@@ -22,8 +22,8 @@ class myAddon(t1mAddon):
       return(ilist)
 
   def getAddonCats(self,url,ilist):
-      html = requests.get(''.join(['http://www.shoutfactorytv.com',url]), headers=self.defaultHeaders).text
-      html = re.compile('<div class="dropdown">.+?a href="'+url+'"(.+?)</div', re.DOTALL).search(html).group(1)
+      html = requests.get(''.join(['https://www.shoutfactorytv.com',url]), headers=self.defaultHeaders).text
+      html = re.compile('<div class="dropdown">.+?a href="'+url+'"(.+?)<li><a', re.DOTALL).search(html).group(1)
       cats = re.compile('<a href="(.+?)">(.+?)<', re.DOTALL).findall(html)
       if url =='/film':
           mode = 'GM'
@@ -34,7 +34,7 @@ class myAddon(t1mAddon):
       return(ilist)
 
   def getAddonEpisodes(self,url,ilist):
-      html = requests.get(''.join(['http://www.shoutfactorytv.com',url]), headers=self.defaultHeaders).text
+      html = requests.get(''.join(['https://www.shoutfactorytv.com',url]), headers=self.defaultHeaders).text
       html = re.compile('<div class="tabs-area(.+?)<div class="container add">', re.DOTALL).search(html).group(1)
       epis = re.compile('<a href="(.+?)".+?alt="(.+?)".+?src="(.+?)".+?Season:(.+?)\n.+?Episode:(.+?)\n.+?</li',re.DOTALL).findall(html)
       for url, name, thumb, season, episode in epis:
@@ -56,7 +56,7 @@ class myAddon(t1mAddon):
       return(ilist)
 
   def getAddonMovies(self,url,ilist):
-      html = requests.get(''.join(['http://www.shoutfactorytv.com',url]), headers=self.defaultHeaders).text
+      html = requests.get(''.join(['https://www.shoutfactorytv.com',url]), headers=self.defaultHeaders).text
       movies=re.compile('<div class="img-holder">.+?href="(.+?)".+?alt="(.+?)".+?src="(.+?)"',re.DOTALL).findall(html)
       movies = sorted(movies, key=lambda x: x[1])
       for url, name, thumb in movies:
@@ -72,7 +72,7 @@ class myAddon(t1mAddon):
       return(ilist)
 
   def getAddonShows(self,url,ilist):
-      html = requests.get(''.join(['http://www.shoutfactorytv.com',url]), headers=self.defaultHeaders).text
+      html = requests.get(''.join(['https://www.shoutfactorytv.com',url]), headers=self.defaultHeaders).text
       shows=re.compile('<div class="img-holder">.+?href="(.+?)".+?alt="(.+?)".+?src="(.+?)"',re.DOTALL).findall(html)
       shows = sorted(shows, key=lambda x: x[1])
       for url, name, thumb in shows:

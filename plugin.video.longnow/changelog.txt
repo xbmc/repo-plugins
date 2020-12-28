@@ -1,0 +1,22 @@
+v0.1.2 (2020-12-28)
+- update for matrix
+
+v0.1.1 (2018-06-23)
+- support python 3
+
+v0.1.0  (2016-09-20)
+- require jarvis as minimum kodi version
+
+v0.0.4  (2016-09-16)
+- fix dialogs if no user or password are given
+- don't use deprecated funktion to init icon
+- change plugin id. WARNING: this means you should uninstall 
+  an older version of this plugin before updating.
+
+v0.0.3  (2016-08-30)
+- Improve error messages
+- Add I18N support
+- add fanart image
+
+v0.0.2  (2016-07-31)
+- Initial version

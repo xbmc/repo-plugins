@@ -1,0 +1,26 @@
+name: Kodi Addon-Submitter
+
+on:
+  create:
+    tags:
+      - v*
+
+jobs:
+  kodi-addon-submitter:
+    runs-on: ubuntu-latest
+    name: Kodi addon submitter
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Generate distribution zip and submit to official kodi repository
+      id: kodi-addon-submitter
+      uses: xbmc/action-kodi-addon-submitter@v1.1
+      with: # Replace all the below values
+        kodi-repository: repo-plugins
+        kodi-version: krypton
+        addon-id: plugin.video.svtplay
+        kodi-matrix: true
+      env: # Make sure you create the below secrets (GH_TOKEN and EMAIL)
+        GH_USERNAME: ${{ github.actor }}
+        GH_TOKEN: ${{secrets.GH_TOKEN}}
+        EMAIL: ${{secrets.EMAIL}}

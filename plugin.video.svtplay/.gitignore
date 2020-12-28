@@ -1,0 +1,9 @@
+.project
+.pydevproject
+.settings
+*.pyc
+*.pyo
+*.swp
+*~
+test.config
+.vscode

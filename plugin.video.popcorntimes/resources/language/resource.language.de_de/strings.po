@@ -1,0 +1,46 @@
+# Kodi Media Center language file
+# Addon Name: Popcorntimes.tv
+# Addon id: plugin.video.popcorntimes
+# Addon Provider: V10lator
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.popcorntime\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: V10lator\n"
+"Language-Team: German (Germany)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Error"
+msgstr "Fehler"
+
+msgctxt "#30001"
+msgid "Couldn't determine stream"
+msgstr "Stream konnte nicht ermittelt werden"
+
+msgctxt "#30002"
+msgid "Not available"
+msgstr "Nicht verfügbar"
+
+msgctxt "#30003"
+msgid "The video is not available anymore"
+msgstr "Video nicht mehr verfügbar"
+
+msgctxt "#30004"
+msgid "Top movies"
+msgstr "Top Filme"
+
+msgctxt "#30005"
+msgid "New movies"
+msgstr "Neu im Programm"
+
+msgctxt "#30006"
+msgid "Genres"
+msgstr "Genres"
+

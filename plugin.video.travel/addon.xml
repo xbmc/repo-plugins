@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.travel"
        name="Travel Channel"
-       version="4.0.0"
+       version="4.0.1"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
@@ -28,5 +28,6 @@
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.jpg</fanart>
     </assets>
+    <broken>The Travel Channel add-on is no longer supported.</broken>
   </extension>
 </addon>

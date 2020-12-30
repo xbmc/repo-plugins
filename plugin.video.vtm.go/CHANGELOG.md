@@ -1,5 +1,14 @@
 # Changelog
 
+## [v1.2.2](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.2) (2020-12-30)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.1...v1.2.2)
+
+**Fixed bugs:**
+
+- Fix subtitles when there are more than one [\#248](https://github.com/add-ons/plugin.video.vtm.go/pull/248) ([michaelarnauts](https://github.com/michaelarnauts))
+- Add proxy to modify the MPEG DASH Manifest [\#247](https://github.com/add-ons/plugin.video.vtm.go/pull/247) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.2.1](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.1) (2020-12-21)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.0...v1.2.1)

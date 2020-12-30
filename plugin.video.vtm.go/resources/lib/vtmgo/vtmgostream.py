@@ -170,12 +170,12 @@ class VtmGoStream:
         """
         subtitles = list()
         if stream_info.get('video').get('subtitles'):
-            for idx, subtitle in enumerate(stream_info.get('video').get('subtitles')):
-                program = stream_info.get('video').get('metadata').get('program')
-                if program:
-                    name = '{} - {}_{}'.format(program.get('title'), stream_info.get('video').get('metadata').get('title'), idx)
-                else:
-                    name = '{}_{}'.format(stream_info.get('video').get('metadata').get('title'), idx)
+            for _, subtitle in enumerate(stream_info.get('video').get('subtitles')):
+                name = subtitle.get('language')
+                if name == 'nl':
+                    name = 'nl.default'
+                elif name == 'nl-tt':
+                    name = 'nl.T888'
                 subtitles.append(dict(name=name, url=subtitle.get('url')))
                 _LOGGER.debug('Found subtitle url %s', subtitle.get('url'))
         return subtitles
@@ -217,8 +217,7 @@ class VtmGoStream:
         _, files = kodiutils.listdir(temp_dir)
         if files:
             for item in files:
-                if kodiutils.to_unicode(item).endswith('.vtt'):
-                    kodiutils.delete(temp_dir + kodiutils.to_unicode(item))
+                kodiutils.delete(temp_dir + kodiutils.to_unicode(item))
 
         # Return if there are no subtitles available
         if not subtitles:
@@ -240,7 +239,7 @@ class VtmGoStream:
             )
 
         for subtitle in subtitles:
-            output_file = temp_dir + subtitle.get('name') + '.' + subtitle.get('url').split('.')[-1]
+            output_file = temp_dir + subtitle.get('name')
             webvtt_content = util.http_get(subtitle.get('url')).text
             webvtt_content = webvtt_timing_regex.sub(lambda match: self._delay_webvtt_timing(match, ad_breaks), webvtt_content)
             with kodiutils.open_file(output_file, 'w') as webvtt_output:

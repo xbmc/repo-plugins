@@ -398,7 +398,6 @@ def get_setting_float(key, default=None):
 
 def set_setting(key, value):
     """Set an add-on setting"""
-    # return ADDON.setSetting(key, from_unicode(str(value)))
     return ADDON.setSetting(key, from_unicode(value))
 
 

@@ -306,6 +306,10 @@ msgctxt "#30717"
 msgid "This program is not available in the VTM GO catalogue."
 msgstr "Dit programma is niet beschikbaar in de VTM GO catalogus."
 
+msgctxt "#30718"
+msgid "The Manifest proxy is not running. Please restart Kodi."
+msgstr "De Manifest-proxy is niet gestart. Gelieve Kodi te herstarten."
+
 ### SETTINGS
 msgctxt "#30800"
 msgid "Credentials"
@@ -483,6 +487,10 @@ msgstr "InputStream Adaptive configuratie…"
 msgctxt "#30887"
 msgid "InputStream Helper settings…"
 msgstr "InputStream Helper configuratie…"
+
+msgctxt "#30888"
+msgid "Modify the MPEG DASH Manifest to workaround an InputStream Adaptive bug"
+msgstr "Pas de MPEG DASH Manifest aan om rond een bug in InputStream Adaptive te werken"
 
 msgctxt "#30889"
 msgid "Logging"

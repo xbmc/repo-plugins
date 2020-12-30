@@ -1,4 +1,4 @@
-import requests
+import json, requests
 from bs4 import BeautifulSoup as bs
 
 BASE_URL="https://www.newyankee.com/watch/"
@@ -20,8 +20,10 @@ def get_second_select_options(dom):
 
 def extract_m3u8(video_js_uri):
     resp_text = session.get(video_js_uri).text
-    m3u8_pos = resp_text.find('https://content.uplynk.com')
-    m3u8_uri = resp_text[m3u8_pos:].split("'),")[0]
+    m3u8_id   = [x for x in resp_text.split('sources: ')[1].split('mmVideo')[0].splitlines() if x.__contains__('id:')][0].split('\'')[1]
+    m3u8_json = "https://content.uplynk.com/preplay/" + m3u8_id + ".json?v=2"
+    m3u8_dict = json.loads(session.get(m3u8_json).text)
+    m3u8_uri  = m3u8_dict["playURL"]
     return m3u8_uri
 
 def get_season_list():

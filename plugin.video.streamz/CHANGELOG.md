@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.0.3](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.3) (2021-01-01)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.2...v1.0.3)
+
+**Implemented enhancements:**
+
+- Add support for external subtitles [\#28](https://github.com/add-ons/plugin.video.streamz/pull/28) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Fixed bugs:**
+
+- Add proxy to modify the MPEG DASH Manifest [\#26](https://github.com/add-ons/plugin.video.streamz/pull/26) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.0.2](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.2) (2020-12-21)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.1...v1.0.2)

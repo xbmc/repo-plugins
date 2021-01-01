@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 import logging
 import os
+from contextlib import contextmanager
 
 import xbmc
 import xbmcaddon
@@ -194,7 +195,7 @@ def show_listing(title_items, category=None, sort=None, content=None, cache=True
     xbmcplugin.endOfDirectory(routing.handle, succeeded, cacheToDisc=cache)
 
 
-def play(stream, license_key=None, title=None, art_dict=None, info_dict=None, prop_dict=None, stream_dict=None):
+def play(stream, license_key=None, title=None, art_dict=None, info_dict=None, prop_dict=None, stream_dict=None, subtitles=None):
     """Play the given stream"""
     from resources.lib.addon import routing
 
@@ -207,6 +208,8 @@ def play(stream, license_key=None, title=None, art_dict=None, info_dict=None, pr
         play_item.setProperties(prop_dict)
     if stream_dict:
         play_item.addStreamInfo('video', stream_dict)
+    if subtitles:
+        play_item.setSubtitles(subtitles)
 
     # Setup Inputstream Adaptive
     if kodi_version_major() >= 19:
@@ -551,6 +554,14 @@ def jsonrpc(*args, **kwargs):
     return loads(xbmc.executeJSONRPC(dumps(kwargs)))
 
 
+@contextmanager
+def open_file(path, flags='r'):
+    """Open a file (using xbmcvfs)"""
+    fdesc = xbmcvfs.File(path, flags)
+    yield fdesc
+    fdesc.close()
+
+
 def listdir(path):
     """Return all files in a directory (using xbmcvfs)"""
     return xbmcvfs.listdir(path)
@@ -559,6 +570,17 @@ def listdir(path):
 def delete(path):
     """Remove a file (using xbmcvfs)"""
     return xbmcvfs.delete(path)
+
+
+def mkdirs(path):
+    """Create directory including parents (using xbmcvfs)"""
+    _LOGGER.debug('Recursively create directory (%s)', path)
+    return xbmcvfs.mkdirs(path)
+
+
+def exists(path):
+    """Whether the path exists (using xbmcvfs)"""
+    return xbmcvfs.exists(path)
 
 
 def get_cache(key, ttl=None):

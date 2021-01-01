@@ -1,0 +1,141 @@
+# Kodi Media Center language file
+# Addon Name: SVT Play
+# Addon id: plugin.video.svtplay
+# Addon Provider: nilzen
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Programs A-Ö"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Live broadcasts"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Latest programs"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Latest news broadcast"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Recommended"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Popular"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Last chance"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Latest clips"
+msgstr ""
+
+msgctxt "#30100"
+msgid "This program is only available at www.svtplay.se"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Show more..."
+msgstr ""
+
+msgctxt "#30102"
+msgid "Search for:"
+msgstr ""
+
+msgctxt "#30103"
+msgid "The search returned no results"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Programs"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Episodes"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Clips"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Install the Öppet Arkiv addon to view these programs"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Clips"
+msgstr ""
+
+msgctxt "#30401"
+msgid "Clear all"
+msgstr ""
+
+msgctxt "#30402"
+msgid "Close"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Play"
+msgstr ""
+
+msgctxt "#30501"
+msgid "Show subtitles"
+msgstr ""
+
+msgctxt "#30502"
+msgid "Group programs in A-Ö by first character"
+msgstr ""
+
+msgctxt "#30503"
+msgid "Block videos that are inapppropriate for children"
+msgstr ""
+
+msgctxt "#30504"
+msgid "This video is blocked for children"
+msgstr ""
+
+msgctxt "#30505"
+msgid "Hide programs that are restricted to Sweden"
+msgstr ""
+
+msgctxt "#30506"
+msgid "Kids mode"
+msgstr ""
+
+msgctxt "#30601"
+msgid "General"
+msgstr ""
+
+msgctxt "#30602"
+msgid "Go to show"
+msgstr ""

@@ -1,6 +1,8 @@
 # Kodi SVT Play Addon
 [![Build Status](https://travis-ci.org/linqcan/xbmc-svtplay.svg?branch=krypton)](https://travis-ci.org/linqcan/xbmc-svtplay)
 
+![Python tests](https://github.com/nilzen/xbmc-svtplay/workflows/Python%20package/badge.svg?branch=krypton)
+
 With this addon you can stream content from SVT Play (svtplay.se).
 
 The plugin fetches the video URL from the SVT Play website and feeds it to the Kodi video player.

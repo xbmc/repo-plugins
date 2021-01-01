@@ -1,0 +1,29 @@
+<addon id="plugin.video.svtplay" name="SVT Play" provider-name="nilzen" version="5.1.12+matrix.1">
+  <requires>
+    <import addon="script.module.requests" version="2.22.0" />
+    <import addon="xbmc.python" version="3.0.0" />
+  </requires>
+  <extension library="default.py" point="xbmc.python.pluginsource">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language>sv</language>
+    <summary lang="en_GB">Watch content from SVT Play.</summary>
+    <summary lang="sv_SE">Titta på innehåll från SVT Play.</summary>
+    <description lang="en_GB">With this addon you can stream content from SVT Play (svtplay.se).</description>
+    <description lang="sv_SE">Med denna addon kan du strömma innehåll från SVT Play (svtplay.se).</description>
+    <disclaimer lang="en_GB">This is an unofficial addon and it is not supported or maintained by SVT. Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+    <platform>all</platform>
+    <license>GPL-3.0-only</license>
+    <website>https://www.svtplay.se</website>
+    <source>https://github.com/nilzen/xbmc-svtplay</source>
+    <forum>https://forum.kodi.tv/showthread.php?tid=67110</forum>
+    <news>
+- Added support for Kodi 19 (Matrix)
+    </news>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

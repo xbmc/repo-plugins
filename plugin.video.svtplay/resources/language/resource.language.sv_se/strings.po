@@ -1,0 +1,141 @@
+# Kodi Media Center language file
+# Addon Name: SVT Play
+# Addon id: plugin.video.svtplay
+# Addon Provider: nilzen
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv_SE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Programs A-Ö"
+msgstr "Program A-Ö"
+
+msgctxt "#30001"
+msgid "Categories"
+msgstr "Kategorier"
+
+msgctxt "#30002"
+msgid "Live broadcasts"
+msgstr "Livesändningar"
+
+msgctxt "#30003"
+msgid "Latest programs"
+msgstr "Senaste program"
+
+msgctxt "#30004"
+msgid "Latest news broadcast"
+msgstr "Senaste nyhetsprogram"
+
+msgctxt "#30005"
+msgid "Recommended"
+msgstr "Rekommenderat"
+
+msgctxt "#30006"
+msgid "Search"
+msgstr "Sök"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "Kanaler"
+
+msgctxt "#30009"
+msgid "Popular"
+msgstr "Populärast just nu"
+
+msgctxt "#30010"
+msgid "Last chance"
+msgstr "Sista chansen"
+
+msgctxt "#30011"
+msgid "Latest clips"
+msgstr "Senaste klipp"
+
+msgctxt "#30100"
+msgid "This program is only available at www.svtplay.se"
+msgstr "Detta program är endast tillgängligt på www.svtplay.se"
+
+msgctxt "#30101"
+msgid "Show more..."
+msgstr "Visa fler..."
+
+msgctxt "#30102"
+msgid "Search for:"
+msgstr "Sök efter:"
+
+msgctxt "#30103"
+msgid "The search returned no results"
+msgstr "Sökningen gav inga träffar"
+
+msgctxt "#30104"
+msgid "Programs"
+msgstr "Program"
+
+msgctxt "#30105"
+msgid "Episodes"
+msgstr "Avsnitt"
+
+msgctxt "#30106"
+msgid "Clips"
+msgstr "Klipp"
+
+msgctxt "#30107"
+msgid "Install the Öppet Arkiv addon to view these programs"
+msgstr "Installera Öppet Arkiv tillägget för att se dessa program"
+
+msgctxt "#30108"
+msgid "Clips"
+msgstr "Klipp"
+
+msgctxt "#30401"
+msgid "Clear all"
+msgstr "Rensa"
+
+msgctxt "#30402"
+msgid "Close"
+msgstr "Stäng"
+
+msgctxt "#30403"
+msgid "Play"
+msgstr "Spela"
+
+msgctxt "#30501"
+msgid "Show subtitles"
+msgstr "Visa undertexter"
+
+msgctxt "#30502"
+msgid "Group programs in A-Ö by first character"
+msgstr "Gruppera program i A-Ö efter första bokstav"
+
+msgctxt "#30503"
+msgid "Block videos that are inapppropriate for children"
+msgstr "Blockera videor olämpliga för barn"
+
+msgctxt "#30504"
+msgid "This video is blocked for children"
+msgstr "Denna video är blockerad för barn"
+
+msgctxt "#30505"
+msgid "Hide programs that are restricted to Sweden"
+msgstr "Dölj program som endast kan visas i Sverige"
+
+msgctxt "#30506"
+msgid "Kids mode"
+msgstr "Barnläge"
+
+msgctxt "#30601"
+msgid "General"
+msgstr "Allmänt"
+
+msgctxt "#30602"
+msgid "Go to show"
+msgstr "Gå till program"

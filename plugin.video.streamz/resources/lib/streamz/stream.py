@@ -5,7 +5,9 @@ from __future__ import absolute_import, division, unicode_literals
 
 import json
 import logging
+import os
 
+from resources.lib import kodiutils
 from resources.lib.streamz import API_ENDPOINT, ResolvedStream, util
 
 _LOGGER = logging.getLogger(__name__)
@@ -51,8 +53,10 @@ class Stream:
         license_url = stream_info.get('drm', {}).get('com.widevine.alpha', {}).get('licenseUrl')
 
         # Extract subtitles from our video_info
-        # subtitles = self._extract_subtitles_from_stream_info(video_info)
-        # TODO: add subtitles, but it seems that some are burned in the video
+        subtitle_info = self._extract_subtitles_from_stream_info(video_info)
+
+        # Download subtitles locally so we can give them a better name
+        subtitles = self._download_subtitles(subtitle_info)
 
         if stream_type == 'episodes':
             return ResolvedStream(
@@ -61,7 +65,7 @@ class Stream:
                 title=video_info['video']['metadata']['title'],
                 duration=video_info['video']['duration'],
                 url=url,
-                # subtitles=subtitles,
+                subtitles=subtitles,
                 license_url=license_url,
             )
 
@@ -71,7 +75,7 @@ class Stream:
                 title=video_info['video']['metadata']['title'],
                 duration=video_info['video']['duration'],
                 url=url,
-                # subtitles=subtitles,
+                subtitles=subtitles,
                 license_url=license_url,
             )
 
@@ -169,15 +173,40 @@ class Stream:
         """
         subtitles = list()
         if stream_info.get('video').get('subtitles'):
-            for idx, subtitle in enumerate(stream_info.get('video').get('subtitles')):
-                program = stream_info.get('video').get('metadata').get('program')
-                if program:
-                    name = '{} - {}_{}'.format(program.get('title'), stream_info.get('video').get('metadata').get('title'), idx)
-                else:
-                    name = '{}_{}'.format(stream_info.get('video').get('metadata').get('title'), idx)
+            for _, subtitle in enumerate(stream_info.get('video').get('subtitles')):
+                name = subtitle.get('language')
+                if name == 'nl':
+                    name = 'nl.default'
+                elif name == 'nl-tt':
+                    name = 'nl.T888'
                 subtitles.append(dict(name=name, url=subtitle.get('url')))
                 _LOGGER.debug('Found subtitle url %s', subtitle.get('url'))
         return subtitles
+
+    @staticmethod
+    def _download_subtitles(subtitles):
+        # Clean up old subtitles
+        temp_dir = os.path.join(kodiutils.addon_profile(), 'temp', '')
+        _, files = kodiutils.listdir(temp_dir)
+        if files:
+            for item in files:
+                kodiutils.delete(temp_dir + kodiutils.to_unicode(item))
+
+        # Return if there are no subtitles available
+        if not subtitles:
+            return None
+
+        if not kodiutils.exists(temp_dir):
+            kodiutils.mkdirs(temp_dir)
+
+        downloaded_subtitles = list()
+        for subtitle in subtitles:
+            output_file = temp_dir + subtitle.get('name')
+            webvtt_content = util.http_get(subtitle.get('url')).text
+            with kodiutils.open_file(output_file, 'w') as webvtt_output:
+                webvtt_output.write(kodiutils.from_unicode(webvtt_content))
+            downloaded_subtitles.append(output_file)
+        return downloaded_subtitles
 
     @staticmethod
     def create_license_key(key_url, key_type='R', key_headers=None, key_value=None):

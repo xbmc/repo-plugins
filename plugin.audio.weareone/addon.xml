@@ -17,7 +17,6 @@
         <source>https://github.com/fossdd/plugin.audio.weareone</source>
         <assets>
             <icon>resources/icon.png</icon>
-            <fanart>resources/fanart.jpg</fanart>
         </assets>
     </extension>
 </addon>

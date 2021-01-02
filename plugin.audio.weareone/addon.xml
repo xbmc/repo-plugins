@@ -11,15 +11,10 @@
     <extension point="xbmc.addon.metadata">
         <summary lang="en_GB">Play Audio Streams by the WeAreOne Family</summary>
         <description lang="en_GB">WeAreOne is a radio sender family. It contains popular techno and house radios like TechnoBase.FM and HouseTime.FM.</description>
-        <language></language>
         <platform>all</platform>
         <license>unlicense</license>
-        <forum></forum>
-        <website></website>
         <email>fossdd@tutanota.com</email>
-        <source></source>
-        <news></news>
-        <disclaimer></disclaimer>
+        <source>https://github.com/fossdd/plugin.audio.weareone</source>
         <assets>
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>

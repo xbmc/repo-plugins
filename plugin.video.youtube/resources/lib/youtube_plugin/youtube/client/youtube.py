@@ -12,9 +12,12 @@ import copy
 import json
 import re
 import threading
+import time
 import traceback
+import xml.etree.ElementTree as ET
 
 import requests
+from six import PY3
 
 from .login_client import LoginClient
 from ..helper.video_info import VideoInfo
@@ -22,6 +25,7 @@ from ..helper.utils import get_shelf_index_by_title
 from ...kodion import constants
 from ...kodion import Context
 from ...kodion.utils import datetime_parser
+from ...kodion.utils import to_unicode
 
 _context = Context(plugin_id='plugin.video.youtube')
 
@@ -294,6 +298,15 @@ class YouTube(LoginClient):
         # a recommended set. We cache aggressively because searches incur a high
         # quota cost of 100 on the YouTube API.
         # Note this is a first stab attempt and can be refined a lot more.
+        payload = {
+            'kind': 'youtube#activityListResponse',
+            'items': []
+        }
+
+        watch_history_id = _context.get_access_manager().get_watch_history_id()
+        if not watch_history_id or watch_history_id == 'HL':
+            return payload
+
         cache = _context.get_data_cache()
 
         # Do we have a cached result?
@@ -322,27 +335,27 @@ class YouTube(LoginClient):
                     item['plugin_fetched_for'] = video_id
                 responses.extend(di['items'])
 
-        history = self.get_watch_history()
-        result = {
-            'kind': 'youtube#activityListResponse',
-            'items': []
-        }
+        history = self.get_playlist_items(watch_history_id, max_results=50)
+
         if not history.get('items'):
-            return result
+            return payload
 
         threads = []
         candidates = []
         already_fetched_for_video_ids = [item['plugin_fetched_for'] for item in items]
         history_items = [item for item in history['items']
-                         if re.match(r'(?P<video_id>[\w-]{11})', item['id'])]
+                         if re.match(r'(?P<video_id>[\w-]{11})',
+                                     item['snippet']['resourceId']['videoId'])]
+
         # TODO:
         # It would be nice to make this 8 user configurable
         for item in history_items[:8]:
-            video_id = item['id']
+            video_id = item['snippet']['resourceId']['videoId']
             if video_id not in already_fetched_for_video_ids:
                 thread = threading.Thread(target=helper, args=(video_id, candidates))
                 threads.append(thread)
                 thread.start()
+
         for thread in threads:
             thread.join()
 
@@ -380,7 +393,10 @@ class YouTube(LoginClient):
 
             # Ensure a single channel isn't hogging the page
             item = items.pop()
-            channel_id = item['snippet']['channelId']
+            channel_id = item.get('snippet', {}).get('channelId')
+            if not channel_id:
+                continue
+
             channel_counts.setdefault(channel_id, 0)
             if channel_counts[channel_id] <= 3:
                 # Use the item
@@ -403,20 +419,20 @@ class YouTube(LoginClient):
         )
 
         # Finalize result
-        result['items'] = sorted_items
+        payload['items'] = sorted_items
         """
         # TODO:
         # Enable pagination
-        result['pageInfo'] = {
+        payload['pageInfo'] = {
             'resultsPerPage': 50,
             'totalResults': len(sorted_items)
         }
         """
         # Update cache
-        cache.set(cache_home_key, json.dumps(result))
+        cache.set(cache_home_key, json.dumps(payload))
 
         # If there are no sorted_items we fall back to default API behaviour
-        return result
+        return payload
 
     def get_activities(self, channel_id, page_token=''):
         params = {'part': 'snippet,contentDetails',
@@ -732,507 +748,169 @@ class YouTube(LoginClient):
         return self.perform_v3_request(method='GET', path='search', params=params)
 
     def get_my_subscriptions(self, page_token=None, offset=0):
+        """
+        modified by PureHemp, using YouTube RSS for fetching latest videos
+        """
+
         if not page_token:
             page_token = ''
 
-        result = {'items': [],
-                  'next_page_token': page_token,
-                  'offset': offset}
-
-        def _perform(_page_token, _offset, _result):
-            _post_data = {
-                'context': {
-                    'client': {
-                        'clientName': 'TVHTML5',
-                        'clientVersion': '5.20150304',
-                        'theme': 'CLASSIC',
-                        'acceptRegion': '%s' % self._region,
-                        'acceptLanguage': '%s' % self._language.replace('_', '-')
-                    },
-                    'user': {
-                        'enableSafetyMode': False
-                    }
-                },
-                'browseId': 'FEsubscriptions'
-            }
-            if _page_token:
-                _post_data['continuation'] = _page_token
-
-            _json_data = self.perform_v1_tv_request(method='POST', path='browse', post_data=_post_data)
-            _data = _json_data.get('contents', {}).get('sectionListRenderer', {}).get('contents', [{}])[0].get(
-                'shelfRenderer', {}).get('content', {}).get('horizontalListRenderer', {})
-            if not _data:
-                _data = _json_data.get('continuationContents', {}).get('horizontalListContinuation', {})
-            _items = _data.get('items', [])
-            if not _result:
-                _result = {'items': []}
-
-            _new_offset = self._max_results - len(_result['items']) + _offset
-            if _offset > 0:
-                _items = _items[_offset:]
-            _result['offset'] = _new_offset
-
-            for _item in _items:
-                _item = _item.get('gridVideoRenderer', {})
-                if _item:
-                    _video_item = {'id': _item['videoId'],
-                                   'title': _item.get('title', {}).get('runs', [{}])[0].get('text', ''),
-                                   'channel': _item.get('shortBylineText', {}).get('runs', [{}])[0].get('text', '')}
-                    _result['items'].append(_video_item)
-
-            _continuations = _data.get('continuations', [{}])[0].get('nextContinuationData', {}).get('continuation', '')
-            if _continuations and len(_result['items']) <= self._max_results:
-                _result['next_page_token'] = _continuations
-
-                if len(_result['items']) < self._max_results:
-                    _result = _perform(_page_token=_continuations, _offset=0, _result=_result)
-
-            # trim result
-            if len(_result['items']) > self._max_results:
-                _items = _result['items']
-                _items = _items[:self._max_results]
-                _result['items'] = _items
-                _result['continue'] = True
-
-            if 'offset' in _result and _result['offset'] >= 100:
-                _result['offset'] -= 100
-
-            if len(_result['items']) < self._max_results:
-                if 'continue' in _result:
-                    del _result['continue']
-
-                if 'next_page_token' in _result:
-                    del _result['next_page_token']
-
-                if 'offset' in _result:
-                    del _result['offset']
-            return _result
-
-        return _perform(_page_token=page_token, _offset=offset, _result=result)
-
-    def get_purchases(self, page_token, offset):
-        if not page_token:
-            page_token = ''
-
-        shelf_title = 'Purchases'
-
-        result = {'items': [],
-                  'next_page_token': page_token,
-                  'offset': offset}
-
-        def _perform(_page_token, _offset, _result, _shelf_index=None):
-            _post_data = {
-                'context': {
-                    'client': {
-                        'clientName': 'TVHTML5',
-                        'clientVersion': '5.20150304',
-                        'theme': 'CLASSIC',
-                        'acceptRegion': '%s' % self._region,
-                        'acceptLanguage': '%s' % self._language.replace('_', '-')
-                    },
-                    'user': {
-                        'enableSafetyMode': False
-                    }
-                }
-            }
-            if _page_token:
-                _post_data['continuation'] = _page_token
-            else:
-                _post_data['browseId'] = 'FEmy_youtube'
-
-            _json_data = self.perform_v1_tv_request(method='POST', path='browse', post_data=_post_data)
-
-            _data = {}
-            if 'continuationContents' in _json_data:
-                _data = _json_data.get('continuationContents', {}).get('horizontalListContinuation', {})
-            elif 'contents' in _json_data:
-                _contents = _json_data.get('contents', {}).get('sectionListRenderer', {}).get('contents', [{}])
-
-                if _shelf_index is None:
-                    _shelf_index = get_shelf_index_by_title(_context, _json_data, shelf_title)
-
-                if _shelf_index is not None:
-                    _data = _contents[_shelf_index].get('shelfRenderer', {}).get('content', {}).get('horizontalListRenderer', {})
-
-            _items = _data.get('items', [])
-            if not _result:
-                _result = {'items': []}
-
-            _new_offset = self._max_results - len(_result['items']) + _offset
-            if _offset > 0:
-                _items = _items[_offset:]
-            _result['offset'] = _new_offset
-
-            for _listItem in _items:
-                _item = _listItem.get('gridVideoRenderer', {})
-                if _item:
-                    _video_item = {'id': _item['videoId'],
-                                   'title': _item.get('title', {}).get('runs', [{}])[0].get('text', ''),
-                                   'channel': _item.get('shortBylineText', {}).get('runs', [{}])[0].get('text', '')}
-                    _result['items'].append(_video_item)
-                _item = _listItem.get('gridPlaylistRenderer', {})
-                if _item:
-                    play_next_page_token = ''
-                    while True:
-                        json_playlist_data = self.get_playlist_items(_item['playlistId'], page_token=play_next_page_token)
-                        _playListItems = json_playlist_data.get('items', {})
-                        for _playListItem in _playListItems:
-                            _playListItem = _playListItem.get('snippet', {})
-                            if _playListItem:
-                                _video_item = {'id': _playListItem.get('resourceId', {}).get('videoId', ''),
-                                               'title': _playListItem['title'],
-                                               'channel': _item.get('shortBylineText', {}).get('runs', [{}])[0].get('text', '')}
-                                _result['items'].append(_video_item)
-                        play_next_page_token = json_playlist_data.get('nextPageToken', '')
-                        if not play_next_page_token or _context.abort_requested():
-                            break
-
-            _continuations = _data.get('continuations', [{}])[0].get('nextContinuationData', {}).get('continuation', '')
-            if _continuations and len(_result['items']) <= self._max_results:
-                _result['next_page_token'] = _continuations
-
-                if len(_result['items']) < self._max_results:
-                    _result = _perform(_page_token=_continuations, _offset=0, _result=_result, _shelf_index=shelf_index)
-
-            # trim result
-            if len(_result['items']) > self._max_results:
-                _items = _result['items']
-                _items = _items[:self._max_results]
-                _result['items'] = _items
-                _result['continue'] = True
-
-            if len(_result['items']) < self._max_results:
-                if 'continue' in _result:
-                    del _result['continue']
-
-                if 'next_page_token' in _result:
-                    del _result['next_page_token']
-
-                if 'offset' in _result:
-                    del _result['offset']
-
-            return _result
-
-        shelf_index = None
-        if self._language != 'en' and not self._language.startswith('en-') and not page_token:
-            #  shelf index is a moving target, make a request in english first to find the correct index by title
-            _en_post_data = {
-                'context': {
-                    'client': {
-                        'clientName': 'TVHTML5',
-                        'clientVersion': '5.20150304',
-                        'theme': 'CLASSIC',
-                        'acceptRegion': 'US',
-                        'acceptLanguage': 'en-US'
-                    },
-                    'user': {
-                        'enableSafetyMode': False
-                    }
-                },
-                'browseId': 'FEmy_youtube'
-            }
-
-            json_data = self.perform_v1_tv_request(method='POST', path='browse', post_data=_en_post_data)
-            shelf_index = get_shelf_index_by_title(_context, json_data, shelf_title)
-
-        result = _perform(_page_token=page_token, _offset=offset, _result=result, _shelf_index=shelf_index)
-
-        return result
-
-    def get_saved_playlists(self, page_token, offset):
-        if not page_token:
-            page_token = ''
-
-        shelf_title = 'Saved Playlists'
-
-        result = {'items': [],
-                  'next_page_token': page_token,
-                  'offset': offset}
-
-        def _perform(_page_token, _offset, _result, _shelf_index=None):
-            _post_data = {
-                'context': {
-                    'client': {
-                        'clientName': 'TVHTML5',
-                        'clientVersion': '5.20150304',
-                        'theme': 'CLASSIC',
-                        'acceptRegion': '%s' % self._region,
-                        'acceptLanguage': '%s' % self._language.replace('_', '-')
-                    },
-                    'user': {
-                        'enableSafetyMode': False
-                    }
-                }
-            }
-            if _page_token:
-                _post_data['continuation'] = _page_token
-            else:
-                _post_data['browseId'] = 'FEmy_youtube'
-
-            _json_data = self.perform_v1_tv_request(method='POST', path='browse', post_data=_post_data)
-            _data = {}
-            if 'continuationContents' in _json_data:
-                _data = _json_data.get('continuationContents', {}).get('horizontalListContinuation', {})
-            elif 'contents' in _json_data:
-                _contents = _json_data.get('contents', {}).get('sectionListRenderer', {}).get('contents', [{}])
-
-                if _shelf_index is None:
-                    _shelf_index = get_shelf_index_by_title(_context, _json_data, shelf_title)
-
-                if _shelf_index is not None:
-                    _data = _contents[_shelf_index].get('shelfRenderer', {}).get('content', {}).get('horizontalListRenderer', {})
-
-            _items = _data.get('items', [])
-            if not _result:
-                _result = {'items': []}
-
-            _new_offset = self._max_results - len(_result['items']) + _offset
-            if _offset > 0:
-                _items = _items[_offset:]
-            _result['offset'] = _new_offset
-
-            for _item in _items:
-                _item = _item.get('gridPlaylistRenderer', {})
-                if _item:
-                    _video_item = {'id': _item['playlistId'],
-                                   'title': _item.get('title', {}).get('runs', [{}])[0].get('text', ''),
-                                   'channel': _item.get('shortBylineText', {}).get('runs', [{}])[0].get('text', ''),
-                                   'channel_id': _item.get('shortBylineText', {}).get('runs', [{}])[0].get('navigationEndpoint', {}).get('browseEndpoint', {}).get('browseId', ''),
-                                   'thumbnails': {'default': {'url': ''}, 'medium': {'url': ''}, 'high': {'url': ''}}}
-
-                    _thumbs = _item.get('thumbnail', {}).get('thumbnails', [{}])
-
-                    for _thumb in _thumbs:
-                        _thumb_url = _thumb.get('url', '')
-                        if _thumb_url.startswith('//'):
-                            _thumb_url = ''.join(['https:', _thumb_url])
-                        if _thumb_url.endswith('/default.jpg'):
-                            _video_item['thumbnails']['default']['url'] = _thumb_url
-                        elif _thumb_url.endswith('/mqdefault.jpg'):
-                            _video_item['thumbnails']['medium']['url'] = _thumb_url
-                        elif _thumb_url.endswith('/hqdefault.jpg'):
-                            _video_item['thumbnails']['high']['url'] = _thumb_url
-
-                    _result['items'].append(_video_item)
-
-            _continuations = _data.get('continuations', [{}])[0].get('nextContinuationData', {}).get('continuation', '')
-            if _continuations and len(_result['items']) <= self._max_results:
-                _result['next_page_token'] = _continuations
-
-                if len(_result['items']) < self._max_results:
-                    _result = _perform(_page_token=_continuations, _offset=0, _result=_result, _shelf_index=_shelf_index)
-
-            # trim result
-            if len(_result['items']) > self._max_results:
-                _items = _result['items']
-                _items = _items[:self._max_results]
-                _result['items'] = _items
-                _result['continue'] = True
-
-            if len(_result['items']) < self._max_results:
-                if 'continue' in _result:
-                    del _result['continue']
-
-                if 'next_page_token' in _result:
-                    del _result['next_page_token']
-
-                if 'offset' in _result:
-                    del _result['offset']
-
-            return _result
-
-        shelf_index = None
-        if self._language != 'en' and not self._language.startswith('en-') and not page_token:
-            #  shelf index is a moving target, make a request in english first to find the correct index by title
-            _en_post_data = {
-                'context': {
-                    'client': {
-                        'clientName': 'TVHTML5',
-                        'clientVersion': '5.20150304',
-                        'theme': 'CLASSIC',
-                        'acceptRegion': 'US',
-                        'acceptLanguage': 'en-US'
-                    },
-                    'user': {
-                        'enableSafetyMode': False
-                    }
-                },
-                'browseId': 'FEmy_youtube'
-            }
-
-            json_data = self.perform_v1_tv_request(method='POST', path='browse', post_data=_en_post_data)
-            shelf_index = get_shelf_index_by_title(_context, json_data, shelf_title)
-
-        result = _perform(_page_token=page_token, _offset=offset, _result=result, _shelf_index=shelf_index)
-
-        return result
-
-    def clear_watch_history(self):
-        _post_data = {
-            'context': {
-                'client': {
-                    'clientName': 'TVHTML5',
-                    'clientVersion': '5.20150304',
-                    'theme': 'CLASSIC',
-                    'acceptRegion': '%s' % self._region,
-                    'acceptLanguage': '%s' % self._language.replace('_', '-')
-                },
-                'user': {
-                    'enableSafetyMode': False
-                }
-            }
+        result = {
+            'items': [],
+            'next_page_token': page_token,
+            'offset': offset
         }
-        _json_data = self.perform_v1_tv_request(method='POST', path='history/clear_watch_history', post_data=_post_data)
-        return _json_data
-
-    def get_watch_history(self, page_token=None, offset=0):
-        if not page_token:
-            page_token = ''
-
-        result = {'items': [],
-                  'next_page_token': page_token,
-                  'offset': offset}
 
         def _perform(_page_token, _offset, _result):
-            _post_data = {
-                'context': {
-                    'client': {
-                        'clientName': 'TVHTML5',
-                        'clientVersion': '5.20150304',
-                        'theme': 'CLASSIC',
-                        'acceptRegion': '%s' % self._region,
-                        'acceptLanguage': '%s' % self._language.replace('_', '-')
-                    },
-                    'user': {
-                        'enableSafetyMode': False
-                    }
-                },
-                'browseId': 'FEhistory'
-            }
-            if _page_token:
-                _post_data['continuation'] = _page_token
 
-            _json_data = self.perform_v1_tv_request(method='POST', path='browse', post_data=_post_data)
-            _data = _json_data.get('contents', {}).get('sectionListRenderer', {}).get('contents', [{}])[0].get(
-                'shelfRenderer', {}).get('content', {}).get('horizontalListRenderer', {})
-            if not _data:
-                _data = _json_data.get('continuationContents', {}).get('horizontalListContinuation', {})
-            _items = _data.get('items', [])
             if not _result:
-                _result = {'items': []}
+                _result = {
+                    'items': []
+                }
 
-            _new_offset = self._max_results - len(_result['items']) + _offset
-            if _offset > 0:
-                _items = _items[_offset:]
-            _result['offset'] = _new_offset
+            cache = _context.get_data_cache()
 
-            for _item in _items:
-                _item = _item.get('gridVideoRenderer', {})
-                if _item:
-                    _video_item = {'id': _item['videoId'],
-                                   'title': _item.get('title', {}).get('runs', [{}])[0].get('text', ''),
-                                   'channel': _item.get('shortBylineText', {}).get('runs', [{}])[0].get('text', '')}
-                    _result['items'].append(_video_item)
+            # if new uploads is cached
+            cache_items_key = 'my-subscriptions-items'
+            cached = cache.get_item(cache.ONE_HOUR, cache_items_key)
+            if cache_items_key in cached:
+                _result['items'] = cached[cache_items_key]
 
-            _continuations = _data.get('continuations', [{}])[0].get('nextContinuationData', {}).get('continuation', '')
-            if _continuations and len(_result['items']) <= self._max_results:
-                _result['next_page_token'] = _continuations
+            """ no cache, get uploads data from web """
+            if len(_result['items']) == 0:
+                # get all subscriptions channel ids
+                sub_page_token = True
+                sub_channel_ids = []
 
-                if len(_result['items']) < self._max_results:
-                    _result = _perform(_page_token=_continuations, _offset=0, _result=_result)
+                while sub_page_token:
+                    if sub_page_token is True:
+                        sub_page_token = ''
 
-            # trim result
-            if len(_result['items']) > self._max_results:
-                _items = _result['items']
-                _items = _items[:self._max_results]
-                _result['items'] = _items
-                _result['continue'] = True
-
-            if len(_result['items']) < self._max_results:
-                if 'continue' in _result:
-                    del _result['continue']
-
-                if 'next_page_token' in _result:
-                    del _result['next_page_token']
-
-                if 'offset' in _result:
-                    del _result['offset']
-            return _result
-
-        return _perform(_page_token=page_token, _offset=offset, _result=result)
-
-    def get_watch_later_id(self):
-        watch_later_id = ''
-
-        def _get_items(_continuation=None):
-            post_data = {
-                'context': {
-                    'client': {
-                        'clientName': 'TVHTML5',
-                        'clientVersion': '5.20150304',
-                        'theme': 'CLASSIC',
-                        'acceptRegion': 'US',
-                        'acceptLanguage': 'en-US'
-                    },
-                    'user': {
-                        'enableSafetyMode': False
+                    params = {
+                        'part': 'snippet',
+                        'maxResults': '50',
+                        'order': 'alphabetical',
+                        'mine': 'true'
                     }
-                },
-                'browseId': 'default'
-            }
 
-            if _continuation:
-                post_data['continuation'] = _continuation
+                    if sub_page_token:
+                        params['pageToken'] = sub_page_token
 
-            return self.perform_v1_tv_request(method='POST', path='browse', post_data=post_data)
+                    sub_json_data = self.perform_v3_request(method='GET', path='subscriptions', params=params)
 
-        current_page = 1
-        pages = 30  # 28 seems to be page limit, add a couple page padding, loop will break when there is no next page data
+                    if not sub_json_data:
+                        sub_json_data = {}
 
-        progress_dialog = _context.get_ui().create_progress_dialog(_context.get_name(),
-                                                                   _context.localize(constants.localize.COMMON_PLEASE_WAIT),
-                                                                   background=True)
-        progress_dialog.set_total(pages)
-        progress_dialog.update(steps=1, text=_context.localize(constants.localize.WATCH_LATER_RETRIEVAL_PAGE) % str(current_page))
+                    items = sub_json_data.get('items', [])
 
-        try:
-            json_data = _get_items()
+                    for item in items:
+                        item = item.get('snippet', {}).get('resourceId', {}).get('channelId', '')
+                        sub_channel_ids.append(item)
 
-            while current_page < pages:
-                contents = json_data.get('contents', json_data.get('continuationContents', {}))
-                section = contents.get('sectionListRenderer', contents.get('sectionListContinuation', {}))
-                contents = section.get('contents', [{}])
+                    # get next token if exists
+                    sub_page_token = sub_json_data.get('nextPageToken', '')
 
-                for shelf in contents:
-                    renderer = shelf.get('shelfRenderer', {})
-                    endpoint = renderer.get('endpoint', {})
-                    browse_endpoint = endpoint.get('browseEndpoint', {})
-                    browse_id = browse_endpoint.get('browseId', '')
-                    title = renderer.get('title', {})
-                    title_runs = title.get('runs', [{}])[0]
-                    title_text = title_runs.get('text', '')
-                    if (title_text.lower() == 'watch later') and (browse_id.startswith('VLPL') or browse_id.startswith('PL')):
-                        watch_later_id = browse_id.lstrip('VL')
+                    # terminate loop when last page
+                    if not sub_page_token:
                         break
 
-                if watch_later_id:
-                    break
+                headers = {
+                    'Host': 'www.youtube.com',
+                    'Connection': 'keep-alive',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                    'DNT': '1',
+                    'Accept-Encoding': 'gzip, deflate',
+                    'Accept-Language': 'en-US,en;q=0.7,de;q=0.3'
+                }
 
-                continuations = section.get('continuations', [{}])[0]
-                next_continuation_data = continuations.get('nextContinuationData', {})
-                continuation = next_continuation_data.get('continuation', '')
+                responses = []
 
-                if continuation:
-                    current_page += 1
-                    progress_dialog.update(steps=1, text=_context.localize(constants.localize.WATCH_LATER_RETRIEVAL_PAGE) % str(current_page))
-                    json_data = _get_items(continuation)
-                    continue
-                else:
-                    break
-        finally:
-            progress_dialog.close()
+                def fetch_xml(_url, _responses):
+                    try:
+                        _response = requests.get(_url, {}, headers=headers, verify=self._verify, allow_redirects=True)
+                    except:
+                        _response = None
+                        _context.log_error('Failed |%s|' % traceback.print_exc())
 
-        return watch_later_id
+                    _responses.append(_response)
+
+                threads = []
+                for channel_id in sub_channel_ids:
+                    thread = threading.Thread(
+                        target=fetch_xml,
+                        args=('https://www.youtube.com/feeds/videos.xml?channel_id=' + channel_id,
+                              responses)
+                    )
+                    threads.append(thread)
+                    thread.start()
+
+                for thread in threads:
+                    thread.join()
+
+                for response in responses:
+                    if response:
+                        response.encoding = 'utf-8'
+                        if PY3:
+                            xml_data = to_unicode(response.content).replace('\n', '')
+                        else:
+                            xml_data = response.content.replace('\n', '')
+
+                        root = ET.fromstring(xml_data)
+
+                        ns = '{http://www.w3.org/2005/Atom}'
+                        yt_ns = '{http://www.youtube.com/xml/schemas/2015}'
+                        media_ns = '{http://search.yahoo.com/mrss/}'
+
+                        for entry in root.findall(ns + "entry"):
+                            # empty news dictionary 
+                            entry_data = {
+                                'id': entry.find(yt_ns + 'videoId').text,
+                                'title': entry.find(media_ns + "group").find(media_ns + 'title').text,
+                                'channel': entry.find(ns + "author").find(ns + "name").text,
+                                'published': entry.find(ns + 'published').text,
+                            }
+                            # append items list 
+                            _result['items'].append(entry_data)
+
+                # sorting by publish date
+                def _sort_by_date_time(e):
+                    return time.mktime(datetime_parser.strptime(e["published"][0:19], "%Y-%m-%dT%H:%M:%S").timetuple())
+
+                _result['items'].sort(reverse=True, key=_sort_by_date_time)
+
+                # Update cache
+                cache.set(cache_items_key, json.dumps(_result['items']))
+            """ no cache, get uploads data from web """
+
+            # trim result
+            if not _page_token:
+                _page_token = 0
+
+            _page_token = int(_page_token)
+
+            if len(_result['items']) > self._max_results:
+                _index_start = _page_token * self._max_results
+                _index_end = _index_start + self._max_results
+
+                _items = _result['items']
+                _items = _items[_index_start:_index_end]
+                _result['items'] = _items
+                _result['next_page_token'] = _page_token + 1
+
+            if len(_result['items']) < self._max_results:
+                if 'continue' in _result:
+                    del _result['continue']
+
+                if 'next_page_token' in _result:
+                    del _result['next_page_token']
+
+                if 'offset' in _result:
+                    del _result['offset']
+
+            return _result
+
+        return _perform(_page_token=page_token, _offset=offset, _result=result)
 
     def perform_v3_request(self, method='GET', headers=None, path=None, post_data=None, params=None,
                            allow_redirects=True, no_login=False):
@@ -1302,53 +980,3 @@ class YouTube(LoginClient):
                 }
 
         return {}
-
-    def perform_v1_tv_request(self, method='GET', headers=None, path=None, post_data=None, params=None,
-                              allow_redirects=True):
-        # params
-        if not params:
-            params = {}
-        _params = {'key': self._config_tv['key']}
-        _params.update(params)
-
-        # headers
-        if not headers:
-            headers = {}
-        _headers = {'Host': 'www.googleapis.com',
-                    'Connection': 'keep-alive',
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36',
-                    'Origin': 'https://www.youtube.com',
-                    'Accept': '*/*',
-                    'DNT': '1',
-                    'Referer': 'https://www.youtube.com/tv',
-                    'Accept-Encoding': 'gzip',
-                    'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'}
-        if self._access_token_tv:
-            _headers['Authorization'] = 'Bearer %s' % self._access_token_tv
-        _headers.update(headers)
-
-        # url
-        _url = 'https://www.googleapis.com/youtubei/v1/%s' % path.strip('/')
-
-        result = None
-
-        _context.log_debug('[i] v1 request: |{0}| path: |{1}| params: |{2}| post_data: |{3}|'.format(method, path, params, post_data))
-        if method == 'GET':
-            result = requests.get(_url, params=_params, headers=_headers, verify=self._verify, allow_redirects=allow_redirects)
-        elif method == 'POST':
-            _headers['content-type'] = 'application/json'
-            result = requests.post(_url, json=post_data, params=_params, headers=_headers, verify=self._verify,
-                                   allow_redirects=allow_redirects)
-        elif method == 'PUT':
-            _headers['content-type'] = 'application/json'
-            result = requests.put(_url, json=post_data, params=_params, headers=_headers, verify=self._verify,
-                                  allow_redirects=allow_redirects)
-        elif method == 'DELETE':
-            result = requests.delete(_url, params=_params, headers=_headers, verify=self._verify,
-                                     allow_redirects=allow_redirects)
-
-        if result is None:
-            return {}
-
-        if result.headers.get('content-type', '').startswith('application/json'):
-            return result.json()

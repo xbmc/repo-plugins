@@ -32,9 +32,18 @@ content available on [Red Bull TV](https://www.redbull.com/discover).
 </table>
 
 ## Releases
+### v3.2.2 (2021-01-12)
+- A fix in the parsing using the new standard for UTC timezone (@dagwiers)
+- Improvements to the parsing and logging of these issues in the future (@dagwiers)
+- Unit tests to detect EPG issues (test for empty results) (@dagwiers)
+- Add GitHub CI workflow for testing EPG issues (@dagwiers)
+- Add python 3.9 support (@dagwiers)
+- Add descriptions to GitHub CI workflows (@dagwiers)
+- Allow installing IPTV Manager from the add-on settings (@michaelarnauts)
+
 ### v3.2.1 (2020-10-31)
 - Fix OK dialog (@dagwiers)
-- Catch missing EPG time markers (@dagpiejanssens)
+- Catch missing EPG time markers (@piejanssens)
 
 ### v3.2.0 (2020-10-29)
 - Support VOD playback from EPG via context menu (@piejanssens)

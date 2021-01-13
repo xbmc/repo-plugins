@@ -12,7 +12,6 @@ from resources.lib import kodilogging, kodiutils
 from resources.lib.modules.proxy import Proxy
 from resources.lib.streamz.exceptions import NoLoginException
 
-kodilogging.config()
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -80,4 +79,5 @@ class BackgroundService(Monitor):
 
 def run():
     """ Run the BackgroundService """
+    kodilogging.config()
     BackgroundService().run()

@@ -102,16 +102,24 @@ class Auth:
                 self._account.product = None
 
     def _check_credentials_change(self):
-        """ Check if credentials have changed """
+        """ Check if credentials have changed.
+
+        :return:                        The hash of the current credentials.
+        :rtype: str
+        """
         old_hash = self._account.hash
         new_hash = md5((self._username + ':' + self._password + ':' + self._loginprovider).encode('utf-8')).hexdigest()
+
         if new_hash != old_hash:
-            _LOGGER.debug('Credentials have changed, clearing tokens.')
-            self._account.hash = new_hash
-            self.logout()
+            return new_hash
+        return None
 
     def get_profiles(self, products='STREAMZ,STREAMZ_KIDS'):
-        """ Returns the available profiles """
+        """ Returns the available profiles.
+
+        :return:                        A list of profiles.
+        :rtype: list[Profile]
+         """
         response = util.http_get(API_ENDPOINT + '/profiles', {'products': products}, token=self._account.jwt_token)
         result = json.loads(response.text)
 
@@ -139,25 +147,31 @@ class Auth:
         :rtype: AccountStorage
         """
         # Check if credentials have changed
-        self._check_credentials_change()
+        new_hash = self._check_credentials_change()
+        if new_hash:
+            _LOGGER.debug('Credentials have changed, forcing a new login.')
+            self._account.hash = new_hash
+            force = True
 
         # Use cached token if it is still valid
         if force or not self._account.is_valid_token():
             # Do actual login
             self._web_login()
 
-        return self._account
+    def get_tokens(self):
+        """ Return the tokens.
 
-    def logout(self):
-        """ Clear the session tokens. """
-        self._account.jwt_token = None
-        self._save_cache()
+        :return:
+        :rtype: AccountStorage
+        """
+        return self._account
 
     def _web_login(self):
         """ Executes a login and returns the JSON Web Token.
         :rtype str
         """
         # Start login flow
+        util.SESSION.cookies.clear()
         util.http_get('https://account.streamz.be/login')
 
         # Generate random state and nonce parameters

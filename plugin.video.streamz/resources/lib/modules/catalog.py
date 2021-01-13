@@ -8,7 +8,7 @@ import logging
 from resources.lib import kodiutils
 from resources.lib.kodiutils import TitleItem
 from resources.lib.modules.menu import Menu
-from resources.lib.streamz import Category, STOREFRONT_SERIES, STOREFRONT_MOVIES
+from resources.lib.streamz import STOREFRONT_MOVIES, STOREFRONT_SERIES, Category
 from resources.lib.streamz.api import CACHE_PREVENT, Api
 from resources.lib.streamz.auth import Auth
 from resources.lib.streamz.exceptions import UnavailableException

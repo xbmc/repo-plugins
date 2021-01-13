@@ -28,9 +28,9 @@ except ImportError:  # Python 2
     from SocketServer import TCPServer
 
 try:  # Python 3
-    from urllib.parse import urlparse, parse_qs
+    from urllib.parse import parse_qs, urlparse
 except ImportError:  # Python 2
-    from urlparse import urlparse, parse_qs
+    from urlparse import parse_qs, urlparse
 
 _LOGGER = logging.getLogger(__name__)
 

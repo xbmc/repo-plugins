@@ -452,6 +452,67 @@ def set_global_setting(key, value):
     return jsonrpc(method='Settings.SetSettingValue', params=dict(setting=key, value=value))
 
 
+def has_socks():
+    """Test if socks is installed, and use a static variable to remember"""
+    if hasattr(has_socks, 'cached'):
+        return getattr(has_socks, 'cached')
+    try:
+        import socks  # noqa: F401; pylint: disable=unused-variable,unused-import
+    except ImportError:
+        has_socks.cached = False
+        return None  # Detect if this is the first run
+    has_socks.cached = True
+    return True
+
+
+def get_proxies():
+    """Return a usable proxies dictionary from Kodi proxy settings"""
+    # Use proxy settings from environment variables
+    env_http_proxy = os.environ.get('HTTP_PROXY')
+    env_https_proxy = os.environ.get('HTTPS_PROXY')
+    if env_http_proxy:
+        return dict(http=env_http_proxy, https=env_https_proxy or env_http_proxy)
+
+    usehttpproxy = get_global_setting('network.usehttpproxy')
+    if usehttpproxy is not True:
+        return None
+
+    try:
+        httpproxytype = int(get_global_setting('network.httpproxytype'))
+    except ValueError:
+        httpproxytype = 0
+
+    socks_supported = has_socks()
+    if httpproxytype != 0 and not socks_supported:
+        # Only open the dialog the first time (to avoid multiple popups)
+        if socks_supported is None:
+            ok_dialog('', localize(30966))  # Requires PySocks
+        return None
+
+    proxy_types = ['http', 'socks4', 'socks4a', 'socks5', 'socks5h']
+
+    proxy = dict(
+        scheme=proxy_types[httpproxytype] if 0 <= httpproxytype < 5 else 'http',
+        server=get_global_setting('network.httpproxyserver'),
+        port=get_global_setting('network.httpproxyport'),
+        username=get_global_setting('network.httpproxyusername'),
+        password=get_global_setting('network.httpproxypassword'),
+    )
+
+    if proxy.get('username') and proxy.get('password') and proxy.get('server') and proxy.get('port'):
+        proxy_address = '{scheme}://{username}:{password}@{server}:{port}'.format(**proxy)
+    elif proxy.get('username') and proxy.get('server') and proxy.get('port'):
+        proxy_address = '{scheme}://{username}@{server}:{port}'.format(**proxy)
+    elif proxy.get('server') and proxy.get('port'):
+        proxy_address = '{scheme}://{server}:{port}'.format(**proxy)
+    elif proxy.get('server'):
+        proxy_address = '{scheme}://{server}'.format(**proxy)
+    else:
+        return None
+
+    return dict(http=proxy_address, https=proxy_address)
+
+
 def get_cond_visibility(condition):
     """Test a condition in XBMC"""
     return xbmc.getCondVisibility(condition)

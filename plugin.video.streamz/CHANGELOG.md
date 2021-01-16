@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.0.4](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.4) (2021-01-13)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.3...v1.0.4)
+
+**Implemented enhancements:**
+
+- Add HTTP Proxy support [\#31](https://github.com/add-ons/plugin.video.streamz/pull/31) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Merged pull requests:**
+
+- Improve tests [\#32](https://github.com/add-ons/plugin.video.streamz/pull/32) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.0.3](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.3) (2021-01-01)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.2...v1.0.3)

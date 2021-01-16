@@ -5,7 +5,6 @@ from resources.lib.logger import Logger
 from resources.lib.regexer import Regexer
 from resources.lib.streams.adaptive import Adaptive
 from resources.lib.mediaitem import MediaItemPart, MediaStream
-from resources.lib.proxyinfo import ProxyInfo
 from resources.lib.addonsettings import AddonSettings
 
 
@@ -14,12 +13,11 @@ class M3u8(object):
         pass
 
     @staticmethod
-    def get_subtitle(url, proxy=None, play_list_data=None, append_query_string=True, language=None):  # NOSONAR
+    def get_subtitle(url, play_list_data=None, append_query_string=True, language=None):  # NOSONAR
         """ Retrieves a subtitle url either from a M3u8 file via HTTP or alternatively from a
         M3u8 playlist string value (in case it was already retrieved).
 
         :param str url:                     The M3u8 url that contains the subtitle information.
-        :param ProxyInfo proxy:             An optional proxy to use.
         :param str play_list_data:          The data (in case the URL was already retrieved).
         :param bool append_query_string:    Should we re-append the query string?
         :param str language:                The language to select (if multiple are present).
@@ -29,7 +27,7 @@ class M3u8(object):
 
         """
 
-        data = play_list_data or UriHandler.open(url, proxy)
+        data = play_list_data or UriHandler.open(url)
         regex = r'(#\w[^:]+)[^\n]+TYPE=SUBTITLES[^\n]*LANGUAGE="(\w+)"[^\n]*\W+URI="([^"]+.m3u8[^"\n\r]*)'
         sub = ""
 
@@ -75,7 +73,8 @@ class M3u8(object):
         return sub
 
     @staticmethod
-    def set_input_stream_addon_input(strm, proxy=None, headers=None,
+    def set_input_stream_addon_input(strm,
+                                     headers=None,
                                      license_key=None, license_type=None,
                                      max_bit_rate=None,
                                      persist_storage=False,
@@ -84,7 +83,6 @@ class M3u8(object):
         """ Updates an existing stream with parameters for the inputstream adaptive add-on.
 
         :param strm:                    (MediaStream) the MediaStream to update
-        :param proxy:                   (Proxy) The proxy to use for opening
         :param dict headers:            Possible HTTP Headers
         :param str license_key:         The value of the license key request
         :param str license_type:        The type of license key request used (see below)
@@ -99,7 +97,7 @@ class M3u8(object):
 
             part = item.create_new_empty_media_part()
             stream = part.append_media_stream(m3u8url, 0)
-            M3u8.set_input_stream_addon_input(stream, self.proxy, self.headers)
+            M3u8.set_input_stream_addon_input(stream, self.headers)
             item.complete = True
 
         if maxBitRate is not set, the bitrate will be configured via the normal generic Retrospect
@@ -107,7 +105,8 @@ class M3u8(object):
 
         """
 
-        return Adaptive.set_input_stream_addon_input(strm, proxy, headers,
+        return Adaptive.set_input_stream_addon_input(strm,
+                                                     headers,
                                                      manifest_type="hls",
                                                      license_key=license_key,
                                                      license_type=license_type,
@@ -148,7 +147,7 @@ class M3u8(object):
     @staticmethod
     def update_part_with_m3u8_streams(part, url,
                                       encrypted=False,
-                                      proxy=None, headers=None,
+                                      headers=None,
                                       map_audio=False,
                                       bitrate=0,
                                       channel=None):
@@ -159,7 +158,6 @@ class M3u8(object):
         :param str url:                 The url to download
         :param bool encrypted:          Is the stream encrypted?
         :param dict[str,str] headers:   Possible HTTP Headers
-        :param ProxyInfo proxy:         The proxy to use for opening
         :param bool map_audio:          Should audio tracks be mapped separately?
         :param int bitrate:             Initial bitrate to use. Will be overridden later.
         :param ChannelInfo channel:     If specified, the channel specific configuration is
@@ -178,13 +176,13 @@ class M3u8(object):
         if input_stream:
             Logger.debug("Using InputStream Adaptive add-on for M3u8 playback.")
             stream = part.append_media_stream(url, bitrate)
-            M3u8.set_input_stream_addon_input(stream, proxy, headers)
+            M3u8.set_input_stream_addon_input(stream, headers)
             return True
 
         complete = False
         if map_audio:
             Logger.debug("Using Retrospect code with Audio mapping for M3u8 playback.")
-            for s, b, a in M3u8.get_streams_from_m3u8(url, proxy, map_audio=True):
+            for s, b, a in M3u8.get_streams_from_m3u8(url, map_audio=True):
                 if a:
                     audio_part = a.rsplit("-", 1)[-1]
                     audio_part = "-%s" % (audio_part,)
@@ -193,15 +191,17 @@ class M3u8(object):
                 complete = True
         else:
             Logger.debug("Using Retrospect code for M3u8 playback.")
-            for s, b in M3u8.get_streams_from_m3u8(url, proxy):
+            for s, b in M3u8.get_streams_from_m3u8(url):
                 part.append_media_stream(s, b)
                 complete = True
 
         return complete
 
     @staticmethod
-    def get_streams_from_m3u8(url, proxy=None, headers=None,                  # NOSONAR
-                              append_query_string=False, map_audio=False,
+    def get_streams_from_m3u8(url,  # NOSONAR
+                              headers=None,
+                              append_query_string=False,
+                              map_audio=False,
                               play_list_data=None):
         """ Parsers standard M3U8 lists and returns a list of tuples with streams and bitrates that
         can be used by other methods.
@@ -209,13 +209,12 @@ class M3u8(object):
         Can be used like this:
 
             part = item.create_new_empty_media_part()
-            for s, b in M3u8.get_streams_from_m3u8(m3u8_url, self.proxy):
+            for s, b in M3u8.get_streams_from_m3u8(m3u8_url):
                 item.complete = True
                 # s = self.get_verifiable_video_url(s)
                 part.append_media_stream(s, b)
 
         :param dict[str,str] headers:       Possible HTTP Headers
-        :param ProxyInfo proxy:             The proxy to use for opening
         :param str url:                     The url to download
         :param bool append_query_string:    Should the existing query string be appended?
         :param bool map_audio:              Map audio streams
@@ -228,7 +227,7 @@ class M3u8(object):
 
         streams = []
 
-        data = play_list_data or UriHandler.open(url, proxy, additional_headers=headers)
+        data = play_list_data or UriHandler.open(url, additional_headers=headers)
         Logger.trace(data)
 
         qs = None

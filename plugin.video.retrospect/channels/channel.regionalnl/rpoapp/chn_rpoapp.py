@@ -285,10 +285,10 @@ class Channel(chn_class.Channel):
         part = item.create_new_empty_media_part()
         if AddonSettings.use_adaptive_stream_add_on():
             stream = part.append_media_stream(item.url, 0)
-            M3u8.set_input_stream_addon_input(stream, self.proxy)
+            M3u8.set_input_stream_addon_input(stream)
             item.complete = True
         else:
-            for s, b in M3u8.get_streams_from_m3u8(item.url, self.proxy):
+            for s, b in M3u8.get_streams_from_m3u8(item.url):
                 item.complete = True
                 part.append_media_stream(s, b)
         return item
@@ -315,7 +315,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        data = UriHandler.open(item.url, proxy=self.proxy)
+        data = UriHandler.open(item.url)
         streams = Regexer.do_regex(r'label:\s*"([^"]+)",\W*file:\s*"([^"]+)"', data)
 
         part = item.create_new_empty_media_part()
@@ -356,7 +356,7 @@ class Channel(chn_class.Channel):
         Logger.debug("Found videoId '%s' for '%s'", video_id, item.url)
 
         url = "https://omroepzeeland.bbvms.com/p/regiogrid/q/sourceid_string:{}*.js".format(video_id)
-        data = UriHandler.open(url, proxy=self.proxy)
+        data = UriHandler.open(url)
 
         json_data = Regexer.do_regex(r'var opts\s*=\s*({.+});\W*//window', data)
         Logger.debug("Found jsondata with size: %s", len(json_data[0]))

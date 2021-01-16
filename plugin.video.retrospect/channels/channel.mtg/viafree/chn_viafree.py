@@ -350,7 +350,7 @@ class Channel(chn_class.Channel):
             Logger.debug("Found FormatId = %s", data_id)
             program_url = \
                 "http://playapi.mtgx.tv/v3/videos?format=%s&order=-airdate&type=program" % (data_id,)
-            data = UriHandler.open(program_url, proxy=self.proxy)
+            data = UriHandler.open(program_url)
             clip_url = \
                 "http://playapi.mtgx.tv/v3/videos?format=%s&order=-updated&type=clip" % (data_id,)
 
@@ -598,10 +598,8 @@ class Channel(chn_class.Channel):
                 "User-Agent": "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.13) "
                               "Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)",
             }
-        if self.localIP:
-            headers.update(self.localIP)
 
-        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=headers or None)
+        data = UriHandler.open(item.url, additional_headers=headers or None)
         json = JsonHelper(data)
 
         embedded_data = json.get_value("embedded")
@@ -613,10 +611,10 @@ class Channel(chn_class.Channel):
             part = item.MediaItemParts[0]
             if part.Subtitle and part.Subtitle.endswith(".vtt"):
                 part.Subtitle = SubtitleHelper.download_subtitle(
-                    part.Subtitle, format="webvtt", proxy=self.proxy)
+                    part.Subtitle, format="webvtt")
             else:
                 part.Subtitle = SubtitleHelper.download_subtitle(
-                    part.Subtitle, format="dcsubtitle", proxy=self.proxy)
+                    part.Subtitle, format="dcsubtitle")
         else:
             part = item.create_new_empty_media_part()
 
@@ -661,7 +659,7 @@ class Channel(chn_class.Channel):
 
         """
         # first see if there are streams in this file, else check the second location.
-        for s, b in M3u8.get_streams_from_m3u8(url, self.proxy, headers=headers):
+        for s, b in M3u8.get_streams_from_m3u8(url, headers=headers):
             if use_kodi_hls:
                 strm = part.append_media_stream(url, 0)
                 M3u8.set_input_stream_addon_input(strm, headers=headers)
@@ -673,7 +671,7 @@ class Channel(chn_class.Channel):
         if not part.MediaStreams and "manifest.m3u8" in url:
             Logger.warning("No streams found in %s, trying alternative with 'master.m3u8'", url)
             url = url.replace("manifest.m3u8", "master.m3u8")
-            for s, b in M3u8.get_streams_from_m3u8(url, self.proxy, headers=headers):
+            for s, b in M3u8.get_streams_from_m3u8(url, headers=headers):
                 if use_kodi_hls:
                     strm = part.append_media_stream(url, 0)
                     M3u8.set_input_stream_addon_input(strm, headers=headers)
@@ -689,11 +687,10 @@ class Channel(chn_class.Channel):
             Logger.debug("Extracting subs from M3u8")
             sub_url = url.rsplit("uri=")[-1]
             sub_url = HtmlEntityHelper.url_decode(sub_url)
-            sub_data = UriHandler.open(sub_url, proxy=self.proxy)
+            sub_data = UriHandler.open(sub_url)
             subs = [line for line in sub_data.split("\n") if line.startswith("http")]
             if subs:
-                part.Subtitle = SubtitleHelper.download_subtitle(subs[0], format='webvtt',
-                                                                 proxy=self.proxy)
+                part.Subtitle = SubtitleHelper.download_subtitle(subs[0], format='webvtt')
         return
 
     def __update_rtmp(self, url, part, quality):
@@ -817,7 +814,7 @@ class Channel(chn_class.Channel):
         stream_url = embedded_data["prioritizedStreams"][0]["links"]["stream"]["href"]
         part = item.create_new_empty_media_part()
         stream = part.append_media_stream(stream_url, 0)
-        M3u8.set_input_stream_addon_input(stream, self.proxy)
+        M3u8.set_input_stream_addon_input(stream)
         item.complete = True
 
         # Some language codes need translation:

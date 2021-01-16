@@ -196,10 +196,10 @@ class Channel(chn_class.Channel):
             return item
 
         # https://www.foxsports.nl/api/video/videodata/2945190
-        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=item.HttpHeaders)
+        data = UriHandler.open(item.url, additional_headers=item.HttpHeaders)
         video_id = Regexer.do_regex(r'data-videoid="(\d+)" ', data)[-1]
         data = UriHandler.open("https://www.foxsports.nl/api/video/videodata/%s" % (video_id,),
-                               proxy=self.proxy, additional_headers=item.HttpHeaders, no_cache=True)
+                               additional_headers=item.HttpHeaders, no_cache=True)
         stream_id = Regexer.do_regex('<uri>([^>]+)</uri>', data)[-1]
 
         # POST https://d3api.foxsports.nl/api/V2/entitlement/tokenize
@@ -224,7 +224,7 @@ class Channel(chn_class.Channel):
         }
 
         data = UriHandler.open("https://d3api.foxsports.nl/api/V2/entitlement/tokenize",
-                               json=post_data, no_cache=True, proxy=self.proxy)
+                               json=post_data, no_cache=True)
         stream_info = JsonHelper(data)
         stream_url = stream_info.get_value("ContentUrl")
         if not stream_url:
@@ -236,5 +236,5 @@ class Channel(chn_class.Channel):
         part = item.create_new_empty_media_part()
         stream = part.append_media_stream(stream_url, 0)
         license_key = Mpd.get_license_key(license_url)
-        Mpd.set_input_stream_addon_input(stream, proxy=self.proxy, license_key=license_key)
+        Mpd.set_input_stream_addon_input(stream, license_key=license_key)
         return item

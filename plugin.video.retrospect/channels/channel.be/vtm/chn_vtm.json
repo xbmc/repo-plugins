@@ -12,7 +12,8 @@
       "channelcode": "vtmnieuws",
       "sortorder": 11,
       "language": "be",
-      "fanart": "vtmfanart.jpg"
+      "fanart": "vtmfanart.jpg",
+      "addonUrl": "plugin://plugin.video.vtm.go/channels/vtmnieuws"
     }
   ]
 }

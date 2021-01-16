@@ -5,7 +5,7 @@ import pytz
 import re
 
 from resources.lib import chn_class
-
+from resources.lib import contenttype
 from resources.lib.logger import Logger
 from resources.lib.regexer import Regexer
 from resources.lib.helpers import subtitlehelper
@@ -46,6 +46,7 @@ class Channel(chn_class.Channel):
         if self.channelCode == "uzgjson":
             self.baseUrl = "https://apps-api.uitzendinggemist.nl"
             self.mainListUri = "#mainlist"
+            self.mainListContentType = contenttype.NONE
             self.noImage = "nosimage.png"
         else:
             raise NotImplementedError("Code %s is not implemented" % (self.channelCode,))
@@ -242,7 +243,7 @@ class Channel(chn_class.Channel):
 
         data = "username=%s&password=%s" % (HtmlEntityHelper.url_encode(username),
                                             HtmlEntityHelper.url_encode(password))
-        UriHandler.open("https://www.npostart.nl/api/login", proxy=self.proxy, no_cache=True,
+        UriHandler.open("https://www.npostart.nl/api/login", no_cache=True,
                         additional_headers={
                             "X-Requested-With": "XMLHttpRequest",
                             "X-XSRF-TOKEN": xsrf_token
@@ -294,7 +295,7 @@ class Channel(chn_class.Channel):
             else:
                 next_page = "%s&%s" % (next_page, query_string)
 
-            page_data = UriHandler.open(next_page, proxy=self.proxy, additional_headers=http_headers)
+            page_data = UriHandler.open(next_page, additional_headers=http_headers)
             json_data = JsonHelper(page_data)
             tiles = json_data.get_value("tiles")
             if not isinstance(tiles, (tuple, list)):
@@ -375,6 +376,7 @@ class Channel(chn_class.Channel):
         extra.dontGroup = True
         extra.description = "Volledige programma lijst van NPO Start."
         extra.HttpHeaders = self.__jsonApiKeyHeader
+        extra.content_type = contenttype.TVSHOWS
         # API Key from here: https://packagist.org/packages/kro-ncrv/npoplayer?q=&p=0&hFR%5Btype%5D%5B0%5D=concrete5-package
         items.append(extra)
 
@@ -382,6 +384,7 @@ class Channel(chn_class.Channel):
                           "https://www.npostart.nl/programmas")
         extra.complete = True
         extra.dontGroup = True
+        extra.content_type = contenttype.FILES
         items.append(extra)
 
         extra = MediaItem(
@@ -390,6 +393,7 @@ class Channel(chn_class.Channel):
         extra.complete = True
         extra.description = "Alfabetische lijst van de NPO.nl site."
         extra.dontGroup = True
+        extra.content_type = contenttype.FILES
         items.append(extra)
 
         recent = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.Recent), "#recent")
@@ -542,6 +546,7 @@ class Channel(chn_class.Channel):
             sub_item = MediaItem(title_format % (char,), url_format % (char,))
             sub_item.complete = True
             sub_item.dontGroup = True
+            sub_item.content_type = contenttype.TVSHOWS
             sub_item.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
             items.append(sub_item)
         return data, items
@@ -587,7 +592,7 @@ class Channel(chn_class.Channel):
 
         xsrf_token = self.__get_xsrf_token()[0]
         UriHandler.open("https://www.npostart.nl/api/account/@me/profile/switch",
-                        proxy=self.proxy, data=profile_data,
+                        data=profile_data,
                         additional_headers={
                             "X-Requested-With": "XMLHttpRequest",
                             "X-XSRF-TOKEN": xsrf_token,
@@ -638,7 +643,7 @@ class Channel(chn_class.Channel):
         results <result_set>. The method should be implemented by derived classes
         and are specific to the channel.
 
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'folder'.
         :rtype: MediaItem|None
@@ -1142,7 +1147,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -1273,7 +1278,7 @@ class Channel(chn_class.Channel):
 
         # we need to determine radio or live tv
         Logger.debug("Fetching live stream data from item url: %s", item.url)
-        html_data = UriHandler.open(item.url, proxy=self.proxy)
+        html_data = UriHandler.open(item.url)
 
         mp3_urls = Regexer.do_regex("""data-streams='{"url":"([^"]+)","codec":"[^"]+"}'""", html_data)
         if len(mp3_urls) > 0:
@@ -1342,16 +1347,16 @@ class Channel(chn_class.Channel):
         if fetch_subtitles:
             sub_title_url = "https://assetscdn.npostart.nl/subtitles/original/nl/%s.vtt" % (episode_id,)
             sub_title_path = subtitlehelper.SubtitleHelper.download_subtitle(
-                sub_title_url, episode_id + ".nl.srt", format='srt', proxy=self.proxy)
+                sub_title_url, episode_id + ".nl.srt", format='srt')
             if sub_title_path:
                 part.Subtitle = sub_title_path
 
         if AddonSettings.use_adaptive_stream_add_on(
                 with_encryption=True, ignore_add_on_config=True):
-            error = NpoStream.add_mpd_stream_from_npo(None, episode_id, part, proxy=self.proxy, live=item.isLive)
+            error = NpoStream.add_mpd_stream_from_npo(None, episode_id, part, live=item.isLive)
             if bool(error) and self.__has_premium():
                 self.__log_on(force_log_off=True)
-                error = NpoStream.add_mpd_stream_from_npo(None, episode_id, part, proxy=self.proxy, live=item.isLive)
+                error = NpoStream.add_mpd_stream_from_npo(None, episode_id, part, live=item.isLive)
 
             if bool(error):
                 XbmcWrapper.show_dialog(
@@ -1380,7 +1385,7 @@ class Channel(chn_class.Channel):
         #     }
         #     UriHandler.open(
         #         "https://www.npostart.nl/api/progress/VPWON_1267211",
-        #         proxy=self.proxy, data=data, additional_headers={
+        #         data=data, additional_headers={
         #             "X-Requested-With": "XMLHttpRequest",
         #             "X-XSRF-TOKEN": xsrf_token,
         #             "content-type": "application/x-www-form-urlencoded; charset=UTF-8"
@@ -1483,7 +1488,7 @@ class Channel(chn_class.Channel):
         """
 
         # get a token (why?), cookies and an xsrf token
-        token = UriHandler.open("https://www.npostart.nl/api/token", proxy=self.proxy,
+        token = UriHandler.open("https://www.npostart.nl/api/token",
                                 no_cache=True,
                                 additional_headers={"X-Requested-With": "XMLHttpRequest"})
 

@@ -13,13 +13,13 @@ from resources.lib.logger import Logger
 
 
 class AwsIdp:
-    def __init__(self, pool_id, client_id, proxy=None, logger=None):
+    def __init__(self, pool_id, client_id, logger=None):
         """ Simple AWS Identity Provider client.
 
         :param str pool_id:     The AWS user pool to connect to (format: <region>_<poolid>).
-                                E.g.: eu-west-1_aLkOfYN3T
+                                 E.g.: eu-west-1_aLkOfYN3T
         :param str client_id:   The client application ID (the ID of the application connecting)
-        :param ProxyInfo proxy: A proxy info object if needed
+        :param Logger logger:   A Logger object if needed
 
         The content of this file is a simplification of the Warrent aws_srp.py file.
 
@@ -32,7 +32,6 @@ class AwsIdp:
         self.client_id = client_id
         self.region = self.pool_id.split("_")[0]
         self.url = "https://cognito-idp.%s.amazonaws.com/" % (self.region, )
-        self.__proxy = proxy
         self.__logger = logger
 
         # Initialize the values
@@ -75,9 +74,8 @@ class AwsIdp:
             "Accept-Encoding": "identity",
             "Content-Type": "application/x-amz-json-1.1"
         }
-        auth_response = UriHandler.open(self.url, proxy=self.__proxy,
-                                        params=auth_data, additional_headers=auth_headers,
-                                        force_text=True)
+        auth_response = UriHandler.open(self.url, params=auth_data,
+                                        additional_headers=auth_headers, force_text=True)
         auth_response_json = JsonHelper(auth_response)
         challenge_parameters = auth_response_json.get_value("ChallengeParameters")
         if self.__logger:
@@ -97,9 +95,8 @@ class AwsIdp:
             "X-Amz-Target": "AWSCognitoIdentityProviderService.RespondToAuthChallenge",
             "Content-Type": "application/x-amz-json-1.1"
         }
-        auth_response = UriHandler.open(self.url, proxy=self.__proxy,
-                                        params=challenge_data, additional_headers=challenge_headers,
-                                        force_text=True)
+        auth_response = UriHandler.open(self.url, params=challenge_data,
+                                        additional_headers=challenge_headers, force_text=True)
 
         auth_response_json = JsonHelper(auth_response)
         if "message" in auth_response_json.json:
@@ -133,8 +130,7 @@ class AwsIdp:
             "Content-Type": "application/x-amz-json-1.1"
         }
         refresh_request_data = JsonHelper.dump(refresh_request)
-        refresh_response = UriHandler.open(self.url, proxy=self.__proxy,
-                                           params=refresh_request_data,
+        refresh_response = UriHandler.open(self.url, params=refresh_request_data,
                                            additional_headers=refresh_headers)
         refresh_json = JsonHelper(refresh_response)
         id_token = refresh_json.get_value("AuthenticationResult", "IdToken")

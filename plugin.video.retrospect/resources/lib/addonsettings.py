@@ -9,7 +9,6 @@ import threading
 import xbmc
 
 from resources.lib.logger import Logger                               # this has not further references
-from resources.lib.proxyinfo import ProxyInfo                         # this has not further references
 from resources.lib.retroconfig import Config                          # this has not further references
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper   # Only has Logger as reference
 from resources.lib.settings import localsettings, kodisettings, settingsstore
@@ -22,14 +21,11 @@ LOCAL = "local"
 class AddonSettings(object):
     """ Static Class for retrieving Kodi Addon settings """
 
-    __NO_PROXY = True
-
     # these are static properties that store the settings. Creating them each time is causing major slow-down
     __user_agent = None
     __kodi_version = None
+    __kodi_version_int = 0
 
-    __PROXY_SETTING = "proxy"
-    __LOCAL_IP_SETTING = "local_ip"
     __USER_AGENT_SETTING = "user_agent"
     __MD5_HASH_VALUE = "md_hash_value"
     __CLIENT_ID = "client_id"
@@ -125,6 +121,20 @@ class AddonSettings(object):
         return AddonSettings.__kodi_version
 
     @staticmethod
+    def get_kodi_major_version():
+        """ Retrieves the Kodi major version we are running on.
+
+        :return: The major version of Kodi
+        :rtype: int
+
+        """
+
+        if AddonSettings.__kodi_version_int == 0:
+            AddonSettings.__kodi_version_int = int(AddonSettings.get_kodi_version().split(".")[0])
+
+        return AddonSettings.__kodi_version_int
+
+    @staticmethod
     def is_min_version(min_value):
         """ Checks whether the version of Kodi is higher or equal to the given version.
 
@@ -136,8 +146,7 @@ class AddonSettings(object):
 
         """
 
-        version = int(AddonSettings.get_kodi_version().split(".")[0])
-        return version >= min_value
+        return AddonSettings.get_kodi_major_version() >= min_value
     #endregion
 
     #region Generic Access to Settings from other modules
@@ -341,41 +350,6 @@ class AddonSettings(object):
     #endregion
 
     #region Geo and region stuff
-    @staticmethod
-    def get_available_countries(as_string=False, as_country_codes=False):
-        """ returns the all available ProxyGroupId's in order. The countries are:
-
-             :param bool as_country_codes:  Returns all the actual country codes values.
-             :param bool as_string:         Returns the translation ID for all the possible country
-                                            codes as strings.
-
-             :return: List[str] A list of either country codes or translation ID's
-
-             * other - Other languages
-             * uk    - United Kingdom
-             * nl    - The Netherlands
-             * se    - Sweden
-             * no    - Norway
-             * de    - Germany
-             * be    - Belgium
-             * ee    - Estonia
-             * lt    - Lithuania
-             * lv    - Latvia
-             * dk    - Danish
-
-        """
-
-        proxy_ids = [30025, 30300, 30301, 30307, 30302, 30305, 30309, 30306, 30308, 30303, 30304, 30310]
-        proxy_codes = [None, "other", "nl", "uk", "se", "no", "de", "be", "ee", "lt", "lv", "dk"]
-
-        if as_string:
-            return [str(i) for i in proxy_ids]
-
-        if as_country_codes:
-            return proxy_codes
-
-        return proxy_ids
-
     @staticmethod
     def hide_geo_locked_items_for_location(channel_region, value_only=False):
         """ Returns the config value that indicates what if we should hide items that are geographically
@@ -949,140 +923,6 @@ class AddonSettings(object):
         (settings_id, settings_label) = AddonSettings.__get_language_settings_id_and_label(language_code)
         return AddonSettings.store(KODI).get_boolean_setting(settings_id, default=True)
 
-    @staticmethod
-    def get_local_ip_header_for_channel(channel_info):
-        """ returns the local IP for a specific channel
-
-        :param channel_info: ChannelInfo - The channel to get proxy info for
-
-        :return: The LocalIP related x-forwarded-for HTTP Header
-        :rtype: dict
-
-        """
-
-        if AddonSettings.__NO_PROXY:
-            return None
-
-        prefix = AddonSettings.get_local_ip_header_country_code_for_channel(channel_info)
-        if prefix is None:
-            Logger.debug("No Local IP configured for %s", channel_info)
-            return None
-
-        Logger.debug("Country settings '%s' configured for Local IP for %s", prefix, channel_info)
-
-        server = AddonSettings.store(KODI).get_setting("%s_local_ip" % (prefix,), default=None)
-        if not server:
-            Logger.debug("No Local IP found for country '%s'", prefix)
-            return None
-
-        Logger.debug("Found Local IP for channel %s:\nLocal IP: %s", channel_info, server)
-        return {"X-Forwarded-For": server}
-
-    @staticmethod
-    def get_local_ip_header_country_code_for_channel(channel_info):
-        """ Returns the Country code for the LocalIP that is configured for this channel
-
-        :param channel_info:  The ChannelInfo object
-
-        :rtype: str
-        :return: 2 character ISO country code
-
-        """
-        if AddonSettings.__NO_PROXY:
-            return None
-
-        country_code = AddonSettings.store(LOCAL).\
-            get_setting(AddonSettings.__LOCAL_IP_SETTING, channel_info)
-        return country_code
-
-    @staticmethod
-    def set_local_ip_for_channel(channel_info, country_code):
-        """ Sets the country code for the local IP for a channel
-
-        :param channel_info:        The channel
-        :param str country_code:    The country code to use for local IP configuration
-
-        """
-
-        if country_code == "other":
-            Logger.warning("LocalIP updating to 'other' which is invalid. Setting it to None.")
-            country_code = None
-
-        AddonSettings.store(LOCAL).\
-            set_setting(AddonSettings.__LOCAL_IP_SETTING, country_code, channel=channel_info)
-        return
-
-    # noinspection PyUnusedLocal
-    @staticmethod
-    def get_proxy_for_channel(channel_info):
-        """ returns the proxy for a specific channel
-
-        :param channel_info: The channel to get proxy info for
-
-        :rtype: None|ProxyInfo
-        :return: The ProxyInfo object to use for calls for this channel. None means no proxy.
-
-        """
-
-        if AddonSettings.__NO_PROXY:
-            return None
-
-        prefix = AddonSettings.get_proxy_country_code_for_channel(channel_info)
-        if prefix is None:
-            Logger.debug("No proxy configured for %s", channel_info)
-            return None
-
-        Logger.debug("Country settings '%s' configured for Proxy for %s", prefix, channel_info)
-
-        server = AddonSettings.store(KODI).get_setting("%s_proxy_server" % (prefix,))
-        port = AddonSettings.store(KODI).get_integer_setting("%s_proxy_port" % (prefix,), default=0)
-        proxy_type = AddonSettings.store(KODI).get_setting("%s_proxy_type" % (prefix,))
-
-        if not proxy_type or proxy_type.lower() not in ('dns', 'http') or not server:
-            Logger.debug("No proxy found for country '%s'", prefix)
-            return None
-
-        username = AddonSettings.store(KODI).\
-            get_setting("%s_proxy_username" % (prefix,), default="")
-        password = AddonSettings.store(KODI).\
-            get_setting("%s_proxy_password" % (prefix,), default="")
-
-        p_info = ProxyInfo(server, port,
-                           scheme=proxy_type.lower(), username=username, password=password)
-        Logger.debug("Found proxy for channel %s:\n%s", channel_info, p_info)
-        return p_info
-
-    @staticmethod
-    def get_proxy_country_code_for_channel(channel_info):
-        """ Returns the Country code for the proxy that is configured for this channel
-
-        :param channel_info:  The ChannelInfo object
-
-        :return: 2 character ISO country code
-        :rtype: str
-
-        """
-
-        if AddonSettings.__NO_PROXY:
-            return None
-
-        country_code = AddonSettings.store(LOCAL).\
-            get_setting(AddonSettings.__PROXY_SETTING, channel_info)
-        return country_code
-
-    @staticmethod
-    def set_proxy_id_for_channel(channel_info, country_code):
-        """ Sets the country code for the proxy for a channel
-
-        :param channel_info: The channel
-        :param str country_code: The country code for the proxy to use.
-
-        """
-
-        AddonSettings.store(LOCAL).\
-            set_setting(AddonSettings.__PROXY_SETTING, country_code, channel_info)
-        return
-
     #noinspection PyUnresolvedReferences
     @staticmethod
     def update_add_on_settings_with_channels(channels, config):
@@ -1098,6 +938,10 @@ class AddonSettings(object):
 
         # Then we read the original file
         filename_template = os.path.join(config.rootDir, "resources", "data", "settings_template.xml")
+        if not os.path.isfile(filename_template):
+            Logger.debug("No template present in '%s'. Skipping generation.", filename_template)
+            return
+
         # noinspection PyArgumentEqualDefault
         with io.open(filename_template, "r", encoding="utf-8") as fp:
             contents = fp.read()
@@ -1400,38 +1244,4 @@ class AddonSettings(object):
         value = pattern % (value, "Show German", AddonSettings.show_channel_with_language("de"))
         value = pattern % (value, "Show Finnish", AddonSettings.show_channel_with_language("fi"))
         value = pattern % (value, "Show Other languages", AddonSettings.show_channel_with_language(None))
-
-        if AddonSettings.__NO_PROXY:
-            return value
-
-        try:
-            proxies = AddonSettings.get_available_countries(as_country_codes=True)
-            for country in proxies:
-                if country is None:
-                    continue
-                elif country == "other":
-                    country = country.title()
-                else:
-                    country = country.upper()
-
-                proxy_title = "{0} Proxy".format(country)
-                proxy_value = "{0} ({1})".format(
-                    AddonSettings.store(KODI).get_setting(
-                        "{0}_proxy_server".format(country.lower()), default="Not Set"),
-                    AddonSettings.store(KODI).get_setting(
-                        "{0}_proxy_type".format(country.lower()), default="Not Set"))
-                value = pattern % (value, proxy_title, proxy_value)
-
-                proxy_port_title = "{0} Proxy Port".format(country)
-                proxy_port_value = \
-                    AddonSettings.store(KODI).get_integer_setting(
-                        "{0}_proxy_port".format(country.lower()), default=0)
-                value = pattern % (value, proxy_port_title, proxy_port_value)
-
-                local_ip_title = "{0} Local IP".format(country)
-                local_ip_value = AddonSettings.store(KODI). \
-                    get_setting("{0}_local_ip".format(country.lower()), default="Not Set")
-                value = pattern % (value, local_ip_title, local_ip_value)
-        except:
-            Logger.error("Error", exc_info=True)
         return value

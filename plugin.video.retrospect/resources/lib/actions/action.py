@@ -14,5 +14,4 @@ SET_ENCRYPTION_PIN = "changepin"            # : Used for setting an application 
 SET_ENCRYPTED_VALUE = "encryptsetting"      # : Used for setting an application pin
 RESET_VAULT = "resetvault"                  # : Used for resetting the vault
 POST_LOG = "postlog"                        # : Used for sending log files to pastebin.com
-PROXY = "setproxy"                          # : Used for setting a proxy
 CLEANUP = "cleanup"                         # : Used for cleaning the cache and cookies

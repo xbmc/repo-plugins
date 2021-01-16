@@ -26,7 +26,8 @@
       "channelcode": "pathejson",
       "sortorder": 50,
       "language": "nl",
-      "fanart": "pathefanart.jpg"
+      "fanart": "pathefanart.jpg",
+      "poster": "patheposter_color.jpg"
     }
   ]
 }

@@ -270,13 +270,11 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
-        data = UriHandler.open(item.url, proxy=self.proxy)
+        data = UriHandler.open(item.url)
         json = JsonHelper(data, Logger.instance())
         video_data = json.get_value("video")
         if video_data:
             part = item.create_new_empty_media_part()
-            if self.localIP:
-                part.HttpHeaders.update(self.localIP)
 
             # Get the videos
             video_infos = video_data.get("videoReferences")
@@ -301,7 +299,7 @@ class Channel(chn_class.Channel):
 
                 elif "dash" in video_type:
                     stream = part.append_media_stream(video_url, supported_formats[video_type])
-                    Mpd.set_input_stream_addon_input(stream, self.proxy)
+                    Mpd.set_input_stream_addon_input(stream)
 
                 else:
                     continue
@@ -310,7 +308,7 @@ class Channel(chn_class.Channel):
                 # if "manifest.f4m" in stream_info:
                 #     continue
                 # elif "master.m3u8" in stream_info:
-                #     for s, b in M3u8.get_streams_from_m3u8(stream_info, self.proxy, headers=part.HttpHeaders):
+                #     for s, b in M3u8.get_streams_from_m3u8(stream_info, headers=part.HttpHeaders):
                 #         item.complete = True
                 #         part.append_media_stream(s, b)
 
@@ -320,7 +318,7 @@ class Channel(chn_class.Channel):
                 Logger.trace(subtitles)
                 sub_url = subtitles[0]["url"]
                 file_name = "%s.srt" % (EncodingHelper.encode_md5(sub_url),)
-                sub_data = UriHandler.open(sub_url, proxy=self.proxy)
+                sub_data = UriHandler.open(sub_url)
 
                 # correct the subs
                 regex = re.compile(r"^1(\d:)", re.MULTILINE)

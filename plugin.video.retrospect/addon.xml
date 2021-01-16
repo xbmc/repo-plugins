@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.19+matrix.1"
+        version="5.2.20+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -13,7 +13,7 @@
         <import addon="script.module.inputstreamhelper" version="0.3.5" />
         <import addon="script.module.pyscrypt" version="1.6.2" />
         <import addon="script.module.pyaes" version="1.6.1" />
-        <import addon="resource.images.retrospect" version="1.0.6" />
+        <import addon="resource.images.retrospect" version="1.0.8" />
     </requires>
 
     <extension  point="xbmc.python.pluginsource"
@@ -127,26 +127,39 @@
 
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.2.19 - Changelog - 2020-12-20[/B]
+        <news>[B]Retrospect v5.2.20 - Changelog - 2021-01-16[/B]
 
-Some Swedish channels had to be updated, as did NRK.no. During the fix, a small bug surfaced that had to be squashed.
+This version of Retrospect focusses on artwork: we introduced poster artwork for channels and shows. Not all channels support them, but more will come over time.
+
+There are also some channels fixes in this build: VTM and related channels  now redirect to the VTM Go add-on instead of Retrospect. Their add-on handles the VTM channel very nicely. MTV and UR Play.se have also been fixed.
 
 [B]Framework related[/B]
-_None_
+* Changed: Don&#x27;t generate settings.xml if no template is present.
+* Added: Content type option to MediaItem and main listing.
+* Changed: Specify `offscreen` for ListItems to improve performance.
+* Changed: Code clean-up for old code related to proxies.
 
 [B]GUI/Settings/Language related[/B]
-* Fixed: Some channels without settings did appear with settings in the context menu.
+* Added: Poster artwork for Channels and MediaItems.
 
 [B]Channel related[/B]
-* Fixed: UR Play moved to TTML subtitles, instead of WebSRT.
-* Changed: Moved Oppet Arkiv to SVT channel code as they are merging
-* Fixed: NRK.no did not play newer streams (Fixes #1459)
-* Updated: SVT Play categories (Fixes #1461)
+* Added: Movies to Kijk.nl channel (Fixes #1462)
+* Updated: RTL XL thumbs for shows.
+* Updated: VTM.be, Stievie.be and VTM Nieuws are now redirecting to the VTM GO add-on (Fixes #1409, See #1462)
+* Fixed: Some vier.be clips did not play (See #1463)
+* Renamed: dplay.se is now discoveryplus.se (Fixes #1467).
+* Fixed: MTV.nl and MTV.de stopped working
+* Fixed: UR Play broke due to URL changes.
+* Updated: Channel artwork for RTL XL and Kijk.nl.
+* Updated: Dumpert artwork.
+* Updated: Pathe artwork.
+* Updated: NPO Start artwork.
 
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>
             <fanart>resources/media/fanart.jpg</fanart>
+            <banner>resources/media/banner.jpg</banner>
             <screenshot>resources/media/retrospect01.jpg</screenshot>
             <screenshot>resources/media/retrospect02.jpg</screenshot>
             <screenshot>resources/media/retrospect03.jpg</screenshot>

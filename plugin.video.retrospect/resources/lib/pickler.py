@@ -104,43 +104,6 @@ class Pickler:
         self.__pickleContainer[item.guid] = hex_string
         return hex_string
 
-    def validate(self, test, raise_on_missing=False, logger=None):
-        """ Validates if in instance has all properties after depickling. The __class__ of
-        the 'test' should implement a self.__dir__(self) that returns the required attributes.
-
-        :param any test:                Item to test
-        :param bool raise_on_missing:   If True an error will be raised on failure
-        :param Logger|None logger:      Pass a loger in
-
-        :return: None if no error, or an error message if an error occurred.
-        :rtype: str|None
-
-        """
-
-        if logger is not None:
-            Logger.trace("Testing: %s", test.__dir__())
-
-        # the default dir() does not work for Android at the moment.
-        for attribute in test.__dir__():
-            if logger is not None:
-                logger.trace("Testing: %s", attribute)
-
-            # manage private attributes
-            if attribute.startswith("__"):
-                attribute = "_%s%s" % (test.__class__.__name__, attribute)
-
-            if not hasattr(test, attribute):
-                error = "Attribute Missing: %s" % attribute
-
-                if logger is not None:
-                    logger.warning(error)
-                if raise_on_missing:
-                    raise Exception(error)
-                return error
-
-        # We are good
-        return None
-
     def purge_store(self, addon_id, age=30):
         """ Purges all files older than xx days.
 

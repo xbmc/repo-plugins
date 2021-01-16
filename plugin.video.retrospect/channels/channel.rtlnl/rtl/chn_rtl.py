@@ -29,6 +29,7 @@ class Channel(chn_class.Channel):
 
         # ============== Actual channel setup STARTS here and should be overwritten from derived classes ===============
         self.noImage = "rtlimage.png"
+        self.poster = "rtlposter.png"
 
         # setup the urls
         self.mainListUri = "http://www.rtl.nl/system/s4m/vfd/version=1/d=pc/output=json/fun=az/fmt=smooth"
@@ -237,11 +238,13 @@ class Channel(chn_class.Channel):
         item.description = desc
 
         # sometimes the `"station": False` instead of a string
-        channel = str(result_set.get("station", "folder")).lower()
-        if channel in self.largeIconSet:
-            item.icon = self.largeIconSet[channel]
-            item.thumb = self.largeIconSet[channel]
+        # channel = str(result_set.get("station", "folder")).lower()
+        # if channel in self.largeIconSet:
+        #     item.icon = self.largeIconSet[channel]
+        #     item.thumb = self.largeIconSet[channel]
 
+        item.thumb = "https://covers.rtl.nl/cover/l/pc/{}".format(key)
+        item.poster = "https://covers.rtl.nl/cover/p/pc/{}".format(key)
         prog_logo = result_set.get("proglogo", None)
         if prog_logo:
             item.thumb = "http://data.rtl.nl/service/programma_logos/%s" % (prog_logo,)

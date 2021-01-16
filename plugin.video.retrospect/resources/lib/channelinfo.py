@@ -6,12 +6,12 @@ import sys
 
 import xbmcgui
 
-
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.logger import Logger
 from resources.lib.retroconfig import Config
 from resources.lib.addonsettings import AddonSettings
+from resources.lib import kodifactory
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.textures import TextureHandler
 
@@ -21,7 +21,7 @@ class ChannelInfo(object):
 
     def __init__(self, guid, name, description, icon, category, path,
                  channel_code=None, sort_order=255, language=None,
-                 ignore=False, fanart=None):
+                 ignore=False, fanart=None, poster=None):
         """ Creates a ChannelInfo object with basic information for a channel
 
         :param str guid:                        A unique GUID.
@@ -36,6 +36,7 @@ class ChannelInfo(object):
         :param str language:                    The language of the channel. Default is None.
         :param bool ignore:                     Should the channel be ignored? Defaults to False
         :param str fanart:                      A fanart url/path.
+        :param str poster:                      A poster url/path.
 
         """
 
@@ -65,11 +66,11 @@ class ChannelInfo(object):
         self.firstTimeMessage = None
 
         self.settings = []
-        self.localIPSupported = False
         self.addonUrl = None
 
         self.icon = icon
         self.fanart = fanart
+        self.poster = poster
         self.enabled = False                  # enabled from the settings
         self.visible = False                  # hidden/visible due to country settings
         self.adaptiveAddonSelectable = False  # can the InputStream Adaptive be selected
@@ -108,7 +109,7 @@ class ChannelInfo(object):
         :rtype: str
         """
 
-        return self.channelName.replace("(", "[").replace(")", "]")
+        return self.channelName.replace("(", "[").replace(")", "]").replace("+", " plus")
 
     def get_kodi_item(self):
         """ Creates an Kodi ListItem object for this channel
@@ -126,7 +127,7 @@ class ChannelInfo(object):
             name = "{} {}".format(name, XbmcWrapper.get_external_add_on_label(self.addonUrl))
 
         self.icon = self.__get_image_path(self.icon)
-        item = xbmcgui.ListItem(name, description)
+        item = kodifactory.list_item(name, description)
         item.setArt({'thumb': self.icon, 'icon': self.icon})
 
         # http://mirrors.kodi.tv/docs/python-docs/14.x-helix/xbmcgui.html#ListItem-setInfo
@@ -137,13 +138,17 @@ class ChannelInfo(object):
                                # "Tagline": description,
                                "Plot": description})
 
+        if self.poster is not None:
+            self.poster = self.__get_image_path(self.poster)
+            item.setArt({'poster': self.poster})
+
         if AddonSettings.hide_fanart():
             return item
 
         if self.fanart is not None:
             self.fanart = self.__get_image_path(self.fanart)
         else:
-            self.fanart = os.path.join(Config.rootDir, "fanart.jpg")
+            self.fanart = Config.fanart
         item.setArt({'fanart': self.fanart})
         return item
 
@@ -243,24 +248,27 @@ class ChannelInfo(object):
 
         for channel in channels:
             channel_guid = channel["guid"]
-            channel_info = ChannelInfo(channel_guid,
-                                       channel["name"],
-                                       channel["description"],
-                                       channel["icon"],
-                                       channel["category"],
-                                       path,
+            channel_info = ChannelInfo(
+                channel_guid,
+                channel["name"],
+                channel["description"],
+                channel["icon"],
+                channel["category"],
+                path,
 
-                                       # none required items
-                                       channel.get("channelcode", None),
-                                       channel.get("sortorder", 255),
-                                       channel.get("language", None),
-                                       channel.get("ignore", False),
-                                       channel.get("fanart", None))
+                # none required items
+                channel_code=channel.get("channelcode", None),
+                sort_order=channel.get("sortorder", 255),
+                language=channel.get("language", None),
+                ignore=channel.get("ignore", False),
+                fanart=channel.get("fanart", None),
+                poster=channel.get("poster", None)
+            )
+
             channel_info.firstTimeMessage = channel.get("message", None)
             channel_info.addonUrl = channel.get("addonUrl", None)
             channel_info.adaptiveAddonSelectable = channel.get("adaptiveAddonSelectable", False)
             # Disable spoofing for the moment
-            # channel_info.localIPSupported = channel.get("localIPSupported", False)
             channel_info.settings = [s for s in settings
                                      if "channels" not in s  # setting has no filters for channels
                                         or channel_guid in s["channels"]]  # setting applied to channel

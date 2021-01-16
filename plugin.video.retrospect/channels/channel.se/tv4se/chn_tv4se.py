@@ -163,7 +163,7 @@ class Channel(chn_class.Channel):
     #                      HtmlEntityHelper.url_encode(sessionToken)
     #                  )
     #         data = UriHandler.open("https://account.services.tv4play.se/session/reauthenticate",
-    #                                noCache=True, proxy=self.proxy, params=params)
+    #                                noCache=True, params=params)
     #
     #     if not data or "vimond_session_token" not in data:
     #         # 1: https://www.tv4play.se/session/new
@@ -190,7 +190,7 @@ class Channel(chn_class.Channel):
     #                      HtmlEntityHelper.url_encode(password),
     #                  )
     #         data = UriHandler.open("https://account.services.tv4play.se/session/authenticate",
-    #                                noCache=True, proxy=self.proxy, params=params)
+    #                                noCache=True, params=params)
     #         if not data:
     #             Logger.Error("Error logging in")
     #             return
@@ -210,7 +210,7 @@ class Channel(chn_class.Channel):
     #     # Get an OAuth token -> not really needed for the standard HTTP calls but it gets us the
     #     # expiration date
     #     tokenUrl = "https://token.services.tv4play.se/jwt?jsessionid=%s&client=tv4play-web" % (vimondSessionToken, )
-    #     token = UriHandler.open(tokenUrl, noCache=True, proxy=self.proxy)
+    #     token = UriHandler.open(tokenUrl, noCache=True)
     #     # Figure out the expiration data
     #     data, expires, other = token.split('.')
     #     expires += "=" * (4 - len(expires) % 4)
@@ -679,7 +679,7 @@ class Channel(chn_class.Channel):
                 """
 
         # retrieve the mediaurl
-        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=self.localIP)
+        data = UriHandler.open(item.url)
         stream_info = JsonHelper(data)
         stream_url = stream_info.get_value("playbackItem", "manifestUrl")
         if stream_url is None:
@@ -691,14 +691,14 @@ class Channel(chn_class.Channel):
         part = item.create_new_empty_media_part()
 
         if AddonSettings.use_adaptive_stream_add_on() and False:
-            subtitle = M3u8.get_subtitle(stream_url, proxy=self.proxy)
+            subtitle = M3u8.get_subtitle(stream_url)
             stream = part.append_media_stream(stream_url, 0)
-            M3u8.set_input_stream_addon_input(stream, self.proxy)
+            M3u8.set_input_stream_addon_input(stream)
             item.complete = True
         else:
-            m3u8_data = UriHandler.open(stream_url, proxy=self.proxy, additional_headers=self.localIP)
-            subtitle = M3u8.get_subtitle(stream_url, proxy=self.proxy, play_list_data=m3u8_data)
-            for s, b, a in M3u8.get_streams_from_m3u8(stream_url, self.proxy,
+            m3u8_data = UriHandler.open(stream_url)
+            subtitle = M3u8.get_subtitle(stream_url, play_list_data=m3u8_data)
+            for s, b, a in M3u8.get_streams_from_m3u8(stream_url,
                                                       play_list_data=m3u8_data, map_audio=True):
                 item.complete = True
                 if not item.isLive and "-video" not in s:
@@ -714,9 +714,7 @@ class Channel(chn_class.Channel):
 
         if subtitle:
             subtitle = subtitle.replace(".m3u8", ".webvtt")
-            part.Subtitle = SubtitleHelper.download_subtitle(subtitle,
-                                                             format="m3u8srt",
-                                                             proxy=self.proxy)
+            part.Subtitle = SubtitleHelper.download_subtitle(subtitle, format="m3u8srt")
         return item
 
     def update_live_item(self, item):
@@ -748,11 +746,11 @@ class Channel(chn_class.Channel):
 
         spoof_ip = self._get_setting("spoof_ip", "0.0.0.0")
         if spoof_ip:
-            for s, b in M3u8.get_streams_from_m3u8(item.url, self.proxy,
+            for s, b in M3u8.get_streams_from_m3u8(item.url,
                                                    headers={"X-Forwarded-For": spoof_ip}):
                 part.append_media_stream(s, b)
         else:
-            for s, b in M3u8.get_streams_from_m3u8(item.url, self.proxy):
+            for s, b in M3u8.get_streams_from_m3u8(item.url):
                 part.append_media_stream(s, b)
 
         item.complete = True
@@ -825,10 +823,10 @@ class Channel(chn_class.Channel):
                 license_url, key_value=license_key_token, key_headers=header)
 
             Mpd.set_input_stream_addon_input(
-                stream, proxy=self.proxy, license_key=license_key)
+                stream, license_key=license_key)
             item.isDrmProtected = False
         else:
-            Mpd.set_input_stream_addon_input(stream, proxy=self.proxy)
+            Mpd.set_input_stream_addon_input(stream)
 
         item.complete = True
         return item

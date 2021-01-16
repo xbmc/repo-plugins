@@ -4,7 +4,7 @@
 
 from __future__ import absolute_import, division, unicode_literals
 import xbmc
-from kodiutils import to_unicode
+from kodiutils import addon_icon, to_unicode, url_for
 
 
 class RedBullTV():
@@ -48,8 +48,50 @@ class RedBullTV():
         # NOTE: With Python 3.5 and older json.loads() does not support bytes or bytearray, so we convert to unicode
         return loads(to_unicode(response.read()))
 
+    @staticmethod
+    def get_iptv_channels():
+        # We only have a single live stream for Red Bul TV
+        return [
+            dict(
+                name='Red Bull TV',
+                stream='plugin://plugin.video.redbull.tv/iptv/play',
+                id='redbulltv',
+                logo=addon_icon(),
+                preset=88,
+            ),
+        ]
+
     def get_epg(self):
         return self.get_json(self.REDBULL_API + 'epg?complete=true', use_token=True)
+
+    def get_iptv_epg(self):
+        from collections import defaultdict
+        import re
+
+        epg = defaultdict(list)
+        regexp = re.compile(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}(Z|\+00:00)')
+
+        # Process the individual EPG items
+        for item in self.get_epg().get('items'):
+            if not regexp.match(item.get('start_time', '')):
+                xbmc.log("Invalid start_time '{start_time}' for Red Bull item ID '{id}'".format(**item))
+                continue
+
+            if not regexp.match(item.get('end_time', '')):
+                xbmc.log("Invalid start_time '{end_time}' for Red Bull item ID '{id}'".format(**item))
+                continue
+
+            epg['redbulltv'].append(dict(
+                start=item.get('start_time'),
+                stop=item.get('end_time'),
+                title=item.get('title'),
+                description=item.get('long_description'),
+                subtitle=item.get('subheading'),
+                genre='Sport',
+                image=self.get_image_url(item.get('id'), item.get('resources'), 'landscape'),
+                stream=url_for('play_uid', uid=item.get('id'))
+            ))
+        return epg
 
     def get_image_url(self, element_id, resources, element_type, width=1024, quality=70):
         if element_type == 'fanart':

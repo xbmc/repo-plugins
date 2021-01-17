@@ -956,3 +956,11 @@ msgstr ""
 msgctxt "#30263"
 msgid "Frame rate limit"
 msgstr ""
+
+msgctxt "#30264"
+msgid "Follow"
+msgstr ""
+
+msgctxt "#30265"
+msgid "Unfollow"
+msgstr ""

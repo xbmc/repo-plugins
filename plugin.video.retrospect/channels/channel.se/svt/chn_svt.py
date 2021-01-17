@@ -797,7 +797,7 @@ class Channel(chn_class.Channel):
         variables = {"titleSlugs": [slug.strip("/")]}
         hash_value = "4122efcb63970216e0cfb8abb25b74d1ba2bb7e780f438bbee19d92230d491c5"
         url = self.__get_api_url("TitlePage", hash_value, variables)
-        data = UriHandler.open(url, proxy=self.proxy)
+        data = UriHandler.open(url)
         json_data = JsonHelper(data)
 
         # Get the parent thumb info
@@ -837,7 +837,7 @@ class Channel(chn_class.Channel):
             {"genre": [genre]}
         )
 
-        data = UriHandler.open(url, proxy=self.proxy)
+        data = UriHandler.open(url)
         json_data = JsonHelper(data)
         possible_lists = json_data.get_value("data", "genres", 0,  "selectionsForWeb")
         program_items = [genres["items"] for genres in possible_lists if genres["selectionType"] == "all"]
@@ -1030,7 +1030,7 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting UpdateChannelItem for %s (%s)', item.name, self.channelName)
 
-        data = UriHandler.open(item.url, proxy=self.proxy)
+        data = UriHandler.open(item.url)
 
         json = JsonHelper(data, logger=Logger.instance())
         videos = json.get_value("videoReferences")
@@ -1060,7 +1060,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        data = UriHandler.open(item.url, proxy=self.proxy)
+        data = UriHandler.open(item.url)
         video_id = Regexer.do_regex(r'\s*"videoSvtId"\s*:\s*"([^"]+)"\s*', data)[0]
         item.url = "https://api.svt.se/video/{}".format(video_id)
         return self.update_video_api_item(item)
@@ -1154,9 +1154,6 @@ class Channel(chn_class.Channel):
 
         item.MediaItemParts = []
         part = item.create_new_empty_media_part()
-        if self.localIP:
-            part.HttpHeaders.update(self.localIP)
-
         use_input_stream = AddonSettings.use_adaptive_stream_add_on(channel=self)
 
         for video in videos:
@@ -1179,7 +1176,7 @@ class Channel(chn_class.Channel):
 
             if "dash" in video_format and use_input_stream:
                 stream = part.append_media_stream(video['url'], supported_formats[video_format])
-                Mpd.set_input_stream_addon_input(stream, self.proxy)
+                Mpd.set_input_stream_addon_input(stream)
 
             elif "m3u8" in url:
                 alt_index = url.find("m3u8?")
@@ -1194,7 +1191,6 @@ class Channel(chn_class.Channel):
                     part,
                     url,
                     encrypted=False,
-                    proxy=self.proxy,
                     headers=part.HttpHeaders,
                     channel=self,
                     bitrate=supported_formats[video_format]
@@ -1221,10 +1217,8 @@ class Channel(chn_class.Channel):
                     # look for more
                     continue
 
-                part.Subtitle = subtitlehelper.SubtitleHelper.download_subtitle(sub_url,
-                                                                                format="srt",
-                                                                                proxy=self.proxy,
-                                                                                replace={"&amp;": "&"})
+                part.Subtitle = subtitlehelper.SubtitleHelper.download_subtitle(
+                    sub_url, format="srt", replace={"&amp;": "&"})
                 # stop when finding one
                 break
 

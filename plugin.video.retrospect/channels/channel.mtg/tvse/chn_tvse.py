@@ -196,21 +196,16 @@ class Channel(chn_class.Channel):
 
         """
 
-        headers = {}
-        if self.localIP:
-            headers.update(self.localIP)
-
-        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=headers)
+        data = UriHandler.open(item.url)
         m3u8_url = Regexer.do_regex('data-file="([^"]+)"', data)[0]
 
         part = item.create_new_empty_media_part()
         if AddonSettings.use_adaptive_stream_add_on(with_encryption=False):
             stream = part.append_media_stream(m3u8_url, 0)
-            M3u8.set_input_stream_addon_input(stream, proxy=self.proxy, headers=headers)
+            M3u8.set_input_stream_addon_input(stream)
             item.complete = True
         else:
-            for s, b, a in M3u8.get_streams_from_m3u8(m3u8_url, self.proxy,
-                                                      headers=headers, map_audio=True):
+            for s, b, a in M3u8.get_streams_from_m3u8(m3u8_url, map_audio=True):
 
                 if a and "-audio" not in s:
                     video_part = s.rsplit("-", 1)[-1]

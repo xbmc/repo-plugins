@@ -12,7 +12,8 @@
       "channelcode": "vtm",
       "sortorder": 10,
       "language": "be",
-      "fanart": "vtmbefanart.jpg"
+      "fanart": "vtmbefanart.jpg",
+      "addonUrl": "plugin://plugin.video.vtm.go"
     },
     {
       "guid": "01C7064B-7E7A-4742-A042-E6F2F4EC5966",
@@ -41,7 +42,8 @@
       "channelcode": "stievie",
       "sortorder": 11,
       "language": "be",
-      "fanart": "stieviefanart2.jpg"
+      "fanart": "stieviefanart2.jpg",
+      "addonUrl": "plugin://plugin.video.vtm.go"
     }
   ],
   "settings": [

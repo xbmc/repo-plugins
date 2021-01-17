@@ -7,7 +7,6 @@ from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.regexer import Regexer
 from resources.lib.urihandler import UriHandler
-from resources.lib.proxyinfo import ProxyInfo
 
 
 class YouTube(object):
@@ -49,18 +48,17 @@ class YouTube(object):
     }
 
     @staticmethod
-    def get_streams_from_you_tube(url, proxy=None, use_add_on=True):
+    def get_streams_from_you_tube(url, use_add_on=True):
         """ Parsers standard YouTube videos and returns a list of tuples with streams and
         bitrates that can be used by other methods.
 
-        :param ProxyInfo proxy:     The proxy to use for opening
         :param str url:             The url to download
         :param bool use_add_on:     Should we use the Youtube add-on if available
 
         Can be used like this:
 
             part = item.create_new_empty_media_part()
-            for s, b in YouTube.get_streams_from_you_tube(url, self.proxy):
+            for s, b in YouTube.get_streams_from_you_tube(url):
                 item.complete = True
                 # s = self.get_verifiable_video_url(s)
                 part.append_media_stream(s, b)
@@ -91,7 +89,7 @@ class YouTube(object):
             Logger.error("Invalid Youtube URL specified: '%s'", url)
             return []
 
-        data = UriHandler.open(url, proxy=proxy)
+        data = UriHandler.open(url)
         if isinstance(data, bytes):
             data = data.decode()
         # get the stream data from the page

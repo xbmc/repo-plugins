@@ -271,8 +271,7 @@ class Channel(chn_class.Channel):
         """
 
         # http://services.vrt.be/videoplayer/r/live.json?_1466364209811=
-        channel_data = UriHandler.open("http://services.vrt.be/videoplayer/r/live.json",
-                                       proxy=self.proxy)
+        channel_data = UriHandler.open("http://services.vrt.be/videoplayer/r/live.json")
         channel_data = JsonHelper(channel_data)
         url = None
         for channel_id in channel_data.json:
@@ -287,7 +286,7 @@ class Channel(chn_class.Channel):
 
         Logger.debug("Found stream url for %s: %s", item, url)
         part = item.create_new_empty_media_part()
-        for s, b in M3u8.get_streams_from_m3u8(url, self.proxy):
+        for s, b in M3u8.get_streams_from_m3u8(url):
             item.complete = True
             part.append_media_stream(s, b)
         return item
@@ -334,7 +333,7 @@ class Channel(chn_class.Channel):
         """
 
         # now the mediaurl is derived. First we try WMV
-        data = UriHandler.open(item.url, proxy=self.proxy)
+        data = UriHandler.open(item.url)
         data = data.replace("\\/", "/")
         urls = Regexer.do_regex(self.mediaUrlRegex, data)
         part = item.create_new_empty_media_part()
@@ -363,7 +362,7 @@ class Channel(chn_class.Channel):
                     if not flv.endswith("playlist.m3u8"):
                         flv = "%s/playlist.m3u8" % (flv,)
 
-                    for s, b in M3u8.get_streams_from_m3u8(flv, self.proxy):
+                    for s, b in M3u8.get_streams_from_m3u8(flv):
                         item.complete = True
                         part.append_media_stream(s, b)
                     # no need to continue adding the streams

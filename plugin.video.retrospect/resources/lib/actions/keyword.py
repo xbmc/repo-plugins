@@ -12,5 +12,3 @@ SETTING_NAME = "settingname"            # : Used for setting an encrypted settin
 SETTING_TAB_FOCUS = "tabfocus"          # : Used for setting the tabcontrol to focus after changing a setting
 SETTING_FOCUS = "settingfocus"          # : Used for setting the setting control to focus after changing a setting
 LANGUAGE = "lang"                       # : Used for the 2 char language information
-PROXY = "proxy"                         # : Used so set the proxy index
-LOCAL_IP = "localip"                    # : Used to set the local ip index

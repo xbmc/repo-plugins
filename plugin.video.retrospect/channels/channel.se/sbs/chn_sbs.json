@@ -44,17 +44,17 @@
     },
     {
       "guid": "230A2F56-572B-470B-AD53-AFD20A768D54",
-      "name": "Dplay (Sverige)",
+      "name": "discovery+",
       "description": {
-        "en": "Broadcasts and show from Dplay.se.",
-        "sv": "Sändningar från Dplay.se."
+        "en": "Broadcasts and show from discoveryplus.se.",
+        "sv": "Sändningar från discoveryplus.se."
       },
-      "icon": "dplaylarge.png",
+      "icon": "dpluslarge.png",
       "category": "National",
       "channelcode": "dplayse",
       "sortorder": 7,
       "language": "se",
-      "fanart": "dplayfanart.jpg"
+      "fanart": "dplusfanart.jpg"
     },
     {
       "guid": "90C8695D-23AE-45B5-BD51-CEA780A770B0",

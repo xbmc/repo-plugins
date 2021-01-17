@@ -51,7 +51,9 @@ class Adaptive(object):
 
     # noinspection PyUnusedLocal
     @staticmethod
-    def set_input_stream_addon_input(strm, proxy=None, headers=None, addon="inputstream.adaptive",
+    def set_input_stream_addon_input(strm,
+                                     headers=None,
+                                     addon="inputstream.adaptive",
                                      manifest_type=None,
                                      license_key=None,
                                      license_type=None,
@@ -62,7 +64,6 @@ class Adaptive(object):
         """ Updates an existing stream with parameters for the inputstream adaptive add-on.
 
         :param strm:                    (MediaStream) the MediaStream to update
-        :param proxy:                   (Proxy) The proxy to use for opening
         :param dict headers:            Possible HTTP Headers
         :param str addon:               Adaptive add-on to use
         :param str manifest_type:       Type of manifest (hls/mpd)
@@ -80,7 +81,7 @@ class Adaptive(object):
 
             part = item.create_new_empty_media_part()
             stream = part.append_media_stream(stream_url, 0)
-            M3u8.set_input_stream_addon_input(stream, self.proxy, self.headers)
+            M3u8.set_input_stream_addon_input(stream, self.headers)
             item.complete = True
 
         if maxBitRate is not set, the bitrate will be configured via the normal generic Retrospect

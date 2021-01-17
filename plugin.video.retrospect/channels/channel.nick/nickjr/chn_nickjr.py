@@ -271,14 +271,14 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
-        meta_data = UriHandler.open(item.url, proxy=self.proxy, referer=self.baseUrl)
+        meta_data = UriHandler.open(item.url, referer=self.baseUrl)
         meta = JsonHelper(meta_data)
         stream_parts = meta.get_value("feed", "items")
         for stream_part in stream_parts:
             stream_url = stream_part["group"]["content"]
             stream_url = stream_url.replace("&device={device}", "")
             stream_url = "%s&format=json&acceptMethods=hls" % (stream_url, )
-            stream_data = UriHandler.open(stream_url, proxy=self.proxy)
+            stream_data = UriHandler.open(stream_url)
             stream = JsonHelper(stream_data)
 
             # subUrls = stream.get_value("package", "video", "item", 0, "transcript", 0, "typographic")  # NOSONAR
@@ -287,7 +287,7 @@ class Channel(chn_class.Channel):
             hls_streams = stream.get_value("package", "video", "item", 0, "rendition")
             for hls_stream in hls_streams:
                 hls_url = hls_stream["src"]
-                item.complete |= M3u8.update_part_with_m3u8_streams(part, hls_url, proxy=self.proxy)
+                item.complete |= M3u8.update_part_with_m3u8_streams(part, hls_url)
 
         item.complete = True
         Logger.trace("Media url: %s", item)

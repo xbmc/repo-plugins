@@ -174,11 +174,11 @@ class Channel(chn_class.Channel):
         part = item.create_new_empty_media_part()
         if item.url == "#livetv":
             url = "https://d34pj260kw1xmk.cloudfront.net/live/l1/tv/index.m3u8"
-            M3u8.update_part_with_m3u8_streams(part, url, encrypted=True, proxy=self.proxy)
+            M3u8.update_part_with_m3u8_streams(part, url, encrypted=True)
         else:
             # the audio won't play with the InputStream Adaptive add-on.
             url = "https://d34pj260kw1xmk.cloudfront.net/live/l1/radio/index.m3u8"
-            for s, b in M3u8.get_streams_from_m3u8(url, self.proxy):
+            for s, b in M3u8.get_streams_from_m3u8(url):
                 part.append_media_stream(s, b)
 
         item.complete = True
@@ -209,7 +209,7 @@ class Channel(chn_class.Channel):
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
         if not item.url.endswith(".js"):
-            data = UriHandler.open(item.url, proxy=self.proxy)
+            data = UriHandler.open(item.url)
             data_id = Regexer.do_regex(r'data-id="(\d+)"[^>]+data-playout', data)
             if data_id is None:
                 Logger.warning("Cannot find stream-id for L1 stream.")
@@ -219,7 +219,7 @@ class Channel(chn_class.Channel):
         else:
             data_url = item.url
 
-        data = UriHandler.open(data_url, proxy=self.proxy)
+        data = UriHandler.open(data_url)
         json = JsonHelper(data, logger=Logger.instance())
         Logger.trace(json)
 

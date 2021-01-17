@@ -32,7 +32,7 @@ class Api:
     def __init__(self, auth):
         """ Initialise object """
         self._auth = auth
-        self._tokens = self._auth.login()
+        self._tokens = self._auth.get_tokens()
 
     def _mode(self):
         """ Return the mode that should be used for API calls. """
@@ -262,7 +262,7 @@ class Api:
 
         # Calculate a hash value of the ids of all episodes
         program_hash = hashlib.md5()
-        program_hash.update(program.get('id'))
+        program_hash.update(program.get('id').encode())
 
         seasons = {}
         for item_season in program.get('seasons', []):
@@ -287,7 +287,7 @@ class Api:
                     progress=item_episode.get('playerPositionSeconds', 0),
                     watched=item_episode.get('doneWatching', False),
                 )
-                program_hash.update(item_episode.get('id'))
+                program_hash.update(item_episode.get('id').encode())
 
             seasons[item_season.get('index')] = Season(
                 number=item_season.get('index'),

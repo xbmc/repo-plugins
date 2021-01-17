@@ -8,6 +8,7 @@ import logging
 import requests
 from requests import HTTPError
 
+from resources.lib import kodiutils
 from resources.lib.streamz.exceptions import InvalidLoginException, InvalidTokenException, LimitReachedException, UnavailableException
 
 _LOGGER = logging.getLogger(__name__)
@@ -21,6 +22,8 @@ SESSION.headers = {
     'x-persgroep-os': 'android',
     'x-persgroep-os-version': '23',
 }
+
+PROXIES = kodiutils.get_proxies()
 
 
 def http_get(url, params=None, token=None, profile=None, headers=None):
@@ -161,7 +164,7 @@ def _request(method, url, params=None, form=None, data=None, token=None, profile
     if profile:
         headers['x-dpp-profile'] = profile
 
-    response = SESSION.request(method, url, params=params, data=form, json=data, headers=headers)
+    response = SESSION.request(method, url, params=params, data=form, json=data, headers=headers, proxies=PROXIES)
 
     # Set encoding to UTF-8 if no charset is indicated in http headers (https://github.com/psf/requests/issues/1604)
     if not response.encoding:

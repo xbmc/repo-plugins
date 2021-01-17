@@ -17,12 +17,11 @@ class Stream:
     """ Streamz Stream API """
 
     _API_KEY = 'zs06SrhsKN2fEQvDdTMDR2t6wYwfceQu5HAmGa0p'
-    _ANVATO_USER_AGENT = 'ANVSDK Android/5.0.39 (Linux; Android 6.0.1; Nexus 5)'
 
     def __init__(self, auth):
         """ Initialise object """
         self._auth = auth
-        self._tokens = self._auth.login()
+        self._tokens = self._auth.get_tokens()
 
     def _mode(self):
         """ Return the mode that should be used for API calls """

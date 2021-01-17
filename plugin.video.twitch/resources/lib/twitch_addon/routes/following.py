@@ -11,6 +11,7 @@
 from ..addon import menu_items
 from ..addon.common import kodi
 from ..addon.constants import MODES
+from ..addon.utils import get_private_oauth_token
 from ..addon.utils import i18n
 
 from twitch.api.parameters import StreamType
@@ -26,8 +27,9 @@ def route():
     context_menu.extend(menu_items.change_direction('followed_channels'))
     kodi.create_item({'label': i18n('channels'), 'path': {'mode': MODES.FOLLOWED, 'content': 'channels'}, 'context_menu': context_menu,
                       'info': {'plot': '%s - %s' % (i18n('following'), i18n('channels'))}})
-    kodi.create_item({'label': i18n('games'), 'path': {'mode': MODES.FOLLOWED, 'content': 'games'},
-                      'info': {'plot': '%s - %s' % (i18n('following'), i18n('games'))}})
+    if get_private_oauth_token():
+        kodi.create_item({'label': i18n('games'), 'path': {'mode': MODES.FOLLOWED, 'content': 'games'},
+                          'info': {'plot': '%s - %s' % (i18n('following'), i18n('games'))}})
     context_menu = list()
     context_menu.extend(menu_items.change_sort_by('clips'))
     kodi.create_item({'label': i18n('clips'), 'path': {'mode': MODES.FOLLOWED, 'content': 'clips'}, 'context_menu': context_menu,

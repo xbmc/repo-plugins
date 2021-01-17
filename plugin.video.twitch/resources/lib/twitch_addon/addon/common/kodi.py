@@ -28,6 +28,11 @@ import json
 import time
 
 try:
+    xbmc.translatePath = xbmcvfs.translatePath
+except AttributeError:
+    pass
+
+try:
     addon = xbmcaddon.Addon()
 except RuntimeError:
     addon = xbmcaddon.Addon('plugin.video.twitch')  # RunScript

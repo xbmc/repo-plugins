@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.redbull.tv" name="Red Bull TV" version="3.2.1" provider-name="piejanssens">
+<addon id="plugin.video.redbull.tv" name="Red Bull TV" version="3.2.2" provider-name="piejanssens">
   <requires>
     <import addon="script.module.dateutil" version="2.8.0" />
     <import addon="script.module.routing" version="0.2.0" />
@@ -29,6 +29,11 @@
       <screenshot>resources/media/screenshot04.jpg</screenshot>
     </assets>
     <news>
+v3.2.2
+- Fix EPG loading
+- Support for Python 3.9
+- Allow installing IPTV Manager from the add-on settings 
+
 v3.2.1
 - Fix OK dialog
 - Catch missing EPG time markers

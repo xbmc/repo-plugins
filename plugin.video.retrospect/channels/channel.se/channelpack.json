@@ -2,6 +2,7 @@
   "textures": {
     "channel.se.oppetarkiv/oppetarkivfanart.jpg": "903bc29217bc40ecae55af098dc17e08",
     "channel.se.sbs/dplayfanart.jpg": "88f9bb12ca35416f66c2b4f2d27ab0d8",
+    "channel.se.sbs/dplusfanart.jpg": "009171a067e7f1b98aeef6251b7e27dc",
     "channel.se.sbs/kanal5fanart.jpg": "f9a94784209abfbb6314ae9529c1bacc",
     "channel.se.sbs/tv11fanart.jpg": "24c6aa0ee1f7a49089f9e8b2929c194a",
     "channel.se.sbs/tv11seimage.jpg": "aa685f708e272c69b41c4df5583a5da7",
@@ -18,6 +19,8 @@
     "channel.se.sbs/dplayfanart.png": "f2acd6984bb38466f08082e4b696e04e",
     "channel.se.sbs/dplayimage.png": "33ce9dbc98c4541db151dd49e0187c70",
     "channel.se.sbs/dplaylarge.png": "0926757305f3860000c98fd4ae147c7b",
+    "channel.se.sbs/dplusimage.png": "3c48a8caefded178f56208b51aeb4539",
+    "channel.se.sbs/dpluslarge.png": "37709a7afdb528f415673f310eca2543",
     "channel.se.sbs/femnorgelarge.png": "5e71b3d4c776cb19dfb3e8b19fbcd356",
     "channel.se.sbs/investigationdiscoverynorgelarge.png": "181545e4136cfda53e8fed3dd26e473c",
     "channel.se.sbs/maxnorgelarge.png": "1c3e7e1d539fcc119e8202caa99350c4",

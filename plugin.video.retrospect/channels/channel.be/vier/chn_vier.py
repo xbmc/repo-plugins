@@ -119,7 +119,7 @@ class Channel(chn_class.Channel):
         # refresh token: viervijfzes_refresh_token
         refresh_token = AddonSettings.get_setting("viervijfzes_refresh_token")
         client = AwsIdp("eu-west-1_dViSsKM5Y", "6s1h851s8uplco5h6mqh1jac8m",
-                        proxy=self.proxy, logger=Logger.instance())
+                        logger=Logger.instance())
         if refresh_token:
             id_token = client.renew_token(refresh_token)
             if id_token:
@@ -419,7 +419,7 @@ class Channel(chn_class.Channel):
         # videoId = item.url.split("/")[-1]
         # url = "%s/video/v3/embed/%s" % (self.baseUrl, videoId,)
         url = item.url
-        data = UriHandler.open(url, proxy=self.proxy)
+        data = UriHandler.open(url)
         return self.__update_video(item, data)
 
     def update_video_item_with_id(self, item):
@@ -451,7 +451,7 @@ class Channel(chn_class.Channel):
 
     def __update_video(self, item, data):
         if not item.url.startswith("https://api.viervijfzes.be/content/"):
-            regex = 'data-videoid="([^"]+)'
+            regex = 'data-video-*id="([^"]+)'
             m3u8_url = Regexer.do_regex(regex, data)[-1]
             # we either have an URL now or an uuid
         else:
@@ -470,7 +470,7 @@ class Channel(chn_class.Channel):
                 "authorization": self.__idToken,
                 "content-type": "application/json"
             }
-            data = UriHandler.open(url, proxy=self.proxy, additional_headers=authentication_header)
+            data = UriHandler.open(url, additional_headers=authentication_header)
             json_data = JsonHelper(data)
             m3u8_url = json_data.get_value("video", "S")
 
@@ -481,6 +481,6 @@ class Channel(chn_class.Channel):
 
         part = item.create_new_empty_media_part()
         item.complete = M3u8.update_part_with_m3u8_streams(
-            part, m3u8_url, proxy=self.proxy, channel=self, encrypted=False)
+            part, m3u8_url, channel=self, encrypted=False)
 
         return item

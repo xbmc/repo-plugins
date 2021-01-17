@@ -46,7 +46,7 @@ class SubtitleHelper(object):
 
     # noinspection PyShadowingBuiltins
     @staticmethod
-    def download_subtitle(url, file_name="", format='sami', proxy=None, replace=None):
+    def download_subtitle(url, file_name="", format='sami', replace=None):
         """Downloads a SAMI and stores the SRT in the cache folder
 
         Arguments:
@@ -55,7 +55,6 @@ class SubtitleHelper(object):
                                      if not specified, an MD5 hash of the URL with .xml
                                      extension will be used
         @param format:      string - Defines the source format. Defaults to Sami.
-        @param proxy:       Proxy  - If specified, a proxy will be used
         @param replace:     dict   - Dictionary with key to will be replaced with their values
 
         @return: The full patch of the cached SRT file.
@@ -80,7 +79,7 @@ class SubtitleHelper(object):
                 return local_complete_path
 
             Logger.trace("Opening Subtitle URL")
-            raw = UriHandler.open(url, proxy=proxy)
+            raw = UriHandler.open(url)
             if UriHandler.instance().status.error:
                 Logger.warning("Could not retrieve subtitle from %s", url)
                 return ""
@@ -108,7 +107,7 @@ class SubtitleHelper(object):
                 format = "webvtt"
 
             # Actually transform the subtitle
-            srt = SubtitleHelper.__transform(raw, sub_format=format, url=url, proxy=proxy)
+            srt = SubtitleHelper.__transform(raw, sub_format=format, url=url)
 
             if replace:
                 Logger.debug("Replacing SRT data: %s", replace)
@@ -360,7 +359,7 @@ class SubtitleHelper(object):
         return srt
 
     @staticmethod
-    def __convert_m3u8_srt_to_subtitle_to_srt(raw, url, proxy):
+    def __convert_m3u8_srt_to_subtitle_to_srt(raw, url):
         # Find the VTT line in the subtitle
         lines = raw.split("\n")
         sub_url = None
@@ -378,7 +377,7 @@ class SubtitleHelper(object):
         # Now we know the subtitle, it would be wise to just use the existing converters to just
         # convert the data, but now now
         result = ""
-        m3u8_sub = UriHandler.open(sub_url, proxy=proxy)
+        m3u8_sub = UriHandler.open(sub_url)
 
         if isinstance(m3u8_sub, bytes):
             # Decode the data as it should be str
@@ -421,13 +420,12 @@ class SubtitleHelper(object):
         return sync
 
     @staticmethod
-    def __transform(raw, sub_format, url, proxy):
+    def __transform(raw, sub_format, url):
         """ Transforms subtitle into a specific format
 
         @param str url:         URL location of the SAMI file
         @param str raw:         The raw subtitle data
         @param str sub_format:  Defines the source format. Defaults to Sami.
-        @param Proxy proxy:     If specified, a proxy will be used
 
         """
 
@@ -447,7 +445,7 @@ class SubtitleHelper(object):
         elif sub_format.lower() == 'json':
             srt = SubtitleHelper.__convert_json_subtitle_to_srt(raw)
         elif sub_format.lower() == 'm3u8srt':
-            srt = SubtitleHelper.__convert_m3u8_srt_to_subtitle_to_srt(raw, url, proxy)
+            srt = SubtitleHelper.__convert_m3u8_srt_to_subtitle_to_srt(raw, url)
         else:
             error = "Unknown subtitle format: %s" % (sub_format,)
             raise NotImplementedError(error)

@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import xbmcgui
 import xbmcplugin
 
 from resources.lib.actions import action
 from resources.lib.actions.addonaction import AddonAction
+from resources.lib import kodifactory
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.logger import Logger
@@ -41,7 +41,7 @@ class CategoryAction(AddonAction):
         fanart = Config.fanart
         for category in categories:
             name = LanguageHelper.get_localized_category(category)
-            kodi_item = xbmcgui.ListItem(name, name)
+            kodi_item = kodifactory.list_item(name, name)
 
             # set art
             try:

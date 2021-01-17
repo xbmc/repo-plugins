@@ -1,6 +1,7 @@
 {
   "textures": {
     "channel.regionalnl.at5/at5fanart.jpg": "b0ecf807fcc933e88305cbc071c0ad5c",
+    "channel.regionalnl.at5/at5poster.jpg": "614e00919190eecacd1a3c01a21fdf52",
     "channel.regionalnl.at5/rtvnhfanart.jpg": "1808c5fd3dd6607bfeb35267e3a69653",
     "channel.regionalnl.flevo/flevofanart.jpg": "2b9c66d86a8f3431666460107cad98c3",
     "channel.regionalnl.l1/l1fanart.jpg": "c8fa3216f6480ffe8479549a36529aaf",
@@ -30,6 +31,7 @@
     "channel.regionalnl.gelderland/gelderlandlarge.png": "0df0c30cc374db19ef305d3df8df33a2",
     "channel.regionalnl.l1/l1image.png": "6cb8c6cff49ac1cbc84e3295523aab6e",
     "channel.regionalnl.l1/l1large.png": "4c5c989652417030384c75d5593f6456",
+    "channel.regionalnl.l1/l1poster.png": "80c06dd66df0b1debebf94c746c9ae3e",
     "channel.regionalnl.lokaal/omroepbrabantfanart.png": "e302ec753b50d2c971addd8ee02a33a8",
     "channel.regionalnl.lokaal/omroepbrabantimage.png": "b1196b5cf23393eb1fbdb93c004a5233",
     "channel.regionalnl.lokaal/omroepbrabantlarge.png": "562d7563fa3a2a0fe50306dc5ee2bff3",

@@ -206,7 +206,7 @@ class Channel(chn_class.Channel):
         if long_login_cookie is not None:
             # if we stored a valid user signature, we can use it, together with the 'gmid' and
             # 'ucid' cookies to extend the session and get new token data
-            data = UriHandler.open("https://token.vrt.be/refreshtoken", proxy=self.proxy, no_cache=True)
+            data = UriHandler.open("https://token.vrt.be/refreshtoken", no_cache=True)
             if "vrtnutoken" in data:
                 Logger.debug("Refreshed the VRT.be session.")
                 return True
@@ -240,14 +240,14 @@ class Channel(chn_class.Channel):
             "authMode": "cookie",
             "format": "json"
         }
-        logon_data = UriHandler.open(url, data=data, proxy=self.proxy, no_cache=True)
+        logon_data = UriHandler.open(url, data=data, no_cache=True)
         user_id, signature, signature_time_stamp = self.__extract_session_data(logon_data)
         if user_id is None or signature is None or signature_time_stamp is None:
             return False
 
         # We need to initialize the token retrieval which will redirect to the actual token
         UriHandler.open("https://token.vrt.be/vrtnuinitlogin?provider=site&destination=https://www.vrt.be/vrtnu/",
-                        proxy=self.proxy, no_cache=True)
+                        no_cache=True)
 
         # Now get the actual VRT tokens (X-VRT-Token....). Valid for 1 hour. So we call the actual
         # perform_login url which will redirect and get cookies.
@@ -263,7 +263,7 @@ class Channel(chn_class.Channel):
             "submit": "submit",
             "_csrf": csrf.value
         }
-        UriHandler.open("https://login.vrt.be/perform_login", proxy=self.proxy, data=token_data, no_cache=True)
+        UriHandler.open("https://login.vrt.be/perform_login", data=token_data, no_cache=True)
         return True
 
     def add_categories(self, data):
@@ -599,7 +599,7 @@ class Channel(chn_class.Channel):
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
         # Get the MZID
-        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=item.HttpHeaders)
+        data = UriHandler.open(item.url, additional_headers=item.HttpHeaders)
         json_data = Regexer.do_regex(r'<script type="application/ld\+json">(.*?)</script>', data)
         json_info = JsonHelper(json_data[-1])
         video_id = json_info.get_value("video", "@id")

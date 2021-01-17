@@ -16,7 +16,7 @@ class Mms(object):
         raise NotImplementedError
 
     @staticmethod
-    def get_mms_from_html(url, proxy=None, index=0):
+    def get_mms_from_html(url, index=0):
         """Opens a URL with a MMS playlist and returns the first found stream
         in the MMS file. Searches for http://url and returns mms://url.
 
@@ -24,7 +24,6 @@ class Mms(object):
         url : string - the URL to a MMS playlist.
 
         Keyword Arguments:
-        proxy : Proxy - Proxy info
         index : int   - The index of the item to retrieve
 
         Returns:
@@ -45,7 +44,7 @@ class Mms(object):
             return url
 
         Logger.debug("Parsing %s to find MMS", url)
-        data = UriHandler.open(url, proxy=proxy)
+        data = UriHandler.open(url)
         urls = Regexer.do_regex(r"[Rr]ef\d=http://([^\r\n]+)", data)
 
         if len(urls) > index:
@@ -56,7 +55,7 @@ class Mms(object):
             return url
 
     @staticmethod
-    def get_mms_from_asx(url, proxy):
+    def get_mms_from_asx(url):
         """Opens a URL with an ASX playlist and returns the first found stream
         in the ASX file. Only searches for mms://url.
 
@@ -95,7 +94,7 @@ class Mms(object):
             return url
 
         Logger.debug("Parsing %s to find MMS", url)
-        data = UriHandler.open(url, proxy=proxy)
+        data = UriHandler.open(url)
         urls = Regexer.do_regex(r'[Rr]ef href\W*=\W*"mms://([^"]+)"', data)
 
         if len(urls) > 0:

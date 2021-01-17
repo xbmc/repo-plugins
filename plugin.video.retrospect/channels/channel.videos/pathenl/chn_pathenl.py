@@ -3,12 +3,12 @@
 
 import datetime
 
-from resources.lib import chn_class
-
+from resources.lib import chn_class, contenttype
 from resources.lib.mediaitem import MediaItem
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.logger import Logger
 from resources.lib.parserdata import ParserData
+from resources.lib.textures import TextureHandler
 from resources.lib.urihandler import UriHandler
 from resources.lib.regexer import Regexer
 from resources.lib.helpers.jsonhelper import JsonHelper
@@ -46,9 +46,16 @@ class Channel(chn_class.Channel):
 
             self._add_data_parser("https://connect.pathe.nl/v1/cinemas", json=True,
                                   match_type=ParserData.MatchExact,
+                                  preprocessor=self.add_special_categories,
                                   parser=[], creator=self.create_cinema)
-            self._add_data_parser("/movies/nowplaying", json=True, match_type=ParserData.MatchEnd,
-                                  parser=[], creator=self.create_movie)
+            self._add_data_parsers(["/movies/nowplaying",
+                                    "https://connect.pathe.nl/v1/movies/comingsoon/",
+                                    "https://connect.pathe.nl/v1/specials/movies/"],
+                                   json=True, match_type=ParserData.MatchEnd,
+                                   parser=[], creator=self.create_movie)
+            self._add_data_parser("https://connect.pathe.nl/v1/movies/lists/",
+                                  json=True, match_type=ParserData.MatchExact,
+                                  parser=["comingSoon"], creator=self.create_movie)
             self._add_data_parser("https://connect.pathe.nl/v1/movies/", json=True,
                                   parser=['trailers'], creator=self.create_trailer)
             self._add_data_parser("/schedules?date=", json=True,
@@ -72,10 +79,40 @@ class Channel(chn_class.Channel):
 
         # ============== Actual channel setup STARTS here and should be overwritten from derived classes ===============
         self.noImage = "patheimage.png"
+        self.movie_poster = TextureHandler.instance().get_texture_uri(self, "patheposter.jpg")
         self.scheduleData = None
 
         # ====================================== Actual channel setup STOPS here =======================================
         return
+
+    def add_special_categories(self, data):
+        """ Adds extra items to the mainlist.
+
+        Accepts an data from the process_folder_list method, BEFORE the items are
+        processed. Allows setting of parameters (like title etc) for the channel.
+        Inside this method the <data> could be changed and additional items can
+        be created.
+
+        :param str data: The retrieve data that was loaded for the current item and URL.
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+
+        """
+
+        items = []
+        extras = {
+            # "Verwacht": "https://connect.pathe.nl/v1/movies/comingsoon/",
+            "Verwacht": "https://connect.pathe.nl/v1/movies/lists/",
+            "Specials": "https://connect.pathe.nl/v1/specials/movies/"
+        }
+        for title, url in extras.items():
+            expected = MediaItem("\a{}".format(title), url)
+            expected.content_type = contenttype.MOVIES
+            expected.dontGroup = True
+            items.append(expected)
+
+        return data, items
 
     def create_cinema(self, result_set):
         """ Creates a new MediaItem for an episode.
@@ -101,6 +138,7 @@ class Channel(chn_class.Channel):
         # https://www.pathe.nl/nocropthumb/[format]/gfx_content/bioscoop/foto/pathe.nl_380x218px_amersfoort.jpg
         now_playing.complete = True
         now_playing.HttpHeaders = self.httpHeaders
+        now_playing.content_type = contenttype.MOVIES
         cinema.items.append(now_playing)
 
         now = datetime.datetime.now()
@@ -133,9 +171,11 @@ class Channel(chn_class.Channel):
         movie_id = result_set['id']
         url = "%s/movies/%s" % (self.baseUrl, movie_id)
         item = MediaItem(result_set["name"], url)
-        item.thumb = result_set["thumb"]
-        if item.thumb:
-            item.thumb = item.thumb.replace("nocropthumb/[format]/", "")
+        item.poster = result_set["thumb"]
+        if item.poster:
+            item.poster = item.poster.replace("nocropthumb/[format]/", "")
+        else:
+            item.poster = self.movie_poster
         item.complete = True
         item.HttpHeaders = self.httpHeaders
 
@@ -163,7 +203,10 @@ class Channel(chn_class.Channel):
             item.description = "%s." % (item.description, )
 
         if "releaseDate" in result_set:
-            item.description = "%s\n\nRelease datum: %s" % (item.description, result_set["releaseDate"])
+            release_date = result_set["releaseDate"].split("T")[0]
+            item.description = "%s\n\nRelease datum: %s" % (item.description, release_date)
+            year, month, day = release_date.split("-")
+            item.set_date(year, month, day)
 
         # Dates?
         # date = result_set.get('releaseDate', None)
@@ -369,7 +412,7 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
         
-        data = UriHandler.open(item.url, proxy=self.proxy)
+        data = UriHandler.open(item.url)
         videos = Regexer.do_regex(self.mediaUrlRegex, data)
 
         fanart = Regexer.do_regex(r'<div class="visual-image">\W+<img src="([^"]+)"', data)

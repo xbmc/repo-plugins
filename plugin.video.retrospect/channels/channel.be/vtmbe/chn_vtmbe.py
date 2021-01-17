@@ -272,7 +272,7 @@ class Channel(chn_class.Channel):
             # only retrieve the account information using the cookie and the token
             account_info_url = "https://accounts.eu1.gigya.com/accounts.getAccountInfo?{}" \
                                "&login_token={}".format(common_data, login_token)
-            account_info = UriHandler.open(account_info_url, proxy=self.proxy, no_cache=True)
+            account_info = UriHandler.open(account_info_url, no_cache=True)
 
             # See if it was successfull
             if self.__extract_session_data(account_info, signature_settings):
@@ -302,7 +302,7 @@ class Channel(chn_class.Channel):
         url = "https://accounts.eu1.gigya.com/accounts.webSdkBootstrap?apiKey={}" \
               "&pageURL=https%3A%2F%2Fwatch.stievie.be%2F&format=jsonp" \
               "&callback=gigya.callback&context=R{}".format(api_key, context_id)
-        init_login = UriHandler.open(url, proxy=self.proxy, no_cache=True)
+        init_login = UriHandler.open(url, no_cache=True)
         init_data = JsonHelper(init_login)
         if init_data.get_value("statusCode") != 200:
             Logger.error("Error initiating login")
@@ -319,7 +319,7 @@ class Channel(chn_class.Channel):
                      "&%s" % \
                      (HtmlEntityHelper.url_encode(username), HtmlEntityHelper.url_encode(password),
                       context_id, common_data)
-        UriHandler.open(login_url, params=login_data, proxy=self.proxy, no_cache=True)
+        UriHandler.open(login_url, params=login_data, no_cache=True)
 
         #  retrieve the result
         login_retrieval_url = "https://accounts.eu1.gigya.com/socialize.getSavedResponse" \
@@ -329,7 +329,7 @@ class Channel(chn_class.Channel):
                               "&sdk=js_latest" \
                               "&format=json" \
                               "&context=R{1}".format(api_key, context_id)
-        login_response = UriHandler.open(login_retrieval_url, proxy=self.proxy, no_cache=True)
+        login_response = UriHandler.open(login_retrieval_url, no_cache=True)
         return self.__extract_session_data(login_response, signature_settings)
 
     # region Stievie listings/menus
@@ -697,7 +697,7 @@ class Channel(chn_class.Channel):
         for i in range(100, count, 100):
             url = "%s&from=%s" % (self.mainListUri, i)
             Logger.debug("Retrieving more items from: %s", url)
-            more_data = UriHandler.open(url, proxy=self.proxy)
+            more_data = UriHandler.open(url)
             more_json = JsonHelper(more_data)
             more_items = more_json.get_value("response", "items")
             if more_items:
@@ -814,7 +814,7 @@ class Channel(chn_class.Channel):
               "&apikey=%s" \
               "&sort=broadcastDate&sortDirection=desc" \
               "&programIds=%s" % (self.__apiKey, show_id)
-        data = UriHandler.open(url, proxy=self.proxy)
+        data = UriHandler.open(url)
         return data, []
 
     def create_video_item_json(self, result_set):
@@ -906,7 +906,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=self.httpHeaders)
+        data = UriHandler.open(item.url, additional_headers=self.httpHeaders)
         json_data = JsonHelper(data)
         video_id = json_data.get_value("response", "videos", 0, "id")
         return self.__update_video_item(item, video_id)
@@ -1019,7 +1019,7 @@ class Channel(chn_class.Channel):
 
         video_id = self.parentItem.url.rsplit("%3A", 1)[-1]
         recent_url = "https://vtm.be/block/responsive/medialaan_vod/program?offset=0&limit=10&program=%s" % (video_id, )
-        recent_data = UriHandler.open(recent_url, proxy=self.proxy)
+        recent_data = UriHandler.open(recent_url)
 
         # https://vtm.be/video/volledige-afleveringen/id/257124125192000
         regex = r'<a href="/(?<url>[^"]+)"[^>]*>\W+<img[^>]+src="(?<thumburl>[^"]+)"[\w\W]{0,1000}?' \
@@ -1107,7 +1107,7 @@ class Channel(chn_class.Channel):
             Logger.warning("Cannot log on")
             return None
 
-        data = UriHandler.open(item.url, proxy=self.proxy)
+        data = UriHandler.open(item.url)
         video_id_regex = '"vodId":"([^"]+)"'
         video_id = Regexer.do_regex(video_id_regex, data)[0]
         return self.__update_video_item(item, video_id)
@@ -1153,10 +1153,7 @@ class Channel(chn_class.Channel):
         )
 
         auth = {"Authorization": "apikey=%s&access_token=%s" % (self.__apiKey, token)}
-        if self.localIP:
-            auth.update(self.localIP)
-
-        data = UriHandler.open(url, proxy=self.proxy, no_cache=True, additional_headers=auth)
+        data = UriHandler.open(url, no_cache=True, additional_headers=auth)
         json_data = JsonHelper(data)
         hls = json_data.get_value("response", "url", "hls-aes-linear")
         if not hls:
@@ -1166,7 +1163,7 @@ class Channel(chn_class.Channel):
         if AddonSettings.use_adaptive_stream_add_on(with_encryption=False) or True:
             # get the cookies
             license_server_url = json_data.get_value("response", "drm", "format", "hls-aes", "licenseServerUrl")
-            UriHandler.open(license_server_url, proxy=self.proxy, no_cache=True)
+            UriHandler.open(license_server_url, no_cache=True)
             domain = ".license.medialaan.io"
             channel_path = json_data.get_value("response", "broadcast", "channel")
 
@@ -1289,7 +1286,7 @@ class Channel(chn_class.Channel):
 
         auth = "apikey=%s&access_token=%s" % (self.__apiKey, token)
         headers = {"Authorization": auth}
-        data = UriHandler.open(media_url, proxy=self.proxy, additional_headers=headers)
+        data = UriHandler.open(media_url, additional_headers=headers)
 
         json_data = JsonHelper(data)
         dash_info = json_data.get_value("response", "dash-cenc")
@@ -1311,7 +1308,7 @@ class Channel(chn_class.Channel):
 
             part = item.create_new_empty_media_part()
             stream = part.append_media_stream(stream_url, 0)
-            Mpd.set_input_stream_addon_input(stream, self.proxy, license_key=license_key, license_type="com.widevine.alpha")
+            Mpd.set_input_stream_addon_input(stream, license_key=license_key, license_type="com.widevine.alpha")
             item.complete = True
         else:
             Logger.debug("No Dash streams supported or no Dash streams available. Using M3u8 streams")
@@ -1336,7 +1333,7 @@ class Channel(chn_class.Channel):
                          "of a stream and to include a full .ts part.", byte_range)
             part.HttpHeaders["Range"] = 'bytes=0-%d' % (byte_range, )
 
-            for s, b in M3u8.get_streams_from_m3u8(m3u8_url, self.proxy):
+            for s, b in M3u8.get_streams_from_m3u8(m3u8_url):
                 item.complete = True
                 part.append_media_stream(s, b)
 
@@ -1364,7 +1361,7 @@ class Channel(chn_class.Channel):
             self.__signatureTimeStamp,
             HtmlEntityHelper.url_encode(self.__apiKey),
             self.__sso)
-        data = UriHandler.open(url, proxy=self.proxy, no_cache=True)
+        data = UriHandler.open(url, no_cache=True)
         json_data = JsonHelper(data)
         return json_data.get_value("response")
 

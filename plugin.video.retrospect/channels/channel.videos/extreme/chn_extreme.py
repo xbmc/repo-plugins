@@ -89,7 +89,7 @@ class Channel(chn_class.Channel):
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
         
         # get additional info
-        data = UriHandler.open(item.url, proxy=self.proxy)
+        data = UriHandler.open(item.url)
 
         #<param name="flashvars" value="id=dj0xMDEzNzQyJmM9MTAwMDAwNA&amp;tags=source%253Dfreecaster&amp;autoplay=1" />
         # http://freecaster.tv/player/smil/dj0xMDEzNzQyJmM9MTAwMDAwNA -> playlist with bitrate
@@ -100,7 +100,7 @@ class Channel(chn_class.Channel):
             Logger.debug("Using Youtube video")
             part = item.create_new_empty_media_part()
             you_tube_url = you_tube_url[0].replace("embed/", "watch?v=")
-            for s, b in YouTube.get_streams_from_you_tube(you_tube_url, self.proxy):
+            for s, b in YouTube.get_streams_from_you_tube(you_tube_url):
                 item.complete = True
                 part.append_media_stream(s, b)
             return item
@@ -119,7 +119,7 @@ class Channel(chn_class.Channel):
             part = item.create_new_empty_media_part()
             for url in urls:
                 if "youtube" in url[0]:
-                    for s, b in YouTube.get_streams_from_you_tube(url[0], self.proxy):
+                    for s, b in YouTube.get_streams_from_you_tube(url[0]):
                         item.complete = True
                         part.append_media_stream(s, b)
                 else:

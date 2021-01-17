@@ -64,8 +64,7 @@ class VideoAction(AddonAction):
                 return
 
             kodi_items = media_item.get_kodi_play_list_data(
-                AddonSettings.get_max_stream_bitrate(self.__channel),
-                self.__channel.proxy
+                AddonSettings.get_max_stream_bitrate(self.__channel)
             )
 
             Logger.debug("Continuing playback in plugin.py")

@@ -275,7 +275,9 @@ class Version(Comparable):
             return True
 
         # we have 2 build types
+        # noinspection PyUnresolvedReferences
         self_build_name = self.buildType.rstrip("0123456789")
+        # noinspection PyUnresolvedReferences
         self_build_name_number = self.buildType.lstrip("".join(version_types)) or "0"
         other_build_name = other.buildType.rstrip("0123456789")
         other_build_name_number = other.buildType.lstrip("".join(version_types)) or "0"

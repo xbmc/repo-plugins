@@ -509,8 +509,13 @@ class Channel(chn_class.Channel):
         items.append(search)
 
         movie_url = self.__get_api_persisted_url(
-            "programs", "b6f65688f7e1fbe22aae20816d24ca5dcea8c86c8e72d80b462a345b5b70fa41",
+            "programs", "cd8d5f074397e43ccd27b1c958d8c24264b0a92a94f3162e8281f6a2934d0391",
             variables={"programTypes": "MOVIE", "limit": 100}
+        )
+        movie_url = self.__get_api_query_url(
+            "programs(programTypes: MOVIE)",
+            "{totalResults,items{type,__typename,guid,title,description,duration,displayGenre,"
+            "imageMedia{url,label},epgDate,sources{type,file,drm},tracks{type,kind,label,file}}}"
         )
         movies_title = LanguageHelper.get_localized_string(LanguageHelper.Movies)
         movies = MediaItem("\a.: {} :.".format(movies_title), movie_url)

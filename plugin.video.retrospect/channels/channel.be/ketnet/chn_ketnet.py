@@ -150,7 +150,7 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
         if item.url.startswith("http"):
-            data = UriHandler.open(item.url, proxy=self.proxy)
+            data = UriHandler.open(item.url)
             json_data = Regexer.do_regex(self.mediaUrlRegex, data)
 
             json = JsonHelper(json_data[0])
@@ -193,7 +193,7 @@ class Channel(chn_class.Channel):
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
         if not item.url.endswith("m3u8"):
-            data = UriHandler.open(item.url, proxy=self.proxy)
+            data = UriHandler.open(item.url)
             json_data = Regexer.do_regex(self.mediaUrlRegex, data)
             if not json_data:
                 Logger.error("Cannot find JSON stream info.")
@@ -209,7 +209,7 @@ class Channel(chn_class.Channel):
             stream = item.url
 
         part = item.create_new_empty_media_part()
-        for s, b in M3u8.get_streams_from_m3u8(stream, self.proxy):
+        for s, b in M3u8.get_streams_from_m3u8(stream):
             item.complete = True
             part.append_media_stream(s, b)
 

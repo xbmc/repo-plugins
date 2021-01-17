@@ -81,7 +81,7 @@ class Channel(chn_class.Channel):
         from resources.lib.helpers.jsonhelper import JsonHelper
         from resources.lib.urihandler import UriHandler
 
-        data = UriHandler.open(item.url, proxy=self.proxy)
+        data = UriHandler.open(item.url)
         json_data = JsonHelper(data)
         streams = json_data.get_value("clip", "previews")
         part = item.create_new_empty_media_part()

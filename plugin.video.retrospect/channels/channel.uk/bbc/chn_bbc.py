@@ -85,8 +85,6 @@ class Channel(chn_class.Channel):
 
         # ===============================================================================================================
         # non standard items
-        # if self.proxy:
-        #     self.proxy.Filter = ["mediaselector"]
 
         self.searchUrl = "http://feeds.bbc.co.uk/iplayer/search/tv/?q=%s"
         self.programs = dict()
@@ -233,7 +231,7 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
-        data = UriHandler.open(item.url, proxy=self.proxy)
+        data = UriHandler.open(item.url)
         json_data, _ = self.extract_json(data)
         video_id = json_data.get_value("versions", 0, "id")
         stream_data_url = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/{}".format(video_id)
@@ -249,10 +247,10 @@ class Channel(chn_class.Channel):
 
         part = item.create_new_empty_media_part()
 
-        stream_data = UriHandler.open(stream_data_url, proxy=self.proxy)
+        stream_data = UriHandler.open(stream_data_url)
         # Reroute for debugging
         # from debug.router import Router
-        # streamData = Router.get_via("uk", streamDataUrl, self.proxy)
+        # streamData = Router.get_via("uk", streamDataUrl)
 
         connection_datas = Regexer.do_regex(
             r'<media bitrate="(\d+)"[^>]+>\W*'
@@ -311,10 +309,10 @@ class Channel(chn_class.Channel):
                     continue
 
                 if transfer_format == "hls":
-                    item.complete = M3u8.update_part_with_m3u8_streams(part, url, proxy=self.proxy, bitrate=stream_bitrate)
+                    item.complete = M3u8.update_part_with_m3u8_streams(part, url, bitrate=stream_bitrate)
                 elif transfer_format == "dash":
                     strm = part.append_media_stream(url, bitrate)
-                    Mpd.set_input_stream_addon_input(strm, self.proxy)
+                    Mpd.set_input_stream_addon_input(strm)
 
         # get the subtitle
         subtitles = Regexer.do_regex(
@@ -324,7 +322,7 @@ class Channel(chn_class.Channel):
             subtitle = subtitles[0]
             subtitle_url = "%s%s" % (subtitle[0], subtitle[1])
             part.Subtitle = subtitlehelper.SubtitleHelper.download_subtitle(
-                subtitle_url, subtitle[1], "ttml", proxy=self.proxy)
+                subtitle_url, subtitle[1], "ttml")
 
         item.complete = True
         Logger.trace('finishing update_video_item: %s.', item)
@@ -439,7 +437,7 @@ class Channel(chn_class.Channel):
         # 328	200	HTTPS	www.bbc.co.uk	/iplayer/episodes/b03srr0b/absolute-genius-with-dick-and-dom	60.571	no-store, must-revalidate, max-age=0	text/html; charset=utf-8	kodi:14240
         show_id = json_data.get_value("episode", "tleoId")
         url = "{}/iplayer/episodes/{}".format(self.baseUrl, show_id)
-        data = UriHandler.open(url, proxy=self.proxy)
+        data = UriHandler.open(url)
         json_data, items = self.extract_json(data)
         return json_data, items
 
@@ -508,12 +506,12 @@ class Channel(chn_class.Channel):
         """
 
         Logger.debug('Starting update_live_item for %s (%s)', item.name, self.channelName)
-        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=self.httpHeaders)
+        data = UriHandler.open(item.url, additional_headers=self.httpHeaders)
         stream_root = Regexer.do_regex(r'<media href="([^"]+\.isml)', data)[0]
         Logger.debug("Found Live stream root: %s", stream_root)
 
         part = item.create_new_empty_media_part()
-        for s, b in F4m.get_streams_from_f4m(item.url, self.proxy):
+        for s, b in F4m.get_streams_from_f4m(item.url):
             item.complete = True
             s = s.replace(".f4m", ".m3u8")
             part.append_media_stream(s, b)

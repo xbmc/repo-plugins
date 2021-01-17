@@ -600,11 +600,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        headers = {}
-        if self.localIP:
-            headers.update(self.localIP)
-
-        data = UriHandler.open(item.url, proxy=self.proxy, no_cache=True, additional_headers=headers)
+        data = UriHandler.open(item.url, no_cache=True)
         manifest = JsonHelper(data)
         if "nonPlayable" in manifest.json and manifest.json["nonPlayable"]:
             Logger.error("Cannot update Live: %s", item)
@@ -612,9 +608,9 @@ class Channel(chn_class.Channel):
 
         source = manifest.get_value("sourceMedium")
         if source == "audio":
-            return self.__update_live_audio(item, manifest, headers)
+            return self.__update_live_audio(item, manifest)
         else:
-            return self.__update_live_video(item, manifest, headers)
+            return self.__update_live_video(item, manifest)
 
     def update_json_video_item(self, item):
         """ Updates an existing MediaItem with more data.
@@ -638,11 +634,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        headers = {}
-        if self.localIP:
-            headers.update(self.localIP)
-
-        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=headers)
+        data = UriHandler.open(item.url)
         video_data = JsonHelper(data)
         stream_data = video_data.get_value("playable")
         if not stream_data:
@@ -687,20 +679,20 @@ class Channel(chn_class.Channel):
         # return "https://psapi.nrk.no/programs/{}?apiKey={}".format(video_id, self.__api_key)
         return "https://psapi.nrk.no/playback/manifest/program/{}?eea-portability=true".format(video_id)
 
-    def __update_live_audio(self, item, manifest, headers):
+    def __update_live_audio(self, item, manifest):
         video_info = manifest.get_value("playable", "assets", 0)
         url = video_info["url"]
         # Is it encrypted? encrypted = video_info["encrypted"]
         part = item.create_new_empty_media_part()
 
         # Adaptive add-on does not work with audio only
-        for s, b in M3u8.get_streams_from_m3u8(url, self.proxy, headers=headers):
+        for s, b in M3u8.get_streams_from_m3u8(url):
             item.complete = True
             part.append_media_stream(s, b)
 
         return item
 
-    def __update_live_video(self, item, manifest, headers):
+    def __update_live_video(self, item, manifest):
         video_info = manifest.get_value("playable", "assets", 0)
         url = video_info["url"]
         encrypted = video_info["encrypted"]
@@ -712,17 +704,17 @@ class Channel(chn_class.Channel):
                 Logger.error("Cannot playback encrypted item without inputstream.adaptive with encryption support")
                 return item
             stream = part.append_media_stream(url, 0)
-            key = M3u8.get_license_key("", key_headers=headers, key_type="R")
-            M3u8.set_input_stream_addon_input(stream, proxy=self.proxy, headers=headers, license_key=key)
+            key = M3u8.get_license_key("", key_type="R")
+            M3u8.set_input_stream_addon_input(stream, license_key=key)
             item.complete = True
         else:
             use_adaptive = AddonSettings.use_adaptive_stream_add_on(with_encryption=False)
             if use_adaptive:
                 stream = part.append_media_stream(url, 0)
-                M3u8.set_input_stream_addon_input(stream, self.proxy, headers=headers)
+                M3u8.set_input_stream_addon_input(stream)
                 item.complete = True
             else:
-                for s, b in M3u8.get_streams_from_m3u8(url, self.proxy, headers=headers):
+                for s, b in M3u8.get_streams_from_m3u8(url):
                     item.complete = True
                     part.append_media_stream(s, b)
 

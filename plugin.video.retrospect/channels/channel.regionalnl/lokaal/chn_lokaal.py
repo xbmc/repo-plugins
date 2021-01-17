@@ -452,16 +452,16 @@ class Channel(chn_class.Channel):
         """
 
         Logger.debug("Updating a (Live) video item")
-        content, url = UriHandler.header(item.url, proxy=self.proxy)
+        content, url = UriHandler.header(item.url)
 
         part = item.create_new_empty_media_part()
         if AddonSettings.use_adaptive_stream_add_on():
             part = item.create_new_empty_media_part()
             stream = part.append_media_stream(url, 0)
-            M3u8.set_input_stream_addon_input(stream, self.proxy, item.HttpHeaders)
+            M3u8.set_input_stream_addon_input(stream, item.HttpHeaders)
             item.complete = True
         else:
-            for s, b in M3u8.get_streams_from_m3u8(url, self.proxy, append_query_string=True):
+            for s, b in M3u8.get_streams_from_m3u8(url, append_query_string=True):
                 item.complete = True
                 part.append_media_stream(s, b)
             item.complete = True

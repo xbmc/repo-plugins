@@ -11,7 +11,8 @@
       "category": "Video",
       "channelcode": "dumpert",
       "language": "nl",
-      "fanart": "dumpertfanart.jpg"
+      "fanart": "dumpertfanart.jpg",
+      "poster": "dumpertposter.jpg"
     }
   ]
 }

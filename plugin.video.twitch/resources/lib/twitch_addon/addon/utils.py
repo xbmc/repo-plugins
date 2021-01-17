@@ -101,7 +101,7 @@ def inputstream_adpative_supports(feature):
         ia_version = '0.0.0'
 
     if feature == 'EXT-X-DISCONTINUITY':
-        if loose_version(ia_version) >= loose_version('999.999.999'):  # TODO: update version when resolved in I.A
+        if loose_version(ia_version) >= loose_version('2.4.6'):
             return True
 
     return False

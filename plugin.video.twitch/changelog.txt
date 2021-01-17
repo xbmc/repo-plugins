@@ -1,3 +1,7 @@
+2.5.4
+[fix] followed games for users with private oauth tokens
+[upd] use xbmcvfs.translatePath if available, clean up for Kodi 19
+
 2.5.3
 [rem] remove usage of xbmc.LOGSEVERE, it's being removed in Kodi 19
 

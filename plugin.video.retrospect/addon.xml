@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.20"
+        version="5.2.21"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -132,7 +132,7 @@
 
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.2.20 - Changelog - 2021-01-16[/B]
+        <news>[B]Retrospect v5.2.21 - Changelog - 2021-01-17[/B]
 
 This version of Retrospect focusses on artwork: we introduced poster artwork for channels and shows. Not all channels support them, but more will come over time.
 
@@ -159,7 +159,7 @@ There are also some channels fixes in this build: VTM and related channels  now 
 * Updated: Dumpert artwork.
 * Updated: Pathe artwork.
 * Updated: NPO Start artwork.
-
+* Fixed: Kijk.nl movies broke.
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

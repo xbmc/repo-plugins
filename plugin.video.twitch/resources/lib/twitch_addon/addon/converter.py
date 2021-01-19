@@ -18,7 +18,7 @@ from six.moves.urllib_parse import quote
 from . import menu_items
 from .common import kodi
 from .constants import Keys, Images, MODES, ADAPTIVE_SOURCE_TEMPLATE
-from .utils import the_art, TitleBuilder, i18n, get_oauth_token, get_vodcast_color, use_inputstream_adaptive, get_thumbnail_size, get_refresh_stamp, to_string
+from .utils import the_art, TitleBuilder, i18n, get_oauth_token, get_vodcast_color, use_inputstream_adaptive, get_thumbnail_size, get_refresh_stamp, to_string, get_private_oauth_token
 
 
 class PlaylistConverter(object):
@@ -69,8 +69,32 @@ class JsonListItemConverter(object):
         image = self.get_thumbnail(game.get(Keys.BOX, game.get(Keys.LOGO)), Images.BOXART)
         context_menu = list()
         context_menu.extend(menu_items.refresh())
-        context_menu.extend(menu_items.edit_follow_game(name))
+        if get_private_oauth_token():
+            context_menu.extend(menu_items.edit_follow_game(game[Keys._ID], name, follow=True))
+            context_menu.extend(menu_items.edit_follow_game(game[Keys._ID], name, follow=False))
         context_menu.extend(menu_items.add_blacklist(game[Keys._ID], name, list_type='game'))
+        plot = '{name}\r\n{channels}:{channel_count} {viewers}:{viewer_count}' \
+            .format(name=name, channels=i18n('channels'), channel_count=channel_count, viewers=i18n('viewers'), viewer_count=viewer_count)
+        return {'label': name,
+                'path': kodi.get_plugin_url({'mode': MODES.GAMELISTS, 'game': name}),
+                'art': the_art({'poster': image, 'thumb': image, 'icon': image}),
+                'context_menu': context_menu,
+                'info': {u'plot': plot, u'plotoutline': plot, u'tagline': plot}}
+
+    def followed_game_to_listitem(self, game):
+        channel_count = i18n('unknown')
+        viewer_count = i18n('unknown')
+        if 'viewersCount' in game:
+            viewer_count = str(game['viewersCount'])
+        name = game['displayName']
+        if name and PY2:
+            name = name.encode('utf-8', 'ignore')
+        if not name:
+            name = i18n('unknown_game')
+        image = game['boxArtURL'] or Images.BOXART
+        context_menu = list()
+        context_menu.extend(menu_items.refresh())
+        context_menu.extend(menu_items.edit_follow_game(game['id'], name, follow=False))
         plot = '{name}\r\n{channels}:{channel_count} {viewers}:{viewer_count}' \
             .format(name=name, channels=i18n('channels'), channel_count=channel_count, viewers=i18n('viewers'), viewer_count=viewer_count)
         return {'label': name,

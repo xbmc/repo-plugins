@@ -129,5 +129,7 @@ STRINGS = {
     'confirm_file_delete_': 30251,
     'delete_succeeded_': 30252,
     'delete_failed_': 30253,
-    'change_languages': 30262
+    'change_languages': 30262,
+    'Follow': 30264,
+    'Unfollow': 30265,
 }

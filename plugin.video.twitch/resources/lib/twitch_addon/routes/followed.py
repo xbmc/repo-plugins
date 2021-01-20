@@ -126,37 +126,19 @@ def route(api, content, offset=0, cursor='MA=='):
         raise NotFound(i18n('channels'))
     elif content == 'games':
         kodi.set_view('files', set_sort=False)
-        games = None
-        all_items = list()
-        requests = 0
-        while (per_page >= (len(all_items) + 1)) and (requests < MAX_REQUESTS):
-            requests += 1
-            games = api.get_followed_games(username, offset, REQUEST_LIMIT)
-            if (games[Keys.TOTAL] > 0) and (Keys.FOLLOWS in games):
-                filtered = \
-                    blacklist_filter.by_type(games, Keys.FOLLOWS, game_key=Keys._ID, list_type='game')
-                last = None
-                for game in filtered[Keys.FOLLOWS]:
-                    last = game
-                    if per_page >= (len(all_items) + 1):
-                        add_item = last if last not in all_items else None
-                        if add_item:
-                            all_items.append(add_item)
-                    else:
-                        break
-                offset = utils.get_offset(offset, last, games[Keys.FOLLOWS])
-                if (offset is None) or (games[Keys.TOTAL] <= offset) or (games[Keys.TOTAL] <= REQUEST_LIMIT):
-                    break
-            else:
-                break
+        response = api.get_followed_games(REQUEST_LIMIT)
+        if not isinstance(response, list):
+            response = [{}]
+
+        games = response[0].get('data', {}).get('currentUser', {})\
+            .get('followedGames', {}).get('nodes', [])
+
         has_items = False
-        if len(all_items) > 0:
+        if len(games) > 0:
             has_items = True
-            for game in all_items:
-                kodi.create_item(converter.game_to_listitem(game))
-        if games[Keys.TOTAL] > (offset + 1):
-            has_items = True
-            kodi.create_item(utils.link_to_next_page({'mode': MODES.FOLLOWED, 'content': content, 'offset': offset}))
+            for game in games:
+                kodi.create_item(converter.followed_game_to_listitem(game))
+
         if has_items:
             kodi.end_of_directory()
             return

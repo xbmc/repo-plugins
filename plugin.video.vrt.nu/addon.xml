@@ -42,6 +42,12 @@
     <website>https://github.com/add-ons/plugin.video.vrt.nu/wiki</website>
     <source>https://github.com/add-ons/plugin.video.vrt.nu</source>
     <news>
+v2.4.3 (2021-01-21)
+- Add new channel "Podium 19"
+- Add livestream cache to speed up playback
+- Use InputStream Adaptive to play HLS
+- Don't log credentials in the Kodi debug log
+
 v2.4.2 (2020-12-18)
 - Fix missing seasons (for 'Thuis') in TV Show menu
 - Fix missing favourite programs in 'My programs' menuu

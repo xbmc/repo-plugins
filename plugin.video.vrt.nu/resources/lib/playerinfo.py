@@ -239,7 +239,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
            we can work around this problem by automatically seeking to the beginning of the program.
         """
         playing_file = self.getPlayingFile()
-        if '?t=' in playing_file:
+        if any(param in playing_file for param in ('?t=', '&t=')):
             try:  # Python 3
                 from urllib.parse import parse_qs, urlsplit
             except ImportError:  # Python 2

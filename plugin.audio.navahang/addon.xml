@@ -1,11 +1,7 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.audio.navahang" name="Navahang" version="2.6" provider-name="Muhammad Hussein Ammari">
+<addon id="plugin.audio.navahang" name="Navahang" version="2.7" provider-name="xmha97">
 	<requires>
         <import addon="xbmc.python"                     version="2.26.0"/>
-        <import addon="script.module.beautifulsoup4"    version="4.3.2"/>
-        <import addon="script.module.requests"          version="2.4.3"/>
         <import addon="script.module.future"            version="0.0.1"/>
-        <import addon="script.module.html5lib"          version="0.999.0"/>
 	</requires>
     <extension point="xbmc.python.pluginsource" library="main.py">
 		<provides>audio</provides>
@@ -18,13 +14,13 @@
 	<description lang="fa_IR">نواهنگ یک شرکت رسانه ای با یکی از بزرگترین آرشیو های آنلاین است که به موسیقی فارسی و همراه با ۲۴/۷ رادیو زنده اختصاص یافته است.</description>
 	<disclaimer lang="fa_IR">این افزونه توسط شرکت نواهنگ تایید نشده است</disclaimer>
 	<platform>all</platform>
-	<language>fa</language>
+	<language>en</language>
 	<license>GPL-2.0-only</license>
 	<forum></forum>
 	<website>https://www.navahang.com</website>
 	<email>xmha97@gmail.com</email>
 	<source>https://github.com/xmha97/kodi-repo-plugins/tree/master/plugin.audio.navahang</source>
-	<news>Solve the problem of censorship in Iran</news>
+	<news>The latest version contains bug fixes and performance improvements.</news>
 	<assets>
 		<icon>resources/media/icon.png</icon>
 			<fanart>resources/media/fanart.jpg</fanart>

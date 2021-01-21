@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.4.2" provider-name="Martijn Moreel, dagwieers, mediaminister">
+<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.4.3" provider-name="Martijn Moreel, dagwieers, mediaminister">
   <requires>
     <import addon="resource.images.studios.white" version="0.0.22"/>
     <import addon="script.module.beautifulsoup4" version="4.6.2"/>
@@ -42,6 +42,12 @@
     <website>https://github.com/add-ons/plugin.video.vrt.nu/wiki</website>
     <source>https://github.com/add-ons/plugin.video.vrt.nu</source>
     <news>
+v2.4.3 (2021-01-21)
+- Add new channel "Podium 19"
+- Add livestream cache to speed up playback
+- Use InputStream Adaptive to play HLS
+- Don't log credentials in the Kodi debug log
+
 v2.4.2 (2020-12-18)
 - Fix missing seasons (for 'Thuis') in TV Show menu
 - Fix missing favourite programs in 'My programs' menuu

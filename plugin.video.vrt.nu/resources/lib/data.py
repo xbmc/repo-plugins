@@ -105,6 +105,14 @@ CHANNELS = [
         vod=True,
     ),
     dict(
+        id='',
+        name='podium19',
+        label='Podium 19',
+        studio='Podium 19',
+        logo='https://images.vrt.be/orig/2020/12/19/53f5fa6f-4223-11eb-aae0-02b7b76bf47f.png',
+        vod=True,
+    ),
+    dict(
         id='12',
         name='sporza',
         label='Sporza',

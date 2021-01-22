@@ -4,8 +4,6 @@
 """Implementation of IPTVManager class"""
 
 from __future__ import absolute_import, division, unicode_literals
-
-from data import CHANNELS
 from kodiutils import log, url_for
 
 
@@ -36,6 +34,7 @@ class IPTVManager:
     @via_socket
     def send_channels():  # pylint: disable=no-method-argument
         """Return JSON-M3U formatted information to IPTV Manager"""
+        from data import CHANNELS
         streams = []
         for channel in CHANNELS:
             if not channel.get('live_stream_id'):

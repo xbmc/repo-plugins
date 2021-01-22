@@ -1,19 +1,22 @@
 import sys
 import re, os, time
-import calendar
-import pytz
-import urllib
-import requests
-import json
-import http
-import time
+import calendar, pytz
+import requests, urllib
 from bs4 import BeautifulSoup
-from datetime import date, datetime, timedelta
-import xbmc, xbmcvfs, xbmcplugin, xbmcgui, xbmcaddon
+from datetime import datetime, timedelta
+from kodi_six import xbmc, xbmcvfs, xbmcplugin, xbmcgui, xbmcaddon
 
+if sys.version_info[0] > 2:
+    import http
+    cookielib = http.cookiejar
+    urllib = urllib.parse
+else:
+    import cookielib
 
-urllib = urllib.parse
-cookielib = http.cookiejar
+try:
+    xbmc.translatePath = xbmcvfs.translatePath
+except AttributeError:
+    pass
 
 addon_handle = int(sys.argv[1])
 
@@ -21,8 +24,8 @@ addon_handle = int(sys.argv[1])
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
 ADDON_VERSION = ADDON.getAddonInfo('version')
-ADDON_PATH_PROFILE = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
-XBMC_VERSION = float(re.findall(r'\d{2}\.\d{1}', xbmc.getInfoLabel("System.BuildVersion"))[0])
+ADDON_PATH_PROFILE = xbmc.translatePath(ADDON.getAddonInfo('profile'))
+KODI_VERSION = float(re.findall(r'\d{2}\.\d{1}', xbmc.getInfoLabel("System.BuildVersion"))[0])
 LOCAL_STRING = ADDON.getLocalizedString
 
 # Settings
@@ -52,12 +55,13 @@ FINAL = 'FF666666'
 FREE = 'FF43CD80'
 
 ROOTDIR = xbmcaddon.Addon().getAddonInfo('path')
-ICON = os.path.join(ROOTDIR, "/icon.png")
-FANART = os.path.join(ROOTDIR, "/fanart.jpg")
-PREV_ICON = os.path.join(ROOTDIR, "/icon.png")
-NEXT_ICON = os.path.join(ROOTDIR, "/icon.png")
+ICON = os.path.join(ROOTDIR, "icon.png")
+FANART = os.path.join(ROOTDIR, "fanart.jpg")
+PREV_ICON = os.path.join(ROOTDIR, "icon.png")
+NEXT_ICON = os.path.join(ROOTDIR, "icon.png")
 
-API_URL = 'http://statsapi.web.nhl.com/api/v1/'
+API_URL = 'http://statsapi.web.nhl.com/api/v1'
+API_MEDIA_URL = 'https://mf.svc.nhl.com/ws/media/mf/v2.4'
 VERIFY = True
 PLATFORM = "IPHONE"
 PLAYBACK_SCENARIO = 'HTTP_CLOUD_TABLET_60'
@@ -161,11 +165,11 @@ def get_params():
     return param
 
 
-def add_stream(name, link_url, title, game_id, epg, icon=None, fanart=None, info=None, video_info=None, audio_info=None,
+def add_stream(name, link_url, title, game_id, icon=None, fanart=None, info=None, video_info=None, audio_info=None,
                start_time=None):
     ok = True
-    u = sys.argv[0] + "?url=" + urllib.quote_plus(link_url) + "&mode=" + str(104) + "&name=" + urllib.quote_plus(name) \
-        + "&game_id=" + urllib.quote_plus(str(game_id)) + "&epg=" + urllib.quote_plus(str(epg))
+    u = sys.argv[0] + "?url=" + urllib.quote_plus(link_url) + "&mode=" + str(104) + "&name=" + urllib.quote_plus(name.encode('utf8')) \
+        + "&game_id=" + urllib.quote_plus(game_id.encode('utf8'))
 
     if start_time is not None:
         u += '&start_time='+start_time
@@ -296,7 +300,7 @@ def addPlaylist(name, game_day, url, mode, icon, fanart=None):
 
 
 def getFavTeamId():
-    url = API_URL + 'teams/'
+    url = API_URL + '/teams/'
 
     headers = {'User-Agent': UA_IPHONE}
 
@@ -381,7 +385,7 @@ def get_thumbnails():
             xbmc.log("PIL not available")
             sys.exit()
 
-    url = API_URL + 'teams/'
+    url = API_URL + '/teams/'
     headers = {'User-Agent': UA_IPHONE}
 
     r = requests.get(url, headers=headers, verify=False)
@@ -472,7 +476,7 @@ def getFavTeamColor():
 def getFavTeamLogo():
     logo_url = ''
 
-    url = API_URL + 'teams'
+    url = API_URL + '/teams'
     headers = {'User-Agent': UA_IPHONE}
 
     r = requests.get(url, headers=headers, verify=False)
@@ -603,3 +607,20 @@ if FAV_TEAM != str(settings.getSetting("fav_team_name")):
 FAV_TEAM_ID = settings.getSetting("fav_team_id")
 FAV_TEAM_COLOR = settings.getSetting("fav_team_color")
 FAV_TEAM_LOGO = settings.getSetting("fav_team_logo")
+
+
+def stream_to_listitem(stream_url, headers):
+    if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
+        listitem = xbmcgui.ListItem(path=stream_url)
+        if KODI_VERSION >= 19:
+            listitem.setProperty('inputstream', 'inputstream.adaptive')
+        else:
+            listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
+        listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
+        listitem.setProperty('inputstream.adaptive.stream_headers', headers)
+        listitem.setProperty('inputstream.adaptive.license_key', "|" + headers)
+    else:
+        listitem = xbmcgui.ListItem(path=stream_url + '|' + headers)
+
+    listitem.setMimeType("application/x-mpegURL")
+    return listitem

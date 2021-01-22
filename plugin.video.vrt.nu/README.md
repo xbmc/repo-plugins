@@ -59,6 +59,12 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.4.3 (2021-01-22)
+- Add new channel "Podium 19" (@dagwieers)
+- Add livestream cache to speed up playback (@mediaminister)
+- Use InputStream Adaptive to play HLS (@mediaminister)
+- Don't log credentials in the Kodi debug log (@michaelarnauts)
+
 ### v2.4.2 (2020-12-18)
 - Fix missing seasons (for 'Thuis') in TV Show menu (@mediaminister)
 - Fix missing favourite programs in 'My programs' menu (@mediaminister)
@@ -73,7 +79,7 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 - Get categories from online JSON (@mediaminister)
 - Improvements to connection error handling (@dagwieers)
 - Improvements to virtual subclip support (@mediaminister)
-- Extend soon offline menu to seven days (@mediaminster)
+- Extend soon offline menu to seven days (@mediaminister)
 - Improve Up Next support (@mediaminister)
 
 ### v2.4.0 (2020-07-18)

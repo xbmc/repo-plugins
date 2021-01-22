@@ -9,7 +9,6 @@ from socket import timeout
 from ssl import SSLError
 
 import xbmc
-import xbmcaddon
 import xbmcplugin
 
 try:  # Kodi 19 alpha 2 and higher
@@ -17,6 +16,7 @@ try:  # Kodi 19 alpha 2 and higher
 except ImportError:  # Kodi 19 alpha 1 and lower
     from xbmc import translatePath  # pylint: disable=ungrouped-imports
 
+from xbmcaddon import Addon
 from utils import from_unicode, to_unicode
 
 try:  # Python 3
@@ -24,7 +24,7 @@ try:  # Python 3
 except ImportError:  # Python 2
     from urllib2 import HTTPErrorProcessor
 
-ADDON = xbmcaddon.Addon()
+ADDON = Addon()
 DEFAULT_CACHE_DIR = 'cache'
 
 SORT_METHODS = dict(
@@ -292,14 +292,23 @@ def play(stream, video=None):
         )
     play_item.setProperty('inputstream.adaptive.max_bandwidth', str(get_max_bandwidth() * 1000))
     play_item.setProperty('network.bandwidth', str(get_max_bandwidth() * 1000))
+
     if stream.stream_url is not None and stream.use_inputstream_adaptive:
         if kodi_version_major() < 19:
             play_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
         else:
             play_item.setProperty('inputstream', 'inputstream.adaptive')
-        play_item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
+
         play_item.setContentLookup(False)
-        play_item.setMimeType('application/dash+xml')
+
+        if '.mpd' in stream.stream_url:
+            play_item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
+            play_item.setMimeType('application/dash+xml')
+
+        if '.m3u8' in stream.stream_url:
+            play_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
+            play_item.setMimeType('application/vnd.apple.mpegurl')
+
         if stream.license_key is not None:
             import inputstreamhelper
             is_helper = inputstreamhelper.Helper('mpd', drm='com.widevine.alpha')
@@ -1090,7 +1099,11 @@ def open_url(url, data=None, headers=None, method=None, cookiejar=None, follow_r
     if data is not None:
         req.data = data
         log(2, 'URL post: {url}', url=unquote(url))
-        log(2, 'URL post data: {data}', data=data)
+        # Make sure we don't log the password
+        debug_data = data
+        if 'password' in to_unicode(debug_data):
+            debug_data = '**redacted**'
+        log(2, 'URL post data: {data}', data=debug_data)
     else:
         log(2, 'URL get: {url}', url=unquote(url))
 
@@ -1178,6 +1191,13 @@ def get_url_json(url, cache=None, headers=None, data=None, fail=None, raise_erro
                 update_cache(cache, dumps(json_data))
             return json_data
     return fail
+
+
+def generate_expiration_date(hours=2):
+    """Return ISO 8601 formatted expirationDate"""
+    from datetime import datetime, timedelta
+    import dateutil.tz
+    return (datetime.now(dateutil.tz.UTC) + timedelta(hours=hours)).isoformat()
 
 
 def delete_cache(cache_file, cache_dir=DEFAULT_CACHE_DIR):

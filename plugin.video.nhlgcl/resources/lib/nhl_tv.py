@@ -2,13 +2,13 @@ from resources.lib.globals import *
 
 
 def categories():
-    add_dir('Today\'s Games', '/live', 100, ICON, FANART)
-    add_dir('Yesterday\'s Games', '/live', 105, ICON, FANART)
+    add_dir(LOCAL_STRING(30360), '/live', 100, ICON, FANART)
+    add_dir(LOCAL_STRING(30361), '/live', 105, ICON, FANART)
     if FAV_TEAM != 'None' and FAV_TEAM != '':
-        add_fav_today(FAV_TEAM + '\'s Game Today', 'Today\'s ' + FAV_TEAM + ' Game', FAV_TEAM_LOGO, FANART)
-        add_dir(FAV_TEAM + '\'s Recent Games', 'favteam', 500, FAV_TEAM_LOGO, FANART)
-    add_dir('Goto Date', '/date', 200, ICON, FANART)
-    add_dir('Featured Videos', '/qp', 300, ICON, FANART)
+        add_fav_today(FAV_TEAM + LOCAL_STRING(30362), FAV_TEAM_LOGO, FANART)
+        add_dir(FAV_TEAM + LOCAL_STRING(30363), 'favteam', 500, FAV_TEAM_LOGO, FANART)
+    add_dir(LOCAL_STRING(30364), '/date', 200, ICON, FANART)
+    add_dir(LOCAL_STRING(30365), '/qp', 300, ICON, FANART)
 
 
 def todays_games(game_day):
@@ -23,13 +23,10 @@ def todays_games(game_day):
     date_display = '[B][I]%s[/I][/B]' % display_day.strftime("%A, %m/%d/%Y")
     addPlaylist(date_display, display_day, '/playhighlights', 900, ICON, FANART)
 
-    url = API_URL + 'schedule?expand=schedule.teams,schedule.linescore,schedule.scoringplays,' \
-                    'schedule.game.content.media.epg&date=' + game_day + '&site=en_nhl&platform=' + PLATFORM
-
-    headers = {'User-Agent': UA_IPHONE,
-               'Connection': 'close'
-               }
-
+    url = '%s/schedule?date=%s&expand=schedule.teams,schedule.linescore,schedule.game.content.media.epg' \
+          '&site=en_nhl&platform=%s' \
+          % (API_URL, game_day, PLATFORM)
+    headers = {'User-Agent': UA_IPHONE}
     r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
     json_source = r.json()
 
@@ -73,16 +70,11 @@ def create_game_listitem(game, game_day):
         home_team = home['name']
 
     fav_game = False
-    if FAV_TEAM_ID == str(away['id']):
+    if FAV_TEAM_ID == str(away['id']) or FAV_TEAM_ID == str(home['id']):
         fav_game = True
-        away_team = color_string(away_team, FAV_TEAM_COLOR)
-
-    if FAV_TEAM_ID == str(home['id']):
-        fav_game = True
-        home_team = color_string(home_team, FAV_TEAM_COLOR)
 
     game_time = ''
-    if game['status']['detailedState'] == 'Scheduled':
+    if game['status']['detailedState'].lower().strip() == 'scheduled':
         game_time = game['gameDate']
         game_time = string_to_date(game_time, "%Y-%m-%dT%H:%M:%SZ")
         game_time = utc_to_local(game_time)
@@ -91,58 +83,38 @@ def create_game_listitem(game, game_day):
             game_time = game_time.strftime('%I:%M %p').lstrip('0')
         else:
             game_time = game_time.strftime('%H:%M')
-
-        game_time = color_string(game_time, UPCOMING)
-
+    elif game['status']['detailedState'].lower().strip() == 'in progress':
+        game_time = '%s %s' % \
+                (game['linescore']['currentPeriodTimeRemaining'], game['linescore']['currentPeriodOrdinal'])
     else:
         game_time = game['status']['detailedState']
 
-        if game_time == 'Final':
-            game_time = color_string(game_time, FINAL)
-        elif 'In Progress' in game_time:
-            color = LIVE
-            if 'Critical' in game_time:
-                color = CRITICAL
-            game_time = '%s %s' % (game['linescore']['currentPeriodTimeRemaining'],
-                                   game['linescore']['currentPeriodOrdinal'])
-            game_time = color_string(game_time, color)
-        else:
-            game_time = color_string(game_time, LIVE)
-
     game_id = str(game['gamePk'])
 
-    # live_video = game['gameLiveVideo']
-    epg = ''
-    try:
-        epg = json.dumps(game['content']['media']['epg'])
-    except:
-        pass
-    live_feeds = 0
-    archive_feeds = 0
     desc = ''
     hide_spoilers = 0
-    if NO_SPOILERS == '1' or (NO_SPOILERS == '2' and fav_game) or (
-            NO_SPOILERS == '3' and game_day == local_to_eastern()) or (
-            NO_SPOILERS == '4' and game_day < local_to_eastern()) or \
-            game['status']['detailedState'] == 'Scheduled':
+    if NO_SPOILERS == '1' or (NO_SPOILERS == '2' and fav_game) or \
+            (NO_SPOILERS == '3' and game_day == local_to_eastern()) or \
+            (NO_SPOILERS == '4' and game_day < local_to_eastern()) or \
+            game['status']['detailedState'].lower().strip() == 'scheduled':
         name = '%s %s at %s' % (game_time, away_team, home_team)
         hide_spoilers = 1
     else:
-        name = '%s %s - %s at %s - %s' % (
-        game_time, away_team, game['teams']['away']['score'], home_team, game['teams']['home']['score'])
+        name = '%s %s - %s at %s - %s' % \
+               (game_time, away_team, game['teams']['away']['score'], home_team, game['teams']['home']['score'])
 
         desc = '%s %s-%s-%s\n%s %s-%s-%s' % (away_team, str(away_record['wins']), str(away_record['losses']),
                                              str(away_record['ot']), home_team, str(home_record['wins']),
                                              str(home_record['losses']), str(home_record['ot']))
 
-    fanart = 'http://nhl.bamcontent.com/images/arena/default/' + str(home['id']) + '@2x.jpg'
+    fanart = 'http://nhl.bamcontent.com/images/arena/default/%s@2x.jpg' % home['id']
     try:
         if game_day < local_to_eastern():
             if hide_spoilers == 0:
                 desc = str(game['content']['media']['epg'][3]['items'][0]['description'])
         else:
             if PREVIEW_INFO == 'true':
-                url = API_URL + 'game/' + str(game['gamePk']) + '/content?site=en_nhl'
+                url = API_URL + '/game/' + str(game['gamePk']) + '/content?site=en_nhl'
                 headers = {'User-Agent': UA_IPHONE,
                            'Connection': 'close'
                            }
@@ -164,12 +136,11 @@ def create_game_listitem(game, game_day):
     except:
         pass
 
-    name = name.encode('utf-8')
+    name = name
     if fav_game:
         name = '[B]%s[/B]' % name
 
     title = '%s at %s' % (away_team, home_team)
-    title = title.encode('utf-8')
 
     # Label free game of the day
     try:
@@ -194,61 +165,53 @@ def create_game_listitem(game, game_day):
     except:
         pass
 
-    # Create Playlist for all highlights
-    try:
-        global RECAP_PLAYLIST
-        temp_recap_stream_url = create_highlight_stream(
-            game['content']['media']['epg'][3]['items'][0]['playbacks'][3]['url'])
+    # Create playlists for all highlights
+    global RECAP_PLAYLIST
+    recap = get_epg_item(game['content']['media']['epg'], "recap")
+    if 'items' in recap and len(recap['items']) > 0:
+        recap_url = get_highlight_url(recap['items'][0]['playbacks'])
+        recap_url = create_highlight_stream(recap_url)
         listitem = xbmcgui.ListItem(title, thumbnailImage=icon)
         listitem.setInfo(type="Video", infoLabels={"Title": title})
-        RECAP_PLAYLIST.add(temp_recap_stream_url, listitem)
+        RECAP_PLAYLIST.add(recap_url, listitem)
 
-        global EXTENDED_PLAYLIST
-        temp_extended_stream_url = create_highlight_stream(
-            game['content']['media']['epg'][2]['items'][0]['playbacks'][3]['url'])
+    global EXTENDED_PLAYLIST
+    extend = get_epg_item(game['content']['media']['epg'], "extended highlights")
+    if 'items' in extend and len(extend['items']) > 0:
+        extend_url = get_highlight_url(extend['items'][0]['playbacks'])
+        extend_url = create_highlight_stream(extend_url)
         listitem = xbmcgui.ListItem(title, thumbnailImage=icon)
         listitem.setInfo(type="Video", infoLabels={"Title": title})
-        EXTENDED_PLAYLIST.add(temp_extended_stream_url, listitem)
-    except:
-        pass
+        EXTENDED_PLAYLIST.add(extend_url, listitem)
 
-    add_stream(name, '', title, game_id, epg, icon, fanart, info, video_info, audio_info, start_time)
+    add_stream(name, '', title, game_id, icon, fanart, info, video_info, audio_info, start_time)
 
 
-def stream_select(game_id, epg, start_time):
-    # print epg
-    # 0 = NHLTV
-    # 1 = Audio
-    # 2 = Extended Highlights
-    # 3 = Recap
+def stream_select(game_id, start_time):
+    url = '%s/game/%s/content' % (API_URL, game_id)
+    headers = {'User-Agent': UA_PC}
+    r = requests.get(url, headers=headers, verify=VERIFY)
 
-    try:
-        epg = json.loads(epg)
-    except:
-        msg = "No playable streams found."
+    if not r.ok or 'media' not in r.json() or 'epg' not in r.json()['media']:
         dialog = xbmcgui.Dialog()
-        ok = dialog.ok('Streams Not Found', msg)
+        ok = dialog.ok(LOCAL_STRING(30366), LOCAL_STRING(30367))
         sys.exit()
 
-    full_game_items = epg[0]['items']
-    audio_items = epg[1]['items']
-    highlight_items = epg[2]['items']
-    recap_items = epg[3]['items']
-
+    epg = r.json()['media']['epg']
+    full_game = get_epg_item(epg, "nhltv")
+    # audio_items = get_epg_item(epg, "audio")['items']
     stream_title = []
     content_id = []
     event_id = []
     free_game = []
     media_state = []
-    archive_type = ['Recap', 'Extended Highlights', 'Full Game']
 
     multi_angle = 0
     multi_cam = 0
-    if len(full_game_items) > 0:
-        for item in full_game_items:
+    if 'items' in full_game and len(full_game['items']) > 0:
+        for item in full_game['items']:
             media_state.append(item['mediaState'])
-            feed_type = item['mediaFeedType'].encode('utf-8')
-
+            feed_type = item['mediaFeedType']
             if feed_type == "COMPOSITE":
                 multi_cam += 1
                 stream_title.append("Multi-Cam " + str(multi_cam))
@@ -257,98 +220,104 @@ def stream_select(game_id, epg, start_time):
                 stream_title.append("Multi-Angle " + str(multi_angle))
             else:
                 temp_item = feed_type.title()
-                if item['callLetters'].encode('utf-8') != '':
-                    temp_item = '%s (%s)' % (temp_item, item['callLetters'].encode('utf-8'))
-
+                if item['callLetters'] != '':
+                    temp_item = '%s (%s)' % (temp_item, item['callLetters'])
                 stream_title.append(temp_item)
 
             content_id.append(item['mediaPlaybackId'])
             event_id.append(item['eventId'])
             free_game.append(item['freeGame'])
     else:
-        msg = "No playable streams found."
         dialog = xbmcgui.Dialog()
-        ok = dialog.ok('Streams Not Found', msg)
+        ok = dialog.ok(LOCAL_STRING(30366), LOCAL_STRING(30367))
         sys.exit()
 
-    stream_url = ''
-    media_auth = ''
-
-    if media_state[0] == 'MEDIA_ARCHIVE':
-        start_time = None
-        dialog = xbmcgui.Dialog()
-        a = dialog.select('Choose Archive', archive_type)
-        if a < 2:
-            if a == 0:
-                # Recap
-                try:
-                    url = recap_items[0]['playbacks'][2]['url']
-                    # Overwrite url if preferable scenario found
-                    for item in recap_items[0]['playbacks']:
-                        if item['name'] == PLAYBACK_SCENARIO:
-                            url = item['url']
-                            break
-
-                    stream_url = create_highlight_stream(url)
-                except:
-                    pass
-            elif a == 1:
-                # Extended Highlights
-                try:
-                    url = highlight_items[0]['playbacks'][2]['url']
-                    # Overwrite url if preferable scenario found
-                    for item in highlight_items[0]['playbacks']:
-                        if item['name'] == PLAYBACK_SCENARIO:
-                            url = item['url']
-                            break
-
-                    stream_url = create_highlight_stream(url)
-                except:
-                    pass
-        elif a == 2:
-            dialog = xbmcgui.Dialog()
-            n = dialog.select('Choose Stream', stream_title)
-            if n > -1:
-                stream_url, media_auth = fetch_stream(game_id, content_id[n], event_id[n])
-                if stream_url != '':
-                    stream_url = create_full_game_stream(stream_url, media_auth)
+    if 'archive' in media_state[0].lower().strip():
+        stream_url, headers = media_archive(stream_title, content_id, event_id, epg)
     else:
-        dialog = xbmcgui.Dialog()
-        n = dialog.select('Choose Stream', stream_title)
-        if n > -1:
-            stream_url, media_auth = fetch_stream(game_id, content_id[n], event_id[n])
-            if stream_url != '':
-                stream_url = create_full_game_stream(stream_url, media_auth)
+        stream_url, headers = media_live(stream_title, content_id, event_id)
 
-    if stream_url != '':
-        x = -1
+    if stream_url == '':
+        sys.exit()
+    else:
+        start_from_beginning = -1
         if start_time is not None:
-            x = dialog.select("Choose Start", ['Watch Live', 'Start from Beginning'])
+            dialog = xbmcgui.Dialog()
+            start_from_beginning = dialog.select("Choose Start", ['Watch Live', 'Start from Beginning'])
 
-        if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
-            listitem = xbmcgui.ListItem(path=stream_url.split("|")[0])
-            listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
-            listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
-            listitem.setProperty('inputstream.adaptive.stream_headers', stream_url.split("|")[1])
-            listitem.setProperty('inputstream.adaptive.license_key', "|" + stream_url.split("|")[1])
-        else:
-            listitem = xbmcgui.ListItem(path=stream_url)
-            listitem.setMimeType("application/x-mpegURL")
-
+        listitem = stream_to_listitem(stream_url, headers)
         xbmcplugin.setResolvedUrl(addon_handle, True, listitem)
 
-        if x == 1:
-            while not xbmc.Player().isPlayingVideo():
+        if start_from_beginning == 1:
+            while not xbmc.Player().isPlayingVideo() and not xbmc.Monitor().abortRequested():
                 xbmc.Monitor().waitForAbort(0.25)
 
-            if xbmc.Player().isPlayingVideo():
+            if xbmc.Player().isPlayingVideo() and not xbmc.Monitor().abortRequested():
                 start_time = string_to_date(start_time, '%Y-%m-%dT%H:%M:%SZ')
                 seek_secs = int((start_time - datetime.utcnow()).total_seconds())
                 xbmc.log("seconds seek = " + str(seek_secs))
                 xbmc.executebuiltin('Seek(' + str(seek_secs) + ')')
 
-    else:
-        sys.exit()
+
+def media_live(stream_title, content_id, event_id):
+    stream_url = ''
+    headers = 'User-Agent=' + UA_IPHONE
+    dialog = xbmcgui.Dialog()
+    n = dialog.select('Choose Stream', stream_title)
+    if n > -1:
+        stream_url, media_auth = fetch_stream(content_id[n], event_id[n])
+        if stream_url != '':
+            stream_url, headers = create_full_game_stream(stream_url, media_auth)
+
+    return stream_url, headers
+
+
+def media_archive(stream_title, content_id, event_id, epg):
+    stream_url = ''
+    headers = 'User-Agent=' + UA_IPHONE
+    highlight = get_epg_item(epg, "extended highlights")
+    recap = get_epg_item(epg, "recap")
+
+    archive_type = [LOCAL_STRING(30022), LOCAL_STRING(30021), LOCAL_STRING(30020)]
+    dialog = xbmcgui.Dialog()
+    a = dialog.select('Choose Archive', archive_type)
+
+    # Full Game
+    if archive_type[a] == LOCAL_STRING(30020) and a != -1:
+        n = dialog.select('Choose Stream', stream_title)
+        if n > -1:
+            stream_url, media_auth = fetch_stream(content_id[n], event_id[n])
+            if stream_url != '':
+                stream_url, headers = create_full_game_stream(stream_url, media_auth)
+
+    # Extended Highlights
+    elif archive_type[a] == LOCAL_STRING(30021):
+        stream_url = get_highlight_url(highlight['items'][0]['playbacks'])
+        stream_url = create_highlight_stream(stream_url)
+
+    # Recap
+    elif archive_type[a] == LOCAL_STRING(30022):
+        stream_url = get_highlight_url(recap['items'][0]['playbacks'])
+        stream_url = create_highlight_stream(stream_url)
+
+    return stream_url, headers
+
+
+def get_epg_item(epg, title):
+    for item in epg:
+        if item['title'].lower().strip() == title.lower().strip():
+            break
+
+    return item
+
+
+def get_highlight_url(playbacks):
+    for item in playbacks:
+        url = item['url']
+        if item['name'] == PLAYBACK_SCENARIO:
+            break
+
+    return url
 
 
 def play_all_highlights():
@@ -404,19 +373,16 @@ def create_full_game_stream(stream_url, media_auth):
         if cookie.name == "Authorization":
             cookies = cookies + cookie.name + "=" + cookie.value + "; "
 
-    stream_url += '|User-Agent=' + UA_IPHONE + '&Cookie=' + cookies + media_auth
+    headers = 'User-Agent=' + UA_IPHONE + '&Cookie=' + cookies + media_auth
     xbmc.log("STREAM URL: " + stream_url)
-    return stream_url
+    return stream_url, headers
 
 
 def get_playlist(stream_url, media_auth):
-    headers = {"Accept": "*/*",
-               "Accept-Encoding": "identity",
-               "Accept-Language": "en-US,en;q=0.8",
-               "Connection": "keep-alive",
-               "User-Agent": UA_NHL,
-               "Cookie": media_auth
-               }
+    headers = {
+        "User-Agent": UA_NHL,
+        "Cookie": media_auth
+    }
 
     r = requests.get(stream_url, headers=headers, cookies=load_cookies(), verify=VERIFY)
     playlist = r.text
@@ -424,7 +390,7 @@ def get_playlist(stream_url, media_auth):
     return playlist.splitlines()
 
 
-def fetch_stream(game_id, content_id, event_id):
+def fetch_stream(content_id, event_id):
     stream_url = ''
     media_auth = ''
 
@@ -435,21 +401,12 @@ def fetch_stream(game_id, content_id, event_id):
         if authorization == '':
             return stream_url, media_auth
 
-    session_key = get_session_key(game_id, event_id, content_id, authorization)
-    if session_key == '':
-        return stream_url, media_auth
-    elif session_key == 'blackout':
-        msg = "The game you are trying to access is not currently available due to local or national blackout " \
-              "restrictions.\n Full game archives will be available 48 hours after completion of this game."
-        dialog = xbmcgui.Dialog()
-        ok = dialog.ok('Game Blacked Out', msg)
-        return stream_url, media_auth
+    session_key = get_session_key(event_id, authorization)
 
-    url = 'https://mf.svc.nhl.com/ws/media/mf/v2.4/stream'
-    url += '?contentId=' + content_id
-    url += '&playbackScenario=' + PLAYBACK_SCENARIO
-    url += '&platform=' + PLATFORM
-    url += '&sessionKey=' + urllib.quote_plus(session_key)
+    url = '%s/stream?contentId=%s&playbackScenario=%s&platform=%s&sessionKey=%s' % \
+          (API_MEDIA_URL, content_id, PLAYBACK_SCENARIO, PLATFORM, urllib.quote_plus(session_key))
+    if settings.getSetting('debug') != "":
+        url += settings.getSetting('debug')
 
     # Get user set CDN
     if CDN == 'Akamai':
@@ -458,86 +415,73 @@ def fetch_stream(game_id, content_id, event_id):
         url += '&cdnName=MED2_LEVEL3_SECURE'
 
     headers = {
-        "Accept": "*/*",
-        "Accept-Encoding": "identity",
-        "Accept-Language": "en-US,en;q=0.8",
-        "Connection": "keep-alive",
         "Authorization": authorization,
-        "User-Agent": UA_NHL,
-        "Proxy-Connection": "keep-alive"
+        "User-Agent": UA_NHL
     }
-
     r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
-    json_source = r.json()
 
-    if json_source['status_code'] == 1:
-        session_key = json_source['session_key']
-        settings.setSetting(id='session_key', value=session_key)
-        if json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['blackout_status']['status'] == 'BlackedOutStatus':
-            msg = "The game you are trying to access is not currently available due to local or national blackout" \
-                  " restrictions.\n Full game archives will be available 48 hours after completion of this game."
+    if r.ok and 'session_key' in r.json():
+        settings.setSetting(id='session_key', value=r.json()['session_key'])
+
+    if not r.ok or 'status_code' not in r.json() or r.json()['status_code'] != 1:
+        msg = LOCAL_STRING(30368)
+        if 'status_message' in r.json():
+            msg = r.json()['status_message']
+        dialog = xbmcgui.Dialog()
+        ok = dialog.ok(LOCAL_STRING(30368), msg)
+        sys.exit()
+    else:
+        if r.json()['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['blackout_status']['status'] == 'BlackedOutStatus':
             dialog = xbmcgui.Dialog()
-            ok = dialog.ok('Game Blacked Out', msg)
+            ok = dialog.ok(LOCAL_STRING(30370), LOCAL_STRING(30371))
             sys.exit()
-        elif json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0][
-            'auth_status'] == 'NotAuthorizedStatus':
-            msg = "You do not have an active NHL.TV subscription. To access this content please purchase at www.NHL.TV" \
-                  " or call customer support at 800-559-2333"
+        elif r.json()['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['auth_status'] == 'NotAuthorizedStatus':
             dialog = xbmcgui.Dialog()
-            ok = dialog.ok('Account Not Authorized', msg)
+            ok = dialog.ok(LOCAL_STRING(30372), LOCAL_STRING(30373))
             sys.exit()
         else:
-            stream_url = \
-                json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['url']
-            media_auth = str(json_source['session_info']['sessionAttributes'][0]['attributeName']) + "=" + str(
-                json_source['session_info']['sessionAttributes'][0]['attributeValue'])
+            stream_url = r.json()['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['url']
+            media_auth = str(r.json()['session_info']['sessionAttributes'][0]['attributeName'])
+            media_auth += "=" + str(r.json()['session_info']['sessionAttributes'][0]['attributeValue'])
 
             settings.setSetting(id='media_auth', value=media_auth)
-
-    else:
-        msg = json_source['status_message']
-        dialog = xbmcgui.Dialog()
-        ok = dialog.ok('Error Fetching Stream', msg)
-        sys.exit()
 
     return stream_url, media_auth
 
 
-def get_session_key(game_id, event_id, content_id, authorization):
+def get_session_key(event_id, authorization):
     # session_key = ''
     session_key = str(settings.getSetting(id="session_key"))
 
     if session_key == '':
         epoch_time_now = str(int(round(time.time() * 1000)))
 
-        url = 'https://mf.svc.nhl.com/ws/media/mf/v2.4/stream?eventId=%s&format=json&platform=%s&subject=NHLTV&_=%s' % \
-              (event_id, PLATFORM, epoch_time_now)
+        url = '%s/stream?eventId=%s&format=json&platform=%s&subject=NHLTV&_=%s' % \
+              (API_MEDIA_URL, event_id, PLATFORM, epoch_time_now)
+        if settings.getSetting('debug') != "":
+            url += settings.getSetting('debug')
         headers = {
             "Accept": "application/json",
-            "Accept-Encoding": "identity",
-            "Accept-Language": "en-US,en;q=0.8",
-            "Connection": "keep-alive",
             "Authorization": authorization,
-            "User-Agent": UA_PC,
-            "Origin": "https://www.nhl.com",
-            "Referer": "https://www.nhl.com/tv/" + game_id + "/" + event_id + "/" + content_id
+            "User-Agent": UA_PC
         }
 
         r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
-        json_source = r.json()
+        if r.ok and 'session_key' in r.json():
+            settings.setSetting(id='session_key', value=r.json()['session_key'])
 
-        xbmc.log("REQUESTED SESSION KEY")
-        if json_source['status_code'] == 1:
-            if json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0][
-                'blackout_status']['status'] == 'BlackedOutStatus':
-                session_key = 'blackout'
-            else:
-                session_key = str(json_source['session_key'])
-                settings.setSetting(id='session_key', value=session_key)
-        else:
-            msg = json_source['status_message']
+        if not r.ok or 'status_code' not in r.json() or r.json()['status_code'] != 1:
+            msg = LOCAL_STRING(30368)
+            if 'status_message' in r.json():
+                msg = r.json()['status_message']
             dialog = xbmcgui.Dialog()
-            ok = dialog.ok('Error Fetching Stream', msg)
+            ok = dialog.ok(LOCAL_STRING(30368), msg)
+            sys.exit()
+        else:
+            if r.json()['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['blackout_status']['status'] == 'BlackedOutStatus':
+                dialog = xbmcgui.Dialog()
+                ok = dialog.ok(LOCAL_STRING(30370), LOCAL_STRING(30371))
+                sys.exit()
 
     return session_key
 
@@ -545,38 +489,30 @@ def get_session_key(game_id, event_id, content_id, authorization):
 def login():
     # Check if username and password are provided
     global USERNAME
-    if USERNAME == '""':
+    if USERNAME == '':
         dialog = xbmcgui.Dialog()
-        USERNAME = dialog.input('Please enter your username', type=xbmcgui.INPUT_ALPHANUM)
+        USERNAME = dialog.input(LOCAL_STRING(30380), type=xbmcgui.INPUT_ALPHANUM)
         settings.setSetting(id='username', value=USERNAME)
-        USERNAME = json.dumps(USERNAME)
-        sys.exit()
-
     global PASSWORD
-    if PASSWORD == '""':
+    if PASSWORD == '':
         dialog = xbmcgui.Dialog()
-        PASSWORD = dialog.input('Please enter your password', type=xbmcgui.INPUT_ALPHANUM,
+        PASSWORD = dialog.input(LOCAL_STRING(30381), type=xbmcgui.INPUT_ALPHANUM,
                                 option=xbmcgui.ALPHANUM_HIDE_INPUT)
         settings.setSetting(id='password', value=PASSWORD)
-        PASSWORD = json.dumps(PASSWORD)
-        sys.exit()
 
-    if USERNAME != '""' and PASSWORD != '""':
+    if USERNAME != '' and PASSWORD != '':
         url = 'https://user.svc.nhl.com/oauth/token?grant_type=client_credentials'
         headers = {
             "Accept": "application/json",
-            "Accept-Encoding": "identity",
-            "Accept-Language": "en-US,en;q=0.8",
             "User-Agent": UA_PC,
             "Origin": "https://www.nhl.com",
             "Authorization": "Basic d2ViX25obC12MS4wLjA6MmQxZDg0NmVhM2IxOTRhMThlZjQwYWM5ZmJjZTk3ZTM=",
         }
 
         r = requests.post(url, headers=headers, data='', cookies=load_cookies(), verify=VERIFY)
-        if r.status_code >= 400:
-            msg = "Authorization Cookie couldn't be downloaded."
+        if not r.ok:            
             dialog = xbmcgui.Dialog()
-            ok = dialog.ok('Authorization Not Found', msg)
+            ok = dialog.ok(LOCAL_STRING(30382), LOCAL_STRING(30383))
             sys.exit()
 
         json_source = r.json()
@@ -587,117 +523,88 @@ def login():
 
         if ROGERS_SUBSCRIBER == 'true':
             url = 'https://activation-rogers.svc.nhl.com/ws/subscription/flow/rogers.login'
-            login_data = '{"rogerCredentials":{"email":' + USERNAME + ',"password":' + PASSWORD + '}}'
-            # referer = "https://www.nhl.com/login/rogers"
+            login_data = {"rogerCredentials": {"email": USERNAME, "password": PASSWORD}}
         else:
             url = 'https://user.svc.nhl.com/v2/user/identity'
-            login_data = '{"email":{"address":' + USERNAME + '},"type":"email-password","password":{"value":' + PASSWORD + '}}'
+            login_data = {"email":{"address": USERNAME},"type":"email-password","password":{"value": PASSWORD}}
 
         headers = {
-            "Accept": "*/*",
-            "Accept-Encoding": "identity",
-            "Accept-Language": "en-US,en;q=0.8",
+            "Accept": "application/json",
             "Content-Type": "application/json",
             "Authorization": authorization,
-            "Connection": "keep-alive",
             "User-Agent": UA_PC
         }
 
-        r = requests.post(url, headers=headers, data=login_data, cookies=load_cookies(), verify=VERIFY)
+        r = requests.post(url, headers=headers, json=login_data, cookies=load_cookies(), verify=VERIFY)
 
-        if r.status_code >= 400:
-            try:
-                json_source = r.json()
-                msg = json_source['message']
-            except:
-                msg = "Please check that your username and password are correct"
+        if not r.ok:
+            if 'message' in r.json():
+                msg = r.json()['message']
+            else:
+                msg = LOCAL_STRING(30385)
+
             dialog = xbmcgui.Dialog()
-            ok = dialog.ok('Login Error', msg)
+            ok = dialog.ok(LOCAL_STRING(30384), msg)
             sys.exit()
 
         save_cookies(r.cookies)
 
 
 def logout(display_msg=None):
-    url = 'https://account.nhl.com/ui/rest/logout'
-    headers = {
-        "Accept": "*/*",
-        "Accept-Encoding": "identity",
-        "Accept-Language": "en-US,en;q=0.8",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Origin": "https://account.nhl.com/ui/SignOut?lang=en",
-        "Connection": "close",
-        "User-Agent": UA_PC
-    }
-
-    r = requests.post(url, headers=headers, data='', cookies=load_cookies(), verify=VERIFY)
-    if r.status_code >= 400:
-        xbmc.log('The server couldn\'t fulfill the request.')
-        xbmc.log('Error code: ', r.status_code)
-        xbmc.log(url)
-
     # Delete cookie file
-    try:
-        os.remove(ADDON_PATH_PROFILE + 'cookies.lwp')
-    except:
-        pass
+    if os.path.exists(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp')):
+        os.remove(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'))
 
     if display_msg == 'true':
         settings.setSetting(id='session_key', value='')
-        dialog = xbmcgui.Dialog()
-        title = "Logout Successful"
-        dialog.notification(title, 'Logout completed successfully', ICON, 5000, False)
+        dialog = xbmcgui.Dialog()        
+        dialog.notification(LOCAL_STRING(30386), LOCAL_STRING(30387), ICON, 5000, False)
 
 
 def my_teams_games():
-    if FAV_TEAM != 'None':
+    if FAV_TEAM == 'None':
+        dialog = xbmcgui.Dialog()
+        ok = dialog.ok(LOCAL_STRING(30390), LOCAL_STRING(30391))
+    else:
         end_day = local_to_eastern()
         end_date = string_to_date(end_day, "%Y-%m-%d")
         start_date = end_date - timedelta(days=30)
         start_day = start_date.strftime("%Y-%m-%d")
 
-        url = API_URL + 'schedule?teamId=' + FAV_TEAM_ID + '&startDate=' + start_day + '&endDate=' + end_day + '&expand=schedule.teams,schedule.linescore,schedule.scoringplays,schedule.game.content.media.epg'
+        url = '%s/schedule?teamId=%s&startDate=%s&endDate=%s&expand=schedule.game.content.media.epg,schedule.teams' % \
+              (API_URL, FAV_TEAM_ID, start_day, end_day)
         headers = {'User-Agent': UA_IPHONE}
         r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
-        json_source = r.json()
 
-        for date in reversed(json_source['dates']):
-            # temp_date = string_to_date(date['date'], "%Y-%m-%d")
-            # date_display = '[B][I]'+ color_string(temp_date.strftime("%A, %m/%d/%Y"),GAMETIME_COLOR)+'[/I][/B]'
-            # add_dir(date_display,'/nothing',999,ICON,FANART)
+        for date in reversed(r.json()['dates']):
             for game in date['games']:
                 create_game_listitem(game, date['date'])
-    else:
-        msg = "Please select your favorite team from the addon settings"
-        dialog = xbmcgui.Dialog()
-        ok = dialog.ok('Favorite Team Not Set', msg)
 
 
 def play_fav_team_today():
-    if FAV_TEAM != 'None':
+    if FAV_TEAM == 'None':
+        dialog = xbmcgui.Dialog()
+        ok = dialog.ok(LOCAL_STRING(30390), LOCAL_STRING(30391))
+    else:
         end_day = local_to_eastern()
         start_day = end_day
 
-        url = API_URL + 'schedule?teamId=' + FAV_TEAM_ID + '&startDate=' + start_day + '&endDate=' + end_day + '&expand=schedule.game.content.media.epg,schedule.teams'
+        url = '%s/schedule?teamId=%s&startDate=%s&endDate=%s&expand=schedule.game.content.media.epg,schedule.teams' % \
+              (API_URL, FAV_TEAM_ID, start_day, end_day)
         headers = {'User-Agent': UA_IPHONE}
 
         r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
-        json_source = r.json()
-
         stream_url = ''
-        if json_source['dates']:
-            todays_game = json_source['dates'][0]['games'][0]
-
+        if r.ok and r.json()['dates']:
+            todays_game = r.json()['dates'][0]['games'][0]
             # Determine if favorite team is home or away
             fav_team_homeaway = ''
-
             away = todays_game['teams']['away']['team']
             home = todays_game['teams']['home']['team']
 
             if FAV_TEAM_ID == str(away['id']):
                 fav_team_homeaway = 'AWAY'
-
-            if FAV_TEAM_ID == str(home['id']):
+            elif FAV_TEAM_ID == str(home['id']):
                 fav_team_homeaway = 'HOME'
 
             # Grab the correct feed (home/away/national)
@@ -715,31 +622,20 @@ def play_fav_team_today():
             if not local_stream:
                 local_stream = natl_stream
 
-            game_id = str(todays_game['gamePk'])
-
             # Create the stream url
-            stream_url, media_auth = fetch_stream(str(game_id), local_stream['mediaPlaybackId'],local_stream['eventId'])
+            stream_url, media_auth = fetch_stream(local_stream['mediaPlaybackId'], local_stream['eventId'])
             if stream_url != '':
-                stream_url = create_full_game_stream(stream_url, media_auth, local_stream['mediaState'])
-
+                stream_url, headers = create_full_game_stream(stream_url, media_auth)
         else:
             dialog = xbmcgui.Dialog()
             dialog.ok('No Game Today', FAV_TEAM + " doesn't play today")
             sys.exit()
 
-        listitem = xbmcgui.ListItem(path=stream_url)
-
         if stream_url != '':
-            listitem.setMimeType("application/x-mpegURL")
+            listitem = stream_to_listitem(stream_url, headers)
             xbmcplugin.setResolvedUrl(addon_handle, True, listitem)
         else:
             xbmcplugin.setResolvedUrl(addon_handle, False, listitem)
-
-
-    else:
-        msg = "Please select your favorite team from the addon settings"
-        dialog = xbmcgui.Dialog()
-        ok = dialog.ok('Favorite Team Not Set', msg)
 
 
 def goto_date():
@@ -761,11 +657,6 @@ def goto_date():
 
     if ret > -1:
         year = year_list[ret]
-
-        # Month
-        # mnth_name = ['September','October','November','December','Janurary','February','March','April','May','June']
-        # mnth_num = ['9','10','11','12','1','2','3','4','5','6']
-
         mnth_name = ['January', 'February', 'March', 'April', 'May', 'June', 'September', 'October', 'November',
                      'December']
         mnth_num = ['1', '2', '3', '4', '5', '6', '9', '10', '11', '12']
@@ -797,10 +688,7 @@ def goto_date():
 
 def nhl_videos(selected_topic=None):
     url = 'http://nhl.bamcontent.com/nhl/en/nav/v1/video/connectedDevices/nhl/playstation-v1.json'
-
-    headers = {'User-Agent': UA_PS4,
-               }
-
+    headers = {'User-Agent': UA_PS4}
     r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
     json_source = r.json()
 
@@ -814,7 +702,10 @@ def nhl_videos(selected_topic=None):
                 for video in main_topic['list']:
                     title = video['title']
                     name = title
-                    icon = video['image']['cuts']['1136x640']['src']
+                    try:
+                        icon = video['image']['cuts']['1136x640']['src']
+                    except:
+                        icon = ICON
                     url = video['playbacks'][4]['url']
                     desc = video['description']
                     release_date = video['date'][0:10]

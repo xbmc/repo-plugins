@@ -24,6 +24,18 @@ msgctxt "#30011"
 msgid "Next"
 msgstr ""
 
+msgctxt "#30020"
+msgid "Full Game"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Extended Highlights"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Recap"
+msgstr ""
+
 
 msgctxt "#30100"
 msgid "Login"
@@ -117,12 +129,20 @@ msgctxt "#32001"
 msgid "24 Hour Clock (ex: 19:00)"
 msgstr ""
 
-msgctxt "#30250"
+msgctxt "#30201"
 msgid "Download Game Preview Info (Today's Games)"
+msgstr ""
+
+msgctxt "#30250"
+msgid "Misc."
 msgstr ""
 
 msgctxt "#30251"
 msgid "Generate Game Thumbnails"
+msgstr ""
+
+msgctxt "#30252"
+msgid "Debug"
 msgstr ""
 
 msgctxt "#30300"
@@ -154,7 +174,7 @@ msgid "Yesterday's Games"
 msgstr ""
 
 msgctxt "#30362"
-msgid "'s Game Today'"
+msgid "'s Game Today"
 msgstr ""
 
 msgctxt "#30363"
@@ -167,6 +187,14 @@ msgstr ""
 
 msgctxt "#30365"
 msgid "Featured Videos"
+msgstr ""
+
+msgctxt "#30366"
+msgid "Streams Not Found"
+msgstr ""
+
+msgctxt "#30367"
+msgid "No playable streams found"
 msgstr ""
 
 msgctxt "#30368"

@@ -688,16 +688,6 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/boxplus/get_liv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/boxupfront.png" group-title="United Kingdom",Box Upfront
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/boxplus/get_live_url/?item_id=box-upfront
 
-##	Quest
-##	quest
-#EXTINF:-1 tvg-id="1230.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/questtv.png" group-title="United Kingdom",Quest
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/dplay/get_live_url/?item_id=quest
-
-##	Quest RED
-##	quest-red
-#EXTINF:-1 tvg-id="1014.tvguide.co.uk" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/questred.png" group-title="United Kingdom",Quest RED
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/dplay/get_live_url/?item_id=quest-red
-
 ##	Bristol Local TV
 ##	bristollocal
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/bristollocal.png" group-title="United Kingdom",Bristol Local TV
@@ -772,26 +762,6 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_l
 ##	twlocal
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/twlocal.png" group-title="United Kingdom",Tyne & Wear Local TV
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/uklocaltv/get_live_url/?item_id=twlocal
-
-##	Really
-##	really
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/really.png" group-title="United Kingdom",Really
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/dplay/get_live_url/?item_id=really
-
-##	Food Network
-##	food-network
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/foodnetwork.png" group-title="United Kingdom",Food Network
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/dplay/get_live_url/?item_id=food-network
-
-##	DMAX
-##	dmax
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/dmax.png" group-title="United Kingdom",DMAX
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/dplay/get_live_url/?item_id=dmax
-
-##	HGTV
-##	home
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/uk/hgtv.png" group-title="United Kingdom",HGTV
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/uk/dplay/get_live_url/?item_id=home
 
 
 
@@ -1198,11 +1168,6 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/jp/weathernewsjp/g
 # Canada
 # ca_live
 
-##	Télé-Québec
-##	telequebec
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/telequebec.png" group-title="Canada",Télé-Québec
-plugin://plugin.video.catchuptvandmore/resources/lib/channels/ca/telequebec/get_live_url/?item_id=telequebec
-
 ##	TVA
 ##	tva
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/tva.png" group-title="Canada",TVA
@@ -1342,6 +1307,11 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/ca/cbc/get_live_ur
 ##	cbc
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/cbc.png" group-title="Canada",CBC St. John's
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/ca/cbc/get_live_url/?item_id=cbc&language=St.+John%27s
+
+##	LCN
+##	lcn
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/lcn.png" group-title="Canada",LCN
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ca/tva/get_live_url/?item_id=lcn
 
 
 

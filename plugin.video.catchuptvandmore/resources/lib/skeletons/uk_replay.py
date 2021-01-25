@@ -68,12 +68,12 @@ menu = {
         'enabled': True,
         'order': 8
     },
-    'dplay': {
-        'route': '/resources/lib/channels/uk/dplay:dplay_root',
-        'label': '*Dplay',
-        'thumb': 'channels/uk/dplay.png',
-        'fanart': 'channels/uk/dplay_fanart.jpg',
-        'enabled': True,
+    'discoveryplus': {
+        'route': '/resources/lib/channels/uk/discoveryplus:discoveryplus_root',
+        'label': 'discovery+',
+        'thumb': 'channels/uk/discoveryplus.png',
+        'fanart': 'channels/uk/discoveryplus_fanart.jpg',
+        'enabled': False,
         'order': 9
     },
     'uktvplay': {

@@ -45,7 +45,8 @@ from kodi_six import xbmc
 
 PY3 = sys.version_info[0] >= 3
 
-"""Kodi InfoLabel functions
+
+""" Handler functions of Kodi versions
 
 """
 
@@ -58,6 +59,13 @@ def get_kodi_version():
     """
     xbmc_version = xbmc.getInfoLabel("System.BuildVersion")
     return int(xbmc_version.split('-')[0].split('.')[0])
+
+
+INPUTSTREAM_PROP = 'inputstream' if get_kodi_version() >= 19 else 'inputstreamaddon'
+
+"""Kodi InfoLabel functions
+
+"""
 
 
 def get_selected_item_art():

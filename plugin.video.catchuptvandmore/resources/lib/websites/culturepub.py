@@ -35,13 +35,13 @@ from resources.lib.menu_utils import item_post_treatment
 
 URL_ROOT = 'http://www.culturepub.fr'
 
-INFO_VIDEO = 'http://api.cbnews.webtv.flumotion.com/videos/%s'
-# IdVideo
+URL_PLAYER = 'http://play.culturepub.fr'
 
-INFO_STREAM = 'http://cbnews.ondemand.flumotion.com/video/mp4/%s/%s.mp4'
-# Quality, IdStream
+INFO_STREAM = URL_PLAYER + '/play/player?player=7&pod=%s'
+# IdStream
 
-QUALITIES_STREAM = ['low', 'hd']
+URL_STREAM = URL_PLAYER + '%s'
+# VideoStream
 
 
 @Route.register
@@ -152,20 +152,15 @@ def list_playlist_videos(plugin, item_id, videos_url, **kwargs):
             item.art['thumb'] = item.art['landscape'] = video.find('.//img').get('src')
 
         video_id = video.find(".//a").get('data-src')
-        video_id = re.compile('player=7&pod=(.*?)[\"\&]').findall(
+        video_id = re.compile(r'player=7&pod=(.*?)[\"\&]').findall(
             video_id)[0]
 
-        info_video_json = urlquick.get(INFO_VIDEO % video_id).text
-        info_video_json = json.loads(info_video_json)
+        resp = urlquick.get(INFO_STREAM % video_id)
+        stream_id = re.compile(r'src\: \'(.*?)\'').findall(resp.text)[0]
 
-        stream_id = re.compile('images/(.*).jpg').findall(
-            info_video_json["thumbnail_url_static"])[0].split('/')[1]
+        final_stream_url = URL_STREAM % stream_id.replace('vtt', 'm3u8')
 
-        all_datas_videos_path = []
-        for quality in QUALITIES_STREAM:
-            all_datas_videos_path.append(INFO_STREAM % (quality, stream_id))
-
-        item.set_callback(all_datas_videos_path[-1],
+        item.set_callback(final_stream_url,
                           is_playable=True)
 
         playlist_items.append(item)
@@ -213,38 +208,13 @@ def get_video_url(plugin,
                                        'User-Agent': web_utils.get_random_ua()
                                    },
                                    max_age=-1).text
-    video_id = re.compile('player=7&pod=(.*?)[\"\&]').findall(
+    video_id = re.compile(r'player=7&pod=(.*?)[\"\&]').findall(
         info_video_html)[0]
+    resp = urlquick.get(INFO_STREAM % video_id)
+    stream_id = re.compile(r'src\: \'(.*?)\'').findall(resp.text)[0]
 
-    info_video_json = urlquick.get(INFO_VIDEO % video_id).text
-    info_video_json = json.loads(info_video_json)
-
-    stream_id = re.compile('images/(.*).jpg').findall(
-        info_video_json["thumbnail_url_static"])[0].split('/')[1]
-
-    desired_quality = Script.setting.get_string('quality')
-    all_datas_videos_quality = []
-    all_datas_videos_path = []
-    for quality in QUALITIES_STREAM:
-        all_datas_videos_quality.append(quality)
-        all_datas_videos_path.append(INFO_STREAM % (quality, stream_id))
-
-    url = ''
-    if desired_quality == "DIALOG":
-        seleted_item = xbmcgui.Dialog().select(
-            plugin.localize(30709),
-            all_datas_videos_quality)
-        if seleted_item == -1:
-            url = ''
-        url = all_datas_videos_path[seleted_item]
-    elif desired_quality == "BEST":
-        url_best = ''
-        for data_video in all_datas_videos_path:
-            url_best = data_video
-        url = url_best
-    else:
-        url = all_datas_videos_path[0]
+    final_stream_url = URL_STREAM % stream_id.replace('vtt', 'm3u8')
 
     if download_mode:
-        return download.download_video(url)
-    return url
+        return download.download_video(final_stream_url)
+    return final_stream_url

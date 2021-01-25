@@ -49,16 +49,16 @@ def website_root(plugin, item_id, **kwargs):
 @Route.register
 def list_videos(plugin, item_id, page, **kwargs):
     """Build videos listing"""
-    resp = urlquick.get(URL_ROOT + '/?page=%s' % page)
+    resp = urlquick.get(URL_ROOT + '/(page)/%s' % page)
 
     # Get Video First Page
     if page == 1:
         item = Listitem()
 
-        video_id = re.compile(r'video: \"(.*?)\"').findall(resp.text)[0]
+        video_id = re.compile(r'video-id\=\"(.*?)\"').findall(resp.text)[0]
         url_first_video = 'https://www.dailymotion.com/embed/video/%s' % video_id
         info_first_video = urlquick.get(url_first_video).text
-        info_first_video_json = re.compile('config = (.*?)};').findall(
+        info_first_video_json = re.compile('window.__PLAYER_CONFIG__ = (.*?)};').findall(
             info_first_video)[0]
         # print 'info_first_video_json : ' + info_first_video_json + '}'
         info_first_video_jsonparser = json.loads(info_first_video_json + '}')
@@ -74,12 +74,26 @@ def list_videos(plugin, item_id, page, **kwargs):
         yield item
 
     root = resp.parse()
-    for episode in root.iterfind(".//div[@class='col-xs-6 col-sm-12']"):
+    for episode in root.iterfind(".//div[@class='item col-sm-6  ']"):
         item = Listitem()
 
-        item.label = episode.find('.//img').get('alt')
+        item.label = episode.find('.//h2/a').text
         video_url = URL_ROOT + episode.find('.//a').get('href')
-        item.art['thumb'] = item.art['landscape'] = episode.find('.//img').get('src').replace(
+        item.art['thumb'] = item.art['landscape'] = episode.find('.//img').get('data-src').replace(
+            '|', '%7C')
+
+        item.set_callback(get_video_url,
+                          item_id=item_id,
+                          video_url=video_url)
+        item_post_treatment(item, is_playable=True, is_downloadable=True)
+        yield item
+
+    for episode in root.iterfind(".//div[@class='item col-sm-4  ']"):
+        item = Listitem()
+
+        item.label = episode.find('.//h2/a').text
+        video_url = URL_ROOT + episode.find('.//a').get('href')
+        item.art['thumb'] = item.art['landscape'] = episode.find('.//img').get('data-src').replace(
             '|', '%7C')
 
         item.set_callback(get_video_url,

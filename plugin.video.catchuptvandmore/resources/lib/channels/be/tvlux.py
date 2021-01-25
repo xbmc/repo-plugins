@@ -47,6 +47,8 @@ URL_VIDEOS = URL_ROOT + '/videos'
 
 URL_EMISSIONS = URL_ROOT + '/emissions'
 
+URL_LIVE_DATAS = 'https://player.freecaster.com/embed/%s.js'
+
 
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
@@ -147,9 +149,9 @@ def get_video_url(plugin,
 def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE, max_age=-1)
-    root = resp.parse()
-    live_datas = root.findall('.//iframe')[0].get('src')
+    list_live_datas = re.compile(
+        r'player\.freecaster\.com\/embed\/(.*?)\.js').findall(resp.text)[0]
 
-    resp2 = urlquick.get(live_datas, max_age=-1)
+    resp2 = urlquick.get(URL_LIVE_DATAS % list_live_datas, max_age=-1)
     return re.compile(
-        r'file\"\:\"(.*?)\"').findall(resp2.text)[0]
+        r'file\"\:\"(.*?)\"').findall(resp2.text.replace('\\', ''))[1]

@@ -33,7 +33,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib import web_utils
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
-from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info
+from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
 from resources.lib.addon_utils import get_item_media_path
 
 import inputstreamhelper
@@ -52,37 +52,37 @@ from kodi_six import xbmcgui
 # Url to get channel's categories
 # e.g. Info, Divertissement, Séries, ...
 # We get an id by category
-URL_ROOT = 'http://pc.middleware.6play.fr/6play/v2/platforms/' \
-           'm6group_web/services/%s/folders?limit=999&offset=0'
+URL_ROOT = 'http://android.middleware.6play.fr/6play/v2/platforms/' \
+           'm6group_androidmob/services/%s/folders?limit=999&offset=0'
 
 # Url to get catgory's programs
 # e.g. Le meilleur patissier, La france à un incroyable talent, ...
 # We get an id by program
-URL_CATEGORY = 'http://pc.middleware.6play.fr/6play/v2/platforms/' \
-               'm6group_web/services/6play/folders/%s/programs' \
+URL_CATEGORY = 'http://android.middleware.6play.fr/6play/v2/platforms/' \
+               'm6group_androidmob/services/6play/folders/%s/programs' \
                '?limit=999&offset=0&csa=6&with=parentcontext'
 
 # Url to get program's subfolders
 # e.g. Saison 5, Les meilleurs moments, les recettes pas à pas, ...
 # We get an id by subfolder
-URL_SUBCATEGORY = 'http://pc.middleware.6play.fr/6play/v2/platforms/' \
-                  'm6group_web/services/6play/programs/%s' \
+URL_SUBCATEGORY = 'http://android.middleware.6play.fr/6play/v2/platforms/' \
+                  'm6group_androidmob/services/6play/programs/%s' \
                   '?with=links,subcats,rights'
 
 # Url to get shows list
 # e.g. Episode 1, Episode 2, ...
-URL_VIDEOS = 'http://pc.middleware.6play.fr/6play/v2/platforms/' \
-             'm6group_web/services/6play/programs/%s/videos?' \
+URL_VIDEOS = 'http://chromecast.middleware.6play.fr/6play/v2/platforms/' \
+             'chromecast/services/6play/programs/%s/videos?' \
              'csa=6&with=clips,freemiumpacks&type=vi,vc,playlist&limit=999'\
              '&offset=0&subcat=%s&sort=subcat'
 
-URL_VIDEOS2 = 'https://pc.middleware.6play.fr/6play/v2/platforms/' \
-              'm6group_web/services/6play/programs/%s/videos?' \
+URL_VIDEOS2 = 'https://chromecast.middleware.6play.fr/6play/v2/platforms/' \
+              'chromecast/services/6play/programs/%s/videos?' \
               'csa=6&with=clips,freemiumpacks&type=vi&limit=999&offset=0'
 
 
-URL_JSON_VIDEO = 'https://pc.middleware.6play.fr/6play/v2/platforms/' \
-                 'm6group_web/services/6play/videos/%s'\
+URL_JSON_VIDEO = 'https://chromecast.middleware.6play.fr/6play/v2/platforms/' \
+                 'chromecast/services/6play/videos/%s'\
                  '?csa=6&with=clips,freemiumpacks'
 
 URL_IMG = 'https://images.6play.fr/v1/images/%s/raw'
@@ -97,13 +97,13 @@ URL_GET_JS_ID_API_KEY = 'https://www.6play.fr/connexion'
 URL_API_KEY = 'https://www.6play.fr/client-%s.bundle.js'
 # Id
 
-URL_TOKEN_DRM = 'https://6play-users.6play.fr/v2/platforms/m6group_web/services/6play/users/%s/videos/%s/upfront-token'
+URL_TOKEN_DRM = 'https://6play-users.6play.fr/v2/platforms/chromecast/services/6play/users/%s/videos/%s/upfront-token'
 
 # URL_LICENCE_KEY = 'https://lic.drmtoday.com/license-proxy-widevine/cenc/|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Host=lic.drmtoday.com&Origin=https://www.6play.fr&Referer=%s&x-dt-auth-token=%s|R{SSM}|JBlicense'
 URL_LICENCE_KEY = 'https://lic.drmtoday.com/license-proxy-widevine/cenc/|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Host=lic.drmtoday.com&x-dt-auth-token=%s|R{SSM}|JBlicense'
 # Referer, Token
 
-URL_LIVE_JSON = 'https://pc.middleware.6play.fr/6play/v2/platforms/m6group_web/services/6play/live?channel=%s&with=service_display_images,nextdiffusion,extra_data'
+URL_LIVE_JSON = 'https://chromecast.middleware.6play.fr/6play/v2/platforms/chromecast/services/6play/live?channel=%s&with=service_display_images,nextdiffusion,extra_data'
 # Chaine
 
 DESIRED_QUALITY = Script.setting['quality']
@@ -459,7 +459,7 @@ def get_video_url(plugin,
                 item.label = get_selected_item_label()
                 item.art.update(get_selected_item_art())
                 item.info.update(get_selected_item_info())
-                item.property['inputstreamaddon'] = 'inputstream.adaptive'
+                item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
                 item.property['inputstream.adaptive.manifest_type'] = 'mpd'
                 item.property[
                     'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
@@ -637,14 +637,14 @@ def get_live_url(plugin, item_id, **kwargs):
                 headers={'User-Agent': web_utils.get_random_ua()},
                 max_age=-1)
             json_parser = json.loads(video_json.text)
-            video_assets = json_parser['6T'][0]['live']['assets']
+            video_assets = json_parser['6T'][0]['live']['assets'][::-1]
         else:
             video_json = urlquick.get(
                 URL_LIVE_JSON % (item_id.upper()),
                 headers={'User-Agent': web_utils.get_random_ua()},
                 max_age=-1)
             json_parser = json.loads(video_json.text)
-            video_assets = json_parser[item_id.upper()][0]['live']['assets']
+            video_assets = json_parser[item_id.upper()][0]['live']['assets'][::-1]
 
         if not video_assets:
             plugin.notify('INFO', plugin.localize(30716))
@@ -662,7 +662,7 @@ def get_live_url(plugin, item_id, **kwargs):
                 item.path = asset['full_physical_path']
                 if 'http' in subtitle_url:
                     item.subtitles.append(subtitle_url)
-                item.property['inputstreamaddon'] = 'inputstream.adaptive'
+                item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
                 item.property['inputstream.adaptive.manifest_type'] = 'mpd'
                 item.property[
                     'inputstream.adaptive.license_type'] = 'com.widevine.alpha'

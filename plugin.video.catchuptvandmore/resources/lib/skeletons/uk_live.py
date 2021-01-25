@@ -144,21 +144,21 @@ menu = {
         'order': 16
     },
     'quest': {
-        'resolver': '/resources/lib/channels/uk/dplay:get_live_url',
+        'resolver': '/resources/lib/channels/uk/discoveryplus:get_live_url',
         'label': 'Quest',
         'thumb': 'channels/uk/questtv.png',
         'fanart': 'channels/uk/questtv_fanart.jpg',
         'xmltv_id': '1230.tvguide.co.uk',
-        'enabled': True,
+        'enabled': False,
         'order': 18
     },
     'quest-red': {
-        'resolver': '/resources/lib/channels/uk/dplay:get_live_url',
+        'resolver': '/resources/lib/channels/uk/discoveryplus:get_live_url',
         'label': 'Quest RED',
         'thumb': 'channels/uk/questred.png',
         'fanart': 'channels/uk/questred_fanart.jpg',
         'xmltv_id': '1014.tvguide.co.uk',
-        'enabled': True,
+        'enabled': False,
         'order': 19
     },
     'bristollocal': {
@@ -282,35 +282,35 @@ menu = {
         'order': 36
     },
     'really': {
-        'resolver': '/resources/lib/channels/uk/dplay:get_live_url',
+        'resolver': '/resources/lib/channels/uk/discoveryplus:get_live_url',
         'label': 'Really',
         'thumb': 'channels/uk/really.png',
         'fanart': 'channels/uk/really_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 37
     },
     'food-network': {
-        'resolver': '/resources/lib/channels/uk/dplay:get_live_url',
+        'resolver': '/resources/lib/channels/uk/discoveryplus:get_live_url',
         'label': 'Food Network',
         'thumb': 'channels/uk/foodnetwork.png',
         'fanart': 'channels/uk/foodnetwork_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 38
     },
     'dmax': {
-        'resolver': '/resources/lib/channels/uk/dplay:get_live_url',
+        'resolver': '/resources/lib/channels/uk/discoveryplus:get_live_url',
         'label': 'DMAX',
         'thumb': 'channels/uk/dmax.png',
         'fanart': 'channels/uk/dmax_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 39
     },
     'home': {
-        'resolver': '/resources/lib/channels/uk/dplay:get_live_url',
+        'resolver': '/resources/lib/channels/uk/discoveryplus:get_live_url',
         'label': 'HGTV',
         'thumb': 'channels/uk/hgtv.png',
         'fanart': 'channels/uk/hgtv_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 40
     }
 }

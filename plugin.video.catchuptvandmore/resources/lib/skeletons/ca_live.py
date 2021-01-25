@@ -41,7 +41,7 @@ menu = {
         'label': 'Télé-Québec',
         'thumb': 'channels/ca/telequebec.png',
         'fanart': 'channels/ca/telequebec_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 4
     },
     'tva': {
@@ -108,7 +108,7 @@ menu = {
         'label': 'LCN',
         'thumb': 'channels/ca/lcn.png',
         'fanart': 'channels/ca/lcn_fanart.jpg',
-        'enabled': False,
+        'enabled': True,
         'order': 12
     },
     'yoopa': {

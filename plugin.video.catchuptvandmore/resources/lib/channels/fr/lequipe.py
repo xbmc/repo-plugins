@@ -81,7 +81,7 @@ def list_videos(plugin, item_id, program_url, page, **kwargs):
         title = video_datas['titre']
         img = video_datas['src_tablette_retina']
         duration = video_datas['duree']
-        video_id = video_datas['lien_dm'].split('//')[1]
+        video_id = video_datas['lien'].split('//')[1]
 
         item = Listitem()
         item.label = title
@@ -117,11 +117,6 @@ def get_live_url(plugin, item_id, **kwargs):
     resp = urlquick.get(URL_LIVE,
                         headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
-    js_live_id = re.compile(r'\/js\/app\.(.*?)\.',
-                            re.DOTALL).findall(resp.text)[0]
-    resp2 = urlquick.get(URL_INFO_STREAM_LIVE % js_live_id,
-                         headers={'User-Agent': web_utils.get_random_ua()},
-                         max_age=-1)
-    live_id = re.compile(r'channelLiveDmId\:\"(.*?)\"',
-                         re.DOTALL).findall(resp2.text)[0]
+    live_id = re.compile(r'video-id\=\"(.*?)\"',
+                         re.DOTALL).findall(resp.text)[0]
     return resolver_proxy.get_stream_dailymotion(plugin, live_id, False)

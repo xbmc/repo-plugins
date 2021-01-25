@@ -33,12 +33,14 @@ from codequick import Route, Resolver, Listitem, utils, Script
 
 from resources.lib import web_utils
 from resources.lib import download
+from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
 from resources.lib.menu_utils import item_post_treatment
 
 # Verify md5 still present in hashlib python 3 (need to find another way if it is not the case)
 # https://docs.python.org/3/library/hashlib.html
 from hashlib import md5
 
+import inputstreamhelper
 import json
 import os
 import re
@@ -56,6 +58,9 @@ URL_LCI_ROOT = "http://www.lci.fr"
 
 URL_VIDEO_STREAM_2 = 'https://delivery.tf1.fr/mytf1-wrd/%s?format=%s'
 # videoId, format['hls', 'dash']
+
+URL_LICENCE_KEY = 'https://drm-wide.tf1.fr/proxy?id=%s|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Host=drm-wide.tf1.fr|R{SSM}|'
+# videoId
 
 URL_VIDEO_STREAM = 'https://www.wat.tv/get/webhtml/%s'
 
@@ -99,7 +104,7 @@ def list_videos(plugin, item_id, program_url, page, **kwargs):
     if page == '1':
         resp = urlquick.get(program_url)
     else:
-        resp = urlquick.get(program_url + '/%s/' % page)
+        resp = urlquick.get(program_url + '%s/' % page)
     root = resp.parse()
 
     for replay in root.iterfind(
@@ -125,7 +130,7 @@ def list_videos(plugin, item_id, program_url, page, **kwargs):
                           program_id=program_id)
         item_post_treatment(item,
                             is_playable=True,
-                            is_downloadable=True)
+                            is_downloadable=False)
         yield item
 
     # More videos...
@@ -171,47 +176,27 @@ def get_video_url(plugin,
                              max_age=-1)
     json_parser = json.loads(htlm_json.text)
 
-    # Check DRM in the m3u8 file
-    manifest = urlquick.get(json_parser["hls"],
-                            headers={
-                                'User-Agent': web_utils.get_random_ua()},
-                            max_age=-1).text
-    if 'drm' in manifest:
-        Script.notify("TEST", plugin.localize(30702),
-                      Script.NOTIFY_INFO)
+    if download_mode:
+        xbmcgui.Dialog().ok('Info', plugin.localize(30603))
         return False
 
-    root = os.path.dirname(json_parser["hls"])
+    is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
+    if not is_helper.check_inputstream():
+        return False
 
-    manifest = urlquick.get(json_parser["hls"].split('&max_bitrate=')[0],
-                            headers={'User-Agent': web_utils.get_random_ua()},
-                            max_age=-1)
+    item = Listitem()
+    item.path = json_parser["mpd"]
+    item.label = get_selected_item_label()
+    item.art.update(get_selected_item_art())
+    item.info.update(get_selected_item_info())
+    item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
+    item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+    item.property[
+        'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+    item.property[
+        'inputstream.adaptive.license_key'] = URL_LICENCE_KEY % video_id
 
-    final_video_url = ''
-    lines = manifest.text.splitlines()
-    all_datas_videos_quality = []
-    all_datas_videos_path = []
-    for k in range(0, len(lines) - 1):
-        if 'RESOLUTION=' in lines[k]:
-            all_datas_videos_quality.append(
-                re.compile(r'RESOLUTION=(.*?),').findall(lines[k])[0])
-            all_datas_videos_path.append(root + '/' + lines[k + 1])
-    if DESIRED_QUALITY == "DIALOG":
-        seleted_item = xbmcgui.Dialog().select(
-            plugin.localize(30709),
-            all_datas_videos_quality)
-        final_video_url = all_datas_videos_path[seleted_item]
-    elif DESIRED_QUALITY == 'BEST':
-        # Last video in the Best
-        for k in all_datas_videos_path:
-            url = k
-        final_video_url = url
-    else:
-        final_video_url = all_datas_videos_path[0]
-
-    if download_mode:
-        return download.download_video(final_video_url)
-    return final_video_url
+    return item
 
 
 @Resolver.register

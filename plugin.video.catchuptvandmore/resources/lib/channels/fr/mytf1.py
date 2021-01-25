@@ -34,7 +34,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib import web_utils
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
-from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info
+from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
 from resources.lib.addon_utils import get_item_media_path
 
 # Verify md5 still present in hashlib python 3 (need to find another way if it is not the case)
@@ -210,7 +210,7 @@ def handle_videos(video_items):
 
         item.set_callback(get_video_url,
                           video_id=video_id)
-        item_post_treatment(item, is_playable=True, is_downloadable=True)
+        item_post_treatment(item, is_playable=True, is_downloadable=False)
         yield item
 
 
@@ -287,7 +287,7 @@ def get_video_url(plugin,
                   download_mode=False,
                   **kwargs):
 
-    video_format = 'hls'
+    video_format = 'dash'
     url_json = URL_VIDEO_STREAM % (video_id, video_format)
     htlm_json = urlquick.get(url_json,
                              headers={'User-Agent': web_utils.get_random_ua()},
@@ -298,55 +298,34 @@ def get_video_url(plugin,
         plugin.notify('ERROR', plugin.localize(30716))
         return False
 
-    # Check DRM in the m3u8 file
-    manifest = urlquick.get(json_parser["url"],
-                            headers={
-                                'User-Agent': web_utils.get_random_ua()},
-                            max_age=-1).text
-    if 'drm' in manifest:
+    if download_mode:
+        xbmcgui.Dialog().ok('Info', plugin.localize(30603))
+        return False
 
-        if get_kodi_version() < 18:
-            xbmcgui.Dialog().ok('Info', plugin.localize(30602))
-            return False
-        else:
-            video_format = 'dash'
+    url_json = URL_VIDEO_STREAM % (video_id, video_format)
+    htlm_json = urlquick.get(
+        url_json,
+        headers={'User-Agent': web_utils.get_random_ua()},
+        max_age=-1)
+    json_parser = json.loads(htlm_json.text)
 
-    if video_format == 'hls':
+    is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
+    if not is_helper.check_inputstream():
+        return False
 
-        final_video_url = json_parser["url"].replace('2800000', '4000000')
-        if download_mode:
-            return download.download_video(final_video_url)
-        return final_video_url
+    item = Listitem()
+    item.path = json_parser["url"]
+    item.label = get_selected_item_label()
+    item.art.update(get_selected_item_art())
+    item.info.update(get_selected_item_info())
+    item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
+    item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+    item.property[
+        'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+    item.property[
+        'inputstream.adaptive.license_key'] = URL_LICENCE_KEY % video_id
 
-    else:
-        if download_mode:
-            xbmcgui.Dialog().ok('Info', plugin.localize(30603))
-            return False
-
-        url_json = URL_VIDEO_STREAM % (video_id, video_format)
-        htlm_json = urlquick.get(
-            url_json,
-            headers={'User-Agent': web_utils.get_random_ua()},
-            max_age=-1)
-        json_parser = json.loads(htlm_json.text)
-
-        is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
-        if not is_helper.check_inputstream():
-            return False
-
-        item = Listitem()
-        item.path = json_parser["url"]
-        item.label = get_selected_item_label()
-        item.art.update(get_selected_item_art())
-        item.info.update(get_selected_item_info())
-        item.property['inputstreamaddon'] = 'inputstream.adaptive'
-        item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-        item.property[
-            'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
-        item.property[
-            'inputstream.adaptive.license_key'] = URL_LICENCE_KEY % video_id
-
-        return item
+    return item
 
 
 @Resolver.register

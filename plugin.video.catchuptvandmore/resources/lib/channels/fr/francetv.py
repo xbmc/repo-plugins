@@ -41,14 +41,20 @@ import json
 import time
 import urlquick
 
-from six.moves.html_parser import HTMLParser
-HTML_PARSER = HTMLParser()
 TAG_RE = re.compile(r'<[^>]+>')
 
 try:
     from itertools import zip_longest
 except ImportError:
     from itertools import izip_longest as zip_longest
+
+try:
+    from html import unescape
+except ImportError:
+    from six.moves.html_parser import HTMLParser
+    HTML_PARSER = HTMLParser()
+    unescape = HTML_PARSER.unescape
+
 
 """
 Channels:
@@ -226,7 +232,7 @@ def populate_video_item(item, video):
         item.label = video['title']
     description = video['description']
     if description:
-        item.info['plot'] = TAG_RE.sub('', HTML_PARSER.unescape(description))
+        item.info['plot'] = TAG_RE.sub('', unescape(description))
     begin_date = time.strftime('%Y-%m-%d', time.localtime(video['begin_date']))
     item.info.date(begin_date, "%Y-%m-%d")
 

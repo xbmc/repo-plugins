@@ -29,7 +29,7 @@ from codequick import Route, Resolver, Listitem, utils, Script
 
 
 from resources.lib import web_utils
-from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info
+from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
 from resources.lib.menu_utils import item_post_treatment
 
 import inputstreamhelper
@@ -158,7 +158,7 @@ def get_video_url(plugin,
     if plugin.setting.get_boolean('active_subtitle'):
         item.subtitles.append(URL_SUBTITLE % video_id)
 
-    item.property['inputstreamaddon'] = 'inputstream.adaptive'
+    item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
     item.property['inputstream.adaptive.manifest_type'] = 'mpd'
     item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
     item.property[
@@ -210,7 +210,7 @@ def get_live_url(plugin, item_id, **kwargs):
     item.info.update(get_selected_item_info())
     if plugin.setting.get_boolean('active_subtitle'):
         item.subtitles.append(URL_SUBTITLE % item_id)
-    item.property['inputstreamaddon'] = 'inputstream.adaptive'
+    item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
     item.property['inputstream.adaptive.manifest_type'] = 'mpd'
     item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
     item.property[

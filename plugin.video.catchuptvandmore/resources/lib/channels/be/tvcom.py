@@ -43,6 +43,10 @@ URL_ROOT = 'https://www.tvcom.be'
 
 URL_LIVE = URL_ROOT + '/live'
 
+URL_LIVE_DATAS_ROOT = 'https://tvcom.fcst.tv'
+
+URL_LIVE_DATAS = URL_LIVE_DATAS_ROOT + '/player/embed/%s'
+
 URL_VIDEOS = URL_ROOT + '/videos'
 
 URL_EMISSIONS = URL_ROOT + '/emissions'
@@ -147,4 +151,7 @@ def get_video_url(plugin,
 def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE, max_age=-1)
-    return re.compile(r'sourceURL\"\:\"(.*?)\"').findall(resp.text)[0]
+    liveid = re.compile(r'embed\/(.*?)\?').findall(resp.text)[0]
+
+    resp2 = urlquick.get(URL_LIVE_DATAS % liveid, max_age=-1)
+    return re.compile(r'file\"\:\"(.*?)\"').findall(resp2.text)[1] + '|referer=%s' % URL_LIVE_DATAS_ROOT

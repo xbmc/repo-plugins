@@ -32,28 +32,60 @@ from codequick import Route, Resolver, Listitem, utils, Script
 from resources.lib import web_utils
 from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
+from resources.lib.addon_utils import get_item_media_path
+from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
 
+import inputstreamhelper
 import json
 import re
 import urlquick
-try:
-    from urllib.parse import quote
-except ImportError:
-    from urllib import quote
 
 # TO DO
-# Add info LIVE TV
-# Get geoblocked video info
+# Fix download mode when video is not DRM protected
 
-URL_ROOT = 'https://videos.tva.ca'
+URL_ROOT = 'https://www.qub.ca'
 
-URL_LIVE = URL_ROOT + '/page/direct'
+URL_API = URL_ROOT + '/proxy/pfu/content-delivery-service/v1'
 
-URL_EMISSIONS = URL_ROOT + '/page/touslescontenus'
+URL_CATEGORIES = URL_API + '/entities?slug=/%s'
 
-URL_VIDEOS = URL_ROOT + '/page/rattrapage'
+URL_LIVE = URL_ROOT + '/tvaplus/%s/en-direct'
 
-URL_SEARCH = URL_ROOT + '/search'
+URL_INFO_STREAM = URL_ROOT + '/tvaplus%s'
+
+URL_BRIGHTCOVE_POLICY_KEY = 'http://players.brightcove.net/%s/%s_default/index.min.js'
+# AccountId, PlayerId
+
+URL_BRIGHTCOVE_VIDEO_JSON = 'https://edge.api.brightcove.com/'\
+                            'playback/v1/accounts/%s/videos/%s'
+# AccountId, VideoId
+
+
+@Route.register
+def tva_root(plugin, **kwargs):
+
+    # (item_id, label, thumb, fanart)
+    channels = [
+        ('tva', 'TVA', 'tva.png', 'tva_fanart.jpg'),
+        ('addiktv', 'addikTV', 'addiktv.png', 'addiktv_fanart.jpg'),
+        ('casa', 'Casa', 'casa.png', 'casa_fanart.jpg'),
+        ('evasion', 'Evasion', 'evasion.png', 'evasion_fanart.jpg'),
+        ('moi-et-cie', 'MOI ET CIE', 'moietcie.png', 'moietcie_fanart.jpg'),
+        ('prise2', 'PRISE2', 'prise2.png', 'prise2_fanart.jpg'),
+        ('yoopa', 'Yoopa', 'yoopa.png', 'yoopa_fanart.jpg'),
+        ('zeste', 'Zeste', 'zeste.png', 'zeste_fanart.jpg'),
+        ('tva-sports', 'TVA Sports', 'tvasports.png', 'tvasports_fanart.jpg'),
+        ('lcn', 'LCN', 'lcn.png', 'lcn_fanart.jpg')
+    ]
+
+    for channel_infos in channels:
+        item = Listitem()
+        item.label = channel_infos[1]
+        item.art["thumb"] = get_item_media_path('channels/ca/' + channel_infos[2])
+        item.art["fanart"] = get_item_media_path('channels/ca/' + channel_infos[3])
+        item.set_callback(list_categories, channel_infos[0])
+        item_post_treatment(item)
+        yield item
 
 
 @Route.register
@@ -65,174 +97,216 @@ def list_categories(plugin, item_id, **kwargs):
     - Informations
     - ...
     """
-    item = Listitem()
-    item.label = plugin.localize(30701)
-    item.set_callback(list_videos, item_id=item_id, next_url=URL_VIDEOS)
-    item_post_treatment(item)
-    yield item
+    resp = urlquick.get(URL_CATEGORIES % item_id)
+    json_parser = json.loads(resp.text)
 
-    item = Listitem()
-    item.label = plugin.localize(30717)
-    item.set_callback(list_programs, item_id=item_id)
-    item_post_treatment(item)
-    yield item
+    for category_datas in json_parser['associatedEntities']:
+        category_name = category_datas['name']
 
-    item = Listitem.search(list_videos_search, item_id=item_id)
-    item_post_treatment(item)
-    yield item
+        item = Listitem()
+        item.label = category_name
+        item.set_callback(
+            list_programs, item_id=item_id, category_name=category_name, next_url=None)
+        item_post_treatment(item)
+        yield item
 
 
 @Route.register
-def list_videos_search(plugin, item_id, search_query, page=1, **kwargs):
-    resp = urlquick.get(URL_SEARCH + '/' + quote(search_query) + '/' + str(page))
-    json_parser = json.loads(
-        re.compile(r'__INITIAL_STATE__ = (.*?)\}\;').findall(resp.text)[0] +
-        '}')
+def list_programs(plugin, item_id, category_name, next_url, **kwargs):
 
-    data_account = json_parser["configurations"]["accountId"]
-    data_player = json_parser["configurations"]["playerId"]
-    at_least_one = False
-    for video_datas in json_parser['items']:
+    if next_url is None:
+        resp = urlquick.get(URL_CATEGORIES % item_id)
+        json_parser = json.loads(resp.text)
 
-        if '_' in video_datas:
-            at_least_one = True
-            video_title = json_parser['items'][str(
-                video_datas)]["content"]["attributes"]["title"]
-            video_plot = ''
-            if 'description' in json_parser['items'][str(
-                    video_datas)]["content"]["attributes"]:
-                video_plot = json_parser['items'][str(
-                    video_datas)]["content"]["attributes"]["description"]
-            video_image = ''
-            if 'image-background' in json_parser['items'][str(
-                    video_datas)]["content"]["attributes"]:
-                video_image = json_parser['items'][str(video_datas)][
-                    "content"]["attributes"]["image-background"]
-            video_id = json_parser['items'][str(
-                video_datas)]["content"]["attributes"]["assetId"]
+        for category_datas in json_parser['associatedEntities']:
+            if category_name == category_datas['name']:
+                for program_datas in category_datas['associatedEntities']:
+                    program_name = program_datas['label']
+                    program_image = program_datas['mainImage']['url']
+                    program_slug = program_datas['slug']
+
+                    item = Listitem()
+                    item.label = program_name
+                    item.art['thumb'] = item.art['landscape'] = program_image
+                    item.set_callback(
+                        list_seasons, item_id=item_id, program_slug=program_slug)
+                    item_post_treatment(item)
+                    yield item
+
+                if 'next' in category_datas:
+                    yield Listitem.next_page(
+                        item_id=item_id, category_name=category_name, next_url=URL_API + category_datas['next'])
+    else:
+        resp = urlquick.get(next_url)
+        json_parser = json.loads(resp.text)
+
+        for program_datas in json_parser['associatedEntities']:
+            program_name = program_datas['label']
+            program_image = program_datas['mainImage']['url']
+            program_slug = program_datas['slug']
 
             item = Listitem()
-            item.label = video_title
-            item.art['thumb'] = item.art['landscape'] = video_image
-            item.info['plot'] = video_plot
-
-            item.set_callback(get_video_url,
-                              item_id=item_id,
-                              data_account=data_account,
-                              data_player=data_player,
-                              data_video_id=video_id)
-            item_post_treatment(item, is_playable=True, is_downloadable=True)
-            yield item
-    if at_least_one:
-        yield Listitem.next_page(
-            item_id=item_id, search_query=search_query, page=page + 1)
-
-
-@Route.register
-def list_programs(plugin, item_id, **kwargs):
-
-    resp = urlquick.get(URL_EMISSIONS)
-    json_parser = json.loads(
-        re.compile(r'__INITIAL_STATE__ = (.*?)\}\;').findall(resp.text)[0] +
-        '}')
-
-    for program_datas in json_parser['items']:
-        program_title = json_parser['items'][str(program_datas)]["content"][
-            "attributes"]["name"].replace(' - Navigation', '')
-        attributes = json_parser['items'][str(program_datas)]["content"][
-            "attributes"]
-        program_image = ''
-        if "image-landscape-medium" in attributes:
-            program_image = attributes["image-landscape-medium"]
-        elif "image-background-medium" in attributes:
-            program_image = attributes["image-background-medium"]
-        program_url = None
-        if 'pageId' in json_parser['items'][str(program_datas)]["content"][
-                "attributes"]:
-            program_url = URL_ROOT + '/page/' + json_parser['items'][str(
-                program_datas)]["content"]["attributes"]["pageId"]
-
-        if program_url is not None:
-            item = Listitem()
-            item.label = program_title
+            item.label = program_name
             item.art['thumb'] = item.art['landscape'] = program_image
             item.set_callback(
-                list_videos, item_id=item_id, next_url=program_url)
+                list_seasons, item_id=item_id, program_slug=program_slug)
+            item_post_treatment(item)
+            yield item
+
+        if 'next' in json_parser:
+            yield Listitem.next_page(
+                item_id=item_id, category_name=category_name, next_url=URL_API + category_datas['next'])
+
+
+@Route.register
+def list_seasons(plugin, item_id, program_slug, **kwargs):
+
+    resp = urlquick.get(URL_API + '/entities?slug=%s' % program_slug)
+    json_parser = json.loads(resp.text)
+
+    if 'seasons' in json_parser['knownEntities']:
+        for season_datas in json_parser['knownEntities']['seasons']['associatedEntities']:
+
+            season_name = json_parser['knownEntities']['seasons']['name'] + ' ' + str(season_datas['seasonNumber'])
+            season_number = str(season_datas['seasonNumber'])
+
+            item = Listitem()
+            item.label = season_name
+            item.set_callback(
+                list_videos_categories, item_id=item_id, program_slug=program_slug, season_number=season_number)
             item_post_treatment(item)
             yield item
 
 
 @Route.register
-def list_videos(plugin, item_id, next_url, **kwargs):
+def list_videos_categories(plugin, item_id, program_slug, season_number, **kwargs):
 
-    resp = urlquick.get(next_url)
-    json_parser = json.loads(
-        re.compile(r'__INITIAL_STATE__ = (.*?)\}\;').findall(resp.text)[0] +
-        '}')
+    resp = urlquick.get(URL_API + '/entities?slug=%s' % program_slug)
+    json_parser = json.loads(resp.text)
 
-    data_account = json_parser["configurations"]["accountId"]
-    data_player = json_parser["configurations"]["playerId"]
+    for season_datas in json_parser['knownEntities']['seasons']['associatedEntities']:
+        if season_number == str(season_datas['seasonNumber']):
+            for video_category_datas in season_datas['associatedEntities']:
+                if len(video_category_datas['associatedEntities']) > 0:
+                    video_category_name = video_category_datas['name']
+                    video_category_slug = video_category_datas['slug']
 
-    for video_datas in json_parser['items']:
+                    item = Listitem()
+                    item.label = video_category_name
+                    item.set_callback(
+                        list_videos, item_id=item_id, video_category_slug=video_category_slug)
+                    item_post_treatment(item)
+                    yield item
 
-        if '_' in video_datas:
-            video_title = json_parser['items'][str(
-                video_datas)]["content"]["attributes"]["title"]
-            video_plot = ''
-            if 'description' in json_parser['items'][str(
-                    video_datas)]["content"]["attributes"]:
-                video_plot = json_parser['items'][str(
-                    video_datas)]["content"]["attributes"]["description"]
-            video_image = ''
-            if 'image-background' in json_parser['items'][str(
-                    video_datas)]["content"]["attributes"]:
-                video_image = json_parser['items'][str(video_datas)][
-                    "content"]["attributes"]["image-background"]
-            video_id = json_parser['items'][str(
-                video_datas)]["content"]["attributes"]["assetId"]
 
-            item = Listitem()
-            item.label = video_title
-            item.art['thumb'] = item.art['landscape'] = video_image
-            item.info['plot'] = video_plot
+@Route.register
+def list_videos(plugin, item_id, video_category_slug, **kwargs):
 
-            item.set_callback(get_video_url,
-                              item_id=item_id,
-                              data_account=data_account,
-                              data_player=data_player,
-                              data_video_id=video_id)
-            item_post_treatment(item, is_playable=True, is_downloadable=True)
-            yield item
+    resp = urlquick.get(URL_API + '/entities?slug=%s' % video_category_slug)
+    json_parser = json.loads(resp.text)
+
+    for video_datas in json_parser['associatedEntities']:
+        video_name = video_datas['secondaryLabel'] + ' - ' + video_datas['label']
+        video_image = video_datas['mainImage']['url']
+        video_plot = ''
+        if 'description' in video_datas:
+            video_plot = video_datas['description']
+        video_duration = video_datas['durationMillis'] / 1000
+        video_slug = video_datas['slug']
+
+        item = Listitem()
+        item.label = video_name
+        item.art['thumb'] = item.art['landscape'] = video_image
+        item.info['plot'] = video_plot
+        item.info['duration'] = video_duration
+        item.set_callback(
+            get_video_url, item_id=item_id, video_slug=video_slug)
+        item_post_treatment(item, is_playable=True, is_downloadable=False)
+        yield item
+
+    if 'next' in json_parser:
+        yield Listitem.next_page(
+            item_id=item_id, video_category_slug=json_parser['next'])
+
+
+# BRIGHTCOVE Part
+def get_brightcove_policy_key(data_account, data_player):
+    """Get policy key"""
+    file_js = urlquick.get(URL_BRIGHTCOVE_POLICY_KEY %
+                           (data_account, data_player))
+    return re.compile('policyKey:"(.+?)"').findall(file_js.text)[0]
 
 
 @Resolver.register
 def get_video_url(plugin,
                   item_id,
-                  data_account,
-                  data_player,
-                  data_video_id,
+                  video_slug,
                   download_mode=False,
                   **kwargs):
 
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
-                                                    data_player, data_video_id,
-                                                    download_mode)
+    is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
+    if not is_helper.check_inputstream():
+        return False
+
+    resp = urlquick.get(URL_INFO_STREAM % video_slug)
+    data_account = re.compile(
+        r'data-accound\=\"(.*?)\"').findall(resp.text)[0]
+    data_player = re.compile(
+        r'data-player\=\"(.*?)\"').findall(resp.text)[0]
+    data_video_id = re.compile(
+        r'data-video-id\=\"(.*?)\"').findall(resp.text)[0]
+
+    # Method to get JSON from 'edge.api.brightcove.com'
+    resp = urlquick.get(
+        URL_BRIGHTCOVE_VIDEO_JSON % (data_account, data_video_id),
+        headers={
+            'User-Agent':
+            web_utils.get_random_ua(),
+            'Accept':
+            'application/json;pk=%s' %
+            (get_brightcove_policy_key(data_account, data_player)),
+            'X-Forwarded-For':
+            plugin.setting.get_string('header_x-forwarded-for')
+        })
+    json_parser = json.loads(resp.text)
+
+    video_url = ''
+    licence_url = ''
+    is_protected_drm = False
+    if 'sources' in json_parser:
+        for url in json_parser["sources"]:
+            if 'src' in url:
+                if 'manifest.mpd' in url["src"]:
+                    video_url = url["src"]
+                    if 'key_systems' in url:
+                        licence_url = url['key_systems']['com.widevine.alpha']['license_url']
+                        is_protected_drm = True
+    else:
+        if json_parser[0]['error_code'] == "ACCESS_DENIED":
+            plugin.notify('ERROR', plugin.localize(30713))
+            return False
+
+    if video_url == '':
+        return False
+
+    item = Listitem()
+    item.path = video_url
+    item.label = get_selected_item_label()
+    item.art.update(get_selected_item_art())
+    item.info.update(get_selected_item_info())
+    item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
+    item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+    if is_protected_drm:
+        item.property[
+            'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+        item.property[
+            'inputstream.adaptive.license_key'] = licence_url + '|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36|R{SSM}|'
+    return item
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE)
-    json_parser = json.loads(
-        re.compile(r'__INITIAL_STATE__ = (.*?)\}\;').findall(resp.text)[0] +
-        '}')
-
-    asset_id_value = ''
-    for id_stream_datas in list(json_parser["items"].keys()):
-        if item_id.upper() in json_parser["items"][id_stream_datas]["content"]["attributes"]["title"]:
-            asset_id_value = json_parser["items"][id_stream_datas]["content"]["attributes"]["assetId"]
-
-    data_account = re.compile(r'accountId":"(.*?)"').findall(resp.text)[0]
-    data_player = re.compile(r'playerId":"(.*?)"').findall(resp.text)[0]
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
-                                                    data_player, asset_id_value)
+    resp = urlquick.get(URL_LIVE % item_id)
+    return re.compile(
+        r'videoSourceUrl\"\:\"(.*?)\"').findall(resp.text)[0]

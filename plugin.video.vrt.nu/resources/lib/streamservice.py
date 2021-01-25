@@ -149,7 +149,7 @@ class StreamService:
             return None
 
         # Try cache for livestreams
-        if api_data.is_live_stream:
+        if api_data.is_live_stream and not roaming:
             filename = api_data.video_id + '.json'
             data = get_cache(filename)
             if data:

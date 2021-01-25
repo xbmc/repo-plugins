@@ -59,6 +59,9 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.4.4 (2021-01-25)
+- Fix watching VRT NU abroad (@mediaminister)
+
 ### v2.4.3 (2021-01-22)
 - Add new channel "Podium 19" (@dagwieers)
 - Add livestream cache to speed up playback (@mediaminister)

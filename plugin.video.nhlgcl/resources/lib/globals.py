@@ -36,7 +36,7 @@ PASSWORD = settings.getSetting("password")
 ROGERS_SUBSCRIBER = settings.getSetting("rogers")
 NO_SPOILERS = settings.getSetting("no_spoilers")
 QUALITY = settings.getSetting("stream_quality")
-FAV_TEAM = settings.getSetting("fav_team")
+FAV_TEAM = settings.getSetting("fav_team").encode('utf8')
 TEAM_NAMES = settings.getSetting("team_names")
 TIME_FORMAT = settings.getSetting("time_format")
 VIEW_MODE = settings.getSetting("view_mode")
@@ -592,7 +592,7 @@ def natural_sort_key(s):
 
 
 # Refresh Fav team info if fav team changed
-if FAV_TEAM != str(settings.getSetting("fav_team_name")):
+if FAV_TEAM != settings.getSetting("fav_team_name").encode('utf8'):
     if FAV_TEAM == 'None':
         settings.setSetting(id="fav_team_name", value='')
         settings.setSetting(id="fav_team_id", value='')

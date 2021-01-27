@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nhlgcl" name="NHL TV™" version="2021.1.21" provider-name="eracknaphobia">
+<addon id="plugin.video.nhlgcl" name="NHL TV™" version="2021.1.25" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
         <import addon="script.module.pytz" />
@@ -20,9 +20,8 @@
             restrictions apply, including national blackouts.
         </disclaimer>
         <news>
-            - Update code for python 3 compatibility
-            - Fix for too many sign-ins error
-            - Code Cleanup
+            - Fix Fav team montreal
+            - Fix watch from beginning dialog on archive
         </news>
         <language>en</language>
         <platform>all</platform>

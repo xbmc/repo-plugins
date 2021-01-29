@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.21"
+        version="5.2.22"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -132,34 +132,22 @@
 
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.2.21 - Changelog - 2021-01-17[/B]
+        <news>[B]Retrospect v5.2.22 - Changelog - 2021-01-29[/B]
 
-This version of Retrospect focusses on artwork: we introduced poster artwork for channels and shows. Not all channels support them, but more will come over time.
-
-There are also some channels fixes in this build: VTM and related channels  now redirect to the VTM Go add-on instead of Retrospect. Their add-on handles the VTM channel very nicely. MTV and UR Play.se have also been fixed.
+A minor release to fix NRK.no categories and to implement the move from Vier.be to goplay.be.
 
 [B]Framework related[/B]
-* Changed: Don&#x27;t generate settings.xml if no template is present.
-* Added: Content type option to MediaItem and main listing.
-* Changed: Specify `offscreen` for ListItems to improve performance.
-* Changed: Code clean-up for old code related to proxies.
+_None_
 
 [B]GUI/Settings/Language related[/B]
-* Added: Poster artwork for Channels and MediaItems.
+_None_
 
 [B]Channel related[/B]
-* Added: Movies to Kijk.nl channel (Fixes #1462)
-* Updated: RTL XL thumbs for shows.
-* Updated: VTM.be, Stievie.be and VTM Nieuws are now redirecting to the VTM GO add-on (Fixes #1409, See #1462)
-* Fixed: Some vier.be clips did not play (See #1463)
-* Renamed: dplay.se is now discoveryplus.se (Fixes #1467).
-* Fixed: MTV.nl and MTV.de stopped working
-* Fixed: UR Play broke due to URL changes.
-* Updated: Channel artwork for RTL XL and Kijk.nl.
-* Updated: Dumpert artwork.
-* Updated: Pathe artwork.
-* Updated: NPO Start artwork.
-* Fixed: Kijk.nl movies broke.
+* Fixed: NRK.no categories broke.
+* Fixed: Vier.be, vijf.be and zes.be moved to goplay.be
+* Fixed: NPO Thumb issue (Fixes #1479)
+
+
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

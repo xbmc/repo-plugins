@@ -97,7 +97,7 @@ menu = {
         'label': 'Gulli',
         'thumb': 'channels/fr/gulli.png',
         'fanart': 'channels/fr/gulli_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 16
     },
     'lequipe': {

@@ -206,6 +206,10 @@ def tv_guide_menu(plugin, item_id, **kwargs):
             if 'icon' in guide_infos:
                 item.art["clearlogo"] = item.art["thumb"]
                 item.art["thumb"] = guide_infos['icon']
+
+        # Playcount is useless for live streams
+        item.info['playcount'] = 0
+
         yield item
 
 

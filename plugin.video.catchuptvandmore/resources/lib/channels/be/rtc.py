@@ -153,4 +153,4 @@ def get_live_url(plugin, item_id, **kwargs):
 
     resp2 = urlquick.get(live_datas, max_age=-1)
     return re.compile(
-        r'file\"\:\"(.*?)\"').findall(resp2.text)[0]
+        r'file\"\:\"(.*?)\"').findall(resp2.text)[1] + '|referer=https://rtc.fcst.tv/'

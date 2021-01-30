@@ -126,4 +126,4 @@ def get_live_url(plugin, item_id, **kwargs):
 
     resp2 = urlquick.get(live_datas, max_age=-1)
     return re.compile(
-        r'file\"\:\"(.*?)\"').findall(resp2.text)[2]
+        r'file\"\:\"(.*?)\"').findall(resp2.text)[2] + '|referer=https://telemb.fcst.tv/'

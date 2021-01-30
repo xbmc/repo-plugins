@@ -46,7 +46,6 @@ class Channel(chn_class.Channel):
         if self.channelCode == "uzgjson":
             self.baseUrl = "https://apps-api.uitzendinggemist.nl"
             self.mainListUri = "#mainlist"
-            self.mainListContentType = contenttype.NONE
             self.noImage = "nosimage.png"
         else:
             raise NotImplementedError("Code %s is not implemented" % (self.channelCode,))

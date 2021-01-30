@@ -66,7 +66,7 @@ class Channel(chn_class.Channel):
         self._add_data_parser("https://psapi.nrk.no/medium/tv/categories", json=True,
                               name="Category listing",
                               parser=[], creator=self.create_category_item)
-        self._add_data_parser("https://psapi.nrk.no/medium/tv/categories/", json=True,
+        self._add_data_parser("http://psapi-granitt-prod-we.cloudapp.net/medium/tv/categories", json=True,
                               name="Category Items",
                               parser=[], creator=self.create_category_episode_item)
 
@@ -242,7 +242,7 @@ class Channel(chn_class.Channel):
 
         title = result_set["displayValue"]
         category_id = result_set["id"]
-        url = "https://psapi.nrk.no/medium/tv/categories/{}/indexelements?apiKey={}"\
+        url = "http://psapi-granitt-prod-we.cloudapp.net/medium/tv/categories/{}/indexelements?apiKey={}"\
             .format(category_id, self.__api_key)
         item = MediaItem(title, url)
         item.type = 'folder'

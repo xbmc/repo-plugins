@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.wakanim" name="Wakanim" version="0.8.1" provider-name="MrKrabat">
+<addon id="plugin.video.wakanim" name="Wakanim" version="0.8.2" provider-name="MrKrabat">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.beautifulsoup4" version="4.5.3"/>
@@ -9,6 +9,7 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <broken>This addon does not work anymore with wakanim</broken>
         <platform>all</platform>
         <language>en de fr ru</language>
         <summary lang="en_GB">Wakanim.tv - Anime streaming live from japan</summary>

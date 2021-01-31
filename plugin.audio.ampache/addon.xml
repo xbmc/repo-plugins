@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.audio.ampache" version="1.2.1" name="Ampache" provider-name="lusum">
+    <requires>
+        <import addon="script.module.future" version="0.16.0"/>
+         <import addon="xbmc.python" version="2.26.0"/>
+    </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.python.module" library="resources/lib/"/>
+  <extension point="xbmc.service" library="resources/lib/service.py" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Stream music from Ampache XML-API</summary>
+    <summary lang="de_DE">Streame Musik von der Ampache XML-API</summary>
+    <summary lang="it_IT">Streaming Musicale per l'XML-API di Ampache</summary>
+    <description lang="en_GB">A web based audio/video streaming application and file manager allowing you to access your music and videos from anywhere, using almost any internet enabled device.</description>
+    <platform>all</platform>
+    <forum>https://forum.kodi.tv/showthread.php?tid=230736</forum>
+    <website>http://ampache.org/</website>
+    <license>GPL-2.0-or-later</license>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

@@ -25,3 +25,19 @@ msgstr ""
 msgctxt "#32001"
 msgid "Debug"
 msgstr ""
+
+msgctxt "#32002"
+msgid "Quality"
+msgstr ""
+
+msgctxt "#32003"
+msgid "HD"
+msgstr "hd"
+
+msgctxt "#32004"
+msgid "High"
+msgstr "high"
+
+msgctxt "#32005"
+msgid "Low"
+msgstr "low"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tubed" name="Tubed" version="1.0.2+matrix.1" provider-name="anxdpanic">
+<addon id="plugin.video.tubed" name="Tubed" version="1.0.3+matrix.1" provider-name="anxdpanic">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="inputstream.adaptive"/>
@@ -15,12 +15,7 @@
     <extension point="xbmc.service" library="resources/lib/service.py"/>
     <extension point="xbmc.addon.metadata">
         <news>
-- de_DE translation |contrib: tweimer|
-- el_GR translation |contrib: Twilight0|
-- pt_BR translation |contrib: MediaBrasil|
-- pt_PT translation |contrib: enen92|
-- ro_RO translation |contrib: tmihai20|
-- zh_TW translation |contrib: JuenTingShie|
+- fixup iso8601 duration parsing
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

@@ -114,6 +114,10 @@ msgctxt "#30205"
 msgid "Season {season}"
 msgstr ""
 
+msgctxt "#30206"
+msgid "[COLOR red]Available in Streamz+[/COLOR]\n"
+msgstr ""
+
 msgctxt "#30207"
 msgid "[COLOR red]Geo-blocked[/COLOR]\n"
 msgstr ""
@@ -159,10 +163,6 @@ msgstr ""
 
 msgctxt "#30708"
 msgid "Please restart Kodi."
-msgstr ""
-
-msgctxt "#30710"
-msgid "This video is geo-blocked and can't be played from your location."
 msgstr ""
 
 msgctxt "#30712"
@@ -245,6 +245,10 @@ msgstr ""
 
 msgctxt "#30823"
 msgid "Show My List"
+msgstr ""
+
+msgctxt "#30825"
+msgid "Show unavailable movies and series (Streamz+)"
 msgstr ""
 
 msgctxt "#30826"

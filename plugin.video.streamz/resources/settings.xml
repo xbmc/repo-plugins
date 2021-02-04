@@ -16,6 +16,7 @@
         <setting label="30822" type="bool" id="interface_show_az" default="false"/>
         <setting label="30823" type="bool" id="interface_show_mylist" default="true"/>
         <setting label="30826" type="bool" id="interface_show_continuewatching" default="false" visible="false"/>
+        <setting label="30825" type="bool" id="interface_show_unavailable" default="true"/>
         <setting label="30827" type="lsep"/> <!-- Metadata -->
         <setting label="30829" type="bool" id="metadata_update" default="true" subsetting="true"/>
         <setting label="30831" type="action" action="RunPlugin(plugin://plugin.video.streamz/metadata/update)"/>

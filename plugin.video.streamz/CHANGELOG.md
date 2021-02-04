@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.0.5](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.5) (2021-02-04)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.4...v1.0.5)
+
+**Implemented enhancements:**
+
+- Indicate what movies or series are not available in your subscription [\#35](https://github.com/add-ons/plugin.video.streamz/pull/35) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Merged pull requests:**
+
+- Make use of git archive [\#34](https://github.com/add-ons/plugin.video.streamz/pull/34) ([dagwieers](https://github.com/dagwieers))
+
 ## [v1.0.4](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.4) (2021-01-13)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.3...v1.0.4)

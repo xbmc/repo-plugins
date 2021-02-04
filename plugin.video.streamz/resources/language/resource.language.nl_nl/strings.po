@@ -115,6 +115,10 @@ msgctxt "#30205"
 msgid "Season {season}"
 msgstr "Seizoen {season}"
 
+msgctxt "#30206"
+msgid "[COLOR red]Available in Streamz+[/COLOR]\n"
+msgstr "[COLOR red]Beschikbaar in Streamz+[/COLOR]\n"
+
 msgctxt "#30207"
 msgid "[COLOR red]Geo-blocked[/COLOR]\n"
 msgstr "[COLOR red]Geo-geblokkeerd[/COLOR]\n"
@@ -161,10 +165,6 @@ msgstr "Uw account heeft geen profielen. Gelieve in te loggen op www.streamz.be 
 msgctxt "#30708"
 msgid "Please restart Kodi."
 msgstr "Gelieve Kodi te herstarten."
-
-msgctxt "#30710"
-msgid "This video is geo-blocked and can't be played from your location."
-msgstr "Deze video is geografisch geblokkeerd en kan niet worden afgespeeld vanaf uw locatie."
 
 msgctxt "#30712"
 msgid "The video is unavailable and can't be played right now."
@@ -247,6 +247,10 @@ msgstr "Toon 'A-Z' menu"
 msgctxt "#30823"
 msgid "Show My List"
 msgstr "Toon 'Mijn lijst' menu"
+
+msgctxt "#30825"
+msgid "Show unavailable movies and series (Streamz+)"
+msgstr "Toon onbeschikbare films en series (Streamz+)"
 
 msgctxt "#30826"
 msgid "Show Continue watching"

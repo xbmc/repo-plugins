@@ -9,7 +9,7 @@ from resources.lib import kodiutils
 from resources.lib.kodiplayer import KodiPlayer
 from resources.lib.streamz.api import Api
 from resources.lib.streamz.auth import Auth
-from resources.lib.streamz.exceptions import LimitReachedException, StreamGeoblockedException, StreamUnavailableException, UnavailableException
+from resources.lib.streamz.exceptions import LimitReachedException, UnavailableException
 from resources.lib.streamz.stream import Stream
 
 _LOGGER = logging.getLogger(__name__)
@@ -43,12 +43,7 @@ class Player:
             # Get stream information
             resolved_stream = self._stream.get_stream(category, item)
 
-        except StreamGeoblockedException:
-            kodiutils.ok_dialog(message=kodiutils.localize(30710))  # This video is geo-blocked...
-            kodiutils.end_of_directory()
-            return
-
-        except StreamUnavailableException:
+        except UnavailableException:
             kodiutils.ok_dialog(message=kodiutils.localize(30712))  # The video is unavailable...
             kodiutils.end_of_directory()
             return

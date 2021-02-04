@@ -36,13 +36,5 @@ class UnavailableException(Exception):
     """ Is thrown when an item is unavailable. """
 
 
-class StreamGeoblockedException(Exception):
-    """ Is thrown when a geoblocked item is played. """
-
-
-class StreamUnavailableException(Exception):
-    """ Is thrown when an unavailable item is played. """
-
-
 class LimitReachedException(Exception):
     """ Is thrown when the limit is reached to play an stream. """

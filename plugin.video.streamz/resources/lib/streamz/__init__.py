@@ -59,7 +59,7 @@ class Movie:
     """ Defines a Movie """
 
     def __init__(self, movie_id=None, name=None, description=None, year=None, cover=None, image=None, duration=None,
-                 remaining=None, geoblocked=None, channel=None, legal=None, aired=None, my_list=None):
+                 remaining=None, geoblocked=None, channel=None, legal=None, aired=None, my_list=None, available=True):
         """
         :type movie_id: str
         :type name: str
@@ -74,6 +74,7 @@ class Movie:
         :type legal: str
         :type aired: str
         :type my_list: bool
+        :type available: bool
         """
         self.movie_id = movie_id
         self.name = name
@@ -88,6 +89,7 @@ class Movie:
         self.legal = legal
         self.aired = aired
         self.my_list = my_list
+        self.available = available
 
     def __repr__(self):
         return "%r" % self.__dict__
@@ -97,7 +99,7 @@ class Program:
     """ Defines a Program """
 
     def __init__(self, program_id=None, name=None, description=None, cover=None, image=None, seasons=None,
-                 geoblocked=None, channel=None, legal=None, my_list=None, content_hash=None):
+                 geoblocked=None, channel=None, legal=None, my_list=None, content_hash=None, available=True):
         """
         :type program_id: str
         :type name: str
@@ -110,6 +112,7 @@ class Program:
         :type legal: str
         :type my_list: bool
         :type content_hash: str
+        :type available: bool
         """
         self.program_id = program_id
         self.name = name
@@ -122,6 +125,7 @@ class Program:
         self.legal = legal
         self.my_list = my_list
         self.content_hash = content_hash
+        self.available = available
 
     def __repr__(self):
         return "%r" % self.__dict__
@@ -155,7 +159,7 @@ class Episode:
 
     def __init__(self, episode_id=None, program_id=None, program_name=None, number=None, season=None, name=None,
                  description=None, cover=None, duration=None, remaining=None, geoblocked=None, channel=None, legal=None,
-                 aired=None, progress=None, watched=False, next_episode=None):
+                 aired=None, progress=None, watched=False, next_episode=None, available=True):
         """
         :type episode_id: str
         :type program_id: str
@@ -174,6 +178,7 @@ class Episode:
         :type progress: int
         :type watched: bool
         :type next_episode: Episode
+        :type available: bool
         """
         import re
         self.episode_id = episode_id
@@ -196,6 +201,7 @@ class Episode:
         self.progress = progress
         self.watched = watched
         self.next_episode = next_episode
+        self.available = available
 
     def __repr__(self):
         return "%r" % self.__dict__

@@ -7,10 +7,10 @@ import logging
 
 from resources.lib import kodiutils
 from resources.lib.modules.menu import Menu
-from resources.lib.solocoo import Program, Channel
+from resources.lib.solocoo import Channel, Program
 from resources.lib.solocoo.auth import AuthApi
 from resources.lib.solocoo.channel import ChannelApi
-from resources.lib.solocoo.exceptions import NotAvailableInOfferException, UnavailableException, InvalidTokenException
+from resources.lib.solocoo.exceptions import InvalidTokenException, NotAvailableInOfferException, UnavailableException
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -77,9 +77,9 @@ class Player:
         :rtype: str
         """
         try:  # Python 3
-            from urllib.parse import urlencode, quote
+            from urllib.parse import quote, urlencode
         except ImportError:  # Python 2
-            from urllib import urlencode, quote
+            from urllib import quote, urlencode
 
         header = ''
         if key_headers:

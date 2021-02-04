@@ -11,10 +11,9 @@ from requests import HTTPError
 from resources.lib import kodilogging, kodiutils
 from resources.lib.vtmgo.exceptions import InvalidLoginException, LoginErrorException
 
-kodilogging.config()
 routing = routing.Plugin()  # pylint: disable=invalid-name
 
-_LOGGER = logging.getLogger('plugin')
+_LOGGER = logging.getLogger(__name__)
 
 
 @routing.route('/')
@@ -315,4 +314,5 @@ def iptv_epg():
 
 def run(params):
     """ Run the routing plugin """
+    kodilogging.config()
     routing.run(params)

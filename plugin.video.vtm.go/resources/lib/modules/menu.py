@@ -29,7 +29,7 @@ class Menu:
         """ Show the main menu """
         listing = []
 
-        account = self._auth.login()
+        account = self._auth.get_tokens()
 
         listing.append(kodiutils.TitleItem(
             title=kodiutils.localize(30007),  # TV Channels

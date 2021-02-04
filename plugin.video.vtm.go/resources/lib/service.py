@@ -12,8 +12,7 @@ from resources.lib import kodilogging, kodiutils
 from resources.lib.modules.proxy import Proxy
 from resources.lib.vtmgo.exceptions import NoLoginException
 
-kodilogging.config()
-_LOGGER = logging.getLogger('service')
+_LOGGER = logging.getLogger(__name__)
 
 
 class BackgroundService(Monitor):
@@ -188,4 +187,5 @@ class PlayerMonitor(Player):
 
 def run():
     """ Run the BackgroundService """
+    kodilogging.config()
     BackgroundService().run()

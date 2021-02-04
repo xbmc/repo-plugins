@@ -302,7 +302,8 @@ def mame_catalog_key_Controls_Expanded(parent_name, machines, machines_render):
     machine = machines[parent_name]
     machine_render = machines_render[parent_name]
     # Order alphabetically the list
-    if machine['input']['control_list']:
+    # In MAME 2003 Plus machine['input'] may be an empty dictionary.
+    if machine['input'] and machine['input']['control_list']:
         control_list = [ctrl_dic['type'] for ctrl_dic in machine['input']['control_list']]
         pretty_control_type_list = misc_improve_mame_control_type_list(control_list)
         sorted_control_type_list = sorted(pretty_control_type_list)
@@ -319,7 +320,8 @@ def mame_catalog_key_Controls_Compact(parent_name, machines, machines_render):
     machine = machines[parent_name]
     machine_render = machines_render[parent_name]
     # Order alphabetically the list
-    if machine['input']['control_list']:
+    # In MAME 2003 Plus machine['input'] may be an empty dictionary.
+    if machine['input'] and machine['input']['control_list']:
         control_list = [ctrl_dic['type'] for ctrl_dic in machine['input']['control_list']]
         pretty_control_type_list = misc_improve_mame_control_type_list(control_list)
         sorted_control_type_list = sorted(pretty_control_type_list)

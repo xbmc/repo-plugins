@@ -2545,9 +2545,9 @@ def mame_update_MAME_Fav_objects(cfg, db_dic):
 
 def mame_update_MAME_MostPlay_objects(cfg, db_dic):
     control_dic = db_dic['control_dic']
-    machines = db_dic['control_dic']
-    renderdb_dic = db_dic['control_dic']
-    assets_dic = db_dic['control_dic']
+    machines = db_dic['machines']
+    renderdb_dic = db_dic['renderdb']
+    assets_dic = db_dic['assetdb']
     most_played_roms_dic = utils_load_JSON_file_dic(cfg.MAME_MOST_PLAYED_FILE_PATH.getPath())
     if len(most_played_roms_dic) < 1:
         kodi_notify('MAME Most Played empty')
@@ -4412,6 +4412,10 @@ def mame_build_MAME_main_database(cfg, st_dic):
         #         }, ...
         #     ]
         # }
+        #
+        # In MAME 2003 Plus bios machines are not runnable and only have <description>,
+        # <year>, <manufacturer>, <biosset> and <rom> tags. For example, machine neogeo.
+        #
         elif event == 'start' and elem.tag == 'input':
             # In the archaic MAMEs used by Retroarch the control structure is different
             # and this code must be adapted.
@@ -4427,7 +4431,9 @@ def mame_build_MAME_main_database(cfg, st_dic):
                 att_tilt = True
             att_players = int(elem.attrib['players']) if 'players' in elem.attrib else 0
             # "control" attribute only in MAME 2003 Plus.
-            att_control = ''
+            # Note that in some machines with valid controls, for example 88games, <input> control
+            # attribute is empty and must be given a default value.
+            att_control = '[ Undefined control type ]'
             if 'control' in elem.attrib:
                 vanilla_mame_input_mode = False
                 att_control = elem.attrib['control']
@@ -4441,7 +4447,8 @@ def mame_build_MAME_main_database(cfg, st_dic):
             # --- Create control_list ---
             control_list = []
             if vanilla_mame_input_mode:
-                # Only in Vanilla MAME. <input> child tags.
+                # --- Vanilla MAME mode ---
+                # <input> child tags.
                 for control_child in elem:
                     attrib = control_child.attrib
                     # Skip non <control> tags. Process <control> tags only.
@@ -4459,11 +4466,12 @@ def mame_build_MAME_main_database(cfg, st_dic):
                     if 'ways3' in attrib: ways_list.append(attrib['ways3'])
                     ctrl_dic['ways'] = ways_list
                     control_list.append(ctrl_dic)
-                # Fix player field when implied
+                # Fix player field when implied.
                 if att_players == 1:
                     for control in control_list: control['player'] = 1
             else:
-                # Create a control_list
+                # --- MAME 2003 Plus mode ---
+                # Create a simulated control_list.
                 for i in range(att_players):
                     control_list.append({
                         'type' : att_control,

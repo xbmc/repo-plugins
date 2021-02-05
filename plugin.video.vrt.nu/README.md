@@ -59,6 +59,10 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.4.5 (2021-02-05)
+- Fix watching livestreams with DRM enabled (@mediaminister)
+- Warn user that InputStream Adaptive is needed for timeshifting (@siemon-geeroms)
+
 ### v2.4.4 (2021-01-25)
 - Fix watching VRT NU abroad (@mediaminister)
 

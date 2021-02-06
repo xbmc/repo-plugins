@@ -51,10 +51,12 @@ class Catalog:
         :type category: str
         """
         items = self._api.get_items(category)
+        show_unavailable = kodiutils.get_setting_bool('interface_show_unavailable')
 
         listing = []
         for item in items:
-            listing.append(Menu.generate_titleitem(item))
+            if show_unavailable or item.available:
+                listing.append(Menu.generate_titleitem(item))
 
         # Sort items by label, but don't put folders at the top.
         # Used for A-Z listing or when movies and episodes are mixed.
@@ -153,6 +155,7 @@ class Catalog:
         :type storefront: str
         """
         results = self._api.get_storefront(storefront)
+        show_unavailable = kodiutils.get_setting_bool('interface_show_unavailable')
 
         listing = []
         for item in results:
@@ -165,7 +168,8 @@ class Catalog:
                     ),
                 ))
             else:
-                listing.append(Menu.generate_titleitem(item))
+                if show_unavailable or item.available:
+                    listing.append(Menu.generate_titleitem(item))
 
         if storefront == STOREFRONT_SERIES:
             label = 30005  # Series
@@ -183,10 +187,12 @@ class Catalog:
         :type category: str
         """
         result = self._api.get_storefront_category(storefront, category)
+        show_unavailable = kodiutils.get_setting_bool('interface_show_unavailable')
 
         listing = []
         for item in result.content:
-            listing.append(Menu.generate_titleitem(item))
+            if show_unavailable or item.available:
+                listing.append(Menu.generate_titleitem(item))
 
         if storefront == STOREFRONT_SERIES:
             content = 'tvshows'

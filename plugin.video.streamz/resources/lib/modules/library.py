@@ -42,12 +42,15 @@ class Library:
         else:
             items = [self._api.get_movie(movie)]
 
+        show_unavailable = kodiutils.get_setting_bool('interface_show_unavailable')
+
         listing = []
         for item in items:
-            title_item = Menu.generate_titleitem(item)
-            # title_item.path = kodiutils.url_for('library_movies', movie=item.movie_id)  # We need a trailing /
-            title_item.path = 'plugin://plugin.video.streamz/library/movies/?movie=%s' % item.movie_id
-            listing.append(title_item)
+            if show_unavailable or item.available:
+                title_item = Menu.generate_titleitem(item)
+                # title_item.path = kodiutils.url_for('library_movies', movie=item.movie_id)  # We need a trailing /
+                title_item.path = 'plugin://plugin.video.streamz/library/movies/?movie=%s' % item.movie_id
+                listing.append(title_item)
 
         kodiutils.show_listing(listing, 30003, content='movies', sort=['label', 'year', 'duration'])
 
@@ -68,12 +71,15 @@ class Library:
             # Fetch only a single program
             items = [self._api.get_program(program, cache=CACHE_PREVENT)]
 
+        show_unavailable = kodiutils.get_setting_bool('interface_show_unavailable')
+
         listing = []
         for item in items:
-            title_item = Menu.generate_titleitem(item)
-            # title_item.path = kodiutils.url_for('library_tvshows', program=item.program_id)  # We need a trailing /
-            title_item.path = 'plugin://plugin.video.streamz/library/tvshows/?program={program_id}'.format(program_id=item.program_id)
-            listing.append(title_item)
+            if show_unavailable or item.available:
+                title_item = Menu.generate_titleitem(item)
+                # title_item.path = kodiutils.url_for('library_tvshows', program=item.program_id)  # We need a trailing /
+                title_item.path = 'plugin://plugin.video.streamz/library/tvshows/?program={program_id}'.format(program_id=item.program_id)
+                listing.append(title_item)
 
         kodiutils.show_listing(listing, 30003, content='tvshows', sort=['label', 'year', 'duration'])
 

@@ -167,6 +167,11 @@ class Menu:
         """
         plot = ''
 
+        # Add geo-blocked message
+        if hasattr(obj, 'available') and not obj.available:
+            plot += kodiutils.localize(30206)  # Available in Streamz+
+            plot += '\n'
+
         # Add remaining
         if hasattr(obj, 'remaining') and obj.remaining is not None:
             if obj.remaining == 0:
@@ -247,8 +252,16 @@ class Menu:
                 'width': 1920,
             }
 
+            if item.available:
+                title = item.name
+            else:
+                title = item.name + ' [COLOR=red](S+)[/COLOR]'
+                info_dict.update({
+                    'title': title,
+                })
+
             return TitleItem(
-                title=item.name,
+                title=title,
                 path=kodiutils.url_for('play', category='movies', item=item.movie_id),
                 art_dict=art_dict,
                 info_dict=info_dict,

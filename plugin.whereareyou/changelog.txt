@@ -1,0 +1,22 @@
+v.0.4.1
+- fix for "no next item in playlist" error
+
+v.0.4.0
+- added ability to open external apps using Harmony Hub
+- fix for looping dialog box if called from home window
+
+v.0.2.1
+- version bump for resubmission to repo-plugins
+
+v.0.2.0
+- changes in logging to accomodate new logging requirements for Kodi 19
+- re-organized code so it can be submitted to the Kodi repo
+
+v.0.1.0
+- Python 2/3 compatibility
+
+v.0.0.2
+- updated readme and icon
+
+v.0.0.1
+- initial release

@@ -16,11 +16,13 @@
     <setting label="32015" id="mergeCategoryAndTitle" type="bool" default="true" subsetting="true" enable="eq(-1,true)"/>
     <setting label="32026" id="showPlayableInTitle" type="bool" default="true"/>
     <setting label="32027" id="showTagsInTitle" type="bool" default="true"/>
+    <setting label="32048" id="showEpisodeInTitle" type="bool" default="true"/>
   </category>
 
   <!-- Player -->
   <category label="32045">
     <setting label="32046" id="filterMasterPlaylist" type="bool" default="true"/>
+    <setting label="32049" id="disableSubtitles" type="bool" default="false"/>
   </category>
 </settings>
  

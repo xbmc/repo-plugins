@@ -89,9 +89,14 @@ class XbmcResponse(Response):
         infoLabels['title'] = title
         infoLabels['sorttitle'] = title
         infoLabels['genre'] = item.genre
-        infoLabels['plot'] = item.text
-        if item.genre is not None and infoLabels['plot'] is not None:
-            infoLabels['plot'] = item.genre + '\n' + infoLabels['plot']
+        plot = ""
+        sep = ""
+        if item.genre is not None:
+            plot = item.genre
+            sep = "\n"
+        if item.text is not None:
+            plot = plot + sep + item.text
+        infoLabels['plot'] = plot
 
         date = item.date
         if date is not None and date != "":
@@ -143,8 +148,10 @@ class Settings(object):
         self.showGenreInTitle = xbmcplugin.getSetting(handle, 'showGenreInTitle') == 'true'
         self.showPlayableInTitle = xbmcplugin.getSetting(handle, 'showPlayableInTitle') == 'true'
         self.showTagsInTitle = xbmcplugin.getSetting(handle, 'showTagsInTitle') == 'true'
+        self.showEpisodeInTitle = xbmcplugin.getSetting(handle, 'showEpisodeInTitle') == 'true'
         # Player
         self.filterMasterPlaylist = xbmcplugin.getSetting(handle, 'filterMasterPlaylist') == 'true'
+        self.disableSubtitles = xbmcplugin.getSetting(handle, 'disableSubtitles') == 'true'
 
 
 baseUrl = sys.argv[0]

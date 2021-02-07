@@ -20,10 +20,11 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 
 class PlayVideo(Pagelet):
     
-    def __init__(self, playerStore, filterMasterPlaylist):
+    def __init__(self, playerStore, filterMasterPlaylist, disableSubtitles):
         super(Pagelet, self).__init__()
         self.playerStore = playerStore
         self.filterMasterPlaylist = filterMasterPlaylist
+        self.disableSubtitles = disableSubtitles
 
     def service(self, request, response):
         contentName = request.getParam('contentName')
@@ -94,7 +95,8 @@ class PlayVideo(Pagelet):
                     item.setArt({'poster': image, 'banner': image, 'thumb': image, 'icon': image, 'fanart': image})
 
                 # set subtitles
-                self._setSubTitles(item, streamInfo.subTitlesUrl)
+                if not self.disableSubtitles:
+                    self._setSubTitles(item, streamInfo.subTitlesUrl)
                 
                 dialog.update(percent=90, message=self._(32010))
                 self.info("setting resolved url='{1}' ...", url)

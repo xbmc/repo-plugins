@@ -16,9 +16,12 @@ catCategoryPattern = compile('class="teaser-cat-category\s*[^"]*"[^>]*>([^<]*)</
 catBrandPattern = compile('class="teaser-cat-brand\s*[^"]*"[^>]*>([^<]*)</[^>]*>')
 aPattern = compile('href="([^"]*)"[^>]*>')
 textPattern = compile('class="teaser-text"[^>]*>([^<]*)</[^>]*>')
-footPattern = compile('class="teaser-foot"[^>]*>')
+footPattern = compile('class="teaser-foot\s*[^"]*"[^>]*>')
 footIconPattern = compile('class="[^"]*icon-[0-9]*_(play)[^"]*">')
-datePattern = compile('class="teaser-info[^"]*"[^>]*>([^<]*)</[^>]*>')
+teaserInfoPattern = getTagPattern('dd', 'teaser-info')
+teaserInfoIsTiviPattern = getTagPattern('span', 'is-tivi')
+teaserInfoDurationPattern = compile('(.*) min')
+teaserInfoEpisodePattern = compile('S(..) F(..)')
 apiTokenPattern = compile('"apiToken"\s*:\s*"([^"]*)"')
 
     
@@ -64,6 +67,8 @@ class Teaser(object):
     contentName = None
     apiToken = None
     duration = None
+    season = None
+    episode = None
     
     def __init__(self):
         pass
@@ -72,7 +77,7 @@ class Teaser(object):
         return self.title is not None and self.url is not None and self.url[0:1] == '/' 
      
     def __str__(self):
-        return "<Teaser '%s' playable='%s' url='%s' apiToken='%s' label='%s'>" % (self.title, self.playable, self.url, self.apiToken, self.label)
+        return "<Teaser '%s' playable='%s' url='%s' genre='%s' apiToken='%s' label='%s' season='%s' episode='%s'>" % (self.title, self.playable, self.url, self.genre, self.apiToken, self.label, self.season, self.episode)
         
 
     def parse(self, string, pos=0, baseUrl=None, teaserMatch=None):
@@ -190,38 +195,60 @@ class Teaser(object):
         return pos
 
     def parseFoot(self, article, pos, pattern=footPattern):
-        playable = False
         footMatch = pattern.search(article, pos)
         foot = None
         if footMatch is not None:
             pos = footMatch.end(0)
 
-            iconMatch = footIconPattern.search(article, pos)
-            if iconMatch is not None:    
-                playable =  iconMatch.group(1) == 'play'
-                pos = article.find('</span>', pos) + len('</span>')
-
-        self.playable = playable
-        pos = self.parseDuration(article, pos)
+            #iconMatch = footIconPattern.search(article, pos)
+            #if iconMatch is not None:    
+            #    playable =  iconMatch.group(1) == 'play'
+            #    pos = article.find('</span>', pos) + len('</span>')
+            pos = self.parseTeaserInfo(article, pos)
         return pos
         
-    def parseDuration(self, article, pos, pattern=datePattern):
-        durationMatch = pattern.search(article, pos)
+    def parseTeaserInfo(self, article, pos, pattern=teaserInfoPattern):
+
+        teaserInfoMatch = pattern.search(article, pos)
         playable = False
         duration = None
-        if durationMatch is not None:
-            duration = durationMatch.group(1).strip()
-            duration = duration.replace(' min', '')
-            if duration.isdigit():
+        season = None
+        episode = None
+        genre = None
+        if teaserInfoMatch is not None:
+            teaserInfo = getTag('dd', article, teaserInfoMatch)
+            isTiviMatch = teaserInfoIsTiviPattern.search(teaserInfo)
+            if isTiviMatch is not None:
+                teaserInfo = teaserInfo[0:isTiviMatch.start(0)]            
+            teaserInfo = cleanTags(teaserInfo)
+            sep = u'\xb7'.encode('utf-8')
+            parts = teaserInfo.split(sep)
+            for part in parts:
+                part = part.strip()
+                partMatch = teaserInfoDurationPattern.search(part)
+                if partMatch is not None:
+                    duration = partMatch.group(1)
+                else:
+                    partMatch = teaserInfoEpisodePattern.search(part)
+                    if partMatch is not None:
+                        season = partMatch.group(1)
+                        episode = partMatch.group(2)
+                    else:
+                        genre = part
+
+            if duration is not None and duration.isdigit():
                 duration = int(duration) * 60
                 playable = True
-            else:
-                duration = None
-            pos = durationMatch.end(0)
+
+            pos = teaserInfoMatch.end(0)
     
         if not self.playable and playable:
             self.playable = playable
         self.duration = duration
+        if self.genre is None:
+            self.genre = genre
+        self.season = season
+        self.episode = episode
         return pos
 
 

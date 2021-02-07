@@ -218,3 +218,15 @@ msgctxt "#32046"
 msgid "Filter master playlist for best resolution"
 msgstr "Filtere Master Playlist nach höchster Auflösung"
 
+msgctxt "#32047"
+msgid "S{0} E{1}"
+msgstr "S{0} F{1}"
+
+msgctxt "#32048"
+msgid "Show Season and Episode in Title"
+msgstr "Zeige Staffel und Folge im Titel"
+
+msgctxt "#32049"
+msgid "Disable Subtitles"
+msgstr "Deaktiviere Untertitel"
+

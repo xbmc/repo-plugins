@@ -305,7 +305,7 @@ def programs_episodes():
     for a in soup.find_all('a'):
         url = a.get('href')
         if a.find('script') != None:
-            match = re.search(r'\'(.+?)\'', a.find('script').text)
+            match = re.search(r'\'(.+?)\'', str(a.find('script')))
             if len(match.groups()) > 0:
                 img = match.group(1)
         metas = a.find_next_sibling('i').find_all('meta')

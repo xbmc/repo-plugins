@@ -2,15 +2,15 @@
 # Addon Name: HBO GO EU
 # Addon id: plugin.video.hbogoeu
 # Addon Provider: arvvoid
-# Translation by: kowalmisiek
+# Translation by: barqqlsky, kowalmisiek
 msgid ""
 msgstr ""
 "Project-Id-Version: plugin.video.hbogoeu\n"
 "Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-04-12 18:17+0200\n"
-"Last-Translator: arvvoid\n"
-"Language-Team: arvvoid, kowalmisiek\n"
+"PO-Revision-Date: 2021-01-08 10:25+0200\n"
+"Last-Translator: barqqlsky\n"
+"Language-Team: barqqlsky, kowalmisiek\n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,22 +23,18 @@ msgctxt "#30000"
 msgid "ENG"
 msgstr "POL"
 
-#, fuzzy
 msgctxt "#30001"
 msgid "ERROR"
 msgstr "BŁĄD"
 
-#, fuzzy
 msgctxt "#30002"
 msgid "Setup failed"
 msgstr "Instalacja nie powiodła się"
 
-#, fuzzy
 msgctxt "#30003"
 msgid "Unsupported region"
 msgstr "Nieobsługiwany region"
 
-#, fuzzy
 msgctxt "#30004"
 msgid "An unexpected error has occurred."
 msgstr "Wystąpił nieoczekiwany błąd."
@@ -55,14 +51,13 @@ msgctxt "#30007"
 msgid "Error deleting data from Hbo Go"
 msgstr "Błąd podczas usuwania danych z HBO Go"
 
-#, fuzzy
 msgctxt "#30008"
 msgid "Communication error, returned STATUS: "
 msgstr "Błąd komunikacji, zwrócony STATUS: "
 
 msgctxt "#30009"
 msgid "The content is available from:"
-msgstr ""
+msgstr "Zawartość jest dostępna z:"
 
 msgctxt "#30100"
 msgid "Web registration on "
@@ -101,7 +96,7 @@ msgstr ""
 
 msgctxt "#30105"
 msgid "Logout (Reset setup)"
-msgstr "Wylogowanie (Restart ustawień)"
+msgstr "Wyloguj (Restart ustawień)"
 
 msgctxt "#30106"
 msgid "Destroy current session"
@@ -137,33 +132,31 @@ msgstr "DRM"
 
 msgctxt "#30665"
 msgid "Inputstream Adaptive Settings (max bitrate, resolution, etc.)"
-msgstr ""
-"Wejściowe ustawienia adaptacyjne (maksymalna szybkość transmisji, "
-"rozdzielczość, ECC ..)"
+msgstr "Ustawienia Inputstream Adaptive (bitrate, rozdzielczość, itp.)"
 
 msgctxt "#30666"
 msgid "InputStream Helper information"
-msgstr "InputStream Helper information"
+msgstr "Informacje o InputStream Helper"
 
 msgctxt "#30667"
 msgid "(Re)install Widevine CDM..."
-msgstr "(Re)install Widevine CDM..."
+msgstr "(Prze)instaluj Widevine CDM..."
 
 msgctxt "#30668"
 msgid "Remove Widevine CDM..."
-msgstr "Remove Widevine CDM..."
+msgstr "Usuń Widevine CDM..."
 
 msgctxt "#30669"
 msgid "InputStream Helper settings..."
-msgstr "InputStream Helper settings..."
+msgstr "Ustawienia InputStream Helper..."
 
 msgctxt "#30700"
 msgid "Find movies and TV Shows..."
-msgstr "Znajdź filmy i seriale …"
+msgstr "Znajdź filmy i seriale..."
 
 msgctxt "#30701"
 msgid "No results"
-msgstr "Brak rezultatów"
+msgstr "Brak wyników"
 
 msgctxt "#30702"
 msgid "Error"
@@ -203,7 +196,7 @@ msgstr "Brak operatora! Sprawdź ustawienia!"
 
 msgctxt "#30711"
 msgid "Search..."
-msgstr "Szukaj…"
+msgstr "Szukaj..."
 
 msgctxt "#30712"
 msgid ""
@@ -237,11 +230,11 @@ msgstr "INFORMACJE"
 
 msgctxt "#30714"
 msgid "I understand the risks and continue"
-msgstr "Rozumiem ryzyko i kontunuuje"
+msgstr "Rozumiem ryzyko i kontunuuję"
 
 msgctxt "#30715"
 msgid "Stop, let me change the settings"
-msgstr "STOP, pozwól mi zmienić ustawienia"
+msgstr "Stój, pozwól mi zmienić ustawienia"
 
 msgctxt "#30716"
 msgid "TV Shows"
@@ -293,13 +286,11 @@ msgstr "Sukces"
 
 msgctxt "#30728"
 msgid "Login failed, do you want to input your credentials again?"
-msgstr ""
-"Logowanie nie powiodło się, czy chcesz ponownie wprowadzić swoje dane "
-"uwierzytelniające?"
+msgstr "Logowanie nieudane, spróbować ponownie?"
 
 msgctxt "#30729"
 msgid "KIDS"
-msgstr "DZIECI"
+msgstr "Dzieci"
 
 msgctxt "#30730"
 msgid "Weekly Top"
@@ -307,31 +298,31 @@ msgstr "Tygodniowy top"
 
 msgctxt "#30731"
 msgid "History"
-msgstr ""
+msgstr "Historia"
 
 msgctxt "#30732"
 msgid "Continue Watching"
-msgstr ""
+msgstr "Oglądaj dalej"
 
 msgctxt "#30733"
 msgid "Home Lists"
-msgstr ""
+msgstr "Moje Listy"
 
 msgctxt "#30734"
 msgid "New search"
-msgstr ""
+msgstr "Nowe wyszukiwanie"
 
 msgctxt "#30735"
 msgid "Clear search history"
-msgstr ""
+msgstr "Wyczyść historię wyszukiwania"
 
 msgctxt "#30736"
 msgid "Remove"
-msgstr ""
+msgstr "Usuń"
 
 msgctxt "#30737"
 msgid "Kids only mode"
-msgstr ""
+msgstr "Tryb tylko dla dzieci"
 
 msgctxt "#30650"
 msgid "Language"
@@ -367,7 +358,7 @@ msgstr "Wymuś użycie scrapera z przyjaznymi tytułami"
 
 msgctxt "#30672"
 msgid "Use generic video media type in listings"
-msgstr ""
+msgstr "Używaj ogólnych typów mediów w listach"
 
 msgctxt "#30680"
 msgid "Session"
@@ -383,7 +374,7 @@ msgstr "Zresetuj sesję, wymuś ponowne logowanie"
 
 msgctxt "#30690"
 msgid "Debug"
-msgstr "Debug"
+msgstr "Debugowanie"
 
 msgctxt "#30691"
 msgid "Include sensitive login data in debug log [DON'T POST PUBLICLY]"
@@ -399,82 +390,65 @@ msgstr ""
 "Are you sure you want to completely reset your setup (device registration "
 "will be lost ) ?"
 
-#, fuzzy
-#| msgctxt "#30693"
-#| msgid "Include full details/RAW retrived data in Debug log"
 msgctxt "#30693"
 msgid "Include full details/RAW retrieved data in Debug log"
-msgstr "Include full details/RAW retrived data in Debug log"
+msgstr "Uwzględnij wszystkie szczegóły/Otrzymane dane RAW w dzienniku logowania"
 
-#, fuzzy
-#| msgctxt "#30694"
-#| msgid ""
-#| "Cryptodome dependency not present on your system, HBO go add-on can't "
-#| "run. For help consult install instructions/official support thread"
 msgctxt "#30694"
 msgid ""
 "Cryptodome dependency not present on your system, HBO Go add-on can't run. "
 "For help consult install instructions/official support thread"
 msgstr ""
-"Cryptodome dependency not present on your system, HBO go add-on can't run. "
-"For help consult install instructions/official support thread"
+"Zależność Cryptodome nie występuje w twoim systemie, nie można uruchomić dodatku HBO Go. "
+"Aby uzyskać pomoc zapoznaj się z instrukcją instalacji/oficjalnym wątkiem wsparcia"
 
-#, fuzzy
 msgctxt "#30696"
 msgid "Home Category"
-msgstr "Strona główna Kategoria"
+msgstr "Strona główna"
 
-#, fuzzy
 msgctxt "#30697"
 msgid "Group Home lists in special category"
-msgstr "Lista główna grupy w kategorii specjalnej"
+msgstr "Grupuj Moje Listy w kategorii specjalnej"
 
-#, fuzzy
 msgctxt "#30800"
 msgid "Sync play time with HBO Go"
-msgstr "Synchronizacja czasu gry z HBO go"
+msgstr "Synchronizacja oglądania z HBO go"
 
-#, fuzzy
 msgctxt "#30801"
 msgid "Send elapsed time to HBO Go"
-msgstr "Wyślij upływ czasu do HBO go"
+msgstr "Wyślij statusy obejrzane do HBO go"
 
-#, fuzzy
 msgctxt "#30802"
 msgid "Get elapsed time from HBO Go"
-msgstr "Pobierz upływ czasu z HBO go"
+msgstr "Pobierz statusy obejrzane z HBO go"
 
-#, fuzzy
 msgctxt "#30803"
 msgid "Set as watched on HBO Go"
-msgstr "Ustaw jako oglądany na HBO go"
+msgstr "Oznacz jako obejrzany"
 
-#, fuzzy
 msgctxt "#30804"
 msgid "Set as unwatched on HBO Go"
-msgstr "Ustaw jako nieoglądany na HBO go"
+msgstr "Oznacz jako nieobejrzany"
 
-#, fuzzy
 msgctxt "#30805"
 msgid "Ignore Kodi Watched status (Only display HBO Go Watched status)"
-msgstr ""
-"Ignoruj stan obserwowany Kodi (wyświetlanie tylko statusu HBO go oglądanego)"
+msgstr "Ignoruj status oglądanych w Kodi (wyświetlanie tylko statusu HBO)"
 
 msgctxt "#30806"
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 msgctxt "#30807"
 msgid "Use request cache"
-msgstr ""
+msgstr "Użyj żądania cache"
 
 msgctxt "#30808"
 msgid "Clear request cache"
-msgstr ""
+msgstr "Wyczyść żądanie cache"
 
 msgctxt "#30809"
 msgid "Encrypt credentials"
-msgstr ""
+msgstr "Szyfruj dane uwierzytelniające"
 
 msgctxt "#30810"
 msgid ""
@@ -491,23 +465,34 @@ msgid ""
 "\n"
 "This message will appear only now on credential input."
 msgstr ""
+"Jeśli nie wiesz czemu szyfrowanie jest nieaktywna, nie podawaj danych logowania i "
+"wyjdź teraz !\n "
+"\n"
+"Jeśli wyłączyłeś szyfrowanie celowo i wiesz co robisz, kontynuuj.\n "
+"\n"
+"Jeśli szyfrowanie nie zostało wyłączone w celu debugowania/testowania, "
+"albo z powodu problemów z utraconymi danymi logowania na urządzeniu, NIE kontynuuj.\n "
+"W przypadku jeśli nie jest to zamierzone, aktywuj opcję szyfrowania danych logowania i "
+"spróbuj ponownie.\n"
+"\n"
+"Ta wiadomość pojawi się tylko podczas wprowadzania danych."
 
 msgctxt "#30811"
 msgid "[Encrypted]"
-msgstr ""
+msgstr "[Szyfrowane]"
 
 msgctxt "#30812"
 msgid "[NOT Encrypted]"
-msgstr ""
+msgstr "[NIE szyfrowane]"
 
 msgctxt "#30813"
 msgid "WARNING: Credential Encryption disabled"
-msgstr ""
+msgstr "OSTRZEŻENIE: Szyfrowanie wyłączone "
 
 msgctxt "#30814"
 msgid "Subtitles cache cleaned"
-msgstr ""
+msgstr "Cache napisów wyczyszczone"
 
 msgctxt "#30815"
 msgid "Clean subtitles cache"
-msgstr ""
+msgstr "Wyczyść cache napisów"

@@ -1042,3 +1042,7 @@ msgstr "Geen on demand stream beschikbaar voor {title}."
 msgctxt "#30987"
 msgid "No stream found, please try again!"
 msgstr "Geen stream gevonden, gelieve opnieuw te proberen!"
+
+msgctxt "#30988"
+msgid "InputStream Adaptive is not available, therefore pause and timeshift of live streams may not work"
+msgstr "InputStream Adaptive is niet geïnstalleerd, daarom kan het pauzeren en timeshift van live tv niet werken"

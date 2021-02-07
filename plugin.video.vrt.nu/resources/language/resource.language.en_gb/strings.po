@@ -1042,3 +1042,7 @@ msgstr ""
 msgctxt "#30987"
 msgid "No stream found, please try again!"
 msgstr ""
+
+msgctxt "#30988"
+msgid "InputStream Adaptive is not installed, therefore pause and timeshift of live streams may not work"
+msgstr ""

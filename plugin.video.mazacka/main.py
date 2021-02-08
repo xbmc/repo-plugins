@@ -89,11 +89,16 @@ def checkStream(html):
     if html == '':
         xbmcgui.Dialog().ok(PLUGIN_ID, _lang(30003))
         return(False)
-    if html.find('Vys&#237;l&#225;n&#237; bude brzy zah&#225;jeno') != -1:
+    if html.find('is-inactive') != -1:
+        thumb = re.search(r'(?:http\:|https\:)?\/\/[^><"]*\.jpg', html)
+        if thumb: placeholder = thumb.group()
+        else: placeholder = 'special://home/addons/{0}/fanart.jpg'.format(PLUGIN_ID)
+        xbmc.executebuiltin('ShowPicture("{0}")'.format(placeholder))
+        
         xbmcgui.Dialog().ok(PLUGIN_ID, _lang(30002))
+        xbmc.executebuiltin('Action(PreviousMenu)')
         return(False)
     return(True)
-
 
 if __name__ == '__main__':
     router(sys.argv[2][1:])

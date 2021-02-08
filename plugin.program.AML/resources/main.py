@@ -396,12 +396,12 @@ def run_plugin(addon_argv):
         command = args['command'][0]
 
         # Commands used by skins to render items of the addon root menu.
-        if   command == 'SKIN_SHOW_FAV_SLOTS':       render_skin_fav_slots()
-        elif command == 'SKIN_SHOW_MAIN_FILTERS':    render_skin_main_filters()
-        elif command == 'SKIN_SHOW_BINARY_FILTERS':  render_skin_binary_filters()
-        elif command == 'SKIN_SHOW_CATALOG_FILTERS': render_skin_catalog_filters()
-        elif command == 'SKIN_SHOW_DAT_SLOTS':       render_skin_dat_slots()
-        elif command == 'SKIN_SHOW_SL_FILTERS':      render_skin_SL_filters()
+        if   command == 'SKIN_SHOW_FAV_SLOTS':       render_skin_fav_slots(cfg)
+        elif command == 'SKIN_SHOW_MAIN_FILTERS':    render_skin_main_filters(cfg)
+        elif command == 'SKIN_SHOW_BINARY_FILTERS':  render_skin_binary_filters(cfg)
+        elif command == 'SKIN_SHOW_CATALOG_FILTERS': render_skin_catalog_filters(cfg)
+        elif command == 'SKIN_SHOW_DAT_SLOTS':       render_skin_dat_slots(cfg)
+        elif command == 'SKIN_SHOW_SL_FILTERS':      render_skin_SL_filters(cfg)
 
         # Auxiliar commands from parent machine context menu
         # Not sure if this will cause problems with the concurrent protected code once it's implemented.
@@ -1468,14 +1468,14 @@ def render_skin_fav_slots(cfg):
     try:
         rd = set_render_root_data()
         # Remove special markers (first and last character)
-        rsCM = root_special_CM.copy()
-        for key, value in rsCM.items(): value[0] = value[0][1:-1]
-        render_root_category_row_custom_CM(*rd['rsCM']['MAME_Favs'])
-        render_root_category_row_custom_CM(*rd['rsCM']['MAME_Most'])
-        render_root_category_row_custom_CM(*rd['rsCM']['MAME_Recent'])
-        render_root_category_row_custom_CM(*rd['rsCM']['SL_Favs'])
-        render_root_category_row_custom_CM(*rd['rsCM']['SL_Most'])
-        render_root_category_row_custom_CM(*rd['rsCM']['SL_Recent'])
+        rsCM = rd.copy()
+        for key, value in rsCM['root_special_CM'].iteritems(): value[0] = value[0][1:-1]
+        render_root_category_row_custom_CM(cfg, *rsCM['root_special_CM']['MAME_Favs'])
+        render_root_category_row_custom_CM(cfg, *rsCM['root_special_CM']['MAME_Most'])
+        render_root_category_row_custom_CM(cfg, *rsCM['root_special_CM']['MAME_Recent'])
+        render_root_category_row_custom_CM(cfg, *rsCM['root_special_CM']['SL_Favs'])
+        render_root_category_row_custom_CM(cfg, *rsCM['root_special_CM']['SL_Most'])
+        render_root_category_row_custom_CM(cfg, *rsCM['root_special_CM']['SL_Recent'])
     except:
         log_error('Excepcion in render_skin_fav_slots()')
     xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -1483,12 +1483,12 @@ def render_skin_fav_slots(cfg):
 def render_skin_main_filters(cfg):
     try:
         rd = set_render_root_data()
-        render_root_catalog_row(*rd['root_Main']['Main_Normal'])
-        render_root_catalog_row(*rd['root_Main']['Main_Unusual'])
-        render_root_catalog_row(*rd['root_Main']['Main_NoCoin'])
-        render_root_catalog_row(*rd['root_Main']['Main_Mechanical'])
-        render_root_catalog_row(*rd['root_Main']['Main_Dead'])
-        render_root_catalog_row(*rd['root_Main']['Main_Devices'])
+        render_root_catalog_row(cfg, *rd['root_Main']['Main_Normal'])
+        render_root_catalog_row(cfg, *rd['root_Main']['Main_Unusual'])
+        render_root_catalog_row(cfg, *rd['root_Main']['Main_NoCoin'])
+        render_root_catalog_row(cfg, *rd['root_Main']['Main_Mechanical'])
+        render_root_catalog_row(cfg, *rd['root_Main']['Main_Dead'])
+        render_root_catalog_row(cfg, *rd['root_Main']['Main_Devices'])
     except:
         log_error('Excepcion in render_skin_main_filters()')
     xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -1496,10 +1496,10 @@ def render_skin_main_filters(cfg):
 def render_skin_binary_filters(cfg):
     try:
         rd = set_render_root_data()
-        render_root_catalog_row(*rd['root_Binary']['BIOS'])
-        render_root_catalog_row(*rd['root_Binary']['CHD'])
-        render_root_catalog_row(*rd['root_Binary']['Samples'])
-        render_root_catalog_row(*rd['root_Binary']['SoftwareLists'])
+        render_root_catalog_row(cfg, *rd['root_Binary']['BIOS'])
+        render_root_catalog_row(cfg, *rd['root_Binary']['CHD'])
+        render_root_catalog_row(cfg, *rd['root_Binary']['Samples'])
+        render_root_catalog_row(cfg, *rd['root_Binary']['SoftwareLists'])
     except:
         log_error('Excepcion in render_skin_binary_filters()')
     xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -1508,41 +1508,41 @@ def render_skin_catalog_filters(cfg):
     try:
         # A mechanism to render only configured filters must be developed.
         rd = set_render_root_data()
-        render_root_category_row(*rd['root_categories']['Catver'])
-        render_root_category_row(*rd['root_categories']['Catlist'])
-        render_root_category_row(*rd['root_categories']['Genre'])
-        render_root_category_row(*rd['root_categories']['Category'])
-        render_root_category_row(*rd['root_categories']['NPlayers'])
-        render_root_category_row(*rd['root_categories']['Bestgames'])
-        render_root_category_row(*rd['root_categories']['Series'])
-        render_root_category_row(*rd['root_categories']['Alltime'])
-        render_root_category_row(*rd['root_categories']['Artwork'])
-        render_root_category_row(*rd['root_categories']['Version'])
-        render_root_category_row(*rd['root_categories']['Controls_Expanded'])
-        render_root_category_row(*rd['root_categories']['Controls_Compact'])
-        render_root_category_row(*rd['root_categories']['Devices_Expanded'])
-        render_root_category_row(*rd['root_categories']['Devices_Compact'])
-        render_root_category_row(*rd['root_categories']['Display_Type'])
-        render_root_category_row(*rd['root_categories']['Display_VSync'])
-        render_root_category_row(*rd['root_categories']['Display_Resolution'])
-        render_root_category_row(*rd['root_categories']['CPU'])
-        render_root_category_row(*rd['root_categories']['Driver'])
-        render_root_category_row(*rd['root_categories']['Manufacturer'])
-        render_root_category_row(*rd['root_categories']['ShortName'])
-        render_root_category_row(*rd['root_categories']['LongName'])
-        render_root_category_row(*rd['root_categories']['BySL'])
-        render_root_category_row(*rd['root_categories']['Year'])
+        render_root_category_row(cfg, *rd['root_categories']['Catver'])
+        render_root_category_row(cfg, *rd['root_categories']['Catlist'])
+        render_root_category_row(cfg, *rd['root_categories']['Genre'])
+        render_root_category_row(cfg, *rd['root_categories']['Category'])
+        render_root_category_row(cfg, *rd['root_categories']['NPlayers'])
+        render_root_category_row(cfg, *rd['root_categories']['Bestgames'])
+        render_root_category_row(cfg, *rd['root_categories']['Series'])
+        render_root_category_row(cfg, *rd['root_categories']['Alltime'])
+        render_root_category_row(cfg, *rd['root_categories']['Artwork'])
+        render_root_category_row(cfg, *rd['root_categories']['Version'])
+        render_root_category_row(cfg, *rd['root_categories']['Controls_Expanded'])
+        render_root_category_row(cfg, *rd['root_categories']['Controls_Compact'])
+        render_root_category_row(cfg, *rd['root_categories']['Devices_Expanded'])
+        render_root_category_row(cfg, *rd['root_categories']['Devices_Compact'])
+        render_root_category_row(cfg, *rd['root_categories']['Display_Type'])
+        render_root_category_row(cfg, *rd['root_categories']['Display_VSync'])
+        render_root_category_row(cfg, *rd['root_categories']['Display_Resolution'])
+        render_root_category_row(cfg, *rd['root_categories']['CPU'])
+        render_root_category_row(cfg, *rd['root_categories']['Driver'])
+        render_root_category_row(cfg, *rd['root_categories']['Manufacturer'])
+        render_root_category_row(cfg, *rd['root_categories']['ShortName'])
+        render_root_category_row(cfg, *rd['root_categories']['LongName'])
+        render_root_category_row(cfg, *rd['root_categories']['BySL'])
+        render_root_category_row(cfg, *rd['root_categories']['Year'])
     except:
         log_error('Excepcion in render_skin_catalog_filters()')
     xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
 
-def render_skin_dat_slots():
+def render_skin_dat_slots(cfg):
     try:
         rd = set_render_root_data()
-        render_root_category_row(*rd['root_special']['History'])
-        render_root_category_row(*rd['root_special']['MAMEINFO'])
-        render_root_category_row(*rd['root_special']['Gameinit'])
-        render_root_category_row(*rd['root_special']['Command'])
+        render_root_category_row(cfg, *rd['root_special']['History'])
+        render_root_category_row(cfg, *rd['root_special']['MAMEINFO'])
+        render_root_category_row(cfg, *rd['root_special']['Gameinit'])
+        render_root_category_row(cfg, *rd['root_special']['Command'])
     except:
         log_error('Excepcion in render_skin_dat_slots()')
     xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -1553,11 +1553,11 @@ def render_skin_SL_filters(cfg):
         return
     try:
         rd = set_render_root_data()
-        render_root_category_row(*rd['root_SL']['SL'])
-        render_root_category_row(*rd['root_SL']['SL_ROM'])
-        render_root_category_row(*rd['root_SL']['SL_ROM_CHD'])
-        render_root_category_row(*rd['root_SL']['SL_CHD'])
-        render_root_category_row(*rd['root_SL']['SL_empty'])
+        render_root_category_row(cfg, *rd['root_SL']['SL'])
+        render_root_category_row(cfg, *rd['root_SL']['SL_ROM'])
+        render_root_category_row(cfg, *rd['root_SL']['SL_ROM_CHD'])
+        render_root_category_row(cfg, *rd['root_SL']['SL_CHD'])
+        render_root_category_row(cfg, *rd['root_SL']['SL_empty'])
     except:
         log_error('Excepcion in render_skin_SL_filters()')
     xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)

@@ -1,5 +1,20 @@
 # Changelog
 
+## [v1.2.3](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.3) (2021-02-04)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.2...v1.2.3)
+
+**Implemented enhancements:**
+
+- Various authentication improvements [\#253](https://github.com/add-ons/plugin.video.vtm.go/pull/253) ([michaelarnauts](https://github.com/michaelarnauts))
+- Improve HTTP Proxy support [\#250](https://github.com/add-ons/plugin.video.vtm.go/pull/250) ([michaelarnauts](https://github.com/michaelarnauts))
+- Prepare to use the MPEG DASH streams [\#213](https://github.com/add-ons/plugin.video.vtm.go/pull/213) ([mediaminister](https://github.com/mediaminister))
+
+**Merged pull requests:**
+
+- Make use of git archive [\#259](https://github.com/add-ons/plugin.video.vtm.go/pull/259) ([dagwieers](https://github.com/dagwieers))
+- Improve tests [\#252](https://github.com/add-ons/plugin.video.vtm.go/pull/252) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.2.2](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.2) (2020-12-30)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.1...v1.2.2)
@@ -54,6 +69,7 @@
 
 **Implemented enhancements:**
 
+- Fix for upcoming UpNext release [\#220](https://github.com/add-ons/plugin.video.vtm.go/pull/220) ([michaelarnauts](https://github.com/michaelarnauts))
 - Move to kodiutils [\#214](https://github.com/add-ons/plugin.video.vtm.go/pull/214) ([mediaminister](https://github.com/mediaminister))
 
 **Fixed bugs:**
@@ -66,7 +82,6 @@
 
 - Use previous sakee version [\#226](https://github.com/add-ons/plugin.video.vtm.go/pull/226) ([mediaminister](https://github.com/mediaminister))
 - Prepare for v1.1.5 [\#225](https://github.com/add-ons/plugin.video.vtm.go/pull/225) ([mediaminister](https://github.com/mediaminister))
-- Fix for upcoming UpNext release [\#220](https://github.com/add-ons/plugin.video.vtm.go/pull/220) ([michaelarnauts](https://github.com/michaelarnauts))
 - Run some checks every 4 hours [\#219](https://github.com/add-ons/plugin.video.vtm.go/pull/219) ([michaelarnauts](https://github.com/michaelarnauts))
 
 ## [v1.1.4](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.1.4) (2020-10-10)

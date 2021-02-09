@@ -145,6 +145,8 @@ def show_tgr_list(mode, url):
 def play(url, pathId="", srt=[]):
     xbmc.log("Playing...")
     
+    ct = ""
+    key = ""
     if pathId != "":
         xbmc.log("PathID: " + pathId)
 
@@ -156,7 +158,6 @@ def play(url, pathId="", srt=[]):
             srtUrl = ""
         else:
             raiplay = RaiPlay(Addon)
-            xbmc.log("Url: " + raiplay.getUrl(pathId))
             metadata = raiplay.getVideoMetadata(pathId)
             url = metadata["content_url"]
             srtUrl = metadata["subtitles"]
@@ -165,22 +166,36 @@ def play(url, pathId="", srt=[]):
             xbmc.log("SRT URL: " + srtUrl)
             srt.append(srtUrl)
 
-    # Handle RAI relinker
-    if url[:53] == "http://mediapolis.rai.it/relinker/relinkerServlet.htm" or \
-        url[:56] == "http://mediapolisvod.rai.it/relinker/relinkerServlet.htm" or \
-        url[:58] == "http://mediapolisevent.rai.it/relinker/relinkerServlet.htm":
+    if "relinkerServlet" in url:
+        url = url.replace ("https:", "http:")
         xbmc.log("Relinker URL: " + url)
         relinker = Relinker()
-        url = relinker.getURL(url)
-    
+        params = relinker.getURL(url)
+        url = params.get('url','')
+        ct = params.get('ct','')
+        key = params.get('key','')
+        
     # Add the server to the URL if missing
     if url[0] == "/":
         url = raiplay.baseUrl[:-1] + url
+    
     xbmc.log("Media URL: " + url)
+    xbmc.log("Media format: %s - License Url: %s" % (ct,key))
     
     # Play the item
-    try: item=xbmcgui.ListItem(path=url + '|User-Agent=' + urllib.quote_plus(Relinker.UserAgent))
-    except: item=xbmcgui.ListItem(path=url + '|User-Agent=' + urllib.parse.quote_plus(Relinker.UserAgent))
+    try: 
+        item=xbmcgui.ListItem(path=url + '|User-Agent=' + urllib.quote_plus(Relinker.UserAgent))
+    except: 
+        item=xbmcgui.ListItem(path=url + '|User-Agent=' + urllib.parse.quote_plus(Relinker.UserAgent))
+    
+    if "dash" in ct :
+        item.setProperty('inputstreamaddon', 'inputstream.adaptive')
+        item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
+        item.setMimeType('application/dash+xml')
+        if key:
+            item.setProperty("inputstream.adaptive.license_type", 'com.widevine.alpha')
+            item.setProperty("inputstream.adaptive.license_key",  key + '||R{SSM}|')
+    
     if len(srt) > 0:
         item.setSubtitles(srt)
     xbmcplugin.setResolvedUrl(handle=handle, succeeded=True, listitem=item)
@@ -483,6 +498,13 @@ def show_ondemand_root():
  
             if not (item["name"] in ("Teatro", "Musica")):
                 liStyle = xbmcgui.ListItem(item["name"])
+                
+                # new urls 
+                # i.e. change "/raiplay/programmi/?json" to "/raiplay/tipologia/programmi/index.json"
+                m = re.findall("raiplay/(.*?)/[?]json", item["PathID"])
+                if m:
+                    item["PathID"] = "/raiplay/tipologia/%s/index.json" % m[0]   
+
                 addDirectoryItem({"mode": "ondemand", "path_id": item["PathID"], "sub_type": item["sub-type"]}, liStyle)
     
     # add new item not in old json
@@ -518,7 +540,7 @@ def show_ondemand_list(pathId):
     # indice ottenuto dal json
     raiplay = RaiPlay(Addon)
     xbmc.log("Url: %s" % raiplay.getUrl(pathId) )
-    
+
     index = raiplay.getIndexFromJSON(pathId)
     xbmc.log(str(index))
 

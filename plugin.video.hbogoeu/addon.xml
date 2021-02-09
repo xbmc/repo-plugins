@@ -1,4 +1,4 @@
-<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.6.2">
+<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.6.3">
   <requires>
     <import addon="xbmc.python" version="2.26.0" />
     <import addon="script.module.kodi-six" version="0.1.0" />
@@ -44,10 +44,9 @@ If an official app is available for your platform, use it instead of this.
     <source>https://github.com/arvvoid/plugin.video.hbogoeu</source>
     <website>https://arvvoid.github.io/plugin.video.hbogoeu</website>
     <news>
-- Subtitle cache autocleaning and manual subtitle cache cleaning
+- Fix minor subtitle offset (sp/no handler)
 - Translations updates
-- Optimize plot (show only "abstract" or "description")
-- Move from deprecated xbmc.translatePath to new xbmcvfs.translatePath for Kodi 19+
+- Minor fixes and optimizations
     </news>
     <assets>
      <icon>resources/icon.png</icon>

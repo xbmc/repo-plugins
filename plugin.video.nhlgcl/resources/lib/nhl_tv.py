@@ -5,8 +5,8 @@ def categories():
     add_dir(LOCAL_STRING(30360), '/live', 100, ICON, FANART)
     add_dir(LOCAL_STRING(30361), '/live', 105, ICON, FANART)
     if FAV_TEAM != 'None' and FAV_TEAM != '':
-        add_fav_today(FAV_TEAM + LOCAL_STRING(30362), FAV_TEAM_LOGO, FANART)
-        add_dir(FAV_TEAM + LOCAL_STRING(30363), 'favteam', 500, FAV_TEAM_LOGO, FANART)
+        add_fav_today(FAV_TEAM + LOCAL_STRING(30362).encode('utf8'), FAV_TEAM_LOGO, FANART)
+        add_dir(FAV_TEAM + LOCAL_STRING(30363).encode('utf8'), 'favteam', 500, FAV_TEAM_LOGO, FANART)
     add_dir(LOCAL_STRING(30364), '/date', 200, ICON, FANART)
     add_dir(LOCAL_STRING(30365), '/qp', 300, ICON, FANART)
 
@@ -241,7 +241,7 @@ def stream_select(game_id, start_time):
         sys.exit()
     else:
         start_from_beginning = -1
-        if start_time is not None:
+        if start_time is not None and 'archive' not in media_state[0].lower().strip():
             dialog = xbmcgui.Dialog()
             start_from_beginning = dialog.select("Choose Start", ['Watch Live', 'Start from Beginning'])
 

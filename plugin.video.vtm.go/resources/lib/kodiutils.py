@@ -460,6 +460,12 @@ def has_socks():
 
 def get_proxies():
     """Return a usable proxies dictionary from Kodi proxy settings"""
+    # Use proxy settings from environment variables
+    env_http_proxy = os.environ.get('HTTP_PROXY')
+    env_https_proxy = os.environ.get('HTTPS_PROXY')
+    if env_http_proxy:
+        return dict(http=env_http_proxy, https=env_https_proxy or env_http_proxy)
+
     usehttpproxy = get_global_setting('network.usehttpproxy')
     if usehttpproxy is not True:
         return None

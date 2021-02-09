@@ -3,6 +3,7 @@ import sys
 import json
 import urllib
 import resources.lib.utils as utils
+import xbmc
 
 PY3 = sys.version_info.major >= 3
 
@@ -32,16 +33,28 @@ class Search:
         "Salute", "Satira", "Scienza", "Società", "Spettacolo", "Sport", "Storia", "Telefilm", "Tempo libero", "Viaggi"]
     
     def getLastContentByTag(self, tags="", numContents=16):
-        try: tags = urllib.quote(tags)
-        except: tags = urllib.parse.quote(tags)
+        try: 
+            tags = urllib.quote(tags)
+        except: 
+            tags = urllib.parse.quote(tags)
+        
         domain = "RaiTv"
         xsl = "rai_tv-statistiche-raiplay-json"
         
         url = self.baseUrl +  "/StatisticheProxy/proxyPost.jsp?action=getLastContentByTag&numContents=%s&tags=%s&domain=%s&xsl=%s" % \
               (str(numContents), tags, domain, xsl)
-        response = json.loads(utils.checkStr(urllib2.urlopen(url).read()))
-        return response["list"]
-    
+
+        xbmc.log("Raiplay.Search.getLastContentByTag url: " + url)
+
+        data = urllib2.urlopen(url).read()
+        data = utils.checkStr(data)
+        try:
+            response = json.loads(data)
+            return response["list"]
+        except:
+            xbmc.log(data)
+            return {}
+            
     def getMostVisited(self, tags, days=7, numContents=16):
         try: tags = urllib.quote(tags)
         except: tags = urllib.parse.quote(tags)

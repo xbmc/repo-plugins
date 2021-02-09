@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.raitv"
        name="Rai Play"
-       version="3.4.7"
+       version="3.5.1"
        provider-name="Nightflyer, cttynul, maxbambi, fabpolli">
   <requires>
-    	<import addon="xbmc.python" version="2.25.0"/>
-	<import addon="script.common.plugin.cache" version="2.6.0"/>
+        <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="script.common.plugin.cache" version="2.6.0"/>
+    <import addon="script.module.inputstreamhelper"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">
@@ -18,22 +19,19 @@
     <description lang="it_IT">
 I canali radio e tv in diretta, gli ultimi 7 giorni di programmazione, le puntate integrali, i telegiornali.
 Source: https://github.com/maxbambi/plugin.video.raitv/
-	  </description>
+      </description>
     <summary lang="en_GB">The broadcasts of Rai channels and its interactive services</summary>
     <description lang="en_GB">
 Live radio and TV channels, latest 7 days of programming, broadcast archive, news.
 Source: https://github.com/maxbambi/plugin.video.raitv/
-	  </description>
+      </description>
     <license>GPL-3.0-or-later</license>
     <forum>https://forum.kodi.tv/showthread.php?tid=155922</forum>
     <website>https://github.com/maxbambi/plugin.video.raitv/</website>
     <email></email>
     <news>
-[B]3.4.7[/B]
-- Translations
-- Added new items for viewing all elements of a category.
-- On air menu shows also current programs. 
-- Added new section from home page of Raiplay.
+[B]3.5.1[/B]
+- Fix new urls for VOD   
     </news>
     <source>https://github.com/maxbambi/plugin.video.raitv/</source>
     <assets>

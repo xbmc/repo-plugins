@@ -46,9 +46,11 @@ class Search:
             return
 
         # Display results
+        show_unavailable = kodiutils.get_setting_bool('interface_show_unavailable')
         listing = []
         for item in items:
-            listing.append(Menu.generate_titleitem(item))
+            if show_unavailable or item.available:
+                listing.append(Menu.generate_titleitem(item))
 
         # Sort like we get our results back.
         kodiutils.show_listing(listing, 30009, content='tvshows')

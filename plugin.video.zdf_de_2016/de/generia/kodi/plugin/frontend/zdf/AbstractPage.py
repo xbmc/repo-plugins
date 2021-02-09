@@ -33,6 +33,9 @@ class AbstractPage(Pagelet):
             title = '[' + label + '] ' + title
         title.strip()
         
+        if teaser.season is not None and teaser.episode is not None and settings.showEpisodeInTitle:
+            title = str(self._(32047, teaser.season, teaser.episode)) + " - " + title
+
         if teaser.playable and settings.showPlayableInTitle:
             title = '(>) ' + title
         if genre is not None and genre != "" and settings.showGenreInTitle:

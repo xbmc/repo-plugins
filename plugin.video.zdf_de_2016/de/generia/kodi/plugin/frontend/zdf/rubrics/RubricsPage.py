@@ -23,7 +23,7 @@ class RubricsPage(AbstractPage):
         for rubric in navigation.rubrics:
             if self._isExcluded(rubric):
                 continue
-            response.addFolder(self._(32004) + ' - ' + rubric.title, Action('RubricPage', {'rubricUrl': rubric.url}))
+            response.addFolder(str(self._(32004)) + ' - ' + rubric.title, Action('RubricPage', {'rubricUrl': rubric.url}))
 
     def _isExcluded(self, rubric):
         for url in self.excludedRubricUrls:

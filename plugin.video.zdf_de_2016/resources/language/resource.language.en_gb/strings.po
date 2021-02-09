@@ -199,3 +199,15 @@ msgstr ""
 msgctxt "#32046"
 msgid "Filter master playlist for best resolution"
 msgstr ""
+
+msgctxt "#32047"
+msgid "S{0} E{1}"
+msgstr ""
+
+msgctxt "#32048"
+msgid "Show Season and Episode in Title"
+msgstr ""
+
+msgctxt "#32049"
+msgid "Disable Subtitles"
+msgstr ""

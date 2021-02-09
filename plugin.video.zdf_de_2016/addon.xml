@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.zdf_de_2016" name="ZDF Mediathek 2016" version="1.0.17" provider-name="Generia">
+<addon id="plugin.video.zdf_de_2016" name="ZDF Mediathek 2016" version="1.0.18" provider-name="Generia">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
   </requires>
@@ -21,9 +21,15 @@ Siehe auch https://github.com/generia/plugin.video.zdf_de_2016
 	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 	<source>https://github.com/generia/plugin.video.zdf_de_2016</source>
 	<email>alex at generia dot de</email>
-	<website>http://www.zdf.de/</website>
+	<website>https://www.zdf.de/</website>
     <platform>all</platform>
     <news>
+1.0.18 (2021-02-07)
+- fix "unplayable" videos (github issue #18)
+- added setting to show season/episode info in titles
+- added setting to disable subtitles (github issue #9)
+- improved teaser parsing and performance
+
 1.0.17 (2020-12-22)
 - fix for low video quality in Kodi 18 (github issue #17)
 - fix for broken live-tv (github issue #15)

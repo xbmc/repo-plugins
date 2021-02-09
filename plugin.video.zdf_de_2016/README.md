@@ -18,6 +18,7 @@ end of October 2016 and updates of the existing plugin were not yet available my
 This addon was tested with 
 - Kodi 16.1 "Jarvis", Confluence Skin, MacOS
 - Kodi 17.0 "Krypton" beta 5, Estouchy Skin, MacOS/Linux 
+- Kodi 18.6 "Leia", Estuary Skin, Linux 
 
 This addon is known to work with
 - XBMC 13.2 "Gotham", see [issue #4](/../../issues/4)

@@ -50,7 +50,7 @@ class MediathekFactory(PageletFactory):
         if pageletId == 'ShowsAzPage':
             return ShowsAzPage()
         if pageletId == 'PlayVideo':
-            return PlayVideo(self._createPlayerStore(context), self.settings.filterMasterPlaylist)
+            return PlayVideo(self._createPlayerStore(context), self.settings.filterMasterPlaylist, self.settings.disableSubtitles)
         
         return Mediathek()
         

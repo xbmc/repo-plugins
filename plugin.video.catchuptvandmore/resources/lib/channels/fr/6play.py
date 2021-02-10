@@ -117,10 +117,10 @@ def sixplay_root(plugin, **kwargs):
         ('m6', 'M6', 'm6.png', 'm6_fanart.jpg'),
         ('w9', 'W9', 'w9.png', 'w9_fanart.jpg'),
         ('6ter', '6ter', '6ter.png', '6ter_fanart.jpg'),
+        ('gulli', 'Gulli', 'gulli.png', 'gulli_fanart.jpg'),
         ('fun_radio', 'Fun Radio', 'funradio.png', 'funradio_fanart.jpg'),
-        ('rtl2', 'RTL 2', 'rtl2.png', 'rtl2_fanart.jpg')
-        # ('courses', 'M6 Courses', 'm6courses.png', 'm6courses_fanart.jpg'),
-        # ('100foot', '100%% Foot', '100foot.png', '100foot_fanart.jpg')
+        ('rtl2', 'RTL 2', 'rtl2.png', 'rtl2_fanart.jpg'),
+        ('courses', 'Cage Warriors', 'cagewarriors.png', 'cagewarriors_fanart.jpg')
     ]
 
     for channel_infos in channels:
@@ -145,7 +145,7 @@ def list_categories(plugin, item_id, **kwargs):
     if item_id == 'rtl2' or \
             item_id == 'fun_radio' or \
             item_id == 'courses' or \
-            item_id == '100foot':
+            item_id == 'gulli':
         resp = urlquick.get(URL_ROOT % item_id)
     else:
         resp = urlquick.get(URL_ROOT % (item_id + 'replay'))
@@ -519,159 +519,132 @@ def get_playlist_urls(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    if item_id == 'fun_radio' or \
+    if get_kodi_version() < 18:
+        xbmcgui.Dialog().ok('Info', plugin.localize(30602))
+        return False
+
+    resp_js_id = urlquick.get(URL_GET_JS_ID_API_KEY)
+    js_id = re.compile(r'client\-(.*?)\.bundle\.js').findall(
+        resp_js_id.text)[0]
+    resp = urlquick.get(URL_API_KEY % js_id)
+
+    api_key = re.compile(r'\"eu1.gigya.com\"\,key\:\"(.*?)\"').findall(
+        resp.text)[0]
+
+    if plugin.setting.get_string('6play.login') == '' or\
+            plugin.setting.get_string('6play.password') == '':
+        xbmcgui.Dialog().ok(
+            plugin.localize(30600),
+            plugin.localize(30604) % ('6play', 'https://www.6play.fr'))
+        return False
+
+    # Build PAYLOAD
+    payload = {
+        "loginID": plugin.setting.get_string('6play.login'),
+        "password": plugin.setting.get_string('6play.password'),
+        "apiKey": api_key,
+        "format": "jsonp",
+        "callback": "jsonp_3bbusffr388pem4"
+    }
+    # LOGIN
+    resp2 = urlquick.post(
+        URL_COMPTE_LOGIN,
+        data=payload,
+        headers={
+            'User-Agent': web_utils.get_random_ua(),
+            'referer': 'https://www.6play.fr/connexion'})
+    json_parser = json.loads(
+        resp2.text.replace('jsonp_3bbusffr388pem4(', '').replace(');', ''))
+
+    if "UID" not in json_parser:
+        plugin.notify('ERROR', '6play : ' + plugin.localize(30711))
+        return False
+    account_id = json_parser["UID"]
+    account_timestamp = json_parser["signatureTimestamp"]
+    account_signature = json_parser["UIDSignature"]
+
+    is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
+    if not is_helper.check_inputstream():
+        return False
+
+    # Build PAYLOAD headers
+    payload_headers = {
+        'x-auth-gigya-signature': account_signature,
+        'x-auth-gigya-signature-timestamp': account_timestamp,
+        'x-auth-gigya-uid': account_id,
+        'x-customer-name': 'm6web'
+    }
+
+    if item_id == '6ter':
+        token_json = urlquick.get(
+            URL_TOKEN_DRM % (account_id, 'dashcenc_%s' % '6T'),
+            headers=payload_headers,
+            max_age=-1)
+    elif item_id == 'fun_radio' or \
             item_id == 'rtl2' or \
-            item_id == 'mb':
-        if item_id == 'mb':
-            video_json = urlquick.get(
-                URL_LIVE_JSON % (item_id.upper()),
-                headers={'User-Agent': web_utils.get_random_ua()},
-                max_age=-1)
-            json_parser = json.loads(video_json.text)
-            video_assets = json_parser[item_id.upper()][0]['live']['assets']
-        else:
-            video_json = urlquick.get(
-                URL_LIVE_JSON % (item_id),
-                headers={'User-Agent': web_utils.get_random_ua()},
-                max_age=-1)
-            json_parser = json.loads(video_json.text)
-            video_assets = json_parser[item_id][0]['live']['assets']
-
-        if not video_assets:
-            plugin.notify('INFO', plugin.localize(30716))
-            return False
-
-        subtitle_url = ''
-        if plugin.setting.get_boolean('active_subtitle'):
-            for asset in video_assets:
-                if 'subtitle_vtt' in asset["type"]:
-                    subtitle_url = asset['full_physical_path']
-
-        for asset in video_assets:
-            if 'delta_hls_h264' in asset["type"]:
-                item = Listitem()
-                item.path = asset['full_physical_path']
-                if 'http' in subtitle_url:
-                    item.subtitles.append(subtitle_url)
-
-                item.label = get_selected_item_label()
-                item.art.update(get_selected_item_art())
-                item.info.update(get_selected_item_info())
-                return item
-        return False
-
+            item_id == 'gulli':
+        token_json = urlquick.get(
+            URL_TOKEN_DRM % (account_id, 'dashcenc_%s' % item_id),
+            headers=payload_headers,
+            max_age=-1)
     else:
+        token_json = urlquick.get(
+            URL_TOKEN_DRM % (account_id, 'dashcenc_%s' % item_id.upper()),
+            headers=payload_headers,
+            max_age=-1)
+    token_jsonparser = json.loads(token_json.text)
+    token = token_jsonparser["token"]
 
-        if get_kodi_version() < 18:
-            xbmcgui.Dialog().ok('Info', plugin.localize(30602))
-            return False
+    if item_id == '6ter':
+        video_json = urlquick.get(
+            URL_LIVE_JSON % '6T',
+            headers={'User-Agent': web_utils.get_random_ua()},
+            max_age=-1)
+        json_parser = json.loads(video_json.text)
+        video_assets = json_parser['6T'][0]['live']['assets'][::-1]
+    elif item_id == 'fun_radio' or \
+            item_id == 'rtl2' or \
+            item_id == 'gulli':
+        video_json = urlquick.get(
+            URL_LIVE_JSON % (item_id),
+            headers={'User-Agent': web_utils.get_random_ua()},
+            max_age=-1)
+        json_parser = json.loads(video_json.text)
+        video_assets = json_parser[item_id][0]['live']['assets'][::-1]
+    else:
+        video_json = urlquick.get(
+            URL_LIVE_JSON % (item_id.upper()),
+            headers={'User-Agent': web_utils.get_random_ua()},
+            max_age=-1)
+        json_parser = json.loads(video_json.text)
+        video_assets = json_parser[item_id.upper()][0]['live']['assets'][::-1]
 
-        resp_js_id = urlquick.get(URL_GET_JS_ID_API_KEY)
-        js_id = re.compile(r'client\-(.*?)\.bundle\.js').findall(
-            resp_js_id.text)[0]
-        resp = urlquick.get(URL_API_KEY % js_id)
-
-        api_key = re.compile(r'\"eu1.gigya.com\"\,key\:\"(.*?)\"').findall(
-            resp.text)[0]
-
-        if plugin.setting.get_string('6play.login') == '' or\
-                plugin.setting.get_string('6play.password') == '':
-            xbmcgui.Dialog().ok(
-                'Info',
-                plugin.localize(30604) % ('6play', 'https://www.6play.fr'))
-            return False
-
-        # Build PAYLOAD
-        payload = {
-            "loginID": plugin.setting.get_string('6play.login'),
-            "password": plugin.setting.get_string('6play.password'),
-            "apiKey": api_key,
-            "format": "jsonp",
-            "callback": "jsonp_3bbusffr388pem4"
-        }
-        # LOGIN
-        resp2 = urlquick.post(URL_COMPTE_LOGIN,
-                              data=payload,
-                              headers={
-                                  'User-Agent': web_utils.get_random_ua(),
-                                  'referer': 'https://www.6play.fr/connexion'
-                              })
-        json_parser = json.loads(
-            resp2.text.replace('jsonp_3bbusffr388pem4(', '').replace(');', ''))
-
-        if "UID" not in json_parser:
-            plugin.notify('ERROR', '6play : ' + plugin.localize(30711))
-            return False
-        account_id = json_parser["UID"]
-        account_timestamp = json_parser["signatureTimestamp"]
-        account_signature = json_parser["UIDSignature"]
-
-        is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
-        if not is_helper.check_inputstream():
-            return False
-
-        # Build PAYLOAD headers
-        payload_headers = {
-            'x-auth-gigya-signature': account_signature,
-            'x-auth-gigya-signature-timestamp': account_timestamp,
-            'x-auth-gigya-uid': account_id,
-            'x-customer-name': 'm6web'
-        }
-
-        if item_id == '6ter':
-            token_json = urlquick.get(URL_TOKEN_DRM %
-                                      (account_id, 'dashcenc_%s' % '6T'),
-                                      headers=payload_headers,
-                                      max_age=-1)
-        else:
-            token_json = urlquick.get(
-                URL_TOKEN_DRM % (account_id, 'dashcenc_%s' % item_id.upper()),
-                headers=payload_headers,
-                max_age=-1)
-        token_jsonparser = json.loads(token_json.text)
-        token = token_jsonparser["token"]
-
-        if item_id == '6ter':
-            video_json = urlquick.get(
-                URL_LIVE_JSON % '6T',
-                headers={'User-Agent': web_utils.get_random_ua()},
-                max_age=-1)
-            json_parser = json.loads(video_json.text)
-            video_assets = json_parser['6T'][0]['live']['assets'][::-1]
-        else:
-            video_json = urlquick.get(
-                URL_LIVE_JSON % (item_id.upper()),
-                headers={'User-Agent': web_utils.get_random_ua()},
-                max_age=-1)
-            json_parser = json.loads(video_json.text)
-            video_assets = json_parser[item_id.upper()][0]['live']['assets'][::-1]
-
-        if not video_assets:
-            plugin.notify('INFO', plugin.localize(30716))
-            return False
-
-        subtitle_url = ''
-        if plugin.setting.get_boolean('active_subtitle'):
-            for asset in video_assets:
-                if 'subtitle_vtt' in asset["type"]:
-                    subtitle_url = asset['full_physical_path']
-
-        for asset in video_assets:
-            if 'delta_dashcenc_h264' in asset["type"]:
-                item = Listitem()
-                item.path = asset['full_physical_path']
-                if 'http' in subtitle_url:
-                    item.subtitles.append(subtitle_url)
-                item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
-                item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-                item.property[
-                    'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
-                item.property[
-                    'inputstream.adaptive.license_key'] = URL_LICENCE_KEY % token
-
-                item.label = get_selected_item_label()
-                item.art.update(get_selected_item_art())
-                item.info.update(get_selected_item_info())
-
-                return item
+    if not video_assets:
+        plugin.notify('INFO', plugin.localize(30716))
         return False
+
+    subtitle_url = ''
+    if plugin.setting.get_boolean('active_subtitle'):
+        for asset in video_assets:
+            if 'subtitle_vtt' in asset["type"]:
+                subtitle_url = asset['full_physical_path']
+
+    for asset in video_assets:
+        if 'delta_dashcenc_h264' in asset["type"]:
+            item = Listitem()
+            item.path = asset['full_physical_path']
+            if 'http' in subtitle_url:
+                item.subtitles.append(subtitle_url)
+            item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
+            item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+            item.property[
+                'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+            item.property[
+                'inputstream.adaptive.license_key'] = URL_LICENCE_KEY % token
+
+            item.label = get_selected_item_label()
+            item.art.update(get_selected_item_art())
+            item.info.update(get_selected_item_info())
+
+            return item
+    return False

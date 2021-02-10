@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.28" provider-name="SylvainCecchetto,wwark">
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.29" provider-name="SylvainCecchetto,wwark">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.codequick" version="0.9.13"/>
@@ -42,21 +42,17 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.28]
-[BE - TV Lux] Fix Live TV
-[FR - CulturePub] Fix WebSite
-[BE - RTBF] Fix Catch-up TV
-[CA - TVA] Fix Live TV and re-add LCN Live TV and Catchup TV
-[FR - L'Equipe TV] Fix Catch-up TV and Live TV
-[WO - Arte] Fix Catch-up TV
-[FR - AutoPlus] Fix Website
-[UK - Dplay] Remove Live TV and Catchup TV
-[FR - France TV] Fixes for compatibility with Kodi 19
-[FR - MyCanal] Fix Catchup TV
-[FR - 6Play] Improvements - Live and Catchup TV quality improve from SD to 720p - Thanks Gromez
-[BE - TVCom] Fix Live TV
-[FR - MyTF1] Fix Catchup TV
-[FR - LCI] Fix Catchup TV
+[Version 0.2.29]
+[FR - MyTF1/LCI] Fix Live TV / Catch-Up TV
+[FR - France-O] Remove Live TV
+[FR - Fun Radio and RTL2] Fix Live TV
+[FR - Gulli] Move Gulli to 6play
+[FR - 6Play] Add Cage Warrios - Catch-Up TV
+[WO - Arte] Readd Hack for Live TV
+[BE - RTBF] Use HLS contents if available because DRM not supported for some kodi instances
+[FR - BSmart] Fix Live TV / Catch-Up TV
+[BE - TéléMB] Fix Live TV
+[BE - RTC Liège] Fix Live TV
 ----
 Visit WebSite - http://mpdb.tv/#home which host the french forum used by users of CU TV and More
     </news>

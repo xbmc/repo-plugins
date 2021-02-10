@@ -56,13 +56,10 @@ URL_ROOT = utils.urljoin_partial("http://www.tf1.fr")
 URL_LCI_REPLAY = "http://www.lci.fr/emissions"
 URL_LCI_ROOT = "http://www.lci.fr"
 
-URL_VIDEO_STREAM_2 = 'https://delivery.tf1.fr/mytf1-wrd/%s?format=%s'
-# videoId, format['hls', 'dash']
+URL_VIDEO_STREAM = 'https://mediainfo.tf1.fr/mediainfocombo/%s?context=MYTF1&pver=4008002&platform=web&os=linux&osVersion=unknown&topDomain=www.tf1.fr'
 
 URL_LICENCE_KEY = 'https://drm-wide.tf1.fr/proxy?id=%s|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Host=drm-wide.tf1.fr|R{SSM}|'
 # videoId
-
-URL_VIDEO_STREAM = 'https://www.wat.tv/get/webhtml/%s'
 
 DESIRED_QUALITY = Script.setting['quality']
 
@@ -176,6 +173,10 @@ def get_video_url(plugin,
                              max_age=-1)
     json_parser = json.loads(htlm_json.text)
 
+    if json_parser['delivery']['code'] > 400:
+        plugin.notify('ERROR', plugin.localize(30713))
+        return False
+
     if download_mode:
         xbmcgui.Dialog().ok('Info', plugin.localize(30603))
         return False
@@ -185,7 +186,7 @@ def get_video_url(plugin,
         return False
 
     item = Listitem()
-    item.path = json_parser["mpd"]
+    item.path = json_parser['delivery']['url']
     item.label = get_selected_item_label()
     item.art.update(get_selected_item_art())
     item.info.update(get_selected_item_info())
@@ -203,17 +204,30 @@ def get_video_url(plugin,
 def get_live_url(plugin, item_id, **kwargs):
 
     video_id = 'L_%s' % item_id.upper()
-
-    video_format = 'hls'
-    url_json = URL_VIDEO_STREAM_2 % (video_id, video_format)
+    url_json = URL_VIDEO_STREAM % (video_id)
     htlm_json = urlquick.get(url_json,
                              headers={'User-Agent': web_utils.get_random_ua()},
                              max_age=-1)
     json_parser = json.loads(htlm_json.text)
 
-    if json_parser['code'] > 400:
+    if json_parser['delivery']['code'] > 400:
         plugin.notify('ERROR', plugin.localize(30713))
         return False
     else:
-        return json_parser['url'].replace('master_2000000.m3u8',
-                                          'master_4000000.m3u8')
+        is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
+        if not is_helper.check_inputstream():
+            return False
+
+        item = Listitem()
+        item.path = json_parser['delivery']['url']
+        item.label = get_selected_item_label()
+        item.art.update(get_selected_item_art())
+        item.info.update(get_selected_item_info())
+        item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
+        item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+        item.property[
+            'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+        item.property[
+            'inputstream.adaptive.license_key'] = URL_LICENCE_KEY % video_id
+
+        return item

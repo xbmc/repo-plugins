@@ -202,7 +202,7 @@ menu = {
         'order': 15
     },
     'gulli': {
-        'resolver': '/resources/lib/channels/fr/gulli:get_live_url',
+        'resolver': '/resources/lib/channels/fr/6play:get_live_url',
         'label': 'Gulli',
         'thumb': 'channels/fr/gulli.png',
         'fanart': 'channels/fr/gulli_fanart.jpg',
@@ -220,7 +220,7 @@ menu = {
         'xmltv_id': 'C160.api.telerama.fr',
         'm3u_group': 'TNT',
         'm3u_order': 19,
-        'enabled': True,
+        'enabled': False,
         'order': 17
     },
     'tf1-series-films': {

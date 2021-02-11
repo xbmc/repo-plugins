@@ -102,10 +102,10 @@ def live():
     except:
         raise_notification()
 
-    match = re.compile(r'<a title=".+? - (.+?)" href="/play/direto/(.+?)".*?\n.*?\n.*?<img alt=".+?" src ="(.+?)".*?\n.*?\n.*?width:(.+?)%').findall(req)
+    match = re.compile(r'<a.+?title=".+? - (.+?)" href="/play/direto/(.+?)".*?\n.*?\n.*?<img alt=".+?" src="(.+?)".*?\n.*?\n.*?width:(.+?)%').findall(req)
 
     for rtp_channel in RTP_CHANNELS:
-        dvr = "Not available"
+        dvr = kodiutils.get_string(32011)
         progimg = ""
         progpercent = 0
         for prog, key, img, percent in match:

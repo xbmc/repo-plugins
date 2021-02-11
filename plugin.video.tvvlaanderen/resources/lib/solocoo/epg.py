@@ -31,7 +31,7 @@ class EpgApi:
         :param resources.lib.solocoo.auth.AuthApi auth: The Authentication object
         """
         self._auth = auth
-        self._tokens = self._auth.login()  # Login and make sure we have a token
+        self._tokens = self._auth.get_tokens()
         self._tenant = self._auth.get_tenant()
 
     def get_guide(self, channels, date_from=None, date_to=None):

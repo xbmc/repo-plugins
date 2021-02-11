@@ -10,7 +10,7 @@ import dateutil.tz
 
 from resources.lib import kodiutils
 from resources.lib.kodiutils import TitleItem
-from resources.lib.modules import SETTINGS_ADULT_HIDE, SETTINGS_ADULT_ALLOW
+from resources.lib.modules import SETTINGS_ADULT_ALLOW, SETTINGS_ADULT_HIDE
 from resources.lib.modules.menu import Menu
 from resources.lib.solocoo.auth import AuthApi
 from resources.lib.solocoo.channel import ChannelApi

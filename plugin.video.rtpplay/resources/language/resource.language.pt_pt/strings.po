@@ -59,3 +59,7 @@ msgstr "Página"
 msgctxt "#32010"
 msgid "#EstudoEmCasa"
 msgstr "#EstudoEmCasa"
+
+msgctxt "#32011"
+msgid "Not Available"
+msgstr "Indisponível"

@@ -12,7 +12,7 @@ from hashlib import md5
 
 from requests import HTTPError
 
-from resources.lib.solocoo import TENANTS, SOLOCOO_API, util
+from resources.lib.solocoo import SOLOCOO_API, TENANTS, util
 from resources.lib.solocoo.exceptions import InvalidLoginException, InvalidTokenException
 
 try:  # Python 3
@@ -22,9 +22,9 @@ except ImportError:  # Python 2
     import pyjwt as jwt
 
 try:  # Python 3
-    from urllib.parse import urlparse, parse_qs, urljoin
+    from urllib.parse import parse_qs, urljoin, urlparse
 except ImportError:  # Python 2
-    from urlparse import urlparse, parse_qs, urljoin
+    from urlparse import parse_qs, urljoin, urlparse
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -58,10 +58,21 @@ class AccountStorage:
             return False
 
         try:
-            # Verify our token to see if it's still valid.
-            jwt.decode(self.jwt_token,
-                       algorithms=['HS256'],
-                       options={'verify_signature': False, 'verify_aud': False, 'verify_nbf': False})
+            # Verify if token is still valid
+            token = jwt.decode(self.jwt_token, algorithms=['HS256'], options={
+                'verify_signature': False,
+                'verify_aud': False,
+                'verify_nbf': False,
+                'verify_exp': True,
+            })
+
+            # NOTE: verify_signature=False combined with verify_exp=True doesn't work on pyjwt 2.0.0, see https://github.com/jpadilla/pyjwt/issues/599
+            from calendar import timegm
+            from datetime import datetime
+            now = timegm(datetime.utcnow().utctimetuple())
+            if int(token["exp"]) < now:
+                raise Exception('Signature has expired')
+
         except Exception as exc:  # pylint: disable=broad-except
             _LOGGER.debug('JWT is NOT valid: %s', exc)
             return False
@@ -117,7 +128,13 @@ class AuthApi:
         :rtype: AccountStorage
         """
         # Check if credentials have changed
-        self._check_credentials_change()
+        new_hash = self._check_credentials_change()
+        if new_hash:
+            _LOGGER.debug('Credentials have changed, forcing a new login.')
+            self._account.hash = new_hash
+            self._account.challenge_id = None
+            self._account.challenge_secret = None
+            force = True
 
         # Use cached token if it is still valid
         if not force and self._account.is_valid_token():
@@ -172,13 +189,17 @@ class AuthApi:
         return self._account
 
     def _check_credentials_change(self):
-        """ Check if credentials have changed """
+        """ Check if credentials have changed.
+
+        :return:                        The hash of the current credentials.
+        :rtype: str
+        """
         old_hash = self._account.hash
         new_hash = md5((self._username + ':' + self._password).encode('utf-8')).hexdigest()
+
         if new_hash != old_hash:
-            _LOGGER.debug('Credentials have changed, clearing tokens.')
-            self._account.hash = new_hash
-            self.logout()
+            return new_hash
+        return None
 
     def _do_challenge(self, device_name, device_serial, username, password):
         """ Do an authentication challenge.
@@ -322,6 +343,14 @@ class AuthApi:
                                    brand=self._tenant.get('app'),
                                ))
         return json.loads(reply.text).get('token')
+
+    def get_tokens(self):
+        """ Return the tokens.
+
+        :return:
+        :rtype: AccountStorage
+        """
+        return self._account
 
     def logout(self):
         """ Clear the session tokens. """

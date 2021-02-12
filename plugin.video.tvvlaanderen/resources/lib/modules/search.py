@@ -7,7 +7,7 @@ import logging
 
 from resources.lib import kodiutils
 from resources.lib.modules.menu import Menu
-from resources.lib.solocoo import Program, Channel
+from resources.lib.solocoo import Channel, Program
 from resources.lib.solocoo.auth import AuthApi
 from resources.lib.solocoo.search import SearchApi
 

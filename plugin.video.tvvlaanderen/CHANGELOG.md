@@ -1,5 +1,18 @@
 # Changelog
 
+## [v1.0.3](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.3) (2021-02-04)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.2...v1.0.3)
+
+**Implemented enhancements:**
+
+- Add http proxy support [\#30](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/30) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Merged pull requests:**
+
+- Make use of git archive [\#32](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/32) ([dagwieers](https://github.com/dagwieers))
+- Improve tests [\#31](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/31) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.0.2](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.2) (2020-12-21)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.1...v1.0.2)

@@ -1,4 +1,4 @@
-#   Copyright (C) 2019 Lunatixz
+#   Copyright (C) 2021 Lunatixz
 #
 #
 # This file is part of NewsOn.
@@ -17,15 +17,27 @@
 # along with NewsOn.  If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-import os, sys, time, datetime, traceback, feedparser, random
-import socket, json, collections, gzip
-import xbmc, xbmcgui, xbmcplugin, xbmcaddon, xbmcvfs
+import os, sys, time, datetime, traceback, random, routing
+import socket, json, requests, collections, base64
 
-from io            import BytesIO
-from simplecache   import SimpleCache, use_cache
 from six.moves     import urllib
+from itertools     import repeat, cycle, chain, zip_longest
+from simplecache   import SimpleCache, use_cache
 from kodi_six      import xbmc, xbmcaddon, xbmcplugin, xbmcgui, xbmcvfs, py2_encode, py2_decode
 
+try:
+    from multiprocessing      import cpu_count
+    from multiprocessing.pool import ThreadPool 
+    ENABLE_POOL = True
+    CORES = cpu_count()
+except: ENABLE_POOL = False
+
+PY2 = sys.version_info[0] == 2
+PY3 = sys.version_info[0] == 3
+if PY3: 
+    basestring = str
+    unicode = str
+  
 # Plugin Info
 ADDON_ID      = 'plugin.video.newson'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
@@ -38,34 +50,218 @@ FANART        = REAL_SETTINGS.getAddonInfo('fanart')
 LANGUAGE      = REAL_SETTINGS.getLocalizedString
 NEWSART       = os.path.join(ADDON_PATH,'resources','images','newscast.jpg')
 CLIPART       = os.path.join(ADDON_PATH,'resources','images','videoclips.jpg')
+ROUTER        = routing.Plugin()
 
 ## GLOBALS ##
-TIMEOUT       = 15
-CONTENT_TYPE  = 'episodes'
-APIKEY        = REAL_SETTINGS.getSetting('MAPQUEST_API')
-DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
-BASE_API      = 'http://watchnewson.com/api/linear/channels'
+DEFAULT_ENCODING = "utf-8"
+CONTENT_TYPE     = 'episodes'
+DISC_CACHE       = False
+APIKEY           = REAL_SETTINGS.getSetting('MAPQUEST_API')
+DEBUG            = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
+
+BASE_API      = 'https://newson.us/api'
 LOGO_URL      = 'https://dummyimage.com/512x512/035e8b/FFFFFF.png&text=%s'
 FAN_URL       = 'https://dummyimage.com/1280x720/035e8b/FFFFFF.png&text=%s'
 MAP_URL       = 'https://www.mapquestapi.com/staticmap/v5/map?key=%s&center=%s&size=@2x'
 
-MENU          = [(LANGUAGE(30002), '0', 0, False, {"thumb":NEWSART,"poster":NEWSART,"fanart":FANART,"icon":ICON,"logo":ICON}),
-                 (LANGUAGE(30003), '2', 2, False, {"thumb":CLIPART,"poster":CLIPART,"fanart":FANART,"icon":ICON,"logo":ICON})]
-           
+@ROUTER.route('/')
+def buildMenu():
+    NewsOn().buildMenu()
+    
+@ROUTER.route('/now')
+def buildNow():
+    NewsOn().browse('now')
+  
+@ROUTER.route('/new')
+def buildBreaking():
+    NewsOn().browse('new')
+  
+@ROUTER.route('/local')
+def buildLocal():
+    NewsOn().browse('local')
+  
+@ROUTER.route('/states')
+def buildStates():
+    NewsOn().browse('states')
+  
+@ROUTER.route('/stations/<state>')
+def buildCities(state):
+    NewsOn().browseCities(state)
+    
+@ROUTER.route('/stations/<state>/<city>')
+def buildCity(state,city):
+    NewsOn().browseChannels(state,city)
+      
+@ROUTER.route('/station/<chid>')
+def buildStation(chid):
+    NewsOn().browseStation(chid)
+    
+@ROUTER.route('/station/<chid>/<opt>')
+def browseDetails(chid,opt):
+    NewsOn().browseStation(chid,opt)
+  
+@ROUTER.route('/play/live/<url>')
+def playURL(url):
+    NewsOn().playVideo(url,opt='live')
+  
 def log(msg, level=xbmc.LOGDEBUG):
     try: msg = str(msg)
     except: pass
     if DEBUG == False and level != xbmc.LOGERROR: return
     if level == xbmc.LOGERROR: msg += ' ,' + traceback.format_exc()
     xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
-       
-socket.setdefaulttimeout(TIMEOUT)
+
+def encodeString(text):
+    return urllib.parse.quote_plus(text)
+
+def decodeString(text):
+    return urllib.parse.unquote_plus(text)
+ 
 class NewsOn(object):
-    def __init__(self, sysARG):
+    def __init__(self, sysARG=sys.argv):
         log('__init__, sysARG = %s'%(sysARG))
         self.sysARG    = sysARG
         self.cache     = SimpleCache()
-        self.stateMenu = self.getStates()
+        self.region    = self.getCoordinates()
+        self.states    = collections.Counter()
+        self.cities    = collections.Counter()
+        
+
+    def buildMenu(self):
+        log('buildMenu')
+        MENU = [(LANGUAGE(30004), (buildNow,)     ),
+                (LANGUAGE(30005), (buildBreaking,)),
+                (LANGUAGE(30006), (buildLocal,)   ),
+                (LANGUAGE(30007), (buildStates,)  )]
+        for item in MENU: self.addDir(*item)
+        
+    
+    def browse(self, opt='now'):
+        log('browse, opt = %s'%(opt))
+        items = {'now'   :self.getLiveNow,
+                 'new'   :self.getBreakingNews,
+                 'local' :self.getLocalStations,
+                 'states':self.getStates}[opt]()
+        if opt in ['states','cities']: 
+            if opt == 'states':
+                if self.poolList(self.buildStates, items.get('states',[])):
+                    for state in self.states.keys(): 
+                        self.addDir(state,(buildCities,state),infoArt={"thumb":FAN_URL%(state),"poster":LOGO_URL%(state),"fanart":FANART,"icon":ICON,"logo":ICON})
+        else: 
+            if not (list(set(self.poolList(self.buildChannel, items, opt)))): 
+                self.addDir(LANGUAGE(30008), (buildMenu,))
+        
+    def browseCities(self, state):
+        log('browseCities, state = %s'%(state))
+        if self.poolList(self.buildStates, self.getStates().get('states',[])):
+            if self.poolList(self.buildCities, self.states):
+                for city in self.cities.get(state,[]): 
+                    self.addDir(city,(buildCity,state,encodeString(city)),infoArt={"thumb":FAN_URL%(city),"poster":LOGO_URL%(city),"fanart":self.getMAP(city),"icon":ICON,"logo":ICON})
+        
+        
+    def browseChannels(self, state, city):
+        city = decodeString(city)
+        log('browseChannels, state = %s, city = %s'%(state,city))
+        if self.poolList(self.buildStates, self.getStates().get('states',[])):
+            if self.poolList(self.buildCities, self.states):
+                self.poolList(self.buildChannel, self.cities.get(state,{}).get(city,[]), 'channels')
+                
+                
+    def browseStation(self, chid, opt=None):
+        log('browseStation, chid = %s'%(chid))
+        data    = self.getStationDetails(chid)
+        channel = data.get('channel',{})
+        chname  = channel.get('name','')
+        chlogo = (channel.get('icon','') or LOGO_URL%(chname))
+        if opt is None:
+            for key in data.keys(): self.addDir(key.title(),(browseDetails,chid,key),infoArt={"thumb":chlogo,"poster":chlogo,"fanart":FANART,"icon":ICON,"logo":ICON})
+        else:
+            items =  data.get(opt,[])
+            if opt != 'programs': items = [items]
+            self.poolList(self.buildChannel, items, opt)
+        
+        
+    def buildStates(self, state):
+        for city in state.get('cities',[]):
+            for channel in city.get('channels',[]):
+                locations = channel.get('configValue',{}).get('locations',[])
+                if not locations: continue
+                self.states[locations[0]['state']] = state.get('cities',[])
+                
+
+    def buildCities(self, state):
+        self.cities[state] = {}
+        cities = self.states[state]
+        for city in cities:
+            for channel in city.get('channels',[]):
+                locations = channel.get('configValue',{}).get('locations',[])
+                if not locations: continue
+                self.cities[state][locations[0]['city']] = city.get('channels',[])
+    
+    
+    def buildChannel(self, data):
+        item, opt = data
+        if not item.get('live',False) and opt in ['now']: return None
+        chid        = item['id']
+        chname      = item['name']
+        chdesc      = (item.get('description','') or xbmc.getLocalizedString(161))
+        chlogo      = (item.get('icon','') or ICON)
+        configValue = item.get('configValue',{})        
+        latest      = item.get('latest',{}  or item)
+        name        = (latest.get('name','' or chname))
+        if chname != name:
+            label   = '%s: [B]%s[/B]'%(chname,name)
+        else:
+            label   = chname
+        plot        = (latest.get('description','')  or chdesc)
+        url         = (latest.get('streamUrl','')    or chid)
+        thumb       = (latest.get('thumbnailUrl','') or chlogo)
+        try:
+            starttime   = datetime.datetime.fromtimestamp(float(latest['startTime']))
+            endtime     = datetime.datetime.fromtimestamp(float(latest['endTime']))
+            duration    = (endtime - starttime).seconds
+        except: 
+            duration = 0
+        infoLabel   = {"mediatype":"video","label":label,"title":label,"plot":plot,"duration":duration,"genre":['News']}
+        infoArt     = {"thumb":thumb,"poster":thumb,"fanart":self.getMAP((configValue.get('latitude','undefined'),configValue.get('longitude','undefined'))),"icon":chlogo,"logo":chlogo} 
+
+        if opt == 'channels':
+            self.addDir(chname,(buildStation,chid),infoArt={"thumb":chlogo,"poster":chlogo,"fanart":FANART,"icon":ICON,"logo":ICON})
+            return True
+        else:
+            self.addLink(label, (playURL,encodeString(url)), infoList=infoLabel, infoArt=infoArt)
+            return True
+        
+
+    @use_cache(1)
+    def getCoordinates(self):
+        log('getCoordinates')
+        return (self.openURL(BASE_API + '/getCoordinates'))
+        
+
+    def getLiveNow(self):
+        log('getLiveNow')
+        return (self.openURL(BASE_API + '/liveNow/999/{lat}/{lon}'.format(lat=self.region.get('latitude','undefined'),lon=self.region.get('longitude','undefined'))))
+
+
+    def getBreakingNews(self):
+        log('getBreakingNews')
+        return (self.openURL(BASE_API + '/breakingNews/{lat}/{lon}'.format(lat=self.region.get('latitude','undefined'),lon=self.region.get('longitude','undefined'))))[0]
+
+
+    def getStates(self):
+        log('getStates')
+        return (self.openURL(BASE_API + '/getStates/{lat}/{lon}'.format(lat=self.region.get('latitude','undefined'),lon=self.region.get('longitude','undefined'))))
+
+        
+    def getLocalStations(self, page=25):
+        log('getLocalStations')
+        return (self.openURL(BASE_API + '/localStations/{page}/{lat}/{lon}'.format(page=page,lat=self.region.get('latitude','undefined'),lon=self.region.get('longitude','undefined'))))
+
+
+    def getStationDetails(self, id):
+        log('getStationDetails')
+        return (self.openURL(BASE_API + '/stationDetails/{chid}/{lat}/{lon}'.format(chid=id,lat=self.region.get('latitude','undefined'),lon=self.region.get('longitude','undefined'))))
 
 
     def getMAP(self, args):
@@ -79,194 +275,94 @@ class NewsOn(object):
         except: return FANART
             
         
-    def openURL(self, url):
+    def openURL(self, url, param={}):
         try:
             log('openURL, url = %s'%(url))
-            cacheresponse = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
+            cacheName = '%s.openURL, url = %s.%s'%(ADDON_NAME,url,json.dumps(param))
+            cacheresponse = self.cache.get(cacheName)
             if not cacheresponse:
-                request = urllib.request.Request(url)
-                request.add_header('Accept-Encoding', 'gzip')
-                request.add_header('User-Agent','Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)')
-                response = urllib.request.urlopen(request, timeout = TIMEOUT)
-                if response.info().get('Content-Encoding') == 'gzip': 
-                    cacheresponse = gzip.GzipFile(fileobj=BytesIO(response.read())).read()
-                else: 
-                    cacheresponse = response
-                response.close()
-                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, cacheresponse, expiration=datetime.timedelta(minutes=5))
-            return json.loads(cacheresponse)
+                req = requests.get(url, param, headers={'User-Agent':'Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)'})
+                cacheresponse = req.json()
+                req.close()
+                self.cache.set(cacheName, json.dumps(cacheresponse), checksum=len(json.dumps(cacheresponse)), expiration=datetime.timedelta(minutes=5))
+                return cacheresponse
+            else: return json.loads(cacheresponse)
         except Exception as e: 
             log("openURL Failed! %s"%(e), xbmc.LOGERROR)
             xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
-            return ''
-        
-        
-    def mainMenu(self):
-        log('mainMenu')
-        for item in MENU: self.addDir(*item)
-        
-                    
-    def browseMenu(self, id=1):
-        log('browseMenu, id = %s'%(id))
-        self.stateMenu = [tuple(s.format(id) for s in tup) for tup in self.stateMenu]
-        for item in self.stateMenu: 
-            self.addDir(item[0], item[1], item[2], False, {"thumb":LOGO_URL%item[0],"poster":LOGO_URL%item[0],"fanart":self.getMAP((item[0])),"landscape":FAN_URL%(item[0]),"icon":ICON,"logo":ICON})
-
-
-    def cleanState(self, state):
-        return state.strip(',').strip()
-
-          
-    def getStates(self):
-        log('getStates')
-        state     = []
-        stateLST  = []
-        data = self.openURL(BASE_API)
-        if len(data) == 0: return []
-        for channel in data:
-            try:    state.append(self.cleanState(channel['config']['state']))
-            except: state.append(self.cleanState(channel['config']['locations'][0]['state']))
-        states = collections.Counter(state)
-        for key, value in sorted(states.items()): stateLST.append(("%s"%(key), key , '{}'))
-        return stateLST
+            return {}
             
-            
-    def newsCasts(self, state):
-        log('newsCasts, state = %s'%(state))
-        urls = []
-        data = self.openURL(BASE_API)
-        if len(data) == 0: return
-        for channel in data:
-            try: states = self.cleanState(channel['config']['state'])
-            except: states = self.cleanState(channel['config']['locations'][0]['state'])
-            if state in states:
-                chid   = str(channel['identifier'])
-                title  = channel['title']
-                lat    = channel['config']['latitude']
-                lon    = channel['config']['longitude']
-                icon   = (channel['icon'] or ICON)
-                for idx, stream in enumerate(channel['streams']):
-                    if stream['StreamType'] == 'website': continue
-                    url = stream['Url']
-                    offset = stream['OffsetFromNow']
-                    delay  = url+'&delay=%d' # todo do something with delay option?
-                    if url in urls: continue # filter duplicate feeds
-                    if url not in urls: urls.append(url)
-                    chid = chid+'.%d'%idx if idx > 0 else chid
-                    label      = "%s - %s" % (chid, title)
-                    infoLabels ={"mediatype":"episodes","label":label,"title":label,'plot':label}
-                    infoArt    ={"thumb":icon,"poster":icon,"fanart":self.getMAP((lat, lon)),"landscape":FAN_URL%(channel['config']['locations'][0]["state"]),"icon":icon,"logo":icon} 
-                    self.addLink(title, url, 9, infoLabels, infoArt)
-        
-        
-    def videoclips(self, state):
-        log('videoclips, state = %s'%(state))
-        data = self.openURL(BASE_API)
-        if len(data) == 0: return
-        for channel in data:
-            try: states = self.cleanState(channel['config']['state'])
-            except: states = self.cleanState(channel['config']['locations'][0]['state'])
-            if state in states:
-                try: 
-                    vidURL = channel['config']['localvodfeed']
-                    chid   = str(channel['identifier'])
-                    title  = channel['title']
-                    lat    = channel['config']['latitude']
-                    lon    = channel['config']['longitude']
-                    icon   = (channel['icon'] or ICON)
-                    label  = "%s - %s" % (chid, title)
-                    infoLabels ={"mediatype":"video","label":label,"title":label}
-                    infoArt    ={"thumb":icon,"poster":icon,"fanart":self.getMAP((lat, lon)),"landscape":FAN_URL%(channel['config']['locations'][0]["state"]),"icon":ICON,"logo":ICON} 
-                    self.addDir(label, vidURL, 4, infoLabels, infoArt)
-                except: continue
-
-
-    def parseclips(self, url):
-        if url is None: return
-        log('parseclips, url = %s'%(url))
-        feed = feedparser.parse(url)
-        for item in feed['entries']:
-            if item and 'summary_detail' in item:
-                for vids in item['media_content']:
-                    try:
-                        title = item['title']
-                        url   = vids['url']
-                        plot  = item['summary']
-                        aired = item.get('published','').replace(' EST','').replace(' UTC','').replace(' GMT','')
-                        try: aired = (datetime.datetime.strptime(aired, '%a, %d %b %Y %H:%M:%S'))
-                        except: aired = datetime.datetime.now()
-                        aired = aired.strftime("%Y-%m-%d")
-                        try: thumb = item['media_thumbnail'][0]['url']
-                        except: thumb = FANART
-                        tagLST = []
-                        if 'tags' in item:
-                            for tag in item['tags']: tagLST.append(((tag['term']).split('/')[0]).title())
-                        if len(tagLST) > 0: genre = (tagLST[0] or '')
-                        infoLabels ={"mediatype":"episode","label":title,"title":title,"plot":plot,"aired":aired,'genre':genre,'tags':tagLST}
-                        infoArt    ={"thumb":thumb,"poster":thumb,"fanart":thumb,"icon":ICON,"logo":ICON} 
-                        self.addLink(title, url, 8, infoLabels, infoArt)
-                    except: continue
                     
-                    
-    def playVideo(self, name, url, live=False):
-        log('playVideo')
-        liz = xbmcgui.ListItem(name, path=url)
+    def playVideo(self, url, opt='live'):
+        url = decodeString(url)
+        log('playVideo, url = %s, opt = %s'%(url,opt))
+        liz = xbmcgui.ListItem(path=url)
         liz.setProperty('IsPlayable','true')
         liz.setProperty('IsInternetStream','true')
-        xbmcplugin.setResolvedUrl(int(self.sysARG[1]), True, liz)
+        xbmcplugin.setResolvedUrl(ROUTER.handle, True, liz)
 
-           
-    def addLink(self, name, u, mode, infoList=False, infoArt=False, total=0):
-        log('addLink, name = %s'%(name))
-        liz=xbmcgui.ListItem(name)
+
+    def poolList(self, method, items=None, args=None, chunk=25):
+        log("poolList")
+        results = []
+        if ENABLE_POOL:
+            pool = ThreadPool(CORES)
+            if args is not None: 
+                results = pool.map(method, zip(items,repeat(args)))
+            elif items: 
+                results = pool.map(method, items)#, chunksize=chunk)
+            pool.close()
+            pool.join()
+        else:
+            if args is not None: 
+                results = [method((item, args)) for item in items]
+            elif items: 
+                results = [method(item) for item in items]
+        return filter(None, results)
+
+
+    def addPlaylist(self, name, path='', infoList={}, infoArt={}, infoVideo={}, infoAudio={}, infoType='video'):
+        log('addPlaylist, name = %s'%name)
+
+    
+    
+    def addLink(self, name, uri=(''), infoList={}, infoArt={}, infoVideo={}, infoAudio={}, infoType='video', total=0):
+        log('addLink, name = %s'%name)
+        liz = xbmcgui.ListItem(name)
         liz.setProperty('IsPlayable','true')
         liz.setProperty('IsInternetStream','true')
-        if infoList == False: liz.setInfo( type="Video", infoLabels={"mediatype":"video","label":name,"title":name})
-        else: liz.setInfo(type="Video", infoLabels=infoList)
-        if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
-        else: liz.setArt(infoArt)
-        u=self.sysARG[0]+"?url="+urllib.parse.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.parse.quote_plus(name)
-        xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=u,listitem=liz,totalItems=total)
+        if infoList:  liz.setInfo(type=infoType, infoLabels=infoList)
+        else:         liz.setInfo(type=infoType, infoLabels={"mediatype":infoType,"label":name,"title":name})
+        if infoArt:   liz.setArt(infoArt)
+        else:         liz.setArt({'thumb':ICON,'fanart':FANART})
+        if infoVideo: liz.addStreamInfo('video', infoVideo)
+        if infoAudio: liz.addStreamInfo('audio', infoAudio)
+        if infoList.get('favorite',None) is not None: liz = self.addContextMenu(liz, infoList)
+        xbmcplugin.addDirectoryItem(ROUTER.handle, ROUTER.url_for(*uri), liz, isFolder=False, totalItems=total)
+                
 
-
-    def addDir(self, name, u, mode, infoList=False, infoArt=False):
-        log('addDir, name = %s'%(name))
-        liz=xbmcgui.ListItem(name)
-        liz.setProperty('IsPlayable', 'false')
-        if infoList == False: liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name})
-        else: liz.setInfo(type="Video", infoLabels=infoList)
-        if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
-        else: liz.setArt(infoArt)
-        u=self.sysARG[0]+"?url="+urllib.parse.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.parse.quote_plus(name)
-        xbmcplugin.addDirectoryItem(handle=int(self.sysARG[1]),url=u,listitem=liz,isFolder=True)
+    def addDir(self, name, uri=(''), infoList={}, infoArt={}, infoType='video'):
+        log('addDir, name = %s'%name)
+        liz = xbmcgui.ListItem(name)
+        liz.setProperty('IsPlayable','false')
+        if infoList: liz.setInfo(type=infoType, infoLabels=infoList)
+        else:        liz.setInfo(type=infoType, infoLabels={"mediatype":infoType,"label":name,"title":name})
+        if infoArt:  liz.setArt(infoArt)
+        else:        liz.setArt({'thumb':ICON,'fanart':FANART})
+        if infoList.get('favorite',None) is not None: liz = self.addContextMenu(liz, infoList)
+        xbmcplugin.addDirectoryItem(ROUTER.handle, ROUTER.url_for(*uri), liz, isFolder=True)
         
         
-    def getParams(self):
-        return dict(urllib.parse.parse_qsl(self.sysARG[2][1:]))
-
-            
-    def run(self):  
-        params=self.getParams()
-        try:    url=urllib.parse.unquote_plus(params["url"])
-        except: url=None
-        try:    name=urllib.parse.unquote_plus(params["name"])
-        except: name=None
-        try:    mode=int(params["mode"])
-        except: mode=None
-        log("Mode: %s, URL : %s, Name: %s"%(mode,url,name))
-
-        if mode==None:  self.mainMenu()
-        elif mode == 0: self.browseMenu(1)
-        elif mode == 1: self.newsCasts(url)
-        elif mode == 2: self.browseMenu(3)
-        elif mode == 3: self.videoclips(url)
-        elif mode == 4: self.parseclips(url)
-        elif mode == 8: self.playVideo(name, url)
-        elif mode == 9: self.playVideo(name, url, True)
-
-        xbmcplugin.setContent(int(self.sysARG[1])    , CONTENT_TYPE)
-        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
-        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_NONE)
-        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_LABEL)
-        xbmcplugin.addSortMethod(int(self.sysARG[1]) , xbmcplugin.SORT_METHOD_TITLE)
-        xbmcplugin.endOfDirectory(int(self.sysARG[1]), cacheToDisc=True)
+    def addContextMenu(self, liz, infoList={}):
+        log('addContextMenu')
+        return liz
+        
+        
+    def run(self): 
+        ROUTER.run()
+        xbmcplugin.setContent(ROUTER.handle     ,CONTENT_TYPE)
+        xbmcplugin.addSortMethod(ROUTER.handle  ,xbmcplugin.SORT_METHOD_UNSORTED)
+        xbmcplugin.addSortMethod(ROUTER.handle  ,xbmcplugin.SORT_METHOD_NONE)
+        xbmcplugin.addSortMethod(ROUTER.handle  ,xbmcplugin.SORT_METHOD_LABEL)
+        xbmcplugin.addSortMethod(ROUTER.handle  ,xbmcplugin.SORT_METHOD_TITLE)
+        xbmcplugin.endOfDirectory(ROUTER.handle ,cacheToDisc=DISC_CACHE)

@@ -2,5 +2,4 @@
 <settings>
     <setting id="Enable_Debugging" type="bool" label="30000" default="false" />
     <setting id="MAPQUEST_API" type="text" visible="false" default="Ac4TEEc7VD6Cq0QSyzl86jAsjPvtxGc3" />
-    
 </settings>

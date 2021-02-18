@@ -45,8 +45,7 @@ class Vualto(object):
 
         asset_url = "https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/" \
                     "external/v1/videos/{0}?vrtPlayerToken={1}&client={2}" \
-            .format(HtmlEntityHelper.url_encode(mzid), HtmlEntityHelper.url_encode(token),
-                    HtmlEntityHelper.url_encode(self.client_id))
+            .format(mzid, HtmlEntityHelper.url_encode(token), self.client_id)
         asset_data = UriHandler.open(asset_url, no_cache=True)
         asset_data = JsonHelper(asset_data)
 

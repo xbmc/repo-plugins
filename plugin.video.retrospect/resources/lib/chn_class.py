@@ -265,7 +265,27 @@ class Channel:
                         handler_json = JsonHelper(handler_data, Logger.instance())
 
                 Logger.trace(data_parser.Parser)
-                parser_results = handler_json.get_value(fallback=[], *data_parser.Parser)
+                parser_results = handler_json.json
+                for parser in data_parser.Parser:
+                    # Find the right elements
+                    if isinstance(parser, tuple):
+                        # We need to match a key in a list of objects.
+                        key, value, index = parser
+                        parser_results = [p for p in parser_results if p.get(key) == value]
+                        if not parser_results:
+                            parser_results = []
+                            break
+                        if index is not None:
+                            parser_results = parser_results[index]
+
+                    elif isinstance(parser_results, list):
+                        parser_results = parser_results[parser]
+                    else:
+                        parser_results = parser_results.get(parser)
+
+                    if not parser_results:
+                        parser_results = []
+                        break
 
                 if not isinstance(parser_results, (tuple, list)):
                     # if there is just one match, return that as a list
@@ -859,20 +879,29 @@ class Channel:
                          json=False, match_type=ParserData.MatchStart, requires_logon=False):
         """ Adds a DataParser to the handlers dictionary
 
-        :param preprocessor:                The pre-processor called
-        :type preprocessor:                 (str) -> (str|JsonHelper,list[MediaItem])
-        :param str name:                    The name of the DataParser
-        :param str url:                     The URLs that triggers these handlers
-        :param str|list[str|int] parser:    The parser (regex or json)
-        :param creator:                     The creator called with the results from the parser
-        :type creator:                      (list[str]|dict) -> MediaItem|None
-        :param updater:                     The updater called for updating a item
-        :type updater:                      MediaItem -> MediaItem
-        :param postprocessor:               The post-processor called
-        :type postprocessor:                (JsonHelper|str,list[MediaItems]) -> list[MediaItems]
-        :param bool json:                   Indication whether the parsers are JSON (True) or Regex (False)
-        :param str match_type:              The type of matching to use
-        :param bool requires_logon:         Do we need to be logged on?
+        :param preprocessor:                    The pre-processor called
+        :type preprocessor:                     (str) -> (str|JsonHelper,list[MediaItem])
+
+        :param str name:                        The name of the DataParser
+        :param str url:                         The URLs that triggers these handlers
+        :param str|list[str|int|tuple] parser:  The parser (regex or json).
+
+        :param creator:                         The creator called with the results from the parser
+        :type creator:                          (list[str]|dict) -> MediaItem|None
+
+        :param updater:                         The updater called for updating a item
+        :type updater:                          MediaItem -> MediaItem
+
+        :param postprocessor:                   The post-processor called
+        :type postprocessor:                    (JsonHelper|str,list[MediaItems]) -> list[MediaItems]
+
+        :param bool json:                       Indication whether the parsers are JSON (True) or Regex (False)
+        :param str match_type:                  The type of matching to use
+        :param bool requires_logon:             Do we need to be logged on?
+
+        If a tuple (key,value,index) is used in the `parser` it will cause a list to be filtered
+        based on the key and its corresponding value. if the index is a number, from the resulting
+        list that index will be used, otherwise the full list will be used.
 
         """
 

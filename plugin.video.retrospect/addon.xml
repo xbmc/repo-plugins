@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.22"
+        version="5.2.23"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -132,22 +132,20 @@
 
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.2.22 - Changelog - 2021-01-29[/B]
+        <news>[B]Retrospect v5.2.23 - Changelog - 2021-02-18[/B]
 
-A minor release to fix NRK.no categories and to implement the move from Vier.be to goplay.be.
+This small update fixes some minor channel issues and updates some translations.
 
 [B]Framework related[/B]
 _None_
 
 [B]GUI/Settings/Language related[/B]
-_None_
+* Updated: Translations via Weblate.
 
 [B]Channel related[/B]
-* Fixed: NRK.no categories broke.
-* Fixed: Vier.be, vijf.be and zes.be moved to goplay.be
-* Fixed: NPO Thumb issue (Fixes #1479)
-
-
+* Fixed: SVT HTML videos broken.
+* Fixed: Ketnet broke due to a change to GraphQL.
+* Fixed: SVT Test video updated.
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

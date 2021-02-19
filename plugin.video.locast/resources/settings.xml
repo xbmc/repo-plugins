@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="30044">
+    <setting id="Enable_Debugging"  type="bool"      label="30000" default="false" />
+    <setting id="User_Email"        type="text"      label="30006" default="" />
+    <setting id="User_Password"     type="text"      label="30007" default=""  option="hidden"/>
+    <setting id="User_Token"        type="text"      label="30002" default=""  visible="false"/>
+    <setting id=""                  type="lsep"      label="30024" default="" />
+    <setting id="User_City"         type="text"      label="30020" default="Unknown"  enable="false" />
+    <setting id="User_LastLogin"    type="text"      label="30022" default="Unknown"  enable="false" />
+    <setting id="User_Donate"       type="text"      label="30019" default="Unknown"  enable="false" />
+    <setting id="User_DonateExpire" type="text"      label="30023" default="Unknown"  enable="false" />
+  </category>
+  <category label="49000">
+    <setting label="49001"          type="action" action="InstallAddon(plugin.video.pseudotv.live)" option="close" visible="!System.HasAddon(plugin.video.pseudotv.live)"/>
+    <setting label="49002"          type="action" action="InstallAddon(service.iptv.manager)"       option="close" visible="!System.HasAddon(service.iptv.manager)"/>
+    <setting id="iptv.enabled"      type="bool"   label="49003" default="true"  visible="System.HasAddon(service.iptv.manager)" />
+    <setting id="Build_Favorites"   type="bool"   label="49006" default="false"                           enable="eq(-1,true)"                visible="System.HasAddon(service.iptv.manager)"       subsetting="true"/>
+    <setting label="49004"          type="action" action="Addon.OpenSettings(service.iptv.manager)"       enable="eq(-2,true)" option="close" visible="System.HasAddon(service.iptv.manager)"       subsetting="true"/>
+    <setting label="49005"          type="action" action="Addon.OpenSettings(plugin.video.pseudotv.live)" enable="eq(-3,true)" option="close" visible="System.HasAddon(plugin.video.pseudotv.live)" subsetting="true"/>
+    <setting id="iptv.channels_uri" default="plugin://plugin.video.locast/iptv/channels" visible="false"/>
+    <setting id="iptv.epg_uri"      default="plugin://plugin.video.locast/iptv/epg"      visible="false"/>
+  </category>
+</settings>

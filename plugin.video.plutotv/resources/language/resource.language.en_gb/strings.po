@@ -93,7 +93,7 @@ msgid "Allow this plugin to automatically configure IPTV Simple PVR Backend?"
 msgstr ""
 
 msgctxt "#30031"
-msgid "M3U/XMLTV Updated"
+msgid "%s Updating..."
 msgstr ""
 
 msgctxt "#30032"
@@ -106,4 +106,96 @@ msgstr ""
 
 msgctxt "#30034"
 msgid "?terminate=false&deviceType=web&deviceMake=web&deviceModel=web&sid=246&deviceId=5331d5fb753499095a00045a&deviceVersion=DNT&appVersion=DNT&deviceDNT=0&userId=&advertisingId=&deviceLat=&deviceLon=&app_name=&appName=web&buildVersion=&appStoreUrl=&architecture=&includeExtendedEvents=false&marketingRegion=US&serverSideAds=false"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Build Only Favorites"
+msgstr ""
+
+msgctxt "#30036"
+msgid "%s added to Favorites"
+msgstr ""
+
+msgctxt "#30037"
+msgid "%s removed from Favorites"
+msgstr ""
+
+msgctxt "#30038"
+msgid "Add Channel to Favorites"
+msgstr ""
+
+msgctxt "#30039"
+msgid "Remove Channel from Favorites"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Live (Favorites)"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Use Direct stream"
+msgstr ""
+
+msgctxt "#30042"
+msgid "PseudoTV Live Supported through Recommended Services"
+msgstr ""
+
+msgctxt "#30043"
+msgid "Prefer Color Channel Logos"
+msgstr ""
+
+msgctxt "#30044"
+msgid "General"
+msgstr ""
+
+msgctxt "#49000"
+msgid "Integration"
+msgstr ""
+
+msgctxt "#49001"
+msgid "Install PseudoTV Live add-on"
+msgstr ""
+
+msgctxt "#49002"
+msgid "Install IPTV Manager add-on"
+msgstr ""
+
+msgctxt "#49003"
+msgid "Enable IPTV Manager integration"
+msgstr ""
+
+msgctxt "#49004"
+msgid "IPTV Manager settings…"
+msgstr ""
+
+msgctxt "#49005"
+msgid "PseudoTV Live settings…"
+msgstr ""
+
+msgctxt "#49006"
+msgid "Only add Favorites"
+msgstr ""
+
+msgctxt "#49007"
+msgid "%s added to Favorites"
+msgstr ""
+
+msgctxt "#49008"
+msgid "%s removed from Favorites"
+msgstr ""
+
+msgctxt "#49009"
+msgid "Add Channel to Favorites"
+msgstr ""
+
+msgctxt "#49010"
+msgid "Remove Channel from Favorites"
+msgstr ""
+
+msgctxt "#49011"
+msgid "Live (Favorites)"
+msgstr ""
+
+msgctxt "#49012"
+msgid "Favorites"
 msgstr ""

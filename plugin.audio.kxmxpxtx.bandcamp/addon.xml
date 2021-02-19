@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.kxmxpxtx.bandcamp" name="Bandcamp" version="0.0.4.1+matrix.1" provider-name="kxmxpxtx">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.22.0+matrix.1"/>
+        <import addon="script.module.future" version="0.18.2+matrix.1"/>
+        <import addon="script.common.plugin.cache" version="2.6.1.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">https://bandcamp.com</summary>
+        <license>MIT</license>
+        <description lang="en_GB">Discover new artists and browse your collection</description>
+        <platform>all</platform>
+        <news>v0.0.4.1+matrix.1 (2021-02-05)
+            - Fix dependencies for Kodi 19 rc 1
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.png</fanart>
+            <screenshot>screenshot/collection.png</screenshot>
+            <screenshot>screenshot/discover.png</screenshot>
+            <screenshot>screenshot/genre.png</screenshot>
+        </assets>
+    </extension>
+</addon>

@@ -14,7 +14,7 @@
         <license>MIT</license>
         <description lang="en_GB">Discover new artists and browse your collection</description>
         <platform>all</platform>
-        <news>v0.0.4.1+matrix.1 (2021-02-05)
+        <news>v0.4.1+matrix.1 (2021-02-05)
             - Fix dependencies for Kodi 19 rc 1
         </news>
         <assets>

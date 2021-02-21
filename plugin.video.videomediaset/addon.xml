@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.videomediaset" name="Mediaset Play" provider-name="phate89, aracnoz" version="2.0.2+matrix.1">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.phate89" version="1.2.1"/>
+        <import addon="script.module.inputstreamhelper" version="0.0.1"/>
+    </requires>
+    <extension library="default.py" point="xbmc.python.pluginsource">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <language>it</language>
+        <platform>all</platform>
+        <summary lang="it_IT">I programmi delle reti Mediaset</summary>
+        <description lang="it_IT">Tutti i tuoi programmi preferiti sono disponibili per te il giorno dopo la messa in onda Tv. Ieri sera ti sei perso la tua fiction preferita? Nessun problema finalmente puoi rivederla comodamente su KODI ogni volta che vuoi.</description>
+        <summary lang="en_GB">The broadcasts of Mediaset channels</summary>
+        <description lang="en_GB">All your favorite shows are available to you the day after the airing Tv. Last night you missed your favorite TV drama? No problem, you can finally see her comfortably on KODI whenever you want.</description>
+        <license>GPL-2.0-only</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=292876</forum>
+        <source>https://github.com/phate89/plugin.video.videomediaset</source>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+        <news>2.0.1
+- removed letter sorting (not available anymore) and fixed endpoints after website change (thx to typhoon51280)
+- added support for live restart (manually jump to start after you start play right now)
+- added brand title in episode and clip search to have better info
+- added details of live event in  live channels section
+- improved performance reusing python env
+- improved element sorting
+- added editions visualization for programs
+- fixed case of valid video without media info (no way to play it)
+- improved media type and info detection
+- fixed next page search
+        </news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

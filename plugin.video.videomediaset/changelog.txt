@@ -1,0 +1,79 @@
+[B]2.0.1[/B]
+- removed letter sorting (not available anymore) and fixed endpoints after website change (thx to typhoon51280)
+- added support for live restart (manually jump to start after you start play right now)
+- added brand title in episode and clip search to have better info
+- added details of live event in  live channels section
+- improved performance reusing python env
+- improved element sorting
+- added editions visualization for programs
+- fixed case of valid video without media info (no way to play it)
+- improved media type and info detection
+- fixed next page search
+
+[B]2.0.0[/B]
+- rewrite the addon for the new website (Mediaset Play)
+- added support for login and widevine protected content (requires inputstream and widevine libraries)
+- added search function
+- added page size setting to limit items (default 500)
+- added tv guide support
+
+[B]1.3.2[/B]
+- fixed live channel urls (thx to LEOSCHUMY)
+
+[B]1.3.1[/B]
+- added the new mediaset channel focus and icon (thx to subst4nc3)
+
+[B]1.3.0[/B]
+- fixed the addon after website changes
+- added the new mediaset channel 20 and icon (thx to gdx2015)
+- fixed the live channel base url (thx to gdx2015)
+- updated the canale 5 logo with the updated one (thx to fsponga/Cristiano)
+
+[B]1.2.2[/B]
+- fixed the addon after website changes (thx to wizy)
+
+[B]1.2.1[/B]
+- fixed the addon after website changes
+
+[B]1.2.0[/B]
+- fixed the addon after website changes
+- added images to program lists
+- refactored the code
+
+[B]1.1.0[/B]
+- added section "Canali Live"
+
+[B]1.0.9[/B]
+- updated plugin to work with the new videomediaset website
+
+[B]1.0.8[/B]
+- added section <season> in Episode List to show old episodes
+
+[B]1.0.7[/B]
+- updated all sections "Ultime puntate" and "Ultime Sport Mediaset" to work with latest change in videomediaset website
+
+[B]1.0.6[/B]
+- updated plugin to work with the latest change in videomediaset website
+
+[B]1.0.5[/B]
+- updated plugin to work with the new videomediaset website
+
+[B]1.0.4[/B]
+- fix error "Remote share: Could not connect to network server" with XBMC 13 Gotham
+
+[B]1.0.3[/B]
+- moved previous root into "Elenco programmi"
+- general speed optimization for section "Elenco programmi"
+- added sections with shortcuts to the latest full videos
+- added sections with shortcuts to the most viewed clips
+- added sections with shortcuts to latest clips of SportMediaset
+- cleanup code
+
+[B]1.0.2[/B]
+- added search text
+
+[B]1.0.1[/B]
+- added import addon beautifulsoup in requires
+
+[B]1.0[/B]
+- first release

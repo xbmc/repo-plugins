@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30001">
+        <setting label="30002" type="text" id="username" default=""/>
+    </category>
+    <category label="30003">
+        <setting label="30011" type="bool" id="slice_top" default="true"/>
+        <setting label="30012" type="bool" id="slice_new" default="false"/>
+        <setting label="30013" type="bool" id="slice_rec" default="false"/>
+    </category>
+</settings>

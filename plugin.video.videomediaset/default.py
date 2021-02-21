@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
-from resources.main import main
+from resources.main import KodiMediaset
 
-main()
+km = KodiMediaset()
+km.main()

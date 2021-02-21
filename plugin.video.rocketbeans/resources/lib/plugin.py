@@ -169,8 +169,9 @@ def guide():
 def createListItem(label, thumbnailImage, isPlayable, plot, duration):
     li = ListItem(
         label=label,
-        thumbnailImage=thumbnailImage
     )
+
+    li.setArt({'thumb': thumbnailImage})
 
     if isPlayable:
         infoLabels = {}

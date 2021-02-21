@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.comingsoon.it" name="Comingsoon Trailer" version="1.2.0" provider-name="phate89">
+<addon id="plugin.video.comingsoon.it" name="Comingsoon Trailer" version="1.2.1" provider-name="phate89">
   <requires>
 	<import addon="xbmc.python" version="2.24.0"/>
 	<import addon="script.module.beautifulsoup4" version="4.3.1"/> 
-	<import addon="script.module.phate89" version="1.2.0"/>
+	<import addon="script.module.phate89" version="1.2.1"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -13,16 +13,21 @@
   	<language>it</language>
     <summary lang="it">Guarda i traiiler dei film da www.comingsoon.it</summary>
 	<summary lang="en">Watch trailers from www.comingsoon.it</summary>
+    <summary lang="it_IT">Guarda i traiiler dei film da www.comingsoon.it</summary>
+	<summary lang="en_GB">Watch trailers from www.comingsoon.it</summary>
     <description lang="it">Visualizza i trailer dei film in sala e in arrivo dal sito www.comingsoon.it</description>
 	<description lang="en">Watch the shows and the complete episodes from the website www.comingsoon.it</description>
+    <description lang="it_IT">Visualizza i trailer dei film in sala e in arrivo dal sito www.comingsoon.it</description>
+	<description lang="en_GB">Watch the shows and the complete episodes from the website www.comingsoon.it</description>
 	<forum>https://forum.kodi.tv/showthread.php?tid=214378</forum>
     <website>https://github.com/phate89/plugin.video.comingsoon.it</website>
     <email></email>
     <source>https://github.com/phate89/plugin.video.comingsoon.it</source>
     <license>GPL-2.0-only</license>
-    <news>v1.2.0
-Fixed addon after page changes
-Minor graphical fixes
-Compatibility with python 3.x</news>
+    <news>v1.2.1
+Fixed addon after page changes</news>
+    <assets>
+        <icon>resources/icon.png</icon>
+    </assets>
   </extension>
 </addon>

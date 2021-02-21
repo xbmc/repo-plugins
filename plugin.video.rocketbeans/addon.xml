@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rocketbeans" version="1.2.2" name="Rocket Beans TV" provider-name="Razzeee">
+<addon id="plugin.video.rocketbeans" version="1.2.3" name="Rocket Beans TV" provider-name="Razzeee">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="plugin.video.youtube" version="5.2.1" />
@@ -31,6 +31,6 @@ Wir machen nur, auf was wir Bock haben – und das mit Erfolg! Egal ob spannende
             <screenshot>resources/screenshot-01.png</screenshot>
             <screenshot>resources/screenshot-02.png</screenshot>
         </assets>
-        <news>- Readded guide</news>
+        <news>- More python 3.9 and kodi deprecation fixes</news>
     </extension>
 </addon>

@@ -37,6 +37,38 @@ msgctxt "#30014"
 msgid "Template"
 msgstr ""
 
+msgctxt "#30015"
+msgid "Sort by"
+msgstr ""
+
+msgctxt "#300150"
+msgid "Relevance"
+msgstr ""
+
+msgctxt "#300151"
+msgid "Popularity"
+msgstr ""
+
+msgctxt "#300152"
+msgid "Most recent"
+msgstr ""
+
+msgctxt "#300153"
+msgid "Alphabetical A-Z"
+msgstr ""
+
+msgctxt "#300154"
+msgid "Alphabetical Z-A"
+msgstr ""
+
+msgctxt "#300155"
+msgid "Longest"
+msgstr ""
+
+msgctxt "#300156"
+msgid "Shortest"
+msgstr ""
+
 msgctxt "#30020"
 msgid "Video"
 msgstr ""
@@ -47,6 +79,10 @@ msgstr ""
 
 msgctxt "#30022"
 msgid "AOMedia Video 1 (AV1)"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Subtitles"
 msgstr ""
 
 # Settings - Advanced
@@ -79,12 +115,53 @@ msgctxt "#30102"
 msgid "Featured"
 msgstr ""
 
+msgctxt "#30103"
+msgid "Trending"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Profile"
+msgstr ""
+
 msgctxt "#30108"
 msgid "Settings"
 msgstr ""
 
 msgctxt "#30109"
-msgid "Sign in"
+msgid "Log in"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Log out"
+msgstr ""
+
+# GUI - Auth
+msgctxt "#30151"
+msgid "Authorization"
+msgstr ""
+
+msgctxt "#30152"
+msgid "1. Open the link {}"
+msgstr ""
+
+msgctxt "#30153"
+msgid "2. Log in and enter the code {}"
+msgstr ""
+
+msgctxt "#30154"
+msgid "3. Authorize the app"
+msgstr ""
+
+msgctxt "#30155"
+msgid "4. Confirm with {}"
+msgstr ""
+
+msgctxt "#30156"
+msgid "You are now logged in as {}!"
 msgstr ""
 
 # GUI - Search
@@ -139,6 +216,36 @@ msgctxt "#30501"
 msgid "Cache cleared"
 msgstr ""
 
+# GUI - Context menus
+msgctxt "#30601"
+msgid "Remove"
+msgstr ""
+
+msgctxt "#30602"
+msgid "Clear"
+msgstr ""
+
+# GUI - Profile
+msgctxt "#30701"
+msgid "Followers"
+msgstr ""
+
+msgctxt "#30702"
+msgid "Following"
+msgstr ""
+
+msgctxt "#30703"
+msgid "Likes"
+msgstr ""
+
+msgctxt "#30704"
+msgid "Albums"
+msgstr ""
+
+msgctxt "#30705"
+msgid "Watch Later"
+msgstr ""
+
 # GUI - Generic
 msgctxt "#30901"
 msgid "Next page"
@@ -150,4 +257,16 @@ msgstr ""
 
 msgctxt "#30903"
 msgid "Trailer"
+msgstr ""
+
+msgctxt "#30904"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30905"
+msgid "Invalid password"
+msgstr ""
+
+msgctxt "#30906"
+msgid "Whoops! That password is invalid"
 msgstr ""

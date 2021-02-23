@@ -15,8 +15,11 @@ class Video(ListItem):
     thumb = ""
     uri = ""
     info = {}
+    hasSubtitles = None
 
     def to_list_item(self, addon, addon_base):
+        text_tracks = "{}/texttracks".format(self.uri) if self.hasSubtitles else ""
+
         list_item = xbmcgui.ListItem(label=(self._get_label_prefix() + self.label))
         list_item.setArt({
             "thumb": self.thumb,
@@ -38,8 +41,12 @@ class Video(ListItem):
         })
         list_item.setProperty("isPlayable", "true")
         list_item.setProperty("mediaUrl", self.uri)
+        list_item.setProperty("textTracks", text_tracks)
 
-        url = addon_base + "/play/?" + urllib.parse.urlencode({"uri": self.uri})
+        url = addon_base + "/play/?" + urllib.parse.urlencode({
+            "uri": self.uri,
+            "texttracks": text_tracks,
+        })
 
         return url, list_item, False
 

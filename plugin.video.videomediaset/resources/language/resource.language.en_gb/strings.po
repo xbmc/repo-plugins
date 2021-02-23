@@ -35,6 +35,10 @@ msgid "Mostra in guida tv anche elementi non riproducibili"
 msgstr "Show in tv guide unplayable items"
 
 msgctxt "#32005"
+msgid "Separa diretta da ricomincia (permette di avere una diretta continua)"
+msgstr "Split live from restart (allows to have a continuous live)"
+
+msgctxt "#32006"
 msgid "Installa widevine per i contenuti protetti"
 msgstr "Install widevine CDM for protected content"
 

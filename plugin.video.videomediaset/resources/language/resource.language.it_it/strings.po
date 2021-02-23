@@ -35,6 +35,10 @@ msgid "Mostra in guida tv anche elementi non riproducibili"
 msgstr "Mostra in guida tv anche elementi non riproducibili"
 
 msgctxt "#32005"
+msgid "Separa diretta da ricomincia (permette di avere una diretta continua)"
+msgstr "Separa diretta da ricomincia (permette di avere una diretta continua)"
+
+msgctxt "#32006"
 msgid "Installa widevine per i contenuti protetti"
 msgstr "Installa widevine per i contenuti protetti"
 

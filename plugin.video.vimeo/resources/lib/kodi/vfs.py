@@ -26,6 +26,10 @@ class VFS:
         file.close()
         return filepath if success else False
 
+    def delete(self, filename):
+        filepath = os.path.join(self.path, filename)
+        return xbmcvfs.delete(filepath)
+
     def remove_dir(self, path):
         dir_list, file_list = xbmcvfs.listdir(path)
 

@@ -1,3 +1,6 @@
+from future import standard_library
+standard_library.install_aliases()  # noqa: E402
+
 from time import time
 
 
@@ -9,16 +12,29 @@ class SearchHistory:
         self.settings = settings
         self.size = int(self.settings.get("search.history.size"))
         self.vfs = vfs
+        self.history = self.vfs.get_json_as_obj(self.filename)
 
     def get(self):
-        search = self.vfs.get_json_as_obj(self.filename)
-        return {k: search[k] for k in list(search)[:self.size]}
+        return {k: self.history[k] for k in list(self.history)[:self.size]}
 
     def add(self, query):
-        search = self.vfs.get_json_as_obj(self.filename)
-        search[str(int(time()))] = {"query": query}
-        search = self._reduce(search)
-        self.vfs.save_obj_to_json(self.filename, search)
+        for k, v in list(self.history.items()):
+            if v["query"] == query:
+                return
 
-    def _reduce(self, search):
-        return {k: search[k] for k in sorted(list(search), reverse=True)[:self.size]}
+        self.history[str(int(time()))] = {"query": query}
+        self.history = self._reduce(self.history)
+        self._save()
+
+    def remove(self, query):
+        self.history = {k: v for k, v in list(self.history.items()) if v["query"] != query}
+        self._save()
+
+    def clear(self):
+        return self.vfs.delete(self.filename)
+
+    def _save(self):
+        return self.vfs.save_obj_to_json(self.filename, self.history)
+
+    def _reduce(self, history):
+        return {k: history[k] for k in sorted(list(history), reverse=True)[:self.size]}

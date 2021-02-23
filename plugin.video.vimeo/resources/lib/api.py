@@ -1,17 +1,20 @@
 from future import standard_library
 standard_library.install_aliases()  # noqa: E402
 
+import json
 import requests
 import urllib.parse
 import xbmc
 
-from .client import VimeoClient
-from .auth import GrantFailed
 from .api_collection import ApiCollection
+from .utils import webvtt_to_srt
+from resources.lib.models.category import Category
 from resources.lib.models.channel import Channel
 from resources.lib.models.group import Group
 from resources.lib.models.user import User
 from resources.lib.models.video import Video
+from resources.lib.vimeo.auth import GrantFailed
+from resources.lib.vimeo.client import VimeoClient
 
 
 class Api:
@@ -19,7 +22,11 @@ class Api:
 
     api_player = "https://player.vimeo.com"
     api_limit = 10
+    api_sort = None
     api_fallback = False
+    api_fallback_params = ["filter"]
+    api_oauth_scope = "public,private,interact"
+    api_user_cache_key = "user.json"
 
     # Extracted from public Vimeo Android App
     # This is a special client ID which will return playable URLs
@@ -28,7 +35,7 @@ class Api:
                         "wdtIIvy0paa7kFN0asWp2ooNSdqaEdwVkBLqau7MJFe0tSWez7HOakg/8BKtYzDe"
 
     # Access token of registered API app
-    # Is used as a fallback if the client login request fails
+    # Is used for specific routes and as a fallback if the client login request fails
     api_access_token_default = "d284acb5ed7c011ec0d79f79e3479f8c"
     api_access_token_cache_duration = 720  # 12 hours
     api_access_token_cache_key = "api-access-token"
@@ -42,6 +49,7 @@ class Api:
         self.cache = cache
 
         self.api_limit = int(self.settings.get("search.items.size"))
+        self.api_sort = self.settings.SORT.get(self.settings.get("search.sort"), {})
         self.video_stream = self.settings.get("video.format")
         self.video_av1 = True if self.settings.get("video.codec.av1") == "true" else False
 
@@ -49,7 +57,7 @@ class Api:
     def api_client(self):
         self.api_fallback = False
 
-        # It is possible to set a custom access token in the settings
+        # It is possible to set a custom access token by logging in or adding it in the settings
         access_token_settings = self.settings.get("api.accesstoken")
         if access_token_settings:
             xbmc.log("plugin.video.vimeo::Api() Using custom access token", xbmc.LOGDEBUG)
@@ -79,6 +87,10 @@ class Api:
             pass
 
         # Fallback
+        return self.api_client_fallback
+
+    @property
+    def api_client_fallback(self):
         self.api_fallback = True
         return VimeoClient(token=self.api_access_token_default)
 
@@ -91,6 +103,16 @@ class Api:
 
         return "{}"
 
+    def oauth_device(self):
+        return self.api_client.load_device_code(self.api_oauth_scope)
+
+    def oauth_device_authorize(self, user_code, device_code):
+        token, user, scope = self.api_client.device_code_authorize(user_code, device_code)
+        self.settings.set("api.accesstoken", token)
+        self.vfs.write(self.api_user_cache_key, json.dumps(user))
+
+        return user["name"]
+
     def call(self, url):
         params = self._get_default_params()
         res = self._do_api_request(url, params)
@@ -98,9 +120,14 @@ class Api:
 
     def search(self, query, kind):
         params = self._get_default_params()
+        params.update(self.api_sort)
         params["query"] = self.search_template.format(query)
         res = self._do_api_request("/{kind}".format(kind=kind), params)
         return self._map_json_to_collection(res)
+
+    def user(self, uri):
+        params = self._get_default_params()
+        return self._do_api_request(uri, params)
 
     def channel(self, channel):
         params = self._get_default_params()
@@ -109,9 +136,26 @@ class Api:
         res = self._do_api_request("/channels/{id}/videos".format(id=channel_id), params)
         return self._map_json_to_collection(res)
 
-    def resolve_media_url(self, uri):
-        media_url = None
+    def categories(self):
+        params = {"fields": "uri,resource_key,name,pictures,metadata,subcategories"}
+        res = self._do_api_request("/categories", params)
+        return self._map_json_to_collection(res)
 
+    def trending(self):
+        params = self._get_default_params()
+        params["filter"] = "trending"
+        params["direction"] = "desc"
+        res = self._do_api_request("/videos", params)
+        return self._map_json_to_collection(res)
+
+    def resolve_texttracks(self, uri):
+        res = self._do_api_request(uri, {})
+        subtitles = res.get("data")
+        for subtitle in subtitles:
+            subtitle["srt"] = webvtt_to_srt(self._do_request(subtitle["link"]))
+        return subtitles
+
+    def resolve_media_url(self, uri, password=None):
         # If we have a on-demand URL, we need to fetch the trailer and return the uri
         if uri.startswith("/ondemand/"):
             xbmc.log("plugin.video.vimeo::Api() resolving on-demand", xbmc.LOGDEBUG)
@@ -128,29 +172,45 @@ class Api:
         else:
             xbmc.log("plugin.video.vimeo::Api() resolving video uri", xbmc.LOGDEBUG)
             params = self._get_default_params()
+            params["password"] = password
             res = self._do_api_request(uri, params)
             media_url = self._extract_url_from_search_response(res["play"])
 
         return self._append_user_agent(media_url)
 
-    def resolve_id(self, video_id):
+    def resolve_id(self, video_id, password=None):
         params = self._get_default_params()
+        params["password"] = password
         res = self._do_api_request("/videos/{video_id}".format(video_id=video_id), params)
         return self._map_json_to_collection(res)
 
     def _do_api_request(self, path, params):
+        xbmc.log("plugin.video.vimeo::Api() Requesting '{}'".format(path), xbmc.LOGDEBUG)
+
+        if self._request_requires_fallback(path, params):
+            return self.api_client_fallback.get(path, params=params).json()
+
         return self.api_client.get(path, params=params).json()
 
     def _do_player_request(self, uri):
         headers = {"Accept-Encoding": "gzip"}
         return requests.get(self.api_player + uri + "/config", headers=headers).json()
 
+    def _do_request(self, uri):
+        return requests.get(uri).text
+
     def _map_json_to_collection(self, json_obj):
         collection = ApiCollection()
         collection.items = []  # Reset list in order to resolve problems in unit tests
         collection.next_href = json_obj.get("paging", {"next": None})["next"]
 
-        if "type" in json_obj and json_obj["type"] == "video":
+        if self._request_was_bad(json_obj) == 2223:
+            raise PasswordRequiredException()
+
+        if self._request_was_bad(json_obj) == 2222:
+            raise WrongPasswordException()
+
+        if "type" in json_obj and json_obj["type"] in ("video", "live"):
             # If we are dealing with a single video, pack it into a dict
             json_obj = {"data": [json_obj]}
 
@@ -164,6 +224,7 @@ class Api:
                 kind = item.get("type", None)
                 is_video = kind == "video"
                 is_live = kind == "live"
+                is_category = "/categories/" in item.get("uri", "")
                 is_channel = "/channels/" in item.get("uri", "")
                 is_group = "/groups/" in item.get("uri", "")
                 is_user = item.get("account", False)
@@ -180,6 +241,7 @@ class Api:
                     video = Video(id=item["resource_key"], label=item["name"])
                     video.thumb = self._get_picture(item["pictures"])
                     video.uri = video_url
+                    video.hasSubtitles = item["metadata"]["connections"]["texttracks"]["total"] > 0
                     video.info = {
                         "date": item["release_time"],
                         "description": item["description"],
@@ -191,6 +253,12 @@ class Api:
                         "live": is_live,
                     }
                     collection.items.append(video)
+
+                elif is_category:
+                    category = Category(id=item["resource_key"], label=item["name"])
+                    category.thumb = self._get_picture(item["pictures"], 3)
+                    category.uri = item["metadata"]["connections"]["videos"]["uri"]
+                    collection.items.append(category)
 
                 elif is_channel:
                     channel = Channel(id=item["resource_key"], label=item["name"])
@@ -214,13 +282,7 @@ class Api:
 
                 elif is_user:
                     user = User(id=item["resource_key"], label=item["name"])
-                    user.thumb = self._get_picture(item["pictures"], 3)
-                    user.uri = item["metadata"]["connections"]["videos"]["uri"]
-                    user.info = {
-                        "country": item.get("location", ""),
-                        "date": item["created_time"],
-                        "description": item["bio"],
-                    }
+                    user.data = item
                     collection.items.append(user)
 
                 else:
@@ -304,8 +366,26 @@ class Api:
             # Avoid rate limiting:
             # https://developer.vimeo.com/guidelines/rate-limiting#avoid-rate-limiting
             "fields": "uri,resource_key,name,description,type,duration,created_time,location,"
-                      "bio,stats,user,account,release_time,pictures,metadata,play,live.status"
+                      "bio,short_bio,stats,user,account,release_time,pictures,metadata,play,"
+                      "live.status,websites"
         }
+
+    def _request_requires_fallback(self, path, params):
+        url = urllib.parse.urlparse(path)
+        for param in self.api_fallback_params:
+            if param in params or param in urllib.parse.parse_qs(url.query):
+                return True
+
+        return False
+
+    @staticmethod
+    def _request_was_bad(json_obj):
+        if "invalid_parameters" in json_obj and isinstance(json_obj["invalid_parameters"], list):
+            invalid_params = json_obj["invalid_parameters"]
+            if len(invalid_params) > 0 and "error_code" in invalid_params[0]:
+                return invalid_params[0]["error_code"]
+
+        return False
 
     @staticmethod
     def _append_user_agent(url):
@@ -326,3 +406,11 @@ class Api:
             return data["sizes"][size]["link"]
         except IndexError:
             return data["sizes"][0]["link"]
+
+
+class PasswordRequiredException(Exception):
+    pass
+
+
+class WrongPasswordException(Exception):
+    pass

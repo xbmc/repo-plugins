@@ -16,10 +16,9 @@ class Cache:
 
         if file:
             mtime = self.vfs.get_mtime(filename)
-            if (int(time.time()) - age * 60) > mtime:
-                return None
+            return None if (int(time.time()) - age * 60) > mtime else file
 
-        return file
+        return None
 
     def add(self, filename, data):
         return self.vfs.write(filename, data)

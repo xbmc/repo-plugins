@@ -37,6 +37,38 @@ msgctxt "#30014"
 msgid "Template"
 msgstr ""
 
+msgctxt "#30015"
+msgid "Sort by"
+msgstr "Sortieren nach"
+
+msgctxt "#300150"
+msgid "Relevance"
+msgstr "Relevanz"
+
+msgctxt "#300151"
+msgid "Popularity"
+msgstr "Beliebtheit"
+
+msgctxt "#300152"
+msgid "Most recent"
+msgstr "Neueste"
+
+msgctxt "#300153"
+msgid "Alphabetical A-Z"
+msgstr "Alphabetisch A-Z"
+
+msgctxt "#300154"
+msgid "Alphabetical Z-A"
+msgstr "Alphabetisch Z-A"
+
+msgctxt "#300155"
+msgid "Longest"
+msgstr "Am längsten"
+
+msgctxt "#300156"
+msgid "Shortest"
+msgstr "Am kürzesten"
+
 msgctxt "#30020"
 msgid "Video"
 msgstr ""
@@ -48,6 +80,10 @@ msgstr ""
 msgctxt "#30022"
 msgid "AOMedia Video 1 (AV1)"
 msgstr ""
+
+msgctxt "#30023"
+msgid "Subtitles"
+msgstr "Untertitel"
 
 # Settings - Advanced
 msgctxt "#30051"
@@ -79,13 +115,54 @@ msgctxt "#30102"
 msgid "Featured"
 msgstr "Featured"
 
+msgctxt "#30103"
+msgid "Trending"
+msgstr "Trending"
+
+msgctxt "#30104"
+msgid "Categories"
+msgstr "Kategorien"
+
+msgctxt "#30105"
+msgid "Profile"
+msgstr "Profil"
+
 msgctxt "#30108"
 msgid "Settings"
 msgstr "Einstellungen"
 
 msgctxt "#30109"
-msgid "Sign in"
+msgid "Log in"
 msgstr "Anmelden"
+
+msgctxt "#30110"
+msgid "Log out"
+msgstr "Abmelden"
+
+# GUI - Auth
+msgctxt "#30151"
+msgid "Authorization"
+msgstr "Autorisierung"
+
+msgctxt "#30152"
+msgid "1. Open the link {}"
+msgstr "1. Öffne den Link {}"
+
+msgctxt "#30153"
+msgid "2. Log in and enter the code {}"
+msgstr "2. Melde dich an und gib den Code {} ein"
+
+msgctxt "#30154"
+msgid "3. Authorize the app"
+msgstr "3. Autorisiere die App"
+
+msgctxt "#30155"
+msgid "4. Confirm with {}"
+msgstr "4. Bestätige mit {}"
+
+msgctxt "#30156"
+msgid "You are now logged in as {}!"
+msgstr "Du bist jetzt als {} angemeldet!"
 
 # GUI - Search
 msgctxt "#30201"
@@ -139,6 +216,36 @@ msgctxt "#30501"
 msgid "Cache cleared"
 msgstr "Cache gelöscht"
 
+# GUI - Context menus
+msgctxt "#30601"
+msgid "Remove"
+msgstr "Entfernen"
+
+msgctxt "#30602"
+msgid "Clear"
+msgstr "Leeren"
+
+# GUI - Profile
+msgctxt "#30701"
+msgid "Followers"
+msgstr ""
+
+msgctxt "#30702"
+msgid "Following"
+msgstr "Folgt"
+
+msgctxt "#30703"
+msgid "Likes"
+msgstr ""
+
+msgctxt "#30704"
+msgid "Albums"
+msgstr "Alben"
+
+msgctxt "#30705"
+msgid "Watch Later"
+msgstr "Später anschauen"
+
 # GUI - Generic
 msgctxt "#30901"
 msgid "Next page"
@@ -151,3 +258,15 @@ msgstr ""
 msgctxt "#30903"
 msgid "Trailer"
 msgstr ""
+
+msgctxt "#30904"
+msgid "Password"
+msgstr "Passwort"
+
+msgctxt "#30905"
+msgid "Invalid password"
+msgstr "Ungültiges Passwort"
+
+msgctxt "#30906"
+msgid "Whoops! That password is invalid"
+msgstr "Whoops! Dieses Passwort ist ungültig"

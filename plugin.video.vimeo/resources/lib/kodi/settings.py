@@ -15,6 +15,19 @@ class Settings:
         "H.264": "H264",
     }
 
+    # These sorting settings only work for the `/videos`-endpoint.
+    # The `/search`-endpoint uses `relevance` instead of `relevant and `latest` instead of `date`.
+    # The `popularity`-sort is undocumented and seems to be the same as the `plays`-sort.
+    SORT = {
+        "0": {"sort": "relevant"},
+        "1": {"sort": "popularity"},
+        "2": {"sort": "date"},
+        "3": {"sort": "alphabetical", "direction": "asc"},
+        "4": {"sort": "alphabetical", "direction": "desc"},
+        "5": {"sort": "duration", "direction": "desc"},
+        "6": {"sort": "duration", "direction": "asc"},
+    }
+
     def __init__(self, addon):
         self.addon = addon
 

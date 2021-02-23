@@ -9,17 +9,41 @@ SPDX-License-Identifier: MIT
 # pylint: disable=import-error
 import xbmc
 import xbmcgui
-import xbmcaddon
 import resources.lib.mvutils as mvutils
+import resources.lib.appContext as appContext
 
 
 class KodiUI(object):
     """ Generic helper class for Kodi UI operations """
 
     def __init__(self):
-        self.addon = xbmcaddon.Addon()
+        self.addon = appContext.ADDONCLASS
         self.language = self.addon.getLocalizedString
         self.pgdialog = KodiProgressDialog()
+
+    """
+        Parameters
+        heading    string or unicode - dialog heading.
+        options    list of strings / xbmcgui.ListItems - options to choose from.
+        autoclose    [opt] integer - milliseconds to autoclose dialog. (default=do not autoclose)
+        preselect    [opt] list of int - indexes of items to preselect in list (default: do not preselect any item)
+        useDetails    [opt] bool - use detailed list instead of a compact list. (default=false) 
+    """
+    def get_entered_multiselect(self, heading=None, options=None, preselect=None):
+        heading = self.language(heading) if isinstance(heading, int) else heading if heading is not None else ''
+        #
+        dialog = xbmcgui.Dialog()
+        ret = dialog.multiselect(heading=heading, options=options, preselect=preselect)
+        #
+        return ret
+
+    def get_entered_select(self, heading=None, list=None, preselect=None):
+        heading = self.language(heading) if isinstance(heading, int) else heading if heading is not None else ''
+        #
+        dialog = xbmcgui.Dialog()
+        ret = dialog.select(heading=heading, list=list, preselect=preselect)
+        #
+        return ret
 
     def get_entered_text(self, deftext=None, heading=None, hidden=False):
         """
@@ -46,7 +70,7 @@ class KodiUI(object):
             enteredText = keyboard.getText();
             enteredText = mvutils.py2_decode(enteredText);
             return (enteredText, True, )
-        return (deftext, False, ) ##TODO deftext.encode('utf-8')
+        return (deftext, False, )
 
     def show_ok_dialog(self, heading=None, line1=None, line2=None, line3=None):
         """
@@ -189,7 +213,7 @@ class KodiProgressDialog(object):
     """ Kodi Progress Dialog Class """
 
     def __init__(self):
-        self.language = xbmcaddon.Addon().getLocalizedString
+        self.language = appContext.ADDONCLASS.getLocalizedString
         self.pgdialog = None
 
     def __del__(self):

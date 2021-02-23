@@ -76,6 +76,15 @@ schon erfolgreich getestet werden. Wegen der Vielzahl der Plattformen ist es
 allerdings nicht möglich eine abschließende Kompatibilitätsaussage zu machen.
 
 
+Installation
+---------------------
+
+Das Mediathekviewplugin kann für Kodi 17, Kodi 18 und Kodi 19 aus den jeweiligen
+offiziellen Repository installiert werden.
+Beim bauen aus GITHUB, muss man die addon.xml entsprechend anpassen (Kodi 17 &
+Kodi 18 > addon.kodi18.xml / Kodi 19 > addon.kodi19.xml).
+
+
 Funktionsweise der Aktualisierungsmethoden
 ------------------------------------------
 
@@ -258,6 +267,15 @@ tested successfully. Due to the variety of platforms, however, it is not
 possible to make a final compatibility statement.
 
 
+Install
+-------------------
+
+The Mediathekview plug-in can be used for Kodi 17, Kodi 18 and Kodi 19 from the respective
+official repository.
+When building from GITHUB, you have to adapt the addon.xml accordingly (Kodi 17 &
+Kodi 18> addon.kodi18.xml / Kodi 19> addon.kodi19.xml)
+
+
 How the update methods work
 ---------------------------
 
@@ -419,6 +437,14 @@ L'addon è stato testato su diverse piattaforme in Linux, MacOS, Windows e
 LibreELEC nonchè OpenELEC. Anche diversi sistemi Android sono stati testati
 con successo. A causa della varietà delle piattaforme, tuttavia, non è
 possibile fare una dichiarazione finale di compatibilità.
+
+Install
+-------------------
+
+Il plug-in Mediathekview può essere utilizzato per Kodi 17, Kodi 18 e Kodi 19 dai rispettivi
+repository ufficiale.
+Quando si compila da GITHUB, è necessario adattare di conseguenza addon.xml (Kodi 17 &
+Kodi 18> addon.kodi18.xml / Kodi 19> addon.kodi19.xml)
 
 
 Come funzionano i metodi di aggiornamento

@@ -29,6 +29,10 @@ msgctxt "#30003"
 msgid "Downloads"
 msgstr "Downloads"
 
+msgctxt "#30004"
+msgid "Advanced Settings"
+msgstr "Advanced Settings"
+
 # Settings Page 1
 msgctxt "#30110"
 msgid "Prefer HD streams"
@@ -82,13 +86,13 @@ msgctxt "#30122"
 msgid "Sort by added"
 msgstr "Added Date"
 
-msgctxt "#30123"
-msgid "Sort by size"
-msgstr "Size"
-
 msgctxt "#30124"
 msgid "Sort by duration"
 msgstr "Duration"
+
+msgctxt "#30125"
+msgid "Blacklist"
+msgstr "Exclude from search"
 
 msgctxt "#30130"
 msgid "Content Type Movie list"
@@ -175,6 +179,10 @@ msgctxt "#30234"
 msgid "Query Caching"
 msgstr "Query Caching"
 
+msgctxt "#30235"
+msgid "Update Batch Size"
+msgstr "Update Batch Size"
+
 msgctxt "#30241"
 msgid "Disabled"
 msgstr "Disabled"
@@ -236,14 +244,97 @@ msgctxt "#30342"
 msgid "Enriched NFO File"
 msgstr "Enriched NFO File"
 
+msgctxt "#30343"
+msgid "staticViewId"
+msgstr "Use predefined views"
+
+#############################
+# Page 4 Extended Search
+#############################
+
+msgctxt "#30401"
+msgid "Id"
+msgstr "Id"
+
+msgctxt "#30402"
+msgid "Title"
+msgstr "Title"
+
+msgctxt "#30403"
+msgid "Show"
+msgstr "Show"
+
+msgctxt "#30404"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "#30405"
+msgid "Channel"
+msgstr "Channel"
+
+msgctxt "#30406"
+msgid "Min. Duration (min)"
+msgstr "Min. Duration (min)"
+
+msgctxt "#30407"
+msgid "No Trailer"
+msgstr "No Trailer"
+
+msgctxt "#30408"
+msgid "Backlist"
+msgstr "Backlist"
+
+msgctxt "#30409"
+msgid "No"
+msgstr "No"
+
+msgctxt "#30410"
+msgid "Yes"
+msgstr "Yes"
+
+msgctxt "#30411"
+msgid "Enter a show name"
+msgstr "Enter a show name"
+
+msgctxt "#30412"
+msgid "Enter a title for the episode"
+msgstr "Enter a title for the episode"
+
+msgctxt "#30413"
+msgid "Enter a part of the plot"
+msgstr "Enter a part of the plot"
+
+msgctxt "#30414"
+msgid "Choose one or multiple channels"
+msgstr "Choose one or multiple channels"
+
+msgctxt "#30415"
+msgid "Enter a showname or title which will be excluded from the results"
+msgstr "Enter a showname or title which will be excluded from the results"
+
+msgctxt "#30417"
+msgid "No future videos (usually trailers)"
+msgstr "No future videos (usually trailers)"
+
+msgctxt "#30418"
+msgid "Minimum duration in minutes"
+msgstr "Minimum duration in minutes"
+
+msgctxt "#30419"
+msgid "Enter a name for the query"
+msgstr "Enter a name for the query"
+
+##############
 # Main Menu
+##############
+
 msgctxt "#30901"
-msgid "Search in Title"
-msgstr "Search in Title"
+msgid "Quick Search"
+msgstr "Quick Search"
 
 msgctxt "#30902"
-msgid "Search in Title and Description"
-msgstr "Search in Title and Description"
+msgid "Search"
+msgstr "Search"
 
 msgctxt "#30903"
 msgid "Livestreams"
@@ -254,16 +345,12 @@ msgid "Recently Added"
 msgstr "Recently Added"
 
 msgctxt "#30905"
-msgid "Recently Added by Channel"
-msgstr "Recently Added by Channel"
+msgid "Browse Shows"
+msgstr "Browse Shows"
 
 msgctxt "#30906"
-msgid "Browse by Show in all Channels"
-msgstr "Browse by Show in all Channels"
-
-msgctxt "#30907"
-msgid "Browse Shows by Channel"
-msgstr "Browse Shows by Channel"
+msgid "All Channels"
+msgstr "All Channels"
 
 msgctxt "#30908"
 msgid "Database Information"
@@ -302,6 +389,14 @@ msgstr "New Search..."
 msgctxt "#30932"
 msgid "Remove Search"
 msgstr "Remove Search"
+
+msgctxt "#30933"
+msgid "Edit Search"
+msgstr "Edit Search"
+
+msgctxt "#30934"
+msgid "Run Search"
+msgstr "Run Search"
 
 # Database status
 msgctxt "#30941"
@@ -350,8 +445,8 @@ msgid "Mediathek Database Update"
 msgstr "Mediathek Database Update"
 
 msgctxt "#30957"
-msgid "Mediathek (%d): channels:%d, shows:%d, movies:%d ..."
-msgstr "Mediathek (%d): channels:%d, shows:%d, movies:%d ..."
+msgid "Mediathek (%d): read:%d, insert:%d, update:%d ..."
+msgstr "Mediathek (%d): read:%d, insert:%d, update:%d ..."
 
 msgctxt "#30958"
 msgid "Please set a download folder in the settings"
@@ -397,25 +492,13 @@ msgctxt "#30966"
 msgid "This database was never updated"
 msgstr "This database was never updated"
 
-msgctxt "#30967"
-msgid "%s in progress...\nDatabase: %s\nAdditions: %d channels, %d shows, %d movies"
-msgstr "%s in progress...\nDatabase: %s\nAdditions: %d channels, %d shows, %d movies"
-
-msgctxt "#30968"
-msgid "%s in progress...\nAdditions: %d channels, %d shows, %d movies"
-msgstr "%s in progress...\nAdditions: %d channels, %d shows, %d movies"
-
-msgctxt "#30969"
-msgid "Last %s: %s\nDatabase: %s\nAdditions: %d channels, %d shows, %d movies\nDeletions: %d channels, %d shows, %d movies"
-msgstr "Last %s: %s\nDatabase: %s\nAdditions: %d channels, %d shows, %d movies\nDeletions: %d channels, %d shows, %d movies"
-
 msgctxt "#30970"
-msgid "Last %s: %s\nAdditions: %d channels, %d shows, %d movies\nDeletions: %d channels, %d shows, %d movies"
-msgstr "Last %s: %s\nAdditions: %d channels, %d shows, %d movies\nDeletions: %d channels, %d shows, %d movies"
+msgid "Filmlist: %s\nFull: %s\nIncremental: %s"
+msgstr "Filmlist : %s\nFull Update : %s\nIncremental Update : %s"
 
 msgctxt "#30971"
-msgid "Total: %d channels, %d shows, %d movies"
-msgstr "Total: %d channels, %d shows, %d movies"
+msgid "%d channels\n%d shows\n%d movies"
+msgstr "%d channels\n%d shows\n%d movies"
 
 msgctxt "#30972"
 msgid "Full Update"

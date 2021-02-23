@@ -10,11 +10,11 @@ import sys
 
 # pylint: disable=import-error
 import xbmc
-import xbmcvfs
 import xbmcgui
-import xbmcaddon
 import xbmcplugin
+import xbmcvfs
 import resources.lib.mvutils as mvutils
+import resources.lib.appContext as appContext
 
 try:
     # Python 3.x
@@ -25,27 +25,25 @@ except ImportError:
     from urllib import urlencode
     from urlparse import parse_qs
 
-from resources.lib.kodi.kodilogger import KodiLogger
 
-
-class KodiAddon(KodiLogger):
+class KodiAddon(object):
     """ The Kodi addon class """
 
     def __init__(self):
-        self.addon = xbmcaddon.Addon()
+        self.addon = appContext.ADDONCLASS
         self.addon_id = self.addon.getAddonInfo('id')
         self.icon = self.addon.getAddonInfo('icon')
         self.fanart = self.addon.getAddonInfo('fanart')
         self.version = self.addon.getAddonInfo('version')
         self.path = mvutils.py2_decode(self.addon.getAddonInfo('path'))
-        ##
+        #
         if self.getKodiVersion() > 18:
             self.datapath = mvutils.py2_decode(xbmcvfs.translatePath(self.addon.getAddonInfo('profile')))
         else:
             self.datapath = mvutils.py2_decode(xbmc.translatePath(self.addon.getAddonInfo('profile')))
-        ##
+        #
         self.language = self.addon.getLocalizedString
-        KodiLogger.__init__(self, self.addon_id, self.version)
+        self.kodiVersion = -1
 
     def getKodiVersion(self):
         """
@@ -56,16 +54,19 @@ class KodiAddon(KodiLogger):
         xbmc_version = xbmc.getInfoLabel("System.BuildVersion")
         return int(xbmc_version.split('-')[0].split('.')[0])
 
-    def get_addon_info(self, info_id):
+    # TODO REMOVE THIS - USE SETTINGS INSTEAD
+    def get_kodi_version(self):
         """
-        Returns the value of an addon property as a string.
-
-        Args:
-            info_id(str): id of the property that the module needs to access.
+        Get Kodi major version
+    
+        Returns:
+            int: Kodi major version (e.g. 18)
         """
-        argument = self.addon.getAddonInfo(info_id)
-        argument = mvutils.py2_decode(argument)
-        return argument
+        if self.kodiVersion > 0:
+            return self.kodiVersion
+        xbmc_version = xbmc.getInfoLabel("System.BuildVersion")
+        self.kodiVersion = int(xbmc_version.split('-')[0].split('.')[0])
+        return self.kodiVersion
 
     def get_setting(self, setting_id):
         """
@@ -96,18 +97,59 @@ class KodiAddon(KodiLogger):
         Args:
             builtin(str): command to execute
         """
-        self.debug('Execute builtin {}', builtin)
+        # self.logger.debug('Execute builtin {}', builtin)
         xbmc.executebuiltin(builtin)
 
-    def run_action(self, action):
-        """
-        Execute a specific action
+    def getCaption(self, msgid):
+        return self.language(msgid);
 
-        Args:
-            action(str): action to execute
-        """
-        self.debug('Triggered action {}', action)
-        xbmc.executebuiltin('Action({})'.format(action))
+    def getSkinName(self):
+        return xbmc.getSkinDir();
+
+    def getCurrentViewId(self):
+        window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
+        return window.getFocusId()
+
+    def setViewId(self, viewId):
+        if viewId > -1:
+            # xbmc.sleep(1000)
+            self.run_builtin('Container.SetViewMode({})'.format(viewId))
+            self.run_builtin('Container.SetViewMode({})'.format(viewId))
+
+    def resolveViewId(self, pViewname):
+        skinName = self.getSkinName()
+        viewId = -1
+        # Kill switch
+        self.logger.debug('static View Id {}', self.addon.getSetting('staticViewIds'))
+        if self.addon.getSetting('staticViewIds') == False or self.addon.getSetting('staticViewIds') == 'false':
+            return viewId
+
+        if skinName == 'skin.estuary' and pViewname == 'MAIN':
+            viewId = 55
+        elif skinName == 'skin.estuary' and pViewname == 'SHOWS':
+            viewId = 55
+        elif skinName == 'skin.estuary' and pViewname == 'LIST':
+            viewId = 55
+        elif skinName == 'skin.estuary' and pViewname == 'THUMBNAIL':
+            viewId = 500
+        elif skinName == 'skin.estouchy' and pViewname == 'MAIN':
+            viewId = 500
+        elif skinName == 'skin.estouchy' and pViewname == 'SHOWS':
+            viewId = 500
+        elif skinName == 'skin.estouchy' and pViewname == 'LIST':
+            viewId = 550
+        elif skinName == 'skin.estouchy' and pViewname == 'THUMBNAIL':
+            viewId = 55
+        elif skinName == 'skin.confluence' and pViewname == 'MAIN':
+            viewId = 51
+        elif skinName == 'skin.confluence' and pViewname == 'SHOWS':
+            viewId = 51
+        elif skinName == 'skin.confluence' and pViewname == 'LIST':
+            viewId = 504
+        elif skinName == 'skin.confluence' and pViewname == 'THUMBNAIL':
+            viewId = 500
+        self.logger.debug('proposed view id {} for {} in mode {}', viewId, skinName, pViewname)
+        return viewId;
 
 
 class KodiService(KodiAddon):
@@ -153,7 +195,7 @@ class KodiPlugin(KodiAddon):
         Args:
             params(object): an object containing parameters
         """
-        ### BUG in urlencode which is solved in python 3
+        # BUG in urlencode which is solved in python 3
         utfEnsuredParams = mvutils.dict_to_utf(params)
         return self.base_url + '?' + urlencode(utfEnsuredParams)
 
@@ -240,7 +282,12 @@ class KodiPlugin(KodiAddon):
         """
         if isinstance(name, int):
             name = self.language(name)
-        list_item = xbmcgui.ListItem(name)
+        #
+        if self.get_kodi_version() > 17:
+            list_item = xbmcgui.ListItem(label=name, offscreen=True)
+        else:
+            list_item = xbmcgui.ListItem(label=name)
+        #
         if contextmenu is not None:
             list_item.addContextMenuItems(contextmenu)
         if icon is not None or thumb is not None:
@@ -250,7 +297,11 @@ class KodiPlugin(KodiAddon):
                 thumb = icon
             list_item.setArt({
                 'thumb': icon,
-                'icon': icon
+                'icon': icon,
+                'banner': icon,
+                'fanart': icon,
+                'clearart': icon,
+                'clearlogo': icon
             })
         xbmcplugin.addDirectoryItem(
             handle=self.addon_handle,
@@ -259,7 +310,7 @@ class KodiPlugin(KodiAddon):
             isFolder=isfolder
         )
 
-    def end_of_directory(self, succeeded=True, update_listing=False, cache_to_disc=True):
+    def end_of_directory(self, succeeded=True, update_listing=False, cache_to_disc=False):
         """
         Callback function to tell Kodi that the end of the directory
         listing is reached.
@@ -281,82 +332,5 @@ class KodiPlugin(KodiAddon):
             cache_to_disc
         )
 
-
-class KodiInterlockedMonitor(xbmc.Monitor):
-    """
-    Kodi Monitor Class that gets notified about events
-    and allows to work as a singleton
-
-    Args:
-        service(KodiService): The Kodi service instance
-
-        setting_id(int): The setting id for storing the
-            instance identification
-    """
-
-    def __init__(self, service, setting_id):
-        super(KodiInterlockedMonitor, self).__init__()
-        self.instance_id = ''.join(format(x, '02x')
-                                   for x in bytearray(os.urandom(16)))
-        self.setting_id = setting_id
-        self.service = service
-
-    def register_instance(self, waittime=1):
-        """
-        Tries to register an instance. If another
-        instance (thread/process) is active, the method
-        locks until the process is terminated or a
-        timeout occurs
-
-        Args:
-            waittime(int, optional): Timeout for registering
-                the instance. Default is 1 second
-        """
-        if self.bad_instance():
-            self.service.info(
-                'Found other instance with id {}', self.instance_id)
-            self.service.info(
-                'Startup delayed by {} second(s) waiting the other instance to shut down', waittime)
-            self.service.set_setting(self.setting_id, self.instance_id)
-            xbmc.Monitor.waitForAbort(self, waittime)
-        else:
-            self.service.set_setting(self.setting_id, self.instance_id)
-
-    def unregister_instance(self):
-        """ Unregisters the instance """
-        self.service.set_setting(self.setting_id, '')
-
-    def bad_instance(self):
-        """
-        Returns `True` if another instance is already registered
-        """
-        instance_id = self.service.get_setting(self.setting_id)
-        return len(instance_id) > 0 and self.instance_id != instance_id
-
-    def abort_requested(self):
-        """
-        Returns `True`if either this instance is not the registered
-        instance or Kodi is shutting down
-        """
-        return self.bad_instance() or xbmc.Monitor.abortRequested(self)
-
-    def wait_for_abort(self, timeout=None):
-        """
-        Waits until Kodi is shutting down or a specified timeout
-        has occurred. Returns `True` if Kodi is shutting down.
-
-        Args:
-            timeout(int, optional): Number of seconds to wait.
-                If not specified, the funtion waits forever.
-        """
-        if timeout is None:
-            # infinite wait
-            while not self.abort_requested():
-                if xbmc.Monitor.waitForAbort(self, 1):
-                    return True
-            return True
-        else:
-            for _ in range(timeout):
-                if self.bad_instance() or xbmc.Monitor.waitForAbort(self, 1):
-                    return True
-            return self.bad_instance()
+    def set_content(self, pContent=''):
+        xbmcplugin.setContent(self.addon_handle, pContent)

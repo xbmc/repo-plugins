@@ -5,13 +5,9 @@
 		<setting id="autosub"			type="bool"		label="30111"	default="false"										/>
 		<setting id="nofuture"			type="bool"		label="30112"	default="true"										/>
 		<setting id="minlength"			type="slider"	label="30113"	default="0"		range="0,30"						/>
-		<setting id="filmuisortmethod"  type="enum"		label="30119"	default="0"		lvalues="30173|30120|30121|30122|30123|30124"	/>
-		<setting id="groupshows"		type="bool"		label="30114"	default="true"										/>
 		<setting id="maxresults"		type="slider"	label="30115"	default="1000"	range="100,100,3000" option="int"	/>
 		<setting id="maxage"			type="slider"	label="30116"	default="2"		range="1,30" option="int"			/>
-		<setting id="recentmode"		type="enum"		label="30117"	default="0"		lvalues="30171|30172"				/>
-		<setting id="updateCheckInterval" type="slider"	label="30118"	default="15"	range="15,600" option="int"			/>
-		<setting id="contentType"		type="enum"		label="30130"	default="30131"	lvalues="30131|30132|30133|30134|30135"/>
+		<setting id="blacklist"         type="text"     label="30125"   default=""                                          />
 	</category>
 	<category label="30002">
 		<setting id="dbtype"			type="enum"		label="30210"	default="0"	lvalues="30221|30222"					/>
@@ -21,9 +17,9 @@
 		<setting id="dbpass"			type="text"		label="30214"	default=""	option="hidden"	visible="eq(-4,1)"		/>
 		<setting id="dbdata"			type="text"		label="30215"	default="mediathekview"		visible="eq(-5,1)"		/>
 		<setting id="updnative"			type="bool"		label="30233"	default="true"				visible="eq(-6,0)"		/>
-		<setting id="caching"			type="bool"		label="30234"	default="true"				visible="eq(-7,0)"		/>
 		<setting id="updmode"			type="enum"		label="30231"	default="3"	lvalues="30241|30242|30243|30244|30245"	/>
 		<setting id="updinterval"		type="slider"	label="30232"	default="2"	range="1,24"	visible="gt(-1,2)"		/>
+		<setting id="updateBatchSize"   type="slider"   label="30235"   default="10000" range="1000,100000"                 />
 	</category>
 	<category label="30003">
 		<setting id="downloadpathep"	type="folder"	label="30310"	source="auto"	option="writeable"					/>
@@ -33,16 +29,34 @@
 		<setting id="reviewname"		type="bool"		label="30314"	default="false"										/>
 		<setting id="downloadsrt"		type="bool"		label="30315"	default="true"										/>
 		<setting id="makenfo"			type="enum"		label="30316"	default="2"		lvalues="30340|30341|30342"			/>
-
+    </category>
+    <category label="30004">
+        <setting id="updateCheckInterval" type="slider" label="30118"   default="30"    range="10,60" option="int"          />
+        <setting id="contentType"       type="enum"     label="30130"   default="30131" lvalues="30131|30132|30133|30134|30135"/>
+        <setting id="caching"           type="bool"     label="30234"   default="true"                                      />
+        <setting id="filmuisortmethod"  type="enum"     label="30119"   default="0"     lvalues="30173|30120|30121|30122|30124" />        
+        <setting id="groupshows"        type="bool"     label="30114"   default="true"                                      />
+        <setting id="recentmode"        type="enum"     label="30117"   default="0"     lvalues="30171|30172"               />
+        <setting id="staticViewIds"     type="bool"     label="30343"   default="true"                                      />                        
 		<!-- setting						type="action"	label="30238"	action="RunScript(plugin.video.mediathekview, downloadreport)"/ -->
 
-		<!-- INTERNAL STUFF USED FOR STATE STORAGE -->
-		<setting id="firstrun"			type="bool"						default="true"	visible="false"						/>
-		<setting id="instanceid"		type="text"						default=""		visible="false"						/>
-		<setting id="updateinid"		type="text"						default=""		visible="false"						/>
+		<!-- INTERNAL STUFF USED FOR STATE STORAGE                                                                         -->
+		<!-- do update trigger from UI to update service                                                                   -->
 		<setting id="updatetrigger"		type="bool"						default="false"	visible="false"						/>
+		<!-- set on UI click to handle update logic automatic                                                              -->
 		<setting id="lastactivity"		type="number"					default="0"		visible="false"						/>
+		<!-- used to handle quick search logic                                                                             -->
 		<setting id="lastsearch1"		type="text"						default=""		visible="false"						/>
 		<setting id="lastsearch2"		type="text"						default=""		visible="false"						/>
+		<!-- copy of the database status table to avoid DB access for SQLite                                               -->
+		<setting id="lastUpdate"	    type="number"					default="0"		visible="false"						/>
+		<setting id="lastFullUpdate"	type="number"					default="0"		visible="false"						/>
+		<setting id="databaseVersion"	type="text"					    default="0"		visible="false"						/>
+		<setting id="databaseStatus"	type="text"					    default="0"		visible="false"						/>
+		<!--  delay startup by x secs to avoid issue with missing network connections -->
+		<setting id="delayStartupSec"   type="number"                   default="10"     visible="false"                     />
+		<setting id="userAgentString"   type="text"                     default="|User-Agent=Mozilla%2F5.0%20%28Windows%20NT%2010.0%3B%20Win64%3B%20x64%3B%20rv%3A84.0%29%20Gecko%2F20100101%20Firefox%2F84.0"     visible="false" />
+        
+        
 	</category>
 </settings>

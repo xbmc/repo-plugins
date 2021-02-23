@@ -13,6 +13,7 @@ import re
 import sys
 import stat
 import string
+import json
 from contextlib import closing
 from codecs import open
 
@@ -35,8 +36,8 @@ try:
 except ImportError:
     IS_KODI = False
 
-
 PY2 = sys.version_info[0] == 2
+
 
 def py2_encode(s, encoding='utf-8'):
    """
@@ -59,6 +60,7 @@ def py2_decode(s, encoding='utf-8'):
        s = s.decode(encoding)
    return s
 
+
 def array_to_utf(a):
     autf = []
     i = 0
@@ -73,9 +75,10 @@ def array_to_utf(a):
             autf.append(v)
     return autf
 
+
 def dict_to_utf(d):
     dutf = {}
-    for k,v in list(d.items()):
+    for k, v in list(d.items()):
         if PY2 and isinstance(v, unicode):
             dutf[k] = py2_encode(v)
         elif PY2 and isinstance(v, list):
@@ -85,6 +88,7 @@ def dict_to_utf(d):
         else:
             dutf[k] = v
     return dutf
+
 
 def dir_exists(name):
     """
@@ -208,12 +212,12 @@ def make_duration(val):
         val(str): input string in format `hh:mm:ss`
     """
     if val == "00:00:00":
-        return None
+        return 0
     elif val is None:
-        return None
+        return 0
     parts = val.split(':')
     if len(parts) != 3:
-        return None
+        return 0
     return int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
 
 
@@ -231,7 +235,7 @@ def cleanup_filename(val):
     return search.strip()
 
 
-def url_retrieve(url, filename, reporthook, chunk_size=8192, aborthook=None):
+def url_retrieve(url, filename, reporthook, chunk_size=65536, aborthook=None):
     """
     Copy a network object denoted by a URL to a local file
 
@@ -254,11 +258,11 @@ def url_retrieve(url, filename, reporthook, chunk_size=8192, aborthook=None):
             each block read thereafter. If specified the operation will be
             aborted if the hook function returns `True`
     """
-    with closing(urlopen(url, timeout = 10)) as src, closing(open(filename, 'wb')) as dst:
+    with closing(urlopen(url, timeout=10)) as src, closing(open(filename, 'wb')) as dst:
         _chunked_url_copier(src, dst, reporthook, chunk_size, aborthook)
 
 
-def url_retrieve_vfs(url, filename, reporthook, chunk_size=8192, aborthook=None):
+def url_retrieve_vfs(url, filename, reporthook, chunk_size=65536, aborthook=None):
     """
     Copy a network object denoted by a URL to a local file using
     Kodi's VFS functions
@@ -282,10 +286,11 @@ def url_retrieve_vfs(url, filename, reporthook, chunk_size=8192, aborthook=None)
             each block read thereafter. If specified the operation will be
             aborted if the hook function returns `True`
     """
-    with closing(urlopen(url, timeout = 10)) as src, closing(xbmcvfs.File(filename, 'wb')) as dst:
+    with closing(urlopen(url, timeout=10)) as src, closing(xbmcvfs.File(filename, 'wb')) as dst:
         _chunked_url_copier(src, dst, reporthook, chunk_size, aborthook)
 
 
+# TODO: Review if it can be merged with kodiaddon.build_url
 def build_url(query):
     """
     Builds a valid plugin url based on the supplied query object
@@ -293,7 +298,9 @@ def build_url(query):
     Args:
         query(object): a query object
     """
-    return sys.argv[0] + '?' + urlencode(query)
+    utfEnsuredParams = dict_to_utf(query)
+    return sys.argv[0] + '?' + urlencode(utfEnsuredParams)
+
 
 def _chunked_url_copier(src, dst, reporthook, chunk_size, aborthook):
     aborthook = aborthook if aborthook is not None else lambda: False
@@ -313,40 +320,26 @@ def _chunked_url_copier(src, dst, reporthook, chunk_size, aborthook):
     # abort requested
     raise ExitRequested('Reception interrupted.')
 
-def fileSplitter(inputFilename, defaultSize = 40000000):
-    outputFiles = []
-    chunkSize = defaultSize
-    filename = inputFilename
-    cnt = 0
-    curentSize = 0
-    with closing( open(inputFilename, 'rb', encoding="utf-8") ) as fin:
-        overflowBuffer = None
-        buffer = None
-        while True:
-            #
-            fout = open(inputFilename + str(cnt),"wb", encoding="utf-8")
-            outputFiles.append(inputFilename + str(cnt))
-            cnt += 1
-            #
-            if overflowBuffer is not None and len(overflowBuffer) > 0:
-                fout.write(overflowBuffer)
-            buffer = fin.read(chunkSize)
-            if not buffer:
-                break;
-            #
-            lastElement = buffer.rfind(',"X":')
-            if lastElement != -1:
-                fout.write(buffer[:lastElement])
-                fout.write(u'}')
-            else:
-                fout.write(buffer)
-            fout.close()
-            #
-            if lastElement < len(buffer):
-                lastElement += 1
-                overflowBuffer = buffer[lastElement:]
-                overflowBuffer = u'{' + overflowBuffer
-            else:
-                overflowBuffer = None
-        fout.close()
-    return outputFiles
+
+def loadJsonFile(filename):
+    #
+    data = None
+    # try:
+    with closing(open(filename, encoding='utf-8')) as json_file:
+        data = json.load(json_file)
+    # pylint: disable=broad-except
+    # except Exception as err:
+    #    pass
+    return data
+
+
+def saveJsonFile(filename, pData):
+    #
+    try:
+        with closing(open(filename, 'w', encoding='utf-8')) as json_file:
+            json.dump(pData, json_file)
+    # pylint: disable=broad-except
+    except Exception as err:
+        return False
+    #
+    return True

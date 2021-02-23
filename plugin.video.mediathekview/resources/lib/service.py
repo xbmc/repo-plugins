@@ -10,26 +10,13 @@ SPDX-License-Identifier: MIT
 from __future__ import unicode_literals
 
 from resources.lib.kodi.kodiaddon import KodiService
-from resources.lib.kodi.kodiaddon import KodiInterlockedMonitor
+from resources.lib.monitorKodi import MonitorKodi
 
-from resources.lib.notifier import Notifier
-from resources.lib.settings import Settings
+from resources.lib.notifierKodi import NotifierKodi
 from resources.lib.updater import MediathekViewUpdater
+import resources.lib.appContext as appContext
 
 # -- Classes ------------------------------------------------
-
-
-class MediathekViewMonitor(KodiInterlockedMonitor):
-    """ Singleton Event Monitor Class """
-
-    def __init__(self, service, setting_id):
-        super(MediathekViewMonitor, self).__init__(service, setting_id)
-        self.logger = service.get_new_logger('Monitor')
-
-    # pylint: disable=invalid-name
-    def onSettingsChanged(self):
-        """ Handler method invoked when settings have been changed """
-        self.service.reload_settings()
 
 
 class MediathekViewService(KodiService):
@@ -37,63 +24,68 @@ class MediathekViewService(KodiService):
 
     def __init__(self):
         super(MediathekViewService, self).__init__()
-        self.set_topic('Service')
-        self.settings = Settings()
-        self.notifier = Notifier()
-        self.monitor = MediathekViewMonitor(self, 'instanceid')
-        self.updater = MediathekViewUpdater(self.get_new_logger(
-            'Updater'), self.notifier, self.settings, self.monitor)
+        # self.set_topic('Service')
+        self.logger = appContext.MVLOGGER.get_new_logger('MediathekViewService')
+        self.settings = appContext.MVSETTINGS
+        self.notifier = appContext.MVNOTIFIER
+        self.monitor = MonitorKodi()
+        appContext.initMonitor(self.monitor)
+        self.updater = MediathekViewUpdater()
+        self._lastDatabaseType = self.settings.getDatabaseType()
+
+    def __del__(self):
+        self.logger = None
+        self.settings = None
+        self.notifier = None
+        self.monitor = None
+        self.updater = None
 
     def init(self):
         """ Initialisation of the service """
-        self.info('Init (instance id: {})', self.monitor.instance_id)
-        self.monitor.register_instance()
-        self.updater.init(convert=True)
-        self.settings.reset_user_activity()
+        self.logger.debug('init')
 
     def run(self):
         """ Execution of the service """
-        self.info('Starting up... (instance id: {})', self.monitor.instance_id)
+        self.logger.debug('Service Startup...')
         # Wait for Kodi to retrieve network
-        self.monitor.wait_for_abort(10)
+        self.monitor.wait_for_abort(self.settings.getDelayStartupSec())
+        # error counter to slow down
+        self.errorCount = 0
         #
         while not self.monitor.abort_requested():
-            if self.settings.reload() is True:
-                # database configuration changed
-                self.info(
-                    '===== Database Configuration has changed - Reloading the updater =====')
-                self.updater.reload()
+            # slow down in case of errors (+1 because 0 is unlimited!)
+            delayInSec = (self.errorCount * 60) + 1
+            self.monitor.wait_for_abort(delayInSec)
+            if delayInSec > 1:
+                self.logger.warn('Delayed service agent by {} sec due to error count {}', delayInSec, self.errorCount)
+            #
+            self.updater = MediathekViewUpdater()
+            self.updater.init()
+            #
+            try:
+                # we need this for database change and update variable cache
+                if self._lastDatabaseType != self.settings.getDatabaseType():
+                    self.logger.debug('database change from {} to {}', self._lastDatabaseType, self.settings.getDatabaseType())
+                    self._lastDatabaseType = self.settings.getDatabaseType()
+                    self.updater.database.get_status()
 
-            updateop = self.updater.get_current_update_operation()
-            if updateop == 1:
-                # full update
-                self.info('Initiating full update...')
-                self.settings.save_update_instance(self.monitor.instance_id)
-                self.updater.update(True)
-            elif updateop == 2:
-                # differential update
-                self.info('Initiating differential update...')
-                self.settings.save_update_instance(self.monitor.instance_id)
-                self.updater.update(False)
+                self.updater.doUpdate()
+                self.errorCount = 0
+            except Exception as err:
+                self.logger.error('MediathekViewUpdater {}', err)
+                self.updater.exit()
+                self.settings.setDatabaseStatus('UNINIT');
+                self.errorCount = self.errorCount + 1
+            #
+            self.updater.exit()
             # Sleep/wait for abort for 60 seconds
-            if self.monitor.wait_for_abort(self.settings.updateCheckInterval):
+            if self.monitor.wait_for_abort(appContext.MVSETTINGS.getUpdateCheckIntervel()):
                 # Abort was requested while waiting. We should exit
                 break
-        self.info('Shutting down... (instance id: {})',
-                  self.monitor.instance_id)
+        self.logger.info('Shutting down Service')
 
     def exit(self):
         """ Shutdown of the service """
-        self.info('Exit (instance id: {})', self.monitor.instance_id)
+        self.logger.info('Exit Service')
         self.updater.exit()
-        self.monitor.unregister_instance()
 
-    def reload_settings(self):
-        """ Reload settings and reconfigure service behaviour """
-        # self.info("===== RELOAD SETTINGS =====")
-        # TODO: support online reconfiguration
-        #       currently there is a bug in Kodi: this event is only
-        #       triggered if the reconfiguration happen inside the
-        #       addon (via setSetting). If teh user changes something
-        #       via the settings page, NOTHING WILL HAPPEN!
-        pass

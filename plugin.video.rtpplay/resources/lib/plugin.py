@@ -2,19 +2,14 @@
 import routing
 import logging
 import requests
-import inputstreamhelper
 from bs4 import BeautifulSoup
 import re
-import urllib
 import xbmcaddon
-from sys import exit, version_info
+from sys import exit
 from resources.lib import kodiutils
 from resources.lib import kodilogging
 from xbmcgui import ListItem, Dialog, INPUT_ALPHANUM
 from xbmcplugin import addDirectoryItem, endOfDirectory, setResolvedUrl
-
-from resources.lib.channels import RTP_CHANNELS, HEADERS
-
 
 if kodiutils.PY3:
     from urllib.parse import urlencode
@@ -34,6 +29,12 @@ HEADERS_VOD = {
     "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Mobile Safari/537.36",
     "Cookie": "rtp_cookie_privacy=permit 1,2,3,4;"
 }
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.146 Safari/537.36",
+    "Referer": "https://www.rtp.pt/",
+}
+
 
 @plugin.route('/')
 def index():
@@ -61,6 +62,7 @@ def search():
         req = requests.get("https://www.rtp.pt/play/pesquisa?q={}".format(input_text), headers=HEADERS_VOD).text
     except:
         raise_notification()
+        return
 
     pagei = ListItem("{} [B]{}[/B]".format(kodiutils.get_string(32008), input_text))
     addDirectoryItem(handle=plugin.handle, listitem=pagei, isFolder=False, url="")
@@ -101,24 +103,21 @@ def live():
         req = requests.get("http://www.rtp.pt/play/direto", headers=HEADERS).text
     except:
         raise_notification()
+        return
 
-    match = re.compile(r'<a.+?title=".+? - (.+?)" href="/play/direto/(.+?)".*?\n.*?\n.*?<img alt=".+?" src="(.+?)".*?\n.*?\n.*?width:(.+?)%').findall(req)
+    match = re.compile(r'<a.+?title=".+? - (.+?)" href="/play/(.+?)".*?\n.*?\n.*?<img alt="(.+?)" src="(.+?)".*?\n.*?\n.*?width:(.+?)%').findall(req)
 
-    for rtp_channel in RTP_CHANNELS:
-        dvr = kodiutils.get_string(32011)
-        progimg = ""
-        progpercent = 0
-        for prog, key, img, percent in match:
-            if key.lower() == rtp_channel["id"]:
-                dvr = prog
-                if img.startswith("/"):
-                    img = "http:{}".format(img)
-                progimg = img
-                progpercent = percent
-                break
+    for prog, key, emissao, img, percent in match:
+        dvr = prog
+        if img.startswith("/"):
+            img = "http:{}".format(img)
+        progimg = img
+        progpercent = percent
+        prefix = "em direto"
+        name = emissao[emissao.index(prefix) + len(prefix):].strip() if prefix in emissao else emissao
 
         liz = ListItem("[B][COLOR blue]{}[/COLOR][/B] ({}) [B]{}%[/B]".format(
-            kodiutils.compat_py23str(rtp_channel["name"]),
+            kodiutils.compat_py23str(name),
             kodiutils.strip_html_tags(kodiutils.compat_py23str(dvr)),
             kodiutils.compat_py23str(progpercent))
         )
@@ -131,8 +130,8 @@ def live():
             plugin.handle,
             plugin.url_for(
                 live_play,
-                label=kodiutils.compat_py23str(rtp_channel["name"]),
-                channel=kodiutils.compat_py23str(rtp_channel["id"]),
+                label=kodiutils.compat_py23str(name),
+                channel=kodiutils.compat_py23str(key.lower()),
                 img=kodiutils.compat_py23str(progimg),
                 prog=kodiutils.compat_py23str(dvr)
             ), liz, False)
@@ -150,56 +149,33 @@ def live_play():
     if "img" in plugin.args:
         icon = plugin.args["img"][0]
 
+    try:
+        req = requests.get("https://www.rtp.pt/play/" + channel, headers=HEADERS)
+        req.encoding = "latin-1"
+        stream = kodiutils.find_stream_url(req.text)
+    except:
+        raise_notification()
+        return
 
-    for rtp_channel in RTP_CHANNELS:
-        if rtp_channel["id"] == channel:
-            streams = rtp_channel["streams"]
-            for stream in streams:
-                if stream["type"] == "hls":
-                    if requests.head(stream["url"], headers=HEADERS).status_code == 200:
-                        liz = ListItem("[B][COLOR blue]{}[/B][/COLOR] ({})".format(
-                            kodiutils.compat_py23str(name),
-                            kodiutils.compat_py23str(prog))
-                        )
-                        liz.setArt({"thumb": icon, "icon": icon})
-                        liz.setProperty('IsPlayable', 'true')
-                        liz.setPath("{}|{}".format(stream["url"], urlencode(HEADERS)))
-                        setResolvedUrl(plugin.handle, True, liz)
-                        break
-                    else:
-                        continue
-                elif stream["type"] == "dashwv":
-                    is_helper = inputstreamhelper.Helper('mpd', drm='com.widevine.alpha')
-                    if is_helper.check_inputstream():
-                        # Grab token
-                        src = requests.get(stream["tk"], headers=HEADERS).text
-                        tk = re.compile('k: \"(.+?)\"', re.DOTALL).findall(src)
-                        if tk:
-                            payload = '{"drm_info":[D{SSM}], "kid": "E13506F7439BEAE7DDF0489FCDDF7481", "token":"' + tk[0] + '"}'
-                            liz = ListItem("[B][COLOR blue]{}[/B][/COLOR] ({})".format(
-                                kodiutils.compat_py23str(name),
-                                kodiutils.compat_py23str(prog))
-                            )
-                            liz.setPath(stream["url"])
-                            liz.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
-                            liz.setProperty('inputstream.adaptive.manifest_type', 'mpd')
-                            liz.setProperty('inputstreamaddon', 'inputstream.adaptive')
-                            liz.setProperty('inputstream.adaptive.stream_headers', urlencode(HEADERS))
-                            liz.setMimeType('application/dash+xml')
-                            liz.setProperty('inputstream.adaptive.license_key', '{}|{}|{}|'.format(stream["license"], "Content-Type=application/json", urllib.quote(payload)))
-                            liz.setContentLookup(False)
-                            setResolvedUrl(plugin.handle, True, liz)
+    liz = ListItem("[COLOR blue][B]{}[/B][/COLOR] ({})".format(
+        kodiutils.compat_py23str(name),
+        kodiutils.compat_py23str(prog))
+    )
+    liz.setArt({"thumb": icon, "icon": icon})
+    liz.setProperty('IsPlayable', 'true')
+    liz.setPath("{}|{}".format(stream, urlencode(HEADERS)))
+    setResolvedUrl(plugin.handle, True, liz)
 
 
 @plugin.route('/programs')
 def programs():
-    # Request dvr
     try:
         req = requests.get("http://www.rtp.pt/play/programas", headers=HEADERS)
         req.encoding = "latin-1"
         req = req.text
     except:
         raise_notification()
+        return
 
     match = re.compile(r'<div class="meta-data"><h4>(.+?)</h4>').findall(req)
 
@@ -223,11 +199,12 @@ def programs_category():
     try:
         req = requests.get("https://www.rtp.pt/play/bg_l_pg/?listcategory={}&page={}".format(
             cat_id,
-            page), headers=HEADERS)
+            page), headers=HEADERS_VOD)
         req.encoding = "latin-1"
         req = req.text
     except:
         raise_notification()
+        return
 
     pagei = ListItem("[B]{}[/B] - {} {}".format(kodiutils.compat_py23str(cat_name), kodiutils.get_string(32009), page))
     pagei.setProperty('IsPlayable', 'false')
@@ -295,6 +272,7 @@ def programs_episodes():
         req = req.text
     except:
         raise_notification()
+        return
 
     pagei = ListItem("[B]{}[/B] - {} {}".format(kodiutils.compat_py23str(title), kodiutils.get_string(32009), page))
     pagei.setProperty('IsPlayable', 'false')
@@ -355,14 +333,10 @@ def programs_play():
     try:
         req = requests.get("https://www.rtp.pt" + url, headers=HEADERS)
         req.encoding = "latin-1"
-        stream = re.search(r'"https://(.+?)ondemand.rtp.pt(.*?)"', req.text)
-        stream = "https://" + stream.group(1) + "ondemand.rtp.pt" + stream.group(2)
+        stream = kodiutils.find_stream_url(req.text)
     except:
-        try:
-            stream = re.search(r'"https://(.+?)streaming.rtp.pt(.*?)"', req.text)
-            stream = "https://" + stream.group(1) + "streaming.rtp.pt" + stream.group(2)
-        except:
-            raise_notification()
+        raise_notification()
+        return
 
     liz = ListItem("{} ({})".format(
         kodiutils.compat_py23str(title),
@@ -371,6 +345,11 @@ def programs_play():
     liz.setArt({"thumb": img, "icon": img})
     liz.setProperty('IsPlayable', 'true')
     liz.setPath("{}|{}".format(stream, urlencode(HEADERS)))
+
+    subtitles = kodiutils.find_subtitles(req.text)
+    if subtitles:
+        liz.setSubtitles([subtitles])
+
     setResolvedUrl(plugin.handle, True, liz)
 
 
@@ -382,6 +361,7 @@ def estudoemcasa():
         req = req.text
     except:
         raise_notification()
+        return
 
     soup = BeautifulSoup(req, 'html.parser')
 

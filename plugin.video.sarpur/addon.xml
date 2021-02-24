@@ -19,10 +19,14 @@
         <platform>all</platform>
         <language>is</language>
         <license>MIT</license>
-        <forum>http://spjall.vaktin.is/viewtopic.php?p=538688</forum>
+        <forum>https://spjall.vaktin.is/viewtopic.php?p=538688</forum>
         <website>https://github.com/Dagur/sarpur-xbmc</website>
-        <source>https://github.com/Dagur/sarpur-xbmc.git</source>
+        <source>https://github.com/Dagur/sarpur-xbmc</source>
         <email></email>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/icon.png</fanart>
+        </assets>
         <news>Version 5.0 (2021-02-23)
 - Upgraded to Python 3 for Kodi 19 compatibility
 - Fixed podcast scraping

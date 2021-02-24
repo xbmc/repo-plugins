@@ -1,3 +1,6 @@
+[B]Version 4.5[/B]
+- Fixed scraping of podcasts
+
 [B]Version 4.4[/B]
 - Add subtitles when available to playable list items
 
@@ -25,51 +28,3 @@
 - Better information about shows (duration, plot, episode number etc.)
 - Search feature
 - Much better podcast support
-
-[B]Version 3.2.0[/B]
-- Better cross platform support (switched to BeautifulSoup 4 from html5lib from lxml)
-- Removed the show index (since RÚV removed the recordings). (Added groups instead)
-- Last Frodo release. Added Gotham support.
-
-[B]Version 3.1.3[/B]
-- Added requests to imports
-
-[B]Version 3.1.2[/B]
-- Switched from lxml to plain etree
-
-[B]Version 3.1.1[/B]
-- Added missing required library
-
-[B]Version 3.1.0[/B]
-- Complete rewrite. Plenty of bugfixes and better performance
-
-[B]Version 3.0.3[/B]
-- Live URL is now fetched instead of being hard coded
-
-[B]Version 3.0.2[/B]
-- Updated for Frodo
-
-[B]Version 2.0.2[/B]
-- Changed scraper because of changed urls
-
-[B]Version 2.0.1[/B]
-- Changed ip-address for live feed
-
-[B]Version 2.0.0[/B]
-- Changing version number for Eden.
-
-[B]Version 1.1.1[/B]
-New:
-- Live stream should work at least for a while
-- Categories working again
-- Submitting to Eden
-
-[B]Version 1.1.0[/B]
-New:
-- Podcasts
-- Eden support
-
-
-[B]Version 1.0.1[/B]
-Bugfixes:
-- Fixed the way data files are being created and dealt with them becoming corrupt

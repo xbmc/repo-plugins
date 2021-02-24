@@ -25,7 +25,7 @@
         <email></email>
         <assets>
             <icon>resources/icon.png</icon>
-            <fanart>resources/icon.png</fanart>
+            <fanart>resources/fanart.png</fanart>
         </assets>
         <news>Version 5.0 (2021-02-23)
 - Upgraded to Python 3 for Kodi 19 compatibility

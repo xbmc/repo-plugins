@@ -1,0 +1,43 @@
+# Kodi Media Center language file
+# Addon Name: Arte +7
+# Addon id: plugin.video.arteplussept
+# Addon Provider: bmf
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30050"
+msgid "Language (Videos)"
+msgstr "Sprache (Videos)"
+
+msgctxt "#30052"
+msgid "Stream video quality"
+msgstr "Qualität des Videostreams"
+
+msgctxt "#30053"
+msgid "Show video stream options"
+msgstr "Show video stream options"
+
+msgctxt "#30005"
+msgid "Most recent"
+msgstr "Neuste"
+
+msgctxt "#30006"
+msgid "Most viewed"
+msgstr "Am meisten gesehen"
+
+msgctxt "#30007"
+msgid "Last chance"
+msgstr "Letzte chance"
+
+msgctxt "#30008"
+msgid "Magazines A-Z"
+msgstr "Sendungen A-Z"
+
+msgctxt "#30009"
+msgid "This week"
+msgstr "Diese Woche"

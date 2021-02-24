@@ -68,10 +68,10 @@ def get_podcast_shows(url):
     doc = get_document(url)
 
     featured = ({
-        'url': show.parent.find_all('li')[1].a['href'],
+        'url': show.find_all('a')[-1]['href'],
         'img': show.a.img["src"],
-        'name': show.a.span.text.capitalize()
-    } for show in doc.find_all("h4"))
+        'name': show.a.img["alt"]
+    } for show in doc.find_all(class_="podcast-container"))
 
     rest = ({
         'url': show.a['href'],
@@ -130,7 +130,6 @@ def get_podcast_episodes(url):
             'Premiered': parse_pubdate(
                 item.select('pubdate')[0].text
             ).strftime("%d.%m.%Y"),
-            'Duration': duration_to_seconds(item.find('itunes:duration').text),
             'title': item.title.text,
             'Plot': item.description.text
         }

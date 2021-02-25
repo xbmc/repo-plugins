@@ -37,6 +37,8 @@ the addon's tree architecture.
 
 TV_GUIDE = Script.setting.get_boolean('tv_guide')
 
+root = 'root'
+
 menu = {
     'fr_live': {
         'route': '/resources/lib/main:tv_guide_menu'

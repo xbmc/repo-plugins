@@ -90,8 +90,11 @@ def list_videos(plugin, item_id, program_guid, **kwargs):
             "title"]
         video_image = video_datas["images"][0]["_filepath"]
         video_plot = video_datas["summary"]
-        video_duration = 60 * int(
-            video_datas["video"]["_duration"].split(' ')[0])
+        video_duration_datas = video_datas["video"]["_duration"].split(' ')
+        if (len(video_duration_datas) > 2):
+            video_duration = 3600 * int(video_duration_datas[0]) + 60 * int(video_duration_datas[2])
+        else:
+            video_duration = 60 * int(video_duration_datas[0])
         video_id = video_datas["video"]["id"]
 
         item = Listitem()
@@ -122,8 +125,8 @@ def get_video_url(plugin,
 
     resp = urlquick.get(URL_BRIGHTCOVE_DATAS)
 
-    data_account = re.compile(r'ACCOUNT_ID\:\"(.*?)\"').findall(resp.text)[0]
-    data_player = re.compile(r'PLAYER_ID\:\"(.*?)\"').findall(resp.text)[0]
+    data_account = re.compile(r'ACCOUNT_ID\:\"(.*?)\"').findall(resp.text)[1]
+    data_player = re.compile(r'PLAYER_ID\:\"(.*?)\"').findall(resp.text)[1]
     data_video_id = video_id
 
     return resolver_proxy.get_brightcove_video_json(plugin, data_account,

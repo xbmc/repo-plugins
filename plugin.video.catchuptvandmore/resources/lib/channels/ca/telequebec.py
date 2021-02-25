@@ -33,20 +33,19 @@ from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
 import json
-import re
+import time
 import urlquick
 
 # TO DO
 # Add info LIVE TV, Replay
 
-URL_ROOT = 'http://zonevideo.telequebec.tv'
+URL_API = 'https://beacon.playback.api.brightcove.com/telequebec/api'
 
-URL_LIVE = 'https://player.telequebec.tv/Tq_VideoPlayer.js'
+URL_LIVE_DATAS = URL_API + '/epg?device_type=web&device_layout=web&datetimestamp=%s'
+# datetimestamp
 
-URL_EMISSIONS = URL_ROOT + '/a-z/'
-
-URL_STREAM_DATAS = 'https://mnmedias.api.telequebec.tv/api/v4/player/%s'
-# VideoId
+URL_BRIGHTCOVE_DATAS = URL_API + '/assets/%s/streams/%s'
+# ContentId, StreamId
 
 
 @Route.register
@@ -58,77 +57,31 @@ def list_programs(plugin, item_id, **kwargs):
     - Informations
     - ...
     """
-    resp = urlquick.get(URL_EMISSIONS)
-    root = resp.parse("div", attrs={"class": "list"})
-
-    for program_datas in root.iterfind(".//li"):
-        program_title = program_datas.find('.//a').text
-        program_url = URL_ROOT + program_datas.find('.//a').get('href')
-
-        item = Listitem()
-        item.label = program_title
-        item.set_callback(list_videos,
-                          item_id=item_id,
-                          program_url=program_url)
-        item_post_treatment(item)
-        yield item
-
-
-@Route.register
-def list_videos(plugin, item_id, program_url, **kwargs):
-
-    resp = urlquick.get(program_url)
-    root = resp.parse()
-
-    for video_datas in root.iterfind(".//div[@class='item']"):
-        video_title = video_datas.find('.//p').text.split(
-            ' / ')[0] + ' - ' + video_datas.find('.//h4').find('.//a').text
-        video_plot = video_datas.find('.//p').text
-        video_image = video_datas.find('.//img').get('src')
-        video_id = video_datas.get('data-mediaid')
-
-        item = Listitem()
-        item.label = video_title
-        item.art['thumb'] = item.art['landscape'] = video_image
-        item.info['plot'] = video_plot
-
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          video_id=video_id)
-        item_post_treatment(item, is_playable=True, is_downloadable=True)
-        yield item
-
-
-@Resolver.register
-def get_video_url(plugin,
-                  item_id,
-                  video_id,
-                  download_mode=False,
-                  **kwargs):
-
-    resp = urlquick.get(URL_STREAM_DATAS % video_id)
-    json_parser = json.loads(resp.text)
-
-    resp2 = urlquick.get(URL_LIVE)
-    data_account = re.compile(r'data-account\"\,(.*?)\)\,').findall(resp2.text)[0]
-    data_player = 'default'
-    data_video_id = ''
-    for stream_datas in json_parser["streamInfos"]:
-        if 'Brightcove' in stream_datas["source"]:
-            data_video_id = stream_datas["sourceId"]
-
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
-                                                    data_player, data_video_id,
-                                                    download_mode)
+    # TODO readd Catchup TV
+    return False
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE)
+    unix_time = time.time()
+    resp = urlquick.get(URL_LIVE_DATAS % unix_time)
+    json_parser = json.loads(resp.text)
 
-    data_account = re.compile(r'accountId:"(.*?)"').findall(resp.text)[0]
-    data_player = re.compile(r'livePlayerId:"(.*?)"').findall(resp.text)[0]
-    data_live_id = re.compile(r'liveVideoId:"(.*?)"').findall(resp.text)[0]
+    content_id = json_parser["data"]["blocks"][0]["widgets"][0]["playlist"]["contents"][0]["id"]
+    stream_id = json_parser["data"]["blocks"][0]["widgets"][0]["playlist"]["contents"][0]["streams"][0]["id"]
+
+    # Build PAYLOAD
+    payload = {
+        "device_layout": "web",
+        "device_type": "web"
+    }
+    resp2 = urlquick.post(URL_BRIGHTCOVE_DATAS % (content_id, stream_id),
+                          data=payload)
+    json_parser2 = json.loads(resp2.text)
+
+    data_account = json_parser2["data"]["stream"]["video_provider_details"]["account_id"]
+    data_player = 'default'
+    data_live_id = json_parser2["data"]["stream"]["url"]
     return resolver_proxy.get_brightcove_video_json(plugin, data_account,
                                                     data_player, data_live_id)

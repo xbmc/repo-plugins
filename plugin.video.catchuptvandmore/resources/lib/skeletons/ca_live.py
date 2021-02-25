@@ -35,13 +35,15 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'live_tv'
+
 menu = {
     'telequebec': {
         'resolver': '/resources/lib/channels/ca/telequebec:get_live_url',
         'label': 'Télé-Québec',
         'thumb': 'channels/ca/telequebec.png',
         'fanart': 'channels/ca/telequebec_fanart.jpg',
-        'enabled': False,
+        'enabled': True,
         'order': 4
     },
     'tva': {

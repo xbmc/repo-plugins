@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.29" provider-name="SylvainCecchetto,wwark">
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.31" provider-name="SylvainCecchetto,wwark">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.codequick" version="0.9.13"/>
@@ -42,17 +42,10 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.29]
-[FR - MyTF1/LCI] Fix Live TV / Catch-Up TV
-[FR - France-O] Remove Live TV
-[FR - Fun Radio and RTL2] Fix Live TV
-[FR - Gulli] Move Gulli to 6play
-[FR - 6Play] Add Cage Warrios - Catch-Up TV
-[WO - Arte] Readd Hack for Live TV
-[BE - RTBF] Use HLS contents if available because DRM not supported for some kodi instances
-[FR - BSmart] Fix Live TV / Catch-Up TV
-[BE - TéléMB] Fix Live TV
-[BE - RTC Liège] Fix Live TV
+[Version 0.2.31]
+[CA - TVA] Fix Catch-up TV
+[CH - SRGSSR] Fix Catch-up TV
+[ALL] Add a notification "Plugin CUTVMore non compatible Kodi 19"
 ----
 Visit WebSite - http://mpdb.tv/#home which host the french forum used by users of CU TV and More
     </news>

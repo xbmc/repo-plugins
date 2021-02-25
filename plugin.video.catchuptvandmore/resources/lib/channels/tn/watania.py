@@ -60,6 +60,6 @@ def get_live_url(plugin, item_id, **kwargs):
         live_html.text)[1]
     live_youtube_html = urlquick.get('https://www.youtube.com/embed/' +
                                      live_id_channel)
-    live_id = re.compile('\'VIDEO_ID\'\: \"(.*?)\"').findall(
+    live_id = re.compile(r'VIDEO_ID\"\:\"(.*?)\"').findall(
         live_youtube_html.text)[0]
     return resolver_proxy.get_stream_youtube(plugin, live_id, False)

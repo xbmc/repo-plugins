@@ -89,7 +89,7 @@ def list_categories(plugin, item_id, **kwargs):
 @Route.register
 def list_videos(plugin, item_id, category_url, page, **kwargs):
 
-    resp = urlquick.get(category_url % page)
+    resp = urlquick.get(category_url % page, max_age=-1)
     parser = htmlement.HTMLement()
     parser.feed(resp.json())
     data = parser.close()

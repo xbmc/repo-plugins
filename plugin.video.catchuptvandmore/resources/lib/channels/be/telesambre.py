@@ -42,4 +42,4 @@ def get_live_url(plugin, item_id, **kwargs):
     for stream_datas in list_files:
         if 'm3u8' in stream_datas:
             url_stream = stream_datas
-    return url_stream
+    return url_stream + '|referer=https://telesambre.fcst.tv/'

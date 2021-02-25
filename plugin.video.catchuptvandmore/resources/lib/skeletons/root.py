@@ -34,6 +34,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = None
+
 menu = {
     'live_tv': {
         'route': '/resources/lib/main:generic_menu',

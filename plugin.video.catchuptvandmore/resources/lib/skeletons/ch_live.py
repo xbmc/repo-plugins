@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'live_tv'
+
 menu = {
     'rougetv': {
         'resolver': '/resources/lib/channels/ch/rougetv:get_live_url',
@@ -86,7 +88,7 @@ menu = {
     },
     'rsila1': {
         'resolver': '/resources/lib/channels/ch/srgssr:get_live_url',
-        'label': 'RTS La 1',
+        'label': 'RSI La 1',
         'thumb': 'channels/ch/rsila1.png',
         'fanart': 'channels/ch/rsila1_fanart.jpg',
         'enabled': True,
@@ -94,7 +96,7 @@ menu = {
     },
     'rsila2': {
         'resolver': '/resources/lib/channels/ch/srgssr:get_live_url',
-        'label': 'RTS La 2',
+        'label': 'RSI La 2',
         'thumb': 'channels/ch/rsila2.png',
         'fanart': 'channels/ch/rsila2_fanart.jpg',
         'enabled': True,

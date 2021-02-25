@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'live_tv'
+
 menu = {
     'tvp3': {
         'resolver': '/resources/lib/channels/pl/tvp:get_live_url',

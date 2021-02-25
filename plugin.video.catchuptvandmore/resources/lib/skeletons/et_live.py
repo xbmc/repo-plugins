@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'live_tv'
+
 menu = {
     'ectv': {
         'resolver': '/resources/lib/channels/et/video2b:get_live_url',

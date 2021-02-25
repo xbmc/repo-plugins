@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'root'
+
 menu = {
     'allocine': {
         'route': '/resources/lib/websites/allocine:website_root',

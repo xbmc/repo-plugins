@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'replay'
+
 menu = {
     'nessma': {
         'route': '/resources/lib/channels/tn/nessma:list_categories',

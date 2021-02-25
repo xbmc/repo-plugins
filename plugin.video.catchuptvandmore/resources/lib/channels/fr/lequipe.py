@@ -81,7 +81,7 @@ def list_videos(plugin, item_id, program_url, page, **kwargs):
         title = video_datas['titre']
         img = video_datas['src_tablette_retina']
         duration = video_datas['duree']
-        video_id = video_datas['lien'].split('//')[1]
+        video_id = video_datas['lien_dm'].split('//')[1]
 
         item = Listitem()
         item.label = title

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     Catch-up TV & More
-    Copyright (C) 2016  SylvainCecchetto
+    Copyright (C) 2017  SylvainCecchetto
 
     This file is part of Catch-up TV & More.
 
@@ -24,34 +24,11 @@
 # an effect on Python 2.
 # It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from codequick import Script
-"""
-The following dictionaries describe
-the addon's tree architecture.
-* Key: item id
-* Value: item infos
-    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
-    - thumb: Item thumb path relative to "media" folder
-    - fanart: Item fanart path relative to "meia" folder
-"""
 
-root = 'live_tv'
+from codequick import Resolver
 
-menu = {
-    'crtv': {
-        'resolver': '/resources/lib/channels/cm/crtv:get_live_url',
-        'label': 'CRTV',
-        'thumb': 'channels/cm/crtv.png',
-        'fanart': 'channels/cm/crtv_fanart.jpg',
-        'enabled': True,
-        'order': 1
-    },
-    'crtvnews': {
-        'resolver': '/resources/lib/channels/cm/crtv:get_live_url',
-        'label': 'CRTV News',
-        'thumb': 'channels/cm/crtvnews.png',
-        'fanart': 'channels/cm/crtvnews_fanart.jpg',
-        'enabled': True,
-        'order': 2
-    }
-}
+
+@Resolver.register
+def get_live_url(plugin, item_id, **kwargs):
+
+    return 'http://api.new.livestream.com/accounts/27755193/events/8452381/live.m3u8'

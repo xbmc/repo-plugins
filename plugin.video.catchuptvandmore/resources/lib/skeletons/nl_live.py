@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'live_tv'
+
 menu = {
     'npo-1': {
         'resolver': '/resources/lib/channels/nl/npo:get_live_url',

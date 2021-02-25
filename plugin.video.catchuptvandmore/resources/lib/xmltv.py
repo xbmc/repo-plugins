@@ -35,6 +35,10 @@ from kodi_six import xbmcvfs
 from codequick import Script
 import urlquick
 
+"""
+python-xmltv package (https://pypi.org/project/python-xmltv/)
+
+"""
 
 # The Python-XMLTV version
 VERSION = "1.4.3"
@@ -248,54 +252,67 @@ def elem_to_programme(elem):
     return d
 
 
-def read_current_programmes(fp):
+def read_programmes(fp, only_current_programmes=False):
     """
     read_current_programmes(fp) -> list
 
-    Return the list of current programmes from xmltv filepath 'fp'
+    Return a list of programme dictionaries from file object 'fp'
+    If 'only_current_programmes', only considere current program based on current time.
     """
 
-    # Get the current UTC datetime
-    current_utc_time = datetime.datetime.now(pytz.UTC)
-    current_utc_time = int(current_utc_time.strftime(date_format_notz))
+    if only_current_programmes:
+        # Get the current UTC datetime
+        current_utc_time = datetime.datetime.now(pytz.UTC)
+        current_utc_time = int(current_utc_time.strftime(date_format_notz))
 
-    # Parse the xmltv file to only keep current programs
-    # It is faster to parse the xmltv file line by line and remove unwanted programmes
-    # than parsing the whole xmltv file with elementtree
-    # (x10 faster)
-    xmltv_l = []
-    with open(fp, 'r') as f:
-        take_line = True
-        for line in f.readlines():
+        # Parse the xmltv file to only keep current programs
+        # It is faster to parse the xmltv file line by line and remove unwanted programmes
+        # than parsing the whole xmltv file with elementtree
+        # (x10 faster)
+        xmltv_l = []
+        with open(fp, 'r') as f:
+            take_line = True
+            for line in f.readlines():
 
-            # Match the beginning of a program
-            if '<programme ' in line:
-                start = int(re.search(r'start="(.*?)"', line).group(1))  # UTC start time
-                stop = int(re.search(r'stop="(.*?)"', line).group(1))  # UTC stop time
-                if current_utc_time >= start and current_utc_time <= stop:
-                    pass
-                else:
-                    take_line = False
-                    continue
+                # Match the beginning of a program
+                if '<programme ' in line:
+                    start = int(re.search(r'start="(.*?)"', line).group(1))  # UTC start time
+                    stop = int(re.search(r'stop="(.*?)"', line).group(1))  # UTC stop time
+                    if current_utc_time >= start and current_utc_time <= stop:
+                        pass
+                    else:
+                        take_line = False
+                        continue
 
-            # Keep this line if needed
-            if take_line:
-                xmltv_l.append(line)
+                # Keep this line if needed
+                if take_line:
+                    xmltv_l.append(line)
 
-            # Match the end of a program
-            if '</programme>' in line:
-                take_line = True
+                # Match the end of a program
+                if '</programme>' in line:
+                    take_line = True
 
-    # Parse the reduced xmltv string with elementtree
-    # and convert each programme to a dict
-    tree = ET.fromstring('\n'.join(xmltv_l))
+        # Parse the reduced xmltv string with elementtree
+        # and convert each programme to a dict
+        tree = ET.fromstring('\n'.join(xmltv_l))
+    else:
+        tree = ET.parse(fp)
     programmes = []
     for elem in tree.findall('programme'):
         programmes.append(elem_to_programme(elem))
     return programmes
 
 
+"""
+CUTV&M functions
+
+"""
+
+
 def datetime_strptime(s, f):
+    """Simple workaroung to fix https://forum.kodi.tv/showthread.php?tid=112916
+
+    """
     try:
         return datetime.datetime.strptime(s, f)
     except TypeError:
@@ -303,6 +320,9 @@ def datetime_strptime(s, f):
 
 
 def programme_post_treatment(programme):
+    """Prepare the programme to be used in the Live TV menu of CUTV&M
+
+    """
     for k in ['title', 'desc', 'sub-title', 'country', 'category']:
         if k in programme:
             s = ''
@@ -355,6 +375,72 @@ def programme_post_treatment(programme):
     return programme
 
 
+def programme_post_treatment_iptvmanager(programme):
+    """Prepare the programme to be used by IPTV Manager
+
+    """
+    # Titles, etc..
+    for k in ['title', 'desc', 'sub-title', 'country', 'category']:
+        if k in programme:
+            s = ''
+            for t in programme[k]:
+                s = s + t[0] + ' - '
+            s = s[:-3]
+            programme[k] = s
+
+    # Icon
+    if 'icon' in programme:
+        programme['icon'] = programme['icon'][0]['src']
+
+    # Episode (e.g 'episode-num': [('0.9.', 'xmltv_ns')])
+    if 'episode-num' in programme:
+        for episode_num, episode_format in programme['episode-num']:
+            if episode_format == 'xmltv_ns':
+                splitted_episode_num = episode_num.split('.')
+                season = splitted_episode_num[0]
+                episode = splitted_episode_num[1]
+                part = splitted_episode_num[2]
+
+                final_string = ''
+                if season != '':
+                    season = int(season) + 1
+                    final_string += 'S' + str(season).zfill(2)
+                if episode != '':
+                    episode = int(episode) + 1
+                    final_string += 'E' + str(episode).zfill(2)
+                if part != '':
+                    part = int(part) + 1
+                    final_string += '/' + str(part).zfill(2)
+                programme['episode'] = final_string
+                break
+
+    # For start and stop we use ISO-8601 format in UTC
+    # (e.g YYYY-MM-DDTHH:MM:SS)
+    ISO_8601_FORMAT = '%Y-%m-%dT%H:%M:%S'
+
+    # But in our xmltv file we have datetime in
+    # %Y%m%d%H%M%S format (e.g. 20210202224100)
+
+    # Get UTC start and stop datetime
+    start_s = programme['start']
+    stop_s = programme['stop']
+
+    # Convert start and stop on naive datetime object
+    start_dt = datetime_strptime(start_s, date_format_notz)
+    stop_dt = datetime_strptime(stop_s, date_format_notz)
+
+    # Add UTC timezone to start and stop
+    utc_tz = pytz.UTC
+    start_dt = utc_tz.localize(start_dt)
+    stop_dt = utc_tz.localize(stop_dt)
+
+    # Use correct format
+    programme['start'] = start_dt.strftime(ISO_8601_FORMAT)
+    programme['stop'] = stop_dt.strftime(ISO_8601_FORMAT)
+
+    return programme
+
+
 xmltv_infos = {
     'fr_live':
         {
@@ -379,39 +465,104 @@ xmltv_infos = {
 }
 
 
-def get_xmltv_url(menu_id):
-    # Get current UTC date
-    xmltv_date = datetime.datetime.now(pytz.UTC)
-    xmltv_date_s = xmltv_date.strftime("%Y%m%d")
-    return xmltv_infos[menu_id]['url'].format(xmltv_date_s)
+def get_xmltv_url(country_id, day_delta=0):
+    """Get URL of the xmltv file
+
+    Args:
+        country_id (str)
+        day_delta (int): 0: Today, 1: Tomorrow,...
+    Returns:
+        str: xmltv URL
+    """
+    xmltv_date = datetime.date.today() + datetime.timedelta(days=day_delta)
+    xmltv_date_s = xmltv_date.strftime('%Y%m%d')
+    return xmltv_infos[country_id]['url'].format(xmltv_date_s)
 
 
-def grab_tv_guide(menu_id):
-    try:
-        xmltv_url = get_xmltv_url(menu_id)
-        Script.log('xmltv url of {}: {}'.format(menu_id, xmltv_url))
+def download_xmltv_file(country_id, day_delta=0):
+    """Try to download XMLTV file of country_id for today + day_delta.
 
-        xmltv_fn = os.path.basename(urlparse(xmltv_url).path)
-        Script.log('xmltv filename of {}: {}'.format(menu_id, xmltv_fn))
+    Args:
+        country_id (str)
+        day_delta (int): 0: Today, 1: Tomorrow,...
+    Returns:
+        str: xmltv filepath.
+    """
+    # Retrieve URL
+    xmltv_url = get_xmltv_url(country_id, day_delta=day_delta)
+    Script.log('xmltv url of {} country with day_delta {}: {}'.format(country_id, day_delta, xmltv_url))
 
-        xmltv_fp = os.path.join(Script.get_info('profile'), xmltv_fn)
+    # Compute dst filepath
+    xmltv_fn = os.path.basename(urlparse(xmltv_url).path)
+    Script.log('xmltv filename: {}'.format(xmltv_fn))
+    xmltv_fp = os.path.join(Script.get_info('profile'), xmltv_fn)
 
-        # Remove old xmltv files of this country
-        dirs, files = xbmcvfs.listdir(Script.get_info('profile'))
-        for fn in files:
-            if xmltv_infos[menu_id]['keyword'] in fn and fn != xmltv_fn:
+    # Remove old xmltv files of this country
+    dirs, files = xbmcvfs.listdir(Script.get_info('profile'))
+    today = datetime.date.today()
+    for fn in files:
+        if xmltv_infos[country_id]['keyword'] not in fn:
+            continue
+        try:
+            file_date_s = fn.split(xmltv_infos[country_id]['keyword'])[1].split('.xml')[0]
+            file_date = datetime_strptime(file_date_s, '%Y%m%d').date()
+            if file_date < today:
                 Script.log('Remove old xmltv file: {}'.format(fn))
                 xbmcvfs.delete(os.path.join(Script.get_info('profile'), fn))
+        except Exception:
+            pass
 
-        # Check if we need to download a fresh xmltv file
-        if not xbmcvfs.exists(xmltv_fp):
-            Script.log("xmltv file of {} for today does not exist, let's download it".format(menu_id))
-            r = urlquick.get(xmltv_url)
-            with open(xmltv_fp, 'wb') as f:
-                f.write(r.content)
+    # Check if we need to download a fresh xmltv file
+    if not xbmcvfs.exists(xmltv_fp):
+        Script.log("xmltv file of {} for today does not exist, let's download it".format(country_id))
+        r = urlquick.get(xmltv_url)
+        with open(xmltv_fp, 'wb') as f:
+            f.write(r.content)
+    return xmltv_fp
+
+
+def grab_programmes(country_id, day_delta):
+    """Retrieve programmes of channels of country_id at day today + day_detla.
+
+    Args:
+        country_id (str)
+        day_delta (int)
+    Returns:
+        list: Programmes.
+    """
+    if country_id not in xmltv_infos:
+        return []
+    try:
+        # Download, if needed, xmltv file
+        xmltv_fp = download_xmltv_file(country_id, day_delta=day_delta)
 
         # Grab programmes in xmltv file
-        programmes = read_current_programmes(xmltv_fp)
+        programmes = read_programmes(xmltv_fp, only_current_programmes=False)
+        programmes_post_treated = []
+        for programme in programmes:
+            programmes_post_treated.append(programme_post_treatment_iptvmanager(programme))
+        return programmes_post_treated
+    except Exception as e:
+        Script.log('xmltv module failed with error: {}'.format(e), lvl=Script.ERROR)
+        return []
+
+
+def grab_current_programmes(country_id):
+    """Retrieve current programmes of channels of country_id.
+
+    Args:
+        country_id (str)
+    Returns:
+        dict: (key: xmltv_id, value: current programme)
+    """
+    if country_id not in xmltv_infos:
+        return {}
+    try:
+        # Download, if needed, xmltv file of today
+        xmltv_fp = download_xmltv_file(country_id)
+
+        # Grab current programmes in xmltv file
+        programmes = read_programmes(xmltv_fp, only_current_programmes=True)
 
         # Use the channel as key
         tv_guide = {}
@@ -425,5 +576,5 @@ def grab_tv_guide(menu_id):
             Script.localize(30722),
             Script.localize(30723),
             display_time=7000)
-        Script.log('xmltv module failed with error: {}'.format(e, lvl=Script.ERROR))
+        Script.log('xmltv module failed with error: {}'.format(e), lvl=Script.ERROR)
         return {}

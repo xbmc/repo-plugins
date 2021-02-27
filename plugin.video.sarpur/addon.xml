@@ -6,7 +6,6 @@
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.beautifulsoup4" version="4.3.2"/>
-        <import addon="script.module.simplejson" version="2.0.10"/>
         <import addon="script.module.requests" version="2.3.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource"
@@ -14,49 +13,20 @@
         <provides>audio video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">Play media off the Icelandic Public Radio's website</summary>
-        <description lang="en">An Icelandic IP-Address is required to use this because of geoblocking</description>
+        <summary lang="en_GB">Play media off the Icelandic Public Radio's website</summary>
+        <description lang="en_GB">An Icelandic IP-Address is required to use this because of geoblocking</description>
         <platform>all</platform>
         <language>is</language>
         <license>MIT</license>
         <forum>https://spjall.vaktin.is/viewtopic.php?p=538688</forum>
         <website>https://github.com/Dagur/sarpur-xbmc</website>
         <source>https://github.com/Dagur/sarpur-xbmc</source>
-        <email></email>
         <assets>
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
         </assets>
         <news>Version 5.0 (2021-02-23)
 - Upgraded to Python 3 for Kodi 19 compatibility
-- Fixed podcast scraping
-
-Version 4.4
-- Add subtitles when available to playable list items
-
-Version 4.3.1
-- Handle error when program title missing
-
-Version 4.3.0
-- Add featured and categories. Add context menu.
-- Only display program episode if program has episodes 
-- Localization
-
-Version 4.2.0
-- Use streams instead of direct URLs (sindrig)
-- Fixed search (sindrig)
-
-Version 4.1.0
-- Fixed the podcast index
-- Fixed duration times
-- Fixed live streams
-- Added a live stream menu
-
-Version 4.0.0
-- Rewritten in large part because of ruv.is website redesign
-- Now uses TV schedule format instead of groups
-- Better information about shows (duration, plot, episode number etc.)
-- Search feature
-- Much better podcast support</news>
+- Fixed podcast scraping</news>
     </extension>
 </addon>

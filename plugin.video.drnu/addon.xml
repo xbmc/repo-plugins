@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="5.0.12" name="DR TV" provider-name="msj33">
+<addon id="plugin.video.drnu" version="5.0.13" name="DR TV" provider-name="TermeHansen">
     <requires>
-        <import addon="xbmc.python" version="2.14.0"/>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.requests" version="2.22.0" />
+        <import addon="script.module.requests-cache" version="0.4.13"/>
         <import addon="script.module.simplejson" version="2.0.10"/>
         <import addon="script.module.buggalo" version="1.1.2"/>
     </requires>
-    <extension point="xbmc.python.pluginsource" library="addon.py">
+    <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
@@ -18,9 +20,32 @@
         <license>GPL 2.0</license>
         <platform>all</platform>
         <language>da</language>
-        <email>msj33@hotmail.com</email>
+        <email>termopeten@gmail.com</email>
         <website>https://www.dr.dk/</website>
         <forum>https://forum.kodi.tv/</forum>
         <source>https://github.com/xbmc-danish-addons/plugin.video.drnu</source>
+<news>[B]Version 5.0.13 - 2021-02-25[/B]
+- Adding old PR's + minor fixes. last update before kodi 19 and python3
+- Change for request-cache for storing web requests locally (in 8hours) #34
+- Fix missing thumbnails and added option in settings to choose fan-art image size #29 #35
+- Fixed themes menu item #34
+- Add support for other plugins to start live tv. #31
+- Update logos and entry screen #24
+- Change subtitle handling to local srt files, so user also can change for hard-of-hearing subs and change while watching #36
+
+[B]Version 5.0.12 - 2018-02-05[/B]
+- Updated copyright(readded) + added new strings.po language format for EN/DA translations.
+
+[B]Version 5.0.11 - 2018-02-05[/B]
+- Fixing encrypted streams - Thanks to @krogsbell on the kodi forums.
+- Moving "ownership" of the addon, hence Tommy have stopped developing on the addon.
+
+[B]Version 5.0.10 - 2017-11-01[/B]
+- Rollback to DR API v1.2
+</news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+       </assets>
     </extension>
 </addon>

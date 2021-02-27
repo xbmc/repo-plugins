@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2014 Tommy Winther, msj33
+#      Copyright (C) 2014 Tommy Winther, msj33, TermeHansen
 #
 #  https://github.com/xbmc-danish-addons/plugin.video.drnu
 #
@@ -24,41 +24,57 @@ try:
 except:
     import simplejson as json
 import urllib
-import urllib2
+import requests
+import requests_cache
 import hashlib
 import binascii
 import struct
 from math import ceil
 import os
-import datetime
 import re
 import base64
-SLUG_PREMIERES='forpremierer'
+import xbmcaddon
+import xbmc
 
+ADDON = xbmcaddon.Addon()
+
+SLUG_PREMIERES='forpremierer'
+SLUG_ADULT=['dr1','dr2','dr3','dr-k']
 
 class Api(object):
     API_URL = 'http://www.dr.dk/mu-online/api/1.2'
 
     def __init__(self, cachePath):
         self.cachePath = cachePath
+        #cache expires after: 3600 = 1hour
+        requests_cache.install_cache(os.path.join(cachePath,'requests.cache'), backend='sqlite', expire_after=3600*8 )
+        requests_cache.remove_expired_responses()
+        self.empty_srt = self.cachePath + '/{}.da.srt'.format(ADDON.getLocalizedString(30508))
+        with open(self.empty_srt, 'w') as fn:
+           fn.write('1\n00:00:00,000 --> 00:01:01,000\n') # we have to have something in srt to make kodi use it
 
     def getLiveTV(self):
-        return self._http_request('/channel/all-active-dr-tv-channels')
+        channels = self._http_request('/channel/all-active-dr-tv-channels')
+        return [channel for channel in channels if channel['Title'] in ['DR1', 'DR2', 'DR Ramasjang']]
 
     def getChildrenFrontItems(self, channel):
         childrenFront = self._http_request('/page/tv/children/front/%s' % channel)
         return self._handle_paging(childrenFront['Programs'])
 
     def getThemes(self):
-        themes = self._http_request('/list/view/themesoverview')
-        return themes['Items']
+        themes = self._http_request('/page/tv/themes', {'themenamesonly': 'false'})
+        return themes['Themes']
 
     def getLatestPrograms(self):
+        channel = ''
+        if ADDON.getSetting('disable.kids') == 'true':
+            channel = ','.join(SLUG_ADULT)
         result = self._http_request('/page/tv/programs', {
             'index': '*',
             'orderBy': 'LastPrimaryBroadcastWithPublicAsset',
-            'orderDescending': 'true'
-        }, cacheMinutes=5)
+            'orderDescending': 'true',
+            'channel': channel
+        }, cache=False)
         return result['Programs']['Items']
 
     def getProgramIndexes(self):
@@ -109,17 +125,43 @@ class Api(object):
                 uri = link['Uri']
                 if uri == None:
                     uri = link['EncryptedUri']
-                    uri = decrypt_uri(uri)               
+                    uri = decrypt_uri(uri)
                 break
 
         subtitlesUri = None
         if 'SubtitlesList' in result and len(result['SubtitlesList']) > 0:
-            subtitlesUri = result['SubtitlesList'][0]['Uri']
-
+            subtitlesUri=[]
+            foreign = False
+            for sub in result['SubtitlesList']:
+               if 'HardOfHearing' in sub['Type']:
+                   name = '{}/{}.da.srt'.format(self.cachePath, ADDON.getLocalizedString(30506).encode('utf-8'))
+               else:
+                   foreign = True
+                   name = '{}/{}.da.srt'.format(self.cachePath, ADDON.getLocalizedString(30507).encode('utf-8'))
+               u = requests.get(sub['Uri'], timeout=10)
+               if u.status_code != 200:
+                   u.close()
+                   break
+               srt = self.vtt2srt( u.content )
+               with open(name, 'w') as fn:
+                   fn.write(srt)
+               u.close()
+               subtitlesUri.append(name)
+            if not foreign:
+               # no subtitles, so probably all danish, so we need to set an empty subtitle file as first choice
+               subtitlesUri = [self.empty_srt] + subtitlesUri
         return {
             'Uri': uri,
             'SubtitlesUri': subtitlesUri
         }
+
+
+    def redirectImageUrl(self, imageUrl, width=300, height=170):
+	# HACK: the servers behind /mu-online/api/1.2 is often returning Content-Type="text/xml" instead of "image/jpeg",
+        # this problem is not pressent for /mu/bar (the "Classic API")
+        assert(self.api.API_URL.endswith("/mu-online/api/1.2"))
+        return imageUrl.replace("/mu-online/api/1.2/bar/","/mu/bar/") + "?width=%d&height=%d" % (width, height)
+
 
     def _handle_paging(self, result):
         items = result['Items']
@@ -128,41 +170,48 @@ class Api(object):
             items.extend(result['Items'])
         return items
 
-    def _http_request(self, url, params=None, cacheMinutes = 720):
+    def _http_request(self, url, params=None, cache=True):
         try:
             if not url.startswith(('http://','https://')):
                 url = self.API_URL + urllib.quote(url, '/')
 
             if params:
-                url = url + '?' + urllib.urlencode(params, doseq=True)
+                url += '?' + urllib.urlencode(params, doseq=True)
 
             try:
                 xbmc.log(url)
             except:
                 pass
 
-            urlCachePath = os.path.join(self.cachePath, hashlib.md5(url).hexdigest() + '.cache')
-
-            cacheUntil = datetime.datetime.now() - datetime.timedelta(minutes=cacheMinutes)
-            if not os.path.exists(urlCachePath) or datetime.datetime.fromtimestamp(os.path.getmtime(urlCachePath)) < cacheUntil:
-                u = urllib2.urlopen(url, timeout=30)
-                content = u.read()
-                u.close()
-
-                try:
-                    f = open(urlCachePath, 'w')
-                    f.write(content)
-                    f.close()
-                except:
-                    pass # ignore, cache has no effect
+            if not cache:
+                with requests_cache.disabled():
+                    u = requests.get(url, timeout=30)
             else:
-                f = open(urlCachePath)
-                content = f.read()
-                f.close()
+                u = requests.get(url, timeout=30)
+            if u.status_code == 200:
+                content = u.text
+                u.close()
 
             return json.loads(content)
         except Exception as ex:
             raise ApiException(ex)
+
+    def vtt2srt(self, vtt):
+        srt = vtt.replace("\r\n", "\n")
+        srt = re.sub(r'([\d]+)\.([\d]+)', r'\1,\2', srt)
+        srt = re.sub(r'WEBVTT\n\n', '', srt)
+        srt = re.sub(r'^\d+\n', '', srt)
+        srt = re.sub(r'\n\d+\n', '\n', srt)
+        srt = re.sub(r'\n([\d]+)', r'\nputINDEXhere\n\1', srt)
+
+        srtout = '1\n'
+        idx = 2
+        for l in srt.split('\n'):
+           if l == 'putINDEXhere':
+               l = str(idx)
+               idx += 1
+           srtout += l + '\n'
+        return srtout
 
 BLOCK_SIZE_BYTES = 16
 
@@ -244,7 +293,7 @@ try:
     compat_str = unicode  # Python 2
 except NameError:
     compat_str = str
-    
+
 def compat_struct_pack(spec, *args):
     if isinstance(spec, compat_str):
         spec = spec.encode('ascii')
@@ -254,7 +303,7 @@ def compat_struct_unpack(spec, *args):
     if isinstance(spec, compat_str):
         spec = spec.encode('ascii')
     return struct.unpack(spec, *args)
-                      
+
 def mix_column(data, matrix):
     data_mixed = []
     for row in range(4):
@@ -274,12 +323,12 @@ def mix_columns(data, matrix=MIX_COLUMN_MATRIX):
 
 def mix_columns_inv(data):
     return mix_columns(data, MIX_COLUMN_MATRIX_INV)
-    
+
 def rijndael_mul(a, b):
     if(a == 0 or b == 0):
         return 0
     return RIJNDAEL_EXP_TABLE[(RIJNDAEL_LOG_TABLE[a] + RIJNDAEL_LOG_TABLE[b]) % 0xFF]
-    
+
 def shift_rows_inv(data):
     data_shifted = []
     for column in range(4):
@@ -381,7 +430,7 @@ def aes_decrypt(data, expanded_key):
     data = xor(data, expanded_key[:BLOCK_SIZE_BYTES])
 
     return data
-    
+
 def bytes_to_intlist(bs):
     if not bs:
         return []
@@ -394,10 +443,10 @@ def intlist_to_bytes(xs):
     if not xs:
         return b''
     return compat_struct_pack('%dB' % len(xs), *xs)
-            
+
 def hex_to_bytes(hex):
     return binascii.a2b_hex(hex.encode('ascii'))
-    
+
 def aes_cbc_decrypt(data, key, iv):
     """
     Decrypt with aes in CBC mode
@@ -421,7 +470,7 @@ def aes_cbc_decrypt(data, key, iv):
     decrypted_data = decrypted_data[:len(data)]
 
     return decrypted_data
-            
+
 def decrypt_uri(e):
     n = int(e[2:10], 16)
     a = e[10 + n:]

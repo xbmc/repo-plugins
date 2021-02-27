@@ -162,9 +162,6 @@ def get_sorted_menu(plugin, menu_id):
     current_menu = importlib.import_module('resources.lib.skeletons.' +
                                            menu_id).menu
 
-    if menu_id == "root":
-        xbmcgui.Dialog().ok(plugin.localize(30607), plugin.localize(30608))
-
     # Notify user for the new M3U Live TV feature
     if menu_id == "live_tv" and \
             get_kodi_version() >= 18 and \

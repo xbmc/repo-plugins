@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+    <controls>
+        <animation type="WindowOpen" reversible="false">
+            <effect type="fade" end="100" time="240" />
+        </animation>
+        <animation type="WindowClose" reversible="false">
+            <effect type="fade" start="100" end="0" time="240" />
+        </animation>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture>loguploader-black.png</texture>
+        </control>
+        <control type="label" id="501">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>50</height>
+            <align>center</align>
+            <aligny>center</aligny>
+        </control>
+        <control type="image">
+            <left>20</left>
+            <top>60</top>
+            <width>1880</width>
+            <height>2</height>
+			<texture>loguploader-white.png</texture>
+        </control>
+        <control type="textbox" id="502">
+            <left>20</left>
+            <top>70</top>
+            <width>1880</width>
+            <height>990</height>
+			<pagecontrol>503</pagecontrol>
+        </control>
+        <control type="scrollbar" id="503">
+            <left>1900</left>
+            <top>70</top>
+            <width>20</width>
+            <height>990</height>
+        </control>
+    </controls>
+</window>
+

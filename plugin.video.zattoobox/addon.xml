@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.zattoobox"
-       version="1.0.7"
+       version="1.0.8"
        name="Zattoo Box"
        provider-name="Pascal Nançoz">
   <requires>

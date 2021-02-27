@@ -62,7 +62,7 @@ class LiveTV(ZBExtension):
 		self.ZBProxy.add_directoryItems(items)
 
 	def watch(self, args):
-		params = {'cid': args['id'], 'stream_type': 'hls'}
+		params = {'cid': args['id'], 'stream_type': 'hls5'}
 		resultData = self.ZapiSession.exec_zapiCall('/zapi/watch', params)
 		if resultData is not None:
 			url = resultData['stream']['watch_urls'][0]['url']

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30001">
+        <setting label="30020" type="lsep"/>
+        <setting id="video.format" type="labelenum" label="30021" values="360p|480p|540p|720p|1080p|2160p|HLS (Adaptive)" default="HLS (Adaptive)"/>
+        <setting id="video.subtitles" type="bool" label="30023" default="false"/>
+        <setting id="video.codec.av1" type="bool" label="30022" default="false"/>
+        <setting label="30011" type="lsep"/>
+        <setting id="search.items.size" type="labelenum" label="30012" values="5|10|15|20|25|30|40|50" default="15"/>
+        <setting id="search.history.size" type="labelenum" label="30013" values="0|5|10|15|20|30|50" default="10"/>
+        <setting id="search.sort" type="enum" label="30015" lvalues="300150|300151|300152|300153|300154|300155|300156" default="0"/>
+        <setting id="search.template" type="text" label="30014" default="{}"/>
+    </category>
+    <category label="30051">
+        <setting label="30070" type="lsep"/>
+        <setting id="api.accesstoken" type="text" label="30071"/>
+        <setting label="30080" type="lsep"/>
+        <setting label="30081" type="action" action="RunPlugin(plugin://$ID/settings/cache/clear/)" option="close"/>
+    </category>
+</settings>

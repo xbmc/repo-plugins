@@ -1,0 +1,20 @@
+#EXTM3U tvg-shift=0
+
+# Tunisia
+# tn_live
+
+##	التلفزة التونسية الوطنية 1
+##	watania1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/tn/watania1.png" group-title="Tunisia",التلفزة التونسية الوطنية 1
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/tn/watania/get_live_url/?item_id=watania1
+
+##	التلفزة التونسية الوطنية 2
+##	watania2
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/tn/watania2.png" group-title="Tunisia",التلفزة التونسية الوطنية 2
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/tn/watania/get_live_url/?item_id=watania2
+
+##	نسمة تي في
+##	nessma
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/tn/nessma.png" group-title="Tunisia",نسمة تي في
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/tn/nessma/get_live_url/?item_id=nessma
+

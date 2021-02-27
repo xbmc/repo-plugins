@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'replay'
+
 menu = {
     'npo-start': {
         'route': '/resources/lib/channels/nl/npo:list_categories',

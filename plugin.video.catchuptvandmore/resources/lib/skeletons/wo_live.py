@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'live_tv'
+
 menu = {
     'euronews': {
         'resolver': '/resources/lib/channels/wo/euronews:get_live_url',

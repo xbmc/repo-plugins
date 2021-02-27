@@ -175,7 +175,8 @@ def list_contents(plugin, item_id, key_value, **kwargs):
                         else:
                             content_image = content["URLImage"]
                     else:
-                        content_image = content["URLImage"]
+                        if 'URLImage' in content:
+                            content_image = content["URLImage"]
                     content_url = content["onClick"]["URLPage"]
 
                     item = Listitem()

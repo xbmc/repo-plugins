@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'replay'
+
 menu = {
     'rts': {
         'route': '/resources/lib/channels/ch/srgssr:list_categories',

@@ -105,26 +105,61 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/ln24/get_live_u
 
 ##	La Une
 ##	laune
-#EXTINF:-1 tvg-id="C164.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/laune.png" group-title="Belgium",La Une
+#EXTINF:-1 tvg-id="C164.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/laune.png" group-title="Belgium Belgique fr",La Une
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=laune
 
 ##	Tipik
 ##	tipiktv
-#EXTINF:-1 tvg-id="C187.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/tipik.png" group-title="Belgium",Tipik
+#EXTINF:-1 tvg-id="C187.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/tipik.png" group-title="Belgium Belgique fr",Tipik
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=tipiktv
 
 ##	La Trois
 ##	latrois
-#EXTINF:-1 tvg-id="C892.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/latrois.png" group-title="Belgium",La Trois
+#EXTINF:-1 tvg-id="C892.api.telerama.fr" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/latrois.png" group-title="Belgium Belgique fr",La Trois
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/rtbf/set_live_url/?item_id=latrois
 
 ##	Antenne Centre TV
 ##	actv
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/actv.png" group-title="Belgium",Antenne Centre TV
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/actv.png" group-title="Belgium Belgique fr",Antenne Centre TV
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/actv/get_live_url/?item_id=actv
 
 ##	Télésambre
 ##	telesambre
-#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/telesambre.png" group-title="Belgium",Télésambre
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/telesambre.png" group-title="Belgium Belgique fr",Télésambre
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/telesambre/get_live_url/?item_id=telesambre
+
+##	ATV (Antwerpen)
+##	atv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/atv.png" group-title="Belgium België nl",ATV (Antwerpen)
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/atv/get_live_url/?item_id=atv
+
+##	BRUZZ (Brussel)
+##	bruzz
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/bruzz.png" group-title="Belgium België nl",BRUZZ (Brussel)
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/bruzz/get_live_url/?item_id=bruzz
+
+##	Focus & WTV (West-Vlaanderen)
+##	focuswtv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/focuswtv.png" group-title="Belgium België nl",Focus & WTV (West-Vlaanderen)
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/focuswtv/get_live_url/?item_id=focuswtv
+
+##	ROB-tv (Oost-Brabant)
+##	robtv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/robtv.png" group-title="Belgium België nl",ROB-tv (Oost-Brabant)
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/robtv/get_live_url/?item_id=robtv
+
+##	TVL (Limburg)
+##	tvl
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/tvl.png" group-title="Belgium België nl",TVL (Limburg)
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/tvl/get_live_url/?item_id=tvl
+
+##	TV Oost (Oost-Vlaanderen)
+##	tvoost
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/tvoost.png" group-title="Belgium België nl",TV Oost (Oost-Vlaanderen)
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/tvoost/get_live_url/?item_id=tvoost
+
+##	HLN Live
+##	hln_live
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/be/hln_live.png" group-title="Belgium België nl",HLN Live
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/be/hln_live/get_live_url/?item_id=hln_live
 

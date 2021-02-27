@@ -162,6 +162,9 @@ def get_sorted_menu(plugin, menu_id):
     current_menu = importlib.import_module('resources.lib.skeletons.' +
                                            menu_id).menu
 
+    if menu_id == "root":
+        xbmcgui.Dialog().ok(plugin.localize(30607), plugin.localize(30608))
+
     # Notify user for the new M3U Live TV feature
     if menu_id == "live_tv" and \
             get_kodi_version() >= 18 and \
@@ -377,35 +380,41 @@ def unmask_all_hidden_items(plugin):
 
 
 @Script.register
-def unmask_items(plugin, menu_id):
-    """Callback function of 'Unmask items' setting buttons
+def unmask_items(plugin):
+    """Callback function of 'Select items to unmask' setting button.
 
     Args:
         plugin (codequick.script.Script)
-        menu_id (str): Menu for which we cant to unmask items
     """
 
     menus_settings = get_menus_settings()
-    if menu_id not in menus_settings:
+
+    multiselect_map = []
+    multiselect_items = []
+
+    for menu_id, items in menus_settings.items():
+        for item_id, item in items.items():
+            if not item.get('hidden', False):
+                continue
+
+            current_lvl = menu_id
+            last_item_id = item_id
+            labels = []
+            while current_lvl is not None:
+                module = importlib.import_module('resources.lib.skeletons.' + current_lvl)
+                labels.insert(0, get_item_label(last_item_id, module.menu[last_item_id]))
+                last_item_id = current_lvl
+                current_lvl = module.root
+            multiselect_items.append(' - '.join(labels))
+            multiselect_map.append((menu_id, item_id))
+
+    seleted_items = xbmcgui.Dialog().multiselect(
+        plugin.localize(30402),
+        multiselect_items)
+    if seleted_items is None:
         return
 
-    menu = importlib.import_module('resources.lib.skeletons.' + menu_id).menu
-
-    hidden_items = []
-    hidden_items_labels = []
-    for item_id, item in menus_settings[menu_id].items():
-        if item.get('hidden', False):
-            hidden_items.append(item_id)
-            hidden_items_labels.append(get_item_label(item_id, menu[item_id]))
-
-    if not hidden_items:
-        return
-
-    seleted_item = xbmcgui.Dialog().select(
-        plugin.localize(30406),
-        hidden_items_labels)
-    if seleted_item == -1:
-        return
-
-    menus_settings[menu_id][hidden_items[seleted_item]].pop('hidden')
+    for seleted_item in seleted_items:
+        (menu_id, item_id) = multiselect_map[seleted_item]
+        menus_settings[menu_id][item_id].pop('hidden')
     save_menus_settings(menus_settings)

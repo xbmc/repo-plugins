@@ -383,7 +383,7 @@ def get_francetv_live_stream(plugin, live_id):
     json_parser2 = json.loads(
         urlquick.get(URL_FRANCETV_HDFAUTH_URL % (final_url), max_age=-1).text)
 
-    return json_parser2['url']
+    return json_parser2['url'] + '|user-agent=%s' % web_utils.get_random_ua()
 
 
 # Arte Part

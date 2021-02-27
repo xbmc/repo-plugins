@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'replay'
+
 menu = {
     'mytf1': {
         'route': '/resources/lib/channels/fr/mytf1:mytf1_root',

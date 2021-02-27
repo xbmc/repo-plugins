@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'live_tv'
+
 menu = {
     'la7': {
         'resolver': '/resources/lib/channels/it/la7:get_live_url',

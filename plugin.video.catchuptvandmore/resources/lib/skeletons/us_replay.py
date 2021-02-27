@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'replay'
+
 menu = {
     'tbd': {
         'route': '/resources/lib/channels/us/tbd:list_programs',

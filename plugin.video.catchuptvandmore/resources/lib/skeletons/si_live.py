@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'live_tv'
+
 menu = {
     'slo1': {
         'resolver': '/resources/lib/channels/si/rtvslo:get_live_url',

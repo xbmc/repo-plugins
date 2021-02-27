@@ -533,6 +533,11 @@ plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/equidia/get_liv
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/bsmart.png" group-title="France Satellite/FAI",B Smart
 plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/bsmart/get_live_url/?item_id=bsmart
 
+##	Culturebox
+##	spectacles-et-culture
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/fr/culturebox.png" group-title="France",Culturebox
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/fr/francetv/get_live_url/?item_id=spectacles-et-culture
+
 ##	Euronews
 ##	euronews
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="France",Euronews

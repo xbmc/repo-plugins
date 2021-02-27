@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'replay'
+
 menu = {
     'tv5mondeafrique': {
         'route': '/resources/lib/channels/wo/tv5mondeafrique:list_categories',

@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'live_tv'
+
 menu = {
     'tf1': {
         'resolver': '/resources/lib/channels/fr/mytf1:get_live_url',
@@ -822,5 +824,13 @@ menu = {
         'm3u_group': 'Satellite/FAI',
         'enabled': True,
         'order': 123
+    },
+    'spectacles-et-culture': {
+        'resolver': '/resources/lib/channels/fr/francetv:get_live_url',
+        'label': 'Culturebox',
+        'thumb': 'channels/fr/culturebox.png',
+        'fanart': 'channels/fr/culturebox_fanart.jpg',
+        'enabled': True,
+        'order': 124
     }
 }

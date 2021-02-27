@@ -3,143 +3,22 @@
 
     <!-- General -->
     <category label="30009">
-        <setting label="30430" type="bool" id="auto_run" default="false"/>
-        <setting label="30373" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/favourites/delete_favourites/)"/>
+        <!-- General -->
+        <setting label="30009" type="lsep" />
+            <setting label="30430" type="bool" id="auto_run" default="false"/>
+            <setting label="30373" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/favourites/delete_favourites/)"/>
+
+        <!-- Menu items -->
+        <setting label="30403" type="lsep" />
+            <!-- Restore default order of all menus -->
+            <setting label="30400" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/restore_default_order/)"/>
+            <!-- Unmask all hidden items -->
+            <setting label="30401" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_all_hidden_items/)"/>
+            <!-- Select items to unmask -->
+            <setting label="30402" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/)"/>
     </category>
     <!-- General -->
 
-
-    <!-- Menus -->
-    <category label="30008">
-        
-        <!-- Default values -->
-        <setting label="30017" type="lsep" />
-
-            <!-- Restore default order of all menus -->
-            <setting label="30400" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/restore_default_order/)"/>
-
-            <!-- Unmask all hidden items -->
-            <setting label="30401" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_all_hidden_items/)"/>
-
-        <!-- Unmask main menus items -->
-        <setting label="30018" type="lsep" />
-
-            <!-- Main menu items -->
-            <setting label="30402" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=root)"/>
-
-            <!-- Live TV countries -->
-            <setting label="30403" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=live_tv)"/>
-
-            <!-- Catch-up TV countries -->
-            <setting label="30404" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=replay)"/>
-
-            <!-- Websites -->
-            <setting label="30405" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=websites)"/>
-
-        <!-- Unmask live TV channels -->
-        <setting label="30019" type="lsep" />
-
-            <!-- French channels -->
-            <setting label="30080" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=fr_live)"/>
-
-            <!-- Switzerland channels -->
-            <setting label="30083" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=ch_live)"/>
-
-            <!-- United Kingdom channels -->
-            <setting label="30084" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=uk_live)"/>
-
-            <!-- International channels -->
-            <setting label="30085" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=wo_live)"/>
-
-            <!-- Belgium channels -->
-            <setting label="30081" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=be_live)"/>
-
-            <!-- Japanese channels -->
-            <setting label="30082" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=jp_live)"/>
-
-            <!-- Canadian channels -->
-            <setting label="30086" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=ca_live)"/>
-
-            <!-- United States of America channels -->
-            <setting label="30087" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=us_live)"/>
-
-            <!-- Polish channels -->
-            <setting label="30088" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=pl_live)"/>
-
-            <!-- Spanish channels -->
-            <setting label="30089" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=es_live)"/>
-
-            <!-- Tunisia channels -->
-            <setting label="30090" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=tn_live)"/>
-
-            <!-- Italian channels -->
-            <setting label="30091" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=it_live)"/>
-
-            <!-- Dutch channels -->
-            <setting label="30092" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=nl_live)"/>
-
-            <!-- Chinese channels -->
-            <setting label="30093" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=cn_live)"/>
-
-            <!-- Cameroon channels -->
-            <setting label="30094" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=cm_live)"/>
-
-            <!-- Slovenian channels -->
-            <setting label="30095" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=si_live)"/>
-
-            <!-- Ethiopian channels -->
-            <setting label="30096" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=et_live)"/>
-
-       <!-- Unmask replay TV channels -->
-        <setting label="30020" type="lsep" />
-
-            <!-- French channels -->
-            <setting label="30080" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=fr_replay)"/>
-
-            <!-- Switzerland channels -->
-            <setting label="30083" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=ch_replay)"/>
-
-            <!-- United Kingdom channels -->
-            <setting label="30084" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=uk_replay)"/>
-
-            <!-- International channels -->
-            <setting label="30085" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=wo_replay)"/>
-
-            <!-- Belgium channels -->
-            <setting label="30081" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=be_replay)"/>
-
-            <!-- Japanese channels -->
-            <setting label="30082" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=jp_replay)"/>
-
-            <!-- Canadian channels -->
-            <setting label="30086" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=ca_replay)"/>
-
-            <!-- United States of America channels -->
-            <setting label="30087" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=us_replay)"/>
-
-            <!-- Polish channels -->
-            <setting label="30088" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=pl_replay)"/>
-
-            <!-- Spanish channels -->
-            <setting label="30089" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=es_replay)"/>
-
-            <!-- Tunisia channels -->
-            <setting label="30090" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=tn_replay)"/>
-
-            <!-- Italian channels -->
-            <setting label="30091" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=it_replay)"/>
-
-            <!-- Dutch channels -->
-            <setting label="30092" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=nl_replay)"/>
-
-            <!-- Chinese channels -->
-            <setting label="30093" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=cn_replay)"/>
-
-            <!-- Cameroon channels -->
-            <setting label="30094" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/?menu_id=cm_replay)"/>
-
-    </category>
-    <!-- Menus -->
 
 
 
@@ -250,6 +129,24 @@
 
     </category>
     <!-- Accounts -->
+
+
+    <!--TV integration -->
+    <category label="30270"> 
+        <!-- Kodi Live TV integration -->
+        <setting label="30271" type="lsep"/>
+            <!-- Install IPTV Manager add-on -->
+            <setting label="30272" type="action" action="InstallAddon(service.iptv.manager)" option="close" visible="!System.HasAddon(service.iptv.manager)"/>
+            <!-- Enable Kodi Live TV integration -->
+            <setting label="30273" type="bool" id="iptv.enabled" default="true" visible="System.HasAddon(service.iptv.manager)"/>
+            <!-- Select channels to enable -->
+            <setting label="30275" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/iptvmanager/select_channels/)" enable="eq(-1,true)" visible="System.HasAddon(service.iptv.manager)" subsetting="true"/>
+            <!-- Open IPTV Manager settings -->
+            <setting label="30274" type="action" action="Addon.OpenSettings(service.iptv.manager)" enable="eq(-2,true)" option="close" visible="System.HasAddon(service.iptv.manager)" subsetting="true"/>
+
+            <setting type="text" id="iptv.channels_uri" default="plugin://plugin.video.catchuptvandmore/resources/lib/iptvmanager/channels/" visible="false"/>
+            <setting type="text" id="iptv.epg_uri" default="plugin://plugin.video.catchuptvandmore/resources/lib/iptvmanager/epg/" visible="false"/>
+    </category>
 
 
 

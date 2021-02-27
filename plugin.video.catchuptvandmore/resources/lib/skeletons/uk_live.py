@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'live_tv'
+
 menu = {
     'blaze': {
         'resolver': '/resources/lib/channels/uk/blaze:get_live_url',

@@ -154,4 +154,4 @@ def get_live_url(plugin, item_id, **kwargs):
     liveid = re.compile(r'embed\/(.*?)\?').findall(resp.text)[0]
 
     resp2 = urlquick.get(URL_LIVE_DATAS % liveid, max_age=-1)
-    return re.compile(r'file\"\:\"(.*?)\"').findall(resp2.text)[1] + '|referer=%s' % URL_LIVE_DATAS_ROOT
+    return re.compile(r'file\"\:\"(.*?)\"').findall(resp2.text)[0] + '|referer=%s' % URL_LIVE_DATAS_ROOT

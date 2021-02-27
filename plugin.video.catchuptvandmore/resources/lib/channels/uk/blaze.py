@@ -38,8 +38,6 @@ import urlquick
 # TO DO
 # Fix Replay (DRM)
 
-URL_ROOT = 'http://www.blaze.tv'
-
 URL_API = 'https://watch.blaze.tv'
 # Live
 URL_LIVE = URL_API + '/live/'
@@ -47,8 +45,9 @@ URL_LIVE_JSON = 'https://live.blaze.tv/stream-live.php?key=%s&platform=chrome'
 # Key
 
 # Replay
-URL_REPLAY = URL_ROOT + '/replay/'
+URL_REPLAY = URL_API + '/replay/553'
 # pageId
+URL_INFO_REPLAY = URL_API + '/watch/replay/%s'
 URL_REPLAY_TOKEN = URL_API + '/stream/replay/widevine/%s'
 # video ID
 
@@ -77,8 +76,8 @@ def list_videos(plugin, item_id, **kwargs):
             ".//div[@class='col-xs-12 col-sm-6 col-md-3']"):
 
         video_title = ''
-        if video_datas.find('.//h3') is not None:
-            video_title = video_datas.find('.//h3').text
+        if video_datas.find('.//img') is not None:
+            video_title = video_datas.find('.//img').get('alt')
         if video_datas.find(".//span[@class='pull-left']") is not None:
             video_title = '{} - {}'.format(
                 video_title,
@@ -104,21 +103,25 @@ def get_video_url(plugin,
                   download_mode=False,
                   **kwargs):
 
-    resp = urlquick.get(URL_REPLAY_TOKEN % video_id,
-                        headers={'X-Requested-With': 'XMLHttpRequest'})
-    json_parser = json.loads(resp.text)
+    resp = urlquick.get(URL_INFO_REPLAY % video_id)
+    stream_id = re.compile(
+        r'uvid\"\:\"(.*?)\"').findall(resp.text)[2]
+
+    resp2 = urlquick.get(URL_REPLAY_TOKEN % stream_id,
+                         headers={'X-Requested-With': 'XMLHttpRequest'})
+    json_parser = json.loads(resp2.text)
 
     video_url = json_parser['tokenizer']['url']
     token_value = json_parser['tokenizer']['token']
     token_expiry_value = json_parser['tokenizer']['expiry']
     uvid_value = json_parser['tokenizer']['uvid']
-    resp2 = urlquick.get(video_url,
+    resp3 = urlquick.get(video_url,
                          headers={'User-Agent': web_utils.get_random_ua(),
                                   'token': token_value,
                                   'token-expiry': token_expiry_value,
                                   'uvid': uvid_value},
                          max_age=-1)
-    json_parser2 = json.loads(resp2.text)
+    json_parser2 = json.loads(resp3.text)
     return json_parser2["Streams"]["Adaptive"]
 
 

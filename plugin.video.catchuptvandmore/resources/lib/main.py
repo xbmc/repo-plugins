@@ -153,7 +153,7 @@ def tv_guide_menu(plugin, item_id, **kwargs):
 
     # Get tv_guide of this country
     xmltv = importlib.import_module('resources.lib.xmltv')
-    tv_guide = xmltv.grab_tv_guide(live_country_id)
+    tv_guide = xmltv.grab_current_programmes(live_country_id)
 
     # Treat this menu as a generic menu and add, if any, tv guide information
     for item in generic_menu(plugin, live_country_id):

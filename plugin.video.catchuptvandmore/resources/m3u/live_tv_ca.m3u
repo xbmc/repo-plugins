@@ -3,6 +3,11 @@
 # Canada
 # ca_live
 
+##	Télé-Québec
+##	telequebec
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/telequebec.png" group-title="Canada",Télé-Québec
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/ca/telequebec/get_live_url/?item_id=telequebec
+
 ##	TVA
 ##	tva
 #EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/ca/tva.png" group-title="Canada",TVA

@@ -35,6 +35,8 @@ the addon's tree architecture.
     - fanart: Item fanart path relative to "meia" folder
 """
 
+root = 'live_tv'
+
 menu = {
     'ntvnews24': {
         'resolver': '/resources/lib/channels/jp/ntvnews24:get_live_url',

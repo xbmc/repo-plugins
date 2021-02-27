@@ -1,0 +1,272 @@
+# Kodi Media Center language file
+# Addon Name: Vimeo
+# Addon id: plugin.video.vimeo
+# Addon Provider: jaylinski
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Settings - General
+msgctxt "#30001"
+msgid "General"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Items per page"
+msgstr ""
+
+msgctxt "#30013"
+msgid "History size"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Template"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Sort by"
+msgstr ""
+
+msgctxt "#300150"
+msgid "Relevance"
+msgstr ""
+
+msgctxt "#300151"
+msgid "Popularity"
+msgstr ""
+
+msgctxt "#300152"
+msgid "Most recent"
+msgstr ""
+
+msgctxt "#300153"
+msgid "Alphabetical A-Z"
+msgstr ""
+
+msgctxt "#300154"
+msgid "Alphabetical Z-A"
+msgstr ""
+
+msgctxt "#300155"
+msgid "Longest"
+msgstr ""
+
+msgctxt "#300156"
+msgid "Shortest"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Video"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Streaming"
+msgstr ""
+
+msgctxt "#30022"
+msgid "AOMedia Video 1 (AV1)"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Subtitles"
+msgstr ""
+
+# Settings - Advanced
+msgctxt "#30051"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30070"
+msgid "API"
+msgstr ""
+
+msgctxt "#30071"
+msgid "Access Token"
+msgstr ""
+
+msgctxt "#30080"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30081"
+msgid "Clear cache"
+msgstr ""
+
+# GUI - Root
+msgctxt "#30101"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Featured"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Trending"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Profile"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#30109"
+msgid "Log in"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Log out"
+msgstr ""
+
+# GUI - Auth
+msgctxt "#30151"
+msgid "Authorization"
+msgstr ""
+
+msgctxt "#30152"
+msgid "1. Open the link {}"
+msgstr ""
+
+msgctxt "#30153"
+msgid "2. Log in and enter the code {}"
+msgstr ""
+
+msgctxt "#30154"
+msgid "3. Authorize the app"
+msgstr ""
+
+msgctxt "#30155"
+msgid "4. Confirm with {}"
+msgstr ""
+
+msgctxt "#30156"
+msgid "You are now logged in as {}!"
+msgstr ""
+
+# GUI - Search
+msgctxt "#30201"
+msgid "New search"
+msgstr ""
+
+msgctxt "#30211"
+msgid "People"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30213"
+msgid "Groups"
+msgstr ""
+
+# GUI - Featured
+msgctxt "#30301"
+msgid "Vimeo Staff Picks"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Vimeo Staff Pick Premieres"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Vimeo Staff Picks: Best of the Month"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Vimeo Staff Picks: Best of the Year"
+msgstr ""
+
+msgctxt "#30305"
+msgid "A Decade of Staff Picks"
+msgstr ""
+
+msgctxt "#30306"
+msgid "Vimeo Curation channels"
+msgstr ""
+
+# GUI - Info
+msgctxt "#30401"
+msgid "Vimeo account"
+msgstr ""
+
+# GUI - Settings
+msgctxt "#30501"
+msgid "Cache cleared"
+msgstr ""
+
+# GUI - Context menus
+msgctxt "#30601"
+msgid "Remove"
+msgstr ""
+
+msgctxt "#30602"
+msgid "Clear"
+msgstr ""
+
+# GUI - Profile
+msgctxt "#30701"
+msgid "Followers"
+msgstr ""
+
+msgctxt "#30702"
+msgid "Following"
+msgstr ""
+
+msgctxt "#30703"
+msgid "Likes"
+msgstr ""
+
+msgctxt "#30704"
+msgid "Albums"
+msgstr ""
+
+msgctxt "#30705"
+msgid "Watch Later"
+msgstr ""
+
+# GUI - Generic
+msgctxt "#30901"
+msgid "Next page"
+msgstr ""
+
+msgctxt "#30902"
+msgid "LIVE"
+msgstr ""
+
+msgctxt "#30903"
+msgid "Trailer"
+msgstr ""
+
+msgctxt "#30904"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30905"
+msgid "Invalid password"
+msgstr ""
+
+msgctxt "#30906"
+msgid "Whoops! That password is invalid"
+msgstr ""

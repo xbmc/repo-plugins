@@ -1,4 +1,4 @@
-﻿[B]Version 5.0.13 - 2021-02-25[/B]
+﻿[B]Version 5.0.13 - 2021-02-27[/B]
 - Adding old PR's + minor fixes. last update before kodi 19 and python3
 - Change for request-cache for storing web requests locally (in 8hours) #34
 - Fix missing thumbnails and added option in settings to choose fan-art image size #29 #35

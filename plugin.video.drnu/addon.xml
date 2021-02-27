@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.drnu" version="5.0.13" name="DR TV" provider-name="TermeHansen">
     <requires>
-        <import addon="xbmc.python" version="2.14.0"/>
+        <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.requests" version="2.22.0" />
         <import addon="script.module.requests-cache" version="0.4.13"/>
         <import addon="script.module.simplejson" version="2.0.10"/>
         <import addon="script.module.buggalo" version="1.1.2"/>
     </requires>
-    <extension point="xbmc.python.pluginsource" library="addon.py">
+    <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">Watch live and archived TV from DR (Danish Broadcasting Corporation)</summary>
-        <summary lang="da">Se live og arkiveret TV fra DR</summary>
-        <description lang="en">All DR's live TV channels and archived programs as seen on dr.dk/tv.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the KODI official forums</description>
-        <description lang="da">Alle DR's live TV kanaler samt alle de programmer du finder på dr.dk/tv.[CR][CR]Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på KODI forummet</description>
-        <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws.</disclaimer>
-        <disclaimer lang="da">Nogle dele af denne addon er muligvis ikke lovlig i dit land - kontroller venligst dine lokale love.</disclaimer>
+        <summary lang="en_GB">Watch live and archived TV from DR (Danish Broadcasting Corporation)</summary>
+        <summary lang="da_DK">Se live og arkiveret TV fra DR</summary>
+        <description lang="en_GB">All DR's live TV channels and archived programs as seen on dr.dk/tv.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the KODI official forums</description>
+        <description lang="da_DK">Alle DR's live TV kanaler samt alle de programmer du finder på dr.dk/tv.[CR][CR]Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på KODI forummet</description>
+        <disclaimer lang="en_GB">Some parts of this addon may not be legal in your country of residence - please check with your local laws.</disclaimer>
+        <disclaimer lang="da_DK">Nogle dele af denne addon er muligvis ikke lovlig i dit land - kontroller venligst dine lokale love.</disclaimer>
         <license>GPL 2.0</license>
         <platform>all</platform>
         <language>da</language>
@@ -24,5 +24,18 @@
         <website>https://www.dr.dk/</website>
         <forum>https://forum.kodi.tv/</forum>
         <source>https://github.com/xbmc-danish-addons/plugin.video.drnu</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+       </assets>
+       <news>[B]Version 5.0.13 - 2021-02-27[/B]
+- Adding old PR's + minor fixes. last update before kodi 19 and python3
+- Change for request-cache for storing web requests locally (in 8hours) #34
+- Fix missing thumbnails and added option in settings to choose fan-art image size #29 #35
+- Fixed themes menu item #34
+- Add support for other plugins to start live tv. #31
+- Update logos and entry screen #24
+- Change subtitle handling to local srt files, so user also can change for hard-of-hearing subs and change while watching #36
+    </news>
     </extension>
 </addon>

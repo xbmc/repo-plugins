@@ -601,14 +601,6 @@ msgctxt "#30606"
 msgid "Do you want to see this information next time?"
 msgstr ""
 
-msgctxt "#30607"
-msgid "Information: Kodi 19 - Matrix"
-msgstr ""
-
-msgctxt "#30608"
-msgid "The Catch-Up TV and More plugin is not compatible with Kodi 19. We are awaiting updates to third party plugins used in this plugin. If you want to continue using this plugin, the last supported version is Kodi 18.9."
-msgstr ""
-
 
 # Others (from 30700 to 30799)
 

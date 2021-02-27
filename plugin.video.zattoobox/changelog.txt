@@ -1,3 +1,6 @@
+[B]1.0.8[/B]
+- [Fix] The plugin stopped working due to provider changes (hls5). Fixed.
+
 [B]1.0.7[/B]
 - [Fix] The plugin stopped working due to provider changes. Fixed.
 

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+    <coordinates>
+        <left>502</left>
+        <top>345</top>
+    </coordinates>
+    <controls>
+        <animation type="WindowOpen" reversible="false">
+            <effect type="zoom" start="80" end="100" center="960,540" delay="160" tween="back" time="240" />
+            <effect type="fade" delay="160" end="100" time="240" />
+        </animation>
+        <animation type="WindowClose" reversible="false">
+            <effect type="zoom" start="100" end="80" center="960,540" easing="in" tween="back" time="240" />
+            <effect type="fade" start="100" end="0" time="240" />
+        </animation>
+        <control type="image">
+            <left>-1920</left>
+            <top>-1080</top>
+            <width>5760</width>
+            <height>3240</height>
+            <animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
+            <animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+            <texture colordiffuse="C2FFFFFF">loguploader-black.png</texture>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>915</width>
+            <height>380</height>
+            <texture border="2">loguploader-dialog-bg.png</texture>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>915</width>
+            <height>70</height>
+            <texture colordiffuse="FF12B2E7" border="2">loguploader-white.png</texture>
+        </control>
+        <control type="label">
+            <textoffsetx>70</textoffsetx>
+            <left>0</left>
+            <top>0</top>
+            <width>915</width>
+            <height>70</height>
+            <font>font20_title</font>
+            <label>[B]$INFO[System.AddonTitle(script.kodi.loguploader)][/B]</label>
+            <align>center</align>
+            <aligny>center</aligny>
+            <shadowcolor>FF000000</shadowcolor>
+        </control>
+        <control type="image" id="501">
+            <left>30</left>
+            <top>75</top>
+            <width>300</width>
+            <height>300</height>
+            <aspectratio aligny="center" align="center">keep</aspectratio>
+        </control>
+        <control type="textbox" id="502">
+            <left>360</left>
+            <top>85</top>
+            <width>545</width>
+            <height>300</height>
+            <font>font12_title</font>
+            <align>left</align>
+            <aligny>top</aligny>
+            <shadowcolor>FF000000</shadowcolor>
+        </control>
+        <control type="button" id="503">
+            <left>600</left>
+            <top>290</top>
+            <width>300</width>
+            <height>90</height>
+            <font>font12_title</font>
+            <textcolor>FFF0F0F0</textcolor>
+            <textoffsetx>20</textoffsetx>
+            <label>15067</label>
+            <align>center</align>
+            <aligny>center</aligny>
+            <texturefocus border="40" colordiffuse="FF12B2E7">loguploader-dialogbutton-fo.png</texturefocus>
+            <texturenofocus border="40">loguploader-dialogbutton-nofo.png</texturenofocus>
+        </control>
+    </controls>
+</window>
+

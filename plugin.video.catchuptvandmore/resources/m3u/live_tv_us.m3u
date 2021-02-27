@@ -1,0 +1,30 @@
+#EXTM3U tvg-shift=0
+
+# United States of America
+# us_live
+
+##	CBS News
+##	cbsnews
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/us/cbsnews.png" group-title="United States of America",CBS News
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/us/cbsnews/get_live_url/?item_id=cbsnews
+
+##	TBD
+##	tbd
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/us/tbd.png" group-title="United States of America",TBD
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/us/tbd/get_live_url/?item_id=tbd
+
+##	ABC News
+##	abcnews
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/us/abcnews.png" group-title="United States of America",ABC News
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/us/abcnews/get_live_url/?item_id=abcnews
+
+##	PBS Kids
+##	pbskids
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/us/pbskids.png" group-title="United States of America",PBS Kids
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/us/pbskids/get_live_url/?item_id=pbskids
+
+##	QVC
+##	qvc
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/qvc.png" group-title="United States of America",QVC
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/wo/qvc/get_live_url/?item_id=qvc&language=US
+

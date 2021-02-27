@@ -1,0 +1,170 @@
+#EXTM3U tvg-shift=0
+
+# Ethiopia
+# et_live
+
+##	ECTV
+##	ectv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/ectv.png" group-title="Ethiopia",ECTV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=ectv
+
+##	Amhara TV
+##	amma
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/amma.png" group-title="Ethiopia",Amhara TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=amma
+
+##	Fana TV
+##	fbctv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/fbctv.png" group-title="Ethiopia",Fana TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=fbctv
+
+##	Walta TV
+##	walta
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/walta.png" group-title="Ethiopia",Walta TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=walta
+
+##	EBC ZENA
+##	etvz
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/etvz.png" group-title="Ethiopia",EBC ZENA
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=etvz
+
+##	EBC MEZINAGNA
+##	etvm
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/etvm.png" group-title="Ethiopia",EBC MEZINAGNA
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=etvm
+
+##	EBC QUANQUAWOCH
+##	etvq
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/etvq.png" group-title="Ethiopia",EBC QUANQUAWOCH
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=etvq
+
+##	LTV
+##	ltv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/ltv.png" group-title="Ethiopia",LTV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=ltv
+
+##	ARTS TV
+##	arts
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/arts.png" group-title="Ethiopia",ARTS TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=arts
+
+##	MoE
+##	moe
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/moe.png" group-title="Ethiopia",MoE
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=moe
+
+##	Nahoo TV
+##	nahoo
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/nahoo.png" group-title="Ethiopia",Nahoo TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=nahoo
+
+##	OBN
+##	obn
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/obn.png" group-title="Ethiopia",OBN
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=obn
+
+##	OBS
+##	obs
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/obs.png" group-title="Ethiopia",OBS
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=obs
+
+##	Tigrai TV
+##	tigrai
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/tigrai.png" group-title="Ethiopia",Tigrai TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=tigrai
+
+##	JTV ETHIOPIA
+##	jtv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/jtv.png" group-title="Ethiopia",JTV ETHIOPIA
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=jtv
+
+##	ESAT
+##	esat
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/esat.png" group-title="Ethiopia",ESAT
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=esat
+
+##	OMN
+##	omn
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/omn.png" group-title="Ethiopia",OMN
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=omn
+
+##	Aleph TV
+##	aleph
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/aleph.png" group-title="Ethiopia",Aleph TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=aleph
+
+##	Bisrat TV
+##	bisrat
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/bisrat.png" group-title="Ethiopia",Bisrat TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=bisrat
+
+##	ONN TV
+##	onn
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/onn.png" group-title="Ethiopia",ONN TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=onn
+
+##	DW TV
+##	dws
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/dws.png" group-title="Ethiopia",DW TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=dws
+
+##	Addis TV
+##	adis
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/adis.png" group-title="Ethiopia",Addis TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=adis
+
+##	ES TV
+##	estv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/estv.png" group-title="Ethiopia",ES TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=estv
+
+##	Southern TV
+##	south
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/south.png" group-title="Ethiopia",Southern TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=south
+
+##	Eritrea TV
+##	eritr
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/eritr.png" group-title="Ethiopia",Eritrea TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=eritr
+
+##	Afrihealth
+##	afri
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/afri.png" group-title="Ethiopia",Afrihealth
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=afri
+
+##	Asham TV
+##	asham
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/asham.png" group-title="Ethiopia",Asham TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=asham
+
+##	Ahadu TV
+##	ahadu
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/ahadu.png" group-title="Ethiopia",Ahadu TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=ahadu
+
+##	Balageru
+##	balage
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/balage.png" group-title="Ethiopia",Balageru
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=balage
+
+##	AVA TV
+##	ava
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/ava.png" group-title="Ethiopia",AVA TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=ava
+
+##	ASRAT MEDIA
+##	asrat
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/asrat.png" group-title="Ethiopia",ASRAT MEDIA
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=asrat
+
+##	Holy Spirit TV
+##	holys
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/holys.png" group-title="Ethiopia",Holy Spirit TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=holys
+
+##	Glory of GOD TV
+##	gloryg
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/et/gloryg.png" group-title="Ethiopia",Glory of GOD TV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/et/video2b/get_live_url/?item_id=gloryg
+

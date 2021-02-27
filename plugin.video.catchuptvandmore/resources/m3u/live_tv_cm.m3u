@@ -1,0 +1,15 @@
+#EXTM3U tvg-shift=0
+
+# Cameroon
+# cm_live
+
+##	CRTV
+##	crtv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cm/crtv.png" group-title="Cameroon",CRTV
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/cm/crtv/get_live_url/?item_id=crtv
+
+##	CRTV News
+##	crtvnews
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/cm/crtvnews.png" group-title="Cameroon",CRTV News
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/cm/crtv/get_live_url/?item_id=crtvnews
+

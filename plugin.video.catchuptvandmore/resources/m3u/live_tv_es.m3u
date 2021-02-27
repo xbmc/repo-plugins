@@ -1,0 +1,70 @@
+#EXTM3U tvg-shift=0
+
+# Spain
+# es_live
+
+##	Realmadrid TV EN
+##	realmadridtv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/realmadridtv.png" group-title="Spain",Realmadrid TV EN
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/realmadridtv/get_live_url/?item_id=realmadridtv&language=EN
+
+##	Realmadrid TV ES
+##	realmadridtv
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/realmadridtv.png" group-title="Spain",Realmadrid TV ES
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/realmadridtv/get_live_url/?item_id=realmadridtv&language=ES
+
+##	Paramount Channel (ES)
+##	paramountchannel_es
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/paramountchannel_es.png" group-title="Spain",Paramount Channel (ES)
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/paramountchannel_es/get_live_url/?item_id=paramountchannel_es
+
+##	La 1
+##	la1
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/la1.png" group-title="Spain",La 1
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/rtve/get_live_url/?item_id=la1
+
+##	La 2
+##	la2
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/la2.png" group-title="Spain",La 2
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/rtve/get_live_url/?item_id=la2
+
+##	Teledeporte
+##	tdp
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/tdp.png" group-title="Spain",Teledeporte
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/rtve/get_live_url/?item_id=tdp
+
+##	Canal 24 horas
+##	24h
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/24h.png" group-title="Spain",Canal 24 horas
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/rtve/get_live_url/?item_id=24h
+
+##	Trece
+##	trece
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/es/trece.png" group-title="Spain",Trece
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/es/trece/get_live_url/?item_id=trece
+
+##	Euronews
+##	euronews
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/euronews.png" group-title="Spain",Euronews
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/wo/euronews/get_live_url/?item_id=euronews&language=ES
+
+##	France 24
+##	france24
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/france24.png" group-title="Spain",France 24
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/wo/france24/get_live_url/?item_id=france24&language=ES
+
+##	DW
+##	dw
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/dw.png" group-title="Spain",DW
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/wo/dw/get_live_url/?item_id=dw&language=ES
+
+##	CGTN
+##	cgtn
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/cgtn.png" group-title="Spain",CGTN
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/wo/cgtn/get_live_url/?item_id=cgtn&language=ES
+
+##	RT
+##	rt
+#EXTINF:-1 tvg-id="" tvg-logo="resource://resource.images.catchuptvandmore/channels/wo/rt.png" group-title="Spain",RT
+plugin://plugin.video.catchuptvandmore/resources/lib/channels/wo/rt/get_live_url/?item_id=rt&language=ES
+

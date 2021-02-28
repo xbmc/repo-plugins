@@ -51,3 +51,7 @@ msgstr "Programmi On-Demand"
 msgctxt "#32008"
 msgid "Teche LA7 - The Protagonists"
 msgstr "Teche LA7 - I Protagonisti"
+
+msgctxt "#32010"
+msgid "LA7 Prime"
+msgstr "LA7 Prime"

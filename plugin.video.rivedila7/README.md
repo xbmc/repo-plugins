@@ -1,8 +1,15 @@
 # La7-La7d Kodi plugin
-Live Streaming, Replay the last week, On-Demand programs, News and Weather, Teche LA7 - The Protagonists (italian language)
+Live Streaming, Replay the last week, LA7 Prime, On-Demand programs, News & Weather, Teche LA7-The Protagonists (italian language)
 
 
 ### Changelog
+4.6.0 (2021-02-04)
+- Updated LA7 Prime
+- Added Meteo della Sera
+
+4.5.0 (2021-01-31)
+- Added LA7 Prime
+
 4.4.0 (2020-05-24)
 - Added Landpage scraping on all on-demand programs
 - Separated on-demand programs episodes by Home-Settimana-Archivio

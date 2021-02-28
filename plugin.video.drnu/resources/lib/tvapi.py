@@ -19,10 +19,7 @@
 #  http://www.gnu.org/copyleft/gpl.html
 #
 
-try:
-    import json
-except:
-    import simplejson as json
+import json
 import urllib
 import requests
 import requests_cache

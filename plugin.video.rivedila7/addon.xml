@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rivedila7" name="La7-La7d" version="4.4.0" provider-name="Luivit, Testato">
+<addon id="plugin.video.rivedila7" name="LA7-LA7d" version="4.6.0" provider-name="Luivit, Testato">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.requests" version="2.22.0"/>
@@ -12,9 +12,9 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">LA7-LA7d</summary>
-    <description lang="en_GB">Live Streaming, Replay the last week, On-Demand programs, News and Weather, Teche LA7 - The Protagonists</description>
+    <description lang="en_GB">Live Streaming, Replay the last week, LA7 Prime, On-Demand programs, News and Weather, Teche LA7-The Protagonists</description>
     <summary lang="it_IT">LA7-LA7d</summary>
-    <description lang="it_IT">Diretta Live, Rivedi ultima settimana, Programmi On-Demand, Telegiornali e Meteo, Teche LA7 - I Protagonisti</description>
+    <description lang="it_IT">Diretta Live, Rivedi ultima settimana, LA7 Prime, Programmi On-Demand, Telegiornali e Meteo, Teche LA7-I Protagonisti</description>
     <language>it</language>
     <platform>all</platform>
     <license>GNU General Public License v3.0</license>
@@ -29,9 +29,9 @@
       <screenshot>resources/screenshots/screenshot-01.jpg</screenshot>
       <screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
     </assets>
-    <news>4.4.0 (2020-05-24)
-      - Added Landpage scraping on all on-demand programs
-      - Separated on-demand programs episodes by Home-Settimana-Archivio
+    <news>4.6.0 (2021-02-04)
+      - Updated LA7 Prime
+      - Added Meteo della Sera
     </news>
   </extension>
 </addon>

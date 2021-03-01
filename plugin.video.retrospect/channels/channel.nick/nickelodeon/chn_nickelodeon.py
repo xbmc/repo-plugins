@@ -41,24 +41,44 @@ class Channel(chn_class.Channel):
             self.mainListUri = "https://www.nickelodeon.no/shows"
             self.baseUrl = "https://www.nickelodeon.no"
 
+        elif self.channelCode == "mtvnl":
+            self.mainListUri = "https://www.mtv.nl/shows"
+            self.baseUrl = "https://www.mtv.nl"
+            self.noImage = "mtvnlimage.png"
+
+        elif self.channelCode == "mtvde":
+            self.mainListUri = "https://www.mtv.de/shows"
+            self.baseUrl = "https://www.mtv.de"
+            self.noImage = "mtvnlimage.png"
         else:
             raise NotImplementedError("Unknown channel code")
 
         self._add_data_parser(self.mainListUri, json=True, name="JSON extract mainlist",
                               match_type=ParserData.MatchExact,
-                              preprocessor=self.extract_json_episodes,
-                              parser=['items'], creator=self.create_json_episode_item)
+                              preprocessor=self.extract_json_episodes)
 
-        self._add_data_parser("https://www.nickelodeon.n[ol]/shows/",
+        self._add_data_parser(self.mainListUri, json=True, name="JSON extract mainlist",
+                              match_type=ParserData.MatchExact,
+                              parser=['children', ("type", "MainContainer", 0),
+                                      "children", ("type", "LineList", 0), 'props', 'items'],
+                              creator=self.create_json_episode_item)
+
+        self._add_data_parser(self.mainListUri, json=True, name="JSON extract more mainlist",
+                              match_type=ParserData.MatchExact,
+                              parser=['children', ("type", "MainContainer", 0),
+                                      "children", ("type", "LineList", 0), 'props', 'loadMore'],
+                              creator=self.extract_more_json_episodes)
+
+        self._add_data_parser("https://www.[^/]+/shows/",
                               name="JSON Retriever for videos",
                               match_type=ParserData.MatchRegex,
                               json=True, preprocessor=self.extract_json_video)
 
-        self._add_data_parser("https://www.nickelodeon.n[ol]/shows/", name="JSON video creator",
+        self._add_data_parser("https://www.[^/]+/shows/", name="JSON video creator",
                               match_type=ParserData.MatchRegex, json=True,
                               parser=["items"], creator=self.create_json_video_item)
 
-        self._add_data_parser("https://www.nickelodeon.n[ol]/shows/", name="JSON season creator",
+        self._add_data_parser("https://www.[^/]+/shows/", name="JSON season creator",
                               match_type=ParserData.MatchRegex,  json=True,
                               parser=["seasons"], creator=self.create_json_season_item)
 
@@ -154,14 +174,37 @@ class Channel(chn_class.Channel):
 
         Logger.info("Performing Pre-Processing")
         items = []
-
         data = Regexer.do_regex(r'window.__DATA__ = ([\w\W]+?});\s*window.__PUSH_STATE__', data)[0]
         json_data = JsonHelper(data)
-        main_container = [m for m in json_data.get_value("children") if m["type"] == "MainContainer"]
-        line_list = [item for item in main_container[0]["children"] if item["type"] == "LineList"]
-        line_list = line_list[0]["props"]
-        json_data.json = line_list
         return json_data, items
+
+    def extract_more_json_episodes(self, result_set):
+        """ Creates a new MediaItem for an episodes in the "More pages".
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        :param dict result_set:   The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'folder'.
+        :rtype: MediaItem|None
+
+        """
+
+        Logger.info("Performing Pre-Processing")
+        items = []
+
+        url = "{}{}".format(self.baseUrl, result_set["url"])
+        data = UriHandler.open(url)
+        json_data = JsonHelper(data)
+        result_sets = json_data.get_value("items", fallback=[])
+        for result_set in result_sets:
+            item = self.create_json_episode_item(result_set)
+            if item:
+                items.append(item)
+
+        return items
 
     def create_json_episode_item(self, result_set):
         """ Creates a new MediaItem for an episode.
@@ -251,6 +294,9 @@ class Channel(chn_class.Channel):
         item.isGeoLocked = True
 
         date_value = meta["date"]
+        if not date_value:
+            return item
+
         if "." in date_value:
             date = DateHelper.get_date_from_string(date_value, date_format="%d.%m.%Y")
         else:

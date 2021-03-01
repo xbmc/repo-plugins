@@ -528,7 +528,7 @@ class Channel(chn_class.Channel):
     def add_graphql_recents(self, data):
         items = []
 
-        today = datetime.datetime.now()
+        today = datetime.datetime.now() - datetime.timedelta(hours=5)
         days = LanguageHelper.get_days_list()
         for i in range(0, 7, 1):
             air_date = today - datetime.timedelta(i)
@@ -675,14 +675,15 @@ class Channel(chn_class.Channel):
         item.set_info_label("genre", result_set.get("displayGenre"))
         self.__get_artwork(item, result_set.get("imageMedia"))
 
-        time_stamp = result_set["epgDate"] / 1000
-        date_stamp = DateHelper.get_date_from_posix(time_stamp, tz=self.__timezone_utc)
-        date_stamp = date_stamp.astimezone(self.__timezone)
-        if date_stamp > datetime.datetime.now(tz=self.__timezone):
-            available = LanguageHelper.get_localized_string(LanguageHelper.AvailableFrom)
-            item.name = "{} - [COLOR=gold]{} {:%Y-%m-%d}[/COLOR]".format(
-                title, available, date_stamp)
-        item.set_date(date_stamp.year, date_stamp.month, date_stamp.day)
+        if "epgDate" in result_set:
+            time_stamp = result_set["epgDate"] / 1000
+            date_stamp = DateHelper.get_date_from_posix(time_stamp, tz=self.__timezone_utc)
+            date_stamp = date_stamp.astimezone(self.__timezone)
+            if date_stamp > datetime.datetime.now(tz=self.__timezone):
+                available = LanguageHelper.get_localized_string(LanguageHelper.AvailableFrom)
+                item.name = "{} - [COLOR=gold]{} {:%Y-%m-%d}[/COLOR]".format(
+                    title, available, date_stamp)
+            item.set_date(date_stamp.year, date_stamp.month, date_stamp.day)
 
         # In the main list we should set the fanart too
         if self.parentItem is None:

@@ -24,16 +24,18 @@ else:
 
 # read settings
 ADDON = xbmcaddon.Addon()
-PROFILE = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
-TEMP = os.path.join(PROFILE, 'temp', '')
+
 
 if PY3:
     ICON = xbmcvfs.translatePath(ADDON.getAddonInfo("icon"))
     FANART = xbmcvfs.translatePath(ADDON.getAddonInfo("fanart"))
+    PROFILE = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
 else:
     ICON = xbmc.translatePath(ADDON.getAddonInfo("icon"))
     FANART = xbmc.translatePath(ADDON.getAddonInfo("fanart"))
+    PROFILE = xbmc.translatePath(ADDON.getAddonInfo('profile'))
 
+TEMP = os.path.join(PROFILE, 'temp', '')
 logger = logging.getLogger(__name__)
 
 

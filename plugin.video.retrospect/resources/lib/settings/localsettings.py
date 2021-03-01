@@ -6,6 +6,7 @@ import json
 import shutil
 
 from . import settingsstore
+from resources.lib.backtothefuture import PY2
 
 
 class LocalSettings(settingsstore.SettingsStore):
@@ -102,7 +103,10 @@ class LocalSettings(settingsstore.SettingsStore):
 
                 # Print the content might expose secret settings. See self._secure_setting_ids
                 # self._logger.Trace("Loading settings: %s", content)
-                LocalSettings.__settings = json.loads(content, encoding='utf-8')
+                if PY2:
+                    LocalSettings.__settings = json.loads(content, encoding='utf-8')
+                else:
+                    LocalSettings.__settings = json.loads(content)
         except:
             self._logger.error("Error loading JSON settings. Resetting all settings.", exc_info=True)
             LocalSettings.__settings = self.__empty_settings()

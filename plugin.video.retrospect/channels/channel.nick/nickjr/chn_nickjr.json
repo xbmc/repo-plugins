@@ -12,6 +12,7 @@
       "channelcode": "nickjrnl",
       "sortorder": 22,
       "language": "nl",
+      "poster": "nickjrposter.png",
       "fanart": "nickjrfanart.jpg"
     },
     {
@@ -25,6 +26,7 @@
       "category": "Kids",
       "channelcode": "nickjrintl",
       "sortorder": 22,
+      "poster": "nickjrposter.png",
       "fanart": "nickjrfanart.jpg",
       "language": null
     },
@@ -40,6 +42,7 @@
       "channelcode": "nickse",
       "sortorder": 22,
       "language": "se",
+      "poster": "nickjrposter.png",
       "fanart": "nickfanart.jpg"
     }
   ]

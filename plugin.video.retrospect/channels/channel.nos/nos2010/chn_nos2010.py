@@ -413,7 +413,7 @@ class Channel(chn_class.Channel):
         """
 
         items = []
-        today = datetime.datetime.now()
+        today = datetime.datetime.now() - datetime.timedelta(hours=5)
         days = LanguageHelper.get_days_list()
         for i in range(0, 7, 1):
             air_date = today - datetime.timedelta(i)
@@ -1290,7 +1290,7 @@ class Channel(chn_class.Channel):
                 # NPO3 has apparently switched the normal and hearing impaired streams?
                 json_urls = Regexer.do_regex('<div class="video-player-container"[^>]+data-alt-prid="([^"]+)"', html_data)
             else:
-                json_urls = Regexer.do_regex('<npo-player [^>]*media-id="([^"]+)"', html_data)
+                json_urls = Regexer.do_regex('<npo-player[^-][^>]*media-id="([^"]+)"', html_data)
 
             for episode_id in json_urls:
                 return self.__update_video_item(item, episode_id, False)

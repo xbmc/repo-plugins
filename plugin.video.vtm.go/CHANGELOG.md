@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.2.4](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.4) (2021-03-01)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.3...v1.2.4)
+
+**Fixed bugs:**
+
+- Rename CAZ 2 to VTM Gold [\#265](https://github.com/add-ons/plugin.video.vtm.go/pull/265) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.2.3](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.3) (2021-02-04)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.2...v1.2.3)

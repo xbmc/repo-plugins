@@ -1,0 +1,41 @@
+# Kodi Media Center language file
+# Addon Name: DR TV
+# Addon id: plugin.video.dr.dk.bonanza
+# Addon Provider: twinther, TermeHansen
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://github.com/xbmc-danish-addons/plugin.video.dr.dk.bonanza\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: twinther, TermeHansen\n"
+"Language-Team: Danish (Denmark) (http://www.transifex.com/projects/p/kodi-main/language/da_DK/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: da_DK\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Search Bonanza"
+msgstr "Søg i Bonanza"
+
+msgctxt "#30002"
+msgid "Editors favourites"
+msgstr "Redaktionens favoritter"
+
+msgctxt "#30003"
+msgid "%d videos seen on Bonanza"
+msgstr "%d klip set på Bonanza"
+
+msgctxt "#30004"
+msgid "Recently added on Bonanza"
+msgstr "Senest tilføjet på Bonanza"
+
+msgctxt "#30900"
+msgid "There was an error while communicating with Bonanza."
+msgstr "Der er sket en fejl i kommunikationen med Bonanza."
+
+msgctxt "#30901"
+msgid "Please try again later. Error message is:"
+msgstr "Prøv igen senere. Fejlen er:"

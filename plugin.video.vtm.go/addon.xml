@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vtm.go" name="VTM GO" version="1.2.3" provider-name="Michaël Arnauts">
+<addon id="plugin.video.vtm.go" name="VTM GO" version="1.2.4" provider-name="Michaël Arnauts">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.dateutil" version="2.6.0"/>
@@ -25,10 +25,8 @@
         <disclaimer lang="nl_NL">Deze add-on wordt niet ondersteund door DPG Media en wordt aangeboden 'as is', zonder enige garantie. De VTM GO naam, VTM GO logo en de kanaallogo's zijn eigendom van DPG Media en worden gebruikt in overeenstemming met de fair use policy.</disclaimer>
         <platform>all</platform>
         <license>GPL-3.0-only</license>
-	<news>v1.2.3 (2021-02-04)
-- Improved error handling with authentication.
-- Improved HTTP proxy support.
-- Code cleanup in stream handling.</news>
+	<news>v1.2.4 (2021-03-01)
+- Rename CAZ 2 to VTM Gold.</news>
         <source>https://github.com/add-ons/plugin.video.vtm.go</source>
         <assets>
             <icon>resources/icon.png</icon>

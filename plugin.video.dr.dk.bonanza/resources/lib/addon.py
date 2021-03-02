@@ -40,15 +40,16 @@ except:
     from urllib.parse import parse_qsl
 
 BASE_URL = 'http://www.dr.dk/bonanza/'
-tr = xbmcaddon.Addon().getLocalizedString
-addon_path = xbmcaddon.Addon().getAddonInfo('path')
-addon_name = xbmcaddon.Addon().getAddonInfo('name')
+addon = xbmcaddon.Addon()
+tr = addon.getLocalizedString
+addon_path = addon.getAddonInfo('path')
+addon_name = addon.getAddonInfo('name')
 ICON = os.path.join(addon_path, 'resources', 'icon.png')
 FANART = os.path.join(addon_path, 'resources', 'fanart.jpg')
 CACHE = os.path.join(addon_path, 'requests_cache')
 
 def make_notice(object):
-    xbmc.log(str(object), xbmc.LOGINFO )
+    xbmc.log(str(object), xbmc.LOGDEBUG )
 
 class BonanzaException(Exception):
     pass
@@ -64,7 +65,6 @@ class Bonanza(object):
         requests_cache.remove_expired_responses()
 
     def search(self):
-        make_notice('search')
         keyboard = xbmc.Keyboard('', tr(30001))
         keyboard.doModal()
         if keyboard.isConfirmed():
@@ -86,7 +86,7 @@ class Bonanza(object):
                     'plot': description,
                     'studio': addon_name}
 
-                item = xbmcgui.ListItem(infoLabels['title'])
+                item = xbmcgui.ListItem(infoLabels['title'], offscreen=True)
                 item.setArt({'fanart': FANART, 'icon': image, 'thumb': image})
                 item.setProperty('IsPlayable', 'true')
                 item.setInfo('video', infoLabels)
@@ -101,7 +101,7 @@ class Bonanza(object):
         items = list()
         html = self._downloadUrl(BASE_URL)
 
-        item = xbmcgui.ListItem(tr(30001))
+        item = xbmcgui.ListItem(tr(30001), offscreen=True)
         item.setArt({'fanart': FANART, 'icon': ICON})
         xbmcplugin.addDirectoryItem(self._plugin_handle, self._plugin_url + '?mode=search', item, True)
 
@@ -110,7 +110,7 @@ class Bonanza(object):
             path = m.group(1)
             title = m.group(2)
 
-            item = xbmcgui.ListItem(title)
+            item = xbmcgui.ListItem(title, offscreen=True)
             item.setArt({'fanart': FANART, 'icon': ICON})
             item.setInfo('video', infoLabels={
                 'title': title
@@ -144,7 +144,7 @@ class Bonanza(object):
             title = unescape(m.group(3))
             description = unescape(m.group(4))
 
-            item = xbmcgui.ListItem(title)
+            item = xbmcgui.ListItem(title, offscreen=True)
             item.setArt({'fanart': FANART, 'icon': image})
             item.setInfo('video', infoLabels={
                 'title': title,
@@ -169,7 +169,7 @@ class Bonanza(object):
                 'plot': description,
                 'studio': addon_name}
 
-            item = xbmcgui.ListItem(infoLabels['title'])
+            item = xbmcgui.ListItem(infoLabels['title'], offscreen=True)
             item.setArt({'fanart': FANART, 'icon': image, 'thumb': image})
             item.setProperty('IsPlayable', 'true')
             item.setInfo('video', infoLabels)

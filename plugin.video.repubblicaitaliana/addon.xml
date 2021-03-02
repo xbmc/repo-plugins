@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.repubblicaitaliana" name="RepubblicaItaliana" version="1.0.0" provider-name="Testato">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="inputstream.adaptive" version="2.6.7"/>
+    <import addon="plugin.video.youtube" version="6.8.10+matrix.1"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">RepubblicaItaliana</summary>
+    <description lang="en_GB">Italian politics - TV and Radio channels</description>
+    <summary lang="it_IT">RepubblicaItaliana</summary>
+    <description lang="it_IT">Politica italiana - Canali TV e Radio</description>
+    <language>it</language>
+    <platform>all</platform>
+    <license>GPL-3.0-only</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=360944</forum>
+    <email>speednpower@gmail.com</email>
+    <source>https://github.com/Testato/plugin.video.repubblicaitaliana</source>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+    </assets>
+    <news>1.0.0 (28 Feb 2021)
+      - Upgraded to Kodi19 Matrix
+      - Fixed SkyTg24
+</news>
+  </extension>
+</addon>

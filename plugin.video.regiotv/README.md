@@ -27,6 +27,10 @@ In Kodi, simply search the add-ons for `Regio TV` and install the Regio TV video
 You can report issues at [our GitHub project](https://github.com/add-ons/plugin.video.regiotv).
 
 ## Releases
+### v0.1.3 (2021-03-04)
+- Fix an exception on Matrix when syncing channel/tvguide from IPTV Manager
+- Remove WTV, combine with Focus TV
+
 ### v0.1.2 (2020-08-01)
 - Add support for IPTV Manager
 - Add support for referer

@@ -30,6 +30,7 @@ def main_menu():
         label = '{name} [COLOR gray]| {label}[/COLOR]'.format(**channel)
         plot = '[B]{name}[/B]\nRegio {label}\n\n[I]{description}[/I]\n\n[COLOR yellow]{website}[/COLOR]'.format(**channel)
         list_item = ListItem(label=label, label2=channel.get('label'), offscreen=True)
+        list_item.setProperty(key='IsInternetStream', value='true' if is_playable else 'false')
         list_item.setProperty(key='IsPlayable', value='true' if is_playable else 'false')
         list_item.setInfo(type='video', infoLabels=dict(
             lastplayed='',

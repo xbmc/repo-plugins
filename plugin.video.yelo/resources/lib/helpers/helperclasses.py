@@ -48,7 +48,7 @@ class EPG:
         data.update(json_data)
 
         with open(os.path.join(path, cls.EPG_CACHE_FILE_NAME), "w") as json_file:
-            json.dump(data, json_file)
+            json.dump(data, json_file, sort_keys=True, indent=True)
 
     @classmethod
     def get_from_cache(cls):
@@ -119,7 +119,7 @@ class PluginCache:  # pylint: disable=no-init
         data.update(json_data)
 
         with open(os.path.join(path, cls.CACHE_FILE_NAME), "w") as json_file:
-            json.dump(data, json_file)
+            json.dump(data, json_file, sort_keys=True, indent=True)
 
     @classmethod
     def get_by_key(cls, key):

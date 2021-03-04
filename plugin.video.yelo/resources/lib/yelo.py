@@ -11,7 +11,7 @@ from data import USER_AGENT
 from helpers.helperclasses import PluginCache
 from helpers.helpermethods import widevine_payload_package
 from yelo_api import YeloApi
-from kodiutils import *
+from kodiutils import kodi_version_major
 
 try:  # Python 3
     from urllib.parse import quote

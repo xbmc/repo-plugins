@@ -26,14 +26,14 @@ CHANNELS = [
         preset=203,
     ),
     dict(
-        name='Focus TV',
+        name='Focus & WTV',
         label='West-Vlaanderen',
         description='Het meest belangwekkende nieuws uit West-Vlaanderen.',
         # live_stream='https://hls-origin01-focus-wtv.cdn01.rambla.be/main/adliveorigin-focus-wtv/_definst_/ARXpX7.smil/playlist.m3u8?',
         live_stream='https://hls-origin01-focus-wtv.cdn01.rambla.be/main/adliveorigin-focus-wtv/_definst_/ARXpX7.smil/playlist.m3u8',
         referer='http://player.clevercast.com/players/video-js/',
         logo='https://i.imgur.com/aGORIN8.png',
-        website='https://www.focustv.be/',
+        website='https://www.focus-wtv.be/',
         preset=204,
     ),
     dict(
@@ -62,16 +62,5 @@ CHANNELS = [
         logo='http://static.tvoost.be/tvoostbe/meta/android-chrome-192x192.png',
         website='https://tvoost.be/',
         preset=209,
-    ),
-    dict(
-        name='WTV',
-        label='West-Vlaanderen',
-        description='Het meest belangwekkende nieuws uit West-Vlaanderen.',
-        # live_stream='https://hls-origin01-focus-wtv.cdn01.rambla.be/main/adliveorigin-focus-wtv/_definst_/AG1G1l.smil/playlist.m3u8',
-        live_stream='http://hls-origin01-focus-wtv.cdn01.rambla.be/main/adliveorigin-focus-wtv/_definst_/ARXpX7.smil/playlist.m3u8',
-        referer='http://player.clevercast.com/players/video-js/',
-        logo='https://i.imgur.com/aGORIN8.png',
-        website='https://www.wtv.be/',
-        preset=210,
     ),
 ]

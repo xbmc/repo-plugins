@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.regiotv" name="Regio TV" version="0.1.2" provider-name="dagwieers">
+<addon id="plugin.video.regiotv" name="Regio TV" version="0.1.4" provider-name="dagwieers">
 <requires>
   <import addon="script.module.routing" version="0.2.3"/>
   <import addon="xbmc.python" version="2.25.0"/>
@@ -29,6 +29,10 @@ Beschikbare zenders: ATV, BRUZZ, Focus TV, ROB-tv, TVL, TV Oost, WTV
   <source>https://github.com/add-ons/plugin.video.regiotv</source>
   <forum>https://github.com/add-ons/plugin.video.regiotv/issues</forum>
   <news>
+v0.1.3 (2021-03-04)
+- Fix an exception on Matrix when syncing channel/tvguide from IPTV Manager
+- Remove WTV, combine with Focus TV
+
 v0.1.2 (2020-08-01)
 - Add support for IPTV Manager
 - Add support for referer

@@ -22,6 +22,8 @@ except ImportError:  # Python 2
 BASE_URL = "https://api.yeloplay.be/api/v1"
 CALLBACK_URL = "https://www.yeloplay.be/openid/callback"
 
+EPG_DAYS = 2
+
 MAXTHREADS = 5
 SEMAPHORE = threading.Semaphore(value=MAXTHREADS)
 VERIFY = True
@@ -342,36 +344,36 @@ class YeloApi:  # pylint: disable=useless-object-inheritance
 
     @classmethod
     def _get_schedule(cls, channel_id):
-        from datetime import datetime
+        from datetime import datetime, timedelta
 
-        today = datetime.today().strftime("%Y-%m-%d")
-        resp = requests.get("https://pubba.yelo.prd.telenet-ops.be/v1/"
-                            "events/schedule-day/outformat/json/lng/nl/channel/"
-                            "{}/day/{}/".format(channel_id, today), verify=VERIFY)
-        return resp.json()["schedule"]
+        today = datetime.today()
 
-    # @classmethod
-    # def _get_schedule_time(cls, channel_id):
-    #    from datetime import datetime
+        name = ""
+        broadcasts = []
+        for i in range(EPG_DAYS):
+            date_str = (today + timedelta(days=i)).strftime("%Y-%m-%d")
+            resp = requests.get("https://pubba.yelo.prd.telenet-ops.be/v1/"
+                                "events/schedule-day/outformat/json/lng/nl/channel/"
+                                "{}/day/{}/".format(channel_id, date_str), verify=VERIFY)
 
-    #    today = datetime.today().strftime("%Y%m%d%H")
-    #   resp = requests.get("https://pubba.yelo.prd.telenet-ops.be/v1/"
-    #                      "events/schedule-time/outformat/json/lng/nl/start/"
-    #                     "{}/range/{}/channel/{}/".format(today, 2, channel_id), verify=VERIFY)
-    # return resp.json()["schedule"]
+            schedule = resp.json()["schedule"]
+            broadcast = schedule[0]["broadcast"]
+            name = schedule[0]["name"]
+            broadcasts.extend(broadcast)
+
+        return dict(name=name, broadcasts=broadcasts)
 
     @classmethod
-    def __epg(cls, channel_id, dict_ref):
+    def __epg(cls, channel_id, channels_ref):
         SEMAPHORE.acquire()
 
         try:
-            data = cls._get_schedule(channel_id)
-
-            channel_name = data[0]["name"]
-            channel_id = data[0]["channelid"]
+            schedule = cls._get_schedule(channel_id)
+            channel_name = schedule.get("name")
+            broadcasts = schedule.get("broadcasts")
 
             channels = []
-            for broadcast in data[0]["broadcast"]:
+            for broadcast in broadcasts:
                 channels.append(dict(
                     id=channel_id,
                     start=timestamp_to_datetime(broadcast.get('starttime')),
@@ -381,7 +383,8 @@ class YeloApi:  # pylint: disable=useless-object-inheritance
                     subtitle=broadcast.get('contentlabel'),
                     image=broadcast.get('image'),
                 ))
-                dict_ref.update({channel_name: channels})
+
+            channels_ref.update({channel_name: channels})
 
             time.sleep(0.01)
             SEMAPHORE.release()
@@ -390,13 +393,12 @@ class YeloApi:  # pylint: disable=useless-object-inheritance
 
     @classmethod
     def _epg(cls, tv_channels):
-        dict_ref = {}
         threads = []
+        channels_ref = {}
 
         channel_ids = [item["id"] for item in tv_channels]
-
         for channel_id in channel_ids:
-            thread = threading.Thread(target=cls.__epg, args=(channel_id, dict_ref))
+            thread = threading.Thread(target=cls.__epg, args=(channel_id, channels_ref))
             thread.start()
             threads.append(thread)
 
@@ -404,7 +406,7 @@ class YeloApi:  # pylint: disable=useless-object-inheritance
         for thread in threads:
             thread.join()
 
-        return dict_ref
+        return channels_ref
 
     @classmethod
     def get_epg(cls, tv_channels):

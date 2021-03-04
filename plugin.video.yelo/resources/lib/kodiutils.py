@@ -52,13 +52,16 @@ def get_setting_as_int(setting):
 def get_string(string_id):
     return ADDON.getLocalizedString(string_id).encode('utf-8', 'ignore')
 
+
 def kodi_version():
     """Returns full Kodi version as string"""
     return xbmc.getInfoLabel('System.BuildVersion').split(' ')[0]
 
+
 def kodi_version_major():
     """Returns major Kodi version as integer"""
     return int(kodi_version().split('.')[0])
+
 
 def kodi_json_request(params):
     data = json.dumps(params)

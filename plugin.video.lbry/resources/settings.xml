@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <category label="30005">
+    <setting id="lbry_api_url" type="text" option="urlencoded" label="30000" default="https://api.lbry.tv/api/v1/proxy"/>
+    <setting id="nsfw" type="bool" label="30001" default="false"/>
+    <setting id="items_per_page" type="number" label="30002" default="20"/>
+    <setting type="lsep" label="30003"/>
+    <setting id="server_filter_disable" type="bool" label="30004" default="false"/>
+  </category>
+</settings>

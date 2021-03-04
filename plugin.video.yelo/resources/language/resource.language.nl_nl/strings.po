@@ -85,7 +85,7 @@ msgid "You need to fill in your credentials in settings."
 msgstr "Je aanmeldgegevens moeten ingevuld worden in de add-on instellingen."
 
 msgctxt "#32016"
-msgid "Extra"
+msgid "InputStream Helper"
 msgstr "InputStream Helper"
 
 msgctxt "#32017"

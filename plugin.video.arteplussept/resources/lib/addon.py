@@ -114,16 +114,13 @@ def weekly():
     return plugin.finish(view.build_weekly(settings))
 
 
-"""
+# @plugin.route('/broadcast', name='broadcast')
+# def broadcast():
+#     plugin.set_content('tvshows')
+#     items = custom.map_broadcast_item(
+#         custom.past_week_programs(language.get('short', 'fr')))
+#     return plugin.finish(items)
 
-@plugin.route('/broadcast', name='broadcast')
-def broadcast():
-    plugin.set_content('tvshows')
-    items = custom.map_broadcast_item(
-        custom.past_week_programs(language.get('short', 'fr')))
-    return plugin.finish(items)
-
-"""
 
 # plugin bootstrap
 if __name__ == '__main__':

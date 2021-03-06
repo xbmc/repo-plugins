@@ -18,7 +18,7 @@ def find_dict(findFn, d):
       findFn: A function taking two params: value, key. MUST return a boolean
       d: The dict to search
     """
-    for k, v in d.iteritems():
+    for k, v in d.items():
         if findFn(v, k):
             return v
     return None
@@ -29,7 +29,7 @@ def map_dict(mapFn, d):
       mapFn: A function taking two params: value, key
       d: The dict to map
     """
-    return {k: mapFn(v, k) for k, v in d.iteritems()}
+    return {k: mapFn(v, k) for k, v in d.items()}
 
 
 def filter_dict(filterFn, d):
@@ -37,7 +37,7 @@ def filter_dict(filterFn, d):
       filterFn: A function taking two params: value, key. MUST return a boolean
       d: The dict to filter
     """
-    return {k: v for k, v in d.iteritems() if filterFn(v, k)}
+    return {k: v for k, v in d.items() if filterFn(v, k)}
 
 
 def reject_dict(filterFn, d):

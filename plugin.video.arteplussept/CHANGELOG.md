@@ -1,3 +1,7 @@
+# Version 1.1.1
+
+- minor python 3 fixes & code improvements (from Kodi Travis CI)
+
 # Version 1.1.0
 
 - API fixes

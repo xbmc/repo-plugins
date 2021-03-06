@@ -1,11 +1,9 @@
 import time
 import datetime
-from html.parser import HTMLParser
+import html
 import urllib.parse
 
 import hof
-
-p = HTMLParser()
 
 
 def colorize(text, color):
@@ -20,10 +18,10 @@ def colorize(text, color):
 
 
 def format_title_and_subtitle(title, subtitle=None):
-    label = u'[B]{title}[/B]'.format(title=p.unescape(title))
+    label = u'[B]{title}[/B]'.format(title=html.unescape(title))
     # suffixes
     if subtitle:
-        label += u' - {subtitle}'.format(subtitle=p.unescape(subtitle))
+        label += u' - {subtitle}'.format(subtitle=html.unescape(subtitle))
     return label
 
 

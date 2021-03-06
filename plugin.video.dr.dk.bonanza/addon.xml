@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.dr.dk.bonanza" version="3.2.1" name="DR.dk Bonanza" provider-name="termehansen">
+    <requires>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.requests" version="2.22.0" />
+        <import addon="script.module.requests-cache" version="0.4.13"/>
+        <import addon="script.module.buggalo" version="1.1.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Best and worst from DR's archives</summary>
+        <summary lang="da_DK">Det bedste og værste fra DR's arkiver</summary>
+        <description lang="en_GB">On the 16th of January 2008 DR (Danish Broadcasting Corporation) opened up its great archive to what became Bonanza. Here you can see some of the best - and worst, of what has been produced during the years.</description>
+        <description lang="da_DK">16. januar 2008 åbnede DR for sit store arkiv med Bonanza. Her kan du se lidt af det bedste - og værste af det, der er blevet produceret i årenes løb.</description>
+        <disclaimer lang="en_GB">Some parts of this addon may not be legal in your country of residence - please check with your local laws.</disclaimer>
+        <disclaimer lang="da_DK">Nogle dele af denne addon er muligvis ikke lovlig i dit land - kontroller venligst dine lokale love.</disclaimer>
+        <license>GPL-2.0-only</license>
+        <platform>all</platform>
+        <language>da</language>
+        <email>termopeten@gmail.com</email>
+        <website>https://www.dr.dk/bonanza</website>
+        <source>https://github.com/xbmc-danish-addons/plugin.video.dr.dk.bonanza</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+       </assets>
+       <news>[B]Version 3.2.1 - 2020-03-06[/B]
+- Updated addon to match website changes
+- Moving "ownership" of the addon, hence Tommy have stopped developing on the addon.
+- re-factor for Leia and Matrix
+    </news>
+    </extension>
+</addon>

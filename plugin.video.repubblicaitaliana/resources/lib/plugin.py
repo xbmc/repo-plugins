@@ -52,7 +52,7 @@ def addDirectoryItem_nodup(parameters, li, title=titolo_global, folder=True):
 def programmi_camera():
     titolo = 'Camera - Canale Assemblea'
     liStyle = xbmcgui.ListItem(titolo)
-    link = 'plugin://plugin.video.youtube/play/?video_id=_pjPv7dS-_w'
+    link = 'plugin://plugin.video.tubed/?mode=play&video_id=_pjPv7dS-_w'
     thumb = 'https://webtv.camera.it/system/events/thumbnails/000/014/843/large/AULAXVIIIC.gif'
     liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
     liStyle.setInfo('video', {})
@@ -61,7 +61,7 @@ def programmi_camera():
 
     titolo = 'Camera - Canale Satellitare'
     liStyle = xbmcgui.ListItem(titolo)
-    link = 'plugin://plugin.video.youtube/play/?video_id=Cnjs83yowUM'
+    link = 'plugin://plugin.video.tubed/?mode=play&video_id=Cnjs83yowUM'
     thumb = 'https://webtv.camera.it/assets/thumbs/flash_7/2019/EI_20190520_ch4_14419.jpg'
     liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
     liStyle.setInfo('video', {})
@@ -75,7 +75,7 @@ def programmi_senato():
     titolo = 'Senato - Web TV 1'
     liStyle = xbmcgui.ListItem(titolo)
     link = 'https://senato-live.morescreens.com/SENATO_1_001/playlist.m3u8?video_id=13440'
-    thumb = 'http://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
+    thumb = 'https://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
     liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
     liStyle.setInfo('video', {})
     liStyle.setProperty('isPlayable', 'true')
@@ -84,7 +84,7 @@ def programmi_senato():
     titolo = 'Senato - Web TV 2'
     liStyle = xbmcgui.ListItem(titolo)
     link = 'https://senato-live.morescreens.com/SENATO_1_002/playlist.m3u8?video_id=13459'
-    thumb = 'http://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
+    thumb = 'https://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
     liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
     liStyle.setInfo('video', {})
     liStyle.setProperty('isPlayable', 'true')
@@ -93,7 +93,7 @@ def programmi_senato():
     titolo = 'Senato - Web TV 3'
     liStyle = xbmcgui.ListItem(titolo)
     link = 'https://senato-live.morescreens.com/SENATO_1_003/playlist.m3u8?video_id=13462'
-    thumb = 'http://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
+    thumb = 'https://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
     liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
     liStyle.setInfo('video', {})
     liStyle.setProperty('isPlayable', 'true')
@@ -102,7 +102,7 @@ def programmi_senato():
     titolo = 'Senato - Web TV 4'
     liStyle = xbmcgui.ListItem(titolo)
     link = 'https://senato-live.morescreens.com/SENATO_1_004/playlist.m3u8?video_id=13465'
-    thumb = 'http://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
+    thumb = 'https://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
     liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
     liStyle.setInfo('video', {})
     liStyle.setProperty('isPlayable', 'true')
@@ -111,7 +111,7 @@ def programmi_senato():
     titolo = 'Senato - Web TV 5'
     liStyle = xbmcgui.ListItem(titolo)
     link = 'https://senato-live.morescreens.com/SENATO_1_005/playlist.m3u8?video_id=13466'
-    thumb = 'http://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
+    thumb = 'https://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
     liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
     liStyle.setInfo('video', {})
     liStyle.setProperty('isPlayable', 'true')
@@ -120,7 +120,7 @@ def programmi_senato():
     titolo = 'Senato - Web TV 6'
     liStyle = xbmcgui.ListItem(titolo)
     link = 'https://senato-live.morescreens.com/SENATO_1_006/playlist.m3u8?video_id=13469'
-    thumb = 'http://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
+    thumb = 'https://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
     liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
     liStyle.setInfo('video', {})
     liStyle.setProperty('isPlayable', 'true')
@@ -129,7 +129,7 @@ def programmi_senato():
     titolo = 'Senato - Web TV 7'
     liStyle = xbmcgui.ListItem(titolo)
     link = 'https://senato-live.morescreens.com/SENATO_1_007/playlist.m3u8?video_id=13472'
-    thumb = 'http://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
+    thumb = 'https://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
     liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
     liStyle.setInfo('video', {})
     liStyle.setProperty('isPlayable', 'true')
@@ -143,7 +143,7 @@ def programmi_tv():
     titolo = 'RaiNews24'
     liStyle = xbmcgui.ListItem(titolo)
     link = 'https://rainews1-live.akamaized.net/hls/live/598326/rainews1/rainews1/playlist.m3u8'
-    thumb = 'http://www.rainews.it/dl/components/img/svg/RaiNewsBarra-logo.png'
+    thumb = 'https://www.rainews.it/dl/components/img/svg/RaiNewsBarra-logo.png'
     liStyle.setArt({ 'thumb': thumb, 'fanart' : fanart_path })
     liStyle.setInfo('video', {})
     liStyle.setProperty('isPlayable', 'true')

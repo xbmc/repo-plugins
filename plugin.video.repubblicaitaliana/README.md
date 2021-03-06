@@ -1,8 +1,18 @@
 # RepubblicaItaliana Kodi plugin
 Italian politics - TV and Radio channels
 
+### Install tips
+On some Linux distros, Kodi comes packaged without the inputstream.adaptive plugin.
+In this case, manually install the missing plugin.
+For example on Ubuntu use the command:
+sudo apt install kodi-inputstream-adaptive
 
 ### Changelog
+1.1.0 (05 Mar 2021)
+- Use of Tubed instead of Youtube
+- Fixed some thumbnails
+- Fixed automatic installation of inputstream.adaptive on Windows
+
 1.0.0 (28 Feb 2021)
 - Upgraded to Kodi19 Matrix
 - Fixed SkyTg24

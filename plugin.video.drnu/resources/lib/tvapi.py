@@ -20,7 +20,7 @@
 #
 
 import json
-import urllib
+import sys
 import requests
 import requests_cache
 import hashlib
@@ -33,7 +33,15 @@ import base64
 import xbmcaddon
 import xbmc
 
+if sys.version_info.major == 2:
+    # python 2
+    compat_str = unicode
+    import urllib as urlparse
+else:
+    compat_str = str
+    import urllib.parse as urlparse
 ADDON = xbmcaddon.Addon()
+tr = xbmcaddon.Addon().getLocalizedString
 
 SLUG_PREMIERES='forpremierer'
 SLUG_ADULT=['dr1','dr2','dr3','dr-k']
@@ -46,7 +54,7 @@ class Api(object):
         #cache expires after: 3600 = 1hour
         requests_cache.install_cache(os.path.join(cachePath,'requests.cache'), backend='sqlite', expire_after=3600*8 )
         requests_cache.remove_expired_responses()
-        self.empty_srt = self.cachePath + '/{}.da.srt'.format(ADDON.getLocalizedString(30508))
+        self.empty_srt = compat_str('{}/{}.da.srt').format(self.cachePath, tr(30508))
         with open(self.empty_srt, 'w') as fn:
            fn.write('1\n00:00:00,000 --> 00:01:01,000\n') # we have to have something in srt to make kodi use it
 
@@ -55,7 +63,7 @@ class Api(object):
         return [channel for channel in channels if channel['Title'] in ['DR1', 'DR2', 'DR Ramasjang']]
 
     def getChildrenFrontItems(self, channel):
-        childrenFront = self._http_request('/page/tv/children/front/%s' % channel)
+        childrenFront = self._http_request('/page/tv/children/front/{}'.format(channel))
         return self._handle_paging(childrenFront['Programs'])
 
     def getThemes(self):
@@ -85,27 +93,25 @@ class Api(object):
         return []
 
     def getSeries(self, query):
-        result = self._http_request('/search/tv/programcards-latest-episode-with-asset/series-title-starts-with/%s' % query,
+        result = self._http_request('/search/tv/programcards-latest-episode-with-asset/series-title-starts-with/{}'.format(query),
                                     {'limit': 75})
         return self._handle_paging(result)
 
     def searchSeries(self, query):
         # Remove various characters that makes the API puke
-        result = self._http_request('/search/tv/programcards-latest-episode-with-asset/series-title/%s' % re.sub('[&()"\'\.!]', '', query))
+        cleaned_query = re.sub('[&()"\'\.!]', '', query)
+        result = self._http_request('/search/tv/programcards-latest-episode-with-asset/series-title/{}'.format(cleaned_query))
         return self._handle_paging(result)
 
     def getEpisodes(self, slug):
-        result = self._http_request('/list/%s' % slug,
-                                    {'limit': 48,
-                                     'expanded': True})
+        result = self._http_request('/list/{}'.format(slug), {'limit': 48, 'expanded': True})
         return self._handle_paging(result)
 
     def getEpisode(self, slug):
-        return self._http_request('/programcard/%s' % slug)
+        return self._http_request('/programcard/{}'.format(slug))
 
     def getMostViewed(self):
-        result = self._http_request('/list/view/mostviewed',
-                                    {'limit': 48})
+        result = self._http_request('/list/view/mostviewed', {'limit': 48})
         return result['Items']
 
     def getSelectedList(self):
@@ -131,17 +137,17 @@ class Api(object):
             foreign = False
             for sub in result['SubtitlesList']:
                if 'HardOfHearing' in sub['Type']:
-                   name = '{}/{}.da.srt'.format(self.cachePath, ADDON.getLocalizedString(30506).encode('utf-8'))
+                   name = compat_str('{}/{}.da.srt').format(self.cachePath, tr(30506))
                else:
                    foreign = True
-                   name = '{}/{}.da.srt'.format(self.cachePath, ADDON.getLocalizedString(30507).encode('utf-8'))
+                   name = compat_str('{}/{}.da.srt').format(self.cachePath, tr(30507))
                u = requests.get(sub['Uri'], timeout=10)
                if u.status_code != 200:
                    u.close()
                    break
-               srt = self.vtt2srt( u.content )
-               with open(name, 'w') as fn:
-                   fn.write(srt)
+               srt = self.vtt2srt(u.content)
+               with open(name, 'wb') as fn:
+                   fn.write(srt.encode('utf-8'))
                u.close()
                subtitlesUri.append(name)
             if not foreign:
@@ -157,7 +163,7 @@ class Api(object):
 	# HACK: the servers behind /mu-online/api/1.2 is often returning Content-Type="text/xml" instead of "image/jpeg",
         # this problem is not pressent for /mu/bar (the "Classic API")
         assert(self.api.API_URL.endswith("/mu-online/api/1.2"))
-        return imageUrl.replace("/mu-online/api/1.2/bar/","/mu/bar/") + "?width=%d&height=%d" % (width, height)
+        return imageUrl.replace("/mu-online/api/1.2/bar/","/mu/bar/") + "?width={:d}&height={:d}".format(width, height)
 
 
     def _handle_paging(self, result):
@@ -170,10 +176,10 @@ class Api(object):
     def _http_request(self, url, params=None, cache=True):
         try:
             if not url.startswith(('http://','https://')):
-                url = self.API_URL + urllib.quote(url, '/')
+                url = self.API_URL + urlparse.quote(url, '/')
 
             if params:
-                url += '?' + urllib.urlencode(params, doseq=True)
+                url += '?' + urlparse.urlencode(params, doseq=True)
 
             try:
                 xbmc.log(url)
@@ -194,6 +200,8 @@ class Api(object):
             raise ApiException(ex)
 
     def vtt2srt(self, vtt):
+        if isinstance(vtt, bytes):
+            vtt = vtt.decode('utf-8')
         srt = vtt.replace("\r\n", "\n")
         srt = re.sub(r'([\d]+)\.([\d]+)', r'\1,\2', srt)
         srt = re.sub(r'WEBVTT\n\n', '', srt)
@@ -201,14 +209,14 @@ class Api(object):
         srt = re.sub(r'\n\d+\n', '\n', srt)
         srt = re.sub(r'\n([\d]+)', r'\nputINDEXhere\n\1', srt)
 
-        srtout = '1\n'
+        srtout = ['1']
         idx = 2
-        for l in srt.split('\n'):
+        for l in srt.splitlines():
            if l == 'putINDEXhere':
                l = str(idx)
                idx += 1
-           srtout += l + '\n'
-        return srtout
+           srtout.append(l)
+        return '\n'.join(srtout)
 
 BLOCK_SIZE_BYTES = 16
 
@@ -285,11 +293,6 @@ RIJNDAEL_LOG_TABLE = (0x00, 0x00, 0x19, 0x01, 0x32, 0x02, 0x1a, 0xc6, 0x4b, 0xc7
                       0x53, 0x39, 0x84, 0x3c, 0x41, 0xa2, 0x6d, 0x47, 0x14, 0x2a, 0x9e, 0x5d, 0x56, 0xf2, 0xd3, 0xab,
                       0x44, 0x11, 0x92, 0xd9, 0x23, 0x20, 0x2e, 0x89, 0xb4, 0x7c, 0xb8, 0x26, 0x77, 0x99, 0xe3, 0xa5,
                       0x67, 0x4a, 0xed, 0xde, 0xc5, 0x31, 0xfe, 0x18, 0x0d, 0x63, 0x8c, 0x80, 0xc0, 0xf7, 0x70, 0x07)
-
-try:
-    compat_str = unicode  # Python 2
-except NameError:
-    compat_str = str
 
 def compat_struct_pack(spec, *args):
     if isinstance(spec, compat_str):

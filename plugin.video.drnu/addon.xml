@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="5.0.13" name="DR TV" provider-name="TermeHansen">
+<addon id="plugin.video.drnu" version="5.0.14" name="DR TV" provider-name="TermeHansen">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.requests" version="2.22.0" />
@@ -26,14 +26,9 @@
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
        </assets>
-       <news>[B]Version 5.0.13 - 2021-02-27[/B]
-- Adding old PR's + minor fixes. last update before kodi 19 and python3
-- Change for request-cache for storing web requests locally (in 8hours) #34
-- Fix missing thumbnails and added option in settings to choose fan-art image size #29 #35
-- Fixed themes menu item #34
-- Add support for other plugins to start live tv. #31
-- Update logos and entry screen #24
-- Change subtitle handling to local srt files, so user also can change for hard-of-hearing subs and change while watching #36
+       <news>[B]Version 5.0.14 - 2021-03-06[/B]
+- Bumping version number, to re-activate addon in leia addon channel
+- Re-factor code to work on both python2 and python 3
     </news>
     </extension>
 </addon>

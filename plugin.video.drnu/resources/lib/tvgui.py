@@ -61,12 +61,14 @@ class AreaSelectorDialog(xbmcgui.WindowDialog):
 
         self.setFocus(self.drTvButton)
 
+        self.id_to_handle = {
+            self.drTvButton.getId(): 'drtv',
+            self.ramasjangButton.getId(): 'ramasjang',
+            self.ultraButton.getId(): 'ultra',
+            }
+
+
     def onControl(self, control):
-        if control == self.drTvButton:
-            self.areaSelected = 'drtv'
-        elif control == self.ramasjangButton:
-            self.areaSelected = 'ramasjang'
-        elif control == self.ultraButton:
-            self.areaSelected = 'ultra'
+        self.areaSelected = self.id_to_handle[control.getId()]
 
         self.close()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.dr.dk.bonanza" version="3.2.0" name="DR.dk Bonanza" provider-name="termehansen">
+<addon id="plugin.video.dr.dk.bonanza" version="3.2.1+matrix.1" name="DR.dk Bonanza" provider-name="termehansen">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.buggalo" version="1.2.0"/>
@@ -26,10 +26,10 @@
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
        </assets>
-       <news>[B]Version 3.2.0 - 2020-11-26[/B]
+       <news>[B]Version 3.2.1 - 2020-03-06[/B]
 - Updated addon to match website changes
 - Moving "ownership" of the addon, hence Tommy have stopped developing on the addon.
-- re-factor for Matrix
+- re-factor for Leia and Matrix
     </news>
     </extension>
 </addon>

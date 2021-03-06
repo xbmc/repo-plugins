@@ -1,0 +1,75 @@
+[B]Version 3.2.0 - 2020-11-26[/B]
+- Updated addon to match website changes
+- Moving "ownership" of the addon, hence Tommy have stopped developing on the addon.
+- re-factor for Leia
+
+[B]Version 3.1.0 - 2017-03-18[/B]
+- Updated addon to match website changes
+
+[B]Version 3.0.3 - 2014-12-23[/B]
+- Fix video playback on Kodi Helix
+
+[B]Version 3.0.2 - 2014-02-07[/B]
+- Fixed problem with setting 'cast' info
+
+[B]Version 3.0.1 - 2013-10-03[/B]
+- Fixed playback on Raspberry Pi
+- Use Python built-in json library (if available)
+- Fixed duration in list view
+
+[B]Version 3.0.0 - 2013-05-01[/B]
+- Initial version for Frodo
+- Added support for Bonanza Radio content
+  Access the addon through the Music addons to see this.
+
+[B]Version 2.1.4 - 2012-10-21[/B]
+- Fixed problems with differences between Eden and Frodo (http://trac.xbmc.org/ticket/13349)
+
+[B]Version 2.1.3 - 2012-09-17[/B]
+- Change video stream selection. Now all available streams are added to a playlist
+  and XBMC will play the first item that works.
+  This is necessary as in some cases the high quality or medium quality stream is not playable.
+
+[B]Version 2.1.2 - 2012-04-18[/B]
+- Fixed playback problem with many videos
+- Allow XBMC to track 'Watched' status
+
+[B]Version 2.1.1 - 2012-02-23[/B]
+- Fixed minor problems with parsing data from Bonanza
+
+[B]Version 2.1.0 - 2012-02-15[/B]
+- Introduced usage of script.module.buggalo for improved error handling
+  with option for the user to submit exceptions/bugs
+- Added support for some radio content
+- Added support for Recently added
+- Fixed problem with missing Editors favourites (once again)
+
+[B]Version 2.0.0 - 2011-07-28[/B]
+- Removed support for Dharma
+- Otherwise same changes as 1.1.0
+
+[B]Version 1.1.0 - 2011-07-28[/B]
+- Removed dependency on script.module.danishaddons
+- Fixed problem with missing Editors favourites
+
+[B]Version 1.0.6[/B]
+- Prepare for official XBMC repository
+
+[B]Version 1.0.5[/B]
+- Updated to danishaddons module 1.1.0
+
+[B]Version 1.0.4[/B]
+- Fixed patching of RTMP URL
+
+[B]Version 1.0.3[/B]
+- Decode HTML entities in title, description, etc.
+
+[B]Version 1.0.2[/B]
+- Updated to use script.module.simplejson
+
+[B]Version 1.0.1[/B]
+- Fixed parsing and display of clip duration
+- Now uses library module for Danish addons
+
+[B]Version 1.0.0[/B]
+- Initial version

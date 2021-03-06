@@ -24,19 +24,21 @@ import re
 import sys
 import requests
 import requests_cache
-from html import unescape
 import buggalo
 
 import xbmc
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
-import json
 
-try:
+if sys.version_info.major == 2:
     # python 2
     from urlparse import parse_qsl
-except:
+    import HTMLParser
+    parser = HTMLParser.HTMLParser()
+else:
+    import html.parser
+    parser = html.parser.HTMLParser()
     from urllib.parse import parse_qsl
 
 BASE_URL = 'http://www.dr.dk/bonanza/'
@@ -78,8 +80,8 @@ class Bonanza(object):
             for m in re.finditer(pattern, html, re.DOTALL):
                 url = BASE_URL + m.group(1)
                 image = 'http:' + m.group(2)
-                title = unescape(m.group(3))
-                description = unescape(m.group(4))
+                title = parser.unescape(m.group(3))
+                description = parser.unescape(m.group(4))
 
                 infoLabels = {
                     'title': title,
@@ -141,8 +143,8 @@ class Bonanza(object):
         for m in re.finditer(pattern, html, re.DOTALL):
             url = BASE_URL + m.group(1)
             image = 'http:' + m.group(2)
-            title = unescape(m.group(3))
-            description = unescape(m.group(4))
+            title = parser.unescape(m.group(3))
+            description = parser.unescape(m.group(4))
 
             item = xbmcgui.ListItem(title, offscreen=True)
             item.setArt({'fanart': FANART, 'icon': image})
@@ -161,9 +163,9 @@ class Bonanza(object):
         html = html.split('<div class="list-footer"></div>',1)[0]
         for m in re.finditer(pattern, html, re.DOTALL):
             url = BASE_URL + m.group(1)
-            description = unescape(m.group(2))
+            description = parser.unescape(m.group(2))
             image = 'http:' + m.group(3)
-            title = unescape(m.group(4))
+            title = parser.unescape(m.group(4))
             infoLabels = {
                 'title': title,
                 'plot': description,

@@ -1,0 +1,174 @@
+# Kodi Media Center language file
+# Addon Name: NHK World TV
+# Addon id: plugin.video.nhkworldtv
+# Addon Provider: sbroenne
+msgid ""
+msgstr ""
+
+# Settings.xml
+msgctxt "#30001"
+msgid "General"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Microsoft Azure Cache"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Display Limits"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Cache NHK API results (minutes)"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Max 'News'-items (the more the slower)"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Max 'At A Glance'-items"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Enable to speed-up video playback (recommended)"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Maximum episodes to cache"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Run Set-up Wizard when plugin starts"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Use 720p instead of 1080p (in case you are running into buffering issues)"
+msgstr ""
+# plugin.py
+
+# Top Stories Menu Item
+msgctxt "#30010"
+msgid "Top Stories >"
+msgstr ""
+
+msgctxt "#30012"
+msgid "{0}\n\n{1}"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Last update at: {0})"
+msgstr ""
+
+# At A Glance
+msgctxt "#30015"
+msgid "At a Glance >"
+msgstr ""
+
+# On-Demand Menu Item
+
+msgctxt "#30020"
+msgid "Watch on demand >"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Image from:\n\n{0}"
+msgstr ""
+
+# Live Menu Item
+
+msgctxt "#30030"
+msgid "Watch live now >"
+msgstr ""
+
+# Schedule Menu Item
+
+msgctxt "#30036"
+msgid "Live Schedule >"
+msgstr ""
+
+# On-Demand Menu
+
+msgctxt "#30040"
+msgid "Programs"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Playlists"
+msgstr ""
+
+msgctxt "#30043"
+msgid "Latest Episodes"
+msgstr ""
+
+msgctxt "#30044"
+msgid "Most Watched"
+msgstr ""
+
+msgctxt "#30045"
+msgid "All Episodes"
+msgstr ""
+
+msgctxt "#30046"
+msgid "Documentaries"
+msgstr ""
+
+msgctxt "#30047"
+msgid "We, in the Time of Corona"
+msgstr ""
+
+# Episode List
+msgctxt "#30050"
+msgid "{0}\n\nAvailable until: {1}"
+msgstr ""
+
+# Top Stories
+msgctxt "#30060"
+msgid "{0} hour ago"
+msgstr ""
+
+msgctxt "#30061"
+msgid "{0} hours ago"
+msgstr ""
+
+msgctxt "#30062"
+msgid "{0} min ago"
+msgstr ""
+
+# Live Schedule
+msgctxt "#30063"
+msgid "PLAY: {0}"
+msgstr ""
+
+# First run Wizard
+
+msgctxt "#30070"
+msgid "Information about 720p and 1080p"
+msgstr ""
+
+msgctxt "#30071"
+msgid "NHK provides streams via Akamai in 720p and 1080p - the plug-in defaults to 1080p where available.[CR]If you encounter buffering issues, you can fall-back to 720p in addon-settings.[CR][CR]The wizard has finished and will close now.[CR]Enjoy NHK World TV!"
+msgstr ""
+
+# News Programs
+msgctxt "#30080"
+msgid "News Programs >"
+msgstr ""
+
+msgctxt "#30081"
+msgid "Watch NHK News Programs like NEWSLINE, NEWSLINE IN DEPTH & NEWSROOM TOKYO on-demand.[CR]Only currently broadcasted programs will be shown."
+msgstr ""
+
+# kodiutils.py
+msgctxt "#30090"
+msgid "{0} - {1} episode"
+msgstr ""
+
+msgctxt "#30091"
+msgid "{0} - {1} episodes"
+msgstr ""
+

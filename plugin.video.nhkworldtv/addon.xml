@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.nhkworldtv" name="NHK World TV" version="1.0.1" provider-name="sbroenne">
+    <requires>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.certifi" version="2019.9.11"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+        <import addon="script.module.requests-cache" version="0.4.13"/>
+        <import addon="script.module.routing" version="0.2.3"/>
+        <import addon="script.module.future" version="0.17.1"/>
+        <import addon="script.module.kodi-six" version="0.1.3"/>
+        <import addon="script.module.pytz" version="2014.2"/>
+        <import addon="script.module.tzlocal" version="2.0.0"/>
+    </requires>
+
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Watch NHK World Japan in Full HD - live stream, on-demand and news programs</summary>
+        <description lang="en_GB">
+Watch NHK World Japan in Full HD
+
+- Live Stream 
+- On demand programs - By program, latest and most watched, categories and playlist. You can also browse and search through all programs.
+- Live schedule
+- Top Stories and At a Glance
+- News programs like NEWSLINE, NEWSLINE IN DEPTH and NEWSROOM TOKYO
+
+Content is retrieved and played directly from the NHK World web site.
+
+Plugin supports fallback to HD if you should encounter buffering issues.
+
+Tested on Kodi 18.6+ Leia and 19 Matrix.
+        </description>
+        <disclaimer lang="en_GB">This plugin is a fan project and not related in any way to NHK!</disclaimer>
+        <platform>all</platform>
+        <license>GPL-3.0-or-later</license>
+        <language>en</language>
+        <email>stefan_broenner@yahoo.com</email>
+        <source>https://github.com/sbroenne/plugin.video.nhkworldtv</source>
+        <forum>https://forum.kodi.tv/showthread.php?tid=353215</forum>
+        <news>v1.0.1
+- Removed optional setting of View States so that plugin can be submitted to official repo
+        </news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/screenshot01.jpeg</screenshot>
+            <screenshot>resources/screenshot02.jpeg</screenshot>
+            <screenshot>resources/screenshot03.jpeg</screenshot>
+        </assets>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+    </extension>
+</addon>

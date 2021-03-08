@@ -309,7 +309,7 @@ def getFavTeamId():
 
     fav_team_id = "0"
     for team in json_source['teams']:
-        if FAV_TEAM in team['name']:
+        if FAV_TEAM in team['name'].encode('utf8'):
             fav_team_id = str(team['id'])
             break
 
@@ -484,7 +484,7 @@ def getFavTeamLogo():
 
     fav_team_abbr = ''
     for team in json_source['teams']:
-        if FAV_TEAM in team['name']:
+        if FAV_TEAM in team['name'].encode('utf8'):
             fav_team_abbr = str(team['abbreviation']).lower()
             break
 

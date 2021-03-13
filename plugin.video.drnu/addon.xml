@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="5.0.14+matrix.1" name="DR TV" provider-name="TermeHansen">
+<addon id="plugin.video.drnu" version="5.0.15+matrix.1" name="DR TV" provider-name="TermeHansen">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.buggalo" version="1.2.0"/>
@@ -26,9 +26,9 @@
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
        </assets>
-       <news>[B]Version 5.0.14 - 2021-03-06[/B]
-- Bumping version number, to re-activate addon in leia addon channel
-- Re-factor code to work on both python2 and python 3
+       <news>[B]Version 5.0.15 - 2021-03-13[/B]
+- Add buggalo error submit to kodi.drnu gmail
+- fix bug for write subtitle files on libreelec, kodi 18.9
     </news>
     </extension>
 </addon>

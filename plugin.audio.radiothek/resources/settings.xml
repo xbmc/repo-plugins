@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+     <category label="30123">
+         <setting id="useHlsLive" label="30116" type="bool" default="true" />
+         <setting id="audioQuality" type="enum"  label="30122" lvalues="30117|30118" default="1" visible="eq(-1,false)" />
+         <setting id="audioQualityHLS" type="enum"  label="30122" lvalues="30117|30118|30119|30120|30121" default="2" visible="eq(-2,true)" />
+     </category>
+</settings>

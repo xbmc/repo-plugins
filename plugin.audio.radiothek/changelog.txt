@@ -1,3 +1,11 @@
+0.1.2
+- Shoutcast livestream pattern changed.
+- Added settings for livestream (Shoutcast/HLS)
+- Added quality settings for livestreams
+
+0.1.1
+- Added sort for podcast & archive views
+
 0.1.0
 - KODI 19 compatible (older versions have to use 0.0.x for now)
 

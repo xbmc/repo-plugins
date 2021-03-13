@@ -77,3 +77,35 @@ msgstr ""
 msgctxt "#30115"
 msgid "No items for this station"
 msgstr ""
+
+msgctxt "#30116"
+msgid "Use HLS Livestream"
+msgstr ""
+
+msgctxt "#30117"
+msgid "Low"
+msgstr ""
+
+msgctxt "#30118"
+msgid "Medium"
+msgstr ""
+
+msgctxt "#30119"
+msgid "High"
+msgstr ""
+
+msgctxt "#30120"
+msgid "Very High"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Adaptive"
+msgstr ""
+
+msgctxt "#30122"
+msgid "Livestream Audio Quality"
+msgstr ""
+
+msgctxt "#30123"
+msgid "Livestream"
+msgstr ""

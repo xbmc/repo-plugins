@@ -1,6 +1,6 @@
 {
-    "name"              : "Netflix",
-    "plugin"            : "plugin.video.netflix",
+    "name"              : "BiNGE",
+    "plugin"            : "slyguy.binge",
     "priority"          : 100,
     "is_resolvable"     : "true",
     "assert"            : {
@@ -10,27 +10,23 @@
                             "search_episode":   ["showname"]
                           },
     "play_movie"        : [
-                            "plugin://plugin.video.netflix/directory/search/search/add/",
-                            {"keyboard": "Select"},
+                            "plugin://slyguy.binge/?_=search",
                             {"keyboard": "{title}"},
-                            {"title": "(?i).*{title}.*", "year": "{year}"}
+                            {"title": "{title}", "year": "{year}"}
                           ],
     "play_episode"      : [
-                            "plugin://plugin.video.netflix/directory/search/search/add/",
-                            {"keyboard": "Select"},
+                            "plugin://slyguy.binge/?_=search",
                             {"keyboard": "{showname}"},
-                            {"title": "(?i).*{showname}.*"},
-                            {"season": "{season}"},
+                            {"title": "{showname}"},
+                            {"title": "Season {season}"},
                             {"season": "{season}", "episode": "{episode}"}
                           ],
     "search_movie"      : [
-                            "plugin://plugin.video.netflix/directory/search/search/add/",
-                            {"keyboard": "Select"},
+                            "plugin://slyguy.binge/?_=search",
                             {"keyboard": "{title}"}
                           ],
     "search_episode"    : [
-                            "plugin://plugin.video.netflix/directory/search/search/add/",
-                            {"keyboard": "Select"},
+                            "plugin://slyguy.binge/?_=search",
                             {"keyboard": "{showname}"}
                           ]
 }

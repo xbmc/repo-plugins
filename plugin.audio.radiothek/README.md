@@ -10,7 +10,7 @@ Windows, Linux , Android and OSX
 
 Current Features
 ----------------
-* Livestream
+* Livestream (incl. OE1 Dolby)
 * Broadcast with Cue Tracks
 * Highlights, Tags, Archive, Podcasts
 * Missed a Show

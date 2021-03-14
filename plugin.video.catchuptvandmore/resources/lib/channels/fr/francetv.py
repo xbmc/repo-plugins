@@ -1,45 +1,23 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Original work (C) JUL1EN094, SPM, SylvainCecchetto
-    Copyright (C) 2016  SylvainCecchetto
+# Copyright: (c) JUL1EN094, SPM, SylvainCecchetto
+# Copyright: (c) 2016, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-
-from codequick import Route, Resolver, Listitem, utils, Script
-
-
-from resources.lib import web_utils
-from resources.lib import resolver_proxy
-from resources.lib.menu_utils import item_post_treatment
-from resources.lib.addon_utils import get_item_media_path
-
-from kodi_six import xbmcplugin
-
-import re
 import json
+import re
 import time
+
+from codequick import Listitem, Route, Resolver, Script, utils
+from kodi_six import xbmcplugin
 import urlquick
+
+from resources.lib import resolver_proxy, web_utils
+from resources.lib.addon_utils import get_item_media_path
+from resources.lib.menu_utils import item_post_treatment
+
 
 TAG_RE = re.compile(r'<[^>]+>')
 
@@ -56,10 +34,8 @@ except ImportError:
     unescape = HTML_PARSER.unescape
 
 
-"""
-Channels:
-    * france.tv (https://www.france.tv/)
-"""
+# Channels:
+#     * france.tv (https://www.france.tv/)
 
 URL_API_MOBILE = utils.urljoin_partial("https://api-mobile.yatta.francetv.fr/")
 URL_API_FRONT = utils.urljoin_partial("http://api-front.yatta.francetv.fr")
@@ -169,31 +145,31 @@ def set_item_callback_based_on_type(item, type_, j, next_page_item=None):
         item_post_treatment(item)
         return True
 
-    elif type_ == 'sous_categorie':
+    if type_ == 'sous_categorie':
         item.set_callback(grab_json_collections, URL_API_MOBILE('/apps/sub-categories/%s' % j['url_complete']))
         item_post_treatment(item)
         return True
 
-    elif type_ == 'region':
+    if type_ == 'region':
         item.set_callback(outre_mer_root, j['region_path'])
         item_post_treatment(item)
         return True
 
-    elif type_ == 'categories':
+    if type_ == 'categories':
         item.label = 'Les sous-catégories'
         item.set_callback(list_generic_items, j['items'], next_page_item)
         item_post_treatment(item)
         return True
 
     # This is a video
-    elif type_ == 'integrale' or type_ == 'extrait' or type_ == 'unitaire':
+    if type_ == 'integrale' or type_ == 'extrait' or type_ == 'unitaire':
         si_id = populate_video_item(item, j)
         item.set_callback(get_video_url,
                           broadcast_id=si_id)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         return True
 
-    elif 'items' in j:
+    if 'items' in j:
         item.set_callback(list_generic_items, j['items'], next_page_item)
         item_post_treatment(item)
         return True
@@ -386,10 +362,11 @@ def grab_json_collections(plugin, json_url, page=0, collection_position=None, **
         # If we are not in page 0, directly print items
         if collection_position is not None and cnt == collection_position:
             return list_generic_items(plugin, collection['items'], next_page_item)
-        else:
-            item = Listitem()
-            if set_item_callback_based_on_type(item, collection['type'], collection, next_page_item):
-                items.append(item)
+
+        item = Listitem()
+        if set_item_callback_based_on_type(item, collection['type'], collection, next_page_item):
+            items.append(item)
+
     if 'item' in j:
         if 'program_path' in j['item'] or 'url_complete' in j['item']:
             if 'program_path' in j['item']:
@@ -425,27 +402,16 @@ def get_video_url(plugin,
                 broadcast_id = medium['media']['si_id']
                 break
 
-    return resolver_proxy.get_francetv_video_stream(plugin, broadcast_id,
-                                                    download_mode)
+    return resolver_proxy.get_francetv_video_stream(plugin, broadcast_id, download_mode)
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    if item_id == 'spectacles-et-culture' or \
-            item_id == 'france-2' or \
-            item_id == 'france-3' or \
-            item_id == 'france-4' or \
-            item_id == 'france-5':
+    if item_id in ('spectacles-et-culture', 'france-2', 'france-3', 'france-4', 'france-5'):
+        resp = urlquick.get(URL_LIVE % item_id, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
+        broadcast_id = re.compile(r'videoId\"\:\"(.*?)\"', re.DOTALL).findall(resp.text)[0]
+        return resolver_proxy.get_francetv_live_stream(plugin, broadcast_id)
 
-        resp = urlquick.get(URL_LIVE % item_id,
-                            headers={'User-Agent': web_utils.get_random_ua()},
-                            max_age=-1)
-        broadcast_id = re.compile(r'videoId\"\:\"(.*?)\"',
-                                  re.DOTALL).findall(resp.text)[0]
-        return resolver_proxy.get_francetv_live_stream(
-            plugin, broadcast_id)
-    else:
-        broadcast_id = 'SIM_France%s'
-        return resolver_proxy.get_francetv_live_stream(
-            plugin, broadcast_id % item_id.split('-')[1])
+    broadcast_id = 'SIM_France%s'
+    return resolver_proxy.get_francetv_live_stream(plugin, broadcast_id % item_id.split('-')[1])

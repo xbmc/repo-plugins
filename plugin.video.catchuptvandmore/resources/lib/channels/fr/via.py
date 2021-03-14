@@ -1,46 +1,23 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2018  SylvainCecchetto
+# Copyright: (c) 2018, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-
-from codequick import Route, Resolver, Listitem, utils, Script
-
-
-from resources.lib import web_utils
-from resources.lib import resolver_proxy
-from resources.lib import download
-from resources.lib.menu_utils import item_post_treatment
-from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
-
-import inputstreamhelper
 import json
 import re
+
+import inputstreamhelper
+from codequick import Listitem, Resolver, Route
 import urlquick
-'''
-TODO Add Replay
-'''
+
+from resources.lib import download, resolver_proxy, web_utils
+from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
+from resources.lib.menu_utils import item_post_treatment
+
+
+# TODO Add Replay
 
 URL_ROOT = 'https://%s.tv'
 
@@ -151,52 +128,53 @@ def get_live_url(plugin, item_id, **kwargs):
         item.art.update(get_selected_item_art())
         item.info.update(get_selected_item_info())
         return item
-    else:
-        if item_id == 'viamoselle':
-            live_html = urlquick.get(
-                URL_LIVE_VIAMOSELLE % item_id,
-                headers={'User-Agent': web_utils.get_random_ua()},
-                max_age=-1)
-        else:
-            live_html = urlquick.get(
-                URL_LIVE % item_id,
-                headers={'User-Agent': web_utils.get_random_ua()},
-                max_age=-1)
-        root = live_html.parse()
-        list_lives_datas = root.findall('.//iframe')
-        live_id = ''
-        for live_datas in list_lives_datas:
-            src_datas = live_datas.get('src')
-            break
 
-        if 'dailymotion' in src_datas:
-            live_id = re.compile(r'dailymotion.com/embed/video/(.*?)[\?\"]'
-                                 ).findall(src_datas)[0]
-            return resolver_proxy.get_stream_dailymotion(
-                plugin, live_id, False)
-        elif 'infomaniak' in src_datas:
-            player_id = src_datas.split('player=')[1]
-            resp2 = urlquick.get(
-                URL_STREAM_INFOMANIAK % player_id,
-                headers={'User-Agent': web_utils.get_random_ua()},
-                max_age=-1)
-            json_parser = json.loads(resp2.text)
-            return 'https://' + json_parser["sPlaylist"]
-        elif 'creacast' in src_datas:
-            resp2 = urlquick.get(
-                src_datas,
-                headers={'User-Agent': web_utils.get_random_ua()},
-                max_age=-1)
-            return re.compile(r'file\: \"(.*?)\"').findall(resp2.text)[0]
-        else:
-            live_id = re.compile(r'v=(.*?)\&').findall(src_datas)[0]
-            stream_json = urlquick.post(
-                URL_STREAM,
-                data={
-                    'action': 'video_info',
-                    'refvideo': live_id
-                },
-                headers={'User-Agent': web_utils.get_random_ua()},
-                max_age=-1)
-            stream_jsonparser = json.loads(stream_json.text)
-            return stream_jsonparser["data"]["bitrates"]["hls"]
+    if item_id == 'viamoselle':
+        live_html = urlquick.get(
+            URL_LIVE_VIAMOSELLE % item_id,
+            headers={'User-Agent': web_utils.get_random_ua()},
+            max_age=-1)
+    else:
+        live_html = urlquick.get(
+            URL_LIVE % item_id,
+            headers={'User-Agent': web_utils.get_random_ua()},
+            max_age=-1)
+    root = live_html.parse()
+    list_lives_datas = root.findall('.//iframe')
+    live_id = ''
+    for live_datas in list_lives_datas:
+        src_datas = live_datas.get('src')
+        break
+
+    if 'dailymotion' in src_datas:
+        live_id = re.compile(r'dailymotion.com/embed/video/(.*?)[\?\"]'
+                             ).findall(src_datas)[0]
+        return resolver_proxy.get_stream_dailymotion(plugin, live_id, False)
+
+    if 'infomaniak' in src_datas:
+        player_id = src_datas.split('player=')[1]
+        resp2 = urlquick.get(
+            URL_STREAM_INFOMANIAK % player_id,
+            headers={'User-Agent': web_utils.get_random_ua()},
+            max_age=-1)
+        json_parser = json.loads(resp2.text)
+        return 'https://' + json_parser["sPlaylist"]
+
+    if 'creacast' in src_datas:
+        resp2 = urlquick.get(
+            src_datas,
+            headers={'User-Agent': web_utils.get_random_ua()},
+            max_age=-1)
+        return re.compile(r'file\: \"(.*?)\"').findall(resp2.text)[0]
+
+    live_id = re.compile(r'v=(.*?)\&').findall(src_datas)[0]
+    stream_json = urlquick.post(
+        URL_STREAM,
+        data={
+            'action': 'video_info',
+            'refvideo': live_id
+        },
+        headers={'User-Agent': web_utils.get_random_ua()},
+        max_age=-1)
+    stream_jsonparser = json.loads(stream_json.text)
+    return stream_jsonparser["data"]["bitrates"]["hls"]

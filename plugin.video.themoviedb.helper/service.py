@@ -1,4 +1,5 @@
-from resources.lib.service import ServiceMonitor
+from resources.lib.monitor.service import ServiceMonitor
+
 
 if __name__ == '__main__':
-    ServiceMonitor()
+    ServiceMonitor().run()

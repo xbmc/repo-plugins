@@ -12,7 +12,7 @@ from copy import deepcopy
 class JsonStorage(object):
 
     def __init__(self,filename):
-        ampache = xbmcaddon.Addon()
+        ampache = xbmcaddon.Addon("plugin.audio.ampache")
         if PY2:
             base_dir = xbmc.translatePath( ampache.getAddonInfo('profile'))
             base_dir = base_dir.decode('utf-8')

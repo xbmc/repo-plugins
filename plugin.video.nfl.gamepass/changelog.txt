@@ -1,0 +1,285 @@
+2021.03.14+matrix.1 -- Taysom Hill Edition
++ Now supports Kodi 19 aka Matrix
+-- Remove busy dialog, it's deprecated (jm-duke)
+-- Replace inputstreamaddon, it's deprecated (jm-duke)
+-- Update string and list handling in scripts (jm-duke)
+-- Bump versions of required addons (jm-duke)
+-- Bump addon version to reflect that it's compatible with Kodi 19 (jm-duke)
+-- Fix open of settings dialog from within the addon (jm-duke)
++ Converted settings.xml to the new format (jm-duke)
+
+﻿2019.07.01 -- Pre-preseason edition
++ Now supports Leia
+-- updated xbmc.gui version to 5.14.0 (baardisk)
+-- updated xbmc.python version to 2.26.0 (baardisk)
+-- updated script.module.requests version to 2.22.0 (baardisk)
+
+2018.09.08 -- A Game of Inches Edition
++ Import the latest pigskin.py. Relevant changes are:
+-- support the new Game Pass (Gigya) authentication (thanks to 41john)
+-- overhaul logging system (aqw)
+-- simplify stream acquisition APIs (aqw)
+-- python 3 fixes (aqw)
+-- loads of code cleanup, refactoring, documentation, and unit tests (aqw)
++ Fix bug where episode list would re-append all show episodes (kaileu)
++ Use ``kodilogging.py`` to better integrate with Kodi's logging (aqw)
++ Assorted code cleanup (aqw)
+
+2018.08.23 -- Tampa 2 Edition
++ Support all NFL Network shows (Kaileu)
++ pigskin.py is now licensed MIT
++ chromecast streams are default; fallback to HLS (aqw)
++ compress images to reduce addon size a bit
++ Better catch login failures (aqw)
++ Assorted code cleanup and bug fixes (aqw)
+
+2018.08.15 -- Quarterback by Committee Edition
++ Assorted fixes for 2018 season breakage (kaileu)
++ Add RedZone Live (kaileu)
++ Make acquisition of NFL Shows dynamic (aqw)
++   it's slower now, but should break less often
++ If there's a password in the log, make sure to 'xxxx' it out (rva87)
++ Bugfix for subscription check (emilsvennesson)
++ When "hide game length" is enabled, don't show if the game went into overtime (pyrocumulus)
++ Assorted bugfixes (rva87, pyrocumulus)
++ Fix invalid XML in skin (aqw)
++ Code cleanup (aqw)
++ Better handle HTTP timeouts (rva87)
++ NOTE: pigskin.py development now happens in https://github.com/aqw/pigskin
++   this addon will sync regularly from that repo
+
+2017.08.24 v0.11.1 -- Kenny Easley Edition
++ Fix "everything is broken"; Game Pass broke their API again (emilsvennesson)
++ Add groundwork for what will become a Team View (kaileu)
++ Open Settings when login info is missing (pyrocumulus)
++ Restore show/episode thumbnails (emilsvennesson)
++ Updated German translation (sieversMartin)
++ Code cleanup (emilsvennesson)
+
+2017.08.17 v0.11.0 -- Jay Cutler Edition
++ NOTE: This addon currently does not support Game Pass International.
++ NOTE: Game Pass Europe moved to a new streaming partner. Not all features
++   are available yet or supported.
++ Support for Game Pass Europe (kaileu and emilsvennesson)
++ Updated Dutch translation (pyrocumulus)
++ Optional support for inputstream.adaptive plugin (but, contrary to the name,
++   no support yet for adaptive streaming)
++ Lots of cleanup (emilsvennesson, aqw, pyrocumulus)
+
+2017.06.23 v0.10.2 -- Daunte Culpepper Edition
++ Temporarily fix addon crashing (emilsvennesson)
++   GamePass is moving to a new streaming partner. The old service will work
++   until July 31st. This fix points to the old service, and buys us time to
++   update everything for the new service.
++ Fix fanart not loading (emilsvennesson)
+
+2017.01.10 v0.10.1 -- Barry Sanders Edition
++ Bug fix caught by Kodi's Pull Request code checks. :-)
+
+2017.01.09 v0.10.0 -- Barry Sanders Edition
++ Update for Krypton
++ Update logging for Krypton (emilsvennesson)
++ Nicely inform user when week info isn't available yet
++ New Translations: Russian and Ukrainian (Igor Davydenko)
++ Domestic users can now access NFL Network
++ RedZone content is now acquired dynamically, like all other resources
++ Assorted cleanup
+
+2016.08.25 v0.9.2 -- Jimmy Johnson Edition
++ New Translation: Japanese (David Maiorino)
++ UI Fix: "Upcoming" game text overlapped with the game time (aqw)
++ The Rams are now correctly shown as the LA Rams (kaileu)
++ Autodetect subscription type; merge Domestic/International settings (emilsvennesson)
++ Show more informative dialogs in common error situations (emilsvennesson and aqw)
++ Bug fix: Game time wasn't localizing (aqw)
++ Removed last of the "Sans Login" setting; hasn't been used in two years (aqw)
++ Unbundle m3u8 as a dependency; use the one in the Kodi repos (aqw, emilsvennesson)
++ Slightly higher res team logos (kaileu)
++ Canceling bitrate/gametype dialogs will now (correctly) cancel and return to
++   the UI rather than start playing a game (emilsvennesson)
++ Assorted small improvements (aqw)
+
+2016.07.29 v0.9.1 -- Bart Starr Edition
++ Shows are now acquired dynamically (BaumSchorle)
++  This means new shows will be available immediately. However, Game Pass has
++  many ways of providing shows, so new shows may not always /work/ right away.
++ Game Pass Resource URLs (most of them) are now acquired dynamically (kaileu)
++  This means the addon should be more resilient to Game Pass service changes.
++ UI Fix: Blacked-Out games are now marked as non-playable (BaumSchorle)
++ Bug Fix: an empty season crashes the add-on (BaumSchorle)
++ Assorted small improvements (aqw)
+
+2015.12.02 v0.9.0 -- Charles Woodson Edition
++ Add support for Jarvis; drop Helix and Isengard
+
+2015.12.02 v0.8.1 -- Brett Favre Edition
++ Add NFL Honors and some old seasons (2010-2011) of other shows
++ Dropped non-functioning old (< 2014) NFL Total Access seasons
++ Make RedZone button show even when in "pre" mode
++ Fix proxy protocol selection (thanks to maguire for reporting)
++ Cleanup method to detect running games (kaileu)
++ Assorted small improvements
+
+2015.08.27 v0.8.0 -- Julius Peppers Edition
++ Fix regression; can now watch streams for more than ~20 minutes on all platforms
++ Replace Game Rewind with Game Pass Domestic
++   Preliminary Support (please report any bugs)
++ Renamed Game Pass to Game Pass International
++ New Logos for Game Pass Domestic and International (eriksoderblom)
++ Bug fix: Games after 2015 preseason Week 1 wouldn't play (kaileu)
++ Bump required version of Requests to 2.7.0
++ Small improvements to debugging
++ Code cleanup
+
+2015.08.17 v0.7.4 -- Pete Carroll Edition
++ Revert skinutils font hack
++ New GamePass-only icon (eriksoderblom)
++   The NFL replaced Game Rewind with the "Game Pass Domestic" service
++ Correctly identify as a script now instead of a plugin (BaumSchorle)
++   Fixes an issue with not being able to exit the addon when using a shortcut
++ Code Cleanup (aqw)
+
+2015.08.13 v0.7.3 -- (Unreleased)
++ Add 2015 Season for Shows (kaileu)
++ 1080i skin (eriksoderblom)
++ Assorted bug fixes and tweaks (mostly for previous release's features)
+
+2015.08.11 v0.7.2 -- (Unreleased)
++ All streams now use same method (publishpoint) to play (kaileu)
++   fixes RedZone, TotalAccess, and likely a few other shows
++ Fix (mostly) font issues in non-Confluence skins (BaumSchorle)
++ Language Fixes/Clarifications (dmaiorino and aqw)
++ Translation: Update Dutch Translation (Vulpecula)
++ Bug fix: Coaches Tape XML now handles both UTF and ASCII (kaileu)
++ Bug fix: Close any open busy-dialogs before launching addon (aqw)
++ Code cleanup (aqw)
+
+2015.01.23 v0.7.1 -- Brian Urlacher Edition
++ Bug fix: Support Pro Bowl (kaileu)
+
+2015.01.09 v0.7.0 -- Kurt Warner Edition
++ Support for HTTP proxies (timewasted)
++   Direct support in lib/pigskin
++   Support via Kodi in the addon's settings
++ Skin support for Helix (eriksoderblom)
++ Reflect upstream rename from XBMC to Kodi (aqw)
++ Dropped support for Gotham and earlier
+
+2014.11.10 v0.6.0 -- Dan Marino Edition
++ New Feature: Coaches Film (22 man view) (BaumSchorle)
++   Interface work (BaumSchorle and eriksoderblom)
++ New Feature: Super Bowl Archives (BaumSchorle)
++ New Feature/Setting: Hide Game Duration (Veronit)
++ New Feature/Setting: Display time in 12 or 24 hour clock (dahlSTROM)
++ Bug fix: Hard Knocks 2013 fixed (BaumSchorle)
++ Bug fix: UTF-8 issues (aqw)
++ Split settings page into categories (eriksoderblom)
++ Unify stream logic so all use publishpoint (BaumSchorle)
++ New internal dependency: m3u8
++ Assorted bug fixes
++ Code cleanup
+
+2014.08.03 v0.5.2 -- Reggie White "The Minister of Defense" Edition
++ Bug fix: Visually distinguish selected past week from unselected future week (eriksoderblom)
++ Bug fix: Skin opened despite login failure (aqw)
++ Bug fix: Playing Total Access 2014 froze addon (aqw)
++ Bug fix: Check for successful login without a subscription (aqw)
++ Bug fix: Fixed top-level click for Game Rewind (aqw)
++ Core module is now fully XBMC independent (aqw)
++ Code cleanup
+
+2014.07.28 v0.5.1 -- Tom Landry Edition
++ New Feature: Settings now available from within the skin (eriksoderblom)
++ New Setting: Localize game times (BaumSchorle)
++ Bug fix: First archived game played was wrong game (BaumSchorle)
++ Bug fix: Sometimes busy dialog wouldn't close when playing (BaumSchorle)
++ Bug fix: UI glitch playing Network-Live after browsing games (BaumSchorle)
++ Bug fix: XBMC on OpenElec wouldn't play archived games/shows (aqw)
++ Bug fix: Future weeks weren't greyed out (aqw)
++ Bug fix: Anything caching related; now always fresh data on addon start (aqw)
++ Bug fix: Super Bowl Archives now lists under all seasons (aqw)
++ Dropped dependency: plugin.cache (aka StorageServer)
++ Assorted performance improvements
++ Code/image cleanup
+
+2014.07.23 v0.5.0 -- Jerry Rice Edition
++ New Feature: Skin Interface! (BaumSchorle and eriksoderblom)
++   Tons of new features
++   Games now include team logos
++   Future/unplayable games are greyed out
++   New artwork
++   New background (original image by charamelody)
++ Bug fix: Some archived games wouldn't play. (aqw)
++ Will now prompt if preferred stream bitrate isn't available (aqw)
++ Many small performance improvements (aqw)
++ Significant code refactoring (aqw)
+
+2014.07.11 v0.4.0 -- "Doomsday Defense" Edition
++ New Feature: Support for Hard Knocks (thanks to BaumSchorle)
++ Bug fix: Top 100 Players works again (thanks to BaumSchorle)
++ Bug fix: cache didn't expire correctly (thanks to eriksoderblom)
++ New Translation: German (thanks to Ralph Schön)
++ Translations ported from XML to po (thanks to eriksoderblom)
++ Migrated from urllib2 to Requests (aqw)
++ New dependency: Requests2
++ Code cleanup
+
+2014.05.16 v0.3.1 -- Vince Lombardi Edition
++ New Game Pass/Rewind icon (thanks to dahlSTROM)
++ Bug fix: workaround Android crash
++ Bug fix: RedZone live should work again (thanks to msoderberg)
++ Bug fix: fix service check for Rewind
++ Bug fix: display live games properly
++ Big fix: Fix live NFL Network streams (thanks to BaumSchorle)
+
+2013.09.20 v0.3.0 -- Don Shula Edition
++ New Feature: Initial Game Rewind support
++ New Setting: Choose Subscription (Game Pass vs Game Rewind)
++ New Feature: NFL Films Presents (thanks to msoderberg!)
++ New Feature: NFL RedZone Live (untested) (thanks to msoderberg!)
++ New Feature: Condensed Games (thanks to msoderberg!)
++ New Setting: Preferred Game Version (Full vs Condensed stream)
++ Updated Dutch locale (thanks to Vulpecula-nl!)
++ Bug fix: starting new streams after lengthy watching of another stream should be more robust
++ More strings localized
++ XML/HTML parsing cleanup
++ Major code refactoring
++ New dependency: xmltodict
+
+2013.09.13 v0.2.0 -- Donald Driver Edition
+Credit goes to divingmule for most of the features added below.
++ New Feature: Live games work (Gotham only)
++ New Feature: NFL Network - Live (Gotham only)
++ New Feature: NFL Total Access
++ New Feature: Sound FX
++ New Feature: NFL Gameday
++ New Feature: NFL RedZone (thanks to msoderberg!)
++ New Feature: Playbook
++ New Feature: A Football Life
++ New Translation: Dutch (thanks to Vulpecula-nl!)
++ New fanart (thanks to dahlSTROM!)
++ Modified Setting: 'Always use best bitrate" is now "Preferred Stream Quality,"
++   which lists possible stream values.
++ Untested Features: Superbowl Archives, Top 100 Players, Coaches Show
++ Future games now have date and time listed
++ Live games are noted as such in the interface
+
+2013.08.25 v0.1.3
++ Bug fix: Super Bowl weeks now list properly.
++ Bug fix: Older streams now list (but don't necessarily play) properly.
++ Bug fix: Duration is now still calculated after the first dir listing.
++ Bug fix: Fixed misleading popup when login failed
++ New Setting: "Sans Login Region" for those who live in countries where Game Pass is free.
+
+2013.08.24 v0.1.2
++ Bug fix. All 16 games (rather than 15) are listed now.
++ New Setting: Always use best bitrate
+
+2013.08.19 v0.1.1
++ Critical bug fix. Streams play again.
+
+2013.08.18 v0.1.0
++ Initial development release (divingmule, aqw)
++ Only supports normal game streams (no coaches film, NFL TV, etc)
++ Can select stream bit rate
++ Sexy icon (thanks to dahlSTROM!)

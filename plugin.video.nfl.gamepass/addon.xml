@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Though the id says this is a plugin, it's actually a script (see extension
+     point). The addon started as a plugin, but became a script when it was
+     converted to a skinned addon. It is left unchanged so that users aren't
+     marooned on an old version. -->
+  <addon id="plugin.video.nfl.gamepass"
+    name="NFL Game Pass"
+    version="2021.03.14+matrix.1"
+    provider-name="Alexqw,divingmule,BaumSchorle,eriksoderblom,kaileu,emilsvennesson,baardisk,Duke">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.m3u8" version="0.5.4+matrix.2"/>
+    <import addon="script.module.requests" version="2.22.0+matrix.1"/>
+    <import addon="xbmc.gui" version="5.15.0"/>
+  </requires>
+  <extension point="xbmc.python.script" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">NFL Game Pass</summary>
+    <description lang="en_GB">Watch NFL Game Pass streams.</description>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <source>https://github.com/pigskin/kodi-gamepass</source>
+    <forum></forum>
+    <disclaimer lang="en_GB">This addon requires you to have a subscription to NFL Game Pass.[CR]Please note that these subscriptions are region restricted by the NFL.[CR]This addon is completely unofficial and is /not/ endorsed by the NFL in any way.</disclaimer>
+    <news>2021.03.14+matrix.1
+    + Modified code to make it compatible with Kodi 19. Most relevant changes:
+    -- Remove busy dialog, it's deprecated
+    -- Replace inputstreamaddon, it's deprecated
+    -- Update string and list handling in scripts
+    -- Bump versions of required addons
+    -- Bump addon version to reflect that it's compatible with Kodi 19
+    -- Fix open of settings dialog from within the addon
+    + Converted settings.xml to the new format
+    </news>
+    <assets>
+      <icon>resources/art/icon.png</icon>
+      <fanart>resources/art/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

@@ -1,5 +1,34 @@
 # Changelog
 
+## [v1.0.3](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.3) (2021-02-04)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.2...v1.0.3)
+
+**Implemented enhancements:**
+
+- Add http proxy support [\#30](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/30) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Merged pull requests:**
+
+- Make use of git archive [\#32](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/32) ([dagwieers](https://github.com/dagwieers))
+- Improve tests [\#31](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/31) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v1.0.2](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.2) (2020-12-21)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.1...v1.0.2)
+
+**Fixed bugs:**
+
+- Don't show the password in the debug log [\#29](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/29) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v1.0.1](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.1) (2020-12-17)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.0...v1.0.1)
+
+**Fixed bugs:**
+
+- Fix EPG on windows [\#28](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/28) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.0.0](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.0) (2020-12-05)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v0.0.1...v1.0.0)

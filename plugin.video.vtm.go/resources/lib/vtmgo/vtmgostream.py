@@ -10,8 +10,8 @@ import random
 from datetime import timedelta
 
 from resources.lib import kodiutils
-from resources.lib.vtmgo import util, ResolvedStream
-from resources.lib.vtmgo.exceptions import StreamGeoblockedException, StreamUnavailableException
+from resources.lib.vtmgo import ResolvedStream, util
+from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -19,12 +19,20 @@ _LOGGER = logging.getLogger(__name__)
 class VtmGoStream:
     """ VTM GO Stream API """
 
-    _VTM_API_KEY = 'zTxhgTEtb055Ihgw3tN158DZ0wbbaVO86lJJulMl'
-    _ANVATO_API_KEY = 'HOydnxEYtxXYY1UfT3ADuevMP7xRjPg6XYNrPLhFISL'
-    _ANVATO_USER_AGENT = 'ANVSDK Android/5.0.39 (Linux; Android 6.0.1; Nexus 5)'
+    _API_KEY = 'jL3yNhGpDsaew9CqJrDPq2UzMrlmNVbnadUXVOET'
 
     def __init__(self):
         """ Initialise object """
+        self._auth = VtmGoAuth(kodiutils.get_setting('username'),
+                               kodiutils.get_setting('password'),
+                               'VTM',
+                               kodiutils.get_setting('profile'),
+                               kodiutils.get_tokens_path())
+        self._tokens = self._auth.get_tokens()
+
+    def _mode(self):
+        """ Return the mode that should be used for API calls """
+        return 'vtmgo-kids' if self._tokens.product == 'VTM_GO_KIDS' else 'vtmgo'
 
     def get_stream(self, stream_type, stream_id):
         """ Return a ResolvedStream based on the stream type and id.
@@ -32,46 +40,56 @@ class VtmGoStream:
         :type stream_id: str
         :rtype ResolvedStream
         """
-        # We begin with asking vtm about the stream info.
-        stream_info = self._get_stream_info(stream_type, stream_id)
+        # We begin with asking the api about the stream info.
+        video_info = self._get_video_info(stream_type, stream_id)
 
-        # Extract the anvato stream from our stream_info.
-        anvato_info = self._extract_anvato_stream_from_stream_info(stream_info)
+        # Live channels are only available trough anvato
+        # if video_info.get('video').get('streamType') == 'live':
+        #     protocol = 'anvato'
+        # else:
+        #     protocol = 'dash'
+        protocol = 'anvato'
 
-        # Ask the anvacks to know where we have to send our requests. (This is hardcoded for now)
-        # anv_acks = self._anvato_get_anvacks(anvato_info.get('accessKey'))
-
-        # Get the server time. (We don't seem to need this)
-        # server_time = self._anvato_get_server_time(anvato_info.get('accessKey'))
-
-        # Send a request for the stream info.
-        anvato_stream_info = self._anvato_get_stream_info(anvato_info=anvato_info, stream_info=stream_info)
-
-        # Get published urls.
-        url = anvato_stream_info['published_urls'][0]['embed_url']
-        license_url = anvato_stream_info['published_urls'][0]['license_url']
-
-        # Get MPEG DASH manifest url.
-        json_manifest = self._download_manifest(url)
-        url = json_manifest.get('master_m3u8')
-
-        # Follow Location tag redirection because InputStream Adaptive doesn't support this yet.
-        # https://github.com/peak3d/inputstream.adaptive/issues/286
-        url = self._redirect_manifest(url)
+        # Extract the stream from our stream_info.
+        stream_info = self._extract_stream_from_video_info(protocol, video_info)
 
         # Extract subtitles from our stream_info.
-        subtitles = self._extract_subtitles_from_stream_info(stream_info)
+        subtitle_info = self._extract_subtitles_from_stream_info(video_info)
 
-        # Delay subtitles taking into account advertisements breaks.
-        subtitles = self._delay_subtitles(subtitles, json_manifest)
+        if protocol == 'anvato':
+            # Send a request for the stream info.
+            anvato_stream_info = self._anvato_get_stream_info(anvato_info=stream_info.get('anvato'), stream_info=video_info)
+
+            # Get published urls.
+            url = anvato_stream_info['published_urls'][0]['embed_url']
+            license_url = anvato_stream_info['published_urls'][0]['license_url']
+
+            # Get MPEG DASH manifest url.
+            json_manifest = self._download_manifest(url)
+            url = json_manifest.get('master_m3u8')
+
+            # Follow Location tag redirection because InputStream Adaptive doesn't support this yet.
+            # https://github.com/peak3d/inputstream.adaptive/issues/286
+            url = self._redirect_manifest(url)
+
+            # Delay subtitles taking into account advertisements breaks.
+            subtitles = self._delay_subtitles(subtitle_info, json_manifest)
+
+        else:
+            # Get published urls.
+            url = stream_info.get('url')
+            license_url = stream_info.get('drm', {}).get('com.widevine.alpha', {}).get('licenseUrl')
+
+            # Download subtitles locally so we can give them a better name
+            subtitles = self._download_subtitles(subtitle_info)
 
         if stream_type == 'episodes':
             # TV episode
             return ResolvedStream(
-                program=stream_info['video']['metadata']['program']['title'],
-                program_id=stream_info['video']['metadata']['program']['id'],
-                title=stream_info['video']['metadata']['title'],
-                duration=stream_info['video']['duration'],
+                program=video_info['video']['metadata']['program']['title'],
+                program_id=video_info['video']['metadata']['program']['id'],
+                title=video_info['video']['metadata']['title'],
+                duration=video_info['video']['duration'],
                 url=url,
                 subtitles=subtitles,
                 license_url=license_url,
@@ -82,8 +100,8 @@ class VtmGoStream:
             # Movie or one-off programs
             return ResolvedStream(
                 program=None,
-                title=stream_info['video']['metadata']['title'],
-                duration=stream_info['video']['duration'],
+                title=video_info['video']['metadata']['title'],
+                duration=video_info['video']['duration'],
                 url=url,
                 subtitles=subtitles,
                 license_url=license_url,
@@ -92,14 +110,14 @@ class VtmGoStream:
 
         if stream_type == 'channels':
             # Live TV
-            if stream_info['video']['metadata']['videoType'] == 'episode':
-                program = stream_info['video']['metadata']['program']['title']
+            if video_info['video']['metadata']['videoType'] == 'episode':
+                program = video_info['video']['metadata']['program']['title']
             else:
                 program = None
 
             return ResolvedStream(
                 program=program,
-                title=stream_info['video']['metadata']['title'],
+                title=video_info['video']['metadata']['title'],
                 duration=None,
                 url=url,
                 subtitles=subtitles,
@@ -109,55 +127,39 @@ class VtmGoStream:
 
         raise Exception('Unknown video type {type}'.format(type=stream_type))
 
-    def _get_stream_info(self, strtype, stream_id):
+    def _get_video_info(self, strtype, stream_id):
         """ Get the stream info for the specified stream.
-        :type strtype: str
-        :type stream_id: str
+        :param str strtype:
+        :param str stream_id:
         :rtype: dict
         """
         url = 'https://videoplayer-service.api.persgroep.cloud/config/%s/%s' % (strtype, stream_id)
-        _LOGGER.debug('Getting stream info from %s', url)
+        _LOGGER.debug('Getting video info from %s', url)
         response = util.http_get(url,
                                  params={
                                      'startPosition': '0.0',
                                      'autoPlay': 'true',
                                  },
                                  headers={
-                                     'x-api-key': self._VTM_API_KEY,
-                                     'Popcorn-SDK-Version': '2',
-                                     'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; Nexus 5 Build/M4B30Z)',
-                                 },
-                                 proxies=kodiutils.get_proxies())
-
-        _LOGGER.debug('Got response (status=%s): %s', response.status_code, response.text)
-
-        if response.status_code == 403:
-            error = json.loads(response.text)
-            if error['type'] == 'videoPlaybackGeoblocked':
-                raise StreamGeoblockedException()
-            if error['type'] == 'serviceError':
-                raise StreamUnavailableException()
-
-        if response.status_code == 404:
-            raise StreamUnavailableException()
-
-        if response.status_code != 200:
-            raise StreamUnavailableException()
+                                     'Accept': 'application/json',
+                                     'x-api-key': self._API_KEY,
+                                     'Popcorn-SDK-Version': '4',
+                                 })
 
         info = json.loads(response.text)
         return info
 
     @staticmethod
-    def _extract_anvato_stream_from_stream_info(stream_info):
-        """ Extract the anvato stream details.
+    def _extract_stream_from_video_info(stream_type, stream_info):
+        """ Extract the requested stream details.
         :type stream_info: dict
         :rtype dict
         """
-        # Loop over available streams, and return the one from anvato
+        # Loop over available streams, and return the requested stream
         if stream_info.get('video'):
             for stream in stream_info.get('video').get('streams'):
-                if stream.get('type') == 'anvato':
-                    return stream.get('anvato')
+                if stream.get('type') == stream_type:
+                    return stream
         elif stream_info.get('code'):
             _LOGGER.error('VTM GO Videoplayer service API error: %s', stream_info.get('type'))
         raise Exception('No stream found that we can handle')
@@ -170,15 +172,40 @@ class VtmGoStream:
         """
         subtitles = list()
         if stream_info.get('video').get('subtitles'):
-            for idx, subtitle in enumerate(stream_info.get('video').get('subtitles')):
-                program = stream_info.get('video').get('metadata').get('program')
-                if program:
-                    name = '{} - {}_{}'.format(program.get('title'), stream_info.get('video').get('metadata').get('title'), idx)
-                else:
-                    name = '{}_{}'.format(stream_info.get('video').get('metadata').get('title'), idx)
+            for _, subtitle in enumerate(stream_info.get('video').get('subtitles')):
+                name = subtitle.get('language')
+                if name == 'nl':
+                    name = 'nl.default'
+                elif name == 'nl-tt':
+                    name = 'nl.T888'
                 subtitles.append(dict(name=name, url=subtitle.get('url')))
                 _LOGGER.debug('Found subtitle url %s', subtitle.get('url'))
         return subtitles
+
+    @staticmethod
+    def _download_subtitles(subtitles):
+        # Clean up old subtitles
+        temp_dir = os.path.join(kodiutils.addon_profile(), 'temp', '')
+        _, files = kodiutils.listdir(temp_dir)
+        if files:
+            for item in files:
+                kodiutils.delete(temp_dir + kodiutils.to_unicode(item))
+
+        # Return if there are no subtitles available
+        if not subtitles:
+            return None
+
+        if not kodiutils.exists(temp_dir):
+            kodiutils.mkdirs(temp_dir)
+
+        downloaded_subtitles = list()
+        for subtitle in subtitles:
+            output_file = temp_dir + subtitle.get('name')
+            webvtt_content = util.http_get(subtitle.get('url')).text
+            with kodiutils.open_file(output_file, 'w') as webvtt_output:
+                webvtt_output.write(kodiutils.from_unicode(webvtt_content))
+            downloaded_subtitles.append(output_file)
+        return downloaded_subtitles
 
     @staticmethod
     def _delay_webvtt_timing(match, ad_breaks):
@@ -208,7 +235,7 @@ class VtmGoStream:
 
     def _delay_subtitles(self, subtitles, json_manifest):
         """ Modify the subtitles timings to account for ad breaks.
-        :type subtitles: list[string]
+        :type subtitles: list[dict]
         :type json_manifest: dict
         :rtype list[str]
         """
@@ -217,8 +244,7 @@ class VtmGoStream:
         _, files = kodiutils.listdir(temp_dir)
         if files:
             for item in files:
-                if kodiutils.to_unicode(item).endswith('.vtt'):
-                    kodiutils.delete(temp_dir + kodiutils.to_unicode(item))
+                kodiutils.delete(temp_dir + kodiutils.to_unicode(item))
 
         # Return if there are no subtitles available
         if not subtitles:
@@ -240,61 +266,13 @@ class VtmGoStream:
             )
 
         for subtitle in subtitles:
-            output_file = temp_dir + subtitle.get('name') + '.' + subtitle.get('url').split('.')[-1]
+            output_file = temp_dir + subtitle.get('name')
             webvtt_content = util.http_get(subtitle.get('url')).text
             webvtt_content = webvtt_timing_regex.sub(lambda match: self._delay_webvtt_timing(match, ad_breaks), webvtt_content)
             with kodiutils.open_file(output_file, 'w') as webvtt_output:
                 webvtt_output.write(kodiutils.from_unicode(webvtt_content))
             delayed_subtitles.append(output_file)
         return delayed_subtitles
-
-    def _anvato_get_anvacks(self, access_key):
-        """ Get the anvacks from anvato. (not needed)
-        :type access_key: string
-        :rtype dict
-        """
-        url = 'https://access-prod.apis.anvato.net/anvacks/{key}'.format(key=access_key)
-        _LOGGER.debug('Getting anvacks from %s', url)
-        response = util.http_get(url,
-                                 params={
-                                     'apikey': self._ANVATO_API_KEY,
-                                 },
-                                 headers={
-                                     'X-Anvato-User-Agent': self._ANVATO_USER_AGENT,
-                                 })
-
-        _LOGGER.debug('Got response (status=%s): %s', response.status_code, response.text)
-
-        if response.status_code != 200:
-            raise Exception('Error %s in _anvato_get_anvacks.' % response.status_code)
-
-        info = json.loads(response.text)
-        return info
-
-    def _anvato_get_server_time(self, access_key):
-        """ Get the server time from anvato. (not needed)
-        :type access_key: string
-        :rtype dict
-        """
-        url = 'https://tkx.apis.anvato.net/rest/v2/server_time'
-        _LOGGER.debug('Getting servertime from %s with access_key %s', url, access_key)
-        response = util.http_get(url,
-                                 params={
-                                     'anvack': access_key,
-                                     'anvtrid': self._generate_random_id(),
-                                 },
-                                 headers={
-                                     'X-Anvato-User-Agent': self._ANVATO_USER_AGENT,
-                                     'User-Agent': self._ANVATO_USER_AGENT,
-                                 })
-
-        _LOGGER.debug('Got response (status=%s): %s', response.status_code, response.text)
-
-        if response.status_code != 200:
-            raise Exception('Error %s.' % response.status_code)
-
-        info = json.loads(response.text)
-        return info
 
     def _anvato_get_stream_info(self, anvato_info, stream_info):
         """ Get the stream info from anvato.
@@ -346,10 +324,6 @@ class VtmGoStream:
                                       'anvack': anvato_info['accessKey'],
                                       'anvtrid': self._generate_random_id(),
                                       'rtyp': 'fp',
-                                  },
-                                  headers={
-                                      'X-Anvato-User-Agent': self._ANVATO_USER_AGENT,
-                                      'User-Agent': self._ANVATO_USER_AGENT,
                                   })
 
         _LOGGER.debug('Got response (status=%s): %s', response.status_code, response.text)
@@ -373,17 +347,14 @@ class VtmGoStream:
         letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
         return ''.join(random.choice(letters) for i in range(length))
 
-    def _download_text(self, url):
+    @staticmethod
+    def _download_text(url):
         """ Download a file as text.
         :type url: str
         :rtype str
         """
         _LOGGER.debug('Downloading text from %s', url)
-        response = util.http_get(url,
-                                 headers={
-                                     'X-Anvato-User-Agent': self._ANVATO_USER_AGENT,
-                                     'User-Agent': self._ANVATO_USER_AGENT,
-                                 })
+        response = util.http_get(url)
         if response.status_code != 200:
             raise Exception('Error %s.' % response.status_code)
 

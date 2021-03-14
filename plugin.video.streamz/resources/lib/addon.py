@@ -9,8 +9,8 @@ import routing
 
 from resources.lib import kodilogging, kodiutils
 
-kodilogging.config()
 routing = routing.Plugin()  # pylint: disable=invalid-name
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -227,4 +227,5 @@ def play(category, item):
 
 def run(params):
     """ Run the routing plugin """
+    kodilogging.config()
     routing.run(params)

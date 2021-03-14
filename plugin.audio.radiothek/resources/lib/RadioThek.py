@@ -615,6 +615,6 @@ class RadioThek:
     @staticmethod
     def log(msg):
         try:
-            radiothek_log(msg)
+            radiothek_log(msg, True)
         except Exception as e:
             radiothek_log(msg.encode('utf-8'))

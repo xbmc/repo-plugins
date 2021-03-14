@@ -45,7 +45,11 @@ class Channel(chn_class.Channel):
         self.__nyheter_url = self.__get_api_url(
             "GenreLists", "90dca0b51b57904ccc59a418332e43e17db21c93a2346d1c73e05583a9aa598c",
             variables={"genre": ["nyheter"]})
-        self.mainListUri = "#mainlist"
+
+        if self.channelCode == "oppetarkiv":
+            self.mainListUri = "#genre_item"
+        else:
+            self.mainListUri = "#mainlist"
 
         # Setup the urls
         self.baseUrl = "https://www.svtplay.se"
@@ -227,26 +231,6 @@ class Channel(chn_class.Channel):
                 "humor",
                 "https://www.svtstatic.se/image/medium/480/7166065/1458037609"
             ),
-            "Livsstil": (
-                "livsstil",
-                "https://www.svtstatic.se/image/medium/480/7166101/1458037687"
-            ),
-            "Underhållning": (
-                "underhallning",
-                "https://www.svtstatic.se/image/medium/480/7166041/1458037574"
-            ),
-            "Kultur": (
-                "kultur",
-                "https://www.svtstatic.se/image/medium/480/7166119/1458037729"
-            ),
-            "Samhälle & Fakta": (
-                "samhalle-och-fakta",
-                "https://www.svtstatic.se/image/medium/480/7166173/1458037837"
-            ),
-            "Filmer": (
-                "filmer",
-                "https://www.svtstatic.se/image/medium/480/20888292/1548755428"
-            ),
             "Barn": (
                 "barn",
                 "https://www.svtstatic.se/image/medium/480/22702778/1560934663"
@@ -263,17 +247,45 @@ class Channel(chn_class.Channel):
                 "serier",
                 "https://www.svtstatic.se/image/medium/480/20888260/1548755402"
             ),
+            "Scen": (
+                "scen",
+                "https://www.svtstatic.se/image/medium/480/26157824/1585127128"
+            ),
+            "Livsstil & reality": (
+                "livsstil-och-reality",
+                "https://www.svtstatic.se/image/medium/480/21866138/1555059667"
+            ),
+            "Underhållning": (
+                "underhallning",
+                "https://www.svtstatic.se/image/medium/480/7166041/1458037574"
+            ),
+            "Filmer": (
+                "filmer",
+                "https://www.svtstatic.se/image/medium/480/20888292/1548755428"
+            ),
+            "Kultur": (
+                "kultur",
+                "https://www.svtstatic.se/image/medium/480/7166119/1458037729"
+            ),
+            "Samhälle & fakta": (
+                "samhalle-och-fakta",
+                "https://www.svtstatic.se/image/medium/480/7166173/1458037837"
+            ),
             "Reality": (
                 "reality",
                 "https://www.svtstatic.se/image/medium/480/21866138/1555059667"
             ),
-            "Ung": (
-                "ung-i-play",
-                "https://www.svtstatic.se/image/medium/480/20888300/1548755484"
-            ),
             "Musik": (
                 "musik",
                 "https://www.svtstatic.se/image/medium/480/19417384/1537791920"
+            ),
+            "Djur & natur": (
+                "djur-och-natur",
+                "https://www.svtstatic.se/image/medium/480/29184042/1605884325"
+            ),
+            "Öppet arkiv": (
+                "oppet-arkiv",
+                "https://www.svtstatic.se/image/medium/480/14077904/1497449020"
             )
         }
 
@@ -312,6 +324,10 @@ class Channel(chn_class.Channel):
         # Clean up the titles
         for item in items:
             item.name = item.name.strip("\a.: ")
+
+        oppet_arkiv = MediaItem("Öppet arkiv", "#genre_item")
+        oppet_arkiv.metaData[self.__genre_id] = "oppet-arkiv"
+        items.append(oppet_arkiv)
 
         return data, items
 
@@ -781,7 +797,7 @@ class Channel(chn_class.Channel):
         variables = {"titleSlugs": [slug.strip("/")]}
         hash_value = "4122efcb63970216e0cfb8abb25b74d1ba2bb7e780f438bbee19d92230d491c5"
         url = self.__get_api_url("TitlePage", hash_value, variables)
-        data = UriHandler.open(url, proxy=self.proxy)
+        data = UriHandler.open(url)
         json_data = JsonHelper(data)
 
         # Get the parent thumb info
@@ -810,13 +826,18 @@ class Channel(chn_class.Channel):
 
     # noinspection PyUnusedLocal
     def fetch_genre_api_data(self, data):
+        if self.channelCode == "oppetarkiv" and self.parentItem is None:
+            genre = "oppet-arkiv"
+        else:
+            genre = self.parentItem.metaData[self.__genre_id]
+
         url = self.__get_api_url(
             "GenreProgramsAO",
             "189b3613ec93e869feace9a379cca47d8b68b97b3f53c04163769dcffa509318",
-            {"genre": [self.parentItem.metaData[self.__genre_id]]}
+            {"genre": [genre]}
         )
 
-        data = UriHandler.open(url, proxy=self.proxy)
+        data = UriHandler.open(url)
         json_data = JsonHelper(data)
         possible_lists = json_data.get_value("data", "genres", 0,  "selectionsForWeb")
         program_items = [genres["items"] for genres in possible_lists if genres["selectionType"] == "all"]
@@ -1009,7 +1030,7 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting UpdateChannelItem for %s (%s)', item.name, self.channelName)
 
-        data = UriHandler.open(item.url, proxy=self.proxy)
+        data = UriHandler.open(item.url)
 
         json = JsonHelper(data, logger=Logger.instance())
         videos = json.get_value("videoReferences")
@@ -1039,8 +1060,8 @@ class Channel(chn_class.Channel):
 
         """
 
-        data = UriHandler.open(item.url, proxy=self.proxy)
-        video_id = Regexer.do_regex(r'\s*"videoSvtId"\s*:\s*"([^"]+)"\s*', data)[0]
+        data = UriHandler.open(item.url)
+        video_id = Regexer.do_regex(r'\s*\\*"videoSvtId\\*"\s*:\s*\\*"([^"\\]+)\\*"\s*', data)[0]
         item.url = "https://api.svt.se/video/{}".format(video_id)
         return self.update_video_api_item(item)
 
@@ -1133,9 +1154,6 @@ class Channel(chn_class.Channel):
 
         item.MediaItemParts = []
         part = item.create_new_empty_media_part()
-        if self.localIP:
-            part.HttpHeaders.update(self.localIP)
-
         use_input_stream = AddonSettings.use_adaptive_stream_add_on(channel=self)
 
         for video in videos:
@@ -1158,7 +1176,7 @@ class Channel(chn_class.Channel):
 
             if "dash" in video_format and use_input_stream:
                 stream = part.append_media_stream(video['url'], supported_formats[video_format])
-                Mpd.set_input_stream_addon_input(stream, self.proxy)
+                Mpd.set_input_stream_addon_input(stream)
 
             elif "m3u8" in url:
                 alt_index = url.find("m3u8?")
@@ -1173,7 +1191,6 @@ class Channel(chn_class.Channel):
                     part,
                     url,
                     encrypted=False,
-                    proxy=self.proxy,
                     headers=part.HttpHeaders,
                     channel=self,
                     bitrate=supported_formats[video_format]
@@ -1200,10 +1217,8 @@ class Channel(chn_class.Channel):
                     # look for more
                     continue
 
-                part.Subtitle = subtitlehelper.SubtitleHelper.download_subtitle(sub_url,
-                                                                                format="srt",
-                                                                                proxy=self.proxy,
-                                                                                replace={"&amp;": "&"})
+                part.Subtitle = subtitlehelper.SubtitleHelper.download_subtitle(
+                    sub_url, format="srt", replace={"&amp;": "&"})
                 # stop when finding one
                 break
 

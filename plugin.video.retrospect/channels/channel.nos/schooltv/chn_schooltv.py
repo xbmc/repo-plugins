@@ -285,11 +285,11 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
-        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=item.HttpHeaders)
+        data = UriHandler.open(item.url, additional_headers=item.HttpHeaders)
         json = JsonHelper(data)
 
         part = item.create_new_empty_media_part()
-        part.Subtitle = NpoStream.get_subtitle(json.get_value("mid"), proxy=self.proxy)
+        part.Subtitle = NpoStream.get_subtitle(json.get_value("mid"))
 
         for stream in json.get_value("videoStreams"):
             if not stream["url"].startswith("odi"):
@@ -299,7 +299,7 @@ class Channel(chn_class.Channel):
         if item.has_media_item_parts():
             return item
 
-        for s, b in NpoStream.get_streams_from_npo(None, json.get_value("mid"), proxy=self.proxy):
+        for s, b in NpoStream.get_streams_from_npo(None, json.get_value("mid")):
             item.complete = True
             part.append_media_stream(s, b)
 

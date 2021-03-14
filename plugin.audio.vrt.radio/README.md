@@ -17,6 +17,12 @@ You can report issues at [our GitHub project](https://github.com/add-ons/plugin.
 
 ## Releases
 
+### v0.1.4 (2020-12-19)
+- Add Dutch translation
+- Add additional channels
+- Improve channel logo's and fanart
+- Release for Leia and Matrix
+
 ### v0.1.3 (2020-06-17)
 - Small fix to IPTV Manager support
 

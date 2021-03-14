@@ -75,16 +75,14 @@ CHANNELS = OrderedDict([
         epg='vtm4',
         iptv_preset=9,
         iptv_id='vtm4.be',
-        stream='vtm4',
         studio_icon='VTM 4',
     )),
-    ('caz2', dict(
-        label='CAZ 2',
-        epg='caz-2',
+    ('vtm-gold', dict(
+        label='VTM Gold',
+        epg='vtmgold',
         iptv_preset=10,
-        iptv_id='caz2.be',
-        stream='caz2',
-        studio_icon='CAZ 2',
+        iptv_id='vtmgold.be',
+        studio_icon='VTM Gold',
     )),
     ('vtmkids', dict(
         label='VTM KIDS',

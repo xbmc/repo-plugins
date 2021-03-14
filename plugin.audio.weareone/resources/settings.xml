@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="debug" type="bool" label="32001" default="false"/>
+    <setting id="quality" type="select" label="32002" lvalues="32003|32004|32005" />
+</settings>
+

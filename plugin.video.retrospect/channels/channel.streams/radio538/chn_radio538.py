@@ -331,7 +331,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        data = UriHandler.open(item.url, proxy=self.proxy)
+        data = UriHandler.open(item.url)
         xml = parseString(data)
         stream_xmls = xml.getElementsByTagName("mountpoint")
         Logger.debug("Found %d streams", len(stream_xmls))
@@ -384,7 +384,7 @@ class Channel(chn_class.Channel):
         """
 
         part = item.create_new_empty_media_part()
-        for s, b in M3u8.get_streams_from_m3u8(item.url, self.proxy):
+        for s, b in M3u8.get_streams_from_m3u8(item.url):
             item.complete = True
             part.append_media_stream(s, b)
 

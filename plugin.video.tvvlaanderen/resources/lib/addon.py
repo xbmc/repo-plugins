@@ -12,8 +12,8 @@ from resources.lib import kodilogging, kodiutils
 from resources.lib.solocoo.auth import AuthApi
 from resources.lib.solocoo.exceptions import InvalidLoginException
 
-kodilogging.config()
 routing = Plugin()  # pylint: disable=invalid-name
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -130,4 +130,5 @@ def iptv_epg():
 
 def run(params):
     """ Run the routing plugin """
+    kodilogging.config()
     routing.run(params)

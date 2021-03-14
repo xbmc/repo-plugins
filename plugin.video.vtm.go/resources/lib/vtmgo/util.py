@@ -8,23 +8,25 @@ import logging
 import requests
 from requests import HTTPError
 
-from resources.lib.vtmgo.exceptions import (InvalidLoginException,
-                                            InvalidTokenException,
-                                            UnavailableException, LimitReachedException)
+from resources.lib import kodiutils
+from resources.lib.vtmgo.exceptions import InvalidLoginException, InvalidTokenException, LimitReachedException, UnavailableException
 
 _LOGGER = logging.getLogger(__name__)
 
 # Setup a static session that can be reused for all calls
 SESSION = requests.Session()
 SESSION.headers = {
+    'User-Agent': 'VTMGO/6.11.18 (be.vmma.vtm.zenderapp; build:12648; Android 25) okhttp/4.7.2',
     'x-app-version': '8',
     'x-persgroep-mobile-app': 'true',
     'x-persgroep-os': 'android',
-    'x-persgroep-os-version': '23',
+    'x-persgroep-os-version': '25',
 }
 
+PROXIES = kodiutils.get_proxies()
 
-def http_get(url, params=None, token=None, profile=None, headers=None, proxies=None):
+
+def http_get(url, params=None, token=None, profile=None, headers=None):
     """ Make a HTTP GET request for the specified URL.
 
     :param str url:                 The URL to call.
@@ -37,7 +39,7 @@ def http_get(url, params=None, token=None, profile=None, headers=None, proxies=N
     :rtype: requests.Response
     """
     try:
-        return _request('GET', url=url, params=params, token=token, profile=profile, headers=headers, proxies=proxies)
+        return _request('GET', url=url, params=params, token=token, profile=profile, headers=headers)
     except HTTPError as exc:
         if exc.response.status_code == 401:
             raise InvalidTokenException(exc)
@@ -50,7 +52,7 @@ def http_get(url, params=None, token=None, profile=None, headers=None, proxies=N
         raise
 
 
-def http_post(url, params=None, form=None, data=None, token=None, profile=None, headers=None, proxies=None):
+def http_post(url, params=None, form=None, data=None, token=None, profile=None, headers=None):
     """ Make a HTTP POST request for the specified URL.
 
     :param str url:                 The URL to call.
@@ -65,7 +67,7 @@ def http_post(url, params=None, form=None, data=None, token=None, profile=None, 
     :rtype: requests.Response
     """
     try:
-        return _request('POST', url=url, params=params, form=form, data=data, token=token, profile=profile, headers=headers, proxies=proxies)
+        return _request('POST', url=url, params=params, form=form, data=data, token=token, profile=profile, headers=headers)
     except HTTPError as exc:
         if exc.response.status_code == 401:
             raise InvalidTokenException(exc)
@@ -78,7 +80,7 @@ def http_post(url, params=None, form=None, data=None, token=None, profile=None, 
         raise
 
 
-def http_put(url, params=None, form=None, data=None, token=None, profile=None, headers=None, proxies=None):
+def http_put(url, params=None, form=None, data=None, token=None, profile=None, headers=None):
     """ Make a HTTP PUT request for the specified URL.
 
     :param str url:                 The URL to call.
@@ -93,7 +95,7 @@ def http_put(url, params=None, form=None, data=None, token=None, profile=None, h
     :rtype: requests.Response
     """
     try:
-        return _request('PUT', url=url, params=params, form=form, data=data, token=token, profile=profile, headers=headers, proxies=proxies)
+        return _request('PUT', url=url, params=params, form=form, data=data, token=token, profile=profile, headers=headers)
     except HTTPError as exc:
         if exc.response.status_code == 401:
             raise InvalidTokenException(exc)
@@ -104,7 +106,7 @@ def http_put(url, params=None, form=None, data=None, token=None, profile=None, h
         raise
 
 
-def http_delete(url, params=None, token=None, profile=None, headers=None, proxies=None):
+def http_delete(url, params=None, token=None, profile=None, headers=None):
     """ Make a HTTP DELETE request for the specified URL.
 
     :param str url:                 The URL to call.
@@ -117,7 +119,7 @@ def http_delete(url, params=None, token=None, profile=None, headers=None, proxie
     :rtype: requests.Response
     """
     try:
-        return _request('DELETE', url=url, params=params, token=token, profile=profile, headers=headers, proxies=proxies)
+        return _request('DELETE', url=url, params=params, token=token, profile=profile, headers=headers)
     except HTTPError as exc:
         if exc.response.status_code == 401:
             raise InvalidTokenException(exc)
@@ -128,7 +130,7 @@ def http_delete(url, params=None, token=None, profile=None, headers=None, proxie
         raise
 
 
-def _request(method, url, params=None, form=None, data=None, token=None, profile=None, headers=None, proxies=None):
+def _request(method, url, params=None, form=None, data=None, token=None, profile=None, headers=None):
     """ Makes a request for the specified URL.
 
     :param str method:              The HTTP Method to use.
@@ -144,7 +146,12 @@ def _request(method, url, params=None, form=None, data=None, token=None, profile
     :rtype: requests.Response
     """
     if form or data:
-        _LOGGER.debug('Sending %s %s: %s', method, url, form or data)
+        # Make sure we don't log the password
+        debug_data = dict()
+        debug_data.update(form or data)
+        if 'password' in debug_data:
+            debug_data['password'] = '**redacted**'
+        _LOGGER.debug('Sending %s %s: %s', method, url, debug_data)
     else:
         _LOGGER.debug('Sending %s %s', method, url)
 
@@ -157,7 +164,7 @@ def _request(method, url, params=None, form=None, data=None, token=None, profile
     if profile:
         headers['x-dpp-profile'] = profile
 
-    response = SESSION.request(method, url, params=params, data=form, json=data, headers=headers, proxies=proxies)
+    response = SESSION.request(method, url, params=params, data=form, json=data, headers=headers, proxies=PROXIES)
 
     # Set encoding to UTF-8 if no charset is indicated in http headers (https://github.com/psf/requests/issues/1604)
     if not response.encoding:

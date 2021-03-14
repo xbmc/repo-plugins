@@ -7,7 +7,7 @@ import logging
 
 from resources.lib import kodiutils
 from resources.lib.modules import CHANNELS
-from resources.lib.vtmgo import (Episode, Movie, Program, STOREFRONT_MAIN, STOREFRONT_MOVIES, STOREFRONT_SERIES, STOREFRONT_KIDS, STOREFRONT_KIDS_MAIN)
+from resources.lib.vtmgo import STOREFRONT_KIDS, STOREFRONT_KIDS_MAIN, STOREFRONT_MAIN, STOREFRONT_MOVIES, STOREFRONT_SERIES, Episode, Movie, Program
 from resources.lib.vtmgo.vtmgo import CONTENT_TYPE_MOVIE, CONTENT_TYPE_PROGRAM
 from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
 
@@ -29,7 +29,7 @@ class Menu:
         """ Show the main menu """
         listing = []
 
-        account = self._auth.login()
+        account = self._auth.get_tokens()
 
         listing.append(kodiutils.TitleItem(
             title=kodiutils.localize(30007),  # TV Channels

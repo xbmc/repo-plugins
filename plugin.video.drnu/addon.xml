@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.drnu" version="5.0.14" name="DR TV" provider-name="TermeHansen">
+    <requires>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.requests" version="2.22.0" />
+        <import addon="script.module.requests-cache" version="0.4.13"/>
+        <import addon="script.module.buggalo" version="1.1.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Watch live and archived TV from DR (Danish Broadcasting Corporation)</summary>
+        <summary lang="da_DK">Se live og arkiveret TV fra DR</summary>
+        <description lang="en_GB">All DR's live TV channels and archived programs as seen on dr.dk/tv.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the KODI official forums</description>
+        <description lang="da_DK">Alle DR's live TV kanaler samt alle de programmer du finder på dr.dk/tv.[CR][CR]Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på KODI forummet</description>
+        <disclaimer lang="en_GB">Some parts of this addon may not be legal in your country of residence - please check with your local laws.</disclaimer>
+        <disclaimer lang="da_DK">Nogle dele af denne addon er muligvis ikke lovlig i dit land - kontroller venligst dine lokale love.</disclaimer>
+        <license>GPL-2.0-only</license>
+        <platform>all</platform>
+        <language>da</language>
+        <email>termopeten@gmail.com</email>
+        <website>https://www.dr.dk/</website>
+        <source>https://github.com/xbmc-danish-addons/plugin.video.drnu</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+       </assets>
+       <news>[B]Version 5.0.14 - 2021-03-06[/B]
+- Bumping version number, to re-activate addon in leia addon channel
+- Re-factor code to work on both python2 and python 3
+    </news>
+    </extension>
+</addon>

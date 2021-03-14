@@ -7,12 +7,10 @@ import logging
 
 from resources.lib import kodiutils
 from resources.lib.kodiplayer import KodiPlayer
-from resources.lib.vtmgo.exceptions import UnavailableException
+from resources.lib.vtmgo.exceptions import StreamGeoblockedException, StreamUnavailableException, UnavailableException
 from resources.lib.vtmgo.vtmgo import VtmGo
 from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
-from resources.lib.vtmgo.vtmgostream import (StreamGeoblockedException,
-                                             StreamUnavailableException,
-                                             VtmGoStream)
+from resources.lib.vtmgo.vtmgostream import VtmGoStream
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -142,15 +140,34 @@ class Player:
             # This allows to play some programs that don't have metadata (yet).
             pass
 
+        # If we have enabled the Manifest proxy, route the call trough that.
+        if category in ['movies', 'oneoffs', 'episodes'] and kodiutils.get_setting_bool('manifest_proxy'):
+            try:  # Python 3
+                from urllib.parse import urlencode
+            except ImportError:  # Python 2
+                from urllib import urlencode
+
+            port = kodiutils.get_setting_int('manifest_proxy_port')
+            if not port:
+                kodiutils.notification(message=kodiutils.localize(30718), icon='error')
+                kodiutils.end_of_directory()
+                return
+
+            url = 'http://127.0.0.1:{port}/manifest?{path}'.format(port=port,
+                                                                   path=urlencode({'path': resolved_stream.url}))
+        else:
+            url = resolved_stream.url
+
         license_key = self._vtm_go_stream.create_license_key(resolved_stream.license_url)
 
         # Play this item
-        kodiutils.play(resolved_stream.url, license_key, resolved_stream.title, {}, info_dict, prop_dict, stream_dict)
+        kodiutils.play(url, license_key, resolved_stream.title, {}, info_dict, prop_dict, stream_dict)
 
         # Wait for playback to start
         kodi_player = KodiPlayer()
-        if not kodi_player.waitForPlayBack(url=resolved_stream.url):
+        if not kodi_player.waitForPlayBack(url=url):
             # Playback didn't start
+            kodiutils.end_of_directory()
             return
 
         # Send Up Next data

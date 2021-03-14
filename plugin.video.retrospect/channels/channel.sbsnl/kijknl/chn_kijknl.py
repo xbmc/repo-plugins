@@ -1,8 +1,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
+import pytz
 
-from resources.lib import chn_class
+from resources.lib import chn_class, contenttype
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.helpers.subtitlehelper import SubtitleHelper
@@ -38,7 +39,8 @@ class Channel(chn_class.Channel):
         self.baseUrl = "https://www.kijk.nl"
 
         if self.channelCode is None:
-            self.noImage = "kijkimage.png"
+            self.noImage = "kijkimage.jpg"
+            self.poster = "kijkposter.jpg"
             self.mainListUri = self.__get_api_query_url(
                 "programs(programTypes:[SERIES],limit:1000)",
                 "{items{__typename,title,description,guid,updated,seriesTvSeasons{id},"
@@ -80,6 +82,9 @@ class Channel(chn_class.Channel):
             self._add_data_parser("https://graph.kijk.nl/graphql-video",
                                   updater=self.update_graphql_item)
 
+            self._add_data_parser("https://graph.kijk.nl/graphql?operationName=programs",
+                                  updater=self.update_graphql_item)
+
         else:
             raise ValueError("Channel with code '{}' not supported".format(self.channelCode))
 
@@ -97,7 +102,10 @@ class Channel(chn_class.Channel):
             "{items{__typename,title,description,guid,updated,seriesTvSeasons{id}," \
             "imageMedia{url,label},type,sources{type,drm,file},series{title}," \
             "seasonNumber,tvSeasonEpisodeNumber,lastPubDate,duration,displayGenre,tracks{type,file}}}"
-        
+        self.__list_limit = 150
+        self.__timezone = pytz.timezone("Europe/Amsterdam")
+        self.__timezone_utc = pytz.timezone("UTC")
+
         #===============================================================================================================
         # Test cases:
 
@@ -198,7 +206,7 @@ class Channel(chn_class.Channel):
         """
 
         headers = {"accept": "application/vnd.sbs.ovp+json; version=2.0"}
-        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=headers)
+        data = UriHandler.open(item.url, additional_headers=headers)
 
         if UriHandler.instance().status.code == 404:
             Logger.warning("No normal stream found. Trying newer method")
@@ -233,7 +241,7 @@ class Channel(chn_class.Channel):
         Logger.debug("Trying standard M3u8 streams.")
         if m3u8_url != "https://embed.kijk.nl/api/playlist/.m3u8" \
                 and "hostingervice=brightcove" not in m3u8_url:
-            for s, b in M3u8.get_streams_from_m3u8(m3u8_url, self.proxy, append_query_string=True):
+            for s, b in M3u8.get_streams_from_m3u8(m3u8_url, append_query_string=True):
                 if "_enc_" in s:
                     continue
 
@@ -241,7 +249,7 @@ class Channel(chn_class.Channel):
                     # we have at least 1 none encrypted streams
                     Logger.info("Using HLS InputStreamAddon")
                     strm = part.append_media_stream(m3u8_url, 0)
-                    M3u8.set_input_stream_addon_input(strm, proxy=self.proxy)
+                    M3u8.set_input_stream_addon_input(strm)
                     item.complete = True
                     return item
 
@@ -255,24 +263,24 @@ class Channel(chn_class.Channel):
         mpd_manifest_url = "https://embed.kijk.nl/video/%s?width=868&height=491" % (video_id,)
         referer = "https://embed.kijk.nl/video/%s" % (video_id,)
 
-        data = UriHandler.open(mpd_manifest_url, proxy=self.proxy, referer=referer)
+        data = UriHandler.open(mpd_manifest_url, referer=referer)
         # First try to find an M3u8
         m3u8_urls = Regexer.do_regex('https:[^"]+.m3u8', data)
         for m3u8_url in m3u8_urls:
             m3u8_url = m3u8_url.replace("\\", "")
 
             # We need the actual URI to make this work, so fetch it.
-            m3u8_url = UriHandler.header(m3u8_url, proxy=self.proxy)[-1]
+            m3u8_url = UriHandler.header(m3u8_url)[-1]
             Logger.debug("Found direct M3u8 in brightcove data.")
             if use_adaptive:
                 # we have at least 1 none encrypted streams
                 Logger.info("Using HLS InputStreamAddon")
                 strm = part.append_media_stream(m3u8_url, 0)
-                M3u8.set_input_stream_addon_input(strm, proxy=self.proxy)
+                M3u8.set_input_stream_addon_input(strm)
                 item.complete = True
                 return item
 
-            for s, b in M3u8.get_streams_from_m3u8(m3u8_url, self.proxy, append_query_string=True):
+            for s, b in M3u8.get_streams_from_m3u8(m3u8_url, append_query_string=True):
                 item.complete = True
                 part.append_media_stream(s, b)
 
@@ -290,7 +298,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        data = UriHandler.open(item.url, proxy=self.proxy)
+        data = UriHandler.open(item.url)
         if UriHandler.instance().status.code == 404:
             title, message = Regexer.do_regex(r'<h1>([^<]+)</h1>\W+<p>([^<]+)<', data)[0]
             XbmcWrapper.show_dialog(title, message)
@@ -317,12 +325,12 @@ class Channel(chn_class.Channel):
                     has_drm_only = False
                     if stream_type == "m3u8":
                         Logger.debug("Found non-encrypted M3u8 stream: %s", stream_url)
-                        M3u8.update_part_with_m3u8_streams(part, stream_url, proxy=self.proxy, channel=self)
+                        M3u8.update_part_with_m3u8_streams(part, stream_url, channel=self)
                         item.complete = True
                     elif stream_type == "dash" and adaptive_available:
                         Logger.debug("Found non-encrypted Dash stream: %s", stream_url)
                         stream = part.append_media_stream(stream_url, 1)
-                        Mpd.set_input_stream_addon_input(stream, proxy=self.proxy)
+                        Mpd.set_input_stream_addon_input(stream)
                         item.complete = True
                     else:
                         Logger.debug("Unknown stream source: %s", source)
@@ -351,7 +359,7 @@ class Channel(chn_class.Channel):
 
                     stream = part.append_media_stream(stream_url, 0)
                     Mpd.set_input_stream_addon_input(
-                        stream, proxy=self.proxy, license_key=encryption_key)
+                        stream, license_key=encryption_key)
                     item.complete = True
 
             subs = [s['file'] for s in play_list_entry.get("tracks", []) if s.get('kind') == "captions"]
@@ -382,14 +390,12 @@ class Channel(chn_class.Channel):
 
         part = item.create_new_empty_media_part()
         mpd_manifest_url = "https:{0}".format(mpd_info["mediaLocator"])
-        mpd_data = UriHandler.open(mpd_manifest_url, proxy=self.proxy)
+        mpd_data = UriHandler.open(mpd_manifest_url)
         subtitles = Regexer.do_regex(r'<BaseURL>([^<]+\.vtt)</BaseURL>', mpd_data)
 
         if subtitles:
             Logger.debug("Found subtitle: %s", subtitles[0])
-            subtitle = SubtitleHelper.download_subtitle(subtitles[0],
-                                                        proxy=self.proxy,
-                                                        format="webvtt")
+            subtitle = SubtitleHelper.download_subtitle(subtitles[0], format="webvtt")
             part.Subtitle = subtitle
 
         if use_adaptive_with_encryption:
@@ -401,7 +407,7 @@ class Channel(chn_class.Channel):
             license_key = Mpd.get_license_key(license_url, key_headers=key_headers)
 
             stream = part.append_media_stream(mpd_manifest_url, 0)
-            Mpd.set_input_stream_addon_input(stream, self.proxy, license_key=license_key)
+            Mpd.set_input_stream_addon_input(stream, license_key=license_key)
             item.complete = True
         else:
             XbmcWrapper.show_dialog(
@@ -438,7 +444,7 @@ class Channel(chn_class.Channel):
             "Accept": "application/json;pk=BCpkADawqM3ve1c3k3HcmzaxBvD8lXCl89K7XEHiKutxZArg2c5RhwJHJANOwPwS_4o7UsC4RhIzXG8Y69mrwKCPlRkIxNgPQVY9qG78SJ1TJop4JoDDcgdsNrg"
         }
 
-        bright_cove_data = UriHandler.open(bright_cove_url, proxy=self.proxy, additional_headers=headers)
+        bright_cove_data = UriHandler.open(bright_cove_url, additional_headers=headers)
         bright_cove_json = JsonHelper(bright_cove_data)
         streams = [d for d in bright_cove_json.get_value("sources") if d["container"] == "M2TS"]
         # Old filter
@@ -455,11 +461,11 @@ class Channel(chn_class.Channel):
         if use_adaptive_with_encryption:
             Logger.info("Using InputStreamAddon for playback of HLS stream")
             strm = part.append_media_stream(stream_url, 0)
-            M3u8.set_input_stream_addon_input(strm, proxy=self.proxy)
+            M3u8.set_input_stream_addon_input(strm)
             item.complete = True
             return item
 
-        for s, b in M3u8.get_streams_from_m3u8(stream_url, self.proxy):
+        for s, b in M3u8.get_streams_from_m3u8(stream_url):
             item.complete = True
             part.append_media_stream(s, b)
         return item
@@ -485,20 +491,15 @@ class Channel(chn_class.Channel):
             "{__typename,title,description,guid,updated,seriesTvSeasons{id},imageMedia{url,label}}"
         )
         popular_title = LanguageHelper.get_localized_string(LanguageHelper.Popular)
-        popular = MediaItem(
-            "\a.: {} :.".format(popular_title),
-            popular_url
-        )
+        popular = MediaItem("\a.: {} :.".format(popular_title), popular_url)
         popular.dontGroup = True
+        popular.content_type = contenttype.TVSHOWS
         items.append(popular)
 
         # https://graph.kijk.nl/graphql?operationName=programsByDate&variables={"date":"2020-04-19","numOfDays":7}&extensions={"persistedQuery":{"version":1,"sha256Hash":"1445cc0d283e10fa21fcdf95b127207d5f8c22834c1d0d17df1aacb8a9da7a8e"}}
         recent_url = "#recentgraphql"
         recent_title = LanguageHelper.get_localized_string(LanguageHelper.Recent)
-        recent = MediaItem(
-            "\a.: {} :.".format(recent_title),
-            recent_url
-        )
+        recent = MediaItem("\a.: {} :.".format(recent_title), recent_url)
         recent.dontGroup = True
         items.append(recent)
 
@@ -507,12 +508,27 @@ class Channel(chn_class.Channel):
         search.dontGroup = True
         items.append(search)
 
+        movie_url = self.__get_api_persisted_url(
+            "programs", "cd8d5f074397e43ccd27b1c958d8c24264b0a92a94f3162e8281f6a2934d0391",
+            variables={"programTypes": "MOVIE", "limit": 100}
+        )
+        movie_url = self.__get_api_query_url(
+            "programs(programTypes: MOVIE)",
+            "{totalResults,items{type,__typename,guid,title,description,duration,displayGenre,"
+            "imageMedia{url,label},epgDate,sources{type,file,drm},tracks{type,kind,label,file}}}"
+        )
+        movies_title = LanguageHelper.get_localized_string(LanguageHelper.Movies)
+        movies = MediaItem("\a.: {} :.".format(movies_title), movie_url)
+        movies.dontGroup = True
+        movies.content_type = contenttype.MOVIES
+        items.append(movies)
+
         return data, items
 
     def add_graphql_recents(self, data):
         items = []
 
-        today = datetime.datetime.now()
+        today = datetime.datetime.now() - datetime.timedelta(hours=5)
         days = LanguageHelper.get_days_list()
         for i in range(0, 7, 1):
             air_date = today - datetime.timedelta(i)
@@ -568,6 +584,8 @@ class Channel(chn_class.Channel):
                 item = self.create_api_episode_type(result_set)
             elif custom_type == "SERIES":
                 item = self.create_api_program_type(result_set)
+            elif custom_type == "MOVIE":
+                item = self.create_api_movie_type(result_set)
             else:
                 Logger.warning("Missing type: %s", api_type)
                 return None
@@ -609,7 +627,7 @@ class Channel(chn_class.Channel):
             # List the videos in that season
             season_id = seasons[0]["id"].rsplit("/", 1)[-1]
             url = self.__get_api_query_url(
-                query='programs(tvSeasonId:"{}",programTypes:EPISODE,skip:0,limit:100)'.format(season_id),
+                query='programs(tvSeasonId:"{}",programTypes:EPISODE,skip:0,limit:{})'.format(season_id, self.__list_limit),
                 fields=self.__video_fields)
         else:
             # Fetch the season information
@@ -619,13 +637,62 @@ class Channel(chn_class.Channel):
             )
 
         item = MediaItem(result_set["title"], url)
-        item.thumb = self.__get_thumb(result_set.get("imageMedia"))
         item.description = result_set.get("description")
+        self.__get_artwork(item, result_set.get("imageMedia"))
 
         # In the main list we should set the fanart too
         if self.parentItem is None:
             item.fanart = item.thumb
 
+        return item
+
+    def create_api_movie_type(self, result_set):
+        """ Creates a new MediaItem for an program.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        :param dict result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'folder'.
+        :rtype: MediaItem|None
+
+        """
+
+        title = result_set["title"]
+        if title is None:
+            return None
+
+        url = self.__get_api_persisted_url(
+            "programs", "b6f65688f7e1fbe22aae20816d24ca5dcea8c86c8e72d80b462a345b5b70fa41",
+            variables={"programTypes": "MOVIE", "guid": result_set["guid"]})
+
+        item = MediaItem(result_set["title"], url)
+        item.description = result_set.get("description")
+        item.type = "video"
+        item.set_info_label("duration", int(result_set.get("duration", 0) or 0))
+        item.set_info_label("genre", result_set.get("displayGenre"))
+        self.__get_artwork(item, result_set.get("imageMedia"))
+
+        if "epgDate" in result_set:
+            time_stamp = result_set["epgDate"] / 1000
+            date_stamp = DateHelper.get_date_from_posix(time_stamp, tz=self.__timezone_utc)
+            date_stamp = date_stamp.astimezone(self.__timezone)
+            if date_stamp > datetime.datetime.now(tz=self.__timezone):
+                available = LanguageHelper.get_localized_string(LanguageHelper.AvailableFrom)
+                item.name = "{} - [COLOR=gold]{} {:%Y-%m-%d}[/COLOR]".format(
+                    title, available, date_stamp)
+            item.set_date(date_stamp.year, date_stamp.month, date_stamp.day)
+
+        # In the main list we should set the fanart too
+        if self.parentItem is None:
+            item.fanart = item.thumb
+
+        sources = result_set.get("sources")
+        item.metaData["sources"] = sources
+        subs = result_set.get("tracks")
+        item.metaData["subtitles"] = subs
         return item
 
     def create_api_tvseason_type(self, result_set):
@@ -648,7 +715,7 @@ class Channel(chn_class.Channel):
 
         season_id = result_set["id"].rsplit("/", 1)[-1]
         url = self.__get_api_query_url(
-            query='programs(tvSeasonId:"{}",programTypes:EPISODE,skip:0,limit:100)'.format(season_id),
+            query='programs(tvSeasonId:"{}",programTypes:EPISODE,skip:0,limit:{})'.format(season_id, self.__list_limit),
             fields=self.__video_fields)
 
         item = MediaItem(title, url)
@@ -686,10 +753,10 @@ class Channel(chn_class.Channel):
             title = title_format.format(season_number, episode_number, title)
 
         item = MediaItem(title, url, type="video")
-        item.thumb = self.__get_thumb(result_set.get("imageMedia"))
         item.description = result_set.get("longDescription", result_set.get("description"))
-        item.set_info_label("duration", int(result_set.get("duration", 0)))
+        item.set_info_label("duration", int(result_set.get("duration", 0) or 0))
         item.set_info_label("genre", result_set.get("displayGenre"))
+        self.__get_artwork(item, result_set.get("imageMedia"), mode="thumb")
 
         updated = result_set["lastPubDate"] / 1000
         date_time = DateHelper.get_date_from_posix(updated)
@@ -730,8 +797,7 @@ class Channel(chn_class.Channel):
             if stream_type == "dash" and not drm:
                 bitrate = 0 if hls_over_dash else 2
                 stream = part.append_media_stream(url, bitrate)
-                item.complete = Mpd.set_input_stream_addon_input(
-                    stream, self.proxy)
+                item.complete = Mpd.set_input_stream_addon_input(stream)
 
             elif stream_type == "dash" and drm and "widevine" in drm:
                 bitrate = 0 if hls_over_dash else 1
@@ -740,7 +806,7 @@ class Channel(chn_class.Channel):
                 # fetch the authentication token:
                 # url = self.__get_api_persisted_url("drmToken", "634c83ae7588a877e2bb67d078dda618cfcfc70ac073aef5e134e622686c0bb6", variables={})
                 url = self.__get_api_query_url("drmToken", "{token,expiration}")
-                token_data = UriHandler.open(url, proxy=self.proxy, no_cache=True)
+                token_data = UriHandler.open(url, no_cache=True)
                 token_json = JsonHelper(token_data)
                 token = token_json.get_value("data", "drmToken", "token")
 
@@ -760,7 +826,7 @@ class Channel(chn_class.Channel):
             elif stream_type == "m3u8" and not drm:
                 bitrate = 2 if hls_over_dash else 0
                 item.complete = M3u8.update_part_with_m3u8_streams(
-                    part, url, proxy=self.proxy, channel=self, bitrate=bitrate)
+                    part, url, channel=self, bitrate=bitrate)
 
             else:
                 Logger.debug("Found incompatible stream: %s", src)
@@ -775,25 +841,33 @@ class Channel(chn_class.Channel):
         return item
 
     # noinspection PyUnusedLocal
-    def __get_thumb(self, thumb_data, width=1920):
+    def __get_artwork(self, item, image_data, mode=("thumb", "poster")):
         """ Generates a full thumbnail url based on the "id" and "changed" values in a thumbnail
         data object from the API.
 
-        :param list[dict[str, string]] thumb_data: The data for the thumb
+        :param MediaItem item:                      The item to set the data to.
+        :param list[dict[str, string]] image_data:  The data for the thumb
 
-        :return: full string url
-        :rtype: str
         """
 
-        if not bool(thumb_data):
+        if not bool(image_data):
             return
 
-        for thumb in thumb_data:
-            if "_landscape" in thumb["label"]:
-                return thumb["url"]
+        thumb_set = False
+        for img in image_data:
+            if "_landscape" in img["label"] and "thumb" in mode:
+                url = "https://cldnr.talpa.network/talpa-network/image/fetch/" \
+                      "ar_16:9,c_scale,f_auto,h_1080,w_auto/{}".format(img["url"])
+                item.set_artwork(thumb=url)
+                thumb_set = True
+            elif "_portrait" in img["label"] and "poster" in mode:
+                url = "https://cldnr.talpa.network/talpa-network/image/fetch/" \
+                      "ar_2:3,c_scale,f_auto,h_750,w_auto/{}".format(img["url"])
+                item.set_artwork(poster=url)
 
         # If it fails, return the first one.
-        return thumb_data[0].get("url")
+        if not thumb_set:
+            item.set_artwork(thumb=image_data[0].get("url"))
 
     def __get_api_query_url(self, query, fields):
         result = "query{%s%s}" % (query, fields)

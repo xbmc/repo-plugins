@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.16"
+        version="5.2.24"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -13,7 +13,7 @@
         <import addon="script.module.inputstreamhelper" version="0.3.5" />
         <import addon="script.module.pyscrypt" version="1.6.2" />
         <import addon="script.module.pyaes" version="1.6.1" />
-        <import addon="resource.images.retrospect" version="1.0.6" />
+        <import addon="resource.images.retrospect" version="1.0.8" />
     </requires>
 
     <extension  point="xbmc.python.pluginsource"
@@ -132,26 +132,27 @@
 
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.2.16 - Changelog - 2020-11-21[/B]
+        <news>[B]Retrospect v5.2.24+matrix.1 - Changelog - 2021-03-01[/B]
 
-This version of Retrospect fixes a minor NPO issue and contains a new OS license: GPL3-or-later.
+This minor update fixes a Python 3.9 issue and fixes the MTV, Kijk and NPO channels.
 
 [B]Framework related[/B]
-* Changed: License was updated to `GPL-3.0-or-later`
+* Added: Allow channels to be moved and old links to stay working.
 
 [B]GUI/Settings/Language related[/B]
-* Updated: Swedish translation
-* Updated: Dutch translation
+_None_
 
 [B]Channel related[/B]
-* Updated: NPO artwork (See #1441)
-* Added: FunX live video stream (Fixes #1441)
-* Added: Radio4 live video stream (Fixes #1441)
+* Moved: MTV.nl to the Nickelodeon.nl channelset as they share the same content backend.
+* Fixed: Small update of the NPO Live streams (Fixes #1492)
+* Fixed: Kijk.nl recents break every know and then due to missing EPG timestamps (Fixes #1489).
+* Changed: &quot;Recents&quot; now switch to the next day at 5:00, instead of 0:00 (See #1489).
 
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>
             <fanart>resources/media/fanart.jpg</fanart>
+            <banner>resources/media/banner.jpg</banner>
             <screenshot>resources/media/retrospect01.jpg</screenshot>
             <screenshot>resources/media/retrospect02.jpg</screenshot>
             <screenshot>resources/media/retrospect03.jpg</screenshot>

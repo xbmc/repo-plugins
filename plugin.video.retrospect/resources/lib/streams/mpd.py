@@ -9,7 +9,7 @@ class Mpd(object):
         pass
 
     @staticmethod
-    def set_input_stream_addon_input(strm, proxy=None, headers=None,
+    def set_input_stream_addon_input(strm, headers=None,
                                      license_key=None, license_type="com.widevine.alpha",
                                      max_bit_rate=None,
                                      persist_storage=False,
@@ -18,7 +18,6 @@ class Mpd(object):
         """ Updates an existing stream with parameters for the inputstream adaptive add-on.
 
         :param strm:                    (MediaStream) the MediaStream to update
-        :param proxy:                   (Proxy) The proxy to use for opening
         :param dict headers:            Possible HTTP Headers
         :param str license_key:         The value of the license key request
         :param str license_type:        The type of license key request used (see below)
@@ -33,7 +32,7 @@ class Mpd(object):
 
             part = item.create_new_empty_media_part()
             stream = part.append_media_stream(m3u8url, 0)
-            M3u8.set_input_stream_addon_input(stream, self.proxy, self.headers)
+            M3u8.set_input_stream_addon_input(stream, self.headers)
             item.complete = True
 
         if maxBitRate is not set, the bitrate will be configured via the normal generic Retrospect
@@ -52,7 +51,7 @@ class Mpd(object):
             else:
                 Logger.error("Widevine was not installed or failed to install.")
 
-        return Adaptive.set_input_stream_addon_input(strm, proxy, headers,
+        return Adaptive.set_input_stream_addon_input(strm, headers,
                                                      manifest_type="mpd",
                                                      license_key=license_key,
                                                      license_type=license_type,

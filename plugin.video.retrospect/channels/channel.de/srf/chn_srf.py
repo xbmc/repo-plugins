@@ -273,7 +273,7 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
-        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=item.HttpHeaders)
+        data = UriHandler.open(item.url, additional_headers=item.HttpHeaders)
         json = JsonHelper(data)
         video_info = json.get_value("content", "videoInfos")
 
@@ -281,13 +281,13 @@ class Channel(chn_class.Channel):
         if "HLSurlHD" in video_info:
             # HLSurlHD=http://srfvodhd-vh.akamaihd.net/i/vod/potzmusig/2015/03/
             # potzmusig_20150307_184438_v_webcast_h264_,q10,q20,q30,q40,q50,q60,.mp4.csmil/master.m3u8
-            for s, b in M3u8.get_streams_from_m3u8(video_info["HLSurlHD"], self.proxy):
+            for s, b in M3u8.get_streams_from_m3u8(video_info["HLSurlHD"]):
                 item.complete = True
                 part.append_media_stream(s, b)
         elif "HLSurl" in video_info:
             # HLSurl=http://srfvodhd-vh.akamaihd.net/i/vod/potzmusig/2015/03/
             # potzmusig_20150307_184438_v_webcast_h264_,q10,q20,q30,q40,.mp4.csmil/master.m3u8
-            for s, b in M3u8.get_streams_from_m3u8(video_info["HLSurl"], self.proxy):
+            for s, b in M3u8.get_streams_from_m3u8(video_info["HLSurl"]):
                 item.complete = True
                 part.append_media_stream(s, b)
 
@@ -322,7 +322,7 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
-        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=item.HttpHeaders)
+        data = UriHandler.open(item.url, additional_headers=item.HttpHeaders)
         json = JsonHelper(data)
         video_play_lists = json.get_value("Video", "Playlists", "Playlist")
 
@@ -333,7 +333,7 @@ class Channel(chn_class.Channel):
             for stream in streams:
                 stream_url = stream["text"]
                 if ".m3u8" in stream_url:
-                    for s, b in M3u8.get_streams_from_m3u8(stream_url, self.proxy):
+                    for s, b in M3u8.get_streams_from_m3u8(stream_url):
                         item.complete = True
                         part.append_media_stream(s, b)
                 else:
@@ -345,13 +345,13 @@ class Channel(chn_class.Channel):
         # part = item.create_new_empty_media_part()
         # if "HLSurlHD" in videoInfo:
         #     # HLSurlHD=http://srfvodhd-vh.akamaihd.net/i/vod/potzmusig/2015/03/potzmusig_20150307_184438_v_webcast_h264_,q10,q20,q30,q40,q50,q60,.mp4.csmil/master.m3u8
-        #     for s, b in M3u8.get_streams_from_m3u8(videoInfo["HLSurlHD"], self.proxy):
+        #     for s, b in M3u8.get_streams_from_m3u8(videoInfo["HLSurlHD"]):
         #         item.complete = True
         #         # s = self.get_verifiable_video_url(s)
         #         part.append_media_stream(s, b)
         # elif "HLSurl" in videoInfo:
         #     # HLSurl=http://srfvodhd-vh.akamaihd.net/i/vod/potzmusig/2015/03/potzmusig_20150307_184438_v_webcast_h264_,q10,q20,q30,q40,.mp4.csmil/master.m3u8
-        #     for s, b in M3u8.get_streams_from_m3u8(videoInfo["HLSurl"], self.proxy):
+        #     for s, b in M3u8.get_streams_from_m3u8(videoInfo["HLSurl"]):
         #         item.complete = True
         #         # s = self.get_verifiable_video_url(s)
         #         part.append_media_stream(s, b)

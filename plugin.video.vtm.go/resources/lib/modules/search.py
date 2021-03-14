@@ -24,7 +24,6 @@ class Search:
                                kodiutils.get_setting('profile'),
                                kodiutils.get_tokens_path())
         self._vtm_go = VtmGo(self._auth)
-        self._menu = Menu()
 
     def show_search(self, query=None):
         """ Shows the search dialog
@@ -48,7 +47,7 @@ class Search:
         # Display results
         listing = []
         for item in items:
-            listing.append(self._menu.generate_titleitem(item))
+            listing.append(Menu.generate_titleitem(item))
 
         # Sort like we get our results back.
         kodiutils.show_listing(listing, 30009, content='tvshows')

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.weareone" name="WeAreOne" version="1.1.0" provider-name="fossdd">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.routing" version="0.2.0"/>
+        <import addon="script.module.httplib2" version="0.10.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Play Audio Streams by the WeAreOne Family</summary>
+        <description lang="en_GB">WeAreOne is a radio sender family. It contains popular techno and house radios like TechnoBase.FM and HouseTime.FM.</description>
+        <news>v1.1.0
+- Download Stream-List for URLs and Names</news>
+        <platform>all</platform>
+        <license>unlicense</license>
+        <email>fossdd@tutanota.com</email>
+        <source>https://github.com/fossdd/plugin.audio.weareone</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+        </assets>
+    </extension>
+</addon>

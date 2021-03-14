@@ -7,8 +7,7 @@ import logging
 
 from resources.lib import kodiutils
 from resources.lib.vtmgo.vtmgo import ApiUpdateRequired, VtmGo
-from resources.lib.vtmgo.vtmgoauth import (InvalidLoginException,
-                                           LoginErrorException, VtmGoAuth)
+from resources.lib.vtmgo.vtmgoauth import InvalidLoginException, LoginErrorException, VtmGoAuth
 
 _LOGGER = logging.getLogger(__name__)
 

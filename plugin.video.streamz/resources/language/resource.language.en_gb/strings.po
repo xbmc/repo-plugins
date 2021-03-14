@@ -114,6 +114,10 @@ msgctxt "#30205"
 msgid "Season {season}"
 msgstr ""
 
+msgctxt "#30206"
+msgid "[COLOR red]Available in Streamz+[/COLOR]\n"
+msgstr ""
+
 msgctxt "#30207"
 msgid "[COLOR red]Geo-blocked[/COLOR]\n"
 msgstr ""
@@ -161,10 +165,6 @@ msgctxt "#30708"
 msgid "Please restart Kodi."
 msgstr ""
 
-msgctxt "#30710"
-msgid "This video is geo-blocked and can't be played from your location."
-msgstr ""
-
 msgctxt "#30712"
 msgid "The video is unavailable and can't be played right now."
 msgstr ""
@@ -184,6 +184,11 @@ msgstr ""
 msgctxt "#30716"
 msgid "Updating metadata ({index}/{total})..."
 msgstr ""
+
+msgctxt "#30718"
+msgid "The Manifest proxy is not running. Please restart Kodi."
+msgstr ""
+
 
 ### SETTINGS
 msgctxt "#30800"
@@ -240,6 +245,10 @@ msgstr ""
 
 msgctxt "#30823"
 msgid "Show My List"
+msgstr ""
+
+msgctxt "#30825"
+msgid "Show unavailable movies and series (Streamz+)"
 msgstr ""
 
 msgctxt "#30826"
@@ -360,6 +369,10 @@ msgstr ""
 
 msgctxt "#30887"
 msgid "InputStream Helper settings…"
+msgstr ""
+
+msgctxt "#30888"
+msgid "Modify the MPEG DASH Manifest to workaround an InputStream Adaptive bug"
 msgstr ""
 
 msgctxt "#30889"

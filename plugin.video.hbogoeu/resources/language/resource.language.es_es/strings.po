@@ -497,3 +497,12 @@ msgstr "[NO cifrado]"
 msgctxt "#30813"
 msgid "WARNING: Credential Encryption disabled"
 msgstr "AVISO: Cifrado de credenciales deshabilitado"
+
+
+msgctxt "#30814"
+msgid "Subtitles cache cleaned"
+msgstr ""
+
+msgctxt "#30815"
+msgid "Clean subtitles cache"
+msgstr ""

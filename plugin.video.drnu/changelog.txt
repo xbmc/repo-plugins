@@ -1,0 +1,218 @@
+﻿[B]Version 5.0.14 - 2021-03-06[/B]
+- Bumping version number, to re-activate addon in leia addon channel
+- Re-factor code to work on both python2 and python 3
+
+[B]Version 5.0.13 - 2021-02-27[/B]
+- Adding old PR's + minor fixes. last update before kodi 19 and python3
+- Change for request-cache for storing web requests locally (in 8hours) #34
+- Fix missing thumbnails and added option in settings to choose fan-art image size #29 #35
+- Fixed themes menu item #34
+- Add support for other plugins to start live tv. #31
+- Update logos and entry screen #24
+- Change subtitle handling to local srt files, so user also can change for hard-of-hearing subs and change while watching #36
+
+﻿[B]Version 5.0.12 - 2018-02-05[/B]
+- Updated copyright(readded) + added new strings.po language format for EN/DA translations.
+
+[B]Version 5.0.11 - 2018-02-05[/B]
+- Fixing encrypted streams - Thanks to @krogsbell on the kodi forums.
+- Moving "ownership" of the addon, hence Tommy have stopped developing on the addon.
+
+[B]Version 5.0.10 - 2017-11-01[/B]
+- Rollback to DR API v1.2
+
+[B]Version 5.0.9 - 2017-10-31[/B]
+- Fix https streams from DR
+- Fix subtitles
+- Step DR API to v1.4
+
+[B]Version 5.0.8 - 2014-12-04[/B]
+- Added themes / repremieres as seen on dr.dk/tv
+
+[B]Version 5.0.7 - 2014-10-29[/B]
+- Added description to video clips
+- Fixed problem when searching for text with special characters
+
+[B]Version 5.0.6 - 2014-10-05[/B]
+- Gracefully handle error when video clip is no longer available for playback
+
+[B]Version 5.0.5 - 2014-10-02[/B]
+- Changed cache period of latest programs to five minutes (instead of a full day)
+
+[B]Version 5.0.4 - 2014-09-16[/B]
+- Fixed favorite program series
+- Added "Clear favorite program series" in the settings to fix broken favorites list
+- Re-added latest programs
+
+[B]Version 5.0.3 - 2014-09-02[/B]
+- Added 'Show area chooser' to context menu
+- Fixed problem with recently watched when the slug no longer exists on the server
+
+[B]Version 5.0.2 - 2014-07-29[/B]
+- Added optional area chooser
+  Set default area in addon settings
+
+[B]Version 5.0.1 - 2014-06-02[/B]
+- Fixed problem parsing certain dates
+
+[B]Version 5.0.0 - 2014-05-31[/B]
+- Yet another rewrite; this time to DR MU-online API
+  http://www.dr.dk/mu-online/Help
+- Added Live TV
+- Added caching
+
+[B]Version 4.0.3 - 2013-10-21[/B]
+- Added 'Latest on TV' category
+
+[B]Version 4.0.2 - 2013-10-02[/B]
+- Fixed problem with favourites only remembering the last favourite added
+- Improve error handling when stream is not available
+
+[B]Version 4.0.1 - 2013-09-24[/B]
+- List up to 500 videos for each program series (instead of just 20)
+- Re-added Premieres, Highlights and Spots categories
+- Fixed problem with empty favourites
+- Added support for displaying subtitles
+
+[B]Version 4.0.0 - 2013-09-23[/B]
+- Added setting to set preferred stream type. Defaults to iOS streams.
+
+[B]Version 3.9.1 - 2013-09-20[/B]
+- Additional features implemented
+
+[B]Version 3.9.0 - 2013-09-19[/B]
+- Initial rewrite to use new DR Medieuniversets REST API
+
+[B]Version 3.0.1 - 2013-08-03[/B]
+- Improved handling of invalid URL's
+- Fixed problem with display of chapters in some cases
+
+[B]Version 3.0.0 - 2013-03-22[/B]
+- Reconstruct rtmp:// url to fix playback problems
+
+[B]Version 2.1.9 - 2013-02-22[/B]
+- Fixed script error on Eden related to duration changes
+
+[B]Version 2.1.8 - 2013-02-19[/B]
+- Added option to show stream selector on video playback
+- Added option to sort videos by title (instead of default by date)
+- Fixed display of video durations
+- Changed fanart to high resolution
+
+[B]Version 2.1.7 - 2012-08-01[/B]
+- Updated date parsing rules to match changes in DR NU API
+
+[B]Version 2.1.6 - 2012-07-27[/B]
+- Changed DR NU API timeout to thirty seconds to avoid errors
+  when DR NU API is slow to respond
+
+[B]Version 2.1.5 - 2012-06-22[/B]
+- Changed search results limit to 100 items
+- Added Premiere videos
+
+[B]Version 2.1.4 - 2012-06-03[/B]
+- Split up Programs A-Z menu into individual letters
+- Handle errors when local filesystem is readonly or out of disk space
+- Added option to define custom icons from program series
+
+[B]Version 2.1.3 - 2012-02-15[/B]
+- Fixed problem with the 'børn' area due to the Danish character
+
+[B]Version 2.1.2 - 2012-02-05[/B]
+- Fixed problem with removing favorites twice
+- Better handle time-outs and other error scenarios from DR NU
+- Introduced usage of script.module.buggalo
+
+[B]Version 2.1.1 - 2012-01-04[/B]
+- Fixed a couple of bugs reported by user using the improved error handling
+- Fixed error handling on Windows
+- Fixed broken icons
+- Avoid extra API calls to speed up loading on slower CPUs
+
+[B]Version 2.1.0 - 2011-12-30[/B]
+- Improved error handling with option for the user to submit exceptions/bugs
+- Added option to navigate chapters (can be enabled in settings)
+  This is useful for some shows, such as [I]På skinner[/I], but breaks date sorting.
+- Added [I]Highlights[I] and indicator for HD videos
+- There is a problem with loading some icons, I have opened an issue:
+  http://trac.xbmc.org/ticket/12316
+- Fixed a number of minor issue, such as search for multiple words
+
+[B]Version 2.0.2 - 2011-09-21[/B]
+- Fix script error on 32 bit OS when expire date of a clip is Jan, 1st 3000
+
+[B]Version 2.0.1 - 2011-09-19[/B]
+- Changed search to use new search API call
+- Added 'Last Chance' videos that will expire soon
+- Sort favorites
+
+[B]Version 2.0.0[/B]
+- Added support for XBMC Eden
+- Depend on xbmc.python version 2.0
+- Otherwise same as Version 1.4.0
+
+[B]Version 1.4.0[/B]
+- Refactored API
+- New graphics
+- Added Programs by area
+- Changed recently watched so it contains videos instead of programs
+
+[B]Version 1.3.1[/B] - 2011-05-28
+- Fixed creation of cache folder
+- Updated fanart and icon
+  - Icon from http://www.dr.dk/drdesign/2010/05/29/dr-nu/
+  - Fanart from http://www.dr.dk/DRPresse/20091104120300.htm?page=13&q=studie&dateFrom=&dateTo=
+
+[B]Version 1.3.0[/B] - 2011-05-16
+- Removed dependency on script.module.danishaddons
+- Fixed errors while display some program series
+
+[B]Version 1.2.1[/B] - 2011-02-01
+- Fixed problem with favorites and recently watched when lists were empty
+- Fixed problem with remove favorite
+
+[B]Version 1.2.0[/B] - 2011-02-01
+- Added main menu with favorites and recently watched program series
+
+[B]Version 1.1.3[/B] - 2010-12-21
+- Updated to danishaddons module 1.1.0
+
+[B]Version 1.1.2[/B] - 2010-11-30
+- Extracted strings into strings.xml
+- Should also fix some encodig errors in drnu.py experience by some users due to international characters
+
+[B]Version 1.1.1[/B] - 2010-11-29
+- Changes to addon.xml
+- Display error in case videoclip is no longer available
+
+[B]Version 1.1.0[/B] - 2010-11-18
+- Fix problems caused by changes on dr.dk
+- General cleanup
+- Added Newest, Spotlight and Search functionality
+- Updated graphics
+
+[B]Version 1.0.4[/B]
+- Stripped invalid videolinks.
+
+[B]Version 1.0.3[/B]
+- Changed the sorting order in the "show" folder. Now the shows are sorted by infoLabel, date.
+      
+[B]Version 1.0.2[/B]
+- DR changed the layout of the videoManifestUrl, so the plugin failed. This is now fixed.
+- Cleaned up some code.
+
+[B]Version 1.0.1[/B]
+- Added an extra /cms to the rtmp url. All videos should now be working.
+- Credits goes to twinther.
+- This script uses script.module.danishaddons. The easiest way to get this is
+- by adding the Danish XBMC Addons Repo. After doing that install the DR.dk Bonanza Video Add-on.
+- You'll find the Danish XBMC Addons Repo here:
+- http://github.com/xbmc-danish-addons/Danish-XBMC-addons/raw/master/repository.danish.addons.zip
+- Install this Add-on by using System -> Add-ons- > Install from zip file.
+- This script also uses script.module.simplejson. You can download this module from varios places.
+- Use this URL to find a download site. http://www.google.dk/search?q=script.module.simplejson-2.0.10.zip
+- Install this Add-on by using System -> Add-ons- > Install from zip file.
+- Updated script to use some constants from script.modules.danishaddons.
+
+[B]Version 1.0.0[/B]
+- Initial release.

@@ -22,8 +22,6 @@ class LanguageHelper(object):
     ErrorId = 30523
     NoVideosId = 30524
     NoStreamsId = 30525
-    ProxyChangeConfirmTitle = 30038
-    ProxyChangeConfirm = 30039
     AddOnSettingsId = 30528
     RefreshListId = 30529
     CheckUpdatesId = 30530
@@ -66,6 +64,8 @@ class LanguageHelper(object):
     LastChance = 30362
     Popular = 30363
     LatestNews = 30364
+    Movies = 30365
+    AvailableFrom = 30366
 
     ChannelSelection = 30507
     # Unused:

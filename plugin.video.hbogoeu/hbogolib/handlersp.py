@@ -434,9 +434,11 @@ class HbogoHandler_sp(HbogoHandler):
             li.setProperty('inputstream.adaptive.license_key', license_url)
 
             # GET SUBTITLES
-            folder = xbmc.translatePath(self.addon.getAddonInfo('profile'))
-            folder = folder + 'subs' + os.sep + media_guid + os.sep
             if self.addon.getSetting('forcesubs') == 'true':
+                folder = KodiUtil.translatePath(self.addon.getAddonInfo('profile'))
+                folder = folder + 'subs'
+                self.clean_sub_cache(folder)
+                folder = folder + os.sep + media_guid + os.sep
                 self.log("Cache subtitles enabled, downloading and converting subtitles in: " + folder)
                 if not os.path.exists(os.path.dirname(folder)):
                     try:
@@ -452,7 +454,7 @@ class HbogoHandler_sp(HbogoHandler):
                         r = requests.get(sub.get('href'))
                         with open(folder + sub.get('lang') + ".xml", 'wb') as f:
                             f.write(r.content)
-                        ttml = Ttml2Srt(py2_encode(folder + sub.get('lang') + ".xml"), 25)
+                        ttml = Ttml2Srt(py2_encode(folder + sub.get('lang') + ".xml"), source_fps=25)
                         srt_file = ttml.write2file(ttml.mfn2srtfn(py2_encode(folder + sub.get('lang')), ttml.lang, False))
                         self.log("Subtitle converted to srt format")
                         subs_paths.append(srt_file)

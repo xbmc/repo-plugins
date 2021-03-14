@@ -1,0 +1,43 @@
+# Kodi Media Center language file
+# Addon Name: WeAreOne
+# Addon id: plugin.audio.weareone
+# Addon Provider: fossdd
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#This is a comment
+
+msgctxt "#32000"
+msgid "Example"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Quality"
+msgstr ""
+
+msgctxt "#32003"
+msgid "HD"
+msgstr "hd"
+
+msgctxt "#32004"
+msgid "High"
+msgstr "high"
+
+msgctxt "#32005"
+msgid "Low"
+msgstr "low"

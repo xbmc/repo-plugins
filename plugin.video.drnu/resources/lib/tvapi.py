@@ -146,7 +146,7 @@ class Api(object):
                    u.close()
                    break
                srt = self.vtt2srt(u.content)
-               with open(name, 'wb') as fn:
+               with open(name.encode('utf-8'), 'wb') as fn:
                    fn.write(srt.encode('utf-8'))
                u.close()
                subtitlesUri.append(name)

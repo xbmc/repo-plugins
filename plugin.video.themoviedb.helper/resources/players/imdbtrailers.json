@@ -1,0 +1,10 @@
+{
+    "name"              : "IMDb Trailers",
+    "plugin"            : "plugin.video.imdb.trailers",
+    "priority"          : 500,
+    "play_movie"        : [
+                            "plugin://plugin.video.imdb.trailers/?action=search",
+                            {"keyboard": "{title}"},
+                            {"title": "{title}"}
+                          ]
+}

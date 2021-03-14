@@ -15,7 +15,7 @@ Meer informatie kan je vinden op de [Wiki pagina](https://github.com/add-ons/plu
 ## Features
 De volgende features worden ondersteund:
 
-* Kijk live TV (VTM, VTM 2, VTM 3, VTM 4, CAZ 2, VTM Kids & QMusic)
+* Kijk live TV (VTM, VTM 2, VTM 3, VTM 4, VTM Gold, VTM Kids & QMusic)
 * Kijk on-demand content (films en series)
 * Doorblader de VTM GO aanbevelingen en "Mijn lijst"
 * Bekijk en speel rechtstreeks vanaf de TV gids

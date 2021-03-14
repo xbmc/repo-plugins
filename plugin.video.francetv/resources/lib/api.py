@@ -43,7 +43,7 @@ try:
     Collection = List[Item]
 
     Art = Dict[Text, Optional[Text]]  # pylint: disable=unsubscriptable-object
-    Url = Dict[Text, Text]
+    Url = Dict[Text, Union[int, Text]]
 
     ParsedItem = NamedTuple(
         "ParsedItem",
@@ -95,6 +95,7 @@ _CHANNEL_ICONS = {
     "franceinfo": join(_MEDIA_DIR, "franceinfo.png"),
     "slash": join(_MEDIA_DIR, "slash.png"),
     "okoo": join(_MEDIA_DIR, "okoo.png"),
+    "culturebox": join(_MEDIA_DIR, "culturebox.png"),
 }  # type: Dict[Optional[Text], Text]
 
 _ALL_TV_SHOWS_ICON = join(_MEDIA_DIR, "all-tv-shows.png")
@@ -434,13 +435,23 @@ class FranceTV:
                     yield parsed_item
 
         if path == "generic/channels":
-            # Add "virtual" Okoo channel in the channel collection, as done on
-            # the france.tv website
+            # Add "virtual" Okoo/Culturebox channels in the channel collection,
+            # as done on the france.tv website
             yield ParsedItem(
                 "Okoo",
                 {"mode": "collection", "path": "apps/categories/enfants"},
                 {"plot": "Okoo"},
                 {"icon": _CHANNEL_ICONS["okoo"]},
+                {},
+            )
+            yield ParsedItem(
+                "Culturebox",
+                {
+                    "mode": "collection",
+                    "path": "apps/categories/spectacles-et-culture",
+                },
+                {"plot": "Culturebox"},
+                {"icon": _CHANNEL_ICONS["culturebox"]},
                 {},
             )
 

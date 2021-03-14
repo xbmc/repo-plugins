@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting
+        id="lang"
+        type="enum"
+        label="30050"
+        values="fr|de|en|es|pl|it"
+        default="0"/>
+    <!-- <setting id="prefer_vost"      type="bool"   label="30051" default="false"/> -->
+    <setting
+        id="quality"
+        type="enum"
+        label="30052"
+        values="SQ (High)|EQ (Medium)|HQ (Low)"
+        default="0"/>
+    <setting
+        id="show_video_streams"
+        type="bool"
+        label="30053"
+        default="false"/>
+</settings>

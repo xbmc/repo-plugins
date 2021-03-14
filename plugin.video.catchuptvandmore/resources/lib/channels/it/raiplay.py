@@ -1,0 +1,190 @@
+# -*- coding: utf-8 -*-
+"""
+    Catch-up TV & More
+    Copyright (C) 2018  SylvainCecchetto
+
+    This file is part of Catch-up TV & More.
+
+    Catch-up TV & More is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    Catch-up TV & More is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with Catch-up TV & More; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+"""
+
+# The unicode_literals import only has
+# an effect on Python 2.
+# It makes string literals as unicode like in Python 3
+from __future__ import unicode_literals
+
+from codequick import Route, Resolver, Listitem, utils, Script
+
+
+from resources.lib import web_utils
+from resources.lib import download
+from resources.lib.menu_utils import item_post_treatment
+
+import json
+import re
+import urlquick
+import xml.etree.ElementTree as ET
+
+# TO DO
+# Add replay
+
+URL_ROOT = 'https://www.raiplay.it'
+
+# Live
+URL_LIVE = URL_ROOT + '/dirette/%s'
+# Channel
+
+URL_REPLAYS = URL_ROOT + '/dl/RaiTV/RaiPlayMobile/Prod/Config/programmiAZ-elenco.json'
+
+
+@Route.register
+def list_letters(plugin, item_id, **kwargs):
+    """
+    Build letter
+    - A
+    - B
+    - ....
+    """
+    resp = urlquick.get(URL_REPLAYS)
+    json_parser = json.loads(resp.text)
+
+    for letter_title in sorted(json_parser.keys()):
+        item = Listitem()
+        item.label = letter_title
+        item.set_callback(list_programs,
+                          item_id=item_id,
+                          letter_title=letter_title)
+        item_post_treatment(item)
+        yield item
+
+
+@Route.register
+def list_programs(plugin, item_id, letter_title, **kwargs):
+    """
+    Build programs listing
+    - Les feux de l'amour
+    - ...
+    """
+    resp = urlquick.get(URL_REPLAYS)
+    json_parser = json.loads(resp.text)
+
+    for program_datas in json_parser[letter_title]:
+        if "PathID" in program_datas:
+            program_title = program_datas["name"]
+            program_image = ''
+            if "images" in program_datas:
+                if 'landscape' in program_datas["images"]:
+                    program_image = URL_ROOT + program_datas["images"][
+                        "landscape"].replace('/resizegd/[RESOLUTION]', '')
+            program_url = program_datas["PathID"]
+            # replace trailing '/?json' by '.json'
+            program_url = '.'.join(program_url.rsplit('/?', 1))
+
+            item = Listitem()
+            item.label = program_title
+            item.art['thumb'] = item.art['landscape'] = program_image
+            item.set_callback(list_videos,
+                              item_id=item_id,
+                              program_url=program_url)
+            item_post_treatment(item)
+            yield item
+
+
+@Route.register
+def list_videos(plugin, item_id, program_url, **kwargs):
+
+    resp = urlquick.get(program_url)
+    json_parser = json.loads(resp.text)
+
+    # Get Program Name and Program Plot
+    program_name = json_parser["name"]
+    program_plot = json_parser["program_info"]["description"]
+
+    has_contents = False
+
+    try:
+        url_videos = URL_ROOT + json_parser["blocks"][0]["sets"][0]["path_id"]
+        has_contents = True
+    except Exception:
+        pass
+
+    if has_contents:
+        resp2 = urlquick.get(url_videos)
+        json_parser2 = json.loads(resp2.text)
+
+        for video_datas in json_parser2["items"]:
+            video_title = program_name + ' ' + video_datas[
+                'name'] + ' ' + video_datas['subtitle']
+            video_image = URL_ROOT + video_datas["images"]["landscape"].replace(
+                '/resizegd/[RESOLUTION]', '')
+            duration_value = video_datas['duration'].split(':')
+            video_duration = 0
+            if len(duration_value) > 2:
+                video_duration = int(duration_value[0]) * 3600 + int(
+                    duration_value[1]) * 60 + int(duration_value[2])
+            elif len(duration_value) > 1:
+                video_duration = int(duration_value[0]) * 60 + int(
+                    duration_value[1])
+            video_url = video_datas['video_url']
+
+            item = Listitem()
+            item.label = video_title
+            item.art['thumb'] = item.art['landscape'] = video_image
+            item.info['duration'] = video_duration
+            item.info['plot'] = program_plot
+            item.params['title'] = video_title
+
+            # subtitles
+            try:
+                weblink = video_datas['weblink']
+                weblink = weblink.rsplit('.', 1)[0] + '.json'
+                resp3 = urlquick.get(URL_ROOT + weblink)
+                json_parser3 = json.loads(resp3.text)
+                subtitles = json_parser3['video']['subtitlesArray']
+                item.params['subtitles'] = subtitles
+            except Exception:
+                Script.log('[raiplay.py] Problem getting subtitles.')
+
+            item.set_callback(get_video_url,
+                              item_id=item_id,
+                              video_url=video_url)
+            item_post_treatment(item, is_playable=True, is_downloadable=True)
+            yield item
+
+
+@Resolver.register
+def get_video_url(plugin,
+                  item_id,
+                  video_url,
+                  download_mode=False,
+                  **kwargs):
+
+    if download_mode:
+        return download.download_video(video_url)
+
+    item = Listitem()
+    item.label = kwargs.get('title', 'unknown')
+    item.path = video_url
+    if kwargs.get('subtitles') and plugin.setting.get_boolean('active_subtitle'):
+        item.subtitles = [URL_ROOT + sub['url'] for sub in kwargs['subtitles']]
+    return item
+
+
+@Resolver.register
+def get_live_url(plugin, item_id, **kwargs):
+
+    resp = urlquick.get(URL_LIVE % item_id, max_age=-1)
+    return re.compile(r'\"content_url\"\:\"(.*?)\"').findall(
+        resp.text)[0]

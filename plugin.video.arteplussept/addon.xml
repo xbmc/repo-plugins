@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.arteplussept" name="Arte +7" version="1.1.1" provider-name="bmf">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.xbmcswift2" version="19.0.4"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="resources/lib/addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Arte +7</summary>
+        <language>fr de en it</language>
+        <description lang="fr">
+Regardez les vidéos de Arte +7
+Pour toute demande ou reporter un problème:
+https://github.com/known-as-bmf/plugin.video.arteplussept/issues
+Les contributions sont les bienvenues:
+https://github.com/known-as-bmf/plugin.video.arteplussept
+        </description>
+        <description lang="de">
+Sehen Sie Videos von Arte +7
+Für Fehlerberichte und Verbesserungsvorschläge:
+https://github.com/known-as-bmf/plugin.video.arteplussept/issues
+Mithilfe ist willkommen:
+https://github.com/known-as-bmf/plugin.video.arteplussept
+        </description>
+        <description lang="en">
+Watch videos from Arte +7
+For feature requests / issues:
+https://github.com/known-as-bmf/plugin.video.arteplussept/issues
+Contributions are welcome:
+https://github.com/known-as-bmf/plugin.video.arteplussept
+        </description>
+        <description lang="it">
+Guarda video da Arte +7
+Per richiedere nuove funzionalità o segnalare problemi:
+https://github.com/known-as-bmf/plugin.video.arteplussept/issues
+Nuovi contributi sono ben accetti:
+https://github.com/known-as-bmf/plugin.video.arteplussept
+        </description>
+        <license>MIT</license>
+        <source>https://github.com/known-as-bmf/plugin.video.arteplussept</source>
+        <!--<forum></forum>
+        <email></email>-->
+        <website>https://www.arte.tv/fr/</website>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+        <news>
+        v1.1.1
+        - minor python 3 fixes &amp; code improvements (from Kodi Travis CI)
+        v1.1.0
+        - API fixes
+        - Added add-on option to select video stream (language, subtitles...)
+        v1.0.2
+        - weekly browse
+        - bugfix (settings parsing #54)
+        v1.0.1
+        - major bug hotfix
+        v1.0.0
+        - brand new version
+        - support for new arte api
+        </news>
+    </extension>
+</addon>

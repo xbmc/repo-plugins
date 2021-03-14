@@ -1,0 +1,77 @@
+# Kodi Media Center language file
+# Addon Name: Rai
+# Addon id: plugin.video.raitv
+# Addon Provider: fabpolli
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.raitv\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-10-10 17:00+8\n"
+"PO-Revision-Date: 2019-10-10 17:00+8\n"
+"Last-Translator: fabpolli\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32001"
+msgid "Find a program"
+msgstr "Cerca un programma"
+
+msgctxt "#32002"
+msgid "Live TV"
+msgstr "Dirette TV"
+
+msgctxt "#32003"
+msgid "Live Radio"
+msgstr "Dirette Radio"
+
+msgctxt "#32004"
+msgid "Replay TV"
+msgstr "Replay TV"
+
+msgctxt "#32005"
+msgid "Replay Radio"
+msgstr "Replay Radio"
+
+msgctxt "#32006"
+msgid "On Demand TV Shows"
+msgstr "Programmi TV On Demand"
+
+msgctxt "#32007"
+msgid "News Archive"
+msgstr "Archivio Telegiornali"
+
+msgctxt "#32008"
+msgid "Videonews"
+msgstr "Videonotizie"
+
+msgctxt "#32009"
+msgid "Thematic areas"
+msgstr "Aree tematiche"
+
+msgctxt "#32010"
+msgid "Rai Sport Archive"
+msgstr "Archivio Rai Sport"
+
+msgctxt "#32011"
+msgid "Show all"
+msgstr "Tutti"
+
+msgctxt "#32012"
+msgid "Music and theater"
+msgstr "Musica e Teatro"
+
+msgctxt "#32013"
+msgid "Highlighted"
+msgstr "In evidenza"
+
+msgctxt "#32014"
+msgid "RaiSportWebLink"
+msgstr "Rai Sport Web Link"
+
+msgctxt "#32015"
+msgid "OtherSports"
+msgstr "Altri sport"

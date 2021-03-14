@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.mediathekview"
 	name="MediathekView"
-	version="0.6.6+matrix.1"
+	version="0.6.7+matrix.1"
 	provider-name="MediathekView.de, Leo Moll">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0"/>
@@ -16,6 +16,7 @@
 		point="xbmc.service"
 		library="service.py" />
 	<extension point="xbmc.addon.metadata">
+		<broken>TEMP REPO REVOKE</broken>
 		<summary lang="de_DE">Öffentlich-Rechtliche Mediatheken</summary>
 		<summary lang="en_GB">Public service video-platforms</summary>
 		<summary lang="it_IT">Piattaforme video dalle emittenti pubbliche</summary>

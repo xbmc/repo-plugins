@@ -1,7 +1,8 @@
 {
     "name"              : "Netflix",
     "plugin"            : "plugin.video.netflix",
-    "priority"          : 500,
+    "priority"          : 100,
+    "is_resolvable"     : "true",
     "assert"            : {
                             "play_movie":       ["title", "year"],
                             "play_episode":     ["showname", "season", "episode"],
@@ -9,15 +10,27 @@
                             "search_episode":   ["showname"]
                           },
     "play_movie"        : [
-                            "plugin://plugin.video.netflix/directory/search/search/{title}/",
-                            {"title": "{title}", "year": "{year}"}
+                            "plugin://plugin.video.netflix/directory/search/search/add/",
+                            {"keyboard": "Select"},
+                            {"keyboard": "{title}"},
+                            {"title": "(?i).*{title}.*", "year": "{year}"}
                           ],
     "play_episode"      : [
-                            "plugin://plugin.video.netflix/directory/search/search/{showname}/",
-                            {"title": "{showname}"},
+                            "plugin://plugin.video.netflix/directory/search/search/add/",
+                            {"keyboard": "Select"},
+                            {"keyboard": "{showname}"},
+                            {"title": "(?i).*{showname}.*"},
                             {"season": "{season}"},
                             {"season": "{season}", "episode": "{episode}"}
                           ],
-    "search_movie"      : "plugin://plugin.video.netflix/directory/search/search/{title}/",
-    "search_episode"    : "plugin://plugin.video.netflix/directory/search/search/{showname}/"
+    "search_movie"      : [
+                            "plugin://plugin.video.netflix/directory/search/search/add/",
+                            {"keyboard": "Select"},
+                            {"keyboard": "{title}"}
+                          ],
+    "search_episode"    : [
+                            "plugin://plugin.video.netflix/directory/search/search/add/",
+                            {"keyboard": "Select"},
+                            {"keyboard": "{showname}"}
+                          ]
 }

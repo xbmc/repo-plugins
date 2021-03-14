@@ -108,14 +108,12 @@ class Channels:
             icon = '{path}/resources/logos/{logo}-white.png'.format(path=kodiutils.addon_path(), logo=channel.key)
             title = channel_data.get('label')
 
-        title = kodiutils.localize(30052, channel=title)  # Watch live {channel}
+        label = kodiutils.localize(30052, channel=title)  # Watch live {channel}
         if channel.epg:
-            label = title + '[COLOR gray] | {title} ({start} - {end})[/COLOR]'.format(
+            label = label + '[COLOR gray] | {title} ({start} - {end})[/COLOR]'.format(
                 title=channel.epg[0].title,
                 start=channel.epg[0].start.strftime('%H:%M'),
                 end=channel.epg[0].end.strftime('%H:%M'))
-        else:
-            label = title
 
         # The .pvr suffix triggers some code paths in Kodi to mark this as a live channel
         listing = [kodiutils.TitleItem(
@@ -142,25 +140,25 @@ class Channels:
         if channel_data and channel_data.get('epg'):
             listing.append(
                 kodiutils.TitleItem(
-                    title=kodiutils.localize(30053, channel=channel_data.get('label')),  # TV Guide for {channel}
+                    title=kodiutils.localize(30053, channel=title),  # TV Guide for {channel}
                     path=kodiutils.url_for('show_tvguide_channel', channel=channel_data.get('epg')),
                     art_dict=dict(
                         icon='DefaultAddonTvInfo.png',
                     ),
                     info_dict=dict(
-                        plot=kodiutils.localize(30054, channel=channel_data.get('label')),  # Browse the TV Guide for {channel}
+                        plot=kodiutils.localize(30054, channel=title),  # Browse the TV Guide for {channel}
                     ),
                 )
             )
 
         listing.append(kodiutils.TitleItem(
-            title=kodiutils.localize(30055, channel=channel_data.get('label')),  # Catalog for {channel}
+            title=kodiutils.localize(30055, channel=title),  # Catalog for {channel}
             path=kodiutils.url_for('show_catalog_channel', channel=key),
             art_dict=dict(
                 icon='DefaultMovieTitle.png'
             ),
             info_dict=dict(
-                plot=kodiutils.localize(30056, channel=channel_data.get('label')),  # Browse the Catalog for {channel}
+                plot=kodiutils.localize(30056, channel=title),  # Browse the Catalog for {channel}
             ),
         ))
 

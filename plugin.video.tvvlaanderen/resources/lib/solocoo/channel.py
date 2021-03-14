@@ -8,7 +8,7 @@ import logging
 
 from requests import HTTPError
 
-from resources.lib.solocoo import SOLOCOO_API, util, StreamInfo
+from resources.lib.solocoo import SOLOCOO_API, StreamInfo, util
 from resources.lib.solocoo.exceptions import NotAvailableInOfferException, UnavailableException
 from resources.lib.solocoo.util import parse_channel, parse_program
 
@@ -27,7 +27,7 @@ class ChannelApi:
         :param resources.lib.solocoo.auth.AuthApi auth: The Authentication object
         """
         self._auth = auth
-        self._tokens = self._auth.login()
+        self._tokens = self._auth.get_tokens()
         self._tenant = self._auth.get_tenant()
 
     def get_channels(self, filter_unavailable=True, filter_pin=False):

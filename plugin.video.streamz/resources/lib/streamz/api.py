@@ -232,6 +232,7 @@ class Api:
             # aired=movie.get('broadcastTimestamp'),
             channel=self._parse_channel(movie.get('channelLogoUrl')),
             # my_list=program.get('addedToMyList'),  # Don't use addedToMyList, since we might have cached this info
+            available=movie.get('blockedFor') != 'SUBSCRIPTION',
         )
 
     def get_program(self, program_id, cache=CACHE_AUTO):
@@ -286,6 +287,7 @@ class Api:
                     aired=item_episode.get('broadcastTimestamp'),
                     progress=item_episode.get('playerPositionSeconds', 0),
                     watched=item_episode.get('doneWatching', False),
+                    available=item_episode.get('blockedFor') != 'SUBSCRIPTION',
                 )
                 program_hash.update(item_episode.get('id').encode())
 
@@ -311,6 +313,7 @@ class Api:
             legal=program.get('legalIcons'),
             content_hash=program_hash.hexdigest().upper(),
             # my_list=program.get('addedToMyList'),  # Don't use addedToMyList, since we might have cached this info
+            available=program.get('blockedFor') != 'SUBSCRIPTION',
         )
 
     @staticmethod
@@ -453,6 +456,7 @@ class Api:
             # We might have a cover from the overview that we don't have in the details
             if item.get('imageUrl'):
                 movie.cover = item.get('imageUrl')
+            movie.available = item.get('blockedFor') != 'SUBSCRIPTION'
             return movie
 
         return Movie(
@@ -461,6 +465,7 @@ class Api:
             cover=item.get('imageUrl'),
             image=item.get('imageUrl'),
             geoblocked=item.get('geoBlocked'),
+            available=item.get('blockedFor') != 'SUBSCRIPTION',
         )
 
     def _parse_program_teaser(self, item, cache=CACHE_ONLY):
@@ -474,6 +479,7 @@ class Api:
             # We might have a cover from the overview that we don't have in the details
             if item.get('imageUrl'):
                 program.cover = item.get('imageUrl')
+            program.available = item.get('blockedFor') != 'SUBSCRIPTION'
             return program
 
         return Program(
@@ -482,6 +488,7 @@ class Api:
             cover=item.get('imageUrl'),
             image=item.get('imageUrl'),
             geoblocked=item.get('geoBlocked'),
+            available=item.get('blockedFor') != 'SUBSCRIPTION',
         )
 
     def _parse_episode_teaser(self, item, cache=CACHE_ONLY):

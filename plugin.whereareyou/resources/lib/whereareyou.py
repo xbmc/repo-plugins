@@ -1,4 +1,4 @@
-from kodi_six import xbmc, xbmcgui
+from kodi_six import xbmc, xbmcgui, xbmcplugin
 from kodi_six.utils import py2_decode
 import json, os, sys
 from resources.lib.waysettings import loadSettings
@@ -54,7 +54,10 @@ class Main:
                 self._run_activity( activity, cmds )
         else:
             self.DIALOG.ok( self.TITLE, self.MESSAGE )
-        xbmc.Player().play( os.path.join( self.SETTINGS['ADDONPATH'], 'resources', 'blank.mp4' ) )
+        pluginhandle = int( sys.argv[1] )
+        xbmcplugin.setContent(pluginhandle, 'files')
+        play_item = xbmcgui.ListItem( path=os.path.join( self.SETTINGS['ADDONPATH'], 'resources', 'blank.mp4' ) )
+        xbmcplugin.setResolvedUrl( pluginhandle, True, listitem=play_item )
 
 
     def _init_vars( self ):

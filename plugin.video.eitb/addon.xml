@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.eitb" name="EITB Nahieran (unofficial)" version="2.0.0" provider-name="Mikel Larreategi">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Plugin for EITB online service</summary>
+        <description lang="en">Plugin for EITB using the unofficial REST API</description>
+        <summary lang="eu">EITB Nahieranentzako plugina</summary>
+        <description lang="eu">EITB Nahieranen API ez ofiziala erabiliz egindakoa</description>
+        <summary lang="es">Plugin para EITB a la carta</summary>
+        <description lang="es">Hecho con la API no oficial de EITB a la carta</description>
+        <license>GPL-3.0-only</license>
+        <source>https://github.com/erral/plugin.video.eitb</source>
+        <website>https://github.com/erral/plugin.video.eitb</website>
+        <email>larreategi@eibar.org</email>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

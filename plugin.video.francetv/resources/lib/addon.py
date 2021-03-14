@@ -64,6 +64,10 @@ class FranceTVAddon:
     _ADDON_DIR = xbmc.translatePath(_ADDON.getAddonInfo("path"))
     _ADDON_MEDIA_DIR = os.path.join(_ADDON_DIR, "resources", "media")
     _ADDON_FANART = Addon().getAddonInfo("fanart")
+    _USER_AGENT = (
+        "Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:85.0) Gecko/20100101 "
+        "Firefox/85.0"
+    )
 
     def __init__(self, base_url, handle, params):
         # type: (Text, int, Text) -> None
@@ -142,7 +146,14 @@ class FranceTVAddon:
         use_dash = bool(is_helper.check_inputstream())
         video_url = FranceTVVideo().get_video_url(video_id, use_dash)
 
-        listitem = ListItem(path=video_url, offscreen=True)
+        # Workaround for
+        # https://github.com/melmorabity/plugin.video.francetv/issues/2
+        headers = "User-Agent={}".format(self._USER_AGENT)
+
+        listitem = ListItem(
+            path="{}|{}".format(video_url, headers),
+            offscreen=True,
+        )
 
         # Use DASH if possible for better subtitle management
         if use_dash and ".mpd" in video_url:
@@ -156,6 +167,9 @@ class FranceTVAddon:
                 listitem.setProperty(
                     "inputstreamaddon", is_helper.inputstream_addon
                 )
+            listitem.setProperty(
+                "inputstream.adaptive.stream_headers", headers
+            )
         xbmcplugin.setResolvedUrl(self._handle, True, listitem)
 
     def _mode_search(self):

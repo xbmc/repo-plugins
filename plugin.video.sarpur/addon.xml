@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.sarpur"
+       name="Sarpur"
+       version="5.0"
+       provider-name="Dagur Páll Ammendrup">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+        <import addon="script.module.requests" version="2.3.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource"
+               library="default.py">
+        <provides>audio video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Play media off the Icelandic Public Radio's website</summary>
+        <description lang="en_GB">An Icelandic IP-Address is required to use this because of geoblocking</description>
+        <platform>all</platform>
+        <language>is</language>
+        <license>MIT</license>
+        <forum>https://spjall.vaktin.is/viewtopic.php?p=538688</forum>
+        <website>https://github.com/Dagur/sarpur-xbmc</website>
+        <source>https://github.com/Dagur/sarpur-xbmc</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+        <news>Version 5.0 (2021-02-23)
+- Upgraded to Python 3 for Kodi 19 compatibility
+- Fixed podcast scraping</news>
+    </extension>
+</addon>

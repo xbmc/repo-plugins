@@ -1,0 +1,139 @@
+# Kodi Media Center language file
+# Addon Name: Mediaset Play
+# Addon id: plugin.video.videomediaset
+# Addon Provider: phate89
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: phate89\n"
+"Language-Team: Italian (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: label impostazioni
+
+msgctxt "#32001"
+msgid "E-Mail"
+msgstr "E-Mail"
+
+msgctxt "#32002"
+msgid "Password"
+msgstr "Password"
+
+msgctxt "#32003"
+msgid "Elementi per pagina"
+msgstr "Elementi per pagina"
+
+msgctxt "#32004"
+msgid "Mostra in guida tv anche elementi non riproducibili"
+msgstr "Mostra in guida tv anche elementi non riproducibili"
+
+msgctxt "#32005"
+msgid "Separa diretta da ricomincia (permette di avere una diretta continua)"
+msgstr "Separa diretta da ricomincia (permette di avere una diretta continua)"
+
+msgctxt "#32006"
+msgid "Installa widevine per i contenuti protetti"
+msgstr "Installa widevine per i contenuti protetti"
+
+msgctxt "#32101"
+msgid "Tutto A-Z"
+msgstr "Tutto A-Z"
+
+msgctxt "#32102"
+msgid "Fiction e Serie TV"
+msgstr "Fiction e Serie TV"
+
+msgctxt "#32103"
+msgid "Film"
+msgstr "Film"
+
+msgctxt "#32104"
+msgid "Kids"
+msgstr "Kids"
+
+msgctxt "#32105"
+msgid "Documentari"
+msgstr "Documentari"
+
+msgctxt "#32106"
+msgid "Programmi TV"
+msgstr "Programmi TV"
+
+msgctxt "#32107"
+msgid "Cerca"
+msgstr "Cerca"
+
+msgctxt "#32111"
+msgid "Dirette"
+msgstr "Dirette"
+
+msgctxt "#32112"
+msgid "Canali"
+msgstr "Canali"
+
+msgctxt "#32113"
+msgid "Guida TV"
+msgstr "Guida TV"
+
+msgctxt "#32115"
+msgid "Programmi"
+msgstr "Programmi"
+
+msgctxt "#32116"
+msgid "Clip"
+msgstr "Clip"
+
+msgctxt "#32117"
+msgid "Episodi"
+msgstr "Episodi"
+
+msgctxt "#32121"
+msgid "Tutti"
+msgstr "Tutti"
+
+msgctxt "#32122"
+msgid "In Onda"
+msgstr "In Onda"
+
+msgctxt "#32130"
+msgid "Prossima pagina"
+msgstr "Prossima pagina"
+
+msgctxt "#32131"
+msgid "Inserisci testo da cercare"
+msgstr "Inserisci testo da cercare"
+
+msgctxt "#32132"
+msgid "Errore"
+msgstr "Errore"
+
+msgctxt "#32133"
+msgid "Per riprodurre il video serve un addon inputstream compatibile"
+msgstr "Per riprodurre il video serve un addon inputstream compatibile"
+
+msgctxt "#32134"
+msgid "Serve effettuare il login per riprodurre questo video"
+msgstr "Serve effettuare il login per riprodurre questo video"
+
+msgctxt "#32135"
+msgid "Login fallito. Correggere e riprovare"
+msgstr "Login fallito. Correggere e riprovare"
+
+msgctxt "#32136"
+msgid "L'elemento non è riproducibile on demand"
+msgstr "L'elemento non è riproducibile on demand"
+
+msgctxt "#32137"
+msgid "Diretta"
+msgstr "Diretta"
+
+msgctxt "#32138"
+msgid "Ricomincia"
+msgstr "Ricomincia"

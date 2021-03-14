@@ -945,7 +945,7 @@ class RuleFunctions():
             returnVal = self.browser( self.niceMatchName( match ) )
         try:
             # Delete any fake node
-            xbmcvfs.delete( os.path.join( xbmc.translatePath( "special://profile" ), "library", self.ltype, "plugin.library.node.editor", "temp.xml" ) )
+            xbmcvfs.delete( os.path.join( xbmcvfs.translatePath( "special://profile" ), "library", self.ltype, "plugin.library.node.editor", "temp.xml" ) )
         except:
             print_exc()
         self.writeUpdatedRule( actionPath, ruleNum, value = returnVal )
@@ -961,7 +961,7 @@ class RuleFunctions():
 
     def createBrowseNode( self, content, grouping = None ):
         # This function creates a fake node which we'll use for browsing
-        targetDir = os.path.join( xbmc.translatePath( "special://profile" ), "library", self.ltype, "plugin.library.node.editor" )
+        targetDir = os.path.join( xbmcvfs.translatePath( "special://profile" ), "library", self.ltype, "plugin.library.node.editor" )
         if not os.path.exists( targetDir ):
             xbmcvfs.mkdirs( targetDir )
         # Create a new etree

@@ -1,21 +1,6 @@
 {
   "channels": [
     {
-      "guid": "7C52452A-F2F9-11DD-BE3F-3F7356D89593",
-      "name": "MTV.nl",
-      "description": {
-        "en": "Episodes and videos from MTV.nl.",
-        "nl": "Afleveringen en video's van MTV.nl."
-      },
-      "icon": "mtvnllarge.png",
-      "category": "Video",
-      "channelcode": "mtvnl",
-      "sortorder": 20,
-      "language": "nl",
-      "fanart": "mtvfanart2.jpg",
-      "poster": "mtvposter.png"
-    },
-    {
       "guid": "55635AAA-183C-11E2-ABEC-36706188709B",
       "name": "MTV.de",
       "description": {

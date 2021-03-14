@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.vimeo" name="Vimeo" version="6.0.0" provider-name="jaylinski">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="de_DE">Vimeo lässt dich fantastische Videos der weltbesten Filmemacher entdecken.</summary>
+        <summary lang="en_GB">Vimeo lets you discover amazing videos from the world’s best creators.</summary>
+        <disclaimer lang="en_GB">This plugin is not official, approved or endorsed by Vimeo.</disclaimer>
+        <platform>all</platform>
+        <license>MIT</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=220437</forum>
+        <website>https://vimeo.com</website>
+        <source>https://github.com/jaylinski/kodi-addon-vimeo</source>
+        <news>6.0.0 (2021-02-25)
+Added support for Kodi v19 (Matrix)
+        </news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

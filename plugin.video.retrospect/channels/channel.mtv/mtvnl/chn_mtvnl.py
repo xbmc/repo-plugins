@@ -39,16 +39,7 @@ class Channel(chn_class.Channel):
         self.__timezone_utc = pytz.timezone("UTC")
 
         # setup the urls
-        if self.channelCode == "mtvnl":
-            self.mainListUri = "http://www.mtv.nl/feeds/intl_m150/V8_0_0/" \
-                               "00ba90ec-33cd-4afb-b6ab-21c4eb615f1c"
-            self.baseUrl = "https://www.mtv.nl"
-            self.__country_id = "mtv.nl"
-            self.__clip_list_id = "442813c0-9344-48d6-9674-f94c359fe9fb"
-            self.__show_list_id = "62701278-3c80-4ef6-a801-1df8ffca7c78"
-            self.__season_list_id = "bb3b48c4-178c-4cad-82c4-67ba76207020"
-
-        elif self.channelCode == "mtvde":
+        if self.channelCode == "mtvde":
             self.mainListUri = "http://www.mtv.de/feeds/intl_m150/V8_0_0/" \
                                "9f78da03-d56a-4946-be43-41ed06a1b005"
             self.baseUrl = "https://www.mtv.de"
@@ -156,7 +147,7 @@ class Channel(chn_class.Channel):
             return items
 
         item_id = self.parentItem.metaData["guid"]
-        season_info_url = "http://www.mtv.nl/feeds/intl_m308/V8_0_0/{0}/{1}/{1}".\
+        season_info_url = "http://www.mtv.de/feeds/intl_m308/V8_0_0/{0}/{1}/{1}".\
             format(self.__season_list_id, item_id)
         season_data = UriHandler.open(season_info_url)
         season_info = JsonHelper(season_data)
@@ -289,7 +280,10 @@ class Channel(chn_class.Channel):
         episode = result_set.get("episode")
         season = result_set.get("season")
         if season and episode:
-            item.set_season_info(season, episode)
+            try:
+                item.set_season_info(season, episode)
+            except:
+                Logger.debug("Error setting season and episode")
 
         duration = result_set.get("duration", "0:00")
         duration = duration.split(":")

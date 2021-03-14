@@ -44,11 +44,11 @@ class Main:
         self.PATHRULE = pathrule
         self.ORDERBY = orderby
         # If there are no custom library nodes in the profile directory, copy them from the Kodi install
-        targetDir = os.path.join( xbmc.translatePath( "special://profile" ), "library", ltype )
+        targetDir = os.path.join( xbmcvfs.translatePath( "special://profile" ), "library", ltype )
         if True:
             if not os.path.exists( targetDir ):
                 xbmcvfs.mkdirs( targetDir )
-                originDir = os.path.join( xbmc.translatePath( "special://xbmc" ), "system", "library", ltype )
+                originDir = os.path.join( xbmcvfs.translatePath( "special://xbmc" ), "system", "library", ltype )
                 dirs, files = xbmcvfs.listdir( originDir )
                 self.copyNode( dirs, files, targetDir, originDir )
         else:
@@ -189,7 +189,7 @@ class Main:
                     if selected != -1 and selected != 0:
                         try:
                             # Copy those defaults across
-                            originDir = os.path.join( xbmc.translatePath( "special://xbmc" ), "system", "library", self.ltype, defaultValues[ selected ] )
+                            originDir = os.path.join( xbmcvfs.translatePath( "special://xbmc" ), "system", "library", self.ltype, defaultValues[ selected ] )
                             dirs, files = xbmcvfs.listdir( originDir )
                             for file in files:
                                 if file != "index.xml":

@@ -61,6 +61,15 @@ class DrDkTvAddon(object):
         self.cache_path = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
         if not os.path.exists(self.cache_path):
             os.makedirs(self.cache_path)
+        buggalo.EMAIL_CONFIG = {
+                 "recipient":"drnu.kodi@gmail.com",
+                 "sender":"Buggalo <drnu.kodi@gmail.com>",
+                 "server":"smtp.googlemail.com",
+                 "method":"ssl",
+                 "user":"drnu.kodi@gmail.com",
+                 "pass":"plugin.video.drnu"
+        }
+        buggalo.addExtraData('cache_path', self.cache_path)
 
         self.favorites_path = os.path.join(self.cache_path, 'favorites.pickle')
         self.recent_path = os.path.join(self.cache_path, 'recent.pickle')

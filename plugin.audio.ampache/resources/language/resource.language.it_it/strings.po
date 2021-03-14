@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: XBMC Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-06 11:30+0100\n"
+"PO-Revision-Date: 2021-02-18 21:42+0100\n"
 "Last-Translator: \n"
 "Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/"
 "language/en/)\n"
@@ -106,19 +106,19 @@ msgstr "Tutto"
 
 msgctxt "#30111"
 msgid "Tag"
-msgstr ""
+msgstr "Genere"
 
 msgctxt "#30112"
 msgid "Artist tag"
-msgstr "Tag artista"
+msgstr "Genere artista"
 
 msgctxt "#30113"
 msgid "Album tag"
-msgstr "Tag album"
+msgstr "Genere album"
 
 msgctxt "#30114"
 msgid "Song tag"
-msgstr "Tag canzone"
+msgstr "Genere canzone"
 
 msgctxt "#30115"
 msgid "Artists"
@@ -138,7 +138,7 @@ msgstr ""
 
 msgctxt "#30119"
 msgid "Tags"
-msgstr ""
+msgstr "Generi"
 
 # code
 msgctxt "#30120"
@@ -236,15 +236,15 @@ msgstr "Mostra tutti gli album di questo artista"
 
 msgctxt "#30142"
 msgid "Artist tags..."
-msgstr "Tag Artisti..."
+msgstr "Generi Artisti..."
 
 msgctxt "#30143"
 msgid "Album tags..."
-msgstr "Tag Album..."
+msgstr "Generi Album..."
 
 msgctxt "#30144"
 msgid "Song tags..."
-msgstr "Tag Canzoni..."
+msgstr "Generi Canzoni..."
 
 msgctxt "#30145"
 msgid "Recently Added..."
@@ -312,7 +312,7 @@ msgstr "Canzoni Dimenticate..."
 
 msgctxt "#30161"
 msgid "Newest Artists..."
-msgstr "Nuovi artisti.."
+msgstr "Nuovi artisti..."
 
 msgctxt "#30162"
 msgid "Newest Albums..."
@@ -420,15 +420,15 @@ msgstr "Plugin Ampache"
 
 msgctxt "#30190"
 msgid "Recently Played Artists..."
-msgstr "Artisti suonati recentemente.."
+msgstr "Artisti suonati recentemente..."
 
 msgctxt "#30191"
 msgid "Recently Played Albums..."
-msgstr "Album suonati recentemente.."
+msgstr "Album suonati recentemente..."
 
 msgctxt "#30192"
 msgid "Recently Played Songs..."
-msgstr "Canzoni suonati recentemente..."
+msgstr "Canzoni suonate recentemente..."
 
 msgctxt "#30193"
 msgid "Recently Played..."
@@ -462,22 +462,28 @@ msgctxt "#30204"
 msgid "Permission error. If you are using Nextcloud don't check api_key box"
 msgstr "Permessi errati. Se state usando Nextcloud non utilizzare l'api_key"
 
-#~ msgctxt "#30190"
-#~ msgid "Recent Artists..."
-#~ msgstr "Artisti recenti.."
+msgctxt "#30220"
+msgid "Video"
+msgstr ""
 
-#~ msgctxt "#30191"
-#~ msgid "Recent Albums..."
-#~ msgstr "Album recenti.."
+msgctxt "#30221"
+msgid "Videos"
+msgstr "Video"
 
-#~ msgctxt "#30192"
-#~ msgid "Recent Songs..."
-#~ msgstr "Canzoni recenti..."
+# code
+msgctxt "#30222"
+msgid "Search Videos..."
+msgstr "Ricerca video..."
 
-#~ msgctxt "#30193"
-#~ msgid "Recent..."
-#~ msgstr "Recenti..."
+msgctxt "#30225"
+msgid "Podcast"
+msgstr ""
 
-#~ msgctxt "#30170"
-#~ msgid "Enter the Name"
-#~ msgstr "Inserisci il nome del server"
+msgctxt "#30226"
+msgid "Podcasts"
+msgstr ""
+
+# code
+msgctxt "#30227"
+msgid "Search Podcasts..."
+msgstr "Ricerca podcast..."

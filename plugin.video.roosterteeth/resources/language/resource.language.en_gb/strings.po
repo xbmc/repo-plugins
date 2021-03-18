@@ -119,6 +119,10 @@ msgctxt "#30111"
 msgid "In settings enter the correct username and password."
 msgstr ""
 
+msgctxt "#30112"
+msgid "General"
+msgstr ""
+
 msgctxt "#30120"
 msgid "Sorry. The login was successful, but the video is not yet available to non-First members."
 msgstr ""

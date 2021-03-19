@@ -1,43 +1,22 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2017  SylvainCecchetto
+# Copyright: (c) 2017, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-
 from builtins import str
-from codequick import Route, Resolver, Listitem, utils, Script
-
-
-from resources.lib import web_utils
-from resources.lib import download
-from resources.lib.menu_utils import item_post_treatment
-
 import json
 import re
+
+from codequick import Listitem, Resolver, Route
 import urlquick
 
-# TO DO
+from resources.lib import download, web_utils
+from resources.lib.menu_utils import item_post_treatment
+
+
+# TODO
 # Download Mode / QUality Mode
 
 URL_TIVI5MONDE_ROOT = 'http://www.tivi5mondeplus.com'
@@ -92,7 +71,8 @@ def list_programs(plugin, item_id, next_url, page, **kwargs):
     - Les feux de l'amour
     - ...
     """
-    resp = urlquick.get(next_url + '?page=%s' % page)
+    resp = urlquick.get(next_url + '?page=%s' % page,
+                        headers={'User-Agent': web_utils.get_random_ua()})
     root = resp.parse()
 
     for program_datas in root.iterfind(
@@ -120,7 +100,8 @@ def list_programs(plugin, item_id, next_url, page, **kwargs):
 @Route.register
 def list_videos(plugin, item_id, next_url, page, **kwargs):
 
-    resp = urlquick.get(next_url + '?page=%s' % page)
+    resp = urlquick.get(next_url + '?page=%s' % page,
+                        headers={'User-Agent': web_utils.get_random_ua()})
     root = resp.parse()
 
     for video_datas in root.iterfind(".//div[@class='row-vignette']"):
@@ -148,7 +129,8 @@ def list_videos_search(plugin, search_query, item_id, page, **kwargs):
 
     resp = urlquick.get(URL_TIVI5MONDE_ROOT +
                         '/recherche?search_api_views_fulltext=%s&page=%s' %
-                        (search_query, page))
+                        (search_query, page),
+                        headers={'User-Agent': web_utils.get_random_ua()})
     root = resp.parse()
 
     at_least_one_item = False

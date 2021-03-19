@@ -1,47 +1,22 @@
 # -*- coding: utf-8 -*-
-'''
-    Catch-up TV & More
-    Copyright (C) 2017  SylvainCecchetto
+# Copyright: (c) 2017, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-'''
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
-from __future__ import unicode_literals
-from __future__ import division
-
+from __future__ import division, unicode_literals
 from builtins import str
-import sys
-from codequick import Route, Resolver, Listitem, utils, Script
+import json
+import time
 
+from codequick import Listitem, Resolver, Route, Script
+from kodi_six import xbmcgui
+import urlquick
 
-from resources.lib import web_utils
-from resources.lib import resolver_proxy
-from resources.lib import download
+from resources.lib import download, resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 from resources.lib.py_utils import old_div
 
-import json
-import time
-import re
-import urlquick
-from kodi_six import xbmcgui
 
 # TO DO
 
@@ -180,42 +155,42 @@ def get_video_url(plugin,
         return resolver_proxy.get_brightcove_video_json(plugin, data_account,
                                                         data_player, data_video_id,
                                                         download_mode)
-    else:
-        video_streams = json_parser['video']['medias']
-        final_video_url = ''
-        if DESIRED_QUALITY == "DIALOG":
-            all_datas_videos_quality = []
-            all_datas_videos_path = []
 
-            for datas in video_streams:
-                all_datas_videos_quality.append("Video Height : " +
-                                                str(datas['frame_height']) +
-                                                " (Encoding : " +
-                                                str(datas['encoding_rate']) + ")")
-                all_datas_videos_path.append(datas['video_url'])
+    video_streams = json_parser['video']['medias']
+    final_video_url = ''
+    if DESIRED_QUALITY == "DIALOG":
+        all_datas_videos_quality = []
+        all_datas_videos_path = []
 
-            seleted_item = xbmcgui.Dialog().select(
-                plugin.localize(30709),
-                all_datas_videos_quality)
+        for datas in video_streams:
+            all_datas_videos_quality.append("Video Height : " +
+                                            str(datas['frame_height']) +
+                                            " (Encoding : " +
+                                            str(datas['encoding_rate']) + ")")
+            all_datas_videos_path.append(datas['video_url'])
 
-            if seleted_item > -1:
-                final_video_url = all_datas_videos_path[seleted_item]
-            else:
-                return False
+        seleted_item = xbmcgui.Dialog().select(
+            plugin.localize(30709),
+            all_datas_videos_quality)
 
-        elif DESIRED_QUALITY == 'BEST':
-            # GET LAST NODE (VIDEO BEST QUALITY)
-            url_best_quality = ''
-            for datas in video_streams:
-                url_best_quality = datas['video_url']
-            final_video_url = url_best_quality
+        if seleted_item > -1:
+            final_video_url = all_datas_videos_path[seleted_item]
         else:
-            # DEFAULT VIDEO
-            final_video_url = json_parser['video']['video_url']
+            return False
 
-        if download_mode:
-            return download.download_video(final_video_url)
-        return final_video_url
+    elif DESIRED_QUALITY == 'BEST':
+        # GET LAST NODE (VIDEO BEST QUALITY)
+        url_best_quality = ''
+        for datas in video_streams:
+            url_best_quality = datas['video_url']
+        final_video_url = url_best_quality
+    else:
+        # DEFAULT VIDEO
+        final_video_url = json_parser['video']['video_url']
+
+    if download_mode:
+        return download.download_video(final_video_url)
+    return final_video_url
 
 
 @Resolver.register
@@ -232,7 +207,7 @@ def get_live_url(plugin, item_id, **kwargs):
         data_player = live_datas.get('playerid')
         return resolver_proxy.get_brightcove_video_json(plugin, data_account,
                                                         data_player, data_video_id)
-    elif item_id == 'bfmbusiness':
+    if item_id == 'bfmbusiness':
         resp = urlquick.get(URL_LIVE_BFMBUSINESS,
                             headers={'User-Agent': web_utils.get_random_ua()},
                             max_age=-1)

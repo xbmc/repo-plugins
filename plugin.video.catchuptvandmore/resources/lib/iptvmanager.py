@@ -1,30 +1,22 @@
 # -*- coding: utf-8 -*-
-"""
-    Copyright (C) 2016-2021 Team Catch-up TV & More
-    This file is part of Catch-up TV & More.
-    SPDX-License-Identifier: GPL-2.0-or-later
-"""
+# Copyright: (c) 2016-2021, Team Catch-up TV & More
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
+# This file is part of Catch-up TV & More
+
 from __future__ import unicode_literals
-
-# Core imports
 import importlib
 import json
 import os
+import socket
 try:
     from urllib.parse import urlencode
 except ImportError:
     from urllib import urlencode
-import socket
 
-# Kodi imports
 from codequick import Script
 from kodi_six import xbmcgui
 
-# Local imports
 from resources.lib.addon_utils import get_item_label, get_item_media_path
 from resources.lib.xmltv import grab_programmes
 
@@ -34,10 +26,7 @@ PLUGIN_KODI_PATH = "plugin://plugin.video.catchuptvandmore"
 TV_INTEGRATION_SETTINGS_FP = os.path.join(Script.get_info('profile'), "tv_integration_settings.json")
 
 
-"""Utility functions to deal with user tv integration settings
-
-"""
-
+# Utility functions to deal with user tv integration settings
 
 def get_tv_integration_settings():
     """Get tv integration settings dict from json file
@@ -71,11 +60,7 @@ def save_tv_integration_settings(j):
         Script.log('Failed to save TV integration settings (%s)', e, lvl=Script.ERROR)
 
 
-"""Settings callback functions
-
-
-"""
-
+# Settings callback functions
 
 def get_all_live_tv_channels():
     """Explore each live_tv skeleton files to retrieve all sorted live tv channels
@@ -156,10 +141,7 @@ def select_channels(plugin):
     save_tv_integration_settings(tv_integration_settings)
 
 
-"""Interface to IPTV Manager
-
-"""
-
+# Interface to IPTV Manager
 
 class IPTVManager:
     def __init__(self, port):
@@ -259,10 +241,7 @@ class IPTVManager:
         return dict(version=1, epg=epg_channels)
 
 
-"""Functions called by IPTV Manager
-
-"""
-
+# Functions called by IPTV Manager
 
 @Script.register
 def channels(plugin, port):

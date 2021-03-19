@@ -1,60 +1,28 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2016  SylvainCecchetto
+# Copyright: (c) 2016, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-
-# Core imports
-import os
-import json
 import importlib
+import json
+import os
 
-# Kodi imports
 from codequick import Script, utils
-from kodi_six import xbmc
-from kodi_six import xbmcvfs
-from kodi_six import xbmcgui
-
-# Local imports
-from resources.lib.kodi_utils import get_kodi_version
-import resources.lib.favourites as fav
+from kodi_six import xbmc, xbmcvfs, xbmcgui
 
 from resources.lib.addon_utils import get_item_label
+import resources.lib.favourites as fav
+from resources.lib.kodi_utils import get_kodi_version
 
 MENUS_SETTINGS_FP = os.path.join(Script.get_info('profile'), "menus_settings.json")
-"""
-Json file that keeps, for each menu of the addon,
-what elements are hidden and the order of items in each menu
 
-"""
+# Json file that keeps, for each menu of the addon,
+# what elements are hidden and the order of items in each menu
 
 
-"""Utility functions to deal with user menus settings
-
-"""
-
-
+# Utility functions to deal with user menus settings
 def get_menus_settings():
     """Get menus settings dict from json file
 
@@ -141,11 +109,7 @@ def set_item_order(item_id, menu_id, order):
     save_menus_settings(menus_settings)
 
 
-"""Utility functions used to build a Kodi menu
-
-"""
-
-
+# Utility functions used to build a Kodi menu
 def get_sorted_menu(plugin, menu_id):
     """Get ordered 'menu_id' menu without disabled and hidden items
 
@@ -281,10 +245,7 @@ def item_post_treatment(item, is_playable=False, is_downloadable=False):
     return
 
 
-"""Context menu callback functions
-
-"""
-
+# Context menu callback functions
 
 @Script.register
 def move_item(plugin, direction, item_id, menu_id):
@@ -338,11 +299,7 @@ def hide_item(plugin, item_id, menu_id):
     xbmc.executebuiltin('Container.Refresh()')
 
 
-"""Settings callback functions
-
-
-"""
-
+# Settings callback functions
 
 @Script.register
 def restore_default_order(plugin):

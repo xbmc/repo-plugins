@@ -1,42 +1,17 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2016  SylvainCecchetto
+# Copyright: (c) 2016, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-
-# Core imports
 import os
 
-# Kodi imports
-from kodi_six import xbmcgui
-from kodi_six import xbmc
-from kodi_six import xbmcvfs
 from codequick import Script, utils
 import urlquick
 
+from kodi_six import xbmcgui, xbmcvfs
 
-# Local imports
 
 def get_item_label(item_id, item_infos={}):
     """Get (translated) label of 'item_id'
@@ -97,30 +72,34 @@ def get_quality_YTDL(download_mode=False):
         quality = Script.setting.get_string('quality')
         if quality == 'BEST':
             return 3
-        elif quality == 'DEFAULT':
+
+        if quality == 'DEFAULT':
             return 3
-        elif quality == 'DIALOG':
+
+        if quality == 'DIALOG':
             youtubeDL_qualiy = ['SD', '720p', '1080p', 'Highest Available']
-            seleted_item = xbmcgui.Dialog().select(
+            selected_item = xbmcgui.Dialog().select(
                 Script.localize(30709),
                 youtubeDL_qualiy)
-            return seleted_item
+            return selected_item
 
-        else:
-            return 3
+        return 3
 
     # Else we need to use the 'dl_quality' setting
-    elif download_mode:
-        dl_quality = Script.setting.get_string('dl_quality')
-        if dl_quality == 'SD':
-            return 0
-        if dl_quality == '720p':
-            return 1
-        if dl_quality == '1080p':
-            return 2
-        if dl_quality == 'Highest available':
-            return 3
+    dl_quality = Script.setting.get_string('dl_quality')
+    if dl_quality == 'SD':
+        return 0
+
+    if dl_quality == '720p':
+        return 1
+
+    if dl_quality == '1080p':
+        return 2
+
+    if dl_quality == 'Highest available':
         return 3
+
+    return 3
 
 
 @Script.register

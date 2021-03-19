@@ -1,38 +1,19 @@
 # -*- coding: utf-8 -*-
-'''
-    Catch-up TV & More
-    Copyright (C) 2017  SylvainCecchetto
-    This file is part of Catch-up TV & More.
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-'''
+# Copyright: (c) 2017, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
+# This file is part of Catch-up TV & More
+
 from __future__ import unicode_literals
-
+import base64
 import json
 import re
 
-from codequick import Route, Resolver, Listitem
+from codequick import Listitem, Resolver, Route
 import urlquick
 
-from resources.lib import resolver_proxy
-
-from resources.lib import download
+from resources.lib import download, resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
-
-import base64
 
 # TO DO
 # Get Last_Page (for Programs, Videos) / Fix Last_page
@@ -657,7 +638,8 @@ def get_video_url(plugin,
         if download_mode:
             return download.download_video(final_url)
         return final_url
-    elif root.find(".//div[@class='card entity-card entity-card-overview entity-card-list cf']") is not None:
+
+    if root.find(".//div[@class='card entity-card entity-card-overview entity-card-list cf']") is not None:
         if loop == 1:   # prevent infinite recursion
             resp2 = urlquick.get(video_url)
             root2 = resp2.parse("div", attrs={"class": "card entity-card entity-card-overview entity-card-list cf"})
@@ -683,21 +665,21 @@ def get_video_url(plugin,
                     plugin, video_id, download_mode)
 
             # Case DailyMotion
-            elif 'dailymotion' in url_video_resolver:
+            if 'dailymotion' in url_video_resolver:
                 video_id = re.compile(r'embed/video/(.*?)[\"\?]').findall(
                     url_video_resolver)[0]
                 return resolver_proxy.get_stream_dailymotion(
                     plugin, video_id, download_mode)
 
             # Case Facebook
-            elif 'facebook' in url_video_resolver:
+            if 'facebook' in url_video_resolver:
                 video_id = re.compile(
                     r'www.facebook.com/allocine/videos/(.*?)/').findall(url_video_resolver)[0]
                 return resolver_proxy.get_stream_facebook(
                     plugin, video_id, download_mode)
 
             # Case Vimeo
-            elif 'vimeo' in url_video_resolver:
+            if 'vimeo' in url_video_resolver:
                 video_id = re.compile(
                     r'player.vimeo.com/video/(.*?)[\?\"]').findall(url_video_resolver)[0]
                 return resolver_proxy.get_stream_vimeo(
@@ -769,14 +751,14 @@ def get_video_url_news_videos(plugin,
                                                  download_mode)
 
     # Case DailyMotion
-    elif 'dailymotion' in url_video_resolver:
+    if 'dailymotion' in url_video_resolver:
         video_id = re.compile(r'embed/video/(.*?)$').findall(
             url_video_resolver)[0]
         return resolver_proxy.get_stream_dailymotion(plugin, video_id,
                                                      download_mode)
 
     # Case Facebook
-    elif 'facebook' in url_video_resolver:
+    if 'facebook' in url_video_resolver:
         video_id = re.compile('www.facebook.com/allocine/videos/(.*?)/'
                               ).findall(url_video_resolver)[0]
         # print 'video_id facebook ' + video_id
@@ -784,10 +766,10 @@ def get_video_url_news_videos(plugin,
                                                   download_mode)
 
     # Case Vimeo
-    elif 'vimeo' in url_video_resolver:
+    if 'vimeo' in url_video_resolver:
         video_id = re.compile(r'player.vimeo.com/video/(.*?)$').findall(
             url_video_resolver)[0]
         return resolver_proxy.get_stream_vimeo(plugin, video_id, download_mode)
+
     # TO DO ? (return an error)
-    else:
-        return False
+    return False

@@ -1,25 +1,15 @@
 # -*- coding: utf-8 -*-
-"""
-    Copyright (C) 2016-2020 Team Catch-up TV & More
-    This file is part of Catch-up TV & More.
-    SPDX-License-Identifier: GPL-2.0-or-later
-"""
+# Copyright: (c) 2016-2020, Team Catch-up TV & More
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
+# This file is part of Catch-up TV & More
+
 from __future__ import unicode_literals
-
-from builtins import range
-from codequick import Route, Resolver, Listitem, utils, Script
-
-from resources.lib import web_utils
-from resources.lib.menu_utils import item_post_treatment
-
 import json
+
+from codequick import Resolver
 import urlquick
 
-# TO DO
 
 URL_ROOT = 'https://www.cope.es'
 

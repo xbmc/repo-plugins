@@ -12,8 +12,8 @@ try:
 except ImportError:
     import pickle
 from collections import MutableMapping
-from kodi_six import xbmcgui
 from six import string_types
+from kodi_six import xbmcgui
 
 
 class MemStorage(MutableMapping):
@@ -80,10 +80,9 @@ class MemStorage(MutableMapping):
         self._check_key(key)
         full_key = '{0}__{1}'.format(self._id, key)
         raw_item = self._window.getProperty(full_key)
-        if raw_item:
-            return pickle.loads(raw_item.encode('latin-1'))
-        else:
+        if not raw_item:
             raise KeyError(key)
+        return pickle.loads(raw_item.encode('latin-1'))
 
     def __setitem__(self, key, value):
         self._check_key(key)

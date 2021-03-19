@@ -1,44 +1,23 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2018  SylvainCecchetto
+# Copyright: (c) 2018, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-
 from builtins import str
-from codequick import Route, Resolver, Listitem, utils, Script
-
-
-from resources.lib import web_utils
-from resources.lib import download
-from resources.lib.menu_utils import item_post_treatment
 
 import base64
 import json
 import re
+from codequick import Listitem, Resolver, Route
 import urlquick
 
-# TO DO
+from resources.lib import download
+from resources.lib.menu_utils import item_post_treatment
+
+
+# TODO
 # Add info Video (duration, ...)
 
 URL_ROOT = 'https://www.channelnewsasia.com'
@@ -234,8 +213,9 @@ def get_video_url(plugin,
             if download_mode:
                 return download.download_video(final_video_url)
             return final_video_url
-        else:
-            plugin.notify('ERROR', plugin.localize(30713))
+
+        plugin.notify('ERROR', plugin.localize(30713))
+
     return False
 
 
@@ -245,20 +225,20 @@ def get_live_url(plugin, item_id, **kwargs):
     resp = urlquick.get(URL_LIVE_ID)
     list_stream_id = re.compile('video-asset-id="(.*?)"').findall(resp.text)
 
-    if len(list_stream_id) > 0:
-        pcode_datas = urlquick.get(URL_GET_JS_PCODE)
-        pcode = re.compile(r'ooyalaPCode\:"(.*?)"').findall(
-            pcode_datas.text)[0]
-        reps_stream_datas = urlquick.get(URL_VIDEO_VOD %
-                                         (pcode, list_stream_id[0]))
-        json_parser = json.loads(reps_stream_datas.text)
-        # Get Value url encodebase64
-        if 'streams' in json_parser["authorization_data"][list_stream_id[0]]:
-            for stream_datas in json_parser["authorization_data"][
-                    list_stream_id[0]]["streams"]:
-                if stream_datas["delivery_type"] == 'hls':
-                    stream_url_base64 = stream_datas["url"]["data"]
-            return base64.standard_b64decode(stream_url_base64)
-        else:
-            plugin.notify('ERROR', plugin.localize(30713))
-    return False
+    if len(list_stream_id) <= 0:
+        return False
+
+    pcode_datas = urlquick.get(URL_GET_JS_PCODE)
+    pcode = re.compile(r'ooyalaPCode\:"(.*?)"').findall(pcode_datas.text)[0]
+    reps_stream_datas = urlquick.get(URL_VIDEO_VOD % (pcode, list_stream_id[0]))
+    json_parser = json.loads(reps_stream_datas.text)
+
+    if 'streams' not in json_parser["authorization_data"][list_stream_id[0]]:
+        plugin.notify('ERROR', plugin.localize(30713))
+        return False
+
+    # Get Value url encodebase64
+    for stream_datas in json_parser["authorization_data"][list_stream_id[0]]["streams"]:
+        if stream_datas["delivery_type"] == 'hls':
+            stream_url_base64 = stream_datas["url"]["data"]
+    return base64.standard_b64decode(stream_url_base64)

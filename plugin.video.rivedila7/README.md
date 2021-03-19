@@ -3,6 +3,10 @@ Live Streaming, Replay the last week, LA7 Prime, On-Demand programs, News & Weat
 
 
 ### Changelog
+5.1.0 (2021-03-12)
+- Fix On-Demand homepages scraping
+- Removed minimal versions on import addon
+
 5.0.0 (2021-02-28)
 - Upgraded to Kodi19 Matrix
 

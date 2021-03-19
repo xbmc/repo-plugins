@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rivedila7" name="LA7-LA7d" version="5.0.0" provider-name="Luivit, Testato">
+<addon id="plugin.video.rivedila7" name="LA7-LA7d" version="5.1.0" provider-name="Luivit, Testato">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
-    <import addon="script.module.requests" version="2.22.0"/>
-    <import addon="script.module.inputstreamhelper" version="0.5.0"/>
-    <import addon="script.module.beautifulsoup4" version="4.5.3"/>
-    <import addon="script.module.html5lib" version="0.999.0"/>
+    <import addon="script.module.requests" version="0.0.0"/>
+    <import addon="script.module.inputstreamhelper" version="0.0.0"/>
+    <import addon="script.module.beautifulsoup4" version="0.0.0"/>
+    <import addon="script.module.html5lib" version="0.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
@@ -29,8 +29,9 @@
       <screenshot>resources/screenshots/screenshot-01.jpg</screenshot>
       <screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
     </assets>
-    <news>5.0.0 (2021-02-28)
-      - Upgraded to Kodi19 Matrix
+    <news>5.1.0 (2021-03-12)
+      - Fix On-Demand homepages scraping
+      - Removed minimal versions on import addon
     </news>
   </extension>
 </addon>

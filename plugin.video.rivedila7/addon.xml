@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rivedila7" name="LA7-LA7d" version="4.6.0" provider-name="Luivit, Testato">
+<addon id="plugin.video.rivedila7" name="LA7-LA7d" version="4.7.0" provider-name="Luivit, Testato">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
-    <import addon="script.module.requests" version="2.22.0"/>
-    <import addon="script.module.inputstreamhelper" version="0.5.0"/>
-    <import addon="script.module.beautifulsoup4" version="4.5.3"/>
-    <import addon="script.module.html5lib" version="0.999.0"/>
+    <import addon="script.module.requests" version="0.0.0"/>
+    <import addon="script.module.inputstreamhelper" version="0.0.0"/>
+    <import addon="script.module.beautifulsoup4" version="0.0.0"/>
+    <import addon="script.module.html5lib" version="0.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
@@ -29,9 +29,9 @@
       <screenshot>resources/screenshots/screenshot-01.jpg</screenshot>
       <screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
     </assets>
-    <news>4.6.0 (2021-02-04)
-      - Updated LA7 Prime
-      - Added Meteo della Sera
+    <news>4.7.0 (2021-03-12) Kodi18 Version
+      - Fix On-Demand homepages scraping
+      - Removed minimal versions on import addon
     </news>
   </extension>
 </addon>

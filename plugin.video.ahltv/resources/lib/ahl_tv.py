@@ -159,7 +159,7 @@ def select_game(game_id):
 
         if x >= 0:
             seek_secs = 0
-            selected_audio = stream_info['streams'][x]['audio_id']
+            selected_audio = stream_info['streams'][x]['audioId']
             if stream_info['streams'][x]['startSeconds'] is not None:
                 seek_secs = stream_info['streams'][x]['startSeconds']
 

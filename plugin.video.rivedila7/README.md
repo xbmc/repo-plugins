@@ -3,6 +3,10 @@ Live Streaming, Replay the last week, LA7 Prime, On-Demand programs, News & Weat
 
 
 ### Changelog
+4.7.0 (2021-03-12) Kodi18 Version
+- Fix On-Demand homepages scraping
+- Removed minimal versions on import addon
+
 4.6.0 (2021-02-04)
 - Updated LA7 Prime
 - Added Meteo della Sera

@@ -292,11 +292,14 @@ class Main(object):
         log("found_m3u8_url", found_m3u8_url)
 
         if found_m3u8_url:
-            # for some reason u0026 is present in the url, it should have been an ampersand
+            # for some reason u0026 or even \u0026 is present in the url, it should have been an ampersand
             # let's correct that
-            m3u8_url = m3u8_url.replace('u0026', '&')
 
-            log("corrected m3u8_url", m3u8_url)
+            log("uncorrected m3u8_url", m3u8_url)
+
+            m3u8_url = m3u8_url.replace('u0026', '&')
+            m3u8_url = m3u8_url.replace('\u0026', '&')
+            m3u8_url = m3u8_url.replace('\\&', '&')
 
             # get the content of the m3u8 file
             response = session.get(m3u8_url, headers=HEADERS)

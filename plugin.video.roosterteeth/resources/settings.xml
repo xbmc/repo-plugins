@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-  <category label="General">
+  <category label="30112">
     <setting id="quality" 	    	        type="enum" label="30020" lvalues="30026|30025|30024|30023|30022|30021"   default="4"/>
     <setting id="use_adaptive_inputstream" 	type="bool" label="30018" 											      default="false"/>
     <setting id="is_first_member" 	        type="bool" label="30015" 											      default="false"/>

@@ -42,8 +42,8 @@ VQ360P = '360p'
 VQ240P = '240p'
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-DATE = "2020-05-02"
-VERSION = "1.5.0"
+DATE = "2021-03-18"
+VERSION = "1.5.1"
 
 if sys.version_info[0] > 2:
     unicode = str

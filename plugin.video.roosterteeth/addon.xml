@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.roosterteeth"
        name="Rooster Teeth"
-       version="1.5.0+matrix.1"
+       version="1.5.1+matrix.1"
        provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="3.0.0"/>
@@ -24,11 +24,8 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=235071</forum>
     <website>https://roosterteeth.com</website>
     <source>https://github.com/skipmodea1/plugin.video.roosterteeth.python3</source>
-    <news>1.5.0 (2020-05-02)
-    - dynamic channels instead of hardcoded channels
-    - set initial sorting, changing the sort order in Kodi now seems to actually do something
-    - added channel shows
-    - changes due to sponsership to First membership change
+    <news>1.5.1 (2021-03-18)
+    - website change
     </news>
     <assets>
       <icon>resources/icon.png</icon>

@@ -1,10 +1,65 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-  <category label="General">
-    <setting id="quality" 	    	        type="enum" label="30020" lvalues="30026|30025|30024|30023|30022|30021"   default="4"/>
-    <setting id="use_adaptive_inputstream" 	type="bool" label="30018" 											      default="false"/>
-    <setting id="is_first_member" 	        type="bool" label="30015" 											      default="false"/>
-    <setting id="username" 	     	        type="text" label="30016" 											      default=""                   enable="eq(-1,true)"/>
-    <setting id="password" 		            type="text" label="30017" 											      default="" option="hidden"   enable="eq(-2,true)"/>
-  </category>
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="plugin.video.roosterteeth">
+		<category id="general" label="30112" help="">
+			<group id="1">
+				<setting id="quality" type="integer" label="30020" help="">
+					<level>0</level>
+					<default>4</default>
+					<constraints>
+						<options>
+							<option label="30026">0</option>
+							<option label="30025">1</option>
+							<option label="30024">2</option>
+							<option label="30023">3</option>
+							<option label="30022">4</option>
+							<option label="30021">5</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="use_adaptive_inputstream" type="boolean" label="30018" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="is_first_member" type="boolean" label="30015" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="username" type="string" label="30016" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="is_first_member">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>30016</heading>
+					</control>
+				</setting>
+				<setting id="password" type="string" label="30017" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="is_first_member">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>30017</heading>
+						<hidden>true</hidden>
+					</control>
+				</setting>
+			</group>
+		</category>
+	</section>
 </settings>

@@ -1,0 +1,71 @@
+v2.0.0 (2021-3-16)
+- Kodi 19 Matrix version
+
+v1.4.2 (2020-7-6)
+- Adapt to change in LL CDN media links
+
+v1.4.1 (2020-6-6)
+- Gracefully handle anomalous missing element exceptions; Add new categories
+
+v1.4.0 (2020-5-31)
+- Fix YT video link parsing, various other fixes and upgrades
+
+v1.3.5 (2018-6-9)
+- Prevent errors caused by 'ghost' threads
+
+v1.3.4 (2018-3-19)
+- Recommended changes; fix Search keyboard grep
+
+v1.3.3 (2018-3-11)
+- Add fallback for multiprocessing module not available
+
+v1.3.2 (2018-3-9)
+- Adapt after Liveleak.com upgrade
+
+v1.3.1 (2018-2-11)
+- Improve handling of video description Info
+
+v1.3.0 (2018-1-23)
+- Add ability to moderate Liveleak users' postings
+
+v1.2.0 (2018-1-21)
+- Implement multiple page fetch threading for improved performance
+
+v1.1.1 (2018-1-17)
+- Upgrade handling of video description Info
+
+v1.1.0 (2017-8-28)
+- Add Liveleak user who posted (credit) and video description (plot) Info
+
+v1.0.1 (2017-4-14)
+- Fix uncaught error on empty server response
+
+v1.0.0 (2017-4-2)
+- Add "view" mode for calling from another plugin
+- Add "Back To Categories" directory item
+- Update version number more inline w/ Semantic Versioning
+
+v0.0.7 (2017-2-9)
+- Add support for expired time-based links
+- Add better video numbering
+- Various code cleanup, enhancement, refactoring
+
+v0.0.6 (2017-2-5)
+- Remove problematic video numbering, plus various cleanup
+
+v0.0.5 (2017-2-4)
+- Fix "Goto Page" error caused by alien unicode characters
+- Add unicode support for video title in Liveleak page
+- Add changelog.txt
+- Update Python version dependency
+- Update addon.xml
+
+v0.0.4 (2017-1-30)
+- Update youtube video URI, enhance title display
+
+v0.0.3 (2017-1-28)
+- Fix parsing of web pages for video sources
+- Update Python dependency
+
+v0.0.2 (2017-1-28)
+- Fork from oneadvent repository

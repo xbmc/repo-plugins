@@ -1,0 +1,16 @@
+This plugin was inspired by the BBC iPlayer plugin of Mikey1234.
+http://www.xunitytalk.com/
+
+Thanks to the get_iplayer project. Their code helped to sort out live streams more than once.
+https://github.com/get-iplayer/get_iplayer
+
+Channel icons by primaeval
+
+The functions used for downloading subtitles are based on the latest version
+of the (currently defunct) iPlayer plugin.
+https://github.com/joolswills/plugin.video.iplayer
+
+IPlayer Icon by b0bd0gz
+http://b0bd0gz.deviantart.com/art/BBC-iPlayer-61572380
+CC License:  http://creativecommons.org/licenses/by-nc-sa/3.0/
+

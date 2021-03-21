@@ -1,0 +1,55 @@
+<settings>
+<category label="30100">
+    <setting label="30103" type="lsep"  />
+    <setting id="bbc_id_enabled" label="30140" default="false" type="bool" />
+    <setting id="bbc_id_username" label="30141" default="" type="text" enable="eq(-1,true)" subsetting="true"/>
+    <setting id="bbc_id_password" label="30142" default="" type="text" enable="eq(-2,true) + !eq(-1,)" subsetting="true" option="hidden"/>
+    <setting id="bbc_id_autologin" label="30143" default="false" type="bool" subsetting="true" />
+    <setting id="kids_mode" label="30180" type="action" action="XBMC.RunPlugin(plugin://plugin.video.iplayerwww?mode=1)"/>
+    <setting label="30101" type="lsep"  />
+    <setting id="search_signed" label="30110" type="bool" default="false" />
+    <setting id="search_ad" label="30120" type="bool" default="false" />
+    <setting id="subtitles" label="30130" type="bool" default="false" />
+</category>
+<category label="30500">
+    <setting label="30101" type="lsep"  />
+    <setting id="suppress_incomplete" label="30150" type="bool" default="false" />
+    <setting id="scrape_atoz" label="30160" type="enum" lvalues="30161|30162" default="0" />
+    <setting id="paginate_episodes" label="30170" type="enum" lvalues="30171|30172" default="1" />
+    <setting id="redbutton_warning" label="30190" type="bool" default="true" />
+    <setting label="30102" type="lsep"  />
+    <setting id="radio_paginate_episodes" label="30170" type="enum" lvalues="30171|30172" default="2" />
+    <setting label="30510" type="lsep"  />
+    <setting id="menu_video_highlights" label="30511" type="bool" default="true"/>
+    <setting id="menu_video_channel_highlights" label="30512" type="bool" default="true"/>
+    <setting id="menu_video_most_popular" label="30513" type="bool" default="true"/>
+    <setting id="menu_video_az" label="30514" type="bool" default="true"/>
+    <setting id="menu_video_channel_az" label="30515" type="bool" default="true"/>
+    <setting id="menu_video_categories" label="30516" type="bool" default="true"/>
+    <setting id="menu_video_search" label="30517" type="bool" default="true"/>
+    <setting id="menu_video_live" label="30518" type="bool" default="true"/>
+    <setting id="menu_video_red_button" label="30519" type="bool" default="true"/>
+    <setting id="menu_video_uhd_trial" label="30529" type="bool" default="true"/>
+    <setting id="menu_video_watching" label="30520" type="bool" default="true"/>
+    <setting id="menu_video_added" label="30521" type="bool" default="true"/>
+    <setting id="menu_radio_live" label="30522" type="bool" default="true"/>
+    <setting id="menu_radio_az" label="30523" type="bool" default="true"/>
+    <setting id="menu_radio_categories" label="30524" type="bool" default="true"/>
+    <setting id="menu_radio_search" label="30525" type="bool" default="true"/>
+    <setting id="menu_radio_most_popular" label="30526" type="bool" default="true"/>
+    <setting id="menu_radio_added" label="30527" type="bool" default="true"/>
+    <setting id="menu_radio_following" label="30528" type="bool" default="true"/>
+</category>
+<category label="30200">
+    <setting label="30103" type="lsep"  />
+    <setting id="streams_autoplay" label="30205" type="bool" default="true" />
+    <setting label="30101" type="lsep"  />
+    <setting id="catchup_source" label="30210" type="enum" values="Any|Akamai|Limelight|Bidi|Cloudfront" default="0" enable="true" />
+    <setting id="live_source" label="30220" type="enum" values="Any|Akamai|Limelight|Bidi|Cloudfront" default="0" enable="eq(-5,true)" />
+    <setting id="subtitle_source" label="30240" type="enum" values="Any|Akamai|Limelight" default="0" />
+    <setting label="30102" type="lsep"  />
+    <setting id="radio_source" label="30231" type="enum" values="Any|Akamai|Limelight|Cloudfront" default="0" enable="eq(-8,true)" />
+    <setting id="radio_location" label="30232" type="enum" values="UK|International" default="0" enable="eq(-9,true)" />
+    <setting id="radio_live_bitrate" label="30233" type="enum" values="48 Kbps|96 Kbps|128 Kbps|320 Kbps" default="3" enable="eq(-10,true)" />
+</category>
+</settings>

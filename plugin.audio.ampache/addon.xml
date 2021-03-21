@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.audio.ampache" version="2.0.0" name="Ampache" provider-name="lusum">
+<addon id="plugin.audio.ampache" version="2.0.1" name="Ampache" provider-name="lusum">
     <requires>
         <import addon="script.module.future" version="0.17.1"/>
         <import addon="xbmc.python" version="2.26.0"/>

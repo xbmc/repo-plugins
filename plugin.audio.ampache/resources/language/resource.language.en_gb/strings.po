@@ -45,6 +45,10 @@ msgctxt "#30014"
 msgid "Enable images on long lists"
 msgstr ""
 
+msgctxt "#30015"
+msgid "Auto fullscreen"
+msgstr ""
+
 msgctxt "#30020"
 msgid "Add Server"
 msgstr ""

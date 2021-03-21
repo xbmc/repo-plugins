@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="4.0.0" provider-name="CaptainT, Cas, ihurst, primaeval">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.requests" version="2.7.0"/>
+    <import addon="inputstream.adaptive" version="2.6.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">TV and Radio from BBC iPlayer</summary>
+    <description lang="en_GB">This add-on enables playing of Live and Catchup TV (UK only) and Radio content (UK or international) from the BBC iPlayer website. It is not created, maintained or in any way affiliated with the BBC. The add-on only provides an interface to access the BBC iPlayer website from Kodi.</description>
+    <platform>all</platform>
+    <license>GPL-2.0-or-later</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=353349</forum>
+    <source>https://github.com/vonH/plugin.video.iplayerwww</source>
+    <disclaimer lang="en_GB">This add-on is a front end to the BBC iPlayer website. It is not an official BBC product. A UK TV Licence is required to watch the live, catch-up, or on-demand TV content.</disclaimer>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+    </assets>
+    <news>
+v4.0.0
+Initial release for Matrix.
+New dependency inputstream.adaptive.
+HLS streams have been removed. As a consequence, bitrate settings have been removed. Bitrate needs to be configured in inputstream.adaptive.
+Switched to PC mediaselector.
+New mediaselector also adds the following new features:
+- Access to new CDN Cloudfront (Amazon)
+- Access to new subtitle sources. If you experience issues with subtitles, first try the new "Subtitle source" setting in the add-on settings before reporting issues.
+- Radio Categories now uses the Categories of BBC Sounds.
+
+Known issues:
+- BBC2 live and all live Radio is broken, most likely due to a bug in inputstream.adaptive
+- No Red Button
+   </news>
+  </extension>
+</addon>

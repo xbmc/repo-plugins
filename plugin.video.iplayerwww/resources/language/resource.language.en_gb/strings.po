@@ -1,0 +1,433 @@
+# Kodi Media Center language file
+# Addon Name: iPlayer WWW
+# Addon id: plugin.video.iplayerwww
+# Addon Provider: CaptainT|primaeval|ihurst|Cas
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30100"
+msgid "General"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Video settings"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Radio settings"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Common settings"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Play Signed programmes when available"
+msgstr ""
+
+msgctxt "#30120"
+msgid "Play Audio Described programmes when available"
+msgstr ""
+
+msgctxt "#30130"
+msgid "Use subtitles when available"
+msgstr ""
+
+msgctxt "#30140"
+msgid "Enable BBC iD"
+msgstr ""
+
+msgctxt "#30141"
+msgid "BBC Username"
+msgstr ""
+
+msgctxt "#30142"
+msgid "BBC Password"
+msgstr ""
+
+msgctxt "#30143"
+msgid "Sign in automatically"
+msgstr ""
+
+msgctxt "#30150"
+msgid "Suppress programmes with incomplete information in Highlights"
+msgstr ""
+
+msgctxt "#30160"
+msgid "Behaviour for getting A-Z"
+msgstr ""
+
+msgctxt "#30161"
+msgid "By character"
+msgstr ""
+
+msgctxt "#30162"
+msgid "All at once"
+msgstr ""
+
+msgctxt "#30170"
+msgid "Behaviour for getting programmes"
+msgstr ""
+
+msgctxt "#30171"
+msgid "By page"
+msgstr ""
+
+msgctxt "#30172"
+msgid "All at once"
+msgstr ""
+
+msgctxt "#30180"
+msgid "Switch CBeebies/CBBC only mode on/off"
+msgstr ""
+
+msgctxt "#30181"
+msgid "Enter old password:"
+msgstr ""
+
+msgctxt "#30182"
+msgid "Enter new password (empty to unlock):"
+msgstr ""
+
+msgctxt "#30190"
+msgid "Show Red Button warning"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Streams"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Play stream automatically using these settings"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Catchup CDN source"
+msgstr ""
+
+msgctxt "#30211"
+msgid "Catchup bitrate"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Stream protocol"
+msgstr ""
+
+msgctxt "#30220"
+msgid "Live CDN source"
+msgstr ""
+
+msgctxt "#30230"
+msgid "Live bitrate"
+msgstr ""
+
+msgctxt "#30231"
+msgid "Radio CDN source"
+msgstr ""
+
+msgctxt "#30232"
+msgid "Radio location"
+msgstr ""
+
+msgctxt "#30233"
+msgid "Max Live Radio bitrate"
+msgstr ""
+
+msgctxt "#30240"
+msgid "Subtitle CDN source"
+msgstr ""
+
+msgctxt "#30300"
+msgid "Highlights"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Most Popular"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Programme List A-Z"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30305"
+msgid "Watch Live"
+msgstr ""
+
+msgctxt "#30306"
+msgid "Watching"
+msgstr ""
+
+msgctxt "#30307"
+msgid "Added"
+msgstr ""
+
+msgctxt "#30308"
+msgid "BBCiD Sign In"
+msgstr ""
+
+msgctxt "#30309"
+msgid "Successful"
+msgstr ""
+
+msgctxt "#30310"
+msgid "Failed - check settings"
+msgstr ""
+
+msgctxt "#30311"
+msgid "BBCiD set-up required, please check settings."
+msgstr ""
+
+msgctxt "#30312"
+msgid "Do you wish to sign in?"
+msgstr ""
+
+msgctxt "#30313"
+msgid "available episodes"
+msgstr ""
+
+msgctxt "#30314"
+msgid "Collection"
+msgstr ""
+
+msgctxt "#30315"
+msgid "available programmes"
+msgstr ""
+
+msgctxt "#30316"
+msgid "This programme is part of the collection"
+msgstr ""
+
+msgctxt "#30317"
+msgid "Channel Highlights"
+msgstr ""
+
+msgctxt "#30318"
+msgid "View all matching episodes"
+msgstr ""
+
+msgctxt "#30319"
+msgid "Finding episodes..."
+msgstr ""
+
+msgctxt "#30320"
+msgid "Next page"
+msgstr ""
+
+msgctxt "#30321"
+msgid "Listen Live"
+msgstr ""
+
+msgctxt "#30322"
+msgid "Listen Live High Quality"
+msgstr ""
+
+msgctxt "#30323"
+msgid "iPlayer: "
+msgstr ""
+
+msgctxt "#30324"
+msgid "Radio: "
+msgstr ""
+
+msgctxt "#30325"
+msgid "Sign out BBCiD"
+msgstr ""
+
+msgctxt "#30326"
+msgid "BBCiD Sign Out"
+msgstr ""
+
+msgctxt "#30327"
+msgid "Channel A-Z"
+msgstr ""
+
+msgctxt "#30328"
+msgid "Red Button"
+msgstr ""
+
+msgctxt "#30329"
+msgid "CBeebies Live"
+msgstr ""
+
+msgctxt "#30330"
+msgid "CBBC Live"
+msgstr ""
+
+msgctxt "#30331"
+msgid "CBeebies A-Z"
+msgstr ""
+
+msgctxt "#30332"
+msgid "CBBC A-Z"
+msgstr ""
+
+msgctxt "#30333"
+msgid "CBeebies Radio"
+msgstr ""
+
+msgctxt "#30334"
+msgid "Following"
+msgstr ""
+
+msgctxt "#30335"
+msgid "UHD Trial Channels"
+msgstr ""
+
+msgctxt "#30400"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30401"
+msgid "BBC iPlayer TV programmes are available to play in the UK only."
+msgstr ""
+
+msgctxt "#30402"
+msgid "Cookie Load Failed"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Playback failed"
+msgstr ""
+
+msgctxt "#30404"
+msgid "Can't find stream."
+msgstr ""
+
+msgctxt "#30405"
+msgid "Warning"
+msgstr ""
+
+msgctxt "#30406"
+msgid "Red Button channels may be unavailable depending on their schedule."
+msgstr ""
+
+msgctxt "#30407"
+msgid "Usage of Red Button is at your own risk."
+msgstr ""
+
+msgctxt "#30408"
+msgid "Agree"
+msgstr ""
+
+msgctxt "#30409"
+msgid "Disagree"
+msgstr ""
+
+msgctxt "#30410"
+msgid "To watch iPlayer TV content legally, you need a UK TV Licence."
+msgstr ""
+
+msgctxt "#30411"
+msgid "The UHD Trial channels are only available using the DASH stream protocol through InputStream Adaptive."
+msgstr ""
+
+msgctxt "#30412"
+msgid "Sorry, this programme appears to be unavailable. If you reached this point from Radio Search, it is most likely caused by the website returning search results that don't exist."
+msgstr ""
+
+msgctxt "#30413"
+msgid "Please check you installed this plugin correctly."
+msgstr ""
+
+msgctxt "#30500"
+msgid "Display"
+msgstr ""
+
+msgctxt "#30510"
+msgid "Select main menu entries"
+msgstr ""
+
+msgctxt "#30511"
+msgid "iPlayer: Highlights"
+msgstr ""
+
+msgctxt "#30512"
+msgid "iPlayer: Channel Highlights"
+msgstr ""
+
+msgctxt "#30513"
+msgid "iPlayer: Most Popular"
+msgstr ""
+
+msgctxt "#30514"
+msgid "iPlayer: Programme List A-Z"
+msgstr ""
+
+msgctxt "#30515"
+msgid "iPlayer: Channel A-Z"
+msgstr ""
+
+msgctxt "#30516"
+msgid "iPlayer: Categories"
+msgstr ""
+
+msgctxt "#30517"
+msgid "iPlayer: Search"
+msgstr ""
+
+msgctxt "#30518"
+msgid "iPlayer: Watch Live"
+msgstr ""
+
+msgctxt "#30519"
+msgid "iPlayer: Red Button"
+msgstr ""
+
+msgctxt "#30520"
+msgid "iPlayer: Watching"
+msgstr ""
+
+msgctxt "#30521"
+msgid "iPlayer: Added"
+msgstr ""
+
+msgctxt "#30522"
+msgid "Radio: Listen Live"
+msgstr ""
+
+msgctxt "#30523"
+msgid "Radio: Programme List A-Z"
+msgstr ""
+
+msgctxt "#30524"
+msgid "Radio: Categories"
+msgstr ""
+
+msgctxt "#30525"
+msgid "Radio: Search"
+msgstr ""
+
+msgctxt "#30526"
+msgid "Radio: Most Popular"
+msgstr ""
+
+msgctxt "#30527"
+msgid "Radio: Added"
+msgstr ""
+
+msgctxt "#30528"
+msgid "Radio: Following"
+msgstr ""
+
+msgctxt "#30529"
+msgid "iPlayer: UHD Trial Channels"
+msgstr ""

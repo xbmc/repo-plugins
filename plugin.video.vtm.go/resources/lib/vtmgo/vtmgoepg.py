@@ -40,7 +40,7 @@ class EpgChannel:
 class EpgBroadcast:
     """ Defines an EPG broadcast"""
 
-    def __init__(self, uuid=None, playable_type=None, title=None, time=None, duration=None, image=None, description=None, live=None, rerun=None, tip=None,
+    def __init__(self, uuid=None, playable_type=None, title=None, time=None, duration=None, thumb=None, description=None, live=None, rerun=None, tip=None,
                  program_uuid=None, playable_uuid=None, channel_uuid=None, airing=None, genre=None):
         """
         :type uuid: str
@@ -48,7 +48,7 @@ class EpgBroadcast:
         :type title: str
         :type time: datetime
         :type duration: int
-        :type image: str
+        :type thumb: str
         :type description: str
         :type live: str
         :type rerun: str
@@ -64,7 +64,7 @@ class EpgBroadcast:
         self.title = title
         self.time = time
         self.duration = duration
-        self.image = image
+        self.thumb = thumb
         self.description = description
         self.live = live
         self.rerun = rerun
@@ -203,7 +203,7 @@ class VtmGoEpg:
             title=broadcast_json.get('title'),
             time=start,
             duration=duration,
-            image=broadcast_json.get('imageUrl'),
+            thumb=broadcast_json.get('imageUrl'),
             description=broadcast_json.get('synopsis'),
             live=broadcast_json.get('live'),
             rerun=broadcast_json.get('rerun'),

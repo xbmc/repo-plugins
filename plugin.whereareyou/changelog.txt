@@ -1,3 +1,6 @@
+v.0.4.2
+- fix for logging issue with Python3
+
 v.0.4.1
 - fix for "no next item in playlist" error
 

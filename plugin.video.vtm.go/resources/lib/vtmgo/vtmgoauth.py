@@ -21,6 +21,11 @@ except ImportError:  # Python 2
     # The package is named pyjwt in Kodi 18: https://github.com/lottaboost/script.module.pyjwt/pull/1
     import pyjwt as jwt
 
+try:  # Python 3
+    from urllib.parse import parse_qs, urlparse
+except ImportError:  # Python 2
+    from urlparse import parse_qs, urlparse
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -141,7 +146,7 @@ class VtmGoAuth:
         # Use cached token if it is still valid
         if force or not self._account.is_valid_token():
             # Do actual login
-            self._web_login()
+            self._android_login()
 
     def logout(self):
         """ Clear the session tokens. """
@@ -154,6 +159,70 @@ class VtmGoAuth:
         :return:
         :rtype: AccountStorage
         """
+        return self._account
+
+    def _android_login(self):
+        """ Executes an android login and returns the JSON Web Token.
+        :rtype str
+        """
+        # We should start fresh
+        util.SESSION.cookies.clear()
+
+        # Start login flow
+        util.http_get('https://login2.vtm.be/authorize', params={
+            'client_id': 'vtm-go-android',
+            'response_type': 'id_token',
+            'scope': 'openid email profile address phone',
+            'nonce': 1550073732654,
+            'sdkVersion': '0.13.1',
+            'state': 'dnRtLWdvLWFuZHJvaWQ=',  # vtm-go-android
+            'redirect_uri': 'https://login2.vtm.be/continue',
+        })
+
+        # Send login credentials
+        try:
+            response = util.http_post('https://login2.vtm.be/login',
+                                      params={
+                                          'client_id': 'vtm-go-android',
+                                      },
+                                      form={
+                                          'userName': self._username,
+                                          'password': self._password,
+                                      })
+        except HTTPError as exc:
+            if exc.response.status_code == 400:
+                raise InvalidLoginException()
+            raise
+
+        if 'errorBlock-OIDC-004' in response.text:  # E-mailadres is niet gekend.
+            raise InvalidLoginException()
+
+        if 'errorBlock-OIDC-003' in response.text:  # Wachtwoord is niet correct.
+            raise InvalidLoginException()
+
+        if 'OIDC-999' in response.text:  # Ongeldige login.
+            raise InvalidLoginException()
+
+        # Follow login
+        response = util.http_get('https://login2.vtm.be/authorize/continue', params={
+            'client_id': 'vtm-go-android'
+        })
+
+        # We are redirected and our id_token is in the fragment of the redirected url
+        params = parse_qs(urlparse(response.url).fragment)
+        id_token = params['id_token'][0]
+
+        # Okay, final stage. We now need to authorize our id_token so we get a valid JWT.
+        response = util.http_post('https://lfvp-api.dpgmedia.net/authorize/idToken', data={
+            'clientId': 'vtm-go-android',
+            'pipIdToken': id_token,
+        })
+
+        # Get JWT from reply
+        self._account.jwt_token = json.loads(response.text).get('jsonWebToken')
+
+        self._save_cache()
+
         return self._account
 
     def _web_login(self):

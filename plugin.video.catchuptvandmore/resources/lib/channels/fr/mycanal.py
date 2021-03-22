@@ -1,55 +1,30 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2017 SylvainCecchetto
+# Copyright: (c) 2017, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-
-
-from codequick import Route, Resolver, Listitem, utils, Script
-
-
-from resources.lib import web_utils
-from resources.lib import resolver_proxy
-from resources.lib import download
-from resources.lib.menu_utils import item_post_treatment
-from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
-from resources.lib.addon_utils import get_item_media_path
-
-import inputstreamhelper
-import re
 import json
-import urlquick
-from kodi_six import xbmc
-from kodi_six import xbmcgui
+import re
 import requests
-# Working for Python 2/3
-try:
+try:  # Python 3
     from urllib.parse import urlencode
-except ImportError:
+except ImportError:  # Python 2
     from urllib import urlencode
 
-# TO DO
+import inputstreamhelper
+from codequick import Listitem, Resolver, Route, Script
+from kodi_six import xbmcgui
+import urlquick
+
+from resources.lib import resolver_proxy, web_utils
+from resources.lib.addon_utils import get_item_media_path
+from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
+from resources.lib.menu_utils import item_post_treatment
+
+
+# TODO
 # Wait Kodi 18 to use live with DRM
 
 # URL :
@@ -164,30 +139,34 @@ def list_contents(plugin, item_id, key_value, **kwargs):
     json_parser = json.loads(json_replay)
 
     for category in json_parser["templates"]["landing"]["strates"]:
-        if category['reactKey'] == key_value:
-            for content in category["contents"]:
-                if content["type"] != 'article':
-                    content_title = content["onClick"]["displayName"]
-                    content_image = ''
-                    if 'URLImageOptimizedRegular' in content_image:
-                        if 'http' in content["URLImageOptimizedRegular"]:
-                            content_image = content["URLImageOptimizedRegular"]
-                        else:
-                            content_image = content["URLImage"]
-                    else:
-                        if 'URLImage' in content:
-                            content_image = content["URLImage"]
-                    content_url = content["onClick"]["URLPage"]
+        if category['reactKey'] != key_value:
+            continue
 
-                    item = Listitem()
-                    item.label = content_title
-                    item.art['thumb'] = item.art['landscape'] = content_image
-                    item.set_callback(
-                        list_programs,
-                        item_id=item_id,
-                        next_url=content_url)
-                    item_post_treatment(item)
-                    yield item
+        for content in category["contents"]:
+            if content["type"] == 'article':
+                continue
+
+            content_title = content["onClick"]["displayName"]
+            content_image = ''
+            if 'URLImageOptimizedRegular' in content_image:
+                if 'http' in content["URLImageOptimizedRegular"]:
+                    content_image = content["URLImageOptimizedRegular"]
+                else:
+                    content_image = content["URLImage"]
+            else:
+                if 'URLImage' in content:
+                    content_image = content["URLImage"]
+            content_url = content["onClick"]["URLPage"]
+
+            item = Listitem()
+            item.label = content_title
+            item.art['thumb'] = item.art['landscape'] = content_image
+            item.set_callback(
+                list_programs,
+                item_id=item_id,
+                next_url=content_url)
+            item_post_treatment(item)
+            yield item
 
 
 @Route.register
@@ -327,28 +306,30 @@ def list_sub_programs(plugin, item_id, next_url, strate_title, **kwargs):
     if 'strates' in json_parser:
 
         for strate in json_parser["strates"]:
-            if strate["type"] == "contentRow" or strate["type"] == "contentGrid":
-                if strate["title"] in strate_title:
-                    for content_datas in strate['contents']:
-                        if content_datas["type"] != 'article':
-                            if 'subtitle' in content_datas:
-                                content_title = content_datas['title'] + \
-                                    ' - ' + content_datas['subtitle']
-                            else:
-                                content_title = content_datas['title']
-                            content_image = content_datas['URLImage']
-                            content_url = content_datas['onClick']['URLPage']
+            if strate["type"] != "contentRow" and strate["type"] != "contentGrid":
+                continue
 
-                            item = Listitem()
-                            item.label = content_title
-                            item.art['thumb'] = item.art['landscape'] = content_image
+            if strate["title"] not in strate_title:
+                continue
 
-                            item.set_callback(
-                                list_programs,
-                                item_id=item_id,
-                                next_url=content_url)
-                            item_post_treatment(item)
-                            yield item
+            for content_datas in strate['contents']:
+                if content_datas["type"] != 'article':
+                    if 'subtitle' in content_datas:
+                        content_title = '{title} - {subtitle}'.format(**content_datas)
+                    else:
+                        content_title = content_datas['title']
+                    content_image = content_datas['URLImage']
+                    content_url = content_datas['onClick']['URLPage']
+
+                    item = Listitem()
+                    item.label = content_title
+                    item.art['thumb'] = item.art['landscape'] = content_image
+                    item.set_callback(
+                        list_programs,
+                        item_id=item_id,
+                        next_url=content_url)
+                    item_post_treatment(item)
+                    yield item
 
 
 @Route.register
@@ -478,32 +459,40 @@ def get_video_url(plugin,
 
         is_video_drm = True
         for stream_datas in value_datas_jsonparser["available"]:
-            if 'stream' in stream_datas['distTechnology']:
-                if 'DRM' not in stream_datas['drmType']:
-                    comMode_value = stream_datas['comMode']
-                    contentId_value = stream_datas['contentId']
-                    distMode_value = stream_datas['distMode']
-                    distTechnology_value = stream_datas['distTechnology']
-                    drmType_value = stream_datas['drmType']
-                    functionalType_value = stream_datas['functionalType']
-                    hash_value = stream_datas['hash']
-                    idKey_value = stream_datas['idKey']
-                    quality_value = stream_datas['quality']
-                    is_video_drm = False
+            if 'stream' not in stream_datas['distTechnology']:
+                continue
+
+            if 'DRM' in stream_datas['drmType']:
+                continue
+
+            comMode_value = stream_datas['comMode']
+            contentId_value = stream_datas['contentId']
+            distMode_value = stream_datas['distMode']
+            distTechnology_value = stream_datas['distTechnology']
+            drmType_value = stream_datas['drmType']
+            functionalType_value = stream_datas['functionalType']
+            hash_value = stream_datas['hash']
+            idKey_value = stream_datas['idKey']
+            quality_value = stream_datas['quality']
+            is_video_drm = False
 
         if is_video_drm:
             for stream_datas in value_datas_jsonparser["available"]:
-                if 'stream' in stream_datas['distTechnology']:
-                    if 'Widevine' in stream_datas['drmType']:
-                        comMode_value = stream_datas['comMode']
-                        contentId_value = stream_datas['contentId']
-                        distMode_value = stream_datas['distMode']
-                        distTechnology_value = stream_datas['distTechnology']
-                        drmType_value = stream_datas['drmType']
-                        functionalType_value = stream_datas['functionalType']
-                        hash_value = stream_datas['hash']
-                        idKey_value = stream_datas['idKey']
-                        quality_value = stream_datas['quality']
+                if 'stream' not in stream_datas['distTechnology']:
+                    continue
+
+                if 'Widevine' not in stream_datas['drmType']:
+                    continue
+
+                comMode_value = stream_datas['comMode']
+                contentId_value = stream_datas['contentId']
+                distMode_value = stream_datas['distMode']
+                distTechnology_value = stream_datas['distTechnology']
+                drmType_value = stream_datas['drmType']
+                functionalType_value = stream_datas['functionalType']
+                hash_value = stream_datas['hash']
+                idKey_value = stream_datas['idKey']
+                quality_value = stream_datas['quality']
 
         payload = {
             'comMode': comMode_value,
@@ -601,16 +590,13 @@ def get_video_url(plugin,
             item.property['inputstream.adaptive.license_key'] = jsonparser_stream_datas['@licence'] + '?drmConfig=mkpl::false' + '|%s|R{SSM}|' % urlencode(headers2)
         return item
 
-    else:
-        resp = urlquick.get(
-            next_url, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
-        json_parser = json.loads(resp.text)
+    resp = urlquick.get(next_url, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
+    json_parser = json.loads(resp.text)
 
-        return json_parser["detail"]["informations"]["playsets"]["available"][0]["videoURL"]
+    return json_parser["detail"]["informations"]["playsets"]["available"][0]["videoURL"]
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    return resolver_proxy.get_stream_dailymotion(
-        plugin, LIVE_DAILYMOTION_ID[item_id], False)
+    return resolver_proxy.get_stream_dailymotion(plugin, LIVE_DAILYMOTION_ID[item_id], False)

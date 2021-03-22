@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.32" provider-name="SylvainCecchetto,wwark">
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.33" provider-name="SylvainCecchetto,wwark">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.codequick" version="0.9.13"/>
@@ -42,8 +42,18 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.32]
-[ALL] Remove notification "Plugin CUTVMore non compatible Kodi 19"
+[Version 0.2.33]
+[France TV - FR] Fix Live TV
+[Kodi] Fix addon auto-run on Kodi 17
+[BrightCove] Possible fix for some instance of Kodi 19
+[TV5Monde - WO] Fix Live TV (hack like Arte TV)
+[Live TV] Fix TV guide on Windows
+[6Play/RTLPlay - FR/BE] Hack to force encoding of a response to fix slow behavior to play content
+[Euronews - WO] Fix Live TV
+[France24 - WO] Fix Live TV and Catch-up TV
+[TV5Monde - WO] Fix Catch-up TV
+[Tivi5Monde - WO] Fix Catch-up TV
+[TV5MondeAfrique - WO] Fix Catch-up TV
 ----
 Visit WebSite - http://mpdb.tv/#home which host the french forum used by users of CU TV and More
     </news>

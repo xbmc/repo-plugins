@@ -1,39 +1,18 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Original work (C) JUL1EN094, SPM, SylvainCecchetto
-    Copyright (C) 2016  SylvainCecchetto
+# Copyright: (c) JUL1EN094, SPM, SylvainCecchetto
+# Copyright: (c) 2016, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
+import json
 
-from codequick import Route, Resolver, Listitem, utils, Script, youtube
+from codequick import Listitem, Resolver, Route, utils, Script
 import urlquick
 
-from resources.lib import web_utils
-from resources.lib import resolver_proxy
+from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
-
-import json
 
 LANG = Script.setting['france24.language']
 TOKEN_APP = '66b85dad-3ad5-40f3-ab32-2305fc2357ea'
@@ -45,6 +24,7 @@ def root_catchup_tv(plugin, item_id, **kwargs):
     # http://apis.france24.com/products/get_product/78dcf358-9333-4fb2-a035-7b91e9705b13?token_application=66b85dad-3ad5-40f3-ab32-2305fc2357ea
     root_json_url = 'products/get_product/78dcf358-9333-4fb2-a035-7b91e9705b13'
     root_json_r = urlquick.get(URL_API(root_json_url),
+                               headers={'User-Agent': web_utils.get_random_ua()},
                                params={'token_application': TOKEN_APP})
     json_root = json.loads(root_json_r.text)
 
@@ -107,11 +87,9 @@ def root_catchup_tv(plugin, item_id, **kwargs):
                             guid_program=json_shows['show_editions']['guid'])
                         item_post_treatment(item)
                         yield item
-                '''
 
-                if 'show_editions' in json_shows:
-                    menus_to_add.append(json_shows['show_editions'])
-                '''
+#                if 'show_editions' in json_shows:
+#                    menus_to_add.append(json_shows['show_editions'])
 
 
 @Route.register
@@ -133,14 +111,12 @@ def list_direct_tv_jts(plugin, item_id, guid, **kwargs):
         if code == 'live_audio':
             continue
         label = json_channel['title']
-        '''
 
-        for json_image in json_channel['images']['formats']:
-            if json_image['code'] == '1920x1080':
-                item.art['fanart'] = json_image['url']
-            if json_image['code'] == '720x405':
-                item.art['thumb'] = item.art['landscape'] = json_image['url'
-        '''
+#        for json_image in json_channel['images']['formats']:
+#            if json_image['code'] == '1920x1080':
+#                item.art['fanart'] = json_image['url']
+#            if json_image['code'] == '720x405':
+#                item.art['thumb'] = item.art['landscape'] = json_image['url'
 
         youtube_playlist_id = ''
         for json_video in json_channel['videos']:
@@ -335,6 +311,7 @@ def get_live_url(plugin, item_id, **kwargs):
 
     root_json_url = 'products/get_product/78dcf358-9333-4fb2-a035-7b91e9705b13'
     root_json_r = urlquick.get(URL_API(root_json_url),
+                               headers={'User-Agent': web_utils.get_random_ua()},
                                params={'token_application': TOKEN_APP})
     json_root = json.loads(root_json_r.text)
 
@@ -345,25 +322,32 @@ def get_live_url(plugin, item_id, **kwargs):
 
     # code in JSON: FR, EN, ES and AR
     for json_language in json_languages:
-        if json_language['code'] == final_language:
-            json_tv = json_language['tv']
-            if 'direct_tv' in json_tv:
-                guid = json_tv['direct_tv']['guid']
-                json_url = 'products/get_product/%s' % guid
-                json_r = urlquick.get(
-                    URL_API(json_url),
-                    params={'token_application': TOKEN_APP},
-                    headers={'User-agent': web_utils.get_ua()})
-                json_v = json.loads(json_r.text)
-                try:
-                    json_channels = json_v['result']['channels']
-                except Exception:
-                    return False
+        if json_language['code'] != final_language:
+            continue
 
-                for json_channel in json_channels:
-                    if json_channel['code'] == 'direct_f24':
-                        for json_video in json_channel['videos']:
-                            for json_format in json_video['formats']:
-                                if json_format['code'] == 'hls_web':
-                                    return json_format['url']
+        json_tv = json_language['tv']
+        if 'direct_tv' not in json_tv:
+            continue
+
+        guid = json_tv['direct_tv']['guid']
+        json_url = 'products/get_product/%s' % guid
+        json_r = urlquick.get(
+            URL_API(json_url),
+            params={'token_application': TOKEN_APP},
+            headers={'User-agent': web_utils.get_ua()})
+        json_v = json.loads(json_r.text)
+        try:
+            json_channels = json_v['result']['channels']
+        except Exception:
+            return False
+
+        for json_channel in json_channels:
+            if json_channel['code'] != 'direct_f24':
+                continue
+
+            for json_video in json_channel['videos']:
+                for json_format in json_video['formats']:
+                    if json_format['code'] == 'hls_web':
+                        return json_format['url']
+
     return False

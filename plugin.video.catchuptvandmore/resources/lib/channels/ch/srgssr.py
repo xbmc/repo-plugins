@@ -1,46 +1,24 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2017  SylvainCecchetto
+# Copyright: (c) 2017, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-
 from builtins import str
-from codequick import Route, Resolver, Listitem, utils, Script
-
-
-from resources.lib import web_utils
-from resources.lib import download
-from resources.lib.menu_utils import item_post_treatment
-from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
-
-import inputstreamhelper
 import datetime
 import json
 import re
-import urlquick
-from kodi_six import xbmc
+
+import inputstreamhelper
+from codequick import Listitem, Resolver, Route
 from kodi_six import xbmcgui
+import urlquick
+
+from resources.lib import download
+from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
+from resources.lib.menu_utils import item_post_treatment
+
 
 # TO DO and Infos
 # Add More Video_button (for emissions)
@@ -180,8 +158,7 @@ def list_programs(plugin, item_id, category_url, **kwargs):
     for program_datas in json_parser["initialData"]["shows"]:
         program_title = program_datas["title"]
         if 'rts.ch' in program_datas["imageUrl"]:
-            program_image = program_datas["imageUrl"] + \
-                '/scale/width/448'
+            program_image = program_datas["imageUrl"] + '/scale/width/448'
         else:
             program_image = program_datas["imageUrl"]
         program_id = program_datas["id"]
@@ -270,11 +247,7 @@ def list_videos_program(plugin, item_id, program_id, next_value=None, **kwargs):
 
 
 @Resolver.register
-def get_video_url(plugin,
-                  item_id,
-                  video_id,
-                  download_mode=False,
-                  **kwargs):
+def get_video_url(plugin, item_id, video_id, download_mode=False, **kwargs):
 
     if item_id == 'swissinfo':
         channel_name_value = 'swi'
@@ -305,57 +278,57 @@ def get_video_url(plugin,
 
         licence_drm_url = ''
         for stream_datas in json_parser["chapterList"]:
-            if video_id in stream_datas["id"]:
-                for stream_datas_url in stream_datas["resourceList"]:
-                    if 'DASH' in stream_datas_url["streaming"]:
-                        stream_url = stream_datas_url["url"]
-                        for licence_drm_datas in stream_datas_url["drmList"]:
-                            if 'WIDEVINE' in licence_drm_datas["type"]:
-                                licence_drm_url = licence_drm_datas["licenseUrl"]
+            if video_id not in stream_datas["id"]:
+                continue
+
+            for stream_datas_url in stream_datas["resourceList"]:
+                if 'DASH' not in stream_datas_url["streaming"]:
+                    continue
+
+                stream_url = stream_datas_url["url"]
+                for licence_drm_datas in stream_datas_url["drmList"]:
+                    if 'WIDEVINE' in licence_drm_datas["type"]:
+                        licence_drm_url = licence_drm_datas["licenseUrl"]
 
         item = Listitem()
         item.path = stream_url
         item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
         item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-        item.property[
-            'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
-        item.property[
-            'inputstream.adaptive.license_key'] = licence_drm_url + '|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Host=srg.live.ott.irdeto.com|R{SSM}|'
+        item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+        item.property['inputstream.adaptive.license_key'] = licence_drm_url + '|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Host=srg.live.ott.irdeto.com|R{SSM}|'
         item.label = get_selected_item_label()
         item.art.update(get_selected_item_art())
         item.info.update(get_selected_item_info())
         return item
 
-    else:
-        stream_url = ''
-        for stream_datas in json_parser["chapterList"]:
-            if video_id in stream_datas["id"]:
-                is_token = False
-                for stream_datas_url in stream_datas["resourceList"]:
-                    if stream_datas_url['tokenType'] == 'NONE':
-                        stream_url = stream_datas_url['url']
-                    else:
-                        is_token = True
-                        if 'HD' in stream_datas_url["quality"] and \
-                                'mpegURL' in stream_datas_url["mimeType"]:
-                            stream_url = stream_datas_url["url"]
-                            break
-                        else:
-                            if 'mpegURL' in stream_datas_url["mimeType"]:
-                                stream_url = stream_datas_url["url"]
-                if is_token:
-                    acl_value = '/i/%s/*' % (re.compile(r'\/i\/(.*?)\/master').findall(stream_url)[0])
-                    token_datas = urlquick.get(URL_TOKEN % acl_value, max_age=-1)
-                    token_jsonparser = json.loads(token_datas.text)
-                    token = token_jsonparser["token"]["authparams"]
-                    if '?' in stream_datas_url['url']:
-                        stream_url = stream_url + '&' + token
-                    else:
-                        stream_url = stream_url + '?' + token
+    stream_url = ''
+    for stream_datas in json_parser["chapterList"]:
+        if video_id in stream_datas["id"]:
+            is_token = False
+            for stream_datas_url in stream_datas["resourceList"]:
+                if stream_datas_url['tokenType'] == 'NONE':
+                    stream_url = stream_datas_url['url']
+                else:
+                    is_token = True
+                    if 'HD' in stream_datas_url["quality"] and \
+                            'mpegURL' in stream_datas_url["mimeType"]:
+                        stream_url = stream_datas_url["url"]
+                        break
+                    if 'mpegURL' in stream_datas_url["mimeType"]:
+                        stream_url = stream_datas_url["url"]
+            if is_token:
+                acl_value = '/i/%s/*' % (re.compile(r'\/i\/(.*?)\/master').findall(stream_url)[0])
+                token_datas = urlquick.get(URL_TOKEN % acl_value, max_age=-1)
+                token_jsonparser = json.loads(token_datas.text)
+                token = token_jsonparser["token"]["authparams"]
+                if '?' in stream_datas_url['url']:
+                    stream_url = stream_url + '&' + token
+                else:
+                    stream_url = stream_url + '?' + token
 
-        if download_mode:
-            return download.download_video(stream_url)
-        return stream_url
+    if download_mode:
+        return download.download_video(stream_url)
+    return stream_url
 
 
 @Resolver.register
@@ -394,46 +367,44 @@ def get_live_url(plugin, item_id, **kwargs):
 
         licence_drm_url = ''
         for stream_datas in json_parser2["chapterList"]:
-            if live_id in stream_datas["id"]:
-                for stream_datas_url in stream_datas["resourceList"]:
-                    stream_url = stream_datas_url["url"]
-                    for licence_drm_datas in stream_datas_url["drmList"]:
-                        if 'WIDEVINE' in licence_drm_datas["type"]:
-                            licence_drm_url = licence_drm_datas["licenseUrl"]
+            if live_id not in stream_datas["id"]:
+                continue
+
+            for stream_datas_url in stream_datas["resourceList"]:
+                stream_url = stream_datas_url["url"]
+                for licence_drm_datas in stream_datas_url["drmList"]:
+                    if 'WIDEVINE' in licence_drm_datas["type"]:
+                        licence_drm_url = licence_drm_datas["licenseUrl"]
 
         item = Listitem()
         item.path = stream_url
         item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
         item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-        item.property[
-            'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
-        item.property[
-            'inputstream.adaptive.license_key'] = licence_drm_url + '|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Host=srg.live.ott.irdeto.com|R{SSM}|'
+        item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+        item.property['inputstream.adaptive.license_key'] = licence_drm_url + '|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Host=srg.live.ott.irdeto.com|R{SSM}|'
         item.property['inputstream.adaptive.manifest_update_parameter'] = 'full'
         item.label = get_selected_item_label()
         item.art.update(get_selected_item_art())
         item.info.update(get_selected_item_info())
         return item
 
-    else:
-        for stream_datas in json_parser2["chapterList"]:
-            if live_id in stream_datas["id"]:
-                for stream_datas_url in stream_datas["resourceList"]:
-                    if 'HD' in stream_datas_url["quality"] and \
-                            'mpegURL' in stream_datas_url["mimeType"]:
-                        stream_url = stream_datas_url["url"]
-                        break
-                    else:
-                        if 'mpegURL' in stream_datas_url["mimeType"]:
-                            stream_url = stream_datas_url["url"]
+    for stream_datas in json_parser2["chapterList"]:
+        if live_id in stream_datas["id"]:
+            for stream_datas_url in stream_datas["resourceList"]:
+                if 'HD' in stream_datas_url["quality"] and \
+                        'mpegURL' in stream_datas_url["mimeType"]:
+                    stream_url = stream_datas_url["url"]
+                    break
 
-        acl_value = '/i/%s/*' % (
-            re.compile(r'\/i\/(.*?)\/').findall(stream_url)[0])
-        token_datas = urlquick.get(URL_TOKEN % acl_value, max_age=-1)
-        token_jsonparser = json.loads(token_datas.text)
-        token = token_jsonparser["token"]["authparams"]
-        if '?' in stream_url:
-            final_video_url = stream_url + '&' + token
-        else:
-            final_video_url = stream_url + '?' + token
-        return final_video_url
+                if 'mpegURL' in stream_datas_url["mimeType"]:
+                    stream_url = stream_datas_url["url"]
+
+    acl_value = '/i/%s/*' % (re.compile(r'\/i\/(.*?)\/').findall(stream_url)[0])
+    token_datas = urlquick.get(URL_TOKEN % acl_value, max_age=-1)
+    token_jsonparser = json.loads(token_datas.text)
+    token = token_jsonparser["token"]["authparams"]
+    if '?' in stream_url:
+        final_video_url = stream_url + '&' + token
+    else:
+        final_video_url = stream_url + '?' + token
+    return final_video_url

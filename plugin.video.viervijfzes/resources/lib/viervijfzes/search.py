@@ -56,7 +56,7 @@ class SearchApi:
                         path=path,
                         title=hit['_source']['title'],
                         description=hit['_source']['intro'],
-                        cover=hit['_source']['img'],
+                        poster=hit['_source']['img'],
                     ))
 
         return results

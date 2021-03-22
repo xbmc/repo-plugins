@@ -1,4 +1,4 @@
-#v.0.4.13
+#v.0.4.14
 
 try:
     from kodi_six import xbmc
@@ -46,8 +46,6 @@ class Logger( object ):
                 loglevel = self.logger.debug
         for line in loglines:
             try:
-                if isinstance(line, unicode):
-                    line = line.encode('utf-8')
                 str_line = line.__str__()
             except Exception as e:
                 str_line = ''

@@ -178,7 +178,7 @@ def addLinks(elem,object_type,useCacheArt,mode):
     for node in elem.iter(elem_type):
         cm = []
         object_id = node.attrib["id"]
-        if object_id is None or object_id == "":
+        if not object_id:
             continue
 
         name = str(node.findtext("name"))
@@ -255,7 +255,7 @@ def addPlayLinks(elem, object_type , object_subtype=None):
 
     for node in elem.iter(elem_type):
         object_id = node.attrib["id"]
-        if object_id is None or object_id == "":
+        if not object_id:
             continue
 
         play_url = str(node.findtext("url"))
@@ -315,10 +315,17 @@ def play_track(url):
         xbmc.log("AmpachePlugin::play_track url null", xbmc.LOGINFO )
         return
 
+    #read here the setting, cause delay problems
+    autofull = ut.strBool_to_bool(ampache.getSetting("auto-fullscreen"))
+
     liz = xbmcgui.ListItem()
     liz.setPath(url)
 
     xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=True,listitem=liz)
+
+    #enable auto fullscreen playing the track ( closes #17 )
+    if autofull is True:
+        xbmc.executebuiltin("ActivateWindow(visualisation)")
 
 #Main function to add xbmc plugin elements
 def addDir(name,mode,submode,offset=None,object_id=None):
@@ -471,7 +478,7 @@ def setRating():
         return
 
     object_id = ut.get_objectId_from_fileURL( file_url )
-    if object_id is None or object_id == "":
+    if not object_id:
         return
     rating = xbmc.getInfoLabel('MusicPlayer.UserRating')
     if rating == "":

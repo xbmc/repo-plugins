@@ -5,6 +5,7 @@
 		<setting id="api-version" type="number" label="30012" default="350001"/>
 		<setting id="old-search-gui" type="bool" label="30013" default="false"/>
 		<setting id="images-long-list" type="bool" label="30014" default="false"/>
+		<setting id="auto-fullscreen" type="bool" label="30015" default="false"/>
 	</category>
   <category label="30002">
 		<setting id="server.add" type="action" label="30020" action="RunPlugin(plugin://plugin.audio.ampache/?mode=301)"/>

@@ -45,7 +45,8 @@ class GeoblockedException(Exception):
 class Program:
     """ Defines a Program. """
 
-    def __init__(self, uuid=None, path=None, channel=None, title=None, description=None, aired=None, cover=None, background=None, seasons=None, episodes=None,
+    def __init__(self, uuid=None, path=None, channel=None, title=None, description=None, aired=None, poster=None, thumb=None, fanart=None, seasons=None,
+                 episodes=None,
                  clips=None, my_list=False):
         """
         :type uuid: str
@@ -54,8 +55,9 @@ class Program:
         :type title: str
         :type description: str
         :type aired: datetime
-        :type cover: str
-        :type background: str
+        :type poster: str
+        :type thumb: str
+        :type fanart: str
         :type seasons: list[Season]
         :type episodes: list[Episode]
         :type clips: list[Episode]
@@ -67,8 +69,9 @@ class Program:
         self.title = title
         self.description = description
         self.aired = aired
-        self.cover = cover
-        self.background = background
+        self.poster = poster
+        self.thumb = thumb
+        self.fanart = fanart
         self.seasons = seasons
         self.episodes = episodes
         self.clips = clips
@@ -81,14 +84,13 @@ class Program:
 class Season:
     """ Defines a Season. """
 
-    def __init__(self, uuid=None, path=None, channel=None, title=None, description=None, cover=None, number=None):
+    def __init__(self, uuid=None, path=None, channel=None, title=None, description=None, number=None):
         """
         :type uuid: str
         :type path: str
         :type channel: str
         :type title: str
         :type description: str
-        :type cover: str
         :type number: int
 
         """
@@ -97,7 +99,6 @@ class Season:
         self.channel = channel
         self.title = title
         self.description = description
-        self.cover = cover
         self.number = number
 
     def __repr__(self):
@@ -107,8 +108,8 @@ class Season:
 class Episode:
     """ Defines an Episode. """
 
-    def __init__(self, uuid=None, nodeid=None, path=None, channel=None, program_title=None, title=None, description=None, cover=None, background=None,
-                 duration=None, season=None, season_uuid=None, number=None, rating=None, aired=None, expiry=None, stream=None):
+    def __init__(self, uuid=None, nodeid=None, path=None, channel=None, program_title=None, title=None, description=None, thumb=None, duration=None,
+                 season=None, season_uuid=None, number=None, rating=None, aired=None, expiry=None, stream=None):
         """
         :type uuid: str
         :type nodeid: str
@@ -117,8 +118,7 @@ class Episode:
         :type program_title: str
         :type title: str
         :type description: str
-        :type cover: str
-        :type background: str
+        :type thumb: str
         :type duration: int
         :type season: int
         :type season_uuid: str
@@ -135,8 +135,7 @@ class Episode:
         self.program_title = program_title
         self.title = title
         self.description = description
-        self.cover = cover
-        self.background = background
+        self.thumb = thumb
         self.duration = duration
         self.season = season
         self.season_uuid = season_uuid
@@ -501,7 +500,7 @@ class ContentApi:
             programs.append(Program(
                 path=path.lstrip('/'),
                 title=unescape(item.group('title')),
-                cover=unescape(item.group('image')),
+                poster=unescape(item.group('image')),
             ))
 
         return programs
@@ -579,7 +578,7 @@ class ContentApi:
                 description=html_to_kodi(description),
                 duration=episode_duration,
                 uuid=episode_video_id,
-                cover=episode_image,
+                thumb=episode_image,
                 program_title=episode_program,
             ))
 
@@ -599,8 +598,9 @@ class ContentApi:
             title=data['title'],
             description=html_to_kodi(data['description']),
             aired=datetime.fromtimestamp(data.get('pageInfo', {}).get('publishDate')),
-            cover=data['images']['poster'],
-            background=data['images']['hero'],
+            poster=data['images']['poster'],
+            thumb=data['images']['teaser'],
+            fanart=data['images']['hero'],
         )
 
         # Create Season info
@@ -651,8 +651,7 @@ class ContentApi:
             program_title=data.get('program', {}).get('title') if data.get('program') else data.get('title'),
             title=data.get('title'),
             description=html_to_kodi(data.get('description')),
-            cover=data.get('image'),
-            background=data.get('image'),
+            thumb=data.get('image'),
             duration=data.get('duration'),
             season=data.get('seasonNumber'),
             season_uuid=season_uuid,

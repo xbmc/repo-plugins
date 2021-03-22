@@ -37,7 +37,7 @@ class EpgProgram:
 
     # pylint: disable=invalid-name
     def __init__(self, channel, program_title, episode_title, episode_title_original, number, season, genre, start,
-                 won_id, won_program_id, program_description, description, duration, program_url, video_url, cover,
+                 won_id, won_program_id, program_description, description, duration, program_url, video_url, thumb,
                  airing):
         self.channel = channel
         self.program_title = program_title
@@ -54,7 +54,7 @@ class EpgProgram:
         self.duration = duration
         self.program_url = program_url
         self.video_url = video_url
-        self.cover = cover
+        self.thumb = thumb
         self.airing = airing
 
         if GENRE_MAPPING.get(self.genre):
@@ -86,7 +86,7 @@ class EpgApi:
         :type channel: str
         :type date: str
         :rtype list[EpgProgram]
-         """
+        """
         if channel not in self.EPG_ENDPOINTS:
             raise Exception('Unknown channel %s' % channel)
 
@@ -127,10 +127,10 @@ class EpgApi:
         # Only allow direct playing if the linked video is the actual program
         if data.get('video_node', {}).get('latest_video'):
             video_url = (data.get('video_node', {}).get('url') or '').lstrip('/')
-            cover = data.get('video_node', {}).get('image')
+            thumb = data.get('video_node', {}).get('image')
         else:
             video_url = None
-            cover = None
+            thumb = None
 
         return EpgProgram(
             channel=channel,
@@ -148,7 +148,7 @@ class EpgApi:
             duration=duration,
             program_url=(data.get('program_node', {}).get('url') or '').lstrip('/'),
             video_url=video_url,
-            cover=cover,
+            thumb=thumb,
             airing=airing,
         )
 

@@ -1,36 +1,18 @@
 # -*- coding: utf-8 -*-
-"""
-    Copyright (C) 2016-2020 Team Catch-up TV & More
-    This file is part of Catch-up TV & More.
-    SPDX-License-Identifier: GPL-2.0-or-later
-"""
+# Copyright: (c) 2016-2020, Team Catch-up TV & More
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
-from __future__ import unicode_literals
-from __future__ import division
+# This file is part of Catch-up TV & More
 
-from builtins import str
-from resources.lib.py_utils import old_div
-from codequick import Route, Resolver, Listitem, utils, Script
-
-
-from resources.lib import web_utils
-from resources.lib.kodi_utils import get_kodi_version
-from resources.lib import download
-from resources.lib.menu_utils import item_post_treatment
-from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
-from resources.lib.addon_utils import get_item_media_path
-
-import inputstreamhelper
+from __future__ import division, unicode_literals
 import json
-import re
-import urlquick
-from kodi_six import xbmc
-from kodi_six import xbmcgui
 
-# TO DO
+from codequick import Listitem, Resolver, Route
+import urlquick
+
+from resources.lib.addon_utils import get_item_media_path
+from resources.lib.menu_utils import item_post_treatment
+
 
 URL_ROOT = 'https://www.discoveryplus.co.uk'
 

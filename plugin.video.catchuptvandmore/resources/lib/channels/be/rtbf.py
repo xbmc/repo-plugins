@@ -1,55 +1,29 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2017  SylvainCecchetto
+# Copyright: (c) 2017, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
+import json
+import re
+try:  # Python 3
+    from urllib.parse import urlencode
+except ImportError:  # Python 2
+    from urllib import urlencode
 
-from codequick import Route, Resolver, Listitem, utils, Script
+import inputstreamhelper
+from codequick import Route, Resolver, Listitem
+import htmlement
+from kodi_six import xbmcgui
+import urlquick
 
-
-from resources.lib import web_utils
-from resources.lib import resolver_proxy
-from resources.lib import download
+from resources.lib import download, resolver_proxy
 from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
 from resources.lib.menu_utils import item_post_treatment
 
-import inputstreamhelper
-import htmlement
-import re
-import json
-import time
-import urlquick
-from kodi_six import xbmc
-from kodi_six import xbmcgui
-from kodi_six import xbmcplugin
-# Working for Python 2/3
-try:
-    from urllib.parse import urlencode
-except ImportError:
-    from urllib import urlencode
 
-# TO DO
+# TODO
 # Add geoblock (info in JSON)
 # Add Quality Mode
 
@@ -494,33 +468,40 @@ def list_videos_sub_category_dl(plugin, item_id, sub_category_data_uuid,
     parser.feed(json_parser["blocks"][sub_category_data_uuid])
     root = parser.close()
 
-    for sub_category_dl_datas in root.iterfind(
-            ".//section[@class='js-item-container']"):
-        if sub_category_dl_datas.get('id') == sub_category_id:
-            list_videos_datas = sub_category_dl_datas.findall('.//article')
+    for sub_category_dl_datas in root.iterfind(".//section[@class='js-item-container']"):
+        if sub_category_dl_datas.get('id') != sub_category_id:
+            continue
 
-            for video_datas in list_videos_datas:
-                if video_datas.get('data-card') is not None:
-                    data_card = video_datas.get('data-card')
-                    if data_card:
-                        json_parser = json.loads(data_card)
-                        if json_parser["isVideo"]:
-                            if "mediaId" in json_parser:
-                                video_title = json_parser["title"] + ' - ' + json_parser["subtitle"]
-                                video_image = json_parser["illustration"]["format1248"]
-                                video_id = json_parser["mediaId"]
+        list_videos_datas = sub_category_dl_datas.findall('.//article')
 
-                                item = Listitem()
-                                item.label = video_title
-                                item.art['thumb'] = item.art['landscape'] = video_image
+        for video_datas in list_videos_datas:
+            if video_datas.get('data-card') is None:
+                continue
 
-                                item.set_callback(get_video_url2,
-                                                  item_id=item_id,
-                                                  video_id=video_id)
-                                item_post_treatment(item,
-                                                    is_playable=True,
-                                                    is_downloadable=True)
-                                yield item
+            data_card = video_datas.get('data-card')
+            if not data_card:
+                continue
+
+            json_parser = json.loads(data_card)
+            if not json_parser["isVideo"]:
+                continue
+
+            if "mediaId" not in json_parser:
+                continue
+
+            video_title = json_parser["title"] + ' - ' + json_parser["subtitle"]
+            video_image = json_parser["illustration"]["format1248"]
+            video_id = json_parser["mediaId"]
+
+            item = Listitem()
+            item.label = video_title
+            item.art['thumb'] = item.art['landscape'] = video_image
+
+            item.set_callback(get_video_url2,
+                              item_id=item_id,
+                              video_id=video_id)
+            item_post_treatment(item, is_playable=True, is_downloadable=True)
+            yield item
 
 
 @Resolver.register
@@ -535,45 +516,44 @@ def get_video_url(plugin,
         video_id = video_url.rsplit('/', 1)[1]
         return resolver_proxy.get_stream_youtube(plugin, video_id,
                                                  download_mode)
-    elif 'arte.tv' in video_url:
+
+    if 'arte.tv' in video_url:
         video_id = re.compile("(?<=fr%2F)(.*)(?=&autostart)").findall(video_url)[0]
         return resolver_proxy.get_arte_video_stream(plugin,
                                                     'fr',
                                                     video_id,
                                                     download_mode)
-    else:
-        if is_drm:
-            if get_kodi_version() < 18:
-                xbmcgui.Dialog().ok('Info', plugin.localize(30602))
-                return False
 
-            is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
-            if not is_helper.check_inputstream():
-                return False
+    if is_drm:
+        if get_kodi_version() < 18:
+            xbmcgui.Dialog().ok('Info', plugin.localize(30602))
+            return False
 
-            token_url = URL_TOKEN % ('media_id', video_id, PARTNER_KEY)
-            token_value = urlquick.get(token_url, max_age=-1)
-            json_parser_token = json.loads(token_value.text)
+        is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
+        if not is_helper.check_inputstream():
+            return False
 
-            item = Listitem()
-            item.path = video_url
-            item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
-            item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-            item.property[
-                'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
-            headers2 = {
-                'customdata':
-                json_parser_token["auth_encoded_xml"],
-            }
-            item.property[
-                'inputstream.adaptive.license_key'] = URL_LICENCE_KEY % urlencode(headers2)
-            item.property['inputstream.adaptive.manifest_update_parameter'] = 'full'
-            item.label = get_selected_item_label()
-            item.art.update(get_selected_item_art())
-            item.info.update(get_selected_item_info())
-            return item
-        else:
-            return video_url
+        token_url = URL_TOKEN % ('media_id', video_id, PARTNER_KEY)
+        token_value = urlquick.get(token_url, max_age=-1)
+        json_parser_token = json.loads(token_value.text)
+
+        item = Listitem()
+        item.path = video_url
+        item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
+        item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+        item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+        headers2 = {
+            'customdata':
+            json_parser_token["auth_encoded_xml"],
+        }
+        item.property['inputstream.adaptive.license_key'] = URL_LICENCE_KEY % urlencode(headers2)
+        item.property['inputstream.adaptive.manifest_update_parameter'] = 'full'
+        item.label = get_selected_item_label()
+        item.art.update(get_selected_item_art())
+        item.info.update(get_selected_item_info())
+        return item
+
+    return video_url
 
 
 @Resolver.register
@@ -593,12 +573,11 @@ def get_video_url2(plugin,
             video_id = json_parser["url"].rsplit('/', 1)[1]
             return resolver_proxy.get_stream_youtube(plugin, video_id,
                                                      download_mode)
-        else:
-            return json_parser["url"]
-    else:
-        stream_url = json_parser["urlHls"]
-        if 'drm' in stream_url:
-            stream_url = json_parser["urlHlsAes128"]
+        return json_parser["url"]
+
+    stream_url = json_parser["urlHls"]
+    if 'drm' in stream_url:
+        stream_url = json_parser["urlHlsAes128"]
 
     if download_mode:
         return download.download_video(stream_url)
@@ -727,18 +706,16 @@ def get_live_url(plugin, item_id, live_url, is_drm, live_id, **kwargs):
         item.path = live_url
         item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
         item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-        item.property[
-            'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+        item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
         headers2 = {
             'customdata':
             json_parser_token["auth_encoded_xml"],
         }
-        item.property[
-            'inputstream.adaptive.license_key'] = URL_LICENCE_KEY % urlencode(headers2)
+        item.property['inputstream.adaptive.license_key'] = URL_LICENCE_KEY % urlencode(headers2)
         item.property['inputstream.adaptive.manifest_update_parameter'] = 'full'
         item.label = get_selected_item_label()
         item.art.update(get_selected_item_art())
         item.info.update(get_selected_item_info())
         return item
-    else:
-        return live_url
+
+    return live_url

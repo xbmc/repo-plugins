@@ -1,32 +1,25 @@
 # -*- coding: utf-8 -*-
-"""
-    Copyright (C) 2016-2020 Team Catch-up TV & More
-    This file is part of Catch-up TV & More.
-    SPDX-License-Identifier: GPL-2.0-or-later
-"""
+# Copyright: (c) 2016-2020, Team Catch-up TV & More
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
+# This file is part of Catch-up TV & More
+
 from __future__ import unicode_literals
-
 from builtins import str
-from codequick import Route, Resolver, Listitem, utils, Script
+import json
+try:  # Python 3
+    from urllib.parse import urlencode
+except ImportError:  # Python 2
+    from urllib import urlencode
 
+import inputstreamhelper
+from codequick import Listitem, Resolver, Route
+from kodi_six import xbmcgui
+import urlquick
 
-from resources.lib import web_utils
 from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
 from resources.lib.menu_utils import item_post_treatment
 
-import inputstreamhelper
-import json
-import urlquick
-from kodi_six import xbmcgui
-# Working for Python 2/3
-try:
-    from urllib.parse import urlencode
-except ImportError:
-    from urllib import urlencode
 
 URL_TV5MONDEPLUS_ROOT = 'https://api.tv5mondeplus.com'
 

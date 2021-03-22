@@ -20,11 +20,11 @@ with this software; if not, see <http://www.gnu.org/licenses/>.
 
 import os
 import re
-import pytz
 import time
 import datetime
-from tzlocal import get_localzone
 import xml.etree.ElementTree as ET
+from tzlocal import get_localzone
+import pytz
 try:
     from urllib.parse import urlparse
 except ImportError:
@@ -35,10 +35,7 @@ from kodi_six import xbmcvfs
 from codequick import Script
 import urlquick
 
-"""
-python-xmltv package (https://pypi.org/project/python-xmltv/)
-
-"""
+# python-xmltv package (https://pypi.org/project/python-xmltv/)
 
 # The Python-XMLTV version
 VERSION = "1.4.3"
@@ -270,7 +267,7 @@ def read_programmes(fp, only_current_programmes=False):
         # than parsing the whole xmltv file with elementtree
         # (x10 faster)
         xmltv_l = []
-        with open(fp, 'r') as f:
+        with open(fp, 'r', encoding='utf-8') as f:
             take_line = True
             for line in f.readlines():
 
@@ -303,11 +300,7 @@ def read_programmes(fp, only_current_programmes=False):
     return programmes
 
 
-"""
-CUTV&M functions
-
-"""
-
+# CUTV&M functions
 
 def datetime_strptime(s, f):
     """Simple workaroung to fix https://forum.kodi.tv/showthread.php?tid=112916

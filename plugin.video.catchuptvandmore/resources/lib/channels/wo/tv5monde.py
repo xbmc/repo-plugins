@@ -1,43 +1,22 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2017  SylvainCecchetto
+# Copyright: (c) 2017, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# TODO Rework filter for all videos
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-
 from builtins import str
-from codequick import Route, Resolver, Listitem, utils, Script
-
-
-from resources.lib import web_utils
-from resources.lib import download
-from resources.lib.menu_utils import item_post_treatment
-
 import json
 import re
+
+from codequick import Listitem, Resolver, Route
 import urlquick
+
+from resources.lib import download, web_utils
+from resources.lib.menu_utils import item_post_treatment
+
+
+# TODO Rework filter for all videos
 
 URL_TV5MONDE_LIVE = 'http://live.tv5monde.com/'
 
@@ -55,7 +34,8 @@ def list_categories(plugin, item_id, **kwargs):
     - Informations
     - ...
     """
-    resp = urlquick.get(URL_TV5MONDE_ROOT + '/toutes-les-emissions')
+    resp = urlquick.get(URL_TV5MONDE_ROOT + '/toutes-les-emissions',
+                        headers={'User-Agent': web_utils.get_random_ua()})
     root = resp.parse()
     category_title = root.find(".//nav[@class='footer__emissions footer-content']").find(
         ".//div[@class='footer__title']").find('.//a').text.strip()
@@ -80,7 +60,8 @@ def list_programs(plugin, item_id, **kwargs):
     - Les feux de l'amour
     - ...
     """
-    resp = urlquick.get(URL_TV5MONDE_ROOT)
+    resp = urlquick.get(URL_TV5MONDE_ROOT,
+                        headers={'User-Agent': web_utils.get_random_ua()})
     root = resp.parse("nav", attrs={"class": "footer__emissions footer-content"})
 
     for program_datas in root.iterfind(".//li"):
@@ -101,7 +82,8 @@ def list_programs(plugin, item_id, **kwargs):
 @Route.register
 def list_videos(plugin, item_id, program_url, page, **kwargs):
 
-    resp = urlquick.get(program_url + '?page=%s' % page)
+    resp = urlquick.get(program_url + '?page=%s' % page,
+                        headers={'User-Agent': web_utils.get_random_ua()})
     root = resp.parse()
 
     for video_datas in root.iterfind(".//div[@class='bloc-episode-content']"):
@@ -136,7 +118,8 @@ def list_videos(plugin, item_id, program_url, page, **kwargs):
 def list_videos_category(plugin, item_id, page, **kwargs):
 
     resp = urlquick.get(URL_TV5MONDE_ROOT +
-                        '/toutes-les-videos?page=%s' % page)
+                        '/toutes-les-videos?page=%s' % page,
+                        headers={'User-Agent': web_utils.get_random_ua()})
     root = resp.parse()
 
     for video_datas in root.iterfind(".//div[@class='bloc-episode-content']"):
@@ -198,4 +181,18 @@ def get_live_url(plugin, item_id, **kwargs):
                         max_age=-1)
     live_json = re.compile(r'data-broadcast=\'(.*?)\'').findall(resp.text)[0]
     json_parser = json.loads(live_json)
-    return json_parser["files"][0]["url"]
+    url_stream = json_parser["files"][0]["url"]
+    manifest = urlquick.get(
+        url_stream,
+        headers={'User-Agent': web_utils.get_random_ua()},
+        max_age=-1)
+    lines = manifest.text.splitlines()
+    final_url = ''
+    for k in range(0, len(lines) - 1):
+        if 'RESOLUTION=' in lines[k]:
+            final_url = lines[k + 1]
+        if 'PROGRAM-ID=' in lines[k]:
+            if '-b/' not in lines[k + 1]:
+                final_url = lines[k + 1]
+
+    return final_url

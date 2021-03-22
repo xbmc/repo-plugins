@@ -11,7 +11,6 @@ from datetime import timedelta
 from resources.lib import kodiutils
 from resources.lib.modules import CHANNELS
 from resources.lib.vtmgo.vtmgo import VtmGo
-from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
 from resources.lib.vtmgo.vtmgoepg import VtmGoEpg
 
 _LOGGER = logging.getLogger(__name__)
@@ -24,12 +23,7 @@ class IPTVManager:
         """ Initialise object
         :type port: int
         """
-        self._auth = VtmGoAuth(kodiutils.get_setting('username'),
-                               kodiutils.get_setting('password'),
-                               'VTM',
-                               kodiutils.get_setting('profile'),
-                               kodiutils.get_tokens_path())
-        self._vtm_go = VtmGo(self._auth)
+        self._vtm_go = VtmGo()
         self._vtm_go_epg = VtmGoEpg()
         self.port = port
 
@@ -105,7 +99,7 @@ class IPTVManager:
                         # season=None,  # Not available in the API
                         # epsiode=None,  # Not available in the API
                         genre=broadcast.genre,
-                        image=broadcast.image,
+                        image=broadcast.thumb,
                         stream=kodiutils.url_for('play',
                                                  category=broadcast.playable_type,
                                                  item=broadcast.playable_uuid) if broadcast.playable_uuid else None)

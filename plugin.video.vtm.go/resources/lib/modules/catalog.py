@@ -8,7 +8,7 @@ import logging
 from resources.lib import kodiutils
 from resources.lib.modules import CHANNELS
 from resources.lib.modules.menu import Menu
-from resources.lib.vtmgo import STOREFRONT_MOVIES, STOREFRONT_SERIES, Category
+from resources.lib.vtmgo import STOREFRONT_MAIN, STOREFRONT_MOVIES, STOREFRONT_SERIES, Category
 from resources.lib.vtmgo.exceptions import UnavailableException
 from resources.lib.vtmgo.vtmgo import CACHE_PREVENT, ApiUpdateRequired, VtmGo
 from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
@@ -127,10 +127,13 @@ class Catalog:
                 title='* %s' % kodiutils.localize(30204),  # * All seasons
                 path=kodiutils.url_for('show_catalog_program_season', program=program, season=-1),
                 art_dict=dict(
-                    thumb=program_obj.cover,
-                    fanart=program_obj.cover,
+                    poster=program_obj.poster,
+                    thumb=program_obj.thumb,
+                    landscape=program_obj.thumb,
+                    fanart=program_obj.fanart,
                 ),
                 info_dict=dict(
+                    mediatype='season',
                     tvshowtitle=program_obj.name,
                     title=kodiutils.localize(30204),  # All seasons
                     tagline=program_obj.description,
@@ -146,10 +149,13 @@ class Catalog:
                 title=kodiutils.localize(30205, season=season.number),  # Season {season}
                 path=kodiutils.url_for('show_catalog_program_season', program=program, season=season.number),
                 art_dict=dict(
-                    thumb=season.cover,
-                    fanart=program_obj.cover,
+                    poster=program_obj.poster,
+                    thumb=program_obj.thumb,
+                    landscape=program_obj.thumb,
+                    fanart=program_obj.fanart,
                 ),
                 info_dict=dict(
+                    mediatype='season',
                     tvshowtitle=program_obj.name,
                     title=kodiutils.localize(30205, season=season.number),  # Season {season}
                     tagline=program_obj.description,
@@ -250,14 +256,14 @@ class Catalog:
         elif storefront == STOREFRONT_MOVIES:
             content = 'movies'
         else:
-            content = 'files'
+            content = 'tvshows'  # Fallback to a list of tvshows
 
         kodiutils.show_listing(listing, result.title, content=content, sort=['unsorted', 'label', 'year', 'duration'])
 
     def show_mylist(self):
         """ Show the items in "My List" """
         try:
-            mylist = self._vtm_go.get_swimlane('my-list')
+            mylist = self._vtm_go.get_mylist()
         except ApiUpdateRequired:
             kodiutils.ok_dialog(message=kodiutils.localize(30705))  # The VTM GO Service has been updated...
             return
@@ -294,7 +300,7 @@ class Catalog:
     def show_continuewatching(self):
         """ Show the items in "Continue Watching" """
         try:
-            mylist = self._vtm_go.get_swimlane('continue-watching')
+            category = self._vtm_go.get_storefront_category(STOREFRONT_MAIN, 'continue-watching')
         except ApiUpdateRequired:
             kodiutils.ok_dialog(message=kodiutils.localize(30705))  # The VTM GO Service has been updated...
             return
@@ -305,7 +311,7 @@ class Catalog:
             return
 
         listing = []
-        for item in mylist:
+        for item in category.content:
             titleitem = Menu.generate_titleitem(item, progress=True)
 
             # Add Program Name to title since this list contains episodes from multiple programs

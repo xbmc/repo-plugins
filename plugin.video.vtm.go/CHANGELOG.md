@@ -1,5 +1,19 @@
 # Changelog
 
+## [v1.2.5](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.5) (2021-03-22)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.4...v1.2.5)
+
+**Implemented enhancements:**
+
+- Improve artwork [\#269](https://github.com/add-ons/plugin.video.vtm.go/pull/269) ([michaelarnauts](https://github.com/michaelarnauts))
+- Add more metadata to movies and programs [\#267](https://github.com/add-ons/plugin.video.vtm.go/pull/267) ([michaelarnauts](https://github.com/michaelarnauts))
+- Don't depend on credentials to populate IPTV Manager data [\#266](https://github.com/add-ons/plugin.video.vtm.go/pull/266) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Fixed bugs:**
+
+- Fix authentication and use API v9 [\#270](https://github.com/add-ons/plugin.video.vtm.go/pull/270) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.2.4](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.4) (2021-03-01)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.3...v1.2.4)

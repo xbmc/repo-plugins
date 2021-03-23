@@ -154,8 +154,7 @@ class TvGuide:
                 TitleItem(title=title,
                           path=path,
                           art_dict={
-                              'icon': program.cover,
-                              'thumb': program.cover,
+                              'thumb': program.thumb,
                           },
                           info_dict=info_dict,
                           stream_dict=stream_dict,

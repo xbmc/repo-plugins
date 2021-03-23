@@ -83,7 +83,7 @@ class IPTVManager:
                             episode='S%sE%s' % (program.season, program.number) if program.season and program.number else None,
                             genre=program.genre,
                             genre_id=program.genre_id,
-                            image=program.cover,
+                            image=program.thumb,
                             stream=kodiutils.url_for('play_from_page',
                                                      channel=key,
                                                      page=quote(program.video_url, safe='')) if program.video_url else None)

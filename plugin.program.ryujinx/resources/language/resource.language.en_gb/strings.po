@@ -1,0 +1,19 @@
+# plugin.program.ryujinx language file
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+msgctxt "#32000"
+msgid "Paths"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Ryujinx path"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Game folder path"
+msgstr ""
+

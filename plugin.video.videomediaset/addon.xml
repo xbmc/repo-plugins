@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.videomediaset" name="Mediaset Play" provider-name="phate89, aracnoz" version="2.0.2+matrix.1">
+<addon id="plugin.video.videomediaset" name="Mediaset Play" provider-name="phate89, aracnoz" version="2.0.3+matrix.1">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.phate89" version="1.2.1"/>
@@ -19,17 +19,10 @@
         <forum>https://forum.kodi.tv/showthread.php?tid=292876</forum>
         <source>https://github.com/phate89/plugin.video.videomediaset</source>
         <reuselanguageinvoker>true</reuselanguageinvoker>
-        <news>2.0.1
-- removed letter sorting (not available anymore) and fixed endpoints after website change (thx to typhoon51280)
-- added support for live restart (manually jump to start after you start play right now)
-- added brand title in episode and clip search to have better info
-- added details of live event in  live channels section
-- improved performance reusing python env
-- improved element sorting
-- added editions visualization for programs
-- fixed case of valid video without media info (no way to play it)
-- improved media type and info detection
-- fixed next page search
+        <news>2.0.3
+- fixed live channel list loading in pre-matrix with spechial characters (thx to madpilot78)
+- added paging for videos
+- added range in url requests (thx to thinkingmik)
         </news>
         <assets>
             <icon>resources/icon.png</icon>

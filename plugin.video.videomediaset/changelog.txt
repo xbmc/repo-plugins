@@ -1,3 +1,9 @@
+[B]2.0.3[/B]
+- fixed live channel list loading in pre-matrix with spechial characters (thx to madpilot78)
+- added paging for videos
+- added range in url requests (thx to thinkingmik)
+
+
 [B]2.0.1[/B]
 - removed letter sorting (not available anymore) and fixed endpoints after website change (thx to typhoon51280)
 - added support for live restart (manually jump to start after you start play right now)

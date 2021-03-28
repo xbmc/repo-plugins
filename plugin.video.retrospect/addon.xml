@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.2.25+matrix.1"
+        version="5.2.26+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -127,18 +127,18 @@
 
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.2.25+matrix.1 - Changelog - 2021-03-20[/B]
+        <news>[B]Retrospect v5.2.26+matrix.1 - Changelog - 2021-03-28[/B]
 
-Just a minor update to fix a thumb related issue for Nickelodeon and to fix the add-on&#x27;s description.
+This release includes a fix for VRT.nu channel that broke completely.
 
 [B]Framework related[/B]
 _None_
 
 [B]GUI/Settings/Language related[/B]
-* Fixed: Make the addon summary, an actual summary.
+_None_
 
 [B]Channel related[/B]
-* Updated: Nickelodeon Sweden thumb (Fixes #1497)
+* Fixed: VRT.Nu videos were not listing (Fixes #1500).
 
         </news>
         <assets>

@@ -1,3 +1,18 @@
+v3.0.50
+Switched to PC mediaselector.
+COMPATIBILITY NOTE: As a result there are no more HD streams over HLS.
+In order to get HD streams, inputstream.adaptive is required.
+Set "Stream protocol" in the add-on settings to "DASH" to get HD streams after making sure inputstream.adaptive is available.
+New mediaselector also adds the following new features:
+- Access to new CDN Cloudfront (Amazon)
+- Access to new subtitle sources. If you experience issues with subtitles, first try the new "Subtitle source" setting in the add-on settings before reporting issues.
+
+Radio Categories now uses the Categories of BBC Sounds.
+
+Known issues:
+- Live TV and Radio over DASH is broken, most likely due to a bug in inputstream.adaptive.
+- Red Button is only available for HLS.
+
 v3.0.49
 Fixes for new subtitle XML format.
 Added initial compatibility with Python 3 (does not work on 19 yet).

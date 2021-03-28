@@ -789,7 +789,7 @@ def AddAvailableStreamItem(name, url, iconimage, description):
         streams_all = ParseStreamsHLSDASH(stream_ids['stream_id_st'])
     if streams_all[1]:
         # print "Setting subtitles URL"
-        subtitles_url = streams_all[1][0]
+        subtitles_url = streams_all[1][0][1]
         # print subtitles_url
     else:
         subtitles_url = ''
@@ -973,7 +973,7 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
         ia_available = CheckInputStreamAdaptiveAvailability()
         if ia_available:
             streams = ParseLiveDASHStreams(channelname)
-            suppliers = ['', 'Akamai', 'Limelight', 'Bidi']
+            suppliers = ['', 'Akamai', 'Limelight', 'Bidi','Cloudfront']
             for supplier, bitrate, url, resolution in streams:
                 title = name + ' - [I][COLOR fff1f1f1]%s[/COLOR][/I]' % (suppliers[supplier])
                 AddMenuEntry(title, url, 201, iconimage, '', '')
@@ -1033,9 +1033,11 @@ def PlayStream(name, url, iconimage, description, subtitles_url):
         liz.setProperty('inputstreamaddon', 'inputstream.adaptive')
         liz.setProperty('inputstream.adaptive.manifest_type', 'mpd')
     if subtitles_url and ADDON.getSetting('subtitles') == 'true':
+        # print "Downloading subtitles"
         subtitles_file = download_subtitles(subtitles_url)
         liz.setSubtitles([subtitles_file])
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
+
 
 def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
     """Will create one menu entry for each available stream of a particular stream_id"""
@@ -1044,13 +1046,13 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
     # print streams
     if streams[1]:
         # print "Setting subtitles URL"
-        subtitles_url = streams[1][0]
+        subtitles_url = streams[1][0][1]
         # print subtitles_url
     else:
         subtitles_url = ''
-    suppliers = ['', 'Akamai', 'Limelight', 'Bidi']
+    suppliers = ['', 'Akamai', 'Limelight', 'Bidi','Cloudfront']
     bitrates = [0, 800, 1012, 1500, 1800, 2400, 3116, 5510]
-    for supplier, bitrate, url, resolution in sorted(streams[0], key=itemgetter(1), reverse=True):
+    for supplier, bitrate, url, resolution, protocol in sorted(streams[0], key=itemgetter(1), reverse=True):
         if bitrate in (5, 7):
             color = 'ff008000'
         elif bitrate == 6:
@@ -1059,12 +1061,69 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
             color = 'ffffff00'
         else:
             color = 'ffffa500'
+        title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR ffd3d3d3]%s (%s)[/COLOR][/I]' % (
+            color, bitrates[bitrate] / 1000, suppliers[supplier], protocol)
         if int(ADDON.getSetting('stream_protocol')) == 1:
             title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR ffd3d3d3]%s[/COLOR][/I]' % (
                 color, bitrates[bitrate] / 1000, suppliers[supplier])
         else:
             title = name + ' - [I][COLOR ffd3d3d3]%s[/COLOR][/I]' % (suppliers[supplier])
         AddMenuEntry(title, url, 201, iconimage, description, subtitles_url, resolution=resolution)
+
+
+def ParseMediaselector(stream_id):
+    streams = []
+    subtitles = []
+    # print "Parsing streams for PID: %s"%stream_id
+    # Open the page with the actual strem information and display the various available streams.
+    NEW_URL = "https://open.live.bbc.co.uk/mediaselector/6/select/version/2.0/mediaset/pc/vpid/%s/format/json/jsfunc/JS_callbacks0" % stream_id
+    html = OpenURL(NEW_URL)
+    match = re.search(r'JS_callbacks0.*?\((.*?)\);', html, re.DOTALL)
+    if match:
+        json_data = json.loads(match.group(1))
+        if json_data:
+            # print(json.dumps(json_data, sort_keys=True, indent=2))
+            if 'media' in json_data:
+                for media in json_data['media']:
+                    if 'kind' in media:
+                        if media['kind'] == 'captions':
+                            if 'connection' in media:
+                                for connection in media['connection']:
+                                    href = ''
+                                    protocol = ''
+                                    supplier = ''
+                                    if 'href' in connection:
+                                        href = connection['href']
+                                    if 'protocol' in connection:
+                                        protocol = connection['protocol']
+                                    if 'supplier' in connection:
+                                        supplier = connection['supplier']
+                                    subtitles.append((href, protocol, supplier))
+                        elif media['kind'].startswith('video'):
+                            if 'connection' in media:
+                                for connection in media['connection']:
+                                    href = ''
+                                    protocol = ''
+                                    supplier = ''
+                                    transfer_format = ''
+                                    if 'href' in connection:
+                                        href = connection['href']
+                                    if 'protocol' in connection:
+                                        protocol = connection['protocol']
+                                    if 'supplier' in connection:
+                                        supplier = connection['supplier']
+                                    if 'transferFormat' in connection:
+                                        transfer_format = connection['transferFormat']
+                                    streams.append((href, protocol, supplier, transfer_format))
+            elif 'result' in json_data:
+                if json_data['result'] == 'geolocation':
+                    # print "Geoblock detected, raising error message"
+                    dialog = xbmcgui.Dialog()
+                    dialog.ok(translation(30400), translation(30401))
+                    raise
+    # print "Found streams:"
+    # print streams
+    return streams, subtitles
 
 
 def ParseStreamsHLSDASH(stream_id):
@@ -1079,253 +1138,157 @@ def ParseStreamsHLSDASH(stream_id):
 
 
 def ParseStreams(stream_id):
-    retlist = []
+    streams = []
+    subtitles = []
     # print "Parsing streams for PID: %s"%stream_id
-    # Open the page with the actual strem information and display the various available streams.
-    NEW_URL = "https://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/%s" % stream_id
-    html = OpenURL(NEW_URL)
-    # Parse the different streams and add them as new directory entries.
-    match = re.compile(
-        'connection authExpires=".+?href="(.+?)".+?supplier="mf_(.+?)".+?transferFormat="(.+?)"'
-        ).findall(html)
+    mediaselector = ParseMediaselector(stream_id)
     source = int(ADDON.getSetting('catchup_source'))
-    for m3u8_url, supplier, transfer_format in match:
+    for m3u8_url, protocol, supplier, transfer_format in mediaselector[0]:
         tmp_sup = 0
         tmp_br = 0
         if transfer_format == 'hls':
-            if supplier.startswith('akamai') and source in [0,1]:
+            if 'akamai' in supplier and source in [0,1]:
                 tmp_sup = 1
-            elif supplier.startswith('limelight') and source in [0,2]:
+            elif 'limelight' in supplier and source in [0,2]:
                 tmp_sup = 2
-            elif supplier.startswith('bidi') and source in [0,3]:
+            elif 'bidi' in supplier and source in [0,3]:
                 tmp_sup = 3
+            elif 'cloudfront' in supplier and source in [0,4]:
+                tmp_sup = 4
             else:
                 continue
-            m3u8_breakdown = re.compile('(.+?)iptv.+?m3u8(.+?)$').findall(m3u8_url)
+            # print m3u8_url
+            m3u8_breakdown = re.compile('(.+?)pc_hd_abr_v2_hls_master.+?m3u8(.+?)$').findall(m3u8_url)
             m3u8_html = OpenURL(m3u8_url)
             m3u8_match = re.compile('BANDWIDTH=(.+?),.+?RESOLUTION=(.+?)(?:,.+?\n|\n)(.+?)\n').findall(m3u8_html)
             for bandwidth, resolution, stream in m3u8_match:
                 url = "%s%s%s" % (m3u8_breakdown[0][0], stream, m3u8_breakdown[0][1])
-                if 1000000 <= int(bandwidth) <= 1100000:
-                    tmp_br = 2
-                elif 1790000 <= int(bandwidth) <= 1800000:
-                    tmp_br = 4
-                elif 3100000 <= int(bandwidth) <= 3120000:
-                    tmp_br = 6
-                elif int(bandwidth) >= 5500000:
-                    tmp_br = 7
-                retlist.append((tmp_sup, tmp_br, url, resolution))
-    # It may be useful to parse these additional streams as a default as they offer additional bandwidths.
-    match = re.compile(
-        'kind="video".+?connection href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
-        ).findall(html)
-    unique = []
-    [unique.append(item) for item in match if item not in unique]
-    for m3u8_url, supplier, transfer_format in unique:
-        tmp_sup = 0
-        tmp_br = 0
-        if transfer_format == 'hls':
-            if supplier.startswith('akamai_hls_open') and source in [0,1]:
-                tmp_sup = 1
-            elif supplier.startswith('limelight_hls_open') and source in [0,2]:
-                tmp_sup = 2
-            else:
-                continue
-            m3u8_breakdown = re.compile('.+?master.m3u8(.+?)$').findall(m3u8_url)
-        m3u8_html = OpenURL(m3u8_url)
-        m3u8_match = re.compile('BANDWIDTH=(.+?),RESOLUTION=(.+?),.+?\n(.+?)\n').findall(m3u8_html)
-        for bandwidth, resolution, stream in m3u8_match:
-            url = "%s%s" % (stream, m3u8_breakdown[0][0])
-            # This is not entirely correct, displayed bandwidth may be higher or lower than actual bandwidth.
-            if int(bandwidth) <= 801000:
-                tmp_br = 1
-            elif int(bandwidth) <= 1510000:
-                tmp_br = 3
-            elif int(bandwidth) <= 2410000:
-                tmp_br = 5
-            retlist.append((tmp_sup, tmp_br, url, resolution))
-    # Some events have special live streams which show up as normal programmes.
-    # They need to be parsed separately.
-    match = re.compile(
-        'connection.+?href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
-        ).findall(html)
-    unique = []
-    [unique.append(item) for item in match if item not in unique]
-    for m3u8_url, supplier, transfer_format in unique:
-        tmp_sup = 0
-        tmp_br = 0
-        if transfer_format == 'hls':
-            if supplier == 'akamai_hls_live':
-                tmp_sup = 1
-            elif supplier == 'll_hls_live':
-                tmp_sup = 2
-            else:
-                # This is not a live stream, skip code to avoid unnecessary loading of playlists.
-                continue
-            html = OpenURL(m3u8_url)
-            match = re.compile('#EXT-X-STREAM-INF:PROGRAM-ID=(.+?),BANDWIDTH=(.+?),CODECS="(.*?)",RESOLUTION=(.+?)\s*(.+?.m3u8)').findall(html)
-            for stream_id, bandwidth, codecs, resolution, url in match:
-                # Note: This is not entirely correct as these bandwidths relate to live programmes,
-                # not catchup.
                 if int(bandwidth) <= 1000000:
                     tmp_br = 1
                 elif int(bandwidth) <= 1100000:
                     tmp_br = 2
-                elif 1700000 <= int(bandwidth) <= 1900000:
+                elif int(bandwidth) <= 1510000:
+                    tmp_br = 3
+                elif int(bandwidth) <= 1900000:
                     tmp_br = 4
-                elif 3100000 <= int(bandwidth) <= 3120000:
+                elif int(bandwidth) <= 2410000:
+                    tmp_br = 5
+                elif int(bandwidth) <= 3120000:
                     tmp_br = 6
                 elif int(bandwidth) >= 5500000:
                     tmp_br = 7
-                retlist.append((tmp_sup, tmp_br, url, resolution))
-    match = re.compile('service="captions".+?connection href="(.+?)"').findall(html)
-    # print "Subtitle URL: %s"%match
-    # print retlist
-    if not match:
-        # print "No streams found"
-        check_geo = re.search(
-            '<error id="geolocation"/>', html)
-        if check_geo:
-            # print "Geoblock detected, raising error message"
-            dialog = xbmcgui.Dialog()
-            dialog.ok(translation(30400), translation(30401))
-            raise
-    return retlist, match
+                # print url
+                streams.append((tmp_sup, tmp_br, url, resolution, protocol))
+
+    source = int(ADDON.getSetting('subtitle_source'))
+    for href, protocol, supplier in mediaselector[1]:
+        if 'akamai' in supplier and source in [0,1]:
+            tmp_sup = 1
+        elif 'limelight' in supplier and source in [0,2]:
+            tmp_sup = 2
+        elif 'bidi' in supplier and source in [0,3]:
+            tmp_sup = 3
+        elif 'cloudfront' in supplier and source in [0,4]:
+            tmp_sup = 4
+        else:
+            continue
+        subtitles.append((tmp_sup, href, protocol))
+
+    return streams, subtitles
 
 
 def ParseDASHStreams(stream_id):
-    retlist = []
+    streams = []
+    subtitles = []
     # print "Parsing streams for PID: %s"%stream_id
+    mediaselector = ParseMediaselector(stream_id)
     # Open the page with the actual strem information and display the various available streams.
-    NEW_URL = "https://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/%s" % stream_id
-    html = OpenURL(NEW_URL)
-
-    # Check if this is a webcast.
-    check_webcast = re.search('webcast', html)
-    if check_webcast:
-        # This appears to be a webcast. Load PC mediaselector to get DASH streams.
-        NEW_URL = "https://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/pc/vpid/%s" % stream_id
-        html = OpenURL(NEW_URL)
-        # Parse the different streams and add them as new directory entries.
-        match = re.compile(
-              'connection.+?href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
-            ).findall(html)
-        unique = []
-        [unique.append(item) for item in match if item not in unique]
-        for mpd_url, supplier, transfer_format in unique:
-            tmp_sup = 0
-            tmp_br = 0
-            if transfer_format == 'dash':
-                if supplier in ['akamai_dash_live', 'akamai_dash_live_https']:
-                    tmp_sup = 1
-                elif supplier in ['ll_dash_live', 'll_dash_live_https']:
-                    tmp_sup = 2
-                retlist.append((tmp_sup, 1, mpd_url, '1280x720'))
-
-        if not match:
-            # print "No streams found"
-            check_geo = re.search(
-                '<error id="geolocation"/>', html)
-            if check_geo:
-                # print "Geoblock detected, raising error message"
-                dialog = xbmcgui.Dialog()
-                dialog.ok(translation(30400), translation(30401))
-                raise
-        return retlist, []
-
-    # Parse the different streams and add them as new directory entries.
-    match = re.compile(
-          'connection authExpires=".+?href="(.+?)".+?supplier="mf_(.+?)".+?transferFormat="(.+?)"'
-        ).findall(html)
-    for mpd_url, supplier, transfer_format in match:
+    source = int(ADDON.getSetting('catchup_source'))
+    for url, protocol, supplier, transfer_format in mediaselector[0]:
         tmp_sup = 0
         tmp_br = 0
         if transfer_format == 'dash':
-            if supplier in ['akamai_uk_dash', 'akamai_uk_dash_https']:
+            if 'akamai' in supplier and source in [0,1]:
                 tmp_sup = 1
-            elif supplier in ['limelight_uk_dash', 'limelight_uk_dash_https']:
+            elif 'limelight' in supplier and source in [0,2]:
                 tmp_sup = 2
-            elif supplier in ['bidi_uk_dash', 'bidi_uk_dash_https']:
+            elif 'bidi' in supplier and source in [0,3]:
                 tmp_sup = 3
-            retlist.append((tmp_sup, 1, mpd_url, '1280x720'))
-
-    match = re.compile('service="captions".+?connection href="(.+?)"').findall(html)
-    # print "Subtitle URL: %s"%match
-    # print retlist
-    if not match:
-        # print "No streams found"
-        check_geo = re.search(
-            '<error id="geolocation"/>', html)
-        if check_geo:
-            # print "Geoblock detected, raising error message"
-            dialog = xbmcgui.Dialog()
-            dialog.ok(translation(30400), translation(30401))
-            raise
-    return retlist, match
-
+            elif 'cloudfront' in supplier and source in [0,4]:
+                tmp_sup = 4
+            else:
+                continue
+            streams.append((tmp_sup, 1, url, '1280x720', protocol))
+    source = int(ADDON.getSetting('subtitle_source'))
+    for href, protocol, supplier in mediaselector[1]:
+        if 'akamai' in supplier and source in [0,1]:
+            tmp_sup = 1
+        elif 'limelight' in supplier and source in [0,2]:
+            tmp_sup = 2
+        elif 'bidi' in supplier and source in [0,3]:
+            tmp_sup = 3
+        elif 'cloudfront' in supplier and source in [0,4]:
+            tmp_sup = 4
+        else:
+            continue
+        subtitles.append((tmp_sup, href, protocol))
+    # print streams
+    # print subtitles
+    return streams, subtitles
 
 
 def ParseLiveStreams(channelname, providers):
-    if providers == '':
-        providers = [('ak', 'Akamai'), ('llnw', 'Limelight')]
     streams = []
+    # print "Parsing streams for PID: %s"%channelname
+    mediaselector = ParseMediaselector(channelname)
+    # print mediaselector
+    for provider_url, protocol, provider_name, transfer_format in mediaselector[0]:
+        if transfer_format == 'hls':
+            html = OpenURL(provider_url)
+            match = re.compile('#EXT-X-STREAM-INF:PROGRAM-ID=(.+?),BANDWIDTH=(.+?),CODECS="(.*?)",RESOLUTION=(.+?)\s*(.+?.m3u8)').findall(html)
+            # print match
+            tmp_sup = ''
+            if 'akamai' in provider_name:
+                tmp_sup = 'Akamai'
+            elif 'll' in provider_name or 'limelight' in provider_name:
+                tmp_sup = 'Limelight'
+            elif 'bidi' in provider_name:
+                tmp_sup = 'Bidi'
+            elif 'cloudfront' in provider_name:
+                tmp_sup = 'Cloudfront'
+            else:
+                continue
+            # Add provider name to the stream list.
+            streams.extend([list(stream) + [tmp_sup] for stream in match])
 
-    for provider_url, provider_name in providers:
-        # First we query the available streams from this website
-        if channelname in ['bbc_parliament', 'bbc_alba', 's4cpbs', 'bbc_one_london',
-                           'bbc_two_wales_digital', 'bbc_two_northern_ireland_digital',
-                           'bbc_two_scotland', 'bbc_one_cambridge', 'bbc_one_channel_islands',
-                           'bbc_one_east', 'bbc_one_east_midlands', 'bbc_one_east_yorkshire',
-                           'bbc_one_north_east', 'bbc_one_north_west', 'bbc_one_oxford',
-                           'bbc_one_south', 'bbc_one_south_east', 'bbc_one_south_west',
-                           'bbc_one_west', 'bbc_one_west_midlands', 'bbc_one_yorks',
-                           'bbc_scotland']:
-            device = 'hls_tablet'
-        else:
-            device = 'abr_hdtv'
-
-        if channelname.startswith('sport_stream_'):
-            cast = "webcast"
-        else:
-            cast = "simulcast"
-
-        url = 'https://a.files.bbci.co.uk/media/live/manifesto/audio_video/%s/hls/uk/%s/%s/%s.m3u8' \
-              % (cast, device, provider_url, channelname)
-        html = OpenURL(url)
-        match = re.compile('#EXT-X-STREAM-INF:PROGRAM-ID=(.+?),BANDWIDTH=(.+?),CODECS="(.*?)",RESOLUTION=(.+?)\s*(.+?.m3u8)').findall(html)
-
-        # Add provider name to the stream list.
-        streams.extend([list(stream) + [provider_name] for stream in match])
-
+    # print streams
     # Convert bitrate to Mbps for further processing
     for i in list(range(len(streams))):
         streams[i][1] = round(int(streams[i][1])/1000000.0, 1)
-
+    # print streams
     # Return list sorted by bitrate
     return sorted(streams, key=lambda x: (x[1]), reverse=True)
 
 
 def ParseLiveDASHStreams(channelname):
     streams = []
-
-    url = "https://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/pc/vpid/%s" % channelname
-    html = OpenURL(url)
-    # Parse the different streams and add them as new directory entries.
-    match = re.compile(
-          'connection.+?href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
-        ).findall(html)
-    unique = []
-    [unique.append(item) for item in match if item not in unique]
-    for mpd_url, supplier, transfer_format in unique:
-        tmp_sup = 0
-        tmp_br = 0
+    mediaselector = ParseMediaselector(channelname)
+    # print mediaselector
+    for provider_url, protocol, provider_name, transfer_format in mediaselector[0]:
         if transfer_format == 'dash':
-            if supplier.startswith('akamai_dash'):
+            tmp_sup = ''
+            if 'akamai' in provider_name:
                 tmp_sup = 1
-            elif supplier.startswith('ll_dash'):
+            elif 'll' in provider_name or 'limelight' in provider_name:
                 tmp_sup = 2
-            streams.append((tmp_sup, 1, mpd_url, '1280x720'))
-
+            elif 'bidi' in provider_name:
+                tmp_sup = 3
+            elif 'cloudfront' in provider_name:
+                tmp_sup = 4
+            else:
+                continue
+            streams.append((tmp_sup, 1, provider_url, '1280x720'))
+    # print streams
     return streams
 
 

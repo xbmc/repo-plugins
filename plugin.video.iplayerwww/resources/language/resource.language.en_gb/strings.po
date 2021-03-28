@@ -144,6 +144,9 @@ msgctxt "#30233"
 msgid "Max Live Radio bitrate"
 msgstr ""
 
+msgctxt "#30240"
+msgid "Subtitle CDN source"
+msgstr ""
 
 msgctxt "#30300"
 msgid "Highlights"
@@ -335,6 +338,14 @@ msgstr ""
 
 msgctxt "#30411"
 msgid "The UHD Trial channels are only available using the DASH stream protocol through InputStream Adaptive."
+msgstr ""
+
+msgctxt "#30412"
+msgid "Sorry, this programme appears to be unavailable. If you reached this point from Radio Search, it is most likely caused by the website returning search results that don't exist."
+msgstr ""
+
+msgctxt "#30413"
+msgid "Please check you installed this plugin correctly."
 msgstr ""
 
 msgctxt "#30500"

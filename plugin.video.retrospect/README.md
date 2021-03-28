@@ -470,3 +470,4 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - Gialt Huininga
 - Petra Pahtajärvi
 - Marcus Bruzelius
+- T.R. Quuk

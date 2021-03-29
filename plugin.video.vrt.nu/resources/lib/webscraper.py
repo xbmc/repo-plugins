@@ -34,7 +34,7 @@ def get_video_attributes(vrtnu_url):
     if response is None:
         return None
     html_page = response.read()
-    strainer = SoupStrainer(['section', 'div'], {'class': ['video-player', 'livestream__inner']})
+    strainer = SoupStrainer(['section', 'div'], {'class': ['video-detail__player', 'livestream__inner']})
     soup = BeautifulSoup(html_page, 'html.parser', parse_only=strainer)
     item = None
     epg_channel = None

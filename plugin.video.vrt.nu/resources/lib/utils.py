@@ -91,6 +91,11 @@ def reformat_url(url, url_type, domain='www.vrt.be'):
     return url
 
 
+def reformat_image_url(url):
+    """Reformat images.vrt.be urls"""
+    return add_https_proto(url.replace('images.vrt.be/orig', 'images.vrt.be/w1920hx'))
+
+
 def program_to_url(program, url_type):
     """Convert a program url component (e.g. de-campus-cup) to:
         - a short programUrl (e.g. /vrtnu/a-z/de-campus-cup/)
@@ -193,6 +198,8 @@ def play_url_to_id(url):
         play_id['video_id'] = url.split('play/upnext/')[1]
     elif '/play/url/' in url:
         play_id['video_url'] = video_to_api_url(url.split('play/url/')[1])
+    elif 'play/whatson/' in url:
+        play_id['whatson_id'] = url.split('play/whatson/')[1]
     return play_id
 
 

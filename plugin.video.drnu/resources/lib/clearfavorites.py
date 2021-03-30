@@ -20,14 +20,21 @@
 #
 
 import os
+import sys
 
 import xbmc
 import xbmcaddon
 import xbmcgui
 
+if sys.version_info.major == 2:
+    # python 2
+    from xbmc import translatePath
+else:
+    from xbmcvfs import translatePath
+
 ADDON = xbmcaddon.Addon('plugin.video.drnu')
 
-CACHE_PATH = xbmc.translatePath(ADDON.getAddonInfo("Profile"))
+CACHE_PATH = translatePath(ADDON.getAddonInfo("Profile"))
 if not os.path.exists(CACHE_PATH):
     os.makedirs(CACHE_PATH)
 
@@ -35,4 +42,5 @@ FAVORITES_PATH = os.path.join(CACHE_PATH, 'favorites.pickle')
 
 if os.path.exists(FAVORITES_PATH):
     os.unlink(FAVORITES_PATH)
+
 xbmcgui.Dialog().ok(ADDON.getLocalizedString(30008), ADDON.getLocalizedString(30202))

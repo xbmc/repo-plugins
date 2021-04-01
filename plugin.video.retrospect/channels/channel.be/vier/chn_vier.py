@@ -470,7 +470,8 @@ class Channel(chn_class.Channel):
         item.set_date(*time_stamp[0:6])
 
         item.set_info_label("duration", result_set["duration"])
-        if "episode_nr" in result_set and "season" in result_set and "-" not in result_set["season"]:
+        if "episode_nr" in result_set and "season" in result_set \
+                and result_set["season"] and "-" not in result_set["season"]:
             item.set_season_info(result_set["season"], result_set["episode_nr"])
         return item
 

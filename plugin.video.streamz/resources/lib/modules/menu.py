@@ -106,18 +106,6 @@ class Menu:
                 ),
             ))
 
-        # listing.append(TitleItem(
-        #     title=kodiutils.localize(30003),  # Catalogue
-        #     path=kodiutils.url_for('show_catalog'),
-        #     art_dict=dict(
-        #         icon='DefaultGenre.png',
-        #         fanart=kodiutils.get_addon_info('fanart'),
-        #     ),
-        #     info_dict=dict(
-        #         plot=kodiutils.localize(30004),
-        #     ),
-        # ))
-
         if kodiutils.get_setting_bool('interface_show_mylist'):
             listing.append(TitleItem(
                 title=kodiutils.localize(30017),  # My List

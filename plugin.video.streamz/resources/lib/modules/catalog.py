@@ -28,23 +28,6 @@ class Catalog:
                           kodiutils.get_tokens_path())
         self._api = Api(self._auth)
 
-    def show_catalog(self):
-        """ Show the catalog. """
-        categories = self._api.get_categories()
-
-        listing = []
-        for cat in categories:
-            listing.append(TitleItem(
-                title=cat.title,
-                path=kodiutils.url_for('show_catalog_category', category=cat.category_id),
-                info_dict=dict(
-                    plot='[B]{category}[/B]'.format(category=cat.title),
-                ),
-            ))
-
-        # Sort categories by default like in Streamz.
-        kodiutils.show_listing(listing, 30003, content='files')
-
     def show_catalog_category(self, category=None):
         """ Show a category in the catalog.
 

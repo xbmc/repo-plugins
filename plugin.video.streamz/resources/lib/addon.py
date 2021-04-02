@@ -45,13 +45,6 @@ def select_profile(key=None):
     Authentication().select_profile(key)
 
 
-@routing.route('/catalog')
-def show_catalog():
-    """ Show the catalog """
-    from resources.lib.modules.catalog import Catalog
-    Catalog().show_catalog()
-
-
 @routing.route('/catalog/all')
 def show_catalog_all():
     """ Show a category in the catalog """

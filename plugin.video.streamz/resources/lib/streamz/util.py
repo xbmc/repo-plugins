@@ -7,11 +7,27 @@ import logging
 
 import requests
 from requests import HTTPError
+from requests.adapters import BaseAdapter
 
 from resources.lib import kodiutils
 from resources.lib.streamz.exceptions import InvalidLoginException, InvalidTokenException, LimitReachedException, UnavailableException
 
 _LOGGER = logging.getLogger(__name__)
+
+
+class StreamzAdapter(BaseAdapter):
+    """ Fake adapter to handle the calls to streamz:// """
+
+    def send(self, request, stream=False, timeout=None, verify=True, cert=None, proxies=None):
+        """ Sends PreparedRequest object. Returns Response object. """
+        response = requests.Response()
+        response.url = request.url
+        response.status_code = 200
+        return response
+
+    def close(self):
+        """ Cleans up adapter specific items. """
+
 
 # Setup a static session that can be reused for all calls
 SESSION = requests.Session()
@@ -22,7 +38,7 @@ SESSION.headers = {
     'x-persgroep-os': 'android',
     'x-persgroep-os-version': '23',
 }
-
+SESSION.mount('streamz://login.streamz.be', StreamzAdapter())
 PROXIES = kodiutils.get_proxies()
 
 

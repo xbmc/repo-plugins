@@ -1,0 +1,189 @@
+# Kodi Media Center language file
+# Addon Name: DR TV
+# Addon id: plugin.video.drnu
+# Addon Provider: twinther, msj33, TermeHansen
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://github.com/xbmc-danish-addons/plugin.video.drnu\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: twinther, msj33, TermeHansen\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Programs A-Z"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Latest videos"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Spotlight videos"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Search videos"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Recently watched videos"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Favorite programs"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Program added"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Program removed"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Most watched videos on DR NU"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Programs by area"
+msgstr ""
+
+msgctxt "#30013"
+msgid "The list is empty."
+msgstr ""
+
+msgctxt "#30018"
+msgid "You can add program series to favorites using"
+msgstr ""
+
+msgctxt "#30019"
+msgid "the context menu."
+msgstr ""
+
+msgctxt "#30020"
+msgid "Your recently watched videos are automatically added."
+msgstr ""
+
+msgctxt "#30025"
+msgid "Premiere videos"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Live TV"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Themes"
+msgstr ""
+
+msgctxt "#30100"
+msgid "DR TV Universe"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Choose area"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Add to favorite program series"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Remove from favorite program series"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Favorite program series cleared"
+msgstr ""
+
+msgctxt "#30500"
+msgid "General"
+msgstr ""
+
+msgctxt "#30503"
+msgid "Enable Hard-of-hearing subtitles"
+msgstr ""
+
+msgctxt "#30504"
+msgid "Clear the favorite programs list"
+msgstr ""
+
+msgctxt "#30505"
+msgid "Remove programs from Ramasjang/Ultra in latest videos list"
+msgstr ""
+
+msgctxt "#30506"
+msgid "Hard-of-hearing"
+msgstr ""
+
+msgctxt "#30507"
+msgid "Subtitles"
+msgstr ""
+
+msgctxt "#30508"
+msgid "Empty"
+msgstr ""
+
+msgctxt "#30509"
+msgid "No subtitles on Ramasjang/Ultra episodes"
+msgstr ""
+
+msgctxt "#30510"
+msgid "Start in area"
+msgstr ""
+
+msgctxt "#30511"
+msgid "Show area chooser"
+msgstr ""
+
+msgctxt "#30512"
+msgid "DR TV"
+msgstr ""
+
+msgctxt "#30513"
+msgid "Ramasjang"
+msgstr ""
+
+msgctxt "#30514"
+msgid "Ultra"
+msgstr ""
+
+msgctxt "#30515"
+msgid "Show area chooser item in root"
+msgstr ""
+
+msgctxt "#30520"
+msgid "Fanart image resolution"
+msgstr ""
+
+msgctxt "#30900"
+msgid "There was an error while communicating with DR NU."
+msgstr ""
+
+msgctxt "#30901"
+msgid "Please try again later. Error message is:"
+msgstr ""
+
+msgctxt "#30902"
+msgid "There was an error while writing temporary data"
+msgstr ""
+
+msgctxt "#30903"
+msgid "to the local disk. The error message is:"
+msgstr ""
+
+msgctxt "#30904"
+msgid "The video is no longer available and playback is not possible."
+msgstr ""
+
+msgctxt "#30905"
+msgid "Unknown Live TV Slug:"
+msgstr ""

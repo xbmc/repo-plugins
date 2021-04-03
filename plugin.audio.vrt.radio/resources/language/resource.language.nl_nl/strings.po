@@ -1,0 +1,31 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30860"
+msgid "Integration"
+msgstr "Integratie"
+
+msgctxt "#30861"
+msgid "Integration with other Kodi add-ons"
+msgstr "Integratie met andere Kodi add-ons"
+
+msgctxt "#30875"
+msgid "Install IPTV Manager add-on…"
+msgstr "Installeer de IPTV Manager add-on…"
+
+msgctxt "#30877"
+msgid "Enable IPTV Manager integration"
+msgstr "Activeer IPTV Manager integratie"
+
+msgctxt "#30879"
+msgid "IPTV Manager settings…"
+msgstr "IPTV Manager instellingen…"
+
+msgctxt "#30966"
+msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
+msgstr "Het gebruik van SOCKS proxies vereist dat de PySocks library (script.module.pysocks) geïnstalleerd is."

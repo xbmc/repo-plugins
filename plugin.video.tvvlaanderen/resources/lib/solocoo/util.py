@@ -11,15 +11,19 @@ import dateutil.tz
 import requests
 from requests import HTTPError
 
-from resources.lib.solocoo import Channel, Program, Credit
+from resources.lib import kodiutils
+from resources.lib.solocoo import Channel, Credit, Program
 from resources.lib.solocoo.exceptions import InvalidTokenException
 
 _LOGGER = logging.getLogger(__name__)
 
 # Setup a static session that can be reused for all calls
-_SESSION = requests.Session()
-_SESSION.headers['User-Agent'] = \
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+SESSION = requests.Session()
+SESSION.headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
+}
+
+PROXIES = kodiutils.get_proxies()
 
 
 def find_image(images, image_type):
@@ -279,7 +283,15 @@ def _request(method, url, params=None, form=None, data=None, token_bearer=None, 
     :returns:                           The HTTP Response object.
     :rtype: requests.Response
     """
-    _LOGGER.debug('Sending %s %s... (%s)', method, url, form or data)
+    if form or data:
+        # Make sure we don't log the password
+        debug_data = dict()
+        debug_data.update(form or data)
+        if 'Password' in debug_data:
+            debug_data['Password'] = '**redacted**'
+        _LOGGER.debug('Sending %s %s: %s', method, url, debug_data)
+    else:
+        _LOGGER.debug('Sending %s %s', method, url)
 
     if token_bearer:
         headers = {
@@ -295,7 +307,7 @@ def _request(method, url, params=None, form=None, data=None, token_bearer=None, 
     else:
         cookies = {}
 
-    response = _SESSION.request(method, url, params=params, data=form, json=data, headers=headers, cookies=cookies)
+    response = SESSION.request(method, url, params=params, data=form, json=data, headers=headers, cookies=cookies, proxies=PROXIES)
 
     # Set encoding to UTF-8 if no charset is indicated in http headers (https://github.com/psf/requests/issues/1604)
     if not response.encoding:

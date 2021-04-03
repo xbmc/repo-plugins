@@ -12,19 +12,19 @@ SECONDS_MARGIN = 30
 CATEGORIES = [
     dict(name='Audiodescriptie', id='met-audiodescriptie', msgctxt=30070),
     dict(name='Cultuur', id='cultuur', msgctxt=30071),
-    dict(name='Documentaire', id='docu', msgctxt=30072),
+    dict(name='Docu', id='docu', msgctxt=30072),
     dict(name='Entertainment', id='entertainment', msgctxt=30073),
     dict(name='Film', id='films', msgctxt=30074),
     dict(name='Human interest', id='human-interest', msgctxt=30075),
     dict(name='Humor', id='humor', msgctxt=30076),
-    dict(name='Kinderen & jongeren', id='voor-kinderen', msgctxt=30077),
+    dict(name='Kinderen en jongeren', id='voor-kinderen', msgctxt=30077),
     dict(name='Koken', id='koken', msgctxt=30078),
     dict(name='Levensbeschouwing', id='levensbeschouwing', msgctxt=30087),
     dict(name='Lifestyle', id='lifestyle', msgctxt=30079),
     dict(name='Muziek', id='muziek', msgctxt=30080),
     dict(name='Nieuws en actua', id='nieuws-en-actua', msgctxt=30081),
     dict(name='Nostalgie', id='nostalgie', msgctxt=30088),
-    dict(name='Serie', id='series', msgctxt=30082),
+    dict(name='Series', id='series', msgctxt=30082),
     dict(name='Sport', id='sport', msgctxt=30083),
     dict(name='Talkshows', id='talkshows', msgctxt=30084),
     dict(name='Vlaamse Gebarentaal', id='met-gebarentaal', msgctxt=30085),
@@ -52,6 +52,7 @@ CHANNELS = [
         logo='https://images.vrt.be/orig/logo/een/een_LOGO_zwart.png',
         epg_id='een.be',
         preset=1,
+        vod=True,
     ),
     dict(
         id='1H',
@@ -69,6 +70,7 @@ CHANNELS = [
         logo='https://images.vrt.be/orig/logo/canvas/CANVAS_logo_lichtblauw.jpg',
         epg_id='canvas.be',
         preset=2,
+        vod=True,
     ),
     dict(
         id='O9',
@@ -86,6 +88,7 @@ CHANNELS = [
         logo='https://images.vrt.be/orig/logo/ketnet/ketnet_LOGO_rood_geel.png',
         epg_id='ketnet.be',
         preset=12,
+        vod=True,
     ),
     dict(
         id='',
@@ -99,6 +102,15 @@ CHANNELS = [
         logo='https://images.vrt.be/orig/2019/07/19/c309360a-aa10-11e9-abcc-02b7b76bf47f.png',
         epg_id='ketnetjr.be',
         preset=11,
+        vod=True,
+    ),
+    dict(
+        id='',
+        name='podium19',
+        label='Podium 19',
+        studio='Podium 19',
+        logo='https://images.vrt.be/orig/2020/12/19/53f5fa6f-4223-11eb-aae0-02b7b76bf47f.png',
+        vod=True,
     ),
     dict(
         id='12',
@@ -112,6 +124,7 @@ CHANNELS = [
         logo='https://images.vrt.be/orig/logo/sporza/sporza_logo_zwart.png',
         epg_id='sporza.be',
         preset=801,
+        vod=True,
     ),
     dict(
         id='13',
@@ -127,6 +140,7 @@ CHANNELS = [
         logo='https://images.vrt.be/orig/logos/vrtnws.png',
         epg_id='vrtnws.be',
         preset=802,
+        vod=True,
     ),
     dict(
         id='11',
@@ -141,6 +155,7 @@ CHANNELS = [
         logo='https://images.vrt.be/orig/logos/radio1.png',
         epg_id='radio1.be',
         preset=901,
+        vod=True,
     ),
     dict(
         id='22',
@@ -155,6 +170,7 @@ CHANNELS = [
         logo='https://images.vrt.be/orig/logos/radio2.png',
         epg_id='radio2vlb.be',
         preset=902,
+        vod=True,
     ),
     dict(
         id='31',
@@ -169,6 +185,7 @@ CHANNELS = [
         logo='https://images.vrt.be/orig/logos/klara.png',
         epg_id='klara.be',
         preset=903,
+        vod=True,
     ),
     dict(
         id='41',
@@ -183,6 +200,7 @@ CHANNELS = [
         logo='https://images.vrt.be/orig/2019/03/12/1e383cf5-44a7-11e9-abcc-02b7b76bf47f.png',
         epg_id='stubru.be',
         preset=904,
+        vod=True,
     ),
     dict(
         id='55',
@@ -197,6 +215,7 @@ CHANNELS = [
         logo='https://images.vrt.be/orig/logo/mnm/logo_witte_achtergrond.png',
         epg_id='mnm.be',
         preset=905,
+        vod=True,
     ),
     dict(
         id='',
@@ -206,6 +225,7 @@ CHANNELS = [
         youtube=[
             dict(label='VRT NXT', url='https://www.youtube.com/channel/UCO-VoGCVzhYVwvQvWYJq4-Q'),
         ],
+        vod=True,
     ),
     dict(
         id='',
@@ -215,6 +235,7 @@ CHANNELS = [
         youtube=[
             dict(label='De Warmste Week', url='https://www.youtube.com/channel/UC_PsMpKLAp4hSGSXyUCPtxw'),
         ],
+        vod=True,
     ),
     dict(
         id='',
@@ -225,6 +246,7 @@ CHANNELS = [
         logo='https://images.vrt.be/orig/logo/vrt.png',
         epg_id='vrtevents1.be',
         preset=851,
+        vod=False,
     ),
     dict(
         id='',
@@ -235,6 +257,7 @@ CHANNELS = [
         logo='https://images.vrt.be/orig/logo/vrt.png',
         epg_id='vrtevents2.be',
         preset=852,
+        vod=False,
     ),
     dict(
         id='',
@@ -245,21 +268,21 @@ CHANNELS = [
         logo='https://images.vrt.be/orig/logo/vrt.png',
         epg_id='vrtevents3.be',
         preset=853,
+        vod=False,
     ),
 ]
 
 FEATURED = [
     # Tijdsgerelateerd
     dict(name='Exclusief online', id='exclusief-online', msgctxt=30100),
-    dict(name='Laatste aflevering', id='laatste-aflevering', msgctxt=30101),
-    dict(name='Laatste kans', id='laatste-kans', msgctxt=30102),
-    dict(name='Nieuw', id='Nieuw', msgctxt=30103),
-    dict(name='Volledig seizoen', id='volledig-seizoen', msgctxt=30104),
-    dict(name='Volledige reeks', id='volledige-reeks', msgctxt=30105),
-    dict(name='Gloednieuw', id='gloednieuw', msgctxt=30106),
-    dict(name='Nieuwe afleveringen', id='nieuwe-afleveringen', msgctxt=30107),
+    dict(name='Volledig seizoen', id='volledig-seizoen', msgctxt=30101),
+    dict(name='Volledige reeks', id='volledige-reeks', msgctxt=30102),
+    dict(name='Uit het archief', id='uit-het-archief', msgctxt=30103),
     # Inhoudsgerelateerd
     dict(name='Kortfilm', id='kortfilm', msgctxt=30120),
+    # Thema
+    dict(name='Klimaat', id='klimaat', msgctxt=30130),
+    dict(name='Koers', id='koers', msgctxt=30131),
 ]
 
 RELATIVE_DATES = [

@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="plugin.video.worldstarhiphop">
+		<category id="general" label="30104" help="">
+			<group id="1">
+				<setting id="video" type="integer" label="30300" help="">
+					<level>0</level>
+					<default>2</default>
+					<constraints>
+                        <!--the number after default indicates the index, index 0 is the first lvalue, index 1 is the second lvalue and so on-->
+						<options>
+							<option label="30301">0</option>
+							<option label="30302">1</option>
+							<option label="30303">2</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+			</group>
+		</category>
+	</section>
+</settings>

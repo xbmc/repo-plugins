@@ -112,11 +112,10 @@ def addon_path():
 
 def addon_profile():
     """Cache and return add-on profile"""
-    if kodi_version_major() >= 19:
-        translate_path = xbmcvfs.translatePath
-    else:
-        translate_path = xbmc.translatePath
-    return to_unicode(translate_path(ADDON.getAddonInfo('profile')))
+    try:  # Kodi 19
+        return to_unicode(xbmcvfs.translatePath(ADDON.getAddonInfo('profile')))
+    except AttributeError:  # Kodi 18
+        return to_unicode(xbmc.translatePath(ADDON.getAddonInfo('profile')))
 
 
 def url_for(name, *args, **kwargs):
@@ -245,13 +244,12 @@ def get_search_string(heading='', message=''):
 
 def ok_dialog(heading='', message=''):
     """Show Kodi's OK dialog"""
-    from xbmcgui import Dialog
     if not heading:
         heading = addon_name()
     if kodi_version_major() < 19:
         # pylint: disable=unexpected-keyword-arg,no-value-for-parameter
-        return Dialog().ok(heading=heading, line1=message)
-    return Dialog().ok(heading=heading, message=message)
+        return xbmcgui.Dialog().ok(heading=heading, line1=message)
+    return xbmcgui.Dialog().ok(heading=heading, message=message)
 
 
 def show_context_menu(items):
@@ -262,14 +260,13 @@ def show_context_menu(items):
 
 def yesno_dialog(heading='', message='', nolabel=None, yeslabel=None, autoclose=0):
     """Show Kodi's Yes/No dialog"""
-    from xbmcgui import Dialog
     if not heading:
         heading = addon_name()
     if kodi_version_major() < 19:
         # pylint: disable=unexpected-keyword-arg,no-value-for-parameter
-        return Dialog().yesno(heading=heading, line1=message, nolabel=nolabel, yeslabel=yeslabel,
-                              autoclose=autoclose)
-    return Dialog().yesno(heading=heading, message=message, nolabel=nolabel, yeslabel=yeslabel, autoclose=autoclose)
+        return xbmcgui.Dialog().yesno(heading=heading, line1=message, nolabel=nolabel, yeslabel=yeslabel,
+                                      autoclose=autoclose)
+    return xbmcgui.Dialog().yesno(heading=heading, message=message, nolabel=nolabel, yeslabel=yeslabel, autoclose=autoclose)
 
 
 def notification(heading='', message='', icon='info', time=4000):
@@ -401,7 +398,6 @@ def get_setting_float(key, default=None):
 
 def set_setting(key, value):
     """Set an add-on setting"""
-    # return ADDON.setSetting(key, from_unicode(str(value)))
     return ADDON.setSetting(key, from_unicode(value))
 
 
@@ -464,6 +460,12 @@ def has_socks():
 
 def get_proxies():
     """Return a usable proxies dictionary from Kodi proxy settings"""
+    # Use proxy settings from environment variables
+    env_http_proxy = os.environ.get('HTTP_PROXY')
+    env_https_proxy = os.environ.get('HTTPS_PROXY')
+    if env_http_proxy:
+        return dict(http=env_http_proxy, https=env_https_proxy or env_http_proxy)
+
     usehttpproxy = get_global_setting('network.usehttpproxy')
     if usehttpproxy is not True:
         return None
@@ -614,35 +616,30 @@ def jsonrpc(*args, **kwargs):
 @contextmanager
 def open_file(path, flags='r'):
     """Open a file (using xbmcvfs)"""
-    from xbmcvfs import File
-    fdesc = File(path, flags)
+    fdesc = xbmcvfs.File(path, flags)
     yield fdesc
     fdesc.close()
 
 
 def listdir(path):
     """Return all files in a directory (using xbmcvfs)"""
-    from xbmcvfs import listdir as vfslistdir
-    return vfslistdir(path)
+    return xbmcvfs.listdir(path)
 
 
 def delete(path):
     """Remove a file (using xbmcvfs)"""
-    from xbmcvfs import delete as vfsdelete
-    return vfsdelete(path)
+    return xbmcvfs.delete(path)
 
 
 def mkdirs(path):
     """Create directory including parents (using xbmcvfs)"""
-    from xbmcvfs import mkdirs as vfsmkdirs
     _LOGGER.debug('Recursively create directory (%s)', path)
-    return vfsmkdirs(path)
+    return xbmcvfs.mkdirs(path)
 
 
 def exists(path):
     """Whether the path exists (using xbmcvfs)"""
-    from xbmcvfs import exists as vfsexists
-    return vfsexists(path)
+    return xbmcvfs.exists(path)
 
 
 def get_cache(key, ttl=None):

@@ -128,7 +128,7 @@ class Channel(chn_class.Channel):
                     elif video_type == "embed" and uri.startswith("youtube"):
                         embed_type, youtube_id = uri.split(":")
                         url = "https://www.youtube.com/watch?v=%s" % (youtube_id, )
-                        for s, b in YouTube.get_streams_from_you_tube(url, self.proxy):
+                        for s, b in YouTube.get_streams_from_you_tube(url):
                             item.complete = True
                             part.append_media_stream(s, b)
                     else:

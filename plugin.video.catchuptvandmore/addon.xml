@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.33+matrix.1" provider-name="SylvainCecchetto,wwark">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.codequick" version="0.9.13"/>
+    <import addon="script.module.youtube.dl" version="18.225.0"/>
+    <import addon="script.module.requests" version="2.12.4"/>
+    <import addon="script.module.pytz" version="2014.2"/>
+    <import addon="script.module.inputstreamhelper" version="0.3.3"/>
+    <import addon="script.module.six" version="1.11.0"/>
+    <import addon="script.module.pyqrcode" version="0.0.1"/>
+    <import addon="script.module.tzlocal" version="2.0.0"/>
+    <import addon="script.module.future" version="0.17.1"/>
+    <import addon="script.module.kodi-six" version="0.0.4"/>
+    <import addon="resource.images.catchuptvandmore" version="1.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.service" library="service.py"/>
+  <extension point="xbmc.addon.metadata">
+    <!-- Set reuselanguageinvoker to false while developing the addon, making it only true for the production version -->
+    <!-- See https://kodi.wiki/view/Addon.xml#.3Creuselanguageinvoker.3E -->
+    <reuselanguageinvoker>true</reuselanguageinvoker>
+    <summary lang="fr_FR">Catch-Up TV &amp; More : Replay TV, Live TV et bien plus encore.</summary>
+    <description lang="fr_FR">Catch-Up TV &amp; More regroupe dans un même plugin Kodi l'ensemble des vidéos des différents services et chaînes de Replay TV (rattrapage TV) ainsi que l'accès au direct. De plus, cette extension vous permet d'accéder rapidement aux vidéos et contenus proposés par certains sites internet.</description>
+    <disclaimer lang="fr_FR">Retours de bugs, propositions d'améliorations ou d'ajout de contenus sont les bienvenue ! GitHub ou e-mail.</disclaimer>
+    <summary lang="en_GB">Catch-Up TV &amp; More: It's all in the title.</summary>
+    <description lang="en_GB">Catch-Up TV &amp; More brings together in one Kodi add-on all the videos of the various services and channels of catch-up TV and live TV. Furthermore, this add-on allows you to quickly access the videos and content offered by certain websites.</description>
+    <disclaimer lang="en_GB">Bug reports, suggestions for improvements or content additions are welcome! GitHub or e-mail.</disclaimer>
+    <description lang="he_IL">ההרחבה מאפשרת לך להתעדכן בתוכן השידורים תוסף אחד של קודי מרכז את כל קטעי וידאו של שירותים שונים וערוצי תוכן משודר. בנוסף, תוספת זו מאפשרת לך לגשת במהירות לסרטונים ולתכנים המוצעים על ידי אתרים מסוימים.</description>
+    <disclaimer lang="he_IL">דוחות שגיאה, הצעות לשיפור או תוספות תוכן יתקבלו בברכה! ל-GitHub או אימייל.</disclaimer>
+    <summary lang="nl_NL">Catch-Up TV &amp; More: Replay tv, Live tv en meer.</summary>
+    <description lang="nl_NL">Catch-Up TV &amp; More brengt replay en live tv van verschikkende diensten en kanalen samen in één Kodi add-on. Bovendien stelt deze add-on u instaat video's van bepaalde websites makkelijk te benaderen.</description>
+    <disclaimer lang="nl_NL">Bug meldingen, suggesties ter verbetering of additionele inhouden zijn welkom! Via GitHub of e-mail.</disclaimer>
+
+    <language></language>
+    <platform>all</platform>
+    <license>GPL-2.0</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=307107</forum>
+    <website>https://catch-up-tv-and-more.github.io/</website>
+    <email>catch.up.tv.and.more at gmail dot com</email>
+    <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
+    <news>
+[Version 0.2.33]
+[France TV - FR] Fix Live TV
+[Kodi] Fix addon auto-run on Kodi 17
+[BrightCove] Possible fix for some instance of Kodi 19
+[TV5Monde - WO] Fix Live TV (hack like Arte TV)
+[Live TV] Fix TV guide on Windows
+[6Play/RTLPlay - FR/BE] Hack to force encoding of a response to fix slow behavior to play content
+[Euronews - WO] Fix Live TV
+[France24 - WO] Fix Live TV and Catch-up TV
+[TV5Monde - WO] Fix Catch-up TV
+[Tivi5Monde - WO] Fix Catch-up TV
+[TV5MondeAfrique - WO] Fix Catch-up TV
+----
+Visit WebSite - http://mpdb.tv/#home which host the french forum used by users of CU TV and More
+    </news>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+      <screenshot>resources/screenshots/screenshot-01.jpg</screenshot>
+      <screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
+      <screenshot>resources/screenshots/screenshot-03.jpg</screenshot>
+      <screenshot>resources/screenshots/screenshot-04.jpg</screenshot>
+      <screenshot>resources/screenshots/screenshot-05.jpg</screenshot>
+    </assets>
+  </extension>
+</addon>

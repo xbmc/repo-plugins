@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nasa" name="Nasa" provider-name="Tristan Fischer (sphere@dersphere.de), enen92" version="3.0.0+matrix.1">
+<addon id="plugin.video.nasa" name="Nasa" provider-name="Tristan Fischer (sphere@dersphere.de), enen92" version="3.0.1+matrix.1">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
     <import addon="script.module.xbmcswift2" version="2.5.0" />
@@ -14,10 +14,8 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=123001</forum>
     <license>GPL-2.0-only</license>
     <news>
-      3.0.0 (12.04.2020)
-        - Automatic submissions to matrix
-        - Adjust language files
-        - Addon.xml fixes
+      3.0.1 (25.01.2021)
+        - Use tubed instead of youtube for matrix
     </news>
     <summary lang="af_ZA">Video plugin om toegang na nasa.gov te bekom</summary>
     <summary lang="ar_SA">ملحق يساعدك للوصول الى المقاطع المرئيه من موقع ناسا nasa.gov</summary>

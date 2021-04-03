@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.liveleak"
+    name="LiveLeak"
+    version="2.0.0"
+    provider-name="Botster">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.9.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Watch LiveLeak.com Videos</summary>
+        <description lang="en_GB">Redefining The Media</description>
+        <language>en</language>
+        <platform>all</platform>
+        <license>GPL-3.0-or-later</license>
+        <source>https://github.com/botster/plugin.video.liveleak</source>
+        <website>https://www.liveleak.com/</website>
+        <news>v2.0.0 (2021-3-16) - Kodi 19 Matrix version</news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

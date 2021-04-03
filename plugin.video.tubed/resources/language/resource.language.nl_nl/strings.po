@@ -493,19 +493,19 @@ msgid "How long until short term function cache expires in minutes"
 msgstr ""
 
 msgctxt "#30117"
-msgid "Clear long term data cache"
+msgid "Clearing long term data cache will remove all entries from the database"
 msgstr ""
 
 msgctxt "#30118"
-msgid "Clear short term function cache"
+msgid "Clearing short term function cache will remove all cache entries"
 msgstr ""
 
 msgctxt "#30119"
-msgid "Delete long term data cache"
+msgid "Deleting long term data cache will delete the whole database"
 msgstr ""
 
 msgctxt "#30120"
-msgid "Delete short term function cache"
+msgid "Deleting short term function cache will delete the whole database"
 msgstr ""
 
 msgctxt "#30121"

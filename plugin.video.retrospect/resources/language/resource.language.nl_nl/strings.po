@@ -606,7 +606,15 @@ msgctxt "#30364"
 msgid "Latest news"
 msgstr "Laatste nieuws"
 
-# empty strings from id 30365 to 30400
+msgctxt "#30365"
+msgid "Movies"
+msgstr "Films"
+
+msgctxt "#30366"
+msgid "Available from"
+msgstr "Beschikbaar vanaf"
+
+# empty strings from id 30367 to 30400
 msgctxt "#30401"
 msgid "Dutch"
 msgstr "Nederlands"

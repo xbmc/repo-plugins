@@ -20,8 +20,8 @@
 import os
 from xbmcswift2 import Plugin
 
-YOUTUBE_URL = 'plugin://plugin.video.youtube/channel/%s/?page=1'
-YOUTUBE_VIDEO_URL = 'plugin://plugin.video.youtube/play/?video_id=%s'
+YOUTUBE_URL = 'plugin://plugin.video.tubed/?channel_id=%s&mode=channel'
+YOUTUBE_VIDEO_URL = 'plugin://plugin.video.tubed/?mode=play&video_id=%s'
 
 plugin = Plugin()
 

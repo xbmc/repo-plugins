@@ -72,8 +72,11 @@ def set_default_quality(content_type, target_id, name, video_id=None, clip_id=No
                        'name': name, 'video_id': video_id, 'clip_id': clip_id})
 
 
-def edit_follow_game(game):
-    return run_plugin(i18n('toggle_follow'), {'mode': MODES.EDITFOLLOW, 'game': game})
+def edit_follow_game(game_id, game_name, follow=True):
+    if follow:
+        return run_plugin(i18n('Follow'), {'mode': MODES.EDITFOLLOW, 'game_id': game_id, 'game_name': game_name, 'follow': True})
+    else:
+        return run_plugin(i18n('Unfollow'), {'mode': MODES.EDITFOLLOW, 'game_id': game_id, 'game_name': game_name, 'follow': False})
 
 
 def change_sort_by(for_type):

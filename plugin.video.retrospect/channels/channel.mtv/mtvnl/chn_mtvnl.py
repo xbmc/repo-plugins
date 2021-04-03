@@ -1,14 +1,16 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+import pytz
 
 from resources.lib import chn_class
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.helpers.languagehelper import LanguageHelper
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.logger import Logger
 from resources.lib.parserdata import ParserData
 from resources.lib.urihandler import UriHandler
-from resources.lib.regexer import Regexer
-from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.xbmcwrapper import XbmcWrapper
 
 
 class Channel(chn_class.Channel):
@@ -30,82 +32,50 @@ class Channel(chn_class.Channel):
 
         # ============== Actual channel setup STARTS here and should be overwritten from derived classes ===============
         self.noImage = "mtvnlimage.png"
+        self.__country_id = None
+        self.__clip_list_id = None
+        self.__show_list_id = None
+        self.__timezone = pytz.timezone("Europe/Amsterdam")
+        self.__timezone_utc = pytz.timezone("UTC")
 
         # setup the urls
-        self.__backgroundServiceEp = None
-        self.__region = None
-        if self.channelCode == "mtvnl":
-            # self.mainListUri = "http://api.mtvnn.com/v2/site/m79obhheh2/nl/franchises.json?per=2147483647"
-            # Configuration on: http://api.playplex.viacom.com/feeds/networkapp/intl/main/1.5?key=networkapp1.0&brand=mtv&platform=android&region=NL&version=2.2
-            # Main screens: http://api.playplex.viacom.com/feeds/networkapp/intl/screen/1.5/mgid:arc:page:mtv.nl:aec18556-7dbb-4ac4-a1f7-90e17fa2e069?key=networkapp1.0&brand=mtv&platform=android&region=NL&version=2.2&region=NL&mvpd=
-            self.mainListUri = "http://api.playplex.viacom.com/feeds/networkapp/intl/promolist/1.5/" \
-                               "mgid:arc:promotion:mtv.nl:0b8e68bb-8477-4eee-940f-6caa86e01960?" \
-                               "key=networkapp1.0&" \
-                               "brand=mtv&" \
-                               "platform=android&" \
-                               "region=NL&" \
-                               "version=2.2&" \
-                               "mvpd="
-            self.baseUrl = "http://www.mtv.nl"
-            self.__backgroundServiceEp = "1b5b03c4"
-            self.__region = "NL"
-
-        elif self.channelCode == "mtvde":
-            # self.mainListUri = "http://api.mtvnn.com/v2/site/va7rcfymx4/de/franchises.json?per=2147483647"
-            # http://api.playplex.viacom.com/feeds/networkapp/intl/main/1.5?key=networkapp1.0&
-            # brand=mtv&platform=android&region=DE&version=2.2
-            self.mainListUri = "http://api.playplex.viacom.com/feeds/networkapp/intl/promolist/1.5/" \
-                               "mgid:arc:promotion:mtv.de:0af488a0-6610-4e25-8483-25e3039b19d3?" \
-                               "key=networkapp1.0&" \
-                               "brand=mtv&" \
-                               "platform=android&" \
-                               "region=DE&" \
-                               "version=2.2&" \
-                               "mvpd="
-            self.baseUrl = "http://www.mtv.de"
-            self.__backgroundServiceEp = "e6bfc4ca"
-            self.__region = "DE"
+        if self.channelCode == "mtvde":
+            self.mainListUri = "http://www.mtv.de/feeds/intl_m150/V8_0_0/" \
+                               "9f78da03-d56a-4946-be43-41ed06a1b005"
+            self.baseUrl = "https://www.mtv.de"
+            self.__country_id = "mtv.de"
+            self.__clip_list_id = "442813c0-9344-48d6-9674-f94c359fe9fb"
+            self.__show_list_id = "62701278-3c80-4ef6-a801-1df8ffca7c78"
+            self.__season_list_id = "bb3b48c4-178c-4cad-82c4-67ba76207020"
 
         self.swfUrl = "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.11.4.swf"
 
-        self._add_data_parser("http://api.playplex.viacom.com/feeds/networkapp/intl/promolist/1.5/",
-                              name="Main show listing PlayPlay API", json=True,
-                              parser=["data", "items"], creator=self.create_episode_item)
-
-        self._add_data_parser("http://api.playplex.viacom.com/feeds/networkapp/intl/series/items",
-                              name="Main video listing PlayPlay API", json=True,
-                              parser=["data", "items"], creator=self.create_video_item)
-
-        # Old API
-        self._add_data_parser(r"http://api.mtvnn.com/v2/site/[^/]+/\w+/franchises.json",
+        self._add_data_parser(r"https?://www.mtv.\w+/feeds/intl_m150/",
                               match_type=ParserData.MatchRegex,
-                              name="V2 API show listing", json=True,
-                              parser=[], creator=self.create_episode_item_json)
-        self._add_data_parser(r"http://api.mtvnn.com/v2/site/[^/]+/\w+/episodes.json",
+                              name="Alpha list MTV", json=True,
+                              parser=["result", "shows"], creator=self.create_program_items)
+
+        self._add_data_parser(r"^https?://www.mtv.\w*/feeds/intl_m112/",
                               match_type=ParserData.MatchRegex,
-                              name="V2 API video listing", json=True,
-                              parser=[], creator=self.create_video_item_json)
+                              name="Version 8 JSON Shows", json=True,
+                              preprocessor=self.add_clips,
+                              parser=["result", "data", "items"],
+                              creator=self.create_video_item_json,
+                              postprocessor=self.add_seasons)
+
+        self._add_data_parser(r"^https?://www.mtv.\w+/feeds/intl_m300/",
+                              match_type=ParserData.MatchRegex,
+                              name="Version 8 JSON Clips", json=True,
+                              parser=["result", "data", "items"],
+                              creator=self.create_clip_item_json)
 
         self._add_data_parser("*", updater=self.update_video_item)
-
-        # # setup the main parsing data
-        # if "json" in self.mainListUri:
-        #     Logger.Debug("Doing a JSON version of MTV")
-        #     self.episodeItemJson = ()
-        #     self.videoItemJson = ()
-        #     self.create_episode_item = self.create_episode_item_json
-        #     self.create_video_item = self.create_video_item_json
-        # else:
-        #     Logger.Debug("Doing a HTML version of MTV")
-        #     self.episodeItemRegex = '<a href="/(shows/[^"]+)" title="([^"]+)"><img [^>]+src="([^"]+)"'  # used for the ParseMainList
-        #     self.videoItemRegex = '<a href="([^"]+)" title="([^"]+)">(?:<span class=\Wepisode_number\W>(\d+)</span>){0,1}[\w\W]{0,100}?<img[^>]+src="([^"]+)"[^>]+\W+</a>'
-        #     self.folderItemRegex = '<li>\W+<a href="/(seizoen/[^"]+)">([^<]+)</a>'
 
         # ====================================== Actual channel setup STOPS here =======================================
         return
 
-    def create_episode_item(self, result_set):
-        """ Creates a new MediaItem for an episode.
+    def create_program_items(self, result_set):
+        """ Creates a new list of MediaItems for a alpha char listing.
 
         This method creates a new MediaItem from the Regular Expression or Json
         results <result_set>. The method should be implemented by derived classes
@@ -114,35 +84,116 @@ class Channel(chn_class.Channel):
         :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
+        :rtype: list[MediaItem]|MediaItem|None
 
         """
 
         Logger.trace(result_set)
 
-        title = result_set["title"]
-        # The id = result_set["id"]
-        url = "http://api.playplex.viacom.com/feeds/networkapp/intl/series/items/1.5/%s" \
-              "?key=networkapp1.0&brand=mtv&platform=android&region=%s&version=2.2" % \
-              (result_set["id"], self.__region)
-        item = MediaItem(title, url)
-        item.description = result_set.get("description", None)
-        item.complete = True
+        items = []
+        for result in result_set["value"]:
+            title = result["title"]
+            item_id = result["itemId"]
 
-        images = result_set.get("images", [])
-        if images:
-            #  mgid:file:gsp:scenic:/international/mtv.nl/playplex/dutch-ridiculousness/Dutch_Ridiculousness_Landscape.png
-            # http://playplex.mtvnimages.com/uri/mgid:file:gsp:scenic:/international/mtv.nl/playplex/dutch-ridiculousness/Dutch_Ridiculousness_Landscape.png
-            for image in images:
-                # noinspection PyTypeChecker
-                if image["width"] > 500:
-                    item.fanart = "http://playplex.mtvnimages.com/uri/%(url)s" % image
-                else:
-                    item.thumb = "http://playplex.mtvnimages.com/uri/%(url)s" % image
+            url = "{}/feeds/intl_m112/V8_0_0/{}/{}" \
+                .format(self.baseUrl, self.__show_list_id, item_id)
 
-        return item
+            item = MediaItem(title, url)
+            item.description = result.get("description", None)
+            item.metaData["guid"] = item_id
+            item.complete = True
+            item.thumb = "http://mtv-intl.mtvnimages.com/uri/mgid:arc:content:{}:{}?" \
+                         "ep={}&stage=live&format=jpg&quality=0.8&quality=0.85" \
+                         "&width=590&height=332&crop=true"\
+                .format(self.__country_id, item_id, self.__country_id)
+            item.fanart = "http://mtv-intl.mtvnimages.com/uri/mgid:arc:content:{}:{}?" \
+                          "ep={}&stage=live&format=jpg&quality=0.8&quality=0.85" \
+                          "&width=1280&height=720&crop=true"\
+                .format(self.__country_id, item_id, self.__country_id)
+            item.poster = "http://mtv-intl.mtvnimages.com/uri/mgid:arc:content:{}:{}?" \
+                          "ep={}&stage=live&format=jpg&quality=0.8&quality=0.85" \
+                          "&width=500&height=750&crop=true"\
+                .format(self.__country_id, item_id, self.__country_id)
+            items.append(item)
+        return items
 
-    def create_video_item(self, result_set):
+    # noinspection PyUnusedLocal
+    def add_seasons(self, data, items):
+        """ Performs post-process actions for data processing.
+
+        Accepts an data from the process_folder_list method, BEFORE the items are
+        processed. Allows setting of parameters (like title etc) for the channel.
+        Inside this method the <data> could be changed and additional items can
+        be created.
+
+        The return values should always be instantiated in at least ("", []).
+
+        :param str|JsonHelper data:     The retrieve data that was loaded for the
+                                         current item and URL.
+        :param list[MediaItem] items:   The currently available items
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: list[MediaItem]
+
+        """
+
+        Logger.info("Performing Post-Processing")
+
+        if not self.parentItem or "guid" not in self.parentItem.metaData:
+            return items
+
+        existing_seasons = set([i.metaData.get("season_id") for i in items])
+        if not existing_seasons:
+            return items
+
+        item_id = self.parentItem.metaData["guid"]
+        season_info_url = "http://www.mtv.de/feeds/intl_m308/V8_0_0/{0}/{1}/{1}".\
+            format(self.__season_list_id, item_id)
+        season_data = UriHandler.open(season_info_url)
+        season_info = JsonHelper(season_data)
+
+        for season in season_info.get_value("result", "data", "seasons", fallback=[]):
+            Logger.trace("Found season: %s", season)
+            season_id = season["id"]
+            if season_id in existing_seasons:
+                Logger.trace("Season is current season")
+                continue
+
+            url = "{}/feeds/intl_m112/V8_0_0/{}/{}/{}"\
+                .format(self.baseUrl, self.__show_list_id, item_id, season_id)
+            season_item = MediaItem(season["eTitle"], url)
+            items.append(season_item)
+
+        Logger.debug("Post-Processing finished")
+        return items
+
+    def add_clips(self, data):
+        """ Adds a clip folder to items.
+
+        :param str data: The retrieve data that was loaded for the current item and URL.
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+
+        """
+
+        Logger.info("Performing Pre-Processing")
+        items = []
+        if not self.parentItem or "guid" not in self.parentItem.metaData:
+            return data, items
+
+        clip_title = LanguageHelper.get_localized_string(LanguageHelper.Clips)
+        item_id = self.parentItem.metaData["guid"]
+        url = "{}/feeds/intl_m300/V8_0_0/{}/{}"\
+            .format(self.baseUrl, self.__clip_list_id, item_id)
+
+        clips = MediaItem("\a.: %s :." % (clip_title,), url)
+        items.append(clips)
+
+        Logger.debug("Pre-Processing finished")
+        return data, items
+
+    def create_clip_item_json(self, result_set):
         """ Creates a MediaItem of type 'video' using the result_set from the regex.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -154,7 +205,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param dict[str,dict|None] result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -163,90 +214,28 @@ class Channel(chn_class.Channel):
 
         Logger.trace(result_set)
 
+        # get the title
         title = result_set["title"]
-        if "subTitle" in result_set:
-            title = "%s - %s" % (title, result_set["subTitle"])
-        mgid = result_set["id"].split(":")[-1]
-        url = "http://feeds.mtvnservices.com/od/feed/intl-mrss-player-feed" \
-              "?mgid=mgid:arc:episode:mtvplay.com:%s" \
-              "&ep=%s" \
-              "&episodeType=segmented" \
-              "&imageEp=android.playplex.mtv.%s" \
-              "&arcEp=android.playplex.mtv.%s" \
-              % (mgid, self.__backgroundServiceEp, self.__region.lower(), self.__region.lower())
+        mgid = result_set["id"]
+
+        url = "https://media-utils.mtvnservices.com/services/MediaGenerator/" \
+              "mgid:arc:video:{}:{}" \
+              "?arcStage=live&format=json&acceptMethods=hls&clang=nl" \
+              "&https=true".format(self.__country_id, mgid)
 
         item = MediaItem(title, url)
         item.type = "video"
-        item.description = result_set.get("description", None)
-        item.isGeoLocked = True
-        images = result_set.get("images", [])
-        if images:
-            # mgid:file:gsp:scenic:/international/mtv.nl/playplex/dutch-ridiculousness/Dutch_Ridiculousness_Landscape.png
-            # http://playplex.mtvnimages.com/uri/mgid:file:gsp:scenic:/international/mtv.nl/playplex/dutch-ridiculousness/Dutch_Ridiculousness_Landscape.png
-            for image in images:
-                if image["width"] > 500:
-                    pass  # no fanart here
-                else:
-                    item.thumb = "http://playplex.mtvnimages.com/uri/%(url)s" % image
 
-        date = result_set.get("originalAirDate", None)
-        if not date:
-            date = result_set.get("originalPublishDate", None)
-        if date:
-            time_stamp = date["timestamp"]
-            date_time = DateHelper.get_date_from_posix(time_stamp)
-            item.set_date(date_time.year, date_time.month, date_time.day, date_time.hour,
-                          date_time.minute,
-                          date_time.second)
+        if "images" in result_set:
+            item.thumb = result_set["images"]["url"]
 
-        return item
+        if "airDate" not in result_set:
+            return item
 
-    def create_episode_item_json(self, result_set):
-        """ Creates a new MediaItem for an episode.
+        air_date = int(result_set["airDate"])
+        date_stamp = DateHelper.get_date_from_posix(air_date, self.__timezone_utc)
+        item.set_date(date_stamp.year, date_stamp.month, date_stamp.day)
 
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-
-        # add  { to make it valid Json again. if it would be in the regex it would
-        # not find all items
-        # data = JsonHelper("{%s" % (result_set,))
-
-        # title
-        local_title = result_set.get("local_title")
-        original_title = result_set.get("original_name")
-        if local_title == "" or local_title is None:
-            title = original_title
-        elif original_title != local_title:
-            title = "%s (%s)" % (local_title, original_title)
-        else:
-            title = local_title
-
-        # the URL
-        serie_id = result_set["id"]
-        url = "%sepisodes.json?per=2147483647&franchise_id=%s" % (self.mainListUri[0:43], serie_id)
-
-        item = MediaItem(title, url)
-        item.complete = True
-
-        # thumbs
-        if "image" in result_set and result_set["image"] is not None:
-            # noinspection PyTypeChecker
-            thumb = result_set["image"]["riptide_image_id"]
-            thumb = "http://images.mtvnn.com/%s/original" % (thumb,)
-            item.thumb = thumb
-
-        # others
-        item.description = result_set["local_long_description"]
         return item
 
     def create_video_item_json(self, result_set):
@@ -271,47 +260,39 @@ class Channel(chn_class.Channel):
         Logger.trace(result_set)
 
         # get the title
-        original_title = result_set.get("original_title")
-        local_title = result_set.get("local_title")
-        # Logger.Trace("%s - %s", originalTitle, localTitle)
-        if original_title == "":
-            title = local_title
-        else:
-            title = original_title
+        title = result_set["title"]
+        mgid = result_set["id"]
 
-        # get the other meta data
-        play_lists = result_set.get("local_playlists", [])
-        video_mgid = None
-        for play_list in play_lists:
-            language = play_list["language_code"]
-            if language == self.language:
-                Logger.trace("Found '%s' playlist, using this one.", language)
-                video_mgid = play_list["id"]
-                break
-            elif language == "en":
-                Logger.trace("Found '%s' instead of '%s' playlist", language, self.language)
-                video_mgid = play_list["id"]
-
-        if video_mgid is None:
-            Logger.error("No video MGID found for: %s", title)
-            return None
-
-        url = "http://api.mtvnn.com/v2/mrss.xml?uri=mgid:sensei:video:mtvnn.com:local_playlist-%s" % (video_mgid,)
-
-        thumb = result_set.get("riptide_image_id")
-        thumb = "http://images.mtvnn.com/%s/original" % (thumb,)
-
-        description = result_set.get("local_long_description")
-
-        date = result_set.get("published_from")
-        date = date[0:10].split("-")
+        url = "http://media.mtvnservices.com/pmt/e1/access/index.html" \
+              "?uri=mgid:arc:video:{}:{}&configtype=edge".format(self.__country_id, mgid)
 
         item = MediaItem(title, url)
-        item.thumb = thumb
-        item.description = description
-        item.type = 'video'
-        item.set_date(date[0], date[1], date[2])
-        item.complete = False
+        item.type = "video"
+        item.description = result_set["description"]
+
+        if "images" in result_set:
+            item.thumb = result_set["images"]["url"]
+
+        air_date = int(result_set["publishDate"])
+        date_stamp = DateHelper.get_date_from_posix(air_date, self.__timezone_utc)
+        item.set_date(date_stamp.year, date_stamp.month, date_stamp.day)
+
+        episode = result_set.get("episode")
+        season = result_set.get("season")
+        if season and episode:
+            try:
+                item.set_season_info(season, episode)
+            except:
+                Logger.debug("Error setting season and episode")
+
+        duration = result_set.get("duration", "0:00")
+        duration = duration.split(":")
+        duration = int(duration[1]) + 60 * int(duration[0])
+        item.set_info_label("duration", duration)
+
+        # store season info
+        item.metaData["season_id"] = result_set.get("seasonId")
+        item.isGeoLocked = True
         return item
 
     def update_video_item(self, item):
@@ -338,20 +319,30 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
-        url = item.url
-        data = UriHandler.open(url, proxy=self.proxy)
+        if "index.html" in item.url:
+            data = UriHandler.open(
+                item.url,
+                additional_headers={"Referer": "http://www.{}/".format(self.__country_id)}
+            )
+            json_data = JsonHelper(data)
+            guid = json_data.get_value("feed", "items", 0, "guid")
+            url = "https://media-utils.mtvnservices.com/services/MediaGenerator/" \
+                  "{}?arcStage=live&format=json&acceptMethods=hls&clang=nl" \
+                  "&https=true".format(guid)
+        else:
+            url = item.url
 
-        renditions_url = Regexer.do_regex(r'<media:content[^>]+url=\W([^\'"]+)\W', data)[0]
-        renditions_url = HtmlEntityHelper.strip_amp(renditions_url)
-        rendition_data = UriHandler.open(renditions_url, proxy=self.proxy)
-        video_items = Regexer.do_regex(r'<rendition[^>]+bitrate="(\d+)"[^>]*>\W+<src>([^<]+)<',
-                                       rendition_data)
+        data = UriHandler.open(url)
+        json_data = JsonHelper(data)
+        url = json_data.get_value("package", "video", "item", 0, "rendition", 0, "src")
+        if not url:
+            error = json_data.get_value("package", "video", "item", 0, "text")
+            Logger.error("Error resolving url: %s", error)
+            XbmcWrapper.show_dialog(LanguageHelper.ErrorId, error)
+            return item
 
         item.MediaItemParts = []
         part = item.create_new_empty_media_part()
-        for video_item in video_items:
-            media_url = self.get_verifiable_video_url(video_item[1].replace("rtmpe", "rtmp"))
-            part.append_media_stream(media_url, video_item[0])
-
+        part.append_media_stream(url, 0)
         item.complete = True
         return item

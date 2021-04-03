@@ -63,7 +63,7 @@ def iso8601_duration_to_seconds(duration):
     string = duration.split('P')[-1]
 
     if 'T' in string:
-        macro_string, micro_string = duration.split('T')
+        macro_string, micro_string = string.split('T')
 
     if macro_string:
         years, macro_string = _iso8601_duration_token(macro_string, 'Y')

@@ -10,17 +10,21 @@ import re
 from hashlib import md5
 from uuid import uuid4
 
-from resources.lib import kodiutils
+from requests import HTTPError
+
 from resources.lib.vtmgo import API_ENDPOINT, Profile, util
-from resources.lib.vtmgo.exceptions import (InvalidLoginException,
-                                            LoginErrorException,
-                                            NoLoginException)
+from resources.lib.vtmgo.exceptions import InvalidLoginException, LoginErrorException, NoLoginException
 
 try:  # Python 3
     import jwt
 except ImportError:  # Python 2
     # The package is named pyjwt in Kodi 18: https://github.com/lottaboost/script.module.pyjwt/pull/1
     import pyjwt as jwt
+
+try:  # Python 3
+    from urllib.parse import parse_qs, urlparse
+except ImportError:  # Python 2
+    from urlparse import parse_qs, urlparse
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -67,7 +71,6 @@ class VtmGoAuth:
         self._password = password
         self._loginprovider = loginprovider
         self._profile = profile
-        self._proxies = kodiutils.get_proxies()
         self._token_path = token_path
 
         if not self._username or not self._password:
@@ -92,14 +95,18 @@ class VtmGoAuth:
             except (IndexError, AttributeError):
                 self._account.product = None
 
-    def check_credentials_change(self):
-        """ Check if credentials have changed """
+    def _check_credentials_change(self):
+        """ Check if credentials have changed.
+
+        :return:                        The hash of the current credentials.
+        :rtype: str
+        """
         old_hash = self._account.hash
         new_hash = md5((self._username + ':' + self._password + ':' + self._loginprovider).encode('utf-8')).hexdigest()
+
         if new_hash != old_hash:
-            _LOGGER.debug('Credentials have changed, clearing tokens.')
-            self._account.hash = new_hash
-            self.logout()
+            return new_hash
+        return None
 
     def get_profiles(self, products='VTM_GO,VTM_GO_KIDS'):
         """ Returns the available profiles """
@@ -130,39 +137,62 @@ class VtmGoAuth:
         :rtype: AccountStorage
         """
         # Check if credentials have changed
-        self.check_credentials_change()
+        new_hash = self._check_credentials_change()
+        if new_hash:
+            _LOGGER.debug('Credentials have changed, forcing a new login.')
+            self._account.hash = new_hash
+            force = True
 
         # Use cached token if it is still valid
         if force or not self._account.is_valid_token():
             # Do actual login
-            self._web_login()
-
-        return self._account
+            self._android_login()
 
     def logout(self):
         """ Clear the session tokens. """
         self._account.jwt_token = None
         self._save_cache()
 
-    def _web_login(self):
-        """ Executes a login and returns the JSON Web Token.
+    def get_tokens(self):
+        """ Return the tokens.
+
+        :return:
+        :rtype: AccountStorage
+        """
+        return self._account
+
+    def _android_login(self):
+        """ Executes an android login and returns the JSON Web Token.
         :rtype str
         """
-
-        # Yes, we have accepted the cookies
-        util.SESSION.cookies.set('authId', str(uuid4()))
+        # We should start fresh
+        util.SESSION.cookies.clear()
 
         # Start login flow
-        response = util.http_get('https://vtm.be/vtmgo/aanmelden?redirectUrl=https://vtm.be/vtmgo', proxies=self._proxies)
-        response.raise_for_status()
+        util.http_get('https://login2.vtm.be/authorize', params={
+            'client_id': 'vtm-go-android',
+            'response_type': 'id_token',
+            'scope': 'openid email profile address phone',
+            'nonce': 1550073732654,
+            'sdkVersion': '0.13.1',
+            'state': 'dnRtLWdvLWFuZHJvaWQ=',  # vtm-go-android
+            'redirect_uri': 'https://login2.vtm.be/continue',
+        })
 
         # Send login credentials
-        response = util.http_post('https://login2.vtm.be/login?client_id=vtm-go-web', form={
-            'userName': kodiutils.get_setting('username'),
-            'password': kodiutils.get_setting('password'),
-            'jsEnabled': 'true',
-        }, proxies=self._proxies)
-        response.raise_for_status()
+        try:
+            response = util.http_post('https://login2.vtm.be/login',
+                                      params={
+                                          'client_id': 'vtm-go-android',
+                                      },
+                                      form={
+                                          'userName': self._username,
+                                          'password': self._password,
+                                      })
+        except HTTPError as exc:
+            if exc.response.status_code == 400:
+                raise InvalidLoginException()
+            raise
 
         if 'errorBlock-OIDC-004' in response.text:  # E-mailadres is niet gekend.
             raise InvalidLoginException()
@@ -174,8 +204,61 @@ class VtmGoAuth:
             raise InvalidLoginException()
 
         # Follow login
-        response = util.http_get('https://login2.vtm.be/authorize/continue?client_id=vtm-go-web', proxies=self._proxies)
-        response.raise_for_status()
+        response = util.http_get('https://login2.vtm.be/authorize/continue', params={
+            'client_id': 'vtm-go-android'
+        })
+
+        # We are redirected and our id_token is in the fragment of the redirected url
+        params = parse_qs(urlparse(response.url).fragment)
+        id_token = params['id_token'][0]
+
+        # Okay, final stage. We now need to authorize our id_token so we get a valid JWT.
+        response = util.http_post('https://lfvp-api.dpgmedia.net/authorize/idToken', data={
+            'clientId': 'vtm-go-android',
+            'pipIdToken': id_token,
+        })
+
+        # Get JWT from reply
+        self._account.jwt_token = json.loads(response.text).get('jsonWebToken')
+
+        self._save_cache()
+
+        return self._account
+
+    def _web_login(self):
+        """ Executes a login and returns the JSON Web Token.
+        :rtype str
+        """
+        # Yes, we have accepted the cookies
+        util.SESSION.cookies.clear()
+        util.SESSION.cookies.set('authId', str(uuid4()))
+
+        # Start login flow
+        util.http_get('https://vtm.be/vtmgo/aanmelden?redirectUrl=https://vtm.be/vtmgo')
+
+        # Send login credentials
+        try:
+            response = util.http_post('https://login2.vtm.be/login?client_id=vtm-go-web', form={
+                'userName': self._username,
+                'password': self._password,
+                'jsEnabled': 'true',
+            })
+        except HTTPError as exc:
+            if exc.response.status_code == 400:
+                raise InvalidLoginException()
+            raise
+
+        if 'errorBlock-OIDC-004' in response.text:  # E-mailadres is niet gekend.
+            raise InvalidLoginException()
+
+        if 'errorBlock-OIDC-003' in response.text:  # Wachtwoord is niet correct.
+            raise InvalidLoginException()
+
+        if 'OIDC-999' in response.text:  # Ongeldige login.
+            raise InvalidLoginException()
+
+        # Follow login
+        response = util.http_get('https://login2.vtm.be/authorize/continue?client_id=vtm-go-web')
 
         # Extract state and code
         matches_state = re.search(r'name="state" value="([^"]+)', response.text)
@@ -191,11 +274,10 @@ class VtmGoAuth:
             raise LoginErrorException(code=101)  # Could not extract authentication code
 
         # Okay, final stage. We now need to POST our state and code to get a valid JWT.
-        response = util.http_post('https://vtm.be/vtmgo/login-callback', form={
+        util.http_post('https://vtm.be/vtmgo/login-callback', form={
             'state': state,
             'code': code,
-        }, proxies=self._proxies)
-        response.raise_for_status()
+        })
 
         # Get JWT from cookies
         self._account.jwt_token = util.SESSION.cookies.get('lfvp_auth')
@@ -219,11 +301,3 @@ class VtmGoAuth:
 
         with open(os.path.join(self._token_path, self.TOKEN_FILE), 'w') as fdesc:
             json.dump(self._account.__dict__, fdesc, indent=2)
-
-    def clear_token(self):
-        """ Remove the cached JWT. """
-        _LOGGER.debug('Clearing token cache')
-        path = os.path.join(self._token_path, self.TOKEN_FILE)
-        if kodiutils.exists(path):
-            kodiutils.delete(path)
-        self._account = AccountStorage()

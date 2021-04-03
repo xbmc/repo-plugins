@@ -12,10 +12,9 @@ except ImportError:  # Python 2
     from urllib2 import quote, HTTPError
 
 from helperobjects import ApiData, StreamURLS
-from kodiutils import (addon_profile, can_play_drm, container_reload, exists, end_of_directory, get_max_bandwidth,
-                       get_setting_bool, get_url_json, has_inputstream_adaptive, invalidate_caches,
-                       kodi_version_major, localize, log, log_error, mkdir, ok_dialog, open_settings,
-                       open_url, supports_drm, to_unicode)
+from kodiutils import (addon_profile, can_play_drm, container_reload, exists, end_of_directory, generate_expiration_date, get_cache,
+                       get_max_bandwidth, get_setting_bool, get_url_json, has_inputstream_adaptive, invalidate_caches, kodi_version_major,
+                       localize, log, log_error, mkdir, ok_dialog, open_settings, open_url, supports_drm, to_unicode, update_cache)
 
 
 class StreamService:
@@ -34,12 +33,20 @@ class StreamService:
         self._tokenresolver = _tokenresolver
         self._create_settings_dir()
         self._can_play_drm = can_play_drm()
-        self._vualto_license_url = None
 
     def _get_vualto_license_url(self):
         """Get Widevine license URL from Vualto API"""
-        json_data = get_url_json(url=self._VUPLAY_API_URL, fail={})
-        self._vualto_license_url = json_data.get('drm_providers', {}).get('widevine', {}).get('la_url')
+        # Try cache
+        data = get_cache('vualto_license_url.json')
+        if data:
+            return data.get('la_url')
+
+        vualto_license_url = get_url_json(url=self._VUPLAY_API_URL, fail={}).get('drm_providers', {}).get('widevine', {})
+        if vualto_license_url:
+            from json import dumps
+            vualto_license_url.update(expirationDate=generate_expiration_date(hours=168))
+            update_cache('vualto_license_url.json', dumps(vualto_license_url))
+        return vualto_license_url.get('la_url')
 
     @staticmethod
     def _create_settings_dir():
@@ -139,6 +146,14 @@ class StreamService:
         """Get JSON with stream details from VRT API"""
         if not api_data:
             return None
+
+        # Try cache for livestreams
+        if api_data.is_live_stream and not roaming:
+            filename = api_data.video_id + '.json'
+            data = get_cache(filename)
+            if data:
+                return data
+
         token_url = api_data.media_api_url + '/tokens'
         if api_data.is_live_stream:
             playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'live', token_url, roaming=roaming)
@@ -150,7 +165,18 @@ class StreamService:
             return None
         api_url = api_data.media_api_url + '/videos/' + api_data.publication_id + \
             api_data.video_id + '?vrtPlayerToken=' + playertoken + '&client=' + api_data.client
-        return get_url_json(url=api_url)
+
+        stream_json = get_url_json(url=api_url)
+
+        # Update livestream cache if we have a livestream
+        if stream_json and api_data.is_live_stream:
+            from json import dumps
+            # Warning: Currently, the drmExpired key in the stream_json cannot be used because it provides a wrong 6 hour ttl for the VUDRM tokens.
+            # After investigation these tokens seem to have an expiration time of only two hours, so we set the expirationDate value accordingly.
+            stream_json.update(expirationDate=generate_expiration_date(hours=2), vualto_license_url=self._get_vualto_license_url())
+            cache_file = api_data.video_id + '.json'
+            update_cache(cache_file, dumps(stream_json))
+        return stream_json
 
     @staticmethod
     def _fix_virtualsubclip(manifest_url, duration):
@@ -208,6 +234,7 @@ class StreamService:
             uplynk = 'uplynk.com' in stream_json.get('targetUrls')[0].get('url')
 
             vudrm_token = stream_json.get('drm')
+            vualto_license_url = stream_json.get('vualto_license_url') or self._get_vualto_license_url()
             drm_stream = (vudrm_token or uplynk)
 
             # Select streaming protocol
@@ -221,41 +248,52 @@ class StreamService:
                 protocol = 'hls'
 
             # Get stream manifest url
-            manifest_url = next(stream.get('url') for stream in stream_json.get('targetUrls') if stream.get('type') == protocol)
+            manifest_url = next((stream.get('url') for stream in stream_json.get('targetUrls') if stream.get('type') == protocol), None)
 
-            # External virtual subclip, live-to-VOD from past 24 hours archived livestream (airdate feature)
-            if video.get('start_date') and video.get('end_date'):
-                manifest_url += '?t=' + video.get('start_date') + '-' + video.get('end_date')
-
-            # Fix virtual subclip
-            from datetime import timedelta
-            duration = timedelta(milliseconds=stream_json.get('duration', 0))
-            manifest_url = self._fix_virtualsubclip(manifest_url, duration)
-
-            # Prepare stream for Kodi player
-            if protocol == 'mpeg_dash' and drm_stream:
-                log(2, 'Protocol: mpeg_dash drm')
-                if vudrm_token:
-                    if self._vualto_license_url is None:
-                        self._get_vualto_license_url()
-                    encryption_json = '{{"token":"{0}","drm_info":[D{{SSM}}],"kid":"{{KID}}"}}'.format(vudrm_token)
-                    license_key = self._get_license_key(key_url=self._vualto_license_url,
-                                                        key_type='D',
-                                                        key_value=encryption_json,
-                                                        key_headers={'Content-Type': 'text/plain;charset=UTF-8'})
-                else:
-                    license_key = self._get_license_key(key_url=self._UPLYNK_LICENSE_URL, key_type='R')
-
-                stream = StreamURLS(manifest_url, license_key=license_key, use_inputstream_adaptive=True)
-            elif protocol == 'mpeg_dash':
-                log(2, 'Protocol: mpeg_dash')
-                stream = StreamURLS(manifest_url, use_inputstream_adaptive=True)
+            # Failed to get compatible manifest url, ask user to toggle "Use Widevine DRM"
+            if manifest_url is None:
+                available_protocols = [stream.get('type') for stream in stream_json.get('targetUrls')]
+                if protocol not in available_protocols:
+                    error_json = {'message': '%s is not available for this stream, please try toggling the "Use Widevine DRM" setting' % protocol}
+                    message = localize(30989)  # Failed to load a compatible stream
+                    return self._handle_stream_api_error(message, error_json)
             else:
-                log(2, 'Protocol: {protocol}', protocol=protocol)
-                # Fix 720p quality for HLS livestreams
-                manifest_url = manifest_url.replace('.m3u8?', '.m3u8?hd&') if '.m3u8?' in manifest_url else manifest_url + '?hd'
-                stream = self._select_hls_substreams(manifest_url, protocol)
-            return stream
+
+                # External virtual subclip, live-to-VOD from past 24 hours archived livestream (airdate feature)
+                if video.get('start_date') and video.get('end_date'):
+                    manifest_url += '?t=' + video.get('start_date') + '-' + video.get('end_date')
+
+                # Fix virtual subclip
+                from datetime import timedelta
+                duration = timedelta(milliseconds=stream_json.get('duration', 0))
+                manifest_url = self._fix_virtualsubclip(manifest_url, duration)
+
+                # Prepare stream for Kodi player
+                if protocol == 'mpeg_dash' and drm_stream:
+                    log(2, 'Protocol: mpeg_dash drm')
+                    if vudrm_token:
+                        encryption_json = '{{"token":"{0}","drm_info":[D{{SSM}}],"kid":"{{KID}}"}}'.format(vudrm_token)
+                        license_key = self._get_license_key(key_url=vualto_license_url,
+                                                            key_type='D',
+                                                            key_value=encryption_json,
+                                                            key_headers={'Content-Type': 'text/plain;charset=UTF-8'})
+                    else:
+                        license_key = self._get_license_key(key_url=self._UPLYNK_LICENSE_URL, key_type='R')
+
+                    stream = StreamURLS(manifest_url, license_key=license_key, use_inputstream_adaptive=True)
+                elif protocol == 'mpeg_dash':
+                    log(2, 'Protocol: mpeg_dash')
+                    stream = StreamURLS(manifest_url, use_inputstream_adaptive=True)
+                else:
+                    log(2, 'Protocol: {protocol}', protocol=protocol)
+                    # Fix 720p quality for HLS livestreams
+                    manifest_url = manifest_url.replace('.m3u8?', '.m3u8?hd&') if '.m3u8?' in manifest_url else manifest_url + '?hd'
+                    # Play HLS directly in Kodi Player on Kodi 17
+                    if kodi_version_major() < 18 or not has_inputstream_adaptive():
+                        stream = self._select_hls_substreams(manifest_url, protocol)
+                    else:
+                        stream = StreamURLS(manifest_url, use_inputstream_adaptive=True)
+                return stream
 
         # VRT Geoblock: failed to get stream, now try again with roaming enabled
         if stream_json.get('code') in self._GEOBLOCK_ERROR_CODES:
@@ -311,7 +349,7 @@ class StreamService:
         end_of_directory()
 
     def _select_hls_substreams(self, master_hls_url, protocol):
-        """Select HLS substreams to speed up Kodi player start, workaround for slower kodi selection"""
+        """Select HLS substreams to speed up Kodi player start, workaround for slower Kodi selection"""
         hls_variant_url = None
         subtitle_url = None
         hls_audio_id = None

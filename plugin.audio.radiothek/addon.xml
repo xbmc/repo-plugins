@@ -19,7 +19,7 @@
         <forum>https://forum.kodi.tv/showthread.php?tid=350090</forum>
         <source>https://github.com/s0faking/plugin.audio.radiothek</source>
         <news>v0.1.2+matrix.1 (03/04/2021)
-	    [fix] version tag fix
+	          [fix] version tag fix
             [fix] Shoutcast Livestream pattern changed.
             [feature] Added settings for livestream (Shoutcast/HLS)
             [feature] Added quality settings

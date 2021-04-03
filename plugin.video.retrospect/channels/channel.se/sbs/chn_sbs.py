@@ -67,7 +67,7 @@ class Channel(chn_class.Channel):
             self.primaryChannelId = 22
 
         elif self.channelCode == "dplayse":
-            self.noImage = "dplayimage.png"
+            self.noImage = "dplusimage.png"
             self.baseUrl = "http://www.dplay.se/api/v2/ajax"
 
         elif self.channelCode == "dplayno":
@@ -205,7 +205,7 @@ class Channel(chn_class.Channel):
             # =aa9ef0ed760df76d184b262d739299a75ccae7b67eec923fe3fcd861f97bcc7f&shortlived=true
             url = "https://{0}/token?realm=dplay{1}&deviceId={2}&shortlived=true"\
                 .format(self.baseUrlApi, self.language, guid)
-            JsonHelper(UriHandler.open(url, proxy=self.proxy))
+            JsonHelper(UriHandler.open(url))
             # noinspection PyTypeChecker
             AddonSettings.set_channel_setting(self, "api_cookie_set", time.time(), store=LOCAL)
 
@@ -249,7 +249,7 @@ class Channel(chn_class.Channel):
                      "&page%5Bsize%5D=100&page%5Bnumber%5D={{0}}".format(self.baseUrlApi)
         # "include=images%2CprimaryChannel" \
         url = url_format.format(p)
-        data = UriHandler.open(url, proxy=self.proxy)
+        data = UriHandler.open(url)
         json = JsonHelper(data)
         pages = json.get_value("meta", "totalPages")
         programs = json.get_value("data") or []
@@ -261,7 +261,7 @@ class Channel(chn_class.Channel):
             url = url_format.format(p)
             Logger.debug("Loading: %s", url)
 
-            data = UriHandler.open(url, proxy=self.proxy)
+            data = UriHandler.open(url)
             json = JsonHelper(data)
             programs += json.get_value("data") or []
 
@@ -304,7 +304,7 @@ class Channel(chn_class.Channel):
         results <result_set>. The method should be implemented by derived classes
         and are specific to the channel.
 
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'folder'.
         :rtype: MediaItem|None
@@ -471,7 +471,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -645,8 +645,7 @@ class Channel(chn_class.Channel):
 
         arkose_data = UriHandler.open(
             "https://client-api.arkoselabs.com/fc/gt2/public_key/FE296399-FDEA-2EA2-8CD5-50F6E3157ECA",
-            proxy=self.proxy, data=req_data,
-            additional_headers={"user-agent": user_agent}, no_cache=True
+            data=req_data, additional_headers={"user-agent": user_agent}, no_cache=True
         )
         arkose_json = JsonHelper(arkose_data)
         arkose_token = arkose_json.get_value("token")
@@ -657,7 +656,7 @@ class Channel(chn_class.Channel):
 
         UriHandler.open(
             "https://disco-api.dplay.se/token?realm=dplayse&deviceId={}&shortlived=true".format(device_id),
-            proxy=self.proxy, no_cache=True
+            no_cache=True
         )
 
         if username is None or password is None:
@@ -679,7 +678,7 @@ class Channel(chn_class.Channel):
                 "Referer": "https://auth.dplay.se/login",
                 "User-Agent": user_agent
             }
-        result = UriHandler.open("https://disco-api.dplay.se/login", proxy=self.proxy,
+        result = UriHandler.open("https://disco-api.dplay.se/login",
                                  json=creds, additional_headers=headers)
         if UriHandler.instance().status.code > 200:
             Logger.error("Failed to log in: %s", result)
@@ -716,7 +715,7 @@ class Channel(chn_class.Channel):
                 XbmcWrapper.show_dialog(LanguageHelper.LoginErrorTitle, LanguageHelper.LoginErrorText)
                 return item
 
-        video_data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=self.localIP)
+        video_data = UriHandler.open(item.url)
         if not video_data:
             return item
 
@@ -731,15 +730,15 @@ class Channel(chn_class.Channel):
 
         m3u8url = video_info["streaming"]["hls"]["url"]
 
-        m3u8data = UriHandler.open(m3u8url, self.proxy)
+        m3u8data = UriHandler.open(m3u8url)
         if AddonSettings.use_adaptive_stream_add_on():
             stream = part.append_media_stream(m3u8url, 0)
             item.complete = True
-            M3u8.set_input_stream_addon_input(stream, self.proxy)
+            M3u8.set_input_stream_addon_input(stream)
         else:
             # user agent for all sub m3u8 and ts requests needs to be the same
             part.HttpHeaders["user-agent"] = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)"
-            for s, b, a in M3u8.get_streams_from_m3u8(m3u8url, self.proxy, append_query_string=False,
+            for s, b, a in M3u8.get_streams_from_m3u8(m3u8url, append_query_string=False,
                                                       map_audio=True, play_list_data=m3u8data):
                 item.complete = True
                 if a:
@@ -749,15 +748,15 @@ class Channel(chn_class.Channel):
                 part.append_media_stream(s, b)
 
         if self.language == "se":
-            vtt_url = M3u8.get_subtitle(m3u8url, self.proxy, m3u8data, language="sv")
+            vtt_url = M3u8.get_subtitle(m3u8url, m3u8data, language="sv")
         elif self.language == "dk":
-            vtt_url = M3u8.get_subtitle(m3u8url, self.proxy, m3u8data, language="da")
+            vtt_url = M3u8.get_subtitle(m3u8url, m3u8data, language="da")
         else:
-            vtt_url = M3u8.get_subtitle(m3u8url, self.proxy, m3u8data)
+            vtt_url = M3u8.get_subtitle(m3u8url, m3u8data)
 
         # https://dplaynordics-vod-80.akamaized.net/dplaydni/259/0/hls/243241001/1112635959-prog_index.m3u8?version_hash=bb753129&hdnts=st=1518218118~exp=1518304518~acl=/*~hmac=bdeefe0ec880f8614e14af4d4a5ca4d3260bf2eaa8559e1eb8ba788645f2087a
         vtt_url = vtt_url.replace("-prog_index.m3u8", "-0.vtt")
-        part.Subtitle = SubtitleHelper.download_subtitle(vtt_url, format='srt', proxy=self.proxy)
+        part.Subtitle = SubtitleHelper.download_subtitle(vtt_url, format='srt')
 
         # if the user has premium, don't show any warnings
         if self.__has_premium:
@@ -814,7 +813,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        me = UriHandler.open("https://disco-api.dplay.se/users/me", proxy=self.proxy, no_cache=True)
+        me = UriHandler.open("https://disco-api.dplay.se/users/me", no_cache=True)
         if UriHandler.instance().status.code >= 300:
             return False
 
@@ -822,7 +821,7 @@ class Channel(chn_class.Channel):
         signed_in_user = account_data.get_value("data", "attributes", "username")
         if signed_in_user is not None and signed_in_user != username:
             # Log out
-            UriHandler.open("https://disco-api.dplay.se/logout", data="", proxy=self.proxy, no_cache=True)
+            UriHandler.open("https://disco-api.dplay.se/logout", data="", no_cache=True)
             return False
 
         logged_in = not account_data.get_value("data", "attributes", "anonymous")
@@ -869,7 +868,7 @@ class Channel(chn_class.Channel):
         subdomain, domain = host.split(".", 1)
         url = "https://secure.%s/secure/api/v2/user/authorization/stream/%s?stream_type=hls" \
               % (domain, video_id,)
-        data = UriHandler.open(url, proxy=self.proxy, additional_headers=headers, no_cache=True)
+        data = UriHandler.open(url, additional_headers=headers, no_cache=True)
         json = JsonHelper(data)
         url = json.get_value("hls")
 
@@ -881,7 +880,7 @@ class Channel(chn_class.Channel):
             qs = url.split("?")[-1]
         else:
             qs = None
-        for s, b in M3u8.get_streams_from_m3u8(url, self.proxy):
+        for s, b in M3u8.get_streams_from_m3u8(url):
             # and we need to append the original QueryString
             if "X-I-FRAME-STREAM" in s:
                 continue

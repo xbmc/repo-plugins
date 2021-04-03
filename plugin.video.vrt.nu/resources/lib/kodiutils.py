@@ -9,8 +9,14 @@ from socket import timeout
 from ssl import SSLError
 
 import xbmc
-import xbmcaddon
 import xbmcplugin
+
+try:  # Kodi 19 alpha 2 and higher
+    from xbmcvfs import translatePath
+except ImportError:  # Kodi 19 alpha 1 and lower
+    from xbmc import translatePath  # pylint: disable=ungrouped-imports
+
+from xbmcaddon import Addon
 from utils import from_unicode, to_unicode
 
 try:  # Python 3
@@ -18,7 +24,7 @@ try:  # Python 3
 except ImportError:  # Python 2
     from urllib2 import HTTPErrorProcessor
 
-ADDON = xbmcaddon.Addon()
+ADDON = Addon()
 DEFAULT_CACHE_DIR = 'cache'
 
 SORT_METHODS = dict(
@@ -128,9 +134,14 @@ def addon_path():
     return get_addon_info('path')
 
 
+def translate_path(path):
+    """Converts a Kodi special:// path to the corresponding OS-specific path"""
+    return to_unicode(translatePath(from_unicode(path)))
+
+
 def addon_profile():
     """Return add-on profile"""
-    return to_unicode(xbmc.translatePath(ADDON.getAddonInfo('profile')))
+    return translate_path(ADDON.getAddonInfo('profile'))
 
 
 def url_for(name, *args, **kwargs):
@@ -281,14 +292,23 @@ def play(stream, video=None):
         )
     play_item.setProperty('inputstream.adaptive.max_bandwidth', str(get_max_bandwidth() * 1000))
     play_item.setProperty('network.bandwidth', str(get_max_bandwidth() * 1000))
+
     if stream.stream_url is not None and stream.use_inputstream_adaptive:
         if kodi_version_major() < 19:
             play_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
         else:
             play_item.setProperty('inputstream', 'inputstream.adaptive')
-        play_item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
+
         play_item.setContentLookup(False)
-        play_item.setMimeType('application/dash+xml')
+
+        if '.mpd' in stream.stream_url:
+            play_item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
+            play_item.setMimeType('application/dash+xml')
+
+        if '.m3u8' in stream.stream_url:
+            play_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
+            play_item.setMimeType('application/vnd.apple.mpegurl')
+
         if stream.license_key is not None:
             import inputstreamhelper
             is_helper = inputstreamhelper.Helper('mpd', drm='com.widevine.alpha')
@@ -405,6 +425,11 @@ def localize_date(date, strftime):
         strftime = strftime.replace('%B', MONTH_LONG[date.strftime('%m')])
     elif '%b' in strftime:
         strftime = strftime.replace('%b', MONTH_SHORT[date.strftime('%m')])
+
+    # %e isn't supported on Python 2.7 on Windows
+    if '%e' in strftime:
+        strftime = strftime.replace('%e', str(int(date.strftime('%d'))))
+
     return date.strftime(strftime)
 
 
@@ -460,15 +485,12 @@ def get_setting_int(key, default=None):
 
 
 def get_setting_float(key, default=None):
-    """Get an add-on setting"""
+    """Get an add-on setting as float"""
+    value = get_setting(key, default)
     try:
-        return ADDON.getSettingNumber(key)
-    except (AttributeError, TypeError):  # On Krypton or older, or when not a float
-        value = get_setting(key, default)
-        try:
-            return float(value)
-        except ValueError:
-            return default
+        return float(value)
+    except ValueError:
+        return default
     except RuntimeError:  # Occurs when the add-on is disabled
         return default
 
@@ -519,7 +541,7 @@ def get_global_setting(key):
 
 def get_advanced_setting(key, default=None):
     """Get a setting from advancedsettings.xml"""
-    as_path = xbmc.translatePath('special://masterprofile/advancedsettings.xml')
+    as_path = translate_path('special://masterprofile/advancedsettings.xml')
     if not exists(as_path):
         return default
     from xml.etree.ElementTree import parse, ParseError
@@ -590,7 +612,7 @@ def get_playerid():
 
 def get_max_bandwidth():
     """Get the max bandwidth based on Kodi and add-on settings"""
-    vrtnu_max_bandwidth = get_setting_int('max_bandwidth', default=0)
+    vrtnu_max_bandwidth = int(get_setting('max_bandwidth', default='0'))
     global_max_bandwidth = int(get_global_setting('network.bandwidth'))
     if vrtnu_max_bandwidth != 0 and global_max_bandwidth != 0:
         return min(vrtnu_max_bandwidth, global_max_bandwidth)
@@ -1077,7 +1099,11 @@ def open_url(url, data=None, headers=None, method=None, cookiejar=None, follow_r
     if data is not None:
         req.data = data
         log(2, 'URL post: {url}', url=unquote(url))
-        log(2, 'URL post data: {data}', data=data)
+        # Make sure we don't log the password
+        debug_data = data
+        if 'password' in to_unicode(debug_data):
+            debug_data = '**redacted**'
+        log(2, 'URL post data: {data}', data=debug_data)
     else:
         log(2, 'URL get: {url}', url=unquote(url))
 
@@ -1165,6 +1191,13 @@ def get_url_json(url, cache=None, headers=None, data=None, fail=None, raise_erro
                 update_cache(cache, dumps(json_data))
             return json_data
     return fail
+
+
+def generate_expiration_date(hours=2):
+    """Return ISO 8601 formatted expirationDate"""
+    from datetime import datetime, timedelta
+    import dateutil.tz
+    return (datetime.now(dateutil.tz.UTC) + timedelta(hours=hours)).isoformat()
 
 
 def delete_cache(cache_file, cache_dir=DEFAULT_CACHE_DIR):

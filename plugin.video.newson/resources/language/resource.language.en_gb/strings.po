@@ -1,0 +1,53 @@
+# Kodi Media Center language file
+# Addon Name: NewsON
+# Addon id: plugin.video.newson
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.newson\n"
+"Report-Msgid-Bugs-To: http://forum.kodi.tv/showthread.php?tid=315924\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Lunatixz Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Enable Debugging [Log errors]"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Site unreachable, try again later..."
+msgstr ""
+
+msgctxt "#30002"
+msgid "Newscasts"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Video Clips"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Live Now"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Breaking News"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Local Stations"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Browse by State"
+msgstr ""
+
+msgctxt "#30008"
+msgid "There are no live stations right now!"
+msgstr ""

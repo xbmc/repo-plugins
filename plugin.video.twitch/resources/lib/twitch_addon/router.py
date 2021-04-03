@@ -157,11 +157,11 @@ def _play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use
     play.route(twitch_api, seek_time, channel_id, video_id, slug, ask, use_player, quality, channel_name)
 
 
-@dispatcher.register(MODES.EDITFOLLOW, kwargs=['channel_id', 'channel_name', 'game'])
+@dispatcher.register(MODES.EDITFOLLOW, kwargs=['channel_id', 'channel_name', 'game_id', 'game_name', 'follow'])
 @error_handler
-def _edit_user_follows(channel_id=None, channel_name=None, game=None):
+def _edit_user_follows(channel_id=None, channel_name=None, game_id=None, game_name=None, follow=True):
     from .routes import edit_user_follows
-    edit_user_follows.route(twitch_api, channel_id, channel_name, game)
+    edit_user_follows.route(twitch_api, channel_id, channel_name, game_id, game_name, follow)
 
 
 @dispatcher.register(MODES.EDITBLACKLIST, kwargs=['list_type', 'target_id', 'name', 'remove', 'refresh'])

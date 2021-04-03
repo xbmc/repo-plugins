@@ -235,7 +235,7 @@ class Channel(chn_class.Channel):
         return item
 
     def update_video_item(self, item):
-        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=item.HttpHeaders)
+        data = UriHandler.open(item.url, additional_headers=item.HttpHeaders)
         media_regex = 'data-media="([^"]+)"'
         media_info = Regexer.do_regex(media_regex, data)[0]
         media_info = HtmlEntityHelper.convert_html_entities(media_info)
@@ -264,7 +264,7 @@ class Channel(chn_class.Channel):
         return item
 
     def update_live_item(self, item):
-        data = UriHandler.open(item.url, proxy=self.proxy, additional_headers=item.HttpHeaders)
+        data = UriHandler.open(item.url, additional_headers=item.HttpHeaders)
         media_regex = 'data-media="([^"]+)"'
         media_info = Regexer.do_regex(media_regex, data)[0]
         media_info = HtmlEntityHelper.convert_html_entities(media_info)
@@ -276,7 +276,7 @@ class Channel(chn_class.Channel):
         if hls_url is not None and "m3u8" in hls_url:
             Logger.debug("Found HLS url for %s: %s", media_info.json["streamName"], hls_url)
 
-            for s, b in M3u8.get_streams_from_m3u8(hls_url, self.proxy):
+            for s, b in M3u8.get_streams_from_m3u8(hls_url):
                 part.append_media_stream(s, b)
                 item.complete = True
         else:
@@ -285,7 +285,7 @@ class Channel(chn_class.Channel):
             token_url = "%s/api/media/streaming?streamname=%s" \
                         % (self.baseUrl, media_info.json["streamName"])
 
-            token_data = UriHandler.open(token_url, proxy=self.proxy,
+            token_data = UriHandler.open(token_url,
                                          additional_headers=item.HttpHeaders, no_cache=True)
 
             token_data = JsonHelper(token_data)

@@ -9,7 +9,7 @@ from resources.lib import kodiutils
 from resources.lib.kodiplayer import KodiPlayer
 from resources.lib.streamz.api import Api
 from resources.lib.streamz.auth import Auth
-from resources.lib.streamz.exceptions import LimitReachedException, StreamGeoblockedException, StreamUnavailableException, UnavailableException
+from resources.lib.streamz.exceptions import LimitReachedException, UnavailableException
 from resources.lib.streamz.stream import Stream
 
 _LOGGER = logging.getLogger(__name__)
@@ -43,12 +43,7 @@ class Player:
             # Get stream information
             resolved_stream = self._stream.get_stream(category, item)
 
-        except StreamGeoblockedException:
-            kodiutils.ok_dialog(message=kodiutils.localize(30710))  # This video is geo-blocked...
-            kodiutils.end_of_directory()
-            return
-
-        except StreamUnavailableException:
+        except UnavailableException:
             kodiutils.ok_dialog(message=kodiutils.localize(30712))  # The video is unavailable...
             kodiutils.end_of_directory()
             return
@@ -115,14 +110,32 @@ class Player:
             # This allows to play some programs that don't have metadata (yet).
             pass
 
+        # If we have enabled the Manifest proxy, route the call trough that.
+        if kodiutils.get_setting_bool('manifest_proxy'):
+            try:  # Python 3
+                from urllib.parse import urlencode
+            except ImportError:  # Python 2
+                from urllib import urlencode
+
+            port = kodiutils.get_setting_int('manifest_proxy_port')
+            if not port:
+                kodiutils.notification(message=kodiutils.localize(30718), icon='error')
+                kodiutils.end_of_directory()
+                return
+
+            url = 'http://127.0.0.1:{port}/manifest?{path}'.format(port=port,
+                                                                   path=urlencode({'path': resolved_stream.url}))
+        else:
+            url = resolved_stream.url
+
         license_key = self._stream.create_license_key(resolved_stream.license_url)
 
         # Play this item
-        kodiutils.play(resolved_stream.url, license_key, resolved_stream.title, {}, info_dict, prop_dict, stream_dict)
+        kodiutils.play(url, license_key, resolved_stream.title, {}, info_dict, prop_dict, stream_dict, subtitles=resolved_stream.subtitles)
 
         # Wait for playback to start
         kodi_player = KodiPlayer()
-        if not kodi_player.waitForPlayBack(url=resolved_stream.url):
+        if not kodi_player.waitForPlayBack(url=url):
             # Playback didn't start
             return
 

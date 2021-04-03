@@ -37,7 +37,7 @@ def route(api):
             context_menu.extend(menu_items.change_direction('followed_channels'))
             kodi.create_item({'label': '%s %s' % (i18n('following'), i18n('channels')), 'path': {'mode': MODES.FOLLOWED, 'content': 'channels'}, 'context_menu': context_menu,
                               'info': {'plot': '%s - %s' % (i18n('following'), i18n('channels'))}})
-        if show_menu('games', 'following'):
+        if show_menu('games', 'following') and utils.get_private_oauth_token():
             kodi.create_item({'label': '%s %s' % (i18n('following'), i18n('games')), 'path': {'mode': MODES.FOLLOWED, 'content': 'games'},
                               'info': {'plot': '%s - %s' % (i18n('following'), i18n('games'))}})
         if show_menu('clips', 'following'):

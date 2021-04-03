@@ -8,7 +8,7 @@ import logging
 from resources.lib import kodiutils
 from resources.lib.kodiutils import TitleItem
 from resources.lib.modules.menu import Menu
-from resources.lib.streamz import Category, STOREFRONT_SERIES, STOREFRONT_MOVIES
+from resources.lib.streamz import STOREFRONT_MOVIES, STOREFRONT_SERIES, Category
 from resources.lib.streamz.api import CACHE_PREVENT, Api
 from resources.lib.streamz.auth import Auth
 from resources.lib.streamz.exceptions import UnavailableException
@@ -28,33 +28,18 @@ class Catalog:
                           kodiutils.get_tokens_path())
         self._api = Api(self._auth)
 
-    def show_catalog(self):
-        """ Show the catalog. """
-        categories = self._api.get_categories()
-
-        listing = []
-        for cat in categories:
-            listing.append(TitleItem(
-                title=cat.title,
-                path=kodiutils.url_for('show_catalog_category', category=cat.category_id),
-                info_dict=dict(
-                    plot='[B]{category}[/B]'.format(category=cat.title),
-                ),
-            ))
-
-        # Sort categories by default like in Streamz.
-        kodiutils.show_listing(listing, 30003, content='files')
-
     def show_catalog_category(self, category=None):
         """ Show a category in the catalog.
 
         :type category: str
         """
         items = self._api.get_items(category)
+        show_unavailable = kodiutils.get_setting_bool('interface_show_unavailable')
 
         listing = []
         for item in items:
-            listing.append(Menu.generate_titleitem(item))
+            if show_unavailable or item.available:
+                listing.append(Menu.generate_titleitem(item))
 
         # Sort items by label, but don't put folders at the top.
         # Used for A-Z listing or when movies and episodes are mixed.
@@ -153,6 +138,7 @@ class Catalog:
         :type storefront: str
         """
         results = self._api.get_storefront(storefront)
+        show_unavailable = kodiutils.get_setting_bool('interface_show_unavailable')
 
         listing = []
         for item in results:
@@ -165,7 +151,8 @@ class Catalog:
                     ),
                 ))
             else:
-                listing.append(Menu.generate_titleitem(item))
+                if show_unavailable or item.available:
+                    listing.append(Menu.generate_titleitem(item))
 
         if storefront == STOREFRONT_SERIES:
             label = 30005  # Series
@@ -183,10 +170,12 @@ class Catalog:
         :type category: str
         """
         result = self._api.get_storefront_category(storefront, category)
+        show_unavailable = kodiutils.get_setting_bool('interface_show_unavailable')
 
         listing = []
         for item in result.content:
-            listing.append(Menu.generate_titleitem(item))
+            if show_unavailable or item.available:
+                listing.append(Menu.generate_titleitem(item))
 
         if storefront == STOREFRONT_SERIES:
             content = 'tvshows'

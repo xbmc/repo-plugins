@@ -3,6 +3,7 @@ import libzdf
 
 class tsat(libzdf.libzdf):
 	def __init__(self):
+		self.apiVersion = 1
 		self.baseApi = 'https://api.3sat.de'
 		self.userAgent = '3Sat-App/3.53.800'
 		self.channels =	['3sat']

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!--Login-->
+  <category label="30000">
+    <setting id="username" type="text" label="30001" default=""/>
+    <setting id="password" type="text" label="30002" option="hidden" default=""/>
+    <setting label="30003" type="action" action="RunPlugin(plugin://plugin.video.ahltv/?url=junk&amp;mode=401)" option="close" />
+  </category>
+  <!--Playback-->
+  <category label="30004">
+    <setting id="ffmpeg" type="bool" label="30005" />
+  </category>
+</settings>

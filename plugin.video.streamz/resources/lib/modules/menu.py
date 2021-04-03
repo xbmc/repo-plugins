@@ -29,7 +29,7 @@ class Menu:
         """ Show the main menu. """
         listing = []
 
-        account = self._auth.login()
+        account = self._auth.get_tokens()
 
         if account.product == 'STREAMZ':
             listing.append(TitleItem(
@@ -106,18 +106,6 @@ class Menu:
                 ),
             ))
 
-        # listing.append(TitleItem(
-        #     title=kodiutils.localize(30003),  # Catalogue
-        #     path=kodiutils.url_for('show_catalog'),
-        #     art_dict=dict(
-        #         icon='DefaultGenre.png',
-        #         fanart=kodiutils.get_addon_info('fanart'),
-        #     ),
-        #     info_dict=dict(
-        #         plot=kodiutils.localize(30004),
-        #     ),
-        # ))
-
         if kodiutils.get_setting_bool('interface_show_mylist'):
             listing.append(TitleItem(
                 title=kodiutils.localize(30017),  # My List
@@ -166,6 +154,11 @@ class Menu:
         :rtype str
         """
         plot = ''
+
+        # Add geo-blocked message
+        if hasattr(obj, 'available') and not obj.available:
+            plot += kodiutils.localize(30206)  # Available in Streamz+
+            plot += '\n'
 
         # Add remaining
         if hasattr(obj, 'remaining') and obj.remaining is not None:
@@ -247,8 +240,16 @@ class Menu:
                 'width': 1920,
             }
 
+            if item.available:
+                title = item.name
+            else:
+                title = item.name + ' [COLOR=red](S+)[/COLOR]'
+                info_dict.update({
+                    'title': title,
+                })
+
             return TitleItem(
-                title=item.name,
+                title=title,
                 path=kodiutils.url_for('play', category='movies', item=item.movie_id),
                 art_dict=art_dict,
                 info_dict=info_dict,

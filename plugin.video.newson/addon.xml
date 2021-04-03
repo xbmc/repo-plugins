@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.newson" version="1.2.4" name="NewsON" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/> 
+        <import addon="script.module.six" version="1.0.0"/>
+        <import addon="script.module.kodi-six" version="0.1.3.1"/>
+        <import addon="script.module.requests" version="2.7.0"/> 
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.routing" version="0.2.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+        <summary lang="en_GB">Local News Nationwide</summary>
+        <description lang="en_GB">NewsON provides instant access to live or on-demand broadcasts from over 175 local stations in 114 U.S. markets. Access previous newscasts for up to 48 hours after they air, and share interesting stories with the integrated social media share function directly from the app. Search for a local station with the interactive map or watch the station closest to you on smartphones, tablets, or Roku streaming players. Save favorite stations, and stay updated with breaking news alerts sent directly to mobile devices from the local source of the news. Stay connected anytime, anywhere without a cable subscription or login.</description>
+        <platform>all</platform>
+        <license>GPL-3.0-or-later</license>
+        <source>https://github.com/Lunatixz/KODI_Addons/tree/master/plugin.video.newson</source>
+        <website>http://watchnewson.com/</website>
+        <forum>https://forum.kodi.tv/showthread.php?tid=315924</forum>
+        <news>v.1.2.0[CR]-Matrix[CR]v1.0.8[CR]Added InputStream Helper[CR]-v1.0.7[CR]Updated Parser[CR]-v1.0.5[CR]-Fixed Parsing Error[CR]v1.0.4[CR]-Leia Compatibility, Added adaptive inputstream[CR]v1.0.3[CR]-Plugin improvments.[CR]v1.0.2[CR]-Updated cache parameters.[CR]v1.0.1[CR]-Updated cache parameters, Improved error detection.</news>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot01.png</screenshot>
+            <screenshot>resources/images/screenshot02.png</screenshot>
+            <screenshot>resources/images/screenshot03.png</screenshot>
+            <screenshot>resources/images/screenshot04.png</screenshot>
+        </assets>
+    </extension>
+</addon>

@@ -263,36 +263,28 @@ msgid "Online exclusive"
 msgstr "Exclusief online"
 
 msgctxt "#30101"
-msgid "Last episode"
-msgstr "Laatste aflevering"
-
-msgctxt "#30102"
-msgid "Last chance"
-msgstr "Laatste kans"
-
-msgctxt "#30103"
-msgid "New"
-msgstr "Nieuw"
-
-msgctxt "#30104"
 msgid "Full season"
 msgstr "Volledig seizoen"
 
-msgctxt "#30105"
+msgctxt "#30102"
 msgid "Complete series"
 msgstr "Volledige reeks"
 
-msgctxt "#30106"
-msgid "Brand new"
-msgstr "Gloednieuw"
-
-msgctxt "#30107"
-msgid "New episodes"
-msgstr "Nieuwe afleveringen"
+msgctxt "#30103"
+msgid "From the archive"
+msgstr "Uit het archief"
 
 msgctxt "#30120"
 msgid "Short film"
 msgstr "Kortfilm"
+
+msgctxt "#30130"
+msgid "Climate"
+msgstr "Klimaat"
+
+msgctxt "#30131"
+msgid "Cycling"
+msgstr "Koers"
 
 ### APPLICATION
 msgctxt "#30131"
@@ -461,7 +453,7 @@ msgstr "Er werden geen gevolgde programma's gevonden."
 
 msgctxt "#30420"
 msgid "Please unselect/select favorites to unfollow/follow."
-msgstr "Duidt aan welke programma's je als favorieten wil volgen."
+msgstr "Duid aan welke programma's je als favorieten wil volgen."
 
 msgctxt "#30421"
 msgid "Now:"
@@ -741,6 +733,10 @@ msgctxt "#30834"
 msgid "VRT NWS"
 msgstr "VRT NWS"
 
+msgctxt "#30835"
+msgid "De Warmste Week"
+msgstr "De Warmste Week"
+
 msgctxt "#30860"
 msgid "Integration"
 msgstr "Integratie"
@@ -790,8 +786,8 @@ msgid "Install IPTV Manager add-on…"
 msgstr "Installeer de IPTV Manager add-on…"
 
 msgctxt "#30877"
-msgid "Enable IPTV Manager integration (experimental)"
-msgstr "Activeer IPTV Manager integratie (experimenteel)"
+msgid "Enable IPTV Manager integration"
+msgstr "Activeer IPTV Manager integratie"
 
 msgctxt "#30879"
 msgid "IPTV Manager settings…"
@@ -896,6 +892,14 @@ msgstr "Logboek"
 msgctxt "#30933"
 msgid "Log level"
 msgstr "Log niveau"
+
+msgctxt "#30935"
+msgid "Install Kodi Logfile Uploader…"
+msgstr "Installeer Kodi Logfile Uploader…"
+
+msgctxt "#30937"
+msgid "Open Kodi Logfile Uploader…"
+msgstr "Open Kodi Logfile Uploader…"
 
 
 ### MESSAGES
@@ -1030,3 +1034,11 @@ msgstr "Geen on demand stream beschikbaar voor {title}."
 msgctxt "#30987"
 msgid "No stream found, please try again!"
 msgstr "Geen stream gevonden, gelieve opnieuw te proberen!"
+
+msgctxt "#30988"
+msgid "InputStream Adaptive is not available, therefore pause and timeshift of live streams may not work"
+msgstr "InputStream Adaptive is niet geïnstalleerd, daarom kan het pauzeren en timeshift van live tv niet werken"
+
+msgctxt "#30989"
+msgid "Failed to load a compatible stream, please try toggling 'Use Widevine DRM' in the add-on Playback settings."
+msgstr "Kan geen compatibele stream laden, probeer 'Gebruik Widevine DRM' in of uit te schakelen in de add-on afspeelinstellingen."

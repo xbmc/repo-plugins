@@ -7,7 +7,7 @@ import logging
 
 from resources.lib import kodiutils
 from resources.lib.modules import CHANNELS
-from resources.lib.vtmgo import (Episode, Movie, Program, STOREFRONT_MAIN, STOREFRONT_MOVIES, STOREFRONT_SERIES, STOREFRONT_KIDS, STOREFRONT_KIDS_MAIN)
+from resources.lib.vtmgo import STOREFRONT_KIDS, STOREFRONT_KIDS_MAIN, STOREFRONT_MAIN, STOREFRONT_MOVIES, STOREFRONT_SERIES, Episode, Movie, Program
 from resources.lib.vtmgo.vtmgo import CONTENT_TYPE_MOVIE, CONTENT_TYPE_PROGRAM
 from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
 
@@ -29,7 +29,7 @@ class Menu:
         """ Show the main menu """
         listing = []
 
-        account = self._auth.login()
+        account = self._auth.get_tokens()
 
         listing.append(kodiutils.TitleItem(
             title=kodiutils.localize(30007),  # TV Channels
@@ -226,8 +226,10 @@ class Menu:
         :rtype TitleItem
         """
         art_dict = {
-            'thumb': item.cover,
-            'cover': item.cover,
+            'poster': item.poster,
+            'landscape': item.thumb,
+            'thumb': item.thumb,
+            'fanart': item.fanart,
         }
         info_dict = {
             'title': item.name,
@@ -254,9 +256,6 @@ class Menu:
                     kodiutils.url_for('mylist_add', video_type=CONTENT_TYPE_MOVIE, content_id=item.movie_id)
                 )]
 
-            art_dict.update({
-                'fanart': item.image,
-            })
             info_dict.update({
                 'mediatype': 'movie',
                 'duration': item.duration,
@@ -298,11 +297,9 @@ class Menu:
                     kodiutils.url_for('mylist_add', video_type=CONTENT_TYPE_PROGRAM, content_id=item.program_id)
                 )]
 
-            art_dict.update({
-                'fanart': item.image,
-            })
             info_dict.update({
                 'mediatype': 'tvshow',
+                'year': item.year,
                 'season': len(item.seasons),
             })
             prop_dict.update({
@@ -330,9 +327,6 @@ class Menu:
                     kodiutils.url_for('show_catalog_program', program=item.program_id)
                 )]
 
-            art_dict.update({
-                'fanart': item.cover,
-            })
             info_dict.update({
                 'mediatype': 'episode',
                 'tvshowtitle': item.program_name,

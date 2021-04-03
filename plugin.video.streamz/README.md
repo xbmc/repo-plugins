@@ -8,7 +8,7 @@
 
 *plugin.video.streamz* is een Kodi add-on om naar de catalogus van Streamz te kijken. 
 
-> Note: Je hebt hiervoor een betalend abonnement nodig van [Streamz](https://www.streamz.be/), of een Play More of Yugo abbonement bij Telenet.
+> Note: Je hebt hiervoor een betalend abonnement nodig van [Streamz](https://www.streamz.be/), of een Play More of Yugo abonnement bij Telenet.
 
 Meer informatie kan je vinden op de [Wiki pagina](https://github.com/add-ons/plugin.video.streamz/wiki).
 

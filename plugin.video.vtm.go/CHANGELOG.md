@@ -1,5 +1,70 @@
 # Changelog
 
+## [v1.2.5](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.5) (2021-03-22)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.4...v1.2.5)
+
+**Implemented enhancements:**
+
+- Improve artwork [\#269](https://github.com/add-ons/plugin.video.vtm.go/pull/269) ([michaelarnauts](https://github.com/michaelarnauts))
+- Add more metadata to movies and programs [\#267](https://github.com/add-ons/plugin.video.vtm.go/pull/267) ([michaelarnauts](https://github.com/michaelarnauts))
+- Don't depend on credentials to populate IPTV Manager data [\#266](https://github.com/add-ons/plugin.video.vtm.go/pull/266) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Fixed bugs:**
+
+- Fix authentication and use API v9 [\#270](https://github.com/add-ons/plugin.video.vtm.go/pull/270) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v1.2.4](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.4) (2021-03-01)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.3...v1.2.4)
+
+**Fixed bugs:**
+
+- Rename CAZ 2 to VTM Gold [\#265](https://github.com/add-ons/plugin.video.vtm.go/pull/265) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v1.2.3](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.3) (2021-02-04)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.2...v1.2.3)
+
+**Implemented enhancements:**
+
+- Various authentication improvements [\#253](https://github.com/add-ons/plugin.video.vtm.go/pull/253) ([michaelarnauts](https://github.com/michaelarnauts))
+- Improve HTTP Proxy support [\#250](https://github.com/add-ons/plugin.video.vtm.go/pull/250) ([michaelarnauts](https://github.com/michaelarnauts))
+- Prepare to use the MPEG DASH streams [\#213](https://github.com/add-ons/plugin.video.vtm.go/pull/213) ([mediaminister](https://github.com/mediaminister))
+
+**Merged pull requests:**
+
+- Make use of git archive [\#259](https://github.com/add-ons/plugin.video.vtm.go/pull/259) ([dagwieers](https://github.com/dagwieers))
+- Improve tests [\#252](https://github.com/add-ons/plugin.video.vtm.go/pull/252) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v1.2.2](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.2) (2020-12-30)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.1...v1.2.2)
+
+**Fixed bugs:**
+
+- Fix subtitles when there are more than one [\#248](https://github.com/add-ons/plugin.video.vtm.go/pull/248) ([michaelarnauts](https://github.com/michaelarnauts))
+- Add proxy to modify the MPEG DASH Manifest [\#247](https://github.com/add-ons/plugin.video.vtm.go/pull/247) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v1.2.1](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.1) (2020-12-21)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.0...v1.2.1)
+
+**Implemented enhancements:**
+
+- Allow displaying all items in a recommendation category [\#239](https://github.com/add-ons/plugin.video.vtm.go/pull/239) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Fixed bugs:**
+
+- Fix token invalidation when using the Library-feature [\#246](https://github.com/add-ons/plugin.video.vtm.go/pull/246) ([michaelarnauts](https://github.com/michaelarnauts))
+- Use xbmcvfs.translatePath when it is available [\#237](https://github.com/add-ons/plugin.video.vtm.go/pull/237) ([tatankat](https://github.com/tatankat))
+
+**Merged pull requests:**
+
+- Run CI on windows [\#244](https://github.com/add-ons/plugin.video.vtm.go/pull/244) ([michaelarnauts](https://github.com/michaelarnauts))
+- Fix typo's in Readme [\#242](https://github.com/add-ons/plugin.video.vtm.go/pull/242) ([MPParsley](https://github.com/MPParsley))
+- Run tests on Python 3.9 [\#240](https://github.com/add-ons/plugin.video.vtm.go/pull/240) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.2.0](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.0) (2020-11-11)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.1.5...v1.2.0)
@@ -26,6 +91,7 @@
 
 **Implemented enhancements:**
 
+- Fix for upcoming UpNext release [\#220](https://github.com/add-ons/plugin.video.vtm.go/pull/220) ([michaelarnauts](https://github.com/michaelarnauts))
 - Move to kodiutils [\#214](https://github.com/add-ons/plugin.video.vtm.go/pull/214) ([mediaminister](https://github.com/mediaminister))
 
 **Fixed bugs:**
@@ -38,7 +104,6 @@
 
 - Use previous sakee version [\#226](https://github.com/add-ons/plugin.video.vtm.go/pull/226) ([mediaminister](https://github.com/mediaminister))
 - Prepare for v1.1.5 [\#225](https://github.com/add-ons/plugin.video.vtm.go/pull/225) ([mediaminister](https://github.com/mediaminister))
-- Fix for upcoming UpNext release [\#220](https://github.com/add-ons/plugin.video.vtm.go/pull/220) ([michaelarnauts](https://github.com/michaelarnauts))
 - Run some checks every 4 hours [\#219](https://github.com/add-ons/plugin.video.vtm.go/pull/219) ([michaelarnauts](https://github.com/michaelarnauts))
 
 ## [v1.1.4](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.1.4) (2020-10-10)

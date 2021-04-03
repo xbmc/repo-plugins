@@ -1,5 +1,61 @@
 # Changelog
 
+## [v1.0.6](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.6) (2021-04-01)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.5...v1.0.6)
+
+**Merged pull requests:**
+
+- Implement new authentication method [\#38](https://github.com/add-ons/plugin.video.streamz/pull/38) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v1.0.5](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.5) (2021-02-04)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.4...v1.0.5)
+
+**Implemented enhancements:**
+
+- Indicate what movies or series are not available in your subscription [\#35](https://github.com/add-ons/plugin.video.streamz/pull/35) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Merged pull requests:**
+
+- Make use of git archive [\#34](https://github.com/add-ons/plugin.video.streamz/pull/34) ([dagwieers](https://github.com/dagwieers))
+
+## [v1.0.4](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.4) (2021-01-13)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.3...v1.0.4)
+
+**Implemented enhancements:**
+
+- Add HTTP Proxy support [\#31](https://github.com/add-ons/plugin.video.streamz/pull/31) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Merged pull requests:**
+
+- Improve tests [\#32](https://github.com/add-ons/plugin.video.streamz/pull/32) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v1.0.3](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.3) (2021-01-01)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.2...v1.0.3)
+
+**Implemented enhancements:**
+
+- Add support for external subtitles [\#28](https://github.com/add-ons/plugin.video.streamz/pull/28) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Fixed bugs:**
+
+- Add proxy to modify the MPEG DASH Manifest [\#26](https://github.com/add-ons/plugin.video.streamz/pull/26) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v1.0.2](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.2) (2020-12-21)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.1...v1.0.2)
+
+**Fixed bugs:**
+
+- Don't show the password in the debug log [\#24](https://github.com/add-ons/plugin.video.streamz/pull/24) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Merged pull requests:**
+
+- Run CI on Windows [\#23](https://github.com/add-ons/plugin.video.streamz/pull/23) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.0.1](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.1) (2020-12-07)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.0...v1.0.1)

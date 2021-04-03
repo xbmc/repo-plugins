@@ -79,6 +79,17 @@ class ChannelIndex(object):
 
         """
 
+        # From historic viewpoint channels might have moved and we should keep that in mind.
+        moved_channels = {
+            ("channel.mtv.mtvnl", "mtvnl"): ("channel.nick.nickelodeon", "mtvnl")
+        }
+
+        moved = moved_channels.get((channel_id, channel_code))
+        if moved:
+            channel_id = moved[0]
+            channel_code = moved[1]
+            Logger.info("Channel was moved to %s-%s", channel_id, channel_code)
+
         # determine the channel folder
         channel_path = os.path.join(Config.rootDir, self.__INTERNAL_CHANNEL_PATH)
         channel_pack, channel_set = channel_id.rsplit(".", 1)

@@ -32,7 +32,7 @@ class Api:
     def __init__(self, auth):
         """ Initialise object """
         self._auth = auth
-        self._tokens = self._auth.login()
+        self._tokens = self._auth.get_tokens()
 
     def _mode(self):
         """ Return the mode that should be used for API calls. """
@@ -149,25 +149,6 @@ class Api:
                          profile=self._tokens.profile)
         kodiutils.set_cache(['swimlane', 'my-list'], None)
 
-    def get_categories(self):
-        """ Get a list of all the categories.
-
-        :rtype list[Category]
-        """
-        response = util.http_get(API_ENDPOINT + '/%s/catalog/filters' % self._mode(),
-                                 token=self._tokens.jwt_token,
-                                 profile=self._tokens.profile)
-        info = json.loads(response.text)
-
-        categories = []
-        for item in info.get('catalogFilters', []):
-            categories.append(Category(
-                category_id=item.get('id'),
-                title=item.get('title'),
-            ))
-
-        return categories
-
     def get_items(self, category=None, content_filter=None, cache=CACHE_ONLY):
         """ Get a list of all the items in a category.
 
@@ -232,6 +213,7 @@ class Api:
             # aired=movie.get('broadcastTimestamp'),
             channel=self._parse_channel(movie.get('channelLogoUrl')),
             # my_list=program.get('addedToMyList'),  # Don't use addedToMyList, since we might have cached this info
+            available=movie.get('blockedFor') != 'SUBSCRIPTION',
         )
 
     def get_program(self, program_id, cache=CACHE_AUTO):
@@ -262,7 +244,7 @@ class Api:
 
         # Calculate a hash value of the ids of all episodes
         program_hash = hashlib.md5()
-        program_hash.update(program.get('id'))
+        program_hash.update(program.get('id').encode())
 
         seasons = {}
         for item_season in program.get('seasons', []):
@@ -286,8 +268,9 @@ class Api:
                     aired=item_episode.get('broadcastTimestamp'),
                     progress=item_episode.get('playerPositionSeconds', 0),
                     watched=item_episode.get('doneWatching', False),
+                    available=item_episode.get('blockedFor') != 'SUBSCRIPTION',
                 )
-                program_hash.update(item_episode.get('id'))
+                program_hash.update(item_episode.get('id').encode())
 
             seasons[item_season.get('index')] = Season(
                 number=item_season.get('index'),
@@ -311,6 +294,7 @@ class Api:
             legal=program.get('legalIcons'),
             content_hash=program_hash.hexdigest().upper(),
             # my_list=program.get('addedToMyList'),  # Don't use addedToMyList, since we might have cached this info
+            available=program.get('blockedFor') != 'SUBSCRIPTION',
         )
 
     @staticmethod
@@ -453,6 +437,7 @@ class Api:
             # We might have a cover from the overview that we don't have in the details
             if item.get('imageUrl'):
                 movie.cover = item.get('imageUrl')
+            movie.available = item.get('blockedFor') != 'SUBSCRIPTION'
             return movie
 
         return Movie(
@@ -461,6 +446,7 @@ class Api:
             cover=item.get('imageUrl'),
             image=item.get('imageUrl'),
             geoblocked=item.get('geoBlocked'),
+            available=item.get('blockedFor') != 'SUBSCRIPTION',
         )
 
     def _parse_program_teaser(self, item, cache=CACHE_ONLY):
@@ -474,6 +460,7 @@ class Api:
             # We might have a cover from the overview that we don't have in the details
             if item.get('imageUrl'):
                 program.cover = item.get('imageUrl')
+            program.available = item.get('blockedFor') != 'SUBSCRIPTION'
             return program
 
         return Program(
@@ -482,6 +469,7 @@ class Api:
             cover=item.get('imageUrl'),
             image=item.get('imageUrl'),
             geoblocked=item.get('geoBlocked'),
+            available=item.get('blockedFor') != 'SUBSCRIPTION',
         )
 
     def _parse_episode_teaser(self, item, cache=CACHE_ONLY):

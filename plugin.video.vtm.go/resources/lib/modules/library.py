@@ -24,7 +24,7 @@ class Library:
         """ Initialise object """
         self._auth = VtmGoAuth(kodiutils.get_setting('username'),
                                kodiutils.get_setting('password'),
-                               kodiutils.get_setting('loginprovider'),
+                               'VTM',
                                kodiutils.get_setting('profile'),
                                kodiutils.get_tokens_path())
         self._api = VtmGo(self._auth)
@@ -38,7 +38,7 @@ class Library:
                 items = self._api.get_items(content_filter=Movie, cache=CACHE_AUTO)
             else:
                 # Only favourites, use cache if available, fetch from api otherwise
-                items = self._api.get_swimlane('my-list', content_filter=Movie)
+                items = self._api.get_mylist(content_filter=Movie)
         else:
             items = [self._api.get_movie(movie)]
 
@@ -63,7 +63,7 @@ class Library:
             else:
                 # Only favourites, don't use cache, fetch from api
                 # If we use CACHE_AUTO, we will miss updates until the user manually opens the program in the Add-on
-                items = self._api.get_swimlane('my-list', content_filter=Program, cache=CACHE_PREVENT)
+                items = self._api.get_mylist(content_filter=Program, cache=CACHE_PREVENT)
         else:
             # Fetch only a single program
             items = [self._api.get_program(program, cache=CACHE_PREVENT)]

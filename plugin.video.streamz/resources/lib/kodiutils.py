@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 import logging
 import os
+from contextlib import contextmanager
 
 import xbmc
 import xbmcaddon
@@ -194,7 +195,7 @@ def show_listing(title_items, category=None, sort=None, content=None, cache=True
     xbmcplugin.endOfDirectory(routing.handle, succeeded, cacheToDisc=cache)
 
 
-def play(stream, license_key=None, title=None, art_dict=None, info_dict=None, prop_dict=None, stream_dict=None):
+def play(stream, license_key=None, title=None, art_dict=None, info_dict=None, prop_dict=None, stream_dict=None, subtitles=None):
     """Play the given stream"""
     from resources.lib.addon import routing
 
@@ -207,6 +208,8 @@ def play(stream, license_key=None, title=None, art_dict=None, info_dict=None, pr
         play_item.setProperties(prop_dict)
     if stream_dict:
         play_item.addStreamInfo('video', stream_dict)
+    if subtitles:
+        play_item.setSubtitles(subtitles)
 
     # Setup Inputstream Adaptive
     if kodi_version_major() >= 19:
@@ -449,6 +452,67 @@ def set_global_setting(key, value):
     return jsonrpc(method='Settings.SetSettingValue', params=dict(setting=key, value=value))
 
 
+def has_socks():
+    """Test if socks is installed, and use a static variable to remember"""
+    if hasattr(has_socks, 'cached'):
+        return getattr(has_socks, 'cached')
+    try:
+        import socks  # noqa: F401; pylint: disable=unused-variable,unused-import
+    except ImportError:
+        has_socks.cached = False
+        return None  # Detect if this is the first run
+    has_socks.cached = True
+    return True
+
+
+def get_proxies():
+    """Return a usable proxies dictionary from Kodi proxy settings"""
+    # Use proxy settings from environment variables
+    env_http_proxy = os.environ.get('HTTP_PROXY')
+    env_https_proxy = os.environ.get('HTTPS_PROXY')
+    if env_http_proxy:
+        return dict(http=env_http_proxy, https=env_https_proxy or env_http_proxy)
+
+    usehttpproxy = get_global_setting('network.usehttpproxy')
+    if usehttpproxy is not True:
+        return None
+
+    try:
+        httpproxytype = int(get_global_setting('network.httpproxytype'))
+    except ValueError:
+        httpproxytype = 0
+
+    socks_supported = has_socks()
+    if httpproxytype != 0 and not socks_supported:
+        # Only open the dialog the first time (to avoid multiple popups)
+        if socks_supported is None:
+            ok_dialog('', localize(30966))  # Requires PySocks
+        return None
+
+    proxy_types = ['http', 'socks4', 'socks4a', 'socks5', 'socks5h']
+
+    proxy = dict(
+        scheme=proxy_types[httpproxytype] if 0 <= httpproxytype < 5 else 'http',
+        server=get_global_setting('network.httpproxyserver'),
+        port=get_global_setting('network.httpproxyport'),
+        username=get_global_setting('network.httpproxyusername'),
+        password=get_global_setting('network.httpproxypassword'),
+    )
+
+    if proxy.get('username') and proxy.get('password') and proxy.get('server') and proxy.get('port'):
+        proxy_address = '{scheme}://{username}:{password}@{server}:{port}'.format(**proxy)
+    elif proxy.get('username') and proxy.get('server') and proxy.get('port'):
+        proxy_address = '{scheme}://{username}@{server}:{port}'.format(**proxy)
+    elif proxy.get('server') and proxy.get('port'):
+        proxy_address = '{scheme}://{server}:{port}'.format(**proxy)
+    elif proxy.get('server'):
+        proxy_address = '{scheme}://{server}'.format(**proxy)
+    else:
+        return None
+
+    return dict(http=proxy_address, https=proxy_address)
+
+
 def get_cond_visibility(condition):
     """Test a condition in XBMC"""
     return xbmc.getCondVisibility(condition)
@@ -551,6 +615,14 @@ def jsonrpc(*args, **kwargs):
     return loads(xbmc.executeJSONRPC(dumps(kwargs)))
 
 
+@contextmanager
+def open_file(path, flags='r'):
+    """Open a file (using xbmcvfs)"""
+    fdesc = xbmcvfs.File(path, flags)
+    yield fdesc
+    fdesc.close()
+
+
 def listdir(path):
     """Return all files in a directory (using xbmcvfs)"""
     return xbmcvfs.listdir(path)
@@ -559,6 +631,17 @@ def listdir(path):
 def delete(path):
     """Remove a file (using xbmcvfs)"""
     return xbmcvfs.delete(path)
+
+
+def mkdirs(path):
+    """Create directory including parents (using xbmcvfs)"""
+    _LOGGER.debug('Recursively create directory (%s)', path)
+    return xbmcvfs.mkdirs(path)
+
+
+def exists(path):
+    """Whether the path exists (using xbmcvfs)"""
+    return xbmcvfs.exists(path)
 
 
 def get_cache(key, ttl=None):

@@ -263,35 +263,27 @@ msgid "Online exclusive"
 msgstr ""
 
 msgctxt "#30101"
-msgid "Last episode"
-msgstr ""
-
-msgctxt "#30102"
-msgid "Last chance"
-msgstr ""
-
-msgctxt "#30103"
-msgid "New"
-msgstr ""
-
-msgctxt "#30104"
 msgid "Full season"
 msgstr ""
 
-msgctxt "#30105"
+msgctxt "#30102"
 msgid "Complete series"
 msgstr ""
 
-msgctxt "#30106"
-msgid "Brand new"
-msgstr ""
-
-msgctxt "#30107"
-msgid "New episodes"
+msgctxt "#30103"
+msgid "From the archive"
 msgstr ""
 
 msgctxt "#30120"
 msgid "Short film"
+msgstr ""
+
+msgctxt "#30130"
+msgid "Climate"
+msgstr ""
+
+msgctxt "#30131"
+msgid "Cycling"
 msgstr ""
 
 ### APPLICATION
@@ -741,6 +733,10 @@ msgctxt "#30834"
 msgid "VRT NWS"
 msgstr ""
 
+msgctxt "#30835"
+msgid "De Warmste Week"
+msgstr ""
+
 msgctxt "#30860"
 msgid "Integration"
 msgstr ""
@@ -790,7 +786,7 @@ msgid "Install IPTV Manager add-on…"
 msgstr ""
 
 msgctxt "#30877"
-msgid "Enable IPTV Manager integration (experimental)"
+msgid "Enable IPTV Manager integration"
 msgstr ""
 
 msgctxt "#30879"
@@ -895,6 +891,14 @@ msgstr ""
 
 msgctxt "#30933"
 msgid "Log level"
+msgstr ""
+
+msgctxt "#30935"
+msgid "Install Kodi Logfile Uploader…"
+msgstr ""
+
+msgctxt "#30937"
+msgid "Open Kodi Logfile Uploader…"
 msgstr ""
 
 
@@ -1029,4 +1033,12 @@ msgstr ""
 
 msgctxt "#30987"
 msgid "No stream found, please try again!"
+msgstr ""
+
+msgctxt "#30988"
+msgid "InputStream Adaptive is not installed, therefore pause and timeshift of live streams may not work"
+msgstr ""
+
+msgctxt "#30989"
+msgid "Failed to load a compatible stream, please try toggling 'Use Widevine DRM' in the add-on Playback settings."
 msgstr ""

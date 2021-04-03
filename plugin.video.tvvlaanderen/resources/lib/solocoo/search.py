@@ -21,7 +21,7 @@ class SearchApi:
         :param resources.lib.solocoo.auth.AuthApi auth: The Authentication object
         """
         self._auth = auth
-        self._tokens = self._auth.login()
+        self._tokens = self._auth.get_tokens()
 
     def search(self, query):
         """ Search through the catalog.
@@ -31,6 +31,9 @@ class SearchApi:
         :returns:                        A list of results.
         :rtype: list[resources.lib.solocoo.util.Channel|resources.lib.solocoo.util.Program]
         """
+        if not query:
+            return []
+
         _LOGGER.debug('Requesting entitlements')
         entitlements = self._auth.list_entitlements()
         offers = entitlements.get('offers', [])

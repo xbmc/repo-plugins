@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+	<category label="30500">
+        <setting id="area" label="30510" type="enum" default="0" lvalues="30511|30512|30513|30514" />
+        <setting id="fanart.size" label="30520" type="labelenum" default="360" values="360|720|1080" />
+        <setting id="enable.subtitles" label="30503" type="bool" default="false" />
+        <setting id="enable.areaitem" label="30515" type="bool" default="false" />
+        <setting id="disable.kids" label="30505" type="bool" default="true" />
+        <setting id="disable.kids.subtitles" label="30509" type="bool" default="true" />
+        <setting label="30504" type="action" action="RunScript($CWD/resources/lib/clearfavorites.py)" />
+	</category>
+</settings>
+

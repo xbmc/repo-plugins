@@ -52,8 +52,7 @@ class Channel(chn_class.Channel):
 
         self._add_data_parser("*", json=True,
                               name="Json based video parser",
-                              preprocessor=self.extract_json_data,
-                              parser=["currentProduct", "series", "programs"],
+                              parser=["accessibleEpisodes"],
                               creator=self.create_video_item_json)
 
         self._add_data_parser("*", updater=self.update_video_item)
@@ -335,27 +334,6 @@ class Channel(chn_class.Channel):
         Logger.debug("Pre-Processing finished")
         return data, items
 
-    def extract_json_data(self, data):
-        """ Extracts the JSON data for video parsing
-
-        The return values should always be instantiated in at least ("", []).
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[JsonHelper,list[MediaItem]]
-
-        """
-
-        Logger.info("Performing Pre-Processing")
-        items = []
-        json_text = Regexer.do_regex(r'ProgramDescription" data-react-props="([^"]+)', data)[0]
-        json_text = HtmlEntityHelper.convert_html_entities(json_text)
-        json_data = JsonHelper(json_text)
-
-        Logger.debug("Pre-Processing finished")
-        return json_data, items
-
     def search_site(self, url=None):
         """ Creates an list of items by searching the site.
 
@@ -419,7 +397,7 @@ class Channel(chn_class.Channel):
         Logger.trace(result_set)
 
         title = "%(title)s" % result_set
-        url = "%s/serie/%s" % (self.baseUrl, result_set["slug"])
+        url = "https://urplay.se/api/bff/v1/series/{}".format(result_set["id"])
         fanart = "https://assets.ur.se/id/%(id)s/images/1_hd.jpg" % result_set
         thumb = "https://assets.ur.se/id/%(id)s/images/1_l.jpg" % result_set
         item = MediaItem(title, url)
@@ -576,9 +554,9 @@ class Channel(chn_class.Channel):
 
         """
 
-        data = UriHandler.open(item.url, proxy=self.proxy)
+        data = UriHandler.open(item.url)
         # Extract stream JSON data from HTML
-        streams = Regexer.do_regex(r'Player"[^>]+data-react-props="({[^"]+})"', data)
+        streams = Regexer.do_regex(r'ProgramContainer" data-react-props="({[^"]+})"', data)
         json_data = streams[0]
         json_data = HtmlEntityHelper.convert_html_entities(json_data)
         json = JsonHelper(json_data, logger=Logger.instance())
@@ -588,12 +566,12 @@ class Channel(chn_class.Channel):
 
         # generic server information
         proxy_data = UriHandler.open("https://streaming-loadbalancer.ur.se/loadbalancer.json",
-                                     proxy=self.proxy, no_cache=True)
+                                     no_cache=True)
         proxy_json = JsonHelper(proxy_data)
         proxy = proxy_json.get_value("redirect")
         Logger.trace("Found RTMP Proxy: %s", proxy)
 
-        stream_infos = json.get_value("currentProduct", "streamingInfo")
+        stream_infos = json.get_value("program", "streamingInfo")
         part = item.create_new_empty_media_part()
         for stream_type, stream_info in stream_infos.items():
             Logger.trace(stream_info)
@@ -606,10 +584,12 @@ class Channel(chn_class.Channel):
                 stream_url = stream["location"]
                 if quality == "tt":
                     part.Subtitle = SubtitleHelper.download_subtitle(
-                        stream_url, format="webvtt", proxy=self.proxy)
+                        stream_url, format="ttml")
                     continue
 
                 bitrate = bitrate if default_stream else bitrate + 1
+                if stream_type == "raw":
+                    bitrate += 1
                 url = "https://%s/%smaster.m3u8" % (proxy, stream_url)
                 part.append_media_stream(url, bitrate)
 

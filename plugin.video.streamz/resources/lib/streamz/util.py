@@ -7,10 +7,27 @@ import logging
 
 import requests
 from requests import HTTPError
+from requests.adapters import BaseAdapter
 
+from resources.lib import kodiutils
 from resources.lib.streamz.exceptions import InvalidLoginException, InvalidTokenException, LimitReachedException, UnavailableException
 
 _LOGGER = logging.getLogger(__name__)
+
+
+class StreamzAdapter(BaseAdapter):
+    """ Fake adapter to handle the calls to streamz:// """
+
+    def send(self, request, stream=False, timeout=None, verify=True, cert=None, proxies=None):
+        """ Sends PreparedRequest object. Returns Response object. """
+        response = requests.Response()
+        response.url = request.url
+        response.status_code = 200
+        return response
+
+    def close(self):
+        """ Cleans up adapter specific items. """
+
 
 # Setup a static session that can be reused for all calls
 SESSION = requests.Session()
@@ -21,6 +38,8 @@ SESSION.headers = {
     'x-persgroep-os': 'android',
     'x-persgroep-os-version': '23',
 }
+SESSION.mount('streamz://login.streamz.be', StreamzAdapter())
+PROXIES = kodiutils.get_proxies()
 
 
 def http_get(url, params=None, token=None, profile=None, headers=None):
@@ -143,7 +162,12 @@ def _request(method, url, params=None, form=None, data=None, token=None, profile
     :rtype: requests.Response
     """
     if form or data:
-        _LOGGER.debug('Sending %s %s: %s', method, url, form or data)
+        # Make sure we don't log the password
+        debug_data = dict()
+        debug_data.update(form or data)
+        if 'password' in debug_data:
+            debug_data['password'] = '**redacted**'
+        _LOGGER.debug('Sending %s %s: %s', method, url, debug_data)
     else:
         _LOGGER.debug('Sending %s %s', method, url)
 
@@ -156,7 +180,7 @@ def _request(method, url, params=None, form=None, data=None, token=None, profile
     if profile:
         headers['x-dpp-profile'] = profile
 
-    response = SESSION.request(method, url, params=params, data=form, json=data, headers=headers)
+    response = SESSION.request(method, url, params=params, data=form, json=data, headers=headers, proxies=PROXIES)
 
     # Set encoding to UTF-8 if no charset is indicated in http headers (https://github.com/psf/requests/issues/1604)
     if not response.encoding:

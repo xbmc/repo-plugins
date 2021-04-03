@@ -1,0 +1,37 @@
+# XBMC Media Center language file
+# Addon Name: Mazačka - Streets of Prague
+# Addon id: plugin.video.mazacka
+# Addon Provider: Radek Homola
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2020-12-06 09:55+0000\n"
+"PO-Revision-Date: 2020-12-06 10:55+0100\n"
+"Last-Translator: Radek Homola\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#31080"
+msgid "Watch the live stream in 1080p."
+msgstr "Sehen Sie sich den Live-Stream in 1080p an."
+
+msgctxt "#30720"
+msgid "Watch the live stream in 720p."
+msgstr "Sehen Sie sich den Live-Stream in 720p an."
+
+msgctxt "#30360"
+msgid "Watch the live stream in 360p."
+msgstr "Sehen Sie sich den Live-Stream in 360p an."
+
+msgctxt "#30002"
+msgid "Mazačka is currently not streaming.\nPlease try again later."
+msgstr "Mazačka wird derzeit nicht gestreamt.\nBitte versuchen Sie es später noch einmal."
+
+msgctxt "#30003"
+msgid "Connection error."
+msgstr "Verbindungsfehler."

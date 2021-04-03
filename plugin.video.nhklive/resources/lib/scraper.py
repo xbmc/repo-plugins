@@ -70,7 +70,7 @@ class myAddon(t1mAddon):
 
 
   def getAddonShows(self,url,ilist):
-      nhkurl = 'https://nhkwlive-ojp.akamaized.net/hls/live/2003459/nhkwlive-ojp/index_4M.m3u8'
+      nhkurl = 'https://nhkwlive-fo-ojp.akamaized.net/hls/live/2003459/nhkwlive-ojp-en/index_4M.m3u8'
       html = requests.get('http://www3.nhk.or.jp/nhkworld/common/js/common.js', headers=self.defaultHeaders).text
       nw_api_prefix, nw_api_key = re.compile('nw_api_prefix\|\|"(.+?)".+?nw_api_key\|\|"(.+?)"', re.DOTALL).search(html).groups()
       nw_region = 'world'

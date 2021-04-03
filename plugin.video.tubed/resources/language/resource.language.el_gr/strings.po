@@ -492,20 +492,20 @@ msgid "How long until short term function cache expires in minutes"
 msgstr "Πόσο πρέπει να κρατήσει, ώστε να ληξει, η διατήρηση δεδομένων βραχείας διάρκειας σε λεπτά"
 
 msgctxt "#30117"
-msgid "Clear long term data cache"
-msgstr "Εκκαθάριση μνήμης δεδομένων βραχείας διάρκειας"
+msgid "Clearing long term data cache will remove all entries from the database"
+msgstr "Η εκκαθάριση της μνήμης δεδομένων μακράς διάρκειας θα αφαιρέσει όλες τις καταχωρήσεις από την βάση δεδομένων"
 
 msgctxt "#30118"
-msgid "Clear short term function cache"
-msgstr "Εκκαθάριση βραχείας διάρκειας δεδομένων λειτουργιών"
+msgid "Clearing short term function cache will remove all cache entries"
+msgstr "Η εκκαθάριση της μνήμης λειτουργιών βραχείας διάρκειας θα αφαιρέσει όλες τις καταχωρήσεις από την προσωρινή μνήμη"
 
 msgctxt "#30119"
-msgid "Delete long term data cache"
-msgstr "Διαγραφή μνήμης δεδομένων μακράς διάρκειας"
+msgid "Deleting long term data cache will delete the whole database"
+msgstr "Η διαγραφή της μνήμης δεδομένων μακράς διάρκειας θα διαγράψει ολόκληρη την βάση δεδομένων"
 
 msgctxt "#30120"
-msgid "Delete short term function cache"
-msgstr "Διαγραφή μνήμης λειτουργιών βραχείας διάρκειας"
+msgid "Deleting short term function cache will delete the whole database"
+msgstr "Η διαγραφή της μνήμης λειτουργιών βραχείας διάρκειας θα διαγράψει ολόκληρη την βάση δεδομένων"
 
 msgctxt "#30121"
 msgid "Failed to clear function cache"

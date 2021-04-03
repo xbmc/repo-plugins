@@ -9,8 +9,8 @@ import routing
 
 from resources.lib import kodilogging, kodiutils
 
-kodilogging.config()
 routing = routing.Plugin()  # pylint: disable=invalid-name
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -43,13 +43,6 @@ def select_profile(key=None):
     """ Select your profile """
     from resources.lib.modules.authentication import Authentication
     Authentication().select_profile(key)
-
-
-@routing.route('/catalog')
-def show_catalog():
-    """ Show the catalog """
-    from resources.lib.modules.catalog import Catalog
-    Catalog().show_catalog()
 
 
 @routing.route('/catalog/all')
@@ -227,4 +220,5 @@ def play(category, item):
 
 def run(params):
     """ Run the routing plugin """
+    kodilogging.config()
     routing.run(params)

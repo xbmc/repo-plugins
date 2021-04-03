@@ -1,0 +1,161 @@
+# Kodi Media Center language file
+# Addon Name: NBC Sports Live Extra
+# Addon id: plugin.video.nbcsnliveextra
+# Addon Provider: eracknaphobia
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30010"
+msgid "Authorize"
+msgstr ""
+
+msgctxt "#30011"
+msgid "You must authenticate this device to view the selected content.\n Would you like to do that now?"
+msgstr ""
+
+msgctxt "#30200"
+msgid "General"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Deauthorize Device"
+msgstr ""
+
+msgctxt "#30220"
+msgid "Only Display FREE Content"
+msgstr ""
+
+msgctxt "#30230"
+msgid "Play Stream From Main Menu"
+msgstr ""
+
+msgctxt "#30240"
+msgid "Automatically Play Best Stream Available"
+msgstr ""
+
+msgctxt "#30300"
+msgid "Stream"
+msgstr ""
+
+msgctxt "#30310"
+msgid "Stream Quality Preference"
+msgstr ""
+
+msgctxt "#30320"
+msgid "CDN Server Location"
+msgstr ""
+
+msgctxt "#30400"
+msgid "Filter"
+msgstr ""
+
+msgctxt "#30410"
+msgid "Show All"
+msgstr ""
+
+msgctxt "#30411"
+msgid "NFL"
+msgstr ""
+
+msgctxt "#30412"
+msgid "Premier League"
+msgstr ""
+
+msgctxt "#30413"
+msgid "NASCAR"
+msgstr ""
+
+msgctxt "#30414"
+msgid "NHL"
+msgstr ""
+
+msgctxt "#30415"
+msgid "Golf"
+msgstr ""
+
+msgctxt "#30416"
+msgid "PGA"
+msgstr ""
+
+msgctxt "#30417"
+msgid "Notre Dame"
+msgstr ""
+
+msgctxt "#30418"
+msgid "College Football"
+msgstr ""
+
+msgctxt "#30419"
+msgid "F1"
+msgstr ""
+
+msgctxt "#30420"
+msgid "NBA"
+msgstr ""
+
+msgctxt "#30421"
+msgid "MLB"
+msgstr ""
+
+msgctxt "#30422"
+msgid "Rugby"
+msgstr ""
+
+msgctxt "#30423"
+msgid "Horse Racing"
+msgstr ""
+
+msgctxt "#30424"
+msgid "Tennis"
+msgstr ""
+
+msgctxt "#30425"
+msgid "IndyCar"
+msgstr ""
+
+msgctxt "#30426"
+msgid "Pro Motocross"
+msgstr ""
+
+msgctxt "#30427"
+msgid "Olympic Sports"
+msgstr ""
+
+msgctxt "#30428"
+msgid "CSN Bay Area"
+msgstr ""
+
+msgctxt "#30429"
+msgid "CSN California"
+msgstr ""
+
+msgctxt "#30430"
+msgid "CSN Chicago"
+msgstr ""
+
+msgctxt "#30431"
+msgid "CSN Mid-Atlantic"
+msgstr ""
+
+msgctxt "#30432"
+msgid "CSN New England"
+msgstr ""
+
+msgctxt "#30433"
+msgid "CSN Philadelphia"
+msgstr ""
+
+msgctxt "#30434"
+msgid "Sportsnet New York"
+msgstr ""

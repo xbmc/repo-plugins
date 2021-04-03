@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+    <section id="plugin.audio.soundcloud">
+        <category id="general" label="30001" help="">
+            <group id="1" label="30002">
+                <setting id="audio.format" type="integer" label="30003" help="">
+                    <level>0</level>
+                    <default>2</default>
+                    <constraints>
+                        <options>
+                            <option label="Opus (HLS)">0</option>
+                            <option label="mp3 (HLS)">1</option>
+                            <option label="mp3 (progressive)">2</option>
+                        </options>
+                    </constraints>
+                    <control type="spinner" format="string"/>
+                </setting>
+            </group>
+            <group id="2" label="30011">
+                <setting id="search.items.size" type="string" label="30012" help="">
+                    <level>0</level>
+                    <default>20</default>
+                    <constraints>
+                        <options>
+                            <option>5</option>
+                            <option>10</option>
+                            <option>15</option>
+                            <option>20</option>
+                            <option>25</option>
+                            <option>30</option>
+                            <option>40</option>
+                            <option>50</option>
+                        </options>
+                    </constraints>
+                    <control type="spinner" format="string"/>
+                </setting>
+                <setting id="search.history.size" type="string" label="30013" help="">
+                    <level>0</level>
+                    <default>10</default>
+                    <constraints>
+                        <options>
+                            <option>0</option>
+                            <option>5</option>
+                            <option>10</option>
+                            <option>15</option>
+                            <option>20</option>
+                            <option>30</option>
+                            <option>50</option>
+                        </options>
+                    </constraints>
+                    <control type="spinner" format="string"/>
+                </setting>
+            </group>
+            <group id="3" label="30060">
+                <setting id="apiv2.client_id" type="string" label="30061" help="">
+                    <level>3</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <control type="edit" format="string">
+                        <heading>30061</heading>
+                    </control>
+                </setting>
+                <setting id="apiv2.locale" type="integer" label="30062" help="">
+                    <level>2</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30063">0</option>
+                            <option label="30064">1</option>
+                        </options>
+                    </constraints>
+                    <control type="spinner" format="string"/>
+                </setting>
+            </group>
+            <group id="4" label="30070">
+                <setting id="cache.clear" type="action" label="30071" help="">
+                    <level>1</level>
+                    <data>RunPlugin(plugin://plugin.audio.soundcloud/settings/cache/clear/)</data>
+                    <control type="button" format="action">
+                        <close>true</close>
+                    </control>
+                </setting>
+            </group>
+        </category>
+    </section>
+</settings>

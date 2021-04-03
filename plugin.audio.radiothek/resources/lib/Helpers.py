@@ -24,7 +24,7 @@ def parameters_string_to_dict(parameters):
     return param_dict
 
 
-def radiothek_log(msg, debug=False):
+def radiothek_log(msg, debug=True):
     if debug:
         xbmc.log(msg, xbmc.LOGDEBUG)
     else:

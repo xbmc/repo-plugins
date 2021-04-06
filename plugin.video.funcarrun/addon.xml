@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.funcarrun" name="Funcarrun Videos" version="0.0.2" provider-name="Funcarrun">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+     <import addon="script.module.requests"   version="1.0.0"/>
+     <import addon="plugin.video.youtube"     version="6.8.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="nl_NL">Bekijk videos van de Funcarrun</summary>
+    <summary lang="en_GB">Watch videos of the Dutch Funcarrun Rally</summary>
+    <description lang="nl_NL">De Funcarrun is de ultieme 4-daagse rally door Europa in een auto van 20 jaar of ouder. Altijd al mee willen doen aan de Gumball Rally? Maar helaas niet in het bezit van een Aston Martin of Bugatti? Stop dan maar met sparen, want de Funcarrun is beter, leuker en gezelliger. De Funcarrun is namelijk de avonturenrit!</description>
+    <description lang="en_GB">Watch videos of the Dutch Funcarrun Rally</description>
+    <disclaimer lang="nl_NL">Disclaimer</disclaimer>
+    <disclaimer lang="en_GB">Disclaimer</disclaimer>
+    <language>nl</language> <!-- the language of the videos or other content the plugin provides, may be omitted in case the addon does not provide any content -->
+    <platform>all</platform>
+    <license>GPL-2.0-or-later</license>
+    <website>https://www.funcarrun.eu</website> <!-- the url of the website that contains the videos (or the official website of your plugin). May be omitted.  -->
+    <email>paul@funcarrun.eu</email> <!-- may be omitted  -->
+    <source>https://github.com/Paul-VW/plugin.video.funcarrun</source>
+    <news>v0.0.1 (22/03/2021)
+      [new] beta Release
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+        <screenshot>resources/images/screenshot1.jpg</screenshot>
+        <screenshot>resources/images/screenshot2.jpg</screenshot>
+        <screenshot>resources/images/screenshot3.jpg</screenshot>
+    </assets>
+  </extension>
+</addon>

@@ -1,0 +1,624 @@
+{
+    "timestamp":"1617605452",
+    "sources": {
+        "vtvgo": {
+            "url": "http://vtvgo.vn/streaming.php?id=XXX_PID",
+            "app": ""
+        },
+        "vtc": {
+            "url": "http://www.tvnet.gov.vn/xml.php?id=XXX_PID&tp=l",
+            "app": ""
+        }
+    },
+    "directories": {
+        "root": {
+            "title": "root",
+            "logo":  "",
+            "desc": "root menu",
+            "content": [
+            {"type":"chn","id":"vtc_vtv1"},
+            {"type":"chn","id":"vtc_vtv2"},
+            {"type":"chn","id":"vtc_vtv3"},
+            {"type":"chn","id":"vtc_vtv4"},
+            {"type":"chn","id":"vtc_vtc1"},
+            {"type":"chn","id":"vtc_vtc10"},
+            {"type":"chn","id":"vtc_vtc16"},
+            {"type":"chn","id":"vtc_ttxvn"},
+            {"type":"chn","id":"vtc_hanoi1"},
+            {"type":"chn","id":"vtc_hochiminh9"},
+            {"type":"chn","id":"vtc_dongthap"},
+            {"type":"chn","id":"vtc_dongnai"},
+            {"type":"chn","id":"vtc_vinhlong"},
+            {"type":"chn","id":"vtc_quangbinh"},
+            {"type":"chn","id":"vtc_haiduong"},
+            {"type":"chn","id":"vtc_thaibinh"},
+            {"type":"chn","id":"vtc_hungyen"},
+            {"type":"chn","id":"vtc_haiphong"},
+            {"type":"chn","id":"vtc_thanhhoa"},
+            {"type":"chn","id":"vtc_nghean"},
+            {"type":"dir_","id":"vtvgo"},
+            {"type":"dir_","id":"fpt"},
+            {"type":"dir_","id":"vtc"},
+            {"type":"dir_","id":"hplus"},
+            {"type":"dir_","id":"vtvplus"},
+            {"type":"dir_","id":"vov"},
+            {"type":"dir_","id":"local"}
+            ]
+        },
+        "vtc": {
+            "title": "Nguồn VTC",
+            "logo":  "default.png",
+            "desc": "Tổng Công ty Truyền thông Đa phương tiện Việt Nam",
+            "content": [
+            {"type":"chn","id":"vtc_vtv1"},
+            {"type":"chn","id":"vtc_vtv2"},
+            {"type":"chn","id":"vtc_vtv3"},
+            {"type":"chn","id":"vtc_vtv4"},
+            {"type":"chn","id":"vtc_ttxvn"},
+            {"type":"chn","id":"vtc_htv9"},
+            {"type":"chn","id":"vtc_vtc1"},
+            {"type":"chn","id":"vtc_vtc10"},
+            {"type":"chn","id":"vtc_vtc16"},
+            {"type":"chn","id":"vtc_hn1"}
+            ]
+        },
+        "vtvgo": {
+            "title": "Nguồn VTVGo",
+            "logo":  "default.png",
+            "desc": "TT Sản xuất & Kinh doanh Nội dung số Đài TH Việt Nam",
+            "content": [
+            {"type":"chn","id":"vtvgo_vtv1"},
+            {"type":"chn","id":"vtvgo_vtv2"},
+            {"type":"chn","id":"vtvgo_vtv3"},
+            {"type":"chn","id":"vtvgo_vtv4"},
+            {"type":"chn","id":"vtvgo_vtv5"},
+            {"type":"chn","id":"vtvgo_vtv6"},
+            {"type":"chn","id":"vtvgo_vtv7"},
+            {"type":"chn","id":"vtvgo_vtv8"},
+            {"type":"chn","id":"vtvgo_vtv9"},
+            {"type":"chn","id":"vtvgo_vtv52"}
+            ]
+        },
+        "vov": {
+            "title": "VOV Radio",
+            "logo":  "vov.png",
+            "desc": "Đài Tiếng nói Việt Nam",
+            "content": [
+            {"type":"chn","id":"vtc_vov1"},
+            {"type":"chn","id":"vtc_vov2"},
+            {"type":"chn","id":"vtc_vov3"},
+            {"type":"chn","id":"vtc_vov5"}
+            ]
+        },
+        "oversea": {
+            "title": "Oversea Stations",
+            "logo":  "",
+            "desc": "Truyền hình Hải ngoại",
+            "content": [
+            {"type":"chn","id":"vtv1"},
+            {"type":"chn","id":"vtv2"}
+            ]
+        }
+    },
+    "channels": {
+        "vtvgo_vtv1": {
+            "title": "VTV1",
+            "logo": "vtv1.png",
+            "desc": "Thông tin tổng hợp",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_vtvgo",
+                "page_url": "http://vtvgo.vn/xem-truc-tuyen-kenh-vtv1-1.html",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv1.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv2": {
+            "title": "VTV2",
+            "logo": "vtv2.png",
+            "desc": "Khoa học, Giáo dục",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_vtvgo",
+                "page_url": "http://vtvgo.vn/xem-truc-tuyen-kenh-vtv2-2.html",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv2.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv3": {
+            "title": "VTV3",
+            "logo": "vtv3.png",
+            "desc": "Thể thao, Giải trí, Thông tin Kinh tế",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_vtvgo",
+                "page_url": "http://vtvgo.vn/xem-truc-tuyen-kenh-vtv3-3.html",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv3.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv4": {
+            "title": "VTV4",
+            "logo": "vtv4.png",
+            "desc": "Kênh cho người Việt Nam ở nước ngoài",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_vtvgo",
+                "page_url": "http://vtvgo.vn/xem-truc-tuyen-kenh-vtv4-4.html",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv4.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv5": {
+            "title": "VTV5",
+            "logo": "default.png",
+            "desc": "Kênh Tiếng Dân tộc Thiểu số",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_vtvgo",
+                "page_url": "http://vtvgo.vn/xem-truc-tuyen-kenh-vtv5-5.html",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv5.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv6": {
+            "title": "VTV6",
+            "logo": "vtv6.png",
+            "desc": "Kênh cho Thanh, thiếu niên",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_vtvgo",
+                "page_url": "http://vtvgo.vn/xem-truc-tuyen-kenh-vtv6-6.html",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv6.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv7": {
+            "title": "VTV7",
+            "logo": "vtv7.png",
+            "desc": "Kênh truyền hình Giáo dục Quốc gia",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_vtvgo",
+                "page_url": "http://vtvgo.vn/xem-truc-tuyen-kenh-vtv7-27.html",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv6.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv8": {
+            "title": "VTV8",
+            "logo": "vtv8.png",
+            "desc": "Kênh truyền hình Tổng hợp",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_vtvgo",
+                "page_url": "http://vtvgo.vn/xem-truc-tuyen-kenh-vtv8-36.html",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv6.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv9": {
+            "title": "VTV9",
+            "logo": "vtv9.png",
+            "desc": "Kênh cho Khán giả miền Nam",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_vtvgo",
+                "page_url": "http://vtvgo.vn/xem-truc-tuyen-kenh-vtv9-39.html",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv9.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv52": {
+            "title": "VTV5TNB",
+            "logo": "default.png",
+            "desc": "Kênh cho Khán giả miền Tây Nam Bộ",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_vtvgo",
+                "page_url": "http://vtvgo.vn/xem-truc-tuyen-kenh-vtv5%20t%C3%A2y%20nam%20b%E1%BB%99-7.html",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtvpy.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        "vtc_vtv1": {
+            "title": "VTV1",
+            "logo": "vtv1.png",
+            "desc": "Thông tin tổng hợp",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1011/vtv1",
+                "referer": "VTV1/15"
+            }
+        },
+        "vtc_vtv2": {
+            "title": "VTV2",
+            "logo": "vtv2.png",
+            "desc": "Khoa học, Giáo dục",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1010/vtv2",
+                "referer": "VTV2/23"
+            }
+        },
+        "vtc_vtv3": {
+            "title": "VTV3",
+            "logo": "vtv3.png",
+            "desc": "Thể thao, Giải trí, Thông tin Kinh tế",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1013/vtv3",
+                "referer": "VTV3/3"
+            }
+        },
+        "vtc_vtv4": {
+            "title": "VTV4",
+            "logo": "vtv4.png",
+            "desc": "Kênh cho người Việt Nam ở nước ngoài",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1009/vtv4",
+                "referer": "VTV4/2"
+            }
+        },
+        "vtc_vtc1": {
+            "title": "VTC1",
+            "logo": "vtc1.png",
+            "desc": "Thời sự tổng hợp",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1007/vtc1",
+                "referer": "VTC1/10"
+            }
+        },
+        "vtc_vtc10": {
+            "title": "VTC10",
+            "logo": "vtc10.png",
+            "desc": "Kênh Văn hóa Việt",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1006/netviet",
+                "referer": "VTC10/22"
+            }
+        },
+        "vtc_vtc16": {
+            "title": "VTC16",
+            "logo": "vtc.png",
+            "desc": "Khoa học, Công nghệ",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1018/vtc16",
+                "referer": "VTC2/11"
+            }
+        },
+        "vtc_ttxvn": {
+            "title": "TTXVN",
+            "logo": "default.png",
+            "desc": "Thông tin, Giải trí, Thể thao",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1019/ttxvn",
+                "referer": ""
+            }
+        },
+        "vtc_hochiminh9": {
+            "title": "HTV9",
+            "logo": "htv9.png",
+            "desc": "Chính trị, Xã hội, Văn hóa",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1012/htv9",
+                "referer": ""
+            }
+        },
+        "vtc_hanoi1": {
+            "title": "HN1",
+            "logo": "",
+            "desc": "Hà Nội 1",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1008/hn",
+                "referer": ""
+            }
+        },
+        "vtc_dongthap": {
+            "title": "THDT",
+            "logo": "",
+            "desc": "Đồng Tháp 1",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1053/dong-thap",
+                "referer": ""
+            }
+        },
+        "vtc_dongnai": {
+            "title": "DN1",
+            "logo": "",
+            "desc": "Đồng Nai 1",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1042/dong-nai1",
+                "referer": ""
+            }
+        },
+        "vtc_vinhlong": {
+            "title": "THVL",
+            "logo": "",
+            "desc": "Vĩnh Long",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1031/thvl1",
+                "referer": ""
+            }
+        },
+        "vtc_quangbinh": {
+            "title": "QBTV",
+            "logo": "",
+            "desc": "Quảng Bình",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1051/quang-binh",
+                "referer": ""
+            }
+        },
+        "vtc_haiduong": {
+            "title": "THD",
+            "logo": "",
+            "desc": "Hải Dương",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1054/hai-duong",
+                "referer": ""
+            }
+        },
+        "vtc_thaibinh": {
+            "title": "TBTV",
+            "logo": "",
+            "desc": "Thái Bình",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1052/thai-binh",
+                "referer": ""
+            }
+        },
+        "vtc_hungyen": {
+            "title": "HY",
+            "logo": "",
+            "desc": "Hưng Yên",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1050/hung-yen",
+                "referer": ""
+            }
+        },
+        "vtc_haiphong": {
+            "title": "THP",
+            "logo": "",
+            "desc": "Hải Phòng",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1041/hai-phong",
+                "referer": ""
+            }
+        },
+        "vtc_thanhhoa": {
+            "title": "TTV",
+            "logo": "",
+            "desc": "Thanh Hóa",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1055/thanh-hoa",
+                "referer": ""
+            }
+        },
+        "vtc_nghean": {
+            "title": "NTV",
+            "logo": "",
+            "desc": "Nghệ An",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1056/nghe-an",
+                "referer": ""
+            }
+        },
+        "vtc_vov1": {
+            "title": "VOV1",
+            "logo": "vov1.png",
+            "desc": "Thời sự, Chính trị, Tổng hợp",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"vov1",
+                "referer": "VOV1/29"
+            }
+        },
+        "vtc_vov2": {
+            "title": "VOV2",
+            "logo": "vov2.png",
+            "desc": "Văn hóa, Đời sống, Khoa giáo",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"vov2",
+                "referer": "VOV2/28"
+            }
+        },
+        "vtc_vov3": {
+            "title": "VOV3",
+            "logo": "vov3.png",
+            "desc": "Âm nhạc, Giải trí",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"vov3",
+                "referer": "VOV3/27"
+            }
+        },
+        "vtc_vov5": {
+            "title": "VOV5",
+            "logo": "vov5.png",
+            "desc": "Phát thanh đối ngoại",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"vov5",
+                "referer": "VOV5/25"
+            }
+        },
+
+
+
+
+        "trt1": {
+            "title": "TRT1",
+            "logo": "",
+            "desc": "Thừa Thiên Huế",
+            "src": {
+                "id":"xunghe",
+                "playpath": "trt",
+                "referer": ""
+            }
+        }
+    }
+}

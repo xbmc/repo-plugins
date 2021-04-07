@@ -1,0 +1,59 @@
+# Kodi Media Center language file
+# Addon Name: TVVN
+# Addon id: plugin.video.tvvn
+# Addon Provider: zecoj
+msgid ""
+msgstr ""
+
+msgctxt "30000"
+msgid "General settings"
+msgstr ""
+
+msgctxt "30001"
+msgid "Show channel's description (Vietnamese Unicode)"
+msgstr ""
+
+msgctxt "30002"
+msgid "Show channel's description on the right of channel's name"
+msgstr ""
+
+msgctxt "30003"
+msgid "Enable auto update of channels list"
+msgstr ""
+
+msgctxt "30004"
+msgid "Channels list url"
+msgstr ""
+
+msgctxt "30005"
+msgid "New channels list update found"
+msgstr ""
+
+msgctxt "30006"
+msgid "Your channels list is"
+msgstr ""
+
+msgctxt "30007"
+msgid "Proceed with update?"
+msgstr ""
+
+msgctxt "30008"
+msgid "Channels list update"
+msgstr ""
+
+msgctxt "30009"
+msgid "Please wait and DO NOT cancel"
+msgstr ""
+
+msgctxt "30010"
+msgid "Channel list updated, enjoy!"
+msgstr ""
+
+msgctxt "30100"
+msgid "tv24.vn settings"
+msgstr ""
+
+msgctxt "30101"
+msgid "Use HTTP streams instead of RTMP"
+msgstr ""
+

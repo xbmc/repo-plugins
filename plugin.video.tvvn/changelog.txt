@@ -1,0 +1,108 @@
+version 0.9.21 (05/04/2021):
+ * Python 3 compatiblity to support Kodi 19 only going forward.
+
+version 0.9.12 (09/10/2017):
+ * re-add vtvgo source
+
+version 0.9.11 (19/09/2017):
+ * fix translatePath as per http://kodi.wiki/view/Add-on_rules#Requirements_for_scripts_and_plugins
+
+version 0.9.10 (19/09/2017):
+ * remove all broken sources, TVNet (VTC) is the only active one.
+ * compressed all images properly
+
+version 0.9.9 (18/11/2015):
+ * fix fpt, tvnet (ex vtc)
+
+version 0.9.8 (10/09/2015):
+ * fix fpt, tvnet (ex vtc)
+ * add vtvgo
+ * fix up some fetching methods
+
+version 0.9.7 (10/06/2015):
+ * Login to HPLUS
+ * Updated data.json format
+
+version 0.9.6 (07/06/2015):
+ * Added new method to grab m3u8 from FPT
+ * Updated data.json format
+
+version 0.9.5 (31/05/2015):
+ * Added new method to grab m3u8, tiny bit more flexible
+
+version 0.9.4 (14/09/2014):
+ * Fix a big with data.json operation
+
+version 0.9.3 (11/07/2014):
+ * Futher changes to comply with Gotham
+
+version 0.9.2 (10/07/2014):
+ * Futher changes to comply with Gotham
+ * Error proof channel-list update
+ * This is the last version for Frodo (v12) future updates will be Gotham (v13)
+   only
+
+version 0.9.1 (05/06/2013):
+ * Changes to comply with Frodo API. Frodo-only going forward.
+
+version 0.9.0 (05/06/2013):
+ * complete rewrite, ensure speedy future updates to channels
+ * temporarily removed oversea channels, none is working
+ * this is the last version for Eden (v11) future updates will be Frodo (v12) only
+
+version 0.8.2 (10/11/2012):
+ * reverted VTV1-4, HTV7,9 & HN1 to vtc.com.vn's source
+ * fixed VpopTV
+ * temporarily removed dead tv24.vn channels (very flaky source lately)
+
+version 0.8.1 (27/07/2012):
+ * adds LifeTV and VpopTV (thanks to bolex17)
+
+version 0.8.0 (25/07/2012):
+ * adds more oversea channels
+ * updates disclaimer
+ * improvements and bug fixes
+ * code clean up
+
+version 0.7.2 (07/05/2012):
+ * show channel's name on "Information screen" during playback
+ * the following options are now available under "Add-on settings"
+   - user can now move the channels' descriptions to the left of channels'
+     names (this makes skins with right-aligned lists looks nicer)
+   - user can now have the option of using tv24.vn's RTMP streams instead
+     of the HTTP streams (seems like OSX users have some playback issues
+     with the HTTP streams)
+
+version 0.7.1 (28/04/2012):
+ * make use of tv24.vn mp4 streams over http -> faster buffering
+ * make use of "SD" streams from tv24.vn -> better quality
+ * VTV1-3 channels will now use streams from tv24.vn
+ * clean up channels descriptions
+
+version 0.7.0 (26/04/2012):
+ * users can now show/hide channels descriptions via "Add-on Settings"
+ * more channels (ANTV and 11 local channels)
+ * change play_video method to work around for tv24.vn
+ * fix playback issue with Windows builds
+ * code clean up
+
+version 0.5.2 (09/04/2012):
+ * minor changes to conform with eden's requirement
+ * minor improvements to artwork
+
+version 0.5.1 (05/04/2012):
+ * move to official repository
+ * new logo
+
+version 0.5.0 (25/03/2012):
+ * improve & add artwork
+ * add more channels from tv24.com.vn
+ * repository created
+
+version 0.3.0 (02/12/2011):
+ * new artwork
+ * source fix-up
+ * new method of getting streams
+
+version 0.1.0 (12/11/2010):
+ * initial release

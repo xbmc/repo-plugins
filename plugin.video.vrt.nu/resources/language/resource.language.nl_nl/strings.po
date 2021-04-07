@@ -278,11 +278,11 @@ msgctxt "#30120"
 msgid "Short film"
 msgstr "Kortfilm"
 
-msgctxt "#30130"
+msgctxt "#30129"
 msgid "Climate"
 msgstr "Klimaat"
 
-msgctxt "#30131"
+msgctxt "#30130"
 msgid "Cycling"
 msgstr "Koers"
 

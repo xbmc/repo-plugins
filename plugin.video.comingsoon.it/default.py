@@ -1,24 +1,30 @@
-import datetime, re
+import datetime
+import re
 from phate89lib import rutils, kodiutils, staticutils
 
 home = "https://www.comingsoon.it"
-webutils=rutils.RUtils()
-rutils.log=kodiutils.log
-webutils.USERAGENT = "Comingsoon video addon"
+webutils = rutils.RUtils()
+rutils.log = kodiutils.log
+webutils.setUserAgent(
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0")
 
-#site logic
+# site logic
 
-def getTheatersList(page = 1, fullDetails = False):
-    return getMoviesList("{home}/cinema/filmalcinema/?page={page}".format(home=home,page=page), fullDetails)
 
-def getNextReleasesList(offsetDays = 0, fullDetails = False):
-    return getMoviesList("{home}/cinema/calendariouscite/?r={offsetDays}".format(home=home,offsetDays=offsetDays), fullDetails)
+def getTheatersList(page=1, fullDetails=False):
+    return getMoviesList("{home}/cinema/filmalcinema/?page={page}".format(home=home, page=page), fullDetails)
 
-def getMoviesList(url, fullDetails = False):
+
+def getNextReleasesList(offsetDays=0, fullDetails=False):
+    return getMoviesList("{home}/cinema/calendariouscite/?r={offsetDays}".format(home=home, offsetDays=offsetDays), fullDetails)
+
+
+def getMoviesList(url, fullDetails=False):
     bpage = webutils.getSoup(url)
     if not bpage:
         return -1, []
-    htmlmovies = bpage.find_all(True, attrs={"class": "cards cards-horiz-box box-office min film brd-c"})
+    htmlmovies = bpage.find_all(
+        True, attrs={"class": "cards cards-horiz-box box-office min film brd-c"})
     if not htmlmovies:
         return -1, []
     movies = []
@@ -33,15 +39,17 @@ def getMoviesList(url, fullDetails = False):
             if (fullDetails):
                 movie = getFullMovieDetails(res.group(1))
             else:
-                movie = getBaseMovieDetails(htmlmovie.find('div',attrs={"class": 'testo plr0'}))
+                movie = getBaseMovieDetails(htmlmovie.find('div', attrs={"class": 'testo plr0'}))
             movie['id'] = res.group(1)
-            movie['image']='https://mr.comingsoon.it/imgdb/locandine/big/{id}.jpg'.format(id=movie['id'])
-            movies.append( movie )
-    lastPage=-1
+            movie['image'] = 'https://mr.comingsoon.it/imgdb/locandine/big/{id}.jpg'.format(
+                id=movie['id'])
+            movies.append(movie)
+    lastPage = -1
     i = bpage.find("i", attrs={"class": "fa fa-forward"})
     if i and len(i.parent['class']) > 0 and not 'disabled' in i.parent['class']:
         lastPage = i.parent['href'].split('=')[-1]
     return lastPage, movies
+
 
 def getBaseMovieDetails(htmlmovie):
     movie = {}
@@ -72,17 +80,19 @@ def getBaseMovieDetails(htmlmovie):
                     movie['director'] = info.span.get_text().strip().split(', ')
                 elif (info.b.string == 'Cast:'):
                     movie['cast'] = info.span.get_text().strip().split(', ')
-    div = htmlmovie.find('div',attrs={"class": "c p"})
+    div = htmlmovie.find('div', attrs={"class": "c p"})
     if div:
-        movie['studio']=div.string.strip()
-    div = htmlmovie.find('div',attrs={"class": "voto p pbs"})
+        movie['studio'] = div.string.strip()
+    div = htmlmovie.find('div', attrs={"class": "voto p pbs"})
     if div:
-        movie['rating'] = float(div.contents[1].strip().replace(',','.'))*2
-      
+        movie['rating'] = float(div.contents[1].strip().replace(',', '.'))*2
+
     return movie
 
+
 def getFullMovieDetails(id):
-    page = webutils.getSoup("{home}/film/movie/{id}/scheda/".format(home=home, id=id),parser='html5lib')
+    page = webutils.getSoup(
+        "{home}/film/movie/{id}/scheda/".format(home=home, id=id), parser='html5lib')
     if not page:
         return {}
     frame = page.find("div", attrs={"class": "container pbm"})
@@ -140,6 +150,7 @@ def getFullMovieDetails(id):
                             pass
     return movie
 
+
 def extractFromLinks(item):
     res = []
     items = item.find_all('a')
@@ -150,23 +161,26 @@ def extractFromLinks(item):
 
 
 def getMovieVideos(id):
-    page = webutils.getSoup("http://www.comingsoon.it/film/movie/{id}/video/".format(id=id)) # url http://www.comingsoon.it/film/something/{movieid}/scheda/
+    # url http://www.comingsoon.it/film/something/{movieid}/scheda/
+    page = webutils.getSoup("http://www.comingsoon.it/film/movie/{id}/video/".format(id=id))
     if not page:
         return []
     videos = []
-    #load the main video
+    # load the main video
     htmlvideos = page.find_all("a", attrs={"class": "cards brd-c mbl"})
     if htmlvideos:
         for htmlvideo in htmlvideos:
             vid = htmlvideo['href'].split('=')[-1]
             div = htmlvideo.find("div", attrs={"class": "titolo h3"})
             if div:
-                videos.append( { "id": vid,  "title": div.string, "image": "http://mr.comingsoon.it/imgdb/video/{id}_big.jpg".format(id=vid) } )
+                videos.append({"id": vid,  "title": div.string,
+                               "image": "http://mr.comingsoon.it/imgdb/video/{id}_big.jpg".format(id=vid)})
     return videos
+
 
 def getVideoUrls(id):
     videourls = {}
-    content =  webutils.getText("http://www.comingsoon.it/VideoPlayer/embed/?ply=1&idv=" + str(id))
+    content = webutils.getText("http://www.comingsoon.it/VideoPlayer/embed/?ply=1&idv=" + str(id))
     if (content):
         res = re.search('vLwRes\:.*?\"(.*?)\"', content)
         if res:
@@ -180,57 +194,71 @@ def getVideoUrls(id):
             videourls['hd'] = "http://video.comingsoon.it/" + res.group(1)
     return videourls
 
-#addon logic
+# addon logic
+
 
 def loadList():
     kodiutils.addListItem(kodiutils.LANGUAGE(32005), {"mode": "moviesintheaters"})
     kodiutils.addListItem(kodiutils.LANGUAGE(32006), {"mode": "moviescomingsoon"})
     kodiutils.endScript()
 
-def addTheatersList(page = 1):
+
+def addTheatersList(page=1):
     page = int(page)
     kodiutils.setContent('movies')
     maxPage, movies = getTheatersList(page, kodiutils.getSettingAsBool('fullDetails'))
     addMoviesList(movies)
     if page < int(maxPage):
-        kodiutils.addListItem(kodiutils.LANGUAGE(32002), {"mode": "moviesintheaters", "page": page + 1 })
+        kodiutils.addListItem(kodiutils.LANGUAGE(
+            32002), {"mode": "moviesintheaters", "page": page + 1})
     kodiutils.endScript()
 
-def addNextReleasesList(offset = 0):
-    offset=int(offset)
+
+def addNextReleasesList(offset=0):
+    offset = int(offset)
     kodiutils.setContent('movies')
     maxPage, movies = getNextReleasesList(offset, kodiutils.getSettingAsBool('fullDetails'))
     addMoviesList(movies)
     if offset <= 0:
-    	kodiutils.addListItem(kodiutils.LANGUAGE(32003), {"mode": "comingweek", "offset": offset - 7 })
+        kodiutils.addListItem(kodiutils.LANGUAGE(
+            32003), {"mode": "comingweek", "offset": offset - 7})
     if offset >= 0:
-    	kodiutils.addListItem(kodiutils.LANGUAGE(32004), {"mode": "comingweek", "offset": offset + 7 })
+        kodiutils.addListItem(kodiutils.LANGUAGE(
+            32004), {"mode": "comingweek", "offset": offset + 7})
     kodiutils.endScript()
+
 
 def addMoviesList(movies):
     for movie in movies:
-        movie['mediatype']='movie'
-        kodiutils.addListItem(movie['title'], {"id": movie['id'], "mode": "videos" }, videoInfo=movie, 
-            thumb=movie['image'], poster=movie['image'])
+        movie['mediatype'] = 'movie'
+        kodiutils.addListItem(movie['title'], {"id": movie['id'], "mode": "videos"}, videoInfo=movie,
+                              thumb=movie['image'], poster=movie['image'])
 
-def loadDates(offset = 0):
+
+def loadDates(offset=0):
     offset = int(offset)
     d = datetime.date.today() + datetime.timedelta(offset)
     offset_days = 3 - d.weekday()
     nextthursday = d + datetime.timedelta(offset_days)
-    for x in range(0,9):
-        kodiutils.addListItem(kodiutils.LANGUAGE(32007) + " " + str(nextthursday + datetime.timedelta(x * 7)), {"offset": offset + (x * 7), "mode": "comingweek" })
+    for x in range(0, 9):
+        kodiutils.addListItem(kodiutils.LANGUAGE(32007) + " " + str(nextthursday +
+                                                                    datetime.timedelta(x * 7)), {"offset": offset + (x * 7), "mode": "comingweek"})
     if offset <= 0:
-        kodiutils.addListItem(kodiutils.LANGUAGE(32001), {"mode": "moviescomingsoon", "offset": offset - 63 })
+        kodiutils.addListItem(kodiutils.LANGUAGE(
+            32001), {"mode": "moviescomingsoon", "offset": offset - 63})
     if offset >= 0:
-        kodiutils.addListItem(kodiutils.LANGUAGE(32002), {"mode": "moviescomingsoon", "offset": offset + 63 })
+        kodiutils.addListItem(kodiutils.LANGUAGE(
+            32002), {"mode": "moviescomingsoon", "offset": offset + 63})
     kodiutils.endScript()
+
 
 def loadVideos(id):
     kodiutils.setContent('videos')
     for video in getMovieVideos(id):
-        kodiutils.addListItem(video['title'], {"id": video['id'], "mode": "videourl" }, thumb=video['image'], videoInfo={'mediatype': 'video'}, isFolder=False)
+        kodiutils.addListItem(video['title'], {"id": video['id'], "mode": "videourl"}, thumb=video['image'], videoInfo={
+                              'mediatype': 'video'}, isFolder=False)
     kodiutils.endScript()
+
 
 def watchVideo(id):
     urls = getVideoUrls(id)
@@ -242,6 +270,7 @@ def watchVideo(id):
         kodiutils.setResolvedUrl(urls['sd'])
     kodiutils.log('No links found')
     kodiutils.setResolvedUrl(solved=False)
+
 
 params = staticutils.getParams()
 if not params or 'mode' not in params:

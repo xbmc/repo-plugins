@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+		<setting id="PreferHD" type="bool" label="32012" default="true"/>
+		<setting id="fullDetails" type="bool" label="32013" default="true"/>
+</settings>

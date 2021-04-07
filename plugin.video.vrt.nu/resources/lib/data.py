@@ -281,8 +281,8 @@ FEATURED = [
     # Inhoudsgerelateerd
     dict(name='Kortfilm', id='kortfilm', msgctxt=30120),
     # Thema
-    dict(name='Klimaat', id='klimaat', msgctxt=30130),
-    dict(name='Koers', id='koers', msgctxt=30131),
+    dict(name='Klimaat', id='klimaat', msgctxt=30129),
+    dict(name='Koers', id='koers', msgctxt=30130),
 ]
 
 RELATIVE_DATES = [

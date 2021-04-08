@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.spurs-tv" name="Spurs TV" version="2.17.0" provider-name="Leopold">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.xbmcswift2" version="19.0.5" optional="false"/>
+    <import addon="script.module.requests" version="2.22.0" optional="false"/>
+    <import addon="script.module.livestreamer" version="1.12.2" optional="false"/>
+    <import addon="script.module.pyrollbar" version="0.15.2" optional="false"/>
+    <import addon="plugin.video.youtube" version="6.8.10" optional="true"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language>en</language>
+    <summary lang="en_GB">Watch videos from Spurs TV</summary>
+    <description lang="en_GB">This video plugin provides access to Tottenham Hotspur match highlights, exclusive interviews, live audio commentary of all first team matches, and more.</description>
+    <website>https://www.tottenhamhotspur.com/tags/spurstv/</website>
+    <forum>https://forum.kodi.tv/showthread.php?tid=235234</forum>
+    <source>https://github.com/LS80/plugin.video.spurs-tv</source>
+    <license>GPL-3.0-or-later</license>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
+    <news>
+      Compatible with Kodi 19 (Matrix)
+      Added search
+      Added separate Men's and Womens's team categories
+      Added Europa League category
+      Removed the broken New Stadium category
+    </news>
+  </extension>
+</addon>

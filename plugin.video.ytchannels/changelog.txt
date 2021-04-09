@@ -1,6 +1,9 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.3.4 [09-April-2021]
+-Fixed bug with removing channels
+
 v0.3.3 [15-March-2021]
 -Added ability to move channels to different folders
 -Added ability to set thumbnail image for folders

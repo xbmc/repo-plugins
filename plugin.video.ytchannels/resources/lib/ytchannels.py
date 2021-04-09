@@ -342,7 +342,7 @@ def ytchannels_main():
 	elif mode[0]=='rem_channel':
 		dicti=urllib.parse.parse_qs(sys.argv[2][1:])
 		channel_id=dicti['channel_id'][0]
-		change_folder(channel_id)
+		remove_channel(channel_id)
 		xbmc.executebuiltin("Container.Refresh")
 
 	elif mode[0]=='rem_folder':

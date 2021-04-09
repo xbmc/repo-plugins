@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.funcarrun" name="Funcarrun Videos" version="0.0.2" provider-name="Funcarrun">
+<addon id="plugin.video.funcarrun" name="Funcarrun Videos" version="0.0.3" provider-name="Funcarrun">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
      <import addon="script.module.requests"   version="1.0.0"/>
@@ -21,8 +21,11 @@
     <website>https://www.funcarrun.eu</website> <!-- the url of the website that contains the videos (or the official website of your plugin). May be omitted.  -->
     <email>paul@funcarrun.eu</email> <!-- may be omitted  -->
     <source>https://github.com/Paul-VW/plugin.video.funcarrun</source>
-    <news>v0.0.1 (22/03/2021)
+    <news>v0.0.1 (03/22/2021)
       [new] beta Release
+
+v0.0.3 (04/07/2021)
+[new] categories added
     </news>
     <assets>
         <icon>resources/icon.png</icon>

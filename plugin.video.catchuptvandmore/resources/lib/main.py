@@ -9,7 +9,7 @@ from builtins import str
 import importlib
 import sys
 
-from codequick import Route, Resolver, Listitem, Script
+from codequick import Route, Resolver, Listitem, Script, utils
 import urlquick
 from kodi_six import xbmc, xbmcgui, xbmcplugin
 
@@ -79,9 +79,14 @@ def generic_menu(plugin, item_id=None, **kwargs):
                 item.art["fanart"] = get_item_media_path(
                     item_infos['fanart'])
 
-            # Set item additional params
-            if 'xmltv_id' in item_infos:
-                item.params['xmltv_id'] = item_infos['xmltv_id']
+            # If it's a live channel we retrieve xmltv id
+            if 'available_languages' in item_infos:
+                if isinstance(item_infos['available_languages'], dict):
+                    lang = utils.ensure_unicode(Script.setting[item_id + '.language'])
+                    lang_infos = item_infos['available_languages'][lang]
+                    item.params['xmltv_id'] = lang_infos.get('xmltv_id')
+            else:
+                item.params['xmltv_id'] = item_infos.get('xmltv_id')
 
             item.params['item_id'] = item_id
 

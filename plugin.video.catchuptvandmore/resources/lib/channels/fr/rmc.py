@@ -7,6 +7,7 @@
 from __future__ import unicode_literals
 
 from codequick import Listitem, Resolver, Route
+import re
 import urlquick
 
 from resources.lib import resolver_proxy, web_utils
@@ -17,6 +18,8 @@ from resources.lib.menu_utils import item_post_treatment
 # Get informations of replay ?
 
 URL_ROOT = 'https://%s.bfmtv.com'
+
+URL_DATA_BRIGTHCOVE = 'https://rmcdecouverte.bfmtv.com/static/js/main.%s.js'
 
 URL_REPLAY = {
     'rmcstory': URL_ROOT + '/mediaplayer-replay/nouveautes/',
@@ -115,12 +118,27 @@ def get_live_url(plugin, item_id, **kwargs):
                         headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
 
-    root = resp.parse()
-    live_datas = root.find(".//div[@class='next-player player_2t_e9']")
+    if item_id == 'rmcstory':
+        root = resp.parse()
+        live_datas = root.find(".//div[@class='next-player player_2t_e9']")
 
-    data_account = live_datas.get('data-account')
-    data_video_id = live_datas.get('data-video-id')
-    data_player = live_datas.get('data-player')
+        data_account = live_datas.get('data-account')
+        data_video_id = live_datas.get('data-video-id')
+        data_player = live_datas.get('data-player')
 
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
-                                                    data_player, data_video_id)
+        return resolver_proxy.get_brightcove_video_json(plugin, data_account,
+                                                        data_player, data_video_id)
+    else:
+        main_id = re.compile(
+            r'main\.(.*?)\.js').findall(resp.text)[0]
+        resp2 = urlquick.get(URL_DATA_BRIGTHCOVE % main_id,
+                             headers={'User-Agent': web_utils.get_random_ua()},
+                             max_age=-1)
+        data_account = re.compile(
+            r'data-account\"\:\"(.*?)\"').findall(resp2.text)[0]
+        data_video_id = re.compile(
+            r'\,y\=\"(.*?)\"').findall(resp2.text)[0]
+        data_player = 'default'
+
+        return resolver_proxy.get_brightcove_video_json(plugin, data_account,
+                                                        data_player, data_video_id)

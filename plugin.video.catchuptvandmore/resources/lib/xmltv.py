@@ -274,7 +274,10 @@ def read_programmes(fp, only_current_programmes=False):
                 # Match the beginning of a program
                 if '<programme ' in line:
                     start = int(re.search(r'start="(.*?)"', line).group(1))  # UTC start time
-                    stop = int(re.search(r'stop="(.*?)"', line).group(1))  # UTC stop time
+                    try:
+                        stop = int(re.search(r'stop="(.*?)"', line).group(1))  # UTC stop time
+                    except Exception:
+                        stop = 50000000000000
                     if current_utc_time >= start and current_utc_time <= stop:
                         pass
                     else:
@@ -345,25 +348,21 @@ def programme_post_treatment(programme):
         # Hotfix issue #102
         local_tz = pytz.timezone('Europe/Paris')
 
-    # Get UTC start and stop datetime
-    start_s = programme['start']
-    stop_s = programme['stop']
+    for elt in ['start', 'stop']:
+        if elt in programme:
+            # Get UTC start and stop datetime
+            elt_s = programme[elt]
+            # Convert start and stop on naive datetime object
+            elt_dt = datetime_strptime(elt_s, date_format_notz)
 
-    # Convert start and stop on naive datetime object
-    start_dt = datetime_strptime(start_s, date_format_notz)
-    stop_dt = datetime_strptime(stop_s, date_format_notz)
+            # Add UTC timezone to start and stop
+            utc_tz = pytz.UTC
+            elt_dt = utc_tz.localize(elt_dt)
 
-    # Add UTC timezone to start and stop
-    utc_tz = pytz.UTC
-    start_dt = utc_tz.localize(start_dt)
-    stop_dt = utc_tz.localize(stop_dt)
+            # Move to our timezone
+            elt_dt = elt_dt.astimezone(local_tz)
 
-    # Move to our timezone
-    start_dt = start_dt.astimezone(local_tz)
-    stop_dt = stop_dt.astimezone(local_tz)
-
-    programme['start'] = start_dt.strftime("%Hh%M")
-    programme['stop'] = stop_dt.strftime("%Hh%M")
+            programme[elt] = elt_dt.strftime("%Hh%M")
 
     return programme
 
@@ -414,22 +413,20 @@ def programme_post_treatment_iptvmanager(programme):
     # But in our xmltv file we have datetime in
     # %Y%m%d%H%M%S format (e.g. 20210202224100)
 
-    # Get UTC start and stop datetime
-    start_s = programme['start']
-    stop_s = programme['stop']
+    for elt in ['start', 'stop']:
+        if elt in programme:
+            # Get UTC start and stop datetime
+            elt_s = programme[elt]
 
-    # Convert start and stop on naive datetime object
-    start_dt = datetime_strptime(start_s, date_format_notz)
-    stop_dt = datetime_strptime(stop_s, date_format_notz)
+            # Convert start and stop on naive datetime object
+            elt_dt = datetime_strptime(elt_s, date_format_notz)
 
-    # Add UTC timezone to start and stop
-    utc_tz = pytz.UTC
-    start_dt = utc_tz.localize(start_dt)
-    stop_dt = utc_tz.localize(stop_dt)
+            # Add UTC timezone to start and stop
+            utc_tz = pytz.UTC
+            elt_dt = utc_tz.localize(elt_dt)
 
-    # Use correct format
-    programme['start'] = start_dt.strftime(ISO_8601_FORMAT)
-    programme['stop'] = stop_dt.strftime(ISO_8601_FORMAT)
+            # Use correct format
+            programme[elt] = elt_dt.strftime(ISO_8601_FORMAT)
 
     return programme
 
@@ -445,6 +442,11 @@ xmltv_infos = {
             'url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_be_{}.xml',
             'keyword': 'tv_guide_be_'
         },
+    'ch_live':
+        {
+            'url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_ch_{}.xml',
+            'keyword': 'tv_guide_ch_'
+        },
     'uk_live':
         {
             'url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_uk_{}.xml',
@@ -454,6 +456,11 @@ xmltv_infos = {
         {
             'url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_it_{}.xml',
             'keyword': 'tv_guide_it_'
+        },
+    'wo_live':
+        {
+            'url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_wo_{}.xml',
+            'keyword': 'tv_guide_wo_'
         }
 }
 

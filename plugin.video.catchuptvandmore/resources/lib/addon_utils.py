@@ -13,12 +13,13 @@ import urlquick
 from kodi_six import xbmcgui, xbmcvfs
 
 
-def get_item_label(item_id, item_infos={}):
+def get_item_label(item_id, item_infos={}, append_selected_lang=True):
     """Get (translated) label of 'item_id'
 
     Args:
         item_id (str)
         item_infos (dict): Information from the skeleton 'menu' dict
+        append_selected_lang (bool, optional): Append selected language by the user in the label
     Returns:
         str: (translated) label of 'item_id'
     """
@@ -29,6 +30,9 @@ def get_item_label(item_id, item_infos={}):
 
     if isinstance(label, int):
         label = Script.localize(label)
+
+    if append_selected_lang and 'available_languages' in item_infos:
+        label = '{} ({})'.format(label, utils.ensure_unicode(Script.setting['{}.language'.format(item_id)]))
     return label
 
 

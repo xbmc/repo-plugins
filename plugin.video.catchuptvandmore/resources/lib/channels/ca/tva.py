@@ -157,7 +157,7 @@ def list_seasons(plugin, item_id, program_slug, **kwargs):
                 list_videos_categories, item_id=item_id, program_slug=program_slug, season_number=season_number)
             item_post_treatment(item)
             yield item
-    else:
+
         season_name = json_parser['name']
         season_number = '-1'
         item = Listitem()

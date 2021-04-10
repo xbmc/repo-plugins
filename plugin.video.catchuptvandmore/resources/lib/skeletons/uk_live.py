@@ -129,7 +129,7 @@ menu = {
         'label': 'Quest',
         'thumb': 'channels/uk/questtv.png',
         'fanart': 'channels/uk/questtv_fanart.jpg',
-        'xmltv_id': '1230.tvguide.co.uk',
+        'xmltv_id': '559.tvguide.co.uk',
         'enabled': False,
         'order': 18
     },
@@ -147,6 +147,7 @@ menu = {
         'label': 'Bristol Local TV',
         'thumb': 'channels/uk/bristollocal.png',
         'fanart': 'channels/uk/bristollocal_fanart.jpg',
+        'xmltv_id': '1157.tvguide.co.uk',
         'enabled': True,
         'order': 21
     },
@@ -211,6 +212,7 @@ menu = {
         'label': 'Birmingham Local TV',
         'thumb': 'channels/uk/birminghamlocal.png',
         'fanart': 'channels/uk/birminghamlocal_fanart.jpg',
+        'xmltv_id': '1154.tvguide.co.uk',
         'enabled': True,
         'order': 31
     },
@@ -219,6 +221,7 @@ menu = {
         'label': 'Cardiff Local TV',
         'thumb': 'channels/uk/cardifflocal.png',
         'fanart': 'channels/uk/cardifflocal_fanart.jpg',
+        'xmltv_id': '1171.tvguide.co.uk',
         'enabled': True,
         'order': 32
     },
@@ -227,6 +230,7 @@ menu = {
         'label': 'Leeds Local TV',
         'thumb': 'channels/uk/leedslocal.png',
         'fanart': 'channels/uk/leedslocal_fanart.jpg',
+        'xmltv_id': '1210.tvguide.co.uk',
         'enabled': True,
         'order': 33
     },
@@ -235,6 +239,7 @@ menu = {
         'label': 'Liverpool Local TV',
         'thumb': 'channels/uk/liverpoollocal.png',
         'fanart': 'channels/uk/liverpoollocal_fanart.jpg',
+        'xmltv_id': '1212.tvguide.co.uk',
         'enabled': True,
         'order': 33
     },
@@ -259,6 +264,7 @@ menu = {
         'label': 'Tyne & Wear Local TV',
         'thumb': 'channels/uk/twlocal.png',
         'fanart': 'channels/uk/twlocal_fanart.jpg',
+        'xmltv_id': '1255.tvguide.co.uk',
         'enabled': True,
         'order': 36
     },
@@ -267,6 +273,7 @@ menu = {
         'label': 'Really',
         'thumb': 'channels/uk/really.png',
         'fanart': 'channels/uk/really_fanart.jpg',
+        'xmltv_id': '422.tvguide.co.uk',
         'enabled': False,
         'order': 37
     },
@@ -275,6 +282,7 @@ menu = {
         'label': 'Food Network',
         'thumb': 'channels/uk/foodnetwork.png',
         'fanart': 'channels/uk/foodnetwork_fanart.jpg',
+        'xmltv_id': '596.tvguide.co.uk',
         'enabled': False,
         'order': 38
     },
@@ -283,6 +291,7 @@ menu = {
         'label': 'DMAX',
         'thumb': 'channels/uk/dmax.png',
         'fanart': 'channels/uk/dmax_fanart.jpg',
+        'xmltv_id': '454.tvguide.co.uk',
         'enabled': False,
         'order': 39
     },

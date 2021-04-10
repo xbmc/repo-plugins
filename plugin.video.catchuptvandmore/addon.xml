@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.33+matrix.1" provider-name="SylvainCecchetto,wwark">
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.34+matrix.1" provider-name="SylvainCecchetto,wwark">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.codequick" version="0.9.13"/>
@@ -42,18 +42,21 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.33]
-[France TV - FR] Fix Live TV
-[Kodi] Fix addon auto-run on Kodi 17
-[BrightCove] Possible fix for some instance of Kodi 19
-[TV5Monde - WO] Fix Live TV (hack like Arte TV)
-[Live TV] Fix TV guide on Windows
-[6Play/RTLPlay - FR/BE] Hack to force encoding of a response to fix slow behavior to play content
-[Euronews - WO] Fix Live TV
-[France24 - WO] Fix Live TV and Catch-up TV
-[TV5Monde - WO] Fix Catch-up TV
-[Tivi5Monde - WO] Fix Catch-up TV
-[TV5MondeAfrique - WO] Fix Catch-up TV
+[Version 0.2.34]
+[NRJ Hits TV - BE] Remove Live TV (not available anymore)
+[NRJ Hits TV - BE] Fix Catch-up TV
+[TeleQuebec - CA] Readd Catch-up TV
+[NOOVO - CA] Fix Catch-up TV
+[BFMTV - FR] Use DailyMotion to play Live TV
+[Languages] Update po files
+[LuckyJack - FR] Remove Live TV
+[ABWEB - BE] Fix Live TV (thanks chamchenko)
+[RMC Decouverte - FR] Fix Live TV
+[MA] Add some live TV for Morroco (M24, SNRT, Medi1 and Telemaroc) (thanks chamchenko)
+[RobTV - BE] Add Catch-up TV (thanks michaelarnauts)
+[Live TV] Add full support for multilingual channels (IPTV Manager + TV guide)
+[Equidia - FR] Add more Lives (thanks chamchenko)
+[TVA - CA] Fix Catch-UP TV
 ----
 Visit WebSite - http://mpdb.tv/#home which host the french forum used by users of CU TV and More
     </news>

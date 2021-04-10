@@ -56,11 +56,8 @@ def videos_by_category(category=None):
         fanart = v['fanartUrl']
         description = description + "\n\nKijk voor inschrijven op https://www.funcarrun.eu"
         listitem = xbmcgui.ListItem(label=title)
-        listitem.setInfo('video', {'plot': description})
-        listitem.setInfo('video', {'plotoutline': description})
-        listitem.setProperty('IsPlayable', 'true')
-        listitem.setArt({'icon': thumbnail, 'poster': thumbnail})
-        listitem.setProperty('fanart_image', fanart)
+        listitem.setInfo('video', {'plot': description, 'plotoutline': description})
+        listitem.setArt({'icon': thumbnail, 'poster': thumbnail, 'fanart': fanart})
 
         xbmcplugin.addDirectoryItem(handle=__handle__, url=uri, listitem=listitem, isFolder=False)
 
@@ -101,4 +98,3 @@ def run():
 
 def start():
     videoList = get_channel_content()
-    print(videoList)

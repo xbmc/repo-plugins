@@ -82,7 +82,7 @@ menu = {
         'order': 13
     },
     'nrjhitstvbe': {
-        'route': '/resources/lib/channels/be/nrjhitstvbe:list_videos',
+        'route': '/resources/lib/channels/be/nrjhitstvbe:list_categories',
         'label': 'NRJ Hits TV',
         'thumb': 'channels/be/nrjhitstvbe.png',
         'fanart': 'channels/be/nrjhitstvbe_fanart.jpg',
@@ -104,5 +104,13 @@ menu = {
         'fanart': 'channels/be/canalc_fanart.jpg',
         'enabled': True,
         'order': 20
-    }
+    },
+    'robtv': {
+        'route': '/resources/lib/channels/be/robtv:list_programs',
+        'label': 'ROB-tv (Oost-Brabant)',
+        'thumb': 'channels/be/robtv.png',
+        'fanart': 'channels/be/robtv_fanart.jpg',
+        'enabled': True,
+        'order': 21,
+    },
 }

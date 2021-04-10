@@ -5,7 +5,6 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-from codequick import Script, utils
 
 # The following dictionaries describe
 # the addon's tree architecture.
@@ -36,14 +35,14 @@ menu = {
     },
     'icitele': {
         'resolver': '/resources/lib/channels/ca/icitele:get_live_url',
-        'label': 'ICI Télé (' + utils.ensure_unicode(Script.setting['icitele.language']) + ')',
+        'label': 'ICI Télé',
         'thumb': 'channels/ca/icitele.png',
         'fanart': 'channels/ca/icitele_fanart.jpg',
-        'available_languages': [
-            'Vancouver', 'Regina', 'Toronto', 'Edmonton', 'Rimouski',
-            'Québec', 'Winnipeg', 'Moncton', 'Ottawa',
-            'Montréal'
-        ],
+        'available_languages': {
+            'Vancouver': {}, 'Regina': {}, 'Toronto': {}, 'Edmonton': {}, 'Rimouski': {},
+            'Québec': {}, 'Winnipeg': {}, 'Moncton': {}, 'Ottawa': {},
+            'Montréal': {}
+        },
         'enabled': True,
         'order': 6
     },
@@ -73,15 +72,15 @@ menu = {
     },
     'cbc': {
         'resolver': '/resources/lib/channels/ca/cbc:get_live_url',
-        'label': 'CBC (' + utils.ensure_unicode(Script.setting['cbc.language']) + ')',
+        'label': 'CBC',
         'thumb': 'channels/ca/cbc.png',
         'fanart': 'channels/ca/cbc_fanart.jpg',
-        'available_languages': [
-            'Ottawa', 'Montreal', 'Charlottetown', 'Fredericton',
-            'Halifax', 'Windsor', 'Yellowknife', 'Winnipeg',
-            'Regina', 'Calgary', 'Edmonton', 'Vancouver',
-            'Toronto', 'St. John\'s'
-        ],
+        'available_languages': {
+            'Ottawa': {}, 'Montreal': {}, 'Charlottetown': {}, 'Fredericton': {},
+            'Halifax': {}, 'Windsor': {}, 'Yellowknife': {}, 'Winnipeg': {},
+            'Regina': {}, 'Calgary': {}, 'Edmonton': {}, 'Vancouver': {},
+            'Toronto': {}, 'St. John\'s': {}
+        },
         'enabled': True,
         'order': 11
     },
@@ -90,7 +89,7 @@ menu = {
         'label': 'LCN',
         'thumb': 'channels/ca/lcn.png',
         'fanart': 'channels/ca/lcn_fanart.jpg',
-        'enabled': True,
+        'enabled': False,
         'order': 12
     },
     'yoopa': {

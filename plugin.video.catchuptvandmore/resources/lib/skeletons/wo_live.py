@@ -5,7 +5,6 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-from codequick import Script, utils
 
 # The following dictionaries describe
 # the addon's tree architecture.
@@ -20,51 +19,68 @@ root = 'live_tv'
 menu = {
     'euronews': {
         'resolver': '/resources/lib/channels/wo/euronews:get_live_url',
-        'label': 'Euronews (' + utils.ensure_unicode(Script.setting['euronews.language']) + ')',
+        'label': 'Euronews',
         'thumb':
         'channels/wo/euronews.png',
         'fanart':
         'channels/wo/euronews_fanart.jpg',
-        'available_languages': [
-            'FR', 'EN', 'AR', 'DE', 'IT', 'ES', 'PT', 'RU', 'TR', 'FA', 'GR',
-            'HU'
-        ],
+        'available_languages': {
+            'FR': {
+                'xmltv_id': 'C140.api.telerama.fr'
+            },
+            'EN': {
+                'xmltv_id': '140.tvguide.co.uk'
+            },
+            'AR': {}, 'DE': {},
+            'IT': {
+                'xmltv_id': 'euronews.rai.it'
+            },
+            'ES': {},
+            'PT': {}, 'RU': {}, 'TR': {}, 'FA': {}, 'GR': {},
+            'HU': {}
+        },
         'enabled': True,
         'order': 2
     },
     'arte': {
         'resolver': '/resources/lib/channels/wo/arte:get_live_url',
-        'label': 'Arte (' + utils.ensure_unicode(Script.setting['arte.language']) + ')',
+        'label': 'Arte',
         'thumb': 'channels/wo/arte.png',
         'fanart': 'channels/wo/arte_fanart.jpg',
-        'available_languages': ['FR', 'DE'],
-        'xmltv_ids': {
-            'FR': 'C111.api.telerama.fr'
-        },
-        'm3u_groups': {
-            'FR': 'France TNT'
-        },
-        'm3u_orders': {
-            'FR': 7
+        'available_languages': {
+            'FR': {
+                'xmltv_id': 'C111.api.telerama.fr',
+                'm3u_group': 'France TNT',
+                'm3u_order': 7
+            },
+            'DE': {}
         },
         'enabled': True,
         'order': 3
     },
     'france24': {
         'resolver': '/resources/lib/channels/wo/france24:get_live_url',
-        'label': 'France 24 (' + utils.ensure_unicode(Script.setting['france24.language']) + ')',
+        'label': 'France 24',
         'thumb': 'channels/wo/france24.png',
         'fanart': 'channels/wo/france24_fanart.jpg',
-        'available_languages': ['FR', 'EN', 'AR', 'ES'],
+        'available_languages': {
+            'FR': {
+                'xmltv_id': 'C529.api.telerama.fr'
+            },
+            'EN': {
+                'xmltv_id': '1183.tvguide.co.uk'
+            },
+            'AR': {}, 'ES': {}
+        },
         'enabled': True,
         'order': 4
     },
     'nhkworld': {
         'resolver': '/resources/lib/channels/wo/nhkworld:get_live_url',
-        'label': 'NHK World (' + utils.ensure_unicode(Script.setting['nhkworld.language']) + ')',
+        'label': 'NHK World',
         'thumb': 'channels/wo/nhkworld.png',
         'fanart': 'channels/wo/nhkworld_fanart.jpg',
-        'available_languages': ['Outside Japan', 'In Japan'],
+        'available_languages': {'Outside Japan': {}, 'In Japan': {}},
         'enabled': True,
         'order': 5
     },
@@ -102,19 +118,22 @@ menu = {
     },
     'dw': {
         'resolver': '/resources/lib/channels/wo/dw:get_live_url',
-        'label': 'DW (' + utils.ensure_unicode(Script.setting['dw.language']) + ')',
+        'label': 'DW',
         'thumb': 'channels/wo/dw.png',
         'fanart': 'channels/wo/dw_fanart.jpg',
-        'available_languages': ['EN', 'AR', 'ES', 'DE'],
+        'available_languages': {
+            'EN': {'xmltv_id': 'C61.api.telerama.fr'},
+            'AR': {}, 'ES': {}, 'DE': {}
+        },
         'enabled': True,
         'order': 12
     },
     'qvc': {
         'resolver': '/resources/lib/channels/wo/qvc:get_live_url',
-        'label': 'QVC (' + utils.ensure_unicode(Script.setting['qvc.language']) + ')',
+        'label': 'QVC',
         'thumb': 'channels/wo/qvc.png',
         'fanart': 'channels/wo/qvc_fanart.jpg',
-        'available_languages': ['JP', 'DE', 'IT', 'UK', 'US'],
+        'available_languages': {'JP': {}, 'DE': {}, 'IT': {}, 'UK': {}, 'US': {}},
         'enabled': True,
         'order': 15
     },
@@ -128,10 +147,10 @@ menu = {
     },
     'cgtn': {
         'resolver': '/resources/lib/channels/wo/cgtn:get_live_url',
-        'label': 'CGTN (' + utils.ensure_unicode(Script.setting['cgtn.language']) + ')',
+        'label': 'CGTN',
         'thumb': 'channels/wo/cgtn.png',
         'fanart': 'channels/wo/cgtn_fanart.jpg',
-        'available_languages': ['FR', 'EN', 'AR', 'ES', 'RU'],
+        'available_languages': {'FR': {}, 'EN': {}, 'AR': {}, 'ES': {}, 'RU': {}},
         'enabled': True,
         'order': 17
     },
@@ -156,6 +175,7 @@ menu = {
         'label': 'TV5Monde France Belgique Suisse',
         'thumb': 'channels/wo/tv5mondefbs.png',
         'fanart': 'channels/wo/tv5mondefbs_fanart.jpg',
+        'xmltv_id': 'C205.api.telerama.fr',
         'enabled': True,
         'order': 21
     },
@@ -177,10 +197,16 @@ menu = {
     },
     'rt': {
         'resolver': '/resources/lib/channels/wo/rt:get_live_url',
-        'label': 'RT (' + utils.ensure_unicode(Script.setting['rt.language']) + ')',
+        'label': 'RT',
         'thumb': 'channels/wo/rt.png',
         'fanart': 'channels/wo/rt_fanart.jpg',
-        'available_languages': ['FR', 'EN', 'AR', 'ES'],
+        'available_languages': {
+            'FR': {},
+            'EN': {
+                'xmltv_id': '853.tvguide.co.uk'
+            },
+            'AR': {}, 'ES': {}
+        },
         'enabled': True,
         'order': 24
     },

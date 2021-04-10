@@ -5,7 +5,6 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-from codequick import Script, utils
 
 # The following dictionaries describe
 # the addon's tree architecture.
@@ -20,16 +19,16 @@ root = 'live_tv'
 menu = {
     'tvp3': {
         'resolver': '/resources/lib/channels/pl/tvp:get_live_url',
-        'label': 'TVP 3 (' + utils.ensure_unicode(Script.setting['tvp3.language']) + ')',
+        'label': 'TVP 3',
         'thumb':
         'channels/pl/tvp3.png',
         'fanart':
         'channels/pl/tvp3_fanart.jpg',
-        'available_languages': [
-            "Białystok", "Bydgoszcz", "Gdańsk", "Gorzów Wielkopolski",
-            "Katowice", "Kielce", "Kraków", "Lublin", "Łódź", "Olsztyn",
-            "Opole", "Poznań", "Rzeszów", "Szczecin", "Warszawa", "Wrocław"
-        ],
+        'available_languages': {
+            "Białystok": {}, "Bydgoszcz": {}, "Gdańsk": {}, "Gorzów Wielkopolski": {},
+            "Katowice": {}, "Kielce": {}, "Kraków": {}, "Lublin": {}, "Łódź": {}, "Olsztyn": {},
+            "Opole": {}, "Poznań": {}, "Rzeszów": {}, "Szczecin": {}, "Warszawa": {}, "Wrocław": {}
+        },
         'enabled': True,
         'order': 2
     },

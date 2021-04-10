@@ -301,9 +301,6 @@ def get_francetv_video_stream(plugin,
         return final_video_url
 
     if 'dash' in all_video_datas[0][0]:
-        if download_mode:
-            xbmcgui.Dialog().ok(plugin.localize(14116), plugin.localize(30603))
-            return False
 
         is_helper = inputstreamhelper.Helper('mpd')
         if not is_helper.check_inputstream():
@@ -317,6 +314,9 @@ def get_francetv_video_stream(plugin,
         item.info.update(get_selected_item_info())
 
         if all_video_datas[0][1]:
+            if download_mode:
+                xbmcgui.Dialog().ok(plugin.localize(14116), plugin.localize(30603))
+                return False
             item.path = video_datas['url']
             token_request = json.loads('{"id": "%s", "drm_type": "%s", "license_type": "%s"}' % (id_diffusion, video_datas['drm_type'], video_datas['license_type']))
             token = urlquick.post(video_datas['token'], json=token_request).json()['token']
@@ -325,10 +325,10 @@ def get_francetv_video_stream(plugin,
             item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
             item.property['inputstream.adaptive.license_key'] = license_key
         else:
-            json_parser2 = json.loads(
-                urlquick.get(url_selected, max_age=-1).text)
+            json_parser2 = json.loads(urlquick.get(url_selected, max_age=-1).text)
             item.path = json_parser2['url']
-
+            if download_mode:
+                return download.download_video(item.path)
         return item
 
     # Return info the format is not known

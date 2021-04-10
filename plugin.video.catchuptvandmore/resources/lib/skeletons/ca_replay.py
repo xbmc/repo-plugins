@@ -27,11 +27,11 @@ menu = {
         'order': 1
     },
     'telequebec': {
-        'route': '/resources/lib/channels/ca/telequebec:list_programs',
+        'route': '/resources/lib/channels/ca/telequebec:list_categories',
         'label': 'Télé-Québec',
         'thumb': 'channels/ca/telequebec.png',
         'fanart': 'channels/ca/telequebec_fanart.jpg',
-        'enabled': False,
+        'enabled': True,
         'order': 4
     },
     'tva': {

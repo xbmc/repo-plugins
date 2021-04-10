@@ -31,7 +31,6 @@ menu = {
         'label': 'Rai News 24',
         'thumb': 'channels/it/rainews24.png',
         'fanart': 'channels/it/rainews24_fanart.jpg',
-        'xmltv_id': 'rainews.guidatv.sky.it',
         'enabled': True,
         'order': 2
     },

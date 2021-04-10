@@ -73,8 +73,7 @@ def list_categories():
     listing = []
     for category in categories:
         list_item = xbmcgui.ListItem(label=category['title'])
-        list_item.setProperty('fanart_image', category['fanart'])
-        list_item.setArt({'icon': category['thumb'], 'poster': category['thumb']})
+        list_item.setArt({'icon': category['thumb'], 'poster': category['thumb'], 'fanart': category['fanart']})
         url = '{0}?action=listing&category={1}'.format(__url__, category['category'])
         is_folder = True
         listing.append((url, list_item, is_folder))

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30110">
+        <setting label="30111" type="labelenum" id="resolution" values="272p|360p|576p|720p|1080p" default="1080p"/>
+    </category>
+    <category label="30120">
+        <setting label="30121" type="action" action="Addon.OpenSettings(plugin.video.youtube)" option="close"/>
+    </category>
+    <category label="30100">
+        <setting label="30101" type="bool" id="debug" default="false"/>
+        <setting label="30102" type="bool" id="send_error_reports" default="false"/>
+    </category>
+</settings>

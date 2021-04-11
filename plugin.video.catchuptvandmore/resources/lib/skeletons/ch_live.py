@@ -38,6 +38,7 @@ menu = {
         'label': 'RTS Un',
         'thumb': 'channels/ch/rtsun.png',
         'fanart': 'channels/ch/rtsun_fanart.jpg',
+        'xmltv_id': 'C202.api.telerama.fr',
         'enabled': True,
         'order': 9
     },
@@ -46,6 +47,7 @@ menu = {
         'label': 'RTS Deux',
         'thumb': 'channels/ch/rtsdeux.png',
         'fanart': 'channels/ch/rtsdeux_fanart.jpg',
+        'xmltv_id': 'C183.api.telerama.fr',
         'enabled': True,
         'order': 10
     },
@@ -70,6 +72,7 @@ menu = {
         'label': 'RSI La 1',
         'thumb': 'channels/ch/rsila1.png',
         'fanart': 'channels/ch/rsila1_fanart.jpg',
+        'xmltv_id': 'C200.api.telerama.fr',
         'enabled': True,
         'order': 13
     },
@@ -78,6 +81,7 @@ menu = {
         'label': 'RSI La 2',
         'thumb': 'channels/ch/rsila2.png',
         'fanart': 'channels/ch/rsila2_fanart.jpg',
+        'xmltv_id': 'C201.api.telerama.fr',
         'enabled': True,
         'order': 14
     },
@@ -86,6 +90,7 @@ menu = {
         'label': 'SRF 1',
         'thumb': 'channels/ch/srf1.png',
         'fanart': 'channels/ch/srf1_fanart.jpg',
+        'xmltv_id': 'C59.api.telerama.fr',
         'enabled': True,
         'order': 15
     },

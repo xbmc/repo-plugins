@@ -5,7 +5,6 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-from codequick import Script, utils
 
 # The following dictionaries describe
 # the addon's tree architecture.
@@ -28,25 +27,28 @@ menu = {
     },
     'arte': {
         'route': '/resources/lib/channels/wo/arte:list_categories',
-        'label': 'Arte (' + utils.ensure_unicode(Script.setting['arte.language']) + ')',
+        'label': 'Arte',
         'thumb': 'channels/wo/arte.png',
         'fanart': 'channels/wo/arte_fanart.jpg',
+        'available_languages': ['FR', 'DE', 'EN', 'ES', 'PL', 'IT'],
         'enabled': True,
         'order': 3
     },
     'france24': {
         'route': '/resources/lib/channels/wo/france24:root_catchup_tv',
-        'label': 'France 24 (' + utils.ensure_unicode(Script.setting['france24.language']) + ')',
+        'label': 'France 24',
         'thumb': 'channels/wo/france24.png',
         'fanart': 'channels/wo/france24_fanart.jpg',
+        'available_languages': ['FR', 'EN', 'AR', 'ES'],
         'enabled': True,
         'order': 4
     },
     'nhkworld': {
         'route': '/resources/lib/channels/wo/nhkworld:list_categories',
-        'label': 'NHK World (' + utils.ensure_unicode(Script.setting['nhkworld.language']) + ')',
+        'label': 'NHK World',
         'thumb': 'channels/wo/nhkworld.png',
         'fanart': 'channels/wo/nhkworld_fanart.jpg',
+        'available_languages': ['Outside Japan', 'In Japan'],
         'enabled': True,
         'order': 5
     },
@@ -108,7 +110,7 @@ menu = {
     },
     'rt': {
         'route': '/resources/lib/channels/wo/rt:list_categories',
-        'label': 'RT (' + utils.ensure_unicode(Script.setting['rt.language']) + ')',
+        'label': 'RT',
         'thumb': 'channels/wo/rt.png',
         'fanart': 'channels/wo/rt_fanart.jpg',
         'available_languages': ['FR', 'EN'],

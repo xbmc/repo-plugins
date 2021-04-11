@@ -5,7 +5,6 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-from codequick import Script, utils
 
 # The following dictionaries describe
 # the addon's tree architecture.
@@ -76,10 +75,10 @@ menu = {
     },
     'realmadridtv': {
         'resolver': '/resources/lib/channels/es/realmadridtv:get_live_url',
-        'label': 'Realmadrid TV (' + utils.ensure_unicode(Script.setting['realmadridtv.language']) + ')',
+        'label': 'Realmadrid TV',
         'thumb': 'channels/es/realmadridtv.png',
         'fanart': 'channels/es/realmadridtv_fanart.jpg',
-        'available_languages': ['EN', 'ES'],
+        'available_languages': {'EN': {}, 'ES': {}},
         'enabled': True,
         'order': 8
     },

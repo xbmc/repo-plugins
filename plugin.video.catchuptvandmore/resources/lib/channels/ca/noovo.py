@@ -40,7 +40,8 @@ def list_programs(plugin, item_id, **kwargs):
     Build programs listing
     - ...
     """
-    resp = urlquick.get(URL_EMISSIONS)
+    resp = urlquick.get(URL_EMISSIONS,
+                        headers={'User-Agent': web_utils.get_random_ua()})
     root = resp.parse()
 
     for program_datas in root.iterfind(".//div[@class='card']"):
@@ -60,7 +61,8 @@ def list_programs(plugin, item_id, **kwargs):
 @Route.register
 def list_seasons(plugin, item_id, program_url, **kwargs):
 
-    resp = urlquick.get(program_url)
+    resp = urlquick.get(program_url,
+                        headers={'User-Agent': web_utils.get_random_ua()})
     root = resp.parse()
     if root.find(".//ul[@class='dropdown__menu']") is not None:
         root = resp.parse("ul", attrs={"class": "dropdown__menu"})
@@ -81,7 +83,8 @@ def list_seasons(plugin, item_id, program_url, **kwargs):
 @Route.register
 def list_videos(plugin, item_id, season_url, page, **kwargs):
 
-    resp = urlquick.get(season_url)
+    resp = urlquick.get(season_url,
+                        headers={'User-Agent': web_utils.get_random_ua()})
     list_season_id = re.compile(r'\?seasonId\=(.*?)\"').findall(resp.text)
 
     if len(list_season_id) > 0:

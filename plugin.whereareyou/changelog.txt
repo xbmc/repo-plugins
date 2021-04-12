@@ -1,3 +1,6 @@
+v.0.4.3
+- fix for crash if using Harmony Hub Control with an activity
+
 v.0.4.2
 - fix for logging issue with Python3
 

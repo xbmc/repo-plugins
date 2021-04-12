@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rivedila7" name="LA7-LA7d" version="5.1.0" provider-name="Luivit, Testato">
+<addon id="plugin.video.rivedila7" name="LA7-LA7d" version="5.2.0" provider-name="Luivit, Testato">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="0.0.0"/>
@@ -29,9 +29,8 @@
       <screenshot>resources/screenshots/screenshot-01.jpg</screenshot>
       <screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
     </assets>
-    <news>5.1.0 (2021-03-12)
-      - Fix On-Demand homepages scraping
-      - Removed minimal versions on import addon
+    <news>5.2.0 (2021-03-29)
+      - Fixed Title of Live channels
     </news>
   </extension>
 </addon>

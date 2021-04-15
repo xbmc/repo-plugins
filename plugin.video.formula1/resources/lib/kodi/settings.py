@@ -10,8 +10,8 @@ class Settings:
     def __init__(self, addon):
         self.addon = addon
 
-    def get(self, id):
-        return self.addon.getSetting(id)
+    def get(self, setting_id):
+        return self.addon.getSetting(setting_id)
 
-    def set(self, id, value):
-        return self.addon.setSetting(id, value)
+    def set(self, setting_id, value):
+        return self.addon.setSetting(setting_id, value)

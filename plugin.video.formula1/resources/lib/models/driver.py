@@ -1,9 +1,8 @@
-from resources.lib.models.list_item import ListItem
 import xbmcgui
+from resources.lib.models.list_item import ListItem
 
 
 class Driver(ListItem):
-    thumb = ""
     info = {}
 
     def to_list_item(self, addon_base):
@@ -21,8 +20,8 @@ class Driver(ListItem):
     @staticmethod
     def get_label(item):
         return "{} - {} {} - {} PTS".format(
-            item["positionNumber"],
+            item.get("positionNumber", "?"),
             item["driverFirstName"],
             item["driverLastName"],
-            str(item["championshipPoints"])
+            str(item.get("championshipPoints", 0))
         )

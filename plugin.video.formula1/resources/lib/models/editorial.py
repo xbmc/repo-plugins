@@ -1,10 +1,9 @@
-from resources.lib.models.list_item import ListItem
 import urllib.parse
 import xbmcgui
+from resources.lib.models.list_item import ListItem
 
 
 class Editorial(ListItem):
-    thumb = ""
     uri = ""
     info = {}
 

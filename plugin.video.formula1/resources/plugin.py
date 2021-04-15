@@ -1,13 +1,15 @@
-from resources.lib.f1.api import Api
-from resources.lib.kodi.items import Items
-from resources.lib.kodi.settings import Settings
-from resources.routes import *
 import sys
 import urllib.parse
+
 import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
+
+from resources.lib.f1.api import Api
+from resources.lib.kodi.items import Items
+from resources.lib.kodi.settings import Settings
+from resources.routes import *
 
 addon = xbmcaddon.Addon()
 addon_id = addon.getAddonInfo("id")

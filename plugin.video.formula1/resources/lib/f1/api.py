@@ -1,11 +1,12 @@
 import base64
 import datetime
-import requests
 import time
 import urllib.parse
+
+import requests
 import xbmc
 
-from .api_collection import ApiCollection
+from resources.lib.f1.api_collection import ApiCollection
 from resources.lib.models.constructor import Constructor
 from resources.lib.models.driver import Driver
 from resources.lib.models.editorial import Editorial
@@ -153,7 +154,7 @@ class Api:
         for item in items:
 
             if item.get("contentType", "") == "assemblyRegionVideoListByTag":
-                editorial = Editorial(id=item["tags"][0]["id"], label=item["title"])
+                editorial = Editorial(item_id=item["tags"][0]["id"], label=item["title"])
                 editorial.thumb = self._get_thumbnail(item["videos"][0])
                 editorial.uri = item["tags"][0]["id"]
                 collection.items.append(editorial)
@@ -165,7 +166,7 @@ class Api:
                     collection.items.append(video)
 
             elif item_type == "drivers":
-                driver = Driver(id=item["driverReference"], label=Driver.get_label(item))
+                driver = Driver(item_id=item["driverReference"], label=Driver.get_label(item))
                 driver.thumb = item["driverImage"]
                 driver.info = {
                     "team": item["teamName"]
@@ -173,7 +174,8 @@ class Api:
                 collection.items.append(driver)
 
             elif item_type == "constructors":
-                constructor = Constructor(id=item["teamKey"], label=Constructor.get_label(item))
+                team_key = item["teamKey"]
+                constructor = Constructor(item_id=team_key, label=Constructor.get_label(item))
                 constructor.thumb = item["teamCroppedImage"]
                 constructor.info = {
                     "drivers": Constructor.get_drivers(item["drivers"])
@@ -181,7 +183,7 @@ class Api:
                 collection.items.append(constructor)
 
             elif item_type == "raceresult":
-                result = Result(id=item["driverReference"], label=Result.get_label(item))
+                result = Result(item_id=item["driverReference"], label=Result.get_label(item))
                 result.thumb = item["driverImage"]
                 result.info = {
                     "name": "{} {}".format(item["driverFirstName"], item["driverLastName"]),
@@ -191,7 +193,7 @@ class Api:
 
             elif item_type == "events" and item.get("type") == "race":
                 event_ended = self._parse_date(item["meetingEndDate"]) < datetime.datetime.now()
-                event = Event(id=item["meetingKey"], label=item["meetingOfficialName"])
+                event = Event(item_id=item["meetingKey"], label=item["meetingOfficialName"])
                 event.thumb = item["countryFlag"]
                 event.info = {
                     "description": Event.get_description(item, event_ended),
@@ -200,7 +202,7 @@ class Api:
                 collection.items.append(event)
 
             elif "ooyalaVideoId" in item:
-                video = Video(id=item["ooyalaVideoId"], label=item["caption"])
+                video = Video(item_id=item["ooyalaVideoId"], label=item["caption"])
                 video.thumb = self._get_thumbnail(item)
                 video.uri = item["ooyalaVideoId"]
                 video.info = {

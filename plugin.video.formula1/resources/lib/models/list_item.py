@@ -5,9 +5,10 @@ class ListItem:
     id = 0
     label = ""
     label2 = None
+    thumb = ""
 
-    def __init__(self, id, label):
-        self.id = id
+    def __init__(self, item_id, label):
+        self.id = item_id
         self.label = label
 
     def to_list_item(self, addon_base):

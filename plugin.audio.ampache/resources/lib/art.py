@@ -20,10 +20,10 @@ user_mediaDir = os.path.join( user_dir , 'media' )
 cacheDir = os.path.join( user_mediaDir , 'cache' )
 
 def cacheArt(imageID,elem_type,url=None):
-    cacheDirType = os.path.join( cacheDir , elem_type )
-    #security check
-    if imageID is None or imageID == "":
+    if not imageID or not url:
         raise NameError
+
+    cacheDirType = os.path.join( cacheDir , elem_type )
    
     possible_ext = ["jpg", "png" , "bmp", "gif", "tiff"]
     for ext in possible_ext:
@@ -39,11 +39,14 @@ def cacheArt(imageID,elem_type,url=None):
     ampacheConnect.id = imageID
     ampacheConnect.type = elem_type
     
-    if url:
-        #old api version
-        headers,contents = ampacheConnect.handle_request(url)
-    else:
-        headers,contents = ampacheConnect.ampache_binary_request(action)
+    try:
+        if(int(ampache.getSetting("api-version"))) < 400001:
+            #old api version
+            headers,contents = ampacheConnect.handle_request(url)
+        else:
+            headers,contents = ampacheConnect.ampache_binary_request(action)
+    except AmpacheConnect.ConnectionError:
+        raise NameError
     #xbmc.log("AmpachePlugin::CacheArt: File needs fetching, id " + imageID,xbmc.LOGDEBUG)
     extension = headers['content-type']
     if extension:
@@ -64,6 +67,7 @@ def cacheArt(imageID,elem_type,url=None):
                 fname = imageID + ".jpg"
             else:
                 fname = imageID + '.' + subtype
+
             pathImage = os.path.join( cacheDirType , fname )
             with open( pathImage, 'wb') as f:
                 f.write(contents)
@@ -88,13 +92,17 @@ def get_artLabels(albumArt):
 
 #get_art, url is used for legacy purposes
 def get_art(object_id,elem_type,url=None):
-    if object_id == None:
-        albumArt = "DefaultFolder.png"
+
+    albumArt = "DefaultFolder.png"
+    #no url, no art, so no need to activate a connection
+    if not object_id or not url:
+        return albumArt
     try:
         albumArt = cacheArt(object_id,elem_type,url)
     except NameError:
         albumArt = "DefaultFolder.png"
-    #xbmc.log("AmpachePlugin::get_art: albumArt - " + str(albumArt), xbmc.LOGDEBUG )
+
+    #xbmc.log("AmpachePlugin::get_art: id - " + object_id + " - albumArt - " + str(albumArt), xbmc.LOGDEBUG )
     return albumArt
 
 

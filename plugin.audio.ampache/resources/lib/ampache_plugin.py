@@ -135,24 +135,28 @@ def getNestedTypeId(node,elem_type):
 #theads, one for request
 def precacheArt(elem,object_type):
     elem_type = ut.otype_to_type(object_type)
+    allid=set()
     if elem_type != "album" and elem_type != "song" and elem_type != "artist":
         return
-    art_type = "album"
     threadList = []
     for node in elem.iter(elem_type):
         if elem_type == "song":
+            art_type = "album"
             try:
                 object_id = getNestedTypeId(node,"album")
             except:
                 object_id = None
         else:
-            try:
-                object_id = node.attrib["id"]
-            except:
-                object_id = None
-        if object_id == None:
+            art_type = elem_type
+            object_id = node.attrib["id"]
+        #avoid to have duplicate threads with the same object_id
+        if object_id not in allid:
+            allid.add(object_id)
+        else:
             continue
-        image_url = check_get_art_url(node)
+        image_url = node.findtext("art")
+        if not object_id or not image_url:
+            continue
         x = threading.Thread(target=art.get_art,args=(object_id,art_type,image_url,))
         threadList.append(x)
     #start threads
@@ -161,12 +165,6 @@ def precacheArt(elem,object_type):
     #join threads
     for x in threadList:
         x.join()
-
-def check_get_art_url(node):
-    url = None
-    if(int(ampache.getSetting("api-version"))) < 400001:
-        url = node.findtext("art")
-    return url
 
 def addLinks(elem,object_type,useCacheArt,mode):
 
@@ -194,20 +192,20 @@ def addLinks(elem,object_type,useCacheArt,mode):
                 else:
                     continue
                 artist_id = getNestedTypeId(node,"artist")
-                if artist_id is not None and artist_id != "":
+                if artist_id:
                     cm.append( ( ut.tString(30141),"Container.Update(%s?object_id=%s&mode=1&submode=6)" % 
                         ( sys.argv[0],artist_id ) ) )
 
                 name = get_album_artist_name(node)
                 if useCacheArt:
-                    image_url = check_get_art_url(node)
+                    image_url = node.findtext("art")
                     image = art.get_art(object_id,elem_type,image_url)
             except:
                 xbmc.log("AmpachePlugin::addLinks: album_id error", xbmc.LOGDEBUG)
         elif elem_type == "artist":
-            useCacheArt = True
-            image_url = check_get_art_url(node)
-            image = art.get_art(object_id,elem_type,image_url)
+            if useCacheArt:
+                image_url = node.findtext("art")
+                image = art.get_art(object_id,elem_type,image_url)
         else:
             useCacheArt = False
 
@@ -253,6 +251,9 @@ def addPlayLinks(elem, object_type , object_subtype=None):
     elif elem_type == "podcast_episode":
         xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_LABEL)
 
+    allid=set()
+    albumTrack={}
+
     for node in elem.iter(elem_type):
         object_id = node.attrib["id"]
         if not object_id:
@@ -267,10 +268,17 @@ def addPlayLinks(elem, object_type , object_subtype=None):
         liz.setLabel(object_title)
 
         if elem_type == "song":
-            image_url = check_get_art_url(node)
+            image_url = node.findtext("art")
             try:
+                #speed up art management for album songs, avoid duplicate
+                #calls
                 album_id = getNestedTypeId(node,"album")
-                albumArt = art.get_art(album_id,"album",image_url)
+                if album_id not in allid:
+                    allid.add(album_id)
+                    albumArt = art.get_art(album_id,"album",image_url)
+                    albumTrack[album_id]=albumArt
+                else:
+                    albumArt=albumTrack[album_id]
             except:
                 albumArt = art.get_art(None,"album",image_url)
 
@@ -281,13 +289,13 @@ def addPlayLinks(elem, object_type , object_subtype=None):
             cm = []
 
             artist_id = getNestedTypeId(node,"artist")
-            if artist_id is not None and artist_id != "":
+            if artist_id:
                 cm.append( ( ut.tString(30138),
                 "Container.Update(%s?object_id=%s&mode=1&submode=6)" % (
                     sys.argv[0],artist_id ) ) )
 
             album_id = getNestedTypeId(node,"album")
-            if album_id is not None and album_id != "":
+            if album_id:
                 cm.append( ( ut.tString(30139),
                 "Container.Update(%s?object_id=%s&mode=2&submode=6)" % (
                     sys.argv[0],album_id ) ) )
@@ -573,15 +581,14 @@ def get_random(object_type, random_items):
         return
 
     seq = random.sample(list(range(items)),random_items)
+    action = ut.otype_to_type(object_type)
     xbmc.log("AmpachePlugin::get_random: seq " + str(seq), xbmc.LOGDEBUG )
     elements = []
+    ampConn = ampache_connect.AmpacheConnect()
     for item_id in seq:
         try:
-            ampConn = ampache_connect.AmpacheConnect()
-
-            ampConn.offset = item_id
-            ampConn.limit = 1
-            elem = ampConn.ampache_http_request(object_type)
+            ampConn.filter = item_id
+            elem = ampConn.ampache_http_request(action)
             addItems( object_type, mode , elem)
         except:
             pass

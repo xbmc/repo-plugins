@@ -87,7 +87,9 @@ class Catalog:
                     title='* %s' % kodiutils.localize(30204),  # * All seasons
                     path=kodiutils.url_for('show_catalog_program_season', program=program_id, season='-1'),
                     art_dict={
-                        'fanart': program.background,
+                        'fanart': program.fanart,
+                        'poster': program.poster,
+                        'landscape': program.thumb,
                     },
                     info_dict={
                         'tvshowtitle': program.title,
@@ -105,7 +107,9 @@ class Catalog:
                     title=season.title,  # kodiutils.localize(30205, season=season.number),  # Season {season}
                     path=kodiutils.url_for('show_catalog_program_season', program=program_id, season=season.uuid),
                     art_dict={
-                        'fanart': program.background,
+                        'fanart': program.fanart,
+                        'poster': program.poster,
+                        'landscape': program.thumb,
                     },
                     info_dict={
                         'tvshowtitle': program.title,
@@ -123,7 +127,9 @@ class Catalog:
                     title=kodiutils.localize(30059, program=program.title),  # Clips for {program}
                     path=kodiutils.url_for('show_catalog_program_clips', program=program_id),
                     art_dict={
-                        'fanart': program.background,
+                        'fanart': program.fanart,
+                        'poster': program.poster,
+                        'landscape': program.thumb,
                     },
                     info_dict={
                         'tvshowtitle': program.title,

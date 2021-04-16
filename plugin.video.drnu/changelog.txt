@@ -1,8 +1,13 @@
+﻿[B]Version 5.0.16 - 2021-03-30[/B]
+- fix bug on ok() dialog in matrix
+- fix bugs in favorit programs functionality
+- new setting to have area chooser item in root
+
 [B]Version 5.0.15 - 2021-03-13[/B]
 - Add buggalo error submit to kodi.drnu gmail
 - fix bug for write subtitle files on libreelec, kodi 18.9
 
-﻿[B]Version 5.0.14 - 2021-03-06[/B]
+[B]Version 5.0.14 - 2021-03-06[/B]
 - Bumping version number, to re-activate addon in leia addon channel
 - Re-factor code to work on both python2 and python 3
 

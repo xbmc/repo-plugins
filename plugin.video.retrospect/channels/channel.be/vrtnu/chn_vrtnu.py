@@ -3,6 +3,7 @@
 import datetime
 
 from resources.lib import chn_class
+from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.mediaitem import MediaItem
 from resources.lib.helpers.htmlhelper import HtmlHelper
 from resources.lib.regexer import Regexer
@@ -12,7 +13,6 @@ from resources.lib.urihandler import UriHandler
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.vault import Vault
 from resources.lib.helpers.datehelper import DateHelper
-from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.textures import TextureHandler
 
 
@@ -39,7 +39,7 @@ class Channel(chn_class.Channel):
         self.baseUrl = "https://www.vrt.be"
 
         # first regex is a bit tighter than the second one.
-        episode_regex = r'<nui-tile href="(?<url>/vrtnu[^"]+)"[^>]*>\s*<h3[^>]*>\s*<a[^>]+>' \
+        episode_regex = r'<nui-tile href="(?<url>/vrtnu[^"]+).relevant/"[^>]*>\s*<h3[^>]*>\s*<a[^>]+>' \
                         r'(?<title>[^<]+)</a>\s*</h3>\s*<div[^>]+>(?:\s*<p>)?(?<description>' \
                         r'[\w\W]{0,2000}?)(?:</p>)?\W*</div>\s*(?:<p[^>]*' \
                         r'data-brand="(?<channel>[^"]+)"[^>]*>[^<]+</p>)?\s*(?:<img[\w\W]{0,100}?' \
@@ -74,16 +74,15 @@ class Channel(chn_class.Channel):
                               parser=[":items", "par", ":items", "categories", "items"],
                               creator=self.create_category)
 
-        folder_regex = r'<li class="vrt-labelnav--item "[^>]*>\s*(?:<h2[^<]*>\s*)?<a[^>]*href="(?<url>[^"]+)"[^>]*>(?:\W*<nui[^>]*>\W*)?(?<title>[^<]+)</'
+        folder_regex = r'<option value="#([^"]+)[^>]*>([^<]+)</option>'
         folder_regex = Regexer.from_expresso(folder_regex)
         self._add_data_parser("*", name="Folder/Season parser",
+                              preprocessor=self.extract_lazy_url,
                               parser=folder_regex, creator=self.create_folder_item)
 
-        video_regex = r'<a[^>]+href="(?<url>/vrtnu/(?:[^/]+/){2}[^/]*?(?<year2>\d*)/[^"]+)"[^>]*>' \
-                      r'\W*(?<title>[^<]+)(?:<br\s*/>\s*)?</a>\s*</h3>\s*<p[^>]*>\W*(?<channel>[^<]+)' \
-                      r'</p>\s*(?:<p[^<]+</p>\s*)?<div[^>]*class="meta[^>]*>\s*(?:<time[^>]+datetime=' \
-                      r'"(?<year>\d+)-(?<month>\d+)-(?<day>\d+))?[\w\W]{0,1000}?ata-responsive-image=' \
-                      r'"(?<thumburl>[^"]+)'
+        video_regex = r'vrtnu-tile[^>]+link="(?<url>[^"]+)[^>]+>\W*<vrtnu-image[^>]+src=' \
+                      r'"(?<thumburl>[^"]+/(?<year>\d{4})/(?<month>\d+)/(?<day>\d+)[^"]+)"' \
+                      r'[\w\W]{100,2000}?<h3[^>]*>(?<title>[^<]+)<[^<]+(?:<div[^>]+>(?<description>[^<]+))?'
 
         # No need for a subtitle for now as it only includes the textual date
         video_regex = Regexer.from_expresso(video_regex)
@@ -163,6 +162,8 @@ class Channel(chn_class.Channel):
         # POST
         # Content-Type:application/json
         # https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1/tokens
+
+        self.__folder_map = {}
 
         # ===============================================================================================================
         # Test cases:
@@ -301,6 +302,27 @@ class Channel(chn_class.Channel):
         items.append(channels)
 
         Logger.debug("Pre-Processing finished")
+        return data, items
+
+    def extract_lazy_url(self, data):
+        """ Extract the lazy load URL from a TV Show page.
+
+        The return values should always be instantiated in at least ("", []).
+
+        :param str data: The retrieve data that was loaded for the current item and URL.
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+
+        """
+
+        Logger.info("Performing Pre-Processing")
+        items = []
+
+        lazy_urls = Regexer.do_regex(r'data-lazy-src="([^"]+)" id="([^"]+)', data)
+        for folder_url in lazy_urls:
+            self.__folder_map[folder_url[1]] = folder_url[0]
+
         return data, items
 
     def list_channels(self, data):
@@ -444,6 +466,7 @@ class Channel(chn_class.Channel):
         if item is None:
             return None
 
+        item.url = "{}/".format(item.url)
         item.description = HtmlHelper.to_text(item.description)
 
         # update artswork
@@ -470,10 +493,13 @@ class Channel(chn_class.Channel):
 
         """
 
-        item = chn_class.Channel.create_folder_item(self, result_set)
-        if item is None:
+        folder_id = result_set[0]
+        folder_url = self.__folder_map.get(folder_id)
+        if not folder_url:
             return None
 
+        folder_url = "{}{}".format(self.baseUrl, folder_url)
+        item = MediaItem(result_set[1], folder_url)
         item.name = item.name.title()
         return item
 

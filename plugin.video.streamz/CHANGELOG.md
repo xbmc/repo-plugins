@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.6](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.6) (2021-04-01)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.5...v1.0.6)
+
+**Merged pull requests:**
+
+- Implement new authentication method [\#38](https://github.com/add-ons/plugin.video.streamz/pull/38) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.0.5](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.5) (2021-02-04)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.4...v1.0.5)

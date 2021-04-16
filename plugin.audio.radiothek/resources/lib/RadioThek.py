@@ -62,11 +62,41 @@ class RadioThek:
     livestream_dd = {
         'oe1': 'https://oe1dd.mdn.ors.at/out/u/oe1dd/manifest.m3u8'
     }
+    livestream_qualities_shoutcast = {
+        'q1a': 'https://orf-live.ors-shoutcast.at/%s-q1a',
+        'q2a': 'https://orf-live.ors-shoutcast.at/%s-q2a',
+    }
+    livestream_qualities_hls_aac = {
+        'q1a': 'https://orf-live-%s.mdn.ors.at/out/u/%s/q1a/manifest.m3u8',
+        'q2a': 'https://orf-live-%s.mdn.ors.at/out/u/%s/q2a/manifest.m3u8',
+        'q3a': 'https://orf-live-%s.mdn.ors.at/out/u/%s/q3a/manifest.m3u8',
+        'q4a': 'https://orf-live-%s.mdn.ors.at/out/u/%s/q4a/manifest.m3u8',
+        'qxa': 'https://orf-live-%s.mdn.ors.at/out/u/%s/qxa/manifest.m3u8',
+    }
 
-    def __init__(self, local_resource_path, translation):
+    def __init__(self, local_resource_path, translation, stream_proto, stream_quality):
         self.log("RadioThek API loaded")
         self.local_resource_path = local_resource_path
         self.translation = translation
+        # hls or shoutcast
+        self.stream_proto = stream_proto
+        # shoutcast: q1a, q2a
+        # hls: q1a, q2a, q3a, q4a, qxa
+        self.stream_quality = stream_quality
+
+        if self.stream_proto == 'shoutcast':
+            self.log("Using shoutcast streaming protocol")
+            if self.stream_quality not in self.livestream_qualities_shoutcast:
+                # Default bad quality settings to highest.
+                self.stream_quality = 'q2a'
+            self.livestream_recipe = self.livestream_qualities_shoutcast[self.stream_quality]
+        else:
+            self.log("Using hls streaming protocol")
+            if self.stream_quality not in self.livestream_qualities_hls_aac:
+                # Default bad quality settings to adaptive.
+                self.stream_quality = 'qxa'
+            self.livestream_recipe = self.livestream_qualities_hls_aac[self.stream_quality]
+        self.log("Using quality setting %s" % self.stream_quality)
 
     @staticmethod
     def build_stream_url(host_station, loop_stream_id, offset):
@@ -518,7 +548,7 @@ class RadioThek:
                     list_items.append(episode)
 
             if 'livestream' in item:
-                link = item['livestream']
+                link = self.build_livestream_url(station)
                 thumbnail = ""
                 backdrop = ""
                 logo = self.get_directory_image({'station': station}, 'logo')
@@ -526,6 +556,12 @@ class RadioThek:
                     episode = Episode(station, title, description, [link], 'Livestream', thumbnail, backdrop, station, logo)
                     list_items.append(episode)
         return list_items
+
+    def build_livestream_url(self, channel):
+        if self.stream_proto == 'hls':
+            return self.livestream_recipe % (channel, channel)
+        else:
+            return self.livestream_recipe % channel
 
     def get_search(self, query):
         list_items = []

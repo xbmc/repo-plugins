@@ -89,8 +89,7 @@ class TvGuide:
                 title=title,
                 path=path,
                 art_dict=dict(
-                    icon=broadcast.image,
-                    thumb=broadcast.image,
+                    thumb=broadcast.thumb,
                 ),
                 info_dict=dict(
                     title=title,

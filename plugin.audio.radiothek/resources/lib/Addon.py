@@ -219,6 +219,26 @@ def getSearchHistory(pluginhandle):
             add_directory(search_query, "", "", "", "", search_query, "search_detail", pluginhandle)
 
 
+def getAudioQuality():
+    quality_list = ['q1a', 'q2a', 'q3a', 'q4a', 'qxb']
+    audio_protocol = getAudioProtocol()
+    if audio_protocol == 'shoutcast':
+        quality_index = int(xbmcaddon.Addon().getSetting('audioQuality'))
+    else:
+        quality_index = int(xbmcaddon.Addon().getSetting('audioQualityHLS'))
+
+    try:
+        return quality_list[quality_index]
+    except:
+        return quality_list[0]
+
+
+def getAudioProtocol():
+    if xbmcaddon.Addon().getSetting('useHlsLive') == 'true':
+        return 'hls'
+    return 'shoutcast'
+
+
 def main(pluginhandle):
     params = parameters_string_to_dict(sys.argv[2])
     mode = params.get('mode')
@@ -235,6 +255,7 @@ def main(pluginhandle):
         list_items = api.get_podcasts()
         for list_item in list_items:
             add_directory_item(list_item,  "podcast_detail", pluginhandle)
+        xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
         xbmcplugin.endOfDirectory(pluginhandle)
     elif mode == 'highlights':
         list_items = api.get_highlights()
@@ -245,16 +266,19 @@ def main(pluginhandle):
         list_items = api.get_tags()
         for list_item in list_items:
             add_directory_item(list_item,  "tags_detail", pluginhandle)
+        xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
         xbmcplugin.endOfDirectory(pluginhandle)
     elif mode == 'archive':
         list_items = api.get_archive()
         for list_item in list_items:
             add_directory_item(list_item, "podcast_detail", pluginhandle)
+        xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
         xbmcplugin.endOfDirectory(pluginhandle)
     elif mode == 'live':
         episodes = api.get_livestream()
         for episode in episodes:
             add_stream(episode, pluginhandle)
+        xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
         xbmcplugin.endOfDirectory(pluginhandle)
     elif mode == 'search':
         add_directory(get_translation(30014, "Search ..."), "", "", "", "", "", "search_detail", pluginhandle)
@@ -314,4 +338,6 @@ def main(pluginhandle):
 settings = xbmcaddon.Addon()
 translation_ref = settings.getLocalizedString
 resource_path = get_media_path()
-api = RadioThek(resource_path, translation_ref)
+protocol = getAudioProtocol()
+quality = getAudioQuality()
+api = RadioThek(resource_path, translation_ref, protocol, quality)

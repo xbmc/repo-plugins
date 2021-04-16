@@ -263,36 +263,28 @@ msgid "Online exclusive"
 msgstr "Exclusief online"
 
 msgctxt "#30101"
-msgid "Last episode"
-msgstr "Laatste aflevering"
-
-msgctxt "#30102"
-msgid "Last chance"
-msgstr "Laatste kans"
-
-msgctxt "#30103"
-msgid "New"
-msgstr "Nieuw"
-
-msgctxt "#30104"
 msgid "Full season"
 msgstr "Volledig seizoen"
 
-msgctxt "#30105"
+msgctxt "#30102"
 msgid "Complete series"
 msgstr "Volledige reeks"
 
-msgctxt "#30106"
-msgid "Brand new"
-msgstr "Gloednieuw"
-
-msgctxt "#30107"
-msgid "New episodes"
-msgstr "Nieuwe afleveringen"
+msgctxt "#30103"
+msgid "From the archive"
+msgstr "Uit het archief"
 
 msgctxt "#30120"
 msgid "Short film"
 msgstr "Kortfilm"
+
+msgctxt "#30129"
+msgid "Climate"
+msgstr "Klimaat"
+
+msgctxt "#30130"
+msgid "Cycling"
+msgstr "Koers"
 
 ### APPLICATION
 msgctxt "#30131"
@@ -461,7 +453,7 @@ msgstr "Er werden geen gevolgde programma's gevonden."
 
 msgctxt "#30420"
 msgid "Please unselect/select favorites to unfollow/follow."
-msgstr "Duidt aan welke programma's je als favorieten wil volgen."
+msgstr "Duid aan welke programma's je als favorieten wil volgen."
 
 msgctxt "#30421"
 msgid "Now:"
@@ -1046,3 +1038,7 @@ msgstr "Geen stream gevonden, gelieve opnieuw te proberen!"
 msgctxt "#30988"
 msgid "InputStream Adaptive is not available, therefore pause and timeshift of live streams may not work"
 msgstr "InputStream Adaptive is niet geïnstalleerd, daarom kan het pauzeren en timeshift van live tv niet werken"
+
+msgctxt "#30989"
+msgid "Failed to load a compatible stream, please try toggling 'Use Widevine DRM' in the add-on Playback settings."
+msgstr "Kan geen compatibele stream laden, probeer 'Gebruik Widevine DRM' in of uit te schakelen in de add-on afspeelinstellingen."

@@ -11,7 +11,6 @@ from datetime import timedelta
 
 from resources.lib import kodiutils
 from resources.lib.vtmgo import ResolvedStream, util
-from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -21,14 +20,10 @@ class VtmGoStream:
 
     _API_KEY = 'jL3yNhGpDsaew9CqJrDPq2UzMrlmNVbnadUXVOET'
 
-    def __init__(self):
+    def __init__(self, auth=None):
         """ Initialise object """
-        self._auth = VtmGoAuth(kodiutils.get_setting('username'),
-                               kodiutils.get_setting('password'),
-                               'VTM',
-                               kodiutils.get_setting('profile'),
-                               kodiutils.get_tokens_path())
-        self._tokens = self._auth.get_tokens()
+        self._auth = auth
+        self._tokens = self._auth.get_tokens() if self._auth else None
 
     def _mode(self):
         """ Return the mode that should be used for API calls """

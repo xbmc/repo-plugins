@@ -1,0 +1,53 @@
+# Kodi Media Center language file
+# Addon Name: Comingsoon Trailer
+# Addon id: plugin.video.comingsoon.it
+# Addon Provider: phate89
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: phate89\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32001"
+msgid "Previous page"
+msgstr "Previous page"
+
+msgctxt "#32002"
+msgid "Next page"
+msgstr "Next page"
+
+msgctxt "#32003"
+msgid "Previous week"
+msgstr "Previous week"
+
+msgctxt "#32004"
+msgid "Next week"
+msgstr "Next week"
+
+msgctxt "#32005"
+msgid "Movies in theaters"
+msgstr "Movies in theaters"
+
+msgctxt "#32006"
+msgid "Movies coming soon"
+msgstr "Movies coming soon"
+
+msgctxt "#32007"
+msgid "In theaters from"
+msgstr "In theaters from"
+
+msgctxt "#32012"
+msgid "Prefer hd videos if available"
+msgstr "Prefer hd videos if available"
+
+msgctxt "#32013"
+msgid "Retrieve additional details for movies"
+msgstr "Retrieve additional details for movies"

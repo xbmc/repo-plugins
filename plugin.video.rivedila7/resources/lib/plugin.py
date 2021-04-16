@@ -116,12 +116,12 @@ def addDirectoryItem_nodup(parameters, li, title=titolo_global, folder=True):
 
 def play_dirette(url,live):
     if live:
-        regex5 = 'emissioneString =  "(.*?)"'
-
         if url == url_live_la7:
             url_title = url_base
+            regex5 = 'emissioneString\s*=\s*"(.*?)"'
         elif url == url_live_la7d:
             url_title = url_base_la7d
+            regex5 = 'emissioneStringLa7d\s*=\s*"(.*?)"'
         #xbmc.log('URL TITLE-----: '+str(url_title),xbmc.LOGINFO)
         
         req = Request(url_title,headers={'user-agent': headers_set['user-agent']})

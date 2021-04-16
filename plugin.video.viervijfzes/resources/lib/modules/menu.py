@@ -3,6 +3,8 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
+import logging
+
 from resources.lib import kodiutils
 from resources.lib.kodiutils import TitleItem
 from resources.lib.viervijfzes import STREAM_DICT
@@ -12,6 +14,8 @@ try:  # Python 3
     from urllib.parse import quote
 except ImportError:  # Python 2
     from urllib import quote
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class Menu:
@@ -100,11 +104,6 @@ class Menu:
         :type item: Union[Program, Episode]
         :rtype TitleItem
         """
-        art_dict = {
-            'thumb': item.cover,
-            'cover': item.cover,
-            'fanart': item.background or item.cover,
-        }
         info_dict = {
             'title': item.title,
             'plot': item.description,
@@ -120,6 +119,13 @@ class Menu:
                 'mediatype': None,
                 'season': len(item.seasons) if item.seasons else None,
             })
+
+            art_dict = {
+                'poster': item.poster,
+                'landscape': item.thumb,
+                'thumb': item.thumb,
+                'fanart': item.fanart,
+            }
 
             visible = True
             if isinstance(item.episodes, list) and not item.episodes:
@@ -171,18 +177,23 @@ class Menu:
                 'episode': item.number,
             })
 
+            art_dict = {
+                'landscape': item.thumb,
+                'thumb': item.thumb,
+                'fanart': item.thumb,
+            }
+
             stream_dict = STREAM_DICT.copy()
             stream_dict.update({
                 'duration': item.duration,
             })
 
-            if item.path:
+            if item.uuid:
+                # We have an UUID and can play this item directly
+                path = kodiutils.url_for('play_catalog', uuid=item.uuid)
+            else:
                 # We don't have an UUID, and first need to fetch the video information from the page
                 path = kodiutils.url_for('play_from_page', page=quote(item.path, safe=''))
-            else:
-                # We have an UUID and can play this item directly
-                # This is not preferred since we will lack metadata
-                path = kodiutils.url_for('play_catalog', uuid=item.uuid)
 
             return TitleItem(title=info_dict['title'],
                              path=path,

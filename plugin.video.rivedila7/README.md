@@ -1,8 +1,15 @@
 # LA7-LA7d Kodi plugin
 Live Streaming, Replay the last week, LA7 Prime, On-Demand programs, News & Weather, Teche LA7-The Protagonists (italian language)
 
+### Install tips
+- You can install this plugin via the official Kodi19 repository
+- On some Linux distros Kodi comes packaged without the inputstream.adaptive plugin, in this case please manually install the missing plugin. For example on Ubuntu use the command:
+"sudo apt install kodi-inputstream-adaptive"
 
 ### Changelog
+5.2.0 (2021-03-29)
+- Fixed Title of Live channels
+
 5.1.0 (2021-03-12)
 - Fix On-Demand homepages scraping
 - Removed minimal versions on import addon

@@ -1,9 +1,8 @@
-from resources.lib.models.list_item import ListItem
 import xbmcgui
+from resources.lib.models.list_item import ListItem
 
 
 class Constructor(ListItem):
-    thumb = ""
     info = {}
 
     def to_list_item(self, addon_base):

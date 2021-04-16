@@ -1,0 +1,374 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="plugin.program.mceremote3">
+		<category id="buttonmappings" label="30200" help="">
+			<group id="1">
+				<setting id="button_0" type="string" label="30000" help="">
+					<level>0</level>
+					<default>0</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_1" type="string" label="30001" help="">
+					<level>0</level>
+					<default>1</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_2" type="string" label="30002" help="">
+					<level>0</level>
+					<default>2</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_3" type="string" label="30003" help="">
+					<level>0</level>
+					<default>3</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_4" type="string" label="30004" help="">
+					<level>0</level>
+					<default>4</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_5" type="string" label="30005" help="">
+					<level>0</level>
+					<default>5</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_6" type="string" label="30006" help="">
+					<level>0</level>
+					<default>6</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_7" type="string" label="30007" help="">
+					<level>0</level>
+					<default>7</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_8" type="string" label="30008" help="">
+					<level>0</level>
+					<default>8</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_9" type="string" label="30009" help="">
+					<level>0</level>
+					<default>9</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_clear" type="string" label="30010" help="">
+					<level>0</level>
+					<default>escape</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_enter" type="string" label="30011" help="">
+					<level>0</level>
+					<default>return</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_power" type="string" label="30012" help="">
+					<level>0</level>
+					<default>mce</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_windows" type="string" label="30013" help="">
+					<level>0</level>
+					<default>ctrl-shift-w</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_mute" type="string" label="30014" help="">
+					<level>0</level>
+					<default>f8</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_info" type="string" label="30015" help="">
+					<level>0</level>
+					<default>ctrl-d</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_volup" type="string" label="30016" help="">
+					<level>0</level>
+					<default>f10</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_voldown" type="string" label="30017" help="">
+					<level>0</level>
+					<default>f9</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_chanup" type="string" label="30018" help="">
+					<level>0</level>
+					<default>pageup</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_chandown" type="string" label="30019" help="">
+					<level>0</level>
+					<default>pagedown</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_ff" type="string" label="30020" help="">
+					<level>0</level>
+					<default>ctrl-shift-f</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_rew" type="string" label="30021" help="">
+					<level>0</level>
+					<default>ctrl-shift-b</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_play" type="string" label="30022" help="">
+					<level>0</level>
+					<default>ctrl-shift-p</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_record" type="string" label="30023" help="">
+					<level>0</level>
+					<default>ctrl-r</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_pause" type="string" label="30024" help="">
+					<level>0</level>
+					<default>ctrl-p</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_stop" type="string" label="30025" help="">
+					<level>0</level>
+					<default>ctrl-shift-s</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_next" type="string" label="30026" help="">
+					<level>0</level>
+					<default>ctrl-f</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_prev" type="string" label="30027" help="">
+					<level>0</level>
+					<default>ctrl-b</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_hash" type="string" label="30028" help="">
+					<level>0</level>
+					<default>ctrl-shift-3</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_star" type="string" label="30029" help="">
+					<level>0</level>
+					<default>ctrl-shift-8</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_up" type="string" label="30030" help="">
+					<level>0</level>
+					<default>up</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_down" type="string" label="30031" help="">
+					<level>0</level>
+					<default>down</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_left" type="string" label="30032" help="">
+					<level>0</level>
+					<default>left</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_right" type="string" label="30033" help="">
+					<level>0</level>
+					<default>right</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_ok" type="string" label="30034" help="">
+					<level>0</level>
+					<default>return</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_back" type="string" label="30035" help="">
+					<level>0</level>
+					<default>backspace</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_dvdmenu" type="string" label="30036" help="">
+					<level>0</level>
+					<default>ctrl-shift-m</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_livetv" type="string" label="30037" help="">
+					<level>0</level>
+					<default>ctrl-shift-t</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_guide" type="string" label="30038" help="">
+					<level>0</level>
+					<default>ctrl-g</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_music" type="string" label="30071" help="">
+					<level>0</level>
+					<default>ctrl-m</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_recordedtv" type="string" label="30072" help="">
+					<level>0</level>
+					<default>ctrl-o</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_pictures" type="string" label="30073" help="">
+					<level>0</level>
+					<default>ctrl-i</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_movies" type="string" label="30074" help="">
+					<level>0</level>
+					<default>ctrl-e</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_radio" type="string" label="30080" help="">
+					<level>0</level>
+					<default>ctrl-a</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_teletext" type="string" label="30090" help="">
+					<level>0</level>
+					<default>ctrl-t</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_red" type="string" label="30091" help="">
+					<level>0</level>
+					<default>ctrl-alt-1</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_green" type="string" label="30092" help="">
+					<level>0</level>
+					<default>ctrl-alt-2</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_yellow" type="string" label="30093" help="">
+					<level>0</level>
+					<default>ctrl-alt-3</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_blue" type="string" label="30094" help="">
+					<level>0</level>
+					<default>ctrl-alt-4</default>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_asrock" type="string" label="30039" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_hpwron" type="string" label="30041" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_hpwroff" type="string" label="30042" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_mgangle" type="string" label="30075" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_mgaudio" type="string" label="30076" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_mgsubtitle" type="string" label="30077" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_hpprint" type="string" label="30078" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_playpause" type="string" label="30110" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_xbopen" type="string" label="30040" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_xbdisplay" type="string" label="30079" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_xblargex" type="string" label="30100" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_xbgreena" type="string" label="30102" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_xbbluex" type="string" label="30104" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_xbchanup" type="string" label="30108" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="button_xbchandn" type="string" label="30109" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+			</group>
+		</category>
+	</section>
+</settings>

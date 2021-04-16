@@ -149,25 +149,6 @@ class Api:
                          profile=self._tokens.profile)
         kodiutils.set_cache(['swimlane', 'my-list'], None)
 
-    def get_categories(self):
-        """ Get a list of all the categories.
-
-        :rtype list[Category]
-        """
-        response = util.http_get(API_ENDPOINT + '/%s/catalog/filters' % self._mode(),
-                                 token=self._tokens.jwt_token,
-                                 profile=self._tokens.profile)
-        info = json.loads(response.text)
-
-        categories = []
-        for item in info.get('catalogFilters', []):
-            categories.append(Category(
-                category_id=item.get('id'),
-                title=item.get('title'),
-            ))
-
-        return categories
-
     def get_items(self, category=None, content_filter=None, cache=CACHE_ONLY):
         """ Get a list of all the items in a category.
 

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Kodi settings -->
 <settings>
     <category label="32001">
         <setting label="32003" type="select" values="google|youtube|local|bing" id="autocomplete_provider" default="youtube"/>

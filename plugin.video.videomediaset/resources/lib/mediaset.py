@@ -129,9 +129,8 @@ class Mediaset(rutils.RUtils):
         rutils.RUtils.__init__(self)
 
     def __getAPISession(self):
-        res = self.SESSION.get(
-            "https://api.one.accedo.tv/session?appKey=59ad346f1de1c4000dfd09c5&uuid=sdd",
-            verify=True)
+        res = self.createRequest(
+            "https://api.one.accedo.tv/session?appKey=59ad346f1de1c4000dfd09c5&uuid=sdd")
         self.setHeader('x-session', res.json()['sessionKey'])
 
     def login(self, user, password):
@@ -291,6 +290,10 @@ class Mediaset(rutils.RUtils):
         url = self.__createAZUrl(["Fiction"], inonda=inonda, pageels=pageels, page=page)
         return self.__getElsFromUrl(url)
 
+    def OttieniCategorieProgrammi(self):
+        self.log('Trying to get the programs sections list', 4)
+        return self.__getsectionsFromEntryID("5acfc8011de1c4000b6ec953")
+
     def OttieniGeneriFiction(self):
         self.log('Trying to get the fiction sections list', 4)
         return self.__getsectionsFromEntryID("5acfcb3c23eec6000d64a6a4")
@@ -329,42 +332,52 @@ class Mediaset(rutils.RUtils):
             pageels=pageels, page=page, args={'platform': 'pc', 'uxReference': self.uxReferenceMapping[gid]})
         return self.__getElsFromUrl(url)
 
-    def OttieniStagioni(self, seriesId, sort=None):
+    def OttieniStagioni(self, seriesId, sort=None, erange=None):
         self.log('Trying to get the seasons from series id {}'.format(seriesId), 4)
         url = 'https://feed.entertainment.tv.theplatform.eu/f/PR1GhC/mediaset-prod-tv-seasons/feed'
         args = {'bySeriesId': seriesId}
         if sort:
             args['sort'] = sort
+        if erange:
+            args['range'] = erange
         return self.__getEntriesFromUrl(url, args)
 
-    def OttieniSezioniProgramma(self, brandId, sort=None):
+    def OttieniSezioniProgramma(self, brandId, sort=None, erange=None):
         self.log('Trying to get the sections from brand id {}'.format(brandId), 4)
         url = 'https://feed.entertainment.tv.theplatform.eu/f/PR1GhC/mediaset-prod-all-brands?'
         args = {'byCustomValue': '{{brandId}}{{{brandId}}}'.format(brandId=brandId)}
         if sort:
             args['sort'] = sort
+        if erange:
+            args['range'] = erange
         return self.__getEntriesFromUrl(url, args)
 
-    def OttieniVideoSezione(self, subBrandId, sort=None):
+    def OttieniVideoSezione(self, subBrandId, sort=None, erange=None):
         self.log('Trying to get the videos from section {}'.format(subBrandId), 4)
         url = 'https://feed.entertainment.tv.theplatform.eu/f/PR1GhC/mediaset-prod-all-programs'
         args = {'byCustomValue': '{{subBrandId}}{{{subBrandId}}}'.format(subBrandId=subBrandId)}
         if sort:
             args['sort'] = sort
+        if erange:
+            args['range'] = erange
         return self.__getEntriesFromUrl(url, args)
 
-    def OttieniCanaliLive(self, sort=None):
+    def OttieniCanaliLive(self, sort=None, erange=None):
         self.log('Trying to get the live channels list', 4)
         url = ('https://feed.entertainment.tv.theplatform.eu/f/PR1GhC/mediaset-prod-all-stations?')
+        args = {}
         if sort:
-            return self.__getEntriesFromUrl(url, {'sort': sort})
-        return self.__getEntriesFromUrl(url)
+            args['sort'] = sort
+        if erange:
+            args['range'] = erange
+        return self.__getEntriesFromUrl(url, args)
 
     def Cerca(self, query, section=None, pageels=100, page=None):
         args = {'query': query, 'platform': 'pc'}
         if section:
             args['uxReference'] = self.uxReferenceMapping[section]
-        url = self.__createMediasetUrl('https://api-ott-prod-fe.mediaset.net/PROD/play/rec2/search/v1.0', pageels=pageels, page=page, args=args)
+        url = self.__createMediasetUrl(
+            'https://api-ott-prod-fe.mediaset.net/PROD/play/rec2/search/v1.0', pageels=pageels, page=page, args=args)
         return self.__getElsFromUrl(url)
 
     def OttieniGuidaTV(self, chid, start, finish):
@@ -411,8 +424,10 @@ class Mediaset(rutils.RUtils):
         u = 'https://link.theplatform.eu/s/PR1GhC/'
         if not live:
             u += 'media/'
-        u += pid + ('?auto=true&balance=true&format=smil&formats=MPEG-DASH,MPEG4,M3U&tracking=true'
-                    '&assetTypes=HD,browser,widevine:HD,browser:SD,browser,widevine:SD,browser:SD')
+        u += pid + ('?auto=true&balance=true&format=SMIL&formats=MPEG-DASH,MPEG4,M3U&tracking=true'
+                    '&assetTypes=HD,browser,widevine,geoIT|geoNo:HD,browser,geoIT|geoNo:HD,'
+                    'geoIT|geoNo:SD,''browser,widevine,geoIT|geoNo:SD,browser,geoIT|geoNo:SD,'
+                    'geoIT|geoNo')
         text = self.getText(u)
         res = {'url': '', 'pid': '', 'type': '', 'security': False}
         root = ET.fromstring(text)

@@ -4,21 +4,12 @@
 # Addon Provider: SylvainCecchetto
 msgid ""
 msgstr ""
-"Project-Id-Version: Kodi Addons\n"
-"Report-Msgid-Bugs-To: alanwww1@kodi.org\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: SylvainCecchetto\n"
-"Language-Team: \n"
-"MIME-Version: 1.0\n"
+"Language: he\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-
 # Settings tabs/categories (from 30000 to 30019)
-
 msgctxt "#30000"
 msgid ""
 msgstr ""
@@ -59,9 +50,7 @@ msgctxt "#30009"
 msgid "General"
 msgstr ""
 
-
 # Settings line separators (from 30010 to 30029)
-
 msgctxt "#30010"
 msgid "Hide main menu categories"
 msgstr "הסתר קטגוריות בתפריט הראשי"
@@ -106,9 +95,7 @@ msgctxt "#30020"
 msgid "Unmask replay TV channels"
 msgstr ""
 
-
 # Main menu (from 30030 to 30049)
-
 msgctxt "#30030"
 msgid "Live TV"
 msgstr "טלוויזיה חיה"
@@ -125,9 +112,7 @@ msgctxt "#30033"
 msgid "Favourites"
 msgstr ""
 
-
 # Countries (from 30050 to 30079)
-
 msgctxt "#30050"
 msgid "France"
 msgstr ""
@@ -196,9 +181,12 @@ msgctxt "#30066"
 msgid "Ethiopia"
 msgstr ""
 
+msgctxt "#30067"
+msgid "Morocco"
+msgstr ""
+
 
 # Channels (from 30080 to 30129)
-
 msgctxt "#30080"
 msgid "French channels"
 msgstr "ערוצים צרפתיים"
@@ -267,12 +255,12 @@ msgctxt "#30096"
 msgid "Ethiopian channels"
 msgstr ""
 
+msgctxt "#30097"
+msgid "Moroccan channels"
+msgstr ""
+
 # Websites (from 30130 to 30149)
-
-
-
 # Quality and content (from 30150 to 30199)
-
 msgctxt "#30150"
 msgid "Video quality"
 msgstr "איכות וידאו מיו-טיוב"
@@ -357,9 +345,7 @@ msgctxt "#30170"
 msgid "CBC: Choose region"
 msgstr ""
 
-
 # Download (from 30200 to 30239)
-
 msgctxt "#30200"
 msgid "Download directory"
 msgstr "תיקיה להורדה"
@@ -376,9 +362,7 @@ msgctxt "#30203"
 msgid "Automatically rename the video (download directory required)"
 msgstr ""
 
-
-# Accounts (from 30240 to 30259)
-
+# Accounts (from 30240 to 30269)
 msgctxt "#30240"
 msgid "NRJ Login"
 msgstr ""
@@ -427,10 +411,7 @@ msgctxt "#30251"
 msgid "UKTVPlay Password"
 msgstr ""
 
-
-
 # TV integration (from 30270 to 30289)
-
 msgctxt "#30270"
 msgid "TV integration"
 msgstr ""
@@ -463,16 +444,8 @@ msgctxt "#30277"
 msgid "Select channels to enable in Kodi Live TV"
 msgstr ""
 
-
-
 # Reserved space for other tab/category in settins (from 30290 to 30339)
-
-
-
-
-
 # Advanced settings (from 30370 to 30399)
-
 msgctxt "#30370"
 msgid "Clear cache"
 msgstr ""
@@ -493,9 +466,7 @@ msgctxt "#30374"
 msgid "Favourites deleted"
 msgstr ""
 
-
 # Settings of 'General' category (from 30400 to 30429)
-
 msgctxt "#30400"
 msgid "Restore default order of all menus"
 msgstr ""
@@ -532,20 +503,13 @@ msgctxt "#30408"
 msgid "All hidden items have been unmasked"
 msgstr ""
 
-
 # Advanced settings (from 30430 to 30449)
-
 msgctxt "#30430"
 msgid "Automatically start Catch-up TV & More when Kodi starts"
 msgstr ""
 
-
 # Reserved space for other tab/category in settins (from 30450 to 30499)
-
-
-
 # Context menu (from 30500 to 30599)
-
 msgctxt "#30500"
 msgid "Move down"
 msgstr "רד למטה"
@@ -570,9 +534,7 @@ msgctxt "#30505"
 msgid "List Videos (type=episode)"
 msgstr ""
 
-
 # Dialog boxes (from 30600 to 30699)
-
 msgctxt "#30600"
 msgid "Information"
 msgstr "מידע"
@@ -601,9 +563,7 @@ msgctxt "#30606"
 msgid "Do you want to see this information next time?"
 msgstr ""
 
-
 # Others (from 30700 to 30799)
-
 msgctxt "#30700"
 msgid "More videos..."
 msgstr "קטעי וידאו נוספים..."
@@ -712,9 +672,7 @@ msgctxt "#30726"
 msgid "Races"
 msgstr ""
 
-
 # Favourites (from 30800 to 30859)
-
 msgctxt "#30800"
 msgid "Add to add-on favourites"
 msgstr ""
@@ -747,9 +705,7 @@ msgctxt "#30807"
 msgid "This favourite raises an error, would you like to delete it?"
 msgstr ""
 
-
 # Log uploader (from 30860 to 30889)
-
 msgctxt "#30860"
 msgid "This selection triggered an unexpected error, would you like to share your error log so that we can try to resolve this issue?"
 msgstr ""
@@ -762,9 +718,7 @@ msgctxt "#30862"
 msgid "Sorry, sharing your error log failed"
 msgstr ""
 
-
 # HTTP error (from 30890 to 30919)
-
 msgctxt "#30890"
 msgid "HTTP Error code"
 msgstr ""

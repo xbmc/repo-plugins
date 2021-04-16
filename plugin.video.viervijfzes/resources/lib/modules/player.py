@@ -10,7 +10,7 @@ from resources.lib.modules.menu import Menu
 from resources.lib.viervijfzes import CHANNELS, ResolvedStream
 from resources.lib.viervijfzes.auth import AuthApi
 from resources.lib.viervijfzes.aws.cognito_idp import AuthenticationException, InvalidLoginException
-from resources.lib.viervijfzes.content import ContentApi, GeoblockedException, UnavailableException
+from resources.lib.viervijfzes.content import CACHE_PREVENT, ContentApi, GeoblockedException, UnavailableException
 
 try:  # Python 3
     from urllib.parse import quote, urlencode
@@ -45,7 +45,7 @@ class Player:
         :type path: string
         """
         # Get episode information
-        episode = self._api.get_episode(path)
+        episode = self._api.get_episode(path, cache=CACHE_PREVENT)
         resolved_stream = None
 
         if episode is None:

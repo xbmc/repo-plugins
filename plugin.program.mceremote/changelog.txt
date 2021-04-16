@@ -1,0 +1,34 @@
+[B]Version 3.0.0 16th March 2021[/B]
+- Change Python version to 3.0.0 for Matrix
+
+[B]Version 2.0.5 16th March 2014[/B]
+- Change Python version to 2.1.0 for Gotham
+
+[B]Version 2.0.4 20th Sep 2012[/B]
+- Remove dependance on xbmc.gui from addon.xml
+
+[B]Version 2.0.3 20th Sep 2012[/B]
+- Use xbmc.gui 3.0
+
+[B]Version 2.0.2 18th Sep 2012[/B]
+- Add new language tag
+
+[B]Version 2.0.1 20th Nov 2011[/B]
+- Cosmetic change to the add-on description
+
+[B]Version 2.0.0 14th Nov 2011[/B]
+- New version for Eden
+- Add support for extra buttons on XBox universal, Mediagate and HP remotes
+- Fix error if the Windows button is set to "mce"
+
+[B]Version 1.1.15 20th Nov 2010[/B]
+- Fix minor bug in keymap editor download.
+
+[B]Version 1.1.0 16th Nov 2010[/B]
+- Now uses KeyMapEdit to edit the keyboard.xml.
+
+[B]Version 1.0.1 9th Nov 2010[/B]
+- Updated icon - no other changes.
+
+[B]Version 1.0.0 17th Oct 2010[/B]
+- First official release.

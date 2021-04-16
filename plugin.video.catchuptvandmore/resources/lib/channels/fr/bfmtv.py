@@ -48,6 +48,12 @@ URL_LIVE_BFMBUSINESS = 'http://bfmbusiness.bfmtv.com/mediaplayer/live-video/'
 
 DESIRED_QUALITY = Script.setting['quality']
 
+# Dailymotion Id get from these pages below
+# - https://www.dailymotion.com/BFMTV
+LIVE_DAILYMOTION_ID = {
+    'bfmtv': 'xgz4t1'
+}
+
 
 def get_token(item_id):
     """Get session token"""
@@ -197,16 +203,8 @@ def get_video_url(plugin,
 def get_live_url(plugin, item_id, **kwargs):
 
     if item_id == 'bfmtv':
-        resp = urlquick.get(URL_LIVE_BFMTV,
-                            headers={'User-Agent': web_utils.get_random_ua()},
-                            max_age=-1)
-        root = resp.parse()
-        live_datas = root.find(".//div[@class='video_block']")
-        data_account = live_datas.get('accountid')
-        data_video_id = live_datas.get('videoid')
-        data_player = live_datas.get('playerid')
-        return resolver_proxy.get_brightcove_video_json(plugin, data_account,
-                                                        data_player, data_video_id)
+        return resolver_proxy.get_stream_dailymotion(plugin, LIVE_DAILYMOTION_ID[item_id], False)
+
     if item_id == 'bfmbusiness':
         resp = urlquick.get(URL_LIVE_BFMBUSINESS,
                             headers={'User-Agent': web_utils.get_random_ua()},

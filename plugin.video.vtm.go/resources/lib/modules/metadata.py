@@ -7,6 +7,7 @@ import logging
 
 from resources.lib import kodiutils
 from resources.lib.vtmgo import Movie, Program
+from resources.lib.vtmgo.exceptions import NoLoginException
 from resources.lib.vtmgo.vtmgo import VtmGo
 from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
 
@@ -18,11 +19,14 @@ class Metadata:
 
     def __init__(self):
         """ Initialise object """
-        self._auth = VtmGoAuth(kodiutils.get_setting('username'),
-                               kodiutils.get_setting('password'),
-                               'VTM',
-                               kodiutils.get_setting('profile'),
-                               kodiutils.get_tokens_path())
+        try:
+            self._auth = VtmGoAuth(kodiutils.get_setting('username'),
+                                   kodiutils.get_setting('password'),
+                                   'VTM',
+                                   kodiutils.get_setting('profile'),
+                                   kodiutils.get_tokens_path())
+        except NoLoginException:
+            self._auth = None
         self._vtm_go = VtmGo(self._auth)
 
     def update(self):

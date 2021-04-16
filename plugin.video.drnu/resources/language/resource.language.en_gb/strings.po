@@ -156,6 +156,10 @@ msgctxt "#30514"
 msgid "Ultra"
 msgstr ""
 
+msgctxt "#30515"
+msgid "Show area chooser item in root"
+msgstr ""
+
 msgctxt "#30520"
 msgid "Fanart image resolution"
 msgstr ""

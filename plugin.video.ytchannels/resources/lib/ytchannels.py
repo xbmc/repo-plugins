@@ -48,15 +48,18 @@ def ytchannels_main():
 
 		YOUTUBE_API_KEY = my_addon.getSetting('youtube_api_key')
 
-	from .functions import build_url, delete_database, get_folders, add_folder, remove_folder, get_channels, get_channel_id_from_uploads_id, add_channel, remove_channel, search_channel, search_channel_by_username, get_latest_from_channel, get_playlists, add_sort_db, init_sort, move_up, move_down, check_sort_db
+	from .functions import build_url, delete_database, get_folders, add_folder, remove_folder, get_channels, get_channel_id_from_uploads_id, add_channel, remove_channel, search_channel, search_channel_by_username, get_latest_from_channel, get_playlists, add_sort_db, init_sort, move_up, move_down, check_sort_db, change_folder, set_folder_thumbnail, get_folder_thumbnail, check_thumb_db, add_thumb_db
 
 	SORT_INIT = check_sort_db()
+	THUMB_INIT = check_thumb_db()
 	if not SORT_INIT:
 		add_sort_db()
 		folders = get_folders()
 		init_sort('Other')
 		for i in range(len(folders)):
 			init_sort(folders[i])
+	if not THUMB_INIT:
+		add_thumb_db()
 
 	if mode is None:
 		folders=get_folders()
@@ -65,13 +68,16 @@ def ytchannels_main():
 			if folders[i]!='Other':
 				url = build_url({'mode': 'open_folder', 'foldername': '%s'%folders[i]})
 				li = xbmcgui.ListItem('%s'%folders[i])
-				li.setArt({'icon':folder_img})
+				image = get_folder_thumbnail(folders[i])
+				li.setArt({'icon':image})
 
 				rem_uri = build_url({'mode': 'rem_folder', 'foldername': '%s'%str(folders[i])})
 
 				add_uri = build_url({'mode': 'add_folder'})
+				setthumb_uri = build_url({'mode': 'set_thumbnail', 'foldername': '%s'%str(folders[i])})
 				addch_uri = build_url({'mode': 'add_channel', 'foldername': 'Other'})
 				li.addContextMenuItems([ (local_string(30000), 'RunPlugin(%s)'%rem_uri),
+									(local_string(30027), 'RunPlugin(%s)'%setthumb_uri),
 									(local_string(30001), 'RunPlugin(%s)'%add_uri),
 									(local_string(30002), 'RunPlugin(%s)'%addch_uri)])
 
@@ -85,13 +91,15 @@ def ytchannels_main():
 			li.setArt({'icon':'%s'%channels[i][2]})
 
 			rem_uri = build_url({'mode': 'rem_channel', 'channel_id': '%s'%str(channels[i][1])})
+			move_uri = build_url({'mode': 'change_folder', 'channel_id': '%s'%str(channels[i][1]), 'curfolder': 'Other'})
 			add_uri = build_url({'mode': 'add_folder'})
 			addch_uri = build_url({'mode': 'add_channel', 'foldername': 'Other'})
 			move_down_uri = build_url({'mode': 'move_down', 'id': '%s'%channels[i][4]})
 			move_up_uri = build_url({'mode': 'move_up', 'id': '%s'%channels[i][4]})
 			items = []
 			items.append((local_string(30003), 'RunPlugin(%s)'%rem_uri))
-			items.append(('Add folder', 'RunPlugin(%s)'%add_uri))
+			items.append((local_string(30025), 'RunPlugin(%s)'%move_uri))
+			items.append((local_string(30001), 'RunPlugin(%s)'%add_uri))
 			items.append((local_string(30002), 'RunPlugin(%s)'%addch_uri))
 			if len(channels) > 1:
 				if channels[i][3] == 1:
@@ -169,10 +177,12 @@ def ytchannels_main():
 			li.setArt({'icon':'%s'%channels[i][2]})
 
 			rem_uri = build_url({'mode': 'rem_channel', 'channel_id': '%s'%str(channels[i][1])})
+			move_uri = build_url({'mode': 'change_folder', 'channel_id': '%s'%str(channels[i][1]), 'curfolder': '%s'%str(foldername)})
 			move_down_uri = build_url({'mode': 'move_down', 'id': '%s'%channels[i][4]})
 			move_up_uri = build_url({'mode': 'move_up', 'id': '%s'%channels[i][4]})
 			items = []
 			items.append((local_string(30003), 'RunPlugin(%s)'%rem_uri))
+			items.append((local_string(30025), 'RunPlugin(%s)'%move_uri))
 			if len(channels) > 1:
 				if channels[i][3] == 1:
 					items.append((local_string(30024), 'RunPlugin(%s)'%move_down_uri))
@@ -339,6 +349,28 @@ def ytchannels_main():
 		dicti=urllib.parse.parse_qs(sys.argv[2][1:])
 		foldername=dicti['foldername'][0]
 		remove_folder(foldername)
+		xbmc.executebuiltin("Container.Refresh")
+
+	elif mode[0]=='change_folder':
+		dicti=urllib.parse.parse_qs(sys.argv[2][1:])
+		channel_id=dicti['channel_id'][0]
+		curfolder=dicti['curfolder'][0]
+		folders=get_folders()
+		if not curfolder=="Other":
+			folders.append("root")
+			folders.remove(curfolder)
+		dialog = xbmcgui.Dialog()
+		index = dialog.select(local_string(30011), folders)
+		if index>-1:
+			change_folder(channel_id, folders[index])
+		xbmc.executebuiltin("Container.Refresh")
+
+	elif mode[0]=='set_thumbnail':
+		dicti=urllib.parse.parse_qs(sys.argv[2][1:])
+		foldername=dicti['foldername'][0]
+		image = xbmcgui.Dialog().browse(2, local_string(30026), '')
+		if image:
+			set_folder_thumbnail(foldername, image)
 		xbmc.executebuiltin("Container.Refresh")
 
 	elif mode[0]=='erase_all':

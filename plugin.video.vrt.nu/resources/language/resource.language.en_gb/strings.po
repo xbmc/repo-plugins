@@ -263,35 +263,27 @@ msgid "Online exclusive"
 msgstr ""
 
 msgctxt "#30101"
-msgid "Last episode"
-msgstr ""
-
-msgctxt "#30102"
-msgid "Last chance"
-msgstr ""
-
-msgctxt "#30103"
-msgid "New"
-msgstr ""
-
-msgctxt "#30104"
 msgid "Full season"
 msgstr ""
 
-msgctxt "#30105"
+msgctxt "#30102"
 msgid "Complete series"
 msgstr ""
 
-msgctxt "#30106"
-msgid "Brand new"
-msgstr ""
-
-msgctxt "#30107"
-msgid "New episodes"
+msgctxt "#30103"
+msgid "From the archive"
 msgstr ""
 
 msgctxt "#30120"
 msgid "Short film"
+msgstr ""
+
+msgctxt "#30129"
+msgid "Climate"
+msgstr ""
+
+msgctxt "#30130"
+msgid "Cycling"
 msgstr ""
 
 ### APPLICATION
@@ -1045,4 +1037,8 @@ msgstr ""
 
 msgctxt "#30988"
 msgid "InputStream Adaptive is not installed, therefore pause and timeshift of live streams may not work"
+msgstr ""
+
+msgctxt "#30989"
+msgid "Failed to load a compatible stream, please try toggling 'Use Widevine DRM' in the add-on Playback settings."
 msgstr ""

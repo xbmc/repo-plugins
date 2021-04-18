@@ -3,9 +3,15 @@ Live Streaming, Replay the last week, LA7 Prime, On-Demand programs, News & Weat
 
 ### Install tips
 This version is for Kodi18
-You need an old version of inputstream.adaptive (Ver 2.4.5) for the Live channels and encrypted programs
+You need inputstream.adaptive Ver 2.4.7 or later to watch the Live channels and encrypted programs
 
 ### Changelog
+4.8.2 (2021-04-14)
+- Fixed Live channels
+
+4.8.1 (2021-04-12) Kodi18 Version
+- Fixed Rivedi LA7 and Rivedi LA7d
+
 4.8.0 (2021-03-29) Kodi18 Version
 - Fixed Title of Live channels
 

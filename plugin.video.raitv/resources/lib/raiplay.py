@@ -53,7 +53,7 @@ class RaiPlay:
     def getCountry(self):
         try:
             response = utils.checkStr(urllib2.urlopen(self.localizeUrl).read())
-        except urllib2.HTTPError:
+        except :
             response = "ERROR"
         return response
         
@@ -73,7 +73,7 @@ class RaiPlay:
         chList = []
         try:
             response = utils.checkStr(urllib2.urlopen(self.RaiSportLiveUrl).read())
-        except urllib2.HTTPError:
+        except :
             response = ''
             
         m = re.search('<ul class="canali">(?P<list>.*)</ul>', response, re.S)
@@ -103,7 +103,7 @@ class RaiPlay:
         
         try:        
             data = utils.checkStr(urllib2.urlopen(self.RaiSportMainUrl).read())
-        except urllib2.HTTPError:
+        except :
             data = ''
         
         m = re.search("<a href=\"javascript:void\(0\)\">Menu</a>(.*?)</div>", data,re.S)
@@ -124,7 +124,7 @@ class RaiPlay:
         for l in good_links:
             try:
                 data = utils.checkStr(urllib2.urlopen(self.RaiSportMainUrl + l['url']).read())
-            except urllib2.HTTPError:
+            except:
                 data = ''
 
             dataDominio= re.findall("data-dominio=\"(.*?)\"", data)
@@ -234,7 +234,7 @@ class RaiPlay:
         url = url.replace("[dd-mm-yyyy]", epgDate)
         try:
             data = utils.checkStr(urllib2.urlopen(url).read())
-        except urllib2.HTTPError:
+        except :
             data = ''
         return data
         

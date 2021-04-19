@@ -35,7 +35,7 @@ class RaiPlayRadio:
     def getCountry(self):
         try:
             response = utils.checkStr(urllib2.urlopen(self.localizeUrl).read())
-        except urllib2.HTTPError:
+        except:
             response = "ERROR"
         return response
         

@@ -36,7 +36,7 @@ class TGR:
 
             return programmes
         
-        except urllib2.HTTPError:
+        except:
             return []
      
     def getList(self, url):
@@ -66,6 +66,6 @@ class TGR:
 
             return items
 
-        except urllib2.HTTPError:
+        except:
             return []
         

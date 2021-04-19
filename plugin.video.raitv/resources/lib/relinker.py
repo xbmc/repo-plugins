@@ -112,5 +112,5 @@ class Relinker:
                 mediaUrl = urllib.parse.quote(mediaUrl, safe="%/:=&?~#+!$,;'@()*[]")
             return mediaUrl
 
-        except HTTPError:
+        except:
             return {'url':'','type':'','key':''}

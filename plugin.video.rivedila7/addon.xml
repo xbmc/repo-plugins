@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rivedila7" name="LA7-LA7d" version="4.8.0" provider-name="Luivit, Testato">
+<addon id="plugin.video.rivedila7" name="LA7-LA7d" version="4.8.2" provider-name="Luivit, Testato">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.requests" version="0.0.0"/>
@@ -29,8 +29,14 @@
       <screenshot>resources/screenshots/screenshot-01.jpg</screenshot>
       <screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
     </assets>
-    <news>4.8.0 (2021-03-29) Kodi18 Version
-      - Fixed Title of Live channels
+    <news>4.8.2 (2021-04-14)
+- Fixed Live channels
+
+4.8.1 (2021-04-12) Kodi18 Version
+- Fixed Rivedi LA7 and Rivedi LA7d
+
+4.8.0 (2021-03-29) Kodi18 Version
+- Fixed Title of Live channels
     </news>
   </extension>
 </addon>

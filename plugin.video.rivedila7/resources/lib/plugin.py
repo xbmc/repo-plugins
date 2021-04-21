@@ -176,10 +176,12 @@ def play_dirette(url,live):
         if live:
             #listitem.setLabel(titolo_diretta)
             listitem.setInfo('video', {'plot': titolo_diretta, 'title': titolo_diretta})
+            listitem.setProperty('inputstream.adaptive.manifest_update_parameter', 'full') #https://github.com/xbmc/inputstream.adaptive/issues/647
         listitem.setProperty("inputstream", is_helper.inputstream_addon)
         listitem.setProperty("inputstream.adaptive.manifest_type", PROTOCOL)
         listitem.setProperty("inputstream.adaptive.license_type", DRM)
         listitem.setProperty("inputstream.adaptive.license_key", lic_url)
+        listitem.setProperty("inputstream.adaptive.license_flags", "force_secure_decoder") #https://github.com/xbmc/inputstream.adaptive/issues/638
         listitem.setMimeType('application/dash+xml')
         xbmcplugin.setResolvedUrl(handle, True, listitem)
 

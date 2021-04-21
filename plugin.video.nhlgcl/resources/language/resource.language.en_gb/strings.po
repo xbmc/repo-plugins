@@ -217,6 +217,14 @@ msgctxt "#30373"
 msgid "You do not have an active NHL.TV subscription. To access this content please purchase at www.NHL.TV or call customer support at 800-559-2333"
 msgstr ""
 
+msgctxt "#30374"
+msgid "No Game Today"
+msgstr ""
+
+msgctxt "#30375"
+msgid " doesn't play today"
+msgstr ""
+
 msgctxt "#30380"
 msgid "Please enter your username"
 msgstr ""

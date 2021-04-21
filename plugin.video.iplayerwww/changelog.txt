@@ -1,3 +1,9 @@
+v3.0.51
+Fixed DASH Radio.
+
+Known issues:
+- Red Button is only available for HLS.
+
 v3.0.50
 Switched to PC mediaselector.
 COMPATIBILITY NOTE: As a result there are no more HD streams over HLS.

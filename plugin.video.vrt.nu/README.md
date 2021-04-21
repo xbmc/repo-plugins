@@ -59,6 +59,9 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.2 (2021-04-21)
+- Fix broken menu listings (@mediaminister)
+
 ### v2.5.1 (2021-04-07)
 - Fix season labels (@mediaminister)
 

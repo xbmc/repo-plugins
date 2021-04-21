@@ -381,7 +381,7 @@ class Metadata:
                 plotoutline = html_to_kodi(api_data.get('shortDescription', ''))
                 return plotoutline
 
-            plotoutline = html_to_kodi(api_data.get('subtitle'))
+            plotoutline = html_to_kodi(api_data.get('subtitle', ''))
             return plotoutline
 
         # VRT NU Suggest API

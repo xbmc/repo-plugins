@@ -579,7 +579,7 @@ class HbogoHandler(object):
     def categories(self):
         pass
 
-    def list(self, url, simple=False):
+    def list(self, url, simple=False, exclude_list=None):
         pass
 
     def season(self, url):

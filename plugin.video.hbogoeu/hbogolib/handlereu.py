@@ -63,6 +63,7 @@ class HbogoHandler_eu(HbogoHandler):
         self.API_URL_CUSTOMER_GROUP = ""
         self.API_URL_GROUP = ""
         self.API_URL_GROUPS = ""
+        self.API_URL_MENU = ""
         self.API_URL_CONTENT = ""
         self.API_URL_PURCHASE = ""
         self.API_URL_SEARCH = ""
@@ -79,6 +80,8 @@ class HbogoHandler_eu(HbogoHandler):
         self.HistoryGroupId = ""
         self.ContinueWatchingGroupId = ""
         self.KidsGroupId = ""
+        self.homeGroupUrlEng = ""
+        self.homeGroupUrl = ""
         self.loggedin_headers = {}
         self.JsonHis = ""
 
@@ -143,6 +146,7 @@ class HbogoHandler_eu(HbogoHandler):
         self.API_URL_CUSTOMER_GROUP = 'https://' + self.API_HOST + '/v8/CustomerGroup/json/' + self.LANGUAGE_CODE + '/' + self.API_PLATFORM + '/'
         self.API_URL_GROUP = 'https://' + self.API_HOST + '/v8/Group/json/' + self.LANGUAGE_CODE + '/ANMO/'
         self.API_URL_GROUPS = 'https://' + self.API_HOST + '/v8/Groups/json/' + self.LANGUAGE_CODE + '/ANMO/0/True'
+        self.API_URL_MENU = 'https://' + self.API_HOST + '/v8/Menu/json/ENG/APTV/0/False'
         self.API_URL_CONTENT = 'https://' + self.API_HOST + '/v8/Content/json/' + self.LANGUAGE_CODE + '/' + self.API_PLATFORM + '/'
         self.API_URL_PURCHASE = 'https://' + self.API_HOST + '/v8/Purchase/Json/' + self.LANGUAGE_CODE + '/' + self.API_PLATFORM
         self.API_URL_SEARCH = 'https://' + self.API_HOST + '/v8/Search/Json/' + self.LANGUAGE_CODE + '/' + self.API_PLATFORM + '/'
@@ -823,7 +827,6 @@ class HbogoHandler_eu(HbogoHandler):
             xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30004))
             return
 
-        position_home = -1
         position_series = -1
         position_movies = -1
 
@@ -832,13 +835,11 @@ class HbogoHandler_eu(HbogoHandler):
         # Find key categories positions
         try:
             for cat in jsonrsp['Items']:
-                if py2_encode(cat["Tracking"]['Name']) == "Home":
-                    position_home = position
                 if py2_encode(cat["Tracking"]['Name']) == "Series":
                     position_series = position
                 if py2_encode(cat["Tracking"]['Name']) == "Movies":
                     position_movies = position
-                if position_home > -1 and position_series > -1 and position_movies > -1:
+                if position_series > -1 and position_movies > -1:
                     break
                 position += 1
         except Exception:
@@ -863,24 +864,60 @@ class HbogoHandler_eu(HbogoHandler):
         if self.addon.getSetting('show_kids') == 'true':
             self.addCat(py2_encode(self.language(30729)), self.API_URL_GROUP + self.KidsGroupId + '/0/0/0/0/0/0/True', self.get_media_resource('kids.png'), HbogoConstants.ACTION_LIST)
 
-        if position_home != -1:
-            if self.addon.getSetting('group_home') == 'true':
-                self.addCat(py2_encode(self.language(30733)),
-                            jsonrsp['Items'][position_home]['ObjectUrl'].replace('/0/{sort}/{pageIndex}/{pageSize}/0/0', '/0/0/1/1024/0/0'),
-                            self.get_media_resource('DefaultFolder.png'), HbogoConstants.ACTION_LIST)
-            else:
-                self.list(jsonrsp['Items'][position_home]['ObjectUrl'].replace('/0/{sort}/{pageIndex}/{pageSize}/0/0', '/0/0/1/1024/0/0'), True)
+        jsonrsp = self.get_from_hbogo(self.API_URL_MENU)
+        # Find key home
+        try:
+            for cat in jsonrsp['Items']:
+                if py2_encode(cat['Name']) == "Home":
+                    self.homeGroupUrlEng = cat['ObjectUrl']
+                    self.homeGroupUrl = cat['ObjectUrl']
+                    if self.LANGUAGE_CODE != "ENG":
+                        self.homeGroupUrl = self.homeGroupUrl.replace("ENG", self.LANGUAGE_CODE)
+                    break
+        except Exception:
+            self.log("Unexpected error in find key in menu for home: " + traceback.format_exc())
+
+        jsonrsp = self.get_from_hbogo(self.homeGroupUrlEng)
+        excludeindex_home = []
+        if jsonrsp is False:
+            pass
         else:
-            self.log("No Home Category found")
+            try:
+                if jsonrsp['ErrorMessage']:
+                    self.log("Get home list exclude index Error: " + py2_encode(jsonrsp['ErrorMessage']))
+                    pass
+            except KeyError:
+                pass  # all is ok no error message just pass
+            except Exception:
+                self.log("Unexpected error: " + traceback.format_exc())
+                pass
+            # find watchlist and continue watching positions for exclusion
+            if len(jsonrsp['Container']) > 1:
+                for container_index in range(0, len(jsonrsp['Container'])):
+                    container_item = jsonrsp['Container'][container_index]
+                    if py2_encode(container_item['Name']) == "Watchlist" or py2_encode(container_item['Name']) == "Continue Watching":
+                        excludeindex_home.append(container_index)
+                    if len(excludeindex_home) > 1:
+                        break
+
+        if self.addon.getSetting('group_home') == 'true':
+            self.addCat(py2_encode(self.language(30733)),
+                        self.homeGroupUrl,
+                        self.get_media_resource('DefaultFolder.png'), HbogoConstants.ACTION_LIST, ','.join(str(e) for e in excludeindex_home))
+        else:
+            self.list(self.homeGroupUrl, True, excludeindex_home)
 
         KodiUtil.endDir(self.handle, None, True)
 
-    def list(self, url, simple=False):
+    def list(self, url, simple=False, excludeindex=None):
         if not self.chk_login():
             self.login()
         self.log("List: " + str(url))
 
         self.reset_media_type_counters()
+
+        if excludeindex is None:
+            excludeindex = []
 
         jsonrsp = self.get_from_hbogo(url)
         if jsonrsp is False:
@@ -904,8 +941,9 @@ class HbogoHandler_eu(HbogoHandler):
         if len(jsonrsp['Container']) > 1:
             for container_index in range(0, len(jsonrsp['Container'])):
                 container_item = jsonrsp['Container'][container_index]
-                self.addCat(py2_encode(container_item['Name']), container_item['ObjectUrl'],
-                            self.get_media_resource('DefaultFolder.png'), HbogoConstants.ACTION_LIST)
+                if container_index not in excludeindex:
+                    self.addCat(py2_encode(container_item['Name']), container_item['ObjectUrl'],
+                                self.get_media_resource('DefaultFolder.png'), HbogoConstants.ACTION_LIST)
         else:
             for title in jsonrsp['Container'][0]['Contents']['Items']:
                 # 1=MOVIE/EXTRAS, 2=SERIES(serial), 3=SERIES(episode)
@@ -1507,11 +1545,12 @@ class HbogoHandler_eu(HbogoHandler):
             liz.addContextMenuItems(items=self.genContextMenu(cid, media_id, HbogoConstants.CONTEXT_MODE_DEFAULT))
         xbmcplugin.addDirectoryItem(handle=self.handle, url=directory_url, listitem=liz, isFolder=True)
 
-    def addCat(self, name, url, icon, mode):
+    def addCat(self, name, url, icon, mode, exclude=''):  # exclude optional index of item to skip in list add
         category_url = '%s?%s' % (self.base_url, urlencode({
             'url': url,
             'mode': mode,
             'name': name,
+            'exclude': exclude
         }))
         liz = xbmcgui.ListItem(name)
         liz.setArt({'fanart': self.get_resource("fanart.jpg"), 'thumb': icon, 'icon': icon})

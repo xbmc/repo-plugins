@@ -74,37 +74,34 @@ def create_game_listitem(game, game_day, show_date=False):
         fav_game = True
 
     game_line_header = ''
-    if game['status']['detailedState'].lower().strip() == 'scheduled':
-        game_time = game['gameDate']
-        game_time = string_to_date(game_time, "%Y-%m-%dT%H:%M:%SZ")
-        game_time = utc_to_local(game_time)
-        game_date = game_time.strftime("%Y-%m-%d")
+    detailed_state = game['status']['detailedState'].lower().strip()
+    if detailed_state == 'scheduled' or detailed_state == 'pre-game':
+        game_time = utc_to_local(string_to_date(game['gameDate'], "%Y-%m-%dT%H:%M:%SZ"))
         if TIME_FORMAT == '0':
             game_time = game_time.strftime('%I:%M %p').lstrip('0')
         else:
             game_time = game_time.strftime('%H:%M')
         game_line_header = game_time
-    elif game['status']['detailedState'].lower().strip() == 'final':
-        game_time = game['gameDate']
-        game_time = string_to_date(game_time, "%Y-%m-%dT%H:%M:%SZ")
-        game_time = utc_to_local(game_time)
-        game_date = game_time.strftime("%Y-%m-%d")
-        if (show_date):
-            game_line_header = game_date
-        else:
-            game_line_header = game['status']['detailedState']
-    else:
+
+    elif detailed_state == 'in progress':
         game_line_header = '%s %s' % \
                            (game['linescore']['currentPeriodTimeRemaining'], game['linescore']['currentPeriodOrdinal'])
+
+    elif detailed_state == 'final' and show_date:
+        game_line_header = utc_to_local(string_to_date(game['gameDate'], "%Y-%m-%dT%H:%M:%SZ")).strftime("%Y-%m-%d")
+
+    else:
+        game_line_header = game['status']['detailedState']
 
     game_id = str(game['gamePk'])
 
     desc = ''
     hide_spoilers = 0
-    if NO_SPOILERS == '1' or (NO_SPOILERS == '2' and fav_game) or \
-            (NO_SPOILERS == '3' and game_day == local_to_eastern()) or \
-            (NO_SPOILERS == '4' and game_day < local_to_eastern()) or \
-            game['status']['detailedState'].lower().strip() == 'scheduled':
+    if NO_SPOILERS == '1' or (NO_SPOILERS == '2' and fav_game) \
+            or (NO_SPOILERS == '3' and game_day == local_to_eastern()) \
+            or (NO_SPOILERS == '4' and game_day < local_to_eastern()) \
+            or game['status']['abstractGameState'].lower().strip() == 'preview':
+
         name = '%s %s at %s' % (game_line_header, away_team, home_team)
         hide_spoilers = 1
     else:
@@ -639,7 +636,7 @@ def play_fav_team_today():
                 stream_url, headers = create_full_game_stream(stream_url, media_auth)
         else:
             dialog = xbmcgui.Dialog()
-            dialog.ok('No Game Today', FAV_TEAM + " doesn't play today")
+            dialog.ok(LOCAL_STRING(30374), FAV_TEAM + LOCAL_STRING(30375).encode('utf8'))
             sys.exit()
 
         if stream_url != '':

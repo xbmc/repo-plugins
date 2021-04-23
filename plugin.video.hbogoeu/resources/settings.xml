@@ -30,7 +30,7 @@
         <setting label="30732" type="bool" id="show_continue" default="true"/>
         <setting label="30729" type="bool" id="show_kids" default="true"/>
         <setting label="30737" type="bool" id="enforce_kids" default="false"/>
-        <setting label="30697" type="bool" id="group_home" default="false"/>
+        <setting label="30697" type="bool" id="group_home" default="true"/>
     </category>
     <!-- Streaming -->
     <category label="30660">

@@ -159,8 +159,9 @@ def play_epg(channel, timestamp):
     TvGuide().play_epg_datetime(channel, timestamp)
 
 
+@routing.route('/play/catalog')
 @routing.route('/play/catalog/<uuid>')
-def play_catalog(uuid):
+def play_catalog(uuid=None):
     """ Play the requested item """
     from resources.lib.modules.player import Player
     Player().play(uuid)

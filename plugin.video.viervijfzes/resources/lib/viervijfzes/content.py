@@ -357,6 +357,9 @@ class ContentApi:
         response = self._get_url(self.API_VIERVIJFZES + '/content/%s' % uuid, authentication=True)
         data = json.loads(response)
 
+        if not data:
+            raise UnavailableException
+
         if 'videoDash' in data:
             # DRM protected stream
             # See https://docs.unified-streaming.com/documentation/drm/buydrm.html#setting-up-the-client

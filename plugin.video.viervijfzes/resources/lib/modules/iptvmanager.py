@@ -4,7 +4,7 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import logging
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from resources.lib import kodiutils
 from resources.lib.viervijfzes import CHANNELS
@@ -64,14 +64,18 @@ class IPTVManager:
         except ImportError:  # Python 2
             from urllib import quote
 
+        today = datetime.today()
+
         results = dict()
         for key, channel in CHANNELS.items():
             iptv_id = channel.get('iptv_id')
 
             if channel.get('iptv_id'):
                 results[iptv_id] = []
-                for date in ['yesterday', 'today', 'tomorrow']:
-                    epg = epg_api.get_epg(key, date)
+
+                for i in range(-3, 7):
+                    date = today + timedelta(days=i)
+                    epg = epg_api.get_epg(key, date.strftime('%Y-%m-%d'))
 
                     results[iptv_id].extend([
                         dict(

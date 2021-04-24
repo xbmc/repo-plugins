@@ -137,17 +137,9 @@ msgctxt "#30702"
 msgid "An error occurred while authenticating: {error}."
 msgstr "Er is een fout opgetreden tijdens het aanmelden: {error}."
 
-msgctxt "#30709"
-msgid "Geo-blocked video"
-msgstr "Video is geografisch geblokkeerd"
-
 msgctxt "#30710"
 msgid "This video is geo-blocked and can't be played from your location."
 msgstr "Deze video is geografisch geblokkeerd en kan niet worden afgespeeld vanaf je locatie."
-
-msgctxt "#30711"
-msgid "Unavailable video"
-msgstr "Onbeschikbare video"
 
 msgctxt "#30712"
 msgid "The video is unavailable and can't be played right now."

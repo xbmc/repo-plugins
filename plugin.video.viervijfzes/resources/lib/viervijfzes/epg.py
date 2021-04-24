@@ -72,7 +72,8 @@ class EpgApi:
     EPG_ENDPOINTS = {
         'Play4': 'https://www.goplay.be/api/epg/vier/{date}',
         'Play5': 'https://www.goplay.be/api/epg/vijf/{date}',
-        'Play6': 'https://www.goplay.be/api/epg/zes/{date}'
+        'Play6': 'https://www.goplay.be/api/epg/zes/{date}',
+        'Play7': 'https://www.goplay.be/api/epg/zeven/{date}',
     }
 
     EPG_NO_BROADCAST = 'Geen uitzending'

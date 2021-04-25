@@ -36,8 +36,8 @@ class TvGuide:
         dates = []
         today = datetime.today()
 
-        # The API provides 7 days in the past and 13 days in the future
-        for i in range(-7, 13):
+        # The API provides 7 days in the past and 8 days in the future
+        for i in range(-7, 8):
             day = today + timedelta(days=i)
 
             if i == -1:
@@ -131,7 +131,7 @@ class TvGuide:
             if program.video_url:
                 path = kodiutils.url_for('play_from_page', channel=channel, page=quote(program.video_url, safe=''))
             else:
-                path = None
+                path = kodiutils.url_for('play_catalog', uuid='')
                 title = '[COLOR gray]' + title + '[/COLOR]'
 
             stream_dict = STREAM_DICT.copy()

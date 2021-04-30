@@ -88,7 +88,10 @@ class ActionParser(object):
                 and self.media_item is not None \
                 and self.pickler.is_pickle_store_id(self.params[keyword.PICKLE]):
             Logger.debug("Replacing PickleStore pickle '%s' with full pickle", self.params[keyword.PICKLE])
+            self.params[keyword.STORE_ID] = self.params[keyword.PICKLE]
             self.params[keyword.PICKLE] = self.pickler.pickle_media_item(self.media_item)
+        elif keyword.PICKLE in self.params:
+            self.params[keyword.STORE_ID] = self.params[keyword.PICKLE]
 
     @property
     def media_item(self):
@@ -103,6 +106,20 @@ class ActionParser(object):
             self.__media_item = self.pickler.de_pickle_media_item(self.params[keyword.PICKLE])
 
         return self.__media_item
+
+    @property
+    def pickle_hash(self):
+        """ Returns the pickle hash of the current item.
+
+        :returns: The pickle has of the current item or `None` if no hash was present.
+        :rtype: str
+
+        """
+
+        if keyword.STORE_ID not in self.params:
+            return None
+
+        return self.params.get(keyword.STORE_ID)
 
     def create_action_url(self, channel, action, item=None, store_id=None, category=None):
         """ Creates an URL that includes an action.

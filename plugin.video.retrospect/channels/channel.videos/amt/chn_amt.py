@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.mediaitem import MediaItem
 from resources.lib.helpers import datehelper
 from resources.lib.regexer import Regexer
@@ -152,9 +152,8 @@ class Channel(chn_class.Channel):
 
         thumb = result_set["thumb"]
         year, month, day = result_set["posted"].split("-")
-        item = MediaItem(title, self.parentItem.url)
+        item = MediaItem(title, self.parentItem.url, media_type=mediatype.EPISODE)
         item.description = self.parentItem.description
-        item.type = 'video'
         item.thumb = thumb
         item.set_date(year, month, day)
 

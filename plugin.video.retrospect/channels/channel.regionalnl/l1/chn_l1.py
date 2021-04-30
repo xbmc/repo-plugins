@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.mediaitem import MediaItem
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.logger import Logger
@@ -91,16 +91,15 @@ class Channel(chn_class.Channel):
         # add live items
         title = LanguageHelper.get_localized_string(LanguageHelper.LiveStreamTitleId)
         item = MediaItem("\a.: {} :.".format(title), "")
-        item.type = "folder"
         items.append(item)
 
         live_item = MediaItem("L1VE TV".format(title), "#livetv")
-        live_item.type = "video"
+        live_item.media_type = mediatype.EPISODE
         live_item.isLive = True
         item.items.append(live_item)
 
         live_item = MediaItem("L1VE Radio".format(title), "#liveradio")
-        live_item.type = "video"
+        live_item.media_type = mediatype.AUDIO
         live_item.isLive = True
         item.items.append(live_item)
 

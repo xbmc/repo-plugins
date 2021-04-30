@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.mediaitem import MediaItem
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.datehelper import DateHelper
@@ -116,7 +116,6 @@ class Channel(chn_class.Channel):
 
         title = LanguageHelper.get_localized_string(LanguageHelper.LiveStreamTitleId)
         item = MediaItem("\a.: {} :.".format(title), self.liveUrl)
-        item.type = "folder"
         items.append(item)
 
         if not data:
@@ -152,7 +151,7 @@ class Channel(chn_class.Channel):
         url = result_set["stream"]["highQualityUrl"]
         title = result_set["title"] or result_set["id"].title()
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.isLive = True
 
         if item.url.endswith(".mp3"):
@@ -180,8 +179,7 @@ class Channel(chn_class.Channel):
         url = "{}/RadioTv/Results?medium=Tv&query=&category={}&from=&to=&page=1"\
             .format(self.baseUrl, result_set["seriesId"])
         title = result_set["title"]
-        item = MediaItem(title, url)
-        item.type = "folder"
+        item = MediaItem(title, url, media_type=mediatype.EPISODE)
         item.complete = False
         return item
 
@@ -241,7 +239,7 @@ class Channel(chn_class.Channel):
         item = MediaItem(title, url)
         item.description = result_set.get("synopsis", None)
         item.thumb = result_set.get("photo", self.noImage)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
 
         if "publicationTimeString" in result_set:
             try:

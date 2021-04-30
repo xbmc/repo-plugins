@@ -5,7 +5,7 @@ import uuid
 import time
 import datetime
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.mediaitem import MediaItem
 from resources.lib.addonsettings import AddonSettings, LOCAL
 from resources.lib.helpers.datehelper import DateHelper
@@ -284,14 +284,13 @@ class Channel(chn_class.Channel):
         # live items
         if self.liveUrl:
             live = MediaItem("\b.: Live :.", self.liveUrl)
-            live.type = "video"
+            live.media_type = mediatype.EPISODE
             live.dontGroup = True
             live.isGeoLocked = True
             live.isLive = True
             items.append(live)
 
         search = MediaItem("\a.: S&ouml;k :.", "searchSite")
-        search.type = "folder"
         search.dontGroup = True
         items.append(search)
 
@@ -486,7 +485,7 @@ class Channel(chn_class.Channel):
         if item is None:
             return None
 
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         video_info = result_set["attributes"]  # type: dict
         if "publishStart" in video_info or "airDate" in video_info:
             date = video_info.get("airDate", video_info["publishStart"])
@@ -567,12 +566,7 @@ class Channel(chn_class.Channel):
         # Local import to not slow down any other stuff
         import os
         import binascii
-        try:
-            # If running on Leia
-            import pyaes
-        except:
-            # If running on Pre-Leia
-            from resources.lib import pyaes
+        import pyaes
         import random
 
         now = int(time.time())

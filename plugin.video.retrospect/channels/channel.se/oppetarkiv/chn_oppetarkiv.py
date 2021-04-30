@@ -226,7 +226,6 @@ class Channel(chn_class.Channel):
         video_id = result_set[4]
         url = "http://www.oppetarkiv.se/video/%s?output=json" % (video_id,)
         item = MediaItem(name, url)
-        item.type = 'video'
         item.thumb = thumb_url
 
         date = result_set[5]

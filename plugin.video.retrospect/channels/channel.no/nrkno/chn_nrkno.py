@@ -1,7 +1,7 @@
 # coding=utf-8  # NOSONAR
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.mediaitem import MediaItem
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.datehelper import DateHelper
@@ -223,7 +223,6 @@ class Channel(chn_class.Channel):
 
         title = LanguageHelper.get_localized_string(LanguageHelper.StartWith) % (title, )
         item = MediaItem(title, url)
-        item.type = 'folder'
         return item
 
     def create_category_item(self, result_set):
@@ -245,7 +244,6 @@ class Channel(chn_class.Channel):
         url = "http://psapi-granitt-prod-we.cloudapp.net/medium/tv/categories/{}/indexelements?apiKey={}"\
             .format(category_id, self.__api_key)
         item = MediaItem(title, url)
-        item.type = 'folder'
         item.thumb = self.__category_thumbs.get(category_id.lower(), self.noImage)
         return item
 
@@ -376,7 +374,6 @@ class Channel(chn_class.Channel):
                 url = "https://psapi.nrk.no/tv/catalog/series/{}?apiKey={}".format(item_id, self.__api_key)
 
             item = MediaItem(title, url)
-            item.type = 'folder'
 
         item.isGeoLocked = result_set.get("isGeoBlocked", result_set.get("usageRights", {}).get("isGeoBlocked", False))
 
@@ -421,7 +418,6 @@ class Channel(chn_class.Channel):
         parent_url, qs = self.parentItem.url.split("?", 1)
         url = "{}/seasons/{}/episodes?apiKey={}".format(parent_url, season_id, self.__api_key)
         item = MediaItem(title, url)
-        item.type = 'folder'
         return item
 
     def create_series_video_item(self, result_set):
@@ -493,7 +489,6 @@ class Channel(chn_class.Channel):
         url = "{}{}?apiKey={}".format(self.baseUrl, result_set["href"], self.__api_key)
 
         item = MediaItem(title, url)
-        item.type = 'folder'
         return item
 
     def create_instalment_video_item(self, result_set):
@@ -524,8 +519,7 @@ class Channel(chn_class.Channel):
             return None
 
         url = self.__get_video_url(result_set["prfId"])
-        item = MediaItem(title, url)
-        item.type = 'video'
+        item = MediaItem(title, url, media_type=mediatype.EPISODE)
         item.thumb = self.__get_image(result_set["image"], "width", "url")
 
         # noinspection PyTypeChecker
@@ -570,7 +564,7 @@ class Channel(chn_class.Channel):
 
         live_data = result_set["_embedded"]["playback"]  # type: dict
         item = MediaItem(live_data["title"], url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.isLive = True
         item.isGeoLocked = live_data.get("isGeoBlocked")
 

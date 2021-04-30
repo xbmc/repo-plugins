@@ -2,7 +2,7 @@
 
 import datetime
 
-from resources.lib import chn_class, contenttype
+from resources.lib import chn_class, contenttype, mediatype
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.htmlhelper import HtmlHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
@@ -410,7 +410,7 @@ class Channel(chn_class.Channel):
         title = result_set['title']
         url = "https://api.viervijfzes.be/content/{}".format(result_set['videoUuid'])
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = HtmlHelper.to_text(result_set.get("description").replace(">\r\n", ">"))
         item.thumb = result_set["image"]
         item.isGeoLocked = result_set.get("isProtected")
@@ -459,7 +459,7 @@ class Channel(chn_class.Channel):
         url = "{}{}".format(self.baseUrl, video_info["url"])
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = video_info["description"]
         item.thumb = video_info["image"]
         item.isGeoLocked = result_set.get("isProtected")

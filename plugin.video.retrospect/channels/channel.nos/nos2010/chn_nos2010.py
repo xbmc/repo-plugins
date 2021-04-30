@@ -6,6 +6,7 @@ import re
 
 from resources.lib import chn_class
 from resources.lib import contenttype
+from resources.lib import mediatype
 from resources.lib.logger import Logger
 from resources.lib.regexer import Regexer
 from resources.lib.helpers import subtitlehelper
@@ -18,7 +19,7 @@ from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.vault import Vault
 from resources.lib.addonsettings import AddonSettings, LOCAL
-from resources.lib.mediaitem import MediaItem
+from resources.lib.mediaitem import MediaItem, FolderItem
 from resources.lib.xbmcwrapper import XbmcWrapper
 
 
@@ -57,7 +58,7 @@ class Channel(chn_class.Channel):
         self.baseUrlLive = "https://www.npostart.nl"
 
         # live radio, the folders and items
-        self._add_data_parser("http://radio-app.omroep.nl/player/script/",
+        self._add_data_parser("https://radio-app.omroep.nl/player/script/",
                               name="Live Radio Streams",
                               preprocessor=self.extract_json_for_live_radio, json=True,
                               parser=[], creator=self.create_live_radio)
@@ -318,7 +319,8 @@ class Channel(chn_class.Channel):
 
             title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
             title = "\a.: %s :." % (title,)
-            more = MediaItem(title, next_page)
+            more = FolderItem(
+                title, next_page, self.parentItem.content_type, self.parentItem.media_type)
             more.HttpHeaders = http_headers
             more.HttpHeaders.update(self.parentItem.HttpHeaders)
             items.append(more)
@@ -336,15 +338,19 @@ class Channel(chn_class.Channel):
         """
 
         items = []
-        search = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.Search), "searchSite")
+        search = FolderItem(
+            LanguageHelper.get_localized_string(LanguageHelper.Search), "searchSite",
+            content_type=contenttype.EPISODES)
         search.complete = True
         search.dontGroup = True
         search.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
         items.append(search)
 
         # Favorite items that require login
-        favs = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.FavouritesId),
-                         "https://www.npostart.nl/api/account/@me/profile")
+        favs = FolderItem(
+            LanguageHelper.get_localized_string(LanguageHelper.FavouritesId),
+            "https://www.npostart.nl/api/account/@me/profile",
+            content_type=contenttype.NONE)
         favs.complete = True
         favs.description = "Favorieten van de NPO.nl website. Het toevoegen van favorieten " \
                            "wordt nog niet ondersteund."
@@ -352,50 +358,57 @@ class Channel(chn_class.Channel):
         favs.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
         items.append(favs)
 
-        extra = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.LiveRadio),
-                          "http://radio-app.omroep.nl/player/script/player.js")
+        extra = FolderItem(
+            LanguageHelper.get_localized_string(LanguageHelper.LiveRadio),
+            "https://radio-app.omroep.nl/player/script/player.js",
+            content_type=contenttype.SONGS)
         extra.complete = True
         extra.dontGroup = True
         items.append(extra)
 
-        extra = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.LiveTv),
-                          "%s/live" % (self.baseUrlLive,))
+        extra = FolderItem(
+            LanguageHelper.get_localized_string(LanguageHelper.LiveTv),
+            "%s/live" % (self.baseUrlLive,),
+            content_type=contenttype.VIDEOS)
         extra.complete = True
         extra.dontGroup = True
         items.append(extra)
 
-        extra = MediaItem(
+        extra = FolderItem(
             "{} ({})".format(
                 LanguageHelper.get_localized_string(LanguageHelper.TvShows),
                 LanguageHelper.get_localized_string(LanguageHelper.FullList)
             ),
-            "https://start-api.npo.nl/page/catalogue?pageSize={}".format(self.__pageSize))
-
+            "https://start-api.npo.nl/page/catalogue?pageSize={}".format(self.__pageSize),
+            content_type=contenttype.TVSHOWS
+        )
         extra.complete = True
         extra.dontGroup = True
         extra.description = "Volledige programma lijst van NPO Start."
         extra.HttpHeaders = self.__jsonApiKeyHeader
-        extra.content_type = contenttype.TVSHOWS
         # API Key from here: https://packagist.org/packages/kro-ncrv/npoplayer?q=&p=0&hFR%5Btype%5D%5B0%5D=concrete5-package
         items.append(extra)
 
-        extra = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.Genres),
-                          "https://www.npostart.nl/programmas")
+        extra = FolderItem(
+            LanguageHelper.get_localized_string(LanguageHelper.Genres),
+            "https://www.npostart.nl/programmas",
+            content_type=contenttype.NONE)
         extra.complete = True
         extra.dontGroup = True
-        extra.content_type = contenttype.FILES
         items.append(extra)
 
-        extra = MediaItem(
+        extra = FolderItem(
             "{} (A-Z)".format(LanguageHelper.get_localized_string(LanguageHelper.TvShows)),
-            "#alphalisting")
+            "#alphalisting",
+            content_type=contenttype.NONE)
         extra.complete = True
         extra.description = "Alfabetische lijst van de NPO.nl site."
         extra.dontGroup = True
-        extra.content_type = contenttype.FILES
         items.append(extra)
 
-        recent = MediaItem(LanguageHelper.get_localized_string(LanguageHelper.Recent), "#recent")
+        recent = FolderItem(
+            LanguageHelper.get_localized_string(LanguageHelper.Recent), "#recent",
+            content_type=contenttype.EPISODES)
         recent.complete = True
         recent.dontGroup = True
         items.append(recent)
@@ -436,7 +449,7 @@ class Channel(chn_class.Channel):
             else:
                 url = "https://www.npostart.nl/gids?date=%04d-%02d-%02d&type=tv" % \
                       (air_date.year, air_date.month, air_date.day)
-            extra = MediaItem(title, url)
+            extra = FolderItem(title, url, content_type=contenttype.EPISODES)
             extra.complete = True
             extra.dontGroup = True
             if self.__useJson:
@@ -495,10 +508,9 @@ class Channel(chn_class.Channel):
             for stream in live_streams:
                 Logger.debug("Adding video item to '%s' sub item list: %s", parent, stream)
                 live_data = live_streams[stream]
-                item = MediaItem(stream, live_data["url"])
+                item = MediaItem(stream, live_data["url"], mediatype.VIDEO)
                 item.icon = parent.icon
                 item.thumb = live_data["thumb"]
-                item.type = 'video'
                 item.isLive = True
                 item.complete = False
                 items.append(item)
@@ -542,7 +554,9 @@ class Channel(chn_class.Channel):
         for char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ0":
             if char == "0":
                 char = "0-9"
-            sub_item = MediaItem(title_format % (char,), url_format % (char,))
+            sub_item = FolderItem(
+                title_format % (char,), url_format % (char,),
+                content_type=contenttype.TVSHOWS)
             sub_item.complete = True
             sub_item.dontGroup = True
             sub_item.content_type = contenttype.TVSHOWS
@@ -565,7 +579,7 @@ class Channel(chn_class.Channel):
         """
 
         profile_name = result_set.get("name")
-        item = MediaItem(profile_name, "#list_profile")
+        item = FolderItem(profile_name, "#list_profile", mediatype.FOLDER, contenttype.NONE)
         item.thumb = result_set.get("thumburl", None)
         item.description = result_set.get("description", "")
         item.complete = True
@@ -599,14 +613,16 @@ class Channel(chn_class.Channel):
                         })
 
         # Add the episodes/tvshows
-        epsisodes = MediaItem(
+        epsisodes = FolderItem(
             LanguageHelper.get_localized_string(LanguageHelper.Episodes),
-            "https://www.npostart.nl/ums/accounts/@me/favourites/episodes?page=1&dateFrom=2014-01-01&tileMapping=dedicated&tileType=asset")
+            "https://www.npostart.nl/ums/accounts/@me/favourites/episodes?page=1&dateFrom=2014-01-01&tileMapping=dedicated&tileType=asset",
+            content_type=contenttype.EPISODES)
         items.append(epsisodes)
 
-        tvshows = MediaItem(
+        tvshows = FolderItem(
             LanguageHelper.get_localized_string(LanguageHelper.TvShows),
-            "https://www.npostart.nl/ums/accounts/@me/favourites?page=1&type=series&tileMapping=normal&tileType=teaser")
+            "https://www.npostart.nl/ums/accounts/@me/favourites?page=1&type=series&tileMapping=normal&tileType=teaser",
+            content_type=contenttype.TVSHOWS)
         items.append(tvshows)
         return data, items
 
@@ -625,6 +641,8 @@ class Channel(chn_class.Channel):
         """
 
         item = chn_class.Channel.create_episode_item(self, result_set)
+        if not item:
+            return None
 
         # Update the URL
         item.url = self.__get_url_for_pom(result_set["powid"])
@@ -633,6 +651,7 @@ class Channel(chn_class.Channel):
         else:
             item.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
         item.dontGroup = True
+        item.content_type = contenttype.EPISODES
         return item
 
     def create_json_episode_item(self, result_set):
@@ -663,8 +682,7 @@ class Channel(chn_class.Channel):
         name = result_set['title']
         description = result_set.get('description', '')
 
-        item = MediaItem(name, url)
-        item.type = 'folder'
+        item = FolderItem(name, url, media_type=mediatype.TVSHOW, content_type=contenttype.EPISODES)
         item.complete = True
         item.description = description
         if self.__useJson:
@@ -736,9 +754,8 @@ class Channel(chn_class.Channel):
         Logger.trace(result_set)
         channel = result_set["channel"].replace("NED", "NPO ")
         title = "{0[hours]}:{0[minutes]} - {1} - {0[title]}".format(result_set, channel)
-        item = MediaItem(title, result_set["url"])
+        item = MediaItem(title, result_set["url"], media_type=mediatype.EPISODE)
         item.description = result_set["channel"]
-        item.type = 'video'
         item.HttpHeaders = self.httpHeaders
         item.complete = False
         return item
@@ -767,10 +784,11 @@ class Channel(chn_class.Channel):
         # set the POW id based on either video of folder:
         # This no longer works. Assuming video for now.
         if "npo-asset-tile-timer" in result_set["videoDetection"]:
-            item.type = "video"
+            item.media_type = mediatype.EPISODE
             item.url = result_set["powid"]
         else:
-            item.type = "folder"
+            item.media_type = mediatype.TVSHOW
+            item.content_type = contenttype.EPISODES
             item.url = "https://www.npostart.nl/media/series/%(powid)s/episodes?page=1&tileMapping=dedicated&tileType=asset&pageType=franchise" % result_set
             item.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
         item.isPaid = "premium" in result_set["class"]
@@ -817,7 +835,7 @@ class Channel(chn_class.Channel):
         next_url = data.get_value("_links", "next", "href")
         if next_url:
             next_title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
-            item = MediaItem(next_title, next_url)
+            item = FolderItem(next_title, next_url, content_type=contenttype.EPISODES)
             item.complete = True
             item.HttpHeaders = self.__jsonApiKeyHeader
             items.append(item)
@@ -857,9 +875,8 @@ class Channel(chn_class.Channel):
         if video_id is None:
             return None
 
-        item = MediaItem(name, video_id)
+        item = MediaItem(name, video_id, media_type=mediatype.EPISODE)
         item.description = description
-        item.type = "video"
 
         season = result_set.get("seasonNumber")
         episode = result_set.get("episodeNumber")
@@ -1033,11 +1050,10 @@ class Channel(chn_class.Channel):
         # Filter the duplicates
         title = " - ".join(set(names))
 
-        item = MediaItem(title, video_id)
-        item.type = 'video'
+        item = MediaItem(title, video_id, media_type=mediatype.EPISODE)
         item.complete = False
         item.description = description
-        #
+
         images = data.get('stills')
         if images:
             # there were images in the stills
@@ -1075,8 +1091,7 @@ class Channel(chn_class.Channel):
         Logger.trace(result_set)
 
         url = "https://www.npostart.nl/media/collections/%s?page=1&tileMapping=normal&tileType=asset&pageType=collection" % (result_set[0],)
-        item = MediaItem(result_set[1], url)
-        item.type = 'folder'
+        item = FolderItem(result_set[1], url, content_type=contenttype.TVSHOWS)
         item.HttpHeaders["X-Requested-With"] = "XMLHttpRequest"
         item.complete = True
         return item
@@ -1119,7 +1134,7 @@ class Channel(chn_class.Channel):
         else:
             description = "Nu: %s" % (result_set[3].strip(),)
 
-        item = MediaItem(name, "%s/live/%s" % (self.baseUrlLive, result_set[0]), type="video")
+        item = MediaItem(name, "%s/live/%s" % (self.baseUrlLive, result_set[0]), media_type=mediatype.VIDEO)
         item.description = description
 
         if result_set[1].startswith("http"):
@@ -1158,7 +1173,7 @@ class Channel(chn_class.Channel):
         if name == "demo":
             return None
 
-        item = MediaItem(name, "", type="audio")
+        item = MediaItem(name, "", media_type=mediatype.AUDIO)
         item.isLive = True
         item.complete = False
 
@@ -1176,7 +1191,7 @@ class Channel(chn_class.Channel):
                 continue
             item.url = "http://e.omroep.nl/metadata/%(url)s" % stream
             item.complete = False
-            item.type = "video"
+            item.media_type = mediatype.EPISODE
             return item
 
         # else the radio streams

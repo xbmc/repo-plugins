@@ -162,13 +162,12 @@ msgctxt "#30036"
 msgid "Password"
 msgstr "Palavra passe"
 
-# empty string with id 30037
-msgctxt "#30038"
-msgid "Confirm proxy changes"
+msgctxt "#30037"
+msgid "Use 'Up Next' to play next episode"
 msgstr ""
 
-msgctxt "#30039"
-msgid "Are you sure you want to update all channels for this country with this proxy?"
+msgctxt "#30038"
+msgid "'Up Next' add-on settings"
 msgstr ""
 
 msgctxt "#30040"
@@ -601,6 +600,14 @@ msgstr ""
 
 msgctxt "#30364"
 msgid "Latest news"
+msgstr ""
+
+msgctxt "#30365"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30366"
+msgid "Available from"
 msgstr ""
 
 # empty strings from id 30365 to 30400

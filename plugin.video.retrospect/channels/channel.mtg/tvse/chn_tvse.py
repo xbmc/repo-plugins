@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-from resources.lib import chn_class
-
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.logger import Logger
@@ -170,7 +169,7 @@ class Channel(chn_class.Channel):
         alt_name = result_set["description"]
         item.name = "{0} - {1}".format(item.name, alt_name)
         item.description = alt_name
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.complete = False
         return item
 

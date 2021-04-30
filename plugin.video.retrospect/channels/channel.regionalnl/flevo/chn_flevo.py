@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.mediaitem import MediaItem
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.datehelper import DateHelper
@@ -84,9 +84,9 @@ class Channel(chn_class.Channel):
         if self.parentItem is None:
             live_item = MediaItem(
                 "\a.: Live TV :.",
-                "https://d5ms27yy6exnf.cloudfront.net/live/omroepflevoland/tv/index.m3u8"
+                "https://d5ms27yy6exnf.cloudfront.net/live/omroepflevoland/tv/index.m3u8",
+                media_type=mediatype.EPISODE
             )
-            live_item.type = 'video'
             live_item.dontGroup = True
             now = datetime.datetime.now()
             live_item.set_date(now.year, now.month, now.day, now.hour, now.minute, now.second)

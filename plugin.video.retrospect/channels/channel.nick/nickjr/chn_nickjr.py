@@ -3,6 +3,7 @@
 from resources.lib import chn_class
 
 from resources.lib.mediaitem import MediaItem
+from resources.lib.mediatype import EPISODE
 from resources.lib.regexer import Regexer
 from resources.lib.parserdata import ParserData
 from resources.lib.logger import Logger
@@ -228,9 +229,8 @@ class Channel(chn_class.Channel):
         url = "http://media.mtvnservices.com/pmt/e1/access/index.html?uri=mgid:%s:%s&configtype=edge" \
               % (self.__mgid, video_id, )
 
-        item = MediaItem(title, url)
+        item = MediaItem(title, url, media_type=EPISODE)
         item.description = result_set.get("description", None)
-        item.type = "video"
         item.HttpHeaders = self.httpHeaders
         item.complete = False
 

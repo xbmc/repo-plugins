@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.logger import Logger
@@ -241,13 +241,12 @@ class Channel(chn_class.Channel):
             title = "%(title)s - %(subtitle)s" % result_set
 
         url = "http://m.schooltv.nl/api/v1/afleveringen/%(mid)s.json" % result_set
-        item = MediaItem(title, url)
+        item = MediaItem(title, url, media_type=mediatype.EPISODE)
         item.description = result_set.get("description", "")
         age_groups = result_set.get('ageGroups', ['Onbekend'])
         item.description = "%s\n\nLeeftijden: %s" % (item.description, ", ".join(age_groups))
 
         item.thumb = result_set.get("image", "")
-        item.type = 'video'
         item.complete = False
         item.set_info_label("duration", result_set['duration'])
 

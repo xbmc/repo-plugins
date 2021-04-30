@@ -555,6 +555,18 @@ class AddonSettings(object):
         return adaptive_add_on_installed
 
     @staticmethod
+    def use_up_next():
+        """ Should we use the Up Next service?
+
+        :rtype: bool
+        :return: To use Up Next or not.
+        """
+        installed = xbmc.getCondVisibility('System.HasAddon(service.upnext) + System.AddonIsEnabled(service.upnext)') == 1
+        use = AddonSettings.store(KODI).get_boolean_setting("use_up_next")
+        Logger.debug("Up Next: installed=%s, use=%s", installed, use)
+        return installed and use
+
+    @staticmethod
     def update_user_agent():
         """ Creates a user agent for this instance of XOT
 

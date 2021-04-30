@@ -8,7 +8,7 @@ else:
     # noinspection PyUnresolvedReferences
     import urllib.parse as parse
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.regexer import Regexer
@@ -131,8 +131,7 @@ class Channel(chn_class.Channel):
         """
 
         url = parse.urljoin(self.baseUrl, HtmlEntityHelper.convert_html_entities(result_set[0]))
-        item = MediaItem(result_set[self.pageNavigationRegexIndex], url)
-        item.type = "page"
+        item = MediaItem(result_set[self.pageNavigationRegexIndex], url, media_type=mediatype.PAGE)
         item.complete = True
 
         Logger.trace("Created '%s' for url %s", item.name, item.url)
@@ -158,7 +157,6 @@ class Channel(chn_class.Channel):
             name = "\a.: %s :." % (result_set[4],)
             item = MediaItem(name, url)
             item.complete = True
-            item.type = "folder"
             return item
 
         url = parse.urljoin(self.baseUrl, HtmlEntityHelper.convert_html_entities(result_set[0]))
@@ -219,8 +217,7 @@ class Channel(chn_class.Channel):
         description = xml_data.get_single_node_content("description")
         description = description.replace("<![CDATA[ ", "").replace("]]>", "").replace("<p>", "").replace("</p>", "\n")
 
-        item = MediaItem(title, url)
-        item.type = 'video'
+        item = MediaItem(title, url, media_type=mediatype.EPISODE)
         item.complete = False
         item.description = description
 

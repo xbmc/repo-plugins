@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.logger import Logger
@@ -162,7 +162,7 @@ class Channel(chn_class.Channel):
 
         url = "%s%s" % (self.baseUrl, result_set["Url"])
         item = MediaItem(result_set["Title"], url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.thumb = result_set["Thumb"]
         item.complete = False
         return item

@@ -4,7 +4,7 @@
 import datetime
 import pytz
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.regexer import Regexer
@@ -586,7 +586,7 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(title, url)
         item.description = result_set.get("longDescription")
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.set_info_label("duration", int(result_set.get("duration", 0)))
         item.isGeoLocked = result_set.get("restrictions", {}).get("onlyAvailableInSweden", False)
 
@@ -684,7 +684,7 @@ class Channel(chn_class.Channel):
         url = '{}{}'.format(self.baseUrl, result_set['urls']['svtplay'])
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = result_set.get('longDescription')
 
         image_info = result_set.get("image")
@@ -736,7 +736,7 @@ class Channel(chn_class.Channel):
             url = "{}{}".format(self.baseUrl, result_set['urls']['svtplay'])
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = result_set.get('longDescription')
         item.isGeoLocked = result_set['restrictions']['onlyAvailableInSweden']
 
@@ -909,7 +909,7 @@ class Channel(chn_class.Channel):
             title,
             "https://www.svt.se/videoplayer-api/video/%s" % (channel_id.lower(),)
         )
-        channel_item.type = "video"
+        channel_item.media_type = mediatype.EPISODE
         channel_item.isLive = True
         channel_item.isGeoLocked = True
         channel_item.description = description

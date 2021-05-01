@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 import datetime
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.helpers.htmlhelper import HtmlHelper
 
 from resources.lib.mediaitem import MediaItem
@@ -9,6 +9,7 @@ from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.logger import Logger
+from resources.lib.mediatype import EPISODE
 from resources.lib.parserdata import ParserData
 from resources.lib.streams.m3u8 import M3u8
 from resources.lib.urihandler import UriHandler
@@ -137,13 +138,12 @@ class Channel(chn_class.Channel):
 
         title = LanguageHelper.get_localized_string(LanguageHelper.LiveStreamTitleId)
         item = MediaItem("\a.: {} :.".format(title), "")
-        item.type = "folder"
         now = datetime.datetime.now()
         item.set_date(now.year, now.month, now.day, 23, 59, 58)
         items.append(item)
 
         live_item = MediaItem(title, "#livestream")
-        live_item.type = "video"
+        live_item.media_type = mediatype.EPISODE
         live_item.isLive = True
         item.items.append(live_item)
 
@@ -190,7 +190,7 @@ class Channel(chn_class.Channel):
             if video_url is None:
                 return None
 
-            item.type = "video"
+            item.media_type = EPISODE
             item.url = video_url
 
         return item
@@ -227,8 +227,7 @@ class Channel(chn_class.Channel):
         else:
             return None
 
-        item = MediaItem(result_set["title"], url)
-        item.type = "video"
+        item = MediaItem(result_set["title"], url, media_type=EPISODE)
         item.thumb = thumb or self.noImage
         item.description = HtmlHelper.to_text(result_set.get("text"))
 

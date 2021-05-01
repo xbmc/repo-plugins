@@ -3,12 +3,14 @@
 import datetime
 import pytz
 
-from resources.lib import chn_class, contenttype
+from resources.lib import chn_class
+from resources.lib import contenttype
+from resources.lib import mediatype
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.helpers.subtitlehelper import SubtitleHelper
 
-from resources.lib.mediaitem import MediaItem
+from resources.lib.mediaitem import MediaItem, FolderItem
 from resources.lib.streams.m3u8 import M3u8
 from resources.lib.streams.mpd import Mpd
 from resources.lib.regexer import Regexer
@@ -176,7 +178,7 @@ class Channel(chn_class.Channel):
                 day_name = days[date.weekday()]
                 title = day_name
 
-            date_item = MediaItem(title, url)
+            date_item = FolderItem(title, url, content_type=contenttype.EPISODES)
             date_item.set_date(date.year, date.month, date.day)
             items.append(date_item)
 
@@ -491,7 +493,8 @@ class Channel(chn_class.Channel):
             "{__typename,title,description,guid,updated,seriesTvSeasons{id},imageMedia{url,label}}"
         )
         popular_title = LanguageHelper.get_localized_string(LanguageHelper.Popular)
-        popular = MediaItem("\a.: {} :.".format(popular_title), popular_url)
+        popular = FolderItem("\a.: {} :.".format(popular_title), popular_url,
+                             content_type=contenttype.EPISODES)
         popular.dontGroup = True
         popular.content_type = contenttype.TVSHOWS
         items.append(popular)
@@ -499,26 +502,30 @@ class Channel(chn_class.Channel):
         # https://graph.kijk.nl/graphql?operationName=programsByDate&variables={"date":"2020-04-19","numOfDays":7}&extensions={"persistedQuery":{"version":1,"sha256Hash":"1445cc0d283e10fa21fcdf95b127207d5f8c22834c1d0d17df1aacb8a9da7a8e"}}
         recent_url = "#recentgraphql"
         recent_title = LanguageHelper.get_localized_string(LanguageHelper.Recent)
-        recent = MediaItem("\a.: {} :.".format(recent_title), recent_url)
+        recent = FolderItem("\a.: {} :.".format(recent_title), recent_url,
+                            content_type=contenttype.FILES)
         recent.dontGroup = True
         items.append(recent)
 
         search_title = LanguageHelper.get_localized_string(LanguageHelper.Search)
-        search = MediaItem("\a.: {} :.".format(search_title), "#searchSite")
+        search = FolderItem("\a.: {} :.".format(search_title), "#searchSite",
+                            content_type=contenttype.EPISODES)
         search.dontGroup = True
         items.append(search)
 
-        movie_url = self.__get_api_persisted_url(
-            "programs", "cd8d5f074397e43ccd27b1c958d8c24264b0a92a94f3162e8281f6a2934d0391",
-            variables={"programTypes": "MOVIE", "limit": 100}
-        )
+        # Persisent URL
+        # movie_url = self.__get_api_persisted_url(
+        #     "programs", "cd8d5f074397e43ccd27b1c958d8c24264b0a92a94f3162e8281f6a2934d0391",
+        #     variables={"programTypes": "MOVIE", "limit": 100}
+        # )
         movie_url = self.__get_api_query_url(
             "programs(programTypes: MOVIE)",
             "{totalResults,items{type,__typename,guid,title,description,duration,displayGenre,"
             "imageMedia{url,label},epgDate,sources{type,file,drm},tracks{type,kind,label,file}}}"
         )
         movies_title = LanguageHelper.get_localized_string(LanguageHelper.Movies)
-        movies = MediaItem("\a.: {} :.".format(movies_title), movie_url)
+        movies = FolderItem("\a.: {} :.".format(movies_title), movie_url,
+                            content_type=contenttype.MOVIES)
         movies.dontGroup = True
         movies.content_type = contenttype.MOVIES
         items.append(movies)
@@ -547,7 +554,7 @@ class Channel(chn_class.Channel):
                     air_date.year, air_date.month, air_date.day),
                 self.__video_fields
             )
-            extra = MediaItem(title, recent_url)
+            extra = FolderItem(title, recent_url, content_type=contenttype.EPISODES)
             extra.complete = True
             extra.dontGroup = True
             extra.metaData["title_format"] = "{2} - s{0:02d}e{1:02d}"
@@ -636,7 +643,7 @@ class Channel(chn_class.Channel):
                 fields="{items{seriesTvSeasons{id,title,seasonNumber,__typename}}}"
             )
 
-        item = MediaItem(result_set["title"], url)
+        item = FolderItem(result_set["title"], url, content_type=contenttype.EPISODES)
         item.description = result_set.get("description")
         self.__get_artwork(item, result_set.get("imageMedia"))
 
@@ -668,9 +675,8 @@ class Channel(chn_class.Channel):
             "programs", "b6f65688f7e1fbe22aae20816d24ca5dcea8c86c8e72d80b462a345b5b70fa41",
             variables={"programTypes": "MOVIE", "guid": result_set["guid"]})
 
-        item = MediaItem(result_set["title"], url)
+        item = MediaItem(result_set["title"], url, media_type=mediatype.MOVIE)
         item.description = result_set.get("description")
-        item.type = "video"
         item.set_info_label("duration", int(result_set.get("duration", 0) or 0))
         item.set_info_label("genre", result_set.get("displayGenre"))
         self.__get_artwork(item, result_set.get("imageMedia"))
@@ -718,7 +724,7 @@ class Channel(chn_class.Channel):
             query='programs(tvSeasonId:"{}",programTypes:EPISODE,skip:0,limit:{})'.format(season_id, self.__list_limit),
             fields=self.__video_fields)
 
-        item = MediaItem(title, url)
+        item = FolderItem(title, url, content_type=contenttype.EPISODES, media_type=mediatype.SEASON)
         return item
 
     def create_api_episode_type(self, result_set):
@@ -752,10 +758,12 @@ class Channel(chn_class.Channel):
         elif season_number is not None and episode_number is not None:
             title = title_format.format(season_number, episode_number, title)
 
-        item = MediaItem(title, url, type="video")
+        item = MediaItem(title, url, media_type=mediatype.EPISODE)
         item.description = result_set.get("longDescription", result_set.get("description"))
         item.set_info_label("duration", int(result_set.get("duration", 0) or 0))
         item.set_info_label("genre", result_set.get("displayGenre"))
+        if season_number and episode_number:
+            item.set_season_info(season_number, episode_number)
         self.__get_artwork(item, result_set.get("imageMedia"), mode="thumb")
 
         updated = result_set["lastPubDate"] / 1000

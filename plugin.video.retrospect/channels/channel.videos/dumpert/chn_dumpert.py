@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.logger import Logger
@@ -94,7 +94,7 @@ class Channel(chn_class.Channel):
         Logger.trace(result_set)
 
         item = MediaItem(result_set["title"], "")
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.thumb = result_set["still"]
         item.description = result_set["description"]
 

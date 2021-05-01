@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 import pytz
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 
@@ -224,7 +224,7 @@ class Channel(chn_class.Channel):
               "&https=true".format(self.__country_id, mgid)
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
 
         if "images" in result_set:
             item.thumb = result_set["images"]["url"]
@@ -267,7 +267,7 @@ class Channel(chn_class.Channel):
               "?uri=mgid:arc:video:{}:{}&configtype=edge".format(self.__country_id, mgid)
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = result_set["description"]
 
         if "images" in result_set:

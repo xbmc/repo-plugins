@@ -8,7 +8,7 @@ else:
     # noinspection PyUnresolvedReferences
     import urllib.parse as parse
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.mediaitem import MediaItem
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.datehelper import DateHelper
@@ -199,8 +199,7 @@ class Channel(chn_class.Channel):
         if self.liveUrl.endswith(".m3u8"):
             # We actually have a single stream.
             title = "{} - {}".format(self.channelName, LanguageHelper.get_localized_string(LanguageHelper.LiveStreamTitleId))
-            live_item = MediaItem(title, self.liveUrl)
-            live_item.type = 'video'
+            live_item = MediaItem(title, self.liveUrl, media_type=mediatype.VIDEO)
             live_item.isLive = True
             if self.channelCode == "rtvdrenthe":
                 # RTV Drenthe actually has a buggy M3u8 without master index.
@@ -360,7 +359,7 @@ class Channel(chn_class.Channel):
         if not url.startswith("http"):
             url = parse.urljoin(self.baseUrl, url)
 
-        item = MediaItem(title, url)
+        item = MediaItem(title, url, media_type=mediatype.EPISODE)
 
         if media_link:
             item.append_single_stream(media_link, self.channelBitrate)
@@ -381,7 +380,6 @@ class Channel(chn_class.Channel):
         if thumb_url:
             item.thumb = thumb_url
 
-        item.type = 'video'
         item.description = HtmlHelper.to_text(result_set.get("text"))
 
         posix = result_set.get("timestamp", None)
@@ -419,11 +417,12 @@ class Channel(chn_class.Channel):
         url = result_set["stream"]["highQualityUrl"]
         title = result_set["title"] or result_set["id"].title()
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.isLive = True
 
         if result_set["mediaType"].lower() == "audio":
             item.append_single_stream(item.url)
+            item.media_type = mediatype.AUDIO
             item.complete = True
             return item
 

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.logger import Logger
@@ -81,7 +81,7 @@ class Channel(chn_class.Channel):
         Logger.info("Performing Post-Processing")
         if len(items) == 1:
             item = items[0]
-            if item.type == "folder" and item.items:
+            if item.is_folder and item.items:
                 return item.items
 
         Logger.debug("Post-Processing finished")
@@ -180,7 +180,7 @@ class Channel(chn_class.Channel):
         Logger.trace(result_set)
         video_id = result_set["id"]
         item = MediaItem(result_set["titlePlaylist"], self.__get_graph_url(video_id))
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = result_set.get("description")
         item.thumb = result_set.get("imageUrl")
 

@@ -9,11 +9,13 @@ from functools import reduce
 import xbmcgui
 
 from resources.lib.addonsettings import AddonSettings
-from resources.lib import contenttype, kodifactory
+from resources.lib import kodifactory
 from resources.lib.logger import Logger
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.encodinghelper import EncodingHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
+from resources.lib import mediatype
+from resources.lib import contenttype
 from resources.lib.streams.adaptive import Adaptive
 from resources.lib.proxyinfo import ProxyInfo
 
@@ -41,8 +43,7 @@ class MediaItem:
     ExpiresAt = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
 
     #noinspection PyShadowingBuiltins
-    def __init__(self, title, url, type="folder", tv_show_title=None,
-                 content_type=contenttype.EPISODES, depickle=False):
+    def __init__(self, title, url, media_type=mediatype.FOLDER, depickle=False, tv_show_title=None):
         """ Creates a new MediaItem.
 
         The `url` can contain an url to a site more info about the item can be
@@ -53,15 +54,12 @@ class MediaItem:
         the item. This is all taken care of when creating Kodi items in the
         different methods.
 
-        :param str|unicode title:       The title of the item, used for appearance in lists.
-        :param str|unicode url:         Url that used for further information retrieval.
-        :param str type:                Type of MediaItem (folder, video, audio).
-                                         Defaults to 'folder'.
-        :param str|None tv_show_title:  The title of the TV Show to which the episode belongs.
-        :param str content_type:        The Kodi content type of the child items: files, songs,
-                                        artists, albums, movies, tvshows, episodes, musicvideos,
-                                        videos, images, games. Defaults to 'episodes'
+        :param str title:               The title of the item, used for appearance in lists.
+        :param str url:                 Url that used for further information retrieval.
+        :param str|None media_type:     The Kodi media type: video, movie, tvshow, season, episode,
+                                        or musicvideo.
         :param bool depickle:           Is the constructor called while depickling.
+        :param str|None tv_show_title:  The title of the TV Show to which the episode belongs.
 
         """
 
@@ -82,12 +80,13 @@ class MediaItem:
         self.__timestamp = datetime.min           # : value for sorting, this one is set to minimum so if non is set, it's shown at the bottom
         self.__expires_datetime = None            # : datetime value of the expire time
 
-        self.type = type                          # : video, audio, folder, append, page, playlist
         self.dontGroup = False                    # : if set to True this item will not be auto grouped.
         self.isLive = False                       # : if set to True, the item will have a random QuerySting param
         self.isGeoLocked = False                  # : if set to True, the item is GeoLocked to the channels language (o)
         self.isDrmProtected = False               # : if set to True, the item is DRM protected and cannot be played (^)
         self.isPaid = False                       # : if set to True, the item is a Paid item and cannot be played (*)
+        self.season = 0                           # : The season number
+        self.epsiode = 0                          # : The episode number
         self.__infoLabels = dict()                # : Additional Kodi InfoLabels
 
         self.complete = False
@@ -98,9 +97,11 @@ class MediaItem:
         self.isCloaked = False
         self.metaData = dict()                    # : Additional data that is for internal / routing use only
 
+        # Kodi media types: video, movie, tvshow, season, episode or musicvideo, music, song, album, artist
+        self.media_type = media_type
         # Kodi content types: files, songs, artists, albums, movies, tvshows, episodes,
         # musicvideos, videos, images, games. Defaults to 'episodes'
-        self.content_type = content_type
+        self.content_type = contenttype.EPISODES
 
         if depickle:
             # While deplickling we don't need to do the guid/guidValue calculations. They will
@@ -168,19 +169,46 @@ class MediaItem:
 
         return False
 
+    @property
     def is_playable(self):
         """ Returns True if the item can be played in a Media Player.
-
-        At this moment it returns True for:
-        * type = 'video'
-        * type = 'audio'
 
         :return: Returns true if this is a playable MediaItem
         :rtype: bool
 
         """
 
-        return self.type.lower() in ('video', 'audio', 'playlist')
+        return self.media_type in mediatype.PLAYABLE_TYPES
+
+    @property
+    def is_folder(self):
+        """ Indication if this item represents a folder.
+
+        :return: True if this item is a folder item. False otherwise.
+        :rtype: bool
+
+        """
+        return self.media_type in mediatype.FOLDER_TYPES
+
+    @property
+    def is_video(self):
+        """ Indication if this item represents a video.
+
+        :return: True if this item is a video item. False otherwise.
+        :rtype: bool
+
+        """
+        return self.media_type in mediatype.VIDEO_TYPES
+
+    @property
+    def is_audio(self):
+        """ Indication if this item represents a audio item.
+
+        :return: True if this item is a audio item. False otherwise.
+        :rtype: bool
+
+        """
+        return self.media_type in mediatype.AUDIO_TYPES
 
     def has_track(self):
         """ Does this MediaItem have a TrackNumber InfoLabel
@@ -216,10 +244,22 @@ class MediaItem:
         """
         return bool(self.__infoLabels)
 
+    def get_info_label(self, label):
+        """ Retrieves an info label.
+
+        :param str label:   The label name to retrieve.
+
+        :return: The value of the label or None if it was not present
+        :rtype: str|int|bool
+
+        """
+
+        return self.__infoLabels.get(label)
+
     def set_info_label(self, label, value):
         """ Set a Kodi InfoLabel and its value.
 
-        See http://kodi.wiki/view/InfoLabels
+        See https://kodi.wiki/view/InfoLabels
         :param str label: the name of the label
         :param Any value: the value to assign
 
@@ -255,8 +295,11 @@ class MediaItem:
             Logger.warning("Cannot set EpisodeInfo without season and episode")
             return
 
-        self.__infoLabels["Episode"] = int(episode)
-        self.__infoLabels["Season"] = int(season)
+        self.season = int(season)
+        self.__infoLabels["Season"] = self.season
+
+        self.epsiode = int(episode)
+        self.__infoLabels["Episode"] = self.epsiode
         return
 
     def set_expire_datetime(self, timestamp, year=0, month=0, day=0, hour=0, minutes=0, seconds=0):
@@ -278,6 +321,20 @@ class MediaItem:
 
         self.__expires_datetime = datetime(
             int(year), int(month), int(day), int(hour), int(minutes), int(seconds))
+
+    def get_upnext_sort_key(self):
+        """ Returns a value that be used to sort episodes for UpNext integration.
+
+        :return: A key used to sort the items chronologically.
+        :rtype: str
+
+        """
+
+        return "{:03d}-{:03d}-{}-{}".format(
+            self.season,
+            self.epsiode,
+            self.__timestamp.strftime("%Y.%m.%d"),
+            self.name)
 
     def set_date(self, year, month, day,
                  hour=None, minutes=None, seconds=None, only_if_newer=False, text=None):
@@ -394,11 +451,15 @@ class MediaItem:
         # Get all the info labels starting with the ones set and then add the specific ones
         info_labels = self.__infoLabels.copy()
         info_labels["Title"] = name
+
+        if self.media_type and self.media_type != mediatype.PAGE:
+            info_labels["mediatype"] = self.media_type
+
         if kodi_date:
             info_labels["Date"] = kodi_date
             info_labels["Year"] = kodi_year
             info_labels["Aired"] = kodi_date
-        if self.type != "audio":
+        if self.media_type in mediatype.VIDEO_TYPES:
             info_labels["Plot"] = description
         if self.tv_show_title:
             info_labels["TVShowTitle"] = self.tv_show_title
@@ -409,13 +470,13 @@ class MediaItem:
         item.setLabel2(self.__date)
 
         # set a flag to indicate it is a item that can be used with setResolveUrl.
-        if self.is_playable():
+        if self.is_playable:
             Logger.trace("Setting IsPlayable to True")
             item.setProperty("IsPlayable", "true")
 
         # specific items
         Logger.trace("Setting InfoLabels: %s", info_labels)
-        if self.type == "audio":
+        if self.media_type in mediatype.AUDIO_TYPES:
             item.setInfo(type="music", infoLabels=info_labels)
         else:
             item.setInfo(type="video", infoLabels=info_labels)
@@ -428,13 +489,7 @@ class MediaItem:
             art['poster'] = self.poster
         item.setArt(art)
 
-        # We never set the content resolving, Retrospect does this. And if we do, then the custom
-        # headers are removed from the URL when opening the resolved URL.
-        try:
-            item.setContentLookup(False)
-        except:
-            # apparently not yet supported on this Kodi version3
-            pass
+        item.setContentLookup(False)
         return item
 
     def get_kodi_play_list_data(self, bitrate, proxy=None):
@@ -450,7 +505,8 @@ class MediaItem:
 
         """
 
-        Logger.info("Creating playlist items for Bitrate: %s kbps\n%s", bitrate, self)
+        Logger.info("Creating playlist items for Bitrate: %s kbps\n%s\nMediaType: %s",
+                    bitrate, self, self.media_type)
 
         if bitrate is None:
             raise ValueError("Bitrate not specified")
@@ -586,21 +642,21 @@ class MediaItem:
 
         value = self.name
 
-        if self.is_playable():
+        if self.is_playable:
             if len(self.MediaItemParts) > 0:
                 value = "MediaItem: %s [Type=%s, Complete=%s, IsLive=%s, Date=%s, Geo/DRM=%s/%s]" % \
-                        (value, self.type, self.complete, self.isLive, self.__date,
+                        (value, self.media_type, self.complete, self.isLive, self.__date,
                          self.isGeoLocked, self.isDrmProtected)
                 for media_part in self.MediaItemParts:
                     value = "%s\n%s" % (value, media_part)
                 value = "%s" % (value,)
             else:
                 value = "%s [Type=%s, Complete=%s, unknown urls, IsLive=%s, Date=%s, Geo/DRM=%s/%s]" \
-                        % (value, self.type, self.complete, self.isLive, self.__date,
+                        % (value, self.media_type, self.complete, self.isLive, self.__date,
                            self.isGeoLocked, self.isDrmProtected)
         else:
             value = "%s [Type=%s, Url=%s, Date=%s, IsLive=%s, Geo/DRM=%s/%s]" \
-                    % (value, self.type, self.url, self.__date, self.isLive, self.isGeoLocked, self.isDrmProtected)
+                    % (value, self.media_type, self.url, self.__date, self.isLive, self.isGeoLocked, self.isDrmProtected)
 
         return value
 
@@ -736,18 +792,18 @@ class MediaItem:
         if not name:
             name = self.name
 
-        if self.type == 'page':
+        if self.media_type == mediatype.PAGE:
             # We need to add the Page prefix to the item
             name = "%s %s" % (LanguageHelper.get_localized_string(LanguageHelper.Page), name)
             Logger.debug("MediaItem.__get_title :: Adding Page Prefix")
 
-        elif self.__date != '' and not self.is_playable() \
+        elif self.__date != '' and not self.is_playable \
                 and not AddonSettings.is_min_version(AddonSettings.KodiLeia):
             # not playable items should always show date
             name = "%s [COLOR=dimgray](%s)[/COLOR]" % (name, self.__date)
 
         folder_prefix = AddonSettings.get_folder_prefix()
-        if self.type == "folder" and not folder_prefix == "":
+        if self.media_type in mediatype.FOLDER_TYPES and not folder_prefix == "":
             name = "%s %s" % (folder_prefix, name)
 
         return name
@@ -760,7 +816,18 @@ class MediaItem:
 
         """
 
-        m = MediaItem(state["name"], state["url"], depickle=False)
+        # Convert older `MediaItem.type` to the new `mediatype` values.
+        media_type = state.get("type")
+        if media_type == "audio":
+            media_type = mediatype.MUSIC
+        elif media_type == "folder":
+            media_type = mediatype.FOLDER
+        elif media_type == "page":
+            media_type = mediatype.PAGE
+        elif media_type == "video":
+            media_type = mediatype.VIDEO
+
+        m = MediaItem(state["name"], state["url"], media_type=media_type, depickle=False)
         self.__dict__ = m.__dict__
         self.__dict__.update(state)
 
@@ -779,6 +846,33 @@ class MediaItem:
     #     """
     #
     #     return type(self), (self.name, self.url), self.__dict__
+
+
+class FolderItem(MediaItem):
+    def __init__(self, title, url, content_type, media_type=mediatype.FOLDER, depickle=False):
+        """ Creates a new FolderItem.
+
+        The `url` can contain an url to a site more info about the item can be
+        retrieved, for instance for a video item to retrieve the media url, or
+        in case of a folder where child items can be retrieved.
+
+        Essential is that no encoding (like UTF8) is specified in the title of
+        the item. This is all taken care of when creating Kodi items in the
+        different methods.
+
+        :param str title:               The title of the item, used for appearance in lists.
+        :param str url:                 Url that used for further information retrieval.
+        :param str|None media_type:     The Kodi media type: video, movie, tvshow, season, episode,
+                                        or musicvideo.
+        :param str|None content_type:   The Kodi content type of the child items: files, songs,
+                                        artists, albums, movies, tvshows, episodes, musicvideos,
+                                        videos, images, games. Defaults to 'episodes'
+        :param bool depickle:           Is the constructor called while depickling.
+
+        """
+
+        MediaItem.__init__(self, title, url, media_type=media_type, depickle=depickle)
+        self.content_type = content_type
 
 
 # Don't make this an MediaItem(object) as it breaks the pickles

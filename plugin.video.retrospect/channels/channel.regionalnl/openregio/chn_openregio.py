@@ -10,7 +10,7 @@ else:
     # noinspection PyUnresolvedReferences
     import urllib.parse as parse
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.mediaitem import MediaItem
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
@@ -129,7 +129,7 @@ class Channel(chn_class.Channel):
 
             for name, url in self.liveUrls.items():
                 item = MediaItem(name, url)
-                item.type = "video"
+                item.media_type = mediatype.EPISODE
                 item.isLive = True
                 live_item.items.append(item)
 
@@ -169,13 +169,13 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(title, link)
         stream_type = result_set["type"]
-        item.type = "video" if stream_type == "tv" else "audio"
+        item.media_type = mediatype.EPISODE if stream_type == "tv" else mediatype.AUDIO
         item.isLive = True
         item.thumb = result_set.get('screenshot')
         item.fanart = result_set.get('image')
 
         if "radio" in title.lower():
-            item.type = "audio"
+            item.media_type = mediatype.AUDIO
         return item
 
     def create_episode_item(self, result_set):
@@ -242,9 +242,8 @@ class Channel(chn_class.Channel):
         title = result_set.get("title")
         media_link = result_set.get("video", result_set.get("ipadLink"))
 
-        item = MediaItem(title, media_link)
+        item = MediaItem(title, media_link, media_type=mediatype.EPISODE)
         item.thumb = result_set.get("image", result_set.get("imageLink"))
-        item.type = 'video'
         item.description = HtmlHelper.to_text(result_set.get("text"))
 
         posix = result_set.get("timestamp", None)
@@ -283,7 +282,7 @@ class Channel(chn_class.Channel):
         """
 
         if "icecast" in item.url:
-            item.type = "audio"
+            item.media_type = mediatype.AUDIO
 
         data = UriHandler.open(item.url)
         stream_info = JsonHelper(data)
@@ -316,7 +315,7 @@ class Channel(chn_class.Channel):
 
         Logger.debug("Updating a (Live) video item")
 
-        if item.type == "audio":
+        if item.is_audio:
             item.append_single_stream(item.url, 0)
             item.complete = True
 

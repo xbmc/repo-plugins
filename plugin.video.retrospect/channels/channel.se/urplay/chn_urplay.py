@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 import pytz
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
@@ -468,7 +468,7 @@ class Channel(chn_class.Channel):
         url = "%s/%s" % (self.baseUrl, slug)
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = result_set['description']
         item.complete = False
 
@@ -627,7 +627,7 @@ class Channel(chn_class.Channel):
         item.fanart = "https://assets.ur.se/id/{}/images/1_l.jpg".format(asset_id)
         if result_type == "program":
             item.set_info_label("duration", result_set["duration"] * 60)
-            item.type = "video"
+            item.media_type = mediatype.EPISODE
         return item
 
     def __iterate_results(self, url_format, results_per_page=150, max_iterations=10):

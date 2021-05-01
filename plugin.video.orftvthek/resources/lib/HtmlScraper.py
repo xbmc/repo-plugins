@@ -819,14 +819,35 @@ class htmlScraper(Scraper):
                 self.html2ListItem(uhd_final_title, banner, "", state, time, channel, channel, generateAddonVideoUrl(uhd_streaming_url), None, False, True, uhdContextMenuItems)
 
             streaming_url = self.getLivestreamUrl(data, self.videoQuality)
-            contextMenuItems = []
-            if inputstreamAdaptive and restart and online:
-                contextMenuItems.append((self.translation(30063), 'RunPlugin(plugin://%s/?mode=liveStreamRestart&link=%s)' % (
-                        xbmcaddon.Addon().getAddonInfo('id'), link)))
-                final_title = "[%s] %s - %s%s" % (self.translation(30063), channel, title, time_str)
-            else:
-                final_title = "%s - %s%s" % (channel, title, time_str)
-            self.html2ListItem(final_title, banner, "", state, time, channel, channel, generateAddonVideoUrl(streaming_url), None, False, True, contextMenuItems)
+            drm_lic_url = self.getLivestreamDRM(data)
+            if streaming_url:
+                contextMenuItems = []
+                if inputstreamAdaptive and restart and online:
+                    contextMenuItems.append((self.translation(30063), 'RunPlugin(plugin://%s/?mode=liveStreamRestart&link=%s)' % (
+                            xbmcaddon.Addon().getAddonInfo('id'), link)))
+                    final_title = "[%s] %s - %s%s" % (self.translation(30063), channel, title, time_str)
+                else:
+                    final_title = "%s - %s%s" % (channel, title, time_str)
+
+                if not drm_lic_url:
+                    self.html2ListItem(final_title, banner, "", state, time, channel, channel, generateAddonVideoUrl(streaming_url), None, False, True, contextMenuItems)
+                elif inputstreamAdaptive:
+                    drm_video_url = generateDRMVideoUrl(streaming_url, drm_lic_url)
+                    self.html2ListItem(final_title, banner, "", state, time, channel, channel, drm_video_url, None, False,
+                                       True, contextMenuItems)
+
+
+    @staticmethod
+    def getLivestreamDRM(data_sets):
+        for data in data_sets:
+            try:
+                data = replaceHTMLCodes(data)
+                data = json.loads(data)
+                if 'drm' in data and 'widevine' in data['drm']:
+                    return data['drm']['widevine']['LA_URL']
+            except Exception as e:
+                debugLog("Error getting Livestream DRM Keys")
+
 
     def liveStreamRestart(self, link):
         try:
@@ -876,6 +897,9 @@ class htmlScraper(Scraper):
                             for video_sources in video_items['sources']:
                                 if video_sources['quality'].lower() == quality.lower() and video_sources[
                                         'protocol'].lower() == "http" and video_sources['delivery'].lower() == 'hls':
+                                    return video_sources['src']
+                                elif video_sources['quality'].lower()[0:3] == quality.lower() and video_sources[
+                                    'protocol'].lower() == "http" and video_sources['delivery'].lower() == 'dash':
                                     return video_sources['src']
             except Exception as e:
                 debugLog("Error getting Livestream")

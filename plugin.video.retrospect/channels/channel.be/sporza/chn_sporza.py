@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.regexer import Regexer
@@ -108,7 +108,6 @@ class Channel(chn_class.Channel):
         items = []
 
         item = MediaItem("\a.: Live :.", "http://sporza.be/cm/sporza/matchcenter/mc_livestream")
-        item.type = "folder"
         item.dontGroup = True
         item.complete = False
         items.append(item)
@@ -136,7 +135,7 @@ class Channel(chn_class.Channel):
         Logger.trace(result_set)
 
         item = MediaItem(result_set[0], result_set[1])
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.isGeoLocked = result_set[3].lower() == "true"
 
         date_time = DateHelper.get_date_from_posix(int(result_set[2]) * 1 / 1000)
@@ -168,7 +167,6 @@ class Channel(chn_class.Channel):
         name = result_set[1]
 
         item = MediaItem(name.capitalize(), url)
-        item.type = "folder"
         item.complete = True
         return item
 

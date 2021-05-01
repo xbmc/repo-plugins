@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.logger import Logger
@@ -81,7 +81,7 @@ class Channel(chn_class.Channel):
             item = MediaItem(live_item, live_base % (live_channels[live_item][0],))
             item.thumb = self.get_image_location(live_channels[live_item][1])
             item.isGeoLocked = True
-            item.type = "video"
+            item.media_type = mediatype.EPISODE
             live_items.items.append(item)
 
         return data, items
@@ -179,7 +179,7 @@ class Channel(chn_class.Channel):
 
         url = "http://www.srf.ch/player/webservice/videodetail/index?id=%s" % (video_id,)
         item = MediaItem(result_set["titleFull"], url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
 
         # noinspection PyTypeChecker
         item.thumb = result_set.get("segmentThumbUrl", None)
@@ -235,7 +235,7 @@ class Channel(chn_class.Channel):
 
         url = "http://il.srgssr.ch/integrationlayer/1.0/ue/srf/video/play/%s.json" % (video_id,)
         item = MediaItem(result_set["title"], url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
 
         item.thumb = self.__get_nested_value(video_info, "Image", "ImageRepresentations", "ImageRepresentation", 0, "url")
         item.description = self.__get_nested_value(video_info, "AssetMetadatas", "AssetMetadata", 0, "description")

@@ -5,7 +5,7 @@ import random
 import time
 import datetime
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.helpers.htmlhelper import HtmlHelper
 from resources.lib.logger import Logger
 from resources.lib.mediaitem import MediaItem
@@ -385,7 +385,7 @@ class Channel(chn_class.Channel):
         items = []
         live = MediaItem("Live %s" % (self.parentItem.name, ), "#livestream")
         live.isLive = True
-        live.type = "video"
+        live.media_type = mediatype.EPISODE
         live.description = self.parentItem.description
         live.metaData = self.parentItem.metaData
         items.append(live)
@@ -463,7 +463,7 @@ class Channel(chn_class.Channel):
         item = MediaItem(result_set["name"], "#livestream")
         item.description = result_set.get("slogan", None)
         item.metaData["channelId"] = result_set["id"]
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.isLive = True
         item.isPaid = True  # result_set.get("premium", False)  All content requires a premium account
         item.isGeoLocked = True
@@ -531,7 +531,7 @@ class Channel(chn_class.Channel):
                 return None
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.isGeoLocked = result_set["geoblock"]
         item.description = episode_info["description"]
         # item.set_date(startTime.year, startTime.month, startTime.day)
@@ -605,7 +605,7 @@ class Channel(chn_class.Channel):
     #         #     startTime = self.parentItem.metaData["airDate"]
     #
     #         item = MediaItem(title, url)
-    #         item.type = "video"
+    #         item.media_type = mediatype.EPISODE
     #         item.isGeoLocked = result_set["geoblock"]
     #         item.description = result_set["shortDescription"]
     #         # item.set_date(startTime.year, startTime.month, startTime.day)
@@ -845,7 +845,7 @@ class Channel(chn_class.Channel):
             title = result_set['title']
 
         url = "https://vod.medialaan.io/vod/v2/videos/%(id)s" % result_set
-        item = MediaItem(title, url, type="video")
+        item = MediaItem(title, url, media_type=mediatype.EPISODE)
         item.description = result_set.get('text')
         item.thumb = self.__find_image(result_set.get('episode', {}), self.parentItem.thumb)
 
@@ -940,7 +940,7 @@ class Channel(chn_class.Channel):
             item = MediaItem("Live VTM", "#livestream")
         else:
             item = MediaItem("Live Q2", "#livestream")
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.isLive = True
         now = datetime.datetime.now()
         item.set_date(now.year, now.month, now.day, now.hour, now.minute, now.second)
@@ -1071,7 +1071,7 @@ class Channel(chn_class.Channel):
         url = result_set["url"].replace('  ', ' ')
         if not result_set["url"].startswith("http"):
             url = "%s/%s" % (self.baseUrl, result_set["url"])
-        item = MediaItem(title, url, type="video")
+        item = MediaItem(title, url, media_type=mediatype.EPISODE)
         item.thumb = result_set['thumburl']
         item.complete = False
 

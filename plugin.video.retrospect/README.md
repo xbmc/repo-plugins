@@ -471,3 +471,5 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - Petra Pahtajärvi
 - Marcus Bruzelius
 - T.R. Quuk
+- M.J.M. de Frankrijker
+- Magnus Holmquist

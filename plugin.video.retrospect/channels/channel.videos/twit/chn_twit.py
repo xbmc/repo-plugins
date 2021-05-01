@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.regexer import Regexer
@@ -78,7 +78,7 @@ class Channel(chn_class.Channel):
         item.complete = True
 
         playback_item = MediaItem("Play Live", "http://live.twit.tv/")
-        playback_item.type = "playlist"
+        playback_item.media_type = mediatype.VIDEO
         playback_item.isLive = True
         playback_part = playback_item.create_new_empty_media_part()
 
@@ -184,8 +184,7 @@ class Channel(chn_class.Channel):
             url = "%s%s" % (self.baseUrl, url)
         name = result_set["title"]
 
-        item = MediaItem(name, url)
-        item.type = 'video'
+        item = MediaItem(name, url, media_type=mediatype.EPISODE)
         month = result_set["month"]
         month = DateHelper.get_month_from_name(month, "en", False)
         day = result_set["day"]

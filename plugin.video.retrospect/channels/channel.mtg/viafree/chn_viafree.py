@@ -2,7 +2,7 @@
 
 import datetime
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem, MediaItemPart
 from resources.lib.regexer import Regexer
@@ -291,7 +291,7 @@ class Channel(chn_class.Channel):
         Logger.trace(result_set)
         url = "http://playapi.mtgx.tv/v3/videos/stream/%(id)s" % result_set
         item = MediaItem(result_set["title"], url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = result_set.get("summary", None)
 
         aired_at = result_set.get("airedAt", None)
@@ -438,7 +438,7 @@ class Channel(chn_class.Channel):
         page = url.rsplit("=", 1)[-1]
 
         item = MediaItem(page, url)
-        item.type = "page"
+        item.media_type = mediatype.PAGE
 
         Logger.trace("Created '%s' for url %s", item.name, item.url)
         return item
@@ -537,7 +537,7 @@ class Channel(chn_class.Channel):
             time_info = time_info.split(":")
             item.set_date(date_info[0], date_info[1], date_info[2], time_info[0], time_info[1], 0)
 
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.complete = False
         item.isGeoLocked = geo_blocked
         item.isDrmProtected = drm_locked

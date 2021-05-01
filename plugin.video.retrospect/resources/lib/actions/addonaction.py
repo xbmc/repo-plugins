@@ -74,7 +74,7 @@ class AddonAction(object):
 
         for menu_item in channel.contextMenuItems:
             # Logger.Debug(menu_item)
-            if menu_item.itemTypes is None or item.type in menu_item.itemTypes:
+            if menu_item.itemTypes is None or item.media_type in menu_item.itemTypes:
                 # We don't care for complete here!
                 # if menu_item.completeStatus == None or menu_item.completeStatus == item.complete:
 

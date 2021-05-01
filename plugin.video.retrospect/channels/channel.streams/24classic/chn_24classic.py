@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.logger import Logger
@@ -136,7 +136,7 @@ class Channel(chn_class.Channel):
         url = "https://www.24classics.com/app/ajax/auth.php?serial=%(serial)s" % result_set
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         # seems to not really work well with track numbers (not showing)
         # item.type = "audio"
         item.complete = False

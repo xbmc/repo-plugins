@@ -4,7 +4,7 @@
 import pytz
 import datetime
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.mediaitem import MediaItem
 from resources.lib.addonsettings import AddonSettings
@@ -458,7 +458,7 @@ class Channel(chn_class.Channel):
         else:
             item.thumb = thumb_url
 
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.complete = False
         item.isGeoLocked = True
         # For now, none are paid.

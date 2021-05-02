@@ -1,0 +1,142 @@
+# Kodi Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@kodi.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32001"
+msgid "Group 1"
+msgstr "Gruppe 1"
+
+msgctxt "#32002"
+msgid "Group 2"
+msgstr "Gruppe 2"
+
+msgctxt "#32003"
+msgid "Group 3"
+msgstr "Gruppe 3"
+
+msgctxt "#32004"
+msgid "Group 4"
+msgstr "Gruppe 4"
+
+msgctxt "#32005"
+msgid "Group 5"
+msgstr "Gruppe 5"
+
+msgctxt "#32006"
+msgid "Group 6"
+msgstr "Gruppe 6"
+
+msgctxt "#32007"
+msgid "Group 7"
+msgstr "Gruppe 7"
+
+msgctxt "#32008"
+msgid "Group 8"
+msgstr "Gruppe 8"
+
+msgctxt "#32009"
+msgid "Group 9"
+msgstr "Gruppe 9"
+
+msgctxt "#32010"
+msgid "Group 10"
+msgstr "Gruppe 10"
+
+msgctxt "#32011"
+msgid "OPML File 1"
+msgstr "OPML Datei 1"
+
+msgctxt "#32012"
+msgid "OPML File 2"
+msgstr "OPML Datei 2"
+
+msgctxt "#32013"
+msgid "OPML File 3"
+msgstr "OPML Datei 3"
+
+msgctxt "#32014"
+msgid "OPML File 4"
+msgstr "OPML Datei 4"
+
+msgctxt "#32015"
+msgid "OPML File 5"
+msgstr "OPML Datei 5"
+
+msgctxt "#32016"
+msgid "OPML File 6"
+msgstr "OPML Datei 6"
+
+msgctxt "#32017"
+msgid "OPML File 7"
+msgstr "OPML Datei 7"
+
+msgctxt "#32018"
+msgid "OPML File 8"
+msgstr "OPML Datei 8"
+
+msgctxt "#32019"
+msgid "OPML File 9"
+msgstr "OPML Datei 9"
+
+msgctxt "#32020"
+msgid "OPML File 10"
+msgstr "OPML Datei 10"
+
+msgctxt "#32021"
+msgid "OPML File"
+msgstr "OPML Datei"
+
+msgctxt "#32022"
+msgid "URL"
+msgstr "URL"
+
+msgctxt "#32031"
+msgid "Podcast 1"
+msgstr "Podcast 1"
+
+msgctxt "#32032"
+msgid "Podcast 2"
+msgstr "Podcast 2"
+
+msgctxt "#32033"
+msgid "Podcast 3"
+msgstr "Podcast 3"
+
+msgctxt "#32034"
+msgid "Podcast 4"
+msgstr "Podcast 4"
+
+msgctxt "#32035"
+msgid "Podcast 5"
+msgstr "Podcast 5"
+
+msgctxt "#32036"
+msgid "Podcast 6"
+msgstr "Podcast 6"
+
+msgctxt "#32037"
+msgid "Podcast 7"
+msgstr "Podcast 7"
+
+msgctxt "#32038"
+msgid "Podcast 8"
+msgstr "Podcast 8"
+
+msgctxt "#32039"
+msgid "Podcast 9"
+msgstr "Podcast 9"
+
+msgctxt "#32040"
+msgid "Podcast 10"
+msgstr "Podcast 10"

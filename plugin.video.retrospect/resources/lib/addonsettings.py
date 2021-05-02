@@ -561,7 +561,12 @@ class AddonSettings(object):
         :rtype: bool
         :return: To use Up Next or not.
         """
-        installed = xbmc.getCondVisibility('System.HasAddon(service.upnext) + System.AddonIsEnabled(service.upnext)') == 1
+
+        if AddonSettings.is_min_version(AddonSettings.KodiMatrix):
+            installed = xbmc.getCondVisibility('System.HasAddon(service.upnext) + System.AddonIsEnabled(service.upnext)') == 1
+        else:
+            installed = xbmc.getCondVisibility('System.HasAddon(service.upnext)') == 1
+
         use = AddonSettings.store(KODI).get_boolean_setting("use_up_next")
         Logger.debug("Up Next: installed=%s, use=%s", installed, use)
         return installed and use

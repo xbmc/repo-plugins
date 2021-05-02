@@ -176,7 +176,7 @@ class VideoAction(AddonAction):
 
         store_id, siblings = self.parameter_parser.pickler.de_pickle_child_items(
             self.parameter_parser.pickle_hash)
-        siblings = list(siblings.values())
+        siblings = [s for s in siblings.values() if s.is_playable]
 
         # Sort based on season-episode-date-name (000-000-0000-00-00-aaaaa)
         siblings.sort(key=lambda s: s.get_upnext_sort_key())
@@ -255,13 +255,13 @@ class VideoAction(AddonAction):
                 # 'tvshow.landscape:': "",
                 # 'tvshow.poster': item.poster,
             },
-            season=item.season or None,
-            episode=item.epsiode or None,
+            season=item.season or "",
+            episode=item.epsiode or "",
             showtitle=item.tv_show_title or "",
             plot=item.description,
             playcount=1,
             rating=1,
-            firstaired=""
+            firstaired=item.get_date()
         )
 
         duration = item.get_info_label("duration")

@@ -333,7 +333,7 @@ class MediaItem:
         return "{:03d}-{:03d}-{}-{}".format(
             self.season,
             self.epsiode,
-            self.__timestamp.strftime("%Y.%m.%d"),
+            self.__timestamp.strftime("%Y.%m.%d") if self.__timestamp.year > 1900 else "0001.01.01",
             self.name)
 
     def set_date(self, year, month, day,
@@ -406,6 +406,14 @@ class MediaItem:
             self.__date = ""
 
         return self.__timestamp
+
+    def get_date(self):
+        """ Gets the object's date.
+
+        :returns: the date for the object
+        :rtype: str|None
+        """
+        return self.__date
 
     def get_kodi_item(self, name=None):
         """Creates a Kodi item with the same data is the MediaItem.

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.3.1+matrix.1"
+        version="5.3.2+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -127,19 +127,18 @@
 
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.3.1+matrix.1 - Changelog - 2021-05-01[/B]
+        <news>[B]Retrospect v5.3.2+matrix.1 - Changelog - 2021-05-02[/B]
 
-This update introduces support for the Next Up add-on (https://github.com/im85288/service.upnext) and introduces a better use of Kodi media and content types. We also squashed some minor bugs.
+Minor issues fixed with Up Next integration and Kodi Leia.
 
 [B]Framework related[/B]
-* Added: Up-Next support for Retrospect (Fixed #1501).
-* Changed: Set correct Kodi media and content types.
+* Fixed: UpNext detection on Kodi Leia.
 
 [B]GUI/Settings/Language related[/B]
-* Updated: Various languages (See #1498 and see #1503).
+_None_
 
 [B]Channel related[/B]
-* Fixed: VRT.nu channel listing.
+_None_
 
         </news>
         <assets>

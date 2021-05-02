@@ -1,3 +1,12 @@
+* 0.12.0
+- added drm livestream playback
+
+* 0.11.1
+- fixed broken livestreams for serviceapi (kodi matrix only)
+
+* 0.11.0
+- kodi v19 support (older versions have to use 0.10.X for now)
+
 * 0.10.3
 - fixed broken livestream when "bundesland heute" videos are available
 

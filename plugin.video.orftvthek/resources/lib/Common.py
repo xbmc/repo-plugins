@@ -23,6 +23,7 @@ from kodi_six.utils import py2_encode, py2_decode
 from future.builtins import str
 from future.builtins import range
 import sys
+import xbmc
 
 PY3 = sys.version_info.major >=3
 if PY3:
@@ -44,19 +45,18 @@ else:
 import re
 
 USERAGENT = u"Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1"
-DEBUG = False
 
 def replaceHTMLCodes(txt):
-    log(repr(txt), 5)
+    log(repr(txt))
     txt = re.sub('(&#[0-9]+)([^;^0-9]+)', '\\1;\\2', txt)
     txt = unescape(txt)
     txt = txt.replace("&amp;", "&")
-    log(repr(txt), 5)
+    log(repr(txt))
     return txt
 
 
 def stripTags(html):
-    log(repr(html), 5)
+    log(repr(html))
     sub_start = html.find("<")
     sub_end = html.find(">")
     while sub_end > sub_start > -1:
@@ -64,12 +64,12 @@ def stripTags(html):
         sub_start = html.find("<")
         sub_end = html.find(">")
 
-    log(repr(html), 5)
+    log(repr(html))
     return html
 
 
 def _getDOMContent(html, name, match, ret):  # Cleanup
-    log("match: " + match, 3)
+    log("match: " + match)
 
     endstr = u"</" + name  # + ">"
 
@@ -77,16 +77,16 @@ def _getDOMContent(html, name, match, ret):  # Cleanup
     end = html.find(endstr, start)
     pos = html.find("<" + name, start + 1 )
 
-    log(str(start) + " < " + str(end) + ", pos = " + str(pos) + ", endpos: " + str(end), 8)
+    log(str(start) + " < " + str(end) + ", pos = " + str(pos) + ", endpos: " + str(end))
 
     while pos < end and pos != -1:  # Ignore too early </endstr> return
         tend = html.find(endstr, end + len(endstr))
         if tend != -1:
             end = tend
         pos = html.find("<" + name, pos + 1)
-        log("loop: " + str(start) + " < " + str(end) + " pos = " + str(pos), 8)
+        log("loop: " + str(start) + " < " + str(end) + " pos = " + str(pos))
 
-    log("start: %s, len: %s, end: %s" % (start, len(match), end), 3)
+    log("start: %s, len: %s, end: %s" % (start, len(match), end))
     if start == -1 and end == -1:
         result = u""
     elif start > -1 and end > -1:
@@ -100,12 +100,10 @@ def _getDOMContent(html, name, match, ret):  # Cleanup
         endstr = html[end:html.find(">", html.find(endstr)) + 1]
         result = match + result + endstr
 
-    log("done result length: " + str(len(result)), 3)
+    log("done result length: " + str(len(result)))
     return result
 
 def _getDOMAttributes(match, name, ret):
-    log("", 3)
-
     lst = re.compile('<' + name + '.*?' + ret + '=([\'"].[^>]*?[\'"])>', re.M | re.S).findall(match)
     if len(lst) == 0:
         lst = re.compile('<' + name + '.*?' + ret + '=(.[^>]*?)>', re.M | re.S).findall(match)
@@ -113,7 +111,7 @@ def _getDOMAttributes(match, name, ret):
     for tmp in lst:
         cont_char = tmp[0]
         if cont_char in "'\"":
-            log("Using %s as quotation mark" % cont_char, 3)
+            log("Using %s as quotation mark" % cont_char)
 
             # Limit down to next variable.
             if tmp.find('=' + cont_char, tmp.find(cont_char, 1)) > -1:
@@ -123,7 +121,7 @@ def _getDOMAttributes(match, name, ret):
             if tmp.rfind(cont_char, 1) > -1:
                 tmp = tmp[1:tmp.rfind(cont_char)]
         else:
-            log("No quotation mark found", 3)
+            log("No quotation mark found")
             if tmp.find(" ") > 0:
                 tmp = tmp[:tmp.find(" ")]
             elif tmp.find("/") > 0:
@@ -133,41 +131,40 @@ def _getDOMAttributes(match, name, ret):
 
         ret.append(tmp.strip())
 
-    log("Done: " + repr(ret), 3)
+    log("Done: " + repr(ret))
     return ret
 
 def _getDOMElements(item, name, attrs):
-    log("", 3)
     lst = []
     for key in attrs:
         lst2 = re.compile('(<' + name + '[^>]*?(?:' + key + '=[\'"]' + attrs[key] + '[\'"].*?>))', re.M | re.S).findall(item)
         if len(lst2) == 0 and attrs[key].find(" ") == -1:  # Try matching without quotation marks
             lst2 = re.compile('(<' + name + '[^>]*?(?:' + key + '=' + attrs[key] + '.*?>))', re.M | re.S).findall(item)
         if len(lst) == 0:
-            log("Setting main list " + repr(lst2), 5)
+            log("Setting main list " + repr(lst2))
             lst = lst2
             lst2 = []
         else:
-            log("Setting new list " + repr(lst2), 5)
+            log("Setting new list " + repr(lst2))
             test = list(range(len(lst)))
             test.reverse()
             for i in test:  # Delete anything missing from the next list.
                 if not lst[i] in lst2:
-                    log("Purging mismatch " + str(len(lst)) + " - " + repr(lst[i]), 3)
+                    log("Purging mismatch " + str(len(lst)) + " - " + repr(lst[i]))
                     del(lst[i])
 
     if len(lst) == 0 and attrs == {}:
-        log("No list found, trying to match on name only", 3)
+        log("No list found, trying to match on name only")
         lst = re.compile('(<' + name + '>)', re.M | re.S).findall(item)
         if len(lst) == 0:
             lst = re.compile('(<' + name + ' .*?>)', re.M | re.S).findall(item)
 
-    log("Done: " + str(type(lst)), 3)
+    log("Done: " + str(type(lst)))
     return lst
 
 
 def parseDOM(html, name=u"", attrs={}, ret=False):
-    log("Name: " + repr(name) + " - Attrs:" + repr(attrs) + " - Ret: " + repr(ret) + " - HTML: " + str(type(html)), 3)
+    log("Name: " + repr(name) + " - Attrs:" + repr(attrs) + " - Ret: " + repr(ret) + " - HTML: " + str(type(html)))
     ret = py2_decode(ret)
     if isinstance(name, str):
         try:
@@ -202,23 +199,23 @@ def parseDOM(html, name=u"", attrs={}, ret=False):
         lst = _getDOMElements(item, name, attrs)
 
         if isinstance(ret, str):
-            log("Getting attribute %s content for %s matches " % (ret, len(lst) ), 3)
+            log("Getting attribute %s content for %s matches " % (ret, len(lst)))
             lst2 = []
             for match in lst:
                 lst2 += _getDOMAttributes(match, name, ret)
             lst = lst2
         else:
-            log("Getting element content for %s matches " % len(lst), 3)
+            log("Getting element content for %s matches " % len(lst))
             lst2 = []
             for match in lst:
-                log("Getting element content for %s" % match, 4)
+                log("Getting element content for %s" % match)
                 temp = _getDOMContent(item, name, match, ret).strip()
                 item = item[item.find(temp, item.find(match)) + len(temp):]
                 lst2.append(temp)
             lst = lst2
         ret_lst += lst
 
-    log("Done: " + repr(ret_lst), 3)
+    log("Done: " + repr(ret_lst))
     return ret_lst
 
 def fetchPage(params={}):
@@ -237,14 +234,14 @@ def fetchPage(params={}):
 
     if get("post_data"):
         if get("hide_post_data"):
-            log("Posting data", 2)
+            log("Posting data")
         else:
-            log("Posting data: " + urlencode(get("post_data")), 2)
+            log("Posting data: " + urlencode(get("post_data")))
 
         request = HTTPRequest(link, urlencode(get("post_data")))
         request.add_header('Content-Type', 'application/x-www-form-urlencoded')
     else:
-        log("Got request", 2)
+        log("Got request")
         request = HTTPRequest(link)
 
     if get("headers"):
@@ -260,7 +257,7 @@ def fetchPage(params={}):
         request.add_header('Referer', get("refering"))
 
     try:
-        log("connecting to server...", 1)
+        log("connecting to server...")
 
         con = OpenRequest(request)
         ret_obj["header"] = con.info()
@@ -290,6 +287,6 @@ def fetchPage(params={}):
         ret_obj["status"] = 500
         return ret_obj
 
-def log(msg, level=False):
-    if DEBUG:
-        print((msg.encode('utf-8')))
+def log(msg):
+    output = py2_encode(msg)
+    xbmc.log(output, xbmc.LOGDEBUG)

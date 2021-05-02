@@ -11,7 +11,7 @@ if PY3:
 else:
     from urllib2 import HTTPError
 
-from .base import *
+from .Base import *
 from .Scraper import *
 
 
@@ -95,7 +95,7 @@ class serviceAPI(Scraper):
                     self.__JSONVideoItem2ListItem(result.get('_embedded').get('video_item'))
 
         else:
-            debugLog('ServiceAPI no available ... switch back to HTML Parsing in the Addon Settings', level=xbmc.LOGDEBUG)
+            debugLog('ServiceAPI not available ... switch back to HTML Parsing in the Addon Settings', level=xbmc.LOGDEBUG)
             showDialog(self.translation(30045).encode('UTF-8'), self.translation(30046).encode('UTF-8'))
 
     # Useful  Methods for JSON Parsing
@@ -265,7 +265,7 @@ class serviceAPI(Scraper):
             title = '%s' % (date.strftime('%A, %d.%m.%Y'))
             parameters = {'mode': 'openDate', 'link': date.strftime('%Y-%m-%d')}
             if x == 8:
-                title = 'älter als %s' % title
+                title = '$s %s' % (self.translation(30064), title)
                 parameters = {'mode': 'openDate', 'link': date.strftime('%Y-%m-%d'), 'from': (date - datetime.timedelta(days=150)).strftime('%Y-%m-%d')}
             u = build_kodi_url(parameters)
             createListItem(title, None, None, None, date.strftime('%Y-%m-%d'), '', u, False, True, self.defaultbackdrop, self.pluginhandle)
@@ -301,9 +301,9 @@ class serviceAPI(Scraper):
 
                     link = self.JSONStreamingURL(result.get('sources'))
                     if inputstreamAdaptive and result.get('restart'):
-                        contextMenuItems.append(('Restart', 'RunPlugin(plugin://%s/?mode=liveStreamRestart&link=%s)' % (xbmcaddon.Addon().getAddonInfo('id'), result.get('id'))))
+                        contextMenuItems.append((self.translation(30063), 'RunPlugin(plugin://%s/?mode=liveStreamRestart&link=%s)' % (xbmcaddon.Addon().getAddonInfo('id'), result.get('id'))))
 
-                    title = "[%s]%s %s (%s)" % (programName, '[Restart]' if inputstreamAdaptive and result.get('restart') else '', result.get('title'), time.strftime('%H:%M', livestreamStart))
+                    title = "[%s] %s %s (%s)" % (programName, self.translation(30063) if inputstreamAdaptive and result.get('restart') else '', result.get('title'), time.strftime('%H:%M', livestreamStart))
 
                     banner = self.JSONImage(result.get('_embedded').get('image'))
 

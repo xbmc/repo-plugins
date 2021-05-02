@@ -232,3 +232,15 @@ msgstr ""
 msgctxt "#30061"
 msgid "Show Full Livestream Schedule"
 msgstr ""
+
+msgctxt "#30062"
+msgid "General"
+msgstr ""
+
+msgctxt "#30063"
+msgid "Restart"
+msgstr ""
+
+msgctxt "#30064"
+msgid "older than"
+msgstr ""

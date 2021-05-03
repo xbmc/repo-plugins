@@ -1,0 +1,47 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.ted.talks\n"
+"Report-Msgid-Bugs-To: https://github.com/moreginger/xbmc-plugin.video.ted.talks\n"
+"POT-Creation-Date: 2017-01-13 21:44+000\n"
+"PO-Revision-Date: 2017-01-13 21:44+000\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Swedish (http://www.transifex.com/projects/p/xbmc-addons/language/sv_SE/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv_SE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "TED Talks"
+msgstr "TED Talks"
+
+msgctxt "#30001"
+msgid "Newest Talks"
+msgstr "Nyaste föredragen"
+
+msgctxt "#30002"
+msgid "Speakers"
+msgstr "Talare"
+
+msgctxt "#30004"
+msgid "Search"
+msgstr "Sök"
+
+msgctxt "#30034"
+msgid "Search for Talks on TED.com"
+msgstr "Sök föredrag på TED.com"
+
+msgctxt "#30007"
+msgid "Topics"
+msgstr "Ämnen"
+
+msgctxt "#30020"
+msgid "Next"
+msgstr "Nästa"
+
+msgctxt "#30021"
+msgid "Previous"
+msgstr "Föregående"
+
+

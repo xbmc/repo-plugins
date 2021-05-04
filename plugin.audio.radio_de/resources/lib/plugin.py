@@ -520,17 +520,16 @@ def get_stream_url(station_id):
             current_track = station['current_track']
     if station:
         __log('get_stream_url result: %s' % stream_url)
-        return plugin.set_resolved_url(
-            listitem.ListItem(
-                label=station['name'],
-                label2=current_track,
-                path=stream_url,
-                icon=station['thumbnail'],
-                thumbnail=station['thumbnail'],
-                fanart=__get_plugin_fanart(),
-                offscreen=True
-            )
-        )
+        resolved_listitem = listitem.ListItem(
+                        label=station['name'],
+                        label2=current_track,
+                        path=stream_url,
+                        icon=station['thumbnail'],
+                        thumbnail=station['thumbnail'],
+                        fanart=__get_plugin_fanart(),
+                        offscreen=True)
+        resolved_listitem.set_property('StationName', station['name'])
+        return plugin.set_resolved_url(resolved_listitem)
 
 
 def __add_stations(stations, add_custom=False, browse_more=None):

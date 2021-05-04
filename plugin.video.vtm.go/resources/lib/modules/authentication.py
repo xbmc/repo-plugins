@@ -8,6 +8,7 @@ import logging
 from resources.lib import kodiutils
 from resources.lib.vtmgo.vtmgo import ApiUpdateRequired, VtmGo
 from resources.lib.vtmgo.vtmgoauth import InvalidLoginException, LoginErrorException, VtmGoAuth
+from resources.lib.vtmgo.exceptions import InvalidTokenException
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -24,7 +25,7 @@ class Authentication:
                                kodiutils.get_tokens_path())
         self._vtm_go = VtmGo(self._auth)
 
-    def select_profile(self, key=None):
+    def select_profile(self, key=None):  # pylint: disable=too-many-return-statements
         """ Show your profiles
         :type key: str
         """
@@ -33,6 +34,11 @@ class Authentication:
         except InvalidLoginException:
             kodiutils.ok_dialog(message=kodiutils.localize(30203))  # Your credentials are not valid!
             kodiutils.open_settings()
+            return
+
+        except InvalidTokenException:
+            self._auth.delete_cache()
+            kodiutils.redirect(kodiutils.url_for('show_main_menu'))
             return
 
         except LoginErrorException as exc:

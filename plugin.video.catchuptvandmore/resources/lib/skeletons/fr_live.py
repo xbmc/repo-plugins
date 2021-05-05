@@ -295,7 +295,7 @@ menu = {
         'order': 23
     },
     'franceinfo': {
-        'resolver': '/resources/lib/channels/fr/franceinfo:get_live_url',
+        'resolver': '/resources/lib/channels/fr/francetv:get_live_url',
         'label': 'France Info',
         'thumb': 'channels/fr/franceinfo.png',
         'fanart': 'channels/fr/franceinfo_fanart.jpg',

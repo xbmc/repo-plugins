@@ -5,20 +5,21 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
+
 import importlib
 import json
 import os
 import socket
+
+from codequick import Script, utils
+from kodi_six import xbmcgui
+from resources.lib.addon_utils import get_item_label, get_item_media_path
+from resources.lib.xmltv import grab_programmes
+
 try:
     from urllib.parse import urlencode
 except ImportError:
     from urllib import urlencode
-
-from codequick import Script
-from kodi_six import xbmcgui
-
-from resources.lib.addon_utils import get_item_label, get_item_media_path
-from resources.lib.xmltv import grab_programmes
 
 PLUGIN_KODI_PATH = "plugin://plugin.video.catchuptvandmore"
 
@@ -198,9 +199,15 @@ class IPTVManager:
                     json_stream['id'] = lang_infos.get('xmltv_id')
                     json_stream['preset'] = lang_infos.get('m3u_order')
                 else:
-                    json_stream['id'] = channel_infos.get('xmltv_id', '')
+                    json_stream['id'] = channel_infos.get('xmltv_id')
                     json_stream['preset'] = channel_infos.get('m3u_order')
-                json_stream['stream'] = PLUGIN_KODI_PATH + resolver + '/?' + urlencode(params)
+
+                # It seems that in Python 2 urlencode doesn't deal well with unicode data
+                # (see https://stackoverflow.com/a/3121311)
+                for k, v in params.items():
+                    params[k] = utils.ensure_native_str(v)
+
+                json_stream['stream'] = utils.ensure_native_str(PLUGIN_KODI_PATH + resolver + '/?') + urlencode(params)
                 json_stream['logo'] = get_item_media_path(channel_infos['thumb'])
 
                 channels_list.append(json_stream)
@@ -220,6 +227,8 @@ class IPTVManager:
 
         country_tv_guides = {}
 
+        xmltv_ids_to_keep = []
+
         # Ierate over each country and enabled channels to grab needed programmes
         for (country_order, country_id, country_label, country_infos, channels) in country_channels:
             for (channel_order, channel_id, channel_label, channel_infos, lang) in channels:
@@ -228,17 +237,27 @@ class IPTVManager:
                     continue
 
                 # Check if we have programmes for this country
-                if country_id in country_tv_guides:
-                    continue
+                if country_id not in country_tv_guides:
+                    programmes = []
+                    for day_delta in range(0, 4):
+                        programmes.extend(grab_programmes(country_id, day_delta))
+                    country_tv_guides[country_id] = programmes
 
-                programmes = []
-                for day_delta in range(0, 4):
-                    programmes.extend(grab_programmes(country_id, day_delta))
-                country_tv_guides[country_id] = programmes
+                # Get the correct xmltv id
+                if lang:
+                    xmltv_id = channel_infos['available_languages'][lang].get('xmltv_id')
+                else:
+                    xmltv_id = channel_infos.get('xmltv_id')
+                if xmltv_id:
+                    xmltv_ids_to_keep.append(xmltv_id)
 
-        # Send each programme
+        # Send all programmes of enables channels
         for country_id, programmes in country_tv_guides.items():
             for p in programmes:
+                if p.get('channel') not in xmltv_ids_to_keep:
+                    continue
+                if not p.get('stop'):
+                    continue
                 epg = dict(
                     start=p.get('start'),
                     stop=p.get('stop'),

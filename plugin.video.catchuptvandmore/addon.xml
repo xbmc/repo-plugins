@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.34+matrix.1" provider-name="SylvainCecchetto,wwark">
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.35+matrix.1" provider-name="SylvainCecchetto,wwark">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.codequick" version="0.9.13"/>
@@ -42,21 +42,11 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.34]
-[NRJ Hits TV - BE] Remove Live TV (not available anymore)
-[NRJ Hits TV - BE] Fix Catch-up TV
-[TeleQuebec - CA] Readd Catch-up TV
-[NOOVO - CA] Fix Catch-up TV
-[BFMTV - FR] Use DailyMotion to play Live TV
-[Languages] Update po files
-[LuckyJack - FR] Remove Live TV
-[ABWEB - BE] Fix Live TV (thanks chamchenko)
-[RMC Decouverte - FR] Fix Live TV
-[MA] Add some live TV for Morroco (M24, SNRT, Medi1 and Telemaroc) (thanks chamchenko)
-[RobTV - BE] Add Catch-up TV (thanks michaelarnauts)
-[Live TV] Add full support for multilingual channels (IPTV Manager + TV guide)
-[Equidia - FR] Add more Lives (thanks chamchenko)
-[TVA - CA] Fix Catch-UP TV
+[Version 0.2.35]
+[Live TV] - Fix addon TV guide on Kodi 17 and 18
+[France Info - FR] Fix Live TV
+[Sport en France - FR] Fix Live TV
+[France TV - FR] Fix Catchup TV
 ----
 Visit WebSite - http://mpdb.tv/#home which host the french forum used by users of CU TV and More
     </news>

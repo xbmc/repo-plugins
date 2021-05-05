@@ -325,8 +325,15 @@ def get_francetv_video_stream(plugin,
             item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
             item.property['inputstream.adaptive.license_key'] = license_key
         else:
-            json_parser2 = json.loads(urlquick.get(url_selected, max_age=-1).text)
-            item.path = json_parser2['url']
+            headers = {
+                'User-Agent':
+                web_utils.get_random_ua()
+            }
+            json_parser2 = json.loads(urlquick.get(url_selected, headers=headers, max_age=-1).text)
+            resp3 = urlquick.get(json_parser2['url'], headers=headers, max_age=-1, allow_redirects=False)
+            location_url = resp3.headers['location']
+            item.path = location_url
+            item.property['inputstream.adaptive.stream_headers'] = 'User-Agent=%s' % web_utils.get_random_ua()
             if download_mode:
                 return download.download_video(item.path)
         return item

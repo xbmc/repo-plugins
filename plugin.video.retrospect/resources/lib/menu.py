@@ -158,7 +158,7 @@ class Menu(ActionParser):
         Logger.debug("Adding favourite: %s", item)
 
         f = Favourites(Config.favouriteDir)
-        if item.is_playable():
+        if item.is_playable:
             action_value = action.PLAY_VIDEO
         else:
             action_value = action.LIST_FOLDER

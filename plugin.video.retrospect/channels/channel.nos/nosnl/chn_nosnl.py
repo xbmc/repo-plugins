@@ -2,7 +2,7 @@
 
 import time
 import base64
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.logger import Logger
 from resources.lib.mediaitem import MediaItem
@@ -159,7 +159,7 @@ class Channel(chn_class.Channel):
         # subcategory = result_set["subcategory"].title()
 
         url = "https://api.nos.nl/mobile/video/%s/phone.json" % (video_id, )
-        item = MediaItem(result_set['title'], url, type="video")
+        item = MediaItem(result_set['title'], url, media_type=mediatype.EPISODE)
         if 'image' in result_set:
             images = result_set['image']["formats"]
             matched_image = images[-1]

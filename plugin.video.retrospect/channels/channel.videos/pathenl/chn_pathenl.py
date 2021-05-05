@@ -3,7 +3,7 @@
 
 import datetime
 
-from resources.lib import chn_class, contenttype
+from resources.lib import chn_class, contenttype, mediatype
 from resources.lib.mediaitem import MediaItem
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.logger import Logger
@@ -358,9 +358,8 @@ class Channel(chn_class.Channel):
         # https://www.pathe.nl/nocropthumb/180x254/gfx_content/posters/clubvansinterklaas3p1.jpg
         thumb_url = thumb_url.replace("nocropthumb/180x254/", "")
 
-        item = MediaItem(name, url)
+        item = MediaItem(name, url, media_type=mediatype.EPISODE)
         item.thumb = thumb_url
-        item.type = 'video'
 
         # more description stuff
         # description = "%s\n\n" % (result_set[4],)

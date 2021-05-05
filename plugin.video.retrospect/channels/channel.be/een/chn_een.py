@@ -2,7 +2,10 @@
 
 from resources.lib import chn_class
 
-from resources.lib.mediaitem import MediaItem
+from resources.lib import contenttype
+from resources.lib import mediatype
+from resources.lib.mediaitem import MediaItem, FolderItem
+
 from resources.lib.regexer import Regexer
 from resources.lib.logger import Logger
 from resources.lib.streams.m3u8 import M3u8
@@ -85,8 +88,7 @@ class Channel(chn_class.Channel):
         """
 
         items = []
-        recent = MediaItem("\a .: Recent :.", "https://www.een.be/deze-week")
-        recent.type = "folder"
+        recent = FolderItem("\a .: Recent :.", "https://www.een.be/deze-week", content_type=contenttype.EPISODES)
         recent.complete = True
         recent.dontGroup = True
         items.append(recent)
@@ -117,6 +119,8 @@ class Channel(chn_class.Channel):
             result_set["url"] = "https://mediazone.vrt.be/api/v1/een/assets/%(url)s" % result_set
 
         item = chn_class.Channel.create_video_item(self, result_set)
+        item.media_type = mediatype.EPISODE
+
         if "year" in result_set and result_set["year"]:
             item.set_date(result_set["year"], result_set["month"], result_set["day"])
         return item
@@ -148,8 +152,9 @@ class Channel(chn_class.Channel):
 
         # # dummy class
         # url = "http://www.een.be/mediatheek/tag/%s"
-        item = MediaItem(result_set["title"], result_set["url"])
-        item.type = "folder"
+        item = FolderItem(
+            result_set["title"], result_set["url"],
+            media_type=mediatype.TVSHOW, content_type=contenttype.EPISODES)
         item.complete = True
 
         if "image" in result_set and "data" in result_set["image"]:

@@ -4,7 +4,7 @@ import datetime
 import time
 from xml.dom.minidom import parseString
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.logger import Logger
@@ -164,14 +164,14 @@ class Channel(chn_class.Channel):
         items = []
 
         slam = MediaItem("Slam! TV", "https://hls.slam.nl/streaming/hls/SLAM!/playlist.m3u8")
-        slam.type = "video"
+        slam.media_type = mediatype.EPISODE
         slam.isLive = True
         items.append(slam)
 
         slam_fm = MediaItem("Slam! FM", "https://18973.live.streamtheworld.com/SLAM_AAC.aac"
                                         "?ttag=PLAYER%3ANOPREROLL&tdsdk=js-2.9"
                                         "&pname=TDSdk&pversion=2.9&banners=none")
-        slam_fm.type = "audio"
+        slam_fm.media_type = mediatype.AUDIO
         slam_fm.isLive = True
         slam_fm.append_single_stream(slam_fm.url)
         slam_fm.complete = True
@@ -236,8 +236,7 @@ class Channel(chn_class.Channel):
                       "transports=http%2Chls%2Chlsts&version=1.9&request.preventCache={1}"\
                     .format(stream_id, rnd)
 
-            item = MediaItem(title, url)
-            item.type = 'video'
+            item = MediaItem(title, url, media_type=mediatype.EPISODE)
             item.isLive = True
             item.thumb = thumb
             item.metaData["streamType"] = stream_type
@@ -272,7 +271,7 @@ class Channel(chn_class.Channel):
         title = "%02d:%02d - %02d:%02d: %s" % (start_time_stamp.tm_hour, start_time_stamp.tm_min,
                                                end_time_stamp.tm_hour, end_time_stamp.tm_min,
                                                result_set['title'])
-        item = MediaItem(title, "", type="video")
+        item = MediaItem(title, "", media_type=mediatype.EPISODE)
         item.description = result_set.get("description")
 
         if "image" in result_set:

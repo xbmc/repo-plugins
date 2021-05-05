@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.mediaitem import MediaItem
 from resources.lib.helpers.xmlhelper import XmlHelper
@@ -203,7 +203,7 @@ class Channel(chn_class.Channel):
         """
 
         item = self.create_episode_item(result_set["props"], append_subtitle=False)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.isGeoLocked = True
         return item
 
@@ -371,7 +371,6 @@ class Channel(chn_class.Channel):
 
         live = MediaItem("Live Channels", "")
         live.dontGroup = True
-        live.type = "folder"
         items.append(live)
 
         for channel in live_channels:
@@ -379,7 +378,7 @@ class Channel(chn_class.Channel):
             item = MediaItem(channel["name"], url)
             item.isGeoLocked = True
             item.isLive = True
-            item.type = "video"
+            item.media_type = mediatype.EPISODE
             item.complete = False
             item.thumb = self.get_image_location(channel["image"])
             live.items.append(item)

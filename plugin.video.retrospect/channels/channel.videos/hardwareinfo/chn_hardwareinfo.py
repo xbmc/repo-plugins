@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.helpers import xmlhelper
@@ -143,8 +143,7 @@ class Channel(chn_class.Channel):
         # url = "http://www.youtube.com/get_video_info?hl=en_GB&asv=3&video_id=%s" % (videoId,)
         url = "http://www.youtube.com/watch?v=%s" % (video_id, )
 
-        item = MediaItem(title, url)
-        item.type = 'video'
+        item = MediaItem(title, url, media_type=mediatype.EPISODE)
 
         # date stuff
         date = xml_data.get_single_node_content("published")

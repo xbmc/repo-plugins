@@ -3,7 +3,6 @@
 
 import socket
 import xbmcplugin
-import inputstreamhelper
 
 from resources.lib.ServiceApi import *
 from resources.lib.HtmlScraper import *
@@ -209,21 +208,25 @@ def run():
         xbmcplugin.setResolvedUrl(pluginhandle, True, listitem=play_item)
         listCallback(False, pluginhandle)
     elif mode == 'playDRM':
-        stream_url = unqoute_url(params.get('link'))
-        lic_url = unqoute_url(params.get('lic_url'))
-        is_helper = inputstreamhelper.Helper(input_stream_protocol, drm=input_stream_drm_version)
-        if is_helper.check_inputstream():
-            debugLog("Video Url: %s" % stream_url)
-            debugLog("DRM License Url: %s" % lic_url)
-            play_item = xbmcgui.ListItem(path=stream_url, offscreen=True)
-            play_item.setContentLookup(False)
-            play_item.setMimeType(input_stream_mime)
-            play_item.setProperty('inputstream', is_helper.inputstream_addon)
-            play_item.setProperty('inputstream.adaptive.manifest_type', input_stream_protocol)
-            play_item.setProperty('inputstream.adaptive.license_type', input_stream_drm_version)
-            play_item.setProperty('inputstream.adaptive.license_key', lic_url + '||R{SSM}|')
-            xbmcplugin.setResolvedUrl(pluginhandle, True, listitem=play_item)
-            listCallback(False, pluginhandle)
+        try:
+            import inputstreamhelper
+            stream_url = unqoute_url(params.get('link'))
+            lic_url = unqoute_url(params.get('lic_url'))
+            is_helper = inputstreamhelper.Helper(input_stream_protocol, drm=input_stream_drm_version)
+            if is_helper.check_inputstream():
+                debugLog("Video Url: %s" % stream_url)
+                debugLog("DRM License Url: %s" % lic_url)
+                play_item = xbmcgui.ListItem(path=stream_url, offscreen=True)
+                play_item.setContentLookup(False)
+                play_item.setMimeType(input_stream_mime)
+                play_item.setProperty('inputstream', is_helper.inputstream_addon)
+                play_item.setProperty('inputstream.adaptive.manifest_type', input_stream_protocol)
+                play_item.setProperty('inputstream.adaptive.license_type', input_stream_drm_version)
+                play_item.setProperty('inputstream.adaptive.license_key', lic_url + '||R{SSM}|')
+                xbmcplugin.setResolvedUrl(pluginhandle, True, listitem=play_item)
+                listCallback(False, pluginhandle)
+        except:
+            debugLog("Inputstream Helper not installed. Cant play DRM livestream content.")
     elif sys.argv[2] == '':
         getMainMenu()
     else:

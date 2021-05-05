@@ -265,7 +265,7 @@ class serviceAPI(Scraper):
             title = '%s' % (date.strftime('%A, %d.%m.%Y'))
             parameters = {'mode': 'openDate', 'link': date.strftime('%Y-%m-%d')}
             if x == 8:
-                title = '$s %s' % (self.translation(30064), title)
+                title = '%s %s' % (self.translation(30064), title)
                 parameters = {'mode': 'openDate', 'link': date.strftime('%Y-%m-%d'), 'from': (date - datetime.timedelta(days=150)).strftime('%Y-%m-%d')}
             u = build_kodi_url(parameters)
             createListItem(title, None, None, None, date.strftime('%Y-%m-%d'), '', u, False, True, self.defaultbackdrop, self.pluginhandle)

@@ -213,13 +213,12 @@ class VtmGoAuth:
         id_token = params['id_token'][0]
 
         # Okay, final stage. We now need to authorize our id_token so we get a valid JWT.
-        response = util.http_post('https://lfvp-api.dpgmedia.net/authorize/idToken', data={
-            'clientId': 'vtm-go-android',
-            'pipIdToken': id_token,
+        response = util.http_post('https://lfvp-api.dpgmedia.net/vtmgo/tokens', data={
+            'idToken': id_token,
         })
 
         # Get JWT from reply
-        self._account.jwt_token = json.loads(response.text).get('jsonWebToken')
+        self._account.jwt_token = json.loads(response.text).get('lfvpToken')
 
         self._save_cache()
 
@@ -301,3 +300,7 @@ class VtmGoAuth:
 
         with open(os.path.join(self._token_path, self.TOKEN_FILE), 'w') as fdesc:
             json.dump(self._account.__dict__, fdesc, indent=2)
+
+    def delete_cache(self):
+        """ Delete tokens from cache """
+        os.remove(os.path.join(self._token_path, self.TOKEN_FILE))

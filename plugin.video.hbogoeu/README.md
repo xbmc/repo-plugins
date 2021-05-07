@@ -2,7 +2,6 @@
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/arvvoid/plugin.video.hbogoeu)](https://github.com/arvvoid/plugin.video.hbogoeu/blob/master/README.md#install-instructions) 
 [![Kodi Version](https://img.shields.io/badge/kodi-18%20%7C%2019%2B-blue)](https://kodi.tv/)
 [![All Contributors](https://img.shields.io/badge/all_contributors-37-orange.svg?style=flat-square)](#contributors-)
-[![HitCount](http://hits.dwyl.io/arvvoid/pluginvideohbogoeu.svg)](http://hits.dwyl.io/arvvoid/pluginvideohbogoeu)
 [![HowToSupport](https://img.shields.io/badge/How%20to-support%20the%20add--on-orange)](https://github.com/arvvoid/plugin.video.hbogoeu#support-the-add-on)
 
 

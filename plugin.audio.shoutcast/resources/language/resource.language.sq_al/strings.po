@@ -1,0 +1,93 @@
+# Kodi Media Center language file
+# Addon Name: SHOUTcast 2
+# Addon id: plugin.audio.shoutcast
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: sq_al\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+msgctxt "#30000"
+msgid "All subgenres"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Top 500 Stations"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Browse by genre"
+msgstr ""
+
+msgctxt "#30003"
+msgid "My Stations"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Search Station by name"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Search Current Track playing Station"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Add to 'My Stations'"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Remove from 'My Stations'"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Show Subgenres"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Num stations in list"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Show Bitrate in Title"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Choose a random server (Don't ask)"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Filter stations by minium Bitrate"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Minimum Bitrate"
+msgstr ""
+
+msgctxt "#30111"
+msgid "96 kbit/s"
+msgstr ""
+
+msgctxt "#30112"
+msgid "128 kbit/s"
+msgstr ""
+
+msgctxt "#30113"
+msgid "160 kbit/s"
+msgstr ""
+
+msgctxt "#30114"
+msgid "192 kbit/s"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Network Error"
+msgstr ""

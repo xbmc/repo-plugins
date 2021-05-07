@@ -5,10 +5,10 @@ import os
 import re
 
 import simplejson as json
-from kodi_six import xbmcplugin, xbmcgui
+from kodi_six import xbmcplugin, xbmcgui, xbmcvfs
 from kodi_six.utils import py2_encode, py2_decode
 from . import Settings
-from .helpers import *
+from .Helpers import *
 
 
 def showDialog(title, description):
@@ -26,6 +26,11 @@ def generateAddonVideoUrl(videourl):
     return "plugin://%s/?mode=play&link=%s" % (xbmcaddon.Addon().getAddonInfo('id'), videourl)
 
 
+def generateDRMVideoUrl(videourl, drm_lic_url):
+    parameters = {"link": videourl, "mode": "playDRM", "lic_url": drm_lic_url}
+    return build_kodi_url(parameters)
+
+
 def buildLink(link):
     link = link.replace("https://apasfpd.apa.at", "https://apasfpd.sf.apa.at")
     if link:
@@ -37,7 +42,7 @@ def buildLink(link):
 def createPlayAllItem(name, pluginhandle, stream_info=False):
     play_all_parameters = {"mode": "playlist"}
     play_all_url = build_kodi_url(play_all_parameters)
-    play_all_item = xbmcgui.ListItem(name)
+    play_all_item = xbmcgui.ListItem(label=name, offscreen=True)
     if stream_info:
         description = stream_info['description']
         play_all_item.setArt({'thumb': stream_info['teaser_image'], 'poster': stream_info['teaser_image']})
@@ -50,9 +55,7 @@ def createPlayAllItem(name, pluginhandle, stream_info=False):
 def createListItem(title, banner, description, duration, date, channel, videourl, playable, folder, backdrop, pluginhandle, subtitles=None, blacklist=False, contextMenuItems=None):
     contextMenuItems = contextMenuItems or []
 
-    liz = xbmcgui.ListItem(title)
-    liz.setIconImage(banner)
-    liz.setThumbnailImage(banner)
+    liz = xbmcgui.ListItem(label=title, label2=channel, offscreen=True)
     liz.setInfo(type="Video", infoLabels={"Title": title})
     liz.setInfo(type="Video", infoLabels={"Tvshowtitle": title})
     liz.setInfo(type="Video", infoLabels={"Sorttitle": title})
@@ -62,7 +65,7 @@ def createListItem(title, banner, description, duration, date, channel, videourl
     liz.setInfo(type="Video", infoLabels={"Studio": channel})
     liz.setProperty('fanart_image', backdrop)
     liz.setProperty('IsPlayable', str(playable and not folder))
-    liz.setArt({'thumb': banner, 'poster': banner, 'fanart': backdrop})
+    liz.setArt({'thumb': banner, 'poster': banner, 'fanart': backdrop, "icon": banner})
 
     if not folder:
         liz.setInfo(type="Video", infoLabels={"mediatype": 'video'})
@@ -117,7 +120,7 @@ def createListItem(title, banner, description, duration, date, channel, videourl
 
 
 def checkBlacklist(title):
-    addonUserDataFolder = xbmc.translatePath("special://profile/addon_data/plugin.video.orftvthek")
+    addonUserDataFolder = xbmcvfs.translatePath("special://profile/addon_data/plugin.video.orftvthek")
     bl_json_file = os.path.join(addonUserDataFolder, 'blacklist.json')
     if os.path.exists(bl_json_file):
         if os.path.getsize(bl_json_file) > 0:
@@ -130,7 +133,7 @@ def checkBlacklist(title):
 
 
 def removeBlacklist(title):
-    addonUserDataFolder = xbmc.translatePath("special://profile/addon_data/plugin.video.orftvthek")
+    addonUserDataFolder = xbmcvfs.translatePath("special://profile/addon_data/plugin.video.orftvthek")
     bl_json_file = os.path.join(addonUserDataFolder, 'blacklist.json')
     if os.path.exists(bl_json_file):
         if os.path.getsize(bl_json_file) > 0:
@@ -143,7 +146,7 @@ def removeBlacklist(title):
 
 
 def printBlacklist(banner, backdrop, translation, pluginhandle):
-    addonUserDataFolder = xbmc.translatePath("special://profile/addon_data/plugin.video.orftvthek")
+    addonUserDataFolder = xbmcvfs.translatePath("special://profile/addon_data/plugin.video.orftvthek")
     bl_json_file = os.path.join(addonUserDataFolder, 'blacklist.json')
     if os.path.exists(bl_json_file):
         if os.path.getsize(bl_json_file) > 0:
@@ -169,7 +172,7 @@ def getJsonFile(file):
 
 
 def blacklistItem(title):
-    addonUserDataFolder = xbmc.translatePath("special://profile/addon_data/plugin.video.orftvthek")
+    addonUserDataFolder = xbmcvfs.translatePath("special://profile/addon_data/plugin.video.orftvthek")
     bl_json_file = os.path.join(addonUserDataFolder, 'blacklist.json')
     title = unqoute_url(title)
     title = title.replace("+", " ").strip()
@@ -209,7 +212,7 @@ def isBlacklisted(title):
 
 
 def searchHistoryPush(title):
-    addonUserDataFolder = xbmc.translatePath("special://profile/addon_data/plugin.video.orftvthek")
+    addonUserDataFolder = xbmcvfs.translatePath("special://profile/addon_data/plugin.video.orftvthek")
     json_file = os.path.join(addonUserDataFolder, 'searchhistory.json')
     title = unqoute_url(title)
     title = title.replace("+", " ").strip()
@@ -235,7 +238,7 @@ def searchHistoryPush(title):
         saveJsonFile(data, json_file)
 
 def searchHistoryGet():
-    addonUserDataFolder = xbmc.translatePath("special://profile/addon_data/plugin.video.orftvthek")
+    addonUserDataFolder = xbmcvfs.translatePath("special://profile/addon_data/plugin.video.orftvthek")
     json_file = os.path.join(addonUserDataFolder, 'searchhistory.json')
     if os.path.exists(json_file):
         if os.path.getsize(json_file) > 0:

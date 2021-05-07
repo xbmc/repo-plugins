@@ -232,3 +232,15 @@ msgstr "Kapitel abspielen"
 msgctxt "#30061"
 msgid "Show Full Livestream Schedule"
 msgstr "Livestream Programm anzeigen"
+
+msgctxt "#30062"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30063"
+msgid "Restart"
+msgstr "Restart"
+
+msgctxt "#30064"
+msgid "older than"
+msgstr "älter als"

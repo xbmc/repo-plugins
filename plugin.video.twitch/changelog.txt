@@ -1,3 +1,6 @@
+2.5.5
+[fix] dialogs
+
 2.5.4
 [fix] followed games for users with private oauth tokens
 [upd] use xbmcvfs.translatePath if available, clean up for Kodi 19

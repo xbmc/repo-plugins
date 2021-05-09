@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.twitch" version="2.5.4+matrix.1" name="Twitch" provider-name="anxdpanic, A Talented Community">
+<addon id="plugin.video.twitch" version="2.5.5+matrix.1" name="Twitch" provider-name="anxdpanic, A Talented Community">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.six" version="1.11.0"/>
@@ -13,8 +13,7 @@
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
         <news>
-[fix] followed games for users with private oauth tokens
-[upd] use xbmcvfs.translatePath if available, clean up for Kodi 19
+[fix] dialogs
         </news>
         <assets>
             <icon>icon.png</icon>
@@ -39,6 +38,8 @@
         <description lang="nb_NO">Se dine favorittstrømmere!</description>
         <summary lang="pl_PL">Twitch video plugin</summary>
         <description lang="pl_PL">Oglądaj ulubione programy TwitchTV!</description>
+        <summary lang="ru_RU">Видео плагин Twitch </summary>
+        <description lang="ru_RU">Смотрите любимые игровые трансляции!</description>
         <reuselanguageinvoker>true</reuselanguageinvoker>
     </extension>
 </addon>

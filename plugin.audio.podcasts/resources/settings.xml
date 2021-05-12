@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+
+  <category label="32021">
+
+    <setting label="32011" type="file" id="opml_file_0" />
+    <setting label="32012" type="file" id="opml_file_1" />
+    <setting label="32013" type="file" id="opml_file_2" />
+    <setting label="32014" type="file" id="opml_file_3" />
+    <setting label="32015" type="file" id="opml_file_4" />
+    <setting label="32016" type="file" id="opml_file_5" />
+    <setting label="32017" type="file" id="opml_file_6" />
+    <setting label="32018" type="file" id="opml_file_7" />
+    <setting label="32019" type="file" id="opml_file_8" />
+    <setting label="32020" type="file" id="opml_file_9" />
+
+  </category>
+
+  <category label="32001">
+
+    <setting label="305" type="bool" id="group_0_enable" default="true" />
+    <setting visible="!eq(-1,False)" label="556" type="text" id="group_0_name" default="Computer" />
+
+    <setting visible="!eq(-2,False)" label="32031" type="lsep" />
+    <setting visible="!eq(-3,False)" label="305" type="bool" id="group_0_rss_0_enable" default="true" />
+    <setting visible="!eq(-4,False)" enable="!eq(-1,False)" label="556" type="text" id="group_0_rss_0_name" default="c't uplink Video-Podcast" />
+    <setting visible="!eq(-5,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_0_rss_0_url" default="https://www.heise.de/ct/uplink/ctuplinkvideohd.rss" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_0_rss_0_icon" default="" />
+
+    <setting visible="!eq(-7,False)" label="32032" type="lsep" />
+    <setting visible="!eq(-8,False)" label="305" type="bool" id="group_0_rss_1_enable" default="false" />
+    <setting visible="!eq(-9,False)" enable="!eq(-1,False)" label="556" type="text" id="group_0_rss_1_name" default="" />
+    <setting visible="!eq(-10,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_0_rss_1_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_0_rss_1_icon" default="" />
+
+    <setting visible="!eq(-12,False)" label="32033" type="lsep" />
+    <setting visible="!eq(-13,False)" label="305" type="bool" id="group_0_rss_2_enable" default="false" />
+    <setting visible="!eq(-14,False)" enable="!eq(-1,False)" label="556" type="text" id="group_0_rss_2_name" default="" />
+    <setting visible="!eq(-15,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_0_rss_2_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_0_rss_2_icon" default="" />
+
+    <setting visible="!eq(-17,False)" label="32034" type="lsep" />
+    <setting visible="!eq(-18,False)" label="305" type="bool" id="group_0_rss_3_enable" default="false" />
+    <setting visible="!eq(-19,False)" enable="!eq(-1,False)" label="556" type="text" id="group_0_rss_3_name" default="" />
+    <setting visible="!eq(-20,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_0_rss_3_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_0_rss_3_icon" default="" />
+
+    <setting visible="!eq(-22,False)" label="32035" type="lsep" />
+    <setting visible="!eq(-23,False)" label="305" type="bool" id="group_0_rss_4_enable" default="false" />
+    <setting visible="!eq(-24,False)" enable="!eq(-1,False)" label="556" type="text" id="group_0_rss_4_name" default="" />
+    <setting visible="!eq(-25,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_0_rss_4_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_0_rss_4_icon" default="" />
+
+    <setting visible="!eq(-27,False)" label="32036" type="lsep" />
+    <setting visible="!eq(-28,False)" label="305" type="bool" id="group_0_rss_5_enable" default="false" />
+    <setting visible="!eq(-29,False)" enable="!eq(-1,False)" label="556" type="text" id="group_0_rss_5_name" default="" />
+    <setting visible="!eq(-30,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_0_rss_5_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_0_rss_5_icon" default="" />
+
+    <setting visible="!eq(-32,False)" label="32037" type="lsep" />
+    <setting visible="!eq(-33,False)" label="305" type="bool" id="group_0_rss_6_enable" default="false" />
+    <setting visible="!eq(-34,False)" enable="!eq(-1,False)" label="556" type="text" id="group_0_rss_6_name" default="" />
+    <setting visible="!eq(-35,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_0_rss_6_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_0_rss_6_icon" default="" />
+
+    <setting visible="!eq(-37,False)" label="32038" type="lsep" />
+    <setting visible="!eq(-38,False)" label="305" type="bool" id="group_0_rss_7_enable" default="false" />
+    <setting visible="!eq(-39,False)" enable="!eq(-1,False)" label="556" type="text" id="group_0_rss_7_name" default="" />
+    <setting visible="!eq(-40,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_0_rss_7_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_0_rss_7_icon" default="" />
+
+    <setting visible="!eq(-42,False)" label="32039" type="lsep" />
+    <setting visible="!eq(-43,False)" label="305" type="bool" id="group_0_rss_8_enable" default="false" />
+    <setting visible="!eq(-44,False)" enable="!eq(-1,False)" label="556" type="text" id="group_0_rss_8_name" default="" />
+    <setting visible="!eq(-45,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_0_rss_8_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_0_rss_8_icon" default="" />
+
+    <setting visible="!eq(-47,False)" label="32040" type="lsep" />
+    <setting visible="!eq(-48,False)" label="305" type="bool" id="group_0_rss_9_enable" default="false" />
+    <setting visible="!eq(-49,False)" enable="!eq(-1,False)" label="556" type="text" id="group_0_rss_9_name" default="" />
+    <setting visible="!eq(-50,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_0_rss_9_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_0_rss_9_icon" default="" />
+
+  </category>
+
+  <category label="32002">
+
+    <setting label="305" type="bool" id="group_1_enable" default="true" />
+    <setting visible="!eq(-1,False)" label="556" type="text" id="group_1_name" default="Business" />
+
+    <setting visible="!eq(-2,False)" label="32031" type="lsep" />
+    <setting visible="!eq(-3,False)" label="305" type="bool" id="group_1_rss_0_enable" default="true" />
+    <setting visible="!eq(-4,False)" enable="!eq(-1,False)" label="556" type="text" id="group_1_rss_0_name" default="BBC Business Matters" />
+    <setting visible="!eq(-5,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_1_rss_0_url" default="http://podcasts.files.bbci.co.uk/p016tl04.rss" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_1_rss_0_icon" default="" />
+
+    <setting visible="!eq(-7,False)" label="32032" type="lsep" />
+    <setting visible="!eq(-8,False)" label="305" type="bool" id="group_1_rss_1_enable" default="false" />
+    <setting visible="!eq(-9,False)" enable="!eq(-1,False)" label="556" type="text" id="group_1_rss_1_name" default="" />
+    <setting visible="!eq(-10,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_1_rss_1_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_1_rss_1_icon" default="" />
+
+    <setting visible="!eq(-12,False)" label="32033" type="lsep" />
+    <setting visible="!eq(-13,False)" label="305" type="bool" id="group_1_rss_2_enable" default="false" />
+    <setting visible="!eq(-14,False)" enable="!eq(-1,False)" label="556" type="text" id="group_1_rss_2_name" default="" />
+    <setting visible="!eq(-15,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_1_rss_2_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_1_rss_2_icon" default="" />
+
+    <setting visible="!eq(-17,False)" label="32034" type="lsep" />
+    <setting visible="!eq(-18,False)" label="305" type="bool" id="group_1_rss_3_enable" default="false" />
+    <setting visible="!eq(-19,False)" enable="!eq(-1,False)" label="556" type="text" id="group_1_rss_3_name" default="" />
+    <setting visible="!eq(-20,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_1_rss_3_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_1_rss_3_icon" default="" />
+
+    <setting visible="!eq(-22,False)" label="32035" type="lsep" />
+    <setting visible="!eq(-23,False)" label="305" type="bool" id="group_1_rss_4_enable" default="false" />
+    <setting visible="!eq(-24,False)" enable="!eq(-1,False)" label="556" type="text" id="group_1_rss_4_name" default="" />
+    <setting visible="!eq(-25,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_1_rss_4_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_1_rss_4_icon" default="" />
+
+    <setting visible="!eq(-27,False)" label="32036" type="lsep" />
+    <setting visible="!eq(-28,False)" label="305" type="bool" id="group_1_rss_5_enable" default="false" />
+    <setting visible="!eq(-29,False)" enable="!eq(-1,False)" label="556" type="text" id="group_1_rss_5_name" default="" />
+    <setting visible="!eq(-30,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_1_rss_5_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_1_rss_5_icon" default="" />
+
+    <setting visible="!eq(-32,False)" label="32037" type="lsep" />
+    <setting visible="!eq(-33,False)" label="305" type="bool" id="group_1_rss_6_enable" default="false" />
+    <setting visible="!eq(-34,False)" enable="!eq(-1,False)" label="556" type="text" id="group_1_rss_6_name" default="" />
+    <setting visible="!eq(-35,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_1_rss_6_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_1_rss_6_icon" default="" />
+
+    <setting visible="!eq(-37,False)" label="32038" type="lsep" />
+    <setting visible="!eq(-38,False)" label="305" type="bool" id="group_1_rss_7_enable" default="false" />
+    <setting visible="!eq(-39,False)" enable="!eq(-1,False)" label="556" type="text" id="group_1_rss_7_name" default="" />
+    <setting visible="!eq(-40,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_1_rss_7_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_1_rss_7_icon" default="" />
+
+    <setting visible="!eq(-42,False)" label="32039" type="lsep" />
+    <setting visible="!eq(-43,False)" label="305" type="bool" id="group_1_rss_8_enable" default="false" />
+    <setting visible="!eq(-44,False)" enable="!eq(-1,False)" label="556" type="text" id="group_1_rss_8_name" default="" />
+    <setting visible="!eq(-45,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_1_rss_8_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_1_rss_8_icon" default="" />
+
+    <setting visible="!eq(-47,False)" label="32040" type="lsep" />
+    <setting visible="!eq(-48,False)" label="305" type="bool" id="group_1_rss_9_enable" default="false" />
+    <setting visible="!eq(-49,False)" enable="!eq(-1,False)" label="556" type="text" id="group_1_rss_9_name" default="" />
+    <setting visible="!eq(-50,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_1_rss_9_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_1_rss_9_icon" default="" />
+
+  </category>
+
+  <category label="32003">
+
+    <setting label="305" type="bool" id="group_2_enable" default="true" />
+    <setting visible="!eq(-1,False)" label="556" type="text" id="group_2_name" default="News" />
+
+    <setting visible="!eq(-2,False)" label="32031" type="lsep" />
+    <setting visible="!eq(-3,False)" label="305" type="bool" id="group_2_rss_0_enable" default="true" />
+    <setting visible="!eq(-4,False)" enable="!eq(-1,False)" label="556" type="text" id="group_2_rss_0_name" default="BBC Global News Podcast" />
+    <setting visible="!eq(-5,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_2_rss_0_url" default="http://podcasts.files.bbci.co.uk/p02nq0gn.rss" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_2_rss_0_icon" default="" />
+
+    <setting visible="!eq(-7,False)" label="32032" type="lsep" />
+    <setting visible="!eq(-8,False)" label="305" type="bool" id="group_2_rss_1_enable" default="false" />
+    <setting visible="!eq(-9,False)" enable="!eq(-1,False)" label="556" type="text" id="group_2_rss_1_name" default="" />
+    <setting visible="!eq(-10,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_2_rss_1_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_2_rss_1_icon" default="" />
+
+    <setting visible="!eq(-12,False)" label="32033" type="lsep" />
+    <setting visible="!eq(-13,False)" label="305" type="bool" id="group_2_rss_2_enable" default="false" />
+    <setting visible="!eq(-14,False)" enable="!eq(-1,False)" label="556" type="text" id="group_2_rss_2_name" default="" />
+    <setting visible="!eq(-15,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_2_rss_2_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_2_rss_2_icon" default="" />
+
+    <setting visible="!eq(-17,False)" label="32034" type="lsep" />
+    <setting visible="!eq(-18,False)" label="305" type="bool" id="group_2_rss_3_enable" default="false" />
+    <setting visible="!eq(-19,False)" enable="!eq(-1,False)" label="556" type="text" id="group_2_rss_3_name" default="" />
+    <setting visible="!eq(-20,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_2_rss_3_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_2_rss_3_icon" default="" />
+
+    <setting visible="!eq(-22,False)" label="32035" type="lsep" />
+    <setting visible="!eq(-23,False)" label="305" type="bool" id="group_2_rss_4_enable" default="false" />
+    <setting visible="!eq(-24,False)" enable="!eq(-1,False)" label="556" type="text" id="group_2_rss_4_name" default="" />
+    <setting visible="!eq(-25,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_2_rss_4_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_2_rss_4_icon" default="" />
+
+    <setting visible="!eq(-27,False)" label="32036" type="lsep" />
+    <setting visible="!eq(-28,False)" label="305" type="bool" id="group_2_rss_5_enable" default="false" />
+    <setting visible="!eq(-29,False)" enable="!eq(-1,False)" label="556" type="text" id="group_2_rss_5_name" default="" />
+    <setting visible="!eq(-30,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_2_rss_5_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_2_rss_5_icon" default="" />
+
+    <setting visible="!eq(-32,False)" label="32037" type="lsep" />
+    <setting visible="!eq(-33,False)" label="305" type="bool" id="group_2_rss_6_enable" default="false" />
+    <setting visible="!eq(-34,False)" enable="!eq(-1,False)" label="556" type="text" id="group_2_rss_6_name" default="" />
+    <setting visible="!eq(-35,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_2_rss_6_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_2_rss_6_icon" default="" />
+
+    <setting visible="!eq(-37,False)" label="32038" type="lsep" />
+    <setting visible="!eq(-38,False)" label="305" type="bool" id="group_2_rss_7_enable" default="false" />
+    <setting visible="!eq(-39,False)" enable="!eq(-1,False)" label="556" type="text" id="group_2_rss_7_name" default="" />
+    <setting visible="!eq(-40,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_2_rss_7_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_2_rss_7_icon" default="" />
+
+    <setting visible="!eq(-42,False)" label="32039" type="lsep" />
+    <setting visible="!eq(-43,False)" label="305" type="bool" id="group_2_rss_8_enable" default="false" />
+    <setting visible="!eq(-44,False)" enable="!eq(-1,False)" label="556" type="text" id="group_2_rss_8_name" default="" />
+    <setting visible="!eq(-45,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_2_rss_8_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_2_rss_8_icon" default="" />
+
+    <setting visible="!eq(-47,False)" label="32040" type="lsep" />
+    <setting visible="!eq(-48,False)" label="305" type="bool" id="group_2_rss_9_enable" default="false" />
+    <setting visible="!eq(-49,False)" enable="!eq(-1,False)" label="556" type="text" id="group_2_rss_9_name" default="" />
+    <setting visible="!eq(-50,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_2_rss_9_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_2_rss_9_icon" default="" />
+
+  </category>
+
+  <category label="32004">
+
+    <setting label="305" type="bool" id="group_3_enable" default="true" />
+    <setting visible="!eq(-1,False)" label="556" type="text" id="group_3_name" default="Music" />
+
+    <setting visible="!eq(-2,False)" label="32031" type="lsep" />
+    <setting visible="!eq(-3,False)" label="305" type="bool" id="group_3_rss_0_enable" default="true" />
+    <setting visible="!eq(-4,False)" enable="!eq(-1,False)" label="556" type="text" id="group_3_rss_0_name" default="BBC: A to Z of Punk on 6 Music" />
+    <setting visible="!eq(-5,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_3_rss_0_url" default="http://podcasts.files.bbci.co.uk/p05k8003.rss" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_3_rss_0_icon" default="" />
+
+    <setting visible="!eq(-7,False)" label="32032" type="lsep" />
+    <setting visible="!eq(-8,False)" label="305" type="bool" id="group_3_rss_1_enable" default="false" />
+    <setting visible="!eq(-9,False)" enable="!eq(-1,False)" label="556" type="text" id="group_3_rss_1_name" default="" />
+    <setting visible="!eq(-10,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_3_rss_1_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_3_rss_1_icon" default="" />
+
+    <setting visible="!eq(-12,False)" label="32033" type="lsep" />
+    <setting visible="!eq(-13,False)" label="305" type="bool" id="group_3_rss_2_enable" default="false" />
+    <setting visible="!eq(-14,False)" enable="!eq(-1,False)" label="556" type="text" id="group_3_rss_2_name" default="" />
+    <setting visible="!eq(-15,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_3_rss_2_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_3_rss_2_icon" default="" />
+
+    <setting visible="!eq(-17,False)" label="32034" type="lsep" />
+    <setting visible="!eq(-18,False)" label="305" type="bool" id="group_3_rss_3_enable" default="false" />
+    <setting visible="!eq(-19,False)" enable="!eq(-1,False)" label="556" type="text" id="group_3_rss_3_name" default="" />
+    <setting visible="!eq(-20,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_3_rss_3_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_3_rss_3_icon" default="" />
+
+    <setting visible="!eq(-22,False)" label="32035" type="lsep" />
+    <setting visible="!eq(-23,False)" label="305" type="bool" id="group_3_rss_4_enable" default="false" />
+    <setting visible="!eq(-24,False)" enable="!eq(-1,False)" label="556" type="text" id="group_3_rss_4_name" default="" />
+    <setting visible="!eq(-25,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_3_rss_4_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_3_rss_4_icon" default="" />
+
+    <setting visible="!eq(-27,False)" label="32036" type="lsep" />
+    <setting visible="!eq(-28,False)" label="305" type="bool" id="group_3_rss_5_enable" default="false" />
+    <setting visible="!eq(-29,False)" enable="!eq(-1,False)" label="556" type="text" id="group_3_rss_5_name" default="" />
+    <setting visible="!eq(-30,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_3_rss_5_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_3_rss_5_icon" default="" />
+
+    <setting visible="!eq(-32,False)" label="32037" type="lsep" />
+    <setting visible="!eq(-33,False)" label="305" type="bool" id="group_3_rss_6_enable" default="false" />
+    <setting visible="!eq(-34,False)" enable="!eq(-1,False)" label="556" type="text" id="group_3_rss_6_name" default="" />
+    <setting visible="!eq(-35,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_3_rss_6_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_3_rss_6_icon" default="" />
+
+    <setting visible="!eq(-37,False)" label="32038" type="lsep" />
+    <setting visible="!eq(-38,False)" label="305" type="bool" id="group_3_rss_7_enable" default="false" />
+    <setting visible="!eq(-39,False)" enable="!eq(-1,False)" label="556" type="text" id="group_3_rss_7_name" default="" />
+    <setting visible="!eq(-40,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_3_rss_7_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_3_rss_7_icon" default="" />
+
+    <setting visible="!eq(-42,False)" label="32039" type="lsep" />
+    <setting visible="!eq(-43,False)" label="305" type="bool" id="group_3_rss_8_enable" default="false" />
+    <setting visible="!eq(-44,False)" enable="!eq(-1,False)" label="556" type="text" id="group_3_rss_8_name" default="" />
+    <setting visible="!eq(-45,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_3_rss_8_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_3_rss_8_icon" default="" />
+
+    <setting visible="!eq(-47,False)" label="32040" type="lsep" />
+    <setting visible="!eq(-48,False)" label="305" type="bool" id="group_3_rss_9_enable" default="false" />
+    <setting visible="!eq(-49,False)" enable="!eq(-1,False)" label="556" type="text" id="group_3_rss_9_name" default="" />
+    <setting visible="!eq(-50,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_3_rss_9_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_3_rss_9_icon" default="" />
+
+  </category>
+
+  <category label="32005">
+
+    <setting label="305" type="bool" id="group_4_enable" default="false" />
+    <setting visible="!eq(-1,False)" label="556" type="text" id="group_4_name" default="Business" />
+
+    <setting visible="!eq(-2,False)" label="32031" type="lsep" />
+    <setting visible="!eq(-3,False)" label="305" type="bool" id="group_4_rss_0_enable" default="false" />
+    <setting visible="!eq(-4,False)" enable="!eq(-1,False)" label="556" type="text" id="group_4_rss_0_name" default="" />
+    <setting visible="!eq(-5,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_4_rss_0_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_4_rss_0_icon" default="" />
+
+    <setting visible="!eq(-7,False)" label="32032" type="lsep" />
+    <setting visible="!eq(-8,False)" label="305" type="bool" id="group_4_rss_1_enable" default="false" />
+    <setting visible="!eq(-9,False)" enable="!eq(-1,False)" label="556" type="text" id="group_4_rss_1_name" default="" />
+    <setting visible="!eq(-10,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_4_rss_1_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_4_rss_1_icon" default="" />
+
+    <setting visible="!eq(-12,False)" label="32033" type="lsep" />
+    <setting visible="!eq(-13,False)" label="305" type="bool" id="group_4_rss_2_enable" default="false" />
+    <setting visible="!eq(-14,False)" enable="!eq(-1,False)" label="556" type="text" id="group_4_rss_2_name" default="" />
+    <setting visible="!eq(-15,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_4_rss_2_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_4_rss_2_icon" default="" />
+
+    <setting visible="!eq(-17,False)" label="32034" type="lsep" />
+    <setting visible="!eq(-18,False)" label="305" type="bool" id="group_4_rss_3_enable" default="false" />
+    <setting visible="!eq(-19,False)" enable="!eq(-1,False)" label="556" type="text" id="group_4_rss_3_name" default="" />
+    <setting visible="!eq(-20,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_4_rss_3_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_4_rss_3_icon" default="" />
+
+    <setting visible="!eq(-22,False)" label="32035" type="lsep" />
+    <setting visible="!eq(-23,False)" label="305" type="bool" id="group_4_rss_4_enable" default="false" />
+    <setting visible="!eq(-24,False)" enable="!eq(-1,False)" label="556" type="text" id="group_4_rss_4_name" default="" />
+    <setting visible="!eq(-25,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_4_rss_4_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_4_rss_4_icon" default="" />
+
+    <setting visible="!eq(-27,False)" label="32036" type="lsep" />
+    <setting visible="!eq(-28,False)" label="305" type="bool" id="group_4_rss_5_enable" default="false" />
+    <setting visible="!eq(-29,False)" enable="!eq(-1,False)" label="556" type="text" id="group_4_rss_5_name" default="" />
+    <setting visible="!eq(-30,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_4_rss_5_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_4_rss_5_icon" default="" />
+
+    <setting visible="!eq(-32,False)" label="32037" type="lsep" />
+    <setting visible="!eq(-33,False)" label="305" type="bool" id="group_4_rss_6_enable" default="false" />
+    <setting visible="!eq(-34,False)" enable="!eq(-1,False)" label="556" type="text" id="group_4_rss_6_name" default="" />
+    <setting visible="!eq(-35,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_4_rss_6_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_4_rss_6_icon" default="" />
+
+    <setting visible="!eq(-37,False)" label="32038" type="lsep" />
+    <setting visible="!eq(-38,False)" label="305" type="bool" id="group_4_rss_7_enable" default="false" />
+    <setting visible="!eq(-39,False)" enable="!eq(-1,False)" label="556" type="text" id="group_4_rss_7_name" default="" />
+    <setting visible="!eq(-40,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_4_rss_7_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_4_rss_7_icon" default="" />
+
+    <setting visible="!eq(-42,False)" label="32039" type="lsep" />
+    <setting visible="!eq(-43,False)" label="305" type="bool" id="group_4_rss_8_enable" default="false" />
+    <setting visible="!eq(-44,False)" enable="!eq(-1,False)" label="556" type="text" id="group_4_rss_8_name" default="" />
+    <setting visible="!eq(-45,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_4_rss_8_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_4_rss_8_icon" default="" />
+
+    <setting visible="!eq(-47,False)" label="32040" type="lsep" />
+    <setting visible="!eq(-48,False)" label="305" type="bool" id="group_4_rss_9_enable" default="false" />
+    <setting visible="!eq(-49,False)" enable="!eq(-1,False)" label="556" type="text" id="group_4_rss_9_name" default="" />
+    <setting visible="!eq(-50,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_4_rss_9_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_4_rss_9_icon" default="" />
+
+  </category>
+
+  <category label="32006">
+
+    <setting label="305" type="bool" id="group_5_enable" default="false" />
+    <setting visible="!eq(-1,False)" label="556" type="text" id="group_5_name" default="Business" />
+
+    <setting visible="!eq(-2,False)" label="32031" type="lsep" />
+    <setting visible="!eq(-3,False)" label="305" type="bool" id="group_5_rss_0_enable" default="false" />
+    <setting visible="!eq(-4,False)" enable="!eq(-1,False)" label="556" type="text" id="group_5_rss_0_name" default="" />
+    <setting visible="!eq(-5,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_5_rss_0_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_5_rss_0_icon" default="" />
+
+    <setting visible="!eq(-7,False)" label="32032" type="lsep" />
+    <setting visible="!eq(-8,False)" label="305" type="bool" id="group_5_rss_1_enable" default="false" />
+    <setting visible="!eq(-9,False)" enable="!eq(-1,False)" label="556" type="text" id="group_5_rss_1_name" default="" />
+    <setting visible="!eq(-10,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_5_rss_1_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_5_rss_1_icon" default="" />
+
+    <setting visible="!eq(-12,False)" label="32033" type="lsep" />
+    <setting visible="!eq(-13,False)" label="305" type="bool" id="group_5_rss_2_enable" default="false" />
+    <setting visible="!eq(-14,False)" enable="!eq(-1,False)" label="556" type="text" id="group_5_rss_2_name" default="" />
+    <setting visible="!eq(-15,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_5_rss_2_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_5_rss_2_icon" default="" />
+
+    <setting visible="!eq(-17,False)" label="32034" type="lsep" />
+    <setting visible="!eq(-18,False)" label="305" type="bool" id="group_5_rss_3_enable" default="false" />
+    <setting visible="!eq(-19,False)" enable="!eq(-1,False)" label="556" type="text" id="group_5_rss_3_name" default="" />
+    <setting visible="!eq(-20,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_5_rss_3_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_5_rss_3_icon" default="" />
+
+    <setting visible="!eq(-22,False)" label="32035" type="lsep" />
+    <setting visible="!eq(-23,False)" label="305" type="bool" id="group_5_rss_4_enable" default="false" />
+    <setting visible="!eq(-24,False)" enable="!eq(-1,False)" label="556" type="text" id="group_5_rss_4_name" default="" />
+    <setting visible="!eq(-25,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_5_rss_4_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_5_rss_4_icon" default="" />
+
+    <setting visible="!eq(-27,False)" label="32036" type="lsep" />
+    <setting visible="!eq(-28,False)" label="305" type="bool" id="group_5_rss_5_enable" default="false" />
+    <setting visible="!eq(-29,False)" enable="!eq(-1,False)" label="556" type="text" id="group_5_rss_5_name" default="" />
+    <setting visible="!eq(-30,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_5_rss_5_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_5_rss_5_icon" default="" />
+
+    <setting visible="!eq(-32,False)" label="32037" type="lsep" />
+    <setting visible="!eq(-33,False)" label="305" type="bool" id="group_5_rss_6_enable" default="false" />
+    <setting visible="!eq(-34,False)" enable="!eq(-1,False)" label="556" type="text" id="group_5_rss_6_name" default="" />
+    <setting visible="!eq(-35,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_5_rss_6_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_5_rss_6_icon" default="" />
+
+    <setting visible="!eq(-37,False)" label="32038" type="lsep" />
+    <setting visible="!eq(-38,False)" label="305" type="bool" id="group_5_rss_7_enable" default="false" />
+    <setting visible="!eq(-39,False)" enable="!eq(-1,False)" label="556" type="text" id="group_5_rss_7_name" default="" />
+    <setting visible="!eq(-40,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_5_rss_7_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_5_rss_7_icon" default="" />
+
+    <setting visible="!eq(-42,False)" label="32039" type="lsep" />
+    <setting visible="!eq(-43,False)" label="305" type="bool" id="group_5_rss_8_enable" default="false" />
+    <setting visible="!eq(-44,False)" enable="!eq(-1,False)" label="556" type="text" id="group_5_rss_8_name" default="" />
+    <setting visible="!eq(-45,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_5_rss_8_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_5_rss_8_icon" default="" />
+
+    <setting visible="!eq(-47,False)" label="32040" type="lsep" />
+    <setting visible="!eq(-48,False)" label="305" type="bool" id="group_5_rss_9_enable" default="false" />
+    <setting visible="!eq(-49,False)" enable="!eq(-1,False)" label="556" type="text" id="group_5_rss_9_name" default="" />
+    <setting visible="!eq(-50,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_5_rss_9_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_5_rss_9_icon" default="" />
+
+  </category>
+
+  <category label="32007">
+
+    <setting label="305" type="bool" id="group_6_enable" default="false" />
+    <setting visible="!eq(-1,False)" label="556" type="text" id="group_6_name" default="Business" />
+
+    <setting visible="!eq(-2,False)" label="32031" type="lsep" />
+    <setting visible="!eq(-3,False)" label="305" type="bool" id="group_6_rss_0_enable" default="false" />
+    <setting visible="!eq(-4,False)" enable="!eq(-1,False)" label="556" type="text" id="group_6_rss_0_name" default="" />
+    <setting visible="!eq(-5,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_6_rss_0_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_6_rss_0_icon" default="" />
+
+    <setting visible="!eq(-7,False)" label="32032" type="lsep" />
+    <setting visible="!eq(-8,False)" label="305" type="bool" id="group_6_rss_1_enable" default="false" />
+    <setting visible="!eq(-9,False)" enable="!eq(-1,False)" label="556" type="text" id="group_6_rss_1_name" default="" />
+    <setting visible="!eq(-10,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_6_rss_1_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_6_rss_1_icon" default="" />
+
+    <setting visible="!eq(-12,False)" label="32033" type="lsep" />
+    <setting visible="!eq(-13,False)" label="305" type="bool" id="group_6_rss_2_enable" default="false" />
+    <setting visible="!eq(-14,False)" enable="!eq(-1,False)" label="556" type="text" id="group_6_rss_2_name" default="" />
+    <setting visible="!eq(-15,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_6_rss_2_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_6_rss_2_icon" default="" />
+
+    <setting visible="!eq(-17,False)" label="32034" type="lsep" />
+    <setting visible="!eq(-18,False)" label="305" type="bool" id="group_6_rss_3_enable" default="false" />
+    <setting visible="!eq(-19,False)" enable="!eq(-1,False)" label="556" type="text" id="group_6_rss_3_name" default="" />
+    <setting visible="!eq(-20,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_6_rss_3_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_6_rss_3_icon" default="" />
+
+    <setting visible="!eq(-22,False)" label="32035" type="lsep" />
+    <setting visible="!eq(-23,False)" label="305" type="bool" id="group_6_rss_4_enable" default="false" />
+    <setting visible="!eq(-24,False)" enable="!eq(-1,False)" label="556" type="text" id="group_6_rss_4_name" default="" />
+    <setting visible="!eq(-25,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_6_rss_4_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_6_rss_4_icon" default="" />
+
+    <setting visible="!eq(-27,False)" label="32036" type="lsep" />
+    <setting visible="!eq(-28,False)" label="305" type="bool" id="group_6_rss_5_enable" default="false" />
+    <setting visible="!eq(-29,False)" enable="!eq(-1,False)" label="556" type="text" id="group_6_rss_5_name" default="" />
+    <setting visible="!eq(-30,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_6_rss_5_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_6_rss_5_icon" default="" />
+
+    <setting visible="!eq(-32,False)" label="32037" type="lsep" />
+    <setting visible="!eq(-33,False)" label="305" type="bool" id="group_6_rss_6_enable" default="false" />
+    <setting visible="!eq(-34,False)" enable="!eq(-1,False)" label="556" type="text" id="group_6_rss_6_name" default="" />
+    <setting visible="!eq(-35,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_6_rss_6_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_6_rss_6_icon" default="" />
+
+    <setting visible="!eq(-37,False)" label="32038" type="lsep" />
+    <setting visible="!eq(-38,False)" label="305" type="bool" id="group_6_rss_7_enable" default="false" />
+    <setting visible="!eq(-39,False)" enable="!eq(-1,False)" label="556" type="text" id="group_6_rss_7_name" default="" />
+    <setting visible="!eq(-40,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_6_rss_7_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_6_rss_7_icon" default="" />
+
+    <setting visible="!eq(-42,False)" label="32039" type="lsep" />
+    <setting visible="!eq(-43,False)" label="305" type="bool" id="group_6_rss_8_enable" default="false" />
+    <setting visible="!eq(-44,False)" enable="!eq(-1,False)" label="556" type="text" id="group_6_rss_8_name" default="" />
+    <setting visible="!eq(-45,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_6_rss_8_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_6_rss_8_icon" default="" />
+
+    <setting visible="!eq(-47,False)" label="32040" type="lsep" />
+    <setting visible="!eq(-48,False)" label="305" type="bool" id="group_6_rss_9_enable" default="false" />
+    <setting visible="!eq(-49,False)" enable="!eq(-1,False)" label="556" type="text" id="group_6_rss_9_name" default="" />
+    <setting visible="!eq(-50,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_6_rss_9_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_6_rss_9_icon" default="" />
+
+  </category>
+
+  <category label="32008">
+
+    <setting label="305" type="bool" id="group_7_enable" default="false" />
+    <setting visible="!eq(-1,False)" label="556" type="text" id="group_7_name" default="Business" />
+
+    <setting visible="!eq(-2,False)" label="32031" type="lsep" />
+    <setting visible="!eq(-3,False)" label="305" type="bool" id="group_7_rss_0_enable" default="false" />
+    <setting visible="!eq(-4,False)" enable="!eq(-1,False)" label="556" type="text" id="group_7_rss_0_name" default="" />
+    <setting visible="!eq(-5,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_7_rss_0_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_7_rss_0_icon" default="" />
+
+    <setting visible="!eq(-7,False)" label="32032" type="lsep" />
+    <setting visible="!eq(-8,False)" label="305" type="bool" id="group_7_rss_1_enable" default="false" />
+    <setting visible="!eq(-9,False)" enable="!eq(-1,False)" label="556" type="text" id="group_7_rss_1_name" default="" />
+    <setting visible="!eq(-10,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_7_rss_1_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_7_rss_1_icon" default="" />
+
+    <setting visible="!eq(-12,False)" label="32033" type="lsep" />
+    <setting visible="!eq(-13,False)" label="305" type="bool" id="group_7_rss_2_enable" default="false" />
+    <setting visible="!eq(-14,False)" enable="!eq(-1,False)" label="556" type="text" id="group_7_rss_2_name" default="" />
+    <setting visible="!eq(-15,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_7_rss_2_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_7_rss_2_icon" default="" />
+
+    <setting visible="!eq(-17,False)" label="32034" type="lsep" />
+    <setting visible="!eq(-18,False)" label="305" type="bool" id="group_7_rss_3_enable" default="false" />
+    <setting visible="!eq(-19,False)" enable="!eq(-1,False)" label="556" type="text" id="group_7_rss_3_name" default="" />
+    <setting visible="!eq(-20,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_7_rss_3_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_7_rss_3_icon" default="" />
+
+    <setting visible="!eq(-22,False)" label="32035" type="lsep" />
+    <setting visible="!eq(-23,False)" label="305" type="bool" id="group_7_rss_4_enable" default="false" />
+    <setting visible="!eq(-24,False)" enable="!eq(-1,False)" label="556" type="text" id="group_7_rss_4_name" default="" />
+    <setting visible="!eq(-25,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_7_rss_4_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_7_rss_4_icon" default="" />
+
+    <setting visible="!eq(-27,False)" label="32036" type="lsep" />
+    <setting visible="!eq(-28,False)" label="305" type="bool" id="group_7_rss_5_enable" default="false" />
+    <setting visible="!eq(-29,False)" enable="!eq(-1,False)" label="556" type="text" id="group_7_rss_5_name" default="" />
+    <setting visible="!eq(-30,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_7_rss_5_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_7_rss_5_icon" default="" />
+
+    <setting visible="!eq(-32,False)" label="32037" type="lsep" />
+    <setting visible="!eq(-33,False)" label="305" type="bool" id="group_7_rss_6_enable" default="false" />
+    <setting visible="!eq(-34,False)" enable="!eq(-1,False)" label="556" type="text" id="group_7_rss_6_name" default="" />
+    <setting visible="!eq(-35,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_7_rss_6_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_7_rss_6_icon" default="" />
+
+    <setting visible="!eq(-37,False)" label="32038" type="lsep" />
+    <setting visible="!eq(-38,False)" label="305" type="bool" id="group_7_rss_7_enable" default="false" />
+    <setting visible="!eq(-39,False)" enable="!eq(-1,False)" label="556" type="text" id="group_7_rss_7_name" default="" />
+    <setting visible="!eq(-40,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_7_rss_7_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_7_rss_7_icon" default="" />
+
+    <setting visible="!eq(-42,False)" label="32039" type="lsep" />
+    <setting visible="!eq(-43,False)" label="305" type="bool" id="group_7_rss_8_enable" default="false" />
+    <setting visible="!eq(-44,False)" enable="!eq(-1,False)" label="556" type="text" id="group_7_rss_8_name" default="" />
+    <setting visible="!eq(-45,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_7_rss_8_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_7_rss_8_icon" default="" />
+
+    <setting visible="!eq(-47,False)" label="32040" type="lsep" />
+    <setting visible="!eq(-48,False)" label="305" type="bool" id="group_7_rss_9_enable" default="false" />
+    <setting visible="!eq(-49,False)" enable="!eq(-1,False)" label="556" type="text" id="group_7_rss_9_name" default="" />
+    <setting visible="!eq(-50,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_7_rss_9_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_7_rss_9_icon" default="" />
+
+  </category>
+
+  <category label="32009">
+
+    <setting label="305" type="bool" id="group_8_enable" default="false" />
+    <setting visible="!eq(-1,False)" label="556" type="text" id="group_8_name" default="Business" />
+
+    <setting visible="!eq(-2,False)" label="32031" type="lsep" />
+    <setting visible="!eq(-3,False)" label="305" type="bool" id="group_8_rss_0_enable" default="false" />
+    <setting visible="!eq(-4,False)" enable="!eq(-1,False)" label="556" type="text" id="group_8_rss_0_name" default="" />
+    <setting visible="!eq(-5,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_8_rss_0_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_8_rss_0_icon" default="" />
+
+    <setting visible="!eq(-7,False)" label="32032" type="lsep" />
+    <setting visible="!eq(-8,False)" label="305" type="bool" id="group_8_rss_1_enable" default="false" />
+    <setting visible="!eq(-9,False)" enable="!eq(-1,False)" label="556" type="text" id="group_8_rss_1_name" default="" />
+    <setting visible="!eq(-10,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_8_rss_1_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_8_rss_1_icon" default="" />
+
+    <setting visible="!eq(-12,False)" label="32033" type="lsep" />
+    <setting visible="!eq(-13,False)" label="305" type="bool" id="group_8_rss_2_enable" default="false" />
+    <setting visible="!eq(-14,False)" enable="!eq(-1,False)" label="556" type="text" id="group_8_rss_2_name" default="" />
+    <setting visible="!eq(-15,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_8_rss_2_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_8_rss_2_icon" default="" />
+
+    <setting visible="!eq(-17,False)" label="32034" type="lsep" />
+    <setting visible="!eq(-18,False)" label="305" type="bool" id="group_8_rss_3_enable" default="false" />
+    <setting visible="!eq(-19,False)" enable="!eq(-1,False)" label="556" type="text" id="group_8_rss_3_name" default="" />
+    <setting visible="!eq(-20,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_8_rss_3_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_8_rss_3_icon" default="" />
+
+    <setting visible="!eq(-22,False)" label="32035" type="lsep" />
+    <setting visible="!eq(-23,False)" label="305" type="bool" id="group_8_rss_4_enable" default="false" />
+    <setting visible="!eq(-24,False)" enable="!eq(-1,False)" label="556" type="text" id="group_8_rss_4_name" default="" />
+    <setting visible="!eq(-25,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_8_rss_4_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_8_rss_4_icon" default="" />
+
+    <setting visible="!eq(-27,False)" label="32036" type="lsep" />
+    <setting visible="!eq(-28,False)" label="305" type="bool" id="group_8_rss_5_enable" default="false" />
+    <setting visible="!eq(-29,False)" enable="!eq(-1,False)" label="556" type="text" id="group_8_rss_5_name" default="" />
+    <setting visible="!eq(-30,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_8_rss_5_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_8_rss_5_icon" default="" />
+
+    <setting visible="!eq(-32,False)" label="32037" type="lsep" />
+    <setting visible="!eq(-33,False)" label="305" type="bool" id="group_8_rss_6_enable" default="false" />
+    <setting visible="!eq(-34,False)" enable="!eq(-1,False)" label="556" type="text" id="group_8_rss_6_name" default="" />
+    <setting visible="!eq(-35,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_8_rss_6_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_8_rss_6_icon" default="" />
+
+    <setting visible="!eq(-37,False)" label="32038" type="lsep" />
+    <setting visible="!eq(-38,False)" label="305" type="bool" id="group_8_rss_7_enable" default="false" />
+    <setting visible="!eq(-39,False)" enable="!eq(-1,False)" label="556" type="text" id="group_8_rss_7_name" default="" />
+    <setting visible="!eq(-40,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_8_rss_7_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_8_rss_7_icon" default="" />
+
+    <setting visible="!eq(-42,False)" label="32039" type="lsep" />
+    <setting visible="!eq(-43,False)" label="305" type="bool" id="group_8_rss_8_enable" default="false" />
+    <setting visible="!eq(-44,False)" enable="!eq(-1,False)" label="556" type="text" id="group_8_rss_8_name" default="" />
+    <setting visible="!eq(-45,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_8_rss_8_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_8_rss_8_icon" default="" />
+
+    <setting visible="!eq(-47,False)" label="32040" type="lsep" />
+    <setting visible="!eq(-48,False)" label="305" type="bool" id="group_8_rss_9_enable" default="false" />
+    <setting visible="!eq(-49,False)" enable="!eq(-1,False)" label="556" type="text" id="group_8_rss_9_name" default="" />
+    <setting visible="!eq(-50,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_8_rss_9_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_8_rss_9_icon" default="" />
+
+  </category>
+
+  <category label="32010">
+
+    <setting label="305" type="bool" id="group_9_enable" default="true" />
+    <setting visible="!eq(-1,False)" label="556" type="text" id="group_9_name" default="Diverse" />
+
+    <setting visible="!eq(-2,False)" label="32031" type="lsep" />
+    <setting visible="!eq(-3,False)" label="305" type="bool" id="group_9_rss_0_enable" default="true" />
+    <setting visible="!eq(-4,False)" enable="!eq(-1,False)" label="556" type="text" id="group_9_rss_0_name" default="BBC Podcasting House" />
+    <setting visible="!eq(-5,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_9_rss_0_url" default="http://podcasts.files.bbci.co.uk/p05ltqxn.rss" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_9_rss_0_icon" default="" />
+
+    <setting visible="!eq(-7,False)" label="32032" type="lsep" />
+    <setting visible="!eq(-8,False)" label="305" type="bool" id="group_9_rss_1_enable" default="false" />
+    <setting visible="!eq(-9,False)" enable="!eq(-1,False)" label="556" type="text" id="group_9_rss_1_name" default="" />
+    <setting visible="!eq(-10,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_9_rss_1_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_9_rss_1_icon" default="" />
+
+    <setting visible="!eq(-12,False)" label="32033" type="lsep" />
+    <setting visible="!eq(-13,False)" label="305" type="bool" id="group_9_rss_2_enable" default="false" />
+    <setting visible="!eq(-14,False)" enable="!eq(-1,False)" label="556" type="text" id="group_9_rss_2_name" default="" />
+    <setting visible="!eq(-15,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_9_rss_2_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_9_rss_2_icon" default="" />
+
+    <setting visible="!eq(-17,False)" label="32034" type="lsep" />
+    <setting visible="!eq(-18,False)" label="305" type="bool" id="group_9_rss_3_enable" default="false" />
+    <setting visible="!eq(-19,False)" enable="!eq(-1,False)" label="556" type="text" id="group_9_rss_3_name" default="" />
+    <setting visible="!eq(-20,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_9_rss_3_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_9_rss_3_icon" default="" />
+
+    <setting visible="!eq(-22,False)" label="32035" type="lsep" />
+    <setting visible="!eq(-23,False)" label="305" type="bool" id="group_9_rss_4_enable" default="false" />
+    <setting visible="!eq(-24,False)" enable="!eq(-1,False)" label="556" type="text" id="group_9_rss_4_name" default="" />
+    <setting visible="!eq(-25,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_9_rss_4_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_9_rss_4_icon" default="" />
+
+    <setting visible="!eq(-27,False)" label="32036" type="lsep" />
+    <setting visible="!eq(-28,False)" label="305" type="bool" id="group_9_rss_5_enable" default="false" />
+    <setting visible="!eq(-29,False)" enable="!eq(-1,False)" label="556" type="text" id="group_9_rss_5_name" default="" />
+    <setting visible="!eq(-30,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_9_rss_5_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_9_rss_5_icon" default="" />
+
+    <setting visible="!eq(-32,False)" label="32037" type="lsep" />
+    <setting visible="!eq(-33,False)" label="305" type="bool" id="group_9_rss_6_enable" default="false" />
+    <setting visible="!eq(-34,False)" enable="!eq(-1,False)" label="556" type="text" id="group_9_rss_6_name" default="" />
+    <setting visible="!eq(-35,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_9_rss_6_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_9_rss_6_icon" default="" />
+
+    <setting visible="!eq(-37,False)" label="32038" type="lsep" />
+    <setting visible="!eq(-38,False)" label="305" type="bool" id="group_9_rss_7_enable" default="false" />
+    <setting visible="!eq(-39,False)" enable="!eq(-1,False)" label="556" type="text" id="group_9_rss_7_name" default="" />
+    <setting visible="!eq(-40,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_9_rss_7_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_9_rss_7_icon" default="" />
+
+    <setting visible="!eq(-42,False)" label="32039" type="lsep" />
+    <setting visible="!eq(-43,False)" label="305" type="bool" id="group_9_rss_8_enable" default="false" />
+    <setting visible="!eq(-44,False)" enable="!eq(-1,False)" label="556" type="text" id="group_9_rss_8_name" default="" />
+    <setting visible="!eq(-45,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_9_rss_8_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_9_rss_8_icon" default="" />
+
+    <setting visible="!eq(-47,False)" label="32040" type="lsep" />
+    <setting visible="!eq(-48,False)" label="305" type="bool" id="group_9_rss_9_enable" default="false" />
+    <setting visible="!eq(-49,False)" enable="!eq(-1,False)" label="556" type="text" id="group_9_rss_9_name" default="" />
+    <setting visible="!eq(-50,False)" enable="!eq(-2,False)" label="32022" type="text" id="group_9_rss_9_url" default="" />
+    <setting visible="False" enable="False" label="19282" type="text" id="group_9_rss_9_icon" default="" />
+
+  </category>
+
+</settings>

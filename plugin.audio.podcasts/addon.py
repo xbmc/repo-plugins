@@ -139,9 +139,11 @@ class Mediathek:
         if "name2" in item:
             li.setProperty("label2", item["name2"])
 
-        if "stream_url" in item and "type" in item:
+        if "stream_url" in item:
             li.setPath(item["stream_url"])
-            li.setInfo(item["type"], {})
+
+        if "type" in item:
+            li.setInfo(item["type"], {"Title": item["name"]})
 
         if "icon" in item and item["icon"]:
             li.setArt({"icon": item["icon"]})
@@ -151,7 +153,13 @@ class Mediathek:
             )
 
         if "date" in item and item["date"]:
-            li.setDateTime(item["date"].strftime("%Y-%m-%dT%H:%M:%SZ"))
+            if "setDateTime" in dir(li):  # available since Kodi v20
+                li.setDateTime(item["date"].strftime("%Y-%m-%dT%H:%M:%SZ"))
+            else:
+                pass
+
+        if "specialsort" in item:
+            li.setProperty("SpecialSort", item["specialsort"])
 
         return li
 
@@ -209,7 +217,10 @@ class Mediathek:
 
             if "enclosure" in _ci and "@url" in _ci["enclosure"]:
                 stream_url = _ci["enclosure"]["@url"]
-                _type = _ci["enclosure"]["@type"].split("/")[0]
+                if _ci["enclosure"]["@type"].split("/")[0] == "video":
+                    _type = "video"
+                else:
+                    _type = "music"
             elif "guid" in _ci and _ci["guid"]:
                 # not supported yet
                 return None
@@ -300,12 +311,15 @@ class Mediathek:
             items = []
 
         if len(items) > 0:
+
             entry = {
                 "path": "latest",
                 "name": title,
                 "name2": description,
                 "icon": image,
                 "date": datetime.now(),
+                "specialsort": "top",
+                "type": items[0]["type"],
                 "params": [
                     {
                         "play_latest": url
@@ -320,8 +334,10 @@ class Mediathek:
                                         listitem=li,
                                         url=item["stream_url"],
                                         isFolder=False)
-        xbmcplugin.addSortMethod(
-            self.addon_handle, xbmcplugin.SORT_METHOD_DATE)
+
+        if "setDateTime" in dir(li):  # available since Kodi v20
+            xbmcplugin.addSortMethod(
+                self.addon_handle, xbmcplugin.SORT_METHOD_DATE)
         xbmcplugin.endOfDirectory(self.addon_handle)
 
     def _browse(self, path):

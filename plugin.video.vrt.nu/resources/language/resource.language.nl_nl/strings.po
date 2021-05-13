@@ -1042,3 +1042,7 @@ msgstr "InputStream Adaptive is niet geïnstalleerd, daarom kan het pauzeren en 
 msgctxt "#30989"
 msgid "Failed to load a compatible stream, please try toggling 'Use Widevine DRM' in the add-on Playback settings."
 msgstr "Kan geen compatibele stream laden, probeer 'Gebruik Widevine DRM' in of uit te schakelen in de add-on afspeelinstellingen."
+
+msgctxt "#30990"
+msgid "This program cannot be played. Your VRT NU account is not allowed to access 12+ content. Please check your VRT NU account details at https://www.vrt.be/vrtnu/"
+msgstr "Dit programma kan niet afgespeeld worden. Je VRT NU-account heeft geen toegang tot 12+ content. Controleer je VRT NU-account details op https://www.vrt.be/vrtnu/"

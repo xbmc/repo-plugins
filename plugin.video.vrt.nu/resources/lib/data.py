@@ -277,12 +277,10 @@ FEATURED = [
     dict(name='Exclusief online', id='exclusief-online', msgctxt=30100),
     dict(name='Volledig seizoen', id='volledig-seizoen', msgctxt=30101),
     dict(name='Volledige reeks', id='volledige-reeks', msgctxt=30102),
-    dict(name='Uit het archief', id='uit-het-archief', msgctxt=30103),
     # Inhoudsgerelateerd
     dict(name='Kortfilm', id='kortfilm', msgctxt=30120),
     # Thema
     dict(name='Klimaat', id='klimaat', msgctxt=30129),
-    dict(name='Koers', id='koers', msgctxt=30130),
 ]
 
 RELATIVE_DATES = [

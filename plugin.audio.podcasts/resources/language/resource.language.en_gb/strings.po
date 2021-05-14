@@ -140,3 +140,15 @@ msgstr "Podcast 9"
 msgctxt "#32040"
 msgid "Podcast 10"
 msgstr "Podcast 10"
+
+msgctxt "#32050"
+msgid "General"
+msgstr "General"
+
+msgctxt "#32051"
+msgid "Anchor for most recent podcast, e.g. for bookmarking"
+msgstr "Anchor for most recent podcast, e.g. for bookmarking"
+
+msgctxt "#32052"
+msgid "Newest episode"
+msgstr "Newest episode"

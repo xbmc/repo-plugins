@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.podcasts" name="RSS Podcasts" version="2.0.1" provider-name="Heckie">
+<addon id="plugin.audio.podcasts" name="RSS Podcasts" version="2.0.2" provider-name="Heckie">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.25.1" />
@@ -18,6 +18,12 @@
 		<website>https://github.com/Heckie75/kodi-addon-podcast</website>
 		<source>https://github.com/Heckie75/kodi-addon-podcast</source>
 		<news>
+v2.0.2 (2021-05-14)
+- Bugfix according missing HTTP header and improved exception handling:
+  - see https://github.com/Heckie75/kodi-addon-podcast/issues/4
+  - see https://github.com/Heckie75/kodi-addon-podcast/issues/5
+- new setting for anchor for latest item in order to turn it on/off   
+
 v2.0.1 (2021-05-12)
 - Bugfix for Kodi v19 which has no order by date. Only availble in Kodi v20
 

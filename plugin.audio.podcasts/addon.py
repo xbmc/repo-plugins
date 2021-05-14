@@ -192,14 +192,33 @@ class Mediathek:
         li = self._create_list_item(entry)
 
         is_folder = "node" in entry
-        if not is_folder and playable:
+        if not is_folder and "stream_url" in entry:
+            url = entry["stream_url"]
+            playable = True
+        else:
+            url = "".join(
+                ["plugin://", __PLUGIN_ID__, item_path, param_string])
+
+        if playable:
             li.setProperty("IsPlayable", "true")
 
         xbmcplugin.addDirectoryItem(handle=self.addon_handle,
                                     listitem=li,
-                                    url="".join(
-                                        ["plugin://", __PLUGIN_ID__, item_path, param_string]),
+                                    url=url,
                                     isFolder=is_folder)
+
+    def _request_get(self, url):
+
+        useragent = f"{settings.getAddonInfo('id')}/{settings.getAddonInfo('version')} (Kodi/{xbmc.getInfoLabel('System.BuildVersionShort')})"
+        headers = {'User-Agent': useragent}
+        res = requests.get(url, headers=headers)
+
+        if res.status_code == 200:
+            return res.text
+
+        else:
+            raise HttpStatusError(
+                "Unexpected HTTP Status %i for %s" % (res.status_code, url))
 
     def _load_opml(self, path):
 
@@ -253,13 +272,9 @@ class Mediathek:
                 "type": _type
             }
 
-        res = requests.get(url)
-        if res.status_code == 200 and res.text.startswith("<?xml"):
-            rss_feed = xmltodict.parse(res.text)
-
-        elif res.status_code != 200:
-            raise HttpStatusError(
-                "Unexpected HTTP Status %i for podcast %s" % (res.status_code, url))
+        res = self._request_get(url)
+        if res.startswith("<?xml"):
+            rss_feed = xmltodict.parse(res)
 
         else:
             raise HttpStatusError("Unexpected content for podcast %s" % url)
@@ -308,37 +323,36 @@ class Mediathek:
             xbmc.log("HTTP Status Error: %s, path=%s" %
                      (error.message, path), xbmc.LOGERROR)
             xbmcgui.Dialog().notification("HTTP Status Error", error.message)
-            items = []
 
-        if len(items) > 0:
+        else:
+            if len(items) > 0 and settings.getSetting("anchor") == "true":
+                entry = {
+                    "path": "latest",
+                    "name": "%s (%s)" % (title, settings.getLocalizedString(32052)),
+                    "name2": description,
+                    "icon": image,
+                    "date": datetime.now(),
+                    "specialsort": "top",
+                    "type": items[0]["type"],
+                    "params": [
+                        {
+                            "play_latest": url
+                        }
+                    ]
+                }
+                self._add_list_item(entry, path, playable=True)
 
-            entry = {
-                "path": "latest",
-                "name": title,
-                "name2": description,
-                "icon": image,
-                "date": datetime.now(),
-                "specialsort": "top",
-                "type": items[0]["type"],
-                "params": [
-                    {
-                        "play_latest": url
-                    }
-                ]
-            }
-            self._add_list_item(entry, path, playable=True)
+            for item in items:
+                li = self._create_list_item(item)
+                xbmcplugin.addDirectoryItem(handle=self.addon_handle,
+                                            listitem=li,
+                                            url=item["stream_url"],
+                                            isFolder=False)
 
-        for item in items:
-            li = self._create_list_item(item)
-            xbmcplugin.addDirectoryItem(handle=self.addon_handle,
-                                        listitem=li,
-                                        url=item["stream_url"],
-                                        isFolder=False)
-
-        if "setDateTime" in dir(li):  # available since Kodi v20
-            xbmcplugin.addSortMethod(
-                self.addon_handle, xbmcplugin.SORT_METHOD_DATE)
-        xbmcplugin.endOfDirectory(self.addon_handle)
+            if "setDateTime" in dir(li):  # available since Kodi v20
+                xbmcplugin.addSortMethod(
+                    self.addon_handle, xbmcplugin.SORT_METHOD_DATE)
+            xbmcplugin.endOfDirectory(self.addon_handle)
 
     def _browse(self, path):
 

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
 
+  <category label="32050">
+    <setting label="32051" type="bool" id="anchor" default="false" />
+  </category>
+
   <category label="32021">
 
     <setting label="32011" type="file" id="opml_file_0" />

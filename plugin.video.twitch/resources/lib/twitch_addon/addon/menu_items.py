@@ -9,6 +9,8 @@
     See LICENSES/GPL-3.0-only for more information.
 """
 
+from six import PY2
+
 from . import utils
 from .common import kodi
 from .constants import MODES, Scripts
@@ -32,6 +34,8 @@ def clear_search_history(search_type, do_refresh=False):
 
 
 def remove_search_history(search_type, query, do_refresh=True):
+    if PY2 and isinstance(query, unicode):
+        query = query.encode('utf-8')
     query_label = '[B]%s[/B]' % query
     params = {'mode': MODES.REMOVESEARCHHISTORY, 'search_type': search_type, 'query': query}
     if not do_refresh:
@@ -62,6 +66,9 @@ def edit_block(target_id, display_name):
 
 
 def add_blacklist(target_id, display_name, list_type='user'):
+    if PY2 and isinstance(display_name, unicode):
+        display_name = display_name.encode('utf-8')
+
     return run_plugin(i18n('add_blacklist') % ''.join(['[COLOR=white][B]', display_name, '[/B][/COLOR]']),
                       {'mode': MODES.EDITBLACKLIST, 'target_id': target_id, 'name': display_name, 'list_type': list_type, 'refresh': True})
 

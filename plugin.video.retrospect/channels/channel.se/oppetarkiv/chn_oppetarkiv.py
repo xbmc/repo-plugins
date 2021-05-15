@@ -254,10 +254,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -273,7 +273,6 @@ class Channel(chn_class.Channel):
         json = JsonHelper(data, Logger.instance())
         video_data = json.get_value("video")
         if video_data:
-            part = item.create_new_empty_media_part()
 
             # Get the videos
             video_infos = video_data.get("videoReferences")
@@ -294,10 +293,10 @@ class Channel(chn_class.Channel):
                     continue
 
                 if "hls" in video_type or "ios" in video_type:
-                    M3u8.update_part_with_m3u8_streams(part, video_url)
+                    M3u8.update_part_with_m3u8_streams(item, video_url)
 
                 elif "dash" in video_type:
-                    stream = part.append_media_stream(video_url, supported_formats[video_type])
+                    stream = item.add_stream(video_url, supported_formats[video_type])
                     Mpd.set_input_stream_addon_input(stream)
 
                 else:
@@ -309,7 +308,7 @@ class Channel(chn_class.Channel):
                 # elif "master.m3u8" in stream_info:
                 #     for s, b in M3u8.get_streams_from_m3u8(stream_info, headers=part.HttpHeaders):
                 #         item.complete = True
-                #         part.append_media_stream(s, b)
+                #         item.add_stream(s, b)
 
             # subtitles
             subtitles = video_data.get("subtitleReferences")
@@ -329,7 +328,7 @@ class Channel(chn_class.Channel):
                 with open(local_complete_path, 'w') as f:
                     f.write(sub_data)
 
-                part.Subtitle = local_complete_path
+                item.Subtitle = local_complete_path
 
             item.complete = True
 

@@ -137,10 +137,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -173,7 +173,7 @@ class Channel(chn_class.Channel):
         for stream in streams:
             stream_url = stream['url']
             if stream['type'] == "mp4":
-                item.append_single_stream(stream_url, 0)
+                item.add_stream(stream_url, 0)
                 item.complete = True
 
         return item

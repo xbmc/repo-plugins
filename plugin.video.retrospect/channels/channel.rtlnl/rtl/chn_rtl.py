@@ -153,11 +153,11 @@ class Channel(chn_class.Channel):
         )
         stream_item.complete = True
         stream_item.dontGroup = True
-        stream_item.append_single_stream("http://mss6.rtl7.nl/rtlzbroad", 1200)
-        stream_item.append_single_stream("http://mss26.rtl7.nl/rtlzbroad", 1200)
-        stream_item.append_single_stream("http://mss4.rtl7.nl/rtlzbroad", 1200)
-        stream_item.append_single_stream("http://mss5.rtl7.nl/rtlzbroad", 1200)
-        stream_item.append_single_stream("http://mss3.rtl7.nl/rtlzbroad", 1200)
+        stream_item.add_stream("http://mss6.rtl7.nl/rtlzbroad", 1200)
+        stream_item.add_stream("http://mss26.rtl7.nl/rtlzbroad", 1200)
+        stream_item.add_stream("http://mss4.rtl7.nl/rtlzbroad", 1200)
+        stream_item.add_stream("http://mss5.rtl7.nl/rtlzbroad", 1200)
+        stream_item.add_stream("http://mss3.rtl7.nl/rtlzbroad", 1200)
 
         rtlz_live.items.append(stream_item)
         items.append(rtlz_live)
@@ -598,10 +598,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -628,8 +628,7 @@ class Channel(chn_class.Channel):
             "content-type": "application/octet-stream"
         }
 
-        part = item.create_new_empty_media_part()
-        stream = part.append_media_stream(video_manifest, 0)
+        stream = item.add_stream(video_manifest, 0)
 
         from resources.lib.streams.mpd import Mpd
         license_key = Mpd.get_license_key(license_url, key_headers=key_headers, key_type="A")

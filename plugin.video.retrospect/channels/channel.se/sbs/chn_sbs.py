@@ -521,10 +521,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -535,8 +535,7 @@ class Channel(chn_class.Channel):
         """
 
         video_id = item.url.rsplit("/", 1)[-1]
-        part = item.create_new_empty_media_part()
-        item.complete = self.__get_video_streams(video_id, part)
+        item.complete = self.__get_video_streams(video_id, item)
         return item
 
     def log_on(self, username=None, password=None):
@@ -690,10 +689,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -720,18 +719,15 @@ class Channel(chn_class.Channel):
         if errors:
             return item
 
-        part = item.create_new_empty_media_part()
-
         m3u8url = video_info["streaming"]["hls"]["url"]
-
         m3u8data = UriHandler.open(m3u8url)
         if AddonSettings.use_adaptive_stream_add_on():
-            stream = part.append_media_stream(m3u8url, 0)
+            stream = item.add_stream(m3u8url, 0)
             item.complete = True
             M3u8.set_input_stream_addon_input(stream)
         else:
             # user agent for all sub m3u8 and ts requests needs to be the same
-            part.HttpHeaders["user-agent"] = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)"
+            stream_headers = {"user-agent": "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)"}
             for s, b, a in M3u8.get_streams_from_m3u8(m3u8url, append_query_string=False,
                                                       map_audio=True, play_list_data=m3u8data):
                 item.complete = True
@@ -739,7 +735,8 @@ class Channel(chn_class.Channel):
                     audio_part = a.split("-prog_index.m3u8", 1)[0]
                     audio_id = audio_part.rsplit("/", 1)[-1]
                     s = s.replace("-prog_index.m3u8", "-{0}-prog_index.m3u8".format(audio_id))
-                part.append_media_stream(s, b)
+                stream = item.add_stream(s, b)
+                stream.HttpHeaders.update(stream_headers)
 
         if self.language == "se":
             vtt_url = M3u8.get_subtitle(m3u8url, m3u8data, language="sv")
@@ -750,7 +747,7 @@ class Channel(chn_class.Channel):
 
         # https://dplaynordics-vod-80.akamaized.net/dplaydni/259/0/hls/243241001/1112635959-prog_index.m3u8?version_hash=bb753129&hdnts=st=1518218118~exp=1518304518~acl=/*~hmac=bdeefe0ec880f8614e14af4d4a5ca4d3260bf2eaa8559e1eb8ba788645f2087a
         vtt_url = vtt_url.replace("-prog_index.m3u8", "-0.vtt")
-        part.Subtitle = SubtitleHelper.download_subtitle(vtt_url, format='srt')
+        item.subtitle = SubtitleHelper.download_subtitle(vtt_url, format='srt')
 
         # if the user has premium, don't show any warnings
         if self.__has_premium:
@@ -843,12 +840,14 @@ class Channel(chn_class.Channel):
         self.showLookup.update(shows)
         self.imageLookup.update(images)
 
-    def __get_video_streams(self, video_id, part):
+    def __get_video_streams(self, video_id, item):
         """ Fetches the video stream for a given videoId
 
-        @param video_id: (integer) the videoId
-        @param part:    (MediaPart) the mediapart to add the streams to
-        @return:        (bool) indicating a successfull retrieval
+        :param int video_id:        The videoId
+        :param MediaItem item:      The mediapart to add the streams to
+
+        :returns: indicating a successfull retrieval
+        :rtype: bool
 
         """
 
@@ -886,7 +885,7 @@ class Channel(chn_class.Channel):
                 else:
                     s = "%s?%s" % (s, qs)
 
-            part.append_media_stream(s, b)
+            item.add_stream(s, b)
 
         return streams_found
 

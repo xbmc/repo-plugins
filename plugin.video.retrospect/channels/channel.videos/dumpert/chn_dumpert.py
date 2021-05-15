@@ -105,7 +105,6 @@ class Channel(chn_class.Channel):
             item.set_date(*[int(i) for i in date_tuple])
 
         if "media" in result_set and result_set["media"]:
-            part = item.create_new_empty_media_part()
             for video_info in result_set["media"]:
                 if video_info["mediatype"] == "FOTO":
                     Logger.trace("Ignoring foto: %s", item)
@@ -116,21 +115,21 @@ class Channel(chn_class.Channel):
                     uri = info["uri"]
 
                     if video_type == "flv":
-                        part.append_media_stream(uri, 1000)
+                        item.add_stream(uri, 1000)
                     elif video_type == "720p":
-                        part.append_media_stream(uri, 1200)
+                        item.add_stream(uri, 1200)
                     elif video_type == "1080p" or video_type == "original":
-                        part.append_media_stream(uri, 1600)
+                        item.add_stream(uri, 1600)
                     elif video_type == "tablet":
-                        part.append_media_stream(uri, 800)
+                        item.add_stream(uri, 800)
                     elif video_type == "mobile":
-                        part.append_media_stream(uri, 450)
+                        item.add_stream(uri, 450)
                     elif video_type == "embed" and uri.startswith("youtube"):
                         embed_type, youtube_id = uri.split(":")
                         url = "https://www.youtube.com/watch?v=%s" % (youtube_id, )
                         for s, b in YouTube.get_streams_from_you_tube(url):
                             item.complete = True
-                            part.append_media_stream(s, b)
+                            item.add_stream(s, b)
                     else:
                         Logger.warning("Video type '%s' was not used", video_type)
             item.complete = True

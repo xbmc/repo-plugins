@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.3.2+matrix.1"
+        version="5.4.0+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -22,7 +22,6 @@
     </extension>
 
     <extension point="xbmc.service" library="retroservice.py" />
-
 
     <extension point="kodi.context.item">
         <menu id="kodi.core.main">
@@ -127,18 +126,26 @@
 
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.3.2+matrix.1 - Changelog - 2021-05-02[/B]
+        <news>[B]Retrospect v5.4.0+matrix.1 - Changelog - 2021-05-15[/B]
 
-Minor issues fixed with Up Next integration and Kodi Leia.
+This update fixes some channel issues and contains a simplification in the &#x27;playing back of items&#x27; code that was long over due.
 
 [B]Framework related[/B]
-* Fixed: UpNext detection on Kodi Leia.
+* Fixed: Filtering of Geo and paid items (Fixes #1511).
+* Changed: Simplified the playback of items.
 
 [B]GUI/Settings/Language related[/B]
 _None_
 
 [B]Channel related[/B]
-_None_
+* Added: Multi-stream SVT videos with extra speech options (only available in Sweden).
+* Fixed: RTV Utrecht item listing.
+* Fixed: Omroep Zeeland video playback.
+* Fixed: Hardware.info TV video playback.
+* Fixed: TWiT.tv video listing, live stream and paging.
+* Fixed: MSDN Channel 9 was broken.
+* Fixed: NOS Streams stopped playing (Fixes #1512).
+* Fixed: Radio 538 Live streams did not work (Fixes #1506).
 
         </news>
         <assets>

@@ -9,7 +9,7 @@ else:
     # noinspection PyUnresolvedReferences
     import urllib.parse as parse
 
-from resources.lib.mediaitem import MediaItem, MediaItemPart, FolderItem
+from resources.lib.mediaitem import MediaItem, FolderItem, MediaStream
 from resources.lib import contenttype
 from resources.lib import mediatype
 from resources.lib.regexer import Regexer
@@ -334,7 +334,7 @@ class Channel:
         hide_drm_protected = AddonSettings.hide_drm_items()
         hide_premium = AddonSettings.hide_premium_items()
         hide_folders = AddonSettings.hide_restricted_folders()
-        type_to_exclude = None
+        type_to_exclude = []
         if not hide_folders:
             type_to_exclude = mediatype.FOLDER_TYPES
 
@@ -625,10 +625,10 @@ class Channel:
             item = FolderItem(
                 result_set[self.pageNavigationRegexIndex],
                 parse.urljoin(self.baseUrl, total),
-                content_type=contenttype.NONE
+                content_type=contenttype.NONE, media_type=mediatype.PAGE
             )
         else:
-            item = FolderItem("0", "", content_type=contenttype.NONE)
+            item = FolderItem("0", "", content_type=contenttype.NONE, media_type=mediatype.PAGE)
 
         item.HttpHeaders = self.httpHeaders
 
@@ -733,10 +733,10 @@ class Channel:
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -751,8 +751,8 @@ class Channel:
         data = UriHandler.open(item.url, additional_headers=item.HttpHeaders)
 
         url = Regexer.do_regex(self.mediaUrlRegex, data)[-1]
-        part = MediaItemPart(item.name, url)
-        item.MediaItemParts.append(part)
+        stream = MediaStream(url)
+        item.streams.append(stream)
 
         Logger.info('finishing update_video_item. MediaItems are %s', item)
 
@@ -760,7 +760,7 @@ class Channel:
             # no thumb was set yet and no url
             Logger.debug("Setting thumb to %s", item.thumb)
 
-        if not item.has_media_item_parts():
+        if not item.has_streams():
             item.complete = False
         else:
             item.complete = True

@@ -269,10 +269,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -287,19 +287,18 @@ class Channel(chn_class.Channel):
         data = UriHandler.open(item.url, additional_headers=item.HttpHeaders)
         json = JsonHelper(data)
 
-        part = item.create_new_empty_media_part()
-        part.Subtitle = NpoStream.get_subtitle(json.get_value("mid"))
+        item.subtitle = NpoStream.get_subtitle(json.get_value("mid"))
 
         for stream in json.get_value("videoStreams"):
             if not stream["url"].startswith("odi"):
-                part.append_media_stream(stream["url"], stream["bitrate"] / 1000)
+                item.add_stream(stream["url"], stream["bitrate"] / 1000)
                 item.complete = True
 
-        if item.has_media_item_parts():
+        if item.has_streams():
             return item
 
         for s, b in NpoStream.get_streams_from_npo(None, json.get_value("mid")):
             item.complete = True
-            part.append_media_stream(s, b)
+            item.add_stream(s, b)
 
         return item

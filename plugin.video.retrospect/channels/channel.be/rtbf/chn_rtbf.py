@@ -243,7 +243,6 @@ class Channel(chn_class.Channel):
         Logger.trace(media_info)
 
         # sources
-        part = item.create_new_empty_media_part()
         # high, web, mobile, url
         media_sources = media_info.json.get("sources", {})
         for quality in media_sources:
@@ -256,7 +255,7 @@ class Channel(chn_class.Channel):
                 bitrate = 400
             else:
                 bitrate = 0
-            part.append_media_stream(url, bitrate)
+            item.add_stream(url, bitrate)
 
         # geoLocRestriction
         item.isGeoLocked = not media_info.get_value("geoLocRestriction", fallback="world") == "world"
@@ -264,20 +263,27 @@ class Channel(chn_class.Channel):
         return item
 
     def update_live_item(self, item):
+        """ Updates a live item.
+
+        :param MediaItem item:  The MediaItem to update.
+        :return: Updated Media Item
+        :rtype: MediaItem
+
+        """
+
         data = UriHandler.open(item.url, additional_headers=item.HttpHeaders)
         media_regex = 'data-media="([^"]+)"'
         media_info = Regexer.do_regex(media_regex, data)[0]
         media_info = HtmlEntityHelper.convert_html_entities(media_info)
         media_info = JsonHelper(media_info)
         Logger.trace(media_info)
-        part = item.create_new_empty_media_part()
 
         hls_url = media_info.get_value("streamUrl")
         if hls_url is not None and "m3u8" in hls_url:
             Logger.debug("Found HLS url for %s: %s", media_info.json["streamName"], hls_url)
 
             for s, b in M3u8.get_streams_from_m3u8(hls_url):
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
                 item.complete = True
         else:
             Logger.debug("No HLS url found for %s. Fetching RTMP Token.", media_info.json["streamName"])
@@ -295,7 +301,7 @@ class Channel(chn_class.Channel):
             rtmp_url = "rtmp://rtmp.rtbf.be/livecast/%s?%s pageUrl=%s tcUrl=rtmp://rtmp.rtbf.be/livecast" \
                        % (media_info.json["streamName"], token, self.baseUrl)
             rtmp_url = self.get_verifiable_video_url(rtmp_url)
-            part.append_media_stream(rtmp_url, 0)
+            item.add_stream(rtmp_url, 0)
             item.complete = True
 
         item.isGeoLocked = not media_info.get_value("geoLocRestriction", fallback="world") == "world"

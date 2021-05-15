@@ -320,10 +320,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         """
@@ -345,12 +345,11 @@ class Channel(chn_class.Channel):
             stream = JsonHelper(stream_data)
 
             # subUrls = stream.get_value("package", "video", "item", 0, "transcript", 0, "typographic")  # NOSONAR
-            part = item.create_new_empty_media_part()
 
             hls_streams = stream.get_value("package", "video", "item", 0, "rendition")
             for hls_stream in hls_streams:
                 hls_url = hls_stream["src"]
-                item.complete |= M3u8.update_part_with_m3u8_streams(part, hls_url)
+                item.complete |= M3u8.update_part_with_m3u8_streams(item, hls_url)
 
         item.complete = True
         Logger.trace("Media url: %s", item)

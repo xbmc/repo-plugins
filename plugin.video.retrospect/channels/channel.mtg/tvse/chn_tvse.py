@@ -182,10 +182,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -198,9 +198,8 @@ class Channel(chn_class.Channel):
         data = UriHandler.open(item.url)
         m3u8_url = Regexer.do_regex('data-file="([^"]+)"', data)[0]
 
-        part = item.create_new_empty_media_part()
         if AddonSettings.use_adaptive_stream_add_on(with_encryption=False):
-            stream = part.append_media_stream(m3u8_url, 0)
+            stream = item.add_stream(m3u8_url, 0)
             M3u8.set_input_stream_addon_input(stream)
             item.complete = True
         else:
@@ -210,7 +209,7 @@ class Channel(chn_class.Channel):
                     video_part = s.rsplit("-", 1)[-1]
                     video_part = "-%s" % (video_part,)
                     s = a.replace(".m3u8", video_part)
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
                 item.complete = True
 
         return item

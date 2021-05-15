@@ -1,12 +1,13 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class, mediatype
+from resources.lib import chn_class, mediatype, contenttype
 
-from resources.lib.mediaitem import MediaItem
+from resources.lib.mediaitem import MediaItem, FolderItem
 from resources.lib.regexer import Regexer
 from resources.lib.helpers.datehelper import DateHelper
 
 from resources.lib.logger import Logger
+from resources.lib.streams.m3u8 import M3u8
 from resources.lib.urihandler import UriHandler
 from resources.lib.parserdata import ParserData
 
@@ -44,13 +45,24 @@ class Channel(chn_class.Channel):
         self.videoItemRegex = r'<div[^>]+class="episode item"[^>]*>\W+<a[^>]+href="(?<url>[^"]+)" ' \
                               r'title="(?<title>[^"]+)">[\w\W]{0,500}?<img[^>]+src="' \
                               r'(?<thumburl>[^"]+)"[^>]+>[\w\W]{0,500}?<span[^>]+class="date"' \
-                              r'[^>]*>(?<month>\w+) (?<day>\d+)\w+ (?<year>\d+)'
+                              r'[^>]*>(?<month>\w+) (?<day>\d+)\D+(?<year>\d+)'
         self.videoItemRegex = Regexer.from_expresso(self.videoItemRegex)
         self._add_data_parser("*",
                               parser=self.videoItemRegex, creator=self.create_video_item,
                               updater=self.update_video_item)
 
-        self.mediaUrlRegex = r'<a href="([^"]+_(\d+).mp4)"[^>]+download>'
+        self.folderItemRegex = r'<div class="all-episodes">\W*<a href="(?<url>[^"]+)"[^>]*>(?<title>[^>]+)</a>'
+        self.folderItemRegex = Regexer.from_expresso(self.folderItemRegex)
+        self._add_data_parser("*",
+                              parser=self.folderItemRegex,
+                              creator=self.create_folder_item)
+
+        self._add_data_parser("*",
+                              parser=r'<a class="next" href="(\?page=(\d+)[^"]+)">',
+                              creator=self.create_page_item)
+
+        self._add_data_parser(".m3u8", match_type=ParserData.MatchEnd, updater=self.update_m3u8)
+        self.mediaUrlRegex = r'<a href="([^"]+(?:_(\d+))?.mp4)"[^>]+download>'
 
         # ====================================== Actual channel setup STOPS here =======================================
         return
@@ -74,62 +86,11 @@ class Channel(chn_class.Channel):
 
         items = []
 
-        item = MediaItem("\a.: TWiT.TV Live :.", "http://live.twit.tv/")
-        item.complete = True
-
-        playback_item = MediaItem("Play Live", "http://live.twit.tv/")
-        playback_item.media_type = mediatype.VIDEO
-        playback_item.isLive = True
-        playback_part = playback_item.create_new_empty_media_part()
-
-        # noinspection PyStatementEffect
-        """
-        BitGravity
-        There are two streams available from BitGravity; a 512 kbps low-bandwidth stream
-        and a 1 Mbps high-bandwidth stream.
-
-        UStream
-        This is the default stream. The UStream stream is a variable stream that maxes at
-        2.2 Mbps and adjusts down based on your bandwidth.
-        Justin.tv
-
-        The Justin.tv stream is a 2.2 mbps high-bandwidth stream that will adjust to lower
-        bandwidth and resolutions.
-
-        Flosoft.biz
-        The Flosoft.biz stream is a 5 resolution/bitrate HLS stream, intended for our app developers.
-        Please see Flosoft Developer Section. This stream is hosted by TWiT through Flosoft.biz
-        """
-
-        # http://wiki.twit.tv/wiki/TWiT_Live#Direct_links_to_TWiT_Live_Video_Streams
-        media_urls = {
-            # Justin TV
-            # "2000": "http://usher.justin.tv/stream/multi_playlist/twit.m3u8",
-
-            # Flosoft (http://wiki.twit.tv/wiki/Developer_Guide#Flosoft.biz)
-            "264": "http://hls.cdn.flosoft.biz/flosoft/mp4:twitStream_240/playlist.m3u8",
-            "512": "http://hls.cdn.flosoft.biz/flosoft/mp4:twitStream_360/playlist.m3u8",
-            "1024": "http://hls.cdn.flosoft.biz/flosoft/mp4:twitStream_480/playlist.m3u8",
-            "1475": "http://hls.cdn.flosoft.biz/flosoft/mp4:twitStream_540/playlist.m3u8",
-            "1778": "http://hls.cdn.flosoft.biz/flosoft/mp4:twitStream_720/playlist.m3u8",
-
-            # UStream
-            "1524": "http://iphone-streaming.ustream.tv/ustreamVideo/1524/streams/live/playlist.m3u8",
-
-            # BitGravity
-            # "512": "http://209.131.99.99/twit/live/low",
-            # "1024": "http://209.131.99.99/twit/live/high",
-            #"512": "http://64.185.191.180/cdn-live-s1/_definst_/twit/live/low/playlist.m3u8",
-            #"1024": "http://64.185.191.180/cdn-live-s1/_definst_/twit/live/high/playlist.m3u8",
-        }
-
-        for bitrate in media_urls:
-            playback_part.append_media_stream(media_urls[bitrate], bitrate)
-
-        Logger.debug("Streams: %s", playback_part)
-        playback_item.complete = True
-        item.items.append(playback_item)
-        Logger.debug("Appended: %s", playback_item)
+        item = MediaItem("\a.: TWiT.TV Live :.",
+                         "http://iphone-streaming.ustream.tv/uhls/1524/streams/live/iphone/playlist.m3u8",
+                         media_type=mediatype.VIDEO)
+        item.complete = False
+        item.isLive = True
 
         items.append(item)
         return data, items
@@ -148,14 +109,36 @@ class Channel(chn_class.Channel):
 
         """
 
+        # https://twit.tv/list/episodes?page=2&filter%5Bshows%5D=1635
         url = "%s/%s" % (self.baseUrl, result_set["url"])
-        item = MediaItem(result_set["title"], url)
+        item = FolderItem(result_set["title"], url, content_type=contenttype.EPISODES, media_type=mediatype.TVSHOW)
 
         item.thumb = result_set["thumburl"]
         if not item.thumb.startswith("http"):
             item.thumb = "%s%s" % (self.baseUrl, item.thumb)
         item.thumb = item.thumb.replace("coverart-small", "coverart")
         item.complete = True
+        return item
+
+    def create_page_item(self, result_set):
+        """ Creates a MediaItem of type 'page' using the result_set from the regex.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'page'.
+        :rtype: MediaItem|None
+
+        """
+
+        Logger.debug("Starting create_page_item")
+
+        item = FolderItem(result_set[1], "{}/list/episodes{}".format(self.baseUrl, result_set[0]),
+                          content_type=contenttype.NONE, media_type=mediatype.PAGE)
+        Logger.debug("Created '%s' for url %s", item.name, item.url)
         return item
 
     def create_video_item(self, result_set):
@@ -186,7 +169,7 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(name, url, media_type=mediatype.EPISODE)
         month = result_set["month"]
-        month = DateHelper.get_month_from_name(month, "en", False)
+        month = DateHelper.get_month_from_name(month, "en")
         day = result_set["day"]
         year = result_set["year"]
         item.set_date(year, month, day)
@@ -203,10 +186,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -221,11 +204,16 @@ class Channel(chn_class.Channel):
         data = UriHandler.open(item.url)
         streams = Regexer.do_regex(self.mediaUrlRegex, data)
 
-        item.MediaItemParts = []
-        part = item.create_new_empty_media_part()
+        item.streams = []
         for stream in streams:
             Logger.trace(stream)
-            part.append_media_stream(stream[0], stream[1])
+            item.add_stream(stream[0], stream[1] or 0)
 
         item.complete = True
+        return item
+
+    def update_m3u8(self, item):
+        # http://iphone-streaming.ustream.tv/uhls/1524/streams/live/iphone/playlist.m3u8
+        part = item.create_new_empty_media_part()
+        item.complete = M3u8.update_part_with_m3u8_streams(part, item.url, encrypted=False)
         return item

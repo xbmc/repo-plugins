@@ -4,7 +4,7 @@ import datetime
 
 from resources.lib import chn_class, mediatype
 
-from resources.lib.mediaitem import MediaItem, MediaItemPart
+from resources.lib.mediaitem import MediaItem
 from resources.lib.regexer import Regexer
 from resources.lib.logger import Logger
 from resources.lib.urihandler import UriHandler
@@ -317,8 +317,7 @@ class Channel(chn_class.Channel):
             srt = result_set.get("subtitles_webvtt")
         if srt:
             Logger.debug("Storing SRT/WebVTT path: %s", srt)
-            part = item.create_new_empty_media_part()
-            part.Subtitle = srt
+            item.subtitle = srt
         return item
 
     def add_clips(self, data):
@@ -559,8 +558,7 @@ class Channel(chn_class.Channel):
             srt = result_set.get("subtitles_webvtt")
         if srt:
             Logger.debug("Storing SRT/WebVTT path: %s", srt)
-            part = item.create_new_empty_media_part()
-            part.Subtitle = srt
+            item.subtitle = srt
 
         item.set_info_label("duration", int(result_set.get("duration", 0)))
         return item
@@ -574,10 +572,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -588,7 +586,7 @@ class Channel(chn_class.Channel):
         """
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
-        use_kodi_hls = AddonSettings.use_adaptive_stream_add_on(channel=self)
+        use_kodi_hls = AddonSettings.use_adaptive_stream_add_on(channel=self) and False
 
         # User-agent (and possible other headers), should be consistent over all
         # M3u8 requests (See #864)
@@ -607,16 +605,11 @@ class Channel(chn_class.Channel):
             return self.__update_embedded(item, embedded_data)
 
         # see if there was an srt already
-        if item.MediaItemParts:
-            part = item.MediaItemParts[0]
-            if part.Subtitle and part.Subtitle.endswith(".vtt"):
-                part.Subtitle = SubtitleHelper.download_subtitle(
-                    part.Subtitle, format="webvtt")
+        if item.subtitle:
+            if item.subtitle.endswith(".vtt"):
+                item.subtitle = SubtitleHelper.download_subtitle(item.subtitle, format="webvtt")
             else:
-                part.Subtitle = SubtitleHelper.download_subtitle(
-                    part.Subtitle, format="dcsubtitle")
-        else:
-            part = item.create_new_empty_media_part()
+                item.subtitle = SubtitleHelper.download_subtitle(item.subtitle, format="dcsubtitle")
 
         for quality in ("high", 3500), ("hls", 2700), ("medium", 2100):
             url = json.get_value("streams", quality[0])
@@ -629,31 +622,33 @@ class Channel(chn_class.Channel):
                 continue
 
             if url.startswith("http") and ".m3u8" in url:
-                self.__update_m3u8(url, part, headers, use_kodi_hls)
+                self.__update_m3u8(url, item, headers, use_kodi_hls)
 
             elif url.startswith("rtmp"):
-                self.__update_rtmp(url, part, quality)
+                self.__update_rtmp(url, item, quality)
 
             elif "[empty]" in url:
                 Logger.debug("Found post-live url with '[empty]' in it. Ignoring this.")
                 continue
 
             else:
-                part.append_media_stream(url, quality[1])
+                item.add_stream(url, quality[1])
 
         if not use_kodi_hls:
-            part.HttpHeaders.update(headers)
+            for stream in item.streams:
+                stream.HttpHeaders.update(headers)
 
-        if part.MediaStreams:
+        if item.has_streams():
             item.complete = True
+
         Logger.trace("Found mediaurl: %s", item)
         return item
 
-    def __update_m3u8(self, url, part, headers, use_kodi_hls):
+    def __update_m3u8(self, url, item, headers, use_kodi_hls):
         """ Update a video that has M3u8 streams.
 
         :param str url:                 The URL for the stream.
-        :param MediaItemPart part:      The new part that needs updating.
+        :param MediaItem item:          The item that needs updating.
         :param dict[str,str] headers:   The URL headers to use.
         :param bool use_kodi_hls:       Should we use the InputStream Adaptive add-on?
 
@@ -661,43 +656,43 @@ class Channel(chn_class.Channel):
         # first see if there are streams in this file, else check the second location.
         for s, b in M3u8.get_streams_from_m3u8(url, headers=headers):
             if use_kodi_hls:
-                strm = part.append_media_stream(url, 0)
+                strm = item.add_stream(url, 0)
                 M3u8.set_input_stream_addon_input(strm, headers=headers)
                 # Only the main M3u8 is needed
                 break
             else:
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
 
-        if not part.MediaStreams and "manifest.m3u8" in url:
+        if not item.has_streams() and "manifest.m3u8" in url:
             Logger.warning("No streams found in %s, trying alternative with 'master.m3u8'", url)
             url = url.replace("manifest.m3u8", "master.m3u8")
             for s, b in M3u8.get_streams_from_m3u8(url, headers=headers):
                 if use_kodi_hls:
-                    strm = part.append_media_stream(url, 0)
+                    strm = item.add_stream(url, 0)
                     M3u8.set_input_stream_addon_input(strm, headers=headers)
                     # Only the main M3u8 is needed
                     break
                 else:
-                    part.append_media_stream(s, b)
+                    item.add_stream(s, b)
 
         # check for subs
         # https://mtgxse01-vh.akamaihd.net/i/201703/13/DCjOLN_1489416462884_427ff3d3_,48,260,460,900,1800,2800,.mp4.csmil/master.m3u8?__b__=300&hdnts=st=1489687185~exp=3637170832~acl=/*~hmac=d0e12e62c219d96798e5b5ef31b11fa848724516b255897efe9808c8a499308b&cc1=name=Svenska%20f%C3%B6r%20h%C3%B6rselskadade~default=no~forced=no~lang=sv~uri=https%3A%2F%2Fsubstitch.play.mtgx.tv%2Fsubtitle%2Fconvert%2Fxml%3Fsource%3Dhttps%3A%2F%2Fcdn-subtitles-mtgx-tv.akamaized.net%2Fpitcher%2F20xxxxxx%2F2039xxxx%2F203969xx%2F20396967%2F20396967-swt.xml%26output%3Dm3u8
         # https://cdn-subtitles-mtgx-tv.akamaized.net/pitcher/20xxxxxx/2039xxxx/203969xx/20396967/20396967-swt.xml&output=m3u8
-        if "uri=" in url and not part.Subtitle:
+        if "uri=" in url and not item.subtitle:
             Logger.debug("Extracting subs from M3u8")
             sub_url = url.rsplit("uri=")[-1]
             sub_url = HtmlEntityHelper.url_decode(sub_url)
             sub_data = UriHandler.open(sub_url)
             subs = [line for line in sub_data.split("\n") if line.startswith("http")]
             if subs:
-                part.Subtitle = SubtitleHelper.download_subtitle(subs[0], format='webvtt')
+                item.subtitle = SubtitleHelper.download_subtitle(subs[0], format='webvtt')
         return
 
-    def __update_rtmp(self, url, part, quality):
+    def __update_rtmp(self, url, item, quality):
         """ Update a video that has a RTMP stream.
 
         :param str url:                 The URL for the stream.
-        :param MediaItemPart part:      The new part that needs updating.
+        :param MediaItem item:          The new part that needs updating.
         :param tuple[str,int] quality:  A quality tuple with quality name and bitrate
 
         """
@@ -717,7 +712,7 @@ class Channel(chn_class.Channel):
             Logger.debug("Updated URL from - to:\n%s\n%s", old_url, url)
 
         url = self.get_verifiable_video_url(url)
-        part.append_media_stream(url, quality[1])
+        item.add_stream(url, quality[1])
         return
 
     def __create_json_episode_item(self, result_set, check_channel=True):
@@ -812,8 +807,7 @@ class Channel(chn_class.Channel):
         """
 
         stream_url = embedded_data["prioritizedStreams"][0]["links"]["stream"]["href"]
-        part = item.create_new_empty_media_part()
-        stream = part.append_media_stream(stream_url, 0)
+        stream = item.add_stream(stream_url, 0)
         M3u8.set_input_stream_addon_input(stream)
         item.complete = True
 
@@ -829,6 +823,6 @@ class Channel(chn_class.Channel):
                 continue
             sub_format = subtitle_info.get("data", {}).get("format", "").lower()
             subtitle_url = subtitle_info["link"]["href"]
-            part.Subtitle = SubtitleHelper.download_subtitle(subtitle_url, format=sub_format)
+            item.subtitle = SubtitleHelper.download_subtitle(subtitle_url, format=sub_format)
 
         return item

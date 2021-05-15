@@ -650,10 +650,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -688,11 +688,9 @@ class Channel(chn_class.Channel):
         if ".mpd" in stream_url:
             return self.__update_dash_video(item, stream_info)
 
-        part = item.create_new_empty_media_part()
-
         if AddonSettings.use_adaptive_stream_add_on() and False:
             subtitle = M3u8.get_subtitle(stream_url)
-            stream = part.append_media_stream(stream_url, 0)
+            stream = item.add_stream(stream_url, 0)
             M3u8.set_input_stream_addon_input(stream)
             item.complete = True
         else:
@@ -710,11 +708,11 @@ class Channel(chn_class.Channel):
                     video_part = video_part.rsplit("-", 1)[-1]
                     video_part = "-%s" % (video_part,)
                     s = a.replace(".m3u8", video_part)
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
 
         if subtitle:
             subtitle = subtitle.replace(".m3u8", ".webvtt")
-            part.Subtitle = SubtitleHelper.download_subtitle(subtitle, format="m3u8srt")
+            item.subtitle = SubtitleHelper.download_subtitle(subtitle, format="m3u8srt")
         return item
 
     def update_live_item(self, item):
@@ -726,10 +724,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -741,17 +739,9 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_live_item for %s (%s)', item.name, self.channelName)
 
-        item.MediaItemParts = []
-        part = item.create_new_empty_media_part()
-
-        spoof_ip = self._get_setting("spoof_ip", "0.0.0.0")
-        if spoof_ip:
-            for s, b in M3u8.get_streams_from_m3u8(item.url,
-                                                   headers={"X-Forwarded-For": spoof_ip}):
-                part.append_media_stream(s, b)
-        else:
-            for s, b in M3u8.get_streams_from_m3u8(item.url):
-                part.append_media_stream(s, b)
+        item.streams = []
+        for s, b in M3u8.get_streams_from_m3u8(item.url):
+            item.add_stream(s, b)
 
         item.complete = True
         return item
@@ -807,8 +797,7 @@ class Channel(chn_class.Channel):
         playback_item = stream_info.get_value("playbackItem")
 
         stream_url = playback_item["manifestUrl"]
-        part = item.create_new_empty_media_part()
-        stream = part.append_media_stream(stream_url, 0)
+        stream = item.add_stream(stream_url, 0)
 
         license_info = playback_item.get("license", None)
         if license_info is not None:

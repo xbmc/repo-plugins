@@ -255,10 +255,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -283,10 +283,9 @@ class Channel(chn_class.Channel):
             return item
 
         Logger.debug("Found stream url for %s: %s", item, url)
-        part = item.create_new_empty_media_part()
         for s, b in M3u8.get_streams_from_m3u8(url):
             item.complete = True
-            part.append_media_stream(s, b)
+            item.add_stream(s, b)
         return item
 
     def update_video_item(self, item):
@@ -298,10 +297,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -334,7 +333,6 @@ class Channel(chn_class.Channel):
         data = UriHandler.open(item.url)
         data = data.replace("\\/", "/")
         urls = Regexer.do_regex(self.mediaUrlRegex, data)
-        part = item.create_new_empty_media_part()
         for url in urls:
             Logger.trace(url)
             if url[0] == "src":
@@ -362,7 +360,7 @@ class Channel(chn_class.Channel):
 
                     for s, b in M3u8.get_streams_from_m3u8(flv):
                         item.complete = True
-                        part.append_media_stream(s, b)
+                        item.add_stream(s, b)
                     # no need to continue adding the streams
                     continue
 
@@ -374,7 +372,7 @@ class Channel(chn_class.Channel):
                     flv = "%s/%s" % (flv_server, flv_path)
                     bitrate = 0
 
-            part.append_media_stream(flv, bitrate)
+            item.add_stream(flv, bitrate)
 
         item.complete = True
         return item

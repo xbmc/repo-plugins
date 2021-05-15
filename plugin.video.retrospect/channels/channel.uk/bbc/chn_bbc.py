@@ -216,10 +216,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -244,8 +244,6 @@ class Channel(chn_class.Channel):
         # streamDataUrl = "http://open.live.bbc.co.uk/mediaselector/5/select/version
         # /2.0/mediaset/pc/vpid/%s/atk/2214e42b5729dcdd012dfb61a3054d39309ccd31/asn/1/
         # And I don't know where that one comes from
-
-        part = item.create_new_empty_media_part()
 
         stream_data = UriHandler.open(stream_data_url)
         # Reroute for debugging
@@ -309,9 +307,9 @@ class Channel(chn_class.Channel):
                     continue
 
                 if transfer_format == "hls":
-                    item.complete = M3u8.update_part_with_m3u8_streams(part, url, bitrate=stream_bitrate)
+                    item.complete = M3u8.update_part_with_m3u8_streams(item, url, bitrate=stream_bitrate)
                 elif transfer_format == "dash":
-                    strm = part.append_media_stream(url, bitrate)
+                    strm = item.add_stream(url, bitrate)
                     Mpd.set_input_stream_addon_input(strm)
 
         # get the subtitle
@@ -321,7 +319,7 @@ class Channel(chn_class.Channel):
         if len(subtitles) > 0:
             subtitle = subtitles[0]
             subtitle_url = "%s%s" % (subtitle[0], subtitle[1])
-            part.Subtitle = subtitlehelper.SubtitleHelper.download_subtitle(
+            item.subtitle = subtitlehelper.SubtitleHelper.download_subtitle(
                 subtitle_url, subtitle[1], "ttml")
 
         item.complete = True
@@ -491,10 +489,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -509,10 +507,9 @@ class Channel(chn_class.Channel):
         stream_root = Regexer.do_regex(r'<media href="([^"]+\.isml)', data)[0]
         Logger.debug("Found Live stream root: %s", stream_root)
 
-        part = item.create_new_empty_media_part()
         for s, b in F4m.get_streams_from_f4m(item.url):
             item.complete = True
             s = s.replace(".f4m", ".m3u8")
-            part.append_media_stream(s, b)
+            item.add_stream(s, b)
 
         return item

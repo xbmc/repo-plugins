@@ -194,10 +194,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -234,7 +234,6 @@ class Channel(chn_class.Channel):
             return self.__update_video_from_mpd(item, mpd_info, use_adaptive_with_encryption)
 
         # Try the plain M3u8 streams
-        part = item.create_new_empty_media_part()
         m3u8_url = json.get_value("playlist")
         use_adaptive = AddonSettings.use_adaptive_stream_add_on(channel=self)
 
@@ -250,12 +249,12 @@ class Channel(chn_class.Channel):
                 if use_adaptive:
                     # we have at least 1 none encrypted streams
                     Logger.info("Using HLS InputStreamAddon")
-                    strm = part.append_media_stream(m3u8_url, 0)
+                    strm = item.add_stream(m3u8_url, 0)
                     M3u8.set_input_stream_addon_input(strm)
                     item.complete = True
                     return item
 
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
                 item.complete = True
             return item
 
@@ -277,14 +276,14 @@ class Channel(chn_class.Channel):
             if use_adaptive:
                 # we have at least 1 none encrypted streams
                 Logger.info("Using HLS InputStreamAddon")
-                strm = part.append_media_stream(m3u8_url, 0)
+                strm = item.add_stream(m3u8_url, 0)
                 M3u8.set_input_stream_addon_input(strm)
                 item.complete = True
                 return item
 
             for s, b in M3u8.get_streams_from_m3u8(m3u8_url, append_query_string=True):
                 item.complete = True
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
 
             return item
 
@@ -317,7 +316,6 @@ class Channel(chn_class.Channel):
         adaptive_available_encrypted = AddonSettings.use_adaptive_stream_add_on(with_encryption=True, channel=self)
 
         for play_list_entry in json.get_value("playlist"):
-            part = item.create_new_empty_media_part()
             for source in play_list_entry["sources"]:
                 stream_type = source["type"]
                 stream_url = source["file"]
@@ -327,11 +325,11 @@ class Channel(chn_class.Channel):
                     has_drm_only = False
                     if stream_type == "m3u8":
                         Logger.debug("Found non-encrypted M3u8 stream: %s", stream_url)
-                        M3u8.update_part_with_m3u8_streams(part, stream_url, channel=self)
+                        M3u8.update_part_with_m3u8_streams(item, stream_url, channel=self)
                         item.complete = True
                     elif stream_type == "dash" and adaptive_available:
                         Logger.debug("Found non-encrypted Dash stream: %s", stream_url)
-                        stream = part.append_media_stream(stream_url, 1)
+                        stream = item.add_stream(stream_url, 1)
                         Mpd.set_input_stream_addon_input(stream)
                         item.complete = True
                     else:
@@ -359,7 +357,7 @@ class Channel(chn_class.Channel):
                     encryption_key = Mpd.get_license_key(
                         license_url, key_type=None, key_value=encryption_json, key_headers=headers)
 
-                    stream = part.append_media_stream(stream_url, 0)
+                    stream = item.add_stream(stream_url, 0)
                     Mpd.set_input_stream_addon_input(
                         stream, license_key=encryption_key)
                     item.complete = True
@@ -367,7 +365,7 @@ class Channel(chn_class.Channel):
             subs = [s['file'] for s in play_list_entry.get("tracks", []) if s.get('kind') == "captions"]
             if subs:
                 subtitle = SubtitleHelper.download_subtitle(subs[0], format="webvtt")
-                part.Subtitle = subtitle
+                item.subtitle = subtitle
 
         if has_drm_only and not adaptive_available_encrypted:
             XbmcWrapper.show_dialog(
@@ -390,7 +388,6 @@ class Channel(chn_class.Channel):
 
         Logger.debug("Updating streams using BrightCove data.")
 
-        part = item.create_new_empty_media_part()
         mpd_manifest_url = "https:{0}".format(mpd_info["mediaLocator"])
         mpd_data = UriHandler.open(mpd_manifest_url)
         subtitles = Regexer.do_regex(r'<BaseURL>([^<]+\.vtt)</BaseURL>', mpd_data)
@@ -398,7 +395,7 @@ class Channel(chn_class.Channel):
         if subtitles:
             Logger.debug("Found subtitle: %s", subtitles[0])
             subtitle = SubtitleHelper.download_subtitle(subtitles[0], format="webvtt")
-            part.Subtitle = subtitle
+            item.subtitle = subtitle
 
         if use_adaptive_with_encryption:
             # We can use the adaptive add-on with encryption
@@ -408,7 +405,7 @@ class Channel(chn_class.Channel):
             key_headers = {"Authorization": token}
             license_key = Mpd.get_license_key(license_url, key_headers=key_headers)
 
-            stream = part.append_media_stream(mpd_manifest_url, 0)
+            stream = item.add_stream(mpd_manifest_url, 0)
             Mpd.set_input_stream_addon_input(stream, license_key=license_key)
             item.complete = True
         else:
@@ -431,7 +428,6 @@ class Channel(chn_class.Channel):
 
         """
 
-        part = item.create_new_empty_media_part()
         # Then try the new BrightCove JSON
         bright_cove_regex = '<video[^>]+data-video-id="(?<videoId>[^"]+)[^>]+data-account="(?<videoAccount>[^"]+)'
         bright_cove_data = Regexer.do_regex(Regexer.from_expresso(bright_cove_regex), data)
@@ -462,14 +458,14 @@ class Channel(chn_class.Channel):
         # "range" http header
         if use_adaptive_with_encryption:
             Logger.info("Using InputStreamAddon for playback of HLS stream")
-            strm = part.append_media_stream(stream_url, 0)
+            strm = item.add_stream(stream_url, 0)
             M3u8.set_input_stream_addon_input(strm)
             item.complete = True
             return item
 
         for s, b in M3u8.get_streams_from_m3u8(stream_url):
             item.complete = True
-            part.append_media_stream(s, b)
+            item.add_stream(s, b)
         return item
 
     #region GraphQL data
@@ -792,7 +788,6 @@ class Channel(chn_class.Channel):
         """
 
         sources = item.metaData["sources"]
-        part = item.create_new_empty_media_part()
         hls_over_dash = self._get_setting("hls_over_dash") == "true"
 
         for src in sources:
@@ -804,12 +799,12 @@ class Channel(chn_class.Channel):
 
             if stream_type == "dash" and not drm:
                 bitrate = 0 if hls_over_dash else 2
-                stream = part.append_media_stream(url, bitrate)
+                stream = item.add_stream(url, bitrate)
                 item.complete = Mpd.set_input_stream_addon_input(stream)
 
             elif stream_type == "dash" and drm and "widevine" in drm:
                 bitrate = 0 if hls_over_dash else 1
-                stream = part.append_media_stream(url, bitrate)
+                stream = item.add_stream(url, bitrate)
 
                 # fetch the authentication token:
                 # url = self.__get_api_persisted_url("drmToken", "634c83ae7588a877e2bb67d078dda618cfcfc70ac073aef5e134e622686c0bb6", variables={})
@@ -834,7 +829,7 @@ class Channel(chn_class.Channel):
             elif stream_type == "m3u8" and not drm:
                 bitrate = 2 if hls_over_dash else 0
                 item.complete = M3u8.update_part_with_m3u8_streams(
-                    part, url, channel=self, bitrate=bitrate)
+                    item, url, channel=self, bitrate=bitrate)
 
             else:
                 Logger.debug("Found incompatible stream: %s", src)
@@ -842,7 +837,7 @@ class Channel(chn_class.Channel):
         subtitle = None
         for sub in item.metaData.get("subtitles", []):
             subtitle = sub["file"]
-        part.Subtitle = subtitle
+        item.subtitle = subtitle
 
         # If we are here, we can playback.
         item.isDrmProtected = False

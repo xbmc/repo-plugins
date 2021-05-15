@@ -57,11 +57,10 @@ class YouTube(object):
 
         Can be used like this:
 
-            part = item.create_new_empty_media_part()
             for s, b in YouTube.get_streams_from_you_tube(url):
                 item.complete = True
                 # s = self.get_verifiable_video_url(s)
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
 
         :return: a list of streams with their bitrate and optionally the audio streams.
         :rtype: list[tuple[str,str]]

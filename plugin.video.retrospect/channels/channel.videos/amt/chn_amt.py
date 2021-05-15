@@ -162,8 +162,7 @@ class Channel(chn_class.Channel):
             duration = (int(runtime[0]) * 60) + int(runtime[1])
             item.set_info_label("duration", duration)
 
-        part = item.create_new_empty_media_part()
-        part.HttpHeaders["User-Agent"] = "QuickTime/7.6 (qtver=7.6;os=Windows NT 6.0Service Pack 2)"
+        stream_headers = {"User-Agent": "QuickTime/7.6 (qtver=7.6;os=Windows NT 6.0Service Pack 2)"}
 
         if "versions" in result_set and "enus" in result_set["versions"] and "sizes" in result_set["versions"]["enus"]:
             streams = result_set["versions"]["enus"]["sizes"]
@@ -183,9 +182,10 @@ class Channel(chn_class.Channel):
                             if len(parts) == 2:
                                 Logger.trace(parts)
                                 stream_url = "%s_h%s" % (parts[0], parts[1])
-                            part.append_media_stream(stream_url, bitrate)
+                            stream = item.add_stream(stream_url, bitrate)
                         else:
-                            part.append_media_stream(stream_url, bitrate)
+                            stream = item.add_stream(stream_url, bitrate)
+                        stream.HttpHeaders.update(stream_headers)
                         item.complete = True
 
         return item

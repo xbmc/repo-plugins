@@ -248,10 +248,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -263,8 +263,7 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
-        part = item.create_new_empty_media_part()
-        item.complete = M3u8.update_part_with_m3u8_streams(part, item.url, channel=self)
+        item.complete = M3u8.update_part_with_m3u8_streams(item, item.url, channel=self)
         return item
 
     def update_live_stream(self, item):
@@ -276,10 +275,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -293,8 +292,7 @@ class Channel(chn_class.Channel):
         url = "https://rrr.sz.xlcdn.com/?account=atvijf" \
               "&file=live&type=live&service=wowza&protocol=https&output=playlist.m3u8"
 
-        part = item.create_new_empty_media_part()
         item.complete = \
-            M3u8.update_part_with_m3u8_streams(part, url, channel=self)
+            M3u8.update_part_with_m3u8_streams(item, url, channel=self)
 
         return item

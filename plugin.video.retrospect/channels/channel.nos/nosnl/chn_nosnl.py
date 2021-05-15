@@ -188,10 +188,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -210,7 +210,6 @@ class Channel(chn_class.Channel):
             return item
 
         qualities = {"720p": 1600, "480p": 1200, "360p": 500, "other": 0}  # , "http-hls": 1500, "3gp-mob01": 300, "flv-web01": 500}
-        part = item.create_new_empty_media_part()
         urls = []
         for stream in streams:
             url = list(stream["url"].values())[-1]
@@ -221,8 +220,8 @@ class Channel(chn_class.Channel):
             urls.append(url)
 
             # actually process the url
-            if ".m3u8" not in url:
-                part.append_media_stream(
+            if ".m3u8" not in url and "profile=hls" not in url:
+                item.add_stream(
                     url=url,
                     bitrate=qualities.get(stream.get("name", "other"), 0)
                 )
@@ -233,5 +232,6 @@ class Channel(chn_class.Channel):
             #     M3u8.SetInputStreamAddonInput(stream)
             #     item.complete = True
             else:
-                M3u8.update_part_with_m3u8_streams(part, url, channel=self)
+                _, actual_url = UriHandler.header(url)
+                item.complete = M3u8.update_part_with_m3u8_streams(item, actual_url, channel=self)
         return item

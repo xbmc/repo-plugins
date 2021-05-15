@@ -581,10 +581,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -615,10 +615,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -634,12 +634,11 @@ class Channel(chn_class.Channel):
         if not stream_data:
             return item
 
-        part = item.create_new_empty_media_part()
         for stream_info in stream_data["assets"]:
             url = stream_info["url"]
             stream_type = stream_info["format"]
             if stream_type == "HLS":
-                item.complete = M3u8.update_part_with_m3u8_streams(part, url)
+                item.complete = M3u8.update_part_with_m3u8_streams(item, url)
             else:
                 Logger.warning("Found unknow stream type: %s", stream_type)
 
@@ -655,7 +654,7 @@ class Channel(chn_class.Channel):
                 sub_type = "webvtt"  # set Retrospect type
 
             if sub_url:
-                part.Subtitle = SubtitleHelper.download_subtitle(sub_url, format=sub_type)
+                item.subtitle = SubtitleHelper.download_subtitle(sub_url, format=sub_type)
                 break
 
         return item
@@ -677,12 +676,11 @@ class Channel(chn_class.Channel):
         video_info = manifest.get_value("playable", "assets", 0)
         url = video_info["url"]
         # Is it encrypted? encrypted = video_info["encrypted"]
-        part = item.create_new_empty_media_part()
 
         # Adaptive add-on does not work with audio only
         for s, b in M3u8.get_streams_from_m3u8(url):
             item.complete = True
-            part.append_media_stream(s, b)
+            item.add_stream(s, b)
 
         return item
 
@@ -690,27 +688,26 @@ class Channel(chn_class.Channel):
         video_info = manifest.get_value("playable", "assets", 0)
         url = video_info["url"]
         encrypted = video_info["encrypted"]
-        part = item.create_new_empty_media_part()
 
         if encrypted:
             use_adaptive = AddonSettings.use_adaptive_stream_add_on(with_encryption=True)
             if not use_adaptive:
                 Logger.error("Cannot playback encrypted item without inputstream.adaptive with encryption support")
                 return item
-            stream = part.append_media_stream(url, 0)
+            stream = item.add_stream(url, 0)
             key = M3u8.get_license_key("", key_type="R")
             M3u8.set_input_stream_addon_input(stream, license_key=key)
             item.complete = True
         else:
             use_adaptive = AddonSettings.use_adaptive_stream_add_on(with_encryption=False)
             if use_adaptive:
-                stream = part.append_media_stream(url, 0)
+                stream = item.add_stream(url, 0)
                 M3u8.set_input_stream_addon_input(stream)
                 item.complete = True
             else:
                 for s, b in M3u8.get_streams_from_m3u8(url):
                     item.complete = True
-                    part.append_media_stream(s, b)
+                    item.add_stream(s, b)
 
         return item
 

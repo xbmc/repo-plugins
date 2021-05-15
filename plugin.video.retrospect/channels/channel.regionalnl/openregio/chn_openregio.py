@@ -268,10 +268,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -300,10 +300,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -316,16 +316,15 @@ class Channel(chn_class.Channel):
         Logger.debug("Updating a (Live) video item")
 
         if item.is_audio:
-            item.append_single_stream(item.url, 0)
+            item.add_stream(item.url, 0)
             item.complete = True
 
         elif ".m3u8" in item.url:
-            part = item.create_new_empty_media_part()
             item.complete = M3u8.update_part_with_m3u8_streams(
-                part, item.url, channel=self, encrypted=False)
+                item, item.url, channel=self, encrypted=False)
 
         elif item.url.endswith(".mp4"):
-            item.append_single_stream(item.url, self.channelBitrate)
+            item.add_stream(item.url, self.channelBitrate)
             item.complete = True
 
         return item

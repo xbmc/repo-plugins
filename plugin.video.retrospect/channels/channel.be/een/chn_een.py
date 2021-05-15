@@ -177,7 +177,6 @@ class Channel(chn_class.Channel):
         # now the mediaurl is derived. First we try WMV
         data = UriHandler.open(item.url)
 
-        part = item.create_new_empty_media_part()
         if "mediazone.vrt.be" not in item.url:
             # Extract actual media data
             video_id = Regexer.do_regex('data-video=[\'"]([^"\']+)[\'"]', data)[0]
@@ -194,7 +193,7 @@ class Channel(chn_class.Channel):
 
             hls_url = url_info["url"]
             for s, b in M3u8.get_streams_from_m3u8(hls_url):
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
 
         item.complete = True
         return item

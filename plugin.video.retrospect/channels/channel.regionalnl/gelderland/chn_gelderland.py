@@ -103,7 +103,7 @@ class Channel(chn_class.Channel):
         
         item = MediaItem(name, url, media_type=mediatype.EPISODE)
         item.thumb = thumb_url
-        item.append_single_stream(video_url)
+        item.add_stream(video_url)
         
         # set date
         month = datehelper.DateHelper.get_month_from_name(result_set[3], "nl", False)

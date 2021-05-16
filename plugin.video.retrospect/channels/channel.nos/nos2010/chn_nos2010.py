@@ -1161,7 +1161,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -1179,7 +1179,6 @@ class Channel(chn_class.Channel):
 
         # noinspection PyTypeChecker
         streams = result_set.get("audiostreams", [])
-        part = item.create_new_empty_media_part()
 
         # first check for the video streams
         # noinspection PyTypeChecker
@@ -1201,7 +1200,7 @@ class Channel(chn_class.Channel):
                 continue
             bitrate = stream.get("bitrate", 0)
             url = stream["url"]
-            part.append_media_stream(url, bitrate)
+            item.add_stream(url, bitrate)
             item.complete = True
             # if not stream["protocol"] == "prid":
             #     continue
@@ -1218,10 +1217,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -1247,10 +1246,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -1272,10 +1271,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -1287,9 +1286,6 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item: %s', item.name)
 
-        item.MediaItemParts = []
-        part = item.create_new_empty_media_part()
-
         # we need to determine radio or live tv
         Logger.debug("Fetching live stream data from item url: %s", item.url)
         html_data = UriHandler.open(item.url)
@@ -1297,7 +1293,7 @@ class Channel(chn_class.Channel):
         mp3_urls = Regexer.do_regex("""data-streams='{"url":"([^"]+)","codec":"[^"]+"}'""", html_data)
         if len(mp3_urls) > 0:
             Logger.debug("Found MP3 URL")
-            part.append_media_stream(mp3_urls[0], 192)
+            item.add_stream(mp3_urls[0], 192)
         else:
             Logger.debug("Finding the actual metadata url from %s", item.url)
             # NPO3 normal stream had wrong subs
@@ -1337,10 +1333,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item:          the original MediaItem that needs updating.
@@ -1354,23 +1350,20 @@ class Channel(chn_class.Channel):
 
         Logger.trace("Using Generic update_video_item method")
 
-        item.MediaItemParts = []
-        part = item.create_new_empty_media_part()
-
         # get the subtitle
         if fetch_subtitles:
             sub_title_url = "https://assetscdn.npostart.nl/subtitles/original/nl/%s.vtt" % (episode_id,)
             sub_title_path = subtitlehelper.SubtitleHelper.download_subtitle(
                 sub_title_url, episode_id + ".nl.srt", format='srt')
             if sub_title_path:
-                part.Subtitle = sub_title_path
+                item.subtitle = sub_title_path
 
         if AddonSettings.use_adaptive_stream_add_on(
                 with_encryption=True, ignore_add_on_config=True):
-            error = NpoStream.add_mpd_stream_from_npo(None, episode_id, part, live=item.isLive)
+            error = NpoStream.add_mpd_stream_from_npo(None, episode_id, item, live=item.isLive)
             if bool(error) and self.__has_premium():
                 self.__log_on(force_log_off=True)
-                error = NpoStream.add_mpd_stream_from_npo(None, episode_id, part, live=item.isLive)
+                error = NpoStream.add_mpd_stream_from_npo(None, episode_id, item, live=item.isLive)
 
             if bool(error):
                 XbmcWrapper.show_dialog(

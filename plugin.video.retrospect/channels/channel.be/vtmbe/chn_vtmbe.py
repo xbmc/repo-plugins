@@ -868,10 +868,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -893,10 +893,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -1082,16 +1082,16 @@ class Channel(chn_class.Channel):
     def update_video_item(self, item):
         """ Updates an existing MediaItem with more data.
 
-        Used to update none complete MediaItems (self.complete = False). This
+        UUsed to update none complete MediaItems (self.complete = False). This
         could include opening the item's URL to fetch more data and then process that
         data or retrieve it's real media-URL.
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -1121,10 +1121,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -1184,8 +1184,7 @@ class Channel(chn_class.Channel):
 
             license_key = license_key[2:]
             license_key = "|Cookie={0}|R{{SSM}}|".format(HtmlEntityHelper.url_encode(license_key))
-            part = item.create_new_empty_media_part()
-            stream = part.append_media_stream(hls, 0)
+            stream = item.add_stream(hls, 0)
             M3u8.set_input_stream_addon_input(stream, license_key=license_key)
             item.complete = True
         else:
@@ -1201,10 +1200,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -1235,7 +1234,7 @@ class Channel(chn_class.Channel):
         for stream in streams:
             stream_url = stream['url']
             if stream['type'] == "mp4":
-                item.append_single_stream(stream_url, 0)
+                item.add_stream(stream_url, 0)
                 item.complete = True
 
         return item
@@ -1252,20 +1251,7 @@ class Channel(chn_class.Channel):
     def __update_video_item(self, item, video_id):
         """ Updates an existing MediaItem with more data.
 
-        Used to update none complete MediaItems (self.complete = False). This
-        could include opening the item's URL to fetch more data and then process that
-        data or retrieve it's real media-URL.
-
-        The method should at least:
-        * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
-        * set self.complete = True.
-
-        if the returned item does not have a MediaItemPart then the self.complete flag
-        will automatically be set back to False.
-
         :param MediaItem item: the original MediaItem that needs updating.
-        :param str video_id: the video ID of the item to update.
 
         :return: The original item with more data added to it's properties.
         :rtype: MediaItem
@@ -1306,8 +1292,7 @@ class Channel(chn_class.Channel):
             license_headers = "x-dt-custom-data={0}&Content-Type=application/octstream".format(base64.b64encode(license_header))
             license_key = "{0}?specConform=true|{1}|R{{SSM}}|".format(license_url, license_headers or "")
 
-            part = item.create_new_empty_media_part()
-            stream = part.append_media_stream(stream_url, 0)
+            stream = item.add_stream(stream_url, 0)
             Mpd.set_input_stream_addon_input(stream, license_key=license_key, license_type="com.widevine.alpha")
             item.complete = True
         else:
@@ -1325,17 +1310,17 @@ class Channel(chn_class.Channel):
                 )
                 return item
 
-            part = item.create_new_empty_media_part()
             # Set the Range header to a proper value to make all streams start at the beginning. Make
             # sure that a complete TS part comes in a single call otherwise we get stuttering.
             byte_range = 10 * 1024 * 1024
             Logger.debug("Setting an 'Range' http header of bytes=0-%d to force playback at the start "
                          "of a stream and to include a full .ts part.", byte_range)
-            part.HttpHeaders["Range"] = 'bytes=0-%d' % (byte_range, )
+            headers = {"Range": 'bytes=0-%d' % (byte_range, )}
 
             for s, b in M3u8.get_streams_from_m3u8(m3u8_url):
                 item.complete = True
-                part.append_media_stream(s, b)
+                stream = item.add_stream(s, b)
+                stream.HttpHeaders.update(headers)
 
         return item
 

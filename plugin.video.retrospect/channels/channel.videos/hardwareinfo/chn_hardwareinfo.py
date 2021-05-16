@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class, mediatype
+from resources.lib import chn_class, mediatype, contenttype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.helpers import xmlhelper
@@ -50,6 +50,9 @@ class Channel(chn_class.Channel):
         self.pageNavigationIndicationRegex = r'<page>(\d+)</page>'
         self.pageNavigationRegex = r'<page>(\d+)</page>'
         self.pageNavigationRegexIndex = 0
+
+        self.mainListContentType = contenttype.EPISODES
+
         self._add_data_parser("*", parser=self.pageNavigationRegex, creator=self.create_page_item)
 
         # ==========================================================================================
@@ -196,7 +199,7 @@ class Channel(chn_class.Channel):
         url = xml_data.get_tag_attribute("enclosure", {'url': None}, {'type': 'video/youtube'})
         Logger.trace(url)
 
-        item = MediaItem(title, url)
+        item = MediaItem(title, url, media_type=mediatype.EPISODE)
         item.type = 'video'
 
         # date stuff
@@ -230,10 +233,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -243,10 +246,9 @@ class Channel(chn_class.Channel):
 
         """
 
-        part = item.create_new_empty_media_part()
         for s, b in YouTube.get_streams_from_you_tube(item.url):
             item.complete = True
-            part.append_media_stream(s, b)
+            item.add_stream(s, b)
 
         item.complete = True
         return item

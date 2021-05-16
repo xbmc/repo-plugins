@@ -288,7 +288,8 @@ class TokenResolver:
                 delete_cache(cache_file, self._TOKEN_CACHE_DIR)
                 xvrttoken = self.get_token('X-VRT-Token', 'roaming')
             elif variant == 'ondemand':
-                xvrttoken = self.get_token('X-VRT-Token')
+                # We need a user X-VRT-Token because the birthdate in the VRT NU profile is checked when watching age restricted content
+                xvrttoken = self.get_token('X-VRT-Token', 'user')
             if xvrttoken is None:
                 return None
             payload = dict(identityToken=xvrttoken)

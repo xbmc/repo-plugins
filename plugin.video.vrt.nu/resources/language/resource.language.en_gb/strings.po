@@ -1042,3 +1042,7 @@ msgstr ""
 msgctxt "#30989"
 msgid "Failed to load a compatible stream, please try toggling 'Use Widevine DRM' in the add-on Playback settings."
 msgstr ""
+
+msgctxt "#30990"
+msgid "This program cannot be played. Your VRT NU account is not allowed to access 12+ content. Please check your VRT NU account details at https://www.vrt.be/vrtnu/"
+msgstr ""

@@ -118,7 +118,7 @@ msgstr "Качество видео"
 
 msgctxt "#30045"
 msgid "Display titles"
-msgstr "Показывать названия"
+msgstr "Стиль заголовка"
 
 msgctxt "#30046"
 msgid "Streamer - Stream Title"
@@ -236,7 +236,7 @@ msgstr "Прошедшие трансляции"
 
 msgctxt "#30079"
 msgid "Video Highlights"
-msgstr "Лучшие моменты"
+msgstr "Яркие моменты"
 
 msgctxt "#30080"
 msgid "Could not find any playable urls"
@@ -408,7 +408,7 @@ msgstr "Сбросить функциональный кеш"
 
 msgctxt "#30123"
 msgid "Items per page"
-msgstr "Количество элементов на страницу"
+msgstr "Количество элементов на странице"
 
 msgctxt "#30124"
 msgid "Video Id/Url"
@@ -512,7 +512,7 @@ msgstr "Вы уверены, что хотите разблокировать %s
 
 msgctxt "#30150"
 msgid "Blacklist %s"
-msgstr "Добавить в чёрный список %s"
+msgstr "В чёрный список %s"
 
 msgctxt "#30151"
 msgid "Blacklisted %s"
@@ -588,11 +588,11 @@ msgstr "Сбросить установленное качество"
 
 msgctxt "#30169"
 msgid "Choose Quality"
-msgstr "Выбрать качество"
+msgstr "Выберите качество"
 
 msgctxt "#30170"
 msgid "Playlists"
-msgstr "Плейлисты"
+msgstr "Трансляции"
 
 msgctxt "#30171"
 msgid "Collections"
@@ -704,7 +704,7 @@ msgstr "Потерянно соединение"
 
 msgctxt "#30200"
 msgid "No %s found"
-msgstr "%s не найдено"
+msgstr "Не удалось найти %s"
 
 msgctxt "#30201"
 msgid "Bandwidth"
@@ -944,7 +944,7 @@ msgstr "Интервал обновления картинок предпрос�
 
 msgctxt "#30260"
 msgid "Limit to 30 fps"
-msgstr "Лимит в 30 кадров"
+msgstr "Лимит в 30 FPS"
 
 msgctxt "#30261"
 msgid "Private API Credentials"
@@ -956,7 +956,7 @@ msgstr "Изменить языки"
 
 msgctxt "#30263"
 msgid "Frame rate limit"
-msgstr "Лимит кадров"
+msgstr "Лимит FPS"
 
 msgctxt "#30264"
 msgid "Follow"

@@ -107,10 +107,14 @@ def create_game_listitem(game, game_day, show_date=False):
     else:
         name = '%s %s - %s at %s - %s' % \
                (game_line_header, away_team, game['teams']['away']['score'], home_team, game['teams']['home']['score'])
-
-        desc = '%s %s-%s-%s\n%s %s-%s-%s' % (away_team, str(away_record['wins']), str(away_record['losses']),
-                                             str(away_record['ot']), home_team, str(home_record['wins']),
-                                             str(home_record['losses']), str(home_record['ot']))
+        away_wins = away_record['wins'] if 'wins' in away_record else '0'
+        away_losses = away_record['losses'] if 'losses' in away_record else '0'
+        away_ot = away_record['ot'] if 'ot' in away_record else '0'
+        home_wins = home_record['wins'] if 'wins' in home_record else '0'
+        home_losses = home_record['losses'] if 'losses' in home_record else '0'
+        home_ot = home_record['ot'] if 'ot' in home_record else '0'
+        desc = '%s %s-%s-%s\n%s %s-%s-%s' % (away_team, away_wins, away_losses, away_ot,
+                                             home_team, home_wins, home_losses, home_ot)
 
     fanart = 'http://nhl.bamcontent.com/images/arena/default/%s@2x.jpg' % home['id']
     try:

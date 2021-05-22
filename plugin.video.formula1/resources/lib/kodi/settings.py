@@ -1,10 +1,10 @@
 class Settings:
 
     VIDEO_FORMAT = {
-        "HLS (Adaptive)": "m3u8",
-        "1080p": "mp4:1080",
-        "720p": "mp4:720",
-        "360p": "mp4:360",
+        "HLS (Adaptive)": "application/x-mpegURL",
+        "1080p": "H264:720",  # 1080p resolution is not available anymore in brightcove player
+        "720p": "H264:720",
+        "360p": "H264:360",
     }
 
     def __init__(self, addon):

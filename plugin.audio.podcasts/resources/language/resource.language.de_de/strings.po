@@ -13,6 +13,10 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#32000"
+msgid "Group"
+msgstr "Gruppe"
+
 msgctxt "#32001"
 msgid "Group 1"
 msgstr "Gruppe 1"
@@ -94,12 +98,20 @@ msgid "OPML File 10"
 msgstr "OPML Datei 10"
 
 msgctxt "#32021"
-msgid "OPML File"
-msgstr "OPML Datei"
+msgid "OPML Files"
+msgstr "OPML Dateien"
 
 msgctxt "#32022"
 msgid "URL"
 msgstr "URL"
+
+msgctxt "#32023"
+msgid "OPML File"
+msgstr "OPML Datei"
+
+msgctxt "#32024"
+msgid "vacancy / occupancy"
+msgstr "frei / belegt"
 
 msgctxt "#32031"
 msgid "Podcast 1"
@@ -142,13 +154,157 @@ msgid "Podcast 10"
 msgstr "Podcast 10"
 
 msgctxt "#32050"
-msgid "General"
-msgstr "Allgemein"
+msgid "Miscellaneous"
+msgstr "Sonstiges"
 
 msgctxt "#32051"
-msgid "Anchor for most recent podcast, e.g. for bookmarking"
-msgstr "Anker für neueste Sendung, z.B. zum Bookmarken"
+msgid "Anchor for most recent podcast (good for bookmarking)"
+msgstr "Anker für aktuelle Sendung (hilfreich zum Bookmarken)"
 
 msgctxt "#32052"
-msgid "Newest episode"
-msgstr "neueste Sendung"
+msgid "most recent episode"
+msgstr "aktuelle Sendung"
+
+msgctxt "#32053"
+msgid "Untitled podcast from"
+msgstr "Namenloser Podcast von"
+
+msgctxt "#32060"
+msgid "Actions"
+msgstr "Aktionen"
+
+msgctxt "#32061"
+msgid "gPodder.net"
+msgstr "gPodder.net"
+
+msgctxt "#32062"
+msgid "Username"
+msgstr "Benutzername"
+
+msgctxt "#32063"
+msgid "Password"
+msgstr "Passwort"
+
+msgctxt "#32064"
+msgid "Import subscriptions to group"
+msgstr "Subskriptionen in eine Gruppe laden"
+
+msgctxt "#32065"
+msgid "Download subscriptions as OPML File"
+msgstr "Subskriptionen als OPML Datei laden"
+
+msgctxt "#32066"
+msgid "Import from OPML File to group"
+msgstr "OPML Datei in eine Gruppe laden"
+
+msgctxt "#32067"
+msgid "Hostname"
+msgstr "Hostname"
+
+msgctxt "#32068"
+msgid "Apply changes"
+msgstr "Änderungen übernehmen"
+
+msgctxt "#32069"
+msgid "Import new subscriptions to group"
+msgstr "Neue Subskriptionen in eine Gruppe laden"
+
+msgctxt "#32070"
+msgid "Select OPML file"
+msgstr "Wähle OPML Datei für Import aus"
+
+msgctxt "#32071"
+msgid "Select feeds"
+msgstr "Wähle RSS Feeds für den Import aus"
+
+msgctxt "#32072"
+msgid "No feeds selected"
+msgstr "Keine Feeds ausgewählt"
+
+msgctxt "#32073"
+msgid "You must select at least one feed"
+msgstr "Du musst mindestens einen Feed auswählen"
+
+msgctxt "#32074"
+msgid "Too many feeds selected"
+msgstr "Zu viele Feeds ausgewählt"
+
+msgctxt "#32075"
+msgid "Do not select more than %i feeds"
+msgstr "Es dürfen nicht mehr als %i Feeds ausgewählt werden"
+
+msgctxt "#32076"
+msgid "Select group for import"
+msgstr "Wähle die Gruppe aus, in die importiert werden soll"
+
+msgctxt "#32077"
+msgid "vacant slots"
+msgstr "freie Plätze"
+
+msgctxt "#32078"
+msgid "No vacant slots in group left"
+msgstr "Keine freien Plätze in Gruppe verfügbar"
+
+msgctxt "#32079"
+msgid "Attach OPML File?"
+msgstr "OPML Datei zuweisen?"
+
+msgctxt "#32080"
+msgid "Select folder for download"
+msgstr "Ordner für Download auswählen"
+
+msgctxt "#32081"
+msgid "Saving OPML file failed"
+msgstr "Speichern fehlgeschlagen"
+
+msgctxt "#32082"
+msgid "Saving OPML file failed for unknown reason"
+msgstr "Speichern ist fehlgeschlagen"
+
+msgctxt "#32083"
+msgid "Saved as"
+msgstr "Gespeichert als"
+
+msgctxt "#32084"
+msgid "Select a different group or disable slots in this group first"
+msgstr "Wähle eine andere Gruppe oder deaktiviere Podcasts in dieser Gruppe um fortzufahren"
+
+msgctxt "#32085"
+msgid "RSS Podcast"
+msgstr "RSS Podcast"
+
+msgctxt "#32086"
+msgid "Actions completed"
+msgstr "Aktionen beendet"
+
+msgctxt "#32087"
+msgid "Detach OPML files"
+msgstr "OPML Dateien aushängen"
+
+msgctxt "#32088"
+msgid "There are no feeds to select"
+msgstr "Es gibt derzeit keine Feeds zur Auswahl"
+
+msgctxt "#32090"
+msgid "Connection Error"
+msgstr "Verbindungsfehler"
+
+msgctxt "#32091"
+msgid "HTTP Method %s not supported"
+msgstr "HTTP Methode %s wird nicht unterstützt"
+
+msgctxt "#32092"
+msgid "Request Exception: Please check URL and port or see logs for further details"
+msgstr "Request Fehler: Prüfe URL und Port. Für weitere Details prüfe die Log-Datei"
+
+msgctxt "#32093"
+msgid "Unexpected HTTP Status %i for %s"
+msgstr "Unerwarteter HTTP Status %i für %s"
+
+msgctxt "#32094"
+msgid "Unexpected content for podcast"
+msgstr "Unerwarteter Inhalt für Podcast"
+
+msgctxt "#32095"
+msgid "Authentification at gPodder failed. Missing session"
+msgstr "Anmeldung an gPodder fehlgeschlagen"

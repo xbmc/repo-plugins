@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.podcasts" name="RSS Podcasts" version="2.0.2" provider-name="Heckie">
+<addon id="plugin.audio.podcasts" name="RSS Podcasts" version="2.1.0" provider-name="Heckie">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.25.1" />
@@ -10,7 +10,15 @@
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en_GB">RSS Podcasts in KODI</summary>
-		<description lang="en_GB">RSS Podcasts in KODI</description>
+		<summary lang="de_DE">RSS Podcasts in KODI</summary>
+		<description lang="en_GB">This addon allows to import your audio and video podcasts from gPodder.net or from OPML files.
+You can make use of up to 10 categories in order to manage your podcasts. You can also directly enter the URLs of your podcasts
+or attach up to 10 OPML files directly.
+		</description>
+		<description lang="de_DE">Dieses Addon ermöglicht den Import Deiner Audio und Video Podcasts von gPodder.net oder aus OPML Dateien.
+Du kannst Deine Podcasts in bis zu 10 Kategorien einsortieren. RSS Feeds können auch manuell gepflegt werden. Weiterhin können bis zu 10 OPML
+Dateien direkt eingehängt werden.	
+		</description>
 		<language>de_de</language>
 		<language>en_gb</language>
 		<platform>all</platform>
@@ -18,6 +26,11 @@
 		<website>https://github.com/Heckie75/kodi-addon-podcast</website>
 		<source>https://github.com/Heckie75/kodi-addon-podcast</source>
 		<news>
+v2.1.0 (2021-05-24)
+- Added support for importing subscriptions from your gPodder account or from local files 
+- Added information like duration and plot for video podcasts
+- many refactorings and bugfixes
+
 v2.0.2 (2021-05-14)
 - Bugfix according missing HTTP header and improved exception handling:
   - see https://github.com/Heckie75/kodi-addon-podcast/issues/4
@@ -37,6 +50,9 @@ v2.0.0 (2021-05-11)
 			<screenshot>resources/assets/screenshot_03.png</screenshot>
 			<screenshot>resources/assets/screenshot_04.png</screenshot>
 			<screenshot>resources/assets/screenshot_05.png</screenshot>
+			<screenshot>resources/assets/screenshot_06.png</screenshot>
+			<screenshot>resources/assets/screenshot_07.png</screenshot>
+			<screenshot>resources/assets/screenshot_08.png</screenshot>
 		</assets>
 	</extension>
 </addon>

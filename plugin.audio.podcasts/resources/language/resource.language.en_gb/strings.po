@@ -13,6 +13,10 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#32000"
+msgid "Group"
+msgstr ""
+
 msgctxt "#32001"
 msgid "Group 1"
 msgstr ""
@@ -94,61 +98,213 @@ msgid "OPML File 10"
 msgstr ""
 
 msgctxt "#32021"
-msgid "OPML File"
+msgid "OPML Files"
 msgstr ""
 
 msgctxt "#32022"
 msgid "URL"
-msgstr "URL"
+msgstr ""
+
+msgctxt "#32023"
+msgid "OPML File"
+msgstr ""
+
+msgctxt "#32024"
+msgid "vacancy / occupancy"
+msgstr ""
 
 msgctxt "#32031"
 msgid "Podcast 1"
-msgstr "Podcast 1"
+msgstr ""
 
 msgctxt "#32032"
 msgid "Podcast 2"
-msgstr "Podcast 2"
+msgstr ""
 
 msgctxt "#32033"
 msgid "Podcast 3"
-msgstr "Podcast 3"
+msgstr ""
 
 msgctxt "#32034"
 msgid "Podcast 4"
-msgstr "Podcast 4"
+msgstr ""
 
 msgctxt "#32035"
 msgid "Podcast 5"
-msgstr "Podcast 5"
+msgstr ""
 
 msgctxt "#32036"
 msgid "Podcast 6"
-msgstr "Podcast 6"
+msgstr ""
 
 msgctxt "#32037"
 msgid "Podcast 7"
-msgstr "Podcast 7"
+msgstr ""
 
 msgctxt "#32038"
 msgid "Podcast 8"
-msgstr "Podcast 8"
+msgstr ""
 
 msgctxt "#32039"
 msgid "Podcast 9"
-msgstr "Podcast 9"
+msgstr ""
 
 msgctxt "#32040"
 msgid "Podcast 10"
-msgstr "Podcast 10"
+msgstr ""
 
 msgctxt "#32050"
-msgid "General"
-msgstr "General"
+msgid "Miscellaneous"
+msgstr ""
 
 msgctxt "#32051"
-msgid "Anchor for most recent podcast, e.g. for bookmarking"
-msgstr "Anchor for most recent podcast, e.g. for bookmarking"
+msgid "Anchor for most recent podcast (good for bookmarking)"
+msgstr ""
 
 msgctxt "#32052"
-msgid "Newest episode"
-msgstr "Newest episode"
+msgid "most recent episode"
+msgstr ""
+
+msgctxt "#32053"
+msgid "Untitled podcast from"
+msgstr ""
+
+msgctxt "#32060"
+msgid "Actions"
+msgstr ""
+
+msgctxt "#32061"
+msgid "gPodder.net"
+msgstr ""
+
+msgctxt "#32062"
+msgid "Username"
+msgstr ""
+
+msgctxt "#32063"
+msgid "Password"
+msgstr ""
+
+msgctxt "#32064"
+msgid "Import subscriptions to group"
+msgstr ""
+
+msgctxt "#32065"
+msgid "Download subscriptions as OPML File"
+msgstr ""
+
+msgctxt "#32066"
+msgid "Import from OPML File to group"
+msgstr ""
+
+msgctxt "#32067"
+msgid "Hostname"
+msgstr ""
+
+msgctxt "#32068"
+msgid "Apply changes"
+msgstr ""
+
+msgctxt "#32069"
+msgid "Import new subscriptions to group"
+msgstr ""
+
+msgctxt "#32070"
+msgid "Select OPML file"
+msgstr ""
+
+msgctxt "#32071"
+msgid "Select feeds"
+msgstr ""
+
+msgctxt "#32072"
+msgid "No feeds selected"
+msgstr ""
+
+msgctxt "#32073"
+msgid "You must select at least one feed"
+msgstr ""
+
+msgctxt "#32074"
+msgid "Too many feeds selected"
+msgstr ""
+
+msgctxt "#32075"
+msgid "Do not select more than %i feeds"
+msgstr ""
+
+msgctxt "#32076"
+msgid "Select group for import"
+msgstr ""
+
+msgctxt "#32077"
+msgid "vacant slots"
+msgstr ""
+
+msgctxt "#32078"
+msgid "No vacant slots in group left"
+msgstr ""
+
+msgctxt "#32079"
+msgid "Attach OPML File?"
+msgstr ""
+
+msgctxt "#32080"
+msgid "Select folder for download"
+msgstr ""
+
+msgctxt "#32081"
+msgid "Saving OPML file failed"
+msgstr ""
+
+msgctxt "#32082"
+msgid "Saving OPML file failed for unknown reason."
+msgstr ""
+
+msgctxt "#32083"
+msgid "Saved as"
+msgstr ""
+
+msgctxt "#32084"
+msgid "Select a different group or disable slots in this group first"
+msgstr ""
+
+msgctxt "#32085"
+msgid "RSS Podcast"
+msgstr ""
+
+msgctxt "#32086"
+msgid "Actions completed"
+msgstr ""
+
+msgctxt "#32087"
+msgid "Detach OPML files"
+msgstr ""
+
+msgctxt "#32088"
+msgid "There are no feeds to select"
+msgstr ""
+
+msgctxt "#32090"
+msgid "Connection Error"
+msgstr ""
+
+msgctxt "#32091"
+msgid "HTTP Method %s not supported"
+msgstr ""
+
+msgctxt "#32092"
+msgid "Request Exception: Please check URL and port or see logs for further details"
+msgstr ""
+
+msgctxt "#32093"
+msgid "Unexpected HTTP Status %i for %s"
+msgstr ""
+
+msgctxt "#32094"
+msgid "Unexpected content for podcast"
+msgstr ""
+
+msgctxt "#32095"
+msgid "Authentification at gPodder failed. Missing session"
+msgstr ""

@@ -69,6 +69,13 @@ def select_profile(key=None):
     Authentication().select_profile(key)
 
 
+@routing.route('/auth/clear-tokens')
+def auth_clear_tokens():
+    """ Update the metadata for the listings (called from settings) """
+    from resources.lib.modules.authentication import Authentication
+    Authentication().clear_tokens()
+
+
 @routing.route('/channels')
 def show_channels():
     """ Shows Live TV channels """

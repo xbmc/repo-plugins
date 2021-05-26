@@ -49,9 +49,28 @@ class AccountStorage:
 
         try:
             # Verify our token to see if it's still valid.
-            jwt.decode(self.jwt_token,
-                       algorithms=['HS256'],
-                       options={'verify_signature': False, 'verify_aud': False})
+            decoded_jwt = jwt.decode(self.jwt_token,
+                                     algorithms=['HS256'],
+                                     options={'verify_signature': False, 'verify_aud': False})
+
+            # Check issued at datetime
+            # VTM GO updated the JWT token format on 2021-05-03T12:00:00+00:00, older JWT tokens became invalid
+            import dateutil.parser
+            import dateutil.tz
+            from datetime import datetime
+            update = dateutil.parser.parse('2021-05-03T12:00:00+00:00')
+            iat = datetime.fromtimestamp(decoded_jwt.get('iat'), tz=dateutil.tz.gettz('Europe/Brussels'))
+            if iat < update:
+                _LOGGER.debug('JWT issued at %s is too old', iat.isoformat())
+                return False
+
+            # Check expiration time
+            exp = datetime.fromtimestamp(decoded_jwt.get('exp'), tz=dateutil.tz.gettz('Europe/Brussels'))
+            now = datetime.now(dateutil.tz.UTC)
+            if exp < now:
+                _LOGGER.debug('JWT is expired at %s', exp.isoformat())
+                return False
+
         except Exception as exc:  # pylint: disable=broad-except
             _LOGGER.debug('JWT is NOT valid: %s', exc)
             return False
@@ -300,7 +319,3 @@ class VtmGoAuth:
 
         with open(os.path.join(self._token_path, self.TOKEN_FILE), 'w') as fdesc:
             json.dump(self._account.__dict__, fdesc, indent=2)
-
-    def delete_cache(self):
-        """ Delete tokens from cache """
-        os.remove(os.path.join(self._token_path, self.TOKEN_FILE))

@@ -99,25 +99,27 @@ class Proxy(BaseHTTPRequestHandler):
         """ Modify the manifest so Inputstream Adaptive can handle it. """
 
         def repl(matchobj):
-            """ Modify an AdaptationSet. We will be removing the BaseURL and prefixing it with the URL's in all SegmentTemplates. """
+            """ Modify an AdaptationSet. We will be removing default_KIDs, the BaseURL and prefixing it with the URL's in all SegmentTemplates. """
             adaptationset = matchobj.group(0)
 
+            # Remove default_KIDs because the manifests from VTM GO have non cenc namespaced default_KID attributes in the ContentProtection tags and
+            # InputStream Adaptive is picking them up but something is going wrong. More info: https://github.com/xbmc/inputstream.adaptive/issues/667#issuecomment-840849939
+            adaptationset = re.sub(r' default_KID=\".*?\"', '', adaptationset)
+
             # Only process AdaptationSets that use a SegmentTemplate
-            if '<SegmentTemplate' not in adaptationset:
-                return adaptationset
+            if '<SegmentTemplate' in adaptationset:
 
-            # Extract BaseURL
-            match = re.search(r'<BaseURL>(.*?)</BaseURL>', adaptationset)
-            if not match:
-                return adaptationset
-            base_url = match.group(1)
+                # Extract BaseURL
+                match = re.search(r'<BaseURL>(.*?)</BaseURL>', adaptationset)
+                if match:
+                    base_url = match.group(1)
 
-            # Remove BaseURL
-            adaptationset = re.sub(r'\s*?<BaseURL>.*?</BaseURL>', '', adaptationset)
+                    # Remove BaseURL
+                    adaptationset = re.sub(r'\s*?<BaseURL>.*?</BaseURL>', '', adaptationset)
 
-            # Prefix BaseURL on initialization=" and media=" tags
-            adaptationset = re.sub(r'(<SegmentTemplate[^>]*?initialization=\")([^\"]*)(\"[^>]*?>)', r'\1' + base_url + r'\2\3', adaptationset)
-            adaptationset = re.sub(r'(<SegmentTemplate[^>]*?media=\")([^\"]*)(\"[^>]*?>)', r'\1' + base_url + r'\2\3', adaptationset)
+                    # Prefix BaseURL on initialization=" and media=" tags
+                    adaptationset = re.sub(r'(<SegmentTemplate[^>]*?initialization=\")([^\"]*)(\"[^>]*?>)', r'\1' + base_url + r'\2\3', adaptationset)
+                    adaptationset = re.sub(r'(<SegmentTemplate[^>]*?media=\")([^\"]*)(\"[^>]*?>)', r'\1' + base_url + r'\2\3', adaptationset)
 
             return adaptationset
 

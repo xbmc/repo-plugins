@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.subtitles.zimukux" name="ZiMuKuX" version="0.0.3" provider-name="pizzamx">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.6.2"/>
+        <import addon="script.module.kodi-six"/>
+        <import addon="vfs.rar" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+    </requires>
+    <extension point="xbmc.subtitle.module" library="resources/lib/addon_entry.py" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">zimuku subtitle</summary>
+        <summary lang="zh">字幕库</summary>
+        <description lang="en">Search and download subtitles from ZiMuKu</description>
+        <description lang="zh">从「字幕库」下载字幕（网址经常变）</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.png</fanart>
+        </assets>
+        <news>
+V0.0.3 (2021/5/18)
+- Fork from service.subtitles.zimuku V2.0.3
+- Episode match for drama to locate the subtitle you need faster
+- add support to change site URL on the fly
+        </news>
+    </extension>
+</addon>

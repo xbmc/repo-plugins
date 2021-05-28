@@ -1,0 +1,10 @@
+msgid ""
+msgstr ""
+
+msgctxt "#30100"
+msgid "Site Config for ZiMuKu"
+msgstr "“字幕库”网站配置"
+
+msgctxt "#30101"
+msgid "Site URL"
+msgstr "网址"

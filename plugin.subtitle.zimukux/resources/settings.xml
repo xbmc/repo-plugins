@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<settings version="1">
+    <level>0</level>
+	<section id="plugin.subtitles.zimukux">
+		<category id="general" label="30100" help="">
+			<group id="1" label="">
+                <setting id="ZiMuKuUrl" type="string" label="30101" help="">
+                	<level>0</level>
+                	<default>http://zmk.pw</default>
+                	<constraints>
+                		<allowempty>false</allowempty>
+                	</constraints>
+                	<control type="edit" format="string">
+                		<heading>32001</heading>
+                	</control>
+                </setting>
+			</group>
+		</category>
+	</section>
+</settings>

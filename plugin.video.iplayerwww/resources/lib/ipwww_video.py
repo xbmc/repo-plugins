@@ -1244,22 +1244,28 @@ def ParseLiveStreams(channelname, providers):
     # print mediaselector
     for provider_url, protocol, provider_name, transfer_format in mediaselector[0]:
         if transfer_format == 'hls':
+            # print provider_url
+            m3u8_breakdown = re.compile('(.+?)pc_hd_abr_v2.+?m3u8$').findall(provider_url)
+            # print m3u8_breakdown
             html = OpenURL(provider_url)
             match = re.compile('#EXT-X-STREAM-INF:PROGRAM-ID=(.+?),BANDWIDTH=(.+?),CODECS="(.*?)",RESOLUTION=(.+?)\s*(.+?.m3u8)').findall(html)
-            # print match
-            tmp_sup = ''
-            if 'akamai' in provider_name:
-                tmp_sup = 'Akamai'
-            elif 'll' in provider_name or 'limelight' in provider_name:
-                tmp_sup = 'Limelight'
-            elif 'bidi' in provider_name:
-                tmp_sup = 'Bidi'
-            elif 'cloudfront' in provider_name:
-                tmp_sup = 'Cloudfront'
-            else:
-                continue
-            # Add provider name to the stream list.
-            streams.extend([list(stream) + [tmp_sup] for stream in match])
+
+            for program_id, bandwidth, codec, resolution, stream in match:
+                url = "%s%s" % (m3u8_breakdown[0], stream)
+                # print match
+                tmp_sup = ''
+                if 'akamai' in provider_name:
+                    tmp_sup = 'Akamai'
+                elif 'll' in provider_name or 'limelight' in provider_name:
+                    tmp_sup = 'Limelight'
+                elif 'bidi' in provider_name:
+                    tmp_sup = 'Bidi'
+                elif 'cloudfront' in provider_name:
+                    tmp_sup = 'Cloudfront'
+                else:
+                    continue
+                # Add provider name to the stream list.
+                streams.append([program_id, bandwidth, codec, resolution, url, tmp_sup])
 
     # print streams
     # Convert bitrate to Mbps for further processing

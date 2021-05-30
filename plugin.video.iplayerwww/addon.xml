@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="3.0.51" provider-name="CaptainT, Cas, ihurst, primaeval">
+<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="3.0.52" provider-name="CaptainT, Cas, ihurst, primaeval">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.requests" version="2.7.0"/>
@@ -20,8 +20,8 @@
         <fanart>resources/fanart.jpg</fanart>
     </assets>
     <news>
-v3.0.51
-Fixed DASH Radio.
+v3.0.52
+Fixed live HLS to match new URL (de)construction.
 
 Known issues:
 - Red Button is only available for HLS.

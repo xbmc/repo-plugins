@@ -1,3 +1,6 @@
+v3.0.52
+Fixed live HLS to match new URL (de)construction.
+
 v3.0.51
 Fixed DASH Radio.
 

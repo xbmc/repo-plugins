@@ -11,7 +11,7 @@
     <platform>all</platform>
     <summary lang="en_GB">View ZoneMinder video surveillance system</summary>
     <description lang="en_GB">View the live stream of cameras via the Zoneminder video surveillance system.</description>
-    <license>GPL-3.0</license>
+    <license>GPL-3.0-or-later</license>
     <source>https://github.com/petegallagher/plugin.video.zoneminder</source>
     <assets>
         <icon>resources/icon.png</icon>

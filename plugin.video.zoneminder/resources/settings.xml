@@ -1,0 +1,89 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="plugin.video.zoneminder">
+		<category id="connection" label="32000" help="">
+			<group id="1">
+				<setting id="base_url" type="string" label="32001" help="">
+					<level>0</level>
+					<default>http://zmhost:8080</default>
+					<control type="edit" format="string">
+						<heading>32001</heading>
+					</control>
+				</setting>
+				<setting id="zm_path" type="string" label="32006" help="">
+					<level>0</level>
+					<default>zm</default>
+					<control type="edit" format="string">
+						<heading>32006</heading>
+					</control>
+				</setting>
+				<setting id="cgi_path" type="string" label="32007" help="">
+					<level>0</level>
+					<default>zm/cgi-bin</default>
+					<control type="edit" format="string">
+						<heading>32007</heading>
+					</control>
+				</setting>
+				<setting id="api_version" type="string" label="32008" help="">
+					<level>0</level>
+					<default>2.0</default>
+					<constraints>
+						<options>
+							<option label="1.0">1.0</option>
+							<option label="2.0">2.0</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="is_authenticated" type="boolean" label="32002" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="username" type="string" label="32003" help="">
+					<level>0</level>
+					<default>admin</default>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="is_authenticated">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>32003</heading>
+					</control>
+				</setting>
+				<setting id="password" type="string" label="32004" help="">
+					<level>0</level>
+					<default>admin</default>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="is_authenticated">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>32004</heading>
+						<hidden>true</hidden>
+					</control>
+				</setting>
+				<setting id="fps" type="string" label="32005" help="">
+					<level>0</level>
+					<default>30</default>
+					<constraints>
+						<options>
+							<option label="1">1</option>
+							<option label="2">2</option>
+							<option label="5">5</option>
+							<option label="10">10</option>
+							<option label="15">15</option>
+							<option label="20">20</option>
+							<option label="25">25</option>
+							<option label="30">30</option>
+							<option label="50">50</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+			</group>
+		</category>
+	</section>
+</settings>

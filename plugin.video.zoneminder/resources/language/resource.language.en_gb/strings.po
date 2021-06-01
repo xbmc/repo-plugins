@@ -1,0 +1,81 @@
+# Kodi Media Center language file
+# Addon Name: Zoneminder
+# Addon id: plugin.video.zoneminder
+# Addon Provider: Peter Gallagher
+msgid ""
+msgstr ""
+"Project-Id-Version: Zoneminder\n"
+"Report-Msgid-Bugs-To: https://github.com/petegallagher/plugin.video.zoneminder/issues/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#
+# Configuration Options
+#
+msgctxt "#32000"
+msgid "Connection"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Base URL"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Auth Enabled"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Username"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Password"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Frames per second (max)"
+msgstr ""
+
+msgctxt "#32006"
+msgid "ZM path"
+msgstr ""
+
+msgctxt "#32007"
+msgid "CGI Path"
+msgstr ""
+
+msgctxt "#32008"
+msgid "API Version"
+msgstr ""
+
+#
+# Interface Strings
+#
+msgctxt "#33000"
+msgid "Events"
+msgstr ""
+
+msgctxt "#33001"
+msgid "Monitors"
+msgstr ""
+
+msgctxt "#33002"
+msgid "Montage"
+msgstr ""
+
+
+#
+# Error Messages
+#
+msgctxt "#34000"
+msgid "Zoneminder Connection Error"
+msgstr ""
+
+msgctxt "#34001"
+msgid "Login failed"
+msgstr ""

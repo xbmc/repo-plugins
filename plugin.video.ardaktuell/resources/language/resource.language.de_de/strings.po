@@ -25,26 +25,26 @@ msgctxt "#32003"
 msgid "Anchor for most recent podcast, e.g. for bookmarking"
 msgstr "Anker für neueste Sendung, z.B. zum Bookmarken"
 
-msgctxt "#32052"
+msgctxt "#32101"
 msgid "most recent episode"
 msgstr "aktuelle Sendung"
 
-msgctxt "#32090"
+msgctxt "#32151"
 msgid "Connection Error"
 msgstr "Verbindungsfehler"
 
-msgctxt "#32091"
+msgctxt "#32152"
 msgid "HTTP Method %s not supported"
 msgstr "HTTP Methode %s wird nicht unterstützt"
 
-msgctxt "#32092"
+msgctxt "#32153"
 msgid "Request Exception: Pls. check URL and port. See logs for further details."
 msgstr "Request Fehler: Prüfe URL und Port. Für weitere Details prüfe die Log-Datei."
 
-msgctxt "#32093"
+msgctxt "#32094"
 msgid "Unexpected HTTP Status %i for %s"
 msgstr "Unerwarteter HTTP Status %i für %s"
 
-msgctxt "#32094"
+msgctxt "#32155"
 msgid "Unexpected content for podcast"
 msgstr "Unerwarteter Inhalt für Podcast"

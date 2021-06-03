@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 '''
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +17,7 @@ import requests
 import requests_cache
 
 session = requests.Session()
-session.headers['User-Agent'] = 'kodi.tv'
+session.headers["User-Agent"] = "kodi.tv"
 
 
 class GetException(Exception):
@@ -30,11 +28,11 @@ class WebGet(object):
     API_URL = "https://www.filmarkivet.se"
 
     def __init__(self, cache_file):
-        requests_cache.install_cache(cache_file, backend='sqlite', expire_after=604800)
+        requests_cache.install_cache(cache_file, backend="sqlite", expire_after=604800)
 
-    def getURL(self, url='/'):
+    def get_url(self, url="/"):
         try:
-            if not (url.startswith('http://') or url.startswith('https://')):
+            if not (url.startswith("http://") or url.startswith("https://")):
                 url = self.API_URL + url
 
             request = session.get(url)

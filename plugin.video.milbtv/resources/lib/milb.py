@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Original plugin.video.mlbtv © eracknaphobia
+# Modified for MiLB.TV compatibility and code cleanup
+
 from resources.lib.globals import *
 from .account import Account
 

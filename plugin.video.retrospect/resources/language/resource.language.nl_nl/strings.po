@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-17 15:39+0000\n"
+"PO-Revision-Date: 2021-05-25 20:46+0000\n"
 "Last-Translator: bas <bas@kodi.tv>\n"
 "Language-Team: Dutch <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/nl_nl/>\n"
 "Language: nl_nl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.3\n"
+"X-Generator: Weblate 4.6.2\n"
 
 msgctxt "#30000"
 msgid "Stream Quality"
@@ -173,6 +173,10 @@ msgctxt "#30038"
 msgid "'Up Next' add-on settings"
 msgstr "'Up Next' add-on instellingen"
 
+msgctxt "#30039"
+msgid "Up Next integration"
+msgstr "Up Next integratie"
+
 msgctxt "#30040"
 msgid "Channels"
 msgstr "Kanalen"
@@ -200,6 +204,10 @@ msgstr "Deze functionaliteit van Retrospect vereist een recentere versie van Kod
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
 msgstr "DRM/Geo-geblokkeerd/Premium filters"
+
+msgctxt "#30047"
+msgid "Cannot playback this YouTube Video because the Kodi YouTube add-on is missing."
+msgstr "Deze YouTube video kan niet worden afgespeeld omdat de Kodi YouTube add-on ontbreekt."
 
 # empty string with id 30047
 msgctxt "#30048"
@@ -233,6 +241,14 @@ msgstr "[COLOR gold][B]De Retrospect wachtwoordkluis[/B][/COLOR][CR]De 'wachtwoo
 msgctxt "#30055"
 msgid "Advanced"
 msgstr "Geavanceerd"
+
+msgctxt "#30056"
+msgid "Install the Up Next add-on"
+msgstr "Installeer de Up Next add-on"
+
+msgctxt "#30057"
+msgid "Enable the Up Next add-on"
+msgstr "Schakel de Up Next add-on in"
 
 # empty strings from id 30056 to 30058
 msgctxt "#30059"
@@ -1056,6 +1072,10 @@ msgstr "Waarschuwing"
 msgctxt "#30609"
 msgid "Error"
 msgstr "Foutmelding"
+
+#~ msgctxt "#30047"
+#~ msgid "Cannot playback this Youtube Video because the Kodi YouTube add-on is missing."
+#~ msgstr "Deze YouTube video kan niet worden afgespeeld omdat de Kodi YouTube add-on ontbreekt."
 
 # empty string with id 30037
 #~ msgctxt "#30038"

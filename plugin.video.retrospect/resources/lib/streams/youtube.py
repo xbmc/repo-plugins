@@ -1,12 +1,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import xbmc
+from resources.lib.addonsettings import AddonSettings
 
 from resources.lib.logger import Logger
-from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
-from resources.lib.helpers.jsonhelper import JsonHelper
-from resources.lib.regexer import Regexer
-from resources.lib.urihandler import UriHandler
+from resources.lib.xbmcwrapper import XbmcWrapper
+from resources.lib.helpers.languagehelper import LanguageHelper
 
 
 class YouTube(object):
@@ -48,12 +47,12 @@ class YouTube(object):
     }
 
     @staticmethod
-    def get_streams_from_you_tube(url, use_add_on=True):
+    def get_streams_from_you_tube(url, ignore_add_on_status=True):
         """ Parsers standard YouTube videos and returns a list of tuples with streams and
         bitrates that can be used by other methods.
 
-        :param str url:             The url to download
-        :param bool use_add_on:     Should we use the Youtube add-on if available
+        :param str url:                     The url to download.
+        :param bool ignore_add_on_status:   Should we ignore the add-on check.
 
         Can be used like this:
 
@@ -68,68 +67,20 @@ class YouTube(object):
         """
 
         you_tube_streams = []
-        you_tube_add_on_available = xbmc.getCondVisibility('System.HasAddon("plugin.video.youtube")') == 1
 
-        if you_tube_add_on_available and use_add_on:
+        if AddonSettings.is_min_version(AddonSettings.KodiMatrix):
+            you_tube_add_on_available = xbmc.getCondVisibility('System.HasAddon(plugin.video.youtube) + System.AddonIsEnabled(plugin.video.youtube)') == 1
+        else:
+            you_tube_add_on_available = xbmc.getCondVisibility('System.HasAddon(plugin.video.youtube)') == 1
+
+        if you_tube_add_on_available or ignore_add_on_status:
             Logger.info("Found Youtube add-on. Using it")
             you_tube_streams.append((YouTube.__play_you_tube_url(url), 0))
             Logger.trace(you_tube_streams)
             return you_tube_streams
 
         Logger.info("No Kodi Youtube Video add-on was found. Falling back.")
-
-        if "watch?v=" in url:
-            video_id = url.split("?v=")[-1]
-            Logger.debug("Using Youtube ID '%s' retrieved from '%s'", video_id, url)
-            # get the meta data url
-            url = "https://www.youtube.com/get_video_info?hl=en_GB&asv=3&video_id=%s" % (video_id, )
-
-        elif "get_video_info" not in url:
-            Logger.error("Invalid Youtube URL specified: '%s'", url)
-            return []
-
-        data = UriHandler.open(url)
-        if isinstance(data, bytes):
-            data = data.decode()
-        # get the stream data from the page
-
-        # Up to 720p with audio and video combined.
-        url_encoded_fmt_stream_map = Regexer.do_regex(r"player_response=([^&]+)", data)
-        # Up to 4K with audio and video split.
-        # url_encoded_fmt_stream_map = Regexer.do_regex("adaptive_fmts=([^&]+)", data)
-        url_encoded_fmt_stream_map_data = HtmlEntityHelper.url_decode(url_encoded_fmt_stream_map[0])
-        # split per stream
-        stream_json = JsonHelper(url_encoded_fmt_stream_map_data)
-        streams = stream_json.get_value("streamingData", "formats")
-
-        for stream in streams:
-            if "itag" in stream and "bitrate" not in stream:
-                i_tag = int(stream.get('itag', -1))
-                stream_encoding = YouTube.__YouTubeEncodings.get(i_tag, None)
-                if stream_encoding is None:
-                    # if the i_tag was not in the list, skip it.
-                    Logger.debug(
-                        "Not using i_tag %s as it is not in the list of supported encodings.", i_tag)
-                    continue
-                bitrate = stream_encoding[0]
-            else:
-                bitrate = int(stream['bitrate'])/1000
-
-            signature = stream.get('s', None)
-            quality = stream.get('quality_label', stream.get('quality'))
-            if not quality:
-                Logger.debug("Missing 'quality_label', skipping: %s", stream)
-                continue
-
-            video_url = HtmlEntityHelper.url_decode(stream['url'])
-            if signature is None:
-                url = video_url
-            else:
-                url = "%s&signature=%s" % (video_url, signature)
-
-            Logger.debug("Found stream {}={:01.2f}kbps for {}".format(quality, bitrate, url))
-            you_tube_streams.append((url, bitrate))
-
+        XbmcWrapper.show_dialog(LanguageHelper.ErrorId, LanguageHelper.YouTubeMissing)
         return you_tube_streams
 
     @staticmethod
@@ -139,8 +90,11 @@ class YouTube(object):
         url = YouTube.PlayYouTubeUrl(url[0])
         part.append_media_stream(url, bitrate=0)
 
-        @param url: The URL to playback in the format: http://www.youtube.com/watch?v=878-LYQEcPs
-        @return: The plugin:// url for the YouTube addon
+        :param str url: The URL to playback in the format: http://www.youtube.com/watch?v=878-LYQEcPs
+
+        :return: The plugin:// url for the YouTube addon
+        :rtype: str
+
         """
 
         if "youtube" in url:

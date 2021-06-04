@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class, mediatype
+from resources.lib import chn_class, mediatype, contenttype
 
-from resources.lib.mediaitem import MediaItem
+from resources.lib.mediaitem import MediaItem, FolderItem
 from resources.lib.logger import Logger
 from resources.lib.urihandler import UriHandler
 from resources.lib.helpers.jsonhelper import JsonHelper
@@ -39,9 +39,8 @@ class Channel(chn_class.Channel):
 
         self._add_data_parser(
             self.mainListUri, json=True, name="MainList Parser for GraphQL",
-            parser=["data", "page", "pagecontent",
-                    ("id", "/content/ketnet/nl/kijken/jcr:content/root/swimlane_64598007", 0),
-                    "items"], creator=self.create_typed_item)
+            preprocessor=self.get_sub_swimlane,
+            parser=["data", "page", "pagecontent"], creator=self.create_typed_item)
 
         self._add_data_parser("https://senior-bff.ketnet.be/graphql?query=query%20GetPage%28",
                               name="Generic GraphQL Parser", json=True,
@@ -109,6 +108,8 @@ class Channel(chn_class.Channel):
             return self.create_playlist_item(result_set)
         elif type_id == "Video":
             return self.create_video_item(result_set)
+        elif type_id == "Swimlane":
+            return self.create_swimlane_item(result_set)
         else:
             Logger.warning("Unknown Graph Type: %s", type_id)
 
@@ -132,6 +133,64 @@ class Channel(chn_class.Channel):
         item = MediaItem(result_set["title"], url)
         item.poster = result_set["posterUrl"]
         return item
+
+    def create_swimlane_item(self, result_set):
+        """ Creates a new MediaItem for an episode.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'folder'.
+        :rtype: MediaItem|None
+
+        """
+
+        title = result_set["title"] or (result_set.get("buttonText") or "").title()
+        if not title:
+            return None
+
+        swimlane_id = result_set["id"]
+        item = FolderItem(title, self.mainListUri, content_type=contenttype.TVSHOWS)
+        item.description = result_set.get("description")
+        item.metaData["id"] = swimlane_id
+        return item
+
+    def get_sub_swimlane(self, data):
+        """ Performs pre-process actions for data processing.
+
+        Accepts an data from the process_folder_list method, BEFORE the items are
+        processed. Allows setting of parameters (like title etc) for the channel.
+        Inside this method the <data> could be changed and additional items can
+        be created.
+
+        The return values should always be instantiated in at least ("", []).
+
+        :param str data: The retrieve data that was loaded for the current item and URL.
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+
+        """
+
+        items = []
+        if not self.parentItem or not self.parentItem.metaData:
+            return data, items
+
+        json_data = JsonHelper(data)
+        data = json_data.get_value("data", "page", "pagecontent")
+        swim_lane_data = None
+        for sub_item in data:
+            if sub_item.get("id") == self.parentItem.metaData["id"]:
+                swim_lane_data = sub_item
+                break
+
+        if swim_lane_data:
+            json_data.json["data"]["page"]["pagecontent"] = swim_lane_data["items"]
+
+        return json_data, items
 
     def create_playlist_item(self, result_set):
         """ Creates a new MediaItem for a playlist of seasons.

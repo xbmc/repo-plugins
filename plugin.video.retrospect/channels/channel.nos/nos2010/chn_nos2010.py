@@ -392,7 +392,7 @@ class Channel(chn_class.Channel):
         extra = FolderItem(
             LanguageHelper.get_localized_string(LanguageHelper.Genres),
             "https://www.npostart.nl/programmas",
-            content_type=contenttype.NONE)
+            content_type=contenttype.FILES)
         extra.complete = True
         extra.dontGroup = True
         items.append(extra)
@@ -400,7 +400,7 @@ class Channel(chn_class.Channel):
         extra = FolderItem(
             "{} (A-Z)".format(LanguageHelper.get_localized_string(LanguageHelper.TvShows)),
             "#alphalisting",
-            content_type=contenttype.NONE)
+            content_type=contenttype.FILES)
         extra.complete = True
         extra.description = "Alfabetische lijst van de NPO.nl site."
         extra.dontGroup = True

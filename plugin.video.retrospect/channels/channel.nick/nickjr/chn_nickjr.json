@@ -13,7 +13,8 @@
       "sortorder": 22,
       "language": "nl",
       "poster": "nickjrposter.png",
-      "fanart": "nickjrfanart.jpg"
+      "fanart": "nickjrfanart.jpg",
+      "ignore": true
     },
     {
       "guid": "27A74E50-838B-4F0D-98DE-82E7403567C8",
@@ -26,9 +27,10 @@
       "category": "Kids",
       "channelcode": "nickjrintl",
       "sortorder": 22,
+      "language": null,
       "poster": "nickjrposter.png",
       "fanart": "nickjrfanart.jpg",
-      "language": null
+      "ignore": true
     },
     {
       "guid": "8D1E5858-F926-11E1-BE1C-90F66188709B",

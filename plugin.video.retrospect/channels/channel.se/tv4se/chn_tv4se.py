@@ -85,6 +85,7 @@ class Channel(chn_class.Channel):
 
         self._add_data_parser("https://graphql.tv4play.se/graphql?query=%7BvideoPanel%28id%3A",
                               name="GraphQL single season/folder listing", json=True,
+                              postprocessor=self.add_next_page,
                               parser=["data", "videoPanel", "videoList", "videoAssets"],
                               creator=self.create_api_video_asset_type)
 
@@ -347,6 +348,8 @@ class Channel(chn_class.Channel):
         folder_id = result_set["id"]
         url = self.__get_api_folder_url(folder_id)
         item = MediaItem(title, url)
+        item.metaData["offset"] = 0
+        item.metaData["folder_id"] = folder_id
         return item
 
     def create_api_swipefolder_type(self, result_set):
@@ -502,6 +505,49 @@ class Channel(chn_class.Channel):
         json_data = JsonHelper(data)
         json_data.json["pageProps"]["initialApolloState"] = list(json_data.json["pageProps"]["initialApolloState"].values())
         return json_data, []
+
+    def add_next_page(self, data, items):
+        """ Performs post-process actions for data processing.
+
+        Accepts an data from the process_folder_list method, BEFORE the items are
+        processed. Allows setting of parameters (like title etc) for the channel.
+        Inside this method the <data> could be changed and additional items can
+        be created.
+
+        The return values should always be instantiated in at least ("", []).
+
+        :param str|JsonHelper data:     The retrieve data that was loaded for the
+                                         current item and URL.
+        :param list[MediaItem] items:   The currently available items
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: list[MediaItem]
+
+        """
+
+        Logger.info("Performing Post-Processing")
+
+        total_hits = data.get_value('data', 'videoPanel', 'videoList', 'totalHits')
+        if total_hits > len(items):
+            Logger.debug("Adding items from next page")
+            offset = self.parentItem.metaData.get("offset", 0) + self.__maxPageSize
+            folder_id = self.parentItem.metaData.get("folder_id")
+            if not folder_id:
+                Logger.warning("Cannot find 'folder_id' in MediaItem")
+                return items
+
+            url = self.__get_api_folder_url(folder_id, offset)
+            data = UriHandler.open(url)
+            json_data = JsonHelper(data)
+            extra_results = json_data.get_value("data", "videoPanel", "videoList", "videoAssets", fallback=[])
+            Logger.debug("Adding %d extra results from next page", len(extra_results or []))
+            for result in extra_results:
+                item = self.create_api_video_asset_type(result)
+                if item:
+                    items.append(item)
+
+        Logger.debug("Post-Processing finished")
+        return items
 
     def detect_single_folder(self, data):
         """ Performs pre-process actions and detect single folder items
@@ -775,11 +821,12 @@ class Channel(chn_class.Channel):
     def __get_api_query(self, query):
         return "https://graphql.tv4play.se/graphql?query={}".format(HtmlEntityHelper.url_encode(query))
 
-    def __get_api_folder_url(self, folder_id):
+    def __get_api_folder_url(self, folder_id, offset=0):
         return self.__get_api_query(
-            '{videoPanel(id: "%s"){name,videoList(limit: 100){totalHits,videoAssets'
+            '{videoPanel(id: "%s"){name,videoList(limit: %s, offset:%d, '
+            'sortOrder: "broadcastDateTime"){totalHits,videoAssets'
             '{title,id,description,season,episode,daysLeftInService,broadcastDateTime,image,'
-            'freemium,drmProtected,live,duration}}}}' % (folder_id,))
+            'freemium,drmProtected,live,duration}}}}' % (folder_id, self.__maxPageSize, offset))
 
     def __update_dash_video(self, item, stream_info):
         """

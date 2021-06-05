@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.4.0"
+        version="5.4.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -9,7 +9,7 @@
         <import addon="script.module.requests" version="2.18.0" />
         <import addon="script.module.pytz" version="2014.2" />
         <import addon="inputstream.adaptive" version="2.0.19" />
-        <import addon="plugin.video.youtube" version="6.0.0" optional="true" />
+        <import addon="plugin.video.youtube" version="6.8.0" />
         <import addon="script.module.inputstreamhelper" version="0.3.5" />
         <import addon="script.module.pyscrypt" version="1.6.2" />
         <import addon="script.module.pyaes" version="1.6.1" />
@@ -131,26 +131,21 @@
 
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.4.0+matrix.1 - Changelog - 2021-05-15[/B]
+        <news>[B]Retrospect v5.4.1 - Changelog - 2021-06-04[/B]
 
-This update fixes some channel issues and contains a simplification in the &#x27;playing back of items&#x27; code that was long over due.
+A minor update to Retrospect with fixes for NPO, KetNet and TV4.
 
 [B]Framework related[/B]
-* Fixed: Filtering of Geo and paid items (Fixes #1511).
-* Changed: Simplified the playback of items.
+* Removed: Custom YT code and force YT add-on.
 
 [B]GUI/Settings/Language related[/B]
-_None_
+* Updated: Settings for Up Next integration.
 
 [B]Channel related[/B]
-* Added: Multi-stream SVT videos with extra speech options (only available in Sweden).
-* Fixed: RTV Utrecht item listing.
-* Fixed: Omroep Zeeland video playback.
-* Fixed: Hardware.info TV video playback.
-* Fixed: TWiT.tv video listing, live stream and paging.
-* Fixed: MSDN Channel 9 was broken.
-* Fixed: NOS Streams stopped playing (Fixes #1512).
-* Fixed: Radio 538 Live streams did not work (Fixes #1506).
+* Fixed: NPO Listing had some &quot;folder-icon&quot; issues (Fixes #1516).
+* Fixed: KetNet broke due to API changes (Fixes #1517).
+* Fixed: Some TV4 Play shows had 100+ items which requires paging (Fixes #1524).
+* Removed: Nick Jr sites as they removed all content (Fixes #1508)
 
         </news>
         <assets>

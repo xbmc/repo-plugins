@@ -222,10 +222,14 @@ class VtmGoAuth:
         if 'OIDC-999' in response.text:  # Ongeldige login.
             raise InvalidLoginException()
 
+        # Extract redirect
+        match = re.search(r"window.location.href = '([^']+)'", response.text)
+        if not match:
+            raise LoginErrorException(code=103)
+        redirect_url = match.group(1)
+
         # Follow login
-        response = util.http_get('https://login2.vtm.be/authorize/continue', params={
-            'client_id': 'vtm-go-android'
-        })
+        response = util.http_get(redirect_url)
 
         # We are redirected and our id_token is in the fragment of the redirected url
         params = parse_qs(urlparse(response.url).fragment)

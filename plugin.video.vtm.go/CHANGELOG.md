@@ -1,5 +1,14 @@
 # Changelog
 
+## [v1.2.8](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.8) (2021-06-10)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.7...v1.2.8)
+
+**Fixed bugs:**
+
+- Fix authentication [\#291](https://github.com/add-ons/plugin.video.vtm.go/pull/291) ([michaelarnauts](https://github.com/michaelarnauts))
+- Set zero default value for season and episode [\#289](https://github.com/add-ons/plugin.video.vtm.go/pull/289) ([mediaminister](https://github.com/mediaminister))
+
 ## [v1.2.7](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.7) (2021-05-25)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.6...v1.2.7)
@@ -354,6 +363,7 @@
 - separate mpeg dash manifest and api json downloads [\#32](https://github.com/add-ons/plugin.video.vtm.go/pull/32) ([mediaminister](https://github.com/mediaminister))
 - Add proxy support [\#31](https://github.com/add-ons/plugin.video.vtm.go/pull/31) ([dagwieers](https://github.com/dagwieers))
 - Assorted set of fixes [\#30](https://github.com/add-ons/plugin.video.vtm.go/pull/30) ([dagwieers](https://github.com/dagwieers))
+- Add days remaining to plot [\#27](https://github.com/add-ons/plugin.video.vtm.go/pull/27) ([michaelarnauts](https://github.com/michaelarnauts))
 - Fix ordering. [\#25](https://github.com/add-ons/plugin.video.vtm.go/pull/25) ([michaelarnauts](https://github.com/michaelarnauts))
 - Add '\* All seasons' support [\#24](https://github.com/add-ons/plugin.video.vtm.go/pull/24) ([dagwieers](https://github.com/dagwieers))
 - Assorted list of improvements [\#21](https://github.com/add-ons/plugin.video.vtm.go/pull/21) ([dagwieers](https://github.com/dagwieers))

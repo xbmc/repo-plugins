@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vtm.go" name="VTM GO" version="1.2.7" provider-name="Michaël Arnauts">
+<addon id="plugin.video.vtm.go" name="VTM GO" version="1.2.8" provider-name="Michaël Arnauts">
     <requires>
         <import addon="xbmc.python" version="2.26.0"/>
         <import addon="script.module.dateutil" version="2.6.0"/>
@@ -25,9 +25,9 @@
         <disclaimer lang="nl_NL">Deze add-on wordt niet ondersteund door DPG Media en wordt aangeboden 'as is', zonder enige garantie. De VTM GO naam, VTM GO logo en de kanaallogo's zijn eigendom van DPG Media en worden gebruikt in overeenstemming met de fair use policy.</disclaimer>
         <platform>all</platform>
         <license>GPL-3.0-only</license>
-	<news>v1.2.7 (2021-05-25)
-- Improve authentication.
-- Improve playback with new version of Inputstream Adaptive.</news>
+	<news>v1.2.8 (2021-06-10)
+- Fix authentication.
+- Fix playing of certain episodes with bad metadata.</news>
         <source>https://github.com/add-ons/plugin.video.vtm.go</source>
         <assets>
             <icon>resources/icon.png</icon>

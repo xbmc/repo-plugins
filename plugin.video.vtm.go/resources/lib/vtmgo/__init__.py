@@ -198,7 +198,7 @@ class Season:
 class Episode:
     """ Defines an Episode """
 
-    def __init__(self, episode_id=None, program_id=None, program_name=None, number=None, season=None, name=None, description=None, poster=None, thumb=None,
+    def __init__(self, episode_id=None, program_id=None, program_name=None, number=0, season=0, name=None, description=None, poster=None, thumb=None,
                  fanart=None, duration=None, remaining=None, geoblocked=None, channel=None, legal=None, aired=None, progress=None, watched=False,
                  next_episode=None):
         """
@@ -206,7 +206,7 @@ class Episode:
         :type program_id: str
         :type program_name: str
         :type number: int
-        :type season: str
+        :type season: int
         :type name: str
         :type description: str
         :type poster: str
@@ -226,8 +226,8 @@ class Episode:
         self.episode_id = episode_id
         self.program_id = program_id
         self.program_name = program_name
-        self.number = int(number) if number else None
-        self.season = int(season) if season else None
+        self.number = int(number)
+        self.season = int(season)
         if number:
             self.name = re.compile('^%d. ' % number).sub('', name)  # Strip episode from name
         else:

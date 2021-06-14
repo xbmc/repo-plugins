@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <category label="32005">
+    <setting type="lsep" default="false" label="32005" />
+    <setting type="label" default="false" label="32010" />
+    <setting id="agreement" type="enum" default="0" lvalues="32006|32007" label="32008" enable="False" />
+  </category>
+</settings>

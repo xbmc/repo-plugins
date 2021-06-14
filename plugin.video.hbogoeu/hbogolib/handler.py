@@ -86,6 +86,12 @@ class HbogoHandler(object):
         else:
             self.sensitive_debug = False
 
+        self.debugon = self.addon.getSetting('debugon')
+        if self.debugon == "true":
+            self.debugon = True
+        else:
+            self.debugon = False
+
         self.lograwdata = self.addon.getSetting('lograwdata')
         if self.lograwdata == "true":
             self.lograwdata = True
@@ -229,10 +235,11 @@ class HbogoHandler(object):
         return py2_decode(KodiUtil.translatePath(xbmcaddon.Addon().getAddonInfo('path') + '/resources/media/' + resourcefile))
 
     def log(self, msg, level=xbmc.LOGDEBUG):
-        try:
-            xbmc.log(self.DEBUG_ID_STRING + msg, level)
-        except TypeError:
-            xbmc.log(self.DEBUG_ID_STRING + msg.decode('utf-8'), level)
+        if self.debugon:
+            try:
+                xbmc.log(self.DEBUG_ID_STRING + msg, level)
+            except TypeError:
+                xbmc.log(self.DEBUG_ID_STRING + msg.decode('utf-8'), level)
 
     def mask_sensitive_data(self, data):
         if self.sensitive_debug:

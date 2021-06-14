@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.ardaktuell" name="ARD Aktuell" version="1.0.0" provider-name="Heckie">
+<addon id="plugin.video.ardaktuell" name="ARD Aktuell" version="1.0.1" provider-name="Heckie">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.25.1" />
@@ -20,9 +20,15 @@
         <language>en_GB</language>
         <platform>all</platform>
         <license>MIT</license>
-        <website>https://github.com/Heckie75/kodi-addon-tagesschau</website>
-        <source>https://github.com/Heckie75/kodi-addon-tagesschau/tree/master/plugin.audio.tagesschau</source>
+        <website>https://github.com/Heckie75/kodi-addon-ard-aktuell</website>
+        <source>https://github.com/Heckie75/kodi-addon-ard-aktuell/tree/main/plugin.video.ardaktuell</source>
         <news>
+v1.0.1 (2021-06-02)
+- Fixed broken URLs to github
+- Fixed issue #2: Navigation back from episodes menu is incorrect
+- Refactoring: seperate general rss code for easier maintainance in future
+- Hint: restart is required in order to load moved translations
+
 v1.0.0 (2021-05-24)
 - Initial version
         </news>

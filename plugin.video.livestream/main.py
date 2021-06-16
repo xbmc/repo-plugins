@@ -14,46 +14,29 @@ video_id=None
 icon = None
 cat_info = None
 
-try:
+if 'url' in params:
     url=urllib.unquote_plus(params["url"])
-except:
-    pass
-try:
+
+if 'name' in params:
     name=urllib.unquote_plus(params["name"])
-except:
-    pass
-try:
+
+if 'mode' in params:
     mode=int(params["mode"])
-except:
-    pass
-try:
+
+if 'event_id' in params:
     event_id=urllib.unquote_plus(params["event_id"])
-except:
-    pass
-try:
+
+if 'owner_id' in params:
     owner_id=urllib.unquote_plus(params["owner_id"])
-except:
-    pass
-try:
+
+if 'icon' in params:
     icon=urllib.unquote_plus(params["icon"])
-except:
-    pass
-try:
+
+if 'video_id' in params:
     video_id=urllib.unquote_plus(params["video_id"])
-except:
-    pass
-try:
+
+if 'cat_info' in params:
     cat_info=urllib.unquote_plus(params["cat_info"])
-except:
-    pass
-
-print "Mode: "+str(mode)
-#print "URL: "+str(url)
-print "Name: "+str(name)
-print "Event ID:"+str(event_id)
-print "Owner ID:"+str(owner_id)
-print "Video ID:"+str(video_id)
-
 
 
 if mode==None or url==None or len(url)<1:    

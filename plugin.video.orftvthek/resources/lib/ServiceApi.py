@@ -331,7 +331,6 @@ class serviceAPI(Scraper):
                         link = self.JSONStreamingURL(result.get('sources'))
 
                     if inputstreamAdaptive and result.get('restart'):
-
                         restart_parameters = {"mode": "liveStreamRestart", "link": result.get('id'), "lic_url": drm_lic_url}
                         restart_url = build_kodi_url(restart_parameters)
                         contextMenuItems.append((self.translation(30063), 'RunPlugin(%s)' % restart_url))

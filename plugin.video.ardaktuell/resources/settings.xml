@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <category label="32001">
+    <setting id="quality" type="enum" default="0" values="XL (1280x720)|L (960x544)|M (512x288)|S (320x180)|Audio" label="622" />
+    <setting id="archive" type="bool" default="false" label="32002" />
+    <setting id="anchor" type="bool" default="false" label="32003" enable="!eq(-1,False)" />
+  </category>
+</settings>

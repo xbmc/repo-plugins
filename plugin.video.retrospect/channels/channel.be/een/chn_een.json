@@ -12,7 +12,8 @@
       "channelcode": null,
       "sortorder": 1,
       "language": "be",
-      "fanart": "eenfanart.jpg"
+      "fanart": "eenfanart.jpg",
+      "ignore": true
     }
   ]
 }

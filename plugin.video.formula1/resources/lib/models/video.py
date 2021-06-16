@@ -13,10 +13,11 @@ class Video(ListItem):
             "thumb": self.thumb,
         })
         list_item.setInfo("video", {
+            "plot": self.info.get("description"),
             "duration": self.info.get("duration"),
         })
         list_item.setProperty("isPlayable", "true")
 
-        url = addon_base + "/play/?" + urllib.parse.urlencode({"embed_code": self.uri})
+        url = addon_base + "/play/?" + urllib.parse.urlencode({"video_id": self.uri})
 
         return url, list_item, False

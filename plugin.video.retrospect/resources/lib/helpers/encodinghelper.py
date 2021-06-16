@@ -23,6 +23,19 @@ class EncodingHelper(object):
         return base64.b64decode(data)
 
     @staticmethod
+    def encode_base64(data):
+        """ Encodes the given string into base64 bytes.
+
+        :param str data:
+        :return: bytes
+        """
+
+        if PY3 and isinstance(data, str):
+            data = data.encode()
+
+        return base64.b64encode(data)
+
+    @staticmethod
     def encode_md5(data, to_upper=True):
         """Encodes the selected string into an MD5 hashTool.
 

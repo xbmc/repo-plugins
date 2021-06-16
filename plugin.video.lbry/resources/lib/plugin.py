@@ -175,7 +175,7 @@ def result_to_itemlist(result, playlist='', channel=''):
             items.append((url, li, True))
         else:
             xbmc.log('ignored item, value_type=' + item['value_type'])
-            xbmc.log('item name=' + item['name'].encode('utf-8'))
+            xbmc.log('item name=' + item['name'])
 
     return items
 

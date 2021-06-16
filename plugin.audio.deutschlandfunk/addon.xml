@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.deutschlandfunk" name="Deutschlandfunk" version="2.0.0" provider-name="Heckie">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.requests" version="2.25.1" />
+        <import addon="script.module.beautifulsoup4" version="4.6.2" />
+        <import addon="script.module.xmltodict" version="0.12.0+matrix.2" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="de_DE">Sender &amp; Podcasts des Deutschlandfunks in KODI</summary>
+        <description lang="de_DE">Kodi Addon für Deutschlandfunk, Deutschlandfunk Kultur und 
+Deutschlandfunk Nova für Livestream und Podcasts
+
+Mit diesem Addon können Radioprogramme des Deutschlandfunks gehört werden.
+Es können sowohl die Live Streams vom Deutschlandfunk, 
+Deutschlandfunk Kultur und Deutschlandfunk Nova als auch
+sämtliche Podcasts der Sender gestreamt werden.</description>
+        <disclaimer lang="de_DE">Der Author des Addons ist nicht verantwortlich für die Inhalte, die auf Ihr Gerät gestreamt werden. Insbesondere liegt es in der alleinigen Verantwortung und Pflicht des Addon-Nutzers sich davon zu überzeugen, dass die Urheberrechtsvereinbarungen der zum Streaming aufgerufenden Websites und Inhalte nicht verletzt werden.</disclaimer>
+        <language>de_DE</language>
+        <platform>all</platform>
+        <license>MIT</license>
+        <website>https://github.com/Heckie75/kodi-addon-deutschlandfunk</website>
+        <source>https://github.com/Heckie75/kodi-addon-deutschlandfunk/tree/master/plugin.audio.deutschlandfunk</source>
+        <news>
+v2.0.0 (2021-05-13)
+- Migration to Kodi 19 (Matrix)
+- almost total rewrite
+        </news>
+        <assets>
+            <icon>resources/assets/icon.png</icon>
+            <fanart>resources/assets/fanart.png</fanart>
+            <screenshot>resources/assets/screen1.png</screenshot>
+            <screenshot>resources/assets/screen2.png</screenshot>
+            <screenshot>resources/assets/screen3.png</screenshot>
+        </assets>
+    </extension>
+</addon>

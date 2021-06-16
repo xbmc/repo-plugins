@@ -160,7 +160,17 @@ msgctxt "#30036"
 msgid "Password"
 msgstr ""
 
-# empty string from id 30037 to 30039
+msgctxt "#30037"
+msgid "Use 'Up Next' to play next episode"
+msgstr ""
+
+msgctxt "#30038"
+msgid "'Up Next' add-on settings"
+msgstr ""
+
+msgctxt "#30039"
+msgid "Up Next integration"
+msgstr ""
 
 msgctxt "#30040"
 msgid "Channels"
@@ -193,7 +203,9 @@ msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
 msgstr ""
 
-# empty string with id 30047
+msgctxt "#30047"
+msgid "Cannot playback this YouTube Video because the Kodi YouTube add-on is missing."
+msgstr ""
 
 msgctxt "#30048"
 msgid "Log level"
@@ -242,7 +254,15 @@ msgctxt "#30055"
 msgid "Advanced"
 msgstr ""
 
-# empty strings from id 30056 to 30058
+msgctxt "#30056"
+msgid "Install the Up Next add-on"
+msgstr ""
+
+msgctxt "#30057"
+msgid "Enable the Up Next add-on"
+msgstr ""
+
+# empty strings id 30058
 
 msgctxt "#30059"
 msgid "Other Countries"

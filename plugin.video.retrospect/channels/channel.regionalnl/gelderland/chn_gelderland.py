@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.mediaitem import MediaItem
 from resources.lib.helpers import datehelper
 
@@ -101,10 +101,9 @@ class Channel(chn_class.Channel):
         video_url = video_url.replace("rtmp://media.omroepgelderland.nl",
                                       "http://content.omroep.nl/omroepgelderland")
         
-        item = MediaItem(name, url)
+        item = MediaItem(name, url, media_type=mediatype.EPISODE)
         item.thumb = thumb_url
-        item.type = 'video'
-        item.append_single_stream(video_url)
+        item.add_stream(video_url)
         
         # set date
         month = datehelper.DateHelper.get_month_from_name(result_set[3], "nl", False)

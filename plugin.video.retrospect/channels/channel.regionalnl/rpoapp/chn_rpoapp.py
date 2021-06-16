@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
-from resources.lib.mediaitem import MediaItem
+from resources.lib import chn_class, mediatype, contenttype
+from resources.lib.mediaitem import MediaItem, FolderItem
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
@@ -66,8 +66,8 @@ class Channel(chn_class.Channel):
                               json=False)
 
         video_item_regex = r'<img src="(?<thumburl>[^"]+)"[^>]+alt="(?<title>[^"]+)"[^>]*/>\W*' \
-                           r'</a>\W*<figcaption(?:[^>]+>\W*){2}<time[^>]+datetime="' \
-                           r'(?<date>[^"]+)[^>]*>(?:[^>]+>\W*){3}<a[^>]+href="(?<url>[^"]+)"' \
+                           r'</a>\W*<figcaption(?:[^>]+>\W*){1,2}<time[^>]+datetime="' \
+                           r'(?<date>[^"]+)[^>]*>(?:[^>]+>\W*){2,3}<a[^>]+href="(?<url>[^"]+)"' \
                            r'[^>]*>\W*(?:[^>]+>\W*){3}<a[^>]+>(?<description>.+?)</a>'
         video_item_regex = Regexer.from_expresso(video_item_regex)
         self._add_data_parser("https://www.rtvutrecht.nl/",
@@ -116,7 +116,6 @@ class Channel(chn_class.Channel):
 
         title = LanguageHelper.get_localized_string(LanguageHelper.LiveStreamTitleId)
         item = MediaItem("\a.: {} :.".format(title), self.liveUrl)
-        item.type = "folder"
         items.append(item)
 
         if not data:
@@ -152,11 +151,11 @@ class Channel(chn_class.Channel):
         url = result_set["stream"]["highQualityUrl"]
         title = result_set["title"] or result_set["id"].title()
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.isLive = True
 
         if item.url.endswith(".mp3"):
-            item.append_single_stream(item.url)
+            item.add_stream(item.url)
             item.complete = True
             return item
 
@@ -180,8 +179,7 @@ class Channel(chn_class.Channel):
         url = "{}/RadioTv/Results?medium=Tv&query=&category={}&from=&to=&page=1"\
             .format(self.baseUrl, result_set["seriesId"])
         title = result_set["title"]
-        item = MediaItem(title, url)
-        item.type = "folder"
+        item = FolderItem(title, url, content_type=contenttype.TVSHOWS)
         item.complete = False
         return item
 
@@ -241,7 +239,7 @@ class Channel(chn_class.Channel):
         item = MediaItem(title, url)
         item.description = result_set.get("synopsis", None)
         item.thumb = result_set.get("photo", self.noImage)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
 
         if "publicationTimeString" in result_set:
             try:
@@ -269,10 +267,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -282,15 +280,14 @@ class Channel(chn_class.Channel):
 
         """
 
-        part = item.create_new_empty_media_part()
         if AddonSettings.use_adaptive_stream_add_on():
-            stream = part.append_media_stream(item.url, 0)
+            stream = item.add_stream(item.url, 0)
             M3u8.set_input_stream_addon_input(stream)
             item.complete = True
         else:
             for s, b in M3u8.get_streams_from_m3u8(item.url):
                 item.complete = True
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
         return item
 
     def update_video_item_json_player(self, item):
@@ -302,10 +299,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -318,10 +315,9 @@ class Channel(chn_class.Channel):
         data = UriHandler.open(item.url)
         streams = Regexer.do_regex(r'label:\s*"([^"]+)",\W*file:\s*"([^"]+)"', data)
 
-        part = item.create_new_empty_media_part()
         bitrates = {"720p SD": 1200}
         for stream in streams:
-            part.append_media_stream(stream[1], bitrates.get(stream[0], 0))
+            item.add_stream(stream[1], bitrates.get(stream[0], 0))
             item.complete = True
 
         return item
@@ -335,10 +331,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -358,14 +354,13 @@ class Channel(chn_class.Channel):
         url = "https://omroepzeeland.bbvms.com/p/regiogrid/q/sourceid_string:{}*.js".format(video_id)
         data = UriHandler.open(url)
 
-        json_data = Regexer.do_regex(r'var opts\s*=\s*({.+});\W*//window', data)
+        json_data = Regexer.do_regex(r'var opts\s*=\s*({.+?});\W*//', data)
         Logger.debug("Found jsondata with size: %s", len(json_data[0]))
         json_data = JsonHelper(json_data[0])
         clip_data = json_data.get_value("clipData", "assets")
         server = json_data.get_value("publicationData", "defaultMediaAssetPath")
-        part = item.create_new_empty_media_part()
         for clip in clip_data:
-            part.append_media_stream("{}{}".format(server, clip["src"]), int(clip["bandwidth"]))
+            item.add_stream("{}{}".format(server, clip["src"]), int(clip["bandwidth"]))
             item.complete = True
 
         return item

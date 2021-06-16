@@ -4,7 +4,7 @@
 import pytz
 import datetime
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.mediaitem import MediaItem
 from resources.lib.addonsettings import AddonSettings
@@ -85,6 +85,7 @@ class Channel(chn_class.Channel):
 
         self._add_data_parser("https://graphql.tv4play.se/graphql?query=%7BvideoPanel%28id%3A",
                               name="GraphQL single season/folder listing", json=True,
+                              postprocessor=self.add_next_page,
                               parser=["data", "videoPanel", "videoList", "videoAssets"],
                               creator=self.create_api_video_asset_type)
 
@@ -347,6 +348,8 @@ class Channel(chn_class.Channel):
         folder_id = result_set["id"]
         url = self.__get_api_folder_url(folder_id)
         item = MediaItem(title, url)
+        item.metaData["offset"] = 0
+        item.metaData["folder_id"] = folder_id
         return item
 
     def create_api_swipefolder_type(self, result_set):
@@ -458,7 +461,7 @@ class Channel(chn_class.Channel):
         else:
             item.thumb = thumb_url
 
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.complete = False
         item.isGeoLocked = True
         # For now, none are paid.
@@ -502,6 +505,49 @@ class Channel(chn_class.Channel):
         json_data = JsonHelper(data)
         json_data.json["pageProps"]["initialApolloState"] = list(json_data.json["pageProps"]["initialApolloState"].values())
         return json_data, []
+
+    def add_next_page(self, data, items):
+        """ Performs post-process actions for data processing.
+
+        Accepts an data from the process_folder_list method, BEFORE the items are
+        processed. Allows setting of parameters (like title etc) for the channel.
+        Inside this method the <data> could be changed and additional items can
+        be created.
+
+        The return values should always be instantiated in at least ("", []).
+
+        :param str|JsonHelper data:     The retrieve data that was loaded for the
+                                         current item and URL.
+        :param list[MediaItem] items:   The currently available items
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: list[MediaItem]
+
+        """
+
+        Logger.info("Performing Post-Processing")
+
+        total_hits = data.get_value('data', 'videoPanel', 'videoList', 'totalHits')
+        if total_hits > len(items):
+            Logger.debug("Adding items from next page")
+            offset = self.parentItem.metaData.get("offset", 0) + self.__maxPageSize
+            folder_id = self.parentItem.metaData.get("folder_id")
+            if not folder_id:
+                Logger.warning("Cannot find 'folder_id' in MediaItem")
+                return items
+
+            url = self.__get_api_folder_url(folder_id, offset)
+            data = UriHandler.open(url)
+            json_data = JsonHelper(data)
+            extra_results = json_data.get_value("data", "videoPanel", "videoList", "videoAssets", fallback=[])
+            Logger.debug("Adding %d extra results from next page", len(extra_results or []))
+            for result in extra_results:
+                item = self.create_api_video_asset_type(result)
+                if item:
+                    items.append(item)
+
+        Logger.debug("Post-Processing finished")
+        return items
 
     def detect_single_folder(self, data):
         """ Performs pre-process actions and detect single folder items
@@ -650,10 +696,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -688,11 +734,9 @@ class Channel(chn_class.Channel):
         if ".mpd" in stream_url:
             return self.__update_dash_video(item, stream_info)
 
-        part = item.create_new_empty_media_part()
-
         if AddonSettings.use_adaptive_stream_add_on() and False:
             subtitle = M3u8.get_subtitle(stream_url)
-            stream = part.append_media_stream(stream_url, 0)
+            stream = item.add_stream(stream_url, 0)
             M3u8.set_input_stream_addon_input(stream)
             item.complete = True
         else:
@@ -710,11 +754,11 @@ class Channel(chn_class.Channel):
                     video_part = video_part.rsplit("-", 1)[-1]
                     video_part = "-%s" % (video_part,)
                     s = a.replace(".m3u8", video_part)
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
 
         if subtitle:
             subtitle = subtitle.replace(".m3u8", ".webvtt")
-            part.Subtitle = SubtitleHelper.download_subtitle(subtitle, format="m3u8srt")
+            item.subtitle = SubtitleHelper.download_subtitle(subtitle, format="m3u8srt")
         return item
 
     def update_live_item(self, item):
@@ -726,10 +770,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -741,17 +785,9 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_live_item for %s (%s)', item.name, self.channelName)
 
-        item.MediaItemParts = []
-        part = item.create_new_empty_media_part()
-
-        spoof_ip = self._get_setting("spoof_ip", "0.0.0.0")
-        if spoof_ip:
-            for s, b in M3u8.get_streams_from_m3u8(item.url,
-                                                   headers={"X-Forwarded-For": spoof_ip}):
-                part.append_media_stream(s, b)
-        else:
-            for s, b in M3u8.get_streams_from_m3u8(item.url):
-                part.append_media_stream(s, b)
+        item.streams = []
+        for s, b in M3u8.get_streams_from_m3u8(item.url):
+            item.add_stream(s, b)
 
         item.complete = True
         return item
@@ -785,11 +821,12 @@ class Channel(chn_class.Channel):
     def __get_api_query(self, query):
         return "https://graphql.tv4play.se/graphql?query={}".format(HtmlEntityHelper.url_encode(query))
 
-    def __get_api_folder_url(self, folder_id):
+    def __get_api_folder_url(self, folder_id, offset=0):
         return self.__get_api_query(
-            '{videoPanel(id: "%s"){name,videoList(limit: 100){totalHits,videoAssets'
+            '{videoPanel(id: "%s"){name,videoList(limit: %s, offset:%d, '
+            'sortOrder: "broadcastDateTime"){totalHits,videoAssets'
             '{title,id,description,season,episode,daysLeftInService,broadcastDateTime,image,'
-            'freemium,drmProtected,live,duration}}}}' % (folder_id,))
+            'freemium,drmProtected,live,duration}}}}' % (folder_id, self.__maxPageSize, offset))
 
     def __update_dash_video(self, item, stream_info):
         """
@@ -807,8 +844,7 @@ class Channel(chn_class.Channel):
         playback_item = stream_info.get_value("playbackItem")
 
         stream_url = playback_item["manifestUrl"]
-        part = item.create_new_empty_media_part()
-        stream = part.append_media_stream(stream_url, 0)
+        stream = item.add_stream(stream_url, 0)
 
         license_info = playback_item.get("license", None)
         if license_info is not None:

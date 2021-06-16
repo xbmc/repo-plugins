@@ -29,6 +29,6 @@ def get_live_url(plugin, item_id, **kwargs):
     resp2 = urlquick.get(
         live_datas.get('src'), headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
     stream_url = ''
-    for url in re.compile(r'videoUrl \= \'(.*?)\'').findall(resp2.text):
-        stream_url = url + '_720p/playlist.m3u8'
+    for url in re.compile(r'videoxurl \= \'(.*?)\'').findall(resp2.text):
+        stream_url = url
     return stream_url

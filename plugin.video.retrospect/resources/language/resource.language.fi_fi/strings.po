@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 21:02+0000\n"
+"PO-Revision-Date: 2021-05-07 15:10+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Finnish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/fi_fi/>\n"
 "Language: fi_fi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.6.1\n"
 
 msgctxt "#30000"
 msgid "Stream Quality"
@@ -162,13 +162,17 @@ msgctxt "#30036"
 msgid "Password"
 msgstr "Salasana"
 
+msgctxt "#30037"
+msgid "Use 'Up Next' to play next episode"
+msgstr ""
+
 msgctxt "#30038"
-msgid "Confirm proxy changes"
-msgstr "Vahvista välityspalvelimen muutokset"
+msgid "'Up Next' add-on settings"
+msgstr ""
 
 msgctxt "#30039"
-msgid "Are you sure you want to update all channels for this country with this proxy?"
-msgstr "Oletko varma, että haluat päivittää kaikki kanavat tässä maassa tämän proxy?"
+msgid "Up Next integration"
+msgstr ""
 
 msgctxt "#30040"
 msgid "Channels"
@@ -196,6 +200,10 @@ msgstr ""
 
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
+msgstr ""
+
+msgctxt "#30047"
+msgid "Cannot playback this YouTube Video because the Kodi YouTube add-on is missing."
 msgstr ""
 
 msgctxt "#30048"
@@ -229,6 +237,14 @@ msgstr ""
 msgctxt "#30055"
 msgid "Advanced"
 msgstr "Kehittyneet"
+
+msgctxt "#30056"
+msgid "Install the Up Next add-on"
+msgstr ""
+
+msgctxt "#30057"
+msgid "Enable the Up Next add-on"
+msgstr ""
 
 msgctxt "#30059"
 msgid "Other Countries"
@@ -352,19 +368,19 @@ msgstr ""
 
 msgctxt "#30089"
 msgid "Password Vault"
-msgstr "Password Vault"
+msgstr ""
 
 msgctxt "#30090"
 msgid "The 'Password Vault' protects stored password with encryption using a PIN."
-msgstr "The 'Password Vault' protects stored password with encryption using a PIN."
+msgstr ""
 
 msgctxt "#30091"
 msgid "Change Vault Pin"
-msgstr "Change Vault Pin"
+msgstr ""
 
 msgctxt "#30092"
 msgid "Reset Vault"
-msgstr "Reset Vault"
+msgstr ""
 
 msgctxt "#30093"
 msgid "Password"
@@ -595,6 +611,14 @@ msgstr ""
 
 msgctxt "#30364"
 msgid "Latest news"
+msgstr ""
+
+msgctxt "#30365"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30366"
+msgid "Available from"
 msgstr ""
 
 msgctxt "#30401"
@@ -860,7 +884,7 @@ msgstr "Valitut kohteet eivät ole ilmaisia ja niitä ei voi toistaa Kodissa."
 
 msgctxt "#30562"
 msgid "Username and/or password not set in Add-on settings"
-msgstr "Username and/or password not set in Add-on settings"
+msgstr ""
 
 msgctxt "#30563"
 msgid "Hide Item"
@@ -880,11 +904,11 @@ msgstr ""
 
 msgctxt "#30567"
 msgid "Add-on(s) disabled"
-msgstr "Add-on(s) disabled"
+msgstr ""
 
 msgctxt "#30568"
 msgid "Some of the Retrospect Channel Add-ons are not enabled which will prevent them from auto updating. The Kodi add-on browser will now open and you should enable all Retrospect related add-ons. See http://kodi.wiki/view/add-on_manager."
-msgstr "Some of the Retrospect Channel Add-ons are not enabled which will prevent them from auto updating. The Kodi add-on browser will now open and you should enable all Retrospect related add-ons. See http://kodi.wiki/view/add-on_manager."
+msgstr ""
 
 msgctxt "#30569"
 msgid "Ignore SSL verification errors (Security Risk!)"
@@ -912,11 +936,11 @@ msgstr "Piilota kanava"
 
 msgctxt "#30575"
 msgid "Retrospect Favourites »"
-msgstr "Retrospect Favourites »"
+msgstr ""
 
 msgctxt "#30576"
 msgid "Select Countries"
-msgstr "Select Countries"
+msgstr ""
 
 msgctxt "#30577"
 msgid "Bitrate »"
@@ -948,35 +972,35 @@ msgstr ""
 
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"
-msgstr "Set a new Retrospect PIN"
+msgstr ""
 
 msgctxt "#30591"
 msgid "No Retrospect PIN specified"
-msgstr "No Retrospect PIN specified"
+msgstr ""
 
 msgctxt "#30592"
 msgid "Repeat the new Retrospect PIN"
-msgstr "Repeat the new Retrospect PIN"
+msgstr ""
 
 msgctxt "#30593"
 msgid "PINs don't match"
-msgstr "PINs don't match"
+msgstr ""
 
 msgctxt "#30594"
 msgid "Specify value for setting: '%s'"
-msgstr "Specify value for setting: '%s'"
+msgstr ""
 
 msgctxt "#30595"
 msgid "Input Retrospect PIN"
-msgstr "Input Retrospect PIN"
+msgstr ""
 
 msgctxt "#30596"
 msgid "Incorrect Retrospect PIN specified"
-msgstr "Incorrect Retrospect PIN specified"
+msgstr ""
 
 msgctxt "#30597"
 msgid "Resetting the vault will invalidate all existing encrypted values. Are you sure?"
-msgstr "Resetting the vault will invalidate all existing encrypted values. Are you sure?"
+msgstr ""
 
 msgctxt "#30598"
 msgid "Send retrospect.log »"
@@ -988,15 +1012,15 @@ msgstr ""
 
 msgctxt "#30600"
 msgid "Logfile successfully posted"
-msgstr "Logfile successfully posted"
+msgstr ""
 
 msgctxt "#30601"
 msgid "Error posting logfile: %s"
-msgstr "Error posting logfile: %s"
+msgstr ""
 
 msgctxt "#30602"
 msgid "Error posting logfile"
-msgstr "Error posting logfile"
+msgstr ""
 
 msgctxt "#30603"
 msgid "Retrospect changed add-on ID. To prevent data loss, your user data will now be migrated. After this has been done, please restart Kodi to complete migration. After the restart update any shortcut you had to Retrospect. The Retrospect marked as \"broken\" in \"My add-ons\" can be uninstalled."
@@ -1025,6 +1049,14 @@ msgstr ""
 msgctxt "#30609"
 msgid "Error"
 msgstr ""
+
+#~ msgctxt "#30038"
+#~ msgid "Confirm proxy changes"
+#~ msgstr "Vahvista välityspalvelimen muutokset"
+
+#~ msgctxt "#30039"
+#~ msgid "Are you sure you want to update all channels for this country with this proxy?"
+#~ msgstr "Oletko varma, että haluat päivittää kaikki kanavat tässä maassa tämän proxy?"
 
 #~ msgctxt "#30599"
 #~ msgid ""

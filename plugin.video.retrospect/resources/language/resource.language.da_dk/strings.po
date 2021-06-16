@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 20:44+0000\n"
+"PO-Revision-Date: 2021-04-27 21:23+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Danish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/da_dk/>\n"
 "Language: da_dk\n"
@@ -12,11 +12,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.6\n"
 
 msgctxt "#30000"
 msgid "Stream Quality"
-msgstr ""
+msgstr "Kvalitet for stream"
 
 msgctxt "#30001"
 msgid "Low"
@@ -36,7 +36,7 @@ msgstr ""
 
 msgctxt "#30005"
 msgid "Stable"
-msgstr ""
+msgstr "Stabil"
 
 msgctxt "#30006"
 msgid "Alpha/Beta"
@@ -44,7 +44,7 @@ msgstr "Alfa/Beta"
 
 msgctxt "#30007"
 msgid "via other add-on"
-msgstr ""
+msgstr "ved hjælp af andet add-on"
 
 msgctxt "#30008"
 msgid "Retrospect"
@@ -60,11 +60,11 @@ msgstr "Kanaler"
 
 msgctxt "#30011"
 msgid "Requires restart of Retrospect to take effect."
-msgstr ""
+msgstr "Behøver genstart af Retrospect for at fungere."
 
 msgctxt "#30012"
 msgid "Login Failed"
-msgstr ""
+msgstr "Login fejlede"
 
 msgctxt "#30013"
 msgid "Could not log on to the selected channel."
@@ -76,7 +76,7 @@ msgstr "Vis info"
 
 msgctxt "#30015"
 msgid "via missing add-on"
-msgstr ""
+msgstr "Ved hjælp af manglende add-on"
 
 msgctxt "#30016"
 msgid "Sort by"
@@ -104,19 +104,19 @@ msgstr ""
 
 msgctxt "#30022"
 msgid "If available"
-msgstr ""
+msgstr "Hvis tilgængelig"
 
 msgctxt "#30023"
 msgid "Never show"
-msgstr ""
+msgstr "Vis aldrig"
 
 msgctxt "#30024"
 msgid "Recent"
-msgstr ""
+msgstr "Seneste"
 
 msgctxt "#30025"
 msgid "None"
-msgstr ""
+msgstr "Ingen"
 
 msgctxt "#30026"
 msgid "Group list if it exceeds # folders"
@@ -124,19 +124,19 @@ msgstr ""
 
 msgctxt "#30027"
 msgid "Autorun Retrospect on Kodi start"
-msgstr ""
+msgstr "Kør automatisk Retrospect når Kodi startes"
 
 msgctxt "#30028"
 msgid "Proxy"
-msgstr ""
+msgstr "Proxy"
 
 msgctxt "#30029"
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 msgctxt "#30030"
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 msgctxt "#30031"
 msgid "Cache HTTP(S) requests"
@@ -144,36 +144,39 @@ msgstr ""
 
 msgctxt "#30032"
 msgid "Channel Settings"
-msgstr ""
+msgstr "Kanalindstillinger"
 
 msgctxt "#30033"
 msgid "Expires at"
-msgstr ""
+msgstr "Udløber"
 
 msgctxt "#30034"
 msgid "No channel selected"
-msgstr ""
+msgstr "Ingen kanal valgt"
 
 msgctxt "#30035"
 msgid "Username"
-msgstr ""
+msgstr "Brugernavn"
 
 msgctxt "#30036"
 msgid "Password"
+msgstr "Kodeord"
+
+msgctxt "#30037"
+msgid "Use 'Up Next' to play next episode"
 msgstr ""
 
-# empty string with id 30037
 msgctxt "#30038"
-msgid "Confirm proxy changes"
+msgid "'Up Next' add-on settings"
 msgstr ""
 
 msgctxt "#30039"
-msgid "Are you sure you want to update all channels for this country with this proxy?"
+msgid "Up Next integration"
 msgstr ""
 
 msgctxt "#30040"
 msgid "Channels"
-msgstr ""
+msgstr "Kanaler"
 
 msgctxt "#30041"
 msgid "Show \"All Favourites\" in main Channel listing"
@@ -181,7 +184,7 @@ msgstr ""
 
 msgctxt "#30042"
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiveret"
 
 msgctxt "#30043"
 msgid "Folder prefix"
@@ -189,7 +192,7 @@ msgstr ""
 
 msgctxt "#30044"
 msgid "Kodi update required"
-msgstr ""
+msgstr "Opdatering af Kodi nødvendig"
 
 msgctxt "#30045"
 msgid "This feature of Retrospect requires a more recent version of Kodi. Please install the most recent version of your current Kodi build. Depending on your installation this can either be a 'stable' or 'nightly' build."
@@ -197,6 +200,10 @@ msgstr ""
 
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
+msgstr ""
+
+msgctxt "#30047"
+msgid "Cannot playback this YouTube Video because the Kodi YouTube add-on is missing."
 msgstr ""
 
 # empty string with id 30047
@@ -210,7 +217,7 @@ msgstr ""
 
 msgctxt "#30050"
 msgid "DRM Protected"
-msgstr ""
+msgstr "DRM-beskyttet"
 
 msgctxt "#30051"
 msgid "Hidden item"
@@ -222,7 +229,7 @@ msgstr ""
 
 msgctxt "#30053"
 msgid "Appearance"
-msgstr ""
+msgstr "Udseende"
 
 msgctxt "#30054"
 msgid "[COLOR gold][B]The Retrospect Password Vault[/B][/COLOR][CR]'The Vault' enables storing sensitive data in a more secure way. How does this work:[CR][CR]* The users selects a simple Vault PIN that is used as the main code for accessing the Vault data.[CR]* This PIN can be rather simple and short and easy to remember: for example 3145.[CR]* That PIN is then used to generate a much stronger and complexer encryption key using Scrypt.[CR]* As a user you will not need to know this complex key.[CR][CR][COLOR gold][B]Storing sensitive data[/B][/COLOR][CR]Whenever sensitive data is being [B]stored[/B]:[CR][CR]* The user will be asked for their PIN first.[CR]* After a correct PIN the actual data to store will be asked.[CR][CR][COLOR gold][B]Retrieving sensitive data[/B][/COLOR][CR]Whenever sensitive data is being [B]retrieved[/B]:[CR][CR]* The user will only be asked for their PIN.[CR]* That PIN is then used to securely fetch the actual data.[CR][CR][COLOR gold][B]Resetting the Vault[/B][/COLOR][CR]If a user has forgotten the PIN, there is no way of recovering the data. The only solution is to reset the Vault and pick a new PIN and generate a new Vault Key. [B]This will invalidate all encrypted data[/B]. This data must be entered again."
@@ -230,12 +237,20 @@ msgstr ""
 
 msgctxt "#30055"
 msgid "Advanced"
+msgstr "Avanceret"
+
+msgctxt "#30056"
+msgid "Install the Up Next add-on"
+msgstr ""
+
+msgctxt "#30057"
+msgid "Enable the Up Next add-on"
 msgstr ""
 
 # empty strings from id 30056 to 30058
 msgctxt "#30059"
 msgid "Other Countries"
-msgstr ""
+msgstr "Andre lande"
 
 msgctxt "#30060"
 msgid "Enable/Disable channels by country of origin"
@@ -243,11 +258,11 @@ msgstr ""
 
 msgctxt "#30061"
 msgid "Channel Origin"
-msgstr ""
+msgstr "Kanalens oprindelse"
 
 msgctxt "#30062"
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 msgctxt "#30063"
 msgid "Channel to configure"
@@ -255,31 +270,31 @@ msgstr ""
 
 msgctxt "#30064"
 msgid "Proxy Group"
-msgstr ""
+msgstr "Proxy-gruppe"
 
 msgctxt "#30065"
 msgid "Country Settings"
-msgstr ""
+msgstr "Indstillinger for land"
 
 msgctxt "#30066"
 msgid "DNS"
-msgstr ""
+msgstr "DNS"
 
 msgctxt "#30067"
 msgid "Show channels in categories"
-msgstr ""
+msgstr "Vis kanaler i kategorier"
 
 msgctxt "#30068"
 msgid "Active"
-msgstr ""
+msgstr "Aktive"
 
 msgctxt "#30069"
 msgid "Settings"
-msgstr ""
+msgstr "Indstillinger"
 
 msgctxt "#30070"
 msgid "Let Kodi determine bitrate if possible"
-msgstr ""
+msgstr "Lad Kodi bestemme bitrate hvis muligt"
 
 msgctxt "#30071"
 msgid "Set the proxy and local IP to all channels related to this country"
@@ -287,7 +302,7 @@ msgstr ""
 
 msgctxt "#30072"
 msgid "Proxy Type"
-msgstr ""
+msgstr "Proxy-type"
 
 msgctxt "#30073"
 msgid "- Geo-blocked = º, DRM protected = ^ and Premium = ª."
@@ -295,7 +310,7 @@ msgstr ""
 
 msgctxt "#30074"
 msgid "Disabled"
-msgstr ""
+msgstr "Deaktiveret"
 
 msgctxt "#30075"
 msgid "Empty list behaviour"
@@ -303,11 +318,11 @@ msgstr ""
 
 msgctxt "#30076"
 msgid "Show error"
-msgstr ""
+msgstr "Vis fejl"
 
 msgctxt "#30077"
 msgid "Show empty list"
-msgstr ""
+msgstr "Vis tom liste"
 
 msgctxt "#30078"
 msgid "Show dummy item"
@@ -601,6 +616,14 @@ msgstr ""
 
 msgctxt "#30364"
 msgid "Latest news"
+msgstr ""
+
+msgctxt "#30365"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30366"
+msgid "Available from"
 msgstr ""
 
 # empty strings from id 30365 to 30400

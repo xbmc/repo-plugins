@@ -1,14 +1,42 @@
 # Changelog
 
+## [v1.2.8](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.8) (2021-06-10)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.7...v1.2.8)
+
+**Fixed bugs:**
+
+- Fix authentication [\#291](https://github.com/add-ons/plugin.video.vtm.go/pull/291) ([michaelarnauts](https://github.com/michaelarnauts))
+- Set zero default value for season and episode [\#289](https://github.com/add-ons/plugin.video.vtm.go/pull/289) ([mediaminister](https://github.com/mediaminister))
+
+## [v1.2.7](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.7) (2021-05-25)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.6...v1.2.7)
+
+**Implemented enhancements:**
+
+- Remove all default\_KIDs from MPEG-DASH manifest [\#287](https://github.com/add-ons/plugin.video.vtm.go/pull/287) ([mediaminister](https://github.com/mediaminister))
+- Remove bad default\_kid from MPD manifest [\#286](https://github.com/add-ons/plugin.video.vtm.go/pull/286) ([mediaminister](https://github.com/mediaminister))
+- Allow to clear tokens from settings [\#285](https://github.com/add-ons/plugin.video.vtm.go/pull/285) ([michaelarnauts](https://github.com/michaelarnauts))
+- Improve detection of outdated auth tokens [\#282](https://github.com/add-ons/plugin.video.vtm.go/pull/282) ([mediaminister](https://github.com/mediaminister))
+
+## [v1.2.6](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.6) (2021-05-04)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.5...v1.2.6)
+
+**Fixed bugs:**
+
+- Fix authentication and use API v10 [\#276](https://github.com/add-ons/plugin.video.vtm.go/pull/276) ([mediaminister](https://github.com/mediaminister))
+
 ## [v1.2.5](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.5) (2021-03-22)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.4...v1.2.5)
 
 **Implemented enhancements:**
 
+- Don't depend on credentials to populate IPTV Manager data [\#266](https://github.com/add-ons/plugin.video.vtm.go/pull/266) ([michaelarnauts](https://github.com/michaelarnauts))
 - Improve artwork [\#269](https://github.com/add-ons/plugin.video.vtm.go/pull/269) ([michaelarnauts](https://github.com/michaelarnauts))
 - Add more metadata to movies and programs [\#267](https://github.com/add-ons/plugin.video.vtm.go/pull/267) ([michaelarnauts](https://github.com/michaelarnauts))
-- Don't depend on credentials to populate IPTV Manager data [\#266](https://github.com/add-ons/plugin.video.vtm.go/pull/266) ([michaelarnauts](https://github.com/michaelarnauts))
 
 **Fixed bugs:**
 

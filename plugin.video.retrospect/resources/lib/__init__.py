@@ -3,5 +3,5 @@
 __all__ = ["addon", "addonsettings", "backtothefuture", "channelinfo", "chn_class", "cloaker",
            "contextmenu", "envcontroller", "environments", "favourites", "initializer", "locker",
            "logger", "mediaitem", "menu", "parserdata", "pickler", "plugin",
-           "proxyinfo", "regexer", "retroconfig", "updater", "urihandler", "vault", "version",
-           "xbmcwrapper", "player", "authentication"]
+           "proxyinfo", "regexer", "retroconfig", "urihandler", "vault", "version",
+           "xbmcwrapper", "player", "authentication", "mediatype", "contenttype"]

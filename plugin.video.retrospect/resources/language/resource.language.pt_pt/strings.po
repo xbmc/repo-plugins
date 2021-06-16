@@ -162,13 +162,16 @@ msgctxt "#30036"
 msgid "Password"
 msgstr "Palavra passe"
 
-# empty string with id 30037
+msgctxt "#30037"
+msgid "Use 'Up Next' to play next episode"
+msgstr ""
+
 msgctxt "#30038"
-msgid "Confirm proxy changes"
+msgid "'Up Next' add-on settings"
 msgstr ""
 
 msgctxt "#30039"
-msgid "Are you sure you want to update all channels for this country with this proxy?"
+msgid "Up Next integration"
 msgstr ""
 
 msgctxt "#30040"
@@ -197,6 +200,10 @@ msgstr "Esta funcionalidade do Retrospect necessita de uma versão mais recente 
 
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
+msgstr ""
+
+msgctxt "#30047"
+msgid "Cannot playback this YouTube Video because the Kodi YouTube add-on is missing."
 msgstr ""
 
 # empty string with id 30047
@@ -230,6 +237,14 @@ msgstr ""
 
 msgctxt "#30055"
 msgid "Advanced"
+msgstr ""
+
+msgctxt "#30056"
+msgid "Install the Up Next add-on"
+msgstr ""
+
+msgctxt "#30057"
+msgid "Enable the Up Next add-on"
 msgstr ""
 
 # empty strings from id 30056 to 30058
@@ -601,6 +616,14 @@ msgstr ""
 
 msgctxt "#30364"
 msgid "Latest news"
+msgstr ""
+
+msgctxt "#30365"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30366"
+msgid "Available from"
 msgstr ""
 
 # empty strings from id 30365 to 30400

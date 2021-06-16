@@ -49,9 +49,28 @@ class AccountStorage:
 
         try:
             # Verify our token to see if it's still valid.
-            jwt.decode(self.jwt_token,
-                       algorithms=['HS256'],
-                       options={'verify_signature': False, 'verify_aud': False})
+            decoded_jwt = jwt.decode(self.jwt_token,
+                                     algorithms=['HS256'],
+                                     options={'verify_signature': False, 'verify_aud': False})
+
+            # Check issued at datetime
+            # VTM GO updated the JWT token format on 2021-05-03T12:00:00+00:00, older JWT tokens became invalid
+            import dateutil.parser
+            import dateutil.tz
+            from datetime import datetime
+            update = dateutil.parser.parse('2021-05-03T12:00:00+00:00')
+            iat = datetime.fromtimestamp(decoded_jwt.get('iat'), tz=dateutil.tz.gettz('Europe/Brussels'))
+            if iat < update:
+                _LOGGER.debug('JWT issued at %s is too old', iat.isoformat())
+                return False
+
+            # Check expiration time
+            exp = datetime.fromtimestamp(decoded_jwt.get('exp'), tz=dateutil.tz.gettz('Europe/Brussels'))
+            now = datetime.now(dateutil.tz.UTC)
+            if exp < now:
+                _LOGGER.debug('JWT is expired at %s', exp.isoformat())
+                return False
+
         except Exception as exc:  # pylint: disable=broad-except
             _LOGGER.debug('JWT is NOT valid: %s', exc)
             return False
@@ -203,23 +222,26 @@ class VtmGoAuth:
         if 'OIDC-999' in response.text:  # Ongeldige login.
             raise InvalidLoginException()
 
+        # Extract redirect
+        match = re.search(r"window.location.href = '([^']+)'", response.text)
+        if not match:
+            raise LoginErrorException(code=103)
+        redirect_url = match.group(1)
+
         # Follow login
-        response = util.http_get('https://login2.vtm.be/authorize/continue', params={
-            'client_id': 'vtm-go-android'
-        })
+        response = util.http_get(redirect_url)
 
         # We are redirected and our id_token is in the fragment of the redirected url
         params = parse_qs(urlparse(response.url).fragment)
         id_token = params['id_token'][0]
 
         # Okay, final stage. We now need to authorize our id_token so we get a valid JWT.
-        response = util.http_post('https://lfvp-api.dpgmedia.net/authorize/idToken', data={
-            'clientId': 'vtm-go-android',
-            'pipIdToken': id_token,
+        response = util.http_post('https://lfvp-api.dpgmedia.net/vtmgo/tokens', data={
+            'idToken': id_token,
         })
 
         # Get JWT from reply
-        self._account.jwt_token = json.loads(response.text).get('jsonWebToken')
+        self._account.jwt_token = json.loads(response.text).get('lfvpToken')
 
         self._save_cache()
 

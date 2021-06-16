@@ -8,7 +8,7 @@ else:
     # noinspection PyUnresolvedReferences
     import urllib.parse as parse
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.mediaitem import MediaItem
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.datehelper import DateHelper
@@ -199,12 +199,11 @@ class Channel(chn_class.Channel):
         if self.liveUrl.endswith(".m3u8"):
             # We actually have a single stream.
             title = "{} - {}".format(self.channelName, LanguageHelper.get_localized_string(LanguageHelper.LiveStreamTitleId))
-            live_item = MediaItem(title, self.liveUrl)
-            live_item.type = 'video'
+            live_item = MediaItem(title, self.liveUrl, media_type=mediatype.VIDEO)
             live_item.isLive = True
             if self.channelCode == "rtvdrenthe":
                 # RTV Drenthe actually has a buggy M3u8 without master index.
-                live_item.append_single_stream(live_item.url, 0)
+                live_item.add_stream(live_item.url, 0)
                 live_item.complete = True
 
             items.append(live_item)
@@ -233,7 +232,6 @@ class Channel(chn_class.Channel):
             live_item.type = 'video'
             live_item.complete = True
             live_item.isLive = True
-            part = live_item.create_new_empty_media_part()
             for stream in streams:
                 Logger.trace(stream)
                 bitrate = None
@@ -276,19 +274,19 @@ class Channel(chn_class.Channel):
                     url = "%s?protection=url" % (url, )
 
                 if bitrate:
-                    part.append_media_stream(url, bitrate)
+                    live_item.add_stream(url, bitrate)
 
                     if url == live_stream_value and ".m3u8" in url:
                         # if it was equal to the previous one, assume we have a m3u8. Reset the others.
                         Logger.info("Found same M3u8 stream for all streams for this Live channel, using that one: %s", url)
-                        live_item.MediaItemParts = []
+                        live_item.streams = []
                         live_item.url = url
                         live_item.complete = False
                         break
                     elif "playlist.m3u8" in url:
                         # if we have a playlist, use that one. Reset the others.
                         Logger.info("Found M3u8 playlist for this Live channel, using that one: %s", url)
-                        live_item.MediaItemParts = []
+                        live_item.streams = []
                         live_item.url = url
                         live_item.complete = False
                         break
@@ -360,10 +358,10 @@ class Channel(chn_class.Channel):
         if not url.startswith("http"):
             url = parse.urljoin(self.baseUrl, url)
 
-        item = MediaItem(title, url)
+        item = MediaItem(title, url, media_type=mediatype.EPISODE)
 
         if media_link:
-            item.append_single_stream(media_link, self.channelBitrate)
+            item.add_stream(media_link, self.channelBitrate)
 
         # get the thumbs from multiple locations
         thumb_urls = result_set.get("images", None)
@@ -381,7 +379,6 @@ class Channel(chn_class.Channel):
         if thumb_url:
             item.thumb = thumb_url
 
-        item.type = 'video'
         item.description = HtmlHelper.to_text(result_set.get("text"))
 
         posix = result_set.get("timestamp", None)
@@ -419,11 +416,12 @@ class Channel(chn_class.Channel):
         url = result_set["stream"]["highQualityUrl"]
         title = result_set["title"] or result_set["id"].title()
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.isLive = True
 
         if result_set["mediaType"].lower() == "audio":
-            item.append_single_stream(item.url)
+            item.add_stream(item.url)
+            item.media_type = mediatype.AUDIO
             item.complete = True
             return item
 
@@ -438,10 +436,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -454,16 +452,14 @@ class Channel(chn_class.Channel):
         Logger.debug("Updating a (Live) video item")
         content, url = UriHandler.header(item.url)
 
-        part = item.create_new_empty_media_part()
         if AddonSettings.use_adaptive_stream_add_on():
-            part = item.create_new_empty_media_part()
-            stream = part.append_media_stream(url, 0)
+            stream = item.add_stream(url, 0)
             M3u8.set_input_stream_addon_input(stream, item.HttpHeaders)
             item.complete = True
         else:
             for s, b in M3u8.get_streams_from_m3u8(url, append_query_string=True):
                 item.complete = True
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
             item.complete = True
 
         return item

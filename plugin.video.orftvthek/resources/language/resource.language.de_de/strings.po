@@ -1,0 +1,246 @@
+# XBMC Media Center language file
+# Addon Name: ORF TVthek
+# Addon id: plugin.video.orftvthek
+# Addon version: 0.9.0
+# Addon Provider: sofaking
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2017-02-05 22:17+0000\n"
+"PO-Revision-Date: 2019-11-09 14:05+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "ORF TVthek"
+msgstr "ORF TVthek"
+
+msgctxt "Addon Description"
+msgid "ORF TVthek - This plugin provides access to the Austrian \"ORF TVthek\""
+msgstr "ORF TVthek - Ermöglicht Ihnen den Zugriff auf die ORF TVthek Video Platform"
+
+msgctxt "#30000"
+msgid "Recently Added Shows"
+msgstr "Neuste Sendungen"
+
+msgctxt "#30001"
+msgid "Frontpage"
+msgstr "Startseite"
+
+msgctxt "#30002"
+msgid "Shows"
+msgstr "Sendungen"
+
+msgctxt "#30003"
+msgid "Topics"
+msgstr "Themen"
+
+msgctxt "#30004"
+msgid "Livestream"
+msgstr "Live"
+
+msgctxt "#30005"
+msgid "ORF Recommendations"
+msgstr "ORF Tipps"
+
+msgctxt "#30006"
+msgid "Most Viewed"
+msgstr "Meist gesehen"
+
+msgctxt "#30007"
+msgid "Search"
+msgstr "Suchen"
+
+msgctxt "#30009"
+msgid "Broadcasted: "
+msgstr "Sendung vom"
+
+msgctxt "#30011"
+msgid "Runtime"
+msgstr "Laufzeit"
+
+msgctxt "#30014"
+msgid "No Results"
+msgstr "Keine Ergebnisse"
+
+msgctxt "#30015"
+msgid "Play all"
+msgstr "Alle Beiträge abspielen"
+
+msgctxt "#30018"
+msgid "Missed a Show?"
+msgstr "Sendung verpasst?"
+
+msgctxt "#30019"
+msgid "Streaming"
+msgstr "Livestream läuft bereits"
+
+msgctxt "#30020"
+msgid "Stream Offline"
+msgstr "Livestream läuft noch nicht"
+
+msgctxt "#30022"
+msgid "Video Resolution"
+msgstr "Videoqualität"
+
+msgctxt "#30023"
+msgid "Low"
+msgstr "Niedrig"
+
+msgctxt "#30024"
+msgid "Medium"
+msgstr "Mittel"
+
+msgctxt "#30025"
+msgid "High"
+msgstr "Hoch"
+
+msgctxt "#30026"
+msgid "Use ServiceAPI (mad props to @Rechi)"
+msgstr "ServiceAPI verwenden (mad props to @Rechi)"
+
+msgctxt "#30027"
+msgid "Trailers"
+msgstr "TV-Vorschau"
+
+msgctxt "#30028"
+msgid "Show Autoplay Prompt"
+msgstr "Beim Öffnen Aktion nachfragen"
+
+msgctxt "#30029"
+msgid "Use Subtitles"
+msgstr "Untertitel verwenden"
+
+msgctxt "#30030"
+msgid "The broadcast hasn't started yet"
+msgstr "Livestream noch nicht gestartet"
+
+msgctxt "#30031"
+msgid "The broadcast starts at"
+msgstr "Der Livestream startet erst um"
+
+msgctxt "#30032"
+msgid "Do you want the stream to start automatically?"
+msgstr "Soll der Livesteam automatisch starten?"
+
+msgctxt "#30033"
+msgid "Waiting for the broadcast to start"
+msgstr "Warte auf Sendungsbeginn"
+
+msgctxt "#30034"
+msgid "Time till broadcast:"
+msgstr "Zeit bis zum Start:"
+
+msgctxt "#30035"
+msgid "Start the stream?"
+msgstr "Den Livestream Starten?"
+
+msgctxt "#30037"
+msgid "Blacklist"
+msgstr "Ausgeblendete Sendungen"
+
+msgctxt "#30038"
+msgid "# Blacklist"
+msgstr "# "
+
+msgctxt "#30040"
+msgid "# Remove %s from the Blacklist #"
+msgstr "# %s von der Liste entfernen #"
+
+msgctxt "#30042"
+msgid " #"
+msgstr "ausblenden #"
+
+msgctxt "#30043"
+msgid "Use Blacklist Feature"
+msgstr "\"Sendungen ausblenden\" aktivieren"
+
+msgctxt "#30044"
+msgid "HD"
+msgstr "Sehr Hoch(HD)"
+
+msgctxt "#30045"
+msgid "The ServiceAPI is currently offline"
+msgstr "Die ServiceAPI ist zurzeit Offline"
+
+msgctxt "#30046"
+msgid "Switch back to HTML Parsing in the Addon Settings"
+msgstr "Deaktivieren Sie die Option in den Einstellungen"
+
+msgctxt "#30047"
+msgid "Play Video"
+msgstr "Video abspielen"
+
+msgctxt "#30048"
+msgid "Do you want the playlist to start immediately?"
+msgstr "Soll die Playlist sofort gestartet werden?"
+
+msgctxt "#30049"
+msgid "Archive"
+msgstr "Archiv"
+
+msgctxt "#30050"
+msgid "An Error occured while loading the selected playlist"
+msgstr "Die Playlist konnte nicht abgespielt werden."
+
+msgctxt "#30051"
+msgid "Error"
+msgstr "Fehler"
+
+msgctxt "#30052"
+msgid "This Video is offline"
+msgstr "Dieses Video ist offline"
+
+msgctxt "#30053"
+msgid "Adaptive"
+msgstr "Adaptiv"
+
+msgctxt "#30054"
+msgid "Stream Method"
+msgstr "Stream Methode"
+
+msgctxt "#30055"
+msgid "HLS"
+msgstr ""
+
+msgctxt "#30056"
+msgid "Enable Progressive Streaming Method"
+msgstr "Progressive Streaming aktivieren"
+
+msgctxt "#30057"
+msgid "In Focus"
+msgstr "Im Fokus"
+
+msgctxt "#30058"
+msgid "Show 'Play Chapters'"
+msgstr "'Kapitel abspielen' anzeigen"
+
+msgctxt "#30059"
+msgid "Play Full Video"
+msgstr "Ganzes Video abspielen"
+
+msgctxt "#30060"
+msgid "Play Chapters"
+msgstr "Kapitel abspielen"
+
+msgctxt "#30061"
+msgid "Show Full Livestream Schedule"
+msgstr "Livestream Programm anzeigen"
+
+msgctxt "#30062"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30063"
+msgid "Restart"
+msgstr "Restart"
+
+msgctxt "#30064"
+msgid "older than"
+msgstr "älter als"

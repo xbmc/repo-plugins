@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.2.9](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.9) (2021-06-17)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.8...v1.2.9)
+
+**Fixed bugs:**
+
+- Use MPEG-DASH stream [\#258](https://github.com/add-ons/plugin.video.vtm.go/pull/258) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.2.8](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.8) (2021-06-10)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.7...v1.2.8)

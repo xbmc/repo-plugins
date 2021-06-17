@@ -7,7 +7,6 @@ import json
 import logging
 import os
 import random
-from datetime import timedelta
 
 from resources.lib import kodiutils
 from resources.lib.vtmgo import ResolvedStream, util
@@ -38,12 +37,11 @@ class VtmGoStream:
         # We begin with asking the api about the stream info.
         video_info = self._get_video_info(stream_type, stream_id)
 
-        # Live channels are only available trough anvato
-        # if video_info.get('video').get('streamType') == 'live':
-        #     protocol = 'anvato'
-        # else:
-        #     protocol = 'dash'
-        protocol = 'anvato'
+        # Live channels are only available through anvato
+        if video_info.get('video').get('streamType') == 'live':
+            protocol = 'anvato'
+        else:
+            protocol = 'dash'
 
         # Extract the stream from our stream_info.
         stream_info = self._extract_stream_from_video_info(protocol, video_info)
@@ -67,8 +65,8 @@ class VtmGoStream:
             # https://github.com/peak3d/inputstream.adaptive/issues/286
             url = self._redirect_manifest(url)
 
-            # Delay subtitles taking into account advertisements breaks.
-            subtitles = self._delay_subtitles(subtitle_info, json_manifest)
+            # No subtitles for the live stream
+            subtitles = None
 
         else:
             # Get published urls.
@@ -88,7 +86,7 @@ class VtmGoStream:
                 url=url,
                 subtitles=subtitles,
                 license_url=license_url,
-                cookies=util.SESSION.cookies.get_dict()
+                cookies=util.SESSION.cookies.get_dict(),
             )
 
         if stream_type in ['movies', 'oneoffs']:
@@ -100,7 +98,7 @@ class VtmGoStream:
                 url=url,
                 subtitles=subtitles,
                 license_url=license_url,
-                cookies=util.SESSION.cookies.get_dict()
+                cookies=util.SESSION.cookies.get_dict(),
             )
 
         if stream_type == 'channels':
@@ -128,7 +126,7 @@ class VtmGoStream:
         :param str stream_id:
         :rtype: dict
         """
-        url = 'https://videoplayer-service.api.persgroep.cloud/config/%s/%s' % (strtype, stream_id)
+        url = 'https://videoplayer-service.dpgmedia.net/config/%s/%s' % (strtype, stream_id)
         _LOGGER.debug('Getting video info from %s', url)
         response = util.http_get(url,
                                  params={
@@ -138,7 +136,7 @@ class VtmGoStream:
                                  headers={
                                      'Accept': 'application/json',
                                      'x-api-key': self._API_KEY,
-                                     'Popcorn-SDK-Version': '4',
+                                     'Popcorn-SDK-Version': '5',
                                  })
 
         info = json.loads(response.text)
@@ -179,6 +177,7 @@ class VtmGoStream:
 
     @staticmethod
     def _download_subtitles(subtitles):
+        """ Download the subtitle file. """
         # Clean up old subtitles
         temp_dir = os.path.join(kodiutils.addon_profile(), 'temp', '')
         _, files = kodiutils.listdir(temp_dir)
@@ -201,73 +200,6 @@ class VtmGoStream:
                 webvtt_output.write(kodiutils.from_unicode(webvtt_content))
             downloaded_subtitles.append(output_file)
         return downloaded_subtitles
-
-    @staticmethod
-    def _delay_webvtt_timing(match, ad_breaks):
-        """ Delay the timing of a webvtt subtitle.
-        :type match: any
-        :type ad_breaks: list[dict]
-        :rtype str
-        """
-        sub_timings = list()
-        for timestamp in match.groups():
-            hours, minutes, seconds, millis = (int(x) for x in [timestamp[:-10], timestamp[-9:-7], timestamp[-6:-4], timestamp[-3:]])
-            sub_timings.append(timedelta(hours=hours, minutes=minutes, seconds=seconds, milliseconds=millis))
-        for ad_break in ad_breaks:
-            # time format: seconds.fraction or seconds
-            ad_break_start = timedelta(milliseconds=ad_break.get('start') * 1000)
-            ad_break_duration = timedelta(milliseconds=ad_break.get('duration') * 1000)
-            if ad_break_start < sub_timings[0]:
-                for idx, item in enumerate(sub_timings):
-                    sub_timings[idx] += ad_break_duration
-        for idx, item in enumerate(sub_timings):
-            hours, remainder = divmod(item.seconds, 3600)
-            minutes, seconds = divmod(remainder, 60)
-            millis = item.microseconds // 1000
-            sub_timings[idx] = '%02d:%02d:%02d,%03d' % (hours, minutes, seconds, millis)
-        delayed_webvtt_timing = '\n{} --> {} '.format(sub_timings[0], sub_timings[1])
-        return delayed_webvtt_timing
-
-    def _delay_subtitles(self, subtitles, json_manifest):
-        """ Modify the subtitles timings to account for ad breaks.
-        :type subtitles: list[dict]
-        :type json_manifest: dict
-        :rtype list[str]
-        """
-        # Clean up old subtitles
-        temp_dir = os.path.join(kodiutils.addon_profile(), 'temp', '')
-        _, files = kodiutils.listdir(temp_dir)
-        if files:
-            for item in files:
-                kodiutils.delete(temp_dir + kodiutils.to_unicode(item))
-
-        # Return if there are no subtitles available
-        if not subtitles:
-            return None
-
-        import re
-        if not kodiutils.exists(temp_dir):
-            kodiutils.mkdirs(temp_dir)
-
-        ad_breaks = list()
-        delayed_subtitles = list()
-        webvtt_timing_regex = re.compile(r'\n(\d{2}:\d{2}:\d{2}\.\d{3}) --> (\d{2}:\d{2}:\d{2}\.\d{3})\s')
-
-        # Get advertising breaks info from json manifest
-        cues = json_manifest.get('interstitials').get('cues')
-        for cue in cues:
-            ad_breaks.append(
-                dict(start=cue.get('start'), duration=cue.get('break_duration'))
-            )
-
-        for subtitle in subtitles:
-            output_file = temp_dir + subtitle.get('name')
-            webvtt_content = util.http_get(subtitle.get('url')).text
-            webvtt_content = webvtt_timing_regex.sub(lambda match: self._delay_webvtt_timing(match, ad_breaks), webvtt_content)
-            with kodiutils.open_file(output_file, 'w') as webvtt_output:
-                webvtt_output.write(kodiutils.from_unicode(webvtt_content))
-            delayed_subtitles.append(output_file)
-        return delayed_subtitles
 
     def _anvato_get_stream_info(self, anvato_info, stream_info):
         """ Get the stream info from anvato.
@@ -301,7 +233,7 @@ class VtmGoStream:
                                       "content": {
                                           "mcp_video_id": anvato_info['video'],
                                       },
-                                      "sdkver": "5.0.39",
+                                      "sdkver": "5.0.65_a",
                                       "user": {
                                           "adobepass": {
                                               "err_msg": "",
@@ -343,26 +275,14 @@ class VtmGoStream:
         return ''.join(random.choice(letters) for i in range(length))
 
     @staticmethod
-    def _download_text(url):
-        """ Download a file as text.
-        :type url: str
-        :rtype str
-        """
-        _LOGGER.debug('Downloading text from %s', url)
-        response = util.http_get(url)
-        if response.status_code != 200:
-            raise Exception('Error %s.' % response.status_code)
-
-        return response.text
-
-    def _download_manifest(self, url):
+    def _download_manifest(url):
         """ Download the MPEG DASH manifest.
         :type url: str
         :rtype dict
         """
-        download = self._download_text(url)
+        response = util.http_get(url)
         try:
-            decoded = json.loads(download)
+            decoded = json.loads(response.text)
             if decoded.get('master_m3u8'):
                 _LOGGER.debug('Followed redirection from %s to %s', url, decoded.get('master_m3u8'))
                 return decoded
@@ -372,7 +292,8 @@ class VtmGoStream:
         # Fallback to the url like we have it
         return dict(master_m3u8=url)
 
-    def _redirect_manifest(self, url):
+    @staticmethod
+    def _redirect_manifest(url):
         """ Follow the Location tag if it is found.
         :type url: str
         :rtype str
@@ -380,9 +301,9 @@ class VtmGoStream:
         import re
 
         # Follow when a <Location>url</Location> tag is found.
-        # https://github.com/peak3d/inputstream.adaptive/issues/286
-        download = self._download_text(url)
-        matches = re.search(r"<Location>([^<]+)</Location>", download)
+        # https://github.com/xbmc/inputstream.adaptive/issues/286
+        response = util.http_get(url)
+        matches = re.search(r"<Location>([^<]+)</Location>", response.text)
         if matches:
             _LOGGER.debug('Followed redirection from %s to %s', url, matches.group(1))
             return matches.group(1)

@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.livestream" name="Livestream" version="2017.4.3" provider-name="eracknaphobia">
+<addon id="plugin.video.livestream" name="Livestream" version="2021.6.16" provider-name="eracknaphobia">
   <requires>
-   <import addon="xbmc.python" version="2.19.0"/>      
+    <import addon="xbmc.python" version="2.19.0"/>
+    <import addon="script.module.requests" />
+    <import addon="script.module.kodi-six" />
   </requires>
   <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>video</provides>
   </extension>  
   <extension point="xbmc.addon.metadata">    
     <platform>all</platform>
-    <summary lang="en">Livestream.com Videos</summary>
-    <description lang="en">Livestream, formerly known as Mogulus, is a live streaming video platform that allows users to view and broadcast video content using a camera and a computer through the internet.</description>
+    <summary lang="en_GB">Livestream.com Videos</summary>
+    <description lang="en_GB">Livestream, formerly known as Mogulus, is a live streaming video platform that allows users to view and broadcast video content using a camera and a computer through the internet.</description>    
     <language>en</language>
     <platform>all</platform>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <news>
+        - Matrix compatibility updates
+        - Code clean up
+    </news>
+    <license>GPL-2.0-or-later</license>
     <forum>http://forum.kodi.tv/showthread.php?tid=230355</forum>
     <website>https://livestream.com/</website>
     <source>https://github.com/eracknaphobia/plugin.video.livestream</source>
+    <assets>
+        <icon>icon.png</icon>
+        <fanart>fanart.jpg</fanart>
+    </assets>
   </extension>
 </addon>

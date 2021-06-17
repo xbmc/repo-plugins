@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
   <!--Login-->
-  <category label="100">    
-    <setting id="username" type="text" label="140" default=""/>
-    <setting id="password" type="text" label="150" option="hidden" default=""/>
-    <setting id="auto_play" type="bool" label="160" default="false"/>
+  <category label="30100">
+    <setting id="username" type="text" label="30140" default=""/>
+    <setting id="password" type="text" label="30150" option="hidden" default=""/>
   </category>
 </settings>

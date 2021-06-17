@@ -108,7 +108,7 @@ class Player:
             elif category == 'episodes':
                 info_dict.update({'mediatype': 'episode'})
 
-                # There is no direct API to get episode details, so we go trough the cached program details
+                # There is no direct API to get episode details, so we go through the cached program details
                 program = self._vtm_go.get_program(resolved_stream.program_id)
                 if program:
                     episode_details = self._vtm_go.get_episode_from_program(program, item)
@@ -144,7 +144,7 @@ class Player:
             # This allows to play some programs that don't have metadata (yet).
             pass
 
-        # If we have enabled the Manifest proxy, route the call trough that.
+        # If we have enabled the Manifest proxy, route the call through that.
         if category in ['movies', 'oneoffs', 'episodes'] and kodiutils.get_setting_bool('manifest_proxy'):
             try:  # Python 3
                 from urllib.parse import urlencode

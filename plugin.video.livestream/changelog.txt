@@ -1,0 +1,54 @@
+2017.4.3
+- Added Search History
+- Updated icon image
+
+2017.4.2
+- Updated api variables
+- Improved following section
+- Login errors now shown in dialog to user
+- Code clean up
+
+
+2016.3.29
+- Replaced Live & Upcoming with Browse by Category section (ex. Category (Number of live events))
+- Renamed My Channels to Following
+- Added Manually Enter list item, which lets you enter the account & event id you wish to watch
+- Fixed bug causing channels not to display if event icon was missing
+
+v2016.1.8
+- Bumped kodi python version
+
+v2015.11.12
+- Bug fix
+
+v2015.10.21
+- Get all feeds from event
+
+v2015.10.2
+- Added play best stream automatically setting
+- Changed code to accommodate for 1 or more streams per event for both live and archive
+- Added description to stream info
+
+v2015.9.22
+- Removed Search Archive
+- Search now has the ability to list events, accounts and videos separately
+- When selecting an account videos are separated into Upcoming and Past events
+
+v2015.9.21
+- Fix for live & archive search errors
+
+v2015.8.13
+- Added Search Archive Feature
+- Label videos as episodes and gave them air dates where applicable
+- Imporved stream fetching ability
+
+v2015.6.30
+- Made titles more descriptive
+- Alphabetic sorting (Live files first, then upcoming)
+- Disabled caching of listings
+
+v2015.6.26
+- Added search ability
+
+v0.0.1
+- Initial version

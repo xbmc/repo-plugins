@@ -45,7 +45,7 @@ If you need help you can consult this resources:
 
 If you are reporting an issue or asking for support you can go to the [ISSUES](https://github.com/arvvoid/plugin.video.hbogoeu/issues) section.
 
-Please use the provided templates and provide all asked information, including [full kodi debug logs](https://kodi.wiki/view/Log_file/Easy) otherwise its hard or impossible to help or identify and fix the problem.
+Please use the provided templates and provide all asked information, including [full kodi debug logs](https://github.com/arvvoid/plugin.video.hbogoeu/wiki/Debug-log) otherwise its hard or impossible to help or identify and fix the problem.
 
 
 ## Change Log

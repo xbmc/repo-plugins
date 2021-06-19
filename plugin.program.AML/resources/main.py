@@ -13,7 +13,7 @@
 
 # Advanced MAME Launcher main script file.
 
-# First include modules in this package. 
+# First include modules in this package.
 # Then include Kodi modules.
 # Finally include standard library modules.
 
@@ -55,31 +55,40 @@ else:
 class Configuration:
     def __init__(self):
         # --- Kodi-related variables and data ---
-        # Addon object (used to access settings).
-        self.__addon__         = xbmcaddon.Addon()
-        self.__addon_id__      = self.__addon__.getAddonInfo('id')
-        self.__addon_name__    = self.__addon__.getAddonInfo('name')
-        self.__addon_version__ = self.__addon__.getAddonInfo('version')
-        self.__addon_author__  = self.__addon__.getAddonInfo('author')
-        self.__addon_profile__ = self.__addon__.getAddonInfo('profile')
-        self.__addon_type__    = self.__addon__.getAddonInfo('type')
+        # TODO Use this instead of the bottom deprecated code.
+        # Change self.addon.info_id with self.addon.info_id
+        self.addon = kodi_addon_obj()
+
+        # Former global variables
+        self.settings = {}
+        self.base_url = ''
+        self.addon_handle = 0
+        self.content_type = ''
+
+        # Map of AEL artwork types to Kodi standard types,
+        self.mame_icon = ''
+        self.mame_fanart = ''
+        self.SL_icon = ''
+        self.SL_fanart = ''
 
         # --- File and directory names ---
-        self.HOME_DIR         = FileName('special://home')
-        self.PROFILE_DIR      = FileName('special://profile')
-        self.ADDON_CODE_DIR   = self.HOME_DIR.pjoin('addons/' + self.__addon_id__)
-        self.ADDON_DATA_DIR   = self.PROFILE_DIR.pjoin('addon_data/' + self.__addon_id__)
-        self.ICON_FILE_PATH   = self.ADDON_CODE_DIR.pjoin('media/icon.png')
+        self.HOME_DIR = FileName('special://home')
+        self.PROFILE_DIR = FileName('special://profile')
+        self.ADDONS_DATA_DIR = FileName('special://profile/addon_data')
+        self.ADDON_DATA_DIR = self.ADDONS_DATA_DIR.pjoin(self.addon.info_id)
+        self.ADDONS_CODE_DIR = self.HOME_DIR.pjoin('addons')
+        self.ADDON_CODE_DIR = self.ADDONS_CODE_DIR.pjoin(self.addon.info_id)
+        self.ICON_FILE_PATH = self.ADDON_CODE_DIR.pjoin('media/icon.png')
         self.FANART_FILE_PATH = self.ADDON_CODE_DIR.pjoin('media/fanart.jpg')
 
         # MAME stdout/strderr files.
-        self.MAME_STDOUT_PATH     = self.ADDON_DATA_DIR.pjoin('log_stdout.log')
-        self.MAME_STDERR_PATH     = self.ADDON_DATA_DIR.pjoin('log_stderr.log')
+        self.MAME_STDOUT_PATH = self.ADDON_DATA_DIR.pjoin('log_stdout.log')
+        self.MAME_STDERR_PATH = self.ADDON_DATA_DIR.pjoin('log_stderr.log')
         self.MAME_STDOUT_VER_PATH = self.ADDON_DATA_DIR.pjoin('log_version_stdout.log')
         self.MAME_STDERR_VER_PATH = self.ADDON_DATA_DIR.pjoin('log_version_stderr.log')
-        self.MAME_OUTPUT_PATH     = self.ADDON_DATA_DIR.pjoin('log_output.log')
-        self.MONO_FONT_PATH       = self.ADDON_CODE_DIR.pjoin('fonts/Inconsolata.otf')
-        self.CUSTOM_FILTER_PATH   = self.ADDON_CODE_DIR.pjoin('filters/AML-MAME-filters.xml')
+        self.MAME_OUTPUT_PATH = self.ADDON_DATA_DIR.pjoin('log_output.log')
+        self.MONO_FONT_PATH = self.ADDON_CODE_DIR.pjoin('fonts/Inconsolata.otf')
+        self.CUSTOM_FILTER_PATH = self.ADDON_CODE_DIR.pjoin('filters/AML-MAME-filters.xml')
 
         # Addon control databases.
         self.MAME_XML_PATH = self.ADDON_DATA_DIR.pjoin('MAME.xml')
@@ -255,23 +264,19 @@ class Configuration:
         self.REPORT_DEBUG_MAME_COLLISIONS_PATH = self.REPORTS_DIR.pjoin('debug_MAME_collisions.txt')
         self.REPORT_DEBUG_SL_COLLISIONS_PATH = self.REPORTS_DIR.pjoin('debug_SL_collisions.txt')
 
-        # --- Former global variables ---
-        self.settings = {}
-        self.base_url = ''
-        self.addon_handle = 0
-        self.content_type = ''
-        # Map of AEL artwork types to Kodi standard types,
-        self.mame_icon = ''
-        self.mame_fanart = ''
-        self.SL_icon = ''
-        self.SL_fanart = ''
-
 # --- Global variables ---
 # Use functional programming as much as possible and avoid global variables.
-# g_base_url must be a global variable because it is used in the misc_url_*() functions.
+# g_base_url must be a global variable because it is used in the misc_url_*() functions
+# for speed reasons.
 g_base_url = ''
+
 # Module loading time. This variable is read only (only modified here).
 g_time_str = text_type(datetime.datetime.now())
+
+# Do not change context menus with listitem.addContextMenuItems() in Kiosk mode.
+# In other words, change the CM if Kiosk mode is disabled.
+# By default kiosk mode is disabled.
+g_kiosk_mode_disabled = True
 
 # ---------------------------------------------------------------------------------------------
 # This is the plugin entry point.
@@ -295,16 +300,25 @@ def run_plugin(addon_argv):
     set_log_level(cfg.settings['log_level'])
 
     # --- Some debug stuff for development ---
-    log_debug('---------- Called AML Main::run_plugin() constructor ----------')
-    log_debug('sys.platform    {}'.format(sys.platform))
-    log_debug('Python version  ' + sys.version.replace('\n', ''))
-    log_debug('__a_id__        {}'.format(cfg.__addon_id__))
-    log_debug('__a_version__   {}'.format(cfg.__addon_version__))
-    # log_debug('ADDON_DATA_DIR {}'.format(cfg.ADDON_DATA_DIR.getPath()))
-    for i in range(len(addon_argv)): log_debug('addon_argv[{}] = "{}"'.format(i, addon_argv[i]))
-    # Timestamp to see if this submodule is reinterpreted or not (interpreter uses a cached instance).
-    log_debug('submodule global timestamp {}'.format(g_time_str))
-    # log_debug('recursionlimit {}'.format(sys.getrecursionlimit()))
+    log_debug('-------------------- Called AML run_plugin() --------------------')
+    log_debug('sys.platform   "{}"'.format(sys.platform))
+    # log_debug('WindowId       "{}"'.format(xbmcgui.getCurrentWindowId()))
+    # log_debug('WindowName     "{}"'.format(xbmc.getInfoLabel('Window.Property(xmlfile)')))
+    log_debug('Python version "' + sys.version.replace('\n', '') + '"')
+    # log_debug('addon_name     "{}"'.format(cfg.addon.info_name))
+    log_debug('addon_id       "{}"'.format(cfg.addon.info_id))
+    log_debug('addon_version  "{}"'.format(cfg.addon.info_version))
+    # log_debug('addon_author   "{}"'.format(cfg.addon.info_author))
+    # log_debug('addon_profile  "{}"'.format(cfg.addon.info_profile))
+    # log_debug('addon_type     "{}"'.format(cfg.addon.info_type))
+    for i in range(len(addon_argv)): log_debug('addon_argv[{}] "{}"'.format(i, addon_argv[i]))
+    # log_debug('PLUGIN_DATA_DIR OP "{}"'.format(cfg.PLUGIN_DATA_DIR.getOriginalPath()))
+    # log_debug('PLUGIN_DATA_DIR  P "{}"'.format(cfg.PLUGIN_DATA_DIR.getPath()))
+    # log_debug('ADDON_CODE_DIR OP "{}"'.format(cfg.ADDON_CODE_DIR.getOriginalPath()))
+    # log_debug('ADDON_CODE_DIR  P "{}"'.format(cfg.ADDON_CODE_DIR.getPath()))
+
+    # Print Python module path.
+    # for i in range(len(sys.path)): log_debug('sys.path[{}] "{}"'.format(i, text_type(sys.path[i])))
 
     # --- Secondary setting processing ---
     get_settings_log_enabled(cfg)
@@ -313,6 +327,9 @@ def run_plugin(addon_argv):
 
     # --- Playground and testing code ---
     # kodi_get_screensaver_mode()
+
+    # Kiosk mode for skins.
+    g_kiosk_mode_disabled = xbmc.getCondVisibility('!Skin.HasSetting(KioskMode.Enabled)')
 
     # --- Addon data paths creation ---
     if not cfg.ADDON_DATA_DIR.exists(): cfg.ADDON_DATA_DIR.makedirs()
@@ -392,12 +409,12 @@ def run_plugin(addon_argv):
         command = args['command'][0]
 
         # Commands used by skins to render items of the addon root menu.
-        if   command == 'SKIN_SHOW_FAV_SLOTS':       render_skin_fav_slots()
-        elif command == 'SKIN_SHOW_MAIN_FILTERS':    render_skin_main_filters()
-        elif command == 'SKIN_SHOW_BINARY_FILTERS':  render_skin_binary_filters()
-        elif command == 'SKIN_SHOW_CATALOG_FILTERS': render_skin_catalog_filters()
-        elif command == 'SKIN_SHOW_DAT_SLOTS':       render_skin_dat_slots()
-        elif command == 'SKIN_SHOW_SL_FILTERS':      render_skin_SL_filters()
+        if   command == 'SKIN_SHOW_FAV_SLOTS':       render_skin_fav_slots(cfg)
+        elif command == 'SKIN_SHOW_MAIN_FILTERS':    render_skin_main_filters(cfg)
+        elif command == 'SKIN_SHOW_BINARY_FILTERS':  render_skin_binary_filters(cfg)
+        elif command == 'SKIN_SHOW_CATALOG_FILTERS': render_skin_catalog_filters(cfg)
+        elif command == 'SKIN_SHOW_DAT_SLOTS':       render_skin_dat_slots(cfg)
+        elif command == 'SKIN_SHOW_SL_FILTERS':      render_skin_SL_filters(cfg)
 
         # Auxiliar commands from parent machine context menu
         # Not sure if this will cause problems with the concurrent protected code once it's implemented.
@@ -610,7 +627,12 @@ def get_settings(cfg):
 
     # --- Advanced ---
     settings['media_state_action'] = kodi_get_int_setting(cfg, 'media_state_action')
-    settings['delay_tempo'] = kodi_get_int_setting(cfg, 'delay_tempo')
+    if ADDON_RUNNING_PYTHON_2:
+        settings['delay_tempo'] = kodi_get_float_setting_as_int(cfg, 'delay_tempo')
+    elif ADDON_RUNNING_PYTHON_3:
+        settings['delay_tempo'] = kodi_get_int_setting(cfg, 'delay_tempo')
+    else:
+        raise TypeError('Undefined Python runtime version.')
     settings['suspend_audio_engine'] = kodi_get_bool_setting(cfg, 'suspend_audio_engine')
     settings['suspend_screensaver'] = kodi_get_bool_setting(cfg, 'suspend_screensaver')
     settings['toggle_window'] = kodi_get_bool_setting(cfg, 'toggle_window')
@@ -634,8 +656,8 @@ def get_settings(cfg):
 # Called after log is enabled. Process secondary settings.
 #
 def get_settings_log_enabled(cfg):
-    # Convenience data
-    cfg.__addon_version_int__ = misc_addon_version_str_to_int(cfg.__addon_version__)
+    # Convenience data.
+    cfg.addon_version_int = misc_addon_version_str_to_int(cfg.addon.info_version)
 
     # Additional settings.
     cfg.settings['op_mode'] = OP_MODE_LIST[cfg.settings['op_mode_raw']]
@@ -657,11 +679,14 @@ def get_settings_log_enabled(cfg):
         raise TypeError('Wrong cfg.settings["op_mode"] = {}'.format(cfg.settings['op_mode']))
 
 # ---------------------------------------------------------------------------------------------
-# Misc URL building functions. Placed here because these functions are used for building
-# global read-only variables using in the addon.
-# NOTE '&' must be scaped to '%26' in all URLs
+# URL building functions.
+# g_base_url is plugin://plugin.program.AML/
+# A class URLs: plugin://plugin.program.AML/?command=xxxxx
+# B class URLs: RunPlugin(plugin://plugin.program.AML/?command=xxxxx)
+# A class URLs are used in xbmcplugin.addDirectoryItem()
+# B class URLs are used in listitem.addContextMenuItems()
+# '&' must be scaped to '%26' in all URLs
 # ---------------------------------------------------------------------------------------------
-# Functions used in xbmcplugin.addDirectoryItem()
 def misc_url(command):
     command_escaped = command.replace('&', '%26')
 
@@ -697,7 +722,9 @@ def misc_url_4_arg(arg_name_1, arg_value_1, arg_name_2, arg_value_2, arg_name_3,
         arg_name_1, arg_value_1_escaped, arg_name_2, arg_value_2_escaped,
         arg_name_3, arg_value_3_escaped,arg_name_4, arg_value_4_escaped)
 
-# Functions used in context menus, in listitem.addContextMenuItems()
+# Kodi Matrix do not support XBMC.RunPlugin() anymore.
+# Leia can run RunPlugin() commands w/o XBMC prefix.
+# What about Krypton?
 def misc_url_RunPlugin(command):
     command_esc = command.replace('&', '%26')
 
@@ -1186,7 +1213,7 @@ def render_root_list(cfg):
     rd = set_render_root_data()
 
     # MAME machine count.
-    cache_index_dic = utils_load_JSON_file_dic(cfg.CACHE_INDEX_PATH.getPath())
+    cache_index_dic = utils_load_JSON_file(cfg.CACHE_INDEX_PATH.getPath())
 
     # Do not crash if cache_index_dic is corrupted or has missing fields (may happen in
     # upgrades). This function must never crash because the user must have always access to
@@ -1247,7 +1274,7 @@ def render_root_list(cfg):
 
     # --- SL item count ---
     if cfg.settings['global_enable_SL']:
-        SL_index_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
+        SL_index_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
         try:
             num_SL_all = 0
             num_SL_ROMs = 0
@@ -1464,14 +1491,15 @@ def render_skin_fav_slots(cfg):
     try:
         rd = set_render_root_data()
         # Remove special markers (first and last character)
-        rsCM = root_special_CM.copy()
-        for key, value in rsCM.items(): value[0] = value[0][1:-1]
-        render_root_category_row_custom_CM(*rd['rsCM']['MAME_Favs'])
-        render_root_category_row_custom_CM(*rd['rsCM']['MAME_Most'])
-        render_root_category_row_custom_CM(*rd['rsCM']['MAME_Recent'])
-        render_root_category_row_custom_CM(*rd['rsCM']['SL_Favs'])
-        render_root_category_row_custom_CM(*rd['rsCM']['SL_Most'])
-        render_root_category_row_custom_CM(*rd['rsCM']['SL_Recent'])
+        rsCM = rd.copy()
+        for key in rsCM['root_special_CM']:
+            rsCM['root_special_CM'][key][0] = rsCM['root_special_CM'][key][0][1:-1]
+        render_root_category_row_custom_CM(cfg, *rsCM['root_special_CM']['MAME_Favs'])
+        render_root_category_row_custom_CM(cfg, *rsCM['root_special_CM']['MAME_Most'])
+        render_root_category_row_custom_CM(cfg, *rsCM['root_special_CM']['MAME_Recent'])
+        render_root_category_row_custom_CM(cfg, *rsCM['root_special_CM']['SL_Favs'])
+        render_root_category_row_custom_CM(cfg, *rsCM['root_special_CM']['SL_Most'])
+        render_root_category_row_custom_CM(cfg, *rsCM['root_special_CM']['SL_Recent'])
     except:
         log_error('Excepcion in render_skin_fav_slots()')
     xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -1479,12 +1507,12 @@ def render_skin_fav_slots(cfg):
 def render_skin_main_filters(cfg):
     try:
         rd = set_render_root_data()
-        render_root_catalog_row(*rd['root_Main']['Main_Normal'])
-        render_root_catalog_row(*rd['root_Main']['Main_Unusual'])
-        render_root_catalog_row(*rd['root_Main']['Main_NoCoin'])
-        render_root_catalog_row(*rd['root_Main']['Main_Mechanical'])
-        render_root_catalog_row(*rd['root_Main']['Main_Dead'])
-        render_root_catalog_row(*rd['root_Main']['Main_Devices'])
+        render_root_catalog_row(cfg, *rd['root_Main']['Main_Normal'])
+        render_root_catalog_row(cfg, *rd['root_Main']['Main_Unusual'])
+        render_root_catalog_row(cfg, *rd['root_Main']['Main_NoCoin'])
+        render_root_catalog_row(cfg, *rd['root_Main']['Main_Mechanical'])
+        render_root_catalog_row(cfg, *rd['root_Main']['Main_Dead'])
+        render_root_catalog_row(cfg, *rd['root_Main']['Main_Devices'])
     except:
         log_error('Excepcion in render_skin_main_filters()')
     xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -1492,10 +1520,10 @@ def render_skin_main_filters(cfg):
 def render_skin_binary_filters(cfg):
     try:
         rd = set_render_root_data()
-        render_root_catalog_row(*rd['root_Binary']['BIOS'])
-        render_root_catalog_row(*rd['root_Binary']['CHD'])
-        render_root_catalog_row(*rd['root_Binary']['Samples'])
-        render_root_catalog_row(*rd['root_Binary']['SoftwareLists'])
+        render_root_catalog_row(cfg, *rd['root_Binary']['BIOS'])
+        render_root_catalog_row(cfg, *rd['root_Binary']['CHD'])
+        render_root_catalog_row(cfg, *rd['root_Binary']['Samples'])
+        render_root_catalog_row(cfg, *rd['root_Binary']['SoftwareLists'])
     except:
         log_error('Excepcion in render_skin_binary_filters()')
     xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -1504,41 +1532,41 @@ def render_skin_catalog_filters(cfg):
     try:
         # A mechanism to render only configured filters must be developed.
         rd = set_render_root_data()
-        render_root_category_row(*rd['root_categories']['Catver'])
-        render_root_category_row(*rd['root_categories']['Catlist'])
-        render_root_category_row(*rd['root_categories']['Genre'])
-        render_root_category_row(*rd['root_categories']['Category'])
-        render_root_category_row(*rd['root_categories']['NPlayers'])
-        render_root_category_row(*rd['root_categories']['Bestgames'])
-        render_root_category_row(*rd['root_categories']['Series'])
-        render_root_category_row(*rd['root_categories']['Alltime'])
-        render_root_category_row(*rd['root_categories']['Artwork'])
-        render_root_category_row(*rd['root_categories']['Version'])
-        render_root_category_row(*rd['root_categories']['Controls_Expanded'])
-        render_root_category_row(*rd['root_categories']['Controls_Compact'])
-        render_root_category_row(*rd['root_categories']['Devices_Expanded'])
-        render_root_category_row(*rd['root_categories']['Devices_Compact'])
-        render_root_category_row(*rd['root_categories']['Display_Type'])
-        render_root_category_row(*rd['root_categories']['Display_VSync'])
-        render_root_category_row(*rd['root_categories']['Display_Resolution'])
-        render_root_category_row(*rd['root_categories']['CPU'])
-        render_root_category_row(*rd['root_categories']['Driver'])
-        render_root_category_row(*rd['root_categories']['Manufacturer'])
-        render_root_category_row(*rd['root_categories']['ShortName'])
-        render_root_category_row(*rd['root_categories']['LongName'])
-        render_root_category_row(*rd['root_categories']['BySL'])
-        render_root_category_row(*rd['root_categories']['Year'])
+        render_root_category_row(cfg, *rd['root_categories']['Catver'])
+        render_root_category_row(cfg, *rd['root_categories']['Catlist'])
+        render_root_category_row(cfg, *rd['root_categories']['Genre'])
+        render_root_category_row(cfg, *rd['root_categories']['Category'])
+        render_root_category_row(cfg, *rd['root_categories']['NPlayers'])
+        render_root_category_row(cfg, *rd['root_categories']['Bestgames'])
+        render_root_category_row(cfg, *rd['root_categories']['Series'])
+        render_root_category_row(cfg, *rd['root_categories']['Alltime'])
+        render_root_category_row(cfg, *rd['root_categories']['Artwork'])
+        render_root_category_row(cfg, *rd['root_categories']['Version'])
+        render_root_category_row(cfg, *rd['root_categories']['Controls_Expanded'])
+        render_root_category_row(cfg, *rd['root_categories']['Controls_Compact'])
+        render_root_category_row(cfg, *rd['root_categories']['Devices_Expanded'])
+        render_root_category_row(cfg, *rd['root_categories']['Devices_Compact'])
+        render_root_category_row(cfg, *rd['root_categories']['Display_Type'])
+        render_root_category_row(cfg, *rd['root_categories']['Display_VSync'])
+        render_root_category_row(cfg, *rd['root_categories']['Display_Resolution'])
+        render_root_category_row(cfg, *rd['root_categories']['CPU'])
+        render_root_category_row(cfg, *rd['root_categories']['Driver'])
+        render_root_category_row(cfg, *rd['root_categories']['Manufacturer'])
+        render_root_category_row(cfg, *rd['root_categories']['ShortName'])
+        render_root_category_row(cfg, *rd['root_categories']['LongName'])
+        render_root_category_row(cfg, *rd['root_categories']['BySL'])
+        render_root_category_row(cfg, *rd['root_categories']['Year'])
     except:
         log_error('Excepcion in render_skin_catalog_filters()')
     xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
 
-def render_skin_dat_slots():
+def render_skin_dat_slots(cfg):
     try:
         rd = set_render_root_data()
-        render_root_category_row(*rd['root_special']['History'])
-        render_root_category_row(*rd['root_special']['MAMEINFO'])
-        render_root_category_row(*rd['root_special']['Gameinit'])
-        render_root_category_row(*rd['root_special']['Command'])
+        render_root_category_row(cfg, *rd['root_special']['History'])
+        render_root_category_row(cfg, *rd['root_special']['MAMEINFO'])
+        render_root_category_row(cfg, *rd['root_special']['Gameinit'])
+        render_root_category_row(cfg, *rd['root_special']['Command'])
     except:
         log_error('Excepcion in render_skin_dat_slots()')
     xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -1549,11 +1577,11 @@ def render_skin_SL_filters(cfg):
         return
     try:
         rd = set_render_root_data()
-        render_root_category_row(*rd['root_SL']['SL'])
-        render_root_category_row(*rd['root_SL']['SL_ROM'])
-        render_root_category_row(*rd['root_SL']['SL_ROM_CHD'])
-        render_root_category_row(*rd['root_SL']['SL_CHD'])
-        render_root_category_row(*rd['root_SL']['SL_empty'])
+        render_root_category_row(cfg, *rd['root_SL']['SL'])
+        render_root_category_row(cfg, *rd['root_SL']['SL_ROM'])
+        render_root_category_row(cfg, *rd['root_SL']['SL_ROM_CHD'])
+        render_root_category_row(cfg, *rd['root_SL']['SL_CHD'])
+        render_root_category_row(cfg, *rd['root_SL']['SL_empty'])
     except:
         log_error('Excepcion in render_skin_SL_filters()')
     xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -1579,7 +1607,7 @@ def render_root_catalog_row(cfg, catalog_name, catalog_key, display_name, plot_s
         ('Setup addon', misc_url_1_arg_RunPlugin('command', 'SETUP_PLUGIN')),
         ('Utilities', URL_utils),
         ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__)),
+        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id)),
     ]
     listitem.addContextMenuItems(commands)
     URL = misc_url_2_arg('catalog', catalog_name, 'category', catalog_key)
@@ -1603,7 +1631,7 @@ def render_root_category_row(cfg, display_name, plot_str, root_URL, color_str = 
     commands = [
         ('Setup addon', misc_url_1_arg_RunPlugin('command', 'SETUP_PLUGIN')),
         ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__)),
+        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id)),
     ]
     listitem.addContextMenuItems(commands)
     xbmcplugin.addDirectoryItem(cfg.addon_handle, root_URL, listitem, isFolder = True)
@@ -1623,7 +1651,7 @@ def render_root_category_row_custom_CM(cfg, display_name, plot_str, root_URL, cm
     commands = [
         ('Setup addon', misc_url_1_arg_RunPlugin('command', 'SETUP_PLUGIN')),
         ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__)),
+        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id)),
     ]
     cmenu_list.extend(commands)
     listitem.addContextMenuItems(cmenu_list)
@@ -1648,7 +1676,7 @@ def render_Utilities_vlaunchers(cfg):
     # --- Common context menu for all VLaunchers ---
     common_commands = [
         ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__)),
+        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id)),
     ]
 
     # --- Check MAME version ---
@@ -1714,13 +1742,13 @@ def render_Utilities_vlaunchers(cfg):
     # --- Export SL ROMs DAT file ---
     # In AML 0.9.10 only export MAME XMLs and see how it goes. SL XMLs cause more trouble
     # than MAME.
-    # listitem = aux_get_generic_listitem(cfg, 
+    # listitem = aux_get_generic_listitem(cfg,
     #     'Export SL ROMs Logiqx XML DAT file', 'Export SL ROMs Logiqx XML DAT file', commands)
     # url_str = misc_url_2_arg('command', 'EXECUTE_UTILITY', 'which', 'EXPORT_SL_ROM_DAT')
     # xbmcplugin.addDirectoryItem(cfg.addon_handle, url_str, listitem, isFolder = False)
 
     # --- Export SL CHDs DAT file ---
-    # listitem = aux_get_generic_listitem(cfg, 
+    # listitem = aux_get_generic_listitem(cfg,
     #     'Export SL CHDs Logiqx XML DAT file', 'Export SL CHDs Logiqx XML DAT file', commands)
     # url_str = misc_url_2_arg('command', 'EXECUTE_UTILITY', 'which', 'EXPORT_SL_CHD_DAT')
     # xbmcplugin.addDirectoryItem(cfg.addon_handle, url_str, listitem, isFolder = False)
@@ -1736,7 +1764,7 @@ def render_GlobalReports_vlaunchers(cfg):
     # --- Common context menu for all VLaunchers ---
     common_commands = [
         ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__)),
+        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id)),
     ]
 
     # --- View MAME last execution output --------------------------------------------------------
@@ -1983,7 +2011,7 @@ def render_catalog_list(cfg, catalog_name):
     # --- General AML plugin check ---
     # Check if databases have been built, print warning messages, etc. This function returns
     # False if no issues, True if there is issues and a dialog has been printed.
-    control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+    control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
     st_dic = kodi_new_status_dic()
     check_MAME_DB_before_rendering_catalog(cfg, st_dic, control_dic)
     if kodi_is_error_status(st_dic):
@@ -1995,7 +2023,7 @@ def render_catalog_list(cfg, catalog_name):
     set_Kodi_all_sorting_methods_and_size(cfg)
     mame_view_mode = cfg.settings['mame_view_mode']
     loading_ticks_start = time.time()
-    cache_index_dic = utils_load_JSON_file_dic(cfg.CACHE_INDEX_PATH.getPath())
+    cache_index_dic = utils_load_JSON_file(cfg.CACHE_INDEX_PATH.getPath())
     if mame_view_mode == VIEW_MODE_FLAT:
         catalog_dic = db_get_cataloged_dic_all(cfg, catalog_name)
     elif mame_view_mode == VIEW_MODE_PCLONE:
@@ -2044,7 +2072,7 @@ def render_catalog_list_row(cfg, catalog_name, catalog_key, num_machines, machin
     commands = [
         ('Utilities', URL_utils),
         ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__)),
+        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id)),
     ]
     listitem.addContextMenuItems(commands)
     URL = misc_url_2_arg('catalog', catalog_name, 'category', catalog_key)
@@ -2064,7 +2092,7 @@ def render_catalog_parent_list(cfg, catalog_name, category_name):
     # --- Load ListItem properties (Not used at the moment) ---
     # prop_key = '{} - {}'.format(catalog_name, category_name)
     # log_debug('render_catalog_parent_list() Loading props with key "{}"'.format(prop_key))
-    # mame_properties_dic = utils_load_JSON_file_dic(cfg.MAIN_PROPERTIES_PATH.getPath())
+    # mame_properties_dic = utils_load_JSON_file(cfg.MAIN_PROPERTIES_PATH.getPath())
     # prop_dic = mame_properties_dic[prop_key]
     # view_mode_property = prop_dic['vm']
 
@@ -2074,7 +2102,7 @@ def render_catalog_parent_list(cfg, catalog_name, category_name):
 
     # --- General AML plugin check ---
     # Check if databases have been built, print warning messages, etc.
-    control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+    control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
     st_dic = kodi_new_status_dic()
     check_MAME_DB_before_rendering_machines(cfg, st_dic, control_dic)
     if kodi_is_error_status(st_dic):
@@ -2095,26 +2123,26 @@ def render_catalog_parent_list(cfg, catalog_name, category_name):
     l_cataloged_dic_end = time.time()
     l_render_db_start = time.time()
     if cfg.settings['debug_enable_MAME_render_cache']:
-        cache_index_dic = utils_load_JSON_file_dic(cfg.CACHE_INDEX_PATH.getPath())
+        cache_index_dic = utils_load_JSON_file(cfg.CACHE_INDEX_PATH.getPath())
         render_db_dic = db_get_render_cache_row(cfg, cache_index_dic, catalog_name, category_name)
     else:
         log_debug('MAME machine cache disabled.')
-        render_db_dic = utils_load_JSON_file_dic(cfg.RENDER_DB_PATH.getPath())
+        render_db_dic = utils_load_JSON_file(cfg.RENDER_DB_PATH.getPath())
     l_render_db_end = time.time()
     l_assets_db_start = time.time()
     if cfg.settings['debug_enable_MAME_asset_cache']:
         if 'cache_index_dic' not in locals():
-            cache_index_dic = utils_load_JSON_file_dic(cfg.CACHE_INDEX_PATH.getPath())
+            cache_index_dic = utils_load_JSON_file(cfg.CACHE_INDEX_PATH.getPath())
         assets_db_dic = db_get_asset_cache_row(cfg, cache_index_dic, catalog_name, category_name)
     else:
         log_debug('MAME asset cache disabled.')
-        assets_db_dic = utils_load_JSON_file_dic(cfg.ASSET_DB_PATH.getPath())
+        assets_db_dic = utils_load_JSON_file(cfg.ASSET_DB_PATH.getPath())
     l_assets_db_end = time.time()
     l_pclone_dic_start = time.time()
-    main_pclone_dic = utils_load_JSON_file_dic(cfg.MAIN_PCLONE_DB_PATH.getPath())
+    main_pclone_dic = utils_load_JSON_file(cfg.MAIN_PCLONE_DB_PATH.getPath())
     l_pclone_dic_end = time.time()
     l_favs_start = time.time()
-    fav_machines = utils_load_JSON_file_dic(cfg.FAV_MACHINES_PATH.getPath())
+    fav_machines = utils_load_JSON_file(cfg.FAV_MACHINES_PATH.getPath())
     l_favs_end = time.time()
 
     # --- Compute loading times ---
@@ -2177,20 +2205,20 @@ def render_catalog_clone_list(cfg, catalog_name, category_name, parent_name):
     loading_ticks_start = time.time()
     catalog_dic = db_get_cataloged_dic_all(cfg, catalog_name)
     if cfg.settings['debug_enable_MAME_render_cache']:
-        cache_index_dic = utils_load_JSON_file_dic(cfg.CACHE_INDEX_PATH.getPath())
+        cache_index_dic = utils_load_JSON_file(cfg.CACHE_INDEX_PATH.getPath())
         render_db_dic = db_get_render_cache_row(cfg, cache_index_dic, catalog_name, category_name)
     else:
         log_debug('MAME machine cache disabled.')
-        render_db_dic = utils_load_JSON_file_dic(cfg.RENDER_DB_PATH.getPath())
+        render_db_dic = utils_load_JSON_file(cfg.RENDER_DB_PATH.getPath())
     if cfg.settings['debug_enable_MAME_asset_cache']:
         if 'cache_index_dic' not in locals():
-            cache_index_dic = utils_load_JSON_file_dic(cfg.CACHE_INDEX_PATH.getPath())
+            cache_index_dic = utils_load_JSON_file(cfg.CACHE_INDEX_PATH.getPath())
         assets_db_dic = db_get_asset_cache_row(cfg, cache_index_dic, catalog_name, category_name)
     else:
         log_debug('MAME asset cache disabled.')
-        assets_db_dic = utils_load_JSON_file_dic(cfg.ASSET_DB_PATH.getPath())
-    main_pclone_dic = utils_load_JSON_file_dic(cfg.MAIN_PCLONE_DB_PATH.getPath())
-    fav_machines = utils_load_JSON_file_dic(cfg.FAV_MACHINES_PATH.getPath())
+        assets_db_dic = utils_load_JSON_file(cfg.ASSET_DB_PATH.getPath())
+    main_pclone_dic = utils_load_JSON_file(cfg.MAIN_PCLONE_DB_PATH.getPath())
+    fav_machines = utils_load_JSON_file(cfg.FAV_MACHINES_PATH.getPath())
     loading_ticks_end = time.time()
     loading_time = loading_ticks_end - loading_ticks_start
 
@@ -2259,7 +2287,8 @@ def render_process_machines(cfg, catalog_dic, catalog_name, category_name,
 
     # --- Traverse machines ---
     r_list = []
-    for machine_name, render_name in catalog_dic[category_name].items():
+    for machine_name in catalog_dic[category_name]:
+        render_name = catalog_dic[category_name][machine_name]
         machine = render_db_dic[machine_name]
         m_assets = assets_dic[machine_name]
         if not flag_ignore_filters:
@@ -2370,7 +2399,7 @@ def render_process_machines(cfg, catalog_dic, catalog_name, category_name,
                 ('Show clones', URL_clones),
                 ('Add to MAME Favourites', URL_fav),
                 ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-                ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__)),
+                ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id)),
             ]
         else:
             commands = [
@@ -2378,7 +2407,7 @@ def render_process_machines(cfg, catalog_dic, catalog_name, category_name,
                 ('View / Audit', URL_view),
                 ('Add to MAME Favourites', URL_fav),
                 ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-                ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__)),
+                ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id)),
             ]
         r_dict['context'] = commands
 
@@ -2388,10 +2417,8 @@ def render_process_machines(cfg, catalog_dic, catalog_name, category_name,
 
     return r_list
 
-#
 # Renders a processed list of machines/ROMs. Basically, this function only calls the
 # Kodi API with the precomputed values.
-#
 def render_commit_machines(cfg, r_list):
     listitem_list = []
 
@@ -2417,8 +2444,8 @@ def render_commit_machines(cfg, r_list):
         for r_dict in r_list:
             listitem = xbmcgui.ListItem(r_dict['render_name'])
             listitem.setInfo('video', r_dict['info'])
-            for prop_name, prop_value in r_dict['props'].items():
-                listitem.setProperty(prop_name, prop_value)
+            for prop_name in r_dict['props']:
+                listitem.setProperty(prop_name, r_dict['props'][prop_name])
             listitem.setArt(r_dict['art'])
             listitem.addContextMenuItems(r_dict['context'])
             listitem_list.append((r_dict['URL'], listitem, False))
@@ -2426,16 +2453,14 @@ def render_commit_machines(cfg, r_list):
     # Add all listitems in one go.
     xbmcplugin.addDirectoryItems(cfg.addon_handle, listitem_list, len(listitem_list))
 
-#
 # Not used at the moment -> There are global display settings in addon settings for this.
-#
 def command_context_display_settings(cfg, catalog_name, category_name):
     # Load ListItem properties.
     log_debug('command_display_settings() catalog_name  "{}"'.format(catalog_name))
     log_debug('command_display_settings() category_name "{}"'.format(category_name))
     prop_key = '{} - {}'.format(catalog_name, category_name)
     log_debug('command_display_settings() Loading props with key "{}"'.format(prop_key))
-    mame_properties_dic = utils_load_JSON_file_dic(cfg.MAIN_PROPERTIES_PATH.getPath())
+    mame_properties_dic = utils_load_JSON_file(cfg.MAIN_PROPERTIES_PATH.getPath())
     prop_dic = mame_properties_dic[prop_key]
     dmode_str = 'Parents only' if prop_dic['vm'] == VIEW_MODE_NORMAL else 'Parents and clones'
 
@@ -2479,7 +2504,7 @@ def render_SL_list(cfg, catalog_name):
     log_debug('render_SL_list() catalog_name = {}\n'.format(catalog_name))
 
     # --- General AML plugin check ---
-    control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+    control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
     st_dic = kodi_new_status_dic()
     check_SL_DB_before_rendering_catalog(cfg, st_dic, control_dic)
     if kodi_is_error_status(st_dic):
@@ -2488,25 +2513,29 @@ def render_SL_list(cfg, catalog_name):
         return
 
     # --- Load Software List catalog and build render catalog ---
-    SL_main_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
+    SL_main_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
     SL_catalog_dic = {}
     if catalog_name == 'SL':
-        for SL_name, SL_dic in SL_main_catalog_dic.items():
-            SL_catalog_dic[SL_name] = SL_dic
+        for SL_name in SL_main_catalog_dic:
+            SL_catalog_dic[SL_name] = SL_main_catalog_dic[SL_name]
     elif catalog_name == 'SL_ROM':
-        for SL_name, SL_dic in SL_main_catalog_dic.items():
+        for SL_name in SL_main_catalog_dic:
+            SL_dic = SL_main_catalog_dic[SL_name]
             if SL_dic['num_with_ROMs'] > 0 and SL_dic['num_with_CHDs'] == 0:
                 SL_catalog_dic[SL_name] = SL_dic
     elif catalog_name == 'SL_CHD':
-        for SL_name, SL_dic in SL_main_catalog_dic.items():
+        for SL_name in SL_main_catalog_dic:
+            SL_dic = SL_main_catalog_dic[SL_name]
             if SL_dic['num_with_ROMs'] == 0 and SL_dic['num_with_CHDs'] > 0:
                 SL_catalog_dic[SL_name] = SL_dic
     elif catalog_name == 'SL_ROM_CHD':
-        for SL_name, SL_dic in SL_main_catalog_dic.items():
+        for SL_name in SL_main_catalog_dic:
+            SL_dic = SL_main_catalog_dic[SL_name]
             if SL_dic['num_with_ROMs'] > 0 and SL_dic['num_with_CHDs'] > 0:
                 SL_catalog_dic[SL_name] = SL_dic
     elif catalog_name == 'SL_empty':
-        for SL_name, SL_dic in SL_main_catalog_dic.items():
+        for SL_name in SL_main_catalog_dic:
+            SL_dic = SL_main_catalog_dic[SL_name]
             if SL_dic['num_with_ROMs'] == 0 and SL_dic['num_with_CHDs'] == 0:
                 SL_catalog_dic[SL_name] = SL_dic
     else:
@@ -2524,7 +2553,7 @@ def render_SL_ROMs(cfg, SL_name):
     log_debug('render_SL_ROMs() SL_name "{}"'.format(SL_name))
 
     # --- General AML plugin check ---
-    control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+    control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
     st_dic = kodi_new_status_dic()
     check_SL_DB_before_rendering_machines(cfg, st_dic, control_dic)
     if kodi_is_error_status(st_dic):
@@ -2533,21 +2562,21 @@ def render_SL_ROMs(cfg, SL_name):
         return
 
     # Load ListItem properties (Not used at the moment)
-    # SL_properties_dic = utils_load_JSON_file_dic(cfg.SL_MACHINES_PROP_PATH.getPath())
+    # SL_properties_dic = utils_load_JSON_file(cfg.SL_MACHINES_PROP_PATH.getPath())
     # prop_dic = SL_properties_dic[SL_name]
     # Global properties
     view_mode_property = cfg.settings['sl_view_mode']
     log_debug('render_SL_ROMs() view_mode_property = {}'.format(view_mode_property))
 
     # Load Software List ROMs
-    SL_PClone_dic = utils_load_JSON_file_dic(cfg.SL_PCLONE_DIC_PATH.getPath())
-    SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
+    SL_PClone_dic = utils_load_JSON_file(cfg.SL_PCLONE_DIC_PATH.getPath())
+    SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
     file_name =  SL_catalog_dic[SL_name]['rom_DB_noext'] + '_items.json'
     SL_DB_FN = cfg.SL_DB_DIR.pjoin(file_name)
     assets_file_name =  SL_catalog_dic[SL_name]['rom_DB_noext'] + '_assets.json'
     SL_asset_DB_FN = cfg.SL_DB_DIR.pjoin(assets_file_name)
-    SL_roms = utils_load_JSON_file_dic(SL_DB_FN.getPath())
-    SL_asset_dic = utils_load_JSON_file_dic(SL_asset_DB_FN.getPath())
+    SL_roms = utils_load_JSON_file(SL_DB_FN.getPath())
+    SL_asset_dic = utils_load_JSON_file(SL_asset_DB_FN.getPath())
 
     set_Kodi_all_sorting_methods(cfg)
     SL_proper_name = SL_catalog_dic[SL_name]['display_name']
@@ -2581,16 +2610,16 @@ def render_SL_pclone_set(cfg, SL_name, parent_name):
     log_debug('render_SL_pclone_set() view_mode_property = {}'.format(view_mode_property))
 
     # Load Software List ROMs.
-    SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
-    SL_PClone_dic = utils_load_JSON_file_dic(cfg.SL_PCLONE_DIC_PATH.getPath())
+    SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
+    SL_PClone_dic = utils_load_JSON_file(cfg.SL_PCLONE_DIC_PATH.getPath())
     file_name =  SL_catalog_dic[SL_name]['rom_DB_noext'] + '_items.json'
     SL_DB_FN = cfg.SL_DB_DIR.pjoin(file_name)
     log_debug('render_SL_pclone_set() ROMs JSON "{}"'.format(SL_DB_FN.getPath()))
-    SL_roms = utils_load_JSON_file_dic(SL_DB_FN.getPath())
+    SL_roms = utils_load_JSON_file(SL_DB_FN.getPath())
 
     assets_file_name =  SL_catalog_dic[SL_name]['rom_DB_noext'] + '_assets.json'
     SL_asset_DB_FN = cfg.SL_DB_DIR.pjoin(assets_file_name)
-    SL_asset_dic = utils_load_JSON_file_dic(SL_asset_DB_FN.getPath())
+    SL_asset_dic = utils_load_JSON_file(SL_asset_DB_FN.getPath())
 
     # Render parent first.
     SL_proper_name = SL_catalog_dic[SL_name]['display_name']
@@ -2641,7 +2670,7 @@ def render_SL_list_row(cfg, SL_name, SL):
     listitem.setInfo('video', {'title' : display_name, 'overlay' : ICON_OVERLAY } )
     listitem.addContextMenuItems([
         ('Kodi File Manager', 'ActivateWindow(filemanager)' ),
-        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__))
+        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id))
     ])
     URL = misc_url_2_arg('catalog', 'SL', 'category', SL_name)
     xbmcplugin.addDirectoryItem(cfg.addon_handle, URL, listitem, isFolder = True)
@@ -2714,7 +2743,7 @@ def render_SL_ROM_row(cfg, SL_name, rom_name, ROM, assets, flag_parent_list = Fa
             ('Show clones', URL_show_c),
             ('Add ROM to SL Favourites', URL_fav),
             ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__))
+            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id))
         ]
     else:
         commands = [
@@ -2722,7 +2751,7 @@ def render_SL_ROM_row(cfg, SL_name, rom_name, ROM, assets, flag_parent_list = Fa
             ('View / Audit', URL_view),
             ('Add ROM to SL Favourites', URL_fav),
             ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__))
+            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id))
         ]
     listitem.addContextMenuItems(commands)
     URL = misc_url_3_arg('command', 'LAUNCH_SL', 'SL', SL_name, 'ROM', rom_name)
@@ -2741,14 +2770,14 @@ def render_DAT_list(cfg, catalog_name):
     commands = [
         ('View', misc_url_1_arg_RunPlugin('command', 'VIEW')),
         ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__)),
+        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id)),
     ]
     # --- Unrolled variables ---
     ICON_OVERLAY = 6
 
     if catalog_name == 'History':
         # Render list of categories.
-        DAT_idx_dic = utils_load_JSON_file_dic(cfg.HISTORY_IDX_PATH.getPath())
+        DAT_idx_dic = utils_load_JSON_file(cfg.HISTORY_IDX_PATH.getPath())
         if not DAT_idx_dic:
             kodi_dialog_OK('DAT database file "{}" empty.'.format(catalog_name))
             xbmcplugin.endOfDirectory(cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -2763,7 +2792,7 @@ def render_DAT_list(cfg, catalog_name):
             xbmcplugin.addDirectoryItem(cfg.addon_handle, url = URL, listitem = listitem, isFolder = True)
     elif catalog_name == 'MAMEINFO':
         # Render list of categories.
-        DAT_idx_dic = utils_load_JSON_file_dic(cfg.MAMEINFO_IDX_PATH.getPath())
+        DAT_idx_dic = utils_load_JSON_file(cfg.MAMEINFO_IDX_PATH.getPath())
         if not DAT_idx_dic:
             kodi_dialog_OK('DAT database file "{}" empty.'.format(catalog_name))
             xbmcplugin.endOfDirectory(cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -2778,7 +2807,7 @@ def render_DAT_list(cfg, catalog_name):
             xbmcplugin.addDirectoryItem(cfg.addon_handle, URL, listitem, isFolder = True)
     elif catalog_name == 'Gameinit':
         # Render list of machines.
-        DAT_idx_dic = utils_load_JSON_file_dic(cfg.GAMEINIT_IDX_PATH.getPath())
+        DAT_idx_dic = utils_load_JSON_file(cfg.GAMEINIT_IDX_PATH.getPath())
         if not DAT_idx_dic:
             kodi_dialog_OK('DAT database file "{}" empty.'.format(catalog_name))
             xbmcplugin.endOfDirectory(cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -2793,7 +2822,7 @@ def render_DAT_list(cfg, catalog_name):
             xbmcplugin.addDirectoryItem(cfg.addon_handle, URL, listitem, isFolder = False)
     elif catalog_name == 'Command':
         # Render list of machines.
-        DAT_idx_dic = utils_load_JSON_file_dic(cfg.COMMAND_IDX_PATH.getPath())
+        DAT_idx_dic = utils_load_JSON_file(cfg.COMMAND_IDX_PATH.getPath())
         if not DAT_idx_dic:
             kodi_dialog_OK('DAT database file "{}" empty.'.format(catalog_name))
             xbmcplugin.endOfDirectory(cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -2814,14 +2843,15 @@ def render_DAT_list(cfg, catalog_name):
     xbmcplugin.endOfDirectory(cfg.addon_handle, succeeded = True, cacheToDisc = False)
 
 # Only History.dat and MAMEinfo.dat have categories.
-def render_DAT_category(catalog_name, category_name):
+def render_DAT_category(cfg, catalog_name, category_name):
     # Load Software List catalog
     if catalog_name == 'History':
-        DAT_catalog_dic = utils_load_JSON_file_dic(cfg.HISTORY_IDX_PATH.getPath())
+        DAT_catalog_dic = utils_load_JSON_file(cfg.HISTORY_IDX_PATH.getPath())
     elif catalog_name == 'MAMEINFO':
-        DAT_catalog_dic = utils_load_JSON_file_dic(cfg.MAMEINFO_IDX_PATH.getPath())
+        DAT_catalog_dic = utils_load_JSON_file(cfg.MAMEINFO_IDX_PATH.getPath())
     else:
-        kodi_dialog_OK('DAT database file "{}" not found. Check out "Setup addon" in the context menu.'.format(catalog_name))
+        kodi_dialog_OK('DAT database file "{}" not found. '
+            'Check out "Setup addon" in the context menu.'.format(catalog_name))
         xbmcplugin.endOfDirectory(cfg.addon_handle, succeeded = True, cacheToDisc = False)
         return
     if not DAT_catalog_dic:
@@ -2834,12 +2864,12 @@ def render_DAT_category(catalog_name, category_name):
         category_machine_dic = DAT_catalog_dic[category_name]['machines']
         for machine_key in category_machine_dic:
             display_name, db_list, db_machine = category_machine_dic[machine_key].split('|')
-            render_DAT_category_row(catalog_name, category_name, machine_key, display_name)
+            render_DAT_category_row(cfg, catalog_name, category_name, machine_key, display_name)
     elif catalog_name == 'MAMEINFO':
         category_machine_dic = DAT_catalog_dic[category_name]
         for machine_key in category_machine_dic:
             display_name = category_machine_dic[machine_key]
-            render_DAT_category_row(catalog_name, category_name, machine_key, display_name)
+            render_DAT_category_row(cfg, catalog_name, category_name, machine_key, display_name)
     xbmcplugin.endOfDirectory(cfg.addon_handle, succeeded = True, cacheToDisc = False)
 
 def render_DAT_category_row(cfg, catalog_name, category_name, machine_key, display_name):
@@ -2850,7 +2880,7 @@ def render_DAT_category_row(cfg, catalog_name, category_name, machine_key, displ
     listitem.setInfo('video', {'title' : display_name, 'overlay' : ICON_OVERLAY } )
     commands = [
         ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-        ('Add-on Settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__))
+        ('Add-on Settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id))
     ]
     listitem.addContextMenuItems(commands)
     URL = misc_url_3_arg('catalog', catalog_name, 'category', category_name, 'machine', machine_key)
@@ -2862,24 +2892,24 @@ def render_DAT_machine_info(cfg, catalog_name, category_name, machine_name):
     log_debug('render_DAT_machine_info() machine_name "{}"'.format(machine_name))
 
     if catalog_name == 'History':
-        DAT_idx_dic = utils_load_JSON_file_dic(cfg.HISTORY_IDX_PATH.getPath())
-        DAT_dic = utils_load_JSON_file_dic(cfg.HISTORY_DB_PATH.getPath())
+        DAT_idx_dic = utils_load_JSON_file(cfg.HISTORY_IDX_PATH.getPath())
+        DAT_dic = utils_load_JSON_file(cfg.HISTORY_DB_PATH.getPath())
         display_name, db_list, db_machine = DAT_idx_dic[category_name]['machines'][machine_name].split('|')
         t_str = ('History for [COLOR=orange]{}[/COLOR] item [COLOR=orange]{}[/COLOR] '
             '(DB entry [COLOR=orange]{}[/COLOR] / [COLOR=orange]{}[/COLOR])')
         window_title = t_str.format(category_name, machine_name, db_list, db_machine)
         info_text = DAT_dic[db_list][db_machine]
     elif catalog_name == 'MAMEINFO':
-        DAT_dic = utils_load_JSON_file_dic(cfg.MAMEINFO_DB_PATH.getPath())
+        DAT_dic = utils_load_JSON_file(cfg.MAMEINFO_DB_PATH.getPath())
         t_str = 'MAMEINFO information for [COLOR=orange]{}[/COLOR] item [COLOR=orange]{}[/COLOR]'
         window_title = t_str.format(category_name, machine_name)
         info_text = DAT_dic[category_name][machine_name]
     elif catalog_name == 'Gameinit':
-        DAT_dic = utils_load_JSON_file_dic(cfg.GAMEINIT_DB_PATH.getPath())
+        DAT_dic = utils_load_JSON_file(cfg.GAMEINIT_DB_PATH.getPath())
         window_title = 'Gameinit information for [COLOR=orange]{}[/COLOR]'.format(machine_name)
         info_text = DAT_dic[machine_name]
     elif catalog_name == 'Command':
-        DAT_dic = utils_load_JSON_file_dic(cfg.COMMAND_DB_PATH.getPath())
+        DAT_dic = utils_load_JSON_file(cfg.COMMAND_DB_PATH.getPath())
         window_title = 'Command information for [COLOR=orange]{}[/COLOR]'.format(machine_name)
         info_text = DAT_dic[machine_name]
     else:
@@ -2897,7 +2927,7 @@ def command_context_display_settings_SL(cfg, SL_name):
     log_debug('command_display_settings_SL() SL_name "{}"'.format(SL_name))
 
     # --- Load properties DB ---
-    SL_properties_dic = utils_load_JSON_file_dic(cfg.SL_MACHINES_PROP_PATH.getPath())
+    SL_properties_dic = utils_load_JSON_file(cfg.SL_MACHINES_PROP_PATH.getPath())
     prop_dic = SL_properties_dic[SL_name]
 
     # --- Show menu ---
@@ -2959,10 +2989,10 @@ def command_context_info_utils(cfg, machine_name, SL_name, SL_ROM, location):
 
     if view_type == VIEW_MAME_MACHINE:
         # --- Load DAT indices ---
-        History_idx_dic   = utils_load_JSON_file_dic(cfg.HISTORY_IDX_PATH.getPath())
-        Mameinfo_idx_dic  = utils_load_JSON_file_dic(cfg.MAMEINFO_IDX_PATH.getPath())
-        Gameinit_idx_list = utils_load_JSON_file_dic(cfg.GAMEINIT_IDX_PATH.getPath())
-        Command_idx_list  = utils_load_JSON_file_dic(cfg.COMMAND_IDX_PATH.getPath())
+        History_idx_dic   = utils_load_JSON_file(cfg.HISTORY_IDX_PATH.getPath())
+        Mameinfo_idx_dic  = utils_load_JSON_file(cfg.MAMEINFO_IDX_PATH.getPath())
+        Gameinit_idx_list = utils_load_JSON_file(cfg.GAMEINIT_IDX_PATH.getPath())
+        Command_idx_list  = utils_load_JSON_file(cfg.COMMAND_IDX_PATH.getPath())
 
         # --- Check if DAT information is available for this machine ---
         if History_idx_dic:
@@ -2990,7 +3020,7 @@ def command_context_info_utils(cfg, machine_name, SL_name, SL_ROM, location):
         # Manual_str =
 
     elif view_type == VIEW_SL_ROM:
-        History_idx_dic = utils_load_JSON_file_dic(cfg.HISTORY_IDX_PATH.getPath())
+        History_idx_dic = utils_load_JSON_file(cfg.HISTORY_IDX_PATH.getPath())
         if History_idx_dic:
             if SL_name in History_idx_dic:
                 History_str = 'Found' if SL_ROM in History_idx_dic[SL_name]['machines'] else 'Not found'
@@ -3062,7 +3092,7 @@ def command_context_info_utils(cfg, machine_name, SL_name, SL_ROM, location):
                 return
             m_str = History_idx_dic['mame']['machines'][machine_name]
             display_name, db_list, db_machine = m_str.split('|')
-            History_DAT_dic = utils_load_JSON_file_dic(cfg.HISTORY_DB_PATH.getPath())
+            History_DAT_dic = utils_load_JSON_file(cfg.HISTORY_DB_PATH.getPath())
             t_str = ('History DAT for MAME machine [COLOR=orange]{}[/COLOR] '
                 '(DB entry [COLOR=orange]{}[/COLOR])')
             window_title = t_str.format(machine_name, db_machine)
@@ -3075,7 +3105,7 @@ def command_context_info_utils(cfg, machine_name, SL_name, SL_ROM, location):
                 return
             m_str = History_idx_dic[SL_name]['machines'][SL_ROM]
             display_name, db_list, db_machine = m_str.split('|')
-            History_DAT_dic = utils_load_JSON_file_dic(cfg.HISTORY_DB_PATH.getPath())
+            History_DAT_dic = utils_load_JSON_file(cfg.HISTORY_DB_PATH.getPath())
             t_str = ('History DAT for SL [COLOR=orange]{}[/COLOR] item [COLOR=orange]{}[/COLOR] '
                 '(DB entry [COLOR=orange]{}[/COLOR] / [COLOR=orange]{}[/COLOR])')
             window_title = t_str.format(SL_name, SL_ROM, db_list, db_machine)
@@ -3085,7 +3115,7 @@ def command_context_info_utils(cfg, machine_name, SL_name, SL_ROM, location):
         if machine_name not in Mameinfo_idx_dic['mame']:
             kodi_dialog_OK('Machine {} not in Mameinfo DAT'.format(machine_name))
             return
-        DAT_dic = utils_load_JSON_file_dic(cfg.MAMEINFO_DB_PATH.getPath())
+        DAT_dic = utils_load_JSON_file(cfg.MAMEINFO_DB_PATH.getPath())
         t_str = 'MAMEINFO information for [COLOR=orange]{}[/COLOR] item [COLOR=orange]{}[/COLOR]'
         window_title = t_str.format('mame', machine_name)
         kodi_display_text_window_mono(window_title, DAT_dic['mame'][machine_name])
@@ -3094,7 +3124,7 @@ def command_context_info_utils(cfg, machine_name, SL_name, SL_ROM, location):
         if machine_name not in Gameinit_idx_list:
             kodi_dialog_OK('Machine {} not in Gameinit DAT'.format(machine_name))
             return
-        DAT_dic = utils_load_JSON_file_dic(cfg.GAMEINIT_DB_PATH.getPath())
+        DAT_dic = utils_load_JSON_file(cfg.GAMEINIT_DB_PATH.getPath())
         window_title = 'Gameinit information for [COLOR=orange]{}[/COLOR]'.format(machine_name)
         kodi_display_text_window_mono(window_title, DAT_dic[machine_name])
 
@@ -3102,7 +3132,7 @@ def command_context_info_utils(cfg, machine_name, SL_name, SL_ROM, location):
         if machine_name not in Command_idx_list:
             kodi_dialog_OK('Machine {} not in Command DAT'.format(machine_name))
             return
-        DAT_dic = utils_load_JSON_file_dic(cfg.COMMAND_DB_PATH.getPath())
+        DAT_dic = utils_load_JSON_file(cfg.COMMAND_DB_PATH.getPath())
         window_title = 'Command information for [COLOR=orange]{}[/COLOR]'.format(machine_name)
         kodi_display_text_window_mono(window_title, DAT_dic[machine_name])
 
@@ -3110,19 +3140,19 @@ def command_context_info_utils(cfg, machine_name, SL_name, SL_ROM, location):
     elif action == ACTION_VIEW_FANART:
         if view_type == VIEW_MAME_MACHINE:
             if location == 'STANDARD':
-                assets_dic = utils_load_JSON_file_dic(cfg.ASSET_DB_PATH.getPath())
+                assets_dic = utils_load_JSON_file(cfg.ASSET_DB_PATH.getPath())
                 m_assets = assets_dic[machine_name]
             else:
-                mame_favs_dic = utils_load_JSON_file_dic(cfg.FAV_MACHINES_PATH.getPath())
+                mame_favs_dic = utils_load_JSON_file(cfg.FAV_MACHINES_PATH.getPath())
                 m_assets = mame_favs_dic[machine_name]['assets']
             if not m_assets['fanart']:
                 kodi_dialog_OK('Fanart for machine {} not found.'.format(machine_name))
                 return
         elif view_type == VIEW_SL_ROM:
-            SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
+            SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
             assets_file_name = SL_catalog_dic[SL_name]['rom_DB_noext'] + '_assets.json'
             SL_asset_DB_FN = cfg.SL_DB_DIR.pjoin(assets_file_name)
-            SL_asset_dic = utils_load_JSON_file_dic(SL_asset_DB_FN.getPath())
+            SL_asset_dic = utils_load_JSON_file(SL_asset_DB_FN.getPath())
             m_assets = SL_asset_dic[SL_ROM]
             if not m_assets['fanart']:
                 kodi_dialog_OK('Fanart for SL item {} not found.'.format(SL_ROM))
@@ -3163,7 +3193,7 @@ def command_context_info_utils(cfg, machine_name, SL_name, SL_ROM, location):
         if view_type == VIEW_MAME_MACHINE:
             log_debug('Displaying Manual for MAME machine {} ...'.format(machine_name))
             # machine = db_get_machine_main_hashed_db(cfg, machine_name)
-            assets_dic = utils_load_JSON_file_dic(cfg.ASSET_DB_PATH.getPath())
+            assets_dic = utils_load_JSON_file(cfg.ASSET_DB_PATH.getPath())
             if not assets_dic[machine_name]['manual']:
                 kodi_dialog_OK('Manual not found in database.')
                 return
@@ -3171,10 +3201,10 @@ def command_context_info_utils(cfg, machine_name, SL_name, SL_ROM, location):
             img_dir_FN = FileName(cfg.settings['assets_path']).pjoin('manuals').pjoin(machine_name + '.pages')
         elif view_type == VIEW_SL_ROM:
             log_debug('Displaying Manual for SL {} item {} ...'.format(SL_name, SL_ROM))
-            SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
+            SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
             assets_file_name = SL_catalog_dic[SL_name]['rom_DB_noext'] + '_assets.json'
             SL_asset_DB_FN = cfg.SL_DB_DIR.pjoin(assets_file_name)
-            SL_asset_dic = utils_load_JSON_file_dic(SL_asset_DB_FN.getPath())
+            SL_asset_dic = utils_load_JSON_file(SL_asset_DB_FN.getPath())
             if not SL_asset_dic[SL_ROM]['manual']:
                 kodi_dialog_OK('Manual not found in database.')
                 return
@@ -3409,7 +3439,7 @@ def command_context_view_audit(cfg, machine_name, SL_name, SL_ROM, location):
             return
         man_file_FN = FileName(assets['manual'])
         img_dir_FN = FileName(cfg.settings['assets_path']).pjoin('manuals').pjoin(machine_name + '.pages')
-        rom_name = man_file_FN.getBase_noext()
+        rom_name = man_file_FN.getBaseNoExt()
         info_FN = img_dir_FN.pjoin(rom_name + '.json')
         if not info_FN.exists():
             kodi_dialog_OK('Manual JSON INFO file not found. View the manual first.')
@@ -3438,7 +3468,7 @@ def action_view_machine_data(cfg, machine_name, SL_name, SL_ROM, location):
 
     elif location == LOCATION_MAME_FAVS:
         pDialog.startProgress('{}\n{}'.format(d_text, 'MAME Favourites database'))
-        machines = utils_load_JSON_file_dic(cfg.FAV_MACHINES_PATH.getPath())
+        machines = utils_load_JSON_file(cfg.FAV_MACHINES_PATH.getPath())
         pDialog.endProgress()
         machine = machines[machine_name]
         assets = machine['assets']
@@ -3446,7 +3476,7 @@ def action_view_machine_data(cfg, machine_name, SL_name, SL_ROM, location):
 
     elif location == LOCATION_MAME_MOST_PLAYED:
         pDialog.startProgress('{}\n{}'.format(d_text, 'MAME Most Played database'))
-        most_played_roms_dic = utils_load_JSON_file_dic(cfg.MAME_MOST_PLAYED_FILE_PATH.getPath())
+        most_played_roms_dic = utils_load_JSON_file(cfg.MAME_MOST_PLAYED_FILE_PATH.getPath())
         pDialog.endProgress()
         machine = most_played_roms_dic[machine_name]
         assets = machine['assets']
@@ -3454,7 +3484,7 @@ def action_view_machine_data(cfg, machine_name, SL_name, SL_ROM, location):
 
     elif location == LOCATION_MAME_RECENT_PLAYED:
         pDialog.startProgress('{}\n{}'.format(d_text, 'MAME Recently Played database'))
-        recent_roms_list = utils_load_JSON_file_list(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath())
+        recent_roms_list = utils_load_JSON_file(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath(), [])
         pDialog.endProgress()
         machine_index = -1
         for i, recent_rom in enumerate(recent_roms_list):
@@ -3482,13 +3512,13 @@ def action_view_machine_data(cfg, machine_name, SL_name, SL_ROM, location):
 def action_view_sl_item_data(cfg, machine_name, SL_name, SL_ROM, location):
     if location == LOCATION_STANDARD:
         # --- Load databases ---
-        SL_machines_dic = utils_load_JSON_file_dic(cfg.SL_MACHINES_PATH.getPath())
-        SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
+        SL_machines_dic = utils_load_JSON_file(cfg.SL_MACHINES_PATH.getPath())
+        SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
         assets_file_name = SL_catalog_dic[SL_name]['rom_DB_noext'] + '_assets.json'
         SL_asset_DB_FN = cfg.SL_DB_DIR.pjoin(assets_file_name)
-        SL_asset_dic = utils_load_JSON_file_dic(SL_asset_DB_FN.getPath())
+        SL_asset_dic = utils_load_JSON_file(SL_asset_DB_FN.getPath())
         SL_DB_FN = cfg.SL_DB_DIR.pjoin(SL_name + '_items.json')
-        roms = utils_load_JSON_file_dic(SL_DB_FN.getPath())
+        roms = utils_load_JSON_file(SL_DB_FN.getPath())
 
         # --- Prepare data ---
         rom = roms[SL_ROM]
@@ -3499,9 +3529,9 @@ def action_view_sl_item_data(cfg, machine_name, SL_name, SL_ROM, location):
 
     elif location == LOCATION_SL_FAVS:
         # --- Load databases ---
-        SL_machines_dic = utils_load_JSON_file_dic(cfg.SL_MACHINES_PATH.getPath())
-        SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
-        fav_SL_roms = utils_load_JSON_file_dic(cfg.FAV_SL_ROMS_PATH.getPath())
+        SL_machines_dic = utils_load_JSON_file(cfg.SL_MACHINES_PATH.getPath())
+        SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
+        fav_SL_roms = utils_load_JSON_file(cfg.FAV_SL_ROMS_PATH.getPath())
 
         # --- Prepare data ---
         fav_key = SL_name + '-' + SL_ROM
@@ -3512,9 +3542,9 @@ def action_view_sl_item_data(cfg, machine_name, SL_name, SL_ROM, location):
         window_title = 'Favourite Software List Item Information'
 
     elif location == LOCATION_SL_MOST_PLAYED:
-        SL_machines_dic = utils_load_JSON_file_dic(cfg.SL_MACHINES_PATH.getPath())
-        SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
-        most_played_roms_dic = utils_load_JSON_file_dic(cfg.SL_MOST_PLAYED_FILE_PATH.getPath())
+        SL_machines_dic = utils_load_JSON_file(cfg.SL_MACHINES_PATH.getPath())
+        SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
+        most_played_roms_dic = utils_load_JSON_file(cfg.SL_MOST_PLAYED_FILE_PATH.getPath())
 
         # --- Prepare data ---
         fav_key = SL_name + '-' + SL_ROM
@@ -3525,9 +3555,9 @@ def action_view_sl_item_data(cfg, machine_name, SL_name, SL_ROM, location):
         window_title = 'Most Played SL Item Information'
 
     elif location == LOCATION_SL_RECENT_PLAYED:
-        SL_machines_dic = utils_load_JSON_file_dic(cfg.SL_MACHINES_PATH.getPath())
-        SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
-        recent_roms_list = utils_load_JSON_file_list(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath())
+        SL_machines_dic = utils_load_JSON_file(cfg.SL_MACHINES_PATH.getPath())
+        SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
+        recent_roms_list = utils_load_JSON_file(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath(), [])
 
         # --- Prepare data ---
         fav_key = SL_name + '-' + SL_ROM
@@ -3563,9 +3593,9 @@ def action_view_machine_roms(cfg, machine_name, SL_name, SL_ROM, location):
     pDialog.startProgress('{}\n{}'.format(d_text, 'MAME machines main'), 3)
     machine = db_get_machine_main_hashed_db(cfg, machine_name)
     pDialog.updateProgressInc('{}\n{}'.format(d_text, 'MAME machine ROMs'))
-    roms_db_dic = utils_load_JSON_file_dic(cfg.ROMS_DB_PATH.getPath())
+    roms_db_dic = utils_load_JSON_file(cfg.ROMS_DB_PATH.getPath())
     pDialog.updateProgressInc('{}\n{}'.format(d_text, 'MAME machine Devices'))
-    devices_db_dic = utils_load_JSON_file_dic(cfg.DEVICES_DB_PATH.getPath())
+    devices_db_dic = utils_load_JSON_file(cfg.DEVICES_DB_PATH.getPath())
     pDialog.endProgress()
 
     # --- Make a dictionary with device ROMs ---
@@ -3636,10 +3666,10 @@ def action_view_machine_roms(cfg, machine_name, SL_name, SL_ROM, location):
             bios_table_str.append(table_row)
 
     # --- Render text information window ---
-    table_str_list = text_render_table_str(table_str)
+    table_str_list = text_render_table(table_str)
     info_text.extend(table_str_list)
     if roms_dic['bios']:
-        bios_table_str_list = text_render_table_str(bios_table_str)
+        bios_table_str_list = text_render_table(bios_table_str)
         info_text.append('')
         info_text.extend(bios_table_str_list)
     window_title = 'Machine {} ROMs'.format(machine_name)
@@ -3658,9 +3688,9 @@ def action_view_machine_audit_roms(cfg, machine_name, SL_name, SL_ROM, location)
     pDialog.startProgress('{}\n{}'.format(d_text, 'MAME machine hash'), 3)
     machine = db_get_machine_main_hashed_db(cfg, machine_name)
     pDialog.updateProgressInc('{}\n{}'.format(d_text, 'MAME ROM Audit'))
-    audit_roms_dic = utils_load_JSON_file_dic(cfg.ROM_AUDIT_DB_PATH.getPath())
+    audit_roms_dic = utils_load_JSON_file(cfg.ROM_AUDIT_DB_PATH.getPath())
     pDialog.updateProgressInc('{}\n{}'.format(d_text, 'Machine archives'))
-    machine_archives = utils_load_JSON_file_dic(cfg.ROM_SET_MACHINE_FILES_DB_PATH.getPath())
+    machine_archives = utils_load_JSON_file(cfg.ROM_SET_MACHINE_FILES_DB_PATH.getPath())
     pDialog.endProgress()
 
     # --- Grab data and settings ---
@@ -3704,7 +3734,7 @@ def action_view_machine_audit_roms(cfg, machine_name, SL_name, SL_ROM, location)
             table_row = [text_type(m_rom['type']), text_type(m_rom['name']), text_type(m_rom['size']),
                 text_type(m_rom['crc']), text_type(m_rom['location'])]
         table_str.append(table_row)
-    info_text.extend(text_render_table_str(table_str))
+    info_text.extend(text_render_table(table_str))
     info_text.append('')
 
     # --- ZIP/CHD/Sample file list ---
@@ -3718,7 +3748,7 @@ def action_view_machine_audit_roms(cfg, machine_name, SL_name, SL_ROM, location)
         table_str.append(['CHD', '[COLOR orange]CHD_path[/COLOR]/' + m_file + '.chd'])
     for m_file in machine_archives[machine_name]['Samples']:
         table_str.append(['Sample', '[COLOR orange]Samples_path[/COLOR]/' + m_file + '.zip'])
-    info_text.extend(text_render_table_str(table_str))
+    info_text.extend(text_render_table(table_str))
 
     window_title = 'Machine {} ROM audit'.format(machine_name)
     kodi_display_text_window_mono(window_title, '\n'.join(info_text))
@@ -3732,16 +3762,16 @@ def action_view_machine_audit_roms(cfg, machine_name, SL_name, SL_ROM, location)
 def action_view_sl_item_roms(cfg, machine_name, SL_name, SL_ROM, location):
     SL_DB_FN = cfg.SL_DB_DIR.pjoin(SL_name + '_items.json')
     SL_ROMS_DB_FN = cfg.SL_DB_DIR.pjoin(SL_name + '_ROMs.json')
-    # SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
-    # SL_machines_dic = utils_load_JSON_file_dic(cfg.SL_MACHINES_PATH.getPath())
+    # SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
+    # SL_machines_dic = utils_load_JSON_file(cfg.SL_MACHINES_PATH.getPath())
     # assets_file_name =  SL_catalog_dic[SL_name]['rom_DB_noext'] + '_assets.json'
     # SL_asset_DB_FN = cfg.SL_DB_DIR.pjoin(assets_file_name)
-    # SL_asset_dic = utils_load_JSON_file_dic(SL_asset_DB_FN.getPath())
+    # SL_asset_dic = utils_load_JSON_file(SL_asset_DB_FN.getPath())
     # SL_dic = SL_catalog_dic[SL_name]
     # SL_machine_list = SL_machines_dic[SL_name]
     # assets = SL_asset_dic[SL_ROM] if SL_ROM in SL_asset_dic else db_new_SL_asset()
-    roms = utils_load_JSON_file_dic(SL_DB_FN.getPath())
-    roms_db = utils_load_JSON_file_dic(SL_ROMS_DB_FN.getPath())
+    roms = utils_load_JSON_file(SL_DB_FN.getPath())
+    roms_db = utils_load_JSON_file(SL_ROMS_DB_FN.getPath())
     rom = roms[SL_ROM]
     rom_db_list = roms_db[SL_ROM]
 
@@ -3778,7 +3808,7 @@ def action_view_sl_item_roms(cfg, machine_name, SL_name, SL_ROM, location):
                     table_row = [part_name, part_interface, 'diskarea', diskarea_name,
                         rom_dic['name'], '', rom_dic['sha1'][0:8]]
                     table_str.append(table_row)
-    table_str_list = text_render_table_str(table_str)
+    table_str_list = text_render_table(table_str)
     info_text.extend(table_str_list)
     window_title = 'Software List ROM List (ROMs DB)'
     kodi_display_text_window_mono(window_title, '\n'.join(info_text))
@@ -3794,8 +3824,8 @@ def action_view_sl_item_audit_roms(cfg, machine_name, SL_name, SL_ROM, location)
     # SL_ROMs_DB_FN = cfg.SL_DB_DIR.pjoin(SL_name + '_roms.json')
     SL_ROM_Audit_DB_FN = cfg.SL_DB_DIR.pjoin(SL_name + '_ROM_audit.json')
 
-    roms = utils_load_JSON_file_dic(SL_DB_FN.getPath())
-    rom_audit_db = utils_load_JSON_file_dic(SL_ROM_Audit_DB_FN.getPath())
+    roms = utils_load_JSON_file(SL_DB_FN.getPath())
+    rom_audit_db = utils_load_JSON_file(SL_ROM_Audit_DB_FN.getPath())
     rom = roms[SL_ROM]
     rom_db_list = rom_audit_db[SL_ROM]
 
@@ -3820,7 +3850,7 @@ def action_view_sl_item_audit_roms(cfg, machine_name, SL_name, SL_ROM, location)
             table_row = [rom_dic['type'], # rom_dic['name'],
                 text_type(rom_dic['size']), rom_dic['crc'], rom_dic['location']]
             table_str.append(table_row)
-    table_str_list = text_render_table_str(table_str)
+    table_str_list = text_render_table(table_str)
     info_text.extend(table_str_list)
     window_title = 'Software List ROM List (Audit DB)'
     kodi_display_text_window_mono(window_title, '\n'.join(info_text))
@@ -3842,7 +3872,7 @@ def action_audit_mame_machine(cfg, machine_name, SL_name, SL_ROM, location):
     pDialog.startProgress('{}\n{}'.format(d_text, 'MAME machine hash'), 2)
     machine = db_get_machine_main_hashed_db(cfg, machine_name)
     pDialog.updateProgressInc('{}\n{}'.format(d_text, 'MAME ROM Audit'))
-    audit_roms_dic = utils_load_JSON_file_dic(cfg.ROM_AUDIT_DB_PATH.getPath())
+    audit_roms_dic = utils_load_JSON_file(cfg.ROM_AUDIT_DB_PATH.getPath())
     pDialog.endProgress()
 
     # --- Grab data and settings ---
@@ -3887,7 +3917,7 @@ def action_audit_mame_machine(cfg, machine_name, SL_name, SL_ROM, location):
             table_row = [text_type(m_rom['type']), text_type(m_rom['name']),
                 text_type(m_rom['size']), text_type(m_rom['crc']), m_rom['location'], m_rom['status_colour']]
         table_str.append(table_row)
-    table_str_list = text_render_table_str(table_str)
+    table_str_list = text_render_table(table_str)
     info_text.extend(table_str_list)
     window_title = 'Machine {} ROM audit'.format(machine_name)
     kodi_display_text_window_mono(window_title, '\n'.join(info_text))
@@ -3901,8 +3931,8 @@ def action_audit_sl_item(cfg, machine_name, SL_name, SL_ROM, location):
     SL_DB_FN = cfg.SL_DB_DIR.pjoin(SL_name + '_items.json')
     SL_ROM_Audit_DB_FN = cfg.SL_DB_DIR.pjoin(SL_name + '_ROM_audit.json')
 
-    roms = utils_load_JSON_file_dic(SL_DB_FN.getPath())
-    roms_audit_db = utils_load_JSON_file_dic(SL_ROM_Audit_DB_FN.getPath())
+    roms = utils_load_JSON_file(SL_DB_FN.getPath())
+    roms_audit_db = utils_load_JSON_file(SL_ROM_Audit_DB_FN.getPath())
     rom = roms[SL_ROM]
     rom_db_list = roms_audit_db[SL_ROM]
 
@@ -3934,7 +3964,7 @@ def action_audit_sl_item(cfg, machine_name, SL_name, SL_ROM, location):
             table_row = [m_rom['type'], # m_rom['name'],
                 text_type(m_rom['size']), m_rom['crc'], m_rom['location'], m_rom['status_colour']]
             table_str.append(table_row)
-    table_str_list = text_render_table_str(table_str)
+    table_str_list = text_render_table(table_str)
     info_text.extend(table_str_list)
     window_title = 'SL {} Software {} ROM audit'.format(SL_name, SL_ROM)
     kodi_display_text_window_mono(window_title, '\n'.join(info_text))
@@ -3994,10 +4024,10 @@ def command_context_add_mame_fav(cfg, machine_name):
     log_debug('command_add_mame_fav() Machine_name "{}"'.format(machine_name))
 
     # Get Machine database entry. Use MAME hashed database for speed.
-    control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+    control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
     machine = db_get_machine_main_hashed_db(cfg, machine_name)
     assets = db_get_machine_assets_hashed_db(cfg, machine_name)
-    fav_machines = utils_load_JSON_file_dic(cfg.FAV_MACHINES_PATH.getPath())
+    fav_machines = utils_load_JSON_file(cfg.FAV_MACHINES_PATH.getPath())
 
     # If machine already in Favourites ask user if overwrite.
     if machine_name in fav_machines:
@@ -4092,7 +4122,7 @@ def render_fav_machine_row(cfg, m_name, machine, m_assets, location):
             ('View / Audit',  URL_view),
             ('Manage Favourites', URL_manage),
             ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__))
+            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id))
         ]
     elif location == LOCATION_MAME_MOST_PLAYED:
         URL_manage = misc_url_2_arg_RunPlugin('command', 'MANAGE_MAME_MOST_PLAYED', 'machine', m_name)
@@ -4101,7 +4131,7 @@ def render_fav_machine_row(cfg, m_name, machine, m_assets, location):
             ('View / Audit',  URL_view),
             ('Manage Most Played', URL_manage),
             ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__))
+            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id))
         ]
     elif location == LOCATION_MAME_RECENT_PLAYED:
         URL_manage = misc_url_2_arg_RunPlugin('command', 'MANAGE_MAME_RECENT_PLAYED', 'machine', m_name)
@@ -4110,7 +4140,7 @@ def render_fav_machine_row(cfg, m_name, machine, m_assets, location):
             ('View / Audit',  URL_view),
             ('Manage Recently Played', URL_manage),
             ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__))
+            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id))
         ]
     listitem.addContextMenuItems(commands)
     URL = misc_url_3_arg('command', 'LAUNCH', 'machine', m_name, 'location', location)
@@ -4120,7 +4150,7 @@ def command_show_mame_fav(cfg):
     log_debug('command_show_mame_fav() Starting ...')
 
     # --- Open Favourite Machines dictionary ---
-    fav_machines = utils_load_JSON_file_dic(cfg.FAV_MACHINES_PATH.getPath())
+    fav_machines = utils_load_JSON_file(cfg.FAV_MACHINES_PATH.getPath())
     if not fav_machines:
         kodi_dialog_OK('No Favourite MAME machines. Add some machines to MAME Favourites first.')
         xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -4219,7 +4249,7 @@ def command_context_manage_mame_fav(cfg, machine_name):
         log_debug('command_context_manage_mame_fav() ACTION_DELETE_MISSING')
 
         # --- Ensure MAME Catalog have been built ---
-        control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+        control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
         st_dic = kodi_new_status_dic()
         options = check_MAME_DB_status(st_dic, MAME_CATALOG_BUILT, control_dic)
         if kodi_display_status_message(st_dic): return False
@@ -4258,7 +4288,7 @@ def command_context_manage_mame_fav(cfg, machine_name):
         kodi_dialog_OK(t)
 
 def command_show_mame_most_played(cfg):
-    most_played_roms_dic = utils_load_JSON_file_dic(cfg.MAME_MOST_PLAYED_FILE_PATH.getPath())
+    most_played_roms_dic = utils_load_JSON_file(cfg.MAME_MOST_PLAYED_FILE_PATH.getPath())
     if not most_played_roms_dic:
         kodi_dialog_OK('No Most Played MAME machines. Play a bit and try later.')
         xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -4353,7 +4383,7 @@ def command_context_manage_mame_most_played(cfg, machine_name):
         log_debug('command_context_manage_mame_most_played() ACTION_DELETE_MISSING')
 
         # --- Ensure MAME Catalog have been built ---
-        control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+        control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
         st_dic = kodi_new_status_dic()
         options = check_MAME_DB_status(st_dic, MAME_CATALOG_BUILT, control_dic)
         if kodi_display_status_message(st_dic): return False
@@ -4391,7 +4421,7 @@ def command_context_manage_mame_most_played(cfg, machine_name):
         kodi_dialog_OK(t)
 
 def command_show_mame_recently_played(cfg):
-    recent_roms_list = utils_load_JSON_file_list(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath())
+    recent_roms_list = utils_load_JSON_file(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath(), [])
     if not recent_roms_list:
         kodi_dialog_OK('No Recently Played MAME machines. Play a bit and try later.')
         xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -4444,7 +4474,7 @@ def command_context_manage_mame_recent_played(cfg, machine_name):
         log_debug('machine_name "{}"'.format(machine_name))
 
         # --- Load Recently Played machine list ---
-        recent_roms_list = utils_load_JSON_file_list(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath())
+        recent_roms_list = utils_load_JSON_file(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath(), [])
 
         # --- Search index of this machine in the list ---
         machine_index = db_locate_idx_by_name(recent_roms_list, machine_name)
@@ -4469,7 +4499,7 @@ def command_context_manage_mame_recent_played(cfg, machine_name):
 
     elif action == ACTION_DELETE_ALL:
         log_debug('command_context_manage_mame_recent_played() ACTION_DELETE_ALL')
-        recent_roms_list = utils_load_JSON_file_list(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath())
+        recent_roms_list = utils_load_JSON_file(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath(), [])
 
         # Confirm with user
         num_machines = len(recent_roms_list)
@@ -4488,7 +4518,7 @@ def command_context_manage_mame_recent_played(cfg, machine_name):
         log_debug('command_context_manage_mame_recent_played() ACTION_DELETE_MISSING')
 
         # --- Ensure MAME Catalog have been built ---
-        control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+        control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
         st_dic = kodi_new_status_dic()
         options = check_MAME_DB_status(st_dic, MAME_CATALOG_BUILT, control_dic)
         if kodi_display_status_message(st_dic): return False
@@ -4498,7 +4528,7 @@ def command_context_manage_mame_recent_played(cfg, machine_name):
             ['machines', 'MAME machines main', cfg.MAIN_DB_PATH.getPath()],
         ]
         db_dic = db_load_files(db_files)
-        recent_roms_list = utils_load_JSON_file_list(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath())
+        recent_roms_list = utils_load_JSON_file(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath(), [])
 
         # --- Delete missing MAME machines ---
         num_deleted_machines = 0
@@ -4535,21 +4565,21 @@ def command_context_add_sl_fav(cfg, SL_name, ROM_name):
     log_debug('command_add_sl_fav() ROM_name "{}"'.format(ROM_name))
 
     # --- Load databases ---
-    control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
-    SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
+    control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
+    SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
     file_name =  SL_catalog_dic[SL_name]['rom_DB_noext'] + '_items.json'
     SL_DB_FN = cfg.SL_DB_DIR.pjoin(file_name)
-    SL_roms = utils_load_JSON_file_dic(SL_DB_FN.getPath())
+    SL_roms = utils_load_JSON_file(SL_DB_FN.getPath())
     assets_file_name =  SL_catalog_dic[SL_name]['rom_DB_noext'] + '_assets.json'
     SL_asset_DB_FN = cfg.SL_DB_DIR.pjoin(assets_file_name)
-    SL_assets_dic = utils_load_JSON_file_dic(SL_asset_DB_FN.getPath())
+    SL_assets_dic = utils_load_JSON_file(SL_asset_DB_FN.getPath())
 
     # Open Favourite Machines dictionary.
-    fav_SL_roms = utils_load_JSON_file_dic(cfg.FAV_SL_ROMS_PATH.getPath())
+    fav_SL_roms = utils_load_JSON_file(cfg.FAV_SL_ROMS_PATH.getPath())
     SL_fav_key = SL_name + '-' + ROM_name
     log_debug('command_add_sl_fav() SL_fav_key "{}"'.format(SL_fav_key))
 
-    # >> If machine already in Favourites ask user if overwrite.
+    # If machine already in Favourites ask user if overwrite.
     if SL_fav_key in fav_SL_roms:
         ret = kodi_dialog_yesno('Machine {} ({}) '.format(ROM_name, SL_name) +
                                 'already in SL Favourites. Overwrite?')
@@ -4625,7 +4655,7 @@ def render_sl_fav_machine_row(cfg, SL_fav_key, ROM, assets, location):
             ('View / Audit', URL_view),
             ('Manage SL Favourites', URL_manage),
             ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__)),
+            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id)),
         ]
     elif location == LOCATION_SL_MOST_PLAYED:
         URL_manage = misc_url_3_arg_RunPlugin('command', 'MANAGE_SL_MOST_PLAYED', 'SL', SL_name, 'ROM', SL_ROM_name)
@@ -4634,7 +4664,7 @@ def render_sl_fav_machine_row(cfg, SL_fav_key, ROM, assets, location):
             ('View / Audit',  URL_view),
             ('Manage SL Most Played', URL_manage),
             ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__))
+            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id))
         ]
     elif location == LOCATION_SL_RECENT_PLAYED:
         URL_manage = misc_url_3_arg_RunPlugin('command', 'MANAGE_SL_RECENT_PLAYED', 'SL', SL_name, 'ROM', SL_ROM_name)
@@ -4643,7 +4673,7 @@ def render_sl_fav_machine_row(cfg, SL_fav_key, ROM, assets, location):
             ('View / Audit',  URL_view),
             ('Manage SL Recently Played', URL_manage),
             ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__))
+            ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id))
         ]
     listitem.addContextMenuItems(commands)
     URL = misc_url_4_arg('command', 'LAUNCH_SL', 'SL', SL_name, 'ROM', SL_ROM_name, 'location', location)
@@ -4652,8 +4682,8 @@ def render_sl_fav_machine_row(cfg, SL_fav_key, ROM, assets, location):
 def command_show_sl_fav(cfg):
     log_debug('command_show_sl_fav() Starting ...')
 
-    SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
-    fav_SL_roms = utils_load_JSON_file_dic(cfg.FAV_SL_ROMS_PATH.getPath())
+    SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
+    fav_SL_roms = utils_load_JSON_file(cfg.FAV_SL_ROMS_PATH.getPath())
     if not fav_SL_roms:
         kodi_dialog_OK('No Favourite Software Lists ROMs. Add some ROMs to SL Favourites first.')
         xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -4716,11 +4746,11 @@ def command_context_manage_sl_fav(cfg, SL_name, ROM_name):
         log_debug('command_context_manage_sl_fav() ACTION_CHOOSE_DEFAULT')
 
         # --- Load Favs ---
-        fav_SL_roms = utils_load_JSON_file_dic(cfg.FAV_SL_ROMS_PATH.getPath())
+        fav_SL_roms = utils_load_JSON_file(cfg.FAV_SL_ROMS_PATH.getPath())
         SL_fav_key = SL_name + '-' + ROM_name
 
         # --- Get a list of machines that can launch this SL ROM. User chooses. ---
-        SL_machines_dic = utils_load_JSON_file_dic(cfg.SL_MACHINES_PATH.getPath())
+        SL_machines_dic = utils_load_JSON_file(cfg.SL_MACHINES_PATH.getPath())
         SL_machine_list = SL_machines_dic[SL_name]
         SL_machine_names_list = []
         SL_machine_desc_list = []
@@ -4749,7 +4779,7 @@ def command_context_manage_sl_fav(cfg, SL_name, ROM_name):
         log_debug('command_context_manage_sl_fav() ACTION_DELETE_MACHINE')
 
         # --- Open Favourite Machines dictionary ---
-        fav_SL_roms = utils_load_JSON_file_dic(cfg.FAV_SL_ROMS_PATH.getPath())
+        fav_SL_roms = utils_load_JSON_file(cfg.FAV_SL_ROMS_PATH.getPath())
         SL_fav_key = SL_name + '-' + ROM_name
         log_debug('SL_fav_key "{}"'.format(SL_fav_key))
 
@@ -4772,7 +4802,7 @@ def command_context_manage_sl_fav(cfg, SL_name, ROM_name):
         log_debug('command_context_manage_sl_fav() ACTION_DELETE_ALL')
 
         # --- Open Favourite Machines dictionary ---
-        fav_SL_roms = utils_load_JSON_file_dic(cfg.FAV_SL_ROMS_PATH.getPath())
+        fav_SL_roms = utils_load_JSON_file(cfg.FAV_SL_ROMS_PATH.getPath())
         SL_fav_key = SL_name + '-' + ROM_name
         log_debug('SL_fav_key "{}"'.format(SL_fav_key))
 
@@ -4790,8 +4820,8 @@ def command_context_manage_sl_fav(cfg, SL_name, ROM_name):
 
     elif action == ACTION_DELETE_MISSING:
         log_debug('command_context_manage_sl_fav() ACTION_DELETE_MISSING BEGIN...')
-        SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
-        fav_SL_roms = utils_load_JSON_file_dic(cfg.FAV_SL_ROMS_PATH.getPath())
+        SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
+        fav_SL_roms = utils_load_JSON_file(cfg.FAV_SL_ROMS_PATH.getPath())
         if len(fav_SL_roms) < 1:
             kodi_notify('SL Favourites empty')
             return
@@ -4808,7 +4838,7 @@ def command_context_manage_sl_fav(cfg, SL_name, ROM_name):
 
             # --- Load SL ROMs DB and assets ---
             SL_DB_FN = cfg.SL_DB_DIR.pjoin(SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_items.json')
-            SL_roms = utils_load_JSON_file_dic(SL_DB_FN.getPath(), verbose = False)
+            SL_roms = utils_load_JSON_file(SL_DB_FN.getPath(), verbose = False)
 
             # --- Check ---
             if fav_ROM_name not in SL_roms:
@@ -4830,8 +4860,8 @@ def command_context_manage_sl_fav(cfg, SL_name, ROM_name):
         kodi_dialog_OK(t)
 
 def command_show_SL_most_played(cfg):
-    SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
-    most_played_roms_dic = utils_load_JSON_file_dic(cfg.SL_MOST_PLAYED_FILE_PATH.getPath())
+    SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
+    most_played_roms_dic = utils_load_JSON_file(cfg.SL_MOST_PLAYED_FILE_PATH.getPath())
     if not most_played_roms_dic:
         kodi_dialog_OK('No Most Played SL machines. Play a bit and try later.')
         xbmcplugin.endOfDirectory(cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -4895,7 +4925,7 @@ def command_context_manage_SL_most_played(cfg, SL_name, ROM_name):
         log_debug('command_context_manage_sl_most_played() ACTION_DELETE_MACHINE')
 
         # --- Load Most Played items dictionary ---
-        most_played_roms_dic = utils_load_JSON_file_dic(cfg.SL_MOST_PLAYED_FILE_PATH.getPath())
+        most_played_roms_dic = utils_load_JSON_file(cfg.SL_MOST_PLAYED_FILE_PATH.getPath())
         SL_fav_key = SL_name + '-' + ROM_name
         log_debug('SL_fav_key "{}"'.format(SL_fav_key))
 
@@ -4919,7 +4949,7 @@ def command_context_manage_SL_most_played(cfg, SL_name, ROM_name):
         log_debug('command_context_manage_sl_most_played() ACTION_DELETE_ALL')
 
         # --- Open Favourite Machines dictionary ---
-        fav_SL_roms = utils_load_JSON_file_dic(cfg.SL_MOST_PLAYED_FILE_PATH.getPath())
+        fav_SL_roms = utils_load_JSON_file(cfg.SL_MOST_PLAYED_FILE_PATH.getPath())
         SL_fav_key = SL_name + '-' + ROM_name
         log_debug('SL_fav_key "{}"'.format(SL_fav_key))
 
@@ -4937,8 +4967,8 @@ def command_context_manage_SL_most_played(cfg, SL_name, ROM_name):
 
     elif action == ACTION_DELETE_MISSING:
         log_debug('command_context_manage_sl_most_played() ACTION_DELETE_MISSING')
-        SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
-        fav_SL_roms = utils_load_JSON_file_dic(cfg.SL_MOST_PLAYED_FILE_PATH.getPath())
+        SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
+        fav_SL_roms = utils_load_JSON_file(cfg.SL_MOST_PLAYED_FILE_PATH.getPath())
         if len(fav_SL_roms) < 1:
             kodi_notify('SL Most Played empty')
             return
@@ -4954,7 +4984,7 @@ def command_context_manage_SL_most_played(cfg, SL_name, ROM_name):
 
             # --- Load SL ROMs DB and assets ---
             SL_DB_FN = cfg.SL_DB_DIR.pjoin(SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_items.json')
-            SL_roms = utils_load_JSON_file_dic(SL_DB_FN.getPath(), verbose = False)
+            SL_roms = utils_load_JSON_file(SL_DB_FN.getPath(), verbose = False)
 
             # --- Check ---
             if fav_ROM_name not in SL_roms:
@@ -4976,8 +5006,8 @@ def command_context_manage_SL_most_played(cfg, SL_name, ROM_name):
         kodi_dialog_OK(t)
 
 def command_show_SL_recently_played(cfg):
-    SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
-    recent_roms_list = utils_load_JSON_file_list(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath())
+    SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
+    recent_roms_list = utils_load_JSON_file(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath(), [])
     if not recent_roms_list:
         kodi_dialog_OK('No Recently Played SL machines. Play a bit and try later.')
         xbmcplugin.endOfDirectory(cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -5040,7 +5070,7 @@ def command_context_manage_SL_recent_played(cfg, SL_name, ROM_name):
         log_debug('command_context_manage_SL_recent_played() Delete SL Recently Played machine')
 
         # --- Load Recently Played machine list ---
-        recent_roms_list = utils_load_JSON_file_list(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath())
+        recent_roms_list = utils_load_JSON_file(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath(), [])
         machine_index = db_locate_idx_by_SL_item_name(recent_roms_list, SL_name, ROM_name)
         if machine_index < 0:
             a = 'Item {}-{} cannot be located in SL Recently Played list. This is a bug.'
@@ -5067,7 +5097,7 @@ def command_context_manage_SL_recent_played(cfg, SL_name, ROM_name):
         log_debug('command_context_manage_SL_recent_played() ACTION_DELETE_ALL')
 
         # --- Open Favourite Machines dictionary ---
-        fav_SL_roms = utils_load_JSON_file_dic(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath())
+        fav_SL_roms = utils_load_JSON_file(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath())
         SL_fav_key = SL_name + '-' + ROM_name
         log_debug('SL_fav_key "{}"'.format(SL_fav_key))
 
@@ -5086,8 +5116,8 @@ def command_context_manage_SL_recent_played(cfg, SL_name, ROM_name):
     elif action == ACTION_DELETE_MISSING:
         # Careful because here fav_SL_roms is a list and not a dictionary.
         log_debug('command_context_manage_SL_recent_played() ACTION_DELETE_MISSING')
-        SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
-        fav_SL_roms = utils_load_JSON_file_dic(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath())
+        SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
+        fav_SL_roms = utils_load_JSON_file(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath())
         if len(fav_SL_roms) < 1:
             kodi_notify_warn('SL Recently Played empty')
             return
@@ -5105,7 +5135,7 @@ def command_context_manage_SL_recent_played(cfg, SL_name, ROM_name):
 
             # --- Load SL ROMs DB and assets ---
             SL_DB_FN = cfg.SL_DB_DIR.pjoin(SL_catalog_dic[fav_SL_name]['rom_DB_noext'] + '_items.json')
-            SL_roms = utils_load_JSON_file_dic(SL_DB_FN.getPath(), verbose = False)
+            SL_roms = utils_load_JSON_file(SL_DB_FN.getPath(), verbose = False)
 
             # --- Check ---
             if fav_ROM_name not in SL_roms:
@@ -5264,14 +5294,14 @@ def command_show_custom_filters(cfg):
     log_debug('command_show_custom_filters() Starting ...')
 
     # Open Custom filter count database and index
-    filter_index_dic = utils_load_JSON_file_dic(cfg.FILTERS_INDEX_PATH.getPath())
+    filter_index_dic = utils_load_JSON_file(cfg.FILTERS_INDEX_PATH.getPath())
     if not filter_index_dic:
         kodi_dialog_OK('MAME custom filter index is empty. Please rebuild your filters.')
         xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
         return
 
     # Check if filters need to be rebuilt
-    control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+    control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
     if control_dic['t_Custom_Filter_build'] < control_dic['t_MAME_Catalog_build']:
         kodi_dialog_OK('MAME custom filters need to be rebuilt.')
         xbmcplugin.endOfDirectory(handle = cfg.addon_handle, succeeded = True, cacheToDisc = False)
@@ -5301,7 +5331,7 @@ def render_custom_filter_item_row(cfg, f_name, num_machines, machine_str, plot):
     # --- Create context menu ---
     commands = [
         ('Kodi File Manager', 'ActivateWindow(filemanager)'),
-        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.__addon_id__))
+        ('AML addon settings', 'Addon.OpenSettings({})'.format(cfg.addon.info_id))
     ]
     listitem.addContextMenuItems(commands)
     URL = misc_url_2_arg('catalog', 'Custom', 'category', f_name)
@@ -5325,17 +5355,17 @@ def render_custom_filter_machines(cfg, filter_name):
 
     # Load main MAME info DB and catalog.
     l_cataloged_dic_start = time.time()
-    Filters_index_dic = utils_load_JSON_file_dic(cfg.FILTERS_INDEX_PATH.getPath())
+    Filters_index_dic = utils_load_JSON_file(cfg.FILTERS_INDEX_PATH.getPath())
     rom_DB_noext = Filters_index_dic[filter_name]['rom_DB_noext']
     l_cataloged_dic_end = time.time()
     l_render_db_start = time.time()
-    render_db_dic = utils_load_JSON_file_dic(cfg.FILTERS_DB_DIR.pjoin(rom_DB_noext + '_render.json').getPath())
+    render_db_dic = utils_load_JSON_file(cfg.FILTERS_DB_DIR.pjoin(rom_DB_noext + '_render.json').getPath())
     l_render_db_end = time.time()
     l_assets_db_start = time.time()
-    assets_db_dic = utils_load_JSON_file_dic(cfg.FILTERS_DB_DIR.pjoin(rom_DB_noext + '_assets.json').getPath())
+    assets_db_dic = utils_load_JSON_file(cfg.FILTERS_DB_DIR.pjoin(rom_DB_noext + '_assets.json').getPath())
     l_assets_db_end = time.time()
     l_favs_start = time.time()
-    fav_machines = utils_load_JSON_file_dic(cfg.FAV_MACHINES_PATH.getPath())
+    fav_machines = utils_load_JSON_file(cfg.FAV_MACHINES_PATH.getPath())
     l_favs_end = time.time()
 
     # Compute loading times.
@@ -5684,8 +5714,8 @@ def command_context_setup_plugin(cfg):
         del db_dic['devices']
         del db_dic['history_idx_dic']
         del db_dic['mameinfo_idx_dic']
-        del db_dic['gameinit_idx_list']
-        del db_dic['command_idx_list']
+        del db_dic['gameinit_idx_dic']
+        del db_dic['command_idx_dic']
         del db_dic['audit_roms']
         del db_dic['machine_archives']
         # Force garbage collection here to free memory?
@@ -5735,8 +5765,8 @@ def command_context_setup_plugin(cfg):
             ['cache_index', 'MAME cache index', cfg.CACHE_INDEX_PATH.getPath()],
             ['history_idx_dic', 'History DAT index', cfg.HISTORY_IDX_PATH.getPath()],
             ['mameinfo_idx_dic', 'Mameinfo DAT index', cfg.MAMEINFO_IDX_PATH.getPath()],
-            ['gameinit_idx_list', 'Gameinit DAT index', cfg.GAMEINIT_IDX_PATH.getPath()],
-            ['command_idx_list', 'Command DAT index', cfg.COMMAND_IDX_PATH.getPath()],
+            ['gameinit_idx_dic', 'Gameinit DAT index', cfg.GAMEINIT_IDX_PATH.getPath()],
+            ['command_idx_dic', 'Command DAT index', cfg.COMMAND_IDX_PATH.getPath()],
         ]
         db_dic = db_load_files(db_files)
 
@@ -5821,9 +5851,9 @@ def command_context_setup_plugin(cfg):
         if kodi_display_status_message(st_dic): return
 
         # MAME asset DB has changed so rebuild MAME asset hashed database and MAME asset cache.
-        control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+        control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
         db_build_asset_hashed_db(cfg, control_dic, data_dic['assetdb'])
-        cache_index = utils_load_JSON_file_dic(cfg.CACHE_INDEX_PATH.getPath())
+        cache_index = utils_load_JSON_file(cfg.CACHE_INDEX_PATH.getPath())
         db_build_asset_cache(cfg, control_dic, cache_index, data_dic['assetdb'])
 
         if cfg.settings['global_enable_SL']:
@@ -5902,7 +5932,7 @@ def command_context_setup_plugin(cfg):
             st_dic = kodi_new_status_dic()
             MAME_XML_path, XML_control_FN = mame_init_MAME_XML(cfg, st_dic)
             if kodi_display_status_message(st_dic): return
-            XML_control_dic = utils_load_JSON_file_dic(XML_control_FN.getPath())
+            XML_control_dic = utils_load_JSON_file(XML_control_FN.getPath())
             # Give user some data.
             mame_v_str = XML_control_dic['ver_mame_str']
             size_MB = int(XML_control_dic['st_size'] / 1000000)
@@ -6135,8 +6165,8 @@ def command_context_setup_plugin(cfg):
                 ['cache_index', 'MAME cache index', cfg.CACHE_INDEX_PATH.getPath()],
                 ['history_idx_dic', 'History DAT index', cfg.HISTORY_IDX_PATH.getPath()],
                 ['mameinfo_idx_dic', 'Mameinfo DAT index', cfg.MAMEINFO_IDX_PATH.getPath()],
-                ['gameinit_idx_list', 'Gameinit DAT index', cfg.GAMEINIT_IDX_PATH.getPath()],
-                ['command_idx_list', 'Command DAT index', cfg.COMMAND_IDX_PATH.getPath()],
+                ['gameinit_idx_dic', 'Gameinit DAT index', cfg.GAMEINIT_IDX_PATH.getPath()],
+                ['command_idx_dic', 'Command DAT index', cfg.COMMAND_IDX_PATH.getPath()],
             ]
             db_dic = db_load_files(db_files)
 
@@ -6302,7 +6332,7 @@ def command_context_setup_plugin(cfg):
             log_debug('TProjection_FN "{}"'.format(TProjection_FN.getPath()))
 
             # Load 3D texture projection matrix
-            t_projection = utils_load_JSON_file_dic(TProjection_FN.getPath())
+            t_projection = utils_load_JSON_file(TProjection_FN.getPath())
 
             # Create fake asset dictionaries
             # m_name = 'dino'
@@ -6344,7 +6374,7 @@ def command_context_setup_plugin(cfg):
             log_debug('Asset_path_FN  "{}"'.format(Asset_path_FN.getPath()))
 
             # Load 3D texture projection matrix
-            t_projection = utils_load_JSON_file_dic(TProjection_FN.getPath())
+            t_projection = utils_load_JSON_file(TProjection_FN.getPath())
 
             # Create fake asset dictionaries
             # SL items in AML don't have clearlogo, but for testing is OK.
@@ -6383,9 +6413,9 @@ def command_context_setup_plugin(cfg):
             if kodi_display_status_message(st_dic): return
 
             # MAME asset DB has changed so rebuild MAME asset hashed database and MAME asset cache.
-            control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+            control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
             db_build_asset_hashed_db(cfg, control_dic, data_dic['assetdb'])
-            cache_index = utils_load_JSON_file_dic(cfg.CACHE_INDEX_PATH.getPath())
+            cache_index = utils_load_JSON_file(cfg.CACHE_INDEX_PATH.getPath())
             db_build_asset_cache(cfg, control_dic, cache_index, data_dic['assetdb'])
 
             if cfg.settings['global_enable_SL']:
@@ -6412,9 +6442,9 @@ def command_context_setup_plugin(cfg):
             if kodi_display_status_message(st_dic): return
 
             # MAME asset DB has changed so rebuild MAME asset hashed database and MAME asset cache.
-            control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+            control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
             db_build_asset_hashed_db(cfg, control_dic, data_dic['assetdb'])
-            cache_index = utils_load_JSON_file_dic(cfg.CACHE_INDEX_PATH.getPath())
+            cache_index = utils_load_JSON_file(cfg.CACHE_INDEX_PATH.getPath())
             db_build_asset_cache(cfg, control_dic, cache_index, data_dic['assetdb'])
 
             if cfg.settings['global_enable_SL']:
@@ -6437,9 +6467,9 @@ def command_context_setup_plugin(cfg):
             graphs_build_MAME_Fanart_all(cfg, st_dic, data_dic)
             if kodi_display_status_message(st_dic): return
             # MAME asset DB has changed so rebuild MAME asset hashed database and MAME asset cache.
-            control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+            control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
             db_build_asset_hashed_db(cfg, control_dic, data_dic['assetdb'])
-            cache_index = utils_load_JSON_file_dic(cfg.CACHE_INDEX_PATH.getPath())
+            cache_index = utils_load_JSON_file(cfg.CACHE_INDEX_PATH.getPath())
             db_build_asset_cache(cfg, control_dic, cache_index, data_dic['assetdb'])
 
         # --- Build missing/Rebuild all SL Fanarts ---
@@ -6467,9 +6497,9 @@ def command_context_setup_plugin(cfg):
             graphs_build_MAME_3DBox_all(cfg, st_dic, data_dic)
             if kodi_display_status_message(st_dic): return
             # MAME asset DB has changed so rebuild MAME asset hashed database and MAME asset cache.
-            control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+            control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
             db_build_asset_hashed_db(cfg, control_dic, data_dic['assetdb'])
-            cache_index = utils_load_JSON_file_dic(cfg.CACHE_INDEX_PATH.getPath())
+            cache_index = utils_load_JSON_file(cfg.CACHE_INDEX_PATH.getPath())
             db_build_asset_cache(cfg, control_dic, cache_index, data_dic['assetdb'])
 
         # --- Build missing/Rebuild all SL 3D Boxes ---
@@ -6716,7 +6746,8 @@ def command_exec_utility(cfg, which_utility):
                 SERIES_FN = DATS_dir_FN.pjoin(SERIES_INI)
                 COMMAND_FN = DATS_dir_FN.pjoin(COMMAND_DAT)
                 GAMEINIT_FN = DATS_dir_FN.pjoin(GAMEINIT_DAT)
-                HISTORY_FN = DATS_dir_FN.pjoin(HISTORY_DAT)
+                HISTORY_XML_FN = DATS_dir_FN.pjoin(HISTORY_XML)
+                HISTORY_DAT_FN = DATS_dir_FN.pjoin(HISTORY_DAT)
                 MAMEINFO_FN = DATS_dir_FN.pjoin(MAMEINFO_DAT)
 
                 aux_check_file_WARN(slist, ALLTIME_FN.getPath(), ALLTIME_INI + ' file')
@@ -6731,7 +6762,8 @@ def command_exec_utility(cfg, which_utility):
                 aux_check_file_WARN(slist, SERIES_FN.getPath(), SERIES_INI + ' file')
                 aux_check_file_WARN(slist, COMMAND_FN.getPath(), COMMAND_DAT + ' file')
                 aux_check_file_WARN(slist, GAMEINIT_FN.getPath(), GAMEINIT_DAT + ' file')
-                aux_check_file_WARN(slist, HISTORY_FN.getPath(), HISTORY_DAT + ' file')
+                aux_check_file_WARN(slist, HISTORY_XML_FN.getPath(), HISTORY_XML + ' file')
+                aux_check_file_WARN(slist, HISTORY_DAT_FN.getPath(), HISTORY_DAT + ' file')
                 aux_check_file_WARN(slist, MAMEINFO_FN.getPath(), MAMEINFO_DAT + ' file')
             else:
                 slist.append('{} MAME INI/DAT path not found'.format(ERR))
@@ -6782,7 +6814,7 @@ def command_exec_utility(cfg, which_utility):
         log_info('command_check_MAME_CRC_collisions() Initialising ...')
 
         # --- Check database ---
-        control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+        control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
         st_dic = kodi_new_status_dic()
         options = check_MAME_DB_status(st_dic, MAME_CATALOG_BUILT, control_dic)
         if kodi_display_status_message(st_dic): return False
@@ -6840,7 +6872,7 @@ def command_exec_utility(cfg, which_utility):
             'There are {} CRC32 collisions'.format(num_collisions),
             '',
         ]
-        table_str_list = text_render_table_str(table_str)
+        table_str_list = text_render_table(table_str)
         slist.extend(table_str_list)
         kodi_display_text_window_mono('AML MAME CRC32 hash collision report', '\n'.join(slist))
         log_info('Writing "{}"'.format(cfg.REPORT_DEBUG_MAME_COLLISIONS_PATH.getPath()))
@@ -6850,11 +6882,11 @@ def command_exec_utility(cfg, which_utility):
         log_info('command_exec_utility() Initialising CHECK_SL_COLLISIONS ...')
 
         # --- Load SL catalog and check for errors ---
-        control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+        control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
         st_dic = kodi_new_status_dic()
         options = check_SL_DB_status(st_dic, SL_MAIN_DB_BUILT, control_dic)
         if kodi_display_status_message(st_dic): return False
-        SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
+        SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
 
         # --- Process all SLs ---
         d_text = 'Scanning Sofware Lists ROMs/CHDs...'
@@ -6872,9 +6904,9 @@ def command_exec_utility(cfg, which_utility):
 
             # Load SL databases
             # SL_SETS_DB_FN = SL_hash_dir_FN.pjoin(SL_name + '.json')
-            # sl_sets = utils_load_JSON_file_dic(SL_SETS_DB_FN.getPath(), verbose = False)
+            # sl_sets = utils_load_JSON_file(SL_SETS_DB_FN.getPath(), verbose = False)
             SL_ROMS_DB_FN = cfg.SL_DB_DIR.pjoin(SL_name + '_ROMs.json')
-            sl_roms = utils_load_JSON_file_dic(SL_ROMS_DB_FN.getPath(), verbose = False)
+            sl_roms = utils_load_JSON_file(SL_ROMS_DB_FN.getPath(), verbose = False)
 
             # First step: make a SHA1 dictionary of all SL item hashes.
             for set_name in sorted(sl_roms):
@@ -6932,7 +6964,7 @@ def command_exec_utility(cfg, which_utility):
             'There are {} CRC32 collisions'.format(num_collisions),
             '',
         ]
-        table_str_list = text_render_table_str(table_str)
+        table_str_list = text_render_table(table_str)
         slist.extend(table_str_list)
         kodi_display_text_window_mono('AML Software Lists CRC32 hash collision report', '\n'.join(slist))
         log_info('Writing "{}"'.format(cfg.REPORT_DEBUG_SL_COLLISIONS_PATH.getPath()))
@@ -6951,7 +6983,7 @@ def command_exec_utility(cfg, which_utility):
             ['roms', 'MAME machine ROMs', cfg.ROMS_DB_PATH.getPath()],
         ]
         db_dic = db_load_files(db_files)
-        control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+        control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
         st_dic = kodi_new_status_dic()
         options = check_MAME_DB_status(st_dic, MAME_MAIN_DB_BUILT, control_dic)
         if kodi_display_status_message(st_dic): return False
@@ -7000,7 +7032,7 @@ def command_exec_utility(cfg, which_utility):
 
         # --- Write report ---
         slist = []
-        table_str_list = text_render_table_str(table_str)
+        table_str_list = text_render_table(table_str)
         slist.extend(table_str_list)
         if show_BIG:
             window_title = 'MAME machines with biggest ROMs'
@@ -7090,11 +7122,11 @@ def command_exec_report(cfg, which_report):
         if not cfg.MAIN_CONTROL_PATH.exists():
             kodi_dialog_OK('MAME database not found. Please setup the addon first.')
             return
-        control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+        control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
         if cfg.settings['op_mode'] == OP_MODE_VANILLA:
-            XML_ctrl_dic = utils_load_JSON_file_dic(cfg.MAME_XML_CONTROL_PATH.getPath())
+            XML_ctrl_dic = utils_load_JSON_file(cfg.MAME_XML_CONTROL_PATH.getPath())
         elif cfg.settings['op_mode'] == OP_MODE_RETRO_MAME2003PLUS:
-            XML_ctrl_dic = utils_load_JSON_file_dic(cfg.MAME_2003_PLUS_XML_CONTROL_PATH.getPath())
+            XML_ctrl_dic = utils_load_JSON_file(cfg.MAME_2003_PLUS_XML_CONTROL_PATH.getPath())
         else:
             XML_ctrl_dic = db_new_MAME_XML_control_dic()
         info_text = []
@@ -7105,7 +7137,7 @@ def command_exec_report(cfg, which_report):
         if not cfg.MAIN_CONTROL_PATH.exists():
             kodi_dialog_OK('MAME database not found. Please setup the addon first.')
             return
-        control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+        control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
         info_text = []
         mame_stats_scanner_print_slist(cfg, info_text, control_dic)
         kodi_display_text_window_mono('Scanner statistics', '\n'.join(info_text))
@@ -7114,7 +7146,7 @@ def command_exec_report(cfg, which_report):
         if not cfg.MAIN_CONTROL_PATH.exists():
             kodi_dialog_OK('MAME database not found. Please setup the addon first.')
             return
-        control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+        control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
         info_text = []
         mame_stats_audit_print_slist(cfg, info_text, control_dic)
         kodi_display_text_window_mono('Database information and statistics', '\n'.join(info_text))
@@ -7123,7 +7155,7 @@ def command_exec_report(cfg, which_report):
         if not cfg.MAIN_CONTROL_PATH.exists():
             kodi_dialog_OK('MAME database not found. Please setup the addon first.')
             return
-        control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+        control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
         info_text = []
         mame_stats_timestamps_slist(cfg, info_text, control_dic)
         kodi_display_text_window_mono('Database information and statistics', '\n'.join(info_text))
@@ -7133,11 +7165,11 @@ def command_exec_report(cfg, which_report):
         if not cfg.MAIN_CONTROL_PATH.exists():
             kodi_dialog_OK('MAME database not found. Please setup the addon first.')
             return
-        control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+        control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
         if cfg.settings['op_mode'] == OP_MODE_VANILLA:
-            XML_ctrl_dic = utils_load_JSON_file_dic(cfg.MAME_XML_CONTROL_PATH.getPath())
+            XML_ctrl_dic = utils_load_JSON_file(cfg.MAME_XML_CONTROL_PATH.getPath())
         elif cfg.settings['op_mode'] == OP_MODE_RETRO_MAME2003PLUS:
-            XML_ctrl_dic = utils_load_JSON_file_dic(cfg.MAME_2003_PLUS_XML_CONTROL_PATH.getPath())
+            XML_ctrl_dic = utils_load_JSON_file(cfg.MAME_2003_PLUS_XML_CONTROL_PATH.getPath())
         else:
             XML_ctrl_dic = db_new_MAME_XML_control_dic()
 
@@ -7155,11 +7187,11 @@ def command_exec_report(cfg, which_report):
         if not cfg.MAIN_CONTROL_PATH.exists():
             kodi_dialog_OK('MAME database not found. Please setup the addon first.')
             return
-        control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+        control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
         if cfg.settings['op_mode'] == OP_MODE_VANILLA:
-            XML_ctrl_dic = utils_load_JSON_file_dic(cfg.MAME_XML_CONTROL_PATH.getPath())
+            XML_ctrl_dic = utils_load_JSON_file(cfg.MAME_XML_CONTROL_PATH.getPath())
         elif cfg.settings['op_mode'] == OP_MODE_RETRO_MAME2003PLUS:
-            XML_ctrl_dic = utils_load_JSON_file_dic(cfg.MAME_2003_PLUS_XML_CONTROL_PATH.getPath())
+            XML_ctrl_dic = utils_load_JSON_file(cfg.MAME_2003_PLUS_XML_CONTROL_PATH.getPath())
         else:
             XML_ctrl_dic = db_new_MAME_XML_control_dic()
 
@@ -7416,24 +7448,24 @@ def run_machine(cfg, machine_name, location):
     log_info('run_machine() Launching MAME location "{}"'.format(location))
 
     # --- Load databases ---
-    control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+    control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
     if location == LOCATION_STANDARD:
         log_debug('Reading info from hashed DBs')
         machine = db_get_machine_main_hashed_db(cfg, machine_name)
         assets = db_get_machine_assets_hashed_db(cfg, machine_name)
     elif location == LOCATION_MAME_FAVS:
         log_debug('Reading info from MAME Favourites')
-        fav_machines = utils_load_JSON_file_dic(cfg.FAV_MACHINES_PATH.getPath())
+        fav_machines = utils_load_JSON_file(cfg.FAV_MACHINES_PATH.getPath())
         machine = fav_machines[machine_name]
         assets = machine['assets']
     elif location == LOCATION_MAME_MOST_PLAYED:
         log_debug('Reading info from MAME Most Played DB')
-        most_played_roms_dic = utils_load_JSON_file_dic(cfg.MAME_MOST_PLAYED_FILE_PATH.getPath())
+        most_played_roms_dic = utils_load_JSON_file(cfg.MAME_MOST_PLAYED_FILE_PATH.getPath())
         machine = most_played_roms_dic[machine_name]
         assets = machine['assets']
     elif location == LOCATION_MAME_RECENT_PLAYED:
         log_debug('Reading info from MAME Recently Played DB')
-        recent_roms_list = utils_load_JSON_file_list(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath())
+        recent_roms_list = utils_load_JSON_file(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath(), [])
         machine_index = db_locate_idx_by_MAME_name(recent_roms_list, machine_name)
         if machine_index < 0:
             a = 'Machine {} cannot be located in Recently Played list. This is a bug.'
@@ -7493,7 +7525,7 @@ def run_machine(cfg, machine_name, location):
     # If the machine is already in the list remove it and place it on the first position.
     MAX_RECENT_PLAYED_ROMS = 100
     recent_rom = db_get_MAME_Favourite_simple(machine_name, machine, assets, control_dic)
-    recent_roms_list = utils_load_JSON_file_list(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath())
+    recent_roms_list = utils_load_JSON_file(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath(), [])
     # Machine names are unique in this list.
     recent_roms_list = [machine for machine in recent_roms_list if machine_name != machine['name']]
     recent_roms_list.insert(0, recent_rom)
@@ -7505,7 +7537,7 @@ def run_machine(cfg, machine_name, location):
     utils_write_JSON_file(cfg.MAME_RECENT_PLAYED_FILE_PATH.getPath(), recent_roms_list)
 
     # --- Compute most played ROM statistics ---
-    most_played_roms_dic = utils_load_JSON_file_dic(cfg.MAME_MOST_PLAYED_FILE_PATH.getPath())
+    most_played_roms_dic = utils_load_JSON_file(cfg.MAME_MOST_PLAYED_FILE_PATH.getPath())
     if recent_rom['name'] in most_played_roms_dic:
         rom_name = recent_rom['name']
         most_played_roms_dic[rom_name]['launch_count'] += 1
@@ -7614,16 +7646,16 @@ def run_SL_machine(cfg, SL_name, SL_ROM_name, location):
 
     # --- Get a list of launch machine <devices> and SL ROM <parts> ---
     # --- Load SL ROMs and SL assets databases ---
-    control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+    control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
     if location == LOCATION_STANDARD:
         # >> Load DBs
         log_info('run_SL_machine() SL ROM is in Standard Location')
-        SL_catalog_dic = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
+        SL_catalog_dic = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
         SL_DB_FN = cfg.SL_DB_DIR.pjoin(SL_catalog_dic[SL_name]['rom_DB_noext'] + '_items.json')
         log_info('run_SL_machine() SL ROMs JSON "{}"'.format(SL_DB_FN.getPath()))
-        SL_ROMs = utils_load_JSON_file_dic(SL_DB_FN.getPath())
+        SL_ROMs = utils_load_JSON_file(SL_DB_FN.getPath())
         SL_asset_DB_FN = cfg.SL_DB_DIR.pjoin(SL_catalog_dic[SL_name]['rom_DB_noext'] + '_assets.json')
-        SL_asset_dic = utils_load_JSON_file_dic(SL_asset_DB_FN.getPath())
+        SL_asset_dic = utils_load_JSON_file(SL_asset_DB_FN.getPath())
         # >> Get ROM and assets
         SL_fav_DB_key = SL_name + '-' + SL_ROM_name
         SL_ROM = SL_ROMs[SL_ROM_name]
@@ -7635,7 +7667,7 @@ def run_SL_machine(cfg, SL_name, SL_ROM_name, location):
     elif location == LOCATION_SL_FAVS:
         # >> Load DBs
         log_info('run_SL_machine() SL ROM is in Favourites')
-        fav_SL_roms = utils_load_JSON_file_dic(cfg.FAV_SL_ROMS_PATH.getPath())
+        fav_SL_roms = utils_load_JSON_file(cfg.FAV_SL_ROMS_PATH.getPath())
         # >> Get ROM and assets
         SL_fav_DB_key = SL_name + '-' + SL_ROM_name
         SL_ROM = fav_SL_roms[SL_fav_DB_key]
@@ -7646,7 +7678,7 @@ def run_SL_machine(cfg, SL_name, SL_ROM_name, location):
         launch_machine_desc = '[ Not available ]'
     elif location == LOCATION_SL_MOST_PLAYED:
         log_debug('Reading info from MAME Most Played DB')
-        most_played_roms_dic = utils_load_JSON_file_dic(cfg.SL_MOST_PLAYED_FILE_PATH.getPath())
+        most_played_roms_dic = utils_load_JSON_file(cfg.SL_MOST_PLAYED_FILE_PATH.getPath())
         SL_fav_DB_key = SL_name + '-' + SL_ROM_name
         SL_ROM = most_played_roms_dic[SL_fav_DB_key]
         SL_assets = SL_ROM['assets']
@@ -7655,7 +7687,7 @@ def run_SL_machine(cfg, SL_name, SL_ROM_name, location):
         launch_machine_desc = '[ Not available ]'
     elif location == LOCATION_SL_RECENT_PLAYED:
         log_debug('Reading info from MAME Recently Played DB')
-        recent_roms_list = utils_load_JSON_file_list(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath())
+        recent_roms_list = utils_load_JSON_file(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath(), [])
         machine_index = db_locate_idx_by_SL_item_name(recent_roms_list, SL_name, SL_ROM_name)
         if machine_index < 0:
             a = 'SL Item {} cannot be located in Recently Played list. This is a bug.'
@@ -7674,7 +7706,7 @@ def run_SL_machine(cfg, SL_name, SL_ROM_name, location):
     log_info('run_SL_machine() launch_machine_desc = "{}"'.format(launch_machine_desc))
 
     # --- Load SL machines ---
-    SL_machines_dic = utils_load_JSON_file_dic(cfg.SL_MACHINES_PATH.getPath())
+    SL_machines_dic = utils_load_JSON_file(cfg.SL_MACHINES_PATH.getPath())
     SL_machine_list = SL_machines_dic[SL_name]
     if not launch_machine_name:
         # >> Get a list of machines that can launch this SL ROM. User chooses in a select dialog
@@ -7800,7 +7832,7 @@ def run_SL_machine(cfg, SL_name, SL_ROM_name, location):
     # If the machine is already in the list remove it and place it on the first position.
     MAX_RECENT_PLAYED_ROMS = 100
     recent_ROM = db_get_SL_Favourite(SL_name, SL_ROM_name, SL_ROM, SL_assets, control_dic)
-    recent_roms_list = utils_load_JSON_file_list(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath())
+    recent_roms_list = utils_load_JSON_file(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath(), [])
     # Machine names are unique in this list
     recent_roms_list = [item for item in recent_roms_list if SL_fav_DB_key != item['SL_DB_key']]
     recent_roms_list.insert(0, recent_ROM)
@@ -7812,7 +7844,7 @@ def run_SL_machine(cfg, SL_name, SL_ROM_name, location):
     utils_write_JSON_file(cfg.SL_RECENT_PLAYED_FILE_PATH.getPath(), recent_roms_list)
 
     # --- Compute most played ROM statistics ---
-    most_played_roms_dic = utils_load_JSON_file_dic(cfg.SL_MOST_PLAYED_FILE_PATH.getPath())
+    most_played_roms_dic = utils_load_JSON_file(cfg.SL_MOST_PLAYED_FILE_PATH.getPath())
     if SL_fav_DB_key in most_played_roms_dic:
         most_played_roms_dic[SL_fav_DB_key]['launch_count'] += 1
     else:
@@ -7858,15 +7890,15 @@ def run_before_execution(cfg):
     media_state_action = cfg.settings['media_state_action']
     media_state_str = ['Stop', 'Pause', 'Keep playing'][media_state_action]
     a = 'run_before_execution() media_state_action is "{}" ({})'
-    log_verb(a.format(media_state_str, media_state_action))
+    log_debug(a.format(media_state_str, media_state_action))
     kodi_is_playing = xbmc.getCondVisibility('Player.HasMedia')
     if media_state_action == 0 and kodi_is_playing:
-        log_verb('run_before_execution() Executing built-in PlayerControl(stop)')
+        log_debug('run_before_execution() Executing built-in PlayerControl(stop)')
         xbmc.executebuiltin('PlayerControl(stop)')
         xbmc.sleep(100)
         g_flag_kodi_was_playing = True
     elif media_state_action == 1 and kodi_is_playing:
-        log_verb('run_before_execution() Executing built-in PlayerControl(pause)')
+        log_debug('run_before_execution() Executing built-in PlayerControl(pause)')
         xbmc.executebuiltin('PlayerControl(pause)')
         xbmc.sleep(100)
         g_flag_kodi_was_playing = True
@@ -7875,13 +7907,13 @@ def run_before_execution(cfg):
     # >> See http://forum.kodi.tv/showthread.php?tid=164522
     g_flag_kodi_audio_suspended = False
     if cfg.settings['suspend_audio_engine']:
-        log_verb('run_before_execution() Suspending Kodi audio engine')
+        log_debug('run_before_execution() Suspending Kodi audio engine')
         xbmc.audioSuspend()
         xbmc.enableNavSounds(False)
         xbmc.sleep(100)
         g_flag_kodi_audio_suspended = True
     else:
-        log_verb('run_before_execution() DO NOT suspend Kodi audio engine')
+        log_debug('run_before_execution() DO NOT suspend Kodi audio engine')
 
     # --- Force joystick suspend if requested in "Settings" --> "Advanced"
     # NOT IMPLEMENTED YET.
@@ -7892,11 +7924,11 @@ def run_before_execution(cfg):
     # --- Toggle Kodi windowed/fullscreen if requested ---
     g_flag_kodi_toggle_fullscreen = False
     if cfg.settings['toggle_window']:
-        log_verb('run_before_execution() Toggling Kodi from fullscreen to window')
+        log_debug('run_before_execution() Toggling Kodi from fullscreen to window')
         kodi_toogle_fullscreen()
         g_flag_kodi_toggle_fullscreen = True
     else:
-        log_verb('run_before_execution() Toggling Kodi fullscreen/windowed DISABLED')
+        log_debug('run_before_execution() Toggling Kodi fullscreen/windowed DISABLED')
 
     # Disable screensaver
     if cfg.settings['suspend_screensaver']:
@@ -7907,7 +7939,7 @@ def run_before_execution(cfg):
 
     # --- Pause Kodi execution some time ---
     delay_tempo_ms = cfg.settings['delay_tempo']
-    log_verb('run_before_execution() Pausing {} ms'.format(delay_tempo_ms))
+    log_debug('run_before_execution() Pausing {} ms'.format(delay_tempo_ms))
     xbmc.sleep(delay_tempo_ms)
     log_debug('run_before_execution() function ENDS')
 
@@ -7949,15 +7981,15 @@ def run_after_execution(cfg):
 
     # --- Stop Kodi some time ---
     delay_tempo_ms = cfg.settings['delay_tempo']
-    log_verb('run_after_execution() Pausing {} ms'.format(delay_tempo_ms))
+    log_debug('run_after_execution() Pausing {} ms'.format(delay_tempo_ms))
     xbmc.sleep(delay_tempo_ms)
 
     # --- Toggle Kodi windowed/fullscreen if requested ---
     if g_flag_kodi_toggle_fullscreen:
-        log_verb('run_after_execution() Toggling Kodi fullscreen')
+        log_debug('run_after_execution() Toggling Kodi fullscreen')
         kodi_toogle_fullscreen()
     else:
-        log_verb('run_after_execution() Toggling Kodi fullscreen DISABLED')
+        log_debug('run_after_execution() Toggling Kodi fullscreen DISABLED')
 
     # --- Resume joystick engine if it was suspended ---
     # NOT IMPLEMENTED
@@ -7968,13 +8000,13 @@ def run_after_execution(cfg):
     # WARNING: CActiveAE::StateMachine - signal: 0 from port: OutputControlPort not handled for state: 7
     #   ERROR: ActiveAE::Resume - failed to init
     if g_flag_kodi_audio_suspended:
-        log_verb('run_after_execution() Kodi audio engine was suspended before launching')
-        log_verb('run_after_execution() Resuming Kodi audio engine')
+        log_debug('run_after_execution() Kodi audio engine was suspended before launching')
+        log_debug('run_after_execution() Resuming Kodi audio engine')
         xbmc.audioResume()
         xbmc.enableNavSounds(True)
         xbmc.sleep(100)
     else:
-        log_verb('run_after_execution() DO NOT resume Kodi audio engine')
+        log_debug('run_after_execution() DO NOT resume Kodi audio engine')
 
     # Restore screensaver status.
     if cfg.settings['suspend_screensaver']:
@@ -7988,10 +8020,10 @@ def run_after_execution(cfg):
     media_state_action = cfg.settings['media_state_action']
     media_state_str = ['Stop', 'Pause', 'Keep playing'][media_state_action]
     a = 'run_after_execution() media_state_action is "{}" ({})'
-    log_verb(a.format(media_state_str, media_state_action))
-    log_verb('run_after_execution() g_flag_kodi_was_playing is {}'.format(g_flag_kodi_was_playing))
+    log_debug(a.format(media_state_str, media_state_action))
+    log_debug('run_after_execution() g_flag_kodi_was_playing is {}'.format(g_flag_kodi_was_playing))
     if g_flag_kodi_was_playing and media_state_action == 1:
-        log_verb('run_after_execution() Executing built-in PlayerControl(play)')
+        log_debug('run_after_execution() Executing built-in PlayerControl(play)')
         # When Kodi is in "pause" mode, resume is used to continue play.
         xbmc.executebuiltin('PlayerControl(resume)')
     log_debug('run_after_execution() Function ENDS')

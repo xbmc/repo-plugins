@@ -26,6 +26,9 @@ WIP      [CORE] AML/AEL must report the aspect ratio of artwork to the skin.
 
 [B]AML ideas and planned features (read to implement)[/B]
 
+WIP      [DOCS] Improve the AML wiki in Github and move documentation from Kodi forum to
+         Github wiki.
+
 WIP      [CORE] Implement the "Read-only launchers". ROLs are XML files that include the
          launcher information as well as the ROMs information. ROLs are generated with AML,
          can be exported as XML and then used with AEL. AEL will handle ROLs as read-only
@@ -67,13 +70,29 @@ WIP      Retroarch core MAME 2003 Plus allows to save the MAME XML file needed b
          See https://github.com/libretro/mame2010-libretro/tree/master/metadata
 
 
-[B]Advanced MAME Launcher | version 1.0.1 | xx xxxxxx 2021[/B]
+[B]Advanced MAME Launcher | version 1.0.2 | 18 June 2021[/B]
 
-WIP      [DOCS] Improve the AML wiki in Github and move documentation from Kodi forum to
-         Github wiki.
+NOTE     Version was bumped to 1.0.2 to keep feature-sync with 0.10.2
+
+FEATURE  [CORE] Synched utils.py and misc.py with AEL.
+
+FEATURE  [CORE] Support new history.dat XML format.
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=3029005#pid3029005
 
 
-[B]Advanced MAME Launcher | version 1.0.0 | 10 November 2020[/B]
+[B]Advanced MAME Launcher | version 1.0.1 | non-released[/B]
+
+NOTE     This version was never uploaded to the Kodi repo.
+
+FIX      [CORE] Fix crash when building Controls (Expanded) catalog in MAME 2003 Plus mode.
+         Also fixed Controls (Expanded) and Controls (Compact) catalogues for empty controls.
+
+FIX      [CORE] Fix SKIN_SHOW_* launchers. 
+
+FIX      [CORE] Fix bug in mame_update_MAME_MostPlay_objects().
+
+
+[B]Advanced MAME Launcher | version 1.0.0 | 27 November 2020[/B]
 
 FEATURE  [CORE] Port the addon to Kodi Matrix and Python 3.
 
@@ -83,7 +102,27 @@ FIX      [MANUALS] The pdfwr library is not working well with Python 3. PDF imag
          have been disabled until this issue is fixed.
 
 
-[B]Advanced MAME Launcher | version 0.10.0 | xx November 2020[/B]
+[B]Advanced MAME Launcher | version 0.10.2 | xx June 2021[/B]
+
+NOTE     Code synched with 1.0.2.
+
+FEATURE  [CORE] Synched utils.py and misc.py with AEL.
+
+FEATURE  [CORE] Support new history.dat XML format.
+         See https://forum.kodi.tv/showthread.php?tid=304186&pid=3029005#pid3029005
+
+
+[B]Advanced MAME Launcher | version 0.10.1 | 04 February 2021[/B]
+
+FIX      [CORE] Fix crash when building Controls (Expanded) catalog in MAME 2003 Plus mode.
+         Also fixed Controls (Expanded) and Controls (Compact) catalogues for empty controls. 
+
+FIX      [CORE] Fix SKIN_SHOW_* launchers.
+
+FIX      [CORE] Fix bug in mame_update_MAME_MostPlay_objects().
+
+
+[B]Advanced MAME Launcher | version 0.10.0 | 27 November 2020[/B]
 
 FEATURE  [CORE] Big code refactoring to prepare Kodi Python API changes.
 

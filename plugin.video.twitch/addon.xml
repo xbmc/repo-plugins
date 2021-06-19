@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.twitch" version="2.5.7+matrix.1" name="Twitch" provider-name="anxdpanic, A Talented Community">
+<addon id="plugin.video.twitch" version="2.5.9+matrix.1" name="Twitch" provider-name="anxdpanic, A Talented Community">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.six" version="1.11.0"/>
@@ -13,8 +13,7 @@
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
         <news>
-[fix] Python 2 encoding issues - DimmKG
-[lang] update Russian translation - DimmKG
+[fix] Signal end_of_directory when an exception appears - DimmKG
         </news>
         <assets>
             <icon>icon.png</icon>
@@ -23,24 +22,24 @@
         <source>https://github.com/anxdpanic/Twitch-on-Kodi</source>
         <license>GPL-3.0-only</license>
         <forum>https://twitchaddon.panicked.xyz/forum</forum>
-        <summary lang="en_GB">Twitch video plugin</summary>
-        <description lang="en_GB">Watch your favorite gaming streams!</description>
-        <summary lang="da_DK">Twitch video plugin</summary>
-        <description lang="da_DK">Se dine favorit gaming streams!</description>
-        <summary lang="de_DE">Twitch video plugin</summary>
-        <description lang="de_DE">Schaue die besten Gaming-Streams!</description>
-        <summary lang="es_ES">Twitch video plugin</summary>
-        <description lang="es_ES">¡Mira los streams de tus juegos favoritos!</description>
-        <summary lang="fr_FR">Twitch video plugin</summary>
-        <description lang="fr_FR">Regardez les streams de vos jeux favoris !</description>
-        <summary lang="nl_NL">Twitch video plugin</summary>
-        <description lang="nl_NL">Bekijk je favoriete gaming-streams!</description>
-        <summary lang="nb_NO">Tillegg for Twitch</summary>
-        <description lang="nb_NO">Se dine favorittstrømmere!</description>
-        <summary lang="pl_PL">Twitch video plugin</summary>
-        <description lang="pl_PL">Oglądaj ulubione programy TwitchTV!</description>
-        <summary lang="ru_RU">Видео плагин Twitch </summary>
-        <description lang="ru_RU">Смотрите любимые игровые трансляции!</description>
         <reuselanguageinvoker>true</reuselanguageinvoker>
+        <summary lang="da_DK">Twitch video plugin</summary>
+        <summary lang="de_DE">Twitch video plugin</summary>
+        <summary lang="en_GB">Twitch video plugin</summary>
+        <summary lang="es_ES">Twitch video plugin</summary>
+        <summary lang="fr_FR">Twitch video plugin</summary>
+        <summary lang="nb_NO">Tillegg for Twitch</summary>
+        <summary lang="nl_NL">Twitch video plugin</summary>
+        <summary lang="pl_PL">Twitch video plugin</summary>
+        <summary lang="ru_RU">Видео плагин Twitch</summary>
+        <description lang="da_DK">Se dine favorit gaming streams!</description>
+        <description lang="de_DE">Schaue die besten Gaming-Streams!</description>
+        <description lang="en_GB">Watch your favorite gaming streams!</description>
+        <description lang="es_ES">¡Mira los streams de tus juegos favoritos!</description>
+        <description lang="fr_FR">Regardez les streams de vos jeux favoris !</description>
+        <description lang="nb_NO">Se dine favorittstrømmere!</description>
+        <description lang="nl_NL">Bekijk je favoriete gaming-streams!</description>
+        <description lang="pl_PL">Oglądaj ulubione programy TwitchTV!</description>
+        <description lang="ru_RU">Смотрите любимые игровые трансляции!</description>
     </extension>
 </addon>

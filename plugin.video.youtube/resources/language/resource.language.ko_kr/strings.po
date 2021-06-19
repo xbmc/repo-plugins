@@ -10,20 +10,30 @@ msgstr ""
 "PO-Revision-Date: 2019-06-17 23:44+0900\n"
 "Last-Translator: Minho Park <parkmino@gmail.com>\n"
 "Language-Team: LANGUAGE\n"
+"Language: ko_KR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ko_KR\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+
+msgctxt "Addon Summary"
+msgid "Plugin for YouTube"
+msgstr "유튜브 플러그인"
+
+msgctxt "Addon Description"
+msgid "YouTube is one of the biggest video-sharing websites of the world."
+msgstr "유튜브는 세상에서 가장 큰 동영상 공유 사이트 중의 하나입니다."
+
+msgctxt "Addon Disclaimer"
+msgid "This plugin is not endorsed by Google"
+msgstr ""
 
 # msgctxt "Addon Summary"
 # msgid "Plugin for YouTube"
 # msgstr ""
-
 # msgctxt "Addon Description"
 # msgid "YouTube is a one of the biggest video-sharing websites of the world."
 # msgstr ""
-
 msgctxt "#30000"
 msgid "General"
 msgstr "일반"
@@ -35,6 +45,15 @@ msgstr "사용자명"
 msgctxt "#30002"
 msgid "Password"
 msgstr "비밀번호"
+
+# empty strings from id 30003 to 30006
+msgctxt "#30007"
+msgid "Use MPEG-DASH"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Configure InputStream Adaptive"
+msgstr ""
 
 msgctxt "#30009"
 msgid "Always ask for the video quality"
@@ -152,9 +171,11 @@ msgctxt "#30038"
 msgid "Custom History playlist id"
 msgstr "사용자가 최근 본 재생목록 id"
 
+# Kodion Common
+# empty strings from id 30039 to 30099
 msgctxt "#30100"
-msgid "Favorites"
-msgstr "즐겨찾기"
+msgid "Favourites"
+msgstr ""
 
 msgctxt "#30101"
 msgid "Add to addon favs"
@@ -238,10 +259,9 @@ msgstr "지우기"
 
 # YouTube
 # empty strings from id 30121 to 30199
-
 msgctxt "#30200"
-msgid "API Key"
-msgstr "API 키"
+msgid "API"
+msgstr ""
 
 msgctxt "#30201"
 msgid "API Key"
@@ -265,7 +285,6 @@ msgstr "현재 API 키 세트 사용"
 
 # YouTube
 # empty strings from id 30206 to 30499
-
 msgctxt "#30500"
 msgid "Channels"
 msgstr "채널"
@@ -1209,3 +1228,13 @@ msgstr ""
 msgctxt "#30735"
 msgid "Edited"
 msgstr ""
+
+#~ msgctxt "#30100"
+#~ msgid "Favorites"
+#~ msgstr "즐겨찾기"
+
+# YouTube
+# empty strings from id 30121 to 30199
+#~ msgctxt "#30200"
+#~ msgid "API Key"
+#~ msgstr "API 키"

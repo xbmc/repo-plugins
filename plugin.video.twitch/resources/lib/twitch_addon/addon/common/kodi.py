@@ -210,8 +210,8 @@ def get_plugin_url(queries):
     return sys.argv[0] + '?' + query
 
 
-def end_of_directory(cache_to_disc=False):
-    xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=cache_to_disc)
+def end_of_directory(cache_to_disc=False, succeeded=True):
+    xbmcplugin.endOfDirectory(int(sys.argv[1]), succeeded=succeeded, cacheToDisc=cache_to_disc)
 
 
 def set_resolved_url(listitem, succeeded=True):

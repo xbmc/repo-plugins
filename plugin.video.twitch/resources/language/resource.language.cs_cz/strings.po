@@ -1,18 +1,24 @@
-
 msgid ""
 msgstr ""
-
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
+"Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: cs_CZ\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
+
+msgctxt "Addon Summary"
+msgid "Twitch video plugin"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Watch your favorite gaming streams!"
+msgstr ""
 
 msgctxt "#30001"
 msgid "Games"
@@ -45,6 +51,10 @@ msgstr "Hledat kanál"
 msgctxt "#30008"
 msgid "Channels"
 msgstr "Kanály"
+
+msgctxt "#30009"
+msgid "Live Channels"
+msgstr ""
 
 msgctxt "#30010"
 msgid "TwitchTV"
@@ -142,6 +152,10 @@ msgctxt "#30053"
 msgid "Password (OAuth Token)"
 msgstr ""
 
+msgctxt "#30054"
+msgid "Language | Streamer - Stream Title"
+msgstr ""
+
 msgctxt "#30060"
 msgid "Unnamed Streamer"
 msgstr "Bezejmenný Streamer"
@@ -153,6 +167,10 @@ msgstr "Stream bez názvu"
 msgctxt "#30062"
 msgid "Unknown Number of Viewers"
 msgstr "Neznámý počet sledujících"
+
+msgctxt "#30063"
+msgid "Unknown Language"
+msgstr ""
 
 msgctxt "#30064"
 msgid "Unknown Game"
@@ -348,6 +366,10 @@ msgstr ""
 
 msgctxt "#30112"
 msgid "Quality may result in best match"
+msgstr ""
+
+msgctxt "#30113"
+msgid "Uploads"
 msgstr ""
 
 msgctxt "#30114"

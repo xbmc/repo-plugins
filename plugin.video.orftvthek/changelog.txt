@@ -1,3 +1,8 @@
+* 0.12.2
+ - drm for restart
+ - drm livestream license url
+ - better quality selection handling for livestreams
+
 * 0.12.1
 - fixed schedule error (serviceapi) #102
 

@@ -45,6 +45,7 @@ else:
 import re
 
 USERAGENT = u"Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1"
+DEBUG_SCRAPER = False
 
 def replaceHTMLCodes(txt):
     log(repr(txt))
@@ -287,6 +288,8 @@ def fetchPage(params={}):
         ret_obj["status"] = 500
         return ret_obj
 
+
 def log(msg):
-    output = py2_encode(msg)
-    xbmc.log(output, xbmc.LOGDEBUG)
+    if DEBUG_SCRAPER:
+        output = py2_encode(msg)
+        xbmc.log(output, xbmc.LOGDEBUG)

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.orftvthek" name="ORF TVthek" version="0.12.2" provider-name="sofaking">
+    <requires>
+        <import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.future" version="0.17.1"/>
+        <import addon="script.module.kodi-six" version="0.0.7"/>
+        <import addon="script.module.simplejson" version="3.16.1"/>
+        <import addon="script.module.inputstreamhelper" version="0.5.5" optional="true"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <language>de en</language>
+        <summary lang="de_DE">ORF TVthek</summary>
+        <summary lang="en_GB">ORF TVthek</summary>
+        <description lang="de_DE">ORF TVthek - Ermöglicht Ihnen den Zugriff auf die ORF TVthek Video Platform</description>
+        <description lang="en_GB">ORF TVthek - This plugin provides access to the Austrian "ORF TVthek"</description>
+        <license>GPL-2.0-only</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=159835</forum>
+        <email>sofaking@gettingmoney.at</email>
+        <website>https://tvthek.orf.at</website>
+        <source>https://github.com/s0faking/plugin.video.orftvthek</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+        <news>v0.12.2 (09/06/2021)
+            [change] bumped python version to 2.26.0 (leia)
+            [fix] drm for restart
+            [fix] drm livestream license url
+            [fix] better quality selection handling for livestreams
+        </news>
+    </extension>
+</addon>

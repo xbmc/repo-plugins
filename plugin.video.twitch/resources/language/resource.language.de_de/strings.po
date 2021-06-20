@@ -1,18 +1,25 @@
-
 msgid ""
 msgstr ""
-
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE\n"
+"PO-Revision-Date: 2021-06-18 21:48+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: German <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/de_de/>\n"
+"Language: de_de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de_DE\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.7\n"
+
+msgctxt "Addon Summary"
+msgid "Twitch video plugin"
+msgstr "Twitch video plugin"
+
+msgctxt "Addon Description"
+msgid "Watch your favorite gaming streams!"
+msgstr "Schaue die besten Gaming-Streams!"
 
 msgctxt "#30001"
 msgid "Games"
@@ -45,6 +52,10 @@ msgstr "Suche nach Kanälen"
 msgctxt "#30008"
 msgid "Channels"
 msgstr "Kanäle"
+
+msgctxt "#30009"
+msgid "Live Channels"
+msgstr ""
 
 msgctxt "#30010"
 msgid "TwitchTV"
@@ -142,6 +153,10 @@ msgctxt "#30053"
 msgid "Password (OAuth Token)"
 msgstr "Passwort (OAuth-Token)"
 
+msgctxt "#30054"
+msgid "Language | Streamer - Stream Title"
+msgstr ""
+
 msgctxt "#30060"
 msgid "Unnamed Streamer"
 msgstr "Nicht benannter Streamer"
@@ -153,6 +168,10 @@ msgstr "Nicht benannter Stream"
 msgctxt "#30062"
 msgid "Unknown Number of Viewers"
 msgstr "Nicht bekannte Zuschauerzahl"
+
+msgctxt "#30063"
+msgid "Unknown Language"
+msgstr ""
 
 msgctxt "#30064"
 msgid "Unknown Game"
@@ -172,27 +191,27 @@ msgstr "Zuschauer bei Spiel | Streamer - Stream-Name"
 
 msgctxt "#30068"
 msgid "Content Type"
-msgstr ""
+msgstr "Inhaltstyp"
 
 msgctxt "#30069"
 msgid "Files"
-msgstr ""
+msgstr "Dateien"
 
 msgctxt "#30070"
 msgid "TV Shows"
-msgstr ""
+msgstr "Serien"
 
 msgctxt "#30071"
 msgid "Movies"
-msgstr ""
+msgstr "Filme"
 
 msgctxt "#30072"
 msgid "Episodes"
-msgstr ""
+msgstr "Episoden"
 
 msgctxt "#30073"
 msgid "Music Videos"
-msgstr ""
+msgstr "Musikvideos"
 
 msgctxt "#30074"
 msgid "Automatically refresh live preview cache"
@@ -248,7 +267,7 @@ msgstr ""
 
 msgctxt "#30087"
 msgid "Notifications"
-msgstr ""
+msgstr "Benachrichtigungen"
 
 msgctxt "#30088"
 msgid "Game"
@@ -348,6 +367,10 @@ msgstr ""
 
 msgctxt "#30112"
 msgid "Quality may result in best match"
+msgstr ""
+
+msgctxt "#30113"
+msgid "Uploads"
 msgstr ""
 
 msgctxt "#30114"

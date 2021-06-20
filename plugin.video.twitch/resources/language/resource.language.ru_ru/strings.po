@@ -1,18 +1,25 @@
-
 msgid ""
 msgstr ""
-
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: DimmKG <dimakrm361@gmail.com>\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-06-19 22:11+0000\n"
+"Last-Translator: Dmitry Petrov <dimakrm361@gmail.com>\n"
+"Language-Team: Russian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/ru_ru/>\n"
+"Language: ru_ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru_RU\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.7\n"
+
+msgctxt "Addon Summary"
+msgid "Twitch video plugin"
+msgstr "Видео плагин Twitch"
+
+msgctxt "Addon Description"
+msgid "Watch your favorite gaming streams!"
+msgstr "Смотрите любимые игровые трансляции!"
 
 msgctxt "#30001"
 msgid "Games"
@@ -67,7 +74,6 @@ msgid "-- Followed Channels --"
 msgstr "-- Отслеживаемые каналы --"
 
 # empty strings from id 30014 to 30019
-
 msgctxt "#30020"
 msgid "Http error"
 msgstr "Ошибка HTTP"
@@ -78,7 +84,7 @@ msgstr "Данные о трансляции не найдены"
 
 msgctxt "#30022"
 msgid "No archives found for"
-msgstr ""
+msgstr "Не удалось найти аривы для"
 
 msgctxt "#30023"
 msgid "User Token Error"
@@ -109,13 +115,11 @@ msgid "Please check your internet connection"
 msgstr "Пожалуйста проверьте интернет соединение"
 
 # empty strings from id 30030 to 30039
-
 msgctxt "#30040"
 msgid "Video Quality"
 msgstr "Качество видео"
 
 # empty strings from id 30041 to 30044
-
 msgctxt "#30045"
 msgid "Display titles"
 msgstr "Стиль заголовка"
@@ -157,7 +161,6 @@ msgid "Language | Streamer - Stream Title"
 msgstr "Язык | Стример - Название трансляции"
 
 # empty strings from id 30055 to 30059
-
 msgctxt "#30060"
 msgid "Unnamed Streamer"
 msgstr "Безымянный стример"
@@ -168,7 +171,7 @@ msgstr "Трансляция без названия"
 
 msgctxt "#30062"
 msgid "Unknown Number of Viewers"
-msgstr "Неизвестное количество зрителей"
+msgstr "Неизвестное число зрителей"
 
 msgctxt "#30063"
 msgid "Unknown Language"
@@ -180,7 +183,7 @@ msgstr "Неизвестная игра"
 
 msgctxt "#30065"
 msgid "Truncate displayed titles"
-msgstr "Усекать отображаемые заголовки"
+msgstr "Усекать длинные заголовки"
 
 msgctxt "#30066"
 msgid "Followed Games"
@@ -264,7 +267,7 @@ msgstr "***** ВНИМАНИЕ *****"
 
 msgctxt "#30086"
 msgid "These settings may allow this add-on to delete database entries and images[CR]for cached live previews."
-msgstr "Эти настройки позволят дополнению удалять записи с базы данных и картинки[CR]для предварительного просмотра"
+msgstr "Эти настройки позволят дополнению удалять записи с базы данных и картинки[CR]для предварительного просмотра."
 
 msgctxt "#30087"
 msgid "Notifications"
@@ -312,7 +315,7 @@ msgstr "OAuth ID клиента"
 
 msgctxt "#30098"
 msgid "Select Video by ID or URL"
-msgstr "Выбрать видео по ID или ссылке"
+msgstr "Выберите видео по ID или ссылке"
 
 msgctxt "#30099"
 msgid "OAuth Token"
@@ -335,8 +338,8 @@ msgid "1080p60"
 msgstr "1080p60"
 
 msgctxt "#30104"
-msgid "1080p60"
-msgstr "1080p60"
+msgid "1080p30"
+msgstr "1080p30"
 
 msgctxt "#30105"
 msgid "720p60"
@@ -444,7 +447,7 @@ msgstr "Ничего не получено"
 
 msgctxt "#30132"
 msgid "OAuth token is required for access to authorized user functions."
-msgstr "Требуется OAuth токен для доступа к функциям пользователя"
+msgstr "Требуется OAuth токен для доступа к функциям пользователя."
 
 msgctxt "#30133"
 msgid "Authorize"
@@ -452,7 +455,7 @@ msgstr "Авторизоваться"
 
 msgctxt "#30134"
 msgid "Get your OAuth token by logging in/signing up to Twitch.tv here:"
-msgstr "Получи свой OAuth токен, путем входа/регистрации на Twitch.tv здесь:"
+msgstr "Получите свой OAuth токен, путем входа/регистрации на Twitch.tv здесь:"
 
 msgctxt "#30135"
 msgid "Get OAuth token"
@@ -488,7 +491,7 @@ msgstr "Вы хотите отслеживать %s?"
 
 msgctxt "#30144"
 msgid "Are you sure you want to unfollow %s?"
-msgstr "Вы уверены, что хотите прекратить следить за %s"
+msgstr "Вы уверены, что хотите прекратить следить за %s?"
 
 msgctxt "#30145"
 msgid "Toggle block user"
@@ -556,7 +559,7 @@ msgstr "Очищен %s %s"
 
 msgctxt "#30161"
 msgid "Are you sure you want to clear %s %s?"
-msgstr "Вы уверены, что хотите очистить %s %s"
+msgstr "Вы уверены, что хотите очистить %s %s?"
 
 msgctxt "#30162"
 msgid "Clear list"
@@ -784,7 +787,7 @@ msgstr "Главное меню"
 
 msgctxt "#30220"
 msgid "Failed to get url, try again shortly."
-msgstr "Не удалось получить ссылку, повторите попытку позднее"
+msgstr "Не удалось получить ссылку, повторите попытку позже."
 
 msgctxt "#30221"
 msgid "Unknown"
@@ -808,7 +811,7 @@ msgstr "inputstream.adaptive включен в настройках Twitch, но
 
 msgctxt "#30226"
 msgid "The installed inputstream.adaptive add-on does not meet the version requirement(%s), and has been disabled in the Twitch add-on settings."
-msgstr "Установленное дополнение inputstream.adaptive не соответствует требуемой версии (%s) и будет выключено в настройках Twitch"
+msgstr "Установленное дополнение inputstream.adaptive не соответствует требуемой версии (%s) и будет выключено в настройках Twitch."
 
 msgctxt "#30227"
 msgid "Revoke Token"
@@ -820,7 +823,7 @@ msgstr "Вы уверены, что хотите отозвать ваш OAuth �
 
 msgctxt "#30229"
 msgid "OAuth token has been revoked"
-msgstr "OAuth токен был отозван"
+msgstr "OAuth токен отозван"
 
 msgctxt "#30230"
 msgid "OAuth token has been updated"
@@ -965,3 +968,7 @@ msgstr "Отслеживать"
 msgctxt "#30265"
 msgid "Unfollow"
 msgstr "Прекратить отслеживать"
+
+#~ msgctxt "#30104"
+#~ msgid "1080p60"
+#~ msgstr "1080p60"

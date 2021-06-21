@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.AML" name="Advanced MAME Launcher" version="0.10.1" provider-name="Wintermute0110">
+<addon id="plugin.program.AML" name="Advanced MAME Launcher" version="0.10.2" provider-name="Wintermute0110">
     <requires>
         <!--
             Check main addon versions in https://github.com/xbmc/xbmc/tree/master/addons
@@ -43,6 +43,6 @@
             <screenshot>media/shot_10_MAME_Audit_db.jpg</screenshot>
             <screenshot>media/shot_11_MAME_Audit_machine.jpg</screenshot>
         </assets>
-        <news>See changelog.txt for information about the latest release.</news>
+        <news>See changelog.txt file in https://github.com/Wintermute0110/plugin.program.AML.dev/ for information about the latest release.</news>
     </extension>
 </addon>

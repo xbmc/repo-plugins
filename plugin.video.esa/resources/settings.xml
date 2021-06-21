@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+   <setting id="language" type="enum" label="30101" values="System default|Česky|English|Español|Français|Deutsch|Ελληνικά|Italiano|Dutch|Português" default="System default"/>
+   <setting id="sort" type="enum" label="30103" values="By Date|Most Viewed|Most Voted" default="By Date"/>
+   <setting id="show_fanart" type="bool" label="30109" default="false"/>
+   <setting id="debug" type="bool" label="30102" default="false"/>
+</settings>

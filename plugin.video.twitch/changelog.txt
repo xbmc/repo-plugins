@@ -1,3 +1,7 @@
+2.5.10
+[fix] Playback of re-runs - apo86
+[fix] New OAuth token generation
+
 2.5.9
 [fix] Signal end_of_directory when an exception appears - DimmKG
 

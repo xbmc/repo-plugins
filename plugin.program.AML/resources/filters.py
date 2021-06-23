@@ -25,7 +25,7 @@ from .db import *
 from .mame_misc import *
 
 # --- Python standard library ---
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree
 
 # -------------------------------------------------------------------------------------------------
 # Constants
@@ -247,7 +247,12 @@ def SP_parse_exec(program, search_string):
         log_debug('SP_parse_exec() Search string "{}"'.format(search_string))
         log_debug('SP_parse_exec() Program       "{}"'.format(program))
     SP_parser_search_string = search_string
-    SP_next = SP_tokenize(program).next
+    if ADDON_RUNNING_PYTHON_2:
+        SP_next = SP_tokenize(program).next
+    elif ADDON_RUNNING_PYTHON_3:
+        SP_next = SP_tokenize(program).__next__
+    else:
+        raise TypeError('Undefined Python runtime version.')
     SP_token = SP_next()
 
     # Old function parse_exec()
@@ -450,7 +455,12 @@ def LSP_parse_exec(program, search_list):
         log_debug('LSP_parse_exec() Search  "{}"'.format(text_type(search_list)))
         log_debug('LSP_parse_exec() Program "{}"'.format(program))
     LSP_parser_search_list = search_list
-    LSP_next = LSP_tokenize(program).next
+    if ADDON_RUNNING_PYTHON_2:
+        LSP_next = LSP_tokenize(program).next
+    elif ADDON_RUNNING_PYTHON_3:
+        LSP_next = LSP_tokenize(program).__next__
+    else:
+        raise TypeError('Undefined Python runtime version.')
     LSP_token = LSP_next()
 
     # Old function parse_exec().
@@ -686,7 +696,12 @@ def YP_parse_exec(program, year_str):
         log_debug('YP_parse_exec() year     "{}"'.format(year))
         log_debug('YP_parse_exec() Program  "{}"'.format(program))
     YP_year = year
-    YP_next = YP_tokenize(program).next
+    if ADDON_RUNNING_PYTHON_2:
+        YP_next = YP_tokenize(program).next
+    elif ADDON_RUNNING_PYTHON_3:
+        YP_next = YP_tokenize(program).__next__
+    else:
+        raise TypeError('Undefined Python runtime version.')
     YP_token = YP_next()
 
     # Old function parse_exec().
@@ -1124,8 +1139,13 @@ def filter_parse_XML(fname_str):
                 'change'           : [], # List of tuples (change_orig string, change_dest string)
             }
             for filter_element in root_element:
-                # In Python 2 filter_element.text has type str and not Unicode.
-                text_t = text_type(filter_element.text if filter_element.text else '')
+                if ADDON_RUNNING_PYTHON_2:
+                    # In Python 2 filter_element.text has type str and not Unicode.
+                    text_t = text_type(filter_element.text if filter_element.text else '')
+                elif ADDON_RUNNING_PYTHON_3:
+                    text_t = filter_element.text if filter_element.text else ''
+                else:
+                    raise TypeError('Undefined Python runtime version.')
                 # log_debug('text_t "{}" type "{}"'.format(text_t, type(text_t)))
                 if filter_element.tag == 'Name':
                     this_filter_dic['name'] = text_t
@@ -1165,11 +1185,12 @@ def filter_parse_XML(fname_str):
 
     # Resolve DEFINE tags (substitute by the defined value)
     for f_definition in filters_list:
-        for initial_str, final_str in define_dic.iteritems():
-            f_definition['driver']           = f_definition['driver'].replace(initial_str, final_str)
-            f_definition['manufacturer']     = f_definition['manufacturer'].replace(initial_str, final_str)
-            f_definition['genre']            = f_definition['genre'].replace(initial_str, final_str)
-            f_definition['controls']         = f_definition['controls'].replace(initial_str, final_str)
+        for initial_str in define_dic:
+            final_str = define_dic[initial_str]
+            f_definition['driver'] = f_definition['driver'].replace(initial_str, final_str)
+            f_definition['manufacturer'] = f_definition['manufacturer'].replace(initial_str, final_str)
+            f_definition['genre'] = f_definition['genre'].replace(initial_str, final_str)
+            f_definition['controls'] = f_definition['controls'].replace(initial_str, final_str)
             f_definition['pluggabledevices'] = f_definition['pluggabledevices'].replace(initial_str, final_str)
             # Replace strings in list of strings.
             for i, s_t in enumerate(f_definition['include']):
@@ -1181,11 +1202,9 @@ def filter_parse_XML(fname_str):
 
     return filters_list
 
-#
 # Makes a list of all machines and add flags for easy filtering.
 # Returns a dictionary of dictionaries, indexed by the machine name.
 # This includes all MAME machines, including parents and clones.
-#
 def filter_get_filter_DB(cfg, db_dic_in):
     machine_main_dic = db_dic_in['machines']
     renderdb_dic = db_dic_in['renderdb']
@@ -1318,7 +1337,7 @@ def filter_get_filter_DB(cfg, db_dic_in):
     ]
     for dname, dnumber in sorted(genres_drivers_dic.items(), key = lambda x: x[1], reverse = True):
         table_str.append(['{}'.format(dname), '{}'.format(dnumber)])
-    rslist.extend(text_render_table_str(table_str))
+    rslist.extend(text_render_table(table_str))
     rslist.append('')
 
     table_str = [
@@ -1327,7 +1346,7 @@ def filter_get_filter_DB(cfg, db_dic_in):
     ]
     for dname, dnumber in sorted(controls_drivers_dic.items(), key = lambda x: x[1], reverse = True):
         table_str.append(['{}'.format(dname), '{}'.format(dnumber)])
-    rslist.extend(text_render_table_str(table_str))
+    rslist.extend(text_render_table(table_str))
     rslist.append('')
 
     table_str = [
@@ -1336,7 +1355,7 @@ def filter_get_filter_DB(cfg, db_dic_in):
     ]
     for dname, dnumber in sorted(pdevices_drivers_dic.items(), key = lambda x: x[1], reverse = True):
         table_str.append(['{}'.format(dname), '{}'.format(dnumber)])
-    rslist.extend(text_render_table_str(table_str))
+    rslist.extend(text_render_table(table_str))
     rslist.append('')
     utils_write_slist_to_file(cfg.REPORT_CF_HISTOGRAMS_PATH.getPath(), rslist)
 

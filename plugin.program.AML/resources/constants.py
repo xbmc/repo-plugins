@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2018-2020 Wintermute0110 <wintermute0110@gmail.com>
+# Copyright (c) 2016-2021 Wintermute0110 <wintermute0110@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the GNU General Public License for more details.
 
-# Advanced MAME Launcher constants and globals.
-# This module must not include any other addon module to avoid circular dependencies.
+# Advanced Emulator/MAME Launcher constants and globals.
+# This module has no external dependencies.
 
 # --- Python standard library ---
 from __future__ import unicode_literals
@@ -32,15 +32,28 @@ else:
     raise TypeError('Unknown Python runtime version')
 
 # -------------------------------------------------------------------------------------------------
-# Addon configuration options
+# Addon options and tuneables.
 # -------------------------------------------------------------------------------------------------
-# Compact, smaller size, non-human readable JSON.
-# This setting must be True when releasing.
+# Compact, smaller size, non-human readable JSON. False forces human-readable JSON for development.
+# In AEL speed is not as critical so False is OK.
+# In AML this must be True when releasing.
 OPTION_COMPACT_JSON = True
 
 # Use less memory when writing big JSON files, but writing is slower.
-# This setting must be True when releasing.
+# In AEL this can be False when releasing.
+# In AML it must be True when releasing.
 OPTION_LOWMEM_WRITE_JSON = True
+
+# The addon name in the GUI. Title of Kodi dialogs (yesno, progress, etc.) and used also in log functions.
+ADDON_LONG_NAME = 'Advanced MAME Launcher'
+ADDON_SHORT_NAME = 'AML'
+
+# These parameters are used in utils_write_JSON_file() when pprint is True or
+# OPTION_COMPACT_JSON is False. Otherwise non-human readable, compact JSON is written.
+# pprint = True function parameter overrides option OPTION_COMPACT_JSON.
+# More compact JSON files (less blanks) load faster because file size is smaller.
+JSON_INDENT = 1
+JSON_SEP = (', ', ': ')
 
 # -------------------------------------------------------------------------------------------------
 # DEBUG/TEST settings
@@ -50,7 +63,70 @@ OPTION_LOWMEM_WRITE_JSON = True
 DISABLE_MAME_LAUNCHING = False
 
 # -------------------------------------------------------------------------------------------------
-# Advanced MAME Launcher settings
+# This is to ease printing colors in Kodi.
+# -------------------------------------------------------------------------------------------------
+KC_RED        = '[COLOR red]'
+KC_ORANGE     = '[COLOR orange]'
+KC_GREEN      = '[COLOR green]'
+KC_YELLOW     = '[COLOR yellow]'
+KC_VIOLET     = '[COLOR violet]'
+KC_BLUEVIOLET = '[COLOR blueviolet]'
+KC_END        = '[/COLOR]'
+
+# -------------------------------------------------------------------------------------------------
+# Image file constants.
+# -------------------------------------------------------------------------------------------------
+# Supported image files in:
+# 1. misc_identify_image_id_by_contents()
+# 2. misc_identify_image_id_by_ext()
+IMAGE_PNG_ID     = 'PNG'
+IMAGE_JPEG_ID    = 'JPEG'
+IMAGE_GIF_ID     = 'GIF'
+IMAGE_BMP_ID     = 'BMP'
+IMAGE_TIFF_ID    = 'TIFF'
+IMAGE_UKNOWN_ID  = 'Image unknown'
+IMAGE_CORRUPT_ID = 'Image corrupt'
+
+IMAGE_IDS = [
+    IMAGE_PNG_ID,
+    IMAGE_JPEG_ID,
+    IMAGE_GIF_ID,
+    IMAGE_BMP_ID,
+    IMAGE_TIFF_ID,
+]
+
+IMAGE_EXTENSIONS = {
+    IMAGE_PNG_ID  : ['png'],
+    IMAGE_JPEG_ID : ['jpg', 'jpeg'],
+    IMAGE_GIF_ID  : ['gif'],
+    IMAGE_BMP_ID  : ['bmp'],
+    IMAGE_TIFF_ID : ['tif', 'tiff'],
+}
+
+# Image file magic numbers. All at file offset 0.
+# See https://en.wikipedia.org/wiki/List_of_file_signatures
+# b prefix is a byte string in both Python 2 and 3.
+IMAGE_MAGIC_DIC = {
+    IMAGE_PNG_ID  : [ b'\x89\x50\x4E\x47\x0D\x0A\x1A\x0A' ],
+    IMAGE_JPEG_ID : [
+        b'\xFF\xD8\xFF\xDB',
+        b'\xFF\xD8\xFF\xE0\x00\x10\x4A\x46\x49\x46\x00\x01',
+        b'\xFF\xD8\xFF\xEE',
+        b'\xFF\xD8\xFF\xE1',
+    ],
+    IMAGE_GIF_ID  : [
+        b'\x47\x49\x46\x38\x37\x61',
+        b'\x47\x49\x46\x38\x39\x61',
+    ],
+    IMAGE_BMP_ID  : [ b'\x42\x4D' ],
+    IMAGE_TIFF_ID : [
+        b'\x49\x49\x2A\x00',
+        b'\x4D\x4D\x00\x2A',
+    ]
+}
+
+# -------------------------------------------------------------------------------------------------
+# Addon constants
 # -------------------------------------------------------------------------------------------------
 # Operational modes
 # This must match setting op_mode_raw in settings.xml or bad things will happen.
@@ -107,6 +183,7 @@ NPLAYERS_INI  = 'nplayers.ini'
 SERIES_INI    = 'series.ini'
 COMMAND_DAT   = 'command.dat'
 GAMEINIT_DAT  = 'gameinit.dat'
+HISTORY_XML   = 'history.xml'
 HISTORY_DAT   = 'history.dat'
 MAMEINFO_DAT  = 'mameinfo.dat'
 

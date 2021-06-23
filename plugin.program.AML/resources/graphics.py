@@ -89,8 +89,8 @@ def ETA_update(build_OK_flag, total_processed_items, build_time):
 # ------------------------------------------------------------------------------------------------
 # Math functions
 # ------------------------------------------------------------------------------------------------
-# Here is a more elegant and scalable solution, imo. It'll work for any nxn matrix and 
-# you may find use for the other methods. Note that getMatrixInverse(m) takes in an 
+# Here is a more elegant and scalable solution, imo. It'll work for any nxn matrix and
+# you may find use for the other methods. Note that getMatrixInverse(m) takes in an
 # array of arrays as input.
 def math_MatrixTranspose(X):
     # return map(list, zip(*X))
@@ -193,7 +193,7 @@ def resize_proportional(img, layout, dic_key, CANVAS_COLOR = (0, 0, 0)):
 def paste_image(img, img_title, layout, dic_key):
     box = (
         layout[dic_key]['left'],
-        layout[dic_key]['top'], 
+        layout[dic_key]['top'],
         layout[dic_key]['left'] + layout[dic_key]['width'],
         layout[dic_key]['top']  + layout[dic_key]['height']
     )
@@ -327,7 +327,8 @@ def graphs_build_MAME_Fanart(cfg, layout, m_name, assets_dic, Fanart_FN,
     # Quickly check if machine has valid assets, and skip fanart generation if not.
     # log_debug('graphs_build_MAME_Fanart() Building fanart for machine {}'.format(m_name))
     machine_has_valid_assets = False
-    for asset_key, asset_db_name in MAME_layout_assets.iteritems():
+    for asset_key in MAME_layout_assets:
+        asset_db_name = MAME_layout_assets[asset_key]
         m_assets = assets_dic[m_name]
         if m_assets[asset_db_name]:
             machine_has_valid_assets = True
@@ -434,7 +435,8 @@ def graphs_build_SL_Fanart(cfg, layout, SL_name, m_name, assets_dic, Fanart_FN,
     # Quickly check if machine has valid assets, and skip fanart generation if not.
     # log_debug('graphs_build_SL_Fanart() Building fanart for SL {} item {}'.format(SL_name, m_name))
     machine_has_valid_assets = False
-    for asset_key, asset_db_name in SL_layout_assets.iteritems():
+    for asset_key in SL_layout_assets:
+        asset_db_name = SL_layout_assets[asset_key]
         m_assets = assets_dic[m_name]
         if m_assets[asset_db_name]:
             machine_has_valid_assets = True
@@ -713,7 +715,7 @@ def graphs_load_MAME_Fanart_stuff(cfg, st_dic, BUILD_MISSING):
     # --- Load Assets DB ---
     pDialog = KodiProgressDialog()
     pDialog.startProgress('Loading MAME asset database...')
-    assetdb_dic = utils_load_JSON_file_dic(cfg.ASSET_DB_PATH.getPath())
+    assetdb_dic = utils_load_JSON_file(cfg.ASSET_DB_PATH.getPath())
     pDialog.endProgress()
     data_dic['assetdb'] = assetdb_dic
 
@@ -761,7 +763,7 @@ def graphs_build_MAME_Fanart_all(cfg, st_dic, data_dic):
     pDialog.endProgress()
 
     # Update MAME Fanart build timestamp
-    control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+    control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
     db_safe_edit(control_dic, 't_MAME_fanart_build', time.time())
     utils_write_JSON_file(cfg.MAIN_CONTROL_PATH.getPath(), control_dic)
 
@@ -843,14 +845,14 @@ def graphs_load_SL_Fanart_stuff(cfg, st_dic, BUILD_MISSING):
     data_dic['layout'] = layout
 
     # --- Load SL index ---
-    SL_index = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
+    SL_index = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
     data_dic['SL_index'] = SL_index
 
     return data_dic
 
 # Builds or rebuilds missing SL Fanarts.
 def graphs_build_SL_Fanart_all(cfg, st_dic, data_dic):
-    control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+    control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
 
     # Traverse all SL and on each SL every item
     pDialog_canceled = False
@@ -876,7 +878,7 @@ def graphs_build_SL_Fanart_all(cfg, st_dic, data_dic):
         pDialog.resetProgress('{}\n{}'.format(dtext, 'Loading SL asset database'))
         assets_file_name =  data_dic['SL_index'][SL_name]['rom_DB_noext'] + '_assets.json'
         SL_asset_DB_FN = cfg.SL_DB_DIR.pjoin(assets_file_name)
-        SL_assets_dic = utils_load_JSON_file_dic(SL_asset_DB_FN.getPath())
+        SL_assets_dic = utils_load_JSON_file(SL_asset_DB_FN.getPath())
 
         # Traverse all SL items and build fanart from other pieces of artwork
         # Last slot of the progress bar is to save the JSON database.
@@ -948,7 +950,7 @@ def graphs_load_MAME_3DBox_stuff(cfg, st_dic, BUILD_MISSING):
     # --- Load 3DBox template from XML file ---
     # TProjection_FN = cfg.ADDON_CODE_DIR.pjoin('templates/3dbox_angleY_56.json')
     TProjection_FN = cfg.ADDON_CODE_DIR.pjoin('templates/3dbox_angleY_60.json')
-    t_projection = utils_load_JSON_file_dic(TProjection_FN.getPath())
+    t_projection = utils_load_JSON_file(TProjection_FN.getPath())
     if not t_projection:
         kodi_set_error_status(st_dic, 'Error loading JSON 3dbox projection data.')
         return
@@ -957,7 +959,7 @@ def graphs_load_MAME_3DBox_stuff(cfg, st_dic, BUILD_MISSING):
     # --- Load Assets DB ---
     pDialog = KodiProgressDialog()
     pDialog.startProgress('Loading MAME asset database...')
-    assetdb_dic = utils_load_JSON_file_dic(cfg.ASSET_DB_PATH.getPath())
+    assetdb_dic = utils_load_JSON_file(cfg.ASSET_DB_PATH.getPath())
     pDialog.endProgress()
     data_dic['assetdb'] = assetdb_dic
 
@@ -1004,7 +1006,7 @@ def graphs_build_MAME_3DBox_all(cfg, st_dic, data_dic):
     pDialog.endProgress()
 
     # --- MAME Fanart build timestamp ---
-    control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+    control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
     db_safe_edit(control_dic, 't_MAME_3dbox_build', time.time())
     utils_write_JSON_file(cfg.MAIN_CONTROL_PATH.getPath(), control_dic)
 
@@ -1029,21 +1031,21 @@ def graphs_load_SL_3DBox_stuff(cfg, st_dic, BUILD_MISSING):
     # --- Load 3D projection template from XML file ---
     # TProjection_FN = cfg.ADDON_CODE_DIR.pjoin('templates/3dbox_angleY_56.json')
     TProjection_FN = cfg.ADDON_CODE_DIR.pjoin('templates/3dbox_angleY_60.json')
-    t_projection = utils_load_JSON_file_dic(TProjection_FN.getPath())
+    t_projection = utils_load_JSON_file(TProjection_FN.getPath())
     if not t_projection:
         kodi_set_error_status(st_dic, 'Error loading JSON SL 3dbox projection data.')
         return
     data_dic['t_projection'] = t_projection
 
     # --- Load SL index ---
-    SL_index = utils_load_JSON_file_dic(cfg.SL_INDEX_PATH.getPath())
+    SL_index = utils_load_JSON_file(cfg.SL_INDEX_PATH.getPath())
     data_dic['SL_index'] = SL_index
 
     return data_dic
 
 # Builds or rebuilds missing SL Fanarts.
 def graphs_build_SL_3DBox_all(cfg, st_dic, data_dic):
-    control_dic = utils_load_JSON_file_dic(cfg.MAIN_CONTROL_PATH.getPath())
+    control_dic = utils_load_JSON_file(cfg.MAIN_CONTROL_PATH.getPath())
 
     # Traverse all SL and on each SL every item
     SL_number, SL_count = len(data_dic['SL_index']), 1
@@ -1068,7 +1070,7 @@ def graphs_build_SL_3DBox_all(cfg, st_dic, data_dic):
         pDialog.resetProgress(d_text + '\n' + 'Loading SL asset database')
         assets_file_name = data_dic['SL_index'][SL_name]['rom_DB_noext'] + '_assets.json'
         SL_asset_DB_FN = cfg.SL_DB_DIR.pjoin(assets_file_name)
-        SL_assets_dic = utils_load_JSON_file_dic(SL_asset_DB_FN.getPath())
+        SL_assets_dic = utils_load_JSON_file(SL_asset_DB_FN.getPath())
 
         # Traverse all SL items and build fanart from other pieces of artwork
         # Last slot of the progress bar is to save the JSON database.

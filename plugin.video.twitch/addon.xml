@@ -1,45 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.twitch" version="2.5.9+matrix.1" name="Twitch" provider-name="anxdpanic, A Talented Community">
-    <requires>
-        <import addon="xbmc.python" version="3.0.0"/>
-        <import addon="script.module.six" version="1.11.0"/>
-        <import addon="script.module.python.twitch" version="2.0.16"/>
-        <import addon="script.module.requests" version="2.9.1"/>
-    </requires>
-    <extension point="xbmc.python.pluginsource" library="resources/lib/addon_runner.py">
-        <provides>video</provides>
-    </extension>
-    <extension point="xbmc.service" library="resources/lib/service_runner.py"/>
-    <extension point="xbmc.addon.metadata">
-        <platform>all</platform>
-        <news>
-[fix] Signal end_of_directory when an exception appears - DimmKG
+<addon id="plugin.video.twitch" version="2.5.10+matrix.1" name="Twitch" provider-name="anxdpanic, A Talented Community">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.six" version="1.11.0"/>
+    <import addon="script.module.requests" version="2.9.1"/>
+    <import addon="script.module.python.twitch" version="2.0.17"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="resources/lib/addon_runner.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.service" library="resources/lib/service_runner.py"/>
+  <extension point="xbmc.addon.metadata">
+    <assets>
+      <icon>resources/media/icon.png</icon>
+      <fanart>resources/media/fanart.jpg</fanart>
+    </assets>
+    <news>
+[fix] Playback of re-runs - apo86
+[fix] New OAuth token generation
         </news>
-        <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-        </assets>
-        <source>https://github.com/anxdpanic/Twitch-on-Kodi</source>
-        <license>GPL-3.0-only</license>
-        <forum>https://twitchaddon.panicked.xyz/forum</forum>
-        <reuselanguageinvoker>true</reuselanguageinvoker>
-        <summary lang="da_DK">Twitch video plugin</summary>
-        <summary lang="de_DE">Twitch video plugin</summary>
-        <summary lang="en_GB">Twitch video plugin</summary>
-        <summary lang="es_ES">Twitch video plugin</summary>
-        <summary lang="fr_FR">Twitch video plugin</summary>
-        <summary lang="nb_NO">Tillegg for Twitch</summary>
-        <summary lang="nl_NL">Twitch video plugin</summary>
-        <summary lang="pl_PL">Twitch video plugin</summary>
-        <summary lang="ru_RU">Видео плагин Twitch</summary>
-        <description lang="da_DK">Se dine favorit gaming streams!</description>
-        <description lang="de_DE">Schaue die besten Gaming-Streams!</description>
-        <description lang="en_GB">Watch your favorite gaming streams!</description>
-        <description lang="es_ES">¡Mira los streams de tus juegos favoritos!</description>
-        <description lang="fr_FR">Regardez les streams de vos jeux favoris !</description>
-        <description lang="nb_NO">Se dine favorittstrømmere!</description>
-        <description lang="nl_NL">Bekijk je favoriete gaming-streams!</description>
-        <description lang="pl_PL">Oglądaj ulubione programy TwitchTV!</description>
-        <description lang="ru_RU">Смотрите любимые игровые трансляции!</description>
-    </extension>
+    <platform>all</platform>
+    <source>https://github.com/anxdpanic/plugin.video.twitch</source>
+    <license>GPL-3.0-only</license>
+    <forum>https://twitchaddon.panicked.xyz/forum</forum>
+    <reuselanguageinvoker>true</reuselanguageinvoker>
+    <summary lang="da_DK">Twitch video plugin</summary>
+    <summary lang="de_DE">Twitch video plugin</summary>
+    <summary lang="en_GB">Twitch video plugin</summary>
+    <summary lang="es_ES">Twitch video plugin</summary>
+    <summary lang="fr_FR">Twitch video plugin</summary>
+    <summary lang="nb_NO">Tillegg for Twitch</summary>
+    <summary lang="nl_NL">Twitch video plugin</summary>
+    <summary lang="pl_PL">Twitch video plugin</summary>
+    <summary lang="ru_RU">Видео плагин Twitch</summary>
+    <description lang="da_DK">Se dine favorit gaming streams!</description>
+    <description lang="de_DE">Schaue die besten Gaming-Streams!</description>
+    <description lang="en_GB">Watch your favorite gaming streams!</description>
+    <description lang="es_ES">¡Mira los streams de tus juegos favoritos!</description>
+    <description lang="fr_FR">Regardez les streams de vos jeux favoris !</description>
+    <description lang="nb_NO">Se dine favorittstrømmere!</description>
+    <description lang="nl_NL">Bekijk je favoriete gaming-streams!</description>
+    <description lang="pl_PL">Oglądaj ulubione programy TwitchTV!</description>
+    <description lang="ru_RU">Смотрите любимые игровые трансляции!</description>
+  </extension>
 </addon>

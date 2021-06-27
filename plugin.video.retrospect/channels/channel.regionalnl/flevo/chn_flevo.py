@@ -94,9 +94,9 @@ class Channel(chn_class.Channel):
 
             live_item = MediaItem(
                 "\a.: Live Radio :.",
-                "https://d5ms27yy6exnf.cloudfront.net/live/omroepflevoland/radio/index.m3u8"
+                "https://d5ms27yy6exnf.cloudfront.net/live/omroepflevoland/radio/index.m3u8",
+                media_type=mediatype.VIDEO
             )
-            live_item.type = 'video'
             live_item.dontGroup = True
             now = datetime.datetime.now()
             live_item.set_date(now.year, now.month, now.day, now.hour, now.minute, now.second)

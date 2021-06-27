@@ -1,9 +1,8 @@
-import time
 import datetime
+import dateutil.parser
+import xbmc
 import html
 import urllib.parse
-
-import hof
 
 
 def colorize(text, color):
@@ -34,16 +33,12 @@ def decode_string(str):
 
 
 def parse_date(datestr):
-    # remove weekday & timezone
-    datestr = str.join(' ', datestr.split(None)[1:5])
-
     date = None
-    # workaround for datetime.strptime not working (NoneType ???)
     try:
-        date = datetime.datetime.strptime(datestr, '%d %b %Y %H:%M:%S')
-    except TypeError:
-        date = datetime.datetime.fromtimestamp(time.mktime(
-            time.strptime(datestr, '%d %b %Y %H:%M:%S')))
+        date = dateutil.parser.parse(datestr)
+    except dateutil.parser.ParserError as e:
+        logmsg = "[{addon_id}] Problem with parsing date: {error}".format(addon_id="plugin.video.arteplussept", error=e)
+        xbmc.log(msg=logmsg, level=xbmc.LOGWARNING)
     return date
 
 

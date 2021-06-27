@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.arteplussept" name="Arte +7" version="1.1.1" provider-name="bmf">
+<addon id="plugin.video.arteplussept" name="Arte +7" version="1.1.2" provider-name="bmf">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.xbmcswift2" version="19.0.4"/>
         <import addon="script.module.requests" version="2.22.0"/>
+        <import addon="script.module.dateutil" version="2.8.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="resources/lib/addon.py">
         <provides>video</provides>
@@ -50,6 +51,8 @@ https://github.com/known-as-bmf/plugin.video.arteplussept
             <fanart>resources/fanart.jpg</fanart>
         </assets>
         <news>
+        v1.1.2
+        - better date / locale handling &amp; prevent crash when http error
         v1.1.1
         - minor python 3 fixes &amp; code improvements (from Kodi Travis CI)
         v1.1.0

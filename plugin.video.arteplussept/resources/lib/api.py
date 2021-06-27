@@ -74,5 +74,8 @@ def daily(date, lang):
 
 
 def _load_json(url, params=None, headers=_base_headers):
-    r = requests.get(_base_api_url + url, params=params, headers=headers)
-    return r.json(object_pairs_hook=OrderedDict)
+    try:
+        r = requests.get(_base_api_url + url, params=params, headers=headers)
+        return r.json(object_pairs_hook=OrderedDict)
+    except ValueError: # JSON decode failure (empty response ?)
+        return {}

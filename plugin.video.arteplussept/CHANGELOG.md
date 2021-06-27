@@ -1,3 +1,7 @@
+# Version 1.1.2
+
+- better date / locale handling & prevent crash when http error
+
 # Version 1.1.1
 
 - minor python 3 fixes & code improvements (from Kodi Travis CI)

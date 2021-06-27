@@ -228,8 +228,7 @@ class Channel(chn_class.Channel):
             Logger.debug("Adding live stream")
             title = streams.get('name') or "%s - Live TV" % (self.channelName, )
 
-            live_item = MediaItem(title, self.liveUrl)
-            live_item.type = 'video'
+            live_item = MediaItem(title, self.liveUrl, media_type=mediatype.VIDEO)
             live_item.complete = True
             live_item.isLive = True
             for stream in streams:
@@ -265,8 +264,10 @@ class Channel(chn_class.Channel):
 
                 elif stream == "name":
                     Logger.trace("Ignoring stream '%s'", stream)
+                    continue
                 else:
                     Logger.warning("No url found for type '%s'", stream)
+                    continue
 
                 # noinspection PyUnboundLocalVariable
                 if "livestreams.omroep.nl/live/" in url and url.endswith("m3u8"):

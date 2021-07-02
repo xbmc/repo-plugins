@@ -1,7 +1,8 @@
 # Kodi Media Center language file
 # Addon Name: Filmarkivet
 # Addon id: plugin.video.filmarkivet
-# Addon Provider: Anders Piniesjö (pugo@pugo.org)
+# Addon creator: Anders Piniesjö (pugo@pugo.org)
+# Addon maintainer: Ikosse
 msgid ""
 msgstr ""
 "Project-Id-Version: Kodi Addons\n"
@@ -52,3 +53,6 @@ msgctxt "#30023"
 msgid "Search"
 msgstr ""
 
+msgctxt "#30024"
+msgid "About"
+msgstr ""

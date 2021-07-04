@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.mazacka"
-version="1.2.4"
+version="1.2.5"
 name="Mazačka - Streets of Prague"
 provider-name="Radek Homola">
 <requires>
@@ -26,9 +26,8 @@ provider-name="Radek Homola">
     <screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
     <screenshot>resources/screenshots/screenshot-03.jpg</screenshot>    
   </assets>
-  <news>v1.2.4 (2021-02-08)
-  - Fixed "Currently not streaming" dialog
-  - Added DE and SK translations
+  <news>v1.2.5 (2021-04-07)
+  - 1080p stream currently unavailable
   </news>
 </extension>
 </addon>

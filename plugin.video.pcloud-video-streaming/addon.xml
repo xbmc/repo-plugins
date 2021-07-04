@@ -13,9 +13,9 @@
     <disclaimer lang="en">
       The plugin's author(s) are not affiliated with Kodi.
     </disclaimer>
-    <language>en</language>
+    <language>en_GB</language>
     <platform>all</platform>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+    <license>GPL-3.0-or-later</license>
     <forum>http://forum.kodi.tv/showthread.php?tid=239955</forum>
     <website>https://github.com/gdomenici/plugin.video.pcloud-video-streaming/wiki</website>
     <email>guido.domenici@gmail.com</email>

@@ -29,41 +29,30 @@ class PCloudApi:
 		self.TOKEN_EXPIRATION_SECONDS = 100 * 86400 # 100 days
 		self.HttpHandler = build_opener()
 		self.HttpHandler.addheaders = [('Accept', 'application/json')]
+		self.errorCodeMapping = {
+			1000: "Log in required.",
+			1002: "No full path or folderid provided.",
+			1004: "No fileid or path provided.",
+			1076: "Please provide 'tokenid'.",
+			2000: "Log in failed.",
+			2002: "A component of parent directory does not exist.",
+			2003: "Access denied. You do not have permissions to perform this operation.",
+			2005: "Directory does not exist.",
+			2009: "File not found.",
+			2010: "Invalid path.",
+			2102: "Provided 'tokenid' not found.",
+			4000: "Too many login tries from this IP address.",
+			5000: "Internal error. Try again later."
+
+		}
 
 	def CheckIfAuthPresent(self):
 		if self.auth is None or self.auth == "":
 			raise Exception ("Auth not present. Call PerformLogon() or SetAuth() first.")
 
 	def GetErrorMessage(self, errorCode):
-		if errorCode == 1000:
-			errorText = "Log in required."
-		elif errorCode == 1002:
-			errorText = "No full path or folderid provided."
-		elif errorCode == 1004:
-			errorText = "No fileid or path provided"
-		elif errorCode == 1076:
-			errorText = "Please provide 'tokenid'"
-		elif errorCode == 2000:
-			errorText = "Log in failed"
-		elif errorCode == 2002:
-			errorText = "A component of parent directory does not exist"
-		elif errorCode == 2003:
-			errorText = "Access denied. You do not have permissions to preform this operation"
-		elif errorCode == 2005:
-			errorText = "Directory does not exist"
-		elif errorCode == 2009:
-			errorText = "File not found"
-		elif errorCode == 2010:
-			errorText = "Invalid path."
-		elif errorCode == 2102:
-			errorText = "Provided 'tokenid' not found."
-		elif errorCode == 4000:
-			errorText = "Too many login tries from this IP address."
-		elif errorCode == 5000:
-			errorText = "Internal error. Try again later."
-		else:
-			errorText = "Unknown error"
-		return errorText
+		errMsg = self.errorCodeMapping.get(errorCode, "Unknown error")
+		return errMsg
 
 	def SetAuth(self, auth):
 		self.auth = auth
@@ -103,7 +92,7 @@ class PCloudApi:
 		"""
 		api = "getdigest"
 		response = self.ExecuteRequest(api)
-		if response["result"] != 0:
+		if response["result"]:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling getdigest: " + errorMessage)
 		sha1 = hashlib.sha1()
@@ -118,7 +107,7 @@ class PCloudApi:
 					"authexpire": str(self.TOKEN_EXPIRATION_SECONDS), "passworddigest": passwordDigest }
 		paramsUrlEncoded = urlencode(params)
 		response = self.ExecuteRequest(authApi, paramsUrlEncoded)
-		if response["result"] != 0:
+		if response["result"]:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling userinfo: " + errorMessage)
 		self.auth = response["auth"]
@@ -160,7 +149,7 @@ class PCloudApi:
 		self.CheckIfAuthPresent()
 		url = "getfilelink?auth=" + self.auth + "&fileid=" + str(fileID)
 		response = self.ExecuteRequest(url)
-		if response["result"] != 0:
+		if response["result"]:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling getfilelink: " + errorMessage)
 		streamingUrl = "https://%s%s" % (response["hosts"][0], response["path"])
@@ -174,7 +163,7 @@ class PCloudApi:
 		params = { "auth": self.auth, "fileids": commaSeparated, "size": "256x256", "format": "png" }
 		paramsUrlEncoded = urlencode(params)
 		response = self.ExecuteRequest(url, paramsUrlEncoded)
-		if response["result"] != 0:
+		if response["result"]:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling getthumbslinks: " + errorMessage)
 		# Turn it into a dictionary indexed by file ID, the value being the thumbnail URL
@@ -190,8 +179,8 @@ class PCloudApi:
 	def DeleteFile(self, fileID):
 		self.CheckIfAuthPresent()
 		url = "deletefile?auth=" + self.auth + "&fileid=" + str(fileID)
-		self.ExecuteRequest(url)
-		if response["result"] != 0:
+		response = self.ExecuteRequest(url)
+		if response["result"]:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling deletefile: " + errorMessage)
 
@@ -199,7 +188,7 @@ class PCloudApi:
 		self.CheckIfAuthPresent()
 		url = self.PCLOUD_BASE_URL + "deletefolderrecursive?auth=" + self.auth + "&folderid=" + str(folderID)
 		response = self.ExecuteRequest(url)
-		if response["result"] != 0:
+		if response["result"]:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling deletefolderrecursive: " + errorMessage)
 

@@ -1,5 +1,6 @@
 {
   "textures": {
+    "channel.nos.bvntv/bvntvfanart.jpg": "daeeeb937820330f63de5c7e921a6ac3",
     "channel.nos.nos2010/3fm-artwork.jpg": "4ee4d24d7c00964df0e8431977d1d8c2",
     "channel.nos.nos2010/funx.jpg": "ea91d0d84949b79b07cb8b12ecb43367",
     "channel.nos.nos2010/nosfanart.jpg": "7397f29df1f86111c076cdcd015173a1",
@@ -12,6 +13,9 @@
     "channel.nos.nosnl/nosfanart.jpg": "7773ffa2916d6f07829c84d1673d729d",
     "channel.nos.schooltv/schooltvfanart.jpg": "6c2cbc2aef2f74c162aafac4555fb574",
     "channel.nos.schooltv/schooltvimage.jpg": "c10d93339c2023017150f348dcaf5ac3",
+    "channel.nos.bvntv/bvntvicon.png": "ef4ed6185629a789e3208684af858802",
+    "channel.nos.bvntv/bvntvimage.png": "eedf8fd41de4928e31d4e768cfa8370d",
+    "channel.nos.bvntv/bvntvposter.png": "e00c77838653a22d25d70ce158de4a0b",
     "channel.nos.nos2010/1large.png": "651eb593fdb0476afdc32aa1fa49b6ac",
     "channel.nos.nos2010/2large.png": "8e29745c38da024acdbe8a5df1f2c3e6",
     "channel.nos.nos2010/3fm-logo.png": "d2b7ff5cdf65a68e9770bc71eb3b96d2",

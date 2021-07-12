@@ -238,7 +238,8 @@ class Channel(chn_class.Channel):
 
         Logger.trace(result_set)
         video_id = result_set["id"]
-        item = MediaItem(result_set["titlePlaylist"], self.__get_graph_url(video_id))
+        title = result_set.get("titlePlaylist", result_set.get("titleSwimlane"))
+        item = MediaItem(title, self.__get_graph_url(video_id))
         item.media_type = mediatype.EPISODE
         item.description = result_set.get("description")
         item.thumb = result_set.get("imageUrl")

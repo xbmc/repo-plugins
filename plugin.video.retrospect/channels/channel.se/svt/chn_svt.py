@@ -1157,19 +1157,23 @@ class Channel(chn_class.Channel):
         in_sweden = self.__validate_location()
         Logger.debug("Streaming location within GEO area: %s", in_sweden)
 
+        # Dictionary with supported video formats and their priority.
+        if in_sweden or not item.isGeoLocked:
+            # For the Dash streams:
+            # "dash-full" has HEVC and x264 video, with multi stream audio, both 5.1 and 2.0 streams
+            # "dash-hbbtv-avc" has x264 multi stream audio, but only 5.1
+            # "dash" has x264 single stream audio and only 2.0
+            # supported_formats = {"dash": 2, "dash-full": 3, "hls": 0, "hls-ts-full": 1}
+            supported_formats = {"dash": 2, "dash-hbbtv-avc": 3, "hls": 0, "hls-ts-full": 1}
+        else:
+            supported_formats = {"dash": 2, "dash-avc-51": 3, "hls": 0, "hls-ts-avc-51": 1}
+        Logger.debug("Looking for formats: %s", ", ".join(supported_formats.keys()))
+
         for video in videos:
             video_format = video.get("format", "")
             if not video_format:
                 video_format = video.get("playerType", "")
             video_format = video_format.lower()
-
-            # Dictionary with supported video formats and their priority.
-            if in_sweden or not item.isGeoLocked:
-                # Has HEVC
-                # supported_formats = {"dash": 2, "dash-full": 3, "hls": 0, "hls-ts-full": 1}
-                supported_formats = {"dash": 2, "dash-hbbtv-avc": 3, "hls": 0, "hls-ts-full": 10}
-            else:
-                supported_formats = {"dash": 2, "dash-avc-51": 3, "hls": 0, "hls-ts-avc-51": 1}
 
             if video_format not in supported_formats:
                 Logger.debug("Skipping video format: %s", video_format)

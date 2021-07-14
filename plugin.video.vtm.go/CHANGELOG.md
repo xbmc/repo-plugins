@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.2.10](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.10) (2021-07-14)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.9...v1.2.10)
+
+**Implemented enhancements:**
+
+- Restore support for anvato streams and use a new API key [\#294](https://github.com/add-ons/plugin.video.vtm.go/pull/294) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Fixed bugs:**
+
+- Fix play from EPG by datetime [\#293](https://github.com/add-ons/plugin.video.vtm.go/pull/293) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.2.9](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.9) (2021-06-17)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.8...v1.2.9)

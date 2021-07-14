@@ -171,7 +171,7 @@ class VtmGoEpg:
 
         # Find a matching broadcast
         for broadcast in epg.broadcasts:
-            if timestamp <= broadcast.time < (broadcast.time + timedelta(seconds=broadcast.duration)):
+            if broadcast.time <= timestamp < (broadcast.time + timedelta(seconds=broadcast.duration)):
                 return broadcast
 
         return None

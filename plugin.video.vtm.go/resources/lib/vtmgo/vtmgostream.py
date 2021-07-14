@@ -7,6 +7,7 @@ import json
 import logging
 import os
 import random
+from datetime import timedelta
 
 from resources.lib import kodiutils
 from resources.lib.vtmgo import ResolvedStream, util
@@ -17,7 +18,7 @@ _LOGGER = logging.getLogger(__name__)
 class VtmGoStream:
     """ VTM GO Stream API """
 
-    _API_KEY = 'jL3yNhGpDsaew9CqJrDPq2UzMrlmNVbnadUXVOET'
+    _API_KEY = '3vjmWnsxF7SUTeNCBZlnUQ4Z7GQV8f6miQ514l10'
 
     def __init__(self, auth=None):
         """ Initialise object """
@@ -37,14 +38,8 @@ class VtmGoStream:
         # We begin with asking the api about the stream info.
         video_info = self._get_video_info(stream_type, stream_id)
 
-        # Live channels are only available through anvato
-        if video_info.get('video').get('streamType') == 'live':
-            protocol = 'anvato'
-        else:
-            protocol = 'dash'
-
-        # Extract the stream from our stream_info.
-        stream_info = self._extract_stream_from_video_info(protocol, video_info)
+        # Select the best stream from our stream_info.
+        protocol, stream_info = self._extract_stream_from_video_info(video_info)
 
         # Extract subtitles from our stream_info.
         subtitle_info = self._extract_subtitles_from_stream_info(video_info)
@@ -66,7 +61,10 @@ class VtmGoStream:
             url = self._redirect_manifest(url)
 
             # No subtitles for the live stream
-            subtitles = None
+            if video_info.get('video').get('streamType') == 'live':
+                subtitles = None
+            else:
+                subtitles = self._download_and_delay_subtitles(subtitle_info, json_manifest)
 
         else:
             # Get published urls.
@@ -143,16 +141,17 @@ class VtmGoStream:
         return info
 
     @staticmethod
-    def _extract_stream_from_video_info(stream_type, stream_info):
-        """ Extract the requested stream details.
+    def _extract_stream_from_video_info(stream_info):
+        """ Extract the preferred stream details.
         :type stream_info: dict
         :rtype dict
         """
         # Loop over available streams, and return the requested stream
         if stream_info.get('video'):
-            for stream in stream_info.get('video').get('streams'):
-                if stream.get('type') == stream_type:
-                    return stream
+            for stream_type in ['dash', 'anvato']:
+                for stream in stream_info.get('video').get('streams'):
+                    if stream.get('type') == stream_type:
+                        return stream_type, stream
         elif stream_info.get('code'):
             _LOGGER.error('VTM GO Videoplayer service API error: %s', stream_info.get('type'))
         raise Exception('No stream found that we can handle')
@@ -200,6 +199,73 @@ class VtmGoStream:
                 webvtt_output.write(kodiutils.from_unicode(webvtt_content))
             downloaded_subtitles.append(output_file)
         return downloaded_subtitles
+
+    @staticmethod
+    def _delay_webvtt_timing(match, ad_breaks):
+        """ Delay the timing of a webvtt subtitle.
+        :type match: any
+        :type ad_breaks: list[dict]
+        :rtype str
+        """
+        sub_timings = list()
+        for timestamp in match.groups():
+            hours, minutes, seconds, millis = (int(x) for x in [timestamp[:-10], timestamp[-9:-7], timestamp[-6:-4], timestamp[-3:]])
+            sub_timings.append(timedelta(hours=hours, minutes=minutes, seconds=seconds, milliseconds=millis))
+        for ad_break in ad_breaks:
+            # time format: seconds.fraction or seconds
+            ad_break_start = timedelta(milliseconds=ad_break.get('start') * 1000)
+            ad_break_duration = timedelta(milliseconds=ad_break.get('duration') * 1000)
+            if ad_break_start < sub_timings[0]:
+                for idx, item in enumerate(sub_timings):
+                    sub_timings[idx] += ad_break_duration
+        for idx, item in enumerate(sub_timings):
+            hours, remainder = divmod(item.seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            millis = item.microseconds // 1000
+            sub_timings[idx] = '%02d:%02d:%02d,%03d' % (hours, minutes, seconds, millis)
+        delayed_webvtt_timing = '\n{} --> {} '.format(sub_timings[0], sub_timings[1])
+        return delayed_webvtt_timing
+
+    def _download_and_delay_subtitles(self, subtitles, json_manifest):
+        """ Modify the subtitles timings to account for ad breaks.
+        :type subtitles: list[dict]
+        :type json_manifest: dict
+        :rtype list[str]
+        """
+        # Clean up old subtitles
+        temp_dir = os.path.join(kodiutils.addon_profile(), 'temp', '')
+        _, files = kodiutils.listdir(temp_dir)
+        if files:
+            for item in files:
+                kodiutils.delete(temp_dir + kodiutils.to_unicode(item))
+
+        # Return if there are no subtitles available
+        if not subtitles:
+            return None
+
+        import re
+        if not kodiutils.exists(temp_dir):
+            kodiutils.mkdirs(temp_dir)
+
+        ad_breaks = list()
+        delayed_subtitles = list()
+        webvtt_timing_regex = re.compile(r'\n(\d{2}:\d{2}:\d{2}\.\d{3}) --> (\d{2}:\d{2}:\d{2}\.\d{3})\s')
+
+        # Get advertising breaks info from json manifest
+        cues = json_manifest.get('interstitials').get('cues')
+        for cue in cues:
+            ad_breaks.append(
+                dict(start=cue.get('start'), duration=cue.get('break_duration'))
+            )
+
+        for subtitle in subtitles:
+            output_file = temp_dir + subtitle.get('name')
+            webvtt_content = util.http_get(subtitle.get('url')).text
+            webvtt_content = webvtt_timing_regex.sub(lambda match: self._delay_webvtt_timing(match, ad_breaks), webvtt_content)
+            with kodiutils.open_file(output_file, 'w') as webvtt_output:
+                webvtt_output.write(kodiutils.from_unicode(webvtt_content))
+            delayed_subtitles.append(output_file)
+        return delayed_subtitles
 
     def _anvato_get_stream_info(self, anvato_info, stream_info):
         """ Get the stream info from anvato.

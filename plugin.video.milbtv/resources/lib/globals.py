@@ -66,6 +66,8 @@ UA_PC = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, li
 
 VERIFY = True
 
+AFFILIATES = {'Athletics':'237,400,524,499','Pirates':'452,484,3390,477','Padres':'510,4904,103,584','Mariners':'574,403,515,529','Giants':'3410,105,461,476','Cardinals':'235,279,443,440','Rays':'234,421,233,2498','Rangers':'102,540,448,485','Blue Jays':'422,463,424,435','Twins':'3898,1960,492,509','Phillies':'1410,427,522,566','Braves':'430,431,432,478','White Sox':'247,580,487,494','Marlins':'4124,564,554,479','Yankees':'531,1956,537,587','Brewers':'556,5015,249,572','Angels':'559,561,401,460','D-backs':'2310,419,516,5368','Orioles':'418,568,548,488','Red Sox':'533,546,414,428','Cubs':'553,451,521,550','Reds':'416,498,450,459','Indians':'402,445,437,481','Rockies':'538,259,342,486','Tigers':'106,512,570,582','Astros':'482,3712,573,5434','Royals':'541,3705,1350,565','Dodgers':'238,260,526,456','Nationals':'534,547,426,436','Mets':'552,505,453,507'}
+
 
 def find(source,start_str,end_str):
     start = source.find(start_str)
@@ -176,7 +178,7 @@ def add_stream(name, title, game_pk, icon=None, fanart=None, info=None, video_in
     return ok
 
 
-def addDir(name,mode,icon=None,fanart=None,game_day=None,level=None):
+def addDir(name,mode,icon=None,fanart=None,game_day=None,level=None,teams=None):
     ok=True
 
     u=sys.argv[0]+"?mode="+str(mode)+"&name="+urllib.quote_plus(name)
@@ -184,6 +186,8 @@ def addDir(name,mode,icon=None,fanart=None,game_day=None,level=None):
         u = u+"&game_day="+urllib.quote_plus(game_day)
     if level is not None:
         u = u+"&level="+urllib.quote_plus(level)
+    if teams is not None:
+        u = u+"&teams="+urllib.quote_plus(teams)
 
     liz = xbmcgui.ListItem(name)
     if icon is None: icon = ICON

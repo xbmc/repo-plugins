@@ -19,6 +19,9 @@ if 'game_day' in params:
 if 'level' in params:
     level = urllib.unquote_plus(params["level"])
 
+if 'teams' in params:
+    teams = urllib.unquote_plus(params["teams"])
+
 if 'game_pk' in params:
     game_pk = urllib.unquote_plus(params["game_pk"])
 
@@ -31,12 +34,15 @@ elif (mode != None) and (mode >= 11) and (mode <= 14):
 elif mode == 17:
     todays_games(game_day, '11,12,13,14')
 
+elif mode == 18:
+    todays_games(game_day, '11,12,13,14', teams)
+
 elif mode == 100:
     levels(game_day)
 
 elif mode == 101:
     # Prev and Next
-    todays_games(game_day, level)
+    todays_games(game_day, level, teams)
 
 elif mode == 104:
     stream_select(game_pk)

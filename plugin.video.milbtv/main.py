@@ -8,6 +8,7 @@ params = get_params()
 mode = None
 game_day = None
 level = None
+teams = None
 game_pk = None
 
 if 'mode' in params:

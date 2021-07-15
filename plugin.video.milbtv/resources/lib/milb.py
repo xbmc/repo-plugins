@@ -30,11 +30,11 @@ def todays_games(game_day, level, teams=None):
     display_day = stringToDate(game_day, "%Y-%m-%d")
     prev_day = display_day - timedelta(days=1)
 
-    addDir('[B]<< %s[/B]' % LOCAL_STRING(30010), 101, PREV_ICON, FANART, prev_day.strftime("%Y-%m-%d"), level)
+    addDir('[B]<< %s[/B]' % LOCAL_STRING(30010), 101, PREV_ICON, FANART, prev_day.strftime("%Y-%m-%d"), level, teams)
 
     date_display = '[B][I]' + colorString(display_day.strftime("%A, %m/%d/%Y"), GAMETIME_COLOR) + '[/I][/B]'
 
-    addDir(date_display, 100, ICON, FANART, game_day, level)
+    addDir(date_display, 100, ICON, FANART, game_day, level, teams)
 
     url = 'https://statsapi.mlb.com/api/v1/schedule'
     url += '?hydrate=broadcasts(all),game(content(all)),linescore,team'

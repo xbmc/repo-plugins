@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.milbtv" name="MiLB.TV®" version="2021.05.15" provider-name="tonywagner">
+<addon id="plugin.video.milbtv" name="MiLB.TV®" version="2021.07.14" provider-name="tonywagner">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -18,8 +18,8 @@
         <description lang="en_GB">Watch live and archived minor league baseball games with your MiLB.TV account</description>
         <disclaimer lang="en_GB">Requires a valid MiLB.TV account (separate from MLB.TV)</disclaimer>
         <news>
-            - MiLB.TV-specific modification of eracknaphobia's add-on
-            - Code cleanup
+            - Added option to view affiliate games of favorite team
+            - Fixed games missing due to lack of resolution info
         </news>
         <language>en</language>
         <platform>all</platform>

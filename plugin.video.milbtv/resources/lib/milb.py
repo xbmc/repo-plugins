@@ -19,24 +19,29 @@ def levels(game_day):
     addDir(LOCAL_STRING(30366), 14, ICON, FANART, game_day)
     addDir(LOCAL_STRING(30367), 17, ICON, FANART, game_day)
 
+    if FAV_TEAM != 'None':
+        addDir(FAV_TEAM + LOCAL_STRING(30368), 18, ICON, FANART, game_day, None, AFFILIATES[FAV_TEAM])
 
-def todays_games(game_day, level):
+
+def todays_games(game_day, level, teams=None):
     if game_day is None:
         game_day = localToEastern()
 
     display_day = stringToDate(game_day, "%Y-%m-%d")
     prev_day = display_day - timedelta(days=1)
 
-    addDir('[B]<< %s[/B]' % LOCAL_STRING(30010), 101, PREV_ICON, FANART, prev_day.strftime("%Y-%m-%d"), level)
+    addDir('[B]<< %s[/B]' % LOCAL_STRING(30010), 101, PREV_ICON, FANART, prev_day.strftime("%Y-%m-%d"), level, teams)
 
     date_display = '[B][I]' + colorString(display_day.strftime("%A, %m/%d/%Y"), GAMETIME_COLOR) + '[/I][/B]'
 
-    addDir(date_display, 100, ICON, FANART, game_day, level)
+    addDir(date_display, 100, ICON, FANART, game_day, level, teams)
 
     url = 'https://statsapi.mlb.com/api/v1/schedule'
     url += '?hydrate=broadcasts(all),game(content(all)),linescore,team'
     url += '&sportId=' + str(level)
     url += '&date=' + game_day
+    if teams is not None:
+        url += '&teamId=' + teams
 
     headers = {
         'User-Agent': UA_PC
@@ -57,7 +62,7 @@ def todays_games(game_day, level):
         pass
 
     next_day = display_day + timedelta(days=1)
-    addDir('[B]%s >>[/B]' % LOCAL_STRING(30011), 101, NEXT_ICON, FANART, next_day.strftime("%Y-%m-%d"), level)
+    addDir('[B]%s >>[/B]' % LOCAL_STRING(30011), 101, NEXT_ICON, FANART, next_day.strftime("%Y-%m-%d"), level, teams)
 
 
 def create_game_listitem(game, game_day, broadcast_index):
@@ -151,7 +156,10 @@ def create_game_listitem(game, game_day, broadcast_index):
         name = '[B]' + name + '[/B]'
 
     # Set audio/video info based on stream quality setting
-    audio_info, video_info = getAudioVideoInfo(game['broadcasts'][broadcast_index]['videoResolution']['resolutionShort'])
+    resolution = 'HD'
+    if 'videoResolution' in game['broadcasts'][broadcast_index]:
+        resolution = game['broadcasts'][broadcast_index]['videoResolution']['resolutionShort']
+    audio_info, video_info = getAudioVideoInfo(resolution)
     # 'duration':length
     info = {'plot': desc, 'tvshowtitle': 'MiLB', 'title': title, 'originaltitle': title, 'aired': game_day, 'genre': LOCAL_STRING(700), 'mediatype': 'video'}
 

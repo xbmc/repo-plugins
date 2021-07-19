@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.liveleak"
     name="LiveLeak"
-    version="1.4.2"
+    version="1.4.3"
     provider-name="Botster">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
@@ -14,6 +14,7 @@
     <extension point="xbmc.addon.metadata">
         <summary lang="en_GB">Watch LiveLeak.com Videos</summary>
         <description lang="en_GB">Redefining The Media</description>
+        <broken>website closed</broken>
         <language>en</language>
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>

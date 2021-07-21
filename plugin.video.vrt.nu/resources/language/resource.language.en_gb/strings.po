@@ -278,12 +278,16 @@ msgctxt "#30120"
 msgid "Short film"
 msgstr ""
 
+msgctxt "#30128"
+msgid "Kies19"
+msgstr ""
+
 msgctxt "#30129"
 msgid "Climate"
 msgstr ""
 
 msgctxt "#30130"
-msgid "Cycling"
+msgid "De warmste week"
 msgstr ""
 
 ### APPLICATION

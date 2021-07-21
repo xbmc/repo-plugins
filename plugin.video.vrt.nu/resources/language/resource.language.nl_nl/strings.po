@@ -278,13 +278,17 @@ msgctxt "#30120"
 msgid "Short film"
 msgstr "Kortfilm"
 
+msgctxt "#30128"
+msgid "Kies19"
+msgstr "Kies19"
+
 msgctxt "#30129"
 msgid "Climate"
 msgstr "Klimaat"
 
 msgctxt "#30130"
-msgid "Cycling"
-msgstr "Koers"
+msgid "De warmste week"
+msgstr "De warmste week"
 
 ### APPLICATION
 msgctxt "#30131"
@@ -1036,7 +1040,7 @@ msgid "No stream found, please try again!"
 msgstr "Geen stream gevonden, gelieve opnieuw te proberen!"
 
 msgctxt "#30988"
-msgid "InputStream Adaptive is not available, therefore pause and timeshift of live streams may not work"
+msgid "InputStream Adaptive is not installed, therefore pause and timeshift of live streams may not work"
 msgstr "InputStream Adaptive is niet geïnstalleerd, daarom kan het pauzeren en timeshift van live tv niet werken"
 
 msgctxt "#30989"

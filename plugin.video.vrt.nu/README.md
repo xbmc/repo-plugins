@@ -59,6 +59,10 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.4 (2021-07-21)
+- Fix login (@mediaminister)
+- Use Widevine DRM by default (@mediaminister)
+
 ### v2.5.3 (2021-05-13)
 - Fix watching age restricted content (@mediaminister)
 

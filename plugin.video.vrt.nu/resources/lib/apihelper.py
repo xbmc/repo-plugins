@@ -25,7 +25,7 @@ class ApiHelper:
 
     _VRTNU_SEARCH_URL = 'https://vrtnu-api.vrt.be/search'
     _VRTNU_SUGGEST_URL = 'https://vrtnu-api.vrt.be/suggest'
-    _VRTNU_SCREENSHOT_URL = 'https://vrtnu-api.vrt.be/screenshots'
+    _VRTNU_SCREENSHOT_URL = 'https://www.vrt.be/vrtnu-static/screenshots'
 
     def __init__(self, _favorites, _resumepoints):
         """Constructor for the ApiHelper class"""

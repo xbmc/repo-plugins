@@ -1,0 +1,266 @@
+# Kodi Media Center language file
+# Addon Name: CBC Olympics
+# Addon id: plugin.video.cbcolympics
+msgid ""
+msgstr ""
+
+# General
+msgctxt "#30999"
+msgid "CBC Olympics"
+msgstr ""
+
+# Sport names
+msgctxt "#30000"
+msgid "All Sports"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Artistic Swimming"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Archery"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Badminton"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Baseball"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Basketball"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Beach Volleyball"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Boxing"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Canoe / Kayak"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Cycling"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Diving"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Equestrian"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Fencing"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Field Hockey"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Golf"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Gymnastics"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Handball"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Judo"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Karate"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Modern Pentathlon"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Rowing"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Rugby"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Sailing"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Shooting"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Skateboarding"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Soccer"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Softball"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Sport Climbing"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Surfing"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Swimming"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Table Tennis"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Taekwondo"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Tennis"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Track and Field"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Triathlon"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Volleyball"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Water Polo"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Weightlifting"
+msgstr ""
+
+msgctxt "#30038"
+msgid "Wrestling"
+msgstr ""
+
+# Static categories
+msgctxt "#30200"
+msgid "Live Now & Upcoming"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Replays"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Sports"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Highlights"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Team Canada"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Features - Kraft While You Were Sleeping"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Features - Petro Canada The Bond"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Features - RBC Spotlight"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Features - Toyota Breakthrough"
+msgstr ""
+
+msgctxt "#30209"
+msgid "Features - VISA Olympic Moments"
+msgstr ""
+
+# General
+msgctxt "#30300"
+msgid ""
+msgstr ""
+
+msgctxt "#30301"
+msgid "General"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Bit rate limit (kbit/s)"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Upcoming at {0}"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Live since {0}"
+msgstr ""
+
+msgctxt "#30305"
+msgid "Replay"
+msgstr ""
+
+msgctxt "#30306"
+msgid "{0} page {1}..."
+msgstr ""
+
+# Errors
+msgctxt "#30900"
+msgid "No URL or ID provided for video"
+msgstr ""
+
+msgctxt "#30901"
+msgid "Invalid paramstring: {0}"
+msgstr ""
+
+msgctxt "#30902"
+msgid "The server did not return a valid stream. Please try again later."
+msgstr ""
+
+msgctxt "#30903"
+msgid "The server has denied the request. This is typically due to geoblocking. Be sure that you're on a Canadian IP address."
+msgstr ""
+
+msgctxt "#30904"
+msgid "The stream for this upcoming event is not yet available. Please wait and try again closer to its scheduled start time."
+msgstr ""
+
+msgctxt "#30905"
+msgid "This stream was not found."
+msgstr ""
+
+msgctxt "#30906"
+msgid "HTTP error {0}: {1}"
+msgstr ""

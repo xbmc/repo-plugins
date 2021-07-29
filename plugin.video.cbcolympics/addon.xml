@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.cbcolympics"
        name="CBC Olympics"
-       version="1.0.1"
+       version="2.0.0"
        provider-name="fourpointsix">
   <requires>
+    <!-- Enable this for Kodi 16.x through 18.x -->
     <import addon="xbmc.python" version="2.24.0"/>
+    <!-- Enable this for Kodi 19.x and newer -->
+    <!--<import addon="xbmc.python" version="3.0.0"/>-->
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">CBC Olympics</summary>
-    <description lang="en">2018 Winter Olympic streams from the CBC. Streams are geo-blocked so you must be on a Canadian IP for this to work.</description>
+    <summary lang="en_GB">CBC Olympics</summary>
+    <description lang="en_GB">Tokyo 2020 Summer Olympics streams from the CBC. Streams are geo-blocked so you must be on a Canadian IP for this to work.</description>
     <platform>all</platform>
-    <language>en</language>
-    <news>v1.0.1
-- Added bitrate limit setting
-- Changed Python dependency to 2.24 for Kodi 16 compatibility
-- Added durations to video listing
-- Added start times to upcoming events</news>
+    <language>en_GB</language>
+    <license>GPL-3.0-only</license>
+    <source>https://github.com/fourpointsix/plugin.video.cbcolympics</source>
+    <news>v2.0.0 (2021-07-29)
+- Re-written for Tokyo 2020</news>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
   </extension>
-  <assets>
-    <icon>icon.png</icon>
-    <fanart>fanart.jpg</fanart>
-  </assets>
 </addon>

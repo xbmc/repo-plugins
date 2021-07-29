@@ -4,188 +4,212 @@
 msgid ""
 msgstr ""
 
+# General
+msgctxt "#30999"
+msgid "CBC Olympics"
+msgstr ""
+
 # Sport names
+msgctxt "#30000"
+msgid "All Sports"
+msgstr ""
+
 msgctxt "#30001"
-msgid "Alpine Skiing"
+msgid "Artistic Swimming"
 msgstr ""
 
 msgctxt "#30002"
-msgid "Biathlon"
+msgid "Archery"
 msgstr ""
 
 msgctxt "#30003"
-msgid "Bobsleigh"
+msgid "Badminton"
 msgstr ""
 
 msgctxt "#30004"
-msgid "Curling"
+msgid "Baseball"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Cross Country"
+msgid "Basketball"
 msgstr ""
 
 msgctxt "#30006"
-msgid "Figure Skating"
+msgid "Beach Volleyball"
 msgstr ""
 
 msgctxt "#30007"
-msgid "Freestyle Skiing"
+msgid "Boxing"
 msgstr ""
 
 msgctxt "#30008"
-msgid "Hockey"
+msgid "Canoe / Kayak"
 msgstr ""
 
 msgctxt "#30009"
-msgid "Luge"
+msgid "Cycling"
 msgstr ""
 
 msgctxt "#30010"
-msgid "Nordic Combined"
+msgid "Diving"
 msgstr ""
 
 msgctxt "#30011"
-msgid "Snowboard"
+msgid "Equestrian"
 msgstr ""
 
 msgctxt "#30012"
-msgid "Ski Jumping"
+msgid "Fencing"
 msgstr ""
 
 msgctxt "#30013"
-msgid "Skeleton"
+msgid "Field Hockey"
 msgstr ""
 
 msgctxt "#30014"
-msgid "Speed Skating"
+msgid "Golf"
 msgstr ""
 
 msgctxt "#30015"
-msgid "Short Track"
+msgid "Gymnastics"
 msgstr ""
 
-# Day names
-msgctxt "#30099"
-msgid "Feb 7-8, Olympic Day -1"
+msgctxt "#30016"
+msgid "Handball"
 msgstr ""
 
-msgctxt "#30100"
-msgid "Feb 8-9, Olympic Day 0"
+msgctxt "#30017"
+msgid "Judo"
 msgstr ""
 
-msgctxt "#30101"
-msgid "Feb 9-10, Olympic Day 1,"
+msgctxt "#30018"
+msgid "Karate"
 msgstr ""
 
-msgctxt "#30102"
-msgid "Feb 10-11, Olympic Day 2"
+msgctxt "#30019"
+msgid "Modern Pentathlon"
 msgstr ""
 
-msgctxt "#30103"
-msgid "Feb 11-12, Olympic Day 3"
+msgctxt "#30020"
+msgid "Rowing"
 msgstr ""
 
-msgctxt "#30104"
-msgid "Feb 12-13, Olympic Day 4"
+msgctxt "#30021"
+msgid "Rugby"
 msgstr ""
 
-msgctxt "#30105"
-msgid "Feb 13-14, Olympic Day 5"
+msgctxt "#30022"
+msgid "Sailing"
 msgstr ""
 
-msgctxt "#30106"
-msgid "Feb 14-15, Olympic Day 6"
+msgctxt "#30023"
+msgid "Shooting"
 msgstr ""
 
-msgctxt "#30107"
-msgid "Feb 15-16, Olympic Day 7"
+msgctxt "#30024"
+msgid "Skateboarding"
 msgstr ""
 
-msgctxt "#30108"
-msgid "Feb 16-17, Olympic Day 8"
+msgctxt "#30025"
+msgid "Soccer"
 msgstr ""
 
-msgctxt "#30109"
-msgid "Feb 17-18, Olympic Day 9"
+msgctxt "#30026"
+msgid "Softball"
 msgstr ""
 
-msgctxt "#30110"
-msgid "Feb 18-19, Olympic Day 10"
+msgctxt "#30027"
+msgid "Sport Climbing"
 msgstr ""
 
-msgctxt "#30111"
-msgid "Feb 19-20, Olympic Day 11"
+msgctxt "#30028"
+msgid "Surfing"
 msgstr ""
 
-msgctxt "#30112"
-msgid "Feb 20-21, Olympic Day 12"
+msgctxt "#30029"
+msgid "Swimming"
 msgstr ""
 
-msgctxt "#30113"
-msgid "Feb 21-22, Olympic Day 13"
+msgctxt "#30030"
+msgid "Table Tennis"
 msgstr ""
 
-msgctxt "#30114"
-msgid "Feb 22-23, Olympic Day 14"
+msgctxt "#30031"
+msgid "Taekwondo"
 msgstr ""
 
-msgctxt "#30115"
-msgid "Feb 23-24, Olympic Day 15"
+msgctxt "#30032"
+msgid "Tennis"
 msgstr ""
 
-msgctxt "#30116"
-msgid "Feb 24-25, Olympic Day 16"
+msgctxt "#30033"
+msgid "Track and Field"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Triathlon"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Volleyball"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Water Polo"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Weightlifting"
+msgstr ""
+
+msgctxt "#30038"
+msgid "Wrestling"
 msgstr ""
 
 # Static categories
 msgctxt "#30200"
-msgid "Condensed Events by Sport"
+msgid "Live Now & Upcoming"
 msgstr ""
 
 msgctxt "#30201"
-msgid "Condensed Events by Date"
+msgid "Replays"
 msgstr ""
 
 msgctxt "#30202"
-msgid "Full Event Replays by Sport"
+msgid "Sports"
 msgstr ""
 
 msgctxt "#30203"
-msgid "Full Event Replays by Date"
+msgid "Highlights"
 msgstr ""
 
 msgctxt "#30204"
-msgid "Highlights by Sport"
+msgid "Team Canada"
 msgstr ""
 
 msgctxt "#30205"
-msgid "Highlights by Date"
+msgid "Features - Kraft While You Were Sleeping"
 msgstr ""
 
 msgctxt "#30206"
-msgid "Must See"
+msgid "Features - Petro Canada The Bond"
 msgstr ""
 
 msgctxt "#30207"
-msgid "Schedule by Sport"
+msgid "Features - RBC Spotlight"
 msgstr ""
 
 msgctxt "#30208"
-msgid "Schedule by Date"
+msgid "Features - Toyota Breakthrough"
 msgstr ""
 
 msgctxt "#30209"
-msgid "What's on TV by Sport"
-msgstr ""
-
-msgctxt "#30210"
-msgid "What's on TV by Date"
+msgid "Features - VISA Olympic Moments"
 msgstr ""
 
 # General
 msgctxt "#30300"
-msgid "Root"
+msgid ""
 msgstr ""
 
 msgctxt "#30301"
@@ -208,6 +232,10 @@ msgctxt "#30305"
 msgid "Replay"
 msgstr ""
 
+msgctxt "#30306"
+msgid "{0} page {1}..."
+msgstr ""
+
 # Errors
 msgctxt "#30900"
 msgid "No URL or ID provided for video"
@@ -215,4 +243,24 @@ msgstr ""
 
 msgctxt "#30901"
 msgid "Invalid paramstring: {0}"
+msgstr ""
+
+msgctxt "#30902"
+msgid "The server did not return a valid stream. Please try again later."
+msgstr ""
+
+msgctxt "#30903"
+msgid "The server has denied the request. This is typically due to geoblocking. Be sure that you're on a Canadian IP address."
+msgstr ""
+
+msgctxt "#30904"
+msgid "The stream for this upcoming event is not yet available. Please wait and try again closer to its scheduled start time."
+msgstr ""
+
+msgctxt "#30905"
+msgid "This stream was not found."
+msgstr ""
+
+msgctxt "#30906"
+msgid "HTTP error {0}: {1}"
 msgstr ""

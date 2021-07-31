@@ -1,15 +1,29 @@
 import sys
-from urllib import urlencode
-from urlparse import urlparse, parse_qsl
+
+try:
+    # Try the Python 3 libraries first
+    from urllib.parse import urlencode
+    from urllib.parse import parse_qsl, urljoin, quote_plus
+    from urllib.request import Request, urlopen
+    from urllib.error import HTTPError
+    isPython2 = False
+except ImportError:
+    # Fall-back to Python 2 libraries
+    from urllib import urlencode, quote_plus
+    from urlparse import parse_qsl, urljoin
+    from urllib2 import Request, urlopen, HTTPError
+    isPython2 = True
+
+import xml.etree.ElementTree as ET
 import datetime
 import time
 import json
 import re
+import xbmc
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
 import urllib
-import urllib2
 import zlib
 
 # Get the plugin url in plugin:// notation.
@@ -21,157 +35,159 @@ addon = xbmcaddon.Addon()
 
 UTF8 = 'utf-8'
 
+class SmilDocumentError(Exception):
+    pass
+
+class NoVideoNodeError(SmilDocumentError):
+    pass
+
+class NoSrcAttribError(SmilDocumentError):
+    pass
+
+# Used for encoding Python 2 strings in UTF-8 while also
+# letting Python 3 just work as it normally does with
+# built-in unicode strings
+def py2utf8(str):
+    if isPython2:
+        return str.encode(UTF8)
+    else:
+        # Python3 strings are already unicode
+        return str
+
+def py2decodeUtf8(str):
+    if isPython2:
+        return str.decode(UTF8)
+    else:
+        # Python3 strings are already unicode
+        return str
+
 def strings(id):
-    return addon.getLocalizedString(id).encode(UTF8)
+    return py2utf8(addon.getLocalizedString(id))
 
-CBC_HOST = 'https://olympics.cbc.ca'
+def okDialog(message):
+    xbmc.log('Showing OK dialog: ' + message)
+    dialog = xbmcgui.Dialog()
+    return dialog.ok(strings(30999), message)
 
-USERAGENT   = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36'
+SMIL_URL = "https://link.theplatform.com/s/ExhSPC/media/guid/2655402169/{0}/meta.smil?feed=Player%20Selector%20-%20Prod&format=smil&mbr=true&manifest=m3u"
 
-STATE_UPCOMING = 'upcoming'
-STATE_LIVE = 'live'
-STATE_REPLAY = 'replay'
+PAGE_SIZE = 36
+
+USERAGENT   = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0'
 
 TIME_FORMAT = '%I:%M %p'
 
-httpHeaders = {'User-Agent': USERAGENT,
+httpHeaders = {
+                'User-Agent': USERAGENT,
                 'Accept':"application/json, text/javascript, text/html,*/*",
                 'Accept-Encoding':'gzip,deflate,sdch',
-                'Accept-Language':'en-US,en;q=0.8'
-                }
+                'Accept-Language':'en-US,en;q=0.8',
+                'Content-Type':'application/json'
+            }
 
-DISCIPLINES = [
-    {'code': 'as', 'name': strings(30001)},
-    {'code': 'bt', 'name': strings(30002)},
-    {'code': 'bs', 'name': strings(30003)},
-    {'code': 'cu', 'name': strings(30004)},
-    {'code': 'cc', 'name': strings(30005)},
-    {'code': 'fs', 'name': strings(30006)},
-    {'code': 'fr', 'name': strings(30007)},
-    {'code': 'ih', 'name': strings(30008)},
-    {'code': 'lg', 'name': strings(30009)},
-    {'code': 'nc', 'name': strings(30010)},
-    {'code': 'sb', 'name': strings(30011)},
-    {'code': 'sj', 'name': strings(30012)},
-    {'code': 'sn', 'name': strings(30013)},
-    {'code': 'ss', 'name': strings(30014)},
-    {'code': 'st', 'name': strings(30015)},
-]
-
-EVENT_DATES = [
-    {'name': strings(30099), 'offset': '-1'},
-    {'name': strings(30100), 'offset': '1'},      # CBC skipped zero for some reason
-    {'name': strings(30101), 'offset': '2'},
-    {'name': strings(30102), 'offset': '3'},
-    {'name': strings(30103), 'offset': '4'},
-    {'name': strings(30104), 'offset': '5'},
-    {'name': strings(30105), 'offset': '6'},
-    {'name': strings(30106), 'offset': '7'},
-    {'name': strings(30107), 'offset': '8'},
-    {'name': strings(30108), 'offset': '9'},
-    {'name': strings(30109), 'offset': '10'},
-    {'name': strings(30110), 'offset': '11'},
-    {'name': strings(30111), 'offset': '12'},
-    {'name': strings(30112), 'offset': '13'},
-    {'name': strings(30113), 'offset': '14'},
-    {'name': strings(30114), 'offset': '15'},
-    {'name': strings(30115), 'offset': '16'},
-    {'name': strings(30116), 'offset': '17'},
-]
+SPORTS = [
+        { 'title': strings(30000), 'category': 'sports/olympics/summer' },
+        { 'title': strings(30001), 'category': 'sports/olympics/summer/aquatics/artistic swimming' },
+        { 'title': strings(30002), 'category': 'sports/olympics/summer/archery' },
+        { 'title': strings(30003), 'category': 'sports/olympics/summer/badminton' },
+        { 'title': strings(30004), 'category': 'sports/olympics/summer/baseball' },
+        { 'title': strings(30005), 'category': 'sports/olympics/summer/basketball' },
+        { 'title': strings(30006), 'category': 'sports/olympics/summer/volleyball/beach volleyball' },
+        { 'title': strings(30007), 'category': 'sports/olympics/summer/boxing' },
+        { 'title': strings(30008), 'category': 'sports/olympics/summer/canoe-kayak' },
+        { 'title': strings(30009), 'category': 'sports/olympics/summer/cycling' },
+        { 'title': strings(30010), 'category': 'sports/olympics/summer/aquatics/diving' },
+        { 'title': strings(30011), 'category': 'sports/olympics/summer/equestrian' },
+        { 'title': strings(30012), 'category': 'sports/olympics/summer/fencing' },
+        { 'title': strings(30013), 'category': 'sports/olympics/summer/field hockey' },
+        { 'title': strings(30014), 'category': 'sports/olympics/summer/golf' },
+        { 'title': strings(30015), 'category': 'sports/olympics/summer/gymnastics' },
+        { 'title': strings(30016), 'category': 'sports/olympics/summer/handball' },
+        { 'title': strings(30017), 'category': 'sports/olympics/summer/judo' },
+        { 'title': strings(30018), 'category': 'sports/olympics/summer/karate' },
+        { 'title': strings(30019), 'category': 'sports/olympics/summer/modern pentathlon' },
+        { 'title': strings(30020), 'category': 'sports/olympics/summer/rowing' },
+        { 'title': strings(30021), 'category': 'sports/olympics/summer/rugby' },
+        { 'title': strings(30022), 'category': 'sports/olympics/summer/sailing' },
+        { 'title': strings(30023), 'category': 'sports/olympics/summer/shooting' },
+        { 'title': strings(30024), 'category': 'sports/olympics/summer/skateboarding' },
+        { 'title': strings(30025), 'category': 'sports/olympics/summer/soccer' },
+        { 'title': strings(30026), 'category': 'sports/olympics/summer/softball' },
+        { 'title': strings(30027), 'category': 'sports/olympics/summer/sport climbing' },
+        { 'title': strings(30028), 'category': 'sports/olympics/summer/surfing' },
+        { 'title': strings(30029), 'category': 'sports/olympics/summer/aquatics/swimming' },
+        { 'title': strings(30030), 'category': 'sports/olympics/summer/table tennis' },
+        { 'title': strings(30031), 'category': 'sports/olympics/summer/taekwondo' },
+        { 'title': strings(30032), 'category': 'sports/olympics/summer/tennis' },
+        { 'title': strings(30033), 'category': 'sports/olympics/summer/track and field' },
+        { 'title': strings(30034), 'category': 'sports/olympics/summer/triathlon' },
+        { 'title': strings(30035), 'category': 'sports/olympics/summer/volleyball/volleyball' },
+        { 'title': strings(30036), 'category': 'sports/olympics/summer/aquatics/water polo' },
+        { 'title': strings(30037), 'category': 'sports/olympics/summer/weightlifting' },
+        { 'title': strings(30038), 'category': 'sports/olympics/summer/wrestling' },
+    ]
 
 STATIC_ENTRIES = [
-            {
-                'type': 'folder',
-                'page': 'json_videos_bysport',
-                'title': strings(30200),
-                'uri': 'condensed-events',
-            },
-            {
-                'type': 'folder',
-                'page': 'json_videos_bydate',
-                'title': strings(30201),
-                'uri': 'condensed-events',
-            },
-            {
-                'type': 'folder',
-                'page': 'json_videos_bysport',
-                'title': strings(30202),
-                'uri': 'replays',
-            },
-            {
-                'type': 'folder',
-                'page': 'json_videos_bydate',
-                'title': strings(30203),
-                'uri': 'replays',
-            },
-            {
-                'type': 'folder',
-                'page': 'json_videos_bysport',
-                'title': strings(30204),
-                'uri': 'highlights',
-            },
-            {
-                'type': 'folder',
-                'page': 'json_videos_bydate',
-                'title': strings(30205),
-                'uri': 'highlights',
-            },
-            {
-                'type': 'folder',
-                'page': 'json_videos',
-                'title': strings(30206),
-                'uri': CBC_HOST + '/api-live/online-listing/must-see/list.json',
-            },
-            {
-                'type': 'folder',
-                'page': 'json_videos_bysport',
-                'title': strings(30207),
-                'uri': 'schedule',
-            },
-            {
-                'type': 'folder',
-                'page': 'json_videos_bydate',
-                'title': strings(30208),
-                'uri': 'schedule',
-            },
-            {
-                'type': 'folder',
-                'page': 'json_videos_bysport',
-                'title': strings(30209),
-                'uri': 'whats-on-tv',
-            },
-            {
-                'type': 'folder',
-                'page': 'json_videos_bydate',
-                'title': strings(30210),
-                'uri': 'whats-on-tv',
-            },
-        ]
-
-# This assumes the input format is fixed at yyyy-mm-ddThh:mm:ssZ
-# (eg. '2018-02-19T10:55:00Z')
-def iso8601UtcStrToLocalDateTime(text):
-    # The lack of native support for time zones in Python is surprising
-    # so we have to calculate it ourselves
-
-    # Calculate the UTC offset for this machine
-    utcOffset = datetime.datetime.now() - datetime.datetime.utcnow()
-
-    # Round the offset to the nearest second because utcnow() and now() were
-    # called serially so there's a few microseconds between them
-    utcOffset = datetime.timedelta(seconds = int(utcOffset.total_seconds()))
-
-    try:
-        # Convert the input UTC string into a UTC datetime object
-        eventTimeUtc = datetime.datetime.strptime(text, '%Y-%m-%dT%H:%M:%SZ')
-    except TypeError:
-        # This is screwy. Some calls to strptime throw "TypeError: attribute of type 'NoneType' is not callable"
-        # so this workaround is necessary. It happened to me and it could happen to you.
-        # See https://forum.kodi.tv/showthread.php?tid=112916
-        eventTimeUtc = datetime.datetime(*(time.strptime(text, '%Y-%m-%dT%H:%M:%SZ')[0:6]))        
-
-    # Return the datetime object offset by utcOffset to get local time
-    return eventTimeUtc + utcOffset
+        {
+            'title': strings(30200),
+            'type': 'folder',
+            'page': 'live_videos',
+            'uri': 'live_videos',
+        },
+        {
+            'title': strings(30201),
+            'type': 'folder',
+            'page': 'clips_by_category',
+            'category': 'sports/olympics/summer/replays',
+        },
+        {
+            'title': strings(30202),
+            'type': 'folder',
+            'page': 'sports',
+        },
+        {
+            'title': strings(30203),
+            'type': 'folder',
+            'page': 'clips_by_category',
+            'category': 'sports/olympics/summer/highlights',
+        },
+        {
+            'title': strings(30204),
+            'type': 'folder',
+            'page': 'clips_by_category',
+            'category': 'Sports/Olympics/Summer/Team Canada',
+        },
+        {
+            'title': strings(30205),
+            'type': 'folder',
+            'page': 'clips_by_category',
+            'category': 'Sports/Olympics/Features/Kraft While You Were Sleeping',
+        },
+        {
+            'title': strings(30206),
+            'type': 'folder',
+            'page': 'clips_by_category',
+            'category': 'sports/olympics/features/Petro Canada The Bond',
+        },
+        {
+            'title': strings(30207),
+            'type': 'folder',
+            'page': 'clips_by_category',
+            'category': 'sports/olympics/features/RBC Spotlight',
+        },
+        {
+            'title': strings(30208),
+            'type': 'folder',
+            'page': 'clips_by_category',
+            'category': 'sports/olympics/features/Toyota Breakthrough',
+        },
+        {
+            'title': strings(30209),
+            'type': 'folder',
+            'page': 'clips_by_category',
+            'category': 'sports/olympics/features/VISA Olympic Moments',
+        }
+    ]
 
 # Lovingly borrowed from t1mlib
 def get_url(**kwargs):
@@ -182,21 +198,22 @@ def get_url(**kwargs):
 
 # Lovingly borrowed from t1mlib
 def getRequest(url, udata=None, headers = httpHeaders, dopost = False, rmethod = None):
-    req = urllib2.Request(url.encode(UTF8), udata, headers)  
+    req = Request(py2utf8(url), udata, headers)
 
     if dopost == True:
-       rmethod = "POST"
+        rmethod = "POST"
 
     if rmethod is not None:
         req.get_method = lambda: rmethod
 
-    try:
-      response = urllib2.urlopen(req, timeout=60)
-      page = response.read()
-      if response.info().getheader('Content-Encoding') == 'gzip':
-         page = zlib.decompress(page, zlib.MAX_WBITS + 16)
-    except:
-      page = ""
+    #try:
+    response = urlopen(req, timeout=60)
+    page = response.read()
+
+    if response.headers.get('Content-Encoding') == 'gzip':
+        page = zlib.decompress(page, zlib.MAX_WBITS + 16)
+    #except:
+    #  page = ""
     return(page.decode(UTF8))        # Decode from UTF-8: Slight change from the library version
 
 def list_entries(folder_title, entries):
@@ -204,7 +221,8 @@ def list_entries(folder_title, entries):
     xbmcplugin.setContent(_handle, 'episodes')
 
     for entry in entries:
-        list_item = xbmcgui.ListItem(entry['title'])
+        # Set the listing entry's title to either listing_title or title
+        list_item = xbmcgui.ListItem(entry.get('listing_title', entry['title']))
 
         if entry['type'] == 'video':
             list_item.setInfo('video',
@@ -220,13 +238,13 @@ def list_entries(folder_title, entries):
             if duration is not None:
                 list_item.addStreamInfo('video',
                     {
-                        'duration': duration.total_seconds()
+                        'duration': duration
                     })
 
             list_item.setArt(entry['art'])
             list_item.setProperty('IsPlayable', 'true')
 
-            url = get_url(action='play', title=entry['title'].encode(UTF8), url=entry.get('url', ''), videoId=entry.get('videoId', ''))
+            url = get_url(action='play', title=py2utf8(entry['title']), videoId=entry.get('videoId', ''), isUpcoming=entry.get('isUpcoming', False))
 
             is_folder = False
 
@@ -236,7 +254,7 @@ def list_entries(folder_title, entries):
         elif entry['type'] == 'folder':
             list_item.setProperty('IsPlayable', 'false')
 
-            url = get_url(action='listing', page=entry['page'], title=entry['title'].encode(UTF8), uri=entry.get('uri', None))
+            url = get_url(action='listing', page=entry['page'], title=py2utf8(entry['title']), uri=entry.get('uri'), category=entry.get('category'), pageNo=entry.get('pageNo', 1))
 
             is_folder = True
 
@@ -249,219 +267,316 @@ def list_entries(folder_title, entries):
     # Finish creating a virtual folder.
     xbmcplugin.endOfDirectory(_handle)
 
-def get_video_json_url(category, filter_name, filter_value):
-    return CBC_HOST + '/api-live/online-listing/{0}/{1}={2}/list.json'.format(category, filter_name, filter_value)
+def entries_append_video(entries, video):
+    duration = video.get('duration')
 
-# category: replays, highlights
-def list_json_videos_bysport(folder_title, category):
-    entries = []
-    for discipline in DISCIPLINES:
-        entries.append(
-            {
-                'type': 'folder',
-                'page': 'json_videos',
-                'title': discipline['name'],
-                'uri': get_video_json_url(category, 'discipline', discipline['code']),
-            })
+    airDate = datetime.datetime.fromtimestamp(video.get('airDate', 0) / 1000)
+    isLive = video.get('isLive', False)
+    isUpcoming = (airDate > datetime.datetime.now())
 
-    return list_entries(folder_title, entries)
+    if isLive or isUpcoming:
+        # For future scheduled events, include the event start time in the title
+        try:
+            # Get the event start time string, stripping off leading zeroes because
+            # apparently Python doesn't have a format specifier for 12-hour hours
+            # without leading zeroes
+            airTimeStr = airDate.strftime(TIME_FORMAT).lstrip('0')
 
-# category: replays, highlights
-def list_json_videos_bydate(folder_title, category):
-    entries = []
-    for event_date in EVENT_DATES:
-        entries.append(
-            {
-                'type': 'folder',
-                'page': 'json_videos',
-                'title': event_date['name'],
-                'uri': get_video_json_url(category, 'day', event_date['offset']),
-            })
+            # For events today just include the time but for
+            # events on another day, include the date and time
+            if datetime.datetime.now().date() == airDate.date():
+                airDateStr = airTimeStr
+            else:
+                monthStr = airDate.strftime('%b')
+                dayStr = airDate.strftime('%d').lstrip('0')       # There's that leading zero strip again
+                airDateStr = '{0} {1} {2}'.format(airTimeStr, monthStr, dayStr)
 
-    return list_entries(folder_title, entries)
+            # Build a description of the start date
+            if isUpcoming:
+                titleState = strings(30303).format(airDateStr)
+                descState = strings(30303).format(airDateStr)
+            elif isLive:
+                titleState = strings(30304).format(airDateStr)
+                descState = strings(30304).format(airDateStr)
+        except:
+            # Something went wrong so just go with the default state string
+            pass
+    else:
+        # Replay (ie. not live or upcoming)
+        titleState = strings(30305)
+        descState = strings(30305)
 
-def list_json_append_video(entries, video):
-    try:
-        if (video.get('startDate') is not None) and (video.get('endDate') is not None):
-            # For videos with start and end dates, calculate and include the event duration
-            startDate = iso8601UtcStrToLocalDateTime(video['startDate'])
-            endDate = iso8601UtcStrToLocalDateTime(video['endDate'])
-            duration = endDate - startDate
-        else:
-            duration = None
+    video['title'] = u'{0} ({1})'.format(video['title'].rstrip(), titleState)
+    video['description'] = u'{0}\n\n({1})'.format(video['description'], descState)
 
-        if ('state' in video) and (video['state'] != ''):
-            titleState = video['state']
-            descState = video['state']
-
-            if video['state'] != STATE_REPLAY:
-                # For non-replay entries, include the event start time
-                try:
-                    # Convert the UTC start date string into a local datetime object
-                    startDate = iso8601UtcStrToLocalDateTime(video['startDate'])
-
-                    # Get the event start time string, stripping off leading zeroes because
-                    # apparently Python doesn't have a format specifier for 12-hour hours
-                    # without leading zeroes
-                    startTimeStr = startDate.strftime(TIME_FORMAT).lstrip('0')
-
-                    # For events today just include the time but for
-                    # events on another day, include the date and time
-                    if datetime.datetime.now().date() == startDate.date():
-                        startDateStr = startTimeStr
-                    else:
-                        monthStr = startDate.strftime('%b')
-                        dayStr = startDate.strftime('%d').lstrip('0')       # There's that leading zero strip again
-                        startDateStr = '{0} {1} {2}'.format(startTimeStr, monthStr, dayStr)
-
-                    # Build a description of the start date
-                    if video['state'] == STATE_UPCOMING:
-                        titleState = strings(30303).format(startDateStr)
-                        descState = strings(30303).format(startDateStr)
-                    elif video['state'] == STATE_LIVE:
-                        titleState = strings(30304).format(startDateStr)
-                        descState = strings(30304).format(startDateStr)
-                except:
-                    # Something went wrong so just go with the default state string
-                    pass
-            elif video['state'] == STATE_REPLAY:
-                titleState = strings(30305)
-                descState = strings(30305)
-
-            video['title'] = u'{0} ({1})'.format(video['title'].rstrip(), titleState)
-            video['description'] = u'{0}\n\n({1})'.format(video['description'], descState)
-    except:
-        raise # ValueError(str(video))
+    thumbnail = video.get('thumbnail')
 
     entries.append(
         {
             'type': 'video',
-            'title': video['title'],
-            'description': video['description'],
-            'videoId': video['key'],
-            'duration': duration,
+            'title': video.get('title'),
+            'description': video.get('description'),
+            'videoId': video.get('id'),
+            'duration': video.get('duration'),
+            'isUpcoming': isUpcoming,
             'art':
             {
 
-                'thumb': CBC_HOST + video['thumb'],
-                'icon': CBC_HOST + video['thumb'],
-                'fanart': CBC_HOST + video['thumb']
+                'thumb': thumbnail,
+                'icon': thumbnail,
+                'fanart': thumbnail
             }
         })
 
     return
 
-def list_json_videos(folder_title, url):
-    # URL: https://olympics.cbc.ca/api-live/online-listing/replays/discipline=cu/list.json
+def run_graphql(graphql, variables):
+    GRAPHQL_URL = 'https://www.cbc.ca/graphql'
 
-    json_response = json.loads(getRequest(url))
+    body = {
+        'query': graphql,
+        'variables': variables
+    }
 
+    return json.loads(getRequest(url=GRAPHQL_URL, udata=json.dumps(body).encode(UTF8), dopost=True))
+
+def graphql_category_to_entries(entries, graphql_category):
+    if graphql_category:
+        for video in graphql_category:
+            entries_append_video(entries, video)
+
+def graphql_result_to_entries(graphql_result):
     entries = []
-    if 'sports' in json_response:
-        for sport in json_response['sports']:
-            for video in sport['videos']:
-                list_json_append_video(entries, video)
-    elif 'videos' in json_response:
-        for video in json_response['videos']:
-            list_json_append_video(entries, video)
+    data = graphql_result.get('data')
+    if data:
+        categories = data.get('categories')
+        for category in categories:
+            graphql_category_to_entries(entries, category.get('clips'))
 
-    return list_entries(folder_title, entries)
+    return entries
 
-def videoIdToIsmUrl(videoId):
-    # Build URL to the video's XML document
-    xml_url = CBC_HOST + '/videodata/{0}.xml'
+def list_live_videos(page_title, pageNo):
+    graphql = """
+query liveClips($liveFullTitle: String, $clipPageSize: Int, $clipPage: Int) {
+        categories: mpxCategories(fullTitle: $liveFullTitle) {
+            id
+            title
+            fullTitle
+            clips(pageSize: $clipPageSize, page: $clipPage) {
+                ...itemBase
+            }
+        }
 
-    # Fetch the XML
-    xml = getRequest(xml_url.format(videoId))
+    } fragment itemBase on MediaItem {
+    id
+    source
+    title
+    description
+    thumbnail
+    duration
+    airDate
+    isLive
+    isVideo
+}
+"""
 
-    # Isolate the HLS videoSource tag content
-    xml = re.compile('<videoSource format="HLS"(.+?)</videoSource>', re.DOTALL).search(xml).group(1)
+    variables = {
+		"liveFullTitle": "sports/olympics/summer/live",
+		"clipPage": pageNo,
+		"clipPageSize": PAGE_SIZE
+	}
 
-    # Get the URL for the video player's source
-    # Example: https://dvr-i-cbc.akamaized.net/dvr/358abd65-c827-4e6f-ac3d-751c445eba59/358abd65-c827-4e6f-ac3d-751c445eba59.ism/manifest(format=m3u8-aapl-v3,audioTrack=english,filter=hls)
-    # We can't use this as the actual video URL as it requires some kind of handshake
-    videosource_url = re.compile('<uri>(.+?)</uri>', re.DOTALL).search(xml).group(1)
+    graphql_result = run_graphql(graphql, variables)
 
-    # Get the videoSource's .ism URL
-    return videosource_url.split('.ism')[0] + '.ism'
+    entries = graphql_result_to_entries(graphql_result)
 
-def videoPageUrlToIsmUrl(videoUrl):
-    # Get the video page's HTML
-    html = getRequest(videoUrl)
+    # If we have a full page of results, append a "next page" entry
+    if len(entries) == PAGE_SIZE:
+        nextPageNo = pageNo + 1
+        entries.append(
+            {
+                'title': page_title,
+                'listing_title': strings(30306).format(page_title, nextPageNo),
+                'type': 'folder',
+                'page': 'live_videos',
+                'pageNo': nextPageNo,
+                'uri': 'live_videos',
+            })
 
-    # Parse the video id from the tag <input name="videoId" value="44267" type="hidden">
-    videoId = re.compile('<input type="hidden" name="videoId" value="(.+?)"', re.DOTALL).search(html).group(1)
+    return list_entries(page_title, entries)
 
-    return videoIdToIsmUrl(videoId)
+def list_clips_by_category(page_title, category, pageNo):
+    graphql = """
+query clipsByCategory($fullTitle: String, $clipPageSize: Int, $clipPage: Int) {
+            categories: mpxCategories(fullTitle: $fullTitle) {
+                id
+                title
+                fullTitle
+                clips(pageSize: $clipPageSize, page: $clipPage) {
+                    ...itemBase
+                }
+            }
+    } fragment itemBase on MediaItem {
+    id
+    title
+    description
+    thumbnail
+    duration
+    airDate
+    isLive
+    isVideo
+}
+"""
 
-def videoIsmUrlToMpegUrl(video_ism_url):
-    # Works
-    # https://vod-i-cbc.akamaized.net/vod/48dd5257-cbb1-425e-a499-a7293b55d4f4/Social-Who-Is-Tongas-Flag-Bearer.ism/QualityLevels(3257373)/Manifest(video,format=m3u8-aapl-v3,audiotrack=aac_UND_1_56,filter=hls)
+    variables = {
+		"fullTitle": category,
+		"clipPage": pageNo,
+		"clipPageSize": PAGE_SIZE
+	}
 
-    # Error
-    # https://vod-i-cbc.akamaized.net/vod/48dd5257-cbb1-425e-a499-a7293b55d4f4/Social-Who-Is-Tongas-Flag-Bearer.ism/QualityLevels(3257373)/Manifest(video,format=m3u8-aapl-v3,audiotrack=english,filter=hls)
+    graphql_result = run_graphql(graphql, variables)
 
-    user_agent = 'Mozilla%2F5.0%20%28Windows%20NT%2010.0%3B%20Win64%3B%20x64%3B%20rv%3A58.0%29%20Gecko%2F20100101%20Firefox%2F58.0'
+    entries = graphql_result_to_entries(graphql_result)
 
-    # Query the video manifest for the highest quality bitrate
-    xml = getRequest(video_ism_url + '/manifest')
-    xml_streams = re.compile('<StreamIndex (.+)>(.+?)</StreamIndex>', re.DOTALL).search(xml).group(1)
-    quality_levels = re.compile('<QualityLevel Index="(.+?)" Bitrate="(.+?)"', re.DOTALL).findall(xml_streams)
+    # If we have a full page of results, append a "next page" entry
+    if len(entries) == PAGE_SIZE:
+        nextPageNo = pageNo + 1
+        entries.append(
+            {
+                'title': page_title,
+                'listing_title': strings(30306).format(page_title, nextPageNo),
+                'type': 'folder',
+                'page': 'clips_by_category',
+                'pageNo': nextPageNo,
+                'category': category,
+            })
 
-    # Get the bitrate limit setting, if there is one
+    return list_entries(page_title, entries)
+
+def list_sports(page_title):
+    entries = []
+    for sport in SPORTS:
+        entries.append(
+            {
+                'title': sport['title'],
+                'type': 'folder',
+                'page': 'clips_by_category',
+                'category': sport['category']
+            })
+
+    list_entries(page_title, entries)
+
+def videoIdToM3u8Url(videoId):
+    # Build URL to the video's SMIL document
+    smil_url = SMIL_URL.format(videoId)
+    xbmc.log('smil_url = ' + smil_url)
+
     try:
-        # Load the kbps bitrate setting and convert to bps
-        bitrateLimit = int(xbmcplugin.getSetting(_handle, 'bitrateLimitKbps')) * 1000
-    except ValueError:
-        bitrateLimit = 10000000000       # 10 Gbit/sec is essentially unlimited, right?
+        # Fetch the SMIL
+        smil = getRequest(smil_url)
 
-    # Find the highest bitrate within the setting limit
-    selected_bitrate = 0
-    for quality_level in quality_levels:
-        bitrate = int(quality_level[1])
-        if (bitrate <= bitrateLimit) and (bitrate > selected_bitrate):
-            selected_bitrate = bitrate
+        # Parse the SMIL document as XML
+        root = ET.fromstring(smil)
 
-    # Default to the most popular highest bitrate
-    if selected_bitrate == 0:
-        selected_bitrate = 3449984
+        # Locate the first video element on the page
+        ns = {'smil': 'http://www.w3.org/2005/SMIL21/Language'}
+        video = root.find('./smil:body//smil:video', ns)
+        if not video:
+            raise NoVideoNodeError('SMIL document missing a video node')
 
-    # Get the audio track format
-    # Find all stream tags
-    xml_stream_tags = re.compile('<StreamIndex (.+?)>', re.DOTALL).findall(xml)
+        # Extract the "src" attribute of the video element
+        src = video.attrib.get('src')
+        if not src:
+            raise NoSrcAttribError('Video node missing a src attribute')
 
-    # Find all stream tags that have type="audio" in them
-    xml_audio_tags = [xml_stream_tag for xml_stream_tag in xml_stream_tags if xml_stream_tag.lower().find('type="audio"') != -1]
+        return src
+    except Exception as err:
+        xbmc.log('Error loading SMIL: ' + str(err))
+        xbmc.log(smil)
+        raise
 
-    # Prepare the name regex
-    name_regex = re.compile('name="(.+?)"', re.DOTALL)
+def pickStreamUrlFromM3u8Url(m3u8_url):
+    try:
+        # Query the video manifest for the highest quality bitrate
+        m3u8 = getRequest(m3u8_url)
+        stream_urls = re.compile('^hdntl.*$', re.MULTILINE).findall(m3u8)
 
-    # Get the first stream's audio track as default
-    audiotrack = name_regex.search(xml_audio_tags[0].lower()).group(1)
+        # Get the bitrate limit setting, if there is one
+        try:
+            # Load the kbps bitrate setting and convert to bps
+            bitrateLimitKbps = int(xbmcplugin.getSetting(_handle, 'bitrateLimitKbps'))
+        except ValueError:
+            bitrateLimitKbps = 10000000       # 10 Gbit/sec is essentially unlimited, right?
 
-    # If the first stream is not english, look for any other streams that say "eng"
-    if audiotrack.find('eng') == -1:
-        for xml_audio_tag in xml_audio_tags:
-            audiotrack_eng = name_regex.search(xml_audio_tag.lower()).group(1)
-            if audiotrack_eng.find('eng') != -1:
-                audiotrack = audiotrack_eng
+        # Find the highest bitrate within the setting limit
+        selected_bitrateKbps = 0
+        for stream_url in stream_urls:
+            bitrateKbps = int(re.search('master_(\d*)', stream_url).group(1))
+            if (bitrateKbps <= bitrateLimitKbps) and (bitrateKbps > selected_bitrateKbps):
+                selected_stream_url = stream_url
+                selected_bitrateKbps = bitrateKbps
 
-    url = video_ism_url + '/QualityLevels({0})/Manifest(video,format=m3u8-aapl-v3,audiotrack={1},filter=hls)|User-Agent={2}'.format(selected_bitrate, audiotrack, user_agent)
+        selected_stream_url = urljoin(m3u8_url, selected_stream_url)
+        return selected_stream_url
+    except HTTPError:
+        # Let the HTTP errors bubble up so that the caller can handle them
+        raise
+    except Exception as err:
+        # If any of the stream selection code above fails, just return the original m3u8
+        # and let Kodi choose the stream. It will default to the first one which has
+        # been the 2 Mbit stream. The user can switch streams in Kodi's UI during playback.
+        xbmc.log('Error picking stream from M3U8: ' + str(err))
+        xbmc.log('Falling back to playing M3U8 directly')
+        return m3u8_url
 
-    return url
-
-def play_video(page_url, videoId):
-    if videoId != '':
-        ism_url = videoIdToIsmUrl(videoId)
-    elif page_url != '':
-        ism_url = videoPageUrlToIsmUrl(page_url)
-    else:
+def play_video(videoId, isUpcoming):
+    if not videoId or (videoId == ''):
         raise ValueError(strings(30900))
 
-    # Create a playable item with a path to play.
-    play_item = xbmcgui.ListItem(path=videoIsmUrlToMpegUrl(ism_url))
-    # Pass the item to the Kodi player.
-    xbmcplugin.setResolvedUrl(_handle, True, listitem=play_item)
+    try:
+        # Fetch the video's SMIL document and extract the m3u8 from it.
+        # This has failed in the past so re-try to see if the error persists.
+        smilAttemptsRemaining = 2
+        while (smilAttemptsRemaining > 0):
+            try:
+                m3u8_url = videoIdToM3u8Url(videoId)
+
+                # Success. No need to re-try.
+                smilAttemptsRemaining = 0
+                xbmc.log('m3u8_url: ' + m3u8_url)
+            except SmilDocumentError as err:
+                smilAttemptsRemaining -= 1
+                if (smilAttemptsRemaining == 0):
+                    # "The server did not return a valid stream. Please try again later."
+                    okDialog(strings(30902))
+                    return
+                else:
+                    xbmc.log('Re-trying SMIL fetch')
+
+        # Fetch the video's m3u8 and pick the stream based on the user's bitrate preference
+        stream_url = pickStreamUrlFromM3u8Url(m3u8_url)
+        xbmc.log('stream_url: ' + stream_url)
+
+        # Append our custom user agent because it needs to match the agent from the m3u8 request,
+        # otherwise an HTTP 403 Forbidden is returned
+        stream_agent_url = '{0}|User-Agent={1}'.format(stream_url, quote_plus(USERAGENT))
+
+        # Create a playable item with a path to play.
+        play_item = xbmcgui.ListItem(path=stream_agent_url)
+        # Pass the item to the Kodi player.
+        xbmcplugin.setResolvedUrl(_handle, True, listitem=play_item)
+    except HTTPError as err:
+        if err.code == 403:
+            errorMessage = strings(30903)
+        elif err.code == 404:
+            if isUpcoming:
+                errorMessage = strings(30904)
+            else:
+                errorMessage = strings(30905)
+        else:
+            errorMessage = strings(30906).format(err.code, err.reason)
+
+        okDialog(errorMessage)
 
 def router(paramstring):
     # Parse a URL-encoded paramstring to the dictionary of
@@ -469,19 +584,19 @@ def router(paramstring):
     params = dict(parse_qsl(paramstring))
     # Check the parameters passed to the plugin
     if params:
-        page_title = params['title'].decode(UTF8)
+        page_title = py2decodeUtf8(params['title'])
 
         if params['action'] == 'listing':
-            if params['page'] == 'json_videos_bysport':
-                list_json_videos_bysport(page_title, params['uri'])
-            if params['page'] == 'json_videos_bydate':
-                list_json_videos_bydate(page_title, params['uri'])
-            if params['page'] == 'json_videos':
-                list_json_videos(page_title, params['uri'])
+            if params['page'] == 'live_videos':
+                list_live_videos(page_title, int(params.get('pageNo', 1)))
+            if params['page'] == 'clips_by_category':
+                list_clips_by_category(page_title, params['category'], int(params.get('pageNo', 1)))
+            if params['page'] == 'sports':
+                list_sports(page_title)
             else:
                 pass
         elif params['action'] == 'play':
-            play_video(params.get('url', ''), params.get('videoId',''))
+            play_video(params.get('videoId',''), params.get('isUpcoming', 'False')=='True')
         else:
             # If the provided paramstring does not contain a supported action
             # we raise an exception. This helps to catch coding errors,

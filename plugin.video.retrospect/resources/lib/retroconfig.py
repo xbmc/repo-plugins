@@ -84,7 +84,7 @@ class Config:
     updateUrl = "https://api.github.com/repos/retrospect-addon/plugin.video.retrospect/releases"
 
     textureMode = "Resources"                                 # : The mode for the textures: Local, Remote, Cached or Resources
-    textureUrl = "https://cdn.rieter.net/" \
+    textureUrl = "https://retrospect-addon.github.io/" \
                  "resource.images.retrospect/resources"       # : The URL for the remote texture location
     textureResource = "resource.images.retrospect"            # : The resource add-on to use for textures
 

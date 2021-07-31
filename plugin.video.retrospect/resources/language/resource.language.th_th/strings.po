@@ -4,20 +4,22 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2021-07-30 21:19+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Thai <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/th_th/>\n"
 "Language: th_th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.7.2\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
 msgstr ""
 
 msgctxt "Addon Description"
-msgid "Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://rieter.net or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
+msgid "Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
 msgstr ""
 
 msgctxt "Addon Disclaimer"
@@ -565,6 +567,23 @@ msgstr ""
 
 msgctxt "#30311"
 msgid "Finland"
+msgstr ""
+
+# empty strings from id 30312 to 30345
+msgctxt "#30346"
+msgid "Now Playing"
+msgstr ""
+
+msgctxt "#30347"
+msgid "Now"
+msgstr ""
+
+msgctxt "#30348"
+msgid "Next"
+msgstr ""
+
+msgctxt "#30349"
+msgid "Later"
 msgstr ""
 
 # empty strings from id 30312 to 30349

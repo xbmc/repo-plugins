@@ -6,7 +6,7 @@
 [![Python](https://img.shields.io/badge/python-2.7%20%7C%203.6-blue?logo=python)](https://kodi.tv/article/attention-addon-developers-migration-python-3)
 [![Weblate](https://kodi.weblate.cloud/widgets/kodi-add-ons-video/-/plugin-video-retrospect/svg-badge.svg)](https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/)
 
-This repository holds the main code for Retrospect. For more information on bug reporting, please visit https://github.com/retrospect-addon/plugin.video.retrospect or https://www.rieter.net/content/.
+This repository holds the main code for Retrospect. For more information on bug reporting, please visit https://github.com/retrospect-addon/plugin.video.retrospect or https://github.com/retrospect-addon/plugin.video.retrospect/wiki.
 
 ## Introduction
 Retrospect (Previously XBMC Online TV) is a Kodi video add-on which allows you to watch streams of a number of free and publicly available online TV stream sites.
@@ -40,7 +40,7 @@ Retrospect is licensed under a _GNU General Public License v3.0_, see: [LICENSE.
 The official add-on package for Retrospect may not be distributed via other repositories than the official Kodi add-on repository.
 
 ### Disclaimer ###
-Retrospect or Rieter.net are not connected to or in any other way affiliated with Kodi, Team Kodi or the XBMC Foundation. Furthermore, any software, addons, or products offered by Retrospect or Rieter.net will only receive support in its [Kodi forum](https://forum.kodi.tv/showthread.php?tid=25522) and [Github repository](https://github.com/retrospect-addon/plugin.video.retrospect).
+Retrospect is not connected to or in any other way affiliated with Kodi, Team Kodi or the XBMC Foundation. Furthermore, any software, addons, or products offered by Retrospect will only receive support in its [Kodi forum](https://forum.kodi.tv/showthread.php?tid=25522) and [Github repository](https://github.com/retrospect-addon/plugin.video.retrospect).
 
 ### Rules & Terms ###
 As more and more people are starting to make channels for Retrospect, we want to lay out some rules and terms for the channels which we will host. Please stick to them before asking us to merge your work with the master branch:
@@ -473,3 +473,7 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - T.R. Quuk
 - M.J.M. de Frankrijker
 - Magnus Holmquist
+- P G M Schoonderwoerd
+- Jasper-Laurens Van Daele
+- Olle Brink
+- Magnus Bertilsson

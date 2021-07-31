@@ -97,7 +97,7 @@ def ytchannels_main():
 			move_down_uri = build_url({'mode': 'move_down', 'id': '%s'%channels[i][4]})
 			move_up_uri = build_url({'mode': 'move_up', 'id': '%s'%channels[i][4]})
 			items = []
-			items.append((local_string(30003), 'RunPlugin(%s)'%rem_uri))
+			items.append((local_string(30028 if channels[i][1].startswith('PL', 0, 2) else 30003), 'RunPlugin(%s)'%rem_uri))
 			items.append((local_string(30025), 'RunPlugin(%s)'%move_uri))
 			items.append((local_string(30001), 'RunPlugin(%s)'%add_uri))
 			items.append((local_string(30002), 'RunPlugin(%s)'%addch_uri))
@@ -181,7 +181,7 @@ def ytchannels_main():
 			move_down_uri = build_url({'mode': 'move_down', 'id': '%s'%channels[i][4]})
 			move_up_uri = build_url({'mode': 'move_up', 'id': '%s'%channels[i][4]})
 			items = []
-			items.append((local_string(30003), 'RunPlugin(%s)'%rem_uri))
+			items.append((local_string(30028 if channels[i][1].startswith('PL', 0, 2) else 30003), 'RunPlugin(%s)'%rem_uri))
 			items.append((local_string(30025), 'RunPlugin(%s)'%move_uri))
 			if len(channels) > 1:
 				if channels[i][3] == 1:
@@ -215,6 +215,9 @@ def ytchannels_main():
 				playlista=True
 		except:
 			playlista=False
+		
+		if id.startswith('PL', 0, 2):
+			playlista = True
 
 		if not playlista and enable_playlists=='true':
 
@@ -279,6 +282,10 @@ def ytchannels_main():
 			url = build_url({'mode': 'open_channel', 'foldername': '%s'%id, 'page':'1', 'playlist':'yes'})
 			li = xbmcgui.ListItem('%s'%name)
 			li.setArt({'icon':'%s'%thumb})
+			add_playlist_uri = build_url({'mode': 'add_playlist', 'id': '%s'%id, 'name': '%s'%name, 'thumb': '%s'%thumb})
+			items = []
+			items.append(("Add to folder", 'RunPlugin(%s)'%add_playlist_uri))
+			li.addContextMenuItems(items)
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li,isFolder=True)
 
 		if next_page!='1':
@@ -363,6 +370,19 @@ def ytchannels_main():
 		index = dialog.select(local_string(30011), folders)
 		if index>-1:
 			change_folder(channel_id, folders[index])
+		xbmc.executebuiltin("Container.Refresh")
+
+	elif mode[0]=='add_playlist':
+		dicti=urllib.parse.parse_qs(sys.argv[2][1:])
+		channel_name = dicti['name'][0]
+		channel_id = dicti['id'][0]
+		thumb = dicti['thumb'][0]
+		folders=get_folders()
+		folders.append("root")
+		dialog = xbmcgui.Dialog()
+		index = dialog.select(local_string(30011), folders)
+		if index>-1:
+			add_channel(folders[index], '[COLOR yellow]' + channel_name + '[/COLOR]', channel_id, thumb)
 		xbmc.executebuiltin("Container.Refresh")
 
 	elif mode[0]=='set_thumbnail':

@@ -9,7 +9,7 @@ class Remote(TextureHandler):
 
         self.__cdnUrl = cdn_url
         if not self.__cdnUrl:
-            self.__cdnUrl = "https://cdn.rieter.net/plugin.video.retrospect.cdn/"
+            raise ValueError("Parameter `cdn_url` needs to be filled.")
 
     def _purge_texture_cache(self, channel_path):
         """ Removes those entries from the textures cache that are no longer required.

@@ -1,9 +1,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class, mediatype
+from resources.lib import chn_class, mediatype, contenttype
+from resources.lib.helpers.languagehelper import LanguageHelper
 
-from resources.lib.mediaitem import MediaItem
+from resources.lib.mediaitem import MediaItem, FolderItem
 from resources.lib.logger import Logger
+from resources.lib.streams.mpd import Mpd
 from resources.lib.urihandler import UriHandler
 from resources.lib.parserdata import ParserData
 from resources.lib.helpers.jsonhelper import JsonHelper
@@ -29,25 +31,26 @@ class Channel(chn_class.Channel):
         self.noImage = "srfimage.png"
 
         # setup the urls
-        self.mainListUri = "http://il.srgssr.ch/integrationlayer/1.0/ue/srf/tv/assetGroup/editorialPlayerAlphabetical.json"
+        self.mainListUri = "https://www.srf.ch/play/v3/api/srf/production/shows?onlyActiveShows=true"
         self.baseUrl = "http://www.srf.ch"
 
         # setup the intial listing
-        self._add_data_parser(self.mainListUri, match_type=ParserData.MatchExact, json=True,
-                              parser=["AssetGroups", "Show"], creator=self.create_episode_item_new)
+        self._add_data_parser(self.mainListUri, match_type=ParserData.MatchExact,
+                              json=True, name="Mainlisting of shows",
+                              preprocessor=self.get_live_items,
+                              parser=["data"], creator=self.create_episode_item)
 
-        # self._add_data_parser(self.mainListUri, matchType=ParserData.MatchExact, json=True,
-        #                     preprocessor=self.get_live_items)
+        self._add_data_parser("https://www.srf.ch/play/v3/api/srf/production/tv-livestreams",
+                              json=True, name="Live stream items",
+                              creator=self.create_live_item, parser=["data"])
 
-        self._add_data_parser("http://il.srgssr.ch/integrationlayer/1.0/ue/srf/video/play",
-                              updater=self.update_live_item)
+        self._add_data_parser("https://www.srf.ch/play/v3/api/srf/production/videos-by-show-id?showId",
+                              json=True, name="Videos for show",
+                              parser=['data', 'data'],
+                              creator=self.create_video_item)
 
-        self._add_data_parser("http://il.srgssr.ch/integrationlayer/1.0/ue/srf/assetSet/listByAssetGroup", json=True,
-                              parser=['AssetSets', 'AssetSet'],
-                              creator=self.create_video_item_new)
-
-        # TODO: folders
-        self._add_data_parser("http://www.srf.ch/player/webservice/videodetail/", updater=self.update_video_item)
+        # Generic updater
+        self._add_data_parser("https://il.srgssr.ch/integrationlayer/2.0/mediaComposition/byUrn", updater=self.update_video_item)
 
         # ===============================================================================================================
         # Test cases:
@@ -70,20 +73,14 @@ class Channel(chn_class.Channel):
         Logger.info("Fetching episode items")
         items = []
 
-        live_items = MediaItem("\a.: Live TV :.", "")
+        live = LanguageHelper.get_localized_string(LanguageHelper.LiveTv)
+        live_items = MediaItem(
+            "\a.: {} :.".format(live),
+            "https://www.srf.ch/play/v3/api/srf/production/tv-livestreams-now-and-next"
+        )
+        live_items.isLive = True
+        live_items.dontGroup = True
         items.append(live_items)
-
-        live_base = "http://il.srgssr.ch/integrationlayer/1.0/ue/srf/video/play/%s.json"
-        live_channels = {"SRF 1 live": ("c4927fcf-e1a0-0001-7edd-1ef01d441651", "srf1.png"),
-                         "SRF zwei live": ("c49c1d64-9f60-0001-1c36-43c288c01a10", "srf2.png"),
-                         "SRF info live": ("c49c1d73-2f70-0001-138a-15e0c4ccd3d0", "srfinfo.png")}
-        for live_item in live_channels.keys():
-            item = MediaItem(live_item, live_base % (live_channels[live_item][0],))
-            item.thumb = self.get_image_location(live_channels[live_item][1])
-            item.isGeoLocked = True
-            item.media_type = mediatype.EPISODE
-            live_items.items.append(item)
-
         return data, items
 
     def create_episode_item(self, result_set):
@@ -102,45 +99,13 @@ class Channel(chn_class.Channel):
 
         Logger.trace(result_set)
 
-        url = "http://il.srgssr.ch/integrationlayer/1.0/ue/srf/assetSet/listByAssetGroup/%s.json" % (result_set["id"],)
-        item = MediaItem(result_set["title"], url)
+        url = "https://www.srf.ch/play/v3/api/srf/production/videos-by-show-id?showId={}".format(result_set["id"])
+        item = FolderItem(result_set["title"], url, content_type=contenttype.EPISODES)
         item.description = result_set.get("description", "")
         item.httpHeaders = self.httpHeaders
-
-        # the 0005 seems to be a quality thing: 0001, 0003, 0004, 0005
-        # http://www.srf.ch/webservice/picture/videogroup/c60026b7-2ed0-0001-b4b1-1f801a6355d0/0005
-        # http://www.srfcdn.ch/piccache/vis/videogroup/c6/00/c60026b7-2ed0-0001-b4b1-1f801a6355d0_0005_w_h_m.jpg
-        # item.thumb = "http://www.srf.ch/webservice/picture/videogroup/%s/0005" % (resultSet["id"],)
-        item.thumb = "http://www.srfcdn.ch/piccache/vis/videogroup/%s/%s/%s_0005_w_h_m.jpg" \
-                     % (result_set["id"][0:2], result_set["id"][2:4], result_set["id"],)
-
-        # item.thumb = resultSet.get("thumbUrl", None)
-        # item.thumb = "%s/scale/width/288" % (item.thumb, )  # apparently only the 144 return the correct HEAD info
-        # item.fanart = resultSet.get("imageUrl", None)  $# the HEAD will not return a size, so Kodi can't handle it
-        item.complete = True
-        return item
-
-    def create_episode_item_new(self, result_set):
-        """ Creates a new MediaItem for an episode.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-
-        url = "http://il.srgssr.ch/integrationlayer/1.0/ue/srf/assetSet/listByAssetGroup/%s.json?pageSize=100" % (result_set["id"],)
-        item = MediaItem(result_set["title"], url)
-        item.description = result_set.get("description", "")
-        item.httpHeaders = self.httpHeaders
-        item.thumb = self.__get_nested_value(result_set, "Image", "ImageRepresentations", "ImageRepresentation", 0, "url")
+        item.poster = result_set.get("posterImageUrl")
+        item.thumb = result_set.get("imageUrl")
+        item.fanart = item.thumb
         item.complete = True
         return item
 
@@ -165,39 +130,29 @@ class Channel(chn_class.Channel):
         """
 
         Logger.trace(result_set)
+        video_urn = result_set["urn"]
+        url = "https://il.srgssr.ch/integrationlayer/2.0/mediaComposition/byUrn/{}.json?onlyChapters=false&vector=portalplay".format(video_urn)
+        item = MediaItem(result_set["title"], url)
 
-        if "fullengthSegment" in result_set and "segment" in result_set["fullengthSegment"]:
-            video_id = result_set["fullengthSegment"]["segment"]["id"]
-            geo_location = result_set["fullengthSegment"]["segment"]["geolocation"]
-            geo_block = False
-            if "flags" in result_set["fullengthSegment"]["segment"]:
-                geo_block = result_set["fullengthSegment"]["segment"]["flags"].get("geoblock", None)
-            Logger.trace("Found geoLocation/geoBlock: %s/%s", geo_location, geo_block)
-        else:
-            Logger.warning("No video information found.")
-            return None
-
-        url = "http://www.srf.ch/player/webservice/videodetail/index?id=%s" % (video_id,)
-        item = MediaItem(result_set["titleFull"], url)
         item.media_type = mediatype.EPISODE
+        item.thumb = result_set.get("imageUrl")
+        item.description = result_set.get("description")
+        item.isGeoLocked = not result_set.get("playableAbroad", True)
 
-        # noinspection PyTypeChecker
-        item.thumb = result_set.get("segmentThumbUrl", None)
-        # apparently only the 144 return the correct HEAD info
-        # item.thumb = "%s/scale/width/288" % (item.thumb, )
-        # the HEAD will not return a size, so Kodi can't handle it
-        # item.fanart = resultSet.get("imageUrl", None)
-        item.description = result_set.get("description", "")
+        duration = result_set.get("duration")
+        if duration:
+            item.set_info_label("duration", int(duration)/1000)
 
-        date_value = str(result_set["time_published"])
-        # 2015-01-20 22:17:59"
-        date_time = DateHelper.get_date_from_string(date_value, "%Y-%m-%d %H:%M:%S")
+        date_value = str(result_set["date"])
+        date_value = date_value.split("+", 1)[0]
+        # date=2021-07-01T12:34:50+02:00
+        date_time = DateHelper.get_date_from_string(date_value, "%Y-%m-%dT%H:%M:%S")
         item.set_date(*date_time[0:6])
         item.httpHeaders = self.httpHeaders
         item.complete = False
         return item
 
-    def create_video_item_new(self, result_set):
+    def create_live_item(self, result_set):
         """ Creates a MediaItem of type 'video' using the result_set from the regex.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -210,7 +165,7 @@ class Channel(chn_class.Channel):
         for playback.
 
         :param result_set: The result_set of the self.episodeItemRegex
-        :type result_set: list[str]|dict[str,str]
+        :type result_set: dict
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
         :rtype: MediaItem|None
@@ -218,34 +173,29 @@ class Channel(chn_class.Channel):
         """
 
         Logger.trace(result_set)
+        video_urn = result_set["livestreamUrn"]
+        url = "https://il.srgssr.ch/integrationlayer/2.0/mediaComposition/byUrn/{}.json?onlyChapters=false&vector=portalplay".format(video_urn)
+        station = result_set["title"]
+        description = []
 
-        videos = self.__get_nested_value(result_set, "Assets", "Video")
-        if not videos:
-            Logger.warning("No video information found.")
-            return None
+        next_item = result_set["next"]
+        if next_item:
+            next_title = LanguageHelper.get_localized_string(LanguageHelper.Next)
+            description.append("[B]{}[/B]: {}".format(next_title, next_item["title"]))
 
-        video_infos = [vi for vi in videos if vi["fullLength"]]
-        if len(video_infos) > 0:
-            video_info = video_infos[0]
+        now_item = result_set.get("now")
+        if now_item:
+            now_title = LanguageHelper.get_localized_string(LanguageHelper.NowPlaying)
+            title = "[COLOR gold]{}[/COLOR]: {}".format(station, now_item["title"])
+            description.insert(0, "[B]{}[/B]: {}".format(now_title, now_item["title"]))
+            description.append("\n{}".format(now_item["description"]))
         else:
-            Logger.warning("No full length video found.")
-            return None
-        # noinspection PyTypeChecker
-        video_id = video_info["id"]
+            title = station
 
-        url = "http://il.srgssr.ch/integrationlayer/1.0/ue/srf/video/play/%s.json" % (video_id,)
-        item = MediaItem(result_set["title"], url)
-        item.media_type = mediatype.EPISODE
-
-        item.thumb = self.__get_nested_value(video_info, "Image", "ImageRepresentations", "ImageRepresentation", 0, "url")
-        item.description = self.__get_nested_value(video_info, "AssetMetadatas", "AssetMetadata", 0, "description")
-
-        date_value = str(result_set["publishedDate"])
-        date_value = date_value[0:-6]
-        # 2015-01-20T22:17:59"
-        date_time = DateHelper.get_date_from_string(date_value, "%Y-%m-%dT%H:%M:%S")
-        item.set_date(*date_time[0:6])
-        item.httpHeaders = self.httpHeaders
+        item = MediaItem(title, url, media_type=mediatype.VIDEO)
+        item.description = "\n".join(description)
+        item.isGeoLocked = True
+        item.isLive = True
         item.complete = False
         return item
 
@@ -275,99 +225,27 @@ class Channel(chn_class.Channel):
 
         data = UriHandler.open(item.url, additional_headers=item.HttpHeaders)
         json = JsonHelper(data)
-        video_info = json.get_value("content", "videoInfos")
+        video_infos = json.get_value("chapterList", 0, "resourceList")
 
-        if "HLSurlHD" in video_info:
-            # HLSurlHD=http://srfvodhd-vh.akamaihd.net/i/vod/potzmusig/2015/03/
-            # potzmusig_20150307_184438_v_webcast_h264_,q10,q20,q30,q40,q50,q60,.mp4.csmil/master.m3u8
-            for s, b in M3u8.get_streams_from_m3u8(video_info["HLSurlHD"]):
-                item.complete = True
-                item.add_stream(s, b)
-        elif "HLSurl" in video_info:
-            # HLSurl=http://srfvodhd-vh.akamaihd.net/i/vod/potzmusig/2015/03/
-            # potzmusig_20150307_184438_v_webcast_h264_,q10,q20,q30,q40,.mp4.csmil/master.m3u8
-            for s, b in M3u8.get_streams_from_m3u8(video_info["HLSurl"]):
-                item.complete = True
-                item.add_stream(s, b)
+        for video_info in video_infos:
+            url = video_info["url"]
+            video_type = video_info["protocol"].lower()
+            quality = video_info["quality"].lower()
+            if quality == "sd":
+                bitrate = 1000
+            else:
+                bitrate = 2500
 
-        if "downloadLink" in video_info:
-            # downloadLink=http://podcastsource.sf.tv/nps/podcast/10vor10/2015/03/
-            # 10vor10_20150304_215030_v_podcast_h264_q10.mp4
-            item.add_stream(video_info["downloadLink"], 1000)
+            if video_type == "hls":
+                item.complete = M3u8.update_part_with_m3u8_streams(item, url, bitrate=bitrate, encrypted=False)
 
-        return item
-
-    def update_live_item(self, item):
-        """ Updates an existing Live stream MediaItem with more data.
-
-        Used to update none complete MediaItems (self.complete = False). This
-        could include opening the item's URL to fetch more data and then process that
-        data or retrieve it's real media-URL.
-
-        The method should at least:
-        * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaStream.
-        * set self.complete = True.
-
-        if the returned item does not have a MediaSteam then the self.complete flag
-        will automatically be set back to False.
-
-        :param MediaItem item: the original MediaItem that needs updating.
-
-        :return: The original item with more data added to it's properties.
-        :rtype: MediaItem
-
-        """
-
-        Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
-
-        data = UriHandler.open(item.url, additional_headers=item.HttpHeaders)
-        json = JsonHelper(data)
-        video_play_lists = json.get_value("Video", "Playlists", "Playlist")
-
-        for play_list in video_play_lists:
-            streams = play_list["url"]
-            Logger.trace("Found %s streams", len(streams))
-            for stream in streams:
-                stream_url = stream["text"]
-                if ".m3u8" in stream_url:
-                    for s, b in M3u8.get_streams_from_m3u8(stream_url):
-                        item.complete = True
-                        item.add_stream(s, b)
-                else:
-                    Logger.debug("Cannot use stream url: %s", stream_url)
-
-        # Unused at the moment
-        # videoInfo = json.get_value("content", "videoInfos")
-        #
-        # if "HLSurlHD" in videoInfo:
-        #     # HLSurlHD=http://srfvodhd-vh.akamaihd.net/i/vod/potzmusig/2015/03/potzmusig_20150307_184438_v_webcast_h264_,q10,q20,q30,q40,q50,q60,.mp4.csmil/master.m3u8
-        #     for s, b in M3u8.get_streams_from_m3u8(videoInfo["HLSurlHD"]):
-        #         item.complete = True
-        #         # s = self.get_verifiable_video_url(s)
-        #         item.add_stream(s, b)
-        # elif "HLSurl" in videoInfo:
-        #     # HLSurl=http://srfvodhd-vh.akamaihd.net/i/vod/potzmusig/2015/03/potzmusig_20150307_184438_v_webcast_h264_,q10,q20,q30,q40,.mp4.csmil/master.m3u8
-        #     for s, b in M3u8.get_streams_from_m3u8(videoInfo["HLSurl"]):
-        #         item.complete = True
-        #         # s = self.get_verifiable_video_url(s)
-        #         item.add_stream(s, b)
-        #
-        # if "downloadLink" in videoInfo:
-        #     # downloadLink=http://podcastsource.sf.tv/nps/podcast/10vor10/2015/03/10vor10_20150304_215030_v_podcast_h264_q10.mp4
-        #     item.add_stream(videoInfo["downloadLink"], 1000)
+            elif video_type == "mpd" or video_type == "dash":
+                license_url = [d["licenseUrl"] for d in video_info["drmList"] if d["type"].lower() == "widevine"][0]
+                license_key = Mpd.get_license_key(license_url, key_type="R")
+                stream = item.add_stream(url, bitrate=bitrate + 1)
+                item.complete = Mpd.set_input_stream_addon_input(stream, license_key=license_key)
+            else:
+                Logger.warning("Cannot playback type '%s': %s", video_type, url)
+                continue
 
         return item
-
-    def __get_nested_value(self, dic, *args, **kwargs):
-        current_node = dic
-        for a in args:
-            try:
-                current_node = current_node[a]
-            except:
-                Logger.debug("Value '%s' is not found in '%s'", a, current_node)
-                if "fallback" in kwargs:
-                    return kwargs["fallback"]
-                else:
-                    return None
-        return current_node

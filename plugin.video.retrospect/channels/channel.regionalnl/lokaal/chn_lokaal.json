@@ -15,20 +15,6 @@
       "fanart": "rtvdrenthefanart.jpg"
     },
     {
-      "guid": "B099990E-5749-44FC-A5C5-A40427A9A5C9",
-      "name": "RTV Oost",
-      "description": {
-        "en": "Video on demand for RTV Oost.\n\nNews and messages from RTV Oost, the regional broadcaster for Overijssel. If something happened in Overijssel, you will see it at RTV Oost.",
-        "nl": "RTV Oost Uitzendinggemist.\n\nNieuws en berichten van RTV Oost, de regionale omroep voor Overijssel. Gebeurt er iets in Overijssel? Dan zie je het bij RTV Oost."
-      },
-      "icon": "rtvoostlarge.png",
-      "category": "Regional",
-      "channelcode": "rtvoost",
-      "sortorder": 100,
-      "language": "nl",
-      "fanart": "rtvoostfanart.jpg"
-    },
-    {
       "guid": "7C40EEE7-40F4-40ED-8A70-FAAB42B7A2B1",
       "name": "RTV Noord",
       "description": {
@@ -41,20 +27,6 @@
       "sortorder": 100,
       "language": "nl",
       "fanart": "rtvnoordfanart.png"
-    },
-    {
-      "guid": "AF2B907D-D437-46DB-B802-F946850098FB",
-      "name": "RTV Rijnmond",
-      "description": {
-        "en": "Video on demand for RTV Rijnmond.\n\n\"We are always on. We are there where it happens. Since 1983 via radio, since 1997 on TV and since 2000 online. We are Rijnmond. We are there!\"",
-        "nl": "RTV Rijnmond Uitzendinggemist.\n\n\"Wij staan altijd aan. Wij zijn daar waar het gebeurt. Sinds 1983 op de radio. Sinds 1997 op tv. Sinds 2000 online. Wij zijn Rijnmond. Wij zijn erbij!\""
-      },
-      "icon": "rtvrijnmondlarge.png",
-      "category": "Regional",
-      "channelcode": "rtvrijnmond",
-      "sortorder": 100,
-      "language": "nl",
-      "fanart": "rtvrijnmondfanart.png"
     },
     {
       "guid": "EFE57022-9F52-41F9-8775-13CCD001FA56",

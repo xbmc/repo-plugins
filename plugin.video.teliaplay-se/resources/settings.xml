@@ -1,0 +1,207 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="plugin.video.teliaplay-se">
+		<category id="general" label="32000" help="">
+			<group id="1" label="32001">
+				<setting id="debug" type="boolean" label="32002" help="32003">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+		</category>
+		<category id="8" label="32004" help="32012">
+			<group id="7" label="32015">
+				<setting id="defaultUser" type="string" label="32017" help="32016">
+					<level>0</level>
+					<default>1</default>
+					<constraints>
+						<options>
+							<option label="32009">5</option>
+							<option label="32008">4</option>
+							<option label="32007">3</option>
+							<option label="32006">2</option>
+							<option label="32005">1</option>
+						</options>
+					<constraints>
+						<allowempty>false</allowempty>
+					</constraints>
+					</constraints>
+					<control type="spinner" format="string">
+						<heading>32015</heading>
+					</control>
+				</setting>
+			</group>
+			<group id="2" label="32005">
+				<setting id="user1" type="string" label="32010" help="32013">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32010</heading>
+					</control>
+				</setting>
+				<setting id="pass1" type="string" label="32011" help="32014">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32011</heading>
+						<hidden>true</hidden>
+					</control>
+				</setting>
+				<setting id="PIN1" type="string" label="32018" help="32019">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32018</heading>
+						<hidden>true</hidden>
+					</control>
+				</setting>
+			</group>
+			<group id="3" label="32006">
+				<setting id="user2" type="string" label="32010" help="32013">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32010</heading>
+					</control>
+				</setting>
+				<setting id="pass2" type="string" label="32011" help="32014">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32011</heading>
+						<hidden>true</hidden>
+					</control>
+				</setting>
+				<setting id="PIN2" type="string" label="32018" help="32019">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32018</heading>
+						<hidden>true</hidden>
+					</control>
+				</setting>
+			</group>
+			<group id="4" label="32007">
+				<setting id="user3" type="string" label="32010" help="32013">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32010</heading>
+					</control>
+				</setting>
+				<setting id="pass3" type="string" label="32011" help="32014">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32011</heading>
+						<hidden>true</hidden>
+					</control>
+				</setting>
+				<setting id="PIN3" type="string" label="32018" help="32019">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32018</heading>
+						<hidden>true</hidden>
+					</control>
+				</setting>
+			</group>
+			<group id="5" label="32008">
+				<setting id="user4" type="string" label="32010" help="32013">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32010</heading>
+					</control>
+				</setting>
+				<setting id="pass4" type="string" label="32011" help="32014">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32011</heading>
+						<hidden>true</hidden>
+					</control>
+				</setting>
+				<setting id="PIN4" type="string" label="32018" help="32019">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32018</heading>
+						<hidden>true</hidden>
+					</control>
+				</setting>
+			</group>
+			<group id="6" label="32009">
+				<setting id="user5" type="string" label="32010" help="32013">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32010</heading>
+					</control>
+				</setting>
+				<setting id="pass5" type="string" label="32011" help="32014">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32011</heading>
+						<hidden>true</hidden>
+					</control>
+				</setting>
+				<setting id="PIN5" type="string" label="32018" help="32019">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32018</heading>
+						<hidden>true</hidden>
+					</control>
+				</setting>
+			</group>
+		</category>
+	</section>
+</settings>

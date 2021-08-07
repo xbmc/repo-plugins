@@ -45,14 +45,7 @@ class Channel(chn_class.Channel):
         self.channelBitrate = 850  # : the default bitrate
         self.liveUrl = None        # : the live url if present
 
-        if self.channelCode == "rtvrijnmond":
-            self.noImage = "rtvrijnmondimage.png"
-            self.mainListUri = "http://rijnmond.api.regiogrid.nl/apps/v520/programs.json"
-            self.baseUrl = "http://rijnmond.api.regiogrid.nl"
-            self.liveUrl = "https://d3r4bk4fg0k2xi.cloudfront.net/rijnmondTv/index.m3u8"
-            self.channelBitrate = 900
-
-        elif self.channelCode == "rtvdrenthe":
+        if self.channelCode == "rtvdrenthe":
             self.noImage = "rtvdrentheimage.png"
             self.mainListUri = "http://drenthe.api.regiogrid.nl/apps/v520/programs.json"
             self.baseUrl = "http://drenthe.api.regiogrid.nl"
@@ -68,15 +61,6 @@ class Channel(chn_class.Channel):
             # Uses NPO stream with smshield cookie
             # self.liveUrl = "http://noord.api.regiogrid.nl/apps/v520/tv-live-kiezer.json"
             self.liveUrl = "https://media.rtvnoord.nl/live/rtvnoord/tv/index.m3u8"
-            self.channelBitrate = 1350
-
-        elif self.channelCode == "rtvoost":
-            self.noImage = "rtvoostimage.png"
-            self.mainListUri = "http://mobileapp.rtvoost.nl/v520/feeds/programmas.aspx"
-            self.baseUrl = "http://mobileapp.rtvoost.nl"
-            self.liveUrl = "http://mobileapp.rtvoost.nl/v520/feeds/tv.aspx"
-            # the v500 has http://145.58.83.153:80/tv/live.stream/playlist.m3u8
-            # the v520 has rtsp://145.58.83.153:554/tv/live.stream and NPO streams
             self.channelBitrate = 1350
 
         elif self.channelCode == "rtvnh":

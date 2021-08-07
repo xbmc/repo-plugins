@@ -1,15 +1,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import os
 from resources.lib.xbmcwrapper import XbmcWrapper
 from resources.lib.helpers.jsonhelper import JsonHelper
-from resources.lib.retroconfig import Config
 
-__all__ = ["local", "remote", "cached", "TextureHandler"]
+__all__ = ["local", "remote", "TextureHandler"]
 
 Local = "local"
 Remote = "remote"
-Cached = "cached"
 Resources = "resources"
 
 
@@ -41,6 +38,7 @@ class TextureHandler:
 
         return TextureHandler.__TextureHandler
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def set_texture_handler(config, logger, uri_handler=None):
         """ Fetches a TextureManager for specific mode and channel.
@@ -63,11 +61,6 @@ class TextureHandler:
         elif mode == Remote:
             from . import remote
             TextureHandler.__TextureHandler = remote.Remote(config.textureUrl, logger)
-        elif mode == Cached:
-            from . import cached
-            TextureHandler.__TextureHandler = cached.Cached(config.textureUrl,
-                                                            config.profileDir, config.profileUri,
-                                                            logger, uri_handler)
         elif mode == Resources:
             from . import resourceaddon
             TextureHandler.__TextureHandler = resourceaddon.Resources(config.textureResource, logger)
@@ -103,28 +96,6 @@ class TextureHandler:
         """
         raise NotImplementedError
 
-    def number_of_missing_textures(self):
-        """ Indication whether or not textures need to be retrieved.
-
-        @return: a boolean value
-        """
-
-        # Could be implemented
-        return 0
-
-    def fetch_textures(self, dialog_call_back=None):
-        """ Fetches all the needed textures
-
-        @param dialog_call_back:  Callback method with signature
-                                  Function(self, retrievedSize, totalSize, perc, completed, status)
-
-        @return: the number of bytes fetched
-
-        """
-
-        # Could be implemented
-        return 0
-
     def purge_texture_cache(self, channel):
         """ Removes those entries from the textures cache that are no longer required.
 
@@ -155,33 +126,13 @@ class TextureHandler:
 
         raise NotImplementedError
 
-    def _get_cdn_sub_folder(self, channel_path):
-        """ Determines the CDN folder, e.g.: channel.be.canvas
-
-        :param str channel_path:    the path of the channel's to which the file belongs
-
-        :return: The texture folder in the texture storage.
-        :rtype: str
-
-        Remark: we cache some stuff for performance improvements
-
-        """
-
-        if channel_path in self.__cdnPaths:
-            return self.__cdnPaths[channel_path]
-
-        parts = channel_path.rsplit(os.sep, 2)[-2:]
-        cdn = ".".join(parts)
-        if cdn.startswith(Config.addonId):
-            cdn = cdn[len(Config.addonId) + 1:]
-        self.__cdnPaths[channel_path] = cdn
-        return cdn
-
     def _purge_kodi_cache(self, channel_texture_path):
         """ Class the JSON RPC within Kodi that removes all changed items which paths contain the
         value given in channelTexturePath
 
-        @param channel_texture_path: string - The
+        :param str channel_texture_path:  The path that is used to search textures in Kodi.
+
+        The path can be a partial path to use int he json RPC.
 
         """
 

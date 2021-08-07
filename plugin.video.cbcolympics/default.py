@@ -44,25 +44,29 @@ class NoVideoNodeError(SmilDocumentError):
 class NoSrcAttribError(SmilDocumentError):
     pass
 
-# Used for encoding Python 2 strings in UTF-8 while also
-# letting Python 3 just work as it normally does with
-# built-in unicode strings
+class M3u8DocumentError(Exception):
+    pass
+
+# Used for encoding and decoding Python 2 strings in UTF-8 while also
+# letting Python 3 just work as it normally does with built-in unicode strings
 def py2utf8(str):
     if isPython2:
+        # Python2 strings are either ASCII or UTF-8 bytes so encode to UTF-8 to maintain non-ASCII support
         return str.encode(UTF8)
     else:
-        # Python3 strings are already unicode
+        # Python3 strings are left unicode
         return str
 
-def py2decodeUtf8(str):
+def py3unicode(str):
     if isPython2:
-        return str.decode(UTF8)
-    else:
-        # Python3 strings are already unicode
+        # Python2 strings are UTF-8 so leave them be
         return str
+    else:
+        # Python3 strings are unicode so convert it from UTF-8 bytes
+        return str.decode(UTF8)
 
 def strings(id):
-    return py2utf8(addon.getLocalizedString(id))
+    return addon.getLocalizedString(id)
 
 def okDialog(message):
     xbmc.log('Showing OK dialog: ' + message)
@@ -158,10 +162,22 @@ STATIC_ENTRIES = [
             'category': 'Sports/Olympics/Summer/Team Canada',
         },
         {
+            'title': strings(30210),
+            'type': 'folder',
+            'page': 'clips_by_category',
+            'category': 'Sports/Olympics/Features/Bell Faster Higher Stronger',
+        },
+        {
             'title': strings(30205),
             'type': 'folder',
             'page': 'clips_by_category',
             'category': 'Sports/Olympics/Features/Kraft While You Were Sleeping',
+        },
+        {
+            'title': strings(30213),
+            'type': 'folder',
+            'page': 'clips_by_category',
+            'category': 'sports/olympics/features/OLG The Quest',
         },
         {
             'title': strings(30206),
@@ -176,10 +192,28 @@ STATIC_ENTRIES = [
             'category': 'sports/olympics/features/RBC Spotlight',
         },
         {
+            'title': strings(30211),
+            'type': 'folder',
+            'page': 'clips_by_category',
+            'category': 'Sports/Olympics/Features/Sobeys Family Album',
+        },
+        {
+            'title': strings(30214),
+            'type': 'folder',
+            'page': 'clips_by_category',
+            'category': 'Sports/Olympics/Features/Sugoi Tokyo',
+        },
+        {
             'title': strings(30208),
             'type': 'folder',
             'page': 'clips_by_category',
             'category': 'sports/olympics/features/Toyota Breakthrough',
+        },
+        {
+            'title': strings(30212),
+            'type': 'folder',
+            'page': 'clips_by_category',
+            'category': 'sports/olympics/features/Uber Go Getters',
         },
         {
             'title': strings(30209),
@@ -192,13 +226,17 @@ STATIC_ENTRIES = [
 # Lovingly borrowed from t1mlib
 def get_url(**kwargs):
     try:
-        return '{0}?{1}'.format(_url, urlencode(kwargs))
+        if isPython2:
+            return '{0}?{1}'.format(_url, urlencode(dict([unicode(k).encode(UTF8),unicode(v).encode(UTF8)] for k,v in kwargs.items())))
+        else:
+            return '{0}?{1}'.format(_url, urlencode(kwargs))
     except:
-        raise ValueError(str(kwargs))
+        xbmc.log('get_url kwargs = ' + str(kwargs))
+        raise
 
 # Lovingly borrowed from t1mlib
 def getRequest(url, udata=None, headers = httpHeaders, dopost = False, rmethod = None):
-    req = Request(py2utf8(url), udata, headers)
+    req = Request(url, udata, headers)
 
     if dopost == True:
         rmethod = "POST"
@@ -214,7 +252,8 @@ def getRequest(url, udata=None, headers = httpHeaders, dopost = False, rmethod =
         page = zlib.decompress(page, zlib.MAX_WBITS + 16)
     #except:
     #  page = ""
-    return(page.decode(UTF8))        # Decode from UTF-8: Slight change from the library version
+
+    return py3unicode(page)     # Return as a Python2 UTF-8 str or a Python3 unicode str
 
 def list_entries(folder_title, entries):
     xbmcplugin.setPluginCategory(_handle, folder_title)
@@ -244,7 +283,7 @@ def list_entries(folder_title, entries):
             list_item.setArt(entry['art'])
             list_item.setProperty('IsPlayable', 'true')
 
-            url = get_url(action='play', title=py2utf8(entry['title']), videoId=entry.get('videoId', ''), isUpcoming=entry.get('isUpcoming', False))
+            url = get_url(action='play', title=entry['title'], videoId=entry.get('videoId', ''), isUpcoming=entry.get('isUpcoming', False))
 
             is_folder = False
 
@@ -254,7 +293,7 @@ def list_entries(folder_title, entries):
         elif entry['type'] == 'folder':
             list_item.setProperty('IsPlayable', 'false')
 
-            url = get_url(action='listing', page=entry['page'], title=py2utf8(entry['title']), uri=entry.get('uri'), category=entry.get('category'), pageNo=entry.get('pageNo', 1))
+            url = get_url(action='listing', page=entry['page'], title=entry['title'], uri=entry.get('uri'), category=entry.get('category'), pageNo=entry.get('pageNo', 1))
 
             is_folder = True
 
@@ -495,26 +534,64 @@ def videoIdToM3u8Url(videoId):
         xbmc.log(smil)
         raise
 
+def parseM3u8(m3u8):
+    streams = {}
+
+    xbmc.log('m3u8 = ' + str(m3u8))
+    m3u8Lines = m3u8.split('\n')
+    if (len(m3u8Lines) < 1) or (m3u8Lines[0] != '#EXTM3U'):
+        raise M3u8DocumentError('Not an M3U document')
+
+    # Start with empty properties in case none are found
+    props = {}
+    for m3u8Line in m3u8Lines:
+        # We're interested in the stream information lines
+        if m3u8Line.startswith('#EXT-X-STREAM-INF:'):
+            # Parse out the info data
+            m3u8StreamInfo = m3u8Line.split(':', 1)[1]
+
+            # Parse properties at the comma. This breaks on quoted properties but it's fine
+            # because we're not interested in those anyway.
+            for m3u8StreamProp in m3u8StreamInfo.split(','):
+                m3u8PropParts = m3u8StreamProp.split('=')
+                if len(m3u8PropParts) == 2:
+                    props[m3u8PropParts[0]] = m3u8PropParts[1]
+
+        elif m3u8Line.startswith('#'):
+            # Skip uninteresting comment lines
+            continue
+
+        else:
+            # A non-comment line is a URL so store it along with the previously-parsed properties
+            streams[m3u8Line] = props
+            # Reset properties for next URL
+            props = {}
+
+    return streams
+
 def pickStreamUrlFromM3u8Url(m3u8_url):
     try:
-        # Query the video manifest for the highest quality bitrate
+        # Fetch and parse the video playlist
         m3u8 = getRequest(m3u8_url)
-        stream_urls = re.compile('^hdntl.*$', re.MULTILINE).findall(m3u8)
+        streams = parseM3u8(m3u8)
 
         # Get the bitrate limit setting, if there is one
         try:
             # Load the kbps bitrate setting and convert to bps
-            bitrateLimitKbps = int(xbmcplugin.getSetting(_handle, 'bitrateLimitKbps'))
+            bitrateLimit = int(xbmcplugin.getSetting(_handle, 'bitrateLimitKbps')) * 1000
         except ValueError:
-            bitrateLimitKbps = 10000000       # 10 Gbit/sec is essentially unlimited, right?
+            bitrateLimit = 10000000000       # 10 Gbit/sec is essentially unlimited, right?
 
         # Find the highest bitrate within the setting limit
-        selected_bitrateKbps = 0
-        for stream_url in stream_urls:
-            bitrateKbps = int(re.search('master_(\d*)', stream_url).group(1))
-            if (bitrateKbps <= bitrateLimitKbps) and (bitrateKbps > selected_bitrateKbps):
-                selected_stream_url = stream_url
-                selected_bitrateKbps = bitrateKbps
+        selected_bitrate = 0
+        for url, props in streams.items():
+            bitrate = int(props.get('BANDWIDTH', 0))
+            if (bitrate <= bitrateLimit) and (bitrate > selected_bitrate):
+                selected_stream_url = url
+                selected_bitrate = bitrate
+
+        xbmc.log('selected_bitrate = ' + str(selected_bitrate))
+        xbmc.log('selected_stream_url = ' + selected_stream_url)
 
         selected_stream_url = urljoin(m3u8_url, selected_stream_url)
         return selected_stream_url
@@ -584,7 +661,7 @@ def router(paramstring):
     params = dict(parse_qsl(paramstring))
     # Check the parameters passed to the plugin
     if params:
-        page_title = py2decodeUtf8(params['title'])
+        page_title = params['title']
 
         if params['action'] == 'listing':
             if params['page'] == 'live_videos':

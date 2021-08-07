@@ -9,3 +9,8 @@ v1.0.1
 
 v2.0.0
 - Re-written for the Tokyo 2020 Summer Olympics
+
+v2.1.0
+- Better handling of M3U8 files and bitrate selection since 7 Mbit 1080p streams were added.
+- More consistent handling of URLs containing Unicode characters
+- Added five more "features" categories

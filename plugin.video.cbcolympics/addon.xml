@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.cbcolympics"
        name="CBC Olympics"
-       version="2.0.0"
+       version="2.1.0"
        provider-name="fourpointsix">
   <requires>
     <!-- Enable this for Kodi 16.x through 18.x -->
@@ -20,7 +20,13 @@
     <license>GPL-3.0-only</license>
     <source>https://github.com/fourpointsix/plugin.video.cbcolympics</source>
     <news>v2.0.0 (2021-07-29)
-- Re-written for Tokyo 2020</news>
+- Re-written for Tokyo 2020
+
+v2.1.0 (2021-08-04)
+- Better handling of M3U8 files and bitrate selection since 7 Mbit 1080p streams were added.
+- More consistent handling of URLs containing Unicode characters
+- Added five more "features" categories
+</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>

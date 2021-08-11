@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tubed" name="Tubed" version="1.0.3+matrix.1" provider-name="anxdpanic">
+<addon id="plugin.video.tubed" name="Tubed" version="1.0.4" provider-name="anxdpanic">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="inputstream.adaptive"/>
@@ -15,7 +15,7 @@
     <extension point="xbmc.service" library="resources/lib/service.py"/>
     <extension point="xbmc.addon.metadata">
         <news>
-- fixup iso8601 duration parsing
+- added weblate translations
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>
@@ -27,26 +27,34 @@
         <website>https://panicked.xyz/tubed/</website>
         <forum>https://tubedaddon.panicked.xyz/forum</forum>
         <reuselanguageinvoker>true</reuselanguageinvoker>
-        <summary lang="de_DE">Sehen Sie Ihre Lieblingsinhalte von Youtube in Kodi an</summary>
+        <summary lang="da_DK">Se dit yndlings YouTube-indhold i Kodi</summary>
+        <summary lang="de_DE">Lieblingsinhalte von YouTube in Kodi ansehen</summary>
         <summary lang="el_GR">Δείτε το αγαπημένο σας περιεχόμενο από το Youtube στο Kodi</summary>
         <summary lang="en_GB">Watch your favorite YouTube content on Kodi</summary>
+        <summary lang="es_MX">Mira tu contenido favorito de YouTube en Kodi</summary>
+        <summary lang="fi_FI">Katso suosikki Youtube sisältöä Kodissa</summary>
         <summary lang="pt_BR">Assista aos seus conteúdos favoritos do Youtube no Kodi</summary>
         <summary lang="pt_PT">Visualizar o seu conteúdo preferido do Youtube no Kodi</summary>
         <summary lang="ro_RO">Urmărește conținutul Youtube favorit în Kodi</summary>
+        <summary lang="ru_RU">Смотрите свои любимые видео с Youtube в Kodi</summary>
         <summary lang="zh_TW">在Kodi上觀看您最喜歡的YouTube內容！</summary>
-        <description lang="de_DE">Sehen Sie Ihre Lieblingsinhalte von Youtube in Kodi an, Playlists erstellen/löschen/umbenennen, Lieblingskanäle abonnieren und deabonnieren, bevorzugte Videos bewerten.</description>
+        <description lang="de_DE">Lieblingsinhalte von YouTube in Kodi ansehen, Wiedergabelisten erstellen / löschen / umbenennen, Lieblingskanäle abonnieren und deabonnieren, Videos bewerten.</description>
         <description lang="el_GR">Περιηγηθείτε στο αγαπημένο σας περιεχόμενο στο Kodi, δημιουργήστε, διαγράψτε, μετονομάστε λίστες αναπαραγωγής, εγγραφτείτε στα αγαπημένα σας κανάλια, βαθμολογείστε τα αγαπημένα σας βίντεο.</description>
         <description lang="en_GB">Browse your favorite content from YouTube; create, delete, and rename playlists; subscribe or unsubscribe from your favorite channels; and rate your favorite videos.</description>
+        <description lang="es_MX">Navega tu contenido favorito desde YouTube; crea, elimina y renombra listas de reproducción; suscríbete o desuscríbete de tus canales favoritos; y valora tus videos favoritos.</description>
         <description lang="pt_BR">Navegue pelo seu conteúdo favorito do YouTube; criar, excluir e renomear listas de reprodução; inscreva-se ou cancele a inscrição de seus canais favoritos; e avalie seus vídeos favoritos.</description>
-        <description lang="pt_PT">Assista os seu conteúdo preferido do Youtube; Crie, remova ou edite listas de reprodução; subscreva ou remova a subscrição para os seus canais favoritos; classifique os seus vídeos favoritos.</description>
+        <description lang="pt_PT">Assista ao seu conteúdo preferido do Youtube; Crie, remova ou edite listas de reprodução; subscreva ou remova a subscrição para os seus canais favoritos; classifique os seus vídeos favoritos.</description>
         <description lang="ro_RO">Răsfoiește conținutul favorit de pe Youtube; creează, șterge și redenumește liste; abonează-te sau dezabonează-te de la canalele favorite; evaluează clipurile favorite.</description>
+        <description lang="ru_RU">Просматривайте любимый контент с YouTube; создавайте, удаляйте, и переименовывайте плейлисты; подписывайтесь или отписывайтесь на каналы; оценивайте любимые видео.</description>
         <description lang="zh_TW">從YouTube瀏覽您喜歡的內容；新建，刪除和重命名播放列表；訂閱或取消訂閱您喜歡的頻道；對您喜歡的視頻進行評分。</description>
-        <disclaimer lang="de_DE">Tubed verwendet Informationen der Google APIs unter den Bedingungen der Google API Services User Data Policy, inklusive der Limited Use Voraussetzungen. Für weitere Informationen zur Verarbeitung Ihrer Daten besuchen Sie Tubeds Privatsphäreerklärung unter https://panicked.xyz/tubed-privacy/</disclaimer>
+        <disclaimer lang="de_DE">Tubed verwendet Informationen der Google APIs unter Einhaltung der Google API Services User Data Policy, inklusive der „Limited Use“ Voraussetzungen. Für weitere Informationen zur Verarbeitung persönlicher Daten bitte Tubed's Datenschutzbestimmungen einsehen unter https://panicked.xyz/tubed-privacy/</disclaimer>
         <disclaimer lang="el_GR">Το Tubed κάνει χρήση πληροφοριών που λαμβάνονται από το API της Google και ακολουθεί της οδηγίες της πολιτικής χρήσης για τα προσωπικά δεδομένα της Google, συμπεριλαμβανομένου και τις απαιτήσεις περιορισμένης χρήσης. Για περισσότερες πληροφορίες και το πως επεξεργάζονται τα δεδομένα παρακαλώ δείτε την πολιτική απορρήτου του Tubed εδώ: https://panicked.xyz/tubed-privacy/</disclaimer>
-        <disclaimer lang="en_GB">Tubed’s use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed's Privacy Policy at https://panicked.xyz/tubed-privacy/</disclaimer>
-        <disclaimer lang="pt_BR">Tubed’s informações recebidas das APIs do Google obedecerá à Política de dados do usuário dos serviços de API do Google, incluindo os requisitos de uso limitado. Para obter mais informações sobre como seus dados são tratados, consulte a Política de privacidade da Tubed em https://panicked.xyz/tubed-privacy/</disclaimer>
+        <disclaimer lang="en_GB">Tubed&#8217;s use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed&#39;s Privacy Policy at https://panicked.xyz/tubed-privacy/</disclaimer>
+        <disclaimer lang="es_MX">El uso de Tubed de la información recibida mediante las API de Google se adherirá a la Política de datos de usuario de los servicios de API de Google, incluidos los requisitos de uso limitado. Para obtener más información sobre cómo se manejan tus datos, consulta la Política de privacidad de Tubed en https://panicked.xyz/tubed-privacy/</disclaimer>
+        <disclaimer lang="pt_BR">Tubed&#8217;s informações recebidas das APIs do Google obedecerá à Política de dados do usuário dos serviços de API do Google, incluindo os requisitos de uso limitado. Para obter mais informações sobre como seus dados são tratados, consulte a Política de privacidade da Tubed em https://panicked.xyz/tubed-privacy/</disclaimer>
         <disclaimer lang="pt_PT">A utilização de informação recebida pelas APIs da Google pelo Tubed respeita os termos de utilização de dados da Google, incluíndo os requisitos limitados de utilização. Para mais informação relativa à utilização dos seus dados consulte a política de privacidade do Tubed em https://panicked.xyz/tubed-privacy/</disclaimer>
         <disclaimer lang="ro_RO">Utilizarea informațiilor primite de la API-urile Google prin Tubed va adera la politicile Google legate de datele utilizatorilor, inclusiv cerințele de Utilizare Limitată. Pentru mai multe informații despre cum sunt folosite datele utilizatorilor vezi Politica de Confidențialitate a Tubed la https://panicked.xyz/tubed-privacy/</disclaimer>
+        <disclaimer lang="ru_RU">Использование Tubed информации, полученной от Google API, будет соответствовать Политике в отношении пользовательских данных служб Google API, включая требования ограниченного использования. Для получения дополнительной информации о том, как обрабатываются ваши данные, см. Политику конфиденциальности Tubed по адресу https://panicked.xyz/tubed-privacy/</disclaimer>
         <disclaimer lang="zh_TW">Tubed對從Google API收到的訊息的使用將遵守Google API服務用戶數據政策，包括“限制使用”要求。有關如何處理數據的更多信息，請參見Tubed的隱私政策，網址為https://panicked.xyz/tubed-privacy/</disclaimer>
     </extension>
 </addon>

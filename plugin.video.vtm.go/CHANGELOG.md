@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.2.11](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.11) (2021-08-12)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.10...v1.2.11)
+
+**Fixed bugs:**
+
+- Refresh token before trying to login again [\#297](https://github.com/add-ons/plugin.video.vtm.go/pull/297) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.2.10](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.10) (2021-07-14)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.9...v1.2.10)

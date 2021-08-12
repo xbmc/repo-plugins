@@ -1,15 +1,25 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Twitch-on-Kodi\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: A. Dambledore\n"
-"Language-Team: Eng2Heb\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: 2021-06-18 21:45+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Hebrew (Israel) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/he_il/>\n"
+"Language: he_il\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: he_IL\n"
-"X-Generator: Poedit 2.0.4\n"
+"Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && n % 10 == 0) ? 2 : 3));\n"
+"X-Generator: Weblate 4.7\n"
+
+msgctxt "Addon Summary"
+msgid "Twitch video plugin"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Watch your favorite gaming streams!"
+msgstr ""
 
 # Next available: 30041-30044, 30063, 30113
 # main menu
@@ -183,7 +193,7 @@ msgstr "המשחקים הבאים"
 
 msgctxt "#30067"
 msgid "Game Title Viewers | Streamer - Stream Title"
-msgstr "צופים בכותרת המשחק |  - סטרימר - כותרת הזרמה"
+msgstr "צופים בכותרת המשחק | - סטרימר - כותרת הזרמה"
 
 msgctxt "#30068"
 msgid "Content Type"

@@ -1,4 +1,4 @@
-<addon id="plugin.audio.radio_de" name="Radio" provider-name="Tristan Fischer, enen92" version="3.0.5+matrix.0">
+<addon id="plugin.audio.radio_de" name="Radio" provider-name="Tristan Fischer, enen92" version="3.0.6+matrix.1">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.xbmcswift2" version="19.0.4" />
@@ -12,10 +12,8 @@
         <source>https://github.com/XBMC-Addons/plugin.audio.radio_de</source>
         <forum>https://forum.kodi.tv/showthread.php?tid=119362</forum>
         <license>GPL-2.0-only</license>
-        <news>v3.0.5+matrix.0 (8/12/2020)
-            [new] Add support to offscreen=True in Listitems
-            [cosmetics] License headers
-            [cleanup] Cleanup unused init files
+        <news>v3.0.6+matrix.1 (4/5/2021)
+            [new] Also set the station name property on the final resolved item
         </news>
         <summary lang="be_BY">Access &gt;30000 radio broadcasts</summary>
         <summary lang="ca_ES">accedeix a mes de 30000 emissores de radio</summary>

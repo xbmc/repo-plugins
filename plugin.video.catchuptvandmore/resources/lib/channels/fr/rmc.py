@@ -1,43 +1,25 @@
 # -*- coding: utf-8 -*-
-'''
-    Catch-up TV & More
-    Copyright (C) 2017  SylvainCecchetto
+# Copyright: (c) 2017, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-'''
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 
-from codequick import Route, Resolver, Listitem, utils, Script
+from codequick import Listitem, Resolver, Route
+import re
+import urlquick
 
-
-from resources.lib import web_utils
-from resources.lib import resolver_proxy
+from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 
-import urlquick
 
 # TODO
 # Get informations of replay ?
 
 URL_ROOT = 'https://%s.bfmtv.com'
+
+URL_DATA_BRIGTHCOVE = 'https://rmcdecouverte.bfmtv.com/static/js/main.%s.js'
 
 URL_REPLAY = {
     'rmcstory': URL_ROOT + '/mediaplayer-replay/nouveautes/',
@@ -136,12 +118,27 @@ def get_live_url(plugin, item_id, **kwargs):
                         headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
 
-    root = resp.parse()
-    live_datas = root.find(".//div[@class='next-player player_2t_e9']")
+    if item_id == 'rmcstory':
+        root = resp.parse()
+        live_datas = root.find(".//div[@class='next-player player_2t_e9']")
 
-    data_account = live_datas.get('data-account')
-    data_video_id = live_datas.get('data-video-id')
-    data_player = live_datas.get('data-player')
+        data_account = live_datas.get('data-account')
+        data_video_id = live_datas.get('data-video-id')
+        data_player = live_datas.get('data-player')
 
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
-                                                    data_player, data_video_id)
+        return resolver_proxy.get_brightcove_video_json(plugin, data_account,
+                                                        data_player, data_video_id)
+    else:
+        main_id = re.compile(
+            r'main\.(.*?)\.js').findall(resp.text)[0]
+        resp2 = urlquick.get(URL_DATA_BRIGTHCOVE % main_id,
+                             headers={'User-Agent': web_utils.get_random_ua()},
+                             max_age=-1)
+        data_account = re.compile(
+            r'data-account\"\:\"(.*?)\"').findall(resp2.text)[0]
+        data_video_id = re.compile(
+            r'\,y\=\"(.*?)\"').findall(resp2.text)[0]
+        data_player = 'default'
+
+        return resolver_proxy.get_brightcove_video_json(plugin, data_account,
+                                                        data_player, data_video_id)

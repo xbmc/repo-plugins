@@ -1,13 +1,15 @@
-from resources.lib.f1.api import Api
-from resources.lib.kodi.items import Items
-from resources.lib.kodi.settings import Settings
-from resources.routes import *
 import sys
 import urllib.parse
+
 import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
+
+from resources.lib.f1.api import Api
+from resources.lib.kodi.items import Items
+from resources.lib.kodi.settings import Settings
+from resources.routes import *
 
 addon = xbmcaddon.Addon()
 addon_id = addon.getAddonInfo("id")
@@ -75,9 +77,9 @@ def run():
         xbmcplugin.endOfDirectory(handle)
 
     elif path == PATH_PLAY:
-        embed_code = args.get("embed_code", [None])[0]
-        if embed_code:
-            resolved_url = api.resolve_embed_code(embed_code)
+        video_id = args.get("video_id", [None])[0]
+        if video_id:
+            resolved_url = api.resolve_video_id(video_id)
             item = xbmcgui.ListItem(path=resolved_url)
             xbmcplugin.setResolvedUrl(handle, succeeded=True, listitem=item)
         else:

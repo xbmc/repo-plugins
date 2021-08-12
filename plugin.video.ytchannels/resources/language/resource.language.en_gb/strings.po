@@ -109,15 +109,31 @@ msgid "A YouTube API Key is required for this addon to work, please enter your A
 msgstr ""
 
 msgctxt "#30023"
-msgid "Move Up"
+msgid "Move up"
 msgstr ""
 
 msgctxt "#30024"
-msgid "Move Down"
+msgid "Move down"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Change folder"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Choose image"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Set thumbnail"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Remove playlist"
 msgstr ""
 
 msgctxt "#30099"
-msgid "Youtube Channels"
+msgid "Youtube channels"
 msgstr ""
 
 msgctxt "#30200"
@@ -129,7 +145,7 @@ msgid "Enable playlists"
 msgstr ""
 
 msgctxt "#30202"
-msgid "Show 'Add folder/channel' options"
+msgid "Show 'add folder/channel' options"
 msgstr ""
 
 msgctxt "#30203"
@@ -151,6 +167,3 @@ msgstr ""
 msgctxt "#30207"
 msgid "YouTube API Key"
 msgstr ""
-
-
-

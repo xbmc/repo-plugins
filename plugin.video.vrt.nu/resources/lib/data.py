@@ -275,15 +275,14 @@ CHANNELS = [
 FEATURED = [
     # Tijdsgerelateerd
     dict(name='Exclusief online', id='exclusief-online', msgctxt=30100),
-    dict(name='Laatste aflevering', id='laatste-aflevering', msgctxt=30101),
-    dict(name='Laatste kans', id='laatste-kans', msgctxt=30102),
-    dict(name='Nieuw', id='Nieuw', msgctxt=30103),
-    dict(name='Volledig seizoen', id='volledig-seizoen', msgctxt=30104),
-    dict(name='Volledige reeks', id='volledige-reeks', msgctxt=30105),
-    dict(name='Gloednieuw', id='gloednieuw', msgctxt=30106),
-    dict(name='Nieuwe afleveringen', id='nieuwe-afleveringen', msgctxt=30107),
+    dict(name='Volledig seizoen', id='volledig-seizoen', msgctxt=30101),
+    dict(name='Volledige reeks', id='volledige-reeks', msgctxt=30102),
     # Inhoudsgerelateerd
     dict(name='Kortfilm', id='kortfilm', msgctxt=30120),
+    # Thema
+    dict(name='Kies19', id='kies-19', msgctxt=30128),
+    dict(name='Klimaat', id='klimaat', msgctxt=30129),
+    dict(name='De warmste week', id='de-warmste-week', msgctxt=30130),
 ]
 
 RELATIVE_DATES = [

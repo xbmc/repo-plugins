@@ -1,3 +1,24 @@
+[B]2.0.7[/B]
+- fix mistake in code refactoring
+
+
+[B]2.0.6[/B]
+- update name and branding after mediaset branding change
+- Fix assets request after site change
+
+[B]2.0.5[/B]
+- restore Programmi tv in home page
+
+[B]2.0.4[/B]
+- fixed loading of live channels and tv guide for a missing property (thx to madpilot78)
+- removed workaround that created problems with loading seasons in shows like striscia
+
+[B]2.0.3[/B]
+- fixed live channel list loading in pre-matrix with spechial characters (thx to madpilot78)
+- added paging for videos
+- added range in url requests (thx to thinkingmik)
+
+
 [B]2.0.1[/B]
 - removed letter sorting (not available anymore) and fixed endpoints after website change (thx to typhoon51280)
 - added support for live restart (manually jump to start after you start play right now)

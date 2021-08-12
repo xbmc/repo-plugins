@@ -1,7 +1,6 @@
 # Kodi Media Center language file
 # Translators:
 # Bas Rieter <basrieter@gmail.com>, 2020
-# Snah <dynggrep@gmail.com>, 2020
 # Sopor, 2020
 #
 msgid ""
@@ -9,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 20:49+0000\n"
+"PO-Revision-Date: 2021-07-30 21:17+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Swedish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/sv_se/>\n"
 "Language: sv_se\n"
@@ -17,7 +16,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.7.2\n"
+
+msgctxt "Addon Summary"
+msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
+msgstr "Retrospect möjliggör att visa playkanaler."
+
+msgctxt "Addon Description"
+msgid "Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
+msgstr "Retrospect använder olika TV-kanalers (framförallt nederländska, belgiska, brittiska, norska och svenska) officiella webbsidor och fritt tillgängliga strömmar för att göra deras playkanaler tillgängliga i Kodi.[CR][CR]Mer information finns på https://github.com/retrospect-addon/plugin.video.retrospect eller Retrospects wiki på https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
+
+msgctxt "Addon Disclaimer"
+msgid "Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched using this add-on or any consequences of using this add-on to watch content via the content providers' platforms."
+msgstr "Retrospect tillgängliggörs i befintligt skick. Vi tar inget som helst ansvar för möjliga (men högst osannolika) skador på ditt system. Vi tar inte heller ansvar för innehållet som kan ses med detta tillägg eller konsekvenser av att använda tillägget för att se innehållet via innehållsleverantörernas plattformar."
 
 msgctxt "#30000"
 msgid "Stream Quality"
@@ -167,14 +178,17 @@ msgctxt "#30036"
 msgid "Password"
 msgstr "Lösenord"
 
-# empty string with id 30037
+msgctxt "#30037"
+msgid "Use 'Up Next' to play next episode"
+msgstr "Använd 'Up Next' för att spela nästa avsnitt"
+
 msgctxt "#30038"
-msgid "Confirm proxy changes"
-msgstr "Bekräfta proxy-ändringar"
+msgid "'Up Next' add-on settings"
+msgstr "Tilläggsinställningar för 'Up Next'"
 
 msgctxt "#30039"
-msgid "Are you sure you want to update all channels for this country with this proxy?"
-msgstr "Vill du verkligen uppdatera alla kanaler för detta land med denna proxy?"
+msgid "Up Next integration"
+msgstr "Up Next integration"
 
 msgctxt "#30040"
 msgid "Channels"
@@ -203,6 +217,10 @@ msgstr "Den här funktionen av Retrospect kräver en nyare version av Kodi. Inst
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
 msgstr "DRM-/geoblockerings-/premiumfilter"
+
+msgctxt "#30047"
+msgid "Cannot playback this YouTube Video because the Kodi YouTube add-on is missing."
+msgstr "Det går inte att spela upp den här YouTube-videon eftersom tillägget YouTube saknas i Kodi."
 
 # empty string with id 30047
 msgctxt "#30048"
@@ -236,6 +254,14 @@ msgstr "[COLOR gold][B]Retrospect lösenordsvalv[/B][/COLOR][CR]'Valvet' gör de
 msgctxt "#30055"
 msgid "Advanced"
 msgstr "Avancerat"
+
+msgctxt "#30056"
+msgid "Install the Up Next add-on"
+msgstr "Installera tillägget Up Next"
+
+msgctxt "#30057"
+msgid "Enable the Up Next add-on"
+msgstr "Aktivera tillägget Up Next"
 
 # empty strings from id 30056 to 30058
 msgctxt "#30059"
@@ -547,6 +573,23 @@ msgctxt "#30311"
 msgid "Finland"
 msgstr "Finland"
 
+# empty strings from id 30312 to 30345
+msgctxt "#30346"
+msgid "Now Playing"
+msgstr ""
+
+msgctxt "#30347"
+msgid "Now"
+msgstr ""
+
+msgctxt "#30348"
+msgid "Next"
+msgstr ""
+
+msgctxt "#30349"
+msgid "Later"
+msgstr ""
+
 # empty strings from id 30312 to 30349
 msgctxt "#30350"
 msgid "Search"
@@ -607,6 +650,14 @@ msgstr "Populära"
 msgctxt "#30364"
 msgid "Latest news"
 msgstr "Senaste nyhetsprogram"
+
+msgctxt "#30365"
+msgid "Movies"
+msgstr "Filmer"
+
+msgctxt "#30366"
+msgid "Available from"
+msgstr "Tillgänglig från"
 
 # empty strings from id 30365 to 30400
 msgctxt "#30401"
@@ -1051,3 +1102,12 @@ msgstr "Varning"
 msgctxt "#30609"
 msgid "Error"
 msgstr "Fel"
+
+# empty string with id 30037
+#~ msgctxt "#30038"
+#~ msgid "Confirm proxy changes"
+#~ msgstr "Bekräfta proxy-ändringar"
+
+#~ msgctxt "#30039"
+#~ msgid "Are you sure you want to update all channels for this country with this proxy?"
+#~ msgstr "Vill du verkligen uppdatera alla kanaler för detta land med denna proxy?"

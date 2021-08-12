@@ -1,4 +1,4 @@
-<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.6.3+matrix.1">
+<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.7.4+matrix.1">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
     <import addon="script.module.kodi-six" version="0.1.0" />
@@ -44,9 +44,12 @@ If an official app is available for your platform, use it instead of this.
     <source>https://github.com/arvvoid/plugin.video.hbogoeu</source>
     <website>https://arvvoid.github.io/plugin.video.hbogoeu</website>
     <news>
-- Fix minor subtitle offset (sp/no handler)
+- Hot Fix: fix playback going throu TV Shows or Movies category [EU region]
+- Remove obsolete non standard login redirect methods (no longer needed and abandoned by all operators) [EU region]
+- Change fallback icon url
+- Add-on integrity hash output to debug log if debug logging is active
+- Debug mode has to be explicitly enabled in add-on config
 - Translations updates
-- Minor fixes and optimizations
     </news>
     <assets>
      <icon>resources/icon.png</icon>

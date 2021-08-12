@@ -8,7 +8,7 @@ import json
 import logging
 
 from resources.lib import kodiutils
-from resources.lib.vtmgo import API_ENDPOINT, Category, Episode, LiveChannel, LiveChannelEpg, Movie, Program, Season, util
+from resources.lib.vtmgo import API_ANDROID_ENDPOINT, API_ENDPOINT, Category, Episode, LiveChannel, LiveChannelEpg, Movie, Program, Season, util
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -33,10 +33,10 @@ class ApiUpdateRequired(Exception):
 class VtmGo:
     """ VTM GO API """
 
-    def __init__(self, auth):
+    def __init__(self, auth=None):
         """ Initialise object """
         self._auth = auth
-        self._tokens = self._auth.get_tokens()
+        self._tokens = self._auth.get_tokens() if self._auth else None
 
     def _mode(self):
         """ Return the mode that should be used for API calls """
@@ -45,7 +45,7 @@ class VtmGo:
     def get_config(self):
         """ Returns the config for the app """
         # This is currently not used
-        response = util.http_get(API_ENDPOINT + '/config', token=self._tokens.jwt_token)
+        response = util.http_get(API_ANDROID_ENDPOINT + '/vtmgo/config', token=self._tokens.jwt_token)
         info = json.loads(response.text)
 
         # This contains a player.updateIntervalSeconds that could be used to notify VTM GO about the playing progress
@@ -58,13 +58,13 @@ class VtmGo:
          :rtype: list[Category|Program|Movie]
          """
         response = util.http_get(API_ENDPOINT + '/%s/storefronts/%s' % (self._mode(), storefront),
-                                 token=self._tokens.jwt_token,
-                                 profile=self._tokens.profile)
+                                 token=self._tokens.jwt_token if self._tokens else None,
+                                 profile=self._tokens.profile if self._tokens else None)
         result = json.loads(response.text)
 
         items = []
         for row in result.get('rows', []):
-            if row.get('rowType') == 'SWIMLANE_DEFAULT':
+            if row.get('rowType') in ['SWIMLANE_DEFAULT', 'SWIMLANE_PORTRAIT', 'SWIMLANE_LANDSCAPE']:
                 items.append(Category(
                     category_id=row.get('id'),
                     title=row.get('title'),
@@ -80,7 +80,7 @@ class VtmGo:
                         items.append(self._parse_program_teaser(item))
                 continue
 
-            if row.get('rowType') == 'MARKETING_BLOCK':
+            if row.get('rowType') in ['TOP_BANNER', 'MARKETING_BLOCK']:
                 item = row.get('teaser')
                 if item.get('target', {}).get('type') == CONTENT_TYPE_MOVIE:
                     items.append(self._parse_movie_teaser(item))
@@ -101,8 +101,8 @@ class VtmGo:
          :rtype: Category
          """
         response = util.http_get(API_ENDPOINT + '/%s/storefronts/%s/detail/%s' % (self._mode(), storefront, category),
-                                 token=self._tokens.jwt_token,
-                                 profile=self._tokens.profile)
+                                 token=self._tokens.jwt_token if self._tokens else None,
+                                 profile=self._tokens.profile if self._tokens else None)
         result = json.loads(response.text)
 
         items = []
@@ -115,11 +115,11 @@ class VtmGo:
 
         return Category(category_id=category, title=result.get('row', {}).get('title'), content=items)
 
-    def get_swimlane(self, swimlane, content_filter=None, cache=CACHE_ONLY):
+    def get_mylist(self, content_filter=None, cache=CACHE_ONLY):
         """ Returns the contents of My List """
-        response = util.http_get(API_ENDPOINT + '/%s/main/swimlane/%s' % (self._mode(), swimlane),
-                                 token=self._tokens.jwt_token,
-                                 profile=self._tokens.profile)
+        response = util.http_get(API_ENDPOINT + '/%s/my-list' % (self._mode()),
+                                 token=self._tokens.jwt_token if self._tokens else None,
+                                 profile=self._tokens.profile if self._tokens else None)
 
         # Result can be empty
         if not response.text:
@@ -160,8 +160,8 @@ class VtmGo:
         """
         import dateutil.parser
         response = util.http_get(API_ENDPOINT + '/%s/live' % self._mode(),
-                                 token=self._tokens.jwt_token,
-                                 profile=self._tokens.profile)
+                                 token=self._tokens.jwt_token if self._tokens else None,
+                                 profile=self._tokens.profile if self._tokens else None)
         info = json.loads(response.text)
 
         channels = []
@@ -196,8 +196,8 @@ class VtmGo:
         :rtype list[Category]
         """
         response = util.http_get(API_ENDPOINT + '/%s/catalog/filters' % self._mode(),
-                                 token=self._tokens.jwt_token,
-                                 profile=self._tokens.profile)
+                                 token=self._tokens.jwt_token if self._tokens else None,
+                                 profile=self._tokens.profile if self._tokens else None)
         info = json.loads(response.text)
 
         categories = []
@@ -220,8 +220,8 @@ class VtmGo:
         # Fetch from API
         response = util.http_get(API_ENDPOINT + '/%s/catalog' % self._mode(),
                                  params={'pageSize': 2000, 'filter': quote(category) if category else None},
-                                 token=self._tokens.jwt_token,
-                                 profile=self._tokens.profile)
+                                 token=self._tokens.jwt_token if self._tokens else None,
+                                 profile=self._tokens.profile if self._tokens else None)
         info = json.loads(response.text)
         content = info.get('pagedTeasers', {}).get('content', [])
 
@@ -252,8 +252,8 @@ class VtmGo:
         if movie is None:
             # Fetch from API
             response = util.http_get(API_ENDPOINT + '/%s/movies/%s' % (self._mode(), movie_id),
-                                     token=self._tokens.jwt_token,
-                                     profile=self._tokens.profile)
+                                     token=self._tokens.jwt_token if self._tokens else None,
+                                     profile=self._tokens.profile if self._tokens else None)
             info = json.loads(response.text)
             movie = info.get('movie', {})
             kodiutils.set_cache(['movie', movie_id], movie)
@@ -263,8 +263,8 @@ class VtmGo:
             name=movie.get('name'),
             description=movie.get('description'),
             duration=movie.get('durationSeconds'),
-            cover=movie.get('bigPhotoUrl'),
-            image=movie.get('bigPhotoUrl'),
+            thumb=movie.get('teaserImageUrl'),
+            fanart=movie.get('bigPhotoUrl'),
             year=movie.get('productionYear'),
             geoblocked=movie.get('geoBlocked'),
             remaining=movie.get('remainingDaysAvailable'),
@@ -290,8 +290,8 @@ class VtmGo:
         if program is None:
             # Fetch from API
             response = util.http_get(API_ENDPOINT + '/%s/programs/%s' % (self._mode(), program_id),
-                                     token=self._tokens.jwt_token,
-                                     profile=self._tokens.profile)
+                                     token=self._tokens.jwt_token if self._tokens else None,
+                                     profile=self._tokens.profile if self._tokens else None)
             info = json.loads(response.text)
             program = info.get('program', {})
             kodiutils.set_cache(['program', program_id], program)
@@ -316,7 +316,8 @@ class VtmGo:
                     name=item_episode.get('name'),
                     description=item_episode.get('description'),
                     duration=item_episode.get('durationSeconds'),
-                    cover=item_episode.get('bigPhotoUrl'),
+                    thumb=item_episode.get('bigPhotoUrl'),
+                    fanart=item_episode.get('bigPhotoUrl'),
                     geoblocked=program.get('geoBlocked'),
                     remaining=item_episode.get('remainingDaysAvailable'),
                     channel=channel,
@@ -330,9 +331,6 @@ class VtmGo:
             seasons[item_season.get('index')] = Season(
                 number=item_season.get('index'),
                 episodes=episodes,
-                cover=item_season.get('episodes', [{}])[0].get('bigPhotoUrl')
-                if episodes else program.get('bigPhotoUrl'),
-                geoblocked=program.get('geoBlocked'),
                 channel=channel,
                 legal=program.get('legalIcons'),
             )
@@ -341,8 +339,9 @@ class VtmGo:
             program_id=program.get('id'),
             name=program.get('name'),
             description=program.get('description'),
-            cover=program.get('bigPhotoUrl'),
-            image=program.get('bigPhotoUrl'),
+            year=program.get('productionYear'),
+            thumb=program.get('teaserImageUrl'),
+            fanart=program.get('bigPhotoUrl'),
             geoblocked=program.get('geoBlocked'),
             seasons=seasons,
             channel=channel,
@@ -394,9 +393,9 @@ class VtmGo:
         :type episode_id: str
         :rtype Episode
         """
-        response = util.http_get(API_ENDPOINT + '/%s/play/episode/%s' % (self._mode(), episode_id),
-                                 token=self._tokens.jwt_token,
-                                 profile=self._tokens.profile)
+        response = util.http_get(API_ENDPOINT + '/%s/play/episodes/%s' % (self._mode(), episode_id),
+                                 token=self._tokens.jwt_token if self._tokens else None,
+                                 profile=self._tokens.profile if self._tokens else None)
         episode = json.loads(response.text)
 
         # Extract next episode info if available
@@ -407,7 +406,7 @@ class VtmGo:
                 program_name=next_playable['title'],
                 name=next_playable['subtitle'],
                 description=next_playable['description'],
-                cover=next_playable['imageUrl'],
+                poster=next_playable['imageUrl'],
             )
         else:
             next_episode = None
@@ -415,7 +414,7 @@ class VtmGo:
         return Episode(
             episode_id=episode.get('id'),
             name=episode.get('title'),
-            cover=episode.get('posterImageUrl'),
+            poster=episode.get('posterImageUrl'),
             progress=episode.get('playerPositionSeconds'),
             next_episode=next_episode,
         )
@@ -428,7 +427,7 @@ class VtmGo:
             return items
 
         # Fetch from API
-        response = util.http_get(API_ENDPOINT + '/%s/main/swimlane/%s' % (self._mode(), 'my-list'),
+        response = util.http_get(API_ENDPOINT + '/%s/my-list' % (self._mode()),
                                  token=self._tokens.jwt_token,
                                  profile=self._tokens.profile)
 
@@ -450,8 +449,8 @@ class VtmGo:
         # Fetch from API
         response = util.http_get(API_ENDPOINT + '/%s/catalog' % self._mode(),
                                  params={'pageSize': 2000, 'filter': None},
-                                 token=self._tokens.jwt_token,
-                                 profile=self._tokens.profile)
+                                 token=self._tokens.jwt_token if self._tokens else None,
+                                 profile=self._tokens.profile if self._tokens else None)
         info = json.loads(response.text)
 
         items = [item.get('target', {}).get('id') for item in info.get('pagedTeasers', {}).get('content', [])]
@@ -466,8 +465,8 @@ class VtmGo:
         """
         response = util.http_get(API_ENDPOINT + '/%s/search/?query=%s' % (self._mode(),
                                                                           kodiutils.to_unicode(quote(kodiutils.from_unicode(search)))),
-                                 token=self._tokens.jwt_token,
-                                 profile=self._tokens.profile)
+                                 token=self._tokens.jwt_token if self._tokens else None,
+                                 profile=self._tokens.profile if self._tokens else None)
         results = json.loads(response.text)
 
         items = []
@@ -497,16 +496,12 @@ class VtmGo:
         """
         movie = self.get_movie(item.get('target', {}).get('id'), cache=cache)
         if movie:
-            # We might have a cover from the overview that we don't have in the details
-            if item.get('imageUrl'):
-                movie.cover = item.get('imageUrl')
             return movie
 
         return Movie(
             movie_id=item.get('target', {}).get('id'),
             name=item.get('title'),
-            cover=item.get('imageUrl'),
-            image=item.get('imageUrl'),
+            thumb=item.get('imageUrl'),
             geoblocked=item.get('geoBlocked'),
         )
 
@@ -518,16 +513,12 @@ class VtmGo:
         """
         program = self.get_program(item.get('target', {}).get('id'), cache=cache)
         if program:
-            # We might have a cover from the overview that we don't have in the details
-            if item.get('imageUrl'):
-                program.cover = item.get('imageUrl')
             return program
 
         return Program(
             program_id=item.get('target', {}).get('id'),
             name=item.get('title'),
-            cover=item.get('imageUrl'),
-            image=item.get('imageUrl'),
+            thumb=item.get('imageUrl'),
             geoblocked=item.get('geoBlocked'),
         )
 
@@ -547,7 +538,7 @@ class VtmGo:
             name=item.get('label'),
             description=episode.description if episode else None,
             geoblocked=item.get('geoBlocked'),
-            cover=item.get('imageUrl'),
+            thumb=item.get('imageUrl'),
             progress=item.get('playerPositionSeconds'),
             watched=False,
             remaining=item.get('remainingDaysAvailable'),

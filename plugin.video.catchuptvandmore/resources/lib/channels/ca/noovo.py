@@ -1,40 +1,19 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2019  SylvainCecchetto
+# Copyright: (c) 2019, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-
 from builtins import str
-from codequick import Route, Resolver, Listitem, utils, Script
+import re
 
+from codequick import Listitem, Resolver, Route
+import urlquick
 
-from resources.lib import web_utils
-from resources.lib import resolver_proxy
+from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 
-import re
-import urlquick
 
 # TO DO
 # Add Pseudo Live TV (like RTBF and France TV Sport)
@@ -61,7 +40,8 @@ def list_programs(plugin, item_id, **kwargs):
     Build programs listing
     - ...
     """
-    resp = urlquick.get(URL_EMISSIONS)
+    resp = urlquick.get(URL_EMISSIONS,
+                        headers={'User-Agent': web_utils.get_random_ua()})
     root = resp.parse()
 
     for program_datas in root.iterfind(".//div[@class='card']"):
@@ -81,7 +61,8 @@ def list_programs(plugin, item_id, **kwargs):
 @Route.register
 def list_seasons(plugin, item_id, program_url, **kwargs):
 
-    resp = urlquick.get(program_url)
+    resp = urlquick.get(program_url,
+                        headers={'User-Agent': web_utils.get_random_ua()})
     root = resp.parse()
     if root.find(".//ul[@class='dropdown__menu']") is not None:
         root = resp.parse("ul", attrs={"class": "dropdown__menu"})
@@ -102,7 +83,8 @@ def list_seasons(plugin, item_id, program_url, **kwargs):
 @Route.register
 def list_videos(plugin, item_id, season_url, page, **kwargs):
 
-    resp = urlquick.get(season_url)
+    resp = urlquick.get(season_url,
+                        headers={'User-Agent': web_utils.get_random_ua()})
     list_season_id = re.compile(r'\?seasonId\=(.*?)\"').findall(resp.text)
 
     if len(list_season_id) > 0:

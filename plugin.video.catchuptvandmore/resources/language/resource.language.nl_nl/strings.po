@@ -4,21 +4,12 @@
 # Addon Provider: SylvainCecchetto
 msgid ""
 msgstr ""
-"Project-Id-Version: Kodi Addons\n"
-"Report-Msgid-Bugs-To: alanwww1@kodi.org\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: AgeBosma\n"
-"Language-Team: \n"
-"MIME-Version: 1.0\n"
+"Language: nl\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-
 # Settings tabs/categories (from 30000 to 30019)
-
 msgctxt "#30000"
 msgid ""
 msgstr ""
@@ -57,11 +48,9 @@ msgstr ""
 
 msgctxt "#30009"
 msgid "General"
-msgstr ""
-
+msgstr "Algemeen"
 
 # Settings line separators (from 30010 to 30029)
-
 msgctxt "#30010"
 msgid "Hide main menu categories"
 msgstr "Verberg hoofdmenu categorieën"
@@ -92,7 +81,7 @@ msgstr "Verberg replay tv landen"
 
 msgctxt "#30017"
 msgid "Default values"
-msgstr ""
+msgstr "Standaardwaarden"
 
 msgctxt "#30018"
 msgid "Unmask main menus items"
@@ -106,9 +95,7 @@ msgctxt "#30020"
 msgid "Unmask replay TV channels"
 msgstr ""
 
-
 # Main menu (from 30030 to 30049)
-
 msgctxt "#30030"
 msgid "Live TV"
 msgstr "Live tv"
@@ -125,9 +112,7 @@ msgctxt "#30033"
 msgid "Favourites"
 msgstr "Favorieten"
 
-
 # Countries (from 30050 to 30079)
-
 msgctxt "#30050"
 msgid "France"
 msgstr "Frankrijk"
@@ -186,19 +171,21 @@ msgstr "China"
 
 msgctxt "#30064"
 msgid "Cameroon"
-msgstr ""
+msgstr "Kameroen"
 
 msgctxt "#30065"
 msgid "Slovenia"
-msgstr ""
+msgstr "Slovenië"
 
 msgctxt "#30066"
 msgid "Ethiopia"
-msgstr ""
+msgstr "Ethiopië"
 
+msgctxt "#30067"
+msgid "Morocco"
+msgstr "Marokko"
 
 # Channels (from 30080 to 30129)
-
 msgctxt "#30080"
 msgid "French channels"
 msgstr "Franse kanalen"
@@ -257,22 +244,22 @@ msgstr "Chinese kanalen"
 
 msgctxt "#30094"
 msgid "Cameroon channels"
-msgstr "Cameroon kanalen"
+msgstr "Kameroense kanalen"
 
 msgctxt "#30095"
 msgid "Slovenian channels"
-msgstr ""
+msgstr "Sloveense kanalen"
 
 msgctxt "#30096"
 msgid "Ethiopian channels"
-msgstr ""
+msgstr "Ethiopische kanalen"
+
+msgctxt "#30096"
+msgid "Moroccan channels"
+msgstr "Marokkaans kanalen"
 
 # Websites (from 30130 to 30149)
-
-
-
 # Quality and content (from 30150 to 30199)
-
 msgctxt "#30150"
 msgid "Video quality"
 msgstr "Video kwaliteit"
@@ -357,9 +344,7 @@ msgctxt "#30170"
 msgid "CBC: Choose region"
 msgstr "CBC : Kies regio"
 
-
 # Download (from 30200 to 30239)
-
 msgctxt "#30200"
 msgid "Download directory"
 msgstr "Download map"
@@ -376,9 +361,7 @@ msgctxt "#30203"
 msgid "Automatically rename the video (download directory required)"
 msgstr "Hernoem de video automatisch (download map vereist)"
 
-
-# Accounts (from 30240 to 30259)
-
+# Accounts (from 30240 to 30269)
 msgctxt "#30240"
 msgid "NRJ Login"
 msgstr "NRJ gebruikersnaam"
@@ -427,52 +410,41 @@ msgctxt "#30251"
 msgid "UKTVPlay Password"
 msgstr "UKTVPlay wachtwoord"
 
-
-
 # TV integration (from 30270 to 30289)
-
 msgctxt "#30270"
 msgid "TV integration"
-msgstr ""
+msgstr "TV integratie"
 
 msgctxt "#30271"
 msgid "Kodi Live TV integration"
-msgstr ""
+msgstr "Kodi Live TV integratie"
 
 msgctxt "#30272"
 msgid "Install IPTV Manager add-on"
-msgstr ""
+msgstr "Installeer IPTV Manager add-on"
 
 msgctxt "#30273"
 msgid "Enable Kodi Live TV integration"
-msgstr ""
+msgstr "Activeer Kodi Live TV intergatie"
 
 msgctxt "#30274"
 msgid "Open IPTV Manager settings"
-msgstr ""
+msgstr "Open IPTV Manager instellingen"
 
 msgctxt "#30275"
 msgid "Select channels to enable"
-msgstr ""
+msgstr "Selecteer de kanalen om te activeren"
 
 msgctxt "#30276"
 msgid "Failed to save TV integration settings"
-msgstr ""
+msgstr "Kon de TV integratie instellingen niet opslaan"
 
 msgctxt "#30277"
 msgid "Select channels to enable in Kodi Live TV"
-msgstr ""
-
-
+msgstr "Selecteer de kanalen om te activeren in Kodi Live TV"
 
 # Reserved space for other tab/category in settins (from 30290 to 30339)
-
-
-
-
-
 # Advanced settings (from 30370 to 30399)
-
 msgctxt "#30370"
 msgid "Clear cache"
 msgstr "Cache legen"
@@ -483,22 +455,20 @@ msgstr "Cache geleegd"
 
 msgctxt "#30372"
 msgid "Send Kodi log to the developers when an error occurred"
-msgstr ""
+msgstr "Stuur de Kodi log naar de ontwikkelaars wanneer er zich een fout voordoet"
 
 msgctxt "#30373"
 msgid "Delete favourites"
-msgstr ""
+msgstr "Verwijder favorieten"
 
 msgctxt "#30374"
 msgid "Favourites deleted"
-msgstr ""
-
+msgstr "Favorieten verwijderd"
 
 # Settings of 'General' category (from 30400 to 30429)
-
 msgctxt "#30400"
 msgid "Restore default order of all menus"
-msgstr ""
+msgstr "Herstel de standaard volgorde van alle menus"
 
 msgctxt "#30401"
 msgid "Unmask all hidden items"
@@ -510,7 +480,7 @@ msgstr ""
 
 msgctxt "#30403"
 msgid "Menu items"
-msgstr ""
+msgstr "Menu items"
 
 msgctxt "#30404"
 msgid ""
@@ -526,26 +496,19 @@ msgstr ""
 
 msgctxt "#30407"
 msgid "Default order of all menus have been restored"
-msgstr ""
+msgstr "De standaard volgorde van alle menus is hersteld"
 
 msgctxt "#30408"
 msgid "All hidden items have been unmasked"
 msgstr ""
 
-
 # Advanced settings (from 30430 to 30449)
-
 msgctxt "#30430"
 msgid "Automatically start Catch-up TV & More when Kodi starts"
-msgstr ""
-
+msgstr "Start Catch-up TV & More automatisch wanneer Kodi start"
 
 # Reserved space for other tab/category in settins (from 30450 to 30499)
-
-
-
 # Context menu (from 30500 to 30599)
-
 msgctxt "#30500"
 msgid "Move down"
 msgstr "Verplaats omlaag"
@@ -570,9 +533,7 @@ msgctxt "#30505"
 msgid "List Videos (type=episode)"
 msgstr "Videos weergeven (type=episode)"
 
-
 # Dialog boxes (from 30600 to 30699)
-
 msgctxt "#30600"
 msgid "Information"
 msgstr "Informatie"
@@ -601,9 +562,7 @@ msgctxt "#30606"
 msgid "Do you want to see this information next time?"
 msgstr "Wilt u deze informatie een volgende keer zien?"
 
-
 # Others (from 30700 to 30799)
-
 msgctxt "#30700"
 msgid "More videos..."
 msgstr "Meer video's..."
@@ -694,27 +653,25 @@ msgstr "Inhoud vereist een abonnement"
 
 msgctxt "#30722"
 msgid "TV guide"
-msgstr ""
+msgstr "Tv-gids"
 
 msgctxt "#30723"
 msgid "An error occurred while getting TV guide"
-msgstr ""
+msgstr "Er trap een fout op bij het ophalen van de Tv-gids"
 
 msgctxt "#30724"
 msgid "Failed to guess your country based on your IP"
-msgstr ""
+msgstr "Uw land kon niet bepaald worden op basis van uw IP"
 
 msgctxt "#30725"
 msgid "Categories"
-msgstr ""
+msgstr "Categoriën"
 
 msgctxt "#30726"
 msgid "Races"
-msgstr ""
-
+msgstr "Races"
 
 # Favourites (from 30800 to 30859)
-
 msgctxt "#30800"
 msgid "Add to add-on favourites"
 msgstr "Toevoegen aan add-on favorieten"
@@ -747,44 +704,40 @@ msgctxt "#30807"
 msgid "This favourite raises an error, would you like to delete it?"
 msgstr "Deze favoriet veroorzaakt een fout, wilt het verwijderen?"
 
-
 # Log uploader (from 30860 to 30889)
-
 msgctxt "#30860"
 msgid "This selection triggered an unexpected error, would you like to share your error log so that we can try to resolve this issue?"
 msgstr "Deze selectie heeft een onverwachte fout veroorzaakt, wilt u het logboek delen zodat we kunnen proberen de fout op te lossen?"
 
 msgctxt "#30861"
-msgid "Share us the URL URL_TO_REPLACE by e-mail directly via the QR-code or catch.up.tv.and.more@gmail.com or in an issue on GitHub. Thank you!"
+msgid "Share us the URL URL_TO_REPLACE by email directly via the QRcode or at catch.up.tv.and.more@gmail.com or in an issue on GitHub. Thank you!"
 msgstr "Deel met ons de URL URL_TO_REPLACE direct via e-mail via de QR-code of catch.up.tv.and.more@gmail.com of via een ticket op GitHub. Dank u wel!"
 
 msgctxt "#30862"
 msgid "Sorry, sharing your error log failed"
 msgstr "Sorry, delen van het logboek is mislukt"
 
-
 # HTTP error (from 30890 to 30919)
-
 msgctxt "#30890"
 msgid "HTTP Error code"
-msgstr ""
+msgstr "HTTP foutcode"
 
 msgctxt "#30891"
 msgid "Inaccessible content"
-msgstr ""
+msgstr "Ontoegankelijke inhoud"
 
 msgctxt "#30892"
 msgid "Authentication is required to access the resource"
-msgstr ""
+msgstr "Authenticatie is nodig voor deze bron"
 
 msgctxt "#30893"
 msgid "Access denied (Geographical restriction?)"
-msgstr ""
+msgstr "Toegang geweigerd (geografische beperking?)"
 
 msgctxt "#30894"
 msgid "This resource requires a payment or a subscription"
-msgstr ""
+msgstr "Deze bron vereist een betaling of abonnement"
 
 msgctxt "#30895"
 msgid "This resource is no longer available"
-msgstr ""
+msgstr "Deze bron is niet langer beschikbaar"

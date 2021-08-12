@@ -57,8 +57,6 @@ Run `pipenv run lint`.
 
 Run `pipenv run test`.
 
-> Requires at least Python 3.6!
-
 ## Copyright and license
 
 This add-on is licensed under the MIT License - see `LICENSE.txt` for details.

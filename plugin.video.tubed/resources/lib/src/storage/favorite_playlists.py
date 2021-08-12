@@ -40,7 +40,7 @@ class FavoritePlaylists(Storage):
 
         return payload
 
-    def remove(self, playlist_id):
+    def remove(self, playlist_id):  # pylint: disable=arguments-renamed
         self._remove(playlist_id)
 
     def update(self, playlist_id, playlist_name):

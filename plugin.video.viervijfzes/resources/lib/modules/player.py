@@ -10,7 +10,7 @@ from resources.lib.modules.menu import Menu
 from resources.lib.viervijfzes import CHANNELS, ResolvedStream
 from resources.lib.viervijfzes.auth import AuthApi
 from resources.lib.viervijfzes.aws.cognito_idp import AuthenticationException, InvalidLoginException
-from resources.lib.viervijfzes.content import ContentApi, GeoblockedException, UnavailableException
+from resources.lib.viervijfzes.content import CACHE_PREVENT, ContentApi, GeoblockedException, UnavailableException
 
 try:  # Python 3
     from urllib.parse import quote, urlencode
@@ -36,6 +36,13 @@ class Player:
         """ Play the live channel.
         :type channel: string
         """
+        # TODO: this doesn't work correctly, playing a live program from the PVR won't play something from the beginning
+        # Lookup current program
+        # broadcast = self._epg.get_broadcast(channel, datetime.datetime.now().isoformat())
+        # if broadcast and broadcast.video_url:
+        #     self.play_from_page(broadcast.video_url)
+        #     return
+
         channel_name = CHANNELS.get(channel, dict(name=channel))
         kodiutils.ok_dialog(message=kodiutils.localize(30718, channel=channel_name.get('name')))  # There is no live stream available for {channel}.
         kodiutils.end_of_directory()
@@ -44,8 +51,12 @@ class Player:
         """ Play the requested item.
         :type path: string
         """
+        if not path:
+            kodiutils.ok_dialog(message=kodiutils.localize(30712))  # The video is unavailable...
+            return
+
         # Get episode information
-        episode = self._api.get_episode(path)
+        episode = self._api.get_episode(path, cache=CACHE_PREVENT)
         resolved_stream = None
 
         if episode is None:
@@ -88,6 +99,10 @@ class Player:
         """ Play the requested item.
         :type uuid: string
         """
+        if not uuid:
+            kodiutils.ok_dialog(message=kodiutils.localize(30712))  # The video is unavailable...
+            return
+
         # Lookup the stream
         resolved_stream = self._resolve_stream(uuid)
         if resolved_stream.license_url:
@@ -130,11 +145,11 @@ class Player:
                 return None
 
         except GeoblockedException:
-            kodiutils.ok_dialog(heading=kodiutils.localize(30709), message=kodiutils.localize(30710))  # This video is geo-blocked...
+            kodiutils.ok_dialog(message=kodiutils.localize(30710))  # This video is geo-blocked...
             return None
 
         except UnavailableException:
-            kodiutils.ok_dialog(heading=kodiutils.localize(30711), message=kodiutils.localize(30712))  # The video is unavailable...
+            kodiutils.ok_dialog(message=kodiutils.localize(30712))  # The video is unavailable...
             return None
 
     @staticmethod

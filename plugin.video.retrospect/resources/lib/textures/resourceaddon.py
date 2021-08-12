@@ -29,8 +29,7 @@ class Resources(TextureHandler):
         elif file_name.startswith("resource://"):
             return_value = file_name
         else:
-            cdn_folder = self._get_cdn_sub_folder(channel_path)
-            return_value = "resource://%s/%s/%s" % (self.__resource_add_on, cdn_folder, file_name)
+            return_value = "resource://%s/channels/%s/%s" % (self.__resource_add_on, file_name[0].lower(), file_name)
 
         self._logger.debug("Resolved texture '%s' to '%s'", file_name, return_value)
         return return_value

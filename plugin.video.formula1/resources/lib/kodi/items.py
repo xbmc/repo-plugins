@@ -1,7 +1,6 @@
-from resources.routes import *
-
 import urllib.parse
 import xbmcgui
+from resources.routes import *
 
 
 class Items:

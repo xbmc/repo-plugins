@@ -2,7 +2,7 @@
 
 import datetime
 
-from resources.lib import chn_class, contenttype
+from resources.lib import chn_class, contenttype, mediatype
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.htmlhelper import HtmlHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
@@ -410,7 +410,7 @@ class Channel(chn_class.Channel):
         title = result_set['title']
         url = "https://api.viervijfzes.be/content/{}".format(result_set['videoUuid'])
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = HtmlHelper.to_text(result_set.get("description").replace(">\r\n", ">"))
         item.thumb = result_set["image"]
         item.isGeoLocked = result_set.get("isProtected")
@@ -459,7 +459,7 @@ class Channel(chn_class.Channel):
         url = "{}{}".format(self.baseUrl, video_info["url"])
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = video_info["description"]
         item.thumb = video_info["image"]
         item.isGeoLocked = result_set.get("isProtected")
@@ -470,7 +470,8 @@ class Channel(chn_class.Channel):
         item.set_date(*time_stamp[0:6])
 
         item.set_info_label("duration", result_set["duration"])
-        if "episode_nr" in result_set and "season" in result_set and "-" not in result_set["season"]:
+        if "episode_nr" in result_set and "season" in result_set \
+                and result_set["season"] and "-" not in result_set["season"]:
             item.set_season_info(result_set["season"], result_set["episode_nr"])
         return item
 
@@ -524,10 +525,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -555,10 +556,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -603,8 +604,7 @@ class Channel(chn_class.Channel):
             # set it for the error statistics
             item.isGeoLocked = True
 
-        part = item.create_new_empty_media_part()
         item.complete = M3u8.update_part_with_m3u8_streams(
-            part, m3u8_url, channel=self, encrypted=False)
+            item, m3u8_url, channel=self, encrypted=False)
 
         return item

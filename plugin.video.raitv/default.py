@@ -86,8 +86,6 @@ def show_root_menu():
     addDirectoryItem({"mode": "tg"}, liStyle)
     liStyle = xbmcgui.ListItem(Addon.getLocalizedString(32008))
     addDirectoryItem({"mode": "news"}, liStyle)
-    liStyle = xbmcgui.ListItem(Addon.getLocalizedString(32009))
-    addDirectoryItem({"mode": "themes"}, liStyle)
     liStyle = xbmcgui.ListItem(Addon.getLocalizedString(32010))
     addDirectoryItem({"mode": "raisport_main"}, liStyle)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
@@ -665,35 +663,37 @@ def show_news_providers():
     xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_LABEL)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
     
-def show_themes():
-    search = Search()
-    for position, tematica in enumerate(search.tematiche):
-        liStyle = xbmcgui.ListItem(tematica)
-        addDirectoryItem({"mode": "get_last_content_by_tag", "tags": "Tematica:"+search.tematiche[int(position)]}, liStyle)
-    xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_LABEL)
-    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
-    
 def get_last_content_by_tag(tags):
     xbmc.log("Get latest content for tags: " + tags)
     search = Search()
-    items = search.getLastContentByTag(tags)
-    show_search_result(items)
-
-def get_most_visited(tags):
-    xbmc.log("Get most visited for tags: " + tags)
-    search = Search()
-    items = search.getMostVisited(tags)
+    items = search.getLastContentByTag(tags,numContents=50)
     show_search_result(items)
 
 def show_search_result(items):
     raiplay = RaiPlay(Addon)
     
     for item in items:
+        if 'url' in item:
+            url = item["Url"]
+        elif 'h264' in item:
+            url = item["h264"]
+        elif 'url_h264' in item:        
+            url = item["url_h264"]
+        elif 'weblink' in item:
+            url = item["weblink"]
+        else:
+            url = ""
+
         liStyle = xbmcgui.ListItem(item["name"])
-        liStyle.setArt({"thumb": raiplay.getThumbnailUrl(item["images"]["landscape"])})
         liStyle.setInfo("video", {})
+
+        if 'largePathImmagine' in item:
+            liStyle.setArt({"thumb": raiplay.getThumbnailUrl(item["largePathImmagine"])})
+        elif 'image' in item:
+            liStyle.setArt({"thumb": raiplay.getThumbnailUrl(item["image"])})
+                    
         # Using "Url" because "PathID" is broken upstream :-/
-        addLinkItem({"mode": "play", "url": item["Url"]}, liStyle)
+        addLinkItem({"mode": "play", "url": url}, liStyle)
 
     xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_NONE)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
@@ -836,8 +836,6 @@ elif mode == "themes":
 
 elif mode == "get_last_content_by_tag":
      get_last_content_by_tag(tags)
-elif mode == "get_most_visited":
-     get_most_visited(tags)
 
 elif mode == "play" or mode =="raiplay_videos":
     play(url, pathId)

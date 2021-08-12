@@ -14,6 +14,7 @@
 # Advanced MAME Launcher PDF/CBZ/CBR manual image extraction.
 
 # --- Modules/packages in this plugin ---
+from .constants import *
 from .utils import *
 from .db import *
 
@@ -22,8 +23,8 @@ import xbmcaddon
 
 # --- Load pdfrw module ---
 import sys
-__addon_id__ = xbmcaddon.Addon().getAddonInfo('id')
-sys.path.insert(0, FileName('special://home/addons').pjoin(__addon_id__).pjoin('pdfrw').getPath())
+addon_id = xbmcaddon.Addon().getAddonInfo('id')
+sys.path.insert(0, FileName('special://home/addons').pjoin(addon_id).pjoin('pdfrw').getPath())
 from pdfrw import PdfReader
 from pdfrw.objects.pdfarray import PdfArray
 from pdfrw.objects.pdfname import BasePdfName
@@ -37,6 +38,8 @@ import struct
 import time
 import types
 import zlib
+if ADDON_RUNNING_PYTHON_2:
+    import StringIO
 try:
     from PIL import Image
     PYTHON_PIL_AVAILABLE = True
@@ -76,10 +79,8 @@ def _tiff_header_for_CCITT(width, height, img_size, CCITT_group = 4):
        0  # last IFD
    )
 
-#
 # Extracs an image from an xobj_dic object.
 # Returns a PIL image object or None
-#
 def _extract_image_from_XObject(xobj_dic):
     log_debug('extract_image_from_XObject() Initialising ...')
 
@@ -231,21 +232,23 @@ def manuals_extract_pages_pdfrw(status_dic, PDF_file_FN, img_dir_FN):
         # --- Iterate /Resources in page ---
         # log_debug('###### Processing page {} ######'.format(page_index))
         resource_dic = page['/Resources']
-        for r_name, resource in resource_dic.items():
-            # >> Skip non /XObject keys in /Resources
+        for r_name in resource_dic:
+            resource = resource_dic[r_name]
+            # Skip non /XObject keys in /Resources
             if r_name != '/XObject': continue
 
-            # >> DEBUG dump /XObjects dictionary
+            # DEBUG dump /XObjects dictionary
             # print('--- resource ---')
             # pprint(resource)
             # print('----------------')
 
-            # >> Traverse /XObject dictionary data. Each page may have 0, 1 or more /XObjects
-            # >> If there is more than 1 image in the page there could be more than 1 /XObject.
-            # >> Some /XObjects are not images, for example, /Subtype = /Form.
-            # >> NOTE Also, images may be inside the /Resources of a /From /XObject.
+            # Traverse /XObject dictionary data. Each page may have 0, 1 or more /XObjects
+            # If there is more than 1 image in the page there could be more than 1 /XObject.
+            # Some /XObjects are not images, for example, /Subtype = /Form.
+            # NOTE Also, images may be inside the /Resources of a /From /XObject.
             img_index = 0
-            for xobj_name, xobj_dic in resource.items():
+            for xobj_name in resource:
+                xobj_dic = resource[xobj_name]
                 xobj_type = xobj_dic['/Type']
                 xobj_subtype = xobj_dic['/Subtype']
                 # >> Skip XObject forms
@@ -294,7 +297,6 @@ def manuals_extract_pages_pdfrw(status_dic, PDF_file_FN, img_dir_FN):
 # If JSON INFO files does not exists then rendering is needed.
 # If JSON INFO file exists, then compare manual mtime with image extraction time.
 # Returns True if extraction is needed, False otherwise.
-#
 def manuals_check_img_extraction_needed(PDF_file_FN, img_dir_FN):
     log_debug('manuals_check_img_extraction_needed() Starting ...')
     status_dic = {
@@ -307,7 +309,7 @@ def manuals_check_img_extraction_needed(PDF_file_FN, img_dir_FN):
     }
 
     # Does the JSON INFO file exists?
-    rom_name = PDF_file_FN.getBase_noext()
+    rom_name = PDF_file_FN.getBaseNoExt()
     info_FN = img_dir_FN.pjoin(rom_name + '.json')
     log_info('manuals_check_img_extraction_needed() Info file "{}"'.format(info_FN.getPath()))
     if not info_FN.exists():
@@ -315,7 +317,7 @@ def manuals_check_img_extraction_needed(PDF_file_FN, img_dir_FN):
         return status_dic
 
     # JSON INFO file exists. Open JSON file and check timestamps.
-    info_dic = utils_load_JSON_file_dic(info_FN.getPath())
+    info_dic = utils_load_JSON_file(info_FN.getPath())
     man_file_mtime = PDF_file_FN.getmtime()
     if man_file_mtime > info_dic['IMG_timestamp']:
         status_dic['extraction_needed'] = True
@@ -341,7 +343,6 @@ PDF_reader = None
 #   status_dic['numImages'] = int
 #
 # Creates a JSON file with the timestamp of the extraction and timestamp of the manual file.
-#
 def manuals_open_PDF_file(status_dic, PDF_file_FN, img_dir_FN):
     global PDF_reader
     log_debug('manuals_open_PDF_file() Starting ...')
@@ -362,11 +363,9 @@ def manuals_close_PDF_file():
 
     PDF_reader = None
 
-#
 # Create JSON INFO file. Call this function after the PDF images have been extracted.
-#
 def manuals_create_INFO_file(status_dic, PDF_file_FN, img_dir_FN):
-    rom_name = PDF_file_FN.getBase_noext()
+    rom_name = PDF_file_FN.getBaseNoExt()
     info_FN = img_dir_FN.pjoin(rom_name + '.json')
     log_info('manuals_create_INFO_file() Info file "{}"'.format(info_FN.getPath()))
     PDF_timestamp = PDF_file_FN.getmtime()
@@ -388,11 +387,9 @@ def manuals_create_INFO_file(status_dic, PDF_file_FN, img_dir_FN):
     }
     utils_write_JSON_file_pprint(info_FN.getPath(), info_dic)
 
-#
 # Gets a list of filters (codecs) used in the PDF file.
 # manuals_extract_PDF_page() is based on this function. In other words, this function has
 # debug code and manuals_extract_PDF_page() is a cleaner version.
-#
 def manuals_get_PDF_filter_list(status_dic, man_file_FN, img_dir_FN):
     # List of lists because each image may have more than 1 filter.
     img_filter_list_list = []
@@ -402,26 +399,28 @@ def manuals_get_PDF_filter_list(status_dic, man_file_FN, img_dir_FN):
         # log_debug('###### Processing page {} ######'.format(page_index))
         resource_dic = page['/Resources']
         # --- Iterate /Resources in page ---
-        for resource_name, resource in resource_dic.items():
-            # >> Skip non /XObject keys in /Resources
+        for resource_name in resource_dic:
+            resource = resource_dic[resource_name]
+            # Skip non /XObject keys in /Resources
             if resource_name != '/XObject': continue
 
-            # >> DEBUG dump /XObjects dictionary
+            # DEBUG dump /XObjects dictionary
             # print('--- resource ---')
             # pprint(resource)
             # print('----------------')
 
-            # >> Traverse /XObject dictionary data. Each page may have 0, 1 or more /XObjects
-            # >> If there is more than 1 image in the page there could be more than 1 /XObject.
-            # >> Some /XObjects are not images, for example, /Subtype = /Form.
-            # >> Also, images may be inside the /Resources of a /From /XObject.
+            # Traverse /XObject dictionary data. Each page may have 0, 1 or more /XObjects
+            # If there is more than 1 image in the page there could be more than 1 /XObject.
+            # Some /XObjects are not images, for example, /Subtype = /Form.
+            # Also, images may be inside the /Resources of a /From /XObject.
             img_index = 0
-            for xobj_name, xobj_dic in resource.items():
+            for xobj_name in resource:
+                xobj_dic = resource[xobj_name]
                 xobj_type = xobj_dic['/Type']
                 xobj_subtype = xobj_dic['/Subtype']
-                # >> Skip XObject forms
+                # Skip XObject forms
                 if xobj_subtype == '/Form':
-                    # >> NOTE There could be an image /XObject in the /From : /Resources dictionary.
+                    # NOTE There could be an image /XObject in the /From : /Resources dictionary.
                     log_info('Skipping /Form /XObject')
                     log_info('--- xobj_dic ---')
                     log_info(pprint.pformat(xobj_dic))
@@ -460,9 +459,7 @@ def manuals_get_PDF_filter_list(status_dic, man_file_FN, img_dir_FN):
                 img_index += 1
     status_dic['imgFilterList'] = img_filter_list_list
 
-#
 # Extracts images in a PDF page.
-#
 def manuals_extract_PDF_page(status_dic, man_file_FN, img_dir_FN, page_index):
     # --- Get page object ---
     page = PDF_reader.pages[page_index]
@@ -471,18 +468,20 @@ def manuals_extract_PDF_page(status_dic, man_file_FN, img_dir_FN, page_index):
     image_counter = 0
     log_debug('###### Processing page {} ######'.format(page_index))
     resource_dic = page['/Resources']
-    for resource_name, resource in resource_dic.items():
-        # >> Skip non /XObject keys in /Resources
+    for resource_name in resource_dic:
+        resource = resource_dic[resource_name]
+        # Skip non /XObject keys in /Resources
         if resource_name != '/XObject': continue
 
-        # >> Traverse /XObject dictionary data.
+        # Traverse /XObject dictionary data.
         img_index = 0
-        for xobj_name, xobj_dic in resource.items():
+        for xobj_name in resource:
+            xobj_dic = resource[xobj_name]
             xobj_type = xobj_dic['/Type']
             xobj_subtype = xobj_dic['/Subtype']
-            # >> Skip XObject forms
+            # Skip XObject forms
             if xobj_subtype == '/Form':
-                # >> NOTE There could be an image /XObject in the /From : /Resources dictionary.
+                # NOTE There could be an image /XObject in the /From : /Resources dictionary.
                 log_info('Skipping /Form /XObject')
                 log_info('--- xobj_dic ---')
                 log_info(pprint.pformat(xobj_dic))

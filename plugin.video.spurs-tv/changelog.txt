@@ -1,0 +1,150 @@
+v2.17.0 (2021-04-04)
+ - Compatible with Kodi 19 (Matrix)
+ - Added search
+ - Added separate Men's and Womens's team categories
+ - Added Europa League category
+ - Removed the broken New Stadium category
+
+v2.16.0 (2020-03-09)
+ - Added pagination to improve loading speed
+ - Added a category for each competition
+ - Removed the old stadium webcam links
+
+v2.15.5 (2019-04-21)
+ - Fixed YouTube videos listing
+
+v2.15.4 (2019-03-21)
+ - Fixed latest videos listing
+
+v2.15.3 (2019-01-27)
+ - Fixed latest videos listing
+
+v2.15.2 (2018-11-19)
+ - Fixed the redirect errors
+ - Fixed the stadium live stream labels
+
+v2.15.1 (2018-08-18)
+ - Fixed latest videos listing
+
+v2.15.0 (2018-08-16)
+ - The new website broke all the things
+
+v2.14.2 (2017-10-01)
+ - Fixed Live Audio Commentary
+
+v2.14.1 (2017-09-26)
+ - Fixed new stadium video gallery
+
+v2.14.0 (2017-04-23)
+ - Fixed New Stadium category after new YouTube streams were added
+ - Update icon again, to match the video logo
+
+v2.13.0 (2017-01-08)
+ - Fixed New Stadium category after new site launch
+ - Fixed error when Live Audio Commentary is offline
+ - Update icon
+
+v2.12.1 (2016-10-03)
+ - Fixed YouTube channel
+
+v2.12.0 (2016-09-30)
+ - Fixed KANE50 category
+ - Added thumbnails for some categories
+
+v2.11.0 (2016-08-31)
+ - Fixed stadium camera streams
+
+v2.10.0 (2016-08-06)
+ - Added all stadium build live streams with descriptions
+ - Made error reporting optional
+
+v2.9.0 (2016-07-31)
+ - Added stadium build live streams
+ - Fixed Tour 2016 category
+
+v2.8.0 (2016-03-19)
+ - Fixed YouTube playlists
+ - Updated fanart
+
+v2.7.0 (2016-02-28)
+ - Kodi Krypton is now a requirement
+ - Use Rollbar for automatically reporting errors
+ - Fixed incorrect characters for some menu items introduced in version 2.6.0
+
+v2.6.0 (2016-02-19)
+ - Use ElementTree to parse the playlist xml
+
+v2.5.0 (2016-02-18)
+ - Use the built-in parser instead of html5lib
+
+v2.4.0 (2016-01-25)
+ - Fixed the categories 'The Vault' and 'A Question of Spurs'
+
+v2.3.2 (2016-01-23)
+ - Fixed an error on the main index page caused by changes to Live Audio Commentary
+
+v2.3.1 (2015-08-27)
+ - Fixed an error when playing videos on Android/iOS/Mac OS X
+
+v2.3.0 (2015-08-13)
+ - Added a Stadium TV category
+
+v2.2.0 (2015-08-13)
+ - Fixed problems caused by changes to the official site video hosting
+ - Removed the option to choose the stream protocol
+
+v2.1.0 (2015-05-28)
+ - Enabled the Tour 2015 category
+
+v2.0.1 (2015-04-04)
+ - Fixed Live Audio Commentary
+
+v2.0.0 (2015-03-30)
+ - Reorganised the menu
+ - Added settings to control the stream protocol and video resolution
+ - Added a shortcut to change the YouTube plugin settings
+
+v1.5.0 (2015-03-05)
+ - Fixed the Capital One Cup category
+
+v1.4.0 (2015-02-05)
+ - Fixed playback problems
+ - Added a debug setting
+
+v1.3.3 (2014-12-18)
+ - Fixed another script error with Official Site video lists
+
+v1.3.2 (2014-12-18)
+ - Fixed a script error with Official Site video lists
+
+v1.3.1
+ - Fixed compatibility with Android
+
+v1.3.0
+ - Localized hard-coded strings
+
+v1.2.1
+ - Fixed a script error with some Official Site search results
+
+v1.2.0
+ - The YouTube plugin now only installs when required
+
+v1.1.0
+ - Added caching for some views which will rarely change
+
+v1.0.0
+ - Added support for the Spurs TV YouTube channel
+
+v0.3.0
+ - Added Live Audio Commentary support
+
+v0.2.1
+ - Fixed a broken dependency
+
+v0.2.0
+ - Added Tour 2014 video categories
+ - Added Highlights subcategories
+ - Added Ledley King Testimonial videos
+
+v0.1.0
+ - Initial release

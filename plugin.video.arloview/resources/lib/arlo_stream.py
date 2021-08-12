@@ -61,14 +61,14 @@ class ArloStream(object):
         self.cameras = None
         self.addon_debug_logging = REAL_SETTINGS.getSettingBool('enable_debug')
 
-    def log(self, msg, level=xbmc.LOGNOTICE):
+    def log(self, msg, level=xbmc.LOGINFO):
 
         # Only log messages (via this function) if debug-logging is turned on in plugin settings
         if self.addon_debug_logging :
-            if level < xbmc.LOGNOTICE:
-                level = xbmc.LOGNOTICE
+            if level < xbmc.LOGINFO:
+                level = xbmc.LOGINFO
             xbmc.log("[{}-{}] {}".format(ADDON_ID, ADDON_VERSION, msg), level)
-
+        
     def main_menu(self):
         for camera in self._get_arlo_cameras():
             camera_info = self._get_camera_info(camera)
@@ -165,7 +165,7 @@ class ArloStream(object):
         if self._snapshot_expired(snapshot_file):
             snapshot_url = camera[snapshot_type]
             try:
-                self.log("Download {} into {}_{}".format(snapshot_type, snapshot_file_prefix, camera['deviceId']),xbmc.LOGNOTICE)
+                self.log("Download {} into {}_{}".format(snapshot_type, snapshot_file_prefix, camera['deviceId']),xbmc.LOGINFO)
                 self.arlo.DownloadSnapshot(snapshot_url, snapshot_file, 4096)
                 if os.path.getsize(snapshot_file) < 1024:
                     # File seems to be invalid, ?remove so it will try again the next time?
@@ -225,7 +225,7 @@ class ArloStream(object):
 
     def check_first_run(self):
         if REAL_SETTINGS.getSetting("userid") == "":
-            self.log("check_first_run()- userid NOT set!", xbmc.LOGNOTICE)
+            self.log("check_first_run()- userid NOT set!", xbmc.LOGINFO)
             msg = "Set ARLO credentials, otherwise...\nVideo will not stream correctly!"
             icon = REAL_SETTINGS.getAddonInfo('icon')
             xbmcgui.Dialog().notification(ADDON_NAME, msg, icon, 5000)

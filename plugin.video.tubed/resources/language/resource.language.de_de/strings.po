@@ -1,31 +1,33 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plugin.video.tubed\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: 2020-12-20 20:08+0000\n"
-"Last-Translator: Tobias Weimer <wishmaster51@gmail.com>\n"
-"Language-Team: German\n"
+"PO-Revision-Date: 2021-07-24 17:29+0000\n"
+"Last-Translator: Kai Sommerfeld <kai.sommerfeld@gmx.com>\n"
+"Language-Team: German <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-tubed/de_de/>\n"
 "Language: de_de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.7.2\n"
 
 msgctxt "Addon Summary"
 msgid "Watch your favorite YouTube content on Kodi"
-msgstr "Sehen Sie Ihre Lieblingsinhalte von Youtube in Kodi an"
+msgstr "Lieblingsinhalte von YouTube in Kodi ansehen"
 
 msgctxt "Addon Description"
 msgid "Browse your favorite content from YouTube; create, delete, and rename playlists; subscribe or unsubscribe from your favorite channels; and rate your favorite videos."
-msgstr "Sehen Sie Ihre Lieblingsinhalte von Youtube in Kodi an, Playlists erstellen/löschen/umbenennen, Lieblingskanäle abonnieren und deabonnieren, bevorzugte Videos bewerten."
+msgstr "Lieblingsinhalte von YouTube in Kodi ansehen, Wiedergabelisten erstellen / löschen / umbenennen, Lieblingskanäle abonnieren und deabonnieren, Videos bewerten."
 
 msgctxt "Addon Disclaimer"
 msgid "Tubed&#8217;s use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed&#39;s Privacy Policy at https://panicked.xyz/tubed-privacy/"
-msgstr "Tubed verwendet Informationen der Google APIs unter den Bedingungen der Google API Services User Data Policy, inklusive der Limited Use Voraussetzungen. Für weitere Informationen zur Verarbeitung Ihrer Daten besuchen Sie Tubeds Privatsphäreerklärung unter https://panicked.xyz/tubed-privacy/"
+msgstr "Tubed verwendet Informationen der Google APIs unter Einhaltung der Google API Services User Data Policy, inklusive der „Limited Use“ Voraussetzungen. Für weitere Informationen zur Verarbeitung persönlicher Daten bitte Tubed's Datenschutzbestimmungen einsehen unter https://panicked.xyz/tubed-privacy/"
 
 msgctxt "#30000"
 msgid "Most Popular"
-msgstr "Am Populärsten"
+msgstr "Am Beliebtesten"
 
 msgctxt "#30001"
 msgid "Next Page"
@@ -45,15 +47,15 @@ msgstr "Mein Kanal"
 
 msgctxt "#30005"
 msgid "Liked Videos"
-msgstr "Videos, die ich mag"
+msgstr "Positiv bewertete Videos"
 
 msgctxt "#30006"
 msgid "Disliked Videos"
-msgstr "Videos, die ich nicht mag"
+msgstr "Negativ bewertete Videos"
 
 msgctxt "#30007"
 msgid "Playlists"
-msgstr "Playlists"
+msgstr "Wiedergabelisten"
 
 msgctxt "#30008"
 msgid "Channels"
@@ -85,23 +87,23 @@ msgstr "Neue Suche"
 
 msgctxt "#30015"
 msgid "Enter your search term"
-msgstr "Geben Sie Ihren Suchbegriff ein"
+msgstr "Bitte Suchbegriff eingeben"
 
 msgctxt "#30016"
 msgid "Go to %s and enter the following code:"
-msgstr "Gehen Sie zu %s und geben Sie folgenden Code ein"
+msgstr "Bitte %s aufrufen und folgenden Code eingeben:"
 
 msgctxt "#30017"
 msgid "New user..."
-msgstr "Neuer Benutzer..."
+msgstr "Neuer Benutzer ..."
 
 msgctxt "#30018"
 msgid "Rename user..."
-msgstr "Benutzer umbenennen..."
+msgstr "Benutzer umbenennen ..."
 
 msgctxt "#30019"
 msgid "Remove user..."
-msgstr "Benutzer entfernen..."
+msgstr "Benutzer entfernen ..."
 
 msgctxt "#30020"
 msgid "New Username"
@@ -113,23 +115,23 @@ msgstr "Benutzer entfernen"
 
 msgctxt "#30022"
 msgid "Removing %s, are you sure?"
-msgstr "Möchten Sie %s wirklich entfernen?"
+msgstr "Soll %s wirklich entfernt werden?"
 
 msgctxt "#30023"
 msgid "Uploads"
-msgstr "Hochgeladen"
+msgstr "Uploads"
 
 msgctxt "#30024"
 msgid "You are about to sign out, are you sure?"
-msgstr "Möchten Sie sich wirklich abmelden?"
+msgstr "Wirklich abmelden?"
 
 msgctxt "#30025"
 msgid "Categories"
-msgstr "Kategorien..."
+msgstr "Kategorien"
 
 msgctxt "#30026"
 msgid "Remove..."
-msgstr "Entfernen..."
+msgstr "Entfernen ..."
 
 msgctxt "#30027"
 msgid "Clear history"
@@ -145,7 +147,7 @@ msgstr "Qualität"
 
 msgctxt "#30030"
 msgid "Choose the maximum playback quality for videos and live content"
-msgstr "Wählen Sie die maximale Abspielqualität für Videos und Live-Inhalte"
+msgstr "Maximale Wiedergabequalität für Videos und Live-Inhalte auswählen"
 
 msgctxt "#30031"
 msgid "Limit to 30 fps"
@@ -221,7 +223,7 @@ msgstr "Sprache"
 
 msgctxt "#30049"
 msgid "Your preferred YouTube UI language"
-msgstr "Ihre bevorzugte Youtube-UI-Sprache"
+msgstr "Bevorzugte YouTube-UI-Sprache"
 
 msgctxt "#30050"
 msgid "Region"
@@ -229,23 +231,23 @@ msgstr "Region"
 
 msgctxt "#30051"
 msgid "Your preferred content region"
-msgstr "Inhalte in Ihrer bevorzugten Region"
+msgstr "Bevorzugten Region für Inhalte"
 
 msgctxt "#30052"
 msgid "Configure regional preferences"
-msgstr "Stellen Sie Ihre regionalen Vorlieben ein"
+msgstr "Regionale Vorlieben einstellen"
 
 msgctxt "#30053"
 msgid "Configure your preferred language and region"
-msgstr "Stellen Sie Ihre bevorzugte Sprache und Region ein"
+msgstr "Bevorzugte Sprache und Region einstellen"
 
 msgctxt "#30054"
 msgid "Configure subtitles"
-msgstr "Untertitel einstellen"
+msgstr "Untertitel konfigureren"
 
 msgctxt "#30055"
 msgid "Configure your preferred subtitle language"
-msgstr "Stellen Sie Ihre bevorzugte Sprache für Untertitel ein"
+msgstr "Bevorzugte Sprache für Untertitel einstellen"
 
 msgctxt "#30056"
 msgid "Subtitle language"
@@ -253,7 +255,7 @@ msgstr "Untertitelsprache"
 
 msgctxt "#30057"
 msgid "Your preferred subtitle language"
-msgstr "Ihre bevorzugte Untertitelsprache"
+msgstr "Bevorzugte Untertitelsprache"
 
 msgctxt "#30058"
 msgid "Subtitles"
@@ -265,7 +267,7 @@ msgstr "%s mit Fallback %s"
 
 msgctxt "#30060"
 msgid "No auto-generated"
-msgstr "nicht automatisch erzeugt"
+msgstr "Keine automatisch erzeugten"
 
 msgctxt "#30061"
 msgid "None"
@@ -297,11 +299,11 @@ msgstr "Fehler"
 
 msgctxt "#30068"
 msgid "Play (Prompt for subtitles)"
-msgstr "Abspielen (nach Untertiteln fragen)"
+msgstr "Wiedergeben (nach Untertiteln fragen)"
 
 msgctxt "#30069"
 msgid "Go to %s"
-msgstr "Gehe zu %s"
+msgstr "%s besuchen"
 
 msgctxt "#30070"
 msgid "Subscribed to %s"
@@ -317,11 +319,11 @@ msgstr "Bewerten"
 
 msgctxt "#30073"
 msgid "I like this"
-msgstr "Ich mag das"
+msgstr "Gefällt mir"
 
 msgctxt "#30074"
 msgid "I dislike this"
-msgstr "Ich mag das nicht"
+msgstr "Gefällt mir nicht"
 
 msgctxt "#30075"
 msgid "Remove rating"
@@ -329,19 +331,19 @@ msgstr "Bewertung entfernen"
 
 msgctxt "#30076"
 msgid "Liked"
-msgstr "Mag ich"
+msgstr "Positiv bewertet"
 
 msgctxt "#30077"
 msgid "Disliked"
-msgstr "Mag ich nicht"
+msgstr "Negativ bewertet"
 
 msgctxt "#30078"
 msgid "Liked %s"
-msgstr "Ich mag %s"
+msgstr "%s als positiv bewertet"
 
 msgctxt "#30079"
 msgid "Disliked %s"
-msgstr "Ich mag %s nicht"
+msgstr "%s als negativ bewertet"
 
 msgctxt "#30080"
 msgid "Rating removed"
@@ -353,23 +355,23 @@ msgstr "Bewertung von %s entfernt"
 
 msgctxt "#30082"
 msgid "New playlist"
-msgstr "Neue Playlist"
+msgstr "Neue Wiedergabeliste"
 
 msgctxt "#30083"
 msgid "Add to playlist"
-msgstr "Zu Playlist hinzufügen"
+msgstr "Zu Wiedergabeliste hinzufügen"
 
 msgctxt "#30084"
 msgid "Remove from playlist"
-msgstr "Aus Playlist entfernen"
+msgstr "Aus Wiedergabeliste entfernen"
 
 msgctxt "#30085"
 msgid "Delete playlist"
-msgstr "Playlist löschen"
+msgstr "Wiedergabeliste löschen"
 
 msgctxt "#30086"
 msgid "Enter your playlist title"
-msgstr "Geben Sie den Titel der Playlist ein"
+msgstr "Bitte den Titel der Wiedergabeliste eingeben"
 
 msgctxt "#30087"
 msgid "Added %s to %s"
@@ -377,27 +379,27 @@ msgstr "%s zu %s hinzugefügt"
 
 msgctxt "#30088"
 msgid "Removed from playlist"
-msgstr "Aus Playlist entfernt"
+msgstr "Aus Wiedergabeliste entfernt"
 
 msgctxt "#30089"
 msgid "Removed %s from playlist"
-msgstr "%s aus Playlist entfernt"
+msgstr "%s aus Wiedergabeliste entfernt"
 
 msgctxt "#30090"
 msgid "Playlist deleted"
-msgstr "Playlist gelöscht"
+msgstr "Wiedergabeliste gelöscht"
 
 msgctxt "#30091"
 msgid "%s playlist deleted"
-msgstr "Playlist %s gelöscht"
+msgstr "Wiedergabeliste %s gelöscht"
 
 msgctxt "#30092"
 msgid "Rename playlist"
-msgstr "Playlist umbenennen"
+msgstr "Wiedergabeliste umbenennen"
 
 msgctxt "#30093"
 msgid "Playlist renamed to %s"
-msgstr "Playlist zu %s umbenannt"
+msgstr "Wiedergabeliste zu %s umbenannt"
 
 msgctxt "#30094"
 msgid "%s renamed to %s"
@@ -405,23 +407,23 @@ msgstr "%s in %s umbenannt"
 
 msgctxt "#30095"
 msgid "You are about to delete %s, are you sure?"
-msgstr "Möchten Sie %s wirklich löschen?"
+msgstr "%s wirklich löschen?"
 
 msgctxt "#30096"
 msgid "You are about to delete a playlist, are you sure?"
-msgstr "Möchten Sie diese Playlist wirklich löschen?"
+msgstr "Diese Wiedergabeliste wirklich löschen?"
 
 msgctxt "#30097"
 msgid "Upcoming"
-msgstr "Bevorstehend"
+msgstr "Demnächst"
 
 msgctxt "#30098"
 msgid "Completed"
-msgstr "Komplett"
+msgstr "Abgeschlossen"
 
 msgctxt "#30099"
 msgid "%s was scheduled to start %s"
-msgstr "%s hätte am %s starten sollen"
+msgstr "%s sollte am %s starten"
 
 msgctxt "#30100"
 msgid "%s is scheduled to start %s"
@@ -437,11 +439,11 @@ msgstr "Cache"
 
 msgctxt "#30103"
 msgid "Data cache TTL (weeks)"
-msgstr "Datencache TTL (Wochen)"
+msgstr "TTL für Datencache (Wochen)"
 
 msgctxt "#30104"
 msgid "Function cache TTL (minutes)"
-msgstr "Funktionscache TTL (Minuten)"
+msgstr "TTL für Funktionscache (Minuten)"
 
 msgctxt "#30105"
 msgid "Clear data cache"
@@ -485,11 +487,11 @@ msgstr "Wartung"
 
 msgctxt "#30115"
 msgid "How long until long term data cache expires in weeks"
-msgstr "Dauer in Wochen bis der Langzeit-Datencache ausläuft"
+msgstr "Dauer in Wochen bis der Langzeit-Datencache verfällt"
 
 msgctxt "#30116"
 msgid "How long until short term function cache expires in minutes"
-msgstr "Dauer in Minuten bis der Kurzzeit-Funktionscache ausläuft"
+msgstr "Dauer in Minuten bis der Kurzzeit-Funktionscache verfällt"
 
 msgctxt "#30117"
 msgid "Clearing long term data cache will remove all entries from the database"
@@ -525,11 +527,11 @@ msgstr "Datencache konnte nicht gelöscht werden"
 
 msgctxt "#30125"
 msgid "Debug"
-msgstr "Debug"
+msgstr "Fehlersuche"
 
 msgctxt "#30126"
 msgid "Component Logging"
-msgstr "Komponenten loggen"
+msgstr "Komponentenprotokollierung"
 
 msgctxt "#30127"
 msgid "API requests"
@@ -537,7 +539,7 @@ msgstr "API-Anfragen"
 
 msgctxt "#30128"
 msgid "Enable logging of API requests and responses"
-msgstr "Loggen von API-Anfragen und -Antworten aktivieren"
+msgstr "Protokollieren von API-Anfragen und -Antworten aktivieren"
 
 msgctxt "#30129"
 msgid "Comments"
@@ -553,7 +555,7 @@ msgstr "Kommentar lesen"
 
 msgctxt "#30132"
 msgid "Likes"
-msgstr "Mag ich"
+msgstr "Anzahl von positiven Bewertungen"
 
 msgctxt "#30133"
 msgid "Replies"
@@ -621,111 +623,111 @@ msgstr "Anzahl Angesehen"
 
 msgctxt "#30149"
 msgid "Post Play"
-msgstr "Nach dem Abspielen"
+msgstr "Nach der Wiedergabe"
 
 msgctxt "#30150"
 msgid "Post play minimum watch percentage"
-msgstr "Minimale Ansehzeit nach dem Abspielen"
+msgstr "Minimale Ansehzeit nach der Wiedergabe"
 
 msgctxt "#30151"
 msgid "What percent of the video's duration must be watched to trigger post play events"
-msgstr "Wieviel Prozent des Videos muss gesehen werden um nach dem Abspielen Ereignisse auszulösen"
+msgstr "Wieviel Prozent des Videos muss gesehen werden, um „Nach der Wiedergabe“ Ereignisse auszulösen"
 
 msgctxt "#30152"
 msgid "Rate the video that just finished playing"
-msgstr "Video nach dem Abspielen bewerten"
+msgstr "Video nach der Wiedergabe bewerten"
 
 msgctxt "#30153"
 msgid "Rate during playlists"
-msgstr "Während Playlists bewerten"
+msgstr "Während Wiedergabeliste bewerten"
 
 msgctxt "#30154"
 msgid "Should rating be requested while watching playlists"
-msgstr "Soll während dem Ansehen von Playlists nach Bewertungen gefragt werden"
+msgstr "Festlegen, ob während der Wiedergabe von Wiedergabelisten nach Bewertungen gefragt werden soll"
 
 msgctxt "#30155"
 msgid "Autoplay related videos"
-msgstr "Ähnliche Videos automatisch abspielen"
+msgstr "Ähnliche Videos automatisch wiedergeben"
 
 msgctxt "#30156"
 msgid "Autoplay videos related to the previously played video"
-msgstr "Zum aktuellen Video ähnliche Videos automatisch abspielen"
+msgstr "Videos automatisch wiedergeben, die dem vorherigen Video ähnlich sind"
 
 msgctxt "#30157"
 msgid "Set as History"
-msgstr "Als Verlauf setzen"
+msgstr "Als „Angesehen“ markieren"
 
 msgctxt "#30158"
 msgid "Set as Watch Later"
-msgstr "Als \"Später ansehen\" setzen"
+msgstr "Als „Später ansehen“ markieren"
 
 msgctxt "#30159"
 msgid "Remove as History"
-msgstr "Als Verlauf entfernen"
+msgstr "„Angesehen“ entfernen"
 
 msgctxt "#30160"
 msgid "Remove as Watch Later"
-msgstr "Als \"Später ansehen\" entfernen"
+msgstr "„Später ansehen“ entfernen"
 
 msgctxt "#30161"
 msgid "History"
-msgstr "Verlauf"
+msgstr "Angesehen"
 
 msgctxt "#30162"
 msgid "Watch later playlist configured"
-msgstr "Später-Ansehen-Playlist wurde eingerichtet"
+msgstr "„Später ansehen“-Wiedergabeliste wurde eingerichtet"
 
 msgctxt "#30163"
 msgid "History playlist configured"
-msgstr "Verlauf-Playlist wurde geändert"
+msgstr "„Angesehen“-Wiedergabeliste wurde eingerichtet"
 
 msgctxt "#30164"
 msgid "%s was configured as your watch later playlist"
-msgstr "%s wurde als Später-Ansehen-Playlist eingestellt"
+msgstr "%s wurde als „Später ansehen“-Wiedergabeliste eingestellt"
 
 msgctxt "#30165"
 msgid "%s was configured as your history playlist"
-msgstr "%s wurde als Verlauf-Playlist eingestellt"
+msgstr "%s wurde als „Angesehen“-Wiedergabeliste eingestellt"
 
 msgctxt "#30166"
 msgid "Watch later playlist is no longer configured"
-msgstr "Später-Ansehen-Playlist ist nicht länger eingestellt"
+msgstr "„Später ansehen“-Wiedergabeliste ist nicht länger eingestellt"
 
 msgctxt "#30167"
 msgid "History playlist is no longer configured"
-msgstr "Verlauf-Playlist ist nicht länger eingestellt"
+msgstr "„Angesehen“-Wiedergabeliste ist nicht länger eingestellt"
 
 msgctxt "#30168"
 msgid "%s is no longer configured as your watch later playlist"
-msgstr "%s ist nicht länger als Später-Ansehen-Playlist eingestellt"
+msgstr "%s ist nicht länger als „Später ansehen“-Wiedergabeliste eingestellt"
 
 msgctxt "#30169"
 msgid "%s is no longer configured as your history playlist"
-msgstr "%s ist nicht länger als Verlauf-Playlist eingestellt"
+msgstr "%s ist nicht länger als „Angesehen“-Wiedergabeliste eingestellt"
 
 msgctxt "#30170"
 msgid "Add to watch later"
-msgstr "Zu später ansehen hinzufügen"
+msgstr "Zu „Später ansehen“ hinzufügen"
 
 msgctxt "#30171"
 msgid "Favorite Channels"
-msgstr "Favorisierte Kanäle"
+msgstr "Lieblingskanäle"
 
 msgctxt "#30172"
 msgid "Add to favorite channels"
-msgstr "Zu favorisierten Kanälen hinzufügen"
+msgstr "Zu Lieblingskanälen hinzufügen"
 
 msgctxt "#30173"
 msgid "Clear favorite channels"
-msgstr "Favorisierte Kanäle entfernen"
+msgstr "Lieblingskanäle löschen"
 
 msgctxt "#30174"
 msgid "Added to favorite channels"
-msgstr "Zu favorisierten Kanälen hinzugefügt"
+msgstr "Zu Lieblingskanälen hinzugefügt"
 
 msgctxt "#30175"
 msgid "Removed from favorite channels"
-msgstr "Aus favorisierten Kanälen entfernt"
+msgstr "Aus Lieblingskanälen entfernt"
 
 msgctxt "#30176"
 msgid "Import from xml"
@@ -733,31 +735,31 @@ msgstr "Aus XML importieren"
 
 msgctxt "#30177"
 msgid "Import failed"
-msgstr "Import fehlgeschlagen"
+msgstr "Importieren fehlgeschlagen"
 
 msgctxt "#30178"
 msgid "Import completed successfully"
-msgstr "Import erfolgreich abgeschlossen"
+msgstr "Importieren erfolgreich abgeschlossen"
 
 msgctxt "#30179"
 msgid "You are about to clear your favorite channels, are you sure?"
-msgstr "Sie sind dabei, Ihre favorisierten Kanäle zu leeren, sind Sie sicher?"
+msgstr "Sollen die Lieblingskanäle wirklich gelöscht werden?"
 
 msgctxt "#30180"
 msgid "Favorite channels cleared"
-msgstr "Favorisierte Kanäle geleert"
+msgstr "Lieblingskanäle gelöscht"
 
 msgctxt "#30181"
 msgid "Add %s to favorite channels"
-msgstr "%s zu favorisierten Kanälen hinzufügen"
+msgstr "%s zu Lieblingskanälen hinzufügen"
 
 msgctxt "#30182"
 msgid "Added %s to favorite channels"
-msgstr "%s zu favorisierten Kanälen hinzugefügt"
+msgstr "%s zu Lieblingskanälen hinzugefügt"
 
 msgctxt "#30183"
 msgid "Removed %s from favorite channels"
-msgstr "%s aus favorisierten Kanälen entfernt"
+msgstr "%s aus Lieblingskanälen entfernt"
 
 msgctxt "#30184"
 msgid "Refresh"
@@ -769,15 +771,15 @@ msgstr "Funktionscache beim Aktualisieren leeren"
 
 msgctxt "#30186"
 msgid "Short term function cache will be cleared when using Refresh from the context menu"
-msgstr "Kurzzeit-Funktionscache wird beim Klick auf Aktualisieren im Kontextmenü geleert"
+msgstr "Kurzzeit-Funktionscache wird beim Klick auf „Aktualisieren“ im Kontextmenü geleert"
 
 msgctxt "#30187"
 msgid "Choose watch later playlist"
-msgstr "Später-Ansehen-Playlist auswählen"
+msgstr "„Später ansehen“-Wiedergabeliste auswählen"
 
 msgctxt "#30188"
 msgid "Added %s to the new watch later playlist %s"
-msgstr "%s zur neuen Später-Ansehen-Playlist %s hinzugefügt"
+msgstr "%s zur neuen „Später ansehen“-Wiedergabeliste %s hinzugefügt"
 
 msgctxt "#30189"
 msgid "Search history items"
@@ -785,27 +787,27 @@ msgstr "Suchverlaufseinträge"
 
 msgctxt "#30190"
 msgid "How many search history items should be kept for each user"
-msgstr "Wie viele Suchverlaufseinträge sollen pro Benutzer gespeichert werden"
+msgstr "Anzahl der Suchverlaufseinträge, die pro Benutzer gespeichert werden sollen"
 
 msgctxt "#30191"
 msgid "Favorite channels"
-msgstr "Favorisierte Kanäle"
+msgstr "Lieblingskanäle"
 
 msgctxt "#30192"
 msgid "How many favorite channels should be kept for each user"
-msgstr "Wie viele favorisierte Kanäle sollen pro Benutzer gespeichert werden"
+msgstr "Anzahl der Lieblingskanäle, die pro Benutzer gespeichert werden sollen"
 
 msgctxt "#30193"
 msgid "Play"
-msgstr "Abspielen"
+msgstr "Wiedergeben"
 
 msgctxt "#30194"
 msgid "Play from %s"
-msgstr "Abspielen ab %s"
+msgstr "Wiedergeben ab %s"
 
 msgctxt "#30195"
 msgid "Most Popular Regionally"
-msgstr "Regional am Populärsten"
+msgstr "Regional am Beliebtesten"
 
 msgctxt "#30196"
 msgid "Main Menu"
@@ -845,7 +847,7 @@ msgstr "Einen aktuellen Benutzer entfernen"
 
 msgctxt "#30205"
 msgid "Change avatar..."
-msgstr "Avatar ändern..."
+msgstr "Avatar ändern ..."
 
 msgctxt "#30206"
 msgid "Change a current user's avatar"
@@ -869,11 +871,11 @@ msgstr "Keine Links in der Beschreibung gefunden"
 
 msgctxt "#30211"
 msgid "Create a new playlist"
-msgstr "Neue Playlist erstellen"
+msgstr "Neue Wiedergabeliste erstellen"
 
 msgctxt "#30212"
 msgid "Go to the next page"
-msgstr "Zur nächsten Seite gehen"
+msgstr "Nächste Seite"
 
 msgctxt "#30213"
 msgid "Rate the selected video"
@@ -897,11 +899,11 @@ msgstr "Anmeldedialog zu Debugzwecken öffnen"
 
 msgctxt "#30218"
 msgid "likes"
-msgstr "Gefällt mir"
+msgstr "Anzahl von positiven Bewertungen"
 
 msgctxt "#30219"
 msgid "dislikes"
-msgstr "Gefällt mir nicht"
+msgstr "Anzahl von negativen Bewertungen"
 
 msgctxt "#30220"
 msgid "views"
@@ -913,7 +915,7 @@ msgstr "Kapitel"
 
 msgctxt "#30222"
 msgid "Chapter starts at %s"
-msgstr "Kapitel startet um %s"
+msgstr "Kapitel startet bei %s"
 
 msgctxt "#30223"
 msgid "API Module"
@@ -925,99 +927,99 @@ msgstr "API-Modul einrichten"
 
 msgctxt "#30225"
 msgid "Open Tubed API settings to configure the API module"
-msgstr "Tubed-API-Einstellungen öffnen um das API-Modul einzustellen"
+msgstr "Tubed-API-Einstellungen öffnen, um das API-Modul zu konfiguriren"
 
 msgctxt "#30226"
 msgid "Favorite Playlists"
-msgstr "Favorisierte Playlist"
+msgstr "Lieblingswiedergabelisten"
 
 msgctxt "#30227"
 msgid "Add to favorite playlists"
-msgstr "Zu favorisierten Playlists hinzufügen"
+msgstr "Zu Lieblingswiedergabelisten hinzufügen"
 
 msgctxt "#30228"
 msgid "Clear favorite playlists"
-msgstr "Favorisierte Playlists leeren"
+msgstr "Lieblingswiedergabelisten löschen"
 
 msgctxt "#30229"
 msgid "Added to favorite playlists"
-msgstr "Zu favorisierten Playlists hinzugefügt"
+msgstr "Zu Lieblingswiedergabelisten hinzugefügt"
 
 msgctxt "#30230"
 msgid "Removed from favorite playlists"
-msgstr "Aus favorisierten Playlists entfernt"
+msgstr "Aus Lieblingswiedergabelisten entfernt"
 
 msgctxt "#30231"
 msgid "You are about to clear your favorite playlists, are you sure?"
-msgstr "Möchten Sie wirklich Ihre favorisierten Playlists leeren?"
+msgstr "Lieblingswiedergabelisten löschen?"
 
 msgctxt "#30232"
 msgid "Favorite playlists cleared"
-msgstr "Favorisierte Playlists geleert"
+msgstr "Lieblingswiedergabelisten gelöscht"
 
 msgctxt "#30233"
 msgid "Add %s to favorite playlists"
-msgstr "%s zur favorisierten Playlist hinzufügen"
+msgstr "%s zu Lieblingswiedergabelisten hinzufügen"
 
 msgctxt "#30234"
 msgid "Added %s to favorite playlists"
-msgstr "%s zur favorisierten Playlist hinzugefügt"
+msgstr "%s zu Lieblingswiedergabelisten hinzugefügt"
 
 msgctxt "#30235"
 msgid "Removed %s from favorite playlists"
-msgstr "%s aus favorisierten Playlist entfernt"
+msgstr "%s aus Lieblingswiedergabelisten entfernt"
 
 msgctxt "#30236"
 msgid "Favorite playlists"
-msgstr "Favorisierte Playlists"
+msgstr "Lieblingswiedergabelisten"
 
 msgctxt "#30237"
 msgid "How many favorite playlists should be kept for each user"
-msgstr "Wie viele favorisierte Playlists sollen pro Benutzer gespeichert werden"
+msgstr "Anzahl von Lieblingswiedergabelisten, die pro Benutzer gespeichert werden sollen"
 
 msgctxt "#30238"
 msgid "Backup"
-msgstr "Sicherung"
+msgstr "Backup"
 
 msgctxt "#30239"
 msgid "Make a backup"
-msgstr "Sicherung erstellen"
+msgstr "Backup erstellen"
 
 msgctxt "#30240"
 msgid "Backup your Tubed settings, users, search history, favorite channels and favorite playlists"
-msgstr "Sichern Sie Ihre Tubed-Einstellungen, -Benutzer, Suchverlauf, favorisierte Channel und Playlists"
+msgstr "Backup der Tubed-Einstellungen, -Benutzer, Suchverlauf, Lieblingskanäle und Lieblingswiedergabelisten erstellen"
 
 msgctxt "#30241"
 msgid "Restore a backup"
-msgstr "Sicherung wiederherstellen"
+msgstr "Backup wiederherstellen"
 
 msgctxt "#30242"
 msgid "Restore your Tubed settings, users, search history, favorite channels and favorite playlists from a previous backup"
-msgstr "Stellen Sie Ihre Tubed-Einstellungen, -Benutzer, Suchverlauf, favorisierte Channel und Playlists aus einer Sicherung wieder her"
+msgstr "Tubed-Einstellungen, -Benutzer, Suchverlauf, Lieblingskanäle und Lieblingswiedergabelisten aus einem Backup wiederherstellen"
 
 msgctxt "#30243"
 msgid "Choose a location to create backup"
-msgstr "Wählen Sie einen Ort aus, an dem Sie die Sicherung erstellen"
+msgstr "Ordner auswählen, in dem das Backup erstellt werden soll"
 
 msgctxt "#30244"
 msgid "Choose a backup to restore"
-msgstr "Wählen Sie die Sicherung zum Wiederherstellen aus"
+msgstr "Backup zum Wiederherstellen auswählen"
 
 msgctxt "#30245"
 msgid "Failed to create backup at %s"
-msgstr "Konnte keine Sicherung in %s erstellen"
+msgstr "Backup konnte nicht in %s erstellt werden"
 
 msgctxt "#30246"
 msgid "Failed to restore backup from %s"
-msgstr "Sicherung aus %s konnte nicht wiederhergestellt werden"
+msgstr "Backup konnte nicht aus %s wiederhergestellt werden"
 
 msgctxt "#30247"
 msgid "Backup successfully created at %s"
-msgstr "Sicherung erfolgreich in %s angelegt"
+msgstr "Backup erfolgreich in %s erstellt"
 
 msgctxt "#30248"
 msgid "Backup successfully restored from %s"
-msgstr "Sicherung aus %s erfolgreich wiederhergestellt."
+msgstr "Backup aus %s erfolgreich wiederhergestellt"
 
 msgctxt "#30249"
 msgid "Client ID: %s"
@@ -1025,7 +1027,7 @@ msgstr "Client-ID: %s"
 
 msgctxt "#30250"
 msgid "Further use of Tubed will be subject to this privacy policy"
-msgstr "Die weitere Nutzung von Tubed unterliegt dieser Privatsphäreerklärung"
+msgstr "Die weitere Nutzung von Tubed unterliegt diesen Datenschutzbestimmungen"
 
 msgctxt "#30251"
 msgid "Accept"
@@ -1037,7 +1039,7 @@ msgstr "Ablehnen"
 
 msgctxt "#30253"
 msgid "Privacy Policy"
-msgstr "Privatsphäreerklärung"
+msgstr "Datenschutzbestimmungen"
 
 msgctxt "#30254"
 msgid "Sign In"
@@ -1045,7 +1047,7 @@ msgstr "Anmelden"
 
 msgctxt "#30255"
 msgid "InputStream Adaptive is required and appears to be disabled. Would you like to enable InputStream Adaptive now?"
-msgstr "InputStream Adaptive wird benötigt und scheint deaktiviert zu sein. Möchten Sie InputStream Adaptive jetzt aktivieren?"
+msgstr "Das Addon InputStream Adaptive wird benötigt und scheint deaktiviert zu sein. Soll das Addon jetzt aktiviert werden?"
 
 msgctxt "#30256"
 msgid "Settings"

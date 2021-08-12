@@ -10,10 +10,10 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
 "Language-Team: Lithuanian (http://www.transifex.com/projects/p/xbmc-addons/language/lt/)\n"
+"Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: lt\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgctxt "#30000"
@@ -52,6 +52,14 @@ msgctxt "#30008"
 msgid "Reset library nodes to default..."
 msgstr "Atstatyti numatytuosius bibliotekos mazgus..."
 
+msgctxt "#30009"
+msgid "Add component..."
+msgstr ""
+
+msgctxt "#30010"
+msgid "Manually edit..."
+msgstr ""
+
 msgctxt "#30091"
 msgid "Video Library"
 msgstr "Vaizdo biblioteka"
@@ -77,8 +85,8 @@ msgid "Browse for icon"
 msgstr "Parinkti piktogramą"
 
 msgctxt "#30104"
-msgid "Edit order"
-msgstr "Keisti rikiavimą"
+msgid "Move node"
+msgstr ""
 
 msgctxt "#30105"
 msgid "Edit visibility"
@@ -115,6 +123,10 @@ msgstr "Kelias"
 msgctxt "#30205"
 msgid "Rule"
 msgstr "Taisyklė"
+
+msgctxt "#30206"
+msgid "Match"
+msgstr ""
 
 msgctxt "#30300"
 msgid "Set name"
@@ -184,6 +196,14 @@ msgctxt "#30316"
 msgid "Name of new node"
 msgstr "Naujo mazgo vardas"
 
+msgctxt "#30317"
+msgid "Retrieving values..."
+msgstr ""
+
+msgctxt "#30318"
+msgid "Property"
+msgstr ""
+
 msgctxt "#30400"
 msgid "Unable to copy default library nodes"
 msgstr "Neįmanoma nukopijuoti numatytųjų bibliotekos mazgų"
@@ -211,3 +231,87 @@ msgstr "Ar tikrai norite pašalinti šią taisyklę?"
 msgctxt "#30406"
 msgid "Order requires a Content parameter"
 msgstr "Rikiavimui reikalingas turinio parametras"
+
+msgctxt "#30407"
+msgid "Are you sure you want to delete this component?"
+msgstr ""
+
+msgctxt "#30408"
+msgid "Custom property..."
+msgstr ""
+
+msgctxt "#30409"
+msgid "No options to select from were found"
+msgstr ""
+
+msgctxt "#30410"
+msgid "Getting plugin listings..."
+msgstr ""
+
+msgctxt "#30411"
+msgid "Link path to here"
+msgstr ""
+
+msgctxt "#30500"
+msgid "Genre ID"
+msgstr ""
+
+msgctxt "#30501"
+msgid "Country ID"
+msgstr ""
+
+msgctxt "#30502"
+msgid "Studio ID"
+msgstr ""
+
+msgctxt "#30503"
+msgid "Director ID"
+msgstr ""
+
+msgctxt "#30504"
+msgid "Actor ID"
+msgstr ""
+
+msgctxt "#30505"
+msgid "Set ID"
+msgstr ""
+
+msgctxt "#30506"
+msgid "Tag ID"
+msgstr ""
+
+msgctxt "#30507"
+msgid "TV Show ID"
+msgstr ""
+
+msgctxt "#30508"
+msgid "Artist ID"
+msgstr ""
+
+msgctxt "#30509"
+msgid "Album ID"
+msgstr ""
+
+msgctxt "#30510"
+msgid "Role ID"
+msgstr ""
+
+msgctxt "#30511"
+msgid "Song ID"
+msgstr ""
+
+msgctxt "#30512"
+msgid "Album artists only"
+msgstr ""
+
+msgctxt "#30513"
+msgid "Show singles"
+msgstr ""
+
+msgctxt "#30514"
+msgid "Plugin..."
+msgstr ""
+
+#~ msgctxt "#30104"
+#~ msgid "Edit order"
+#~ msgstr "Keisti rikiavimą"

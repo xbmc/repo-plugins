@@ -207,7 +207,7 @@ def add_premium_link(name, link_url, icon, stream_info, fanart=None, info=None):
     ok = True
     u = sys.argv[0] + "?url=" + urllib.quote_plus(link_url) + "&mode=5&icon_image=" + urllib.quote_plus(
         icon) + "&requestor_id=" + urllib.quote_plus(stream_info['requestor_id']) + "&channel=" \
-        + urllib.quote_plus(stream_info['channel'])
+        + urllib.quote_plus(stream_info['channel']) + "&pid=" + urllib.quote_plus(stream_info['pid'])
 
     liz = xbmcgui.ListItem(name)
     if icon is None: icon = ICON

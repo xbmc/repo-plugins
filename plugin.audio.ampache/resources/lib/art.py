@@ -20,35 +20,39 @@ user_mediaDir = os.path.join( user_dir , 'media' )
 cacheDir = os.path.join( user_mediaDir , 'cache' )
 
 def cacheArt(imageID,elem_type,url=None):
-    #security check
-    if imageID == None:
+    if not imageID or not url:
         raise NameError
+
+    cacheDirType = os.path.join( cacheDir , elem_type )
    
     possible_ext = ["jpg", "png" , "bmp", "gif", "tiff"]
     for ext in possible_ext:
-        imageName = str(imageID) + "." + ext
-        pathImage = os.path.join( cacheDir , imageName )
+        imageName = imageID + "." + ext
+        pathImage = os.path.join( cacheDirType , imageName )
         if os.path.exists( pathImage ):
-            xbmc.log("AmpachePlugin::CacheArt: cached, id " + str(imageID) +  " extension " + ext ,xbmc.LOGDEBUG)
+            xbmc.log("AmpachePlugin::CacheArt: cached, id " + imageID +  " extension " + ext ,xbmc.LOGDEBUG)
             return pathImage
     
     #no return, not found
     ampacheConnect = ampache_connect.AmpacheConnect()
     action = 'get_art'
-    ampacheConnect.id = str(imageID)
+    ampacheConnect.id = imageID
     ampacheConnect.type = elem_type
     
-    if url:
-        #old api version
-        headers,contents = ampacheConnect.handle_request(url)
-    else:
-        headers,contents = ampacheConnect.ampache_binary_request(action)
-    #xbmc.log("AmpachePlugin::CacheArt: File needs fetching, id " + str(imageID),xbmc.LOGDEBUG)
+    try:
+        if(int(ampache.getSetting("api-version"))) < 400001:
+            #old api version
+            headers,contents = ampacheConnect.handle_request(url)
+        else:
+            headers,contents = ampacheConnect.ampache_binary_request(action)
+    except AmpacheConnect.ConnectionError:
+        raise NameError
+    #xbmc.log("AmpachePlugin::CacheArt: File needs fetching, id " + imageID,xbmc.LOGDEBUG)
     extension = headers['content-type']
     if extension:
         mimetype, options = cgi.parse_header(extension)
         #little hack when content-type is not standard
-        if mimetype == "JPG":
+        if mimetype == "JPG" or mimetype == "jpeg":
             maintype = "image"
             subtype = "jpg"
         else:
@@ -60,20 +64,21 @@ def cacheArt(imageID,elem_type,url=None):
                 raise NameError
         if maintype == 'image':
             if subtype == "jpeg":
-                fname = str(imageID) + ".jpg"
+                fname = imageID + ".jpg"
             else:
-                fname = str(imageID) + '.' + subtype
-            pathImage = os.path.join( cacheDir , fname )
+                fname = imageID + '.' + subtype
+
+            pathImage = os.path.join( cacheDirType , fname )
             with open( pathImage, 'wb') as f:
                 f.write(contents)
                 f.close()
-            #xbmc.log("AmpachePlugin::CacheArt: Cached " + str(fname), xbmc.LOGDEBUG )
+            #xbmc.log("AmpachePlugin::CacheArt: Cached " + fname, xbmc.LOGDEBUG )
             return pathImage
         else:
-            xbmc.log("AmpachePlugin::CacheArt: It didnt work, id " + str(imageID) , xbmc.LOGDEBUG )
+            xbmc.log("AmpachePlugin::CacheArt: It didnt work, id " + imageID , xbmc.LOGDEBUG )
             raise NameError
     else:
-        xbmc.log("AmpachePlugin::CacheArt: No file found, id " + str(imageID) , xbmc.LOGDEBUG )
+        xbmc.log("AmpachePlugin::CacheArt: No file found, id " + imageID , xbmc.LOGDEBUG )
         raise NameError
 
 def get_artLabels(albumArt):
@@ -87,11 +92,17 @@ def get_artLabels(albumArt):
 
 #get_art, url is used for legacy purposes
 def get_art(object_id,elem_type,url=None):
+
+    albumArt = "DefaultFolder.png"
+    #no url, no art, so no need to activate a connection
+    if not object_id or not url:
+        return albumArt
     try:
         albumArt = cacheArt(object_id,elem_type,url)
     except NameError:
         albumArt = "DefaultFolder.png"
-    #xbmc.log("AmpachePlugin::get_art: albumArt - " + str(albumArt), xbmc.LOGDEBUG )
+
+    #xbmc.log("AmpachePlugin::get_art: id - " + object_id + " - albumArt - " + str(albumArt), xbmc.LOGDEBUG )
     return albumArt
 
 

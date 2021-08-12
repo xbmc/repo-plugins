@@ -1,39 +1,18 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2016  SylvainCecchetto
+# Copyright: (c) 2016, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from codequick import Script, utils
-"""
-The following dictionaries describe
-the addon's tree architecture.
-* Key: item id
-* Value: item infos
-    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
-    - thumb: Item thumb path relative to "media" folder
-    - fanart: Item fanart path relative to "meia" folder
-"""
+
+# The following dictionaries describe
+# the addon's tree architecture.
+# * Key: item id
+# * Value: item infos
+#     - route (folder)/resolver (playable URL): Callback function to run once this item is selected
+#     - thumb: Item thumb path relative to "media" folder
+#     - fanart: Item fanart path relative to "media" folder
 
 root = 'live_tv'
 
@@ -282,23 +261,41 @@ menu = {
     },
     'la_1ere': {
         'resolver': '/resources/lib/channels/fr/la_1ere:get_live_url',
-        'label': 'La 1ère (' + utils.ensure_unicode(Script.setting['la_1ere.language']) + ')',
+        'label': 'La 1ère',
         'thumb':
         'channels/fr/la1ere.png',
         'fanart':
         'channels/fr/la1ere_fanart.jpg',
         'm3u_group':
         'Région',
-        'available_languages': [
-            "Guadeloupe", "Guyane", "Martinique", "Mayotte",
-            "Nouvelle Calédonie", "Polynésie", "Réunion",
-            "St-Pierre et Miquelon", "Wallis et Futuna"
-        ],
+        'available_languages': {
+            "Guadeloupe": {
+                'xmltv_id': 'C329.api.telerama.fr'
+            },
+            "Guyane": {
+                'xmltv_id': 'C260.api.telerama.fr'
+            },
+            "Martinique": {
+                'xmltv_id': 'C328.api.telerama.fr'
+            },
+            "Mayotte": {},
+            "Nouvelle Calédonie": {
+                'xmltv_id': 'C240.api.telerama.fr'
+            },
+            "Polynésie": {
+                'xmltv_id': 'C459.api.telerama.fr'
+            },
+            "Réunion": {
+                'xmltv_id': 'C245.api.telerama.fr'
+            },
+            "St-Pierre et Miquelon": {},
+            "Wallis et Futuna": {}
+        },
         'enabled': True,
         'order': 23
     },
     'franceinfo': {
-        'resolver': '/resources/lib/channels/fr/franceinfo:get_live_url',
+        'resolver': '/resources/lib/channels/fr/francetv:get_live_url',
         'label': 'France Info',
         'thumb': 'channels/fr/franceinfo.png',
         'fanart': 'channels/fr/franceinfo_fanart.jpg',
@@ -364,22 +361,86 @@ menu = {
     },
     'france3regions': {
         'resolver': '/resources/lib/channels/fr/france3regions:get_live_url',
-        'label': 'France 3 Régions (' + utils.ensure_unicode(Script.setting['france3regions.language']) + ')',
+        'label': 'France 3 Régions',
         'thumb':
         'channels/fr/france3regions.png',
         'fanart':
         'channels/fr/france3regions_fanart.jpg',
         'm3u_group':
         'Région',
-        'available_languages': [
-            'Alpes', 'Alsace', 'Aquitaine', 'Auvergne', 'Bourgogne',
-            'Bretagne', 'Centre-Val de Loire', 'Chapagne-Ardenne', 'Corse',
-            "Côte d'Azur", 'Franche-Comté', 'Languedoc-Roussillon',
-            'Limousin', 'Lorraine', 'Midi-Pyrénées', 'Nord-Pas-de-Calais',
-            'Basse-Normandie', 'Haute-Normandie', 'Paris Île-de-France',
-            'Pays de la Loire', 'Picardie', 'Poitou-Charentes',
-            'Provence-Alpes', 'Rhône-Alpes', 'Nouvelle-Aquitaine'
-        ],
+        'available_languages': {
+            'Alpes': {
+                'xmltv_id': 'C1921.api.telerama.fr'
+            },
+            'Alsace': {
+                'xmltv_id': 'C1922.api.telerama.fr'
+            },
+            'Aquitaine': {
+                'xmltv_id': 'C1923.api.telerama.fr'
+            },
+            'Auvergne': {
+                'xmltv_id': 'C1924.api.telerama.fr'
+            },
+            'Bourgogne': {
+                'xmltv_id': 'C1926.api.telerama.fr'
+            },
+            'Bretagne': {
+                'xmltv_id': 'C1927.api.telerama.fr'
+            },
+            'Centre-Val de Loire': {
+                'xmltv_id': 'C1928.api.telerama.fr'
+            },
+            'Chapagne-Ardenne': {
+                'xmltv_id': 'C1929.api.telerama.fr'
+            },
+            'Corse': {},
+            "Côte d'Azur": {
+                'xmltv_id': 'C1931.api.telerama.fr'
+            },
+            'Franche-Comté': {
+                'xmltv_id': 'C1932.api.telerama.fr'
+            },
+            'Languedoc-Roussillon': {
+                'xmltv_id': 'C1934.api.telerama.fr'
+            },
+            'Limousin': {
+                'xmltv_id': 'C1935.api.telerama.fr'
+            },
+            'Lorraine': {
+                'xmltv_id': 'C1936.api.telerama.fr'
+            },
+            'Midi-Pyrénées': {
+                'xmltv_id': 'C1937.api.telerama.fr'
+            },
+            'Nord-Pas-de-Calais': {
+                'xmltv_id': 'C1938.api.telerama.fr'
+            },
+            'Basse-Normandie': {
+                'xmltv_id': 'C1925.api.telerama.fr'
+            },
+            'Haute-Normandie': {
+                'xmltv_id': 'C1933.api.telerama.fr'
+            },
+            'Paris Île-de-France': {
+                'xmltv_id': 'C1939.api.telerama.fr'
+            },
+            'Pays de la Loire': {
+                'xmltv_id': 'C1940.api.telerama.fr'
+            },
+            'Picardie': {
+                'xmltv_id': 'C1941.api.telerama.fr'
+            },
+            'Poitou-Charentes': {
+                'xmltv_id': 'C1942.api.telerama.fr'
+            },
+            'Provence-Alpes': {
+                'xmltv_id': 'C1943.api.telerama.fr'
+            },
+            'Rhône-Alpes': {
+                'xmltv_id': 'C1944.api.telerama.fr'
+            },
+            'Nouvelle-Aquitaine': {}
+        },
         'enabled': True,
         'order': 40
     },
@@ -524,6 +585,7 @@ menu = {
         'label': 'viàMoselle',
         'thumb': 'channels/fr/viamoselle.png',
         'fanart': 'channels/fr/viamoselle_fanart.jpg',
+        'xmltv_id': 'C1045.api.telerama.fr',
         'm3u_group': 'Région',
         'enabled': True,
         'order': 80
@@ -552,7 +614,7 @@ menu = {
         'thumb': 'channels/fr/luckyjack.png',
         'fanart': 'channels/fr/luckyjack_fanart.jpg',
         'm3u_group': 'Satellite/FAI',
-        'enabled': True,
+        'enabled': False,
         'order': 83
     },
     'mblivetv': {
@@ -807,11 +869,12 @@ menu = {
         'enabled': True,
         'order': 121
     },
-    'equidia': {
+    'equidia-live2': {
         'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
         'label': 'Equidia',
         'thumb': 'channels/fr/equidia.png',
         'fanart': 'channels/fr/equidia_fanart.jpg',
+        'xmltv_id': 'C64.api.telerama.fr',
         'm3u_group': 'Satellite/FAI',
         'enabled': True,
         'order': 122
@@ -830,7 +893,107 @@ menu = {
         'label': 'Culturebox',
         'thumb': 'channels/fr/culturebox.png',
         'fanart': 'channels/fr/culturebox_fanart.jpg',
+        'xmltv_id': 'C3163.api.telerama.fr',
         'enabled': True,
         'order': 124
+    },
+    'equidia-racingtrot': {
+        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
+        'label': 'Equidia Racing Trot',
+        'thumb': 'channels/fr/equidiaracingtrot.png',
+        'fanart': 'channels/fr/equidiaracingtrot_fanart.jpg',
+        'm3u_group': 'Satellite/FAI',
+        'enabled': True,
+        'order': 125
+    },
+    'equidia-racingmag': {
+        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
+        'label': 'Equidia Racing Mag',
+        'thumb': 'channels/fr/equidiaracingmag.png',
+        'fanart': 'channels/fr/equidiaracingmag_fanart.jpg',
+        'm3u_group': 'Satellite/FAI',
+        'enabled': True,
+        'order': 126
+    },
+    'equidia-racinggalop': {
+        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
+        'label': 'Equidia Racing Galop',
+        'thumb': 'channels/fr/equidiaracinggalop.png',
+        'fanart': 'channels/fr/equidiaracinggalop_fanart.jpg',
+        'm3u_group': 'Satellite/FAI',
+        'enabled': True,
+        'order': 127
+    },
+    'equidia-racing1': {
+        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
+        'label': 'Equidia Racing 1',
+        'thumb': 'channels/fr/equidiar1.png',
+        'fanart': 'channels/fr/equidiar1_fanart.jpg',
+        'm3u_group': 'Satellite/FAI',
+        'enabled': True,
+        'order': 128
+    },
+    'equidia-racing2': {
+        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
+        'label': 'Equidia Racing 2',
+        'thumb': 'channels/fr/equidiar2.png',
+        'fanart': 'channels/fr/equidiar2_fanart.jpg',
+        'm3u_group': 'Satellite/FAI',
+        'enabled': True,
+        'order': 129
+    },
+    'equidia-racing3': {
+        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
+        'label': 'Equidia Racing 3',
+        'thumb': 'channels/fr/equidiar3.png',
+        'fanart': 'channels/fr/equidiar3_fanart.jpg',
+        'm3u_group': 'Satellite/FAI',
+        'enabled': True,
+        'order': 130
+    },
+    'equidia-racing4': {
+        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
+        'label': 'Equidia Racing 4',
+        'thumb': 'channels/fr/equidiar4.png',
+        'fanart': 'channels/fr/eequidiar4_fanart.jpg',
+        'm3u_group': 'Satellite/FAI',
+        'enabled': True,
+        'order': 131
+    },
+    'equidia-racing5': {
+        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
+        'label': 'Equidia Racing 5',
+        'thumb': 'channels/fr/equidiar5.png',
+        'fanart': 'channels/fr/equidiar5_fanart.jpg',
+        'm3u_group': 'Satellite/FAI',
+        'enabled': True,
+        'order': 132
+    },
+    'equidia-racing6': {
+        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
+        'label': 'Equidia Racing 6',
+        'thumb': 'channels/fr/equidiar6.png',
+        'fanart': 'channels/fr/equidiar6_fanart.jpg',
+        'm3u_group': 'Satellite/FAI',
+        'enabled': True,
+        'order': 133
+    },
+    'equidia-racing7': {
+        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
+        'label': 'Equidia Racing 7',
+        'thumb': 'channels/fr/equidiar7.png',
+        'fanart': 'channels/fr/equidiar7_fanart.jpg',
+        'm3u_group': 'Satellite/FAI',
+        'enabled': True,
+        'order': 134
+    },
+    'equidia-racing8': {
+        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
+        'label': 'Equidia Racing 8',
+        'thumb': 'channels/fr/equidiar8.png',
+        'fanart': 'channels/fr/equidiar8_fanart.jpg',
+        'm3u_group': 'Satellite/FAI',
+        'enabled': True,
+        'order': 135
     }
 }

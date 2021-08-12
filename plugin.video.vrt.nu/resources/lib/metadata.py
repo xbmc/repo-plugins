@@ -14,7 +14,7 @@ except ImportError:  # Python 2
 from data import CHANNELS, SECONDS_MARGIN
 from kodiutils import colour, get_setting_bool, localize, localize_datelong, log, url_for
 from utils import (add_https_proto, assetpath_to_id, capitalize, find_entry, from_unicode,
-                   html_to_kodi, reformat_url, shorten_link, to_unicode, unescape,
+                   html_to_kodi, reformat_url, reformat_image_url, shorten_link, to_unicode, unescape,
                    url_to_episode)
 
 
@@ -381,7 +381,7 @@ class Metadata:
                 plotoutline = html_to_kodi(api_data.get('shortDescription', ''))
                 return plotoutline
 
-            plotoutline = html_to_kodi(api_data.get('subtitle'))
+            plotoutline = html_to_kodi(api_data.get('subtitle', ''))
             return plotoutline
 
         # VRT NU Suggest API
@@ -579,25 +579,25 @@ class Metadata:
         if api_data.get('type') == 'episode':
             if season is not False:
                 if get_setting_bool('showfanart', default=True):
-                    art_dict['fanart'] = add_https_proto(api_data.get('programImageUrl', 'DefaultSets.png'))
+                    art_dict['fanart'] = reformat_image_url(api_data.get('programImageUrl', 'DefaultSets.png'))
                     if season != 'allseasons':
-                        art_dict['thumb'] = add_https_proto(api_data.get('videoThumbnailUrl', art_dict.get('fanart')))
+                        art_dict['thumb'] = reformat_image_url(api_data.get('videoThumbnailUrl', art_dict.get('fanart')))
                     else:
                         art_dict['thumb'] = art_dict.get('fanart')
                     art_dict['banner'] = art_dict.get('fanart')
                     if api_data.get('programAlternativeImageUrl'):
-                        art_dict['cover'] = add_https_proto(api_data.get('programAlternativeImageUrl'))
-                        art_dict['poster'] = add_https_proto(api_data.get('programAlternativeImageUrl'))
+                        art_dict['cover'] = reformat_image_url(api_data.get('programAlternativeImageUrl'))
+                        art_dict['poster'] = reformat_image_url(api_data.get('programAlternativeImageUrl'))
                 else:
                     art_dict['thumb'] = 'DefaultSets.png'
             else:
                 if get_setting_bool('showfanart', default=True):
-                    art_dict['thumb'] = add_https_proto(api_data.get('videoThumbnailUrl', 'DefaultAddonVideo.png'))
-                    art_dict['fanart'] = add_https_proto(api_data.get('programImageUrl', art_dict.get('thumb')))
+                    art_dict['thumb'] = reformat_image_url(api_data.get('videoThumbnailUrl', 'DefaultAddonVideo.png'))
+                    art_dict['fanart'] = reformat_image_url(api_data.get('programImageUrl', art_dict.get('thumb')))
                     art_dict['banner'] = art_dict.get('fanart')
                     if api_data.get('programAlternativeImageUrl'):
-                        art_dict['cover'] = add_https_proto(api_data.get('programAlternativeImageUrl'))
-                        art_dict['poster'] = add_https_proto(api_data.get('programAlternativeImageUrl'))
+                        art_dict['cover'] = reformat_image_url(api_data.get('programAlternativeImageUrl'))
+                        art_dict['poster'] = reformat_image_url(api_data.get('programAlternativeImageUrl'))
                 else:
                     art_dict['thumb'] = 'DefaultAddonVideo.png'
 
@@ -606,12 +606,12 @@ class Metadata:
         # VRT NU Suggest API
         if api_data.get('type') == 'program':
             if get_setting_bool('showfanart', default=True):
-                art_dict['thumb'] = add_https_proto(api_data.get('thumbnail', 'DefaultAddonVideo.png'))
+                art_dict['thumb'] = reformat_image_url(api_data.get('thumbnail', 'DefaultAddonVideo.png'))
                 art_dict['fanart'] = art_dict.get('thumb')
                 art_dict['banner'] = art_dict.get('fanart')
                 if api_data.get('alternativeImage'):
-                    art_dict['cover'] = add_https_proto(api_data.get('alternativeImage'))
-                    art_dict['poster'] = add_https_proto(api_data.get('alternativeImage'))
+                    art_dict['cover'] = reformat_image_url(api_data.get('alternativeImage'))
+                    art_dict['poster'] = reformat_image_url(api_data.get('alternativeImage'))
             else:
                 art_dict['thumb'] = 'DefaultAddonVideo.png'
 
@@ -620,7 +620,7 @@ class Metadata:
         # VRT NU Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             if get_setting_bool('showfanart', default=True):
-                art_dict['thumb'] = add_https_proto(api_data.get('image', 'DefaultAddonVideo.png'))
+                art_dict['thumb'] = reformat_image_url(api_data.get('image', 'DefaultAddonVideo.png'))
                 art_dict['fanart'] = art_dict.get('thumb')
                 art_dict['banner'] = art_dict.get('fanart')
             else:
@@ -733,7 +733,7 @@ class Metadata:
             sort = 'unsorted'
             ascending = True
 
-            if titletype in ('continue', 'offline', 'recent', 'watchlater'):
+            if titletype == 'mixed_episodes':
                 ascending = False
                 label = '[B]%s[/B] - %s' % (api_data.get('program'), label)
                 sort = 'dateadded'

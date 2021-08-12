@@ -59,6 +59,22 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.4 (2021-07-21)
+- Fix login (@mediaminister)
+- Use Widevine DRM by default (@mediaminister)
+
+### v2.5.3 (2021-05-13)
+- Fix watching age restricted content (@mediaminister)
+
+### v2.5.2 (2021-04-21)
+- Fix broken menu listings (@mediaminister)
+
+### v2.5.1 (2021-04-07)
+- Fix season labels (@mediaminister)
+
+### v2.5.0 (2021-03-29)
+- Add new categories to featured menu (@mediaminister)
+
 ### v2.4.5 (2021-02-05)
 - Fix watching livestreams with DRM enabled (@mediaminister)
 - Warn user that InputStream Adaptive is needed for timeshifting (@siemon-geeroms)

@@ -1,44 +1,24 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2018  SylvainCecchetto
+# Copyright: (c) 2018, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-
 from builtins import str
-from codequick import Route, Resolver, Listitem, utils, Script
-
-
-from resources.lib import web_utils
-from resources.lib.menu_utils import item_post_treatment
-from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
-
-import inputstreamhelper
 import json
 import re
-import urlquick
-from kodi_six import xbmc
+
+import inputstreamhelper
 from six import text_type
+from codequick import Listitem, Resolver, Route
+from kodi_six import xbmc
+import urlquick
+
+from resources.lib import web_utils
+from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
+from resources.lib.menu_utils import item_post_treatment
+
 
 # TO DO
 # Add Account
@@ -223,21 +203,22 @@ def get_video_url(plugin,
     response = xbmc.executeJSONRPC(json.dumps(payload))
     responses_uni = text_type(response, 'utf-8', errors='ignore')
     response_serialized = json.loads(responses_uni)
-    if 'error' not in list(response_serialized.keys()):
-        result = response_serialized.get('result', {})
-        addon = result.get('addon', {})
-        if addon.get('enabled', False) is True:
-            item = Listitem()
-            item.path = json_parser["sources"][1]["src"]
-            item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
-            item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-            item.label = get_selected_item_label()
-            item.art.update(get_selected_item_art())
-            item.info.update(get_selected_item_info())
-            return item
-    # Add Notification
-    plugin.notify('ERROR', plugin.localize(30719))
-    return False
+    if 'error' in list(response_serialized.keys()):
+        # Add Notification
+        plugin.notify('ERROR', plugin.localize(30719))
+        return False
+
+    result = response_serialized.get('result', {})
+    addon = result.get('addon', {})
+    if addon.get('enabled', False) is True:
+        item = Listitem()
+        item.path = json_parser["sources"][1]["src"]
+        item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
+        item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+        item.label = get_selected_item_label()
+        item.art.update(get_selected_item_art())
+        item.info.update(get_selected_item_info())
+        return item
 
 
 @Resolver.register
@@ -253,8 +234,8 @@ def get_live_url(plugin, item_id, **kwargs):
         headers={'User-Agent': web_utils.get_random_ua()},
         max_age=-1)
     live_stream_jsonparser = json.loads(live_stream_json.text)
-    if "sources" in live_stream_jsonparser:
-        return live_stream_jsonparser["sources"][0]["src"]
-    else:
+    if "sources" not in live_stream_jsonparser:
         plugin.notify('ERROR', plugin.localize(30713))
         return False
+
+    return live_stream_jsonparser["sources"][0]["src"]

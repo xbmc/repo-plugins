@@ -1,32 +1,25 @@
 # -*- coding: utf-8 -*-
-"""
-    Copyright (C) 2016-2021 Team Catch-up TV & More
-    This file is part of Catch-up TV & More.
-    SPDX-License-Identifier: GPL-2.0-or-later
-"""
+# Copyright: (c) 2016-2021, Team Catch-up TV & More
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
+# This file is part of Catch-up TV & More
+
 from __future__ import unicode_literals
 
-# Core imports
 import importlib
 import json
 import os
+import socket
+
+from codequick import Script, utils
+from kodi_six import xbmcgui
+from resources.lib.addon_utils import get_item_label, get_item_media_path
+from resources.lib.xmltv import grab_programmes
+
 try:
     from urllib.parse import urlencode
 except ImportError:
     from urllib import urlencode
-import socket
-
-# Kodi imports
-from codequick import Script
-from kodi_six import xbmcgui
-
-# Local imports
-from resources.lib.addon_utils import get_item_label, get_item_media_path
-from resources.lib.xmltv import grab_programmes
 
 PLUGIN_KODI_PATH = "plugin://plugin.video.catchuptvandmore"
 
@@ -34,10 +27,7 @@ PLUGIN_KODI_PATH = "plugin://plugin.video.catchuptvandmore"
 TV_INTEGRATION_SETTINGS_FP = os.path.join(Script.get_info('profile'), "tv_integration_settings.json")
 
 
-"""Utility functions to deal with user tv integration settings
-
-"""
-
+# Utility functions to deal with user tv integration settings
 
 def get_tv_integration_settings():
     """Get tv integration settings dict from json file
@@ -71,18 +61,14 @@ def save_tv_integration_settings(j):
         Script.log('Failed to save TV integration settings (%s)', e, lvl=Script.ERROR)
 
 
-"""Settings callback functions
-
-
-"""
-
+# Settings callback functions
 
 def get_all_live_tv_channels():
     """Explore each live_tv skeleton files to retrieve all sorted live tv channels
 
     Returns:
         list: Format: (coutry_order, country_id, country_label, country_infos, [channels]),
-                      Channel format: (channel_order, channel_id, channel_label, channel_infos)
+                      Channel format: (channel_order, channel_id, channel_label, channel_infos, lang)
     """
     country_channels = []
     live_tv_dict = importlib.import_module('resources.lib.skeletons.live_tv').menu
@@ -96,9 +82,15 @@ def get_all_live_tv_channels():
             # If this channel is a folder (e.g. multi live) --> ignore this channel
             if 'resolver' not in channel_infos:
                 continue
-            channels.append((channel_infos['order'], channel_id, get_item_label(channel_id, channel_infos), channel_infos))
-        channels = sorted(channels, key=lambda x: x[2])
-        country_channels.append((country_infos['order'], country_id, get_item_label(country_id, country_infos), country_infos, sorted(channels, key=lambda x: x[0])))
+            # Check if this channel has multiple language
+            if 'available_languages' in channel_infos:
+                for lang in channel_infos['available_languages']:
+                    label = '{} ({})'.format(get_item_label(channel_id, channel_infos, append_selected_lang=False), lang)
+                    channels.append((channel_infos['order'], channel_id, label, channel_infos, lang))
+            else:
+                channels.append((channel_infos['order'], channel_id, get_item_label(channel_id, channel_infos), channel_infos, None))
+        channels = sorted(channels, key=lambda x: x[0])
+        country_channels.append((country_infos['order'], country_id, get_item_label(country_id, country_infos), country_infos, channels))
     return sorted(country_channels, key=lambda x: x[2])
 
 
@@ -125,14 +117,15 @@ def select_channels(plugin):
         if country_id not in tv_integration_settings['enabled_channels']:
             tv_integration_settings['enabled_channels'][country_id] = {}
 
-        for (channel_order, channel_id, channel_label, channel_infos) in channels:
-            if channel_id not in tv_integration_settings['enabled_channels'][country_id]:
-                tv_integration_settings['enabled_channels'][country_id][channel_id] = {'enabled': False}
+        for (channel_order, channel_id, channel_label, channel_infos, lang) in channels:
+            channel_key = channel_id if not lang else channel_id + ' ' + lang
+            if channel_key not in tv_integration_settings['enabled_channels'][country_id]:
+                tv_integration_settings['enabled_channels'][country_id][channel_key] = {'enabled': False}
 
             label = country_label + ' - ' + channel_label
             options.append(label)
-            selected_channels_map.append((country_id, channel_id))
-            if tv_integration_settings['enabled_channels'][country_id][channel_id]['enabled']:
+            selected_channels_map.append((country_id, channel_key))
+            if tv_integration_settings['enabled_channels'][country_id][channel_key]['enabled']:
                 preselect.append(cnt)
             cnt += 1
 
@@ -145,21 +138,18 @@ def select_channels(plugin):
 
     # By default, disable all channels in the setting file
     for country_id in tv_integration_settings['enabled_channels'].keys():
-        for channel_id in tv_integration_settings['enabled_channels'][country_id].keys():
-            tv_integration_settings['enabled_channels'][country_id][channel_id]['enabled'] = False
+        for channel_key in tv_integration_settings['enabled_channels'][country_id].keys():
+            tv_integration_settings['enabled_channels'][country_id][channel_key]['enabled'] = False
 
     # Apply user selection and save settings
     for selected_channel in selected_channels:
-        (country_id, channel_id) = selected_channels_map[selected_channel]
-        tv_integration_settings['enabled_channels'][country_id][channel_id]['enabled'] = True
+        (country_id, channel_key) = selected_channels_map[selected_channel]
+        tv_integration_settings['enabled_channels'][country_id][channel_key]['enabled'] = True
 
     save_tv_integration_settings(tv_integration_settings)
 
 
-"""Interface to IPTV Manager
-
-"""
-
+# Interface to IPTV Manager
 
 class IPTVManager:
     def __init__(self, port):
@@ -192,22 +182,32 @@ class IPTVManager:
         tv_integration_settings = get_tv_integration_settings()
 
         for (country_order, country_id, country_label, country_infos, channels) in country_channels:
-            for (channel_order, channel_id, channel_label, channel_infos) in channels:
-                if not tv_integration_settings['enabled_channels'].get(country_id, {}).get(channel_id, {}).get('enabled', False):
+            for (channel_order, channel_id, channel_label, channel_infos, lang) in channels:
+                channel_key = channel_id if not lang else channel_id + ' ' + lang
+                if not tv_integration_settings['enabled_channels'].get(country_id, {}).get(channel_key, {}).get('enabled', False):
                     continue
 
                 json_stream = {}
-                json_stream['name'] = get_item_label(channel_id, channel_infos)
+                json_stream['name'] = channel_label
                 resolver = channel_infos['resolver'].replace(':', '/')
                 params = {
                     'item_id': channel_id
                 }
-                query = urlencode(params)
-                json_stream['stream'] = PLUGIN_KODI_PATH + resolver + '/?' + query
-                if 'xmltv_id' in channel_infos:
-                    json_stream['id'] = channel_infos['xmltv_id']
-                if 'm3u_order' in channel_infos:
-                    json_stream['preset'] = channel_infos['m3u_order']
+                if lang:
+                    params['language'] = lang
+                    lang_infos = channel_infos['available_languages'][lang]
+                    json_stream['id'] = lang_infos.get('xmltv_id')
+                    json_stream['preset'] = lang_infos.get('m3u_order')
+                else:
+                    json_stream['id'] = channel_infos.get('xmltv_id')
+                    json_stream['preset'] = channel_infos.get('m3u_order')
+
+                # It seems that in Python 2 urlencode doesn't deal well with unicode data
+                # (see https://stackoverflow.com/a/3121311)
+                for k, v in params.items():
+                    params[k] = utils.ensure_native_str(v)
+
+                json_stream['stream'] = utils.ensure_native_str(PLUGIN_KODI_PATH + resolver + '/?') + urlencode(params)
                 json_stream['logo'] = get_item_media_path(channel_infos['thumb'])
 
                 channels_list.append(json_stream)
@@ -219,29 +219,45 @@ class IPTVManager:
         """Return JSON-EPG formatted python data structure to IPTV Manager"""
         epg_channels = {}
 
+        # Grab all live TV channels
+        country_channels = get_all_live_tv_channels()
+
         # Grab current user settings
         tv_integration_settings = get_tv_integration_settings()
 
         country_tv_guides = {}
 
+        xmltv_ids_to_keep = []
+
         # Ierate over each country and enabled channels to grab needed programmes
-        for country_id in tv_integration_settings['enabled_channels']:
-            for channel_id in tv_integration_settings['enabled_channels'][country_id]:
-                if not tv_integration_settings['enabled_channels'][country_id][channel_id]['enabled']:
+        for (country_order, country_id, country_label, country_infos, channels) in country_channels:
+            for (channel_order, channel_id, channel_label, channel_infos, lang) in channels:
+                channel_key = channel_id if not lang else channel_id + ' ' + lang
+                if not tv_integration_settings['enabled_channels'].get(country_id, {}).get(channel_key, {}).get('enabled', False):
                     continue
 
                 # Check if we have programmes for this country
-                if country_id in country_tv_guides:
-                    continue
+                if country_id not in country_tv_guides:
+                    programmes = []
+                    for day_delta in range(0, 4):
+                        programmes.extend(grab_programmes(country_id, day_delta))
+                    country_tv_guides[country_id] = programmes
 
-                programmes = []
-                for day_delta in range(0, 4):
-                    programmes.extend(grab_programmes(country_id, day_delta))
-                country_tv_guides[country_id] = programmes
+                # Get the correct xmltv id
+                if lang:
+                    xmltv_id = channel_infos['available_languages'][lang].get('xmltv_id')
+                else:
+                    xmltv_id = channel_infos.get('xmltv_id')
+                if xmltv_id:
+                    xmltv_ids_to_keep.append(xmltv_id)
 
-        # Send each programme
+        # Send all programmes of enables channels
         for country_id, programmes in country_tv_guides.items():
             for p in programmes:
+                if p.get('channel') not in xmltv_ids_to_keep:
+                    continue
+                if not p.get('stop'):
+                    continue
                 epg = dict(
                     start=p.get('start'),
                     stop=p.get('stop'),
@@ -259,10 +275,7 @@ class IPTVManager:
         return dict(version=1, epg=epg_channels)
 
 
-"""Functions called by IPTV Manager
-
-"""
-
+# Functions called by IPTV Manager
 
 @Script.register
 def channels(plugin, port):

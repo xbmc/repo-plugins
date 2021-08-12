@@ -1,5 +1,27 @@
 # Changelog
 
+## [v0.4.3](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.3) (2021-04-24)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.4.2...v0.4.3)
+
+**Implemented enhancements:**
+
+- Fetch a week of EPG data for IPTV Manager [\#89](https://github.com/add-ons/plugin.video.viervijfzes/pull/89) ([michaelarnauts](https://github.com/michaelarnauts))
+- Improve playback error handling [\#87](https://github.com/add-ons/plugin.video.viervijfzes/pull/87) ([michaelarnauts](https://github.com/michaelarnauts))
+- Add support for Play7 [\#86](https://github.com/add-ons/plugin.video.viervijfzes/pull/86) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v0.4.2](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.2) (2021-03-22)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.4.1...v0.4.2)
+
+**Implemented enhancements:**
+
+- Improve artwork and descriptions [\#79](https://github.com/add-ons/plugin.video.viervijfzes/pull/79) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Fixed bugs:**
+
+- Don't use cached episode info for playback [\#82](https://github.com/add-ons/plugin.video.viervijfzes/pull/82) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v0.4.1](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.1) (2021-02-27)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.4.0...v0.4.1)

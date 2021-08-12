@@ -1,50 +1,22 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2016  SylvainCecchetto
+# Copyright: (c) 2016, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-
-# Core imports
 from builtins import str
-from builtins import range
 import importlib
 import sys
 
-# Kodi imports
-from codequick import Route, Resolver, Listitem, Script
+from codequick import Route, Resolver, Listitem, Script, utils
 import urlquick
-from kodi_six import xbmc
-from kodi_six import xbmcgui
-from kodi_six import xbmcplugin
-from six import string_types
+from kodi_six import xbmc, xbmcgui, xbmcplugin
 
-# Local imports
-
-from resources.lib.kodi_utils import build_kodi_url, get_params_in_query
-import resources.lib.favourites as fav
-from resources.lib.menu_utils import get_sorted_menu, add_context_menus_to_item
 from resources.lib.addon_utils import get_item_label, get_item_media_path
+import resources.lib.favourites as fav
+from resources.lib.kodi_utils import build_kodi_url, get_params_in_query
+from resources.lib.menu_utils import get_sorted_menu, add_context_menus_to_item
 
 
 @Route.register
@@ -107,9 +79,14 @@ def generic_menu(plugin, item_id=None, **kwargs):
                 item.art["fanart"] = get_item_media_path(
                     item_infos['fanart'])
 
-            # Set item additional params
-            if 'xmltv_id' in item_infos:
-                item.params['xmltv_id'] = item_infos['xmltv_id']
+            # If it's a live channel we retrieve xmltv id
+            if 'available_languages' in item_infos:
+                if isinstance(item_infos['available_languages'], dict):
+                    lang = utils.ensure_unicode(Script.setting[item_id + '.language'])
+                    lang_infos = item_infos['available_languages'][lang]
+                    item.params['xmltv_id'] = lang_infos.get('xmltv_id')
+            else:
+                item.params['xmltv_id'] = item_infos.get('xmltv_id')
 
             item.params['item_id'] = item_id
 

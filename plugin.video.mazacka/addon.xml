@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.mazacka"
+version="2.0.1"
+name="Mazačka - Streets of Prague"
+provider-name="Radek Homola">
+<requires>
+  <import addon="xbmc.python" version="3.0.0"/>
+</requires>
+<extension point="xbmc.python.pluginsource" library="main.py">
+  <provides>video</provides>
+</extension>
+<extension point="xbmc.addon.metadata">
+  <summary lang="en_GB">Take a live tour through the streets of Prague, Czech Republic.</summary>
+  <summary lang="cs_CZ">Projeďte se speciální mazací tramvají ulicemi Prahy.</summary>
+  <summary lang="sk_SK">Prejdite sa špeciálnou mazacie električkou ulicami Prahy.</summary>
+  <summary lang="de_DE">Machen Sie eine Live-Tour durch die Straßen von Prag, Tschechische Republik.</summary>
+  <description lang="en_GB">Unique Czech tram called 'Mazačka' travels around the city of Prague. It does not stop to pick up passengers. Rather, ensures that all the other trams ride as smoothly as possible - by oiling the rails along its way. Tatra T3 tram number 5572 now has one more function: it provides an unexpected look at the 1000 year old city.</description>
+  <description lang="cs_CZ">Mazací tramvaj s evidenčním číslem 5572, pro kterou se vžil zkrácený název "Mazačka", slouží na pražských tramvajových tratích od ledna 2015. Aplikace maziva pomáhá snížit hluk a opotřebení kolejnic a kol. Každý den najede Mazačka v průměru přes 200 kilometrů.</description>
+  <description lang="sk_SK">Mazacie električka s evidenčným číslom 5572, pre ktorú sa vžil skrátený názov "Mazačka", slúži na pražských električkových tratiach od januára 2015. Aplikácia mazivá pomáha znížiť hluk a opotrebenie koľajníc a kolies. Každý deň urazí Mazačka v priemere vyše 200 kilometrov.</description>
+  <description lang="de_DE">Die Straßenbahn mit der Kennzeichennummer 5572, die die Schienen schmiert, für die der abgekürzte Name "Mazačka" übernommen wurde, wird seit Januar 2015 in Prager Straßenbahnlinien eingesetzt. Die Schmiermittelanwendung trägt dazu bei, Geräusche und Verschleiß an Schienen und Rädern zu reduzieren. Mazačka legt jeden Tag durchschnittlich über 200 Kilometer zurück.</description>
+  <platform>all</platform>
+  <license>GPL-3.0-only</license>
+  <source>https://github.com/homolaradek/plugin.video.mazacka</source>
+  <assets>
+    <icon>icon.png</icon>
+    <fanart>fanart.jpg</fanart>
+    <screenshot>resources/screenshots/screenshot-01.jpg</screenshot>
+    <screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
+    <screenshot>resources/screenshots/screenshot-03.jpg</screenshot>    
+  </assets>
+  <news>v2.0.1 (2021-07-04)
+  - 1080p stream currently unavailable
+  </news>
+</extension>
+</addon>

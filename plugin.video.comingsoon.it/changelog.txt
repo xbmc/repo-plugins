@@ -1,0 +1,22 @@
+1.2.1
+Fixed addon after page changes
+
+1.2.0
+Fixed addon after page changes
+Minor graphical fixes
+Compatibility with python 3.x
+
+1.1.0
+Rewrite part of the code to use phate89 library
+Removed previous page item (kodi provide methods to go back)
+Added an option to get more info for the movies (enabled by default)
+Fixed pagination of dates
+
+1.0.1
+Added localized strings
+Improved checks
+Added option to select image quality (default: High)
+Added option to chose to prefer hd videos if available
+
+1.0.0
+Initial release

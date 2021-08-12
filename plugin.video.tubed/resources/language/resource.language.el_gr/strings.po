@@ -77,7 +77,7 @@ msgstr "Έξοδος"
 
 msgctxt "#30013"
 msgid "Manage Users"
-msgstr "Διαχείρηση χρηστών"
+msgstr "Διαχείριση χρηστών"
 
 msgctxt "#30014"
 msgid "New Search"
@@ -117,7 +117,7 @@ msgstr "Αφαίρεση του %s, είστε σίγουροι;"
 
 msgctxt "#30023"
 msgid "Uploads"
-msgstr "Μεταφορώσεις"
+msgstr "Μεταφορτώσεις"
 
 msgctxt "#30024"
 msgid "You are about to sign out, are you sure?"

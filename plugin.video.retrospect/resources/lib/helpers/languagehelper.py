@@ -36,6 +36,7 @@ class LanguageHelper(object):
     MissingAddon = 30015
     UpdateRequired = 30044
     UpdateToNewKodi = 30045
+    YouTubeMissing = 30047
 
     Monday = 30190
     Tuesday = 30191
@@ -49,6 +50,10 @@ class LanguageHelper(object):
     LoginErrorTitle = 30012
     LoginErrorText = 30013
 
+    NowPlaying = 30346
+    Now = 30347
+    Next = 30348
+    Later = 30349
     Search = 30350
     Categories = 30351
     TvShows = 30352

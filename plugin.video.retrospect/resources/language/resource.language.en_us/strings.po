@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 20:48+0000\n"
+"PO-Revision-Date: 2021-07-30 21:31+0000\n"
 "Last-Translator: bas <bas@kodi.tv>\n"
 "Language-Team: English (United States) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/en_us/>\n"
 "Language: en_us\n"
@@ -12,7 +12,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.7.2\n"
+
+msgctxt "Addon Summary"
+msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
+msgstr "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
+
+msgctxt "Addon Description"
+msgid "Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
+msgstr "Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
+
+msgctxt "Addon Disclaimer"
+msgid "Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched using this add-on or any consequences of using this add-on to watch content via the content providers' platforms."
+msgstr "Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched using this add-on or any consequences of using this add-on to watch content via the content providers' platforms."
 
 msgctxt "#30000"
 msgid "Stream Quality"
@@ -162,14 +174,17 @@ msgctxt "#30036"
 msgid "Password"
 msgstr "Password"
 
-# empty string with id 30037
+msgctxt "#30037"
+msgid "Use 'Up Next' to play next episode"
+msgstr "Use 'Up Next' to play next episode"
+
 msgctxt "#30038"
-msgid "Confirm proxy changes"
-msgstr "Confirm proxy changes"
+msgid "'Up Next' add-on settings"
+msgstr "'Up Next' add-on settings"
 
 msgctxt "#30039"
-msgid "Are you sure you want to update all channels for this country with this proxy?"
-msgstr "Are you sure you want to update all channels for this country with this proxy?"
+msgid "Up Next integration"
+msgstr "Up Next integration"
 
 msgctxt "#30040"
 msgid "Channels"
@@ -198,6 +213,10 @@ msgstr "This feature of Retrospect requires a more recent version of Kodi. Pleas
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
 msgstr "DRM/Geo-blocked/Premium filters"
+
+msgctxt "#30047"
+msgid "Cannot playback this YouTube Video because the Kodi YouTube add-on is missing."
+msgstr "Cannot playback this YouTube Video because the Kodi YouTube add-on is missing."
 
 # empty string with id 30047
 msgctxt "#30048"
@@ -231,6 +250,14 @@ msgstr "[COLOR gold][B]The Retrospect Password Vault[/B][/COLOR][CR]'The Vault' 
 msgctxt "#30055"
 msgid "Advanced"
 msgstr "Advanced"
+
+msgctxt "#30056"
+msgid "Install the Up Next add-on"
+msgstr "Install the Up Next add-on"
+
+msgctxt "#30057"
+msgid "Enable the Up Next add-on"
+msgstr "Enable the Up Next add-on"
 
 # empty strings from id 30056 to 30058
 msgctxt "#30059"
@@ -542,6 +569,23 @@ msgctxt "#30311"
 msgid "Finland"
 msgstr "Finland"
 
+# empty strings from id 30312 to 30345
+msgctxt "#30346"
+msgid "Now Playing"
+msgstr "Now Playing"
+
+msgctxt "#30347"
+msgid "Now"
+msgstr "Now"
+
+msgctxt "#30348"
+msgid "Next"
+msgstr "Next"
+
+msgctxt "#30349"
+msgid "Later"
+msgstr "Later"
+
 # empty strings from id 30312 to 30349
 msgctxt "#30350"
 msgid "Search"
@@ -602,6 +646,14 @@ msgstr "Popular"
 msgctxt "#30364"
 msgid "Latest news"
 msgstr "Latest news"
+
+msgctxt "#30365"
+msgid "Movies"
+msgstr "Movies"
+
+msgctxt "#30366"
+msgid "Available from"
+msgstr "Available from"
 
 # empty strings from id 30365 to 30400
 msgctxt "#30401"
@@ -1046,6 +1098,15 @@ msgstr "Warning"
 msgctxt "#30609"
 msgid "Error"
 msgstr "Error"
+
+# empty string with id 30037
+#~ msgctxt "#30038"
+#~ msgid "Confirm proxy changes"
+#~ msgstr "Confirm proxy changes"
+
+#~ msgctxt "#30039"
+#~ msgid "Are you sure you want to update all channels for this country with this proxy?"
+#~ msgstr "Are you sure you want to update all channels for this country with this proxy?"
 
 #~ msgctxt "#30054"
 #~ msgid ""

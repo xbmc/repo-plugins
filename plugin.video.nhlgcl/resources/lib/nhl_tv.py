@@ -44,7 +44,7 @@ def todays_games(game_day):
     add_dir('[B]%s >>[/B]' % LOCAL_STRING(30011), '/live', 101, NEXT_ICON, FANART, next_day.strftime("%Y-%m-%d"))
 
 
-def create_game_listitem(game, game_day):
+def create_game_listitem(game, game_day, show_date=False):
     away = game['teams']['away']['team']
     away_record = game['teams']['away']['leagueRecord']
     home = game['teams']['home']['team']
@@ -73,39 +73,48 @@ def create_game_listitem(game, game_day):
     if FAV_TEAM_ID == str(away['id']) or FAV_TEAM_ID == str(home['id']):
         fav_game = True
 
-    game_time = ''
-    if game['status']['detailedState'].lower().strip() == 'scheduled':
-        game_time = game['gameDate']
-        game_time = string_to_date(game_time, "%Y-%m-%dT%H:%M:%SZ")
-        game_time = utc_to_local(game_time)
-
+    game_line_header = ''
+    detailed_state = game['status']['detailedState'].lower().strip()
+    if detailed_state == 'scheduled' or detailed_state == 'pre-game':
+        game_time = utc_to_local(string_to_date(game['gameDate'], "%Y-%m-%dT%H:%M:%SZ"))
         if TIME_FORMAT == '0':
             game_time = game_time.strftime('%I:%M %p').lstrip('0')
         else:
             game_time = game_time.strftime('%H:%M')
-    elif game['status']['detailedState'].lower().strip() == 'in progress':
-        game_time = '%s %s' % \
-                (game['linescore']['currentPeriodTimeRemaining'], game['linescore']['currentPeriodOrdinal'])
+        game_line_header = game_time
+
+    elif detailed_state == 'in progress':
+        game_line_header = '%s %s' % \
+                           (game['linescore']['currentPeriodTimeRemaining'], game['linescore']['currentPeriodOrdinal'])
+
+    elif detailed_state == 'final' and show_date:
+        game_line_header = utc_to_local(string_to_date(game['gameDate'], "%Y-%m-%dT%H:%M:%SZ")).strftime("%Y-%m-%d")
+
     else:
-        game_time = game['status']['detailedState']
+        game_line_header = game['status']['detailedState']
 
     game_id = str(game['gamePk'])
 
     desc = ''
     hide_spoilers = 0
-    if NO_SPOILERS == '1' or (NO_SPOILERS == '2' and fav_game) or \
-            (NO_SPOILERS == '3' and game_day == local_to_eastern()) or \
-            (NO_SPOILERS == '4' and game_day < local_to_eastern()) or \
-            game['status']['detailedState'].lower().strip() == 'scheduled':
-        name = '%s %s at %s' % (game_time, away_team, home_team)
+    if NO_SPOILERS == '1' or (NO_SPOILERS == '2' and fav_game) \
+            or (NO_SPOILERS == '3' and game_day == local_to_eastern()) \
+            or (NO_SPOILERS == '4' and game_day < local_to_eastern()) \
+            or game['status']['abstractGameState'].lower().strip() == 'preview':
+
+        name = '%s %s at %s' % (game_line_header, away_team, home_team)
         hide_spoilers = 1
     else:
         name = '%s %s - %s at %s - %s' % \
-               (game_time, away_team, game['teams']['away']['score'], home_team, game['teams']['home']['score'])
-
-        desc = '%s %s-%s-%s\n%s %s-%s-%s' % (away_team, str(away_record['wins']), str(away_record['losses']),
-                                             str(away_record['ot']), home_team, str(home_record['wins']),
-                                             str(home_record['losses']), str(home_record['ot']))
+               (game_line_header, away_team, game['teams']['away']['score'], home_team, game['teams']['home']['score'])
+        away_wins = away_record['wins'] if 'wins' in away_record else '0'
+        away_losses = away_record['losses'] if 'losses' in away_record else '0'
+        away_ot = away_record['ot'] if 'ot' in away_record else '0'
+        home_wins = home_record['wins'] if 'wins' in home_record else '0'
+        home_losses = home_record['losses'] if 'losses' in home_record else '0'
+        home_ot = home_record['ot'] if 'ot' in home_record else '0'
+        desc = '%s %s-%s-%s\n%s %s-%s-%s' % (away_team, away_wins, away_losses, away_ot,
+                                             home_team, home_wins, home_losses, home_ot)
 
     fanart = 'http://nhl.bamcontent.com/images/arena/default/%s@2x.jpg' % home['id']
     try:
@@ -125,7 +134,7 @@ def create_game_listitem(game, game_day):
                     json_source['editorial']['preview']['items'][0]['media']['image']['cuts']['1284x722']['src'])
                 soup = BeautifulSoup(str(json_source['editorial']['preview']['items'][0]['preview']))
                 desc = soup.get_text()
-            elif hide_spoilers == 0:
+            elif hide_spoilers == 0 and 'scoringPlays' in game:
                 for play in game['scoringPlays']:
                     scorer = play['result']['description']
                     scorer = scorer[0:scorer.find(",")]
@@ -171,7 +180,8 @@ def create_game_listitem(game, game_day):
     if 'items' in recap and len(recap['items']) > 0:
         recap_url = get_highlight_url(recap['items'][0]['playbacks'])
         recap_url = create_highlight_stream(recap_url)
-        listitem = xbmcgui.ListItem(title, thumbnailImage=icon)
+        listitem = xbmcgui.ListItem(title)
+        listitem.setArt({'thumb' : icon})
         listitem.setInfo(type="Video", infoLabels={"Title": title})
         RECAP_PLAYLIST.add(recap_url, listitem)
 
@@ -180,7 +190,8 @@ def create_game_listitem(game, game_day):
     if 'items' in extend and len(extend['items']) > 0:
         extend_url = get_highlight_url(extend['items'][0]['playbacks'])
         extend_url = create_highlight_stream(extend_url)
-        listitem = xbmcgui.ListItem(title, thumbnailImage=icon)
+        listitem = xbmcgui.ListItem(title)
+        listitem.setArt({'thumb' : icon})
         listitem.setInfo(type="Video", infoLabels={"Title": title})
         EXTENDED_PLAYLIST.add(extend_url, listitem)
 
@@ -253,6 +264,7 @@ def stream_select(game_id, start_time):
                 xbmc.Monitor().waitForAbort(0.25)
 
             if xbmc.Player().isPlayingVideo() and not xbmc.Monitor().abortRequested():
+                xbmc.Monitor().waitForAbort(0.25)
                 start_time = string_to_date(start_time, '%Y-%m-%dT%H:%M:%SZ')
                 seek_secs = int((start_time - datetime.utcnow()).total_seconds())
                 xbmc.log("seconds seek = " + str(seek_secs))
@@ -571,14 +583,14 @@ def my_teams_games():
         start_date = end_date - timedelta(days=30)
         start_day = start_date.strftime("%Y-%m-%d")
 
-        url = '%s/schedule?teamId=%s&startDate=%s&endDate=%s&expand=schedule.game.content.media.epg,schedule.teams' % \
+        url = '%s/schedule?teamId=%s&startDate=%s&endDate=%s&expand=schedule.linescore,schedule.game.content.media.epg,schedule.teams' % \
               (API_URL, FAV_TEAM_ID, start_day, end_day)
         headers = {'User-Agent': UA_IPHONE}
         r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
 
         for date in reversed(r.json()['dates']):
             for game in date['games']:
-                create_game_listitem(game, date['date'])
+                create_game_listitem(game, date['date'], True)
 
 
 def play_fav_team_today():
@@ -628,7 +640,7 @@ def play_fav_team_today():
                 stream_url, headers = create_full_game_stream(stream_url, media_auth)
         else:
             dialog = xbmcgui.Dialog()
-            dialog.ok('No Game Today', FAV_TEAM + " doesn't play today")
+            dialog.ok(LOCAL_STRING(30374), FAV_TEAM + LOCAL_STRING(30375).encode('utf8'))
             sys.exit()
 
         if stream_url != '':

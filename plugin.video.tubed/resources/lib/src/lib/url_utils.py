@@ -25,12 +25,12 @@ def parse_query(query):
 
     args = parse_qs(query.lstrip('?'))
 
-    for arg in args:
-        if len(args[arg]) == 1:
-            payload[arg] = args[arg][0]
+    for key, value in args.items():
+        if len(value) == 1:
+            payload[key] = value[0]
 
         else:
-            payload[arg] = args[arg]
+            payload[key] = value
 
     return payload
 

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 import pytz
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 
@@ -224,7 +224,7 @@ class Channel(chn_class.Channel):
               "&https=true".format(self.__country_id, mgid)
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
 
         if "images" in result_set:
             item.thumb = result_set["images"]["url"]
@@ -267,7 +267,7 @@ class Channel(chn_class.Channel):
               "?uri=mgid:arc:video:{}:{}&configtype=edge".format(self.__country_id, mgid)
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = result_set["description"]
 
         if "images" in result_set:
@@ -304,10 +304,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -341,8 +341,7 @@ class Channel(chn_class.Channel):
             XbmcWrapper.show_dialog(LanguageHelper.ErrorId, error)
             return item
 
-        item.MediaItemParts = []
-        part = item.create_new_empty_media_part()
-        part.append_media_stream(url, 0)
+        item.streams = []
+        item.add_stream(url, 0)
         item.complete = True
         return item

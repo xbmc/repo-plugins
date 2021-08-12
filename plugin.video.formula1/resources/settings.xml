@@ -26,7 +26,6 @@
                         <options>
                             <option>360p</option>
                             <option>720p</option>
-                            <option>1080p</option>
                             <option>HLS (Adaptive)</option>
                         </options>
                     </constraints>

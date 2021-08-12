@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <!--General-->
+    <category label="30110">
+        <setting id="enable_subtitles" type="bool" default="true" label="30111" />
+        <setting type="sep"/>
+        <setting id="subtitle_language" type="text" default="" label="30113" enable="eq(-2,true)"/>        
+    </category>
+</settings>

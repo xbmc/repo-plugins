@@ -17,6 +17,7 @@ from .Scraper import *
 
 class serviceAPI(Scraper):
     __urlBase = 'https://api-tvthek.orf.at/api/v3/'
+    __urlBaseV4 = 'https://api-tvthek.orf.at/api/v4.2/'
     __urlLive = 'livestreams/24hours?limit=20'
     __urlMostViewed = 'page/startpage'
     __urlNewest = 'page/startpage/newest'
@@ -24,6 +25,9 @@ class serviceAPI(Scraper):
     __urlShows = 'profiles?limit=1000'
     __urlTips = 'page/startpage/tips'
     __urlTopics = 'topics/overview?limit=1000'
+    __urlChannel = 'channel/'
+    __urlDRMLic = 'https://drm.ors.at/acquire-license/widevine'
+    __brandIdDRM = '13f2e056-53fe-4469-ba6d-999970dbe549'
 
     serviceAPIEpisode = 'episode/%s'
     serviceAPIDate = 'schedule/%s?limit=1000'
@@ -132,6 +136,27 @@ class serviceAPI(Scraper):
         else:
             showDialog(self.translation(30014).encode('UTF-8'), self.translation(30050).encode('UTF-8'))
             return
+
+    def JSONLicenseDrmURL(self, jsonData):
+        if jsonData.get('drm_token') is not None:
+            token = jsonData.get('drm_token')
+            license_url = "%s?BrandGuid=%s&userToken=%s" % (self.__urlDRMLic, self.__brandIdDRM, token)
+            debugLog("DRM License Url %s" % license_url)
+            return license_url
+
+    def JSONStreamingDrmURL(self, jsonData):
+        if jsonData.get('drm_token') is not None:
+            license_url = self.JSONLicenseDrmURL(jsonData)
+            jsonVideos = jsonData.get('sources')
+            for streamingUrl in jsonVideos.get('dash'):
+                if streamingUrl.get('quality_key').lower()[0:3] == self.videoQuality:
+                    return generateDRMVideoUrl(streamingUrl.get('src'), license_url)
+                source = streamingUrl.get('src')
+            if source is not None:
+                return generateDRMVideoUrl(source, license_url)
+            else:
+                showDialog(self.translation(30014).encode('UTF-8'), self.translation(30050).encode('UTF-8'))
+                return
 
     # list all Categories
     def getCategories(self):
@@ -265,7 +290,7 @@ class serviceAPI(Scraper):
             title = '%s' % (date.strftime('%A, %d.%m.%Y'))
             parameters = {'mode': 'openDate', 'link': date.strftime('%Y-%m-%d')}
             if x == 8:
-                title = '$s %s' % (self.translation(30064), title)
+                title = '%s %s' % (self.translation(30064), title)
                 parameters = {'mode': 'openDate', 'link': date.strftime('%Y-%m-%d'), 'from': (date - datetime.timedelta(days=150)).strftime('%Y-%m-%d')}
             u = build_kodi_url(parameters)
             createListItem(title, None, None, None, date.strftime('%Y-%m-%d'), '', u, False, True, self.defaultbackdrop, self.pluginhandle)
@@ -273,7 +298,7 @@ class serviceAPI(Scraper):
     # Returns Live Stream Listing
     def getLiveStreams(self):
         try:
-            response = self.__makeRequest(self.__urlLive)
+            response = self.__makeRequestV4(self.__urlLive)
             responseCode = response.getcode()
         except HTTPError as error:
             responseCode = error.getcode()
@@ -289,6 +314,7 @@ class serviceAPI(Scraper):
             showFullSchedule = xbmcaddon.Addon().getSetting('showLiveStreamSchedule') == 'true'
 
             for result in json.loads(response.read().decode('UTF-8')).get('_embedded').get('items'):
+                drm_lic_url = self.JSONLicenseDrmURL(result)
                 description = result.get('description')
                 programName = result.get('_embedded').get('channel').get('name')
                 livestreamStart = time.strptime(result.get('start')[0:19], '%Y-%m-%dT%H:%M:%S')
@@ -298,21 +324,32 @@ class serviceAPI(Scraper):
 
                 if programName not in foundProgram or showFullSchedule:
                     foundProgram.append(programName)
+                    if inputstreamAdaptive and result.get('is_drm_protected'):
+                        debugLog('DRM is active for %s' % result.get('title'))
+                        link = self.JSONStreamingDrmURL(result)
+                    else:
+                        link = self.JSONStreamingURL(result.get('sources'))
 
-                    link = self.JSONStreamingURL(result.get('sources'))
                     if inputstreamAdaptive and result.get('restart'):
-                        contextMenuItems.append(self.translation(30063), 'RunPlugin(plugin://%s/?mode=liveStreamRestart&link=%s)' % (xbmcaddon.Addon().getAddonInfo('id'), result.get('id')))
+                        restart_parameters = {"mode": "liveStreamRestart", "link": result.get('id'), "lic_url": drm_lic_url}
+                        restart_url = build_kodi_url(restart_parameters)
+                        contextMenuItems.append((self.translation(30063), 'RunPlugin(%s)' % restart_url))
 
                     title = "[%s] %s %s (%s)" % (programName, self.translation(30063) if inputstreamAdaptive and result.get('restart') else '', result.get('title'), time.strftime('%H:%M', livestreamStart))
 
                     banner = self.JSONImage(result.get('_embedded').get('image'))
+
+                    for stream in result.get('sources').get('dash'):
+                        if stream.get('is_uhd') and stream.get('quality_key').lower() == 'uhdbrowser':
+                            uhd_video_url = generateDRMVideoUrl(stream.get('src'), drm_lic_url)
+                            createListItem("[UHD] %s" % title, banner, description, duration,time.strftime('%Y-%m-%d', livestreamStart), programName, uhd_video_url, True, False, self.defaultbackdrop, self.pluginhandle)
 
                     createListItem(title, banner, description, duration, time.strftime('%Y-%m-%d', livestreamStart), programName, link, True, False, self.defaultbackdrop, self.pluginhandle,
                                    contextMenuItems=contextMenuItems)
         else:
             showDialog(self.translation(30045).encode('UTF-8'), self.translation(30046).encode('UTF-8'))
 
-    def liveStreamRestart(self, link):
+    def liveStreamRestart(self, link, protocol):
         try:
             xbmcaddon.Addon('inputstream.adaptive')
         except RuntimeError:
@@ -326,7 +363,6 @@ class serviceAPI(Scraper):
 
         if responseCode == 200:
             result = json.loads(response.read().decode('UTF-8'))
-
             title = result.get('title').encode('UTF-8')
             image = self.JSONImage(result.get('_embedded').get('image'))
             description = result.get('description')
@@ -334,23 +370,25 @@ class serviceAPI(Scraper):
             date = time.strptime(result.get('start')[0:19], '%Y-%m-%dT%H:%M:%S')
 
             ApiKey = '2e9f11608ede41f1826488f1e23c4a8d'
-            bitmovinStreamId = result.get('_embedded').get('channel').get('restart_urls').get('default')
+            debugLog("Restart Url: %s" % result.get('channel_restart_url_android'))
+            bitmovinStreamId = result.get('channel_restart_url_android')
             if bitmovinStreamId:
                 bitmovinStreamId = bitmovinStreamId.replace("https://playerapi-restarttv.ors.at/livestreams/", "").replace("/sections/", "")
                 bitmovinStreamId = bitmovinStreamId.split("?")[0]
             response = url_get_request('https://playerapi-restarttv.ors.at/livestreams/%s/sections/?state=active&X-Api-Key=%s' % (bitmovinStreamId, ApiKey))  # nosec
-            section = json.loads(response.read().decode('UTF-8'))[0]
-
-            streamingURL = 'https://playerapi-restarttv.ors.at/livestreams/%s/sections/%s/manifests/hls/?startTime=%s&X-Api-Key=%s' % (bitmovinStreamId, section.get('id'), section.get('metaData').get('timestamp'), ApiKey)
-
-            listItem = createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), result.get('_embedded').get('channel').get('name'), streamingURL, True, False, self.defaultbackdrop,
-                                      self.pluginhandle)
-            listItem.setProperty('inputstreamaddon', 'inputstream.adaptive')
-            listItem.setProperty('inputstream.adaptive.manifest_type', 'hls')
-            self.xbmc.Player().play(streamingURL, listItem)
+            response_raw = response.read().decode('UTF-8')
+            section = json.loads(response_raw)[0]
+            section_id = section.get('id')
+            timestamp = section.get('metaData').get('timestamp')
+            streamingURL = 'https://playerapi-restarttv.ors.at/livestreams/%s/sections/%s/manifests/%s/?startTime=%s&X-Api-Key=%s' % (bitmovinStreamId, section_id, protocol, timestamp, ApiKey)
+            listItem = createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), result.get('SSA').get('channel').upper(), streamingURL, True, False, self.defaultbackdrop, self.pluginhandle)
+            return streamingURL, listItem
 
     def __makeRequest(self, url):
         return url_get_request(self.__urlBase + url, self.httpauth)
+
+    def __makeRequestV4(self, url):
+        return url_get_request(self.__urlBaseV4 + url, self.httpauth)
 
     def __JSONEpisode2ListItem(self, JSONEpisode, ignoreEpisodeType=None):
         if JSONEpisode.get('killdate') is not None and time.strptime(JSONEpisode.get('killdate')[0:19], '%Y-%m-%dT%H:%M:%S') < time.localtime():

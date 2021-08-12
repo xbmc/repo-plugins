@@ -248,43 +248,52 @@ class StreamService:
                 protocol = 'hls'
 
             # Get stream manifest url
-            manifest_url = next(stream.get('url') for stream in stream_json.get('targetUrls') if stream.get('type') == protocol)
+            manifest_url = next((stream.get('url') for stream in stream_json.get('targetUrls') if stream.get('type') == protocol), None)
 
-            # External virtual subclip, live-to-VOD from past 24 hours archived livestream (airdate feature)
-            if video.get('start_date') and video.get('end_date'):
-                manifest_url += '?t=' + video.get('start_date') + '-' + video.get('end_date')
-
-            # Fix virtual subclip
-            from datetime import timedelta
-            duration = timedelta(milliseconds=stream_json.get('duration', 0))
-            manifest_url = self._fix_virtualsubclip(manifest_url, duration)
-
-            # Prepare stream for Kodi player
-            if protocol == 'mpeg_dash' and drm_stream:
-                log(2, 'Protocol: mpeg_dash drm')
-                if vudrm_token:
-                    encryption_json = '{{"token":"{0}","drm_info":[D{{SSM}}],"kid":"{{KID}}"}}'.format(vudrm_token)
-                    license_key = self._get_license_key(key_url=vualto_license_url,
-                                                        key_type='D',
-                                                        key_value=encryption_json,
-                                                        key_headers={'Content-Type': 'text/plain;charset=UTF-8'})
-                else:
-                    license_key = self._get_license_key(key_url=self._UPLYNK_LICENSE_URL, key_type='R')
-
-                stream = StreamURLS(manifest_url, license_key=license_key, use_inputstream_adaptive=True)
-            elif protocol == 'mpeg_dash':
-                log(2, 'Protocol: mpeg_dash')
-                stream = StreamURLS(manifest_url, use_inputstream_adaptive=True)
+            # Failed to get compatible manifest url, ask user to toggle "Use Widevine DRM"
+            if manifest_url is None:
+                available_protocols = [stream.get('type') for stream in stream_json.get('targetUrls')]
+                if protocol not in available_protocols:
+                    error_json = {'message': '%s is not available for this stream, please try toggling the "Use Widevine DRM" setting' % protocol}
+                    message = localize(30989)  # Failed to load a compatible stream
+                    return self._handle_stream_api_error(message, error_json)
             else:
-                log(2, 'Protocol: {protocol}', protocol=protocol)
-                # Fix 720p quality for HLS livestreams
-                manifest_url = manifest_url.replace('.m3u8?', '.m3u8?hd&') if '.m3u8?' in manifest_url else manifest_url + '?hd'
-                # Play HLS directly in Kodi Player on Kodi 17
-                if kodi_version_major() < 18 or not has_inputstream_adaptive():
-                    stream = self._select_hls_substreams(manifest_url, protocol)
-                else:
+
+                # External virtual subclip, live-to-VOD from past 24 hours archived livestream (airdate feature)
+                if video.get('start_date') and video.get('end_date'):
+                    manifest_url += '?t=' + video.get('start_date') + '-' + video.get('end_date')
+
+                # Fix virtual subclip
+                from datetime import timedelta
+                duration = timedelta(milliseconds=stream_json.get('duration', 0))
+                manifest_url = self._fix_virtualsubclip(manifest_url, duration)
+
+                # Prepare stream for Kodi player
+                if protocol == 'mpeg_dash' and drm_stream:
+                    log(2, 'Protocol: mpeg_dash drm')
+                    if vudrm_token:
+                        encryption_json = '{{"token":"{0}","drm_info":[D{{SSM}}],"kid":"{{KID}}"}}'.format(vudrm_token)
+                        license_key = self._get_license_key(key_url=vualto_license_url,
+                                                            key_type='D',
+                                                            key_value=encryption_json,
+                                                            key_headers={'Content-Type': 'text/plain;charset=UTF-8'})
+                    else:
+                        license_key = self._get_license_key(key_url=self._UPLYNK_LICENSE_URL, key_type='R')
+
+                    stream = StreamURLS(manifest_url, license_key=license_key, use_inputstream_adaptive=True)
+                elif protocol == 'mpeg_dash':
+                    log(2, 'Protocol: mpeg_dash')
                     stream = StreamURLS(manifest_url, use_inputstream_adaptive=True)
-            return stream
+                else:
+                    log(2, 'Protocol: {protocol}', protocol=protocol)
+                    # Fix 720p quality for HLS livestreams
+                    manifest_url = manifest_url.replace('.m3u8?', '.m3u8?hd&') if '.m3u8?' in manifest_url else manifest_url + '?hd'
+                    # Play HLS directly in Kodi Player on Kodi 17
+                    if kodi_version_major() < 18 or not has_inputstream_adaptive():
+                        stream = self._select_hls_substreams(manifest_url, protocol)
+                    else:
+                        stream = StreamURLS(manifest_url, use_inputstream_adaptive=True)
+                return stream
 
         # VRT Geoblock: failed to get stream, now try again with roaming enabled
         if stream_json.get('code') in self._GEOBLOCK_ERROR_CODES:
@@ -303,6 +312,9 @@ class StreamService:
             invalidate_caches('*.json')
             container_reload()
             message = localize(30987)  # No stream found
+            return self._handle_stream_api_error(message, stream_json)
+        if stream_json.get('code') == 'ERROR_AGE_RESTRICTED':
+            message = localize(30990)  # Cannot be played, VRT NU account not allowed to access 12+ content
             return self._handle_stream_api_error(message, stream_json)
 
         # Failed to get stream, handle error

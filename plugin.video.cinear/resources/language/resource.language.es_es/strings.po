@@ -1,0 +1,148 @@
+# Kodi Media Center language file
+# Addon Name: Cine.ar Play
+# Addon id: plugin.video.cinear
+# Addon Provider: ARSAT
+msgid ""
+msgstr ""
+"Report-Msgid-Bugs-To: cinear@arsat.com.ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Enter your e-mail address"
+msgstr "Ingrese su dirección de correo electrónico"
+
+msgctxt "#30002"
+msgid "Enter your password"
+msgstr "Ingrese su contraseña"
+
+msgctxt "#30003"
+msgid "Login"
+msgstr "Inicio de sesión"
+
+msgctxt "#30004"
+msgid "Terms and conditions"
+msgstr "Términos y condiciones"
+
+msgctxt "#30005"
+msgid "The terms and coditions have changed. Please visit play.cine.ar to accept them."
+msgstr "Hay una nueva versión de los términos y condiciones. Visite play.cine.ar para aceptarlos."
+
+msgctxt "#30006"
+msgid "Enter PIN for "
+msgstr "Ingrese el PIN de "
+
+msgctxt "#30007"
+msgid "Profile selection"
+msgstr "Selección de perfil"
+
+msgctxt "#30008"
+msgid "Incorrect PIN."
+msgstr "El PIN ingresado es incorrecto."
+
+msgctxt "#30009"
+msgid "Home"
+msgstr "Inicio"
+
+msgctxt "#30010"
+msgid "Last seen"
+msgstr "Últimas vistas"
+
+msgctxt "#30011"
+msgid "Explore"
+msgstr "Explorar"
+
+msgctxt "#30012"
+msgid "Mi sala"
+msgstr "Mi sala"
+
+msgctxt "#30013"
+msgid "Search"
+msgstr "Búsqueda"
+
+msgctxt "#30014"
+msgid "Close session"
+msgstr "Cerrar sesión"
+
+msgctxt "#30015"
+msgid "Featured"
+msgstr "Destacados"
+
+msgctxt "#30021"
+msgid "Add to Mi Sala"
+msgstr "Agregar a Mi Sala"
+
+msgctxt "#30022"
+msgid "Delete from Mi Sala"
+msgstr "Quitar de Mi Sala"
+
+msgctxt "#30023"
+msgid "Rate..."
+msgstr "Calificar..."
+
+msgctxt "#30024"
+msgid "Sort by..."
+msgstr "Ordenar por..."
+
+msgctxt "#30025"
+msgid "My rate is:"
+msgstr "Mi calificación es:"
+
+msgctxt "#30026"
+msgid "Order by"
+msgstr "Ordenar los ítems"
+
+msgctxt "#30027"
+msgid "Title, Director, Actor..."
+msgstr "Título, Director, Actor..."
+
+msgctxt "#30028"
+msgid "Cannot reproduce, try later"
+msgstr "Problemas en la reproducción, reintente nuevamente."
+
+msgctxt "#30029"
+msgid "Session has expired"
+msgstr "Sesión expirada"
+
+msgctxt "#30030"
+msgid "Please login again."
+msgstr "Por favor vuelva a ingresar."
+
+msgctxt "#30031"
+msgid "Next..."
+msgstr "Siguiente..."
+
+msgctxt "#30032"
+msgid "My rentals"
+msgstr "Mis alquileres"
+
+msgctxt "#30033"
+msgid "Premieres"
+msgstr "Estrenos"
+
+msgctxt "#30034"
+msgid "To rent a production, please do so from the webpage."
+msgstr "Para alquilar por favor hágalo desde la web."
+
+msgctxt "#30035"
+msgid "Movie unavailable. Please retry later."
+msgstr "Película no disponible. Reintente más tarde."
+
+msgctxt "#30036"
+msgid "Error Player"
+msgstr "Error del reproductor"
+
+msgctxt "#30037"
+msgid "Error Request"
+msgstr "Error de petición"
+
+msgctxt "#30100"
+msgid "General"
+msgstr "General"
+
+msgctxt "#30101"
+msgid "Items per page"
+msgstr "Ítems por página"

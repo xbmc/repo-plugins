@@ -1,0 +1,189 @@
+# Kodi Media Center language file
+# Addon Name: DR TV
+# Addon id: plugin.video.drnu
+# Addon Provider: twinther, msj33, TermeHansen
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://github.com/xbmc-danish-addons/plugin.video.drnu\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: twinther, msj33, TermeHansen\n"
+"Language-Team: Danish (Denmark) (http://www.transifex.com/projects/p/kodi-main/language/da_DK/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: da_DK\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Programs A-Z"
+msgstr "Programmer A-Å"
+
+msgctxt "#30001"
+msgid "Latest videos"
+msgstr "Nyeste videoer"
+
+msgctxt "#30002"
+msgid "Spotlight videos"
+msgstr "Spotlight videoer"
+
+msgctxt "#30003"
+msgid "Search videos"
+msgstr "Søg efter videoer"
+
+msgctxt "#30007"
+msgid "Recently watched videos"
+msgstr "Nyligt sete videoer"
+
+msgctxt "#30008"
+msgid "Favorite programs"
+msgstr "Foretrukne programmer"
+
+msgctxt "#30009"
+msgid "Program added"
+msgstr "Program tilføjet"
+
+msgctxt "#30010"
+msgid "Program removed"
+msgstr "Program fjernet"
+
+msgctxt "#30011"
+msgid "Most watched videos on DR NU"
+msgstr "Mest sete videoer på DR NU"
+
+msgctxt "#30012"
+msgid "Programs by area"
+msgstr "Program for område"
+
+msgctxt "#30013"
+msgid "The list is empty."
+msgstr "Listen er tom."
+
+msgctxt "#30018"
+msgid "You can add program series to favorites using"
+msgstr "Du kan tilføje programmer til foretrukne ved brug"
+
+msgctxt "#30019"
+msgid "the context menu."
+msgstr "af højreklik-menuen."
+
+msgctxt "#30020"
+msgid "Your recently watched videos are automatically added."
+msgstr "De videoer du sidst har set tilføjes automatisk."
+
+msgctxt "#30025"
+msgid "Premiere videos"
+msgstr "Forpremiere"
+
+msgctxt "#30027"
+msgid "Live TV"
+msgstr "Live TV"
+
+msgctxt "#30028"
+msgid "Themes"
+msgstr "Temaer"
+
+msgctxt "#30100"
+msgid "DR TV Universe"
+msgstr "DR TV Univers"
+
+msgctxt "#30101"
+msgid "Choose area"
+msgstr "Vælg område"
+
+msgctxt "#30200"
+msgid "Add to favorite program series"
+msgstr "Tilføj til foretrukne programmer"
+
+msgctxt "#30201"
+msgid "Remove from favorite program series"
+msgstr "Fjern fra foretrukne programmer"
+
+msgctxt "#30202"
+msgid "Favorite program series cleared"
+msgstr "Foretrukne programmer blev nulstillet"
+
+msgctxt "#30500"
+msgid "General"
+msgstr "Generelt"
+
+msgctxt "#30503"
+msgid "Enable Hard-of-hearing subtitles"
+msgstr "Vis undertekster for hørehæmmedde"
+
+msgctxt "#30504"
+msgid "Clear the favorite programs list"
+msgstr "Nulstil listen med foretrukne programmer"
+
+msgctxt "#30505"
+msgid "Remove programs from Ramasjang/Ultra in latest videos list"
+msgstr "Fjern programmer fra Ramasjang/Ultra under nyeste videoer"
+
+msgctxt "#30506"
+msgid "Hard-of-hearing"
+msgstr "For hørehæmmede"
+
+msgctxt "#30507"
+msgid "Subtitles"
+msgstr "Undertekster"
+
+msgctxt "#30508"
+msgid "empty"
+msgstr "Ingen undertekster"
+
+msgctxt "#30509"
+msgid "No subtitles on Ramasjang/Ultra episodes"
+msgstr "Ingen undertekster på episoder fra Ramasjang/Ultra"
+
+msgctxt "#30510"
+msgid "Start in area"
+msgstr "Start i område"
+
+msgctxt "#30511"
+msgid "Show area chooser"
+msgstr "Vis områdevælger"
+
+msgctxt "#30512"
+msgid "DR TV"
+msgstr "DR TV"
+
+msgctxt "#30513"
+msgid "Ramasjang"
+msgstr "Ramasjang"
+
+msgctxt "#30514"
+msgid "Ultra"
+msgstr "Ultra"
+
+msgctxt "#30515"
+msgid "Show area chooser item in root"
+msgstr "Vis områdevælger kategori i roden"
+
+msgctxt "#30520"
+msgid "Fanart image resolution"
+msgstr "Størrelse på fanart billeder"
+
+msgctxt "#30900"
+msgid "There was an error while communicating with DR NU."
+msgstr "Der er sket en fejl i kommunikationen med DR NU."
+
+msgctxt "#30901"
+msgid "Please try again later. Error message is:"
+msgstr "Prøv igen senere. Fejlen er:"
+
+msgctxt "#30902"
+msgid "There was an error while writing temporary data"
+msgstr "Det var ikke muligt at gemme midlertidige data"
+
+msgctxt "#30903"
+msgid "to the local disk. The error message is:"
+msgstr "lokalt på disken. Fejlen er:"
+
+msgctxt "#30904"
+msgid "The video is no longer available and playback is not possible."
+msgstr "Videoen er ikke længere tilgængelig og kan ikke afspilles."
+
+msgctxt "#30905"
+msgid "Unknown Live TV Slug:"
+msgstr "Ukendt Live TV Slug:"

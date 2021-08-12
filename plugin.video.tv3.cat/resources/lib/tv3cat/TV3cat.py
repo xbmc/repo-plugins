@@ -269,6 +269,7 @@ class TV3cat(object):
                             if len(match) != 0:
                                 url1 = match[0][0]
                                 urlcode = match[0][1]
+
                                 url_final = url1 + 'capitols/' + urlcode
                             else:
                                 url_final = urlProg + 'capitols/'
@@ -478,9 +479,11 @@ class TV3cat(object):
                                     if len(match) != 0:
                                         url1 = match[0][0]
                                         urlcode = match[0][1]
+                                        
                                         url_final = url1 + 'capitols/' + urlcode
                                     else:
                                         url_final = urlProg + 'capitols/'
+
 
                                 folderVideo = FolderVideo(titol, url_final, 'getlistvideos', "", "")
                                 lFolderVideos.append(folderVideo)
@@ -521,6 +524,7 @@ class TV3cat(object):
 
                 # Super 3
                 if not links:
+                  
                     links = soup.findAll("div",
                                          {"class": "M-destacat super3 T-video  ombres-laterals"})
                     links2 = soup.findAll("div",

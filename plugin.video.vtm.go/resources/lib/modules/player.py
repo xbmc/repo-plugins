@@ -7,7 +7,7 @@ import logging
 
 from resources.lib import kodiutils
 from resources.lib.kodiplayer import KodiPlayer
-from resources.lib.vtmgo.exceptions import StreamGeoblockedException, StreamUnavailableException, UnavailableException
+from resources.lib.vtmgo.exceptions import NoLoginException, StreamGeoblockedException, StreamUnavailableException, UnavailableException
 from resources.lib.vtmgo.vtmgo import VtmGo
 from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
 from resources.lib.vtmgo.vtmgostream import VtmGoStream
@@ -20,13 +20,17 @@ class Player:
 
     def __init__(self):
         """ Initialise object """
-        self._auth = VtmGoAuth(kodiutils.get_setting('username'),
-                               kodiutils.get_setting('password'),
-                               'VTM',
-                               kodiutils.get_setting('profile'),
-                               kodiutils.get_tokens_path())
+        try:
+            self._auth = VtmGoAuth(kodiutils.get_setting('username'),
+                                   kodiutils.get_setting('password'),
+                                   'VTM',
+                                   kodiutils.get_setting('profile'),
+                                   kodiutils.get_tokens_path())
+        except NoLoginException:
+            self._auth = None
+
         self._vtm_go = VtmGo(self._auth)
-        self._vtm_go_stream = VtmGoStream()
+        self._vtm_go_stream = VtmGoStream(self._auth)
 
     def play_or_live(self, category, item, channel):
         """ Ask to play the requested item or switch to the live channel
@@ -104,7 +108,7 @@ class Player:
             elif category == 'episodes':
                 info_dict.update({'mediatype': 'episode'})
 
-                # There is no direct API to get episode details, so we go trough the cached program details
+                # There is no direct API to get episode details, so we go through the cached program details
                 program = self._vtm_go.get_program(resolved_stream.program_id)
                 if program:
                     episode_details = self._vtm_go.get_episode_from_program(program, item)
@@ -140,7 +144,7 @@ class Player:
             # This allows to play some programs that don't have metadata (yet).
             pass
 
-        # If we have enabled the Manifest proxy, route the call trough that.
+        # If we have enabled the Manifest proxy, route the call through that.
         if category in ['movies', 'oneoffs', 'episodes'] and kodiutils.get_setting_bool('manifest_proxy'):
             try:  # Python 3
                 from urllib.parse import urlencode
@@ -220,7 +224,9 @@ class Player:
                 tvshowid=current_episode.program_id,
                 title=current_episode.name,
                 art={
-                    'thumb': current_episode.cover,
+                    'poster': current_episode.poster,
+                    'landscape': current_episode.thumb,
+                    'fanart': current_episode.fanart,
                 },
                 season=current_episode.season,
                 episode=current_episode.number,
@@ -236,7 +242,9 @@ class Player:
                 tvshowid=next_episode.program_id,
                 title=next_episode.name,
                 art={
-                    'thumb': next_episode.cover,
+                    'poster': next_episode.poster,
+                    'landscape': next_episode.thumb,
+                    'fanart': next_episode.fanart,
                 },
                 season=next_episode.season,
                 episode=next_episode.number,

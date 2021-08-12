@@ -210,8 +210,8 @@ def get_plugin_url(queries):
     return sys.argv[0] + '?' + query
 
 
-def end_of_directory(cache_to_disc=False):
-    xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=cache_to_disc)
+def end_of_directory(cache_to_disc=False, succeeded=True):
+    xbmcplugin.endOfDirectory(int(sys.argv[1]), succeeded=succeeded, cacheToDisc=cache_to_disc)
 
 
 def set_resolved_url(listitem, succeeded=True):
@@ -407,11 +407,15 @@ class WorkingDialog(object):
 class ProgressDialog(object):
     pd = None
 
-    def __init__(self, heading, line1='', line2='', line3='', background=False, active=True, timer=0):
+    def __init__(self, heading, line1=None, line2=None, line3=None, background=False, active=True, timer=0):
         self.begin = time.time()
         self.timer = timer
         self.background = background
         self.heading = heading
+        self.line1 = line1
+        self.line2 = line2
+        self.line3 = line3
+
         if active and not timer:
             self.pd = self.__create_dialog(line1, line2, line3)
             self.pd.update(0)
@@ -419,12 +423,36 @@ class ProgressDialog(object):
     def __create_dialog(self, line1, line2, line3):
         if self.background:
             pd = xbmcgui.DialogProgressBG()
-            msg = line1 + line2 + line3
+            msg = self.__formatted_message(line1, line2, line3, bg=True)
             pd.create(self.heading, msg)
         else:
             pd = xbmcgui.DialogProgress()
-            pd.create(self.heading, line1, line2, line3)
+            pd.create(self.heading, self.__formatted_message(line1, line2, line3,))
         return pd
+
+    def __formatted_message(self, line1, line2, line3, bg=True):
+        lines = []
+
+        whitespace = '' if bg else '[CR]'
+
+        if line1 is None:
+            lines[0] = whitespace if self.line1 is None else self.line1
+        else:
+            lines[0] = line1
+
+        if line2 is None:
+            lines[1] = whitespace if self.line2 is None else self.line2
+        else:
+            lines[1] = line2
+
+        if line3 is None:
+            lines[2] = '' if self.line3 is None else self.line3
+        else:
+            lines[2] = line3
+
+        whitespace = ' ' if bg else '[CR]'
+
+        return whitespace.join(lines)
 
     def __enter__(self):
         return self
@@ -439,33 +467,62 @@ class ProgressDialog(object):
         else:
             return False
 
-    def update(self, percent, line1='', line2='', line3=''):
+    def update(self, percent, line1=None, line2=None, line3=None):
         if self.pd is None and self.timer and (time.time() - self.begin) >= self.timer:
             self.pd = self.__create_dialog(line1, line2, line3)
 
+        if line1 is not None:
+            self.line1 = line1
+        if line2 is not None:
+            self.line2 = line2
+        if line2 is not None:
+            self.line2 = line2
+
         if self.pd is not None:
             if self.background:
-                msg = line1 + line2 + line3
+                msg = self.__formatted_message(line1, line2, line3, bg=True)
                 self.pd.update(percent, self.heading, msg)
             else:
-                self.pd.update(percent, line1, line2, line3)
+                self.pd.update(percent, self.__formatted_message(line1, line2, line3))
 
 
 class CountdownDialog(object):
     __INTERVALS = 5
     pd = None
 
-    def __init__(self, heading, line1='', line2='', line3='', active=True, countdown=60, interval=5):
+    def __init__(self, heading, line1=None, line2=None, line3=None, active=True, countdown=60, interval=5):
         self.heading = heading
         self.countdown = countdown
         self.interval = interval
+        self.line1 = line1
+        self.line2 = line2
         self.line3 = line3
         if active:
             pd = xbmcgui.DialogProgress()
             if not self.line3: line3 = 'Expires in: %s seconds' % countdown
-            pd.create(self.heading, line1, line2, line3)
+            pd.create(self.heading, self.__formatted_message(line1, line2, line3))
             pd.update(100)
             self.pd = pd
+
+    def __formatted_message(self, line1, line2, line3):
+        lines = []
+
+        if line1 is None:
+            lines[0] = '[CR]' if self.line1 is None else self.line1
+        else:
+            lines[0] = line1
+
+        if line2 is None:
+            lines[1] = '[CR]' if self.line2 is None else self.line2
+        else:
+            lines[1] = line2
+
+        if line3 is None:
+            lines[2] = '' if self.line3 is None else self.line3
+        else:
+            lines[2] = line3
+
+        return '[CR]'.join(lines)
 
     def __enter__(self):
         return self
@@ -504,9 +561,16 @@ class CountdownDialog(object):
         else:
             return self.pd.iscanceled()
 
-    def update(self, percent, line1='', line2='', line3=''):
+    def update(self, percent, line1=None, line2=None, line3=None):
+        if line1 is not None:
+            self.line1 = line1
+        if line2 is not None:
+            self.line2 = line2
+        if line2 is not None:
+            self.line2 = line2
+
         if self.pd is not None:
-            self.pd.update(percent, line1, line2, line3)
+            self.pd.update(percent, self.__formatted_message(line1, line2, line3))
 
 
 class ListItem(xbmcgui.ListItem):

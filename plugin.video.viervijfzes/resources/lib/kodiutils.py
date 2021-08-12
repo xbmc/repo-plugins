@@ -44,6 +44,7 @@ HTML_MAPPING = [
     (re.compile(r'<li>', re.I), '- '),
     (re.compile(r'</?(li|ul|ol)(|\s[^>]+)>', re.I), '\n'),
     (re.compile(r'</?(code|div|p|pre|span)(|\s[^>]+)>', re.I), ''),
+    (re.compile(r'<br />', re.I), '\n'),  # Remove newlines
     (re.compile('(&nbsp;\n){2,}', re.I), '\n'),  # Remove repeating non-blocking spaced newlines
     (re.compile('  +', re.I), ' '),  # Remove double spaces
 ]

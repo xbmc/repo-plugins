@@ -12,7 +12,10 @@ from six.moves import urllib
 addonID = xbmcaddon.Addon().getAddonInfo("id")
 addon = xbmcaddon.Addon(addonID)
 db_path = addon.getAddonInfo('profile')
-db_file = xbmc.translatePath("%s/youtube_channels.db" % db_path)
+if sys.version_info.major == 3:
+	db_file = xbmcvfs.translatePath("%s/youtube_channels.db" % db_path)
+else:
+	db_file = xbmc.translatePath("%s/youtube_channels.db" % db_path)
 
 if not xbmcvfs.exists(db_path):
 	xbmcvfs.mkdirs(db_path)
@@ -82,6 +85,25 @@ def move_down(id):
 def build_url(query):
 	return base_url + '?' + urllib.parse.urlencode(query)
 
+def check_thumb_db():
+	cur = db.cursor()
+	columns = [i[1] for i in cur.execute('PRAGMA table_info(Folders)')]
+	if 'Thumb' not in columns:
+		return False
+	else:
+		return True
+
+def add_thumb_db():
+	# Add thumbnail column to existing database if it doesn't already exist
+	cur = db.cursor()
+	try: # This should always succeed since this should only get called if the column hasn't been added but using try just in-case
+		cur.execute('ALTER TABLE Folders ADD COLUMN Thumb TEXT;')
+	except:
+		pass
+	db.commit()
+	cur.close()
+	return
+
 def check_sort_db():
 	cur = db.cursor()
 	columns = [i[1] for i in cur.execute('PRAGMA table_info(Channels)')]
@@ -134,7 +156,7 @@ def init_database():
 	with db:
 		cur = db.cursor()
 		cur.execute("begin")
-		cur.execute("create table if not exists Folders (Name TEXT, Channel TEXT)")
+		cur.execute("create table if not exists Folders (Name TEXT, Channel TEXT, Thumb TEXT)")
 		cur.execute("create table if not exists Channels (Folder TEXT, Channel TEXT, Channel_ID TEXT,thumb TEXT,sort INT)")
 		db.commit()
 		cur.close()
@@ -213,6 +235,17 @@ def add_channel(foldername,channel_name,channel_id,thumb):
 	db.commit()
 	cur.close()
 
+def change_folder(channel_id, folder_name):
+	if folder_name=="root":
+		folder_name="Other"
+	cur = db.cursor()
+	cur.execute("begin")
+	cur.execute("SELECT * From Channels WHERE Folder = ?",(folder_name,))
+	sort = len(cur.fetchall()) + 1
+	cur.execute("UPDATE Channels SET Folder = ?, sort = ? WHERE Channel_ID = ?;",(folder_name, sort, channel_id))
+	db.commit()
+	cur.close()
+
 def remove_channel(id):
 	cur = db.cursor()
 	cur.execute("begin")
@@ -221,6 +254,23 @@ def remove_channel(id):
 
 	db.commit()
 	cur.close()
+
+def set_folder_thumbnail(folder_name, image):
+	cur = db.cursor()
+	cur.execute("begin")
+	cur.execute("UPDATE Folders SET Thumb = ? WHERE Name = ?;",(image, folder_name))
+	db.commit()
+	cur.close()
+
+def get_folder_thumbnail(folder_name):
+	cur = db.cursor()
+	cur.execute("begin")
+	cur.execute("SELECT Thumb FROM Folders WHERE Name = ?;",(folder_name,))
+	thumb = cur.fetchone()[0]
+	db.commit()
+	cur.close()
+	
+	return thumb
 
 def search_channel(channel_name):
 	my_addon = xbmcaddon.Addon()

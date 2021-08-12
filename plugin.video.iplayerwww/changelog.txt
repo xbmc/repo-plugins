@@ -1,0 +1,625 @@
+v4.0.0
+Initial release for Matrix.
+New dependency inputstream.adaptive.
+HLS streams have been removed. As a consequence, bitrate settings have been removed. Bitrate needs to be configured in inputstream.adaptive.
+Switched to PC mediaselector.
+New mediaselector also adds the following new features:
+- Access to new CDN Cloudfront (Amazon)
+- Access to new subtitle sources. If you experience issues with subtitles, first try the new "Subtitle source" setting in the add-on settings before reporting issues.
+- Radio Categories now uses the Categories of BBC Sounds.
+
+Known issues:
+- BBC2 live and all live Radio is broken, most likely due to a bug in inputstream.adaptive
+- No Red Button
+
+v3.0.49
+Fixes for new subtitle XML format.
+Added initial compatibility with Python 3 (does not work on 19 yet).
+Fixed issue for programmes with multiple pages.
+
+v3.0.48
+Added support for BBC Scotland.
+
+v3.0.47
+Fixed broken DASH streaming due to discontinuation of http service.
+
+v3.0.46
+Fixed sign in.
+Fixed CRLF in changelog.txt
+
+v3.0.45
+Fixed Added and Watching.
+
+v3.0.44
+Preserve all subtitle colours to indicate speaker changes.
+Fixed new JSON format for Highlights.
+
+v3.0.43
+Adapt to new JSON format for all expected cases.
+In particular fixed A-Z based on this change.
+
+v3.0.42
+Added fallback for experimental JSON data.
+
+v3.0.41
+Fixed Categories.
+(Dirty) fix for new series view.
+
+v3.0.40
+Fix duplicate of last subtitle.
+
+v3.0.39
+Fixed episode JSON changes.
+
+v3.0.38
+Programme scraping now relies on JSON only.
+Refactored code scraping.
+
+v3.0.37
+Fixed Most Popular.
+
+v3.0.36
+Adapted to new JSON structure.
+
+v3.0.35
+Added support for colored subtitles.
+
+v3.0.34
+Fixed A-Z.
+Fixed Categories.
+
+v3.0.33
+Fixed Radio A-Z.
+Added additional stream sources for Radio.
+Fixed Radio scraping in general.
+
+v3.0.32
+Fixed Radio for programmes which contain semicolon in the json data.
+
+v3.0.31
+Fixed Channel A-Z.
+
+v3.0.30
+Fixed single episodes in A-Z.
+
+v3.0.29
+Fixed Radio Categories and A-Z.
+
+v3.0.28
+Fixed Highlights and Channel Highlights.
+Added UHD Trial Channels (only work in Kodi 18 with latest inputstream.adaptive).
+
+v3.0.27
+Fixed Catgeories again.
+
+v3.0.26
+Categories fix.
+
+v3.0.25
+Fixed problem with episodes that are not available in standard format.
+
+v3.0.24
+Fixed pagination for Categories.
+
+v3.0.23
+Switched everything to https.
+Fixed problem with pagination.
+
+v3.0.22
+Added missing initializations and title fallback.
+
+v3.0.21
+Adapted to new episodes layout on iPlayer.
+Fixed Radio Favourites.
+Removed Radio Following (currently not working on the website).
+
+v3.0.20
+Fixed Most Popular and Highlights.
+
+v3.0.19
+Fixed Channel Highlights.
+
+v3.0.18
+Fixed Highlights (again).
+Fixed BBCiD login.
+Made Added and Watching more robust against some changes.
+
+v3.0.17
+Fixed Highlights.
+
+v3.0.16
+Categories now needs https.
+
+v3.0.15
+Fixed Highlights.
+
+v3.0.14
+Fix for new mediator HTML.
+Live TV now uses a timestamp to avoid problems with "Hide watched".
+
+v3.0.13
+Fix for full URL for some programmes.
+
+v3.0.12
+Signed and AD streams must be treated separately.
+
+v3.0.11
+Added new stream kind and option for future stream kinds.
+
+v3.0.10
+Add support for live events (webcast).
+
+v3.0.9
+Fixed Channel A-Z.
+
+v3.0.8
+Add support for 'technical-replacement' stream type.
+
+v3.0.7
+Fixed Channel Highlights.
+Removed dependency on InputStream Adaptive.
+COMPATIBILITY NOTE: Stream protocol will automatically reset to HLS if InputStream Adaptive is missing.
+
+v3.0.6
+Fixed broken Channel A-Z.
+
+v3.0.5
+Fixed Categories (yet again).
+Adapted to new design of episode pages.
+Fixed broken Radio A-Z.
+
+v3.0.4
+Fixed broken BBC iD functionality.
+
+v3.0.3
+Fixed broken Categories (again).
+
+v3.0.2
+Fixed broken Categories.
+Added support for Live https DASH streams.
+
+v3.0.1
+Optimized selection of catchup CDN internally.
+COMPATIBILITY NOTE: Users need to set catchup source to "Any" when Autoplay is switched off
+to get a choice of all CDNs.
+Additional programme properties for better shortcut handling within Kodi.
+Fixed Channel A-Z.
+
+v3.0.0
+Initial release for Kodi Krypton.
+Support for DASH streams if inputstream.adaptive add-on is available.
+
+v2.5.6
+Added live TV channel BBC One South West.
+
+v2.5.5
+Fixed broken Highlights.
+Added option to automatically sign in with BBCiD.
+NOTE: If this option is enabled, users will always be signed in.
+
+v2.5.4
+Fixed missing icon image when using BBCiD.
+Properly added new CDN Bidi (worked before just by chance).
+Added option to select main menu entries.
+
+v2.5.3
+New image urls.
+
+v2.5.2
+Fixed typo.
+Adapted to latest changes on the website.
+
+v2.5.1
+Fix for broken BBC iD functionality.
+COMPATIBILITY NOTE:
+Users need to sign in on the website once and provide additional data, e.g. their
+postcode before using the updated BBC iD functionality in the add-on.
+
+v2.5.0
+New channel icons for TV and Radio by primaeval. Now all channels have dedicated icons.
+Added warning regarding new TV Licence legislation.
+
+v2.4.1
+Fixed problem which caused too many playlists to be loaded.
+Tidied up some code.
+
+v2.4.0
+Added more Red Button streams.
+Added more regional Live TV.
+Added option to disable Red Button warning pop-up.
+Added icons for top level directories.
+
+v2.3.4
+Moved to different, hopefully more stable, source for Red Button streams.
+Red Button now uses the same code as Watch Live.
+
+v2.3.3
+Fixed high quality Red Button streams.
+
+v2.3.2
+Fixed Radio Favourites and renamed to Added, as on the website.
+
+v2.3.1
+Fixed Favourites and renamed to Added, as on the website.
+
+v2.3.0
+Added mode which shows CBeebies/CBBC only.
+Rearranged settings.
+Moved translation to .po format. (already in 2.2.1)
+
+v2.2.1
+Fixed problem with new Highlights layout.
+Fixed problem with new XML format.
+
+v2.2.0
+Added support for Red Button.
+Fixed empty directory in Channel Highlights.
+
+v2.1.3
+Added more bitrate options for Radio.
+Switched to new stable source for live TV.
+COMPATIBILITY NOTE:
+If autoplay is used for live TV, users MUST set their preferences for live TV bitrate again.
+
+v2.1.2
+Fixed missing live non-HD TV.
+
+v2.1.1
+Fixed live HD TV.
+
+v2.1.0
+Added support for international radio.
+Set default Live TV to 1.7Mbps.
+Live Radio max bitrate setting.
+Removed BBC Three live.
+
+v2.0.1
+Reverted sorting of programmes back to previous default.
+Fixed various warnings in the logfile.
+Added support for Channel A-Z.
+
+v2.0.0
+Added support for radio.
+Broke up code into different files.
+Added option to sign out BBCiD.
+
+v1.3.5
+Fix for Unicode characters in subtitles.
+
+v1.3.4
+Fix for new URL of BBC Three.
+
+v1.3.3
+Fix for episode count in Favourites.
+
+v1.3.2
+Fixed missing multiple episodes in Favourites.
+Added missing unescaping of HTML.
+Fix for single page listings.
+Minor fixes of potential errors.
+Added optional settings for displaying programme lists.
+
+v1.3.1
+Fixed aired date in Favourites and Watching.
+Fixed incompatibility with Python 2.6.
+
+v1.3.0
+Redesign of scrapers for more robustness, speed and ease of maintenance.
+New progress bar during lengthy scrapes.
+Search groups are supported again.
+Fixed missing aired date.
+Corrected and added dependencies.
+Added support for keyword injection in Search.
+
+v1.2.10
+Fix for changed HTML layout.
+
+v1.2.9
+Fixed broken aired date.
+Added rudimentary support for aired date in Categories.
+
+v1.2.8
+Temporarily removed support for search groups as it may cause Search to fail completely.
+
+v1.2.7
+Fixed bug in Categories with subtcategories, which was introduced in 1.2.6.
+
+v1.2.6
+Cleaned up scraping of aired date.
+Fixed subtitles for newer programmes.
+Fixed some missing channel icons for Live TV.
+
+v1.2.5
+Adapted to new design Highlights website.
+
+v1.2.4
+Added Channel Highlights.
+Fixed missing plot bug in Watching.
+Fixed bugs related to UTF-8 encoded v2.5.4
+Fixed missing icon image when using BBCiD.
+Properly added new CDN Bidi (worked before just by chance).
+Added option to select main menu entries.
+
+v2.5.3
+New image urls.
+
+v2.5.2
+Fixed typo.
+Adapted to latest changes on the website.
+
+v2.5.1
+Fix for broken BBC iD functionality.
+COMPATIBILITY NOTE:
+Users need to sign in on the website once and provide additional data, e.g. their
+postcode before using the updated BBC iD functionality in the add-on.
+
+v2.5.0
+New channel icons for TV and Radio by primaeval. Now all channels have dedicated icons.
+Added warning regarding new TV Licence legislation.
+
+v2.4.1
+Fixed problem which caused too many playlists to be loaded.
+Tidied up some code.
+
+v2.4.0
+Added more Red Button streams.
+Added more regional Live TV.
+Added option to disable Red Button warning pop-up.
+Added icons for top level directories.
+
+v2.3.4
+Moved to different, hopefully more stable, source for Red Button streams.
+Red Button now uses the same code as Watch Live.
+
+v2.3.3
+Fixed high quality Red Button streams.
+
+v2.3.2
+Fixed Radio Favourites and renamed to Added, as on the website.
+
+v2.3.1
+Fixed Favourites and renamed to Added, as on the website.
+
+v2.3.0
+Added mode which shows CBeebies/CBBC only.
+Rearranged settings.
+Moved translation to .po format. (already in 2.2.1)
+
+v2.2.1
+Fixed problem with new Highlights layout.
+Fixed problem with new XML format.
+
+v2.2.0
+Added support for Red Button.
+Fixed empty directory in Channel Highlights.
+
+v2.1.3
+Added more bitrate options for Radio.
+Switched to new stable source for live TV.
+COMPATIBILITY NOTE:
+If autoplay is used for live TV, users MUST set their preferences for live TV bitrate again.
+
+v2.1.2
+Fixed missing live non-HD TV.
+
+v2.1.1
+Fixed live HD TV.
+
+v2.1.0
+Added support for international radio.
+Set default Live TV to 1.7Mbps.
+Live Radio max bitrate setting.
+Removed BBC Three live.
+
+v2.0.1
+Reverted sorting of programmes back to previous default.
+Fixed various warnings in the logfile.
+Added support for Channel A-Z.
+
+v2.0.0
+Added support for radio.
+Broke up code into different files.
+Added option to sign out BBCiD.
+
+v1.3.5
+Fix for Unicode characters in subtitles.
+
+v1.3.4
+Fix for new URL of BBC Three.
+
+v1.3.3
+Fix for episode count in Favourites.
+
+v1.3.2
+Fixed missing multiple episodes in Favourites.
+Added missing unescaping of HTML.
+Fix for single page listings.
+Minor fixes of potential errors.
+Added optional settings for displaying programme lists.
+
+v1.3.1
+Fixed aired date in Favourites and Watching.
+Fixed incompatibility with Python 2.6.
+
+v1.3.0
+Redesign of scrapers for more robustness, speed and ease of maintenance.
+New progress bar during lengthy scrapes.
+Search groups are supported again.
+Fixed missing aired date.
+Corrected and added dependencies.
+Added support for keyword injection in Search.
+
+v1.2.10
+Fix for changed HTML layout.
+
+v1.2.9
+Fixed broken aired date.
+Added rudimentary support for aired date in Categories.
+
+v1.2.8
+Temporarily removed support for search groups as it may cause Search to fail completely.
+
+v1.2.7
+Fixed bug in Categories with subtcategories, which was introduced in 1.2.6.
+
+v1.2.6
+Cleaned up scraping of aired date.
+Fixed subtitles for newer programmes.
+Fixed some missing channel icons for Live TV.
+
+v1.2.5
+Adapted to new design Highlights website.
+
+v1.2.4
+Added Channel Highlights.
+Fixed missing plot bug in Watching.
+Fixed bugs related to UTF-8 encoded programme names.
+Fixed HTML tags showing up in some Highlights programme names.
+
+v1.2.3
+Fixed various bugs in personalisation features.
+Improved cookie handling.
+Make sure the user data directory exists.
+
+v1.2.2
+Further localization of messages.
+Fixed bugs in translations.
+
+v1.2.1
+Localized main menu entries and pop-up messages.
+
+v1.2.0
+Added personalisation features.
+Fixed S4C live TV.
+Final tweaks and fixes for Highlights section.
+Added error pop-ups for requests.
+
+v1.1.2
+Adapted to new layout of Highlights page.
+Part of this is still experimental and may need further fixes.
+
+v1.1.1
+Fixed bug in settings dialog.
+
+v1.1.0
+Added first aired date for episodes.
+Redesigned user interface for manual stream selection and preferences dialog.
+Cleaned up unneccesary code.
+Improved error dialog.
+
+v1.0.1
+Fixup code to pep8 standard.
+Convert to docstrings.
+Fixed typo.
+Added error dialog.
+
+v1.0.0
+Corrected a few typos.
+
+v1.0.0rc4
+Added additional sources for catchup content.
+Adapted to new website layout in Highlights section.
+
+v1.0.0rc3
+Fixed bug in bitrate selection of live TV and catchup content.
+
+v1.0.0rc2
+Added regional channels for live TV.
+Fixed display of icons for live TV.
+Fixed bug in bitrate selection of live TV.
+Fixed bug in bitrate selection of some catchup content.
+
+v1.0.0rc1
+Fixed bug in category and search view: Programmes with multiple episodes did not show up correctly.
+
+v1.0.0beta5
+Moved from urllib2 to requests (adds dependency to requests add-on from official repo).
+Corrected ambiguous values in settings.
+
+v1.0.0beta4
+Added experimental support for sorting content by date, if the date is part of the title.
+
+v1.0.0beta3
+Fixed problem with some older catchup content, which was not found correctly.
+
+v1.0.0beta2
+Fixed typo in settings.
+Fixed live TV for News, Parliament and Alba.
+
+v1.0.0beta1
+Initial release.
+programme names.
+Fixed HTML tags showing up in some Highlights programme names.
+
+v1.2.3
+Fixed various bugs in personalisation features.
+Improved cookie handling.
+Make sure the user data directory exists.
+
+v1.2.2
+Further localization of messages.
+Fixed bugs in translations.
+
+v1.2.1
+Localized main menu entries and pop-up messages.
+
+v1.2.0
+Added personalisation features.
+Fixed S4C live TV.
+Final tweaks and fixes for Highlights section.
+Added error pop-ups for requests.
+
+v1.1.2
+Adapted to new layout of Highlights page.
+Part of this is still experimental and may need further fixes.
+
+v1.1.1
+Fixed bug in settings dialog.
+
+v1.1.0
+Added first aired date for episodes.
+Redesigned user interface for manual stream selection and preferences dialog.
+Cleaned up unneccesary code.
+Improved error dialog.
+
+v1.0.1
+Fixup code to pep8 standard.
+Convert to docstrings.
+Fixed typo.
+Added error dialog.
+
+v1.0.0
+Corrected a few typos.
+
+v1.0.0rc4
+Added additional sources for catchup content.
+Adapted to new website layout in Highlights section.
+
+v1.0.0rc3
+Fixed bug in bitrate selection of live TV and catchup content.
+
+v1.0.0rc2
+Added regional channels for live TV.
+Fixed display of icons for live TV.
+Fixed bug in bitrate selection of live TV.
+Fixed bug in bitrate selection of some catchup content.
+
+v1.0.0rc1
+Fixed bug in category and search view: Programmes with multiple episodes did not show up correctly.
+
+v1.0.0beta5
+Moved from urllib2 to requests (adds dependency to requests add-on from official repo).
+Corrected ambiguous values in settings.
+
+v1.0.0beta4
+Added experimental support for sorting content by date, if the date is part of the title.
+
+v1.0.0beta3
+Fixed problem with some older catchup content, which was not found correctly.
+
+v1.0.0beta2
+Fixed typo in settings.
+Fixed live TV for News, Parliament and Alba.
+
+v1.0.0beta1
+Initial release.

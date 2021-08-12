@@ -1,39 +1,18 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2016  SylvainCecchetto
+# Copyright: (c) 2016, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from codequick import Script
-"""
-The following dictionaries describe
-the addon's tree architecture.
-* Key: item id
-* Value: item infos
-    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
-    - thumb: Item thumb path relative to "media" folder
-    - fanart: Item fanart path relative to "meia" folder
-"""
+
+# The following dictionaries describe
+# the addon's tree architecture.
+# * Key: item id
+# * Value: item infos
+#     - route (folder)/resolver (playable URL): Callback function to run once this item is selected
+#     - thumb: Item thumb path relative to "media" folder
+#     - fanart: Item fanart path relative to "media" folder
 
 root = 'live_tv'
 
@@ -59,6 +38,7 @@ menu = {
         'label': 'RTS Un',
         'thumb': 'channels/ch/rtsun.png',
         'fanart': 'channels/ch/rtsun_fanart.jpg',
+        'xmltv_id': 'C202.api.telerama.fr',
         'enabled': True,
         'order': 9
     },
@@ -67,6 +47,7 @@ menu = {
         'label': 'RTS Deux',
         'thumb': 'channels/ch/rtsdeux.png',
         'fanart': 'channels/ch/rtsdeux_fanart.jpg',
+        'xmltv_id': 'C183.api.telerama.fr',
         'enabled': True,
         'order': 10
     },
@@ -91,6 +72,7 @@ menu = {
         'label': 'RSI La 1',
         'thumb': 'channels/ch/rsila1.png',
         'fanart': 'channels/ch/rsila1_fanart.jpg',
+        'xmltv_id': 'C200.api.telerama.fr',
         'enabled': True,
         'order': 13
     },
@@ -99,6 +81,7 @@ menu = {
         'label': 'RSI La 2',
         'thumb': 'channels/ch/rsila2.png',
         'fanart': 'channels/ch/rsila2_fanart.jpg',
+        'xmltv_id': 'C201.api.telerama.fr',
         'enabled': True,
         'order': 14
     },
@@ -107,6 +90,7 @@ menu = {
         'label': 'SRF 1',
         'thumb': 'channels/ch/srf1.png',
         'fanart': 'channels/ch/srf1_fanart.jpg',
+        'xmltv_id': 'C59.api.telerama.fr',
         'enabled': True,
         'order': 15
     },

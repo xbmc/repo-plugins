@@ -100,7 +100,7 @@ def addServer():
     xbmc.log("AmpachePlugin::addServer" , xbmc.LOGDEBUG )
     jsStorServer = json_storage.JsonStorage("servers.json")
     serverData = jsStorServer.getData()
-    stnum = len(list(serverData["servers"]))
+    stnum = str(len(list(serverData["servers"])))
     username = ""
     password = ""
     apikey = ""

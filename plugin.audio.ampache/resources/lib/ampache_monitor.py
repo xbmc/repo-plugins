@@ -46,6 +46,6 @@ class AmpacheMonitor( xbmc.Monitor ):
                 except:
                     xbmc.log("AmpacheMonitor::no playing file " , xbmc.LOGDEBUG)
                     return
-                xbmc.executebuiltin('RunPlugin(plugin://plugin.audio.ampache/?mode=47)')
+                xbmc.executebuiltin('RunPlugin(plugin://plugin.audio.ampache/?mode=205)')
 
 

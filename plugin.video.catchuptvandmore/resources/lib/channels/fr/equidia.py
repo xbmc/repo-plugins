@@ -1,42 +1,20 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2019  SylvainCecchetto
+# Copyright: (c) 2019, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
 from datetime import date
-
-from codequick import Route, Resolver, Listitem, utils, Script
-
-from resources.lib import web_utils
-from resources.lib import download
-from resources.lib.menu_utils import item_post_treatment
-
 import json
 import re
+
+from codequick import Listitem, Resolver, Route, Script
 import urlquick
 
-# TODO
+from resources.lib import download, web_utils
+from resources.lib.menu_utils import item_post_treatment
+
 
 URL_ROOT = 'https://www.equidia.fr'
 
@@ -51,6 +29,7 @@ URL_IMAGE = URL_API_SEARCH + '/media/article_header/%s'
 
 URL_REPLAY_DATAS = 'https://api.equidia.fr/api/public/videos-store/player/%s'
 # VideoId
+URL_MOBILE_API = 'https://api.equidia.fr/api/public/racing/equidia-mobileapp-ios-1/%s'
 
 CATEGORIES_VIDEOS_EQUIDIA = {
     '/search/emissions': Script.localize(20343),  # TV shows
@@ -194,17 +173,15 @@ def get_video_course_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    # Get date of Today
-    today = date.today()
-    today_value = today.strftime("%Y%m%d")
     resp = urlquick.get(
-        URL_LIVE_DATAS % today_value, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    json_parser = json.loads(resp.text)
-    url_stream_datas = ''
-    for stream_datas in json_parser:
-        if 'EQUIDIA' in stream_datas['title']:
-            url_stream_datas = stream_datas["streamUrl"]
-    resp2 = urlquick.get(
-        url_stream_datas, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    json_parser2 = json.loads(resp2.text)
-    return json_parser2["primary"]
+        URL_MOBILE_API % item_id,
+        headers={
+            "User-Agent": "Equidia/6036 CFNetwork/1220.1 Darwin/20.3.0",
+            "Referer": "https://fr.equidia.app/"
+        },
+        max_age=-1)
+    json_parser2 = json.loads(resp.text)
+    if "primary" in json_parser2:
+        return json_parser2["primary"]
+    else:
+        return json_parser2["stream_url_pri"]

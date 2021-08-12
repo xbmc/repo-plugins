@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 import pytz
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
@@ -468,7 +468,7 @@ class Channel(chn_class.Channel):
         url = "%s/%s" % (self.baseUrl, slug)
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = result_set['description']
         item.complete = False
 
@@ -522,10 +522,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -562,7 +562,7 @@ class Channel(chn_class.Channel):
         json = JsonHelper(json_data, logger=Logger.instance())
         Logger.trace(json.json)
 
-        item.MediaItemParts = []
+        item.streams = []
 
         # generic server information
         proxy_data = UriHandler.open("https://streaming-loadbalancer.ur.se/loadbalancer.json",
@@ -572,7 +572,6 @@ class Channel(chn_class.Channel):
         Logger.trace("Found RTMP Proxy: %s", proxy)
 
         stream_infos = json.get_value("program", "streamingInfo")
-        part = item.create_new_empty_media_part()
         for stream_type, stream_info in stream_infos.items():
             Logger.trace(stream_info)
             default_stream = stream_info.get("default", False)
@@ -583,7 +582,7 @@ class Channel(chn_class.Channel):
                     continue
                 stream_url = stream["location"]
                 if quality == "tt":
-                    part.Subtitle = SubtitleHelper.download_subtitle(
+                    item.subtitle = SubtitleHelper.download_subtitle(
                         stream_url, format="ttml")
                     continue
 
@@ -591,7 +590,7 @@ class Channel(chn_class.Channel):
                 if stream_type == "raw":
                     bitrate += 1
                 url = "https://%s/%smaster.m3u8" % (proxy, stream_url)
-                part.append_media_stream(url, bitrate)
+                item.add_stream(url, bitrate)
 
         item.complete = True
         return item
@@ -627,7 +626,7 @@ class Channel(chn_class.Channel):
         item.fanart = "https://assets.ur.se/id/{}/images/1_l.jpg".format(asset_id)
         if result_type == "program":
             item.set_info_label("duration", result_set["duration"] * 60)
-            item.type = "video"
+            item.media_type = mediatype.EPISODE
         return item
 
     def __iterate_results(self, url_format, results_per_page=150, max_iterations=10):

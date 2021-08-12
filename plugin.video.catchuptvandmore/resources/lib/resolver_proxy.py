@@ -1,48 +1,26 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2017  SylvainCecchetto
+# Copyright: (c) 2017, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-
-from codequick import Script, Listitem
-
-
-from resources.lib import web_utils
-from resources.lib import addon_utils
-from resources.lib import download
-from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
-
-import inputstreamhelper
 import json
 import re
-import urlquick
-from kodi_six import xbmcgui
-
 try:
     from urllib.parse import quote_plus
 except ImportError:
     from urllib import quote_plus
+
+import inputstreamhelper
+from codequick import Script, Listitem
+from kodi_six import xbmcgui
+import urlquick
+
+from resources.lib import download, web_utils
+from resources.lib.addon_utils import get_quality_YTDL
+from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
+
 
 # TO DO
 # Quality VIMEO
@@ -104,7 +82,7 @@ def get_stream_default(plugin,
     if download_mode:
         return download.download_video(video_url)
 
-    quality = addon_utils.get_quality_YTDL(download_mode=download_mode)
+    quality = get_quality_YTDL(download_mode=download_mode)
     return plugin.extract_source(video_url, quality)
 
 
@@ -213,7 +191,7 @@ def get_brightcove_policy_key(data_account, data_player):
     """Get policy key"""
     file_js = urlquick.get(URL_BRIGHTCOVE_POLICY_KEY %
                            (data_account, data_player))
-    return re.compile('policyKey:"(.+?)"').findall(file_js.text)[0]
+    return re.compile(r'policyKey\:\"(.*?)\"').findall(file_js.text)[0]
 
 
 def get_brightcove_video_json(plugin,
@@ -321,10 +299,8 @@ def get_francetv_video_stream(plugin,
         if download_mode:
             return download.download_video(final_video_url)
         return final_video_url
-    elif 'dash' in all_video_datas[0][0]:
-        if download_mode:
-            xbmcgui.Dialog().ok(plugin.localize(14116), plugin.localize(30603))
-            return False
+
+    if 'dash' in all_video_datas[0][0]:
 
         is_helper = inputstreamhelper.Helper('mpd')
         if not is_helper.check_inputstream():
@@ -338,6 +314,9 @@ def get_francetv_video_stream(plugin,
         item.info.update(get_selected_item_info())
 
         if all_video_datas[0][1]:
+            if download_mode:
+                xbmcgui.Dialog().ok(plugin.localize(14116), plugin.localize(30603))
+                return False
             item.path = video_datas['url']
             token_request = json.loads('{"id": "%s", "drm_type": "%s", "license_type": "%s"}' % (id_diffusion, video_datas['drm_type'], video_datas['license_type']))
             token = urlquick.post(video_datas['token'], json=token_request).json()['token']
@@ -346,14 +325,21 @@ def get_francetv_video_stream(plugin,
             item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
             item.property['inputstream.adaptive.license_key'] = license_key
         else:
-            json_parser2 = json.loads(
-                urlquick.get(url_selected, max_age=-1).text)
-            item.path = json_parser2['url']
-
+            headers = {
+                'User-Agent':
+                web_utils.get_random_ua()
+            }
+            json_parser2 = json.loads(urlquick.get(url_selected, headers=headers, max_age=-1).text)
+            resp3 = urlquick.get(json_parser2['url'], headers=headers, max_age=-1, allow_redirects=False)
+            location_url = resp3.headers['location']
+            item.path = location_url
+            item.property['inputstream.adaptive.stream_headers'] = 'User-Agent=%s' % web_utils.get_random_ua()
+            if download_mode:
+                return download.download_video(item.path)
         return item
-    else:
-        # Return info the format is not known
-        return False
+
+    # Return info the format is not known
+    return False
 
 
 def get_francetv_live_stream(plugin, live_id):
@@ -368,22 +354,25 @@ def get_francetv_live_stream(plugin, live_id):
     if not geoip_value:
         geoip_value = 'FR'
     for video in json_parser_liveId['videos']:
-        if 'format' in video:
-            if 'hls_v' in video['format'] or video['format'] == 'hls':
-                if video['geoblocage'] is not None:
-                    for value_geoblocage in video['geoblocage']:
-                        if geoip_value == value_geoblocage:
-                            final_url = video['url']
-                else:
+        if 'format' not in video:
+            continue
+
+        if 'hls_v' not in video['format'] and video['format'] != 'hls':
+            continue
+
+        if video['geoblocage'] is not None:
+            for value_geoblocage in video['geoblocage']:
+                if geoip_value == value_geoblocage:
                     final_url = video['url']
+        else:
+            final_url = video['url']
 
     if final_url == '':
         return None
 
-    json_parser2 = json.loads(
-        urlquick.get(URL_FRANCETV_HDFAUTH_URL % (final_url), max_age=-1).text)
+    json_parser2 = json.loads(urlquick.get(URL_FRANCETV_HDFAUTH_URL % (final_url), max_age=-1).text)
 
-    return json_parser2['url'] + '|user-agent=%s' % web_utils.get_random_ua()
+    return json_parser2['url'] + '|User-Agent=%s' % web_utils.get_random_ua()
 
 
 # Arte Part

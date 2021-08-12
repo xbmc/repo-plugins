@@ -1,10 +1,9 @@
-from resources.lib.models.list_item import ListItem
 import urllib.parse
 import xbmcgui
+from resources.lib.models.list_item import ListItem
 
 
 class Editorial(ListItem):
-    thumb = ""
     uri = ""
     info = {}
 
@@ -16,7 +15,7 @@ class Editorial(ListItem):
         })
         url = addon_base + "/?" + urllib.parse.urlencode({
             "action": "call",
-            "call": "fom-assets/videos?tag={tag}".format(tag=self.id),
+            "call": "video-assets/videos?tag={tag}".format(tag=self.id),
         })
 
         return url, list_item, True

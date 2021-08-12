@@ -1,8 +1,21 @@
 # RepubblicaItaliana Kodi plugin
 Italian politics - TV and Radio channels
 
+### Install tips
+- You can install this plugin via the official Kodi19 repository
 
 ### Changelog
+2.0.0 (20 May 2021)
+- Plugin reworked
+- Removed InputStream Adaptive
+- Fix Camera Assemblea
+- Fix TgCom24 on Linux
+
+1.1.0 (05 Mar 2021)
+- Use of Tubed instead of Youtube
+- Fixed some thumbnails
+- Fixed automatic installation of inputstream.adaptive on Windows
+
 1.0.0 (28 Feb 2021)
 - Upgraded to Kodi19 Matrix
 - Fixed SkyTg24
@@ -26,3 +39,4 @@ Italian politics - TV and Radio channels
 
 0.1.0 (26 Aug 2019)
 - first version
+

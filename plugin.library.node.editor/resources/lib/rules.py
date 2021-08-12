@@ -233,7 +233,23 @@ class RuleFunctions():
                 type = xbmcgui.INPUT_DATE
             if group == "isornot":
                 type = xbmcgui.INPUT_ALPHANUM
+            if group == "seconds":
+                type = xbmcgui.INPUT_TIME
+                # album duration is in HH:MM:SS but we can't call that input dialog from python so
+                # find and strip any seconds that may be in an existing node. Use the HH:MM dialog
+                # and add the seconds field back on before we write the node
+                secPos = -1
+                if curValue is not None:
+                    secPos = curValue.rfind(":00")
+                    if secPos == -1:
+                        secPos = len( curValue)
+                if ((curValue is not None) and (secPos >= 4)):
+                    curValue = curValue[0:secPos]
+                    if len( curValue ) < 5:
+                        curValue = " " + curValue
             returnVal = xbmcgui.Dialog().input( LANGUAGE( 30307 ), curValue, type=type )
+            if ( group == "seconds" and returnVal !="" ):
+                returnVal += ":00"# Add the seconds if we previously removed them
             if returnVal != "":
                 self.writeUpdatedRule( unquote(actionPath), ruleNum, value=returnVal )
         except:
@@ -945,7 +961,7 @@ class RuleFunctions():
             returnVal = self.browser( self.niceMatchName( match ) )
         try:
             # Delete any fake node
-            xbmcvfs.delete( os.path.join( xbmc.translatePath( "special://profile" ), "library", self.ltype, "plugin.library.node.editor", "temp.xml" ) )
+            xbmcvfs.delete( os.path.join( xbmcvfs.translatePath( "special://profile" ), "library", self.ltype, "plugin.library.node.editor", "temp.xml" ) )
         except:
             print_exc()
         self.writeUpdatedRule( actionPath, ruleNum, value = returnVal )
@@ -961,7 +977,7 @@ class RuleFunctions():
 
     def createBrowseNode( self, content, grouping = None ):
         # This function creates a fake node which we'll use for browsing
-        targetDir = os.path.join( xbmc.translatePath( "special://profile" ), "library", self.ltype, "plugin.library.node.editor" )
+        targetDir = os.path.join( xbmcvfs.translatePath( "special://profile" ), "library", self.ltype, "plugin.library.node.editor" )
         if not os.path.exists( targetDir ):
             xbmcvfs.mkdirs( targetDir )
         # Create a new etree

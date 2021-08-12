@@ -45,6 +45,10 @@ msgctxt "#30014"
 msgid "Enable images on long lists"
 msgstr ""
 
+msgctxt "#30015"
+msgid "Auto fullscreen"
+msgstr ""
+
 msgctxt "#30020"
 msgid "Add Server"
 msgstr ""
@@ -452,4 +456,28 @@ msgstr ""
 
 msgctxt "#30204"
 msgid "Permission error. If you are using Nextcloud don't check api_key box"
+msgstr ""
+
+msgctxt "#30220"
+msgid "Video"
+msgstr ""
+
+msgctxt "#30221"
+msgid "Videos"
+msgstr ""
+
+msgctxt "#30222"
+msgid "Search Videos..."
+msgstr ""
+
+msgctxt "#30225"
+msgid "Podcast"
+msgstr ""
+
+msgctxt "#30226"
+msgid "Podcasts"
+msgstr ""
+
+msgctxt "#30227"
+msgid "Search Podcasts..."
 msgstr ""

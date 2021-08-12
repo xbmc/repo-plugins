@@ -1,39 +1,18 @@
 # -*- coding: utf-8 -*-
-"""
-    Catch-up TV & More
-    Copyright (C) 2016  SylvainCecchetto
+# Copyright: (c) 2016, SylvainCecchetto
+# GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
-    This file is part of Catch-up TV & More.
+# This file is part of Catch-up TV & More
 
-    Catch-up TV & More is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Catch-up TV & More is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with Catch-up TV & More; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-
-# The unicode_literals import only has
-# an effect on Python 2.
-# It makes string literals as unicode like in Python 3
 from __future__ import unicode_literals
-from codequick import Script
-"""
-The following dictionaries describe
-the addon's tree architecture.
-* Key: item id
-* Value: item infos
-    - route (folder)/resolver (playable URL): Callback function to run once this item is selected
-    - thumb: Item thumb path relative to "media" folder
-    - fanart: Item fanart path relative to "meia" folder
-"""
+
+# The following dictionaries describe
+# the addon's tree architecture.
+# * Key: item id
+# * Value: item infos
+#     - route (folder)/resolver (playable URL): Callback function to run once this item is selected
+#     - thumb: Item thumb path relative to "media" folder
+#     - fanart: Item fanart path relative to "media" folder
 
 root = 'live_tv'
 
@@ -150,7 +129,7 @@ menu = {
         'label': 'Quest',
         'thumb': 'channels/uk/questtv.png',
         'fanart': 'channels/uk/questtv_fanart.jpg',
-        'xmltv_id': '1230.tvguide.co.uk',
+        'xmltv_id': '559.tvguide.co.uk',
         'enabled': False,
         'order': 18
     },
@@ -168,6 +147,7 @@ menu = {
         'label': 'Bristol Local TV',
         'thumb': 'channels/uk/bristollocal.png',
         'fanart': 'channels/uk/bristollocal_fanart.jpg',
+        'xmltv_id': '1157.tvguide.co.uk',
         'enabled': True,
         'order': 21
     },
@@ -232,6 +212,7 @@ menu = {
         'label': 'Birmingham Local TV',
         'thumb': 'channels/uk/birminghamlocal.png',
         'fanart': 'channels/uk/birminghamlocal_fanart.jpg',
+        'xmltv_id': '1154.tvguide.co.uk',
         'enabled': True,
         'order': 31
     },
@@ -240,6 +221,7 @@ menu = {
         'label': 'Cardiff Local TV',
         'thumb': 'channels/uk/cardifflocal.png',
         'fanart': 'channels/uk/cardifflocal_fanart.jpg',
+        'xmltv_id': '1171.tvguide.co.uk',
         'enabled': True,
         'order': 32
     },
@@ -248,6 +230,7 @@ menu = {
         'label': 'Leeds Local TV',
         'thumb': 'channels/uk/leedslocal.png',
         'fanart': 'channels/uk/leedslocal_fanart.jpg',
+        'xmltv_id': '1210.tvguide.co.uk',
         'enabled': True,
         'order': 33
     },
@@ -256,6 +239,7 @@ menu = {
         'label': 'Liverpool Local TV',
         'thumb': 'channels/uk/liverpoollocal.png',
         'fanart': 'channels/uk/liverpoollocal_fanart.jpg',
+        'xmltv_id': '1212.tvguide.co.uk',
         'enabled': True,
         'order': 33
     },
@@ -280,6 +264,7 @@ menu = {
         'label': 'Tyne & Wear Local TV',
         'thumb': 'channels/uk/twlocal.png',
         'fanart': 'channels/uk/twlocal_fanart.jpg',
+        'xmltv_id': '1255.tvguide.co.uk',
         'enabled': True,
         'order': 36
     },
@@ -288,6 +273,7 @@ menu = {
         'label': 'Really',
         'thumb': 'channels/uk/really.png',
         'fanart': 'channels/uk/really_fanart.jpg',
+        'xmltv_id': '422.tvguide.co.uk',
         'enabled': False,
         'order': 37
     },
@@ -296,6 +282,7 @@ menu = {
         'label': 'Food Network',
         'thumb': 'channels/uk/foodnetwork.png',
         'fanart': 'channels/uk/foodnetwork_fanart.jpg',
+        'xmltv_id': '596.tvguide.co.uk',
         'enabled': False,
         'order': 38
     },
@@ -304,6 +291,7 @@ menu = {
         'label': 'DMAX',
         'thumb': 'channels/uk/dmax.png',
         'fanart': 'channels/uk/dmax_fanart.jpg',
+        'xmltv_id': '454.tvguide.co.uk',
         'enabled': False,
         'order': 39
     },

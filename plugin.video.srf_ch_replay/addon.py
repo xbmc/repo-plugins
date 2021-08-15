@@ -15,6 +15,7 @@ import traceback
 from io import StringIO
 import gzip
 from urllib.parse import urlparse
+from string import ascii_lowercase
 
 #'Base settings'
 #'Start of the plugin functionality is at the end of the file'
@@ -31,6 +32,9 @@ FavoritesFile = xbmcvfs.translatePath("special://profile/addon_data/" + addonID 
 numberOfEpisodesPerPage = str(addon.getSetting("numberOfShowsPerPage"))
 tr = addon.getLocalizedString
 
+#####################################
+# OLD SRF Podcast Plugin api methods
+#####################################
 
 def open_srf_url(urlstring):
     request = urllib.request.Request(urlstring)
@@ -48,21 +52,7 @@ def open_srf_url(urlstring):
     return response
 
 
-def _addShow(name, url, mode, desc, iconimage, page):
-    """
-    helper method to create a folder with subitems
-    """
-    directoryurl = sys.argv[0] + "?url=" + urllib.parse.quote_plus(url) + "&mode=" + str(mode) + "&showbackground=" + urllib.parse.quote_plus(iconimage) + "&page=" + str(page) + "&channel=srf"
-    liz = xbmcgui.ListItem(name)
-    liz.setLabel2(desc)
-    liz.setArt({'poster': iconimage, 'banner': iconimage, 'fanart': iconimage, 'thumb': iconimage})
-    liz.setInfo(type="Video", infoLabels={"title": name, "plot": desc, "plotoutline": desc})
-    xbmcplugin.setContent(pluginhandle, 'tvshows')
-    ok = xbmcplugin.addDirectoryItem(pluginhandle, url=directoryurl, listitem=liz, isFolder=True)
-    return ok
-
-
-def listTvShows():
+def list_all_tv_shows(letter):
     """
     this method list all available TV shows
     """
@@ -87,12 +77,28 @@ def listTvShows():
             picture = show['Image']['ImageRepresentations']['ImageRepresentation'][0]['url']
         except:
             picture = ''
-        _addShow(title, show['id'], mode, desc, picture, page)
+
+        firstTitleLetter = title[:1]
+        if (firstTitleLetter.lower() == letter) or (not firstTitleLetter.isalpha() and not str(letter).isalpha()):
+            _add_show(title, show['id'], mode, desc, picture, page)
 
     xbmcplugin.addSortMethod(pluginhandle, 1)
     xbmcplugin.endOfDirectory(pluginhandle)
     xbmcplugin.endOfDirectory(handle=pluginhandle, succeeded=True)
-   
+
+
+def _add_show(name, url, mode, desc, iconimage, page):
+    """
+    helper method to create a folder with subitems
+    """
+    directoryurl = sys.argv[0] + "?url=" + urllib.parse.quote_plus(url) + "&mode=" + str(mode) + "&showbackground=" + urllib.parse.quote_plus(iconimage) + "&page=" + str(page) + "&channel=srf"
+    liz = xbmcgui.ListItem(name)
+    liz.setLabel2(desc)
+    liz.setArt({'poster': iconimage, 'banner': iconimage, 'fanart': iconimage, 'thumb': iconimage})
+    liz.setInfo(type="Video", infoLabels={"title": name, "plot": desc, "plotoutline": desc})
+    xbmcplugin.setContent(pluginhandle, 'tvshows')
+    ok = xbmcplugin.addDirectoryItem(pluginhandle, url=directoryurl, listitem=liz, isFolder=True)
+    return ok
 
 
 def _addLink(name, url, mode, desc, iconurl, length, pubdate, showbackground):
@@ -124,7 +130,7 @@ def _addnextpage(name, url, mode, desc, showbackground, page):
     return ok
 
 
-def listEpisodes(showid, showbackground, page):
+def list_all_episodes(showid, showbackground, page):
     """
     this method list all episodes of the selected show
     """
@@ -175,7 +181,7 @@ def listEpisodes(showid, showbackground, page):
     if page < maxpage or maxpage == 0 and len(show) == int(numberOfEpisodesPerPage):
         page = page + 1
         _addnextpage(tr(30005).format(page, maxpage), showid, 'listEpisodes', '', showbackground, page)
-
+        
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
@@ -245,6 +251,19 @@ def _parameters_string_to_dict(parameters):
                 paramDict[paramSplits[0]] = paramSplits[1]
     return paramDict
 
+def choose_tv_show_letter(channel):
+    nextMode = 'listTvShows'
+    _add_letter(channel, '#', tr(30019), nextMode)
+    for c in ascii_lowercase:
+        _add_letter(channel, c, c, nextMode)
+    xbmcplugin.endOfDirectory(handle=pluginhandle, succeeded=True)
+
+
+def _add_letter(channel, letter, letterDescription, mode):
+    directoryurl = sys.argv[0] + "?mode=" + str(mode) + "&channel=" + str(channel) + "&letter=" + letter
+    liz = xbmcgui.ListItem(letterDescription)
+    return xbmcplugin.addDirectoryItem(pluginhandle, url=directoryurl, listitem=liz, isFolder=True)
+
 
 #'Start'
 params = _parameters_string_to_dict(sys.argv[2])
@@ -252,11 +271,16 @@ mode = params.get('mode', '')
 url = params.get('url', '')
 showbackground = urllib.parse.unquote_plus(params.get('showbackground', ''))
 page = params.get('page', '')
+channel = params.get('channel', 'srf')
+letter = params.get('letter', '')
 
-if mode == 'listEpisodes':
-    listEpisodes(url, showbackground, page)
-elif mode == 'playepisode':
+if mode == 'playepisode':
     playepisode(url)
+elif mode == 'listEpisodes':
+    list_all_episodes(url, showbackground, page)
+elif mode == 'listTvShows':
+    list_all_tv_shows(letter)
 else:
-    listTvShows()
+    choose_tv_show_letter(channel)
+
     

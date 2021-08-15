@@ -31,3 +31,7 @@ msgstr "Keine Beschreibung"
 msgctxt "#30009"
 msgid "No url"
 msgstr "Keine Url"
+
+msgctxt "#30019"
+msgid "# (numbers & special characters)"
+msgstr "# (Nummern & Sonderzeichen)"

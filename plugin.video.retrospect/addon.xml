@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.4.5+matrix.1"
+        version="5.4.6+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -117,20 +117,19 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.4.5 - Changelog - 2021-08-03[/B]
+        <news>[B]Retrospect v5.4.6 - Changelog - 2021-08-18[/B]
 
-This update contains a change in texture structure to store the textures more efficiently in the resource add-on.
+This is a small update to solve minor issues.
 
 [B]Framework related[/B]
-* Changed: Texture paths are not independent of the channel.
-
-[B]GUI/Settings/Language related[/B]
 _None_
 
-[B]Channel related[/B]
-* Changed: Moved RTV Oost to RPO channel.
-* Changed: Moved RTV Rijnmond to RPO channel.
+[B]GUI/Settings/Language related[/B]
+* Updated: Swedish Translation.
 
+[B]Channel related[/B]
+* Fixed: ViaFree listing of shows (Fixes #1544).
+* Fixed: Subtitle issue (Fixes #1545) with c0ac292f.
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

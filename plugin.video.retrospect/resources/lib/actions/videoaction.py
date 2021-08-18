@@ -93,7 +93,7 @@ class VideoAction(AddonAction):
             # Get the Kodi Player instance (let Kodi decide what player, see
             # http://forum.kodi.tv/showthread.php?tid=173887&pid=1516662#pid1516662)
             kodi_player = player.Player(show_subs=show_subs, subs=available_subs)
-            kodi_player.waitForPlayBack(url=start_url, time_out=10)
+            kodi_player.waitForPlayBack(url=start_url, time_out=30)
 
             if AddonSettings.use_up_next() and not media_item.isLive:
                 # Wrap in setting for Next Up

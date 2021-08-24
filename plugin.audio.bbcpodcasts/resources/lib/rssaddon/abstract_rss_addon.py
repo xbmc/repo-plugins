@@ -23,14 +23,12 @@ class AbstractRssAddon:
 
     addon = None
     addon_handle = None
-    plugin_id = None
     addon_dir = None
     anchor_for_latest = True
 
-    def __init__(self, plugin_id, addon_handle):
+    def __init__(self, addon_handle):
 
-        self.plugin_id = plugin_id
-        self.addon = xbmcaddon.Addon(id=plugin_id)
+        self.addon = xbmcaddon.Addon()
         self.addon_handle = addon_handle
         self.addon_dir = xbmcvfs.translatePath(self.addon.getAddonInfo('path'))
 
@@ -65,6 +63,10 @@ class AbstractRssAddon:
 
         pass
 
+    def is_force_http(self):
+
+        return False
+
     def _load_rss(self, url):
 
         def _parse_item(_ci, fallback_image):
@@ -75,7 +77,7 @@ class AbstractRssAddon:
             item = {
                 "name": _ci["title"],
                 "description": _ci["description"] if "description" in _ci else "",
-                "stream_url": _ci["enclosure"]["@url"],
+                "stream_url": _ci["enclosure"]["@url"] if not self.is_force_http() else _ci["enclosure"]["@url"].replace("https://", "http://"),
                 "type": "video" if _ci["enclosure"]["@type"].split("/")[0] == "video" else "music",
                 "icon": _ci["itunes:image"]["@href"] if "itunes:image" in _ci and "@href" in _ci["itunes:image"] else fallback_image
             }
@@ -214,7 +216,7 @@ class AbstractRssAddon:
 
         else:
             url = "".join(
-                ["plugin://", self.plugin_id, item_path, param_string])
+                ["plugin://", self.addon.getAddonInfo("id"), item_path, param_string])
 
         is_folder = "node" in entry
         li.setProperty("IsPlayable", "false" if is_folder else "true")

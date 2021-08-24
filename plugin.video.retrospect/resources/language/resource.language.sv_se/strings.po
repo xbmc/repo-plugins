@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-30 21:17+0000\n"
-"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"PO-Revision-Date: 2021-08-09 01:29+0000\n"
+"Last-Translator: Sopor <sopor@hotmail.com>\n"
 "Language-Team: Swedish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/sv_se/>\n"
 "Language: sv_se\n"
 "MIME-Version: 1.0\n"
@@ -212,7 +212,7 @@ msgstr "Kodi måste uppdateras"
 
 msgctxt "#30045"
 msgid "This feature of Retrospect requires a more recent version of Kodi. Please install the most recent version of your current Kodi build. Depending on your installation this can either be a 'stable' or 'nightly' build."
-msgstr "Den här funktionen av Retrospect kräver en nyare version av Kodi. Installera därför den senaste versionen av din nuvarande Kodi-version. Beroende på din installation kan detta antingen vara en \"stabil\" eller \"daglig\" version\"."
+msgstr "Den här funktionen av Retrospect kräver en nyare version av Kodi. Installera därför den senaste versionen av din nuvarande Kodi-version. Beroende på din installation kan detta antingen vara en \"stabil\" eller \"nightly\" version\"."
 
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
@@ -576,19 +576,19 @@ msgstr "Finland"
 # empty strings from id 30312 to 30345
 msgctxt "#30346"
 msgid "Now Playing"
-msgstr ""
+msgstr "Spelas nu"
 
 msgctxt "#30347"
 msgid "Now"
-msgstr ""
+msgstr "Nu"
 
 msgctxt "#30348"
 msgid "Next"
-msgstr ""
+msgstr "Nästa"
 
 msgctxt "#30349"
 msgid "Later"
-msgstr ""
+msgstr "Senare"
 
 # empty strings from id 30312 to 30349
 msgctxt "#30350"

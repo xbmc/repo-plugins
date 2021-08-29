@@ -8,12 +8,12 @@
     <provides>video image audio</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">Provides streaming from a pcloud.com bucket</summary>
-    <description lang="en">Provides streaming from a pcloud.com video source. You need an account with pCloud to use this (free accounts are OK). Not affiliated with pcloud.com.</description>
-    <disclaimer lang="en">
+    <summary lang="en_GB">Provides streaming from a pcloud.com bucket</summary>
+    <description lang="en_GB">Provides streaming from a pcloud.com video source. You need an account with pCloud to use this (free accounts are OK). Not affiliated with pcloud.com.</description>
+    <disclaimer lang="en_GB">
       The plugin's author(s) are not affiliated with Kodi.
     </disclaimer>
-    <language>en_GB</language>
+    <language>en</language>
     <platform>all</platform>
     <license>GPL-3.0-or-later</license>
     <forum>http://forum.kodi.tv/showthread.php?tid=239955</forum>

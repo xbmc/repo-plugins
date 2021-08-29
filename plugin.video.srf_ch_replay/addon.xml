@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.srf_ch_replay" name="SRF Replay" version="2.0.0" provider-name="Man Behind MooN">
+<addon id="plugin.video.srf_ch_replay" name="Unofficial SRF Replay" version="2.0.1" provider-name="Man Behind MooN">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>
@@ -7,20 +7,22 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-	 <news>Former "SRF Podcast Plugin" reloaded as "SRF Replay" for Kodi 19</news>
+	 <news>- Former "SRF Podcast Plugin" reloaded as "Unofficial SRF Replay" for Kodi 19
+- New Logo and unofficial added to the name
+- Tv show navigation improved</news>
 	<assets>
 		<icon>icon.png</icon>
 	</assets>
-    <summary lang="en_GB">SRF Replay plugin lists all shows from SRF.</summary>
-    <description lang="en_GB">SRF Replay plugin lists all recorded shows from the national Swiss German TV station SRF. All the shows are mainly in German.</description>
-    <disclaimer lang="en_GB">This plugin is not endorsed by SRF</disclaimer>
-	<summary lang="de_DE">SRF Replay Plugin zeigt alle SRF Sendungen.</summary>
-    <description lang="de_DE">Der SRF Replay Plugin zeigt alle aufgezeichneten Sendungen vom nationalen Schweizer deutschprachigen TV Sender SRF. Die Sendungen sind hauptsächlich in deutscher Sprache.</description>
-    <disclaimer lang="de_DE">Dieser Plugin ist nicht offiziell von SRF</disclaimer>
+    <summary lang="en_GB">Unofficial SRF Replay add-on lists all shows from SRF.</summary>
+    <description lang="en_GB">Unofficial SRF Replay add-on lists recorded shows from the national Swiss German TV station SRF over their provided API. All the shows are mainly in German.</description>
+    <disclaimer lang="en_GB">This add-on is not endorsed by SRG SSR and no support can be claimed. This add-on uses the officially provided API by SRG SSR.</disclaimer>
+	<summary lang="de_DE">Der inoffizielle SRF Replay Add-on zeigt alle SRF Sendungen.</summary>
+    <description lang="de_DE">Der inoffizielle SRF Replay Add-on zeigt aufgezeichneten Sendungen vom nationalen Schweizer deutschprachigen TV Sender SRF über das zur Verfügung gestellte API. Die Sendungen sind hauptsächlich in deutscher Sprache.</description>
+    <disclaimer lang="de_DE">Dieser Add-on ist nicht offiziell von der SRG SSR und es bestehen keinerlei Support-Ansprüche. Der Add-on benutzt die von der SRG SSR zur Verfügung gestellten Schnittstellen.</disclaimer>
     <language>de</language>
     <platform>all</platform>
     <license>GPL-2.0-or-later</license>
-    <email>man_behind_moon at gmx</email>
+    <email>man_behind_moon at gmx dot net</email>
     <source>https://github.com/ManBehindMooN/kodi_plugin_video_srf_ch_replay</source>
   </extension>
 </addon>

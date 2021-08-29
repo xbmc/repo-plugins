@@ -11,7 +11,7 @@
         <setting id="show_cloaked_items" type="bool" label="30095" default="false" />
         <setting id="use_adaptive_addon" type="bool" label="30571" default="true" enable="System.HasAddon(inputstream.adaptive)" />
         <setting id="adaptive_addon_settings" subsetting="true" type="action" label="30578" action="Addon.OpenSettings(inputstream.adaptive)" option="close" enable="System.HasAddon(inputstream.adaptive)" visible="eq(-1,true)" />
-        <setting id="widevine_install" subsetting="true" type="action" label="30532" option="close" action="RunScript(special://home/addons/plugin.video.retrospect/menu_install_widevine.py,plugin.video.retrospect)" enable="System.HasAddon(script.module.inputstreamhelper)" visible="eq(-2,true)"/>
+        <setting id="widevine_install" subsetting="true" type="action" label="30532" option="close" action="RunScript(special://home/addons/plugin.video.retrospect/action_install_widevine.py,plugin.video.retrospect)" enable="System.HasAddon(script.module.inputstreamhelper)" visible="eq(-2,true)"/>
 
         <setting type="lsep" label="30039" />
         <setting id="up_next_install" type="action" label="30056" option="close" action="InstallAddon(service.upnext)" visible="!System.HasAddon(service.upnext)" />

@@ -280,7 +280,9 @@ FEATURED = [
     # Inhoudsgerelateerd
     dict(name='Kortfilm', id='kortfilm', msgctxt=30120),
     # Thema
+    dict(name='Kies19', id='kies-19', msgctxt=30128),
     dict(name='Klimaat', id='klimaat', msgctxt=30129),
+    dict(name='De warmste week', id='de-warmste-week', msgctxt=30130),
 ]
 
 RELATIVE_DATES = [

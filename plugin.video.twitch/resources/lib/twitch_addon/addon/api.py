@@ -238,14 +238,12 @@ class Twitch:
 
     @api_error_handler
     def follow(self, channel_id):
-        user_id = self.get_user_id()
-        results = self.api.users.follow_channel(user_id=user_id, channel_id=channel_id)
+        results = self.api.users.follow_channel(channel_id=channel_id, headers=self.get_private_credential_headers())
         return self.error_check(results)
 
     @api_error_handler
     def unfollow(self, channel_id):
-        user_id = self.get_user_id()
-        results = self.api.users.unfollow_channel(user_id=user_id, channel_id=channel_id)
+        results = self.api.users.unfollow_channel(channel_id=channel_id, headers=self.get_private_credential_headers())
         return self.error_check(results)
 
     @api_error_handler

@@ -122,7 +122,7 @@ class Channel(chn_class.Channel):
                               match_type=ParserData.MatchExact)
         self._add_data_parser(self.mainListUri, preprocessor=self.extract_categories_and_add_search,
                               json=True, match_type=ParserData.MatchExact,
-                              parser=["page", "blocks", 0, "_embedded", "programs"],
+                              parser=["_embedded", "programs"],
                               creator=self.create_json_episode_item)
 
         # This is the new way, but more complex and some channels have items with missing
@@ -187,7 +187,7 @@ class Channel(chn_class.Channel):
         dummy_data, items = self.add_search(data)
 
         # The data was already in a JsonHelper
-        categories = data.get_value("page", "blocks", 0, "allPrograms", "categories")
+        categories = data.get_value("allPrograms", "categories")
         for category in categories:
             self.__categories[category["guid"]] = category
 
@@ -209,11 +209,11 @@ class Channel(chn_class.Channel):
         Logger.info("Performing Pre-Processing")
         items = []
 
-        json_data = Regexer.do_regex(r'("staticpages":\s*{[^<]+),\s*"translations":', data)[0]
+        json_data = Regexer.do_regex(r'"blocks"\s*:\s*\[([^<]+)],\s*"streamsProgress', data)[0]
         # We need to put it in a JSON envelop as we are taking JSON from the 'middle'
-        return_data = "{{{0}}}".format(json_data)
-        Logger.trace("Found Json:\n%s", return_data)
-        return JsonHelper(return_data), items
+        # return_data = "{{{0}}}".format(json_data)
+        Logger.trace("Found Json:\n%s", json_data)
+        return JsonHelper(json_data), items
 
     def create_json_episode_item(self, result_set):
         """ Creates a new MediaItem for an episode.

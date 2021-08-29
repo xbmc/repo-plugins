@@ -1,6 +1,10 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.3.5 [19-May-2021]
+-Add ability to add a playlist to a folder, similar to a channel
+-Resets sort value when moving channel to a different folder
+
 v0.3.4 [09-April-2021]
 -Fixed bug with removing channels
 

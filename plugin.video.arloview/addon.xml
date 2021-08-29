@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.arloview" name="Arlo Streamer" version="1.1.1" provider-name="JavaWiz">
+<addon id="plugin.video.arloview" name="Arlo Streamer" version="1.2.0" provider-name="JavaWiz">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
-    <import addon="script.module.arlo" version="1.2.35"/>
+    <import addon="script.module.arlo" version="1.2.50"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -21,6 +21,8 @@
     <license>Apache 2.0</license>
     <email>JavaWiz1@hotmail.com</email>
     <news>
+    v1.2.0 (7/2/2021)
+    * Updated script.module.arlo to v1.2.50 and logging updates.
     v1.1.1 (5/30/2020)
     * Initial matrix version
     </news>

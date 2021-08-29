@@ -120,6 +120,10 @@ msgctxt "#30367"
 msgid "All Levels"
 msgstr ""
 
+msgctxt "#30368"
+msgid " affiliates"
+msgstr ""
+
 msgctxt "#30371"
 msgid "Always Ask stream quality will not work when inputstream adaptive is enabled. Either disable inputstream adaptive or switch stream quality to Best Available."
 msgstr ""

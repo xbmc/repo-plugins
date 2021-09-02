@@ -1,0 +1,112 @@
+# Kodi language file
+# Addon Provider: Guido Domenici
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: guido.domenici@gmail.com\n"
+"POT-Creation-Date: 2017-03-02T22:25:00+01:00\n"
+"PO-Revision-Date: 2017-03-02T22:25:00+01:00\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30100"
+msgid "General"
+msgstr ""
+
+msgctxt "#30101"
+msgid "pCloud username (email)"
+msgstr ""
+
+msgctxt "#30102"
+msgid "pCloud password"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Log On"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Log on to pCloud?"
+msgstr ""
+
+msgctxt "#30105"
+msgid "auth"
+msgstr ""
+
+msgctxt "#30106"
+msgid "auth expiry"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Cannot log on to pCloud (see log)"
+msgstr ""
+
+msgctxt "#30109"
+msgid "ERROR: cannot logon to pCloud"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Success"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Logon successful"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Last used folder ID"
+msgstr ""
+
+msgctxt "#30113"
+msgid "Back to parent folder"
+msgstr ""
+
+msgctxt "#30114"
+msgid "Delete from pCloud..."
+msgstr ""
+
+msgctxt "#30115"
+msgid "Confirm Delete"
+msgstr ""
+
+msgctxt "#30116"
+msgid "Delete '{0}' from pCloud?"
+msgstr ""
+
+msgctxt "#30117"
+msgid "Operation cannot be undone."
+msgstr ""
+
+msgctxt "#30118"
+msgid "Deleted successfully"
+msgstr ""
+
+msgctxt "#30119"
+msgid "Error during delete (see log)"
+msgstr ""
+
+msgctxt "#30120"
+msgid "ERROR: cannot delete file or folder from pCloud"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Mark as watched"
+msgstr ""
+
+msgctxt "#30122"
+msgid "My Shares"
+msgstr ""
+
+msgctxt "#30123"
+msgid "Back to My pCloud"
+msgstr ""
+

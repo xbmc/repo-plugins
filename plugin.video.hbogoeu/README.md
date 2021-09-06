@@ -1,4 +1,5 @@
 [![Build Status](https://github.com/arvvoid/plugin.video.hbogoeu/workflows/CI/badge.svg)](https://github.com/arvvoid/plugin.video.hbogoeu/actions)
+[![CodeQL](https://github.com/arvvoid/plugin.video.hbogoeu/workflows/CodeQL/badge.svg)](https://github.com/arvvoid/plugin.video.hbogoeu/actions/workflows/codeql-analysis.yml)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/arvvoid/plugin.video.hbogoeu)](https://github.com/arvvoid/plugin.video.hbogoeu/blob/master/README.md#install-instructions) 
 [![Kodi Version](https://img.shields.io/badge/kodi-18%20%7C%2019%2B-blue)](https://kodi.tv/)
 [![All Contributors](https://img.shields.io/badge/all_contributors-37-orange.svg?style=flat-square)](#contributors-)

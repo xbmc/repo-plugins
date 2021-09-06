@@ -520,24 +520,25 @@ class HbogoHandler_eu(HbogoHandler):
             try:
                 if jsonrsp['ErrorMessage']:
                     self.log("Get " + py2_encode(hbo_go_cat_url) + " exclude index Error: " + py2_encode(jsonrsp['ErrorMessage']))
-                    pass
             except KeyError:
                 pass  # all is ok no error message just pass
             except Exception:
                 self.log("Unexpected error: " + traceback.format_exc())
-                pass
             # find watchlist and continue watching positions for exclusion
-            if len(jsonrsp['Container']) > 1:
-                for container_index in range(0, len(jsonrsp['Container'])):
-                    container_item = jsonrsp['Container'][container_index]
-                    if py2_encode(container_item['Name']) in list_of_items_to_exlude:
-                        excludeindex.append(container_index)
-                    if len(excludeindex) == len(list_of_items_to_exlude):
-                        break
-            if return_as_string:
-                return ','.join(str(e) for e in excludeindex)
-            else:
-                return excludeindex
+            try:
+                if len(jsonrsp['Container']) > 1:
+                    for container_index in range(0, len(jsonrsp['Container'])):
+                        container_item = jsonrsp['Container'][container_index]
+                        if py2_encode(container_item['Name']) in list_of_items_to_exlude:
+                            excludeindex.append(container_index)
+                        if len(excludeindex) == len(list_of_items_to_exlude):
+                            break
+            except Exception:
+                self.log("Unexpected error: " + traceback.format_exc())
+        if return_as_string:
+            return ','.join(str(e) for e in excludeindex)
+        else:
+            return excludeindex
 
     def categories(self):
         if not self.chk_login():
@@ -674,6 +675,13 @@ class HbogoHandler_eu(HbogoHandler):
         if not self.chk_login():
             self.login()
         self.log("Season: " + str(url))
+        # replace alien platform url with current set API platform
+        # temp fix for "new version" errors in series/season listings
+        url = url.replace("APTV", self.API_PLATFORM)
+        url = url.replace("ANMO", self.API_PLATFORM)
+        self.log("Season url fix: " + str(url))
+        # end fix
+
         jsonrsp = self.get_from_hbogo(url)
         if jsonrsp is False:
             return
@@ -716,7 +724,12 @@ class HbogoHandler_eu(HbogoHandler):
         self.log("Episode: " + str(url))
 
         self.reset_media_type_counters()
-
+        # replace alien platform url with current set API platform
+        # temp fix for "new version" errors in series/season listings
+        url = url.replace("APTV", self.API_PLATFORM)
+        url = url.replace("ANMO", self.API_PLATFORM)
+        self.log("Episode url fix: " + str(url))
+        # end fix
         jsonrsp = self.get_from_hbogo(url)
         if jsonrsp is False:
             return

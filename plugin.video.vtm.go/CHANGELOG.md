@@ -1,5 +1,14 @@
 # Changelog
 
+## [v1.2.12](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.12) (2021-09-08)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.11...v1.2.12)
+
+**Merged pull requests:**
+
+- Update anvato URL [\#304](https://github.com/add-ons/plugin.video.vtm.go/pull/304) ([michaelarnauts](https://github.com/michaelarnauts))
+- Fix tests [\#303](https://github.com/add-ons/plugin.video.vtm.go/pull/303) ([mediaminister](https://github.com/mediaminister))
+
 ## [v1.2.11](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.2.11) (2021-08-12)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.10...v1.2.11)

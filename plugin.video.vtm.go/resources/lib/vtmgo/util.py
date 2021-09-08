@@ -147,7 +147,7 @@ def _request(method, url, params=None, form=None, data=None, token=None, profile
     """
     if form or data:
         # Make sure we don't log the password
-        debug_data = dict()
+        debug_data = {}
         debug_data.update(form or data)
         if 'password' in debug_data:
             debug_data['password'] = '**redacted**'

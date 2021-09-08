@@ -162,7 +162,7 @@ class VtmGoStream:
         :type stream_info: dict
         :rtype list[dict]
         """
-        subtitles = list()
+        subtitles = []
         if stream_info.get('video').get('subtitles'):
             for _, subtitle in enumerate(stream_info.get('video').get('subtitles')):
                 name = subtitle.get('language')
@@ -191,7 +191,7 @@ class VtmGoStream:
         if not kodiutils.exists(temp_dir):
             kodiutils.mkdirs(temp_dir)
 
-        downloaded_subtitles = list()
+        downloaded_subtitles = []
         for subtitle in subtitles:
             output_file = temp_dir + subtitle.get('name')
             webvtt_content = util.http_get(subtitle.get('url')).text
@@ -207,7 +207,7 @@ class VtmGoStream:
         :type ad_breaks: list[dict]
         :rtype str
         """
-        sub_timings = list()
+        sub_timings = []
         for timestamp in match.groups():
             hours, minutes, seconds, millis = (int(x) for x in [timestamp[:-10], timestamp[-9:-7], timestamp[-6:-4], timestamp[-3:]])
             sub_timings.append(timedelta(hours=hours, minutes=minutes, seconds=seconds, milliseconds=millis))
@@ -247,8 +247,8 @@ class VtmGoStream:
         if not kodiutils.exists(temp_dir):
             kodiutils.mkdirs(temp_dir)
 
-        ad_breaks = list()
-        delayed_subtitles = list()
+        ad_breaks = []
+        delayed_subtitles = []
         webvtt_timing_regex = re.compile(r'\n(\d{2}:\d{2}:\d{2}\.\d{3}) --> (\d{2}:\d{2}:\d{2}\.\d{3})\s')
 
         # Get advertising breaks info from json manifest
@@ -273,7 +273,7 @@ class VtmGoStream:
         :type stream_info: dict
         :rtype dict
         """
-        url = 'https://tkx.apis.anvato.net/rest/v2/mcp/video/{video}'.format(**anvato_info)
+        url = 'https://tkx.mp.lura.live/rest/v2/mcp/video/{video}'.format(**anvato_info)
         _LOGGER.debug('Getting stream info from %s with access_key %s and token %s', url, anvato_info['accessKey'], anvato_info['token'])
         response = util.http_post(url,
                                   data={

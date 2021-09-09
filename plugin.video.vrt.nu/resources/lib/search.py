@@ -101,7 +101,7 @@ class Search:
                 label=colour(localize(30300)),  # More…
                 path=url_for('search_query', keywords=keywords, page=page + 1),
                 art_dict=dict(thumb='DefaultAddonSearch.png'),
-                info_dict=dict(),
+                info_dict={},
             ))
 
         self._favorites.refresh(ttl=ttl('indirect'))

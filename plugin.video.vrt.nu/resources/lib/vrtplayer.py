@@ -293,7 +293,7 @@ class VRTPlayer:
                 label=colour(localize(30300)),
                 path=url_for(recent, page=page + 1),
                 art_dict=dict(thumb='DefaultRecentlyAddedEpisodes.png'),
-                info_dict=dict(),
+                info_dict={},
             ))
 
         show_listing(episode_items, category=30020, sort=sort, ascending=ascending, content=content, cache=False)
@@ -317,7 +317,7 @@ class VRTPlayer:
                 label=localize(30300),
                 path=url_for(offline, page=page + 1),
                 art_dict=dict(thumb='DefaultYear.png'),
-                info_dict=dict(),
+                info_dict={},
             ))
 
         show_listing(episode_items, category=30022, sort=sort, ascending=ascending, content=content, cache=False)

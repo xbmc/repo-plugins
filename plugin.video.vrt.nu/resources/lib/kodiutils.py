@@ -604,7 +604,7 @@ def notify(sender, message, data):
 
 def get_playerid():
     """Get current playerid"""
-    result = dict()
+    result = {}
     while not result.get('result'):
         result = jsonrpc(method='Player.GetActivePlayers')
     return result.get('result', [{}])[0].get('playerid')
@@ -1094,7 +1094,7 @@ def open_url(url, data=None, headers=None, method=None, cookiejar=None, follow_r
     opener = build_opener(*opener_args)
 
     if not headers:
-        headers = dict()
+        headers = {}
     req = Request(url, headers=headers)
     if data is not None:
         req.data = data
@@ -1111,7 +1111,7 @@ def open_url(url, data=None, headers=None, method=None, cookiejar=None, follow_r
         req.get_method = lambda: method
 
     if raise_errors is None:
-        raise_errors = list()
+        raise_errors = []
     try:
         return opener.open(req)
     except HTTPError as exc:

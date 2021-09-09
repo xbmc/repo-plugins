@@ -221,7 +221,7 @@ class TVGuide:
         """Return EPG data"""
         now = datetime.now(dateutil.tz.tzlocal())
 
-        epg_data = dict()
+        epg_data = {}
         for date in ['yesterday', 'today', 'tomorrow']:
             epg = self.parse(date, now)
             epg_url = epg.strftime(self.VRT_TVGUIDE)

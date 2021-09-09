@@ -20,7 +20,7 @@ def get_video_attributes(vrtnu_url):
     cache_file = 'web_video_attrs_multi.json'
     video_attrs_multi = get_cache(cache_file, ttl=ttl('indirect'))
     if not video_attrs_multi:
-        video_attrs_multi = dict()
+        video_attrs_multi = {}
     if vrtnu_url in video_attrs_multi:
         return video_attrs_multi[vrtnu_url]
 

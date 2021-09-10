@@ -1,6 +1,6 @@
 import requests, urllib.request, urllib.parse, urllib.error
 from xml.dom.minidom import *
-from .utils import saveCookies, loadCookies, loadAuthorization, log
+from .utils import save_cookies, loadCookies, loadAuthorization, log
 
 class CBCAuthError(Exception):
     def __init__(self, value, payment):
@@ -103,7 +103,7 @@ class Shows:
         elif not r.status_code == 200:
             log('(getShows) {} returns {} status: "{}"'.format(url, r.status_code, r.content), True)
             return None
-        saveCookies(self.session.cookies)
+        save_cookies(self.session.cookies)
         dom = parseString(r.content)
         statuses = dom.getElementsByTagName('status')
 
@@ -149,7 +149,7 @@ class Shows:
         elif not r.status_code == 200:
             log('(getStream) {} returns {} status code'.format(url, r.status_code), True)
             return None
-        saveCookies(self.session.cookies)
+        save_cookies(self.session.cookies)
 
         dom = parseString(r.content)
         status = dom.getElementsByTagName('status')[0].firstChild.nodeValue

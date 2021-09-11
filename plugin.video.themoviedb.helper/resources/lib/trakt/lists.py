@@ -43,6 +43,7 @@ class TraktLists():
         self.tmdb_cache_only = False
         self.library = 'video'
         self.container_content = 'movies'
+        self.kodi_db = self.get_kodi_database('both')
         return items
 
     def list_sync(self, info, tmdb_type, page=None, **kwargs):
@@ -82,7 +83,7 @@ class TraktLists():
 
     def _list_trakt_sortby_item(self, i, params):
         item = get_empty_item()
-        item['label'] = item['infolabels']['title'] = i['name']
+        item['label'] = item['infolabels']['title'] = '{}[CR]{}'.format(params.get('list_name'), i['name'])
         item['params'] = params
         for k, v in i['params'].items():
             item['params'][k] = v
@@ -90,7 +91,8 @@ class TraktLists():
 
     def list_trakt_sortby(self, info, **kwargs):
         kwargs['info'] = kwargs.pop('parent_info', None)
-        items = [self._list_trakt_sortby_item(i, kwargs.copy()) for i in get_sort_methods()]
+        items = get_sort_methods() if kwargs['info'] == 'trakt_userlist' else get_sort_methods(True)
+        items = [self._list_trakt_sortby_item(i, kwargs.copy()) for i in items]
         self.library = 'video'
         return items
 
@@ -101,6 +103,7 @@ class TraktLists():
             user_slug=user_slug,
             sort_by=kwargs.get('sort_by', None),
             sort_how=kwargs.get('sort_how', None),
+            extended=kwargs.get('extended', None),
             authorize=False if user_slug else True)
         if not response:
             return []
@@ -116,6 +119,14 @@ class TraktLists():
             self.container_content = 'tvshows'
         elif lengths.index(max(lengths)) == 2:
             self.container_content = 'actors'
+
+        if lengths[0] and lengths[1]:
+            self.kodi_db = self.get_kodi_database('both')
+        elif lengths[0]:
+            self.kodi_db = self.get_kodi_database('movie')
+        elif lengths[1]:
+            self.kodi_db = self.get_kodi_database('tvshow')
+
         return response.get('items', []) + response.get('next_page', [])
 
     def list_becauseyouwatched(self, info, tmdb_type, page=None, **kwargs):

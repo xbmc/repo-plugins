@@ -40,7 +40,7 @@ class TMDbLists():
         return items
 
     def list_seasons(self, tmdb_id, **kwargs):
-        items = self.tmdb_api.get_season_list(tmdb_id, hide_specials=ADDON.getSettingBool('hide_special_seasons'))
+        items = self.tmdb_api.get_season_list(tmdb_id, special_folders=ADDON.getSettingInt('special_folders'))
         self.container_content = convert_type('season', 'container')
         return items
 
@@ -58,6 +58,11 @@ class TMDbLists():
     def list_crew(self, tmdb_id, tmdb_type, season=None, episode=None, **kwargs):
         items = self.tmdb_api.get_cast_list(tmdb_id, tmdb_type, season=season, episode=episode, keys=['crew'])
         self.container_content = convert_type('person', 'container')
+        return items
+
+    def list_videos(self, tmdb_id, tmdb_type, season=None, episode=None, **kwargs):
+        items = self.tmdb_api.get_videos(tmdb_id, tmdb_type, season, episode)
+        self.container_content = convert_type('video', 'container')
         return items
 
     def list_all_items(self, tmdb_type, page=None, **kwargs):

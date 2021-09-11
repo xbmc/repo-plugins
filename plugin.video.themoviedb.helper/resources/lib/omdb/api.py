@@ -1,6 +1,6 @@
 from resources.lib.api.request import RequestAPI
 from resources.lib.addon.plugin import ADDON
-from resources.lib.addon.setutils import del_empty_keys
+from resources.lib.addon.setutils import del_empty_keys, merge_two_dicts
 from resources.lib.omdb.mapping import ItemMapper
 
 
@@ -29,3 +29,20 @@ class OMDb(RequestAPI):
     def get_ratings_awards(self, imdb_id=None, title=None, year=None, cache_only=False, base_item=None):
         request = self.get_request_item(imdb_id=imdb_id, title=title, year=year, cache_only=cache_only)
         return ItemMapper().get_info(request, base_item=base_item)
+
+    def _get_item_imdb(self, item):
+        for i, j in [('infolabels', 'imdbnumber'), ('unique_ids', 'imdb'), ('unique_ids', 'tvshow.imdb')]:
+            imdb_id = item.get(i, {}).get(j)
+            if imdb_id and imdb_id.startswith('tt'):
+                return imdb_id
+
+    def get_item_ratings(self, item, cache_only=False):
+        """ Get ratings for an item using IMDb lookup """
+        if not item:
+            return
+        imdb_id = self._get_item_imdb(item)
+        if not imdb_id:
+            return item
+        ratings = self.get_ratings_awards(imdb_id=imdb_id, cache_only=cache_only)
+        item['infoproperties'] = merge_two_dicts(item.get('infoproperties', {}), ratings.get('infoproperties', {}))
+        return item

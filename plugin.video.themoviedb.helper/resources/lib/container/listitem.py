@@ -105,6 +105,9 @@ class _ListItem(object):
     def is_unaired(self, format_label=None, check_hide_settings=True, no_date=True):
         return
 
+    def unaired_bool(self):
+        return False
+
     def set_context_menu(self):
         for k, v in ContextMenu(self).get():
             self.infoproperties[k] = v
@@ -302,7 +305,7 @@ class _Tvshow(_Video):
 
 class _Season(_Tvshow):
     def get_ftv_id(self):
-        return self.unique_ids.get('tvdb')
+        return self.unique_ids.get('tvshow.tvdb')
 
     def get_tmdb_id(self):
         return self.unique_ids.get('tvshow.tmdb')

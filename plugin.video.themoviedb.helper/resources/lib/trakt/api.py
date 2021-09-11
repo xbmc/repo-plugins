@@ -20,8 +20,8 @@ CLIENT_ID = 'e6fde6173adf3c6af8fd1b0694b9b84d7c519cefc24482310e1de06c6abe5467'
 CLIENT_SECRET = '15119384341d9a61c751d8d515acbc0dd801001d4ebe85d3eef9885df80ee4d9'
 
 
-def get_sort_methods():
-    return [
+def get_sort_methods(default_only=False):
+    items = [
         {
             'name': u'{}: {}'.format(ADDON.getLocalizedString(32287), ADDON.getLocalizedString(32286)),
             'params': {'sort_by': 'rank', 'sort_how': 'asc'}},
@@ -32,20 +32,51 @@ def get_sort_methods():
             'name': u'{}: {}'.format(ADDON.getLocalizedString(32287), xbmc.getLocalizedString(369)),
             'params': {'sort_by': 'title', 'sort_how': 'asc'}},
         {
+            'name': u'{}: {}'.format(ADDON.getLocalizedString(32287), xbmc.getLocalizedString(16102)),
+            'params': {'sort_by': 'watched', 'sort_how': 'desc', 'extended': 'sync'}},
+        {
+            'name': u'{}: {}'.format(ADDON.getLocalizedString(32287), xbmc.getLocalizedString(563)),
+            'params': {'sort_by': 'percentage', 'sort_how': 'desc', 'extended': 'full'}},
+        {
             'name': u'{}: {}'.format(ADDON.getLocalizedString(32287), xbmc.getLocalizedString(345)),
             'params': {'sort_by': 'year', 'sort_how': 'desc'}},
         {
+            'name': u'{}: {}'.format(ADDON.getLocalizedString(32287), ADDON.getLocalizedString(32377)),
+            'params': {'sort_by': 'plays', 'sort_how': 'desc', 'extended': 'sync'}},
+        {
+            'name': u'{}: {}'.format(ADDON.getLocalizedString(32287), ADDON.getLocalizedString(32242)),
+            'params': {'sort_by': 'released', 'sort_how': 'desc', 'extended': 'full'}},
+        {
+            'name': u'{}: {}'.format(ADDON.getLocalizedString(32287), xbmc.getLocalizedString(2050)),
+            'params': {'sort_by': 'runtime', 'sort_how': 'desc', 'extended': 'full'}},
+        {
+            'name': u'{}: {}'.format(ADDON.getLocalizedString(32287), xbmc.getLocalizedString(205)),
+            'params': {'sort_by': 'votes', 'sort_how': 'desc', 'extended': 'full'}},
+        {
+            'name': u'{}: {}'.format(ADDON.getLocalizedString(32287), ADDON.getLocalizedString(32175)),
+            'params': {'sort_by': 'popularity', 'sort_how': 'desc', 'extended': 'full'}},
+        {
             'name': u'{}: {}'.format(ADDON.getLocalizedString(32287), xbmc.getLocalizedString(590)),
             'params': {'sort_by': 'random'}}]
-
+    if default_only:
+        return [i for i in items if i['params']['sort_by'] in ['rank', 'added', 'title', 'year', 'random']]
+    return items
 
 class _TraktLists():
+    def _merge_sync_sort(self, items):
+        """ Get sync dict sorted by slugs then merge slug into list """
+        sync = {}
+        sync.update(self.get_sync('watched', 'show', 'slug'))
+        sync.update(self.get_sync('watched', 'movie', 'slug'))
+        return [dict(i, **sync.get(i.get(i.get('type'), {}).get('ids', {}).get('slug'), {})) for i in items]
+
     @use_simple_cache(cache_days=CACHE_SHORT)
     def get_sorted_list(self, path, sort_by=None, sort_how=None, extended=None, trakt_type=None, permitted_types=None, cache_refresh=False):
         response = self.get_response(path, extended=extended, limit=4095)
         if not response:
             return
-        return TraktItems(response.json(), headers=response.headers).build_items(
+        items = self._merge_sync_sort(response.json()) if extended == 'sync' else response.json()
+        return TraktItems(items, headers=response.headers).build_items(
             sort_by=sort_by or response.headers.get('X-Sort-By'),
             sort_how=sort_how or response.headers.get('X-Sort-How'),
             permitted_types=permitted_types)
@@ -144,6 +175,7 @@ class _TraktLists():
             item['art'] = {}
             item['params'] = {
                 'info': 'trakt_userlist',
+                'list_name': i.get('name'),
                 'list_slug': i.get('ids', {}).get('slug'),
                 'user_slug': i.get('user', {}).get('ids', {}).get('slug')}
             item['unique_ids'] = {
@@ -248,7 +280,7 @@ class _TraktSync():
             self.last_activities = self.get_response_json('sync/last_activities')
         return self._get_activity_timestamp(self.last_activities, activity_type=activity_type, activity_key=activity_key)
 
-    @use_activity_cache(cache_days=CACHE_SHORT, pickle_object=False)
+    @use_activity_cache(cache_days=CACHE_SHORT, pickle_object=False, allow_fallback=True)
     def _get_sync_response(self, path, extended=None):
         """ Quick sub-cache routine to avoid recalling full sync list if we also want to quicklist it """
         sync_name = u'sync_response.{}.{}'.format(path, extended)
@@ -346,7 +378,7 @@ class _TraktSync():
 
 class TraktAPI(RequestAPI, _TraktSync, _TraktLists, _TraktProgress):
     def __init__(self, force=False):
-        super(TraktAPI, self).__init__(req_api_url=API_URL, req_api_name='TraktAPI')
+        super(TraktAPI, self).__init__(req_api_url=API_URL, req_api_name='TraktAPI', timeout=20)
         self.authorization = ''
         self.attempted_login = False
         self.dialog_noapikey_header = u'{0} {1} {2}'.format(ADDON.getLocalizedString(32007), self.req_api_name, ADDON.getLocalizedString(32011))
@@ -586,4 +618,4 @@ class TraktAPI(RequestAPI, _TraktSync, _TraktLists, _TraktProgress):
             return
         return {
             'trakt_rating': u'{:0.1f}'.format(response.get('rating') or 0.0),
-            'trakt_votes': u'{:0.1f}'.format(response.get('votes') or 0.0)}
+            'trakt_votes': u'{:0,.0f}'.format(response.get('votes') or 0.0)}

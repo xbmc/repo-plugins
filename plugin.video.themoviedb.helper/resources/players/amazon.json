@@ -1,6 +1,6 @@
 {
-    "name"              : "Netflix",
-    "plugin"            : "plugin.video.netflix",
+    "name"              : "Amazon Prime Video",
+    "plugin"            : "plugin.video.amazon-test",
     "priority"          : 100,
     "is_resolvable"     : "true",
     "assert"            : {
@@ -10,28 +10,27 @@
                             "search_episode":   ["showname"]
                           },
     "play_movie"        : [
-                            "plugin://plugin.video.netflix/directory/search/search/add/",
-                            {"keyboard": "Select"},
+                            "plugin://plugin.video.amazon-test/",
+                            {"file": "(?i).*/search/"},
                             {"keyboard": "{title}"},
-                            {"title": "(?i).*{title}.*", "year": "{year}"}
+                            {"label": "(?i).*{title}.*", "year": "{year}"}
                           ],
     "play_episode"      : [
-                            "plugin://plugin.video.netflix/directory/search/search/add/",
-                            {"keyboard": "Select"},
+                            "plugin://plugin.video.amazon-test/",
+                            {"file": "(?i).*/search/"},
                             {"keyboard": "{showname}"},
-                            {"title": "(?i).*{showname}.*"},
-                            {"return": "true", "season": "{season}", "episode": "{episode}"},
+                            {"label": "(?i).*{showname}.*"},
                             {"season": "{season}"},
                             {"season": "{season}", "episode": "{episode}"}
                           ],
     "search_movie"      : [
-                            "plugin://plugin.video.netflix/directory/search/search/add/",
-                            {"keyboard": "Select"},
+                            "plugin://plugin.video.amazon-test/",
+                            {"file": "(?i).*/search/"},
                             {"keyboard": "{title}"}
                           ],
     "search_episode"    : [
-                            "plugin://plugin.video.netflix/directory/search/search/add/",
-                            {"keyboard": "Select"},
+                            "plugin://plugin.video.amazon-test/",
+                            {"file": "(?i).*/search/"},
                             {"keyboard": "{showname}"}
                           ]
 }

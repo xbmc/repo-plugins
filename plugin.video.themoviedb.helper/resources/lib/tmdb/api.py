@@ -152,7 +152,7 @@ class TMDb(RequestAPI):
 
     def get_details(self, tmdb_type, tmdb_id, season=None, episode=None, **kwargs):
         kwargs['cache_days'] = CACHE_LONG
-        kwargs['cache_name'] = 'TMDb.get_details.v2'
+        kwargs['cache_name'] = 'TMDb.get_details.v7.{}'.format(self.language)
         kwargs['cache_combine_name'] = True
         return self._cache.use_cache(self._get_details, tmdb_type, tmdb_id, season, episode, **kwargs)
 
@@ -164,7 +164,7 @@ class TMDb(RequestAPI):
         info_item = self._get_details_request(tmdb_type, tmdb_id)
         base_item = self.mapper.get_info(info_item, tmdb_type)
 
-        if tmdb_type != 'tv' or not season:
+        if tmdb_type != 'tv' or season is None:
             return base_item
 
         # If we're getting season/episode details we need to add them to the base tv details
@@ -218,7 +218,48 @@ class TMDb(RequestAPI):
             for i in request.get('results', [])]
         return items
 
-    def get_season_list(self, tmdb_id, hide_specials=False):
+    def _get_videos(self, tmdb_id, tmdb_type, season=None, episode=None):
+        path = u'{}/{}'.format(tmdb_type, tmdb_id)
+        if season is not None:
+            path = u'{}/season/{}'.format(path, season)
+        if episode is not None:
+            path = u'{}/episode/{}'.format(path, episode)
+        request = self.get_request_sc(u'{}/videos'.format(path)) or {}
+        return request.get('results') or []
+
+    def get_videos(self, tmdb_id, tmdb_type, season=None, episode=None):
+        results = self._get_videos(tmdb_id, tmdb_type, season, episode)
+        if episode is not None:  # Also get season videos
+            results = results + self._get_videos(tmdb_id, tmdb_type, season)
+        if season is not None:  # Also get base show videos
+            results = results + self._get_videos(tmdb_id, tmdb_type)
+        if not results:
+            return []
+
+        # Grab base item details and pop any details that aren't relevant to the video
+        base_item = self.get_details(tmdb_type, tmdb_id, season, episode)
+        base_item['infolabels'].pop('duration', None)
+        base_item['infolabels'].pop('season', None)
+        base_item['infolabels'].pop('episode', None)
+
+        # Only list YouTube videos because Kodi install might not have browser and needs to play via plugin
+        # Not sure if TMDb provides videos from other sites anymore but check just in case
+        items = []
+        for i in results:
+            if i.get('site') != 'YouTube' or not i.get('key'):
+                continue
+            item = self.mapper.get_info(i, 'video', base_item, tmdb_id=tmdb_id)
+            item['art']['thumb'] = 'https://img.youtube.com/vi/{}/0.jpg'.format(i['key'])
+            item['path'] = u'plugin://plugin.video.youtube/play/?video_id={}'.format(i['key'])
+            item['is_folder'] = False
+            items.append(item)
+        return items
+
+    def get_season_list(self, tmdb_id, special_folders=0):
+        """
+        special_folders: int binary to hide:
+        001 (1) = Hide Specials, 010 (2) = Hide Up Next, 100 (4) = Hide Groups
+        """
         request = self.get_request_sc(u'tv/{}'.format(tmdb_id))
         if not request:
             return []
@@ -232,22 +273,29 @@ class TMDb(RequestAPI):
             #     xbmc.getLocalizedString(22083),
             #     'RunScript(plugin.video.themoviedb.helper,play_season={},tmdb_id={})'.format(
             #         item['infolabels']['season'], tmdb_id))]
-            items.append(item) if i.get('season_number') != 0 else items_end.append(item)
-        if hide_specials:
-            return items
-        egroups = self.get_request_sc(u'tv/{}/episode_groups'.format(tmdb_id))
-        if egroups and egroups.get('results'):
-            egroup_item = self.mapper.get_info({
-                'title': ADDON.getLocalizedString(32345)}, 'season', base_item, tmdb_id=tmdb_id, definition={
-                    'info': 'episode_groups', 'tmdb_type': 'tv', 'tmdb_id': tmdb_id})
-            egroup_item['art']['thumb'] = egroup_item['art']['poster'] = u'{}/resources/icons/trakt/groupings.png'.format(ADDONPATH)
-            items_end.append(egroup_item)
-        if get_property('TraktIsAuth') == 'True':
-            upnext_item = self.mapper.get_info({
-                'title': ADDON.getLocalizedString(32043)}, 'season', base_item, tmdb_id=tmdb_id, definition={
-                    'info': 'trakt_upnext', 'tmdb_type': 'tv', 'tmdb_id': tmdb_id})
-            upnext_item['art']['thumb'] = upnext_item['art']['poster'] = u'{}/resources/icons/trakt/up-next.png'.format(ADDONPATH)
-            items_end.append(upnext_item)
+            if i.get('season_number') != 0:
+                items.append(item)
+            elif ((special_folders >> 0) & 1) == 0:  # on bit in 0 pos hides specials
+                items_end.append(item)
+
+        # Episode Groups
+        if ((special_folders >> 2) & 1) == 0:  # on bit in 2 pos hides episode groups
+            egroups = self.get_request_sc(u'tv/{}/episode_groups'.format(tmdb_id))
+            if egroups and egroups.get('results'):
+                egroup_item = self.mapper.get_info({
+                    'title': ADDON.getLocalizedString(32345)}, 'season', base_item, tmdb_id=tmdb_id, definition={
+                        'info': 'episode_groups', 'tmdb_type': 'tv', 'tmdb_id': tmdb_id})
+                egroup_item['art']['thumb'] = egroup_item['art']['poster'] = u'{}/resources/icons/trakt/groupings.png'.format(ADDONPATH)
+                items_end.append(egroup_item)
+
+        # Up Next
+        if ((special_folders >> 1) & 1) == 0:  # on bit in 1 pos hides up next
+            if get_property('TraktIsAuth') == 'True':
+                upnext_item = self.mapper.get_info({
+                    'title': ADDON.getLocalizedString(32043)}, 'season', base_item, tmdb_id=tmdb_id, definition={
+                        'info': 'trakt_upnext', 'tmdb_type': 'tv', 'tmdb_id': tmdb_id})
+                upnext_item['art']['thumb'] = upnext_item['art']['poster'] = u'{}/resources/icons/trakt/up-next.png'.format(ADDONPATH)
+                items_end.append(upnext_item)
         return items + items_end
 
     def get_episode_list(self, tmdb_id, season):

@@ -1,3 +1,6 @@
+v1.5.1 -- 12-Sep-2021
+- Fixed issue #38: Added support for eapi.pcloud.com as alternative endpoint. Now the settings screen lets you select the default one (api.pcloud.com) or the alternative one. 
+
 v1.5.0 -- 24-Jun-2021
 - Changes required for compatibility with Kodi Matrix
 - Updated xbmc.python to version="3.0.0"

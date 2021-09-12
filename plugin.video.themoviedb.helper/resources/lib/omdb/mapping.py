@@ -29,8 +29,11 @@ class ItemMapper(_ItemMapper):
                 'keys': [('infoproperties', 'goldenglobe_wins')],
                 'func': lambda v: get_between_strings(v or '', 'Won ', ' Golden Globe')}, {
                 # ---
+                'keys': [('infoproperties', 'emmy_wins')],
+                'func': lambda v: get_between_strings(v or '', 'Won ', ' Primetime Emmy')}, {
+                # ---
                 'keys': [('infoproperties', 'award_wins')],
-                'func': lambda v: get_between_strings(v or '', '. Another ', ' wins') or get_between_strings(v or '', '', ' wins')}, {
+                'func': lambda v: get_between_strings(v or '', '.* ', ' win') or get_between_strings(v or '', '', ' win')}, {
                 # ---
                 'keys': [('infoproperties', 'oscar_nominations')],
                 'func': lambda v: get_between_strings(v or '', 'Nominated for ', ' Oscar')}, {
@@ -38,8 +41,11 @@ class ItemMapper(_ItemMapper):
                 'keys': [('infoproperties', 'goldenglobe_nominations')],
                 'func': lambda v: get_between_strings(v or '', 'Nominated for ', ' Golden Globe')}, {
                 # ---
+                'keys': [('infoproperties', 'emmy_nominations')],
+                'func': lambda v: get_between_strings(v or '', 'Nominated for ', ' Primetime Emmy')}, {
+                # ---
                 'keys': [('infoproperties', 'award_nominations')],
-                'func': lambda v: get_between_strings(v or '', 'wins & ', ' nominations') or get_between_strings(v or '', '', ' nominations')
+                'func': lambda v: get_between_strings(v or '', 'wins? & ', ' nomination') or get_between_strings(v or '', '', ' nomination')
             }],
             'tomatoReviews': [{
                 'keys': [('infoproperties', 'rottentomatoes_reviewstotal')],

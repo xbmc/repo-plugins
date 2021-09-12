@@ -31,7 +31,7 @@ IMAGEPATH_ORIGINAL = 'https://image.tmdb.org/t/p/original'
 IMAGEPATH_POSTER = 'https://image.tmdb.org/t/p/w500'
 
 TMDB_GENRE_IDS = {
-    "Action": 28, "Adventure": 12, "Animation": 16, "Comedy": 35, "Crime": 80, "Documentary": 99, "Drama": 18,
+    "Action": 28, "Adventure": 12, "Action & Adventure": 10759, "Animation": 16, "Comedy": 35, "Crime": 80, "Documentary": 99, "Drama": 18,
     "Family": 10751, "Fantasy": 14, "History": 36, "Horror": 27, "Kids": 10762, "Music": 10402, "Mystery": 9648,
     "News": 10763, "Reality": 10764, "Romance": 10749, "Science Fiction": 878, "Sci-Fi & Fantasy": 10765, "Soap": 10766,
     "Talk": 10767, "TV Movie": 10770, "Thriller": 53, "War": 10752, "War & Politics": 10768, "Western": 37}
@@ -45,7 +45,7 @@ PLAYERS_BASEDIR_SAVE = 'special://profile/addon_data/plugin.video.themoviedb.hel
 PLAYERS_BASEDIR_BUNDLED = 'special://home/addons/plugin.video.themoviedb.helper/resources/players/'
 PLAYERS_PRIORITY = 1000
 
-NO_LABEL_FORMATTING = ['details', 'upcoming', 'trakt_calendar', 'trakt_myairing', 'trakt_anticipated', 'library_nextaired']
+NO_LABEL_FORMATTING = ['details', 'upcoming', 'trakt_calendar', 'trakt_myairing', 'trakt_anticipated', 'library_nextaired', 'videos']
 
 TMDB_ALL_ITEMS_LISTS = {
     'movie': {
@@ -222,12 +222,6 @@ TMDB_BASIC_LISTS = {
         'path': 'person/{tmdb_id}/images',
         'key': 'profiles',
         'tmdb_type': 'image',
-        'route': TMDB_BASIC_LISTS_ROUTE
-    },
-    'videos': {
-        'path': '{tmdb_type}/{tmdb_id}/videos',
-        'key': 'results',
-        'tmdb_type': 'video',
         'route': TMDB_BASIC_LISTS_ROUTE
     },
     'posters': {
@@ -496,4 +490,7 @@ ROUTE_TMDB_ID = {
     'trakt_upnext': {'route': {
         'lambda': lambda func, **kwargs: func(**kwargs),
         'getattr': 'list_upnext'}},
+    'videos': {'route': {
+        'lambda': lambda func, **kwargs: func(**kwargs),
+        'getattr': 'list_videos'}},
 }

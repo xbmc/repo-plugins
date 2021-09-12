@@ -28,7 +28,7 @@ SETPROP_RATINGS = {
     'rottentomatoes_reviewsrotten', 'rottentomatoes_consensus', 'rottentomatoes_usermeter',
     'rottentomatoes_userreviews', 'trakt_rating', 'trakt_votes', 'goldenglobe_wins',
     'goldenglobe_nominations', 'oscar_wins', 'oscar_nominations', 'award_wins', 'award_nominations',
-    'tmdb_rating', 'tmdb_votes', 'top250'}
+    'emmy_wins', 'emmy_nominations', 'tmdb_rating', 'tmdb_votes', 'top250'}
 
 
 class CommonMonitorFunctions(object):
@@ -165,18 +165,12 @@ class CommonMonitorFunctions(object):
     def get_omdb_ratings(self, item, cache_only=False):
         if not self.omdb_api:
             return item
-        imdb_id = item.get('infolabels', {}).get('imdbnumber')
-        if not imdb_id or not imdb_id.startswith('tt'):
-            imdb_id = item.get('unique_ids', {}).get('imdb')
-        if not imdb_id or not imdb_id.startswith('tt'):
-            imdb_id = item.get('unique_ids', {}).get('tvshow.imdb')
-        if not imdb_id:
-            return item
-        ratings = self.omdb_api.get_ratings_awards(imdb_id=imdb_id, cache_only=cache_only)
-        item['infoproperties'] = merge_two_dicts(item.get('infoproperties', {}), ratings.get('infoproperties', {}))
-        return item
+        return self.omdb_api.get_item_ratings(item, cache_only=cache_only)
 
     def clear_properties(self, ignore_keys=None):
+        if not ignore_keys:
+            self.cur_item = 0
+            self.pre_item = 1
         ignore_keys = ignore_keys or set()
         for k in self.properties - ignore_keys:
             self.clear_property(k)

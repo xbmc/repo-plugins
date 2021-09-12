@@ -69,12 +69,15 @@ class SearchLists():
 
     def list_search(self, tmdb_type, query=None, update_listing=False, page=None, **kwargs):
         original_query = query
-        query = query or set_search_history(
-            query=xbmcgui.Dialog().input(ADDON.getLocalizedString(32044), type=xbmcgui.INPUT_ALPHANUM),
-            tmdb_type=tmdb_type)
 
         if not query:
-            return
+            query = set_search_history(
+                query=xbmcgui.Dialog().input(ADDON.getLocalizedString(32044), type=xbmcgui.INPUT_ALPHANUM),
+                tmdb_type=tmdb_type)
+            if not query:
+                return
+        elif kwargs.get('history', '').lower() == 'true':  # Force saving history
+            set_search_history(query=query, tmdb_type=tmdb_type)
 
         items = self.tmdb_api.get_search_list(
             tmdb_type=tmdb_type, query=query, page=page,

@@ -66,27 +66,31 @@ class RequestAPI(object):
             return request.json()
         return {}
 
-    def connection_error(self, err):
-        self.req_connect_err = set_timestamp()
+    def connection_error(self, err, wait_time=30, msg_affix=''):
+        self.req_connect_err = set_timestamp(wait_time)
         get_property(self.req_connect_err_prop, self.req_connect_err)
-        kodi_log(u'ConnectionError: {}\nSuppressing retries for 1 minute'.format(err), 1)
+        kodi_log(u'ConnectionError: {} {}\nSuppressing retries for 30 seconds'.format(msg_affix, err), 1)
         xbmcgui.Dialog().notification(
-            ADDON.getLocalizedString(32308).format(self.req_api_name),
-            ADDON.getLocalizedString(32307))
+            ADDON.getLocalizedString(32308).format(' '.join([self.req_api_name, msg_affix])),
+            ADDON.getLocalizedString(32307).format('30'))
 
-    def fivehundred_error(self, request):
-        self.req_500_err[request] = set_timestamp()
+    def fivehundred_error(self, request, wait_time=60):
+        self.req_500_err[request] = set_timestamp(wait_time)
         get_property(self.req_500_err_prop, dumps(self.req_500_err))
-        kodi_log(u'ConnectionError: {}\nSuppressing retries for 1 minute'.format(dumps(self.req_500_err)), 1)
+        kodi_log(u'ConnectionError: {}\nSuppressing retries for 60 seconds'.format(dumps(self.req_500_err)), 1)
         xbmcgui.Dialog().notification(
             ADDON.getLocalizedString(32308).format(self.req_api_name),
-            ADDON.getLocalizedString(32307))
+            ADDON.getLocalizedString(32307).format('60'))
 
     def timeout_error(self, err):
-        """ Log timeout error - if two in one minute set connection error """
+        """ Log timeout error
+        If two timeouts occur in x3 the timeout limit then set connection error
+        e.g. if timeout limit is 10s then two timeouts within 30s trigger connection error
+        """
+        kodi_log(u'ConnectionTimeOut: {}'.format(err), 1)
         if get_timestamp(self.req_timeout_err):
-            self.connection_error(err)
-        self.req_timeout_err = set_timestamp()
+            self.connection_error(err, msg_affix='timeout')
+        self.req_timeout_err = set_timestamp(self.timeout * 3)
         get_property(self.req_timeout_err_prop, self.req_timeout_err)
 
     @lazyimport_requests

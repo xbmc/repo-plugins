@@ -26,6 +26,10 @@ def get_timedelta(*args, **kwargs):
     return datetime.timedelta(*args, **kwargs)
 
 
+def get_datetime_datetime(*args, **kwargs):
+    return datetime.datetime(*args, **kwargs)
+
+
 def get_timestamp(timestamp=None):
     if not timestamp:
         return

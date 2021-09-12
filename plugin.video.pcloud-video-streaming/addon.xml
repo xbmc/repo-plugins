@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.pcloud-video-streaming" name="PCloud Video Streaming" version="1.4.5" provider-name="Guido Domenici, updated for Kodi Matrix by Carneal">
+<addon id="plugin.video.pcloud-video-streaming" name="PCloud Video Streaming" version="1.5.1" provider-name="Guido Domenici, updated for Kodi Matrix by Carneal">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>

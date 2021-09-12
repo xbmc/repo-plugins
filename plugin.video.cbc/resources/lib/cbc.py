@@ -2,7 +2,9 @@ import requests, uuid, urllib.request, urllib.parse, urllib.error, json
 from xml.dom.minidom import *
 import xml.etree.ElementTree as ET
 
-from .utils import saveCookies, loadCookies, saveAuthorization, log
+from .utils import save_cookies, loadCookies, saveAuthorization, log
+
+CALLSIGN = 'cbc$callSign'
 
 class CBC:
 
@@ -75,7 +77,7 @@ class CBC:
             auth['token'] = token
 
         saveAuthorization(auth)
-        saveCookies(self.session.cookies)
+        save_cookies(self.session.cookies)
 
         return True
 
@@ -85,7 +87,7 @@ class CBC:
         if not r.status_code == 200:
             log('ERROR: {} returns status of {}'.format(url, r.status_code), True)
             return None
-        saveCookies(self.session.cookies)
+        save_cookies(self.session.cookies)
         # Parse the authorization response
         dom = parseString(r.content)
         status = dom.getElementsByTagName('status')[0].firstChild.nodeValue
@@ -157,8 +159,12 @@ class CBC:
             return item['cbc$featureImage']
         return None
 
+    @staticmethod
+    def get_callsign(item):
+        """Get the callsign for a channel."""
+        return item[CALLSIGN] if CALLSIGN in item else None
 
-    def getLabels(self, item):
+    def get_labels(self, item):
         labels = {
             'studio': 'Canadian Broadcasting Corporation',
             'country': 'Canada'
@@ -207,9 +213,9 @@ class CBC:
         r = self.session.get(smil)
 
         if not r.status_code == 200:
-            log('ERROR: {} returns status of {}'.format(url, r.status_code), True)
+            log('ERROR: {} returns status of {}'.format(smil, r.status_code), True)
             return None
-        saveCookies(self.session.cookies)
+        save_cookies(self.session.cookies)
 
         dom = parseString(r.content)
         seq = dom.getElementsByTagName('seq')[0]

@@ -1,5 +1,5 @@
 import requests, json
-from .utils import saveCookies, loadCookies, log
+from .utils import save_cookies, loadCookies, log
 
 
 class LivePrograms:
@@ -22,7 +22,7 @@ class LivePrograms:
         if not r.status_code == 200:
             log('ERROR: {} returns status of {}'.format(url, r.status_code), True)
             return None
-        saveCookies(self.session.cookies)
+        save_cookies(self.session.cookies)
 
         streams = []
         items = json.loads(r.content)[self.LIST_ELEMENT]

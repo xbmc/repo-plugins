@@ -1,26 +1,34 @@
-import os, pickle
+"""Utilities module."""
+import os
+import pickle
 from requests.utils import dict_from_cookiejar
 from requests.cookies import cookiejar_from_dict
 
-def getCookieFile():
-    """
-    Get the cookies file
-    """
+def get_cookie_file():
+    """Get the cookies file."""
     try:
-        import xbmc, xbmcaddon
-        base = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
-    except:
+        from xbmcvfs import translatePath
+        base = translatePath('special://userdata/addon_data/plugin.video.cbc')
+    except ModuleNotFoundError:
         base = os.getcwd()
-
     return os.path.join(base, 'cookies')
 
 
-def saveCookies(session_cookies):
+def get_iptv_channels_file():
+    """Get the filename for the IPTV channels filter."""
+    try:
+        from xbmcvfs import translatePath
+        base = translatePath('special://userdata/addon_data/plugin.video.cbc')
+    except ModuleNotFoundError:
+        base = os.getcwd()
+    return os.path.join(base, 'iptvchannels')
+
+def save_cookies(session_cookies):
     """
     Write cookies to the cookie file
     @param session_cookies the session.cookies object to save
     """
-    with open(getCookieFile(), 'wb') as f:
+    with open(get_cookie_file(), 'wb') as f:
         cookies = dict_from_cookiejar(session_cookies)
         pickle.dump(cookies, f)
 
@@ -31,7 +39,7 @@ def loadCookies():
     @return a session.cookies object
     """
     try:
-        with open(getCookieFile(), 'rb') as f:
+        with open(get_cookie_file(), 'rb') as f:
             cookies = pickle.load(f)
             return cookiejar_from_dict(cookies)
     except IOError as err:

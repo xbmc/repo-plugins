@@ -104,7 +104,7 @@ class Channel(chn_class.Channel):
         self._add_data_parser("https://www.tv4play.se/alla-program", json=True,
                               name="Specific Program list API",
                               preprocessor=self.extract_tv_show_list,
-                              parser=["pageProps", "initialApolloState"],
+                              parser=["props", "pageProps", "initialApolloState"],
                               creator=self.create_api_typed_item)
 
         self._add_data_parser("http://tv4live-i.akamaihd.net/hls/live/",
@@ -384,6 +384,10 @@ class Channel(chn_class.Channel):
                 continue
 
             item.items.append(child)
+
+        if not item.items:
+            return None
+
         return item
 
     def create_api_video_asset_type(self, result_set):
@@ -499,11 +503,12 @@ class Channel(chn_class.Channel):
         """
 
         # Find the build id for the current CMS build
-        build_id = Regexer.do_regex(r'"buildId"\W*:\W*"([^"]+)"', data)[0]
-        data = UriHandler.open("https://www.tv4play.se/_next/data/{}/allprograms.json".format(build_id))
+        # build_id = Regexer.do_regex(r'"buildId"\W*:\W*"([^"]+)"', data)[0]
+        # data = UriHandler.open("https://www.tv4play.se/_next/data/{}/allprograms.json".format(build_id))
 
+        data = Regexer.do_regex(r'__NEXT_DATA__" type="application/json">(.*?)</script>', data)[0]
         json_data = JsonHelper(data)
-        json_data.json["pageProps"]["initialApolloState"] = list(json_data.json["pageProps"]["initialApolloState"].values())
+        json_data.json["props"]["pageProps"]["initialApolloState"] = list(json_data.json["props"]["pageProps"]["initialApolloState"].values())
         return json_data, []
 
     def add_next_page(self, data, items):

@@ -118,7 +118,7 @@ class Channel(chn_class.Channel):
             r'[^>]*>\W+<div[^>]+>\W+<div [^>]+data-from="(?<date>[^"]*)"[^>]+'
             r'data-premium-from="(?<datePremium>[^"]*)"(?<videoDetection>[\w\W]{0,1000}?)<img[^>]+'
             r'data-src="(?<thumburl>[^"]+)"[\w\W]{0,1000}?<h2>(?<title>[^<]+)</h2>\W+<p>'
-            r'(?<subtitle>[^<]*)</p>')
+            r'(?:\s*&nbsp;\s*)*(?<subtitle>[^<]*)</p>')
         self._add_data_parsers(["https://www.npostart.nl/media/series/",
                                 "https://www.npostart.nl/search/extended",
                                 "https://www.npostart.nl/media/collections/"],
@@ -182,7 +182,8 @@ class Channel(chn_class.Channel):
         self.__NextPageAdded = False
         self.__jsonApiKeyHeader = {"apikey": "07896f1ee72645f68bc75581d7f00d54"}
         self.__useJson = True
-        self.__pageSize = 500
+        self.__pageSize = 100
+        self.__max_page_count = 5
         self.__has_premium_cache = None
         self.__timezone = pytz.timezone("Europe/Amsterdam")
 
@@ -833,6 +834,22 @@ class Channel(chn_class.Channel):
 
         data = JsonHelper(data)
         next_url = data.get_value("_links", "next", "href")
+        Logger.debug("Retrieving a total of %s items", data.get_value("total"))
+
+        if not next_url:
+            return data, items
+
+        # We will just try to download all items.
+        for i in range(0, self.__max_page_count - 1):
+            page_data = UriHandler.open(next_url, additional_headers=self.parentItem.HttpHeaders)
+            page_json = JsonHelper(page_data)
+            page_items = page_json.get_value("items")
+            if page_items:
+                data.json["items"] += page_items
+            next_url = page_json.get_value("_links", "next", "href")
+            if not next_url:
+                break
+
         if next_url:
             next_title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
             item = FolderItem(next_title, next_url, content_type=contenttype.EPISODES)

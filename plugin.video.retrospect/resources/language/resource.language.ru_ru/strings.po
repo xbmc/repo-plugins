@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-30 21:19+0000\n"
+"PO-Revision-Date: 2021-08-28 17:29+0000\n"
 "Last-Translator: Dmitry Petrov <dimakrm361@gmail.com>\n"
 "Language-Team: Russian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/ru_ru/>\n"
 "Language: ru_ru\n"
@@ -12,19 +12,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.8\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
-msgstr ""
+msgstr "Retrospect позволяет тебе смотреть повторы/архив ТВ-передач, доступные через официальные телеканалы."
 
 msgctxt "Addon Description"
 msgid "Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
-msgstr ""
+msgstr "Retrospect использует трансляции доступные через официальные сайты телеканалов для просмотра повторов/архива телепередач, доступных в Kodi (в основном голландские, бельгийские, британские, норвежские и шведские). [CR][CR]Некоторые доступные каналы: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]Дополнительную информацию можно найти на https://github.com/retrospect-addon/plugin.video.retrospect или в вики Retrospect https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
 
 msgctxt "Addon Disclaimer"
 msgid "Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched using this add-on or any consequences of using this add-on to watch content via the content providers' platforms."
-msgstr ""
+msgstr "Retrospect предоставляется как есть. Мы не несем ответственности за возможные (но маловероятные) повреждения вашей системы. Мы также не несем ответственности за контент, который можно просматривать с помощью этого дополнения, или за любые последствия использования дополнения для просмотра через платформы поставщиков контента."
 
 msgctxt "#30000"
 msgid "Stream Quality"
@@ -44,11 +44,11 @@ msgstr "Высокое"
 
 msgctxt "#30004"
 msgid "Release channel for update notifications"
-msgstr ""
+msgstr "Канал выпуска для уведомления о обновлении"
 
 msgctxt "#30005"
 msgid "Stable"
-msgstr ""
+msgstr "Стабильный"
 
 msgctxt "#30006"
 msgid "Alpha/Beta"
@@ -56,7 +56,7 @@ msgstr "Альфа/Бета"
 
 msgctxt "#30007"
 msgid "via other add-on"
-msgstr ""
+msgstr "через другое дополнение"
 
 msgctxt "#30008"
 msgid "Retrospect"
@@ -72,23 +72,23 @@ msgstr "Каналы"
 
 msgctxt "#30011"
 msgid "Requires restart of Retrospect to take effect."
-msgstr ""
+msgstr "Требуется перезапуск Retrospect для применения изменений."
 
 msgctxt "#30012"
 msgid "Login Failed"
-msgstr ""
+msgstr "Не удалось войти"
 
 msgctxt "#30013"
 msgid "Could not log on to the selected channel."
-msgstr ""
+msgstr "Не удалось войти в выбранный канал."
 
 msgctxt "#30014"
 msgid "Show info"
-msgstr ""
+msgstr "Показать информацию"
 
 msgctxt "#30015"
 msgid "via missing add-on"
-msgstr ""
+msgstr "через отсутств. дополнение"
 
 msgctxt "#30016"
 msgid "Sort by"
@@ -132,7 +132,7 @@ msgstr "Ничего"
 
 msgctxt "#30026"
 msgid "Group list if it exceeds # folders"
-msgstr ""
+msgstr "Группировать список, если он превышает # папок"
 
 msgctxt "#30027"
 msgid "Autorun Retrospect on Kodi start"
@@ -160,7 +160,7 @@ msgstr "Настройки канала"
 
 msgctxt "#30033"
 msgid "Expires at"
-msgstr ""
+msgstr "Истекает в"
 
 msgctxt "#30034"
 msgid "No channel selected"
@@ -196,7 +196,7 @@ msgstr ""
 
 msgctxt "#30042"
 msgid "Enabled"
-msgstr ""
+msgstr "Вкл."
 
 msgctxt "#30043"
 msgid "Folder prefix"
@@ -204,44 +204,44 @@ msgstr ""
 
 msgctxt "#30044"
 msgid "Kodi update required"
-msgstr ""
+msgstr "Требуется обновление Kodi"
 
 msgctxt "#30045"
 msgid "This feature of Retrospect requires a more recent version of Kodi. Please install the most recent version of your current Kodi build. Depending on your installation this can either be a 'stable' or 'nightly' build."
-msgstr ""
+msgstr "Эта функция требует обновления до более свежей версии Kodi. Пожалуйста, установите свежую версию Kodi. В зависимости от вашей установки это может быть «стабильная» или «ночная» сборка."
 
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
-msgstr ""
+msgstr "DRM/Гео-блокировка/Премиум фильтры"
 
 msgctxt "#30047"
 msgid "Cannot playback this YouTube Video because the Kodi YouTube add-on is missing."
-msgstr ""
+msgstr "Не удалось воспроизвести это видео потому, что отсутствует дополнение Youtube."
 
 # empty string with id 30047
 msgctxt "#30048"
 msgid "Log level"
-msgstr ""
+msgstr "Уровень журнала"
 
 msgctxt "#30049"
 msgid "Premium/Paid"
-msgstr ""
+msgstr "Премиум/Платное"
 
 msgctxt "#30050"
 msgid "DRM Protected"
-msgstr ""
+msgstr "Защищен DRM"
 
 msgctxt "#30051"
 msgid "Hidden item"
-msgstr ""
+msgstr "Скрытый элемент"
 
 msgctxt "#30052"
 msgid "Send usage statistics"
-msgstr ""
+msgstr "Отправлять статистику об использовании"
 
 msgctxt "#30053"
 msgid "Appearance"
-msgstr ""
+msgstr "Внешний вид"
 
 msgctxt "#30054"
 msgid "[COLOR gold][B]The Retrospect Password Vault[/B][/COLOR][CR]'The Vault' enables storing sensitive data in a more secure way. How does this work:[CR][CR]* The users selects a simple Vault PIN that is used as the main code for accessing the Vault data.[CR]* This PIN can be rather simple and short and easy to remember: for example 3145.[CR]* That PIN is then used to generate a much stronger and complexer encryption key using Scrypt.[CR]* As a user you will not need to know this complex key.[CR][CR][COLOR gold][B]Storing sensitive data[/B][/COLOR][CR]Whenever sensitive data is being [B]stored[/B]:[CR][CR]* The user will be asked for their PIN first.[CR]* After a correct PIN the actual data to store will be asked.[CR][CR][COLOR gold][B]Retrieving sensitive data[/B][/COLOR][CR]Whenever sensitive data is being [B]retrieved[/B]:[CR][CR]* The user will only be asked for their PIN.[CR]* That PIN is then used to securely fetch the actual data.[CR][CR][COLOR gold][B]Resetting the Vault[/B][/COLOR][CR]If a user has forgotten the PIN, there is no way of recovering the data. The only solution is to reset the Vault and pick a new PIN and generate a new Vault Key. [B]This will invalidate all encrypted data[/B]. This data must be entered again."
@@ -249,7 +249,7 @@ msgstr ""
 
 msgctxt "#30055"
 msgid "Advanced"
-msgstr ""
+msgstr "Дополнительные"
 
 msgctxt "#30056"
 msgid "Install the Up Next add-on"
@@ -262,7 +262,7 @@ msgstr ""
 # empty strings from id 30056 to 30058
 msgctxt "#30059"
 msgid "Other Countries"
-msgstr ""
+msgstr "Другие страны"
 
 msgctxt "#30060"
 msgid "Enable/Disable channels by country of origin"
@@ -274,7 +274,7 @@ msgstr ""
 
 msgctxt "#30062"
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 msgctxt "#30063"
 msgid "Channel to configure"
@@ -286,11 +286,11 @@ msgstr ""
 
 msgctxt "#30065"
 msgid "Country Settings"
-msgstr ""
+msgstr "Настройки страны"
 
 msgctxt "#30066"
 msgid "DNS"
-msgstr ""
+msgstr "DNS"
 
 msgctxt "#30067"
 msgid "Show channels in categories"
@@ -298,15 +298,15 @@ msgstr ""
 
 msgctxt "#30068"
 msgid "Active"
-msgstr ""
+msgstr "Активный"
 
 msgctxt "#30069"
 msgid "Settings"
-msgstr ""
+msgstr "Настройки"
 
 msgctxt "#30070"
 msgid "Let Kodi determine bitrate if possible"
-msgstr ""
+msgstr "Позволить Kodi определить битрейт если возможно"
 
 msgctxt "#30071"
 msgid "Set the proxy and local IP to all channels related to this country"
@@ -318,63 +318,63 @@ msgstr ""
 
 msgctxt "#30073"
 msgid "- Geo-blocked = º, DRM protected = ^ and Premium = ª."
-msgstr ""
+msgstr "- Заблокирован в регионе = º, защищён DRM = ^ и Премиум = ª."
 
 msgctxt "#30074"
 msgid "Disabled"
-msgstr ""
+msgstr "Откл."
 
 msgctxt "#30075"
 msgid "Empty list behaviour"
-msgstr ""
+msgstr "Поведение при пустом списке"
 
 msgctxt "#30076"
 msgid "Show error"
-msgstr ""
+msgstr "Показать ошибку"
 
 msgctxt "#30077"
 msgid "Show empty list"
-msgstr ""
+msgstr "Показать пустой список"
 
 msgctxt "#30078"
 msgid "Show dummy item"
-msgstr ""
+msgstr "Показать тестовый элемент"
 
 msgctxt "#30079"
 msgid "Local IP (0.0.0.0=disabled)"
-msgstr ""
+msgstr "Локальный IP-адрес (0.0.0.0=отключено)"
 
 msgctxt "#30080"
 msgid "Filter DRM protected items"
-msgstr ""
+msgstr "Убрать защищенные DRM элементы"
 
 msgctxt "#30081"
 msgid "Filter Premium/Paid items"
-msgstr ""
+msgstr "Убрать Премиум/Платные элементы"
 
 msgctxt "#30082"
 msgid "Apply filter to"
-msgstr ""
+msgstr "Применить фильтр на"
 
 msgctxt "#30083"
 msgid "Folders & Streams"
-msgstr ""
+msgstr "Папки и трансляции"
 
 msgctxt "#30084"
 msgid "Streams Only"
-msgstr ""
+msgstr "Только трансляции"
 
 msgctxt "#30085"
 msgid "Geo Location"
-msgstr ""
+msgstr "Геолокация"
 
 msgctxt "#30086"
 msgid "Hide Fanart"
-msgstr ""
+msgstr "Скрыть фанарт"
 
 msgctxt "#30087"
 msgid "Mix folders and streams while sorting"
-msgstr ""
+msgstr "Смешивать папки и трансляции во время сортировки"
 
 msgctxt "#30088"
 msgid "Show thumbnail as fanart if no fanart is available"
@@ -410,15 +410,15 @@ msgstr ""
 
 msgctxt "#30096"
 msgid "Country"
-msgstr ""
+msgstr "Страна"
 
 msgctxt "#30097"
 msgid "Local IP"
-msgstr ""
+msgstr "Локальный IP-адрес"
 
 msgctxt "#30098"
 msgid "Logging & Diagnostics"
-msgstr ""
+msgstr "Журнал и Диагностика"
 
 msgctxt "#30099"
 msgid "Use HLS instead of Dash for non-encrypted streams"
@@ -426,148 +426,148 @@ msgstr ""
 
 msgctxt "#30100"
 msgid "None"
-msgstr ""
+msgstr "Ничего"
 
 msgctxt "#30101"
 msgid "Regional"
-msgstr ""
+msgstr "Региональные"
 
 msgctxt "#30102"
 msgid "National"
-msgstr ""
+msgstr "Национальные"
 
 msgctxt "#30103"
 msgid "Video"
-msgstr ""
+msgstr "Видео"
 
 msgctxt "#30104"
 msgid "Radio"
-msgstr ""
+msgstr "Радио"
 
 msgctxt "#30105"
 msgid "Sport"
-msgstr ""
+msgstr "Спорт"
 
 msgctxt "#30106"
 msgid "Kids"
-msgstr ""
+msgstr "Дети"
 
 msgctxt "#30107"
 msgid "Tech"
-msgstr ""
+msgstr "Технологии"
 
 msgctxt "#30108"
 msgid "Other"
-msgstr ""
+msgstr "Другое"
 
 # used for list limits
 # empty strings from id 30109 to 30189
 msgctxt "#30190"
 msgid "Monday"
-msgstr ""
+msgstr "Понедельник"
 
 msgctxt "#30191"
 msgid "Tuesday"
-msgstr ""
+msgstr "Вторник"
 
 msgctxt "#30192"
 msgid "Wednesday"
-msgstr ""
+msgstr "Среда"
 
 msgctxt "#30193"
 msgid "Thursday"
-msgstr ""
+msgstr "Четверг"
 
 msgctxt "#30194"
 msgid "Friday"
-msgstr ""
+msgstr "Пятница"
 
 msgctxt "#30195"
 msgid "Saturday"
-msgstr ""
+msgstr "Суббота"
 
 msgctxt "#30196"
 msgid "Sunday"
-msgstr ""
+msgstr "Воскресение"
 
 msgctxt "#30199"
 msgid "10"
-msgstr ""
+msgstr "10"
 
 msgctxt "#30200"
 msgid "50"
-msgstr ""
+msgstr "50"
 
 msgctxt "#30201"
 msgid "75"
-msgstr ""
+msgstr "75"
 
 msgctxt "#30202"
 msgid "100"
-msgstr ""
+msgstr "100"
 
 msgctxt "#30203"
 msgid "150"
-msgstr ""
+msgstr "150"
 
 msgctxt "#30204"
 msgid "200"
-msgstr ""
+msgstr "200"
 
 msgctxt "#30205"
 msgid "1000"
-msgstr ""
+msgstr "1000"
 
 # language and countries
 # empty strings from id 30206 to 30299
 msgctxt "#30300"
 msgid "Other Countries"
-msgstr ""
+msgstr "Другие страны"
 
 # nl
 msgctxt "#30301"
 msgid "The Netherlands"
-msgstr ""
+msgstr "Нидерланды"
 
 msgctxt "#30302"
 msgid "Sweden"
-msgstr ""
+msgstr "Швеция"
 
 msgctxt "#30303"
 msgid "Lithuania"
-msgstr ""
+msgstr "Литва"
 
 msgctxt "#30304"
 msgid "Latvia"
-msgstr ""
+msgstr "Латвия"
 
 msgctxt "#30305"
 msgid "Norway"
-msgstr ""
+msgstr "Норвегия"
 
 msgctxt "#30306"
 msgid "Belgium"
-msgstr ""
+msgstr "Бельгия"
 
 msgctxt "#30307"
 msgid "United Kingdom"
-msgstr ""
+msgstr "Великобритания"
 
 msgctxt "#30308"
 msgid "Estonia"
-msgstr ""
+msgstr "Эстония"
 
 msgctxt "#30309"
 msgid "Germany"
-msgstr ""
+msgstr "Германия"
 
 msgctxt "#30310"
 msgid "Denmark"
-msgstr ""
+msgstr "Данния"
 
 msgctxt "#30311"
 msgid "Finland"
-msgstr ""
+msgstr "Финляндия"
 
 # empty strings from id 30312 to 30345
 msgctxt "#30346"
@@ -576,28 +576,28 @@ msgstr ""
 
 msgctxt "#30347"
 msgid "Now"
-msgstr ""
+msgstr "Сейчас"
 
 msgctxt "#30348"
 msgid "Next"
-msgstr ""
+msgstr "Далее"
 
 msgctxt "#30349"
 msgid "Later"
-msgstr ""
+msgstr "Затем"
 
 # empty strings from id 30312 to 30349
 msgctxt "#30350"
 msgid "Search"
-msgstr ""
+msgstr "Поиск"
 
 msgctxt "#30351"
 msgid "Categories"
-msgstr ""
+msgstr "Категории"
 
 msgctxt "#30352"
 msgid "TV shows"
-msgstr ""
+msgstr "ТВ передачи"
 
 msgctxt "#30353"
 msgid "Currently playing"
@@ -613,7 +613,7 @@ msgstr ""
 
 msgctxt "#30356"
 msgid "Live TV"
-msgstr ""
+msgstr "Прямой эфир"
 
 msgctxt "#30357"
 msgid "Live Radio"
@@ -625,15 +625,15 @@ msgstr ""
 
 msgctxt "#30359"
 msgid "Genres"
-msgstr ""
+msgstr "Жанры"
 
 msgctxt "#30360"
 msgid "Full list"
-msgstr ""
+msgstr "Полный список"
 
 msgctxt "#30361"
 msgid "Tags"
-msgstr ""
+msgstr "Метки"
 
 msgctxt "#30362"
 msgid "Last chance"
@@ -641,15 +641,15 @@ msgstr ""
 
 msgctxt "#30363"
 msgid "Popular"
-msgstr ""
+msgstr "Популярное"
 
 msgctxt "#30364"
 msgid "Latest news"
-msgstr ""
+msgstr "Последние новости"
 
 msgctxt "#30365"
 msgid "Movies"
-msgstr ""
+msgstr "Фильмы"
 
 msgctxt "#30366"
 msgid "Available from"
@@ -737,7 +737,7 @@ msgstr ""
 
 msgctxt "#30505"
 msgid "Hide"
-msgstr ""
+msgstr "Скрыть"
 
 msgctxt "#30506"
 msgid "Remove Favourite"
@@ -745,7 +745,7 @@ msgstr ""
 
 msgctxt "#30507"
 msgid "Select Channels »"
-msgstr ""
+msgstr "Выбрать каналы »"
 
 msgctxt "#30508"
 msgid "No favourites available"
@@ -757,16 +757,16 @@ msgstr ""
 
 msgctxt "#30510"
 msgid "New version available"
-msgstr ""
+msgstr "Доступна новая версия"
 
 # empty strings from id 30511 to 30515
 msgctxt "#30516"
 msgid "New Version Available."
-msgstr ""
+msgstr "Доступна новая версия."
 
 msgctxt "#30517"
 msgid "A new version of %s is available: %s. Please visit the website to download it."
-msgstr ""
+msgstr "Доступна новая версия %s. Пожалуйста посетите веб-сайт для скачивания."
 
 # empty strings from id 30518 to 30519
 msgctxt "#30520"
@@ -779,15 +779,15 @@ msgstr ""
 
 msgctxt "#30522"
 msgid "Channel message"
-msgstr ""
+msgstr "Сообщение канала"
 
 msgctxt "#30523"
 msgid "Error"
-msgstr ""
+msgstr "Ошибка"
 
 msgctxt "#30524"
 msgid "No videos were found for the selected item."
-msgstr ""
+msgstr "Для выбранного элемента не найдены видео."
 
 msgctxt "#30525"
 msgid "The selected item does not have|any streams associated."
@@ -796,7 +796,7 @@ msgstr ""
 # empty strings from id 30526 to 30527
 msgctxt "#30528"
 msgid "Add-on Settings"
-msgstr ""
+msgstr "Настройки дополнения"
 
 msgctxt "#30529"
 msgid "Refresh list"
@@ -808,7 +808,7 @@ msgstr ""
 
 msgctxt "#30531"
 msgid "Missing 'InputStream Helper' add-on. Cannot install."
-msgstr ""
+msgstr "Отсутствует дополнение 'InputStream Helper'. Не удалось установить."
 
 msgctxt "#30532"
 msgid "Install Widevine using 'InputStream Helper' add-on"
@@ -820,11 +820,11 @@ msgstr ""
 
 msgctxt "#30534"
 msgid "Installation of Widevine failed!"
-msgstr ""
+msgstr "Не удалось установить Widevine!"
 
 msgctxt "#30535"
 msgid "Installation of Widevine completed!"
-msgstr ""
+msgstr "Установка Widevine завершена!"
 
 msgctxt "#30536"
 msgid "This stream requires Kodi Leia, an enabled InputStream Adaptive add-on and the Widevine library to be installed. The latter can be installed from within the Retrospect add-on settings."
@@ -832,7 +832,7 @@ msgstr ""
 
 msgctxt "#30537"
 msgid "Page"
-msgstr ""
+msgstr "Страница"
 
 msgctxt "#30538"
 msgid "The selected live stream has not yet|begun."
@@ -844,7 +844,7 @@ msgstr ""
 
 msgctxt "#30540"
 msgid "Geo-blocked"
-msgstr ""
+msgstr "Заблокирован в регионе"
 
 msgctxt "#30541"
 msgid "Queue item"
@@ -856,11 +856,11 @@ msgstr ""
 
 msgctxt "#30543"
 msgid "Season"
-msgstr ""
+msgstr "Сезон"
 
 msgctxt "#30544"
 msgid "Episode"
-msgstr ""
+msgstr "Эпизод"
 
 msgctxt "#30545"
 msgid "Titles with '%s'"
@@ -876,7 +876,7 @@ msgstr ""
 
 msgctxt "#30548"
 msgid "Clips"
-msgstr ""
+msgstr "Клипы"
 
 msgctxt "#30549"
 msgid "Error retrieving the list of items."
@@ -888,19 +888,19 @@ msgstr ""
 
 msgctxt "#30551"
 msgid "Today"
-msgstr ""
+msgstr "Сегодня"
 
 msgctxt "#30552"
 msgid "Yesterday"
-msgstr ""
+msgstr "Вчера"
 
 msgctxt "#30553"
 msgid "Day before yesterday"
-msgstr ""
+msgstr "Позавчера"
 
 msgctxt "#30554"
 msgid "DRM Protection"
-msgstr ""
+msgstr "DRM защита"
 
 msgctxt "#30555"
 msgid "The selected item is DRM protected and might not play on Kodi."
@@ -924,7 +924,7 @@ msgstr ""
 
 msgctxt "#30560"
 msgid "Paid video"
-msgstr ""
+msgstr "Платное видео"
 
 msgctxt "#30561"
 msgid "The selected item is not free and might not play on Kodi."
@@ -936,15 +936,15 @@ msgstr ""
 
 msgctxt "#30563"
 msgid "Hide Item"
-msgstr ""
+msgstr "Скрыть элемент"
 
 msgctxt "#30564"
 msgid "Show Hidden Item"
-msgstr ""
+msgstr "Показать скрытый элемент"
 
 msgctxt "#30565"
 msgid "Hidden items"
-msgstr ""
+msgstr "Скрытые элементы"
 
 msgctxt "#30566"
 msgid "To show a hidden item, first configure Retrospect to show hidden items. Then use the context menu's \"Show hidden item\"."
@@ -1053,7 +1053,7 @@ msgstr ""
 
 msgctxt "#30598"
 msgid "Send retrospect.log »"
-msgstr ""
+msgstr "Отправить retrospect.log »"
 
 msgctxt "#30599"
 msgid "Logfile posted to: %s[CR][CR]Note the URL (especially the last characters) and use them to refer to these log files in posts."
@@ -1085,19 +1085,19 @@ msgstr ""
 
 msgctxt "#30606"
 msgid "Minimum level for showing notifications"
-msgstr ""
+msgstr "Минимальный уровень для просмотра уведомлений"
 
 msgctxt "#30607"
 msgid "Info"
-msgstr ""
+msgstr "Информация"
 
 msgctxt "#30608"
 msgid "Warning"
-msgstr ""
+msgstr "Предупреждение"
 
 msgctxt "#30609"
 msgid "Error"
-msgstr ""
+msgstr "Ошибка"
 
 # empty string with id 30037
 #~ msgctxt "#30038"

@@ -47,17 +47,20 @@ class Channel(chn_class.Channel):
         if self.channelCode == "vijfbe":
             self.noImage = "vijfimage.png"
             self.mainListUri = "https://www.goplay.be/programmas/play5"
-            self.__channel_brand = "vijf"
+            self.__channel_brand = "play6"
+            self.__channel_slug = "vijf"
 
         elif self.channelCode == "zesbe":
             self.noImage = "zesimage.png"
             self.mainListUri = "https://www.goplay.be/programmas/play6"
-            self.__channel_brand = "zes"
+            self.__channel_brand = "play6"
+            self.__channel_slug = "zes"
 
         else:
             self.noImage = "vierimage.png"
             self.mainListUri = "https://www.goplay.be/programmas/play4"
-            self.__channel_brand = "vier"
+            self.__channel_brand = "play4"
+            self.__channel_slug = "vier"
 
         episode_regex = r'(data-program)="([^"]+)"'
         self._add_data_parser(self.mainListUri, match_type=ParserData.MatchExact,
@@ -200,7 +203,7 @@ class Channel(chn_class.Channel):
 
             title = "%04d-%02d-%02d - %s" % (air_date.year, air_date.month, air_date.day, day)
             url = "https://www.goplay.be/api/epg/{}/{:04d}-{:02d}-{:02d}".\
-                format(self.__channel_brand, air_date.year, air_date.month, air_date.day)
+                format(self.__channel_slug, air_date.year, air_date.month, air_date.day)
 
             extra = MediaItem(title, url)
             extra.complete = True
@@ -231,7 +234,7 @@ class Channel(chn_class.Channel):
         items = []
 
         specials = {
-            "https://www.goplay.be/api/programs/popular/{}".format(self.__channel_brand): (
+            "https://www.goplay.be/api/programs/popular/{}".format(self.__channel_slug): (
                 LanguageHelper.get_localized_string(LanguageHelper.Popular),
                 contenttype.TVSHOWS
             ),
@@ -286,14 +289,14 @@ class Channel(chn_class.Channel):
             result_set = JsonHelper(json_data)
             result_set = result_set.json
 
-        brand = result_set["brand"]
+        brand = result_set["pageInfo"]["brand"].lower()
         if brand != self.__channel_brand:
             return None
 
         title = result_set["title"]
         url = "{}{}".format(self.baseUrl, result_set["link"])
         item = MediaItem(title, url)
-        item.description = result_set["description"]
+        item.description = result_set.get("description")
         item.isGeoLocked = True
 
         images = result_set["images"]

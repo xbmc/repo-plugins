@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.4.6+matrix.1"
+        version="5.4.7+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -117,19 +117,26 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.4.6 - Changelog - 2021-08-18[/B]
+        <news>[B]Retrospect v5.4.7 - Changelog - 2021-09-19[/B]
 
-This is a small update to solve minor issues.
+This release of Retrospect only contains a number of channel fixes (See below).
 
 [B]Framework related[/B]
 _None_
 
 [B]GUI/Settings/Language related[/B]
-* Updated: Swedish Translation.
+_None_
 
 [B]Channel related[/B]
-* Fixed: ViaFree listing of shows (Fixes #1544).
-* Fixed: Subtitle issue (Fixes #1545) with c0ac292f.
+* Fixed: Issue with empty folders in main TV4 listings.
+* Fixed: Omroep Brabant broke due to back end changes.
+* Fixed: Radio 538 live streams (Fixes #1548).
+* Fixed: Vier.be updated their api which broke listings (Fixes #1553).
+* Fixed: TV4play.se was not listing due to API changes (Fixes #1554).
+* Fixed: Download additional pages for NPO Start (Fixes #1552).
+* Fixed: UR Play updated their API url (Fixes 1550).
+* Fixed: UR Play search function due to API change (Fixes #1555).
+* Fixed: NPO items under genres had an extra &quot;-&quot; (Fixes #1551).
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

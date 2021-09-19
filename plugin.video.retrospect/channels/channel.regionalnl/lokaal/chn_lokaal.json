@@ -57,20 +57,6 @@
       "fanart": "omroepgelderlandfanart.jpg"
     },
     {
-      "guid": "770D3385-2EC9-4B87-9BC8-3A7190248A9C",
-      "name": "Omroep Brabant",
-      "description": {
-        "en": "Video on demand for Omroep Brabant.\n\nDiscover news videos of all topics in and around Noord-Brabant, crime, entertainment, sports and events from the province.",
-        "nl": "Omroep Brabant Uitzendinggemist.\n\nHier vind je nieuwsvideo's over alle actualiteiten in en rondom Noord-Brabant, misdaad, entertainment, sport en evenementen uit de provincie. In Brabant is Omroep Brabant dé regionale omroep. Omroep Brabant is in alle opzichten de grootste regionale omroep in Nederland. Dagelijks luisteren 340.000 Brabanders naar \"hun\" omroep en kijken 540.000 personen naar de tv-programma's. "
-      },
-      "icon": "omroepbrabantlarge.png",
-      "category": "Regional",
-      "channelcode": "omroepbrabant",
-      "sortorder": 100,
-      "language": "nl",
-      "fanart": "omroepbrabantfanart.png"
-    },
-    {
       "guid": "81CD5339-0D59-4019-9171-12A98815311C",
       "name": "Omrop Fryslân",
       "description": {

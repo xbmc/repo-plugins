@@ -61,6 +61,9 @@ class Channel(chn_class.Channel):
                                 "https://hls.slam.nl/streaming/hls/"],
                                updater=self.update_live_stream_m3u8)
 
+        self._add_data_parser(r"https://radio538-nl.+\.m3u8", match_type=ParserData.MatchRegex,
+                              updater=self.update_live_stream_m3u8)
+
         self._add_data_parser("https://playerservices.streamtheworld.com/api/livestream-redirect",
                               updater=self.update_live_stream_redirect)
         # self._add_data_parser("https://playerservices.streamtheworld.com/api/livestream",
@@ -252,7 +255,7 @@ class Channel(chn_class.Channel):
         slam.isLive = True
         items.append(slam)
 
-        slam_fm = MediaItem("Slam! FM", "https://18973.live.streamtheworld.com/SLAM_AAC.aac"
+        slam_fm = MediaItem("Slam! FM", "https://20133.live.streamtheworld.com/SLAM_AAC.aac"
                                         "?ttag=PLAYER%3ANOPREROLL&tdsdk=js-2.9"
                                         "&pname=TDSdk&pversion=2.9&banners=none")
         slam_fm.media_type = mediatype.AUDIO

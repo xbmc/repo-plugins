@@ -4,6 +4,10 @@
     <setting id="lbry_api_url" type="text" option="urlencoded" label="30000" default="https://api.lbry.tv/api/v1/proxy"/>
     <setting id="nsfw" type="bool" label="30001" default="false"/>
     <setting id="items_per_page" type="number" label="30002" default="20"/>
+    <setting type="lsep" label="30246" />
+    <setting label="30243" type="action" action="RunPlugin(plugin://plugin.video.lbry/select_user_channel)"/>
+    <setting id="user_channel" label="30244" type="text" default="" visible="true" enable="false" />
+    <setting label="30245" type="action" action="RunPlugin(plugin://plugin.video.lbry/clear_user_channel)"/>
     <setting type="lsep" label="30003"/>
     <setting id="server_filter_disable" type="bool" label="30004" default="false"/>
   </category>

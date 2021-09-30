@@ -54,7 +54,8 @@
       "channelcode": "omroepgelderland",
       "sortorder": 100,
       "language": "nl",
-      "fanart": "omroepgelderlandfanart.jpg"
+      "fanart": "omroepgelderlandfanart.jpg",
+      "ignore": true
     },
     {
       "guid": "81CD5339-0D59-4019-9171-12A98815311C",

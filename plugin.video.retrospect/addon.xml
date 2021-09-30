@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.4.7+matrix.1"
+        version="5.4.8+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -117,26 +117,20 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.4.7 - Changelog - 2021-09-19[/B]
+        <news>[B]Retrospect v5.4.8 - Changelog - 2021-09-30[/B]
 
-This release of Retrospect only contains a number of channel fixes (See below).
+This build contains a number of fixes for different channels.
 
 [B]Framework related[/B]
 _None_
 
 [B]GUI/Settings/Language related[/B]
-_None_
+* Fixed: Return local path of image if present instead of resource.
 
 [B]Channel related[/B]
-* Fixed: Issue with empty folders in main TV4 listings.
-* Fixed: Omroep Brabant broke due to back end changes.
-* Fixed: Radio 538 live streams (Fixes #1548).
-* Fixed: Vier.be updated their api which broke listings (Fixes #1553).
-* Fixed: TV4play.se was not listing due to API changes (Fixes #1554).
-* Fixed: Download additional pages for NPO Start (Fixes #1552).
-* Fixed: UR Play updated their API url (Fixes 1550).
-* Fixed: UR Play search function due to API change (Fixes #1555).
-* Fixed: NPO items under genres had an extra &quot;-&quot; (Fixes #1551).
+* Fixed: Vijf.be and Zes.be showed the same listing (of zes.be) (Fixes #1553).
+* Fixed: Load more shows for the full NPO listing (See #1552).
+* Fixed: Omroep Gelderland changed API&#x27;s (Fixes #1561).
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>
@@ -150,14 +144,17 @@ _None_
         <summary lang="en_GB">Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters.</summary>
         <summary lang="en_US">Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters.</summary>
         <summary lang="nl_NL">Retrospect maakt het mogelijk om afleveringen te bekijken van TV series die door de officiële zenders beschikbaar worden gesteld.</summary>
+        <summary lang="ru_RU">Retrospect позволяет тебе смотреть повторы/архив ТВ-передач, доступные через официальные телеканалы.</summary>
         <summary lang="sv_SE">Retrospect möjliggör att visa playkanaler.</summary>
         <description lang="en_GB">Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/.</description>
         <description lang="en_US">Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/.</description>
         <description lang="nl_NL">Retrospect maakt gebruik van de officiële websites en vrij beschikbare streams van de verschillende omroepen (voornamelijk Nederlands, Belgische, Britse, Noorweegse en Zweedse) om hun uitzendinggemist afleveringen beschikbaar te maken viat Kodi. [CR][CR]Aantal van de beschikbare kanalen zijn: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info en Ons.[CR][CR]. Meer informatie kan worden gevonden op https://github.com/retrospect-addon/plugin.video.retrospect of de Retrospect wiki op https://github.com/retrospect-addon/plugin.video.retrospect/wiki/.</description>
+        <description lang="ru_RU">Retrospect использует трансляции доступные через официальные сайты телеканалов для просмотра повторов/архива телепередач, доступных в Kodi (в основном голландские, бельгийские, британские, норвежские и шведские). [CR][CR]Некоторые доступные каналы: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]Дополнительную информацию можно найти на https://github.com/retrospect-addon/plugin.video.retrospect или в вики Retrospect https://github.com/retrospect-addon/plugin.video.retrospect/wiki/.</description>
         <description lang="sv_SE">Retrospect använder olika TV-kanalers (framförallt nederländska, belgiska, brittiska, norska och svenska) officiella webbsidor och fritt tillgängliga strömmar för att göra deras playkanaler tillgängliga i Kodi.[CR][CR]Mer information finns på https://github.com/retrospect-addon/plugin.video.retrospect eller Retrospects wiki på https://github.com/retrospect-addon/plugin.video.retrospect/wiki/.</description>
         <disclaimer lang="en_GB">Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched using this add-on or any consequences of using this add-on to watch content via the content providers' platforms.</disclaimer>
         <disclaimer lang="en_US">Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched using this add-on or any consequences of using this add-on to watch content via the content providers' platforms.</disclaimer>
-        <disclaimer lang="nl_NL">Retrospect wordt aangeleverd zoals het is. Wij aanvaarden geen enkele verantwoordelijkheid voor mogelijke (maar hoogst onwaarschijnlijke) schade aan uw systeem. Evenmin nemen wij verantwoordelijkheid voor de content van de contentaanbieders die kan worden bekeken met behulp van deze add-on of eventuele gevolgen van het bekijken van deze content.</disclaimer>
+        <disclaimer lang="nl_NL">Retrospect wordt aangeleverd zoals het is. Wij aanvaarden geen enkele verantwoordelijkheid voor mogelijke (maar hoogst onwaarschijnlijke) schade aan je systeem. Evenmin nemen wij verantwoordelijkheid voor de content van de contentaanbieders die kan worden bekeken met behulp van deze add-on of eventuele gevolgen van het bekijken van deze content.</disclaimer>
+        <disclaimer lang="ru_RU">Retrospect предоставляется как есть. Мы не несем ответственности за возможные (но маловероятные) повреждения вашей системы. Мы также не несем ответственности за контент, который можно просматривать с помощью этого дополнения, или за любые последствия использования дополнения для просмотра через платформы поставщиков контента.</disclaimer>
         <disclaimer lang="sv_SE">Retrospect tillgängliggörs i befintligt skick. Vi tar inget som helst ansvar för möjliga (men högst osannolika) skador på ditt system. Vi tar inte heller ansvar för innehållet som kan ses med detta tillägg eller konsekvenser av att använda tillägget för att se innehållet via innehållsleverantörernas plattformar.</disclaimer>
     </extension>
 </addon>

@@ -47,7 +47,7 @@ class Channel(chn_class.Channel):
         if self.channelCode == "vijfbe":
             self.noImage = "vijfimage.png"
             self.mainListUri = "https://www.goplay.be/programmas/play5"
-            self.__channel_brand = "play6"
+            self.__channel_brand = "play5"
             self.__channel_slug = "vijf"
 
         elif self.channelCode == "zesbe":

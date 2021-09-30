@@ -76,14 +76,6 @@ class Channel(chn_class.Channel):
             self.liveUrl = "http://feeds.omroepwest.nl/v520/tv.json"
             self.channelBitrate = 1500
 
-        elif self.channelCode == "omroepgelderland":
-            # TODO: move to chn_rpoapp?
-            self.noImage = "omroepgelderlandimage.png"
-            self.mainListUri = "https://web.omroepgelderland.nl/json/v400/programmas.json"
-            self.baseUrl = "https://web.omroepgelderland.nl"
-            self.liveUrl = "https://gelderland.rpoapp.nl/v02/livestreams/AndroidTablet.json"
-            self.channelBitrate = 1500
-
         elif self.channelCode == "omroepbrabant":
             self.noImage = "omroepbrabantimage.png"
             self.mainListUri = "http://feed.omroepbrabant.nl/v520/UGSeries.json"

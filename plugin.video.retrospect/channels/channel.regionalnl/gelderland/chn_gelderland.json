@@ -1,18 +1,19 @@
 {
   "channels": [
     {
-      "guid": "B797D9BA-F06B-11E1-9CD5-9F7D6188709B",
+      "guid": "9CC8EF1B-8840-42F1-B0A1-0D20652DB68F",
       "name": "Omroep Gelderland",
       "description": {
-        "en": "Video on demand for Omroep Gelderland. Always up to date with the latest news from Gelderland.",
-        "nl": "Omroep Gelderland uitzendinggemist. Altijd op de hoogte van het laatste Gelderse nieuws."
+        "en": "Video on demand for Omroep Gelderland.\n\nKeep up-to-date with the latest news from Gelderland.",
+        "nl": "Omroep Gelderland Uitzendinggemist.\n\nAltijd op de hoogte van het laatste Gelderse nieuws."
       },
-      "icon": "gelderlandlarge.png",
+      "icon": "omroepgelderlandlarge.png",
+      "poster": "omroepgelderlandposter.png",
       "category": "Regional",
-      "channelcode": "tv1",
+      "channelcode": "omroepgelderland",
       "sortorder": 100,
       "language": "nl",
-      "ignore": true
+      "fanart": "omroepgelderlandfanart.jpg"
     }
   ]
 }

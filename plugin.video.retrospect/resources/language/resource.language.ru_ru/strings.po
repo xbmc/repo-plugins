@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-08-28 17:29+0000\n"
-"Last-Translator: Dmitry Petrov <dimakrm361@gmail.com>\n"
+"PO-Revision-Date: 2021-09-20 09:41+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Russian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/ru_ru/>\n"
 "Language: ru_ru\n"
 "MIME-Version: 1.0\n"
@@ -314,7 +314,7 @@ msgstr ""
 
 msgctxt "#30072"
 msgid "Proxy Type"
-msgstr ""
+msgstr "Тип прокси-сервера"
 
 msgctxt "#30073"
 msgid "- Geo-blocked = º, DRM protected = ^ and Premium = ª."
@@ -398,11 +398,11 @@ msgstr ""
 
 msgctxt "#30093"
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 msgctxt "#30094"
 msgid "Username"
-msgstr ""
+msgstr "Пользователь"
 
 msgctxt "#30095"
 msgid "Show Hidden Items"
@@ -572,7 +572,7 @@ msgstr "Финляндия"
 # empty strings from id 30312 to 30345
 msgctxt "#30346"
 msgid "Now Playing"
-msgstr ""
+msgstr "Сейчас воспроизводится"
 
 msgctxt "#30347"
 msgid "Now"
@@ -621,7 +621,7 @@ msgstr ""
 
 msgctxt "#30358"
 msgid "Episodes"
-msgstr ""
+msgstr "Серии"
 
 msgctxt "#30359"
 msgid "Genres"
@@ -698,7 +698,7 @@ msgstr ""
 # de
 msgctxt "#30409"
 msgid "German"
-msgstr ""
+msgstr "Немецкий"
 
 # dk
 msgctxt "#30410"
@@ -721,11 +721,11 @@ msgstr ""
 
 msgctxt "#30501"
 msgid "Favourite"
-msgstr ""
+msgstr "Избранное"
 
 msgctxt "#30502"
 msgid "Favourites"
-msgstr ""
+msgstr "Избранное"
 
 msgctxt "#30503"
 msgid "Channel Favourites"
@@ -848,7 +848,7 @@ msgstr "Заблокирован в регионе"
 
 msgctxt "#30541"
 msgid "Queue item"
-msgstr ""
+msgstr "Добавить в плейлист"
 
 msgctxt "#30542"
 msgid "Starting %s."
@@ -980,7 +980,7 @@ msgstr ""
 
 msgctxt "#30574"
 msgid "Hide Channel"
-msgstr ""
+msgstr "Скрыть канал"
 
 msgctxt "#30575"
 msgid "Retrospect Favourites »"
@@ -992,7 +992,7 @@ msgstr ""
 
 msgctxt "#30577"
 msgid "Bitrate »"
-msgstr ""
+msgstr "Битрейт »"
 
 msgctxt "#30578"
 msgid "InputStream Adaptive add-on settings"
@@ -1004,7 +1004,7 @@ msgstr ""
 
 msgctxt "#30580"
 msgid "Channel Options »"
-msgstr ""
+msgstr "Настройки канала »"
 
 msgctxt "#30581"
 msgid "InputStream Adaptive add-on usage"

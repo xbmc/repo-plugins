@@ -48,7 +48,7 @@ class LiveChannels:
             if callsign in blocked:
                 continue
 
-            labels = cbc.get_labels(channel)
+            labels = CBC.get_labels(channel)
             image = cbc.getImage(channel)
             values = {
                 'url': channel['content'][0]['url'],

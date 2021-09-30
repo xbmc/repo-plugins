@@ -54,8 +54,8 @@ def getAuthorizationFile():
     Get the authorization file
     """
     try:
-        import xbmc, xbmcaddon
-        base = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
+        from xbmcvfs import translatePath
+        base = translatePath('special://userdata/addon_data/plugin.video.cbc')
     except:
         base = os.getcwd()
 

@@ -33,7 +33,7 @@ msgid "Live Channels"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Live Programs"
+msgid "Featured"
 msgstr ""
 
 msgctxt "#30006"
@@ -102,4 +102,20 @@ msgstr ""
 
 msgctxt "#30022"
 msgid "IPTV Manager settings…"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Shows"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Documentaries"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Kids"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Search"
 msgstr ""

@@ -156,9 +156,11 @@ class Channel(chn_class.Channel):
                               requires_logon=True)
 
         # Alpha listing based on JSON API
-        self._add_data_parser("https://start-api.npo.nl/page/catalogue", json=True,
-                              parser=["components", 1, "data", "items"],
-                              creator=self.create_json_episode_item)
+        # self._add_data_parser("https://start-api.npo.nl/page/catalogue", json=True,
+        self._add_data_parser("https://start-api.npo.nl/media/series", json=True,
+                              parser=["items"],
+                              creator=self.create_json_episode_item,
+                              preprocessor=self.extract_api_pages)
 
         # New API endpoints:
         # https://start-api.npo.nl/epg/2018-12-22?type=tv
@@ -380,7 +382,8 @@ class Channel(chn_class.Channel):
                 LanguageHelper.get_localized_string(LanguageHelper.TvShows),
                 LanguageHelper.get_localized_string(LanguageHelper.FullList)
             ),
-            "https://start-api.npo.nl/page/catalogue?pageSize={}".format(self.__pageSize),
+            "https://start-api.npo.nl/media/series?pageSize={}&dateFrom=2014-01-01".format(self.__pageSize),
+            # "https://start-api.npo.nl/page/catalogue?pageSize={}".format(self.__pageSize),
             content_type=contenttype.TVSHOWS
         )
         extra.complete = True
@@ -852,7 +855,7 @@ class Channel(chn_class.Channel):
 
         if next_url:
             next_title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
-            item = FolderItem(next_title, next_url, content_type=contenttype.EPISODES)
+            item = FolderItem("\b.: {} :.".format(next_title), next_url, content_type=contenttype.EPISODES)
             item.complete = True
             item.HttpHeaders = self.__jsonApiKeyHeader
             items.append(item)

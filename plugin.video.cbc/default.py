@@ -1,6 +1,7 @@
 """Default plugin module."""
 import os
-from urllib.parse import urlencode, parse_qs, parse_qsl
+import json
+from urllib.parse import urlencode, parse_qsl
 
 import xbmc
 import xbmcplugin
@@ -12,14 +13,19 @@ import routing
 from resources.lib.cbc import CBC
 from resources.lib.utils import log, getAuthorizationFile, get_cookie_file, get_iptv_channels_file
 from resources.lib.livechannels import LiveChannels
-from resources.lib.liveprograms import LivePrograms
-from resources.lib.shows import Shows, CBCAuthError
+from resources.lib.gemv2 import GemV2
 from resources.lib.iptvmanager import IPTVManager
 
 getString = xbmcaddon.Addon().getLocalizedString
 LIVE_CHANNELS = getString(30004)
-LIVE_PROGRAMS = getString(30005)
-SHOWS = getString(30006)
+GEMS = {
+    'featured': getString(30005),
+    'shows': getString(30006),
+    'documentaries': getString(30024),
+    'kids': getString(30025)
+}
+SEARCH = getString(30026)
+
 
 plugin = routing.Plugin()
 
@@ -78,72 +84,6 @@ def play_smil():
     return play(labels, plugin.args['image'][0], url)
 
 
-@plugin.route('/show')
-def play_show():
-    """Play a show."""
-    smil = plugin.args['smil'][0]
-    image = plugin.args['image'][0]
-    labels = plugin.args['labels'][0]
-    labels = parse_qs(labels)
-    for key in list(labels.keys()):
-        labels[key] = labels[key][0]
-    shows = Shows()
-    try:
-        res = shows.getStream(smil)
-    except CBCAuthError as ex:
-        log('(play_show) auth failed. retrying...', True)
-        if not authorize():
-            log('(play_show) auth retry failed: {}'.format(ex), True)
-            return
-        log('(play_show) auth retry successful', True)
-        try:
-            res = shows.getStream(smil)
-        except CBCAuthError as ex:
-            if ex.payment:
-                log('(play_show) getStream failed because login required', True)
-                xbmcgui.Dialog().ok(getString(30010), getString(30011))
-            else:
-                log('(play_show) getStream failed despite successful auth retry', True)
-                xbmcgui.Dialog().ok(getString(30010), getString(30012))
-            return
-
-    play(labels, image, res['url'])
-
-
-@plugin.route('/programs')
-def live_programs_menu():
-    """Populate the menu with live programs."""
-    xbmcplugin.setContent(plugin.handle, 'videos')
-    progs = LivePrograms()
-    prog_list = progs.getLivePrograms()
-    cbc = CBC()
-    for prog in prog_list:
-        # skip unavailable streams
-        if not prog['availabilityState'] == 'available':
-            continue
-
-        if prog['availableDate'] == 0:
-            continue
-
-        labels = cbc.get_labels(prog)
-        image = cbc.getImage(prog)
-        item = xbmcgui.ListItem(labels['title'])
-        item.setArt({'thumb': image, 'poster': image})
-        item.setInfo(type="Video", infoLabels=labels)
-        item.setProperty('IsPlayable', 'true')
-        values = {
-            'smil': prog['content'][0]['url'],
-            'labels': urlencode(labels),
-            'image': image
-        }
-        url = sys.argv[0] + "?" + urlencode(values)
-        xbmcplugin.addDirectoryItem(plugin.handle, url, item, False)
-
-    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE)
-    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE)
-    xbmcplugin.endOfDirectory(plugin.handle)
-
-
 @plugin.route('/iptv/channels')
 def iptv_channels():
     """Send a list of IPTV channels."""
@@ -181,6 +121,7 @@ def live_channels_add_only(station):
     """Remove all but the specified station from the IPTV station list."""
     LiveChannels.add_only_iptv_channel(station)
 
+
 @plugin.route('/channels')
 def live_channels_menu():
     """Populate the menu with live channels."""
@@ -189,7 +130,7 @@ def live_channels_menu():
     chan_list = chans.get_live_channels()
     cbc = CBC()
     for channel in chan_list:
-        labels = cbc.get_labels(channel)
+        labels = CBC.get_labels(channel)
         callsign = cbc.get_callsign(channel)
         image = cbc.getImage(channel)
         item = xbmcgui.ListItem(labels['title'])
@@ -208,60 +149,122 @@ def live_channels_menu():
     xbmcplugin.endOfDirectory(plugin.handle)
 
 
-@plugin.route('/shows')
-def play_menu():
-    """Populate the menu with shows."""
-    cbc = CBC()
-    shows = Shows()
-    if 'smil' in plugin.args:
-        url = plugin.args['smil'][0]
-    else:
-        # if there is no smil link this is the main menu of all shows, so it
-        # only has show titles (eg: not season or episode titles). In this
-        # situation, it is appropriate to sort by title and ignore 'The ...'
-        xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE)
-        xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE)
-        url = None
+@plugin.route('/gem/show/episode')
+def gem_episode():
+    """Play an episode."""
+    json_str = plugin.args['query'][0]
+    episode = json.loads(json_str)
 
-    prog = xbmcgui.DialogProgress()
-    prog.create(getString(30003))
-    try:
-        show_list = shows.getShows(url, progress_callback=prog.update)
-    except CBCAuthError:
-        log('(play_menu) auth failed. retrying', True)
-        if not authorize():
-            log('(play_menu) auth retry failed', True)
-            return
-        log('(play_menu) auth retry successful', True)
-        try:
-            show_list = shows.getShows(url, progress_callback=prog.update)
-        except CBCAuthError:
-            log('(play_menu) getShows failed despite successful auth retry', True)
-            return
+    # get the url, and failing that, attempt authorization, then retry
+    resp = GemV2().get_episode(episode['url'])
+    url = resp['url'] if 'url' in resp else None
+    if not url:
+        log('Failed to get stream URL, attempting to authorize.')
+        if authorize():
+            resp = GemV2().get_episode(episode['url'])
+            url = resp['url'] if 'url' in resp else None
 
-    xbmcplugin.setContent(plugin.handle, 'episodes' if 'video' in show_list[0] else 'tvshows')
+    item = xbmcgui.ListItem("Title", path=url)
+    labels = episode['labels']
+    item.setInfo(type="Video", infoLabels=labels)
+    helper = inputstreamhelper.Helper('hls')
+    if not xbmcaddon.Addon().getSettingBool("ffmpeg") and helper.check_inputstream():
+        item.setProperty('inputstream', 'inputstream.adaptive')
+        item.setProperty('inputstream.adaptive.manifest_type', 'hls')
 
-    prog.close()
-    for show in show_list:
-        if show['url'] is None:
-            continue
-        is_video = show['video'] if 'video' in show else False
-        labels = cbc.get_labels(show)
-        image = show['image'] if 'image' in show else None
-        item = xbmcgui.ListItem(labels['title'])
+    # if at this point we don't have a URL to play, display an error
+    xbmcplugin.setResolvedUrl(plugin.handle, url is not None, item)
+    if url is None:
+        xbmcgui.Dialog().ok(getString(30010), getString(30011))
 
-        item.setInfo(type="Video", infoLabels=labels)
-        item.setProperty('IsPlayable', 'true' if is_video else 'false')
-        if 'duration' in show:
-            item.addStreamInfo('video', {'duration': show['duration']})
+
+@plugin.route('/gem/show/season')
+def gem_show_season():
+    """Create a menu for a show season."""
+    xbmcplugin.setContent(plugin.handle, 'videos')
+    json_str = plugin.args['query'][0]
+    # remember show['season'] is season details but there is general show info in show as well
+    show = json.loads(json_str)
+    for episode in show['season']['assets']:
+        item = xbmcgui.ListItem(episode['title'])
+        image = episode['image'].replace('(Size)', '224')
         item.setArt({'thumb': image, 'poster': image})
-
-        plugin_url = plugin.url_for(play_menu, smil=show['url'])
-        if is_video:
-            plugin_url = plugin.url_for(play_show, smil=show['url'], labels=urlencode(labels), image=image)
-        xbmcplugin.addDirectoryItem(plugin.handle, plugin_url, item, not is_video)
-
+        item.setProperty('IsPlayable', 'true')
+        labels = GemV2.get_labels(show, episode)
+        item.setInfo(type="Video", infoLabels=labels)
+        episode_info = {'url': episode['playSession']['url'], 'labels': labels}
+        url = plugin.url_for(gem_episode, query=json.dumps(episode_info))
+        xbmcplugin.addDirectoryItem(plugin.handle, url, item, False)
     xbmcplugin.endOfDirectory(plugin.handle)
+
+
+@plugin.route('/gem/show/<show_id>')
+def gem_show_menu(show_id):
+    """Create a menu for a shelfs items."""
+    xbmcplugin.setContent(plugin.handle, 'videos')
+    show_layout = GemV2.get_show_layout_by_id(show_id)
+    show = {k: v for (k, v) in show_layout.items() if k not in ['sponsors', 'seasons']}
+    for season in show_layout['seasons']:
+        item = xbmcgui.ListItem(season['title'])
+        item.setInfo(type="Video", infoLabels=CBC.get_labels(season))
+        image = season['image'].replace('(Size)', '224')
+        item.setArt({'thumb': image, 'poster': image})
+        show['season'] = season
+        xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for(gem_show_season, query=json.dumps(show)), item, True)
+    xbmcplugin.endOfDirectory(plugin.handle)
+
+
+@plugin.route('/gem/shelf')
+def gem_shelf_menu():
+    """Create a menu item for each shelf."""
+    handle = plugin.handle
+    xbmcplugin.setContent(handle, 'videos')
+    json_str = plugin.args['query'][0]
+    shelf_items = json.loads(json_str)
+    for shelf_item in shelf_items:
+        item = xbmcgui.ListItem(shelf_item['title'])
+        image = shelf_item['image'].replace('(Size)', '224')
+        item.setArt({'thumb': image, 'poster': image})
+        url = plugin.url_for(gem_show_menu, shelf_item['id'])
+        xbmcplugin.addDirectoryItem(handle, url, item, True)
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE)
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE)
+    xbmcplugin.endOfDirectory(handle)
+
+
+@plugin.route('/gem/categories/<category_id>')
+def gem_category_menu(category_id):
+    """Populate a menu with categorical content."""
+    handle = plugin.handle
+    xbmcplugin.setContent(handle, 'videos')
+    category = GemV2.get_category(category_id)
+    for show in category['items']:
+        item = xbmcgui.ListItem(show['title'])
+        image = show['image'].replace('(Size)', '224')
+        item.setArt({'thumb': image, 'poster': image})
+        url = plugin.url_for(gem_show_menu, show['id'])
+        xbmcplugin.addDirectoryItem(handle, url, item, True)
+    xbmcplugin.endOfDirectory(handle)
+
+
+@plugin.route('/gem/layout/<layout>')
+def layout_menu(layout):
+    """Populate the menu with featured items."""
+    handle = plugin.handle
+    xbmcplugin.setContent(handle, 'videos')
+    layout = GemV2.get_layout(layout)
+    if 'categories' in layout:
+        for category in layout['categories']:
+            item = xbmcgui.ListItem(category['title'])
+            url = plugin.url_for(gem_category_menu, category['id'])
+            xbmcplugin.addDirectoryItem(handle, url, item, True)
+    if 'shelves' in layout:
+        for shelf in layout['shelves']:
+            item = xbmcgui.ListItem(shelf['title'])
+            shelf_items = json.dumps(shelf['items'])
+            url = plugin.url_for(gem_shelf_menu, query=shelf_items)
+            xbmcplugin.addDirectoryItem(handle, url, item, True)
+    xbmcplugin.endOfDirectory(handle)
 
 
 @plugin.route('/')
@@ -273,14 +276,12 @@ def main_menu():
     if not os.path.exists(getAuthorizationFile()):
         authorize()
 
-    xbmcplugin.setContent(plugin.handle, 'videos')
-    xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for(live_channels_menu),
-                                xbmcgui.ListItem(LIVE_CHANNELS), True)
-    xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for(live_programs_menu),
-                                xbmcgui.ListItem(LIVE_PROGRAMS), True)
-    xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for(play_menu),
-                                xbmcgui.ListItem(SHOWS), True)
-    xbmcplugin.endOfDirectory(plugin.handle)
+    handle = plugin.handle
+    xbmcplugin.setContent(handle, 'videos')
+    for key, value in GEMS.items():
+        xbmcplugin.addDirectoryItem(handle, plugin.url_for(layout_menu, key), xbmcgui.ListItem(value), True)
+    xbmcplugin.addDirectoryItem(handle, plugin.url_for(live_channels_menu), xbmcgui.ListItem(LIVE_CHANNELS), True)
+    xbmcplugin.endOfDirectory(handle)
 
 
 if __name__ == '__main__':

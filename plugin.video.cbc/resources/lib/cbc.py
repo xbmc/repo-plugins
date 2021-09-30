@@ -164,7 +164,9 @@ class CBC:
         """Get the callsign for a channel."""
         return item[CALLSIGN] if CALLSIGN in item else None
 
-    def get_labels(self, item):
+    @staticmethod
+    def get_labels(item):
+        """Get labels for a CBC item."""
         labels = {
             'studio': 'Canadian Broadcasting Corporation',
             'country': 'Canada'
@@ -224,3 +226,11 @@ class CBC:
         title = video.attributes['title'].value
         abstract = video.attributes['abstract'].value
         return src
+
+    def get_session():
+        """Get a requests session object with CBC cookies."""
+        sess = requests.Session()
+        cookies = loadCookies()
+        if cookies is not None:
+            sess.cookies = cookies
+        return sess

@@ -86,7 +86,10 @@ def build_video_link(item):
         elif 'iosStreamUrl' in item['videoSources'][0]:
             url = item['videoSources'][0]['iosStreamUrl']
 
-    pid = item['pid']
+    if 'pid' in item:
+        pid = item['pid']
+    else:
+        pid = ""
     menu_name = item['title']
     title = menu_name
     desc = item['info']

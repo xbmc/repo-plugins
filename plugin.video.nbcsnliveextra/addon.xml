@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nbcsnliveextra" name="NBC Sports Live Extra" version="2021.7.31+matrix.1" provider-name="eracknaphobia">
+<addon id="plugin.video.nbcsnliveextra" name="NBC Sports Live Extra" version="2021.8.6+matrix.1" provider-name="eracknaphobia">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.adobepass" />

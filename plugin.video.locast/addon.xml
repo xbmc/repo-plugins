@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.locast" version="1.1.3" name="Locast" provider-name="Lunatixz">
+<addon id="plugin.video.locast" version="1.1.9" name="Locast" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.six" version="1.0.0"/>
@@ -7,6 +7,10 @@
         <import addon="script.module.requests" version="2.7.0"/> 
         <import addon="script.module.simplecache" version="1.0.0"/>
         <import addon="script.module.routing" version="0.2.3"/>
+        <import addon="script.module.pytz" version="2019.3.0+matrix.2"/>
+        <import addon="script.module.dateutil" version="2.8.1+matrix.1"/>
+        <import addon="script.module.tzlocal" version="2.0.0+matrix.1"/>
+        
         <import addon="script.module.inputstreamhelper" version="0.3.3"/>
         <import addon="service.iptv.manager" version="0.2.2" optional="true"/>
     </requires>
@@ -16,10 +20,11 @@
     <extension point="xbmc.service" library="pseudotv_recommended.py"/>
     <extension point="xbmc.addon.metadata">
         <reuselanguageinvoker>true</reuselanguageinvoker>
+        <lifecyclestate type="broken" lang="en_GB">Locast is suspending operations, effective immediately.\nVisit www.locast.org for details...</lifecyclestate>
         <summary lang="en_GB">Locast is a public service to Americans, providing local broadcast signals over the Internet in select cities like New York, Philadelphia, Boston, Chicago, Houston and Dallas ...</summary>
         <description lang="en_GB">All you have to do is sign up online, provide your name and email address, and certify that you live in, and are logging on from, one of the select US cities (“Designated Market Area”). Then, you can select among local broadcasters and stream your favorite local station. Locast.org is a “digital translator,” meaning that Locast.org operates just like a traditional broadcast translator service, except instead of using an over-the-air signal to boost a broadcaster’s reach, we stream the signal over the Internet to consumers located within select US cities. Ever since the dawn of TV broadcasting in the mid-20th Century, non-profit organizations have provided “translator” TV stations as a public service. Where a primary broadcaster cannot reach a receiver with a strong enough signal, the translator amplifies that signal with another transmitter, allowing consumers who otherwise could not get the over-the-air signal to receive important programming, including local news, weather and of course, sports. Locast.org provides the same public service, except instead of an over-the-air signal transmitter, we provide the local broadcast signal via online streaming.</description>
         <platform>all</platform>
-        <news>v1.1.0[CR]- Matrix</news>
+        <news>v1.1.7[CR]- Fixed login issues[CR]v1.1.7[CR]- IPTV Simple Guidedata fix, Inputstream beta build support for uninterrupted playback.</news>
         <license>GPL-3.0-or-later</license>
         <source>https://github.com/Lunatixz/KODI_ADDONS/tree/master/plugin.video.locast</source>
         <website>https://www.locast.org</website>

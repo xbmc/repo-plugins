@@ -9,8 +9,8 @@ msgstr ""
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2021-05-07 12:24+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
-"Language-Team: Bulgarian <https://kodi.weblate.cloud/projects/kodi-add-ons-music/plugin-audio-radio_de/bg_bg/>\n"
-"Language: bg_bg\n"
+"Language-Team: Asturian (Spain) <https://kodi.weblate.cloud/projects/kodi-add-ons-music/plugin-audio-radio_de/ast_es/>\n"
+"Language: ast_es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -35,7 +35,7 @@ msgstr ""
 
 msgctxt "#30102"
 msgid "Browse by genre"
-msgstr "Търси по жанр"
+msgstr ""
 
 msgctxt "#30103"
 msgid "Browse by topic"
@@ -43,7 +43,7 @@ msgstr ""
 
 msgctxt "#30104"
 msgid "Browse by country"
-msgstr "Търси по държава"
+msgstr ""
 
 msgctxt "#30105"
 msgid "Browse by city"
@@ -59,7 +59,7 @@ msgstr ""
 
 msgctxt "#30108"
 msgid "My Stations"
-msgstr "Моите станции"
+msgstr ""
 
 msgctxt "#30200"
 msgid "Search for station"
@@ -67,19 +67,19 @@ msgstr ""
 
 msgctxt "#30300"
 msgid "Language"
-msgstr "Език"
+msgstr "Llingua"
 
 msgctxt "#30301"
 msgid "English"
-msgstr "Английски"
+msgstr ""
 
 msgctxt "#30302"
 msgid "German"
-msgstr "Немски"
+msgstr ""
 
 msgctxt "#30303"
 msgid "French"
-msgstr "Френски"
+msgstr ""
 
 msgctxt "#30304"
 msgid "Portuguese"
@@ -91,15 +91,15 @@ msgstr ""
 
 msgctxt "#30310"
 msgid "Force ViewMode to Thumbnail"
-msgstr "Превключвай винаги на изглед 'Миниатюри'"
+msgstr ""
 
 msgctxt "#30400"
 msgid "Add to 'My Stations'"
-msgstr "Добави в 'Моите станции'"
+msgstr ""
 
 msgctxt "#30401"
 msgid "Remove from 'My Stations'"
-msgstr "Премахни от 'Моите станции'"
+msgstr ""
 
 msgctxt "#30402"
 msgid "Edit custom Station"
@@ -111,7 +111,7 @@ msgstr ""
 
 msgctxt "#30501"
 msgid "title"
-msgstr ""
+msgstr "títulu"
 
 msgctxt "#30502"
 msgid "thumbnail url or path"
@@ -127,15 +127,15 @@ msgstr ""
 
 msgctxt "#30600"
 msgid "Network Error"
-msgstr "Мрежова грешка"
+msgstr ""
 
 msgctxt "#30601"
 msgid "General"
-msgstr "Основни"
+msgstr "Xeneral"
 
 msgctxt "#30602"
 msgid "Hide fanart"
-msgstr "Скрий фанарта"
+msgstr ""
 
 msgctxt "#30603"
 msgid "Most Popular"

@@ -16,6 +16,14 @@ msgstr ""
 "Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "Addon Summary"
+msgid "Access &gt;30000 radio broadcasts"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Music plugin to access over 30000 international radio broadcasts from rad.io, radio.de, radio.fr, radio.pt and radio.es[CR]Currently features[CR]- English, german, french translated[CR]- Browse stations by location, genre, topic, country, city and language[CR]- Search for stations[CR]- 115 genres, 59 topics, 94 countrys, 1010 citys, 63 languages"
+msgstr ""
+
 msgctxt "#30100"
 msgid "Editorials Recommendations"
 msgstr ""
@@ -146,4 +154,16 @@ msgstr ""
 
 msgctxt "#30607"
 msgid "Prefer HTTP streams over HTTS"
+msgstr ""
+
+msgctxt "#30608"
+msgid "Unable to get radio stream url"
+msgstr ""
+
+msgctxt "#30609"
+msgid "Sucessfully added to my stations!"
+msgstr ""
+
+msgctxt "#30610"
+msgid "Sucessfully removed from my stations!"
 msgstr ""

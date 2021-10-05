@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.hdhomerun.simple" name="HDHomerun Simple" provider-name="Lunatixz" version="1.0.7">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.six" version="1.0.0"/>
+        <import addon="script.module.kodi-six" version="0.1.3.1"/>
+        <import addon="script.module.requests" version="2.7.0"/> 
+        <import addon="script.module.pyhdhr" version="1.1.1"/>
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.routing" version="0.2.3"/>
+        <import addon="script.module.inputstreamhelper" version="0.3.3"/>
+        <import addon="service.iptv.manager" version="0.2.2" optional="true"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.service" library="pseudotv_recommended.py"/>
+    <extension point="xbmc.addon.metadata">
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+        <summary lang="en_GB">Simple HDHomeRun Interface.</summary>
+        <description lang="en_GB">Automatically find all the compatible HDHomeRun devices on your network, Simple and Easy HDHomeRun Interface.</description>
+        <disclaimer lang="en_GB">Requires a compatible HDHomeRun device</disclaimer>
+        <platform>all</platform>
+        <license>GPL-3.0-or-later</license>
+        <source>https://github.com/Lunatixz/KODI_Addons/tree/master/plugin.video.hdhomerun.simple</source>
+        <website>https://www.hdhomerun.com</website>
+        <forum>https://forum.kodi.tv/showthread.php?tid=327117</forum>
+        <news>v1.0.5[CR]- Matrix</news>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot01.jpg</screenshot>
+            <screenshot>resources/images/screenshot02.jpg</screenshot>
+            <screenshot>resources/images/screenshot03.jpg</screenshot>
+            <screenshot>resources/images/screenshot04.jpg</screenshot>
+            <screenshot>resources/images/screenshot05.jpg</screenshot>
+        </assets>
+    </extension>
+</addon>

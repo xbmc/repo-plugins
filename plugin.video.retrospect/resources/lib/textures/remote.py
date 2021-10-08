@@ -7,9 +7,10 @@ class Remote(TextureHandler):
     def __init__(self, cdn_url, logger):
         TextureHandler.__init__(self, logger)
 
+        self.__purged = False
         self.__cdnUrl = cdn_url
         if not self.__cdnUrl:
-            self.__cdnUrl = "https://cdn.rieter.net/plugin.video.retrospect.cdn/"
+            raise ValueError("Parameter `cdn_url` needs to be filled.")
 
     def _purge_texture_cache(self, channel_path):
         """ Removes those entries from the textures cache that are no longer required.
@@ -18,9 +19,13 @@ class Remote(TextureHandler):
 
         """
 
-        cdn_folder = self._get_cdn_sub_folder(channel_path)
+        if self.__purged:
+            return
+
+        cdn_folder = "resources/channels"
         self._logger.info("Purging Kodi Texture for: %s", cdn_folder)
         self._purge_kodi_cache(cdn_folder)
+        self.__purged = True
         return
 
     def _get_texture_uri(self, channel_path, file_name):
@@ -41,8 +46,7 @@ class Remote(TextureHandler):
         if file_name.startswith("http"):
             return_value = file_name
         else:
-            cdn_folder = self._get_cdn_sub_folder(channel_path)
-            return_value = "%s/%s/%s" % (self.__cdnUrl, cdn_folder, file_name)
+            return_value = "%s/channels/%s/%s" % (self.__cdnUrl, file_name[0].lower(), file_name)
 
         self._logger.debug("Resolved texture '%s' to '%s'", file_name, return_value)
         return return_value

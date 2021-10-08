@@ -30,8 +30,7 @@ class Mpd(object):
 
         Can be used like this:
 
-            part = item.create_new_empty_media_part()
-            stream = part.append_media_stream(m3u8url, 0)
+            stream = item.add_stream(m3u8url, 0)
             M3u8.set_input_stream_addon_input(stream, self.headers)
             item.complete = True
 

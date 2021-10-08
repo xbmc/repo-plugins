@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.4.4](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.4) (2021-09-15)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.4.3...v0.4.4)
+
+**Fixed bugs:**
+
+- Fix catalogue and recommendations menu [\#93](https://github.com/add-ons/plugin.video.viervijfzes/pull/93) ([mediaminister](https://github.com/mediaminister))
+
 ## [v0.4.3](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.3) (2021-04-24)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.4.2...v0.4.3)

@@ -73,10 +73,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -98,11 +98,10 @@ class Channel(chn_class.Channel):
         you_tube_url = Regexer.do_regex('"(https://www.youtube.com/embed/[^\"]+)', data)
         if you_tube_url:
             Logger.debug("Using Youtube video")
-            part = item.create_new_empty_media_part()
             you_tube_url = you_tube_url[0].replace("embed/", "watch?v=")
             for s, b in YouTube.get_streams_from_you_tube(you_tube_url):
                 item.complete = True
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
             return item
 
         guid = Regexer.do_regex(
@@ -116,14 +115,13 @@ class Channel(chn_class.Channel):
             base_url = smiller.get_base_url()
             urls = smiller.get_videos_and_bitrates()
 
-            part = item.create_new_empty_media_part()
             for url in urls:
                 if "youtube" in url[0]:
                     for s, b in YouTube.get_streams_from_you_tube(url[0]):
                         item.complete = True
-                        part.append_media_stream(s, b)
+                        item.add_stream(s, b)
                 else:
-                    part.append_media_stream("%s%s" % (base_url, url[0]), bitrate=int(url[1]) // 1000)
+                    item.add_stream("%s%s" % (base_url, url[0]), bitrate=int(url[1]) // 1000)
                 item.complete = True
 
             Logger.trace("update_video_item complete: %s", item)

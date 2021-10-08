@@ -4,6 +4,7 @@ import xbmcplugin
 
 from resources.lib.actions import action
 from resources.lib import contenttype
+from resources.lib import mediatype
 from resources.lib.actions.addonaction import AddonAction
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.chn_class import Channel
@@ -70,10 +71,10 @@ class FolderAction(AddonAction):
             for media_item in media_items:  # type: MediaItem
                 self.__update_artwork(media_item, self.__channel, use_thumbs_as_fanart)
 
-                if media_item.type == 'folder' or media_item.type == 'append' or media_item.type == "page":
+                if media_item.is_folder:
                     action_value = action.LIST_FOLDER
                     folder = True
-                elif media_item.is_playable():
+                elif media_item.is_playable:
                     action_value = action.PLAY_VIDEO
                     folder = False
                 else:
@@ -148,7 +149,7 @@ class FolderAction(AddonAction):
             ok = False
         elif behaviour == "dummy" and not favs:
             # We should add a dummy items, but not for favs
-            empty_list_item = MediaItem("- %s -" % (title.strip("."), ), "", type='video')
+            empty_list_item = MediaItem("- %s -" % (title.strip("."), ), "", mediatype.VIDEO)
             empty_list_item.dontGroup = True
             empty_list_item.complete = True
 
@@ -196,7 +197,7 @@ class FolderAction(AddonAction):
             fallback_poster = parent_item.poster or fallback_poster
 
         # keep it or use the fallback
-        if not media_item.is_playable() and not media_item.poster and not media_item.thumb:
+        if not media_item.is_playable and not media_item.poster and not media_item.thumb:
             # Only set a fallback poster on none-playable items that do not have a poster and
             # don't have a thumb. Otherwise Kodi will always display the fallback poster. The
             # thumb is preferred in that case.

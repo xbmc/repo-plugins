@@ -66,7 +66,7 @@ class IPTVManager:
 
         today = datetime.today()
 
-        results = dict()
+        results = {}
         for key, channel in CHANNELS.items():
             iptv_id = channel.get('iptv_id')
 

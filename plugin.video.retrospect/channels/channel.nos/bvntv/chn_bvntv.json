@@ -1,0 +1,18 @@
+{
+  "channels": [
+    {
+      "guid": "D6527D8C-F08C-4E43-AE9A-E25F90EC03EA",
+      "name": "BVN",
+      "description": {
+        "en": "BVN stands for ‘Beste van NPO’ and it is the public TV channel for Dutch speaking people abroad. Every day we offer a selection from the current content from the NPO: news and backgrounds, Dutch drama, events, education and information, human interests, sports, amusement and kids shows. Available throughout the world via our app and the livestream on our website.",
+        "nl": "BVN staat voor het ‘Beste van NPO’ en is de publieke televisiezender voor Nederlandstaligen buiten Nederland. Elke dag bieden we een selectie uit het actuele televisieaanbod van de Nederlandse Publieke Omroep: nieuws en achtergronden, Nederlandstalig drama, evenementen, educatie en informatie, human interest, sport, amusement en kinderprogrammering. Wereldwijd beschikbaar via onze app en de livestream op de website en in een belangrijk deel van de wereld via satelliet."
+      },
+      "icon": "bvntvicon.png",
+      "category": "National",
+      "channelcode": "bvntv",
+      "sortorder": 101,
+      "language": "nl",
+      "fanart": "bvntvfanart.jpg"
+    }
+  ]
+}

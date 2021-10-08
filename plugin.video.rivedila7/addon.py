@@ -1,3 +1,5 @@
-from resources.lib import plugin
+import sys
 
-plugin.show_root_menu()
+from resources.lib.plugin import run
+
+run(sys.argv)

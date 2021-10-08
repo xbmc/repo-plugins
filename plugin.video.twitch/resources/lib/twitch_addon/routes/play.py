@@ -110,7 +110,7 @@ def route(api, seek_time=0, channel_id=None, video_id=None, slug=None, ask=False
                     quality = utils.get_default_quality('stream', channel_id)
                     if quality:
                         quality = quality[str(channel_id)]['quality']
-                result = api.get_channel_stream(channel_id)[Keys.STREAM]
+                result = api.get_channel_stream(channel_id)[Keys.STREAMS][0]
                 channel_name = result[Keys.CHANNEL][Keys.DISPLAY_NAME] \
                     if result[Keys.CHANNEL][Keys.DISPLAY_NAME] else result[Keys.CHANNEL][Keys.NAME]
                 name = result[Keys.CHANNEL][Keys.NAME]

@@ -168,6 +168,41 @@
 			<songs>True</songs>
 			<operator>string</operator>
 		</match>
+		<match name="totaldiscs">
+			<label>38077</label>
+			<albums>True</albums>
+			<operator>numeric</operator>
+		</match>
+		<match name="samplerate">
+			<label>613</label>
+			<songs>True</songs>
+			<operator>numeric</operator>
+		</match>
+		<match name="bitrate">
+			<label>623</label>
+			<songs>True</songs>
+			<operator>numeric</operator>
+		</match>
+		<match name="channels">
+			<label>253</label>
+			<songs>True</songs>
+			<operator>numeric</operator>
+		</match>
+		<match name="bpm">
+			<label>38080</label>
+			<songs>True</songs>
+			<operator>numeric</operator>
+		</match>
+		<match name="albumstatus">
+			<label>38081</label>
+			<albums>True</albums>
+			<operator>string</operator>
+		</match>
+		<match name="albumduration">
+			<label>180</label>
+			<albums>True</albums>
+			<operator>seconds</operator>
+		</match>
 	</matches>
 	<operators>
 		<group name="string">

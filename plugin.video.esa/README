@@ -1,0 +1,39 @@
+ESA Videos: KODI video plugin to watch the ESA videos from the ESA web site.
+
+   Copyright (C) 2013 Jose Antonio Montes (jamontes)
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+Initial release 1.0.0
+
+This KODI plugin allows to watch the videos from the ESA web site (more than 1500 videos available).
+
+The European Space Agency (ESA) is Europe’s gateway to space. Its mission is to shape the development of Europe’s space capability and ensure that investment in space continues to deliver benefits to the citizens of Europe and the world.
+
+ESA is an international organisation with 20 Member States. By coordinating the financial and intellectual resources of its members, it can undertake programmes and activities far beyond the scope of any single European country.
+
+ESA’s job is to draw up the European space programme and carry it through. ESA's programmes are designed to find out more about Earth, its immediate space environment, our Solar System and the Universe, as well as to develop satellite-based technologies and services, and to promote European industries. ESA also works closely with space organisations outside Europe (source: http://www.esa.int/About_Us/Welcome_to_ESA/What_is_ESA).
+
+Through the Add-on settings you can configure the language preferred to watch the videos if it is available.
+You can configure as well the order criteria to list the videos (by date, views, votes, and rating).
+
+To install it simply download the zip file, and then proceed as with any other plugin from KODI:
+ System->Settings->Add-ons->Install from zip file.
+
+Any issues detected can be reported using this forum thread for official support: http://forum.xbmc.org/showthread.php?tid=170058
+
+Enjoy it!
+
+jamontes

@@ -61,7 +61,7 @@ def router(paramstring):
         except Exception:
             raise ValueError('Stream URL not found!')
             return
-        res = ['1080', '720', '360']
+        res = ['720', '360']
         fanart = 'special://home/addons/{0}/fanart.jpg'.format(PLUGIN_ID)
         xbmcplugin.setContent(_handle, 'movies')
         for r in res:

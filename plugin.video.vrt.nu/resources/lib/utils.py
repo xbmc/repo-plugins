@@ -191,7 +191,7 @@ def play_url_to_id(url):
     """Convert a plugin:// url (e.g. plugin://plugin.video.vrt.nu/play/id/vid-5b12c0f6-b8fe-426f-a600-557f501f3be9/pbs-pub-7e2764cf-a8c0-4e78-9cbc-46d39381c237)
         to an id dictionary (e.g. {'video_id': 'vid-5b12c0f6-b8fe-426f-a600-557f501f3be9'}
    """
-    play_id = dict()
+    play_id = {}
     if 'play/id/' in url:
         play_id['video_id'] = url.split('play/id/')[1].split('/')[0]
     elif 'play/upnext/' in url:

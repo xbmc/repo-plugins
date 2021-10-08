@@ -4,6 +4,7 @@
 import socket
 import traceback
 import xbmcplugin
+import inputstreamhelper
 
 from resources.lib.ServiceApi import *
 from resources.lib.HtmlScraper import *
@@ -255,6 +256,7 @@ def run():
                 play_item.setContentLookup(False)
                 play_item.setMimeType(input_stream_mime)
                 play_item.setProperty('inputstream.adaptive.stream_headers', headers)
+
                 play_item.setProperty('inputstream', is_helper.inputstream_addon)
                 play_item.setProperty('inputstream.adaptive.manifest_type', input_stream_protocol)
                 play_item.setProperty('inputstream.adaptive.license_type', input_stream_drm_version)

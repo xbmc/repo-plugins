@@ -53,7 +53,6 @@ class Vualto(object):
         drm_protected = drm_key is not None
         adaptive_available = AddonSettings.use_adaptive_stream_add_on(
             with_encryption=drm_protected, channel=self.channel)
-        part = item.create_new_empty_media_part()
         srt = None
 
         # see if we prefer hls over dash
@@ -66,14 +65,14 @@ class Vualto(object):
             if video_type == "hls_aes" and drm_protected and adaptive_available:
                 # no difference in encrypted or not.
                 Logger.debug("Found HLS AES encrypted stream and a DRM key")
-                stream = part.append_media_stream(video_url, hls_prio)
+                stream = item.add_stream(video_url, hls_prio)
                 M3u8.set_input_stream_addon_input(stream)
 
             elif video_type == "hls" and not drm_protected:
                 # no difference in encrypted or not.
                 if adaptive_available:
                     Logger.debug("Found standard HLS stream and without DRM protection")
-                    stream = part.append_media_stream(video_url, hls_prio)
+                    stream = item.add_stream(video_url, hls_prio)
                     M3u8.set_input_stream_addon_input(stream)
                 else:
                     m3u8_data = UriHandler.open(video_url)
@@ -85,7 +84,7 @@ class Vualto(object):
                             audio_part = a.rsplit("-", 1)[-1]
                             audio_part = "-%s" % (audio_part,)
                             s = s.replace(".m3u8", audio_part)
-                        part.append_media_stream(s, b)
+                        item.add_stream(s, b)
 
                     srt = M3u8.get_subtitle(video_url, play_list_data=m3u8_data)
                     if not srt or live:
@@ -94,15 +93,15 @@ class Vualto(object):
                         continue
 
                     srt = srt.replace(".m3u8", ".vtt")
-                    part.Subtitle = SubtitleHelper.download_subtitle(srt, format="webvtt")
+                    item.subtitle = SubtitleHelper.download_subtitle(srt, format="webvtt")
 
             elif video_type == "mpeg_dash" and adaptive_available:
                 if not drm_protected:
                     Logger.debug("Found standard MPD stream and without DRM protection")
-                    stream = part.append_media_stream(video_url, 1)
+                    stream = item.add_stream(video_url, 1)
                     Mpd.set_input_stream_addon_input(stream)
                 else:
-                    stream = part.append_media_stream(video_url, 1)
+                    stream = item.add_stream(video_url, 1)
                     encryption_json = '{{"token":"{0}","drm_info":[D{{SSM}}],"kid":"{{KID}}"}}' \
                         .format(drm_key)
                     encryption_key = Mpd.get_license_key(
@@ -121,7 +120,7 @@ class Vualto(object):
                     continue
 
                 srt = srt.replace(".m3u8", ".vtt")
-                part.Subtitle = SubtitleHelper.download_subtitle(srt, format="webvtt")
+                item.subtitle = SubtitleHelper.download_subtitle(srt, format="webvtt")
 
             item.complete = True
         return item

@@ -33,7 +33,10 @@ STRINGS = {
     'most_popular': 30603,
     'az': 30604,
     'next_page': 30605,
-    'by_country': 30606
+    'by_country': 30606,
+    'error_stream': 30608,
+    'station_add_success': 30609,
+    'station_rm_success': 30610
 }
 
 SORT_TYPES = {
@@ -205,8 +208,13 @@ def custom_my_station(station_id):
 @plugin.route('/stations/my/add/<station_id>')
 def add_to_my_stations(station_id):
     station = radio_api.get_station_by_station_id(station_id)
-    my_stations[station_id] = station
-    my_stations.sync()
+    if station:
+        my_stations[station_id] = station
+        my_stations.sync()
+        plugin.notify("Radio", _('station_add_success'), image=plugin.icon)
+        plugin.refresh_container()
+    else:
+        plugin.notify("Radio", _('error_stream'), image=plugin.icon)
 
 
 @plugin.route('/stations/my/del/<station_id>')
@@ -214,6 +222,8 @@ def del_from_my_stations(station_id):
     if station_id in my_stations:
         del my_stations[station_id]
         my_stations.sync()
+        plugin.notify("Radio", _('station_rm_success'), image=plugin.icon)
+        plugin.refresh_container()
 
 
 @plugin.route('/stations/genres')
@@ -506,7 +516,8 @@ def sub_menu_entry(option, category, value, page=1):
 
 @plugin.route('/station/<station_id>')
 def get_stream_url(station_id):
-    if my_stations.get(station_id, {}).get('is_custom', False):
+    station = my_stations.get(station_id, {})
+    if station and station.get('is_custom', False):
         station = my_stations[station_id]
         stream_url = radio_api.internal_resolver(station)
         current_track = ''
@@ -518,68 +529,70 @@ def get_stream_url(station_id):
         if station:
             stream_url = station['stream_url']
             current_track = station['current_track']
+        else:
+            plugin.notify("Radio", _('error_stream'), image=plugin.icon)
     if station:
         __log('get_stream_url result: %s' % stream_url)
-        return plugin.set_resolved_url(
-            listitem.ListItem(
-                label=station['name'],
-                label2=current_track,
-                path=stream_url,
-                icon=station['thumbnail'],
-                thumbnail=station['thumbnail'],
-                fanart=__get_plugin_fanart(),
-                offscreen=True
-            )
-        )
+        resolved_listitem = listitem.ListItem(
+                        label=station['name'],
+                        label2=current_track,
+                        path=stream_url,
+                        icon=station['thumbnail'],
+                        thumbnail=station['thumbnail'],
+                        fanart=__get_plugin_fanart(),
+                        offscreen=True)
+        resolved_listitem.set_property('StationName', station['name'])
+        return plugin.set_resolved_url(resolved_listitem)
 
 
 def __add_stations(stations, add_custom=False, browse_more=None):
     items = []
-    my_station_ids = my_stations.keys()
+    my_station_ids = [int(item) for item in my_stations if item.isdigit()]
     for i, station in enumerate(stations):
-        station_id = str(station['id'])
-        if not station_id in my_station_ids:
-            context_menu = [(
-                _('add_to_my_stations'),
-                'RunPlugin(%s)' % plugin.url_for('add_to_my_stations',
-                                                      station_id=station_id),
-            )]
-        else:
-            context_menu = [(
-                _('remove_from_my_stations'),
-                'RunPlugin(%s)' % plugin.url_for('del_from_my_stations',
-                                                      station_id=station_id),
-            )]
-        if station.get('is_custom', False):
-            context_menu.append((
-                _('edit_custom_station'),
-                'RunPlugin(%s)' % plugin.url_for('custom_my_station',
-                                                      station_id=station_id),
-            ))
+        if station:
+            station_id = station.get('id')
+            if station_id and not station_id in my_station_ids:
+                context_menu = [(
+                    _('add_to_my_stations'),
+                    'RunPlugin(%s)' % plugin.url_for('add_to_my_stations',
+                                                        station_id=station_id),
+                )]
+            elif station_id and station_id in my_station_ids:
+                context_menu = [(
+                    _('remove_from_my_stations'),
+                    'RunPlugin(%s)' % plugin.url_for('del_from_my_stations',
+                                                        station_id=station_id),
+                )]
+            if station.get('is_custom', False):
+                context_menu.append((
+                    _('edit_custom_station'),
+                    'RunPlugin(%s)' % plugin.url_for('custom_my_station',
+                                                        station_id=station_id),
+                ))
 
-        items.append({
-            'label': station.get('name', ''),
-            'thumbnail': station['thumbnail'],
-            'fanart': __get_plugin_fanart(),
-            'info': {
-                'title': station.get('name', ''),
-                'rating': (10.0 - 0.0)*((float(station.get('rating', 0.0))-30.000)/(1.0-30.000)), # linear interpolation
-                'genre': station.get('genre', ''),
-                'size': int(station.get('bitrate', 0)),
-                'comment': station.get('description', ''),
-                'count': i,
-            },
-            'context_menu': context_menu,
-            'path': plugin.url_for(
-                'get_stream_url',
-                station_id=station_id,
-            ),
-            'is_playable': True,
-            'properties': {
-                'StationName': station.get('name', '') # Matrix++ only
-            },
-            'offscreen': True
-        })
+            items.append({
+                'label': station.get('name', ''),
+                'thumbnail': station['thumbnail'],
+                'fanart': __get_plugin_fanart(),
+                'info': {
+                    'title': station.get('name', ''),
+                    'rating': (10.0 - 0.0)*((float(station.get('rating', 0.0))-30.000)/(1.0-30.000)), # linear interpolation
+                    'genre': station.get('genre', ''),
+                    'size': int(station.get('bitrate', 0)),
+                    'comment': station.get('description', ''),
+                    'count': i,
+                },
+                'context_menu': context_menu,
+                'path': plugin.url_for(
+                    'get_stream_url',
+                    station_id=station_id,
+                ),
+                'is_playable': True,
+                'properties': {
+                    'StationName': station.get('name', '') # Matrix++ only
+                },
+                'offscreen': True
+            })
     if add_custom:
         items.append({
             'label': _('add_custom'),

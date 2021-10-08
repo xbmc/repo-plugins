@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.teliaplay-se" name="Telia Play SE" version="1.0.1+matrix.1" provider-name="Ikosse">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.requests" version="2.22.0+matrix.1"/>
+    <import addon="script.module.dateutil" version="2.8.1+matrix.1"/>
+	<import addon="script.module.pytz" version="2019.3+matrix.1"/>
+	<import addon="script.module.inputstreamhelper" version="0.5.5"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en_GB">Watch content provided by Telia Play SE.</summary>
+	<description lang="en_GB">This add-on gives you access to wide variety of content provided by Telia Play SE (Sweden), including movies, series, play services and live TV. An account on https://teliaplay.se is required for the add-on to work.</description>
+	<disclaimer lang="en_GB">This add-on is unofficial and is not supported nor endorsed by https://teliaplay.se.</disclaimer> 
+	<license>GPL-2.0-or-later</license>
+    <email>andrelofgren@hotmail.co.uk</email>
+    <source>https://github.com/Ikosse/plugin.video.teliaplay-se</source>
+    <assets>
+		<icon>resources/icon.png</icon>
+		<fanart>resources/fanart.jpg</fanart>
+		<screenshot>resources/screenshot-01.jpg</screenshot>
+		<screenshot>resources/screenshot-02.jpg</screenshot>
+		<screenshot>resources/screenshot-03.jpg</screenshot>
+		<screenshot>resources/screenshot-04.jpg</screenshot>
+   </assets>
+  </extension>
+</addon>

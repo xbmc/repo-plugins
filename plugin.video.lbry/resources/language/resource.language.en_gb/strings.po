@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plugin.video.lbry\n"
 "POT-Creation-Date: 2020-12-01 12:53+0100\n"
-"PO-Revision-Date: 2020-12-01 13:57+0100\n"
+"PO-Revision-Date: 2021-06-14 10:03+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -138,4 +138,120 @@ msgstr ""
 
 msgctxt "#30217"
 msgid "Repost in %s"
+msgstr ""
+
+msgctxt "#30218"
+msgid "Recent"
+msgstr ""
+
+msgctxt "#30219"
+msgid "Loading comments..."
+msgstr ""
+
+msgctxt "#30220"
+msgid "Fetching Page"
+msgstr ""
+
+msgctxt "#30221"
+msgid "New Comment"
+msgstr ""
+
+msgctxt "#30222"
+msgid "Reply"
+msgstr ""
+
+msgctxt "#30223"
+msgid "Edit"
+msgstr ""
+
+msgctxt "#30224"
+msgid "Remove"
+msgstr ""
+
+msgctxt "#30225"
+msgid "Change User"
+msgstr ""
+
+msgctxt "#30226"
+msgid "Like"
+msgstr ""
+
+msgctxt "#30227"
+msgid "Dislike"
+msgstr ""
+
+msgctxt "#30228"
+msgid "Clear Vote"
+msgstr ""
+
+msgctxt "#30229"
+msgid "Select User Channel"
+msgstr ""
+
+msgctxt "#30230"
+msgid "No Comments"
+msgstr ""
+
+msgctxt "#30231"
+msgid "Loading user channel list..."
+msgstr ""
+
+msgctxt "#30232"
+msgid "No owned channels found."
+msgstr ""
+
+msgctxt "#30233"
+msgid "Found user."
+msgstr ""
+
+msgctxt "#30234"
+msgid "Multiple users found. Select a user."
+msgstr ""
+
+msgctxt "#30235"
+msgid "Verifying user channel..."
+msgstr ""
+
+msgctxt "#30236"
+msgid "User verified!"
+msgstr ""
+
+msgctxt "#30237"
+msgid "User could not be verified!"
+msgstr ""
+
+msgctxt "#30238"
+msgid "Comments"
+msgstr ""
+
+msgctxt "#30239"
+msgid "Post As"
+msgstr ""
+
+msgctxt "#30240"
+msgid "Refresh"
+msgstr ""
+
+msgctxt "#30241"
+msgid "Posting"
+msgstr ""
+
+msgctxt "#30242"
+msgid "Waiting for response..."
+msgstr ""
+
+msgctxt "#30243"
+msgid "Select channel"
+msgstr ""
+
+msgctxt "#30244"
+msgid "Channel: "
+msgstr ""
+
+msgctxt "#30245"
+msgid "Clear channel"
+msgstr ""
+
+msgctxt "#30246"
+msgid "Login"
 msgstr ""

@@ -64,8 +64,9 @@ def get_tmdb_id_nfo(basedir, foldername, tmdb_type='tv'):
             content = read_file(folder + nfo)  # Get contents of .nfo file
             tmdb_id = content.replace(u'https://www.themoviedb.org/{}/'.format(tmdb_type), '')  # Clean content to retrieve tmdb_id
             tmdb_id = tmdb_id.replace(u'&islocal=True', '')
+            tmdb_id = try_int(tmdb_id)
             if tmdb_id:
-                return tmdb_id
+                return u'{}'.format(tmdb_id)
 
     except Exception as exc:
         kodi_log(u'ERROR GETTING TMDBID FROM NFO:\n{}'.format(exc))
@@ -89,7 +90,10 @@ def dumps_to_file(data, folder, filename, indent=2, join_addon_data=True):
 def get_write_path(folder, join_addon_data=True):
     main_dir = os.path.join(xbmcvfs.translatePath(ADDONDATA), folder) if join_addon_data else xbmcvfs.translatePath(folder)
     if not os.path.exists(main_dir):
-        os.makedirs(main_dir)
+        try:  # Try makedir to avoid race conditions
+            os.makedirs(main_dir)
+        except FileExistsError:
+            pass
     return main_dir
 
 

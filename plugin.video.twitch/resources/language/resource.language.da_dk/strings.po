@@ -1,18 +1,25 @@
-
 msgid ""
 msgstr ""
-
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE\n"
+"PO-Revision-Date: 2021-08-05 10:29+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Danish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/da_dk/>\n"
+"Language: da_dk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: da_DK\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.7.2\n"
+
+msgctxt "Addon Summary"
+msgid "Twitch video plugin"
+msgstr "Twitch video plugin"
+
+msgctxt "Addon Description"
+msgid "Watch your favorite gaming streams!"
+msgstr "Se dine favorit gaming-streams!"
 
 msgctxt "#30001"
 msgid "Games"
@@ -32,7 +39,7 @@ msgstr "Indstillinger"
 
 msgctxt "#30005"
 msgid "Featured Streams"
-msgstr "Fremhævede Spil"
+msgstr "Fremhævede streams"
 
 msgctxt "#30006"
 msgid "Teams"
@@ -46,6 +53,10 @@ msgctxt "#30008"
 msgid "Channels"
 msgstr "Kanaler"
 
+msgctxt "#30009"
+msgid "Live Channels"
+msgstr "Direkte kanaler"
+
 msgctxt "#30010"
 msgid "TwitchTV"
 msgstr "TwitchTV"
@@ -56,11 +67,11 @@ msgstr "næste side..."
 
 msgctxt "#30012"
 msgid "-- Currently Live Streams --"
-msgstr "-- Nuværende Live Streams --"
+msgstr "-- Nuværende direkte streams --"
 
 msgctxt "#30013"
 msgid "-- Followed Channels --"
-msgstr "-- Fulgte Kanaler --"
+msgstr "-- Fulgte kanaler --"
 
 msgctxt "#30020"
 msgid "Http error"
@@ -68,7 +79,7 @@ msgstr "Http fejl"
 
 msgctxt "#30021"
 msgid "No Live Data Found"
-msgstr "Ingen Live Data Fundet"
+msgstr "Ingen live data fundet"
 
 msgctxt "#30022"
 msgid "No archives found for"
@@ -142,6 +153,10 @@ msgctxt "#30053"
 msgid "Password (OAuth Token)"
 msgstr "Adgangskode (OAuth Token)"
 
+msgctxt "#30054"
+msgid "Language | Streamer - Stream Title"
+msgstr ""
+
 msgctxt "#30060"
 msgid "Unnamed Streamer"
 msgstr "Unavngivet Streamer"
@@ -153,6 +168,10 @@ msgstr "Unavngivet Stream"
 msgctxt "#30062"
 msgid "Unknown Number of Viewers"
 msgstr "Ukendt Nummer af Seere"
+
+msgctxt "#30063"
+msgid "Unknown Language"
+msgstr ""
 
 msgctxt "#30064"
 msgid "Unknown Game"
@@ -348,6 +367,10 @@ msgstr ""
 
 msgctxt "#30112"
 msgid "Quality may result in best match"
+msgstr ""
+
+msgctxt "#30113"
+msgid "Uploads"
 msgstr ""
 
 msgctxt "#30114"

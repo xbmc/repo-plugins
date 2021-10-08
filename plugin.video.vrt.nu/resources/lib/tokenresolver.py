@@ -123,13 +123,11 @@ class TokenResolver:
         """Return a new token"""
 
         if name == 'X-VRT-Token':
-            if variant is None:
-                xvrttoken = self._get_xvrttoken(login_json=login_json)
-                if xvrttoken:
-                    return xvrttoken
-                return self.login()
             if variant == 'user':
-                return self._get_usertoken('X-VRT-Token', login_json=login_json)
+                usertoken = self._get_usertoken('X-VRT-Token', login_json=login_json)
+                if usertoken:
+                    return usertoken
+                return self.login(token_variant='user')
             if variant == 'roaming':
                 return self._get_roaming_xvrttoken()
 
@@ -181,33 +179,6 @@ class TokenResolver:
             cache_file = self._get_token_filename('vrtlogin-at')
             update_cache(cache_file, dumps(accesstoken), self._TOKEN_CACHE_DIR)
         return usertoken
-
-    def _get_xvrttoken(self, login_json=None):
-        """Get a one year valid X-VRT-Token"""
-        from json import dumps
-        if not login_json:
-            login_json = self._get_login_json()
-        login_token = login_json.get('sessionInfo', {}).get('login_token')
-        if not login_token:
-            return None
-        login_cookie = 'glt_{api_key}={token}'.format(api_key=self._API_KEY, token=login_token)
-        payload = dict(
-            uid=login_json.get('UID'),
-            uidsig=login_json.get('UIDSignature'),
-            ts=login_json.get('signatureTimestamp'),
-            email=from_unicode(get_setting('username'))
-        )
-        data = dumps(payload).encode()
-        headers = {'Content-Type': 'application/json', 'Cookie': login_cookie}
-        response = open_url(self._TOKEN_GATEWAY_URL, data=data, headers=headers)
-        if response is None:
-            return None
-        setcookie_header = response.info().get('Set-Cookie')
-        xvrttoken = TokenResolver._create_token_dictionary(setcookie_header)
-        if xvrttoken is None:
-            return None
-        notification(message=localize(30952))  # Login succeeded.
-        return xvrttoken
 
     def _get_roaming_xvrttoken(self):
         """Get a X-VRT-Token for roaming"""
@@ -288,7 +259,8 @@ class TokenResolver:
                 delete_cache(cache_file, self._TOKEN_CACHE_DIR)
                 xvrttoken = self.get_token('X-VRT-Token', 'roaming')
             elif variant == 'ondemand':
-                xvrttoken = self.get_token('X-VRT-Token')
+                # We need a user X-VRT-Token because the birthdate in the VRT NU profile is checked when watching age restricted content
+                xvrttoken = self.get_token('X-VRT-Token', 'user')
             if xvrttoken is None:
                 return None
             payload = dict(identityToken=xvrttoken)
@@ -323,7 +295,7 @@ class TokenResolver:
 
             # Refresh login
             log(2, 'Refresh login')
-            self.login(refresh=True)
+            self.login(refresh=True, token_variant='user')
 
     def cleanup_userdata(self):
         """Cleanup userdata"""
@@ -336,7 +308,7 @@ class TokenResolver:
 
     def logged_in(self):
         """Whether there is an active login"""
-        cache_file = self._get_token_filename('X-VRT-Token')
+        cache_file = self._get_token_filename('X-VRT-Token', 'user')
         return bool(get_cache(cache_file, cache_dir=self._TOKEN_CACHE_DIR))
 
     @staticmethod

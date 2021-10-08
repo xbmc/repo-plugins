@@ -8,6 +8,9 @@
     SPDX-License-Identifier: GPL-3.0-only
     See LICENSES/GPL-3.0-only for more information.
 """
+
+from six import PY2
+
 from ..addon import utils
 from ..addon.common import kodi
 from ..addon.constants import Scripts
@@ -28,6 +31,8 @@ def route(list_type='user', target_id=None, name=None, remove=False, refresh=Fal
     else:
         result = utils.remove_blacklist(list_type)
         if result:
+            if PY2 and isinstance(result[1], unicode):
+                result[1] = result[1].encode('utf-8')
             kodi.notify(msg=i18n('removed_from_blacklist') % result[1], sound=False)
 
     if refresh:

@@ -8,6 +8,9 @@
     SPDX-License-Identifier: GPL-3.0-only
     See LICENSES/GPL-3.0-only for more information.
 """
+
+from six import PY2
+
 from ..addon import utils
 from ..addon.common import kodi
 from ..addon.constants import ADAPTIVE_SOURCE_TEMPLATE, LINE_LENGTH
@@ -39,4 +42,7 @@ def route(api, content_type, target_id=None, name=None, video_id=None, remove=Fa
     else:
         result = utils.remove_default_quality(content_type)
         if result:
-            kodi.notify(msg=i18n('removed_default_quality') % (content_type, result[result.keys()[0]]['name']), sound=False)
+            name = result[result.keys()[0]]['name']
+            if PY2 and isinstance(name, unicode):
+                name = name.encode('utf-8')
+            kodi.notify(msg=i18n('removed_default_quality') % (content_type, name), sound=False)

@@ -1,5 +1,5 @@
 from resources.lib.files.utils import set_pickle, get_pickle
-from resources.lib.addon.plugin import format_name
+from resources.lib.addon.plugin import format_name, kodi_log
 
 
 def is_authorized(func):
@@ -38,7 +38,7 @@ def use_lastupdated_cache(cache, func, *args, **kwargs):
     return response
 
 
-def use_activity_cache(activity_type=None, activity_key=None, cache_days=None, pickle_object=False):
+def use_activity_cache(activity_type=None, activity_key=None, cache_days=None, pickle_object=False, allow_fallback=False):
     """
     Decorator to cache and refresh if last activity changes
     Optionally can pickle instead of cache if necessary (useful for large objects like sync lists)
@@ -67,7 +67,12 @@ def use_activity_cache(activity_type=None, activity_key=None, cache_days=None, p
             # Either not cached or last_activity doesn't match so get a new request and cache it
             response = func(self, *args, **kwargs)
             if not response:
-                return
+                cache_object = cache_object or func_get(cache_name) if allow_fallback else None
+                if allow_fallback:
+                    kodi_log([
+                        'No response for ', cache_name,
+                        '\nAttempting fallback... ', 'Failed!' if not cache_object else 'Success!'], 1)
+                return cache_object.get('response') if cache_object else None
             func_set(
                 {'response': response, 'last_activity': last_activity},
                 cache_name=cache_name, cache_days=cache_days)

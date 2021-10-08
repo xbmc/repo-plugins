@@ -13,7 +13,7 @@ from resources.lib.player.details import get_item_details, get_detailed_item, ge
 from resources.lib.player.inputter import KeyboardInputter
 from resources.lib.player.configure import get_players_from_file
 from resources.lib.addon.constants import PLAYERS_PRIORITY
-from resources.lib.addon.decorators import busy_dialog
+from resources.lib.addon.decorators import busy_dialog, ProgressDialog
 from string import Formatter
 
 
@@ -87,18 +87,25 @@ def resolve_to_dummy(handle=None, stop_after=1, delay_wait=0):
 
 class Players(object):
     def __init__(self, tmdb_type, tmdb_id=None, season=None, episode=None, ignore_default=False, islocal=False, **kwargs):
-        self.players = get_players_from_file()
-        self.details = get_item_details(tmdb_type, tmdb_id, season, episode)
-        self.item = get_detailed_item(tmdb_type, tmdb_id, season, episode, details=self.details) or {}
-        self.playerstring = get_playerstring(tmdb_type, tmdb_id, season, episode, details=self.details)
-        self.dialog_players = self._get_players_for_dialog(tmdb_type)
-        self.default_player = ADDON.getSettingString('default_player_movies') if tmdb_type == 'movie' else ADDON.getSettingString('default_player_episodes')
-        self.ignore_default = ignore_default
-        self.tmdb_type, self.tmdb_id, self.season, self.episode = tmdb_type, tmdb_id, season, episode
-        self.dummy_duration = try_float(ADDON.getSettingString('dummy_duration')) or 1.0
-        self.dummy_delay = try_float(ADDON.getSettingString('dummy_delay')) or 1.0
-        self.force_xbmcplayer = ADDON.getSettingBool('force_xbmcplayer')
-        self.is_strm = islocal
+        with ProgressDialog('TMDbHelper', u'{}...'.format(ADDON.getLocalizedString(32374)), total=3) as _p_dialog:
+            self.api_language = None
+            self.players = get_players_from_file()
+
+            _p_dialog.update(u'{}...'.format(ADDON.getLocalizedString(32375)))
+            self.details = get_item_details(tmdb_type, tmdb_id, season, episode)
+            self.item = get_detailed_item(tmdb_type, tmdb_id, season, episode, details=self.details) or {}
+
+            _p_dialog.update(u'{}...'.format(ADDON.getLocalizedString(32376)))
+            self.playerstring = get_playerstring(tmdb_type, tmdb_id, season, episode, details=self.details)
+            self.dialog_players = self._get_players_for_dialog(tmdb_type)
+
+            self.default_player = ADDON.getSettingString('default_player_movies') if tmdb_type == 'movie' else ADDON.getSettingString('default_player_episodes')
+            self.ignore_default = ignore_default
+            self.tmdb_type, self.tmdb_id, self.season, self.episode = tmdb_type, tmdb_id, season, episode
+            self.dummy_duration = try_float(ADDON.getSettingString('dummy_duration')) or 1.0
+            self.dummy_delay = try_float(ADDON.getSettingString('dummy_delay')) or 1.0
+            self.force_xbmcplayer = ADDON.getSettingBool('force_xbmcplayer')
+            self.is_strm = islocal
 
     def _check_assert(self, keys=[]):
         if not self.item:
@@ -124,6 +131,7 @@ class Players(object):
             'file': file, 'mode': mode,
             'is_folder': is_folder,
             'is_resolvable': value.get('is_resolvable'),
+            'api_language': value.get('api_language'),
             'language': value.get('language'),
             'name': u'{} {}'.format(name, value.get('name')),
             'plugin_name': value.get('plugin'),
@@ -194,7 +202,7 @@ class Players(object):
                     dialog_search.append(self._get_built_player(file=k, mode='search_episode', value=v))
         return dialog_play + dialog_search
 
-    def select_player(self, detailed=True, clear_player=False):
+    def select_player(self, detailed=True, clear_player=False, header=ADDON.getLocalizedString(32042)):
         """ Returns user selected player via dialog - detailed bool switches dialog style """
         dialog_players = [] if not clear_player else [{
             'name': ADDON.getLocalizedString(32311),
@@ -205,7 +213,7 @@ class Players(object):
             label=i.get('name'),
             label2=u'{} v{}'.format(i.get('plugin_name'), xbmcaddon.Addon(i.get('plugin_name', '')).getAddonInfo('version')),
             art={'thumb': i.get('plugin_icon')}).get_listitem() for i in dialog_players]
-        x = xbmcgui.Dialog().select(ADDON.getLocalizedString(32042), players, useDetails=detailed)
+        x = xbmcgui.Dialog().select(header, players, useDetails=detailed)
         if x == -1:
             return {}
         player = dialog_players[x]
@@ -250,6 +258,7 @@ class Players(object):
 
             # Get the label of the item
             label_a = f.get('label')
+            label_b_list = []
 
             # Add year to our label if exists and not special value of 1601
             if f.get('year') and f.get('year') != 1601:
@@ -257,10 +266,12 @@ class Players(object):
 
             # Add season and episode numbers to label
             if try_int(f.get('season', 0)) > 0 and try_int(f.get('episode', 0)) > 0:
-                label_a = u'{}x{}. {}'.format(f.get('season'), f.get('episode'), label_a)
+                if f.get('filetype') == 'file':  # If file assume is an episode so add to main label
+                    label_a = u'{}x{}. {}'.format(f['season'], f['episode'], label_a)
+                else:  # If folder assume is tvshow or season so add episode count to label2
+                    label_b_list.append(u'{} {}'.format(f['episode'], xbmc.getLocalizedString(20360)))
 
             # Add various stream details to ListItem.Label2 (aka label_b)
-            label_b_list = []
             if f.get('streamdetails'):
                 sdv_list = f.get('streamdetails', {}).get('video', [{}]) or [{}]
                 sda_list = f.get('streamdetails', {}).get('audio', [{}]) or [{}]
@@ -299,19 +310,18 @@ class Players(object):
 
     def _get_path_from_actions(self, actions, is_folder=True):
         """ Returns tuple of (path, is_folder) """
+        is_dialog = None
         keyboard_input = None
         path = (actions[0], is_folder)
+        if not is_folder:
+            return path
         for action in actions[1:]:
-            # Check if we've got a playable item already
-            if not is_folder:
-                return path
-
             # Start thread with keyboard inputter if needed
             if action.get('keyboard'):
-                if action.get('keyboard') in ['Up', 'Down', 'Left', 'Right', 'Select']:
+                if action['keyboard'] in ['Up', 'Down', 'Left', 'Right', 'Select']:
                     keyboard_input = KeyboardInputter(action="Input.{}".format(action.get('keyboard')))
                 else:
-                    text = string_format_map(action.get('keyboard', ''), self.item)
+                    text = string_format_map(action['keyboard'], self.item)
                     keyboard_input = KeyboardInputter(text=text[::-1] if action.get('direction') == 'rtl' else text)
                 keyboard_input.setName('keyboard_input')
                 keyboard_input.start()
@@ -325,15 +335,38 @@ class Players(object):
                 keyboard_input.exit = True
                 keyboard_input = None
 
-            # Special option to show dialog of items to select
-            if action.get('dialog'):
-                auto = True if action.get('dialog', '').lower() == 'auto' else False
-                return self._player_dialog_select(folder, auto=auto)
+            # Pop special actions
+            is_return = action.pop('return', None)
+            is_dialog = action.pop('dialog', None)
 
-            # Apply the rules for the current action and grab the path
-            path = self._get_path_from_rules(folder, action)
-            if not path:
+            # Get next path if there's still actions left
+            next_path = self._get_path_from_rules(folder, action) if action else None
+
+            # Special action to fallback to select dialog if match is not found directly
+            if is_dialog and not next_path:
+                next_path = self._player_dialog_select(folder, auto=is_dialog.lower() == 'auto')
+
+            # Early return flag ignores a step failure and instead continues onto trying next step
+            # Check against next_path[1] also to make sure we aren't trying to play a folder
+            if is_return and (not next_path or next_path[1]):
+                continue
+
+            # No next path and no special flags means that player failed
+            if not next_path:
                 return
+
+            # File is playable and user manually selected or early return flag set
+            # Useful for early exit to play episodes in flattened miniseries instead of opening season folder
+            if not next_path[1] and (is_dialog or is_return):
+                return next_path
+
+            # Set next path to path for next action
+            path = next_path
+
+        # If dialog repeat flag set then repeat action over until find playable or user cancels
+        if path and is_dialog == 'repeat':
+            return self._get_path_from_actions([path[0], {'dialog': 'repeat'}], path[1])
+
         return path
 
     def _get_path_from_player(self, player=None):
@@ -371,13 +404,29 @@ class Players(object):
     def _get_resolved_path(self, player=None, allow_default=False):
         if not player and allow_default:
             player = self.get_default_player()
-        player = player or self.select_player()
+
+        # If we dont have a player from fallback then ask user to select one
         if not player:
-            return
+            header = self.item.get('name') or ADDON.getLocalizedString(32042)
+            if self.item.get('episode') and self.item.get('title'):
+                header = u'{} - {}'.format(header, self.item['title'])
+            player = self.select_player(header=header)
+            if not player:
+                return
+
+        # Allow players to override language settings
+        # Compare against self.api_language to check if another player changed language previously
+        if player.get('api_language', None) != self.api_language:
+            self.api_language = player.get('api_language', None)
+            self.details = get_item_details(self.tmdb_type, self.tmdb_id, self.season, self.episode, language=self.api_language)
+            self.item = get_detailed_item(self.tmdb_type, self.tmdb_id, self.season, self.episode, details=self.details) or {}
+
+        # Allow for a separate translation language to add "{de_title}" keys ("de" is iso language code)
         if player.get('language'):
             self.item = get_language_details(
                 self.item, self.tmdb_type, self.tmdb_id, self.season, self.episode,
                 player['language'], self.item.get('year'))
+
         path = self._get_path_from_player(player)
         if not path:
             if player.get('idx') is not None:

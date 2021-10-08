@@ -40,7 +40,7 @@ class FavoriteChannels(Storage):
 
         return payload
 
-    def remove(self, channel_id):
+    def remove(self, channel_id):  # pylint: disable=arguments-renamed
         self._remove(channel_id)
 
     def update(self, channel_id, channel_name):

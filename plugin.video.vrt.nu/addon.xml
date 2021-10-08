@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.5.2+matrix.1" provider-name="Martijn Moreel, dagwieers, mediaminister">
+<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.5.5+matrix.1" provider-name="Martijn Moreel, dagwieers, mediaminister">
   <requires>
     <import addon="resource.images.studios.white" version="0.0.22"/>
     <import addon="script.module.beautifulsoup4" version="4.6.2"/>
@@ -42,6 +42,16 @@
     <website>https://github.com/add-ons/plugin.video.vrt.nu/wiki</website>
     <source>https://github.com/add-ons/plugin.video.vrt.nu</source>
     <news>
+v2.5.5 (2021-09-09)
+- Fix broken menu listings
+
+v2.5.4 (2021-07-21)
+- Fix login
+- Use Widevine DRM by default
+
+v2.5.2 (2021-05-13)
+- Fix watching age restricted content
+
 v2.5.2 (2021-04-21)
 - Fix broken menu listings
 
@@ -80,14 +90,6 @@ v2.4.1 (2020-10-31)
 - Improvements to virtual subclip support
 - Extend soon offline menu to seven days
 - Improve Up Next support
-
-v2.4.0 (2020-07-18)
-- Show error messages when connections fail
-- Improve user authentication cache
-- Fix missing "Worldview" category
-- Improve playing programs using the TV guide
-- Improve IPTV Manager support
-- Add user setting to update the VRT NU add-on easily
     </news>
     <assets>
       <icon>resources/media/icon.png</icon>

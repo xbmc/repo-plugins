@@ -5,11 +5,10 @@ from resources.lib import envcontroller
 from resources.lib.logger import Logger
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.retroconfig import Config
-from resources.lib.xbmcwrapper import XbmcWrapper, XbmcDialogProgressWrapper, XbmcDialogProgressBgWrapper
+from resources.lib.xbmcwrapper import XbmcWrapper
 from resources.lib.helpers.channelimporter import ChannelIndex
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.helpers.sessionhelper import SessionHelper
-from resources.lib.textures import TextureHandler
 from resources.lib.actions.actionparser import ActionParser
 from resources.lib.actions import keyword
 from resources.lib.actions import action
@@ -164,32 +163,4 @@ class Plugin(ActionParser):
         if addon_action is not None:
             addon_action.execute()
 
-        self.__fetch_textures()
-        return
-
-    def __fetch_textures(self):
-        textures_to_retrieve = TextureHandler.instance().number_of_missing_textures()
-
-        if textures_to_retrieve > 0:
-            w = None
-            try:
-                # show a blocking or background progress bar
-                if textures_to_retrieve > 4:
-                    w = XbmcDialogProgressWrapper(
-                        "%s: %s" % (Config.appName, LanguageHelper.get_localized_string(LanguageHelper.InitChannelTitle)),
-                        LanguageHelper.get_localized_string(LanguageHelper.FetchTexturesTitle)
-                    )
-                else:
-                    w = XbmcDialogProgressBgWrapper(
-                        "%s: %s" % (Config.appName, LanguageHelper.get_localized_string(LanguageHelper.FetchTexturesTitle)),
-                        Config.textureUrl
-                    )
-
-                TextureHandler.instance().fetch_textures(w.progress_update)
-            except:
-                Logger.error("Error fetching textures", exc_info=True)
-            finally:
-                if w is not None:
-                    # always close the progress bar
-                    w.close()
         return

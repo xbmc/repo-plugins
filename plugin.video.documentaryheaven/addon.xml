@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.documentaryheaven" name="DocumentaryHeaven" version="1.0.1+matrix.1" provider-name="Ikosse">
+  <requires>
+    <import addon="xbmc.python"                     version="3.0.0"/>
+    <import addon="script.module.requests"    		version="2.22.0+matrix.1"/>
+    <import addon="script.module.beautifulsoup4"    version="4.3.2+matrix.1"/>
+	<import addon="plugin.video.youtube"			version="6.8.10+matrix.1"/>
+	<import addon="plugin.video.vimeo"				version="6.0.0"/>
+	<import addon="plugin.video.dailymotion_com"	version="2.4.2"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language></language>
+    <summary lang="en_GB">Documentary Heaven is a website offering collection of documentaries spanning across many genres.</summary>
+    <description lang="en_GB">This add-on gives you access to Documentary Heaven, a site filled with thousands of free online documentaries just waiting to be seen, so come on in and embrace the knowledge!</description>
+	<disclaimer lang="en_GB">This add-on is unofficial and is not supported nor endorsed by https://documentaryheaven.com.</disclaimer> 
+	<license>GPL-2.0-or-later</license>
+    <email>andrelofgren@hotmail.co.uk</email>
+    <source>https://github.com/Ikosse/plugin.video.documentaryheaven</source>
+    <assets>
+		<icon>resources/icon.png</icon>
+		<fanart>resources/fanart.jpg</fanart>
+		<banner>resources/banner.png</banner>
+		<screenshot>resources/screenshot-01.jpg</screenshot>
+		<screenshot>resources/screenshot-02.jpg</screenshot>
+		<screenshot>resources/screenshot-03.jpg</screenshot>
+		<screenshot>resources/screenshot-04.jpg</screenshot>
+   </assets>
+  </extension>
+</addon>

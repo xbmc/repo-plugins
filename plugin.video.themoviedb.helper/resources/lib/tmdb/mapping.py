@@ -163,6 +163,7 @@ def get_episode_to_air(v, name):
     infoproperties[u'{}'.format(name)] = format_date(i.get('air_date'), xbmc.getRegion('dateshort'))
     infoproperties[u'{}.long'.format(name)] = format_date(i.get('air_date'), xbmc.getRegion('datelong'))
     infoproperties[u'{}.day'.format(name)] = format_date(i.get('air_date'), "%A")
+    infoproperties[u'{}.year'.format(name)] = format_date(i.get('air_date'), "%Y")
     infoproperties[u'{}.episode'.format(name)] = i.get('episode_number')
     infoproperties[u'{}.name'.format(name)] = i.get('name')
     infoproperties[u'{}.tmdb_id'.format(name)] = i.get('id')
@@ -174,38 +175,45 @@ def get_episode_to_air(v, name):
     return infoproperties
 
 
-def get_cast(item):
+def _get_cast_thumb(i):
+    if i.get('thumbnail'):
+        return i['thumbnail']
+    if i.get('profile_path'):
+        return get_imagepath_poster(i['profile_path'])
+
+
+def _get_cast_item(i, cast_dict):
+    name = i.get('name')
+    role = i.get('character') or i.get('role')
+    if name not in cast_dict:
+        return {'name': name, 'role': role, 'order': i.get('order', 9999)}
+    item = cast_dict[name]
+    if role and item.get('role') and role not in item['role']:
+        item['role'] = u'{} / {}'.format(item['role'], role)
+    item['order'] = min(item.get('order', 9999), i.get('order', 9999))
+    return item
+
+
+def _get_cast_dict(item, base_item=None):
     cast_list = []
+    cast_dict = {}
+    if base_item and base_item.get('cast'):
+        cast_list += base_item['cast']
     if item.get('credits', {}).get('cast'):
         cast_list += item['credits']['cast']
     if item.get('guest_stars'):
         cast_list += item['guest_stars']
     if not cast_list:
-        return cast_list
+        return cast_dict
 
-    cast = []
-    cast_item = None
-    for i in sorted(cast_list, key=lambda k: k.get('order', 0)):
-        # Only add previous cast member if not current cast member
-        # Otherwise join the character roles together into the one item
-        if cast_item:
-            if cast_item.get('name') != i.get('name'):
-                cast.append(cast_item)
-                cast_item = None
-            elif i.get('character'):
-                cast_item['role'] = u'{} / {}'.format(cast_item['role'], i['character'])
-        # Only construct new cast member if not the same as previous cast member
-        if not cast_item:
-            cast_item = {
-                'name': i.get('name'),
-                'role': i.get('character'),
-                'order': i.get('order')}
-            if i.get('profile_path'):
-                cast_item['thumbnail'] = get_imagepath_poster(i['profile_path'])
-    # Add left-over cast member after finishing for loop
-    if cast_item:
-        cast.append(cast_item)
-    return cast
+    # Build a dictionary of cast members to avoid duplicates by combining roles
+    for i in cast_list:
+        name = i.get('name')
+        cast_dict[name] = _get_cast_item(i, cast_dict)
+        if not cast_dict[name].get('thumbnail'):
+            cast_dict[name]['thumbnail'] = _get_cast_thumb(i)
+
+    return cast_dict
 
 
 def set_crew_properties(i, x, prefix):
@@ -473,9 +481,12 @@ class ItemMapper(_ItemMapper):
                 'func': dict_to_list,
                 'args': ['name']}, {
                 # ---
+                'keys': [('infoproperties', 'network')],
+                'func': lambda v: ' / '.join([x['name'] for x in v or [] if x.get('name')])}, {
+                # ---
                 'keys': [('infoproperties', UPDATE_BASEKEY)],
                 'func': get_iter_props,
-                'args': ['studio'],
+                'args': ['network'],
                 'kwargs': {
                     'basic_keys': {'name': 'name', 'tmdb_id': 'id'},
                     'image_keys': {'icon': 'logo_path'}}
@@ -544,6 +555,8 @@ class ItemMapper(_ItemMapper):
             'episode_number': ('infolabels', 'episode'),
             'season_count': ('infolabels', 'season'),
             'episode_count': ('infolabels', 'episode'),
+            'number_of_seasons': ('infolabels', 'season'),
+            'number_of_episodes': ('infolabels', 'episode'),
             'department': ('infoproperties', 'department'),
             'place_of_birth': ('infoproperties', 'born'),
             'birthday': ('infoproperties', 'birthday'),
@@ -585,12 +598,29 @@ class ItemMapper(_ItemMapper):
             item['infoproperties'][u'{}_id'.format(k)] = v
         return item
 
+    def add_cast(self, item, info_item, base_item=None):
+        cast_dict = _get_cast_dict(info_item, base_item)
+        if not cast_dict:
+            return item
+        cast_list, cast_prop = [], []
+        for x, i in enumerate(sorted(cast_dict, key=lambda k: cast_dict[k].get('order', 9999)), start=1):
+            i = cast_dict[i]
+            if not i or not i['name']:
+                continue
+            p = u'{}.{}.'.format('Cast', x)
+            for j in [('name', 'Name'), ('role', 'Role'), ('thumbnail', 'Thumb')]:
+                item['infoproperties'][u'{}{}'.format(p, j[1])] = i.get(j[0], '')
+            cast_prop.append(i['name'])
+            cast_list.append(i)
+        item['infoproperties']['cast'] = " / ".join(cast_prop)
+        item['cast'] = cast_list
+        return item
+
     def get_info(self, info_item, tmdb_type, base_item=None, **kwargs):
         item = get_empty_item()
         item = self.map_item(item, info_item)
         item = self.add_base(item, base_item, tmdb_type, key_blacklist=['year', 'premiered'])
+        item = self.add_cast(item, info_item, base_item)
         item = self.finalise(item, tmdb_type)
-        item['cast'] = base_item['cast'] if base_item else []
-        item['cast'] += get_cast(info_item)
         item['params'] = get_params(info_item, tmdb_type, params=item.get('params', {}), **kwargs)
         return item

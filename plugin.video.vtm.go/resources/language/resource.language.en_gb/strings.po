@@ -265,6 +265,10 @@ msgctxt "#30705"
 msgid "The VTM GO Service has been updated, but this add-on hasn't been modified yet for these changes. Please check for an update."
 msgstr ""
 
+msgctxt "#30706"
+msgid "The authentication tokens are removed."
+msgstr ""
+
 msgctxt "#30708"
 msgid "Please restart Kodi."
 msgstr ""
@@ -505,4 +509,12 @@ msgstr ""
 
 msgctxt "#30893"
 msgid "Open Kodi Logfile Uploader…"
+msgstr ""
+
+msgctxt "#30894"
+msgid "Authentication"
+msgstr ""
+
+msgctxt "#30895"
+msgid "Clear authentication tokens…"
 msgstr ""

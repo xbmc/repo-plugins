@@ -20,6 +20,7 @@
                             {"keyboard": "Select"},
                             {"keyboard": "{showname}"},
                             {"title": "(?i).*{showname}.*"},
+                            {"return": "true", "season": "{season}", "episode": "{episode}"},
                             {"season": "{season}"},
                             {"season": "{season}", "episode": "{episode}"}
                           ],

@@ -19,7 +19,7 @@ def route(api):
     if not token:
         kodi.notify(msg=i18n('token_required'))
         return
-    result = kodi.Dialog().yesno(heading=i18n('revoke_token'), line1=i18n('revoke_confirmation'))
+    result = kodi.Dialog().yesno(i18n('revoke_token'), i18n('revoke_confirmation'))
     if result:
         response = api.client.revoke_token(token=token)
 

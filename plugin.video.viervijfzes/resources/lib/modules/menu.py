@@ -128,14 +128,7 @@ class Menu:
             }
 
             visible = True
-            if isinstance(item.episodes, list) and not item.episodes:
-                # We know that we don't have episodes
-                title = '[COLOR gray]' + item.title + '[/COLOR]'
-                visible = kodiutils.get_setting_bool('interface_show_unavailable')
-
-            else:
-                # We have episodes, or we don't know it
-                title = item.title
+            title = item.title
 
             context_menu = []
             if item.uuid:

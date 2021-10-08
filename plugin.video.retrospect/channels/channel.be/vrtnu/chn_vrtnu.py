@@ -3,8 +3,10 @@
 import datetime
 
 from resources.lib import chn_class
+from resources.lib import contenttype
+from resources.lib import mediatype
+from resources.lib.mediaitem import MediaItem, FolderItem
 from resources.lib.helpers.languagehelper import LanguageHelper
-from resources.lib.mediaitem import MediaItem
 from resources.lib.helpers.htmlhelper import HtmlHelper
 from resources.lib.regexer import Regexer
 from resources.lib.parserdata import ParserData
@@ -39,7 +41,7 @@ class Channel(chn_class.Channel):
         self.baseUrl = "https://www.vrt.be"
 
         # first regex is a bit tighter than the second one.
-        episode_regex = r'<nui-tile href="(?<url>/vrtnu[^"]+).relevant/"[^>]*>\s*<h3[^>]*>\s*<a[^>]+>' \
+        episode_regex = r'<nui-tile href="(?<url>/vrtnu[^"]+)/"[^>]*>\s*<h3[^>]*>\s*<a[^>]+>' \
                         r'(?<title>[^<]+)</a>\s*</h3>\s*<div[^>]+>(?:\s*<p>)?(?<description>' \
                         r'[\w\W]{0,2000}?)(?:</p>)?\W*</div>\s*(?:<p[^>]*' \
                         r'data-brand="(?<channel>[^"]+)"[^>]*>[^<]+</p>)?\s*(?:<img[\w\W]{0,100}?' \
@@ -92,6 +94,7 @@ class Channel(chn_class.Channel):
         # needs to be after the standard video item regex
         single_video_regex = r'<script type="application/ld\+json">\W+({[\w\W]+?})\s*</script'
         single_video_regex = Regexer.from_expresso(single_video_regex)
+        # noinspection PyTypeChecker
         self._add_data_parser("*", name="Single video item parser",
                               parser=single_video_regex, creator=self.create_single_video_item)
 
@@ -287,17 +290,20 @@ class Channel(chn_class.Channel):
             Logger.info("Only showing items for channel: '%s'", self.__currentChannel)
             return data, items
 
-        cat = MediaItem("\a.: Categori&euml;n :.", "https://www.vrt.be/vrtnu/categorieen.model.json")
+        cat = FolderItem("\a.: Categori&euml;n :.", "https://www.vrt.be/vrtnu/categorieen.model.json",
+                         content_type=contenttype.FILES)
         cat.dontGroup = True
         items.append(cat)
 
-        live = MediaItem("\a.: Live Streams :.", "https://services.vrt.be/videoplayer/r/live.json")
+        live = FolderItem("\a.: Live Streams :.", "https://services.vrt.be/videoplayer/r/live.json",
+                          content_type=contenttype.VIDEOS)
         live.dontGroup = True
         live.isLive = True
         items.append(live)
 
         channel_text = LanguageHelper.get_localized_string(30010)
-        channels = MediaItem("\a.: %s :." % (channel_text, ), "#channels")
+        channels = FolderItem("\a.: %s :." % (channel_text, ), "#channels",
+                              content_type=contenttype.FILES)
         channels.dontGroup = True
         items.append(channels)
 
@@ -341,7 +347,7 @@ class Channel(chn_class.Channel):
             if "metaCode" not in meta:
                 continue
 
-            channel = MediaItem(meta["title"], self.mainListUri)
+            channel = FolderItem(meta["title"], self.mainListUri, content_type=contenttype.TVSHOWS)
             # noinspection PyArgumentList
             channel.fanart = meta.get("fanart", self.fanart)
             # noinspection PyArgumentList
@@ -374,10 +380,9 @@ class Channel(chn_class.Channel):
         if thumb.startswith("//"):
             thumb = "https:{}".format(thumb)
 
-        item = MediaItem(title, url)
+        item = FolderItem(title, url, content_type=contenttype.EPISODES)
         item.description = title
         item.thumb = thumb
-        item.type = 'folder'
         item.HttpHeaders = self.httpHeaders
         item.complete = True
         return item
@@ -411,9 +416,8 @@ class Channel(chn_class.Channel):
                 continue
 
             url = channel_data["url"] if "url" in channel_data else stream_value["mpd"]
-            live_item = MediaItem(channel_data["title"], url)
+            live_item = MediaItem(channel_data["title"], url, media_type=mediatype.VIDEO)
             live_item.isLive = True
-            live_item.type = 'video'
             live_item.fanart = channel_data.get("fanart", self.fanart)
             live_item.thumb = channel_data.get("icon", self.icon)
             live_item.icon = channel_data.get("icon", self.icon)
@@ -499,7 +503,7 @@ class Channel(chn_class.Channel):
             return None
 
         folder_url = "{}{}".format(self.baseUrl, folder_url)
-        item = MediaItem(result_set[1], folder_url)
+        item = FolderItem(result_set[1], folder_url, content_type=contenttype.EPISODES)
         item.name = item.name.title()
         return item
 
@@ -532,7 +536,8 @@ class Channel(chn_class.Channel):
         url = self.parentItem.url
         title = json_data.get_value("name")
         description = HtmlHelper.to_text(json_data.get_value("description"))
-        item = MediaItem(title, url, type="video")
+
+        item = MediaItem(title, url,  media_type=mediatype.EPISODE)
         item.description = description
         return item
 
@@ -560,6 +565,7 @@ class Channel(chn_class.Channel):
 
         result_set["title"] = result_set["title"].strip()
         item = chn_class.Channel.create_video_item(self, result_set)
+        item.media_type = mediatype.EPISODE
         if item is None:
             return None
 
@@ -576,7 +582,7 @@ class Channel(chn_class.Channel):
         return item
 
     def update_live_video(self, item):
-        """ Updates an existing live stream MediaItem with more data.
+        """ Updates an existing MediaItem with more data.
 
         Used to update none complete MediaItems (self.complete = False). This
         could include opening the item's URL to fetch more data and then process that
@@ -584,10 +590,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -609,10 +615,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.

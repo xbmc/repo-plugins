@@ -29,6 +29,7 @@ import random
 import requests
 from ...kodion.utils import is_httpd_live, make_dirs, DataCache
 from ..youtube_exceptions import YouTubeException
+from .ratebypass import ratebypass
 from .signature.cipher import Cipher
 from .subtitles import Subtitles
 
@@ -500,6 +501,7 @@ class VideoInfo(object):
         self.language = context.get_settings().get_string('youtube.language', 'en_US').replace('-', '_')
         self.region = context.get_settings().get_string('youtube.region', 'US')
         self._access_token = access_token
+        self._calculate_n = None
 
     @staticmethod
     def generate_cpn():
@@ -510,6 +512,26 @@ class VideoInfo(object):
         cpn_alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_'
         cpn = ''.join((cpn_alphabet[random.randint(0, 256) & 63] for _ in range(0, 16)))
         return cpn
+
+    def calculate_n(self, url):
+        if not self._calculate_n:
+            return url
+
+        parsed_query = dict(urllib.parse.parse_qsl(urllib.parse.urlsplit(url).query))
+
+        if parsed_query.get('ratebypass', 'no') != 'yes' and 'n' in parsed_query:
+            # Cipher n to get the updated value
+            initial_n = list(parsed_query['n'])
+            new_n = self._calculate_n.calculate_n(initial_n)
+            if new_n:
+                parsed_query['n'] = new_n
+                parsed_query['ratebypass'] = 'yes'
+                parsed_url = urllib.parse.urlsplit(url)
+                url = '%s://%s%s?%s' % \
+                      (parsed_url.scheme, parsed_url.netloc,
+                       parsed_url.path, urllib.parse.urlencode(parsed_query))
+
+        return url
 
     def load_stream_infos(self, video_id):
         return self._method_get_video_info(video_id)
@@ -528,12 +550,14 @@ class VideoInfo(object):
                   'hl': self.language,
                   'gl': self.region}
 
+        cookies = {'CONSENT': 'YES+cb.20210615-14-p0.en+FX+294'}
+
         if self._access_token:
             params['access_token'] = self._access_token
 
         url = 'https://www.youtube.com/watch'
 
-        result = requests.get(url, params=params, headers=headers, verify=self._verify, allow_redirects=True)
+        result = requests.get(url, params=params, headers=headers, cookies=cookies, verify=self._verify, allow_redirects=True)
         return {'html': result.text, 'cookies': result.cookies}
 
     def get_embed_page(self, video_id):
@@ -549,37 +573,44 @@ class VideoInfo(object):
         params = {'hl': self.language,
                   'gl': self.region}
 
+        cookies = {'CONSENT': 'YES+cb.20210615-14-p0.en+FX+294'}
+
         if self._access_token:
             params['access_token'] = self._access_token
 
         url = 'https://www.youtube.com/embed/{video_id}'.format(video_id=video_id)
 
-        result = requests.get(url, params=params, headers=headers, verify=self._verify, allow_redirects=True)
+        result = requests.get(url, params=params, headers=headers, cookies=cookies, verify=self._verify, allow_redirects=True)
         return {'html': result.text, 'cookies': result.cookies}
 
     @staticmethod
-    def get_player_client(html):
-        context = {}
-
-        found = re.search(
-            r'ytcfg\.set\((?P<context>{"INNERTUBE_CONTEXT":.+?)\)\s*;', html
-        )
-        if found:
-            context = json.loads(found.group('context'))
-
-        return context.get('INNERTUBE_CONTEXT', {}).get('client', {})
+    def get_player_client(config):
+        return config.get('INNERTUBE_CONTEXT', {}).get('client', {})
 
     @staticmethod
     def get_player_config(html):
         config = {}
 
         found = re.search(
-            r'window\.ytplayer\s*=\s*{}\s*;\s*ytcfg\.set\((?P<config>.+?)\)\s*;\s*ytcfg', html
+            r'window\.ytplayer\s*=\s*{}\s*;\s*ytcfg\.set\((?P<config>.+?)\)\s*;\s*(?:ytcfg|var setMessage\s*=\s*)', html
         )
+
         if found:
             config = json.loads(found.group('config'))
 
         return config
+
+    @staticmethod
+    def get_player_response(html):
+        response = {}
+
+        found = re.search(
+                r'ytInitialPlayerResponse\s*=\s*(?P<response>{.+?})\s*;\s*(?:var\s+meta|</script|\n)', html
+        )
+        if found:
+            response = json.loads(found.group('response'))
+
+        return response
 
     def get_player_js(self, video_id, javascript_url=''):
         def _normalize(url):
@@ -599,25 +630,41 @@ class VideoInfo(object):
         if cached_js and cached_js.get('player_javascript', {}).get('url'):
             cached_url = cached_js.get('player_javascript', {}).get('url')
             if cached_url not in ['http://', 'https://']:
-                return cached_url
+                javascript_url = cached_url
 
-        if javascript_url:
-            return _normalize(javascript_url)
+        if not javascript_url:
+            page_result = self.get_embed_page(video_id)
+            html = page_result.get('html')
+            html = html.encode('utf8', 'ignore')
+            html = html.decode('utf8')
 
-        page_result = self.get_embed_page(video_id)
-        html = page_result.get('html')
-        html = html.encode('utf8', 'ignore')
-        html = html.decode('utf8')
+            if not html:
+                return ''
 
-        if not html:
-            return ''
+            found = re.search(r'"jsUrl":"(?P<url>[^"]*base.js)"', html)
 
-        found = re.search(r'"jsUrl":"(?P<url>[^"]*base.js)"', html)
+            if found:
+                javascript_url = found.group('url')
 
-        if found:
-            javascript_url = found.group('url')
+        javascript_url = _normalize(javascript_url)
+        cache_key = urllib.parse.quote(javascript_url)
+        cached_js = self._data_cache.get_item(DataCache.ONE_HOUR * 4, cache_key)
+        if cached_js:
+            return cached_js
 
-        return _normalize(javascript_url)
+        headers = {
+            'Connection': 'keep-alive',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.36 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'DNT': '1',
+            'Accept-Encoding': 'gzip, deflate',
+            'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'
+        }
+        result = requests.get(javascript_url, headers=headers, verify=False, allow_redirects=True)
+        javascript = result.text
+
+        self._data_cache.set(javascript_url, cache_key)
+        return javascript
 
     def _load_manifest(self, url, video_id, meta_info=None, curl_headers='', playback_stats=None):
         headers = {'Host': 'manifest.googlevideo.com',
@@ -694,6 +741,10 @@ class VideoInfo(object):
 
         curl_headers = ''
         cookies = page_result.get('cookies', {})
+        cookies.update({
+            'CONSENT': 'YES+cb.20210615-14-p0.en+FX+294'
+        })
+
         if cookies:
             cookies_list = list()
             for c in cookies:
@@ -703,7 +754,8 @@ class VideoInfo(object):
                     .format(cookies=urllib.parse.quote(''.join(cookies_list)))
 
         player_config = self.get_player_config(html)
-        player_client = self.get_player_client(html)
+        player_client = self.get_player_client(player_config)
+        player_response = self.get_player_response(html)
 
         http_params = {
             'hl': self.language,
@@ -724,17 +776,18 @@ class VideoInfo(object):
         el_values = ['detailpage', 'embedded']
 
         params = dict()
-        player_response = dict()
 
         for el in el_values:
+            if player_response.get('streamingData', {}).get('formats', []) or \
+                    player_response.get('streamingData', {}).get('hlsManifestUrl', ''):
+                break
             http_params['el'] = el
             result = requests.get(video_info_url, params=http_params, headers=headers, cookies=cookies, verify=self._verify, allow_redirects=True)
             data = result.text
             params = dict(urllib.parse.parse_qsl(data))
-            player_response = json.loads(params.get('player_response', '{}'))
-            if player_response.get('streamingData', {}).get('formats', []) or \
-                    player_response.get('streamingData', {}).get('hlsManifestUrl', ''):
-                break
+            p_response = json.loads(params.get('player_response', '{}'))
+            if p_response:
+                player_response = p_response
 
         playability_status = player_response.get('playabilityStatus', {})
 
@@ -764,9 +817,16 @@ class VideoInfo(object):
         meta_info['channel']['author'] = meta_info['channel']['author'].encode('raw_unicode_escape')
 
         if PY2:
-            meta_info['video']['title'] = meta_info['video']['title'].decode('utf-8')
-            meta_info['channel']['author'] = meta_info['channel']['author'].decode('utf-8')
-
+            try:
+                if r'\u' not in meta_info['video']['title']:
+                    meta_info['video']['title'] = meta_info['video']['title'].decode('utf-8')
+                    meta_info['channel']['author'] = meta_info['channel']['author'].decode('utf-8')
+                else:
+                    meta_info['video']['title'] = meta_info['video']['title'].decode('raw_unicode_escape')
+                    meta_info['channel']['author'] = meta_info['channel']['author'].decode('raw_unicode_escape')
+            except UnicodeDecodeError:
+                meta_info['video']['title'] = meta_info['video']['title'].decode('raw_unicode_escape')
+                meta_info['channel']['author'] = meta_info['channel']['author'].decode('raw_unicode_escape')
         else:
             meta_info['video']['title'] = meta_info['video']['title'].decode('raw_unicode_escape')
             meta_info['channel']['author'] = meta_info['channel']['author'].decode('raw_unicode_escape')
@@ -900,9 +960,11 @@ class VideoInfo(object):
                     license_info['token'] = self._access_token
                     break
 
+        js = self.get_player_js(video_id, player_config.get('assets', {}).get('js', ''))
+
+        self._calculate_n = ratebypass.CalculateN(js)
         if requires_cipher(adaptive_fmts) or requires_cipher(std_fmts):
-            js = self.get_player_js(video_id, player_config.get('assets', {}).get('js', ''))
-            cipher = Cipher(self._context, javascript_url=js)
+            cipher = Cipher(self._context, javascript=js)
 
         if not is_live and httpd_is_live and adaptive_fmts:
             mpd_url, s_info = self.generate_mpd(video_id,
@@ -931,11 +993,15 @@ class VideoInfo(object):
                     else:
                         raise YouTubeException('Cipher: Not Found')
             if mpd_sig_deciphered:
-                video_stream = {'url': mpd_url,
-                                'meta': meta_info,
-                                'headers': curl_headers,
-                                'license_info': license_info,
-                                'playback_stats': playback_stats}
+                mpd_url = self.calculate_n(mpd_url)
+
+                video_stream = {
+                    'url': mpd_url,
+                    'meta': meta_info,
+                    'headers': curl_headers,
+                    'license_info': license_info,
+                    'playback_stats': playback_stats
+                }
 
                 if is_live:
                     video_stream['url'] = '&'.join([video_stream['url'], 'start_seq=$START_NUMBER$'])
@@ -988,6 +1054,8 @@ class VideoInfo(object):
                         else:
                             raise YouTubeException('Cipher: Not Found')
 
+                    url = self.calculate_n(url)
+
                     itag = stream_map['itag']
                     yt_format = self.FORMAT.get(itag, None)
                     if not yt_format:
@@ -1033,7 +1101,7 @@ class VideoInfo(object):
 
         return stream_list
 
-    def generate_mpd(self, video_id, adaptive_fmts, duration, cipher,license_url):
+    def generate_mpd(self, video_id, adaptive_fmts, duration, cipher, license_url):
         discarded_streams = list()
 
         def get_discarded_audio(fmt, mime_type, itag, stream, reason='unsupported'):
@@ -1218,7 +1286,10 @@ class VideoInfo(object):
                 else:
                     raise YouTubeException('Cipher: Not Found')
 
+            url = self.calculate_n(url)
+
             url = url.replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;").replace(">", "&gt;")
+
             data[key][i]['baseUrl'] = url
 
             data[key][i]['indexRange'] = '0-0'

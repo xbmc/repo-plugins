@@ -1,3 +1,7 @@
+[AML python2..master comparison](https://github.com/Wintermute0110/plugin.program.AML.dev/compare/python2..master)
+
+[AML master..python2 comparison](https://github.com/Wintermute0110/plugin.program.AML.dev/compare/master..python2)
+
 [Kodi Documentation (codedocs)](https://codedocs.xyz/xbmc/xbmc/)
 
 [RA buildbot cores](https://buildbot.libretro.com/nightly/)
@@ -56,7 +60,7 @@ Remove tasks once finished.
 
    [Kodi wiki: Add-on settings](https://kodi.wiki/view/Add-on_settings) [Kodi wiki: Addon settings conversion](https://kodi.wiki/view/Add-on_settings_conversion) [Kodi Matrix alpha 1, addon settings do not show](https://forum.kodi.tv/showthread.php?tid=356245)
 
- * Matrix change: `XBMC.RunPlugin({}?command={})` must be changed to `XBMC.RunPlugin({}?command={})`.
+ * Matrix change: `XBMC.RunPlugin({}?command={})` must be changed to `RunPlugin({}?command={})`.
 
  * Matrix change: `xbmcgui.Dialog().yesno()` add support for custom button.
 

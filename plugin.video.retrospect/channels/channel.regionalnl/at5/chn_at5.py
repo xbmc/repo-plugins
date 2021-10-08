@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 import datetime
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.helpers.htmlhelper import HtmlHelper
 
 from resources.lib.mediaitem import MediaItem
@@ -9,6 +9,7 @@ from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.logger import Logger
+from resources.lib.mediatype import EPISODE
 from resources.lib.parserdata import ParserData
 from resources.lib.streams.m3u8 import M3u8
 from resources.lib.urihandler import UriHandler
@@ -137,13 +138,12 @@ class Channel(chn_class.Channel):
 
         title = LanguageHelper.get_localized_string(LanguageHelper.LiveStreamTitleId)
         item = MediaItem("\a.: {} :.".format(title), "")
-        item.type = "folder"
         now = datetime.datetime.now()
         item.set_date(now.year, now.month, now.day, 23, 59, 58)
         items.append(item)
 
         live_item = MediaItem(title, "#livestream")
-        live_item.type = "video"
+        live_item.media_type = mediatype.EPISODE
         live_item.isLive = True
         item.items.append(live_item)
 
@@ -190,7 +190,7 @@ class Channel(chn_class.Channel):
             if video_url is None:
                 return None
 
-            item.type = "video"
+            item.media_type = EPISODE
             item.url = video_url
 
         return item
@@ -227,8 +227,7 @@ class Channel(chn_class.Channel):
         else:
             return None
 
-        item = MediaItem(result_set["title"], url)
-        item.type = "video"
+        item = MediaItem(result_set["title"], url, media_type=EPISODE)
         item.thumb = thumb or self.noImage
         item.description = HtmlHelper.to_text(result_set.get("text"))
 
@@ -249,10 +248,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -264,8 +263,7 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
-        part = item.create_new_empty_media_part()
-        item.complete = M3u8.update_part_with_m3u8_streams(part, item.url, channel=self)
+        item.complete = M3u8.update_part_with_m3u8_streams(item, item.url, channel=self)
         return item
 
     def update_live_stream(self, item):
@@ -277,10 +275,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -294,8 +292,7 @@ class Channel(chn_class.Channel):
         url = "https://rrr.sz.xlcdn.com/?account=atvijf" \
               "&file=live&type=live&service=wowza&protocol=https&output=playlist.m3u8"
 
-        part = item.create_new_empty_media_part()
         item.complete = \
-            M3u8.update_part_with_m3u8_streams(part, url, channel=self)
+            M3u8.update_part_with_m3u8_streams(item, url, channel=self)
 
         return item

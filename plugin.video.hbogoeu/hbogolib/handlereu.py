@@ -4,10 +4,10 @@
 
 from __future__ import absolute_import, division
 
-import json
-import sys
 import errno
+import json
 import os
+import sys
 import time
 import traceback
 
@@ -19,10 +19,8 @@ from libs.kodiutil import KodiUtil
 from libs.util import Util
 
 try:
-    import urlparse as parse  # type: ignore
     from urllib import quote_plus as quote, urlencode  # type: ignore
 except ImportError:
-    import urllib.parse as parse  # type: ignore
     from urllib.parse import quote_plus as quote, urlencode  # type: ignore
 
 from kodi_six import xbmc, xbmcplugin, xbmcgui  # type: ignore
@@ -62,7 +60,6 @@ class HbogoHandler_eu(HbogoHandler):
         self.API_URL_AUTH_OPERATOR = ""
         self.API_URL_CUSTOMER_GROUP = ""
         self.API_URL_GROUP = ""
-        self.API_URL_GROUPS = ""
         self.API_URL_MENU = ""
         self.API_URL_CONTENT = ""
         self.API_URL_PURCHASE = ""
@@ -82,6 +79,10 @@ class HbogoHandler_eu(HbogoHandler):
         self.KidsGroupId = ""
         self.homeGroupUrlEng = ""
         self.homeGroupUrl = ""
+        self.seriesGroupUrl = ""
+        self.moviesGroupUrl = ""
+        self.seriesGroupUrlEng = ""
+        self.moviesGroupUrlEng = ""
         self.loggedin_headers = {}
         self.JsonHis = ""
 
@@ -138,14 +139,13 @@ class HbogoHandler_eu(HbogoHandler):
         self.API_HOST_GATEWAY = 'https://gateway.hbogo.eu'
         self.API_HOST_GATEWAY_REFERER = 'https://gateway.hbogo.eu/signin/form'
 
-        self.API_URL_SETTINGS = 'https://' + self.API_HOST + '/v8/Settings/json/' + self.LANGUAGE_CODE + '/ANMO'
+        self.API_URL_SETTINGS = 'https://' + self.API_HOST + '/v8/Settings/json/' + self.LANGUAGE_CODE + '/APTV'
         self.API_URL_AUTH_WEBBASIC = 'https://api.ugw.hbogo.eu/v3.0/Authentication/' + self.COUNTRY_CODE + '/JSON/' + self.LANGUAGE_CODE + '/' + \
                                      self.API_PLATFORM
         self.API_URL_AUTH_OPERATOR = 'https://' + self.COUNTRY_CODE_SHORT + 'gwapi.hbogo.eu/v2.1/Authentication/json/' + self.LANGUAGE_CODE + '/' + \
                                      self.API_PLATFORM
         self.API_URL_CUSTOMER_GROUP = 'https://' + self.API_HOST + '/v8/CustomerGroup/json/' + self.LANGUAGE_CODE + '/' + self.API_PLATFORM + '/'
-        self.API_URL_GROUP = 'https://' + self.API_HOST + '/v8/Group/json/' + self.LANGUAGE_CODE + '/ANMO/'
-        self.API_URL_GROUPS = 'https://' + self.API_HOST + '/v8/Groups/json/' + self.LANGUAGE_CODE + '/ANMO/0/True'
+        self.API_URL_GROUP = 'https://' + self.API_HOST + '/v8/Group/json/' + self.LANGUAGE_CODE + '/APTV/'
         self.API_URL_MENU = 'https://' + self.API_HOST + '/v8/Menu/json/ENG/APTV/0/False'
         self.API_URL_CONTENT = 'https://' + self.API_HOST + '/v8/Content/json/' + self.LANGUAGE_CODE + '/' + self.API_PLATFORM + '/'
         self.API_URL_PURCHASE = 'https://' + self.API_HOST + '/v8/Purchase/Json/' + self.LANGUAGE_CODE + '/' + self.API_PLATFORM
@@ -310,278 +310,6 @@ class HbogoHandler_eu(HbogoHandler):
         self.loggedin_headers['GO-Token'] = str(self.goToken)
         self.loggedin_headers['GO-CustomerId'] = str(self.GOcustomerId)
 
-    def OAuthLogin(self, username, password):
-        # Check if operator is supported
-
-        if self.op_id in HbogoConstants.eu_redirect_login:
-            # perform login
-
-            self.log("Attempting OAuth login for: " + str(self.op_id))
-            self.log("Urls and data: " + str(HbogoConstants.eu_redirect_login[self.op_id]))
-
-            hbo_session = requests.session()
-
-            hbo_session.headers.update({
-                'Host': self.COUNTRY_CODE_SHORT + 'gwapi.hbogo.eu',
-                'User-Agent': self.UA,
-                'Accept': 'application/json',
-                'Accept-Language': self.ACCEPT_LANGUAGE,
-                'Accept-Encoding': 'br, gzip, deflate',
-                'Referer': 'https://gateway.hbogo.eu/signin/sso',
-                'Content-Type': 'application/json',
-                'GO-CustomerId': '00000000-0000-0000-0000-000000000000',
-                'Origin': 'https://gateway.hbogo.eu',
-                'Connection': 'keep-alive'
-            })
-
-            hbo_payload = {
-                "Action": None,
-                "AppLanguage": None,
-                "ActivationCode": None,
-                "AllowedContents": [],
-                "AudioLanguage": None,
-                "AutoPlayNext": False,
-                "BirthYear": 0,
-                "CurrentDevice": {
-                    "AppLanguage": "",
-                    "AutoPlayNext": False,
-                    "Brand": "Chrome",
-                    "CreatedDate": "",
-                    "DeletedDate": "",
-                    "Id": self.customerId,
-                    "Individualization": self.individualization,
-                    "IsDeleted": False,
-                    "LastUsed": "",
-                    "Modell": "71",
-                    "Name": "",
-                    "OSName": "Linux",
-                    "OSVersion": "undefined",
-                    "Platform": self.API_PLATFORM,
-                    "SWVersion": "4.7.3.6484.2142",
-                    "SubtitleSize": ""
-                },
-                "CustomerCode": "",
-                "DebugMode": False,
-                "DefaultSubtitleLanguage": None,
-                "EmailAddress": "",
-                "FirstName": "",
-                "Gender": 0,
-                "Id": "00000000-0000-0000-0000-000000000000",
-                "IsAnonymus": True,
-                "IsPromo": False,
-                "Language": "",
-                "LastName": "",
-                "Nick": "",
-                "NotificationChanges": 0,
-                "OperatorId": "00000000-0000-0000-0000-000000000000",
-                "OperatorName": "",
-                "OperatorToken": "",
-                "ParentalControl": {
-                    "Active": False,
-                    "Password": "",
-                    "Rating": 0,
-                    "ReferenceId": "00000000-0000-0000-0000-000000000000"
-                },
-                "Password": "",
-                "PromoCode": "",
-                "ReferenceId": "00000000-0000-0000-0000-000000000000",
-                "SecondaryEmailAddress": "",
-                "SecondarySpecificData": None,
-                "ServiceCode": "",
-                "SpecificData": None,
-                "SubscribeForNewsletter": False,
-                "SubscState": None,
-                "SubtitleSize": "",
-                "TVPinCode": "",
-                "ZipCode": "",
-                "PromoId": ""
-            }
-
-            hbo_session.headers.update({'GO-CustomerId': '00000000-0000-0000-0000-000000000000'})
-
-            response = hbo_session.post(
-                self.API_URL_AUTH_OPERATOR,
-                json=hbo_payload
-            )
-
-            jsonrspl = response.json()
-
-            token = jsonrspl['Token']
-            backuri = "%s/ssocallbackhandler?%s" % (self.API_HOST_REFERER, urlencode({
-                'ssoid': '{0}',
-                'method': '{1}',
-                'cou': self.COUNTRY_CODE_SHORT,
-                'operatorId': self.op_id,
-                'p': self.API_PLATFORM,
-                'l': self.LANGUAGE_CODE,
-                'cb': Util.base64enc(token),
-                't': 'signin',
-            }))
-
-            hbo_session.headers.pop('GO-CustomerId')
-            hbo_session.headers.update({'GO-Token': token})
-            hbo_payload['CurrentDevice'] = jsonrspl['Customer']['CurrentDevice']
-            hbo_payload['Action'] = 'L'
-            hbo_payload['OperatorId'] = self.op_id
-
-            cp_session = requests.session()
-            cp_session.headers.update({
-                'Referer': self.API_HOST_REFERER,
-                'User-Agent': self.UA
-            })
-
-            payload = {
-                "caller": "GW",
-                "cid": str(jsonrspl['Customer']['Id']),
-                "oid": self.op_id,
-                "platform": self.API_PLATFORM,
-                "backuri": backuri
-            }
-
-            self.log("GET CP SESSION: " + self.REDIRECT_URL.split('?')[0])
-
-            r = cp_session.get(self.REDIRECT_URL.split('?')[0], params=payload)
-
-            payload = HbogoConstants.eu_redirect_login[self.op_id][3]
-
-            if self.op_id == HbogoConstants.SkylinkID:  # Perform special steps for Skylink
-                import re
-                payload['__VIEWSTATE'] = re.compile('<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="(.+?)" />').findall(r.text)[0]
-                payload['__VIEWSTATEGENERATOR'] = \
-                    re.compile('<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="(.+?)" />').findall(r.text)[0]
-                payload['__EVENTVALIDATION'] = \
-                    re.compile('<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="(.+?)" />').findall(r.text)[0]
-
-            payload[HbogoConstants.eu_redirect_login[self.op_id][1]] = username
-            payload[HbogoConstants.eu_redirect_login[self.op_id][2]] = password
-
-            if self.sensitive_debug:
-                self.log('LOGIN FORM PAYLOAD: ' + str(payload))
-
-            response = cp_session.post(
-                HbogoConstants.eu_redirect_login[self.op_id][0],
-                data=payload
-            )
-
-            self.log("RESPONSE URL: " + str(response.url))
-
-            parsed_url = parse.urlparse(response.url)
-
-            self.log("PARTED URL: " + str(parsed_url))
-
-            try:
-                # Treat special 2nd confirm callback required by Telekom RO
-                if self.op_id == HbogoConstants.special_data['telekom_ro']['id']:
-                    auth_state = parse.parse_qs(parsed_url.query)['state'][0]
-
-                    confirm_payload = HbogoConstants.special_data['telekom_ro']['payload']
-                    confirm_payload['state'] = auth_state
-                    confirm_response = cp_session.post(
-                        HbogoConstants.special_data['telekom_ro']['confirm_uri'],
-                        confirm_payload
-                    )
-
-                    self.log("URL confirm: " + confirm_response.url)
-                    parsed_url = parse.urlparse(confirm_response.url)
-
-                ssoid = parse.parse_qs(parsed_url.query)['ssoid'][0]
-            except Exception:
-                self.log("OAuth login attempt failed, operator not supported, stack trace: " + traceback.format_exc())
-                self.log("OAuth login attempt failed, operator not supported: " + str(self.op_id))
-                xbmcgui.Dialog().ok(self.LB_LOGIN_ERROR,
-                                    "Sorry the OAuth login attempt have failed. Your operator require a special login procedure thats not supported at the "
-                                    "moment. Please report with a full debug log")
-                self.del_setup()
-                self.log(str(response))
-                sys.exit()
-
-            response = hbo_session.post(
-                'https://' + self.COUNTRY_CODE_SHORT + 'gwapi.hbogo.eu/v2.1/RetrieveCustomerByToken/json/' + self.LANGUAGE_CODE + '/' + self.API_PLATFORM
-            )
-
-            jsonrspl = response.json()
-
-            hbo_session.headers.update({
-                'GO-CustomerId': str(jsonrspl['Customer']['Id']),
-                'GO-SessionId': str(jsonrspl['SessionId'])
-            })
-
-            hbo_payload['Id'] = str(jsonrspl['Customer']['Id'])
-            hbo_payload['ReferenceId'] = ssoid
-
-            response = hbo_session.post(
-                self.API_URL_AUTH_OPERATOR,
-                json=hbo_payload
-            )
-
-            jsonrspl = response.json()
-
-            try:
-                if jsonrspl['ErrorMessage']:
-                    self.log("OAuth Login Error: " + py2_encode(jsonrspl['ErrorMessage']))
-                    xbmcgui.Dialog().ok(self.LB_LOGIN_ERROR, jsonrspl['ErrorMessage'])
-                    self.logout()
-                    return False
-            except Exception:
-                self.log("No login error: " + traceback.format_exc())
-
-            try:
-                if self.customerId != jsonrspl['Customer']['CurrentDevice']['Id'] or self.individualization != \
-                        jsonrspl['Customer']['CurrentDevice']['Individualization']:
-                    self.log("Device ID or Individualization Mismatch Showing diferences")
-                    self.log("Device ID: " + self.customerId + " : " + jsonrspl['Customer']['CurrentDevice']['Id'])
-                    self.log(
-                        "Individualization: " + self.individualization + " : " + jsonrspl['Customer']['CurrentDevice'][
-                            'Individualization'])
-                    self.storeIndiv(jsonrspl['Customer']['CurrentDevice']['Individualization'],
-                                    jsonrspl['Customer']['CurrentDevice']['Id'])
-                else:
-                    self.log("Device ID and Individualization Match")
-            except Exception:
-                self.log("LOGIN: INDIVIDUALIZATION ERROR: " + traceback.format_exc())
-                xbmcgui.Dialog().ok(self.LB_LOGIN_ERROR, "LOGIN: INDIVIDUALIZATION ERROR")
-                self.logout()
-                return False
-
-            try:
-                self.sessionId = jsonrspl['SessionId']
-            except Exception:
-                self.log("Session Id error, stack trace: " + traceback.format_exc())
-                self.sessionId = '00000000-0000-0000-0000-000000000000'
-            if self.sessionId == '00000000-0000-0000-0000-000000000000' or len(self.sessionId) != 36:
-                self.log("GENERIC LOGIN ERROR")
-                xbmcgui.Dialog().ok(self.LB_LOGIN_ERROR, "GENERIC LOGIN ERROR")
-                self.logout()
-                return False
-            self.goToken = jsonrspl['Token']
-            self.GOcustomerId = jsonrspl['Customer']['Id']
-            self.log('Login sucess - Token' + self.mask_sensitive_data(str(self.goToken)))
-            self.log('Login sucess - Customer Id' + self.mask_sensitive_data(str(self.GOcustomerId)))
-            self.log('Login sucess - Session Id' + self.mask_sensitive_data(str(self.sessionId)))
-            self.loggedin_headers['GO-SessionId'] = str(self.sessionId)
-            self.loggedin_headers['GO-Token'] = str(self.goToken)
-            self.loggedin_headers['GO-CustomerId'] = str(self.GOcustomerId)
-            # save the session with validity of n hours to not relogin every run of the add-on
-
-            login_hash = Util.hash256_string(
-                self.individualization + self.customerId + username + password + self.op_id)
-            self.log("LOGIN HASH: " + login_hash)
-
-            saved_session = {
-
-                "hash": login_hash,
-                "headers": self.loggedin_headers,
-                "time": time.time()
-
-            }
-            self.log('SAVING SESSION: ' + self.mask_sensitive_data(str(saved_session)))
-            self.save_obj(saved_session, self.addon_id + "_session")
-            return True
-        else:
-            self.log("OAuth operator not supported: " + str(self.op_id))
-            xbmcgui.Dialog().ok(self.LB_LOGIN_ERROR,
-                                "Sorry your operator require a special login procedure thats not supported at the moment.")
-
     def login(self):
         self.log('Login using operator: ' + str(self.op_id))
 
@@ -630,8 +358,8 @@ class HbogoHandler_eu(HbogoHandler):
 
         if self.REDIRECT_URL:
             self.log("OPERATOR WITH LOGIN REDIRECTION DETECTED")
-            self.log("LOGIN WITH SPECIAL OAuth LOGIN PROCEDURE")
-            return self.OAuthLogin(username, password)
+            self.log("THIS METHOD IS NO LONGER SUPPORTED")
+            self.log("ATTEMPTING NORMAL LOGIN")
 
         headers = {
             'Origin': self.API_HOST_GATEWAY,
@@ -715,7 +443,7 @@ class HbogoHandler_eu(HbogoHandler):
 
         data = json.dumps(data_obj)
         self.log('PERFORMING LOGIN: ' + self.mask_sensitive_data(str(data)))
-        jsonrspl = self.post_to_hbogo(url, headers, data, 'json', self.max_comm_retry)   # last parameter prevents retry on failed login
+        jsonrspl = self.post_to_hbogo(url, headers, data, 'json', self.max_comm_retry)  # last parameter prevents retry on failed login
         if jsonrspl is False:
             self.logout()
             return False
@@ -783,6 +511,35 @@ class HbogoHandler_eu(HbogoHandler):
         self.save_obj(saved_session, self.addon_id + "_session")
         return True
 
+    def gen_exclusion_list(self, hbo_go_cat_url, list_of_items_to_exlude, return_as_string=False):
+        jsonrsp = self.get_from_hbogo(hbo_go_cat_url)
+        excludeindex = []
+        if jsonrsp is False:
+            pass
+        else:
+            try:
+                if jsonrsp['ErrorMessage']:
+                    self.log("Get " + py2_encode(hbo_go_cat_url) + " exclude index Error: " + py2_encode(jsonrsp['ErrorMessage']))
+            except KeyError:
+                pass  # all is ok no error message just pass
+            except Exception:
+                self.log("Unexpected error: " + traceback.format_exc())
+            # find watchlist and continue watching positions for exclusion
+            try:
+                if len(jsonrsp['Container']) > 1:
+                    for container_index in range(0, len(jsonrsp['Container'])):
+                        container_item = jsonrsp['Container'][container_index]
+                        if py2_encode(container_item['Name']) in list_of_items_to_exlude:
+                            excludeindex.append(container_index)
+                        if len(excludeindex) == len(list_of_items_to_exlude):
+                            break
+            except Exception:
+                self.log("Unexpected error: " + traceback.format_exc())
+        if return_as_string:
+            return ','.join(str(e) for e in excludeindex)
+        else:
+            return excludeindex
+
     def categories(self):
         if not self.chk_login():
             self.login()
@@ -811,61 +568,9 @@ class HbogoHandler_eu(HbogoHandler):
                         self.API_URL_CUSTOMER_GROUP + self.HistoryGroupId + '/-/-/-/1000/-/-/false',
                         self.get_media_resource('DefaultFolder.png'), HbogoConstants.ACTION_LIST)
 
-        jsonrsp = self.get_from_hbogo(self.API_URL_GROUPS)
-        if jsonrsp is False:
-            return
-
-        try:
-            if jsonrsp['ErrorMessage']:
-                self.log("Categories Error: " + py2_encode(jsonrsp['ErrorMessage']))
-                xbmcgui.Dialog().ok(self.LB_ERROR, jsonrsp['ErrorMessage'])
-                return
-        except KeyError:
-            pass  # all is ok no error message just pass
-        except Exception:
-            self.log("Unexpected error: " + traceback.format_exc())
-            xbmcgui.Dialog().ok(self.LB_ERROR, self.language(30004))
-            return
-
-        position_series = -1
-        position_movies = -1
-
-        position = 0
-
-        # Find key categories positions
-        try:
-            for cat in jsonrsp['Items']:
-                if py2_encode(cat["Tracking"]['Name']) == "Series":
-                    position_series = position
-                if py2_encode(cat["Tracking"]['Name']) == "Movies":
-                    position_movies = position
-                if position_series > -1 and position_movies > -1:
-                    break
-                position += 1
-        except Exception:
-            self.log("Unexpected error in find key categories: " + traceback.format_exc())
-
-        if position_series != -1:
-            self.addCat(py2_encode(self.language(30716)),
-                        jsonrsp['Items'][position_series]['ObjectUrl'].replace('/0/{sort}/{pageIndex}/{pageSize}/0/0',
-                                                                               '/0/0/1/1024/0/0'),
-                        self.get_media_resource('tv.png'), HbogoConstants.ACTION_LIST)
-        else:
-            self.log("No Series Category found")
-
-        if position_movies != -1:
-            self.addCat(py2_encode(self.language(30717)),
-                        jsonrsp['Items'][position_movies]['ObjectUrl'].replace('/0/{sort}/{pageIndex}/{pageSize}/0/0',
-                                                                               '/0/0/1/1024/0/0'),
-                        self.get_media_resource('movie.png'), HbogoConstants.ACTION_LIST)
-        else:
-            self.log("No Movies Category found")
-
-        if self.addon.getSetting('show_kids') == 'true':
-            self.addCat(py2_encode(self.language(30729)), self.API_URL_GROUP + self.KidsGroupId + '/0/0/0/0/0/0/True', self.get_media_resource('kids.png'), HbogoConstants.ACTION_LIST)
-
         jsonrsp = self.get_from_hbogo(self.API_URL_MENU)
-        # Find key home
+        found_items = 0
+        # Find key home, series and movies
         try:
             for cat in jsonrsp['Items']:
                 if py2_encode(cat['Name']) == "Home":
@@ -873,39 +578,46 @@ class HbogoHandler_eu(HbogoHandler):
                     self.homeGroupUrl = cat['ObjectUrl']
                     if self.LANGUAGE_CODE != "ENG":
                         self.homeGroupUrl = self.homeGroupUrl.replace("ENG", self.LANGUAGE_CODE)
+                    found_items += 1
+                if py2_encode(cat['Name']) == "Series":
+                    self.seriesGroupUrlEng = cat['ObjectUrl']
+                    self.seriesGroupUrl = cat['ObjectUrl']
+                    if self.LANGUAGE_CODE != "ENG":
+                        self.seriesGroupUrl = self.seriesGroupUrl.replace("ENG", self.LANGUAGE_CODE)
+                    found_items += 1
+                if py2_encode(cat['Name']) == "Movies":
+                    self.moviesGroupUrlEng = cat['ObjectUrl']
+                    self.moviesGroupUrl = cat['ObjectUrl']
+                    if self.LANGUAGE_CODE != "ENG":
+                        self.moviesGroupUrl = self.moviesGroupUrl.replace("ENG", self.LANGUAGE_CODE)
+                    found_items += 1
+                if found_items > 2:
                     break
         except Exception:
             self.log("Unexpected error in find key in menu for home: " + traceback.format_exc())
 
-        jsonrsp = self.get_from_hbogo(self.homeGroupUrlEng)
-        excludeindex_home = []
-        if jsonrsp is False:
-            pass
+        if self.seriesGroupUrl != "":
+            self.addCat(py2_encode(self.language(30716)), self.seriesGroupUrl, self.get_media_resource('tv.png'), HbogoConstants.ACTION_LIST,
+                        self.gen_exclusion_list(self.seriesGroupUrlEng, ["Genres"], True))
         else:
-            try:
-                if jsonrsp['ErrorMessage']:
-                    self.log("Get home list exclude index Error: " + py2_encode(jsonrsp['ErrorMessage']))
-                    pass
-            except KeyError:
-                pass  # all is ok no error message just pass
-            except Exception:
-                self.log("Unexpected error: " + traceback.format_exc())
-                pass
-            # find watchlist and continue watching positions for exclusion
-            if len(jsonrsp['Container']) > 1:
-                for container_index in range(0, len(jsonrsp['Container'])):
-                    container_item = jsonrsp['Container'][container_index]
-                    if py2_encode(container_item['Name']) == "Watchlist" or py2_encode(container_item['Name']) == "Continue Watching":
-                        excludeindex_home.append(container_index)
-                    if len(excludeindex_home) > 1:
-                        break
+            self.log("No Series Category found")
+
+        if self.moviesGroupUrl != "":
+            self.addCat(py2_encode(self.language(30717)), self.moviesGroupUrl, self.get_media_resource('movie.png'), HbogoConstants.ACTION_LIST,
+                        self.gen_exclusion_list(self.moviesGroupUrlEng, ["Genres"], True))
+        else:
+            self.log("No Movies Category found")
+
+        if self.addon.getSetting('show_kids') == 'true':
+            self.addCat(py2_encode(self.language(30729)), self.API_URL_GROUP + self.KidsGroupId + '/0/0/0/0/0/0/True', self.get_media_resource('kids.png'),
+                        HbogoConstants.ACTION_LIST)
 
         if self.addon.getSetting('group_home') == 'true':
             self.addCat(py2_encode(self.language(30733)),
                         self.homeGroupUrl,
-                        self.get_media_resource('DefaultFolder.png'), HbogoConstants.ACTION_LIST, ','.join(str(e) for e in excludeindex_home))
+                        self.get_media_resource('DefaultFolder.png'), HbogoConstants.ACTION_LIST, self.gen_exclusion_list(self.homeGroupUrlEng, ["Watchlist", "Continue Watching"], True))
         else:
-            self.list(self.homeGroupUrl, True, excludeindex_home)
+            self.list(self.homeGroupUrl, True, self.gen_exclusion_list(self.homeGroupUrlEng, ["Watchlist", "Continue Watching"]))
 
         KodiUtil.endDir(self.handle, None, True)
 
@@ -963,6 +675,13 @@ class HbogoHandler_eu(HbogoHandler):
         if not self.chk_login():
             self.login()
         self.log("Season: " + str(url))
+        # replace alien platform url with current set API platform
+        # temp fix for "new version" errors in series/season listings
+        url = url.replace("APTV", self.API_PLATFORM)
+        url = url.replace("ANMO", self.API_PLATFORM)
+        self.log("Season url fix: " + str(url))
+        # end fix
+
         jsonrsp = self.get_from_hbogo(url)
         if jsonrsp is False:
             return
@@ -1005,7 +724,12 @@ class HbogoHandler_eu(HbogoHandler):
         self.log("Episode: " + str(url))
 
         self.reset_media_type_counters()
-
+        # replace alien platform url with current set API platform
+        # temp fix for "new version" errors in series/season listings
+        url = url.replace("APTV", self.API_PLATFORM)
+        url = url.replace("ANMO", self.API_PLATFORM)
+        self.log("Episode url fix: " + str(url))
+        # end fix
         jsonrsp = self.get_from_hbogo(url)
         if jsonrsp is False:
             return
@@ -1203,7 +927,7 @@ class HbogoHandler_eu(HbogoHandler):
         is_helper = Helper(protocol, drm=drm)
         if is_helper.check_inputstream():
             if sys.version_info < (3, 0):  # if python version < 3 is safe to assume we are running on Kodi 18
-                list_item.setProperty('inputstreamaddon', 'inputstream.adaptive')   # compatible with Kodi 18 API
+                list_item.setProperty('inputstreamaddon', 'inputstream.adaptive')  # compatible with Kodi 18 API
             else:
                 list_item.setProperty('inputstream', 'inputstream.adaptive')  # compatible with recent builds Kodi 19 API
             list_item.setProperty('inputstream.adaptive.manifest_type', protocol)
@@ -1480,7 +1204,8 @@ class HbogoHandler_eu(HbogoHandler):
             liz.setInfo(type="Video", infoLabels={"PlayCount": "0"})
             liz.setProperty("resumetime", str(0))
         if hbogo_position > -1:
-            self.log("Found elapsed time on Hbo go for " + cid + " External ID: " + externalid + " Elapsed: " + str(hbogo_position) + " of " + str(title['Duration']))
+            self.log("Found elapsed time on Hbo go for " + cid + " External ID: " + externalid + " Elapsed: " + str(hbogo_position) + " of " + str(
+                title['Duration']))
             liz.setProperty("totaltime", str(title['Duration']))
             liz.setProperty("resumetime", str(hbogo_position))
             if int(hbogo_position) == 0:
@@ -1614,7 +1339,8 @@ class HbogoHandler_eu(HbogoHandler):
                 break
 
         try:
-            self.log("TRACKING ELAPSED for " + str(externalid) + ": Current time: " + str(current_time) + " of " + str(total_time) + " " + str(percent_elapsed) + "%")
+            self.log("TRACKING ELAPSED for " + str(externalid) + ": Current time: " + str(current_time) + " of " + str(total_time) + " " + str(
+                percent_elapsed) + "%")
         except Exception:
             self.log("Unexpected error in logging track elapsed: " + traceback.format_exc())
         if percent_elapsed > 89:

@@ -67,7 +67,7 @@ class HbogoConstants(object):
         ['Sweden', 'se', 'se', 'SWE', 'sv_hbon', 'https://se.hbonordic.com/', HANDLER_NORDIC]
     ]
 
-    fallback_operator_icon_eu = 'https://www.hbo-europe.com/images/hbo_eu_logo.png'
+    fallback_operator_icon_eu = 'http://www.hbo.eu/images/hboeu_logo.png'
 
     platforms = {
 
@@ -106,34 +106,6 @@ class HbogoConstants(object):
         33: "XBOX",
         34: "XONE",
 
-    }
-
-    SkylinkID = "c55e69f0-2471-46a9-a8b7-24dac54e6eb9"  # Skylink Operator ID, Skylink require special steps in login
-
-    # Special data for OAUTH that require custom actions
-    # each entry is one operator
-    # each operator has:
-    #   id: the id of the operator for easy retrieval
-    #   confirm_uri: the URI that is called at a 2nd callback for auth success
-    #   payload: the data to send in this 2nd request
-    special_data = {
-        'telekom_ro': {
-            'id': "972706fe-094c-4ea5-ae98-e8c5d907f6a2",
-            'confirm_uri': "https://my.telekom.ro/oauth2/rest/approval",
-            'payload': {
-                'state': None,
-                'act': 1
-            }
-        }
-    }
-
-    # 0 - operator website login form url, 1 - username field name, 2 - password field name, 3 form payload
-    eu_redirect_login = {
-        'c55e69f0-2471-46a9-a8b7-24dac54e6eb9': ['https://hbogo.skylink.cz/goauthenticate.aspx?client_id=HBO&redirect_uri=https%3a%2f%2fczapi.hbogo.eu%2foauthskylink%2frequest2.aspx&state=5zveHRYBaocYXvjTxHozRg&scope=HBO&response_type=code', 'txtLogin', 'txtPassword', {"__LASTFOCUS": None, "__EVENTTARGET": "btnSubmit", "__EVENTARGUMENT": None, "__VIEWSTATE": None, "__VIEWSTATEGENERATOR": None, "txtLogin": None, "txtPassword": None}],  # Czech Republic: Skylink + Slovakia: Skylink
-        'f0e09ddb-1286-4ade-bb30-99bf1ade7cff': ['https://service.upc.cz/pkmslogin.form', 'username', 'password', {"login-form-type": "pwd", "username": None, "password": None}],  # Czech Republic: UPC CZ + Slovakia: UPC CZ
-        '414847a0-635c-4587-8076-079e3aa96035': ['https://icok.cyfrowypolsat.pl/logowanie.cp', 'j_username', 'j_password', {"j_username": None, "j_password": None, "loginFormM_SUBMIT": "1", "sInBtn": "", "javax.faces.ViewState": ""}],  # Polonia: Cyfrowy Polsat
-        '972706fe-094c-4ea5-ae98-e8c5d907f6a2': ['https://my.telekom.ro/oam/server/auth_cred_submit', 'username', 'password', {"username": None, "password": None}],  # Romania: Telekom Romania (My Account)
-        '41a660dc-ee15-4125-8e92-cdb8c2602c5d': ['https://www.upc.ro/rest/v40/session/start?protocol=oidc&rememberMe=false', 'username', 'credential', {"username": None, "credential": None}],  # Romania: UPC Romania
     }
 
     fallback_ck = '10727db2-602e-4988-9a9b-e7dc57af795e'

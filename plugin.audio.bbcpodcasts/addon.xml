@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.bbcpodcasts" name="BBC Podcasts" version="2.0.1" provider-name="Heckie">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.requests" version="2.25.1" />
+        <import addon="script.module.beautifulsoup4" version="4.6.2" />
+        <import addon="script.module.xmltodict" version="0.12.0+matrix.2" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="de_DE">Podcasts vom BBC in KODI</summary>
+        <summary lang="en_GB">Podcasts by BBC in KODI</summary>
+        <description lang="de_DE">Kodi Addon für Podcasts der BBC. Alle Inhalte werden gestreamt von https://www.bbc.co.uk/podcasts</description>
+        <description lang="en_GB">Podcasts by BBC in KODI. All contents are streamed from https://www.bbc.co.uk/podcasts</description>
+        <disclaimer lang="de_DE">"Der Author des Addons ist nicht verantwortlich für die Inhalte, die auf Ihr Gerät gestreamt werden. Insbesondere liegt es in der alleinigen Verantwortung und Pflicht des Addon-Nutzers sich davon zu überzeugen, dass die Urheberrechts- und Nutzungsvereinbarungen der zum Streaming aufgerufenden Websites und Inhalte nicht verletzt werden. Alle Inhalte stammen von https://www.bbc.co.uk/podcasts"</disclaimer>
+        <disclaimer lang="en_GB">The author of this addon is not responsible for the contents which are streamed to this device. Especially the user of this addon is in responsibility to convince that copyrights and right of use are not violated. All contents are streamed from https://www.bbc.co.uk/podcasts</disclaimer>
+        <language>de_DE</language>
+        <language>en_GB</language>
+        <platform>all</platform>
+        <license>MIT</license>
+        <website>https://github.com/Heckie75/kodi-addon-bbc-podcasts</website>
+        <source>https://github.com/Heckie75/kodi-addon-bbc-podcasts/tree/main/plugin.audio.bbcpodcasts</source>
+        <news>
+v2.0.1 (2021-09-12)
+- Fixed exception so that 'all podcasts' menu didn't work caused by NoneType
+
+v2.0.0 (2021-08-14)
+- Changes after relaunch of BBC podcasts website
+
+v1.0.1 (2021-08-01)
+- migrated to new settings format
+
+v1.0.0 (2021-05-24)
+- Initial version
+        </news>
+        <assets>
+            <icon>resources/assets/icon.png</icon>
+            <fanart>resources/assets/fanart.png</fanart>
+            <screenshot>resources/assets/screenshot_1.png</screenshot>
+            <screenshot>resources/assets/screenshot_2.png</screenshot>
+            <screenshot>resources/assets/screenshot_3.png</screenshot>
+        </assets>
+    </extension>
+</addon>

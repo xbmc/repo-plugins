@@ -26,6 +26,11 @@ def generateAddonVideoUrl(videourl):
     return "plugin://%s/?mode=play&link=%s" % (xbmcaddon.Addon().getAddonInfo('id'), videourl)
 
 
+def generateDRMVideoUrl(videourl, drm_lic_url):
+    parameters = {"link": videourl, "mode": "playDRM", "lic_url": drm_lic_url}
+    return build_kodi_url(parameters)
+
+
 def buildLink(link):
     link = link.replace("https://apasfpd.apa.at", "https://apasfpd.sf.apa.at")
     if link:

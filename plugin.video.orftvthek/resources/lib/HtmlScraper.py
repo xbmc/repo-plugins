@@ -22,6 +22,8 @@ class htmlScraper(Scraper):
     __urlArchive = __urlBase + '/history'
     __urlTrailer = __urlBase + '/coming-soon'
 
+    __videoQualities = ["Q1A", "Q4A", "Q6A", "Q8C", "QXB", "QXA"]
+
     def __init__(self, xbmc, settings, pluginhandle, quality, protocol, delivery, defaultbanner, defaultbackdrop, usePlayAllPlaylist):
         self.translation = settings.getLocalizedString
         self.xbmc = xbmc
@@ -34,6 +36,7 @@ class htmlScraper(Scraper):
         self.enableBlacklist = settings.getSetting("enableBlacklist") == "true"
         self.usePlayAllPlaylist = usePlayAllPlaylist
         debugLog('HTML Scraper - Init done')
+
 
     def getMostViewed(self):
         self.getTeaserList(self.__urlMostViewed, "b-teasers-list")
@@ -56,12 +59,14 @@ class htmlScraper(Scraper):
         self.getLaneTopicOverview(self.__urlFocus)
 
     # Extracts VideoURL from JSON String
-    def getVideoUrl(self, sources):
+    def getVideoUrl(self, sources, drm_license=None):
         for source in sources:
-            if source["protocol"].lower() == self.videoProtocol.lower():
-                if source["delivery"].lower() == self.videoDelivery.lower():
-                    if source["quality"].lower() == self.videoQuality.lower():
-                        return generateAddonVideoUrl(source["src"])
+            if drm_license and source['quality'].lower()[0:3] == self.videoQuality.lower() and source['delivery'].lower() == 'dash':
+                debugLog("Found DRM Video Url %s" % source["src"])
+                return generateDRMVideoUrl(source["src"], drm_license)
+            elif source["protocol"].lower() == self.videoProtocol.lower() and source["delivery"].lower() == self.videoDelivery.lower() and source["quality"].lower() == self.videoQuality.lower():
+                debugLog("Found Simple Video Url %s" % source["src"])
+                return generateAddonVideoUrl(source["src"])
         return False
 
     # Parses teaser lists
@@ -556,7 +561,7 @@ class htmlScraper(Scraper):
         params = parameters_string_to_dict(videourl)
         mode = params.get('mode')
         if not mode:
-            mode = "player"
+            mode = "play"
 
         blacklist = False
         if self.enableBlacklist:
@@ -577,6 +582,7 @@ class htmlScraper(Scraper):
         try:
             html_data = parseDOM(html.get("content"), name='section', attrs={'class': "b-video-details.*?"}, ret=False)
             playlist_json = data_json.get('playlist')
+            drm_license_url = self.getDRMLicense(data_json)
 
             current_channel = parseDOM(html_data, name='span', attrs={'class': "channel.*?"}, ret='aria-label')
             if len(current_channel):
@@ -629,7 +635,7 @@ class htmlScraper(Scraper):
                 stream_info['subtitles'] = main_subtitles
             else:
                 stream_info['subtitles'] = None
-            stream_info['main_videourl'] = self.getVideoUrl(data_json.get("selected_video")["sources"])
+            stream_info['main_videourl'] = self.getVideoUrl(data_json.get("selected_video")["sources"], drm_license_url)
         except:
             debugLog("Error fetching stream infos from html")
         return stream_info
@@ -660,11 +666,12 @@ class htmlScraper(Scraper):
 
             # Add the gapless video if available
             try:
+                drm_license_url = self.getDRMLicense(data_json)
                 if "is_gapless" in playlist_json:
                     gapless_subtitles = []
                     gapless_name = '-- %s --' % self.translation(30059)
                     if playlist_json['is_gapless']:
-                        gapless_videourl = self.getVideoUrl(playlist_json['gapless_video']['sources'])
+                        gapless_videourl = self.getVideoUrl(playlist_json['gapless_video']['sources'], drm_license_url)
                         if gapless_videourl:
                             if "subtitles" in playlist_json['gapless_video']:
                                 for sub in playlist_json['gapless_video']["subtitles"]:
@@ -710,10 +717,11 @@ class htmlScraper(Scraper):
                                 subtitles.append(sub.get(u'src'))
                         else:
                             subtitles = None
-                        videourl = self.getVideoUrl(sources)
+                        videourl = self.getVideoUrl(sources, drm_license_url)
                         liz = self.html2ListItem(title, preview_img, "", desc, duration, '', '', videourl, subtitles, False, True)
                         playlist.add(videourl, liz)
                     except Exception as e:
+                        debugLog("Error on getLinks")
                         debugLog(str(e), self.xbmc.LOGERROR)
                         continue
                 return playlist
@@ -733,10 +741,16 @@ class htmlScraper(Scraper):
         section = parseDOM(wrapper, name='section', attrs={'class': 'b-live-program.*?'})
         items = parseDOM(section, name='li', attrs={'class': 'channel orf.*?'})
 
+        try:
+            xbmcaddon.Addon('inputstream.adaptive')
+        except RuntimeError:
+            self.html2ListItem("[COLOR red][I] -- %s -- [/I][/COLOR]" % self.translation(30067), self.defaultbanner, "", "", "", "", "Info", "addons://user/kodi.inputstream", None, True, False)
+
         for item in items:
             channel = parseDOM(item, name='img', attrs={'class': 'channel-logo'}, ret="alt")
             channel = replaceHTMLCodes(channel[0])
 
+            debugLog("Processing %s Livestream" % channel)
             bundesland_article = parseDOM(item, name='li', attrs={'class': '.*?is-bundesland-heute.*?'}, ret='data-jsb')
             article = parseDOM(item, name='article', attrs={'class': 'b-livestream-teaser is-live.*?'})
             if not len(bundesland_article) and len(article):
@@ -778,9 +792,12 @@ class htmlScraper(Scraper):
                         bundesland_link = bundesland_item.get('url')
 
                         self.buildLivestream(bundesland_title, bundesland_link, "", True, channel, bundesland_image, True)
+            else:
+                debugLog("Channel %s was skipped" % channel)
 
     def buildLivestream(self, title, link, time, restart, channel, banner, online):
         html = fetchPage({'link': link})
+        debugLog("Loading Livestream Page %s for Channel %s" % (link, channel))
         container = parseDOM(html.get("content"), name='div', attrs={'class': "player_viewport.*?"})
         if len(container):
             data = parseDOM(container[0], name='div', attrs={}, ret="data-jsb")
@@ -806,29 +823,71 @@ class htmlScraper(Scraper):
             else:
                 channel = "LIVE"
 
-            uhd_streaming_url = self.getLivestreamUrl(data, 'uhdbrowser')
+            streaming_url = self.getLivestreamUrl(data, self.videoQuality)
+            drm_lic_url = self.getLivestreamDRM(data)
+            uhd_streaming_url = self.getLivestreamUrl(data, 'UHD', True)
+
+            final_title = "[%s] %s - %s%s" % (self.translation(30063), channel, title, time_str)
+
+            debugLog("DRM License: %s" % drm_lic_url)
             if uhd_streaming_url:
-                debugLog("Adding UHD Livestream")
+                debugLog("Adding UHD Livestream from %s" % uhd_streaming_url)
                 uhdContextMenuItems = []
                 if inputstreamAdaptive and restart and online:
-                    uhdContextMenuItems.append(('Restart', 'RunPlugin(plugin://%s/?mode=liveStreamRestart&link=%s)' % (
-                            xbmcaddon.Addon().getAddonInfo('id'), link)))
+                    uhd_restart_parameters = {"mode": "liveStreamRestart", "link": link, "lic_url": drm_lic_url}
+                    uhd_restart_url = build_kodi_url(uhd_restart_parameters)
+                    uhdContextMenuItems.append(('Restart', 'RunPlugin(%s)' % uhd_restart_url))
                     uhd_final_title = "[%s] %s [UHD] - %s%s" % (self.translation(30063), channel, title, time_str)
                 else:
                     uhd_final_title = "%s[UHD] - %s%s" % (channel, title, time_str)
-                self.html2ListItem(uhd_final_title, banner, "", state, time, channel, channel, generateAddonVideoUrl(uhd_streaming_url), None, False, True, uhdContextMenuItems)
 
-            streaming_url = self.getLivestreamUrl(data, self.videoQuality)
-            contextMenuItems = []
-            if inputstreamAdaptive and restart and online:
-                contextMenuItems.append((self.translation(30063), 'RunPlugin(plugin://%s/?mode=liveStreamRestart&link=%s)' % (
-                        xbmcaddon.Addon().getAddonInfo('id'), link)))
-                final_title = "[%s] %s - %s%s" % (self.translation(30063), channel, title, time_str)
-            else:
-                final_title = "%s - %s%s" % (channel, title, time_str)
-            self.html2ListItem(final_title, banner, "", state, time, channel, channel, generateAddonVideoUrl(streaming_url), None, False, True, contextMenuItems)
+                if not drm_lic_url:
+                    self.html2ListItem(uhd_final_title, banner, "", state, time, channel, channel, generateAddonVideoUrl(uhd_streaming_url), None, False, True, uhdContextMenuItems)
+                elif inputstreamAdaptive:
+                    drm_video_url = generateDRMVideoUrl(uhd_streaming_url, drm_lic_url)
+                    self.html2ListItem(uhd_final_title, banner, "", state, time, channel, channel, drm_video_url, None, False, True, uhdContextMenuItems)
 
-    def liveStreamRestart(self, link):
+            if streaming_url:
+                contextMenuItems = []
+                if inputstreamAdaptive and restart and online:
+                    debugLog("Adding DRM Restart %s" % drm_lic_url)
+                    restart_parameters = {"mode": "liveStreamRestart", "link": link, "lic_url": drm_lic_url}
+                    restart_url = build_kodi_url(restart_parameters)
+                    contextMenuItems.append((self.translation(30063), 'RunPlugin(%s)' % restart_url))
+
+                else:
+                    final_title = "%s - %s%s" % (channel, title, time_str)
+
+                if not drm_lic_url:
+                    self.html2ListItem(final_title, banner, "", state, time, channel, channel, generateAddonVideoUrl(streaming_url), None, False, True, contextMenuItems)
+                elif inputstreamAdaptive:
+                    drm_video_url = generateDRMVideoUrl(streaming_url, drm_lic_url)
+                    self.html2ListItem(final_title, banner, "", state, time, channel, channel, drm_video_url, None, False,
+                                       True, contextMenuItems)
+
+    def getDRMLicense(self, data):
+        try:
+            if 'drm' in data and 'widevineUrl' in data['drm']:
+                debugLog("Widevine Url found %s" % data['drm']['widevineUrl'])
+                widevineUrl = data['drm']['widevineUrl']
+                token = data['drm']['token']
+                brand = data['drm']['brandGuid']
+                return "%s?BrandGuid=%s&userToken=%s" % (widevineUrl, brand, token)
+        except:
+            debugLog("No License Url found")
+
+    def getLivestreamDRM(self, data_sets):
+        for data in data_sets:
+            try:
+                data = replaceHTMLCodes(data)
+                data = json.loads(data)
+                drm_lic = self.getDRMLicense(data)
+                if drm_lic:
+                    return drm_lic
+            except Exception as e:
+                debugLog("Error getting Livestream DRM Keys")
+
+    def liveStreamRestart(self, link, protocol):
         try:
             xbmcaddon.Addon('inputstream.adaptive')
         except RuntimeError:
@@ -857,15 +916,13 @@ class htmlScraper(Scraper):
             section = json.loads(response_raw)
             if len(section):
                 section = section[0]
-                streamingURL = 'https://playerapi-restarttv.ors.at/livestreams/%s/sections/%s/manifests/hls/?startTime=%s&X-Api-Key=%s' % (bitmovinStreamId, section.get('id'), section.get('metaData').get('timestamp'), ApiKey)
+                streamingURL = 'https://playerapi-restarttv.ors.at/livestreams/%s/sections/%s/manifests/%s/?startTime=%s&X-Api-Key=%s' % (bitmovinStreamId, section.get('id'), protocol, section.get('metaData').get('timestamp'), ApiKey)
 
                 listItem = createListItem(title, image, description, duration, date, channel, streamingURL, True, False, self.defaultbackdrop, self.pluginhandle)
-                listItem.setProperty('inputstreamaddon', 'inputstream.adaptive')
-                listItem.setProperty('inputstream.adaptive.manifest_type', 'hls')
-                self.xbmc.Player().play(streamingURL, listItem)
+                return streamingURL, listItem
 
-    @staticmethod
-    def getLivestreamUrl(data_sets, quality):
+    def getLivestreamUrl(self, data_sets, preferred_quality, strict=False):
+        fallback = {}
         for data in data_sets:
             try:
                 data = replaceHTMLCodes(data)
@@ -874,14 +931,27 @@ class htmlScraper(Scraper):
                     if 'videos' in data['playlist']:
                         for video_items in data['playlist']['videos']:
                             for video_sources in video_items['sources']:
-                                if video_sources['quality'].lower() == quality.lower() and video_sources[
+
+                                if video_sources['quality'].lower() == preferred_quality.lower() and video_sources[
                                         'protocol'].lower() == "http" and video_sources['delivery'].lower() == 'hls':
                                     return video_sources['src']
+                                elif video_sources['quality'].lower()[0:3] == preferred_quality.lower() and video_sources[
+                                    'protocol'].lower() == "http" and video_sources['delivery'].lower() == 'dash':
+                                    return video_sources['src']
+                                elif video_sources['quality'] and video_sources['src'] and video_sources['quality'][0:3] in self.__videoQualities:
+                                    debugLog("Adding Video Url %s (%s)" % (video_sources['src'], video_sources['delivery']))
+                                    fallback[video_sources['quality'].lower()[0:3]] = video_sources['src']
+                        if not strict:
+                            for quality in reversed(self.__videoQualities):
+                                debugLog("Looking for Fallback Quality %s" % quality)
+                                if quality.lower() in fallback:
+                                    debugLog("Returning Fallback Stream %s" % quality)
+                                    return fallback[quality.lower()]
             except Exception as e:
                 debugLog("Error getting Livestream")
 
     @staticmethod
-    def getLivestreamBitmovinID(html):
+    def getLivestreamJSON(html, key_check='restart_url'):
         container = parseDOM(html.get("content"), name='div', attrs={'class': "player_viewport.*?"})
         if len(container):
             data_sets = parseDOM(container[0], name='div', attrs={}, ret="data-jsb")
@@ -890,14 +960,28 @@ class htmlScraper(Scraper):
                     try:
                         data = replaceHTMLCodes(data)
                         data = json.loads(data)
-
-                        if 'restart_url' in data:
-                            bitmovin_id = data['restart_url'].replace("https://playerapi-restarttv.ors.at/livestreams/","").replace("/sections/", "")
-                            return bitmovin_id.split("?")[0]
+                        if key_check in data:
+                            return data
                     except Exception as e:
-                        debugLog("Error getting Livestream Bitmovin ID")
-                        return False
+                        debugLog("Error getting Livestream JSON for key %s" % key_check)
         return False
+
+    def getLivestreamBitmovinID(self, html):
+        data = self.getLivestreamJSON(html, 'restart_url')
+        if data:
+            try:
+                bitmovin_id = data['restart_url'].replace("https://playerapi-restarttv.ors.at/livestreams/", "").replace("/sections/", "")
+                return bitmovin_id.split("?")[0]
+            except Exception as e:
+                debugLog("Error getting Livestream Bitmovin ID")
+
+    def getLivestreamLicenseData(self, html):
+        data = self.getLivestreamJSON(html, 'drm')
+        if data:
+            try:
+                return self.getLivestreamDRM(data)
+            except Exception as e:
+                debugLog("Error getting Livestream DRM License")
 
     @staticmethod
     def getLivestreamInformation(html):

@@ -244,3 +244,15 @@ msgstr ""
 msgctxt "#30064"
 msgid "older than"
 msgstr ""
+
+msgctxt "#30065"
+msgid "Install Inputstream Adaptive to see more Livestreams"
+msgstr ""
+
+msgctxt "#30066"
+msgid "Inputstream Adaptive not installed. Cant play DRM content."
+msgstr ""
+
+msgctxt "#30067"
+msgid "Inputstream Helper not installed. Cant play DRM content."
+msgstr ""

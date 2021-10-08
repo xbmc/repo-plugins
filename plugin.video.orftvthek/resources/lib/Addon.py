@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import socket
+import traceback
 import xbmcplugin
 
 from resources.lib.ServiceApi import *
@@ -224,12 +225,14 @@ def run():
                     play_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
                     play_item.setProperty('inputstream.adaptive.stream_headers', headers)
                     play_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
-                debugLog("Restart Stream Url: %s" % streaming_url)
+                debugLog("Restart Stream Url: %s; play_item: %s" % (streaming_url, play_item))
                 xbmcplugin.setResolvedUrl(pluginhandle, True, listitem=play_item)
                 listCallback(False, pluginhandle)
                 #xbmc.Player().play(streaming_url, play_item)
-        except:
-            debugLog("Inputstream Helper not installed. Cant play DRM livestream Restart content.")
+        except Exception as e:
+            debugLog("Exception: %s" % ( e, ), xbmc.LOGDEBUG)
+            debugLog("TB: %s" % ( traceback.format_exc(), ), xbmc.LOGDEBUG)
+            userNotification((translation(30067)).encode("utf-8"))
     elif mode == 'playlist':
         startPlaylist(tvthekplayer, playlist)
     elif mode == 'play':
@@ -257,8 +260,10 @@ def run():
                 play_item.setProperty('inputstream.adaptive.license_key', lic_url + '||R{SSM}|')
                 xbmcplugin.setResolvedUrl(pluginhandle, True, listitem=play_item)
                 listCallback(False, pluginhandle)
+            else:
+                userNotification((translation(30066)).encode("utf-8"))
         except:
-            debugLog("Inputstream Helper not installed. Cant play DRM livestream content.")
+            userNotification((translation(30067)).encode("utf-8"))
     elif sys.argv[2] == '':
         getMainMenu()
     else:

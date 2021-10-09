@@ -33,6 +33,8 @@ def build_kodi_url(parameters):
 
 
 def encode_parameters(parameters):
+    parameters = { k: v if v is not None else ""
+                   for k, v in parameters.items() }
     try:
         return urlencode(parameters)
     except:

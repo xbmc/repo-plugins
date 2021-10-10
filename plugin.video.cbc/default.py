@@ -7,6 +7,7 @@ import xbmc
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
+from xbmcvfs import translatePath
 import inputstreamhelper
 import routing
 
@@ -205,12 +206,26 @@ def gem_show_menu(show_id):
     show_layout = GemV2.get_show_layout_by_id(show_id)
     show = {k: v for (k, v) in show_layout.items() if k not in ['sponsors', 'seasons']}
     for season in show_layout['seasons']:
-        item = xbmcgui.ListItem(season['title'])
-        item.setInfo(type="Video", infoLabels=CBC.get_labels(season))
+        film = season['title'] == 'Film'
+        title = season['assets'][0]['title'] if film else season['title']
+        labels = GemV2.get_labels(season, season)
+
+        # films seem to have been shoe-horned (with teeth) into the structure oddly -- compensate
+        if film:
+            labels['title'] = title
+
+        item = xbmcgui.ListItem(title)
+        item.setInfo(type="Video", infoLabels=labels)
         image = season['image'].replace('(Size)', '224')
         item.setArt({'thumb': image, 'poster': image})
-        show['season'] = season
-        xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for(gem_show_season, query=json.dumps(show)), item, True)
+        if film:
+            item.setProperty('IsPlayable', 'true')
+            episode_info = {'url': season['assets'][0]['playSession']['url'], 'labels': labels}
+            url = plugin.url_for(gem_episode, query=json.dumps(episode_info))
+        else:
+            show['season'] = season
+            url = plugin.url_for(gem_show_season, query=json.dumps(show))
+        xbmcplugin.addDirectoryItem(plugin.handle, url, item, not film)
     xbmcplugin.endOfDirectory(plugin.handle)
 
 
@@ -223,12 +238,12 @@ def gem_shelf_menu():
     shelf_items = json.loads(json_str)
     for shelf_item in shelf_items:
         item = xbmcgui.ListItem(shelf_item['title'])
+        item.setInfo(type="Video", infoLabels=CBC.get_labels(shelf_item))
         image = shelf_item['image'].replace('(Size)', '224')
         item.setArt({'thumb': image, 'poster': image})
         url = plugin.url_for(gem_show_menu, shelf_item['id'])
         xbmcplugin.addDirectoryItem(handle, url, item, True)
     xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE)
-    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE)
     xbmcplugin.endOfDirectory(handle)
 
 
@@ -240,10 +255,12 @@ def gem_category_menu(category_id):
     category = GemV2.get_category(category_id)
     for show in category['items']:
         item = xbmcgui.ListItem(show['title'])
+        item.setInfo(type="Video", infoLabels=CBC.get_labels(show))
         image = show['image'].replace('(Size)', '224')
         item.setArt({'thumb': image, 'poster': image})
         url = plugin.url_for(gem_show_menu, show['id'])
         xbmcplugin.addDirectoryItem(handle, url, item, True)
+    xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE)
     xbmcplugin.endOfDirectory(handle)
 
 
@@ -270,7 +287,7 @@ def layout_menu(layout):
 @plugin.route('/')
 def main_menu():
     """Populate the menu with the main menu items."""
-    data_path = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
+    data_path = translatePath('special://userdata/addon_data/plugin.video.cbc')
     if not os.path.exists(data_path):
         os.makedirs(data_path)
     if not os.path.exists(getAuthorizationFile()):

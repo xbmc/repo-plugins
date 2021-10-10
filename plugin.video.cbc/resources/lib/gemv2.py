@@ -4,6 +4,7 @@ import json
 import requests
 
 from resources.lib.cbc import CBC
+from resources.lib.utils import loadAuthorization
 
 LAYOUT_MAP = {
     'featured': 'https://services.radio-canada.ca/ott/cbc-api/v2/home',
@@ -35,8 +36,15 @@ class GemV2:
     @staticmethod
     def get_episode(url):
         """Get a Gem V2 episode by URL."""
-        # resp = CBC.get_session().get(url)
-        resp = requests.get(url)
+        auth = loadAuthorization()
+        headers = {}
+        if 'token' in auth:
+            headers['Authorization'] = 'Bearer {}'.format(auth['token'])
+
+        if 'claims' in auth:
+            headers['x-claims-token'] = auth['claims']
+
+        resp = requests.get(url, headers=headers)
         return json.loads(resp.content)
 
     @staticmethod
@@ -52,11 +60,12 @@ class GemV2:
         labels = {
             'studio': 'Canadian Broadcasting Corporation',
             'country': 'Canada',
-            'tvshowtitle': episode['title'],
-            'title': show['title'],
+            'tvshowtitle': show['title'],
+            'title': episode['title'],
             'plot': episode['description'],
             'plotoutline': episode['description'],
             'season': episode['season'],
-            'episode': episode['episode']
         }
+        if 'episode' in episode:
+            labels['episode'] = episode['episode']
         return labels

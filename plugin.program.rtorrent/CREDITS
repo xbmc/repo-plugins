@@ -1,0 +1,18 @@
+I would like to thank and acknowledge the following people and projects.
+
+# Developers
+* rakshasa, the creator of rTorrent (libtorrent.rakshasa.no)
+* Team-Kodi for the amazing Kodi (kodi.tv)
+* WallyCZ for the new rTorrent API PR, which inspired the complete rewrite :)
+* Roger Que for writing a SCGI wrapper for xmlrpclib (https://gist.github.com/query/899683)
+
+# Artists
+* ~wurstgott for the icons (wurstgott.deviantart.com)
+
+# Translators (Before Weblate)
+* runkov (Russian)
+* mad-max (German)
+* Stijn Segers (Dutch)
+
+# Bug reporters
+* trexx for reporting bugs

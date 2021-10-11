@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings version="1">
+  <section id="plugin.program.rtorrent">
+    <category id="connection" label="30080">
+      <group id="1">
+        <setting id="uri" type="string" label="30000" help="30001">
+          <level>0</level>
+          <default>http://localhost:8000</default>
+          <constraints>
+            <allowempty>false</allowempty>
+          </constraints>
+          <control format="string" type="edit">
+            <heading>30000</heading>
+          </control>
+        </setting>
+      </group>
+    </category>
+    <category id="remote" label="30081">
+      <group id="2" label="30040">
+        <setting id="remote_folder_downloading" type="path" label="30004" help="">
+          <level>0</level>
+          <default/>
+          <constraints>
+            <sources>
+              <source>/</source>
+            </sources>
+            <writable>false</writable>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="button" format="path">
+            <heading>30004</heading>
+          </control>
+        </setting>
+        <setting id="remote_folder_complete" type="path" label="30005" help="">
+          <level>0</level>
+          <default/>
+          <constraints>
+            <sources>
+              <source>/</source>
+            </sources>
+            <writable>false</writable>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="button" format="path">
+            <heading>30005</heading>
+          </control>
+        </setting>
+      </group>
+    </category>
+  </section>
+</settings>

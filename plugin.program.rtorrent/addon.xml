@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.rtorrent"
+    name="rTorrent"
+    version="19.21.10"
+    provider-name="Daniel Jolly">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <license>GPL-2.0-or-later</license>
+    <source>http://github.com/djcode/XBMC-rTorrent-Plugin</source>
+    <news>v19.21.9 (09/2021)
+          [new] complete rewrite from previous version
+          [new] support for viewing images
+          [fix] supports new rTorrent API
+          [fix] updated for Python3 and Kodi Matrix
+          [fix] improved connection handling
+    </news>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+    <summary lang="en_GB">rTorrent Control Plugin</summary>
+    <description lang="en_GB">A simple plugin for interacting with rTorrent over HTTP or SCGI.</description>
+    <disclaimer lang="en_GB">Requires an rTorrent instance with XMLRPC enabled.</disclaimer>
+  </extension>
+</addon>

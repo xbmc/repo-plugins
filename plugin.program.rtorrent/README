@@ -1,0 +1,7 @@
+This Kodi plugin is a simple client for interacting with rTorrent.
+You can do simple actions like:
+* Starting/stopping/deleting torrents
+* Changing torrent and file priority
+* Playing downloaded files (locally and remotely)
+
+Feedback and suggestions welcome at https://github.com/djcode/XBMC-rTorrent-Plugin

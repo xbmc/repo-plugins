@@ -1,0 +1,78 @@
+19.21.10 - 2021/10/11
+* Added Korean and Russian translations from Weblate
+
+19.21.9 - 2021/09/09
+* So many changes! Basically a complete rewrite.
+* Updated all code to work with Python 3 and Kodi 19
+* Added support to talk to XMLRPC over HTTP
+* Added support for new rTorrent XMLRPC API (thanks to WallyCZ)
+* Improved error handling of bad settings
+* Added support to show images in torrents as well as videos
+* Pre 9.x rTorrent API code removed
+* All code has been PyLint'ed
+
+1.16.1 - 2016/01/03
+* Bumped the python version to support the newer Kodi releases
+* Added Portugese (BR) thanks to rom232
+* Tested on Frodo, Gotham, Helix, Isengard and the Jarvis Beta.
+
+0.11.7 - 2011/07/10
+* Moved to a x.<year>.<month> style of versioning.
+* Officially changed icons and now use an easier to understand colour scheme.
+* Removed icon from the fanart as it didn't look right on all skin
+* Fixed bug with torrents containing 0 byte files
+* Fixed bug with multiple TCPIP interfaces
+* Added missing "Connection Failed" strings to all languages
+* Fixed addon descriptions.
+
+0.10.4 - 2011/02/11
+* Fixed bug that will speed up viewing files.
+
+0.10.3 - 2010/11/03
+* Added more padding around the icon
+
+0.10.2 - 2010/11/01
+* New non-transparent icon
+* Changed any code from os.getcwd() to xbmcaddon.getAddonInfo('path')
+* Changed imports using "var = __import__('module')" to "import module as var"
+* Added Dutch translations. Thanks to Stijn Segers for the translations and the patience waiting for me to release this update!
+* Added size and sorting to files (total size of multi-file torrents does not show at the moment)
+
+0.10.1 - 2010/09/11
+* More flexible file playback
+* Added support for playback from remote computers
+* Made sure all files are UTF-8 UNIX format
+
+0.10.0
+* Now supports all platforms!
+* Complete code redesign (more modular, easier to maintain and add features)
+* Checks to see if it can connect to rTorrent before it connects (no more errors if improperly configured)
+
+0.9.3 - 2010/08/20
+* Added Russian translations thanks to runkov!
+* Made addonID info lowercase by request of the XBMC Team
+* Cleaned up some strings
+
+0.9.2 - 2010/08/12
+* Completely language-neutral. Translations welcome!
+* Added support for rTorrent domain sockets
+* Conditional settings menu
+
+0.9.1
+* Wrote README and attached proper acknowledgements
+* Wrote this changelog.txt
+* Fixed bugs with getting localized strings and settings
+* Updated English strings.xml to contain all English used in plugin
+* Removed rtorrent.py - Old, unused and not license compatible
+* Resized fanart to 720p
+* Fixed bug when getting SCGI Port setting
+
+0.9.0 - 2010/08/06
+* Resized images to suit addon specifications
+* Pushed to GitHub
+
+0.8.0
+* Modified to suit XBMC addon format
+
+0.5.0
+* Personal rTorrent plugin creation

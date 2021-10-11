@@ -11,7 +11,7 @@
   <category label="30159">
     <setting id="stream_quality" type="labelenum" label="30160" values="SD (800 kbps)|SD (1200 kbps)|HD (2500 kbps)|HD (3500 kbps)|HD (5600 kbps)|Best Available|Always Ask" default="Best Available" />
     <setting id="no_spoilers" type="enum" label="30170" lvalues="31700|31701|31702|31703|31704" />
-    <setting id="fav_team" type="labelenum" label="30180" default="None" values="None|Winnipeg|Washington|Vegas|Vancouver|Toronto|Tampa Bay|St. Louis|San Jose|Ottawa|Pittsburgh|Philadelphia|New York Rangers|New York Islanders|New Jersey|Nashville|Montréal|Minnesota|Los Angeles|Florida|Edmonton|Detroit|Dallas|Columbus|Colorado|Chicago|Carolina|Calgary|Buffalo|Boston|Arizona|Anaheim" />
+    <setting id="fav_team" type="labelenum" label="30180" default="None" values="None|Winnipeg|Washington|Vegas|Vancouver|Toronto|Tampa Bay|St. Louis|Seattle|San Jose|Ottawa|Pittsburgh|Philadelphia|New York Rangers|New York Islanders|New Jersey|Nashville|Montréal|Minnesota|Los Angeles|Florida|Edmonton|Detroit|Dallas|Columbus|Colorado|Chicago|Carolina|Calgary|Buffalo|Boston|Arizona|Anaheim" />
     <setting id="team_names" type="select" label="30190" lvalues="31900|31901|31902|31903" default="0" />
     <setting id="time_format" type="select" label="30200" lvalues="32000|32001" default="0" />
     <setting id="game_preview_info" type="bool" label="30201" default="false" />

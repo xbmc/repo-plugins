@@ -49,7 +49,8 @@ def create_game_listitem(game, game_day, show_date=False):
     away_record = game['teams']['away']['leagueRecord']
     home = game['teams']['home']['team']
     home_record = game['teams']['home']['leagueRecord']
-    icon = getGameIcon(home['abbreviation'], away['abbreviation'])
+    #icon = getGameIcon(home['abbreviation'], away['abbreviation'], home['id'])
+    icon = getGameIcon(home['id'], away['id'])
 
     if TEAM_NAMES == "1":
         away_team = away['teamName']
@@ -176,24 +177,26 @@ def create_game_listitem(game, game_day, show_date=False):
 
     # Create playlists for all highlights
     global RECAP_PLAYLIST
-    recap = get_epg_item(game['content']['media']['epg'], "recap")
-    if 'items' in recap and len(recap['items']) > 0:
-        recap_url = get_highlight_url(recap['items'][0]['playbacks'])
-        recap_url = create_highlight_stream(recap_url)
-        listitem = xbmcgui.ListItem(title)
-        listitem.setArt({'thumb' : icon})
-        listitem.setInfo(type="Video", infoLabels={"Title": title})
-        RECAP_PLAYLIST.add(recap_url, listitem)
+    if 'media' in game['content']:
+        recap = get_epg_item(game['content']['media']['epg'], "recap")
+        if 'items' in recap and len(recap['items']) > 0:
+            recap_url = get_highlight_url(recap['items'][0]['playbacks'])
+            recap_url = create_highlight_stream(recap_url)
+            listitem = xbmcgui.ListItem(title)
+            listitem.setArt({'thumb' : icon})
+            listitem.setInfo(type="Video", infoLabels={"Title": title})
+            RECAP_PLAYLIST.add(recap_url, listitem)
 
     global EXTENDED_PLAYLIST
-    extend = get_epg_item(game['content']['media']['epg'], "extended highlights")
-    if 'items' in extend and len(extend['items']) > 0:
-        extend_url = get_highlight_url(extend['items'][0]['playbacks'])
-        extend_url = create_highlight_stream(extend_url)
-        listitem = xbmcgui.ListItem(title)
-        listitem.setArt({'thumb' : icon})
-        listitem.setInfo(type="Video", infoLabels={"Title": title})
-        EXTENDED_PLAYLIST.add(extend_url, listitem)
+    if 'media' in game['content']:
+        extend = get_epg_item(game['content']['media']['epg'], "extended highlights")
+        if 'items' in extend and len(extend['items']) > 0:
+            extend_url = get_highlight_url(extend['items'][0]['playbacks'])
+            extend_url = create_highlight_stream(extend_url)
+            listitem = xbmcgui.ListItem(title)
+            listitem.setArt({'thumb' : icon})
+            listitem.setInfo(type="Video", infoLabels={"Title": title})
+            EXTENDED_PLAYLIST.add(extend_url, listitem)
 
     add_stream(name, '', title, game_id, icon, fanart, info, video_info, audio_info, start_time)
 

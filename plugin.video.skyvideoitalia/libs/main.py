@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-from resources.lib.skyitalia import addonutils
-from resources.lib.skyitalia import SkyItalia
+from libs.skyitalia import SkyItalia
+from libs import addonutils
 
 
 class SkyVideoItalia(object):
+    LOCAL_MAP = {
+        'media.not.found': 31003,
+    }
 
     def __init__(self):
         self.skyit = SkyItalia()
@@ -35,7 +38,7 @@ class SkyVideoItalia(object):
                 addonutils.setResolvedUrl(url)
             else:
                 self.skyit.log('main, Media URL not found, asset_id = %s' % params['asset_id'], 3)
-                addonutils.notify(addonutils.LANGUAGE(31003))
+                addonutils.notify(addonutils.LANGUAGE(self.LOCAL_MAP['media.not.found']))
                 addonutils.setResolvedUrl(solved=False)
 
         elif 'playlist_id' in params:

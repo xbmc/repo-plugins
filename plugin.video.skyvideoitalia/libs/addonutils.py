@@ -32,7 +32,7 @@ def executebuiltin(func, block=False):
 
 
 def notify(msg):
-    xbmcgui.Dialog().notification(ID, msg, ICON)
+    xbmcgui.Dialog().notification(NAME, msg, ICON)
 
 
 def log(msg, level=xbmc.LOGDEBUG):
@@ -68,6 +68,10 @@ def getSettingAsNum(setting):
     except ValueError:
         pass
     return num
+
+
+def getSettingAsInt(setting):
+    return int(getSettingAsNum(setting))
 
 
 def setSetting(setting, value):

@@ -32,6 +32,10 @@
 				[*] Replaced eval function for static function calls
 			Version 3.0.2 (04-NOV-2020)
 				[*] Commit to matrix branch
+			Version 3.0.3 (08-10-2021)
+				[*] made a single commit
+			Version 3.0.4 (13-10-2021)
+				[*] stream and podcast urls from settings.xml
 		</news>
 	</extension>
 </addon>

@@ -55,11 +55,11 @@ def create_index(params):
         {'thumbnail': '', 
             'info': {'type':'Audio', 
             'title': get_located_string("Play")}, 
-            'path': p.get_plugin_path(action='play_audio', url=api.retrieve_streamurl()), 
+            'path': p.get_plugin_path(action='play_audio', url=settings.getSetting('stream_url')),
             'IsPlayable': True, },
         {'thumbnail': '', 
             'info': {'title': get_located_string("Podcasts")}, 
-            'path': p.get_plugin_path(action='retrieve_podcasts', url=api.retrieve_podcasturl()), 
+            'path': p.get_plugin_path(action='retrieve_podcasts', url=settings.getSetting('podcast_url')),
             'IsPlayable': False, }
     ]    
     p.add_items(main_menu)

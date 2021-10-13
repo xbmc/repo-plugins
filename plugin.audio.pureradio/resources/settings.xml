@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-        <setting id="podcast_images"        type="bool"   label="30102" default="false"/>
-        <setting id="VERSION"               type="text"   label=""      default="3.0.1" visible="false"/>
+        <setting id="podcast_images" type="bool" label="30102" default="false"/>
+        <setting id="VERSION" type="text" label="" default="3.0.4" visible="false"/>
+        <setting id="stream_url" type="text" label=""  default="http://pureradio.one:8000/" visible="false"/>
+        <setting id="podcast_url" type="text" label="" default="http://www.spreaker.com/show/1757189/episodes/feed" visible="false"/>
 </settings>

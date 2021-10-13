@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.pureradio" name="Pureradio.One" version="3.0.2+matrix.0" provider-name="Bart van Dommelen">
+<addon id="plugin.audio.pureradio" name="Pureradio.One" version="3.0.4+matrix.0" provider-name="Bart van Dommelen">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0"/>
 	</requires>
@@ -32,6 +32,10 @@
 				[*] Replaced eval function for static function calls
 			Version 3.0.2 (04-NOV-2020)
 				[*] Commit to matrix branch
+			Version 3.0.3 (08-10-2021)
+				[*] made a single commit
+			Version 3.0.4 (13-10-2021)
+				[*] stream and podcast urls from settings.xml
 		</news>
 	</extension>
 </addon>

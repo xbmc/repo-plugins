@@ -56,7 +56,11 @@ msgctxt "#30006"
 msgid "Video Menu Mode"
 msgstr "Video Menüsü Modu"
 
-# empty strings from id 30007 to 30200
+msgctxt "#30007"
+msgid "Enable Debug Mode"
+msgstr "Hata Ayıklama Modunu Etkinleştir"
+
+# empty strings from id 30008 to 30200
 
 msgctxt "#30201"
 msgid "In Cinemas"

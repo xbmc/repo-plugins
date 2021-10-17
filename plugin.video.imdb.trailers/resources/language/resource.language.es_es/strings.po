@@ -57,7 +57,11 @@ msgctxt "#30006"
 msgid "Video Menu Mode"
 msgstr "Modo de menú de video"
 
-# empty strings from id 30007 to 30200
+msgctxt "#30007"
+msgid "Enable Debug Mode"
+msgstr "Habilitar el modo de depuración"
+
+# empty strings from id 30008 to 30200
 
 msgctxt "#30201"
 msgid "In Cinemas"

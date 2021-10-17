@@ -1,3 +1,7 @@
+* 0.12.3
+ - service api fixes (auth & restart)
+ - minor logging improvements
+ 
 * 0.12.2
 - bumped python version to 2.26.0 (leia)
 - drm for restart
@@ -47,7 +51,7 @@
 - New icons/backdrops according to the new CI
 
 0.8.8
-- removed stream method option because its not available with the htmlscraper. Progressive streaming can still be used with the serviceAPI. 
+- removed stream method option because its not available with the htmlscraper. Progressive streaming can still be used with the serviceAPI.
 
 0.8.7
 - another fix for the restart option

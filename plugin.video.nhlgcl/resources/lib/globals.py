@@ -4,10 +4,13 @@ import calendar, pytz
 import requests, urllib
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
+from PIL import Image
+from io import BytesIO
 from kodi_six import xbmc, xbmcvfs, xbmcplugin, xbmcgui, xbmcaddon
 
 if sys.version_info[0] > 2:
     import http
+
     cookielib = http.cookiejar
     urllib = urllib.parse
 else:
@@ -55,6 +58,7 @@ FINAL = 'FF666666'
 FREE = 'FF43CD80'
 
 ROOTDIR = xbmcaddon.Addon().getAddonInfo('path')
+USER_DATA_DIR = os.path.join(xbmc.translatePath("special://userdata"), 'addon_data', ADDON_ID)
 ICON = os.path.join(ROOTDIR, "icon.png")
 FANART = os.path.join(ROOTDIR, "fanart.jpg")
 PREV_ICON = os.path.join(ROOTDIR, "icon.png")
@@ -168,17 +172,18 @@ def get_params():
 def add_stream(name, link_url, title, game_id, icon=None, fanart=None, info=None, video_info=None, audio_info=None,
                start_time=None):
     ok = True
-    u = sys.argv[0] + "?url=" + urllib.quote_plus(link_url) + "&mode=" + str(104) + "&name=" + urllib.quote_plus(name.encode('utf8')) \
+    u = sys.argv[0] + "?url=" + urllib.quote_plus(link_url) + "&mode=" + str(104) + "&name=" + urllib.quote_plus(
+        name.encode('utf8')) \
         + "&game_id=" + urllib.quote_plus(game_id.encode('utf8'))
 
     if start_time is not None:
-        u += '&start_time='+start_time
+        u += '&start_time=' + start_time
 
     liz = xbmcgui.ListItem(name)
     if icon is None: icon = ICON
     if fanart is None: fanart = FANART
     liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
-    
+
     liz.setProperty("IsPlayable", "true")
 
     liz.setInfo(type="Video", infoLabels={"Title": title})
@@ -318,60 +323,63 @@ def getFavTeamId():
 
 def getGameIcon(home, away):
     # Check if game image already exists
-    image_path = os.path.join(ROOTDIR, 'resources','media', away.lower() + 'vs' + home.lower() + '.png')
-    # file_name = os.path.join(image_path)
-    if not os.path.isfile(image_path):
-        image_path = ICON
+    image_name = '%svs%s.png' % (away, home)
+    folder_path = os.path.join(USER_DATA_DIR, 'media')
+    image_path = os.path.join(folder_path, image_name)
 
-    '''
-    Hold off until PIL is fixed for Android OS
-    try:
-        createGameIcon(home,away,image_path)
-    except:
-        image_path = ICON
-        pass
-    '''
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
+    if not os.path.isfile(image_path):
+        createGameIcon(home, away, image_path)
 
     return image_path
 
 
 def createGameIcon(home, away, image_path):
-    try:
-        from PIL import Image
-    except:
-        try:
-            from pil import Image
-        except:
-            xbmc.log("PIL not available")
-            sys.exit()
+    size = 512, 512
+    bg = Image.new('RGBA', size, (0, 0, 0, 255))
+    headers = {'User-Agent': UA_IPHONE}
+    bg_url = 'http://nhl.bamcontent.com/images/arena/scoreboard/%s@2x.jpg' % home
+    xbmc.log(bg_url)
+    r = requests.get(bg_url, headers=headers)
+    if r.ok:
+        bg_image = Image.open(BytesIO(r.content))
+        width, height = bg_image.size  # Get dimensions
+        left = (width - 512) / 2
+        top = (height - 512) / 2
+        right = (width + 512) / 2
+        bottom = (height + 512) / 2
 
-    # Arena backgrounds
-    # http://nhl.bamcontent.com/images/arena/scoreboard/52.jpg
-    # http://nhl.bamcontent.com/images/arena/scoreboard/52@2x.jpg
+        # Crop the center of the image
+        bg_image = bg_image.crop((left, top, right, bottom))
+        bg_image = bg_image.convert("RGBA")
+        bg.paste(bg_image, (0, 0), bg_image)
 
-    bg = Image.open(ROOTDIR + '/resources/bg_dark.png')
-    # bg_url = urllib.urlopen('http://nhl.bamcontent.com/images/arena/scoreboard/52.jpg')
-    # bg_img = StringIO(bg_url.read())
-    # bg = Image.open(bg_img)
+    home_image = get_team_logo(home)
+    away_image = get_team_logo(away)
 
-    size = 256, 256
+    if home_image != None and away_image != None:
+        bg.paste(away_image, (0, 128), away_image)
+        bg.paste(home_image, (256, 128), home_image)
+        bg.save(image_path)
 
-    logo_root = 'http://nhl.bamcontent.com/images/logos/600x600/'
-    img_file = urllib.urlopen(logo_root + home.lower() + '.png ')
-    im = StringIO(img_file.read())
-    home_image = Image.open(im)
-    home_image.thumbnail(size, Image.ANTIALIAS)
-    home_image = home_image.convert("RGBA")
 
-    img_file = urllib.urlopen(logo_root + away.lower() + '.png ')
-    im = StringIO(img_file.read())
-    away_image = Image.open(im)
-    away_image.thumbnail(size, Image.ANTIALIAS)
-    away_image = away_image.convert("RGBA")
+def get_team_logo(id):
+    from PIL import Image
+    from io import BytesIO
+    logo = None
+    headers = {'User-Agent': UA_IPHONE}
+    url = 'https://statsapi.web.nhl.com/api/v1/teams?teamId=%s&hydrate=deviceProperties' % id
+    # url = 'https://statsapi.web.nhl.com/api/v1/teams?teamId=%s&hydrate=deviceProperties(platform=ios-phone)' % id
+    r = requests.get(url, headers=headers)
+    if r.ok:
+        logo_url = r.json()['teams'][0]['deviceProperties']['favicon']['image']['cuts']['256x256']['src']
+        r = requests.get(logo_url, headers=headers)
+        logo = Image.open(BytesIO(r.content))
+        logo = logo.convert("RGBA")
 
-    bg.paste(away_image, (0, 0), away_image)
-    bg.paste(home_image, (256, 256), home_image)
-    bg.save(image_path)
+    return logo
 
 
 def get_thumbnails():
@@ -414,8 +422,7 @@ def get_thumbnails():
             if (progress.iscanceled()): break
 
             if home_team != away_team:
-                image_path = ROOTDIR + '/resources/media/' + away_team + 'vs' + home_team + '.png'
-                # bg =  Image.open(ROOTDIR+'/resources/bg_dark.png')
+                image_path = os.path.join(USER_DATA_DIR, media, '%svs%s.png' % (away_team, home_team))
                 bg = Image.new('RGB', (400, 225), (255, 255, 255))
 
                 # home team
@@ -449,47 +456,26 @@ def get_thumbnails():
 
 
 def getFavTeamColor():
-    url = 'http://nhl.bamcontent.com/data/config/nhl/teamColors.json'
-    # url = 'https://statsapi.web.nhl.com/api/v1/teams?teamId=
-    headers = {'User-Agent': UA_IPHONE}
-
-    r = requests.get(url, headers=headers, verify=False)
-    json_source = r.json()
-
     fav_team_color = ''
     fav_team_id = settings.getSetting("fav_team_id")
-    for team in json_source['teams']:
-        if fav_team_id == str(team['id']):
-            # Pick the lightest color
-            fav_team_color = str(team['colors']['foreground'])
-            if fav_team_color < str(team['colors']['background']):
-                fav_team_color = str(team['colors']['background'])
-            if fav_team_color < str(team['colors']['highlight']):
-                fav_team_color = str(team['colors']['highlight'])
-
-            fav_team_color = fav_team_color.replace('#', 'FF')
-            break
+    headers = {'User-Agent': UA_IPHONE}
+    url = 'https://statsapi.web.nhl.com/api/v1/teams?teamId=%s&hydrate=deviceProperties' % fav_team_id
+    r = requests.get(url, headers=headers)
+    if r.ok:
+        fav_team_color = r.json()['teams'][0]['deviceProperties']['breakingNewsBar']['barBackgroundColor']
+        fav_team_color = fav_team_color.replace('#', 'FF')
 
     return fav_team_color
 
 
 def getFavTeamLogo():
     logo_url = ''
-
-    url = API_URL + '/teams'
+    fav_team_id = settings.getSetting("fav_team_id")
     headers = {'User-Agent': UA_IPHONE}
-
-    r = requests.get(url, headers=headers, verify=False)
-    json_source = r.json()
-
-    fav_team_abbr = ''
-    for team in json_source['teams']:
-        if FAV_TEAM in team['name'].encode('utf8'):
-            fav_team_abbr = str(team['abbreviation']).lower()
-            break
-
-    if fav_team_abbr != '':
-        logo_url = 'http://nhl.bamcontent.com/images/logos/600x600/' + fav_team_abbr + '.png'
+    url = 'https://statsapi.web.nhl.com/api/v1/teams?teamId=%s&hydrate=deviceProperties' % fav_team_id
+    r = requests.get(url, headers=headers)
+    if r.ok:
+        logo_url = r.json()['teams'][0]['deviceProperties']['favicon']['image']['cuts']['256x256']['src']
 
     return logo_url
 

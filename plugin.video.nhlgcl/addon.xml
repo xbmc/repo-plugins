@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nhlgcl" name="NHL TV™" version="2021.5.17+matrix.1" provider-name="eracknaphobia">
+<addon id="plugin.video.nhlgcl" name="NHL TV™" version="2021.10.1+matrix.1" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -20,7 +20,9 @@
             restrictions apply, including national blackouts.
         </disclaimer>
         <news>
-            - Fix games not showing up because OT field missing
+            - Add Seattle to Favorite Team selection
+            - Refactor Fav Team code
+            - Build game images dynamically
         </news>
         <language>en</language>
         <platform>all</platform>

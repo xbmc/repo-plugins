@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: rTorrent Plugin\n"
-"Report-Msgid-Bugs-To: xbmc@danieljolly.com\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-10 08:36+0000\n"
-"Last-Translator: Dmitry Petrov <dimakrm361@gmail.com>\n"
+"PO-Revision-Date: 2021-10-19 18:30+0000\n"
+"Last-Translator: vdkbsd <valexgus@gmail.com>\n"
 "Language-Team: Russian <https://kodi.weblate.cloud/projects/kodi-add-ons-program/plugin-program-rtorrent/ru_ru/>\n"
 "Language: ru_ru\n"
 "MIME-Version: 1.0\n"
@@ -19,15 +19,15 @@ msgstr ""
 
 msgctxt "Addon Summary"
 msgid "rTorrent Control Plugin"
-msgstr ""
+msgstr "Плагин управления rTorrent"
 
 msgctxt "Addon Description"
 msgid "A simple plugin for interacting with rTorrent over HTTP or SCGI."
-msgstr ""
+msgstr "Простой плагин для взаимодействия с rTorrent через HTTP или SCGI."
 
 msgctxt "Addon Disclaimer"
 msgid "Requires an rTorrent instance with XMLRPC enabled."
-msgstr ""
+msgstr "Требуется экземпляр rTorrent с включённым XMLRPC."
 
 # --- SETTINGS START
 msgctxt "#30000"
@@ -60,7 +60,7 @@ msgstr "Соединение"
 
 msgctxt "#30081"
 msgid "Remote"
-msgstr ""
+msgstr "Удалённый"
 
 # --- SETTINGS END
 # --- CONTEXT MENU START

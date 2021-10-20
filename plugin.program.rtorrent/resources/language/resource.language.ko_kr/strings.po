@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: rTorrent Plugin\n"
-"Report-Msgid-Bugs-To: xbmc@danieljolly.com\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-10 08:36+0000\n"
+"PO-Revision-Date: 2021-10-19 18:30+0000\n"
 "Last-Translator: Minho Park <parkmino@gmail.com>\n"
 "Language-Team: Korean <https://kodi.weblate.cloud/projects/kodi-add-ons-program/plugin-program-rtorrent/ko_kr/>\n"
 "Language: ko_kr\n"
@@ -19,15 +19,15 @@ msgstr ""
 
 msgctxt "Addon Summary"
 msgid "rTorrent Control Plugin"
-msgstr ""
+msgstr "rTorrent 컨트롤 플러그인"
 
 msgctxt "Addon Description"
 msgid "A simple plugin for interacting with rTorrent over HTTP or SCGI."
-msgstr ""
+msgstr "HTTP 또는 SCGI를 통해 rTorrent와 상호 작용하기 위한 간단한 플러그인입니다."
 
 msgctxt "Addon Disclaimer"
 msgid "Requires an rTorrent instance with XMLRPC enabled."
-msgstr ""
+msgstr "XMLRPC가 활성화된 rTorrent 인스턴스가 필요합니다."
 
 # --- SETTINGS START
 msgctxt "#30000"

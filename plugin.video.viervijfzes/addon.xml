@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.viervijfzes" name="GoPlay" version="0.4.4+matrix.1" provider-name="Michaël Arnauts">
+<addon id="plugin.video.viervijfzes" name="GoPlay" version="0.4.5+matrix.1" provider-name="Michaël Arnauts">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.dateutil" version="2.6.0"/>
@@ -7,7 +7,6 @@
         <import addon="script.module.pysocks" version="1.6.8" optional="true"/>
         <import addon="script.module.requests" version="2.22.0"/>
         <import addon="script.module.routing" version="0.2.0"/>
-        <import addon="inputstream.adaptive" version="2.4.3"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon_entry.py">
         <provides>video</provides>
@@ -22,8 +21,8 @@
         <disclaimer lang="en_GB">This add-on is not officially commissioned/supported by SBS Belgium and is provided 'as is' without any warranty of any kind. The Play4, Play5 and Play6 logos are property of SBS Belgium.</disclaimer>
         <platform>all</platform>
         <license>GPL-3.0-only</license>
-	    <news>v0.4.4 (2021-09-15)
-- Fix catalogue and recommendations menu</news>
+	    <news>v0.4.5 (2021-10-21)
+- Various fixes due to changes on the GoPlay website.</news>
         <source>https://github.com/add-ons/plugin.video.viervijfzes</source>
         <assets>
             <icon>resources/icon.png</icon>

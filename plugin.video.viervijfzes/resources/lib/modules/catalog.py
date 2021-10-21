@@ -113,7 +113,7 @@ class Catalog:
                     },
                     info_dict={
                         'tvshowtitle': program.title,
-                        'title': kodiutils.localize(30205, season=season.number),  # Season {season}
+                        'title': kodiutils.localize(30205, season=season.number) if season.number else season.title,  # Season {season}
                         'plot': season.description or program.description,
                         'set': program.title,
                     }
@@ -243,7 +243,8 @@ class Catalog:
         listing = []
         for episode in episodes:
             title_item = Menu.generate_titleitem(episode)
-            title_item.info_dict['title'] = episode.program_title + ' - ' + title_item.title
+            if episode.program_title:
+                title_item.info_dict['title'] = episode.program_title + ' - ' + title_item.title
             listing.append(title_item)
 
         for program in programs:

@@ -96,7 +96,8 @@ def rtlplay_root(plugin, **kwargs):
         ('rtl_info', 'RTL INFO', 'rtlinfo.png', 'rtlinfo_fanart.jpg'),
         ('rtl_sport', 'RTL Sport', 'rtlsport.png', 'rtlsport_fanart.jpg'),
         ('bel_rtl', 'BEL RTL', 'belrtl.png', 'belrtl_fanart.jpg'),
-        ('contact', 'Contact', 'contact.png', 'contact_fanart.jpg')
+        ('contact', 'Contact', 'contact.png', 'contact_fanart.jpg'),
+        ('rtl_play', 'RTL Play', 'rtlplay.png', 'rtlplay_fanart.jpg')
     ]
 
     for channel_infos in channels:

@@ -713,6 +713,17 @@ msgctxt "#30726"
 msgid "Races"
 msgstr ""
 
+msgctxt "#30727"
+msgid "Most popular"
+msgstr ""
+
+msgctxt "#30728"
+msgid "Recently added"
+msgstr ""
+
+msgctxt "#30729"
+msgid "Emissions"
+msgstr ""
 
 # Favourites (from 30800 to 30859)
 

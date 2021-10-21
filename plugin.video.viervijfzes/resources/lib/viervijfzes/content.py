@@ -454,7 +454,7 @@ class ContentApi:
 
         # Categories regexes
         regex_articles = re.compile(r'<article[^>]+>(.*?)</article>', re.DOTALL)
-        regex_category = re.compile(r'<h1.*?>(.*?)</h1>(?:.*?<div class=\"visually-hidden\">(.*?)</div>)?', re.DOTALL)
+        regex_category = re.compile(r'<h2.*?>(.*?)</h2>(?:.*?<div class="visually-hidden">(.*?)</div>)?', re.DOTALL)
 
         categories = []
         for result in regex_articles.finditer(raw_html):

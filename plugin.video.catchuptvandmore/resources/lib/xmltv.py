@@ -18,23 +18,25 @@ with this software; if not, see <http://www.gnu.org/licenses/>.
 
 # Stolen from https://bitbucket.org/jfunk/python-xmltv/src/default/xmltv.py
 
+import datetime
 import os
 import re
 import time
-import datetime
 import xml.etree.ElementTree as ET
-from tzlocal import get_localzone
+
 import pytz
+import urlquick
+from codequick import Script
+from kodi_six import xbmcvfs
+from resources.lib.py_utils import compute_md5
+from tzlocal import get_localzone
+
 try:
     from urllib.parse import urlparse
 except ImportError:
     from urlparse import urlparse
 
-from kodi_six import xbmcvfs
 
-from codequick import Script
-import urlquick
-from resources.lib.py_utils import compute_md5
 
 # python-xmltv package (https://pypi.org/project/python-xmltv/)
 

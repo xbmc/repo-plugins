@@ -75,7 +75,7 @@
             <setting label="30086" type="lsep" subsetting="true" visible="eq(1,true)"/>
             <!--<setting label="" type="bool" id="pl" default="true" visible="false"/>-->
 
-                <setting label="30164" type="labelenum" id="icitele.language" values="Vancouver|Regina|Toronto|Edmonton|Rimouski|Québec|Winnipeg|Moncton|Ottawa|Montréal" default="Montréal"/>
+                <setting label="30164" type="labelenum" id="icitele.language" values="Vancouver|Regina|Toronto|Edmonton|Rimouski|Québec|Winnipeg|Moncton|Ottawa|Sherbrooke|Trois-Rivières|Montréal" default="Montréal"/>
                 <setting label="30170" type="labelenum" id="cbc.language" values="Ottawa|Montreal|Charlottetown|Fredericton|Halifax|Windsor|Yellowknife|Winnipeg|Regina|Calgary|Edmonton|Vancouver|Toronto|St. John\'s" default="Ottawa"/>
 
     </category>

@@ -5,16 +5,15 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-from builtins import str
+
 import json
 import re
+from builtins import str
 
-from codequick import Listitem, Resolver, Route
 import urlquick
-
+from codequick import Listitem, Resolver, Route
 from resources.lib import download, web_utils
 from resources.lib.menu_utils import item_post_treatment
-
 
 # TODO Rework filter for all videos
 
@@ -161,7 +160,10 @@ def get_video_url(plugin,
                         max_age=-1)
     video_json = re.compile('data-broadcast=\'(.*?)\'').findall(resp.text)[0]
     json_parser = json.loads(video_json)
-    final_video_url = json_parser["files"][0]["url"]
+    try:
+        final_video_url = json_parser["files"][0]["url"]
+    except Exception:
+        final_video_url = json_parser[0]["url"]
 
     if download_mode:
         return download.download_video(final_video_url)

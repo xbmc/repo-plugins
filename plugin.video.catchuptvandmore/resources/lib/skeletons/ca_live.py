@@ -40,7 +40,7 @@ menu = {
         'fanart': 'channels/ca/icitele_fanart.jpg',
         'available_languages': {
             'Vancouver': {}, 'Regina': {}, 'Toronto': {}, 'Edmonton': {}, 'Rimouski': {},
-            'Québec': {}, 'Winnipeg': {}, 'Moncton': {}, 'Ottawa': {},
+            'Québec': {}, 'Winnipeg': {}, 'Moncton': {}, 'Ottawa': {}, 'Sherbrooke': {}, 'Trois-Rivières': {},
             'Montréal': {}
         },
         'enabled': True,

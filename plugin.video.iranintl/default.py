@@ -13,7 +13,7 @@ def main():
         response = urllib.request.urlopen(request)
         html = response.read().decode('utf-8')
 
-        liveVideoUrls = re.findall('https://.*?.m3u8', html)
+        liveVideoUrls = [urllib.parse.unquote(url) for url in re.findall('https%3A%2F%2F.*?.m3u8', html)]
 
         if len(liveVideoUrls) > 0:
             base_url = liveVideoUrls[0].rsplit('/', 1)[0]+'/'

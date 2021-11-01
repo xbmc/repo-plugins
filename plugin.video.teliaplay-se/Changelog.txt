@@ -1,2 +1,7 @@
 1.0.1 [20210804]
 - Release
+
+1.1.1 [20211030]
+- Updated graphql hashes
+- Fixed broken menu entries
+- Increased TV channel history

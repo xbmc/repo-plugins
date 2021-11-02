@@ -10,11 +10,11 @@ msgstr "Allgemein"
 
 msgctxt "#30004"
 msgid "Number of episodes shown per page"
-msgstr "Abzahl Episodes pro Seite anzeigen"
+msgstr "Abzahl Austrahlungen pro Seite anzeigen"
 
 msgctxt "#30005"
 msgid "Older episodes (page {0} of {1})"
-msgstr "Ältere Folgen (Seite {0} von {1})"
+msgstr "Ältere Ausstrahlungen (Seite {0} von {1})"
 
 msgctxt "#30006"
 msgid "Unexpected error"
@@ -71,3 +71,11 @@ msgstr "# (Nummern & Sonderzeichen)"
 msgctxt "#30020"
 msgid "In order to use this add-on a consumer key & secret in your add-on settings must be provided.[CR]See instructions: [B]https://github.com/ManBehindMooN/[CR]kodi_plugin_video_srgssr_ch_replay[/B][CR][CR]Sorry for the inconvenience."
 msgstr "Um das Add-on benutzen zu können braucht es einen Consumer Key & Secret in den Add-on Settings.[CR]Instruktionen unter: [B]https://github.com/ManBehindMooN/[CR]kodi_plugin_video_srgssr_ch_replay[/B][CR][CR]Sorry für die Umstände."
+
+msgctxt "#30021"
+msgid "Search TV shows"
+msgstr "Suche nach Sendungen"
+
+msgctxt "#30022"
+msgid "Enter a TV show name to search for"
+msgstr "Einen Sendungsname eingeben für die Suche"

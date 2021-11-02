@@ -32,9 +32,14 @@ _icon = addon.getAddonInfo('icon')
 _fanart = addon.getAddonInfo('fanart')
 _path = addon.getAddonInfo('path')
 _ipath = '{0}/resources/images/'.format(_path)
-channelFavsFile = xbmc.translatePath("special://profile/addon_data/{0}/{0}.favorites".format(addonID))
-HistoryFile = xbmc.translatePath("special://profile/addon_data/{0}/{0}.history".format(addonID))
-cookie_file = xbmc.translatePath("special://profile/addon_data/{0}/cookies".format(addonID))
+
+if hasattr(xbmcvfs, "translatePath"):
+    translate_path = xbmcvfs.translatePath
+else:
+    translate_path = xbmc.translatePath
+channelFavsFile = translate_path("special://profile/addon_data/{0}/{0}.favorites".format(addonID))
+HistoryFile = translate_path("special://profile/addon_data/{0}/{0}.history".format(addonID))
+cookie_file = translate_path("special://profile/addon_data/{0}/cookies".format(addonID))
 pDialog = xbmcgui.DialogProgress()
 familyFilter = '1'
 
@@ -54,7 +59,9 @@ downloadDir = addon.getSetting("downloadDir")
 qual = ['240', '380', '480', '720', '1080', '1440', '2160']
 maxVideoQuality = qual[int(maxVideoQuality)]
 language = addon.getSetting("language")
-languages = ["ar_ES", "br_PT", "ca_EN", "ca_FR", "de_DE", "es_ES", "fr_FR", "in_EN", "id_ID", "it_IT", "ci_FR", "my_MS", "mx_ES", "pk_EN", "ph_EN", "tr_TR", "en_GB", "en_US", "vn_VI", "kr_KO", "tw_TW"]
+languages = ["ar_ES", "br_PT", "ca_EN", "ca_FR", "de_DE", "es_ES", "fr_FR",
+             "in_EN", "id_ID", "it_IT", "ci_FR", "my_MS", "mx_ES", "pk_EN",
+             "ph_EN", "tr_TR", "en_GB", "en_US", "vn_VI", "kr_KO", "tw_TW"]
 language = languages[int(language)]
 dmUser = addon.getSetting("dmUser")
 itemsPerPage = addon.getSetting("itemsPerPage")
@@ -97,7 +104,6 @@ def index():
     addDir(translation(30006), "", 'listChannels', "{0}channels.png".format(_ipath))
     addDir(translation(30007), "{0}/users?fields=username,avatar_large_url,videos_total,views_total&sort=popular&limit={1}&family_filter={2}&localization={3}&page=1".format(urlMain, itemsPerPage, familyFilter, language), 'listUsers', "{0}users.png".format(_ipath))
     addDir(translation(30002), "{0}/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&search=&sort=relevance&limit={1}&family_filter={2}&localization={3}&page=1".format(urlMain, itemsPerPage, familyFilter, language), 'search', "{0}search.png".format(_ipath))
-    addDir(translation(30002) + " " + translation(30003), "", 'livesearch', _ipath + "search_live.png")
     addDir("{0} {1}".format(translation(30002), translation(30003)), "", 'livesearch', "{0}search_live.png".format(_ipath))
     addDir("{0} {1}".format(translation(30002), translation(30007)), "", 'usersearch', "{0}search_users.png".format(_ipath))
     addDir(translation(30115), "", "History", "{0}search.png".format(_ipath))
@@ -257,7 +263,6 @@ def listVideos(url):
     if force_mode:
         xbmc.executebuiltin('Container.SetViewMode({0})'.format(video_mode))
     xbmcplugin.endOfDirectory(pluginhandle)
-    xbmcplugin.endOfDirectory(pluginhandle, updateListing=True, cacheToDisc=False)
 
 
 def listUsers(url):
@@ -376,9 +381,11 @@ def getStreamUrl(vid, live=False):
                     else:
                         m_url = m_url.replace('dvr=true&', '')
                         if '.m3u8?sec' in m_url:
-                            m_url = m_url.split('?sec=')
-                            the_url = '{0}?redirect=0&sec={1}'.format(m_url[0], urllib_parse.quote(m_url[1]))
+                            m_url1 = m_url.split('?sec=')
+                            the_url = '{0}?redirect=0&sec={1}'.format(m_url1[0], urllib_parse.quote(m_url1[1]))
                             rr = requests.get(the_url, cookies=r.cookies.get_dict(), headers=headers)
+                            if rr.status_code > 200:
+                                rr = requests.get(m_url, cookies=r.cookies.get_dict(), headers=headers)
                             mb = re.findall('NAME="([^"]+)"\n(.+)', rr.text)
                             mb = sorted(mb, key=s, reverse=True)
                             for quality, strurl in mb:
@@ -680,14 +687,23 @@ def addUserFavDir(name, url, mode, iconimage):
     return ok
 
 
-def search(url):
-    keyboard = xbmc.Keyboard('', translation(30002))
+def get_key(heading):
+    keyboard = xbmc.Keyboard('', heading)
     keyboard.doModal()
-    if keyboard.isConfirmed() and keyboard.getText():
-        search_string = urllib_parse.quote_plus(keyboard.getText())
-        url2 = url.replace("&search=", "&search=" + str(search_string))
-        listVideos(url2)
-        addtoHistory({'name': keyboard.getText(), 'url': urllib_parse.quote_plus(url2), 'mode': 'listVideos'})
+    if keyboard.isConfirmed():
+        return keyboard.getText()
+
+
+def search(url):
+    search_string = get_key(translation(30002))
+    xbmcplugin.endOfDirectory(pluginhandle, cacheToDisc=False)
+    if search_string and len(search_string) > 2:
+        url2 = url.replace("&search=", "&search={0}".format(urllib_parse.quote_plus(search_string)))
+        addtoHistory({'name': search_string, 'url': urllib_parse.quote_plus(url2), 'mode': 'listVideos'})
+        u = "{0}?url={1}&mode=listVideos".format(sys.argv[0], urllib_parse.quote_plus(url2))
+        xbmc.executebuiltin("Container.Update({0})".format(u))
+    else:
+        xbmc.executebuiltin("Container.Update({0},replace)".format(sys.argv[0]))
 
 
 def searchLive():

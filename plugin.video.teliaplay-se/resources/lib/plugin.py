@@ -82,9 +82,9 @@ class Router():
             self.menu_list.page_menu(self.params["pageId"])
 
     def channel_menu(self):
-        if "channelId" in self.params and "schedule" in self.params:
+        if "channelId" in self.params and "dayOffset" in self.params:
             self.menu_list.tv_programs_menu(
-                self.params["channelId"], self.params["schedule"]
+                self.params["channelId"], self.params["dayOffset"]
             )
         else:
             self.menu_list.tv_channels_menu()

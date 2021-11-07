@@ -325,7 +325,7 @@ class Channel(chn_class.Channel):
         Logger.info("Performing Pre-Processing")
         items = []
 
-        lazy_urls = Regexer.do_regex(r'data-lazy-src="([^"]+)" id="([^"]+)', data)
+        lazy_urls = Regexer.do_regex(r'data-lazy-src="([^"]+)"[^>]+id="([^"]+)', data)
         for folder_url in lazy_urls:
             self.__folder_map[folder_url[1]] = folder_url[0]
 

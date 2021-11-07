@@ -1,10 +1,10 @@
 # coding=utf-8  # NOSONAR
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, contenttype, mediatype
 from resources.lib.helpers.datehelper import DateHelper
 
-from resources.lib.mediaitem import MediaItem
+from resources.lib.mediaitem import MediaItem, FolderItem
 from resources.lib.mediatype import EPISODE
 from resources.lib.parserdata import ParserData
 from resources.lib.regexer import Regexer
@@ -70,16 +70,16 @@ class Channel(chn_class.Channel):
                                       "children", ("type", "LineList", 0), 'props', 'loadMore'],
                               creator=self.extract_more_json_episodes)
 
-        self._add_data_parser("https://www.[^/]+/shows/",
+        self._add_data_parser("https://www.[^/]+/(shows|serien)/",
                               name="JSON Retriever for videos",
                               match_type=ParserData.MatchRegex,
                               json=True, preprocessor=self.extract_json_video)
 
-        self._add_data_parser("https://www.[^/]+/shows/", name="JSON video creator",
+        self._add_data_parser("https://www.[^/]+/(shows|serien)/", name="JSON video creator",
                               match_type=ParserData.MatchRegex, json=True,
                               parser=["items"], creator=self.create_json_video_item)
 
-        self._add_data_parser("https://www.[^/]+/shows/", name="JSON season creator",
+        self._add_data_parser("https://www.[^/]+/(shows|serien)/", name="JSON season creator",
                               match_type=ParserData.MatchRegex,  json=True,
                               parser=["seasons"], creator=self.create_json_season_item)
 
@@ -254,7 +254,7 @@ class Channel(chn_class.Channel):
         """
 
         url = "{}{}".format(self.baseUrl, result_set["url"])
-        item = MediaItem(result_set["label"], url)
+        item = FolderItem(result_set["label"], url, content_type=contenttype.EPISODES, media_type=mediatype.SEASON)
         item.metaData["is_season"] = True
         return item
 

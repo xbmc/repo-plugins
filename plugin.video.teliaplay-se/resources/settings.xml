@@ -2,7 +2,33 @@
 <settings version="1">
 	<section id="plugin.video.teliaplay-se">
 		<category id="general" label="32000" help="">
-			<group id="1" label="32001">
+			<group id="1" label="32024">
+				<setting id="channelsPerPage" type="integer" label="32020" help="32021">
+					<level>0</level>
+					<default>25</default>
+					<constraints>
+						<minimum>25</minimum>
+						<step>25</step>
+						<maximum>100</maximum>
+					</constraints>
+					<control type="slider" format="integer">
+						<popup>false</popup>
+					</control>
+				</setting>
+				<setting id="moviesPerPage" type="integer" label="32022" help="32023">
+					<level>0</level>
+					<default>50</default>
+					<constraints>
+						<minimum>50</minimum>
+							<step>50</step>
+						<maximum>500</maximum>
+					</constraints>
+					<control type="slider" format="integer">
+						<popup>false</popup>
+					</control>
+				</setting>	
+			</group>
+			<group id="2" label="32001">
 				<setting id="debug" type="boolean" label="32002" help="32003">
 					<level>0</level>
 					<default>false</default>

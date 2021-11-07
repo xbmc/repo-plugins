@@ -43,25 +43,7 @@ msgid "Sport"
 msgstr "Sport"
 
 # Tv programs context menu
-msgctxt "#30006"
-msgid "Now & soon"
-msgstr "Nu & snart"
-
-msgctxt "#30007"
-msgid "Today"
-msgstr "Idag"
-
-msgctxt "#30008"
-msgid "Tonight"
-msgstr "Ikväll"
-
-msgctxt "#30009"
-msgid "Yesterday"
-msgstr "Igår"
-
-msgctxt "#30010"
-msgid "Tomorrow"
-msgstr "Imorgon"
+# 30006 - 30010 empty
 
 msgctxt "#30011"
 msgid "All programs"
@@ -212,3 +194,23 @@ msgstr "PIN"
 msgctxt "#32019"
 msgid "The PIN code is used for authentication when purchasing or renting videos."
 msgstr "PIN-koden används för autentisering vid köp eller hyrning av film."
+
+msgctxt "#32020"
+msgid "Channels per page"
+msgstr "Kanaler per sida"
+
+msgctxt "#32021"
+msgid "Adjust the number of channels displayed on each page."
+msgstr "Justera antalet kanaler som visas på varje sida."
+
+msgctxt "#32022"
+msgid "Movies per page"
+msgstr "Filmer per sida"
+
+msgctxt "#32023"
+msgid "Adjust the number of movies displayed on each page."
+msgstr "Justera antalet filmer som visas på varje sida."
+
+msgctxt "#32024"
+msgid "Add-on settings"
+msgstr "Tilläggsinställningar"

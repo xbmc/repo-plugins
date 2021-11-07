@@ -563,9 +563,10 @@ class Channel(chn_class.Channel):
 
         data = UriHandler.open(item.url)
         # Extract stream JSON data from HTML
-        streams = Regexer.do_regex(r'ProgramContainer" data-react-props="({[^"]+})"', data)
-        json_data = streams[0]
-        json_data = HtmlEntityHelper.convert_html_entities(json_data)
+        # streams = Regexer.do_regex(r'ProgramContainer" data-react-props="({[^"]+})"', data)
+        # json_data = streams[0]
+        # json_data = HtmlEntityHelper.convert_html_entities(json_data)
+        json_data = Regexer.do_regex(r'__NEXT_DATA__" type="application/json">(.*?)</script>', data)[0]
         json = JsonHelper(json_data, logger=Logger.instance())
         Logger.trace(json.json)
 
@@ -578,7 +579,7 @@ class Channel(chn_class.Channel):
         proxy = proxy_json.get_value("redirect")
         Logger.trace("Found RTMP Proxy: %s", proxy)
 
-        stream_infos = json.get_value("program", "streamingInfo")
+        stream_infos = json.get_value("props", "pageProps", "program", "streamingInfo")
         for stream_type, stream_info in stream_infos.items():
             Logger.trace(stream_info)
             default_stream = stream_info.get("default", False)

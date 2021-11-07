@@ -1,4 +1,3 @@
-
 # Kodi Media Center language file
 # Addon Name: Telia Play SE
 # Addon id: plugin.video.teliaplay-se
@@ -43,25 +42,7 @@ msgid "Sport"
 msgstr ""
 
 # Tv programs context menu
-msgctxt "#30006"
-msgid "Now & soon"
-msgstr ""
-
-msgctxt "#30007"
-msgid "Today"
-msgstr ""
-
-msgctxt "#30008"
-msgid "Tonight"
-msgstr ""
-
-msgctxt "#30009"
-msgid "Yesterday"
-msgstr ""
-
-msgctxt "#30010"
-msgid "Tomorrow"
-msgstr ""
+# 30006 - 30010 empty
 
 msgctxt "#30011"
 msgid "All programs"
@@ -211,4 +192,24 @@ msgstr ""
 
 msgctxt "#32019"
 msgid "The PIN code is used for authentication when purchasing or renting videos."
+msgstr ""
+
+msgctxt "#32020"
+msgid "Channels per page"
+msgstr ""
+
+msgctxt "#32021"
+msgid "Adjust the number of channels displayed on each page."
+msgstr ""
+
+msgctxt "#32022"
+msgid "Movies per page"
+msgstr ""
+
+msgctxt "#32023"
+msgid "Adjust the number of movies displayed on each page."
+msgstr ""
+
+msgctxt "#32024"
+msgid "Add-on settings"
 msgstr ""

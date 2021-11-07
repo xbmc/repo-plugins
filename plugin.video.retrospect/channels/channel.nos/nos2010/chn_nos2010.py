@@ -858,6 +858,7 @@ class Channel(chn_class.Channel):
             item = FolderItem("\b.: {} :.".format(next_title), next_url, content_type=contenttype.EPISODES)
             item.complete = True
             item.HttpHeaders = self.__jsonApiKeyHeader
+            item.dontGroup = True
             items.append(item)
 
         return data, items

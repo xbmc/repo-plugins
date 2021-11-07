@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-09-20 09:41+0000\n"
-"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"PO-Revision-Date: 2021-10-10 10:18+0000\n"
+"Last-Translator: Dmitry Petrov <dimakrm361@gmail.com>\n"
 "Language-Team: Russian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/ru_ru/>\n"
 "Language: ru_ru\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
-msgstr "Retrospect позволяет тебе смотреть повторы/архив ТВ-передач, доступные через официальные телеканалы."
+msgstr "Retrospect позволяет вам смотреть повторы/архив ТВ-передач, доступные через официальные телеканалы."
 
 msgctxt "Addon Description"
 msgid "Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
@@ -44,7 +44,7 @@ msgstr "Высокое"
 
 msgctxt "#30004"
 msgid "Release channel for update notifications"
-msgstr "Канал выпуска для уведомления о обновлении"
+msgstr "Канал выпусков для уведомления о обновлении"
 
 msgctxt "#30005"
 msgid "Stable"
@@ -88,7 +88,7 @@ msgstr "Показать информацию"
 
 msgctxt "#30015"
 msgid "via missing add-on"
-msgstr "через отсутств. дополнение"
+msgstr "через отсутствующее дополнение"
 
 msgctxt "#30016"
 msgid "Sort by"
@@ -200,7 +200,7 @@ msgstr "Вкл."
 
 msgctxt "#30043"
 msgid "Folder prefix"
-msgstr ""
+msgstr "Префикс папки"
 
 msgctxt "#30044"
 msgid "Kodi update required"
@@ -208,7 +208,7 @@ msgstr "Требуется обновление Kodi"
 
 msgctxt "#30045"
 msgid "This feature of Retrospect requires a more recent version of Kodi. Please install the most recent version of your current Kodi build. Depending on your installation this can either be a 'stable' or 'nightly' build."
-msgstr "Эта функция требует обновления до более свежей версии Kodi. Пожалуйста, установите свежую версию Kodi. В зависимости от вашей установки это может быть «стабильная» или «ночная» сборка."
+msgstr "Эта функция требует обновления до более свежей версии Kodi. Пожалуйста, установите свежую версию Kodi. В зависимости от установленой системы это может быть «стабильная» или «ночная» сборка."
 
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
@@ -216,7 +216,7 @@ msgstr "DRM/Гео-блокировка/Премиум фильтры"
 
 msgctxt "#30047"
 msgid "Cannot playback this YouTube Video because the Kodi YouTube add-on is missing."
-msgstr "Не удалось воспроизвести это видео потому, что отсутствует дополнение Youtube."
+msgstr "Не удалось воспроизвести это видео потому, что отсутствует дополнение YouTube."
 
 # empty string with id 30047
 msgctxt "#30048"
@@ -406,7 +406,7 @@ msgstr "Пользователь"
 
 msgctxt "#30095"
 msgid "Show Hidden Items"
-msgstr ""
+msgstr "Показать скрытые элементы"
 
 msgctxt "#30096"
 msgid "Country"
@@ -422,7 +422,7 @@ msgstr "Журнал и Диагностика"
 
 msgctxt "#30099"
 msgid "Use HLS instead of Dash for non-encrypted streams"
-msgstr ""
+msgstr "Использовать HLS вместо Dash для незашифрованных трансляций"
 
 msgctxt "#30100"
 msgid "None"
@@ -601,7 +601,7 @@ msgstr "ТВ передачи"
 
 msgctxt "#30353"
 msgid "Currently playing"
-msgstr ""
+msgstr "Сейчас воспроизводится"
 
 msgctxt "#30354"
 msgid "Most viewed episodes"
@@ -617,7 +617,7 @@ msgstr "Прямой эфир"
 
 msgctxt "#30357"
 msgid "Live Radio"
-msgstr ""
+msgstr "Радио"
 
 msgctxt "#30358"
 msgid "Episodes"
@@ -637,7 +637,7 @@ msgstr "Метки"
 
 msgctxt "#30362"
 msgid "Last chance"
-msgstr ""
+msgstr "Последний шанс"
 
 msgctxt "#30363"
 msgid "Popular"
@@ -733,7 +733,7 @@ msgstr ""
 
 msgctxt "#30504"
 msgid "Add to Favourites"
-msgstr ""
+msgstr "Добавить в \"Избранное\""
 
 msgctxt "#30505"
 msgid "Hide"
@@ -741,7 +741,7 @@ msgstr "Скрыть"
 
 msgctxt "#30506"
 msgid "Remove Favourite"
-msgstr ""
+msgstr "Убрать из \"Избранное\""
 
 msgctxt "#30507"
 msgid "Select Channels »"
@@ -753,7 +753,7 @@ msgstr ""
 
 msgctxt "#30509"
 msgid "Cannot start playback"
-msgstr ""
+msgstr "Не удалось начать воспроизведение"
 
 msgctxt "#30510"
 msgid "New version available"
@@ -771,11 +771,11 @@ msgstr "Доступна новая версия %s. Пожалуйста пос
 # empty strings from id 30518 to 30519
 msgctxt "#30520"
 msgid "Repository Warning"
-msgstr ""
+msgstr "Предупреждение репозитория"
 
 msgctxt "#30521"
 msgid "The Retrospect repository is not installed.|Please install it to allow future updates."
-msgstr ""
+msgstr "Репозиторий Retrospect не установлен.|Пожалуйста установите его для будущих обновлений."
 
 msgctxt "#30522"
 msgid "Channel message"
@@ -804,7 +804,7 @@ msgstr ""
 
 msgctxt "#30530"
 msgid "Check for Retrospect updates"
-msgstr ""
+msgstr "Проверять обновления Retrospect"
 
 msgctxt "#30531"
 msgid "Missing 'InputStream Helper' add-on. Cannot install."
@@ -812,11 +812,11 @@ msgstr "Отсутствует дополнение 'InputStream Helper'. Не �
 
 msgctxt "#30532"
 msgid "Install Widevine using 'InputStream Helper' add-on"
-msgstr ""
+msgstr "Установить Widevine, с помощью дополнения 'InputStream Helper'"
 
 msgctxt "#30533"
 msgid "Installing Widevine libraries using the 'InputStream Helper' add-on is done at your own risk and Retrospect is not responsible for any results. Nor is it guaranteed that Widevine will be installed correctly."
-msgstr ""
+msgstr "Установка библиотек Widevine с помощью дополнения 'InputStream Helper', выполняется на свой страх и риск и Retrospect не несёт ответственности за любой результат. Не гарантируется, что Widevine будет установлено корректно."
 
 msgctxt "#30534"
 msgid "Installation of Widevine failed!"
@@ -828,7 +828,7 @@ msgstr "Установка Widevine завершена!"
 
 msgctxt "#30536"
 msgid "This stream requires Kodi Leia, an enabled InputStream Adaptive add-on and the Widevine library to be installed. The latter can be installed from within the Retrospect add-on settings."
-msgstr ""
+msgstr "Для этой трансляции требуется Kodi Leia,включённое дополнение InputStream Adaptive и установленная библиотека Widevine. Последний можно установить в настройках дополнения Retrospect."
 
 msgctxt "#30537"
 msgid "Page"
@@ -836,11 +836,11 @@ msgstr "Страница"
 
 msgctxt "#30538"
 msgid "The selected live stream has not yet|begun."
-msgstr ""
+msgstr "Эта прямая трансляция ещё не началась."
 
 msgctxt "#30539"
 msgid "Live stream"
-msgstr ""
+msgstr "Прямая трансляция"
 
 msgctxt "#30540"
 msgid "Geo-blocked"
@@ -852,7 +852,7 @@ msgstr "Добавить в плейлист"
 
 msgctxt "#30542"
 msgid "Starting %s."
-msgstr ""
+msgstr "Начнётся в %s."
 
 msgctxt "#30543"
 msgid "Season"
@@ -868,11 +868,11 @@ msgstr ""
 
 msgctxt "#30546"
 msgid "Other Chars"
-msgstr ""
+msgstr "Другие символы"
 
 msgctxt "#30547"
 msgid "More Pages"
-msgstr ""
+msgstr "Больше страниц"
 
 msgctxt "#30548"
 msgid "Clips"
@@ -904,7 +904,7 @@ msgstr "DRM защита"
 
 msgctxt "#30555"
 msgid "The selected item is DRM protected and might not play on Kodi."
-msgstr ""
+msgstr "Этот элемент защищён DRM и не может быть воспроизведён в Kodi."
 
 msgctxt "#30556"
 msgid "Initialising channel(s)."

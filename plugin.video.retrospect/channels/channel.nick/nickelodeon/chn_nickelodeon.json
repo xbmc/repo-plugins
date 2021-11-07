@@ -44,6 +44,22 @@
       "language": "nl",
       "fanart": "mtvfanart2.jpg",
       "poster": "mtvposter.png"
+    },
+    {
+      "guid": "55635AAA-183C-11E2-ABEC-36706188709B",
+      "name": "MTV.de",
+      "description": {
+        "en": "Episodes and videos from MTV.de.",
+        "de": "Episoden und Videos von MTV.de.",
+        "nl": "Afleveringen en video's vna MTV.de."
+      },
+      "icon": "mtvnllarge.png",
+      "category": "Video",
+      "channelcode": "mtvde",
+      "sortorder": 20,
+      "language": "de",
+      "fanart": "mtvfanart2.jpg",
+      "poster": "mtvposter.png"
     }
   ]
 }

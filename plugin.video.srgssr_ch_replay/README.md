@@ -1,4 +1,4 @@
-![Unofficial SRG SSR Replay](icon.png)
+![Unofficial SRG SSR Replay](resources/icon.png)
 
 # Unofficial SRG SSR Replay
 

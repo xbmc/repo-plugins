@@ -5,7 +5,7 @@ import json
 import re
 import urllib.request as urllib2
 
-from . import addonutils
+from libs import addonutils
 from simplecache import SimpleCache
 
 
@@ -17,11 +17,17 @@ class SkyItalia:
     GET_VIDEO_DATA = 'https://apid.sky.it/vdp/v1/getVideoData?token={token}&caller=sky&rendition=web&id={id}'  # noqa: E501
     TOKEN = 'F96WlOd8yoFmLQgiqv6fNQRvHZcsWk5jDaYnDvhbiJk'
     TIMEOUT = 15
-    LOGLEVEL = int(addonutils.getSetting('LogLevel'))
-    QUALITY = addonutils.getSetting('Quality')
+    LOGLEVEL = addonutils.getSettingAsInt('LogLevel')
+    QUALITY = addonutils.getSettingAsInt('Quality')
     QUALITIES = ['web_low_url', 'web_med_url', 'web_high_url', 'web_hd_url']
     LOGOSDIR = '%sresources\\logos\\' % addonutils.PATH_T
     FANART = addonutils.FANART
+    LOCAL_MAP = {
+        'error.openurl': 31000,
+        'error.json': 31001,
+        'error.json.decode': 31002,
+        'playlist.title': 32001,
+    }
 
     def __init__(self):
         self.cache = SimpleCache()
@@ -30,39 +36,35 @@ class SkyItalia:
         if level >= self.LOGLEVEL:
             addonutils.log(msg, level)
 
-    def openURL(self, url):
+    def openURL(self, url, hours=24):
         self.log('openURL, url = %s' % url, 1)
         try:
             cacheresponse = self.cache.get(
-                '%s.openURL, url = %s' % (addonutils.NAME, url))
+                '%s.openURL, url = %s' % (addonutils.ID, url))
             if not cacheresponse:
                 self.log('openURL, no cache found')
                 request = urllib2.Request(url)              
                 response = urllib2.urlopen(request, timeout=self.TIMEOUT).read()
                 self.cache.set(
-                    '%s.openURL, url = %s' % (addonutils.NAME, url),
+                    '%s.openURL, url = %s' % (addonutils.ID, url),
                     response,
-                    expiration=datetime.timedelta(days=1))
-            return self.cache.get('%s.openURL, url = %s' % (addonutils.NAME, url))
+                    expiration=datetime.timedelta(hours=hours))
+            return self.cache.get('%s.openURL, url = %s' % (addonutils.ID, url))
         except Exception as e:
             self.cache = None
             self.log("openURL Failed! " + str(e), 3)
-            addonutils.notify(addonutils.LANGUAGE(31000))
+            addonutils.notify(addonutils.LANGUAGE(self.LOCAL_MAP['error.openurl']))
             addonutils.endScript()
 
-    def cleanTitle(self, title):
+    def cleanTitle(self, title, remove=''):
         title = html.unescape(title)
         title = re.sub(r'^VIDEO:*\s+', '', title)
+        title = re.sub(r'^%s\s*-\s+' % remove, '', title)
         return title
 
-    def loadData(self, url):
+    def loadData(self, url, hours=24):
         self.log('loadData, url = %s' % url, 1)
-        response = self.openURL(url)
-        if len(response) == 0:
-            addonutils.notify(addonutils.LANGUAGE(31000))
-            self.log('loadData: "%s" not available' % url, 3)
-            return
-        response = response.decode('utf-8')
+        response = self.openURL(url, hours=hours).decode('utf-8')
 
         try:
             # try if the file is json
@@ -85,16 +87,16 @@ class SkyItalia:
                 items = json.loads(main)
                 self.log('loadData, main menu found')
             except Exception as e:
-                addonutils.notify(addonutils.LANGUAGE(31001))
+                addonutils.notify(addonutils.LANGUAGE(self.LOCAL_MAP['error.json']))
                 self.log('loadJsonData, NO JSON DATA FOUND' + str(e), 3)
                 addonutils.endScript()
 
         return items
 
-    def getAssets(self, data):
+    def getAssets(self, data, title=''):
         self.log('getAssets, assets = %d' % len(data['assets']), 1)
         for item in data['assets']:
-            label = self.cleanTitle(item['title'])
+            label = self.cleanTitle(item['title'], title)
             yield {
                 'label': label,
                 'params': {
@@ -150,35 +152,44 @@ class SkyItalia:
 
     def getSubSection(self, section, subsection, title, page=0):
         self.log('getSubSection, section/subsection = %s/%s' % (section, subsection), 1)
-        yield {
-            'label': addonutils.LANGUAGE(32001) % title,
-            'params': {
-                'section': section,
-                'subsection': subsection,
-                'playlist': title,
-            },
-            'arts': {
-                'icon': '%s%s\\%s.png' % (
-                    self.LOGOSDIR, section, subsection),
-                'fanart': self.FANART,
-            },
-        }
+        if self.getPlaylistsCount(section, subsection, True) > 0:
+            yield {
+                'label': addonutils.LANGUAGE(self.LOCAL_MAP['playlist.title']) % title,
+                'params': {
+                    'section': section,
+                    'subsection': subsection,
+                    'playlist': title,
+                },
+                'arts': {
+                    'icon': '%s%s\\%s.png' % (
+                        self.LOGOSDIR, section, subsection),
+                    'fanart': self.FANART,
+                },
+            }
 
         url = self.GET_VIDEO_SEARCH
         url = url.replace('{token}', self.TOKEN)
         url = url.replace('{section}', section)
         url = url.replace('{subsection}', subsection)
         url = url.replace('{page}', str(page))
-        data = self.loadData(url)
-        yield from self.getAssets(data)
+        data = self.loadData(url, hours=0.5)
+        yield from self.getAssets(data, title)
 
-    def getPlaylists(self, section, subsection):
-        self.log('getPlaylists, section/subsection = %s/%s' % (section, subsection), 1)
+    def getPlaylistsCount(self, section, subsection, test=False):
+        self.log('getPlaylistsCount, section/subsection = %s/%s' % (section, subsection), 1)
         url = self.GET_PLAYLISTS
         url = url.replace('{token}', self.TOKEN)
         url = url.replace('{section}', section)
         url = url.replace('{subsection}', subsection)
         data = self.loadData(url)
+        length = len(data)
+        self.log('getPlaylistsCount, data length:%d' % length)
+
+        return length if test else data
+
+    def getPlaylists(self, section, subsection):
+        self.log('getPlaylists, section/subsection = %s/%s' % (section, subsection), 1)
+        data = self.getPlaylistsCount(section, subsection)
 
         for item in data:
             yield {
@@ -197,7 +208,7 @@ class SkyItalia:
         url = self.GET_PLAYLIST_VIDEO
         url = url.replace('{token}', self.TOKEN)
         url = url.replace('{id}', playlist_id)
-        data = self.loadData(url)
+        data = self.loadData(url, hours=0.5)
         yield from self.getAssets(data)
 
     def getVideo(self, asset_id):
@@ -208,11 +219,12 @@ class SkyItalia:
         data = self.loadData(url)
 
         url = None
-        self.log('getPlaylistContent, quality_selected = %s' % self.QUALITIES[int(self.QUALITY)])
+        self.log('getPlaylistContent, quality_selected = %s' % self.QUALITIES[self.QUALITY])
         for i in range(int(self.QUALITY), 0, -1):
             if self.QUALITIES[i] in data:
                 self.log('getPlaylistContent, quality_found = %s' % self.QUALITIES[i])
                 url = data[self.QUALITIES[i]]
-                break
+                if url != '':
+                    break
 
         return url

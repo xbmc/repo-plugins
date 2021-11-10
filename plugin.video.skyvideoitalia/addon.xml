@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.skyvideoitalia" name="Sky Video Italia" version="1.0.0" provider-name="nixxo">
+<addon id="plugin.video.skyvideoitalia" name="Sky Video Italia" version="1.0.1" provider-name="nixxo">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.simplecache" version="1.0.0"/>
@@ -17,9 +17,13 @@
         <license>GPL-3.0-or-later</license>
         <website>https://www.github.com/nixxo</website>
         <source>https://www.github.com/nixxo/plugin.video.skyvideoitalia</source>
-        <news>1.0.0
+        <news>[B]1.0.1[/B]
+- added missing logos
+- code improvements
+
+[B]1.0.0[/B]
 - first public release
-- code cleanup, unix eol</news>
+- code cleanup</news>
         <assets>
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.png</fanart>

@@ -1,3 +1,14 @@
+[B]1.0.1[/B]
+- added missing logos (removed unused)
+- added getSettingAsInt
+- added LOCAL_MAP
+- improved simplecache usage (custom time set for different use)
+- improved cleanTitle (clean if it starts with playlist title)
+- better notification ID > NAME
+- improved media url check
+- moved libraries from resources to libs
+- added .gitignore and removed garbage
+
 [B]1.0.0[/B]
 - first public release
 - code cleanup, unix eol

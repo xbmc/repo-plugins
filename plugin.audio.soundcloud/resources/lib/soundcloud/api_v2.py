@@ -54,7 +54,7 @@ class ApiV2(ApiInterface):
 
         # Extract client ID from website and cache it
         client_id = self.fetch_client_id()
-        self.cache.add(self.api_client_id_cache_key, str(client_id))
+        self.cache.add(self.api_client_id_cache_key, client_id)
         xbmc.log("plugin.audio.soundcloud::ApiV2() Using new client ID", xbmc.LOGDEBUG)
 
         return client_id
@@ -112,6 +112,7 @@ class ApiV2(ApiInterface):
         if cache:
             cached_response = self.cache.get(cache_key, cache)
             if cached_response:
+                xbmc.log("plugin.audio.soundcloud::ApiV2() Cache hit", xbmc.LOGDEBUG)
                 return json.loads(cached_response)
 
         # Send the request.
@@ -274,7 +275,7 @@ class ApiV2(ApiInterface):
                 key = re.search(r"exports={\"api-v2\".*client_id:\"(\w*)\"", response.text)
 
                 if key:
-                    return key.group(1)
+                    return str(key.group(1))
 
             raise Exception("Failed to extract client key from js")
         else:

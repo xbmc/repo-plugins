@@ -1,15 +1,15 @@
-from resources.lib.rssaddon.abstract_rss_addon import AbstractRssAddon
-from resources.lib.rssaddon.http_status_error import HttpStatusError
-from resources.lib.rssaddon.http_client import http_request
-
-from bs4 import BeautifulSoup
 import json
 import os
+import re
 
 import xbmc
+import xbmcaddon
 import xbmcgui
 import xbmcplugin
-import xbmcaddon
+from bs4 import BeautifulSoup
+from resources.lib.rssaddon.abstract_rss_addon import AbstractRssAddon
+from resources.lib.rssaddon.http_client import http_request
+from resources.lib.rssaddon.http_status_error import HttpStatusError
 
 
 class DeutschlandfunkAddon(AbstractRssAddon):
@@ -18,8 +18,8 @@ class DeutschlandfunkAddon(AbstractRssAddon):
 
     URL_STREAMS_RPC = "https://srv.deutschlandradio.de/config-feed.2828.de.rpc"
 
-    URL_PODCASTS_DLF = "https://www.deutschlandfunk.de/podcasts.2516.de.html?drpp%3Ahash=displayAllBroadcasts"
-    URL_PODCASTS_DLK = "https://www.deutschlandfunkkultur.de/podcasts.2502.de.html?drpp%3Ahash=displayAllBroadcasts"
+    URL_PODCASTS_DLF = "https://www.deutschlandfunk.de/podcasts"
+    URL_PODCASTS_DLK = "https://www.deutschlandfunkkultur.de/program-and-podcast"
     URL_PODCASTS_NOVA = "https://www.deutschlandfunknova.de/podcasts"
 
     PATH_DLF = "dlf"
@@ -177,21 +177,66 @@ class DeutschlandfunkAddon(AbstractRssAddon):
         _data, _cookies = http_request(self.addon, url)
 
         soup = BeautifulSoup(_data, 'html.parser')
-        _js_cast_defs = soup.select('span.abo.dradio-podlove')
+        _div_podcast_teasers = soup.select('div.b-podcast-teaser')
 
-        for _def in _js_cast_defs:
-            entry = {
-                "path": _def["data-buttonid"],
-                "name": _def["data-title"],
-                "icon": _def["data-logosrc"],
-                "params": [
-                    {
-                        "rss": _def["data-url"]
+        for _teaser in _div_podcast_teasers:
+            try:
+                _img = _teaser.findChild("img")["src"]
+                _name = _teaser.findChild("h4").text
+                _rss = _teaser.find_all("a", class_=["is-rss"])[0]["href"]
+                m = re.match(r"^.*([^/]+)\.xml$", _rss)
+                if m:
+                    entry = {
+                        "path": m.groups()[0],
+                        "name": _name,
+                        "icon": _img,
+                        "params": [
+                            {
+                                "rss": _rss
+                            }
+                        ],
+                        "node": []
                     }
-                ],
-                "node": []
-            }
-            self.add_list_item(entry, path)
+                    self.add_list_item(entry, path)
+
+            except:
+                pass
+
+        xbmcplugin.addSortMethod(
+            self.addon_handle, xbmcplugin.SORT_METHOD_LABEL)
+
+        xbmcplugin.endOfDirectory(self.addon_handle, updateListing=False)
+
+    def _parse_drk(self, path, url):
+
+        # download html site with podcast overview
+        _data, _cookies = http_request(self.addon, url)
+
+        soup = BeautifulSoup(_data, 'html.parser')
+        _div_podcast_teasers = soup.select('div.b-teaser-podcast')
+
+        for _teaser in _div_podcast_teasers:
+            try:
+                _img = _teaser.findChild("img")["src"]
+                _name = _teaser.findChild("h3").text
+                _rss = _teaser.find_all("a", class_=["is-rss"])[0]["href"]
+                m = re.match(r"^.*([^/]+)\.xml$", _rss)
+                if m:
+                    entry = {
+                        "path": m.groups()[0],
+                        "name": _name,
+                        "icon": _img,
+                        "params": [
+                            {
+                                "rss": _rss
+                            }
+                        ],
+                        "node": []
+                    }
+                    self.add_list_item(entry, path)
+
+            except:
+                pass
 
         xbmcplugin.addSortMethod(
             self.addon_handle, xbmcplugin.SORT_METHOD_LABEL)
@@ -207,7 +252,7 @@ class DeutschlandfunkAddon(AbstractRssAddon):
                 self._parse_dlf(path, self.URL_PODCASTS_DLF)
 
             elif splitted_path[0] == DeutschlandfunkAddon.PATH_DLK:
-                self._parse_dlf(path, self.URL_PODCASTS_DLK)
+                self._parse_drk(path, self.URL_PODCASTS_DLK)
 
             elif splitted_path[0] == DeutschlandfunkAddon.PATH_NOVA:
                 self._parse_nova(path)

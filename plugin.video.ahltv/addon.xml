@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.ahltv" name="AHLTV" version="0.1.1" provider-name="sobralik">
+<addon id="plugin.video.ahltv" name="AHLTV" version="1.0.1" provider-name="sobralik">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
         <import addon="script.module.inputstreamhelper" version="0.4.3"/>
@@ -21,10 +21,10 @@
             <fanart>fanart.jpg</fanart>
         </assets>
         <news>
-            - Initial Release
+            - Added new team entries for Abbotsford and Bridgeport
         </news>
         <license>GPL-2.0-or-later</license>
-        <forum>https://forum.kodi.tv/showthread.php?tid=243756</forum> <!-- make a real thread? -->
+        <forum>https://forum.kodi.tv/showthread.php?tid=351891</forum>
         <website>https://www.theahl.com/ahltv</website>
         <source>https://github.com/sobralik/plugin.video.ahltv</source>
     </extension>

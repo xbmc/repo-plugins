@@ -50,6 +50,7 @@ TEAM_FANART = {
     60030: "https://www.coloradoeagles.com/assets/img/1180x440-GameRecap-121719-2c0cd0f381.jpg", # Colorado
     60007: "https://griffinshockey.com/imager/general/189530/55-ford-white-jersey-1_191218_153138_87b984c08ea1e9642840dd02102af27c.jpg", # Grand
     60008: "http://www.hartfordwolfpack.com/assets/img/Dmowski-Action-Shot-2-c102424c5f.jpg", # Hartford
+    60036: "https://www.hendersonsilverknights.com/wp-content/uploads/51037803332_d7a84d658a_k.jpg", # Henderson
     60009: "https://gocheckers.com/images/Division_Preview_Hershey.jpg", # Hershey
     60010: "https://www.iowawild.com/assets/img/ROT_IAvsONT_121419-a046a71eed.png", # Iowa
     60011: "https://www.rocketlaval.com/wp-content/uploads/2019/12/49236067966_40ff74a7cc_h.jpg", # Laval
@@ -58,9 +59,9 @@ TEAM_FANART = {
     60014: "https://farm66.staticflickr.com/65535/49391830453_e964db6ab0_c.jpg", # Milwaukee
     60015: "https://www.ontarioreign.com/assets/img/Moulson-BAK-Web-413-68af5a4817.jpg", # Ontario
     60016: "https://pbs.twimg.com/media/EMHgfRmXYAUGjJg?format=jpg&name=small", # Providence
-    60017: "https://amerks.com/img/user/1947a071-25ce-4464-8c41-9de4d8b08741_20200110-RT.jpg", # Rochester
+    60017: "https://www.amerks.com/assets/img/202102010MV0103-a2f885f781.JPG", # Rochester
     60018: "https://www.icehogs.com/imager/general/images/56887/26675183548_fe811a1358_o_c98a7ad80693ecadd28d6db983184f6b.jpg", # Rockford
-    60019: "http://www.sarampage.com/assets/img/20181026-Chimuelos-Rampage-AdrianGarcia-SSE_AA91455-97d48e296b.jpg", # San Antonio
+    60019: "https://www.oursportscentral.com/graphics/pictures/md20181113-159863.jpg", # San Antonio
     60020: "https://www.sandiegogulls.com/assets/img/49236474651_f20b716fe0_o-0e0bd9e650.jpg", # San Diego
     60021: "http://www.sjbarracuda.com/assets/img/20191004_Knights_vs_Sharks_0048-043f42ccbb.jpg", # San Jose
     60022: "http://www.springfieldthunderbirds.com/assets/img/Final-12-13-19-slideshow-f56650b6d8.jpg", # Springfield
@@ -71,6 +72,8 @@ TEAM_FANART = {
     60027: "https://www.tucsonroadrunners.com/wp-content/uploads/2019/12/12.14.19-Web-Recap.png", # Tucson
     60028: "http://www.uticacomets.com/assets/img/1218-feature-5450f98f05.jpg", # Utica
     60029: "http://www.wbspenguins.com/wp-content/uploads/2019/12/1000_Larmi.jpg", # Wilkes
+    194381: "https://api.abbotsford.canucks.com/uploads/Homepage_5583e2b396.jpg", # Abbotsford
+    194382: "https://www.bridgeportislanders.com/assets/img/weekly5-17502d478f.jpg", # Bridgeport Islanders
 }
 
 # User Agents

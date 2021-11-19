@@ -1,0 +1,149 @@
+# Kodi Media Center language file
+# Addon Name: CBC Sports
+# Addon id: plugin.video.cbc-sports
+# Addon Provider: 
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: English"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Stream Not Available Yet"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Event Blacked-Out in Your Region."
+msgstr ""
+
+msgctxt "#30002"
+msgid "Connection Timed Out.  Try Again."
+msgstr ""
+
+msgctxt "#30003"
+msgid "Live Schedule"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Highlights"
+msgstr ""
+
+msgctxt "#30005"
+msgid "461602883775"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Most Recent"
+msgstr ""
+
+msgctxt "#30007"
+msgid "461477443878"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Archive"
+msgstr ""
+
+msgctxt "#30009"
+msgid "461088323897"
+msgstr ""
+
+msgctxt "#30010"
+msgid "This Event Stream Hasn't Started.  Please check back later."
+msgstr ""
+
+msgctxt "#30011"
+msgid "Refresh"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Go up"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Stream temporarily unavailable. Please check back later."
+msgstr ""
+
+msgctxt "#30314"
+msgid "Highlights Display Limit"
+msgstr ""
+
+msgctxt "#30315"
+msgid "Most Recent Display Limit"
+msgstr ""
+
+msgctxt "#30316"
+msgid "Archive Display Limit"
+msgstr ""
+
+msgctxt "#30317"
+msgid "Limits & Logging"
+msgstr ""
+
+msgctxt "#30318"
+msgid "CBC Sports Website Response Logging"
+msgstr ""
+
+msgctxt "#30319"
+msgid "Live Schedule Limit"
+msgstr ""
+
+msgctxt "#30320"
+msgid "No URL information yet from the CBC Sports website.  Please try again later."
+msgstr ""
+
+msgctxt "#30321"
+msgid "Display notification time (secs)"
+msgstr ""
+
+msgctxt "#30322"
+msgid "Display Hockey Night Live Events"
+msgstr ""
+
+msgctxt "#30323"
+msgid "Display Live Events Publish Check"
+msgstr ""
+
+msgctxt "#30514"
+msgid "The number of Highlights items to display."
+msgstr ""
+
+msgctxt "#30515"
+msgid "The number of Most Recent items to display."
+msgstr ""
+
+msgctxt "#30516"
+msgid "The number of Archive items to display."
+msgstr ""
+
+msgctxt "#30518"
+msgid "Log responses from CBC Sports website for troubleshooting.  The default is off."
+msgstr ""
+
+msgctxt "#30519"
+msgid "No mediaId from the CBC Sports website.  Please try again later."
+msgstr ""
+
+msgctxt "#30520"
+msgid "The number of Live Schedule items to display."
+msgstr ""
+
+msgctxt "#30521"
+msgid "The number of seconds live event notification messages will appear.  The default is 3 seconds."
+msgstr ""
+
+msgctxt "#30522"
+msgid "Display Hockey Night in Canada Live Events.  Currently they do not play.  The default is disabled."
+msgstr ""
+
+msgctxt "#30523"
+msgid "Enabling will add [COLOR blue](Published)[/COLOR] to Live Events with published stream information.  The default is disabled."
+msgstr ""

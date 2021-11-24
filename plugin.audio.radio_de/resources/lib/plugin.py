@@ -547,6 +547,7 @@ def get_stream_url(station_id):
 
 def __add_stations(stations, add_custom=False, browse_more=None):
     items = []
+    context_menu = []
     my_station_ids = [int(item) for item in my_stations if item.isdigit()]
     for i, station in enumerate(stations):
         if station:

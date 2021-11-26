@@ -21,6 +21,7 @@ defaultvideo = 'special://home/addons/plugin.video.cbc-sports/resources/icon.png
 defaulticon = 'special://home/addons/plugin.video.cbc-sports/resources/icon.png'
 #baseurl = 'http://www.cbc.ca/sports'
 baseurl = 'http://www.cbc.ca'
+unavailableurl = 'http://link.theplatform.com/s/errorFiles/Unavailable.mp4'
 basefeed = 'http://tpfeed.cbc.ca/f/ExhSPC/vms_5akSXx4Ng_Zn?byGuid='
 mp4base = 'http://main.mp4.cbc.ca/prodVideo/sports/'
 #cbcfeedbase = 'http://tpfeed.cbc.ca/f/ExhSPC/vms_5akSXx4Ng_Zn?range=1-50&byCategoryIds='
@@ -61,11 +62,10 @@ def INDEX(url):
 	count = len(item_dict['schedule'])
 	for item in jdata['schedule']:
 		title = (jdata['schedule'][i]['ti'])
-		if cbclog >= 1:
-	    		xbmc.log('CBC Sports Index title: ' + str(title), xbmc.LOGINFO)
-	    		xbmc.log('CBC Sports Index URL: ' + str(url), xbmc.LOGINFO)
 		if cbclog == 2:
-	    		xbmc.log('CBC Sports Index jdata: ' + str(jdata), xbmc.LOGINFO)
+	    		xbmc.log('CBC Sports Index title: ' + str(title), xbmc.LOGDEBUG)
+	    		xbmc.log('CBC Sports Index URL: ' + str(url), xbmc.LOGDEBUG)
+	    		xbmc.log('CBC Sports Index jdata: ' + str(jdata), xbmc.LOGDEBUG)
 		onfirst = (jdata['schedule'][i]['on'][0])
 		if 'Hockey Night' in title and hnight == 'false':
 			i += 1
@@ -79,8 +79,8 @@ def INDEX(url):
 			pub += 1
 		etime = jdata['schedule'][i]['stt']
 		sttime = jdata['schedule'][i]['end']
-		if cbclog >= 1:
-			xbmc.log('Live event title: ' + str(i), xbmc.LOGINFO)
+		if cbclog == 2:
+			xbmc.log('Live event title: ' + str(i), xbmc.LOGDEBUG)
 		try:
 			starttime = datetime.strptime(etime[:16],'%m/%d/%Y %H:%M')
 			endtime = datetime.strptime(sttime[:16],'%m/%d/%Y %H:%M')
@@ -98,8 +98,8 @@ def INDEX(url):
 			continue
 		etime = etime.split(' ',1)[-1].upper()
 		url = baseurl + jdata['schedule'][i]['url']
-		if cbclog >= 1:
-		    xbmc.log('Live event URL: ' + str(url), xbmc.LOGINFO)
+		if cbclog == 2:
+		    xbmc.log('Live event URL: ' + str(url), xbmc.LOGDEBUG)
 		image = jdata['schedule'][i]['thumb']
 		if edate == now:
 			title = etime + ' - ' + title
@@ -119,94 +119,110 @@ def INDEX(url):
 #2
 def IFRAME(name,url):
 	cbclog = int(xbmcaddon.Addon().getSetting('cbclog'))
+	stream = 'Not found'
+	valid = 0; pmfound = 0
 	if cbclog >= 1:
 	    xbmc.log('CBC Sports Live Feed name: ' + str(name), xbmc.LOGINFO)
 	    xbmc.log('CBC Sports URL: ' + str(url), xbmc.LOGINFO)
 	if 'www.cbc.ca/sports' in url:		#  Check if valid URL is posted yet
 	    xbmcgui.Dialog().notification(name, translation(30320), defaultimage, notetime, False)
+	    iframe_return()	    
 	    return  
 	rdata = str(get_html(url))
 	#try: mediaId = re.compile("mediaId': '(.+?)'").findall(str(data))[0]
 	if cbclog == 2:
-	    xbmc.log('CBC Sports rdata: ' + str(rdata), xbmc.LOGINFO)
+	    xbmc.log('CBC Sports rdata: ' + str(rdata), xbmc.LOGDEBUG)
 
 	try:					# primary mediaId parse
-	    startpos = rdata.find('mediaId')
-	    mediaId = rdata[startpos+8:startpos+21]
+	    if valid == 0:
+	        startpos = rdata.find('mediaId')
+	        mediaId = rdata[startpos+8:startpos+21]
 	except IndexError:             
 	    xbmcgui.Dialog().notification(name, translation(30000), defaultimage, notetime, False)
-	    return
-	if cbclog >= 1:
-	    xbmc.log('CBC Sports mediaId: ' + mediaId, xbmc.LOGINFO)
+	    valid = 1
 
 	try:					# primary mediaId verify int
-	    mediaIdint = int(mediaId)
+	    if valid == 0:
+	        mediaIdint = int(mediaId)
+	        pmfound = 1
 	except ValueError:			# alternate mediaId parse
 	    altid_start = rdata.find('identifier')
 	    mediaId = rdata[altid_start+13:altid_start+26]
 	    if cbclog >= 1:
 	        xbmc.log('CBC Sports alternate mediaId: ' + mediaId, xbmc.LOGINFO)
 
+	if cbclog >= 1 and pmfound == 1:
+	    xbmc.log('CBC Sports mediaId: ' + mediaId, xbmc.LOGINFO)
+
 	try:					# alternate mediaId verify int
-	    mediaIdint = int(mediaId)
+	    if valid == 0:
+	        mediaIdint = int(mediaId)
 	except ValueError:
 	    xbmcgui.Dialog().notification(name, translation(30519), defaultimage, notetime, False)
-	    return
-	    
-	furl = basefeed + mediaId
-	jresponse = urllib.request.urlopen(furl)
-	jdata = json.load(jresponse)
+	    valid = 1				#  No valid mediaId found
+	
+	if valid == 0:	    
+	    furl = basefeed + mediaId
+	    jresponse = urllib.request.urlopen(furl)
+	    jdata = json.load(jresponse)
 	if cbclog == 2:
-	    xbmc.log('CBC Sports Live Schedule Playback response: ' + str(jdata), xbmc.LOGINFO)
+	    xbmc.log('CBC Sports Live Schedule Playback response: ' + str(jdata), xbmc.LOGDEBUG)
 
 	try:
-	    smil_url = jdata['entries'][0]['content'][0]['url']
+	    if valid == 0:
+	        smil_url = jdata['entries'][0]['content'][0]['url']
 	except IndexError:             
 	    xbmcgui.Dialog().notification(name, translation(30000), defaultimage, notetime, False)
+	    valid = 1
 	    if cbclog >= 1:
-	        xbmc.log('CBC Sports Live Schedule entry count is 0 for event: ' + str(name), xbmc.LOGINFO)
-	    return	
+	        xbmc.log('CBC Sports Live Schedule entry count is 0 for event: ' + str(name), xbmc.LOGINFO)	
 
-	smil = get_html(smil_url)
-	contents = BeautifulSoup(smil,'html5lib')
-	if cbclog >= 1:
-	    xbmc.log('CBC Sports Live Schedule contents: ' + str(contents), xbmc.LOGINFO)
+	if valid == 0:	  
+	    smil = get_html(smil_url)
+	    contents = BeautifulSoup(smil,'html5lib')
+	    if cbclog >= 1:
+	        xbmc.log('CBC Sports Live Schedule contents: ' + str(contents), xbmc.LOGINFO)
 					
-	if 'GeoLocationBlocked' in str(contents):		#  Check for blackout
-	    xbmcgui.Dialog().notification(name, translation(30001), defaultimage, notetime, False)
+	    if 'GeoLocationBlocked' in str(contents):		#  Check for blackout
+	        xbmcgui.Dialog().notification(name, translation(30001), defaultimage, notetime, False)
+	        iframe_return()
+	        return
+
+	try:
+	    if valid == 0:    
+	        stream = (re.compile('video src="(.+?)"').findall(str(contents))[0]).replace('/z/','/i/').replace('manifest.f4m','master.m3u8')
+	except IndexError:			#  Check if stream is available
+	    xbmcgui.Dialog().notification(name, translation(30000), defaultimage, notetime, False)
+	    valid = 1
+
+	if stream != 'Not found':
+	    sdata = str(get_html(stream))
+	else:
+	    iframe_return()
 	    return
 
 	try:
-		stream = (re.compile('video src="(.+?)"').findall(str(contents))[0]).replace('/z/','/i/').replace('manifest.f4m','master.m3u8')
-	except IndexError:			#  Check if stream is available
-		xbmcgui.Dialog().notification(name, translation(30000), defaultimage, notetime, False)
-		return
-
-	if cbclog >= 1:
-	    xbmc.log('CBC Sports Live Schedule Playback stream: ' + str(stream), xbmc.LOGINFO)
-	listitem = xbmcgui.ListItem(name)
-	listitem.setArt({'thumb': defaultimage, 'icon': defaultimage})
-	sdata = str(get_html(stream))
-
-	try:
-	    errfound = sdata.find('An error occurred')
+	    if valid == 0:
+	        errfound = sdata.find('An error occurred')
 	except IndexError:
-            xbmcgui.Dialog().notification(name, translation(30010), defaultimage, notetime, False)
-            return
-
-	if errfound > -1:
-		xbmcgui.Dialog().notification(name, translation(30010), defaultimage, notetime, False)
-		return
-	if cbclog >= 1:
-	    xbmc.log('CBC Sports Live Schedule stream return data: ' + sdata, xbmc.LOGINFO)
-
-	try:	
-	    xbmc.Player().play( stream, listitem )
-	except:              
 	    xbmcgui.Dialog().notification(name, translation(30010), defaultimage, notetime, False)
+	    valid = 1
 
-	sys.exit()
-	xbmcplugin.endOfDirectory(int(sys.argv[1]))
+	#if errfound > -1:
+	#	xbmcgui.Dialog().notification(name, translation(30010), defaultimage, notetime, False)
+	#	valid = 1
+	#	return
+
+	if cbclog >= 1:
+	    xbmc.log('CBC Sports Live Schedule valid stream: ' + str(valid), xbmc.LOGINFO)
+	    xbmc.log('CBC Sports Live Schedule Playback stream: ' + str(stream), xbmc.LOGINFO)
+
+	if valid == 0:
+	    listitem = xbmcgui.ListItem(name, path = stream)
+	    listitem.setArt({'thumb': defaultimage, 'icon': defaultimage})
+	    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
+	else:
+	    iframe_return()
 
 
 #6
@@ -240,34 +256,46 @@ def VIDEOS(url):
 #7
 def GET_STREAM(name,url):
 	cbclog = int(xbmcaddon.Addon().getSetting('cbclog'))
+	valid = 0
+	smil = get_html(url)
 	if cbclog >= 1:
 	    xbmc.log('CBC Sports GET_STREAM name: ' + str(name), xbmc.LOGINFO)
 	    xbmc.log('CBC Sports URL: ' + str(url), xbmc.LOGINFO)
-	smil = get_html(url)
+	    xbmc.log('CBC Sports smil: ' + str(smil), xbmc.LOGINFO)
 	contents = BeautifulSoup(smil,'html5lib')
 	if cbclog >= 1:
 	    xbmc.log('CBC Sports GET_STREAM contents: ' + str(contents), xbmc.LOGINFO)
 	if 'GeoLocationBlocked' in str(contents):		#  Check for blackout
 	    xbmcgui.Dialog().notification(name, translation(30001), defaultimage, notetime, False)
+	    iframe_return()
+	    return
+	if 'system-bitrate="0"' in str(contents):		#  Check for bad stream
+	    xbmcgui.Dialog().notification(name, translation(30002), defaultimage, notetime, False)
+	    iframe_return()
 	    return
 	stream = (re.compile('src="(.+?)"').findall(str(contents))[0])
 	if mp4base not in stream:
 		#stream = mp4base + stream
 		stream = stream
-	listitem = xbmcgui.ListItem(name)
-	listitem.setArt({'thumb': defaultimage, 'icon': defaultimage})
 	if cbclog >= 1:
 	    xbmc.log('CBC Sports Live Schedule Playback stream: ' + str(stream), xbmc.LOGINFO)
-	xbmc.Player().play( stream, listitem )
-	sys.exit()
-	xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
+	if valid == 0:
+	    li = xbmcgui.ListItem(name, path=stream)
+	    li.setArt({'thumb': defaultimage, 'icon': defaultimage})
+	    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, li)
+	else:
+	    iframe_return()
 
 #99
 def play(url):
 	item = xbmcgui.ListItem(path=url)
 	return xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
+def iframe_return():
+	listitem = xbmcgui.ListItem(name, path=unavailableurl)
+	listitem.setArt({'thumb': defaultimage, 'icon': defaultimage})
+	xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, listitem)
+		
 
 def striphtml(data):
 	p = re.compile(r'<.*?>')
@@ -331,7 +359,7 @@ def addDir(name, url, mode, iconimage, fanart=False, infoLabels=True):
 	u = sys.argv[0] + "?url=" + urllib.parse.quote_plus(url) + "&mode=" + str(mode) + "&name=" + urllib.parse.quote_plus(name) + "&iconimage=" + urllib.parse.quote_plus(iconimage)
 	ok = True
 	liz = xbmcgui.ListItem(name)
-	liz.setInfo(type="Video", infoLabels={"Title": name})
+	#liz.setInfo(type="Video", infoLabels={"Title": name})
 	liz.setProperty('IsPlayable', 'true')
 	if not fanart:
 		fanart=defaultfanart
@@ -343,22 +371,25 @@ def addDir(name, url, mode, iconimage, fanart=False, infoLabels=True):
 def addDir2(name,url,duration,mode,iconimage, aired=False, plot=False, vheight=False, vwidth=False, fanart=False, infoLabels=False):
 	u=sys.argv[0]+"?url="+urllib.parse.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.parse.quote_plus(name)
 	ok=True
-	liz = xbmcgui.ListItem(name)
 	plot_text = ''
 	if plot:
 	    plot_text = plot
 	else:
 	    plot_text = name
 	aired_text = ''
+	year_test = ''
 	if aired:
-            aired_text = aired
-	infoLabels={ "Title": name,
+	    aired_text = aired
+	    year_text = aired_text.split('-',1)[0]
+	liz = xbmcgui.ListItem(name)
+	info={ "Title": name,
              "Aired": aired_text,
              "Year": aired_text.split('-',1)[0],
              "mediatype": 'episode',
              "Duration": duration,
              "Plot": plot_text }
-	liz.setInfo( "video", infoLabels)	
+	liz.setInfo( "video", info)
+	liz.setProperty('IsPlayable', 'true')
 	fanart=defaultfanart
 	liz.setArt({'thumb': iconimage, 'icon': iconimage, 'fanart': fanart})
 	if vheight and vwidth:

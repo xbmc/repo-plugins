@@ -12,13 +12,15 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <license>GPL 2.0 or Later</license>
+        <license>GPL-2.0-or-later</license>
+        <source>https://github.com/jbinkley60/plugin.video.cbc-sports</source>
+        <forum>https://forum.kodi.tv/showthread.php?tid=328282</forum>
         <assets>
-        <icon>/resources/icon.png</icon>
-        <fanart>/resources/fanart.jpg</fanart>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
         </assets>
         <summary lang="en_GB">Live Events, Replays, and Highlights from CBC Sports</summary>
         <description lang="en_GB">Get the latest headlines, opinion, and video from CBC Sports.  Watch live events, replays, and highlights.  Region blocked for Canada only.</description>
-        <disclaimer lang="en_GB"></disclaimer>
+        <disclaimer lang="en_GB">For bugs, requests or general questions visit the thread on the Kodi forum.</disclaimer> 
     </extension>
 </addon>

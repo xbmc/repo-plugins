@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kodi Addons\n"
-"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-09-23 23:02+0000\n"
+"PO-Revision-Date: 2021-10-03 12:30+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Belarusian <https://kodi.weblate.cloud/projects/kodi-add-ons-music/plugin-audio-radio_de/be_by/>\n"
 "Language: be_by\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Weblate 4.8\n"
 
 msgctxt "Addon Summary"
-msgid "Access &gt;30000 radio broadcasts"
+msgid "Access >30000 radio broadcasts"
 msgstr ""
 
 msgctxt "Addon Description"
@@ -155,4 +155,16 @@ msgstr ""
 
 msgctxt "#30607"
 msgid "Prefer HTTP streams over HTTS"
+msgstr ""
+
+msgctxt "#30608"
+msgid "Unable to get radio stream url"
+msgstr ""
+
+msgctxt "#30609"
+msgid "Sucessfully added to my stations!"
+msgstr ""
+
+msgctxt "#30610"
+msgid "Sucessfully removed from my stations!"
 msgstr ""

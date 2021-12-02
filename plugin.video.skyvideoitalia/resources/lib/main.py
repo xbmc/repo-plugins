@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from libs.skyitalia import SkyItalia
-from libs import addonutils
+from resources.lib.skyitalia import SkyItalia
+from resources.lib import addonutils
 
 
 class SkyVideoItalia(object):
     LOCAL_MAP = {
         'media.not.found': 31003,
+        'live.not.found': 31004,
     }
 
     def __init__(self):
@@ -29,15 +30,15 @@ class SkyVideoItalia(object):
 
     def main(self):
         params = addonutils.getParams()
-        addonutils.log('main, Params = %s' % str(params))
+        self.skyit._log('main, Params = %s' % str(params))
         if 'asset_id' in params:
             # PLAY VIDEO
             url = self.skyit.getVideo(params['asset_id'])
             if url:
-                self.skyit.log('main, Media URL = %s' % url, 1)
+                self.skyit._log('main, Media URL = %s' % url, 1)
                 addonutils.setResolvedUrl(url)
             else:
-                self.skyit.log('main, Media URL not found, asset_id = %s' % params['asset_id'], 3)
+                self.skyit._log('main, Media URL not found, asset_id = %s' % params['asset_id'], 3)
                 addonutils.notify(addonutils.LANGUAGE(self.LOCAL_MAP['media.not.found']))
                 addonutils.setResolvedUrl(solved=False)
 
@@ -62,6 +63,28 @@ class SkyVideoItalia(object):
             # SECTION MENU
             section_content = self.skyit.getSection(params['section'])
             self.addItems(section_content)
+
+        elif 'livestream_id' in params:
+            # LIVESTREAM PLAY SECTION
+            live_content = self.skyit.getLiveStream(params['livestream_id'])
+            if live_content:
+                item = addonutils.createListItem(
+                    path=live_content.get('path'),
+                    label=live_content.get('label'),
+                    videoInfo=live_content.get('videoInfo'),
+                    arts=live_content.get('arts'),
+                    isFolder=False
+                )
+                addonutils.setResolvedUrl(item=item)
+            else:
+                self.skyit._log('main, Livestream URL not found, id = %s' % params['livestream_id'], 3)
+                addonutils.notify(addonutils.LANGUAGE(self.LOCAL_MAP['live.not.found']))
+                addonutils.setResolvedUrl(solved=False)
+
+        elif 'live' in params:
+            # LIVESTREAM SECTION
+            live_content = self.skyit.getLiveStreams()
+            self.addItems(live_content)
 
         else:
             # MAIN MENU

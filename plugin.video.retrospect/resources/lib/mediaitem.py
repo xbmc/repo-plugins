@@ -9,30 +9,26 @@ from functools import reduce
 import xbmcgui
 
 from resources.lib.addonsettings import AddonSettings
-from resources.lib import contenttype, kodifactory
+from resources.lib import kodifactory
 from resources.lib.logger import Logger
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.encodinghelper import EncodingHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
+from resources.lib import mediatype
+from resources.lib import contenttype
 from resources.lib.streams.adaptive import Adaptive
 from resources.lib.proxyinfo import ProxyInfo
 
 
 # Don't make this an MediaItem(object) as it breaks the pickles
 class MediaItem:
-    """Main class that represent items that are retrieved in XOT. They are used
-    to fill the lists and have MediaItemParts which have MediaStreams in this
-    hierarchy:
+    """Main class that represent items that are retrieved in Retrospect. They are used
+    to fill the lists and have MediaStreams in this hierarchy:
 
     MediaItem
-        +- MediaItemPart
-        |    +- MediaStream
-        |    +- MediaStream
-        |    +- MediaStream
-        +- MediaItemPart
-        |    +- MediaStream
-        |    +- MediaStream
-        |    +- MediaStream
+        +- MediaStream
+        +- MediaStream
+        +- MediaStream
 
     """
 
@@ -41,8 +37,7 @@ class MediaItem:
     ExpiresAt = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
 
     #noinspection PyShadowingBuiltins
-    def __init__(self, title, url, type="folder", tv_show_title=None,
-                 content_type=contenttype.EPISODES, depickle=False):
+    def __init__(self, title, url, media_type=mediatype.FOLDER, depickle=False, tv_show_title=None):
         """ Creates a new MediaItem.
 
         The `url` can contain an url to a site more info about the item can be
@@ -53,15 +48,12 @@ class MediaItem:
         the item. This is all taken care of when creating Kodi items in the
         different methods.
 
-        :param str|unicode title:       The title of the item, used for appearance in lists.
-        :param str|unicode url:         Url that used for further information retrieval.
-        :param str type:                Type of MediaItem (folder, video, audio).
-                                         Defaults to 'folder'.
-        :param str|None tv_show_title:  The title of the TV Show to which the episode belongs.
-        :param str content_type:        The Kodi content type of the child items: files, songs,
-                                        artists, albums, movies, tvshows, episodes, musicvideos,
-                                        videos, images, games. Defaults to 'episodes'
+        :param str title:               The title of the item, used for appearance in lists.
+        :param str url:                 Url that used for further information retrieval.
+        :param str|None media_type:     The Kodi media type: video, movie, tvshow, season, episode,
+                                        or musicvideo.
         :param bool depickle:           Is the constructor called while depickling.
+        :param str|None tv_show_title:  The title of the TV Show to which the episode belongs.
 
         """
 
@@ -71,7 +63,7 @@ class MediaItem:
         self.tv_show_title = tv_show_title
         self.url = url
         self.actionUrl = None
-        self.MediaItemParts = []
+
         self.description = ""
         self.thumb = ""                           # : The thumbnail (16:9, min 520x293)
         self.fanart = ""                          # : The fanart url (16:9, min 720p)
@@ -82,12 +74,13 @@ class MediaItem:
         self.__timestamp = datetime.min           # : value for sorting, this one is set to minimum so if non is set, it's shown at the bottom
         self.__expires_datetime = None            # : datetime value of the expire time
 
-        self.type = type                          # : video, audio, folder, append, page, playlist
         self.dontGroup = False                    # : if set to True this item will not be auto grouped.
         self.isLive = False                       # : if set to True, the item will have a random QuerySting param
         self.isGeoLocked = False                  # : if set to True, the item is GeoLocked to the channels language (o)
         self.isDrmProtected = False               # : if set to True, the item is DRM protected and cannot be played (^)
         self.isPaid = False                       # : if set to True, the item is a Paid item and cannot be played (*)
+        self.season = 0                           # : The season number
+        self.epsiode = 0                          # : The episode number
         self.__infoLabels = dict()                # : Additional Kodi InfoLabels
 
         self.complete = False
@@ -98,9 +91,14 @@ class MediaItem:
         self.isCloaked = False
         self.metaData = dict()                    # : Additional data that is for internal / routing use only
 
+        # Kodi media types: video, movie, tvshow, season, episode or musicvideo, music, song, album, artist
+        self.media_type = media_type
         # Kodi content types: files, songs, artists, albums, movies, tvshows, episodes,
         # musicvideos, videos, images, games. Defaults to 'episodes'
-        self.content_type = content_type
+        self.content_type = contenttype.EPISODES
+
+        self.streams = []  # type: list[MediaStream]
+        self.subtitle = None
 
         if depickle:
             # While deplickling we don't need to do the guid/guidValue calculations. They will
@@ -116,71 +114,78 @@ class MediaItem:
             self.guid = self.__get_uuid()
         self.guidValue = int("0x%s" % (self.guid,), 0)
 
-    def append_single_stream(self, url, bitrate=0, subtitle=None):
-        """ Appends a single stream to a new MediaPart of this MediaItem.
+    def add_stream(self, url, bitrate=0, subtitle=None):
+        """ Appends a single stream to  this MediaItem.
 
-        This methods creates a new MediaPart item and adds the provided
-        stream to its MediaStreams collection. The newly created MediaPart
-        is then added to the MediaItem's MediaParts collection.
+        This methods adds a new MediaStream the MediaItem's streams collection.
 
         :param str url:         Url of the stream.
         :param int bitrate:     Bitrate of the stream (default = 0).
-        :param str subtitle:    Url of the subtitle of the mediapart.
+        :param str subtitle:    Url of the subtitle of the this Mediaitem..
 
-        :return: A reference to the created MediaPart.
-        :rtype: MediaItemPart
-
-        """
-
-        new_part = MediaItemPart(self.name, url, bitrate, subtitle)
-        self.MediaItemParts.append(new_part)
-        return new_part
-
-    def create_new_empty_media_part(self):
-        """ Adds an empty MediaPart to the MediaItem.
-
-        This method is used to create an empty MediaPart that can be used to
-        add new stream to. The newly created MediaPart is appended to the
-        MediaItem.MediaParts list.
-
-        :return: The new MediaPart object (as a reference) that was appended.
-        :rtype: MediaItemPart
+        :return: A reference to the created MediaStream.
+        :rtype: MediaStream
 
         """
 
-        new_part = MediaItemPart(self.name)
-        self.MediaItemParts.append(new_part)
-        return new_part
+        stream = MediaStream(url, bitrate)
+        self.streams.append(stream)
 
-    def has_media_item_parts(self):
-        """ Return True if there are any MediaItemParts present with streams for
-        this MediaItem
+        if subtitle:
+            self.subtitle = subtitle
 
-        :return: True if there are any MediaItemParts present with streams for
-                 this MediaItem
+        return stream
+
+    def has_streams(self):
+        """ Return True if there are any MediaStreams present for this MediaItem
+
+        :return: True if there are any MediaStreams present this MediaItem
         :rtype: bool
 
         """
 
-        for part in self.MediaItemParts:
-            if len(part.MediaStreams) > 0:
-                return True
+        return len(self.streams) > 0
 
-        return False
-
+    @property
     def is_playable(self):
         """ Returns True if the item can be played in a Media Player.
-
-        At this moment it returns True for:
-        * type = 'video'
-        * type = 'audio'
 
         :return: Returns true if this is a playable MediaItem
         :rtype: bool
 
         """
 
-        return self.type.lower() in ('video', 'audio', 'playlist')
+        return self.media_type in mediatype.PLAYABLE_TYPES
+
+    @property
+    def is_folder(self):
+        """ Indication if this item represents a folder.
+
+        :return: True if this item is a folder item. False otherwise.
+        :rtype: bool
+
+        """
+        return self.media_type in mediatype.FOLDER_TYPES
+
+    @property
+    def is_video(self):
+        """ Indication if this item represents a video.
+
+        :return: True if this item is a video item. False otherwise.
+        :rtype: bool
+
+        """
+        return self.media_type in mediatype.VIDEO_TYPES
+
+    @property
+    def is_audio(self):
+        """ Indication if this item represents a audio item.
+
+        :return: True if this item is a audio item. False otherwise.
+        :rtype: bool
+
+        """
+        return self.media_type in mediatype.AUDIO_TYPES
 
     def has_track(self):
         """ Does this MediaItem have a TrackNumber InfoLabel
@@ -216,10 +221,22 @@ class MediaItem:
         """
         return bool(self.__infoLabels)
 
+    def get_info_label(self, label):
+        """ Retrieves an info label.
+
+        :param str label:   The label name to retrieve.
+
+        :return: The value of the label or None if it was not present
+        :rtype: str|int|bool
+
+        """
+
+        return self.__infoLabels.get(label)
+
     def set_info_label(self, label, value):
         """ Set a Kodi InfoLabel and its value.
 
-        See http://kodi.wiki/view/InfoLabels
+        See https://kodi.wiki/view/InfoLabels
         :param str label: the name of the label
         :param Any value: the value to assign
 
@@ -255,8 +272,11 @@ class MediaItem:
             Logger.warning("Cannot set EpisodeInfo without season and episode")
             return
 
-        self.__infoLabels["Episode"] = int(episode)
-        self.__infoLabels["Season"] = int(season)
+        self.season = int(season)
+        self.__infoLabels["Season"] = self.season
+
+        self.epsiode = int(episode)
+        self.__infoLabels["Episode"] = self.epsiode
         return
 
     def set_expire_datetime(self, timestamp, year=0, month=0, day=0, hour=0, minutes=0, seconds=0):
@@ -278,6 +298,20 @@ class MediaItem:
 
         self.__expires_datetime = datetime(
             int(year), int(month), int(day), int(hour), int(minutes), int(seconds))
+
+    def get_upnext_sort_key(self):
+        """ Returns a value that be used to sort episodes for UpNext integration.
+
+        :return: A key used to sort the items chronologically.
+        :rtype: str
+
+        """
+
+        return "{:03d}-{:03d}-{}-{}".format(
+            self.season,
+            self.epsiode,
+            self.__timestamp.strftime("%Y.%m.%d") if self.__timestamp.year > 1900 else "0001.01.01",
+            self.name)
 
     def set_date(self, year, month, day,
                  hour=None, minutes=None, seconds=None, only_if_newer=False, text=None):
@@ -350,6 +384,14 @@ class MediaItem:
 
         return self.__timestamp
 
+    def get_date(self):
+        """ Gets the object's date.
+
+        :returns: the date for the object
+        :rtype: str|None
+        """
+        return self.__date
+
     def get_kodi_item(self, name=None):
         """Creates a Kodi item with the same data is the MediaItem.
 
@@ -394,11 +436,15 @@ class MediaItem:
         # Get all the info labels starting with the ones set and then add the specific ones
         info_labels = self.__infoLabels.copy()
         info_labels["Title"] = name
+
+        if self.media_type and self.media_type != mediatype.PAGE:
+            info_labels["mediatype"] = self.media_type
+
         if kodi_date:
             info_labels["Date"] = kodi_date
             info_labels["Year"] = kodi_year
             info_labels["Aired"] = kodi_date
-        if self.type != "audio":
+        if self.media_type in mediatype.VIDEO_TYPES:
             info_labels["Plot"] = description
         if self.tv_show_title:
             info_labels["TVShowTitle"] = self.tv_show_title
@@ -409,13 +455,13 @@ class MediaItem:
         item.setLabel2(self.__date)
 
         # set a flag to indicate it is a item that can be used with setResolveUrl.
-        if self.is_playable():
+        if self.is_playable:
             Logger.trace("Setting IsPlayable to True")
             item.setProperty("IsPlayable", "true")
 
         # specific items
         Logger.trace("Setting InfoLabels: %s", info_labels)
-        if self.type == "audio":
+        if self.media_type in mediatype.AUDIO_TYPES:
             item.setInfo(type="music", infoLabels=info_labels)
         else:
             item.setInfo(type="video", infoLabels=info_labels)
@@ -428,79 +474,70 @@ class MediaItem:
             art['poster'] = self.poster
         item.setArt(art)
 
-        # We never set the content resolving, Retrospect does this. And if we do, then the custom
-        # headers are removed from the URL when opening the resolved URL.
-        try:
-            item.setContentLookup(False)
-        except:
-            # apparently not yet supported on this Kodi version3
-            pass
+        item.setContentLookup(False)
         return item
 
-    def get_kodi_play_list_data(self, bitrate, proxy=None):
-        """ Returns the playlist items for this MediaItem
+    def get_resolved_kodi_item(self, bitrate, proxy=None):
+        """ Retrieves a resolved kodi ListItem.
 
         :param int bitrate:             The bitrate of the streams that should be in the
                                         playlist. Given in kbps.
         :param ProxyInfo|None proxy:    The proxy to set
 
-        :return: A list of ListItems that should be added to a playlist with their selected
-                 stream url
-        :rtype: list[tuple[xbmcgui.ListItem, str]]
+        :return: A Kodi ListItem with a resolved path and that path.
+        :rtype: tuple[xbmcgui.ListItem, str]
 
         """
 
-        Logger.info("Creating playlist items for Bitrate: %s kbps\n%s", bitrate, self)
+        Logger.info("Creating a Kodi ListItem for Bitrate: %s kbps\n%s\nMediaType: %s",
+                    bitrate, self, self.media_type)
 
         if bitrate is None:
             raise ValueError("Bitrate not specified")
 
-        play_list_data = []
-        for part in self.MediaItemParts:
-            if len(part.MediaStreams) == 0:
-                Logger.warning("Ignoring empty MediaPart: %s", part)
-                continue
+        if len(self.streams) == 0:
+            Logger.warning("Ignoring empty MediaItem: %s", self)
+            return None, None
 
-            kodi_item = self.get_kodi_item()
-            stream = part.get_media_stream_for_bitrate(bitrate)
-            if stream.Adaptive and bitrate > 0:
-                Adaptive.set_max_bitrate(stream, max_bit_rate=bitrate)
+        kodi_item = self.get_kodi_item()
 
-            # Set the actual stream path
-            kodi_item.setProperty("path", stream.Url)
+        stream = self.__get_matching_stream(bitrate=bitrate)
+        if stream.Adaptive and bitrate > 0:
+            Adaptive.set_max_bitrate(stream, max_bit_rate=bitrate)
 
-            # properties of the Part
-            for prop in part.Properties + stream.Properties:
-                Logger.trace("Adding property: %s", prop)
-                kodi_item.setProperty(prop[0], prop[1])
+        # Set the actual stream path
+        kodi_item.setPath(path=stream.Url)
 
-            # TODO: Apparently if we use the InputStream Adaptive, using the setSubtitles() causes sync issues.
-            if part.Subtitle and False:
-                Logger.debug("Adding subtitle to ListItem: %s", part.Subtitle)
-                kodi_item.setSubtitles([part.Subtitle, ])
+        # properties of the Part
+        for prop in stream.Properties:
+            Logger.trace("Adding property: %s", prop)
+            kodi_item.setProperty(prop[0], prop[1])
 
-            # Set any custom Header
-            header_params = dict()
+        # TODO: Apparently if we use the InputStream Adaptive, using the setSubtitles() causes sync issues.
+        if self.subtitle and False:
+            Logger.debug("Adding subtitle to ListItem: %s", self.subtitle)
+            kodi_item.setSubtitles([self.subtitle, ])
 
-            # set proxy information if present
-            self.__set_kodi_proxy_info(kodi_item, stream, stream.Url, header_params, proxy)
+        # Set any custom Header
+        header_params = dict()
 
-            # Now add the actual HTTP headers
-            for k in part.HttpHeaders:
-                header_params[k] = HtmlEntityHelper.url_encode(part.HttpHeaders[k])
+        # set proxy information if present
+        self.__set_kodi_proxy_info(kodi_item, stream, stream.Url, header_params, proxy)
 
-            stream_url = stream.Url
-            if header_params:
-                kodi_query_string = reduce(
-                    lambda x, y: "%s&%s=%s" % (x, y, header_params[y]), header_params.keys(), "")
-                kodi_query_string = kodi_query_string.lstrip("&")
-                Logger.debug("Adding Kodi Stream parameters: %s\n%s", header_params, kodi_query_string)
-                stream_url = "%s|%s" % (stream.Url, kodi_query_string)
+        # Now add the actual HTTP headers
+        for k in stream.HttpHeaders:
+            header_params[k] = HtmlEntityHelper.url_encode(stream.HttpHeaders[k])
 
-            Logger.info("Playing Stream:  %s", stream)
-            play_list_data.append((kodi_item, stream_url))
+        stream_url = stream.Url
+        if header_params:
+            kodi_query_string = reduce(
+                lambda x, y: "%s&%s=%s" % (x, y, header_params[y]), header_params.keys(), "")
+            kodi_query_string = kodi_query_string.lstrip("&")
+            Logger.debug("Adding Kodi Stream parameters: %s\n%s", header_params, kodi_query_string)
+            stream_url = "%s|%s" % (stream.Url, kodi_query_string)
 
-        return play_list_data
+        Logger.info("Playing Stream: %s", stream)
+        return kodi_item, stream_url
 
     @property
     def uses_external_addon(self):
@@ -509,6 +546,54 @@ class MediaItem:
     @property
     def title(self):
         return self.name
+
+    def __get_matching_stream(self, bitrate):
+        """ Returns the MediaStream for the requested bitrate.
+
+        Arguments:
+        bitrate : integer - The bitrate of the stream in kbps
+
+        Returns:
+        The url of the stream with the requested bitrate.
+
+        If bitrate is not specified the highest bitrate stream will be used.
+
+        """
+
+        # order the items by bitrate
+        self.streams.sort(key=lambda s: s.Bitrate)
+        best_stream = None
+        best_distance = None
+
+        if bitrate == 0:
+            # return the highest one
+            Logger.debug("Returning the higest bitrate stream")
+            return self.streams[-1]
+
+        for stream in self.streams:
+            if stream.Bitrate is None:
+                # no bitrate set, see if others are available
+                continue
+
+            # this is the bitrate-as-max-limit-method
+            if stream.Bitrate > bitrate:
+                # if the bitrate is higher, continue for more
+                continue
+            # if commented ^^ , we get the closest-match-method
+
+            # determine the distance till the bitrate
+            distance = abs(bitrate - stream.Bitrate)
+
+            if best_distance is None or best_distance > distance:
+                # this stream is better, so store it.
+                best_distance = distance
+                best_stream = stream
+
+        if best_stream is None:
+            # no match, take the lowest bitrate
+            return self.streams[0]
+
+        return best_stream
 
     def __set_kodi_proxy_info(self, kodi_item, stream, stream_url, kodi_params, proxy):
         """ Updates a Kodi ListItem with the correct Proxy configuration taken from the ProxyInfo
@@ -586,21 +671,24 @@ class MediaItem:
 
         value = self.name
 
-        if self.is_playable():
-            if len(self.MediaItemParts) > 0:
+        if self.is_playable:
+            if len(self.streams) > 0:
                 value = "MediaItem: %s [Type=%s, Complete=%s, IsLive=%s, Date=%s, Geo/DRM=%s/%s]" % \
-                        (value, self.type, self.complete, self.isLive, self.__date,
+                        (value, self.media_type, self.complete, self.isLive, self.__date,
                          self.isGeoLocked, self.isDrmProtected)
-                for media_part in self.MediaItemParts:
-                    value = "%s\n%s" % (value, media_part)
+                for media_stream in self.streams:
+                    value = "%s\n%s" % (value, media_stream)
                 value = "%s" % (value,)
             else:
                 value = "%s [Type=%s, Complete=%s, unknown urls, IsLive=%s, Date=%s, Geo/DRM=%s/%s]" \
-                        % (value, self.type, self.complete, self.isLive, self.__date,
+                        % (value, self.media_type, self.complete, self.isLive, self.__date,
                            self.isGeoLocked, self.isDrmProtected)
         else:
             value = "%s [Type=%s, Url=%s, Date=%s, IsLive=%s, Geo/DRM=%s/%s]" \
-                    % (value, self.type, self.url, self.__date, self.isLive, self.isGeoLocked, self.isDrmProtected)
+                    % (value, self.media_type, self.url, self.__date, self.isLive, self.isGeoLocked, self.isDrmProtected)
+
+        if self.subtitle:
+            value = "%s\n + Subtitle: %s" % (value, self.subtitle)
 
         return value
 
@@ -736,18 +824,18 @@ class MediaItem:
         if not name:
             name = self.name
 
-        if self.type == 'page':
+        if self.media_type == mediatype.PAGE:
             # We need to add the Page prefix to the item
             name = "%s %s" % (LanguageHelper.get_localized_string(LanguageHelper.Page), name)
             Logger.debug("MediaItem.__get_title :: Adding Page Prefix")
 
-        elif self.__date != '' and not self.is_playable() \
+        elif self.__date != '' and not self.is_playable \
                 and not AddonSettings.is_min_version(AddonSettings.KodiLeia):
             # not playable items should always show date
             name = "%s [COLOR=dimgray](%s)[/COLOR]" % (name, self.__date)
 
         folder_prefix = AddonSettings.get_folder_prefix()
-        if self.type == "folder" and not folder_prefix == "":
+        if self.media_type in mediatype.FOLDER_TYPES and not folder_prefix == "":
             name = "%s %s" % (folder_prefix, name)
 
         return name
@@ -760,7 +848,18 @@ class MediaItem:
 
         """
 
-        m = MediaItem(state["name"], state["url"], depickle=False)
+        # Convert older `MediaItem.type` to the new `mediatype` values.
+        media_type = state.get("type")
+        if media_type == "audio":
+            media_type = mediatype.MUSIC
+        elif media_type == "folder":
+            media_type = mediatype.FOLDER
+        elif media_type == "page":
+            media_type = mediatype.PAGE
+        elif media_type == "video":
+            media_type = mediatype.VIDEO
+
+        m = MediaItem(state["name"], state["url"], media_type=media_type, depickle=False)
         self.__dict__ = m.__dict__
         self.__dict__.update(state)
 
@@ -781,184 +880,31 @@ class MediaItem:
     #     return type(self), (self.name, self.url), self.__dict__
 
 
-# Don't make this an MediaItem(object) as it breaks the pickles
-class MediaItemPart:
-    """Class that represents a MediaItemPart"""
+class FolderItem(MediaItem):
+    def __init__(self, title, url, content_type, media_type=mediatype.FOLDER, depickle=False):
+        """ Creates a new FolderItem.
 
-    def __init__(self, name, url="", bitrate=0, subtitle=None, *args):
-        """ Creates a MediaItemPart with <name> with at least one MediaStream
-        instantiated with the values <url> and <bitrate>.
-        The MediaPart could also have a <subtitle> or Properties in the <*args>
+        The `url` can contain an url to a site more info about the item can be
+        retrieved, for instance for a video item to retrieve the media url, or
+        in case of a folder where child items can be retrieved.
 
-        If a subtitles was provided, the subtitle will be downloaded and stored
-        in the XOT cache. When played, the subtitle is shown. Due to the Kodi
-        limitation only one subtitle can be set on a playlist, this will be
-        the subtitle of the first MediaPartItem
+        Essential is that no encoding (like UTF8) is specified in the title of
+        the item. This is all taken care of when creating Kodi items in the
+        different methods.
 
-        :param str name:                    The name of the MediaItemPart.
-        :param str url:                     The URL of the stream of the MediaItemPart.
-        :param int bitrate:                 The bitrate of the stream of the MediaItemPart.
-        :param str|None subtitle:           The url of the subtitle of this MediaItemPart
-        :param tuple[str,str] args:         A list of arguments that will be set as properties
-                                            when getting an Kodi Playlist Item
-
-        """
-
-        Logger.trace("Creating MediaItemPart '%s' for '%s'", name, url)
-        self.Name = name
-        self.MediaStreams = []
-        self.Subtitle = ""
-        self.HttpHeaders = dict()                   # :  HTTP Headers for stream playback
-
-        # set a subtitle
-        if subtitle is not None:
-            self.Subtitle = subtitle
-
-        if not url == "":
-            # set the stream that was passed
-            self.append_media_stream(url, bitrate)
-
-        # set properties
-        self.Properties = []
-        for prop in args:
-            self.add_property(prop[0], prop[1])
-        return
-
-    def append_media_stream(self, url, bitrate, *args):
-        """Appends a mediastream item to the current MediaPart
-
-        The bitrate could be set to None.
-
-        :param url:                     The url of the MediaStream.
-        :param int|str bitrate:         The bitrate of the MediaStream.
-        :param tuple[str,str] args:     A list of arguments that will be set as properties
-                                        when getting an Kodi Playlist Item
-
-        :return: The newly added MediaStream by reference.
-        :rtype: MediaStream
+        :param str title:               The title of the item, used for appearance in lists.
+        :param str url:                 Url that used for further information retrieval.
+        :param str|None media_type:     The Kodi media type: video, movie, tvshow, season, episode,
+                                        or musicvideo.
+        :param str|None content_type:   The Kodi content type of the child items: files, songs,
+                                        artists, albums, movies, tvshows, episodes, musicvideos,
+                                        videos, images, games. Defaults to 'episodes'
+        :param bool depickle:           Is the constructor called while depickling.
 
         """
 
-        stream = MediaStream(url, bitrate, *args)
-        self.MediaStreams.append(stream)
-        return stream
-
-    def add_property(self, name, value):
-        """ Adds a property to the MediaPart.
-
-        Appends a new property to the self.Properties dictionary. On playback
-        these properties will be set to the Kodi PlaylistItem as properties.
-
-        :param str name:    The name of the property.
-        :param str value:   The value of the property.
-
-        """
-
-        Logger.debug("Adding property: %s = %s", name, value)
-        self.Properties.append((name, value))
-
-    def get_media_stream_for_bitrate(self, bitrate):
-        """Returns the MediaStream for the requested bitrate.
-
-        Arguments:
-        bitrate : integer - The bitrate of the stream in kbps
-
-        Returns:
-        The url of the stream with the requested bitrate.
-
-        If bitrate is not specified the highest bitrate stream will be used.
-
-        """
-
-        # order the items by bitrate
-        self.MediaStreams.sort(key=lambda s: s.Bitrate)
-        best_stream = None
-        best_distance = None
-
-        if bitrate == 0:
-            # return the highest one
-            Logger.debug("Returning the higest bitrate stream")
-            return self.MediaStreams[-1]
-
-        for stream in self.MediaStreams:
-            if stream.Bitrate is None:
-                # no bitrate set, see if others are available
-                continue
-
-            # this is the bitrate-as-max-limit-method
-            if stream.Bitrate > bitrate:
-                # if the bitrate is higher, continue for more
-                continue
-            # if commented ^^ , we get the closest-match-method
-
-            # determine the distance till the bitrate
-            distance = abs(bitrate - stream.Bitrate)
-
-            if best_distance is None or best_distance > distance:
-                # this stream is better, so store it.
-                best_distance = distance
-                best_stream = stream
-
-        if best_stream is None:
-            # no match, take the lowest bitrate
-            return self.MediaStreams[0]
-
-        return best_stream
-
-    def __eq__(self, other):
-        """ Checks 2 items for Equality. Equality takes into consideration:
-
-        * Name
-        * Subtitle
-        * Length of the MediaStreams
-        * Compares all the MediaStreams in the self.MediaStreams
-
-         :param MediaItemPart other: The part the test for equality.
-
-         :return: Returns true if the items are equal.
-         :rtype: bool
-
-        """
-
-        if other is None:
-            return False
-
-        if not other.Name == self.Name:
-            return False
-
-        if not other.Subtitle == self.Subtitle:
-            return False
-
-        # now check the stream
-        if not len(self.MediaStreams) == len(other.MediaStreams):
-            return False
-
-        for i in range(0, len(self.MediaStreams)):
-            if not self.MediaStreams[i] == other.MediaStreams[i]:
-                return False
-
-        # if we reach this point they are equal.
-        return True
-
-    def __str__(self):
-        """ String representation for the MediaPart
-
-        :return: The String representation
-        :rtype: str
-
-        """
-
-        text = "MediaPart: %s [HttpHeaders=%s]" % (self.Name, self.HttpHeaders)
-
-        if self.Subtitle != "":
-            text = "%s\n + Subtitle: %s" % (text, self.Subtitle)
-
-        for prop in self.Properties:
-            text = "%s\n + Property: %s=%s" % (text, prop[0], prop[1])
-
-        for stream in self.MediaStreams:
-            text = "%s\n + %s" % (text, stream)
-        return text
+        MediaItem.__init__(self, title, url, media_type=media_type, depickle=depickle)
+        self.content_type = content_type
 
 
 # Don't make this an MediaItem(object) as it breaks the pickles
@@ -979,6 +925,7 @@ class MediaStream:
         self.Bitrate = int(bitrate)
         self.Properties = []
         self.Adaptive = False
+        self.HttpHeaders = dict()  # :  HTTP Headers for stream playback
 
         for prop in args:
             self.add_property(prop[0], prop[1])

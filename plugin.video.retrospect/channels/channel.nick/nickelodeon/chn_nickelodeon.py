@@ -1,10 +1,11 @@
 # coding=utf-8  # NOSONAR
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, contenttype, mediatype
 from resources.lib.helpers.datehelper import DateHelper
 
-from resources.lib.mediaitem import MediaItem
+from resources.lib.mediaitem import MediaItem, FolderItem
+from resources.lib.mediatype import EPISODE
 from resources.lib.parserdata import ParserData
 from resources.lib.regexer import Regexer
 from resources.lib.helpers.jsonhelper import JsonHelper
@@ -69,16 +70,16 @@ class Channel(chn_class.Channel):
                                       "children", ("type", "LineList", 0), 'props', 'loadMore'],
                               creator=self.extract_more_json_episodes)
 
-        self._add_data_parser("https://www.[^/]+/shows/",
+        self._add_data_parser("https://www.[^/]+/(shows|serien)/",
                               name="JSON Retriever for videos",
                               match_type=ParserData.MatchRegex,
                               json=True, preprocessor=self.extract_json_video)
 
-        self._add_data_parser("https://www.[^/]+/shows/", name="JSON video creator",
+        self._add_data_parser("https://www.[^/]+/(shows|serien)/", name="JSON video creator",
                               match_type=ParserData.MatchRegex, json=True,
                               parser=["items"], creator=self.create_json_video_item)
 
-        self._add_data_parser("https://www.[^/]+/shows/", name="JSON season creator",
+        self._add_data_parser("https://www.[^/]+/(shows|serien)/", name="JSON season creator",
                               match_type=ParserData.MatchRegex,  json=True,
                               parser=["seasons"], creator=self.create_json_season_item)
 
@@ -253,7 +254,7 @@ class Channel(chn_class.Channel):
         """
 
         url = "{}{}".format(self.baseUrl, result_set["url"])
-        item = MediaItem(result_set["label"], url)
+        item = FolderItem(result_set["label"], url, content_type=contenttype.EPISODES, media_type=mediatype.SEASON)
         item.metaData["is_season"] = True
         return item
 
@@ -287,8 +288,7 @@ class Channel(chn_class.Channel):
             name = "{} - {}".format(name, sub_heading)
 
         url = "{}{}".format(self.baseUrl, result_set["url"])
-        item = MediaItem(name, url)
-        item.type = "video"
+        item = MediaItem(name, url, media_type=EPISODE)
         item.description = meta.get("description")
         item.thumb = result_set.get("media", {}).get("image", {}).get("url")
         item.isGeoLocked = True
@@ -320,10 +320,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         """
@@ -345,12 +345,11 @@ class Channel(chn_class.Channel):
             stream = JsonHelper(stream_data)
 
             # subUrls = stream.get_value("package", "video", "item", 0, "transcript", 0, "typographic")  # NOSONAR
-            part = item.create_new_empty_media_part()
 
             hls_streams = stream.get_value("package", "video", "item", 0, "rendition")
             for hls_stream in hls_streams:
                 hls_url = hls_stream["src"]
-                item.complete |= M3u8.update_part_with_m3u8_streams(part, hls_url)
+                item.complete |= M3u8.update_part_with_m3u8_streams(item, hls_url)
 
         item.complete = True
         Logger.trace("Media url: %s", item)

@@ -5,7 +5,7 @@ import random
 import time
 import datetime
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.helpers.htmlhelper import HtmlHelper
 from resources.lib.logger import Logger
 from resources.lib.mediaitem import MediaItem
@@ -385,7 +385,7 @@ class Channel(chn_class.Channel):
         items = []
         live = MediaItem("Live %s" % (self.parentItem.name, ), "#livestream")
         live.isLive = True
-        live.type = "video"
+        live.media_type = mediatype.EPISODE
         live.description = self.parentItem.description
         live.metaData = self.parentItem.metaData
         items.append(live)
@@ -463,7 +463,7 @@ class Channel(chn_class.Channel):
         item = MediaItem(result_set["name"], "#livestream")
         item.description = result_set.get("slogan", None)
         item.metaData["channelId"] = result_set["id"]
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.isLive = True
         item.isPaid = True  # result_set.get("premium", False)  All content requires a premium account
         item.isGeoLocked = True
@@ -531,7 +531,7 @@ class Channel(chn_class.Channel):
                 return None
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.isGeoLocked = result_set["geoblock"]
         item.description = episode_info["description"]
         # item.set_date(startTime.year, startTime.month, startTime.day)
@@ -605,7 +605,7 @@ class Channel(chn_class.Channel):
     #         #     startTime = self.parentItem.metaData["airDate"]
     #
     #         item = MediaItem(title, url)
-    #         item.type = "video"
+    #         item.media_type = mediatype.EPISODE
     #         item.isGeoLocked = result_set["geoblock"]
     #         item.description = result_set["shortDescription"]
     #         # item.set_date(startTime.year, startTime.month, startTime.day)
@@ -845,7 +845,7 @@ class Channel(chn_class.Channel):
             title = result_set['title']
 
         url = "https://vod.medialaan.io/vod/v2/videos/%(id)s" % result_set
-        item = MediaItem(title, url, type="video")
+        item = MediaItem(title, url, media_type=mediatype.EPISODE)
         item.description = result_set.get('text')
         item.thumb = self.__find_image(result_set.get('episode', {}), self.parentItem.thumb)
 
@@ -868,10 +868,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -893,10 +893,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -940,7 +940,7 @@ class Channel(chn_class.Channel):
             item = MediaItem("Live VTM", "#livestream")
         else:
             item = MediaItem("Live Q2", "#livestream")
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.isLive = True
         now = datetime.datetime.now()
         item.set_date(now.year, now.month, now.day, now.hour, now.minute, now.second)
@@ -1071,7 +1071,7 @@ class Channel(chn_class.Channel):
         url = result_set["url"].replace('  ', ' ')
         if not result_set["url"].startswith("http"):
             url = "%s/%s" % (self.baseUrl, result_set["url"])
-        item = MediaItem(title, url, type="video")
+        item = MediaItem(title, url, media_type=mediatype.EPISODE)
         item.thumb = result_set['thumburl']
         item.complete = False
 
@@ -1082,16 +1082,16 @@ class Channel(chn_class.Channel):
     def update_video_item(self, item):
         """ Updates an existing MediaItem with more data.
 
-        Used to update none complete MediaItems (self.complete = False). This
+        UUsed to update none complete MediaItems (self.complete = False). This
         could include opening the item's URL to fetch more data and then process that
         data or retrieve it's real media-URL.
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -1121,10 +1121,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -1184,8 +1184,7 @@ class Channel(chn_class.Channel):
 
             license_key = license_key[2:]
             license_key = "|Cookie={0}|R{{SSM}}|".format(HtmlEntityHelper.url_encode(license_key))
-            part = item.create_new_empty_media_part()
-            stream = part.append_media_stream(hls, 0)
+            stream = item.add_stream(hls, 0)
             M3u8.set_input_stream_addon_input(stream, license_key=license_key)
             item.complete = True
         else:
@@ -1201,10 +1200,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -1235,7 +1234,7 @@ class Channel(chn_class.Channel):
         for stream in streams:
             stream_url = stream['url']
             if stream['type'] == "mp4":
-                item.append_single_stream(stream_url, 0)
+                item.add_stream(stream_url, 0)
                 item.complete = True
 
         return item
@@ -1252,20 +1251,7 @@ class Channel(chn_class.Channel):
     def __update_video_item(self, item, video_id):
         """ Updates an existing MediaItem with more data.
 
-        Used to update none complete MediaItems (self.complete = False). This
-        could include opening the item's URL to fetch more data and then process that
-        data or retrieve it's real media-URL.
-
-        The method should at least:
-        * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
-        * set self.complete = True.
-
-        if the returned item does not have a MediaItemPart then the self.complete flag
-        will automatically be set back to False.
-
         :param MediaItem item: the original MediaItem that needs updating.
-        :param str video_id: the video ID of the item to update.
 
         :return: The original item with more data added to it's properties.
         :rtype: MediaItem
@@ -1306,8 +1292,7 @@ class Channel(chn_class.Channel):
             license_headers = "x-dt-custom-data={0}&Content-Type=application/octstream".format(base64.b64encode(license_header))
             license_key = "{0}?specConform=true|{1}|R{{SSM}}|".format(license_url, license_headers or "")
 
-            part = item.create_new_empty_media_part()
-            stream = part.append_media_stream(stream_url, 0)
+            stream = item.add_stream(stream_url, 0)
             Mpd.set_input_stream_addon_input(stream, license_key=license_key, license_type="com.widevine.alpha")
             item.complete = True
         else:
@@ -1325,17 +1310,17 @@ class Channel(chn_class.Channel):
                 )
                 return item
 
-            part = item.create_new_empty_media_part()
             # Set the Range header to a proper value to make all streams start at the beginning. Make
             # sure that a complete TS part comes in a single call otherwise we get stuttering.
             byte_range = 10 * 1024 * 1024
             Logger.debug("Setting an 'Range' http header of bytes=0-%d to force playback at the start "
                          "of a stream and to include a full .ts part.", byte_range)
-            part.HttpHeaders["Range"] = 'bytes=0-%d' % (byte_range, )
+            headers = {"Range": 'bytes=0-%d' % (byte_range, )}
 
             for s, b in M3u8.get_streams_from_m3u8(m3u8_url):
                 item.complete = True
-                part.append_media_stream(s, b)
+                stream = item.add_stream(s, b)
+                stream.HttpHeaders.update(headers)
 
         return item
 

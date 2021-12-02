@@ -12,7 +12,10 @@ from six.moves import urllib
 addonID = xbmcaddon.Addon().getAddonInfo("id")
 addon = xbmcaddon.Addon(addonID)
 db_path = addon.getAddonInfo('profile')
-db_file = xbmc.translatePath("%s/youtube_channels.db" % db_path)
+if sys.version_info.major == 3:
+	db_file = xbmcvfs.translatePath("%s/youtube_channels.db" % db_path)
+else:
+	db_file = xbmc.translatePath("%s/youtube_channels.db" % db_path)
 
 if not xbmcvfs.exists(db_path):
 	xbmcvfs.mkdirs(db_path)
@@ -237,7 +240,9 @@ def change_folder(channel_id, folder_name):
 		folder_name="Other"
 	cur = db.cursor()
 	cur.execute("begin")
-	cur.execute("UPDATE Channels SET Folder = ? WHERE Channel_ID = ?;",(folder_name, channel_id))
+	cur.execute("SELECT * From Channels WHERE Folder = ?",(folder_name,))
+	sort = len(cur.fetchall()) + 1
+	cur.execute("UPDATE Channels SET Folder = ?, sort = ? WHERE Channel_ID = ?;",(folder_name, sort, channel_id))
 	db.commit()
 	cur.close()
 
@@ -264,7 +269,7 @@ def get_folder_thumbnail(folder_name):
 	thumb = cur.fetchone()[0]
 	db.commit()
 	cur.close()
-	
+
 	return thumb
 
 def search_channel(channel_name):
@@ -386,6 +391,39 @@ def get_playlists(channelID,page):
 
 			playlists.append([playlist_id,playlist_name,thumb])
 	return playlists
+
+def get_livestreams(channelID,page):
+	if page=='1':
+		url='https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=%s&eventType=live&order=date&type=video&key=%s'%(channelID,YOUTUBE_API_KEY)
+	else:
+		url='https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=%s&eventType=live%order=date%type=video&pageToken=%s&key=%s'%(channelID,page,YOUTUBE_API_KEY)
+	read=read_url(url)
+	decoded_data=json.loads(read)
+	livestreams=[]
+	videoids=[]
+	try:
+		next_page=decoded_data['nextPageToken']
+	except:
+		next_page='1'
+	livestreams.append(next_page)
+	
+	for i in range(0, len(decoded_data['items'])):
+		video_id = decoded_data['items'][i]['id']['videoId']
+		videoids.append(video_id)
+
+	video_req_url = 'https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=%s&key=%s' % (','.join(videoids), YOUTUBE_API_KEY)
+	video_read = read_url(video_req_url)
+	video_decoded = json.loads(video_read)
+	sorted_data = sorted((video_decoded['items']), key=(lambda i: i['snippet']['publishedAt']), reverse=True)
+	
+	for i in range(0, len(sorted_data)):
+		title = sorted_data[i]['snippet']['title']
+		video_id = sorted_data[i]['id']
+		thumb = sorted_data[i]['snippet']['thumbnails']['high']['url']
+		desc = sorted_data[i]['snippet']['description']
+		livestreams.append([title, video_id, thumb, desc])
+
+	return livestreams
 
 def local_string(string_id):
 	return my_addon.getLocalizedString(string_id)

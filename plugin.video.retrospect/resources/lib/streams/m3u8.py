@@ -4,7 +4,7 @@ from resources.lib.urihandler import UriHandler
 from resources.lib.logger import Logger
 from resources.lib.regexer import Regexer
 from resources.lib.streams.adaptive import Adaptive
-from resources.lib.mediaitem import MediaItemPart, MediaStream
+from resources.lib.mediaitem import MediaStream, MediaItem
 from resources.lib.addonsettings import AddonSettings
 
 
@@ -82,7 +82,7 @@ class M3u8(object):
                                      manifest_update=None):
         """ Updates an existing stream with parameters for the inputstream adaptive add-on.
 
-        :param strm:                    (MediaStream) the MediaStream to update
+        :param MediaStream strm:        The MediaStream to update
         :param dict headers:            Possible HTTP Headers
         :param str license_key:         The value of the license key request
         :param str license_type:        The type of license key request used (see below)
@@ -95,8 +95,7 @@ class M3u8(object):
 
         Can be used like this:
 
-            part = item.create_new_empty_media_part()
-            stream = part.append_media_stream(m3u8url, 0)
+            stream = item.add_stream(m3u8url, 0)
             M3u8.set_input_stream_addon_input(stream, self.headers)
             item.complete = True
 
@@ -145,16 +144,16 @@ class M3u8(object):
                                         key_value=key_value)
 
     @staticmethod
-    def update_part_with_m3u8_streams(part, url,
+    def update_part_with_m3u8_streams(item, url,
                                       encrypted=False,
                                       headers=None,
                                       map_audio=False,
                                       bitrate=0,
                                       channel=None):
-        """ Updates an existing MediaItemPart with M3u8 data either using the Adaptive Inputstream 
+        """ Updates an existing MediaItem with M3u8 data either using the Adaptive Inputstream
         Add-on or with the built-in code.
 
-        :param MediaItemPart part:      The part to update
+        :param MediaItem item:          The MediaItem to update
         :param str url:                 The url to download
         :param bool encrypted:          Is the stream encrypted?
         :param dict[str,str] headers:   Possible HTTP Headers
@@ -175,7 +174,7 @@ class M3u8(object):
 
         if input_stream:
             Logger.debug("Using InputStream Adaptive add-on for M3u8 playback.")
-            stream = part.append_media_stream(url, bitrate)
+            stream = item.add_stream(url, bitrate)
             M3u8.set_input_stream_addon_input(stream, headers)
             return True
 
@@ -187,12 +186,12 @@ class M3u8(object):
                     audio_part = a.rsplit("-", 1)[-1]
                     audio_part = "-%s" % (audio_part,)
                     s = s.replace(".m3u8", audio_part)
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
                 complete = True
         else:
             Logger.debug("Using Retrospect code for M3u8 playback.")
             for s, b in M3u8.get_streams_from_m3u8(url):
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
                 complete = True
 
         return complete
@@ -208,11 +207,10 @@ class M3u8(object):
 
         Can be used like this:
 
-            part = item.create_new_empty_media_part()
             for s, b in M3u8.get_streams_from_m3u8(m3u8_url):
                 item.complete = True
                 # s = self.get_verifiable_video_url(s)
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
 
         :param dict[str,str] headers:       Possible HTTP Headers
         :param str url:                     The url to download

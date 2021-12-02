@@ -41,13 +41,33 @@ class Pickler:
 
     def __init__(self, pickle_store_path=None):
         # store some vars for speed optimization
-        self.__pickleContainer = dict()  # : storage for pickled items to prevent duplicate pickling
+        self.__pickle_container = dict()  # : storage for pickled items to prevent duplicate pickling
+        self.__depickle_container = dict()  # : storage for depickled items.
+
         self.__pickle_store_path = pickle_store_path
         self.__compress = True
         if self.__compress:
             self.__ext = "store.z"
         else:
             self.__ext = "store"
+
+    def de_pickle_child_items(self, hex_string):
+        """ De-serializes a serialized mediaitem.
+
+        Warning: Pickling from Python2 to Python3 will not work.
+
+        :param str|unicode hex_string: Base64 encoded string that should be decoded.
+
+        :return: The object that was Pickled and Base64 encoded.
+        :rtype: tuple[str, dict[str, list[MediaItem]]]
+
+        """
+
+        if not self.is_pickle_store_id(hex_string):
+            raise ValueError("Cannot fetch child items for non-store item.")
+
+        store_guid, item_guid = hex_string.split(Pickler.__store_separator)
+        return store_guid, self.__retrieve_media_items_from_store(store_guid)
 
     def de_pickle_media_item(self, hex_string):
         """ De-serializes a serialized mediaitem.
@@ -57,6 +77,7 @@ class Pickler:
         :param str|unicode hex_string: Base64 encoded string that should be decoded.
 
         :return: The object that was Pickled and Base64 encoded.
+        :rtype: MediaItem
 
         """
 
@@ -88,9 +109,9 @@ class Pickler:
 
         """
 
-        if item.guid in self.__pickleContainer:
+        if item.guid in self.__pickle_container:
             Logger.trace("Pickle Container cache hit: %s", item.guid)
-            return self.__pickleContainer[item.guid]
+            return self.__pickle_container[item.guid]
 
         pickle_string = pickle.dumps(item, protocol=pickle.HIGHEST_PROTOCOL)  # type: bytes
         hex_bytes = base64.b64encode(pickle_string)  # type: bytes
@@ -101,7 +122,7 @@ class Pickler:
                             Pickler.__Base64CharsEncode.keys(),
                             hex_string)
 
-        self.__pickleContainer[item.guid] = hex_string
+        self.__pickle_container[item.guid] = hex_string
         return hex_string
 
     def purge_store(self, addon_id, age=30):
@@ -191,10 +212,14 @@ class Pickler:
         """
         return self.__store_separator in pickle
 
-    def __retrieve_media_item_from_store(self, storage_location):
-        store_guid, item_guid = storage_location.split(Pickler.__store_separator)
+    def __retrieve_media_items_from_store(self, store_guid):
+        content = self.__depickle_container.get(store_guid)
+        if content:
+            items = content.get("children")
+            return items
+
         pickles_dir, pickles_path = self.__get_pickle_path(store_guid)
-        Logger.debug("PickleStore: Reading %s from '%s'", item_guid, pickles_path)
+        Logger.debug("PickleStore: Reading items from '%s'", pickles_path)
 
         try:
             if self.__compress:
@@ -210,6 +235,13 @@ class Pickler:
             return None
 
         items = content.get("children")
+        self.__depickle_container[store_guid] = content
+        return items
+
+    def __retrieve_media_item_from_store(self, storage_location):
+        store_guid, item_guid = storage_location.split(Pickler.__store_separator)
+        items = self.__retrieve_media_items_from_store(store_guid)
+
         item_pickle = items.get(item_guid)
         return item_pickle
 

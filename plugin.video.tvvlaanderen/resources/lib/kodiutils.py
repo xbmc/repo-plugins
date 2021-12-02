@@ -218,6 +218,7 @@ def play(stream, license_key=None, title=None, art_dict=None, info_dict=None, pr
     else:
         play_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
     play_item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
+    play_item.setProperty('inputstream.adaptive.stream_headers', 'user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36')
     play_item.setMimeType('application/dash+xml')
     play_item.setContentLookup(False)
 

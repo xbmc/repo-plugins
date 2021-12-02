@@ -323,7 +323,7 @@ class HbogoHandler_sp(HbogoHandler):
             self.log('List pages calling next page... max: ' + str(max_items) + ' offset: ' + str(offset + max_items))
             self.list_pages(url, max_items, offset + max_items)
 
-    def list(self, url, simple=False):
+    def list(self, url, simple=False, exclude_list=None):
         if not self.chk_login():
             self.login()
         self.log("List: " + str(url))

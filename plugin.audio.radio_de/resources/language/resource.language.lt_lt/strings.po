@@ -7,14 +7,23 @@ msgstr ""
 "Project-Id-Version: Kodi Addons\n"
 "Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Kodi Translation Team\n"
-"Language-Team: Team-Kodi\n"
+"PO-Revision-Date: 2021-10-03 12:30+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Lithuanian <https://kodi.weblate.cloud/projects/kodi-add-ons-music/plugin-audio-radio_de/lt_lt/>\n"
+"Language: lt_lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: lt_LT\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 4.8\n"
+
+msgctxt "Addon Summary"
+msgid "Access >30000 radio broadcasts"
+msgstr "Prieiga> 30000 radijo transliacijų"
+
+msgctxt "Addon Description"
+msgid "Music plugin to access over 30000 international radio broadcasts from rad.io, radio.de, radio.fr, radio.pt and radio.es[CR]Currently features[CR]- English, german, french translated[CR]- Browse stations by location, genre, topic, country, city and language[CR]- Search for stations[CR]- 115 genres, 59 topics, 94 countrys, 1010 citys, 63 languages"
+msgstr "Muzikos įskiepio prieiga prie daugiau nei 30000 tarptautinių radijo transliacijų iš rad.io, radio.de ir radio.fr [CR] Šiuo metu programoja išversta į [Cr] - anglų, vokiečių ir prancūzų kalbas [CR] - Naršyti stotis pagal: vietovę, žanrą, temą, šalį, miestą ir/ar kalbą [CR] - Ieškoti radio stočių pagal:[Cr] - 115 žanrai, 59 temos, 94 šalys, 1010 miestų, 63 kalbos"
 
 msgctxt "#30100"
 msgid "Editorials Recommendations"
@@ -62,15 +71,23 @@ msgstr "Kalba"
 
 msgctxt "#30301"
 msgid "English"
-msgstr "Anglijos"
+msgstr "Anglų"
 
 msgctxt "#30302"
 msgid "German"
-msgstr "Vokietijos"
+msgstr "Vokiečių"
 
 msgctxt "#30303"
 msgid "French"
 msgstr "Prancūzų"
+
+msgctxt "#30304"
+msgid "Portuguese"
+msgstr "Portugalų"
+
+msgctxt "#30305"
+msgid "Spanish"
+msgstr "Ispanų"
 
 msgctxt "#30310"
 msgid "Force ViewMode to Thumbnail"
@@ -112,3 +129,42 @@ msgctxt "#30600"
 msgid "Network Error"
 msgstr "Tinklo klaida"
 
+msgctxt "#30601"
+msgid "General"
+msgstr "Pagrindinis"
+
+msgctxt "#30602"
+msgid "Hide fanart"
+msgstr "Slėpti fanart"
+
+msgctxt "#30603"
+msgid "Most Popular"
+msgstr "Populiariausi"
+
+msgctxt "#30604"
+msgid "A-Z"
+msgstr "A-Z"
+
+msgctxt "#30605"
+msgid "Page (%s/%s) | Next >>"
+msgstr "Puslapis (%s/%s) | Kitas >>"
+
+msgctxt "#30606"
+msgid "By country"
+msgstr "Pagal šalį"
+
+msgctxt "#30607"
+msgid "Prefer HTTP streams over HTTS"
+msgstr "Pirmenybę teikite HTTP srautams, o ne HTTPS"
+
+msgctxt "#30608"
+msgid "Unable to get radio stream url"
+msgstr ""
+
+msgctxt "#30609"
+msgid "Sucessfully added to my stations!"
+msgstr ""
+
+msgctxt "#30610"
+msgid "Sucessfully removed from my stations!"
+msgstr ""

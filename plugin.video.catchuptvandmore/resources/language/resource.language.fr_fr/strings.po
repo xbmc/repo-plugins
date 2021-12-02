@@ -143,7 +143,7 @@ msgstr "Canada"
 
 msgctxt "#30057"
 msgid "United States of America"
-msgstr "Etat Unis d'Amérique"
+msgstr "États-Unis d'Amérique"
 
 msgctxt "#30058"
 msgid "Poland"
@@ -671,6 +671,18 @@ msgstr "Catégories"
 msgctxt "#30726"
 msgid "Races"
 msgstr "Courses"
+
+msgctxt "#30727"
+msgid "Most popular"
+msgstr "Les plus populaires"
+
+msgctxt "#30728"
+msgid "Recently added"
+msgstr "Ajouté récemment"
+
+msgctxt "#30729"
+msgid "Emissions"
+msgstr "Émissions"
 
 # Favourites (from 30800 to 30859)
 msgctxt "#30800"

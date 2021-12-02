@@ -3,6 +3,7 @@ import libzdf
 
 class tivi(libzdf.libzdf):
 	def __init__(self):
+		self.apiVersion = 2
 		self.baseApi = 'https://api.zdf.de'
 		self.userAgent = 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0'
 		self.channels =	['ZDF','ZDFinfo','ZDFneo',]
@@ -13,7 +14,7 @@ class tivi(libzdf.libzdf):
 
 
 	def libZdfListMain(self):
-		l = []#https://api.zdf.de/content/documents/zdf/kinder/sendungen-a-z
+		l = []
 
 		l.append({'metadata':{'name':self.translation(32132)}, 'params':{'mode':'libZdfListShows', 'uri':'/content/documents/kindersendungen-a-z-100.json?profile=default'}, 'type':'dir'})
 		l.append({'metadata':{'name':self.translation(32133)}, 'params':{'mode':'libMediathekListDate','subParams':f'{{"mode":"libZdfListChannelDateVideos","channel":"KI.KA"}}'}, 'type':'dir'})

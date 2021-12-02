@@ -88,5 +88,13 @@ menu = {
         'fanart': 'channels/nl/at5_fanart.jpg',
         'enabled': True,
         'order': 10
+    },
+    'ob': {
+        'resolver': '/resources/lib/channels/nl/ob:get_live_url',
+        'label': 'Omroep Brabant',
+        'thumb': 'channels/nl/ob.png',
+        'fanart': 'channels/nl/ob_fanart.jpg',
+        'enabled': True,
+        'order': 11
     }
 }

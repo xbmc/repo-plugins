@@ -8,6 +8,11 @@
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="enable_livestreams" type="boolean" label="30208">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
 				<setting id="show_adds" type="boolean" label="30202">
 					<level>0</level>
 					<default>true</default>

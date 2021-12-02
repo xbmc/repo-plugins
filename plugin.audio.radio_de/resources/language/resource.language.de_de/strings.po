@@ -7,14 +7,23 @@ msgstr ""
 "Project-Id-Version: Kodi Addons\n"
 "Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Kodi Translation Team\n"
-"Language-Team: Team-Kodi\n"
+"PO-Revision-Date: 2021-10-08 01:37+0000\n"
+"Last-Translator: Kai Sommerfeld <kai.sommerfeld@gmx.com>\n"
+"Language-Team: German <https://kodi.weblate.cloud/projects/kodi-add-ons-music/plugin-audio-radio_de/de_de/>\n"
+"Language: de_de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de_DE\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.8\n"
+
+msgctxt "Addon Summary"
+msgid "Access >30000 radio broadcasts"
+msgstr "Zugang zu mehr als 30000 Radiosendern"
+
+msgctxt "Addon Description"
+msgid "Music plugin to access over 30000 international radio broadcasts from rad.io, radio.de, radio.fr, radio.pt and radio.es[CR]Currently features[CR]- English, german, french translated[CR]- Browse stations by location, genre, topic, country, city and language[CR]- Search for stations[CR]- 115 genres, 59 topics, 94 countrys, 1010 citys, 63 languages"
+msgstr "Das Radio im Internet mit über 30000 Radiosendern, Internetradiostationen, gratis Streams und Podcasts live von rad.io, radio.de und radio.fr.[CR]Features[CR]- Auf deutsch, englisch und französisch übersetzt[CR]- Sortiert nach: in der Nähe, Genre, Thema, Land und Sprache[CR]- nach Sendern suchen[CR]- 115 Genre, 59 Themen, 94 Länder, 1010 Städte, 63 Sprachen"
 
 msgctxt "#30100"
 msgid "Editorials Recommendations"
@@ -22,7 +31,7 @@ msgstr "Tipps der Redaktion"
 
 msgctxt "#30101"
 msgid "Top Stations"
-msgstr "Top Sender"
+msgstr "Beliebteste Sender"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -46,7 +55,7 @@ msgstr "Nach Sprache"
 
 msgctxt "#30107"
 msgid "Local Stations"
-msgstr "Sender in Ihrer Nähe"
+msgstr "Sender in der Nähe"
 
 msgctxt "#30108"
 msgid "My Stations"
@@ -72,25 +81,33 @@ msgctxt "#30303"
 msgid "French"
 msgstr "Französisch"
 
+msgctxt "#30304"
+msgid "Portuguese"
+msgstr "Portugiesisch"
+
+msgctxt "#30305"
+msgid "Spanish"
+msgstr "Spanisch"
+
 msgctxt "#30310"
 msgid "Force ViewMode to Thumbnail"
-msgstr "ViewMode 'Thumbnail' erzwingen"
+msgstr "ViewMode „Vorschaubild“ erzwingen"
 
 msgctxt "#30400"
 msgid "Add to 'My Stations'"
-msgstr "Zu 'Meine Sender' hinzufügen"
+msgstr "Zu „Meine Sender“ hinzufügen"
 
 msgctxt "#30401"
 msgid "Remove from 'My Stations'"
-msgstr "Von 'Meine Sender' entfernen"
+msgstr "Aus „Meine Sender“ entfernen"
 
 msgctxt "#30402"
 msgid "Edit custom Station"
-msgstr "Sender editieren"
+msgstr "Benutzerdefinierten Sender bearbeiten"
 
 msgctxt "#30500"
 msgid "Please enter %s"
-msgstr "Bitte %s angeben"
+msgstr "Bitte %s eingeben"
 
 msgctxt "#30501"
 msgid "title"
@@ -98,17 +115,56 @@ msgstr "Titel"
 
 msgctxt "#30502"
 msgid "thumbnail url or path"
-msgstr "Thumbnail url oder Pfad"
+msgstr "Vorschaubild-URL oder -Pfad"
 
 msgctxt "#30503"
 msgid "stream url"
-msgstr "Stream url"
+msgstr "Stream-URL"
 
 msgctxt "#30504"
 msgid "Add custom Station..."
-msgstr "Neuen Sender anlegen..."
+msgstr "Benutzerdefinierten Sender hinzufügen ..."
 
 msgctxt "#30600"
 msgid "Network Error"
-msgstr "Netzwerk Fehler"
+msgstr "Netzwerkfehler"
 
+msgctxt "#30601"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30602"
+msgid "Hide fanart"
+msgstr "Fanart verbergen"
+
+msgctxt "#30603"
+msgid "Most Popular"
+msgstr "Am beliebtesten"
+
+msgctxt "#30604"
+msgid "A-Z"
+msgstr "A bis Z"
+
+msgctxt "#30605"
+msgid "Page (%s/%s) | Next >>"
+msgstr "Seite (%s / %s) | Nächste >>"
+
+msgctxt "#30606"
+msgid "By country"
+msgstr "Nach Land"
+
+msgctxt "#30607"
+msgid "Prefer HTTP streams over HTTS"
+msgstr "HTTPS-Streams gegenüber HTTP-Streams bevorzugen"
+
+msgctxt "#30608"
+msgid "Unable to get radio stream url"
+msgstr "URL des Radio-Streams kann nicht ermittelt werden"
+
+msgctxt "#30609"
+msgid "Sucessfully added to my stations!"
+msgstr "Erfolgreich zu „Meine Sender“ hinzugefügt!"
+
+msgctxt "#30610"
+msgid "Sucessfully removed from my stations!"
+msgstr "Erfolgreich aus „Meine Sender“ entfernt!"

@@ -136,16 +136,8 @@ msgctxt "#30702"
 msgid "An error occurred while authenticating: {error}."
 msgstr ""
 
-msgctxt "#30709"
-msgid "Geo-blocked video"
-msgstr ""
-
 msgctxt "#30710"
 msgid "This video is geo-blocked and can't be played from your location."
-msgstr ""
-
-msgctxt "#30711"
-msgid "Unavailable video"
 msgstr ""
 
 msgctxt "#30712"

@@ -3,12 +3,14 @@
 import datetime
 import pytz
 
-from resources.lib import chn_class, contenttype
+from resources.lib import chn_class
+from resources.lib import contenttype
+from resources.lib import mediatype
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.helpers.subtitlehelper import SubtitleHelper
 
-from resources.lib.mediaitem import MediaItem
+from resources.lib.mediaitem import MediaItem, FolderItem
 from resources.lib.streams.m3u8 import M3u8
 from resources.lib.streams.mpd import Mpd
 from resources.lib.regexer import Regexer
@@ -176,7 +178,7 @@ class Channel(chn_class.Channel):
                 day_name = days[date.weekday()]
                 title = day_name
 
-            date_item = MediaItem(title, url)
+            date_item = FolderItem(title, url, content_type=contenttype.EPISODES)
             date_item.set_date(date.year, date.month, date.day)
             items.append(date_item)
 
@@ -192,10 +194,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -232,7 +234,6 @@ class Channel(chn_class.Channel):
             return self.__update_video_from_mpd(item, mpd_info, use_adaptive_with_encryption)
 
         # Try the plain M3u8 streams
-        part = item.create_new_empty_media_part()
         m3u8_url = json.get_value("playlist")
         use_adaptive = AddonSettings.use_adaptive_stream_add_on(channel=self)
 
@@ -248,12 +249,12 @@ class Channel(chn_class.Channel):
                 if use_adaptive:
                     # we have at least 1 none encrypted streams
                     Logger.info("Using HLS InputStreamAddon")
-                    strm = part.append_media_stream(m3u8_url, 0)
+                    strm = item.add_stream(m3u8_url, 0)
                     M3u8.set_input_stream_addon_input(strm)
                     item.complete = True
                     return item
 
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
                 item.complete = True
             return item
 
@@ -275,14 +276,14 @@ class Channel(chn_class.Channel):
             if use_adaptive:
                 # we have at least 1 none encrypted streams
                 Logger.info("Using HLS InputStreamAddon")
-                strm = part.append_media_stream(m3u8_url, 0)
+                strm = item.add_stream(m3u8_url, 0)
                 M3u8.set_input_stream_addon_input(strm)
                 item.complete = True
                 return item
 
             for s, b in M3u8.get_streams_from_m3u8(m3u8_url, append_query_string=True):
                 item.complete = True
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
 
             return item
 
@@ -315,7 +316,6 @@ class Channel(chn_class.Channel):
         adaptive_available_encrypted = AddonSettings.use_adaptive_stream_add_on(with_encryption=True, channel=self)
 
         for play_list_entry in json.get_value("playlist"):
-            part = item.create_new_empty_media_part()
             for source in play_list_entry["sources"]:
                 stream_type = source["type"]
                 stream_url = source["file"]
@@ -325,11 +325,11 @@ class Channel(chn_class.Channel):
                     has_drm_only = False
                     if stream_type == "m3u8":
                         Logger.debug("Found non-encrypted M3u8 stream: %s", stream_url)
-                        M3u8.update_part_with_m3u8_streams(part, stream_url, channel=self)
+                        M3u8.update_part_with_m3u8_streams(item, stream_url, channel=self)
                         item.complete = True
                     elif stream_type == "dash" and adaptive_available:
                         Logger.debug("Found non-encrypted Dash stream: %s", stream_url)
-                        stream = part.append_media_stream(stream_url, 1)
+                        stream = item.add_stream(stream_url, 1)
                         Mpd.set_input_stream_addon_input(stream)
                         item.complete = True
                     else:
@@ -357,7 +357,7 @@ class Channel(chn_class.Channel):
                     encryption_key = Mpd.get_license_key(
                         license_url, key_type=None, key_value=encryption_json, key_headers=headers)
 
-                    stream = part.append_media_stream(stream_url, 0)
+                    stream = item.add_stream(stream_url, 0)
                     Mpd.set_input_stream_addon_input(
                         stream, license_key=encryption_key)
                     item.complete = True
@@ -365,7 +365,7 @@ class Channel(chn_class.Channel):
             subs = [s['file'] for s in play_list_entry.get("tracks", []) if s.get('kind') == "captions"]
             if subs:
                 subtitle = SubtitleHelper.download_subtitle(subs[0], format="webvtt")
-                part.Subtitle = subtitle
+                item.subtitle = subtitle
 
         if has_drm_only and not adaptive_available_encrypted:
             XbmcWrapper.show_dialog(
@@ -388,7 +388,6 @@ class Channel(chn_class.Channel):
 
         Logger.debug("Updating streams using BrightCove data.")
 
-        part = item.create_new_empty_media_part()
         mpd_manifest_url = "https:{0}".format(mpd_info["mediaLocator"])
         mpd_data = UriHandler.open(mpd_manifest_url)
         subtitles = Regexer.do_regex(r'<BaseURL>([^<]+\.vtt)</BaseURL>', mpd_data)
@@ -396,7 +395,7 @@ class Channel(chn_class.Channel):
         if subtitles:
             Logger.debug("Found subtitle: %s", subtitles[0])
             subtitle = SubtitleHelper.download_subtitle(subtitles[0], format="webvtt")
-            part.Subtitle = subtitle
+            item.subtitle = subtitle
 
         if use_adaptive_with_encryption:
             # We can use the adaptive add-on with encryption
@@ -406,7 +405,7 @@ class Channel(chn_class.Channel):
             key_headers = {"Authorization": token}
             license_key = Mpd.get_license_key(license_url, key_headers=key_headers)
 
-            stream = part.append_media_stream(mpd_manifest_url, 0)
+            stream = item.add_stream(mpd_manifest_url, 0)
             Mpd.set_input_stream_addon_input(stream, license_key=license_key)
             item.complete = True
         else:
@@ -429,7 +428,6 @@ class Channel(chn_class.Channel):
 
         """
 
-        part = item.create_new_empty_media_part()
         # Then try the new BrightCove JSON
         bright_cove_regex = '<video[^>]+data-video-id="(?<videoId>[^"]+)[^>]+data-account="(?<videoAccount>[^"]+)'
         bright_cove_data = Regexer.do_regex(Regexer.from_expresso(bright_cove_regex), data)
@@ -460,14 +458,14 @@ class Channel(chn_class.Channel):
         # "range" http header
         if use_adaptive_with_encryption:
             Logger.info("Using InputStreamAddon for playback of HLS stream")
-            strm = part.append_media_stream(stream_url, 0)
+            strm = item.add_stream(stream_url, 0)
             M3u8.set_input_stream_addon_input(strm)
             item.complete = True
             return item
 
         for s, b in M3u8.get_streams_from_m3u8(stream_url):
             item.complete = True
-            part.append_media_stream(s, b)
+            item.add_stream(s, b)
         return item
 
     #region GraphQL data
@@ -491,7 +489,8 @@ class Channel(chn_class.Channel):
             "{__typename,title,description,guid,updated,seriesTvSeasons{id},imageMedia{url,label}}"
         )
         popular_title = LanguageHelper.get_localized_string(LanguageHelper.Popular)
-        popular = MediaItem("\a.: {} :.".format(popular_title), popular_url)
+        popular = FolderItem("\a.: {} :.".format(popular_title), popular_url,
+                             content_type=contenttype.EPISODES)
         popular.dontGroup = True
         popular.content_type = contenttype.TVSHOWS
         items.append(popular)
@@ -499,26 +498,30 @@ class Channel(chn_class.Channel):
         # https://graph.kijk.nl/graphql?operationName=programsByDate&variables={"date":"2020-04-19","numOfDays":7}&extensions={"persistedQuery":{"version":1,"sha256Hash":"1445cc0d283e10fa21fcdf95b127207d5f8c22834c1d0d17df1aacb8a9da7a8e"}}
         recent_url = "#recentgraphql"
         recent_title = LanguageHelper.get_localized_string(LanguageHelper.Recent)
-        recent = MediaItem("\a.: {} :.".format(recent_title), recent_url)
+        recent = FolderItem("\a.: {} :.".format(recent_title), recent_url,
+                            content_type=contenttype.FILES)
         recent.dontGroup = True
         items.append(recent)
 
         search_title = LanguageHelper.get_localized_string(LanguageHelper.Search)
-        search = MediaItem("\a.: {} :.".format(search_title), "#searchSite")
+        search = FolderItem("\a.: {} :.".format(search_title), "#searchSite",
+                            content_type=contenttype.EPISODES)
         search.dontGroup = True
         items.append(search)
 
-        movie_url = self.__get_api_persisted_url(
-            "programs", "cd8d5f074397e43ccd27b1c958d8c24264b0a92a94f3162e8281f6a2934d0391",
-            variables={"programTypes": "MOVIE", "limit": 100}
-        )
+        # Persisent URL
+        # movie_url = self.__get_api_persisted_url(
+        #     "programs", "cd8d5f074397e43ccd27b1c958d8c24264b0a92a94f3162e8281f6a2934d0391",
+        #     variables={"programTypes": "MOVIE", "limit": 100}
+        # )
         movie_url = self.__get_api_query_url(
             "programs(programTypes: MOVIE)",
             "{totalResults,items{type,__typename,guid,title,description,duration,displayGenre,"
             "imageMedia{url,label},epgDate,sources{type,file,drm},tracks{type,kind,label,file}}}"
         )
         movies_title = LanguageHelper.get_localized_string(LanguageHelper.Movies)
-        movies = MediaItem("\a.: {} :.".format(movies_title), movie_url)
+        movies = FolderItem("\a.: {} :.".format(movies_title), movie_url,
+                            content_type=contenttype.MOVIES)
         movies.dontGroup = True
         movies.content_type = contenttype.MOVIES
         items.append(movies)
@@ -547,7 +550,7 @@ class Channel(chn_class.Channel):
                     air_date.year, air_date.month, air_date.day),
                 self.__video_fields
             )
-            extra = MediaItem(title, recent_url)
+            extra = FolderItem(title, recent_url, content_type=contenttype.EPISODES)
             extra.complete = True
             extra.dontGroup = True
             extra.metaData["title_format"] = "{2} - s{0:02d}e{1:02d}"
@@ -636,7 +639,7 @@ class Channel(chn_class.Channel):
                 fields="{items{seriesTvSeasons{id,title,seasonNumber,__typename}}}"
             )
 
-        item = MediaItem(result_set["title"], url)
+        item = FolderItem(result_set["title"], url, content_type=contenttype.EPISODES)
         item.description = result_set.get("description")
         self.__get_artwork(item, result_set.get("imageMedia"))
 
@@ -668,9 +671,8 @@ class Channel(chn_class.Channel):
             "programs", "b6f65688f7e1fbe22aae20816d24ca5dcea8c86c8e72d80b462a345b5b70fa41",
             variables={"programTypes": "MOVIE", "guid": result_set["guid"]})
 
-        item = MediaItem(result_set["title"], url)
+        item = MediaItem(result_set["title"], url, media_type=mediatype.MOVIE)
         item.description = result_set.get("description")
-        item.type = "video"
         item.set_info_label("duration", int(result_set.get("duration", 0) or 0))
         item.set_info_label("genre", result_set.get("displayGenre"))
         self.__get_artwork(item, result_set.get("imageMedia"))
@@ -718,7 +720,7 @@ class Channel(chn_class.Channel):
             query='programs(tvSeasonId:"{}",programTypes:EPISODE,skip:0,limit:{})'.format(season_id, self.__list_limit),
             fields=self.__video_fields)
 
-        item = MediaItem(title, url)
+        item = FolderItem(title, url, content_type=contenttype.EPISODES, media_type=mediatype.SEASON)
         return item
 
     def create_api_episode_type(self, result_set):
@@ -752,10 +754,12 @@ class Channel(chn_class.Channel):
         elif season_number is not None and episode_number is not None:
             title = title_format.format(season_number, episode_number, title)
 
-        item = MediaItem(title, url, type="video")
+        item = MediaItem(title, url, media_type=mediatype.EPISODE)
         item.description = result_set.get("longDescription", result_set.get("description"))
         item.set_info_label("duration", int(result_set.get("duration", 0) or 0))
         item.set_info_label("genre", result_set.get("displayGenre"))
+        if season_number and episode_number:
+            item.set_season_info(season_number, episode_number)
         self.__get_artwork(item, result_set.get("imageMedia"), mode="thumb")
 
         updated = result_set["lastPubDate"] / 1000
@@ -784,7 +788,6 @@ class Channel(chn_class.Channel):
         """
 
         sources = item.metaData["sources"]
-        part = item.create_new_empty_media_part()
         hls_over_dash = self._get_setting("hls_over_dash") == "true"
 
         for src in sources:
@@ -796,12 +799,12 @@ class Channel(chn_class.Channel):
 
             if stream_type == "dash" and not drm:
                 bitrate = 0 if hls_over_dash else 2
-                stream = part.append_media_stream(url, bitrate)
+                stream = item.add_stream(url, bitrate)
                 item.complete = Mpd.set_input_stream_addon_input(stream)
 
             elif stream_type == "dash" and drm and "widevine" in drm:
                 bitrate = 0 if hls_over_dash else 1
-                stream = part.append_media_stream(url, bitrate)
+                stream = item.add_stream(url, bitrate)
 
                 # fetch the authentication token:
                 # url = self.__get_api_persisted_url("drmToken", "634c83ae7588a877e2bb67d078dda618cfcfc70ac073aef5e134e622686c0bb6", variables={})
@@ -826,7 +829,7 @@ class Channel(chn_class.Channel):
             elif stream_type == "m3u8" and not drm:
                 bitrate = 2 if hls_over_dash else 0
                 item.complete = M3u8.update_part_with_m3u8_streams(
-                    part, url, channel=self, bitrate=bitrate)
+                    item, url, channel=self, bitrate=bitrate)
 
             else:
                 Logger.debug("Found incompatible stream: %s", src)
@@ -834,7 +837,7 @@ class Channel(chn_class.Channel):
         subtitle = None
         for sub in item.metaData.get("subtitles", []):
             subtitle = sub["file"]
-        part.Subtitle = subtitle
+        item.subtitle = subtitle
 
         # If we are here, we can playback.
         item.isDrmProtected = False

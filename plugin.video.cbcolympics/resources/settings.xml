@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+  <category label="30301">
+    <setting id="bitrateLimitKbps" type="select" label="30302" default="Unlimited" values="Unlimited|3000|2000|1200|700|400|256" />
+  </category>
+</settings>

@@ -25,6 +25,8 @@ URL_ROOT_SPORT = 'https://sport.francetvinfo.fr'
 
 URL_FRANCETV_SPORT = 'https://api-sport-events.webservices.' \
                      'francetelevisions.fr/%s'
+URL_FRANCETV_SPORT2 = 'https://api-mobile.yatta.francetv.fr' \
+                      '/generic/directs?platform=apps'
 
 
 @Route.register
@@ -107,21 +109,23 @@ def get_video_url(plugin,
 @Route.register
 def list_lives(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_FRANCETV_SPORT % 'directs', max_age=-1)
+    resp = urlquick.get(URL_FRANCETV_SPORT2, max_age=-1)
     json_parser = json.loads(resp.text)
 
-    if 'lives' in json_parser["page"]:
-        for live_datas in json_parser["page"]["lives"]:
+    for live_datas in json_parser["items"]:
+        if not live_datas['channel']:
             live_title = live_datas["title"]
             live_image = ''
-            if 'image' in live_datas:
-                live_image = live_datas["image"]["large_16_9"]
-            id_diffusion = live_datas["sivideo-id"]
+            if 'images' in live_datas:
+                for image_group in live_datas['images']:
+                    if image_group['type'] == 'vignette_16x9':
+                        live_image = image_group['urls']['w:400']
+            id_diffusion = live_datas["si_id"]
             try:
                 live_date_plot = time.strftime(
-                    '%d/%m/%Y %H:%M', time.localtime(live_datas["start"]))
+                    '%d/%m/%Y %H:%M', time.localtime(live_datas["broadcast_begin_date"]))
                 date_value = time.strftime('%Y-%m-%d',
-                                           time.localtime(live_datas["start"]))
+                                           time.localtime(live_datas["broadcast_begin_date"]))
             except Exception:
                 live_date_plot = ''
                 date_value = ''
@@ -137,28 +141,31 @@ def list_lives(plugin, item_id, **kwargs):
                               id_diffusion=id_diffusion)
             yield item
 
-    for live_datas in json_parser["page"]["upcoming-lives"]:
-        live_title = 'Prochainement - ' + live_datas["title"]
-        try:
-            live_image = live_datas["image"]["large_16_9"]
-        except KeyError:
-            live_image = ''
-        try:
-            live_date_plot = time.strftime('%d/%m/%Y %H:%M',
+    resp = urlquick.get(URL_FRANCETV_SPORT % 'directs', max_age=-1)
+    json_parser = json.loads(resp.text)
+    if "upcoming-lives" in json_parser["page"]:
+        for live_datas in json_parser["page"]["upcoming-lives"]:
+            live_title = 'Prochainement - ' + live_datas["title"]
+            try:
+                live_image = live_datas["image"]["large_16_9"]
+            except KeyError:
+                live_image = ''
+            try:
+                live_date_plot = time.strftime('%d/%m/%Y %H:%M',
+                                               time.localtime(live_datas["start"]))
+                date_value = time.strftime('%Y-%m-%d',
                                            time.localtime(live_datas["start"]))
-            date_value = time.strftime('%Y-%m-%d',
-                                       time.localtime(live_datas["start"]))
-        except Exception:
-            live_date_plot = ''
-            date_value = ''
-        live_plot = 'Live starts at ' + live_date_plot
+            except Exception:
+                live_date_plot = ''
+                date_value = ''
+            live_plot = 'Live starts at ' + live_date_plot
 
-        item = Listitem()
-        item.label = live_title
-        item.art['thumb'] = item.art['landscape'] = live_image
-        item.info['plot'] = live_plot
-        item.info.date(date_value, '%Y-%m-%d')
-        yield item
+            item = Listitem()
+            item.label = live_title
+            item.art['thumb'] = item.art['landscape'] = live_image
+            item.info['plot'] = live_plot
+            item.info.date(date_value, '%Y-%m-%d')
+            yield item
 
 
 @Resolver.register

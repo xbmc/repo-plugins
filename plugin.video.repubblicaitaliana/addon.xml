@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.repubblicaitaliana" name="RepubblicaItaliana" version="1.1.0" provider-name="Testato">
+<addon id="plugin.video.repubblicaitaliana" name="RepubblicaItaliana" version="2.0.0" provider-name="Testato">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
-    <import addon="inputstream.adaptive" version="0.0.0"/>
     <import addon="plugin.video.tubed" version="0.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
+    <reuselanguageinvoker>true</reuselanguageinvoker>
     <summary lang="en_GB">RepubblicaItaliana</summary>
     <description lang="en_GB">Italian politics - TV and Radio channels</description>
     <summary lang="it_IT">RepubblicaItaliana</summary>
@@ -23,10 +23,20 @@
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.jpg</fanart>
     </assets>
-    <news>1.1.0 (05 Mar 2021)
-      - Use of Tubed instead of Youtube
-      - Fixed some thumbnails
-      - Fixed automatic installation of inputstream.adaptive on Windows
+    <news>2.0.0 (20 May 2021)
+- Plugin reworked
+- Removed InputStream Adaptive
+- Fix Camera Assemblea
+- Fix TgCom24 on Linux
+
+1.1.0 (05 Mar 2021)
+- Use of Tubed instead of Youtube
+- Fixed some thumbnails
+- Fixed automatic installation of inputstream.adaptive on Windows
+
+1.0.0 (28 Feb 2021)
+- Upgraded to Kodi19 Matrix
+- Fixed SkyTg24
     </news>
   </extension>
 </addon>

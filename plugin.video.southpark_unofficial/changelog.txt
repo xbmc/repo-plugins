@@ -1,3 +1,6 @@
+0.6.4
+- Added Brazilian portuguese episodes (br-pt - thanks to serajr)
+- Added Latin America (spanish) episodes
 0.6.3
 - Cleanup, generic european stream and clear cache features.
 0.6.2

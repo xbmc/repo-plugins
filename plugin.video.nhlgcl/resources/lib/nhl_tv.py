@@ -49,7 +49,8 @@ def create_game_listitem(game, game_day, show_date=False):
     away_record = game['teams']['away']['leagueRecord']
     home = game['teams']['home']['team']
     home_record = game['teams']['home']['leagueRecord']
-    icon = getGameIcon(home['abbreviation'], away['abbreviation'])
+    #icon = getGameIcon(home['abbreviation'], away['abbreviation'], home['id'])
+    icon = getGameIcon(home['id'], away['id'])
 
     if TEAM_NAMES == "1":
         away_team = away['teamName']
@@ -74,46 +75,47 @@ def create_game_listitem(game, game_day, show_date=False):
         fav_game = True
 
     game_line_header = ''
-    if game['status']['detailedState'].lower().strip() == 'scheduled':
-        game_time = game['gameDate']
-        game_time = string_to_date(game_time, "%Y-%m-%dT%H:%M:%SZ")
-        game_time = utc_to_local(game_time)
-        game_date = game_time.strftime("%Y-%m-%d")
+    detailed_state = game['status']['detailedState'].lower().strip()
+    if detailed_state == 'scheduled' or detailed_state == 'pre-game':
+        game_time = utc_to_local(string_to_date(game['gameDate'], "%Y-%m-%dT%H:%M:%SZ"))
         if TIME_FORMAT == '0':
             game_time = game_time.strftime('%I:%M %p').lstrip('0')
         else:
             game_time = game_time.strftime('%H:%M')
         game_line_header = game_time
-    elif game['status']['detailedState'].lower().strip() == 'final':
-        game_time = game['gameDate']
-        game_time = string_to_date(game_time, "%Y-%m-%dT%H:%M:%SZ")
-        game_time = utc_to_local(game_time)
-        game_date = game_time.strftime("%Y-%m-%d")
-        if (show_date):
-            game_line_header = game_date
-        else:
-            game_line_header = game['status']['detailedState']
-    else:
+
+    elif detailed_state == 'in progress':
         game_line_header = '%s %s' % \
                            (game['linescore']['currentPeriodTimeRemaining'], game['linescore']['currentPeriodOrdinal'])
+
+    elif detailed_state == 'final' and show_date:
+        game_line_header = utc_to_local(string_to_date(game['gameDate'], "%Y-%m-%dT%H:%M:%SZ")).strftime("%Y-%m-%d")
+
+    else:
+        game_line_header = game['status']['detailedState']
 
     game_id = str(game['gamePk'])
 
     desc = ''
     hide_spoilers = 0
-    if NO_SPOILERS == '1' or (NO_SPOILERS == '2' and fav_game) or \
-            (NO_SPOILERS == '3' and game_day == local_to_eastern()) or \
-            (NO_SPOILERS == '4' and game_day < local_to_eastern()) or \
-            game['status']['detailedState'].lower().strip() == 'scheduled':
+    if NO_SPOILERS == '1' or (NO_SPOILERS == '2' and fav_game) \
+            or (NO_SPOILERS == '3' and game_day == local_to_eastern()) \
+            or (NO_SPOILERS == '4' and game_day < local_to_eastern()) \
+            or game['status']['abstractGameState'].lower().strip() == 'preview':
+
         name = '%s %s at %s' % (game_line_header, away_team, home_team)
         hide_spoilers = 1
     else:
         name = '%s %s - %s at %s - %s' % \
                (game_line_header, away_team, game['teams']['away']['score'], home_team, game['teams']['home']['score'])
-
-        desc = '%s %s-%s-%s\n%s %s-%s-%s' % (away_team, str(away_record['wins']), str(away_record['losses']),
-                                             str(away_record['ot']), home_team, str(home_record['wins']),
-                                             str(home_record['losses']), str(home_record['ot']))
+        away_wins = away_record['wins'] if 'wins' in away_record else '0'
+        away_losses = away_record['losses'] if 'losses' in away_record else '0'
+        away_ot = away_record['ot'] if 'ot' in away_record else '0'
+        home_wins = home_record['wins'] if 'wins' in home_record else '0'
+        home_losses = home_record['losses'] if 'losses' in home_record else '0'
+        home_ot = home_record['ot'] if 'ot' in home_record else '0'
+        desc = '%s %s-%s-%s\n%s %s-%s-%s' % (away_team, away_wins, away_losses, away_ot,
+                                             home_team, home_wins, home_losses, home_ot)
 
     fanart = 'http://nhl.bamcontent.com/images/arena/default/%s@2x.jpg' % home['id']
     try:
@@ -175,24 +177,26 @@ def create_game_listitem(game, game_day, show_date=False):
 
     # Create playlists for all highlights
     global RECAP_PLAYLIST
-    recap = get_epg_item(game['content']['media']['epg'], "recap")
-    if 'items' in recap and len(recap['items']) > 0:
-        recap_url = get_highlight_url(recap['items'][0]['playbacks'])
-        recap_url = create_highlight_stream(recap_url)
-        listitem = xbmcgui.ListItem(title)
-        listitem.setArt({'thumb' : icon})
-        listitem.setInfo(type="Video", infoLabels={"Title": title})
-        RECAP_PLAYLIST.add(recap_url, listitem)
+    if 'media' in game['content']:
+        recap = get_epg_item(game['content']['media']['epg'], "recap")
+        if 'items' in recap and len(recap['items']) > 0:
+            recap_url = get_highlight_url(recap['items'][0]['playbacks'])
+            recap_url = create_highlight_stream(recap_url)
+            listitem = xbmcgui.ListItem(title)
+            listitem.setArt({'thumb' : icon})
+            listitem.setInfo(type="Video", infoLabels={"Title": title})
+            RECAP_PLAYLIST.add(recap_url, listitem)
 
     global EXTENDED_PLAYLIST
-    extend = get_epg_item(game['content']['media']['epg'], "extended highlights")
-    if 'items' in extend and len(extend['items']) > 0:
-        extend_url = get_highlight_url(extend['items'][0]['playbacks'])
-        extend_url = create_highlight_stream(extend_url)
-        listitem = xbmcgui.ListItem(title)
-        listitem.setArt({'thumb' : icon})
-        listitem.setInfo(type="Video", infoLabels={"Title": title})
-        EXTENDED_PLAYLIST.add(extend_url, listitem)
+    if 'media' in game['content']:
+        extend = get_epg_item(game['content']['media']['epg'], "extended highlights")
+        if 'items' in extend and len(extend['items']) > 0:
+            extend_url = get_highlight_url(extend['items'][0]['playbacks'])
+            extend_url = create_highlight_stream(extend_url)
+            listitem = xbmcgui.ListItem(title)
+            listitem.setArt({'thumb' : icon})
+            listitem.setInfo(type="Video", infoLabels={"Title": title})
+            EXTENDED_PLAYLIST.add(extend_url, listitem)
 
     add_stream(name, '', title, game_id, icon, fanart, info, video_info, audio_info, start_time)
 
@@ -639,7 +643,7 @@ def play_fav_team_today():
                 stream_url, headers = create_full_game_stream(stream_url, media_auth)
         else:
             dialog = xbmcgui.Dialog()
-            dialog.ok('No Game Today', FAV_TEAM + " doesn't play today")
+            dialog.ok(LOCAL_STRING(30374), FAV_TEAM + LOCAL_STRING(30375).encode('utf8'))
             sys.exit()
 
         if stream_url != '':

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.regexer import Regexer
 from resources.lib.mediaitem import MediaItem
 from resources.lib.urihandler import UriHandler
@@ -84,7 +84,7 @@ class Channel(chn_class.Channel):
         item = MediaItem(result_set[1], "%s/%s" % (self.baseUrl, result_set[0]))
         item.complete = True
         if "/het-weer" in item.url:
-            item.type = "video"
+            item.media_type = mediatype.EPISODE
             item.complete = False
         return item
 
@@ -111,7 +111,7 @@ class Channel(chn_class.Channel):
         url = "%s%s" % (self.baseUrl, result_set["Url"])
 
         item = MediaItem(title, url)
-        item.type = 'video'
+        item.media_type = mediatype.EPISODE
         item.thumb = result_set["Thumb"]
         item.description = result_set.get("Description", None)
         item.complete = False
@@ -137,10 +137,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -173,7 +173,7 @@ class Channel(chn_class.Channel):
         for stream in streams:
             stream_url = stream['url']
             if stream['type'] == "mp4":
-                item.append_single_stream(stream_url, 0)
+                item.add_stream(stream_url, 0)
                 item.complete = True
 
         return item

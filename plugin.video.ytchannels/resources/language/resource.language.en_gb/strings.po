@@ -1,3 +1,4 @@
+
 # Kodi Media Center language file
 # Addon Name: YouTube
 # Addon id: plugin.video.youtube
@@ -128,6 +129,14 @@ msgctxt "#30027"
 msgid "Set thumbnail"
 msgstr ""
 
+msgctxt "#30028"
+msgid "Remove playlist"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Live"
+msgstr ""
+
 msgctxt "#30099"
 msgid "Youtube channels"
 msgstr ""
@@ -164,5 +173,7 @@ msgctxt "#30207"
 msgid "YouTube API Key"
 msgstr ""
 
-
+msgctxt "#30208"
+msgid "Enable live streams"
+msgstr ""
 

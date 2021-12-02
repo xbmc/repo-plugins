@@ -1,0 +1,106 @@
+# XBMC Media Center language file
+# Addon Name: Sveriges Radio
+# Addon id: plugin.audio.sverigesradio
+# Addon version: 2.2.0
+# Addon Provider: Daniel
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2019-12-08 16:51+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Swedish National Radio (Sveriges Radio)"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Listen to Sveriges Radio"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "This addon uses Sveriges Radio's official API. It may or may not work outside of Sweden, and there is mainly content in Swedish."
+msgstr ""
+
+msgctxt "#30000"
+msgid "Sveriges Radio"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Unable to communicate with the Sveriges Radio servers"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Unable to understand the response from the Sveriges Radio servers"
+msgstr ""
+
+msgctxt "#30012"
+msgid "No valid stream found"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Programs A-Ö"
+msgstr ""
+
+msgctxt "#32000"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Quality"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Prefer"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Prefix"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Page size (used to limit number of episodes retrieved in one go)"
+msgstr ""
+
+msgctxt "#32111"
+msgid "Low"
+msgstr ""
+
+msgctxt "#32112"
+msgid "Normal"
+msgstr ""
+
+msgctxt "#32113"
+msgid "High"
+msgstr ""
+
+msgctxt "#32121"
+msgid "Broadcasts (music)"
+msgstr ""
+
+msgctxt "#32122"
+msgid "Podfiles (sometimes extra content)"
+msgstr ""
+
+msgctxt "#32123"
+msgid "Prefix with date/time"
+msgstr ""

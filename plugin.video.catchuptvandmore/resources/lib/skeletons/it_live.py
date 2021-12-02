@@ -149,5 +149,117 @@ menu = {
         'fanart': 'channels/it/paramountchannel_it_fanart.jpg',
         'enabled': True,
         'order': 17
+    },
+    'C5': {
+        'resolver': '/resources/lib/channels/it/mediaset:get_live_url',
+        'label': 'Canale 5',
+        'thumb': 'channels/it/canale5.png',
+        'fanart': 'channels/it/canale5_fanart.jpg',
+        'enabled': True,
+        'order': 18
+    },
+    'I1': {
+        'resolver': '/resources/lib/channels/it/mediaset:get_live_url',
+        'label': 'Italia 1',
+        'thumb': 'channels/it/italia1.png',
+        'fanart': 'channels/it/italia1_fanart.jpg',
+        'enabled': True,
+        'order': 19
+    },
+    'R4': {
+        'resolver': '/resources/lib/channels/it/mediaset:get_live_url',
+        'label': 'Rete 4',
+        'thumb': 'channels/it/rete4.png',
+        'fanart': 'channels/it/rete4_fanart.jpg',
+        'enabled': True,
+        'order': 20
+    },
+    'LB': {
+        'resolver': '/resources/lib/channels/it/mediaset:get_live_url',
+        'label': '20',
+        'thumb': 'channels/it/20.png',
+        'fanart': 'channels/it/20_fanart.jpg',
+        'enabled': True,
+        'order': 21
+    },
+    'KA': {
+        'resolver': '/resources/lib/channels/it/mediaset:get_live_url',
+        'label': 'La 5',
+        'thumb': 'channels/it/la5.png',
+        'fanart': 'channels/it/la5_fanart.jpg',
+        'enabled': True,
+        'order': 22
+    },
+    'I2': {
+        'resolver': '/resources/lib/channels/it/mediaset:get_live_url',
+        'label': 'Italia 2',
+        'thumb': 'channels/it/italia2.png',
+        'fanart': 'channels/it/italia2_fanart.jpg',
+        'enabled': True,
+        'order': 23
+    },
+    'B6': {
+        'resolver': '/resources/lib/channels/it/mediaset:get_live_url',
+        'label': 'Cine34',
+        'thumb': 'channels/it/cine34.png',
+        'fanart': 'channels/it/cine34_fanart.jpg',
+        'enabled': True,
+        'order': 24
+    },
+    'KQ': {
+        'resolver': '/resources/lib/channels/it/mediaset:get_live_url',
+        'label': 'Mediaset Extra',
+        'thumb': 'channels/it/mediasetextra.png',
+        'fanart': 'channels/it/mediasetextra_fanart.jpg',
+        'enabled': True,
+        'order': 25
+    },
+    'FU': {
+        'resolver': '/resources/lib/channels/it/mediaset:get_live_url',
+        'label': 'Focus',
+        'thumb': 'channels/it/focus.png',
+        'fanart': 'channels/it/focus_fanart.jpg',
+        'enabled': True,
+        'order': 26
+    },
+    'LT': {
+        'resolver': '/resources/lib/channels/it/mediaset:get_live_url',
+        'label': 'Top Crime',
+        'thumb': 'channels/it/topcrime.png',
+        'fanart': 'channels/it/topcrime_fanart.jpg',
+        'enabled': True,
+        'order': 27
+    },
+    'KI': {
+        'resolver': '/resources/lib/channels/it/mediaset:get_live_url',
+        'label': 'Iris',
+        'thumb': 'channels/it/iris.png',
+        'fanart': 'channels/it/iris_fanart.jpg',
+        'enabled': True,
+        'order': 28
+    },
+    'BP': {
+        'resolver': '/resources/lib/channels/it/mediaset:get_live_url',
+        'label': 'Boing Plus',
+        'thumb': 'channels/it/boingplus.png',
+        'fanart': 'channels/it/boingplus_fanart.jpg',
+        'enabled': True,
+        'order': 29
+    },
+    'LA': {
+        'resolver': '/resources/lib/channels/it/mediaset:get_live_url',
+        'label': 'Cartoonito',
+        'thumb': 'channels/it/cartoonito.png',
+        'fanart': 'channels/it/cartoonito_fanart.jpg',
+        'enabled': True,
+        'order': 30
+    },
+    'KF': {
+        'resolver': '/resources/lib/channels/it/mediaset:get_live_url',
+        'label': 'TGCom',
+        'thumb': 'channels/it/tgcom.png',
+        'fanart': 'channels/it/tgcom_fanart.jpg',
+        'enabled': True,
+        'order': 31
     }
 }

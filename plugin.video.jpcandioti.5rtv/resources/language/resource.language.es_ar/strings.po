@@ -1,0 +1,23 @@
+# Kodi Media Center language file
+# Addon Name: 5RTV Addon
+# Addon id: plugin.video.jpcandioti.5rtv
+# Addon Provider: @JPCandioti
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+
+msgctxt "#32001"
+msgid "Live"
+msgstr "En vivo"
+
+msgctxt "#32002"
+msgid "Contents on demand"
+msgstr "Contenidos disponibles"
+
+msgctxt "#32003"
+msgid "5RTV live"
+msgstr "5RTV en vivo"
+

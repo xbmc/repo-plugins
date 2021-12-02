@@ -3,8 +3,10 @@
 import datetime
 
 from resources.lib import chn_class
-
+from resources.lib import mediatype
+from resources.lib import contenttype
 from resources.lib.mediaitem import MediaItem
+from resources.lib.mediaitem import FolderItem
 from resources.lib.logger import Logger
 from resources.lib.urihandler import UriHandler
 from resources.lib.helpers.jsonhelper import JsonHelper
@@ -139,27 +141,30 @@ class Channel(chn_class.Channel):
         items = []
 
         # let's add the RTL-Z live stream
-        rtlz_live = MediaItem("RTL Z Live Stream", "")
+        rtlz_live = FolderItem("RTL Z Live Stream", "", content_type=contenttype.VIDEOS)
         rtlz_live.complete = True
         rtlz_live.isLive = True
         rtlz_live.dontGroup = True
 
-        stream_item = MediaItem("RTL Z: Live Stream", "http://www.rtl.nl/(config=RTLXLV2,channel=rtlxl,progid=rtlz,zone=inlineplayer.rtl.nl/rtlz,ord=0)/system/video/wvx/components/financien/rtlz/miMedia/livestream/rtlz_livestream.xml/1500.wvx")
+        stream_item = MediaItem(
+            "RTL Z: Live Stream",
+            "http://www.rtl.nl/(config=RTLXLV2,channel=rtlxl,progid=rtlz,zone=inlineplayer.rtl.nl/rtlz,ord=0)/system/video/wvx/components/financien/rtlz/miMedia/livestream/rtlz_livestream.xml/1500.wvx",
+            media_type=mediatype.VIDEO
+        )
         stream_item.complete = True
-        stream_item.type = "video"
         stream_item.dontGroup = True
-        stream_item.append_single_stream("http://mss6.rtl7.nl/rtlzbroad", 1200)
-        stream_item.append_single_stream("http://mss26.rtl7.nl/rtlzbroad", 1200)
-        stream_item.append_single_stream("http://mss4.rtl7.nl/rtlzbroad", 1200)
-        stream_item.append_single_stream("http://mss5.rtl7.nl/rtlzbroad", 1200)
-        stream_item.append_single_stream("http://mss3.rtl7.nl/rtlzbroad", 1200)
+        stream_item.add_stream("http://mss6.rtl7.nl/rtlzbroad", 1200)
+        stream_item.add_stream("http://mss26.rtl7.nl/rtlzbroad", 1200)
+        stream_item.add_stream("http://mss4.rtl7.nl/rtlzbroad", 1200)
+        stream_item.add_stream("http://mss5.rtl7.nl/rtlzbroad", 1200)
+        stream_item.add_stream("http://mss3.rtl7.nl/rtlzbroad", 1200)
 
         rtlz_live.items.append(stream_item)
         items.append(rtlz_live)
 
         # Add recent items
         data, recent_items = self.add_recent_items(data)
-        return data, recent_items
+        return data, recent_items + items
 
     def add_recent_items(self, data):
         """ Builds the "Recent" folder for this channel.
@@ -173,8 +178,7 @@ class Channel(chn_class.Channel):
 
         items = []
 
-        recent = MediaItem("\a .: Recent :.", "")
-        recent.type = "folder"
+        recent = FolderItem("\a .: Recent :.", "", content_type=contenttype.FILES)
         recent.complete = True
         recent.dontGroup = True
         items.append(recent)
@@ -195,18 +199,16 @@ class Channel(chn_class.Channel):
                 day = "Eergisteren"
             title = "%04d-%02d-%02d - %s" % (air_date.year, air_date.month, air_date.day, day)
 
-            # url = "https://www.npostart.nl/media/series?page=1&dateFrom=%04d-%02d-%02d&tileMapping=normal&tileType=teaser&pageType=catalogue" % \
             url = "https://xlapi.rtl.nl/version=1/fun=gemist/model=svod/bcdate=" \
                   "{0:04d}{1:02d}{2:02d}/".format(air_date.year, air_date.month, air_date.day)
-            extra = MediaItem(title, url)
+            extra = FolderItem(title, url, content_type=contenttype.EPISODES)
             extra.complete = True
             extra.dontGroup = True
             extra.set_date(air_date.year, air_date.month, air_date.day, text="")
 
             recent.items.append(extra)
 
-        news = MediaItem("\a .: Zoeken :.", "#searchSite")
-        news.type = "folder"
+        news = FolderItem("\a .: Zoeken :.", "#searchSite", content_type=contenttype.NONE)
         news.complete = True
         news.dontGroup = True
         items.append(news)
@@ -231,7 +233,7 @@ class Channel(chn_class.Channel):
         title = result_set["name"]
         key = result_set.get("key", result_set["abstract_key"])
         url = "http://www.rtl.nl/system/s4m/vfd/version=1/d=pc/output=json/fun=getseasons/ak=%s" % (key,)
-        item = MediaItem(title, url)
+        item = FolderItem(title, url, content_type=contenttype.EPISODES)
         item.complete = True
 
         desc = result_set.get("synopsis", "")
@@ -309,8 +311,11 @@ class Channel(chn_class.Channel):
                 url = self.parentItem.url[:self.parentItem.url.rindex("=")]
                 url = "%s=%s" % (url, next_page)
                 Logger.trace(url)
-                page_item = MediaItem(str(next_page), url)
-                page_item.type = "page"
+                page_item = FolderItem(
+                    str(next_page), url,
+                    content_type=self.parentItem.content_type,
+                    media_type=mediatype.PAGE
+                )
                 page_item.complete = True
                 items.append(page_item)
 
@@ -351,7 +356,7 @@ class Channel(chn_class.Channel):
         key_value = result_set["key"]
         url = "http://www.rtl.nl/system/s4m/vfd/version=1/d=pc/output=json/ak=%s/sk=%s/pg=1" % (abstract_key, key_value)
 
-        item = MediaItem(title.title(), url)
+        item = FolderItem(title.title(), url, content_type=contenttype.EPISODES)
         item.description = description
         item.thumb = "%s/%s.png" % (self.posterBase, key_value,)
         item.complete = True
@@ -432,8 +437,7 @@ class Channel(chn_class.Channel):
         uuid = result_set["uuid"]
         url = "https://api.rtl.nl/watch/play/api/play/xl/%s?device=web&drm=widevine&format=dash" % (uuid,)
 
-        item = MediaItem(title.title(), url)
-        item.type = "video"
+        item = MediaItem(title.title(), url, media_type=mediatype.EPISODE)
         item.isPaid = premium_item
         item.description = description
         item.thumb = "%s%s" % (self.posterBase, uuid,)
@@ -482,7 +486,7 @@ class Channel(chn_class.Channel):
         # Search Programma's
         url = "https://search.rtl.nl/?typeRestriction=tvabstract&search={}&page=1&pageSize=99"
         search_url = url.format(needle)
-        temp = MediaItem("Search", search_url)
+        temp = FolderItem("Search", search_url, content_type=contenttype.NONE)
         items += self.process_folder_list(temp) or []
 
         # Search Afleveringen -> no dates given, so this makes little sense
@@ -518,7 +522,7 @@ class Channel(chn_class.Channel):
         # Not used: uuid = result_set["Uuid"]
         abstract_key = result_set["AbstractKey"]
         url = "http://www.rtl.nl/system/s4m/vfd/version=1/d=pc/output=json/fun=getseasons/ak={}".format(abstract_key)
-        item = MediaItem(title, url)
+        item = FolderItem(title, url, content_type=contenttype.EPISODES)
 
         time_stamp = result_set["LastBroadcastDate"]  # =1546268400000
         date_time = DateHelper.get_date_from_posix(int(time_stamp)/1000)
@@ -556,8 +560,7 @@ class Channel(chn_class.Channel):
         uuid = result_set["uuid"]
         url = "https://api.rtl.nl/watch/play/api/play/xl/%s?device=web&drm=widevine&format=dash" % (uuid,)
 
-        item = MediaItem(title.title(), url)
-        item.type = "video"
+        item = MediaItem(title.title(), url, media_type=mediatype.EPISODE)
         item.description = description
         item.thumb = "%s%s" % (self.posterBase, uuid,)
 
@@ -595,10 +598,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -625,8 +628,7 @@ class Channel(chn_class.Channel):
             "content-type": "application/octet-stream"
         }
 
-        part = item.create_new_empty_media_part()
-        stream = part.append_media_stream(video_manifest, 0)
+        stream = item.add_stream(video_manifest, 0)
 
         from resources.lib.streams.mpd import Mpd
         license_key = Mpd.get_license_key(license_url, key_headers=key_headers, key_type="A")

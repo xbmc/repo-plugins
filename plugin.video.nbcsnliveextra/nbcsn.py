@@ -86,6 +86,10 @@ def build_video_link(item):
         elif 'iosStreamUrl' in item['videoSources'][0]:
             url = item['videoSources'][0]['iosStreamUrl']
 
+    if 'pid' in item:
+        pid = item['pid']
+    else:
+        pid = ""
     menu_name = item['title']
     title = menu_name
     desc = item['info']
@@ -116,12 +120,14 @@ def build_video_link(item):
 
     requestor_id = 'nbcsports'
     channel = ''
+
     # if 'requestorId' in item and item['requestorId'] != 'nbcentertainment':
     #     requestor_id = item['requestorId']
     # if 'channel' in item:
     #     channel = item['channel']
-
+    #
     stream_info = {
+        'pid': pid,
         'requestor_id': requestor_id,
         'channel': channel
     }
@@ -154,19 +160,15 @@ def build_video_link(item):
             add_dir(menu_name + ' ' + start_date, '/disabled', 0, imgurl, FANART, False, info)
 
 
-def sign_stream(stream_url, stream_name, stream_icon, requestor_id, channel):
-    SERVICE_VARS['requestor_id'] = requestor_id
-    # SERVICE_VARS['requestor_id'] = 'nbcsports'
+def sign_stream(stream_url, stream_name, stream_icon, pid):
+    SERVICE_VARS['requestor_id'] = 'nbcsports'
     resource_id = get_resource_id()
-    # resource_id = "<rss version='2.0'><channel><title>" + channel + "</title></channel></rss>"
     SERVICE_VARS['resource_id'] = urllib.quote(resource_id)
     adobe = ADOBE(SERVICE_VARS)
     if adobe.check_authn():
         if adobe.authorize():
-            #resource_id = get_resource_id()
             media_token = adobe.media_token()
-            stream_url = tv_sign(media_token, resource_id, stream_url)
-            #stream_url = set_stream_quality(stream_url)
+            stream_url = get_tokenized_url(media_token, resource_id, stream_url, pid)
             stream_url += "|User-Agent=" + UA_NBCSN
             play_stream(stream_url)
         else:
@@ -176,31 +178,35 @@ def sign_stream(stream_url, stream_name, stream_icon, requestor_id, channel):
         answer = dialog.yesno(LOCAL_STRING(30010), LOCAL_STRING(30011))
         if answer:
             adobe.register_device()
-            sign_stream(stream_url, stream_name, stream_icon, requestor_id, channel)
+            sign_stream(stream_url, stream_name, stream_icon, pid)
         else:
             sys.exit()
 
 
-def tv_sign(media_token, resource_id, stream_url):
-    url = 'http://sp.auth.adobe.com/tvs/v1/sign'
+def get_tokenized_url(media_token, resource_id, stream_url, pid):
+    url = 'https://token.playmakerservices.com/cdn'
     headers = {
         "Accept": "*/*",
         "Accept-Language": "en;q=1",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "User-Agent": UA_NBCSN
+        "Content-Type": "application/json",
+        "User-Agent": "okhttp/3.11.0"
     }
 
     payload = {
+        'resourceId': base64.b64encode(codecs.encode(resource_id)).decode("ascii"),
+        'requestorId': 'nbcsports',
+        'token': media_token,
         'cdn': 'akamai',
-        'mediaToken': media_token,
-        'resource': base64.b64encode(codecs.encode(resource_id)),
-        'url': stream_url
+        'url': stream_url,
+        'pid': pid,
+        'application': 'NBCSports',
+        'version': 'v1',
+        'platform': 'desktop'
     }
 
-    r = requests.post(url, headers=headers, cookies=load_cookies(), data=payload, verify=VERIFY)
+    r = requests.post(url, headers=headers, cookies=load_cookies(), json=payload, verify=VERIFY)
     save_cookies(r.cookies)
-
-    return r.text
+    return r.json()['tokenizedUrl']
 
 
 def logout():
@@ -240,6 +246,7 @@ mode = None
 icon_image = None
 requestor_id = ''
 channel = ''
+pid = ''
 
 if 'url' in params: url = urllib.unquote_plus(params["url"])
 if 'name' in params: name = urllib.unquote_plus(params["name"])
@@ -247,6 +254,7 @@ if 'mode' in params: mode = int(params["mode"])
 if 'icon_image' in params: icon_image = urllib.unquote_plus(params["icon_image"])
 if 'requestor_id' in params: requestor_id = urllib.unquote_plus(params['requestor_id'])
 if 'channel' in params: channel = urllib.unquote_plus(params['channel'])
+if 'pid' in params: pid = urllib.unquote_plus(params['pid'])
 
 if mode is None or url is None or len(url) < 1:
     categories()
@@ -258,7 +266,7 @@ elif mode == 4:
     scrape_videos(url)
 
 elif mode == 5:
-    sign_stream(url, name, icon_image, requestor_id, channel)
+    sign_stream(url, name, icon_image, pid)
 
 elif mode == 6:
     # Set quality level based on user settings

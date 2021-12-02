@@ -5,6 +5,7 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
+import hashlib
 import numbers
 import time
 
@@ -26,3 +27,22 @@ def current_timestamp():
         float: Current timestamp
     """
     return time.time()
+
+
+def compute_md5(filepath):
+    """Compute MD5 hash of file given by filepath.
+
+    Args:
+        filepath (str)
+    Returns:
+        str: MD5 value of the file given by filepath
+    """
+    with open(filepath, "rb") as f:
+        file_md5 = hashlib.md5()
+        while True:
+            chunk = f.read(8192)
+            if not chunk:
+                break
+            file_md5.update(chunk)
+
+        return file_md5.hexdigest()

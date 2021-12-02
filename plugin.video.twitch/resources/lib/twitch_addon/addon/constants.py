@@ -74,7 +74,7 @@ FANART = kodi.get_fanart()
 ADAPTIVE_SOURCE_TEMPLATE = {'id': 'hls', 'name': 'Adaptive', 'bandwidth': -1, 'url': ''}
 
 CLIENT_ID = 'cHMyZWQ5emxqOHp5cXp0c2R6MnRsNHV5czg0Yjhr'
-REDIRECT_URI = 'https://anxdpanic.github.io/Twitch-on-Kodi/token/'
+REDIRECT_URI = 'https://anxdpanic.github.io/plugin.video.twitch/token/'
 
 OLD_CLIENT_ID = 'NjdlYnBmaHlvaWNhYjVrcjB5N3B6b2NzZm9oczd0eQ=='
 OLD_REDIRECT_URI = 'https://mrsprigster.github.io/Twitch-on-Kodi/token/'

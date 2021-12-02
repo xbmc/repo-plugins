@@ -63,3 +63,11 @@ msgstr "#EstudoEmCasa"
 msgctxt "#32011"
 msgid "Not Available"
 msgstr "Indisponível"
+
+msgctxt "#32012"
+msgid "Live TV"
+msgstr "TV em direto"
+
+msgctxt "#32013"
+msgid "Live Radio"
+msgstr "Radio em direto"

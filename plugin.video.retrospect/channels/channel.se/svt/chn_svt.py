@@ -4,7 +4,7 @@
 import datetime
 import pytz
 
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
 from resources.lib.regexer import Regexer
@@ -586,7 +586,7 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(title, url)
         item.description = result_set.get("longDescription")
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.set_info_label("duration", int(result_set.get("duration", 0)))
         item.isGeoLocked = result_set.get("restrictions", {}).get("onlyAvailableInSweden", False)
 
@@ -684,7 +684,7 @@ class Channel(chn_class.Channel):
         url = '{}{}'.format(self.baseUrl, result_set['urls']['svtplay'])
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = result_set.get('longDescription')
 
         image_info = result_set.get("image")
@@ -736,7 +736,7 @@ class Channel(chn_class.Channel):
             url = "{}{}".format(self.baseUrl, result_set['urls']['svtplay'])
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = result_set.get('longDescription')
         item.isGeoLocked = result_set['restrictions']['onlyAvailableInSweden']
 
@@ -909,7 +909,7 @@ class Channel(chn_class.Channel):
             title,
             "https://www.svt.se/videoplayer-api/video/%s" % (channel_id.lower(),)
         )
-        channel_item.type = "video"
+        channel_item.media_type = mediatype.EPISODE
         channel_item.isLive = True
         channel_item.isGeoLocked = True
         channel_item.description = description
@@ -1015,10 +1015,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -1047,10 +1047,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -1152,9 +1152,22 @@ class Channel(chn_class.Channel):
 
         """
 
-        item.MediaItemParts = []
-        part = item.create_new_empty_media_part()
+        item.streams = []
         use_input_stream = AddonSettings.use_adaptive_stream_add_on(channel=self)
+        in_sweden = self.__validate_location()
+        Logger.debug("Streaming location within GEO area: %s", in_sweden)
+
+        # Dictionary with supported video formats and their priority.
+        if in_sweden or not item.isGeoLocked:
+            # For the Dash streams:
+            # "dash-full" has HEVC and x264 video, with multi stream audio, both 5.1 and 2.0 streams
+            # "dash-hbbtv-avc" has x264 multi stream audio, but only 5.1
+            # "dash" has x264 single stream audio and only 2.0
+            # supported_formats = {"dash": 2, "dash-full": 3, "hls": 0, "hls-ts-full": 1}
+            supported_formats = {"dash": 2, "dash-hbbtv-avc": 3, "hls": 0, "hls-ts-full": 1}
+        else:
+            supported_formats = {"dash": 2, "dash-avc-51": 3, "hls": 0, "hls-ts-avc-51": 1}
+        Logger.debug("Looking for formats: %s", ", ".join(supported_formats.keys()))
 
         for video in videos:
             video_format = video.get("format", "")
@@ -1162,20 +1175,18 @@ class Channel(chn_class.Channel):
                 video_format = video.get("playerType", "")
             video_format = video_format.lower()
 
-            # Dictionary with supported video formats and their priority.
-            supported_formats = {"dash": 2, "dash-avc-51": 3, "hls": 0, "hls-ts-avc-51": 1}
             if video_format not in supported_formats:
                 Logger.debug("Skipping video format: %s", video_format)
                 continue
             Logger.debug("Found video item for format: %s", video_format)
 
             url = video['url']
-            if any(filter(lambda s: s.Url == url, part.MediaStreams)):
+            if any(filter(lambda s: s.Url == url, item.streams)):
                 Logger.debug("Skippping duplicate Stream url: %s", url)
                 continue
 
             if "dash" in video_format and use_input_stream:
-                stream = part.append_media_stream(video['url'], supported_formats[video_format])
+                stream = item.add_stream(video['url'], supported_formats[video_format])
                 Mpd.set_input_stream_addon_input(stream)
 
             elif "m3u8" in url:
@@ -1188,21 +1199,20 @@ class Channel(chn_class.Channel):
                     continue
 
                 M3u8.update_part_with_m3u8_streams(
-                    part,
+                    item,
                     url,
                     encrypted=False,
-                    headers=part.HttpHeaders,
                     channel=self,
                     bitrate=supported_formats[video_format]
                 )
 
             elif video["url"].startswith("rtmp"):
                 # just replace some data in the URL
-                part.append_media_stream(
+                item.add_stream(
                     self.get_verifiable_video_url(video["url"]).replace("_definst_", "?slist="),
                     video[1])
             else:
-                part.append_media_stream(url, 0)
+                item.add_stream(url, 0)
 
         if subtitles:
             Logger.info("Found subtitles to play")
@@ -1217,10 +1227,15 @@ class Channel(chn_class.Channel):
                     # look for more
                     continue
 
-                part.Subtitle = subtitlehelper.SubtitleHelper.download_subtitle(
+                item.subtitle = subtitlehelper.SubtitleHelper.download_subtitle(
                     sub_url, format="srt", replace={"&amp;": "&"})
                 # stop when finding one
                 break
 
         item.complete = True
         return item
+
+    def __validate_location(self):
+        url = "https://api.svt.se/geo.modernizr.js"
+        data = UriHandler.open(url, force_text=True, no_cache=True)
+        return "return true" in data

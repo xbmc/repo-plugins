@@ -250,7 +250,7 @@ class SP_Options(object):
 	def __init__(self, addon):
 		super(SP_Options, self).__init__()
 		self.addon = addon
-		self.geolocation = ["en", "es", "de", "se", "eu"]
+		self.geolocation = ["en", "es", "de", "se", "eu", "br", "lat"]
 
 	def debug(self):
 		log_error("OPTIONS Geolocation          {0}".format(self.audio(True)))
@@ -381,7 +381,7 @@ class SouthParkAddon(object):
 				log_error("Found locked episode '{0}'. trying again!".format(episode_data["title"]))
 				continue
 			if self.options.playrandom():
-				self.play_episode(episode_data['uuid'], episode_data['title'], episode_data['image'])
+				self.play_episode(episode_data['season'], episode_data['episode'])
 			else:
 				self.add_episode(episode_data)
 			break
@@ -441,8 +441,6 @@ class SouthParkAddon(object):
 
 			playitem.setArt({'icon': data["image"], 'thumb': data["image"]})
 			playitem.setInfo('video', {'Title': title, 'Plot': data["details"]})
-			playitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
-			playitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
 
 			if subtitles[i] != None and show_subs:
 				playitem.setSubtitles([subtitles[i]])

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.formula1" name="Formula 1" version="2.0.1" provider-name="jaylinski">
+<addon id="plugin.video.formula1" name="Formula 1" version="2.0.2" provider-name="jaylinski">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.22.0"/>
@@ -16,11 +16,14 @@
         <forum>https://forum.kodi.tv/showthread.php?tid=352138</forum>
         <website>https://www.formula1.com</website>
         <source>https://github.com/jaylinski/kodi-addon-formula1</source>
-        <news>2.0.1 (2021-04-16)
-Fix error when viewing driver standings
+        <news>2.0.2 (2021-05-22)
+Switched to new player API (the old player API did not display the latest videos)
+
+2.0.1 (2021-04-16)
+Fixed error when viewing driver standings
 
 2.0.0 (2020-12-05)
-Add support for Kodi v19 (Matrix)
+Added support for Kodi v19 (Matrix)
         </news>
         <assets>
             <icon>resources/icon.png</icon>

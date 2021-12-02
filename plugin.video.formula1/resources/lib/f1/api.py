@@ -25,19 +25,22 @@ class Api:
 
     # API endpoints
     api_path_editorial = "editorial-assemblies/videos/2BiKQUC040cmuysoQsgwcK"
-    api_path_videos = "fom-assets/videos"
+    api_path_videos = "video-assets/videos"
     api_path_constructors = "editorial-constructorlisting/listing"
     api_path_drivers = "editorial-driverlisting/listing"
     api_path_events = "editorial-eventlisting/events"
     api_path_results = "fom-results/raceresults"
 
-    # Ooyala (https://help.ooyala.com/video-platform/concepts/book_ref_apis.html)
-    player_api_url = "https://player.ooyala.com"
-    player_api_path = "/sas/player_api/v2/authorization/embed_code/{pcode}/{embed_codes}"
-    player_api_pcode = "tudTgyOkO_Oa2kec6fNFnApvZ8ig"
+    # Brightcove (https://www.brightcove.com/)
+    # Policy key is hardcoded and was extracted from public Formula 1 Android App
+    player_api_url = "https://edge.api.brightcove.com"
+    player_api_path = "/playback/v1/accounts/{account_id}/videos/{video_id}"
+    player_account_id = "6057949432001"
+    player_policy_key = "BCpkADawqM1hQVBuXkSlsl6hUsBZQMmrLbIfOjJQ3_n8zmPOhlNSwZhQBF6d5xggxm0t052" \
+                        "lQjYyhqZR3FW2eP03YGOER9ihJkUnIhRZGBxuLhnL-QiFpvcDWIh_LvwN5j8zkjTtGKarhsdV"
 
     video_stream = ""
-    thumbnail_quality = "transform/5col/image.jpg"
+    thumbnail_quality = "6col"
 
     def __init__(self, settings):
         self.settings = settings
@@ -78,16 +81,11 @@ class Api:
         res = self._do_api_request(path, {})
         return self._map_json_to_collection(res)
 
-    def resolve_embed_code(self, embed_code):
-        video_format = self._get_video_format()
+    def resolve_video_id(self, video_id):
+        path = self.player_api_path.format(account_id=self.player_account_id, video_id=video_id)
+        res = self._do_player_request(path)
 
-        auth = self.player_api_path.format(pcode=self.player_api_pcode, embed_codes=embed_code)
-        res = self._do_player_request(auth, {
-            "domain": "http%3A%2F%2Fooyala.com",
-            "supportedFormats": video_format.get("format"),
-        })
-
-        return self._get_stream_by_format(res["authorization_data"][embed_code]["streams"])
+        return self._get_stream_by_format(res["sources"])
 
     def _do_api_request(self, path, params):
         headers = {
@@ -104,17 +102,19 @@ class Api:
 
         return requests.get(path, headers=headers, params=params).json()
 
-    def _do_player_request(self, path, params):
-        headers = {"Accept-Encoding": "gzip"}
+    def _do_player_request(self, path):
         path = self.player_api_url + path
+        headers = {
+            "Accept-Encoding": "gzip",
+            "BCOV-POLICY": self.player_policy_key,
+        }
 
         xbmc.log(
-            "plugin.video.formula1::Api() Calling %s with header %s and payload %s" %
-            (path, str(headers), str(params)),
+            "plugin.video.formula1::Api() Calling %s with header %s" % (path, str(headers)),
             xbmc.LOGDEBUG
         )
 
-        return requests.get(path, headers=headers, params=params).json()
+        return requests.get(path, headers=headers).json()
 
     def _map_json_to_collection(self, json_obj):
         collection = ApiCollection()
@@ -201,19 +201,20 @@ class Api:
                 }
                 collection.items.append(event)
 
-            elif "ooyalaVideoId" in item:
-                video = Video(item_id=item["ooyalaVideoId"], label=item["caption"])
+            elif "videoId" in item:
+                video = Video(item_id=item["videoId"], label=item["caption"])
                 video.thumb = self._get_thumbnail(item)
-                video.uri = item["ooyalaVideoId"]
+                video.uri = item["videoId"]
                 video.info = {
-                    "duration": item["ooyalaVideoDurationInSeconds"],
+                    "description": item.get("description", ""),
+                    "duration": item.get("videoDurationInSeconds", 0),
                 }
                 collection.items.append(video)
 
         return collection
 
     def _get_thumbnail(self, item):
-        return "{}.{}".format(item["thumbnail"]["url"], self.thumbnail_quality)
+        return item["thumbnail"]["renditions"][self.thumbnail_quality]
 
     def _get_video_format(self):
         video_format = self.settings.VIDEO_FORMAT[self.video_stream]
@@ -227,15 +228,16 @@ class Api:
     def _get_stream_by_format(self, streams):
         video_format = self._get_video_format()
 
-        if video_format.get("format") == "m3u8":
-            return base64.b64decode(streams[0]["url"]["data"]).decode("ascii")
-
         for stream in streams:
-            if stream.get("height") == video_format.get("quality"):
-                return base64.b64decode(stream["url"]["data"]).decode("ascii")
+            # HLS streams
+            if stream.get("type", "") == video_format.get("format"):
+                return stream["src"]
+            # MP4/H264 streams
+            if stream.get("codec", "") == video_format.get("format"):
+                if stream.get("height") == video_format.get("quality"):
+                    return stream["src"]
 
-        # Fallback (if no matching resolution was found)
-        return base64.b64decode(streams[0]["url"]["data"]).decode("ascii")
+        raise RuntimeError("No matching stream found")
 
     def _parse_date(self, value):
         date = value.split(".")[0]  # Date without microseconds

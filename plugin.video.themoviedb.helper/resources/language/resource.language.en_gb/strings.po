@@ -459,7 +459,7 @@ msgstr ""
 
 #: /resources/settings.xml
 msgctxt "#32091"
-msgid "Hide specials / up next folders"
+msgid "Special season folders"
 msgstr ""
 
 #: /resources/settings.xml
@@ -1549,7 +1549,7 @@ msgstr ""
 
 #: /resources/lib/request/api.py
 msgctxt "#32307"
-msgid "Suppressing retries for 1 minute"
+msgid "Suppressing retries for {} seconds"
 msgstr ""
 
 #: /resources/lib/request/api.py
@@ -1903,6 +1903,114 @@ msgstr ""
 #: /resources/settings.xml
 msgctxt "#32373"
 msgid "Restrict dummy setResolvedUrl method to library strm"
+msgstr ""
+
+#: /resources/lib/player/players.py
+msgctxt "#32374"
+msgid "Constructing Players"
+msgstr ""
+
+#: /resources/lib/player/players.py
+msgctxt "#32375"
+msgid "Retrieving Item Details"
+msgstr ""
+
+#: /resources/lib/player/players.py
+msgctxt "#32376"
+msgid "Building Player Dialog"
+msgstr ""
+
+#: /resources/lib/trakt/api.py
+msgctxt "#32377"
+msgid "Playcount"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32378"
+msgid "Show All"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32379"
+msgid "Hide Specials"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32380"
+msgid "Hide Up Next"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32381"
+msgid "Hide Up Next and Specials"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32382"
+msgid "Hide Episode Groups"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32383"
+msgid "Hide Episode Groups and Specials"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32384"
+msgid "Hide Episode Groups and Up Next"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32385"
+msgid "Hide All"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32386"
+msgid "Delete Cache"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32387"
+msgid "Delete {} Cache"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32388"
+msgid ""
+"Are you sure you want to delete the {} cache? This action cannot be undone.\n"
+"\n"
+"TMDbHelper performs regular automatic cache management and cleaning. You should only delete the cache manually in cases of persistent cache related errors."
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32389"
+msgid "Cache deleted!"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32390"
+msgid "Use alternative .nfo filename to avoid externally managed .nfo conflicts"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32391"
+msgid "Select update type"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32392"
+msgid "Use [B]Quick Update[/B] to check for new items.\n\nUse [B]Forced Update[/B] to ignore previously cached update details and recheck all items. Forced updates should only be used when cleaning and rebuilding the Kodi library."
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32393"
+msgid "Forced Update"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32394"
+msgid "Quick Update"
 msgstr ""
 
 msgctxt "#30030"

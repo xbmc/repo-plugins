@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 import xbmc
 import xbmcaddon
-from xbmcgui import ListItem, Dialog, NOTIFICATION_ERROR
+from xbmcgui import ListItem, Dialog, NOTIFICATION_ERROR, Window, WindowXML
 from xbmcplugin import addDirectoryItem, addDirectoryItems, endOfDirectory, setContent, setResolvedUrl
 
 import routing
@@ -20,6 +20,7 @@ tr = ADDON.getLocalizedString
 lbry_api_url = unquote(ADDON.getSetting('lbry_api_url'))
 if lbry_api_url == '':
     raise Exception('Lbry API URL is undefined.')
+using_lbry_proxy = lbry_api_url.find('api.lbry.tv') != -1
 
 items_per_page = ADDON.getSettingInt('items_per_page')
 nsfw = ADDON.getSettingBool('nsfw')
@@ -93,6 +94,10 @@ def to_video_listitem(item, playlist='', channel='', repost=None):
 
     if playlist == '':
         menu.append((
+            tr(30238), 'RunPlugin(%s)' % plugin.url_for(plugin_comment_show, uri=serialize_uri(item))
+            ))
+
+        menu.append((
             tr(30212) % tr(30211), 'RunPlugin(%s)' % plugin.url_for(plugin_playlist_add, name=quote(tr(30211)), uri=serialize_uri(item))
         ))
     else:
@@ -141,7 +146,7 @@ def result_to_itemlist(result, playlist='', channel=''):
         if not 'value_type' in item:
             xbmc.log(str(item))
             continue
-        if item['value_type'] == 'stream' and item['value']['stream_type'] == 'video':
+        if item['value_type'] == 'stream' and 'stream_type' in item['value'] and item['value']['stream_type'] == 'video':
             # nsfw?
             if 'tags' in item['value']:
                 if 'mature' in item['value']['tags'] and not nsfw:
@@ -163,7 +168,7 @@ def result_to_itemlist(result, playlist='', channel=''):
 
             items.append((url, li))
         elif item['value_type'] == 'channel':
-            li = ListItem('[B]%s[/B]' % item['name'])
+            li = ListItem('[B]%s[/B] [I]#%s[/I]' % (item['name'], item['claim_id'][0:4]))
             li.setProperty('IsFolder','true')
             if 'thumbnail' in item['value'] and 'url' in item['value']['thumbnail']:
                 li.setArt({
@@ -171,17 +176,477 @@ def result_to_itemlist(result, playlist='', channel=''):
                     'poster': item['value']['thumbnail']['url'],
                     'fanart': item['value']['thumbnail']['url']
                 })
-            url = plugin.url_for(lbry_channel, uri=serialize_uri(item['name'] + '#' + item['claim_id']),page=1)
+            url = plugin.url_for(lbry_channel, uri=serialize_uri(item),page=1)
+
+            menu = []
+            ch_name = item['name']
+            menu.append((
+                tr(30205) % ch_name, 'RunPlugin(%s)' % plugin.url_for(plugin_follow, uri=serialize_uri(item))
+            ))
+            li.addContextMenuItems(menu)
+
             items.append((url, li, True))
         else:
             xbmc.log('ignored item, value_type=' + item['value_type'])
-            xbmc.log('item name=' + item['name'].encode('utf-8'))
+            xbmc.log('item name=' + item['name'])
 
     return items
+
+def get_user_channel():
+    user_channel_str = ADDON.getSettingString('user_channel')
+    if user_channel_str:
+        toks = user_channel_str.split('#')
+        if len(toks) == 2:
+            return (toks[0], toks[1])
+    return None
+
+def set_user_channel(channel_name, channel_id):
+    ADDON.setSettingString('user_channel', "%s#%s" % (channel_name, channel_id))
+
+@plugin.route('/select_user_channel')
+def select_user_channel():
+    user_channel = ADDON.getSettingString('user_channel')
+
+    progressDialog = xbmcgui.DialogProgress()
+    progressDialog.create(tr(30231))
+
+    page = 1
+    total_pages = 1
+    items = []
+    while page <= total_pages:
+        if progressDialog.iscanceled():
+            break
+
+        try:
+            params = {'page' : page}
+            result = call_rpc('channel_list', params, errdialog=not using_lbry_proxy)
+            total_pages = max(result['total_pages'], 1) # Total pages returns 0 if empty
+            if 'items' in result:
+                items += result['items']
+            else:
+                break
+        except:
+            pass
+
+        page = page + 1
+        progressDialog.update(int(100.0*page/total_pages), tr(30220) + ' %s/%s' % (page, total_pages))
+
+    if len(items) == 0:
+        progressDialog.update(100, tr(30232)) # No owned channels found
+        xbmc.sleep(1000)
+        progressDialog.close()
+        return
+    elif len(items) == 1:
+        progressDialog.update(100, tr(30233)) # Found single user
+        xbmc.sleep(1000)
+        progressDialog.close()
+
+        selected_item = items[0]
+    else:
+        progressDialog.update(100, tr(30234)) # Multiple users found
+        xbmc.sleep(1000)
+        progressDialog.close()
+
+        names = []
+        for item in items:
+            names.append(item['name'])
+
+        selected_name_index = dialog.select(tr(30239), names) # Post As
+
+        if selected_name_index >= 0: # If not cancelled
+            selected_item = items[selected_name_index]
+            set_user_channel(selected_item['name'], selected_item['claim_id'])
+
+@plugin.route('/clear_user_channel')
+def clear_user_channel():
+    ADDON.setSettingString('user_channel', '')
+
+class CommentWindow(WindowXML):
+    def __init__(self, *args, **kwargs):
+        self.claim_id = kwargs['claim_id']
+        self.last_selected_position = -1
+        WindowXML.__init__(self, args, kwargs)
+
+    def onInit(self):
+        self.refresh()
+
+    def onAction(self, action):
+        if action == xbmcgui.ACTION_CONTEXT_MENU:
+            # Commenting is not supported
+            if using_lbry_proxy:
+                ret = dialog.contextmenu([tr(30240)]) # Only allow refreshing
+                if ret == 0:
+                    self.refresh()
+                return
+
+            # No user channel. Allow user to select an account or refresh.
+            if not get_user_channel():
+                ret = dialog.contextmenu([tr(30240)])
+                if ret == 0:
+                    self.refresh()
+                return
+
+            # User channel selected. Allow comment manipulation.
+            user_channel = get_user_channel()
+            if get_user_channel():
+                ccl = self.get_comment_control_list()
+                selected_pos = ccl.getSelectedPosition()
+                item = ccl.getSelectedItem()
+
+                menu = []
+                offsets = []
+                offset = 0
+                invalid_offset = 10000
+                if item:
+                    comment_id = item.getProperty('id')
+
+                    menu.append(tr(30226)) # Like
+                    offsets.append(0)
+
+                    menu.append(tr(30227)) # Dislike
+                    offsets.append(1)
+
+                    menu.append(tr(30228)) # Clear Vote
+                    offsets.append(2)
+
+                    offset = 3
+                else:
+                    offsets.append(invalid_offset)
+                    offsets.append(invalid_offset)
+                    offsets.append(invalid_offset)
+                    offset = 0
+
+                menu.append(tr(30221)) # New comment
+                offsets.append(offset)
+                offset = offset + 1
+
+                if item:
+                    menu.append(tr(30222)) # Reply
+                    offsets.append(offset)
+                    offset = offset + 1
+
+                    if item.getProperty('channel_id') == get_user_channel()[1]:
+
+                        menu.append(tr(30223)) # Edit
+                        offsets.append(offset)
+                        offset = offset + 1
+
+                        menu.append(tr(30224)) # Remove
+                        offsets.append(offset)
+                        offset = offset + 1
+                    else:
+                        offsets.append(invalid_offset)
+                        offsets.append(invalid_offset)
+                else:
+                    offsets.append(invalid_offset)
+                    offsets.append(invalid_offset)
+                    offsets.append(invalid_offset)
+
+                menu.append(tr(30240)) # Refresh
+                offsets.append(offset)
+
+                ret = dialog.contextmenu(menu)
+
+                if ret == offsets[0]: # Like
+                    self.like(comment_id)
+                    item.setProperty('my_vote', str(1))
+                    self.refresh_label(item)
+
+                elif ret == offsets[1]: # Dislike
+                    self.dislike(comment_id)
+                    item.setProperty('my_vote', str(-1))
+                    self.refresh_label(item)
+
+                elif ret == offsets[2]: # Clear Vote
+                    self.neutral(comment_id)
+                    item.setProperty('my_vote', str(0))
+                    self.refresh_label(item)
+
+                elif ret == offsets[3]: # New Comment
+                    comment = dialog.input(tr(30221), type=xbmcgui.INPUT_ALPHANUM)
+                    if comment:
+                        comment_id = self.create_comment(comment)
+
+                        # Remove 'No Comments' item
+                        if ccl.size() == 1 and ccl.getListItem(0).getLabel() == tr(30230):
+                            ccl.reset()
+
+                        # Add new comment item
+                        ccl.addItem(self.create_list_item(comment_id, user_channel[0], user_channel[1], 0, 0, comment, 0, 1))
+                        ccl.selectItem(ccl.size()-1)
+
+                elif ret == offsets[4]: # Reply
+                    comment = dialog.input(tr(30222), type=xbmcgui.INPUT_ALPHANUM)
+                    if comment:
+                        comment_id = self.create_comment(comment, comment_id)
+
+                        # Insert new item by copying the list (no XMBC method to allow a fast insertion).
+                        newItems = []
+                        for i in range(selected_pos+1):
+                            newItems.append(self.copy_list_item(ccl.getListItem(i)))
+                        newItems.append(self.create_list_item(comment_id, user_channel[0], user_channel[1], 0, 0, comment, int(item.getProperty('indent'))+1, 1))
+                        for i in range(selected_pos+1, ccl.size()):
+                            newItems.append(self.copy_list_item(ccl.getListItem(i)))
+
+                        ccl.reset()
+                        ccl.addItems(newItems)
+                        ccl.selectItem(selected_pos+1)
+
+                elif ret == offsets[5]: # Edit
+                    id = item.getProperty('id');
+                    comment = item.getProperty('comment')
+                    comment = dialog.input(tr(30223), type=xbmcgui.INPUT_ALPHANUM, defaultt=comment)
+                    if comment:
+                        self.edit_comment(id, comment)
+                        item.setProperty('comment', comment)
+                        self.refresh_label(item)
+
+                elif ret == offsets[6]: # Change User
+                    indentRemoved = item.getProperty('indent')
+                    self.remove_comment(comment_id)
+                    ccl.removeItem(selected_pos)
+
+                    while True:
+                        if selected_pos == ccl.size():
+                            break
+                        indent = ccl.getListItem(selected_pos).getProperty('indent')
+                        if indent <= indentRemoved:
+                            break
+                        ccl.removeItem(selected_pos)
+
+                    if selected_pos > 0:
+                        ccl.selectItem(selected_pos-1)
+
+                    if ccl.size() == 0:
+                        ccl.addItem(ListItem(label=tr(30230)))
+
+                elif ret == offsets[7]: # Refresh
+                    self.refresh()
+
+        else:
+            WindowXML.onAction(self, action)
+
+        # If an action changes the selected item position refresh the label
+        ccl = self.get_comment_control_list()
+        if self.last_selected_position != ccl.getSelectedPosition():
+            if self.last_selected_position >= 0 and self.last_selected_position < ccl.size():
+                oldItem = ccl.getListItem(self.last_selected_position)
+                if oldItem:
+                    self.refresh_label(oldItem, False)
+            newItem = ccl.getSelectedItem()
+            if newItem:
+                self.refresh_label(newItem, True)
+            self.last_selected_position = ccl.getSelectedPosition()
+
+    def refresh(self):
+        self.last_selected_position = -1
+        progressDialog = xbmcgui.DialogProgress()
+        progressDialog.create(tr(30219), tr(30220) + ' 1')
+
+        ccl = self.get_comment_control_list()
+
+        query = { 'include_replies' : True, 'visible' : False, 'hidden' : False, 'page' : 1, 'claim_id' : self.claim_id, 'page_size' : 50 }
+        result = call_rpc('comment_list', query)
+
+        page = 1
+        total_pages = result['total_pages']
+
+        while page < total_pages:
+            if progressDialog.iscanceled():
+                break
+            progressDialog.update(int(100.0*page/total_pages), tr(30220) + " %s/%s" % (page + 1, total_pages))
+            page = page+1
+            query['page'] = page
+            result['items'] += call_rpc('comment_list', query)['items']
+
+        if 'items' in result:
+            ccl.reset()
+            items = result['items']
+
+            # Grab the likes and dislikes.
+            comment_ids = ''
+            for item in items:
+                comment_ids += item['comment_id'] + ','
+            params = { 'comment_ids' : comment_ids }
+            user_channel = get_user_channel()
+            if user_channel:
+                params['channel_name'] = user_channel[0]
+                params['channel_id'] = user_channel[1]
+            result = call_rpc('comment_react_list', params)
+            others_reactions = result['others_reactions']
+
+            # Items are returned newest to oldest which implies that child comments are always before their parents.
+            # Iterate from oldest to newest comments building up a pre-order traversal ordering of the comment tree. Order
+            # the tree roots by decreasing score (likes-dislikes).
+            sort_indices = []
+            i = len(items)-1
+            while i >= 0:
+                item = items[i]
+                comment_id = item['comment_id']
+                if 'parent_id' in item and item['parent_id'] != 0:
+                    for j in range(len(sort_indices)): # search for the parent in the sorted index list
+                        sorted_item = items[sort_indices[j][0]]
+                        indent = sort_indices[j][1]
+                        if sorted_item['comment_id'] == item['parent_id']: # found the parent
+                            # Insert at the end of the subtree of the parent. Use the indentation to figure
+                            # out where the end is.
+                            while j+1 < len(sort_indices):
+                                if sort_indices[j+1][1] > indent: # Item with index j+1 is in the child subtree
+                                    j = j+1
+                                else: # Item with index j+1 is not in the child subtree. Break and insert before this item.
+                                    break
+                            sort_indices.insert(j+1, (i, indent+1, 0))
+                            break
+                else:
+                    reaction = others_reactions[comment_id]
+                    likes = reaction['like']
+                    dislikes = reaction['dislike']
+                    score = likes-dislikes
+
+                    j = 0
+                    insert_index = len(sort_indices)
+                    while j < len(sort_indices):
+                        if sort_indices[j][1] == 0 and score > sort_indices[j][2]:
+                            insert_index = j
+                            break
+                        j = j+1
+
+                    sort_indices.insert(insert_index, (i, 0, score))
+
+                i -= 1
+
+            for (index,indent,score) in sort_indices:
+                item = items[index]
+                channel_name = item['channel_name']
+                channel_id = item['channel_id']
+                comment = item['comment']
+                comment_id = item['comment_id']
+                reaction = result['others_reactions'][comment_id]
+                likes = reaction['like']
+                dislikes = reaction['dislike']
+
+                if 'my_reactions' in result:
+                    my_reaction = result['my_reactions'][comment_id]
+                    my_vote = my_reaction['like'] - my_reaction['dislike']
+                else:
+                    my_vote = 0
+
+                ccl.addItem(self.create_list_item(comment_id, channel_name, channel_id, likes, dislikes, comment, indent, my_vote))
+        else:
+            if ccl.size() == 0:
+                ccl.addItem(ListItem(label=tr(30230))) # No Comments
+
+        progressDialog.update(100)
+        progressDialog.close()
+
+    def get_comment_control_list(self):
+        return self.getControl(1)
+
+    def create_list_item(self, comment_id, channel_name, channel_id, likes, dislikes, comment, indent, my_vote):
+        li = ListItem(label=self.create_label(channel_name, channel_id, likes, dislikes, comment, indent, my_vote))
+        li.setProperty('id', comment_id)
+        li.setProperty('channel_name', channel_name)
+        li.setProperty('channel_id', channel_id)
+        li.setProperty('likes', str(likes))
+        li.setProperty('dislikes', str(dislikes))
+        li.setProperty('comment', comment)
+        li.setProperty('indent', str(indent))
+        li.setProperty('my_vote', str(my_vote))
+        return li
+
+    def copy_list_item(self, li):
+        li_copy = ListItem(label=li.getLabel())
+        li_copy.setProperty('id', li.getProperty('id'))
+        li_copy.setProperty('channel_name', li.getProperty('channel_name'))
+        li_copy.setProperty('channel_id', li.getProperty('channel_id'))
+        li_copy.setProperty('likes', li.getProperty('likes'))
+        li_copy.setProperty('dislikes', li.getProperty('dislikes'))
+        li_copy.setProperty('comment', li.getProperty('comment'))
+        li_copy.setProperty('indent', li.getProperty('indent'))
+        li_copy.setProperty('my_vote', li.getProperty('my_vote'))
+        return li_copy
+
+    def refresh_label(self, li, selected=True):
+        li.getProperty('id');
+        channel_name = li.getProperty('channel_name')
+        channel_id = li.getProperty('channel_id')
+        likes = int(li.getProperty('likes'))
+        dislikes = int(li.getProperty('dislikes'))
+        comment = li.getProperty('comment')
+        indent = int(li.getProperty('indent'))
+        my_vote = int(li.getProperty('my_vote'))
+        li.setLabel(self.create_label(channel_name, channel_id, likes, dislikes, comment, indent, my_vote, selected))
+
+    def create_label(self, channel_name, channel_id, likes, dislikes, comment, indent, my_vote, selected=False):
+        user_channel = get_user_channel()
+        if user_channel and user_channel[1] == channel_id:
+            color = 'red' if selected else 'green'
+            channel_name = '[COLOR ' + color + ']' + channel_name + '[/COLOR]'
+
+        if my_vote == 1:
+            likes = '[COLOR green]' + str(likes+1) + '[/COLOR]'
+            dislikes = str(dislikes)
+        elif my_vote == -1:
+            likes = str(likes)
+            dislikes = '[COLOR green]' + str(dislikes+1) + '[/COLOR]'
+        else:
+            likes = str(likes)
+            dislikes = str(dislikes)
+
+        lilabel = channel_name + ' [COLOR orange]' + likes + '/' + dislikes + '[/COLOR] [COLOR white]' + comment + '[/COLOR]'
+
+        padding = ''
+        for i in range(indent):
+            padding += '   '
+        lilabel = padding + lilabel
+
+        return lilabel
+
+    def create_comment(self, comment, parent_id=None):
+        user_channel = get_user_channel()
+        progressDialog = xbmcgui.DialogProgress()
+        progressDialog.create(tr(30241), tr(30242))
+        params = { 'claim_id' : self.claim_id, 'comment' : comment, 'channel_id' : user_channel[1] }
+        if parent_id:
+            params['parent_id'] = parent_id
+        res = call_rpc('comment_create', params)
+        self.like(res['comment_id'])
+        progressDialog.close()
+        return res['comment_id']
+
+    def edit_comment(self, comment_id, comment):
+        user_channel = get_user_channel()
+        params = { 'comment_id' : comment_id, 'comment' : comment }
+        return call_rpc('comment_update', params)
+
+    def remove_comment(self, comment_id):
+        params = { 'comment_id' : comment_id }
+        call_rpc('comment_abandon', params)
+
+    def react(self, comment_id, type=None):
+        user_channel = get_user_channel()
+        params = { 'comment_ids' : comment_id,
+                'clear_types': 'like,dislike',
+                'channel_name' : user_channel[0],
+                'channel_id' : user_channel[1]
+                }
+        if type:
+            params['react_type'] = type
+        call_rpc('comment_react', params)
+
+    def like(self, comment_id):
+        self.react(comment_id, 'like')
+
+    def dislike(self, comment_id):
+        self.react(comment_id, 'dislike')
+
+    def neutral(self, comment_id):
+        self.react(comment_id)
 
 @plugin.route('/')
 def lbry_root():
     addDirectoryItem(ph, plugin.url_for(plugin_follows), ListItem(tr(30200)), True)
+    addDirectoryItem(ph, plugin.url_for(plugin_recent, page=1), ListItem(tr(30218)), True)
     #addDirectoryItem(ph, plugin.url_for(plugin_playlists), ListItem(tr(30210)), True)
     addDirectoryItem(ph, plugin.url_for(plugin_playlist, name=quote_plus(tr(30211))), ListItem(tr(30211)), True)
     addDirectoryItem(ph, plugin.url_for(lbry_new, page=1), ListItem(tr(30202)), True)
@@ -252,7 +717,6 @@ def plugin_follows():
                     'poster': channel_info['value']['thumbnail']['url'],
                     'fanart': channel_info['value']['thumbnail']['url']
                 })
-
         menu = []
         menu.append((
             tr(30206) % name, 'RunPlugin(%s)' % plugin.url_for(plugin_unfollow, uri=serialize_uri(uri))
@@ -260,6 +724,31 @@ def plugin_follows():
         li.addContextMenuItems(menu)
         addDirectoryItem(ph, plugin.url_for(lbry_channel, uri=serialize_uri(uri), page=1), li, True)
     endOfDirectory(ph)
+
+@plugin.route('/recent/<page>')
+def plugin_recent(page):
+    page = int(page)
+    channels = load_channel_subs()
+    channel_ids = []
+    for (name,claim_id) in channels:
+        channel_ids.append(claim_id)
+    query = {'page': page, 'page_size': items_per_page, 'order_by': 'release_time', 'channel_ids': channel_ids}
+    if not ADDON.getSettingBool('server_filter_disable'):
+        query['stream_types'] = ['video']
+    result = call_rpc('claim_search', query)
+    items = result_to_itemlist(result['items'])
+    addDirectoryItems(ph, items, result['page_size'])
+    total_pages = int(result['total_pages'])
+    if total_pages > 1 and page < total_pages:
+        addDirectoryItem(ph, plugin.url_for(plugin_recent, page=page+1), ListItem(tr(30203)), True)
+    endOfDirectory(ph)
+
+@plugin.route('/comments/show/<uri>')
+def plugin_comment_show(uri):
+    uri = deserialize_uri(uri)
+    win = CommentWindow('addon-lbry-comments.xml', xbmcaddon.Addon().getAddonInfo('path'), 'Default', claim_id=uri.split('#')[1])
+    win.doModal()
+    del win
 
 @plugin.route('/follows/add/<uri>')
 def plugin_follow(uri):
@@ -390,7 +879,7 @@ def claim_download(uri):
         if not user_payment_confirmed(claim_info):
             return
 
-    result = call_rpc('get', {'uri': uri, 'save_file': True})
+    call_rpc('get', {'uri': uri, 'save_file': True})
 
 def run():
     try:

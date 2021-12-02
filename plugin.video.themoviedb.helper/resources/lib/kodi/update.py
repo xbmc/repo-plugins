@@ -11,6 +11,8 @@ STRM_MOVIE = 'plugin://plugin.video.themoviedb.helper/?info=play&tmdb_id={}&tmdb
 STRM_EPISODE = 'plugin://plugin.video.themoviedb.helper/?info=play&tmdb_type=tv&islocal=True&tmdb_id={}&season={}&episode={}'
 BASEDIR_MOVIE = ADDON.getSettingString('movies_library') or 'special://profile/addon_data/plugin.video.themoviedb.helper/movies/'
 BASEDIR_TV = ADDON.getSettingString('tvshows_library') or 'special://profile/addon_data/plugin.video.themoviedb.helper/tvshows/'
+NFOFILE_MOVIE = u'movie-tmdbhelper' if ADDON.getSettingBool('alternative_nfo') else u'movie'
+NFOFILE_TV = u'tvshow-tmdbhelper' if ADDON.getSettingBool('alternative_nfo') else u'tvshow'
 """
 IMPORTANT: These limits are set to prevent excessive API data usage.
 Please respect the APIs that provide this data for free.
@@ -93,7 +95,7 @@ def create_file(content, filename, *args, **kwargs):
 
 
 def create_nfo(tmdb_type, tmdb_id, *args, **kwargs):
-    filename = u'movie' if tmdb_type == 'movie' else u'tvshow'
+    filename = NFOFILE_MOVIE if tmdb_type == 'movie' else NFOFILE_TV
     content = u'https://www.themoviedb.org/{}/{}'.format(tmdb_type, tmdb_id)
     kwargs['file_ext'], kwargs['clean_url'] = 'nfo', False
     create_file(content, filename, *args, **kwargs)

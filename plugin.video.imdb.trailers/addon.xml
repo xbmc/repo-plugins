@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.12+matrix.1" provider-name="gujal">
+<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.14+matrix.1" provider-name="gujal">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.4.3"/>
-	  <import addon="script.module.requests-cache" version="0.0.1"/>
-	  <import addon="script.module.beautifulsoup4" version="4.0.0"/>
-    <import addon="script.module.six" version="0.0.1"/>
+    <import addon="script.common.plugin.cache" version="2.6.0"/>
+    <import addon="script.module.beautifulsoup4" version="4.0.0"/>
+    <import addon="script.module.six" version="1.12.0"/>
+    <import addon="script.module.kodi-six" version="0.0.1"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -32,8 +33,10 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=352127</forum>
     <website>https://www.imdb.com/trailers/</website>
     <email>gujal at protonmail dot com</email>
-    <news>v2.1.11+matrix.1 (20200516)
-      Add new api calls
+    <news>v2.1.14 (20211015)
+      [fix] code breaking on Kodi18
+      [fix] Search dialog popup after playing a searched trailer
+      [fix play by imdb_id
     </news>
     <assets>
       <icon>icon.png</icon>

@@ -33,6 +33,8 @@ def build_kodi_url(parameters):
 
 
 def encode_parameters(parameters):
+    parameters = { k: v if v is not None else ""
+                   for k, v in parameters.items() }
     try:
         return urlencode(parameters)
     except:
@@ -63,3 +65,7 @@ def parameters_string_to_dict(parameters):
 def debugLog(message, loglevel=xbmc.LOGDEBUG):
     output = py2_encode(message)
     xbmc.log(msg=output, level=loglevel)
+
+def userNotification(message, title="ORF TVThek"):
+    output = py2_encode(message)
+    xbmcgui.Dialog().notification(title, output, icon=xbmcgui.NOTIFICATION_ERROR)

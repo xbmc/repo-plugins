@@ -1,0 +1,112 @@
+# Kodi language file
+# Addon Provider: Guido Domenici
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: guido.domenici@gmail.com\n"
+"POT-Creation-Date: 2017-03-02T22:25:00+01:00\n"
+"PO-Revision-Date: 2017-03-02T22:25:00+01:00\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30100"
+msgid "General"
+msgstr "Generale"
+
+msgctxt "#30101"
+msgid "pCloud username (email)"
+msgstr "pCloud username (email)"
+
+msgctxt "#30102"
+msgid "pCloud password"
+msgstr "pCloud password"
+
+msgctxt "#30103"
+msgid "Log On"
+msgstr "Accedi"
+
+msgctxt "#30104"
+msgid "Log on to pCloud?"
+msgstr "Accedi a pCloud"
+
+msgctxt "#30105"
+msgid "auth"
+msgstr ""
+
+msgctxt "#30106"
+msgid "auth expiry"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Error"
+msgstr "Errore"
+
+msgctxt "#30108"
+msgid "Cannot log on to pCloud (see log)"
+msgstr "Accesso a pCloud fallito (vedi log)"
+
+msgctxt "#30109"
+msgid "ERROR: cannot logon to pCloud"
+msgstr "ERRORE: accesso a pCloud fallito"
+
+msgctxt "#30110"
+msgid "Success"
+msgstr "Successo"
+
+msgctxt "#30111"
+msgid "Logon successful"
+msgstr "Accesso eseguito con successo"
+
+msgctxt "#30112"
+msgid "Last used folder ID"
+msgstr "ID dell'ultimo folder usato"
+
+msgctxt "#30113"
+msgid "Back to parent folder"
+msgstr "Torna al folder di livello superiore"
+
+msgctxt "#30114"
+msgid "Delete from pCloud..."
+msgstr "Cancella da pCloud..."
+
+msgctxt "#30115"
+msgid "Confirm Delete"
+msgstr "Confermare Cancellazione"
+
+msgctxt "#30116"
+msgid "Delete '{0}' from pCloud"
+msgstr "Cancellare '{0}' da pCloud?"
+
+msgctxt "#30117"
+msgid "Operation cannot be undone."
+msgstr "L'operazione è irreversibile."
+
+msgctxt "#30118"
+msgid "Deleted successfully"
+msgstr "Cancellazione eseguita con successo"
+
+msgctxt "#30119"
+msgid "Error during delete (see log)"
+msgstr "Cancellazione fallita (vedi log)"
+
+msgctxt "#30120"
+msgid "ERROR: cannot delete file or folder from pCloud"
+msgstr "ERRORE: cancellazione file/folder da pCloud fallita"
+
+msgctxt "#30121"
+msgid "Mark as watched"
+msgstr "Segna come già visto"
+
+msgctxt "#30122"
+msgid "My Shares"
+msgstr "Le mie condivisioni"
+
+msgctxt "#30123"
+msgid "Back to My pCloud"
+msgstr "Torna a Il Mio pCloud"
+

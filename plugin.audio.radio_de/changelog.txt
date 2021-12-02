@@ -1,3 +1,13 @@
+v3.0.8+matrix.1 (24/11/2021)
+    - [new] Sync translations
+    - [fix] Initialize empty context menu items
+
+v3.0.7+matrix.1 (3/10/2021)
+    - [new] New fanart without .de
+    - [new] Move art to the resources folder
+    - [fix] Fix playback and additions to the my_stations list if the stream url cannot be obtained
+    - [fix] hot reload of lists after addition/removal from the mystations table
+
 v3.0.4+matrix.0 (27/9/2020)
     - [new] Add stationname property
 

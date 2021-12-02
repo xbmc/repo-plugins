@@ -1,0 +1,67 @@
+# Kodi Media Center language file
+# Addon Name: ESA Videos
+# Addon id: plugin.video.esa
+# Addon Provider: Jose Antonio Montes (jamontes)
+msgid ""
+msgstr ""
+"Project-Id-Version: KODI Addons\n"
+"Report-Msgid-Bugs-To: https://github.com/jamontes/plugin.video.esa/issues/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Jose Antonio Montes (jamontes)\n"
+"Language-Team: German (http://www.transifex.com/projects/p/kodi-addons/language/de_DE/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30010"
+msgid "Next page"
+msgstr "Nachste Seite"
+
+msgctxt "#30011"
+msgid "Video type not supported"
+msgstr "Video-Typ nicht unterstutzt"
+
+msgctxt "#30012"
+msgid "Couldn't locate video url"
+msgstr "Konnte Video-URL nicht finden"
+
+# Empty strings from id 30013 to 30100
+
+msgctxt "#30101"
+msgid "Language (for videos)"
+msgstr "Sprache (Videos)"
+
+msgctxt "#30102"
+msgid "Debug (enable logs)"
+msgstr "Debug (logs)"
+
+msgctxt "#30103"
+msgid "Sort criteria"
+msgstr "Sortierkriterien"
+
+msgctxt "#30104"
+msgid "Search"
+msgstr "Suchen"
+
+msgctxt "#30105"
+msgid "Search text"
+msgstr "Suchbegriff"
+
+msgctxt "#30106"
+msgid "Previous page"
+msgstr "Vorherige Seite"
+
+msgctxt "#30107"
+msgid "All the videos"
+msgstr "Alle Videos"
+
+msgctxt "#30108"
+msgid "Other Categories"
+msgstr "Weitere Kategorien"
+
+msgctxt "#30109"
+msgid "Show thumbnails as fanart"
+msgstr "Thumb als Fanart nutzen"

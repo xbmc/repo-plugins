@@ -20,7 +20,7 @@ user_mediaDir = os.path.join( user_dir , 'media' )
 cacheDir = os.path.join( user_mediaDir , 'cache' )
 
 def cacheArt(imageID,elem_type,url=None):
-    if not imageID or not url:
+    if not imageID and not url:
         raise NameError
 
     cacheDirType = os.path.join( cacheDir , elem_type )
@@ -95,7 +95,7 @@ def get_art(object_id,elem_type,url=None):
 
     albumArt = "DefaultFolder.png"
     #no url, no art, so no need to activate a connection
-    if not object_id or not url:
+    if not object_id and not url:
         return albumArt
     try:
         albumArt = cacheArt(object_id,elem_type,url)

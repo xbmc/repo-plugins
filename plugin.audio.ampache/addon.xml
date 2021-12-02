@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.audio.ampache" version="2.0.2+matrix.1" name="Ampache" provider-name="lusum">
+<addon id="plugin.audio.ampache" version="2.1.0+matrix.1" name="Ampache" provider-name="lusum">
     <requires>
         <import addon="script.module.future" version="0.17.1"/>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -16,7 +16,7 @@
     <description lang="en_GB">A web based audio/video streaming application and file manager allowing you to access your music and videos from anywhere, using almost any internet enabled device.</description>
     <platform>all</platform>
     <forum>https://forum.kodi.tv/showthread.php?tid=230736</forum>
-    <website>http://ampache.org/</website>
+    <website>https://ampache.org/</website>
     <license>GPL-2.0-or-later</license>
     <assets>
         <icon>resources/icon.png</icon>

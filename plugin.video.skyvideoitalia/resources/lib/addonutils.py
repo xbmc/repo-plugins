@@ -20,7 +20,7 @@ PATH = ADDON.getAddonInfo('path')
 DATA_PATH = ADDON.getAddonInfo('profile')
 PATH_T = xbmcvfs.translatePath(PATH)
 DATA_PATH_T = xbmcvfs.translatePath(DATA_PATH)
-IMAGE_PATH_T = os.path.join(PATH_T, 'resources', 'media', "")
+IMAGE_PATH_T = os.path.join(PATH_T, 'resources', 'media')
 LANGUAGE = ADDON.getLocalizedString
 KODILANGUAGE = xbmc.getLocalizedString
 

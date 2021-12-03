@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
     <category label="30000">
-        <setting id="Quality" type="enum" label="30002" default="3" values="LOW|MED|HIGH|HD" />
-        <setting id="LogLevel" type="enum" label="30003" default="3" values="Debug|Info|Warning|Error"/>
+        <setting label="30002" id="Quality" type="enum" default="3" values="LOW|MED|HIGH|HD" />
+        <!--<setting label="30008" id="UseInputstream" type="bool" default="true"/>-->
+        <setting label="30003" id="LogLevel" type="enum" default="3" lvalues="30009|30010|30011|30012"/>
+        <setting label="30001" id="Debug" type="bool" default="false"/>
     </category>
 </settings>

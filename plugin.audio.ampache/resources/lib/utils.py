@@ -1,10 +1,14 @@
 import time
 import datetime
-import xbmcaddon
+import xbmcaddon,xbmcplugin
 import sys
 
 #main plugin/service library
 ampache = xbmcaddon.Addon("plugin.audio.ampache")
+
+def setContent(handle,object_type):
+    if object_type == 'artists' or object_type == 'albums' or object_type == 'songs' or object_type == 'videos':
+        xbmcplugin.setContent(handle, object_type)
 
 def otype_to_mode(object_type, object_subtype=None):
     mode = None

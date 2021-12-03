@@ -72,6 +72,8 @@ TEAM_FANART = {
     60027: "https://www.tucsonroadrunners.com/wp-content/uploads/2019/12/12.14.19-Web-Recap.png", # Tucson
     60028: "http://www.uticacomets.com/assets/img/1218-feature-5450f98f05.jpg", # Utica
     60029: "http://www.wbspenguins.com/wp-content/uploads/2019/12/1000_Larmi.jpg", # Wilkes
+    194381: "https://api.abbotsford.canucks.com/uploads/Homepage_5583e2b396.jpg", # Abbotsford
+    194382: "https://www.bridgeportislanders.com/assets/img/weekly5-17502d478f.jpg", # Bridgeport Islanders
 }
 
 # User Agents

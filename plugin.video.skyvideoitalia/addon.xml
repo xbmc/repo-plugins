@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.skyvideoitalia" name="Sky Video Italia" version="1.0.2" provider-name="nixxo">
+<addon id="plugin.video.skyvideoitalia" name="Sky Video Italia" version="1.0.3" provider-name="nixxo">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.simplecache" version="2.0.0"/>
@@ -18,7 +18,10 @@
         <license>GPL-3.0-or-later</license>
         <website>https://www.github.com/nixxo</website>
         <source>https://www.github.com/nixxo/plugin.video.skyvideoitalia</source>
-        <news>[B]1.0.2[/B]
+        <news>[B]1.0.3[/B]
+- solved a bug when setting certain icons
+
+[B]1.0.2[/B]
 - added live streams
 - fix localization
 

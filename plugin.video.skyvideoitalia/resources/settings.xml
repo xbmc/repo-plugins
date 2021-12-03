@@ -1,9 +1,45 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <category label="30000">
-        <setting label="30002" id="Quality" type="enum" default="3" values="LOW|MED|HIGH|HD" />
-        <!--<setting label="30008" id="UseInputstream" type="bool" default="true"/>-->
-        <setting label="30003" id="LogLevel" type="enum" default="3" lvalues="30009|30010|30011|30012"/>
-        <setting label="30001" id="Debug" type="bool" default="false"/>
-    </category>
+<?xml version="1.0" ?>
+<settings version="1">
+    <section id="plugin.video.skyvideoitalia">
+        <category id="general" label="30000" help="">
+            <group id="1">
+                <setting id="Quality" label="30002" type="integer" help="">
+                    <level>0</level>
+                    <default>3</default>
+                    <constraints>
+                        <options>
+                            <option label="LOW">0</option>
+                            <option label="MED">1</option>
+                            <option label="HIGH">2</option>
+                            <option label="HD">3</option>
+                        </options>
+                    </constraints>
+                    <control type="spinner" format="string" />
+                </setting>
+                <setting id="UseInputstream" label="30008" type="boolean" help="">
+                    <level>4</level>
+                    <default>false</default>
+                    <control type="toggle" />
+                </setting>
+                <setting id="LogLevel" label="30003" type="integer" help="">
+                    <level>1</level>
+                    <default>3</default>
+                    <constraints>
+                        <options>
+                            <option label="30009">0</option>
+                            <option label="30010">1</option>
+                            <option label="30011">2</option>
+                            <option label="30012">3</option>
+                        </options>
+                    </constraints>
+                    <control type="spinner" format="string" />
+                </setting>
+                <setting id="Debug" label="30001" type="boolean" help="">
+                    <level>1</level>
+                    <default>false</default>
+                    <control type="toggle" />
+                </setting>
+            </group>
+        </category>
+    </section>
 </settings>

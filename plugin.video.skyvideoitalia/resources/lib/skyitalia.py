@@ -271,8 +271,7 @@ class SkyItalia:
                     'playlist': title,
                 },
                 'arts': {
-                    'icon': '%s%s\\%s.png' % (
-                        self.LOGOSDIR, section, subsection),
+                    'icon': self._iconPath(section, subsection),
                     'fanart': addonutils.FANART,
                 },
             }
@@ -392,7 +391,7 @@ class SkyItalia:
         url = self.GET_VIDEO_DATA
         url = url.replace('{token}', self.TOKEN)
         url = url.replace('{id}', asset_id)
-        data = self._loadData(url)
+        data = self._loadData(url, hours=0.1)
 
         url = None
         self._log('getPlaylistContent, quality_selected = %s' % self.QUALITIES[self.QUALITY])

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.somafm"
+       name="SomaFM"
+       version="2.0.1"
+       provider-name="Soma-FM-Kodi-Add-On Organization">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.9.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <license>GPL-3.0-or-later</license>
+        <platform>all</platform>
+        <summary lang="en">Listener supported radio</summary>
+        <summary lang="de">Hörergetragenes Radio</summary>
+        <summary lang="nl">Luisteraarondersteunde Radio</summary>
+        <description lang="en">Over 30 unique channels of listener-supported, commercial-free, underground/alternative radio broadcasting from San Francisco. All music hand-picked by SomaFM's award-winning DJs and music directors.
+        Please consider donating at https://somafm.com to keep this service alive!</description>
+        <description lang="de">Über 30 einzigartige Sender vom hörergetragenen, werbefreien, underground / alternative Radio aus San Francisco. Die gesamte Musik ist handerlesen von SomaFMs ausgezeichneten DJs und Musikprogrammleitern.
+        Bitte denk über eine Spende auf https://somafm.com nach, um diesen Dienst am Leben zu halten!</description>
+        <description lang="nl">Meer dan 30 unieke kanalen van luisteraarondersteunde, reclamevrije, alternatieve radiouitzendingen uit San Fransisco. Alle muziek is handgeselecteerd door SomaFM's bekroonde dj's en muzikale programmamakers.
+        Overweeg a.u.b. een donatie te doen op https://somafm.com om deze service in leven te houden!</description>
+        <website>https://somafm.com</website>
+        <source>https://github.com/Soma-FM-Kodi-Add-On/plugin.audio.somafm</source>
+        <news>
+        Version 2.0.1 - 2021-11-16
+        - Updating details
+        - Implementing stability measures
+
+        Version 2.0.0 - 2021-11-16
+        - Update to Python3
+        - Updating to adhere to newish automated testing tool standards
+
+        Version 1.1.0 - 2016-02-22
+        - Remove firewall mode in response to the SomaFM streaming server update
+
+        Version 1.0.2 - 2015-11-08
+        - Dutch translation and some polishing by PanderMusubi - thanks!
+
+        Version 1.0.1 - 2015-01-01
+        - Fix playback on Android client
+
+        Version 1.0.0 - 2014-10-09
+        - Use localized strings, supporting English and German for now
+        - Settings for caching the channel list and clearing the cache
+        - Include a donation reminder ❤️
+
+        Version 0.1.0 - 2014-10-05
+        - Automatically select a stream and instantly start playback when station is selected
+        - Cache playlist files
+        - Settings for quality, format and firewall streams
+
+        Version 0.0.2 - 2013-07-21
+        - Use SomaFM XML API.
+
+        Version 0.0.1 - 2011-03-07
+        - Initial version.
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

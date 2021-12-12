@@ -21,7 +21,7 @@ class RaiPlayRadio:
     
     # http://www.rai.it/dl/rairadio/mobile/config/RaiRadioConfig.json
     baseUrl = "http://www.raiplayradio.it/"
-    channelsUrl = "http://www.raiplayradio.it/dirette/ContentSet-8e2a3414-bbfd-4a72-852b-7d827dc00e7e.html?json"
+    channelsUrl = "http://www.raiplaysound.it/dirette.json"
     localizeUrl = "http://mediapolisgs.rai.it/relinker/relinkerServlet.htm?cont=201342"
     palinsestoUrl = "http://www.raiplayradio.it/dl/palinsesti/Page-a47ba852-d24f-44c2-8abb-0c9f90187a3e-json.html?canale=[nomeCanale]&giorno=[dd-mm-yyyy]&mode=light"
     AzTvShowPath = "/dl/RaiTV/RaiRadioMobile/Prod/Config/programmiAZ-elenco.json"
@@ -41,7 +41,7 @@ class RaiPlayRadio:
         
     def getChannels(self):
         response = json.loads(utils.checkStr(urllib2.urlopen(self.channelsUrl).read()))
-        return response["dirette"]
+        return response["contents"]
         
     def getProgrammes(self, channelName, epgDate):
         channelTag = channelName.replace(" ", "")

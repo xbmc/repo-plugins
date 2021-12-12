@@ -15,7 +15,7 @@
         <setting label="$ADDON[plugin.video.themoviedb.helper 32073]" type="bool" id="hide_unaired_movies" default="false" />
         <setting label="$ADDON[plugin.video.themoviedb.helper 32084]" type="bool" id="hide_unaired_episodes" default="false" />
         <setting label="$ADDON[plugin.video.themoviedb.helper 32366]" type="bool" id="nodate_is_unaired" default="true" enable="eq(-1,True)|eq(-2,True)"/>
-        <setting label="$ADDON[plugin.video.themoviedb.helper 32091]" type="bool" id="hide_special_seasons" default="false" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32091]" type="select" id="special_folders" default="0" lvalues="32378|32379|32380|32381|32382|32383|32384|32385" />
         <setting label="$ADDON[plugin.video.themoviedb.helper 32085]" type="bool" id="flatten_seasons" default="false" />
     </category>
     <category label="$ADDON[plugin.video.themoviedb.helper 32092]">
@@ -36,9 +36,10 @@
         <setting label="$ADDON[plugin.video.themoviedb.helper 32130]" subsetting="true" type="enum" values="$HOURS" id="library_autoupdate_hour" enable="eq(-1,True)" />
         <setting label="$ADDON[plugin.video.themoviedb.helper 32131]" subsetting="true" type="action" action="RunScript(plugin.video.themoviedb.helper,monitor_userlist)" id="monitor_userlist"  enable="eq(-2,True)"/>
         <setting type="text" id="monitor_userslug" visible="false"/>
-        <setting label="$ADDON[plugin.video.themoviedb.helper 32154]" subsetting="true" type="action" action="RunScript(plugin.video.themoviedb.helper,library_autoupdate,busy_dialog,force)" id="last_autoupdate" enable="eq(-4,True)"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32154]" subsetting="true" type="action" action="RunScript(plugin.video.themoviedb.helper,library_autoupdate,busy_dialog,force=select)" id="last_autoupdate" enable="eq(-4,True)"/>
         <setting label="$LOCALIZE[10039]" type="lsep"/>
         <setting label="$ADDON[plugin.video.themoviedb.helper 32077]" type="bool" id="ignore_folderchecking" default="false" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32390]" type="bool" id="alternative_nfo" default="false" />
         <setting type="bool" id="legacy_conversion" visible="false" default="false"/>
     </category>
     <category label="$ADDON[plugin.video.themoviedb.helper 32017]">
@@ -75,6 +76,7 @@
         <setting label="$ADDON[plugin.video.themoviedb.helper 32364]" type="bool" id="force_xbmcplayer" default="True"/>
         <setting label="$ADDON[plugin.video.themoviedb.helper 32373]" type="bool" id="only_resolve_strm" default="False"/>
         <setting label="$LOCALIZE[14260]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32386]" type="action" action="RunScript(plugin.video.themoviedb.helper, delete_cache=select)" />
         <setting label="$ADDON[plugin.video.themoviedb.helper 32066]" type="bool" id="debug_logging" default="False" />
         <setting label="$ADDON[plugin.video.themoviedb.helper 32348]" type="action" action="RunScript(plugin.video.themoviedb.helper, log_request=tmdb)" />
         <setting label="$ADDON[plugin.video.themoviedb.helper 32347]" type="action" action="RunScript(plugin.video.themoviedb.helper, log_request=trakt)" />

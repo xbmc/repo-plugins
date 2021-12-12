@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+	<section id="plugin.video.cinear">
+		<category id="general" label="30100" help="">
+			<group id="1" label="">
+                <setting id="itemsPerPage" type="integer" label="30101" help="">
+                    <level>0</level>
+                    <default>50</default>
+                    <constraints>
+                        <minimum>15</minimum>
+                        <step>1</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="email" type="string" help="">
+                    <level>4</level>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <default/>
+                </setting>
+                <setting id="token" type="string" help="">
+                    <level>4</level>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <default/>
+                    <enable>false</enable>
+                </setting>
+                <setting id="metadata" type="string" help="">
+                    <level>4</level>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <default/>
+                    <enable>false</enable>
+                </setting>
+			</group>
+		</category>
+	</section>
+</settings>

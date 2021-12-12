@@ -92,6 +92,7 @@ class hbogo(object):
         content_id = None
         mode = None
         vote = None
+        exclude_list = None
 
         try:
             url = unquote(params["url"])
@@ -128,6 +129,15 @@ class hbogo(object):
             xbmc.log("[" + str(self.addon_id) + "] " + "ROUTER - vote warning: " + traceback.format_exc(),
                      xbmc.LOGDEBUG)
 
+        try:
+            exclude_list = str(params["exclude"])
+            exclude_list = [int(e) if e.isdigit() else e for e in exclude_list.split(',')]
+        except KeyError:
+            pass
+        except Exception:
+            xbmc.log("[" + str(self.addon_id) + "] " + "ROUTER - exclude list warning: " + traceback.format_exc(),
+                     xbmc.LOGDEBUG)
+
         if mode is None or url is None or len(url) < 1:
             self.start()
             self.handler.categories()
@@ -135,7 +145,10 @@ class hbogo(object):
         elif mode == HbogoConstants.ACTION_LIST:
             self.start()
             self.handler.setDispCat(name)
-            self.handler.list(url)
+            if exclude_list is None:
+                self.handler.list(url)
+            else:
+                self.handler.list(url, False, exclude_list)
 
         elif mode == HbogoConstants.ACTION_SEASON:
             self.start()

@@ -33,7 +33,7 @@ msgid "Live Channels"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Live Programs"
+msgid "Featured"
 msgstr ""
 
 msgctxt "#30006"
@@ -66,4 +66,56 @@ msgstr ""
 
 msgctxt "#30013"
 msgid "Use FFMPEG instead of inputstream.adaptive"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Add all to IPTV manager"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Add to IPTV Manager"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Remove from IPTV Manager"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Remove all but this from IPTV manager"
+msgstr ""
+
+msgctxt "#30018"
+msgid "General"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Integration"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Install IPTV Manager add-on"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Enable IPTV Manager integration"
+msgstr ""
+
+msgctxt "#30022"
+msgid "IPTV Manager settings…"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Shows"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Documentaries"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Kids"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Search"
 msgstr ""

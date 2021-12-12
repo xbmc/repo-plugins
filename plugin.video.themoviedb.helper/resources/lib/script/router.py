@@ -3,6 +3,7 @@
 # License: GPL v.3 https://www.gnu.org/copyleft/gpl.html
 import sys
 import xbmc
+import xbmcvfs
 import xbmcgui
 from json import dumps
 from resources.lib.kodi.library import add_to_library
@@ -18,6 +19,7 @@ from resources.lib.container.basedir import get_basedir_details
 from resources.lib.fanarttv.api import FanartTV
 from resources.lib.tmdb.api import TMDb
 from resources.lib.trakt.api import TraktAPI, get_sort_methods
+from resources.lib.omdb.api import OMDb
 from resources.lib.script.sync import sync_trakt_item
 from resources.lib.window.manager import WindowManager
 from resources.lib.player.players import Players
@@ -73,6 +75,28 @@ def run_plugin(**kwargs):
 def container_refresh():
     xbmc.executebuiltin('Container.Refresh')
     xbmc.executebuiltin('UpdateLibrary(video,/fake/path/to/force/refresh/on/home)')
+
+
+def delete_cache(delete_cache, **kwargs):
+    d = {
+        'TMDb': lambda: TMDb(),
+        'Trakt': lambda: TraktAPI(),
+        'FanartTV': lambda: FanartTV(),
+        'OMDb': lambda: OMDb()}
+    if delete_cache == 'select':
+        m = [i for i in d]
+        x = xbmcgui.Dialog().contextmenu([ADDON.getLocalizedString(32387).format(i) for i in m])
+        if x == -1:
+            return
+        delete_cache = m[x]
+    z = d.get(delete_cache)
+    if not z:
+        return
+    if not xbmcgui.Dialog().yesno(ADDON.getLocalizedString(32387).format(delete_cache), ADDON.getLocalizedString(32388).format(delete_cache)):
+        return
+    with busy_dialog():
+        z()._cache.ret_cache()._do_delete()
+    xbmcgui.Dialog().ok(ADDON.getLocalizedString(32387).format(delete_cache), ADDON.getLocalizedString(32389))
 
 
 @map_kwargs({'play': 'tmdb_type'})
@@ -259,6 +283,15 @@ def image_colors(image_colors=None, **kwargs):
 
 
 def library_update(**kwargs):
+    if kwargs.get('force') == 'select':
+        choice = xbmcgui.Dialog().yesno(
+            ADDON.getLocalizedString(32391),
+            ADDON.getLocalizedString(32392),
+            yeslabel=ADDON.getLocalizedString(32393),
+            nolabel=ADDON.getLocalizedString(32394))
+        if choice == -1:
+            return
+        kwargs['force'] = True if choice else False
     library_autoupdate(
         list_slugs=kwargs.get('list_slug', None),
         user_slugs=kwargs.get('user_slug', None),
@@ -283,13 +316,13 @@ def log_request(**kwargs):
         filename = validify_filename(u'{}_{}.json'.format(kwargs['log_request'], kwargs['url']))
         dumps_to_file(kwargs, 'log_request', filename)
         xbmcgui.Dialog().ok(kwargs['log_request'].capitalize(), u'[B]{}[/B]\n\n{}\n{}\n{}'.format(
-            kwargs['url'], xbmc.translatePath('special://profile/addon_data/'),
+            kwargs['url'], xbmcvfs.translatePath('special://profile/addon_data/'),
             'plugin.video.themoviedb.helper/log_request', filename))
         xbmcgui.Dialog().textviewer(filename, dumps(kwargs['response'], indent=2))
 
 
 def sort_list(**kwargs):
-    sort_methods = get_sort_methods()
+    sort_methods = get_sort_methods() if kwargs['info'] == 'trakt_userlist' else get_sort_methods(True)
     x = xbmcgui.Dialog().contextmenu([i['name'] for i in sort_methods])
     if x == -1:
         return
@@ -304,7 +337,7 @@ class Script(object):
         for arg in sys.argv[1:]:
             if '=' in arg:
                 key, value = arg.split('=', 1)
-                self.params[key] = value.strip('\'').strip('"') if value else True
+                self.params[key] = value.strip('\'').strip('"') if value else None
             else:
                 self.params[arg] = True
         self.params = reconfigure_legacy_params(**self.params)
@@ -333,6 +366,7 @@ class Script(object):
         'play_media': lambda **kwargs: play_media(**kwargs),
         'run_plugin': lambda **kwargs: run_plugin(**kwargs),
         'log_request': lambda **kwargs: log_request(**kwargs),
+        'delete_cache': lambda **kwargs: delete_cache(**kwargs),
         'play': lambda **kwargs: play_external(**kwargs),
         'add_path': lambda **kwargs: WindowManager(**kwargs).router(),
         'add_query': lambda **kwargs: WindowManager(**kwargs).router(),

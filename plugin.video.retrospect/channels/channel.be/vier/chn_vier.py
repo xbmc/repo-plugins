@@ -2,7 +2,7 @@
 
 import datetime
 
-from resources.lib import chn_class, contenttype
+from resources.lib import chn_class, contenttype, mediatype
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.htmlhelper import HtmlHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
@@ -47,17 +47,20 @@ class Channel(chn_class.Channel):
         if self.channelCode == "vijfbe":
             self.noImage = "vijfimage.png"
             self.mainListUri = "https://www.goplay.be/programmas/play5"
-            self.__channel_brand = "vijf"
+            self.__channel_brand = "play5"
+            self.__channel_slug = "vijf"
 
         elif self.channelCode == "zesbe":
             self.noImage = "zesimage.png"
             self.mainListUri = "https://www.goplay.be/programmas/play6"
-            self.__channel_brand = "zes"
+            self.__channel_brand = "play6"
+            self.__channel_slug = "zes"
 
         else:
             self.noImage = "vierimage.png"
             self.mainListUri = "https://www.goplay.be/programmas/play4"
-            self.__channel_brand = "vier"
+            self.__channel_brand = "play4"
+            self.__channel_slug = "vier"
 
         episode_regex = r'(data-program)="([^"]+)"'
         self._add_data_parser(self.mainListUri, match_type=ParserData.MatchExact,
@@ -200,7 +203,7 @@ class Channel(chn_class.Channel):
 
             title = "%04d-%02d-%02d - %s" % (air_date.year, air_date.month, air_date.day, day)
             url = "https://www.goplay.be/api/epg/{}/{:04d}-{:02d}-{:02d}".\
-                format(self.__channel_brand, air_date.year, air_date.month, air_date.day)
+                format(self.__channel_slug, air_date.year, air_date.month, air_date.day)
 
             extra = MediaItem(title, url)
             extra.complete = True
@@ -231,7 +234,7 @@ class Channel(chn_class.Channel):
         items = []
 
         specials = {
-            "https://www.goplay.be/api/programs/popular/{}".format(self.__channel_brand): (
+            "https://www.goplay.be/api/programs/popular/{}".format(self.__channel_slug): (
                 LanguageHelper.get_localized_string(LanguageHelper.Popular),
                 contenttype.TVSHOWS
             ),
@@ -286,14 +289,14 @@ class Channel(chn_class.Channel):
             result_set = JsonHelper(json_data)
             result_set = result_set.json
 
-        brand = result_set["brand"]
+        brand = result_set["pageInfo"]["brand"].lower()
         if brand != self.__channel_brand:
             return None
 
         title = result_set["title"]
         url = "{}{}".format(self.baseUrl, result_set["link"])
         item = MediaItem(title, url)
-        item.description = result_set["description"]
+        item.description = result_set.get("description")
         item.isGeoLocked = True
 
         images = result_set["images"]
@@ -410,7 +413,7 @@ class Channel(chn_class.Channel):
         title = result_set['title']
         url = "https://api.viervijfzes.be/content/{}".format(result_set['videoUuid'])
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = HtmlHelper.to_text(result_set.get("description").replace(">\r\n", ">"))
         item.thumb = result_set["image"]
         item.isGeoLocked = result_set.get("isProtected")
@@ -459,7 +462,7 @@ class Channel(chn_class.Channel):
         url = "{}{}".format(self.baseUrl, video_info["url"])
 
         item = MediaItem(title, url)
-        item.type = "video"
+        item.media_type = mediatype.EPISODE
         item.description = video_info["description"]
         item.thumb = video_info["image"]
         item.isGeoLocked = result_set.get("isProtected")
@@ -525,10 +528,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -556,10 +559,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -604,8 +607,7 @@ class Channel(chn_class.Channel):
             # set it for the error statistics
             item.isGeoLocked = True
 
-        part = item.create_new_empty_media_part()
         item.complete = M3u8.update_part_with_m3u8_streams(
-            part, m3u8_url, channel=self, encrypted=False)
+            item, m3u8_url, channel=self, encrypted=False)
 
         return item

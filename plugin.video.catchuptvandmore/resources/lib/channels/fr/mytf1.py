@@ -240,10 +240,12 @@ def list_videos(plugin, program_slug, video_type_value, offset, **kwargs):
     resp = urlquick.get(URL_API, params=params, headers=headers)
     json_parser = json.loads(resp.text)
 
-    for video_item in handle_videos(json_parser['data']['programBySlug']['videos']['items']):
+    video_items = json_parser['data']['programBySlug']['videos']['items']
+
+    for video_item in handle_videos(video_items):
         yield video_item
 
-    if (20 + int(offset) * 20) < json_parser['data']['programBySlug']['videos']['total']:
+    if len(video_items) == 20:
         yield Listitem.next_page(program_slug=program_slug,
                                  video_type_value=video_type_value,
                                  offset=str(int(offset) + 1))

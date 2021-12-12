@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 PICKLE = "pickle"                       # : Used for the pickle item
+STORE_ID = "store_id"                   # : Used for the pickle store guids
 ACTION = "action"                       # : Used for specifying the action
 CHANNEL = "channel"                     # : Used for the channel
 CHANNEL_CODE = "channelcode"            # : Used for the channelcode

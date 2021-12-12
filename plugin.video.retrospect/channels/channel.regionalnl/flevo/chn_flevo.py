@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
-from resources.lib import chn_class
+from resources.lib import chn_class, mediatype
 from resources.lib.mediaitem import MediaItem
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.datehelper import DateHelper
@@ -84,9 +84,9 @@ class Channel(chn_class.Channel):
         if self.parentItem is None:
             live_item = MediaItem(
                 "\a.: Live TV :.",
-                "https://d5ms27yy6exnf.cloudfront.net/live/omroepflevoland/tv/index.m3u8"
+                "https://d5ms27yy6exnf.cloudfront.net/live/omroepflevoland/tv/index.m3u8",
+                media_type=mediatype.EPISODE
             )
-            live_item.type = 'video'
             live_item.dontGroup = True
             now = datetime.datetime.now()
             live_item.set_date(now.year, now.month, now.day, now.hour, now.minute, now.second)
@@ -94,9 +94,9 @@ class Channel(chn_class.Channel):
 
             live_item = MediaItem(
                 "\a.: Live Radio :.",
-                "https://d5ms27yy6exnf.cloudfront.net/live/omroepflevoland/radio/index.m3u8"
+                "https://d5ms27yy6exnf.cloudfront.net/live/omroepflevoland/radio/index.m3u8",
+                media_type=mediatype.VIDEO
             )
-            live_item.type = 'video'
             live_item.dontGroup = True
             now = datetime.datetime.now()
             live_item.set_date(now.year, now.month, now.day, now.hour, now.minute, now.second)
@@ -150,10 +150,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -166,13 +166,12 @@ class Channel(chn_class.Channel):
         data = UriHandler.open(item.url)
         stream = Regexer.do_regex(r'data-file="([^"]+)+', data)[0]
 
-        part = item.create_new_empty_media_part()
         if ".mp3" in stream:
             item.complete = True
-            part.append_media_stream(stream, 0)
+            item.add_stream(stream, 0)
         elif stream.endswith(".mp4"):
             item.complete = True
-            part.append_media_stream(stream, 2500)
+            item.add_stream(stream, 2500)
         elif ".m3u8" in stream:
             item.url = stream
             return self.update_live_urls(item)
@@ -187,10 +186,10 @@ class Channel(chn_class.Channel):
 
         The method should at least:
         * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaItemPart with a single MediaStream.
+        * set at least one MediaStream.
         * set self.complete = True.
 
-        if the returned item does not have a MediaItemPart then the self.complete flag
+        if the returned item does not have a MediaSteam then the self.complete flag
         will automatically be set back to False.
 
         :param MediaItem item: the original MediaItem that needs updating.
@@ -202,15 +201,14 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
-        part = item.create_new_empty_media_part()
         if AddonSettings.use_adaptive_stream_add_on():
-            stream = part.append_media_stream(item.url, 0)
+            stream = item.add_stream(item.url, 0)
             M3u8.set_input_stream_addon_input(stream)
             item.complete = True
         else:
 
             for s, b in M3u8.get_streams_from_m3u8(item.url):
                 item.complete = True
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
             item.complete = True
         return item

@@ -7,22 +7,31 @@ msgstr ""
 "Project-Id-Version: Kodi Addons\n"
 "Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Kodi Translation Team\n"
-"Language-Team: Team-Kodi\n"
+"PO-Revision-Date: 2021-10-13 08:27+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Danish <https://kodi.weblate.cloud/projects/kodi-add-ons-music/plugin-audio-radio_de/da_dk/>\n"
+"Language: da_dk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: da_DK\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.8\n"
+
+msgctxt "Addon Summary"
+msgid "Access >30000 radio broadcasts"
+msgstr "Få adgang til >30000 radioudsendelser"
+
+msgctxt "Addon Description"
+msgid "Music plugin to access over 30000 international radio broadcasts from rad.io, radio.de, radio.fr, radio.pt and radio.es[CR]Currently features[CR]- English, german, french translated[CR]- Browse stations by location, genre, topic, country, city and language[CR]- Search for stations[CR]- 115 genres, 59 topics, 94 countrys, 1010 citys, 63 languages"
+msgstr "Musikplugin som giver adgang til over 30000 internationale radioudsendelser fra rad.io, radio.de, radio.fr, radio.pt og radio.es[CR]Nuværende funktioner[CR]- Oversat til engelsk, tysk og fransk[CR]- Gennemse stationer efter lokalitet, genre, emne, land, by og sprog[CR]- Søg efter stationer[CR]- 115 genrer, 59 emner, 94 lande, 1010 byer og 63 sprog"
 
 msgctxt "#30100"
 msgid "Editorials Recommendations"
-msgstr "Redaktørerne Anbefaler"
+msgstr "Redaktørerne anbefaler"
 
 msgctxt "#30101"
 msgid "Top Stations"
-msgstr "Top Stationer"
+msgstr "Top stationer"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -46,11 +55,11 @@ msgstr "Gennemse efter sprog"
 
 msgctxt "#30107"
 msgid "Local Stations"
-msgstr "Lokale Stationer"
+msgstr "Lokale stationer"
 
 msgctxt "#30108"
 msgid "My Stations"
-msgstr "Mine Stationer"
+msgstr "Mine stationer"
 
 msgctxt "#30200"
 msgid "Search for station"
@@ -72,9 +81,17 @@ msgctxt "#30303"
 msgid "French"
 msgstr "Fransk"
 
+msgctxt "#30304"
+msgid "Portuguese"
+msgstr "Portugisisk"
+
+msgctxt "#30305"
+msgid "Spanish"
+msgstr "Spansk"
+
 msgctxt "#30310"
 msgid "Force ViewMode to Thumbnail"
-msgstr "Tving Miniaturebillede-visning"
+msgstr "Tving miniaturebillede-visning"
 
 msgctxt "#30400"
 msgid "Add to 'My Stations'"
@@ -86,7 +103,7 @@ msgstr "Fjern fra 'Mine Stationer'"
 
 msgctxt "#30402"
 msgid "Edit custom Station"
-msgstr "Rediger brugerdefineret Station"
+msgstr "Rediger brugerdefineret station"
 
 msgctxt "#30500"
 msgid "Please enter %s"
@@ -106,9 +123,48 @@ msgstr "webadresse til stream"
 
 msgctxt "#30504"
 msgid "Add custom Station..."
-msgstr "Tilføj brugerdefineret Station"
+msgstr "Tilføj brugerdefineret station..."
 
 msgctxt "#30600"
 msgid "Network Error"
 msgstr "Netværksfejl"
 
+msgctxt "#30601"
+msgid "General"
+msgstr "Generel"
+
+msgctxt "#30602"
+msgid "Hide fanart"
+msgstr "Skjul fankunst"
+
+msgctxt "#30603"
+msgid "Most Popular"
+msgstr "Mest populære"
+
+msgctxt "#30604"
+msgid "A-Z"
+msgstr "A-Z"
+
+msgctxt "#30605"
+msgid "Page (%s/%s) | Next >>"
+msgstr "Side (%s/%s) | Næste >>"
+
+msgctxt "#30606"
+msgid "By country"
+msgstr "Efter land"
+
+msgctxt "#30607"
+msgid "Prefer HTTP streams over HTTS"
+msgstr "Foretræk HTTP-streams frem for HTTPS"
+
+msgctxt "#30608"
+msgid "Unable to get radio stream url"
+msgstr "Kan ikke hente url til radiostream"
+
+msgctxt "#30609"
+msgid "Sucessfully added to my stations!"
+msgstr "Føjet til mine stationer!"
+
+msgctxt "#30610"
+msgid "Sucessfully removed from my stations!"
+msgstr "Fjernet fra mine stationer!"

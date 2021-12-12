@@ -244,3 +244,15 @@ msgstr "Restart"
 msgctxt "#30064"
 msgid "older than"
 msgstr "älter als"
+
+msgctxt "#30065"
+msgid "Aktivieren Sie Inputstream Adaptive um alle Livestreams zu sehen"
+msgstr ""
+
+msgctxt "#30066"
+msgid "Inputstream Adaptive ist nicht aktiviert. DRM Inhalte können nicht abgespielt werden."
+msgstr ""
+
+msgctxt "#30067"
+msgid "Inputstream Helper ist nicht aktiviert. DRM Inhalte können nicht abgespielt werden."
+msgstr "

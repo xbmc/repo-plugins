@@ -260,7 +260,9 @@ class ListItemMonitor(CommonMonitorFunctions):
 
         # Get TMDb Details
         tmdb_id = self.get_tmdb_id(
-            tmdb_type, self.imdb_id, self.query,
+            tmdb_type=tmdb_type,
+            query=self.query,
+            imdb_id=self.imdb_id if not self.season else None,  # Skip IMDb ID for seasons/episodes as we can't distinguish if the ID is for the episode or the show.
             year=self.year if tmdb_type == 'movie' else None,
             episode_year=self.year if tmdb_type == 'tv' else None)
         details = self.tmdb_api.get_details(tmdb_type, tmdb_id, self.season, self.episode)

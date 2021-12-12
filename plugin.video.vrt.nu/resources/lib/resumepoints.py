@@ -20,7 +20,7 @@ class ResumePoints:
 
     def __init__(self):
         """Initialize resumepoints, relies on XBMC vfs and a special VRT token"""
-        self._data = dict()  # Our internal representation
+        self._data = {}  # Our internal representation
 
     @staticmethod
     def is_activated():

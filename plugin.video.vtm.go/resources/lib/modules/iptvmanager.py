@@ -70,7 +70,7 @@ class IPTVManager:
     @via_socket
     def send_epg(self):
         """ Report EPG data """
-        results = dict()
+        results = {}
 
         # Fetch EPG data
         for date in ['yesterday', 'today', 'tomorrow']:

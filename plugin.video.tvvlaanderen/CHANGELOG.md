@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.4](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.4) (2021-06-25)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.3...v1.0.4)
+
+**Fixed bugs:**
+
+- Set a user-agent [\#34](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/34) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.0.3](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.3) (2021-02-04)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.2...v1.0.3)

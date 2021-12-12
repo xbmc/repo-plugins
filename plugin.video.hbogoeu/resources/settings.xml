@@ -30,7 +30,7 @@
         <setting label="30732" type="bool" id="show_continue" default="true"/>
         <setting label="30729" type="bool" id="show_kids" default="true"/>
         <setting label="30737" type="bool" id="enforce_kids" default="false"/>
-        <setting label="30697" type="bool" id="group_home" default="false"/>
+        <setting label="30697" type="bool" id="group_home" default="true"/>
     </category>
     <!-- Streaming -->
     <category label="30660">
@@ -53,6 +53,7 @@
         <setting id="delcache" type="action" label="30808" action="RunPlugin(plugin://plugin.video.hbogoeu/?url=delcache&amp;mode=16)"/>
         <setting id="delsubs" type="action" label="30815" action="RunPlugin(plugin://plugin.video.hbogoeu/?url=delsubs&amp;mode=17)"/>
         <setting label="30690" type="lsep"/>
+        <setting label="30690" type="bool" id="debugon" default="false"/>
         <setting label="30693" type="bool" id="lograwdata" default="false"/>
         <setting label="30691" type="bool" id="sensitivedebug" default="false"/>
         <setting label="30809" type="lsep"/>

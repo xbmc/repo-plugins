@@ -32,7 +32,7 @@
         <setting label="30781" type="lsep"/>
         <setting label="30783" help="30784" type="bool" id="showsubtitles" default="true"/>
         <setting label="30785" type="lsep"/> <!-- InputStream Adaptive -->
-        <setting label="30787" help="30788" type="bool" id="usedrm" visible="String.StartsWith(System.BuildVersion,18) | String.StartsWith(System.BuildVersion,19)" default="false"/>
+        <setting label="30787" help="30788" type="bool" id="usedrm" visible="String.StartsWith(System.BuildVersion,18) | String.StartsWith(System.BuildVersion,19)" default="true"/>
         <setting label="30789" help="30790" type="labelenum" id="max_bandwidth" default="0" values="0|256|512|1024|1536|2048|2560|3072|4096|6144|8192|10240|15360|20480|25600|30720"/>
     </category>
     <category label="30820"> <!--Channels -->

@@ -77,7 +77,7 @@ class Cache(Database):
     def _optimize_item_count(self):
         pass
 
-    def _set(self, content_id, item):  # pylint: disable=arguments-differ
+    def _set(self, content_id, item):  # pylint: disable=arguments-renamed
         self._open()
 
         self._execute(

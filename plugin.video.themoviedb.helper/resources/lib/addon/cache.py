@@ -1,7 +1,6 @@
 from resources.lib.addon.simplecache import SimpleCache
 from resources.lib.addon.plugin import kodi_log, format_name
 from resources.lib.files.utils import get_pickle_name
-from resources.lib.addon.timedate import get_timedelta
 from resources.lib.addon.decorators import try_except_log
 
 CACHE_LONG = 14
@@ -16,21 +15,27 @@ class BasicCache(object):
         self._cache = None
         self._mem_only = mem_only
 
+    @try_except_log('lib.addon.cache ret_cache')
+    def ret_cache(self):
+        if not self._cache:
+            self._cache = SimpleCache(filename=self._filename, mem_only=self._mem_only)
+        return self._cache
+
     @try_except_log('lib.addon.cache get_cache')
     def get_cache(self, cache_name):
-        self._cache = self._cache or SimpleCache(filename=self._filename, mem_only=self._mem_only)
+        self.ret_cache()
         return self._cache.get(get_pickle_name(cache_name or ''))
 
     @try_except_log('lib.addon.cache set_cache')
     def set_cache(self, my_object, cache_name, cache_days=14, force=False, fallback=None):
-        self._cache = self._cache or SimpleCache(filename=self._filename, mem_only=self._mem_only)
+        self.ret_cache()
         cache_name = get_pickle_name(cache_name or '')
         if my_object and cache_name and cache_days:
-            self._cache.set(cache_name, my_object, expiration=get_timedelta(days=cache_days))
+            self._cache.set(cache_name, my_object, cache_days=cache_days)
         elif force:
             my_object = my_object or fallback
             cache_days = force if isinstance(force, int) else cache_days
-            self._cache.set(cache_name, my_object, expiration=get_timedelta(days=cache_days))
+            self._cache.set(cache_name, my_object, cache_days=cache_days)
         return my_object
 
     @try_except_log('lib.addon.cache use_cache')

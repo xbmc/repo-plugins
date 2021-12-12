@@ -1,3 +1,21 @@
+* 0.12.3
+ - service api fixes (auth & restart)
+ - minor logging improvements
+
+* 0.12.2
+ - drm for restart
+ - drm livestream license url
+ - better quality selection handling for livestreams
+
+* 0.12.1
+- fixed schedule error (serviceapi) #102
+
+* 0.12.0
+- added drm livestream playback
+
+* 0.11.1
+- fixed broken livestreams for serviceapi (kodi matrix only)
+
 * 0.11.0
 - kodi v19 support (older versions have to use 0.10.X for now)
 
@@ -14,7 +32,7 @@
 - python2/3 compatible
 - added 'play full video' for htmlscraper
 - show listitems are absolute now and can be added to favourites
-- minor fixes for serviceapi & htmlscraper 
+- minor fixes for serviceapi & htmlscraper
 
 0.9.2
 - fixed frontpage (new html markup)
@@ -32,7 +50,7 @@
 - New icons/backdrops according to the new CI
 
 0.8.8
-- removed stream method option because its not available with the htmlscraper. Progressive streaming can still be used with the serviceAPI. 
+- removed stream method option because its not available with the htmlscraper. Progressive streaming can still be used with the serviceAPI.
 
 0.8.7
 - another fix for the restart option

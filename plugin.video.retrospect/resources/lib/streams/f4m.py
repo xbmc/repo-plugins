@@ -19,11 +19,10 @@ class F4m(object):
 
         Can be used like this:
 
-            part = item.create_new_empty_media_part()
             for s, b in F4m.get_streams_from_f4m(url):
                 item.complete = True
                 # s = self.get_verifiable_video_url(s)
-                part.append_media_stream(s, b)
+                item.add_stream(s, b)
 
         """
 

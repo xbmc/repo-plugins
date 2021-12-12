@@ -58,8 +58,10 @@ def get_external_ids(li, season=None, episode=None):
                 'trakt': episode_details.get('ids', {}).get('trakt')}}
 
 
-def get_item_details(tmdb_type, tmdb_id, season=None, episode=None):
-    details = TMDb().get_details(tmdb_type, tmdb_id, season, episode)
+def get_item_details(tmdb_type, tmdb_id, season=None, episode=None, language=None):
+    tmdb_api = TMDb(language=language) if language else TMDb()
+    details = tmdb_api.get_details(tmdb_type, tmdb_id, season, episode)
+    del tmdb_api
     if not details:
         return
     details = ListItem(**details)

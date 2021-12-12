@@ -12,19 +12,19 @@ def _sort_itemlist(items, sort_by=None, sort_how=None, trakt_type=None):
     elif sort_by == 'plays':
         return sorted(items, key=lambda i: i.get('plays', 0), reverse=reverse)
     elif sort_by == 'watched':
-        return sorted(items, key=lambda i: i.get('last_watched_at', 0), reverse=reverse)
+        return sorted(items, key=lambda i: i.get('last_watched_at', ''), reverse=reverse)
     elif sort_by == 'paused':
-        return sorted(items, key=lambda i: i.get('paused_at', 0), reverse=reverse)
+        return sorted(items, key=lambda i: i.get('paused_at', ''), reverse=reverse)
     elif sort_by == 'added':
-        return sorted(items, key=lambda i: i.get('listed_at', 0), reverse=reverse)
+        return sorted(items, key=lambda i: i.get('listed_at', ''), reverse=reverse)
     elif sort_by == 'title':
-        return sorted(items, key=lambda i: i.get(trakt_type or i.get('type'), {}).get('title', 0), reverse=reverse)
+        return sorted(items, key=lambda i: i.get(trakt_type or i.get('type'), {}).get('title', ''), reverse=reverse)
     elif sort_by == 'year':
         return sorted(items, key=lambda i: i.get(trakt_type or i.get('type'), {}).get('year', 0), reverse=reverse)
     elif sort_by == 'released':
-        return sorted(items, key=lambda i: i.get(trakt_type or i.get('type'), {}).get('first_aired', 0)
+        return sorted(items, key=lambda i: i.get(trakt_type or i.get('type'), {}).get('first_aired', '')
                       if (trakt_type or i.get('type')) in ['show', 'episode']
-                      else i.get(trakt_type or i.get('type'), {}).get('released', 0), reverse=reverse)
+                      else i.get(trakt_type or i.get('type'), {}).get('released', ''), reverse=reverse)
     elif sort_by == 'runtime':
         return sorted(items, key=lambda i: i.get(trakt_type or i.get('type'), {}).get('runtime', 0), reverse=reverse)
     elif sort_by == 'popularity':
@@ -36,7 +36,7 @@ def _sort_itemlist(items, sort_by=None, sort_how=None, trakt_type=None):
     elif sort_by == 'random':
         random.shuffle(items)
         return items
-    return sorted(items, key=lambda i: i.get('listed_at', 0), reverse=True)
+    return sorted(items, key=lambda i: i.get('listed_at', ''), reverse=True)
 
 
 def _get_item_title(item):

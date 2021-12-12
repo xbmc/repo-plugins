@@ -46,8 +46,8 @@ def get_thumb_timestamp(minutes=15):
 
 
 def make_comment_item(context, provider, snippet, uri, total_replies=0):
-    author = '[B]{}[/B]'.format(kodion.utils.to_utf8(snippet['authorDisplayName']))
-    body = kodion.utils.to_utf8(snippet['textOriginal'])
+    author = '[B]{}[/B]'.format(kodion.utils.to_str(snippet['authorDisplayName']))
+    body = kodion.utils.to_str(snippet['textOriginal'])
 
     label_props = None
     plot_props = None

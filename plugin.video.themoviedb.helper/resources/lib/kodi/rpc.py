@@ -31,6 +31,8 @@ def get_kodi_library(tmdb_type, tvshowid=None):
         return KodiLibrary(dbtype='tvshow')
     if tmdb_type in ['season', 'episode'] and tvshowid:
         return KodiLibrary(dbtype=tmdb_type, tvshowid=tvshowid)
+    if tmdb_type == 'both':
+        return KodiLibrary(dbtype='both')
 
 
 def get_library(dbtype=None, properties=None, filterr=None):
@@ -164,7 +166,14 @@ def get_episode_details(dbid=None):
 class KodiLibrary(object):
     def __init__(self, dbtype=None, tvshowid=None, attempt_reconnect=False, logging=True):
         self.dbtype = dbtype
-        self.database = self.get_database(dbtype, tvshowid, attempt_reconnect)
+        self.database = self._get_database(dbtype, tvshowid, attempt_reconnect)
+
+    def _get_database(self, dbtype, tvshowid=None, attempt_reconnect=False, logging=True):
+        if dbtype == 'both':
+            movies = self.get_database('movie', None, attempt_reconnect) or []
+            tvshows = self.get_database('tvshow', None, attempt_reconnect) or []
+            return movies + tvshows
+        return self.get_database(dbtype, tvshowid, attempt_reconnect)
 
     def get_database(self, dbtype, tvshowid=None, attempt_reconnect=False, logging=True):
         retries = 5 if attempt_reconnect else 1

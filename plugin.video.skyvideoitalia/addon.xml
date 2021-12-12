@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.skyvideoitalia" name="Sky Video Italia" version="1.0.3" provider-name="nixxo">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.simplecache" version="2.0.0"/>
+        <import addon="script.module.requests" version="2.25.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="it_IT">Visualizza contenuti di Sky Video Italia</summary>
+        <description lang="it_IT">Visualizza contenuti video del portale di Sky Italia (video.sky.it). Notizie, sport, intrattenimento e tanto altro.</description>
+        <summary lang="en_GB">Show content from Sky Video Italia</summary>
+        <description lang="en_GB">Show video content from the website of Sky Italia (video.sky.it). News, sport, entertainment and much more.</description>
+        <language>it</language>
+        <platform>all</platform>
+        <license>GPL-3.0-or-later</license>
+        <website>https://www.github.com/nixxo</website>
+        <source>https://www.github.com/nixxo/plugin.video.skyvideoitalia</source>
+        <news>[B]1.0.3[/B]
+- solved a bug when setting certain icons
+
+[B]1.0.2[/B]
+- added live streams
+- fix localization
+
+[B]1.0.1[/B]
+- added missing logos
+- code improvements
+
+[B]1.0.0[/B]
+- first public release
+- code cleanup</news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.png</fanart>
+        </assets>
+    </extension>
+</addon>

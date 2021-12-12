@@ -313,6 +313,9 @@ class StreamService:
             container_reload()
             message = localize(30987)  # No stream found
             return self._handle_stream_api_error(message, stream_json)
+        if stream_json.get('code') == 'ERROR_AGE_RESTRICTED':
+            message = localize(30990)  # Cannot be played, VRT NU account not allowed to access 12+ content
+            return self._handle_stream_api_error(message, stream_json)
 
         # Failed to get stream, handle error
         message = localize(30954)  # Whoops something went wrong

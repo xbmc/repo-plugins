@@ -197,7 +197,7 @@ class TV3cat(object):
                     titol = t.encode("utf-8")
 
 
-                    img = el.figure.img["data-src"]
+                    img = el.figure.img["src"]
 
 
                     foldVideo = FolderVideo(titol,url, 'getlistvideos', img, img)
@@ -269,9 +269,10 @@ class TV3cat(object):
                             if len(match) != 0:
                                 url1 = match[0][0]
                                 urlcode = match[0][1]
-                                url_final = url1 + 'ultims-programes/' + urlcode
+
+                                url_final = url1 + 'capitols/' + urlcode
                             else:
-                                url_final = urlProg + 'ultims-programes/'
+                                url_final = urlProg + 'capitols/'
 
 
                         foldVideo = FolderVideo(titol, url_final, 'getlistvideos', "", "")
@@ -478,9 +479,11 @@ class TV3cat(object):
                                     if len(match) != 0:
                                         url1 = match[0][0]
                                         urlcode = match[0][1]
-                                        url_final = url1 + 'ultims-programes/' + urlcode
+                                        
+                                        url_final = url1 + 'capitols/' + urlcode
                                     else:
-                                        url_final = urlProg + 'ultims-programes/'
+                                        url_final = urlProg + 'capitols/'
+
 
                                 folderVideo = FolderVideo(titol, url_final, 'getlistvideos', "", "")
                                 lFolderVideos.append(folderVideo)
@@ -521,9 +524,10 @@ class TV3cat(object):
 
                 # Super 3
                 if not links:
-                    links = soup.findAll("article",
+                  
+                    links = soup.findAll("div",
                                          {"class": "M-destacat super3 T-video  ombres-laterals"})
-                    links2 = soup.findAll("article",
+                    links2 = soup.findAll("div",
                                          {"class": "M-destacat super3 noGapAfter T-video  ombres-laterals"})
                     links = links + links2
 

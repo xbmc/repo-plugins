@@ -64,15 +64,15 @@ def searchGui():
 #return album and artist name, only album could be confusing
 def get_album_artist_name(node):
     disknumber = str(node.findtext("disk"))
+    album_name = str(node.findtext("name"))
+    artist_name = str(node.findtext("artist"))
+    fullname = album_name
     if PY2:
-        fullname = str(node.findtext("name"))
         fullname += u" - "
-        fullname += str(node.findtext("artist"))
     else:
         #no encode utf-8 in python3, not necessary
-        fullname = node.findtext("name")
         fullname += " - "
-        fullname += node.findtext("artist")
+    fullname += artist_name
     #disknumber = "None" when disk number is not sent
     if disknumber!="None" and disknumber != "1" and disknumber !="0":
         if PY2:
@@ -82,10 +82,10 @@ def get_album_artist_name(node):
             fullname = fullname + " - [ " + ut.tString(30195) + " " + disknumber + " ]"
     return fullname
 
-def get_infolabels(object_type , node):
+def get_infolabels(elem_type , node):
     infoLabels = None
     rating = ut.getRating(node.findtext("rating"))
-    if object_type == 'albums':
+    if elem_type == 'album':
         infoLabels = {
             'Title' : str(node.findtext("name")) ,
             'Album' : str(node.findtext("name")) ,
@@ -96,14 +96,14 @@ def get_infolabels(object_type , node):
             'Mediatype' : 'album'
         }
  
-    elif object_type == 'artists':
+    elif elem_type == 'artist':
         infoLabels = {
             'Title' : str(node.findtext("name")) ,
             'Artist' : str(node.findtext("name")),
             'Mediatype' : 'artist'
         }
 
-    elif object_type == 'songs':
+    elif elem_type == 'song':
         infoLabels = {
             'Title' : str(node.findtext("title")) ,
             'Artist' : str(node.findtext("artist")),
@@ -116,10 +116,16 @@ def get_infolabels(object_type , node):
             'Mediatype' : 'song'
         }
 
-    elif object_type == 'videos':
+    elif elem_type == 'podcast_episode':
+        infoLabels = {
+            'Title' : str(node.findtext("title")) ,
+            'UserRating' : rating,
+            'Mediatype' : 'song'
+        }
+
+    elif elem_type == 'video':
         infoLabels = {
             'Title' : str(node.findtext("name")) ,
-            'VideoResolution' : node.findtext("resolution") ,
             'Size' : node.findtext("size") ,
             'Mediatype' : 'video'
         }
@@ -128,24 +134,24 @@ def get_infolabels(object_type , node):
 
 def getNestedTypeId(node,elem_type):
     obj_elem = node.find(elem_type)
-    obj_id = obj_elem.attrib["id"]
-    return obj_id
+    if obj_elem is not None or obj_elem != '':
+        obj_id = obj_elem.attrib["id"]
+        return obj_id
+    return None
 
 #this function is used to speed up the loading of the images using differents
 #theads, one for request
-def precacheArt(elem,object_type):
-    elem_type = ut.otype_to_type(object_type)
+def precacheArt(elem,elem_type):
+
     allid=set()
-    if elem_type != "album" and elem_type != "song" and elem_type != "artist":
+    if elem_type != "album" and elem_type != "song" and elem_type != "artist" and elem_type != "podcast":
         return
+
     threadList = []
     for node in elem.iter(elem_type):
         if elem_type == "song":
             art_type = "album"
-            try:
-                object_id = getNestedTypeId(node,"album")
-            except:
-                object_id = None
+            object_id = getNestedTypeId(node,"album")
         else:
             art_type = elem_type
             object_id = node.attrib["id"]
@@ -166,10 +172,9 @@ def precacheArt(elem,object_type):
     for x in threadList:
         x.join()
 
-def addLinks(elem,object_type,useCacheArt,mode):
+def addLinks(elem,elem_type,useCacheArt,mode):
 
     image = "DefaultFolder.png"
-    elem_type = ut.otype_to_type(object_type)
     it=[]
     allid = set()
 
@@ -182,34 +187,31 @@ def addLinks(elem,object_type,useCacheArt,mode):
         name = str(node.findtext("name"))
 
         if elem_type == "album":
-            try:
-                #no unicode function, cause urllib quot_plus error ( bug )
-                #album_id is ok also as string, cause it is needed to create
-                #an url
-                #remove duplicates in album names ( workaround for a problem in server comunication )
-                if object_id not in allid:
-                    allid.add(object_id)
-                else:
-                    continue
-                artist_id = getNestedTypeId(node,"artist")
-                if artist_id:
-                    cm.append( ( ut.tString(30141),"Container.Update(%s?object_id=%s&mode=1&submode=6)" % 
-                        ( sys.argv[0],artist_id ) ) )
+            #remove duplicates in album names ( workaround for a problem in server comunication )
+            if object_id not in allid:
+                allid.add(object_id)
+            else:
+                continue
+            artist_id = getNestedTypeId(node,"artist")
+            if artist_id:
+                cm.append( ( ut.tString(30141),"Container.Update(%s?object_id=%s&mode=1&submode=6)" %
+                    ( sys.argv[0],artist_id ) ) )
 
-                name = get_album_artist_name(node)
-                if useCacheArt:
-                    image_url = node.findtext("art")
-                    image = art.get_art(object_id,elem_type,image_url)
-            except:
-                xbmc.log("AmpachePlugin::addLinks: album_id error", xbmc.LOGDEBUG)
+            name = get_album_artist_name(node)
+            if useCacheArt:
+                image_url = node.findtext("art")
+                image = art.get_art(object_id,elem_type,image_url)
         elif elem_type == "artist":
             if useCacheArt:
                 image_url = node.findtext("art")
                 image = art.get_art(object_id,elem_type,image_url)
+        elif elem_type == "podcast":
+            if useCacheArt:
+                image = art.get_art(object_id,"podcast")
         else:
             useCacheArt = False
 
-        infoLabels=get_infolabels(object_type,node)
+        infoLabels=get_infolabels(elem_type,node)
 
         if infoLabels == None:
             infoLabels={ "Title": name }
@@ -225,8 +227,6 @@ def addLinks(elem,object_type,useCacheArt,mode):
         if cm:
             liz.addContextMenuItems(cm)
 
-        handle=int(sys.argv[1])
-
         u=sys.argv[0]+"?object_id="+object_id+"&mode="+str(mode)+"&submode=71"
         #xbmc.log("AmpachePlugin::addLinks: u - " + u, xbmc.LOGDEBUG )
         isFolder=True
@@ -237,12 +237,9 @@ def addLinks(elem,object_type,useCacheArt,mode):
 
 # Used to populate items for songs on XBMC. Calls plugin script with mode ==
 # 45 and play_ur == (ampache item url)
-def addPlayLinks(elem, object_type , object_subtype=None):
+def addPlayLinks(elem, elem_type):
    
-    xbmcplugin.setContent(int(sys.argv[1]), object_type)
     it=[]
-
-    elem_type = ut.otype_to_type(object_type,object_subtype)
 
     #we don't use sort method for track cause songs are already sorted
     #by the server and it make a mess in random playlists
@@ -262,28 +259,27 @@ def addPlayLinks(elem, object_type , object_subtype=None):
         play_url = str(node.findtext("url"))
         object_title = str(node.findtext("title"))
 
-        liz=xbmcgui.ListItem()
+        liz=xbmcgui.ListItem(object_title)
         liz.setProperty("IsPlayable", "true")
         liz.setPath(play_url)
-        liz.setLabel(object_title)
 
         if elem_type == "song":
             image_url = node.findtext("art")
-            try:
-                #speed up art management for album songs, avoid duplicate
-                #calls
-                album_id = getNestedTypeId(node,"album")
+            #speed up art management for album songs, avoid duplicate
+            #calls
+            album_id = getNestedTypeId(node,"album")
+            if album_id:
                 if album_id not in allid:
                     allid.add(album_id)
                     albumArt = art.get_art(album_id,"album",image_url)
                     albumTrack[album_id]=albumArt
                 else:
                     albumArt=albumTrack[album_id]
-            except:
+            else:
                 albumArt = art.get_art(None,"album",image_url)
 
             liz.setArt( art.get_artLabels(albumArt) )
-            liz.setInfo( type="music", infoLabels=get_infolabels("songs", node) )
+            liz.setInfo( type="music", infoLabels=get_infolabels("song", node) )
             liz.setMimeType(node.findtext("mime"))
 
             cm = []
@@ -294,7 +290,6 @@ def addPlayLinks(elem, object_type , object_subtype=None):
                 "Container.Update(%s?object_id=%s&mode=1&submode=6)" % (
                     sys.argv[0],artist_id ) ) )
 
-            album_id = getNestedTypeId(node,"album")
             if album_id:
                 cm.append( ( ut.tString(30139),
                 "Container.Update(%s?object_id=%s&mode=2&submode=6)" % (
@@ -306,8 +301,10 @@ def addPlayLinks(elem, object_type , object_subtype=None):
 
             if cm != []:
                 liz.addContextMenuItems(cm)
+        elif elem_type == "podcast_episode":
+            liz.setInfo( type="music", infoLabels=get_infolabels(elem_type, node) )
         elif elem_type == "video":
-            liz.setInfo( type="video", infoLabels=get_infolabels("videos", node) )
+            liz.setInfo( type="video", infoLabels=get_infolabels("video", node) )
             liz.setMimeType(node.findtext("mime"))
 
         track_parameters = { "mode": 200, "play_url" : play_url}
@@ -355,19 +352,35 @@ def addDir(name,mode,submode,offset=None,object_id=None):
     xbmcplugin.addDirectoryItem(handle=handle,url=u,listitem=liz,isFolder=True)
 
 #this function add items to the directory using the low level addLinks of ddSongLinks functions
-def addItems( object_type, mode , elem, useCacheArt=True, object_subtype=None):
-    image = "DefaultFolder.png"
+def addItems( object_type, elem, object_subtype=None,precache=True):
+
+    ut.setContent(int(sys.argv[1]), object_type)
+
     xbmc.log("AmpachePlugin::addItems: object_type - " + str(object_type) , xbmc.LOGDEBUG )
     if object_subtype:
         xbmc.log("AmpachePlugin::addItems: object_subtype - " + str(object_subtype) , xbmc.LOGDEBUG )
 
-    if useCacheArt:
-        precacheArt(elem,object_type)
+    elem_type = ut.otype_to_type(object_type,object_subtype)
+    xbmc.log("AmpachePlugin::addItems: elem_type - " + str(elem_type) , xbmc.LOGDEBUG )
+
+    useCacheArt = True
+
+    if elem_type != "song":
+        limit = len(elem.findall(elem_type))
+        if limit > 100:
+            #to not overload servers
+            if (not ut.strBool_to_bool(ampache.getSetting("images-long-list"))):
+                useCacheArt = False
+
+    if useCacheArt and precache:
+        precacheArt(elem,elem_type)
 
     if object_type == 'songs' or object_type == 'videos':
-        addPlayLinks(elem,object_type,object_subtype)
+        addPlayLinks(elem,elem_type)
     else:
-        addLinks(elem,object_type,useCacheArt,mode)
+        #set the mode
+        mode = ut.otype_to_mode(object_type, object_subtype)
+        addLinks(elem,elem_type,useCacheArt,mode)
     return
 
 def get_all(object_type, mode ,offset=None):
@@ -375,16 +388,14 @@ def get_all(object_type, mode ,offset=None):
         offset=0
     try:
         limit = int(ampache.getSetting(object_type))
+        if limit == 0:
+            return
     except:
         return
-    #to not overload servers
+
     step = 500
     newLimit = offset+step
-    #load images in long list
-    if (ut.strBool_to_bool(ampache.getSetting("images-long-list"))):
-        get_items(object_type, limit=step, offset=offset)
-    else:
-        get_items(object_type, limit=step, offset=offset, useCacheArt=False)
+    get_items(object_type, limit=step, offset=offset)
     if newLimit < limit:
         pass
     else:
@@ -396,7 +407,7 @@ def get_all(object_type, mode ,offset=None):
 #this functions handles the majority of the requests to the server
 #so, we have a lot of optional params
 def get_items(object_type, object_id=None, add=None,\
-        thisFilter=None,limit=5000,useCacheArt=True, object_subtype=None,\
+        thisFilter=None,limit=5000, object_subtype=None,\
         exact=None, offset=None ):
     
     if object_type:
@@ -446,10 +457,6 @@ def get_items(object_type, object_id=None, add=None,\
     if object_id:
         thisFilter = object_id
 
-  #set the mode 
-
-    mode = ut.otype_to_mode(object_type, object_subtype)
-
     #here the documentation for an ampache connection
     #first create the connection object
     #second choose the api function to call in action variable
@@ -472,7 +479,7 @@ def get_items(object_type, object_id=None, add=None,\
         ampConn.offset = offset
 
         elem = ampConn.ampache_http_request(action)
-        addItems( object_type, mode , elem, useCacheArt,object_subtype)
+        addItems( object_type, elem, object_subtype)
     except:
         return
 
@@ -529,10 +536,6 @@ def get_stats(object_type, object_subtype=None, limit=5000 ):
 
     xbmc.log("AmpachePlugin::get_stats ",  xbmc.LOGDEBUG)
 
-    mode = ut.otype_to_mode(object_type)
-   
-    xbmcplugin.setContent(int(sys.argv[1]), object_type)
-
     action = 'stats'
     if(int(ampache.getSetting("api-version"))) < 400001:
         amtype = object_subtype
@@ -549,7 +552,7 @@ def get_stats(object_type, object_subtype=None, limit=5000 ):
         ampConn.type = amtype
                 
         elem = ampConn.ampache_http_request(action)
-        addItems( object_type, mode , elem)
+        addItems( object_type, elem)
     except:
         return
 
@@ -566,30 +569,29 @@ def get_recent(object_type,submode,object_subtype=None):
     elif submode == 34:
         get_items(object_type=object_type,add=ut.get_time(-90),object_subtype=object_subtype)
 
-def get_random(object_type, random_items):
-    xbmc.log("AmpachePlugin::get_random: object_type " + object_type, xbmc.LOGDEBUG)
+def get_random(object_type, num_items):
     #object type can be : albums, artists, songs, playlists
     
-    mode = ut.otype_to_mode(object_type)
+    tot_items = int(ampache.getSetting(object_type))
 
-    xbmcplugin.setContent(int(sys.argv[1]), object_type)
+    xbmc.log("AmpachePlugin::get_random: object_type " + object_type + " num_items " + str(num_items) + " tot_items " +\
+            str(tot_items), xbmc.LOGDEBUG)
 
-    items = int(ampache.getSetting(object_type))
-    if random_items > items:
-        #if items are less than random_itmes, return all items
-        get_items(object_type, limit=items)
+    if num_items > tot_items:
+        #if tot_items are less than num_itmes, return all items
+        get_items(object_type, limit=tot_items)
         return
 
-    seq = random.sample(list(range(items)),random_items)
-    action = ut.otype_to_type(object_type)
+    seq = random.sample(list(range(tot_items)),num_items)
+    action = object_type
     xbmc.log("AmpachePlugin::get_random: seq " + str(seq), xbmc.LOGDEBUG )
-    elements = []
     ampConn = ampache_connect.AmpacheConnect()
     for item_id in seq:
         try:
-            ampConn.filter = item_id
+            ampConn.offset = item_id
+            ampConn.limit = 1
             elem = ampConn.ampache_http_request(action)
-            addItems( object_type, mode , elem)
+            addItems( object_type, elem,precache=False)
         except:
             pass
 
@@ -666,13 +668,14 @@ def main_params(plugin_url):
 
 #add new line in case of new stat function implemented, checking the version
 #in menus
-def manage_stats_menu(submode, object_type):
+def manage_stats_menu(object_type,submode):
 
     num_items = (int(ampache.getSetting("random_items"))*3)+3
+    apiVersion = int(ampache.getSetting("api-version"))
 
     if submode == 40:
         #playlists are not in the new stats api, so, use the old mode
-        if(int(ampache.getSetting("api-version"))) < 400001 or object_type == 'playlists':
+        if(apiVersion < 400001 or (object_type == 'playlists' and apiVersion < 510000 )):
             get_random(object_type, num_items)
         else:
             get_stats(object_type=object_type,object_subtype="random",limit=num_items)
@@ -715,8 +718,6 @@ def Main():
     submode = m_params['submode']
     object_id = m_params['object_id']
 
-    servers_manager.initializeServer()
-    
     #check if the connection is expired
     #connect to the server
     #do not connect on main screen and when we operate setting; 
@@ -724,10 +725,14 @@ def Main():
     if mode!=None and mode < endCheckConnection:
         if ut.check_tokenexp():
             try:
+                #check server file only when necessary
+                servers_manager.initializeServer()
                 ampacheConnect = ampache_connect.AmpacheConnect()
                 ampacheConnect.AMPACHECONNECT()
             except:
                 pass
+
+    apiVersion = int(ampache.getSetting("api-version"))
 
     #start menu
     if mode==None:
@@ -765,7 +770,7 @@ def Main():
         #submode between 40-46( random.. recent )
         #40-70 stats
         elif submode >= 40 and submode <= 46:
-            manage_stats_menu(submode, "artists")
+            manage_stats_menu("artists",submode)
         #get all albums from an artist_id
         elif submode == 71:
             get_items(object_type="albums",object_id=object_id,object_subtype="artist_albums")
@@ -788,7 +793,7 @@ def Main():
         elif submode > 30 and submode < 35:
             get_recent( "albums", submode )
         elif submode >= 40 and submode <= 46:
-            manage_stats_menu(submode, "albums")
+            manage_stats_menu("albums",submode)
         #get all songs from an album_id
         elif submode == 71:
             get_items(object_type="songs",object_id=object_id,object_subtype="album_songs")
@@ -810,7 +815,7 @@ def Main():
             get_recent( "songs", submode )
         #40-70 stats
         elif submode >= 40 and submode <= 46:
-            manage_stats_menu(submode, "songs")
+            manage_stats_menu("songs",submode)
 
     #playlist mode
     elif mode==4:
@@ -821,7 +826,7 @@ def Main():
         elif submode > 30 and submode < 35:
             get_recent( "playlists", submode )
         elif submode == 40:
-            manage_stats_menu(submode, "playlists")
+            manage_stats_menu("playlists", submode)
         #get all songs from a playlist_id
         elif submode == 71:
             get_items(object_type="songs",object_id=object_id,object_subtype="playlist_songs")
@@ -834,7 +839,7 @@ def Main():
             endDir = do_search("podcasts")
         #get all episodes
         elif submode == 71:
-            if(int(ampache.getSetting("api-version"))) >= 440000:
+            if apiVersion >= 440000:
                 get_items(object_type="songs",object_id=object_id,object_subtype="podcast_episodes")
 
     #video
@@ -862,14 +867,14 @@ def Main():
             elif mode == 21:
                 get_items(object_type="songs", object_subtype=object_subtype,object_id=object_id)
 
-    #main meus 50-100
+    #main menus 50-100
     #explore
     elif mode==50:
         #recently added
         addDir(ut.tString(30145),107,None)
         #random
         addDir(ut.tString(30146),100,None)
-        if(int(ampache.getSetting("api-version"))) >= 400001:
+        if apiVersion >= 400001:
             #highest
             addDir(ut.tString(30148),101,None)
             #frequent
@@ -892,7 +897,6 @@ def Main():
             addDir(ut.tString(30221) + " (" + ampache.getSetting("videos")+ ")",8,5)
         if ampache.getSetting("podcasts"):
             addDir(ut.tString(30226) + " (" + ampache.getSetting("podcasts")+ ")",5,5)
-        apiVersion = int(ampache.getSetting("api-version"))
         if apiVersion >= 380001:
             #get all tags ( submode 5 )
             addDir(ut.tString(30119),54,5)
@@ -901,7 +905,7 @@ def Main():
     elif mode==52:
         #random album
         addDir(ut.tString(30135),2,40)
-        if(int(ampache.getSetting("api-version"))) >= 400001:
+        if apiVersion >= 400001:
             #newest albums
             addDir(ut.tString(30162),2,45)
             #frequent albums
@@ -1041,17 +1045,21 @@ def Main():
 
     #the four modes below are used to manage servers
     elif mode==301:
+        servers_manager.initializeServer()
         if servers_manager.addServer():
             servers_manager.switchServer()
     
     elif mode==302:
+        servers_manager.initializeServer()
         if servers_manager.deleteServer():
             servers_manager.switchServer()
     
     elif mode==303:
+        servers_manager.initializeServer()
         servers_manager.modifyServer()
     
     elif mode==304:
+        servers_manager.initializeServer()
         servers_manager.switchServer()
 
     #no end directory item ( problem with failed searches )

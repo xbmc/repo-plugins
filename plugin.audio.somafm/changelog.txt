@@ -1,0 +1,43 @@
+[B]Version 1.1.0 - 2016-02-22[/B]
+
+- Remove firewall mode in response to the SomaFM streaming server update
+
+
+
+[B]Version 1.0.2 - 2015-11-08[/B]
+
+- Dutch translation and some polishing by PanderMusubi - thanks!
+
+
+
+[B]Version 1.0.1 - 2015-01-01[/B]
+
+- Fix playback on Android client
+
+
+
+[B]Version 1.0.0 - 2014-10-09[/B]
+
+- Use localized strings, supporting English and German for now
+- Settings for caching the channel list and clearing the cache
+- Include a donation reminder <3
+
+
+
+[B]Version 0.1.0 - 2014-10-05[/B]
+
+- Automatically select a stream and instantly start playback when station is selected
+- Cache playlist files
+- Settings for quality, format and firewall streams
+
+
+
+[B]Version 0.0.2 - 2013-07-21[/B]
+
+- Use SomaFM XML API.
+
+
+
+[B]Version 0.0.1 - 2011-03-07[/B]
+
+- Initial version.

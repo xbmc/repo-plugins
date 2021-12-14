@@ -1,0 +1,99 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Stream"
+msgstr "Stream"
+
+msgctxt "#32001"
+msgid "Quality"
+msgstr "Qualität"
+
+msgctxt "#32002"
+msgid "Format"
+msgstr "Format"
+
+msgctxt "#32004"
+msgid "SomaFM"
+msgstr "SomaFM"
+
+msgctxt "#32005"
+msgid "Cache cleared."
+msgstr "Cache gelöscht."
+
+msgctxt "#32006"
+msgid "Cache"
+msgstr "Cache"
+
+msgctxt "#32007"
+msgid "Clear channel and playlist cache"
+msgstr "Cache mit Senderliste und Playlists löschen"
+
+msgctxt "#32008"
+msgid "Refresh channel list from server"
+msgstr "Senderliste vom Server laden"
+
+msgctxt "#32009"
+msgid "Please consider donating to keep SomaFM alive.\nVisit https://somafm.com"
+msgstr "Bitte erhalte SomaFM mit Deiner Spende am Leben.\nBesuche https://somafm.com"
+
+#enums
+
+#quality
+
+msgctxt "#32913"
+msgid "High, medium, low"
+msgstr "Hoch, mittel, niedrig"
+
+msgctxt "#32912"
+msgid "Medium, high, low"
+msgstr "Mittel, hoch, niedrig"
+
+msgctxt "#32911"
+msgid "Medium, low, high"
+msgstr "Mittel, niedrig, hoch"
+
+msgctxt "#32910"
+msgid "Low, medium, high"
+msgstr "Niedrig, mittel, hoch"
+
+#format
+
+msgctxt "#32920"
+msgid "MP3 only"
+msgstr "Nur MP3"
+
+msgctxt "#32921"
+msgid "MP3, AAC"
+msgstr "MP3, AAC"
+
+msgctxt "#32922"
+msgid "AAC, MP3"
+msgstr "AAC, MP3"
+
+msgctxt "#32923"
+msgid "AAC only"
+msgstr "Nur AAC"
+
+#ttl
+
+msgctxt "#32930"
+msgid "Always"
+msgstr "Immer"
+
+msgctxt "#32931"
+msgid "Once in a day"
+msgstr "Einmal am Tag"
+
+msgctxt "#32932"
+msgid "Once in a week"
+msgstr "Einmal in der Woche"
+
+msgctxt "#32933"
+msgid "Once in a month"
+msgstr "Einmal im Monat"

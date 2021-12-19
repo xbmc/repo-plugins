@@ -1,5 +1,18 @@
 # Changelog
 
+## [v1.1.0](https://github.com/add-ons/plugin.video.streamz/tree/v1.1.0) (2021-12-19)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.6...v1.1.0)
+
+**Implemented enhancements:**
+
+- Update artwork [\#41](https://github.com/add-ons/plugin.video.streamz/pull/41) ([michaelarnauts](https://github.com/michaelarnauts))
+- Upgrade to API v10 [\#40](https://github.com/add-ons/plugin.video.streamz/pull/40) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Fixed bugs:**
+
+- Use new authentication flow [\#43](https://github.com/add-ons/plugin.video.streamz/pull/43) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.0.6](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.6) (2021-04-01)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.5...v1.0.6)

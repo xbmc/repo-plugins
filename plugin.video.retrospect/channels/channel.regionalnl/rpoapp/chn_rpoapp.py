@@ -39,12 +39,6 @@ class Channel(chn_class.Channel):
             self.baseUrl = "https://www.rijnmond.nl"
             self.liveUrl = "https://rijnmond.rpoapp.nl/v01/livestreams/AndroidTablet.json"
 
-        elif self.channelCode == "omroepzeeland":
-            self.noImage = "omroepzeelandimage.png"
-            self.mainListUri = "https://www.omroepzeeland.nl/tvgemist"
-            self.baseUrl = "https://www.omroepzeeland.nl"
-            self.liveUrl = "https://zeeland.rpoapp.nl/v01/livestreams/AndroidTablet.json"
-
         elif self.channelCode == "rtvoost":
             self.noImage = "rtvoostimage.png"
             self.mainListUri = "https://www.rtvoost.nl/tv/gemist"
@@ -105,7 +99,6 @@ class Channel(chn_class.Channel):
 
         #===============================================================================================================
         # Test cases:
-        #   Omroep Zeeland: M3u8 playist
 
         # ====================================== Actual channel setup STOPS here =======================================
         return
@@ -131,7 +124,7 @@ class Channel(chn_class.Channel):
         if not data:
             return "[]", items
 
-        json_data = Regexer.do_regex(r"setupBroadcastArchive\('Tv',\s*([^;]+)\);", data)
+        json_data = Regexer.do_regex(r"setupBroadcastArchive\('Tv',\s*(.+?)\);\w+", data)
         if isinstance(json_data, (tuple, list)) and len(json_data) > 0:
             Logger.debug("Pre-Processing finished")
             return json_data[0], items
@@ -375,6 +368,12 @@ class Channel(chn_class.Channel):
         data = UriHandler.open(item.url)
         streams = Regexer.do_regex(r'label:\s*"([^"]+)",\W*file:\s*"([^"]+)"', data)
 
+        if not streams:
+            javascript = Regexer.do_regex(r'src="([^"]+/\d+\.js)"\W*async', data)
+            url = javascript[0]
+            data = UriHandler.open(url)
+            return self.__process_javascript(item, data)
+
         bitrates = {"720p SD": 1200}
         for stream in streams:
             item.add_stream(stream[1], bitrates.get(stream[0], 0))
@@ -410,14 +409,19 @@ class Channel(chn_class.Channel):
 
         url = "{}/p/regiogrid/q/sourceid_string:{}*.js".format(base_url, video_id)
         data = UriHandler.open(url)
+        return self.__process_javascript(item, data)
 
+    def __process_javascript(self, item, data):
         json_data = Regexer.do_regex(r'var opts\s*=\s*({.+?});\W*//', data)
         Logger.debug("Found jsondata with size: %s", len(json_data[0]))
         json_data = JsonHelper(json_data[0])
         clip_data = json_data.get_value("clipData", "assets")
         server = json_data.get_value("publicationData", "defaultMediaAssetPath")
         for clip in clip_data:
-            item.add_stream("{}{}".format(server, clip["src"]), int(clip["bandwidth"]))
+            bitrate = clip["bandwidth"]
+            if bitrate.lower() == "auto":
+                bitrate = 3600
+            item.add_stream("{}{}".format(server, clip["src"]), int(bitrate))
             item.complete = True
 
         return item

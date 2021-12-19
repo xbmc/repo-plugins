@@ -424,8 +424,8 @@ class Channel(chn_class.Channel):
                       date_time.second)
 
         item.set_info_label("duration", result_set["duration"])
-        if "epsiodeNumber" in result_set and "seasonNumber" in result_set:
-            item.set_season_info(result_set["seasonNumber"], result_set["epsiodeNumber"])
+        if "episodeNumber" in result_set and "seasonNumber" in result_set:
+            item.set_season_info(result_set["seasonNumber"], result_set["episodeNumber"])
         return item
 
     def create_epg_item(self, result_set):

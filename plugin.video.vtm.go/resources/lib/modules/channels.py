@@ -19,17 +19,13 @@ class Channels:
 
     def __init__(self):
         """ Initialise object """
-        self._auth = VtmGoAuth(kodiutils.get_setting('username'),
-                               kodiutils.get_setting('password'),
-                               'VTM',
-                               kodiutils.get_setting('profile'),
-                               kodiutils.get_tokens_path())
-        self._vtm_go = VtmGo(self._auth)
+        auth = VtmGoAuth(kodiutils.get_tokens_path())
+        self._api = VtmGo(auth.get_tokens())
 
     def show_channels(self):
         """ Shows TV channels """
         # Fetch EPG from API
-        channels = self._vtm_go.get_live_channels()
+        channels = self._api.get_live_channels()
 
         listing = []
         for channel in channels:
@@ -54,12 +50,6 @@ class Channels:
                     'Container.Update(%s)' %
                     kodiutils.url_for('show_tvguide_channel', channel=channel_data.get('epg'))
                 ))
-
-            context_menu.append((
-                kodiutils.localize(30055, channel=title),  # Catalog for {channel}
-                'Container.Update(%s)' %
-                kodiutils.url_for('show_catalog_channel', channel=channel.key)
-            ))
 
             if channel.epg:
                 label = title + '[COLOR gray] | {title} ({start} - {end})[/COLOR]'.format(
@@ -98,7 +88,7 @@ class Channels:
         :type key: str
         """
         # Fetch EPG from API
-        channel = self._vtm_go.get_live_channel(key)
+        channel = self._api.get_live_channel(key)
         channel_data = CHANNELS.get(channel.key)
 
         icon = channel.logo
@@ -150,17 +140,6 @@ class Channels:
                     ),
                 )
             )
-
-        listing.append(kodiutils.TitleItem(
-            title=kodiutils.localize(30055, channel=title),  # Catalog for {channel}
-            path=kodiutils.url_for('show_catalog_channel', channel=key),
-            art_dict=dict(
-                icon='DefaultMovieTitle.png'
-            ),
-            info_dict=dict(
-                plot=kodiutils.localize(30056, channel=title),  # Browse the Catalog for {channel}
-            ),
-        ))
 
         # Add YouTube channels
         if channel_data and kodiutils.get_cond_visibility('System.HasAddon(plugin.video.youtube)') != 0:

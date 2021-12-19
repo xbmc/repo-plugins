@@ -516,11 +516,6 @@ def has_addon(name):
     return xbmc.getCondVisibility('System.HasAddon(%s)' % name) == 1
 
 
-def has_credentials():
-    """Whether the add-on has credentials filled in"""
-    return bool(get_setting('username') and get_setting('password'))
-
-
 def kodi_version():
     """Returns full Kodi version as string"""
     return xbmc.getInfoLabel('System.BuildVersion').split(' ')[0]

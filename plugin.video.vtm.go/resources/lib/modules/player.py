@@ -7,7 +7,7 @@ import logging
 
 from resources.lib import kodiutils
 from resources.lib.kodiplayer import KodiPlayer
-from resources.lib.vtmgo.exceptions import NoLoginException, StreamGeoblockedException, StreamUnavailableException, UnavailableException
+from resources.lib.vtmgo.exceptions import StreamGeoblockedException, StreamUnavailableException, UnavailableException
 from resources.lib.vtmgo.vtmgo import VtmGo
 from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
 from resources.lib.vtmgo.vtmgostream import VtmGoStream
@@ -20,17 +20,9 @@ class Player:
 
     def __init__(self):
         """ Initialise object """
-        try:
-            self._auth = VtmGoAuth(kodiutils.get_setting('username'),
-                                   kodiutils.get_setting('password'),
-                                   'VTM',
-                                   kodiutils.get_setting('profile'),
-                                   kodiutils.get_tokens_path())
-        except NoLoginException:
-            self._auth = None
-
-        self._vtm_go = VtmGo(self._auth)
-        self._vtm_go_stream = VtmGoStream(self._auth)
+        auth = VtmGoAuth(kodiutils.get_tokens_path())
+        self._api = VtmGo(auth.get_tokens())
+        self._stream = VtmGoStream(auth.get_tokens())
 
     def play_or_live(self, category, item, channel):
         """ Ask to play the requested item or switch to the live channel
@@ -54,10 +46,6 @@ class Player:
         :type category: string
         :type item: string
         """
-        if not self._check_credentials():
-            kodiutils.end_of_directory()
-            return
-
         # Check if inputstreamhelper is correctly installed
         if not self._check_inputstream():
             kodiutils.end_of_directory()
@@ -65,7 +53,7 @@ class Player:
 
         try:
             # Get stream information
-            resolved_stream = self._vtm_go_stream.get_stream(category, item)
+            resolved_stream = self._stream.get_stream(category, item)
 
         except StreamGeoblockedException:
             kodiutils.ok_dialog(heading=kodiutils.localize(30709), message=kodiutils.localize(30710))  # This video is geo-blocked...
@@ -97,7 +85,7 @@ class Player:
                 info_dict.update({'mediatype': 'movie'})
 
                 # Get details
-                movie_details = self._vtm_go.get_movie(item)
+                movie_details = self._api.get_movie(item)
                 if movie_details:
                     info_dict.update({
                         'plot': movie_details.description,
@@ -109,9 +97,9 @@ class Player:
                 info_dict.update({'mediatype': 'episode'})
 
                 # There is no direct API to get episode details, so we go through the cached program details
-                program = self._vtm_go.get_program(resolved_stream.program_id)
+                program = self._api.get_program(resolved_stream.program_id)
                 if program:
-                    episode_details = self._vtm_go.get_episode_from_program(program, item)
+                    episode_details = self._api.get_episode_from_program(program, item)
                     if episode_details:
                         info_dict.update({
                             'plot': episode_details.description,
@@ -120,7 +108,7 @@ class Player:
                         })
 
                         # Lookup the next episode
-                        next_episode_details = self._vtm_go.get_next_episode_from_program(program, episode_details.season, episode_details.number)
+                        next_episode_details = self._api.get_next_episode_from_program(program, episode_details.season, episode_details.number)
 
                         # Create the data for Up Next
                         if next_episode_details:
@@ -162,7 +150,7 @@ class Player:
         else:
             url = resolved_stream.url
 
-        license_key = self._vtm_go_stream.create_license_key(resolved_stream.license_url)
+        license_key = self._stream.create_license_key(resolved_stream.license_url)
 
         # Play this item
         kodiutils.play(url, license_key, resolved_stream.title, {}, info_dict, prop_dict, stream_dict)
@@ -178,21 +166,6 @@ class Player:
         if upnext_data and kodiutils.get_setting_bool('useupnext'):
             _LOGGER.debug("Sending Up Next data: %s", upnext_data)
             self.send_upnext(upnext_data)
-
-    @staticmethod
-    def _check_credentials():
-        """ Check if the user has credentials """
-        if kodiutils.has_credentials():
-            return True
-
-        # You need to configure your credentials before you can access the content of VTM GO.
-        confirm = kodiutils.yesno_dialog(message=kodiutils.localize(30701))
-        if confirm:
-            kodiutils.open_settings()
-            if kodiutils.has_credentials():
-                return True
-
-        return False
 
     @staticmethod
     def _check_inputstream():

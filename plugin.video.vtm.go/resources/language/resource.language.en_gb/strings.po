@@ -5,15 +5,7 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-### MENUS
-msgctxt "#30001"
-msgid "A-Z"
-msgstr ""
-
-msgctxt "#30002"
-msgid "Alphabetically sorted list of programs"
-msgstr ""
-
+# MENUS
 msgctxt "#30003"
 msgid "Movies"
 msgstr ""
@@ -46,20 +38,8 @@ msgctxt "#30010"
 msgid "Search the VTM GO catalogue"
 msgstr ""
 
-msgctxt "#30011"
-msgid "Switch Profile ([B]{profile}[/B])"
-msgstr ""
-
-msgctxt "#30012"
-msgid "Select a different profile to use"
-msgstr ""
-
 msgctxt "#30013"
 msgid "TV guide"
-msgstr ""
-
-msgctxt "#30014"
-msgid "Browse the TV Guide"
 msgstr ""
 
 msgctxt "#30015"
@@ -95,11 +75,7 @@ msgid "Show the VTM GO recommendations for Kids"
 msgstr ""
 
 
-### SUBMENUS
-msgctxt "#30051"
-msgid "Watch [B]{channel}[/B]"
-msgstr ""
-
+# SUBMENUS
 msgctxt "#30052"
 msgid "Watch live [B]{channel}[/B]"
 msgstr ""
@@ -112,21 +88,8 @@ msgctxt "#30054"
 msgid "Browse the TV Guide for [B]{channel}[/B]"
 msgstr ""
 
-msgctxt "#30055"
-msgid "Catalog for [B]{channel}[/B]"
-msgstr ""
 
-msgctxt "#30056"
-msgid "Browse the Catalog for [B]{channel}[/B]"
-msgstr ""
-
-msgctxt "#30057"
-msgid "Select Profile"
-msgstr ""
-
-
-### CONTEXT MENU
-
+# CONTEXT MENU
 msgctxt "#30100"
 msgid "Add to My List"
 msgstr ""
@@ -143,32 +106,12 @@ msgctxt "#30103"
 msgid "Watch Live"
 msgstr ""
 
-msgctxt "#30104"
-msgid "TV Guide"
-msgstr ""
-
 msgctxt "#30105"
 msgid "Play from Catalog"
 msgstr ""
 
 
-### CODE
-msgctxt "#30200"
-msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
-msgstr ""
-
-msgctxt "#30201"
-msgid "[B][COLOR lightblue]Kids zone[/COLOR][/B]"
-msgstr ""
-
-msgctxt "#30202"
-msgid "Credentials are correct!"
-msgstr ""
-
-msgctxt "#30203"
-msgid "Your credentials are not valid!"
-msgstr ""
-
+# CODE
 msgctxt "#30204"
 msgid "All seasons"
 msgstr ""
@@ -213,20 +156,12 @@ msgctxt "#30214"
 msgid "[B]Next:[/B] {start} - {end}\n» {title}"
 msgstr ""
 
-msgctxt "#30215"
-msgid "Browse the TV-Guide of [B]{channel}[/B]"
-msgstr ""
-
 msgctxt "#30216"
 msgid "All ages"
 msgstr ""
 
 
-### Dates
-msgctxt "#30300"
-msgid "2 days ago"
-msgstr ""
-
+# Dates
 msgctxt "#30301"
 msgid "Yesterday"
 msgstr ""
@@ -239,26 +174,18 @@ msgctxt "#30303"
 msgid "Tomorrow"
 msgstr ""
 
-msgctxt "#30304"
-msgid "In 2 days"
-msgstr ""
 
-
-### MESSAGES
+# MESSAGES
 msgctxt "#30701"
-msgid "You need to configure your credentials before you can access the content of VTM GO. Do you want to enter them now?"
+msgid "Go to {url} on another device and enter use code [B]{code}[/B] when logging in."
 msgstr ""
 
 msgctxt "#30702"
-msgid "Unknown error while logging in: {code}"
+msgid "This device is successfully logged in to the VTM Go Service."
 msgstr ""
 
 msgctxt "#30703"
-msgid "Your account has no profiles defined. Please login on vtm.be/vtmgo and create a profile."
-msgstr ""
-
-msgctxt "#30704"
-msgid "This video may be geo-blocked, or your account is already being used currently."
+msgid "The login code has expired. Please try again."
 msgstr ""
 
 msgctxt "#30705"
@@ -293,18 +220,6 @@ msgctxt "#30713"
 msgid "The requested video was not found in the guide."
 msgstr ""
 
-msgctxt "#30714"
-msgid "Local metadata is cleared."
-msgstr ""
-
-msgctxt "#30715"
-msgid "Updating metadata..."
-msgstr ""
-
-msgctxt "#30716"
-msgid "Updating metadata ({index}/{total})..."
-msgstr ""
-
 msgctxt "#30717"
 msgid "This program is not available in the VTM GO catalogue."
 msgstr ""
@@ -314,35 +229,7 @@ msgid "The Manifest proxy is not running. Please restart Kodi."
 msgstr ""
 
 
-### SETTINGS
-msgctxt "#30800"
-msgid "Credentials"
-msgstr ""
-
-msgctxt "#30801"
-msgid "Credentials"
-msgstr ""
-
-msgctxt "#30803"
-msgid "Email address"
-msgstr ""
-
-msgctxt "#30805"
-msgid "Password"
-msgstr ""
-
-msgctxt "#30809"
-msgid "Profile"
-msgstr ""
-
-msgctxt "#30810"
-msgid "Always use the current profile"
-msgstr ""
-
-msgctxt "#30811"
-msgid "Current profile"
-msgstr ""
-
+# SETTINGS
 msgctxt "#30820"
 msgid "Interface"
 msgstr ""
@@ -357,22 +244,6 @@ msgstr ""
 
 msgctxt "#30826"
 msgid "Show Continue watching"
-msgstr ""
-
-msgctxt "#30827"
-msgid "Metadata"
-msgstr ""
-
-msgctxt "#30829"
-msgid "Periodically refresh metadata in the background"
-msgstr ""
-
-msgctxt "#30831"
-msgid "Update local metadata now…"
-msgstr ""
-
-msgctxt "#30833"
-msgid "Clear local metadata…"
 msgstr ""
 
 msgctxt "#30840"
@@ -429,46 +300,6 @@ msgstr ""
 
 msgctxt "#30869"
 msgid "IPTV Manager settings…"
-msgstr ""
-
-msgctxt "#30870"
-msgid "Kodi Library"
-msgstr ""
-
-msgctxt "#30871"
-msgid "Indexing"
-msgstr ""
-
-msgctxt "#30872"
-msgid "Add video locations to the Kodi Library… [COLOR gray](See README.md)[/COLOR]"
-msgstr ""
-
-msgctxt "#30873"
-msgid "Index the following movies"
-msgstr ""
-
-msgctxt "#30874"
-msgid "Index the following series"
-msgstr ""
-
-msgctxt "#30875"
-msgid "Full catalog"
-msgstr ""
-
-msgctxt "#30876"
-msgid "Items on 'My List' only"
-msgstr ""
-
-msgctxt "#30877"
-msgid "Maintenance"
-msgstr ""
-
-msgctxt "#30878"
-msgid "Refresh Library…"
-msgstr ""
-
-msgctxt "#30879"
-msgid "Clean Library…"
 msgstr ""
 
 msgctxt "#30880"

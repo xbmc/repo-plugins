@@ -4,14 +4,13 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import logging
-
-from requests import HTTPError
+from datetime import datetime, timedelta
+from time import sleep
 
 from resources.lib import kodiutils
 from resources.lib.kodiutils import TitleItem
-from resources.lib.streamz.api import Api
+from resources.lib.streamz import PRODUCT_STREAMZ_KIDS
 from resources.lib.streamz.auth import Auth
-from resources.lib.streamz.exceptions import InvalidLoginException, LoginErrorException, NoStreamzSubscriptionException, NoTelenetSubscriptionException
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -21,61 +20,51 @@ class Authentication:
 
     def __init__(self):
         """ Initialise object """
-        self._auth = Auth(kodiutils.get_setting('username'),
-                          kodiutils.get_setting('password'),
-                          kodiutils.get_setting('loginprovider'),
-                          kodiutils.get_setting('profile'),
-                          kodiutils.get_tokens_path())
-        self._api = Api(self._auth)
+        self._auth = Auth(kodiutils.get_tokens_path())
 
-    @staticmethod
-    def verify_credentials():
-        """ Verify if the user has credentials and if they are valid. """
-        retry = False
-        while True:
+    def login(self):
+        """ Start the authorisation flow. """
+        auth_info = self._auth.authorize()
 
-            # Check if the user has credentials
-            if retry or not kodiutils.get_setting('username') or not kodiutils.get_setting('password'):
+        # Show the authorization message
+        progress_dialog = kodiutils.progress(
+            message=kodiutils.localize(30701,
+                                       url=auth_info.get('verification_uri'),
+                                       code=auth_info.get('user_code')))
+        progress_dialog.update(0)
 
-                # Ask user to fill in his credentials
-                if not kodiutils.yesno_dialog(message=kodiutils.localize(30701)):  # You need to configure your credentials...
-                    # The user doesn't want to do this. Abort to Home screen.
-                    return False
+        # Check the authorization until it succeeds or the user cancels.
+        delay = auth_info.get('interval')
+        expiry = auth_info.get('expires_in')
+        time_start = datetime.now()
+        time_end = time_start + timedelta(seconds=expiry)
+        while datetime.now() < time_end:
+            # Update progress
+            progress_dialog.update(int((datetime.now() - time_start).seconds * 100 / expiry))
 
-                kodiutils.open_settings()
+            # Check if the users has cancelled the login flow
+            if progress_dialog.iscanceled():
+                progress_dialog.close()
+                return
 
-            try:
-                # Create Auth object so we actually do a login.
-                Auth(kodiutils.get_setting('username'),
-                     kodiutils.get_setting('password'),
-                     kodiutils.get_setting('loginprovider'),
-                     kodiutils.get_setting('profile'),
-                     kodiutils.get_tokens_path())
-                return True
+            # Check if we are authorized now
+            check = self._auth.authorize_check()
+            if check:
+                progress_dialog.close()
+                kodiutils.notification(kodiutils.localize(30702))
+                kodiutils.redirect(kodiutils.url_for('show_main_menu'))
+                return
 
-            except InvalidLoginException:
-                kodiutils.ok_dialog(message=kodiutils.localize(30203))  # Your credentials are not valid!
-                retry = True
+            # Sleep a bit
+            sleep(delay)
 
-            except NoStreamzSubscriptionException:
-                kodiutils.ok_dialog(message=kodiutils.localize(30201))  # Your Streamz account has no valid subscription!
-                retry = True
+        # Close progress indicator
+        progress_dialog.close()
 
-            except NoTelenetSubscriptionException:
-                kodiutils.ok_dialog(message=kodiutils.localize(30202))  # Your Telenet account has no valid subscription!
-                retry = True
-
-            except LoginErrorException as exc:
-                kodiutils.ok_dialog(message=kodiutils.localize(30702, code=exc.code))  # Unknown error while logging in: {code}
-                return False
-
-            except HTTPError as exc:
-                kodiutils.ok_dialog(message=kodiutils.localize(30702, code='HTTP %d' % exc.response.status_code))  # Unknown error while logging in: {code}
-                return False
+        kodiutils.ok_dialog(message=kodiutils.localize(30703))
 
     def select_profile(self, key=None):
         """ Show your profiles.
-
         :type key: str
         """
         profiles = self._auth.get_profiles()
@@ -83,7 +72,7 @@ class Authentication:
         # Show warning when you have no profiles
         if not profiles:
             # Your account has no profiles defined. Please login on www.streamz.be/streamz and create a profile.
-            kodiutils.ok_dialog(message=kodiutils.localize(30703))
+            kodiutils.ok_dialog(message=kodiutils.localize(30704))
             kodiutils.end_of_directory()
             return
 
@@ -95,8 +84,7 @@ class Authentication:
         if key:
             profile = [x for x in profiles if x.key == key][0]
             _LOGGER.debug('Setting profile to %s', profile)
-            kodiutils.set_setting('profile', '%s:%s' % (profile.key, profile.product))
-            kodiutils.set_setting('profile_name', profile.name)
+            self._auth.set_profile(profile.key, profile.product)
 
             kodiutils.redirect(kodiutils.url_for('show_main_menu'))
             return
@@ -121,7 +109,6 @@ class Authentication:
     @staticmethod
     def _get_profile_name(profile):
         """ Get a descriptive string of the profile.
-
         :type profile: resources.lib.streamz.Profile
         """
         title = profile.name
@@ -141,7 +128,12 @@ class Authentication:
             title = '[COLOR %s]%s[/COLOR]' % (color_map.get(profile.color.upper()), kodiutils.to_unicode(title))
 
         # Append (Kids)
-        if profile.product == 'STREAMZ_KIDS':
+        if profile.product == PRODUCT_STREAMZ_KIDS:
             title = "%s (Kids)" % title
 
         return title
+
+    def clear_tokens(self):
+        """ Clear the authentication tokens """
+        self._auth.logout()
+        kodiutils.notification(message=kodiutils.localize(30706))

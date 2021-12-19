@@ -18,7 +18,6 @@ De volgende features worden ondersteund:
 * Afspelen van films en series
 * Volledig overzicht van alle content
 * Zoeken in de volledige catalogus
-* Integratie met Kodi bibliotheek
 
 ## Screenshots
 

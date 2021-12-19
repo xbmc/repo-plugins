@@ -8,7 +8,7 @@ import logging
 import os
 
 from resources.lib import kodiutils
-from resources.lib.streamz import API_ENDPOINT, ResolvedStream, util
+from resources.lib.streamz import API_ENDPOINT, PRODUCT_STREAMZ_KIDS, ResolvedStream, util
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -18,14 +18,13 @@ class Stream:
 
     _API_KEY = 'zs06SrhsKN2fEQvDdTMDR2t6wYwfceQu5HAmGa0p'
 
-    def __init__(self, auth):
+    def __init__(self, tokens=None):
         """ Initialise object """
-        self._auth = auth
-        self._tokens = self._auth.get_tokens()
+        self._tokens = tokens
 
     def _mode(self):
         """ Return the mode that should be used for API calls """
-        return 'streamz-kids' if self._tokens.product == 'STREAMZ_KIDS' else 'streamz'
+        return 'streamz-kids' if self._tokens.product == PRODUCT_STREAMZ_KIDS else 'streamz'
 
     def get_stream(self, stream_type, stream_id):
         """ Return a ResolvedStream based on the stream type and id.
@@ -87,14 +86,14 @@ class Stream:
         :rtype: dict
         """
         if strtype == 'movies':
-            url = API_ENDPOINT + '/%s/play/movie/%s' % (self._mode(), stream_id)
+            url = API_ENDPOINT + '/%s/play/movies/%s' % (self._mode(), stream_id)
         elif strtype == 'episodes':
-            url = API_ENDPOINT + '/%s/play/episode/%s' % (self._mode(), stream_id)
+            url = API_ENDPOINT + '/%s/play/episodes/%s' % (self._mode(), stream_id)
         else:
             raise Exception('Unknown stream type: %s' % strtype)
 
         _LOGGER.debug('Getting stream tokens from %s', url)
-        response = util.http_get(url, token=self._tokens.jwt_token, profile=self._tokens.profile)
+        response = util.http_get(url, token=self._tokens.access_token, profile=self._tokens.profile)
 
         return json.loads(response.text)
 
@@ -170,7 +169,7 @@ class Stream:
         :returns: A list of subtitles.
         :rtype: list[dict]
         """
-        subtitles = list()
+        subtitles = []
         if stream_info.get('video').get('subtitles'):
             for _, subtitle in enumerate(stream_info.get('video').get('subtitles')):
                 name = subtitle.get('language')
@@ -178,7 +177,8 @@ class Stream:
                     name = 'nl.default'
                 elif name == 'nl-tt':
                     name = 'nl.T888'
-                subtitles.append(dict(name=name, url=subtitle.get('url')))
+                subtitles.append({'name': name,
+                                  'url': subtitle.get('url')})
                 _LOGGER.debug('Found subtitle url %s', subtitle.get('url'))
         return subtitles
 
@@ -198,7 +198,7 @@ class Stream:
         if not kodiutils.exists(temp_dir):
             kodiutils.mkdirs(temp_dir)
 
-        downloaded_subtitles = list()
+        downloaded_subtitles = []
         for subtitle in subtitles:
             output_file = temp_dir + subtitle.get('name')
             webvtt_content = util.http_get(subtitle.get('url')).text

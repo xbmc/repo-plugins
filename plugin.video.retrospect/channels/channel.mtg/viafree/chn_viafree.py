@@ -464,6 +464,8 @@ class Channel(chn_class.Channel):
         Logger.trace(result_set)
 
         drm_locked = False
+        season = 0
+        episode = 0
         geo_blocked = result_set["is_geo_blocked"]
 
         title = result_set["title"]
@@ -495,10 +497,7 @@ class Channel(chn_class.Channel):
 
             # if the name had the episode in it, translate it
             if episode > 0 and season > 0:  # and not webisode:
-                description = "%s\n\n%s" % (title, description)
-                title = "{0} - s{1:02d}e{2:02d}".format(result_set["format_title"],
-                                                        season,
-                                                        episode)
+                title = "{} {}".format(LanguageHelper.get_localized_string(LanguageHelper.EpisodeId), episode)
             else:
                 Logger.debug("Found episode '0' or websido '%s': using name instead of episode number", title)
 
@@ -537,6 +536,8 @@ class Channel(chn_class.Channel):
             item.set_date(date_info[0], date_info[1], date_info[2], time_info[0], time_info[1], 0)
 
         item.media_type = mediatype.EPISODE
+        if episode > 0 and season > 0:
+            item.set_season_info(season, episode)
         item.complete = False
         item.isGeoLocked = geo_blocked
         item.isDrmProtected = drm_locked

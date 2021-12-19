@@ -21,9 +21,7 @@ De volgende features worden ondersteund:
 * Bekijk en speel rechtstreeks vanaf de TV gids
 * Doorzoek de catalogus
 * Bekijk YouTube-filmpjes van enkele DPG Media kanalen
-* Gebruikersprofielen (VTM GO of VTM GO Kids)
 * Integratie met [IPTV Manager](https://github.com/add-ons/service.iptv.manager)
-* Integratie met Kodi bibliotheek
 
 ## Screenshots
 

@@ -1,0 +1,32 @@
+{
+  "channels": [
+    {
+      "guid": "BD113683-233A-46EB-962D-98B3C02EB738",
+      "name": "RTV Utrecht",
+      "description": {
+        "en": "Video on demand for RTV Utrecht.\n\nRTV Utrecht is the regional broadcaster for the province of Utrecht and consists of RTV Utrecht, Radio M Utrecht, UStad & Bingo FM.",
+        "nl": "RTV Utrecht Uitzendinggemist.\n\nRTV Utrecht is de regionale omroep voor de provincie Utrecht en bestaat uit RTV Utrecht, Radio M Utrecht, UStad & Bingo FM."
+      },
+      "icon": "rtvutrechtlarge.png",
+      "category": "Regional",
+      "channelcode": "rtvutrecht",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "rtvutrechtfanart.png"
+    },
+    {
+      "guid": "8B4A56C7-44D5-40C2-A890-2287C4C1D74B",
+      "name": "Omroep Zeeland",
+      "description": {
+        "en": "Omroep Zeeland Uitzendinggemist.\n\nOmroep Zeeland is the regional broadcaster for the province of Zeeland. They are active on radio, television and internet.",
+        "nl": "Video on demand for Omroep Zeeland.\n\nOmroep Zeeland is de regionale omroep voor de provincie Zeeland, actief op radio, televisie en internet."
+      },
+      "icon": "omroepzeelandlarge.png",
+      "category": "Regional",
+      "channelcode": "omroepzeeland",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "omroepzeelandfanart.jpg"
+    }
+  ]
+}

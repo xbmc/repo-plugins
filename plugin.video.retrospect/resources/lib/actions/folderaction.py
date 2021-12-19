@@ -68,8 +68,22 @@ class FolderAction(AddonAction):
             kodi_items = []
 
             use_thumbs_as_fanart = AddonSettings.use_thumbs_as_fanart()
+
+            # Determine the TV Show title. Use the TV Show title of the selected item if it has one,
+            # or use the title of the selected item if the content has `episodes`. Becaue in that
+            # case the selected item is a TV Show.
+            tv_show_title = None
+            if selected_item:
+                tv_show_title = selected_item.tv_show_title or (
+                    selected_item.title if selected_item.content_type == contenttype.EPISODES else None
+                )
+
             for media_item in media_items:  # type: MediaItem
                 self.__update_artwork(media_item, self.__channel, use_thumbs_as_fanart)
+                # Set the TV Show title if it was set before, but don't override existing values.
+                if tv_show_title and not media_item.tv_show_title:
+                    Logger.trace("Updating TV Show title to: %s", tv_show_title)
+                    media_item.tv_show_title = tv_show_title
 
                 if media_item.is_folder:
                     action_value = action.LIST_FOLDER
@@ -271,6 +285,10 @@ class FolderAction(AddonAction):
             if has_tracks:
                 sort_methods.insert(0, xbmcplugin.SORT_METHOD_TRACKNUM)
 
+            has_episodes = any([i for i in items if i.has_info_label(MediaItem.LabelEpisode)])
+            if has_episodes:
+                sort_methods.insert(0, xbmcplugin.SORT_METHOD_EPISODE)
+
         # Actually add them
         Logger.debug("Sorting methods: %s", sort_methods)
         for sort_method in sort_methods:
@@ -290,7 +308,10 @@ class FolderAction(AddonAction):
 
         bread_crumb = None
         if selected_item is not None:
-            bread_crumb = selected_item.name
+            if selected_item.tv_show_title and selected_item.tv_show_title != selected_item.name:
+                bread_crumb = "{} / {}".format(selected_item.tv_show_title, selected_item.name)
+            else:
+                bread_crumb = selected_item.name
         elif self.__channel is not None:
             bread_crumb = channel.channelName
 

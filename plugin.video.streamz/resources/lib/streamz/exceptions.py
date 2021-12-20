@@ -5,15 +5,12 @@ from __future__ import absolute_import, division, unicode_literals
 
 
 class NoLoginException(Exception):
-    """ Is thrown when the user has no credentials. """
+    """ Is thrown when the user need to follow the authorization flow. """
 
 
 class InvalidTokenException(Exception):
     """ Is thrown when the token is invalid. """
 
-
-class InvalidLoginException(Exception):
-    """ Is thrown when the credentials are invalid. """
 
 
 class NoStreamzSubscriptionException(Exception):

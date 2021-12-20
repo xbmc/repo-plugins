@@ -10,7 +10,7 @@ from requests import HTTPError
 from requests.adapters import BaseAdapter
 
 from resources.lib import kodiutils
-from resources.lib.streamz.exceptions import InvalidLoginException, InvalidTokenException, LimitReachedException, UnavailableException
+from resources.lib.streamz.exceptions import InvalidTokenException, LimitReachedException, UnavailableException
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -32,13 +32,12 @@ class StreamzAdapter(BaseAdapter):
 # Setup a static session that can be reused for all calls
 SESSION = requests.Session()
 SESSION.headers = {
-    'User-Agent': 'STREAMZ/1.0.0 (be.dpgmedia.streamz; build:12544; Android 23) okhttp/4.6.0',
-    'x-app-version': '8',
+    'User-Agent': 'STREAMZ/11.19 (be.dpgmedia.streamz; build:14554; iOS 24) okhttp/4.9.1',
+    'x-app-version': '11',
     'x-persgroep-mobile-app': 'true',
     'x-persgroep-os': 'android',
-    'x-persgroep-os-version': '23',
+    'x-persgroep-os-version': '24',
 }
-SESSION.mount('streamz://login.streamz.be', StreamzAdapter())
 PROXIES = kodiutils.get_proxies()
 
 
@@ -59,8 +58,6 @@ def http_get(url, params=None, token=None, profile=None, headers=None):
     except HTTPError as exc:
         if exc.response.status_code == 401:
             raise InvalidTokenException(exc)
-        if exc.response.status_code == 403:
-            raise InvalidLoginException(exc)
         if exc.response.status_code == 404:
             raise UnavailableException(exc)
         if exc.response.status_code == 429:
@@ -87,8 +84,6 @@ def http_post(url, params=None, form=None, data=None, token=None, profile=None, 
     except HTTPError as exc:
         if exc.response.status_code == 401:
             raise InvalidTokenException(exc)
-        if exc.response.status_code == 403:
-            raise InvalidLoginException(exc)
         if exc.response.status_code == 404:
             raise UnavailableException(exc)
         if exc.response.status_code == 429:
@@ -115,8 +110,6 @@ def http_put(url, params=None, form=None, data=None, token=None, profile=None, h
     except HTTPError as exc:
         if exc.response.status_code == 401:
             raise InvalidTokenException(exc)
-        if exc.response.status_code == 403:
-            raise InvalidLoginException(exc)
         if exc.response.status_code == 404:
             raise UnavailableException(exc)
         raise
@@ -139,8 +132,6 @@ def http_delete(url, params=None, token=None, profile=None, headers=None):
     except HTTPError as exc:
         if exc.response.status_code == 401:
             raise InvalidTokenException(exc)
-        if exc.response.status_code == 403:
-            raise InvalidLoginException(exc)
         if exc.response.status_code == 404:
             raise UnavailableException(exc)
         raise
@@ -163,7 +154,7 @@ def _request(method, url, params=None, form=None, data=None, token=None, profile
     """
     if form or data:
         # Make sure we don't log the password
-        debug_data = dict()
+        debug_data = {}
         debug_data.update(form or data)
         if 'password' in debug_data:
             debug_data['password'] = '**redacted**'
@@ -175,7 +166,7 @@ def _request(method, url, params=None, form=None, data=None, token=None, profile
         headers = {}
 
     if token:
-        headers['x-dpp-jwt'] = token
+        headers['lfvp-auth'] = token
 
     if profile:
         headers['x-dpp-profile'] = profile

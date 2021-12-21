@@ -1,0 +1,19 @@
+Version 1.0.2
+
+-  Added additional stream and video validation checking to eliminate Kodi playback errors.
+-  Added display indication for future video on demand events
+-  Added date / time format checking for Live Events
+
+Version 1.0.1
+-  Added alternate mediaId parsing for Live events
+-  Added mediaId validation for primary and secondary parsing
+-  Improved displaying of Live Event and VoD metadata
+-  Added setting for limiting the number of Live Events displayed
+-  Added detection for geographic blackout of streams
+-  Added setting to adjust notification timeout for live events
+-  Added option to not display Hockey Night in Canada Live Events which currently do not work.
+-  Added option to display which Live Events have published stream information. 
+
+Version 1.0.0
+- Inital Kodi Matrix production release
+

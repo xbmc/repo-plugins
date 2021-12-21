@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.cbc-sports" name="CBC Sports" version="1.0.2" provider-name="Jbinkley60">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    <import addon="script.module.html5lib" version="0.999.0"/> 
+    <import addon="script.module.requests" version="2.9.1"/> 
+    </requires>
+    <extension point="xbmc.python.pluginsource"
+               library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <license>GPL-2.0-or-later</license>
+        <source>https://github.com/jbinkley60/plugin.video.cbc-sports</source>
+        <forum>https://forum.kodi.tv/showthread.php?tid=328282</forum>
+        <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+        </assets>
+        <summary lang="en_GB">Live Events, Replays, and Highlights from CBC Sports</summary>
+        <description lang="en_GB">Get the latest headlines, opinion, and video from CBC Sports.  Watch live events, replays, and highlights.  Region blocked for Canada only.</description>
+        <disclaimer lang="en_GB">For bugs, requests or general questions visit the thread on the Kodi forum.</disclaimer> 
+    </extension>
+</addon>

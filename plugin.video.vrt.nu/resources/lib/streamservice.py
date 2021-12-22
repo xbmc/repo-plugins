@@ -21,12 +21,13 @@ class StreamService:
     """Collect and prepare stream info for Kodi Player"""
 
     _VUPLAY_API_URL = 'https://api.vuplay.co.uk'
-    _VUALTO_API_URL = 'https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v1'
+    _VUALTO_API_URL = 'https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v2'
     _CLIENT = 'vrtvideo@PROD'
     _UPLYNK_LICENSE_URL = 'https://content.uplynk.com/wv'
     _INVALID_LOCATION = 'INVALID_LOCATION'
     _INCOMPLETE_ROAMING_CONFIG = 'INCOMPLETE_ROAMING_CONFIG'
-    _GEOBLOCK_ERROR_CODES = (_INCOMPLETE_ROAMING_CONFIG, _INVALID_LOCATION)
+    _BELGIUM_ONLY = 'CONTENT_AVAILABLE_ONLY_IN_BE'
+    _GEOBLOCK_ERROR_CODES = (_INCOMPLETE_ROAMING_CONFIG, _INVALID_LOCATION, _BELGIUM_ONLY)
 
     def __init__(self, _tokenresolver):
         """Initialize Stream Service class"""
@@ -303,6 +304,10 @@ class StreamService:
 
             if stream_json.get('code') == self._INVALID_LOCATION:
                 message = localize(30965)  # Geoblock error: Blocked on your geographical location based on your IP address
+                return self._handle_stream_api_error(message, stream_json)
+
+            if stream_json.get('code') == self._BELGIUM_ONLY:
+                message = localize(30973)  # Geoblock error: This program can only be played from EU
                 return self._handle_stream_api_error(message, stream_json)
 
             message = localize(30964)  # Geoblock error: Cannot be played, need Belgian phone number validation

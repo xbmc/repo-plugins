@@ -59,6 +59,11 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.6 (2021-12-22)
+- Fix watching VRT NU abroad (@mediaminister)
+- Fix resumepoints (@mediaminister)
+- Update featured menu (@mediaminister)
+
 ### v2.5.5 (2021-09-09)
 - Fix broken menu listings (@mediaminister)
 

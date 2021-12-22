@@ -274,9 +274,17 @@ msgctxt "#30103"
 msgid "From the archive"
 msgstr "Uit het archief"
 
+msgctxt "#30104"
+msgid "Last chance"
+msgstr "Laatste kans"
+
 msgctxt "#30120"
 msgid "Short film"
 msgstr "Kortfilm"
+
+msgctxt "#30121"
+msgid "12+"
+msgstr "12+"
 
 msgctxt "#30128"
 msgid "Kies19"
@@ -994,6 +1002,10 @@ msgstr "Er is een onbekend probleem bij het verifiëren van je gebruikersgegeven
 msgctxt "#30972"
 msgid "There is a problem authenticating at VRT NU to enable favorites. Please check your VRT NU account at https://www.vrt.be/vrtnu/ or disable favorites in the add-on settings."
 msgstr "Er is een probleem met de authenticatie bij VRT NU om favorieten in te schakelen. Controleer je VRT NU-account op https://www.vrt.be/vrtnu/ of schakel favorieten uit in de add-on-instellingen."
+
+msgctxt "#30973"
+msgid "This program can only be played from an European Union member state. It is blocked on your geographical location based on your IP address. More info at https://www.vrt.be/vrtnu/help/country/"
+msgstr "Dit programma kan alleen afgespeeld worden vanuit een lidstaat van de Europese Unie. Het wordt geblokkeerd op jouw geografische locatie op basis van je IP-adres. Meer info op https://www.vrt.be/vrtnu/help/country/"
 
 msgctxt "#30975"
 msgid "Failed to get user token from VRT NU"

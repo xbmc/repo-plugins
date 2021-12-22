@@ -101,7 +101,10 @@ class myAddon(t1mAddon):
   def getAddonVideo(self,url):
       if not url.endswith('.m3u8'):
           html = requests.get(url, headers=self.defaultHeaders).text
-          uid = re.compile('data-src="(.+?)"', re.DOTALL).search(html).group(1)
+          datakey = re.compile('data-key="(.+?)"', re.DOTALL).search(html).group(1)
+          url = ''.join(['https://api.nhk.or.jp/nhkworld/vodesdlist/v7a/episode/',datakey,'/en/all/all.json?apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'])
+          a = requests.get(url, headers=self.defaultHeaders).json()
+          uid = a['data']['episodes'][0]['vod_id']
           url = ''.join(['https://movie-s.nhk.or.jp/v/refid/nhkworld/prefid/',uid,'?embed=js&targetId=videoplayer&de-responsive=true&de-callback-method=nwCustomCallback&de-appid=',uid,'&de-subtitle-on=false'])
           html = requests.get(url, headers=self.defaultHeaders).text
           akey = re.compile("'data-de-api-key','(.+?)'", re.DOTALL).search(html).group(1)

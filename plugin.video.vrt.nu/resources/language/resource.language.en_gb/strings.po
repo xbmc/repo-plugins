@@ -274,8 +274,16 @@ msgctxt "#30103"
 msgid "From the archive"
 msgstr ""
 
+msgctxt "#30104"
+msgid "Last chance"
+msgstr ""
+
 msgctxt "#30120"
 msgid "Short film"
+msgstr ""
+
+msgctxt "#30121"
+msgid "12+"
 msgstr ""
 
 msgctxt "#30128"
@@ -993,6 +1001,10 @@ msgstr ""
 
 msgctxt "#30972"
 msgid "There is a problem authenticating at VRT NU to enable favorites. Please check your VRT NU account at https://www.vrt.be/vrtnu/ or disable favorites in the add-on settings."
+msgstr ""
+
+msgctxt "#30973"
+msgid "This program can only be played from an European Union member state. It is blocked on your geographical location based on your IP address. More info at https://www.vrt.be/vrtnu/help/country/"
 msgstr ""
 
 msgctxt "#30975"

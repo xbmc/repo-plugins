@@ -170,15 +170,49 @@ class Metadata:
 
         return asset_id
 
+    @staticmethod
+    def get_asset_str(api_data):
+        """Get asset_str from single item json api data"""
+        asset_str = None
+
+        # VRT NU Search API
+        if api_data.get('type') == 'episode':
+            asset_str = '{program} - {season} - {title}'.format(
+                program=api_data.get('program'),
+                season=api_data.get('seasonTitle'),
+                title=api_data.get('title')
+            ).lower()
+        return asset_str
+
+    @staticmethod
+    def get_video_id(api_data):
+        """Get video_id from single item json api data"""
+        video_id = None
+
+        # VRT NU Search API
+        if api_data.get('type') == 'episode':
+            video_id = api_data.get('videoId')
+
+        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        elif api_data.get('vrt.whatson-id') or api_data.get('startTime'):
+            video_id = api_data.get('videoId')
+
+        # Fallback to VRT NU website scraping
+        if not video_id and api_data.get('url'):
+            from webscraper import get_video_id
+            video_id = get_video_id(add_https_proto(api_data.get('url')))
+
+        return video_id
+
     def get_playcount(self, api_data):
         """Get playcount from single item json api data"""
         playcount = -1
         # Only fill in playcount when using VRT NU resumepoints because setting playcount breaks standard Kodi watched status
         if self._resumepoints.is_activated():
-            asset_id = self.get_asset_id(api_data)
-            if asset_id:
-                position = self._resumepoints.get_position(asset_id)
-                total = self._resumepoints.get_total(asset_id)
+            video_id = self.get_video_id(api_data)
+            if video_id:
+                position = self._resumepoints.get_position(video_id)
+                total = self._resumepoints.get_total(video_id)
                 if position and total and position > total - SECONDS_MARGIN:
                     playcount = 1
         return playcount
@@ -189,16 +223,16 @@ class Metadata:
 
         # Only fill in properties when using VRT NU resumepoints because setting resumetime/totaltime breaks standard Kodi watched status
         if self._resumepoints.is_activated():
-            asset_id = self.get_asset_id(api_data)
-            if asset_id:
+            video_id = self.get_video_id(api_data)
+            if video_id:
                 # We need to ensure forward slashes are quoted
                 program_title = to_unicode(quote_plus(from_unicode(api_data.get('program'))))
 
                 url = reformat_url(api_data.get('url', ''), 'medium')
-                properties.update(asset_id=asset_id, url=url, title=program_title)
+                properties.update(video_id=video_id, url=url, title=program_title)
 
-                position = self._resumepoints.get_position(asset_id)
-                total = self._resumepoints.get_total(asset_id)
+                position = self._resumepoints.get_position(video_id)
+                total = self._resumepoints.get_total(video_id)
                 # Master over Kodi watch status
                 if position and total and SECONDS_MARGIN < position < total - SECONDS_MARGIN:
                     properties['resumetime'] = position

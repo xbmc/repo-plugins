@@ -7,9 +7,8 @@ import logging
 
 from resources.lib import kodiutils
 from resources.lib.modules import CHANNELS
-from resources.lib.vtmgo import STOREFRONT_KIDS, STOREFRONT_KIDS_MAIN, STOREFRONT_MAIN, STOREFRONT_MOVIES, STOREFRONT_SERIES, Episode, Movie, Program
+from resources.lib.vtmgo import STOREFRONT_KIDS, STOREFRONT_MAIN, STOREFRONT_MOVIES, STOREFRONT_SERIES, Episode, Movie, Program
 from resources.lib.vtmgo.vtmgo import CONTENT_TYPE_MOVIE, CONTENT_TYPE_PROGRAM
-from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -19,17 +18,11 @@ class Menu:
 
     def __init__(self):
         """ Initialise object """
-        self._auth = VtmGoAuth(kodiutils.get_setting('username'),
-                               kodiutils.get_setting('password'),
-                               'VTM',
-                               kodiutils.get_setting('profile'),
-                               kodiutils.get_tokens_path())
 
-    def show_mainmenu(self):
+    @staticmethod
+    def show_mainmenu():
         """ Show the main menu """
         listing = []
-
-        account = self._auth.get_tokens()
 
         listing.append(kodiutils.TitleItem(
             title=kodiutils.localize(30007),  # TV Channels
@@ -43,93 +36,55 @@ class Menu:
             ),
         ))
 
-        if account.product == 'VTM_GO':
-            listing.append(kodiutils.TitleItem(
-                title=kodiutils.localize(30015),  # Recommendations
-                path=kodiutils.url_for('show_recommendations', storefront=STOREFRONT_MAIN),
-                art_dict=dict(
-                    icon='DefaultFavourites.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30016),
-                ),
-            ))
-
-            listing.append(kodiutils.TitleItem(
-                title=kodiutils.localize(30003),  # Movies
-                path=kodiutils.url_for('show_recommendations', storefront=STOREFRONT_MOVIES),
-                art_dict=dict(
-                    icon='DefaultMovies.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30004),
-                ),
-            ))
-
-            listing.append(kodiutils.TitleItem(
-                title=kodiutils.localize(30005),  # Series
-                path=kodiutils.url_for('show_recommendations', storefront=STOREFRONT_SERIES),
-                art_dict=dict(
-                    icon='DefaultTVShows.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30006),
-                ),
-            ))
-
-            listing.append(kodiutils.TitleItem(
-                title=kodiutils.localize(30021),  # Kids
-                path=kodiutils.url_for('show_recommendations', storefront=STOREFRONT_KIDS),
-                art_dict=dict(
-                    icon='DefaultFavourites.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30022),
-                ),
-            ))
-
-        elif account.product == 'VTM_GO_KIDS':
-            listing.append(kodiutils.TitleItem(
-                title=kodiutils.localize(30015),  # Recommendations
-                path=kodiutils.url_for('show_recommendations', storefront=STOREFRONT_KIDS_MAIN),
-                art_dict=dict(
-                    icon='DefaultFavourites.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30016),
-                ),
-            ))
-
         listing.append(kodiutils.TitleItem(
-            title=kodiutils.localize(30001),  # A-Z
-            path=kodiutils.url_for('show_catalog_all'),
+            title=kodiutils.localize(30015),  # Recommendations
+            path=kodiutils.url_for('show_recommendations', storefront=STOREFRONT_MAIN),
             art_dict=dict(
-                icon='DefaultMovieTitle.png',
+                icon='DefaultFavourites.png',
                 fanart=kodiutils.get_addon_info('fanart'),
             ),
             info_dict=dict(
-                plot=kodiutils.localize(30002),
+                plot=kodiutils.localize(30016),
             ),
         ))
 
-        # listing.append(kodiutils.TitleItem(
-        #     title=kodiutils.localize(30003),  # Catalogue
-        #     path=kodiutils.url_for('show_catalog'),
-        #     art_dict=dict(
-        #         icon='DefaultGenre.png',
-        #         fanart=kodiutils.get_addon_info('fanart'),
-        #     ),
-        #     info_dict=dict(
-        #         plot=kodiutils.localize(30004),
-        #     ),
-        # ))
+        listing.append(kodiutils.TitleItem(
+            title=kodiutils.localize(30003),  # Movies
+            path=kodiutils.url_for('show_recommendations', storefront=STOREFRONT_MOVIES),
+            art_dict=dict(
+                icon='DefaultMovies.png',
+                fanart=kodiutils.get_addon_info('fanart'),
+            ),
+            info_dict=dict(
+                plot=kodiutils.localize(30004),
+            ),
+        ))
 
-        if kodiutils.get_setting_bool('interface_show_mylist') and kodiutils.has_credentials():
+        listing.append(kodiutils.TitleItem(
+            title=kodiutils.localize(30005),  # Series
+            path=kodiutils.url_for('show_recommendations', storefront=STOREFRONT_SERIES),
+            art_dict=dict(
+                icon='DefaultTVShows.png',
+                fanart=kodiutils.get_addon_info('fanart'),
+            ),
+            info_dict=dict(
+                plot=kodiutils.localize(30006),
+            ),
+        ))
+
+        listing.append(kodiutils.TitleItem(
+            title=kodiutils.localize(30021),  # Kids
+            path=kodiutils.url_for('show_recommendations', storefront=STOREFRONT_KIDS),
+            art_dict=dict(
+                icon='DefaultFavourites.png',
+                fanart=kodiutils.get_addon_info('fanart'),
+            ),
+            info_dict=dict(
+                plot=kodiutils.localize(30022),
+            ),
+        ))
+
+        if kodiutils.get_setting_bool('interface_show_mylist'):
             listing.append(kodiutils.TitleItem(
                 title=kodiutils.localize(30017),  # My List
                 path=kodiutils.url_for('show_mylist'),
@@ -142,7 +97,7 @@ class Menu:
                 ),
             ))
 
-        if kodiutils.get_setting_bool('interface_show_continuewatching') and kodiutils.has_credentials():
+        if kodiutils.get_setting_bool('interface_show_continuewatching'):
             listing.append(kodiutils.TitleItem(
                 title=kodiutils.localize(30019),  # Continue watching
                 path=kodiutils.url_for('show_continuewatching'),
@@ -301,9 +256,6 @@ class Menu:
                 'mediatype': 'tvshow',
                 'year': item.year,
                 'season': len(item.seasons),
-            })
-            prop_dict.update({
-                'hash': item.content_hash,
             })
 
             return kodiutils.TitleItem(

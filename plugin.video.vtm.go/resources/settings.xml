@@ -1,39 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <setting id="credentials_hash" visible="false"/>
-    <setting id="metadata_last_updated" visible="false"/>
-    <category label="30800"> <!-- Credentials -->
-        <setting label="30801" type="lsep"/> <!-- VTM GO login -->
-        <setting label="30803" type="text" id="username"/>
-        <setting label="30805" type="text" id="password" option="hidden"/>
-        <setting label="30809" type="lsep"/> <!-- Profile -->
-        <setting label="30810" type="bool" id="auto_login" default="false" enable="!eq(-3,) + !eq(-2,)"/>
-        <setting type="text" id="profile" visible="false"/>
-        <setting label="30811" type="text" id="profile_name" enable="false" visible="!eq(-1,)" />
-    </category>
     <category label="30820"> <!-- Interface -->
         <setting label="30821" type="lsep"/> <!-- Features -->
         <setting label="30823" type="bool" id="interface_show_mylist" default="true"/>
         <setting label="30826" type="bool" id="interface_show_continuewatching" default="false" visible="false"/>
-        <setting label="30827" type="lsep"/> <!-- Metadata -->
-        <setting label="30829" type="bool" id="metadata_update" default="true" subsetting="true"/>
-        <setting label="30831" type="action" action="RunPlugin(plugin://plugin.video.vtm.go/metadata/update)"/>
-        <setting label="30833" type="action" action="RunPlugin(plugin://plugin.video.vtm.go/metadata/clean)"/>
     </category>
     <category label="30840"> <!-- Playback -->
         <setting label="30841" type="lsep"/> <!-- Subtitles -->
         <setting label="30842" type="bool" id="showsubtitles" default="true"/>
         <setting label="30843" type="lsep"/> <!-- Streaming -->
         <setting label="30844" type="select" id="max_bandwidth" default="0" values="0|256|512|1024|1536|2048|2560|3072|4096|6144|8192|10240|15360|20480|25600|30720"/>
-    </category>
-    <category label="30870"> <!-- Kodi Library -->
-        <setting label="30871" type="lsep"/> <!-- Indexing -->
-        <setting label="30872" type="action" action="RunPlugin(plugin://plugin.video.vtm.go/library/configure)" option="close"/>
-        <setting label="30873" type="select" id="library_movies" default="1" lvalues="30875|30876"/>
-        <setting label="30874" type="select" id="library_tvshows" default="1" lvalues="30875|30876"/>
-        <setting label="30877" type="lsep"/> <!-- Maintenance -->
-        <setting label="30878" type="action" action="RunPlugin(plugin://plugin.video.vtm.go/library/update)"/>
-        <setting label="30879" type="action" action="RunPlugin(plugin://plugin.video.vtm.go/library/clean)"/>
     </category>
     <category label="30860"> <!-- Integrations -->
         <setting label="30861" type="lsep"/> <!-- Up Next -->

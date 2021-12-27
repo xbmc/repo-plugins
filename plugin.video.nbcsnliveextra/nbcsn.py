@@ -1,4 +1,5 @@
-from resources.globals import *
+from resources.lib.globals import *
+from resources.lib.stream import *
 from adobepass.adobe import ADOBE
 
 
@@ -7,7 +8,7 @@ def categories():
         'User-Agent': UA_NBCSN
     }
 
-    r = requests.get(ROOT_URL + 'apps/NBCSports/configuration-firetv.json?version=5.12.4', headers=headers,
+    r = requests.get(CONFIG_URL, headers=headers,
                      verify=VERIFY)
     json_source = r.json()
 
@@ -31,8 +32,7 @@ def get_sub_nav(id, icon):
     headers = {
         'User-Agent': UA_NBCSN
     }
-    url = ROOT_URL
-    url += 'apps/NBCSports/configuration-firetv.json?version=5.12.4'
+    url = CONFIG_URL
     # if id == 'nbc-sports-gold':
     #     url += 'apps/NBCSportsGold/configuration-firetv.json'
     # else:
@@ -51,6 +51,7 @@ def get_sub_nav(id, icon):
 
 
 def scrape_videos(url):
+    url = 'https://api-leap.nbcsports.com/feeds/assets?application=NBCSports&env=prod&format=v1&platform=androidTV&sections=all&size=35&statuses=Replay'
     headers = {
         'Connection': 'keep-alive',
         'Accept': '*/*',
@@ -64,12 +65,12 @@ def scrape_videos(url):
     if 'featured' in url:
         json_source = json_source['showCase']
 
-    if 'live-upcoming' not in url:
-        json_source = sorted(json_source, key=lambda k: k['start'], reverse=True)
-    else:
-        json_source = sorted(json_source, key=lambda k: k['start'], reverse=False)
+    # if 'live-upcoming' not in url:
+    #     json_source = sorted(json_source, key=lambda k: k['start'], reverse=True)
+    # else:
+    #     json_source = sorted(json_source, key=lambda k: k['start'], reverse=False)
 
-    for item in json_source:
+    for item in json_source['results']:
         if 'show-all' in filter_list or item['sport'] in filter_list:
             build_video_link(item)
 
@@ -129,8 +130,13 @@ def build_video_link(item):
     stream_info = {
         'pid': pid,
         'requestor_id': requestor_id,
-        'channel': channel
+        'channel': channel,
     }
+    try:
+        stream_info['drm_type'] = item['videoSources'][0]['drmType']
+        stream_info['drm_asset_id'] = item['videoSources'][0]['drmAssetId']
+    except:
+        pass
 
     imgurl = "http://hdliveextra-pmd.edgesuite.net/HD/image_sports/mobile/%s_m50.jpg" % item['image']
     # menu_name = filter(lambda x: x in string.printable, menu_name)
@@ -160,7 +166,7 @@ def build_video_link(item):
             add_dir(menu_name + ' ' + start_date, '/disabled', 0, imgurl, FANART, False, info)
 
 
-def sign_stream(stream_url, stream_name, stream_icon, pid):
+def sign_stream(stream_url, stream_name, stream_icon, pid, drm_type, drm_asset_id):
     SERVICE_VARS['requestor_id'] = 'nbcsports'
     resource_id = get_resource_id()
     SERVICE_VARS['resource_id'] = urllib.quote(resource_id)
@@ -168,9 +174,20 @@ def sign_stream(stream_url, stream_name, stream_icon, pid):
     if adobe.check_authn():
         if adobe.authorize():
             media_token = adobe.media_token()
-            stream_url = get_tokenized_url(media_token, resource_id, stream_url, pid)
-            stream_url += "|User-Agent=" + UA_NBCSN
-            play_stream(stream_url)
+            stream_vars = {
+                'drm_asset_id': drm_asset_id,
+                'drm_type': drm_type,
+                'manifest_url': stream_url,
+                'media_token': media_token,
+                'resource_id': resource_id,
+                'pid': pid
+            }
+            stream = Stream(stream_vars)
+            # stream_url = get_tokenized_url(media_token, resource_id, stream_url, pid)
+            # drm_token = get_drm_token(media_token, resource_id, pid)
+            # stream_url += "|User-Agent=" + UA_NBCSN
+            # play_stream(stream_url, drm_token)
+            xbmcplugin.setResolvedUrl(ADDON_HANDLE, True, stream.create_listitem())
         else:
             sys.exit()
     else:
@@ -184,7 +201,8 @@ def sign_stream(stream_url, stream_name, stream_icon, pid):
 
 
 def get_tokenized_url(media_token, resource_id, stream_url, pid):
-    url = 'https://token.playmakerservices.com/cdn'
+    #url = 'http://token.playmakerservices.com/cdn'
+    url = 'https://tokens.playmakerservices.com'
     headers = {
         "Accept": "*/*",
         "Accept-Language": "en;q=1",
@@ -193,20 +211,75 @@ def get_tokenized_url(media_token, resource_id, stream_url, pid):
     }
 
     payload = {
-        'resourceId': base64.b64encode(codecs.encode(resource_id)).decode("ascii"),
-        'requestorId': 'nbcsports',
-        'token': media_token,
-        'cdn': 'akamai',
-        'url': stream_url,
-        'pid': pid,
-        'application': 'NBCSports',
-        'version': 'v1',
-        'platform': 'desktop'
+      "application": "NBCSports",
+      "authInfo": {
+        "authenticationType": "adobe-pass",
+        "requestorId": "nbcsports",
+        "resourceId": base64.b64encode(codecs.encode(resource_id)).decode("ascii"),
+        "token": media_token
+      },
+      "cdns": [
+        {
+          "name": "akamai",
+          "url": stream_url
+        }
+      ],
+      "pid": pid,
+      "platform": "firetv"
     }
 
+    # payload = {
+    #     'resourceId': base64.b64encode(codecs.encode(resource_id)).decode("ascii"),
+    #     'requestorId': 'nbcsports',
+    #     'token': media_token,
+    #     'cdn': 'akamai',
+    #     'url': stream_url,
+    #     'pid': pid,
+    #     'application': 'NBCSports',
+    #     'version': 'v1',
+    #     'platform': 'firetv'
+    # }
+    xbmc.log(str(payload))
     r = requests.post(url, headers=headers, cookies=load_cookies(), json=payload, verify=VERIFY)
     save_cookies(r.cookies)
-    return r.json()['tokenizedUrl']
+
+    xbmc.log(r.text)
+
+    return r.json()['akamai'][0]['tokenizedUrl']
+
+
+def get_drm_token(media_token, resource_id, pid):
+    url = 'https://tokens.playmakerservices.com'
+    headers = {
+        "Accept": "*/*",
+        "Accept-Language": "en;q=1",
+        "Content-Type": "application/json",
+        "User-Agent": "okhttp/3.11.0"
+    }
+
+    payload = {
+        "application": "NBCSports",
+        "pid": pid,
+        "platform": "firetv",
+        "authInfo": {
+            "authenticationType": "adobe-pass",
+            "requestorId": "nbcsports",
+            "resourceId": base64.b64encode(codecs.encode(resource_id)).decode("ascii"),
+            "token": media_token
+        },
+        "drmInfo":
+            {
+                "assetId":"0D9978F6344C4646A0CCFFE40B5D106300000000",
+                "deviceId":"c577f1f28b8d181d"
+            }
+        }
+
+    xbmc.log(str(payload))
+    r = requests.post(url, headers=headers, cookies=load_cookies(), json=payload, verify=VERIFY)
+    save_cookies(r.cookies)
+    xbmc.log(r.text)
+
+    return r.json()['drmToken']
 
 
 def logout():
@@ -214,22 +287,35 @@ def logout():
     adobe.logout()
 
 
-def play_stream(stream_url):
+def play_stream(stream_url, drm_token):
     xbmc.log('------------------------------------------------------------------------------------------')
     xbmc.log(stream_url)
+    xbmc.log(drm_token)
     xbmc.log('------------------------------------------------------------------------------------------')
 
     if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
         stream = stream_url.split("|")[0]
         headers = stream_url.split("|")[1]
+
+        lic_url = 'https://widevine.license.istreamplanet.com/widevine/api/license/263b65d9-0c1f-4246-9b3f-0b500ed8c794'
+        lic_headers = "User-Agent=okhttp/3.12.12"
+        lic_headers += '&X-ISP-TOKEN=%s' % drm_token
+        license_key = '%s|%s|R{SSM}|' % (lic_url, lic_headers)
+        xbmc.log(license_key)
+
+        is_helper = inputstreamhelper.Helper('hls', drm='widevine')
+        if not is_helper.check_inputstream():
+            sys.exit()
+
         listitem = xbmcgui.ListItem(path=stream)
         if KODI_VERSION >= 19:
             listitem.setProperty('inputstream', 'inputstream.adaptive')
         else:
             listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
         listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
-        listitem.setProperty('inputstream.adaptive.stream_headers', headers)
-        listitem.setProperty('inputstream.adaptive.license_key', "|" + headers)
+        listitem.setProperty('inputstream.adaptive.stream_headers', 'User-Agent=%s' % UA_NBCSN)
+        listitem.setProperty('inputstream.adaptive.license_key', license_key)
+        listitem.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
     else:
         listitem = xbmcgui.ListItem(path=stream_url)
         listitem.setMimeType("application/x-mpegURL")
@@ -247,6 +333,8 @@ icon_image = None
 requestor_id = ''
 channel = ''
 pid = ''
+drm_asset_id = ''
+drm_type = ''
 
 if 'url' in params: url = urllib.unquote_plus(params["url"])
 if 'name' in params: name = urllib.unquote_plus(params["name"])
@@ -255,6 +343,8 @@ if 'icon_image' in params: icon_image = urllib.unquote_plus(params["icon_image"]
 if 'requestor_id' in params: requestor_id = urllib.unquote_plus(params['requestor_id'])
 if 'channel' in params: channel = urllib.unquote_plus(params['channel'])
 if 'pid' in params: pid = urllib.unquote_plus(params['pid'])
+if 'drm_asset_id' in params: drm_asset_id = urllib.unquote_plus(params['drm_asset_id'])
+if 'drm_type' in params: drm_type = urllib.unquote_plus(params['drm_type'])
 
 if mode is None or url is None or len(url) < 1:
     categories()
@@ -266,7 +356,7 @@ elif mode == 4:
     scrape_videos(url)
 
 elif mode == 5:
-    sign_stream(url, name, icon_image, pid)
+    sign_stream(url, name, icon_image, pid, drm_type, drm_asset_id)
 
 elif mode == 6:
     # Set quality level based on user settings

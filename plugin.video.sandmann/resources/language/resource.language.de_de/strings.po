@@ -1,0 +1,61 @@
+# Kodi Media Center language file
+# Addon Name: detektor.fm
+# Addon id: plugin.audio.detektorfm
+# Addon Provider: sorax
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: http://trac.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: sorax\n"
+"Language-Team: sorax\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Our Sandman"
+msgstr "Unser Sandmännchen"
+
+msgctxt "#30002"
+msgid "from"
+msgstr "vom"
+
+msgctxt "#30010"
+msgid "Preferred Quality"
+msgstr "Bevorzugte Qualität"
+
+msgctxt "#30020"
+msgid "Update"
+msgstr "Aktualisieren"
+
+msgctxt "#30030"
+msgid "Interval (in hours)"
+msgstr "Intervall (in Stunden)"
+
+msgctxt "#30040"
+msgid "Sign Language"
+msgstr "Gebärdensprache"
+
+#  msgctxt "#30101"
+#  msgid "Automatic"
+#  msgstr "Automatisch"
+
+msgctxt "#30102"
+msgid "Interval"
+msgstr "Intervall"
+
+msgctxt "#30103"
+msgid "Manual"
+msgstr "Manuell"
+
+msgctxt "#30104"
+msgid "On Start"
+msgstr "Nur beim Start"
+
+msgctxt "#30200"
+msgid "Update in progress"
+msgstr "Aktualisierung wird durchgeführt"

@@ -499,7 +499,7 @@ class Channel(chn_class.Channel):
         recent_url = "#recentgraphql"
         recent_title = LanguageHelper.get_localized_string(LanguageHelper.Recent)
         recent = FolderItem("\a.: {} :.".format(recent_title), recent_url,
-                            content_type=contenttype.FILES)
+                            content_type=contenttype.VIDEOS)
         recent.dontGroup = True
         items.append(recent)
 

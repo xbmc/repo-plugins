@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-FILES = "files"
+FILES = "files"  # Better default to VIDEOS if unsure.
 SONGS = "songs"
 ARTISTS = "artists"
 ALBUMS = "albums"

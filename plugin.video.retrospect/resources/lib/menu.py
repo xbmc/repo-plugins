@@ -172,6 +172,37 @@ class Menu(ActionParser):
         self.favourites()
 
     @LockWithDialog(logger=Logger.instance())
+    def add_shortcut(self):
+        """ Adds the selected item to the favourites. The opens the favourite list. """
+
+        # remove the item
+        item = self.media_item
+        Logger.debug("Adding shortcut: %s", item)
+
+        f = Favourites(Config.shortcutDir)
+        if item.is_playable:
+            action_value = action.PLAY_VIDEO
+        else:
+            action_value = action.LIST_FOLDER
+
+        # Ask for a filename
+        heading = LanguageHelper.get_localized_string(LanguageHelper.ShortCutName)
+        keyboard = xbmc.Keyboard("", heading)
+        keyboard.doModal()
+        if not keyboard.isConfirmed():
+            return None
+
+        filename = keyboard.getText()
+        if not filename:
+            Logger.warning("No shortcut name set. Aborting.")
+            return
+
+        # add the favourite
+        f.add(self.channelObject,
+              item,
+              self.create_action_url(self.channelObject, action_value, item), shortcut_name=filename)
+
+    @LockWithDialog(logger=Logger.instance())
     def remove_favourite(self):
         """ Remove the selected favourite and then refresh the favourite list. """
 

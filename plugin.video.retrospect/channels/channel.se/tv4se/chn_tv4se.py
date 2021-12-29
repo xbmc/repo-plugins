@@ -658,7 +658,7 @@ class Channel(chn_class.Channel):
         for name in extras:
             title = name
             url, date, is_live = extras[name]   # type: str, datetime.datetime, bool
-            item = FolderItem(title, url, content_type=contenttype.FILES)
+            item = FolderItem(title, url, content_type=contenttype.VIDEOS)
             item.dontGroup = True
             item.complete = True
             item.HttpHeaders = self.httpHeaders

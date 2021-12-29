@@ -2,4 +2,4 @@
 
 __all__ = ["addonaction", "channellistaction", "categoryaction", "vaultaction", "keyword",
            "logaction", "configurechannelaction", "folderaction", "favouritesaction",
-           "action", "videoaction", "contextaction", "actionparser", "cleanaction"]
+           "action", "videoaction", "contextaction", "actionparser", "cleanaction", "shortcutaction"]

@@ -271,23 +271,27 @@ class FolderAction(AddonAction):
         if AddonSettings.mix_folders_and_videos():
             sort_methods.append(xbmcplugin.SORT_METHOD_LABEL_IGNORE_FOLDERS)
         else:
-            sort_methods.append(xbmcplugin.SORT_METHOD_LABEL)
-        sort_methods.append(xbmcplugin.SORT_METHOD_EPISODE)
-        sort_methods.append(xbmcplugin.SORT_METHOD_UNSORTED)
+            sort_methods.append(xbmcplugin.SORT_METHOD_LABEL)  # 1
+        sort_methods.append(xbmcplugin.SORT_METHOD_UNSORTED)   # 40
 
         # And then the specialized ones ad default sort options
         if items:
-            has_dates = any([i for i in items if i.has_date()])
+            has_dates = any([i.has_date() for i in items])
             if has_dates:
-                sort_methods.insert(0, xbmcplugin.SORT_METHOD_DATE)
+                sort_methods.insert(0, xbmcplugin.SORT_METHOD_DATE)  # 3
 
-            has_tracks = any([i for i in items if i.has_track()])
+            has_tracks = any([i.has_track() for i in items])
             if has_tracks:
                 sort_methods.insert(0, xbmcplugin.SORT_METHOD_TRACKNUM)
 
-            has_episodes = any([i for i in items if i.has_info_label(MediaItem.LabelEpisode)])
-            if has_episodes:
-                sort_methods.insert(0, xbmcplugin.SORT_METHOD_EPISODE)
+            # Check for episodes
+            if all([i.has_info_label(MediaItem.LabelEpisode) for i in items if i.is_playable]):
+                # All playable items have episodes, pre-sort them on that.
+                sort_methods.insert(0, xbmcplugin.SORT_METHOD_EPISODE)  # 24
+
+            elif any([i.has_info_label(MediaItem.LabelEpisode)] for i in items):
+                # Some items have episodes, only add the sorting options.
+                sort_methods.append(xbmcplugin.SORT_METHOD_EPISODE)  # 24
 
         # Actually add them
         Logger.debug("Sorting methods: %s", sort_methods)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.4.10"
+        version="5.5.0"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -84,6 +84,11 @@
                     <visible>ListItem.Property(RetrospectFolder)+!ListItem.Property(RetrospectFavorite)</visible>
                 </item>
 
+                <item library="menu_add_shortcut.py">
+                    <label>30511</label>
+                    <visible>[ListItem.Property(RetrospectFolder)|ListItem.Property(RetrospectVideo)]+!ListItem.Property(RetrospectFavorite)</visible>
+                </item>
+
                 <item library="menu_remove_fav.py">
                     <label>30506</label>
                     <visible>ListItem.Property(RetrospectFavorite)</visible>
@@ -117,25 +122,25 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.4.10 - Changelog - 2021-12-19[/B]
+        <news>[B]Retrospect v5.5.0 - Changelog - 2021-12-29[/B]
 
-Updated a number of channels and improved the handling for episodes and seasons. Both in sorting and in the bread crumbs this now works better.
+This new minor version introduces the option to create &#x27;shortcuts&#x27; for videos and folders. These shortcuts are simple named items that can be used in Kodi (JSON) API calls without the need of specifying any guids that usually belong to Retrospect urls. More information can be found in the readme.md file under to section &quot;Automation of Retrospect&quot;.
+
+Besides this change, some channels were fixed.
 
 [B]Framework related[/B]
-_None_
+* Added: &#x27;Shortcut&#x27; implementation to enable automation of Retrospect via Kodi (JSON) API (Fixes #1591 and #1588).
 
 [B]GUI/Settings/Language related[/B]
-* Added: Set the TV Show info label for episodes (Fixes #1577).
-* Added: TV Show label to bread crumbs (See #1582).
+* Changed: Only force sorting by episode/season if all have episodes.
 
 [B]Channel related[/B]
-* Fixed: Some RTV Utrecht video&#x27;s did not play.
-* Fixed: Apple Movie Trailers failed do to missing meta data (Fixes #1575).
-* Fixed: RTV Utrecht moved to Regio Groei platform.
-* Fixed: Omroep Zeeland moved to Regio Groei platform.
-* Fixed: Microsoft Channel 9 / Learn channel (Fixes 1574).
-* Fixed: RTV Oost mainlist parsing.
-* Fixed: Changed The Slam Radio url to a working one, and Remove SlamTV!
+* Fixed: ViaSat now has encrypted streams, so we always need to use InputStream Adaptive (Fixes #1589).
+* Updated: Mark genre folders with content type `videos` (See #1579).
+* Updated: Mark Single items in SVT as `videos` (See #1579).
+* Changed: RTV Noord to Regio Groei.
+* Fixed: More default content types fixed (Fixes #1593).
+* Fixed: NPO EPG contained confusing episode and seasons info (Fixes #1590).
 
         </news>
         <assets>

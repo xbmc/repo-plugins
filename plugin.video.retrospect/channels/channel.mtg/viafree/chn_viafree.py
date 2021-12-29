@@ -587,18 +587,9 @@ class Channel(chn_class.Channel):
         """
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
-        use_kodi_hls = AddonSettings.use_adaptive_stream_add_on(channel=self) and False
 
-        # User-agent (and possible other headers), should be consistent over all
-        # M3u8 requests (See #864)
-        headers = {}
-        if not use_kodi_hls:
-            headers = {
-                "User-Agent": "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.13) "
-                              "Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)",
-            }
-
-        data = UriHandler.open(item.url, additional_headers=headers or None)
+        # User-agent (and possible other headers), should be consistent over all m3u8 requets.
+        data = UriHandler.open(item.url)
         json = JsonHelper(data)
 
         embedded_data = json.get_value("embedded")
@@ -623,7 +614,7 @@ class Channel(chn_class.Channel):
                 continue
 
             if url.startswith("http") and ".m3u8" in url:
-                self.__update_m3u8(url, item, headers, use_kodi_hls)
+                self.__update_m3u8(url, item)
 
             elif url.startswith("rtmp"):
                 self.__update_rtmp(url, item, quality)
@@ -635,46 +626,26 @@ class Channel(chn_class.Channel):
             else:
                 item.add_stream(url, quality[1])
 
-        if not use_kodi_hls:
-            for stream in item.streams:
-                stream.HttpHeaders.update(headers)
-
         if item.has_streams():
             item.complete = True
 
         Logger.trace("Found mediaurl: %s", item)
         return item
 
-    def __update_m3u8(self, url, item, headers, use_kodi_hls):
+    def __update_m3u8(self, url, item):
         """ Update a video that has M3u8 streams.
 
         :param str url:                 The URL for the stream.
         :param MediaItem item:          The item that needs updating.
-        :param dict[str,str] headers:   The URL headers to use.
-        :param bool use_kodi_hls:       Should we use the InputStream Adaptive add-on?
 
         """
-        # first see if there are streams in this file, else check the second location.
-        for s, b in M3u8.get_streams_from_m3u8(url, headers=headers):
-            if use_kodi_hls:
-                strm = item.add_stream(url, 0)
-                M3u8.set_input_stream_addon_input(strm, headers=headers)
-                # Only the main M3u8 is needed
-                break
-            else:
-                item.add_stream(s, b)
 
-        if not item.has_streams() and "manifest.m3u8" in url:
-            Logger.warning("No streams found in %s, trying alternative with 'master.m3u8'", url)
-            url = url.replace("manifest.m3u8", "master.m3u8")
-            for s, b in M3u8.get_streams_from_m3u8(url, headers=headers):
-                if use_kodi_hls:
-                    strm = item.add_stream(url, 0)
-                    M3u8.set_input_stream_addon_input(strm, headers=headers)
-                    # Only the main M3u8 is needed
-                    break
-                else:
-                    item.add_stream(s, b)
+        item.complete = M3u8.update_part_with_m3u8_streams(item, url, encrypted=True, bitrate=1)
+
+        # if not item.has_streams() and "manifest.m3u8" in url:
+        #     Logger.warning("No streams found in %s, trying alternative with 'master.m3u8'", url)
+        #     url = url.replace("manifest.m3u8", "master.m3u8")
+        #     item.complete = M3u8.update_part_with_m3u8_streams(item, url, channel=self, encrypted=True)
 
         # check for subs
         # https://mtgxse01-vh.akamaihd.net/i/201703/13/DCjOLN_1489416462884_427ff3d3_,48,260,460,900,1800,2800,.mp4.csmil/master.m3u8?__b__=300&hdnts=st=1489687185~exp=3637170832~acl=/*~hmac=d0e12e62c219d96798e5b5ef31b11fa848724516b255897efe9808c8a499308b&cc1=name=Svenska%20f%C3%B6r%20h%C3%B6rselskadade~default=no~forced=no~lang=sv~uri=https%3A%2F%2Fsubstitch.play.mtgx.tv%2Fsubtitle%2Fconvert%2Fxml%3Fsource%3Dhttps%3A%2F%2Fcdn-subtitles-mtgx-tv.akamaized.net%2Fpitcher%2F20xxxxxx%2F2039xxxx%2F203969xx%2F20396967%2F20396967-swt.xml%26output%3Dm3u8
@@ -713,7 +684,7 @@ class Channel(chn_class.Channel):
             Logger.debug("Updated URL from - to:\n%s\n%s", old_url, url)
 
         url = self.get_verifiable_video_url(url)
-        item.add_stream(url, quality[1])
+        item.add_stream(url, int(quality[1]))
         return
 
     def __create_json_episode_item(self, result_set, check_channel=True):

@@ -12,8 +12,7 @@
       "channelcode": "se3",
       "sortorder": 3,
       "language": "se",
-      "fanart": "tv3sefanart.png",
-      "adaptiveAddonSelectable": true
+      "fanart": "tv3sefanart.png"
     },
     {
       "guid": "FB34E1F0-2930-11DE-A339-255856D89593",
@@ -27,8 +26,7 @@
       "channelcode": "se6",
       "sortorder": 6,
       "language": "se",
-      "fanart": "tv6viasatfanart.png",
-      "adaptiveAddonSelectable": true
+      "fanart": "tv6viasatfanart.png"
     },
     {
       "guid": "BDC1A5C5-2777-4D05-BB5B-742A88B89CC5",
@@ -42,8 +40,7 @@
       "channelcode": "se8",
       "sortorder": 8,
       "language": "se",
-      "fanart": "tv8sefanart.jpg",
-      "adaptiveAddonSelectable": true
+      "fanart": "tv8sefanart.jpg"
     },
     {
       "guid": "584E7420-2867-11E3-AA01-F2806188709B",
@@ -57,8 +54,7 @@
       "channelcode": "se10",
       "sortorder": 10,
       "language": "se",
-      "fanart": "tv10sefanart.png",
-      "adaptiveAddonSelectable": true
+      "fanart": "tv10sefanart.png"
     },
     {
       "guid": "FF998410-CAD5-4FDC-9E48-E28BC4E51BC4",
@@ -72,8 +68,7 @@
       "channelcode": "viafreese",
       "sortorder": 10,
       "language": "se",
-      "fanart": "viafreesefanart.png",
-      "adaptiveAddonSelectable": true
+      "fanart": "viafreesefanart.png"
     },
     {
       "guid": "D2FE9600-EFFB-4D15-A175-FBDE01907944",
@@ -87,8 +82,7 @@
       "channelcode": "ngse",
       "sortorder": 11,
       "language": "se",
-      "fanart": "nationalgeographic.jpg",
-      "adaptiveAddonSelectable": true
+      "fanart": "nationalgeographic.jpg"
     },
     {
       "guid": "CAACF71C-55B2-456A-86B9-F0A80710B286",
@@ -102,8 +96,7 @@
       "channelcode": "mtvse",
       "sortorder": 12,
       "language": "se",
-      "fanart": "mtvfanart2.jpg",
-      "adaptiveAddonSelectable": true
+      "fanart": "mtvfanart2.jpg"
     },
     {
       "guid": "89673FF0-5EF3-11E0-8CC9-494DDFD72085",
@@ -117,8 +110,7 @@
       "channelcode": "no3",
       "sortorder": 3,
       "language": "no",
-      "fanart": "tv3fanart.jpg",
-      "adaptiveAddonSelectable": true
+      "fanart": "tv3fanart.jpg"
     },
     {
       "guid": "90DD5C88-5EF3-11E0-93A2-4D4DDFD72085",
@@ -132,8 +124,7 @@
       "channelcode": "no4",
       "sortorder": 4,
       "language": "no",
-      "fanart": "viasat4fanart.jpg",
-      "adaptiveAddonSelectable": true
+      "fanart": "viasat4fanart.jpg"
     },
     {
       "guid": "3CD2662C-3C7A-4217-8375-079B2D850F27",
@@ -147,8 +138,7 @@
       "channelcode": "no6",
       "sortorder": 6,
       "language": "no",
-      "fanart": "tv6viasatfanart.png",
-      "adaptiveAddonSelectable": true
+      "fanart": "tv6viasatfanart.png"
     },
     {
       "guid": "281E8079-33E7-4C4F-85F6-A04F3A7D5B92",
@@ -162,8 +152,7 @@
       "channelcode": "viafreeno",
       "sortorder": 6,
       "language": "no",
-      "fanart": "viafreefanart.png",
-      "adaptiveAddonSelectable": true
+      "fanart": "viafreefanart.png"
     }
   ],
   "settings": [

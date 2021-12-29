@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2021-12-10 04:13+0000\n"
 "Last-Translator: Edson Armando <edsonarmando78@outlook.com>\n"
@@ -758,6 +758,14 @@ msgstr "No se pudo iniciar la reproducción"
 msgctxt "#30510"
 msgid "New version available"
 msgstr "Nueva versión disponible"
+
+msgctxt "#30511"
+msgid "Add shortcut"
+msgstr ""
+
+msgctxt "#30512"
+msgid "Please provide a name for the shortcut."
+msgstr ""
 
 # empty strings from id 30511 to 30515
 msgctxt "#30516"

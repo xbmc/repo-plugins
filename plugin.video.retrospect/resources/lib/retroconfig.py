@@ -64,6 +64,7 @@ class Config:
 
     cacheDir = os.path.join(profileDir, 'cache', '')         # : The cache directory.
     favouriteDir = os.path.join(profileDir, 'favourites')    # : The favourites directory
+    shortcutDir = os.path.join(profileDir, 'shortcuts')      # : The shortcut directory
 
     appName = "Retrospect"                                   # : Name of the XOT application (could be overwritten from the addon.xml)
     cacheValidTime = 7 * 24 * 3600                           # : Time the cache files are valid in seconds.

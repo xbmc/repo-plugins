@@ -39,6 +39,8 @@ else:
             m.favourites(all_favorites=True)
         elif command == "add_fav":
             m.add_favourite()
+        elif command == "add_shortcut":
+            m.add_shortcut()
         elif command == "remove_fav":
             m.remove_favourite()
         elif command == "channel_selection":

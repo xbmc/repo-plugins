@@ -25,6 +25,33 @@ Starting from Kodi Leia (v18), you can easily install Retrospect from the offici
 ### Kodi Krypton    
 We have a -1/+1 Kodi release policy: we support the previous, the current and the future release of Kodi. So with the release of Kodi Matrix, the support for Kodi Krypton has been removed.
 
+## Automation of Retrospect
+Listing of folders or playing of media can be automated for Retrospect. In order for this to work, you will need to create _shortcuts_ for the folders and/or videos you want to automate. This can be done as follows:
+
+- On each folder or video item you can go to:
+  - Retrospect Favourites.
+  - Add Shortcut.
+  - Provide a `[simple name]`.
+  - Remember the `simple name` as you need it later.
+- Then you can use this url to directly open or play the shortcut: 
+  - `plugin://plugin.video.retrospect/?action=openshortcut&shortcut=[simple name]`
+  
+Listing a folder can be done by caling the Kodi API `Addons.ExecuteAddon` with the given shortcut url. Media can be played using the `Player.Open` API.
+
+If you were to use the Kodi JSON-RPC API (documented [here](https://kodi.wiki/view/JSON-RPC_API)) the following are your options:
+
+1. You could start the playback of a media file with `Player.Open`:
+
+```shell
+curl -X POST -H "content-type:application/json" http://<kodi-ip>:<kodi-port>/jsonrpc -d '{"jsonrpc": "2.0", "method": "Player.Open", "params": {"item": {"file": "plugin://plugin.video.retrospect/?action=openshortcut&shortcut=<shortcut-name>"}}, "id": 1}'
+```
+2. Or open a shortcut to a folder with `Addons.ExecuteAddon`:
+```shell
+curl -X POST -H "content-type:application/json" http://<kodi-ip>:<kodi-port>/jsonrpc -d '{"jsonrpc": "2.0", "method": "Addons.ExecuteAddon", "params": {"addonid": "plugin.video.retrospect","params": {"action": "openshortcut","shortcut": "<shortcut-name>" }}, "id": 1}'**
+```
+
+Replace `<shortcut-name>`, `<kodi-ip>` and `<kodi-port>` with the correct values.
+
 ## Contributing
 You can help develop Retrospect via our [Github](https://github.com/retrospect-addon/plugin.video.retrospect) page and/or help translating Retrospect via the [Kodi Add-on Weblate](https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/).
 

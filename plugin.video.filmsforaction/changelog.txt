@@ -1,3 +1,6 @@
+1.1.2 (2021.12.28)
+- Quick fix due to website changes (thanks to Itai0001).
+- Replaced Travis-CI by AppVeyor for unit tests.
 1.1.1 (2020.05.06)
 - Quick fix due to website changes.
 1.1.0 (2019.01.27)

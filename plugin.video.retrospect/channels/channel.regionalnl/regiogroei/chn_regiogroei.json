@@ -27,6 +27,20 @@
       "sortorder": 100,
       "language": "nl",
       "fanart": "omroepzeelandfanart.jpg"
+    },
+    {
+      "guid": "7C40EEE7-40F4-40ED-8A70-FAAB42B7A2B1",
+      "name": "RTV Noord",
+      "description": {
+        "en": "Video on demand for RTV Noord.\n\nNews, weather sports and opinions at RTV Noord, the regional broadcaster for Groningen.",
+        "nl": "RTV Noord Uitzendinggemist.\n\nNieuws, weer, sport en opinie op RTV Noord, de regionale omroep voor Groningen."
+      },
+      "icon": "rtvnoordlarge.png",
+      "category": "Regional",
+      "channelcode": "rtvnoord",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "rtvnoordfanart.png"
     }
   ]
 }

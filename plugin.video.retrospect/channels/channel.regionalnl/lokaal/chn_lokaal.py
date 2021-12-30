@@ -54,15 +54,6 @@ class Channel(chn_class.Channel):
             self.liveUrl = "https://cdn.rtvdrenthe.nl/live/rtvdrenthe/tv/index.m3u8"
             self.channelBitrate = 1350
 
-        elif self.channelCode == "rtvnoord":
-            self.noImage = "rtvnoordimage.png"
-            self.mainListUri = "http://noord.api.regiogrid.nl/apps/v520/programs.json"
-            self.baseUrl = "http://noord.api.regiogrid.nl"
-            # Uses NPO stream with smshield cookie
-            # self.liveUrl = "http://noord.api.regiogrid.nl/apps/v520/tv-live-kiezer.json"
-            self.liveUrl = "https://media.rtvnoord.nl/live/rtvnoord/tv/index.m3u8"
-            self.channelBitrate = 1350
-
         elif self.channelCode == "rtvnh":
             self.noImage = "rtvnhimage.png"
             self.baseUrl = "http://www.rtvnh.nl"

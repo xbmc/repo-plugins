@@ -46,16 +46,24 @@ class Channel(chn_class.Channel):
             self.noImage = "rtvutrechtimage.png"
             self.videoUrlFormat = "https://rtvutrecht.bbvms.com/p/regiogroei_utrecht_web_videoplayer/c/{}.json"
             self.recentSlug = "rtvutrecht"
-            self.liveUrl = "https://rtvutrecht.bbvms.com/p/regiogroei_utrecht_web_videoplayer/c/3742011.json"
+            self.liveUrl = "https://api.regiogroei.cloud/page/channel/rtv-utrecht?channel=rtv-utrecht"
             self.httpHeaders["accept"] = "application/vnd.groei.utrecht+json;v=2.0"
 
         elif self.channelCode == "omroepzeeland":
             self.mainListUri = "https://api.regiogroei.cloud/page/tv/programs?zeeland"
             self.noImage = "omroepzeelandimage.png"
-            self.videoUrlFormat = "https://omroepzeeland.bbvms.com/p/regiogroei_zeeland_web_videoplayer/c/sourceid_string:{}.json"
+            self.videoUrlFormat = "https://omroepzeeland.bbvms.com/p/regiogroei_zeeland_web_videoplayer/c/{}.json"
             self.recentSlug = "omroep-zeeland-tv"
-            self.liveUrl = "https://omroepzeeland.bbvms.com/p/regiogroei_zeeland_web_videoplayer/c/3745936.json"
+            self.liveUrl = "https://api.regiogroei.cloud/page/channel/omroep-zeeland-tv?channel=omroep-zeeland-tv"
             self.httpHeaders["accept"] = "application/vnd.groei.zeeland+json;v=2.0"
+
+        elif self.channelCode == "rtvnoord":
+            self.mainListUri = "https://api.regiogroei.cloud/page/tv/programs?noord"
+            self.noImage = "rtvnoordimage.png"
+            self.videoUrlFormat = "https://rtvnoord.bbvms.com/p/regiogroei_web_videoplayer/c/{}.json"
+            self.recentSlug = "tv-noord"
+            self.httpHeaders["accept"] = "application/vnd.groei.groningen+json;v=2.0"
+            self.liveUrl = "https://api.regiogroei.cloud/page/channel/tv-noord?channel=tv-noord"
 
         else:
             raise NotImplementedError("Channelcode '%s' not implemented" % (self.channelCode,))
@@ -201,7 +209,7 @@ class Channel(chn_class.Channel):
         origin = result_set["_links"]["web"]["originId"]
         url = "{}{}?slug={}&origin={}".format(self.baseUrl, base, slug, origin)
 
-        item = FolderItem(title, url, content_type=contenttype.EPISODES)
+        item = FolderItem(title, url, content_type=contenttype.EPISODES, media_type=mediatype.TVSHOW)
         item.description = desc
         item.thumb = self._get_thumb(thumb)
         # item.poster = thumb.replace("[format]", "1000x1500").replace("[ext]", "jpg")
@@ -224,7 +232,7 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+        :param dict result_set: The result_set of the self.episodeItemRegex
         :param bool epg_item: format as an EPG item.
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
@@ -240,7 +248,7 @@ class Channel(chn_class.Channel):
 
         program_title = result_set["programTitle"]
         episode_title = result_set["episodeTitle"]
-        url = self.videoUrlFormat.format(result_set["sourceId"])
+        url = "{}{}".format(self.baseUrl, result_set["_links"]["page"]["href"])
 
         item = MediaItem(episode_title or program_title, url, media_type=mediatype.EPISODE)
         item.description = result_set.get("synopsis")
@@ -286,14 +294,25 @@ class Channel(chn_class.Channel):
 
         """
 
-        data = UriHandler.open(item.url)
-        json_data = JsonHelper(data)
-        clip_data = json_data.get_value("clipData")
-        if not clip_data:
-            Logger.debug("Retrying without 'sourceid_string:'")
-            data = UriHandler.open(item.url.replace("sourceid_string:", ""))
-            json_data = JsonHelper(data)
+        # Just double check.
+        if not item.HttpHeaders:
+            item.HttpHeaders = self.httpHeaders
 
+        data = UriHandler.open(item.url, additional_headers=item.HttpHeaders)
+        # extract the source_id:
+        json_data = JsonHelper(data)
+        source_id = None
+        for c in json_data.get_value("components"):
+            if c["type"] == "tv-detail-header":
+                source_id = c["sourceId"]
+                break
+
+        if not source_id:
+            Logger.error("Unable to extract source_id")
+
+        source_url = self.videoUrlFormat.format(source_id)
+        data = UriHandler.open(source_url)
+        json_data = JsonHelper(data)
         base_url = json_data.get_value("publicationData", "defaultMediaAssetPath")
         clip_data = json_data.get_value("clipData", "assets")
 
@@ -302,16 +321,16 @@ class Channel(chn_class.Channel):
             if not video_url.startswith("http"):
                 video_url = "{}{}".format(base_url, video_url)
 
-            bitrate = clip["bandwidth"]
+            bitrate = clip["bandwidth"] or "0"
             if bitrate.lower() == "auto":
-                bitrate = 3600
+                bitrate = 4000
 
             media_type = clip["mediatype"].lower()
             # Should we resolve the actual urls?
             # _, video_url = UriHandler.header(video_url)
 
             if "m3u8" in video_url:
-                item.complete = M3u8.update_part_with_m3u8_streams(item, video_url)
+                item.complete = M3u8.update_part_with_m3u8_streams(item, video_url, bitrate=bitrate)
 
             elif media_type.startswith("mp4_"):
                 item.add_stream(video_url, bitrate=bitrate)

@@ -79,7 +79,8 @@ def carga_web(url):
     log('carga_web URL: "%s"' % url)
     MiReq = urllib2.Request(url) # We use the Request method because we need to add a header into the HTTP GET to the web site.
     # We have to tell the web site we are using a real browser.
-    MiReq.add_header('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20100101 Firefox/17.0') # This is a true Firefox header.
+    MiReq.add_header('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64; rv:95.0) Gecko/20100101 Firefox/95.0') # This is a true Firefox header.
+    MiReq.add_header('Referer', 'https://www.filmsforaction.org/') # This is required for this add-on.
     MiConex = urllib2.urlopen(MiReq) # We open the HTTP connection to the URL.
     MiHTML = MiConex.read() # We load all the HTML contents from the web page and store it into a var.
     MiConex.close() # We close the HTTP connection as we have all the info required.
@@ -94,7 +95,7 @@ def carga_web_cookies(url, headers=''):
     log('carga_web_cookies URL: "%s"' % url)
     MiReq = urllib2.Request(url) # We use the Request method because we need to add a header into the HTTP GET to the web site.
     # We have to tell the web site we are using a real browser.
-    MiReq.add_header('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20100101 Firefox/17.0') # This is a true Firefox header.
+    MiReq.add_header('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64; rv:95.0) Gecko/20100101 Firefox/95.0') # This is a true Firefox header.
     for key in headers:
         MiReq.add_header(key, headers[key])
     MiConex = urllib2.urlopen(MiReq) # We open the HTTP connection to the URL.

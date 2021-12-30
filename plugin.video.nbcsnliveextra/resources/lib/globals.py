@@ -27,23 +27,12 @@ ROOTDIR = xbmcaddon.Addon().getAddonInfo('path')
 ICON = os.path.join(ROOTDIR,"icon.png")
 FANART = os.path.join(ROOTDIR,"fanart.jpg")
 ROOT_URL = 'http://stream.nbcsports.com/data/mobile'
-# CONFIG_URL = '%s/apps/NBCSports/configuration-firetv-v2.json' % ROOT_URL
 CONFIG_URL = 'http://stream.nbcsports.com/data/mobile/apps/NBCSports/configuration-android-v6.json'
-# CONFIG_URL = 'http://stream.nbcsports.com/data/mobile/apps/NBCSports/configuration-androidtv-v4.json'
 
 # Main settings
 settings = xbmcaddon.Addon()
 FREE_ONLY = str(settings.getSetting("free_only"))
 KODI_VERSION = float(re.findall(r'\d{2}\.\d{1}', xbmc.getInfoLabel("System.BuildVersion"))[0])
-# if sys.version_info[0] > 2:
-#     FREE_ONLY = settings.getSettingString("free_only")
-# else:
-#     # CDN = int(settings.getSetting(id="cdn"))
-#     # USERNAME = str(settings.getSetting(id="username"))
-#     # PASSWORD = str(settings.getSetting(id="password"))
-#     # PROVIDER = str(settings.getSetting(id="provider"))
-#     FREE_ONLY = str(settings.getSetting("free_only"))
-#     # PLAY_BEST = str(settings.getSetting(id="play_best"))
 
 filter_ids = [
     "show-all",
@@ -81,7 +70,6 @@ for fid in filter_ids:
 
 # User Agents
 UA_NBCSN = 'Adobe Primetime/1.4 Dalvik/2.1.0 (Linux; U; Android 6.0.1; Hub Build/MHC19J)'
-#UA_NBCSN = 'Mozilla/5.0 (Linux; U; Android 9;  CPH1923 Build/PPR1.180610.011)'
 
 # Event Colors
 FREE = 'FF43CD80'
@@ -211,11 +199,6 @@ def add_premium_link(name, link_url, icon, stream_info, fanart=None, info=None):
     u = sys.argv[0] + "?url=" + urllib.quote_plus(link_url) + "&mode=5&icon_image=" + urllib.quote_plus(icon)
     for key in stream_info:
         u += '&%s=%s' % (key, stream_info[key])
-    # "&requestor_id=" + urllib.quote_plus(stream_info['requestor_id']) + "&channel=" \
-    #     + urllib.quote_plus(stream_info['channel']) + "&pid=" + urllib.quote_plus(stream_info['pid'])
-
-    xbmc.log(u)
-
     liz = xbmcgui.ListItem(name)
     if icon is None: icon = ICON
     if fanart is None: fanart = FANART

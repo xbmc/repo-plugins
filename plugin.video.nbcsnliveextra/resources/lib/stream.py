@@ -33,7 +33,7 @@ class Stream:
             "application": "NBCSports",
             "authInfo": {
                 "authenticationType": "adobe-pass",
-                "requestorId": "nbcsports",
+                "requestorId": self.requestor_id,
                 "resourceId": base64.b64encode(codecs.encode(self.resource_id)).decode("ascii"),
                 "token": self.media_token
             },
@@ -61,7 +61,7 @@ class Stream:
             "platform": "android",
             "authInfo": {
                 "authenticationType": "adobe-pass",
-                "requestorId": "nbcsports",
+                "requestorId": self.requestor_id,
                 "resourceId": base64.b64encode(codecs.encode(self.resource_id)).decode("ascii"),
                 "token": self.media_token
             },
@@ -72,7 +72,6 @@ class Stream:
                 }
         }
 
-        xbmc.log(str(payload))
         r = requests.post(self.token_url, headers=self.token_headers, cookies=load_cookies(), json=payload, verify=VERIFY)
         save_cookies(r.cookies)
         xbmc.log(r.text)
@@ -80,11 +79,6 @@ class Stream:
         return r.json()['drmToken']
 
     def create_listitem(self):
-        xbmc.log('------------------------------------------------------------------------------------------')
-        xbmc.log(self.manifest_url)
-        xbmc.log(self.drm_token)
-        xbmc.log('------------------------------------------------------------------------------------------')
-
         self.get_tokenized_url()
 
         is_helper = inputstreamhelper.Helper('hls', drm='widevine')
@@ -95,24 +89,17 @@ class Stream:
             else:
                 listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
 
-            xbmc.log('---------------------- Drm Type --------------------')
-            xbmc.log(self.drm_type)
-            xbmc.log('------------------------------------------------------')
             if self.drm_type == 'widevine':
                 lic_headers = 'User-Agent=Dalvik%2F2.1.0+(Linux%3B+U%3B+Android+6.0.1%3B+Hub+Build%2FMHC19J)'
                 lic_headers += '&Content-Type=application/octet-stream'
-                # lic_headers += '&X-NewRelic-ID=VQ8AU1RbChABU1VQAQkAV10%3D'
                 lic_headers += '&X-ISP-TOKEN=%s' % urllib.quote(self.get_drm_token())
                 license_key = '%s|%s|R{SSM}|' % (self.lic_url, lic_headers)
                 listitem.setProperty('inputstream.adaptive.license_key', license_key)
                 listitem.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
-                xbmc.log(license_key)
 
             listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
             listitem.setProperty('inputstream.adaptive.stream_headers', 'User-Agent=%s' % UA_NBCSN)
         else:
             listitem.setMimeType("application/x-mpegURL")
-
-        # listitem = xbmcgui.ListItem(path=stream_url)
 
         return listitem

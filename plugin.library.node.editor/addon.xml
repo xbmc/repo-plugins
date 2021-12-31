@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.library.node.editor" name="Library Node Editor" version="2.0.4" provider-name="Unfledged, Team-Kodi">
+<addon id="plugin.library.node.editor" name="Library Node Editor" version="2.0.5" provider-name="Unfledged, Team-Kodi">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.unidecode" version="1.1.1"/>
@@ -8,31 +8,6 @@
         <provides>executable</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="de_DE">Benutzerdefinierte Bibliotheksknoten verwalten.</summary>
-        <summary lang="en_GB">Manage custom library nodes.</summary>
-        <summary lang="en_NZ">Manage custom library nodes.</summary>
-        <summary lang="en_US">Manage custom library nodes.</summary>
-        <summary lang="fr_FR">Gére des nœuds de médiathèque personnalisés.</summary>
-        <summary lang="fr_CA">Gérer des nœuds de médiathèque personnalisés.</summary>
-        <summary lang="it_IT">Gestisci nodi libreria personalizzati</summary>
-        <summary lang="ko_KR">사용자 라이브러리 노드 관리자</summary>
-        <summary lang="lt_LT">Tvarkykite savus bibliotekos mazgus.</summary>
-        <summary lang="nl_NL">Beheer aangepaste bibliotheek nodes. </summary>
-        <summary lang="pl_PL">Zarządzanie niestandardowymi węzłami biblioteki.</summary>
-        <summary lang="pt_BR">Gerenciar nós customizados da biblioteca</summary>
-        <summary lang="ro_RO">Administrați noduri mediatecă personalizate</summary>
-        <description lang="de_DE">Benutzerdefinierte Bibliotheksknoten erstellen und bearbeiten.</description>
-        <description lang="en_GB">Create and edit custom library nodes.</description>
-        <description lang="en_NZ">Create and edit custom library nodes.</description>
-        <description lang="en_US">Create and edit custom library nodes.</description>
-        <description lang="fr_FR">Crée et modifie des nœuds de médiathèque personnalisés.</description>
-        <description lang="fr_CA">Créer et modifier des nœuds de médiathèque personnalisés.</description>
-        <description lang="it_IT">Crea e modifica nodi libreria personalizzati.</description>
-        <description lang="ko_KR">사용자 라이브러리 노드를 생성하고 편집합니다.</description>
-        <description lang="lt_LT">Sukurkite ir keiskite savus bibliotekos mazgus.</description>
-        <description lang="nl_NL">Creëer en wijzig aangepaste bibliotheek nodes.</description>
-        <description lang="pl_PL">Tworzenie i edytowanie niestandardowych węzłów biblioteki.</description>
-        <description lang="pt_BR">Crie e edite nós customizados na biblioteca</description>
         <platform>all</platform>
         <license>GPL-2.0-only</license>
         <forum>https://forum.kodi.tv/showthread.php?tid=224512</forum>
@@ -41,8 +16,42 @@
             <icon>icon.png</icon>
         </assets>
         <news>
-            2.0.4 (07/3/2021)
-            - Add new music library fields for v19
+            2.0.5 (31/12/2021)
+            - Sync translations
         </news>
+        <summary lang="da_DK">Administrer brugerdefinerede biblioteksnoder.</summary>
+        <summary lang="de_DE">Benutzerdefinierte Bibliotheksknoten verwalten.</summary>
+        <summary lang="en_GB">Manage custom library nodes.</summary>
+        <summary lang="en_NZ">Manage custom library nodes.</summary>
+        <summary lang="en_US">Manage custom library nodes.</summary>
+        <summary lang="fr_CA">Gérer des nœuds de médiathèque personnalisés.</summary>
+        <summary lang="fr_FR">Gére des nœuds de médiathèque personnalisés.</summary>
+        <summary lang="it_IT">Gestisci nodi libreria personalizzati</summary>
+        <summary lang="ko_KR">사용자 정의 라이브러리 노드를 관리합니다.</summary>
+        <summary lang="lt_LT">Tvarkykite savus bibliotekos mazgus.</summary>
+        <summary lang="nl_NL">Beheer aangepaste bibliotheek nodes.</summary>
+        <summary lang="pl_PL">Zarządzanie niestandardowymi węzłami biblioteki.</summary>
+        <summary lang="pt_BR">Gerenciar nós customizados da biblioteca.</summary>
+        <summary lang="ro_RO">Administrați noduri mediatecă personalizate</summary>
+        <summary lang="ru_RU">Управление узлами пользовательских медиатек.</summary>
+        <summary lang="sv_SE">Hantera anpassade biblioteksnoder.</summary>
+        <summary lang="vi_VN">Quản lý các nút thư viện tùy chỉnh.</summary>
+        <summary lang="zh_CN">管理自定义资料库节点。</summary>
+        <description lang="da_DK">Opret og rediger brugerdefinerede biblioteksnoder.</description>
+        <description lang="de_DE">Benutzerdefinierte Bibliotheksknoten erstellen und bearbeiten.</description>
+        <description lang="en_GB">Create and edit custom library nodes.</description>
+        <description lang="en_NZ">Create and edit custom library nodes.</description>
+        <description lang="en_US">Create and edit custom library nodes.</description>
+        <description lang="fr_CA">Créer et modifier des nœuds de médiathèque personnalisés.</description>
+        <description lang="fr_FR">Crée et modifie des nœuds de médiathèque personnalisés.</description>
+        <description lang="it_IT">Crea e modifica nodi libreria personalizzati.</description>
+        <description lang="ko_KR">사용자 라이브러리 노드를 생성하고 편집합니다.</description>
+        <description lang="lt_LT">Sukurkite ir keiskite savus bibliotekos mazgus.</description>
+        <description lang="nl_NL">Creëer en wijzig aangepaste bibliotheek nodes.</description>
+        <description lang="pl_PL">Tworzenie i edytowanie niestandardowych węzłów biblioteki.</description>
+        <description lang="pt_BR">Crie e edite nós customizados na biblioteca.</description>
+        <description lang="ru_RU">Создание и редактирование пользовательских узлов медиатеки.</description>
+        <description lang="sv_SE">Skapa och redigera anpassade biblioteksnoder.</description>
+        <description lang="zh_CN">创建和编辑自定义资料库节点。</description>
     </extension>
 </addon>

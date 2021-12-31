@@ -1,0 +1,44 @@
+# XBMC Media Center language file
+# Addon Name: Google Earth
+# Addon id: screensaver.google.earth
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To:  \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: eo\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+msgctxt "Addon Summary"
+msgid "Earth View displays a beautiful Satellite image from Google Earth..."
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Earth View is a collection of the most beautiful and striking landscapes found in Google Earth."
+msgstr ""
+
+msgctxt "#32001"
+msgid "Something went wrong, Try again later ..."
+msgstr ""
+
+msgctxt "#32002"
+msgid "Rotate Image Every"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Animate Image"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Display Time & Weather"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Use Vignette Overlay"
+msgstr ""

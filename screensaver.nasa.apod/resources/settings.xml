@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="30002">
+    <setting id="RotateTime"  type="enum"   label="32002" default="30"           values="30|60|120|240"/>
+    <setting id="Animate"     type="bool"   label="32003" default="false"/>
+    <setting id="Time"        type="bool"   label="32004" default="true" />
+    <setting id="Overlay"     type="bool"   label="32011" default="false" />
+  </category>
+</settings>
+        

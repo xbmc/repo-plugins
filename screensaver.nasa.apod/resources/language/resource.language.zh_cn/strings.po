@@ -1,0 +1,45 @@
+# XBMC Media Center language file
+# Addon Name: Google Earth
+# Addon id: screensaver.google.earth
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-10-29 22:17+0000\n"
+"Last-Translator: 撷星芒 <mofa2020@qq.com>\n"
+"Language-Team: Chinese (China) <https://kodi.weblate.cloud/projects/kodi-add-ons-look-and-feel/screensaver-google-earth/zh_cn/>\n"
+"Language: zh_cn\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.8\n"
+
+msgctxt "Addon Summary"
+msgid "Earth View displays a beautiful Satellite image from Google Earth..."
+msgstr "地球视图显示谷歌地球的美丽卫星图像......"
+
+msgctxt "Addon Description"
+msgid "Earth View is a collection of the most beautiful and striking landscapes found in Google Earth."
+msgstr "地球视图是谷歌地球中发现最美丽醒目的景观的集合。"
+
+msgctxt "#32001"
+msgid "Something went wrong, Try again later ..."
+msgstr "出现问题，请稍后再试..."
+
+msgctxt "#32002"
+msgid "Rotate Image Every"
+msgstr "旋转图像间隔"
+
+msgctxt "#32003"
+msgid "Animate Image"
+msgstr "动画图像"
+
+msgctxt "#32004"
+msgid "Display Time & Weather"
+msgstr "显示时间和天气"
+
+msgctxt "#32011"
+msgid "Use Vignette Overlay"
+msgstr "使用晕影叠加"

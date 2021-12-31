@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="screensaver.nasa.apod" name="NASA Astronomy Photo of the Day" version="1.0.0" provider-name="evinr">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.six" version="1.0.0"/>
+        <import addon="script.module.kodi-six" version="0.1.3.1"/>
+        <import addon="script.module.requests" version="2.7.0"/> 
+        <import addon="script.module.requests-cache" version="0.5.2"/>
+    </requires>
+    <extension point="xbmc.ui.screensaver" library="default.py"/>
+    <extension point="xbmc.addon.metadata">
+        <license>GPL-3.0-or-later</license>
+        <platform>all</platform>
+        <source>https://github.com/evinr/screensaver.nasa.apod</source>
+        <news>v1.0.0 - 20211205 - first release based off of the screensaver.google.earth and other Lunatixz screensavers</news>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/fanart.jpg</screenshot>
+        </assets>
+        <summary lang="da_DK">Ontdek de kosmos! Toont beelden van ons fascinerende universum...</summary>
+        <summary lang="en_GB">Discover the cosmos! Displays images of our fascinating universe...</summary>
+        <summary lang="zh_CN">探索宇宙！显示我们迷人宇宙的图像......</summary>
+        <description lang="da_DK">Toont willekeurige Astronomy Photo of the Day van NASA, samen met een korte uitleg geschreven door een professionele astronoom.</description>
+        <description lang="en_GB">Displays random Astronomy Photo of the Day from NASA, along with a brief explanation written by a professional astronomer.</description>
+        <description lang="zh_CN">显示来自 NASA 的每日天文随机照片，以及由专业天文学家撰写的简要说明。</description>
+    </extension>
+</addon>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+   <setting id="quality" type="enum" label="30103" values="SD|HD|UltraHD" default="SD"/>
+   <setting id="rated" type="bool" label="30101" default="false"/>
+   <setting id="debug" type="bool" label="30102" default="false"/>
+</settings>

@@ -7,18 +7,13 @@ import requests
 from requests.packages import urllib3
 #Below is required to get around an ssl issue
 urllib3.disable_warnings()
-major_version = sys.version_info.major
 import urllib
-if major_version == 2:
-    import HTMLParser
-elif major_version == 3:
-    import html
+import html
 import codecs
 import time
 
 import xbmc
-if major_version == 3:
-    import xbmcvfs
+import xbmcvfs
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
@@ -33,17 +28,11 @@ ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
 
 
 def tp(path):
-    if major_version == 2:
-        return xbmc.translatePath(path)
-    elif major_version == 3:
-        return xbmcvfs.translatePath(path)
+    return xbmcvfs.translatePath(path)
 
 
 def unescape(string):
-    if major_version == 2:
-        return HTMLParser.HTMLParser().unescape(string)
-    elif major_version == 3:
-        return html.unescape(string)
+    return html.unescape(string)
 
 
 
@@ -61,6 +50,7 @@ def GetAddonInfo():
 addonid = "plugin.video.iplayerwww"
 addoninfo = GetAddonInfo()
 DIR_USERDATA = tp(addoninfo["profile"])
+icondir = 'resource://resource.images.iplayerwww/media/'
 cookie_jar = None
 user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0'
 headers = {'User-Agent': user_agent}
@@ -403,18 +393,12 @@ def GetCookieJar():
 
 # Creates a 'urlencoded' string from a unicode input
 def utf8_quote_plus(unicode):
-    if major_version == 2:
-        return urllib.quote_plus(unicode.encode('utf-8'))
-    elif major_version == 3:
-        return urllib.parse.quote_plus(unicode.encode('utf-8'))
+    return urllib.parse.quote_plus(unicode.encode('utf-8'))
 
 
 # Gets a unicode string from a 'urlencoded' string
 def utf8_unquote_plus(str):
-    if major_version == 2:
-        return urllib.unquote_plus(str).decode('utf-8')
-    elif major_version == 3:
-        return urllib.parse.unquote_plus(str)
+    return urllib.parse.unquote_plus(str)
 
 
 def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=None, resolution=None, logged_in=False):
@@ -511,282 +495,118 @@ def CreateBaseDirectory(content_type):
             live_mode = 203
         else:
             live_mode = 123
-        AddMenuEntry(translation(30329), 'cbeebies_hd', live_mode,
-                     tp(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies_hd.png'
-                     ),
-                     '', '')
-        AddMenuEntry(translation(30330), 'cbbc_hd', live_mode,
-                     tp(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbbc_hd.png'
-                     ),
-                     '', '')
-        AddMenuEntry(translation(30331), 'cbeebies', 125,
-                     tp(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies_hd.png'
-                     ),
-                     '', '')
-        AddMenuEntry(translation(30332), 'cbbc', 125,
-                     tp(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbbc_hd.png'
-                     ),
-                     '', '')
-        AddMenuEntry(translation(30333), 'p02pnn9d', 131,
-                     tp(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies_hd.png'
-                     ),
-                     '', '')
+        AddMenuEntry(translation(30329), 'cbeebies_hd', live_mode, icondir+'cbeebies_hd.png', '', '')
+        AddMenuEntry(translation(30330), 'cbbc_hd', live_mode, icondir+'cbbc_hd.png', '', '')
+        AddMenuEntry(translation(30331), 'cbeebies', 125, icondir+'cbeebies_hd.png', '', '')
+        AddMenuEntry(translation(30332), 'cbbc', 125, icondir+'cbbc_hd.png', '', '')
+        AddMenuEntry(translation(30333), 'p02pnn9d', 131, icondir+'cbeebies_hd.png', '', '')
         return
 
     if content_type == "video":
         ShowLicenceWarning()
         if ADDON.getSetting("menu_video_highlights") == 'true':
-            AddMenuEntry(translation(30300), 'iplayer', 106,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30300), 'iplayer', 106, icondir+'top_rated.png', '', '')
         if ADDON.getSetting("menu_video_channel_highlights") == 'true':
-            AddMenuEntry(translation(30317), 'url', 109,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30317), 'url', 109, icondir+'top_rated.png', '', '')
         if ADDON.getSetting("menu_video_most_popular") == 'true':
-            AddMenuEntry(translation(30301), 'url', 105,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/popular.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30301), 'url', 105, icondir+'popular.png', '', '')
         if ADDON.getSetting("menu_video_az") == 'true':
-            AddMenuEntry(translation(30302), 'url', 102,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30302), 'url', 102, icondir+'lists.png', '', '')
         if ADDON.getSetting("menu_video_channel_az") == 'true':
-            AddMenuEntry(translation(30327), 'url', 120,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30327), 'url', 120, icondir+'lists.png', '', '')
         if ADDON.getSetting("menu_video_categories") == 'true':
-            AddMenuEntry(translation(30303), 'url', 103,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30303), 'url', 103, icondir+'lists.png', '', '')
         if ADDON.getSetting("menu_video_search") == 'true':
-            AddMenuEntry(translation(30304), 'url', 104,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/search.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30304), 'url', 104, icondir+'search.png', '', '')
         if ADDON.getSetting("menu_video_live") == 'true':
-            AddMenuEntry(translation(30305), 'url', 101,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/tv.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30305), 'url', 101, icondir+'tv.png', '', '')
         # if ADDON.getSetting("menu_video_red_button") == 'true':
-        #     AddMenuEntry(translation(30328), 'url', 118,
-        #                  tp(
-        #                    'special://home/addons/plugin.video.iplayerwww/media/tv.png'
-        #                                     ),
-        #                  '', '')
+        #     AddMenuEntry(translation(30328), 'url', 118, icondir+'tv.png', '', '')
         if ADDON.getSetting("menu_video_uhd_trial") == 'true':
-            AddMenuEntry(translation(30335), 'url', 197,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/tv.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30335), 'url', 197, icondir+'tv.png', '', '')
         if ADDON.getSetting("menu_video_watching") == 'true':
-            AddMenuEntry(translation(30306), 'url', 107,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30306), 'url', 107, icondir+'favourites.png', '', '')
         if ADDON.getSetting("menu_video_added") == 'true':
-            AddMenuEntry(translation(30307), 'url', 108,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
-                                            ),
-                         '', '')
-        AddMenuEntry(translation(30325), 'url', 119,
-                     tp(
-                       'special://home/addons/plugin.video.iplayerwww/media/settings.png'
-                                        ), 
-                     '', '')
+            AddMenuEntry(translation(30307), 'url', 108, icondir+'favourites.png', '', '')
+        AddMenuEntry(translation(30325), 'url', 119, icondir+'settings.png',  '', '')
     elif content_type == "audio":
         if ADDON.getSetting("menu_radio_live") == 'true':
-            AddMenuEntry(translation(30321), 'url', 113,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/live.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30321), 'url', 113, icondir+'live.png', '', '')
         if ADDON.getSetting("menu_radio_az") == 'true':
-            AddMenuEntry(translation(30302), 'url', 112,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30302), 'url', 112, icondir+'lists.png', '', '')
         if ADDON.getSetting("menu_radio_categories") == 'true':
-            AddMenuEntry(translation(30303), 'url', 114,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30303), 'url', 114, icondir+'lists.png', '', '')
         if ADDON.getSetting("menu_radio_search") == 'true':
-            AddMenuEntry(translation(30304), 'url', 115,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/search.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30304), 'url', 115, icondir+'search.png', '', '')
         if ADDON.getSetting("menu_radio_most_popular") == 'true':
-            AddMenuEntry(translation(30301), 'url', 116,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/popular.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30301), 'url', 116, icondir+'popular.png', '', '')
         if ADDON.getSetting("menu_radio_added") == 'true':
-            AddMenuEntry(translation(30307), 'url', 117,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30307), 'url', 117, icondir+'favourites.png', '', '')
         """
         if ADDON.getSetting("menu_radio_following") == 'true':
-            AddMenuEntry(translation(30334), 'url', 199,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
-                                            ),
-                         '', '')
+            AddMenuEntry(translation(30334), 'url', 199, icondir+'favourites.png', '', '')
         """
-        AddMenuEntry(translation(30325), 'url', 119,
-                     tp(
-                       'special://home/addons/plugin.video.iplayerwww/media/settings.png'
-                                        ),
-                     '', '')
+        AddMenuEntry(translation(30325), 'url', 119, icondir+'settings.png', '', '')
     else:
         ShowLicenceWarning()
         if ADDON.getSetting("menu_video_highlights") == 'true':
             AddMenuEntry((translation(30323)+translation(30300)), 'iplayer', 106,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
-                                            ),
-                         '', '')
+                         icondir+'top_rated.png', '', '')
         if ADDON.getSetting("menu_video_channel_highlights") == 'true':
             AddMenuEntry((translation(30323)+translation(30317)), 'url', 109,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
-                                            ),
-                         '', '')
+                         icondir+'top_rated.png', '', '')
         if ADDON.getSetting("menu_video_most_popular") == 'true':
             AddMenuEntry((translation(30323)+translation(30301)), 'url', 105,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/popular.png'
-                                            ),
-                         '', '')
+                         icondir+'popular.png', '', '')
         if ADDON.getSetting("menu_video_az") == 'true':
             AddMenuEntry((translation(30323)+translation(30302)), 'url', 102,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
-                                            ),
-                         '', '')
+                         icondir+'lists.png', '', '')
         if ADDON.getSetting("menu_video_channel_az") == 'true':
             AddMenuEntry((translation(30323)+translation(30327)), 'url', 120,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
-                                            ),
-                         '', '')
+                         icondir+'lists.png', '', '')
         if ADDON.getSetting("menu_video_categories") == 'true':
             AddMenuEntry((translation(30323)+translation(30303)), 'url', 103,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
-                                            ),
-                         '', '')
+                         icondir+'lists.png', '', '')
         if ADDON.getSetting("menu_video_search") == 'true':
             AddMenuEntry((translation(30323)+translation(30304)), 'url', 104,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/search.png'
-                                            ),
-                         '', '')
+                         icondir+'search.png', '', '')
         if ADDON.getSetting("menu_video_live") == 'true':
             AddMenuEntry((translation(30323)+translation(30305)), 'url', 101,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/tv.png'
-                                            ),
-                         '', '')
+                         icondir+'tv.png', '', '')
         # if ADDON.getSetting("menu_video_red_button") == 'true':
         #     AddMenuEntry((translation(30323)+translation(30328)), 'url', 118,
-        #                  tp(
-        #                    'special://home/addons/plugin.video.iplayerwww/media/tv.png'
-        #                                     ),
-        #                  '', '')
+        #                  icondir+'tv.png', '', '')
         if ADDON.getSetting("menu_video_uhd_trial") == 'true':
             AddMenuEntry((translation(30323)+translation(30335)), 'url', 197,
-                         xbmc.translatePath(
-                           'special://home/addons/plugin.video.iplayerwww/media/tv.png'
-                                            ),
-                         '', '')
+                         icondir+'tv.png', '', '')
         if ADDON.getSetting("menu_video_watching") == 'true':
             AddMenuEntry((translation(30323)+translation(30306)), 'url', 107,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
-                                            ),
-                         '', '')
+                         icondir+'favourites.png', '', '')
         if ADDON.getSetting("menu_video_added") == 'true':
             AddMenuEntry((translation(30323)+translation(30307)), 'url', 108,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
-                                            ),
-                         '', '')
+                         icondir+'favourites.png', '', '')
 
         if ADDON.getSetting("menu_radio_live") == 'true':
             AddMenuEntry((translation(30324)+translation(30321)), 'url', 113,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/live.png'
-                                            ),
-                         '', '')
+                         icondir+'live.png', '', '')
         if ADDON.getSetting("menu_radio_az") == 'true':
             AddMenuEntry((translation(30324)+translation(30302)), 'url', 112,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
-                                            ),
-                         '', '')
+                         icondir+'lists.png', '', '')
         if ADDON.getSetting("menu_radio_categories") == 'true':
             AddMenuEntry((translation(30324)+translation(30303)), 'url', 114,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
-                                            ),
-                         '', '')
+                         icondir+'lists.png', '', '')
         if ADDON.getSetting("menu_radio_search") == 'true':
             AddMenuEntry((translation(30324)+translation(30304)), 'url', 115,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/search.png'
-                                            ),
-                         '', '')
+                         icondir+'search.png', '', '')
         if ADDON.getSetting("menu_radio_most_popular") == 'true':
             AddMenuEntry((translation(30324)+translation(30301)), 'url', 116,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/popular.png'
-                                            ),
-                         '', '')
+                         icondir+'popular.png', '', '')
         if ADDON.getSetting("menu_radio_added") == 'true':
             AddMenuEntry((translation(30324)+translation(30307)), 'url', 117,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
-                                            ),
-                         '', '')
+                         icondir+'favourites.png', '', '')
         if ADDON.getSetting("menu_radio_following") == 'true':
             AddMenuEntry((translation(30324)+translation(30334)), 'url', 199,
-                         tp(
-                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
-                                            ),
-                         '', '')
+                         icondir+'favourites.png', '', '')
         AddMenuEntry(translation(30325), 'url', 119,
-                     tp(
-                       'special://home/addons/plugin.video.iplayerwww/media/settings.png'
-                                        ),
-                     '', '')
+                     icondir+'settings.png', '', '')
 

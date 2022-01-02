@@ -13,10 +13,8 @@ from resources.lib.ipwww_common import translation, AddMenuEntry, OpenURL, \
                                        CheckLogin, CreateBaseDirectory, GetCookieJar, \
                                        ParseImageUrl, download_subtitles
 
-major_version = sys.version_info.major
 import xbmc
-if major_version == 3:
-    import xbmcvfs
+import xbmcvfs
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
@@ -26,10 +24,7 @@ ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
 
 
 def tp(path):
-    if major_version == 2:
-        return xbmc.translatePath(path)
-    elif major_version == 3:
-        return xbmcvfs.translatePath(path)
+    return xbmcvfs.translatePath(path)
 
 
 def RedButtonDialog():
@@ -110,7 +105,7 @@ def ListUHDTrial():
         ('uhd_stream_04',  'UHD Trial 4'),
         ('uhd_stream_05',  'UHD Trial 5'),
     ]
-    iconimage = tp('special://home/addons/plugin.video.iplayerwww/media/red_button.png')
+    iconimage = 'resource://resource.images.iplayerwww/media/red_button.png'
     for id, name in channel_list:
         AddMenuEntry(name, id, 205, iconimage, '', '')
 
@@ -166,8 +161,7 @@ def ListLive():
         ('bbc_one_yorks',                    'BBC One Yorks',),
     ]
     for id, name in channel_list:
-        iconimage = tp(
-            os.path.join('special://home/addons/plugin.video.iplayerwww/media', id + '.png'))
+        iconimage = 'resource://resource.images.iplayerwww/media/'+id+'.png'
         if ADDON.getSetting('streams_autoplay') == 'true':
             AddMenuEntry(name, id, 203, iconimage, '', '')
         else:
@@ -220,8 +214,7 @@ def ListChannelAtoZ():
         ('tv/s4c',           's4cpbs',                      'S4C'),
     ]
     for id, img, name in channel_list:
-        iconimage = tp(
-            os.path.join('special://home/addons/plugin.video.iplayerwww/media', img + '.png'))
+        iconimage = 'resource://resource.images.iplayerwww/media/'+img+'.png'
         url = "https://www.bbc.co.uk/%s/a-z" % id
         AddMenuEntry(name, url, 134, iconimage, '', '')
 
@@ -505,8 +498,7 @@ def ListChannelHighlights():
         ('tv/s4c',           's4cpbs',                      'S4C'),
     ]
     for id, img, name in channel_list:
-        iconimage = tp(
-            os.path.join('special://home/addons/plugin.video.iplayerwww/media', img + '.png'))
+        iconimage = 'resource://resource.images.iplayerwww/media/'+img+'.png'
         AddMenuEntry(name, id, 106, iconimage, '', '')
 
 
@@ -904,13 +896,13 @@ def PlayStream(name, url, iconimage, description, subtitles_url):
 
 def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
     """Will create one menu entry for each available stream of a particular stream_id"""
-    # print "Stream ID: %s"%stream_id
+    # print("Stream ID: %s"%stream_id)
     streams = ParseStreamsHLSDASH(stream_id)
-    # print streams
+    # print(streams)
     if streams[1]:
-        # print "Setting subtitles URL"
+        # print("Setting subtitles URL")
         subtitles_url = streams[1][0][1]
-        # print subtitles_url
+        # print(subtitles_url)
     else:
         subtitles_url = ''
     suppliers = ['', 'Akamai', 'Limelight', 'Bidi','Cloudfront']
@@ -969,8 +961,9 @@ def ParseMediaselector(stream_id):
                     dialog = xbmcgui.Dialog()
                     dialog.ok(translation(30400), translation(30401))
                     raise
-    # print "Found streams:"
-    # print streams
+    # print("Found streams:")
+    # print(streams)
+    # print(subtitles)
     return streams, subtitles
 
 

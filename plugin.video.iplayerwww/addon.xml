@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="4.0.0" provider-name="CaptainT, Cas, ihurst, primaeval">
+<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="4.0.1" provider-name="CaptainT, Cas, ihurst, primaeval">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.7.0"/>
     <import addon="inputstream.adaptive" version="2.6.0"/>
+    <import addon="resource.images.iplayerwww" version="1.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>audio video</provides>
@@ -21,18 +22,11 @@
         <fanart>resources/fanart.jpg</fanart>
     </assets>
     <news>
-v4.0.0
-Initial release for Matrix.
-New dependency inputstream.adaptive.
-HLS streams have been removed. As a consequence, bitrate settings have been removed. Bitrate needs to be configured in inputstream.adaptive.
-Switched to PC mediaselector.
-New mediaselector also adds the following new features:
-- Access to new CDN Cloudfront (Amazon)
-- Access to new subtitle sources. If you experience issues with subtitles, first try the new "Subtitle source" setting in the add-on settings before reporting issues.
-- Radio Categories now uses the Categories of BBC Sounds.
+v4.0.1
+Moved icons to separate add-on resource.images.iplayerwwww which becomes a new requirement.
+Changed settings to new format.
 
 Known issues:
-- BBC2 live and all live Radio is broken, most likely due to a bug in inputstream.adaptive
 - No Red Button
    </news>
   </extension>

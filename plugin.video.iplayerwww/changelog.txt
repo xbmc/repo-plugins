@@ -1,3 +1,7 @@
+v4.0.1
+Moved icons to separate add-on resource.images.iplayerwwww which becomes a new requirement.
+Changed settings to new format.
+
 v4.0.0
 Initial release for Matrix.
 New dependency inputstream.adaptive.

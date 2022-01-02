@@ -1,0 +1,36 @@
+ESO Videos: KODI video plugin to watch the ESO videos from the ESO web site.
+
+   Copyright (C) 2014 Jose Antonio Montes (jamontes)
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+Initial release 1.0.0
+
+This KODI plugin allows to watch the videos from the ESO web site (more than 2000 videos available).
+
+ESO, the European Southern Observatory, is the foremost intergovernmental astronomy organisation in Europe and the world's most productive astronomical observatory. ESO provides state-of-the-art research facilities to astronomers and is supported by Austria, Belgium, Brazil, the Czech Republic, Denmark, Finland, France, Germany, Italy, the Netherlands, Portugal, Spain, Sweden, Switzerland and the United Kingdom. Several other countries have expressed an interest in membership.
+
+ESO's main mission, laid down in the 1962 Convention, is to provide state-of-the-art research facilities to astronomers and astrophysicists, allowing them to conduct front-line science in the best conditions (source: http://www.eso.org/public/about-eso/).
+
+As the videos support several subtitle languages, you must select your preferred language for the subtitles from the KODI *System=>Settings=>Appearance=>International=>Preferred Subtitle language* option menu.
+
+To install it simply download the zip file, and then proceed as with any other plugin from KODI:
+ System->Settings->Add-ons->Install from zip file.
+
+Any issues detected can be reported using this forum thread for official support: https://forum.kodi.tv/showthread.php?tid=186024
+
+Enjoy it!
+
+jamontes

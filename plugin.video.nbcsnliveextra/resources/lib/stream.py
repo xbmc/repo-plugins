@@ -25,8 +25,8 @@ class Stream:
         self.drm_type = stream_vars['drm_type']
         self.manifest_url = stream_vars['manifest_url']
         self.pid = stream_vars['pid']
-        self.resource_id = stream_vars['resource_id']
-        self.media_token = stream_vars['media_token']
+        if 'media_token' in stream_vars: self.media_token = stream_vars['media_token']
+        if 'resource_id' in stream_vars: self.resource_id = stream_vars['resource_id']
 
     def get_tokenized_url(self):
         payload = {
@@ -65,11 +65,10 @@ class Stream:
                 "resourceId": base64.b64encode(codecs.encode(self.resource_id)).decode("ascii"),
                 "token": self.media_token
             },
-            "drmInfo":
-                {
-                    "assetId": self.drm_asset_id,
-                    "deviceId": "android_c577f1f28b8d181d"
-                }
+            "drmInfo": {
+                "assetId": self.drm_asset_id,
+                "deviceId": "android_c577f1f28b8d181d"
+            }
         }
 
         r = requests.post(self.token_url, headers=self.token_headers, cookies=load_cookies(), json=payload, verify=VERIFY)
@@ -79,8 +78,7 @@ class Stream:
         return r.json()['drmToken']
 
     def create_listitem(self):
-        self.get_tokenized_url()
-
+        if self.media_token != '': self.get_tokenized_url()
         is_helper = inputstreamhelper.Helper('hls', drm='widevine')
         listitem = xbmcgui.ListItem(path=('%s|User-Agent=%s') % (self.manifest_url, UA_NBCSN))
         if is_helper.check_inputstream():

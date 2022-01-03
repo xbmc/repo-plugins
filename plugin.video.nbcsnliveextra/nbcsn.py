@@ -219,11 +219,14 @@ elif mode == 5:
     sign_stream(url, name, icon_image, pid, drm_type, drm_asset_id)
 
 elif mode == 6:
-    # Set quality level based on user settings
-    #stream_url = set_stream_quality(url)
-    #listitem = xbmcgui.ListItem(path=stream_url)
-    stream_url = url + "|User-Agent=" + UA_NBCSN
-    play_stream(stream_url)
+    stream_vars = {
+        'drm_asset_id': drm_asset_id,
+        'drm_type': drm_type,
+        'manifest_url': url,
+        'pid': pid
+    }
+    stream = Stream(stream_vars)
+    xbmcplugin.setResolvedUrl(ADDON_HANDLE, True, stream.create_listitem())
 
 elif mode == 999:
     logout()

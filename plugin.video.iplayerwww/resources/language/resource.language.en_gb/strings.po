@@ -128,6 +128,26 @@ msgctxt "#30220"
 msgid "Live CDN source"
 msgstr ""
 
+msgctxt "#30221"
+msgid "Any"
+msgstr ""
+
+msgctxt "#30222"
+msgid "Akamai"
+msgstr ""
+
+msgctxt "#30223"
+msgid "Limelight"
+msgstr ""
+
+msgctxt "#30224"
+msgid "Bidi"
+msgstr ""
+
+msgctxt "#30225"
+msgid "Cloudfront"
+msgstr ""
+
 msgctxt "#30230"
 msgid "Live bitrate"
 msgstr ""
@@ -142,6 +162,30 @@ msgstr ""
 
 msgctxt "#30233"
 msgid "Max Live Radio bitrate"
+msgstr ""
+
+msgctxt "#30234"
+msgid "48 Kbps"
+msgstr ""
+
+msgctxt "#30235"
+msgid "96 Kbps"
+msgstr ""
+
+msgctxt "#30236"
+msgid "128 Kbps"
+msgstr ""
+
+msgctxt "#30237"
+msgid "320 Kpbs"
+msgstr ""
+
+msgctxt "#30238"
+msgid "UK"
+msgstr ""
+
+msgctxt "#30239"
+msgid "International"
 msgstr ""
 
 msgctxt "#30240"
@@ -431,3 +475,4 @@ msgstr ""
 msgctxt "#30529"
 msgid "iPlayer: UHD Trial Channels"
 msgstr ""
+

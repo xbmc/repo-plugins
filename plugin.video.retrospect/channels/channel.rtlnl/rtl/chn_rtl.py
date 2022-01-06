@@ -178,7 +178,7 @@ class Channel(chn_class.Channel):
 
         items = []
 
-        recent = FolderItem("\a .: Recent :.", "", content_type=contenttype.FILES)
+        recent = FolderItem("\a .: Recent :.", "", content_type=contenttype.VIDEOS)
         recent.complete = True
         recent.dontGroup = True
         items.append(recent)

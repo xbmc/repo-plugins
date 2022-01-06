@@ -222,7 +222,7 @@ class VideoAction(AddonAction):
                 # 'tvshow.poster': item.poster,
             },
             season=item.season or "",
-            episode=item.epsiode or "",
+            episode=item.episode or "",
             showtitle=item.tv_show_title or "",
             plot=item.description,
             playcount=1,

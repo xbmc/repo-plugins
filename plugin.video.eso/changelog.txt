@@ -1,0 +1,47 @@
+1.3.0+matrix.1 (2021.05.21)
+- Code updated for matrix onwards.
+1.0.7 (2017.03.13)
+- Fixed thumbnail images.
+- Updated logging system.
+- Code refactored and cleaned.
+1.0.6 (2016.04.01)
+- Fixed video parser due to website changes.
+- Support for Ultra HD videos option available from add-on settings menu.
+1.0.5 (2015.12.05)
+- Improved failover video parser.
+- Quickfix for "by date" order filter in Next/Previous pages and Search entries.
+1.0.4
+- Improved failover parser for Spacetelescope videos.
+1.0.3
+- Fixes for Hubble videos due to Spacetelescope wesite changes.
+- Recover thumbnails images due to ESO website changes.
+- Added filter to order videos by date or by ranking from add-on settings menu.
+- Code refactring and cleaning to fit both websites into the same add-on code.
+1.0.2
+- Quick fix due to website changes.
+1.0.1
+- Added support for Hubble's spacetelescope.org website.
+1.0.0
+- Force settings setup on first run.
+- First release ready for summit to official repo.
+- Added forum thread for official support.
+0.0.9
+- Prepared everything for public testing.
+- Code cleaning and refactoring.
+0.0.8
+- Add localized strings for settings and addon.xml.
+- Support for failover video option if no quality selected is available.
+0.0.7
+- Support for video quality selection from settings.
+0.0.6
+- Add Search option.
+0.0.5
+- Add the icon and fanart files.
+0.0.4
+- Add Other Categories menu entry.
+0.0.3
+- Improve the parsers for next and previous pages.
+0.0.2
+- Clean up title strings.
+0.0.1
+- First Try.

@@ -141,6 +141,10 @@ class Plugin(ActionParser):
                 from resources.lib.actions.favouritesaction import ShowFavouritesAction
                 addon_action = ShowFavouritesAction(self, None)
 
+            elif self.params[keyword.ACTION] == action.OPEN_SHORTCUT:
+                from resources.lib.actions.shortcutaction import OpenShortcutAction
+                addon_action = OpenShortcutAction(self)
+
             elif self.params[keyword.ACTION] == action.LIST_FOLDER:
                 # channelName and U.lib.aRL is present, Parse the folder
                 from resources.lib.actions.folderaction import FolderAction

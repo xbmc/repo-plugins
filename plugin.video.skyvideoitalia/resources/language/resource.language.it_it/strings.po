@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Last-Translator: nixxo\n"
+"Language-Team: nixxo\n"
 "X-Generator: Poedit 3.0\n"
 
 msgctxt "#30000"
@@ -32,6 +32,26 @@ msgctxt "#30003"
 msgid "Log Level (for developers)"
 msgstr "Livello del Log (per sviluppatori)"
 
+msgctxt "#30008"
+msgid "Use InputStream Adaptive"
+msgstr "Usa InputStream Adaptive"
+
+msgctxt "#30009"
+msgid "Debug"
+msgstr "Debug"
+
+msgctxt "#30010"
+msgid "Info"
+msgstr "Informazione"
+
+msgctxt "#30011"
+msgid "Warning"
+msgstr "Attenzione"
+
+msgctxt "#30012"
+msgid "Error"
+msgstr "Errore"
+
 msgctxt "#31000"
 msgid "Error retrieving URL. Check log."
 msgstr "Errore download pagina. Controlla log."
@@ -45,9 +65,17 @@ msgid "JSON decode error"
 msgstr "Errore decodifica JSON"
 
 msgctxt "#31003"
-msgid "MEDIA URL NOT FOUND"
-msgstr "URL VIDEO NON TROVATO"
+msgid "Media URL not found"
+msgstr "URL video not trovato"
+
+msgctxt "#31004"
+msgid "Livestream URL not found"
+msgstr "URL stream diretta non trovato"
 
 msgctxt "#32001"
 msgid "Playlists from %s"
 msgstr "Playlist di %s"
+
+msgctxt "#32002"
+msgid "Live Streaming"
+msgstr "Dirette Streaming"

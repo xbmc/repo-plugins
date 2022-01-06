@@ -18,12 +18,8 @@ class Search:
 
     def __init__(self):
         """ Initialise object """
-        self._auth = VtmGoAuth(kodiutils.get_setting('username'),
-                               kodiutils.get_setting('password'),
-                               'VTM',
-                               kodiutils.get_setting('profile'),
-                               kodiutils.get_tokens_path())
-        self._vtm_go = VtmGo(self._auth)
+        auth = VtmGoAuth(kodiutils.get_tokens_path())
+        self._api = VtmGo(auth.get_tokens())
 
     def show_search(self, query=None):
         """ Shows the search dialog
@@ -38,7 +34,7 @@ class Search:
 
         # Do search
         try:
-            items = self._vtm_go.do_search(query)
+            items = self._api.do_search(query)
         except Exception as ex:  # pylint: disable=broad-except
             kodiutils.notification(message=str(ex))
             kodiutils.end_of_directory()

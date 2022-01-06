@@ -19,11 +19,11 @@ class VtmGoStream:
     """ VTM GO Stream API """
 
     _API_KEY = '3vjmWnsxF7SUTeNCBZlnUQ4Z7GQV8f6miQ514l10'
+    # _API_KEY = 'jL3yNhGpDsaew9CqJrDPq2UzMrlmNVbnadUXVOET'
 
-    def __init__(self, auth=None):
+    def __init__(self, tokens=None):
         """ Initialise object """
-        self._auth = auth
-        self._tokens = self._auth.get_tokens() if self._auth else None
+        self._tokens = tokens
 
     def _mode(self):
         """ Return the mode that should be used for API calls """
@@ -215,7 +215,7 @@ class VtmGoStream:
             # time format: seconds.fraction or seconds
             ad_break_start = timedelta(milliseconds=ad_break.get('start') * 1000)
             ad_break_duration = timedelta(milliseconds=ad_break.get('duration') * 1000)
-            if ad_break_start < sub_timings[0]:
+            if ad_break_start <= sub_timings[0]:
                 for idx, item in enumerate(sub_timings):
                     sub_timings[idx] += ad_break_duration
         for idx, item in enumerate(sub_timings):

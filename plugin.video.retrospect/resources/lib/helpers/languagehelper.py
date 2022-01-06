@@ -73,6 +73,8 @@ class LanguageHelper(object):
     AvailableFrom = 30366
 
     ChannelSelection = 30507
+    ShortCutName = 30512
+
     # Unused:
     # InitializingId = 30531
     # ImportCommonId = 30532

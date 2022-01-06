@@ -743,6 +743,14 @@ msgctxt "#30510"
 msgid "New version available"
 msgstr "Uusi versio saatavilla"
 
+msgctxt "#30511"
+msgid "Add shortcut"
+msgstr ""
+
+msgctxt "#30512"
+msgid "Please provide a name for the shortcut."
+msgstr ""
+
 msgctxt "#30516"
 msgid "New Version Available."
 msgstr "Uusi Versio Saatavilla."

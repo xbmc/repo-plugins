@@ -11,7 +11,7 @@ from data import CHANNELS
 from favorites import Favorites
 from kodiutils import addon_id, get_setting_bool, has_addon, jsonrpc, kodi_version_major, log, log_error, notify, set_property, url_for
 from resumepoints import ResumePoints
-from utils import play_url_to_id, to_unicode, url_to_episode
+from utils import play_url_to_id, to_unicode
 
 
 class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
@@ -28,15 +28,14 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         self.positionthread = None
         self.quit = Event()
 
-        self.asset_id = None
+        self.asset_str = None
         # FIXME On Kodi 17, use ListItem.Filenameandpath because Player.FilenameAndPath returns the stream manifest url and
         # this definitely breaks "Up Next" on Kodi 17, but this is not supported or available through the Kodi add-on repo anyway
         self.path_infolabel = 'ListItem.Filenameandpath' if kodi_version_major() < 18 else 'Player.FilenameAndPath'
         self.path = None
         self.title = None
         self.ep_id = None
-        self.url = None
-        self.whatson_id = None
+        self.video_id = None
         from random import randint
         self.thread_id = randint(1, 10001)
         log(3, '[PlayerInfo {id}] Initialized', id=self.thread_id)
@@ -61,10 +60,9 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
             self.push_position(position=self.last_pos, total=self.total)
 
         # Reset episode data
-        self.asset_id = None
+        self.video_id = None
+        self.asset_str = None
         self.title = None
-        self.url = None
-        self.whatson_id = None
 
         ep_id = play_url_to_id(self.path)
 
@@ -88,10 +86,9 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
             return
 
         from metadata import Metadata
-        self.asset_id = Metadata(None, None).get_asset_id(episode)
+        self.video_id = episode.get('videoId') or None
+        self.asset_str = Metadata(None, None).get_asset_str(episode)
         self.title = episode.get('program')
-        self.url = url_to_episode(episode.get('url', ''))
-        self.whatson_id = episode.get('whatsonId') or None  # Avoid empty string
 
         # Kodi 17 doesn't have onAVStarted
         if kodi_version_major() < 18:
@@ -274,17 +271,16 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
 
     def push_position(self, position, total):
         """Push player position to VRT NU resumepoints API and reload container"""
-        # Not all content has an asset_id
-        if not self.asset_id:
+        # Not all content has an video_id
+        if not self.video_id:
             return
 
         # Push resumepoint to VRT NU
-        self.resumepoints.update(
-            asset_id=self.asset_id,
+        self.resumepoints.update_resumepoint(
+            video_id=self.video_id,
+            asset_str=self.asset_str,
             title=self.title,
-            url=self.url,
             position=position,
             total=total,
-            whatson_id=self.whatson_id,
             path=self.path
         )

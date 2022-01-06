@@ -4,6 +4,7 @@ CHANNEL_FAVOURITES = "favourites"           # : Used to show favorites for a cha
 ALL_FAVOURITES = "allfavourites"            # : Used to show all favorites
 REMOVE_FAVOURITE = "removefromfavourites"   # : Used to remove items from favorites
 ADD_FAVOURITE = "addtofavourites"           # : Used to add items to favorites
+OPEN_SHORTCUT = "openshortcut"              # : Used to open a shortcut
 DOWNLOAD_VIDEO = "downloadVideo"            # : Used to download a video item
 PLAY_VIDEO = "playvideo"                    # : Used to play a video item
 UPDATE_CHANNELS = "updatechannels"          # : Used to update channels

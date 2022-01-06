@@ -86,11 +86,14 @@ class Channel(chn_class.Channel):
         # Set some info labels
         studio = result_set["studio"]
         item.set_info_label("studio", studio)
-        directors = result_set["directors"]
+
+        directors = (result_set["directors"] or [])
         item.set_info_label("Director", directors)
-        actors_data = result_set["actors"][:]
+
+        actors_data = (result_set["actors"] or [])[:]
         item.set_info_label("cast", actors_data)
-        genre_data = result_set["genre"][:]
+
+        genre_data = (result_set["genre"] or [])[:]
         item.set_info_label("genre", genre_data)
 
         return item

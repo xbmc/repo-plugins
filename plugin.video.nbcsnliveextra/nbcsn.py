@@ -1,51 +1,41 @@
-from resources.globals import *
+from resources.lib.globals import *
+from resources.lib.stream import *
 from adobepass.adobe import ADOBE
 
 
 def categories():
-    headers = {
-        'User-Agent': UA_NBCSN
-    }
-
-    r = requests.get(ROOT_URL + 'apps/NBCSports/configuration-firetv.json?version=5.12.4', headers=headers,
-                     verify=VERIFY)
+    headers = {'User-Agent': UA_NBCSN}
+    r = requests.get(CONFIG_URL, headers=headers, verify=VERIFY)
     json_source = r.json()
 
     for item in json_source['brands']:
         display_name = item['display-name']
         url = item['id']
         icon = item['channelChangerLogo']
-        add_dir(display_name, url, 2, icon, FANART)
-
-    # r = requests.get(ROOT_URL + 'apps/NBCSportsGold/configuration-firetv.json', headers=headers, verify=VERIFY)
-    # json_source = r.json()
-    #
-    # for item in json_source['brands']:
-    #     display_name = item['display-name']
-    #     url = item['id']
-    #     icon = item['channelChangerLogo']
-    #     add_dir(display_name, url, 2, icon, FANART)
+        if url != 'nbc-sports-gold' and url != 'sports-talk' and url != 'scores':
+            add_dir(display_name, url, 2, icon, FANART)
 
 
 def get_sub_nav(id, icon):
-    headers = {
-        'User-Agent': UA_NBCSN
-    }
-    url = ROOT_URL
-    url += 'apps/NBCSports/configuration-firetv.json?version=5.12.4'
-    # if id == 'nbc-sports-gold':
-    #     url += 'apps/NBCSportsGold/configuration-firetv.json'
-    # else:
-    #     url += 'apps/NBCSports/configuration-firetv.json'
+    headers = {'User-Agent': UA_NBCSN}
 
-    r = requests.get(url, headers=headers, verify=VERIFY)
+    r = requests.get(CONFIG_URL, headers=headers, verify=VERIFY)
     json_source = r.json()
 
     for brand in json_source['brands']:
         if brand['id'] == id:
+            app_name = brand['chromecastApplicationName']
             for sub_nav in brand['sub-nav']:
                 display_name = sub_nav['display-name']
+                status = sub_nav['id']
                 url = sub_nav['feed-url']
+                if '?application=' not in url and id != 'oly-channel':
+                    if status == 'live-upcoming': status = 'live'
+                    if status == 'replays': status = 'replay'
+                    url = 'https://api-leap.nbcsports.com/feeds/assets' \
+                          '?application=%s' \
+                          '&env=prod&format=v1' \
+                          '&platform=android&size=50&statuses=%s&sections=%s' % (app_name, status, id)
                 add_dir(display_name, url, 4, icon, FANART)
             break
 
@@ -61,13 +51,10 @@ def scrape_videos(url):
     r = requests.get(url, headers=headers, verify=VERIFY)
     json_source = r.json()
 
-    if 'featured' in url:
+    if 'results' in json_source:
+        json_source = json_source['results']
+    elif 'showCase' in json_source:
         json_source = json_source['showCase']
-
-    if 'live-upcoming' not in url:
-        json_source = sorted(json_source, key=lambda k: k['start'], reverse=True)
-    else:
-        json_source = sorted(json_source, key=lambda k: k['start'], reverse=False)
 
     for item in json_source:
         if 'show-all' in filter_list or item['sport'] in filter_list:
@@ -129,8 +116,13 @@ def build_video_link(item):
     stream_info = {
         'pid': pid,
         'requestor_id': requestor_id,
-        'channel': channel
+        'channel': channel,
     }
+    try:
+        stream_info['drm_type'] = item['videoSources'][0]['drmType']
+        stream_info['drm_asset_id'] = item['videoSources'][0]['drmAssetId'].ljust(40, '0')
+    except:
+        pass
 
     imgurl = "http://hdliveextra-pmd.edgesuite.net/HD/image_sports/mobile/%s_m50.jpg" % item['image']
     # menu_name = filter(lambda x: x in string.printable, menu_name)
@@ -146,11 +138,9 @@ def build_video_link(item):
         if free:
             menu_name = '[COLOR=' + FREE + ']' + menu_name + '[/COLOR]'
             add_free_link(menu_name, url, imgurl, FANART, info)
-            #add_free_link(name, link_url, iconimage, fanart=None, info=None)
         elif FREE_ONLY == 'false':
             menu_name = '[COLOR=' + LIVE + ']' + menu_name + '[/COLOR]'
             add_premium_link(menu_name, url, imgurl, stream_info, FANART, info)
-            #(name, link_url, iconimage, requestor_id, fanart=None, info=None)
     else:
         if free:
             menu_name = '[COLOR=' + FREE_UPCOMING + ']' + menu_name + '[/COLOR]'
@@ -160,7 +150,7 @@ def build_video_link(item):
             add_dir(menu_name + ' ' + start_date, '/disabled', 0, imgurl, FANART, False, info)
 
 
-def sign_stream(stream_url, stream_name, stream_icon, pid):
+def sign_stream(stream_url, stream_name, stream_icon, pid, drm_type, drm_asset_id):
     SERVICE_VARS['requestor_id'] = 'nbcsports'
     resource_id = get_resource_id()
     SERVICE_VARS['resource_id'] = urllib.quote(resource_id)
@@ -168,9 +158,16 @@ def sign_stream(stream_url, stream_name, stream_icon, pid):
     if adobe.check_authn():
         if adobe.authorize():
             media_token = adobe.media_token()
-            stream_url = get_tokenized_url(media_token, resource_id, stream_url, pid)
-            stream_url += "|User-Agent=" + UA_NBCSN
-            play_stream(stream_url)
+            stream_vars = {
+                'drm_asset_id': drm_asset_id,
+                'drm_type': drm_type,
+                'manifest_url': stream_url,
+                'media_token': media_token,
+                'resource_id': resource_id,
+                'pid': pid
+            }
+            stream = Stream(stream_vars)
+            xbmcplugin.setResolvedUrl(ADDON_HANDLE, True, stream.create_listitem())
         else:
             sys.exit()
     else:
@@ -183,60 +180,9 @@ def sign_stream(stream_url, stream_name, stream_icon, pid):
             sys.exit()
 
 
-def get_tokenized_url(media_token, resource_id, stream_url, pid):
-    url = 'https://token.playmakerservices.com/cdn'
-    headers = {
-        "Accept": "*/*",
-        "Accept-Language": "en;q=1",
-        "Content-Type": "application/json",
-        "User-Agent": "okhttp/3.11.0"
-    }
-
-    payload = {
-        'resourceId': base64.b64encode(codecs.encode(resource_id)).decode("ascii"),
-        'requestorId': 'nbcsports',
-        'token': media_token,
-        'cdn': 'akamai',
-        'url': stream_url,
-        'pid': pid,
-        'application': 'NBCSports',
-        'version': 'v1',
-        'platform': 'desktop'
-    }
-
-    r = requests.post(url, headers=headers, cookies=load_cookies(), json=payload, verify=VERIFY)
-    save_cookies(r.cookies)
-    return r.json()['tokenizedUrl']
-
-
 def logout():
     adobe = ADOBE(SERVICE_VARS)
     adobe.logout()
-
-
-def play_stream(stream_url):
-    xbmc.log('------------------------------------------------------------------------------------------')
-    xbmc.log(stream_url)
-    xbmc.log('------------------------------------------------------------------------------------------')
-
-    if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
-        stream = stream_url.split("|")[0]
-        headers = stream_url.split("|")[1]
-        listitem = xbmcgui.ListItem(path=stream)
-        if KODI_VERSION >= 19:
-            listitem.setProperty('inputstream', 'inputstream.adaptive')
-        else:
-            listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
-        listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
-        listitem.setProperty('inputstream.adaptive.stream_headers', headers)
-        listitem.setProperty('inputstream.adaptive.license_key', "|" + headers)
-    else:
-        listitem = xbmcgui.ListItem(path=stream_url)
-        listitem.setMimeType("application/x-mpegURL")
-
-    # listitem = xbmcgui.ListItem(path=stream_url)
-    xbmcplugin.setResolvedUrl(ADDON_HANDLE, True, listitem)
-
 
 
 params = get_params()
@@ -247,6 +193,8 @@ icon_image = None
 requestor_id = ''
 channel = ''
 pid = ''
+drm_asset_id = ''
+drm_type = ''
 
 if 'url' in params: url = urllib.unquote_plus(params["url"])
 if 'name' in params: name = urllib.unquote_plus(params["name"])
@@ -255,6 +203,8 @@ if 'icon_image' in params: icon_image = urllib.unquote_plus(params["icon_image"]
 if 'requestor_id' in params: requestor_id = urllib.unquote_plus(params['requestor_id'])
 if 'channel' in params: channel = urllib.unquote_plus(params['channel'])
 if 'pid' in params: pid = urllib.unquote_plus(params['pid'])
+if 'drm_asset_id' in params: drm_asset_id = urllib.unquote_plus(params['drm_asset_id'])
+if 'drm_type' in params: drm_type = urllib.unquote_plus(params['drm_type'])
 
 if mode is None or url is None or len(url) < 1:
     categories()
@@ -266,20 +216,23 @@ elif mode == 4:
     scrape_videos(url)
 
 elif mode == 5:
-    sign_stream(url, name, icon_image, pid)
+    sign_stream(url, name, icon_image, pid, drm_type, drm_asset_id)
 
 elif mode == 6:
-    # Set quality level based on user settings
-    #stream_url = set_stream_quality(url)
-    #listitem = xbmcgui.ListItem(path=stream_url)
-    stream_url = url + "|User-Agent=" + UA_NBCSN
-    play_stream(stream_url)
+    stream_vars = {
+        'drm_asset_id': drm_asset_id,
+        'drm_type': drm_type,
+        'manifest_url': url,
+        'pid': pid
+    }
+    stream = Stream(stream_vars)
+    xbmcplugin.setResolvedUrl(ADDON_HANDLE, True, stream.create_listitem())
 
 elif mode == 999:
     logout()
 
 # Don't cache content lists
-if mode == 4:
-    xbmcplugin.endOfDirectory(ADDON_HANDLE, cacheToDisc=False)
-else:
+if mode and mode > 4:
     xbmcplugin.endOfDirectory(ADDON_HANDLE)
+else:
+    xbmcplugin.endOfDirectory(ADDON_HANDLE, cacheToDisc=False)

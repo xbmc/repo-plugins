@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.raitv"
        name="Rai Play"
-       version="3.6.1"
+       version="3.8.1"
        provider-name="Nightflyer, cttynul, maxbambi, fabpolli">
   <requires>
         <import addon="xbmc.python" version="3.0.0"/>    
@@ -28,15 +28,13 @@ Source: https://github.com/maxbambi/plugin.video.raitv/
     <license>GPL-3.0-or-later</license>
     <forum>https://forum.kodi.tv/showthread.php?tid=155922</forum>
     <website>https://github.com/maxbambi/plugin.video.raitv/</website>
+    <email></email>
     <news>
-[B]3.6.1[/B]
-- fix news section
+[B]3.8.1[/B]
+- Fix Home Page Raiplay  
 
-[B]3.6.0.2[/B]
-- fix in try except  
-
-[B]3.6.0[/B]
-- Fixes for Kodi 19 Matrix  
+[B]3.8.0[/B]
+- Fix Radio Rai Audio Streams  
     </news>
     <source>https://github.com/maxbambi/plugin.video.raitv/</source>
     <assets>

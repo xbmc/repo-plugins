@@ -1,6 +1,5 @@
 import json
 import os
-import re
 
 import xbmc
 import xbmcaddon
@@ -19,7 +18,7 @@ class DeutschlandfunkAddon(AbstractRssAddon):
     URL_STREAMS_RPC = "https://srv.deutschlandradio.de/config-feed.2828.de.rpc"
 
     URL_PODCASTS_DLF = "https://www.deutschlandfunk.de/podcasts"
-    URL_PODCASTS_DLK = "https://www.deutschlandfunkkultur.de/program-and-podcast"
+    URL_PODCASTS_DLK = "https://www.deutschlandfunkkultur.de/sendungen-podcasts"
     URL_PODCASTS_NOVA = "https://www.deutschlandfunknova.de/podcasts"
 
     PATH_DLF = "dlf"
@@ -176,59 +175,33 @@ class DeutschlandfunkAddon(AbstractRssAddon):
         # download html site with podcast overview
         _data, _cookies = http_request(self.addon, url)
 
-        soup = BeautifulSoup(_data, 'html.parser')
-        _div_podcast_teasers = soup.select('div.b-podcast-teaser')
+        soup = BeautifulSoup(_data, "html.parser")
+        _script_js_client_queries = soup.find_all(
+            "script", class_="js-client-queries")
 
-        for _teaser in _div_podcast_teasers:
+        _img_src = None
+
+        for _script in _script_js_client_queries:
+
+            if not _script.has_attr("data-json"):
+                continue
+
             try:
-                _img = _teaser.findChild("img")["src"]
-                _name = _teaser.findChild("h4").text
-                _rss = _teaser.find_all("a", class_=["is-rss"])[0]["href"]
-                m = re.match(r"^.*([^/]+)\.xml$", _rss)
-                if m:
+                _data_json = json.loads(_script["data-json"])
+                if "value" not in _data_json or "__typename" not in _data_json["value"]:
+                    continue
+
+                if _data_json["value"]["__typename"] == "Image":
+                    _img_src = _data_json["value"]["src"]
+
+                elif _data_json["value"]["__typename"] == "Teaser" and "pathPodcast" in _data_json["value"]:
                     entry = {
-                        "path": m.groups()[0],
-                        "name": _name,
-                        "icon": _img,
+                        "path": _data_json["value"]["sophoraId"],
+                        "name": _data_json["value"]["title"],
+                        "icon": _img_src,
                         "params": [
                             {
-                                "rss": _rss
-                            }
-                        ],
-                        "node": []
-                    }
-                    self.add_list_item(entry, path)
-
-            except:
-                pass
-
-        xbmcplugin.addSortMethod(
-            self.addon_handle, xbmcplugin.SORT_METHOD_LABEL)
-
-        xbmcplugin.endOfDirectory(self.addon_handle, updateListing=False)
-
-    def _parse_drk(self, path, url):
-
-        # download html site with podcast overview
-        _data, _cookies = http_request(self.addon, url)
-
-        soup = BeautifulSoup(_data, 'html.parser')
-        _div_podcast_teasers = soup.select('div.b-teaser-podcast')
-
-        for _teaser in _div_podcast_teasers:
-            try:
-                _img = _teaser.findChild("img")["src"]
-                _name = _teaser.findChild("h3").text
-                _rss = _teaser.find_all("a", class_=["is-rss"])[0]["href"]
-                m = re.match(r"^.*([^/]+)\.xml$", _rss)
-                if m:
-                    entry = {
-                        "path": m.groups()[0],
-                        "name": _name,
-                        "icon": _img,
-                        "params": [
-                            {
-                                "rss": _rss
+                                "rss": _data_json["value"]["pathPodcast"]
                             }
                         ],
                         "node": []
@@ -252,7 +225,7 @@ class DeutschlandfunkAddon(AbstractRssAddon):
                 self._parse_dlf(path, self.URL_PODCASTS_DLF)
 
             elif splitted_path[0] == DeutschlandfunkAddon.PATH_DLK:
-                self._parse_drk(path, self.URL_PODCASTS_DLK)
+                self._parse_dlf(path, self.URL_PODCASTS_DLK)
 
             elif splitted_path[0] == DeutschlandfunkAddon.PATH_NOVA:
                 self._parse_nova(path)

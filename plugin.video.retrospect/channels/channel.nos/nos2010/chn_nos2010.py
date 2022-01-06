@@ -396,7 +396,7 @@ class Channel(chn_class.Channel):
         extra = FolderItem(
             LanguageHelper.get_localized_string(LanguageHelper.Genres),
             "https://www.npostart.nl/programmas",
-            content_type=contenttype.FILES)
+            content_type=contenttype.VIDEOS)
         extra.complete = True
         extra.dontGroup = True
         items.append(extra)
@@ -404,7 +404,7 @@ class Channel(chn_class.Channel):
         extra = FolderItem(
             "{} (A-Z)".format(LanguageHelper.get_localized_string(LanguageHelper.TvShows)),
             "#alphalisting",
-            content_type=contenttype.FILES)
+            content_type=contenttype.TVSHOWS)
         extra.complete = True
         extra.description = "Alfabetische lijst van de NPO.nl site."
         extra.dontGroup = True
@@ -901,7 +901,9 @@ class Channel(chn_class.Channel):
 
         season = result_set.get("seasonNumber")
         episode = result_set.get("episodeNumber")
-        if bool(season) and bool(episode) and season < 100:
+
+        # Check for seasons but don't add then for EPG
+        if bool(season) and bool(episode) and season < 100 and not for_epg:
             item.set_season_info(season, episode)
             # TODO: setting it now is to messy. Perhaps we should make it configurable?
             # item.name = "s{0:02d}e{1:02d} - {2}".format(season, episode, item.name)

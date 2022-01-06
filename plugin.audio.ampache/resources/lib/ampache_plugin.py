@@ -144,7 +144,8 @@ def getNestedTypeId(node,elem_type):
 def precacheArt(elem,elem_type):
 
     allid=set()
-    if elem_type != "album" and elem_type != "song" and elem_type != "artist" and elem_type != "podcast":
+    if elem_type != "album" and elem_type != "song" and\
+            elem_type != "artist" and elem_type != "podcast" and elem_type!= "playlist":
         return
 
     threadList = []
@@ -208,6 +209,9 @@ def addLinks(elem,elem_type,useCacheArt,mode):
         elif elem_type == "podcast":
             if useCacheArt:
                 image = art.get_art(object_id,"podcast")
+        elif elem_type == "playlist":
+            if useCacheArt:
+                image = art.get_art(object_id,"playlist")
         else:
             useCacheArt = False
 
@@ -236,7 +240,7 @@ def addLinks(elem,elem_type,useCacheArt,mode):
     xbmcplugin.addDirectoryItems(handle=int(sys.argv[1]),items=it,totalItems=len(elem))
 
 # Used to populate items for songs on XBMC. Calls plugin script with mode ==
-# 45 and play_ur == (ampache item url)
+# 45 and play_url == (ampache item url)
 def addPlayLinks(elem, elem_type):
    
     it=[]

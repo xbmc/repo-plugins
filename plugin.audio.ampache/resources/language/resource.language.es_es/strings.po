@@ -1,0 +1,493 @@
+# Kodi Media Center language file
+# Addon Name: Ampache plugin
+# Addon id: plugin.audio.ampache
+# Addon Provider: lusum
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-03-18 00:01+0100\n"
+"Last-Translator: \n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/"
+"language/en/)\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.4.1\n"
+
+msgctxt "#30001"
+msgid "General"
+msgstr "General"
+
+msgctxt "#30002"
+msgid "Servers"
+msgstr "Servidores"
+
+msgctxt "#30010"
+msgid "Random Items"
+msgstr "Núumero de elementos aleatorios"
+
+msgctxt "#30011"
+msgid "Disable Ssl certs"
+msgstr "Deshabilitar certificados Ssl"
+
+# empty string with id 32003
+msgctxt "#30012"
+msgid "Api Version"
+msgstr "Versión de la Api"
+
+msgctxt "#30013"
+msgid "Old search gui (web controller friendly)"
+msgstr "Interfaz de búsqueda para el controlador web"
+
+msgctxt "#30014"
+msgid "Enable images on long lists"
+msgstr "Habilita imágenes en listas largas"
+
+msgctxt "#30015"
+msgid "Auto fullscreen"
+msgstr "Pantalla completa automática"
+
+msgctxt "#30020"
+msgid "Add Server"
+msgstr "Añadir servidor"
+
+msgctxt "#30021"
+msgid "Remove Server"
+msgstr "Eliminar servidor"
+
+msgctxt "#30022"
+msgid "Modify Server"
+msgstr "Modificar servidor"
+
+msgctxt "#30023"
+msgid "Switch Server"
+msgstr "Cambiar servidor"
+
+# code
+msgctxt "#30101"
+msgid "Search..."
+msgstr "Buscar..."
+
+msgctxt "#30102"
+msgid "Quick access..."
+msgstr "Acceso rápido..."
+
+msgctxt "#30103"
+msgid "Explore..."
+msgstr "Explorar..."
+
+msgctxt "#30104"
+msgid "Library..."
+msgstr "Librería..."
+
+msgctxt "#30105"
+msgid "Settings"
+msgstr "Configuración"
+
+msgctxt "#30106"
+msgid "Artist"
+msgstr "Artista"
+
+msgctxt "#30107"
+msgid "Album"
+msgstr "Álbum"
+
+msgctxt "#30108"
+msgid "Song"
+msgstr "Canción"
+
+msgctxt "#30109"
+msgid "Playlist"
+msgstr "Lista de reproducción"
+
+msgctxt "#30110"
+msgid "All"
+msgstr "Todo"
+
+msgctxt "#30111"
+msgid "Tag"
+msgstr "Género"
+
+msgctxt "#30112"
+msgid "Artist tag"
+msgstr "Género del artista"
+
+msgctxt "#30113"
+msgid "Album tag"
+msgstr "Género del álbum"
+
+msgctxt "#30114"
+msgid "Song tag"
+msgstr "Género de la canción"
+
+msgctxt "#30115"
+msgid "Artists"
+msgstr "Artistas"
+
+msgctxt "#30116"
+msgid "Albums"
+msgstr "Álbumes"
+
+msgctxt "#30117"
+msgid "Songs"
+msgstr "Canciones"
+
+msgctxt "#30118"
+msgid "Playlists"
+msgstr "Listas de reproducción"
+
+msgctxt "#30119"
+msgid "Tags"
+msgstr "Géneros"
+
+# code
+msgctxt "#30120"
+msgid "Search Artists..."
+msgstr "Buscar de artistas..."
+
+# code
+msgctxt "#30121"
+msgid "Search Albums..."
+msgstr "Buscar de álbumes..."
+
+# code
+msgctxt "#30122"
+msgid "Search Songs..."
+msgstr "Buscar de canciones..."
+
+# code
+msgctxt "#30123"
+msgid "Search Playlists..."
+msgstr "Buscar de listas de reproducción..."
+
+# code
+msgctxt "#30124"
+msgid "Search All..."
+msgstr "Buscar todo..."
+
+# code
+msgctxt "#30125"
+msgid "Search Tags..."
+msgstr "Buscar géneros..."
+
+msgctxt "#30126"
+msgid "Recently Added Artists..."
+msgstr "Artistas añadidos recientemente..."
+
+msgctxt "#30127"
+msgid "Recently Added Albums..."
+msgstr "Álbumes añadidos recientemente..."
+
+msgctxt "#30128"
+msgid "Recently Added Songs..."
+msgstr "Canciones añadidas recientemente..."
+
+msgctxt "#30129"
+msgid "Recently Added Playlists..."
+msgstr "Listas de reproducción añadidas recientemente..."
+
+msgctxt "#30130"
+msgid "Last Update"
+msgstr "Últimas actualizaciones"
+
+msgctxt "#30131"
+msgid "1 Week"
+msgstr "1 semana"
+
+msgctxt "#30132"
+msgid "1 Month"
+msgstr "1 mes"
+
+msgctxt "#30133"
+msgid "3 Months"
+msgstr "3 meses"
+
+msgctxt "#30134"
+msgid "Random Artists..."
+msgstr "Artistas aleatorios..."
+
+msgctxt "#30135"
+msgid "Random Albums..."
+msgstr "Álbumes aleatorios..."
+
+msgctxt "#30136"
+msgid "Random Songs..."
+msgstr "Canciones aleatorios..."
+
+msgctxt "#30137"
+msgid "Random Playlists..."
+msgstr "Listas de reproducción aleatorias..."
+
+msgctxt "#30138"
+msgid "Show artist from this song"
+msgstr "Mostrar artistas de esta canción"
+
+msgctxt "#30139"
+msgid "Show album from this song"
+msgstr "Mostrar álbum de esta canción"
+
+msgctxt "#30140"
+msgid "Search all songs with this title"
+msgstr "Buscar todas las canciones con este título"
+
+msgctxt "#30141"
+msgid "Show all albums from artist"
+msgstr "Mostrar todos los álbumes del artista"
+
+msgctxt "#30142"
+msgid "Artist tags..."
+msgstr "Géneros de artistas..."
+
+msgctxt "#30143"
+msgid "Album tags..."
+msgstr "Géneros de álbumes..."
+
+msgctxt "#30144"
+msgid "Song tags..."
+msgstr "Géneros de canciones..."
+
+msgctxt "#30145"
+msgid "Recently Added..."
+msgstr "Añadido recientemente..."
+
+msgctxt "#30146"
+msgid "Random..."
+msgstr "Aleatorio..."
+
+msgctxt "#30147"
+msgid "Server playlist..."
+msgstr "Lista de reproducción del servidor..."
+
+msgctxt "#30148"
+msgid "Highest Rated..."
+msgstr "Puntuaciones mas altas..."
+
+msgctxt "#30149"
+msgid "Highest Rated Artists..."
+msgstr "Artistas con mejor puntuación..."
+
+msgctxt "#30150"
+msgid "Highest Rated Albums..."
+msgstr "Álbumes con mejor puntuación..."
+
+msgctxt "#30151"
+msgid "Highest Rated Songs..."
+msgstr "Canciones con mejor puntuación..."
+
+msgctxt "#30152"
+msgid "Frequent Artists..."
+msgstr "Artitas frequentes..."
+
+msgctxt "#30153"
+msgid "Frequent Albums..."
+msgstr "Álbumes frequentes..."
+
+msgctxt "#30154"
+msgid "Frequent Songs..."
+msgstr "Canciones frequentes..."
+
+msgctxt "#30155"
+msgid "Flagged Artists..."
+msgstr "Artistas favoritos..."
+
+msgctxt "#30156"
+msgid "Flagged Albums..."
+msgstr "Álbumes favoritos..."
+
+msgctxt "#30157"
+msgid "Flagged Songs..."
+msgstr "Canciones favoritas..."
+
+msgctxt "#30158"
+msgid "Forgotten Artists..."
+msgstr "Artistas olvidados..."
+
+msgctxt "#30159"
+msgid "Forgotten Albums..."
+msgstr "Álbumes olvidados..."
+
+msgctxt "#30160"
+msgid "Forgotten Songs..."
+msgstr "Canciones olvidadas..."
+
+msgctxt "#30161"
+msgid "Newest Artists..."
+msgstr "Artistas añadidos recientemente..."
+
+msgctxt "#30162"
+msgid "Newest Albums..."
+msgstr "Álbumes añadidos recientemente"
+
+msgctxt "#30163"
+msgid "Newest Songs..."
+msgstr "Canciones añadidas recientemente..."
+
+msgctxt "#30164"
+msgid "Frequent..."
+msgstr "Frequentes..."
+
+msgctxt "#30165"
+msgid "Flagged..."
+msgstr "Favoritos..."
+
+msgctxt "#30166"
+msgid "Forgotten..."
+msgstr "Olvidados..."
+
+msgctxt "#30167"
+msgid "Newest..."
+msgstr "Añadido recientemente..."
+
+msgctxt "#30168"
+msgid "Modify the data, cancel to exit"
+msgstr "Modifique los datos, para salir pulse cancelar"
+
+msgctxt "#30169"
+msgid "Choose a default server"
+msgstr "Elija el servidor predeterminador"
+
+msgctxt "#30170"
+msgid "Enter the Server name"
+msgstr "Inserte el nombre del servidor"
+
+msgctxt "#30171"
+msgid "Enter the url of the server"
+msgstr "Inserte la url del servidor"
+
+msgctxt "#30173"
+msgid "Do you want to use an api-key?"
+msgstr "¿Quiere usar una clave api?"
+
+msgctxt "#30174"
+msgid "Enter the Api key"
+msgstr "Inserte la clave Api"
+
+msgctxt "#30175"
+msgid "Enter the username"
+msgstr "Inserte el nombre de usuario"
+
+msgctxt "#30177"
+msgid "The server needs a password?"
+msgstr "¿Necesita contraseña el servidor?"
+
+msgctxt "#30178"
+msgid "Enter the password"
+msgstr "Inserte la contraseña"
+
+msgctxt "#30179"
+msgid "Choose a server to remove"
+msgstr "Elija un servidor a eliminar"
+
+msgctxt "#30180"
+msgid "Modify a server"
+msgstr "Modificar un servidor"
+
+msgctxt "#30181"
+msgid "Server name"
+msgstr "Nombre del servidor"
+
+msgctxt "#30182"
+msgid "Server url"
+msgstr "Url del servidor"
+
+msgctxt "#30183"
+msgid "Username"
+msgstr "Nombre de usuario"
+
+msgctxt "#30184"
+msgid "Enable password"
+msgstr "Habilitar contraseña"
+
+msgctxt "#30185"
+msgid "Password"
+msgstr "Contraseña"
+
+msgctxt "#30186"
+msgid "Use api key"
+msgstr "Usar clave api"
+
+msgctxt "#30187"
+msgid "Api key"
+msgstr "Clave api"
+
+msgctxt "#30188"
+msgid "Are you sure?"
+msgstr "Está seguro?"
+
+msgctxt "#30189"
+msgid "Ampache plugin"
+msgstr "Plugin Ampache"
+
+msgctxt "#30190"
+msgid "Recently Played Artists..."
+msgstr "Artistas reproducidos recientemente..."
+
+msgctxt "#30191"
+msgid "Recently Played Albums..."
+msgstr "Álbumes reproducidos recientemente..."
+
+msgctxt "#30192"
+msgid "Recently Played Songs..."
+msgstr "Canciones reproducidas recientemente..."
+
+msgctxt "#30193"
+msgid "Recently Played..."
+msgstr "Reproducido recientemente..."
+
+msgctxt "#30194"
+msgid "Next items..."
+msgstr "Siguientes elementos..."
+
+msgctxt "#30195"
+msgid "Disk"
+msgstr "Disco"
+
+msgctxt "#30197"
+msgid "Information"
+msgstr "Información"
+
+msgctxt "#30198"
+msgid "Error"
+msgstr "Error"
+
+msgctxt "#30202"
+msgid "Connection Error"
+msgstr "Error de conexión"
+
+msgctxt "#30203"
+msgid "Connection OK"
+msgstr "Conexión correcta"
+
+msgctxt "#30204"
+msgid "Permission error. If you are using Nextcloud don't check api_key box"
+msgstr "Error de permiso. Si se está usando Nextcloud, no utilizar clave api"
+
+msgctxt "#30220"
+msgid "Video"
+msgstr "Vídeo"
+
+msgctxt "#30221"
+msgid "Videos"
+msgstr "Videos"
+
+# code
+msgctxt "#30222"
+msgid "Search Videos..."
+msgstr "Buscar vídeos..."
+
+msgctxt "#30225"
+msgid "Podcast"
+msgstr "Podcast"
+
+msgctxt "#30226"
+msgid "Podcasts"
+msgstr "Podcasts"
+
+# code
+msgctxt "#30227"
+msgid "Search Podcasts..."
+msgstr "Busca podcasts..."

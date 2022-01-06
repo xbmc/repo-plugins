@@ -27,23 +27,23 @@ class TeliaPlay():
 
     graphql_hashes = {
 	"getMainMenu":
-        "3a18959010d36f5d47e7341167a2c596c11bdd2697bfb6ca7821862b048ff832",
+        "f9c1eb6c91def27ee800da2296922d3798a54a8af32f79f25661afb621f1b45d",
 	"search":
-        "6be7dcb0253bf9bf1bb966d2f4317148d21910ce4c79d9f0c08a50faf30145ca",
+        "de385aa8e38e6d7c1e308a740bdb152b9d6d89c620e758a16814ad9bd0ae85e0",
 	"getPage":
-        "4010f0c6c590330655506fabd5493ec94e6d1605d91d7cb9dcd4f9d2ce99126f",
+        "4f9d11526144a07568d64d659c008bb28085e116c84c1dd0cd5ed7ea8db44a77",
 	"getTvChannels":
-        "3ac1076fee793bf1cbb19327d3baf6c89ae647a6664b9e8c3030635ebc6dd2c9",
+        "332c536e6095632e61dd88f63a73b2c7f783c24ef4a8b21bcefbeae638de7aa2",
 	"getTvChannel":
-        "05f9356e33be31cb36938442b37776097b304241072bf1bc31af53f65dfaf417",
+        "de9b6b8f45d8698cf5f6572d56ed387aa564a32ba8c617349221505c8222f77f",
 	"getStorePage":
-        "b2c9288f9eed4e05677b95f4989521aafb3ee36d4c70c2c0c66709211a89aa48",
+        "f02456e757d511c7d4abd02d64c9b7ab82e04d5203dca691f91112d54790d9db",
 	"getPanel":
-        "cd619fae55e04557a38bab23b9215a06b9b848e9cc5778c662da91ea19f61b27",
+        "bbf3465986a62517cd9d33e237901c6f2fcb5b3983847800a9265e9378c19f00",
 	"getSeries":
-        "d028bd6a063b12220fc7c600361ac0aab35d0253f6a84f8ce2e9e7b446deed7d",
+        "672502c85fe4c4d5ebd2db79e8b4cc46e3d83844f1c67e75226d8bc91300250d",
 	"getSeason":
-        "e8232e47c6de8c71f750884b23f2518b91cf3365f16451740a7a910b60ca283f",
+        "09bda1dc98eb6bc40d947de0ef48f76ff515687838ac1b4bda805d8fc4be2664",
 	"addToMyList":
         "70a1b84e1976a3b9773b25b9096e4e6c39128218720b5a6d2ccc0a0dd522919b",
 	"removeFromMyList":
@@ -646,7 +646,7 @@ class TeliaPlay():
                 "packagings": ["DASH_MP4_CTR"],
                 "drmType": "WIDEVINE",
                 "capabilities": [],
-                "screen": {"height": 2160, "width": 3840},
+                "screen": {"height": 1080, "width": 1920},
                 "os": platform.system()
             },
             "preferences": {
@@ -660,12 +660,9 @@ class TeliaPlay():
         ).json()
         error_check(response_json)
 
-        if stream_type == "live":
-            try:
-                return response_json["streams"][1]
-            except IndexError:
-                return response_json["streams"][0]
-        else:
+        try:
+            return response_json["streams"][1]
+        except IndexError:
             return response_json["streams"][0]
 
     def delete_stream(self):

@@ -100,7 +100,12 @@ def addServer():
     xbmc.log("AmpachePlugin::addServer" , xbmc.LOGDEBUG )
     jsStorServer = json_storage.JsonStorage("servers.json")
     serverData = jsStorServer.getData()
-    stnum = str(len(list(serverData["servers"])))
+    if len(list(serverData["servers"])) > 0:
+        #choose the max number of the server list plus one
+        stnum = str(max([int(i) for i in list(serverData["servers"])])+1)
+    else:
+        #empty list
+        stnum = "0"
     username = ""
     password = ""
     apikey = ""
@@ -150,7 +155,10 @@ def deleteServer():
     dialog = xbmcgui.Dialog()
     confirm = dialog.yesno(ut.tString(30189),ut.tString(30188))
     if confirm:
-        del serverData["servers"][i_rem]
+        #replace old server position with the latest server in the list
+        repl_num = str(max([int(i) for i in list(serverData["servers"])]))
+        serverData["servers"][i_rem] = serverData["servers"][repl_num].copy()
+        del serverData["servers"][repl_num]
         jsStorServer.save(serverData)
         return True
     else:

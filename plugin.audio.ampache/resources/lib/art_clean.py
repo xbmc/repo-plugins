@@ -36,7 +36,7 @@ def clean_cache_art():
     if not os.path.isdir(user_dir):
         ampache.setSetting("api-version","350001")
 
-    cacheTypes = ["album", "artist" , "song", "podcast"]
+    cacheTypes = ["album", "artist" , "song", "podcast","playlist"]
     #if cacheDir doesn't exist, create it
     if not os.path.isdir(user_mediaDir):
         os.mkdir(user_mediaDir)

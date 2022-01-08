@@ -117,7 +117,7 @@ class AmpacheConnect(object):
     def get_auth_key_login_url(self):
         myURL = self._connectionData["url"] +  self.getBaseUrl() + '?action=handshake&auth='
         myURL += self._connectionData["api_key"]
-        myURL += '&version=' + version
+        myURL += '&version=' + self.version
         return myURL
 
     def handle_request(self,url):
@@ -150,7 +150,6 @@ class AmpacheConnect(object):
         return headers,contents
 
     def AMPACHECONNECT(self,showok=False):
-        version = 350001
         socket.setdefaulttimeout(3600)
         nTime = int(time.time())
         use_api_key = self._connectionData["use_api_key"]

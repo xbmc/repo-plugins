@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.5.0+matrix.1"
+        version="5.5.1+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -122,25 +122,22 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.5.0 - Changelog - 2021-12-29[/B]
+        <news>[B]Retrospect v5.5.1 - Changelog - 2022-01-08[/B]
 
-This new minor version introduces the option to create &#x27;shortcuts&#x27; for videos and folders. These shortcuts are simple named items that can be used in Kodi (JSON) API calls without the need of specifying any guids that usually belong to Retrospect urls. More information can be found in the readme.md file under to section &quot;Automation of Retrospect&quot;.
-
-Besides this change, some channels were fixed. 
+Minor update to fix SVT, VRT.nu and some Nickelodeon channels.
 
 [B]Framework related[/B]
-* Added: &#x27;Shortcut&#x27; implementation to enable automation of Retrospect via Kodi (JSON) API (Fixes #1591 and #1588).
+_None_
 
 [B]GUI/Settings/Language related[/B]
-* Changed: Only force sorting by episode/season if all have episodes.
+_None_
 
 [B]Channel related[/B]
-* Fixed: ViaSat now has encrypted streams, so we always need to use InputStream Adaptive (Fixes #1589).
-* Updated: Mark genre folders with content type `videos` (See #1579).
-* Updated: Mark Single items in SVT as `videos` (See #1579).
-* Changed: RTV Noord to Regio Groei.
-* Fixed: More default content types fixed (Fixes #1593).
-* Fixed: NPO EPG contained confusing episode and seasons info (Fixes #1590).
+* Removed: Nickelodeon.no as they no longer provide videos.
+* Removed: NickJr.se as they no longer provide videos.
+* Fixed: HTML video resolved for SVT broken (Fixes #1596).
+* Fixed: TV Show images for VRT.nu.
+* Updated: VRT.nu logon to v2 (Fixes #1595).
 
         </news>
         <assets>

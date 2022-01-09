@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kodi Addons\n"
-"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2021-12-06 14:13+0000\n"
 "Last-Translator: G0mez82 <jalehto_99@hotmail.com>\n"
@@ -48,3 +48,31 @@ msgstr "Etsi videoita"
 msgctxt "#30201"
 msgid "Title"
 msgstr "Nimike"
+
+msgctxt "#30202"
+msgid "General"
+msgstr ""
+
+msgctxt "#30203"
+msgid "General Settings"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Add-on used for playback"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Select the Add-on used for playback"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Youtube Add-on"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Tubed Add-on"
+msgstr ""

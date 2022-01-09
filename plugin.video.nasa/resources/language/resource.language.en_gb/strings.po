@@ -61,7 +61,7 @@ msgid "Playback"
 msgstr ""
 
 msgctxt "#30205"
-msgid "Addon used for playback"
+msgid "Add-on used for playback"
 msgstr ""
 
 msgctxt "#30206"
@@ -74,8 +74,4 @@ msgstr ""
 
 msgctxt "#30208"
 msgid "Tubed Add-on"
-msgstr ""
-
-msgctxt "#30208"
-msgid "Coiso"
 msgstr ""

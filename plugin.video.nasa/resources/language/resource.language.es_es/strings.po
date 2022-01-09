@@ -47,3 +47,31 @@ msgstr "Buscar vídeos"
 msgctxt "#30201"
 msgid "Title"
 msgstr "Título"
+
+msgctxt "#30202"
+msgid "General"
+msgstr ""
+
+msgctxt "#30203"
+msgid "General Settings"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Add-on used for playback"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Select the Add-on used for playback"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Youtube Add-on"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Tubed Add-on"
+msgstr ""

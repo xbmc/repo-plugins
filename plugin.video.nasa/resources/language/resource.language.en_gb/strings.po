@@ -16,6 +16,14 @@ msgstr ""
 "Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "Addon Summary"
+msgid "Video plugin to access content from nasa.gov"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "This video plugin provides access to more than 1800 videos, 8 vodcasts and 4 nasa-tv livestreams[CR]All content is dynamic and should be always up to date."
+msgstr ""
+
 msgctxt "#30001"
 msgid "Page"
 msgstr ""
@@ -40,3 +48,34 @@ msgctxt "#30201"
 msgid "Title"
 msgstr ""
 
+msgctxt "#30202"
+msgid "General"
+msgstr ""
+
+msgctxt "#30203"
+msgid "General Settings"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Addon used for playback"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Select the Add-on used for playback"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Youtube Add-on"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Tubed Add-on"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Coiso"
+msgstr ""

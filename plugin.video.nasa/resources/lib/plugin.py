@@ -20,10 +20,21 @@
 import os
 from xbmcswift2 import Plugin
 
-YOUTUBE_URL = 'plugin://plugin.video.tubed/?channel_id=%s&mode=channel'
-YOUTUBE_VIDEO_URL = 'plugin://plugin.video.tubed/?mode=play&video_id=%s'
-
 plugin = Plugin()
+
+PLAYBACK_ADDON_DICT = {
+    0: {
+        'addon': 'Youtube',
+        'channel_url': 'plugin://plugin.video.youtube/channel/%s/?page=1',
+        'video_url': 'plugin://plugin.video.youtube/play/?video_id=%s'
+    },
+    1: {
+        'addon': 'Tubed',
+        'channel_url': 'plugin://plugin.video.tubed/?channel_id=%s&mode=channel',
+        'video_url': 'plugin://plugin.video.tubed/?mode=play&video_id=%s'
+    }
+}
+
 
 STRINGS = {
     'page': 30001,
@@ -39,27 +50,27 @@ STATIC_STREAMS = (
         'title': 'Nasa TV HD',
         'logo': 'public.jpg',
         'fanart': plugin.fanart,
-        'stream_url': (YOUTUBE_VIDEO_URL % '21X5lGlDOfg'),
+        'stream_url': (PLAYBACK_ADDON_DICT[plugin.get_setting('playbackaddon', int)]['video_url'] % '21X5lGlDOfg'),
     }, {
         'title': 'ISS Live Stream',
         'logo': 'iss.jpg',
         'fanart': plugin.fanart,
-        'stream_url': (YOUTUBE_VIDEO_URL % 'EEIk7gwjgIM'),
+        'stream_url': (PLAYBACK_ADDON_DICT[plugin.get_setting('playbackaddon', int)]['video_url'] % 'EEIk7gwjgIM'),
     }, {
         'title': 'Media Channel HD',
         'logo': 'media.jpg',
         'fanart': plugin.fanart,
-        'stream_url': (YOUTUBE_VIDEO_URL % 'nA9UZF-SZoQ'),
+        'stream_url': (PLAYBACK_ADDON_DICT[plugin.get_setting('playbackaddon', int)]['video_url'] % 'nA9UZF-SZoQ'),
     },{
         'title': 'ISS HD Earth Viewing',
         'logo': 'isshd.jpg',
         'fanart': plugin.fanart,
-        'stream_url': (YOUTUBE_VIDEO_URL % '2E7l9rZ0cQY'),
+        'stream_url': (PLAYBACK_ADDON_DICT[plugin.get_setting('playbackaddon', int)]['video_url'] % '2E7l9rZ0cQY'),
     },{
         'title': 'ISS HD Earth From Space',
         'logo': 'isshd.jpg',
         'fanart': plugin.fanart,
-        'stream_url': (YOUTUBE_VIDEO_URL % 'EEIk7gwjgIM'),
+        'stream_url': (PLAYBACK_ADDON_DICT[plugin.get_setting('playbackaddon', int)]['video_url'] % 'EEIk7gwjgIM'),
     }
 )
 
@@ -122,7 +133,7 @@ def show_channels():
         'label': channel['name'],
         'thumbnail': get_logo(channel['logo']),
         'fanart': plugin.fanart,
-        'path': YOUTUBE_URL % channel['channel_id'],
+        'path': PLAYBACK_ADDON_DICT[plugin.get_setting('playbackaddon', int)]['channel_url'] % channel['channel_id'],
     } for channel in YOUTUBE_CHANNELS]
     return plugin.finish(items)
 

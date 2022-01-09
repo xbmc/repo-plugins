@@ -10,17 +10,40 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
 "Language-Team: Team-Kodi\n"
+"Language: bs_BA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: bs_BA\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "Addon Summary"
+msgid "Video plugin to access content from nasa.gov"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "This video plugin provides access to more than 1800 videos, 8 vodcasts and 4 nasa-tv livestreams[CR]All content is dynamic and should be always up to date."
+msgstr ""
+
+msgctxt "#30001"
+msgid "Page"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Livestreams"
+msgstr ""
 
 msgctxt "#30101"
 msgid "Videos"
 msgstr "Filmovi"
 
+msgctxt "#30103"
+msgid "Vodcasts"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Search for Videos"
+msgstr ""
+
 msgctxt "#30201"
 msgid "Title"
 msgstr "Naslov"
-

@@ -10,19 +10,35 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
 "Language-Team: Team-Kodi\n"
+"Language: id_ID\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: id_ID\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "Addon Summary"
+msgid "Video plugin to access content from nasa.gov"
+msgstr "Plugin video untuk mengakses konten dari nasa.gov"
+
+msgctxt "Addon Description"
+msgid "This video plugin provides access to more than 1800 videos, 8 vodcasts and 4 nasa-tv livestreams[CR]All content is dynamic and should be always up to date."
+msgstr ""
 
 msgctxt "#30001"
 msgid "Page"
 msgstr "Halaman"
 
+msgctxt "#30100"
+msgid "Livestreams"
+msgstr ""
+
 msgctxt "#30101"
 msgid "Videos"
 msgstr "Video"
+
+msgctxt "#30103"
+msgid "Vodcasts"
+msgstr ""
 
 msgctxt "#30200"
 msgid "Search for Videos"
@@ -31,4 +47,3 @@ msgstr "Cari Video"
 msgctxt "#30201"
 msgid "Title"
 msgstr "Judul"
-

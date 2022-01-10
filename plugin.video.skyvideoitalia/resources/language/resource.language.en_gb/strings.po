@@ -7,75 +7,85 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Project-Id-Version: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: nixxo\n"
-"Language-Team: nixxo\n"
-"X-Generator: Poedit 3.0\n"
+"Language: it_IT\n"
 
 msgctxt "#30000"
 msgid "General"
 msgstr ""
 
-msgctxt "#30001"
-msgid "Enable Debug Infos"
-msgstr ""
-
-msgctxt "#30002"
-msgid "Maximum Quality"
-msgstr ""
-
-msgctxt "#30003"
-msgid "Log Level (for developers)"
-msgstr ""
-
-msgctxt "#30008"
-msgid "Use InputStream Adaptive"
-msgstr ""
-
-msgctxt "#30009"
-msgid "Debug"
-msgstr ""
-
-msgctxt "#30010"
-msgid "Info"
-msgstr ""
-
-msgctxt "#30011"
-msgid "Warning"
-msgstr ""
-
-msgctxt "#30012"
-msgid "Error"
-msgstr ""
-
 msgctxt "#31000"
-msgid "Error retrieving URL. Check log."
+msgid "Playback"
 msgstr ""
 
 msgctxt "#31001"
-msgid "JSON not found in webpage"
+msgid "Use InputStream Adaptive"
 msgstr ""
 
 msgctxt "#31002"
-msgid "JSON decode error"
+msgid "Maximum Quality"
 msgstr ""
 
 msgctxt "#31003"
-msgid "Media URL not found"
+msgid "Low"
 msgstr ""
 
 msgctxt "#31004"
-msgid "Livestream URL not found"
+msgid "Medium"
+msgstr ""
+
+msgctxt "#31005"
+msgid "High"
+msgstr ""
+
+msgctxt "#31006"
+msgid "High definition"
+msgstr ""
+
+msgctxt "#31010"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#31011"
+msgid "Enable developer mode"
 msgstr ""
 
 msgctxt "#32001"
-msgid "Playlists from %s"
+msgid "Live Streaming"
 msgstr ""
 
 msgctxt "#32002"
-msgid "Live Streaming"
+msgid "Playlists from {title}"
+msgstr ""
+
+msgctxt "#33000"
+msgid "Error retrieving URL. Check log."
+msgstr ""
+
+msgctxt "#33001"
+msgid "JSON not found in webpage"
+msgstr ""
+
+msgctxt "#33002"
+msgid "JSON decode error"
+msgstr ""
+
+msgctxt "#33003"
+msgid "Media URL not found"
+msgstr ""
+
+msgctxt "#33004"
+msgid "Livestream URL not found"
+msgstr ""
+
+msgctxt "#41001"
+msgid "Use InputStream Adaptive and demand quality selction to it."
+msgstr ""
+
+msgctxt "#41002"
+msgid "Maximum Quality used when InputstreamAdaptive is not selected."
+msgstr ""
+
+msgctxt "#41011"
+msgid "Enable verbose log messages. Useful to troubleshoot problems."
 msgstr ""

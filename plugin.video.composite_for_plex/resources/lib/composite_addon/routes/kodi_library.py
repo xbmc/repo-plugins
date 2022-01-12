@@ -11,6 +11,7 @@
 
 from kodi_six import xbmcgui  # pylint: disable=import-error
 from kodi_six import xbmcplugin  # pylint: disable=import-error
+from six import PY3
 
 from ..addon.common import get_handle
 from ..addon.containers import Item
@@ -100,9 +101,16 @@ def _list_content(context, server, url):
     items = []
     append_item = items.append
 
-    branches = tree.getiterator('Video')
+    if PY3:
+        branches = tree.iter('Video')
+    else:
+        branches = tree.getiterator('Video')
+
     if not branches:
-        branches = tree.getiterator('Directory')
+        if PY3:
+            branches = tree.iter('Directory')
+        else:
+            branches = tree.getiterator('Directory')
 
     for content in branches:
         item = Item(server, url, tree, content)

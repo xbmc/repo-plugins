@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.5.1+matrix.1"
+        version="5.5.2+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -122,9 +122,9 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.5.1 - Changelog - 2022-01-08[/B]
+        <news>[B]Retrospect v5.5.2 - Changelog - 2022-01-12[/B]
 
-Minor update to fix SVT, VRT.nu and some Nickelodeon channels.
+Fixed an issue with NPO Start profiles not loading correctly and some other minor things.
 
 [B]Framework related[/B]
 _None_
@@ -133,11 +133,9 @@ _None_
 _None_
 
 [B]Channel related[/B]
-* Removed: Nickelodeon.no as they no longer provide videos.
-* Removed: NickJr.se as they no longer provide videos.
-* Fixed: HTML video resolved for SVT broken (Fixes #1596).
-* Fixed: TV Show images for VRT.nu.
-* Updated: VRT.nu logon to v2 (Fixes #1595).
+* Added: &quot;New on Play&quot; category to SVT Play (See #1587).
+* Fixed: NRK.no updated their API.
+* Fixed: Moved to id.npo.nl for logging in to npostart (Fixes #1597).
 
         </news>
         <assets>

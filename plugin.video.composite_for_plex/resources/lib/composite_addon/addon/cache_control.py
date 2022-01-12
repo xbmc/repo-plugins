@@ -19,14 +19,13 @@ import os
 import shutil
 import time
 
+# don't use kodi_six xbmcvfs
+import xbmcvfs  # pylint: disable=import-error
+from kodi_six import xbmc  # pylint: disable=import-error
 from six import PY3
 from six import text_type
 # noinspection PyPep8Naming
 from six.moves import cPickle as pickle
-
-# don't use kodi_six xbmcvfs
-import xbmcvfs  # pylint: disable=import-error
-from kodi_six import xbmc  # pylint: disable=import-error
 
 from .constants import CONFIG
 from .logger import Logger

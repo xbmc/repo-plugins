@@ -11,6 +11,7 @@
 """
 
 from kodi_six import xbmcplugin  # pylint: disable=import-error
+from six import PY3
 
 from ..common import get_handle
 from ..containers import Item
@@ -33,7 +34,11 @@ def process_directories(context, url, tree=None):
 
     items = []
     append_item = items.append
-    directories = tree.getiterator('Directory')
+    if PY3:
+        directories = tree.iter('Directory')
+    else:
+        directories = tree.getiterator('Directory')
+
     for directory in directories:
         item = Item(server, url, tree, directory)
         append_item(create_directory_item(context, item))

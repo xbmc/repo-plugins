@@ -52,9 +52,11 @@ class Channel(chn_class.Channel):
                               updater=self.update_json_video_item)
 
         self._add_data_parsers(
-            ["https://psapi.nrk.no/medium/tv/recommendedprograms",
-             "https://psapi.nrk.no/medium/tv/popularprograms",
-             "https://psapi.nrk.no/medium/tv/recentlysentprograms"],
+            [
+                # "https://psapi.nrk.no/medium/tv/recommendedprograms",
+                # "https://psapi.nrk.no/medium/tv/popularprograms",
+                "https://psapi.nrk.no/medium/tv/recentlysentprograms"
+            ],
             json=True, parser=[], creator=self.create_video_item)
 
         self._add_data_parsers(["https://psapi.nrk.no/tv/live", "https://psapi.nrk.no/radio/live"],
@@ -63,7 +65,8 @@ class Channel(chn_class.Channel):
         self._add_data_parser("https://psapi.nrk.no/playback/manifest/channel/",
                               updater=self.update_live_channel)
 
-        self._add_data_parser("https://psapi.nrk.no/medium/tv/categories", json=True,
+        self._add_data_parser("http://psapi-granitt-prod-we.cloudapp.net/medium/tv/categories?", json=True,
+                              # match_type=ParserData.MatchExact,
                               name="Category listing",
                               parser=[], creator=self.create_category_item)
         self._add_data_parser("http://psapi-granitt-prod-we.cloudapp.net/medium/tv/categories", json=True,
@@ -162,7 +165,7 @@ class Channel(chn_class.Channel):
             "Recommended": "https://psapi.nrk.no/medium/tv/recommendedprograms?maxnumber=100&startRow=0&apiKey={}".format(self.__api_key),
             "Popular": "https://psapi.nrk.no/medium/tv/popularprograms/week?maxnumber=100&startRow=0&apiKey={}".format(self.__api_key),
             "Recent": "https://psapi.nrk.no/medium/tv/recentlysentprograms?maxnumber=100&startRow=0&apiKey={}".format(self.__api_key),
-            "Categories": "https://psapi.nrk.no/medium/tv/categories?apiKey={}".format(self.__api_key),
+            "Categories": "http://psapi-granitt-prod-we.cloudapp.net/medium/tv/categories?apiKey={}".format(self.__api_key),
             "A - Å": "https://psapi.nrk.no/medium/tv/letters?apiKey={}".format(self.__api_key),
             "S&oslash;k": "#searchSite"
         }

@@ -17,13 +17,11 @@ import traceback
 import xml.etree.ElementTree as ETree
 
 import requests
+from kodi_six import xbmcgui  # pylint: disable=import-error
 from six import PY3
 from six import iteritems
 from six import string_types
 from six.moves.urllib_parse import urlparse
-
-from kodi_six import xbmc  # pylint: disable=import-error
-from kodi_six import xbmcgui  # pylint: disable=import-error
 
 from ..addon import cache_control
 from ..addon.common import get_platform_ip
@@ -43,6 +41,8 @@ from .plexserver import PlexMediaServer
 DEFAULT_PORT = '32400'
 LOG = Logger('plex')
 
+WINDOW = xbmcgui.Window(10000)
+
 
 class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attributes
 
@@ -60,7 +60,7 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
         self.server_list_cache = 'discovered_plex_servers.cache'
         self.plexhome_cache = 'plexhome_user.pcache'
         self.client_id = None
-        self.user_list = dict()
+        self.user_list = {}
         self.plexhome_settings = {
             'myplex_signedin': False,
             'plexhome_enabled': False,
@@ -176,22 +176,13 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
     def load(self):
         LOG.debug('Loading cached server list')
 
-        try:
-            ttl = self.settings.cache_ttl()
-        except ValueError:
-            ttl = 3600
+        data_ok = False
+        self.server_list = None
 
-        if xbmc.Player().isPlaying():
+        if WINDOW.getProperty('plugin.video.composite-refresh.servers') != 'true':
             data_ok, self.server_list = self.cache.read_cache(self.server_list_cache)
 
-            if not data_ok or not self.server_list:
-                LOG.debug('unsuccessful during playback')
-                self.server_list = {}
-
-            LOG.debug('Server list is now: %s' % self.server_list)
-            return
-
-        data_ok, self.server_list = self.cache.check_cache(self.server_list_cache, ttl)
+        WINDOW.clearProperty('plugin.video.composite-refresh.servers')
 
         if data_ok:
             if not self.check_server_version():
@@ -452,14 +443,18 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
         return xml
 
     def get_myplex_servers(self):
-        temp_servers = dict()
+        temp_servers = {}
         xml = self.talk_to_myplex('/api/resources?includeHttps=1')
 
         if xml is False:
             return {}
 
         server_list = ETree.fromstring(xml)
-        devices = server_list.getiterator('Device')  # pylint: disable=deprecated-method
+        if PY3:
+            devices = server_list.iter('Device')
+        else:
+            devices = server_list.getiterator('Device')
+
         for device in devices:
 
             LOG.debug('[%s] Found device' % device.get('name'))
@@ -475,8 +470,10 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
             discovered_server.set_owned(device.get('owned'))
             discovered_server.set_token(device.get('accessToken'))
             discovered_server.set_user(self.effective_user)
-
-            connections = device.getiterator('Connection')
+            if PY3:
+                connections = device.iter('Connection')
+            else:
+                connections = device.getiterator('Connection')
             for connection in connections:
                 LOG.debug('[%s] Found server connection' % device.get('name'))
 
@@ -612,7 +609,7 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
             base64bytes = base64.encodebytes(credentials)
             base64string = base64bytes.decode('utf-8').replace('\n', '')
         else:
-            base64string = base64.encodestring(credentials).replace('\n', '')  # pylint: disable=deprecated-method
+            base64string = base64.encodestring(credentials).replace('\n', '')  # pylint: disable=no-member
 
         token = False
         myplex_headers = {
@@ -727,7 +724,7 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
 
     def set_plex_home_users(self):
         data = ETree.fromstring(self.talk_to_myplex('/api/home/users'))
-        self.user_list = dict()
+        self.user_list = {}
         for users in data:
             add = {
                 'id': users.get('id'),
@@ -743,7 +740,7 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
 
     def get_plex_home_users(self):
         data = ETree.fromstring(self.talk_to_myplex('/api/home/users'))
-        self.user_list = dict()
+        self.user_list = {}
         for users in data:
             add = {
                 'id': users.get('id'),
@@ -803,10 +800,11 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
         data = self.talk_to_myplex('/users/account')
         xml = ETree.fromstring(data)
 
-        result = dict()
-        result['username'] = xml.get('username', 'unknown')
-        result['email'] = xml.get('email', 'unknown')
-        result['thumb'] = xml.get('thumb')
+        result = {
+            'username': xml.get('username', 'unknown'),
+            'email': xml.get('email', 'unknown'),
+            'thumb': xml.get('thumb')
+        }
 
         subscription = xml.find('subscription')
         if subscription is not None:

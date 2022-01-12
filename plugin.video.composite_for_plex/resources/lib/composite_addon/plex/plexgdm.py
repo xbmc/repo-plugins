@@ -165,8 +165,9 @@ class PlexGDM:  # pylint: disable=too-many-instance-attributes
                 media_port = self.server_list[0]['port']
 
                 LOG.debug('Checking server [%s] on port [%s]' % (media_server, media_port))
-                file_handle = urlopen('http://%s:%s/clients' % (media_server, media_port))
-                client_result = file_handle.read()
+                with urlopen('http://%s:%s/clients' % (media_server, media_port)) as file_handle:
+                    client_result = file_handle.read()
+
                 if self.client_id in client_result:
                     LOG.debug('Client registration successful')
                     LOG.debug('Client data is: %s' % client_result)
@@ -310,7 +311,7 @@ class PlexGDM:  # pylint: disable=too-many-instance-attributes
             LOG.debug('Discovery starting up')
             self._discovery_is_running = True
             self.discover_t = threading.Thread(target=self.run_discovery_loop)
-            self.discover_t.setDaemon(daemon)
+            self.discover_t.daemon = daemon
             self.discover_t.start()
         else:
             LOG.debug('Discovery already running')
@@ -320,7 +321,7 @@ class PlexGDM:  # pylint: disable=too-many-instance-attributes
             LOG.debug('Registration starting up')
             self._registration_is_running = True
             self.register_t = threading.Thread(target=self.client_update)
-            self.register_t.setDaemon(daemon)
+            self.register_t.daemon = daemon
             self.register_t.start()
         else:
             LOG.debug('Registration already running')

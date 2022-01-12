@@ -11,6 +11,7 @@
 """
 
 from kodi_six import xbmcplugin  # pylint: disable=import-error
+from six import PY3
 
 from ..common import get_handle
 from ..containers import Item
@@ -27,7 +28,11 @@ def process_music(context, url, tree=None):
 
     items = []
     append_item = items.append
-    branches = tree.getiterator()
+    if PY3:
+        branches = tree.iter()
+    else:
+        branches = tree.getiterator()
+
     for music in branches:
 
         if music.get('key') is None:

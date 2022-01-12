@@ -88,6 +88,11 @@ class Channel(chn_class.Channel):
                               parser=["data", "startForSvtPlay", "selections", 0, "items"],
                               creator=self.create_api_typed_item)
 
+        self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=FionaPage",
+                              name="GraphQL FionaPage parsers", json=True,
+                              parser=["data", "selectionById", "items"],
+                              creator=self.create_api_typed_item)
+
         self._add_data_parser(self.__nyheter_url, name="Latest news", json=True,
                               parser=["data", "genres", 0, "selectionsForWeb", 1, "items"],
                               creator=self.create_api_typed_item)
@@ -197,7 +202,13 @@ class Channel(chn_class.Channel):
             LanguageHelper.get_localized_string(LanguageHelper.LatestNews): (
                 self.__nyheter_url,
                 False
-            )
+            ),
+
+            LanguageHelper.get_localized_string(LanguageHelper.NewOnChannel)  % self.channelName: (
+                self.__get_api_url("FionaPage",
+                                   "0d50e0ae57df3a99f8b7fb0b94e1159fea64f04297d7dcb7c75f0358f09a1a48",
+                                   variables={"includeFullOppetArkiv": True, "selectionId": "8vyaD1x"}),
+                False)
         }
 
         for title, (url, include_subheading) in extra_items.items():

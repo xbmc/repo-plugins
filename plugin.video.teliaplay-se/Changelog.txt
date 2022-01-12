@@ -10,3 +10,7 @@
 - Added paginator for channels menu
 - Added settings for controling the number of channels and movies per page
 - Separated search history for each user
+
+1.2.2 [20211230]
+- Updated graphql hashes
+- Fixed broken menu entries

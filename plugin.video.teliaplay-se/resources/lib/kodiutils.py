@@ -92,7 +92,7 @@ class UserDataHandler():
 
     def save(self):
         with open(self.filepath, "w") as data_file:
-            json.dump(self.userdata_json, data_file)
+            json.dump(self.userdata_json, data_file, indent=4)
 
     def add(self, username, userdata):
         self.userdata_json.update({username: userdata})
@@ -137,7 +137,7 @@ class SearchHistory():
 
     def save(self):
         with open(self.save_path, "w") as history_file:
-            json.dump(self.history_json, history_file)
+            json.dump(self.history_json, history_file, indent=4)
 
     def get(self, query_id):
         return self.get_queries()[int(query_id)]

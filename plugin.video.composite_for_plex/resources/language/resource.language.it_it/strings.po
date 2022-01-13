@@ -10,11 +10,19 @@ msgstr ""
 "PO-Revision-Date: 2020-01-18 21:15+0500\n"
 "Last-Translator: GITHUB USERNAME\n"
 "Language-Team: Italian\n"
+"Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it_IT\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "Addon Description"
+msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "Composite is NOT an official Plex add-on and is not supported or endorsed by Plex."
+msgstr ""
 
 msgctxt "#30000"
 msgid "Confirm file delete?"
@@ -57,7 +65,6 @@ msgid "You are currently signed into myPlex. Are you sure you want to sign out?"
 msgstr "Hai eseguito l'accesso in myPlex. Sei sicuro di voler uscire?"
 
 #  30010
-
 msgctxt "#30011"
 msgid "You are not currently logged into myPlex. Continue to sign in, or cancel to return"
 msgstr "Non sei attualmente loggato in myPlex. Per favore continua il login, oppure annulla per tornare indietro"
@@ -378,8 +385,7 @@ msgctxt "#30090"
 msgid "Unplayed"
 msgstr ""
 
-###### SETTINGS
-
+# ##### SETTINGS
 msgctxt "#30500"
 msgid "Primary Server Address"
 msgstr "Indirizzo Server Primario"
@@ -504,9 +510,33 @@ msgctxt "#30530"
 msgid "Port Number"
 msgstr "Numero porta"
 
+msgctxt "#30531"
+msgid "Use PMS localisation settings"
+msgstr ""
+
+msgctxt "#30532"
+msgid "Manual"
+msgstr ""
+
+msgctxt "#30533"
+msgid "Always"
+msgstr ""
+
+msgctxt "#30534"
+msgid "Audio stream selection"
+msgstr ""
+
+msgctxt "#30535"
+msgid "Subtitle stream selection"
+msgstr ""
+
 msgctxt "#30536"
 msgid "Kodi Control"
 msgstr "Controllo Kodi"
+
+msgctxt "#30537"
+msgid "External"
+msgstr ""
 
 msgctxt "#30538"
 msgid "Audio and subtitle selector"
@@ -520,6 +550,10 @@ msgctxt "#30540"
 msgid "Quality"
 msgstr "Qualità"
 
+msgctxt "#30541"
+msgid "Proxy Port"
+msgstr ""
+
 msgctxt "#30542"
 msgid "Plex Channel View"
 msgstr "Vista Canale Plex"
@@ -528,12 +562,23 @@ msgctxt "#30543"
 msgid "Flatten TV Shows"
 msgstr "Spiana le Serie TV"
 
+msgctxt "#30544"
+msgid "Server MAC address"
+msgstr ""
+
+msgctxt "#30545"
+msgid "Plex Style Watched flags"
+msgstr ""
+
 msgctxt "#30546"
 msgid "Windows Media Server?"
 msgstr ""
 
-# 30548
+msgctxt "#30547"
+msgid "Use WOL?"
+msgstr ""
 
+# 30548
 msgctxt "#30549"
 msgid "Skip Genre/director/writer"
 msgstr "Evita i metadata Genere/Regista/Scrittore"
@@ -553,6 +598,14 @@ msgstr "Evita i menu contestuali"
 msgctxt "#30553"
 msgid "Off"
 msgstr "Spento"
+
+msgctxt "#30554"
+msgid "Bonjour"
+msgstr ""
+
+msgctxt "#30556"
+msgid "Play TV Theme Music"
+msgstr ""
 
 msgctxt "#30557"
 msgid "Select audio output"
@@ -606,13 +659,17 @@ msgctxt "#30569"
 msgid "Audio Boost"
 msgstr "Aumento Livello Audio"
 
+msgctxt "#30570"
+msgid "Auto (GDM)"
+msgstr ""
+
 msgctxt "#30571"
 msgid "Current Master Server"
 msgstr "Master Server Corrente"
 
 msgctxt "#30572"
-msgid "Shelf Items"
-msgstr "Elementi Scaffale"
+msgid "Current Master Server"
+msgstr ""
 
 msgctxt "#30573"
 msgid "Recently Added"
@@ -694,6 +751,10 @@ msgctxt "#30592"
 msgid "Use menu for shared sections"
 msgstr "Utilizza il menù per le sezioni condivise"
 
+msgctxt "#30593"
+msgid "Cache Data"
+msgstr ""
+
 msgctxt "#30594"
 msgid "Manual"
 msgstr "Manuale"
@@ -709,6 +770,18 @@ msgstr "Utilizza le fanart a piena risoluzione"
 msgctxt "#30597"
 msgid "Hide watched recently added items"
 msgstr "Nascondi gli elementi visti e aggiunti di recente"
+
+msgctxt "#30598"
+msgid "Info"
+msgstr ""
+
+msgctxt "#30599"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#30600"
+msgid "Debug+"
+msgstr ""
 
 msgctxt "#30601"
 msgid "Transcoder"
@@ -835,15 +908,12 @@ msgid "Exit"
 msgstr ""
 
 #  30632
-
 #  30633
-
 msgctxt "#30634"
 msgid "Enter your myPlex details below"
 msgstr ""
 
 #  30635
-
 msgctxt "#30636"
 msgid "Unknown"
 msgstr ""
@@ -1499,3 +1569,15 @@ msgstr ""
 msgctxt "#30799"
 msgid "Configured library sections have been reset"
 msgstr ""
+
+msgctxt "#30800"
+msgid "Continue Watching"
+msgstr ""
+
+msgctxt "#30801"
+msgid "Detect Servers"
+msgstr ""
+
+#~ msgctxt "#30572"
+#~ msgid "Shelf Items"
+#~ msgstr "Elementi Scaffale"

@@ -1,4 +1,4 @@
-Films For Action Videos: XBMC video add-on to watch the Films For Action videos from the FFA web site.
+Films For Action Videos: KODI video add-on to watch the Films For Action videos from the FFA web site.
 
    Copyright (C) 2014 Jose Antonio Montes (jamontes)
 
@@ -18,9 +18,9 @@ Films For Action Videos: XBMC video add-on to watch the Films For Action videos 
 
 Initial release 1.0.0
 
-[![Build Status](https://secure.travis-ci.org/jamontes/plugin.video.filmsforaction.png)](http://travis-ci.org/jamontes/plugin.video.filmsforaction)
+[![Build status](https://ci.appveyor.com/api/projects/status/b6cc9449bhep93aj/branch/matrix?svg=true)](https://ci.appveyor.com/project/jamontes/plugin-video-filmsforaction/branch/matrix)
 
-This XBMC plugin allows to watch the videos from the Films For Action web site (more than 2500 videos available).
+This KODI add-on allows to watch the videos from the Films For Action web site (more than 2500 videos available).
 
 << Films For Action is a community-powered learning library and alternative news center for people who want to change the world.
 

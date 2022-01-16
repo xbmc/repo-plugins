@@ -673,7 +673,11 @@ msgctxt "#30366"
 msgid "Available from"
 msgstr ""
 
-# empty strings from id 30367 to 30400
+msgctxt "#30367"
+msgid "New on %s"
+msgstr ""
+
+# empty strings from id 30368 to 30400
 
 msgctxt "#30401"
 msgid "Dutch"
@@ -789,7 +793,15 @@ msgctxt "#30510"
 msgid "New version available"
 msgstr ""
 
-# empty strings from id 30511 to 30515
+msgctxt "#30511"
+msgid "Add shortcut"
+msgstr ""
+
+msgctxt "#30512"
+msgid "Please provide a name for the shortcut."
+msgstr ""
+
+# empty strings from id 30513 to 30515
 
 msgctxt "#30516"
 msgid "New Version Available."

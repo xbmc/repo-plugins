@@ -23,11 +23,12 @@ class Vualto(object):
         self.client_id = client_id
         self.channel = channel
 
-    def get_stream_info(self, item, mzid, live=False, hls_over_dash=False):  # NOSONAR
+    def get_stream_info(self, item, mzid, identity_token, live=False, hls_over_dash=False):  # NOSONAR
         """ Updates an item with Vualto stream data.
 
         :param MediaItem item:      The Mediaitem to update
         :param str mzid:            The MZ ID of the stream
+        :param str identity_token:  The identity token to use.
         :param bool live:           Indicator if the stream is live or not
         :param bool hls_over_dash:  Should we prefer HLS over Dash?
 
@@ -36,16 +37,23 @@ class Vualto(object):
 
         """
 
-        # We need a player token
-        token_data = UriHandler.open("https://media-services-public.vrt.be/"
-                                     "vualto-video-aggregator-web/rest/external/v1/tokens", data="",
-                                     additional_headers={"Content-Type": "application/json"})
+        # We need a player token and for that we need to passa
+
+        token_url = "https://media-services-public.vrt.be" \
+                    "/vualto-video-aggregator-web/rest/external/v2/tokens"
+        token_headers = {"Content-Type": "application/json"}
+
+        if identity_token:
+            post_data = {"identityToken": identity_token}
+            token_data = UriHandler.open(token_url, json=post_data, additional_headers=token_headers)
+        else:
+            token_data = UriHandler.open(token_url, data="", additional_headers=token_headers)
 
         token = JsonHelper(token_data).get_value("vrtPlayerToken")
 
         asset_url = "https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/" \
-                    "external/v1/videos/{0}?vrtPlayerToken={1}&client={2}" \
-            .format(mzid, HtmlEntityHelper.url_encode(token), self.client_id)
+                    "external/v2/videos/{0}?vrtPlayerToken={1}&client={2}" \
+            .format(HtmlEntityHelper.url_encode(mzid), HtmlEntityHelper.url_encode(token), self.client_id)
         asset_data = UriHandler.open(asset_url, no_cache=True)
         asset_data = JsonHelper(asset_data)
 

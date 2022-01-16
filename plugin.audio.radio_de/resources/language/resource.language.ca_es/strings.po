@@ -7,14 +7,23 @@ msgstr ""
 "Project-Id-Version: Kodi Addons\n"
 "Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Kodi Translation Team\n"
-"Language-Team: Team-Kodi\n"
+"PO-Revision-Date: 2021-10-03 12:30+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Catalan (Spain) <https://kodi.weblate.cloud/projects/kodi-add-ons-music/plugin-audio-radio_de/ca_es/>\n"
+"Language: ca_es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ca_ES\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.8\n"
+
+msgctxt "Addon Summary"
+msgid "Access >30000 radio broadcasts"
+msgstr "accedeix a mes de 30000 emissores de radio"
+
+msgctxt "Addon Description"
+msgid "Music plugin to access over 30000 international radio broadcasts from rad.io, radio.de, radio.fr, radio.pt and radio.es[CR]Currently features[CR]- English, german, french translated[CR]- Browse stations by location, genre, topic, country, city and language[CR]- Search for stations[CR]- 115 genres, 59 topics, 94 countrys, 1010 citys, 63 languages"
+msgstr "Plugin de música per escoltar més de 30000 emissores de ràdio internacionals des rad.io, radio.de i radio.fr[CR]Característiques actuals:[CR]- Traduccions a l'anglès, alemany i francès[CR]- Cercador d'emissores per ubicació, gènere, tema, país, ciutat o idioma[CR]- Cercador d'emissores[CR]- 115 gèneres, 59 temes, 94 països, 1010 ciutats, 63 idiomes"
 
 msgctxt "#30100"
 msgid "Editorials Recommendations"
@@ -72,6 +81,14 @@ msgctxt "#30303"
 msgid "French"
 msgstr "Francès"
 
+msgctxt "#30304"
+msgid "Portuguese"
+msgstr "Portuguès"
+
+msgctxt "#30305"
+msgid "Spanish"
+msgstr "Castellà"
+
 msgctxt "#30310"
 msgid "Force ViewMode to Thumbnail"
 msgstr "Força la vista a Miniatura"
@@ -106,9 +123,48 @@ msgstr "Url de l'Stream"
 
 msgctxt "#30504"
 msgid "Add custom Station..."
-msgstr "Afageix una emissora personalitzada"
+msgstr "Afageix una emissora personalitzada..."
 
 msgctxt "#30600"
 msgid "Network Error"
 msgstr "Error de xarxa"
 
+msgctxt "#30601"
+msgid "General"
+msgstr "General"
+
+msgctxt "#30602"
+msgid "Hide fanart"
+msgstr "Amaga fanart"
+
+msgctxt "#30603"
+msgid "Most Popular"
+msgstr "El més popular"
+
+msgctxt "#30604"
+msgid "A-Z"
+msgstr "De la A a la Z"
+
+msgctxt "#30605"
+msgid "Page (%s/%s) | Next >>"
+msgstr "Pàgina (%s/%s) | Següent >>"
+
+msgctxt "#30606"
+msgid "By country"
+msgstr "Per països"
+
+msgctxt "#30607"
+msgid "Prefer HTTP streams over HTTS"
+msgstr "Preferir transmissions HTTP en comptes d'HTTPS"
+
+msgctxt "#30608"
+msgid "Unable to get radio stream url"
+msgstr ""
+
+msgctxt "#30609"
+msgid "Sucessfully added to my stations!"
+msgstr ""
+
+msgctxt "#30610"
+msgid "Sucessfully removed from my stations!"
+msgstr ""

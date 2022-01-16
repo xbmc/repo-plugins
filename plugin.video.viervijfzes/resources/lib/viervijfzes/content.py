@@ -454,30 +454,33 @@ class ContentApi:
 
         # Categories regexes
         regex_articles = re.compile(r'<article[^>]+>(.*?)</article>', re.DOTALL)
-        regex_category = re.compile(r'<h1.*?>(.*?)</h1>(?:.*?<div class="visually-hidden">(.*?)</div>)?', re.DOTALL)
+        regex_category = re.compile(r'<h2.*?>(.*?)</h2>(?:.*?<div class="visually-hidden">(.*?)</div>)?', re.DOTALL)
 
         categories = []
         for result in regex_articles.finditer(raw_html):
             article_html = result.group(1)
 
             match_category = regex_category.search(article_html)
-            category_title = match_category.group(1).strip()
-            if match_category.group(2):
-                category_title += ' [B]%s[/B]' % match_category.group(2).strip()
+            category_title = None
+            if match_category:
+                category_title = match_category.group(1).strip()
+                if match_category.group(2):
+                    category_title += ' [B]%s[/B]' % match_category.group(2).strip()
 
-            # Extract programs and lookup in all_programs so we have more metadata
-            programs = []
-            for program in self._extract_programs(article_html):
-                try:
-                    rich_program = next(rich_program for rich_program in all_programs if rich_program.path == program.path)
-                    programs.append(rich_program)
-                except StopIteration:
-                    programs.append(program)
+            if category_title:
+                # Extract programs and lookup in all_programs so we have more metadata
+                programs = []
+                for program in self._extract_programs(article_html):
+                    try:
+                        rich_program = next(rich_program for rich_program in all_programs if rich_program.path == program.path)
+                        programs.append(rich_program)
+                    except StopIteration:
+                        programs.append(program)
 
-            episodes = self._extract_videos(article_html)
+                episodes = self._extract_videos(article_html)
 
-            categories.append(
-                Category(uuid=hashlib.md5(category_title.encode('utf-8')).hexdigest(), title=category_title, programs=programs, episodes=episodes))
+                categories.append(
+                    Category(uuid=hashlib.md5(category_title.encode('utf-8')).hexdigest(), title=category_title, programs=programs, episodes=episodes))
 
         return categories
 
@@ -595,35 +598,35 @@ class ContentApi:
         """
         # Create Program info
         program = Program(
-            uuid=data['id'],
-            path=data['link'].lstrip('/'),
-            channel=data['pageInfo']['brand'],
-            title=data['title'],
-            description=html_to_kodi(data['description']),
-            aired=datetime.fromtimestamp(data.get('pageInfo', {}).get('publishDate')),
-            poster=data['images']['poster'],
-            thumb=data['images']['teaser'],
-            fanart=data['images']['hero'],
+            uuid=data.get('id'),
+            path=data.get('link').lstrip('/'),
+            channel=data.get('pageInfo').get('brand'),
+            title=data.get('title'),
+            description=html_to_kodi(data.get('description')),
+            aired=datetime.fromtimestamp(data.get('pageInfo', {}).get('publishDate', 0.0)),
+            poster=data.get('images').get('poster'),
+            thumb=data.get('images').get('teaser'),
+            fanart=data.get('images').get('teaser'),
         )
 
         # Create Season info
         program.seasons = {
             key: Season(
-                uuid=playlist['id'],
-                path=playlist['link'].lstrip('/'),
-                channel=playlist['pageInfo']['brand'],
-                title=playlist['title'],
+                uuid=playlist.get('id'),
+                path=playlist.get('link').lstrip('/'),
+                channel=playlist.get('pageInfo').get('brand'),
+                title=playlist.get('title'),
                 description=html_to_kodi(playlist.get('description')),
-                number=playlist['episodes'][0]['seasonNumber'],  # You did not see this
+                number=playlist.get('episodes')[0].get('seasonNumber'),  # You did not see this
             )
-            for key, playlist in enumerate(data['playlists']) if playlist['episodes']
+            for key, playlist in enumerate(data.get('playlists', [])) if playlist.get('episodes')
         }
 
         # Create Episodes info
         program.episodes = [
-            ContentApi._parse_episode_data(episode, playlist['id'])
-            for playlist in data['playlists']
-            for episode in playlist['episodes']
+            ContentApi._parse_episode_data(episode, playlist.get('id'))
+            for playlist in data.get('playlists', [])
+            for episode in playlist.get('episodes')
         ]
 
         return program

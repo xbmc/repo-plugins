@@ -1,0 +1,100 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="plugin.video.cbc-sports">
+		<category id="display limits" label="30317" help="">
+			<group id="1">
+				<setting id="llimit" type="string" label="30319" help="30520">
+					<level>0</level>
+					<default>0</default>
+					<constraints>
+						<options>
+							<option>100</option>
+							<option>200</option>
+							<option>300</option>
+							<option label="All">0</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>	
+				<setting id="hlimit" type="string" label="30314" help="30514">
+					<level>0</level>
+					<default>50</default>
+					<constraints>
+						<options>
+							<option>10</option>
+							<option>25</option>
+							<option>50</option>
+							<option>100</option>
+							<option>150</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="mlimit" type="string" label="30315" help="30515">
+					<level>0</level>
+					<default>50</default>
+					<constraints>
+						<options>
+ 							<option>10</option>
+							<option>25</option>
+							<option>50</option>
+							<option>100</option>
+							<option>150</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="alimit" type="string" label="30316" help="30516">
+					<level>0</level>
+					<default>50</default>
+					<constraints>
+						<options>
+							<option>10</option>
+							<option>25</option>
+							<option>50</option>
+							<option>100</option>
+							<option>150</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="notetime" type="string" label="30321" help="30521">
+					<level>0</level>
+					<default>3</default>
+					<constraints>
+						<options>
+							<option>2</option>
+							<option>3</option>
+							<option>4</option>
+							<option>5</option>
+							<option>6</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="hnight" type="boolean" label="30322" help="30522">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="pubevents" type="boolean" label="30323" help="30523">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="cbclog" type="string" label="30318" help="30518">
+					<level>0</level>
+					<default>0</default>
+					<constraints>
+						<options>
+							<option label="Off">0</option>
+							<option label="Normal">1</option>
+							<option label="Detailed">2</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>							
+			</group>
+		</category>
+	</section>
+</settings>

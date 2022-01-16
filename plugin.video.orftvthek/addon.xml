@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.orftvthek" name="ORF TVthek" version="0.12.2+matrix.1" provider-name="sofaking">
+<addon id="plugin.video.orftvthek" name="ORF TVthek" version="0.12.3+matrix.1" provider-name="sofaking">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.future" version="0.16.0"/>
@@ -26,11 +26,9 @@
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
         </assets>
-        <news>v0.12.2 (16/06/2021)
-            [change] default quality is now adaptive
-            [fix] drm for restart
-            [fix] drm livestream license url
-            [fix] better quality selection handling for livestreams
+        <news>v0.12.3 (08/10/2021)
+            [fix] service api restart
+            [fix] service api auth change
         </news>
     </extension>
 </addon>

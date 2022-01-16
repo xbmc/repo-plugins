@@ -5,25 +5,34 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Addons\n"
-"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Kodi Translation Team\n"
-"Language-Team: Vietnamese (http://www.transifex.com/projects/p/xbmc-addons/language/vi/)\n"
-"Language: vi\n"
+"PO-Revision-Date: 2021-08-20 04:51+0000\n"
+"Last-Translator: Nguyễn Trung Hậu <trunghau1712@gmail.com>\n"
+"Language-Team: Vietnamese <https://kodi.weblate.cloud/projects/kodi-add-ons-program/plugin-library-node-editor/vi_vn/>\n"
+"Language: vi_VN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.7.2\n"
+
+msgctxt "Addon Summary"
+msgid "Manage custom library nodes."
+msgstr "Quản lý các nút thư viện tùy chỉnh."
+
+msgctxt "Addon Description"
+msgid "Create and edit custom library nodes."
+msgstr ""
 
 # Menu items
 msgctxt "#30000"
 msgid "Add content..."
-msgstr ""
+msgstr "Thêm nội dung..."
 
 msgctxt "#30001"
 msgid "Add path..."
-msgstr ""
+msgstr "Thêm đường dẫn..."
 
 msgctxt "#30002"
 msgid "Add order..."
@@ -131,7 +140,7 @@ msgstr ""
 
 msgctxt "#30300"
 msgid "Set name"
-msgstr ""
+msgstr "Đặt tên"
 
 msgctxt "#30301"
 msgid "Set visibility condition"
@@ -147,7 +156,7 @@ msgstr ""
 
 msgctxt "#30304"
 msgid "Start with defaults"
-msgstr ""
+msgstr "Bắt đầu theo mặc định"
 
 msgctxt "#30305"
 msgid "Field"
@@ -163,11 +172,11 @@ msgstr ""
 
 msgctxt "#30308"
 msgid "Content type"
-msgstr ""
+msgstr "Kiểu nội dung"
 
 msgctxt "#30309"
 msgid "Content"
-msgstr ""
+msgstr "Nội dung"
 
 msgctxt "#30310"
 msgid "Group"

@@ -1,0 +1,37 @@
+# Kodi Media Center language file
+# Addon Name: Tagesschau
+# Addon id: plugin.video.tagesschau
+# Addon Provider: J.Schumacher, H.Saul, C.Prasch
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: German (http://www.transifex.com/projects/p/xbmc-addons/language/de/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Preferred Quality"
+msgstr "Bevorzugte Qualität"
+
+msgctxt "#30100"
+msgid "Latest Videos"
+msgstr "Aktuelle Videos"
+
+msgctxt "#30101"
+msgid "Latest Broadcasts"
+msgstr "Aktuelle Sendungen"
+
+msgctxt "#30102"
+msgid "Dossiers"
+msgstr "Dossiers"
+
+msgctxt "#30103"
+msgid "Archived Broadcasts"
+msgstr "Sendungsarchiv"

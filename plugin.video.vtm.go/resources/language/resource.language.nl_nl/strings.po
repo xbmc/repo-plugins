@@ -1,20 +1,13 @@
+#
 msgid ""
 msgstr ""
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-### MENUS
-msgctxt "#30001"
-msgid "A-Z"
-msgstr "A-Z"
-
-msgctxt "#30002"
-msgid "Alphabetically sorted list of programs"
-msgstr "Volledige lijst van programma's"
-
+# MENUS
 msgctxt "#30003"
 msgid "Movies"
 msgstr "Films"
@@ -47,21 +40,9 @@ msgctxt "#30010"
 msgid "Search the VTM GO catalogue"
 msgstr "Doorzoek de VTM catalogus"
 
-msgctxt "#30011"
-msgid "Switch Profile ([B]{profile}[/B])"
-msgstr "Verwissel profiel ([B]{profile}[/B])"
-
-msgctxt "#30012"
-msgid "Select a different profile to use"
-msgstr "Selecteer een ander profiel om te gebruiken"
-
 msgctxt "#30013"
 msgid "TV guide"
 msgstr "Tv-gids"
-
-msgctxt "#30014"
-msgid "Browse the TV Guide"
-msgstr "Doorblader de tv-gids"
 
 msgctxt "#30015"
 msgid "Recommendations"
@@ -95,12 +76,7 @@ msgctxt "#30022"
 msgid "Show the VTM GO recommendations for Kids"
 msgstr "Bekijk de VTM GO aanbevelingen voor kinderen"
 
-
-### SUBMENUS
-msgctxt "#30051"
-msgid "Watch [B]{channel}[/B]"
-msgstr "Kijk [B]{channel}[/B]"
-
+# SUBMENUS
 msgctxt "#30052"
 msgid "Watch live [B]{channel}[/B]"
 msgstr "Kijk live [B]{channel}[/B]"
@@ -113,21 +89,7 @@ msgctxt "#30054"
 msgid "Browse the TV Guide for [B]{channel}[/B]"
 msgstr "Doorblader de tv-gids voor [B]{channel}[/B]"
 
-msgctxt "#30055"
-msgid "Catalog for [B]{channel}[/B]"
-msgstr "Catalogus voor [B]{channel}[/B]"
-
-msgctxt "#30056"
-msgid "Browse the Catalog for [B]{channel}[/B]"
-msgstr "Doorblader de catalogus voor [B]{channel}[/B]"
-
-msgctxt "#30057"
-msgid "Select Profile"
-msgstr "Selecteer profiel"
-
-
-### CONTEXT MENU
-
+# CONTEXT MENU
 msgctxt "#30100"
 msgid "Add to My List"
 msgstr "Toevoegen aan mijn lijst"
@@ -144,32 +106,11 @@ msgctxt "#30103"
 msgid "Watch Live"
 msgstr "Kijk live"
 
-msgctxt "#30104"
-msgid "TV Guide"
-msgstr "Tv-gids"
-
 msgctxt "#30105"
 msgid "Play from Catalog"
 msgstr "Afspelen uit catalogus"
 
-
-### CODE
-msgctxt "#30200"
-msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
-msgstr "De PySocks library (script.module.pysocks) is nodig voor het gebruik van een SOCKS proxy."
-
-msgctxt "#30201"
-msgid "[B][COLOR lightblue]Kids zone[/COLOR][/B]"
-msgstr "[B][COLOR lightblue]Kids zone[/COLOR][/B]"
-
-msgctxt "#30202"
-msgid "Credentials are correct!"
-msgstr "De VTM GO inloggegevens werken perfect!"
-
-msgctxt "#30203"
-msgid "Your credentials are not valid!"
-msgstr "De VTM GO inloggegevens zijn onjuist!"
-
+# CODE
 msgctxt "#30204"
 msgid "All seasons"
 msgstr "Alle seizoenen"
@@ -207,27 +148,26 @@ msgid "[B]{days} more days[/B] remaining"
 msgstr "Nog [B]{days} dagen[/B] beschikbaar"
 
 msgctxt "#30213"
-msgid "[B]Now:[/B] {start} - {end}\n» {title}"
-msgstr "[B]Nu:[/B] {start} - {end}\n» {title}"
+msgid ""
+"[B]Now:[/B] {start} - {end}\n"
+"» {title}"
+msgstr ""
+"[B]Nu:[/B] {start} - {end}\n"
+"» {title}"
 
 msgctxt "#30214"
-msgid "[B]Next:[/B] {start} - {end}\n» {title}"
-msgstr "[B]Straks:[/B] {start} - {end}\n» {title}"
-
-msgctxt "#30215"
-msgid "Browse the TV-Guide of [B]{channel}[/B]"
-msgstr "Doorblader de tv-gids van [B]{channel}[/B]"
+msgid ""
+"[B]Next:[/B] {start} - {end}\n"
+"» {title}"
+msgstr ""
+"[B]Straks:[/B] {start} - {end}\n"
+"» {title}"
 
 msgctxt "#30216"
 msgid "All ages"
 msgstr "Alle leeftijden"
 
-
-### Dates
-msgctxt "#30300"
-msgid "2 days ago"
-msgstr "Eergisteren"
-
+# Dates
 msgctxt "#30301"
 msgid "Yesterday"
 msgstr "Gisteren"
@@ -240,27 +180,18 @@ msgctxt "#30303"
 msgid "Tomorrow"
 msgstr "Morgen"
 
-msgctxt "#30304"
-msgid "In 2 days"
-msgstr "Overmorgen"
-
-
-### MESSAGES
+# MESSAGES
 msgctxt "#30701"
-msgid "You need to configure your credentials before you can access the content of VTM GO. Do you want to enter them now?"
-msgstr "U moet uw inloggegevens configureren voordat u VTM GO kan gebruiken. Wilt u dit nu doen?"
+msgid "Go to {url} on another device and enter use code [B]{code}[/B] when logging in."
+msgstr "Ga naar {url} op een ander toestel en geef de code [B]{code}[/B] in bij het inloggen."
 
 msgctxt "#30702"
-msgid "Unknown error while logging in: {code}"
-msgstr "Onbekende fout bij het inloggen: {code}"
+msgid "This device is successfully logged in to the VTM Go Service."
+msgstr "Dit toestel is succesvol ingelogd bij de VTM Go Service."
 
 msgctxt "#30703"
-msgid "Your account has no profiles defined. Please login on vtm.be/vtmgo and create a profile."
-msgstr "Je account heeft geen profielen. Gelieve in te loggen op vtm.be/vtmgo en een profiel aan te maken."
-
-msgctxt "#30704"
-msgid "This video may be geo-blocked, or your account is already being used currently."
-msgstr "Deze video werd wellicht geografisch geblokkeerd, of je account is reeds in gebruik."
+msgid "The login code has expired. Please try again."
+msgstr "De logincode is vervallen. Probeer opnieuw."
 
 msgctxt "#30705"
 msgid "The VTM GO Service has been updated, but this add-on hasn't been modified yet for these changes. Please check for an update."
@@ -294,18 +225,6 @@ msgctxt "#30713"
 msgid "The requested video was not found in the guide."
 msgstr "De gevraagde video werd niet gevonden in de tv-gids."
 
-msgctxt "#30714"
-msgid "Local metadata is cleared."
-msgstr "De lokale metadata is verwijderd."
-
-msgctxt "#30715"
-msgid "Updating metadata..."
-msgstr "Vernieuwen metadata..."
-
-msgctxt "#30716"
-msgid "Updating metadata ({index}/{total})..."
-msgstr "Vernieuwen metadata ({index}/{total})..."
-
 msgctxt "#30717"
 msgid "This program is not available in the VTM GO catalogue."
 msgstr "Dit programma is niet beschikbaar in de VTM GO catalogus."
@@ -314,35 +233,7 @@ msgctxt "#30718"
 msgid "The Manifest proxy is not running. Please restart Kodi."
 msgstr "De Manifest-proxy is niet gestart. Gelieve Kodi te herstarten."
 
-### SETTINGS
-msgctxt "#30800"
-msgid "Credentials"
-msgstr "Inloggegevens"
-
-msgctxt "#30801"
-msgid "Credentials"
-msgstr "Inloggegevens"
-
-msgctxt "#30803"
-msgid "Email address"
-msgstr "E-mailadres"
-
-msgctxt "#30805"
-msgid "Password"
-msgstr "Wachtwoord"
-
-msgctxt "#30809"
-msgid "Profile"
-msgstr "Profile"
-
-msgctxt "#30810"
-msgid "Always use the current profile"
-msgstr "Altijd het huidige profiel gebruiken"
-
-msgctxt "#30811"
-msgid "Current profile"
-msgstr "Huidig profiel"
-
+# SETTINGS
 msgctxt "#30820"
 msgid "Interface"
 msgstr "Interface"
@@ -358,22 +249,6 @@ msgstr "Toon 'Mijn lijst' menu"
 msgctxt "#30826"
 msgid "Show Continue watching"
 msgstr "Toon 'Verder kijken' menu"
-
-msgctxt "#30827"
-msgid "Metadata"
-msgstr "Metadata"
-
-msgctxt "#30829"
-msgid "Periodically refresh metadata in the background"
-msgstr "Vernieuw de metadata automatisch in de achtergrond"
-
-msgctxt "#30831"
-msgid "Update local metadata now…"
-msgstr "De lokale metadata nu vernieuwen…"
-
-msgctxt "#30833"
-msgid "Clear local metadata…"
-msgstr "De lokale metadata verwijderen…"
 
 msgctxt "#30840"
 msgid "Playback"
@@ -394,7 +269,6 @@ msgstr "Streaming"
 msgctxt "#30844"
 msgid "Maximum bandwidth (kbps)"
 msgstr "Maximale bandbreedte (kbps)"
-
 
 msgctxt "#30860"
 msgid "Integrations"
@@ -431,46 +305,6 @@ msgstr "Activeer IPTV Manager integratie"
 msgctxt "#30869"
 msgid "IPTV Manager settings…"
 msgstr "IPTV Manager instellingen…"
-
-msgctxt "#30870"
-msgid "Kodi Library"
-msgstr "Kodi-bibliotheek"
-
-msgctxt "#30871"
-msgid "Indexing"
-msgstr "Indexeren"
-
-msgctxt "#30872"
-msgid "Add video locations to the Kodi Library… [COLOR gray](See README.md)[/COLOR]"
-msgstr "Videolocaties toevoegen aan de Kodi-bibliotheek… [COLOR gray](Zie README.md)[/COLOR]"
-
-msgctxt "#30873"
-msgid "Index the following movies"
-msgstr "Indexeer de volgende films"
-
-msgctxt "#30874"
-msgid "Index the following series"
-msgstr "Indexeer de volgende series"
-
-msgctxt "#30875"
-msgid "Full catalog"
-msgstr "Volledige catalogus"
-
-msgctxt "#30876"
-msgid "Items on 'My List' only"
-msgstr "Enkel items op 'Mijn lijst'"
-
-msgctxt "#30877"
-msgid "Maintenance"
-msgstr "Onderhoud"
-
-msgctxt "#30878"
-msgid "Refresh Library…"
-msgstr "Verniew bibliotheek…"
-
-msgctxt "#30879"
-msgid "Clean Library…"
-msgstr "Bibliotheek opkuisen…"
 
 msgctxt "#30880"
 msgid "Expert"

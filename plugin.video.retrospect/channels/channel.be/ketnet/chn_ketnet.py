@@ -285,7 +285,7 @@ class Channel(chn_class.Channel):
 
         from resources.lib.streams.vualto import Vualto
         v = Vualto(self, client_code)
-        item = v.get_stream_info(item, media_refernce_pbs, hls_over_dash=hls_over_dash)
+        item = v.get_stream_info(item, media_refernce_pbs, None, hls_over_dash=hls_over_dash)
         return item
 
     def __get_graph_url(self, id):

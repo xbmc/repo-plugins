@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <setting id="quality" type="enum" label="30001" values="Medium (512x288)|Large (960x544)|XL (1280x720)" default="2" />
+</settings>

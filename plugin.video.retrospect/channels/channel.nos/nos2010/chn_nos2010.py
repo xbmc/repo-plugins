@@ -118,7 +118,7 @@ class Channel(chn_class.Channel):
             r'[^>]*>\W+<div[^>]+>\W+<div [^>]+data-from="(?<date>[^"]*)"[^>]+'
             r'data-premium-from="(?<datePremium>[^"]*)"(?<videoDetection>[\w\W]{0,1000}?)<img[^>]+'
             r'data-src="(?<thumburl>[^"]+)"[\w\W]{0,1000}?<h2>(?<title>[^<]+)</h2>\W+<p>'
-            r'(?<subtitle>[^<]*)</p>')
+            r'(?:\s*&nbsp;\s*)*(?<subtitle>[^<]*)</p>')
         self._add_data_parsers(["https://www.npostart.nl/media/series/",
                                 "https://www.npostart.nl/search/extended",
                                 "https://www.npostart.nl/media/collections/"],
@@ -156,9 +156,11 @@ class Channel(chn_class.Channel):
                               requires_logon=True)
 
         # Alpha listing based on JSON API
-        self._add_data_parser("https://start-api.npo.nl/page/catalogue", json=True,
-                              parser=["components", 1, "data", "items"],
-                              creator=self.create_json_episode_item)
+        # self._add_data_parser("https://start-api.npo.nl/page/catalogue", json=True,
+        self._add_data_parser("https://start-api.npo.nl/media/series", json=True,
+                              parser=["items"],
+                              creator=self.create_json_episode_item,
+                              preprocessor=self.extract_api_pages)
 
         # New API endpoints:
         # https://start-api.npo.nl/epg/2018-12-22?type=tv
@@ -182,7 +184,8 @@ class Channel(chn_class.Channel):
         self.__NextPageAdded = False
         self.__jsonApiKeyHeader = {"apikey": "07896f1ee72645f68bc75581d7f00d54"}
         self.__useJson = True
-        self.__pageSize = 500
+        self.__pageSize = 100
+        self.__max_page_count = 5
         self.__has_premium_cache = None
         self.__timezone = pytz.timezone("Europe/Amsterdam")
 
@@ -237,19 +240,31 @@ class Channel(chn_class.Channel):
             Logger.warning("No password found for %s", self)
             return False
 
-        xsrf_token = self.__get_xsrf_token()[0]
-        if not xsrf_token:
-            return False
+        # xsrf_token = self.__get_xsrf_token()[0]
+        # if not xsrf_token:
+        #     return False
 
-        data = "username=%s&password=%s" % (HtmlEntityHelper.url_encode(username),
-                                            HtmlEntityHelper.url_encode(password))
-        UriHandler.open("https://www.npostart.nl/api/login", no_cache=True,
-                        additional_headers={
-                            "X-Requested-With": "XMLHttpRequest",
-                            "X-XSRF-TOKEN": xsrf_token
-                        },
-                        params=data)
+        # Will redirect to the new id.npo.nl site with a return url given.
+        data = UriHandler.open("https://www.npostart.nl/login", no_cache=True)
 
+        # Find the return url.
+        redirect_url = UriHandler.instance().status.url.split("ReturnUrl=")[-1]
+        redirect_url = HtmlEntityHelper.url_decode(redirect_url)
+
+        # Extract the verification token.
+        verification_code = Regexer.do_regex(r'name="__RequestVerificationToken"[^>]+value="([^"]+)"', data)
+        data = {
+            "EmailAddress": username,
+            "Password": password,
+            "ReturnUrl": redirect_url,
+            "__RequestVerificationToken": verification_code
+        }
+
+        # The actual call for logging in.
+        UriHandler.open("https://id.npo.nl/account/login", no_cache=True, data=data)
+
+        # The callback url to finish up.
+        UriHandler.open("https://id.npo.nl{}".format(redirect_url), no_cache=True)
         return not UriHandler.instance().status.error
 
     def extract_tiles(self, data):  # NOSONAR
@@ -379,7 +394,8 @@ class Channel(chn_class.Channel):
                 LanguageHelper.get_localized_string(LanguageHelper.TvShows),
                 LanguageHelper.get_localized_string(LanguageHelper.FullList)
             ),
-            "https://start-api.npo.nl/page/catalogue?pageSize={}".format(self.__pageSize),
+            "https://start-api.npo.nl/media/series?pageSize={}&dateFrom=2014-01-01".format(self.__pageSize),
+            # "https://start-api.npo.nl/page/catalogue?pageSize={}".format(self.__pageSize),
             content_type=contenttype.TVSHOWS
         )
         extra.complete = True
@@ -392,7 +408,7 @@ class Channel(chn_class.Channel):
         extra = FolderItem(
             LanguageHelper.get_localized_string(LanguageHelper.Genres),
             "https://www.npostart.nl/programmas",
-            content_type=contenttype.FILES)
+            content_type=contenttype.VIDEOS)
         extra.complete = True
         extra.dontGroup = True
         items.append(extra)
@@ -400,7 +416,7 @@ class Channel(chn_class.Channel):
         extra = FolderItem(
             "{} (A-Z)".format(LanguageHelper.get_localized_string(LanguageHelper.TvShows)),
             "#alphalisting",
-            content_type=contenttype.FILES)
+            content_type=contenttype.TVSHOWS)
         extra.complete = True
         extra.description = "Alfabetische lijst van de NPO.nl site."
         extra.dontGroup = True
@@ -833,11 +849,28 @@ class Channel(chn_class.Channel):
 
         data = JsonHelper(data)
         next_url = data.get_value("_links", "next", "href")
+        Logger.debug("Retrieving a total of %s items", data.get_value("total"))
+
+        if not next_url:
+            return data, items
+
+        # We will just try to download all items.
+        for i in range(0, self.__max_page_count - 1):
+            page_data = UriHandler.open(next_url, additional_headers=self.parentItem.HttpHeaders)
+            page_json = JsonHelper(page_data)
+            page_items = page_json.get_value("items")
+            if page_items:
+                data.json["items"] += page_items
+            next_url = page_json.get_value("_links", "next", "href")
+            if not next_url:
+                break
+
         if next_url:
             next_title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
-            item = FolderItem(next_title, next_url, content_type=contenttype.EPISODES)
+            item = FolderItem("\b.: {} :.".format(next_title), next_url, content_type=contenttype.EPISODES)
             item.complete = True
             item.HttpHeaders = self.__jsonApiKeyHeader
+            item.dontGroup = True
             items.append(item)
 
         return data, items
@@ -880,7 +913,9 @@ class Channel(chn_class.Channel):
 
         season = result_set.get("seasonNumber")
         episode = result_set.get("episodeNumber")
-        if bool(season) and bool(episode) and season < 100:
+
+        # Check for seasons but don't add then for EPG
+        if bool(season) and bool(episode) and season < 100 and not for_epg:
             item.set_season_info(season, episode)
             # TODO: setting it now is to messy. Perhaps we should make it configurable?
             # item.name = "s{0:02d}e{1:02d} - {2}".format(season, episode, item.name)

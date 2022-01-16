@@ -17,6 +17,7 @@ import uuid
 import xml.etree.ElementTree as ETree
 
 import requests
+from kodi_six import xbmcgui  # pylint: disable=import-error
 from six.moves import xrange
 from six.moves.urllib_parse import parse_qsl
 from six.moves.urllib_parse import quote
@@ -37,6 +38,8 @@ from .plexcommon import get_device_name
 
 DEFAULT_PORT = '32400'
 LOG = Logger('plexserver')
+
+WINDOW = xbmcgui.Window(10000)
 
 LOG.debug('Using Requests version for HTTP: %s' % requests.__version__)
 
@@ -375,11 +378,17 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
                 http_tags.append('external')
 
         for url in self.custom_access_urls:
+            if not url.startswith('http'):
+                https_uris.append('%s://%s/' % ('https', url.rstrip('/')))
+                https_tags.append('user')
+                http_uris.append('%s://%s/' % ('http', url.rstrip('/')))
+                http_tags.append('user')
+                continue
             if url.startswith('https'):
-                https_uris.append('%s://%s/' % ('https', address))
+                https_uris.append(url)
                 https_tags.append('user')
                 continue
-            http_uris.append('%s://%s/' % ('http', address))
+            http_uris.append(url)
             http_tags.append('user')
 
         return (https_uris, https_tags), (http_uris, http_tags)
@@ -575,9 +584,11 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
                     return self.talk(url, refresh, method)
 
                 self.offline = True
+                WINDOW.setProperty('plugin.video.composite-refresh.servers', 'true')
 
             except requests.exceptions.ReadTimeout:
                 LOG.debug('Server: read timeout for %s on %s ' % (self.get_address(), url))
+                WINDOW.setProperty('plugin.video.composite-refresh.servers', 'true')
 
             else:
                 LOG.debug('URL was: %s using %s' % (response.url, self.protocol))
@@ -797,7 +808,7 @@ class PlexMediaServer:  # pylint: disable=too-many-public-methods, too-many-inst
 
     def is_owned(self):
 
-        if self.owned == 1 or self.owned == '1':
+        if self.owned in (1, '1'):
             return True
         return False
 

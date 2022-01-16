@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import socket
+import traceback
 import xbmcplugin
 import inputstreamhelper
 
@@ -224,11 +225,13 @@ def run():
                     play_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
                     play_item.setProperty('inputstream.adaptive.stream_headers', headers)
                     play_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
-                debugLog("Restart Stream Url: %s" % streaming_url)
+                debugLog("Restart Stream Url: %s; play_item: %s" % (streaming_url, play_item))
                 xbmc.Player().play(streaming_url, play_item)
             else:
                 userNotification((translation(30066)).encode("utf-8"))
-        except:
+        except Exception as e:
+            debugLog("Exception: %s" % ( e, ), xbmc.LOGINFO)
+            debugLog("TB: %s" % ( traceback.format_exc(), ), xbmc.LOGINFO)
             userNotification((translation(30067)).encode("utf-8"))
     elif mode == 'playlist':
         startPlaylist(tvthekplayer, playlist)

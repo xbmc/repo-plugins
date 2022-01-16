@@ -75,3 +75,9 @@ def get_asset_id(vrtnu_url):
     """Return an asset_id by scraping the VRT NU website"""
     asset_id = assetpath_to_id(get_asset_path(vrtnu_url))
     return asset_id
+
+
+def get_video_id(vrtnu_url):
+    """Return an video_id by scraping the VRT NU website"""
+    video_id = get_video_attributes(vrtnu_url).get('videoid')
+    return video_id

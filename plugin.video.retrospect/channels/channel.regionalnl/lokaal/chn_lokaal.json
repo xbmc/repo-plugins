@@ -15,20 +15,6 @@
       "fanart": "rtvdrenthefanart.jpg"
     },
     {
-      "guid": "7C40EEE7-40F4-40ED-8A70-FAAB42B7A2B1",
-      "name": "RTV Noord",
-      "description": {
-        "en": "Video on demand for RTV Noord.\n\nNews, weather sports and opinions at RTV Noord, the regional broadcaster for Groningen.",
-        "nl": "RTV Noord Uitzendinggemist.\n\nNieuws, weer, sport en opinie op RTV Noord, de regionale omroep voor Groningen."
-      },
-      "icon": "rtvnoordlarge.png",
-      "category": "Regional",
-      "channelcode": "rtvnoord",
-      "sortorder": 100,
-      "language": "nl",
-      "fanart": "rtvnoordfanart.png"
-    },
-    {
       "guid": "EFE57022-9F52-41F9-8775-13CCD001FA56",
       "name": "Omroep West",
       "description": {
@@ -54,21 +40,8 @@
       "channelcode": "omroepgelderland",
       "sortorder": 100,
       "language": "nl",
-      "fanart": "omroepgelderlandfanart.jpg"
-    },
-    {
-      "guid": "770D3385-2EC9-4B87-9BC8-3A7190248A9C",
-      "name": "Omroep Brabant",
-      "description": {
-        "en": "Video on demand for Omroep Brabant.\n\nDiscover news videos of all topics in and around Noord-Brabant, crime, entertainment, sports and events from the province.",
-        "nl": "Omroep Brabant Uitzendinggemist.\n\nHier vind je nieuwsvideo's over alle actualiteiten in en rondom Noord-Brabant, misdaad, entertainment, sport en evenementen uit de provincie. In Brabant is Omroep Brabant dé regionale omroep. Omroep Brabant is in alle opzichten de grootste regionale omroep in Nederland. Dagelijks luisteren 340.000 Brabanders naar \"hun\" omroep en kijken 540.000 personen naar de tv-programma's. "
-      },
-      "icon": "omroepbrabantlarge.png",
-      "category": "Regional",
-      "channelcode": "omroepbrabant",
-      "sortorder": 100,
-      "language": "nl",
-      "fanart": "omroepbrabantfanart.png"
+      "fanart": "omroepgelderlandfanart.jpg",
+      "ignore": true
     },
     {
       "guid": "81CD5339-0D59-4019-9171-12A98815311C",

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.13+matrix.1" provider-name="gujal">
+<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.14+matrix.1" provider-name="gujal">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.4.3"/>
@@ -33,10 +33,10 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=352127</forum>
     <website>https://www.imdb.com/trailers/</website>
     <email>gujal at protonmail dot com</email>
-    <news>v2.1.13 (20210815)
-      [fix] html parser breaking on Kodi20
-      [fix] handle exceptions such as empty plot or no art
-      [new] Use common plugin cache to improve caching
+    <news>v2.1.14 (20211015)
+      [fix] code breaking on Kodi18
+      [fix] Search dialog popup after playing a searched trailer
+      [fix play by imdb_id
     </news>
     <assets>
       <icon>icon.png</icon>

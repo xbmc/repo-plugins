@@ -25,6 +25,31 @@ def error_check(response_json):
 
 class TeliaPlay():
 
+    graphql_hashes = {
+	"getMainMenu":
+        "f9c1eb6c91def27ee800da2296922d3798a54a8af32f79f25661afb621f1b45d",
+	"search":
+        "de385aa8e38e6d7c1e308a740bdb152b9d6d89c620e758a16814ad9bd0ae85e0",
+	"getPage":
+        "4f9d11526144a07568d64d659c008bb28085e116c84c1dd0cd5ed7ea8db44a77",
+	"getTvChannels":
+        "332c536e6095632e61dd88f63a73b2c7f783c24ef4a8b21bcefbeae638de7aa2",
+	"getTvChannel":
+        "de9b6b8f45d8698cf5f6572d56ed387aa564a32ba8c617349221505c8222f77f",
+	"getStorePage":
+        "f02456e757d511c7d4abd02d64c9b7ab82e04d5203dca691f91112d54790d9db",
+	"getPanel":
+        "bbf3465986a62517cd9d33e237901c6f2fcb5b3983847800a9265e9378c19f00",
+	"getSeries":
+        "672502c85fe4c4d5ebd2db79e8b4cc46e3d83844f1c67e75226d8bc91300250d",
+	"getSeason":
+        "09bda1dc98eb6bc40d947de0ef48f76ff515687838ac1b4bda805d8fc4be2664",
+	"addToMyList":
+        "70a1b84e1976a3b9773b25b9096e4e6c39128218720b5a6d2ccc0a0dd522919b",
+	"removeFromMyList":
+        "f1b3ae838fa9b39cc8c1994ff03039aaa09b494673bcaa3f49c04a17a5fa92a1"
+    }
+
     def __init__(self, userdata):
         self.tv_client_boot_id = userdata["bootUUID"]
         self.device_id = userdata["deviceUUID"]
@@ -143,7 +168,7 @@ class TeliaPlay():
                     "extensions": {
                         "persistedQuery": {
                             "version": 1,
-                            "sha256Hash": "3a18959010d36f5d47e7341167a2c596c11bdd2697bfb6ca7821862b048ff832"
+                            "sha256Hash": self.graphql_hashes["getMainMenu"]
                         }
                     }
                 }
@@ -180,7 +205,7 @@ class TeliaPlay():
                     "extensions": {
                         "persistedQuery": {
                             "version": 1,
-                            "sha256Hash": "958b924205529891e53b7000269afbbc63d27c171fbb569baae9c3466a681e32"
+                            "sha256Hash": self.graphql_hashes["search"]
                         }
                     }
                 }
@@ -212,7 +237,7 @@ class TeliaPlay():
                     "extensions": {
                         "persistedQuery": {
                             "version": 1,
-                            "sha256Hash": "c8dc9ddc3c115e21b4e0ac9f9c5c11ad675a51ffeabd6a577fcd8e64ebcef84a"
+                            "sha256Hash": self.graphql_hashes["getPage"]
                         }
                     }
                 }
@@ -223,7 +248,7 @@ class TeliaPlay():
             "User-Agent": "kodi.tv",
             "client-name": "web",
             "tv-client-boot-id": self.tv_client_boot_id,
-            "Authorization": "Bearer " + self.token_data["accessToken"],
+            "Authorization": "Bearer " + self.token_data["accessToken"]
         }
 
         response_json = self.web_utils.make_request(
@@ -232,7 +257,7 @@ class TeliaPlay():
         error_check(response_json)
         return response_json["data"]["page"]["pagePanels"]["items"]
 
-    def get_channels(self, timestamp, program_limit=3):
+    def get_channels(self, timestamp, channel_limit=3, offset=0):
         request = {
             "GET": {
                 "scheme": "https",
@@ -242,14 +267,14 @@ class TeliaPlay():
                     "operationName": "getTvChannels",
                     "variables": {
                         "timestamp": int(timestamp),
-                        "limit": 20,
-                        "programLimit": program_limit,
-                        "offset": 0
+                        "limit": channel_limit,
+                        "programLimit": 3,
+                        "offset": offset
                     },
                     "extensions": {
                         "persistedQuery": {
                             "version": 1,
-                            "sha256Hash": "7e99f055ab4baeff853c1848482a4e0252be8b0a447fba1bff4afcf0ce29a49d"
+                            "sha256Hash": self.graphql_hashes["getTvChannels"]
                         }
                     }
                 }
@@ -266,7 +291,7 @@ class TeliaPlay():
             request, headers=headers
         ).json()
         error_check(response_json)
-        return response_json["data"]["channels"]["channelItems"]
+        return response_json["data"]["channels"]
 
     def get_channel(self, channel_id, timestamp):
         request = {
@@ -284,7 +309,7 @@ class TeliaPlay():
                     "extensions": {
                         "persistedQuery": {
                             "version": 1,
-                            "sha256Hash": "b7b5417c08cd8bce181d47c2a563306207bd3219cea86866a6514722c1b838bc"
+                            "sha256Hash": self.graphql_hashes["getTvChannel"]
                         }
                     }
                 }
@@ -303,39 +328,6 @@ class TeliaPlay():
         error_check(response_json)
         return response_json["data"]["channel"]
 
-    def get_play_stores(self):
-        request = {
-            "GET": {
-                "scheme": "https",
-                "host": "graphql-telia.t6a.net",
-                "filename": "/graphql",
-                "query": {
-                    "operationName": "getPage",
-                    "variables": {
-                        "id": "all-stores"
-                    },
-                    "extensions": {
-                        "persistedQuery": {
-                            "version": 1,
-                            "sha256Hash": "c8dc9ddc3c115e21b4e0ac9f9c5c11ad675a51ffeabd6a577fcd8e64ebcef84a"
-                        }
-                    }
-                }
-            }
-        }
-        headers = {
-            "User-Agent": "kodi.tv",
-            "client-name": "web",
-            "tv-client-boot-id": self.tv_client_boot_id,
-            "Authorization": "Bearer " + self.token_data["accessToken"],
-        }
-
-        response_json = self.web_utils.make_request(
-            request, headers=headers
-        ).json()
-        error_check(response_json)
-        return response_json["data"]["page"]["pagePanels"]["items"]
-
     def get_store(self, store_id):
         request = {
             "GET": {
@@ -345,12 +337,13 @@ class TeliaPlay():
                 "query": {
                     "operationName": "getStorePage",
                     "variables": {
-                        "id": store_id
+                        "id": store_id,
+                        "offset": 0
                     },
                     "extensions": {
                         "persistedQuery": {
                             "version": 1,
-                            "sha256Hash": "ee298e9cb2c92d788b6f50965a10eeba708c50b9a77e014faa4179709593ddc5"
+                            "sha256Hash": self.graphql_hashes["getStorePage"]
                         }
                     }
                 }
@@ -391,7 +384,7 @@ class TeliaPlay():
                     "extensions": {
                         "persistedQuery": {
                             "version": 1,
-                            "sha256Hash": "c10de6b66a0635a0ffbeab07b723e42dcd919b1ed8cb3570bd1ba68aab2e05fe"
+                            "sha256Hash": self.graphql_hashes["getPanel"]
                         }
                     }
                 }
@@ -411,9 +404,6 @@ class TeliaPlay():
         error_check(response_json)
         return response_json["data"]["panel"]["selectionMediaContent"]
 
-    def get_movie(self, movie_id):
-        pass
-
     def get_series(self, series_id):
         request = {
             "GET": {
@@ -421,15 +411,14 @@ class TeliaPlay():
                 "host": "graphql-telia.t6a.net",
                 "filename": "/graphql",
                 "query": {
-                    "operationName":
-                    "getSeries",
+                    "operationName": "getSeries",
                     "variables": {
                         "id": series_id
                     },
                     "extensions": {
                         "persistedQuery": {
                             "version": 1,
-                            "sha256Hash": "d32d31dc4bb4d192e3aca22f675a19a8d691454e84542624a8fdeb07052be011"
+                            "sha256Hash": self.graphql_hashes["getSeries"]
                         }
                     }
                 }
@@ -465,7 +454,7 @@ class TeliaPlay():
                     "extensions": {
                         "persistedQuery": {
                             "version": 1,
-                            "sha256Hash": "9bb2423ff85037af6e1e6bad300c4805e78f7c0132f8193891c09d11e1479eb6"
+                            "sha256Hash": self.graphql_hashes["getSeason"]
                         }
                     }
                 }
@@ -583,7 +572,7 @@ class TeliaPlay():
             "extensions": {
                 "persistedQuery": {
                     "version": 1,
-                    "sha256Hash": "70a1b84e1976a3b9773b25b9096e4e6c39128218720b5a6d2ccc0a0dd522919b"
+                    "sha256Hash": self.graphql_hashes["addToMyList"]
                 }
             }
         }
@@ -616,7 +605,7 @@ class TeliaPlay():
             "extensions": {
                 "persistedQuery": {
                     "version": 1,
-                    "sha256Hash": "f1b3ae838fa9b39cc8c1994ff03039aaa09b494673bcaa3f49c04a17a5fa92a1"
+                    "sha256Hash": self.graphql_hashes["removeFromMyList"]
                 }
             }
         }
@@ -671,9 +660,9 @@ class TeliaPlay():
         ).json()
         error_check(response_json)
 
-        if stream_type == "live":
+        try:
             return response_json["streams"][1]
-        else:
+        except IndexError:
             return response_json["streams"][0]
 
     def delete_stream(self):

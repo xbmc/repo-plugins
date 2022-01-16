@@ -7,14 +7,23 @@ msgstr ""
 "Project-Id-Version: Kodi Addons\n"
 "Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Kodi Translation Team\n"
-"Language-Team: Team-Kodi\n"
+"PO-Revision-Date: 2021-10-03 12:30+0000\n"
+"Last-Translator: Sopor <sopor@hotmail.com>\n"
+"Language-Team: Swedish <https://kodi.weblate.cloud/projects/kodi-add-ons-music/plugin-audio-radio_de/sv_se/>\n"
+"Language: sv_se\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv_SE\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.8\n"
+
+msgctxt "Addon Summary"
+msgid "Access >30000 radio broadcasts"
+msgstr "Få tillgång till >30000 radiosändningar"
+
+msgctxt "Addon Description"
+msgid "Music plugin to access over 30000 international radio broadcasts from rad.io, radio.de, radio.fr, radio.pt and radio.es[CR]Currently features[CR]- English, german, french translated[CR]- Browse stations by location, genre, topic, country, city and language[CR]- Search for stations[CR]- 115 genres, 59 topics, 94 countrys, 1010 citys, 63 languages"
+msgstr "Musiktillägg som ger åtkomst till över 30000 internationella radiosändningar från rad.io, radio.de och radio.fr[CR]Nuvarande funktioner[CR]- Engelsk, tysk, och fransk översättning[]- Bläddra efter stationer baserat på genre, ämne, land, stad och språk[CR]- Sök efter stationer[CR]-115 genres, 59 ämnen, 94 länder, 1010 städer, 63 språk"
 
 msgctxt "#30100"
 msgid "Editorials Recommendations"
@@ -22,7 +31,7 @@ msgstr "Redaktionella rekommendationer"
 
 msgctxt "#30101"
 msgid "Top Stations"
-msgstr "Topp stationer"
+msgstr "Toppstationer"
 
 msgctxt "#30102"
 msgid "Browse by genre"
@@ -72,6 +81,14 @@ msgctxt "#30303"
 msgid "French"
 msgstr "Franska"
 
+msgctxt "#30304"
+msgid "Portuguese"
+msgstr "Portugisiska"
+
+msgctxt "#30305"
+msgid "Spanish"
+msgstr "Spanska"
+
 msgctxt "#30310"
 msgid "Force ViewMode to Thumbnail"
 msgstr "Tvinga visningsläge till miniatyrer"
@@ -82,7 +99,7 @@ msgstr "Lägg till i 'Mina stationer'"
 
 msgctxt "#30401"
 msgid "Remove from 'My Stations'"
-msgstr "Radera från 'Mina stationer'"
+msgstr "Ta bort från 'Mina stationer'"
 
 msgctxt "#30402"
 msgid "Edit custom Station"
@@ -90,7 +107,7 @@ msgstr "Redigera anpassad station"
 
 msgctxt "#30500"
 msgid "Please enter %s"
-msgstr "Var god ange %s"
+msgstr "Ange %s"
 
 msgctxt "#30501"
 msgid "title"
@@ -102,13 +119,52 @@ msgstr "miniatyr-url eller sökväg"
 
 msgctxt "#30503"
 msgid "stream url"
-msgstr "strömurl"
+msgstr "ström-url"
 
 msgctxt "#30504"
 msgid "Add custom Station..."
-msgstr "Lägg till anpassad station"
+msgstr "Lägg till anpassad station..."
 
 msgctxt "#30600"
 msgid "Network Error"
 msgstr "Nätverksfel"
 
+msgctxt "#30601"
+msgid "General"
+msgstr "Allmänt"
+
+msgctxt "#30602"
+msgid "Hide fanart"
+msgstr "Dölj fanart"
+
+msgctxt "#30603"
+msgid "Most Popular"
+msgstr "Mest populär"
+
+msgctxt "#30604"
+msgid "A-Z"
+msgstr "A-Z"
+
+msgctxt "#30605"
+msgid "Page (%s/%s) | Next >>"
+msgstr "Sida (%s/%s) | Nästa >>"
+
+msgctxt "#30606"
+msgid "By country"
+msgstr "Efter land"
+
+msgctxt "#30607"
+msgid "Prefer HTTP streams over HTTS"
+msgstr "Föredra HTTP-strömmar framför HTTPS"
+
+msgctxt "#30608"
+msgid "Unable to get radio stream url"
+msgstr ""
+
+msgctxt "#30609"
+msgid "Sucessfully added to my stations!"
+msgstr ""
+
+msgctxt "#30610"
+msgid "Sucessfully removed from my stations!"
+msgstr ""

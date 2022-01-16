@@ -32,8 +32,10 @@ class MediaItem:
 
     """
 
+    LabelEpisode = "Episode"
     LabelTrackNumber = "TrackNumber"
     LabelDuration = "Duration"
+    LabelTvShowTitle = "TVShowTitle"
     ExpiresAt = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
 
     #noinspection PyShadowingBuiltins
@@ -80,7 +82,7 @@ class MediaItem:
         self.isDrmProtected = False               # : if set to True, the item is DRM protected and cannot be played (^)
         self.isPaid = False                       # : if set to True, the item is a Paid item and cannot be played (*)
         self.season = 0                           # : The season number
-        self.epsiode = 0                          # : The episode number
+        self.episode = 0                          # : The episode number
         self.__infoLabels = dict()                # : Additional Kodi InfoLabels
 
         self.complete = False
@@ -244,6 +246,18 @@ class MediaItem:
 
         self.__infoLabels[label] = value
 
+    def has_info_label(self, label):
+        """ Indication of a specific info label is present
+
+        :param str label:   The info label to check.
+
+        :returns: In boolean whether the info label exists.
+        :rtype: bool
+
+        """
+
+        return label in self.__infoLabels
+
     def set_artwork(self, icon=None, thumb=None, fanart=None, poster=None):
         """ Set the artwork for this MediaItem.
 
@@ -260,11 +274,12 @@ class MediaItem:
         self.fanart = fanart or self.fanart
         self.poster = poster or self.poster
 
-    def set_season_info(self, season, episode):
+    def set_season_info(self, season, episode, tv_show_title=None):
         """ Set season and episode information
 
         :param str|int season:  The Season Number
         :param str|int episode: The Episode Number
+        :param str|None: The name of the TV Show
 
         """
 
@@ -275,8 +290,11 @@ class MediaItem:
         self.season = int(season)
         self.__infoLabels["Season"] = self.season
 
-        self.epsiode = int(episode)
-        self.__infoLabels["Episode"] = self.epsiode
+        self.episode = int(episode)
+        self.__infoLabels["Episode"] = self.episode
+
+        if tv_show_title:
+            self.tv_show_title = tv_show_title
         return
 
     def set_expire_datetime(self, timestamp, year=0, month=0, day=0, hour=0, minutes=0, seconds=0):
@@ -309,7 +327,7 @@ class MediaItem:
 
         return "{:03d}-{:03d}-{}-{}".format(
             self.season,
-            self.epsiode,
+            self.episode,
             self.__timestamp.strftime("%Y.%m.%d") if self.__timestamp.year > 1900 else "0001.01.01",
             self.name)
 
@@ -447,7 +465,7 @@ class MediaItem:
         if self.media_type in mediatype.VIDEO_TYPES:
             info_labels["Plot"] = description
         if self.tv_show_title:
-            info_labels["TVShowTitle"] = self.tv_show_title
+            info_labels[MediaItem.LabelTvShowTitle] = self.tv_show_title
 
         # now create the Kodi item
         item = kodifactory.list_item(name or "<unknown>", self.__date)

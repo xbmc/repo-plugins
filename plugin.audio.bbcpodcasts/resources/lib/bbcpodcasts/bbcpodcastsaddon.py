@@ -79,7 +79,9 @@ class BbcPodcastsAddon(AbstractRssAddon):
 
         entries = list()
         for _tile in soup.select("article"):
-            entries.append(self._parse_podcast_tile(_tile))
+            entry = self._parse_podcast_tile(_tile)
+            if entry:
+                entries.append(entry)
 
         pager_next = _parse_pager(soup)
         if pager_next:

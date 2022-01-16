@@ -92,7 +92,7 @@ class UserDataHandler():
 
     def save(self):
         with open(self.filepath, "w") as data_file:
-            json.dump(self.userdata_json, data_file)
+            json.dump(self.userdata_json, data_file, indent=4)
 
     def add(self, username, userdata):
         self.userdata_json.update({username: userdata})
@@ -117,23 +117,27 @@ class UserDataHandler():
 class SearchHistory():
     filename = "search_history.json"
 
-    def __init__(self, profile):
-        os.makedirs(profile, exist_ok=True)
-        self.save_path = os.path.join(profile, self.filename)
+    def __init__(self, username):
+        self.username = username
+        self.addon = AddonUtils()
+        os.makedirs(self.addon.profile, exist_ok=True)
+        self.save_path = os.path.join(self.addon.profile, self.filename)
         self.load()
 
     def load(self):
         try:
             with open(self.save_path, "r") as history_file:
                 self.history_json = json.load(history_file)
+                if self.username not in self.history_json:
+                    self.history_json[self.username] = []
         except FileNotFoundError:
             self.history_json = {}
-            self.history_json["queries"] = []
+            self.history_json[self.username] = []
             self.save()
 
     def save(self):
         with open(self.save_path, "w") as history_file:
-            json.dump(self.history_json, history_file)
+            json.dump(self.history_json, history_file, indent=4)
 
     def get(self, query_id):
         return self.get_queries()[int(query_id)]
@@ -147,18 +151,18 @@ class SearchHistory():
             return None
 
     def get_queries(self):
-        return self.history_json["queries"]
+        return self.history_json[self.username]
 
     def add(self, query):
-        queries = self.history_json["queries"]
+        queries = self.history_json[self.username]
         if query not in queries:
             queries.insert(0, query)
         self.save()
 
     def remove(self, query_id):
-        del self.history_json["queries"][int(query_id)]
+        del self.history_json[self.username][int(query_id)]
         self.save()
 
     def clear(self):
-        self.history_json["queries"] = []
+        self.history_json[self.username] = []
         self.save()

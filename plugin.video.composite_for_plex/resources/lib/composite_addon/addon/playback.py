@@ -10,13 +10,13 @@
     See LICENSES/GPL-2.0-or-later.txt for more information.
 """
 
-from six.moves import xrange
-from six.moves.urllib_parse import unquote
-
 from kodi_six import xbmc  # pylint: disable=import-error
 from kodi_six import xbmcgui  # pylint: disable=import-error
 from kodi_six import xbmcplugin  # pylint: disable=import-error
 from kodi_six import xbmcvfs  # pylint: disable=import-error
+from six import PY3
+from six.moves import xrange
+from six.moves.urllib_parse import unquote
 
 from .common import get_handle
 from .common import is_resuming_video
@@ -537,7 +537,10 @@ class StreamData:
         self.data['audio_count'] = 0
         self.data['sub_count'] = 0
 
-        tags = self.tree.getiterator('Stream')
+        if PY3:
+            tags = self.tree.iter('Stream')
+        else:
+            tags = self.tree.getiterator('Stream')
 
         forced_subtitle = False
         for bits in tags:

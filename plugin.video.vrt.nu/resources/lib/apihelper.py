@@ -547,14 +547,14 @@ class ApiHelper:
                 params['facets[programType]'] = 'oneoff'
 
             if variety == 'watchlater':
-                self._resumepoints.refresh(ttl=ttl('direct'))
+                self._resumepoints.refresh_watchlater(ttl=ttl('direct'))
                 episode_urls = self._resumepoints.watchlater_urls()
                 params['facets[url]'] = '[%s]' % (','.join(episode_urls))
 
             if variety == 'continue':
-                self._resumepoints.refresh(ttl=ttl('direct'))
-                episode_urls = self._resumepoints.resumepoints_urls()
-                params['facets[url]'] = '[%s]' % (','.join(episode_urls))
+                self._resumepoints.refresh_resumepoints(ttl=ttl('direct'))
+                episode_ids = self._resumepoints.resumepoints_ids()
+                params['facets[videoId]'] = '[%s]' % (','.join(episode_ids))
 
             if use_favorites:
                 program_urls = [program_to_url(p, 'medium') for p in self._favorites.programs()]

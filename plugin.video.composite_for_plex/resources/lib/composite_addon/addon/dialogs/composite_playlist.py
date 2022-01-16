@@ -15,11 +15,11 @@ import random
 from itertools import chain
 from itertools import groupby
 
-from six.moves import zip_longest
-
 import pyxbmct.addonwindow as pyxbmct  # pylint: disable=import-error
 from kodi_six import xbmc  # pylint: disable=import-error
 from kodi_six import xbmcgui  # pylint: disable=import-error
+from six import PY3
+from six.moves import zip_longest
 
 from ...addon.constants import CONFIG
 from ...addon.containers import Item
@@ -429,7 +429,11 @@ class PlaylistGenerator:
         return server_sections
 
     def _get_item_collection(self, server, tree):
-        branches = tree.getiterator('Video')
+        if PY3:
+            branches = tree.iter('Video')
+        else:
+            branches = tree.getiterator('Video')
+
         if branches is None:
             return []
 

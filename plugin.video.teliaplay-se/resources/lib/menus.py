@@ -43,7 +43,6 @@ class MenuList():
     def __init__(self):
         self.addon = AddonUtils()
         self.userdata_handler = UserDataHandler()
-        self.search_history = SearchHistory(self.addon.profile)
 
         username = self.addon.get_setting(
             "user" + self.addon.get_setting("defaultUser")
@@ -53,6 +52,7 @@ class MenuList():
             "pass" + self.addon.get_setting("defaultUser")
         )
 
+        self.search_history = SearchHistory(username)
         userdata = self.userdata_handler.get(username)
 
         if not userdata:
@@ -250,6 +250,10 @@ class MenuList():
                     menu = submenu["timelineContent"]
                 elif submenu["__typename"] == "RentalsPanel":
                     menu = submenu["rentalsContent"]
+                elif submenu["__typename"] == "StoresPanel":
+                    menu = submenu["storesContent"]
+                    self.play_stores_menu(menu["items"])
+                    return
                 break
         else:
             return
@@ -387,28 +391,36 @@ class MenuList():
         self._end_folder(items)
 
     @logging
-    def play_stores_menu(self):
-        services = self.telia_play.get_play_stores()
+    def play_stores_menu(self, channels=None):
+
+        def add_channel(items, channel):
+            try:
+                icon = urllib.parse.unquote(
+                    channel["icons"]["dark"]["source"]
+                )
+            except Exception:
+                icon = None
+
+            plugin_url = self.addon.plugin_url({
+                "menu": "page",
+                "mode": "Alla Playtjänster",
+                "storeId": channel["id"]
+            })
+
+            self._add_folder_item(
+                items, channel["name"], plugin_url, icon=icon
+            )
 
         items = []
-        for service in services:
-            for channel in service["storesContent"]["items"]:
-                try:
-                    icon = urllib.parse.unquote(
-                        channel["icons"]["dark"]["source"]
-                    )
-                except Exception:
-                    icon = None
+        if channels is None:
+            services = self.telia_play.get_page("all-stores")
 
-                plugin_url = self.addon.plugin_url({
-                    "menu": "page",
-                    "mode": "Alla Playtjänster",
-                    "storeId": channel["id"]
-                })
-
-                self._add_folder_item(
-                    items, channel["name"], plugin_url, icon=icon
-                )
+            for service in services:
+                for channel in service["storesContent"]["items"]:
+                    add_channel(items, channel)
+        else:
+            for channel in channels:
+                add_channel(items, channel)
 
         self._end_folder(items, (SORT_METHOD_UNSORTED, SORT_METHOD_TITLE))
 
@@ -573,7 +585,7 @@ class MenuList():
 
     @logging
     def panel_menu(self, panel_id, page, search=False):
-        results_per_page = 100
+        results_per_page = self.addon.get_setting_as_int("moviesPerPage")
         offset = page*results_per_page
 
         if not search:
@@ -583,6 +595,9 @@ class MenuList():
         else:
             # Reuse panel menu for search menu; no need to reinvent the wheel.
             query = self.search_history.get(panel_id)
+            # Searching won't work if the number of results per page is too large.
+            results_per_page = 50
+            offset = page*results_per_page
             panel = self.telia_play.search(query, results_per_page, offset)
 
         items = []
@@ -734,10 +749,10 @@ class MenuList():
                     raise
 
             receipt["startTime"] = tz_sthlm_stamps.local_datetime_str(
-                receipt["startTime"], "ms", "%c"
+                receipt["startTime"], "%c", "ms"
             )
             receipt["endTime"] = tz_sthlm_stamps.local_datetime_str(
-                receipt["endTime"], "ms", "%c"
+                receipt["endTime"], "%c", "ms"
             )
 
             # Display super fancy invoice
@@ -910,14 +925,14 @@ class MenuList():
             try:
                 tz_sthlm_stamps = TimezoneStamps("Europe/Stockholm")
                 datetime_str = tz_sthlm_stamps.local_datetime_str(
-                    episode["availableFrom"]["timestamp"], "ms",
-                    "%Y-%m-%d %H:%M:%S"
+                    episode["availableFrom"]["timestamp"],
+                    "%Y-%m-%d %H:%M:%S", "ms"
                 )
                 date_label = tz_sthlm_stamps.local_datetime_str(
-                    episode["availableFrom"]["timestamp"], "ms", "%x"
+                    episode["availableFrom"]["timestamp"], "%x", "ms"
                 )
                 time_label = tz_sthlm_stamps.local_datetime_str(
-                    episode["availableFrom"]["timestamp"], "ms", "%X"
+                    episode["availableFrom"]["timestamp"], "%X", "ms"
                 )
                 time_label = tz_sthlm_stamps.strip_seconds(time_label)
             except Exception:
@@ -971,12 +986,16 @@ class MenuList():
         self._end_folder(items, sort_methods=(SORT_METHOD_DATEADDED,))
 
     @logging
-    def tv_channels_menu(self):
+    def tv_channels_menu(self, page=0):
+        channel_limit = self.addon.get_setting_as_int("channelsPerPage")
+        offset = channel_limit*page
         tz_sthlm_stamps = TimezoneStamps("Europe/Stockholm")
-        menu_items = self.telia_play.get_channels(tz_sthlm_stamps.now("ms"))
+        menu = self.telia_play.get_channels(
+            tz_sthlm_stamps.now("ms"), channel_limit, offset
+        )
 
         items = []
-        for channel in menu_items:
+        for channel in menu["channelItems"]:
             try:
                 icon = urllib.parse.unquote(channel["icons"]["dark"]["source"])
             except Exception:
@@ -995,18 +1014,27 @@ class MenuList():
             context_url = self.addon.plugin_url({
                 "menu": "page",
                 "pageId": "epg",
-                "schedule": "{0}",
+                "dayOffset": "{0}",
                 "channelId": channel["id"]
             })
-            context_menu = [
-                (self.addon.localize(30006 + string_id),
-                 "ActivateWindow(videos, {0}, return)".format(
-                     urllib.parse.unquote(context_url).format(schedule)
-                 ))
-                for (string_id, schedule) in enumerate(
-                    ("now", "today", "tonight", "yesterday", "tomorrow")
+
+            tz_sthlm_stamps = TimezoneStamps("Europe/Stockholm")
+            context_menu = []
+            for day_offset in range(-7, 8):
+                timestamp = tz_sthlm_stamps.today(day_offset, units="ms")
+                menu_entry_label = tz_sthlm_stamps.local_datetime_str(
+                    timestamp, "%a %d %b", "ms"
                 )
-            ]
+                if day_offset == 0:
+                    menu_entry_label = "[COLOR blue]{0}[/COLOR]".format(
+                        menu_entry_label
+                    )
+                context_menu.append(
+                    (menu_entry_label,
+                     "ActivateWindow(videos, {0}, return)".format(
+                         urllib.parse.unquote(context_url).format(day_offset)
+                     ))
+                )
 
             plugin_url = self.addon.plugin_url({
                 "menu": "play",
@@ -1022,21 +1050,22 @@ class MenuList():
                 context_menu_items=context_menu
             )
 
+        if "pageInfo" in menu and menu["pageInfo"]["hasNextPage"]:
+            plugin_url = self.addon.plugin_url({
+                "menu": "page",
+                "pageId": "epg",
+                "page": page+1
+            })
+
+            self._add_folder_item(
+                items, self.addon.localize(30013), plugin_url
+            )
         self._end_folder(items)
 
     @logging
-    def tv_programs_menu(self, channel_id, schedule):
+    def tv_programs_menu(self, channel_id, day_offset):
         tz_sthlm_stamps = TimezoneStamps("Europe/Stockholm")
-        if schedule == "yesterday":
-            timestamp = tz_sthlm_stamps.yesterday("ms")
-        elif schedule == "today":
-            timestamp = tz_sthlm_stamps.today("ms")
-        elif schedule == "now":
-            timestamp = tz_sthlm_stamps.now("ms")
-        elif schedule == "tonight":
-            timestamp = tz_sthlm_stamps.tonight("ms")
-        elif schedule == "tomorrow":
-            timestamp = tz_sthlm_stamps.tomorrow("ms")
+        timestamp = tz_sthlm_stamps.today(int(day_offset), "ms")
 
         channel = self.telia_play.get_channel(
             channel_id, timestamp
@@ -1076,12 +1105,12 @@ class MenuList():
             duration = (end_timestamp - start_timestamp) // 1000
 
             start_time = tz_sthlm_stamps.local_datetime_str(
-                start_timestamp, "ms", "%X"
+                start_timestamp, "%X", "ms"
             )
             start_time = tz_sthlm_stamps.strip_seconds(start_time)
 
             end_time = tz_sthlm_stamps.local_datetime_str(
-                end_timestamp, "ms", "%X"
+                end_timestamp, "%X", "ms"
             )
             end_time = tz_sthlm_stamps.strip_seconds(end_time)
 

@@ -1,0 +1,28 @@
+{
+    "name"              : "SBS On Demand",
+    "plugin"            : "plugin.video.sbs",
+    "priority"          : 1000,
+    "provider"          : "SBS On Demand",
+    "is_resolvable"     : "true",
+    "assert"            : {
+                            "play_movie":       ["title", "year"],
+                            "play_episode":     ["showname", "season", "episode"],
+                            "search_movie":     ["title"],
+                            "search_episode":   ["showname"]
+                          },
+    "play_movie"        : [
+                            "plugin://plugin.video.sbs/?action=searchhistory&name={title_url}",
+                            {"label": "Movies"},
+                            {"label": "(?i){title}"}
+                          ],
+    "search_movie"      : "plugin://plugin.video.sbs/?action=searchhistory&name={title_url}",
+    "play_episode"      : [
+                            "plugin://plugin.video.sbs/?action=searchhistory&name={showname_url}",
+                            {"label": "Programs"},
+                            {"label": "(?i){showname}"},
+                            {"label": "^Season {season}$"},
+                            {"return": "true", "season": "^{season}$", "episode": "^{episode}$"},
+                            {"dialog": "true"}
+                          ],
+    "search_episode"    : "plugin://plugin.video.sbs/?action=searchhistory&name={showname_url}"
+}

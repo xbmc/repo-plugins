@@ -392,9 +392,9 @@ msgctxt "#32077"
 msgid "Ignore folder creation checks"
 msgstr ""
 
-#: /resources/settings.xml
+#: /resources/lib/container/basedir.py
 msgctxt "#32078"
-msgid "Expand Trakt list limit to 20 items"
+msgid "Still to Watch"
 msgstr ""
 
 #: /resources/settings.xml
@@ -409,7 +409,7 @@ msgstr ""
 
 #: /resources/settings.xml
 msgctxt "#32081"
-msgid "Show next page item on widgets (requires skin reload)"
+msgid "Show next page item"
 msgstr ""
 
 #: /resources/settings.xml
@@ -716,7 +716,7 @@ msgstr ""
 
 #: /resources/settings.xml
 msgctxt "#32142"
-msgid "Hide watched items on widgets"
+msgid "Hide watched items"
 msgstr ""
 
 #: /resources/lib/context.py
@@ -1200,7 +1200,7 @@ msgstr ""
 
 #: /resources/lib/userdiscover.py
 msgctxt "#32238"
-msgid "Discover {} w/ Below Settings"
+msgid "Discover {}"
 msgstr ""
 
 #: /resources/lib/userdiscover.py
@@ -1967,7 +1967,7 @@ msgstr ""
 
 #: /resources/settings.xml
 msgctxt "#32386"
-msgid "Delete Cache"
+msgid "Delete cache"
 msgstr ""
 
 #: /resources/lib/script/router.py
@@ -2000,7 +2000,10 @@ msgstr ""
 
 #: /resources/lib/script/router.py
 msgctxt "#32392"
-msgid "Use [B]Quick Update[/B] to check for new items.\n\nUse [B]Forced Update[/B] to ignore previously cached update details and recheck all items. Forced updates should only be used when cleaning and rebuilding the Kodi library."
+msgid ""
+"Use [B]Quick Update[/B] to check for new items.\n"
+"\n"
+"Use [B]Forced Update[/B] to ignore previously cached update details and recheck all items. Forced updates should only be used when cleaning and rebuilding the Kodi library."
 msgstr ""
 
 #: /resources/lib/script/router.py
@@ -2011,6 +2014,271 @@ msgstr ""
 #: /resources/lib/script/router.py
 msgctxt "#32394"
 msgid "Quick Update"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32395"
+msgid "Log timer reports for directories"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32396"
+msgid "Unwatched counts only on in-progress tvshows"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32397"
+msgid "Original"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32398"
+msgid "Medium"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32399"
+msgid "Fallback to English when main language unavailable"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32400"
+msgid "Play local Kodi library files"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32401"
+msgid "TMDb detailed information"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32402"
+msgid "Get additional details and artwork from TMDb"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32403"
+msgid "Increase synced lists items per page (increases load times)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32404"
+msgid "Flatten tvshows with multiple episodes airing same day"
+msgstr ""
+
+#: /resources/lib/addon/constants.py
+msgctxt "#32405"
+msgid "Your TV Shows Airing This Week"
+msgstr ""
+
+#: /resources/lib/container/basedir.py
+msgctxt "#32406"
+msgid "Your In-Progress Episodes"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32407"
+msgid "Get resume points from Trakt (increases load times)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32408"
+msgid "Prefer artwork from TMDb first if available"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32409"
+msgid "Cache database location"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32410"
+msgid "Max concurrent threads (0 is unlimited)"
+msgstr ""
+
+#: /resources/lib/items/basedir.py
+msgctxt "#32411"
+msgid "Providers"
+msgstr ""
+
+#: /resources/lib/api/tmdb/discover.py
+msgctxt "#32412"
+msgid "With Watch Provider"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32413"
+msgid "Next episodes checks calendar (slower but more accurate)"
+msgstr ""
+
+#: /resources/lib/addon/consts.py
+msgctxt "#32414"
+msgid "Most Watched"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32415"
+msgid "Combine all players for plugin into single entry"
+msgstr ""
+
+#: /resources/lib/items/basedir.py
+msgctxt "#32416"
+msgid "Premieres"
+msgstr ""
+
+#: /resources/lib/script/sync.py
+msgctxt "#32417"
+msgid "Remove from progress"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32418"
+msgid "Adds text to the start of the MPAA rating. For example if set to 'Rated' a 'PG' rating is displayed as 'Rated PG'. Cached items will need to be refreshed."
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32419"
+msgid "The language and country settings used when looking up data from TMDb and Trakt APIs"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32420"
+msgid "TMDb artwork quality"
+msgstr ""
+
+#: /resources/lib/items/basedir.py
+msgctxt "#32421"
+msgid "Top Lists"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32422"
+msgid "MDbList API"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32423"
+msgid "MDbList API key"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32424"
+msgid "Make episode playlists"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32425"
+msgid "Have TMDbHelper queue all episodes in a playlist when playing an episode using this player?"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32426"
+msgid "Return to previous folder (..)"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32427"
+msgid "Use current folder as search URL"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32428"
+msgid "Browse for MOVIE search url"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32429"
+msgid "Browse for TVSHOW search url"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32430"
+msgid "Enter a name for this player"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32431"
+msgid "Use the same search URL for tvshows as movies?"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32432"
+msgid "Select template"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32433"
+msgid "Missing QUERYKEY in URL"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32434"
+msgid "You must insert QUERYKEY where the search query for the URL goes"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32435"
+msgid "Input QUERYKEY where search query goes"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32436"
+msgid "Details"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32437"
+msgid "Configure provider data allowlist"
+msgstr ""
+
+#: /resources/lib/script/method.py
+msgctxt "#32438"
+msgid "Provider allowlist updated"
+msgstr ""
+
+#: /resources/lib/script/method.py
+msgctxt "#32439"
+msgid "The provider allowlist has been updated. Please note that updating provider details requires the item cache to be refreshed. The item cache can be deleted in the expert settings section."
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32440"
+msgid "Edit steps"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32441"
+msgid "Add a new step"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32442"
+msgid "Add a new rule"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32443"
+msgid "Select value to match against {}"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32444"
+msgid "Select rule or listitem key"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32445"
+msgid "Edit Rules for Step {}"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32446"
+msgid "plugin:// search URL for {}"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32447"
+msgid "Up Next Only"
 msgstr ""
 
 msgctxt "#30030"

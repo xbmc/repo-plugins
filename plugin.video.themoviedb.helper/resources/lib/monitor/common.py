@@ -1,23 +1,23 @@
-import xbmc
 from resources.lib.addon.window import get_property
-from resources.lib.tmdb.api import TMDb
-from resources.lib.omdb.api import OMDb
-from resources.lib.trakt.api import TraktAPI
-from resources.lib.fanarttv.api import FanartTV
-from resources.lib.addon.plugin import ADDON, kodi_traceback
-from resources.lib.addon.parser import try_int
-from resources.lib.addon.setutils import merge_two_dicts
-from resources.lib.addon.decorators import try_except_log
+from resources.lib.api.tmdb.api import TMDb
+from resources.lib.api.omdb.api import OMDb
+from resources.lib.api.trakt.api import TraktAPI
+from resources.lib.api.fanarttv.api import FanartTV
+from resources.lib.addon.plugin import get_setting, get_infolabel, get_condvisibility
+from resources.lib.addon.parser import try_int, merge_two_dicts
+from resources.lib.addon.tmdate import convert_timestamp, get_region_date
+from resources.lib.items.builder import ItemBuilder
+from resources.lib.addon.logger import kodi_traceback, kodi_try_except
 
 
 SETMAIN = {
     'label', 'tmdb_id', 'imdb_id'}
 SETMAIN_ARTWORK = {
-    'icon', 'poster', 'thumb', 'fanart', 'discart', 'clearart', 'clearlogo', 'landscape', 'banner'}
+    'icon', 'poster', 'thumb', 'fanart', 'discart', 'clearart', 'clearlogo', 'landscape', 'banner', 'keyart'}
 SETINFO = {
     'title', 'originaltitle', 'tvshowtitle', 'plot', 'rating', 'votes', 'premiered', 'year',
     'imdbnumber', 'tagline', 'status', 'episode', 'season', 'genre', 'set', 'studio', 'country',
-    'MPAA', 'director', 'writer', 'trailer', 'top250'}
+    'mpaa', 'director', 'writer', 'trailer', 'top250'}
 SETPROP = {
     'tmdb_id', 'imdb_id', 'tvdb_id', 'tvshow.tvdb_id', 'tvshow.tmdb_id', 'tvshow.imdb_id',
     'biography', 'birthday', 'age', 'deathday', 'character', 'department', 'job', 'known_for', 'role', 'born',
@@ -37,25 +37,30 @@ class CommonMonitorFunctions(object):
         self.index_properties = set()
         self.trakt_api = TraktAPI()
         self.tmdb_api = TMDb()
-        self.fanarttv = FanartTV()
-        self.omdb_api = OMDb() if ADDON.getSettingString('omdb_apikey') else None
+        self.ftv_api = FanartTV()
+        self.omdb_api = OMDb() if get_setting('omdb_apikey', 'str') else None
+        self.ib = ItemBuilder(tmdb_api=self.tmdb_api, ftv_api=self.ftv_api, trakt_api=self.trakt_api)
         self.imdb_top250 = {}
         self.property_prefix = 'ListItem'
 
-    @try_except_log('lib.monitor.common clear_property')
+    @kodi_try_except('lib.monitor.common clear_property')
     def clear_property(self, key):
-        key = u'{}.{}'.format(self.property_prefix, key)
+        key = f'{self.property_prefix}.{key}'
         get_property(key, clear_property=True)
 
-    @try_except_log('lib.monitor.common set_property')
+    @kodi_try_except('lib.monitor.common set_property')
     def set_property(self, key, value):
-        key = u'{}.{}'.format(self.property_prefix, key)
+        key = f'{self.property_prefix}.{key}'
         if value is None:
             get_property(key, clear_property=True)
         else:
-            get_property(key, set_property=u'{0}'.format(value))
+            get_property(key, set_property=f'{value}')
 
-    def set_iter_properties(self, dictionary, keys):
+    def set_iter_properties(self, dictionary: dict, keys: set):
+        """ Interates through a set of keys and adds corresponding value from the dictionary as a window property
+        Lists of values from dictionary are joined with ' / '.join(dictionary[key])
+        TMDbHelper.ListItem.{key} = dictionary[key]
+        """
         if not isinstance(dictionary, dict):
             dictionary = {}
         for k in keys:
@@ -65,11 +70,11 @@ class CommonMonitorFunctions(object):
                     try:
                         v = ' / '.join(v)
                     except Exception as exc:
-                        kodi_traceback(exc, u'\nlib.monitor.common set_iter_properties\nk: {} v: {}'.format(k, v))
+                        kodi_traceback(exc, f'\nlib.monitor.common set_iter_properties\nk: {k} v: {v}')
                 self.properties.add(k)
                 self.set_property(k, v)
             except Exception as exc:
-                kodi_traceback(exc, u'\nlib.monitor.common set_iter_properties\nk: {}'.format(k))
+                kodi_traceback(exc, f'\nlib.monitor.common set_iter_properties\nk: {k}')
 
     def set_indexed_properties(self, dictionary):
         if not isinstance(dictionary, dict):
@@ -84,13 +89,13 @@ class CommonMonitorFunctions(object):
                 self.set_property(k, v)
                 index_properties.add(k)
             except Exception as exc:
-                kodi_traceback(exc, u'\nlib.monitor.common set_indexed_properties\nk: {} v: {}'.format(k, v))
+                kodi_traceback(exc, f'\nlib.monitor.common set_indexed_properties\nk: {k} v: {v}')
 
         for k in (self.index_properties - index_properties):
             self.clear_property(k)
         self.index_properties = index_properties.copy()
 
-    @try_except_log('lib.monitor.common set_list_properties')
+    @kodi_try_except('lib.monitor.common set_list_properties')
     def set_list_properties(self, items, key, prop):
         if not isinstance(items, list):
             return
@@ -99,7 +104,7 @@ class CommonMonitorFunctions(object):
         self.properties.add(prop)
         self.set_property(prop, joinlist)
 
-    @try_except_log('lib.monitor.common set_time_properties')
+    @kodi_try_except('lib.monitor.common set_time_properties')
     def set_time_properties(self, duration):
         minutes = duration // 60 % 60
         hours = duration // 60 // 60
@@ -107,37 +112,38 @@ class CommonMonitorFunctions(object):
         self.set_property('Duration', totalmin)
         self.set_property('Duration_H', hours)
         self.set_property('Duration_M', minutes)
-        self.set_property('Duration_HHMM', u'{0:02d}:{1:02d}'.format(hours, minutes))
+        self.set_property('Duration_HHMM', f'{hours:02d}:{minutes:02d}')
         self.properties.update(['Duration', 'Duration_H', 'Duration_M', 'Duration_HHMM'])
+
+    @kodi_try_except('lib.monitor.common set_date_properties')
+    def set_date_properties(self, premiered):
+        date_obj = convert_timestamp(premiered, time_fmt="%Y-%m-%d", time_lim=10)
+        if not date_obj:
+            return
+        self.set_property('Premiered', get_region_date(date_obj, 'dateshort'))
+        self.set_property('Premiered_Long', get_region_date(date_obj, 'datelong'))
+        self.set_property('Premiered_Custom', date_obj.strftime(get_infolabel('Skin.String(TMDbHelper.Date.Format)') or '%d %b %Y'))
+        self.properties.update(['Premiered', 'Premiered_Long', 'Premiered_Custom'])
 
     def set_properties(self, item):
         self.set_iter_properties(item, SETMAIN)
         self.set_iter_properties(item.get('infolabels', {}), SETINFO)
         self.set_iter_properties(item.get('infoproperties', {}), SETPROP)
         self.set_time_properties(item.get('infolabels', {}).get('duration', 0))
+        self.set_date_properties(item.get('infolabels', {}).get('premiered'))
         self.set_list_properties(item.get('cast', []), 'name', 'cast')
-        if xbmc.getCondVisibility("!Skin.HasSetting(TMDbHelper.DisableExtendedProperties)"):
+        if get_condvisibility("!Skin.HasSetting(TMDbHelper.DisableExtendedProperties)"):
             self.set_indexed_properties(item.get('infoproperties', {}))
 
-    @try_except_log('lib.monitor.common get_tmdb_id')
-    def get_tmdb_id(self, tmdb_type, imdb_id=None, query=None, year=None, episode_year=None):
+    @kodi_try_except('lib.monitor.common get_tmdb_id')
+    def get_tmdb_id(self, tmdb_type, imdb_id=None, query=None, year=None, episode_year=None, media_type=None):
         if imdb_id and imdb_id.startswith('tt'):
             return self.tmdb_api.get_tmdb_id(tmdb_type=tmdb_type, imdb_id=imdb_id)
+        if tmdb_type == 'multi':
+            multi_i = self.tmdb_api.get_tmdb_multisearch(query=query, media_type=media_type) or {}
+            self.multisearch_tmdbtype = multi_i.get('media_type')
+            return multi_i.get('id')
         return self.tmdb_api.get_tmdb_id(tmdb_type=tmdb_type, query=query, year=year, episode_year=episode_year)
-
-    def get_fanarttv_artwork(self, item, tmdb_type=None, tmdb_id=None, tvdb_id=None):
-        if not self.fanarttv or tmdb_type not in ['movie', 'tv']:
-            return item
-        lookup_id = None
-        if tmdb_type == 'tv':
-            lookup_id = tvdb_id or item.get('unique_ids', {}).get('tvshow.tvdb') or item.get('unique_ids', {}).get('tvdb')
-            func = self.fanarttv.get_tv_all_artwork
-        elif tmdb_type == 'movie':
-            lookup_id = tmdb_id or item.get('unique_ids', {}).get('tmdb')
-            func = self.fanarttv.get_movies_all_artwork
-        if lookup_id:
-            item['art'] = merge_two_dicts(item.get('art', {}), func(lookup_id))
-        return item
 
     def get_trakt_ratings(self, item, trakt_type, season=None, episode=None):
         ratings = self.trakt_api.get_ratings(
@@ -152,14 +158,24 @@ class CommonMonitorFunctions(object):
         item['infoproperties'] = merge_two_dicts(item.get('infoproperties', {}), ratings)
         return item
 
-    def get_imdb_top250_rank(self, item):
-        if not self.imdb_top250:
-            self.imdb_top250 = self.trakt_api.get_imdb_top250(id_type='tmdb')
+    def get_imdb_top250_rank(self, item, trakt_type):
         try:
-            item['infoproperties']['top250'] = item['infolabels']['top250'] = self.imdb_top250.index(
-                try_int(item.get('unique_ids', {}).get('tmdb'))) + 1
+            tmdb_id = try_int(item['unique_ids'].get('tvshow.tmdb') or item['unique_ids'].get('tmdb'))
+        except KeyError:
+            tmdb_id = None
+        if not tmdb_id:
+            return item
+        try:
+            imdb_top250 = self.imdb_top250[trakt_type]
+        except KeyError:
+            imdb_top250 = self.trakt_api.get_imdb_top250(id_type='tmdb', trakt_type=trakt_type)
+            if not imdb_top250:
+                return item
+            self.imdb_top250[trakt_type] = imdb_top250
+        try:
+            item['infoproperties']['top250'] = item['infolabels']['top250'] = imdb_top250.index(tmdb_id) + 1
         except Exception:
-            pass
+            return item
         return item
 
     def get_omdb_ratings(self, item, cache_only=False):

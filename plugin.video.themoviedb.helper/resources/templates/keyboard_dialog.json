@@ -1,0 +1,34 @@
+{
+    "name"              : "STR_PLUGINNAME",
+    "plugin"            : "STR_PLUGINID",
+    "priority"          : 100,
+    "assert"            : {
+                            "play_movie":       ["title", "year"],
+                            "play_episode":     ["showname", "season", "episode"],
+                            "search_movie":     ["title"],
+                            "search_episode":   ["showname"]
+                          },
+    "play_movie"        : [
+                            "STR_PLUGINMOVIESEARCHURL",
+                            {"keyboard": "{title}"},
+                            {"label": "(?i)^(\\[.*\\])?.*{title}.*(\\[.*\\])?$", "dialog": "true"},
+                            {"dialog": "true"}
+                          ],
+    "play_episode"      : [
+                            "STR_PLUGINTVSEARCHURL",
+                            {"keyboard": "{showname}"},
+                            {"label": "(?i)^(\\[.*\\])?{showname}(\\[.*\\])?$"},
+                            {"return": "true", "season": "^{season}$", "episode": "^{episode}$"},
+                            {"season": "^{season}$"},
+                            {"return": "true", "season": "^{season}$", "episode": "^{episode}$"},
+                            {"dialog": "true"}
+                          ],
+    "search_movie"      : [
+                            "STR_PLUGINMOVIESEARCHURL",
+                            {"keyboard": "{title}"}
+                          ],
+    "search_episode"    : [
+                            "STR_PLUGINTVSEARCHURL",
+                            {"keyboard": "{showname}"}
+                          ]
+}

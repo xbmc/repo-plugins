@@ -2,6 +2,7 @@
     "name"              : "Netflix",
     "plugin"            : "plugin.video.netflix",
     "priority"          : 100,
+    "provider"          : "Netflix",
     "is_resolvable"     : "true",
     "assert"            : {
                             "play_movie":       ["title", "year"],
@@ -19,7 +20,7 @@
                             "plugin://plugin.video.netflix/directory/search/search/add/",
                             {"keyboard": "Select"},
                             {"keyboard": "{showname}"},
-                            {"title": "(?i).*{showname}.*"},
+                            {"title": "(?i)^(\\[.*\\])?{showname}(\\[.*\\])?$"},
                             {"return": "true", "season": "{season}", "episode": "{episode}"},
                             {"season": "{season}"},
                             {"season": "{season}", "episode": "{episode}"}

@@ -24,10 +24,10 @@ def get_external_ids(li, season=None, episode=None):
         trakt_type = 'show'
     if not unique_id or not trakt_type:
         return
-    trakt_slug = trakt_api.get_id(id_type='tmdb', unique_id=unique_id, trakt_type=trakt_type, output_type='slug')
-    if not trakt_slug:
+    trakt_id = trakt_api.get_id(id_type='tmdb', unique_id=unique_id, trakt_type=trakt_type, output_type='trakt')
+    if not trakt_id:
         return
-    details = trakt_api.get_details(trakt_type, trakt_slug, extended=None)
+    details = trakt_api.get_details(trakt_type, trakt_id, extended=None)
     if not details:
         return
     if li.infolabels.get('mediatype') in ['movie', 'tvshow', 'season']:
@@ -39,7 +39,7 @@ def get_external_ids(li, season=None, episode=None):
                 'slug': details.get('ids', {}).get('slug'),
                 'trakt': details.get('ids', {}).get('trakt')}}
     episode_details = trakt_api.get_details(
-        trakt_type, trakt_slug,
+        trakt_type, trakt_id,
         season=season or li.infolabels.get('season'),
         episode=episode or li.infolabels.get('episode'),
         extended=None)
@@ -138,7 +138,7 @@ def get_detailed_item(tmdb_type, tmdb_id, season=None, episode=None, details=Non
     details = details or get_item_details(tmdb_type, tmdb_id, season, episode)
     if not details:
         return None
-    item = defaultdict(lambda: '+')
+    item = defaultdict(lambda: '_')
     item['id'] = item['tmdb'] = tmdb_id
     item['imdb'] = details.unique_ids.get('imdb')
     item['tvdb'] = details.unique_ids.get('tvdb')

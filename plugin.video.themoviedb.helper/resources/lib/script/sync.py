@@ -3,15 +3,30 @@
 # License: GPL v.3 https://www.gnu.org/copyleft/gpl.html
 import xbmc
 import xbmcgui
+import xbmcaddon
 from resources.lib.addon.decorators import busy_dialog
 from resources.lib.addon.parser import try_int
 from resources.lib.trakt.api import TraktAPI
-from resources.lib.addon.plugin import ADDON, set_kwargattr, convert_trakt_type
+from resources.lib.addon.plugin import set_kwargattr, convert_trakt_type
 from resources.lib.kodi.userlist import get_monitor_userlists
 from resources.lib.kodi.library import add_to_library
 
 
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
+
+
 def _menu_items():
+    """ Build the menu of options
+    method and sync_type indicate Trakt API call
+    preconfigured=True
+        - menu item is already preconfigured and will always be included
+        - must have 'remove' bool and 'name' str attribs set
+    preconfigured=False
+        - checks sync to determine 'remove' bool automatically
+        - must have 'name_add' and 'name_remove' str attribs set
+    allow_episodes=False
+        - do not include the menu item if it is a single episode
+    """
     return [
         {
             'class': _UserList},
@@ -21,8 +36,18 @@ def _menu_items():
                 'method': 'history',
                 'sync_type': 'watched',
                 'allow_episodes': True,
-                'name_add': xbmc.getLocalizedString(16103),
-                'name_remove': xbmc.getLocalizedString(16104)}},
+                'preconfigured': True,
+                'remove': False,
+                'name': xbmc.getLocalizedString(16103)}},
+        {
+            'class': _SyncItem,
+            'kwargs': {
+                'method': 'history',
+                'sync_type': 'watched',
+                'allow_episodes': True,
+                'preconfigured': True,
+                'remove': True,
+                'name': xbmc.getLocalizedString(16104)}},
         {
             'class': _SyncItem,
             'kwargs': {
@@ -109,12 +134,18 @@ class _Menu():
 class _SyncItem():
     def __init__(self, item, **kwargs):
         self._item, self._trakt = item, item._trakt
+        self.preconfigured = False
         set_kwargattr(self, kwargs)
 
     def _getself(self):
         """ Method to see if we should return item in menu or not """
         if self._item.season is not None and (not self.allow_episodes or not self._item.episode):
-            return
+            return  # Only sync episodes if allowed and we have an episode number
+
+        # Allow early exit for preconfigured items (e.g. watched history to give both choices)
+        if self.preconfigured:
+            return self
+
         self.remove = self._trakt.is_sync(
             self._item.trakt_type, self._item.unique_id, self._item.season, self._item.episode,
             self._item.id_type, self.sync_type)

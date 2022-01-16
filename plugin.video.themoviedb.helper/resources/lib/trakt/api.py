@@ -1,11 +1,12 @@
 import xbmc
 import xbmcgui
 import random
+import xbmcaddon
 import resources.lib.container.pages as pages
 from resources.lib.addon.window import get_property
 from json import loads, dumps
 from resources.lib.api.request import RequestAPI
-from resources.lib.addon.plugin import ADDON, kodi_log
+from resources.lib.addon.plugin import kodi_log
 from resources.lib.container.pages import PaginatedItems
 from resources.lib.trakt.items import TraktItems
 from resources.lib.trakt.decorators import is_authorized, use_activity_cache
@@ -18,6 +19,8 @@ from resources.lib.addon.timedate import set_timestamp, get_timestamp
 API_URL = 'https://api.trakt.tv/'
 CLIENT_ID = 'e6fde6173adf3c6af8fd1b0694b9b84d7c519cefc24482310e1de06c6abe5467'
 CLIENT_SECRET = '15119384341d9a61c751d8d515acbc0dd801001d4ebe85d3eef9885df80ee4d9'
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 def get_sort_methods(default_only=False):
@@ -56,11 +59,15 @@ def get_sort_methods(default_only=False):
             'name': u'{}: {}'.format(ADDON.getLocalizedString(32287), ADDON.getLocalizedString(32175)),
             'params': {'sort_by': 'popularity', 'sort_how': 'desc', 'extended': 'full'}},
         {
+            'name': u'{}: {}'.format(ADDON.getLocalizedString(32287), xbmc.getLocalizedString(575)),
+            'params': {'sort_by': 'watched', 'sort_how': 'desc', 'extended': 'inprogress'}},
+        {
             'name': u'{}: {}'.format(ADDON.getLocalizedString(32287), xbmc.getLocalizedString(590)),
             'params': {'sort_by': 'random'}}]
     if default_only:
         return [i for i in items if i['params']['sort_by'] in ['rank', 'added', 'title', 'year', 'random']]
     return items
+
 
 class _TraktLists():
     def _merge_sync_sort(self, items):
@@ -70,12 +77,28 @@ class _TraktLists():
         sync.update(self.get_sync('watched', 'movie', 'slug'))
         return [dict(i, **sync.get(i.get(i.get('type'), {}).get('ids', {}).get('slug'), {})) for i in items]
 
+    def _filter_inprogress(self, items):
+        """ Filter list so that it only returns inprogress shows """
+        inprogress = self._get_inprogress_shows() or []
+        inprogress = [i['show']['ids']['slug'] for i in inprogress if i.get('show', {}).get('ids', {}).get('slug')]
+        if not inprogress:
+            return
+        items = [i for i in items if i.get('show', {}).get('ids', {}).get('slug') in inprogress]
+        return items
+
     @use_simple_cache(cache_days=CACHE_SHORT)
     def get_sorted_list(self, path, sort_by=None, sort_how=None, extended=None, trakt_type=None, permitted_types=None, cache_refresh=False):
         response = self.get_response(path, extended=extended, limit=4095)
         if not response:
             return
-        items = self._merge_sync_sort(response.json()) if extended == 'sync' else response.json()
+
+        if extended == 'sync':
+            items = self._merge_sync_sort(response.json())
+        elif extended == 'inprogress':
+            items = self._filter_inprogress(self._merge_sync_sort(response.json()))
+        else:
+            items = response.json()
+
         return TraktItems(items, headers=response.headers).build_items(
             sort_by=sort_by or response.headers.get('X-Sort-By'),
             sort_how=sort_how or response.headers.get('X-Sort-How'),
@@ -97,10 +120,10 @@ class _TraktLists():
         items = []
         for trakt_type in trakt_types:
             response = self.get_simple_list(
-                path.format(trakt_type=trakt_type), extended=extended, page=1, limit=50, trakt_type=trakt_type) or {}
+                path.format(trakt_type=trakt_type), extended=extended, page=1, limit=limit * 2, trakt_type=trakt_type) or {}
             items += response.get('items') or []
         if items:
-            return random.sample(items, 20)
+            return random.sample(items, limit)
 
     @is_authorized
     def get_basic_list(self, path, trakt_type, page=1, limit=20, params=None, sort_by=None, sort_how=None, extended=None, authorize=False, randomise=False):
@@ -109,17 +132,26 @@ class _TraktLists():
         cache_refresh = True if try_int(page, fallback=1) == 1 else False
         if randomise:
             response = self.get_simple_list(
-                path, extended=extended, page=1, limit=50, trakt_type=trakt_type)
+                path, extended=extended, page=1, limit=limit * 2, trakt_type=trakt_type)
         elif sort_by is not None:  # Sorted list manually paginated because need to sort first
             response = self.get_sorted_list(path, sort_by, sort_how, extended, cache_refresh=cache_refresh)
             response = PaginatedItems(items=response['items'], page=page, limit=limit).get_dict()
         else:  # Unsorted lists can be paginated by the API
-            response = self.get_simple_list(
-                path, extended=extended, page=page, limit=limit, trakt_type=trakt_type)
+            response = self.get_simple_list(path, extended=extended, page=page, limit=limit, trakt_type=trakt_type)
         if response:
             if randomise and len(response['items']) > limit:
                 items = random.sample(response['items'], limit)
                 return items
+            return response['items'] + pages.get_next_page(response['headers'])
+
+    @is_authorized
+    def get_stacked_list(self, path, trakt_type, page=1, limit=20, params=None, sort_by=None, sort_how=None, extended=None, authorize=False, **kwargs):
+        """ Get Basic list but stack repeat TV Shows """
+        cache_refresh = True if try_int(page, fallback=1) == 1 else False
+        response = self.get_simple_list(path, extended=extended, limit=4095, trakt_type=trakt_type, cache_refresh=cache_refresh)
+        response['items'] = self._stack_calendar_tvshows(response['items'])
+        response = PaginatedItems(items=response['items'], page=page, limit=limit).get_dict()
+        if response:
             return response['items'] + pages.get_next_page(response['headers'])
 
     def get_custom_list(self, list_slug, user_slug=None, page=1, limit=20, params=None, authorize=False, sort_by=None, sort_how=None, extended=None, owner=False):
@@ -142,13 +174,14 @@ class _TraktLists():
             'next_page': paginated_items.next_page}
 
     @use_activity_cache(cache_days=CACHE_SHORT)
-    def _get_sync_list(self, sync_type, trakt_type, sort_by=None, sort_how=None):
-        return TraktItems(
-            items=self.get_sync(sync_type, trakt_type),
-            trakt_type=trakt_type).build_items(sort_by, sort_how)
+    def _get_sync_list(self, sync_type, trakt_type, sort_by=None, sort_how=None, decorator_cache_refresh=False):
+        func = TraktItems(items=self.get_sync(sync_type, trakt_type), trakt_type=trakt_type).build_items
+        return func(sort_by, sort_how)
 
-    def get_sync_list(self, sync_type, trakt_type, page=1, limit=20, params=None, sort_by=None, sort_how=None, next_page=True):
-        response = self._get_sync_list(sync_type, trakt_type, sort_by=sort_by, sort_how=sort_how)
+    def get_sync_list(self, sync_type, trakt_type, page=1, limit=None, params=None, sort_by=None, sort_how=None, next_page=True):
+        limit = limit or self.item_limit
+        cache_refresh = True if try_int(page, fallback=1) == 1 else False
+        response = self._get_sync_list(sync_type, trakt_type, sort_by=sort_by, sort_how=sort_how, decorator_cache_refresh=cache_refresh)
         if not response:
             return
         response = PaginatedItems(items=response['items'], page=page, limit=limit)
@@ -157,8 +190,6 @@ class _TraktLists():
     @is_authorized
     def get_list_of_lists(self, path, page=1, limit=250, authorize=False, next_page=True):
         response = self.get_response(path, page=page, limit=limit)
-        like_list = True if path.startswith('lists/') else False
-        delete_like = True if path.startswith('users/likes') else False
         if not response:
             return
         items = []
@@ -177,7 +208,8 @@ class _TraktLists():
                 'info': 'trakt_userlist',
                 'list_name': i.get('name'),
                 'list_slug': i.get('ids', {}).get('slug'),
-                'user_slug': i.get('user', {}).get('ids', {}).get('slug')}
+                'user_slug': i.get('user', {}).get('ids', {}).get('slug'),
+                'plugin_category': i.get('name')}
             item['unique_ids'] = {
                 'trakt': i.get('ids', {}).get('trakt'),
                 'slug': i.get('ids', {}).get('slug'),
@@ -334,11 +366,11 @@ class _TraktSync():
     def get_sync_collection_shows(self, trakt_type, id_type=None):
         return self._get_sync('sync/collection/shows', trakt_type, id_type=id_type)
 
-    @use_activity_cache('movies', 'watched_at', CACHE_LONG, pickle_object=False)
+    @use_activity_cache('movies', 'paused_at', CACHE_LONG, pickle_object=False)
     def get_sync_playback_movies(self, trakt_type, id_type=None):
         return self._get_sync('sync/playback/movies', 'movie', id_type=id_type)
 
-    @use_activity_cache('episodes', 'watched_at', CACHE_LONG, pickle_object=False)
+    @use_activity_cache('episodes', 'paused_at', CACHE_LONG, pickle_object=False)
     def get_sync_playback_shows(self, trakt_type, id_type=None):
         return self._get_sync('sync/playback/episodes', trakt_type, id_type=id_type)
 
@@ -389,6 +421,7 @@ class TraktAPI(RequestAPI, _TraktSync, _TraktLists, _TraktProgress):
         self.last_activities = {}
         self.sync_activities = {}
         self.sync = {}
+        self.item_limit = 83 if ADDON.getSettingBool('trakt_expandedlimit') else 20  # 84 (83+NextPage) has common factors 4,6,7,8 suitable for wall views
         self.login() if force else self.authorize()
 
     def authorize(self, login=False):

@@ -71,7 +71,7 @@ def _openimage(image, targetpath, filename):
                     return ''
 
             else:
-                targetfile = os.path.join(targetpath, filename)
+                targetfile = os.path.join(targetpath, 'temp_{}'.format(filename))  # Use temp file to avoid Kodi writing early
                 if not xbmcvfs.exists(targetfile):
                     xbmcvfs.copy(image, targetfile)
 
@@ -86,25 +86,42 @@ def _openimage(image, targetpath, filename):
     return ''
 
 
+def _saveimage(image, targetfile):
+    """ Save image object to disk
+    Uses flush() and os.fsync() to ensure file is written to disk before continuing
+    Used to prevent Kodi from attempting to cache the image before writing is complete
+    """
+    f = open(targetfile, 'wb')
+    image.save(f, 'PNG')
+    f.flush()
+    os.fsync(f)
+    f.close()
+
+
 class ImageFunctions(Thread):
     def __init__(self, method=None, artwork=None):
         Thread.__init__(self)
         self.image = artwork
         self.func = None
+        self.save_orig = False
         self.save_prop = None
         self.save_path = 'special://profile/addon_data/plugin.video.themoviedb.helper/{}/'
         if method == 'blur':
             self.func = self.blur
             self.save_path = make_path(self.save_path.format('blur'))
             self.save_prop = 'ListItem.BlurImage'
+            self.save_orig = True
+            self.radius = try_int(xbmc.getInfoLabel('Skin.String(TMDbHelper.Blur.Radius)')) or 20
         elif method == 'crop':
             self.func = self.crop
             self.save_path = make_path(self.save_path.format('crop'))
             self.save_prop = 'ListItem.CropImage'
+            self.save_orig = True
         elif method == 'desaturate':
             self.func = self.desaturate
             self.save_path = make_path(self.save_path.format('desaturate'))
             self.save_prop = 'ListItem.DesaturateImage'
+            self.save_orig = True
         elif method == 'colors':
             self.func = self.colors
             self.save_path = make_path(self.save_path.format('colors'))
@@ -113,24 +130,28 @@ class ImageFunctions(Thread):
     def run(self):
         if not self.save_prop or not self.func:
             return
-        if not self.image:
+        output = self.func(self.image) if self.image else None
+        if not output:
             get_property(self.save_prop, clear_property=True)
+            get_property('{}.Original'.format(self.save_prop), clear_property=True) if self.save_orig else None
             return
-        get_property(self.save_prop, self.func(self.image))
+        get_property(self.save_prop, output)
+        get_property('{}.Original'.format(self.save_prop), self.image) if self.save_orig else None
 
     def clamp(self, x):
         return max(0, min(x, 255))
 
+    @lazyimport_pil
     def crop(self, source):
         filename = u'cropped-{}.png'.format(md5hash(source))
-        destination = self.save_path + filename
+        destination = os.path.join(self.save_path, filename)
         try:
             if xbmcvfs.exists(destination):
                 os.utime(destination, None)
             else:
                 img = _openimage(source, self.save_path, filename)
                 img = img.crop(img.convert('RGBa').getbbox())
-                img.save(destination)
+                _saveimage(img, destination)
                 img.close()
 
             return destination
@@ -139,8 +160,8 @@ class ImageFunctions(Thread):
             return ''
 
     @lazyimport_pil
-    def blur(self, source, radius=20):
-        filename = u'{}{}.png'.format(md5hash(source), radius)
+    def blur(self, source):
+        filename = u'{}{}.png'.format(md5hash(source), self.radius)
         destination = self.save_path + filename
         try:
             if xbmcvfs.exists(destination):
@@ -149,8 +170,8 @@ class ImageFunctions(Thread):
                 img = _openimage(source, self.save_path, filename)
                 img.thumbnail((256, 256))
                 img = img.convert('RGB')
-                img = img.filter(ImageFilter.GaussianBlur(radius))
-                img.save(destination)
+                img = img.filter(ImageFilter.GaussianBlur(self.radius))
+                _saveimage(img, destination)
                 img.close()
 
             return destination
@@ -158,6 +179,7 @@ class ImageFunctions(Thread):
         except Exception:
             return ''
 
+    @lazyimport_pil
     def desaturate(self, source):
         filename = u'{}.png'.format(md5hash(source))
         destination = self.save_path + filename
@@ -167,7 +189,7 @@ class ImageFunctions(Thread):
             else:
                 img = _openimage(source, self.save_path, filename)
                 img = img.convert('LA')
-                img.save(destination)
+                _saveimage(img, destination)
                 img.close()
 
             return destination
@@ -255,7 +277,7 @@ class ImageFunctions(Thread):
                 img = _openimage(source, self.save_path, filename)
                 img.thumbnail((256, 256))
                 img = img.convert('RGB')
-                img.save(destination)
+                _saveimage(img, destination)
 
             maincolor_rgb = self.get_maincolor(img)
             maincolor_hex = self.rgb_to_hex(*self.get_color_lumsat(*maincolor_rgb))

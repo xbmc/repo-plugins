@@ -1,15 +1,18 @@
 import xbmc
 import xbmcgui
 import xbmcvfs
+import xbmcaddon
 import resources.lib.kodi.rpc as rpc
 from resources.lib.addon.parser import try_int
-from resources.lib.addon.plugin import ADDON
 from resources.lib.files.utils import validify_filename, get_tmdb_id_nfo
 from resources.lib.kodi.logger import _LibraryLogger
 from resources.lib.kodi.update import BASEDIR_MOVIE, BASEDIR_TV, STRM_MOVIE, STRM_EPISODE, create_file, create_nfo, get_unique_folder, get_userlist, create_playlist
 from resources.lib.kodi.cacher import _TVShowCache
 from resources.lib.addon.timedate import is_unaired_timestamp, get_current_date_time
 from resources.lib.tmdb.api import TMDb
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 def add_to_library(info, busy_spinner=True, library_adder=None, finished=True, **kwargs):

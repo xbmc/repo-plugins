@@ -1,5 +1,10 @@
+import xbmc
+import xbmcaddon
 from resources.lib.addon.constants import TMDB_BASIC_LISTS
-from resources.lib.addon.plugin import ADDON, convert_type
+from resources.lib.addon.plugin import convert_type, get_plugin_category
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 class TMDbLists():
@@ -16,6 +21,7 @@ class TMDbLists():
         self.kodi_db = self.get_kodi_database(info_tmdb_type)
         self.library = convert_type(info_tmdb_type, 'library')
         self.container_content = convert_type(info_tmdb_type, 'container')
+        self.plugin_category = get_plugin_category(info_model, convert_type(info_tmdb_type, 'plural'))
         return items
 
     def list_episode_group_episodes(self, tmdb_id, group_id, position, **kwargs):
@@ -48,20 +54,24 @@ class TMDbLists():
         items = self.tmdb_api.get_episode_list(tmdb_id, season)
         self.kodi_db = self.get_kodi_database('tv')
         self.container_content = convert_type('episode', 'container')
+        self.plugin_category = '{} {}'.format(xbmc.getLocalizedString(20373), season)
         return items
 
     def list_cast(self, tmdb_id, tmdb_type, season=None, episode=None, **kwargs):
         items = self.tmdb_api.get_cast_list(tmdb_id, tmdb_type, season=season, episode=episode)
+        self.tmdb_cache_only = True
         self.container_content = convert_type('person', 'container')
         return items
 
     def list_crew(self, tmdb_id, tmdb_type, season=None, episode=None, **kwargs):
         items = self.tmdb_api.get_cast_list(tmdb_id, tmdb_type, season=season, episode=episode, keys=['crew'])
+        self.tmdb_cache_only = True
         self.container_content = convert_type('person', 'container')
         return items
 
     def list_videos(self, tmdb_id, tmdb_type, season=None, episode=None, **kwargs):
         items = self.tmdb_api.get_videos(tmdb_id, tmdb_type, season, episode)
+        self.tmdb_cache_only = True
         self.container_content = convert_type('video', 'container')
         return items
 

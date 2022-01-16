@@ -1,10 +1,14 @@
 import xbmcvfs
 import xbmcgui
+import xbmcaddon
 from resources.lib.addon.decorators import busy_dialog
-from resources.lib.addon.plugin import kodi_log, ADDON
+from resources.lib.addon.plugin import kodi_log
 from resources.lib.addon.parser import try_int
 from resources.lib.files.utils import validify_filename, make_path, write_to_file, get_tmdb_id_nfo
 from resources.lib.trakt.api import TraktAPI
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 STRM_MOVIE = 'plugin://plugin.video.themoviedb.helper/?info=play&tmdb_id={}&tmdb_type=movie&islocal=True'

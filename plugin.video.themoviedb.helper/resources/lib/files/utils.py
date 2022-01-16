@@ -3,16 +3,20 @@ import os
 import json
 import xbmcgui
 import xbmcvfs
+import xbmcaddon
 import unicodedata
 from resources.lib.addon.timedate import get_timedelta, get_datetime_now
 from resources.lib.addon.parser import try_int
-from resources.lib.addon.plugin import ADDON, ADDONDATA, kodi_log
+from resources.lib.addon.plugin import ADDONDATA, kodi_log
 from resources.lib.addon.constants import ALPHANUM_CHARS, INVALID_FILECHARS
 from resources.lib.addon.timedate import is_future_timestamp
 try:
     import cPickle as _pickle
 except ImportError:
     import pickle as _pickle  # Newer versions of Py3 just use pickle
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 def validify_filename(filename, alphanum=False):

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.themoviedb.helper"
-version="4.4.0"
+version="4.5.0"
 name="TheMovieDb Helper"
 provider-name="jurialmunkey">
 <requires>
@@ -43,15 +43,22 @@ provider-name="jurialmunkey">
       <label>$ADDON[plugin.video.themoviedb.helper 32309]</label>
       <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.sorting))</visible>
     </item>
+    <item library="context-recacheblur.py">
+      <label>$ADDON[plugin.video.themoviedb.helper 32395]</label>
+      <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.BlurImage))</visible>
+    </item>
   </menu>
 </extension>
 <extension point="xbmc.addon.metadata">
   <summary lang="en_GB">TheMovieDb Helper - Now With Trakt Support!</summary>
   <summary lang="es_ES">TheMovieDb Helper - ¡Ahora con soporte para Trakt!</summary>
+  <summary lang="fr_FR">TheMovieDb Helper - Maintenant avec support Trakt!</summary>
   <description lang="en_GB">TheMovieDb Helper provides details about movies, tvshows and actors from TMDb. Users can access a variety of lists from TMDb and Trakt.</description>
   <description lang="es_ES">TheMovieDb Helper proporciona detalles sobre películas, programas de televisión y actores de TMDb. Los usuarios pueden acceder a una variedad de listas desde TMDb y Trakt.</description>
+  <description lang="fr_FR">TheMovieDb Helper fournit des détails sur les films, les émissions de télévision et acteurs de TMDb. Les utilisateurs peuvent accéder à une variété de listes TMDb et Trakt.</description>
   <disclaimer lang="en_GB">Provided by TheMovieDb and Trakt.</disclaimer>
   <disclaimer lang="es_ES">Proporcionado por TheMovieDb y Trakt</disclaimer>
+  <disclaimer lang="fr_FR">Fourni par TheMovieDb et Trakt.</disclaimer>
   <license>GPL-3.0-or-later</license>
   <website>https://github.com/jurialmunkey/plugin.video.themoviedb.helper</website>
   <forum>https://forum.kodi.tv/showthread.php?tid=345847</forum>
@@ -61,6 +68,25 @@ provider-name="jurialmunkey">
     <screenshot>resources/screenshot-01.jpg</screenshot>
     <screenshot>resources/screenshot-02.jpg</screenshot>
   </assets>
-  <news>Add some additional dbid checking based on title/year combo</news>
+<news>
+  - Improved PVR service matching
+  - Avoid unnecessary FanartTV re-requests
+  - Add In-Progress Episodes Trakt list
+  - Add Still to Watch Trakt list (In-Progress+Watchlist)
+  - Allow stacking of episodes from same show in calendar
+  - Fix collection matching and query encoding
+  - Better list filtering options
+  - Add cacheonly=true param for faster dialog widget loading
+  - Add script getter/setter functions for audio/subs in player
+  - Allow larger sync list items per page limits
+  - Fix plugincategory labels
+  - Fix randomised lists not refreshing
+  - Fix string formatter for update to Py3.7 in 19.3
+  - Fix fallback players when asserted value not available
+  - Allow both mark as watched/unwatched in Trakt options
+  - Update branding and icons
+  - Add temporary service pause for custom dialogs via Window.Property(TMDbHelper.ServicePause)
+  - Artwork monitor fixes
+</news>
 </extension>
 </addon>

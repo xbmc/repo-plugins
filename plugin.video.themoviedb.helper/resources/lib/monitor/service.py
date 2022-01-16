@@ -1,10 +1,13 @@
 import xbmc
+import xbmcaddon
 from resources.lib.addon.window import get_property, wait_for_property
-from resources.lib.addon.plugin import ADDON
 from resources.lib.monitor.cronjob import CronJobMonitor
 from resources.lib.monitor.listitem import ListItemMonitor
 from resources.lib.monitor.player import PlayerMonitor
 from threading import Thread
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 def restart_service_monitor():
@@ -87,7 +90,8 @@ class ServiceMonitor(object):
                     "Window.IsActive(progressdialog) | "
                     "Window.IsActive(contextmenu) | "
                     "Window.IsActive(busydialog) | "
-                    "Window.IsActive(shutdownmenu)"):
+                    "Window.IsActive(shutdownmenu) | "
+                    "!String.IsEmpty(Window.Property(TMDbHelper.ServicePause))"):
                 self._on_modal()
 
             # skip when container scrolling

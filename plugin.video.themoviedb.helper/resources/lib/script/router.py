@@ -5,6 +5,7 @@ import sys
 import xbmc
 import xbmcvfs
 import xbmcgui
+import xbmcaddon
 from json import dumps
 from resources.lib.kodi.library import add_to_library
 from resources.lib.kodi.userlist import monitor_userlist, library_autoupdate
@@ -12,9 +13,9 @@ from resources.lib.kodi.rpc import get_jsonrpc
 from resources.lib.files.downloader import Downloader
 from resources.lib.files.utils import dumps_to_file, validify_filename
 from resources.lib.addon.window import get_property
-from resources.lib.addon.plugin import ADDON, reconfigure_legacy_params, kodi_log, format_folderpath, convert_type
+from resources.lib.addon.plugin import reconfigure_legacy_params, kodi_log, format_folderpath, convert_type
 from resources.lib.addon.decorators import busy_dialog
-from resources.lib.addon.parser import encode_url
+from resources.lib.addon.parser import encode_url, try_int
 from resources.lib.container.basedir import get_basedir_details
 from resources.lib.fanarttv.api import FanartTV
 from resources.lib.tmdb.api import TMDb
@@ -26,6 +27,9 @@ from resources.lib.player.players import Players
 from resources.lib.player.configure import configure_players
 from resources.lib.monitor.images import ImageFunctions
 from resources.lib.container.listitem import ListItem
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 # Get TMDb ID decorator
@@ -189,6 +193,7 @@ def related_lists(tmdb_id=None, tmdb_type=None, season=None, episode=None, conta
         path=encode_url(path=item.get('path'), **item.get('params')),
         info=item['params']['info'], play='RunPlugin',  # Use RunPlugin to avoid window manager info dialog crash with Browse method
         content='pictures' if item['params']['info'] in ['posters', 'fanart'] else 'videos')
+    xbmc.executebuiltin('Dialog.Close(busydialog)')  # Kill modals because prevents ActivateWindow
     xbmc.executebuiltin(path)
 
 
@@ -225,6 +230,55 @@ def kodi_setting(kodi_setting, **kwargs):
     get_property(
         name=kwargs.get('property') or 'TMDbHelper.KodiSetting',
         set_property=u'{}'.format(response.get('result', {}).get('value', '')))
+
+
+def _player_audiostream_items(items, prop='', schema=[]):
+    prev_prop = '{}.Total'.format(prop)
+    items_len = len(items)
+    items_max = max(items_len, try_int(get_property(prev_prop)))
+    if not items_max:
+        return
+    x = 0
+    for x in range(0, items_max):
+        for i in schema:
+            i_prop = '{}.{}.{}'.format(prop, x + 1, i)
+            detail = items[x].get(i) if x < items_len else None
+            get_property(i_prop, set_property=detail, clear_property=detail is None)
+    get_property(prev_prop, set_property=items_len)
+
+
+def get_player_audiostreams(**kwargs):
+    method = "Player.GetProperties"
+    params = {"playerid": 1, "properties": ["subtitles", "audiostreams", "currentsubtitle", "currentaudiostream"]}
+    response = get_jsonrpc(method, params) or {}
+    response = response.get('result') or {}
+
+    # Subtitles Properties
+    _player_audiostream_items(
+        items=response.get('subtitles', []), prop='Player.Subtitles',
+        schema=['index', 'isdefault', 'isforced', 'isimpaired', 'language', 'name'])
+    get_property('Player.Subtitles.CurrentIndex', set_property=response.get('currentsubtitle', {}).get('index', 0))
+
+    # AudioStreams Properties
+    _player_audiostream_items(
+        items=response.get('audiostreams', []), prop='Player.AudioStreams',
+        schema=['bitrate', 'channels', 'codec', 'index', 'isdefault', 'isimpaired',
+                'isoriginal', 'language', 'name', 'samplerate'])
+    get_property('Player.AudioStreams.CurrentIndex', set_property=response.get('currentaudiostream', {}).get('index', 0))
+
+
+def set_player_subtitle(set_player_subtitle, **kwargs):
+    method = "Player.SetSubtitle"
+    params = {"playerid": 1, "subtitle": try_int(set_player_subtitle), "enable": True}
+    get_jsonrpc(method, params)
+    get_property('Player.Subtitles.CurrentIndex', set_property=try_int(set_player_subtitle))
+
+
+def set_player_audiostream(set_player_audiostream, **kwargs):
+    method = "Player.SetAudioStream"
+    params = {"playerid": 1, "stream": try_int(set_player_audiostream)}
+    get_jsonrpc(method, params)
+    get_property('Player.AudioStreams.CurrentIndex', set_property=try_int(set_player_audiostream))
 
 
 def user_list(user_list, user_slug=None, **kwargs):
@@ -331,6 +385,27 @@ def sort_list(**kwargs):
     xbmc.executebuiltin(format_folderpath(encode_url(**kwargs)))
 
 
+def recache_image(recache_image, **kwargs):
+    import sqlite3
+    blur_img = get_property(recache_image, clear_property=True)
+    image_db = sqlite3.connect(xbmcvfs.translatePath('special://database/Textures13.db'), timeout=30, isolation_level=None)
+    if not blur_img:
+        xbmcgui.Dialog().ok('TMDbHelper Error', ADDON.getLocalizedString(32396))
+        return
+    cached_i = image_db.execute("SELECT cachedurl FROM texture WHERE url = ?", (blur_img,)).fetchone()
+    if not cached_i:
+        xbmcgui.Dialog().ok('TMDbHelper Error', ADDON.getLocalizedString(32397))
+        return
+    image_db.execute("DELETE FROM texture WHERE url = ?", (blur_img,))
+    filepath = xbmcvfs.translatePath('special://thumbnails/{}'.format(cached_i[0]))
+    if not xbmcvfs.delete(blur_img):
+        xbmcgui.Dialog().ok('TMDbHelper Error', ADDON.getLocalizedString(32399).format(blur_img))
+    if not xbmcvfs.delete(filepath):
+        xbmcgui.Dialog().ok('TMDbHelper Error', ADDON.getLocalizedString(32399).format(filepath))
+        return
+    xbmcgui.Dialog().ok(ADDON.getLocalizedString(32398), '{}\n{}'.format(blur_img, filepath))
+
+
 class Script(object):
     def __init__(self):
         self.params = {}
@@ -347,6 +422,9 @@ class Script(object):
         'revoke_trakt': lambda **kwargs: TraktAPI().logout(),
         'split_value': lambda **kwargs: split_value(**kwargs),
         'kodi_setting': lambda **kwargs: kodi_setting(**kwargs),
+        'get_player_audiostreams': lambda **kwargs: get_player_audiostreams(**kwargs),
+        'set_player_subtitle': lambda **kwargs: set_player_subtitle(**kwargs),
+        'set_player_audiostream': lambda **kwargs: set_player_audiostream(**kwargs),
         'sync_trakt': lambda **kwargs: sync_trakt(**kwargs),
         'manage_artwork': lambda **kwargs: manage_artwork(**kwargs),
         'refresh_details': lambda **kwargs: refresh_details(**kwargs),
@@ -362,6 +440,7 @@ class Script(object):
         'set_defaultplayer': lambda **kwargs: set_defaultplayer(**kwargs),
         'configure_players': lambda **kwargs: configure_players(**kwargs),
         'library_autoupdate': lambda **kwargs: library_update(**kwargs),
+        'recache_image': lambda **kwargs: recache_image(**kwargs),
         # 'play_season': lambda **kwargs: play_season(**kwargs),
         'play_media': lambda **kwargs: play_media(**kwargs),
         'run_plugin': lambda **kwargs: run_plugin(**kwargs),

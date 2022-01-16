@@ -2,12 +2,17 @@ import os
 import xbmc
 import xbmcvfs
 import xbmcgui
+import xbmcaddon
 import zipfile
 import gzip
-from resources.lib.addon.plugin import ADDON, kodi_log
+from resources.lib.addon.plugin import kodi_log
 from resources.lib.addon.decorators import busy_dialog
 from io import BytesIO
 from urllib.parse import urlparse
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
+
 
 requests = None  # Requests module is slow to import so lazy import via decorator instead
 

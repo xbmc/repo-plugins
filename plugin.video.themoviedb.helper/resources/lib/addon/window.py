@@ -1,6 +1,6 @@
 import xbmc
 import xbmcgui
-from resources.lib.addon.parser import try_int, try_float
+from resources.lib.addon.parser import try_type, try_int
 
 
 def get_property(name, set_property=None, clear_property=False, window_id=None, prefix=None, is_type=None):
@@ -8,22 +8,14 @@ def get_property(name, set_property=None, clear_property=False, window_id=None, 
         prefix = prefix or 'TMDbHelper'
         name = u'{}.{}'.format(prefix, name)
     if window_id == 'current':
-        window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
-    elif window_id:
-        window = xbmcgui.Window(window_id)
-    else:
-        window = xbmcgui.Window(10000)
+        window_id = xbmcgui.getCurrentWindowId()
+    window = xbmcgui.Window(window_id or 10000)  # Fallback to home window id=10000
+    ret_property = set_property or window.getProperty(name)
     if clear_property:
         window.clearProperty(name)
-        return
-    elif set_property is not None:
+    if set_property is not None:
         window.setProperty(name, u'{}'.format(set_property))
-        return set_property
-    if is_type == int:
-        return try_int(window.getProperty(name))
-    if is_type == float:
-        return try_float(window.getProperty(name))
-    return window.getProperty(name)
+    return try_type(ret_property, is_type or str)
 
 
 def _property_is_value(name, value):

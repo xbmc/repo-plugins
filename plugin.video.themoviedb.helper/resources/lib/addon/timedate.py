@@ -2,8 +2,12 @@ import _strptime
 import datetime
 import xbmc
 import time
-from resources.lib.addon.plugin import kodi_log, ADDON
+import xbmcaddon
+from resources.lib.addon.plugin import kodi_log
 from resources.lib.addon.decorators import try_except_log
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 def get_datetime_combine(*args, **kwargs):
@@ -42,13 +46,15 @@ def set_timestamp(wait_time=60):
     return time.time() + wait_time
 
 
-def format_date(time_str, str_fmt="%A", time_fmt="%Y-%m-%d", time_lim=10, utc_convert=False):
+def format_date(time_str, str_fmt="%A", time_fmt="%Y-%m-%d", time_lim=10, utc_convert=False, region_fmt=None):
     if not time_str:
         return
     time_obj = convert_timestamp(time_str, time_fmt, time_lim, utc_convert=utc_convert)
     if not time_obj:
         return
-    return time_obj.strftime(str_fmt)
+    if not region_fmt:
+        return time_obj.strftime(str_fmt)
+    return get_region_date(time_obj, region_fmt)
 
 
 @try_except_log('lib.timedate - date_in_range', notification=False)
@@ -67,9 +73,10 @@ def date_in_range(date_str, days=1, start_date=0, date_fmt="%Y-%m-%dT%H:%M:%S", 
         return date_str
 
 
-def get_region_date(date_obj, region='dateshort', del_fmt=':%S'):
-    date_fmt = xbmc.getRegion(region).replace(del_fmt, '')
-    return date_obj.strftime(date_fmt)
+def get_region_date(date_obj, region_fmt='dateshort', del_fmt=':%S'):
+    xbmc_region = xbmc.getRegion(region_fmt).replace(del_fmt, '')  # Strip seconds from formatting durations
+    date_string = date_obj.strftime(xbmc_region.encode('unicode-escape').decode())  # Avoid UnicodeEncode errors in strftime
+    return date_string.encode().decode('unicode-escape')  # Restore Unicode characters
 
 
 def is_future_timestamp(time_str, time_fmt="%Y-%m-%dT%H:%M:%S", time_lim=19, utc_convert=False, use_today=False, days=0):

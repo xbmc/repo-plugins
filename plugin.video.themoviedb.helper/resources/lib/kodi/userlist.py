@@ -1,10 +1,14 @@
 import xbmc
 import xbmcgui
+import xbmcaddon
 from resources.lib.addon.decorators import busy_dialog
-from resources.lib.addon.plugin import ADDON, kodi_log
+from resources.lib.addon.plugin import kodi_log
 from resources.lib.trakt.api import TraktAPI
 from resources.lib.kodi.library import add_to_library
 from resources.lib.kodi.update import get_userlist
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 def get_monitor_userlists(list_slugs=None, user_slugs=None):

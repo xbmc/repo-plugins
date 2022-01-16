@@ -1,9 +1,12 @@
 import xbmc
+import xbmcaddon
 import resources.lib.kodi.rpc as rpc
 from resources.lib.addon.window import get_property
 from resources.lib.monitor.common import CommonMonitorFunctions, SETPROP_RATINGS, SETMAIN_ARTWORK
-from resources.lib.addon.plugin import ADDON
 from json import loads
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 class PlayerMonitor(xbmc.Player, CommonMonitorFunctions):

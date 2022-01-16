@@ -66,7 +66,8 @@ TMDB_ALL_ITEMS_LISTS = {
     'collection': {
         'type': 'collection',
         'sort': False,
-        'limit': 20
+        'limit': 20,
+        'params': {'plugin_category': '{label}'}
     },
     'network': {
         'type': 'tv_network',
@@ -74,7 +75,8 @@ TMDB_ALL_ITEMS_LISTS = {
         'limit': 2500,
         'params': {
             'info': 'discover', 'tmdb_type': 'tv',
-            'with_networks': '{tmdb_id}', 'with_id': 'True'}
+            'with_networks': '{tmdb_id}', 'with_id': 'True',
+            'plugin_category': '{label}'}
     },
     'keyword': {
         'type': 'keyword',
@@ -82,7 +84,8 @@ TMDB_ALL_ITEMS_LISTS = {
         'limit': 2500,
         'params': {
             'info': 'discover', 'tmdb_type': 'movie',
-            'with_keywords': '{tmdb_id}', 'with_id': 'True'}
+            'with_keywords': '{tmdb_id}', 'with_id': 'True',
+            'plugin_category': '{label}'}
     },
     'studio': {
         'type': 'production_company',
@@ -90,7 +93,8 @@ TMDB_ALL_ITEMS_LISTS = {
         'limit': 2500,
         'params': {
             'info': 'discover', 'tmdb_type': 'movie',
-            'with_companies': '{tmdb_id}', 'with_id': 'True'}
+            'with_companies': '{tmdb_id}', 'with_id': 'True',
+            'plugin_category': '{label}'}
     }
 }
 
@@ -141,42 +145,58 @@ TMDB_BASIC_LISTS = {
     'popular': {
         'path': '{tmdb_type}/popular',
         'key': 'results',
-        'route': TMDB_BASIC_LISTS_ROUTE
+        'route': TMDB_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized} {plural}',
+        'localized': 32175
     },
     'top_rated': {
         'path': '{tmdb_type}/top_rated',
         'key': 'results',
-        'route': TMDB_BASIC_LISTS_ROUTE
+        'route': TMDB_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized} {plural}',
+        'localized': 32176
     },
     'upcoming': {
         'path': '{tmdb_type}/upcoming',
         'key': 'results',
-        'route': TMDB_BASIC_LISTS_ROUTE
+        'route': TMDB_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized} {plural}',
+        'localized': 32177
     },
     'trending_day': {
         'path': 'trending/{tmdb_type}/day',
         'key': 'results',
-        'route': TMDB_BASIC_LISTS_ROUTE
+        'route': TMDB_BASIC_LISTS_ROUTE,
+        'plugin_category': '{plural} {localized}',
+        'localized': 32178
     },
     'trending_week': {
         'path': 'trending/{tmdb_type}/week',
         'key': 'results',
-        'route': TMDB_BASIC_LISTS_ROUTE
+        'route': TMDB_BASIC_LISTS_ROUTE,
+        'plugin_category': '{plural} {localized}',
+        'localized': 32179
     },
     'now_playing': {
         'path': '{tmdb_type}/now_playing',
         'key': 'results',
-        'route': TMDB_BASIC_LISTS_ROUTE
+        'route': TMDB_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized}',
+        'localized': 32180
     },
     'airing_today': {
         'path': '{tmdb_type}/airing_today',
         'key': 'results',
-        'route': TMDB_BASIC_LISTS_ROUTE
+        'route': TMDB_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized}',
+        'localized': 32181
     },
     'on_the_air': {
         'path': '{tmdb_type}/on_the_air',
         'key': 'results',
-        'route': TMDB_BASIC_LISTS_ROUTE
+        'route': TMDB_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized}',
+        'localized': 32182
     },
     'recommendations': {
         'path': '{tmdb_type}/{tmdb_id}/recommendations',
@@ -236,6 +256,12 @@ TMDB_BASIC_LISTS = {
         'tmdb_type': 'image',
         'route': TMDB_BASIC_LISTS_ROUTE
     },
+    'episode_thumbs': {
+        'path': 'tv/{tmdb_id}/season/{season}/episode/{episode}/images',
+        'key': 'stills',
+        'tmdb_type': 'image',
+        'route': TMDB_BASIC_LISTS_ROUTE
+    },
     'reviews': {
         'path': '{tmdb_type}/{tmdb_id}/reviews',
         'key': 'results',
@@ -244,18 +270,24 @@ TMDB_BASIC_LISTS = {
     'revenue_movies': {
         'path': 'discover/{tmdb_type}?sort_by=revenue.desc',
         'key': 'results',
-        'route': TMDB_BASIC_LISTS_ROUTE
+        'route': TMDB_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized} {plural}',
+        'localized': 32184
     },
     'most_voted': {
         'path': 'discover/{tmdb_type}?sort_by=vote_count.desc',
         'key': 'results',
-        'route': TMDB_BASIC_LISTS_ROUTE
+        'route': TMDB_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized} {plural}',
+        'localized': 32185
     },
     'collection': {
         'path': 'collection/{tmdb_id}',
         'key': 'parts',
         'tmdb_type': 'movie',
-        'route': TMDB_BASIC_LISTS_ROUTE
+        'route': TMDB_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized}',
+        'localized': 32192
     },
     'movie_keywords': {
         'path': 'movie/{tmdb_id}/keywords',
@@ -279,7 +311,8 @@ TMDB_BASIC_LISTS = {
             'with_genres': '{tmdb_id}',
             'with_id': 'True'
         },
-        'route': TMDB_BASIC_LISTS_ROUTE
+        'route': TMDB_BASIC_LISTS_ROUTE,
+        'plugin_category': '{plural}',
     }
 }
 
@@ -290,33 +323,48 @@ TRAKT_BASIC_LISTS_ROUTE = {
 TRAKT_BASIC_LISTS = {
     'trakt_trending': {
         'path': '{trakt_type}s/trending',
-        'route': TRAKT_BASIC_LISTS_ROUTE
+        'route': TRAKT_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized} {plural}',
+        'localized': 32204
     },
     'trakt_popular': {
         'path': '{trakt_type}s/popular',
-        'route': TRAKT_BASIC_LISTS_ROUTE
+        'route': TRAKT_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized} {plural}',
+        'localized': 32175
     },
     'trakt_mostplayed': {
         'path': '{trakt_type}s/played/weekly',
-        'route': TRAKT_BASIC_LISTS_ROUTE
+        'route': TRAKT_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized} {plural}',
+        'localized': 32205
     },
     'trakt_anticipated': {
         'path': '{trakt_type}s/anticipated',
-        'route': TRAKT_BASIC_LISTS_ROUTE
+        'route': TRAKT_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized} {plural}',
+        'localized': 32206
     },
     'trakt_boxoffice': {
         'path': '{trakt_type}s/boxoffice',
-        'route': TRAKT_BASIC_LISTS_ROUTE
+        'route': TRAKT_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized} {plural}',
+        'localized': 32207
     },
     'trakt_recommendations': {
         'path': 'recommendations/{trakt_type}s?ignore_collected=true',
         'authorize': True,
-        'route': TRAKT_BASIC_LISTS_ROUTE
+        'route': TRAKT_BASIC_LISTS_ROUTE,
+        'plugin_category': '{plural} {localized}',
+        'localized': 32198
     },
     'trakt_myairing': {
         'path': 'calendars/my/{trakt_type}s',
         'authorize': True,
-        'route': TRAKT_BASIC_LISTS_ROUTE
+        'stacked': True,
+        'route': TRAKT_BASIC_LISTS_ROUTE,
+        'plugin_category': '{localized}',
+        'localized': 32405
     }
 }
 
@@ -329,31 +377,41 @@ TRAKT_SYNC_LISTS = {
         'sync_type': 'collection',
         'sort_by': 'title',
         'sort_how': 'asc',
-        'route': TRAKT_SYNC_LISTS_ROUTE
+        'route': TRAKT_SYNC_LISTS_ROUTE,
+        'plugin_category': '{plural} {localized}',
+        'localized': 32192
     },
     'trakt_watchlist': {
         'sync_type': 'watchlist',
         'use_show_activity': True,
         'sort_by': 'unsorted',
-        'route': TRAKT_SYNC_LISTS_ROUTE
+        'route': TRAKT_SYNC_LISTS_ROUTE,
+        'plugin_category': '{plural} {localized}',
+        'localized': 32193
     },
     'trakt_history': {
         'sync_type': 'watched',
         'sort_by': 'watched',
         'sort_how': 'desc',
-        'route': TRAKT_SYNC_LISTS_ROUTE
+        'route': TRAKT_SYNC_LISTS_ROUTE,
+        'plugin_category': '{localized} {plural}',
+        'localized': 32194
     },
     'trakt_mostwatched': {
         'sync_type': 'watched',
         'sort_by': 'plays',
         'sort_how': 'desc',
-        'route': TRAKT_SYNC_LISTS_ROUTE
+        'route': TRAKT_SYNC_LISTS_ROUTE,
+        'plugin_category': '{localized} {plural}',
+        'localized': 32195
     },
     'trakt_inprogress': {
         'sync_type': 'playback',
         'sort_by': 'paused',
         'sort_how': 'desc',
-        'route': TRAKT_SYNC_LISTS_ROUTE
+        'route': TRAKT_SYNC_LISTS_ROUTE,
+        'plugin_category': '{localized} {plural}',
+        'localized': 32196
     }
 }
 
@@ -364,18 +422,26 @@ TRAKT_LIST_OF_LISTS_ROUTE = {
 TRAKT_LIST_OF_LISTS = {
     'trakt_trendinglists': {
         'path': 'lists/trending',
-        'route': TRAKT_LIST_OF_LISTS_ROUTE},
+        'route': TRAKT_LIST_OF_LISTS_ROUTE,
+        'plugin_category': '{localized}',
+        'localized': 32208},
     'trakt_popularlists': {
         'path': 'lists/popular',
-        'route': TRAKT_LIST_OF_LISTS_ROUTE},
+        'route': TRAKT_LIST_OF_LISTS_ROUTE,
+        'plugin_category': '{localized}',
+        'localized': 32209},
     'trakt_likedlists': {
         'path': 'users/likes/lists',
         'authorize': True,
-        'route': TRAKT_LIST_OF_LISTS_ROUTE},
+        'route': TRAKT_LIST_OF_LISTS_ROUTE,
+        'plugin_category': '{localized}',
+        'localized': 32210},
     'trakt_mylists': {
         'path': 'users/me/lists',
         'authorize': True,
-        'route': TRAKT_LIST_OF_LISTS_ROUTE}
+        'route': TRAKT_LIST_OF_LISTS_ROUTE,
+        'plugin_category': '{localized}',
+        'localized': 32211}
 }
 
 CONTEXT_MENU_ITEMS = {
@@ -441,6 +507,12 @@ ROUTE_NO_ID = {
     'trakt_inprogress': {'route': {
         'lambda': lambda func, **kwargs: func(**kwargs),
         'getattr': 'list_inprogress'}},
+    'trakt_ondeck': {'route': {
+        'lambda': lambda func, **kwargs: func(**kwargs),
+        'getattr': 'list_ondeck'}},
+    'trakt_towatch': {'route': {
+        'lambda': lambda func, **kwargs: func(**kwargs),
+        'getattr': 'list_towatch'}},
     'trakt_nextepisodes': {'route': {
         'lambda': lambda func, **kwargs: func(**kwargs),
         'getattr': 'list_nextepisodes'}},

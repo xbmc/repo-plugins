@@ -1,19 +1,24 @@
 import xbmc
+import xbmcaddon
 from resources.lib.addon.window import get_property
 from resources.lib.tmdb.api import TMDb
 from resources.lib.omdb.api import OMDb
 from resources.lib.trakt.api import TraktAPI
 from resources.lib.fanarttv.api import FanartTV
-from resources.lib.addon.plugin import ADDON, kodi_traceback
+from resources.lib.addon.plugin import kodi_traceback
 from resources.lib.addon.parser import try_int
 from resources.lib.addon.setutils import merge_two_dicts
 from resources.lib.addon.decorators import try_except_log
+from resources.lib.addon.timedate import convert_timestamp, get_region_date
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 SETMAIN = {
     'label', 'tmdb_id', 'imdb_id'}
 SETMAIN_ARTWORK = {
-    'icon', 'poster', 'thumb', 'fanart', 'discart', 'clearart', 'clearlogo', 'landscape', 'banner'}
+    'icon', 'poster', 'thumb', 'fanart', 'discart', 'clearart', 'clearlogo', 'landscape', 'banner', 'keyart'}
 SETINFO = {
     'title', 'originaltitle', 'tvshowtitle', 'plot', 'rating', 'votes', 'premiered', 'year',
     'imdbnumber', 'tagline', 'status', 'episode', 'season', 'genre', 'set', 'studio', 'country',
@@ -110,19 +115,34 @@ class CommonMonitorFunctions(object):
         self.set_property('Duration_HHMM', u'{0:02d}:{1:02d}'.format(hours, minutes))
         self.properties.update(['Duration', 'Duration_H', 'Duration_M', 'Duration_HHMM'])
 
+    @try_except_log('lib.monitor.common set_date_properties')
+    def set_date_properties(self, premiered):
+        date_obj = convert_timestamp(premiered, time_fmt="%Y-%m-%d", time_lim=10)
+        if not date_obj:
+            return
+        self.set_property('Premiered', get_region_date(date_obj, 'dateshort'))
+        self.set_property('Premiered_Long', get_region_date(date_obj, 'datelong'))
+        self.set_property('Premiered_Custom', date_obj.strftime(xbmc.getInfoLabel('Skin.String(TMDbHelper.Date.Format)') or '%d %b %Y'))
+        self.properties.update(['Premiered', 'Premiered_Long', 'Premiered_Custom'])
+
     def set_properties(self, item):
         self.set_iter_properties(item, SETMAIN)
         self.set_iter_properties(item.get('infolabels', {}), SETINFO)
         self.set_iter_properties(item.get('infoproperties', {}), SETPROP)
         self.set_time_properties(item.get('infolabels', {}).get('duration', 0))
+        self.set_date_properties(item.get('infolabels', {}).get('premiered'))
         self.set_list_properties(item.get('cast', []), 'name', 'cast')
         if xbmc.getCondVisibility("!Skin.HasSetting(TMDbHelper.DisableExtendedProperties)"):
             self.set_indexed_properties(item.get('infoproperties', {}))
 
     @try_except_log('lib.monitor.common get_tmdb_id')
-    def get_tmdb_id(self, tmdb_type, imdb_id=None, query=None, year=None, episode_year=None):
+    def get_tmdb_id(self, tmdb_type, imdb_id=None, query=None, year=None, episode_year=None, media_type=None):
         if imdb_id and imdb_id.startswith('tt'):
             return self.tmdb_api.get_tmdb_id(tmdb_type=tmdb_type, imdb_id=imdb_id)
+        if tmdb_type == 'multi':
+            multi_i = self.tmdb_api.get_tmdb_multisearch(query=query, media_type=media_type) or {}
+            self.multisearch_tmdbtype = multi_i.get('media_type')
+            return multi_i.get('id')
         return self.tmdb_api.get_tmdb_id(tmdb_type=tmdb_type, query=query, year=year, episode_year=episode_year)
 
     def get_fanarttv_artwork(self, item, tmdb_type=None, tmdb_id=None, tvdb_id=None):
@@ -130,13 +150,15 @@ class CommonMonitorFunctions(object):
             return item
         lookup_id = None
         if tmdb_type == 'tv':
+            ftv_type = 'tv'
             lookup_id = tvdb_id or item.get('unique_ids', {}).get('tvshow.tvdb') or item.get('unique_ids', {}).get('tvdb')
-            func = self.fanarttv.get_tv_all_artwork
+            func = self.fanarttv.get_all_artwork
         elif tmdb_type == 'movie':
+            ftv_type = 'movies'
             lookup_id = tmdb_id or item.get('unique_ids', {}).get('tmdb')
-            func = self.fanarttv.get_movies_all_artwork
+            func = self.fanarttv.get_all_artwork
         if lookup_id:
-            item['art'] = merge_two_dicts(item.get('art', {}), func(lookup_id))
+            item['art'] = merge_two_dicts(item.get('art', {}), func(lookup_id, ftv_type))
         return item
 
     def get_trakt_ratings(self, item, trakt_type, season=None, episode=None):

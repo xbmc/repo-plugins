@@ -1,5 +1,5 @@
-import xbmc
-from resources.lib.addon.plugin import get_mpaa_prefix, get_language, convert_type, ADDON
+import xbmcaddon
+from resources.lib.addon.plugin import get_mpaa_prefix, get_language, convert_type
 from resources.lib.addon.parser import try_int, try_float
 from resources.lib.addon.setutils import iter_props, dict_to_list, get_params
 from resources.lib.addon.timedate import format_date, age_difference
@@ -7,12 +7,15 @@ from resources.lib.addon.constants import IMAGEPATH_ORIGINAL, IMAGEPATH_POSTER, 
 from resources.lib.api.mapping import UPDATE_BASEKEY, _ItemMapper, get_empty_item
 
 
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
+
+
 def get_imagepath_poster(v):
-    return u'{}{}'.format(IMAGEPATH_POSTER, v)
+    return u'{}{}'.format(IMAGEPATH_POSTER, v) if v else ''
 
 
 def get_imagepath_fanart(v):
-    return u'{}{}'.format(IMAGEPATH_ORIGINAL, v)
+    return u'{}{}'.format(IMAGEPATH_ORIGINAL, v) if v else ''
 
 
 def get_runtime(v, *args, **kwargs):
@@ -43,7 +46,7 @@ def get_collection_properties(v):
     ratings = []
     infoproperties = {}
     year_l, year_h, votes = 9999, 0, 0
-    for p, i in enumerate(v):
+    for p, i in enumerate(v, start=1):
         infoproperties[u'set.{}.title'.format(p)] = i.get('title', '')
         infoproperties[u'set.{}.tmdb_id'.format(p)] = i.get('id', '')
         infoproperties[u'set.{}.originaltitle'.format(p)] = i.get('original_title', '')
@@ -123,6 +126,7 @@ def get_providers(v):
             u'provider.{}.name'.format(x): i['provider_name'],
             u'provider.{}.icon'.format(x): get_imagepath_poster(i.get('logo_path'))})
         added_append(i['provider_name'])
+    infoproperties['providers'] = ' / '.join(added)
     return infoproperties
 
 
@@ -157,11 +161,31 @@ def get_external_ids(v):
     return unique_ids
 
 
+def get_extra_art(v):
+    """ Get additional artwork types from artwork list
+    Fanart with language is treated as landscape because it will have text
+    TODO: Add extra fanart
+    """
+    artwork = {}
+
+    landscape = [i for i in v['backdrops'] if i.get('iso_639_1') and i.get('aspect_ratio') == 1.778] if v.get('backdrops') else None
+    if landscape:
+        landscape_item = sorted(landscape, key=lambda i: i.get('vote_average', 0), reverse=True)[0]
+        artwork['landscape'] = get_imagepath_fanart(landscape_item.get('file_path'))
+
+    clearlogo = [i for i in v['logos'] if i.get('file_path', '')[-4:] != '.svg'] if v.get('logos') else None
+    if clearlogo:
+        clearlogo_item = sorted(clearlogo, key=lambda i: i.get('vote_average', 0), reverse=True)[0]
+        artwork['clearlogo'] = get_imagepath_fanart(clearlogo_item.get('file_path'))
+
+    return artwork
+
+
 def get_episode_to_air(v, name):
     i = v or {}
     infoproperties = {}
-    infoproperties[u'{}'.format(name)] = format_date(i.get('air_date'), xbmc.getRegion('dateshort'))
-    infoproperties[u'{}.long'.format(name)] = format_date(i.get('air_date'), xbmc.getRegion('datelong'))
+    infoproperties[u'{}'.format(name)] = format_date(i.get('air_date'), region_fmt='dateshort')
+    infoproperties[u'{}.long'.format(name)] = format_date(i.get('air_date'), region_fmt='datelong')
     infoproperties[u'{}.day'.format(name)] = format_date(i.get('air_date'), "%A")
     infoproperties[u'{}.year'.format(name)] = format_date(i.get('air_date'), "%Y")
     infoproperties[u'{}.episode'.format(name)] = i.get('episode_number')
@@ -405,6 +429,10 @@ class ItemMapper(_ItemMapper):
                 'keys': [('unique_ids', UPDATE_BASEKEY)],
                 'func': get_external_ids
             }],
+            'images': [{
+                'keys': [('art', UPDATE_BASEKEY)],
+                'func': get_extra_art
+            }],
             'credits': [{
                 'keys': [('infolabels', UPDATE_BASEKEY)],
                 'func': get_credits}, {
@@ -558,6 +586,7 @@ class ItemMapper(_ItemMapper):
             'number_of_seasons': ('infolabels', 'season'),
             'number_of_episodes': ('infolabels', 'episode'),
             'department': ('infoproperties', 'department'),
+            'known_for_department': ('infoproperties', 'department'),
             'place_of_birth': ('infoproperties', 'born'),
             'birthday': ('infoproperties', 'birthday'),
             'deathday': ('infoproperties', 'deathday'),
@@ -593,7 +622,6 @@ class ItemMapper(_ItemMapper):
         item['label'] = item['infolabels'].get('title')
         item['infoproperties']['tmdb_type'] = tmdb_type
         item['infolabels']['mediatype'] = item['infoproperties']['dbtype'] = convert_type(tmdb_type, 'dbtype')
-        item['art']['thumb'] = item['art'].get('thumb') or item['art'].get('poster')
         for k, v in item['unique_ids'].items():
             item['infoproperties'][u'{}_id'.format(k)] = v
         return item

@@ -392,9 +392,9 @@ msgctxt "#32077"
 msgid "Ignore folder creation checks"
 msgstr ""
 
-#: /resources/settings.xml
+#: /resources/lib/container/basedir.py
 msgctxt "#32078"
-msgid "Expand Trakt list limit to 20 items"
+msgid "Still to Watch"
 msgstr ""
 
 #: /resources/settings.xml
@@ -2000,7 +2000,10 @@ msgstr ""
 
 #: /resources/lib/script/router.py
 msgctxt "#32392"
-msgid "Use [B]Quick Update[/B] to check for new items.\n\nUse [B]Forced Update[/B] to ignore previously cached update details and recheck all items. Forced updates should only be used when cleaning and rebuilding the Kodi library."
+msgid ""
+"Use [B]Quick Update[/B] to check for new items.\n"
+"\n"
+"Use [B]Forced Update[/B] to ignore previously cached update details and recheck all items. Forced updates should only be used when cleaning and rebuilding the Kodi library."
 msgstr ""
 
 #: /resources/lib/script/router.py
@@ -2011,6 +2014,66 @@ msgstr ""
 #: /resources/lib/script/router.py
 msgctxt "#32394"
 msgid "Quick Update"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32395"
+msgid "Refresh Blur"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32396"
+msgid "Blur image window property empty"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32397"
+msgid "Texture cache entry missing for blurred image"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32398"
+msgid "Deleted Cached Images"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32399"
+msgid "Failed to delete file!\\n{}"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32400"
+msgid "Play local Kodi library files"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32401"
+msgid "TMDb detailed information"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32402"
+msgid "Get additional details and artwork from TMDb"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32403"
+msgid "Increase synced lists items per page (increases load times)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32404"
+msgid "Flatten tvshows with multiple episodes airing same day"
+msgstr ""
+
+#: /resources/lib/addon/constants.py
+msgctxt "#32405"
+msgid "Your TV Shows Airing This Week"
+msgstr ""
+
+#: /resources/lib/container/basedir.py
+msgctxt "#32406"
+msgid "Your In-Progress Episodes"
 msgstr ""
 
 msgctxt "#30030"

@@ -1,5 +1,7 @@
+import xbmc
+import xbmcaddon
 from resources.lib.container.pages import PaginatedItems
-from resources.lib.trakt.items import TraktItems
+from resources.lib.trakt.items import TraktItems, EPISODE_PARAMS
 from resources.lib.trakt.decorators import is_authorized, use_activity_cache, use_lastupdated_cache
 from resources.lib.addon.parser import try_int
 from resources.lib.addon.timedate import convert_timestamp, date_in_range, get_region_date, get_datetime_today, get_timedelta
@@ -7,9 +9,36 @@ from resources.lib.api.mapping import get_empty_item
 from resources.lib.addon.cache import CACHE_SHORT, CACHE_LONG, use_simple_cache
 
 
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
+
+
 class _TraktProgress():
     @is_authorized
-    def get_inprogress_shows_list(self, page=1, limit=20, params=None, next_page=True, sort_by=None, sort_how=None):
+    def get_ondeck_list(self, page=1, limit=None, sort_by=None, sort_how=None, trakt_type=None):
+        limit = limit or self.item_limit
+        response = self._get_inprogress_items('show' if trakt_type == 'episode' else trakt_type)
+        response = TraktItems(response, trakt_type=trakt_type).build_items(
+            sort_by=sort_by, sort_how=sort_how,
+            params_def=EPISODE_PARAMS if trakt_type == 'episode' else None)
+        response = PaginatedItems(response['items'], page=page, limit=limit)
+        return response.items + response.next_page
+
+    @is_authorized
+    def get_towatch_list(self, trakt_type, page=1, limit=None):
+        limit = limit or self.item_limit
+        items_ip = self._get_inprogress_shows() if trakt_type == 'show' else self._get_inprogress_items('movie')
+        items_wl = self.get_sync('watchlist', trakt_type)
+        response = TraktItems(items_ip + items_wl, trakt_type=trakt_type).build_items(sort_by='activity', sort_how='desc')
+        response = PaginatedItems(response['items'], page=page, limit=limit)
+        return response.items + response.next_page
+
+    def _get_inprogress_items(self, sync_type, lowest=5, highest=95):
+        response = self.get_sync('playback', sync_type)
+        return [i for i in response if lowest <= try_int(i.get('progress', 0)) <= highest]
+
+    @is_authorized
+    def get_inprogress_shows_list(self, page=1, limit=None, params=None, next_page=True, sort_by=None, sort_how=None):
+        limit = limit or self.item_limit
         response = self._get_upnext_episodes_list(sort_by_premiered=True) if sort_by == 'year' else self._get_inprogress_shows()
         response = TraktItems(response, trakt_type='show').build_items(
             params_def=params, sort_by=sort_by if sort_by != 'year' else 'unsorted', sort_how=sort_how)
@@ -100,27 +129,25 @@ class _TraktProgress():
 
     @is_authorized
     # @use_activity_cache('episodes', 'watched_at', cache_days=CACHE_SHORT)
-    def get_upnext_list(self, unique_id, id_type=None, page=1):
+    def get_upnext_list(self, unique_id, id_type=None, page=1, limit=None):
         """ Gets the next episodes for a show that user should watch next """
+        limit = limit or self.item_limit
         if id_type != 'slug':
             unique_id = self.get_id(unique_id, id_type, 'show', output_type='slug')
         if unique_id:
             showitem = self.get_details('show', unique_id)
             response = self.get_upnext_episodes(unique_id, showitem)
-            response = TraktItems(response, trakt_type='episode').configure_items(params_def={
-                'info': 'details', 'tmdb_type': '{tmdb_type}', 'tmdb_id': '{tmdb_id}',
-                'season': '{season}', 'episode': '{number}'})
-            response = PaginatedItems(response['items'], page=page, limit=10)
+            response = TraktItems(response, trakt_type='episode').configure_items(params_def=EPISODE_PARAMS)
+            response = PaginatedItems(response['items'], page=page, limit=limit)
             return response.items + response.next_page
 
     @is_authorized
-    def get_upnext_episodes_list(self, page=1, sort_by_premiered=False):
+    def get_upnext_episodes_list(self, page=1, sort_by_premiered=False, limit=None):
         """ Gets a list of episodes for in-progress shows that user should watch next """
+        limit = limit or self.item_limit
         response = self._get_upnext_episodes_list(sort_by_premiered=sort_by_premiered)
-        response = TraktItems(response, trakt_type='episode').configure_items(params_def={
-            'info': 'details', 'tmdb_type': '{tmdb_type}', 'tmdb_id': '{tmdb_id}',
-            'season': '{season}', 'episode': '{number}'})
-        response = PaginatedItems(response['items'], page=page, limit=10)
+        response = TraktItems(response, trakt_type='episode').configure_items(params_def=EPISODE_PARAMS)
+        response = PaginatedItems(response['items'], page=page, limit=limit)
         return response.items + response.next_page
 
     @is_authorized
@@ -179,7 +206,6 @@ class _TraktProgress():
             or (reset_at and convert_timestamp(episode.get('last_watched_at')) < reset_at)]
 
     @is_authorized
-    # @use_activity_cache('movies', 'watched_at', cache_days=CACHE_LONG)
     def get_movie_playcount(self, unique_id, id_type):
         return self.get_sync('watched', 'movie', id_type).get(unique_id, {}).get('plays')
 
@@ -245,6 +271,9 @@ class _TraktProgress():
             'air_day': air_date.strftime('%A'),
             'air_day_short': air_date.strftime('%a'),
             'air_date_short': air_date.strftime('%d %b')}
+        days_to_air = (air_date.date() - get_datetime_today().date()).days
+        dtaproperty = 'days_from_aired' if days_to_air < 0 else 'days_until_aired'
+        item['infoproperties'][dtaproperty] = str(abs(days_to_air))
         item['unique_ids'] = {u'tvshow.{}'.format(k): v for k, v in i.get('show', {}).get('ids', {}).items()}
         item['params'] = {
             'info': 'details',
@@ -266,19 +295,99 @@ class _TraktProgress():
             return False
         return True
 
+    def _get_stacked_item(self, next_item, last_item):
+        # If the next item is the same show then we stack the details onto the last item and add it next iteration
+        ip = last_item['infoproperties']
+
+        # First time setup
+        if not ip.get('stacked_count'):
+            ip['stacked_count'] = 1
+            ti = last_item['infolabels']['title']
+            se = '{season}x{episode:0>2}'.format(season=try_int(
+                last_item['infolabels']['season']), episode=try_int(last_item['infolabels']['episode']))
+            ep = '{episode}. {label}'.format(episode=se, label=ti)
+            ip['stacked_labels'] = ep
+            ip['stacked_titles'] = ti
+            ip['stacked_episodes'] = se
+            ip['stacked_first'] = '{season}x{episode:0>2}'.format(
+                season=try_int(last_item['infolabels'].get('season')),
+                episode=try_int(last_item['infolabels'].get('episode')))
+            ip['stacked_first_episode'] = last_item['infolabels']['episode']
+            ip['stacked_first_season'] = last_item['infolabels']['season']
+            ip['no_label_formatting'] = True
+            last_item['params'].pop('episode', None)
+            last_item['params']['info'] = 'episodes'
+            last_item['is_folder'] = True
+
+        # Stacked Setup
+        ti = next_item['infolabels']['title']
+        se = '{season}x{episode:0>2}'.format(season=try_int(
+            next_item['infolabels']['season']), episode=try_int(next_item['infolabels']['episode']))
+        ep = '{episode}. {label}'.format(episode=se, label=ti)
+        ip['stacked_count'] = ip.get('stacked_count', 1) + 1
+        ip['stacked_labels'] = '{}, {}'.format(ip['stacked_labels'], ep)
+        ip['stacked_titles'] = '{}, {}'.format(ip['stacked_titles'], ti)
+        ip['stacked_episodes'] = '{}, {}'.format(ip['stacked_episodes'], se)
+        ip['stacked_last'] = se
+        ip['stacked_last_episode'] = next_item['infolabels']['episode']
+        ip['stacked_last_season'] = next_item['infolabels']['season']
+        last_item['label'] = '{first_ep}-{final_ep}. {ep_count}'.format(
+            ep_count='{} {}'.format(ip['stacked_count'], xbmc.getLocalizedString(20360)),
+            first_ep=ip['stacked_first'],
+            final_ep=ip['stacked_last'])
+        return last_item
+
+    def _stack_calendar_episodes(self, episode_list, flipped=False):
+        items = []
+        last_item = None
+        for i in reversed(episode_list) if flipped else episode_list:
+            if not last_item:
+                last_item = i
+                continue
+
+            # If the next item is a different show or day then we stop stacking and add the item
+            if (
+                    last_item['infolabels']['tvshowtitle'] != i['infolabels']['tvshowtitle']
+                    or last_item['infolabels']['premiered'] != i['infolabels']['premiered']
+            ):
+                items.append(last_item)
+                last_item = i
+                continue
+
+            last_item = self._get_stacked_item(i, last_item)
+
+        else:  # The last item in the list won't be added in the for loop so do an extra action at the end to add it
+            if last_item:
+                items.append(last_item)
+        return items[::-1] if flipped else items
+
+    def _stack_calendar_tvshows(self, tvshow_list, flipped=False):
+        items, titles = [], []
+        for i in reversed(tvshow_list) if flipped else tvshow_list:
+            t = i['infolabels']['title']
+            if t not in titles:
+                items.append(i)
+                titles.append(t)
+                continue
+            x = titles.index(t)
+            i = items[x]
+            i['infoproperties']['stacked_count'] = i['infoproperties'].get('stacked_count', 0) + 1
+        return items[::-1] if flipped else items
+
     @use_simple_cache(cache_days=0.25)
-    def _get_calendar_episodes_list(self, startdate=0, days=1, user=True, kodi_db=None):
+    def _get_calendar_episodes_list(self, startdate=0, days=1, user=True, kodi_db=None, stack=True):
         # Get response
         response = self.get_calendar_episodes(startdate=startdate, days=days, user=user)
         if not response:
             return
         # Reverse items for date ranges in past
         traktitems = reversed(response) if startdate < -1 else response
-        return [self._get_calendar_episode_item(i) for i in traktitems if self._get_calendar_episode_item_bool(
-            i, kodi_db, user, startdate, days)]
+        items = [self._get_calendar_episode_item(i) for i in traktitems if self._get_calendar_episode_item_bool(i, kodi_db, user, startdate, days)]
+        return self._stack_calendar_episodes(items, flipped=startdate < -1) if stack else items
 
-    def get_calendar_episodes_list(self, startdate=0, days=1, user=True, kodi_db=None, page=1, limit=20):
-        response_items = self._get_calendar_episodes_list(startdate, days, user, kodi_db)
+    def get_calendar_episodes_list(self, startdate=0, days=1, user=True, kodi_db=None, page=1, limit=None):
+        limit = limit or self.item_limit
+        response_items = self._get_calendar_episodes_list(startdate, days, user, kodi_db, stack=ADDON.getSettingBool('calendar_flatten'))
         response = PaginatedItems(response_items, page=page, limit=limit)
         if response and response.items:
             return response.items + response.next_page

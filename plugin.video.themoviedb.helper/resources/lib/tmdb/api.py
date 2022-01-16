@@ -1,21 +1,27 @@
 import xbmcgui
+import xbmcaddon
 from resources.lib.addon.cache import CACHE_SHORT, CACHE_LONG
 from resources.lib.tmdb.mapping import ItemMapper, get_episode_to_air
 from resources.lib.api.request import RequestAPI
-from resources.lib.addon.plugin import ADDON, get_mpaa_prefix, get_language, convert_type, ADDONPATH
+from resources.lib.addon.plugin import get_mpaa_prefix, get_language, convert_type
 from resources.lib.files.downloader import Downloader
 from resources.lib.container.listitem import ListItem
 from resources.lib.addon.constants import TMDB_ALL_ITEMS_LISTS, TMDB_PARAMS_SEASONS, TMDB_PARAMS_EPISODES
 from resources.lib.addon.parser import try_int
-from resources.lib.files.utils import use_pickle
+from resources.lib.files.utils import use_pickle, validify_filename
 from resources.lib.addon.constants import TMDB_GENRE_IDS
 from resources.lib.addon.window import get_property
 from resources.lib.addon.timedate import get_datetime_now, get_timedelta
+from urllib.parse import quote_plus
 from json import loads
 
 
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
+ADDONPATH = ADDON.getAddonInfo('path')
+
+
 API_URL = 'https://api.themoviedb.org/3'
-APPEND_TO_RESPONSE = 'credits,release_dates,content_ratings,external_ids,movie_credits,tv_credits,keywords,reviews,videos,watch/providers'
+APPEND_TO_RESPONSE = 'credits,images,release_dates,content_ratings,external_ids,movie_credits,tv_credits,keywords,reviews,videos,watch/providers'
 
 
 class TMDb(RequestAPI):
@@ -47,11 +53,43 @@ class TMDb(RequestAPI):
         else:
             return False
 
+    def _get_tmdb_multisearch_validfy(self, query=None, validfy=True):
+        if not validfy or not query:
+            return query
+        return validify_filename(query.lower(), alphanum=True)
+
+    def _get_tmdb_multisearch(self, query=None, validfy=True, media_type=None, **kwargs):
+        if not query:
+            return
+        request = self.get_request_sc('search', 'multi', language=self.req_language, query=query)
+        request = request.get('results', [])
+        if not request:
+            return
+        query = self._get_tmdb_multisearch_validfy(query, validfy=validfy)
+        for i in request:
+            if media_type and i.get('media_type') != media_type:
+                continue
+            if query == self._get_tmdb_multisearch_validfy(i.get('name', ''), validfy=validfy):
+                return i
+            if query == self._get_tmdb_multisearch_validfy(i.get('title', ''), validfy=validfy):
+                return i
+            if query == self._get_tmdb_multisearch_validfy(i.get('original_name', ''), validfy=validfy):
+                return i
+            if query == self._get_tmdb_multisearch_validfy(i.get('original_title', ''), validfy=validfy):
+                return i
+
+    def get_tmdb_multisearch(self, query=None, validfy=True, media_type=None, **kwargs):
+        kwargs['cache_days'] = CACHE_SHORT
+        kwargs['cache_name'] = 'TMDb.get_tmdb_multisearch.v1'
+        kwargs['cache_combine_name'] = True
+        return self._cache.use_cache(
+            self._get_tmdb_multisearch, query=query, validfy=validfy, media_type=media_type, **kwargs)
+
     def get_tmdb_id(self, tmdb_type=None, imdb_id=None, tvdb_id=None, query=None, year=None, episode_year=None, raw_data=False, **kwargs):
         if not tmdb_type:
             return
         kwargs['cache_days'] = CACHE_SHORT
-        kwargs['cache_name'] = 'TMDb.get_tmdb_id.v2'
+        kwargs['cache_name'] = 'TMDb.get_tmdb_id.v3'
         kwargs['cache_combine_name'] = True
         return self._cache.use_cache(
             self._get_tmdb_id, tmdb_type=tmdb_type, imdb_id=imdb_id, tvdb_id=tvdb_id, query=query, year=year,
@@ -71,7 +109,9 @@ class TMDb(RequestAPI):
             request = func('find', tvdb_id, language=self.req_language, external_source='tvdb_id')
             request = request.get(u'{0}_results'.format(tmdb_type), [])
         elif query:
-            query = query.split(' (', 1)[0]  # Scrub added (Year) or other cruft in parentheses () added by Addons or TVDb
+            if tmdb_type in ['movie', 'tv']:
+                query = query.split(' (', 1)[0]  # Scrub added (Year) or other cruft in parentheses () added by Addons or TVDb
+            query = quote_plus(query)
             if tmdb_type == 'tv':
                 request = func('search', tmdb_type, language=self.req_language, query=query, first_air_date_year=year)
             else:
@@ -94,6 +134,8 @@ class TMDb(RequestAPI):
         if not query or not tmdb_type:
             return
         response = self.get_tmdb_id(tmdb_type, query=query, raw_data=True)
+        if not response:
+            return
         items = [ListItem(**self.mapper.get_info(i, tmdb_type)).get_listitem() for i in response]
         if not items:
             return
@@ -152,7 +194,7 @@ class TMDb(RequestAPI):
 
     def get_details(self, tmdb_type, tmdb_id, season=None, episode=None, **kwargs):
         kwargs['cache_days'] = CACHE_LONG
-        kwargs['cache_name'] = 'TMDb.get_details.v7.{}'.format(self.language)
+        kwargs['cache_name'] = 'TMDb.get_details.v4_4_60.{}'.format(self.language)
         kwargs['cache_combine_name'] = True
         return self._cache.use_cache(self._get_details, tmdb_type, tmdb_id, season, episode, **kwargs)
 
@@ -393,7 +435,7 @@ class TMDb(RequestAPI):
             if not item:
                 continue
             for k, v in param.items():
-                item['params'][k] = v.format(tmdb_id=i.get('id'))
+                item['params'][k] = v.format(tmdb_id=i.get('id'), label=i.get('name'))
             items.append(item)
         if not items:
             return []
@@ -403,9 +445,12 @@ class TMDb(RequestAPI):
             items.append({'next_page': try_int(page, fallback=1) + 1})
         return items
 
-    def get_search_list(self, tmdb_type, **kwargs):
+    def get_search_list(self, tmdb_type, query=None, **kwargs):
         """ standard kwargs: query= page= """
+        if not query:
+            return
         kwargs['key'] = 'results'
+        kwargs['query'] = quote_plus(query)
         return self.get_basic_list(u'search/{}'.format(tmdb_type), tmdb_type, **kwargs)
 
     def get_basic_list(self, path, tmdb_type, key='results', params=None, base_tmdb_type=None, **kwargs):

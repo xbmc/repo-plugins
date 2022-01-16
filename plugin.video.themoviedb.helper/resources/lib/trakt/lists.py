@@ -1,13 +1,16 @@
 import random
 import xbmcgui
+import xbmcaddon
 from resources.lib.kodi.rpc import get_kodi_library
-from resources.lib.addon.plugin import convert_type, PLUGINPATH
+from resources.lib.addon.plugin import convert_type, PLUGINPATH, get_plugin_category
 from resources.lib.addon.constants import TRAKT_BASIC_LISTS, TRAKT_SYNC_LISTS, TRAKT_LIST_OF_LISTS
-from resources.lib.addon.plugin import ADDON
 from resources.lib.addon.parser import try_int, encode_url
 from resources.lib.api.mapping import get_empty_item
 from resources.lib.addon.timedate import get_calendar_name
 from resources.lib.trakt.api import get_sort_methods
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 class TraktLists():
@@ -17,7 +20,8 @@ class TraktLists():
         info_model = TRAKT_BASIC_LISTS.get(info)
         info_tmdb_type = info_model.get('tmdb_type') or tmdb_type
         trakt_type = convert_type(tmdb_type, 'trakt')
-        items = self.trakt_api.get_basic_list(
+        func = self.trakt_api.get_stacked_list if info_model.get('stacked') else self.trakt_api.get_basic_list
+        items = func(
             path=info_model.get('path', '').format(trakt_type=trakt_type, **kwargs),
             trakt_type=trakt_type,
             params=info_model.get('params'),
@@ -31,6 +35,7 @@ class TraktLists():
         self.kodi_db = self.get_kodi_database(info_tmdb_type)
         self.library = convert_type(info_tmdb_type, 'library')
         self.container_content = convert_type(info_tmdb_type, 'container')
+        self.plugin_category = get_plugin_category(info_model, convert_type(info_tmdb_type, 'plural'))
         return items
 
     def list_mixed(self, info, **kwargs):
@@ -60,6 +65,20 @@ class TraktLists():
         self.kodi_db = self.get_kodi_database(info_tmdb_type)
         self.library = convert_type(info_tmdb_type, 'library')
         self.container_content = convert_type(info_tmdb_type, 'container')
+        self.plugin_category = get_plugin_category(info_model, convert_type(info_tmdb_type, 'plural'))
+        return items
+
+    def list_towatch(self, info, tmdb_type, page=None, **kwargs):
+        """ Get a mix of watchlisted and inprogress """
+        if tmdb_type not in ['movie', 'tv']:
+            return
+        trakt_type = convert_type(tmdb_type, 'trakt')
+        items = self.trakt_api.get_towatch_list(trakt_type=trakt_type, page=page)
+        self.tmdb_cache_only = False
+        self.kodi_db = self.get_kodi_database(tmdb_type)
+        self.library = convert_type(tmdb_type, 'library')
+        self.container_content = convert_type(tmdb_type, 'container')
+        self.plugin_category = '{} {}'.format(convert_type(tmdb_type, 'plural'), ADDON.getLocalizedString(32078))
         return items
 
     def list_lists(self, info, page=None, **kwargs):
@@ -69,6 +88,7 @@ class TraktLists():
             page=page,
             authorize=info_model.get('authorize', False))
         self.library = 'video'
+        self.plugin_category = get_plugin_category(info_model)
         return items
 
     def list_lists_search(self, query=None, **kwargs):
@@ -147,28 +167,42 @@ class TraktLists():
             'info': 'recommendations',
             'tmdb_type': item.get('params', {}).get('tmdb_type'),
             'tmdb_id': item.get('params', {}).get('tmdb_id')}
-        self.plugin_category = u'{} {}'.format(ADDON.getLocalizedString(32288), item.get('label'))
+        self.params['plugin_category'] = u'{} {}'.format(ADDON.getLocalizedString(32288), item.get('label'))
         return self.list_tmdb(
             info='recommendations',
             tmdb_type=item.get('params', {}).get('tmdb_type'),
             tmdb_id=item.get('params', {}).get('tmdb_id'),
             page=1)
 
+    def list_ondeck(self, page=None, **kwargs):
+        items = self.trakt_api.get_ondeck_list(page=page, trakt_type='episode')
+        self.tmdb_cache_only = False
+        self.library = 'video'
+        self.container_content = 'episodes'
+        self.plugin_category = ADDON.getLocalizedString(32406)
+        return items
+
     def list_inprogress(self, info, tmdb_type, page=None, **kwargs):
-        if tmdb_type != 'tv':
-            return self.list_sync(info, tmdb_type, page, **kwargs)
-        items = self.trakt_api.get_inprogress_shows_list(
-            page=page,
-            params={
-                'info': 'trakt_upnext',
-                'tmdb_type': 'tv',
-                'tmdb_id': '{tmdb_id}'},
-            sort_by=kwargs.get('sort_by', None),
-            sort_how=kwargs.get('sort_how', None))
+        if tmdb_type == 'tv':
+            items = self.trakt_api.get_inprogress_shows_list(
+                page=page,
+                params={
+                    'info': 'trakt_upnext',
+                    'tmdb_type': 'tv',
+                    'tmdb_id': '{tmdb_id}'},
+                sort_by=kwargs.get('sort_by', None),
+                sort_how=kwargs.get('sort_how', None))
+        else:
+            items = self.trakt_api.get_ondeck_list(
+                page=page,
+                trakt_type='movie',
+                sort_by=kwargs.get('sort_by', None),
+                sort_how=kwargs.get('sort_how', None))
         self.tmdb_cache_only = False
         self.kodi_db = self.get_kodi_database(tmdb_type)
         self.library = convert_type(tmdb_type, 'library')
         self.container_content = convert_type(tmdb_type, 'container')
+        self.plugin_category = '{} {}'.format(ADDON.getLocalizedString(32196), convert_type(tmdb_type, 'plural'))
         return items
 
     def list_nextepisodes(self, info, tmdb_type, page=None, **kwargs):
@@ -181,6 +215,7 @@ class TraktLists():
         self.library = 'video'
         self.container_content = 'episodes'
         self.thumb_override = ADDON.getSettingInt('calendar_art')
+        self.plugin_category = ADDON.getLocalizedString(32197)
         return items
 
     def list_trakt_calendar(self, info, startdate, days, page=None, library=False, **kwargs):
@@ -210,4 +245,5 @@ class TraktLists():
         self.kodi_db = self.get_kodi_database(tmdb_type)
         self.library = 'video'
         self.container_content = 'episodes'
+        self.plugin_category = ADDON.getLocalizedString(32043)
         return items

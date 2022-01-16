@@ -1,7 +1,10 @@
+import xbmcaddon
 from resources.lib.api.request import RequestAPI
-from resources.lib.addon.plugin import ADDON
 from resources.lib.addon.setutils import del_empty_keys, merge_two_dicts
 from resources.lib.omdb.mapping import ItemMapper
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 class OMDb(RequestAPI):

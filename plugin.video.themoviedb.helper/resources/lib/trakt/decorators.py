@@ -42,11 +42,14 @@ def use_activity_cache(activity_type=None, activity_key=None, cache_days=None, p
     """
     Decorator to cache and refresh if last activity changes
     Optionally can pickle instead of cache if necessary (useful for large objects like sync lists)
+    Optionally send decorator_cache_refresh=True in func kwargs to force refresh
     """
     def decorator(func):
         def wrapper(self, *args, **kwargs):
             if not self.authorize():
                 return
+
+            decorator_cache_refresh = kwargs.pop('decorator_cache_refresh', None)
 
             # Setup getter/setter cache funcs
             func_get = get_pickle if pickle_object else self._cache.get_cache
@@ -59,7 +62,7 @@ def use_activity_cache(activity_type=None, activity_key=None, cache_days=None, p
 
             # Cached response last_activity timestamp matches last_activity from trakt so no need to refresh
             last_activity = self._get_last_activity(activity_type, activity_key)
-            cache_object = func_get(cache_name) if last_activity else None
+            cache_object = func_get(cache_name) if last_activity and not decorator_cache_refresh else None
             if cache_object and cache_object.get('last_activity') == last_activity:
                 if cache_object.get('response') and cache_object.get('last_activity'):
                     return cache_object['response']

@@ -16,6 +16,20 @@ _addonlogname = '[plugin.video.themoviedb.helper]\n'
 _debuglogging = ADDON.getSettingBool('debug_logging')
 
 
+def get_localized(localize_int=0):
+    if localize_int >= 30000 and localize_int < 33000:
+        return ADDON.getLocalizedString(localize_int)
+    return xbmc.getLocalizedString(localize_int)
+
+
+def get_plugin_category(info_model, plural=''):
+    plugin_category = info_model.get('plugin_category')
+    if not plugin_category:
+        return
+    localized = get_localized(info_model['localized']) if 'localized' in info_model else ''
+    return plugin_category.format(localized=localized, plural=plural)
+
+
 def format_name(cache_name, *args, **kwargs):
     # Define a type whitelist to avoiding adding non-basic types like classes to cache name
     permitted_types = (int, float, str, bool, bytes)

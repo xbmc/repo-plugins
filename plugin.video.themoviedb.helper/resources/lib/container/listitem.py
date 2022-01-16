@@ -1,12 +1,17 @@
 import xbmc
 import xbmcgui
+import xbmcaddon
 from resources.lib.addon.constants import ACCEPTED_MEDIATYPES
-from resources.lib.addon.plugin import ADDON, ADDONPATH, PLUGINPATH, kodi_log, convert_media_type
+from resources.lib.addon.plugin import PLUGINPATH, kodi_log, convert_media_type
 from resources.lib.addon.parser import try_int, encode_url
 from resources.lib.addon.timedate import is_unaired_timestamp
 from resources.lib.addon.setutils import merge_two_dicts
 from resources.lib.container.context import ContextMenu
 # from resources.lib.addon.decorators import timer_report
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
+ADDONPATH = ADDON.getAddonInfo('path')
 
 
 def ListItem(*args, **kwargs):
@@ -50,14 +55,15 @@ class _ListItem(object):
         self.context_menu = context_menu or []
         self.stream_details = stream_details or {}
         self.unique_ids = unique_ids or {}
+        self.next_page = next_page
         self._set_as_next_page(next_page)
 
     def _set_as_next_page(self, next_page=None):
         if not next_page:
             return
         self.label = xbmc.getLocalizedString(33078)
-        self.art['thumb'] = u'{}/resources/icons/tmdb/nextpage.png'.format(ADDONPATH)
-        self.art['landscape'] = u'{}/resources/icons/tmdb/nextpage_wide.png'.format(ADDONPATH)
+        self.art['icon'] = u'{}/resources/icons/themoviedb/nextpage.png'.format(ADDONPATH)
+        self.art['landscape'] = u'{}/resources/icons/themoviedb/nextpage_wide.png'.format(ADDONPATH)
         self.infoproperties['specialsort'] = 'bottom'
         self.params = self.parent_params.copy()
         self.params['page'] = next_page
@@ -66,10 +72,12 @@ class _ListItem(object):
         self.is_folder = True
 
     def set_art_fallbacks(self):
-        if not self.art.get('thumb'):
-            self.art['thumb'] = u'{}/resources/poster.png'.format(ADDONPATH)
+        if not self.art.get('poster'):
+            self.art['poster'] = self.art.get('icon') or u'{}/resources/icons/themoviedb/default.png'.format(ADDONPATH)
         if not self.art.get('fanart'):
             self.art['fanart'] = u'{}/fanart.jpg'.format(ADDONPATH)
+        if not self.art.get('icon'):
+            self.art['icon'] = self.art['poster']
         return self.art
 
     def set_thumb_to_art(self, prefer_landscape=False):
@@ -132,12 +140,18 @@ class _ListItem(object):
             self.params['parent_info'] = self.params['info']
             self.params['info'] = 'trakt_sortby'
 
-    def set_params_reroute(self, ftv_forced_lookup=False, flatten_seasons=False):
+    def set_params_reroute(self, ftv_forced_lookup=False, flatten_seasons=False, extended=None, cache_only=False):
         if xbmc.getCondVisibility("Window.IsVisible(script-skinshortcuts.xml)"):
             self._set_params_reroute_skinshortcuts()
 
+        if cache_only:  # Take cacheony param from parent list with us onto subsequent pages
+            self.params['cacheonly'] = cache_only
+
         if ftv_forced_lookup:  # Take fanarttv param from parent list with us onto subsequent pages
             self.params['fanarttv'] = ftv_forced_lookup
+
+        if extended == 'inprogress':  # Reroute for extended sorting of trakt list by inprogress to open up next folder
+            self.params['info'] = 'trakt_upnext'
 
         if self.params.get('info') == 'details':  # Reconfigure details item into play/browse etc.
             self._set_params_reroute_details(flatten_seasons)
@@ -278,7 +292,7 @@ class _Tvshow(_Video):
     def get_ftv_id(self):
         return self.unique_ids.get('tvdb')
 
-    def set_playcount(self, playcount):
+    def _set_playcount(self, playcount):
         playcount = try_int(playcount)
         if not try_int(self.infolabels.get('episode')):
             return
@@ -290,6 +304,10 @@ class _Tvshow(_Video):
             return
         il['playcount'] = playcount
         il['overlay'] = 5
+
+    def set_playcount(self, playcount):
+        self._set_playcount(playcount)
+        self.infoproperties['totalseasons'] = try_int(self.infolabels.get('season'))
 
     def unaired_bool(self):
         if ADDON.getSettingBool('hide_unaired_episodes'):
@@ -312,6 +330,9 @@ class _Season(_Tvshow):
 
     def _set_params_reroute_details(self, flatten_seasons):
         self.params['info'] = 'episodes'
+
+    def set_playcount(self, playcount):
+        self._set_playcount(playcount)
 
 
 class _Episode(_Tvshow):
@@ -339,8 +360,10 @@ class _Episode(_Tvshow):
         self._set_params_reroute_default()
 
     def set_episode_label(self, format_label=u'{season}x{episode:0>2}. {label}'):
+        if self.infoproperties.pop('no_label_formatting', None):
+            return
         season = try_int(self.infolabels.get('season', 0))
         episode = try_int(self.infolabels.get('episode', 0))
-        if not season or not episode:
+        if not episode:
             return
         self.label = format_label.format(season=season, episode=episode, label=self.infolabels.get('title', ''))

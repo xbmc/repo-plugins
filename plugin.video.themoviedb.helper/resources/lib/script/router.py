@@ -5,27 +5,31 @@ import sys
 import xbmc
 import xbmcvfs
 import xbmcgui
+import xbmcaddon
 from json import dumps
-from resources.lib.kodi.library import add_to_library
-from resources.lib.kodi.userlist import monitor_userlist, library_autoupdate
-from resources.lib.kodi.rpc import get_jsonrpc
-from resources.lib.files.downloader import Downloader
-from resources.lib.files.utils import dumps_to_file, validify_filename
 from resources.lib.addon.window import get_property
-from resources.lib.addon.plugin import ADDON, reconfigure_legacy_params, kodi_log, format_folderpath, convert_type
-from resources.lib.addon.decorators import busy_dialog
-from resources.lib.addon.parser import encode_url
-from resources.lib.container.basedir import get_basedir_details
-from resources.lib.fanarttv.api import FanartTV
-from resources.lib.tmdb.api import TMDb
-from resources.lib.trakt.api import TraktAPI, get_sort_methods
-from resources.lib.omdb.api import OMDb
-from resources.lib.script.sync import sync_trakt_item
+from resources.lib.addon.plugin import reconfigure_legacy_params, kodi_log, format_folderpath, convert_type
+from resources.lib.addon.decorators import busy_dialog, timer_func
+from resources.lib.addon.parser import encode_url, try_int, parse_paramstring
+from resources.lib.files.downloader import Downloader
+from resources.lib.files.utils import dumps_to_file, validify_filename, read_file
+from resources.lib.items.basedir import get_basedir_details
+from resources.lib.items.builder import ItemBuilder
+from resources.lib.api.fanarttv.api import FanartTV
+from resources.lib.api.tmdb.api import TMDb
+from resources.lib.api.trakt.api import TraktAPI, get_sort_methods
+from resources.lib.api.omdb.api import OMDb
+from resources.lib.api.kodi.rpc import get_jsonrpc
+from resources.lib.update.library import add_to_library
+from resources.lib.update.userlist import monitor_userlist, library_autoupdate
 from resources.lib.window.manager import WindowManager
 from resources.lib.player.players import Players
 from resources.lib.player.configure import configure_players
 from resources.lib.monitor.images import ImageFunctions
-from resources.lib.container.listitem import ListItem
+from resources.lib.script.sync import sync_trakt_item
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 # Get TMDb ID decorator
@@ -82,7 +86,8 @@ def delete_cache(delete_cache, **kwargs):
         'TMDb': lambda: TMDb(),
         'Trakt': lambda: TraktAPI(),
         'FanartTV': lambda: FanartTV(),
-        'OMDb': lambda: OMDb()}
+        'OMDb': lambda: OMDb(),
+        'Item Details': lambda: ItemBuilder()}
     if delete_cache == 'select':
         m = [i for i in d]
         x = xbmcgui.Dialog().contextmenu([ADDON.getLocalizedString(32387).format(i) for i in m])
@@ -105,6 +110,43 @@ def play_external(**kwargs):
     kodi_log(['lib.script.router - attempting to play\n', kwargs], 1)
     Players(**kwargs).play()
 
+
+def play_using(play_using, mode='play', **kwargs):
+    if 'tmdb_type' not in kwargs and not _update_from_listitem(kwargs):
+        return
+    kwargs['mode'] = mode
+    kwargs['player'] = play_using
+    play_external(**kwargs)
+
+
+def _update_from_listitem(dictionary):
+    url = xbmc.getInfoLabel('ListItem.FileNameAndPath') or ''
+    if url[-5:] == '.strm':
+        url = read_file(url)
+    params = {}
+    if url.startswith('plugin://plugin.video.themoviedb.helper/?'):
+        params = parse_paramstring(url.replace('plugin://plugin.video.themoviedb.helper/?', ''))
+    if params.pop('info', None) in ['play', 'related']:
+        dictionary.update(params)
+    if dictionary.get('tmdb_type'):
+        return dictionary
+    dbtype = xbmc.getInfoLabel('ListItem.DBType')
+    if dbtype == 'movie':
+        dictionary['tmdb_type'] = 'movie'
+        dictionary['tmdb_id'] = xbmc.getInfoLabel('ListItem.UniqueId(tmdb)')
+        dictionary['imdb_id'] = xbmc.getInfoLabel('ListItem.UniqueId(imdb)')
+        dictionary['query'] = xbmc.getInfoLabel('ListItem.Title')
+        dictionary['year'] = xbmc.getInfoLabel('ListItem.Year')
+        if dictionary['tmdb_id'] or dictionary['imdb_id'] or dictionary['query']:
+            return dictionary
+    elif dbtype == 'episode':
+        dictionary['tmdb_type'] = 'tv'
+        dictionary['query'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
+        dictionary['ep_year'] = xbmc.getInfoLabel('ListItem.Year')
+        dictionary['season'] = xbmc.getInfoLabel('ListItem.Season')
+        dictionary['episode'] = xbmc.getInfoLabel('ListItem.Episode')
+        if dictionary['query'] and dictionary['season'] and dictionary['episode']:
+            return dictionary
 
 # def add_to_queue(episodes, clear_playlist=False, play_next=False):
 #     if not episodes:
@@ -150,21 +192,10 @@ def sync_trakt(**kwargs):
         id_type='tmdb')
 
 
-def _get_ftv_id(**kwargs):
-    details = refresh_details(confirm=False, **kwargs)
-    if not details:
+def manage_artwork(tmdb_id=None, tmdb_type=None, season=None, **kwargs):
+    if not tmdb_type or not tmdb_id:
         return
-    return ListItem(**details).get_ftv_id()
-
-
-def manage_artwork(ftv_id=None, ftv_type=None, **kwargs):
-    if not ftv_type:
-        return
-    if not ftv_id:
-        ftv_id = _get_ftv_id(**kwargs)
-    if not ftv_id:
-        return
-    FanartTV().manage_artwork(ftv_id, ftv_type)
+    ItemBuilder().manage_artwork(tmdb_id=tmdb_id, tmdb_type=tmdb_type, season=season)
 
 
 @get_tmdb_id
@@ -189,6 +220,7 @@ def related_lists(tmdb_id=None, tmdb_type=None, season=None, episode=None, conta
         path=encode_url(path=item.get('path'), **item.get('params')),
         info=item['params']['info'], play='RunPlugin',  # Use RunPlugin to avoid window manager info dialog crash with Browse method
         content='pictures' if item['params']['info'] in ['posters', 'fanart'] else 'videos')
+    xbmc.executebuiltin('Dialog.Close(busydialog)')  # Kill modals because prevents ActivateWindow
     xbmc.executebuiltin(path)
 
 
@@ -211,7 +243,8 @@ def refresh_details(tmdb_id=None, tmdb_type=None, season=None, episode=None, con
     if not tmdb_id or not tmdb_type:
         return
     with busy_dialog():
-        details = TMDb().get_details(tmdb_type, tmdb_id, season, episode, cache_refresh=True)
+        details = ItemBuilder().get_item(tmdb_type, tmdb_id, season, episode, cache_refresh=True) or {}
+        details = details.get('listitem')
     if details and confirm:
         xbmcgui.Dialog().ok('TMDbHelper', ADDON.getLocalizedString(32234).format(tmdb_type, tmdb_id))
         container_refresh()
@@ -331,6 +364,30 @@ def sort_list(**kwargs):
     xbmc.executebuiltin(format_folderpath(encode_url(**kwargs)))
 
 
+def log_jsonrpc(**kwargs):
+    dialog = xbmcgui.DialogProgress()
+    method = "VideoLibrary.GetMovies"
+    params = {
+        "properties": ["title", "imdbnumber", "originaltitle", "uniqueid", "year", "file"],
+        "sort": {"method": "year", "order": "descending"},
+        "filter": {"or": [
+            {"operator": "contains", "field": "title", "value": "Batman"},
+            {"operator": "contains", "field": "originaltitle", "value": "Batman"},
+        ]}
+    }
+    # with timer_func('json_rpc'):
+    response = get_jsonrpc(method, params) or {}
+    dialog.create('JSON_RPC Results', '{}'.format(response))
+    update = 0
+    while update < 100:
+        update += 10
+        dialog.update(update)
+        xbmc.sleep(500)
+    # xbmcgui.Dialog().ok('JSON_RPC Results', '{}'.format(response))
+    dialog.close()
+    kodi_log(['JSONRPC:\n', response], 1)
+
+
 class Script(object):
     def __init__(self):
         self.params = {}
@@ -365,9 +422,11 @@ class Script(object):
         # 'play_season': lambda **kwargs: play_season(**kwargs),
         'play_media': lambda **kwargs: play_media(**kwargs),
         'run_plugin': lambda **kwargs: run_plugin(**kwargs),
+        'log_jsonrpc': lambda **kwargs: log_jsonrpc(**kwargs),
         'log_request': lambda **kwargs: log_request(**kwargs),
         'delete_cache': lambda **kwargs: delete_cache(**kwargs),
         'play': lambda **kwargs: play_external(**kwargs),
+        'play_using': lambda **kwargs: play_using(**kwargs),
         'add_path': lambda **kwargs: WindowManager(**kwargs).router(),
         'add_query': lambda **kwargs: WindowManager(**kwargs).router(),
         'close_dialog': lambda **kwargs: WindowManager(**kwargs).router(),

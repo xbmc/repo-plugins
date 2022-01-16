@@ -1,11 +1,15 @@
 import xbmc
-from resources.lib.kodi.rpc import get_person_stats
+import xbmcaddon
+from resources.lib.api.kodi.rpc import get_person_stats
 from resources.lib.addon.window import get_property
 from resources.lib.monitor.common import CommonMonitorFunctions, SETMAIN_ARTWORK, SETPROP_RATINGS
 from resources.lib.monitor.images import ImageFunctions
-from resources.lib.addon.plugin import ADDON, convert_media_type
+from resources.lib.addon.plugin import convert_media_type, convert_type
 from resources.lib.addon.decorators import try_except_log
 from threading import Thread
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 def get_container():
@@ -72,18 +76,23 @@ class ListItemMonitor(CommonMonitorFunctions):
     def get_dbtype(self):
         if self.get_infolabel('Property(tmdb_type)') == 'person':
             return 'actors'
-        elif xbmc.getCondVisibility(
+        dbtype = self.get_infolabel('dbtype')
+        if dbtype:
+            return u'{}s'.format(dbtype)
+        if xbmc.getCondVisibility(
                 "Window.IsVisible(DialogPVRInfo.xml) | "
                 "Window.IsVisible(MyPVRChannels.xml) | "
                 "Window.IsVisible(MyPVRGuide.xml)"):
-            return 'tvshows'
-        dbtype = self.get_infolabel('dbtype')
-        if not dbtype and self.container == 'Container.':
+            return 'multi'
+        if self.container == 'Container.':
             return xbmc.getInfoLabel('Container.Content()') or ''
-        return u'{0}s'.format(dbtype) if dbtype else ''
+        return ''
 
     def get_tmdb_type(self, dbtype=None):
-        return convert_media_type(dbtype or self.dbtype, 'tmdb', strip_plural=True, parent_type=True)
+        dbtype = dbtype or self.dbtype
+        if dbtype == 'multi':
+            return 'multi'
+        return convert_media_type(dbtype, 'tmdb', strip_plural=True, parent_type=True)
 
     def set_cur_item(self):
         self.dbtype = self.get_dbtype()
@@ -123,23 +132,20 @@ class ListItemMonitor(CommonMonitorFunctions):
             self.pre_folder = self.cur_folder
 
     @try_except_log('lib.monitor.listitem.process_artwork')
-    def process_artwork(self, details, tmdb_type):
+    def process_artwork(self, details, tmdb_type, artwork):
         self.clear_property_list(SETMAIN_ARTWORK)
-        if self.dbtype not in ['movies', 'tvshows', 'episodes']:
-            if tmdb_type not in ['movie', 'tv']:
-                return
-        if ADDON.getSettingBool('service_fanarttv_lookup'):
-            details = self.get_fanarttv_artwork(details, tmdb_type)
         if not self.is_same_item():
             return
-        self.set_iter_properties(details.get('art', {}), SETMAIN_ARTWORK)
+        art_details = self.ib.get_item_artwork(artwork)
+        self.set_iter_properties(art_details, SETMAIN_ARTWORK)
 
         # Crop Image
-        if details.get('clearlogo'):
-            if xbmc.getCondVisibility("Skin.HasSetting(TMDbHelper.EnableCrop)"):
-                self.crop_img = ImageFunctions(method='crop', artwork=details.get('clearlogo'))
-                self.crop_img.setName('crop_img')
-                self.crop_img.start()
+        if xbmc.getCondVisibility("Skin.HasSetting(TMDbHelper.EnableCrop)"):
+            self.crop_img = ImageFunctions(method='crop', artwork=self.get_artwork(
+                source="Art(tvshow.clearlogo)|Art(clearlogo)",
+                fallback=art_details.get('clearlogo')))
+            self.crop_img.setName('crop_img')
+            self.crop_img.start()
 
     @try_except_log('lib.monitor.listitem.process_ratings')
     def process_ratings(self, details, tmdb_type, tmdb_id):
@@ -259,13 +265,21 @@ class ListItemMonitor(CommonMonitorFunctions):
         self.clear_property_list(SETPROP_RATINGS)
 
         # Get TMDb Details
+        self.multisearch_tmdbtype = None
         tmdb_id = self.get_tmdb_id(
             tmdb_type=tmdb_type,
             query=self.query,
             imdb_id=self.imdb_id if not self.season else None,  # Skip IMDb ID for seasons/episodes as we can't distinguish if the ID is for the episode or the show.
             year=self.year if tmdb_type == 'movie' else None,
-            episode_year=self.year if tmdb_type == 'tv' else None)
-        details = self.tmdb_api.get_details(tmdb_type, tmdb_id, self.season, self.episode)
+            episode_year=self.year if tmdb_type == 'tv' else None,
+            media_type='tv' if tmdb_type == 'multi' and (self.get_infolabel('episode') or self.get_infolabel('season')) else None)
+        if tmdb_type == 'multi':
+            tmdb_type = self.multisearch_tmdbtype
+            self.dbtype = convert_type(tmdb_type, 'dbtype')
+        self.ib.ftv_api = self.ftv_api if ADDON.getSettingBool('service_fanarttv_lookup') else None
+        details = self.ib.get_item(tmdb_type, tmdb_id, self.season, self.episode)
+        artwork = details['artwork'] if details else None
+        details = details['listitem'] if details else None
         if not details:
             self.clear_properties()
             return get_property('IsUpdating', clear_property=True)
@@ -276,7 +290,7 @@ class ListItemMonitor(CommonMonitorFunctions):
 
         # Get our artwork properties
         if xbmc.getCondVisibility("!Skin.HasSetting(TMDbHelper.DisableArtwork)"):
-            thread_artwork = Thread(target=self.process_artwork, args=[details, tmdb_type])
+            thread_artwork = Thread(target=self.process_artwork, args=[details, tmdb_type, artwork])
             thread_artwork.start()
 
         # Item changed whilst retrieving details so lets clear and get next item

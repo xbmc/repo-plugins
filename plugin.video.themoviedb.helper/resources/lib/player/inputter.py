@@ -1,6 +1,6 @@
 
 import xbmc
-from resources.lib.kodi.rpc import get_jsonrpc
+from resources.lib.api.kodi.rpc import get_jsonrpc
 from threading import Thread
 
 

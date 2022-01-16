@@ -1,12 +1,18 @@
+import xbmc
 import xbmcgui
+import xbmcaddon
 import xml.etree.ElementTree as ET
-from resources.lib.addon.cache import BasicCache, CACHE_SHORT, CACHE_LONG
 from resources.lib.addon.window import get_property
-from resources.lib.addon.plugin import kodi_log, ADDON
+from resources.lib.addon.plugin import kodi_log
 from resources.lib.addon.parser import try_int
 from resources.lib.addon.timedate import get_timestamp, set_timestamp
+from resources.lib.files.cache import BasicCache, CACHE_SHORT, CACHE_LONG
 from copy import copy
 from json import loads, dumps
+# from resources.lib.addon.decorators import timer_func
+# import requests
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 requests = None  # Requests module is slow to import so lazy import via decorator instead
@@ -42,12 +48,12 @@ def translate_xml(request):
 
 
 class RequestAPI(object):
-    def __init__(self, req_api_url=None, req_api_key=None, req_api_name=None, timeout=None):
+    def __init__(self, req_api_url=None, req_api_key=None, req_api_name=None, timeout=None, delay_write=False):
         self.req_api_url = req_api_url or ''
         self.req_api_key = req_api_key or ''
         self.req_api_name = req_api_name or ''
         self.req_timeout_err_prop = u'TimeOutError.{}'.format(self.req_api_name)
-        self.req_timeout_err = get_property(self.req_timeout_err_prop, is_type=float) or 0
+        self.req_timeout_err = 0  # Only check last timeout on timeout since we only want to suppress when multiple
         self.req_connect_err_prop = u'ConnectionError.{}'.format(self.req_api_name)
         self.req_connect_err = get_property(self.req_connect_err_prop, is_type=float) or 0
         self.req_500_err_prop = u'500Error.{}'.format(self.req_api_name)
@@ -56,7 +62,7 @@ class RequestAPI(object):
         self.req_strip = [(self.req_api_url, self.req_api_name), (self.req_api_key, ''), ('is_xml=False', ''), ('is_xml=True', '')]
         self.headers = None
         self.timeout = timeout or 10
-        self._cache = BasicCache(filename='{}.db'.format(req_api_name or 'requests'))
+        self._cache = BasicCache(filename='{}.db'.format(req_api_name or 'requests'), delay_write=delay_write)
 
     def get_api_request_json(self, request=None, postdata=None, headers=None, is_xml=False):
         request = self.get_api_request(request=request, postdata=postdata, headers=headers)
@@ -66,9 +72,30 @@ class RequestAPI(object):
             return request.json()
         return {}
 
-    def connection_error(self, err, wait_time=30, msg_affix=''):
+    def nointernet_err(self, err, log_time=900):
+        # Check Kodi internet status to confirm network is down
+        if xbmc.getCondVisibility("System.InternetState"):
+            return
+
+        # Get the last error timestamp
+        err_prop = u'NoInternetError.{}'.format(self.req_api_name)
+        last_err = get_property(err_prop, is_type=float) or 0
+
+        # Only log error and notify user if it hasn't happened in last {log_time} seconds to avoid log/gui spam
+        if not get_timestamp(last_err):
+            xbmcgui.Dialog().notification(ADDON.getLocalizedString(32308).format(self.req_api_name), xbmc.getLocalizedString(13297))
+            kodi_log(u'ConnectionError: {}\n{}\nSuppressing retries.'.format(xbmc.getLocalizedString(13297), err), 1)
+
+        # Update our last error timestamp and return it
+        return get_property(err_prop, set_timestamp(log_time))
+
+    def connection_error(self, err, wait_time=30, msg_affix='', check_status=False):
         self.req_connect_err = set_timestamp(wait_time)
         get_property(self.req_connect_err_prop, self.req_connect_err)
+
+        if check_status and self.nointernet_err(err):
+            return
+
         kodi_log(u'ConnectionError: {} {}\nSuppressing retries for 30 seconds'.format(msg_affix, err), 1)
         xbmcgui.Dialog().notification(
             ADDON.getLocalizedString(32308).format(' '.join([self.req_api_name, msg_affix])),
@@ -88,6 +115,7 @@ class RequestAPI(object):
         e.g. if timeout limit is 10s then two timeouts within 30s trigger connection error
         """
         kodi_log(u'ConnectionTimeOut: {}'.format(err), 1)
+        self.req_timeout_err = self.req_timeout_err or get_property(self.req_timeout_err_prop, is_type=float) or 0
         if get_timestamp(self.req_timeout_err):
             self.connection_error(err, msg_affix='timeout')
         self.req_timeout_err = set_timestamp(self.timeout * 3)
@@ -104,13 +132,12 @@ class RequestAPI(object):
                 return requests.post(request, data=postdata, headers=headers, timeout=self.timeout)
             return requests.get(request, headers=headers, timeout=self.timeout)
         except requests.exceptions.ConnectionError as errc:
-            self.connection_error(errc)
+            self.connection_error(errc, check_status=True)
         except requests.exceptions.Timeout as errt:
             self.timeout_error(errt)
         except Exception as err:
             kodi_log(u'RequestError: {}'.format(err), 1)
 
-    @lazyimport_requests
     def get_api_request(self, request=None, postdata=None, headers=None):
         """
         Make the request to the API by passing a url request string
@@ -127,7 +154,7 @@ class RequestAPI(object):
             return
 
         # Some error checking
-        if not response.status_code == requests.codes.ok and try_int(response.status_code) >= 400:  # Error Checking
+        if not response.status_code == 200 and try_int(response.status_code) >= 400:  # Error Checking
             # 500 code is server error which usually indicates Trakt is down
             # In this case let's set a connection error and suppress retries for a minute
             if response.status_code == 500:
@@ -155,17 +182,15 @@ class RequestAPI(object):
         Creates a url request string:
         https://api.themoviedb.org/3/arg1/arg2?api_key=foo&kwparamkey=kwparamvalue
         """
-        request = self.req_api_url
-        for arg in args:
-            if arg is not None:
-                request = u'{}/{}'.format(request, arg)
-        sep = '?' if '?' not in request else '&'
-        request = u'{}{}{}'.format(request, sep, self.req_api_key) if self.req_api_key else request
-        for key, value in sorted(kwargs.items()):
-            if value is not None:  # Don't add nonetype kwargs
-                sep = '?' if '?' not in request else ''
-                request = u'{}{}&{}={}'.format(request, sep, key, value)
-        return request
+        url = '/'.join((self.req_api_url, '/'.join(map(str, (i for i in args if i is not None)))))
+        sep = '?'
+        if self.req_api_key:
+            url = sep.join((url, self.req_api_key))
+            sep = '&'
+        if not kwargs:
+            return url
+        kws = '&'.join(('{}={}'.format(k, v) for k, v in kwargs.items() if v is not None))
+        return sep.join((url, kws)) if kws else url
 
     def get_request_sc(self, *args, **kwargs):
         """ Get API request using the short cache """

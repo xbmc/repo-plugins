@@ -1,10 +1,11 @@
 import xbmc
 import xbmcgui
+import xbmcaddon
 import resources.lib.addon.window as window
 from resources.lib.addon.parser import try_int
-from resources.lib.addon.plugin import kodi_log, ADDON
+from resources.lib.addon.plugin import kodi_log
 from resources.lib.addon.decorators import busy_dialog
-from resources.lib.tmdb.api import TMDb
+from resources.lib.api.tmdb.api import TMDb
 
 PREFIX_PATH = 'Path.'
 PREFIX_QUERY = 'Query'
@@ -15,6 +16,9 @@ PREFIX_INSTANCE = 'Instance'
 PREFIX_COMMAND = 'Command'
 ID_VIDEOINFO = 12003
 CONTAINER_ID = 9999
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 def _configure_path(path):
@@ -212,7 +216,13 @@ class WindowManager(_EventLoop):
         window.wait_for_property(PREFIX_ADDPATH, path, True)
         self.call_auto()
 
-    def add_query(self, query, tmdb_type):
+    def add_query(self, query, tmdb_type, separator=' / '):
+        if separator and separator in query:
+            split_str = query.split(separator)
+            x = xbmcgui.Dialog().select(ADDON.getLocalizedString(32236), split_str)
+            if x == -1:
+                return
+            query = split_str[x]
         with busy_dialog():
             tmdb_id = TMDb().get_tmdb_id_from_query(tmdb_type, query, header=query, use_details=True, auto_single=True)
         if not tmdb_id:

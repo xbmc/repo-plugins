@@ -1,14 +1,18 @@
 import xbmc
 import xbmcgui
 import xbmcaddon
+from resources.lib.addon.parser import try_int
+from resources.lib.addon.decorators import busy_dialog
 from resources.lib.addon.constants import PLAYERS_BASEDIR_BUNDLED, PLAYERS_BASEDIR_USER, PLAYERS_BASEDIR_SAVE, PLAYERS_PRIORITY
 from resources.lib.files.utils import get_files_in_folder
-from resources.lib.addon.plugin import ADDON, ADDONPATH
 from resources.lib.files.utils import read_file, dumps_to_file, delete_file
-from resources.lib.addon.parser import try_int
-from resources.lib.container.listitem import ListItem
-from resources.lib.addon.decorators import busy_dialog
+from resources.lib.items.listitem import ListItem
 from json import loads, dumps
+from copy import deepcopy
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
+ADDONPATH = ADDON.getAddonInfo('path')
 
 
 def get_players_from_file():
@@ -24,7 +28,7 @@ def get_players_from_file():
             plugins = meta.get('plugin') or 'plugin.undefined'  # Give dummy name to undefined plugins so that they fail the check
             plugins = plugins if isinstance(plugins, list) else [plugins]  # Listify for simplicity of code
             for i in plugins:
-                if not xbmc.getCondVisibility(u'System.HasAddon({0})'.format(i)):
+                if not xbmc.getCondVisibility(u'System.AddonIsEnabled({0})'.format(i)):
                     break  # System doesn't have a required plugin so skip this player
             else:
                 meta['plugin'] = plugins[0]
@@ -207,7 +211,7 @@ class ConfigurePlayers():
         filename = self.select_player()
         if not filename:
             return
-        player = self.players[filename].copy()
+        player = deepcopy(self.players[filename])
         player = _ConfigurePlayer(player, filename=filename).configure()
         if player == -1:  # Reset player (i.e. delete player file)
             self.delete_player(filename)

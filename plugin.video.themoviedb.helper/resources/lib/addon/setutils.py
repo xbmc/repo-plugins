@@ -1,6 +1,9 @@
 import random
 
 
+ITER_PROPS_MAX = 10
+
+
 def random_from_list(items, remove_next_page=True):
     if not items or not isinstance(items, list) or len(items) < 2:
         return
@@ -70,7 +73,7 @@ def iter_props(items, property_name, infoproperties=None, func=None, **kwargs):
     for x, i in enumerate(items, start=1):
         for k, v in kwargs.items():
             infoproperties[u'{}.{}.{}'.format(property_name, x, k)] = func(i.get(v)) if func else i.get(v)
-        if x >= 10:
+        if x >= ITER_PROPS_MAX:
             break
     return infoproperties
 

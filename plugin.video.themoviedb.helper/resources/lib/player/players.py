@@ -3,21 +3,28 @@ import xbmc
 import xbmcgui
 import xbmcaddon
 import xbmcplugin
-from resources.lib.kodi.rpc import get_directory, KodiLibrary
 from resources.lib.addon.window import get_property
-from resources.lib.container.listitem import ListItem
-from resources.lib.addon.plugin import ADDON, PLUGINPATH, ADDONPATH, format_folderpath, kodi_log
+from resources.lib.addon.plugin import PLUGINPATH, format_folderpath, kodi_log
 from resources.lib.addon.parser import try_int, try_float
+from resources.lib.addon.constants import PLAYERS_PRIORITY
+from resources.lib.addon.decorators import busy_dialog, ProgressDialog
+from resources.lib.items.listitem import ListItem
 from resources.lib.files.utils import read_file, normalise_filesize
+from resources.lib.api.kodi.rpc import get_directory, KodiLibrary
 from resources.lib.player.details import get_item_details, get_detailed_item, get_playerstring, get_language_details
 from resources.lib.player.inputter import KeyboardInputter
 from resources.lib.player.configure import get_players_from_file
-from resources.lib.addon.constants import PLAYERS_PRIORITY
-from resources.lib.addon.decorators import busy_dialog, ProgressDialog
-from string import Formatter
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
+ADDONPATH = ADDON.getAddonInfo('path')
 
 
 def string_format_map(fmt, d):
+    """ Py 2/3 cross-compatibility to return defaultdict formatted string
+    No longer needed after support for Py2 was dropped
+
+    Old code for legacy
     try:
         str.format_map
     except AttributeError:
@@ -25,6 +32,8 @@ def string_format_map(fmt, d):
         return fmt.format(**{part[1]: d[part[1]] for part in parts})
     else:
         return fmt.format(**d)
+    """
+    return fmt.format_map(d)  # NOTE: .format(**d) works in Py3.5 but not Py3.7+ so use format_map(d) instead
 
 
 def wait_for_player(to_start=None, timeout=5, poll=0.25, stop_after=0):
@@ -86,7 +95,7 @@ def resolve_to_dummy(handle=None, stop_after=1, delay_wait=0):
 
 
 class Players(object):
-    def __init__(self, tmdb_type, tmdb_id=None, season=None, episode=None, ignore_default=False, islocal=False, **kwargs):
+    def __init__(self, tmdb_type, tmdb_id=None, season=None, episode=None, ignore_default=False, islocal=False, player=None, mode=None, **kwargs):
         with ProgressDialog('TMDbHelper', u'{}...'.format(ADDON.getLocalizedString(32374)), total=3) as _p_dialog:
             self.api_language = None
             self.players = get_players_from_file()
@@ -100,7 +109,7 @@ class Players(object):
             self.dialog_players = self._get_players_for_dialog(tmdb_type)
 
             self.default_player = ADDON.getSettingString('default_player_movies') if tmdb_type == 'movie' else ADDON.getSettingString('default_player_episodes')
-            self.ignore_default = ignore_default
+            self.ignore_default = u'{} {}'.format(player, u'{}_{}'.format(mode or 'play', 'movie' if tmdb_type == 'movie' else 'episode')) if player else ignore_default or ''
             self.tmdb_type, self.tmdb_id, self.season, self.episode = tmdb_type, tmdb_id, season, episode
             self.dummy_duration = try_float(ADDON.getSettingString('dummy_duration')) or 1.0
             self.dummy_delay = try_float(ADDON.getSettingString('dummy_delay')) or 1.0
@@ -140,6 +149,8 @@ class Players(object):
             'actions': value.get(mode)}
 
     def _get_local_item(self, tmdb_type):
+        if not ADDON.getSettingInt('default_player_kodi'):
+            return []
         file = self._get_local_movie() if tmdb_type == 'movie' else self._get_local_episode()
         if not file:
             return []
@@ -220,7 +231,7 @@ class Players(object):
         player['idx'] = x
         return player
 
-    def _get_player_fallback(self, fallback):
+    def _get_player_or_fallback(self, fallback):
         if not fallback:
             return
         file, mode = fallback.split()
@@ -229,10 +240,16 @@ class Players(object):
         player = self._get_built_player(file, mode)
         if not player:
             return
+
+        # Look for the fallback player in the dialog list and return it if we have it
         for x, i in enumerate(self.dialog_players):
             if i == player:
                 player['idx'] = x
                 return player
+
+        # If we don't have the fallback but the fallback has a fallback then try that instead
+        if player.get('fallback'):
+            return self._get_player_or_fallback(player['fallback'])
 
     def _get_path_from_rules(self, folder, action):
         """ Returns tuple of (path, is_folder) """
@@ -297,7 +314,7 @@ class Players(object):
             d_items.append(ListItem(label=label_a, label2=label_b, art={'thumb': f.get('thumbnail')}).get_listitem())
 
         if not d_items:
-            return -1  # No items so ask user to select new player
+            return  # No items so ask user to select new player
 
         # If autoselect enabled and only 1 item choose that otherwise ask user to choose
         idx = 0 if auto and len(d_items) == 1 else xbmcgui.Dialog().select(ADDON.getLocalizedString(32236), d_items, useDetails=True)
@@ -384,22 +401,19 @@ class Players(object):
     def get_default_player(self):
         """ Returns default player """
         if self.ignore_default:
-            return
-        # Check local first if we have the setting
-        if ADDON.getSettingBool('default_player_local') and self.dialog_players[0].get('is_local'):
+            if self.ignore_default.lower() == 'true':
+                return
+            self.default_player = self.ignore_default
+        elif self.dialog_players[0].get('is_local') and ADDON.getSettingInt('default_player_kodi') == 1:
             player = self.dialog_players[0]
             player['idx'] = 0
             return player
-        if not self.default_player:
+
+        # No default player setting or no players left
+        if not self.default_player or not self.dialog_players:
             return
-        all_players = [u'{} {}'.format(i.get('file'), i.get('mode')) for i in self.dialog_players]
-        try:
-            x = all_players.index(self.default_player)
-        except Exception:
-            return
-        player = self.dialog_players[x]
-        player['idx'] = x
-        return player
+
+        return self._get_player_or_fallback(self.default_player)
 
     def _get_resolved_path(self, player=None, allow_default=False):
         if not player and allow_default:
@@ -431,7 +445,7 @@ class Players(object):
         if not path:
             if player.get('idx') is not None:
                 del self.dialog_players[player['idx']]  # Remove out player so we don't re-ask user for it
-            fallback = self._get_player_fallback(player['fallback']) if player.get('fallback') else None
+            fallback = self._get_player_or_fallback(player['fallback']) if player.get('fallback') else None
             return self._get_resolved_path(fallback)
         if path and isinstance(path, tuple):
             return {

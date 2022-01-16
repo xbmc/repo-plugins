@@ -3,16 +3,19 @@ import os
 import json
 import xbmcgui
 import xbmcvfs
+import xbmcaddon
 import unicodedata
-from resources.lib.addon.timedate import get_timedelta, get_datetime_now
+from resources.lib.addon.timedate import get_timedelta, get_datetime_now, is_future_timestamp
 from resources.lib.addon.parser import try_int
-from resources.lib.addon.plugin import ADDON, ADDONDATA, kodi_log
+from resources.lib.addon.plugin import ADDONDATA, kodi_log
 from resources.lib.addon.constants import ALPHANUM_CHARS, INVALID_FILECHARS
-from resources.lib.addon.timedate import is_future_timestamp
 try:
     import cPickle as _pickle
 except ImportError:
     import pickle as _pickle  # Newer versions of Py3 just use pickle
+
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 def validify_filename(filename, alphanum=False):
@@ -44,12 +47,6 @@ def read_file(filepath):
     finally:
         vfs_file.close()
     return content
-
-
-def write_to_file(filepath, content):
-    f = xbmcvfs.File(filepath, 'w')
-    f.write(content)
-    f.close()
 
 
 def get_tmdb_id_nfo(basedir, foldername, tmdb_type='tv'):
@@ -87,6 +84,14 @@ def dumps_to_file(data, folder, filename, indent=2, join_addon_data=True):
     return path
 
 
+def write_to_file(data, folder, filename, join_addon_data=True, append_to_file=False):
+    path = os.path.join(get_write_path(folder, join_addon_data), filename)
+    if append_to_file:
+        data = '\n'.join([read_file(path), data])
+    with xbmcvfs.File(path, 'w') as f:
+        f.write(data)
+
+
 def get_write_path(folder, join_addon_data=True):
     main_dir = os.path.join(xbmcvfs.translatePath(ADDONDATA), folder) if join_addon_data else xbmcvfs.translatePath(folder)
     if not os.path.exists(main_dir):
@@ -122,6 +127,23 @@ def make_path(path, warn_dialog=False):
     xbmcgui.Dialog().ok(
         'XBMCVFS', u'{} [B]{}[/B]\n{}'.format(
             ADDON.getLocalizedString(32122), path, ADDON.getLocalizedString(32123)))
+
+
+def json_loads(obj):
+    def json_int_keys(ordered_pairs):
+        result = {}
+        for key, value in ordered_pairs:
+            try:
+                key = int(key)
+            except ValueError:
+                pass
+            result[key] = value
+        return result
+    return json.loads(obj, object_pairs_hook=json_int_keys)
+
+
+def pickle_deepcopy(obj):
+    return _pickle.loads(_pickle.dumps(obj))
 
 
 def get_pickle_name(cache_name, alphanum=False):

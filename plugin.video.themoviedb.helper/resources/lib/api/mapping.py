@@ -23,9 +23,47 @@ def set_show(item, base_item=None):
         {'tvshow.{}'.format(k): v for k, v in base_item.get('unique_ids', {}).items()})
     item['infoproperties'].update(
         {'tvshow.{}'.format(k): v for k, v in base_item.get('infolabels', {}).items() if type(v) not in [dict, list, tuple]})
-    item['infolabels']['tvshowtitle'] = base_item['infolabels'].get('title')
+    item['infolabels']['tvshowtitle'] = base_item['infolabels'].get('tvshowtitle') or base_item['infolabels'].get('title')
     item['unique_ids']['tmdb'] = item['unique_ids'].get('tvshow.tmdb')
     return item
+
+
+def is_excluded(item, filter_key=None, filter_value=None, exclude_key=None, exclude_value=None, is_listitem=False):
+    def is_filtered(d, k, v, exclude=False):
+        boolean = False if exclude else True  # Flip values if we want to exclude instead of include
+        if k and v and k in d and str(v).lower() in str(d[k]).lower():
+            boolean = exclude
+        return boolean
+
+    if not item:
+        return
+
+    if is_listitem:
+        il, ip = item.infolabels, item.infoproperties
+    else:
+        il, ip = item.get('infolabels', {}), item.get('infoproperties', {})
+
+    if filter_key and filter_value:
+        if filter_value == 'is_empty':
+            if il.get(filter_key) or ip.get(filter_key):
+                return True
+        if filter_key in il:
+            if is_filtered(il, filter_key, filter_value):
+                return True
+        if filter_key in ip:
+            if is_filtered(ip, filter_key, filter_value):
+                return True
+
+    if exclude_key and exclude_value:
+        if exclude_value == 'is_empty':
+            if not il.get(exclude_key) and not ip.get(exclude_key):
+                return True
+        if exclude_key in il:
+            if is_filtered(il, exclude_key, exclude_value, True):
+                return True
+        if exclude_key in ip:
+            if is_filtered(ip, exclude_key, exclude_value, True):
+                return True
 
 
 class _ItemMapper(object):
@@ -34,7 +72,7 @@ class _ItemMapper(object):
             return item
         for d in ['infolabels', 'infoproperties', 'art']:
             for k, v in base_item.get(d, {}).items():
-                if not v or item[d].get(k):
+                if not v or item[d].get(k) is not None:
                     continue
                 if k in key_blacklist:
                     continue

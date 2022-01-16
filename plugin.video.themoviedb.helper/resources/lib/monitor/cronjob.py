@@ -1,8 +1,10 @@
 import xbmc
+import xbmcaddon
 from resources.lib.addon.parser import try_int
 from threading import Thread
-from resources.lib.addon.plugin import ADDON
 from resources.lib.addon.timedate import convert_timestamp, get_datetime_now, get_timedelta, get_datetime_today, get_datetime_time, get_datetime_combine
+
+ADDON = xbmcaddon.Addon('plugin.video.themoviedb.helper')
 
 
 class CronJobMonitor(Thread):

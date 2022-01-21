@@ -19,7 +19,7 @@ def route(content):
     context_menu = list()
     context_menu.extend(menu_items.clear_search_history(content, do_refresh=True))
     kodi.create_item({'label': '[B]%s[/B]' % i18n('new_search'), 'path': {'mode': MODES.NEWSEARCH, 'content': content},
-                      'info': {'plot': i18n('new_search')}, 'context_menu': context_menu})
+                      'info': {'plot': i18n('new_search')}, 'context_menu': context_menu, 'thumbfile': 'Search.png'})
     history = utils.get_search_history(content)
     history_items = list()
     if history:

@@ -89,13 +89,10 @@ def serialize_uri(item):
         return quote(item)
 
 def serialize_comment_uri(item):
-    # all uris passed via kodi's routing system must be urlquoted
-    if type(item) is dict:
+    if 'signing_channel' in item and 'name' in item['signing_channel'] and 'claim_id' in item['signing_channel']:
         signing_channel = item['signing_channel']
         return quote(signing_channel['name'] + '#' + signing_channel['claim_id'] + '#' + item['claim_id'])
-    else:
-        return quote(item)
-
+    return None
 
 def deserialize_uri(item):
     # all uris passed via kodi's routing system must be urlquoted
@@ -128,9 +125,11 @@ def to_video_listitem(item, playlist='', channel='', repost=None):
         infoLabels['duration'] = str(item['value']['video']['duration'])
 
     if playlist == '':
-        menu.append((
-            tr(30238), 'RunPlugin(%s)' % plugin.url_for(plugin_comment_show, uri=serialize_comment_uri(item))
-            ))
+        uri = serialize_comment_uri(item)
+        if uri:
+            menu.append((
+                tr(30238), 'RunPlugin(%s)' % plugin.url_for(plugin_comment_show, uri=uri)
+                ))
 
         menu.append((
             tr(30212) % tr(30211), 'RunPlugin(%s)' % plugin.url_for(plugin_playlist_add, name=quote(tr(30211)), uri=serialize_uri(item))

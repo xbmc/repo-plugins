@@ -1,3 +1,7 @@
+2.5.12
+[add] new menu icons - Goldenfreddy0703
+[lang] updated translations from Weblate
+
 2.5.11
 [fix] fix follow/unfollow channels - apo86
 [lang] updated translations from Weblate

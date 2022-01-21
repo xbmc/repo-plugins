@@ -1,44 +1,45 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-11-14 13:06+0000\n"
+"Last-Translator: JuenTingShie <t104340042@ntut.org.tw>\n"
+"Language-Team: Chinese (Taiwan) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/zh_tw/>\n"
 "Language: zh_tw\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.8.1\n"
 
 msgctxt "Addon Summary"
 msgid "Twitch video plugin"
-msgstr ""
+msgstr "Twitch 影片插件"
 
 msgctxt "Addon Description"
 msgid "Watch your favorite gaming streams!"
-msgstr ""
+msgstr "觀看你最愛的遊戲直播!"
 
 msgctxt "#30001"
 msgid "Games"
-msgstr ""
+msgstr "遊戲"
 
 msgctxt "#30002"
 msgid "Following"
-msgstr ""
+msgstr "追隨中"
 
 msgctxt "#30003"
 msgid "Search"
-msgstr ""
+msgstr "搜尋"
 
 msgctxt "#30004"
 msgid "Settings"
-msgstr ""
+msgstr "設定"
 
 msgctxt "#30005"
 msgid "Featured Streams"
-msgstr ""
+msgstr "推薦的直播"
 
 msgctxt "#30006"
 msgid "Teams"
@@ -46,36 +47,36 @@ msgstr ""
 
 msgctxt "#30007"
 msgid "Search for channels"
-msgstr ""
+msgstr "搜尋頻道"
 
 msgctxt "#30008"
 msgid "Channels"
-msgstr ""
+msgstr "頻道"
 
 msgctxt "#30009"
 msgid "Live Channels"
-msgstr ""
+msgstr "直播頻道"
 
 msgctxt "#30010"
 msgid "TwitchTV"
-msgstr ""
+msgstr "TwitchTV"
 
 msgctxt "#30011"
 msgid "next page..."
-msgstr ""
+msgstr "下一頁..."
 
 msgctxt "#30012"
 msgid "-- Currently Live Streams --"
-msgstr ""
+msgstr "-- 當前直播頻道 --"
 
 msgctxt "#30013"
 msgid "-- Followed Channels --"
-msgstr ""
+msgstr "-- 追蹤中頻道 --"
 
 # empty strings from id 30014 to 30019
 msgctxt "#30020"
 msgid "Http error"
-msgstr ""
+msgstr "Http 錯誤"
 
 msgctxt "#30021"
 msgid "No Live Data Found"
@@ -83,102 +84,102 @@ msgstr ""
 
 msgctxt "#30022"
 msgid "No archives found for"
-msgstr ""
+msgstr "找不到直播存檔"
 
 msgctxt "#30023"
 msgid "User Token Error"
-msgstr ""
+msgstr "使用者Token錯誤"
 
 msgctxt "#30024"
 msgid "Changed video settings"
-msgstr ""
+msgstr "更改影片設定"
 
 msgctxt "#30025"
 msgid "Selected video settings are not available"
-msgstr ""
+msgstr "選擇的影片設定不可使用"
 
 msgctxt "#30026"
 msgid "TwitchApi error"
-msgstr ""
+msgstr "TwitchApi 錯誤"
 
 msgctxt "#30027"
 msgid "JSON error"
-msgstr ""
+msgstr "JSON 錯誤"
 
 msgctxt "#30028"
 msgid "Failed to parse the result set"
-msgstr ""
+msgstr "解析成果失敗"
 
 msgctxt "#30029"
 msgid "Please check your internet connection"
-msgstr ""
+msgstr "請檢查網路連線"
 
 # empty strings from id 30030 to 30039
 msgctxt "#30040"
 msgid "Video Quality"
-msgstr ""
+msgstr "影片畫質"
 
 # empty strings from id 30041 to 30044
 msgctxt "#30045"
 msgid "Display titles"
-msgstr ""
+msgstr "顯示標題"
 
 msgctxt "#30046"
 msgid "Streamer - Stream Title"
-msgstr ""
+msgstr "實況主 - 直播標題"
 
 msgctxt "#30047"
 msgid "Viewers - Streamer - Stream Title"
-msgstr ""
+msgstr "觀眾數 - 實況主 - 直播標題"
 
 msgctxt "#30048"
 msgid "Stream Title"
-msgstr ""
+msgstr "直播標題"
 
 msgctxt "#30049"
 msgid "Streamer"
-msgstr ""
+msgstr "實況主"
 
 msgctxt "#30050"
 msgid "Username"
-msgstr ""
+msgstr "使用者名稱"
 
 msgctxt "#30051"
 msgid "Streamer - Game Title - Stream Title"
-msgstr ""
+msgstr "實況主 - 遊戲標題 - 直播標題"
 
 msgctxt "#30052"
 msgid "Enable"
-msgstr ""
+msgstr "啟用"
 
 msgctxt "#30053"
 msgid "Password (OAuth Token)"
-msgstr ""
+msgstr "密碼 (OAuth Token)"
 
 msgctxt "#30054"
 msgid "Language | Streamer - Stream Title"
-msgstr ""
+msgstr "語言 | 實況主 - 直播標題"
 
 # empty strings from id 30055 to 30059
 msgctxt "#30060"
 msgid "Unnamed Streamer"
-msgstr ""
+msgstr "匿名實況主"
 
 msgctxt "#30061"
 msgid "Untitled Stream"
-msgstr ""
+msgstr "無標題直播"
 
 msgctxt "#30062"
 msgid "Unknown Number of Viewers"
-msgstr ""
+msgstr "未知觀眾數"
 
 msgctxt "#30063"
 msgid "Unknown Language"
-msgstr ""
+msgstr "未知語言"
 
 msgctxt "#30064"
 msgid "Unknown Game"
-msgstr ""
+msgstr "未知遊戲"
 
 msgctxt "#30065"
 msgid "Truncate displayed titles"
@@ -186,103 +187,103 @@ msgstr ""
 
 msgctxt "#30066"
 msgid "Followed Games"
-msgstr ""
+msgstr "追隨中的遊戲"
 
 msgctxt "#30067"
 msgid "Game Title Viewers | Streamer - Stream Title"
-msgstr ""
+msgstr "遊戲標題觀眾數 | 實況主 - 直播標題"
 
 msgctxt "#30068"
 msgid "Content Type"
-msgstr ""
+msgstr "內容類型"
 
 msgctxt "#30069"
 msgid "Files"
-msgstr ""
+msgstr "檔案"
 
 msgctxt "#30070"
 msgid "TV Shows"
-msgstr ""
+msgstr "電視節目"
 
 msgctxt "#30071"
 msgid "Movies"
-msgstr ""
+msgstr "電影"
 
 msgctxt "#30072"
 msgid "Episodes"
-msgstr ""
+msgstr "影集"
 
 msgctxt "#30073"
 msgid "Music Videos"
-msgstr ""
+msgstr "音樂影片"
 
 msgctxt "#30074"
 msgid "Automatically refresh live preview cache"
-msgstr ""
+msgstr "自動更新直播預覽快取"
 
 msgctxt "#30075"
 msgid "Install IrcChat (script.ircchat)"
-msgstr ""
+msgstr "安裝 IrcChat (script.ircchat)"
 
 msgctxt "#30076"
 msgid "General"
-msgstr ""
+msgstr "一般"
 
 msgctxt "#30077"
 msgid "Play (Choose Quality)"
-msgstr ""
+msgstr "撥放 (選擇畫質)"
 
 msgctxt "#30078"
 msgid "Past Broadcasts"
-msgstr ""
+msgstr "過往廣播"
 
 msgctxt "#30079"
 msgid "Video Highlights"
-msgstr ""
+msgstr "影片精華"
 
 msgctxt "#30080"
 msgid "Could not find any playable urls"
-msgstr ""
+msgstr "找不到任何可撥放的網址"
 
 msgctxt "#30081"
 msgid "IRC Chat"
-msgstr ""
+msgstr "IRC Chat"
 
 msgctxt "#30082"
 msgid "Live Previews"
-msgstr ""
+msgstr "直播預覽"
 
 msgctxt "#30083"
 msgid "Live Preview Settings"
-msgstr ""
+msgstr "直播預覽設定"
 
 msgctxt "#30084"
 msgid "Clear live preview cache"
-msgstr ""
+msgstr "刪除直播預覽快取"
 
 msgctxt "#30085"
 msgid "***** WARNING *****"
-msgstr ""
+msgstr "***** 警告 *****"
 
 msgctxt "#30086"
 msgid "These settings may allow this add-on to delete database entries and images[CR]for cached live previews."
-msgstr ""
+msgstr "這些設定可能造成此插件能夠刪除直播預覽快取的資料庫與影像[CR]。"
 
 msgctxt "#30087"
 msgid "Notifications"
-msgstr ""
+msgstr "通知"
 
 msgctxt "#30088"
 msgid "Game"
-msgstr ""
+msgstr "遊戲"
 
 msgctxt "#30089"
 msgid "Viewers"
-msgstr ""
+msgstr "觀眾數"
 
 msgctxt "#30090"
 msgid "Language"
-msgstr ""
+msgstr "語言"
 
 msgctxt "#30091"
 msgid "Mature"
@@ -290,311 +291,311 @@ msgstr ""
 
 msgctxt "#30092"
 msgid "Partner"
-msgstr ""
+msgstr "夥伴"
 
 msgctxt "#30093"
 msgid "Delay"
-msgstr ""
+msgstr "延遲"
 
 msgctxt "#30094"
 msgid "Automatic refresh interval (minutes)"
-msgstr ""
+msgstr "自動更新間隔 (分鐘)"
 
 msgctxt "#30095"
 msgid "Username is required"
-msgstr ""
+msgstr "使用者名稱為必要"
 
 msgctxt "#30096"
 msgid "API"
-msgstr ""
+msgstr "API"
 
 msgctxt "#30097"
 msgid "OAuth Client ID"
-msgstr ""
+msgstr "OAuth 用戶端 ID"
 
 msgctxt "#30098"
 msgid "Select Video by ID or URL"
-msgstr ""
+msgstr "依照 ID 與 URL 選擇影片"
 
 msgctxt "#30099"
 msgid "OAuth Token"
-msgstr ""
+msgstr "OAuth Token"
 
 msgctxt "#30100"
 msgid "Visit www.twitch.tv/settings/connections and [CR]'Register your application' for an OAuth Client-ID"
-msgstr ""
+msgstr "訪問 www.twitch.tv/settings/connections 與 [CR] '註冊應用程式' 以獲取 OAuth 用戶端-ID"
 
 msgctxt "#30101"
 msgid "Visit www.twitchapps.com/tmi to generate an OAuth token"
-msgstr ""
+msgstr "瀏覽 www.twitchapps.com/tmi 以生成 OAuth token"
 
 msgctxt "#30102"
 msgid "Source"
-msgstr ""
+msgstr "來源"
 
 msgctxt "#30103"
 msgid "1080p60"
-msgstr ""
+msgstr "1080p60"
 
 msgctxt "#30104"
 msgid "1080p30"
-msgstr ""
+msgstr "1080p30"
 
 msgctxt "#30105"
 msgid "720p60"
-msgstr ""
+msgstr "720p60"
 
 msgctxt "#30106"
 msgid "720p30"
-msgstr ""
+msgstr "720p30"
 
 msgctxt "#30107"
 msgid "540p30"
-msgstr ""
+msgstr "540p30"
 
 msgctxt "#30108"
 msgid "480p30"
-msgstr ""
+msgstr "480p30"
 
 msgctxt "#30109"
 msgid "360p30"
-msgstr ""
+msgstr "360p30"
 
 msgctxt "#30110"
 msgid "240p30"
-msgstr ""
+msgstr "240p30"
 
 msgctxt "#30111"
 msgid "144p30"
-msgstr ""
+msgstr "144p30"
 
 msgctxt "#30112"
 msgid "Quality may result in best match"
-msgstr ""
+msgstr "畫質會影響最符合結果"
 
 msgctxt "#30113"
 msgid "Uploads"
-msgstr ""
+msgstr "上傳"
 
 msgctxt "#30114"
 msgid "Confirm"
-msgstr ""
+msgstr "確定"
 
 msgctxt "#30115"
 msgid "Function cache has been reset"
-msgstr ""
+msgstr "功能快取已經被重置"
 
 msgctxt "#30116"
 msgid "Function cache reset failed"
-msgstr ""
+msgstr "功能快取重置失敗"
 
 msgctxt "#30117"
 msgid "Reset function cache?"
-msgstr ""
+msgstr "重置功能快取?"
 
 msgctxt "#30118"
 msgid "Developer"
-msgstr ""
+msgstr "開發者"
 
 msgctxt "#30120"
 msgid "Cache"
-msgstr ""
+msgstr "快取"
 
 msgctxt "#30121"
 msgid "Cache expire time (minutes)"
-msgstr ""
+msgstr "快取到期時間 (分鐘)"
 
 msgctxt "#30122"
 msgid "Reset function cache"
-msgstr ""
+msgstr "重置功能快取"
 
 msgctxt "#30123"
 msgid "Items per page"
-msgstr ""
+msgstr "每頁數量"
 
 msgctxt "#30124"
 msgid "Video Id/Url"
-msgstr ""
+msgstr "影片 Id/Url"
 
 msgctxt "#30125"
 msgid "Streams"
-msgstr ""
+msgstr "直播"
 
 msgctxt "#30126"
 msgid "Refresh"
-msgstr ""
+msgstr "重新整理"
 
 msgctxt "#30127"
 msgid "Login"
-msgstr ""
+msgstr "登入"
 
 msgctxt "#30128"
 msgid "OAuth token is required"
-msgstr ""
+msgstr "OAuth token 為必要"
 
 msgctxt "#30129"
 msgid "Error"
-msgstr ""
+msgstr "錯誤"
 
 msgctxt "#30130"
 msgid "Go to %s"
-msgstr ""
+msgstr "前往 %s"
 
 msgctxt "#30131"
 msgid "No results returned"
-msgstr ""
+msgstr "沒有回傳任何結果"
 
 msgctxt "#30132"
 msgid "OAuth token is required for access to authorized user functions."
-msgstr ""
+msgstr "OAuth token 在存取使用者已登入功能是必要的。"
 
 msgctxt "#30133"
 msgid "Authorize"
-msgstr ""
+msgstr "授權"
 
 msgctxt "#30134"
 msgid "Get your OAuth token by logging in/signing up to Twitch.tv here:"
-msgstr ""
+msgstr "由以下的網址登入 Twitch.tv 以取得你的 OAuth token:"
 
 msgctxt "#30135"
 msgid "Get OAuth token"
-msgstr ""
+msgstr "取得 OAuth token"
 
 msgctxt "#30136"
 msgid "Always ask"
-msgstr ""
+msgstr "一律詢問"
 
 msgctxt "#30138"
 msgid "*** Do NOT share your OAuth token. ***"
-msgstr ""
+msgstr "*** 請不要分享你的 OAuth token ***"
 
 msgctxt "#30139"
 msgid "Toggle follow"
-msgstr ""
+msgstr "切換追隨"
 
 msgctxt "#30140"
 msgid "Now following %s"
-msgstr ""
+msgstr "正在追隨 %s"
 
 msgctxt "#30141"
 msgid "Unfollowed %s"
-msgstr ""
+msgstr "未追隨 %s"
 
 msgctxt "#30142"
 msgid "Redirect URI"
-msgstr ""
+msgstr "重新導向 URI"
 
 msgctxt "#30143"
 msgid "Would you like to follow %s?"
-msgstr ""
+msgstr "你要追隨 %s 嗎?"
 
 msgctxt "#30144"
 msgid "Are you sure you want to unfollow %s?"
-msgstr ""
+msgstr "你確定要取消追隨 %s 嗎?"
 
 msgctxt "#30145"
 msgid "Toggle block user"
-msgstr ""
+msgstr "切換封鎖使用者"
 
 msgctxt "#30146"
 msgid "Blocked %s"
-msgstr ""
+msgstr "封鎖 %s"
 
 msgctxt "#30147"
 msgid "Unblocked %s"
-msgstr ""
+msgstr "取消封鎖 %s"
 
 msgctxt "#30148"
 msgid "Would you like to block %s?"
-msgstr ""
+msgstr "你要封鎖 %s 嗎?"
 
 msgctxt "#30149"
 msgid "Are you sure you want to unblock %s?"
-msgstr ""
+msgstr "你要取消封鎖 %s 嗎?"
 
 msgctxt "#30150"
 msgid "Blacklist %s"
-msgstr ""
+msgstr "封鎖清單 %s"
 
 msgctxt "#30151"
 msgid "Blacklisted %s"
-msgstr ""
+msgstr "黑名單 %s"
 
 msgctxt "#30152"
 msgid "Lists"
-msgstr ""
+msgstr "清單"
 
 msgctxt "#30153"
 msgid "Blacklist"
-msgstr ""
+msgstr "黑名單"
 
 msgctxt "#30154"
 msgid "Remove a user"
-msgstr ""
+msgstr "移除使用者"
 
 msgctxt "#30155"
 msgid "Remove a game"
-msgstr ""
+msgstr "移除遊戲"
 
 msgctxt "#30156"
 msgid "Remove all users"
-msgstr ""
+msgstr "移除所有使用者"
 
 msgctxt "#30157"
 msgid "Remove all games"
-msgstr ""
+msgstr "移除所有遊戲"
 
 msgctxt "#30158"
 msgid "Remove %s from blacklist"
-msgstr ""
+msgstr "從黑名單中移除 %s"
 
 msgctxt "#30159"
 msgid "Removed %s from blacklist"
-msgstr ""
+msgstr "已經從黑名單中移除 %s"
 
 msgctxt "#30160"
 msgid "Cleared %s %s"
-msgstr ""
+msgstr "清除 %s %s"
 
 msgctxt "#30161"
 msgid "Are you sure you want to clear %s %s?"
-msgstr ""
+msgstr "你確定要清除 %s %s 嗎?"
 
 msgctxt "#30162"
 msgid "Clear list"
-msgstr ""
+msgstr "清理清單"
 
 msgctxt "#30163"
 msgid "Set default quality"
-msgstr ""
+msgstr "設定預設畫質"
 
 msgctxt "#30164"
 msgid "Default '%s' quality '%s' set for %s"
-msgstr ""
+msgstr "預設 '%s' 畫質 '%s\" 設定給 %s"
 
 msgctxt "#30165"
 msgid "Removed default '%s' quality for %s"
-msgstr ""
+msgstr "移除預設 '%s' 畫質給 %s"
 
 msgctxt "#30166"
 msgid "Remove %s quality"
-msgstr ""
+msgstr "移除 %s 畫質"
 
 msgctxt "#30167"
 msgid "Default Qualities"
-msgstr ""
+msgstr "預設畫質"
 
 msgctxt "#30168"
 msgid "Clear default quality"
-msgstr ""
+msgstr "移除預設畫質"
 
 msgctxt "#30169"
 msgid "Choose Quality"
-msgstr ""
+msgstr "選擇畫質"
 
 msgctxt "#30170"
 msgid "Playlists"
-msgstr ""
+msgstr "播放清單"
 
 msgctxt "#30171"
 msgid "Collections"
@@ -602,163 +603,163 @@ msgstr ""
 
 msgctxt "#30172"
 msgid "Browse"
-msgstr ""
+msgstr "瀏覽"
 
 msgctxt "#30173"
 msgid "Xbox One"
-msgstr ""
+msgstr "Xbox One"
 
 msgctxt "#30174"
 msgid "Playstation 4"
-msgstr ""
+msgstr "Playstation 4"
 
 msgctxt "#30175"
 msgid "Videos"
-msgstr ""
+msgstr "影片"
 
 msgctxt "#30176"
 msgid "Clips"
-msgstr ""
+msgstr "剪輯"
 
 msgctxt "#30177"
 msgid "Invalid OAuth token"
-msgstr ""
+msgstr "不正確的 OAuth token"
 
 msgctxt "#30178"
 msgid "Missing required scopes: %s"
-msgstr ""
+msgstr "缺少必要範圍: %s"
 
 msgctxt "#30179"
 msgid "Client id mismatch"
-msgstr ""
+msgstr "用戶端 id 不正確"
 
 msgctxt "#30180"
 msgid "Go to '%s' - '%s' - '%s' to generate a new token"
-msgstr ""
+msgstr "前往 '%s' - '%s' -'%s' 以產生新的 token"
 
 msgctxt "#30181"
 msgid "Are you sure you want to blacklist %s?"
-msgstr ""
+msgstr "你確定要黑名單 %s 嗎?"
 
 msgctxt "#30184"
 msgid "Change sort by"
-msgstr ""
+msgstr "更改排序"
 
 msgctxt "#30185"
 msgid "Change sort direction"
-msgstr ""
+msgstr "更改方向"
 
 msgctxt "#30186"
 msgid "Change period"
-msgstr ""
+msgstr "更改期間"
 
 msgctxt "#30187"
 msgid "Popular"
-msgstr ""
+msgstr "熱門"
 
 msgctxt "#30188"
 msgid "Views"
-msgstr ""
+msgstr "觀看數"
 
 msgctxt "#30189"
 msgid "Add a language"
-msgstr ""
+msgstr "新增語言"
 
 msgctxt "#30190"
 msgid "Remove a language"
-msgstr ""
+msgstr "移除語言"
 
 msgctxt "#30191"
 msgid "Remove a stream quality"
-msgstr ""
+msgstr "移除直播畫質"
 
 msgctxt "#30192"
 msgid "Remove a video quality"
-msgstr ""
+msgstr "移除影片畫質"
 
 msgctxt "#30193"
 msgid "Remove a clip quality"
-msgstr ""
+msgstr "移除剪輯畫質"
 
 msgctxt "#30194"
 msgid "Remove all stream qualities"
-msgstr ""
+msgstr "移除所有直播畫質"
 
 msgctxt "#30195"
 msgid "Remove all video qualities"
-msgstr ""
+msgstr "移除所有影片畫質"
 
 msgctxt "#30196"
 msgid "Remove all clip qualities"
-msgstr ""
+msgstr "移除所有剪輯畫質"
 
 msgctxt "#30197"
 msgid "Requires confirmation"
-msgstr ""
+msgstr "需要確認"
 
 msgctxt "#30198"
 msgid "Requires subscription to %s"
-msgstr ""
+msgstr "需要訂閱 %s"
 
 msgctxt "#30199"
 msgid "Connection failed"
-msgstr ""
+msgstr "連線失敗"
 
 msgctxt "#30200"
 msgid "No %s found"
-msgstr ""
+msgstr "沒有 %s 找尋到"
 
 msgctxt "#30201"
 msgid "Bandwidth"
-msgstr ""
+msgstr "頻寬"
 
 msgctxt "#30202"
 msgid "Currently Live"
-msgstr ""
+msgstr "正在線上"
 
 msgctxt "#30203"
 msgid "Went Live"
-msgstr ""
+msgstr "上線"
 
 msgctxt "#30204"
 msgid "Live notifications"
-msgstr ""
+msgstr "上線通知"
 
 msgctxt "#30205"
 msgid "Audible"
-msgstr ""
+msgstr "可聽"
 
 msgctxt "#30206"
 msgid "Playback failed"
-msgstr ""
+msgstr "播放失敗"
 
 msgctxt "#30207"
 msgid "Retrying in %d seconds"
-msgstr ""
+msgstr "在 %d 秒後重試"
 
 msgctxt "#30208"
 msgid "Attempting to reconnect to %s"
-msgstr ""
+msgstr "嘗試重新連線至 %s"
 
 msgctxt "#30209"
 msgid "Attempt #%d"
-msgstr ""
+msgstr "嘗試 #%d"
 
 msgctxt "#30210"
 msgid "Attempt reconnection to live streams"
-msgstr ""
+msgstr "嘗試重新連線至直播"
 
 msgctxt "#30211"
 msgid "Enabled"
-msgstr ""
+msgstr "啟用"
 
 msgctxt "#30212"
 msgid "Failed to connect to Twitch API"
-msgstr ""
+msgstr "連線到 Twitch API 失敗"
 
 msgctxt "#30213"
 msgid "Followers"
-msgstr ""
+msgstr "追隨者"
 
 msgctxt "#30214"
 msgid "Items"
@@ -766,7 +767,7 @@ msgstr ""
 
 msgctxt "#30215"
 msgid "Duration"
-msgstr ""
+msgstr "期間"
 
 msgctxt "#30216"
 msgid "Curated"
@@ -774,196 +775,196 @@ msgstr ""
 
 msgctxt "#30217"
 msgid "Press OK to resolve"
-msgstr ""
+msgstr "按下 OK 以解決"
 
 msgctxt "#30218"
 msgid "Supported video ids: a123435, c123435, v123435, videos123435[CR]Example urls:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
-msgstr ""
+msgstr "支援的影片 id: a123435, c123435, v123435, videos123435[CR]範例 url:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
 
 msgctxt "#30219"
 msgid "Main Menu"
-msgstr ""
+msgstr "主選單"
 
 msgctxt "#30220"
 msgid "Failed to get url, try again shortly."
-msgstr ""
+msgstr "取得連結失敗，稍後再嘗試。"
 
 msgctxt "#30221"
 msgid "Unknown"
-msgstr ""
+msgstr "未知"
 
 msgctxt "#30222"
 msgid "VODCast highlight color"
-msgstr ""
+msgstr "VODCast 強調顏色"
 
 msgctxt "#30223"
 msgid "Use inputstream.adaptive"
-msgstr ""
+msgstr "使用 inputstream.adaptive"
 
 msgctxt "#30224"
 msgid "Configure inputstream.adaptive"
-msgstr ""
+msgstr "設定 inputstream.adaptive"
 
 msgctxt "#30225"
 msgid "inputstream.adaptive is enabled in the Twitch settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
-msgstr ""
+msgstr "inputstream.adaptive 在 Twitch 設定內為啟用，但是 inputstream.adaptive 似乎是未啟用狀態。你要現在啟用 inputstream.adaptive 嗎?"
 
 msgctxt "#30226"
 msgid "The installed inputstream.adaptive add-on does not meet the version requirement(%s), and has been disabled in the Twitch add-on settings."
-msgstr ""
+msgstr "已經安裝的 inputstream.adaptive 插件不符合版本需求(%s)，在 Twitch 插件中已經被取消啟用。"
 
 msgctxt "#30227"
 msgid "Revoke Token"
-msgstr ""
+msgstr "撤銷 Token"
 
 msgctxt "#30228"
 msgid "Are you sure you want to revoke your OAuth token?"
-msgstr ""
+msgstr "你確定要撤銷你的 OAuth token嗎?"
 
 msgctxt "#30229"
 msgid "OAuth token has been revoked"
-msgstr ""
+msgstr "OAuth token 已經被撤銷"
 
 msgctxt "#30230"
 msgid "OAuth token has been updated"
-msgstr ""
+msgstr "OAuth token 已經更新"
 
 msgctxt "#30231"
 msgid "%s started streaming %s"
-msgstr ""
+msgstr "%s 開始直播 %s"
 
 msgctxt "#30232"
 msgid "Notify at start"
-msgstr ""
+msgstr "啟動時發送提示"
 
 msgctxt "#30233"
 msgid "Group notifications at start"
-msgstr ""
+msgstr "啟動時發送群組提示"
 
 msgctxt "#30234"
 msgid "Reset cache on Refresh"
-msgstr ""
+msgstr "重整時重置快取"
 
 msgctxt "#30235"
 msgid "New search"
-msgstr ""
+msgstr "新搜尋"
 
 msgctxt "#30236"
 msgid "Search history size"
-msgstr ""
+msgstr "搜尋記錄大小"
 
 msgctxt "#30237"
 msgid "Clear search history?"
-msgstr ""
+msgstr "清除搜尋紀錄?"
 
 msgctxt "#30238"
 msgid "Remove %s from search history?"
-msgstr ""
+msgstr "移除 %s 自搜尋紀錄?"
 
 msgctxt "#30239"
 msgid "Remove %s"
-msgstr ""
+msgstr "移除 %s"
 
 msgctxt "#30240"
 msgid "Clear search history"
-msgstr ""
+msgstr "清除搜尋紀錄"
 
 msgctxt "#30241"
 msgid "Search history cleared"
-msgstr ""
+msgstr "搜尋紀錄已被清除"
 
 msgctxt "#30242"
 msgid "Removed %s from search history"
-msgstr ""
+msgstr "移除 %s 自搜尋紀錄"
 
 msgctxt "#30243"
 msgid "Maintenance"
-msgstr ""
+msgstr "維護"
 
 msgctxt "#30244"
 msgid "Search History"
-msgstr ""
+msgstr "搜尋紀錄"
 
 msgctxt "#30245"
 msgid "Delete streams search history"
-msgstr ""
+msgstr "刪除直播搜尋紀錄"
 
 msgctxt "#30246"
 msgid "Delete channels search history"
-msgstr ""
+msgstr "刪除頻道搜尋紀錄"
 
 msgctxt "#30247"
 msgid "Delete games search history"
-msgstr ""
+msgstr "刪除遊戲搜尋紀錄"
 
 msgctxt "#30248"
 msgid "Delete video id/url search history"
-msgstr ""
+msgstr "刪除影片 id/url 搜尋紀錄"
 
 msgctxt "#30249"
 msgid "Other"
-msgstr ""
+msgstr "其他"
 
 msgctxt "#30250"
 msgid "Delete storage.json"
-msgstr ""
+msgstr "刪除 storage.json"
 
 msgctxt "#30251"
 msgid "Are you sure you want to delete %s?"
-msgstr ""
+msgstr "你確定要刪除 %s 嗎?"
 
 msgctxt "#30252"
 msgid "Deleting %s succeeded"
-msgstr ""
+msgstr "刪除 %s 成功"
 
 msgctxt "#30253"
 msgid "Deleting %s failed"
-msgstr ""
+msgstr "刪除 %s 失敗"
 
 msgctxt "#30254"
 msgid "Adaptive"
-msgstr ""
+msgstr "自適應"
 
 msgctxt "#30255"
 msgid "Thumbnail size"
-msgstr ""
+msgstr "預覽圖大小"
 
 msgctxt "#30256"
 msgid "Large"
-msgstr ""
+msgstr "大"
 
 msgctxt "#30257"
 msgid "Medium"
-msgstr ""
+msgstr "中"
 
 msgctxt "#30258"
 msgid "Small"
-msgstr ""
+msgstr "小"
 
 msgctxt "#30259"
 msgid "Live preview refresh interval (minutes)"
-msgstr ""
+msgstr "直播預覽刷新間隔(分鐘)"
 
 msgctxt "#30260"
 msgid "Limit to 30 fps"
-msgstr ""
+msgstr "限制至 30fps"
 
 msgctxt "#30261"
 msgid "Private API Credentials"
-msgstr ""
+msgstr "私有 API 憑證"
 
 msgctxt "#30262"
 msgid "Change languages"
-msgstr ""
+msgstr "更改語言"
 
 msgctxt "#30263"
 msgid "Frame rate limit"
-msgstr ""
+msgstr "幀數限制"
 
 msgctxt "#30264"
 msgid "Follow"
-msgstr ""
+msgstr "追隨"
 
 msgctxt "#30265"
 msgid "Unfollow"
-msgstr ""
+msgstr "未追隨"

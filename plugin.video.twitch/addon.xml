@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.twitch" version="2.5.11+matrix.1" name="Twitch" provider-name="anxdpanic, A Talented Community">
+<addon id="plugin.video.twitch" version="2.5.12+matrix.1" name="Twitch" provider-name="anxdpanic, A Talented Community">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.six" version="1.11.0"/>
@@ -16,7 +16,7 @@
       <fanart>resources/media/fanart.jpg</fanart>
     </assets>
     <news>
-[fix] fix follow/unfollow channels - apo86
+[add] new menu icons - Goldenfreddy0703
 [lang] updated translations from Weblate
         </news>
     <platform>all</platform>
@@ -24,23 +24,31 @@
     <license>GPL-3.0-only</license>
     <forum>https://twitchaddon.panicked.xyz/forum</forum>
     <reuselanguageinvoker>true</reuselanguageinvoker>
-    <summary lang="da_DK">Twitch video plugin</summary>
-    <summary lang="de_DE">Twitch video plugin</summary>
+    <summary lang="da_DK">Twitch video-plugin</summary>
+    <summary lang="de_DE">Twitch Video-Plugin</summary>
     <summary lang="en_GB">Twitch video plugin</summary>
-    <summary lang="es_ES">Twitch video plugin</summary>
+    <summary lang="es_ES">Complemento de vídeo para Twitch</summary>
+    <summary lang="es_MX">Plugin de video de Twitch</summary>
     <summary lang="fr_FR">Twitch video plugin</summary>
+    <summary lang="ko_KR">트위치 비디오 플러그인</summary>
     <summary lang="nb_NO">Tillegg for Twitch</summary>
     <summary lang="nl_NL">Twitch video plugin</summary>
-    <summary lang="pl_PL">Twitch video plugin</summary>
+    <summary lang="pl_PL">Wtyczka Twitch</summary>
     <summary lang="ru_RU">Видео плагин Twitch</summary>
+    <summary lang="zh_CN">Twitch 视频插件</summary>
+    <summary lang="zh_TW">Twitch 影片插件</summary>
     <description lang="da_DK">Se dine favorit gaming-streams!</description>
-    <description lang="de_DE">Schaue die besten Gaming-Streams!</description>
+    <description lang="de_DE">Die besten Gaming-Streams ansehen!</description>
     <description lang="en_GB">Watch your favorite gaming streams!</description>
     <description lang="es_ES">¡Mira los streams de tus juegos favoritos!</description>
+    <description lang="es_MX">¡Mira tus transmisiones de videojuegos favoritas!</description>
     <description lang="fr_FR">Regardez les streams de vos jeux favoris !</description>
+    <description lang="ko_KR">좋아하는 게임 스트림을 시청하세요!</description>
     <description lang="nb_NO">Se dine favorittstrømmere!</description>
     <description lang="nl_NL">Bekijk je favoriete gaming-streams!</description>
     <description lang="pl_PL">Oglądaj ulubione programy TwitchTV!</description>
     <description lang="ru_RU">Смотрите любимые игровые трансляции!</description>
+    <description lang="zh_CN">观看您喜爱的游戏流！</description>
+    <description lang="zh_TW">觀看你最愛的遊戲直播!</description>
   </extension>
 </addon>

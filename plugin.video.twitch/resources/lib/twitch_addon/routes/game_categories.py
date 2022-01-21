@@ -18,7 +18,7 @@ def route(game):
     kodi.set_view('files', set_sort=False)
     context_menu = list()
     kodi.create_item({'label': i18n('live_channels'), 'path': {'mode': MODES.GAMESTREAMS, 'game': game}, 'context_menu': context_menu,
-                      'info': {'plot': '%s - %s' % (game, i18n('live_channels'))}})
+                      'info': {'plot': '%s - %s' % (game, i18n('live_channels'))}, 'thumbfile': 'Live_Channels.png'})
     kodi.create_item({'label': i18n('videos'), 'path': {'mode': MODES.CHANNELVIDEOS, 'game': game},
-                      'info': {'plot': '%s - %s' % (game, i18n('videos'))}})
+                      'info': {'plot': '%s - %s' % (game, i18n('videos'))}, 'thumbfile': 'Videos.png'})
     kodi.end_of_directory()

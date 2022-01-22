@@ -1,3 +1,7 @@
+Version 1.0.3
+
+-  Increased settings limit for CBC SPorts Archives from 150 to 500 items
+
 Version 1.0.2
 
 -  Added additional stream and video validation checking to eliminate Kodi playback errors.

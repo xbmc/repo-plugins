@@ -98,7 +98,7 @@ class EpgApi:
             channels = [channels]
 
         # Python 2.7 doesn't support .timestamp(), and windows doesn't do '%s', so we need to calculate it ourself
-        epoch = datetime(1970, 1, 1, tzinfo=dateutil.tz.gettz('UTC'))
+        epoch = datetime(1970, 1, 1, tzinfo=dateutil.tz.UTC)
 
         # Generate dates in UTC format
         if date_from is not None:
@@ -167,7 +167,7 @@ class EpgApi:
         else:
             date_obj = dateutil.parser.parse(date)
 
-        # Mark as midnight
-        date_obj = date_obj.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=dateutil.tz.gettz('CET'))
-        date_obj = date_obj.astimezone(dateutil.tz.gettz('UTC'))
+        # Mark as midnight in UTC
+        date_obj = date_obj.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=dateutil.tz.tzlocal())
+        date_obj = date_obj.astimezone(dateutil.tz.UTC)
         return date_obj

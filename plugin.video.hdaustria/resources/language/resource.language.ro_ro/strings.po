@@ -1,0 +1,205 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ro\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+### MENUS
+msgctxt "#30007"
+msgid "Channels"
+msgstr "Canale"
+
+msgctxt "#30008"
+msgid "Show channel based overview"
+msgstr "Afișați o prezentare generală pentru fiecare canal TV"
+
+msgctxt "#30009"
+msgid "Search"
+msgstr "Căutare"
+
+msgctxt "#30010"
+msgid "Search through the catalogue"
+msgstr "Căutare în bibliotecă"
+
+
+### SUBMENUS
+msgctxt "#30051"
+msgid "Watch live [B]{channel}[/B]"
+msgstr "Urmărește în direct [B]{channel}[/B]"
+
+msgctxt "#30052"
+msgid "Restart [B]{program}[/B] from the beginning"
+msgstr "Reporniți [B]{program}[/B] de la început"
+
+msgctxt "#30053"
+msgid "TV guide for [B]{channel}[/B]"
+msgstr "Ghid TV pentru [B]{channel}[/B]"
+
+msgctxt "#30054"
+msgid "Browse the TV guide for [B]{channel}[/B]"
+msgstr "Răsfoiește ghidul TV pentru [B]{channel}[/B]"
+
+msgctxt "#30055"
+msgid "Replay for [B]{channel}[/B]"
+msgstr "Replay pentru [B]{channel}[/B]"
+
+msgctxt "#30056"
+msgid "Browse the replay catalog for [B]{channel}[/B]"
+msgstr "Răsfoiește biblioteca replay pentru [B]{channel}[/B]"
+
+
+### CODE
+msgctxt "#30203"
+msgid "Your credentials are not valid!"
+msgstr "Datele dvs de logare nu sunt corecte!"
+
+msgctxt "#30204"
+msgid "Enter PIN"
+msgstr "Introduceți PIN"
+
+msgctxt "#30205"
+msgid "The PIN you have entered is invalid!"
+msgstr "PIN-ul introdus este incorect!"
+
+msgctxt "#30208"
+msgid "[B]{days} days[/B] remaining"
+msgstr "[B]{days} zile[/B] rămase"
+
+msgctxt "#30209"
+msgid "[B]1 day[/B] remaining"
+msgstr "[B]1 zi[/B] rămasă"
+
+msgctxt "#30210"
+msgid "[B]{hours} hours[/B] remaining"
+msgstr "[B]{hours} ore[/B] rămase"
+
+msgctxt "#30211"
+msgid "[B]1 hour[/B] remaining"
+msgstr "[B]1 oră[/B] rămasă"
+
+msgctxt "#30212"
+msgid "[B]less then 1 hour[/B] remaining"
+msgstr "[B]mai puțin de 1 oră[/B] rămasă"
+
+msgctxt "#30213"
+msgid "[B]Now:[/B] {start} - {end}\n» {title}"
+msgstr "[B]Acum:[/B] {start} - {end}\n» {title}"
+
+msgctxt "#30214"
+msgid "[B]Next:[/B] {start} - {end}\n» {title}"
+msgstr "[B]Urmează:[/B] {start} - {end}\n» {title}"
+
+
+### Dates
+msgctxt "#30301"
+msgid "Yesterday"
+msgstr "Ieri"
+
+msgctxt "#30302"
+msgid "Today"
+msgstr "Astăzi"
+
+msgctxt "#30303"
+msgid "Tomorrow"
+msgstr "Mâine"
+
+
+### MESSAGES
+msgctxt "#30701"
+msgid "To watch a video, you need to enter your credentials. Do you want to enter them now?"
+msgstr "Pentru a viziona conținutul, trebuie să vă autentificați. Vă autentificați acum?"
+
+msgctxt "#30702"
+msgid "An error occurred while authenticating: {error}."
+msgstr "A apărut o eroare la autentificare: {eroare}."
+
+msgctxt "#30712"
+msgid "The video is unavailable and can't be played right now."
+msgstr "Video-ul este indisponibil și nu poate fi redat momentan."
+
+
+### SETTINGS
+msgctxt "#30800"
+msgid "Credentials"
+msgstr "Autentificare"
+
+msgctxt "#30801"
+msgid "Credentials"
+msgstr "Autentificare"
+
+msgctxt "#30802"
+msgid "Email address"
+msgstr "adresă e-mail"
+
+msgctxt "#30803"
+msgid "Password"
+msgstr "Parolă"
+
+msgctxt "#30804"
+msgid "Provider"
+msgstr "Furnizor"
+
+msgctxt "#30820"
+msgid "Interface"
+msgstr "Interfață"
+
+msgctxt "#30821"
+msgid "Channels"
+msgstr "Canale"
+
+msgctxt "#30822"
+msgid "Parental Content"
+msgstr "Control Parental"
+
+msgctxt "#30823"
+msgid "Ask PIN for 18+ channels"
+msgstr "Introduceți PIN pentru canale 18+"
+
+msgctxt "#30824"
+msgid "Hide 18+ channels"
+msgstr "Ascunde canalele 18+"
+
+msgctxt "#30825"
+msgid "Allow 18+ channels without asking PIN"
+msgstr "Permiteți canalele 18+ fără introducere PIN"
+
+msgctxt "#30840"
+msgid "Integration"
+msgstr "Integrare"
+
+msgctxt "#30841"
+msgid "IPTV Manager"
+msgstr "IPTV Manager"
+
+msgctxt "#30842"
+msgid "Install IPTV Manager add-on…"
+msgstr "Instalați suplimentul IPTV Manager …"
+
+msgctxt "#30843"
+msgid "Enable IPTV Manager integration"
+msgstr "Activați integrarea cu IPTV Manager"
+
+msgctxt "#30844"
+msgid "IPTV Manager settings…"
+msgstr "Setări IPTV Manager"
+
+msgctxt "#30880"
+msgid "Expert"
+msgstr "Expert"
+
+msgctxt "#30881"
+msgid "Logging"
+msgstr "Logging"
+
+msgctxt "#30882"
+msgid "Enable debug logging"
+msgstr "Activați debug logging"
+
+msgctxt "#30883"
+msgid "Install Kodi Logfile Uploader…"
+msgstr "Instalați Kodi Logfile Uploader…"
+
+msgctxt "#30884"
+msgid "Open Kodi Logfile Uploader…"
+msgstr "Deschideți Kodi Logfile Uploader…"

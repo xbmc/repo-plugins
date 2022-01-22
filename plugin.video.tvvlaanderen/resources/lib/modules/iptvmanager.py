@@ -51,7 +51,7 @@ class IPTVManager:
 
         streams = []
 
-        channels = channel_api.get_channels(filter_pin=kodiutils.get_setting_bool('interface_adult') != SETTINGS_ADULT_HIDE)
+        channels = channel_api.get_channels(filter_pin=kodiutils.get_setting_int('interface_adult') == SETTINGS_ADULT_HIDE)
         for channel in channels:
             streams.append(dict(
                 name=channel.title,
@@ -72,7 +72,7 @@ class IPTVManager:
         epg = defaultdict(list)
 
         # Load EPG data
-        channels = channel_api.get_channels(filter_pin=kodiutils.get_setting_bool('interface_adult') != SETTINGS_ADULT_HIDE)
+        channels = channel_api.get_channels(filter_pin=kodiutils.get_setting_int('interface_adult') == SETTINGS_ADULT_HIDE)
         for date in ['yesterday', 'today', 'tomorrow']:
             for channel, programs in epg_api.get_guide_with_capi([channel.station_id for channel in channels], date).items():
                 for program in programs:

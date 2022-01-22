@@ -151,6 +151,8 @@ def set_addon_enabled(addon_id, enabled=True):
 def get_icon():
     return translate_path('special://home/addons/{0!s}/icon.png'.format(get_id()))
 
+def get_thumb(filename):
+    return translate_path('special://home/addons/{0!s}/resources/media/thumbnails/{1!s}'.format(get_id(),filename))
 
 def get_fanart():
     return translate_path('special://home/addons/{0!s}/fanart.png'.format(get_id()))
@@ -226,10 +228,12 @@ def create_item(item_dict, add=True):
     path = item_dict.get('path', '')
     path = path if isinstance(path, string_types) else get_plugin_url(path)
     list_item = ListItem(label=item_dict.get('label', ''), label2=item_dict.get('label2', ''), path=path)
+    thumbfile = item_dict.get('thumbfile', None)
 
     icon = get_icon()
+    thumb = get_thumb(thumbfile) if thumbfile else icon
     fanart = get_fanart()
-    art = item_dict.get('art', {'icon': icon, 'thumb': icon, 'fanart': fanart})
+    art = item_dict.get('art', {'icon': icon, 'thumb': thumb, 'fanart': fanart})
     if not art.get('icon', None):
         art['icon'] = icon
     if not art.get('thumb', None):

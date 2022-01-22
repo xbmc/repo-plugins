@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30001">
+        <setting id="use_720P" type="bool" label="30017" default="false"/>
+        <setting id="run_wizard" type="bool" label="30016" default="true"/>
+        <setting label="30004" type="slider" id="url_cache_minutes" default="240" range="60,60,1200" option="int" />
+    </category>
+    <category label="30002">
+        <setting id="use_backend" type="bool" label="30008" default="true"/>
+        <setting subsetting="true" label="30009" type="slider" id="max_program_metadate_cache_items" default="2000" range="500,500,2000" option="int" />
+    </category>
+    <category label="30003">
+        <setting label="30006" type="slider" id="max_news_items" default="39" range="10,10,60" option="int" />
+        <setting label="30007" type="slider" id="max_ataglance_items" default="83" range="44,40,1000" option="int" />
+    </category>
+</settings>

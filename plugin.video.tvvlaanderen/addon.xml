@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tvvlaanderen" name="TV Vlaanderen" version="1.0.4+matrix.1" provider-name="Michaël Arnauts">
+<addon id="plugin.video.tvvlaanderen" name="TV Vlaanderen" version="1.0.5+matrix.1" provider-name="Michaël Arnauts">
     <requires>
-        <import addon="xbmc.python" version="3.0.0"/>
-        <import addon="script.module.dateutil" version="2.6.0"/>
-        <import addon="script.module.inputstreamhelper" version="0.5.1"/>
-        <import addon="script.module.pysocks" version="1.6.8" optional="true"/>
-        <import addon="script.module.requests" version="2.22.0"/>
-        <import addon="script.module.routing" version="0.2.0"/>
-        <import addon="script.module.pyjwt" version="1.6.4"/>
-        <import addon="inputstream.adaptive" version="2.4.3"/>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.dateutil" version="2.6.0" />
+        <import addon="script.module.inputstreamhelper" version="0.5.1" />
+        <import addon="script.module.pysocks" version="1.6.8" optional="true" />
+        <import addon="script.module.requests" version="2.22.0" />
+        <import addon="script.module.routing" version="0.2.0" />
+        <import addon="script.module.pyjwt" version="1.6.4" />
+        <import addon="inputstream.adaptive" version="2.4.3" />
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon_entry.py">
         <provides>video</provides>
@@ -22,8 +22,10 @@
         <disclaimer lang="en_GB">This add-on is not officially commissioned/supported by TV Vlaanderen and is provided 'as is' without any warranty of any kind. TV Vlaanderen is a brand of Canal+ Luxembourg S. à r.l.</disclaimer>
         <platform>all</platform>
         <license>GPL-3.0-only</license>
-        <news>v1.0.4 (2021-06-27)
-- Fix playback of some channels.</news>
+        <news>v1.0.5 (2022-01-22)
+- Fix incorrect time in EPG view.
+- Fix hiding of adult channels in EPG view.
+- Add translations.</news>
         <source>https://github.com/add-ons/plugin.video.tvvlaanderen</source>
         <assets>
             <icon>resources/icon.png</icon>

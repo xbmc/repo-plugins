@@ -1,12 +1,35 @@
 # Changelog
 
-## [v1.0.4](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.4) (2021-06-25)
+## [v1.0.5](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.5) (2022-01-22)
 
-[Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.3...v1.0.4)
+[Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.4...v1.0.5)
+
+**Implemented enhancements:**
+
+- Add support for Focus Sat in Romania [\#42](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/42) ([michaelarnauts](https://github.com/michaelarnauts))
+- Add support for HD Austria [\#39](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/39) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Fixed bugs:**
+
+- Remove hardcoded CET timezone and fix timezone in IPTV Manager data [\#45](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/45) ([michaelarnauts](https://github.com/michaelarnauts))
+- Fix adult settings for iptv-manager channel list [\#40](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/40) ([bananenfisch](https://github.com/bananenfisch))
+
+**Merged pull requests:**
+
+- HD Austria: language, readme, addon.xml, screenshots [\#48](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/48) ([bananenfisch](https://github.com/bananenfisch))
+- Adding romanian translation [\#43](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/43) ([derzis](https://github.com/derzis))
+
+## [v1.0.4](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.4) (2021-06-27)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0...v1.0.4)
 
 **Fixed bugs:**
 
 - Set a user-agent [\#34](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/34) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v1.0](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0) (2021-06-27)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.3...v1.0)
 
 ## [v1.0.3](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.3) (2021-02-04)
 
@@ -15,11 +38,6 @@
 **Implemented enhancements:**
 
 - Add http proxy support [\#30](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/30) ([michaelarnauts](https://github.com/michaelarnauts))
-
-**Merged pull requests:**
-
-- Make use of git archive [\#32](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/32) ([dagwieers](https://github.com/dagwieers))
-- Improve tests [\#31](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/31) ([michaelarnauts](https://github.com/michaelarnauts))
 
 ## [v1.0.2](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.2) (2020-12-21)
 
@@ -51,10 +69,6 @@
 
 - Fix EPG in the channels view [\#25](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/25) ([michaelarnauts](https://github.com/michaelarnauts))
 - Depend on inputstreamhelper to make sure widevine is installed [\#20](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/20) ([mediaminister](https://github.com/mediaminister))
-
-**Merged pull requests:**
-
-- Run tests on Python 3.9 [\#22](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/22) ([michaelarnauts](https://github.com/michaelarnauts))
 
 ## [v0.0.1](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v0.0.1) (2020-11-11)
 

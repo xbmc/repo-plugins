@@ -6,13 +6,15 @@ from __future__ import absolute_import, division, unicode_literals
 import json
 import logging
 import os
+import re
 import time
 import uuid
 from hashlib import md5
 
 from requests import HTTPError
 
-from resources.lib.solocoo import SOLOCOO_API, TENANTS, util
+from resources.lib.solocoo import SOLOCOO_API, util
+from resources.lib.solocoo.config import TENANTS
 from resources.lib.solocoo.exceptions import InvalidLoginException, InvalidTokenException
 
 try:  # Python 3
@@ -260,11 +262,13 @@ class AuthApi:
             params=dict(
                 a=self._tenant.get('app'),
                 s=time.time() * 100,  # unixtime in milliseconds
+                d='PC',
             )
         )
 
         # Extract the path from the form, the form posts to /
-        login_url = urljoin(login_page.url, '/')
+        form_action = re.compile(r'<form action="([^"]+)"').search(login_page.text).group(1)
+        login_url = urljoin(login_page.url, form_action)
 
         # Submit credentials
         reply = util.http_post(
@@ -275,7 +279,8 @@ class AuthApi:
             )
         )
 
-        if 'De gebruikersnaam of het wachtwoord dat u heeft ingegeven is niet correct' in reply.text:
+        # We should get redirected, if not, there was an issue with the credentials.
+        if not reply.history:
             raise InvalidLoginException
 
         # Extract query parameters from redirected url

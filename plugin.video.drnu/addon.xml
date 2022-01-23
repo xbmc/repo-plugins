@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="5.0.16+matrix.1" name="DR TV" provider-name="TermeHansen">
+<addon id="plugin.video.drnu" version="5.0.17+matrix.1" name="DR TV" provider-name="TermeHansen">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
-        <import addon="script.module.buggalo" version="1.2.0"/>
-        <import addon="script.module.requests" version="2.22.0+matrix.1" />
+        <import addon="script.module.requests" version="2.25.1+matrix.1" />
         <import addon="script.module.requests-cache" version="0.5.2+matrix.2"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
@@ -26,10 +25,9 @@
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
        </assets>
-       <news>-[B]Version 5.0.16 - 2021-03-30[/B]
-- fix bug on ok() dialog in matrix
-- fix bugs in favorit programs functionality
-- new setting to have area chooser item in root
+       <news>-[B]Version 5.0.17 - 2022-01-22[/B]
+- add subtitles to livestreams
+- change exception handling to pastebin from buggalo
     </news>
     </extension>
 </addon>

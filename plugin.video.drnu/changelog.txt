@@ -1,3 +1,7 @@
+[B]Version 5.0.17 - 2022-01-22[/B]
+- add subtitles to livestreams
+- change exception handling to pastebin from buggalo
+
 [B]Version 5.0.16 - 2021-03-30[/B]
 - fix bug on ok() dialog in matrix
 - fix bugs in favorit programs functionality

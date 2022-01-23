@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.cc.com" version="1.0.0" name="Comedy Central" provider-name="nixxo">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.simplecache" version="2.0.0"/>
+        <import addon="script.module.requests" version="2.25.0"/>
+        <import addon="script.module.inputstreamhelper" version="0.5.8" optional="true"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Watch full episodes and clips from your favorite Comedy Central shows.</summary>
+        <description lang="en_GB">Comedy Central brings you the funniest stuff on the planet. Watch hit shows like Workaholics, Tosh.0, The Daily Show with Trevor Noah, Key and Peele @midnight and Broad City, plus cutting-edge stand-up comedy you won't find anywhere else. Head to CC.com for full episodes, exclusives, previews and more.</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/nixxo/plugin.video.cc.com</source>
+        <website>https://www.cc.com/</website>
+        <news>[B]1.0.0[/B]
+- first release on kodi addons repo
+- final fixes
+
+[B]0.0.7[/B]
+- improved thumbnail setup
+- improved setContent
+- improved info extraction to avoid NoneType errors
+- added offscreen=True to listitem creation
+- created getPlaylist
+- improved settings
+- using f-strings
+- urllib > requests
+- moved videoInfo update before loop
+- addonutils improvements
+
+[B]v0.0.6[/B]
+- improved translations
+- made settings.xml with kodi19 conventions
+- implemented better quality selection
+- added "Full Episodes" menu item
+
+[B]v0.0.5[/B]
+- added inputstream helper option
+- fixed single video title
+- settings cleanup
+
+[B]v0.0.4[/B]
+- using cache to save video info
+- added duration/airdate to videos
+- code improvements and cleanup
+
+[B]v0.0.3[/B]
+- yt-dlp updated to 2021.10.22
+- pull listitem infos to set plot on all playlist elements
+- improved settings and localization
+
+[B]v0.0.2[/B]
+- playlist index fix
+- strptime workaround
+
+[B]v0.0.1[/B]
+- first release</news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.png</fanart>
+        </assets>
+    </extension>
+</addon>

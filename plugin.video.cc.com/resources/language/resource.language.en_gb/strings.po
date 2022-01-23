@@ -1,0 +1,115 @@
+# Kodi Media Center language file
+# Addon Name: "Comedy Central"
+# Addon id: plugin.video.cc.com
+# Addon Provider: nixxo
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr ""
+
+msgctxt "#31000"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#31001"
+msgid "Use InputStream Adaptive"
+msgstr ""
+
+msgctxt "#31002"
+msgid "Manual quality selection"
+msgstr ""
+
+msgctxt "#31003"
+msgid "Select Preferred Maximum Quality"
+msgstr ""
+
+msgctxt "#31004"
+msgid "Low definition - 360p"
+msgstr ""
+
+msgctxt "#31005"
+msgid "Standard definition - 540p"
+msgstr ""
+
+msgctxt "#31006"
+msgid "High definition - 720p"
+msgstr ""
+
+msgctxt "#31007"
+msgid "Full HD - 1080p"
+msgstr ""
+
+msgctxt "#31008"
+msgid "Highest Available"
+msgstr ""
+
+msgctxt "#31010"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#31011"
+msgid "Enable developer mode"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Shows"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Full Episodes"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Standup"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Digital Originals"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Load More"
+msgstr ""
+
+msgctxt "#33001"
+msgid "Url not supported, check log."
+msgstr ""
+
+msgctxt "#33002"
+msgid "No json data found, check log."
+msgstr ""
+
+msgctxt "#33003"
+msgid "Video not available."
+msgstr ""
+
+msgctxt "#33004"
+msgid "Something went wrong, Try again..."
+msgstr ""
+
+msgctxt "#33005"
+msgid "_type not supported. See log."
+msgstr ""
+
+msgctxt "#41001"
+msgid "Use InputStream Adaptive and let it manage quality."
+msgstr ""
+
+msgctxt "#41002"
+msgid "Force maximum quality to InputStream Adaptive as well."
+msgstr ""
+
+msgctxt "#41003"
+msgid "Maximum quality to be used by the plugin."
+msgstr ""
+
+msgctxt "#41011"
+msgid "Enable developer mode to increase verbosity of logging and set everything to LOG_INFO level and avoid enableing Kodi Debug mode."
+msgstr ""

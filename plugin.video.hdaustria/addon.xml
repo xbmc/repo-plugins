@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tvvlaanderen" name="TV Vlaanderen" version="1.0.5+matrix.1" provider-name="Michaël Arnauts">
+<addon id="plugin.video.hdaustria" name="HD Austria" version="1.0.5+matrix.1" provider-name="Michaël Arnauts">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.dateutil" version="2.6.0" />
@@ -14,12 +14,12 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="nl_NL">Bekijk Live en on-demand TV via je TV Vlaanderen abonnement.</summary>
-        <description lang="nl_NL">Deze add-on geeft toegang tot de live TV kanalen en de video-on-demand content dat beschikbaar is via je TV Vlaanderen abonnement.</description>
-        <disclaimer lang="nl_NL">Deze add-on wordt niet ondersteund door TV Vlaanderen, en wordt aangeboden 'as is', zonder enige garantie. TV Vlaanderen is een merk van Canal+ Luxembourg S. à r.l.</disclaimer>
-        <summary lang="en_GB">Watch Live TV and on-demand TV with your TV Vlaanderen subscription.</summary>
-        <description lang="en_GB">This add-on gives access to the live tv channels and the video-on-demand content available in your TV Vlaanderen subscription.</description>
-        <disclaimer lang="en_GB">This add-on is not officially commissioned/supported by TV Vlaanderen and is provided 'as is' without any warranty of any kind. TV Vlaanderen is a brand of Canal+ Luxembourg S. à r.l.</disclaimer>
+        <summary lang="de_DE">Schaue Live TV und on-demand TV mit deinem HD Austria Abonnement.</summary>
+        <description lang="de_DE">Dieses add-on erlaubt Zugriff auf Live TV Kanäle und video-on-demand Inhalte, bereitgestellt von deinem HD Austria Abonnement.</description>
+        <disclaimer lang="de_DE">Dieses add-on wird nicht von der M7 Group herausgegeben oder supportet, sondern wird angeboten 'as is' ohne jede Garantie.</disclaimer>
+        <summary lang="en_GB">Watch Live TV and on-demand TV with your HD Austria subscription.</summary>
+        <description lang="en_GB">This add-on gives access to the live tv channels and the video-on-demand content available in your HD Austria subscription.</description>
+        <disclaimer lang="en_GB">This add-on is not officially commissioned/supported by M7 Group and is provided 'as is' without any warranty of any kind.</disclaimer>
         <platform>all</platform>
         <license>GPL-3.0-only</license>
         <news>v1.0.5 (2022-01-22)

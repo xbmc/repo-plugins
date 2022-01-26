@@ -46,18 +46,28 @@ class API:
 
         self._api.ACCESS_TOKEN = self.users.access_token
 
+        self._api.ACCESS_TOKEN_TV = self.users.tv_access_token
+
         self._usher = usher
 
         self.quality = self._usher.Quality
 
         self.api = v3
         self.client = oauth.Client()
+        self.tv_client = oauth.Client(str(CREDENTIALS.TV_ID), str(CREDENTIALS.TV_SECRET))
+
         self.refresh_token()
+        self.tv_refresh_token()
 
     @property
     def logged_in(self):
         self.refresh_token()
         return self.users.access_token and not self.users.token_expired
+
+    @property
+    def tv_logged_in(self):
+        self.tv_refresh_token()
+        return self.users.tv_access_token and not self.users.tv_token_expired
 
     @property
     def language(self):
@@ -704,6 +714,59 @@ class API:
         self.users.load()
         self._api.ACCESS_TOKEN = self.users.access_token
         self.client = oauth.Client()
+        memoizer.reset_cache()
+
+    @api_request
+    def tv_refresh_token(self):
+        if self.users.tv_access_token and self.users.tv_token_expired:
+            access_token, expiry = self.tv_client.refresh_token(self.users.tv_refresh_token)
+            self.users.tv_access_token = access_token
+            self.users.tv_token_expiry = time.time() + int(expiry)
+            self.users.save()
+            self.tv_refresh_client()
+
+    @api_request
+    def tv_revoke_token(self):
+        if self.users.tv_refresh_token:
+            self.tv_client.revoke_token(self.users.tv_refresh_token)
+            self.users.tv_access_token = ''
+            self.users.tv_refresh_token = ''
+            self.users.tv_token_expiry = -1
+            self.users.save()
+            self.tv_refresh_client()
+
+    @api_request
+    def tv_request_codes(self):
+        return self.tv_client.request_codes()
+
+    @api_request
+    def tv_request_access_token(self, device_code):
+        data = self.tv_client.request_access_token(device_code)
+
+        if 'error' not in data:
+            access_token = data.get('access_token', '')
+            refresh_token = data.get('refresh_token', '')
+            token_expiry = time.time() + int(data.get('expires_in', 3600))
+
+            if not access_token and not refresh_token:
+                token_expiry = -1
+
+            self.users.tv_access_token = access_token
+            self.users.tv_refresh_token = refresh_token
+            self.users.tv_token_expiry = token_expiry
+            self.users.save()
+            self.tv_refresh_client()
+            return True
+
+        if data['error'] == 'authorization_pending':
+            return False
+
+        return data
+
+    def tv_refresh_client(self):
+        self.users.load()
+        self._api.ACCESS_TOKEN_TV = self.users.tv_access_token
+        self.tv_client = oauth.Client(str(CREDENTIALS.TV_ID), str(CREDENTIALS.TV_SECRET))
         memoizer.reset_cache()
 
     def calculate_next_page_token(self, page):

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: plugin.video.tubed\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: 2021-07-24 17:29+0000\n"
+"PO-Revision-Date: 2021-09-26 20:30+0000\n"
 "Last-Translator: Kai Sommerfeld <kai.sommerfeld@gmx.com>\n"
 "Language-Team: German <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-tubed/de_de/>\n"
 "Language: de_de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.8\n"
 
 msgctxt "Addon Summary"
 msgid "Watch your favorite YouTube content on Kodi"
@@ -22,7 +22,7 @@ msgid "Browse your favorite content from YouTube; create, delete, and rename pla
 msgstr "Lieblingsinhalte von YouTube in Kodi ansehen, Wiedergabelisten erstellen / löschen / umbenennen, Lieblingskanäle abonnieren und deabonnieren, Videos bewerten."
 
 msgctxt "Addon Disclaimer"
-msgid "Tubed&#8217;s use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed&#39;s Privacy Policy at https://panicked.xyz/tubed-privacy/"
+msgid "Tubed's use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed's Privacy Policy at https://panicked.xyz/tubed-privacy/"
 msgstr "Tubed verwendet Informationen der Google APIs unter Einhaltung der Google API Services User Data Policy, inklusive der „Limited Use“ Voraussetzungen. Für weitere Informationen zur Verarbeitung persönlicher Daten bitte Tubed's Datenschutzbestimmungen einsehen unter https://panicked.xyz/tubed-privacy/"
 
 msgctxt "#30000"
@@ -979,47 +979,47 @@ msgstr "Anzahl von Lieblingswiedergabelisten, die pro Benutzer gespeichert werde
 
 msgctxt "#30238"
 msgid "Backup"
-msgstr "Backup"
+msgstr "Sicherung"
 
 msgctxt "#30239"
 msgid "Make a backup"
-msgstr "Backup erstellen"
+msgstr "Sicherung erstellen"
 
 msgctxt "#30240"
 msgid "Backup your Tubed settings, users, search history, favorite channels and favorite playlists"
-msgstr "Backup der Tubed-Einstellungen, -Benutzer, Suchverlauf, Lieblingskanäle und Lieblingswiedergabelisten erstellen"
+msgstr "Sicherung der Tubed-Einstellungen, -Benutzer, Suchverlauf, Lieblingskanäle und Lieblingswiedergabelisten erstellen"
 
 msgctxt "#30241"
 msgid "Restore a backup"
-msgstr "Backup wiederherstellen"
+msgstr "Sicherung wiederherstellen"
 
 msgctxt "#30242"
 msgid "Restore your Tubed settings, users, search history, favorite channels and favorite playlists from a previous backup"
-msgstr "Tubed-Einstellungen, -Benutzer, Suchverlauf, Lieblingskanäle und Lieblingswiedergabelisten aus einem Backup wiederherstellen"
+msgstr "Tubed-Einstellungen, -Benutzer, Suchverlauf, Lieblingskanäle und Lieblingswiedergabelisten aus einer Sicherung wiederherstellen"
 
 msgctxt "#30243"
 msgid "Choose a location to create backup"
-msgstr "Ordner auswählen, in dem das Backup erstellt werden soll"
+msgstr "Ordner zum Erstellen der Sicherung auswählen"
 
 msgctxt "#30244"
 msgid "Choose a backup to restore"
-msgstr "Backup zum Wiederherstellen auswählen"
+msgstr "Sicherung zum Wiederherstellen auswählen"
 
 msgctxt "#30245"
 msgid "Failed to create backup at %s"
-msgstr "Backup konnte nicht in %s erstellt werden"
+msgstr "Sicherung konnte nicht in %s erstellt werden"
 
 msgctxt "#30246"
 msgid "Failed to restore backup from %s"
-msgstr "Backup konnte nicht aus %s wiederhergestellt werden"
+msgstr "Sicherung konnte nicht aus %s wiederhergestellt werden"
 
 msgctxt "#30247"
 msgid "Backup successfully created at %s"
-msgstr "Backup erfolgreich in %s erstellt"
+msgstr "Sicherung erfolgreich in %s erstellt"
 
 msgctxt "#30248"
 msgid "Backup successfully restored from %s"
-msgstr "Backup aus %s erfolgreich wiederhergestellt"
+msgstr "Sicherung aus %s erfolgreich wiederhergestellt"
 
 msgctxt "#30249"
 msgid "Client ID: %s"

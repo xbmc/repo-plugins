@@ -21,7 +21,7 @@ msgid "Browse your favorite content from YouTube; create, delete, and rename pla
 msgstr "Răsfoiește conținutul favorit de pe Youtube; creează, șterge și redenumește liste; abonează-te sau dezabonează-te de la canalele favorite; evaluează clipurile favorite."
 
 msgctxt "Addon Disclaimer"
-msgid "Tubed&#8217;s use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed&#39;s Privacy Policy at https://panicked.xyz/tubed-privacy/"
+msgid "Tubed's use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed's Privacy Policy at https://panicked.xyz/tubed-privacy/"
 msgstr "Utilizarea informațiilor primite de la API-urile Google prin Tubed va adera la politicile Google legate de datele utilizatorilor, inclusiv cerințele de Utilizare Limitată. Pentru mai multe informații despre cum sunt folosite datele utilizatorilor vezi Politica de Confidențialitate a Tubed la https://panicked.xyz/tubed-privacy/"
 
 msgctxt "#30000"

@@ -22,7 +22,7 @@ msgid "Browse your favorite content from YouTube; create, delete, and rename pla
 msgstr "Просматривайте любимый контент с YouTube; создавайте, удаляйте, и переименовывайте плейлисты; подписывайтесь или отписывайтесь на каналы; оценивайте любимые видео."
 
 msgctxt "Addon Disclaimer"
-msgid "Tubed&#8217;s use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed&#39;s Privacy Policy at https://panicked.xyz/tubed-privacy/"
+msgid "Tubed's use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed's Privacy Policy at https://panicked.xyz/tubed-privacy/"
 msgstr "Использование Tubed информации, полученной от Google API, будет соответствовать Политике в отношении пользовательских данных служб Google API, включая требования ограниченного использования. Для получения дополнительной информации о том, как обрабатываются ваши данные, см. Политику конфиденциальности Tubed по адресу https://panicked.xyz/tubed-privacy/"
 
 msgctxt "#30000"

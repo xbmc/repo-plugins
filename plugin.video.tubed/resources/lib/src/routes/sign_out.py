@@ -17,5 +17,6 @@ def invoke(context):
                               context.i18n('You are about to sign out, are you sure?')):
 
         context.api.revoke_token()
+        context.api.tv_revoke_token()
 
         xbmc.executebuiltin('Container.Refresh')

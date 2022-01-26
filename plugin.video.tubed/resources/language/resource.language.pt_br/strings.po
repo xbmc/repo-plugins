@@ -1,16 +1,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STRINGS\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: 2021-05-03 00:29+0000\n"
-"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"PO-Revision-Date: 2021-12-07 01:13+0000\n"
+"Last-Translator: Fabio <fabioihle+kodi@alunos.utfpr.edu.br>\n"
 "Language-Team: Portuguese (Brazil) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-tubed/pt_br/>\n"
 "Language: pt_br\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.6.1\n"
+"X-Generator: Weblate 4.9.1\n"
 
 msgctxt "Addon Summary"
 msgid "Watch your favorite YouTube content on Kodi"
@@ -21,8 +22,8 @@ msgid "Browse your favorite content from YouTube; create, delete, and rename pla
 msgstr "Navegue pelo seu conteúdo favorito do YouTube; criar, excluir e renomear listas de reprodução; inscreva-se ou cancele a inscrição de seus canais favoritos; e avalie seus vídeos favoritos."
 
 msgctxt "Addon Disclaimer"
-msgid "Tubed&#8217;s use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed&#39;s Privacy Policy at https://panicked.xyz/tubed-privacy/"
-msgstr "Tubed&#8217;s informações recebidas das APIs do Google obedecerá à Política de dados do usuário dos serviços de API do Google, incluindo os requisitos de uso limitado. Para obter mais informações sobre como seus dados são tratados, consulte a Política de privacidade da Tubed em https://panicked.xyz/tubed-privacy/"
+msgid "Tubed's use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed's Privacy Policy at https://panicked.xyz/tubed-privacy/"
+msgstr "Tubed's informações recebidas das APIs do Google obedecerá à Política de dados do usuário dos serviços de API do Google, incluindo os requisitos de uso limitado. Para obter mais informações sobre como seus dados são tratados, consulte a Política de privacidade da Tubed em https://panicked.xyz/tubed-privacy/"
 
 msgctxt "#30000"
 msgid "Most Popular"
@@ -38,7 +39,7 @@ msgstr "Recomendações"
 
 msgctxt "#30003"
 msgid "Search"
-msgstr "Procura"
+msgstr "Procurar"
 
 msgctxt "#30004"
 msgid "My Channel"
@@ -166,11 +167,11 @@ msgstr "Use os melhores streams HDR correspondentes para vídeos"
 
 msgctxt "#30035"
 msgid "Adaptive (MP4/H264)"
-msgstr "Adaptive (MP4/H264)"
+msgstr "Adaptativo (MP4/H264)"
 
 msgctxt "#30036"
 msgid "Adaptive (WEBM/VP9)"
-msgstr "Adaptive (WEBM/VP9)"
+msgstr "Adaptativo (WEBM/VP9)"
 
 msgctxt "#30037"
 msgid "240p"
@@ -274,7 +275,7 @@ msgstr "Nenhum"
 
 msgctxt "#30062"
 msgid "Prompt"
-msgstr "Prompt"
+msgstr "Perguntar"
 
 msgctxt "#30063"
 msgid "Subscribe"
@@ -622,7 +623,7 @@ msgstr "Quantidade de visualizações"
 
 msgctxt "#30149"
 msgid "Post Play"
-msgstr "Post Play"
+msgstr "Após reprodução"
 
 msgctxt "#30150"
 msgid "Post play minimum watch percentage"

@@ -29,9 +29,15 @@ class SignInDialog(AddonFullWindow):
         self._context = context
         self.window = window
 
+        self.tv_client = kwargs.get('tv_client') is True
         self.demo = kwargs.get('mode') == 'demo'
 
-        self.title = bold(context.i18n('Sign In'))
+        if not self.tv_client:
+            client_title = context.i18n('v3 Data API Client')
+        else:
+            client_title = context.i18n('YouTube-TV API Client')
+
+        self.title = bold(' '.join([context.i18n('Sign In'), '-', client_title]))
 
         super().__init__(self.title)
 
@@ -62,7 +68,10 @@ class SignInDialog(AddonFullWindow):
         if self.demo:
             data = SIGN_IN_CODES
         else:
-            data = self.context.api.request_codes()
+            if not self.tv_client:
+                data = self.context.api.request_codes()
+            else:
+                data = self.context.api.tv_request_codes()
 
         self.device_code = data['device_code']
         self.user_code = data['user_code']
@@ -82,8 +91,8 @@ class SignInDialog(AddonFullWindow):
         self.connect(pyxbmct.ACTION_NAV_BACK, self.close)
         self.connect(ACTION_STOP, self.close)
 
-        self.thread = DialogThread(self.context, self.device_code,
-                                   self.interval, self.close, self.demo)
+        self.thread = DialogThread(self.context, self.device_code, self.interval,
+                                   self.close, self.demo, self.tv_client)
 
         self.doModal()
 
@@ -119,7 +128,7 @@ class SignInDialog(AddonFullWindow):
 
         self.client_id = pyxbmct.Label(
             self.context.i18n('Client ID: %s') %
-            bold(str(CREDENTIALS.ID)),
+            bold(str(CREDENTIALS.ID)) if not self.tv_client else bold(str(CREDENTIALS.TV_ID)),
             font='font10',
             alignment=2
         )
@@ -130,7 +139,7 @@ class SignInDialog(AddonFullWindow):
 
 
 class DialogThread(threading.Thread):
-    def __init__(self, context, device_code, interval, close, demo=False):
+    def __init__(self, context, device_code, interval, close, demo=False, tv_client=False):
         super().__init__()
 
         self._stopped = threading.Event()
@@ -141,6 +150,7 @@ class DialogThread(threading.Thread):
         self.interval = interval
 
         self.demo = demo
+        self.tv_client = tv_client
 
         self.monitor = xbmc.Monitor()
 
@@ -170,7 +180,11 @@ class DialogThread(threading.Thread):
             for _ in range(steps):
                 # self.update_progress(int(float((100.0 // steps)) * index))
 
-                signed_in = self.context.api.request_access_token(self.device_code)
+                if self.tv_client:
+                    signed_in = self.context.api.tv_request_access_token(self.device_code)
+                else:
+                    signed_in = self.context.api.request_access_token(self.device_code)
+
                 if signed_in:
                     self.signed_in = True
                     self.stop()

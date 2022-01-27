@@ -191,4 +191,6 @@ STRINGS = {
     'Would you like to enable InputStream Adaptive now?': 30255,
     'Settings': 30256,
     'No entries found': 30257,
+    'v3 Data API Client': 30258,
+    'YouTube-TV API Client': 30259,
 }

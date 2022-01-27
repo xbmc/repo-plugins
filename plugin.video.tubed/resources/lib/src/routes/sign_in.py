@@ -15,7 +15,17 @@ from ..dialogs.sign_in import SignInDialog
 
 
 def invoke(context):
-    signed_in = open_dialog(context, SignInDialog)
+    logged_in = context.api.logged_in
+    tv_logged_in = context.api.tv_logged_in
 
-    if signed_in:
+    signed_in = False
+    tv_signed_in = False
+
+    if not logged_in:
+        signed_in = open_dialog(context, SignInDialog)
+
+    if not tv_logged_in:
+        tv_signed_in = open_dialog(context, SignInDialog, tv_client=True)
+
+    if signed_in or tv_signed_in:
         xbmc.executebuiltin('Container.Refresh')

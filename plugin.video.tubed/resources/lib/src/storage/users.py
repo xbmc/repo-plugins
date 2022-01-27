@@ -34,6 +34,9 @@ class UserStorage:
         <refresh_token></refresh_token>
         <access_token></access_token>
         <token_expiry>-1</token_expiry>
+        <tv_refresh_token></tv_refresh_token>
+        <tv_access_token></tv_access_token>
+        <tv_token_expiry>-1</tv_token_expiry>
         <history_playlist></history_playlist>
         <watchlater_playlist></watchlater_playlist>
         <avatar></avatar>
@@ -49,6 +52,9 @@ class UserStorage:
         <refresh_token></refresh_token>
         <access_token></access_token>
         <token_expiry>-1</token_expiry>
+        <tv_refresh_token></tv_refresh_token>
+        <tv_access_token></tv_access_token>
+        <tv_token_expiry>-1</tv_token_expiry>
         <history_playlist></history_playlist>
         <watchlater_playlist></watchlater_playlist>
         <avatar></avatar>
@@ -90,6 +96,10 @@ class UserStorage:
                 access_token = self._get_elements_text(user, 'access_token')
                 token_expiry = self._get_elements_text(user, 'token_expiry', -1)
 
+                tv_refresh_token = self._get_elements_text(user, 'tv_refresh_token')
+                tv_access_token = self._get_elements_text(user, 'tv_access_token')
+                tv_token_expiry = self._get_elements_text(user, 'tv_token_expiry', -1)
+
                 current = user.attrib.get('current', 'false').lower() == 'true'
 
                 history_playlist = self._get_elements_text(user, 'history_playlist')
@@ -102,6 +112,9 @@ class UserStorage:
                     'refresh_token': refresh_token,
                     'access_token': access_token,
                     'token_expiry': token_expiry,
+                    'tv_refresh_token': tv_refresh_token,
+                    'tv_access_token': tv_access_token,
+                    'tv_token_expiry': tv_token_expiry,
                     'history_playlist': history_playlist,
                     'watchlater_playlist': watchlater_playlist,
                     'avatar': avatar,
@@ -150,22 +163,6 @@ class UserStorage:
         self._current_user_set('access_token', value)
 
     @property
-    def history_playlist(self):
-        return self._current_user_get('history_playlist', '')
-
-    @history_playlist.setter
-    def history_playlist(self, value):
-        self._current_user_set('history_playlist', value)
-
-    @property
-    def watchlater_playlist(self):
-        return self._current_user_get('watchlater_playlist', '')
-
-    @watchlater_playlist.setter
-    def watchlater_playlist(self, value):
-        self._current_user_set('watchlater_playlist', value)
-
-    @property
     def token_expiry(self):
         return float(self._current_user_get('token_expiry', -1))
 
@@ -183,6 +180,57 @@ class UserStorage:
             return False
 
         return self.token_expiry <= int(time.time())
+
+    @property
+    def tv_refresh_token(self):
+        return self._current_user_get('tv_refresh_token', '')
+
+    @tv_refresh_token.setter
+    def tv_refresh_token(self, value):
+        self._current_user_set('tv_refresh_token', value)
+
+    @property
+    def tv_access_token(self):
+        return self._current_user_get('tv_access_token', '')
+
+    @tv_access_token.setter
+    def tv_access_token(self, value):
+        self._current_user_set('tv_access_token', value)
+
+    @property
+    def tv_token_expiry(self):
+        return float(self._current_user_get('tv_token_expiry', -1))
+
+    @tv_token_expiry.setter
+    def tv_token_expiry(self, value):
+        self._current_user_set('tv_token_expiry', str(value))
+
+    @property
+    def tv_token_expired(self):
+        if not self.tv_access_token:
+            return True
+
+        # in this case no expiration date was set
+        if self.tv_token_expiry == -1:
+            return False
+
+        return self.tv_token_expiry <= int(time.time())
+
+    @property
+    def history_playlist(self):
+        return self._current_user_get('history_playlist', '')
+
+    @history_playlist.setter
+    def history_playlist(self, value):
+        self._current_user_set('history_playlist', value)
+
+    @property
+    def watchlater_playlist(self):
+        return self._current_user_get('watchlater_playlist', '')
+
+    @watchlater_playlist.setter
+    def watchlater_playlist(self, value):
+        self._current_user_set('watchlater_playlist', value)
 
     def change_current(self, user_uuid):
         user = self.root.find('.//user[@current="true"]')

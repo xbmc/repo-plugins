@@ -1,8 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STRINGS\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: 2021-04-08 10:29+0000\n"
+"PO-Revision-Date: 2021-12-14 15:13+0000\n"
 "Last-Translator: Edson Armando <edsonarmando78@outlook.com>\n"
 "Language-Team: Spanish (Mexico) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-tubed/es_mx/>\n"
 "Language: es_mx\n"
@@ -10,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.3\n"
+"X-Generator: Weblate 4.9.1\n"
 
 msgctxt "Addon Summary"
 msgid "Watch your favorite YouTube content on Kodi"
@@ -21,7 +22,7 @@ msgid "Browse your favorite content from YouTube; create, delete, and rename pla
 msgstr "Navega tu contenido favorito desde YouTube; crea, elimina y renombra listas de reproducción; suscríbete o desuscríbete de tus canales favoritos; y valora tus videos favoritos."
 
 msgctxt "Addon Disclaimer"
-msgid "Tubed&#8217;s use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed&#39;s Privacy Policy at https://panicked.xyz/tubed-privacy/"
+msgid "Tubed's use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed's Privacy Policy at https://panicked.xyz/tubed-privacy/"
 msgstr "El uso de Tubed de la información recibida mediante las API de Google se adherirá a la Política de datos de usuario de los servicios de API de Google, incluidos los requisitos de uso limitado. Para obtener más información sobre cómo se manejan tus datos, consulta la Política de privacidad de Tubed en https://panicked.xyz/tubed-privacy/"
 
 msgctxt "#30000"
@@ -470,11 +471,11 @@ msgstr "Caché de función eliminada"
 
 msgctxt "#30111"
 msgid "Data cache was deleted"
-msgstr ""
+msgstr "El caché de datos ha sido eliminado"
 
 msgctxt "#30112"
 msgid "Function cache was deleted"
-msgstr ""
+msgstr "El caché de funciones ha sido eliminado"
 
 msgctxt "#30113"
 msgid "Time to Live"
@@ -482,576 +483,576 @@ msgstr ""
 
 msgctxt "#30114"
 msgid "Maintenance"
-msgstr ""
+msgstr "Mantenimiento"
 
 msgctxt "#30115"
 msgid "How long until long term data cache expires in weeks"
-msgstr ""
+msgstr "Tiempo hasta que el caché de datos a largo plazo expire (en semanas)"
 
 msgctxt "#30116"
 msgid "How long until short term function cache expires in minutes"
-msgstr ""
+msgstr "Tiempo hasta que el caché de funciones a corto plazo expire (en minutos)"
 
 msgctxt "#30117"
 msgid "Clearing long term data cache will remove all entries from the database"
-msgstr ""
+msgstr "Limpiar el caché de datos a largo plazo eliminará todas las entradas de la base de datos"
 
 msgctxt "#30118"
 msgid "Clearing short term function cache will remove all cache entries"
-msgstr ""
+msgstr "Limpiar el caché de funciones a corto plazo eliminará todas las entradas en caché"
 
 msgctxt "#30119"
 msgid "Deleting long term data cache will delete the whole database"
-msgstr ""
+msgstr "Eliminar el caché de datos a largo plazo eliminará la base de datos completa"
 
 msgctxt "#30120"
 msgid "Deleting short term function cache will delete the whole database"
-msgstr ""
+msgstr "Eliminar el caché de funciones a corto plazo eliminará la base de datos completa"
 
 msgctxt "#30121"
 msgid "Failed to clear function cache"
-msgstr ""
+msgstr "No se pudo limpiar el caché de funciones"
 
 msgctxt "#30122"
 msgid "Failed to clear data cache"
-msgstr ""
+msgstr "No se pudo limpiar el caché de datos"
 
 msgctxt "#30123"
 msgid "Failed to delete function cache"
-msgstr ""
+msgstr "No se pudo eliminar el caché de funciones"
 
 msgctxt "#30124"
 msgid "Failed to delete data cache"
-msgstr ""
+msgstr "No se pudo eliminar el caché de datos"
 
 msgctxt "#30125"
 msgid "Debug"
-msgstr ""
+msgstr "Depuración"
 
 msgctxt "#30126"
 msgid "Component Logging"
-msgstr ""
+msgstr "Depuración de componentes"
 
 msgctxt "#30127"
 msgid "API requests"
-msgstr ""
+msgstr "Peticiones de API"
 
 msgctxt "#30128"
 msgid "Enable logging of API requests and responses"
-msgstr ""
+msgstr "Activar depuración de peticiones y respuestas a la API"
 
 msgctxt "#30129"
 msgid "Comments"
-msgstr ""
+msgstr "Comentarios"
 
 msgctxt "#30130"
 msgid "Comment"
-msgstr ""
+msgstr "Comentar"
 
 msgctxt "#30131"
 msgid "Read comment"
-msgstr ""
+msgstr "Leer comentario"
 
 msgctxt "#30132"
 msgid "Likes"
-msgstr ""
+msgstr "Me gusta"
 
 msgctxt "#30133"
 msgid "Replies"
-msgstr ""
+msgstr "Respuestas"
 
 msgctxt "#30134"
 msgid "Comment has been edited"
-msgstr ""
+msgstr "El comentario ha sido editado"
 
 msgctxt "#30135"
 msgid "Limits"
-msgstr ""
+msgstr "Límites"
 
 msgctxt "#30136"
 msgid "Data cache (MB)"
-msgstr ""
+msgstr "Caché de datos (MB)"
 
 msgctxt "#30137"
 msgid "The maximum size of long term data cache before being automatically resized"
-msgstr ""
+msgstr "El tamaño máximo del caché de datos a largo plazo antes de que sea reajustado automáticamente"
 
 msgctxt "#30138"
 msgid "Sort order"
-msgstr ""
+msgstr "Orden"
 
 msgctxt "#30139"
 msgid "Choose a sort order"
-msgstr ""
+msgstr "Eligen un método para ordenar"
 
 msgctxt "#30140"
 msgid "Alphabetical"
-msgstr ""
+msgstr "Alfabético"
 
 msgctxt "#30141"
 msgid "Relevance"
-msgstr ""
+msgstr "Relevancia"
 
 msgctxt "#30142"
 msgid "Activity"
-msgstr ""
+msgstr "Actividad"
 
 msgctxt "#30143"
 msgid "Time"
-msgstr ""
+msgstr "Tiempo"
 
 msgctxt "#30144"
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 msgctxt "#30145"
 msgid "Rating"
-msgstr ""
+msgstr "Calificación"
 
 msgctxt "#30146"
 msgid "Title"
-msgstr ""
+msgstr "Titulo"
 
 msgctxt "#30147"
 msgid "Video Count"
-msgstr ""
+msgstr "Cantidad de videos"
 
 msgctxt "#30148"
 msgid "View Count"
-msgstr ""
+msgstr "Cantidad de vistas"
 
 msgctxt "#30149"
 msgid "Post Play"
-msgstr ""
+msgstr "Pos-reproducción"
 
 msgctxt "#30150"
 msgid "Post play minimum watch percentage"
-msgstr ""
+msgstr "Porcentaje mínimo de visualización para pos-reproducción"
 
 msgctxt "#30151"
 msgid "What percent of the video's duration must be watched to trigger post play events"
-msgstr ""
+msgstr "El porcentaje mínimo de visualización del video para iniciar eventos posteriores a la reproducción"
 
 msgctxt "#30152"
 msgid "Rate the video that just finished playing"
-msgstr ""
+msgstr "Calificar el video al finalizar la reproducción"
 
 msgctxt "#30153"
 msgid "Rate during playlists"
-msgstr ""
+msgstr "Calificar en listas de reproducción"
 
 msgctxt "#30154"
 msgid "Should rating be requested while watching playlists"
-msgstr ""
+msgstr "Si se debería de solicitar calificación mientras se reproducen listas de reproducción"
 
 msgctxt "#30155"
 msgid "Autoplay related videos"
-msgstr ""
+msgstr "Videos relacionados de reproducción automática"
 
 msgctxt "#30156"
 msgid "Autoplay videos related to the previously played video"
-msgstr ""
+msgstr "Videos de reproducción automática relacionados al video visto previamente"
 
 msgctxt "#30157"
 msgid "Set as History"
-msgstr ""
+msgstr "Establecer como Historial"
 
 msgctxt "#30158"
 msgid "Set as Watch Later"
-msgstr ""
+msgstr "Establecer como Ver más tarde"
 
 msgctxt "#30159"
 msgid "Remove as History"
-msgstr ""
+msgstr "Eliminar como Historial"
 
 msgctxt "#30160"
 msgid "Remove as Watch Later"
-msgstr ""
+msgstr "Eliminar como Ver más tarde"
 
 msgctxt "#30161"
 msgid "History"
-msgstr ""
+msgstr "Historial"
 
 msgctxt "#30162"
 msgid "Watch later playlist configured"
-msgstr ""
+msgstr "Lista de reproducción Ver más tarde configurada"
 
 msgctxt "#30163"
 msgid "History playlist configured"
-msgstr ""
+msgstr "Lista de reproducción Historial configurada"
 
 msgctxt "#30164"
 msgid "%s was configured as your watch later playlist"
-msgstr ""
+msgstr "%s fue configurada como tu lista de reproducción de Ver más tarde"
 
 msgctxt "#30165"
 msgid "%s was configured as your history playlist"
-msgstr ""
+msgstr "%s fue configurada como tu lista de reproducción de Historial"
 
 msgctxt "#30166"
 msgid "Watch later playlist is no longer configured"
-msgstr ""
+msgstr "La lista de reproducción de Ver más tarde ya no está configurada"
 
 msgctxt "#30167"
 msgid "History playlist is no longer configured"
-msgstr ""
+msgstr "La lista de reproducción de Historial ya no está configurada"
 
 msgctxt "#30168"
 msgid "%s is no longer configured as your watch later playlist"
-msgstr ""
+msgstr "%s ya no está configurada como tu lista de reproducción de Ver más tarde"
 
 msgctxt "#30169"
 msgid "%s is no longer configured as your history playlist"
-msgstr ""
+msgstr "%s ya no está configurada como tu lista de reproducción de Historial"
 
 msgctxt "#30170"
 msgid "Add to watch later"
-msgstr ""
+msgstr "Añadir a Ver más tarde"
 
 msgctxt "#30171"
 msgid "Favorite Channels"
-msgstr ""
+msgstr "Canales favoritos"
 
 msgctxt "#30172"
 msgid "Add to favorite channels"
-msgstr ""
+msgstr "Añadir a canales favoritos"
 
 msgctxt "#30173"
 msgid "Clear favorite channels"
-msgstr ""
+msgstr "Limpiar canales favoritos"
 
 msgctxt "#30174"
 msgid "Added to favorite channels"
-msgstr ""
+msgstr "Añadido a canales favoritos"
 
 msgctxt "#30175"
 msgid "Removed from favorite channels"
-msgstr ""
+msgstr "Eliminado de canales favoritos"
 
 msgctxt "#30176"
 msgid "Import from xml"
-msgstr ""
+msgstr "Importar de XML"
 
 msgctxt "#30177"
 msgid "Import failed"
-msgstr ""
+msgstr "Importación fallida"
 
 msgctxt "#30178"
 msgid "Import completed successfully"
-msgstr ""
+msgstr "Importación completada con éxito"
 
 msgctxt "#30179"
 msgid "You are about to clear your favorite channels, are you sure?"
-msgstr ""
+msgstr "Vas a limpiar tus canales favoritos, ¿estas seguro?"
 
 msgctxt "#30180"
 msgid "Favorite channels cleared"
-msgstr ""
+msgstr "Canales favoritos limpiados"
 
 msgctxt "#30181"
 msgid "Add %s to favorite channels"
-msgstr ""
+msgstr "Añadir %s a canales favoritos"
 
 msgctxt "#30182"
 msgid "Added %s to favorite channels"
-msgstr ""
+msgstr "%s añadido a canales favoritos"
 
 msgctxt "#30183"
 msgid "Removed %s from favorite channels"
-msgstr ""
+msgstr "%s eliminado de canales favoritos"
 
 msgctxt "#30184"
 msgid "Refresh"
-msgstr ""
+msgstr "Actualizar"
 
 msgctxt "#30185"
 msgid "Clear function cache on refresh"
-msgstr ""
+msgstr "Limpiar caché de funciones al actualizar"
 
 msgctxt "#30186"
 msgid "Short term function cache will be cleared when using Refresh from the context menu"
-msgstr ""
+msgstr "El caché de funciones a corto plazo será limpiado al Actualizar desde el menú contextual"
 
 msgctxt "#30187"
 msgid "Choose watch later playlist"
-msgstr ""
+msgstr "Elegir lista de reproducción de Ver más tarde"
 
 msgctxt "#30188"
 msgid "Added %s to the new watch later playlist %s"
-msgstr ""
+msgstr "%s añadido a la nueva lista de reproducción de Ver más tarde %s"
 
 msgctxt "#30189"
 msgid "Search history items"
-msgstr ""
+msgstr "Elementos de Historial de búsqueda"
 
 msgctxt "#30190"
 msgid "How many search history items should be kept for each user"
-msgstr ""
+msgstr "Cuántos elementos del historial de búsqueda mantener por usuario"
 
 msgctxt "#30191"
 msgid "Favorite channels"
-msgstr ""
+msgstr "Canales favoritos"
 
 msgctxt "#30192"
 msgid "How many favorite channels should be kept for each user"
-msgstr ""
+msgstr "Cuántos canales favoritos mantener por cada usuario"
 
 msgctxt "#30193"
 msgid "Play"
-msgstr ""
+msgstr "Reproducir"
 
 msgctxt "#30194"
 msgid "Play from %s"
-msgstr ""
+msgstr "Reproducir desde %s"
 
 msgctxt "#30195"
 msgid "Most Popular Regionally"
-msgstr ""
+msgstr "Más popular en la región"
 
 msgctxt "#30196"
 msgid "Main Menu"
-msgstr ""
+msgstr "Menú principal"
 
 msgctxt "#30197"
 msgid "Show/Hide this item on the main menu"
-msgstr ""
+msgstr "Mostrar/Ocultar este elemento en el menú principal"
 
 msgctxt "#30198"
 msgid "Hide %s"
-msgstr ""
+msgstr "Ocultar %s"
 
 msgctxt "#30199"
 msgid "%s was hidden from the main menu"
-msgstr ""
+msgstr "%s ha sido ocultado del menú principal"
 
 msgctxt "#30200"
 msgid "User is authenticated"
-msgstr ""
+msgstr "El usuario está autenticado"
 
 msgctxt "#30201"
 msgid "User is not authenticated"
-msgstr ""
+msgstr "El usuario no está autenticado"
 
 msgctxt "#30202"
 msgid "Create a new user"
-msgstr ""
+msgstr "Crear un nuevo usuario"
 
 msgctxt "#30203"
 msgid "Rename a current user"
-msgstr ""
+msgstr "Renombrar un usuario existente"
 
 msgctxt "#30204"
 msgid "Remove a current user"
-msgstr ""
+msgstr "Eliminar un usuario existente"
 
 msgctxt "#30205"
 msgid "Change avatar..."
-msgstr ""
+msgstr "Cambiar avatar..."
 
 msgctxt "#30206"
 msgid "Change a current user's avatar"
-msgstr ""
+msgstr "Cambiar el avatar de un usuario existente"
 
 msgctxt "#30207"
 msgid "Choose a new avatar"
-msgstr ""
+msgstr "Elegir un nuevo avatar"
 
 msgctxt "#30208"
 msgid "Up Next"
-msgstr ""
+msgstr "Siguiente"
 
 msgctxt "#30209"
 msgid "Links in the description"
-msgstr ""
+msgstr "Enlaces en la descripción"
 
 msgctxt "#30210"
 msgid "There were no links found in the description"
-msgstr ""
+msgstr "No se encontraron enlaces en la descripción"
 
 msgctxt "#30211"
 msgid "Create a new playlist"
-msgstr ""
+msgstr "Crear una nueva lista de reproducción"
 
 msgctxt "#30212"
 msgid "Go to the next page"
-msgstr ""
+msgstr "Ir a la siguiente página"
 
 msgctxt "#30213"
 msgid "Rate the selected video"
-msgstr ""
+msgstr "Calificar el video seleccionado"
 
 msgctxt "#30214"
 msgid "Rate %s"
-msgstr ""
+msgstr "Calificar %s"
 
 msgctxt "#30215"
 msgid "Dialogs"
-msgstr ""
+msgstr "Diálogos"
 
 msgctxt "#30216"
 msgid "Open the autoplay related video dialog for debugging"
-msgstr ""
+msgstr "Abrir el diálogo de reproducción automática del video relacionado para depuración"
 
 msgctxt "#30217"
 msgid "Open the sign in dialog for debugging"
-msgstr ""
+msgstr "Abrir el diálogo de inicio de sesión para depuración"
 
 msgctxt "#30218"
 msgid "likes"
-msgstr ""
+msgstr "me gusta"
 
 msgctxt "#30219"
 msgid "dislikes"
-msgstr ""
+msgstr "no me gusta"
 
 msgctxt "#30220"
 msgid "views"
-msgstr ""
+msgstr "vistas"
 
 msgctxt "#30221"
 msgid "Chapters"
-msgstr ""
+msgstr "Capítulos"
 
 msgctxt "#30222"
 msgid "Chapter starts at %s"
-msgstr ""
+msgstr "El capítulo empieza en %s"
 
 msgctxt "#30223"
 msgid "API Module"
-msgstr ""
+msgstr "Módulo de API"
 
 msgctxt "#30224"
 msgid "Configure API module"
-msgstr ""
+msgstr "Configurar módulo de API"
 
 msgctxt "#30225"
 msgid "Open Tubed API settings to configure the API module"
-msgstr ""
+msgstr "Abrir la configuración de API de Tubed para configurar el módulo de API"
 
 msgctxt "#30226"
 msgid "Favorite Playlists"
-msgstr ""
+msgstr "Listas de reproducción favoritas"
 
 msgctxt "#30227"
 msgid "Add to favorite playlists"
-msgstr ""
+msgstr "Añadir a listas de reproducción favoritas"
 
 msgctxt "#30228"
 msgid "Clear favorite playlists"
-msgstr ""
+msgstr "Limpiar listas de reproducción favoritas"
 
 msgctxt "#30229"
 msgid "Added to favorite playlists"
-msgstr ""
+msgstr "Añadido a listas de reproducción favoritas"
 
 msgctxt "#30230"
 msgid "Removed from favorite playlists"
-msgstr ""
+msgstr "Eliminado de listas de reproducción favoritas"
 
 msgctxt "#30231"
 msgid "You are about to clear your favorite playlists, are you sure?"
-msgstr ""
+msgstr "Vas a limpiar tus listas de reproducción favoritas, ¿estás seguro?"
 
 msgctxt "#30232"
 msgid "Favorite playlists cleared"
-msgstr ""
+msgstr "Listas de reproducción favoritas limpiadas"
 
 msgctxt "#30233"
 msgid "Add %s to favorite playlists"
-msgstr ""
+msgstr "Añadir %s a listas de reproducción favoritas"
 
 msgctxt "#30234"
 msgid "Added %s to favorite playlists"
-msgstr ""
+msgstr "%s añadido a listas de reproducción favoritas"
 
 msgctxt "#30235"
 msgid "Removed %s from favorite playlists"
-msgstr ""
+msgstr "%s eliminado de listas de reproducción favoritas"
 
 msgctxt "#30236"
 msgid "Favorite playlists"
-msgstr ""
+msgstr "Listas de reproducción favoritas"
 
 msgctxt "#30237"
 msgid "How many favorite playlists should be kept for each user"
-msgstr ""
+msgstr "Cuántas listas de reproducción favoritas mantener por usuario"
 
 msgctxt "#30238"
 msgid "Backup"
-msgstr ""
+msgstr "Respaldo"
 
 msgctxt "#30239"
 msgid "Make a backup"
-msgstr ""
+msgstr "Hacer un respaldo"
 
 msgctxt "#30240"
 msgid "Backup your Tubed settings, users, search history, favorite channels and favorite playlists"
-msgstr ""
+msgstr "Respalda tu configuración de Tubed, usuarios, historial de búsqueda, canales favoritos y listas de reproducción favoritas"
 
 msgctxt "#30241"
 msgid "Restore a backup"
-msgstr ""
+msgstr "Restaurar un respaldo"
 
 msgctxt "#30242"
 msgid "Restore your Tubed settings, users, search history, favorite channels and favorite playlists from a previous backup"
-msgstr ""
+msgstr "Restaura tu configuración de Tubed, usuarios, historial de búsqueda, canales favoritos y listas de reproducción favoritas"
 
 msgctxt "#30243"
 msgid "Choose a location to create backup"
-msgstr ""
+msgstr "Elige una ubicación para crear el respaldo"
 
 msgctxt "#30244"
 msgid "Choose a backup to restore"
-msgstr ""
+msgstr "Elige un respaldo a restaurar"
 
 msgctxt "#30245"
 msgid "Failed to create backup at %s"
-msgstr ""
+msgstr "No se pudo crear un respaldo en %s"
 
 msgctxt "#30246"
 msgid "Failed to restore backup from %s"
-msgstr ""
+msgstr "No se pudo restaurar el respaldo en %s"
 
 msgctxt "#30247"
 msgid "Backup successfully created at %s"
-msgstr ""
+msgstr "Respaldo creado satisfactoriamente en %s"
 
 msgctxt "#30248"
 msgid "Backup successfully restored from %s"
-msgstr ""
+msgstr "Respaldo restaurado satisfactoriamente de %s"
 
 msgctxt "#30249"
 msgid "Client ID: %s"
-msgstr ""
+msgstr "ID de cliente: %s"
 
 msgctxt "#30250"
 msgid "Further use of Tubed will be subject to this privacy policy"
-msgstr ""
+msgstr "El uso continuo de Tubed estará sujeto a esta política de privacidad"
 
 msgctxt "#30251"
 msgid "Accept"
-msgstr ""
+msgstr "Aceptar"
 
 msgctxt "#30252"
 msgid "Decline"
-msgstr ""
+msgstr "Rechazar"
 
 msgctxt "#30253"
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Política de privacidad"
 
 msgctxt "#30254"
 msgid "Sign In"
-msgstr ""
+msgstr "Iniciar sesión"
 
 msgctxt "#30255"
 msgid "InputStream Adaptive is required and appears to be disabled. Would you like to enable InputStream Adaptive now?"
-msgstr ""
+msgstr "Se requiere InputStream Adaptive y parece que está desactivado. ¿Quieres activar InputStream Adaptive ahora?"
 
 msgctxt "#30256"
 msgid "Settings"
-msgstr ""
+msgstr "Configuración"
 
 msgctxt "#30257"
 msgid "No entries found"
-msgstr ""
+msgstr "No se encontraron entradas"

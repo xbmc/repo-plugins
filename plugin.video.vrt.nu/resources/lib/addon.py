@@ -43,33 +43,35 @@ def delete_tokens():
     TokenResolver().delete_tokens()
 
 
-@plugin.route('/follow/<program>/<title>')
-def follow(program, title):
+@plugin.route('/follow/<program_name>/<title>')
+@plugin.route('/follow/<program_name>/<program_id>/<title>')
+def follow(program_name, title, program_id=None):
     """The API interface to follow a program used by the context menu"""
     from favorites import Favorites
-    Favorites().follow(program=program, title=to_unicode(unquote_plus(from_unicode(title))))
+    Favorites().follow(program_name=program_name, title=to_unicode(unquote_plus(from_unicode(title))), program_id=program_id)
 
 
-@plugin.route('/unfollow/<program>/<title>')
-def unfollow(program, title):
+@plugin.route('/unfollow/<program_name>/<title>')
+@plugin.route('/unfollow/<program_name>/<program_id>/<title>')
+def unfollow(program_name, title, program_id=None):
     """The API interface to unfollow a program used by the context menu"""
     move_down = bool(plugin.args.get('move_down'))
     from favorites import Favorites
-    Favorites().unfollow(program=program, title=to_unicode(unquote_plus(from_unicode(title))), move_down=move_down)
+    Favorites().unfollow(program_name=program_name, title=to_unicode(unquote_plus(from_unicode(title))), program_id=program_id, move_down=move_down)
 
 
-@plugin.route('/watchlater/<path:url>/<asset_id>/<title>')
-def watchlater(asset_id, title, url):
+@plugin.route('/watchlater/<episode_id>/<title>')
+def watchlater(episode_id, title):
     """The API interface to watch an episode used by the context menu"""
     from resumepoints import ResumePoints
-    ResumePoints().watchlater(asset_id=asset_id, title=to_unicode(unquote_plus(from_unicode(title))), url=url)
+    ResumePoints().watchlater(episode_id=episode_id, title=to_unicode(unquote_plus(from_unicode(title))))
 
 
-@plugin.route('/unwatchlater/<path:url>/<asset_id>/<title>')
-def unwatchlater(asset_id, title, url):
+@plugin.route('/unwatchlater/<episode_id>/<title>')
+def unwatchlater(episode_id, title):
     """The API interface to unwatch an episode used by the context menu"""
     from resumepoints import ResumePoints
-    ResumePoints().unwatchlater(asset_id=asset_id, title=to_unicode(unquote_plus(from_unicode(title))), url=url)
+    ResumePoints().unwatchlater(episode_id=episode_id, title=to_unicode(unquote_plus(from_unicode(title))))
 
 
 @plugin.route('/favorites')

@@ -87,16 +87,18 @@ class Stream:
             else:
                 listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
 
+            listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
+            listitem.setProperty('inputstream.adaptive.stream_headers', 'User-Agent=%s' % UA_NBCSN)
+            lic_headers = 'User-Agent=Dalvik%2F2.1.0+(Linux%3B+U%3B+Android+6.0.1%3B+Hub+Build%2FMHC19J)'
             if self.drm_type == 'widevine':
-                lic_headers = 'User-Agent=Dalvik%2F2.1.0+(Linux%3B+U%3B+Android+6.0.1%3B+Hub+Build%2FMHC19J)'
                 lic_headers += '&Content-Type=application/octet-stream'
                 lic_headers += '&X-ISP-TOKEN=%s' % urllib.quote(self.get_drm_token())
                 license_key = '%s|%s|R{SSM}|' % (self.lic_url, lic_headers)
-                listitem.setProperty('inputstream.adaptive.license_key', license_key)
                 listitem.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
+            else:
+                license_key = '|%s||' % (lic_headers)
 
-            listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
-            listitem.setProperty('inputstream.adaptive.stream_headers', 'User-Agent=%s' % UA_NBCSN)
+            listitem.setProperty('inputstream.adaptive.license_key', license_key)
         else:
             listitem.setMimeType("application/x-mpegURL")
 

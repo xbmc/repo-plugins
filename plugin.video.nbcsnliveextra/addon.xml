@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nbcsnliveextra" name="NBC Sports Live Extra" version="2022.1.3+matrix.1" provider-name="eracknaphobia">
+<addon id="plugin.video.nbcsnliveextra" name="NBC Sports Live Extra" version="2022.1.29+matrix.1" provider-name="eracknaphobia">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.adobepass" />
@@ -16,7 +16,7 @@
     <summary lang="en_GB">Watch NBCSN Live Extra</summary>
     <description lang="en_GB">NBC Sports Live Extra is a service that allows you to watch NBC Sports coverage of live events from NBC and NBCSports Network</description>
     <news>
-        - Fix for free content not playing
+        - Fix playback failing by always setting inputstream license headers
     </news>
     <language>en</language>
     <platform>all</platform>

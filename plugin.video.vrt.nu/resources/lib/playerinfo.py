@@ -35,6 +35,8 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         self.path = None
         self.title = None
         self.ep_id = None
+        self.episode_id = None
+        self.episode_title = None
         self.video_id = None
         from random import randint
         self.thread_id = randint(1, 10001)
@@ -61,6 +63,8 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
 
         # Reset episode data
         self.video_id = None
+        self.episode_id = None
+        self.episode_title = None
         self.asset_str = None
         self.title = None
 
@@ -87,6 +91,8 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
 
         from metadata import Metadata
         self.video_id = episode.get('videoId') or None
+        self.episode_id = episode.get('episodeId') or None
+        self.episode_title = episode.get('title') or None
         self.asset_str = Metadata(None, None).get_asset_str(episode)
         self.title = episode.get('program')
 
@@ -282,5 +288,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
             title=self.title,
             position=position,
             total=total,
-            path=self.path
+            path=self.path,
+            episode_id=self.episode_id,
+            episode_title=self.episode_title
         )

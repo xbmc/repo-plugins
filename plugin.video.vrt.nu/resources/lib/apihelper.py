@@ -548,8 +548,8 @@ class ApiHelper:
 
             if variety == 'watchlater':
                 self._resumepoints.refresh_watchlater(ttl=ttl('direct'))
-                episode_urls = self._resumepoints.watchlater_urls()
-                params['facets[url]'] = '[%s]' % (','.join(episode_urls))
+                episode_ids = self._resumepoints.watchlater_ids()
+                params['facets[episodeId]'] = '[%s]' % (','.join(episode_ids))
 
             if variety == 'continue':
                 self._resumepoints.refresh_resumepoints(ttl=ttl('direct'))

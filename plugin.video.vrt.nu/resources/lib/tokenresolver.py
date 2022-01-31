@@ -304,7 +304,9 @@ class TokenResolver:
         self.delete_tokens()
 
         # Delete user-related caches
-        invalidate_caches('continue-*.json', 'favorites.json', 'my-offline-*.json', 'my-recent-*.json', 'resume_points.json', 'watchlater-*.json')
+        invalidate_caches(
+            'continue-*.json', 'favorites.json', 'my-offline-*.json', 'my-recent-*.json',
+            'resume_points.json', 'watchlater.json', 'watchlater-*.json')
 
     def logged_in(self):
         """Whether there is an active login"""

@@ -180,7 +180,7 @@ class VRTPlayer:
         show_listing(favorites_items, category=30010, cache=False)  # My favorites
 
         # Show dialog when no favorites were found
-        if not self._favorites.titles():
+        if not self._favorites.programs():
             ok_dialog(heading=localize(30415), message=localize(30416))
 
     def show_favorites_docu_menu(self):

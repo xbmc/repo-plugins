@@ -1,9 +1,12 @@
 <settings>
-	 <category label="30001">
-	   <setting id="numberOfShowsPerPage" type="number" label="30004" default="10"/>
+	<category label="30001">
+		<setting id="numberOfShowsPerPage" type="number" label="30004" default="10" />
 	</category>
-	 <category label="30010">
-	   <setting id="consumerKey" type="text" label="30012" />
-	   <setting id="consumerSecret" type="text" label="30013" />
+	<category label="30010">
+		<setting id="consumerKey" type="text" label="30012" />
+		<setting id="consumerSecret" type="text" label="30013" />
+		<setting id="subtitlesEnabled" type="bool" label="30002" default="false" />
+		<setting id="consumerKeySubtitles" type="text" label="30023" enable="eq(-1,true)" subsetting="true" />
+		<setting id="consumerSecretSubtitles" type="text" label="30024" enable="eq(-2,true)" subsetting="true" />
 	</category>
 </settings>

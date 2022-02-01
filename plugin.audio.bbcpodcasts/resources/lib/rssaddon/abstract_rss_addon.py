@@ -106,7 +106,7 @@ class AbstractRssAddon:
 
         res, cookies = http_request(self.addon, url)
 
-        if not res.startswith("<?xml"):
+        if not res.startswith("<?xml") and not res.startswith("<rss"):
             raise HttpStatusError("%s %s" % (
                 self.addon.getLocalizedString(32155), url))
 
@@ -261,7 +261,7 @@ class AbstractRssAddon:
                                             url=item["stream_url"],
                                             isFolder=False)
 
-            if "setDateTime" in dir(li):  # available since Kodi v20
+            if li and "setDateTime" in dir(li):  # available since Kodi v20
                 xbmcplugin.addSortMethod(
                     self.addon_handle, xbmcplugin.SORT_METHOD_DATE)
             xbmcplugin.endOfDirectory(self.addon_handle)

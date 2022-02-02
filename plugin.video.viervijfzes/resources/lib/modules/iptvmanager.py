@@ -4,7 +4,7 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import logging
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
 from resources.lib import kodiutils
 from resources.lib.viervijfzes import CHANNELS

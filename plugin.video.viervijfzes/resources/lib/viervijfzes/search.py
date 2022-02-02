@@ -9,7 +9,7 @@ import logging
 import requests
 
 from resources.lib import kodiutils
-from resources.lib.viervijfzes.content import Program, ContentApi, CACHE_ONLY
+from resources.lib.viervijfzes.content import CACHE_ONLY, ContentApi, Program
 
 _LOGGER = logging.getLogger(__name__)
 

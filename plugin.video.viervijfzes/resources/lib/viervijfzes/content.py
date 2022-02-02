@@ -13,7 +13,7 @@ from datetime import datetime
 
 import requests
 
-from resources.lib.kodiutils import html_to_kodi, STREAM_DASH, STREAM_HLS
+from resources.lib.kodiutils import STREAM_DASH, STREAM_HLS, html_to_kodi
 from resources.lib.viervijfzes import ResolvedStream
 
 try:  # Python 3
@@ -366,7 +366,7 @@ class ContentApi:
             drm_key = data['drmKey']['S']
 
             _LOGGER.debug('Fetching Authentication XML with drm_key %s', drm_key)
-            response_drm = self._get_url(self.API_GOPLAY + '/restricted/decode/%s' % drm_key, authentication=True)
+            response_drm = self._get_url(self.API_GOPLAY + '/video/xml/%s' % drm_key, authentication=True)
             data_drm = json.loads(response_drm)
 
             return ResolvedStream(

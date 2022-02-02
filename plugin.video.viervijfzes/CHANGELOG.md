@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.4.6](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.6) (2022-02-02)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.4.5...v0.4.6)
+
+**Fixed bugs:**
+
+- Fix playback of DRM protected content [\#101](https://github.com/add-ons/plugin.video.viervijfzes/pull/101) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v0.4.5](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.5) (2021-10-21)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.4.4...v0.4.5)
@@ -15,12 +23,7 @@
 
 **Fixed bugs:**
 
-- Fix tests [\#94](https://github.com/add-ons/plugin.video.viervijfzes/pull/94) ([mediaminister](https://github.com/mediaminister))
 - Fix menu [\#93](https://github.com/add-ons/plugin.video.viervijfzes/pull/93) ([mediaminister](https://github.com/mediaminister))
-
-**Merged pull requests:**
-
-- Prepare for v0.4.4 [\#95](https://github.com/add-ons/plugin.video.viervijfzes/pull/95) ([mediaminister](https://github.com/mediaminister))
 
 ## [v0.4.3](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.3) (2021-04-24)
 
@@ -59,11 +62,6 @@
 
 - Fix error when requesting a My List that has not been created yet. [\#73](https://github.com/add-ons/plugin.video.viervijfzes/pull/73) ([michaelarnauts](https://github.com/michaelarnauts))
 
-**Merged pull requests:**
-
-- Cleanup CI [\#72](https://github.com/add-ons/plugin.video.viervijfzes/pull/72) ([michaelarnauts](https://github.com/michaelarnauts))
-- Remove dependency on tox [\#70](https://github.com/add-ons/plugin.video.viervijfzes/pull/70) ([michaelarnauts](https://github.com/michaelarnauts))
-
 ## [v0.4.0](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.0) (2021-02-04)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.3.1...v0.4.0)
@@ -72,12 +70,6 @@
 
 - Rebranding to GoPlay [\#64](https://github.com/add-ons/plugin.video.viervijfzes/pull/64) ([michaelarnauts](https://github.com/michaelarnauts))
 
-**Merged pull requests:**
-
-- Make use of git archive [\#66](https://github.com/add-ons/plugin.video.viervijfzes/pull/66) ([dagwieers](https://github.com/dagwieers))
-- Run CI on Windows [\#62](https://github.com/add-ons/plugin.video.viervijfzes/pull/62) ([michaelarnauts](https://github.com/michaelarnauts))
-- Add support for Python 3.9 [\#60](https://github.com/add-ons/plugin.video.viervijfzes/pull/60) ([michaelarnauts](https://github.com/michaelarnauts))
-
 ## [v0.3.1](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.3.1) (2020-11-28)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.3.0...v0.3.1)
@@ -85,10 +77,6 @@
 **Fixed bugs:**
 
 - Fix authentication on some older Android devices [\#58](https://github.com/add-ons/plugin.video.viervijfzes/pull/58) ([michaelarnauts](https://github.com/michaelarnauts))
-
-**Merged pull requests:**
-
-- Fix CI tests [\#59](https://github.com/add-ons/plugin.video.viervijfzes/pull/59) ([michaelarnauts](https://github.com/michaelarnauts))
 
 ## [v0.3.0](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.3.0) (2020-11-17)
 
@@ -108,11 +96,6 @@
 - Fix logging for Kodi Matrix [\#48](https://github.com/add-ons/plugin.video.viervijfzes/pull/48) ([michaelarnauts](https://github.com/michaelarnauts))
 - Opening some programs without a title could throw an error [\#45](https://github.com/add-ons/plugin.video.viervijfzes/pull/45) ([dagwieers](https://github.com/dagwieers))
 - Show message when Kodi Player fails to get the stream [\#40](https://github.com/add-ons/plugin.video.viervijfzes/pull/40) ([mediaminister](https://github.com/mediaminister))
-
-**Merged pull requests:**
-
-- Various fixes [\#46](https://github.com/add-ons/plugin.video.viervijfzes/pull/46) ([michaelarnauts](https://github.com/michaelarnauts))
-- Use sake for Kodi stubs [\#36](https://github.com/add-ons/plugin.video.viervijfzes/pull/36) ([michaelarnauts](https://github.com/michaelarnauts))
 
 ## [v0.2.0](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.2.0) (2020-06-19)
 
@@ -138,11 +121,6 @@
 - Fix multi-line text in progress dialog [\#21](https://github.com/add-ons/plugin.video.viervijfzes/pull/21) ([mediaminister](https://github.com/mediaminister))
 - Fix token encoding in auth [\#19](https://github.com/add-ons/plugin.video.viervijfzes/pull/19) ([michaelarnauts](https://github.com/michaelarnauts))
 
-**Merged pull requests:**
-
-- Check for unused translations [\#24](https://github.com/add-ons/plugin.video.viervijfzes/pull/24) ([michaelarnauts](https://github.com/michaelarnauts))
-- Move test/ to tests/ [\#17](https://github.com/add-ons/plugin.video.viervijfzes/pull/17) ([dagwieers](https://github.com/dagwieers))
-
 ## [v0.1.0](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.1.0) (2020-03-27)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/89f55f70b017d0add645d1e1d88f0ce8192d11c4...v0.1.0)
@@ -158,11 +136,7 @@
 
 **Merged pull requests:**
 
-- Improve CI tests [\#14](https://github.com/add-ons/plugin.video.viervijfzes/pull/14) ([michaelarnauts](https://github.com/michaelarnauts))
 - Small translation fixes [\#12](https://github.com/add-ons/plugin.video.viervijfzes/pull/12) ([dagwieers](https://github.com/dagwieers))
-- Various check fixes [\#11](https://github.com/add-ons/plugin.video.viervijfzes/pull/11) ([dagwieers](https://github.com/dagwieers))
-- Replace Travis with GitHub Actions [\#10](https://github.com/add-ons/plugin.video.viervijfzes/pull/10) ([michaelarnauts](https://github.com/michaelarnauts))
-- Improve code coverage [\#9](https://github.com/add-ons/plugin.video.viervijfzes/pull/9) ([michaelarnauts](https://github.com/michaelarnauts))
 
 
 

@@ -1218,7 +1218,7 @@ def get_cached_url_json(url, cache, headers=None, ttl=None, fail=None):  # pylin
 
 def refresh_caches(cache_file=None):
     """Invalidate the needed caches and refresh container"""
-    files = ['favorites.json', 'oneoff.json', 'resume_points.json', 'resume_points_ddt.json']
+    files = ['favorites.json', 'oneoff.json', 'resume_points.json', 'watchlater.json']
     if cache_file and cache_file not in files:
         files.append(cache_file)
     invalidate_caches(*files)

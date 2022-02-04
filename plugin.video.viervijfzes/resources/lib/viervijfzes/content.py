@@ -13,7 +13,7 @@ from datetime import datetime
 
 import requests
 
-from resources.lib.kodiutils import html_to_kodi, STREAM_DASH, STREAM_HLS
+from resources.lib.kodiutils import STREAM_DASH, STREAM_HLS, html_to_kodi
 from resources.lib.viervijfzes import ResolvedStream
 
 try:  # Python 3
@@ -354,7 +354,7 @@ class ContentApi:
         :type uuid: str
         :rtype str
         """
-        response = self._get_url(self.API_VIERVIJFZES + '/content/%s' % uuid, authentication=True)
+        response = self._get_url(self.API_VIERVIJFZES + '/content/%s' % uuid, authentication=self._auth.get_token())
         data = json.loads(response)
 
         if not data:
@@ -366,7 +366,7 @@ class ContentApi:
             drm_key = data['drmKey']['S']
 
             _LOGGER.debug('Fetching Authentication XML with drm_key %s', drm_key)
-            response_drm = self._get_url(self.API_GOPLAY + '/restricted/decode/%s' % drm_key, authentication=True)
+            response_drm = self._get_url(self.API_GOPLAY + '/video/xml/%s' % drm_key, authentication=self._auth.get_token())
             data_drm = json.loads(response_drm)
 
             return ResolvedStream(
@@ -483,6 +483,33 @@ class ContentApi:
                     Category(uuid=hashlib.md5(category_title.encode('utf-8')).hexdigest(), title=category_title, programs=programs, episodes=episodes))
 
         return categories
+
+    def get_mylist(self):
+        """ Get the content of My List
+        :rtype list[Program]
+        """
+        data = self._get_url(self.API_GOPLAY + '/my-list', authentication='Bearer %s' % self._auth.get_token())
+        result = json.loads(data)
+
+        items = []
+        for item in result:
+            try:
+                program = self.get_program_by_uuid(item.get('programId'))
+                if program:
+                    program.my_list = True
+                    items.append(program)
+            except Exception as exc:  # pylint: disable=broad-except
+                _LOGGER.warning(exc)
+
+        return items
+
+    def mylist_add(self, program_id):
+        """ Add a program on My List """
+        self._post_url(self.API_GOPLAY + '/my-list', data={'programId': program_id}, authentication='Bearer %s' % self._auth.get_token())
+
+    def mylist_del(self, program_id):
+        """ Remove a program on My List """
+        self._delete_url(self.API_GOPLAY + '/my-list-item', params={'programId': program_id}, authentication='Bearer %s' % self._auth.get_token())
 
     @staticmethod
     def _extract_programs(html):
@@ -669,19 +696,56 @@ class ContentApi:
         )
         return episode
 
-    def _get_url(self, url, params=None, authentication=False):
+    def _get_url(self, url, params=None, authentication=None):
         """ Makes a GET request for the specified URL.
         :type url: str
+        :type authentication: str
         :rtype str
         """
         if authentication:
-            if not self._auth:
-                raise Exception('Requested to authenticate, but not auth object passed')
             response = self._session.get(url, params=params, headers={
-                'authorization': self._auth.get_token(),
+                'authorization': authentication,
             })
         else:
             response = self._session.get(url, params=params)
+
+        if response.status_code != 200:
+            _LOGGER.error(response.text)
+            raise Exception('Could not fetch data')
+
+        return response.text
+
+    def _post_url(self, url, params=None, data=None, authentication=None):
+        """ Makes a POST request for the specified URL.
+        :type url: str
+        :type authentication: str
+        :rtype str
+        """
+        if authentication:
+            response = self._session.post(url, params=params, json=data, headers={
+                'authorization': authentication,
+            })
+        else:
+            response = self._session.post(url, params=params, json=data)
+
+        if response.status_code != 200:
+            _LOGGER.error(response.text)
+            raise Exception('Could not fetch data')
+
+        return response.text
+
+    def _delete_url(self, url, params=None, authentication=None):
+        """ Makes a DELETE request for the specified URL.
+        :type url: str
+        :type authentication: str
+        :rtype str
+        """
+        if authentication:
+            response = self._session.delete(url, params=params, headers={
+                'authorization': authentication,
+            })
+        else:
+            response = self._session.delete(url, params=params)
 
         if response.status_code != 200:
             _LOGGER.error(response.text)

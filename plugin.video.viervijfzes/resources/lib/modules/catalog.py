@@ -4,9 +4,6 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import logging
-from datetime import datetime
-
-import dateutil.tz
 
 from resources.lib import kodiutils
 from resources.lib.kodiutils import TitleItem
@@ -253,22 +250,10 @@ class Catalog:
         kodiutils.show_listing(listing, 30005, content='tvshows')
 
     def show_mylist(self):
-        """ Show all the programs of all channels """
-        try:
-            mylist, _ = self._auth.get_dataset('myList', 'myList')
-        except Exception as ex:
-            kodiutils.notification(message=str(ex))
-            raise
+        """ Show the programs of My List """
+        mylist = self._api.get_mylist()
 
-        items = []
-        if mylist:
-            for item in mylist:
-                program = self._api.get_program_by_uuid(item.get('id'))
-                if program:
-                    program.my_list = True
-                    items.append(program)
-
-        listing = [Menu.generate_titleitem(item) for item in items]
+        listing = [Menu.generate_titleitem(item) for item in mylist]
 
         # Sort items by title
         # Used for A-Z listing or when movies and episodes are mixed.
@@ -280,23 +265,7 @@ class Catalog:
             kodiutils.end_of_directory()
             return
 
-        mylist, sync_info = self._auth.get_dataset('myList', 'myList')
-
-        if not mylist:
-            mylist = []
-
-        if uuid not in [item.get('id') for item in mylist]:
-            # Python 2.7 doesn't support .timestamp(), and windows doesn't do '%s', so we need to calculate it ourself
-            epoch = datetime(1970, 1, 1, tzinfo=dateutil.tz.gettz('UTC'))
-            now = datetime.now(tz=dateutil.tz.gettz('UTC'))
-            timestamp = int((now - epoch).total_seconds()) * 1000
-
-            mylist.append({
-                'id': uuid,
-                'timestamp': timestamp,
-            })
-
-            self._auth.put_dataset('myList', 'myList', mylist, sync_info)
+        self._api.mylist_add(uuid)
 
         kodiutils.end_of_directory()
 
@@ -306,12 +275,6 @@ class Catalog:
             kodiutils.end_of_directory()
             return
 
-        mylist, sync_info = self._auth.get_dataset('myList', 'myList')
-
-        if not mylist:
-            mylist = []
-
-        new_mylist = [item for item in mylist if item.get('id') != uuid]
-        self._auth.put_dataset('myList', 'myList', new_mylist, sync_info)
+        self._api.mylist_del(uuid)
 
         kodiutils.end_of_directory()

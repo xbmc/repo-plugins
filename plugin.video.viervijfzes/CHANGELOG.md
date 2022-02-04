@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.4.7](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.7) (2022-02-04)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.4.6...v0.4.7)
+
+**Fixed bugs:**
+
+- Fix empty My List due to unknown items [\#102](https://github.com/add-ons/plugin.video.viervijfzes/pull/102) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v0.4.6](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.6) (2022-02-02)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.4.5...v0.4.6)

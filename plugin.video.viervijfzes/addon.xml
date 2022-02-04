@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.viervijfzes" name="GoPlay" version="0.4.5" provider-name="Michaël Arnauts">
+<addon id="plugin.video.viervijfzes" name="GoPlay" version="0.4.7" provider-name="Michaël Arnauts">
     <requires>
-        <import addon="xbmc.python" version="2.26.0"/>
-        <import addon="script.module.dateutil" version="2.6.0"/>
-        <import addon="script.module.inputstreamhelper" version="0.5.1"/>
-        <import addon="script.module.pysocks" version="1.6.8" optional="true"/>
-        <import addon="script.module.requests" version="2.22.0"/>
-        <import addon="script.module.routing" version="0.2.0"/>
+        <import addon="xbmc.python" version="2.26.0" />
+        <import addon="script.module.dateutil" version="2.6.0" />
+        <import addon="script.module.inputstreamhelper" version="0.5.1" />
+        <import addon="script.module.pysocks" version="1.6.8" optional="true" />
+        <import addon="script.module.requests" version="2.22.0" />
+        <import addon="script.module.routing" version="0.2.0" />
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon_entry.py">
         <provides>video</provides>
     </extension>
-    <extension point="xbmc.service" library="service_entry.py"/>
+    <extension point="xbmc.service" library="service_entry.py" />
     <extension point="xbmc.addon.metadata">
         <summary lang="nl_NL">Bekijk programma's van Play4, Play5 en Play6.</summary>
         <description lang="nl_NL">Deze add-on geeft toegang tot de programma's die aangeboden worden op de websites van Play4, Play5 en Play6.</description>
@@ -21,8 +21,8 @@
         <disclaimer lang="en_GB">This add-on is not officially commissioned/supported by SBS Belgium and is provided 'as is' without any warranty of any kind. The Play4, Play5 and Play6 logos are property of SBS Belgium.</disclaimer>
         <platform>all</platform>
         <license>GPL-3.0-only</license>
-	    <news>v0.4.5 (2021-10-21)
-- Various fixes due to changes on the GoPlay website.</news>
+	    <news>v0.4.7 (2022-02-04)
+- Fix My List.</news>
         <source>https://github.com/add-ons/plugin.video.viervijfzes</source>
         <assets>
             <icon>resources/icon.png</icon>

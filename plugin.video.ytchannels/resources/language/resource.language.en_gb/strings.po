@@ -137,6 +137,10 @@ msgctxt "#30029"
 msgid "Live"
 msgstr ""
 
+msgctxt "#30031"
+msgid "Playing using YouTube"
+msgstr ""
+
 msgctxt "#30099"
 msgid "Youtube channels"
 msgstr ""
@@ -176,4 +180,3 @@ msgstr ""
 msgctxt "#30208"
 msgid "Enable live streams"
 msgstr ""
-

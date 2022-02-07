@@ -3,7 +3,8 @@ import time
 import xbmcgui, xbmcaddon, xbmcplugin, xbmc
 
 
-def timeConvert(orgtime):				#  Verify CBC Sports tiem format
+def timeConvert(orgtime):				#  Verify CBC Sports time format
+
 
     if len(orgtime) == 20 and orgtime[2] == '/' and orgtime[5] == '/' and orgtime[13] == ':':
         retime = orgtime
@@ -15,6 +16,9 @@ def timeConvert(orgtime):				#  Verify CBC Sports tiem format
         retime = retime[:5] + '/' + retime[5:]
     else:
         retime = 'invalid'
+
+    if int(orgtime[11:13]) > 24:
+        retime = 'invalid'     
 
     return(retime)
 

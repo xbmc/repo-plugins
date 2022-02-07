@@ -265,6 +265,7 @@ def VIDEOS(url):
 	    xbmc.log('CBC Sports VIDEOS name: ' + str(url), xbmc.LOGINFO)
 	if cbclog == 2:
 	    xbmc.log('CBC Sports VIDEOS data ' + str(jdata), xbmc.LOGDEBUG)
+	    #xbmc.log('CBC Sports VIDEOS data ' + str(jdata), xbmc.LOGINFO)
 	item_dict = jdata
 	count = len(item_dict['entries'])
 	for item in jdata['entries']:

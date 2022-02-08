@@ -67,6 +67,14 @@ msgctxt "#30106"
 msgid "API Server unreachable"
 msgstr ""
 
+msgctxt "#30107"
+msgid "Comment API Error"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Comment API Server unreachable"
+msgstr ""
+
 # generic UI 302xx
 msgctxt "#30200"
 msgid "Followed Channels"

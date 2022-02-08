@@ -18,10 +18,16 @@ from resources.lib.exception import *
 ADDON = xbmcaddon.Addon()
 tr = ADDON.getLocalizedString
 lbry_api_url = unquote(ADDON.getSetting('lbry_api_url'))
-odysee_comment_api_url = 'https://comments.odysee.com/api/v2'
 if lbry_api_url == '':
     raise Exception('Lbry API URL is undefined.')
 using_lbry_proxy = lbry_api_url.find('api.lbry.tv') != -1
+
+odysee_comment_api_url = 'https://comments.odysee.com/api/v2'
+
+# assure profile directory exists
+profile_path = ADDON.getAddonInfo('profile')
+if not xbmcvfs.exists(profile_path):
+    xbmcvfs.mkdir(profile_path)
 
 items_per_page = ADDON.getSettingInt('items_per_page')
 nsfw = ADDON.getSettingBool('nsfw')
@@ -31,13 +37,12 @@ ph = plugin.handle
 setContent(ph, 'videos')
 dialog = Dialog()
 
-def call_rpc(method, params={}, errdialog=True, url=lbry_api_url, extra_json_vals={}, headers={}):
+def call_rpc(method, params={}, errdialog=True):
     try:
-        xbmc.log('call_rpc: url=' + url + ', method=' + method + ', params=' + str(params))
-        json = extra_json_vals
-        json['method'] = method
-        json['params'] = params
-        result = requests.post(url, headers=headers, json=json)
+        xbmc.log('call_rpc: url=' + lbry_api_url + ', method=' + method + ', params=' + str(params))
+        headers = {'content-type' : 'application/json'}
+        json = { 'jsonrpc' : '2.0', 'id' : '1', 'method': method, 'params': params }
+        result = requests.post(lbry_api_url, headers=headers, json=json)
         result.raise_for_status()
         rjson = result.json()
         if 'error' in rjson:
@@ -59,27 +64,49 @@ def call_rpc(method, params={}, errdialog=True, url=lbry_api_url, extra_json_val
         xbmc.log('call_rpc exception:' + str(e))
         raise e
 
-def call_comment_rpc(method, params={}):
-    headers = {'content-type' : 'application/json'}
-    extra_json_vals = { 'jsonrpc' : '2.0', 'id' : '1' }
-    return call_rpc(method, params, errdialog=True, url=odysee_comment_api_url, extra_json_vals=extra_json_vals, headers=headers)
+def call_comment_rpc(method, params={}, errdialog=True):
+    try:
+        xbmc.log('call_comment_rpc: url=' + odysee_comment_api_url + ', method=' + method + ', params=' + str(params))
+        headers = {'content-type' : 'application/json'}
+        json = { 'jsonrpc' : '2.0', 'id' : '1', 'method': method, 'params': params }
+        result = requests.post(odysee_comment_api_url, headers=headers, json=json)
+        result.raise_for_status()
+        rjson = result.json()
+        if 'error' in rjson:
+            raise PluginException(rjson['error']['message'])
+        return result.json()['result']
+    except requests.exceptions.ConnectionError as e:
+        if errdialog:
+            dialog.notification(tr(30105), tr(30108), NOTIFICATION_ERROR)
+        raise PluginException(e)
+    except requests.exceptions.HTTPError as e:
+        if errdialog:
+            dialog.notification(tr(30101), str(e), NOTIFICATION_ERROR)
+        raise PluginException(e)
+    except PluginException as e:
+        if errdialog:
+            dialog.notification(tr(30107), str(e), NOTIFICATION_ERROR)
+        raise e
+    except Exception as e:
+        xbmc.log('call_comment_rpc exception:' + str(e))
+        raise e
 
 # Sign data if a user channel is selected
 def sign(data):
-    def to_hex(s):
-      s = unquote_plus(quote_plus(s,encoding='utf-8'))
-      res = '';
-      for c in s:
-        s = format(ord(c), 'x')
-        if len(s) == 1:
-            s = '0' + s;
-        res += s
-      return res
-
     user_channel = get_user_channel()
-    if user_channel:
-        return call_rpc('channel_sign', params={'channel_id':user_channel[1],'hexdata':to_hex(data)})
-    return None
+    if not user_channel:
+        return None
+
+    # assume data type is str
+    if type(data) is not str:
+        raise Exception('attempt to sign non-str type')
+
+    bdata = bytes(data, 'utf-8')
+
+    toHex = lambda x : "".join([format(c,'02x') for c in x])
+
+    return call_rpc('channel_sign', params={'channel_id': user_channel[1], 'hexdata': toHex(bdata)})
+
 
 def serialize_uri(item):
     # all uris passed via kodi's routing system must be urlquoted
@@ -87,12 +114,6 @@ def serialize_uri(item):
         return quote(item['name'] + '#' + item['claim_id'])
     else:
         return quote(item)
-
-def serialize_comment_uri(item):
-    if 'signing_channel' in item and 'name' in item['signing_channel'] and 'claim_id' in item['signing_channel']:
-        signing_channel = item['signing_channel']
-        return quote(signing_channel['name'] + '#' + signing_channel['claim_id'] + '#' + item['claim_id'])
-    return None
 
 def deserialize_uri(item):
     # all uris passed via kodi's routing system must be urlquoted
@@ -125,11 +146,11 @@ def to_video_listitem(item, playlist='', channel='', repost=None):
         infoLabels['duration'] = str(item['value']['video']['duration'])
 
     if playlist == '':
-        uri = serialize_comment_uri(item)
-        if uri:
+        if 'signing_channel' in item:
+            comment_uri = item['signing_channel']['name'] + '#' + item['signing_channel']['claim_id'] + '#' + item['claim_id']
             menu.append((
-                tr(30238), 'RunPlugin(%s)' % plugin.url_for(plugin_comment_show, uri=uri)
-                ))
+                tr(30238), 'RunPlugin(%s)' % plugin.url_for(plugin_comment_show, uri=serialize_uri(comment_uri))
+            ))
 
         menu.append((
             tr(30212) % tr(30211), 'RunPlugin(%s)' % plugin.url_for(plugin_playlist_add, name=quote(tr(30211)), uri=serialize_uri(item))
@@ -236,11 +257,15 @@ def get_user_channel():
 
 def set_user_channel(channel_name, channel_id):
     ADDON.setSettingString('user_channel', "%s#%s" % (channel_name, channel_id))
+    ADDON.setSettingString('user_channel_vis', "%s#%s" % (channel_name, channel_id[:5]))
+
+@plugin.route('/clear_user_channel')
+def clear_user_channel():
+    ADDON.setSettingString('user_channel', '')
+    ADDON.setSettingString('user_channel_vis', '')
 
 @plugin.route('/select_user_channel')
 def select_user_channel():
-    user_channel = ADDON.getSettingString('user_channel')
-
     progressDialog = xbmcgui.DialogProgress()
     progressDialog.create(tr(30231))
 
@@ -264,6 +289,8 @@ def select_user_channel():
 
         page = page + 1
         progressDialog.update(int(100.0*page/total_pages), tr(30220) + ' %s/%s' % (page, total_pages))
+
+    selected_item = None
 
     if len(items) == 0:
         progressDialog.update(100, tr(30232)) # No owned channels found
@@ -289,11 +316,9 @@ def select_user_channel():
 
         if selected_name_index >= 0: # If not cancelled
             selected_item = items[selected_name_index]
-            set_user_channel(selected_item['name'], selected_item['claim_id'])
 
-@plugin.route('/clear_user_channel')
-def clear_user_channel():
-    ADDON.setSettingString('user_channel', '')
+    if selected_item:
+        set_user_channel(selected_item['name'], selected_item['claim_id'])
 
 class CommentWindow(WindowXML):
     def __init__(self, *args, **kwargs):
@@ -709,7 +734,7 @@ def lbry_root():
     addDirectoryItem(ph, plugin.url_for(plugin_recent, page=1), ListItem(tr(30218)), True)
     #addDirectoryItem(ph, plugin.url_for(plugin_playlists), ListItem(tr(30210)), True)
     addDirectoryItem(ph, plugin.url_for(plugin_playlist, name=quote_plus(tr(30211))), ListItem(tr(30211)), True)
-    addDirectoryItem(ph, plugin.url_for(lbry_new, page=1), ListItem(tr(30202)), True)
+    #addDirectoryItem(ph, plugin.url_for(lbry_new, page=1), ListItem(tr(30202)), True)
     addDirectoryItem(ph, plugin.url_for(lbry_search), ListItem(tr(30201)), True)
     endOfDirectory(ph)
 

@@ -22,12 +22,12 @@ msgstr ""
 
 #: Settings
 msgctxt "#32102"
-msgid "Enable Harmony hub control"
+msgid "Enable external app control"
 msgstr ""
 
 #: Settings
 msgctxt "#32103"
-msgid "Harmony hub IP address"
+msgid "Device address"
 msgstr ""
 
 #: Settings
@@ -45,6 +45,35 @@ msgctxt "#32106"
 msgid "Delay between remote commands (in milliseconds)"
 msgstr ""
 
+#: Settings
+msgctxt "#32107"
+msgid "External Control Type"
+msgstr ""
+
+#: Settings
+msgctxt "#32108"
+msgid "Device port"
+msgstr ""
+
+#: Settings
+msgctxt "#32109"
+msgid "HA Token"
+msgstr ""
+
+#: Settings
+msgctxt "#32110"
+msgid "Home Assistant"
+msgstr ""
+
+#: Settings
+msgctxt "#32111"
+msgid "Harmony Hub"
+msgstr ""
+
+#: Settings
+msgctxt "#32112"
+msgid "Use secure connection to Home Assistant"
+msgstr ""
 
 #: Dialog Heading
 msgctxt "#32200"
@@ -63,7 +92,7 @@ msgstr ""
 
 #: Dialog Heading
 msgctxt "#32203"
-msgid "Enter Harmony activity"
+msgid "Enter activity/script"
 msgstr ""
 
 #: Dialog Heading

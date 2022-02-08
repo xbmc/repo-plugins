@@ -1,7 +1,7 @@
-# v.0.4.14
+# v.0.5.0
 
 try:
-    from kodi_six import xbmc
+    import xbmc
     LOGTYPE = 'xbmc'
 except ImportError:
     import os

@@ -26,6 +26,13 @@ if lbry_api_url == '':
     raise Exception('Lbry API URL is undefined.')
 using_lbry_proxy = lbry_api_url.find('api.lbry.tv') != -1
 
+odysee_comment_api_url = 'https://comments.odysee.com/api/v2'
+
+# assure profile directory exists
+profile_path = ADDON.getAddonInfo('profile')
+if not xbmcvfs.exists(profile_path):
+    xbmcvfs.mkdir(profile_path)
+
 items_per_page = ADDON.getSettingInt('items_per_page')
 nsfw = ADDON.getSettingBool('nsfw')
 
@@ -37,7 +44,9 @@ dialog = Dialog()
 def call_rpc(method, params={}, errdialog=True):
     try:
         xbmc.log('call_rpc: url=' + lbry_api_url + ', method=' + method + ', params=' + str(params))
-        result = requests.post(lbry_api_url, json={'method': method, 'params': params})
+        headers = {'content-type' : 'application/json'}
+        json = { 'jsonrpc' : '2.0', 'id' : '1', 'method': method, 'params': params }
+        result = requests.post(lbry_api_url, headers=headers, json=json)
         result.raise_for_status()
         rjson = result.json()
         if 'error' in rjson:
@@ -58,6 +67,48 @@ def call_rpc(method, params={}, errdialog=True):
     except Exception as e:
         xbmc.log('call_rpc exception:' + str(e))
         raise e
+
+def call_comment_rpc(method, params={}, errdialog=True):
+    try:
+        xbmc.log('call_comment_rpc: url=' + odysee_comment_api_url + ', method=' + method + ', params=' + str(params))
+        headers = {'content-type' : 'application/json'}
+        json = { 'jsonrpc' : '2.0', 'id' : '1', 'method': method, 'params': params }
+        result = requests.post(odysee_comment_api_url, headers=headers, json=json)
+        result.raise_for_status()
+        rjson = result.json()
+        if 'error' in rjson:
+            raise PluginException(rjson['error']['message'])
+        return result.json()['result']
+    except requests.exceptions.ConnectionError as e:
+        if errdialog:
+            dialog.notification(tr(30105), tr(30108), NOTIFICATION_ERROR)
+        raise PluginException(e)
+    except requests.exceptions.HTTPError as e:
+        if errdialog:
+            dialog.notification(tr(30101), str(e), NOTIFICATION_ERROR)
+        raise PluginException(e)
+    except PluginException as e:
+        if errdialog:
+            dialog.notification(tr(30107), str(e), NOTIFICATION_ERROR)
+        raise e
+    except Exception as e:
+        xbmc.log('call_comment_rpc exception:' + str(e))
+        raise e
+
+# Sign data if a user channel is selected
+def sign(data):
+    user_channel = get_user_channel()
+    if not user_channel:
+        return None
+
+    # assume data type is str
+    if type(data) is not str:
+        raise Exception('attempt to sign non-str type')
+
+    toHex = lambda x : "".join([format(ord(c),'02x') for c in x])
+
+    return call_rpc('channel_sign', params={'channel_id': user_channel[1], 'hexdata': toHex(bdata)})
+
 
 def serialize_uri(item):
     # all uris passed via kodi's routing system must be urlquoted
@@ -98,8 +149,10 @@ def to_video_listitem(item, playlist='', channel='', repost=None):
         infoLabels['duration'] = str(item['value']['video']['duration'])
 
     if playlist == '':
-        menu.append((
-            tr(30238), 'RunPlugin(%s)' % plugin.url_for(plugin_comment_show, uri=serialize_uri(item))
+        if 'signing_channel' in item:
+            comment_uri = item['signing_channel']['name'] + '#' + item['signing_channel']['claim_id'] + '#' + item['claim_id']
+            menu.append((
+                tr(30238), 'RunPlugin(%s)' % plugin.url_for(plugin_comment_show, uri=serialize_uri(comment_uri))
             ))
 
         menu.append((
@@ -207,11 +260,15 @@ def get_user_channel():
 
 def set_user_channel(channel_name, channel_id):
     ADDON.setSettingString('user_channel', "%s#%s" % (channel_name, channel_id))
+    ADDON.setSettingString('user_channel_vis', "%s#%s" % (channel_name, channel_id[:5]))
+
+@plugin.route('/clear_user_channel')
+def clear_user_channel():
+    ADDON.setSettingString('user_channel', '')
+    ADDON.setSettingString('user_channel_vis', '')
 
 @plugin.route('/select_user_channel')
 def select_user_channel():
-    user_channel = ADDON.getSettingString('user_channel')
-
     progressDialog = xbmcgui.DialogProgress()
     progressDialog.create(tr(30231))
 
@@ -235,6 +292,8 @@ def select_user_channel():
 
         page = page + 1
         progressDialog.update(int(100.0*page/total_pages), tr(30220) + ' %s/%s' % (page, total_pages))
+
+    selected_item = None
 
     if len(items) == 0:
         progressDialog.update(100, tr(30232)) # No owned channels found
@@ -260,14 +319,14 @@ def select_user_channel():
 
         if selected_name_index >= 0: # If not cancelled
             selected_item = items[selected_name_index]
-            set_user_channel(selected_item['name'], selected_item['claim_id'])
 
-@plugin.route('/clear_user_channel')
-def clear_user_channel():
-    ADDON.setSettingString('user_channel', '')
+    if selected_item:
+        set_user_channel(selected_item['name'], selected_item['claim_id'])
 
 class CommentWindow(WindowXML):
     def __init__(self, *args, **kwargs):
+        self.channel_name = kwargs['channel_name']
+        self.channel_id = kwargs['channel_id']
         self.claim_id = kwargs['claim_id']
         self.last_selected_position = -1
         WindowXML.__init__(self, args, kwargs)
@@ -363,7 +422,7 @@ class CommentWindow(WindowXML):
                     self.refresh_label(item)
 
                 elif ret == offsets[2]: # Clear Vote
-                    self.neutral(comment_id)
+                    self.neutral(comment_id, item.getProperty('my_vote'))
                     item.setProperty('my_vote', str(0))
                     self.refresh_label(item)
 
@@ -443,6 +502,18 @@ class CommentWindow(WindowXML):
                 self.refresh_label(newItem, True)
             self.last_selected_position = ccl.getSelectedPosition()
 
+    def fetch_comment_list(self, page):
+        return call_comment_rpc('comment.List', params={"page":page,"page_size":50,'include_replies':True,'visible':False,'hidden':False,'top_level':False,'channel_name':self.channel_name,'channel_id':self.channel_id,'claim_id':self.claim_id,'sort_by':0})
+
+    def fetch_react_list(self, comment_ids):
+        user_channel = get_user_channel()
+        params = {'comment_ids' : comment_ids }
+        if user_channel:
+            params['channel_name'] = user_channel[0]
+            params['channel_id'] = user_channel[1]
+            self.sign(user_channel[0], params)
+        return call_comment_rpc('reaction.List', params=params)
+
     def refresh(self):
         self.last_selected_position = -1
         progressDialog = xbmcgui.DialogProgress()
@@ -450,10 +521,8 @@ class CommentWindow(WindowXML):
 
         ccl = self.get_comment_control_list()
 
-        query = { 'include_replies' : True, 'visible' : False, 'hidden' : False, 'page' : 1, 'claim_id' : self.claim_id, 'page_size' : 50 }
-        result = call_rpc('comment_list', query)
-
         page = 1
+        result = self.fetch_comment_list(page)
         total_pages = result['total_pages']
 
         while page < total_pages:
@@ -461,8 +530,7 @@ class CommentWindow(WindowXML):
                 break
             progressDialog.update(int(100.0*page/total_pages), tr(30220) + " %s/%s" % (page + 1, total_pages))
             page = page+1
-            query['page'] = page
-            result['items'] += call_rpc('comment_list', query)['items']
+            result['items'] += self.fetch_comment_list(page)['items']
 
         if 'items' in result:
             ccl.reset()
@@ -472,12 +540,7 @@ class CommentWindow(WindowXML):
             comment_ids = ''
             for item in items:
                 comment_ids += item['comment_id'] + ','
-            params = { 'comment_ids' : comment_ids }
-            user_channel = get_user_channel()
-            if user_channel:
-                params['channel_name'] = user_channel[0]
-                params['channel_id'] = user_channel[1]
-            result = call_rpc('comment_react_list', params)
+            result = self.fetch_react_list(comment_ids)
             others_reactions = result['others_reactions']
 
             # Items are returned newest to oldest which implies that child comments are always before their parents.
@@ -607,6 +670,11 @@ class CommentWindow(WindowXML):
 
         return lilabel
 
+    def sign(self, data, params):
+        res = sign(data)
+        params['signature'] = res['signature']
+        params['signing_ts'] = res['signing_ts']
+
     def create_comment(self, comment, parent_id=None):
         user_channel = get_user_channel()
         progressDialog = xbmcgui.DialogProgress()
@@ -614,7 +682,8 @@ class CommentWindow(WindowXML):
         params = { 'claim_id' : self.claim_id, 'comment' : comment, 'channel_id' : user_channel[1] }
         if parent_id:
             params['parent_id'] = parent_id
-        res = call_rpc('comment_create', params)
+        self.sign(comment, params)
+        res = call_comment_rpc('comment.Create', params)
         self.like(res['comment_id'])
         progressDialog.close()
         return res['comment_id']
@@ -622,31 +691,45 @@ class CommentWindow(WindowXML):
     def edit_comment(self, comment_id, comment):
         user_channel = get_user_channel()
         params = { 'comment_id' : comment_id, 'comment' : comment }
-        return call_rpc('comment_update', params)
+        self.sign(comment, params)
+        return call_comment_rpc('comment.Edit', params)
 
     def remove_comment(self, comment_id):
         params = { 'comment_id' : comment_id }
-        call_rpc('comment_abandon', params)
+        self.sign(comment_id, params)
+        call_comment_rpc('comment.Abandon', params)
 
-    def react(self, comment_id, type=None):
+    def react(self, comment_id, current_vote=0, type=None):
+        # No vote to clear
+        if current_vote == '0' and type == None:
+            return
+
         user_channel = get_user_channel()
         params = { 'comment_ids' : comment_id,
-                'clear_types': 'like,dislike',
                 'channel_name' : user_channel[0],
                 'channel_id' : user_channel[1]
                 }
-        if type:
-            params['react_type'] = type
-        call_rpc('comment_react', params)
+        if type == 'like':
+            params['clear_types'] = 'dislike'
+            params['type'] = 'like'
+        elif type == 'dislike':
+            params['clear_types'] = 'like'
+            params['type'] = 'dislike'
+        else:
+            params['remove'] = True
+            params['type'] = 'dislike' if current_vote == '-1' else 'like'
+
+        self.sign(user_channel[0], params)
+        call_comment_rpc('reaction.React', params)
 
     def like(self, comment_id):
-        self.react(comment_id, 'like')
+        self.react(comment_id, type='like')
 
     def dislike(self, comment_id):
-        self.react(comment_id, 'dislike')
+        self.react(comment_id, type='dislike')
 
-    def neutral(self, comment_id):
-        self.react(comment_id)
+    def neutral(self, comment_id, current_vote):
+        self.react(comment_id, current_vote=current_vote)
 
 @plugin.route('/')
 def lbry_root():
@@ -654,7 +737,7 @@ def lbry_root():
     addDirectoryItem(ph, plugin.url_for(plugin_recent, page=1), ListItem(tr(30218)), True)
     #addDirectoryItem(ph, plugin.url_for(plugin_playlists), ListItem(tr(30210)), True)
     addDirectoryItem(ph, plugin.url_for(plugin_playlist, name=quote_plus(tr(30211))), ListItem(tr(30211)), True)
-    addDirectoryItem(ph, plugin.url_for(lbry_new, page=1), ListItem(tr(30202)), True)
+    #addDirectoryItem(ph, plugin.url_for(lbry_new, page=1), ListItem(tr(30202)), True)
     addDirectoryItem(ph, plugin.url_for(lbry_search), ListItem(tr(30201)), True)
     endOfDirectory(ph)
 
@@ -750,8 +833,8 @@ def plugin_recent(page):
 
 @plugin.route('/comments/show/<uri>')
 def plugin_comment_show(uri):
-    uri = deserialize_uri(uri)
-    win = CommentWindow('addon-lbry-comments.xml', xbmcaddon.Addon().getAddonInfo('path'), 'Default', claim_id=uri.split('#')[1])
+    params = deserialize_uri(uri).split('#')
+    win = CommentWindow('addon-lbry-comments.xml', xbmcaddon.Addon().getAddonInfo('path'), 'Default', channel_name=params[0], channel_id=params[1], claim_id=params[2])
     win.doModal()
     del win
 

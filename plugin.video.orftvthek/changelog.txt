@@ -1,3 +1,11 @@
+* 0.12.4
+ - added header to drm license server request (fixes error 500 for drm content) 
+
+* 0.12.3-1
+ - bugfix livestream restart (kodi <19 only)
+ - removed quality setting
+ - livestream active bugfix
+
 * 0.12.3
  - service api fixes (auth & restart)
  - minor logging improvements
@@ -6,7 +14,7 @@
  - drm for restart
  - drm livestream license url
  - better quality selection handling for livestreams
-
+ 
 * 0.12.1
 - fixed schedule error (serviceapi) #102
 

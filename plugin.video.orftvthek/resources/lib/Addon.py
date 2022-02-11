@@ -19,9 +19,9 @@ basepath = settings.getAddonInfo('path')
 translation = settings.getLocalizedString
 
 # hardcoded
-video_delivery_list = ["HLS", "Progressive"]
-video_quality_list = ["Q1A", "Q4A", "Q6A", "Q8C", "QXB"]
 videoProtocol = "http"
+videoQuality = "QXB"
+videoDelivery = "HLS"
 
 input_stream_protocol = 'mpd'
 input_stream_drm_version = 'com.widevine.alpha'
@@ -48,8 +48,6 @@ defaultbackdrop = os.path.join(media_path, "fanart_v2.jpg")
 
 # load settings
 useServiceAPI = Settings.serviceAPI()
-videoQuality = Settings.videoQuality(video_quality_list)
-videoDelivery = Settings.videoDelivery(video_delivery_list)
 autoPlayPrompt = Settings.autoPlayPrompt()
 usePlayAllPlaylist = Settings.playAllPlaylist()
 
@@ -205,7 +203,7 @@ def run():
             if is_helper.check_inputstream():
                 link = unqoute_url(link)
                 debugLog("Restart Source Link: %s" % link)
-                headers = "User-Agent=%s" % Settings.userAgent()
+                headers = "User-Agent=%s&Content-Type=text/xml" % Settings.userAgent()
                 if params.get('lic_url'):
                     lic_url = unqoute_url(params.get('lic_url'))
                     debugLog("Playing DRM protected Restart Stream")
@@ -218,7 +216,7 @@ def run():
                     play_item.setProperty('inputstream', is_helper.inputstream_addon)
                     play_item.setProperty('inputstream.adaptive.manifest_type', input_stream_protocol)
                     play_item.setProperty('inputstream.adaptive.license_type', input_stream_drm_version)
-                    play_item.setProperty('inputstream.adaptive.license_key', lic_url + '||R{SSM}|')
+                    play_item.setProperty('inputstream.adaptive.license_key', lic_url + '|' + headers + '|R{SSM}|')
                 else:
                     streaming_url, play_item = scraper.liveStreamRestart(link, 'hls')
                     debugLog("Playing Non-DRM protected Restart Stream")
@@ -226,9 +224,10 @@ def run():
                     play_item.setProperty('inputstream.adaptive.stream_headers', headers)
                     play_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
                 debugLog("Restart Stream Url: %s; play_item: %s" % (streaming_url, play_item))
-                xbmcplugin.setResolvedUrl(pluginhandle, True, listitem=play_item)
-                listCallback(False, pluginhandle)
-                #xbmc.Player().play(streaming_url, play_item)
+                #This works on matrix. On Kodi <19 the stream wont play
+                #xbmcplugin.setResolvedUrl(pluginhandle, True, listitem=play_item)
+                #listCallback(False, pluginhandle)
+                xbmc.Player().play(streaming_url, play_item)
         except Exception as e:
             debugLog("Exception: %s" % ( e, ), xbmc.LOGDEBUG)
             debugLog("TB: %s" % ( traceback.format_exc(), ), xbmc.LOGDEBUG)
@@ -245,7 +244,7 @@ def run():
             import inputstreamhelper
             stream_url = unqoute_url(params.get('link'))
             lic_url = unqoute_url(params.get('lic_url'))
-            headers = "User-Agent=%s" % Settings.userAgent()
+            headers = "User-Agent=%s&Content-Type=text/xml" % Settings.userAgent()
             is_helper = inputstreamhelper.Helper(input_stream_protocol, drm=input_stream_drm_version)
             if is_helper.check_inputstream():
                 debugLog("Video Url: %s" % stream_url)
@@ -257,7 +256,7 @@ def run():
                 play_item.setProperty('inputstreamaddon', is_helper.inputstream_addon)
                 play_item.setProperty('inputstream.adaptive.manifest_type', input_stream_protocol)
                 play_item.setProperty('inputstream.adaptive.license_type', input_stream_drm_version)
-                play_item.setProperty('inputstream.adaptive.license_key', lic_url + '||R{SSM}|')
+                play_item.setProperty('inputstream.adaptive.license_key', lic_url + '|' + headers + '|R{SSM}|')
                 xbmcplugin.setResolvedUrl(pluginhandle, True, listitem=play_item)
                 listCallback(False, pluginhandle)
             else:

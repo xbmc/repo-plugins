@@ -2,7 +2,6 @@ import json
 import os
 import re
 
-import xbmc
 import xbmcgui
 import xbmcplugin
 from bs4 import BeautifulSoup
@@ -107,14 +106,36 @@ class BbcPodcastsAddon(AbstractRssAddon):
 
         _data, _cookies = http_request(self.addon,
                                        "%s%s" % (self.BBC_BASE_URL, self.PODCASTS_URL))
+
         soup = BeautifulSoup(_data, 'html.parser')
+        _json = None
+        for _script in soup.select("script"):
+            if "__PRELOADED_STATE__" not in str(_script):
+                continue
+
+            _s = str(_script).replace(
+                "<script> window.__PRELOADED_STATE__ = ", "")
+            _s = _s.replace("; </script>", "")
+            _json = json.loads(_s)
+
+        if not _json:
+            return list()
 
         result = list()
-        for _h3 in soup.select("h3"):
-            for _footer in _h3.parent.parent.select("footer"):
+
+        for _d in _json["modules"]["data"]:
+
+            if "title" not in _d or not "controls" in _d or not _d["controls"] or not "navigation" in _d["controls"] or _d["controls"]["navigation"]["id"] != "see_more":
+                continue
+
+            _name = _d["title"]
+            _path = _d["controls"]["navigation"]["target"]["urn"]
+            _data = "data" in _d and type(_d["data"]) == list
+
+            if _path and _name and _data:
                 result.append({
-                    "path": _footer.a["href"],
-                    "name": _h3.text,
+                    "path": "%s/%s" % (self.PODCASTS_URL, _path.split(":")[-1]),
+                    "name": _name,
                     "icon": os.path.join(self.addon_dir, "resources", "assets", "icon_category.png"),
                     "node": []
                 })

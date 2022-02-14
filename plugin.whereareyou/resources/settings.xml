@@ -38,6 +38,24 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="controltype" type="integer" parent="harmonycontrol" label="32107" help="">
+					<level>0</level>
+					<default>2</default>
+					<constraints>
+						<options>
+							<option label="32110">1</option>
+							<option label="32111">2</option>
+						</options>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="harmonycontrol">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="list" format="string">
+						<heading>32107</heading>
+					</control>
+				</setting>
 				<setting help="" id="hub_ip" label="32103" parent="harmonycontrol" type="string">
 					<level>0</level>
 					<default/>
@@ -49,45 +67,91 @@
 							<condition operator="is" setting="harmonycontrol">true</condition>
 						</dependency>
 					</dependencies>
-					<control format="ip" type="edit">
+					<control format="string" type="edit">
 						<heading>32103</heading>
 					</control>
 				</setting>
-				<setting help="" id="delay" label="32106" parent="hub_ip" type="integer">
+				<setting help="" id="hub_port" label="32108" parent="harmonycontrol" type="string">
+					<level>0</level>
+					<default>8123</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="harmonycontrol">true</condition>
+							<condition operator="is" setting="controltype">1</condition>
+						</dependency>
+					</dependencies>
+					<control format="string" type="edit">
+						<heading>32108</heading>
+					</control>
+				</setting>
+				<setting help="" id="ha_secure" label="32112" parent="harmonycontrol" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="harmonycontrol">true</condition>
+							<condition operator="is" setting="controltype">1</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="ha_token" label="32109" parent="harmonycontrol" type="string">
+					<level>0</level>
+					<default />
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="harmonycontrol">true</condition>
+							<condition operator="is" setting="controltype">1</condition>
+						</dependency>
+					</dependencies>
+					<control format="string" type="edit">
+						<heading>32109</heading>
+					</control>
+				</setting>
+				<setting help="" id="delay" label="32106" parent="harmonycontrol" type="integer">
 					<level>0</level>
 					<default>250</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition operator="is" setting="harmonycontrol">true</condition>
+							<condition operator="is" setting="controltype">2</condition>
 						</dependency>
 					</dependencies>
 					<control format="integer" type="edit">
 						<heading>32106</heading>
 					</control>
 				</setting>
-				<setting help="" id="timeout" label="32105" parent="delay" type="integer">
+				<setting help="" id="timeout" label="32105" parent="harmonycontrol" type="integer">
 					<level>0</level>
 					<default>30</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition operator="is" setting="harmonycontrol">true</condition>
+							<condition operator="is" setting="controltype">2</condition>
 						</dependency>
 					</dependencies>
 					<control format="integer" type="edit">
 						<heading>32105</heading>
 					</control>
 				</setting>
-				<setting help="" id="harmonyadvanced" label="32104" parent="timeout" type="boolean">
+				<setting help="" id="harmonyadvanced" label="32104" parent="harmonycontrol" type="boolean">
 					<level>0</level>
 					<default>false</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition operator="is" setting="harmonycontrol">true</condition>
+							<condition operator="is" setting="controltype">2</condition>
 						</dependency>
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<setting help="" id="olxtfmmphzxyvyuceobduduprajrbixk" label="32101" parent="harmonyadvanced" type="action">
+				<setting help="" id="olxtfmmphzxyvyuceobduduprajrbixk" label="32101" parent="harmonycontrol" type="action">
 					<level>0</level>
 					<data>RunScript(plugin.whereareyou,fromsettings)</data>
 					<constraints>

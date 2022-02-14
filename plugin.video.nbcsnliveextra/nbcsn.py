@@ -8,13 +8,12 @@ def categories():
     r = requests.get(CONFIG_URL, headers=headers, verify=VERIFY)
     json_source = r.json()
 
-    for item in json_source['brands']:
-        display_name = item['display-name']
+    for item in json_source['channelChanger']:
+        display_name = item['displayName']
         url = item['id']
         icon = item['channelChangerLogo']
-        if url != 'nbc-sports-gold' and url != 'sports-talk' and url != 'scores':
+        if url != 'nbc-sports-gold' and url != 'sports-talk' and url != 'scores' and url != 'rotoworld':
             add_dir(display_name, url, 2, icon, FANART)
-
 
 def get_sub_nav(id, icon):
     headers = {'User-Agent': UA_NBCSN}
@@ -22,23 +21,16 @@ def get_sub_nav(id, icon):
     r = requests.get(CONFIG_URL, headers=headers, verify=VERIFY)
     json_source = r.json()
 
-    for brand in json_source['brands']:
+    for brand in json_source['channelChanger']:
         if brand['id'] == id:
-            app_name = brand['chromecastApplicationName']
-            for sub_nav in brand['sub-nav']:
-                display_name = sub_nav['display-name']
-                status = sub_nav['id']
-                url = sub_nav['feed-url']
-                if '?application=' not in url and id != 'oly-channel':
-                    if status == 'live-upcoming': status = 'live'
-                    if status == 'replays': status = 'replay'
-                    url = 'https://api-leap.nbcsports.com/feeds/assets' \
-                          '?application=%s' \
-                          '&env=prod&format=v1' \
-                          '&platform=android&size=50&statuses=%s&sections=%s' % (app_name, status, id)
-                add_dir(display_name, url, 4, icon, FANART)
+            #app_name = brand['chromecastApplicationName']
+            for sub_nav in brand['subNav']:
+                display_name = sub_nav['displayName']
+                url = sub_nav['feedUrl']
+                url = url.replace('[PLATFORM]', 'android')
+                if '/feeds/' in url:
+                    add_dir(display_name, url, 4, icon, FANART)
             break
-
 
 def scrape_videos(url):
     headers = {

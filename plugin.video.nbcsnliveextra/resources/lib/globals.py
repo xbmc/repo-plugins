@@ -27,7 +27,7 @@ ROOTDIR = xbmcaddon.Addon().getAddonInfo('path')
 ICON = os.path.join(ROOTDIR,"icon.png")
 FANART = os.path.join(ROOTDIR,"fanart.jpg")
 ROOT_URL = 'http://stream.nbcsports.com/data/mobile'
-CONFIG_URL = 'http://stream.nbcsports.com/data/mobile/apps/NBCSports/configuration-android-v6.json'
+CONFIG_URL = 'https://stream.nbcsports.com/data/mobile/apps/NBCSports/configuration-vjs.json'
 
 # Main settings
 settings = xbmcaddon.Addon()

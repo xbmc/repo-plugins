@@ -45,7 +45,7 @@ def call_rpc(method, params={}, errdialog=True):
     try:
         xbmc.log('call_rpc: url=' + lbry_api_url + ', method=' + method + ', params=' + str(params))
         headers = {'content-type' : 'application/json'}
-        json = { 'jsonrpc' : '2.0', 'id' : '1', 'method': method, 'params': params }
+        json = { 'jsonrpc' : '2.0', 'id' : 1, 'method': method, 'params': params }
         result = requests.post(lbry_api_url, headers=headers, json=json)
         result.raise_for_status()
         rjson = result.json()
@@ -72,7 +72,7 @@ def call_comment_rpc(method, params={}, errdialog=True):
     try:
         xbmc.log('call_comment_rpc: url=' + odysee_comment_api_url + ', method=' + method + ', params=' + str(params))
         headers = {'content-type' : 'application/json'}
-        json = { 'jsonrpc' : '2.0', 'id' : '1', 'method': method, 'params': params }
+        json = { 'jsonrpc' : '2.0', 'id' : 1, 'method': method, 'params': params }
         result = requests.post(odysee_comment_api_url, headers=headers, json=json)
         result.raise_for_status()
         rjson = result.json()
@@ -149,7 +149,7 @@ def to_video_listitem(item, playlist='', channel='', repost=None):
         infoLabels['duration'] = str(item['value']['video']['duration'])
 
     if playlist == '':
-        if 'signing_channel' in item:
+        if 'signing_channel' in item and 'name' in item['signing_channel']:
             comment_uri = item['signing_channel']['name'] + '#' + item['signing_channel']['claim_id'] + '#' + item['claim_id']
             menu.append((
                 tr(30238), 'RunPlugin(%s)' % plugin.url_for(plugin_comment_show, uri=serialize_uri(comment_uri))

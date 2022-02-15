@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-30 21:31+0000\n"
+"PO-Revision-Date: 2022-01-26 08:32+0000\n"
 "Last-Translator: bas <bas@kodi.tv>\n"
 "Language-Team: English (United States) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/en_us/>\n"
 "Language: en_us\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.10.1\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -655,6 +655,10 @@ msgctxt "#30366"
 msgid "Available from"
 msgstr "Available from"
 
+msgctxt "#30367"
+msgid "New on %s"
+msgstr "New on %s"
+
 # empty strings from id 30365 to 30400
 msgctxt "#30401"
 msgid "Dutch"
@@ -761,11 +765,11 @@ msgstr "New version available"
 
 msgctxt "#30511"
 msgid "Add shortcut"
-msgstr ""
+msgstr "Add shortcut"
 
 msgctxt "#30512"
 msgid "Please provide a name for the shortcut."
-msgstr ""
+msgstr "Please provide a name for the shortcut."
 
 # empty strings from id 30511 to 30515
 msgctxt "#30516"
@@ -1025,6 +1029,18 @@ msgstr "Split TV shows and single episodes in separate folders"
 msgctxt "#30583"
 msgid "Single episodes"
 msgstr "Single episodes"
+
+msgctxt "#30584"
+msgid "Fetching a long list of items using multiple API calls."
+msgstr "Fetching a long list of items using multiple API calls."
+
+msgctxt "#30585"
+msgid "Page {} of {}"
+msgstr "Page {} of {}"
+
+msgctxt "#30586"
+msgid "Number of pages to load for the main listing"
+msgstr "Number of pages to load for the main listing"
 
 # empty strings from id 30584 to 30589
 msgctxt "#30590"

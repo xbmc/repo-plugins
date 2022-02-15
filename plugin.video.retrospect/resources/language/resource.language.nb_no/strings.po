@@ -650,6 +650,10 @@ msgctxt "#30366"
 msgid "Available from"
 msgstr ""
 
+msgctxt "#30367"
+msgid "New on %s"
+msgstr ""
+
 msgctxt "#30401"
 msgid "Dutch"
 msgstr "Nederlandsk"
@@ -1005,6 +1009,18 @@ msgstr ""
 
 msgctxt "#30583"
 msgid "Single episodes"
+msgstr ""
+
+msgctxt "#30584"
+msgid "Fetching a long list of items using multiple API calls."
+msgstr ""
+
+msgctxt "#30585"
+msgid "Page {} of {}"
+msgstr ""
+
+msgctxt "#30586"
+msgid "Number of pages to load for the main listing"
 msgstr ""
 
 msgctxt "#30590"

@@ -60,13 +60,6 @@ class Channel(chn_class.Channel):
             self.liveUrl = "https://rrr.sz.xlcdn.com/?account=nhnieuws&file=live&type=live&service=wowza&protocol=https&output=playlist.m3u8"
             self.channelBitrate = 1200
 
-        elif self.channelCode == "omroepwest":
-            self.noImage = "omroepwestimage.png"
-            self.mainListUri = "http://west.api.regiogrid.nl/apps/v520/programs.json"
-            self.baseUrl = "http://www.omroepwest.nl"
-            self.liveUrl = "http://feeds.omroepwest.nl/v520/tv.json"
-            self.channelBitrate = 1500
-
         elif self.channelCode == "omroepbrabant":
             self.noImage = "omroepbrabantimage.png"
             self.mainListUri = "http://feed.omroepbrabant.nl/v520/UGSeries.json"

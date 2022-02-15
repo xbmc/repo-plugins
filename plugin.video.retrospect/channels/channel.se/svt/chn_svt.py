@@ -204,10 +204,10 @@ class Channel(chn_class.Channel):
                 False
             ),
 
-            LanguageHelper.get_localized_string(LanguageHelper.NewOnChannel)  % self.channelName: (
+            LanguageHelper.get_localized_string(LanguageHelper.NewOnChannel) % self.channelName: (
                 self.__get_api_url("FionaPage",
                                    "0d50e0ae57df3a99f8b7fb0b94e1159fea64f04297d7dcb7c75f0358f09a1a48",
-                                   variables={"includeFullOppetArkiv": True, "selectionId": "8vyaD1x"}),
+                                   variables={"includeFullOppetArkiv": True, "selectionId": "KM6mbZ4"}),
                 False)
         }
 

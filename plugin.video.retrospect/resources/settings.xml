@@ -61,7 +61,7 @@
     <category id="channelsettings" label="30032">
         <setting type="lsep" label="30063" />
         <!-- start of active channels -->
-        <setting id="config_channel" type="select" label="30040" values="NPO Start|RTL XL [RTL 4,5,7 &amp; 8]|Kijk.nl|Vier|Vijf|Zes|VTM.be|Stievie|VRT NU|Ketnet|SVT Play|Kanal 5|discovery plus|Kanal 9|Kanal 11" />
+        <setting id="config_channel" type="select" label="30040" values="NPO Start|RTL XL [RTL 4,5,7 &amp; 8]|Kijk.nl|Vier|Vijf|Zes|VTM.be|Stievie|VRT NU|Ketnet|SVT Play|UR Play|Kanal 5|discovery plus|Kanal 9|Kanal 11" />
         <!-- end of active channels -->
 
         <setting type="lsep" label="30032" />
@@ -86,21 +86,23 @@
         <setting id="dplayse_password" default="" visible="eq(-13,Kanal 11)|eq(-13,Kanal 9)|eq(-13,discovery plus)|eq(-13,Kanal 5)" />
         <!-- chn_svt.py -->
         <setting id="channel_3AF9C61E-88B2-11E1-A03F-08F6BAE59B18_show_programs_folder" label="30582" type="bool" default="true" visible="eq(-14,SVT Play)" />
+        <!-- chn_urplay.py -->
+        <setting id="channel_9F0F57D6-B897-11E0-AF2E-92314924019B_mainlist_pages" type="number" label="30586" default="25" visible="eq(-15,UR Play)" />
         <!-- chn_vier.py -->
-        <setting id="viervijfzes_username" type="text" label="30094" default="" visible="eq(-15,Zes)|eq(-15,Vijf)|eq(-15,Vier)" />
-        <setting id="viervijfzes_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=viervijfzes_password&amp;settingname=Vier/Vijf/Zes.be password&amp;tabfocus=102)" option="close" visible="eq(-16,Zes)|eq(-16,Vijf)|eq(-16,Vier)" />
-        <setting id="viervijfzes_password" default="" visible="eq(-17,Zes)|eq(-17,Vijf)|eq(-17,Vier)" />
-        <setting id="viervijfzes_refresh_token" default="" visible="eq(-18,Zes)|eq(-18,Vijf)|eq(-18,Vier)" />
+        <setting id="viervijfzes_username" type="text" label="30094" default="" visible="eq(-16,Zes)|eq(-16,Vijf)|eq(-16,Vier)" />
+        <setting id="viervijfzes_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=viervijfzes_password&amp;settingname=Vier/Vijf/Zes.be password&amp;tabfocus=102)" option="close" visible="eq(-17,Zes)|eq(-17,Vijf)|eq(-17,Vier)" />
+        <setting id="viervijfzes_password" default="" visible="eq(-18,Zes)|eq(-18,Vijf)|eq(-18,Vier)" />
+        <setting id="viervijfzes_refresh_token" default="" visible="eq(-19,Zes)|eq(-19,Vijf)|eq(-19,Vier)" />
         <!-- chn_vrtnu.py -->
-        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_username" label="30094" type="text" default="" visible="eq(-19,VRT NU)" />
-        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=channel_F530A9EC-3C0D-49B6-96C2-480273417460_password&amp;settingname=VRT NU password&amp;tabfocus=102)" option="close" visible="eq(-20,VRT NU)" />
-        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_password" default="" visible="eq(-21,VRT NU)" />
-        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_hls_over_dash" label="30099" type="bool" default="" visible="eq(-22,VRT NU)" />
+        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_username" label="30094" type="text" default="" visible="eq(-20,VRT NU)" />
+        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=channel_F530A9EC-3C0D-49B6-96C2-480273417460_password&amp;settingname=VRT NU password&amp;tabfocus=102)" option="close" visible="eq(-21,VRT NU)" />
+        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_password" default="" visible="eq(-22,VRT NU)" />
+        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_hls_over_dash" label="30099" type="bool" default="" visible="eq(-23,VRT NU)" />
         <!-- chn_vtmbe.py -->
-        <setting id="mediaan_username" type="text" label="30094" default="" visible="eq(-23,Stievie)|eq(-23,VTM.be)" />
-        <setting id="mediaan_password" default="" visible="eq(-24,Stievie)|eq(-24,VTM.be)" />
-        <setting id="mediaan_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=mediaan_password&amp;settingname=Mediaan Wachtwoord.be&amp;tabfocus=102)" option="close" visible="eq(-25,Stievie)|eq(-25,VTM.be)" />
-        <setting id="mediaan_signature" default="" visible="eq(-26,Stievie)|eq(-26,VTM.be)" />
+        <setting id="mediaan_username" type="text" label="30094" default="" visible="eq(-24,Stievie)|eq(-24,VTM.be)" />
+        <setting id="mediaan_password" default="" visible="eq(-25,Stievie)|eq(-25,VTM.be)" />
+        <setting id="mediaan_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=mediaan_password&amp;settingname=Mediaan Wachtwoord.be&amp;tabfocus=102)" option="close" visible="eq(-26,Stievie)|eq(-26,VTM.be)" />
+        <setting id="mediaan_signature" default="" visible="eq(-27,Stievie)|eq(-27,VTM.be)" />
         <!-- end of channel settings -->
     </category>
 

@@ -113,6 +113,8 @@ class LanguageHelper(object):
     CloakMessage = 30566
     AddonsNotEnabledTitle = 30567
     AddonsNotEnabledText = 30568
+    FetchMultiApi = 30584
+    PageOfPages = 30585
 
     Active = 30068
     InitChannelTitle = 30556

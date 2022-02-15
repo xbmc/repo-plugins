@@ -15,19 +15,23 @@ from resources.lib.logger import Logger
 
 class CacheHTTPAdapter(HTTPAdapter):
 
-    def __init__(self, cache_store, pool_connections=DEFAULT_POOLSIZE, pool_maxsize=DEFAULT_POOLSIZE,
+    def __init__(self, cache_store, force_cache_duration,
+                 pool_connections=DEFAULT_POOLSIZE, pool_maxsize=DEFAULT_POOLSIZE,
                  max_retries=DEFAULT_RETRIES, pool_block=DEFAULT_POOLBLOCK):
         """ Creates a Caching HTTP Adapter for the Requests module.
 
-        :param StreamCache cache_store:     The Cache store to use.
-        :param int pool_connections:        Size of connection pool.
-        :param int pool_maxsize:            Maximum number of active connections.
-        :param int max_retries:             Maximum number of retries.
-        :param bool pool_block:             Use the default pool?
+        :param StreamCache cache_store:         The Cache store to use.
+        :param int|None force_cache_duration:   Should a forced cache duration be used?
+
+        :param int pool_connections:            Size of connection pool.
+        :param int pool_maxsize:                Maximum number of active connections.
+        :param int max_retries:                 Maximum number of retries.
+        :param bool pool_block:                 Use the default pool?
 
         """
 
-        self.cache_store = cache_store        # type: StreamCache
+        self.cache_store = cache_store                      # type: StreamCache
+        self.force_cache_duration = force_cache_duration    # type: int
 
         super(CacheHTTPAdapter, self).__init__(pool_connections, pool_maxsize, max_retries,
                                                pool_block)
@@ -88,7 +92,9 @@ class CacheHTTPAdapter(HTTPAdapter):
         # Determine the maximum age and then check if the cache if valid or not.
         Logger.trace("Cache-Data: %s", cache_data)
         valid_in_seconds = 3600
-        if 'max-age' in cache_data:
+        if self.force_cache_duration is not None:
+            valid_in_seconds = self.force_cache_duration
+        elif 'max-age' in cache_data:
             valid_in_seconds = cache_data['max-age']
 
         if self.cache_store.is_expired(meta_key, valid_in_seconds):

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-12-28 21:33+0000\n"
+"PO-Revision-Date: 2022-01-26 08:32+0000\n"
 "Last-Translator: bas <bas@kodi.tv>\n"
 "Language-Team: Dutch <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/nl_nl/>\n"
 "Language: nl_nl\n"
@@ -23,7 +23,7 @@ msgstr "Retrospect maakt het mogelijk om afleveringen te bekijken van TV series 
 
 msgctxt "Addon Description"
 msgid "Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
-msgstr "Retrospect maakt gebruik van de officiële websites en vrij beschikbare streams van de verschillende omroepen (voornamelijk Nederlands, Belgische, Britse, Noorweegse en Zweedse) om hun uitzendinggemist afleveringen beschikbaar te maken viat Kodi. [CR][CR]Aantal van de beschikbare kanalen zijn: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info en Ons.[CR][CR]. Meer informatie kan worden gevonden op https://github.com/retrospect-addon/plugin.video.retrospect of de Retrospect wiki op https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
+msgstr "Retrospect maakt gebruik van de officiële websites en vrij beschikbare streams van de verschillende omroepen (voornamelijk Nederlands, Belgische, Britse, Noorse en Zweedse) om hun uitzendinggemist afleveringen beschikbaar te maken viat Kodi. [CR][CR]Aantal van de beschikbare kanalen zijn: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info en Ons.[CR][CR]. Meer informatie kan worden gevonden op https://github.com/retrospect-addon/plugin.video.retrospect of de Retrospect wiki op https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
 
 msgctxt "Addon Disclaimer"
 msgid "Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched using this add-on or any consequences of using this add-on to watch content via the content providers' platforms."
@@ -658,6 +658,10 @@ msgctxt "#30366"
 msgid "Available from"
 msgstr "Beschikbaar vanaf"
 
+msgctxt "#30367"
+msgid "New on %s"
+msgstr "Nieuw op %s"
+
 # empty strings from id 30367 to 30400
 msgctxt "#30401"
 msgid "Dutch"
@@ -1028,6 +1032,18 @@ msgstr "Splits TV programma's en enkelvoudige afleveringen in verschillende mapp
 msgctxt "#30583"
 msgid "Single episodes"
 msgstr "Eenmalige afleveringen"
+
+msgctxt "#30584"
+msgid "Fetching a long list of items using multiple API calls."
+msgstr "Bezig met het ophalen van meerdere API pagina's."
+
+msgctxt "#30585"
+msgid "Page {} of {}"
+msgstr "Pagina {} van {}"
+
+msgctxt "#30586"
+msgid "Number of pages to load for the main listing"
+msgstr "Aantal pagina's om te laden voor de hoofdlijst"
 
 # empty strings from id 30584 to 30589
 msgctxt "#30590"

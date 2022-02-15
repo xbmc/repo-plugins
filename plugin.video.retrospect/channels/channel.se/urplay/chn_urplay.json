@@ -14,5 +14,12 @@
       "language": "se",
       "fanart": "urplayfanart.jpg"
     }
+  ],
+  "settings": [
+     {
+      "order": 1,
+      "value": "type=\"number\" label=\"30586\" default=\"25\"",
+      "id": "mainlist_pages"
+    }
   ]
 }

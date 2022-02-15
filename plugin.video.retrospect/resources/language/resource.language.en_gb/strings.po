@@ -1063,7 +1063,20 @@ msgctxt "#30583"
 msgid "Single episodes"
 msgstr ""
 
-# empty strings from id 30584 to 30589
+msgctxt "#30584"
+msgid "Fetching a long list of items using multiple API calls."
+msgstr ""
+
+msgctxt "#30585"
+msgid "Page {} of {}"
+msgstr ""
+
+
+msgctxt "#30586"
+msgid "Number of pages to load for the main listing"
+msgstr ""
+
+# empty strings from id 30587 to 30589
 
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"

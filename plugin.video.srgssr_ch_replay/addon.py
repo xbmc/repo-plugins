@@ -28,11 +28,11 @@ pluginhandle = int(sys.argv[1])
 socket.setdefaulttimeout(30)
 xbmcplugin.setPluginCategory(pluginhandle, "News")
 xbmcplugin.setContent(pluginhandle, "tvshows")
-addon_work_folder = xbmcvfs.translatePath("special://profile/addon_data/" + addonID)
+addon_work_folder = xbmcvfs.translatePath("special://userdata/addon_data/" + addonID)
 if not os.path.isdir(addon_work_folder):
     os.mkdir(addon_work_folder)
-FavoritesFile = xbmcvfs.translatePath("special://profile/addon_data/" + addonID + "/" + addonID + ".favorites")
 numberOfEpisodesPerPage = int(addon.getSetting("numberOfShowsPerPage"))
+subtitlesEnabled = addon.getSetting("subtitlesEnabled") == "true"
 consumerKey = addon.getSetting("consumerKey")
 consumerSecret = addon.getSetting("consumerSecret")
 tr = addon.getLocalizedString
@@ -91,13 +91,13 @@ def _query_tv_shows(channel, path, query, rootIndex):
 
 
 def list_episodes(channel, showid, showbackground, pageNumber, numberOfEpisodes, nextParam):
-    PATH = f"/videometadata/v2/latest_episodes/shows/{showid}"
+    path = f"/videometadata/v2/latest_episodes/shows/{showid}"
     query = {"bu": channel}
     if nextParam:
         query.update({"next": nextParam})
     else:
         query.update({"pageSize": numberOfEpisodesPerPage})
-    response = _srg_get(PATH, query=query)
+    response = _srg_get(path, query=query)
     show = response.get('show')
     episodeList = response.get("episodeList")
 
@@ -106,8 +106,8 @@ def list_episodes(channel, showid, showbackground, pageNumber, numberOfEpisodes,
             title = show.get('title') + ' - ' + episode.get('title')
             desc = episode.get('description')
             pubdate = episode.get('publishedDate')
+            url = episode.get('id')
             media = episode.get('mediaList')[0]
-            url = media.get('id')
             urn = media.get('urn')
             picture = media.get('imageUrl')
             length = int(media.get('duration', 0)) / 1000 / 60
@@ -135,16 +135,21 @@ def _srg_api_get_simple(path, *, query=None, bearer, exp_code=None):
     return _http_request(SRG_API_HOST, 'GET', path, query, headers, None, exp_code)
 
 
-def _srg_api_auth_token():
-    token_ts = addon.getSetting('srgssrTokenTS')
+def _srg_api_auth_token(tokenPrefix):
+    token_ts = addon.getSetting(f'srgssr{tokenPrefix}TokenTS')
     if token_ts:
         delta_ts = datetime.datetime.utcnow() - datetime.datetime.fromisoformat(token_ts)
-        token = addon.getSetting('srgssrToken')
+        token = addon.getSetting(f'srgssr{tokenPrefix}Token')
         if delta_ts < datetime.timedelta(days=25) and token:
             return token
 
     query = {"grant_type": "client_credentials"}
-    headers = {"Authorization": "Basic " + str(base64.b64encode(f"{consumerKey}:{consumerSecret}".encode("utf-8")), "utf-8")}
+    key = addon.getSetting(f"consumerKey{tokenPrefix}")
+    secret = addon.getSetting(f"consumerSecret{tokenPrefix}")
+    if key == '' or secret == '':
+        xbmcgui.Dialog().ok(tr(30006), tr(30020))
+        addon.openSettings()
+    headers = {"Authorization": "Basic " + str(base64.b64encode(f"{key}:{secret}".encode("utf-8")), "utf-8")}
     try:
         r = _http_request(SRG_API_HOST, 'POST', "/oauth/v1/accesstoken", query=query, headers=headers, exp_code=200)
     except UnexpectedStatusCodeException as e:
@@ -152,14 +157,14 @@ def _srg_api_auth_token():
             xbmc.log(f"Authentication failed -> No API token")
         raise e
     access_token = r.json()["access_token"]
-    addon.setSetting('srgssrToken', access_token)
-    addon.setSetting('srgssrTokenTS', datetime.datetime.utcnow().isoformat())
+    addon.setSetting(f'srgssr{tokenPrefix}Token', access_token)
+    addon.setSetting(f'srgssr{tokenPrefix}TokenTS', datetime.datetime.utcnow().isoformat())
     return access_token
 
 
-def _srg_get(path, query):
+def _srg_get(path, query, tokenPrefix = ""):
     def _get_with_token(path, query):
-        token = _srg_api_auth_token()
+        token = _srg_api_auth_token(tokenPrefix)
         if token:
             r = _srg_api_get_simple(path, bearer=token, query=query, exp_code=[200, 203])
             return r.json()
@@ -170,8 +175,8 @@ def _srg_get(path, query):
     except UnexpectedStatusCodeException as e:
         if e.status_code in [401, 403]:
             # clear cached api token
-            addon.setSetting('srgssrToken', '')
-            addon.setSetting('srgssrTokenTS', '')
+            addon.setSetting(f'srgssr{tokenPrefix}Token', '')
+            addon.setSetting(f'srgssr{tokenPrefix}TokenTS', '')
             data = _get_with_token(path, query)
         else:
             raise e
@@ -196,11 +201,25 @@ def _http_request(host, method, path, query=None, headers={}, body_dict=None, ex
     return res
 
 
+def _addSubtitles(listitem, channel, showid):
+    if subtitlesEnabled:
+        path = f'/srgssr-play-subtitles/v1/identifier/urn:{channel}:episode:tv:{showid}'
+        subResponse = _srg_get(path, {}, 'Subtitles')
+        
+        subs = []
+        for asset in subResponse["data"]["assets"]:
+            if  asset is not None:
+                for sub in asset["hasSubtitling"]:
+                    subs.append(sub["identifier"])
+                    
+        listitem.setSubtitles(subs)
+            
+
 #####################################
 # Common methods
 #####################################
 
-def play_episode(urn):
+def play_episode(urn, channel, showid):
     """
     this method plays the selected episode
     """
@@ -215,6 +234,7 @@ def play_episode(urn):
         besturl = besturl + '?' + token
 
     listitem = xbmcgui.ListItem(path=besturl)
+    _addSubtitles(listitem, channel, showid)
     xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 
@@ -282,7 +302,7 @@ def _add_show(name, url, urn, mode, desc, iconimage, channel, numberOfEpisodes):
     liz = xbmcgui.ListItem(name)
     liz.setLabel2(desc)
     liz.setArt({'poster': iconimage, 'banner': iconimage, 'fanart': iconimage, 'thumb': iconimage})
-    #TODO setInfo is deprecated (see comments https://github.com/xbmc/repo-plugins/pull/3722)
+    #TODO setInfo might become deprecated (see comments https://github.com/xbmc/repo-plugins/pull/3722)
     liz.setInfo(type="Video", infoLabels={"title": name, "plot": desc, "plotoutline": desc})
     xbmcplugin.setContent(pluginhandle, 'tvshows')
     ok = xbmcplugin.addDirectoryItem(pluginhandle, url=directoryurl, listitem=liz, isFolder=True)
@@ -297,7 +317,7 @@ def _addLink(name, url, urn, mode, desc, iconurl, length, pubdate, showbackgroun
     liz = xbmcgui.ListItem(name)
     liz.setLabel2(desc)
     liz.setArt({'poster': iconurl, 'banner': iconurl, 'fanart': showbackground, 'thumb': iconurl})
-    #TODO setInfo is deprecated (see comments https://github.com/xbmc/repo-plugins/pull/3722)
+    #TODO setInfo might become deprecated (see comments https://github.com/xbmc/repo-plugins/pull/3722)
     liz.setInfo(type='Video', infoLabels={"Title": name, "Duration": length, "Plot": desc, "Aired": pubdate})
     liz.setProperty('IsPlayable', 'true')
     xbmcplugin.setContent(pluginhandle, 'episodes')
@@ -313,7 +333,7 @@ def _addnextpage(name, url, mode, desc, showbackground, pageNumber, channel, num
         "&page=" + str(pageNumber or "") + "&channel=" + str(channel) + "&numberOfEpisodes=" + str(numberOfEpisodes or "") + "&next=" + str(nextParam)
     liz = xbmcgui.ListItem(name)
     liz.setLabel2(desc)
-    #TODO setInfo is deprecated (see comments https://github.com/xbmc/repo-plugins/pull/3722)
+    #TODO setInfo might become deprecated (see comments https://github.com/xbmc/repo-plugins/pull/3722)
     liz.setInfo(type="Video", infoLabels={"title": name, "plot": desc, "plotoutline": desc})
     xbmcplugin.setContent(pluginhandle, 'episodes')
     ok = xbmcplugin.addDirectoryItem(pluginhandle, url=directoryurl, listitem=liz, isFolder=True)
@@ -352,7 +372,7 @@ if consumerKey == '' or consumerSecret == '':
     xbmcgui.Dialog().ok(tr(30012) + ' / ' + tr(30013), tr(30020))
     addon.openSettings()
 elif mode == 'playEpisode':
-    play_episode(urn)
+    play_episode(urn, channel, url)
 elif mode == 'listEpisodes':
     list_episodes(channel, url, showbackground, page, numberOfEpisodes, nextParam)
 elif mode == 'listTvShowsByLetter':

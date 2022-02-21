@@ -40,8 +40,8 @@ msgid "Settings"
 msgstr "הגדרות"
 
 msgctxt "#30005"
-msgid "Featured Streams"
-msgstr "הזרמות מומלצות"
+msgid "Popular Streams"
+msgstr ""
 
 msgctxt "#30006"
 msgid "Teams"
@@ -452,8 +452,8 @@ msgid "No results returned"
 msgstr "לא הוחזרו תוצאות"
 
 msgctxt "#30132"
-msgid "OAuth token is required for access to authorized user functions."
-msgstr "חובה להזין אסימון OAuth עבור גישה לפונקציות משתמש מורשה."
+msgid "OAuth token is required for access"
+msgstr ""
 
 msgctxt "#30133"
 msgid "Authorize"
@@ -974,3 +974,19 @@ msgstr ""
 msgctxt "#30265"
 msgid "Unfollow"
 msgstr ""
+
+msgctxt "#30266"
+msgid "Add to queue"
+msgstr ""
+
+msgctxt "#30267"
+msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr ""
+
+#~ msgctxt "#30132"
+#~ msgid "OAuth token is required for access to authorized user functions."
+#~ msgstr "חובה להזין אסימון OAuth עבור גישה לפונקציות משתמש מורשה."
+
+#~ msgctxt "#30005"
+#~ msgid "Featured Streams"
+#~ msgstr "הזרמות מומלצות"

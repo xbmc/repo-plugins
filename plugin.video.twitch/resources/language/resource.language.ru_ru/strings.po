@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
 "PO-Revision-Date: 2021-10-24 10:40+0000\n"
 "Last-Translator: Dmitry Petrov <dimakrm361@gmail.com>\n"
@@ -38,8 +38,8 @@ msgid "Settings"
 msgstr "Настройки"
 
 msgctxt "#30005"
-msgid "Featured Streams"
-msgstr "Рекомендуемые трансляции"
+msgid "Popular Streams"
+msgstr ""
 
 msgctxt "#30006"
 msgid "Teams"
@@ -446,8 +446,8 @@ msgid "No results returned"
 msgstr "Ничего не получено"
 
 msgctxt "#30132"
-msgid "OAuth token is required for access to authorized user functions."
-msgstr "Требуется OAuth токен для доступа к функциям пользователя."
+msgid "OAuth token is required for access"
+msgstr ""
 
 msgctxt "#30133"
 msgid "Authorize"
@@ -968,6 +968,22 @@ msgstr "Отслеживать"
 msgctxt "#30265"
 msgid "Unfollow"
 msgstr "Прекратить отслеживать"
+
+msgctxt "#30266"
+msgid "Add to queue"
+msgstr ""
+
+msgctxt "#30267"
+msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr ""
+
+#~ msgctxt "#30132"
+#~ msgid "OAuth token is required for access to authorized user functions."
+#~ msgstr "Требуется OAuth токен для доступа к функциям пользователя."
+
+#~ msgctxt "#30005"
+#~ msgid "Featured Streams"
+#~ msgstr "Рекомендуемые трансляции"
 
 #~ msgctxt "#30104"
 #~ msgid "1080p60"

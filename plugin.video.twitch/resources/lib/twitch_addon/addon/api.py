@@ -10,6 +10,7 @@
 """
 
 import json
+import sys
 
 from . import cache, utils
 from .common import kodi, log_utils
@@ -20,8 +21,8 @@ from .twitch_exceptions import PlaybackFailed, TwitchException
 from twitch import queries as twitch_queries
 from twitch import oauth
 from twitch.api import usher
-from twitch.api import v5 as twitch
-from twitch.api.parameters import Boolean, Period, ClipPeriod, Direction, Language, SortBy, StreamType, VideoSort
+from twitch.api import helix as twitch
+from twitch.api.parameters import Language, Boolean, VideoSort, PeriodHelix
 
 i18n = utils.i18n
 
@@ -42,6 +43,13 @@ class Twitch:
         self.queries.OAUTH_TOKEN = self.access_token
         self.queries.APP_TOKEN = self.app_token
         self.client = oauth.clients.MobileClient(self.client_id, self.client_secret)
+
+        self.private_client_id = utils.get_private_client_id()
+        self.private_access_token = utils.get_private_oauth_token()
+        if self.private_access_token:
+            if not self.valid_private_token(self.private_client_id, self.private_access_token):
+                self.private_access_token = ''
+
         if self.access_token:
             if not self.valid_token(self.client_id, self.access_token, self.required_scopes):
                 self.queries.OAUTH_TOKEN = ''
@@ -51,259 +59,248 @@ class Twitch:
     def valid_token(self, client_id, token, scopes):  # client_id, token used for unique caching only
         token_check = self.root()
         while True:
-            if not token_check['token']['valid']:
-                result = kodi.Dialog().ok(
-                    i18n('oauth_token'),
-                    '[CR]'.join([
-                        i18n('invalid_token'),
-                        i18n('get_new_oauth_token') % (i18n('settings'), i18n('login'), i18n('get_oauth_token'))
-                    ])
-                )
-                log_utils.log('Error: Current OAuth token is invalid.', log_utils.LOGERROR)
-                return False
-            else:
-                if token_check['token']['client_id'] in (self.client_id, utils.get_client_id(default=True, old=True)):
-                    if token_check['token']['authorization']:
-                        token_scopes = token_check['token']['authorization']['scopes']
-                        missing_scopes = [value for value in scopes if value not in token_scopes]
-                        if len(missing_scopes) > 0:
-                            result = kodi.Dialog().ok(
-                                i18n('oauth_token'),
-                                '[CR]'.join([
-                                    i18n('missing_scopes') % missing_scopes,
-                                    i18n('get_new_oauth_token') %
-                                    (i18n('settings'), i18n('login'), i18n('get_oauth_token'))
-                                ])
-                            )
-                            log_utils.log('Error: Current OAuth token is missing required scopes |%s|' % missing_scopes, log_utils.LOGERROR)
-                            return False
-                        else:
-                            return True
-                    else:
-                        return False
-                else:
-                    matches_default = token_check['token']['client_id'] == utils.get_client_id(default=True)
-                    matches_old = token_check['token']['client_id'] == utils.get_client_id(default=True, old=True)
-                    message = 'Token created using %s Client-ID |%s|' % ('default' if matches_default else 'old' if matches_old else 'none', str(matches_default))
-                    log_utils.log('Error: OAuth Client-ID mismatch: %s' % message, log_utils.LOGERROR)
-                    if matches_default:
-                        result = kodi.Dialog().ok(
-                            i18n('oauth_token'),
-                            '[CR]'.join([i18n('client_id_mismatch'), i18n('ok_to_resolve')])
-                        )
-                        utils.clear_client_id()
-                        self.client_id = utils.get_client_id(default=True)
-                        self.queries.CLIENT_ID = self.client_id
-                        self.client = oauth.clients.MobileClient(self.client_id, self.client_secret)
-                    elif matches_old:
-                        result = kodi.Dialog().ok(
-                            i18n('oauth_token'),
-                            '[CR]'.join([i18n('client_id_mismatch'), i18n('ok_to_resolve')])
-                        )
-                        utils.clear_client_id()
-                        self.client_id = utils.get_client_id(default=True, old=True)
-                        self.queries.CLIENT_ID = self.client_id
-                        self.client = oauth.clients.MobileClient(self.client_id, self.client_secret)
-                    else:
+            if token_check['client_id'] == self.client_id:
+                if token_check['scopes']:
+                    token_scopes = token_check['scopes']
+                    missing_scopes = [value for value in scopes if value not in token_scopes]
+                    if len(missing_scopes) > 0:
                         result = kodi.Dialog().ok(
                             i18n('oauth_token'),
                             '[CR]'.join([
-                                i18n('client_id_mismatch'),
+                                i18n('missing_scopes') % missing_scopes,
                                 i18n('get_new_oauth_token') %
                                 (i18n('settings'), i18n('login'), i18n('get_oauth_token'))
                             ])
                         )
+                        log_utils.log('Error: Current OAuth token is missing required scopes |%s|' % missing_scopes,
+                                      log_utils.LOGERROR)
                         return False
+                    else:
+                        return True
+                else:
+                    return False
+            else:
+                matches_default = token_check['client_id'] == utils.get_client_id(default=True)
+                log_utils.log('Error: OAuth Client-ID mismatch', log_utils.LOGERROR)
+                if matches_default:
+                    _ = kodi.Dialog().ok(
+                        i18n('oauth_token'),
+                        '[CR]'.join([i18n('client_id_mismatch'), i18n('ok_to_resolve')])
+                    )
+                    utils.clear_client_id()
+                    self.client_id = utils.get_client_id(default=True)
+                    self.queries.CLIENT_ID = self.client_id
+                    self.client = oauth.clients.MobileClient(self.client_id, self.client_secret)
+                else:
+                    _ = kodi.Dialog().ok(
+                        i18n('oauth_token'),
+                        '[CR]'.join([
+                            i18n('client_id_mismatch'),
+                            i18n('get_new_oauth_token') %
+                            (i18n('settings'), i18n('login'), i18n('get_oauth_token'))
+                        ])
+                    )
+                    return False
+
+    @cache.cache_method(cache_limit=1)
+    def valid_private_token(self, client_id, token):  # client_id used for unique caching only
+        token_check = self.validate(token)
+        if token_check['client_id'] != self.private_client_id:
+            matches_default = token_check['client_id'] == utils.get_client_id(default=True)
+            log_utils.log('Error: Private OAuth Client-ID mismatch', log_utils.LOGERROR)
+            if matches_default:
+                log_utils.log('Private OAuth token matches add-on Client-ID', log_utils.LOGDEBUG)
+                if not self.access_token:
+                    self.access_token = self.private_access_token
+                    self.queries.OAUTH_TOKEN = self.private_access_token
+                    kodi.set_setting('oauth_token_helix', self.private_access_token)
+                    kodi.set_setting('private_oauth_token', '')
+                    self.private_access_token = ''
+            return False
+        return True
 
     @api_error_handler
     def root(self):
-        results = self.api.root()
+        results = oauth.validation.validate(self.access_token)
+        return self.error_check(results)
+
+    @api_error_handler
+    def validate(self, token):
+        results = oauth.validation.validate(token)
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=1)
     def get_user(self, token):  # token used for unique caching only
-        results = self.api.users.user()
+        results = self.api.users.get_users()
         return self.error_check(results)
 
     def get_user_id(self):
         results = self.get_user(self.access_token)
-        return results.get(Keys._ID)
+        results = results.get('data', [{}])[0]
+        return results.get(Keys.ID)  # NOQA
 
     def get_username(self):
         results = self.get_user(self.access_token)
-        return results.get(Keys.NAME)
+        results = results.get('data', [{}])[0]
+        return results.get(Keys.LOGIN)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_user_ids(self, logins):
-        results = self.api.users.users(logins=logins)
+        results = self.api.users.get_users(user_login=logins)
+        results = self.error_check(results)
+        ids = []
+        for user in results.get(Keys.DATA, [{}]):
+            if user.get(Keys.ID):
+                ids.append(user.get(Keys.ID))
+        return ids
+
+    @api_error_handler
+    @cache.cache_method(cache_limit=cache.limit)
+    def get_users(self, user_ids):
+        results = self.api.users.get_users(user_id=user_ids)
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_featured_streams(self, offset, limit):
-        results = self.api.streams.get_featured(offset=offset, limit=limit)
+    def get_top_games(self, after='MA==', before='MA==', first=20):
+        results = self.api.games.get_top(after=after, before=before, first=first)
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_top_games(self, offset, limit):
-        results = self.api.games.get_top(offset=offset, limit=limit)
+    def get_all_streams(self, game_id=None, user_id=None, user_login=None, language=Language.ALL, after='MA==',
+                        before='MA==', first=20):
+        if game_id is None:
+            game_id = []
+        if user_login is None:
+            user_login = []
+        if user_id is None:
+            user_id = []
+        results = self.api.streams.get_streams(game_id=game_id, user_id=user_id, user_login=user_login,
+                                               language=language, after=after, before=before, first=first)
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_collections(self, channel_id, cursor, limit):
-        results = self.api.collections.get_collections(channel_id=channel_id, cursor=cursor, limit=limit)
+    def get_followed_channels(self, from_id='', to_id='', after='MA==', before='MA==', first=20):
+        results = self.api.users.get_follows(from_id=from_id, to_id=to_id, after=after, before=before, first=first)
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_all_streams(self, stream_type, platform, offset, limit, language=Language.ALL):
-        results = self.api.streams.get_all(stream_type=stream_type, platform=platform, offset=offset, limit=limit, language=language)
+    def get_top_videos(self, broadcast_type, period=PeriodHelix.ALL,
+                       after='MA==', before='MA==', first=20, game_id='', user_id=''):
+        if not period:
+            period = PeriodHelix.ALL
+        results = self.api.videos.get_videos(user_id=user_id, game_id=game_id, broadcast_type=broadcast_type,
+                                             period=period, after=after, before=before, first=first)
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_all_teams(self, offset, limit):
-        results = self.api.teams.get_active(offset=offset, limit=limit)
+    def get_clips(self, broadcaster_id='', game_id='', after='MA==', first=20):
+        results = self.api.clips.get_clip(broadcaster_id=broadcaster_id, game_id=game_id, after=after, first=first)
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_followed_channels(self, user_id, offset, limit, direction=Direction.DESC, sort_by=SortBy.LAST_BROADCAST):
-        results = self.api.users.get_follows(user_id=user_id, limit=limit, offset=offset, direction=direction, sort_by=sort_by)
+    def get_channel_videos(self, user_id, broadcast_type, period=PeriodHelix.ALL, after='MA==', before='MA==', first=20,
+                           sort_by=VideoSort.TIME, language=Language.ALL):
+        if not period:
+            period = PeriodHelix.ALL
+        results = self.api.videos.get_videos(user_id=user_id, broadcast_type=broadcast_type, period=period,
+                                             after=after, before=before, first=first, sort_order=sort_by,
+                                             language=language)
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_top_videos(self, offset, limit, broadcast_type, period=Period.WEEK, game=None):
-        results = self.api.videos.get_top(limit=limit, offset=offset, game=game, broadcast_type=broadcast_type, period=period)
+    def get_game_streams(self, game_id=None, language=Language.ALL, after='MA==', before='MA==', first=20):
+        if game_id is None:
+            game_id = []
+        results = self.api.streams.get_streams(game_id=game_id, language=language, after=after,
+                                               before=before, first=first)
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_followed_clips(self, cursor, limit, trending=Boolean.TRUE, language=Language.ALL):
-        results = self.api.clips.get_followed(limit=limit, cursor=cursor, trending=trending, language=language)
+    def get_channel_search(self, search_query, after='MA==', first=20):
+        results = self.api.search.get_channels(search_query=search_query, after=after, first=first,
+                                               live_only=Boolean.FALSE)
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_top_clips(self, cursor, limit, channel=None, game=None, period=ClipPeriod.WEEK, trending=Boolean.TRUE, language=Language.ALL):
-        results = self.api.clips.get_top(limit=limit, cursor=cursor, channels=channel, games=game, period=period, trending=trending, language=language)
+    def get_stream_search(self, search_query, after='MA==', first=20):
+        results = self.api.search.get_channels(search_query=search_query, after=after, first=first,
+                                               live_only=Boolean.TRUE)
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_channel_videos(self, channel_id, offset, limit, broadcast_type, sort_by=VideoSort.TIME, language=Language.ALL):
-        results = self.api.channels.get_videos(channel_id=channel_id, limit=limit, offset=offset, broadcast_type=broadcast_type, sort_by=sort_by, language=language)
-        return self.error_check(results)
-
-    @api_error_handler
-    @cache.cache_method(cache_limit=cache.limit)
-    def get_collection_videos(self, collection_id):
-        results = self.api.collections.by_id(collection_id=collection_id, include_all=Boolean.FALSE)
-        return self.error_check(results)
-
-    @api_error_handler
-    @cache.cache_method(cache_limit=cache.limit)
-    def get_game_streams(self, game, offset, limit, language=Language.ALL):
-        results = self.api.streams.get_all(game=game, limit=limit, offset=offset, language=language)
-        return self.error_check(results)
-
-    @api_error_handler
-    @cache.cache_method(cache_limit=cache.limit)
-    def get_channel_search(self, search_query, offset, limit):
-        results = self.api.search.channels(search_query=search_query, limit=limit, offset=offset)
-        return self.error_check(results)
-
-    @api_error_handler
-    @cache.cache_method(cache_limit=cache.limit)
-    def get_stream_search(self, search_query, offset, limit):
-        results = self.api.search.streams(search_query=search_query, limit=limit, offset=offset)
-        return self.error_check(results)
-
-    @api_error_handler
-    @cache.cache_method(cache_limit=cache.limit)
-    def get_game_search(self, search_query):
-        results = self.api.search.games(search_query=search_query)
+    def get_game_search(self, search_query, after='MA==', first=20):
+        results = self.api.search.get_categories(search_query=search_query, after=after, first=first)
         return self.error_check(results)
 
     @api_error_handler
     def check_follow(self, channel_id):
         user_id = self.get_user_id()
-        results = self.api.users.check_follows(user_id=user_id, channel_id=channel_id)
-        return self.return_boolean(results)
+        results = self.api.users.get_follows(from_id=user_id, to_id=channel_id)
+        results = self.error_check(results)
+        return results.get('total') == 1
 
     @api_error_handler
     def follow(self, channel_id):
-        results = self.api.users.follow_channel(channel_id=channel_id, headers=self.get_private_credential_headers())
-        return self.error_check(results)
+        results = self.api.users._follow_channel(channel_id=channel_id, headers=self.get_private_credential_headers())  # NOQA
+        return self.error_check(results, private=True)
 
     @api_error_handler
     def unfollow(self, channel_id):
-        results = self.api.users.unfollow_channel(channel_id=channel_id, headers=self.get_private_credential_headers())
-        return self.error_check(results)
+        results = self.api.users._unfollow_channel(channel_id=channel_id, headers=self.get_private_credential_headers())  # NOQA
+        return self.error_check(results, private=True)
 
     @api_error_handler
     def follow_game(self, game_id):
-        results = self.api.games._follow(game_id=game_id, headers=self.get_private_credential_headers())
-        return self.error_check(results)
+        results = self.api.games._follow(game_id=game_id, headers=self.get_private_credential_headers())  # NOQA
+        return self.error_check(results, private=True)
 
     @api_error_handler
     def unfollow_game(self, game_id):
-        results = self.api.games._unfollow(game_id=game_id, headers=self.get_private_credential_headers())
-        return self.error_check(results)
+        results = self.api.games._unfollow(game_id=game_id, headers=self.get_private_credential_headers())  # NOQA
+        return self.error_check(results, private=True)
 
     @api_error_handler
     def check_subscribed(self, channel_id):
         user_id = self.get_user_id()
-        results = self.api.users.check_subscription(channel_id=channel_id, user_id=user_id)
+        results = self.api.subscriptions.get_user_subscriptions(broadcaster_id=channel_id, user_id=user_id)
         return self.return_boolean(results)
-
-    @api_error_handler
-    def blocks(self, offset, limit):
-        user_id = self.get_user_id()
-        results = self.api.users.get_blocks(user_id=user_id, limit=limit, offset=offset)
-        return self.error_check(results)
-
-    @api_error_handler
-    def block_user(self, target_id):
-        user_id = self.get_user_id()
-        results = self.api.users.block_user(user_id=user_id, target_id=target_id)
-        return self.error_check(results)
-
-    @api_error_handler
-    def unblock_user(self, target_id):
-        user_id = self.get_user_id()
-        results = self.api.users.unblock_user(user_id=user_id, target_id=target_id)
-        return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_video_by_id(self, video_id):
-        results = self.api.videos.by_id(video_id=video_id)
+        results = self.api.videos.get_videos(video_id=video_id)
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def _get_video_token(self, video_id):
-        results = self.usher.vod_token(video_id=video_id)
+        results = self.usher.vod_token(video_id=video_id, headers=self.get_private_credential_headers())
         if 'token' in results:
             results = json.loads(results['token'])
-        return self.error_check(results)
+        return self.error_check(results, private=True)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_clip_by_slug(self, slug):
-        results = self.api.clips.by_slug(slug=slug)
+        results = self.api.clips.get_clip(clip_id=slug)
         return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_channel_stream(self, channel_id):
-        results = self.api.streams.by_id(channel_id=channel_id, stream_type=StreamType.ALL)
+        results = self.api.streams.get_streams(user_id=channel_id)
         return self.error_check(results)
 
     @api_error_handler
@@ -319,25 +316,21 @@ class Twitch:
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_followed_games(self, limit):
-        results = self.api.games._get_followed(limit=limit, headers=self.get_private_credential_headers())
-        return self.error_check(results)
+        results = self.api.games._get_followed(limit=limit, headers=self.get_private_credential_headers())  # NOQA
+        return self.error_check(results, private=True)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_followed_streams(self, stream_type, offset, limit):
-        results = self.api.streams.get_followed(stream_type=stream_type, limit=limit, offset=offset)
+    def get_followed_streams(self, user_id, after='MA==', first=20):
+        results = self.api.streams.get_followed(user_id=user_id, after=after, first=first)
         results = self.error_check(results)
-        if isinstance(results.get('streams'), list):
-            results['streams'] = sorted(results['streams'],
-                                        key=lambda x: int(x.get('viewers', 0)),
-                                        reverse=True)
         return results
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_vod(self, video_id):
         results = self.usher.video(video_id, headers=self.get_private_credential_headers())
-        return self.error_check(results)
+        return self.error_check(results, private=True)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
@@ -348,7 +341,7 @@ class Twitch:
     @cache.cache_method(cache_limit=cache.limit)
     def get_live(self, name):
         results = self.usher.live(name, headers=self.get_private_credential_headers())
-        return self.error_check(results)
+        return self.error_check(results, private=True)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
@@ -357,7 +350,7 @@ class Twitch:
             results = self.usher.live_request(name, platform='ps4', headers=self.get_private_credential_headers())
         else:
             results = self.usher.live_request(name, headers=self.get_private_credential_headers())
-        return self.error_check(results)
+        return self.error_check(results, private=True)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
@@ -366,41 +359,42 @@ class Twitch:
             results = self.usher.video_request(video_id, platform='ps4', headers=self.get_private_credential_headers())
         else:
             results = self.usher.video_request(video_id, headers=self.get_private_credential_headers())
-        return self.error_check(results)
-
-    def get_user_blocks(self):
-        limit = 100
-        offset = 0
-
-        user_blocks = []
-        while True:
-            temp = self.blocks(offset, limit)
-            if len(temp[Keys.BLOCKS]) == 0:
-                break
-            for user in temp[Keys.BLOCKS]:
-                user_blocks.append((user[Keys.USER][Keys._ID],
-                                    user[Keys.USER][Keys.DISPLAY_NAME] if user[Keys.USER][Keys.DISPLAY_NAME] else user[Keys.USER][Keys.NAME]))
-            offset += limit
-            if temp[Keys.TOTAL] <= offset:
-                break
-
-        return user_blocks
+        return self.error_check(results, private=True)
 
     @staticmethod
-    def error_check(results):
-        if 'stream' in results and results['stream'] is None:
+    def error_check(results, private=False):
+        if isinstance(results, list):
+            return results
+
+        payload = results.copy()
+        if 'response' in payload:
+            payload = payload['response']
+
+        if ('error' in payload) and (payload['status'] == 401):
+            if not private:
+                _ = kodi.Dialog().ok(
+                    i18n('oauth_heading'),
+                    i18n('oauth_message') % (i18n('settings'), i18n('login'), i18n('get_oauth_token'))
+                )
+            else:
+                _ = kodi.Dialog().ok(
+                    i18n('private_oauth_heading'),
+                    i18n('private_oauth_message') % (i18n('settings'), i18n('login'), i18n('private_credentials'))
+                )
+            sys.exit()
+        if 'stream' in payload and payload['stream'] is None:
             raise PlaybackFailed()
 
-        if 'error' in results:
-            raise TwitchException(results)
+        if 'error' in payload:
+            raise TwitchException(payload)
 
-        return results
+        return payload
 
     @staticmethod
     def return_boolean(results):
-        if ('error' in results) and (results['status'] == 404):
+        if ('error' in results.get('response', {})) and (results['response']['status'] == 404):
             return False
-        elif 'error' in results:
+        elif 'error' in results.get('response', {}):
             raise TwitchException(results)
         else:
             return True

@@ -11,7 +11,7 @@
 """
 
 from six import string_types, text_type, with_metaclass, PY2, PY3
-from six.moves.urllib.parse import urlparse, urlencode, parse_qs
+from six.moves.urllib.parse import urlencode, parse_qs
 
 from xbmc import PLAYLIST_VIDEO, PLAYLIST_MUSIC  # NOQA
 
@@ -149,13 +149,21 @@ def set_addon_enabled(addon_id, enabled=True):
 
 
 def get_icon():
-    return translate_path('special://home/addons/{0!s}/icon.png'.format(get_id()))
+    if PY2:
+        return translate_path('special://home/addons/{0!s}/icon.png'.format(get_id()))
+    else:
+        return translate_path('special://home/addons/{0!s}/resources/media/icon.png'.format(get_id()))
+
 
 def get_thumb(filename):
-    return translate_path('special://home/addons/{0!s}/resources/media/thumbnails/{1!s}'.format(get_id(),filename))
+    return translate_path('special://home/addons/{0!s}/resources/media/thumbnails/{1!s}'.format(get_id(), filename))
+
 
 def get_fanart():
-    return translate_path('special://home/addons/{0!s}/fanart.png'.format(get_id()))
+    if PY2:
+        return translate_path('special://home/addons/{0!s}/fanart.jpg'.format(get_id()))
+    else:
+        return translate_path('special://home/addons/{0!s}/resources/media/fanart.jpg'.format(get_id()))
 
 
 def get_kodi_version():
@@ -431,11 +439,11 @@ class ProgressDialog(object):
             pd.create(self.heading, msg)
         else:
             pd = xbmcgui.DialogProgress()
-            pd.create(self.heading, self.__formatted_message(line1, line2, line3,))
+            pd.create(self.heading, self.__formatted_message(line1, line2, line3, bg=False))
         return pd
 
     def __formatted_message(self, line1, line2, line3, bg=True):
-        lines = []
+        lines = ['', '', '']
 
         whitespace = '' if bg else '[CR]'
 
@@ -487,7 +495,7 @@ class ProgressDialog(object):
                 msg = self.__formatted_message(line1, line2, line3, bg=True)
                 self.pd.update(percent, self.heading, msg)
             else:
-                self.pd.update(percent, self.__formatted_message(line1, line2, line3))
+                self.pd.update(percent, self.__formatted_message(line1, line2, line3, bg=False))
 
 
 class CountdownDialog(object):

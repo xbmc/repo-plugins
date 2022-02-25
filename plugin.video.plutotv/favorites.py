@@ -46,12 +46,12 @@ def addFavorite(chname, chnumber, silent=False):
         REAL_SETTINGS.setSetting('favorites',json.dumps({"favorites":favorites}))
         if not silent: notificationDialog(LANGUAGE(49007)%(chname))
     
-def delFavorite(chname, chnumber):
+def delFavorite(chname, chnumber, silent=False):
     favorites = getFavorites()
     if chnumber in favorites:
         favorites.pop(favorites.index(chnumber))
         REAL_SETTINGS.setSetting('favorites',json.dumps({"favorites":favorites}))
-        notificationDialog(LANGUAGE(49008)%(chname))
+        if not silent: notificationDialog(LANGUAGE(49008)%(chname))
   
 class Favorites:    
     def __init__(self, sysARG=sys.argv):

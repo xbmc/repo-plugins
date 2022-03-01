@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.twitch" version="2.5.12+matrix.1" name="Twitch" provider-name="anxdpanic, A Talented Community">
+<addon id="plugin.video.twitch" version="2.6.0+matrix.1" name="Twitch" provider-name="anxdpanic, A Talented Community">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.six" version="1.11.0"/>
     <import addon="script.module.requests" version="2.9.1"/>
-    <import addon="script.module.python.twitch" version="2.0.19"/>
+    <import addon="script.module.python.twitch" version="2.0.20"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="resources/lib/addon_runner.py">
     <provides>video</provides>
@@ -16,7 +16,12 @@
       <fanart>resources/media/fanart.jpg</fanart>
     </assets>
     <news>
-[add] new menu icons - Goldenfreddy0703
+[update] Update Twitch API usage from v5 to Helix
+    - This change will require you to generate a new oauth token from the add-on settings
+    - Some favorites may need to be recreated
+    - This change requires an OAuth token for access to any content
+[add] Add to queue context menu item
+[rem] Blacklisting of content
 [lang] updated translations from Weblate
         </news>
     <platform>all</platform>

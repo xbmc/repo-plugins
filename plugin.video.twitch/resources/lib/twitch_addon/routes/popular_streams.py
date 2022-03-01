@@ -16,19 +16,14 @@ from ..addon.twitch_exceptions import NotFound
 
 
 def route(api):
-    blacklist_filter = utils.BlacklistFilter()
     converter = JsonListItemConverter(LINE_LENGTH)
     utils.refresh_previews()
     kodi.set_view('videos', set_sort=True)
-    streams = api.get_featured_streams(offset=0, limit=100)
-    if Keys.FEATURED in streams:
-        filtered = \
-            blacklist_filter.by_type(streams, Keys.FEATURED, parent_keys=[Keys.STREAM, Keys.CHANNEL], id_key=Keys._ID, list_type='user')
-        filtered = \
-            blacklist_filter.by_type(filtered, Keys.FEATURED, parent_keys=[Keys.STREAM], game_key=Keys.GAME, list_type='game')
-        if filtered[Keys.FEATURED]:
-            for result in filtered[Keys.FEATURED]:
-                kodi.create_item(converter.stream_to_listitem(result[Keys.STREAM]))
+    streams = api.get_all_streams(first=100)
+    if Keys.DATA in streams:
+        if streams[Keys.DATA]:
+            for result in streams[Keys.DATA]:
+                kodi.create_item(converter.stream_to_listitem(result))
             kodi.end_of_directory()
             return
     raise NotFound('streams')

@@ -37,7 +37,7 @@ msgid "Settings"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Featured Streams"
+msgid "Popular Streams"
 msgstr ""
 
 msgctxt "#30006"
@@ -445,7 +445,7 @@ msgid "No results returned"
 msgstr ""
 
 msgctxt "#30132"
-msgid "OAuth token is required for access to authorized user functions."
+msgid "OAuth token is required for access"
 msgstr ""
 
 msgctxt "#30133"
@@ -966,4 +966,12 @@ msgstr ""
 
 msgctxt "#30265"
 msgid "Unfollow"
+msgstr ""
+
+msgctxt "#30266"
+msgid "Add to queue"
+msgstr ""
+
+msgctxt "#30267"
+msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
 msgstr ""

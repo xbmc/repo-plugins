@@ -3,7 +3,7 @@
 	<section id="plugin.video.twitch">
 		<category help="" id="login" label="30127">
 			<group id="1">
-				<setting help="" id="oauth_token" label="30099" type="string">
+				<setting help="" id="oauth_token_helix" label="30099" type="string">
 					<level>0</level>
 					<default/>
 					<constraints>
@@ -60,17 +60,17 @@
 		</category>
 		<category help="" id="main menu" label="30219">
 			<group id="1">
-				<setting help="" id="menu_featured" label="30005" type="boolean">
+				<setting help="" id="menu_browse_live" label="30009" type="boolean">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="menu_browse_games" label="30001" type="boolean">
 					<level>0</level>
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
 				<setting help="" id="menu_following" label="30002" type="boolean">
-					<level>0</level>
-					<default>true</default>
-					<control type="toggle"/>
-				</setting>
-				<setting help="" id="menu_browse" label="30172" type="boolean">
 					<level>0</level>
 					<default>true</default>
 					<control type="toggle"/>
@@ -102,45 +102,8 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
-				<setting help="" id="menu_following_clips" label="30176" type="boolean">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
 			</group>
-			<group id="3" label="30172">
-				<setting help="" id="menu_browse_live" label="30009" type="boolean">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting help="" id="menu_browse_xbox_one" label="30173" type="boolean">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting help="" id="menu_browse_ps4" label="30174" type="boolean">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting help="" id="menu_browse_videos" label="30175" type="boolean">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting help="" id="menu_browse_clips" label="30176" type="boolean">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting help="" id="menu_browse_games" label="30001" type="boolean">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-			</group>
-			<group id="4" label="30003">
+			<group id="3" label="30003">
 				<setting help="" id="menu_search_streams" label="30125" type="boolean">
 					<level>0</level>
 					<default>false</default>
@@ -620,47 +583,6 @@
 				<setting help="" id="clear_default_clip_qualities" label="30196" type="action">
 					<level>0</level>
 					<data>RunPlugin(plugin://plugin.video.twitch/?mode=clear_list&amp;list_type=clip&amp;list_name=qualities)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<control format="action" type="button"/>
-				</setting>
-			</group>
-		</category>
-		<category help="" id="blacklist" label="30153">
-			<group id="1">
-				<setting help="" id="blacklist_confirm_toggle" label="30197" type="boolean">
-					<level>0</level>
-					<default>true</default>
-					<control type="toggle"/>
-				</setting>
-				<setting help="" id="remove_user_blacklist" label="30154" type="action">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twitch/?mode=edit_blacklist&amp;list_type=user&amp;remove=true)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<control format="action" type="button"/>
-				</setting>
-				<setting help="" id="remove_game_blacklist" label="30155" type="action">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twitch/?mode=edit_blacklist&amp;list_type=game&amp;remove=true)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<control format="action" type="button"/>
-				</setting>
-				<setting help="" id="clear_user_blacklist" label="30156" type="action">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twitch/?mode=clear_list&amp;list_type=user&amp;list_name=blacklist)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<control format="action" type="button"/>
-				</setting>
-				<setting help="" id="clear_game_blacklist" label="30157" type="action">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twitch/?mode=clear_list&amp;list_type=game&amp;list_name=blacklist)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>

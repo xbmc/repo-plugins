@@ -30,8 +30,5 @@ def route():
     if get_private_oauth_token():
         kodi.create_item({'label': i18n('games'), 'path': {'mode': MODES.FOLLOWED, 'content': 'games'},
                           'info': {'plot': '%s - %s' % (i18n('following'), i18n('games'))}, 'thumbfile': 'Games.png'})
-    context_menu = list()
-    context_menu.extend(menu_items.change_sort_by('clips'))
-    kodi.create_item({'label': i18n('clips'), 'path': {'mode': MODES.FOLLOWED, 'content': 'clips'}, 'context_menu': context_menu,
-                      'info': {'plot': '%s - %s' % (i18n('following'), i18n('clips'))}, 'thumbfile': 'Clips.png'})
+
     kodi.end_of_directory(cache_to_disc=False)

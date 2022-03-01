@@ -2,7 +2,7 @@
 <settings>
     <!-- Login -->
     <category label="30127">
-        <setting id="oauth_token" type="text" label="30099" default=""/>
+        <setting id="oauth_token_helix" type="text" label="30099" default=""/>
         <setting label="30132" type="lsep"/>
         <setting label="30135" id="show_token_url" type="action" action="RunPlugin(plugin://$ID/?mode=get_token_url)" option="close"/>
         <setting label="30138" type="lsep"/>
@@ -13,23 +13,15 @@
     </category>
     <!-- Main Menu -->
     <category label="30219">
-        <setting label="30005" id="menu_featured" type="bool" default="true"/>
+        <setting label="30009" id="menu_browse_live" type="bool" default="true"/>
+        <setting label="30001" id="menu_browse_games" type="bool" default="true"/>
         <setting label="30002" id="menu_following" type="bool" default="true"/>
-        <setting label="30172" id="menu_browse" type="bool" default="true"/>
         <setting label="30003" id="menu_search" type="bool" default="true"/>
         <setting label="30004" id="menu_settings" type="bool" default="true"/>
         <setting label="30002" type="lsep"/>
         <setting label="30009" id="menu_following_live" type="bool" default="false"/>
         <setting label="30008" id="menu_following_channels" type="bool" default="false"/>
         <setting label="30001" id="menu_following_games" type="bool" default="false"/>
-        <setting label="30176" id="menu_following_clips" type="bool" default="false"/>
-        <setting label="30172" type="lsep"/>
-        <setting label="30009" id="menu_browse_live" type="bool" default="false"/>
-        <setting label="30173" id="menu_browse_xbox_one" type="bool" default="false"/>
-        <setting label="30174" id="menu_browse_ps4" type="bool" default="false"/>
-        <setting label="30175" id="menu_browse_videos" type="bool" default="false"/>
-        <setting label="30176" id="menu_browse_clips" type="bool" default="false"/>
-        <setting label="30001" id="menu_browse_games" type="bool" default="false"/>
         <setting label="30003" type="lsep"/>
         <setting label="30125" id="menu_search_streams" type="bool" default="false"/>
         <setting label="30008" id="menu_search_channels" type="bool" default="false"/>
@@ -85,13 +77,6 @@
         <setting label="30194" id="clear_default_stream_qualities" type="action" action="RunPlugin(plugin://$ID/?mode=clear_list&amp;list_type=stream&amp;list_name=qualities)"/>
         <setting label="30195" id="clear_default_video_qualities" type="action" action="RunPlugin(plugin://$ID/?mode=clear_list&amp;list_type=video&amp;list_name=qualities)"/>
         <setting label="30196" id="clear_default_clip_qualities" type="action" action="RunPlugin(plugin://$ID/?mode=clear_list&amp;list_type=clip&amp;list_name=qualities)"/>
-    </category>
-    <category label="30153">
-        <setting id="blacklist_confirm_toggle" type="bool" label="30197" default="true"/>
-        <setting label="30154" id="remove_user_blacklist" type="action" action="RunPlugin(plugin://$ID/?mode=edit_blacklist&amp;list_type=user&amp;remove=true)"/>
-        <setting label="30155" id="remove_game_blacklist" type="action" action="RunPlugin(plugin://$ID/?mode=edit_blacklist&amp;list_type=game&amp;remove=true)"/>
-        <setting label="30156" id="clear_user_blacklist" type="action" action="RunPlugin(plugin://$ID/?mode=clear_list&amp;list_type=user&amp;list_name=blacklist)"/>
-        <setting label="30157" id="clear_game_blacklist" type="action" action="RunPlugin(plugin://$ID/?mode=clear_list&amp;list_type=game&amp;list_name=blacklist)"/>
     </category>
     <!-- IRC -->
     <category label="30081">

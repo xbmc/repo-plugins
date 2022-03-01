@@ -19,7 +19,7 @@ def route(content):
         user_input = kodi.get_keyboard(i18n('search'))
         if user_input:
             kodi.end_of_directory()
-            kodi.update_container(kodi.get_plugin_url({'mode': MODES.SEARCHRESULTS, 'content': content, 'query': user_input, 'index': 0}))
+            kodi.update_container(kodi.get_plugin_url({'mode': MODES.SEARCHRESULTS, 'content': content, 'query': user_input, 'after': 'MA=='}))
         else:
             return
     else:

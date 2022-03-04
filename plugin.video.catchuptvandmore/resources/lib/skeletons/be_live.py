@@ -241,6 +241,15 @@ menu = {
         'enabled': True,
         'order': 26
     },
+    'tipik': {
+        'resolver': '/resources/lib/channels/be/rtbf:set_live_url',
+        'label': 'TipikVision',
+        'thumb': 'channels/be/tipik.png',
+        'fanart': 'channels/be/tipik_fanart.jpg',
+        'm3u_group': 'Belgique fr',
+        'enabled': True,
+        'order': 27
+    },
     'actv': {
         'resolver': '/resources/lib/channels/be/actv:get_live_url',
         'label': 'Antenne Centre TV',
@@ -248,7 +257,7 @@ menu = {
         'fanart': 'channels/be/actv_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 27
+        'order': 28
     },
     'telesambre': {
         'resolver': '/resources/lib/channels/be/telesambre:get_live_url',
@@ -257,7 +266,7 @@ menu = {
         'fanart': 'channels/be/telesambre_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 28
+        'order': 29
     },
     'atv': {
         'resolver': '/resources/lib/channels/be/atv:get_live_url',
@@ -266,7 +275,7 @@ menu = {
         'fanart': 'channels/be/atv_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 29,
+        'order': 30,
     },
     'bruzz': {
         'resolver': '/resources/lib/channels/be/bruzz:get_live_url',
@@ -275,7 +284,7 @@ menu = {
         'fanart': 'channels/be/bruzz_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 30,
+        'order': 31,
     },
     'focuswtv': {
         'resolver': '/resources/lib/channels/be/focuswtv:get_live_url',
@@ -284,7 +293,7 @@ menu = {
         'fanart': 'channels/be/focuswtv_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 31,
+        'order': 32,
     },
     'robtv': {
         'resolver': '/resources/lib/channels/be/robtv:get_live_url',
@@ -293,7 +302,7 @@ menu = {
         'fanart': 'channels/be/robtv_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 32,
+        'order': 33,
     },
     'tvl': {
         'resolver': '/resources/lib/channels/be/tvl:get_live_url',
@@ -302,7 +311,7 @@ menu = {
         'fanart': 'channels/be/tvl_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 33,
+        'order': 34,
     },
     'tvoost': {
         'resolver': '/resources/lib/channels/be/tvoost:get_live_url',
@@ -311,7 +320,7 @@ menu = {
         'fanart': 'channels/be/tvoost_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 34,
+        'order': 35,
     },
     'hln_live': {
         'resolver': '/resources/lib/channels/be/hln_live:get_live_url',
@@ -320,6 +329,6 @@ menu = {
         'fanart': 'channels/be/hln_live_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 35,
+        'order': 36,
     },
 }

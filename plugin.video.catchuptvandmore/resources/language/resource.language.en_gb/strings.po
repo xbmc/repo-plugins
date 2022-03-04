@@ -193,6 +193,14 @@ msgctxt "#30067"
 msgid "Morocco"
 msgstr ""
 
+msgctxt "#30068"
+msgid "Singapore"
+msgstr ""
+
+msgctxt "#30069"
+msgid "Lituania"
+msgstr ""
+
 
 # Channels (from 30080 to 30129)
 
@@ -359,6 +367,18 @@ msgctxt "#30170"
 msgid "CBC: Choose region"
 msgstr ""
 
+msgctxt "#30171"
+msgid "BFM Régions: Choose region"
+msgstr ""
+
+msgctxt "#30172"
+msgid "TV5 monde plus: Choose country"
+msgstr ""
+
+msgctxt "#30173"
+msgid "TV5 monde plus: Choose language"
+msgstr ""
+
 
 # Download (from 30200 to 30239)
 
@@ -429,6 +449,13 @@ msgctxt "#30251"
 msgid "UKTVPlay Password"
 msgstr ""
 
+msgctxt "#30252"
+msgid "RMCBFM Play Login"
+msgstr ""
+
+msgctxt "#30253"
+msgid "RMCBFM Play Password"
+msgstr ""
 
 # TV integration (from 30270 to 30289)
 
@@ -470,6 +497,101 @@ msgstr ""
 
 
 
+# delete_for_submission_start
+# OpenVPN (from 30340 to 30369)
+
+msgctxt "#30340"
+msgid "Enable VPN feature"
+msgstr ""
+
+msgctxt "#30341"
+msgid "OpenVPN filepath"
+msgstr ""
+
+msgctxt "#30342"
+msgid "Import OpenVPN configuration file"
+msgstr ""
+
+msgctxt "#30343"
+msgid "Delete OpenVPN configuration file"
+msgstr ""
+
+msgctxt "#30344"
+msgid "Additional arguments"
+msgstr ""
+
+msgctxt "#30345"
+msgid "Run OpenVPN with superuser privileges (sudo)"
+msgstr ""
+
+msgctxt "#30346"
+msgid "Ask for sudo password"
+msgstr ""
+
+msgctxt "#30347"
+msgid "Connect VPN"
+msgstr ""
+
+msgctxt "#30348"
+msgid "Choose a name for OpenVPN configuration"
+msgstr ""
+
+msgctxt "#30349"
+msgid "This OpenVPN configuration name already exists. Overwrite?"
+msgstr ""
+
+msgctxt "#30350"
+msgid "Import cancelled"
+msgstr ""
+
+msgctxt "#30351"
+msgid "Import failed. You must specify a name for the OpenVPN configuration"
+msgstr ""
+
+msgctxt "#30352"
+msgid "Select OpenVPN configuration to run"
+msgstr ""
+
+msgctxt "#30353"
+msgid "Enter your sudo password"
+msgstr ""
+
+msgctxt "#30354"
+msgid "Started VPN connection"
+msgstr ""
+
+msgctxt "#30355"
+msgid "Stopped VPN connection"
+msgstr ""
+
+msgctxt "#30356"
+msgid "An existing OpenVPN instance appears to be running."
+msgstr ""
+
+msgctxt "#30357"
+msgid "Disconnect it?"
+msgstr ""
+
+msgctxt "#30358"
+msgid "An error has occurred while trying to connect OpenVPN"
+msgstr ""
+
+msgctxt "#30359"
+msgid "Disconnect VPN"
+msgstr ""
+
+msgctxt "#30360"
+msgid "Select OpenVPN configuration to delete"
+msgstr ""
+
+msgctxt "#30361"
+msgid "Connect/Disconnect VPN"
+msgstr ""
+
+msgctxt "#30362"
+msgid "An error has occurred while trying to disconnect OpenVPN"
+msgstr ""
+# delete_for_submission_end
 
 
 # Advanced settings (from 30370 to 30399)
@@ -724,6 +846,7 @@ msgstr ""
 msgctxt "#30729"
 msgid "Emissions"
 msgstr ""
+
 
 # Favourites (from 30800 to 30859)
 

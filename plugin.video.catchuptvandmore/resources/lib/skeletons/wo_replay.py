@@ -130,7 +130,7 @@ menu = {
         'label': 'TV5Monde Plus',
         'thumb': 'channels/wo/tv5mondeplus.png',
         'fanart': 'channels/wo/tv5mondeplus_fanart.jpg',
-        'enabled': False,
+        'enabled': True,
         'order': 26
     }
 }

@@ -51,6 +51,8 @@
                 <setting label="30162" type="labelenum" id="nhkworld.language" values="Outside Japan|In Japan" default="Outside Japan"/>
                 <setting label="30163" type="labelenum" id="cgtn.language" values="FR|EN|AR|ES|RU" default="FR"/>
                 <setting label="30166" type="labelenum" id="rt.language" values="FR|EN|AR|ES" default="FR"/>
+                <setting label="30172" type="labelenum" id="tv5mondeplus.country" values="FR|BE|DE|PT|DK|LT|HR|LV|UA|HU|MD|ME|IE|MK|EE|IL|IM|MT|IS|AL|IT|VA|AM|ES|AQ|AT|AX|AZ|JE|RO|NL|BA|NO|RS|FI|RU|BG|FO|SE|BV|SI|BY|SJ|SK|SM|GB|GE|GG|GI|GL|GR|XK|CY|CZ|PL|LI|TR" default="FR"/>
+                <setting label="30173" type="labelenum" id="tv5mondeplus.language" values="fr|en|de|es-LA" default="fr"/>
 
             <!-- French channels -->
             <setting label="30080" type="lsep" subsetting="true" visible="eq(1,true)"/>
@@ -58,6 +60,7 @@
 
                 <setting label="30158" type="labelenum" id="france3regions.language" values="Alpes|Alsace|Aquitaine|Auvergne|Bourgogne|Bretagne|Centre-Val de Loire|Chapagne-Ardenne|Corse|Côte d'Azur|Franche-Comté|Languedoc-Roussillon|Limousin|Lorraine|Midi-Pyrénées|Nord-Pas-de-Calais|Basse-Normandie|Haute-Normandie|Paris Île-de-France|Pays de la Loire|Picardie|Poitou-Charentes|Provence-Alpes|Rhône-Alpes|Nouvelle-Aquitaine" default="Alpes"/>
                 <setting label="30159" type="labelenum" id="la_1ere.language" values="Guadeloupe|Guyane|Martinique|Mayotte|Nouvelle Calédonie|Polynésie|Réunion|St-Pierre et Miquelon|Wallis et Futuna|Outre-mer" default="Guadeloupe"/>
+                <setting label="30171" type="labelenum" id="BFM_Régions.language" values="BFM DICI HAUTE-PROVENCE|BFM Grand Lille|BFM Grand Littoral|BFM Lyon|BFM MARSEILLE PROVENCE|BFM NICE COTE D'AZUR|BFM Paris|BFM TOULON VAR" default="BFM Paris"/>
 
             <!-- Spain channels -->
             <setting label="30089" type="lsep" subsetting="true" visible="eq(1,true)"/>
@@ -112,6 +115,9 @@
             <setting label="30248" type="text" id="abweb.login" default=""/>
             <setting label="30249" type="text" id="abweb.password" option="hidden" default=""/>
 
+            <setting label="30252" type="text" id="rmcbfmplay.login" default=""/>
+            <setting label="30253" type="text" id="rmcbfmplay.password" option="hidden" default=""/>
+
         <setting label="30081" type="lsep" subsetting="true" visible="eq(1,true)"/>
         <!--<setting label="" type="bool" id="be" default="true" visible="false"/>-->
 
@@ -151,6 +157,21 @@
 
 
 
+    <!-- delete_for_submission_start -->
+    <!-- OpenVPN -->
+    <category label="OpenVPN">
+        <setting label="30340" type="bool" id="vpn.hide" default="true"/>
+        <setting label="30361" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/vpn/vpn_item_callback/)"  visible="eq(-1,true)"/>
+        <setting label="30341" type="file" id="vpn.openvpnfilepath" default="/usr/bin/openvpn" visible="eq(-2,true)"/>
+        <setting label="30342" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/vpn/import_ovpn/)"  visible="eq(-3,true)"/>
+        <setting label="30343" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/vpn/delete_ovpn/)"  visible="eq(-4,true)"/>
+        <setting label="30344" type="text" id="vpn.args" default="" visible="eq(-5,true)"/>
+        <setting label="30345" type="bool" id="vpn.sudo" default="false" visible="eq(-6,true)"/>
+        <setting label="30346" type="bool" id="vpn.sudopsw" default="false" enable="!eq(-1,false)" visible="eq(-7,true)"/>
+
+    </category>
+    <!-- OpenVPN -->
+    <!-- delete_for_submission_end -->
 
 
 

@@ -157,5 +157,13 @@ menu = {
         'fanart': 'channels/ch/telem1_fanart.jpg',
         'enabled': True,
         'order': 23
+    },
+    'lfmtv': {
+        'resolver': '/resources/lib/channels/ch/lfmtv:get_live_url',
+        'label': 'LFM TV',
+        'thumb': 'channels/ch/lfmtv.png',
+        'fanart': 'channels/ch/lfmtv_fanart.jpg',
+        'enabled': True,
+        'order': 24
     }
 }

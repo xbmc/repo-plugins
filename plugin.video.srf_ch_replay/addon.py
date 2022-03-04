@@ -10,7 +10,7 @@ import xbmcplugin
 import xbmcgui
 import xbmcaddon
 import xbmcvfs
-import os
+#import os
 import traceback
 from io import StringIO
 import gzip
@@ -25,9 +25,9 @@ pluginhandle = int(sys.argv[1])
 socket.setdefaulttimeout(30)
 xbmcplugin.setPluginCategory(pluginhandle, "News")
 xbmcplugin.setContent(pluginhandle, "tvshows")
-addon_work_folder = xbmcvfs.translatePath("special://profile/addon_data/" + addonID)
-if not os.path.isdir(addon_work_folder):
-    os.mkdir(addon_work_folder)
+#addon_work_folder = xbmcvfs.translatePath("special://profile/addon_data/" + addonID)
+#if not os.path.isdir(addon_work_folder):
+#    os.mkdir(addon_work_folder)
 FavoritesFile = xbmcvfs.translatePath("special://profile/addon_data/" + addonID + "/" + addonID + ".favorites")
 numberOfEpisodesPerPage = str(addon.getSetting("numberOfShowsPerPage"))
 tr = addon.getLocalizedString
@@ -56,9 +56,9 @@ def list_all_tv_shows(letter):
     """
     this method list all available TV shows
     """
-    url = 'http://il.srgssr.ch/integrationlayer/1.0/ue/srf/tv/assetGroup/'
+    url = 'https://il.srgssr.ch/integrationlayer/2.0/srf/showList/tv/alphabetical?vector=portalplay&pageSize=unlimited&onlyActiveShows=false'
     response = json.load(open_srf_url(url))
-    shows = response["AssetGroups"]["Show"]
+    shows = response["showList"]
     title = ''
     desc = ''
     picture = ''
@@ -74,7 +74,7 @@ def list_all_tv_shows(letter):
         except:
             desc = tr(30008)
         try:
-            picture = show['Image']['ImageRepresentations']['ImageRepresentation'][0]['url']
+            picture = show['imageUrl']
         except:
             picture = ''
 

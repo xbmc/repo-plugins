@@ -48,12 +48,20 @@ menu = {
         'enabled': True,
         'order': 4
     },
-    'tvppolandin': {
+    'tvpworld': {
         'resolver': '/resources/lib/channels/pl/tvp:get_live_url',
-        'label': 'TVP Poland IN',
-        'thumb': 'channels/pl/tvppolandin.png',
-        'fanart': 'channels/pl/tvppolandin_fanart.jpg',
+        'label': 'TVP World',
+        'thumb': 'channels/pl/tvpworld.png',
+        'fanart': 'channels/pl/tvpworld_fanart.jpg',
         'enabled': True,
         'order': 5
-    }
+    },
+    'tvpwilno': {
+        'resolver': '/resources/lib/channels/pl/tvp:get_live_url',
+        'label': 'TVP Wilno',
+        'thumb': 'channels/pl/tvpwilno.png',
+        'fanart': 'channels/pl/tvpwilno_fanart.jpg',
+        'enabled': True,
+        'order': 6
+    },
 }

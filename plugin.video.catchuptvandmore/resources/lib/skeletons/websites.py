@@ -142,12 +142,12 @@ menu = {
         'label': 'Les Argonautes',
         'thumb': 'websites/lesargonautes.png',
         'fanart': 'websites/lesargonautes_fanart.jpg',
-        'enabled': True,
+        'enabled': False,  # broken, disabled
         'order': 16
     },
-    'nationalfff': {
-        'route': '/resources/lib/websites/nationalfff:website_root',
-        'label': 'National FFF',
+    'fff': {
+        'route': '/resources/lib/websites/fff:website_root',
+        'label': 'FFF',
         'thumb': 'websites/nationalfff.png',
         'fanart': 'websites/nationalfff_fanart.jpg',
         'enabled': True,

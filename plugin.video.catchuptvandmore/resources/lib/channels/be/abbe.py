@@ -9,17 +9,24 @@ import re
 import json
 import random
 import urlquick
+import inputstreamhelper
+
 from hashlib import sha256
 from codecs import encode as codec_encode
 from codecs import decode as codec_decode
 
-from codequick import Resolver
+from codequick import Resolver, Listitem
 from kodi_six import xbmcgui
 from resources.lib import web_utils
 try:
     from urllib.parse import urlencode
 except ImportError:
     from urllib import urlencode
+
+from resources.lib.kodi_utils import (INPUTSTREAM_PROP, get_selected_item_art,
+                                      get_selected_item_info,
+                                      get_selected_item_label)
+
 
 # TO DO
 # Add Paid contents ?
@@ -36,7 +43,9 @@ URL_CONNECT_TOKEN = URL_ROOT_LOGIN + '/connect/token'
 
 URL_AUTH_CALLBACK = URL_ROOT + '/auth-callback'
 
-URL_API = 'https://subscription.digital.api.abweb.com/api/subscription/has-live-rights/%s/%s'
+URL_API = 'https://subscription.digital.api.abweb.com/api/player/live/%s/%s'
+
+URL_LICENCE_KEY = 'https://mediawan.fe.cloud.vo.services/drmgateway/v1/drm/widevine/license?drmLicenseToken=%s|User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Origin=%s&Referer=%s&Authority=mediawan.fe.cloud.vo.services&Content-Type=|R{SSM}|'
 
 
 def genparams(item_id):
@@ -139,4 +148,22 @@ def get_live_url(plugin, item_id, **kwargs):
     }
     resp4 = session_urlquick.get(URL_API % (item_id, item_id), headers=headers, max_age=-1)
     json_parser4 = json.loads(resp4.text)
-    return json_parser4['hlsUrl']
+
+    is_helper = inputstreamhelper.Helper("mpd")
+    if not is_helper.check_inputstream():
+        return False
+
+    item = Listitem()
+    if "hdnts" in json_parser4["hdnts"]:
+        item.path = json_parser4["streamBaseUrl"] + "/index.mpd?" + json_parser4["hdnts"]
+    else:
+        item.path = json_parser4["streamBaseUrl"] + "/index.mpd?hdnts=" + json_parser4["hdnts"]
+    item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
+    item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+    item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+    item.property['inputstream.adaptive.license_key'] = URL_LICENCE_KEY % (
+        json_parser4["smToken"], URL_ROOT % item_id, URL_ROOT % item_id)
+    item.label = get_selected_item_label()
+    item.art.update(get_selected_item_art())
+    item.info.update(get_selected_item_info())
+    return item

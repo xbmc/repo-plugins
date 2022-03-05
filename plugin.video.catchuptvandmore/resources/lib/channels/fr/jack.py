@@ -5,14 +5,13 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
+
 import json
 
-from codequick import Listitem, Resolver, Route
 import urlquick
-
+from codequick import Listitem, Resolver, Route
 from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
-
 
 # TO DO
 # Add More Pages
@@ -67,7 +66,6 @@ def list_videos(plugin, item_id, program_title, **kwargs):
         web_utils.get_random_ua()
     }
     resp = urlquick.get(URL_VIDEOS, headers=headers)
-    print(repr(resp.text))
     json_parser = json.loads(resp.text)
 
     for program_datas in json_parser["blocks"]:

@@ -14,8 +14,7 @@ import urlquick
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
 
-# TO DO
-# Fix Download Mode
+# TODO fix module, 404 error on url root
 
 URL_ROOT = 'http://lesargonautes.telequebec.tv'
 

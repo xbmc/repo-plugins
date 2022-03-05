@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.36+matrix.1" provider-name="SylvainCecchetto,wwark">
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.37+matrix.1" provider-name="SylvainCecchetto,wwark,joaopa">
   <requires>
-    <import addon="xbmc.python" version="3.0.0"/>
+    <<import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.codequick" version="0.9.13"/>
     <import addon="script.module.youtube.dl" version="18.225.0"/>
     <import addon="script.module.requests" version="2.12.4"/>
@@ -42,24 +42,85 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.36]
-[6Play - FR] Fix Catchup TV
-[STV - UK] Fix missing content (#512)
-[STV - UK] Add subtitle (#513)
-[Website - NFB] Fix videos (#498)
-[France TV sport] Fix lives (#525) (thanks @chamchenko)
-[FR - LCI] Fix missing programs (#450)
-[IT - MediaSet] Add lives TV (#534) (thanks @Bas)
-[IT - MediaSet] Add lives TV (#534) (thanks @Bas)
-[NL - OB] added omroep brabant live (#534) (thanks @Bas)
-[CA - IciTele] Add more Lives TV (#528) (thanks @Sphinxroot)
-[BE - RTLPlay] Add more Catch-Up TV (#528) (thanks @darodi)
-[FR - MyTFI] Fix missing next page button (#535)
-[WO - Arte Live] Fix 404 error (#546)
-[FR - FranceTV] Fix replay (#540) (thanks @0xced and @pipoprods)
-[WO - TV5Monde] Fix replay (#530)
-[WO - Arte Live] Fix bad resolution (#552)
-[FR - France TV] Fix live (#558 and #560) (thanks @Arias800)
+[Version 0.2.37]
+[FR - Cnews] Fi live and replay (#568)
+[CH - SSR] Fix error on SSR channels replay (#574) Thanks @jmzambon for #587
+[FR - SSR] Fix Alsace 20 and LaChaineNormande (DRM) (#584) Thanks @jmzambon for #585
+[FR - MyTF1] Fix categories (#562) Thanks @aaitmouloud for #563
+[BE - RTLPlay] Add 'All programs'. Thanks @darodi for #582
+[IT - raiplay] Enhanced. Thanks @jmzambon for #583
+[Website - FFF] Fix error when no image (#586)
+[FR - CNEWS] Try hardcoded live id in case of error (#580)
+[BE - RTBF] Fix RTBF sometimes down (#526) Thanks @Gaet81 for #536
+[BE - RTLPlay] Fix replay (#576) Thanks @Gaet81 for #589
+[Live TV] Temp fix of tzlocal error (#592)
+[Website - FFF] Fix video playback error (#586)
+[IT - Rai] Fix live TV (#611)
+[FR - france.tv] Fix replay (#616, thanks @Arias800)
+[JP - FujiTV] Add the replay for FujiTV (#615)
+[Website - FFF] Add more replays (#614)
+[FR - AlbiTV] Add live for AlbiTV (#620)
+[FR - Mycanal] Fix replay pour mycanal (#624) Thanks @Arias800
+[Configuration] fix bug report (#618) Thanks @darodi
+[BE - RTLPlay] [FR - M6] choose live quality (#627) Thanks @darodi
+[FR - M6] add all programs section (#627) Thanks @darodi
+[BE - RTLPlay] add search (#627) Thanks @darodi
+[FR - Replay] Beginning of a new API for the replay of the RMC channels
+[FR - Replay] Complete the API for RMC channels replay: now working !! (#626) Thanks @Arias800
+[FR - Live ARTE] Workaround a FFMPEG bug (#619)
+[ES Live RTVE] Fix broken live url (#633) Thanks @Adrien Aubry
+[FR - Replay] Use v1 API instead of v2 API for ARTE replay (#557) Thanks @jmzambon
+[FR - RMC] Fix live for RMC channels (#594) Thanks @Arias800
+[FR - Replay] Fix a crash when retrieving RMC channels in replay
+[FR - Replay] Clean-up skeleton
+[FR - Replay] Fix Lumni replay
+[INTERNATIONAL - ARTE] Use Inpustream-adaptive to open the lives of ARTE
+[INTERNATIONAL - ARTE] Remove dead code
+[Website] Move to the more generic FFF site
+[BE - AB] Fix AB3 and AB Xplore (#636) Thanks @chamchenko
+[SG] Add Channel News Asia (CNA) live (issue #478)
+[Menu] Add some Hebrew translations
+[SG - CNA] Cosmetic changes
+[FR] Add Tahiti Nui Télévision (TNTV) live (issue #452)
+[ES live RealMadridTV] Fix broken url parsing (PR ##637) Thanks @Adrien Aubry
+[Website] Fix the route for the FFF website (PR #640) thanks @darodi
+[BE-RTC] fix live (PR #642) thanks @darodi
+[PL - TVP] Search specifically for m3u8 URLs (PR #639) Thanks @Piotr Pawlicki
+[PL - TVP] Gracefully handle not available streams (PR #639) Thanks @Piotr Pawlicki
+[PL - TVP] Rename 'TVP Poland In' to 'TVP World' (PR #639) Thanks @Piotr Pawlicki
+[PL - TVP] Use data-channel-id for Polonia (PR #639) Thanks @Piotr Pawlicki
+[FR - RMCBFMPLAY] Add a dialog box to advertise that credentials are not set (PR #644) Thanks Arias800
+[WO- TV5MONDE] Fix TV5Monde live (PR #643) Thanks Arias800
+[Project] Fix linting to be compliant with Flake8 (PR #646 #647 #649 #650 #651 #652 #652 #653 #654 #655) Thanks @Piotr Pawlicki
+[PL - TVP] Add stream for TVP Wilno (#PR  656) Thanks @Piotr Pawlicki
+[FR - RMCBFMPLAY] Fix a syntax error Thanks @Piotr Pawlicki
+[FR - RMCBMFPLAY] Correct linting on rmcbfmplay.py (PR #648) Thanks @Piotr Pawlicki
+[WO - TV5MONDE] Correct linting on tv5monde.py (PR #657) Thanks @Piotr Pawlicki
+[Website] Disable lesargonautes (PR #641) Thanks @darodi
+[BE - RTBFAuvio] Add TipikVision live (PR #661) Thanks @darodi
+[FR - AlbiTV] Add replay for AlbiTV (PR #662) Thanks Arias800
+[FR - Live] Remove a useless item in fr_live skeleton
+[FR - Live] Rearrange the items in fr_live skeleton
+[FR - Live] Replace the locals of BFM by the more generic BFM Régions
+[FR - RMC] Remove a useless file
+[FR - RTL] Fix live for RTL radios group (#663)
+[FR - DICI] Fix live for DICI and implement replay (PR #666) Thanks @Arias800
+[Project] Make Captchuptvmore more compliant with Flake8
+[FR - BFM] Remove a useless file
+[FR - REPLAY] Remove a useless item in fr_replay skeleton
+[FR - RMCBMFPLAY] Add local BFM channels (#665)
+addon.xml Change RMCBFMREPLAY into RMCBMFPLAY
+[LT] Add LRT Televizija live (issue #416)
+[LT - LIVE] Add LRT Plius live (issue #416)
+[LT - LIVE] Add LRT Lituanica live (issue #416)
+[LT - LIVE] Fix the path for LRT Televizija pictures
+[SG] Fix live skeleton
+[LT] Make Flake8 happy
+[WO - TV5MONDEPLUS] Enable TV5mondeplus (PR #673) Thanks @darodi
+[FR - BFM REGIONS] Fix a translation Thanks @darodi
+[WO - TV5MONDEPLUS] Fix Flake8 errors
+[LT] Capitalize LRT TELEVIZIJA in skeleton
+[Project] Add joaopa00 as releaser
 ----
 Visit WebSite - http://mpdb.tv/#home which host the french forum used by users of CU TV and More
     </news>

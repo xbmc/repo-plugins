@@ -100,7 +100,7 @@ def list_categories(plugin, item_id, **kwargs):
 
     # Other categories (Info, Kids, ...)
     resp = urlquick.get(URL_CATEGORIES_JSON % item_id)
-    json_value = re.compile(r'__SSR_DATA__ = (.*?)</script>').findall(resp.text)[0]
+    json_value = re.compile(r'__SSR_VIDEO_DATA__ = (.*?)</script>').findall(resp.text)[0]
     json_parser = json.loads(json_value)
     for category_datas in json_parser["initialData"]["topics"]:
         category_title = category_datas["title"]
@@ -127,7 +127,7 @@ def list_categories(plugin, item_id, **kwargs):
 def list_sub_categories(plugin, item_id, category_urn, **kwargs):
 
     resp = urlquick.get(URL_CATEGORIES_JSON % item_id)
-    json_value = re.compile(r'__SSR_DATA__ = (.*?)</script>').findall(resp.text)[0]
+    json_value = re.compile(r'__SSR_VIDEO_DATA__ = (.*?)</script>').findall(resp.text)[0]
     json_parser = json.loads(json_value)
 
     for sub_category_datas in json_parser["initialData"]["pacPageConfigs"]["topicSections"][category_urn]:
@@ -153,7 +153,7 @@ def list_programs(plugin, item_id, category_url, **kwargs):
     - ...
     """
     resp = urlquick.get(category_url)
-    json_value = re.compile(r'__SSR_DATA__ = (.*?)</script>').findall(resp.text)[0]
+    json_value = re.compile(r'__SSR_VIDEO_DATA__ = (.*?)</script>').findall(resp.text)[0]
     json_parser = json.loads(json_value)
     for program_datas in json_parser["initialData"]["shows"]:
         program_title = program_datas["title"]

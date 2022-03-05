@@ -51,27 +51,48 @@ def get_live_url(plugin, item_id, **kwargs):
                         max_age=-1)
     root = resp.parse()
 
-    live_id = ''
+    live_id = None
     for live_datas in root.findall(".//div"):
         if live_datas.get('data-stationname') is not None:
             if item_id == 'tvpinfo':
                 if 'info' in live_datas.find('.//img').get('alt'):
                     live_id = live_datas.get('data-video-id')
+                    break
             elif item_id == 'tvppolonia':
-                if 'Polonia' in live_datas.get('data-title'):
+                if (
+                    'Polonia' in live_datas.get('data-title')
+                    or '1773' in live_datas.get('data-channel-id')
+                ):
                     live_id = live_datas.get('data-video-id')
-            elif item_id == 'tvppolandin':
+                    break
+            elif item_id == 'tvpworld':
                 if 'News and entertainment' in live_datas.get('data-title'):
                     live_id = live_datas.get('data-video-id')
+                    break
             elif item_id == 'tvp3':
                 if LIVE_TVP3_REGIONS[utils.ensure_unicode(
                         final_language)] in live_datas.find('.//img').get(
                             'alt'):
                     live_id = live_datas.get('data-video-id')
-    if live_id == '':
-        # Add Notification
+                    break
+            elif item_id == 'tvpwilno':
+                if 'wilno' in live_datas.find('.//img').get('alt'):
+                    live_id = live_datas.get('data-video-id')
+                    break
+
+    if live_id is None:
+        # Stream is not available - channel not found on scrapped page
+        plugin.notify('INFO', plugin.localize(30716))
         return False
+
     lives_html = urlquick.get(URL_STREAM % live_id,
                               headers={'User-Agent': web_utils.get_random_ua()},
                               max_age=-1)
-    return re.compile(r'src:\'(.*?)\'').findall(lives_html.text)[0]
+
+    final_video_url = re.compile(r'src:\'(.+\.m3u8)\'').search(lives_html.text)
+    if final_video_url is not None:
+        return final_video_url.group(1)
+
+    # Stream is not available - M3U8 playlist not found on scrapped page
+    plugin.notify('INFO', plugin.localize(30716))
+    return False

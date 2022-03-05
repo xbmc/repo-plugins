@@ -29,14 +29,16 @@ import urlquick
 from codequick import Script
 from kodi_six import xbmcvfs
 from resources.lib.py_utils import compute_md5
-from tzlocal import get_localzone
 
+try:
+    # Temp fix of #592
+    from tzlocal import get_localzone
+except Exception:
+    get_localzone = None
 try:
     from urllib.parse import urlparse
 except ImportError:
     from urlparse import urlparse
-
-
 
 # python-xmltv package (https://pypi.org/project/python-xmltv/)
 
@@ -344,11 +346,14 @@ def programme_post_treatment(programme):
     # For start and stop we use a string in %Hh%m format in our local timezone
 
     # Get local timezone
-    try:
-        local_tz = get_localzone()
-    except Exception:
-        # Hotfix issue #102
+    if get_localzone is None:
         local_tz = pytz.timezone('Europe/Paris')
+    else:
+        try:
+            local_tz = get_localzone()
+        except Exception:
+            # Hotfix issue #102
+            local_tz = pytz.timezone('Europe/Paris')
 
     for elt in ['start', 'stop']:
         if elt in programme:
@@ -544,6 +549,8 @@ def download_xmltv_file(country_id, day_delta=0):
         # Check if we have the last version of the file
         current_file_md5 = compute_md5(xmltv_fp)
         remote_file_md5 = get_remote_xmltv_md5(country_id, day_delta=day_delta)
+        print(current_file_md5)
+        print(remote_file_md5)
         if current_file_md5 != remote_file_md5:
             Script.log("A new version of xmltv file of {} for today exists, let's download it".format(country_id))
             need_to_downlod_xmltv_file = True

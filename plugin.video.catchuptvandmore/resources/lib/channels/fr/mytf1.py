@@ -37,9 +37,9 @@ URL_API = 'https://www.tf1.fr/graphql/web'
 DESIRED_QUALITY = Script.setting['quality']
 
 VIDEO_TYPES = {
-    'Replay': 'replay',
-    'Extrait': 'extract',
-    'Exclu': 'bonus'
+    'Replay': 'REPLAY',
+    'Extrait': 'EXTRACT',
+    'Exclu': 'BONUS'
 }
 
 

@@ -14,6 +14,8 @@ import urlquick
 from codequick import Listitem, Resolver, Route
 from resources.lib import download, web_utils
 from resources.lib.menu_utils import item_post_treatment
+from resources.lib.kodi_utils import (INPUTSTREAM_PROP, get_selected_item_art,
+                                      get_selected_item_info, get_selected_item_label)
 
 # TODO Rework filter for all videos
 
@@ -183,18 +185,13 @@ def get_live_url(plugin, item_id, **kwargs):
                         max_age=-1)
     live_json = re.compile(r'data-broadcast=\'(.*?)\'').findall(resp.text)[0]
     json_parser = json.loads(live_json)
-    url_stream = json_parser["files"][0]["url"]
-    manifest = urlquick.get(
-        url_stream,
-        headers={'User-Agent': web_utils.get_random_ua()},
-        max_age=-1)
-    lines = manifest.text.splitlines()
-    final_url = ''
-    for k in range(0, len(lines) - 1):
-        if 'RESOLUTION=' in lines[k]:
-            final_url = lines[k + 1]
-        if 'PROGRAM-ID=' in lines[k]:
-            if '-b/' not in lines[k + 1]:
-                final_url = lines[k + 1]
 
-    return final_url
+    item = Listitem()
+    item.path = json_parser[0]["url"]
+    item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
+    item.property['inputstream.adaptive.manifest_type'] = 'hls'
+
+    item.label = get_selected_item_label()
+    item.art.update(get_selected_item_art())
+    item.info.update(get_selected_item_info())
+    return item

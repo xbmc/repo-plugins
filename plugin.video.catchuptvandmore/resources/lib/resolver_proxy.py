@@ -8,12 +8,12 @@ from __future__ import unicode_literals
 
 import json
 import re
+from random import randint
 
 import inputstreamhelper
 import urlquick
 from codequick import Listitem, Script
 from kodi_six import xbmcgui
-from random import randint
 from resources.lib import download, web_utils
 from resources.lib.addon_utils import get_quality_YTDL
 from resources.lib.kodi_utils import (INPUTSTREAM_PROP, get_selected_item_art,
@@ -74,7 +74,7 @@ URL_FRANCETV_HDFAUTH_URL = 'https://hdfauthftv-a.akamaihd.net/esi/TA?format=json
 
 URL_DAILYMOTION_EMBED_2 = 'https://www.dailymotion.com/player/metadata/video/%s?integration=inline&GK_PV5_NEON=1'
 
-URL_REPLAY_ARTE = 'https://api.arte.tv/api/player/v2/config/%s/%s'
+URL_REPLAY_ARTE = 'https://api.arte.tv/api/player/v1/config/%s/%s'
 # desired_language, videoid
 
 
@@ -330,7 +330,7 @@ def get_francetv_video_stream(plugin,
             headers = {
                 'User-Agent': web_utils.get_random_ua(),
                 # 2.0.0.0 -> 2.16.0.255 are french IP addresses, see https://lite.ip2location.com/france-ip-address-ranges
-                'X-Forwarded-For': '2.' + str(randint(0, 15)) + '.' + str(randint(0, 255)) + '.' + str(randint(0, 255)),
+                # 'X-Forwarded-For': '2.' + str(randint(0, 15)) + '.' + str(randint(0, 255)) + '.' + str(randint(0, 255)),
             }
             stream_headers = urlencode(headers)
             json_parser2 = json.loads(urlquick.get(url_selected, headers=headers, max_age=-1).text)
@@ -358,7 +358,7 @@ def get_francetv_live_stream(plugin, live_id):
 
     try:
         final_url = json_parser_liveId['url']
-    except:
+    except Exception:
         return None
 
     json_parser2 = json.loads(urlquick.get(URL_FRANCETV_HDFAUTH_URL % (final_url), max_age=-1).text)
@@ -371,30 +371,25 @@ def get_arte_video_stream(plugin,
                           video_id,
                           download_mode=False):
 
-    token = 'MzYyZDYyYmM1Y2Q3ZWRlZWFjMmIyZjZjNTRiMGY4MzY4NzBhOWQ5YjE4MGQ1NGFiODJmOTFlZDQwN2FkOTZjMQ'
-    headers = {
-        'Authorization': 'Bearer %s' % token
-    }
     url = URL_REPLAY_ARTE % (desired_language, video_id)
-    j = urlquick.get(url, headers=headers).json()
+    j = urlquick.get(url).json()
+    stream_datas = j['videoJsonPlayer']['VSR']
 
     all_streams_label = []
     all_streams_url = []
+    for stream in sorted(stream_datas.keys()):
+        if stream_datas[stream]['quality'] == 'XQ':
+            try:
+                all_streams_label.append(stream_datas[stream]['versionLibelle'])
+            except Exception:
+                all_streams_label.append('Stream ' + str(len(all_streams_label)))
+            all_streams_url.append(stream_datas[stream]['url'])
 
-    for stream in j['data']['attributes']['streams']:
-        try:
-            all_streams_label.append(stream['versions'][0]['label'])
-        except Exception:
-            all_streams_label.append('Stream ' + str(len(all_streams_label)))
-        all_streams_url.append(stream['url'])
     url_selected = ''
-
     if len(all_streams_url) == 1:
         url_selected = all_streams_url[0]
     else:
-        seleted_item = xbmcgui.Dialog().select(
-            plugin.localize(30709),
-            all_streams_label)
+        seleted_item = xbmcgui.Dialog().select(plugin.localize(30709), all_streams_label)
         if seleted_item > -1:
             url_selected = all_streams_url[seleted_item]
         else:

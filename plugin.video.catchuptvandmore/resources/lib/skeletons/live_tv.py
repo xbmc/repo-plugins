@@ -151,5 +151,19 @@ menu = {
         'thumb': 'channels/ma.png',
         'enabled': True,
         'order': 18
+    },
+    'sg_live': {
+        'route': '/resources/lib/main:generic_menu',
+        'label': 30068,
+        'thumb': 'channels/sg.png',
+        'enabled': True,
+        'order': 19
+    },
+    'lt_live': {
+        'route': '/resources/lib/main:generic_menu',
+        'label': 30069,
+        'thumb': 'channels/lt.png',
+        'enabled': True,
+        'order': 20
     }
 }

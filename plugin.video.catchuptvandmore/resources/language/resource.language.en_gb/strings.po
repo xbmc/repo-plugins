@@ -193,6 +193,14 @@ msgctxt "#30067"
 msgid "Morocco"
 msgstr ""
 
+msgctxt "#30068"
+msgid "Singapore"
+msgstr ""
+
+msgctxt "#30069"
+msgid "Lituania"
+msgstr ""
+
 
 # Channels (from 30080 to 30129)
 
@@ -359,6 +367,18 @@ msgctxt "#30170"
 msgid "CBC: Choose region"
 msgstr ""
 
+msgctxt "#30171"
+msgid "BFM Régions: Choose region"
+msgstr ""
+
+msgctxt "#30172"
+msgid "TV5 monde plus: Choose country"
+msgstr ""
+
+msgctxt "#30173"
+msgid "TV5 monde plus: Choose language"
+msgstr ""
+
 
 # Download (from 30200 to 30239)
 
@@ -429,6 +449,13 @@ msgctxt "#30251"
 msgid "UKTVPlay Password"
 msgstr ""
 
+msgctxt "#30252"
+msgid "RMCBFM Play Login"
+msgstr ""
+
+msgctxt "#30253"
+msgid "RMCBFM Play Password"
+msgstr ""
 
 # TV integration (from 30270 to 30289)
 
@@ -724,6 +751,7 @@ msgstr ""
 msgctxt "#30729"
 msgid "Emissions"
 msgstr ""
+
 
 # Favourites (from 30800 to 30859)
 

@@ -5,13 +5,13 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
+
 import base64
 import json
 import re
 
-from codequick import Listitem, Resolver, Route
 import urlquick
-
+from codequick import Listitem, Resolver, Route
 from resources.lib import download, resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
@@ -654,7 +654,6 @@ def get_video_url(plugin,
     elif root.find(".//div[@class='more-overlay-item social-export light']") is not None:
         stream_datas_json = root.find(
             ".//div[@class='more-overlay-item social-export light']").get('data-model')
-        print(repr(stream_datas_json))
         json_parser = json.loads(stream_datas_json)
         if 'code' in json_parser["videos"][0]["sources"]:
             url_video_resolver = json_parser["videos"][0]["sources"]["code"]

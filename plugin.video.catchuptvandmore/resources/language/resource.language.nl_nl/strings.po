@@ -9,7 +9,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+
 # Settings tabs/categories (from 30000 to 30019)
+
 msgctxt "#30000"
 msgid ""
 msgstr ""
@@ -50,7 +52,9 @@ msgctxt "#30009"
 msgid "General"
 msgstr "Algemeen"
 
+
 # Settings line separators (from 30010 to 30029)
+
 msgctxt "#30010"
 msgid "Hide main menu categories"
 msgstr "Verberg hoofdmenu categorieën"
@@ -95,7 +99,9 @@ msgctxt "#30020"
 msgid "Unmask replay TV channels"
 msgstr ""
 
+
 # Main menu (from 30030 to 30049)
+
 msgctxt "#30030"
 msgid "Live TV"
 msgstr "Live tv"
@@ -112,7 +118,9 @@ msgctxt "#30033"
 msgid "Favourites"
 msgstr "Favorieten"
 
+
 # Countries (from 30050 to 30079)
+
 msgctxt "#30050"
 msgid "France"
 msgstr "Frankrijk"
@@ -185,7 +193,17 @@ msgctxt "#30067"
 msgid "Morocco"
 msgstr "Marokko"
 
+msgctxt "#30068"
+msgid "Singapore"
+msgstr "Singapore"
+
+msgctxt "#30069"
+msgid "Lituania"
+msgstr "Litouwen"
+
+
 # Channels (from 30080 to 30129)
+
 msgctxt "#30080"
 msgid "French channels"
 msgstr "Franse kanalen"
@@ -258,8 +276,13 @@ msgctxt "#30096"
 msgid "Moroccan channels"
 msgstr "Marokkaans kanalen"
 
+
 # Websites (from 30130 to 30149)
+
+
+
 # Quality and content (from 30150 to 30199)
+
 msgctxt "#30150"
 msgid "Video quality"
 msgstr "Video kwaliteit"
@@ -344,7 +367,21 @@ msgctxt "#30170"
 msgid "CBC: Choose region"
 msgstr "CBC : Kies regio"
 
+msgctxt "#30171"
+msgid "BFM Régions: Choose region"
+msgstr ""
+
+msgctxt "#30172"
+msgid "TV5 monde plus: Choose country"
+msgstr ""
+
+msgctxt "#30173"
+msgid "TV5 monde plus: Choose language"
+msgstr ""
+
+
 # Download (from 30200 to 30239)
+
 msgctxt "#30200"
 msgid "Download directory"
 msgstr "Download map"
@@ -361,7 +398,9 @@ msgctxt "#30203"
 msgid "Automatically rename the video (download directory required)"
 msgstr "Hernoem de video automatisch (download map vereist)"
 
+
 # Accounts (from 30240 to 30269)
+
 msgctxt "#30240"
 msgid "NRJ Login"
 msgstr "NRJ gebruikersnaam"
@@ -410,7 +449,16 @@ msgctxt "#30251"
 msgid "UKTVPlay Password"
 msgstr "UKTVPlay wachtwoord"
 
+msgctxt "#30252"
+msgid "RMCBFM Play Login"
+msgstr ""
+
+msgctxt "#30253"
+msgid "RMCBFM Play Password"
+msgstr ""
+
 # TV integration (from 30270 to 30289)
+
 msgctxt "#30270"
 msgid "TV integration"
 msgstr "TV integratie"
@@ -443,8 +491,16 @@ msgctxt "#30277"
 msgid "Select channels to enable in Kodi Live TV"
 msgstr "Selecteer de kanalen om te activeren in Kodi Live TV"
 
+
+
 # Reserved space for other tab/category in settins (from 30290 to 30339)
+
+
+
+
+
 # Advanced settings (from 30370 to 30399)
+
 msgctxt "#30370"
 msgid "Clear cache"
 msgstr "Cache legen"
@@ -465,7 +521,9 @@ msgctxt "#30374"
 msgid "Favourites deleted"
 msgstr "Favorieten verwijderd"
 
+
 # Settings of 'General' category (from 30400 to 30429)
+
 msgctxt "#30400"
 msgid "Restore default order of all menus"
 msgstr "Herstel de standaard volgorde van alle menus"
@@ -502,13 +560,20 @@ msgctxt "#30408"
 msgid "All hidden items have been unmasked"
 msgstr ""
 
+
 # Advanced settings (from 30430 to 30449)
+
 msgctxt "#30430"
 msgid "Automatically start Catch-up TV & More when Kodi starts"
 msgstr "Start Catch-up TV & More automatisch wanneer Kodi start"
 
+
 # Reserved space for other tab/category in settins (from 30450 to 30499)
+
+
+
 # Context menu (from 30500 to 30599)
+
 msgctxt "#30500"
 msgid "Move down"
 msgstr "Verplaats omlaag"
@@ -533,7 +598,9 @@ msgctxt "#30505"
 msgid "List Videos (type=episode)"
 msgstr "Videos weergeven (type=episode)"
 
+
 # Dialog boxes (from 30600 to 30699)
+
 msgctxt "#30600"
 msgid "Information"
 msgstr "Informatie"
@@ -562,7 +629,9 @@ msgctxt "#30606"
 msgid "Do you want to see this information next time?"
 msgstr "Wilt u deze informatie een volgende keer zien?"
 
+
 # Others (from 30700 to 30799)
+
 msgctxt "#30700"
 msgid "More videos..."
 msgstr "Meer video's..."
@@ -683,7 +752,9 @@ msgctxt "#30729"
 msgid "Emissions"
 msgstr ""
 
+
 # Favourites (from 30800 to 30859)
+
 msgctxt "#30800"
 msgid "Add to add-on favourites"
 msgstr "Toevoegen aan add-on favorieten"
@@ -716,7 +787,9 @@ msgctxt "#30807"
 msgid "This favourite raises an error, would you like to delete it?"
 msgstr "Deze favoriet veroorzaakt een fout, wilt het verwijderen?"
 
+
 # Log uploader (from 30860 to 30889)
+
 msgctxt "#30860"
 msgid "This selection triggered an unexpected error, would you like to share your error log so that we can try to resolve this issue?"
 msgstr "Deze selectie heeft een onverwachte fout veroorzaakt, wilt u het logboek delen zodat we kunnen proberen de fout op te lossen?"
@@ -729,7 +802,9 @@ msgctxt "#30862"
 msgid "Sorry, sharing your error log failed"
 msgstr "Sorry, delen van het logboek is mislukt"
 
+
 # HTTP error (from 30890 to 30919)
+
 msgctxt "#30890"
 msgid "HTTP Error code"
 msgstr "HTTP foutcode"

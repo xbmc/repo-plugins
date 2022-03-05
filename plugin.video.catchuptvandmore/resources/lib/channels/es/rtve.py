@@ -16,7 +16,7 @@ from resources.lib.menu_utils import item_post_treatment
 
 URL_ROOT = 'https://www.rtve.es'
 
-URL_LIVE_STREAM = 'https://rtvelivestream-lvlt.rtve.es/%s_dvr.m3u8'
+URL_LIVE_STREAM = 'https://rtvelivestream-lvlt.rtve.es/{0}/{0}_main.m3u8'
 # Live Id
 
 URL_CATEGORIES = URL_ROOT + '/alacarta/categorieslist.shtml?ctx=tve'
@@ -55,4 +55,4 @@ def list_programs(plugin, item_id, category_url, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    return URL_LIVE_STREAM % item_id
+    return URL_LIVE_STREAM.format(item_id)

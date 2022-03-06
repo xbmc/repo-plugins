@@ -1,3 +1,5 @@
+version 2.0.0:
+ * complete rewrite for kodi 19 (aka matrix)
 version 1.2.2:
  * Kodi 19 compatibility (respond to issue #4)
 version 1.2.1:

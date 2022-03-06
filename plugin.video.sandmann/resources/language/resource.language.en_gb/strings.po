@@ -16,14 +16,6 @@ msgstr ""
 "Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "#30001"
-msgid "Our Sandman"
-msgstr ""
-
-msgctxt "#30002"
-msgid "from"
-msgstr ""
-
 msgctxt "#30010"
 msgid "Preferred Quality"
 msgstr ""
@@ -54,8 +46,4 @@ msgstr ""
 
 msgctxt "#30104"
 msgid "On Start"
-msgstr ""
-
-msgctxt "#30200"
-msgid "Update in progress"
 msgstr ""

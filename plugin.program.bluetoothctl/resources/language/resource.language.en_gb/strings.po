@@ -1,0 +1,133 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-02-27 15:17+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_gb\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+# Name, summary and description
+msgctxt "#30000"
+msgid "Bluetoothctl"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Interface to bluetoothctl"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Manage bluetooth devices using bluetoothctl"
+msgstr ""
+
+# Addon settings 301xx
+# Bluetoothctl settings 301xx
+
+msgctxt "#30100"
+msgid "bluetoothctl settings"
+msgstr ""
+
+msgctxt "#30101"
+msgid "bluetoothctl path"
+msgstr ""
+
+msgctxt "#30102"
+msgid "bluetoothctl timeout"
+msgstr ""
+
+# Addon actions 302xx
+
+msgctxt "#30201"
+msgid "Paired devices"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Available devices"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Connect"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Disconnect"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Pair"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Unpair"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Trust"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Revoke trust"
+msgstr ""
+
+msgctxt "#30209"
+msgid "Information"
+msgstr ""
+
+# Notifications 303xx
+
+msgctxt "#30310"
+msgid "connecting successful"
+msgstr ""
+
+msgctxt "#30311"
+msgid "connecting failed"
+msgstr ""
+
+msgctxt "#30320"
+msgid "disconnecting successful"
+msgstr ""
+
+msgctxt "#30321"
+msgid "disconnecting failed"
+msgstr ""
+
+msgctxt "#30330"
+msgid "pairing successful"
+msgstr ""
+
+msgctxt "#30331"
+msgid "pairing failed"
+msgstr ""
+
+msgctxt "#30340"
+msgid "removing successful"
+msgstr ""
+
+msgctxt "#30341"
+msgid "removing failed"
+msgstr ""
+
+msgctxt "#30350"
+msgid "trusting successful"
+msgstr ""
+
+msgctxt "#30351"
+msgid "trusting failed"
+msgstr ""
+
+msgctxt "#30360"
+msgid "revoking trust successful"
+msgstr ""
+
+msgctxt "#30361"
+msgid "revoking trust failed"
+msgstr ""
+
+msgctxt "#30370"
+msgid "failed to get information"
+msgstr ""

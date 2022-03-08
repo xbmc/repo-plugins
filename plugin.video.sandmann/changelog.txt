@@ -1,3 +1,5 @@
+version 2.0.1:
+ * update contributers
 version 2.0.0:
  * complete rewrite for kodi 19 (aka matrix)
 version 1.2.2:

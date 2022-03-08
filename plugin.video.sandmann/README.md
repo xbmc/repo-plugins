@@ -13,4 +13,4 @@ If you find a bug, please submit it to GitHub's
 ## Contributors
 
 - [sorax](https://github.com/sorax), [handfrog](https://github.com/handfrog)
-- Special thanks to [chefmagier](https://github.com/chefmagier), [yafp](https://github.com/yafp)
+- Special thanks to [chefmagier](https://github.com/chefmagier), [yafp](https://github.com/yafp), [OBedford](https://github.com/OBedford), [kevleodev](https://github.com/kevleodev)

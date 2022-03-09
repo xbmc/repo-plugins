@@ -1,0 +1,89 @@
+Version 3.0.0 - 2022-02-18
+
+- Kodi Matrix with Python 3
+- Minor refactoring
+- Upgraded artwork
+- Added OGG stream
+
+
+Version 2.0.1 - 2019-11-24
+
+- Minor improvements after review Kodi maintainers
+
+
+Version 2.0.0 - 2019-10-14
+
+- Completely new implementation by Dreamer and Pander based on video add-on
+
+
+Version 1.0.7 - 2016-12-22
+
+- Upgraded channels url to http, no https
+
+
+Version 1.0.6 - 2016-10-10
+
+- Upgraded icon
+- Upgraded image urls
+- Upgraded site urls
+- Upgraded stream urls
+- Upgraded url channels.xml
+- Improved texts
+
+
+Version 1.0.5 - 2016-02-25
+
+- Fixed icon
+- Fixed typo in documentation
+- Fixed ref to tv plugin
+- Usign HTTP and not HTTPS anymore
+- Added URL to forum
+
+
+Version 1.0.4 - 2016-01-17
+
+- Improved documentation and link to video plugin
+
+
+Version 1.0.3 - 2015-11-28
+
+- Improved fanart and added it to all channels
+- Log to debug level
+- Moved cache from temp to userdata/addon_data
+
+
+
+Version 1.0.2 - 2015-11-25
+
+- Approved fork from from SomaFM for Intergalactic FM
+- Artwork from Intergalactic FM
+- Fanart from Yulia Vilensky
+
+
+Version 1.0.1 - 2015-01-01
+
+- Fix playback on Android client
+
+
+Version 1.0.0 - 2014-10-09
+
+- Use localized strings, supporting English and German for now
+- Settings for caching the channel list and clearing the cache
+- Include a donation reminder <3
+
+
+Version 0.1.0 - 2014-10-05
+
+- Automatically select a stream and instantly start playback when station is selected
+- Cache playlist files
+- Settings for quality, format and firewall streams
+
+
+Version 0.0.2 - 2013-07-21
+
+- Use SomaFM XML API.
+
+
+Version 0.0.1 - 2011-03-07
+
+- Initial version.

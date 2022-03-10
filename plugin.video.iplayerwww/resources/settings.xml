@@ -65,7 +65,7 @@
                                     <default>false</default>
                                     <control type="toggle"/>
                                 </setting>
-                                <setting id="suibtitles" type="boolean" label="30130" help="">
+                                <setting id="subtitles" type="boolean" label="30130" help="">
                                     <level>0</level>
                                     <default>false</default>
                                     <control type="toggle"/>

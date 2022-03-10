@@ -2,12 +2,12 @@
 <addon
     id="plugin.video.sandmann"
     name="Sandmann"
-    version="1.2.1"
+    version="2.0.0"
     provider-name="sorax">
   <requires>
-    <import addon="xbmc.python" version="2.26.0" />
+    <import addon="xbmc.python" version="3.0.0"></import>
   </requires>
-  <extension point="xbmc.python.pluginsource" library="addon.py">
+  <extension point="xbmc.python.pluginsource" library="main.py">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
@@ -22,10 +22,12 @@
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
     <website>https://www.sandmann.de</website>
     <source>https://github.com/sorax/plugin.video.sandmann</source>
-    <!--<news></news>-->
     <assets>
-      <icon>icon.png</icon>
-      <fanart>fanart.jpg</fanart>
+      <icon>resources/assets/icon.png</icon>
+      <fanart>resources/assets/fanart.jpg</fanart>
     </assets>
+    <news>v2.0.0:
+      - complete rewrite for kodi 19 (aka matrix)
+    </news>
   </extension>
 </addon>

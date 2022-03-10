@@ -16,14 +16,6 @@ msgstr ""
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "#30001"
-msgid "Our Sandman"
-msgstr "Unser Sandmännchen"
-
-msgctxt "#30002"
-msgid "from"
-msgstr "vom"
-
 msgctxt "#30010"
 msgid "Preferred Quality"
 msgstr "Bevorzugte Qualität"
@@ -55,7 +47,3 @@ msgstr "Manuell"
 msgctxt "#30104"
 msgid "On Start"
 msgstr "Nur beim Start"
-
-msgctxt "#30200"
-msgid "Update in progress"
-msgstr "Aktualisierung wird durchgeführt"

@@ -22,8 +22,8 @@ def main():
          li = xbmcgui.ListItem(title)
          try:
               li.setArt({'thumb': icons[streams[bitrate][2]]})
-         except IndexError:
-              li.setArt({'thumb': icon})
+         except (IndexError, KeyError):
+              li.setArt({'thumb': icons['Auto']})
          xbmcplugin.addDirectoryItem(handle=addon_handle, url=streams[bitrate][1], listitem=li, isFolder=False)
 
     xbmcplugin.endOfDirectory(addon_handle)

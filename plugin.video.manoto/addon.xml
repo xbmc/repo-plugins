@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.manoto"
        name="Manoto TV"
-       version="2.3.0"
+       version="2.3.1"
        provider-name="babak">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>

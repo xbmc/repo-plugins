@@ -125,6 +125,15 @@ msgctxt "#30501"
 msgid "Cache cleared"
 msgstr "Cache gelöscht"
 
+# GUI - Context menus
+msgctxt "#30601"
+msgid "Remove"
+msgstr "Entfernen"
+
+msgctxt "#30602"
+msgid "Clear"
+msgstr "Leeren"
+
 # GUI - Generic
 msgctxt "#30901"
 msgid "Next page"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.soundcloud" name="SoundCloud" version="4.0.1" provider-name="jaylinski">
+<addon id="plugin.audio.soundcloud" name="SoundCloud" version="4.0.2" provider-name="jaylinski">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.22.0"/>
@@ -18,7 +18,11 @@
         <forum>https://forum.kodi.tv/showthread.php?tid=206635</forum>
         <website>https://soundcloud.com</website>
         <source>https://github.com/jaylinski/kodi-addon-soundcloud</source>
-        <news>4.0.1 (2021-11-02)
+        <news>4.0.2 (2022-03-13)
+Fixed random CloudFront errors when sending requests
+Added context-menu option for removing search-history items
+
+4.0.1 (2021-11-02)
 Fixed error in "Discover"-folder
 
 4.0.0 (2020-12-12)

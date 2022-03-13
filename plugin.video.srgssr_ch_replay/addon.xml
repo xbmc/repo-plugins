@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.srgssr_ch_replay" name="Unofficial SRG SSR Replay" version="3.0.2" provider-name="Man Behind MooN">
+<addon id="plugin.video.srgssr_ch_replay" name="Unofficial SRG SSR Replay" version="3.0.3" provider-name="Man Behind MooN">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.25.1+matrix.1"/>
@@ -14,7 +14,9 @@
 [Info] SRG SSR user account required
 [Info] Search for TV shows
 [Info] Bug fixes
-[New] Subtitle can be enabled</news>
+[Info] Subtitle can be enabled
+[New] Inactive TV shows can be included in the alphabetical search (undocumented &amp; experimental)
+[New] The letter menu can be disabled (undocumented &amp; experimental)</news>
 	<assets>
 		<icon>resources/icon.png</icon>
 		<fanart>resources/fanart.png</fanart>

@@ -19,6 +19,7 @@ class AddonUtils():
         self.path = xbmcvfs.translatePath(self.addon.getAddonInfo("path"))
         self.profile = xbmcvfs.translatePath(self.addon.getAddonInfo("profile"))
         self.resources = os.path.join(self.path, "resources")
+        self.lib = os.path.join(self.resources, "lib")
         self.media = os.path.join(self.resources, "media")
         self.icon = self.addon.getAddonInfo("icon")
 

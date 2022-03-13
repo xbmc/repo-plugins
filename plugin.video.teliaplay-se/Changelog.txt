@@ -14,3 +14,6 @@
 1.2.2 [20211230]
 - Updated graphql hashes
 - Fixed broken menu entries
+
+1.2.3 [20220403]
+- Updated graphql hashes and fixed add/remove from my list

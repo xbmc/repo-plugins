@@ -1,4 +1,6 @@
 import sys
+import json
+import requests
 from urllib.parse import parse_qsl
 from xbmcgui import Dialog
 from resources.lib.api import TeliaException
@@ -103,6 +105,7 @@ class Router():
 def run():
     paramstring = sys.argv[2][1:]
     params = dict(parse_qsl(paramstring))
+
     try:
         router = Router(params)
         router.main_menu()

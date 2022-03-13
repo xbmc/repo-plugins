@@ -167,11 +167,11 @@ msgid "To login, provide the username and password of your Telia Play account in
 msgstr ""
 
 msgctxt "#32013"
-msgid "Type the username of your Telia Play account here."
+msgid "Fill in username of your Telia Play account here."
 msgstr ""
 
 msgctxt "#32014"
-msgid "Type the password of your Telia Play account. Be aware that passwords are stored in clear text on disk."
+msgid "Fill in password of your Telia Play account here. Be aware that passwords are stored in clear text on your hard drive."
 msgstr ""
 
 msgctxt "#32015"

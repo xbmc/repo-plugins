@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<setting label="Activar" type="bool" id="activa" default="false"/>
+	<setting label="Correo"  type="text"  id="username" default=""/>
+	<setting label="Clave"   type="text"  id="password" option="hidden" enable="!eq(-1,)" default=""/>
+</settings>

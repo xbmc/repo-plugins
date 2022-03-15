@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.lacapitv" name="La Capi TV" version="1.0.0" provider-name="bazza">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.t1mlib" version="4.0.0"/>
+		<import addon="script.module.requests" version="2.22.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="es_AR">Una televisión interespacial</summary>
+		<description lang="es_AR">Un servicio de streaming intergaláctico donde podés encontrar animaciones de La Capi entre tantas otras series y pequeños experimentos de animación.
+</description>
+		<license>GNU General Public License, v3</license>
+		<language>es</language>
+		<!--		<forum>http://forum.kodi.tv/showthread.php?tid=209948</forum> -->
+		<source>https://gitlab.com/b4zz4/</source>
+		<website>lacapi.tv</website>
+		<email>info@lacapi.tv</email>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+			<screenshot>resources/01.jpg</screenshot>
+			<screenshot>resources/02.jpg</screenshot>
+			<screenshot>resources/03.jpg</screenshot>
+		</assets>
+		<news>Inicia el proyecto</news>
+	</extension>
+</addon>

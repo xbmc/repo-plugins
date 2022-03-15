@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-	<setting label="Activar" type="bool" id="activa" default="false"/>
-	<setting label="Correo"  type="text"  id="username" default=""/>
-	<setting label="Clave"   type="text"  id="password" option="hidden" enable="!eq(-1,)" default=""/>
+    <category label="30003">
+		<setting label="30004" type="bool" id="activa"   default="false"/>
+		<setting label="30001" type="text" id="username" default=""/>
+		<setting label="30002" type="text" id="password" option="hidden" enable="!eq(-1,)" default=""/>
+	</category>
 </settings>

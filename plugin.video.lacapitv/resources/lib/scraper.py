@@ -17,6 +17,7 @@ if settings.getSetting('activa') == "true":
 	path ="p/"
 	cuenta = settings.getSetting('username') + ":" + settings.getSetting('password') + "@"
 html = requests.get('https://'+cuenta+'play.lacapi.tv/'+path+'show.json').text
+translation = settings.getLocalizedString
 
 class myAddon(t1mAddon):
 	def getAddonMenu(self,url,ilist):
@@ -45,7 +46,7 @@ class myAddon(t1mAddon):
 				url = b['video']
 				mensaje = ""
 				if (b['privado']) and path == "" :
-					mensaje="\r\n\r\nPara ver el video completo cree una cuenta en play.lacapi.tv"
+					mensaje="\r\n\r\n" + translation(30005)
 				infoList = {'mediatype':'episode',
 								'Title': name,
 								'TVShowTitle': xbmc.getInfoLabel('ListItem.TVShowTitle'),
@@ -58,5 +59,4 @@ class myAddon(t1mAddon):
 
 	def getAddonVideo(self,url):
 		liz = xbmcgui.ListItem(path = url, offscreen=True)
-		#liz.setMimeType('video/webm')
 		xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)

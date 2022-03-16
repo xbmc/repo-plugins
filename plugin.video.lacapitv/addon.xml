@@ -17,7 +17,7 @@
 		<description lang="es_AR">Un servicio de streaming intergaláctico donde podés encontrar animaciones de La Capi entre tantas otras series y pequeños experimentos de animación.
 </description>
 		<license>GPL-3.0-or-later</license>
-		<language>es en</language>
+		<language>es</language>
 		<source>https://git.tuxfamily.org/4232/kodi_plugin_video_lacapitv.git/</source>
 		<website>https://lacapi.tv</website>
 		<email>info@lacapi.tv</email>

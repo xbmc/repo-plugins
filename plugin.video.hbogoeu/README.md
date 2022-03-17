@@ -5,6 +5,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-37-orange.svg?style=flat-square)](#contributors-)
 [![HowToSupport](https://img.shields.io/badge/How%20to-support%20the%20add--on-orange)](https://github.com/arvvoid/plugin.video.hbogoeu#support-the-add-on)
 
+ATTENTION ALL REGIONS SUPPORTED BY THIS ADD-ON SWITCHED TO HBO MAX, A HBO MAX ADD-ON ALREADY EXIST HERE: https://forum.kodi.tv/showthread.php?tid=358484.
 
 # Disclaimer
 

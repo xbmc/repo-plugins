@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon
-    id="plugin.video.sandmann"
-    name="Sandmann"
-    version="2.0.1"
-    provider-name="sorax">
+<addon id="plugin.video.sandmann" name="Sandmann" version="2.1.1" provider-name="sorax">
   <requires>
     <import addon="xbmc.python" version="3.0.0"></import>
   </requires>
@@ -26,8 +22,8 @@
       <icon>resources/assets/icon.png</icon>
       <fanart>resources/assets/fanart.jpg</fanart>
     </assets>
-    <news>v2.0.1:
-      - update contributers
+    <news>v2.1.1:
+      - add setting to switch between different versions (rbb/mdr)
     </news>
   </extension>
 </addon>

@@ -1,3 +1,5 @@
+version 2.1.1:
+ * add setting to switch between different versions (rbb/mdr)
 version 2.0.1:
  * update contributers
 version 2.0.0:

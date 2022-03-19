@@ -33,16 +33,25 @@ addon_icon = addon.getAddonInfo("icon")
 base_path = sys.argv[0]
 
 # -- Constants --
-episodes_url = "https://api.ardmediathek.de/page-gateway/widgets/ard/asset/Y3JpZDovL3JiYi1vbmxpbmUuZGUvc2FuZG1hbm4"
+sources = {
+    "rbb": "https://api.ardmediathek.de/page-gateway/widgets/ard/asset/Y3JpZDovL3JiYi1vbmxpbmUuZGUvc2FuZG1hbm4",
+    "mdr": "https://api.ardmediathek.de/page-gateway/widgets/ard/asset/Y3JpZDovL21kci5kZS9zZW5kZXJlaWhlbi84NjY2ZjI5OS02ZGU3LTQwNjMtODY4MS01NjA5ZWVlMzI4OGU"
+}
+
 
 # -- Settings --
 dgs = addon.getSettingInt("dgs2")
 interval = addon.getSettingInt("interval2")
 quality = addon.getSettingInt("quality2")
 update = addon.getSettingInt("update2")
+source = addon.getSettingInt("source2")
 
 
 def sandmann():
+    episodes_url = sources["rbb"]
+    if source == 1:
+        episodes_url = sources["mdr"]
+
     episodes_list = getEpisodes(episodes_url, quality)
 
     item_list = []

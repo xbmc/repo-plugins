@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.picture.googlephotos"
+version="0.0.1"
+name="Google Photos"
+provider-name="Pranjal Singhal">
+<requires>
+  <import addon="xbmc.python" version="3.0.0" />
+  <!-- <import addon="script.module.pyasn1" version="0.4.8+matrix.1"/>
+  <import addon="script.module.pyasn1-modules" version="0.2.8+matrix.1" /> -->
+  <import addon="script.module.requests"  />
+  <!-- <import addon="script.module.googleapi" />
+  <import addon="script.module.googleauth" /> -->
+</requires>
+
+<extension point="xbmc.python.pluginsource" library="main.py">
+  <provides>image</provides>
+</extension>
+<extension point="xbmc.addon.metadata">
+  <summary lang="en_GB">Google Photos for Kodi</summary>
+  <description lang="en_GB">The addon is in development phase.</description>
+  <license>	GPL-3.0-or-later</license>
+  <assets>
+    <icon>icon.png</icon>
+    <fanart>fanart.jpg</fanart>
+  </assets>
+</extension>
+</addon>

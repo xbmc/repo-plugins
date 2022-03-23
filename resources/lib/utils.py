@@ -1,4 +1,6 @@
 from urllib import parse
+import pickle
+import os
 
 
 def build_url(base_url, query: dict, qs=None) -> str:
@@ -24,3 +26,22 @@ def sleep_time(time=300):
     return time // 100
 
 
+def loadData(path):
+    if not os.path.exists(path):
+        return None
+    data = []
+    with open(path, 'rb') as fr:
+        try:
+            while True:
+                data.append(pickle.load(fr))
+        except EOFError:
+            pass
+    return data
+
+
+def storeData(path, db: dict):
+    # Appends data to file
+    dbfile = open(path, 'ab')
+    # source, destination
+    pickle.dump(db, dbfile)
+    dbfile.close()

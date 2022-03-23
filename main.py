@@ -2,6 +2,7 @@
 
 import os
 import sys
+import pickle
 from time import sleep
 import requests
 from resources.lib import auth
@@ -29,8 +30,9 @@ token = None
 # Addon dir path
 __addon__ = xbmcaddon.Addon()
 addon_path = __addon__.getAddonInfo('path')
-token_path = xbmcvfs.translatePath(
-    __addon__.getAddonInfo('profile')) + config.token_filename
+profile_path = xbmcvfs.translatePath(
+    __addon__.getAddonInfo('profile'))
+token_path = profile_path + config.token_filename
 xbmcplugin.setContent(addon_handle, 'images')
 
 
@@ -105,17 +107,24 @@ def search():
     pass
 
 
-def load_itemsbg(m):
+def refresh():
+    id = xbmcgui.getCurrentWindowId()
+    # pos = xbmc.getInfoLabel(f'ListItem.Label')
+    pos = int(xbmc.getInfoLabel(f'Container.CurrentItem'))
+    xbmc.executebuiltin('Container.Refresh')
+    # get active window
+    win = xbmcgui.Window(id)
+    cid = win.getFocusId()
+    while not xbmc.getCondVisibility(f'Control.IsVisible({cid})'):
+        sleep(0.2)
+    xbmc.executebuiltin(f'SetFocus({cid},{pos},absolute)')
 
-    pass
 
-
-def list_media():
-
+def get_items(pageToken=None) -> dict:
     # Handle Pagination and other params for request
     params = {'pageSize': 100}
-    if args.get('pageToken'):
-        params['pageToken'] = args.get('pageToken')[0]
+    if pageToken:
+        params['pageToken'] = pageToken
 
     headers = {'Authorization': 'Bearer ' + token}
     # Check type of required listing
@@ -125,36 +134,63 @@ def list_media():
         res = requests.get(config.service_endpoint + f'/mediaItems',
                            headers=headers, params=params)
     elif list_type == 'album':
-        error = 'Unable to open album'
+        error = 'Unable to load album items'
         params['albumId'] = args.get('id')[0]
         res = requests.post(config.service_endpoint + f'/mediaItems:search',
                             headers=headers, data=params)
-
-    # Call to Photos API
-
     if res.status_code != 200:
-        xbmc.executebuiltin(
-            f'Notification(Error {res.status_code}, {error}, time=3000)')
-    else:
-        media = res.json()
-
-        # List for media
-        items = create_media_list(media)
-
-        # Add list to directory
-        xbmcplugin.addDirectoryItems(
-            addon_handle, items, totalItems=len(items))
-
-        # Next Page
-        # if 'nextPageToken' in media:
-        #     url = utils.build_url(
-        #         base_url, {'pageToken': media['nextPageToken']}, qs)
-        #     li = xbmcgui.ListItem('Next Page')
-        #     xbmcplugin.addDirectoryItem(addon_handle, url, li, True)
-        xbmcplugin.endOfDirectory(addon_handle)
+        dialog = xbmcgui.Dialog()
+        dialog.notification(
+            'Error', f'{error}. Error Code:{res.status_code}', xbmcgui.NOTIFICATION_ERROR, 3000)
+        return None
+    return res.json()
 
 
-def create_media_list(media):
+def get_items_bg(result, path):
+    xbmc.log("Image Loader started.", xbmc.LOGDEBUG)
+    if 'nextPageToken' in result[-1]:
+        # print(f'lala {result}')
+        pageToken = result[-1]["nextPageToken"]
+        media = get_items(pageToken)
+        if not media:
+            return None
+        utils.storeData(path, media)
+
+
+def list_media():
+    path = profile_path + config.media_filename
+    result = utils.loadData(path)
+    if not result:
+        media = get_items()
+        if not media:
+            return
+        result = [media]
+        utils.storeData(path, media)
+
+    # List for media
+    items = []
+    for item in result:
+        items += create_media_list(item)
+
+    # Add list to directory
+    xbmcplugin.addDirectoryItems(
+        addon_handle, items, totalItems=len(items))
+    if 'nextPageToken' in result[-1]:
+        url = utils.build_url(base_url, {'mode': 'refresh'})
+        li = xbmcgui.ListItem('Show more...')
+        xbmcplugin.addDirectoryItem(addon_handle, url, li)
+
+    xbmcplugin.endOfDirectory(addon_handle)
+
+    if 'nextPageToken' in result[-1]:
+        loader = threading.Thread(target=get_items_bg, args=(
+            result, path,))
+        loader.start()
+        loader.join()
+        xbmc.log("All Image links fetched.", xbmc.LOGDEBUG)
+
+
+def create_media_list(media: dict):
     # Creates a list of (url, li) from media dictionary
     items = []
     for item in media["mediaItems"]:
@@ -210,7 +246,7 @@ def list_albums():
         params['pageToken'] = args.get('pageToken')[0]
     a_num = 1
     headers = {'Authorization': 'Bearer ' + token}
-    res = requests.get(config.service_endpoint + '/album',
+    res = requests.get(config.service_endpoint + '/albums',
                        headers=headers, params=params)
     if res.status_code != 200:
         dialog = xbmcgui.Dialog()
@@ -278,24 +314,3 @@ else:
         creds = read_credentials(token_path)
     token = creds["token"]
     eval(mode[0] + '()')
-
-# elif mode[0] == 'folder':
-#     foldername = args['foldername'][0]
-#     url = ''
-#     li = xbmcgui.ListItem(foldername + ' Image')
-#     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
-#     xbmcplugin.endOfDirectory(addon_handle)
-
-    # service = build('photoslibrary', 'v1', credentials=creds,
-    #                 static_discovery=False)
-    # service.close()
-
-# from googleapiclient.discovery import build
-# from init_photos_service import service
-
-# picture_list = [{"name" :"Crab",
-#                 "link" : "https://www.vidsplay.com/wp-content/uploads/2017/04/crab-screenshot.jpg"},
-#                 {"name" : "Alligator",
-#                 "link" : 'http://www.vidsplay.com/wp-content/uploads/2017/04/alligator-screenshot.jpg'},
-#                 {"name" : "Turtle",
-#                 "link" : 'http:/8/www.vidsplay.com/wp-content/uploads/2017/04/turtle-screenshot.jpg'} ]

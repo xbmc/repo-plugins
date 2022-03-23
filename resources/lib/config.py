@@ -17,3 +17,4 @@ email_url = 'https://openidconnect.googleapis.com/v1/userinfo'
 service_endpoint = 'https://photoslibrary.googleapis.com/v1'
 # TODO: Remove this
 token_filename = 'token.json'
+media_filename = 'media_db'

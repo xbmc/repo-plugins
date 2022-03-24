@@ -21,9 +21,12 @@ def build_url(base_url, query: dict, qs=None) -> str:
 def sleep_time(time=300):
     '''
     Input: Time to complete authentication
-    Return: time to sleep 
+    Return: time to sleep(in msec) 
     '''
-    return time // 100
+    return (time * 10)
+
+# Portability not guaranteed
+# check xbmcvfs
 
 
 def loadData(path):
@@ -45,3 +48,5 @@ def storeData(path, db: dict):
     # source, destination
     pickle.dump(db, dbfile)
     dbfile.close()
+
+

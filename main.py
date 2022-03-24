@@ -1,9 +1,5 @@
-# TODO: find secure way to pass token
-
 import os
 import sys
-import pickle
-from time import sleep
 import requests
 from resources.lib import auth
 import resources.lib.config as config
@@ -57,7 +53,7 @@ def new_account():
         login_dialog.update(time)
         if login_dialog.iscanceled():
             break
-        sleep(sleep_time)
+        xbmc.sleep(sleep_time)
         # TODO: Handle the case of server going down
         status_code = auth.fetch_and_save_token(
             code_json['deviceCode'], token_path)
@@ -67,7 +63,7 @@ def new_account():
                 'Notification(Success, Account added successfully, time=3000)')
             break
         if status_code == 403:
-            sleep(10)
+            xbmc.sleep(10000)
         if time == 0:
             code_json = get_device_code()
             time = 100
@@ -84,6 +80,11 @@ def new_account():
     # resp = xbmcgui.Dialog().ok(
     #     'Authenticate', f'Visit {config.base_url} and enter the code: {user_code}')
     # win =
+
+
+def remove_account():
+    xbmcvfs.delete(token_path)
+    xbmc.executebuiltin('Container.Refresh')
 
 
 def list_options():
@@ -108,15 +109,23 @@ def search():
 
 
 def refresh():
+    '''
+    Refreshes the current window
+    IMP: Pass previous query string as argument in the url with key prev_q
+    '''
     id = xbmcgui.getCurrentWindowId()
     # pos = xbmc.getInfoLabel(f'ListItem.Label')
     pos = int(xbmc.getInfoLabel(f'Container.CurrentItem'))
-    xbmc.executebuiltin('Container.Refresh')
-    # get active window
+    # xbmc.executebuiltin('Container.Refresh')
+    cont_path = utils.build_url(
+        base_url, {'call_type': 1}, args.get('prev_q')[0])
+    print(f'lala{cont_path}')
+    xbmc.executebuiltin(f'Container.Update({cont_path})')
+    # # get active window
     win = xbmcgui.Window(id)
     cid = win.getFocusId()
     while not xbmc.getCondVisibility(f'Control.IsVisible({cid})'):
-        sleep(0.2)
+        xbmc.sleep(150)
     xbmc.executebuiltin(f'SetFocus({cid},{pos},absolute)')
 
 
@@ -159,6 +168,9 @@ def get_items_bg(result, path):
 
 def list_media():
     path = profile_path + config.media_filename
+    if not args.get('call_type'):
+        xbmcvfs.delete(path)
+
     result = utils.loadData(path)
     if not result:
         media = get_items()
@@ -176,11 +188,15 @@ def list_media():
     xbmcplugin.addDirectoryItems(
         addon_handle, items, totalItems=len(items))
     if 'nextPageToken' in result[-1]:
-        url = utils.build_url(base_url, {'mode': 'refresh'})
+        url = utils.build_url(base_url, {'mode': 'refresh', 'prev_q': qs})
         li = xbmcgui.ListItem('Show more...')
         xbmcplugin.addDirectoryItem(addon_handle, url, li)
-
-    xbmcplugin.endOfDirectory(addon_handle)
+    if args.get('call_type'):
+        updateListing = True
+    else:
+        updateListing = False
+    xbmcplugin.endOfDirectory(
+        addon_handle, updateListing=updateListing, cacheToDisc=False)
 
     if 'nextPageToken' in result[-1]:
         loader = threading.Thread(target=get_items_bg, args=(
@@ -301,6 +317,10 @@ if mode is None:
         url = utils.build_url(
             base_url, {'mode': 'list_options'})
         li = xbmcgui.ListItem(email)
+        removePath = utils.build_url(
+            base_url, {'mode': 'remove_account', 'email': email})
+        contextItems = [('Remove Account', f'RunPlugin({removePath})')]
+        li.addContextMenuItems(contextItems)
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                     listitem=li, isFolder=True)
     # Add Account Button
@@ -310,7 +330,9 @@ if mode is None:
                                 listitem=li)
     xbmcplugin.endOfDirectory(addon_handle)
 else:
+    # Read account credentials if present
     if os.path.exists(token_path):
         creds = read_credentials(token_path)
-    token = creds["token"]
+        token = creds["token"]
+    # Fire up the actual function
     eval(mode[0] + '()')

@@ -112,6 +112,9 @@ msgctxt "#30304"
 msgid "Catch Up"
 msgstr ""
 
+msgctxt "#30305"
+msgid "Show only free games"
+msgstr ""
 
 msgctxt "#30300"
 msgid "In Market Streams"
@@ -145,6 +148,26 @@ msgctxt "#30250"
 msgid "Password"
 msgstr ""
 
+msgctxt "#30260"
+msgid "Logout Successful"
+msgstr ""
+
+msgctxt "#30261"
+msgid "Logout completed successfully"
+msgstr ""
+
+msgctxt "#30262"
+msgid "Login Failed"
+msgstr ""
+
+msgctxt "#30263"
+msgid "Please check your credentials and try again"
+msgstr ""
+
+msgctxt "#30270"
+msgid "Error Occured"
+msgstr ""
+
 msgctxt "#30360"
 msgid "Today's Games"
 msgstr ""
@@ -155,6 +178,14 @@ msgstr ""
 
 msgctxt "#30362"
 msgid "Goto Date"
+msgstr ""
+
+msgctxt "#30365"
+msgid "Invalid Date"
+msgstr ""
+
+msgctxt "#30366"
+msgid "The date entered is not in the format required."
 msgstr ""
 
 msgctxt "#30370"
@@ -184,4 +215,13 @@ msgstr ""
 msgctxt "#30382"
 msgid "Downloading "
 msgstr ""
+
+msgctxt "#30383"
+msgid "Streams Not Found"
+msgstr ""
+
+msgctxt "#30384"
+msgid "No playable streams found"
+msgstr ""
+
 

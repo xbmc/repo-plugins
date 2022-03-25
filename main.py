@@ -93,7 +93,7 @@ def remove_account():
 def list_options():
     items = []
     modes = [('Search', 'search'), ('All Media', 'list_media', 'all'),
-             ('All Albums', 'list_albums'), ('Shared Albums', 'shared_albums')]
+             ('All Albums', 'list_albums', 'albums'), ('Shared Albums', 'list_albums', 'sharedAlbums')]
 
     for mode in modes:
         if len(mode) == 2:
@@ -115,27 +115,29 @@ def refresh():
     IMP: Pass previous query string as argument in the url with key prev_q
     '''
     id = xbmcgui.getCurrentWindowId()
-    # pos = xbmc.getInfoLabel(f'ListItem.Label')
     pos = int(xbmc.getInfoLabel(f'Container.CurrentItem'))
-    # xbmc.executebuiltin('Container.Refresh')
     cont_path = utils.build_url(
         base_url, {'call_type': 1}, args.get('prev_q')[0])
     xbmc.executebuiltin(f'Container.Update({cont_path})')
-    # # get active window
+
+    # get active window
     win = xbmcgui.Window(id)
     cid = win.getFocusId()
+    # Check if window is fully loaded
     while not xbmc.getCondVisibility(f'Control.IsVisible({cid})'):
         xbmc.sleep(150)
+    # Focus on the last focused position
     xbmc.executebuiltin(f'SetFocus({cid},{pos},absolute)')
 
 
 def get_items(pageToken=None) -> dict:
-    # Handle Pagination and other params for request
+
+    # Prepare request
     params = {'pageSize': 100}
     if pageToken:
         params['pageToken'] = pageToken
-
     headers = {'Authorization': 'Bearer ' + token}
+
     # Check type of required listing
     list_type = args.get('type')[0]
     if list_type == 'all':
@@ -217,20 +219,16 @@ def create_media_list(media: dict):
             # thumb_url = item["baseUrl"] + f'=w{w}-h{h}'
             thumb_url = item["baseUrl"] + f'=w{960}-h{540}'
             img_url = item["baseUrl"] + f'=w{w}-h{h}'
-
-            # url = utils.build_url(
-            #     base_url, {'mode': 'show_image', 'path': thumb_url})
             li.setArt(
                 {'icon': 'DefaultIconInfo.png'})
             url = img_url
-            # li.set
         elif item_type == 'video':
             vid_url = item["baseUrl"] + '=dv'
             thumb_url = item["baseUrl"] + f'=w{w}-h{h}'
             url = utils.build_url(
-                base_url, {'mode': 'play_video', 'path': vid_url, 'status': item["mediaMetadata"]["video"]["status"], 'token_filename': token_path.name})
+                base_url, {'mode': 'play_video', 'path': vid_url,
+                           'status': item["mediaMetadata"]["video"]["status"], 'token_filename': token_path.name})
             li.setArt({'thumb': thumb_url, 'icon': thumb_url})
-            # li.setInfo()
             li.setProperty('IsPlayable', 'true')
         else:
             continue
@@ -247,8 +245,6 @@ def play_video():
     else:
         # Create a playable item with a path to play.
         play_item = xbmcgui.ListItem(path=args.get('path')[0])
-        # play_item = xbmcgui.ListItem(
-        #     path='http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4')
         # Pass the item to the Kodi player.
         xbmcplugin.setResolvedUrl(addon_handle, True, listitem=play_item)
 
@@ -258,14 +254,20 @@ def search():
 
 
 def list_albums():
+    # For shared albums and regular albums
     # https://developers.google.com/photos/library/guides/list
+
+    request_type = args.get('type')[0]
+    # Request for listing albums
     params = {}
     if args.get('pageToken'):
         params['pageToken'] = args.get('pageToken')[0]
-    a_num = 1
     headers = {'Authorization': 'Bearer ' + token}
-    res = requests.get(config.service_endpoint + '/albums',
+    res = requests.get(config.service_endpoint + f'/{request_type}',
                        headers=headers, params=params)
+
+    # Parse response
+    a_num = 1    # For albums without name TODO: a_num should be in nextPage URL
     if res.status_code != 200:
         dialog = xbmcgui.Dialog()
         dialog.notification(
@@ -275,7 +277,7 @@ def list_albums():
         # Album cover is also available in API. Useful for nameless albums
         items = []
         if album_data:
-            for album in album_data["albums"]:
+            for album in album_data[request_type]:
                 url = utils.build_url(
                     base_url, {'mode': 'list_media', 'type': 'album', 'id': album["id"], 'token_filename': token_path.name})
                 if 'title' in album:
@@ -295,7 +297,7 @@ def list_albums():
         # Pagination
         if 'nextPageToken' in album_data:
             url = utils.build_url(
-                base_url, {'mode': 'list_albums', 'pageToken': album_data['nextPageToken'], 'token_filename': token_path.name})
+                base_url, {'mode': 'list_albums', 'pageToken': album_data['nextPageToken'], 'token_filename': token_path.name, 'type': request_type})
             li = xbmcgui.ListItem('Next Page')
             # icon = os.path.join(addon_path, 'resources',
             #                     'lib', 'download.png')
@@ -303,10 +305,6 @@ def list_albums():
             xbmcplugin.addDirectoryItem(addon_handle, url, li, True)
 
         xbmcplugin.endOfDirectory(addon_handle)
-
-
-def shared_albums():
-    pass
 
 
 if mode is None:
@@ -335,5 +333,4 @@ else:
     if token_path:
         creds = read_credentials(token_path)
         token = creds["token"]
-    # Fire up the actual function
-    eval(mode[0] + '()')
+    eval(mode[0] + '()')  # Fire up the actual function

@@ -1,6 +1,6 @@
-import os
 import sys
 import requests
+from pathlib import Path
 from resources.lib import auth
 import resources.lib.config as config
 from urllib import parse
@@ -21,14 +21,17 @@ qs = sys.argv[2][1:]
 args = parse.parse_qs(qs)
 
 mode = args.get('mode')
-token = None
+token = None  # Access token
 
 # Addon dir path
 __addon__ = xbmcaddon.Addon()
 addon_path = __addon__.getAddonInfo('path')
 profile_path = xbmcvfs.translatePath(
     __addon__.getAddonInfo('profile'))
-token_path = profile_path + config.token_filename
+token_folder = Path(profile_path + config.token_folder)
+token_path = None
+if args.get('token_filename'):
+    token_path = Path(token_folder / args.get('token_filename')[0])
 xbmcplugin.setContent(addon_handle, 'images')
 
 
@@ -56,7 +59,7 @@ def new_account():
         xbmc.sleep(sleep_time)
         # TODO: Handle the case of server going down
         status_code = auth.fetch_and_save_token(
-            code_json['deviceCode'], token_path)
+            code_json['deviceCode'], token_folder)
         # TODO: Time parameter
         if status_code == 200:
             xbmc.executebuiltin(
@@ -83,7 +86,7 @@ def new_account():
 
 
 def remove_account():
-    xbmcvfs.delete(token_path)
+    xbmcvfs.delete(str(token_path))
     xbmc.executebuiltin('Container.Refresh')
 
 
@@ -94,18 +97,16 @@ def list_options():
 
     for mode in modes:
         if len(mode) == 2:
-            url = utils.build_url(base_url, {'mode': mode[1]})
+            url = utils.build_url(
+                base_url, {'mode': mode[1], 'token_filename': token_path.name})
         else:
-            url = utils.build_url(base_url, {'mode': mode[1], 'type': mode[2]})
+            url = utils.build_url(
+                base_url, {'mode': mode[1], 'type': mode[2], 'token_filename': token_path.name})
         li = xbmcgui.ListItem(mode[0])
         items.append((url, li, True))  # (url, listitem[, isFolder])
 
     xbmcplugin.addDirectoryItems(addon_handle, items)
     xbmcplugin.endOfDirectory(addon_handle)
-
-
-def search():
-    pass
 
 
 def refresh():
@@ -119,7 +120,6 @@ def refresh():
     # xbmc.executebuiltin('Container.Refresh')
     cont_path = utils.build_url(
         base_url, {'call_type': 1}, args.get('prev_q')[0])
-    print(f'lala{cont_path}')
     xbmc.executebuiltin(f'Container.Update({cont_path})')
     # # get active window
     win = xbmcgui.Window(id)
@@ -158,7 +158,6 @@ def get_items(pageToken=None) -> dict:
 def get_items_bg(result, path):
     xbmc.log("Image Loader started.", xbmc.LOGDEBUG)
     if 'nextPageToken' in result[-1]:
-        # print(f'lala {result}')
         pageToken = result[-1]["nextPageToken"]
         media = get_items(pageToken)
         if not media:
@@ -167,6 +166,7 @@ def get_items_bg(result, path):
 
 
 def list_media():
+    # For all photo directories
     path = profile_path + config.media_filename
     if not args.get('call_type'):
         xbmcvfs.delete(path)
@@ -174,11 +174,9 @@ def list_media():
     result = utils.loadData(path)
     if not result:
         media = get_items()
-        if not media:
-            return
+        if media:
+            utils.storeData(path, media)
         result = [media]
-        utils.storeData(path, media)
-
     # List for media
     items = []
     for item in result:
@@ -209,7 +207,7 @@ def list_media():
 def create_media_list(media: dict):
     # Creates a list of (url, li) from media dictionary
     items = []
-    for item in media["mediaItems"]:
+    for item in media.get("mediaItems", {}):
         item_type = item["mimeType"].split('/')[0]
         li = xbmcgui.ListItem(item["filename"])
         url = None
@@ -230,7 +228,7 @@ def create_media_list(media: dict):
             vid_url = item["baseUrl"] + '=dv'
             thumb_url = item["baseUrl"] + f'=w{w}-h{h}'
             url = utils.build_url(
-                base_url, {'mode': 'play_video', 'path': vid_url, 'status': item["mediaMetadata"]["video"]["status"]})
+                base_url, {'mode': 'play_video', 'path': vid_url, 'status': item["mediaMetadata"]["video"]["status"], 'token_filename': token_path.name})
             li.setArt({'thumb': thumb_url, 'icon': thumb_url})
             # li.setInfo()
             li.setProperty('IsPlayable', 'true')
@@ -255,6 +253,10 @@ def play_video():
         xbmcplugin.setResolvedUrl(addon_handle, True, listitem=play_item)
 
 
+def search():
+    pass
+
+
 def list_albums():
     # https://developers.google.com/photos/library/guides/list
     params = {}
@@ -272,19 +274,20 @@ def list_albums():
         album_data = res.json()  # { albums, nextPageToken}
         # Album cover is also available in API. Useful for nameless albums
         items = []
-        for album in album_data["albums"]:
-            url = utils.build_url(
-                base_url, {'mode': 'list_media', 'type': 'album', 'id': album["id"]})
-            if 'title' in album:
-                li = xbmcgui.ListItem(album["title"])
-            else:
-                li = xbmcgui.ListItem(f'Nameless album {a_num}')
-                a_num += 1
-            thumb_url = album["coverPhotoBaseUrl"] + \
-                f'=w{xbmcgui.getScreenWidth()}-h{xbmcgui.getScreenHeight()}'
-            li.setArt(
-                {'thumb': thumb_url})
-            items.append((url, li, True))
+        if album_data:
+            for album in album_data["albums"]:
+                url = utils.build_url(
+                    base_url, {'mode': 'list_media', 'type': 'album', 'id': album["id"], 'token_filename': token_path.name})
+                if 'title' in album:
+                    li = xbmcgui.ListItem(album["title"])
+                else:
+                    li = xbmcgui.ListItem(f'Nameless album {a_num}')
+                    a_num += 1
+                thumb_url = album["coverPhotoBaseUrl"] + \
+                    f'=w{xbmcgui.getScreenWidth()}-h{xbmcgui.getScreenHeight()}'
+                li.setArt(
+                    {'thumb': thumb_url})
+                items.append((url, li, True))
 
         xbmcplugin.addDirectoryItems(
             addon_handle, items, totalItems=len(items))
@@ -292,7 +295,7 @@ def list_albums():
         # Pagination
         if 'nextPageToken' in album_data:
             url = utils.build_url(
-                base_url, {'mode': 'list_albums', 'pageToken': album_data['nextPageToken']})
+                base_url, {'mode': 'list_albums', 'pageToken': album_data['nextPageToken'], 'token_filename': token_path.name})
             li = xbmcgui.ListItem('Next Page')
             # icon = os.path.join(addon_path, 'resources',
             #                     'lib', 'download.png')
@@ -302,23 +305,21 @@ def list_albums():
         xbmcplugin.endOfDirectory(addon_handle)
 
 
-if mode is None:
-    # Option for adding New Account
-    if os.path.exists(token_path):
-        # Get email
-        email = 'Email Unknown'
-        creds = read_credentials(token_path)
-        headers = {'Authorization': 'Bearer ' + creds["token"]}
-        res = requests.get(config.email_url, headers=headers)
-        if res.status_code == 200:
-            res_json = res.json()
-            email = res_json["email"]
+def shared_albums():
+    pass
 
+
+if mode is None:
+    # Display logged in accounts
+    token_folder.mkdir(parents=True, exist_ok=True)
+    for file in token_folder.iterdir():
+        creds = read_credentials(file)
+        email = creds["email"]
         url = utils.build_url(
-            base_url, {'mode': 'list_options'})
+            base_url, {'mode': 'list_options', 'token_filename': file.name})
         li = xbmcgui.ListItem(email)
         removePath = utils.build_url(
-            base_url, {'mode': 'remove_account', 'email': email})
+            base_url, {'mode': 'remove_account', 'email': email, 'token_filename': file.name})
         contextItems = [('Remove Account', f'RunPlugin({removePath})')]
         li.addContextMenuItems(contextItems)
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
@@ -331,7 +332,7 @@ if mode is None:
     xbmcplugin.endOfDirectory(addon_handle)
 else:
     # Read account credentials if present
-    if os.path.exists(token_path):
+    if token_path:
         creds = read_credentials(token_path)
         token = creds["token"]
     # Fire up the actual function

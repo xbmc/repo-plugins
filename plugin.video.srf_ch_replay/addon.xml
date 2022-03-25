@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.srf_ch_replay" name="Unofficial SRF Replay" version="2.0.3" provider-name="Man Behind MooN">
+<addon id="plugin.video.srf_ch_replay" name="Unofficial SRF Replay" version="2.0.4" provider-name="Man Behind MooN">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>
@@ -13,19 +13,20 @@
 - Fanart added with final design
 - No new features will be added to this add-on (see disclaimer)
 - A new add-on "Unofficial SRG SSR Replay" has been launched that supports all current and more features
-[INFO] The TV show URL from the unofficial API changed
-[WARN] Last fix before the status changes from deprecated to broken</news>
+- The TV show URL from the unofficial API changed
+- Last fix before the status changes from deprecated to broken
+[WARN] This addon is broken. Please move to the "Unofficial SRG SSR Replay" add-on</news>
 	<assets>
 		<icon>resources/icon.png</icon>
 		<fanart>resources/fanart.png</fanart>
 	</assets>
-	<lifecyclestate type="deprecated" lang="en_GB">This add-on uses an unsupported &amp; unofficial API. This add-on migth not work anymore in the near future. Please move to the new "Unofficial SRG SSR Replay" add-on.</lifecyclestate>
-    <summary lang="en_GB">The unofficial SRF Replay add-on plays TV shows from the SRF channel.</summary>
-    <description lang="en_GB">The unofficial SRF Replay add-on streams recorded TV shows from the national Swiss German TV station SRF over the unofficial provided API. All the shows are mainly in German. All shows are legally owned by the SRG SSR and will only be streamed over this add-on. Some shows might be regional locked and can only be played by Swiss IP addresses. Please note that this add-on deprecated. Please move to the new "Unofficial SRG SSR Replay" add-on.</description>
+	<lifecyclestate type="broken" lang="en_GB">This add-on uses an unsupported &amp; unofficial API. This add-on is broken &amp; does not work anymore. Please move to the new "Unofficial SRG SSR Replay" add-on.</lifecyclestate>
+    <summary lang="en_GB">[DEPRECATED &amp; BROKEN] The unofficial SRF Replay add-on plays TV shows from the SRF channel.</summary>
+    <description lang="en_GB">[DEPRECATED &amp; BROKEN] The unofficial SRF Replay add-on streams recorded TV shows from the national Swiss German TV station SRF over the unofficial provided API. All the shows are mainly in German. All shows are legally owned by the SRG SSR and will only be streamed over this add-on. Some shows might be regional locked and can only be played by Swiss IP addresses. Please note that this add-on is deprecated. Please move to the new "Unofficial SRG SSR Replay" add-on.</description>
     <disclaimer lang="en_GB">This add-on is not endorsed by SRG SSR and no support can be claimed. This add-on uses an unsupported API. This add-on is deprecated and will just be kept alive in its current state as long as the current used API is working. No new features will be added. A new version of this add-on "Unofficial SRG SSR Replay" has been launched that supports all the current features and some more.</disclaimer>
-	<lifecyclestate type="deprecated" lang="de_DE">Dieses Add-on benututz eine nicht supportete &amp; inoffizielle API. Dieses Add-on wird in naher Zukunft nicht mehr funktionieren. Bitte das neue "Unofficial SRG SSR Replay" Add-on benutzen.</lifecyclestate>
-	<summary lang="de_DE">Das inoffizielle SRF Replay Add-on zeigt alle SRF Sendungen.</summary>
-    <description lang="de_DE">Das inoffizielle SRF Replay Add-on zeigt aufgezeichneten Sendungen vom nationalen Schweizer deutschsprachigen TV Sender SRF über das zur Verfügung gestellte inoffizielle API. Die Sendungen sind hauptsächlich in deutscher Sprache. Alle Sendungen gehören der SRG SSR und werden vom Add-on lediglich gestreamt. Einige Sendungen können auf Regionen beschränkt sein und nur mit Schweizer IP Adressen abgespielt werden. Dieses Add-on ist veraltet. Bitte das neue "Unofficial SRG SSR Replay" Add-on benutzen.</description>
+	<lifecyclestate type="broken" lang="de_DE">Dieses Add-on benututz eine nicht supportete &amp; inoffizielle API. Dieses Add-on ist defekt &amp; funktioniert nicht mehr. Bitte das neue "Unofficial SRG SSR Replay" Add-on benutzen.</lifecyclestate>
+	<summary lang="de_DE">[VERALTET &amp; DEFEKT] Das inoffizielle SRF Replay Add-on zeigt alle SRF Sendungen.</summary>
+    <description lang="de_DE">[VERALTET &amp; DEFEKT] Das inoffizielle SRF Replay Add-on zeigt aufgezeichneten Sendungen vom nationalen Schweizer deutschsprachigen TV Sender SRF über das zur Verfügung gestellte inoffizielle API. Die Sendungen sind hauptsächlich in deutscher Sprache. Alle Sendungen gehören der SRG SSR und werden vom Add-on lediglich gestreamt. Einige Sendungen können auf Regionen beschränkt sein und nur mit Schweizer IP Adressen abgespielt werden. Dieses Add-on ist veraltet. Bitte das neue "Unofficial SRG SSR Replay" Add-on benutzen.</description>
     <disclaimer lang="de_DE">Dieses Add-on ist nicht offiziell von der SRG SSR und es bestehen keinerlei Support-Ansprüche. Das Add-on benutzt eine nicht supportete Schnittstelle. Dieses Add-on ist am Lebensende angekommen und wird nur noch solange die jetzt benutzte Schnittstelle funktioniert am Leben erhalten. Keine neuen Funktionen werden hinzugefügt. Ein neues Add-on "Unofficial SRG SSR Replay" steht zur Verfügung mit allen jetzigen und mehr Funktionen.</disclaimer>
     <language>de</language>
     <platform>all</platform>

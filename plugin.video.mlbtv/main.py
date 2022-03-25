@@ -8,6 +8,7 @@ game_pk = None
 gid = None
 teams_stream = None
 stream_date = None
+spoiler = 'True'
 
 if 'name' in params:
     name = urllib.unquote_plus(params["name"])
@@ -27,6 +28,9 @@ if 'teams_stream' in params:
 if 'stream_date' in params:
     stream_date = urllib.unquote_plus(params["stream_date"])
 
+if 'spoiler' in params:
+    spoiler = urllib.unquote_plus(params["spoiler"])
+
 if mode is None:
     categories()
 
@@ -39,7 +43,7 @@ elif mode == 101:
 
 
 elif mode == 104:
-    stream_select(game_pk)
+    stream_select(game_pk, spoiler)
 
 elif mode == 105:
     # Yesterday's Games
@@ -58,9 +62,8 @@ elif mode == 200:
         todays_games(game_day)
     else:
         if game_day != '':
-            msg = "The date entered is not in the format required."
             dialog = xbmcgui.Dialog()
-            dialog.ok('Invalid Date', msg)
+            dialog.ok(LOCAL_STRING(30365),LOCAL_STRING(30366))
 
         sys.exit()
 
@@ -68,8 +71,7 @@ elif mode == 400:
     account = Account()
     account.logout()
     dialog = xbmcgui.Dialog()
-    title = "Logout Successful"
-    dialog.notification(title, 'Logout completed successfully', ICON, 5000, False)
+    dialog.notification(LOCAL_STRING(30260), LOCAL_STRING(30261), ICON, 5000, False)
 
 elif mode == 500:
     myTeamsGames()

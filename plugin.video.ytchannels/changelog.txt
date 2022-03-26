@@ -1,6 +1,9 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.4.1 [25-March-2022]
+-Make "Show 'add folder/channel options'" setting work properly
+
 v0.4.0 [06-Feb-2022]
 -URL encode channel name to support UTF-8 encoding
 -Update yt_time function

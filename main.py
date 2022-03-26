@@ -45,7 +45,8 @@ def new_account():
     #     raise Exception(
     #         "Unable to get code from auth server. Check your server configuration in addon settings")
     login_dialog = xbmcgui.DialogProgress()
-    dialog_msg = f'Visit {config.base_url} and enter the code:\n'
+    baseUrl = __addon__.getSettingString('baseUrl')
+    dialog_msg = f'Visit {baseUrl} and enter the code:\n'
     login_dialog.create('Authenticate', dialog_msg + user_code)
 
     # Update progress dialog indicating time left for complete
@@ -67,6 +68,8 @@ def new_account():
             break
         if status_code == 403:
             xbmc.sleep(10000)
+        elif status_code != 202:
+            xbmc.log(status_code, xbmc.LOGWARNING)
         if time == 0:
             code_json = get_device_code()
             time = 100

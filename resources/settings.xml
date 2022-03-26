@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<settings version="1">
+  <section id="plugin.picture.googlephotos">
+    <category id="signin" label="30100" help="">
+      <group id="1" label="">
+        <setting id="baseUrl" type="urlencodedstring" label="30101" help="">
+          <level>0</level>
+          <default>http://localhost:8080</default>
+          <constraints>
+            <allowempty>false</allowempty>
+          </constraints>
+          <control type="edit" format="urlencoded"></control>
+        </setting>
+
+        <setting id="deviceCodeUrl" type="urlencodedstring" label="30102" help="">
+          <level>0</level>
+          <default>/device/code</default>
+          <constraints>
+            <allowempty>false</allowempty>
+          </constraints>
+          <control type="edit" format="urlencoded"></control>
+        </setting>
+
+        <setting id="tokenUrl" type="urlencodedstring" label="30103" help="">
+          <level>0</level>
+          <default>/token</default>
+          <constraints>
+            <allowempty>false</allowempty>
+          </constraints>
+          <control type="edit" format="urlencoded"></control>
+        </setting>
+
+        <setting id="refreshUrl" type="urlencodedstring" label="30104" help="">
+          <level>0</level>
+          <default>/refresh</default>
+          <constraints>
+            <allowempty>false</allowempty>
+          </constraints>
+          <control type="edit" format="urlencoded"></control>
+        </setting>
+      </group>
+    </category>
+  </section>
+</settings>

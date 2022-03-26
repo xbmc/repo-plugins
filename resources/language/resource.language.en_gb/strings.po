@@ -1,0 +1,46 @@
+# Kodi Media Center language file
+# Addon Name: Google Photos 
+# Addon id: plugin.picture.googlephotos
+# Addon Provider: Pranjal Singhal
+msgid ""        
+msgstr ""
+
+#settings screen settings.xml
+#setting category
+msgctxt "#30100"
+msgid "Sign-in Server"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Base URL"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Device Code Subroute"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Access Token Subroute"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Refresh Token Subroute"
+msgstr ""
+
+msgctxt "#30105"
+msgid "https://photoslibrary.googleapis.com/v1"
+msgstr ""
+
+msgctxt "#30106"
+msgid "https://openidconnect.googleapis.com/v1/userinfo"
+msgstr ""
+
+#cache file name
+msgctxt "#30107"
+msgid "media_db"
+msgstr ""
+
+msgctxt "#30108"
+msgid "accounts/"
+msgstr ""
+

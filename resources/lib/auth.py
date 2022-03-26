@@ -1,11 +1,10 @@
 import datetime
 import time
-# import os.path
-import os
 from pathlib import Path
 from . import config
 import requests
 import json
+import xbmcaddon
 
 
 SCOPES = ['https://www.googleapis.com/auth/photoslibrary.readonly',
@@ -17,11 +16,15 @@ SCOPES = ['https://www.googleapis.com/auth/photoslibrary.readonly',
 # created automatically when the authorization flow completes for the first
 # time.
 
+__addon__ = xbmcaddon.Addon()
+
 
 def get_device_code():
     # On success, returns json containing user code, device code etc. and None on failure
     # Exception Possible
-    res = requests.get(config.device_code_url)
+    path = __addon__.getSettingString(
+        'baseUrl') + __addon__.getSettingString('deviceCodeUrl')
+    res = requests.get(path)
     if res.status_code != 200:
         return None
     return res.json()
@@ -38,7 +41,9 @@ def fetch_and_save_token(device_code, tf_path):
     P.S. This function does not continously poll the auth server. It needs to be repeatedly called by the caller code.    
     '''
     pl_path = Path(tf_path)  # Pathlib path
-    res = requests.post(config.token_url, data={
+    token_url = __addon__.getSettingString(
+        'baseUrl') + __addon__.getSettingString('tokenUrl')
+    res = requests.post(token_url, data={
                         'deviceCode': device_code, 'grant_type': 'urn:ietf:params:oauth:grant-type:device_code'})
     if res.status_code == 202 or res.status_code == 403:
         return res.status_code
@@ -75,7 +80,9 @@ def fetch_and_save_token(device_code, tf_path):
 
 def refresh_access_token(creds, path):
     # Returns new access token and expiry
-    res = requests.post(config.refresh_url, data={
+    refresh_url = __addon__.getSettingString(
+        'baseUrl') + __addon__.getSettingString('refreshUrl')
+    res = requests.post(refresh_url, data={
                         'refresh_token': creds["refresh_token"], 'grant_type': 'refresh_token'})
     if res.status_code != 200:
         return res.status_code

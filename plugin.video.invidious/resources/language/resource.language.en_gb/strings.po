@@ -1,0 +1,53 @@
+# Kodi Media Center language file
+# Addon Name: YouTube
+# Addon id: plugin.video.invidious
+# Addon Provider: TheAssassin
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2015-09-21 11:01+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30000"
+msgid "No description available"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Search video titles"
+msgstr ""
+
+msgctxt "#30003"
+msgid "HTTP error"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Request to Invidious API failed: HTTP status "
+msgstr ""
+
+msgctxt "#30005"
+msgid "Timeout"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Request to Invidious API exceeded timeout"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Instance URL"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Instance settings"
+msgstr ""

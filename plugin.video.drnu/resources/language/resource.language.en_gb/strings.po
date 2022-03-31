@@ -160,6 +160,10 @@ msgctxt "#30515"
 msgid "Show area chooser item in root"
 msgstr ""
 
+msgctxt "#30516"
+msgid "Minisjang"
+msgstr ""
+
 msgctxt "#30520"
 msgid "Fanart image resolution"
 msgstr ""
@@ -186,4 +190,16 @@ msgstr ""
 
 msgctxt "#30905"
 msgid "Unknown Live TV Slug:"
+msgstr ""
+
+msgctxt "#30906"
+msgid "Please report issue at github"
+msgstr ""
+
+msgctxt "#30907"
+msgid "https://github.com/xbmc-danish-addons/plugin.video.drnu/issues"
+msgstr ""
+
+msgctxt "#30908"
+msgid "see error at:"
 msgstr ""

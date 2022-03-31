@@ -18,37 +18,28 @@
 #  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 #  http://www.gnu.org/copyleft/gpl.html
 #
-import pickle
-import os
-import sys
-import re
 import datetime
+import os
+import pickle
+import re
+import traceback
+import urllib.parse as urlparse
 
 import xbmc
-import xbmcgui
 import xbmcaddon
+import xbmcgui
 import xbmcplugin
+from xbmcvfs import translatePath
 
 from resources.lib import tvapi
 from resources.lib import tvgui
-
-import buggalo
-
-if sys.version_info.major == 2:
-    # python 2
-    import urlparse
-    from xbmc import translatePath
-    compat_str = unicode
-else:
-    import urllib.parse as urlparse
-    from xbmcvfs import translatePath
-    compat_str = str
-
 
 addon = xbmcaddon.Addon()
 get_setting = addon.getSetting
 addon_path = addon.getAddonInfo('path')
 addon_name = addon.getAddonInfo('name')
+
+SLUG_ADULT = 'dr1,dr2,dr3,dr-k'
 
 
 def tr(id):
@@ -58,11 +49,11 @@ def tr(id):
 
 
 def bool_setting(name):
-    return  get_setting(name) == 'true'
+    return get_setting(name) == 'true'
 
 
 def make_notice(object):
-    xbmc.log(str(object), xbmc.LOGDEBUG )
+    xbmc.log(str(object), xbmc.LOGDEBUG)
 
 
 class DrDkTvAddon(object):
@@ -73,31 +64,24 @@ class DrDkTvAddon(object):
         self.cache_path = translatePath(addon.getAddonInfo('profile'))
         if not os.path.exists(self.cache_path):
             os.makedirs(self.cache_path)
-        buggalo.EMAIL_CONFIG = {
-                 "recipient":"drnu.kodi@gmail.com",
-                 "sender":"Buggalo <drnu.kodi@gmail.com>",
-                 "server":"smtp.googlemail.com",
-                 "method":"ssl",
-                 "user":"drnu.kodi@gmail.com",
-                 "pass":"plugin.video.drnu"
-        }
-        buggalo.addExtraData('cache_path', self.cache_path)
 
         self.favorites_path = os.path.join(self.cache_path, 'favorites.pickle')
         self.recent_path = os.path.join(self.cache_path, 'recent.pickle')
         self.fanart_image = os.path.join(addon_path, 'resources', 'fanart.jpg')
 
-        self.api = tvapi.Api(self.cache_path)
+        self.api = tvapi.Api(self.cache_path, tr)
         self.favorites = list()
         self.recentlyWatched = list()
 
         self.menuItems = list()
-        runScript = "RunAddon(plugin.video.drnu,?show=areaselector&random={:d})".format(self._plugin_handle)
+        runScript = "RunAddon(plugin.video.drnu,?show=areaselector&random={:d})".format(
+            self._plugin_handle)
         self.menuItems.append((tr(30511), runScript))
 
         # Area Selector
         self.area_item = xbmcgui.ListItem(tr(30101), offscreen=True)
-        self.area_item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(addon_path, 'resources', 'icons', 'all.png')})
+        self.area_item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(
+            addon_path, 'resources', 'icons', 'all.png')})
 
         self._load()
 
@@ -142,61 +126,64 @@ class DrDkTvAddon(object):
         items = list()
         # Live TV
         item = xbmcgui.ListItem(tr(30027), offscreen=True)
-        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(addon_path, 'resources', 'icons', 'livetv.png')})
+        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(
+            addon_path, 'resources', 'icons', 'livetv.png')})
         item.addContextMenuItems(self.menuItems, False)
         items.append((self._plugin_url + '?show=liveTV', item, True))
 
         # A-Z Program Series
         item = xbmcgui.ListItem(tr(30000), offscreen=True)
-        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(addon_path, 'resources', 'icons', 'all.png')})
+        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(
+            addon_path, 'resources', 'icons', 'all.png')})
         item.addContextMenuItems(self.menuItems, False)
         items.append((self._plugin_url + '?show=listAZ', item, True))
 
         # Latest
         item = xbmcgui.ListItem(tr(30001), offscreen=True)
-        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(addon_path, 'resources', 'icons', 'all.png')})
+        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(
+            addon_path, 'resources', 'icons', 'all.png')})
         item.addContextMenuItems(self.menuItems, False)
         items.append((self._plugin_url + '?show=latest', item, True))
 
-        # Premiere
-        item = xbmcgui.ListItem(tr(30025), offscreen=True)
-        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(addon_path, 'resources', 'icons', 'new.png')})
-        item.addContextMenuItems(self.menuItems, False)
-        items.append(('{}?listVideos={}'.format(self._plugin_url, tvapi.SLUG_PREMIERES), item, True))
-
         # Themes
         item = xbmcgui.ListItem(tr(30028), offscreen=True)
-        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(addon_path, 'resources', 'icons', 'all.png')})
+        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(
+            addon_path, 'resources', 'icons', 'all.png')})
         item.addContextMenuItems(self.menuItems, False)
         items.append((self._plugin_url + '?show=themes', item, True))
 
         # Most viewed
         item = xbmcgui.ListItem(tr(30011), offscreen=True)
-        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(addon_path, 'resources', 'icons', 'eye.png')})
+        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(
+            addon_path, 'resources', 'icons', 'eye.png')})
         item.addContextMenuItems(self.menuItems, False)
         items.append((self._plugin_url + '?show=mostViewed', item, True))
 
         # Spotlight
         item = xbmcgui.ListItem(tr(30002), offscreen=True)
-        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(addon_path, 'resources', 'icons', 'star.png')})
+        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(
+            addon_path, 'resources', 'icons', 'star.png')})
         item.addContextMenuItems(self.menuItems, False)
         items.append((self._plugin_url + '?show=highlights', item, True))
 
         # Search videos
         item = xbmcgui.ListItem(tr(30003), offscreen=True)
-        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(addon_path, 'resources', 'icons', 'search.png')})
+        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(
+            addon_path, 'resources', 'icons', 'search.png')})
         item.addContextMenuItems(self.menuItems, False)
         items.append((self._plugin_url + '?show=search', item, True))
 
         # Recently watched Program Series
         item = xbmcgui.ListItem(tr(30007), offscreen=True)
-        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(addon_path, 'resources', 'icons', 'eye-star.png')})
+        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(
+            addon_path, 'resources', 'icons', 'eye-star.png')})
         item.addContextMenuItems(self.menuItems, False)
         items.append((self._plugin_url + '?show=recentlyWatched', item, True))
 
         # Favorite Program Series
         item = xbmcgui.ListItem(tr(30008), offscreen=True)
-        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(addon_path, 'resources', 'icons', 'plusone.png')})
+        item.setArt({'fanart': self.fanart_image, 'icon': os.path.join(
+            addon_path, 'resources', 'icons', 'plusone.png')})
         item.addContextMenuItems(self.menuItems, False)
         items.append((self._plugin_url + '?show=favorites', item, True))
 
@@ -240,13 +227,14 @@ class DrDkTvAddon(object):
 
     def showLiveTV(self):
         items = list()
+        HLS = 'HLS_subtitles' if bool_setting('enable.subtitles') else 'HLS'
         for channel in self.api.getLiveTV():
             if channel['WebChannel']:
                 continue
 
             server = None
             for streamingServer in channel['StreamingServers']:
-                if streamingServer['LinkType'] == 'HLS':
+                if streamingServer['LinkType'] == HLS:
                     server = streamingServer
                     break
 
@@ -255,10 +243,10 @@ class DrDkTvAddon(object):
 
             item = xbmcgui.ListItem(channel['Title'], offscreen=True)
             fanart_h = int(get_setting('fanart.size'))
-            fanart_w = int(fanart_h*16/9)            
+            fanart_w = int(fanart_h*16/9)
             item.setArt({'thumb': self.api.redirectImageUrl(channel['PrimaryImageUri'], 640, 360),
                          'icon': self.api.redirectImageUrl(channel['PrimaryImageUri'], 75, 42),
-                         'fanart': self.api.redirectImageUrl(channel['PrimaryImageUri'], fanart_w, fanart_h)}) 
+                         'fanart': self.api.redirectImageUrl(channel['PrimaryImageUri'], fanart_w, fanart_h)})
             item.addContextMenuItems(self.menuItems, False)
 
             url = server['Server'] + '/' + server['Qualities'][0]['Streams'][0]['Stream']
@@ -273,7 +261,7 @@ class DrDkTvAddon(object):
         # All Program Series
         iconImage = os.path.join(addon_path, 'resources', 'icons', 'all.png')
         items = list()
-        for programIndex in self.api.getProgramIndexes():
+        for programIndex in self.api.getAZIndexes():
             item = xbmcgui.ListItem(programIndex['Title'], offscreen=True)
             item.setArt({'fanart': self.fanart_image, 'icon': iconImage})
             item.addContextMenuItems(self.menuItems, False)
@@ -292,7 +280,8 @@ class DrDkTvAddon(object):
             item.setArt({'fanart': self.fanart_image, 'icon': iconImage})
             item.addContextMenuItems(self.menuItems, False)
 
-            url = self._plugin_url + '?listThemeSeries=' + theme['Paging']['Source'].split('list/',1)[1]
+            url = self._plugin_url + '?listThemeSeries=' + \
+                theme['Paging']['Source'].split('list/', 1)[1]
             items.append((url, item, True))
 
         xbmcplugin.addDirectoryItems(self._plugin_handle, items)
@@ -303,7 +292,7 @@ class DrDkTvAddon(object):
         keyboard.doModal()
         if keyboard.isConfirmed():
             keyword = keyboard.getText()
-            self.listSeries(self.api.getSeries(keyword))
+            self.listSeries(self.api.searchSeries(keyword))
 
     def listSeries(self, items, addToFavorites=True, add_area_selector=False):
         if not items:
@@ -315,25 +304,25 @@ class DrDkTvAddon(object):
         else:
             directoryItems = list()
             if add_area_selector:
-                directoryItems.append((self._plugin_url + '?show=areaselector', self.area_item, True))
+                directoryItems.append(
+                    (self._plugin_url + '?show=areaselector', self.area_item, True))
+            fanart_h = int(get_setting('fanart.size'))
+            fanart_w = int(fanart_h*16/9)
             for item in items:
                 menuItems = list(self.menuItems)
 
                 title = item['SeriesTitle'].replace('&', '%26').replace(',', '%2C')
-                if item['SeriesTitle'] in self.favorites:
-                    runScript = compat_str("RunPlugin(plugin://plugin.video.drnu/?delfavorite={})").format(title)
+                if title in self.favorites:
+                    runScript = f"RunPlugin(plugin://plugin.video.drnu/?delfavorite={title})"
                     menuItems.append((tr(30201), runScript))
                 else:
-                    runScript = compat_str("RunPlugin(plugin://plugin.video.drnu/?addfavorite={})").format(title)
+                    runScript = f"RunPlugin(plugin://plugin.video.drnu/?addfavorite={title})"
                     menuItems.append((tr(30200), runScript))
 
-
                 listItem = xbmcgui.ListItem(item['SeriesTitle'], offscreen=True)
-                fanart_h = int(get_setting('fanart.size'))
-                fanart_w = int(fanart_h*16/9)            
                 listItem.setArt({'thumb': self.api.redirectImageUrl(item['PrimaryImageUri'], 640, 360),
-                          	 'icon': self.api.redirectImageUrl(item['PrimaryImageUri'], 75, 42),
-                          	 'fanart': self.api.redirectImageUrl(item['PrimaryImageUri'], fanart_w, fanart_h)})
+                                 'icon': self.api.redirectImageUrl(item['PrimaryImageUri'], 75, 42),
+                                 'fanart': self.api.redirectImageUrl(item['PrimaryImageUri'], fanart_w, fanart_h)})
                 listItem.addContextMenuItems(menuItems, False)
 
                 url = self._plugin_url + '?listVideos=' + item['SeriesSlug']
@@ -362,7 +351,7 @@ class DrDkTvAddon(object):
 
             listItem = xbmcgui.ListItem(item['Title'], offscreen=True)
             fanart_h = int(get_setting('fanart.size'))
-            fanart_w = int(fanart_h*16/9)            
+            fanart_w = int(fanart_h*16/9)
             listItem.setArt({'thumb': self.api.redirectImageUrl(item['PrimaryImageUri'], 640, 360),
                              'icon': self.api.redirectImageUrl(item['PrimaryImageUri'], 75, 42),
                              'fanart': self.api.redirectImageUrl(item['PrimaryImageUri'], fanart_w, fanart_h)})
@@ -381,10 +370,9 @@ class DrDkTvAddon(object):
     def playVideo(self, slug):
         self.updateRecentlyWatched(slug)
         api_item = self.api.getEpisode(slug)
-        kids_channel = False
-        if 'PrimaryBroadcast' in api_item:
-            kids_channel = api_item['PrimaryBroadcast']['ChannelSlug'] in ['dr-ramasjang', 'dr-ultra']
-        if not 'PrimaryAsset' in api_item:
+        kids_channel = api_item.get('PrimaryChannelSlug', 'no_channel_slug') in [
+                                    'dr-minisjang', 'dr-ramasjang', 'dr-ultra']
+        if 'PrimaryAsset' not in api_item:
             self.displayError(tr(30904))
             return
 
@@ -404,12 +392,13 @@ class DrDkTvAddon(object):
     def playLiveTV(self, slug):
         item = None
         url = None
+        HLS = 'HLS_subtitles' if bool_setting('enable.subtitles') else 'HLS'
         for channel in self.api.getLiveTV():
             # If the channel has the right slug, play the channel
             if channel['Slug'] == slug:
                 server = None
                 for streamingServer in channel['StreamingServers']:
-                    if streamingServer['LinkType'] == 'HLS':
+                    if streamingServer['LinkType'] == HLS:
                         server = streamingServer
                         break
                 if server is None:
@@ -417,18 +406,19 @@ class DrDkTvAddon(object):
 
                 url = server['Server'] + '/' + server['Qualities'][0]['Streams'][0]['Stream']
                 item = xbmcgui.ListItem(channel['Title'], path=url, offscreen=True)
-                item.setArt({'fanart': channel['PrimaryImageUri'], 'icon': channel['PrimaryImageUri']})
+                item.setArt({'fanart': channel['PrimaryImageUri'],
+                            'icon': channel['PrimaryImageUri']})
                 item.addContextMenuItems(self.menuItems, False)
                 break
         if item:
             xbmcplugin.setResolvedUrl(self._plugin_handle, True, item)
         else:
-            self.displayError('{} {}'.format(tr(30905), slug))
+            self.displayError(f'{tr(30905)} {slug}')
 
     def parseDate(self, dateString):
         if dateString is not None:
             try:
-                m = re.search('(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)', dateString)
+                m = re.search(r'(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)', dateString)
                 year = int(m.group(1))
                 month = int(m.group(2))
                 day = int(m.group(3))
@@ -463,11 +453,11 @@ class DrDkTvAddon(object):
         self._save()
 
     def displayError(self, message='n/a'):
-        heading = buggalo.getRandomHeading()
+        heading = 'API error'
         xbmcgui.Dialog().ok(heading, '\n'.join([tr(30900), tr(30901), message]))
 
     def displayIOError(self, message='n/a'):
-        heading = buggalo.getRandomHeading()
+        heading = 'I/O error'
         xbmcgui.Dialog().ok(heading, '\n'.join([tr(30902), tr(30903), message]))
 
     def route(self, query):
@@ -479,7 +469,8 @@ class DrDkTvAddon(object):
                 elif PARAMS['show'] == 'listAZ':
                     self.showAZ()
                 elif PARAMS['show'] == 'latest':
-                    self.listEpisodes(self.api.getLatestPrograms(), addSortMethods=False)
+                    channel = SLUG_ADULT if bool_setting('disable.kids') else ''
+                    self.listEpisodes(self.api.getLatestPrograms(channel), addSortMethods=False)
                 elif PARAMS['show'] == 'mostViewed':
                     self.listEpisodes(self.api.getMostViewed())
                 elif PARAMS['show'] == 'highlights':
@@ -499,7 +490,8 @@ class DrDkTvAddon(object):
                 self.listSeries(self.api.getEpisodes(PARAMS['listThemeSeries']))
 
             elif 'listProgramSeriesByLetter' in PARAMS:
-                self.listSeries(self.api.getSeries(PARAMS['listProgramSeriesByLetter']))
+                self.listSeries(self.api.searchSeries(
+                    PARAMS['listProgramSeriesByLetter'], startswith=True))
 
             elif 'listVideos' in PARAMS:
                 self.listEpisodes(self.api.getEpisodes(PARAMS['listVideos']))
@@ -520,7 +512,7 @@ class DrDkTvAddon(object):
             else:
                 try:
                     area = int(get_setting('area'))
-                except:
+                except Exception:
                     area = 0
 
                 if area == 0:
@@ -528,9 +520,12 @@ class DrDkTvAddon(object):
                 elif area == 1:
                     self.showMainMenu()
                 elif area == 2:
-                    items = self.api.getChildrenFrontItems('dr-ramasjang')
+                    items = self.api.getChildrenFrontItems('dr-minisjang')
                     self.listSeries(items, add_area_selector=True)
                 elif area == 3:
+                    items = self.api.getChildrenFrontItems('dr-ramasjang')
+                    self.listSeries(items, add_area_selector=True)
+                elif area == 5:
                     items = self.api.getChildrenFrontItems('dr-ultra')
                     self.listSeries(items, add_area_selector=True)
 
@@ -541,4 +536,8 @@ class DrDkTvAddon(object):
             self.displayIOError(str(ex))
 
         except Exception:
-            buggalo.onExceptionRaised()
+            crash_file = os.path.join(self.cache_path, 'drnu.crash')
+            with open(crash_file, 'w') as fh:
+                fh.write(traceback.format_exc())
+            heading = 'drnu addon crash'
+            xbmcgui.Dialog().ok(heading, '\n'.join([tr(30906), tr(30907), tr(30908), crash_file]))

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.tagesschau"
-    version="2.3.0"
+    version="2.3.2"
     name="Tagesschau"
     provider-name="J.Schumacher, H.Saul, C.Prasch">
   <requires>
@@ -12,17 +12,17 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <language>de</language>
+    <language>en de</language>
     <platform>all</platform>
     <license>GPL-3.0-only</license>
     <website>https://github.com/christianprasch/plugin.video.tagesschau</website>
     <source>https://github.com/christianprasch/plugin.video.tagesschau</source>    
-    <summary lang="de">Die Nachrichten der ARD</summary>
-    <summary lang="en">News from Germany's public broadcaster ARD</summary>
-    <description lang="de">Die Nachrichten der ARD mit aktuellen Videos, kompletten Sendungen und Hintergrundberichten.</description>
-    <description lang="en">News in German from Germany's trusted public broadcaster ARD, featuring current videos, complete broadcasts and background information.</description>
-    <disclaimer lang="en_GB">Use at your own risk. Post suggestions, improvements or bug reports directly to GitHub.</disclaimer>
+    <summary lang="de_DE">Die Nachrichten der ARD</summary>
+    <summary lang="en_GB">News from Germany's public broadcaster ARD</summary>
+    <description lang="de_DE">Die Nachrichten der ARD mit aktuellen Videos, kompletten Sendungen und Hintergrundberichten.</description>
+    <description lang="en_GB">News in German from Germany's trusted public broadcaster ARD, featuring current videos, complete broadcasts and background information.</description>
     <disclaimer lang="de_DE">Benutzung auf eigene Gefahr. Anregungen, Verbesserungen oder Bugs bitte direkt über GitHub posten.</disclaimer>
+    <disclaimer lang="en_GB">Use at your own risk. Post suggestions, improvements or bug reports directly to GitHub.</disclaimer>
     <assets>
       <icon>resources/assets/icon.png</icon>
       <fanart>resources/assets/fanart.jpg</fanart>
@@ -31,6 +31,9 @@
       <screenshot>resources/assets/screenshot_3.png</screenshot>
     </assets>
     <news>
+version 2.3.2 (2022-03-25)
+ * Fixed HTTP redirect error: 308 (thanks to Josef Friedrich) 
+
 version 2.3.0
  * Update to Kodi 19 (Matrix)
 

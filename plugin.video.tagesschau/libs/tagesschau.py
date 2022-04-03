@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# Copyright 2011 Jörn Schumacher, Henning Saul 
-# Copyright 2021 Christian Prasch 
+# Copyright 2011 Jörn Schumacher, Henning Saul
+# Copyright 2021 Christian Prasch
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ FEED_PARAM = 'feed'
 ID_PARAM = 'tsid'
 URL_PARAM = 'url'
 
-DEFAULT_IMAGE_URL = 'http://miss.tagesschau.de/image/sendung/ard_portal_vorspann_ts.jpg'
+DEFAULT_IMAGE_URL = 'https://www.tagesschau.de/image/sendung/ard_portal_vorspann_ts.jpg'
 
 # -- Settings -----------------------------------------------
 logger = logging.getLogger("plugin.video.tagesschau.api")
@@ -51,7 +51,7 @@ strings = { 'latest_videos':       language(30100),
 #-- Subtitles ------------------------------------------------
 
 profile_dir = xbmcvfs.translatePath(addon.getAddonInfo('profile'))
-subtitles_dir  = os.path.join(profile_dir, 'Subtitles') 
+subtitles_dir  = os.path.join(profile_dir, 'Subtitles')
 
 # ------------------------------------------------------------
 
@@ -62,9 +62,9 @@ def addVideoContentDirectory(title, method):
     li = xbmcgui.ListItem(str(title))
     li.setArt({'thumb':DEFAULT_IMAGE_URL})
     li.setProperty('Fanart_Image', FANART)
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=True)    
-    
-def getListItem(videocontent):    
+    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=True)
+
+def getListItem(videocontent):
     title = str(videocontent.title)
     image_url = videocontent.image_url()
     if(not image_url):
@@ -88,10 +88,10 @@ def getUrl(videocontent, method):
     else:
         url_data[URL_PARAM] = urllib.parse.quote(videocontent.video_url(quality))
     return 'plugin://' + ADDON_ID + '?' + urllib.parse.urlencode(url_data)
-    
+
 def addVideoContentItem(videocontent, method):
     li = getListItem(videocontent)
-    url = getUrl(videocontent, method)  
+    url = getUrl(videocontent, method)
     return xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, li, False)
 
 def addVideoContentItems(videocontents, method):
@@ -99,73 +99,71 @@ def addVideoContentItems(videocontents, method):
     for videocontent in videocontents:
         li = getListItem(videocontent)
         url = getUrl(videocontent, method)
-        items.append((url, li, False))   
+        items.append((url, li, False))
     return xbmcplugin.addDirectoryItems(int(sys.argv[1]), items, len(items))
 
 def get_params():
     paramstring = sys.argv[2]
     params = urllib.parse.parse_qs(urllib.parse.urlparse(paramstring).query)
-    
+
     for key in params:
         params[key] = params[key][0]
     return params
-    
+
 
 def tagesschau():
-   # TODO: can't figure out how to set fanart for root/back folder of plugin
-   # http://trac.xbmc.org/ticket/8228? 
-   xbmcplugin.setPluginFanart(int(sys.argv[1]), 'special://home/addons/' + ADDON_ID + '/resources/assets/fanart.jpg')
+    # TODO: can't figure out how to set fanart for root/back folder of plugin
+    # http://trac.xbmc.org/ticket/8228?
+    xbmcplugin.setPluginFanart(int(sys.argv[1]), 'special://home/addons/' + ADDON_ID + '/resources/assets/fanart.jpg')
 
-   params = get_params()
-   provider = VideoContentProvider(JsonSource())
+    params = get_params()
+    provider = VideoContentProvider(JsonSource())
 
-   if params.get(ACTION_PARAM) == 'play_video':
-       subtitles_file = None
-       # expecting either url or feed and id param
-       url = params.get(URL_PARAM)
-       if url:
-           url = urllib.parse.unquote(url) 
-       else: 
-           videos_method = getattr(provider, params[FEED_PARAM])
-           videos = videos_method()    
-           tsid = urllib.parse.unquote(params[ID_PARAM])
-           # find video with matching tsid
-           for video in videos:
-               if video.tsid == tsid:
-                   url = video.video_url(quality)
-                   # try to download and and convert subtitles to local SRT file
-                   # as of October 2014, only subtiles for complete "tagesschau" broadcasts are available
-                   # subtitles_url = 'http://www.tagesschau.de/multimedia/video/video-29351~subtitle.html'
-                   subtitles_url = 'http://www.tagesschau.de/multimedia/video/' + str(video.video_id()) + '~subtitle.html'        
-                   subtitles_file = download_subtitles(subtitles_url, subtitles_dir)
-                   
-       listitem = xbmcgui.ListItem(path=url)
-       if(subtitles_file != None):
-           # the following only works in Gotham, see
-           # http://forum.xbmc.org/showthread.php?tid=154805&page=7&highlight=subtitle
-           listitem.setProperty('upnp:subtitle:1', subtitles_file)
-           listitem.setSubtitles((subtitles_file,))
+    if params.get(ACTION_PARAM) == 'play_video':
+        subtitles_file = None
+        # expecting either url or feed and id param
+        url = params.get(URL_PARAM)
+        if url:
+            url = urllib.parse.unquote(url)
+        else:
+            videos_method = getattr(provider, params[FEED_PARAM])
+            videos = videos_method()
+            tsid = urllib.parse.unquote(params[ID_PARAM])
+            # find video with matching tsid
+            for video in videos:
+                if video.tsid == tsid:
+                    url = video.video_url(quality)
+                    # try to download and and convert subtitles to local SRT file
+                    subtitles_url = 'https://www.tagesschau.de/multimedia/video/' + str(video.video_id()) + '~subtitle.html'
+                    subtitles_file = download_subtitles(subtitles_url, subtitles_dir)
 
-       xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=(url != None), listitem=listitem)
+        listitem = xbmcgui.ListItem(path=url)
+        if(subtitles_file != None):
+            # the following only works in Gotham, see
+            # http://forum.xbmc.org/showthread.php?tid=154805&page=7&highlight=subtitle
+            listitem.setProperty('upnp:subtitle:1', subtitles_file)
+            listitem.setSubtitles((subtitles_file,))
 
-   elif params.get(ACTION_PARAM) == 'list_feed':
-       # list video for a directory
-       videos_method = getattr(provider, params[FEED_PARAM])
-       videos = videos_method()
-       addVideoContentItems(videos, params[FEED_PARAM])
+        xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=(url != None), listitem=listitem)
 
-   else:
-       # populate root directory
-       # check whether there is a livestream
-       videos = provider.livestreams()
-       if(len(videos) == 1):
-           addVideoContentItem(videos[0], "livestreams")
+    elif params.get(ACTION_PARAM) == 'list_feed':
+        # list video for a directory
+        videos_method = getattr(provider, params[FEED_PARAM])
+        videos = videos_method()
+        addVideoContentItems(videos, params[FEED_PARAM])
 
-       # add directories for other feeds        
-       add_named_directory = lambda x: addVideoContentDirectory(strings[x], x)
-       add_named_directory('latest_videos')
-       add_named_directory('latest_broadcasts')
-       add_named_directory('dossiers')
-       add_named_directory('archived_broadcasts')
-           
-   xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    else:
+        # populate root directory
+        # check whether there is a livestream
+        videos = provider.livestreams()
+        if(len(videos) == 1):
+            addVideoContentItem(videos[0], "livestreams")
+
+        # add directories for other feeds
+        add_named_directory = lambda x: addVideoContentDirectory(strings[x], x)
+        add_named_directory('latest_videos')
+        add_named_directory('latest_broadcasts')
+        add_named_directory('dossiers')
+        add_named_directory('archived_broadcasts')
+
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))

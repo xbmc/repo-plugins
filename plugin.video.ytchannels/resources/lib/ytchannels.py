@@ -115,7 +115,7 @@ def ytchannels_main():
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
 								listitem=li,isFolder=True)
 
-		if show_adds !='false' or (len(folders) == 0):
+		if show_adds !='false':
 
 			url = build_url({'mode': 'add_folder', 'foldername': 'Add folder'})
 			li = xbmcgui.ListItem('[COLOR green]%s[/COLOR]'%local_string(30001))

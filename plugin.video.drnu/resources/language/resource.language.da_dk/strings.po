@@ -160,6 +160,10 @@ msgctxt "#30515"
 msgid "Show area chooser item in root"
 msgstr "Vis områdevælger kategori i roden"
 
+msgctxt "#30516"
+msgid "Minisjang"
+msgstr "Minisjang"
+
 msgctxt "#30520"
 msgid "Fanart image resolution"
 msgstr "Størrelse på fanart billeder"
@@ -187,3 +191,15 @@ msgstr "Videoen er ikke længere tilgængelig og kan ikke afspilles."
 msgctxt "#30905"
 msgid "Unknown Live TV Slug:"
 msgstr "Ukendt Live TV Slug:"
+
+msgctxt "#30906"
+msgid "Please report issue at github"
+msgstr "Rapporter gerne fejlen på github"
+
+msgctxt "#30907"
+msgid "https://github.com/xbmc-danish-addons/plugin.video.drnu/issues"
+msgstr "https://github.com/xbmc-danish-addons/plugin.video.drnu/issues"
+
+msgctxt "#30908"
+msgid "see error at:"
+msgstr "se fejlen i:"

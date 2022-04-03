@@ -82,10 +82,6 @@ msgctxt "#30013"
 msgid "Could not log on to the selected channel."
 msgstr "Não foi possivel efetuar login no canal seleccionado."
 
-msgctxt "#30014"
-msgid "Show info"
-msgstr "Mostrar informação"
-
 msgctxt "#30015"
 msgid "via missing add-on"
 msgstr "através de um add-on não existente"
@@ -1122,3 +1118,7 @@ msgstr ""
 msgctxt "#30609"
 msgid "Error"
 msgstr ""
+
+#~ msgctxt "#30014"
+#~ msgid "Show info"
+#~ msgstr "Mostrar informação"

@@ -82,10 +82,6 @@ msgctxt "#30013"
 msgid "Could not log on to the selected channel."
 msgstr ""
 
-msgctxt "#30014"
-msgid "Show info"
-msgstr ""
-
 msgctxt "#30015"
 msgid "via missing add-on"
 msgstr ""

@@ -45,7 +45,7 @@ class Channel(chn_class.Channel):
             self.mainListUri = "https://api.regiogroei.cloud/page/tv/programs?utrecht"
             self.noImage = "rtvutrechtimage.png"
             self.videoUrlFormat = "https://rtvutrecht.bbvms.com/p/regiogroei_utrecht_web_videoplayer/c/{}.json"
-            self.recentSlug = "rtvutrecht"
+            self.recentSlug = "rtv-utrecht"
             self.liveUrl = "https://api.regiogroei.cloud/page/channel/rtv-utrecht?channel=rtv-utrecht"
             self.httpHeaders["accept"] = "application/vnd.groei.utrecht+json;v=2.0"
 
@@ -96,6 +96,14 @@ class Channel(chn_class.Channel):
             self.recentSlug = "tv-oost"
             self.httpHeaders["accept"] = "application/vnd.groei.overijssel+json;v=3.0"
             self.liveUrl = "https://api.regiogroei.cloud/page/channel/tv-oost?channel=tv-oost"
+
+        elif self.channelCode == "rtvdrenthe":
+            self.mainListUri = "https://api.regiogroei.cloud/page/tv/programs?rtvdrenthe"
+            self.noImage = "rtvdrentheimage.png"
+            self.videoUrlFormat = "https://api.regiogroei.cloud/p/regiogroei_drenthe_web_videoplayer/c/{}.json"
+            self.recentSlug = "tv-drenthe"
+            self.httpHeaders["accept"] = "application/vnd.groei.drenthe+json;v=3.0"
+            # self.liveUrl = ""
 
         else:
             raise NotImplementedError("Channelcode '%s' not implemented" % (self.channelCode,))
@@ -341,6 +349,10 @@ class Channel(chn_class.Channel):
 
         if not source_id:
             Logger.error("Unable to extract source_id")
+
+        if self.channelCode in ("rtvdrenthe", ):
+            # Some channels do not require the sourceid_string prefix.
+            source_id = source_id.replace("sourceid_string:", "")
 
         source_url = self.videoUrlFormat.format(source_id)
         data = UriHandler.open(source_url)

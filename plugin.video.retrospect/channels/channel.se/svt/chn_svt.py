@@ -89,8 +89,13 @@ class Channel(chn_class.Channel):
                               creator=self.create_api_typed_item)
 
         self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=FionaPage",
-                              name="GraphQL FionaPage parsers", json=True,
+                              name="GraphQL FionaPage parsers for Nytt pa Play", json=True,
                               parser=["data", "selectionById", "items"],
+                              creator=self.create_api_typed_item)
+
+        self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=StartPage",
+                              name="GraphQL StartPage parsers for Nytt pa Play", json=True,
+                              parser=["data", "startForSvtPlay", "selections", ("name", "Nytt på Play", 0), "items"],
                               creator=self.create_api_typed_item)
 
         self._add_data_parser(self.__nyheter_url, name="Latest news", json=True,
@@ -204,10 +209,18 @@ class Channel(chn_class.Channel):
                 False
             ),
 
+            # The selection ID might change over time.
             LanguageHelper.get_localized_string(LanguageHelper.NewOnChannel) % self.channelName: (
-                self.__get_api_url("FionaPage",
-                                   "0d50e0ae57df3a99f8b7fb0b94e1159fea64f04297d7dcb7c75f0358f09a1a48",
-                                   variables={"includeFullOppetArkiv": True, "selectionId": "KM6mbZ4"}),
+                # self.__get_api_url("FionaPage",
+                #                    "0d50e0ae57df3a99f8b7fb0b94e1159fea64f04297d7dcb7c75f0358f09a1a48",
+                #                    variables={"includeFullOppetArkiv": True, "selectionId": "e6YwkAY"}),
+                # False)
+
+                # Perhaps we should extract it from the main page.
+                # https://api.svt.se/contento/graphql?operationName=StartPage&variables=%7B%22abTestVariants%22%3A%5B%5D%2C%22includeFullOppetArkiv%22%3Atrue%7D&extensions=%7B%22persistedQuery%22%3A%7B%22sha256Hash%22%3A%22b2a022f7353fbe891696aacd173a74c964a5f382f6f9153f0fcf129cecd4b9ac%22%2C%22version%22%3A1%7D%7D&ua=svtplaywebb-render-low-prio-client
+                self.__get_api_url("StartPage",
+                                   "b2a022f7353fbe891696aacd173a74c964a5f382f6f9153f0fcf129cecd4b9ac",
+                                   variables={"abTestVariants": [], "includeFullOppetArkiv": True}),
                 False)
         }
 

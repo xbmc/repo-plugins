@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.5.3+matrix.1"
+        version="5.5.4+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -122,9 +122,9 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.5.3 - Changelog - 2022-02-15[/B]
+        <news>[B]Retrospect v5.5.4 - Changelog - 2022-04-03[/B]
 
-t.b.d.
+This minor update fixes a number of channels that broke/moved.
 
 [B]Framework related[/B]
 _None_
@@ -133,12 +133,12 @@ _None_
 _None_
 
 [B]Channel related[/B]
-* Changed: RTV Rijnmond now uses RegioGroei back-end.
-* Fixed: UR Play broke (See #1604).
-* Changed: Omroep West now uses RegioGroei back-end.
-* Moved: Omroep Gelderland to RegioGroei channel.
-* Fixed: SVT &#x27;New on Play&#x27; (Fixes #1612).
-* Fixed: RTV Oost moved to RegioGroei.
+* Fixed: RTV Utrecht recent slug.
+* Fixed: With the new proper Content-Types and Media-Types we don&#x27;t need to force an &quot;Info&quot; menu entry (Fixes #1620).
+* Fixed: SVT &quot;New on SVT Play&quot; broken (Fixes #1621, Twice.......).
+* Fixed: 24 Classics moved to Spotify and Youtube (See #1626)
+* Fixed: Some VTT subtitles have guids as lines (Fixes #1625).
+* Fixed: RTV Drenthe.
 
         </news>
         <assets>

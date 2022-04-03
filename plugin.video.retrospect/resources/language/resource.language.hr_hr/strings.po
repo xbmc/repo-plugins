@@ -4,15 +4,15 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-30 21:18+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-02-25 18:13+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Croatian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/hr_hr/>\n"
 "Language: hr_hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.11\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -64,11 +64,11 @@ msgstr ""
 
 msgctxt "#30009"
 msgid "General"
-msgstr ""
+msgstr "Općenito"
 
 msgctxt "#30010"
 msgid "Channels"
-msgstr ""
+msgstr "Kanali"
 
 msgctxt "#30011"
 msgid "Requires restart of Retrospect to take effect."
@@ -80,10 +80,6 @@ msgstr ""
 
 msgctxt "#30013"
 msgid "Could not log on to the selected channel."
-msgstr ""
-
-msgctxt "#30014"
-msgid "Show info"
 msgstr ""
 
 msgctxt "#30015"
@@ -128,7 +124,7 @@ msgstr ""
 
 msgctxt "#30025"
 msgid "None"
-msgstr ""
+msgstr "Nijedno"
 
 msgctxt "#30026"
 msgid "Group list if it exceeds # folders"
@@ -148,7 +144,7 @@ msgstr ""
 
 msgctxt "#30030"
 msgid "Port"
-msgstr ""
+msgstr "Ulaz"
 
 msgctxt "#30031"
 msgid "Cache HTTP(S) requests"
@@ -168,11 +164,11 @@ msgstr ""
 
 msgctxt "#30035"
 msgid "Username"
-msgstr ""
+msgstr "Korisničko ime"
 
 msgctxt "#30036"
 msgid "Password"
-msgstr ""
+msgstr "Lozinka"
 
 msgctxt "#30037"
 msgid "Use 'Up Next' to play next episode"
@@ -188,7 +184,7 @@ msgstr ""
 
 msgctxt "#30040"
 msgid "Channels"
-msgstr ""
+msgstr "Kanali"
 
 msgctxt "#30041"
 msgid "Show \"All Favourites\" in main Channel listing"
@@ -249,7 +245,7 @@ msgstr ""
 
 msgctxt "#30055"
 msgid "Advanced"
-msgstr ""
+msgstr "Napredno"
 
 msgctxt "#30056"
 msgid "Install the Up Next add-on"
@@ -302,7 +298,7 @@ msgstr ""
 
 msgctxt "#30069"
 msgid "Settings"
-msgstr ""
+msgstr "Postavke"
 
 msgctxt "#30070"
 msgid "Let Kodi determine bitrate if possible"
@@ -398,11 +394,11 @@ msgstr ""
 
 msgctxt "#30093"
 msgid "Password"
-msgstr ""
+msgstr "Lozinka"
 
 msgctxt "#30094"
 msgid "Username"
-msgstr ""
+msgstr "Korisničko ime"
 
 msgctxt "#30095"
 msgid "Show Hidden Items"
@@ -426,7 +422,7 @@ msgstr ""
 
 msgctxt "#30100"
 msgid "None"
-msgstr ""
+msgstr "Nijedno"
 
 msgctxt "#30101"
 msgid "Regional"
@@ -589,7 +585,7 @@ msgstr ""
 # empty strings from id 30312 to 30349
 msgctxt "#30350"
 msgid "Search"
-msgstr ""
+msgstr "Pretraga"
 
 msgctxt "#30351"
 msgid "Categories"
@@ -729,7 +725,7 @@ msgstr ""
 
 msgctxt "#30502"
 msgid "Favourites"
-msgstr ""
+msgstr "Omiljeno"
 
 msgctxt "#30503"
 msgid "Channel Favourites"
@@ -844,7 +840,7 @@ msgstr ""
 
 msgctxt "#30537"
 msgid "Page"
-msgstr ""
+msgstr "Stranica"
 
 msgctxt "#30538"
 msgid "The selected live stream has not yet|begun."

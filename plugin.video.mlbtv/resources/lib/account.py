@@ -15,7 +15,7 @@ class Account:
     username = ''
     password = ''
     session_key = ''
-    icon = os.path.join(addon.getAddonInfo('path'), 'icon.png')
+    icon = addon.getAddonInfo('icon')
     verify = True
 
     def __init__(self):
@@ -35,12 +35,12 @@ class Account:
         # Check if username and password are provided
         if self.username == '':
             dialog = xbmcgui.Dialog()
-            self.username = dialog.input('Please enter your username', type=xbmcgui.INPUT_ALPHANUM)
+            self.username = dialog.input(LOCAL_STRING(30240), type=xbmcgui.INPUT_ALPHANUM)
             self.addon.setSetting(id='username', value=self.username)
 
         if self.password == '':
             dialog = xbmcgui.Dialog()
-            self.password = dialog.input('Please enter your password', type=xbmcgui.INPUT_ALPHANUM,
+            self.password = dialog.input(LOCAL_STRING(30250), type=xbmcgui.INPUT_ALPHANUM,
                                     option=xbmcgui.ALPHANUM_HIDE_INPUT)
             self.addon.setSetting(id='password', value=self.password)
 
@@ -62,11 +62,10 @@ class Account:
                 self.addon.setSetting('last_login', str(time.time()))
             else:
                 dialog = xbmcgui.Dialog()
-                title = "Login Failed"
-                msg = "Please check your credentials and try again"
+                msg = LOCAL_STRING(30263)
                 if 'error_description' in r.json():
                     msg = r.json()['error_description']
-                dialog.notification(title, msg, ICON, 5000, False)
+                dialog.notification(LOCAL_STRING(30262), msg, ICON, 5000, False)
                 self.addon.setSetting('login_token', '')
                 self.addon.setSetting('last_login', '')
                 sys.exit()
@@ -125,17 +124,27 @@ class Account:
         r = requests.get(url, headers=headers, cookies=self.util.load_cookies(), verify=self.verify)
         if not r.ok:
             dialog = xbmcgui.Dialog()
-            title = "Error Occured"
             msg = ""
             for item in r.json()['errors']:
                 msg += item['code'] + '\n'
-            dialog.notification(title, msg, self.icon, 5000, False)
+            dialog.notification(LOCAL_STRING(30270), msg, self.icon, 5000, False)
             sys.exit()
 
-        return auth, r.json()['data']['Airings'][0]['playbackUrls'][0]['href']
+        broadcast_start = '1'
+        try:
+            offset_index = 0
+            if r.json()['data']['Airings'][0]['milestones'][0]['milestoneTime'][1]['type'] == 'offset':
+                offset_index = 1
+            broadcast_start = r.json()['data']['Airings'][0]['milestones'][0]['milestoneTime'][offset_index]['start']
+            if isinstance(broadcast_start, int):
+                broadcast_start = str(broadcast_start)
+        except:
+            pass
+        
+        return auth, r.json()['data']['Airings'][0]['playbackUrls'][0]['href'], broadcast_start
 
     def get_stream(self, content_id):
-        auth, url = self.get_playback_url(content_id)
+        auth, url, broadcast_start = self.get_playback_url(content_id)
 
         url = url.replace('{scenario}','browser~csai')
         headers = {
@@ -149,17 +158,16 @@ class Account:
         r = requests.get(url, headers=headers, cookies=self.util.load_cookies(), verify=self.verify)
         if not r.ok:
             dialog = xbmcgui.Dialog()
-            title = "Error Occured"
             msg = ""
             for item in r.json()['errors']:
                 msg += item['code'] + '\n'
-            dialog.notification(title, msg, self.icon, 5000, False)
+            dialog.notification(LOCAL_STRING(30270), msg, self.icon, 5000, False)
             sys.exit()
 
-        if 'slide' in r.json()['stream']:
-            stream_url = r.json()['stream']['slide']
-        else:
+        if 'complete' in r.json()['stream']:
             stream_url = r.json()['stream']['complete']
+        else:
+            stream_url = r.json()['stream']['slide']
 
         if QUALITY == 'Always Ask':
             stream_url = self.get_stream_quality(stream_url)
@@ -180,7 +188,7 @@ class Account:
         elif CDN == 'Level 3' and l3c_url not in stream_url:
             stream_url = stream_url.replace(akc_url, l3c_url)
         
-        return stream_url, headers
+        return stream_url, headers, broadcast_start
 
     def get_stream_quality(self, stream_url):
         #Check if inputstream adaptive is on, if so warn user and return master m3u8
@@ -210,7 +218,7 @@ class Account:
         stream_title.sort(key=self.util.natural_sort_key, reverse=True)
         stream_urls.sort(key=self.util.natural_sort_key, reverse=True)
         dialog = xbmcgui.Dialog()
-        ret = dialog.select('Choose Stream Quality', stream_title)
+        ret = dialog.select(LOCAL_STRING(30372), stream_title)
         if ret >= 0:
             if 'http' not in stream_urls[ret]:
                 stream_url = stream_url.replace(stream_url.rsplit('/', 1)[-1], stream_urls[ret])

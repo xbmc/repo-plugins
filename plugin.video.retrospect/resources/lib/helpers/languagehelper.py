@@ -25,7 +25,6 @@ class LanguageHelper(object):
     AddOnSettingsId = 30528
     RefreshListId = 30529
     CheckUpdatesId = 30530
-    ItemInfo = 30014
     BitrateSelection = 30020
     Recent = 30024
     OtherAddon = 30007

@@ -64,10 +64,6 @@ class AddonAction(object):
         if channel is None:
             return context_menu_items
 
-        if item.has_info():
-            info_action = LanguageHelper.get_localized_string(LanguageHelper.ItemInfo)
-            context_menu_items.append((info_action, 'Action(info)'))
-
         # now we process the other items
         possible_methods = self.__get_members(channel)
         # Logger.Debug(possible_methods)

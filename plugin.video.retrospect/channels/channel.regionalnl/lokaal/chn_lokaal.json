@@ -1,20 +1,6 @@
 {
   "channels": [
     {
-      "guid": "B7EB69DF-18C4-4935-BA83-0B2A89295178",
-      "name": "RTV Drenthe",
-      "description": {
-        "en": "Video on demand for RTV Drenthe.\n\nRTV Drenthe is thé newssource of the province of Drenthe. They keep the inhabitants of Drenthe up-to-date with the news of the provice.",
-        "nl": "RTV Drenthe Uitzendinggemist.\n\nRTV Drenthe is dé nieuwsbron van de provincie Drenthe. Ze houden de inwoners van Drenthe op de hoogte van het nieuws uit de provincie."
-      },
-      "icon": "rtvdrenthelarge.png",
-      "category": "Regional",
-      "channelcode": "rtvdrenthe",
-      "sortorder": 100,
-      "language": "nl",
-      "fanart": "rtvdrenthefanart.jpg"
-    },
-    {
       "guid": "B2AF5744-4697-44CD-9A54-CFD6A4273207",
       "name": "Omroep Gelderland",
       "description": {

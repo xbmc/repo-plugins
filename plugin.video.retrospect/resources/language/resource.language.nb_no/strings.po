@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-30 21:17+0000\n"
+"PO-Revision-Date: 2022-03-27 01:19+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Norwegian Bokmål <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/nb_no/>\n"
 "Language: nb_no\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -80,10 +80,6 @@ msgstr ""
 
 msgctxt "#30013"
 msgid "Could not log on to the selected channel."
-msgstr ""
-
-msgctxt "#30014"
-msgid "Show info"
 msgstr ""
 
 msgctxt "#30015"
@@ -300,7 +296,7 @@ msgstr "Aktiv"
 
 msgctxt "#30069"
 msgid "Settings"
-msgstr ""
+msgstr "Innstillinger"
 
 msgctxt "#30070"
 msgid "Let Kodi determine bitrate if possible"
@@ -584,7 +580,7 @@ msgstr ""
 # empty strings from id 30312 to 30349
 msgctxt "#30350"
 msgid "Search"
-msgstr ""
+msgstr "Søk"
 
 msgctxt "#30351"
 msgid "Categories"
@@ -616,7 +612,7 @@ msgstr ""
 
 msgctxt "#30358"
 msgid "Episodes"
-msgstr ""
+msgstr "Episoder"
 
 msgctxt "#30359"
 msgid "Genres"
@@ -644,7 +640,7 @@ msgstr ""
 
 msgctxt "#30365"
 msgid "Movies"
-msgstr ""
+msgstr "Filmer"
 
 msgctxt "#30366"
 msgid "Available from"
@@ -825,7 +821,7 @@ msgstr ""
 
 msgctxt "#30537"
 msgid "Page"
-msgstr ""
+msgstr "Side"
 
 msgctxt "#30538"
 msgid "The selected live stream has not yet|begun."

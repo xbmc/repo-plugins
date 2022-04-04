@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2022-01-26 08:32+0000\n"
 "Last-Translator: bas <bas@kodi.tv>\n"
@@ -81,10 +81,6 @@ msgstr "Login Failed"
 msgctxt "#30013"
 msgid "Could not log on to the selected channel."
 msgstr "Could not log on to the selected channel."
-
-msgctxt "#30014"
-msgid "Show info"
-msgstr "Show info"
 
 msgctxt "#30015"
 msgid "via missing add-on"
@@ -1122,6 +1118,10 @@ msgstr "Warning"
 msgctxt "#30609"
 msgid "Error"
 msgstr "Error"
+
+#~ msgctxt "#30014"
+#~ msgid "Show info"
+#~ msgstr "Show info"
 
 # empty string with id 30037
 #~ msgctxt "#30038"

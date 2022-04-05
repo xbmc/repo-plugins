@@ -19,7 +19,3 @@ msgstr ""
 msgctxt "#32001"
 msgid "Video format"
 msgstr ""
-
-msgctxt "#32002"
-msgid "General"
-msgstr ""

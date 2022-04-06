@@ -1,4 +1,4 @@
-<addon id="plugin.video.svtplay" name="SVT Play" provider-name="nilzen" version="5.1.12+matrix.1">
+<addon id="plugin.video.svtplay" name="SVT Play" provider-name="nilzen" version="5.1.13+matrix.1">
   <requires>
     <import addon="script.module.requests" version="2.22.0" />
     <import addon="xbmc.python" version="3.0.0" />
@@ -19,7 +19,7 @@
     <source>https://github.com/nilzen/xbmc-svtplay</source>
     <forum>https://forum.kodi.tv/showthread.php?tid=67110</forum>
     <news>
-- Added support for Kodi 19 (Matrix)
+- Fixed broken program listings
     </news>
     <assets>
       <icon>icon.png</icon>

@@ -156,7 +156,7 @@ class GraphQL:
       fanart = self.get_fanart_url(images["wide"]["id"], images["wide"]["changed"]) if images else ""
       geo_restricted = item["restrictions"].get("onlyAvailableInSweden", False)
       info = {
-        "duration": item["duration"]
+        "duration": item.get("duration", 0)
       }
       video_item = VideoItem(title, video_id, thumbnail, geo_restricted, info, fanart)
       latest_items.append(video_item)
@@ -164,27 +164,25 @@ class GraphQL:
 
   def getSearchResults(self, query_string):
     operation_name = "SearchPage"
-    query_hash = "bed799b6f3105046779adff02a29028c1847782da4b171e9fe1bcc48622a342d"
+    query_hash = "ab8c604fc76d14885dcedd0f377b76afae9aabcde73b3324676f60ca86d12606"
     variables = {"querystring":query_string}
     json_data = self.__get(operation_name, query_hash, variables=variables)
     if not json_data:
       return None
     results = []
-    for search_hit in json_data["search"]:
-      item = search_hit["item"]
+    for search_hit in json_data["searchPage"]["flat"]["hits"]:
+      item = search_hit["teaser"]["item"]
       type_name = item["__typename"]
       if not self.__is_supported_type(type_name):
         logging.log("Unsupported search result type \"{}\"".format(type_name))
         logging.log(item)
         continue
-      title = item["name"]
-      if "parent" in item:
-        title = "{parent} - {name}".format(name=item["name"], parent=item["parent"]["name"])
+      title = search_hit["teaser"]["heading"]
       geo_restricted = item["restrictions"]["onlyAvailableInSweden"]
       item_id = item["urls"]["svtplay"]
       thumbnail = self.get_thumbnail_url(item["image"]["id"], item["image"]["changed"]) if "image" in item else ""
       info = {
-        "plot" : item["longDescription"]
+        "plot" : search_hit["teaser"]["description"]
       }
       play_item = self.__create_item(title, type_name, item_id, geo_restricted, thumbnail, info)
       results.append(play_item)
@@ -211,7 +209,7 @@ class GraphQL:
 
   def getChannels(self):
     operation_name = "ChannelsQuery"
-    query_hash = "65ceeccf67cc8334bc14eb495eb921cffebf34300562900076958856e1a58d37"
+    query_hash = "210be4b72f03223b990f031d9a2e3501ff9284f8d2c66b01b255a807775f0b19"
     json_data = self.__get(operation_name, query_hash)
     if not json_data:
       return None
@@ -243,9 +241,10 @@ class GraphQL:
     return self.__get_image_url(image_id, image_changed, "poster")
 
   def __get_start_page_selection(self, selection_id):
-    operation_name = "StartPage"
-    query_hash = "c011159df51539c3604fc09a6ca856af833715d1477d0082afe5a9a871477569"
-    json_data = self.__get(operation_name, query_hash=query_hash)
+    operation_name = "GridPage"
+    query_hash = "b30578b1b188242ce190c8a2cefe3d4694efafd17a929d08d273ae224a302b24"
+    variables = { "selectionId": selection_id }
+    json_data = self.__get(operation_name, query_hash=query_hash, variables=variables)
     if not json_data:
       return None
     selections = json_data["startForSvtPlay"]["selections"]
@@ -262,20 +261,17 @@ class GraphQL:
       return None
     video_items = []
     for item in selection["items"]:
-      image_id = item["images"]["cleanWide"]["id"]
-      image_changed = item["images"]["cleanWide"]["changed"]
+      image_id = item["images"]["wide"]["id"]
+      image_changed = item["images"]["wide"]["changed"]
       title = "{show} - {episode}".format(show=item["heading"], episode=item["subHeading"])
       item = item["item"]
       video_id = item["urls"]["svtplay"]
-      parent_image_id = item["parent"]["images"]["wide"]["id"]
-      parent_image_changed = item["parent"]["images"]["wide"]["changed"]
       thumbnail = self.get_thumbnail_url(image_id, image_changed)
       geo_restricted = item["restrictions"]["onlyAvailableInSweden"]
       video_info = {
         "plot": item["longDescription"]
       }
-      fanart = self.get_fanart_url(parent_image_id, parent_image_changed)
-      video_item = VideoItem(title, video_id, thumbnail, geo_restricted, video_info, fanart)
+      video_item = VideoItem(title, video_id, thumbnail, geo_restricted, info=video_info)
       video_items.append(video_item)
     return video_items
 

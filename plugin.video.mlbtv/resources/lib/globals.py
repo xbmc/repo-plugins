@@ -3,7 +3,7 @@ import sys, re, os, time
 import calendar, pytz
 import urllib, requests
 from datetime import date, datetime, timedelta
-from kodi_six import xbmc, xbmcplugin, xbmcgui, xbmcaddon
+from kodi_six import xbmc, xbmcvfs, xbmcplugin, xbmcgui, xbmcaddon
 
 if sys.version_info[0] > 2:
     import http
@@ -11,6 +11,11 @@ if sys.version_info[0] > 2:
     urllib = urllib.parse
 else:
     import cookielib
+
+try:
+    xbmc.translatePath = xbmcvfs.translatePath
+except AttributeError:
+    pass
 
 addon_handle = int(sys.argv[1])
 
@@ -39,6 +44,7 @@ TEAM_NAMES = settings.getSetting(id="team_names")
 TIME_FORMAT = settings.getSetting(id="time_format")
 SINGLE_TEAM = str(settings.getSetting(id='single_team'))
 CATCH_UP = str(settings.getSetting(id='catch_up'))
+ONLY_FREE_GAMES = str(settings.getSetting(id="only_free_games"))
 
 #Proxy Settings
 PROXY_ENABLED = str(settings.getSetting(id='use_proxy'))
@@ -96,41 +102,6 @@ def find(source,start_str,end_str):
     else:
         return ''
 
-
-def getGameIcon(home,away):
-    #Check if game image already exists
-    #image_path = ROOTDIR+'/resources/images/'+away+'vs'+home+'.png'
-    image_path = os.path.join(ROOTDIR,'resources/images/'+away+'vs'+home+'.png')
-    file_name = os.path.join(image_path)
-    if not os.path.isfile(file_name): 
-        try:
-            createGameIcon(home,away,image_path)
-        except:
-            pass
-
-    return image_path
-
-
-def createGameIcon(home,away,image_path):    
-    #bg = Image.new('RGB', (400,225), (0,0,0))    
-    bg = Image.new('RGB', (500,250), (0,0,0)) 
-    #http://mlb.mlb.com/mlb/images/devices/240x240/110.png
-    #img_file = urllib.urlopen('http://mlb.mlb.com/mlb/images/devices/76x76/'+home+'.png ')
-    img_file = urllib.urlopen('http://mlb.mlb.com/mlb/images/devices/240x240/'+home+'.png')
-    im = StringIO(img_file.read())
-    home_image = Image.open(im)
-    #bg.paste(home_image, (267,74), home_image)
-    bg.paste(home_image, (255,5), home_image)
-
-    #img_file = urllib.urlopen('http://mlb.mlb.com/mlb/images/devices/76x76/'+away+'.png ')
-    img_file = urllib.urlopen('http://mlb.mlb.com/mlb/images/devices/240x240/'+away+'.png')
-    im = StringIO(img_file.read())
-    away_image = Image.open(im)
-    #bg.paste(away_image, (57,74), away_image)    
-    bg.paste(away_image, (5,5), away_image)    
-    
-    bg.save(image_path)        
-    
 
 def colorString(string, color):
     return '[COLOR='+color+']'+string+'[/COLOR]'
@@ -207,9 +178,9 @@ def get_params():
     return param
 
 
-def add_stream(name, title, game_pk, icon=None, fanart=None, info=None, video_info=None, audio_info=None, stream_date=None):
+def add_stream(name, title, game_pk, icon=None, fanart=None, info=None, video_info=None, audio_info=None, stream_date=None, spoiler='True'):
     ok=True
-    u=sys.argv[0]+"?mode="+str(104)+"&name="+urllib.quote_plus(name)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&stream_date="+urllib.quote_plus(str(stream_date))
+    u=sys.argv[0]+"?mode="+str(104)+"&name="+urllib.quote_plus(name)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&stream_date="+urllib.quote_plus(str(stream_date))+"&spoiler="+urllib.quote_plus(str(spoiler))
 
     liz=xbmcgui.ListItem(name)
     if icon is None: icon = ICON
@@ -487,7 +458,7 @@ def load_cookies():
     return cj
 
 
-def stream_to_listitem(stream_url, headers):
+def stream_to_listitem(stream_url, headers, spoiler='True', start='1'):
     if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
         listitem = xbmcgui.ListItem(path=stream_url)
         if KODI_VERSION >= 19:
@@ -497,6 +468,9 @@ def stream_to_listitem(stream_url, headers):
         listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
         listitem.setProperty('inputstream.adaptive.stream_headers', headers)
         listitem.setProperty('inputstream.adaptive.license_key', "|" + headers)
+        if spoiler == "False":
+            listitem.setProperty('ResumeTime', start)
+            listitem.setProperty('TotalTime', start)
     else:
         listitem = xbmcgui.ListItem(path=stream_url + '|' + headers)
 

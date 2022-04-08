@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2021.1.13+matrix.1" provider-name="eracknaphobia">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2022.4.8+matrix.1" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -20,14 +20,7 @@
         </description>
         <disclaimer lang="en_GB">Requires an MLB.tv account</disclaimer>
         <news>
-            Thanks to Tony Wagner for the following updates
-            - added seek in live games, start live from beginning options
-            - hide highlights option and beginning/live dialog when Kodi resume point is used
-            - fixed dialog behavior when resuming
-            - use broadcast start time, also changed spoiler variable to string
-            - fixed catch-up option
-            - verify start offset is valid
-            - get highlights in date/time order
+            - Update Cleveland team name
         </news>
         <language>en</language>
         <platform>all</platform>

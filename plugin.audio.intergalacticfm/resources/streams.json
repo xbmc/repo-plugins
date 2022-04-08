@@ -1,0 +1,51 @@
+{
+    "cbs_aac": {
+        "label": "Cybernetic Broadcasting System - 128k AAC+",
+        "url": "http://radio.intergalactic.fm:80/1aac",
+        "tagline": "Nothing Beyond Our Reach",
+        "plot": "Cybernetic Broadcasting System dominates our galaxy for over a decade. This is the main audio stream from Intergalactic FM. You can run all you want, but there is no escaping CBS.",
+        "genre": "electro, techno, acid, rap, old school, new wave"
+    },
+    "cbs_mp3": {
+        "label": "Cybernetic Broadcasting System - 192k MP3",
+        "url": "http://radio.intergalactic.fm:80/1",
+        "tagline": "Nothing Beyond Our Reach",
+        "plot": "Cybernetic Broadcasting System dominates our galaxy for over a decade. This is the main audio stream from Intergalactic FM. You can run all you want, but there is no escaping CBS.",
+        "genre": "electro, techno, acid, rap, old school, new wave"
+    },
+    "cbs_ogg": {
+        "label": "Cybernetic Broadcasting System - 192k OGG",
+        "url": "https://radio.intergalactic.fm/cbs",
+        "tagline": "Nothing Beyond Our Reach",
+        "plot": "Cybernetic Broadcasting System dominates our galaxy for over a decade. This is the main audio stream from Intergalactic FM. You can run all you want, but there is no escaping CBS.",
+        "genre": "electro, techno, acid, rap, old school, new wave"
+    },
+    "df_aac": {
+        "label": "IFM Disco Fetish - 128k AAC+",
+        "url": "http://radio.intergalactic.fm:80/2aac",
+        "tagline": "No Station Such Dedication",
+        "plot": "This stream is Intergalactic FM's audio channel called Disco Fetish. Here you will find the galaxy's best of italo disco.",
+        "genre": "italo, disco, boogie, funk, 70's, 80's"
+    },
+    "df_mp3": {
+        "label": "IFM Disco Fetish - 192k MP3",
+        "url": "http://radio.intergalactic.fm:80/2",
+        "tagline": "No Station Such Dedication",
+        "plot": "This stream is Intergalactic FM's audio channel called Disco Fetish. Here you will find the galaxy's best of italo disco.",
+        "genre": "italo, disco, boogie, funk, 70's, 80's"
+    },
+    "tdm_aac": {
+        "label": "IFM Dream Machine - 128k AAC+",
+        "url": "http://radio.intergalactic.fm:80/3aac",
+        "tagline": "You Are Not Alone",
+        "plot": "This stream is Intergalactic FM's audio channel called Dream Machine for soundtracks, ambient and experimental music.",
+        "genre": " electronic, OST, ambient, experimental, world"
+    },
+    "tdm_mp3": {
+        "label": "IFM Dream Machine - 192k MP3",
+        "url": "http://radio.intergalactic.fm:80/3",
+            "tagline": "You Are Not Alone",
+        "plot": "This stream is Intergalactic FM's audio channel called Dream Machine for soundtracks, ambient and experimental music.",
+        "genre": " electronic, OST, ambient, experimental, world"
+    }
+}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.intergalacticfm" name="Intergalactic FM" version="3.0.0" provider-name="Dreamer, Pander">
+<requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.requests" version="2.19.1"/>
+</requires>
+<extension point="xbmc.python.pluginsource" library="main.py">
+    <provides>audio</provides>
+</extension>
+<extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en">No Station Such Dedication</summary>
+    <summary lang="de">No Station Such Dedication</summary>
+    <summary lang="nl">No Station Such Dedication</summary>
+    <description lang="en"><![CDATA[
+Audio add-on of listener-supported, commercial-free audio streams from Intergalacic FM.
+
+See also the video plugin. Please consider donating at https://intergalactic.fm to keep Intergalactic FM in orbit.
+    ]]></description>
+    <description lang="de"><![CDATA[
+Audioadd-on vom hörergetragenen, werbefreien Audioostreams von Intergalactic FM.
+
+Siehe auch die Video-Plugin. Bitte denk über eine Spende auf https://intergalactic.fm nach, um Intergalactic FM in der Umlaufbahn zu erhalte.
+    ]]></description>
+    <description lang="nl"><![CDATA[
+Audio-add-on van luisteraarondersteunde, reclamevrije audiostreams van Intergalactic FM.
+
+Zie ook de videoplugin. Overweeg a.u.b. een donatie te doen op https://intergalactic.fm om Intergalactic FM in haar baan te houden.
+    ]]></description>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+        <screenshot>screenshots/s1.jpg</screenshot>
+        <screenshot>screenshots/s2.jpg</screenshot>
+        <screenshot>screenshots/s3.jpg</screenshot>    
+    </assets>
+    <news>Updated with latest artwork metadata</news>
+    <license>GPL-3.0-or-later</license>
+    <source>https://github.com/intergalacticfm/plugin.audio.intergalacticfm</source>
+    <website>http://intergalactic.fm</website>
+    <forum>https://forum.kodi.tv/showthread.php?tid=257200</forum>
+</extension>
+</addon>

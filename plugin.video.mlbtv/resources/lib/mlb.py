@@ -55,14 +55,13 @@ def todays_games(game_day):
 
 
 def create_game_listitem(game, game_day):
-    # icon = getGameIcon(game['home_team_id'],game['away_team_id'])
     icon = ICON
     # http://mlb.mlb.com/mlb/images/devices/ballpark/1920x1080/2681.jpg
     # B&W
     # fanart = 'http://mlb.mlb.com/mlb/images/devices/ballpark/1920x1080/'+game['venue_id']+'.jpg'
     # Color
     # fanart = 'http://www.mlb.com/mlb/images/devices/ballpark/1920x1080/color/' + str(game['venue']['id']) + '.jpg'
-    fanart = 'http://cd-images.mlbstatic.com/stadium-backgrounds/color/light-theme/1920x1080/' + str(game['venue']['id']) + '.png'
+    fanart = 'http://cd-images.mlbstatic.com/stadium-backgrounds/color/light-theme/1920x1080/%s.png' % game['venue']['id']
 
 
     xbmc.log(str(game['gamePk']))
@@ -140,7 +139,9 @@ def create_game_listitem(game, game_day):
     stream_date = str(game_day)
 
     desc = ''
+    spoiler = 'True'
     if NO_SPOILERS == '1' or (NO_SPOILERS == '2' and fav_game) or (NO_SPOILERS == '3' and game_day == localToEastern()) or (NO_SPOILERS == '4' and game_day < localToEastern()) or game['status']['abstractGameState'] == 'Preview':
+        spoiler = 'False'
         name = game_time + ' ' + away_team + ' at ' + home_team
     else:
         name = game_time + ' ' + away_team
@@ -159,7 +160,7 @@ def create_game_listitem(game, game_day):
     # Label free game of the day if applicable
     try:
         if game['content']['media']['freeGame']:
-            # and game_day >= localToEastern():
+            # and game_day >= localToEastern(): 
             name = colorString(name, FREE)
     except:
         pass
@@ -187,10 +188,13 @@ def create_game_listitem(game, game_day):
     except:
         pass
     """
-    add_stream(name, title, game_pk, icon, fanart, info, video_info, audio_info, stream_date)
+    # If set only show free games in the list
+    if ONLY_FREE_GAMES == 'true' and not game['content']['media']['freeGame']:
+        return 
+    add_stream(name, title, game_pk, icon, fanart, info, video_info, audio_info, stream_date, spoiler)
 
 
-def stream_select(game_pk):
+def stream_select(game_pk, spoiler='True'):
     url = 'https://statsapi.mlb.com/api/v1/game/' + game_pk + '/content'
     headers = {
         'User-Agent': UA_ANDROID
@@ -198,7 +202,12 @@ def stream_select(game_pk):
     r = requests.get(url, headers=headers, verify=VERIFY)
     json_source = r.json()
 
-    stream_title = ['Highlights']
+    if sys.argv[3] == 'resume:true':
+        stream_title = []
+        highlight_offset = 0
+    else:
+        stream_title = ['Highlights']
+        highlight_offset = 1
     media_state = []
     content_id = []
     epg = json_source['media']['epg'][0]['items']
@@ -211,7 +220,7 @@ def stream_select(game_pk):
                 if 'HOME' in title.upper():
                     media_state.insert(0, item['mediaState'])
                     content_id.insert(0, item['contentId'])
-                    stream_title.insert(1, title + " (" + item['callLetters'] + ")")
+                    stream_title.insert(highlight_offset, title + " (" + item['callLetters'] + ")")
                 else:
                     media_state.append(item['mediaState'])
                     content_id.append(item['contentId'])
@@ -219,31 +228,37 @@ def stream_select(game_pk):
 
     # All past games should have highlights
     if len(stream_title) == 0:
-        # and stream_date > localToEastern():
-        msg = "No playable streams found."
         dialog = xbmcgui.Dialog()
-        dialog.notification('Streams Not Found', msg, ICON, 5000, False)
+        dialog.notification(LOCAL_STRING(30383), LOCAL_STRING(30384), ICON, 5000, False)
         xbmcplugin.setResolvedUrl(addon_handle, False, xbmcgui.ListItem())
         sys.exit()
 
     stream_url = ''
+    start = '1'
 
     dialog = xbmcgui.Dialog()
     n = dialog.select('Choose Stream', stream_title)
     if n > -1 and stream_title[n] != 'Highlights':
         account = Account()
-        stream_url, headers = account.get_stream(content_id[n-1])
-        if epg[0]['mediaState'] == "MEDIA_ON" and CATCH_UP == 'true':
-            p = dialog.select('Select a Start Point', ['Catch Up', 'Live'])
+        stream_url, headers, broadcast_start = account.get_stream(content_id[n-highlight_offset])
+        if sys.argv[3] == 'resume:true':
+            spoiler = "True"
+        elif epg[0]['mediaState'] == "MEDIA_ON" and CATCH_UP == 'true':
+            p = dialog.select('Select a Start Point', ['Catch Up', 'Beginning', 'Live'])
             if p == 0:
                 listitem = stream_to_listitem(stream_url, headers)
-                highlight_select_stream(json_source['highlights']['live']['items'], listitem)
+                highlight_select_stream(json_source['highlights']['highlights']['items'], listitem)
                 sys.exit()
+            elif p == 1:
+                spoiler = "False"
+                start = broadcast_start
+            elif p == 2:
+                spoiler = "True"
             elif p == -1:
                 sys.exit()
 
     if '.m3u8' in stream_url:
-        play_stream(stream_url, headers)
+        play_stream(stream_url, headers, spoiler, start)
 
     elif stream_title[n] == 'Highlights':
         highlight_select_stream(json_source['highlights']['highlights']['items'])
@@ -292,15 +307,15 @@ def highlight_select_stream(json_source, catchup=None):
         xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=playlist[0])
 
 
-def play_stream(stream_url, headers):
-    listitem = stream_to_listitem(stream_url, headers)
+def play_stream(stream_url, headers, spoiler='True', start='1'):
+    listitem = stream_to_listitem(stream_url, headers, spoiler, start)
     xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=listitem)
 
 
 def get_highlights(items):
     xbmc.log(str(items))
     highlights = []
-    for item in items:
+    for item in sorted(items, key=lambda x: x['date']):
         for playback in item['playbacks']:
             if 'hlsCloud' in playback['name']:
                 clip_url = playback['url']

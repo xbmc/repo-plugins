@@ -271,7 +271,8 @@ class GraphQL:
       video_info = {
         "plot": item["longDescription"]
       }
-      video_item = VideoItem(title, video_id, thumbnail, geo_restricted, info=video_info)
+      fanart = self.get_fanart_url(image_id, image_changed)
+      video_item = VideoItem(title, video_id, thumbnail, geo_restricted, info=video_info, fanart=fanart)
       video_items.append(video_item)
     return video_items
 

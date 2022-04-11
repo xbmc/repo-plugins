@@ -5,6 +5,7 @@ import datetime
 import pytz
 
 from resources.lib import chn_class, mediatype, contenttype
+from resources.lib.helpers.htmlhelper import HtmlHelper
 
 from resources.lib.mediaitem import MediaItem, FolderItem
 from resources.lib.regexer import Regexer
@@ -125,9 +126,9 @@ class Channel(chn_class.Channel):
                               creator=self.create_channel_item)
 
         # Searching
-        self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=SearchPage",
+        self._add_data_parser("https://contento-search.svt.se/graphql",
                               json=True,
-                              parser=["data", "search"], creator=self.create_api_typed_item)
+                              parser=["data", "searchPage", "flat", "hits"], creator=self.create_api_typed_item)
 
         # Generic updating of videos
         self._add_data_parser("https://api.svt.se/videoplayer-api/video/",
@@ -178,7 +179,7 @@ class Channel(chn_class.Channel):
 
             LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes): (
                 self.__get_api_url("GridPage",
-                                   "265677a2465d93d39b536545cdc3664d97e3843ce5e34f145b2a45813b85007b",
+                                   "b30578b1b188242ce190c8a2cefe3d4694efafd17a929d08d273ae224a302b24",
                                    variables={"selectionId": "live"}),
                 True),
 
@@ -187,19 +188,19 @@ class Channel(chn_class.Channel):
 
             LanguageHelper.get_localized_string(LanguageHelper.Recent): (
                 self.__get_api_url("GridPage",
-                                   "265677a2465d93d39b536545cdc3664d97e3843ce5e34f145b2a45813b85007b",
+                                   "b30578b1b188242ce190c8a2cefe3d4694efafd17a929d08d273ae224a302b24",
                                    variables={"selectionId": "latest"}),
                 False),
 
             LanguageHelper.get_localized_string(LanguageHelper.LastChance): (
                 self.__get_api_url("GridPage",
-                                   "265677a2465d93d39b536545cdc3664d97e3843ce5e34f145b2a45813b85007b",
+                                   "b30578b1b188242ce190c8a2cefe3d4694efafd17a929d08d273ae224a302b24",
                                    variables={"selectionId": "lastchance"}),
                 False),
 
             LanguageHelper.get_localized_string(LanguageHelper.MostViewedEpisodes): (
                 self.__get_api_url("GridPage",
-                                   "265677a2465d93d39b536545cdc3664d97e3843ce5e34f145b2a45813b85007b",
+                                   "b30578b1b188242ce190c8a2cefe3d4694efafd17a929d08d273ae224a302b24",
                                    variables={"selectionId": "popular"}),
                 False),
 
@@ -277,7 +278,7 @@ class Channel(chn_class.Channel):
             ),
             "Livsstil & reality": (
                 "livsstil-och-reality",
-                "https://www.svtstatic.se/image/medium/480/21866138/1555059667"
+                "https://www.svtstatic.se/image/medium/480/29184042/1605884325"
             ),
             "Underhållning": (
                 "underhallning",
@@ -291,13 +292,13 @@ class Channel(chn_class.Channel):
                 "kultur",
                 "https://www.svtstatic.se/image/medium/480/7166119/1458037729"
             ),
-            "Samhälle & fakta": (
-                "samhalle-och-fakta",
+            "Samhälle": (
+                "samhalle",
                 "https://www.svtstatic.se/image/medium/480/7166173/1458037837"
             ),
-            "Reality": (
-                "reality",
-                "https://www.svtstatic.se/image/medium/480/21866138/1555059667"
+            "Fakta": (
+                "fakta",
+                "https://www.svtstatic.se/image/medium/480/29184042/1605884325"
             ),
             "Musik": (
                 "musik",
@@ -305,7 +306,7 @@ class Channel(chn_class.Channel):
             ),
             "Djur & natur": (
                 "djur-och-natur",
-                "https://www.svtstatic.se/image/medium/480/29184042/1605884325"
+                "https://www.svtstatic.se/image/medium/480/32904903/1634633546"
             ),
             "Öppet arkiv": (
                 "oppet-arkiv",
@@ -413,8 +414,9 @@ class Channel(chn_class.Channel):
             item = self.create_api_tvshow_type(result_set)
 
         # Search Result
-        elif api_type == "SearchHit":
-            item = self.create_api_typed_item(result_set["item"], add_parent_title=True)
+        elif api_type == "SearchPageHit":
+            # item = self.create_api_typed_item(result_set["item"], add_parent_title=True)
+            item = self.create_api_search_hit(result_set)
 
         # Video items
         elif api_type == "Single":
@@ -510,10 +512,15 @@ class Channel(chn_class.Channel):
         if not self.__show_folders:
             return None
 
-        if result_set["type"].lower() == "upcoming":
+        if result_set.get("type", "").lower() == "upcoming":
             return None
 
-        item = MediaItem(result_set["name"], self.parentItem.url)
+        name = result_set["name"]
+        if not name:
+            # If there is no name, use the ID for it and split the ID off.
+            name = result_set["id"].rsplit("-", 1)[0].replace("-", " ").title()
+
+        item = MediaItem(name, self.parentItem.url)
         item.metaData[self.__folder_id] = result_set["id"]
         item.metaData.update(self.parentItem.metaData)
         item.thumb = self.__get_thumb(result_set[self.__parent_images], width=720)
@@ -566,6 +573,10 @@ class Channel(chn_class.Channel):
 
         # Transfer some items
         new_result_set[self.__parent_images] = result_set.get(self.__parent_images)
+
+        if "longDescription" not in new_result_set:
+            new_result_set["longDescription"] = result_set.get("description")
+
         if "images" in result_set:
             images = result_set.get("images", {}).get("wide")
             if images:
@@ -613,7 +624,6 @@ class Channel(chn_class.Channel):
 
         item = MediaItem(title, url)
         item.description = result_set.get("longDescription")
-        item.media_type = mediatype.EPISODE
         item.set_info_label("duration", int(result_set.get("duration", 0)))
         item.isGeoLocked = result_set.get("restrictions", {}).get("onlyAvailableInSweden", False)
 
@@ -664,6 +674,7 @@ class Channel(chn_class.Channel):
 
             item.name = "{:02}:{:02} - {}".format(hour, minute, item.name)
 
+        item.media_type = mediatype.VIDEO
         season_info = result_set.get("positionInSeason")
         if bool(season_info):
             Logger.debug("Found season info: %s", season_info)
@@ -673,6 +684,7 @@ class Channel(chn_class.Channel):
                     return item
 
                 item.set_season_info(episode_info[1], episode_info[4])
+                item.media_type = mediatype.EPISODE
                 item.name = result_set.get("nameRaw", item.name) or item.name
             except:
                 Logger.warning("Failed to set season info: %s", season_info, exc_info=True)
@@ -802,6 +814,48 @@ class Channel(chn_class.Channel):
         item.metaData[self.__genre_id] = result_set["id"]
         return item
 
+    def create_api_search_hit(self, result_set):
+        """ Creates a MediaItem of type 'video' or 'folder' using the result_set from the API.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        If the item is completely processed an no further data needs to be fetched
+        the self.complete property should be set to True. If not set to True, the
+        self.update_video_item method is called if the item is focussed or selected
+        for playback.
+
+        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
+        :rtype: MediaItem|None
+
+        """
+
+        teaser = result_set["teaser"]
+        result_set.update(teaser or {})
+        category_teaser = result_set["categoryTeaser"]
+        result_set.update(category_teaser or {})
+
+        # Clean up the name and description and highlight the search results.
+        name = result_set["heading"]
+        name = name.replace("<em>", "[COLOR=yellow]").replace("</em>", "[/COLOR]")
+        name = HtmlHelper.to_text(name)
+
+        description = result_set.get("description", "")
+        description = description.replace("<em>", "[COLOR=yellow]").replace("</em>", "[/COLOR]")
+        description = HtmlHelper.to_text(description)
+
+        result_set["name"] = name
+        result_set["heading"] = name
+        result_set["description"] = description
+
+        if teaser:
+            return self.create_api_typed_item(result_set)
+        else:
+            return self.create_api_genre_type(result_set)
+
     # noinspection PyUnusedLocal
     def fetch_program_api_data(self, data):
         """ Loaded the data that contains the main episodes for a show.
@@ -818,17 +872,20 @@ class Channel(chn_class.Channel):
 
         items = []
         slug = self.parentItem.metaData["slug"]
-        variables = {"titleSlugs": [slug.strip("/")]}
-        hash_value = "4122efcb63970216e0cfb8abb25b74d1ba2bb7e780f438bbee19d92230d491c5"
-        url = self.__get_api_url("TitlePage", hash_value, variables)
+        variables = {"includeFullOppetArkiv": True, "path": slug}
+        hash_value = "d4539b09f69378792486cf87e676af62e9f8ac6de274de616c58b93e86b26da1"
+        url = self.__get_api_url("DetailsPageQuery", hash_value, variables)
         data = UriHandler.open(url)
         json_data = JsonHelper(data)
 
         # Get the parent thumb info
-        parent_item_thumb_data = json_data.get_value("data", "listablesBySlug", 0, "image")
+        parent_item_thumb_data = json_data.get_value("data", "detailsPageByPath", "images", "wide")
 
-        possible_folders = json_data.get_value("data", "listablesBySlug", 0, "associatedContent")
+        possible_folders = json_data.get_value("data", "detailsPageByPath", "associatedContent")
         possible_folders = [p for p in possible_folders if p["id"] != "upcoming"]
+
+        if self._get_setting("show_accessibility_videos") == "false":
+            possible_folders = [p for p in possible_folders if p.get("selectionType") != "accessibility"]
 
         if self.__folder_id in self.parentItem.metaData:
             folder_id = self.parentItem.metaData[self.__folder_id]
@@ -961,10 +1018,18 @@ class Channel(chn_class.Channel):
 
         """
 
+        # https://contento-search.svt.se/graphql?operationName=AutoCompleteSearch&variables=%7B%22abTestVariants%22%3A%5B%5D%2C%22querystring%22%3A%22nyheter%22%2C%22searchClickHistory%22%3A%5B%5D%7D&extensions=%7B%22persistedQuery%22%3A%7B%22sha256Hash%22%3A%228989b62115022fda8a6129d0f512b94f4d2de3bf2110415647c09c4316ce4a91%22%2C%22version%22%3A1%7D%7D&ua=svtplaywebb-render-production-client
+        # url = self.__get_api_url(
+        #     "AutoCompleteSearch", "8989b62115022fda8a6129d0f512b94f4d2de3bf2110415647c09c4316ce4a91",
+        #     {"querystring": "----", "abTestVariants": [], "searchClickHistory": []}
+        # )
+        # https://contento-search.svt.se/graphql?operationName=SearchPage&variables=%7B%22abTestVariants%22%3A%5B%5D%2C%22querystring%22%3A%22nyheter%22%7D&extensions=%7B%22persistedQuery%22%3A%7B%22sha256Hash%22%3A%22ab8c604fc76d14885dcedd0f377b76afae9aabcde73b3324676f60ca86d12606%22%2C%22version%22%3A1%7D%7D&ua=svtplaywebb-render-production-client
         url = self.__get_api_url(
-            "SearchPage", "5dc9b6838966c23614566893feed440e718c51069fc394bcbfd3096d13ccf72f",
-            {"querystring": "----"}
+            "SearchPage", "ab8c604fc76d14885dcedd0f377b76afae9aabcde73b3324676f60ca86d12606",
+            {"querystring": "----", "abTestVariants": [], "searchClickHistory": []}
         )
+
+        url = url.replace("https://api.svt.se/contento/graphql", "https://contento-search.svt.se/graphql")
         url = url.replace("%", "%%")
         url = url.replace("----", "%s")
         return chn_class.Channel.search_site(self, url)

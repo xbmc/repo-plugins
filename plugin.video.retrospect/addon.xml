@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.5.4+matrix.1"
+        version="5.5.5+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -122,23 +122,18 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.5.4 - Changelog - 2022-04-03[/B]
+        <news>[B]Retrospect v5.5.5 - Changelog - 2022-04-11[/B]
 
-This minor update fixes a number of channels that broke/moved.
+This updates fixes some issues with SVT Play and introduces some logging optimizations.
 
 [B]Framework related[/B]
-_None_
+* Added: if Kodi has debug logging enabled, also enable debug logging in Retrospect.
 
 [B]GUI/Settings/Language related[/B]
-_None_
+* Changed: default to showing thumbs as fanart if no fanart is present (Fixes #1632).
 
 [B]Channel related[/B]
-* Fixed: RTV Utrecht recent slug.
-* Fixed: With the new proper Content-Types and Media-Types we don&#x27;t need to force an &quot;Info&quot; menu entry (Fixes #1620).
-* Fixed: SVT &quot;New on SVT Play&quot; broken (Fixes #1621, Twice.......).
-* Fixed: 24 Classics moved to Spotify and Youtube (See #1626)
-* Fixed: Some VTT subtitles have guids as lines (Fixes #1625).
-* Fixed: RTV Drenthe.
+* Fixed: SVT Channel broke due to API changes (Fixes #1628).
 
         </news>
         <assets>

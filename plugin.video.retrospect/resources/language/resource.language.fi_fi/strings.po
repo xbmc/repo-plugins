@@ -1019,6 +1019,10 @@ msgctxt "#30586"
 msgid "Number of pages to load for the main listing"
 msgstr ""
 
+msgctxt "#30587"
+msgid "Show streams with accessibility features"
+msgstr ""
+
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"
 msgstr ""

@@ -1042,6 +1042,10 @@ msgctxt "#30586"
 msgid "Number of pages to load for the main listing"
 msgstr "Antal sidor som skall laddas ner för huvudlistan"
 
+msgctxt "#30587"
+msgid "Show streams with accessibility features"
+msgstr "Visa program med syn och teckentolkat"
+
 # empty strings from id 30584 to 30589
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"

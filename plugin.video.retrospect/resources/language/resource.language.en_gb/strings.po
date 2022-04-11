@@ -1069,12 +1069,15 @@ msgctxt "#30585"
 msgid "Page {} of {}"
 msgstr ""
 
-
 msgctxt "#30586"
 msgid "Number of pages to load for the main listing"
 msgstr ""
 
-# empty strings from id 30587 to 30589
+msgctxt "#30587"
+msgid "Show streams with accessibility features"
+msgstr ""
+
+# empty strings from id 30588 to 30589
 
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"

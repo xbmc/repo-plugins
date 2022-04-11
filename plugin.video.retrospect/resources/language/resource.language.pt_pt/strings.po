@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-30 21:19+0000\n"
+"PO-Revision-Date: 2022-04-03 23:13+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Portuguese (Portugal) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/pt_pt/>\n"
 "Language: pt_pt\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -245,7 +245,7 @@ msgstr ""
 
 msgctxt "#30055"
 msgid "Advanced"
-msgstr ""
+msgstr "Avançado"
 
 msgctxt "#30056"
 msgid "Install the Up Next add-on"
@@ -298,7 +298,7 @@ msgstr ""
 
 msgctxt "#30069"
 msgid "Settings"
-msgstr ""
+msgstr "Definições"
 
 msgctxt "#30070"
 msgid "Let Kodi determine bitrate if possible"
@@ -394,11 +394,11 @@ msgstr ""
 
 msgctxt "#30093"
 msgid "Password"
-msgstr ""
+msgstr "Palavra-Passe"
 
 msgctxt "#30094"
 msgid "Username"
-msgstr ""
+msgstr "Utilizador"
 
 msgctxt "#30095"
 msgid "Show Hidden Items"
@@ -422,11 +422,11 @@ msgstr ""
 
 msgctxt "#30100"
 msgid "None"
-msgstr ""
+msgstr "Nenhum"
 
 msgctxt "#30101"
 msgid "Regional"
-msgstr ""
+msgstr "Regional"
 
 msgctxt "#30102"
 msgid "National"
@@ -585,11 +585,11 @@ msgstr ""
 # empty strings from id 30312 to 30349
 msgctxt "#30350"
 msgid "Search"
-msgstr ""
+msgstr "Procurar"
 
 msgctxt "#30351"
 msgid "Categories"
-msgstr ""
+msgstr "Categorias"
 
 msgctxt "#30352"
 msgid "TV shows"
@@ -791,7 +791,7 @@ msgstr ""
 
 msgctxt "#30523"
 msgid "Error"
-msgstr ""
+msgstr "Erro"
 
 msgctxt "#30524"
 msgid "No videos were found for the selected item."
@@ -840,7 +840,7 @@ msgstr ""
 
 msgctxt "#30537"
 msgid "Page"
-msgstr ""
+msgstr "Página"
 
 msgctxt "#30538"
 msgid "The selected live stream has not yet|begun."
@@ -1038,6 +1038,10 @@ msgctxt "#30586"
 msgid "Number of pages to load for the main listing"
 msgstr ""
 
+msgctxt "#30587"
+msgid "Show streams with accessibility features"
+msgstr ""
+
 # empty strings from id 30584 to 30589
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"
@@ -1117,7 +1121,7 @@ msgstr ""
 
 msgctxt "#30609"
 msgid "Error"
-msgstr ""
+msgstr "Erro"
 
 #~ msgctxt "#30014"
 #~ msgid "Show info"

@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+import json
 import os
 import io
 import uuid
@@ -25,6 +25,7 @@ class AddonSettings(object):
     __user_agent = None
     __kodi_version = None
     __kodi_version_int = 0
+    __kodi_debug_log = None
 
     __USER_AGENT_SETTING = "user_agent"
     __MD5_HASH_VALUE = "md_hash_value"
@@ -827,12 +828,40 @@ class AddonSettings(object):
         - 40: Error
         - 50: Critical
 
-        :returnL: The requested log level
+        :return: The requested log level
         :rtype: int
 
         """
 
         level = AddonSettings.store(KODI).get_integer_setting("log_level", default=2)
+
+        # Check if Kodi has debugging enabled, but only if Retrospect does not.
+        if level > 1:
+            # Did we already call the JSON RPC this run?
+            if AddonSettings.__kodi_debug_log is None:
+                rpc_call = {
+                    "jsonrpc": "2.0", "method": "Settings.GetSettingValue",
+                    "params": {
+                        "setting": "debug.showloginfo"
+                    }, "id": 1
+                }
+
+                try:
+                    rpc_result = json.loads(xbmc.executeJSONRPC(json.dumps(rpc_call)))
+                    kodi_debug_logging = rpc_result.get("result", {}).get("value", False)
+                    AddonSettings.__kodi_debug_log = kodi_debug_logging
+                except:
+                    Logger.error("Error on logging RCP call", exc_info=True)
+                    kodi_debug_logging = False
+
+            else:
+                # Retrieve the value that was previously retrieved.
+                kodi_debug_logging = AddonSettings.__kodi_debug_log
+
+            if kodi_debug_logging:
+                Logger.warning("Debug logging enabled due to Kodi GUI settings.")
+                return 10
+
         # noinspection PyTypeChecker
         return int(level) * 10
 

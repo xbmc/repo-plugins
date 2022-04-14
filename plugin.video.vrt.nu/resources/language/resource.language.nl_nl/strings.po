@@ -286,9 +286,13 @@ msgctxt "#30121"
 msgid "12+"
 msgstr "12+"
 
-msgctxt "#30129"
+msgctxt "#30128"
 msgid "Climate"
 msgstr "Klimaat"
+
+msgctxt "#30129"
+msgid "Cycling"
+msgstr "Koers"
 
 msgctxt "#30130"
 msgid "De warmste week"

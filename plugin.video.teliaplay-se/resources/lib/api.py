@@ -1,5 +1,7 @@
 import platform
 import uuid
+import json
+from resources.lib.kodiutils import AddonUtils
 from resources.lib.webutils import WebUtils
 
 
@@ -23,34 +25,12 @@ def error_check(response_json):
         raise TeliaException(response_json["message"])
 
 
+
 class TeliaPlay():
 
-    graphql_hashes = {
-	"getMainMenu":
-        "f9c1eb6c91def27ee800da2296922d3798a54a8af32f79f25661afb621f1b45d",
-	"search":
-        "de385aa8e38e6d7c1e308a740bdb152b9d6d89c620e758a16814ad9bd0ae85e0",
-	"getPage":
-        "4f9d11526144a07568d64d659c008bb28085e116c84c1dd0cd5ed7ea8db44a77",
-	"getTvChannels":
-        "332c536e6095632e61dd88f63a73b2c7f783c24ef4a8b21bcefbeae638de7aa2",
-	"getTvChannel":
-        "de9b6b8f45d8698cf5f6572d56ed387aa564a32ba8c617349221505c8222f77f",
-	"getStorePage":
-        "f02456e757d511c7d4abd02d64c9b7ab82e04d5203dca691f91112d54790d9db",
-	"getPanel":
-        "bbf3465986a62517cd9d33e237901c6f2fcb5b3983847800a9265e9378c19f00",
-	"getSeries":
-        "672502c85fe4c4d5ebd2db79e8b4cc46e3d83844f1c67e75226d8bc91300250d",
-	"getSeason":
-        "09bda1dc98eb6bc40d947de0ef48f76ff515687838ac1b4bda805d8fc4be2664",
-	"addToMyList":
-        "70a1b84e1976a3b9773b25b9096e4e6c39128218720b5a6d2ccc0a0dd522919b",
-	"removeFromMyList":
-        "f1b3ae838fa9b39cc8c1994ff03039aaa09b494673bcaa3f49c04a17a5fa92a1"
-    }
-
     def __init__(self, userdata):
+        addon_utils = AddonUtils()
+
         self.tv_client_boot_id = userdata["bootUUID"]
         self.device_id = userdata["deviceUUID"]
         self.session_id = str(uuid.uuid4())
@@ -59,6 +39,22 @@ class TeliaPlay():
         except KeyError:
             self.token_data = None
         self.web_utils = WebUtils()
+
+    @property
+    def graphql_hashes(self):
+        return {
+            "getMainMenu":      "f9c1eb6c91def27ee800da2296922d3798a54a8af32f79f25661afb621f1b45d",
+            "search":           "09f23a5c7c32057f94847098ab916031144bc9282b4d0723e8e2c144ef9585e2",
+            "getPage":          "224eeb20c30bbb3751a9c63d17609007395be5169851e3d6654f1f11bcb3beab",
+            "getTvChannels":    "2615623a9c746424ac4f5b84a7b653aebc7b08667f6f004ecb095ea7fad593dc",
+            "getTvChannel":     "5aff95917d396ffb0dc1574a4153968904c33ce49f87fba1063ce4ed7d3f17c0",
+            "getStorePage":     "ad128a72a1b44455ac3842f3ae1b38b537203aed063d4db0b23177a0d3aeb1a1",
+            "getPanel":         "82873e2fa838f9109740051444d0c0fb9adad9a7752cb7eda33c6dc92823271b",
+            "getSeries":        "af6df2f77b0594519af1f9e417460767076a6c62731afc75d45fc825ef62a681",
+            "getSeason":        "c54e9b322fec2b60c96b6218336de8399724de3a052ae6a7b8a59a0e889bca3c",
+            "addToMyList":      "a8369da660da6f45e0eabd53756effcd4c40668f1794a853c298c29e7903c7f9",
+            "removeFromMyList": "630c2f99d817682d4f15d41084cdc2f40dc158a5dae0bd2ab0e815ce268da277"
+        }
 
     def login(self, username, password):
         request = {
@@ -566,8 +562,10 @@ class TeliaPlay():
         payload = {
             "operationName": "addToMyList",
             "variables": {
-                "id": media_id,
-                "type": "SERIES" if media_id.startswith("s") else "MEDIA"
+                "input": {
+                    "id": media_id,
+                    "type": "SERIES" if media_id.startswith("s") else "MEDIA"
+                }
             },
             "extensions": {
                 "persistedQuery": {
@@ -599,8 +597,10 @@ class TeliaPlay():
         payload = {
             "operationName": "removeFromMyList",
             "variables": {
-                "id": media_id,
-                "type": "SERIES" if media_id.startswith("s") else "MEDIA"
+                "input": {
+                    "id": media_id,
+                    "type": "SERIES" if media_id.startswith("s") else "MEDIA"
+                }
             },
             "extensions": {
                 "persistedQuery": {

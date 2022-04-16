@@ -286,8 +286,12 @@ msgctxt "#30121"
 msgid "12+"
 msgstr ""
 
-msgctxt "#30129"
+msgctxt "#30128"
 msgid "Climate"
+msgstr ""
+
+msgctxt "#30129"
+msgid "Cycling"
 msgstr ""
 
 msgctxt "#30130"

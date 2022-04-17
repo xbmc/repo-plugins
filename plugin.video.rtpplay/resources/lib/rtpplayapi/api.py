@@ -30,7 +30,7 @@ class RTPPlayAPI:
         return RTPPlayConfig(r)
 
     def __get_key(self, current_time_millis):
-        RTP_PLAY_AUTH_KEY = "bdaafc5451445b65a10dc615e63d7ffe"
+        RTP_PLAY_AUTH_KEY = "KlWSOwcxTqIHrXQvqYLSaVmTkaoCh28I"
         key = ""
         i = 0
         for j in range(len(RTP_PLAY_AUTH_KEY)):
@@ -60,11 +60,12 @@ class RTPPlayAPI:
         current_time_millis = str(round(time.time() * 1000))
         key = self.__get_key(current_time_millis)
         msg = current_time_millis + self.config.AUTH_URL_ENDPOINT
-        headers = {'RTP-Play-Auth': 'RTPPLAY_MOBILE_ANDROID',
+        headers = {'RTP-Play-Auth': 'MOBILE_ANDROID_RTPPLAY_UPDATE',
                    'RTP-Play-Auth-Hash': self.__encode(key, msg),
-                   'RTP-Play-Auth-Timestamp': current_time_millis}
+                   'RTP-Play-Auth-Timestamp': current_time_millis,
+                   'User-Agent': 'okhttp/3.12.8'}
         logger.debug("Token headers:", headers)
-        r = requests.post(self.config.AUTH_URL_ENDPOINT, headers=headers).json()
+        r = requests.get(self.config.AUTH_URL_ENDPOINT, headers=headers).json()
         if "error" not in r:
             self.AUTH_TOKEN = r["token"]["token"]
             self.AUTH_TOKEN_LIFETIME = r["token"]["expire"] * 1000
@@ -81,7 +82,8 @@ class RTPPlayAPI:
             # unable to fetch token
             return
         headers = {'Authorization': 'Bearer ' + self.AUTH_TOKEN,
-                   'RTP-Play-Auth-Timestamp': str(current_time_millis)}
+                   'RTP-Play-Auth-Timestamp': str(current_time_millis),
+                   'User-Agent': 'okhttp/3.12.8'}
         logger.debug(url)
         r = requests.get(self.config.BASE_API_URL_ENDPOINT + url, headers=headers).json()
         if "error" not in r or r["error"] != "Not Authenticated" or not retry:

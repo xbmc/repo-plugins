@@ -22,6 +22,8 @@ def otype_to_mode(object_type, object_subtype=None):
         mode = 4
     elif object_type == 'podcasts':
         mode = 5
+    elif object_type == 'live_streams':
+        mode = 6
     elif object_type == 'videos':
         mode = 8
     elif object_type == 'tags' or object_type == 'genres':
@@ -68,6 +70,8 @@ def otype_to_type(object_type,object_subtype=None):
     elif object_type == 'songs':
         if object_subtype == 'podcast_episodes':
             return 'podcast_episode'
+        elif object_subtype == 'live_streams':
+            return 'live_stream'
         return 'song'
     return None
 

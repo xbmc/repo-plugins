@@ -30,6 +30,7 @@ def clean_settings():
     ampache.setSetting("playlists", "")
     ampache.setSetting("videos", "")
     ampache.setSetting("podcasts", "")
+    ampache.setSetting("live_streams", "")
 
 def clean_cache_art():
     #hack to force the creation of profile directory if don't exists

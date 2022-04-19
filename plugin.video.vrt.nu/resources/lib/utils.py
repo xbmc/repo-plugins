@@ -172,9 +172,9 @@ def video_to_api_url(url):
     return url
 
 
-def program_to_id(program):
+def program_to_str(program):
     """Convert a program url component (e.g. de-campus-cup)
-        to a favorite program_id (e.g. vrtnuazdecampuscup), used for lookups in favorites dict"""
+        to a favorite program_str (e.g. vrtnuazdecampuscup), used for lookups in favorites dict"""
     return 'vrtnuaz' + program.replace('-', '')
 
 

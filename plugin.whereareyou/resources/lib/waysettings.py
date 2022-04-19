@@ -3,7 +3,11 @@ from resources.lib.kodisettings import *
 
 SETTINGSLIST = [{'name': 'mappings', 'default': ''},
                 {'name': 'harmonycontrol', 'default': False},
+                {'name': 'controltype', 'default': 2},
                 {'name': 'hub_ip', 'default': ''},
+                {'name': 'hub_port', 'default': '8123'},
+                {'name': 'ha_token', 'default': ''},
+                {'name': 'ha_secure', 'default': False},
                 {'name': 'timeout', 'default': 30},
                 {'name': 'delay', 'default': 250},
                 {'name': 'harmonyadvanced', 'default': False},

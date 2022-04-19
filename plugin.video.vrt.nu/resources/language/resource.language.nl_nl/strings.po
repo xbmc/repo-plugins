@@ -287,12 +287,12 @@ msgid "12+"
 msgstr "12+"
 
 msgctxt "#30128"
-msgid "Kies19"
-msgstr "Kies19"
-
-msgctxt "#30129"
 msgid "Climate"
 msgstr "Klimaat"
+
+msgctxt "#30129"
+msgid "Cycling"
+msgstr "Koers"
 
 msgctxt "#30130"
 msgid "De warmste week"

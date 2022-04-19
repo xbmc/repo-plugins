@@ -1,9 +1,16 @@
 <settings>
-	 <category label="30001">
-	   <setting id="numberOfShowsPerPage" type="number" label="30004" default="10"/>
+	<category label="30100">
+		<setting id="consumerKey" type="text" label="30101" />
+		<setting id="consumerSecret" type="text" label="30102" />
+		<setting id="subtitlesEnabled" type="bool" label="30103" default="false" />
+		<setting id="consumerKeySubtitles" type="text" label="30104" enable="eq(-1,true)" subsetting="true" />
+		<setting id="consumerSecretSubtitles" type="text" label="30105" enable="eq(-2,true)" subsetting="true" />
 	</category>
-	 <category label="30010">
-	   <setting id="consumerKey" type="text" label="30012" />
-	   <setting id="consumerSecret" type="text" label="30013" />
+	<category label="30200">
+		<setting id="numberOfShowsPerPage" type="number" label="30201" default="10" />
+	</category>
+	<category label="30900">
+		<setting id="showInactiveShows" type="bool" label="30901" default="false" />
+		<setting id="disableLetterMenu" type="bool" label="30902" default="false" />
 	</category>
 </settings>

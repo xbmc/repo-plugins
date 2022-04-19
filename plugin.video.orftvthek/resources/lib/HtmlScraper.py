@@ -746,13 +746,15 @@ class htmlScraper(Scraper):
         except RuntimeError:
             self.html2ListItem("[COLOR red][I] -- %s -- [/I][/COLOR]" % self.translation(30067), self.defaultbanner, "", "", "", "", "Info", "addons://user/kodi.inputstream", None, True, False)
 
+        if items:
+            debugLog("Found %d Livestream Channels" % len(items))
         for item in items:
             channel = parseDOM(item, name='img', attrs={'class': 'channel-logo'}, ret="alt")
             channel = replaceHTMLCodes(channel[0])
 
             debugLog("Processing %s Livestream" % channel)
             bundesland_article = parseDOM(item, name='li', attrs={'class': '.*?is-bundesland-heute.*?'}, ret='data-jsb')
-            article = parseDOM(item, name='article', attrs={'class': 'b-livestream-teaser is-live.*?'})
+            article = parseDOM(item, name='article', attrs={'class': 'b-livestream-teaser.*?'})
             if not len(bundesland_article) and len(article):
                 figure = parseDOM(article, name='figure', attrs={'class': 'teaser-img'}, ret=False)
                 image = parseDOM(figure, name='img', attrs={}, ret='data-src')

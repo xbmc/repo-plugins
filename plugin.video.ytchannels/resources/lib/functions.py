@@ -7,6 +7,7 @@ import sqlite3
 import json
 import sys
 import re
+from requests.utils import requote_uri
 from six.moves import urllib
 
 addonID = xbmcaddon.Addon().getAddonInfo("id")
@@ -52,7 +53,7 @@ def yt_time(duration="P1W2DT6H21M32S"):
 	# Put list in ascending order & remove 'None' types
 	units = list(reversed([int(x) if x != None else 0 for x in units]))
 	# Do the maths
-	return sum([x*60**units.index(x) for x in units])
+	return units[2]*60*60 + units[1]*60 + units[0]
 
 def move_up(id):
 	cur = db.cursor()
@@ -145,6 +146,7 @@ def delete_database():
 	return
 
 def read_url(url):
+	url = requote_uri(url)
 	req = urllib.request.Request(url)
 	req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:33.0) Gecko/20100101 Firefox/33.0')
 	response = urllib.request.urlopen(req)
@@ -276,7 +278,7 @@ def search_channel(channel_name):
 	my_addon = xbmcaddon.Addon()
 	result_num = my_addon.getSetting('result_number_channels')
 
-	req_url='https://www.googleapis.com/youtube/v3/search?q=%s&type=channel&part=snippet&maxResults=%s&key=%s'%(channel_name.replace(' ','%20'),str(result_num),YOUTUBE_API_KEY)
+	req_url='https://www.googleapis.com/youtube/v3/search?q=%s&type=channel&part=snippet&maxResults=%s&key=%s'%(channel_name,str(result_num),YOUTUBE_API_KEY)
 	read=read_url(req_url)
 	decoded_data=json.loads(read)
 	listout=[]
@@ -284,13 +286,14 @@ def search_channel(channel_name):
 	for x in range(0, len(decoded_data['items'])):
 		title=decoded_data['items'][x]['snippet']['title']
 		thumb=decoded_data['items'][x]['snippet']['thumbnails']['high']['url']
+		desc=decoded_data['items'][x]['snippet']['description']
 		channel_id=decoded_data['items'][x]['snippet']['channelId']
 		req1='https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=%s&key=%s'%(channel_id,YOUTUBE_API_KEY)
 		read2=read_url(req1)
 		decoded_data2=json.loads(read2)
 		try:
 			channel_uplid=decoded_data2['items'][0]['contentDetails']['relatedPlaylists']['uploads']
-			listout.append([title,channel_uplid,thumb,channel_id])
+			listout.append([title,channel_uplid,thumb,channel_id,desc])
 		except:
 			pass
 
@@ -312,11 +315,13 @@ def search_channel_by_username(username):
 
 		title=decoded_data['items'][0]['snippet']['title']
 		thumb=decoded_data['items'][0]['snippet']['thumbnails']['high']['url']
+		desc=decoded_data['items'][0]['snippet']['description']
 		channel_uplid=uploads_id
 		listout.append(title)
 		listout.append(channel_uplid)
 		listout.append(thumb)
 		listout.append(channel_id)
+		listout.append(desc)
 		return listout
 	elif decoded_data['pageInfo']['totalResults']==0:
 		return 'not found'

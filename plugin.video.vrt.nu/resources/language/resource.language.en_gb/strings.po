@@ -287,11 +287,11 @@ msgid "12+"
 msgstr ""
 
 msgctxt "#30128"
-msgid "Kies19"
+msgid "Climate"
 msgstr ""
 
 msgctxt "#30129"
-msgid "Climate"
+msgid "Cycling"
 msgstr ""
 
 msgctxt "#30130"

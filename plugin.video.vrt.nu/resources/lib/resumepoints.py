@@ -7,7 +7,9 @@ from __future__ import absolute_import, division, unicode_literals
 
 try:  # Python 3
     from urllib.error import HTTPError
+    from urllib.parse import urlencode
 except ImportError:  # Python 2
+    from urllib import urlencode
     from urllib2 import HTTPError
 
 from data import SECONDS_MARGIN
@@ -18,10 +20,12 @@ from kodiutils import (container_refresh, get_cache, get_setting_bool, get_url_j
 class ResumePoints:
     """Track, cache and manage VRT resume points and watchLater status"""
 
+    GRAPHQL_URL = 'https://www.vrt.be/vrtnu-api/graphql/v1'
+    WATCHLATER_REST_URL = 'https://www.vrt.be/vrtnu-api/rest/lists/vrtnu-watchLater'
     RESUMEPOINTS_URL = 'https://ddt.profiel.vrt.be/resumePoints'
-    RESUMEPOINTS_CACHE_FILE = 'resume_points_ddt.json'
+    RESUMEPOINTS_CACHE_FILE = 'resume_points.json'
     WATCHLATER_URL = 'https://video-user-data.vrt.be/resume_points'
-    WATCHLATER_CACHE_FILE = 'resume_points.json'
+    WATCHLATER_CACHE_FILE = 'watchlater.json'
 
     def __init__(self):
         """Initialize resumepoints, relies on XBMC vfs and a special VRT token"""
@@ -60,14 +64,13 @@ class ResumePoints:
         """Get a cached copy or a newer watchLater list from VRT, or fall back to a cached file"""
         if not self.is_activated():
             return
-        watchlater_json = get_cache(self.WATCHLATER_CACHE_FILE, ttl)
-        if not watchlater_json:
-            headers = self.watchlater_headers()
-            if not headers:
-                return
-            watchlater_json = get_url_json(url=self.WATCHLATER_URL, cache=self.WATCHLATER_CACHE_FILE, headers=headers)
-        if watchlater_json is not None:
-            self._watchlater = watchlater_json
+        watchlater_dict = get_cache(self.WATCHLATER_CACHE_FILE, ttl)
+        if not watchlater_dict:
+            watchlater_dict = self._generate_watchlater_dict(self.get_watchlater())
+        if watchlater_dict is not None:
+            from json import dumps
+            self._watchlater = watchlater_dict
+            update_cache(self.WATCHLATER_CACHE_FILE, dumps(self._watchlater))
 
     def refresh_resumepoints(self, ttl=None):
         """Get a cached copy or a newer resumepoints from VRT, or fall back to a cached file"""
@@ -99,8 +102,8 @@ class ResumePoints:
             notification(message=localize(30975))
         return headers
 
-    def update_resumepoint(self, video_id, asset_str, title, position=None, total=None, path=None):
-        """Set program resumepoint and update local copy"""
+    def update_resumepoint(self, video_id, asset_str, title, position=None, total=None, path=None, episode_id=None, episode_title=None):
+        """Set episode resumepoint and update local copy"""
 
         if video_id is None:
             return True
@@ -157,6 +160,9 @@ class ResumePoints:
             # Delete
             log(3, "[Resumepoints] Delete resumepoint '{asset_str}' {position}/{total}", asset_str=asset_str, position=position, total=total)
 
+            # Delete watchlater
+            self.update_watchlater(episode_id, episode_title, watch_later=False)
+
             # Do nothing if there is no resumepoint for this video_id
             from json import dumps
             if video_id not in dumps(self._resumepoints):
@@ -186,117 +192,113 @@ class ResumePoints:
                 invalidate_caches(*menu_caches)
         return True
 
-    def update_watchlater(self, asset_id, title, url, watch_later=None):
+    def update_watchlater(self, episode_id, title, watch_later=None):
         """Set program watchLater status and update local copy"""
 
-        menu_caches = []
         self.refresh_watchlater(ttl=5)
 
         # Update
+        log(3, "[watchLater] Update {episode_id} watchLater status", episode_id=episode_id)
+
+        # watchLater status is not changed, nothing to do
+        if watch_later is not None and watch_later is self.is_watchlater(episode_id):
+            return True
+
+        # Update local watch_later cache
         if watch_later is True:
-            log(3, "[watchLater] Update {asset_id} watchLater status", asset_id=asset_id)
-
-            if asset_id is None:
-                return True
-
-            if watch_later is not None and watch_later is self.is_watchlater(asset_id):
-                # watchLater status is not changed, nothing to do
-                return True
-
-            if asset_id in self._watchlater:
-                # Update existing watchLater values
-                payload = self._watchlater[asset_id]['value']
-                payload['url'] = url
-            else:
-                # Create new watchLater values
-                payload = dict(position=0, total=100, url=url)
-
-            payload['watchLater'] = watch_later
-            menu_caches.append('watchlater-*.json')
-
-            # First update watchLater status to a fast local cache because online watchLater status takes a longer time to take effect
-            self.update_watchlater_local(asset_id, dict(value=payload), menu_caches)
-
-            # Asynchronously update online
-            from threading import Thread
-            Thread(target=self.update_watchlater_online, name='WatchLaterUpdate', args=(asset_id, title, url, payload)).start()
-
+            self._watchlater[episode_id] = dict(
+                title=title)
         else:
+            del self._watchlater[episode_id]
 
-            # Delete
-            log(3, "[watchLater] Delete watchLater status of '{asset_id}'", asset_id=asset_id)
-
-            # Do nothing if there is no watchLater status for this asset_id
-            if not self._watchlater.get(asset_id):
-                log(3, "[Resumepoints] '{asset_id}' not present, nothing to delete", asset_id=asset_id)
-                return True
-
-            # Add menu caches
-            menu_caches.append('watchlater-*.json')
-
-            # Delete local representation and cache
-            self.delete_watchlater_local(asset_id, menu_caches)
-
-            # Asynchronously delete online
-            from threading import Thread
-            Thread(target=self.delete_watchlater_online, name='WatchLaterDelete', args=(asset_id,)).start()
-
-        return True
-
-    def update_watchlater_online(self, asset_id, title, url, payload):
-        """Update watchLater status online"""
-        from json import dumps
-        try:
-            get_url_json('{api}/{asset_id}'.format(api=self.WATCHLATER_URL, asset_id=asset_id),
-                         headers=self.watchlater_headers(url), data=dumps(payload).encode())
-        except HTTPError as exc:
-            log_error('Failed to update watchLater status of {title} at VRT NU ({error})', title=title, error=exc)
-            notification(message=localize(30977, title=title))
-            return False
-        return True
-
-    def update_watchlater_local(self, asset_id, resumepoint_json, menu_caches=None):
-        """Update watchLater status locally and update cache"""
-        self._watchlater.update({asset_id: resumepoint_json})
+        # Update cache
         from json import dumps
         update_cache(self.WATCHLATER_CACHE_FILE, dumps(self._watchlater))
-        if menu_caches:
-            invalidate_caches(*menu_caches)
+        invalidate_caches('watchlater-*.json')
 
-    def delete_watchlater_local(self, asset_id, menu_caches=None):
-        """Delete watchLater status locally and update cache"""
-        if asset_id in self._watchlater:
-            del self._watchlater[asset_id]
-            from json import dumps
-            update_cache(self.WATCHLATER_CACHE_FILE, dumps(self._watchlater))
-            if menu_caches:
-                invalidate_caches(*menu_caches)
+        # Update online
+        self.set_watchlater_graphql(episode_id, title, watch_later)
 
-    def delete_watchlater_online(self, asset_id):
-        """Delete watchLater status online"""
-        try:
-            result = open_url('{api}/{asset_id}'.format(api=self.WATCHLATER_URL, asset_id=asset_id),
-                              headers=self.watchlater_headers(), method='DELETE', raise_errors='all')
-            log(3, "[watchLater] '{asset_id}' online deleted: {code}", asset_id=asset_id, code=result.getcode())
-        except HTTPError as exc:
-            log_error("Failed to remove watchLater status of '{asset_id}': {error}", asset_id=asset_id, error=exc)
-            return False
         return True
 
-    def is_watchlater(self, asset_id):
-        """Is a program set to watch later ?"""
-        return self._watchlater.get(asset_id, {}).get('value', {}).get('watchLater') is True
+    def get_watchlater(self):
+        """Get watchlater using VRT NU REST API"""
+        from tokenresolver import TokenResolver
+        vrtlogin_at = TokenResolver().get_token('vrtlogin-at')
+        watchlater_json = {}
+        if vrtlogin_at:
+            headers = {
+                'Authorization': 'Bearer ' + vrtlogin_at,
+                'Accept': 'application/json',
+            }
+            payload = dict(
+                tileType='mixed-content',
+                tileContentType='episode',
+                tileOrientation='landscape',
+                layout='slider',
+                title='Later kijken')
+            watchlater_json = get_url_json(url='{}?{}'.format(self.WATCHLATER_REST_URL, urlencode(payload)), cache=None, headers=headers, raise_errors='all')
+        return watchlater_json
 
-    def watchlater(self, asset_id, title, url):
+    def set_watchlater_graphql(self, episode_id, title, watch_later=True):
+        """Set watchLater episode using GraphQL API"""
+        from tokenresolver import TokenResolver
+        vrtlogin_at = TokenResolver().get_token('vrtlogin-at')
+        result_json = {}
+        if vrtlogin_at:
+            headers = {
+                'Authorization': 'Bearer ' + vrtlogin_at,
+                'Content-Type': 'application/json',
+            }
+            graphql_query = """
+                mutation setWatchLater($input: WatchLaterActionInput!) {
+                  setWatchLater(input: $input) {
+                    id
+                    watchLater
+                  }
+                }
+            """
+            payload = dict(
+                variables=dict(
+                    input=dict(
+                        id=episode_id,
+                        title=title,
+                        watchLater=watch_later,
+                    ),
+                ),
+                query=graphql_query,
+            )
+            from json import dumps
+            data = dumps(payload).encode('utf-8')
+            result_json = get_url_json(url=self.GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
+        return result_json
+
+    @staticmethod
+    def _generate_watchlater_dict(watchlater_json):
+        """Generate a simple watchlater dict with episodeIds and episodeTitles"""
+        watchlater_dict = {}
+        if watchlater_json is not None:
+            for item in watchlater_json.get(':items', []):
+                episode_id = watchlater_json.get(':items')[item].get('data').get('episode').get('id')
+                title = watchlater_json.get(':items')[item].get('description')
+                watchlater_dict[episode_id] = dict(
+                    title=title)
+        return watchlater_dict
+
+    def is_watchlater(self, episode_id):
+        """Is an episode set to watch later ?"""
+        return episode_id in self._watchlater
+
+    def watchlater(self, episode_id, title):
         """Watch an episode later"""
-        succeeded = self.update_watchlater(asset_id=asset_id, title=title, url=url, watch_later=True)
+        succeeded = self.update_watchlater(episode_id=episode_id, title=title, watch_later=True)
         if succeeded:
             notification(message=localize(30403, title=title))
             container_refresh()
 
-    def unwatchlater(self, asset_id, title, url, move_down=False):
+    def unwatchlater(self, episode_id, title, move_down=False):
         """Unwatch an episode later"""
-        succeeded = self.update_watchlater(asset_id=asset_id, title=title, url=url, watch_later=False)
+        succeeded = self.update_watchlater(episode_id=episode_id, title=title, watch_later=False)
         if succeeded:
             notification(message=localize(30404, title=title))
             # If the current item is selected and we need to move down before removing
@@ -322,14 +324,9 @@ class ResumePoints:
                     return item.get('total', 100)
         return 100
 
-    def get_watchlater_url(self, asset_id, url_type='medium'):
-        """Return the stored url for a watchLater status asset"""
-        from utils import reformat_url
-        return reformat_url(self._watchlater.get(asset_id, {}).get('value', {}).get('url'), url_type)
-
-    def watchlater_urls(self):
-        """Return all watchlater urls"""
-        return [self.get_watchlater_url(asset_id) for asset_id in self._watchlater if self.is_watchlater(asset_id)]
+    def watchlater_ids(self):
+        """Return all watchlater episode_id's"""
+        return list(self._watchlater.keys())
 
     def resumepoints_ids(self):
         """Return all ids that have not been finished watching"""

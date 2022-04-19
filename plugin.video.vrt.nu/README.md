@@ -59,6 +59,14 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.8 (2022-04-14)
+- Fix watching VRT NU abroad (@mediaminister)
+- Fix webscraping video attributes (@mediaminister)
+
+### v2.5.7 (2022-01-31)
+- Fix watch later (@mediaminister)
+- Fix favorites (@mediaminister)
+
 ### v2.5.6 (2021-12-22)
 - Fix watching VRT NU abroad (@mediaminister)
 - Fix resumepoints (@mediaminister)

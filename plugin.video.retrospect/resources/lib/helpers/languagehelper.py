@@ -25,7 +25,6 @@ class LanguageHelper(object):
     AddOnSettingsId = 30528
     RefreshListId = 30529
     CheckUpdatesId = 30530
-    ItemInfo = 30014
     BitrateSelection = 30020
     Recent = 30024
     OtherAddon = 30007
@@ -71,6 +70,7 @@ class LanguageHelper(object):
     LatestNews = 30364
     Movies = 30365
     AvailableFrom = 30366
+    NewOnChannel = 30367
 
     ChannelSelection = 30507
     ShortCutName = 30512
@@ -112,6 +112,8 @@ class LanguageHelper(object):
     CloakMessage = 30566
     AddonsNotEnabledTitle = 30567
     AddonsNotEnabledText = 30568
+    FetchMultiApi = 30584
+    PageOfPages = 30585
 
     Active = 30068
     InitChannelTitle = 30556

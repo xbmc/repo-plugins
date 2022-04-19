@@ -52,7 +52,9 @@ class Items:
         # Search history
         history = self.search_history.get()
         for k in sorted(list(history), reverse=True):
-            list_item = xbmcgui.ListItem(label=history[k].get("query"))
+            query = history[k].get("query")
+            list_item = xbmcgui.ListItem(label=query)
+            list_item.addContextMenuItems(self._search_context_menu(query))
             url = self.addon_base + PATH_SEARCH + "?" + urllib.parse.urlencode({
                 "query": history[k].get("query")
             })
@@ -152,3 +154,22 @@ class Items:
             items.append((url, next_item, True))
 
         return items
+
+    def _search_context_menu(self, query):
+        return [
+            (
+                self.addon.getLocalizedString(30601),
+                "RunPlugin({}/{}?{})".format(
+                    self.addon_base, PATH_SEARCH, urllib.parse.urlencode({
+                        "action": "remove",
+                        "query": query
+                    })
+                )
+            ),
+            (
+                self.addon.getLocalizedString(30602),
+                "RunPlugin({}/{}?{})".format(
+                    self.addon_base, PATH_SEARCH, urllib.parse.urlencode({"action": "clear"})
+                )
+             ),
+        ]

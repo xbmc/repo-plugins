@@ -28,7 +28,8 @@
       "sortorder": 22,
       "language": "no",
       "poster": "nickposter.png",
-      "fanart": "nickfanart.jpg"
+      "fanart": "nickfanart.jpg",
+      "ignore": true
     },
     {
       "guid": "7C52452A-F2F9-11DD-BE3F-3F7356D89593",

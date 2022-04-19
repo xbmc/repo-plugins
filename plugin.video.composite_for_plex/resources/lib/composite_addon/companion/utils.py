@@ -14,9 +14,8 @@
 import base64
 import json
 
-from six import PY3
-
 from kodi_six import xbmc  # pylint: disable=import-error
+from six import PY3
 
 from ..addon.common import get_platform
 from ..addon.constants import CONFIG
@@ -131,7 +130,7 @@ def jsonrpc(action, arguments=None):
                 base64bytes = base64.encodebytes(credentials)
                 base64string = base64bytes.decode('utf-8').replace('\n', '')
             else:
-                base64string = base64.encodestring(credentials).replace('\n', '')  # pylint: disable=deprecated-method
+                base64string = base64.encodestring(credentials).replace('\n', '')  # pylint: disable=no-member
             headers = {
                 'Content-Type': 'application/json',
                 'Authorization': 'Basic ' + base64string,

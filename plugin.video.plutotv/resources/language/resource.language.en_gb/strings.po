@@ -1,5 +1,5 @@
 # Kodi Media Center language file
-# Addon Name: Pluto.TV
+# Addon Name: Pluto TV
 # Addon id: plugin.video.plutotv
 # Addon Provider: Lunatixz
 msgid ""
@@ -15,6 +15,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "Addon Summary"
+msgid "TV channels devoted to your favorite things, made from blockbuster movies from Paramount, ... “The genius of Pluto TV: This is real internet television”."
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Watch Free TV on Kodi! Stream Pluto TV's 100+ channels of news, sports, and the Internet's best, completely free on your Kodi device."
+msgstr ""
 
 msgctxt "#30000"
 msgid "Enable Debugging [Log errors]"

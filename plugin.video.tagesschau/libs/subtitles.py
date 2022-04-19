@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# Copyright 2011 Jörn Schumacher, Henning Saul 
-# Copyright 2021 Christian Prasch 
+# Copyright 2011 Jörn Schumacher, Henning Saul
+# Copyright 2021 Christian Prasch
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ class SubtitlesContentHandler(xml.sax.ContentHandler):
         self._result = ""
         self._count = 0
         self._line = False
- 
+
     def startElement(self, name, attrs):
         if name == "tt:p":
             self._startEntry(attrs.get("begin"), attrs.get("end"))
@@ -40,20 +40,20 @@ class SubtitlesContentHandler(xml.sax.ContentHandler):
         if name == "tt:p":
             self._endEntry()
         elif name == "tt:span":
-            self._endLine()    
+            self._endLine()
         elif name == "tt:br":
-            self._newLine()    
-             
+            self._newLine()
+
     def characters(self, content):
         if(self._line):
             self._result += content
 
     def _startEntry(self, begin, end):
         """Start a new entry in SRT format.
-        
+
         Args:
             begin: timestamp in format hh:mm:ss.mmm
-            end: timestamp in format hh:mm:ss.mmm            
+            end: timestamp in format hh:mm:ss.mmm
         """
         self._count = self._count + 1
         self._result += str(self._count)
@@ -62,43 +62,43 @@ class SubtitlesContentHandler(xml.sax.ContentHandler):
         self._result += " --> "
         self._result += end.replace('.', ',')
         self._result += "\n"
-    
+
     def _endEntry(self):
         """Ends the current SRT entry."""
-        self._result += "\n\n"        
-    
+        self._result += "\n\n"
+
     def _startLine(self):
         """Starts a line for current SRT entry."""
         self._line = True
-        
+
     def _endLine(self):
         """Ends line for current SRT entry."""
         self._line = False
-   
+
     def _newLine(self):
         """Appends new line for current SRT entry."""
         self._result += "\n"
-                 
+
     def result(self):
         """Returns the parsed result in SRT format.
 
         Returns:
             A single String for the parsed result in SRT format.
         """
-        return self._result 
+        return self._result
 
 def download_subtitles(url, subtitles_dir):
     """Downloads and parses TTML subtitles from the given URL and saves it as tagesschau.de.srt in the given subtitles directory.
-    
+
     If downloading or parsing fails, returns None.
-    
+
     Args:
         url: URL of TTML subtiles
         subtitles_dir: Directory to save parsed SRT file to
 
     Returns:
         File handle of the parsed SRT, or None
-    """    
+    """
     if not os.path.exists(subtitles_dir):
         os.makedirs(subtitles_dir)
 
@@ -109,7 +109,7 @@ def download_subtitles(url, subtitles_dir):
 
     if not url:
         return None
-    
+
     logger = logging.getLogger("plugin.video.tagesschau.subtitles")
     try:
         source = urllib.request.urlopen(url)
@@ -125,4 +125,4 @@ def download_subtitles(url, subtitles_dir):
     except urllib.error.HTTPError:
         # the only way to find out if we have subtitles is to try to retrieve them
         logger.debug("Received HTTP error for " + url)
-        return None        
+        return None

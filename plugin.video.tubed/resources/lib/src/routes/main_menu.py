@@ -37,13 +37,15 @@ def invoke(context):  # pylint: disable=too-many-branches,too-many-statements
     users = None
 
     logged_in = context.api.logged_in
+    tv_logged_in = context.api.tv_logged_in
+
     fanart = context.addon.getAddonInfo('fanart')
 
     has_channel_mine = False
     if logged_in:
         has_channel_mine = context.api.channel_by_username('mine') != {}
 
-    if not logged_in:
+    if not logged_in or not tv_logged_in:
         if show_main_menu_item('sign.in'):
             label = context.i18n('Sign in with Google')
             action = Action(
@@ -59,10 +61,10 @@ def invoke(context):  # pylint: disable=too-many-branches,too-many-statements
             })
 
             # artificial centering of plot
-            unicode_spaces = u''
+            unicode_spaces = ''
             spaces_required = (15 - (len(label) - 19))
             if spaces_required > 0:
-                unicode_spaces = u'\u2008' * spaces_required
+                unicode_spaces = '\u2008' * spaces_required
             plot = unicode_spaces + bold(label)
             action.ListItem.setInfo('video', {
                 'plot': plot,

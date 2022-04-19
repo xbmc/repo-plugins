@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-10-10 10:18+0000\n"
+"PO-Revision-Date: 2022-03-27 01:19+0000\n"
 "Last-Translator: Dmitry Petrov <dimakrm361@gmail.com>\n"
 "Language-Team: Russian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/ru_ru/>\n"
 "Language: ru_ru\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -81,10 +81,6 @@ msgstr "Не удалось войти"
 msgctxt "#30013"
 msgid "Could not log on to the selected channel."
 msgstr "Не удалось войти в выбранный канал."
-
-msgctxt "#30014"
-msgid "Show info"
-msgstr "Показать информацию"
 
 msgctxt "#30015"
 msgid "via missing add-on"
@@ -655,6 +651,10 @@ msgctxt "#30366"
 msgid "Available from"
 msgstr ""
 
+msgctxt "#30367"
+msgid "New on %s"
+msgstr ""
+
 # empty strings from id 30365 to 30400
 msgctxt "#30401"
 msgid "Dutch"
@@ -860,7 +860,7 @@ msgstr "Добавить в плейлист"
 
 msgctxt "#30542"
 msgid "Starting %s."
-msgstr "Начнётся в %s."
+msgstr "Запуск %s."
 
 msgctxt "#30543"
 msgid "Season"
@@ -1026,6 +1026,22 @@ msgctxt "#30583"
 msgid "Single episodes"
 msgstr ""
 
+msgctxt "#30584"
+msgid "Fetching a long list of items using multiple API calls."
+msgstr ""
+
+msgctxt "#30585"
+msgid "Page {} of {}"
+msgstr ""
+
+msgctxt "#30586"
+msgid "Number of pages to load for the main listing"
+msgstr ""
+
+msgctxt "#30587"
+msgid "Show streams with accessibility features"
+msgstr ""
+
 # empty strings from id 30584 to 30589
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"
@@ -1106,6 +1122,10 @@ msgstr "Предупреждение"
 msgctxt "#30609"
 msgid "Error"
 msgstr "Ошибка"
+
+#~ msgctxt "#30014"
+#~ msgid "Show info"
+#~ msgstr "Показать информацию"
 
 # empty string with id 30037
 #~ msgctxt "#30038"

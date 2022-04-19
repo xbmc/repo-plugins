@@ -22,6 +22,7 @@ class ApiV2(ApiInterface):
     api_limit = 20
     api_limit_tracks = 50
     api_lang = "en"
+    api_user_agent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:96.0) Gecko/20100101 Firefox/96.0"
     api_cache = {
         "discover": 120  # 2 hours
     }
@@ -98,7 +99,7 @@ class ApiV2(ApiInterface):
     def _do_request(self, path, payload, cache=0):
         payload["client_id"] = self.api_client_id
         payload["app_locale"] = self.api_lang
-        headers = {"Accept-Encoding": "gzip"}
+        headers = {"Accept-Encoding": "gzip", "User-Agent": self.api_user_agent}
         path = self.api_host + path
         cache_key = hashlib.sha1((path + str(payload)).encode()).hexdigest()
 
@@ -257,7 +258,7 @@ class ApiV2(ApiInterface):
 
     @staticmethod
     def fetch_client_id():
-        headers = {"Accept-Encoding": "gzip"}
+        headers = {"Accept-Encoding": "gzip", "User-Agent": ApiV2.api_user_agent}
 
         # Get the HTML (includes a reference to the JS file we need)
         html = requests.get("https://soundcloud.com/", headers=headers).text

@@ -4,46 +4,6 @@
 msgid ""
 msgstr ""
 
-msgctxt "#30001"
-msgid "General"
-msgstr "Allgemein"
-
-msgctxt "#30004"
-msgid "Number of episodes shown per page"
-msgstr "Abzahl Austrahlungen pro Seite anzeigen"
-
-msgctxt "#30005"
-msgid "Older episodes (page {0} of {1})"
-msgstr "Ältere Ausstrahlungen (Seite {0} von {1})"
-
-msgctxt "#30006"
-msgid "Unexpected error"
-msgstr "Unerwarteter Fehler"
-
-msgctxt "#30007"
-msgid "No title"
-msgstr "Kein Titel"
-
-msgctxt "#30008"
-msgid "No description"
-msgstr "Keine Beschreibung"
-
-msgctxt "#30009"
-msgid "No url"
-msgstr "Keine Url"
-
-msgctxt "#30010"
-msgid "Official API"
-msgstr "Offizielles API"
-
-msgctxt "#30012"
-msgid "Consumer Key"
-msgstr "Consumer Key"
-
-msgctxt "#30013"
-msgid "Consumer Secret"
-msgstr "Consumer Secret"
-
 msgctxt "#30014"
 msgid "SRF"
 msgstr "SRF"
@@ -69,8 +29,8 @@ msgid "# (numbers & special characters)"
 msgstr "# (Nummern & Sonderzeichen)"
 
 msgctxt "#30020"
-msgid "In order to use this add-on a consumer key & secret in your add-on settings must be provided.[CR]See instructions: [B]https://github.com/ManBehindMooN/[CR]kodi_plugin_video_srgssr_ch_replay[/B][CR][CR]Sorry for the inconvenience."
-msgstr "Um das Add-on benutzen zu können braucht es einen Consumer Key & Secret in den Add-on Settings.[CR]Instruktionen unter: [B]https://github.com/ManBehindMooN/[CR]kodi_plugin_video_srgssr_ch_replay[/B][CR][CR]Sorry für die Umstände."
+msgid "Older episodes (page {0} of {1})"
+msgstr "Ältere Ausstrahlungen (Seite {0} von {1})"
 
 msgctxt "#30021"
 msgid "Search TV shows"
@@ -79,3 +39,55 @@ msgstr "Suche nach Sendungen"
 msgctxt "#30022"
 msgid "Enter a TV show name to search for"
 msgstr "Einen Sendungsname eingeben für die Suche"
+
+msgctxt "#30098"
+msgid "In order to use this add-on a consumer key & secret in your add-on settings must be provided.[CR]See instructions: [B]https://github.com/ManBehindMooN/[CR]kodi_plugin_video_srgssr_ch_replay[/B][CR][CR]Sorry for the inconvenience."
+msgstr "Um das Add-on benutzen zu können braucht es Consumer Keys & Secrets in den Add-on Settings.[CR]Instruktionen unter: [B]https://github.com/ManBehindMooN/[CR]kodi_plugin_video_srgssr_ch_replay[/B][CR][CR]Sorry für die Umstände."
+
+msgctxt "#30099"
+msgid "Unexpected error"
+msgstr "Unerwarteter Fehler"
+
+msgctxt "#30100"
+msgid "SRG SSR API"
+msgstr "SRG SSR API"
+
+msgctxt "#30101"
+msgid "Consumer Key"
+msgstr "Consumer Key"
+
+msgctxt "#30102"
+msgid "Consumer Secret"
+msgstr "Consumer Secret"
+
+msgctxt "#30103"
+msgid "Enable subtitle"
+msgstr "Untertitel einschalten"
+
+msgctxt "#30104"
+msgid "Subtitles Consumer Key"
+msgstr "Untertitel Consumer Key"
+
+msgctxt "#30105"
+msgid "Subtitles Consumer Secret"
+msgstr "Untertitel Consumer Secret"
+
+msgctxt "#30200"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30201"
+msgid "Number of episodes shown per page"
+msgstr "Abzahl Austrahlungen pro Seite anzeigen"
+
+msgctxt "#30900"
+msgid "Experimental"
+msgstr "Experimentell"
+
+msgctxt "#30901"
+msgid "Show inactive TV shows"
+msgstr "Inaktive Sendungen anzeigen"
+
+msgctxt "#30902"
+msgid "Disable letter menu"
+msgstr "Buchstabenauswahl deaktivieren"

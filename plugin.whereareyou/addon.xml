@@ -1,7 +1,6 @@
-<addon id="plugin.whereareyou" name="Where Are You" provider-name="pkscout" version="0.4.3+matrix.1">
+<addon id="plugin.whereareyou" name="Where Are You" provider-name="pkscout" version="0.5.1">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.kodi-six" version="0.1.3.1" />
 		<import addon="script.module.requests" version="2.22.0+matrix.1" />
 		<import addon="script.module.websocket" version="0.5.7+matrix.1" />
 	</requires>
@@ -9,8 +8,11 @@
 		<provides>executable</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
-		<news>v.0.4.3
-- fix for crash if using Harmony Hub Control with an activity
+		<news>v.0.5.1
+- added option to use Home Assistant script to launch external app
+- changed IP entry in settings to string to allow for domain name
+- added settings option to enable SSL (HA only)
+- Harmony Hub option now shows list of activites from which to pick
 		</news>
 		<assets>
 			<icon>icon.png</icon>

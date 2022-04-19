@@ -1,5 +1,7 @@
 import platform
 import uuid
+import json
+from resources.lib.kodiutils import AddonUtils
 from resources.lib.webutils import WebUtils
 
 
@@ -23,34 +25,12 @@ def error_check(response_json):
         raise TeliaException(response_json["message"])
 
 
+
 class TeliaPlay():
 
-    graphql_hashes = {
-	"getMainMenu":
-        "3a18959010d36f5d47e7341167a2c596c11bdd2697bfb6ca7821862b048ff832",
-	"search":
-        "6be7dcb0253bf9bf1bb966d2f4317148d21910ce4c79d9f0c08a50faf30145ca",
-	"getPage":
-        "4010f0c6c590330655506fabd5493ec94e6d1605d91d7cb9dcd4f9d2ce99126f",
-	"getTvChannels":
-        "3ac1076fee793bf1cbb19327d3baf6c89ae647a6664b9e8c3030635ebc6dd2c9",
-	"getTvChannel":
-        "05f9356e33be31cb36938442b37776097b304241072bf1bc31af53f65dfaf417",
-	"getStorePage":
-        "b2c9288f9eed4e05677b95f4989521aafb3ee36d4c70c2c0c66709211a89aa48",
-	"getPanel":
-        "cd619fae55e04557a38bab23b9215a06b9b848e9cc5778c662da91ea19f61b27",
-	"getSeries":
-        "d028bd6a063b12220fc7c600361ac0aab35d0253f6a84f8ce2e9e7b446deed7d",
-	"getSeason":
-        "e8232e47c6de8c71f750884b23f2518b91cf3365f16451740a7a910b60ca283f",
-	"addToMyList":
-        "70a1b84e1976a3b9773b25b9096e4e6c39128218720b5a6d2ccc0a0dd522919b",
-	"removeFromMyList":
-        "f1b3ae838fa9b39cc8c1994ff03039aaa09b494673bcaa3f49c04a17a5fa92a1"
-    }
-
     def __init__(self, userdata):
+        addon_utils = AddonUtils()
+
         self.tv_client_boot_id = userdata["bootUUID"]
         self.device_id = userdata["deviceUUID"]
         self.session_id = str(uuid.uuid4())
@@ -59,6 +39,22 @@ class TeliaPlay():
         except KeyError:
             self.token_data = None
         self.web_utils = WebUtils()
+
+    @property
+    def graphql_hashes(self):
+        return {
+            "getMainMenu":      "f9c1eb6c91def27ee800da2296922d3798a54a8af32f79f25661afb621f1b45d",
+            "search":           "09f23a5c7c32057f94847098ab916031144bc9282b4d0723e8e2c144ef9585e2",
+            "getPage":          "224eeb20c30bbb3751a9c63d17609007395be5169851e3d6654f1f11bcb3beab",
+            "getTvChannels":    "2615623a9c746424ac4f5b84a7b653aebc7b08667f6f004ecb095ea7fad593dc",
+            "getTvChannel":     "5aff95917d396ffb0dc1574a4153968904c33ce49f87fba1063ce4ed7d3f17c0",
+            "getStorePage":     "ad128a72a1b44455ac3842f3ae1b38b537203aed063d4db0b23177a0d3aeb1a1",
+            "getPanel":         "82873e2fa838f9109740051444d0c0fb9adad9a7752cb7eda33c6dc92823271b",
+            "getSeries":        "af6df2f77b0594519af1f9e417460767076a6c62731afc75d45fc825ef62a681",
+            "getSeason":        "c54e9b322fec2b60c96b6218336de8399724de3a052ae6a7b8a59a0e889bca3c",
+            "addToMyList":      "a8369da660da6f45e0eabd53756effcd4c40668f1794a853c298c29e7903c7f9",
+            "removeFromMyList": "630c2f99d817682d4f15d41084cdc2f40dc158a5dae0bd2ab0e815ce268da277"
+        }
 
     def login(self, username, password):
         request = {
@@ -566,8 +562,10 @@ class TeliaPlay():
         payload = {
             "operationName": "addToMyList",
             "variables": {
-                "id": media_id,
-                "type": "SERIES" if media_id.startswith("s") else "MEDIA"
+                "input": {
+                    "id": media_id,
+                    "type": "SERIES" if media_id.startswith("s") else "MEDIA"
+                }
             },
             "extensions": {
                 "persistedQuery": {
@@ -599,8 +597,10 @@ class TeliaPlay():
         payload = {
             "operationName": "removeFromMyList",
             "variables": {
-                "id": media_id,
-                "type": "SERIES" if media_id.startswith("s") else "MEDIA"
+                "input": {
+                    "id": media_id,
+                    "type": "SERIES" if media_id.startswith("s") else "MEDIA"
+                }
             },
             "extensions": {
                 "persistedQuery": {
@@ -646,7 +646,7 @@ class TeliaPlay():
                 "packagings": ["DASH_MP4_CTR"],
                 "drmType": "WIDEVINE",
                 "capabilities": [],
-                "screen": {"height": 2160, "width": 3840},
+                "screen": {"height": 1080, "width": 1920},
                 "os": platform.system()
             },
             "preferences": {
@@ -660,12 +660,9 @@ class TeliaPlay():
         ).json()
         error_check(response_json)
 
-        if stream_type == "live":
-            try:
-                return response_json["streams"][1]
-            except IndexError:
-                return response_json["streams"][0]
-        else:
+        try:
+            return response_json["streams"][1]
+        except IndexError:
             return response_json["streams"][0]
 
     def delete_stream(self):

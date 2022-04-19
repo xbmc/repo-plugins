@@ -4,46 +4,6 @@
 msgid ""
 msgstr ""
 
-msgctxt "#30001"
-msgid "General"
-msgstr ""
-
-msgctxt "#30004"
-msgid "Number of episodes shown per page"
-msgstr ""
-
-msgctxt "#30005"
-msgid "Older episodes (page {0} of {1})"
-msgstr ""
-
-msgctxt "#30006"
-msgid "Unexpected error"
-msgstr ""
-
-msgctxt "#30007"
-msgid "No title"
-msgstr ""
-
-msgctxt "#30008"
-msgid "No description"
-msgstr ""
-
-msgctxt "#30009"
-msgid "No url"
-msgstr ""
-
-msgctxt "#30010"
-msgid "Offical API"
-msgstr ""
-
-msgctxt "#30012"
-msgid "Consumer Key"
-msgstr ""
-
-msgctxt "#30013"
-msgid "Consumer Secret"
-msgstr ""
-
 msgctxt "#30014"
 msgid "SRF"
 msgstr ""
@@ -69,7 +29,7 @@ msgid "# (numbers & special characters)"
 msgstr ""
 
 msgctxt "#30020"
-msgid "In order to use this add-on a consumer key & secret in your add-on settings must be provided.[CR]See instructions: [B]https://github.com/ManBehindMooN/[CR]kodi_plugin_video_srgssr_ch_replay[/B][CR][CR]Sorry for the inconvenience."
+msgid "Older episodes (page {0} of {1})"
 msgstr ""
 
 msgctxt "#30021"
@@ -78,4 +38,56 @@ msgstr ""
 
 msgctxt "#30022"
 msgid "Enter a TV show name to search for"
+msgstr ""
+
+msgctxt "#30098"
+msgid "In order to use this add-on a consumer key & secret in your add-on settings must be provided.[CR]See instructions: [B]https://github.com/ManBehindMooN/[CR]kodi_plugin_video_srgssr_ch_replay[/B][CR][CR]Sorry for the inconvenience."
+msgstr ""
+
+msgctxt "#30099"
+msgid "Unexpected error"
+msgstr ""
+
+msgctxt "#30100"
+msgid "SRG SSR API"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Consumer Key"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Consumer Secret"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Enable subtitle"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Subtitles Consumer Key"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Subtitles Consumer Secret"
+msgstr ""
+
+msgctxt "#30200"
+msgid "General"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Number of episodes shown per page"
+msgstr ""
+
+msgctxt "#30900"
+msgid "Experimental"
+msgstr ""
+
+msgctxt "#30901"
+msgid "Show inactive TV shows"
+msgstr ""
+
+msgctxt "#30902"
+msgid "Disable letter menu"
 msgstr ""

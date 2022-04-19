@@ -110,8 +110,8 @@ def parse_urls(context, urls):
                     except IndexError:
                         continue
 
-            elif (parsed_url.path.startswith(('/user/', '/c/')) or
-                  len(parsed_url.path.lstrip('/').split('/')) == 1):
+            elif parsed_url.path.startswith(('/user/', '/c/') or
+                                            len(parsed_url.path.lstrip('/').split('/')) == 1):
                 try:
                     username = \
                         parsed_url.path.lstrip('/user').lstrip('/c').lstrip('/').split('/')[0]

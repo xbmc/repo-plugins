@@ -165,15 +165,15 @@ msgstr "Lösenord"
 
 msgctxt "#32012"
 msgid "To login, provide the username and password of your Telia Play account into one of the fields below."
-msgstr "För att logga in, skriv in användarnamn och lösenord för ditt Telia Play konto i något av fälten nedan."
+msgstr "För inloggning, skriv in användarnamn och lösenord för ditt Telia Play konto i något av fälten nedan."
 
 msgctxt "#32013"
-msgid "Type the username of your Telia Play account here."
-msgstr "Skriv in användarnamn för ditt Telia Play konto här."
+msgid "Fill in username of your Telia Play account here."
+msgstr "Fyll i användarnamn för ditt Telia Play konto här."
 
 msgctxt "#32014"
-msgid "Type the password of your Telia Play account. Be aware that passwords are stored in clear text on disk."
-msgstr "Skriv in lösenord för ditt Telia Play konto här. Obs. lösenord sparas i klartext på hårddisken."
+msgid "Fill in password of your Telia Play account here. Be aware that passwords are stored in clear text on your hard drive."
+msgstr "Fyll i lösenord för ditt Telia Play konto här. Obs. lösenord sparas i klartext på hårddisken."
 
 msgctxt "#32015"
 msgid "Default account"

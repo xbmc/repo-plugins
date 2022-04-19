@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vimeo" name="Vimeo" version="6.0.0" provider-name="jaylinski">
+<addon id="plugin.video.vimeo" name="Vimeo" version="6.0.1" provider-name="jaylinski">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.22.0"/>
@@ -16,7 +16,13 @@
         <forum>https://forum.kodi.tv/showthread.php?tid=220437</forum>
         <website>https://vimeo.com</website>
         <source>https://github.com/jaylinski/kodi-addon-vimeo</source>
-        <news>6.0.0 (2021-02-25)
+        <news>6.0.1 (2022-02-25)
+Fixed subtitle conversion issue
+Fixed playback issue on certain videos when using HLS video format (related to AV1 codec)
+Replaced invalid video-format "240p" in settings
+Replaced deprecated API call (fixes Kodi v20 crash)
+
+6.0.0 (2021-02-25)
 Added support for Kodi v19 (Matrix)
         </news>
         <assets>

@@ -20,7 +20,7 @@ msgid "Browse your favorite content from YouTube; create, delete, and rename pla
 msgstr "Περιηγηθείτε στο αγαπημένο σας περιεχόμενο στο Kodi, δημιουργήστε, διαγράψτε, μετονομάστε λίστες αναπαραγωγής, εγγραφτείτε στα αγαπημένα σας κανάλια, βαθμολογείστε τα αγαπημένα σας βίντεο."
 
 msgctxt "Addon Disclaimer"
-msgid "Tubed&#8217;s use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed&#39;s Privacy Policy at https://panicked.xyz/tubed-privacy/"
+msgid "Tubed's use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed's Privacy Policy at https://panicked.xyz/tubed-privacy/"
 msgstr "Το Tubed κάνει χρήση πληροφοριών που λαμβάνονται από το API της Google και ακολουθεί της οδηγίες της πολιτικής χρήσης για τα προσωπικά δεδομένα της Google, συμπεριλαμβανομένου και τις απαιτήσεις περιορισμένης χρήσης. Για περισσότερες πληροφορίες και το πως επεξεργάζονται τα δεδομένα παρακαλώ δείτε την πολιτική απορρήτου του Tubed εδώ: https://panicked.xyz/tubed-privacy/"
 
 msgctxt "#30000"

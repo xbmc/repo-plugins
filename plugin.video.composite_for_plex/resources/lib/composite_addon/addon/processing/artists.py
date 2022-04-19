@@ -11,6 +11,7 @@
 """
 
 from kodi_six import xbmcplugin  # pylint: disable=import-error
+from six import PY3
 
 from ..common import get_handle
 from ..containers import Item
@@ -40,7 +41,11 @@ def process_artists(context, url, tree=None):
 
     items = []
     append_item = items.append
-    artists = tree.getiterator('Directory')
+    if PY3:
+        artists = tree.iter('Directory')
+    else:
+        artists = tree.getiterator('Directory')
+
     for artist in artists:
         item = Item(server, url, tree, artist)
         append_item(create_artist_item(context, item))

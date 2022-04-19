@@ -115,7 +115,7 @@ def ytchannels_main():
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
 								listitem=li,isFolder=True)
 
-		if show_adds !='false' or (len(folders) == 0):
+		if show_adds !='false':
 
 			url = build_url({'mode': 'add_folder', 'foldername': 'Add folder'})
 			li = xbmcgui.ListItem('[COLOR green]%s[/COLOR]'%local_string(30001))
@@ -321,6 +321,7 @@ def ytchannels_main():
 			plot = desc
 
 			uri='plugin://plugin.video.youtube/play/?video_id='+video_id
+
 			li = xbmcgui.ListItem('%s'%title)
 			li.setArt({'icon':thumb})
 			li.setProperty('IsPlayable', 'true')
@@ -346,11 +347,12 @@ def ytchannels_main():
 
 				results=search_channel(channel_name)
 
-				result_list=[]
+				li=[None]*len(results)
 				for i in range(len(results)):
-					result_list+=[results[i][0]]
+					li[i] = xbmcgui.ListItem(results[i][0],results[i][4])
+					li[i].setArt({'icon':results[i][2]})
 				dialog = xbmcgui.Dialog()
-				index = dialog.select(local_string(30013), result_list)
+				index = dialog.select(local_string(30013), li, useDetails=True)
 				if index>-1:
 					channel_uplid=results[index][1]
 					channel_name=results[index][0]

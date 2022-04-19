@@ -1,34 +1,6 @@
 {
   "channels": [
     {
-      "guid": "B7EB69DF-18C4-4935-BA83-0B2A89295178",
-      "name": "RTV Drenthe",
-      "description": {
-        "en": "Video on demand for RTV Drenthe.\n\nRTV Drenthe is thé newssource of the province of Drenthe. They keep the inhabitants of Drenthe up-to-date with the news of the provice.",
-        "nl": "RTV Drenthe Uitzendinggemist.\n\nRTV Drenthe is dé nieuwsbron van de provincie Drenthe. Ze houden de inwoners van Drenthe op de hoogte van het nieuws uit de provincie."
-      },
-      "icon": "rtvdrenthelarge.png",
-      "category": "Regional",
-      "channelcode": "rtvdrenthe",
-      "sortorder": 100,
-      "language": "nl",
-      "fanart": "rtvdrenthefanart.jpg"
-    },
-    {
-      "guid": "EFE57022-9F52-41F9-8775-13CCD001FA56",
-      "name": "Omroep West",
-      "description": {
-        "en": "Video on demand for Omroep West.\n\nThe latest news, weather, traffic from the The Hague region, Zoetermeer, Westland, Delft, Leiden, Alphen aan den Rijn en Gouda.",
-        "nl": "Omroep West Uitzendinggemist.\n\nHet laatste nieuws, weer, verkeer uit regio Den Haag, Zoetermeer, Westland, Delft, Leiden, Alphen aan den Rijn en Gouda."
-      },
-      "icon": "omroepwestlarge.png",
-      "category": "Regional",
-      "channelcode": "omroepwest",
-      "sortorder": 100,
-      "language": "nl",
-      "fanart": "omroepwestfanart.jpg"
-    },
-    {
       "guid": "B2AF5744-4697-44CD-9A54-CFD6A4273207",
       "name": "Omroep Gelderland",
       "description": {

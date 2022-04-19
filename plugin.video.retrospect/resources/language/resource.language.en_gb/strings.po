@@ -80,9 +80,7 @@ msgctxt "#30013"
 msgid "Could not log on to the selected channel."
 msgstr ""
 
-msgctxt "#30014"
-msgid "Show info"
-msgstr ""
+# empty strings from id 30014 to 30014
 
 msgctxt "#30015"
 msgid "via missing add-on"
@@ -673,7 +671,11 @@ msgctxt "#30366"
 msgid "Available from"
 msgstr ""
 
-# empty strings from id 30367 to 30400
+msgctxt "#30367"
+msgid "New on %s"
+msgstr ""
+
+# empty strings from id 30368 to 30400
 
 msgctxt "#30401"
 msgid "Dutch"
@@ -1059,7 +1061,23 @@ msgctxt "#30583"
 msgid "Single episodes"
 msgstr ""
 
-# empty strings from id 30584 to 30589
+msgctxt "#30584"
+msgid "Fetching a long list of items using multiple API calls."
+msgstr ""
+
+msgctxt "#30585"
+msgid "Page {} of {}"
+msgstr ""
+
+msgctxt "#30586"
+msgid "Number of pages to load for the main listing"
+msgstr ""
+
+msgctxt "#30587"
+msgid "Show streams with accessibility features"
+msgstr ""
+
+# empty strings from id 30588 to 30589
 
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"

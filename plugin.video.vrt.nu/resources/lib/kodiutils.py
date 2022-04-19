@@ -1161,7 +1161,7 @@ def open_url(url, data=None, headers=None, method=None, cookiejar=None, follow_r
         return None
     except timeout as exc:
         ok_dialog(heading=localize(30968), message=localize(30969))
-        log_error('Timeout: {error}\nurl: {url}', error=exc.reason, url=url)
+        log_error('Timeout: {error}\nurl: {url}', error=exc, url=url)
         return None
 
 
@@ -1218,7 +1218,7 @@ def get_cached_url_json(url, cache, headers=None, ttl=None, fail=None):  # pylin
 
 def refresh_caches(cache_file=None):
     """Invalidate the needed caches and refresh container"""
-    files = ['favorites.json', 'oneoff.json', 'resume_points.json', 'resume_points_ddt.json']
+    files = ['favorites.json', 'oneoff.json', 'resume_points.json', 'watchlater.json']
     if cache_file and cache_file not in files:
         files.append(cache_file)
     invalidate_caches(*files)

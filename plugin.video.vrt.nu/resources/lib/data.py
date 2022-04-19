@@ -113,6 +113,14 @@ CHANNELS = [
         vod=True,
     ),
     dict(
+        id='',
+        name='vrt-nu',
+        label='VRT NU',
+        studio='VRT NU',
+        logo='https://www.vrt.be/etc.clientlibs/vrtvideo/clientlibs/clientlib-site/resources/logo-vrt_NU-pos-rgb@4x.png',
+        vod=True,
+    ),
+    dict(
         id='12',
         name='sporza',
         label='Sporza',
@@ -277,13 +285,14 @@ FEATURED = [
     dict(name='Exclusief online', id='exclusief-online', msgctxt=30100),
     dict(name='Volledig seizoen', id='volledig-seizoen', msgctxt=30101),
     dict(name='Volledige reeks', id='volledige-reeks', msgctxt=30102),
-    dict(name='Laatste kans', id='laatste-kans', msgctxt=30104),
+    dict(name='Uit het archief', id='uit-het-archief', msgctxt=30103),
+    # dict(name='Laatste kans', id='laatste-kans', msgctxt=30104),
     # Inhoudsgerelateerd
     dict(name='Kortfilm', id='kortfilm', msgctxt=30120),
-    dict(name='12+', id='12+', msgctxt=30121),
+    # dict(name='12+', id='12+', msgctxt=30121),
     # Thema
-    dict(name='Kies19', id='kies-19', msgctxt=30128),
-    dict(name='Klimaat', id='klimaat', msgctxt=30129),
+    dict(name='Klimaat', id='klimaat', msgctxt=30128),
+    dict(name='Koers', id='koers', msgctxt=30129),
     dict(name='De warmste week', id='de-warmste-week', msgctxt=30130),
 ]
 

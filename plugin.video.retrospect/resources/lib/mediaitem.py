@@ -462,7 +462,7 @@ class MediaItem:
             info_labels["Date"] = kodi_date
             info_labels["Year"] = kodi_year
             info_labels["Aired"] = kodi_date
-        if self.media_type in mediatype.VIDEO_TYPES:
+        if self.media_type in (mediatype.VIDEO_TYPES | mediatype.FOLDER_TYPES):
             info_labels["Plot"] = description
         if self.tv_show_title:
             info_labels[MediaItem.LabelTvShowTitle] = self.tv_show_title

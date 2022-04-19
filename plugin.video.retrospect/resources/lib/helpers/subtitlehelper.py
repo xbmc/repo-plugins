@@ -276,6 +276,8 @@ class SubtitleHelper(object):
             elif line == str(count + 1):
                 # we apparently have built-in numbering using WebVTT cue-numbering
                 continue
+            elif Regexer.do_regex("^[0-9a-f]{32}$", line):
+                continue
             else:
                 result = "%s\n%s" % (result, HtmlEntityHelper.convert_html_entities(line))
 

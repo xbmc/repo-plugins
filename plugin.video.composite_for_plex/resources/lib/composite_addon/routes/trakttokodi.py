@@ -12,11 +12,10 @@
 import string
 import xml.etree.ElementTree as ETree
 
-from six import PY3
-from six.moves.urllib_parse import unquote
-
 from kodi_six import xbmc  # pylint: disable=import-error
 from kodi_six import xbmcplugin  # pylint: disable=import-error
+from six import PY3
+from six.moves.urllib_parse import unquote
 
 from ..addon.common import get_handle
 from ..addon.common import get_plugin_url

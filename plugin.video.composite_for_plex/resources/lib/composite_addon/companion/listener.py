@@ -14,13 +14,12 @@
 import re
 import traceback
 
+from kodi_six import xbmc  # pylint: disable=import-error
 from six.moves.BaseHTTPServer import BaseHTTPRequestHandler
 from six.moves.BaseHTTPServer import HTTPServer
 from six.moves.socketserver import ThreadingMixIn
 from six.moves.urllib_parse import parse_qs
 from six.moves.urllib_parse import urlparse
-
-from kodi_six import xbmc  # pylint: disable=import-error
 
 from ..addon.common import get_platform
 from ..addon.constants import CONFIG
@@ -107,8 +106,8 @@ class PlexCompanionHandler(BaseHTTPRequestHandler):
 
             param_arrays = parse_qs(url.query)
             params = {}
-            for key in param_arrays:
-                params[key] = param_arrays[key][0]
+            for key, value in param_arrays.items():
+                params[key] = value[0]
 
             LOG.debug('request path is: [%s]' % (request_path,))
             LOG.debug('params are: %s' % params)

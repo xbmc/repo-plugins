@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.ilovemusic" name="I Love Music" version="2.2.0" provider-name="adiko01">
+<addon id="plugin.audio.ilovemusic" name="I Love Music" version="2.3.0" provider-name="adiko01">
     <requires>
 		<import addon="xbmc.python" version="2.26.0"/>
 	</requires>
@@ -21,16 +21,19 @@
 		<website>https://www.ilovemusic.de</website>
 		<email>dev@adiko01.de</email>
 		<source>https://github.com/adiko01/plugin.audio.ilovemusic</source>
-		<news>v2.2.0 (08/01/2021)
+		<news>v2.3.0 (26/03/2022)
 			[new] Neue Kanäle:
-				I LOVE CHILLHOP
-				I LOVE MONSTERCAT
-				I LOVE NEW POP
-				I LOVE TRASHPOP
+				I LOVE BASS BY HBZ
+				I LOVE DANCE 2022
+				I LOVE DANCE HISTORY
+				I LOVE HIP HOP 2022
+				I LOVE HIP HOP HISTORY
+				I LOVE HITS 2022
+				I LOVE RADIO FROM MARS
+				I LOVE REMIX RADIO
+				I LOVE WORKOUT
 			[new] Entfernte Kanäle:
-				I LOVE CHILL NATION
-				I LOVE POPSTARS
-				I LOVE TRAP NATION
+				I LOVE HITS 2020
 		</news>
 		<assets>
 			<icon>resources/icon.png</icon>

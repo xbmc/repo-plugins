@@ -14,12 +14,11 @@ import json
 import os
 import time
 
+from kodi_six import xbmc  # pylint: disable=import-error
+from kodi_six import xbmcgui  # pylint: disable=import-error
 from six import PY3
 from six.moves import cPickle as pickle
 from six.moves import xrange
-
-from kodi_six import xbmc  # pylint: disable=import-error
-from kodi_six import xbmcgui  # pylint: disable=import-error
 
 from ..addon.constants import CONFIG
 from ..addon.logger import Logger

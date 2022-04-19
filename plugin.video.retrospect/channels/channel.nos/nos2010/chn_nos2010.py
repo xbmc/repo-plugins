@@ -240,19 +240,31 @@ class Channel(chn_class.Channel):
             Logger.warning("No password found for %s", self)
             return False
 
-        xsrf_token = self.__get_xsrf_token()[0]
-        if not xsrf_token:
-            return False
+        # xsrf_token = self.__get_xsrf_token()[0]
+        # if not xsrf_token:
+        #     return False
 
-        data = "username=%s&password=%s" % (HtmlEntityHelper.url_encode(username),
-                                            HtmlEntityHelper.url_encode(password))
-        UriHandler.open("https://www.npostart.nl/api/login", no_cache=True,
-                        additional_headers={
-                            "X-Requested-With": "XMLHttpRequest",
-                            "X-XSRF-TOKEN": xsrf_token
-                        },
-                        params=data)
+        # Will redirect to the new id.npo.nl site with a return url given.
+        data = UriHandler.open("https://www.npostart.nl/login", no_cache=True)
 
+        # Find the return url.
+        redirect_url = UriHandler.instance().status.url.split("ReturnUrl=")[-1]
+        redirect_url = HtmlEntityHelper.url_decode(redirect_url)
+
+        # Extract the verification token.
+        verification_code = Regexer.do_regex(r'name="__RequestVerificationToken"[^>]+value="([^"]+)"', data)
+        data = {
+            "EmailAddress": username,
+            "Password": password,
+            "ReturnUrl": redirect_url,
+            "__RequestVerificationToken": verification_code
+        }
+
+        # The actual call for logging in.
+        UriHandler.open("https://id.npo.nl/account/login", no_cache=True, data=data)
+
+        # The callback url to finish up.
+        UriHandler.open("https://id.npo.nl{}".format(redirect_url), no_cache=True)
         return not UriHandler.instance().status.error
 
     def extract_tiles(self, data):  # NOSONAR

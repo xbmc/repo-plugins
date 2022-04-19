@@ -17,11 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#30001"
-msgid "Our Sandman"
-msgstr ""
-
-msgctxt "#30002"
-msgid "from"
+msgid "Settings"
 msgstr ""
 
 msgctxt "#30010"
@@ -29,7 +25,7 @@ msgid "Preferred Quality"
 msgstr ""
 
 msgctxt "#30020"
-msgid "Update"
+msgid "Refresh"
 msgstr ""
 
 msgctxt "#30030"
@@ -38,6 +34,22 @@ msgstr ""
 
 msgctxt "#30040"
 msgid "Sign Language"
+msgstr ""
+
+msgctxt "#30041"
+msgid "no"
+msgstr ""
+
+msgctxt "#30042"
+msgid "both"
+msgstr ""
+
+msgctxt "#30043"
+msgid "only"
+msgstr ""
+
+msgctxt "#30050"
+msgid "Source"
 msgstr ""
 
 #  msgctxt "#30101"
@@ -54,8 +66,4 @@ msgstr ""
 
 msgctxt "#30104"
 msgid "On Start"
-msgstr ""
-
-msgctxt "#30200"
-msgid "Update in progress"
 msgstr ""

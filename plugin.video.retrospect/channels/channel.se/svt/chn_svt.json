@@ -21,6 +21,11 @@
       "order": 1,
       "id": "show_programs_folder",
       "value": "label=\"30582\" type=\"bool\" default=\"true\""
+    },
+    {
+      "order": 2,
+      "id": "show_accessibility_videos",
+      "value": "label=\"30587\" type=\"bool\" default=\"true\""
     }
   ]
 }

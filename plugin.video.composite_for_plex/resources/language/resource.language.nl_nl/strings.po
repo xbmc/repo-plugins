@@ -10,11 +10,19 @@ msgstr ""
 "PO-Revision-Date: 2020-01-18 21:15+0500\n"
 "Last-Translator: GITHUB USERNAME\n"
 "Language-Team: Dutch\n"
+"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "Addon Description"
+msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "Composite is NOT an official Plex add-on and is not supported or endorsed by Plex."
+msgstr ""
 
 msgctxt "#30000"
 msgid "Confirm file delete?"
@@ -57,7 +65,6 @@ msgid "You are currently signed into myPlex. Are you sure you want to sign out?"
 msgstr ""
 
 #  30010
-
 msgctxt "#30011"
 msgid "You are not currently logged into myPlex. Continue to sign in, or cancel to return"
 msgstr ""
@@ -378,8 +385,7 @@ msgctxt "#30090"
 msgid "Unplayed"
 msgstr ""
 
-###### SETTINGS
-
+# ##### SETTINGS
 msgctxt "#30500"
 msgid "Primary Server Address"
 msgstr "Adres van primaire server"
@@ -573,7 +579,6 @@ msgid "Use WOL?"
 msgstr "Gebruik WOL?"
 
 # 30548
-
 msgctxt "#30549"
 msgid "Skip Genre/director/writer"
 msgstr "Genre/regisseur/schrijver-metadata overslaan"
@@ -903,15 +908,12 @@ msgid "Exit"
 msgstr ""
 
 #  30632
-
 #  30633
-
 msgctxt "#30634"
 msgid "Enter your myPlex details below"
 msgstr ""
 
 #  30635
-
 msgctxt "#30636"
 msgid "Unknown"
 msgstr ""
@@ -1566,4 +1568,12 @@ msgstr ""
 
 msgctxt "#30799"
 msgid "Configured library sections have been reset"
+msgstr ""
+
+msgctxt "#30800"
+msgid "Continue Watching"
+msgstr ""
+
+msgctxt "#30801"
+msgid "Detect Servers"
 msgstr ""

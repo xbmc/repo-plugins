@@ -94,7 +94,7 @@ def check_deals_entitlement(deals, offers):
             best_deal = end
 
     if best_deal is not None:
-        return dateutil.parser.parse(best_deal).astimezone(dateutil.tz.gettz('CET'))
+        return dateutil.parser.parse(best_deal).astimezone(tz=dateutil.tz.tzlocal())
 
     return False
 
@@ -137,9 +137,9 @@ def parse_program(program, offers=None):
     if not program:
         return None
 
-    # Parse dates
-    start = dateutil.parser.parse(program.get('params', {}).get('start')).astimezone(dateutil.tz.gettz('CET'))
-    end = dateutil.parser.parse(program.get('params', {}).get('end')).astimezone(dateutil.tz.gettz('CET'))
+    # Parse dates and convert from UTC to local timezone
+    start = dateutil.parser.parse(program.get('params', {}).get('start')).replace(tzinfo=dateutil.tz.UTC).astimezone(tz=dateutil.tz.tzlocal())
+    end = dateutil.parser.parse(program.get('params', {}).get('end')).replace(tzinfo=dateutil.tz.UTC).astimezone(tz=dateutil.tz.tzlocal())
 
     season = program.get('params', {}).get('seriesSeason')
     episode = program.get('params', {}).get('seriesEpisode')
@@ -182,10 +182,10 @@ def parse_program_capi(program, tenant):
     if not program:
         return None
 
-    # Parse dates
-    start = datetime.fromtimestamp(program.get('start') / 1000, dateutil.tz.gettz('CET'))
-    end = datetime.fromtimestamp(program.get('end') / 1000, dateutil.tz.gettz('CET'))
-    now = datetime.now().replace(tzinfo=dateutil.tz.gettz('CET'))
+    # Parse dates and convert from UTC to local timezone
+    start = datetime.fromtimestamp(program.get('start') / 1000, tz=dateutil.tz.UTC).astimezone(tz=dateutil.tz.tzlocal())
+    end = datetime.fromtimestamp(program.get('end') / 1000, tz=dateutil.tz.UTC).astimezone(tz=dateutil.tz.tzlocal())
+    now = datetime.now(tz=dateutil.tz.tzlocal())
 
     # Parse credits
     credit_list = []
@@ -285,7 +285,7 @@ def _request(method, url, params=None, form=None, data=None, token_bearer=None, 
     """
     if form or data:
         # Make sure we don't log the password
-        debug_data = dict()
+        debug_data = {}
         debug_data.update(form or data)
         if 'Password' in debug_data:
             debug_data['Password'] = '**redacted**'

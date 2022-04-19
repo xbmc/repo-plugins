@@ -10,10 +10,9 @@
     See LICENSES/GPL-2.0-or-later.txt for more information.
 """
 
+from kodi_six import xbmc  # pylint: disable=import-error
 from six.moves.urllib_parse import quote
 from six.moves.urllib_parse import unquote
-
-from kodi_six import xbmc  # pylint: disable=import-error
 
 from ..addon.logger import Logger
 from ..addon.processing.plex_plugins import process_plex_plugins

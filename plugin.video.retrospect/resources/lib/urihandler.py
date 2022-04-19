@@ -104,27 +104,31 @@ class UriHandler(object):
 
     @staticmethod
     def open(uri, proxy=None, params=None, data=None, json=None,
-             referer=None, additional_headers=None, no_cache=False, force_text=False):
+             referer=None, additional_headers=None, no_cache=False,
+             force_text=False, force_cache_duration=None):
         """ Open an URL Async using a thread
 
-        :param str uri:                   The URI to download.
-        :param str params|bytes:          Data to send with the request (open(uri, params)).
-        :param dict[str, any]|str data:   Data to send with the request (open(uri, data)).
-        :param dict[str, any] json:       Json to send with the request (open(uri, params)).
-        :param ProxyInfo proxy:           The address and port (proxy.address.ext:port) of a
-                                          proxy server that should be used.
-        :param str referer:               The http referer to use.
-        :param dict additional_headers:   The optional headers.
-        :param bool no_cache:             Should cache be disabled.
-        :param bool force_text:           In case no content type is specified, force text.
+        :param str uri:                         The URI to download.
+        :param str params|bytes:                Data to send with the request (open(uri, params)).
+        :param dict[str, any]|str data:         Data to send with the request (open(uri, data)).
+        :param dict[str, any] json:             Json to send with the request (open(uri, params)).
+        :param ProxyInfo proxy:                 The address and port (proxy.address.ext:port) of a
+                                                proxy server that should be used.
+        :param str referer:                     The http referer to use.
+        :param dict additional_headers:         The optional headers.
+        :param bool no_cache:                   Should cache be disabled.
+        :param bool force_text:                 In case no content type is specified, force text.
+        :param int|None force_cache_duration:   Should a forced cache duration be used?
+
 
         :return: The data that was retrieved from the URI.
         :rtype: str|unicode
 
         """
 
-        return UriHandler.instance().open(uri, proxy, params, data, json,
-                                          referer, additional_headers, no_cache, force_text)
+        return UriHandler.instance().open(
+            uri, proxy, params, data, json, referer,
+            additional_headers, no_cache, force_text, force_cache_duration)
 
     @staticmethod
     def header(uri, proxy=None, referer=None, additional_headers=None):
@@ -376,7 +380,7 @@ class _RequestsHandler(object):
         Logger.info("Creating Downloader for url '%s' to filename '%s'", uri, download_path)
         r = self.__requests(uri, proxy=proxy, params=params, data=data, json=json,
                             referer=referer, additional_headers=additional_headers,
-                            no_cache=True, stream=True)
+                            no_cache=True, stream=True, force_cache_duration=None)
         if r is None:
             return ""
 
@@ -410,7 +414,8 @@ class _RequestsHandler(object):
         return download_path
 
     def open(self, uri, proxy=None, params=None, data=None, json=None,
-             referer=None, additional_headers=None, no_cache=False, force_text=False):
+             referer=None, additional_headers=None, no_cache=False,
+             force_text=False, force_cache_duration=None):
         """ Open an URL Async using a thread
 
         :param str uri:                         The URI to download.
@@ -422,15 +427,22 @@ class _RequestsHandler(object):
         :param str referer:                     The http referer to use.
         :param dict|None additional_headers:    The optional headers.
         :param bool no_cache:                   Should cache be disabled.
-        :param bool force_text:                 In case no content type is specified, force text.
+        :param bool|None force_text:            In case no content type is specified, force text.
+        :param int|None force_cache_duration:   Should a forced cache duration be used?
 
         :return: The data that was retrieved from the URI.
         :rtype: str|unicode
 
+        Specifying `no_cache` completely disables the cache component and does not attach a
+        `CachHttpAdapter` to the session. Setting the `cache_duration` to 0, does make use of such
+        a `CachHttpAdapter`, but forces a cache duration of 0 seconds. This will make all the
+        caches invalid and force the requets with an 'etag' to revalidate.
+
         """
         r = self.__requests(uri, proxy=proxy, params=params, data=data, json=json,
                             referer=referer, additional_headers=additional_headers,
-                            no_cache=no_cache, stream=False)
+                            no_cache=no_cache, stream=False,
+                            force_cache_duration=force_cache_duration)
         if r is None:
             return ""
 
@@ -498,15 +510,15 @@ class _RequestsHandler(object):
 
     # noinspection PyUnusedLocal
     def __requests(self, uri, proxy, params, data, json, referer,
-                   additional_headers, no_cache, stream):
+                   additional_headers, no_cache, stream, force_cache_duration):
 
         with requests.session() as s:
             s.cookies = self.cookieJar
             s.verify = not self.ignoreSslErrors
             if self.cacheStore and not no_cache:
                 Logger.trace("Adding the %s to the request", self.cacheStore)
-                s.mount("https://", CacheHTTPAdapter(self.cacheStore))
-                s.mount("http://", CacheHTTPAdapter(self.cacheStore))
+                s.mount("https://", CacheHTTPAdapter(self.cacheStore, force_cache_duration))
+                s.mount("http://", CacheHTTPAdapter(self.cacheStore, force_cache_duration))
 
             proxies = self.__get_proxies(proxy, uri)
 

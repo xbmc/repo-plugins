@@ -137,6 +137,10 @@ msgctxt "#30803"
 msgid "Password"
 msgstr "Wachtwoord"
 
+msgctxt "#30804"
+msgid "Provider"
+msgstr "Provider"
+
 msgctxt "#30820"
 msgid "Interface"
 msgstr "Interface"

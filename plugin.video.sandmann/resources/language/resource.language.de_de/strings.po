@@ -17,19 +17,15 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#30001"
-msgid "Our Sandman"
-msgstr "Unser Sandmännchen"
-
-msgctxt "#30002"
-msgid "from"
-msgstr "vom"
+msgid "Settings"
+msgstr "Einstellungen"
 
 msgctxt "#30010"
 msgid "Preferred Quality"
 msgstr "Bevorzugte Qualität"
 
 msgctxt "#30020"
-msgid "Update"
+msgid "Refresh"
 msgstr "Aktualisieren"
 
 msgctxt "#30030"
@@ -39,6 +35,22 @@ msgstr "Intervall (in Stunden)"
 msgctxt "#30040"
 msgid "Sign Language"
 msgstr "Gebärdensprache"
+
+msgctxt "#30041"
+msgid "no"
+msgstr "ohne"
+
+msgctxt "#30042"
+msgid "both"
+msgstr "mit"
+
+msgctxt "#30043"
+msgid "only"
+msgstr "nur"
+
+msgctxt "#30050"
+msgid "Source"
+msgstr "Quelle"
 
 #  msgctxt "#30101"
 #  msgid "Automatic"
@@ -55,7 +67,3 @@ msgstr "Manuell"
 msgctxt "#30104"
 msgid "On Start"
 msgstr "Nur beim Start"
-
-msgctxt "#30200"
-msgid "Update in progress"
-msgstr "Aktualisierung wird durchgeführt"

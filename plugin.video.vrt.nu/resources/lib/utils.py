@@ -57,6 +57,8 @@ def strip_newlines(text):
 
 def html_to_kodi(text):
     """Convert VRT HTML content into Kodi formatted text"""
+    if text is None:
+        return ''
     for key, val in HTML_MAPPING:
         text = key.sub(val, text)
     return unescape(text).strip()

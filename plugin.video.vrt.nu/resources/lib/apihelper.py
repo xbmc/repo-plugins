@@ -17,14 +17,14 @@ from kodiutils import (delete_cached_thumbnail, get_cache, get_cached_url_json, 
                        localize_from_data, log, ttl, update_cache, url_for)
 from metadata import Metadata
 from utils import (add_https_proto, html_to_kodi, find_entry, from_unicode, play_url_to_id,
-                   program_to_url, realpage, url_to_program, youtube_to_plugin_url)
+                   realpage, youtube_to_plugin_url)
 
 
 class ApiHelper:
     """A class with common VRT NU API functionality"""
 
-    _VRTNU_SEARCH_URL = 'https://search.vrt.be/search'
-    _VRTNU_SUGGEST_URL = 'https://search.vrt.be/suggest'
+    _VRTNU_SEARCH_URL = 'https://search7.vrt.be/search'
+    _VRTNU_SUGGEST_URL = 'https://search7.vrt.be/suggest'
     _VRTNU_SCREENSHOT_URL = 'https://www.vrt.be/vrtnu-static/screenshots'
 
     def __init__(self, _favorites, _resumepoints):
@@ -100,7 +100,7 @@ class ApiHelper:
         )
 
     def list_episodes(self, program=None, season=None, category=None, feature=None, programtype=None,
-                      page=None, items_per_page=None, use_favorites=False, variety=None, sort_key=None, whatson_id=None):
+                      page=None, items_per_page=None, use_favorites=False, variety=None, sort_key=None, whatson_id=None, episode_id=None):
         """Construct a list of episode or season TitleItems from VRT NU Search API data and filtered by favorites"""
         # Caching
         if not variety:
@@ -123,11 +123,11 @@ class ApiHelper:
         # Get data from api or cache
         if sort_key:
             episodes = self.get_episodes(program=program, season=season, category=category, feature=feature, programtype=programtype,
-                                         use_favorites=use_favorites, variety=variety, cache_file=cache_file, whatson_id=whatson_id)
+                                         use_favorites=use_favorites, variety=variety, cache_file=cache_file, whatson_id=whatson_id, episode_id=episode_id)
             episodes = sorted(episodes, key=lambda k: k[sort_key])[(page * items_per_page) - items_per_page:page * items_per_page]
         else:
-            episodes = self.get_episodes(program=program, season=season, category=category, feature=feature, programtype=programtype,
-                                         page=page, use_favorites=use_favorites, variety=variety, cache_file=cache_file, whatson_id=whatson_id)
+            episodes = self.get_episodes(program=program, season=season, category=category, feature=feature, programtype=programtype, page=page,
+                                         use_favorites=use_favorites, variety=variety, cache_file=cache_file, whatson_id=whatson_id, episode_id=episode_id)
 
         if isinstance(episodes, tuple):
             seasons = episodes[0]
@@ -146,12 +146,12 @@ class ApiHelper:
             favorite_programs = self._favorites.programs()
 
         for episode in episodes:
-            # VRT API workaround: seasonTitle facet behaves as a partial match regex,
+            # VRT API workaround: seasonId facet behaves as a partial match regex,
             # so we have to filter out the episodes from seasons that don't exactly match.
-            if season and season != 'allseasons' and episode.get('seasonTitle') != season:
+            if season and season != 'allseasons' and episode.get('seasonId') != season:
                 continue
 
-            program = url_to_program(episode.get('programUrl'))
+            program = episode.get('programName')
             if use_favorites and program not in favorite_programs:
                 continue
 
@@ -202,12 +202,12 @@ class ApiHelper:
             season_key = season.get('key', '')
             # If more than 300 episodes exist, we may end up with an empty season (Winteruur)
             try:
-                episode = random.choice([e for e in episodes if e.get('seasonName') == season_key])
+                episode = random.choice([e for e in episodes if e.get('seasonId') == season_key])
             except IndexError:
                 episode = episodes[0]
 
             season_items.append(TitleItem(
-                label=self._metadata.get_title(episode, season=season_key),
+                label=self._metadata.get_title(episode, season=season.get('name', '')),
                 path=url_for('programs', program=program, season=season_key),
                 art_dict=self._metadata.get_art(episode, season=season_key),
                 info_dict=self._metadata.get_info_labels(episode, season=season_key),
@@ -223,10 +223,10 @@ class ApiHelper:
             favorite_programs = self._favorites.programs()
 
         # Create list of oneoff programs from oneoff episodes
-        oneoff_programs = [url_to_program(episode.get('programUrl')) for episode in oneoffs]
+        oneoff_programs = [episode.get('programName') for episode in oneoffs]
 
         for tvshow in tvshows:
-            program = url_to_program(tvshow.get('programUrl'))
+            program = tvshow.get('programName')
 
             if use_favorites and program not in favorite_programs:
                 continue
@@ -271,7 +271,7 @@ class ApiHelper:
 
     def get_upnext(self, info):
         """Get up next data from VRT Search API"""
-        program = info.get('program')
+        program = info.get('programTitle')
         path = info.get('path')
         season = None
         current_ep_no = None
@@ -279,8 +279,8 @@ class ApiHelper:
         # Get current episode unique identifier
         ep_id = play_url_to_id(path)
 
-        # Get all episodes from current program and sort by program, seasonTitle and episodeNumber
-        episodes = sorted(self.get_episodes(keywords=program), key=lambda k: (k.get('program'), k.get('seasonTitle'), k.get('episodeNumber')))
+        # Get all episodes from current program and sort by programTitle, seasonTitle and episodeNumber
+        episodes = sorted(self.get_episodes(keywords=program), key=lambda k: (k.get('programTitle'), k.get('seasonTitle'), k.get('episodeNumber')))
         upnext = {}
         for episode in episodes:
             if ep_id.get('whatson_id') == episode.get('whatsonId') or \
@@ -288,14 +288,14 @@ class ApiHelper:
                ep_id.get('video_url') == episode.get('url'):
                 season = episode.get('seasonTitle')
                 current_ep_no = episode.get('episodeNumber')
-                program = episode.get('program')
+                program = episode.get('programTitle')
                 upnext['current'] = episode
                 try:
                     next_episode = episodes[episodes.index(episode) + 1]
                 except IndexError:
                     pass
                 else:
-                    if next_episode.get('program') == program and next_episode.get('episodeNumber') != current_ep_no:
+                    if next_episode.get('programTitle') == program and next_episode.get('episodeNumber') != current_ep_no:
                         upnext['next'] = next_episode
 
         current_ep = upnext.get('current')
@@ -315,7 +315,7 @@ class ApiHelper:
         art = self._metadata.get_art(current_ep)
         current_episode = dict(
             episodeid=current_ep.get('videoId'),
-            tvshowid=current_ep.get('programUrl'),
+            tvshowid=current_ep.get('programName'),
             title=self._metadata.get_title(current_ep),
             art={
                 'tvshow.poster': art.get('thumb'),
@@ -338,7 +338,7 @@ class ApiHelper:
         art = self._metadata.get_art(next_ep)
         next_episode = dict(
             episodeid=next_ep.get('videoId'),
-            tvshowid=next_ep.get('programUrl'),
+            tvshowid=next_ep.get('programName'),
             title=self._metadata.get_title(next_ep),
             art={
                 'tvshow.poster': art.get('thumb'),
@@ -505,7 +505,7 @@ class ApiHelper:
         return video
 
     def get_episodes(self, program=None, season=None, episodes=None, category=None, feature=None, programtype=None, keywords=None,
-                     whatson_id=None, video_id=None, video_url=None, page=None, use_favorites=False, variety=None, cache_file=None):
+                     whatson_id=None, episode_id=None, video_id=None, video_url=None, page=None, use_favorites=False, variety=None, cache_file=None):
         """Get episodes or season data from VRT NU Search API"""
 
         # Contruct params
@@ -530,7 +530,6 @@ class ApiHelper:
                 'i': 'video',
                 'size': '300',
             }
-            params['facets[allowedRegion]'] = '[BE,WORLD]'
 
         if variety:
             season = 'allseasons'
@@ -540,7 +539,7 @@ class ApiHelper:
                 import dateutil.tz
                 now = datetime.now(dateutil.tz.gettz('Europe/Brussels'))
                 off_dates = [(now + timedelta(days=day)).strftime('%Y-%m-%d') for day in range(0, 7)]
-                params['facets[assetOffTime]'] = '[%s]' % (','.join(off_dates))
+                params['facets[offTime]'] = '[%s]' % (','.join(off_dates))
 
             if variety == 'oneoff':
                 params['facets[episodeNumber]'] = '[0,1]'  # This to avoid VRT NU metadata errors (see #670)
@@ -557,8 +556,7 @@ class ApiHelper:
                 params['facets[videoId]'] = '[%s]' % (','.join(episode_ids))
 
             if use_favorites:
-                program_urls = [program_to_url(p, 'medium') for p in self._favorites.programs()]
-                params['facets[programUrl]'] = '[%s]' % (','.join(program_urls))
+                params['facets[programName]'] = '[%s]' % (','.join(self._favorites.programs()))
             elif variety in ('offline', 'recent'):
                 channel_filter = []
                 for channel in CHANNELS:
@@ -567,10 +565,10 @@ class ApiHelper:
                 params['facets[programBrands]'] = '[%s]' % (','.join(channel_filter))
 
         if program:
-            params['facets[programUrl]'] = program_to_url(program, 'medium')
+            params['facets[programName]'] = program
 
         if season and season != 'allseasons':
-            params['facets[seasonTitle]'] = season
+            params['facets[seasonId]'] = season
 
         if episodes:
             params['facets[episodeNumber]'] = '[%s]' % (','.join(str(episode) for episode in episodes))
@@ -597,6 +595,13 @@ class ApiHelper:
             else:
                 params['facets[whatsonId]'] = whatson_id
 
+        if episode_id:
+            if isinstance(episode_id, list):
+                season = 'allseasons'
+                params['facets[episodeId]'] = '[%s]' % (','.join(str(item) for item in episode_id))
+            else:
+                params['facets[episodeId]'] = episode_id
+
         if video_id:
             params['facets[videoId]'] = video_id
 
@@ -612,24 +617,19 @@ class ApiHelper:
             search_json = get_url_json(url=search_url, fail={})
 
         # Check for multiple seasons
+        # VRT Search API only returns a maximum of 10 seasons, to get all seasons we need to use the "model.json" API
         seasons = []
-        if 'facets[seasonTitle]' not in unquote(search_url):
-            facets = search_json.get('facets', {}).get('facets')
-            if facets:
-                seasons = next((f.get('buckets', []) for f in facets if f.get('name') == 'seasons' and len(f.get('buckets', [])) > 1), None)
-            # Experimental: VRT Search API only returns a maximum of 10 seasons, to get all seasons we need to use the "model.json" API
-            if seasons and program and len(seasons) == 10:
-                season_json = get_url_json('https://www.vrt.be/vrtnu/a-z/%s.model.json' % program)
-                season_items = None
-                try:
-                    season_items = season_json.get(':items').get('parsys').get(':items').get('container') \
-                                              .get(':items').get('banner').get(':items').get('navigation').get(':items')
-                except AttributeError:
-                    pass
-                if season_items:
-                    seasons = []
-                    for item in season_items:
-                        seasons.append(dict(key=item.lstrip('0')))
+        if 'facets[seasonId]' not in unquote(search_url) and program:
+            season_json = get_url_json('https://www.vrt.be/vrtnu/a-z/%s.model.json' % program)
+            season_items = None
+            try:
+                season_items = season_json.get('details').get('data').get('program').get('seasons')
+            except AttributeError:
+                pass
+            if season_items:
+                seasons = []
+                for item in season_items:
+                    seasons.append(dict(key=item.get('id'), name=item.get('name')))
 
         episodes = search_json.get('results', [{}])
         show_seasons = bool(season != 'allseasons')
@@ -843,7 +843,7 @@ class ApiHelper:
                     if 'episode' in action.get('type'):
                         mediatype = 'episodes'
                 if mediatype == 'episodes':
-                    media.append(item.get('whatsonId'))
+                    media.append(item.get('data').get('episode').get('id'))
                 else:
                     media.append(item.get('programName'))
         return dict(name=data.get('title'), mediatype=mediatype, medialist=media)

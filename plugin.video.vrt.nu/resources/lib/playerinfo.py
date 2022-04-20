@@ -81,7 +81,9 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
                 return
 
         # Get episode data needed to update resumepoints from VRT NU Search API
-        episode = self.apihelper.get_single_episode_data(video_id=ep_id.get('video_id'), whatson_id=ep_id.get('whatson_id'), video_url=ep_id.get('video_url'))
+        # FIXME: Getting single episode data is broken, VRT NU Search API return a http error 400
+        # episode = self.apihelper.get_single_episode_data(video_id=ep_id.get('video_id'), whatson_id=ep_id.get('whatson_id'), video_url=ep_id.get('video_url'))
+        episode = None
 
         # Avoid setting resumepoints without episode data
         if episode is None:

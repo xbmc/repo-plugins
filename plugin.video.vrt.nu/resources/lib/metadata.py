@@ -29,7 +29,7 @@ class Metadata:
         """Get studio string from single item json api data"""
 
         # VRT NU Search API or VRT NU Suggest API
-        if api_data.get('type') == 'episode' or api_data.get('type') == 'program':
+        if api_data.get('episodeType') or api_data.get('type') == 'program':
             brands = api_data.get('programBrands', []) or api_data.get('brands', [])
             if brands:
                 try:
@@ -63,7 +63,7 @@ class Metadata:
             episode_id = api_data.get('episodeId')
 
             # VRT NU Search API
-            if api_data.get('type') == 'episode':
+            if api_data.get('episodeType'):
                 title = api_data.get('title')
 
             # VRT NU Schedule API (some are missing vrt.whatson-id)
@@ -95,9 +95,9 @@ class Metadata:
         if self._favorites.is_activated():
 
             # VRT NU Search API
-            if api_data.get('type') == 'episode':
+            if api_data.get('episodeType'):
                 program_id = api_data.get('programId')
-                program_title = api_data.get('program')
+                program_title = api_data.get('programTitle')
                 program_type = api_data.get('programType')
                 follow_suffix = localize(30410) if program_type != 'oneoff' else ''  # program
                 follow_enabled = True
@@ -158,9 +158,9 @@ class Metadata:
         asset_str = None
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             asset_str = '{program} - {season} - {title}'.format(
-                program=api_data.get('program'),
+                program=api_data.get('programTitle'),
                 season=api_data.get('seasonTitle'),
                 title=api_data.get('title')
             ).lower()
@@ -172,7 +172,7 @@ class Metadata:
         video_id = None
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             video_id = api_data.get('videoId')
 
         # VRT NU Schedule API (some are missing vrt.whatson-id)
@@ -208,7 +208,7 @@ class Metadata:
             video_id = self.get_video_id(api_data)
             if video_id:
                 # We need to ensure forward slashes are quoted
-                program_title = to_unicode(quote_plus(from_unicode(api_data.get('program'))))
+                program_title = to_unicode(quote_plus(from_unicode(api_data.get('programTitle'))))
 
                 url = reformat_url(api_data.get('url', ''), 'medium')
                 properties.update(video_id=video_id, url=url, title=program_title)
@@ -237,8 +237,8 @@ class Metadata:
         """Get tvshowtitle string from single item json api data"""
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
-            return api_data.get('program', '???')
+        if api_data.get('episodeType'):
+            return api_data.get('programTitle', '???')
 
         # VRT NU Suggest API
         if api_data.get('type') == 'program':
@@ -256,7 +256,7 @@ class Metadata:
         """Get film rating string from single item json api data"""
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             if api_data.get('ageGroup'):
                 return api_data.get('ageGroup')
 
@@ -268,7 +268,7 @@ class Metadata:
         """Get duration int from single item json api data"""
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             return api_data.get('duration', int()) * 60  # Minutes to seconds
 
         # VRT NU Suggest API
@@ -295,22 +295,22 @@ class Metadata:
         import dateutil.tz
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             if season is not False:
-                plot = html_to_kodi(api_data.get('programDescription', ''))
+                plot = html_to_kodi(api_data.get('programShortDescription', ''))
 
                 # Add additional metadata to plot
                 plot_meta = ''
                 if api_data.get('allowedRegion') == 'BE':
                     plot_meta += localize(30201) + '\n\n'  # Geo-blocked
-                plot = '%s[B]%s[/B]\n%s' % (plot_meta, api_data.get('program'), plot)
+                plot = '%s[B]%s[/B]\n%s' % (plot_meta, api_data.get('programTitle'), plot)
                 return colour(plot)
 
             # Add additional metadata to plot
             plot_meta = ''
             # Only display when a video disappears if it is within the next 3 months
-            if api_data.get('assetOffTime'):
-                offtime = dateutil.parser.parse(api_data.get('assetOffTime'))
+            if api_data.get('offTime'):
+                offtime = dateutil.parser.parse(api_data.get('offTime'))
 
                 # Show the remaining days/hours the episode is still available
                 if offtime:
@@ -388,13 +388,9 @@ class Metadata:
     def get_plotoutline(api_data, season=False):
         """Get plotoutline string from single item json api data"""
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             if season is not False:
-                plotoutline = html_to_kodi(api_data.get('programDescription', ''))
-                return plotoutline
-
-            if api_data.get('displayOptions', {}).get('showShortDescription'):
-                plotoutline = html_to_kodi(api_data.get('shortDescription', ''))
+                plotoutline = html_to_kodi(api_data.get('programDescription', '') or api_data.get('programShortDescription', ''))
                 return plotoutline
 
             plotoutline = html_to_kodi(api_data.get('subtitle', ''))
@@ -415,16 +411,16 @@ class Metadata:
         """Get season int from single item json api data"""
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             # If this is a oneoff video and the season is a year, don't return a season
             if api_data.get('programType') == 'oneoff' and self.get_year(api_data):
                 return ''
             try:
-                season = int(api_data.get('seasonTitle'))
-            except ValueError:
+                season = int(api_data.get('seasonNumber'))
+            except (TypeError, ValueError):
                 try:
                     season = int(api_data.get('seasonName'))
-                except ValueError:
+                except (TypeError, ValueError):
                     season = api_data.get('seasonTitle')
             return season
 
@@ -443,13 +439,13 @@ class Metadata:
         """Get episode int from single item json api data"""
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             # If this is a oneoff video and the season is a year, don't return an episode
             if api_data.get('programType') == 'oneoff' and self.get_year(api_data):
                 return ''
             try:
                 episode = int(api_data.get('episodeNumber'))
-            except ValueError:
+            except (TypeError, ValueError):
                 episode = int()
             return episode
 
@@ -469,9 +465,9 @@ class Metadata:
         """Get date string from single item json api data"""
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             import dateutil.parser
-            return dateutil.parser.parse(api_data.get('assetOnTime')).strftime('%d.%m.%Y')
+            return dateutil.parser.parse(api_data.get('onTime')).strftime('%d.%m.%Y')
 
         # VRT NU Suggest API
         if api_data.get('type') == 'program':
@@ -488,7 +484,7 @@ class Metadata:
         """Get aired string from single item json api data"""
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             # FIXME: Due to a bug in Kodi, ListItem.Year, as shown in Info pane, is based on 'aired' when set
             # If this is a oneoff (e.g. movie) and we get a year of release, do not set 'aired'
             if api_data.get('programType') == 'oneoff' and self.get_year(api_data):
@@ -520,9 +516,9 @@ class Metadata:
         """Get dateadded string from single item json api data"""
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             import dateutil.parser
-            return dateutil.parser.parse(api_data.get('assetOnTime')).strftime('%Y-%m-%d %H:%M:%S')
+            return dateutil.parser.parse(api_data.get('onTime')).strftime('%Y-%m-%d %H:%M:%S')
 
         # VRT NU Suggest API
         if api_data.get('type') == 'program':
@@ -541,13 +537,13 @@ class Metadata:
         from datetime import datetime
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             # Add proper year information when season falls in range
             # NOTE: Estuary skin is using premiered/aired year, which is incorrect
             try:
                 if int(api_data.get('seasonTitle')) in range(1900, datetime.now().year + 1):
                     return int(api_data.get('seasonTitle'))
-            except ValueError:
+            except (TypeError, ValueError):
                 pass
             return int()
 
@@ -566,7 +562,7 @@ class Metadata:
         """Get art dict from single item json api data"""
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             if season is not False:
                 return 'season'
 
@@ -592,7 +588,7 @@ class Metadata:
         art_dict = {}
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             if season is not False:
                 if get_setting_bool('showfanart', default=True):
                     art_dict['fanart'] = reformat_image_url(api_data.get('programImageUrl', 'DefaultSets.png'))
@@ -651,7 +647,7 @@ class Metadata:
         """Get infoLabels dict from single item json api data"""
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             info_labels = dict(
                 title=self.get_title(api_data, season=season),
                 # sorttitle=self.get_title(api_data),  # NOTE: Does not appear to work
@@ -711,7 +707,7 @@ class Metadata:
             return title
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             title = html_to_kodi(api_data.get('title') or api_data.get('shortDescription', '???'))
 
         # VRT NU Suggest API
@@ -729,59 +725,33 @@ class Metadata:
         """Get an appropriate label string matching the type of listing and VRT NU provided displayOptions from single item json api data"""
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
-            display_options = api_data.get('displayOptions', {})
-
-            # NOTE: Hard-code showing seasons because it is unreliable (i.e; Thuis or Down the Road have it disabled)
-            display_options['showSeason'] = True
+        if api_data.get('episodeType'):
 
             program_type = api_data.get('programType')
             if not titletype:
                 titletype = program_type
 
-            if display_options.get('showEpisodeTitle'):
-                label = html_to_kodi(api_data.get('title', '') or api_data.get('shortDescription', ''))
-            elif display_options.get('showShortDescription'):
-                label = html_to_kodi(api_data.get('shortDescription', '') or api_data.get('title', ''))
-            else:
-                label = html_to_kodi(api_data.get('title', '') or api_data.get('shortDescription', ''))
-
+            label = html_to_kodi(api_data.get('title', '') or api_data.get('shortDescription', ''))
             sort = 'unsorted'
             ascending = True
 
             if titletype == 'mixed_episodes':
                 ascending = False
-                label = '[B]%s[/B] - %s' % (api_data.get('program'), label)
+                label = '[B]%s[/B] - %s' % (api_data.get('programTitle'), label)
                 sort = 'dateadded'
 
             elif titletype in ('reeksaflopend', 'reeksoplopend'):
 
+                if (api_data.get('seasonNumber') and api_data.get('episodeNumber')):
+                    sort = 'episode'
+
                 if titletype == 'reeksaflopend':
                     ascending = False
 
-                # NOTE: This is disable on purpose as 'showSeason' is not reliable
-                if (display_options.get('showSeason') is False and display_options.get('showEpisodeNumber')
-                        and api_data.get('seasonName') and api_data.get('episodeNumber')):
-                    try:
-                        label = 'S%02dE%02d: %s' % (int(api_data.get('seasonName')), int(api_data.get('episodeNumber')), label)
-                    except ValueError:
-                        # Season may not always be a perfect number
-                        sort = 'episode'
-                    else:
-                        sort = 'dateadded'
-                elif display_options.get('showEpisodeNumber') and api_data.get('episodeNumber') and ascending:
-                    # NOTE: Do not prefix with "Episode X" when sorting by episode
-                    # label = '%s %s: %s' % (localize(30132), api_data.get('episodeNumber'), label)
-                    sort = 'episode'
-                elif display_options.get('showBroadcastDate') and api_data.get('formattedBroadcastShortDate'):
-                    label = '%s - %s' % (api_data.get('formattedBroadcastShortDate'), label)
-                    sort = 'dateadded'
-                else:
-                    sort = 'dateadded'
-
             elif titletype == 'daily':
+                import dateutil.parser
+                label = '%s - %s' % (dateutil.parser.parse(api_data.get('onTime')).strftime('%d/%m'), label)
                 ascending = False
-                label = '%s - %s' % (api_data.get('formattedBroadcastShortDate'), label)
                 sort = 'dateadded'
 
             elif titletype == 'oneoff':
@@ -815,7 +785,7 @@ class Metadata:
         """Return categories for a given episode"""
 
         # VRT NU Search API
-        if api_data.get('type') == 'episode':
+        if api_data.get('episodeType'):
             from data import CATEGORIES
             return sorted([localize(find_entry(CATEGORIES, 'id', category, {}).get('msgctxt', category))
                            for category in api_data.get('categories', [])])

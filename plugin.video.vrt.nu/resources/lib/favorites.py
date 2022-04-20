@@ -175,7 +175,7 @@ class Favorites:
 
     def programs(self):
         """Return all favorite programs"""
-        return self._favorites.keys()
+        return list(self._favorites.keys())
 
     @staticmethod
     def _generate_favorites_dict(favorites_json):
@@ -203,7 +203,7 @@ class Favorites:
             return value.get('title')
 
         items = [dict(program_id=value.get('program_id'), program_name=key,
-                      title=unquote(value.get('title'))) for key, value in sorted(self._favorites.items(), key=by_title)]
+                      title=unquote(value.get('title'))) for key, value in sorted(list(self._favorites.items()), key=by_title)]
         titles = [item['title'] for item in items]
         preselect = list(range(0, len(items)))
         selected = multiselect(localize(30420), options=titles, preselect=preselect)  # Please select/unselect to follow/unfollow

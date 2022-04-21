@@ -16,8 +16,8 @@ LANGUAGE = SETTINGS.getLocalizedString
 BASEURL = "http://www.worldstarhiphop.com"
 IMAGES_PATH = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources')
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-DATE = "2020-10-25"
-VERSION = "1.0.13"
+DATE = "2022-04-21"
+VERSION = "1.0.14"
 
 
 if sys.version_info[0] > 2:

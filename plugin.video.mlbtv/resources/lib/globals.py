@@ -3,6 +3,8 @@ import sys, re, os, time
 import calendar, pytz
 import urllib, requests
 from datetime import date, datetime, timedelta
+from dateutil.parser import parse
+import json
 from kodi_six import xbmc, xbmcvfs, xbmcplugin, xbmcgui, xbmcaddon
 
 if sys.version_info[0] > 2:
@@ -87,10 +89,10 @@ UA_IPAD = 'AppleCoreMedia/1.0 ( iPad; compatible; 3ivx HLS Engine/2.0.0.382; Win
 UA_PC = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
 UA_ANDROID = 'okhttp/3.12.1'
 
-#Playlists
-RECAP_PLAYLIST = xbmc.PlayList(0)
-EXTENDED_PLAYLIST = xbmc.PlayList(1)
 VERIFY = True
+
+#Big Inning
+BIG_INNING_LIVE_NAME = 'LIVE NOW: MLB Big Inning'
 
 
 def find(source,start_str,end_str):    
@@ -229,12 +231,7 @@ def addLink(name,url,title,icon,info=None,video_info=None,audio_info=None,fanart
 
 
 def addDir(name,mode,icon,fanart=None,game_day=None):
-    ok=True    
-    
-    #Set day to today if none given
-    #game_day = time.strftime("%Y-%m-%d")
-    #game_day = localToEastern()
-    #game_day = '2016-01-27'
+    ok=True
 
     u=sys.argv[0]+"?mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(icon)
     if game_day is not None:
@@ -261,15 +258,14 @@ def addPlaylist(name,game_day,mode,icon,fanart=None):
     if fanart is None: fanart = FANART
     liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
-    info = {'plot': LOCAL_STRING(30375)+game_day,'tvshowtitle':'MLB','title':name,'originaltitle':name,'aired':game_day,'genre':LOCAL_STRING(700),'mediatype':'video'}
+    game_day_display = parse(game_day).strftime('%A, %B %d, %Y')
+    info = {'plot': LOCAL_STRING(30375)+game_day_display,'tvshowtitle':'MLB','title':name,'originaltitle':name,'aired':game_day,'genre':LOCAL_STRING(700),'mediatype':'video'}
+    # Get audio/video info
     audio_info, video_info = getAudioVideoInfo()
 
-    if info is not None:
-        liz.setInfo( type="Video", infoLabels=info)
-    if video_info is not None:
-        liz.addStreamInfo('video', video_info)
-    if audio_info is not None:
-        liz.addStreamInfo('audio', audio_info)
+    liz.setInfo( type="Video", infoLabels=info)
+    liz.addStreamInfo('video', video_info)
+    liz.addStreamInfo('audio', audio_info)
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)    
     #xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
@@ -285,7 +281,7 @@ def getFavTeamColor():
                    'Chicago Cubs': 'FFCC3433',
                    'Chicago White Sox': 'FFC4CED4',
                    'Cincinnati Reds': 'FFC6011F',
-                   'Cleveland Indians': 'FFE31937',
+                   'Cleveland Guardians': 'FFE31937',
                    'Colorado Rockies': 'FFC4CED4',
                    'Detroit Tigers': 'FF0C2C56',
                    'Houston Astros': 'FFEB6E1F',
@@ -324,7 +320,7 @@ def getFavTeamId():
                 'Chicago Cubs': '112',
                 'Chicago White Sox': '145',
                 'Cincinnati Reds': '113',
-                'Cleveland Indians': '114',
+                'Cleveland Guardians': '114',
                 'Colorado Rockies': '115',
                 'Detroit Tigers': '116',
                 'Houston Astros': '117',
@@ -354,77 +350,10 @@ def getFavTeamId():
 
 
 def getAudioVideoInfo():
-    #SD (800 kbps)|SD (1600 kbps)|HD (3000 kbps)|HD (5000 kbps)
-    if QUALITY == 'SD (800 kbps)':        
-        video_info = { 'codec': 'h264', 'width' : 512, 'height' : 288, 'aspect' : 1.78 }        
-    elif QUALITY == 'SD (1200 kbps)':
-        video_info = { 'codec': 'h264', 'width' : 640, 'height' : 360, 'aspect' : 1.78 }        
-    else:
-        #elif QUALITY == 'HD (2500 kbps)' or QUALITY == 'HD (3500 kbps)' or QUALITY == 'HD (5000 kbps)':
-        video_info = { 'codec': 'h264', 'width' : 1280, 'height' : 720, 'aspect' : 1.78 }        
-
+    video_info = { 'codec': 'h264', 'width' : 1280, 'height' : 720, 'aspect' : 1.78 }
     audio_info = { 'codec': 'aac', 'language': 'en', 'channels': 2 }
     return audio_info, video_info
 
-
-def convertSubtitles(suburl):
-    #suburl = subtitles url
-    #xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = url))
-
-    #if ((addon.getSetting('sub_enable') == "true"):    
-    subfile = xbmc.translatePath(os.path.join(ADDON_PATH_PROFILE, 'game_subtitles.srt'))
-    prodir  = xbmc.translatePath(os.path.join(ADDON_PATH_PROFILE))
-    if not os.path.isdir(prodir):
-        os.makedirs(prodir)
-
-    #pg = getRequest(suburl)
-    response = urllib.urlopen(suburl)
-    pg = response.read()    
-    response.close()    
-    if pg != "":
-        ofile = open(subfile, 'w+')
-        #need to adjust for subtitles not starting until 18 hours into the stream
-        #<p begin='18:00:08;29' end='18:00:35;23'>&gt;&gt;&gt;</p>
-        captions = re.compile("<p begin='(.+?)' end='(.+?)'>(.+?)</p>").findall(pg)
-        idx = 1
-        for cstart, cend, caption in captions:            
-            cstart = cstart.replace('.',',')
-            cend   = cend.replace('.',',').split('"',1)[0]
-            caption = caption.replace('<br/>','\n').replace('&gt;','>')
-            ofile.write( '%s\n%s --> %s\n%s\n\n' % (idx, cstart, cend, caption))
-            idx += 1
-        ofile.close()
-
-    return subfile
-
-
-def getStreamQuality(stream_url):    
-    stream_title = []
-    r = reguests.get(stream_url, headers={'User-Agent': UA_PC})
-    master = r.text()
-            
-    line = re.compile("(.+?)\n").findall(master)  
-
-    for temp_url in line:
-        if '.m3u8' in temp_url:
-            temp_url = temp_url
-            match = re.search(r'(\d.+?)K', temp_url)
-            if match:
-                bandwidth = match.group()
-                if 0 < len(bandwidth) < 6:
-                    bandwidth = bandwidth.replace('K',' kbps')                    
-                    stream_title.append(bandwidth)                           
-    
-
-    stream_title.sort(key=natural_sort_key,reverse=True) 
-    dialog = xbmcgui.Dialog() 
-    ret = dialog.select(LOCAL_STRING(30372), stream_title)
-    if ret >=0:        
-        bandwidth = find(stream_title[ret],'',' kbps')
-    else:
-        sys.exit()
-
-    return bandwidth
 
 def natural_sort_key(s):
     _nsre = re.compile('([0-9]+)')
@@ -459,21 +388,30 @@ def load_cookies():
     return cj
 
 
-def stream_to_listitem(stream_url, headers, spoiler='True', start='1'):
-    if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
-        listitem = xbmcgui.ListItem(path=stream_url)
-        if KODI_VERSION >= 19:
-            listitem.setProperty('inputstream', 'inputstream.adaptive')
+def stream_to_listitem(stream_url, headers, spoiler='True', start='1', stream_type='video'):
+    # check if our stream is HLS
+    if '.m3u8' in stream_url:
+        # if not audio only, check if inputstream.adaptive is present and enabled, depending on Kodi version
+        if stream_type != 'audio' and (xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)') or (KODI_VERSION >= 19 and xbmc.getCondVisibility('System.AddonIsEnabled(inputstream.adaptive)'))):
+            listitem = xbmcgui.ListItem(path=stream_url)
+            if KODI_VERSION >= 19:
+                listitem.setProperty('inputstream', 'inputstream.adaptive')
+            else:
+                listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
+            listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
+            listitem.setProperty('inputstream.adaptive.stream_headers', headers)
+            listitem.setProperty('inputstream.adaptive.license_key', "|" + headers)
+            # start stream at beginning if no spoilers
+            if spoiler == "False":
+                listitem.setProperty('ResumeTime', start)
+                listitem.setProperty('TotalTime', start)
         else:
-            listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
-        listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
-        listitem.setProperty('inputstream.adaptive.stream_headers', headers)
-        listitem.setProperty('inputstream.adaptive.license_key', "|" + headers)
-        if spoiler == "False":
-            listitem.setProperty('ResumeTime', start)
-            listitem.setProperty('TotalTime', start)
+            listitem = xbmcgui.ListItem(path=stream_url + '|' + headers)
+
+        listitem.setMimeType("application/x-mpegURL")
+    # otherwise, if not HLS, assume it is MP4
     else:
         listitem = xbmcgui.ListItem(path=stream_url + '|' + headers)
+        listitem.setMimeType("video/mp4")
 
-    listitem.setMimeType("application/x-mpegURL")
     return listitem

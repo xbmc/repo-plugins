@@ -9,6 +9,7 @@ gid = None
 teams_stream = None
 stream_date = None
 spoiler = 'True'
+featured_video = None
 
 if 'name' in params:
     name = urllib.unquote_plus(params["name"])
@@ -30,6 +31,9 @@ if 'stream_date' in params:
 
 if 'spoiler' in params:
     spoiler = urllib.unquote_plus(params["spoiler"])
+
+if 'featured_video' in params:
+    featured_video = urllib.unquote_plus(params["featured_video"])
 
 if mode is None:
     categories()
@@ -67,18 +71,22 @@ elif mode == 200:
 
         sys.exit()
 
+elif mode == 300:
+    # Featured Videos
+    featured_videos(featured_video)
+
+elif mode == 301:
+    featured_stream_select(featured_video, name)
+
 elif mode == 400:
     account = Account()
     account.logout()
     dialog = xbmcgui.Dialog()
     dialog.notification(LOCAL_STRING(30260), LOCAL_STRING(30261), ICON, 5000, False)
 
-elif mode == 500:
-    myTeamsGames()
-
 elif mode == 900:
-    getGamesForDate(stream_date)
-    playAllHighlights()
+    # play all recaps or condensed games for selected date
+    playAllHighlights(stream_date)
 
 elif mode == 999:
     sys.exit()

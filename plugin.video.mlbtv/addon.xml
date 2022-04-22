@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2022.4.12" provider-name="eracknaphobia">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2022.4.19" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.pytz" />
@@ -7,6 +7,7 @@
         <import addon="script.module.requests" />
         <import addon="inputstream.adaptive" optional="true"/>
         <import addon="script.module.kodi-six" />
+        <import addon="script.module.dateutil" />
     </requires>
     <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>video</provides>
@@ -20,7 +21,15 @@
         </description>
         <disclaimer lang="en_GB">Requires an MLB.tv account</disclaimer>
         <news>
-            - Fix game icon and fanart
+            - featured videos, including Big Inning
+            - audio-only streams
+            - unique game icons
+            - probable pitchers
+            - doubleheader/TBD start times
+            - restored "play all recaps" behavior when selecting date
+            - moved more text to language localization file
+            - additional AddonIsEnabled detection for inputstream adaptive
+            - code cleanup
         </news>
         <language>en</language>
         <platform>all</platform>

@@ -30,6 +30,7 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 from xbmcvfs import translatePath
+from inputstreamhelper import Helper
 
 from resources.lib import tvapi
 from resources.lib import tvgui
@@ -361,6 +362,7 @@ class DrDkTvAddon(object):
             listItem.addContextMenuItems(self.menuItems, False)
             directoryItems.append((url, listItem))
 
+        xbmcplugin.setContent(self._plugin_handle, 'episodes')
         xbmcplugin.addDirectoryItems(self._plugin_handle, directoryItems)
         if addSortMethods:
             xbmcplugin.addSortMethod(self._plugin_handle, xbmcplugin.SORT_METHOD_DATE)
@@ -379,6 +381,11 @@ class DrDkTvAddon(object):
         video = self.api.getVideoUrl(api_item['PrimaryAsset']['Uri'])
         item = xbmcgui.ListItem(path=video['Uri'], offscreen=True)
         item.setArt({'thumb': api_item['PrimaryImageUri']})
+        is_helper = Helper('hls')
+        if is_helper.check_inputstream():
+            item.setProperty('inputstreamaddon', is_helper.inputstream_addon)
+        item.setProperty('inputstream', 'inputstream.adaptive')
+        item.setProperty('inputstream.adaptive.manifest_type', 'hls')
 
         if not all([bool_setting('disable.kids.subtitles') and kids_channel]):
             if video['SubtitlesUri']:
@@ -408,6 +415,11 @@ class DrDkTvAddon(object):
                 item = xbmcgui.ListItem(channel['Title'], path=url, offscreen=True)
                 item.setArt({'fanart': channel['PrimaryImageUri'],
                             'icon': channel['PrimaryImageUri']})
+                is_helper = Helper('hls')
+                if is_helper.check_inputstream():
+                    item.setProperty('inputstreamaddon', is_helper.inputstream_addon)
+                item.setProperty('inputstream', 'inputstream.adaptive')
+                item.setProperty('inputstream.adaptive.manifest_type', 'hls')
                 item.addContextMenuItems(self.menuItems, False)
                 break
         if item:

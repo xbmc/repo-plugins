@@ -62,6 +62,7 @@ class AmpacheConnect(object):
             self._ampache.setSetting("playlists", tree.findtext("playlists_searches"))
         self._ampache.setSetting("videos", tree.findtext("videos") )
         self._ampache.setSetting("podcasts", tree.findtext("podcasts") )
+        self._ampache.setSetting("live_streams", tree.findtext("live_streams") )
         self._ampache.setSetting("session_expire", tree.findtext("session_expire"))
         self._ampache.setSetting("add", tree.findtext("add"))
         self._ampache.setSetting("token", token)

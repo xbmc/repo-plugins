@@ -27,7 +27,7 @@ ampache = xbmcaddon.Addon("plugin.audio.ampache")
 def searchGui():
     dialog = xbmcgui.Dialog()
     ret = dialog.contextmenu([ut.tString(30106),ut.tString(30107),ut.tString(30108),\
-                              ut.tString(30109),ut.tString(30110),ut.tString(30220),ut.tString(30225),ut.tString(30111)])
+                              ut.tString(30109),ut.tString(30110),ut.tString(30220),ut.tString(30225),ut.tString(30228),ut.tString(30111)])
     endDir = False
     if ret == 0:
         endDir = do_search("artists")
@@ -44,6 +44,8 @@ def searchGui():
     elif ret == 6:
         endDir = do_search("podcasts")
     elif ret == 7:
+        endDir = do_search("songs","live_streams")
+    elif ret == 8:
         ret2 = dialog.contextmenu([ut.tString(30112),ut.tString(30113),ut.tString(30114)])
         if(int(ampache.getSetting("api-version"))) < 500000:
             if ret2 == 0:
@@ -262,6 +264,8 @@ def addPlayLinks(elem, elem_type):
 
         play_url = str(node.findtext("url"))
         object_title = str(node.findtext("title"))
+        if elem_type == "live_stream":
+            object_title = str(node.findtext("name"))
 
         liz=xbmcgui.ListItem(object_title)
         liz.setProperty("IsPlayable", "true")
@@ -441,7 +445,8 @@ def get_items(object_type, object_id=None, add=None,\
     album_action_subtypes = [ 'tag_artists','genre_artists','artist']
 
     song_action_subtypes = [ 'tag_songs','genre_songs', 'playlist_songs',
-            'album_songs', 'artist_songs','search_songs', 'podcast_episodes']
+            'album_songs', 'artist_songs','search_songs',
+            'podcast_episodes','live_streams']
 
     #do not use action = object_subtype cause in tags it is used only to
     #discriminate between subtypes
@@ -846,6 +851,15 @@ def Main():
             if apiVersion >= 440000:
                 get_items(object_type="songs",object_id=object_id,object_subtype="podcast_episodes")
 
+    #live_streams
+    elif mode==6:
+        if submode == 10:
+            endDir = do_search("songs","live_streams")
+        #get all streams
+        elif submode == 71:
+            if apiVersion >= 440000:
+                get_items(object_type="songs",object_id=object_id,object_subtype="live_streams")
+
     #video
     elif mode==8:
         if submode == 5:
@@ -901,6 +915,9 @@ def Main():
             addDir(ut.tString(30221) + " (" + ampache.getSetting("videos")+ ")",8,5)
         if ampache.getSetting("podcasts"):
             addDir(ut.tString(30226) + " (" + ampache.getSetting("podcasts")+ ")",5,5)
+        if ampache.getSetting("live_streams"):
+            addDir(ut.tString(30229) + " (" +
+                    ampache.getSetting("live_streams")+ ")",6,71)
         if apiVersion >= 380001:
             #get all tags ( submode 5 )
             addDir(ut.tString(30119),54,5)
@@ -944,6 +961,8 @@ def Main():
             addDir(ut.tString(30222),8,10)
             #search podcast
             addDir(ut.tString(30227),5,10)
+            #search live_streams
+            addDir(ut.tString(30230),6,10)
 
     #search tags
     elif mode==54:

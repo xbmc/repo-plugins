@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="5.1.0+matrix.1" name="DR TV" provider-name="TermeHansen">
+<addon id="plugin.video.drnu" version="5.1.1+matrix.1" name="DR TV" provider-name="TermeHansen">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.25.1+matrix.1" />
         <import addon="script.module.requests-cache" version="0.5.2+matrix.2"/>
+        <import addon="script.module.inputstreamhelper" version="0.5.10+matrix.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
@@ -25,6 +26,8 @@
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
        </assets>
+       <news>[B]Version 5.1.1 - 2022-04-20[/B]
+       - hot-fix to use hls inputstreams</news>
        <news>[B]Version 5.1.0 - 2022-04-01[/B]
        - re-factor for python 3 only
        - remove exception handling for pastebin

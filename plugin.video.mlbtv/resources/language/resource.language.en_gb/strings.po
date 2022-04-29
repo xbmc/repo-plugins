@@ -180,12 +180,24 @@ msgctxt "#30362"
 msgid "Goto Date"
 msgstr ""
 
+msgctxt "#30363"
+msgid "Featured Videos"
+msgstr ""
+
 msgctxt "#30365"
 msgid "Invalid Date"
 msgstr ""
 
 msgctxt "#30366"
 msgid "The date entered is not in the format required."
+msgstr ""
+
+msgctxt "#30367"
+msgid "MLB Big Inning"
+msgstr ""
+
+msgctxt "#30369"
+msgid "Big Inning may require inputstream adaptive to be enabled, or Kodi version 19+, to stream live properly"
 msgstr ""
 
 msgctxt "#30370"
@@ -201,7 +213,7 @@ msgid "Choose Stream Quality"
 msgstr ""
 
 msgctxt "#30375"
-msgid "Watch all the days highlights for "
+msgid "Watch all the day's highlights for "
 msgstr ""
 
 msgctxt "#30380"
@@ -224,4 +236,51 @@ msgctxt "#30384"
 msgid "No playable streams found"
 msgstr ""
 
+msgctxt "#30390"
+msgid "Choose Stream"
+msgstr ""
+
+msgctxt "#30391"
+msgid "Highlights"
+msgstr ""
+
+msgctxt "#30392"
+msgid " TV"
+msgstr ""
+
+msgctxt "#30393"
+msgid " Radio"
+msgstr ""
+
+msgctxt "#30394"
+msgid ""
+msgstr ""
+
+msgctxt "#30395"
+msgid " Spanish"
+msgstr ""
+
+msgctxt "#30396"
+msgid "Select a Start Point"
+msgstr ""
+
+msgctxt "#30398"
+msgid "Beginning"
+msgstr ""
+
+msgctxt "#30399"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30400"
+msgid "View All"
+msgstr ""
+
+msgctxt "#30401"
+msgid "Recaps"
+msgstr ""
+
+msgctxt "#30402"
+msgid "Condensed Games"
+msgstr ""
 

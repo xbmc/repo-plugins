@@ -11,6 +11,10 @@
     <setting id='device_id' type='text' visible="false" default=''/>
     <setting id='last_login' type='text' visible="false" default=''/>
     <setting id='login_token' type='text' visible="false" default=''/>
+    <setting id="session_token" type="text" label="" default="" visible="false"/>
+    <setting id="okta_client_id" type="text" label="" default="" visible="false"/>
+    <setting id="okta_access_token" type="text" label="" default="" visible="false"/>
+    <setting id="okta_access_token_expiry" type="text" label="" default="" visible="false"/>
   </category>
 
   <category label="30159">
@@ -28,6 +32,10 @@
 
     <setting id="old_username" type="text" label="" default="" visible="false"/>
     <setting id="old_password" type="text" label="" default="" visible="false"/>
+
+    <setting id="stream_date" type="text" label="" default="" visible="false"/>
+    <setting id="big_inning_date" type="text" label="" default="" visible="false"/>
+    <setting id="big_inning_schedule" type="text" label="" default="" visible="false"/>
   </category>
   <!--Proxy-->
   <category label='30200'>

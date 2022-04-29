@@ -209,8 +209,8 @@ class ApiHelper:
             season_items.append(TitleItem(
                 label=self._metadata.get_title(episode, season=season.get('name', '')),
                 path=url_for('programs', program=program, season=season_key),
-                art_dict=self._metadata.get_art(episode, season=season_key),
-                info_dict=self._metadata.get_info_labels(episode, season=season_key),
+                art_dict=self._metadata.get_art(episode, season=season.get('name', '')),
+                info_dict=self._metadata.get_info_labels(episode, season=season.get('name', '')),
                 prop_dict=self._metadata.get_properties(episode),
             ))
         return season_items, sort, ascending, content
@@ -369,7 +369,7 @@ class ApiHelper:
         )
         return next_info
 
-    def get_single_episode_data(self, video_id=None, whatson_id=None, video_url=None):
+    def get_single_episode_data(self, video_id=None, whatson_id=None, video_url=None, episode_id=None):
         """Get single episode api data by videoId, whatsonId or url"""
         episode = None
         api_data = []
@@ -379,14 +379,16 @@ class ApiHelper:
             api_data = self.get_episodes(whatson_id=whatson_id, variety='single')
         elif video_url:
             api_data = self.get_episodes(video_url=video_url, variety='single')
+        elif episode_id:
+            api_data = self.get_episodes(episode_id=episode_id, variety='single')
         if len(api_data) == 1:
             episode = api_data[0]
         return episode
 
-    def get_single_episode(self, video_id=None, whatson_id=None, video_url=None):
+    def get_single_episode(self, video_id=None, whatson_id=None, video_url=None, episode_id=None):
         """Get single episode by videoId, whatsonId or url"""
         video = None
-        episode = self.get_single_episode_data(video_id=video_id, whatson_id=whatson_id, video_url=video_url)
+        episode = self.get_single_episode_data(video_id=video_id, whatson_id=whatson_id, video_url=video_url, episode_id=episode_id)
         if episode:
             video_item = TitleItem(
                 label=self._metadata.get_label(episode),
@@ -448,9 +450,9 @@ class ApiHelper:
                                             + timedelta(seconds=(dateutil.parser.parse(episode.get('endTime'))
                                                                  - dateutil.parser.parse(episode.get('startTime'))).total_seconds() / 2))) == mindate), None)
 
-        if episode_guess and episode_guess.get('vrt.whatson-id', None):
+        if episode_guess:
             offairdate_guess = dateutil.parser.parse(episode_guess.get('endTime'))
-            video = self.get_single_episode(whatson_id=episode_guess.get('vrt.whatson-id'))
+            video = self.get_single_episode(episode_id=episode_guess.get('episodeId'))
             if video:
                 return video
 
@@ -530,6 +532,7 @@ class ApiHelper:
                 'i': 'video',
                 'size': '300',
             }
+        params['facets[transcodingStatus]'] = '[AVAILABLE]'
 
         if variety:
             season = 'allseasons'
@@ -611,6 +614,7 @@ class ApiHelper:
         # Construct VRT NU Search API Url and get api data
         querystring = '&'.join('{}={}'.format(key, value) for key, value in list(params.items()))
         search_url = self._VRTNU_SEARCH_URL + '?' + querystring.replace(' ', '%20')  # Only encode spaces to minimize url length
+        print(search_url)
         if cache_file:
             search_json = get_cached_url_json(url=search_url, cache=cache_file, ttl=ttl('indirect'), fail={})
         else:
@@ -635,7 +639,7 @@ class ApiHelper:
         show_seasons = bool(season != 'allseasons')
 
         # Return seasons
-        if show_seasons and seasons:
+        if show_seasons and len(seasons) > 1:
             return (seasons, episodes)
 
         api_pages = search_json.get('meta').get('pages').get('total')

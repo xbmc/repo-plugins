@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.5.9" provider-name="Martijn Moreel, dagwieers, mediaminister">
+<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.5.10+matrix.1" provider-name="Martijn Moreel, dagwieers, mediaminister">
   <requires>
     <import addon="resource.images.studios.white" version="0.0.22"/>
     <import addon="script.module.beautifulsoup4" version="4.6.2"/>
     <import addon="script.module.dateutil" version="2.8.0"/>
     <import addon="script.module.inputstreamhelper" version="0.4.3"/>
     <import addon="script.module.routing" version="0.2.3"/>
-    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="xbmc.python" version="3.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="resources/lib/addon_entry.py">
     <provides>video</provides>
@@ -42,6 +42,10 @@
     <website>https://github.com/add-ons/plugin.video.vrt.nu/wiki</website>
     <source>https://github.com/add-ons/plugin.video.vrt.nu</source>
     <news>
+v2.5.10 (2022-04-29)
+- Fix watching from the tv guide
+- Fix season menu labels
+
 v2.5.9 (2022-04-20)
 - Fix broken menu listings
 

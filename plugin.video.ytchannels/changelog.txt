@@ -1,6 +1,9 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.4.2 [24-April-2022]
+-Polish Language support (thanks to hevet)
+
 v0.4.1 [25-March-2022]
 -Make "Show 'add folder/channel options'" setting work properly
 

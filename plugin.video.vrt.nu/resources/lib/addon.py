@@ -323,6 +323,13 @@ def play_whatson_id(whatson_id):
     VRTPlayer().play_episode_by_whatson_id(whatson_id=whatson_id)
 
 
+@plugin.route('/play/episode/<episode_id>')
+def play_episode_id(episode_id):
+    """The API interface to play a video by using a episodeId"""
+    from vrtplayer import VRTPlayer
+    VRTPlayer().play_episode_by_episode_id(episode_id=episode_id)
+
+
 @plugin.route('/iptv/channels')
 def iptv_channels():
     """Return JSON-M3U formatted data for all live channels"""

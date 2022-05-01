@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.cbc"
        name="Canadian Broadcasting Corp (CBC)"
-       version="4.0.13+matrix.1"
+       version="4.0.14+matrix.1"
        provider-name="micahg,t1m,smf007,oshanrube">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
@@ -28,8 +28,7 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=328421</forum>
     <website>https://watch.cbc.ca/</website>
     <source>https://github.com/micahg/plugin.video.cbc</source>
-    <news>- Fix authentication
-- Fix movies
-- Fix sort order on shelf and category menus</news>
+    <news>- Fix shelf menu items that are playable
+- Fix authorization issue</news>
   </extension>
 </addon>

@@ -14,6 +14,7 @@ LAYOUT_MAP = {
 }
 SHOW_BY_ID = 'https://services.radio-canada.ca/ott/cbc-api/v2/shows/{}'
 CATEGORY_BY_ID = 'https://services.radio-canada.ca/ott/cbc-api/v2/categories/{}'
+ASSET_BY_ID = 'https://services.radio-canada.ca/ott/cbc-api/v2/assets/{}'
 
 
 class GemV2:
@@ -34,9 +35,20 @@ class GemV2:
         return json.loads(resp.content)
 
     @staticmethod
+    def get_asset_by_id(asset_id):
+        url = ASSET_BY_ID.format(asset_id)
+        resp = CBC.get_session().get(url)
+        return json.loads(resp.content)
+
+    @staticmethod
     def get_episode(url):
         """Get a Gem V2 episode by URL."""
         auth = loadAuthorization()
+
+        # if we have no authorization, return none to for the UI to authorize
+        if auth is None:
+            return None
+
         headers = {}
         if 'token' in auth:
             headers['Authorization'] = 'Bearer {}'.format(auth['token'])

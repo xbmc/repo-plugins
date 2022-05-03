@@ -1,0 +1,64 @@
+{
+    "channels": [
+        {
+            "name": "RTS - Radio Télévision Suisse",
+            "channel": "UCQyyY2Izw8hin7c8T5YY4sg"
+        },
+        {
+            "name": "RTS Sport",
+            "channel": "UC0mHPa3T9kzMd0jogiN6nhA"
+        },
+        {
+            "name": "RTS Kids",
+            "channel": "UCxNRDGdDIkWLah3lVTKc0dg"
+        },
+        {
+            "name": "Les archives de la RTS",
+            "channel": "UCe1rxEqz65ZWXwvWLrvq0Rw"
+        },
+        {
+            "name": "Temps Présent",
+            "channel": "UCBm0mt3q5l8xDy9PRIohaFw"
+        },
+        {
+            "name": "Nouvo",
+            "channel": "UCN24XiX1e8fTJEfanFRWeaw"
+        },
+        {
+            "name": "Géopolitis",
+            "channel": "UC8jSdiTfai1PFwjQ9MrkkBg"
+        },
+        {
+            "name": "Passe-moi les jumelles",
+            "channel": "UCW3--jh4FUnSxw-gofzKnqg"
+        },
+        {
+            "name": "Mise au Point",
+            "channel": "UCoLxAkyUJH1Zr6lE6M8WTwg"
+        },
+        {
+            "name": "Tataki",
+            "channel": "UCde0cBJrjHbmUio1ZU4LijQ"
+        },
+        {
+            "name": "36.9",
+            "channel": "UCBsnveG0qp0WNQRCtbqfONg"
+        },
+        {
+            "name": "Point Barre: Édition Pixel",
+            "channel": "UCc9E74Lnab6thrFB5Bbl22Q"
+        },
+        {
+            "name": "Couleur3",
+            "channel": "UCMKTFLrYiRerhOR9-lZnb3Q"
+        },
+        {
+            "name": "Les repérages Couleur3",
+            "channel": "UCLWGmqDVMSmVNTgBWJEDYZA"
+        },
+        {
+            "name": "Signes",
+            "channel": "UCzvOeolkdwDCtrDYqs1FZag"
+        }
+    ]
+}

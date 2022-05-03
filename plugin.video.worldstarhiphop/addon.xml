@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.worldstarhiphop" 
 	name="World Star Hip Hop" 
-	version="1.0.13"
+	version="1.0.14"
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="2.14.0"/>
@@ -27,7 +27,7 @@
     <website>http://worldstarhiphop.com/</website>
     <email></email>
     <source>https://github.com/skipmodea1/plugin.video.worldstarhiphop</source>
-    <news>v1.0.13 (2030-10-25)
+    <news>v1.0.14 (2022-04-21)
     - changes due to website changes
     </news>
   </extension>

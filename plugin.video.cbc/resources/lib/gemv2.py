@@ -15,7 +15,7 @@ LAYOUT_MAP = {
 SHOW_BY_ID = 'https://services.radio-canada.ca/ott/cbc-api/v2/shows/{}'
 CATEGORY_BY_ID = 'https://services.radio-canada.ca/ott/cbc-api/v2/categories/{}'
 ASSET_BY_ID = 'https://services.radio-canada.ca/ott/cbc-api/v2/assets/{}'
-
+SEARCH_BY_NAME = 'https://services.radio-canada.ca/ott/cbc-api/v2/search'
 
 class GemV2:
     """V2 Gem API class."""
@@ -81,3 +81,9 @@ class GemV2:
         if 'episode' in episode:
             labels['episode'] = episode['episode']
         return labels
+
+    @staticmethod
+    def search_by_term(term):
+        params = {'term': term}
+        resp = CBC.get_session().get(SEARCH_BY_NAME, params=params)
+        return json.loads(resp.content)

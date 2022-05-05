@@ -109,11 +109,15 @@ msgid "24 Hour Clock (ex. 18:00)"
 msgstr ""
 
 msgctxt "#30304"
-msgid "Catch Up"
+msgid "Ask to Catch Up, start from beginning, or from inning"
 msgstr ""
 
 msgctxt "#30305"
 msgid "Show only free games"
+msgstr ""
+
+msgctxt "#30306"
+msgid "Ask to automatically skip breaks"
 msgstr ""
 
 msgctxt "#30300"
@@ -193,6 +197,10 @@ msgid "The date entered is not in the format required."
 msgstr ""
 
 msgctxt "#30367"
+msgid "LIVE NOW: "
+msgstr ""
+
+msgctxt "#30368"
 msgid "MLB Big Inning"
 msgstr ""
 
@@ -264,6 +272,10 @@ msgctxt "#30396"
 msgid "Select a Start Point"
 msgstr ""
 
+msgctxt "#30397"
+msgid "Catch Up"
+msgstr ""
+
 msgctxt "#30398"
 msgid "Beginning"
 msgstr ""
@@ -282,5 +294,37 @@ msgstr ""
 
 msgctxt "#30402"
 msgid "Condensed Games"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Automatically Skip"
+msgstr ""
+
+msgctxt "#30404"
+msgid "Skip nothing"
+msgstr ""
+
+msgctxt "#30405"
+msgid "Skip breaks plus idle time"
+msgstr ""
+
+msgctxt "#30406"
+msgid "Skip breaks, idle time, and non-action pitches"
+msgstr ""
+
+msgctxt "#30407"
+msgid "Inning"
+msgstr ""
+
+msgctxt "#30408"
+msgid "Skip breaks"
+msgstr ""
+
+msgctxt "#30409"
+msgid "Top"
+msgstr ""
+
+msgctxt "#30410"
+msgid "Bottom"
 msgstr ""
 

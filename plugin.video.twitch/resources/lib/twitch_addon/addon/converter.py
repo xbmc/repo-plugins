@@ -46,7 +46,7 @@ class PlaylistConverter(object):
 class JsonListItemConverter(object):
     def __init__(self, title_length):
         self.title_builder = TitleBuilder(title_length)
-        self.has_token = True if get_oauth_token() else False
+        self.has_token = True if get_private_oauth_token() else False
 
     def game_to_listitem(self, game):
         name = game[Keys.NAME]
@@ -58,7 +58,7 @@ class JsonListItemConverter(object):
         image = self.get_boxart(game.get(Keys.BOX_ART_URL), Images.BOXART)
         context_menu = list()
         context_menu.extend(menu_items.refresh())
-        if get_private_oauth_token():
+        if self.has_token:
             context_menu.extend(menu_items.edit_follow_game(game[Keys.ID], name, follow=True))
             context_menu.extend(menu_items.edit_follow_game(game[Keys.ID], name, follow=False))
         plot = '{name}'.format(name=name)
@@ -80,7 +80,8 @@ class JsonListItemConverter(object):
         image = self.get_boxart(game['boxArtURL'], Images.BOXART)
         context_menu = list()
         context_menu.extend(menu_items.refresh())
-        context_menu.extend(menu_items.edit_follow_game(game['id'], name, follow=False))
+        if self.has_token:
+            context_menu.extend(menu_items.edit_follow_game(game['id'], name, follow=False))
         plot = '{name}\r\n{viewers}:{viewer_count}' \
             .format(name=name, viewers=i18n('viewers'), viewer_count=viewer_count)
         return {'label': name,

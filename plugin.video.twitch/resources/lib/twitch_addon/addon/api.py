@@ -59,6 +59,9 @@ class Twitch:
     def valid_token(self, client_id, token, scopes):  # client_id, token used for unique caching only
         token_check = self.root()
         while True:
+            if token_check.get('status') == 401:
+                kodi.notify(i18n('oauth_token'), i18n('invalid_expired_token'))
+                return False
             if token_check['client_id'] == self.client_id:
                 if token_check['scopes']:
                     token_scopes = token_check['scopes']

@@ -60,7 +60,7 @@ class VrtMonitor(Monitor, object):  # pylint: disable=useless-object-inheritance
             from base64 import b64decode
             data = loads(to_unicode(b64decode(hexdata[0])))
             log(2, '[Up Next notification] sender={sender}, method={method}, data={data}', sender=sender, method=method, data=to_unicode(data))
-            self._playerinfo.add_upnext(data.get('video_id'))
+            self._playerinfo.add_upnext(data.get('episode_id'))
 
     def onSettingsChanged(self):  # pylint: disable=invalid-name
         """Handler for changes to settings"""

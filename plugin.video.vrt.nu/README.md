@@ -59,6 +59,10 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.10 (2022-04-29)
+- Fix watching from the tv guide (@mediaminister)
+- Fix season menu labels (@mediaminister)
+
 ### v2.5.9 (2022-04-20)
 - Fix broken menu listings (@mediaminister)
 

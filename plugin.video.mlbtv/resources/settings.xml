@@ -28,6 +28,7 @@
     <setting id="team_names" type="select" label="30190" lvalues="30191|30192" default="0" />
     <setting id="time_format" type="select" label="30301" lvalues="30302|30301" default="0" />
     <setting id="catch_up" type="bool" label="30304" default="true" />
+    <setting id="ask_to_skip" type="bool" label="30306" default="true" />
     <setting id="only_free_games" type="bool" label="30305" default="false" />
 
     <setting id="old_username" type="text" label="" default="" visible="false"/>
@@ -36,6 +37,7 @@
     <setting id="stream_date" type="text" label="" default="" visible="false"/>
     <setting id="big_inning_date" type="text" label="" default="" visible="false"/>
     <setting id="big_inning_schedule" type="text" label="" default="" visible="false"/>
+    <setting id="mlb_monitor_started" type="text" label="" default="" visible="false"/>
   </category>
   <!--Proxy-->
   <category label='30200'>

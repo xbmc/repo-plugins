@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: 2021-09-25 08:30+0000\n"
-"Last-Translator: Klojum <klojum@kodi.tv>\n"
+"PO-Revision-Date: 2022-03-11 09:05+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Dutch <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/nl_nl/>\n"
 "Language: nl_nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Summary"
 msgid "Twitch video plugin"
@@ -899,7 +899,7 @@ msgstr ""
 
 msgctxt "#30249"
 msgid "Other"
-msgstr ""
+msgstr "Overige"
 
 msgctxt "#30250"
 msgid "Delete storage.json"
@@ -923,7 +923,7 @@ msgstr ""
 
 msgctxt "#30255"
 msgid "Thumbnail size"
-msgstr ""
+msgstr "Miniatuur formaat"
 
 msgctxt "#30256"
 msgid "Large"
@@ -931,7 +931,7 @@ msgstr ""
 
 msgctxt "#30257"
 msgid "Medium"
-msgstr ""
+msgstr "Gemiddeld"
 
 msgctxt "#30258"
 msgid "Small"
@@ -943,7 +943,7 @@ msgstr ""
 
 msgctxt "#30260"
 msgid "Limit to 30 fps"
-msgstr ""
+msgstr "Beperk tot 30 fps"
 
 msgctxt "#30261"
 msgid "Private API Credentials"
@@ -971,6 +971,30 @@ msgstr ""
 
 msgctxt "#30267"
 msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr ""
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr ""
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr ""
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr ""
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr ""
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr ""
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
 msgstr ""
 
 #~ msgctxt "#30132"

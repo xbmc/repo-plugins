@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: 2021-08-05 10:29+0000\n"
-"Last-Translator: Tommi Raulahti <traulahti@gmail.com>\n"
+"PO-Revision-Date: 2022-03-19 06:49+0000\n"
+"Last-Translator: Oskari Lavinto <olavinto@protonmail.com>\n"
 "Language-Team: Finnish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/fi_fi/>\n"
 "Language: fi_fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Summary"
 msgid "Twitch video plugin"
@@ -31,11 +31,11 @@ msgstr ""
 
 msgctxt "#30003"
 msgid "Search"
-msgstr "Hae"
+msgstr "Haku"
 
 msgctxt "#30004"
 msgid "Settings"
-msgstr ""
+msgstr "Asetukset"
 
 msgctxt "#30005"
 msgid "Popular Streams"
@@ -122,19 +122,19 @@ msgstr ""
 # empty strings from id 30041 to 30044
 msgctxt "#30045"
 msgid "Display titles"
-msgstr ""
+msgstr "Näytä nimet"
 
 msgctxt "#30046"
 msgid "Streamer - Stream Title"
-msgstr ""
+msgstr "Suoratoistaja - Mediavirran nimi"
 
 msgctxt "#30047"
 msgid "Viewers - Streamer - Stream Title"
-msgstr ""
+msgstr "Katsojia - Suoratoistaja - Mediavirran nimi"
 
 msgctxt "#30048"
 msgid "Stream Title"
-msgstr ""
+msgstr "Mediavirran nimi"
 
 msgctxt "#30049"
 msgid "Streamer"
@@ -142,11 +142,11 @@ msgstr ""
 
 msgctxt "#30050"
 msgid "Username"
-msgstr ""
+msgstr "Käyttäjätunnus"
 
 msgctxt "#30051"
 msgid "Streamer - Game Title - Stream Title"
-msgstr ""
+msgstr "Suoratoistaja - Pelin nimi - Mediavirran nimi"
 
 msgctxt "#30052"
 msgid "Enable"
@@ -158,7 +158,7 @@ msgstr ""
 
 msgctxt "#30054"
 msgid "Language | Streamer - Stream Title"
-msgstr ""
+msgstr "Kieli | Suoratoistaja - Mediavirran nimi"
 
 # empty strings from id 30055 to 30059
 msgctxt "#30060"
@@ -167,7 +167,7 @@ msgstr ""
 
 msgctxt "#30061"
 msgid "Untitled Stream"
-msgstr ""
+msgstr "Nimetön mediavirta"
 
 msgctxt "#30062"
 msgid "Unknown Number of Viewers"
@@ -183,7 +183,7 @@ msgstr ""
 
 msgctxt "#30065"
 msgid "Truncate displayed titles"
-msgstr ""
+msgstr "Lyhennä näytetyt nimikkeet"
 
 msgctxt "#30066"
 msgid "Followed Games"
@@ -191,7 +191,7 @@ msgstr ""
 
 msgctxt "#30067"
 msgid "Game Title Viewers | Streamer - Stream Title"
-msgstr ""
+msgstr "Pelin katsojat | Suoratoistaja - Mediavirran nimi"
 
 msgctxt "#30068"
 msgid "Content Type"
@@ -203,11 +203,11 @@ msgstr ""
 
 msgctxt "#30070"
 msgid "TV Shows"
-msgstr ""
+msgstr "Sarjat"
 
 msgctxt "#30071"
 msgid "Movies"
-msgstr ""
+msgstr "Elokuvat"
 
 msgctxt "#30072"
 msgid "Episodes"
@@ -227,7 +227,7 @@ msgstr ""
 
 msgctxt "#30076"
 msgid "General"
-msgstr ""
+msgstr "Yleiset"
 
 msgctxt "#30077"
 msgid "Play (Choose Quality)"
@@ -283,7 +283,7 @@ msgstr ""
 
 msgctxt "#30090"
 msgid "Language"
-msgstr ""
+msgstr "Kieli"
 
 msgctxt "#30091"
 msgid "Mature"
@@ -307,7 +307,7 @@ msgstr ""
 
 msgctxt "#30096"
 msgid "API"
-msgstr ""
+msgstr "API"
 
 msgctxt "#30097"
 msgid "OAuth Client ID"
@@ -331,7 +331,7 @@ msgstr ""
 
 msgctxt "#30102"
 msgid "Source"
-msgstr ""
+msgstr "Lähde"
 
 msgctxt "#30103"
 msgid "1080p60"
@@ -375,7 +375,7 @@ msgstr ""
 
 msgctxt "#30113"
 msgid "Uploads"
-msgstr ""
+msgstr "Lähetykset"
 
 msgctxt "#30114"
 msgid "Confirm"
@@ -399,7 +399,7 @@ msgstr ""
 
 msgctxt "#30120"
 msgid "Cache"
-msgstr ""
+msgstr "Välimuisti"
 
 msgctxt "#30121"
 msgid "Cache expire time (minutes)"
@@ -411,7 +411,7 @@ msgstr ""
 
 msgctxt "#30123"
 msgid "Items per page"
-msgstr ""
+msgstr "Kohteita sivulla"
 
 msgctxt "#30124"
 msgid "Video Id/Url"
@@ -423,7 +423,7 @@ msgstr ""
 
 msgctxt "#30126"
 msgid "Refresh"
-msgstr ""
+msgstr "Päivitä"
 
 msgctxt "#30127"
 msgid "Login"
@@ -435,11 +435,11 @@ msgstr ""
 
 msgctxt "#30129"
 msgid "Error"
-msgstr ""
+msgstr "Virhe"
 
 msgctxt "#30130"
 msgid "Go to %s"
-msgstr ""
+msgstr "Avaa %s"
 
 msgctxt "#30131"
 msgid "No results returned"
@@ -527,11 +527,11 @@ msgstr ""
 
 msgctxt "#30153"
 msgid "Blacklist"
-msgstr ""
+msgstr "Musta lista"
 
 msgctxt "#30154"
 msgid "Remove a user"
-msgstr ""
+msgstr "Poista käyttäjä"
 
 msgctxt "#30155"
 msgid "Remove a game"
@@ -595,7 +595,7 @@ msgstr ""
 
 msgctxt "#30170"
 msgid "Playlists"
-msgstr ""
+msgstr "Toistolistat"
 
 msgctxt "#30171"
 msgid "Collections"
@@ -615,11 +615,11 @@ msgstr ""
 
 msgctxt "#30175"
 msgid "Videos"
-msgstr ""
+msgstr "Videot"
 
 msgctxt "#30176"
 msgid "Clips"
-msgstr ""
+msgstr "Leikkeet"
 
 msgctxt "#30177"
 msgid "Invalid OAuth token"
@@ -751,7 +751,7 @@ msgstr ""
 
 msgctxt "#30211"
 msgid "Enabled"
-msgstr ""
+msgstr "Käytössä"
 
 msgctxt "#30212"
 msgid "Failed to connect to Twitch API"
@@ -783,7 +783,7 @@ msgstr ""
 
 msgctxt "#30219"
 msgid "Main Menu"
-msgstr ""
+msgstr "Päävalikko"
 
 msgctxt "#30220"
 msgid "Failed to get url, try again shortly."
@@ -791,7 +791,7 @@ msgstr ""
 
 msgctxt "#30221"
 msgid "Unknown"
-msgstr ""
+msgstr "Tuntematon"
 
 msgctxt "#30222"
 msgid "VODCast highlight color"
@@ -851,7 +851,7 @@ msgstr ""
 
 msgctxt "#30236"
 msgid "Search history size"
-msgstr ""
+msgstr "Hakuhistorian koko"
 
 msgctxt "#30237"
 msgid "Clear search history?"
@@ -867,7 +867,7 @@ msgstr ""
 
 msgctxt "#30240"
 msgid "Clear search history"
-msgstr ""
+msgstr "Tyhjennä hakuhistoria"
 
 msgctxt "#30241"
 msgid "Search history cleared"
@@ -879,7 +879,7 @@ msgstr ""
 
 msgctxt "#30243"
 msgid "Maintenance"
-msgstr ""
+msgstr "Ylläpito"
 
 msgctxt "#30244"
 msgid "Search History"
@@ -903,7 +903,7 @@ msgstr ""
 
 msgctxt "#30249"
 msgid "Other"
-msgstr ""
+msgstr "Muut"
 
 msgctxt "#30250"
 msgid "Delete storage.json"
@@ -927,7 +927,7 @@ msgstr ""
 
 msgctxt "#30255"
 msgid "Thumbnail size"
-msgstr ""
+msgstr "Pienoiskuvien koko"
 
 msgctxt "#30256"
 msgid "Large"
@@ -935,7 +935,7 @@ msgstr ""
 
 msgctxt "#30257"
 msgid "Medium"
-msgstr ""
+msgstr "Keskikokoinen"
 
 msgctxt "#30258"
 msgid "Small"
@@ -947,7 +947,7 @@ msgstr ""
 
 msgctxt "#30260"
 msgid "Limit to 30 fps"
-msgstr ""
+msgstr "Rajoita 30 fps:ään"
 
 msgctxt "#30261"
 msgid "Private API Credentials"
@@ -975,4 +975,28 @@ msgstr ""
 
 msgctxt "#30267"
 msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr ""
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr ""
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr ""
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr ""
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr ""
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr ""
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
 msgstr ""

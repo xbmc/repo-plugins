@@ -3,14 +3,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE\n"
-"Language: nb_NO\n"
+"PO-Revision-Date: 2022-03-27 01:19+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Norwegian Bokmål <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/nb_no/>\n"
+"Language: nb_no\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Summary"
 msgid "Twitch video plugin"
@@ -406,7 +407,7 @@ msgstr ""
 
 msgctxt "#30123"
 msgid "Items per page"
-msgstr ""
+msgstr "Innslag per side"
 
 msgctxt "#30124"
 msgid "Video Id/Url"
@@ -418,7 +419,7 @@ msgstr ""
 
 msgctxt "#30126"
 msgid "Refresh"
-msgstr ""
+msgstr "Oppdater"
 
 msgctxt "#30127"
 msgid "Login"
@@ -430,11 +431,11 @@ msgstr ""
 
 msgctxt "#30129"
 msgid "Error"
-msgstr ""
+msgstr "Feil"
 
 msgctxt "#30130"
 msgid "Go to %s"
-msgstr ""
+msgstr "Gå til %s"
 
 msgctxt "#30131"
 msgid "No results returned"
@@ -590,7 +591,7 @@ msgstr ""
 
 msgctxt "#30170"
 msgid "Playlists"
-msgstr ""
+msgstr "Spillelister"
 
 msgctxt "#30171"
 msgid "Collections"
@@ -610,11 +611,11 @@ msgstr ""
 
 msgctxt "#30175"
 msgid "Videos"
-msgstr ""
+msgstr "Videoer"
 
 msgctxt "#30176"
 msgid "Clips"
-msgstr ""
+msgstr "Klipp"
 
 msgctxt "#30177"
 msgid "Invalid OAuth token"
@@ -746,7 +747,7 @@ msgstr ""
 
 msgctxt "#30211"
 msgid "Enabled"
-msgstr ""
+msgstr "Aktivert"
 
 msgctxt "#30212"
 msgid "Failed to connect to Twitch API"
@@ -846,7 +847,7 @@ msgstr ""
 
 msgctxt "#30236"
 msgid "Search history size"
-msgstr ""
+msgstr "Søkehistorikk størrelse"
 
 msgctxt "#30237"
 msgid "Clear search history?"
@@ -862,7 +863,7 @@ msgstr ""
 
 msgctxt "#30240"
 msgid "Clear search history"
-msgstr ""
+msgstr "Rens søkehistorie"
 
 msgctxt "#30241"
 msgid "Search history cleared"
@@ -874,7 +875,7 @@ msgstr ""
 
 msgctxt "#30243"
 msgid "Maintenance"
-msgstr ""
+msgstr "Velikehold"
 
 msgctxt "#30244"
 msgid "Search History"
@@ -898,7 +899,7 @@ msgstr ""
 
 msgctxt "#30249"
 msgid "Other"
-msgstr ""
+msgstr "Annet"
 
 msgctxt "#30250"
 msgid "Delete storage.json"
@@ -930,7 +931,7 @@ msgstr ""
 
 msgctxt "#30257"
 msgid "Medium"
-msgstr ""
+msgstr "Middels"
 
 msgctxt "#30258"
 msgid "Small"
@@ -970,6 +971,30 @@ msgstr ""
 
 msgctxt "#30267"
 msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr ""
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr ""
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr ""
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr ""
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr ""
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr ""
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
 msgstr ""
 
 #~ msgctxt "#30005"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: 2021-10-12 17:03+0000\n"
+"PO-Revision-Date: 2022-03-19 06:49+0000\n"
 "Last-Translator: Kai Sommerfeld <kai.sommerfeld@gmx.com>\n"
 "Language-Team: German <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/de_de/>\n"
 "Language: de_de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Summary"
 msgid "Twitch video plugin"
@@ -39,7 +39,7 @@ msgstr "Einstellungen"
 
 msgctxt "#30005"
 msgid "Popular Streams"
-msgstr ""
+msgstr "Beliebte Streams"
 
 msgctxt "#30006"
 msgid "Teams"
@@ -55,7 +55,7 @@ msgstr "Kanäle"
 
 msgctxt "#30009"
 msgid "Live Channels"
-msgstr ""
+msgstr "Live-Kanäle"
 
 msgctxt "#30010"
 msgid "TwitchTV"
@@ -155,7 +155,7 @@ msgstr "Passwort (OAuth-Token)"
 
 msgctxt "#30054"
 msgid "Language | Streamer - Stream Title"
-msgstr ""
+msgstr "Sprache | Streamer - Stream-Titel"
 
 msgctxt "#30060"
 msgid "Unnamed Streamer"
@@ -171,7 +171,7 @@ msgstr "Nicht bekannte Zuschauerzahl"
 
 msgctxt "#30063"
 msgid "Unknown Language"
-msgstr ""
+msgstr "Unbekannte Sprache"
 
 msgctxt "#30064"
 msgid "Unknown Game"
@@ -283,7 +283,7 @@ msgstr "Sprache"
 
 msgctxt "#30091"
 msgid "Mature"
-msgstr "Ausgereift"
+msgstr "Für Erwachsene"
 
 msgctxt "#30092"
 msgid "Partner"
@@ -371,7 +371,7 @@ msgstr "Qualität kann in beste Passfähigkeit resultieren"
 
 msgctxt "#30113"
 msgid "Uploads"
-msgstr ""
+msgstr "Uploads"
 
 msgctxt "#30114"
 msgid "Confirm"
@@ -443,7 +443,7 @@ msgstr "Keine Ergebnisse erhalten"
 
 msgctxt "#30132"
 msgid "OAuth token is required for access"
-msgstr ""
+msgstr "OAuth-Token wird für den Zugriff benötigt"
 
 msgctxt "#30133"
 msgid "Authorize"
@@ -967,10 +967,34 @@ msgstr "Nicht mehr folgen"
 
 msgctxt "#30266"
 msgid "Add to queue"
-msgstr ""
+msgstr "Zu Warteschlange hinzufügen"
 
 msgctxt "#30267"
 msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr "Für den Zugriff wird ein OAuth-Token benötigt. '%s' - '%s' - '%s' aufrufen, um ein Token zu erzeugen"
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr "Privater OAuth-Autentifizierungsfehler"
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr "Die privaten OAuth-Zugangsdaten sind inkorrekt. '%s' - '%s' - '%s' aufrufen, um das Problem zu beheben"
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr ""
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr ""
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr ""
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
 msgstr ""
 
 #~ msgctxt "#30132"

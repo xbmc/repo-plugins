@@ -286,6 +286,10 @@ msgctxt "#30121"
 msgid "12+"
 msgstr ""
 
+msgctxt "#30122"
+msgid "Cinema Canvas"
+msgstr ""
+
 msgctxt "#30128"
 msgid "Climate"
 msgstr ""

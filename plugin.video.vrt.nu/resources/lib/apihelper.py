@@ -209,8 +209,8 @@ class ApiHelper:
             season_items.append(TitleItem(
                 label=self._metadata.get_title(episode, season=season.get('name', '')),
                 path=url_for('programs', program=program, season=season_key),
-                art_dict=self._metadata.get_art(episode, season=season_key),
-                info_dict=self._metadata.get_info_labels(episode, season=season_key),
+                art_dict=self._metadata.get_art(episode, season=season.get('name', '')),
+                info_dict=self._metadata.get_info_labels(episode, season=season.get('name', '')),
                 prop_dict=self._metadata.get_properties(episode),
             ))
         return season_items, sort, ascending, content
@@ -271,45 +271,44 @@ class ApiHelper:
 
     def get_upnext(self, info):
         """Get up next data from VRT Search API"""
-        program = info.get('programTitle')
+        program_title = info.get('program_title')
         path = info.get('path')
-        season = None
-        current_ep_no = None
+        season_num = info.get('season_number')
+        episode_num = info.get('episode_number')
 
         # Get current episode unique identifier
         ep_id = play_url_to_id(path)
 
         # Get all episodes from current program and sort by programTitle, seasonTitle and episodeNumber
-        episodes = sorted(self.get_episodes(keywords=program), key=lambda k: (k.get('programTitle'), k.get('seasonTitle'), k.get('episodeNumber')))
+        episodes = sorted(self.get_episodes(keywords=program_title), key=lambda k: (k.get('programTitle'), k.get('seasonTitle'), k.get('episodeNumber')))
         upnext = {}
         for episode in episodes:
-            if ep_id.get('whatson_id') == episode.get('whatsonId') or \
-               ep_id.get('video_id') == episode.get('videoId') or \
-               ep_id.get('video_url') == episode.get('url'):
-                season = episode.get('seasonTitle')
-                current_ep_no = episode.get('episodeNumber')
-                program = episode.get('programTitle')
+            if episode.get('whatsonId') == ep_id.get('whatson_id') or \
+               episode.get('videoId') == ep_id.get('video_id') or \
+               episode.get('url') == ep_id.get('video_url') or \
+               episode.get('episodeId') == ep_id.get('episode_id'):
                 upnext['current'] = episode
                 try:
                     next_episode = episodes[episodes.index(episode) + 1]
                 except IndexError:
                     pass
                 else:
-                    if next_episode.get('programTitle') == program and next_episode.get('episodeNumber') != current_ep_no:
+                    if next_episode.get('programTitle') == program_title and next_episode.get('episodeNumber') != episode_num:
                         upnext['next'] = next_episode
+                        break
 
         current_ep = upnext.get('current')
         next_ep = upnext.get('next')
 
         if next_ep is None:
             if current_ep is not None and current_ep.get('episodeNumber') == current_ep.get('seasonNbOfEpisodes') is not None:
-                log(2, '[Up Next] Already at last episode of last season for {program} S{season}E{episode}',
-                    program=program, season=season, episode=current_ep_no)
-            elif season and current_ep_no:
-                log(2, '[Up Next] No api data found for {program} S{season}E{episode}',
-                    program=program, season=season, episode=current_ep_no)
+                log(2, '[Up Next] Already at last episode of last season for {program_title} S{season_num}E{episode_num}',
+                    program_title=program_title, season_num=season_num, episode_num=episode_num)
+            elif season_num and program_title:
+                log(2, '[Up Next] No api data found for {program_title} S{season_num}E{episode_num}',
+                    program_title=program_title, season_num=season_num, episode_num=episode_num)
             else:
-                log(2, '[Up Next] No api data found for {program}', program=program)
+                log(2, '[Up Next] No api data found for {program_title}', program_title=program_title)
             return None
 
         art = self._metadata.get_art(current_ep)
@@ -359,7 +358,7 @@ class ApiHelper:
         )
 
         play_info = dict(
-            video_id=next_ep.get('videoId'),
+            episode_id=next_ep.get('episodeId'),
         )
 
         next_info = dict(
@@ -369,7 +368,7 @@ class ApiHelper:
         )
         return next_info
 
-    def get_single_episode_data(self, video_id=None, whatson_id=None, video_url=None):
+    def get_single_episode_data(self, video_id=None, whatson_id=None, video_url=None, episode_id=None):
         """Get single episode api data by videoId, whatsonId or url"""
         episode = None
         api_data = []
@@ -379,14 +378,16 @@ class ApiHelper:
             api_data = self.get_episodes(whatson_id=whatson_id, variety='single')
         elif video_url:
             api_data = self.get_episodes(video_url=video_url, variety='single')
+        elif episode_id:
+            api_data = self.get_episodes(episode_id=episode_id, variety='single')
         if len(api_data) == 1:
             episode = api_data[0]
         return episode
 
-    def get_single_episode(self, video_id=None, whatson_id=None, video_url=None):
+    def get_single_episode(self, video_id=None, whatson_id=None, video_url=None, episode_id=None):
         """Get single episode by videoId, whatsonId or url"""
         video = None
-        episode = self.get_single_episode_data(video_id=video_id, whatson_id=whatson_id, video_url=video_url)
+        episode = self.get_single_episode_data(video_id=video_id, whatson_id=whatson_id, video_url=video_url, episode_id=episode_id)
         if episode:
             video_item = TitleItem(
                 label=self._metadata.get_label(episode),
@@ -448,9 +449,9 @@ class ApiHelper:
                                             + timedelta(seconds=(dateutil.parser.parse(episode.get('endTime'))
                                                                  - dateutil.parser.parse(episode.get('startTime'))).total_seconds() / 2))) == mindate), None)
 
-        if episode_guess and episode_guess.get('vrt.whatson-id', None):
+        if episode_guess:
             offairdate_guess = dateutil.parser.parse(episode_guess.get('endTime'))
-            video = self.get_single_episode(whatson_id=episode_guess.get('vrt.whatson-id'))
+            video = self.get_single_episode(episode_id=episode_guess.get('episodeId'))
             if video:
                 return video
 
@@ -530,6 +531,7 @@ class ApiHelper:
                 'i': 'video',
                 'size': '300',
             }
+        params['facets[transcodingStatus]'] = '[AVAILABLE]'
 
         if variety:
             season = 'allseasons'
@@ -635,7 +637,7 @@ class ApiHelper:
         show_seasons = bool(season != 'allseasons')
 
         # Return seasons
-        if show_seasons and seasons:
+        if show_seasons and len(seasons) > 1:
             return (seasons, episodes)
 
         api_pages = search_json.get('meta').get('pages').get('total')

@@ -211,11 +211,11 @@ class TVGuide:
         """Return a playable plugin:// path for an episode"""
         now = datetime.now(dateutil.tz.tzlocal())
         end_date = dateutil.parser.parse(episode.get('endTime'))
-        if episode.get('url') and episode.get('vrt.whatson-id'):
-            return url_for('play_whatson_id', whatson_id=episode.get('vrt.whatson-id'))
+        if episode.get('url') and episode.get('episodeId'):
+            return url_for('play_episode_id', episode_id=episode.get('episodeId'))
         if now - timedelta(hours=24) <= end_date <= now:
             return url_for('play_air_date', channel, episode.get('startTime')[:19], episode.get('endTime')[:19])
-        return url_for('noop', whatsonid=episode.get('vrt.whatson-id', ''))
+        return url_for('noop', episode_id=episode.get('episodeId', ''))
 
     def get_epg_data(self):
         """Return EPG data"""
@@ -232,8 +232,8 @@ class TVGuide:
                 if epg_id not in epg_data:
                     epg_data[epg_id] = []
                 for episode in episodes:
-                    if episode.get('url') and episode.get('vrt.whatson-id'):
-                        path = url_for('play_whatson_id', whatson_id=episode.get('vrt.whatson-id'))
+                    if episode.get('url') and episode.get('episodeId'):
+                        path = url_for('play_episode_id', episode_id=episode.get('episodeId'))
                     else:
                         path = None
                     epg_data[epg_id].append(dict(

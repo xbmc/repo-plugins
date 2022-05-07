@@ -481,3 +481,15 @@ msgstr ""
 msgctxt "#30227"
 msgid "Search Podcasts..."
 msgstr ""
+
+msgctxt "#30228"
+msgid "Live stream"
+msgstr ""
+
+msgctxt "#30229"
+msgid "Live streams"
+msgstr ""
+
+msgctxt "#30230"
+msgid "Search Live Streams..."
+msgstr ""

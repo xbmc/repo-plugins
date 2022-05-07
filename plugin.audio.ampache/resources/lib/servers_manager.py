@@ -21,12 +21,12 @@ def initializeServer():
         tempd = {}
         tempd["0"] = {}
         serverData["servers"].update(tempd)
-        serverData["servers"]["0"]["name"] = "ampache"
-        serverData["servers"]["0"]["url"] = "http://127.0.0.1/ampache"
+        serverData["servers"]["0"]["name"] = "Develop Demo"
+        serverData["servers"]["0"]["url"] = "http://develop.ampache.dev/"
         serverData["servers"]["0"]["use_api_key"] = "false"
         serverData["servers"]["0"]["enable_password"] = "true"
-        serverData["servers"]["0"]["username"] = "ampache"
-        serverData["servers"]["0"]["password"] = "ampache"
+        serverData["servers"]["0"]["username"] = "kodi_demo"
+        serverData["servers"]["0"]["password"] = "aNNKvApsECw7Tpc"
         serverData["servers"]["0"]["api_key"] = ""
         serverData["current_server"] = "0"
         jsStorServer.save(serverData)

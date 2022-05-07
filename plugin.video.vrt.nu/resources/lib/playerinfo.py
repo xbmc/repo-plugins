@@ -190,12 +190,12 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
                 break
         self.onPlayerExit()
 
-    def add_upnext(self, video_id):
+    def add_upnext(self, episode_id):
         """Add Up Next url to Kodi Player"""
         # Reset vrtnu_resumepoints property
         set_property('vrtnu_resumepoints', None)
 
-        url = url_for('play_upnext', video_id=video_id)
+        url = url_for('play_upnext', episode_id=episode_id)
         self.update_position()
         self.update_total()
         if self.isPlaying() and self.total - self.last_pos < 1:
@@ -210,7 +210,9 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         if has_addon('service.upnext') and get_setting_bool('useupnext', default=True) and self.isPlaying():
             info_tag = self.getVideoInfoTag()
             next_info = self.apihelper.get_upnext(dict(
-                program=to_unicode(info_tag.getTVShowTitle()),
+                program_title=to_unicode(info_tag.getTVShowTitle()),
+                season_number=to_unicode(info_tag.getSeason()),
+                episode_number=to_unicode(info_tag.getEpisode()),
                 playcount=info_tag.getPlayCount(),
                 rating=info_tag.getRating(),
                 path=self.path,

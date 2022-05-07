@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<addon id="plugin.video.lacapitv" name="La Capi TV" version="1.0.0" provider-name="Ernesto Bazzano">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.t1mlib" version="4.0.0"/>
+		<import addon="script.module.requests" version="2.22.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en_GB">Interspace television</summary>
+		<description lang="en_GB">An intergalactic streaming service where you can find La Capi animations among many other series and small animation experiments.
+</description>
+		<summary lang="es_AR">Una televisión interespacial</summary>
+		<description lang="es_AR">Un servicio de streaming intergaláctico donde podés encontrar animaciones de La Capi entre tantas otras series y pequeños experimentos de animación.
+</description>
+		<license>GPL-3.0-or-later</license>
+		<language>es</language>
+		<source>https://git.tuxfamily.org/4232/kodi_plugin_video_lacapitv.git/</source>
+		<website>https://lacapi.tv</website>
+		<email>info@lacapi.tv</email>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+			<screenshot>resources/01.jpg</screenshot>
+			<screenshot>resources/02.jpg</screenshot>
+			<screenshot>resources/03.jpg</screenshot>
+		</assets>
+		<news>Start the project</news>
+	</extension>
+</addon>

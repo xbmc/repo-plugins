@@ -38,25 +38,6 @@
 					</control>
 				</setting>
 			</group>
-			<group id="4" label="30261">
-				<setting help="" id="private_oauth_clientid" label="30097" type="string">
-					<level>0</level>
-					<default>kimne78kx3ncx6brgo4mv6wki5h1ko</default>
-					<control format="string" type="edit">
-						<heading>30097</heading>
-					</control>
-				</setting>
-				<setting help="" id="private_oauth_token" label="30099" type="string">
-					<level>0</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<control format="string" type="edit">
-						<heading>30099</heading>
-					</control>
-				</setting>
-			</group>
 		</category>
 		<category help="" id="main menu" label="30219">
 			<group id="1">
@@ -534,6 +515,53 @@
 					</constraints>
 					<control format="integer" type="slider">
 						<popup>false</popup>
+					</control>
+				</setting>
+			</group>
+		</category>
+		<category help="" id="login_benefits" label="30270">
+			<group id="1" label="30261">
+				<setting help="" id="private_oauth_clientid" label="30097" type="string">
+					<level>0</level>
+					<default>kimne78kx3ncx6brgo4mv6wki5h1ko</default>
+					<control format="string" type="edit">
+						<heading>30097</heading>
+					</control>
+				</setting>
+				<setting help="" id="private_oauth_token" label="30099" type="string">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="string" type="edit">
+						<heading>30099</heading>
+					</control>
+				</setting>
+			</group>
+			<group id="2" label="30271">
+				<setting help="" id="label.dummy.01" label="" type="string">
+					<level>0</level>
+                   <visible>false</visible>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="string" type="edit">
+						<heading></heading>
+					</control>
+				</setting>
+			</group>
+			<group id="3" label="30272">
+				<setting help="" id="label.dummy.01" label="" type="string">
+					<level>0</level>
+                   <visible>false</visible>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="string" type="edit">
+						<heading></heading>
 					</control>
 				</setting>
 			</group>

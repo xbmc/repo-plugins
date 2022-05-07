@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: 2022-01-29 23:13+0000\n"
+"PO-Revision-Date: 2022-04-08 00:13+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Romanian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/ro_ro/>\n"
 "Language: ro_ro\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Summary"
 msgid "Twitch video plugin"
@@ -35,7 +35,7 @@ msgstr "Căutare"
 
 msgctxt "#30004"
 msgid "Settings"
-msgstr ""
+msgstr "Setări"
 
 msgctxt "#30005"
 msgid "Popular Streams"
@@ -142,7 +142,7 @@ msgstr ""
 
 msgctxt "#30050"
 msgid "Username"
-msgstr ""
+msgstr "Nume utilizator"
 
 msgctxt "#30051"
 msgid "Streamer - Game Title - Stream Title"
@@ -227,7 +227,7 @@ msgstr ""
 
 msgctxt "#30076"
 msgid "General"
-msgstr ""
+msgstr "General"
 
 msgctxt "#30077"
 msgid "Play (Choose Quality)"
@@ -283,7 +283,7 @@ msgstr ""
 
 msgctxt "#30090"
 msgid "Language"
-msgstr ""
+msgstr "Limbă"
 
 msgctxt "#30091"
 msgid "Mature"
@@ -375,7 +375,7 @@ msgstr ""
 
 msgctxt "#30113"
 msgid "Uploads"
-msgstr ""
+msgstr "Încărcări"
 
 msgctxt "#30114"
 msgid "Confirm"
@@ -399,7 +399,7 @@ msgstr ""
 
 msgctxt "#30120"
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 msgctxt "#30121"
 msgid "Cache expire time (minutes)"
@@ -411,7 +411,7 @@ msgstr ""
 
 msgctxt "#30123"
 msgid "Items per page"
-msgstr ""
+msgstr "Elemente per pagină"
 
 msgctxt "#30124"
 msgid "Video Id/Url"
@@ -423,7 +423,7 @@ msgstr ""
 
 msgctxt "#30126"
 msgid "Refresh"
-msgstr ""
+msgstr "Reîncărcare"
 
 msgctxt "#30127"
 msgid "Login"
@@ -435,11 +435,11 @@ msgstr ""
 
 msgctxt "#30129"
 msgid "Error"
-msgstr ""
+msgstr "Eroare"
 
 msgctxt "#30130"
 msgid "Go to %s"
-msgstr ""
+msgstr "Mergi la %s"
 
 msgctxt "#30131"
 msgid "No results returned"
@@ -595,7 +595,7 @@ msgstr ""
 
 msgctxt "#30170"
 msgid "Playlists"
-msgstr ""
+msgstr "Liste"
 
 msgctxt "#30171"
 msgid "Collections"
@@ -615,7 +615,7 @@ msgstr ""
 
 msgctxt "#30175"
 msgid "Videos"
-msgstr ""
+msgstr "Filme"
 
 msgctxt "#30176"
 msgid "Clips"
@@ -783,7 +783,7 @@ msgstr ""
 
 msgctxt "#30219"
 msgid "Main Menu"
-msgstr ""
+msgstr "Meniu principal"
 
 msgctxt "#30220"
 msgid "Failed to get url, try again shortly."
@@ -851,7 +851,7 @@ msgstr ""
 
 msgctxt "#30236"
 msgid "Search history size"
-msgstr ""
+msgstr "Dimensiune istoric căutare"
 
 msgctxt "#30237"
 msgid "Clear search history?"
@@ -879,7 +879,7 @@ msgstr ""
 
 msgctxt "#30243"
 msgid "Maintenance"
-msgstr ""
+msgstr "Mentenanță"
 
 msgctxt "#30244"
 msgid "Search History"
@@ -947,7 +947,7 @@ msgstr ""
 
 msgctxt "#30260"
 msgid "Limit to 30 fps"
-msgstr ""
+msgstr "Limitează la 30 fps"
 
 msgctxt "#30261"
 msgid "Private API Credentials"
@@ -975,4 +975,28 @@ msgstr ""
 
 msgctxt "#30267"
 msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr ""
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr ""
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr ""
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr ""
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr ""
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr ""
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
 msgstr ""

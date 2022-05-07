@@ -138,4 +138,5 @@ STRINGS = {
     'private_oauth_heading': 30268,
     'private_oauth_message': 30269,
     'private_credentials': 30261,
+    'invalid_expired_token': 30273,
 }

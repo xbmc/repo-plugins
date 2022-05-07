@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: 2021-08-27 09:29+0000\n"
+"PO-Revision-Date: 2022-02-19 19:10+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Danish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/da_dk/>\n"
 "Language: da_dk\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.10.1\n"
 
 msgctxt "Addon Summary"
 msgid "Twitch video plugin"
@@ -223,7 +223,7 @@ msgstr ""
 
 msgctxt "#30076"
 msgid "General"
-msgstr ""
+msgstr "Generel"
 
 msgctxt "#30077"
 msgid "Play (Choose Quality)"
@@ -279,7 +279,7 @@ msgstr ""
 
 msgctxt "#30090"
 msgid "Language"
-msgstr ""
+msgstr "Sprog"
 
 msgctxt "#30091"
 msgid "Mature"
@@ -303,7 +303,7 @@ msgstr ""
 
 msgctxt "#30096"
 msgid "API"
-msgstr ""
+msgstr "API"
 
 msgctxt "#30097"
 msgid "OAuth Client ID"
@@ -371,7 +371,7 @@ msgstr ""
 
 msgctxt "#30113"
 msgid "Uploads"
-msgstr ""
+msgstr "Uploads"
 
 msgctxt "#30114"
 msgid "Confirm"
@@ -395,7 +395,7 @@ msgstr ""
 
 msgctxt "#30120"
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 msgctxt "#30121"
 msgid "Cache expire time (minutes)"
@@ -407,7 +407,7 @@ msgstr ""
 
 msgctxt "#30123"
 msgid "Items per page"
-msgstr ""
+msgstr "Emner per side"
 
 msgctxt "#30124"
 msgid "Video Id/Url"
@@ -419,7 +419,7 @@ msgstr ""
 
 msgctxt "#30126"
 msgid "Refresh"
-msgstr ""
+msgstr "Opdater"
 
 msgctxt "#30127"
 msgid "Login"
@@ -431,11 +431,11 @@ msgstr ""
 
 msgctxt "#30129"
 msgid "Error"
-msgstr ""
+msgstr "Fejl"
 
 msgctxt "#30130"
 msgid "Go to %s"
-msgstr ""
+msgstr "Gå til %s"
 
 msgctxt "#30131"
 msgid "No results returned"
@@ -523,7 +523,7 @@ msgstr ""
 
 msgctxt "#30153"
 msgid "Blacklist"
-msgstr ""
+msgstr "Sortliste"
 
 msgctxt "#30154"
 msgid "Remove a user"
@@ -591,7 +591,7 @@ msgstr ""
 
 msgctxt "#30170"
 msgid "Playlists"
-msgstr ""
+msgstr "Playlister"
 
 msgctxt "#30171"
 msgid "Collections"
@@ -611,7 +611,7 @@ msgstr ""
 
 msgctxt "#30175"
 msgid "Videos"
-msgstr ""
+msgstr "Videoer"
 
 msgctxt "#30176"
 msgid "Clips"
@@ -747,7 +747,7 @@ msgstr ""
 
 msgctxt "#30211"
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiveret"
 
 msgctxt "#30212"
 msgid "Failed to connect to Twitch API"
@@ -779,7 +779,7 @@ msgstr ""
 
 msgctxt "#30219"
 msgid "Main Menu"
-msgstr ""
+msgstr "Hovedmenu"
 
 msgctxt "#30220"
 msgid "Failed to get url, try again shortly."
@@ -847,7 +847,7 @@ msgstr ""
 
 msgctxt "#30236"
 msgid "Search history size"
-msgstr ""
+msgstr "Størrelse på søgehistorik"
 
 msgctxt "#30237"
 msgid "Clear search history?"
@@ -863,7 +863,7 @@ msgstr ""
 
 msgctxt "#30240"
 msgid "Clear search history"
-msgstr ""
+msgstr "Ryd søgehistorik"
 
 msgctxt "#30241"
 msgid "Search history cleared"
@@ -875,7 +875,7 @@ msgstr ""
 
 msgctxt "#30243"
 msgid "Maintenance"
-msgstr ""
+msgstr "Vedligeholdelse"
 
 msgctxt "#30244"
 msgid "Search History"
@@ -923,7 +923,7 @@ msgstr ""
 
 msgctxt "#30255"
 msgid "Thumbnail size"
-msgstr ""
+msgstr "Størrelse på miniaturebillede"
 
 msgctxt "#30256"
 msgid "Large"
@@ -931,7 +931,7 @@ msgstr ""
 
 msgctxt "#30257"
 msgid "Medium"
-msgstr ""
+msgstr "Medium"
 
 msgctxt "#30258"
 msgid "Small"
@@ -943,7 +943,7 @@ msgstr ""
 
 msgctxt "#30260"
 msgid "Limit to 30 fps"
-msgstr ""
+msgstr "Begræns til 30 fps"
 
 msgctxt "#30261"
 msgid "Private API Credentials"
@@ -971,6 +971,30 @@ msgstr ""
 
 msgctxt "#30267"
 msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr ""
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr ""
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr ""
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr ""
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr ""
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr ""
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
 msgstr ""
 
 #~ msgctxt "#30005"

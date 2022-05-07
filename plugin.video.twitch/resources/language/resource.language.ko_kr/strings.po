@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: 2021-08-27 09:29+0000\n"
+"PO-Revision-Date: 2022-03-27 01:19+0000\n"
 "Last-Translator: Minho Park <parkmino@gmail.com>\n"
 "Language-Team: Korean <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/ko_kr/>\n"
 "Language: ko_kr\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Summary"
 msgid "Twitch video plugin"
@@ -39,7 +39,7 @@ msgstr "설정"
 
 msgctxt "#30005"
 msgid "Popular Streams"
-msgstr ""
+msgstr "인기 스트림"
 
 msgctxt "#30006"
 msgid "Teams"
@@ -447,7 +447,7 @@ msgstr "결과가 없음"
 
 msgctxt "#30132"
 msgid "OAuth token is required for access"
-msgstr ""
+msgstr "액세스하려면 OAuth 토큰이 필요합니다"
 
 msgctxt "#30133"
 msgid "Authorize"
@@ -971,10 +971,34 @@ msgstr "언팔로우"
 
 msgctxt "#30266"
 msgid "Add to queue"
-msgstr ""
+msgstr "순서에 추가"
 
 msgctxt "#30267"
 msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr "액세스하려면 OAuth 토큰이 필요합니다. OAuth 토큰을 만들려면 '%s' - '%s' - '%s'로 이동하세요"
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr "비공개 OAuth 인증 오류"
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr "개인 OAuth 자격 증명이 잘못되었습니다. 문제를 해결하려면 '%s' - '%s' - '%s'(으)로 이동하세요"
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr ""
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr ""
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr ""
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
 msgstr ""
 
 #~ msgctxt "#30132"

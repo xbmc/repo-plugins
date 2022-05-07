@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.twitch" version="2.6.0" name="Twitch" provider-name="anxdpanic, A Talented Community">
+<addon id="plugin.video.twitch" version="2.6.1" name="Twitch" provider-name="anxdpanic, A Talented Community">
     <requires>
         <import addon="xbmc.python" version="2.20.0"/>
         <import addon="script.module.six" version="1.11.0"/>
@@ -16,12 +16,9 @@
             <fanart>fanart.jpg</fanart>
         </assets>
         <news>
-[update] Update Twitch API usage from v5 to Helix
-    - This change will require you to generate a new oauth token from the add-on settings
-    - Some favorites may need to be recreated
-    - This change requires an OAuth token for access to any content
-[add] Add to queue context menu item
-[rem] Blacklisting of content
+[fix] notify of expired or invalid tokens
+[fix] don't show toggle follow context menu unless user has the proper credentials
+[chg] move subscriber and turbo benefits to own settings category
 [lang] updated translations from Weblate
         </news>
         <platform>all</platform>

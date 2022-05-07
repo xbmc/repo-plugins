@@ -9,6 +9,18 @@ online services.
 * Live events
 * Shows
 
+## Setup Instructions
+
+Install this add-on via Kodi's GUI using the [Add-on Manager](https://kodi.wiki/view/Add-ons).
+Once installed, you will have immediate access to live programming. If you wish
+to access TV shows and other on-demand content, you need a CBC Gem account.
+
+Sign up for CBC Gem [here](https://gem.cbc.ca/join-now). It is suggested to
+first login to your account via web browser and you should see a prompt for your
+name and postal code. After confirming your information via web browser, you
+should then be able to use your login email and password on the add-on
+configuration page in Kodi.
+
 ## API Details
 
 Content is keyed off of the following links:

@@ -301,11 +301,11 @@ def play_latest(program):
     VRTPlayer().play_latest_episode(program=program)
 
 
-@plugin.route('/play/upnext/<video_id>')
-def play_upnext(video_id):
+@plugin.route('/play/upnext/<episode_id>')
+def play_upnext(episode_id):
     """The API interface to play the next episode of a program"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().play_upnext(video_id=video_id)
+    VRTPlayer().play_upnext(episode_id=episode_id)
 
 
 @plugin.route('/play/airdate/<channel>/<start_date>')
@@ -321,6 +321,13 @@ def play_whatson_id(whatson_id):
     """The API interface to play a video by using a whatson_id"""
     from vrtplayer import VRTPlayer
     VRTPlayer().play_episode_by_whatson_id(whatson_id=whatson_id)
+
+
+@plugin.route('/play/episode/<episode_id>')
+def play_episode_id(episode_id):
+    """The API interface to play a video by using a episodeId"""
+    from vrtplayer import VRTPlayer
+    VRTPlayer().play_episode_by_episode_id(episode_id=episode_id)
 
 
 @plugin.route('/iptv/channels')

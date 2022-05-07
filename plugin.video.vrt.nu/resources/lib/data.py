@@ -290,9 +290,10 @@ FEATURED = [
     # Inhoudsgerelateerd
     dict(name='Kortfilm', id='kortfilm', msgctxt=30120),
     # dict(name='12+', id='12+', msgctxt=30121),
+    dict(name='Cinema canvas', id='cinema-canvas', msgctxt=30122),
     # Thema
     dict(name='Klimaat', id='klimaat', msgctxt=30128),
-    dict(name='Koers', id='koers', msgctxt=30129),
+    # dict(name='Koers', id='koers', msgctxt=30129),
     dict(name='De warmste week', id='de-warmste-week', msgctxt=30130),
 ]
 

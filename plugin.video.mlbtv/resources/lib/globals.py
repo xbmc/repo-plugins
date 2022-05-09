@@ -45,8 +45,16 @@ FAV_TEAM = str(settings.getSetting(id="fav_team"))
 TEAM_NAMES = settings.getSetting(id="team_names")
 TIME_FORMAT = settings.getSetting(id="time_format")
 SINGLE_TEAM = str(settings.getSetting(id='single_team'))
+AUTO_SELECT_STREAM = str(settings.getSetting(id='auto_select_stream'))
 CATCH_UP = str(settings.getSetting(id='catch_up'))
+ASK_TO_SKIP = str(settings.getSetting(id='ask_to_skip'))
 ONLY_FREE_GAMES = str(settings.getSetting(id="only_free_games"))
+
+#Monitor setting
+MLB_MONITOR_STARTED = settings.getSetting(id='mlb_monitor_started')
+if MLB_MONITOR_STARTED != '' and not xbmc.getCondVisibility("Player.HasMedia"):
+    xbmc.log("MLB Monitor detection resetting due to no stream playing")
+    settings.setSetting(id='mlb_monitor_started', value='')
 
 #Proxy Settings
 PROXY_ENABLED = str(settings.getSetting(id='use_proxy'))
@@ -83,7 +91,7 @@ else:
     MASTER_FILE_TYPE = 'master_wired60.m3u8'
     PLAYBACK_SCENARIO = 'HTTP_CLOUD_WIRED_60'
 
-
+API_URL = 'https://statsapi.mlb.com'
 #User Agents
 UA_IPAD = 'AppleCoreMedia/1.0 ( iPad; compatible; 3ivx HLS Engine/2.0.0.382; Win8; x64; 264P AACP AC3P AESD CLCP HTPC HTPI HTSI MP3P MTKA)'
 UA_PC = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
@@ -91,9 +99,15 @@ UA_ANDROID = 'okhttp/3.12.1'
 
 VERIFY = True
 
-#Big Inning
-BIG_INNING_LIVE_NAME = 'LIVE NOW: MLB Big Inning'
-
+#Skip monitor
+#These are the break events to ignore
+BREAK_TYPES = ['Game Advisory', 'Pitching Substitution', 'Offensive Substitution', 'Defensive Sub', 'Defensive Switch', 'Runner Placed On Base']
+#These are the action events to keep, in addition to the last event of each at-bat, if we're skipping non-decision pitches
+ACTION_TYPES = ['Wild Pitch', 'Passed Ball', 'Stolen Base', 'Caught Stealing', 'Pickoff', 'Error', 'Out', 'Balk', 'Defensive Indiff']
+#Pad events at both start (-) and end (+)
+EVENT_START_PADDING = -5
+EVENT_END_PADDING = 8
+MINIMUM_BREAK_DURATION = 10
 
 def find(source,start_str,end_str):    
     start = source.find(start_str)
@@ -196,6 +210,9 @@ def add_stream(name, title, game_pk, icon=None, fanart=None, info=None, video_in
         liz.addStreamInfo('video', video_info)
     if audio_info is not None:
         liz.addStreamInfo('audio', audio_info)
+
+    # add Choose Stream and Highlights as context menu items
+    liz.addContextMenuItems([(LOCAL_STRING(30390), 'PlayMedia(plugin://plugin.video.mlbtv/?mode='+str(103)+'&name='+urllib.quote_plus(name)+'&game_pk='+urllib.quote_plus(str(game_pk))+'&stream_date='+urllib.quote_plus(str(stream_date))+'&spoiler='+urllib.quote_plus(str(spoiler))+')'), (LOCAL_STRING(30391), 'Container.Update(plugin://plugin.video.mlbtv/?mode='+str(106)+'&name='+urllib.quote_plus(name)+'&game_pk='+urllib.quote_plus(str(game_pk))+')')])
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
     xbmcplugin.setContent(addon_handle, 'episodes')

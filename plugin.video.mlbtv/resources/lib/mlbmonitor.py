@@ -89,9 +89,6 @@ class MLBMonitor(xbmc.Monitor):
                         xbmc.log("Skip monitor for " + content_id + " closing due to stream not starting")
                         break
 
-            # wait 1 second until next loop iteration
-            xbmc.sleep(1000)
-
         xbmc.log("Skip monitor for " + content_id + " closed")
 
 

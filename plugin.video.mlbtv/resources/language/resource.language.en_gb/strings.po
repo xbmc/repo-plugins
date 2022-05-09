@@ -120,6 +120,10 @@ msgctxt "#30306"
 msgid "Ask to automatically skip breaks"
 msgstr ""
 
+msgctxt "#30307"
+msgid "Auto-select favorite/home video stream"
+msgstr ""
+
 msgctxt "#30300"
 msgid "In Market Streams"
 msgstr ""
@@ -328,3 +332,6 @@ msgctxt "#30410"
 msgid "Bottom"
 msgstr ""
 
+msgctxt "#30411"
+msgid "Play All"
+msgstr ""

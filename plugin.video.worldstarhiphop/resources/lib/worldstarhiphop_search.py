@@ -98,25 +98,23 @@ class Main(object):
         # Parse response
         soup = getSoup(html_source)
 
-        # <section class="box" itemscope itemtype="http://schema.org/ImageObject">
-        #     <a itemprop="url" href="/videos/video.php?v=wshh2CJS555r6b1C9wYW" class="video-box">
-        #         <img class="lazy" data-original="http://hw-static.worldstarhiphop.com/u/pic/2017/06/RQuaJkNGpDn1.jpg" width="222" height="125" alt="XXXTentacion Punches A Fan In The Face For Touching Him During Salt Lake City Performance!" itemprop="thumbnailUrl">
-        #         <noscript><img src="http://hw-static.worldstarhiphop.com/u/pic/2017/06/RQuaJkNGpDn1.jpg" width="222" height="125" alt="XXXTentacion Punches A Fan In The Face For Touching Him During Salt Lake City Performance!" itemprop="thumbnailUrl"></noscript>
-        #     </a>
-        #     <strong class="title" itemprop="name"><a href="/videos/video.php?v=wshh2CJS555r6b1C9wYW">XXXTentacion Punches A Fan In The Face For Touching Him During Salt Lake City Performance!</a></strong>
-        #     <div>
-        #         <span class="views">104,000</span>
-        #         <span class="comments"><a href="http://www.worldstarhiphop.com/videos/video.php?v=wshh2CJS555r6b1C9wYW#disqus_thread" data-disqus-identifier="108305"></a></span>
-        #     </div>
-        # </section>
+        # <a itemprop="url" class="video-box" href="https://worldstar.com/videos/wshhfvUpk4c8RQJu1Ldx/quotgirls-gone-wildquot-chicks-from-the-2000s-era-now-regret-flashing-cameras-exposing-joe-francis">
+		#   <img class="lazy" data-original="https://hw-static.worldstarhiphop.com/u/pic/2022/04/8psfWpSeWZE4.jpg" alt="&quot;Girls Gone Wild&quot; Chicks From The 2000s Era Now Regret Flashing Cameras... Exposing Joe Francis!"
+        #    itemprop="thumbnailUrl" src="https://hw-static.worldstarhiphop.com/u/pic/2022/04/8psfWpSeWZE4.jpg" style="" width="222" height="125">
+		# 	<noscript>
+        #     <img src="https://hw-static.worldstarhiphop.com/u/pic/2022/04/8psfWpSeWZE4.jpg" width="222" height="125"
+        # 	   alt="&quot;Girls Gone Wild&quot; Chicks From The 2000s Era Now Regret Flashing Cameras... Exposing Joe Francis!" itemprop="thumbnailUrl">
+        # 	</noscript>
+		# </a>
 
-        items = soup.findAll('section', attrs={'class': re.compile("^box")})
+        items = soup.findAll('a', attrs={'class': re.compile("^video-box")})
 
         log("len(items)", len(items))
 
         for item in items:
             try:
-                video_page_url = BASEURL + str(item.a['href'])
+                # video_page_url = BASEURL + str(item['href'])
+                video_page_url = str(item['href'])
             except:
                 # skip the item if it does not have a href
 
@@ -126,8 +124,8 @@ class Main(object):
 
             log("video_page_url", video_page_url)
 
-            # skip the item if the video page url isn't a real video page url
-            if str(video_page_url).find('/videos/video.php?v=') == -1:
+            # # skip the item if the video page url isn't a real video page url
+            if str(video_page_url).find('/videos/') == -1:
 
                 log("skipping item because no video could be found", video_page_url)
 

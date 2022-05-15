@@ -37,26 +37,33 @@ class ApiHelper:
         """Get all TV shows for a given category, channel or feature, optionally filtered by favorites"""
         params = {}
 
+        # Facet-selection
         if category:
             params['facets[categories]'] = category
             cache_file = 'category.{category}.json'.format(category=category)
-
-        if channel:
-            params['facets[programBrands]'] = channel
-            cache_file = 'channel.{channel}.json'.format(channel=channel)
 
         if feature:
             params['facets[programTags.title]'] = feature
             cache_file = 'featured.{feature}.json'.format(feature=feature)
 
         # If no facet-selection is done, we return the 'All programs' listing
-        if not category and not channel and not feature:
-            params['facets[transcodingStatus]'] = 'AVAILABLE'  # Required for getting results in Suggests API
+        if not category and not feature:
+            params['size'] = '1000'  # Required for getting results in Suggests API
             cache_file = 'programs.json'
 
         querystring = '&'.join('{}={}'.format(key, value) for key, value in list(params.items()))
         suggest_url = self._VRTNU_SUGGEST_URL + '?' + querystring
-        return get_cached_url_json(url=suggest_url, cache=cache_file, ttl=ttl('indirect'), fail=[])
+        tvshows = get_cached_url_json(url=suggest_url, cache=cache_file, ttl=ttl('indirect'), fail=[])
+
+        # Filter tvshows by channel
+        if channel:
+            filtered_tvshows = []
+            for tvshow in tvshows:
+                if tvshow.get('brands') and tvshow.get('brands')[0] == channel:
+                    filtered_tvshows.append(tvshow)
+            tvshows = filtered_tvshows
+
+        return tvshows
 
     def list_tvshows(self, category=None, channel=None, feature=None, programs=None, use_favorites=False):
         """List all TV shows for a given category, channel, feature or list of programNames, optionally filtered by favorites"""
@@ -72,7 +79,10 @@ class ApiHelper:
                     filtered_tvshows.append(tvshow)
             tvshows = filtered_tvshows
 
-        # Get oneoffs
+        # FIXME: Get oneoffs
+        cache_file = None
+        oneoffs = []
+        '''
         if get_setting_bool('showoneoff', default=True):
             cache_file = 'oneoff.json'
             oneoffs = self.get_episodes(variety='oneoff', cache_file=cache_file)
@@ -80,6 +90,7 @@ class ApiHelper:
             cache_file = None
             # Return empty list
             oneoffs = []
+        '''
 
         return self.__map_tvshows(tvshows, oneoffs, use_favorites=use_favorites, cache_file=cache_file)
 
@@ -100,7 +111,7 @@ class ApiHelper:
         )
 
     def list_episodes(self, program=None, season=None, category=None, feature=None, programtype=None,
-                      page=None, items_per_page=None, use_favorites=False, variety=None, sort_key=None, whatson_id=None, episode_id=None):
+                      page=None, use_favorites=False, variety=None, whatson_id=None, episode_id=None):
         """Construct a list of episode or season TitleItems from VRT NU Search API data and filtered by favorites"""
         # Caching
         if not variety:
@@ -109,7 +120,7 @@ class ApiHelper:
             cache_file = '{my}{variety}{page}.json'.format(
                 my='my-' if use_favorites else '',
                 variety=variety,
-                page='-{}'.format(page) if sort_key is None and page is not None else '',
+                page='-{}'.format(page) if page is not None else '',
             )
 
         # Titletype
@@ -121,13 +132,8 @@ class ApiHelper:
             titletype = variety
 
         # Get data from api or cache
-        if sort_key:
-            episodes = self.get_episodes(program=program, season=season, category=category, feature=feature, programtype=programtype,
-                                         use_favorites=use_favorites, variety=variety, cache_file=cache_file, whatson_id=whatson_id, episode_id=episode_id)
-            episodes = sorted(episodes, key=lambda k: k[sort_key])[(page * items_per_page) - items_per_page:page * items_per_page]
-        else:
-            episodes = self.get_episodes(program=program, season=season, category=category, feature=feature, programtype=programtype, page=page,
-                                         use_favorites=use_favorites, variety=variety, cache_file=cache_file, whatson_id=whatson_id, episode_id=episode_id)
+        episodes = self.get_episodes(program=program, season=season, category=category, feature=feature, programtype=programtype, page=page,
+                                     use_favorites=use_favorites, variety=variety, cache_file=cache_file, whatson_id=whatson_id, episode_id=episode_id)
 
         if isinstance(episodes, tuple):
             seasons = episodes[0]
@@ -531,17 +537,14 @@ class ApiHelper:
                 'i': 'video',
                 'size': '300',
             }
-        params['facets[transcodingStatus]'] = '[AVAILABLE]'
+        params['available'] = 'true'
 
         if variety:
             season = 'allseasons'
 
             if variety == 'offline':
-                from datetime import datetime, timedelta
-                import dateutil.tz
-                now = datetime.now(dateutil.tz.gettz('Europe/Brussels'))
-                off_dates = [(now + timedelta(days=day)).strftime('%Y-%m-%d') for day in range(0, 7)]
-                params['facets[offTime]'] = '[%s]' % (','.join(off_dates))
+                params['orderBy'] = 'offTime'
+                params['order'] = 'asc'
 
             if variety == 'oneoff':
                 params['facets[episodeNumber]'] = '[0,1]'  # This to avoid VRT NU metadata errors (see #670)
@@ -553,21 +556,19 @@ class ApiHelper:
                 params['facets[episodeId]'] = '[%s]' % (','.join(episode_ids))
 
             if variety == 'continue':
-                self._resumepoints.refresh_resumepoints(ttl=ttl('direct'))
-                episode_ids = self._resumepoints.resumepoints_ids()
-                params['facets[videoId]'] = '[%s]' % (','.join(episode_ids))
+                self._resumepoints.refresh_continue(ttl=ttl('direct'))
+                episode_ids = self._resumepoints.continue_ids()
+                params['facets[episodeId]'] = '[%s]' % (','.join(episode_ids))
 
             if use_favorites:
                 params['facets[programName]'] = '[%s]' % (','.join(self._favorites.programs()))
             elif variety in ('offline', 'recent'):
-                channel_filter = []
-                for channel in CHANNELS:
-                    if channel.get('vod') is True and get_setting_bool(channel.get('name'), default=True):
-                        channel_filter.append(channel.get('name'))
-                params['facets[programBrands]'] = '[%s]' % (','.join(channel_filter))
+                params['q'] = 'BE'
 
         if program:
-            params['facets[programName]'] = program
+            params['orderBy'] = 'episodeId'
+            params['order'] = 'desc'
+            params['q'] = program.replace('-', ' ')
 
         if season and season != 'allseasons':
             params['facets[seasonId]'] = season
@@ -650,6 +651,24 @@ class ApiHelper:
                 api_page_json = get_url_json(api_page_url)
                 if api_page_json is not None:
                     episodes += api_page_json.get('results', [{}])
+
+        # FIXME: Filter episodes because faceted search is broken
+        if program:
+            filtered_episodes = []
+            for episode in episodes:
+                if episode.get('programName') == program:
+                    filtered_episodes.append(episode)
+            episodes = filtered_episodes
+        elif variety in ('offline', 'recent'):
+            channel_filter = []
+            for channel in CHANNELS:
+                if channel.get('vod') is True and get_setting_bool(channel.get('name'), default=True):
+                    channel_filter.append(channel.get('name'))
+            filtered_episodes = []
+            for episode in episodes:
+                if episode.get('brands')[0] in channel_filter:
+                    filtered_episodes.append(episode)
+            episodes = filtered_episodes
 
         # Return episodes
         return episodes

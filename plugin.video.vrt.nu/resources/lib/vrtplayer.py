@@ -7,7 +7,7 @@ from apihelper import ApiHelper
 from favorites import Favorites
 from helperobjects import TitleItem
 from kodiutils import (colour, delete_cached_thumbnail, end_of_directory, get_addon_info,
-                       get_setting, get_setting_bool, get_setting_int, has_credentials,
+                       get_setting, get_setting_bool, has_credentials,
                        has_inputstream_adaptive, localize, kodi_version_major, log_error,
                        ok_dialog, play, set_setting, show_listing, ttl, url_for,
                        wait_for_resumepoints)
@@ -283,18 +283,16 @@ class VRTPlayer:
         # My favorites menus may need more up-to-date favorites
         self._favorites.refresh(ttl=ttl('direct' if use_favorites else 'indirect'))
         self._resumepoints.refresh(ttl=ttl('direct' if use_favorites else 'indirect'))
-        page = realpage(page)
         episode_items, sort, ascending, content = self._apihelper.list_episodes(page=page, use_favorites=use_favorites, variety='recent')
 
         # Add 'More...' entry at the end
-        if len(episode_items) == get_setting_int('itemsperpage', default=50):
-            recent = 'favorites_recent' if use_favorites else 'recent'
-            episode_items.append(TitleItem(
-                label=colour(localize(30300)),
-                path=url_for(recent, page=page + 1),
-                art_dict=dict(thumb='DefaultRecentlyAddedEpisodes.png'),
-                info_dict={},
-            ))
+        recent = 'favorites_recent' if use_favorites else 'recent'
+        episode_items.append(TitleItem(
+            label=colour(localize(30300)),
+            path=url_for(recent, page=realpage(page) + 1),
+            art_dict=dict(thumb='DefaultRecentlyAddedEpisodes.png'),
+            info_dict={},
+        ))
 
         show_listing(episode_items, category=30020, sort=sort, ascending=ascending, content=content, cache=False)
 
@@ -304,21 +302,17 @@ class VRTPlayer:
         # My favorites menus may need more up-to-date favorites
         self._favorites.refresh(ttl=ttl('direct' if use_favorites else 'indirect'))
         self._resumepoints.refresh(ttl=ttl('direct' if use_favorites else 'indirect'))
-        page = realpage(page)
-        items_per_page = get_setting_int('itemsperpage', default=50)
-        sort_key = 'offTime'
-        episode_items, sort, ascending, content = self._apihelper.list_episodes(page=page, items_per_page=items_per_page, use_favorites=use_favorites,
-                                                                                variety='offline', sort_key=sort_key)
+        episode_items, sort, ascending, content = self._apihelper.list_episodes(page=page, use_favorites=use_favorites, variety='offline')
 
         # Add 'More...' entry at the end
-        if len(episode_items) == items_per_page:
-            offline = 'favorites_offline' if use_favorites else 'offline'
-            episode_items.append(TitleItem(
-                label=localize(30300),
-                path=url_for(offline, page=page + 1),
-                art_dict=dict(thumb='DefaultYear.png'),
-                info_dict={},
-            ))
+        # if len(episode_items) == items_per_page:
+        offline = 'favorites_offline' if use_favorites else 'offline'
+        episode_items.append(TitleItem(
+            label=localize(30300),
+            path=url_for(offline, page=realpage(page) + 1),
+            art_dict=dict(thumb='DefaultYear.png'),
+            info_dict={},
+        ))
 
         show_listing(episode_items, category=30022, sort=sort, ascending=ascending, content=content, cache=False)
 
@@ -361,16 +355,6 @@ class VRTPlayer:
             return
         if not video:
             log_error('Play episode by air date failed, channel {channel}, start_date {start}', channel=channel, start=start_date)
-            ok_dialog(message=localize(30954))
-            end_of_directory()
-            return
-        self.play(video)
-
-    def play_episode_by_whatson_id(self, whatson_id):
-        """Play an episode of a program given the whatson_id"""
-        video = self._apihelper.get_single_episode(whatson_id=whatson_id)
-        if not video:
-            log_error('Play episode by whatson_id failed, whatson_id {whatson_id}', whatson_id=whatson_id)
             ok_dialog(message=localize(30954))
             end_of_directory()
             return

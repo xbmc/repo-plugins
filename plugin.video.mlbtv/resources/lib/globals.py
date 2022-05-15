@@ -45,6 +45,7 @@ FAV_TEAM = str(settings.getSetting(id="fav_team"))
 TEAM_NAMES = settings.getSetting(id="team_names")
 TIME_FORMAT = settings.getSetting(id="time_format")
 SINGLE_TEAM = str(settings.getSetting(id='single_team'))
+AUTO_SELECT_STREAM = str(settings.getSetting(id='auto_select_stream'))
 CATCH_UP = str(settings.getSetting(id='catch_up'))
 ASK_TO_SKIP = str(settings.getSetting(id='ask_to_skip'))
 ONLY_FREE_GAMES = str(settings.getSetting(id="only_free_games"))
@@ -209,6 +210,9 @@ def add_stream(name, title, game_pk, icon=None, fanart=None, info=None, video_in
         liz.addStreamInfo('video', video_info)
     if audio_info is not None:
         liz.addStreamInfo('audio', audio_info)
+
+    # add Choose Stream and Highlights as context menu items
+    liz.addContextMenuItems([(LOCAL_STRING(30390), 'PlayMedia(plugin://plugin.video.mlbtv/?mode='+str(103)+'&name='+urllib.quote_plus(name)+'&game_pk='+urllib.quote_plus(str(game_pk))+'&stream_date='+urllib.quote_plus(str(stream_date))+'&spoiler='+urllib.quote_plus(str(spoiler))+')'), (LOCAL_STRING(30391), 'Container.Update(plugin://plugin.video.mlbtv/?mode='+str(106)+'&name='+urllib.quote_plus(name)+'&game_pk='+urllib.quote_plus(str(game_pk))+')')])
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
     xbmcplugin.setContent(addon_handle, 'episodes')

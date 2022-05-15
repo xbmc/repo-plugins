@@ -22,8 +22,10 @@ class ResumePoints:
 
     GRAPHQL_URL = 'https://www.vrt.be/vrtnu-api/graphql/v1'
     WATCHLATER_REST_URL = 'https://www.vrt.be/vrtnu-api/rest/lists/vrtnu-watchLater'
+    CONTINUE_REST_URL = 'https://www.vrt.be/vrtnu-api/rest/recommendations/live/vrtnu/verder'
     RESUMEPOINTS_URL = 'https://ddt.profiel.vrt.be/resumePoints'
     RESUMEPOINTS_CACHE_FILE = 'resume_points.json'
+    CONTINUE_CACHE_FILE = 'continue.json'
     WATCHLATER_URL = 'https://video-user-data.vrt.be/resume_points'
     WATCHLATER_CACHE_FILE = 'watchlater.json'
 
@@ -31,6 +33,7 @@ class ResumePoints:
         """Initialize resumepoints, relies on XBMC vfs and a special VRT token"""
         self._watchlater = {}  # Our internal watchLater status representation
         self._resumepoints = {}  # Our internal Resumepoints representation
+        self._continue = {}  # Our internal continue status representation
 
     @staticmethod
     def is_activated():
@@ -59,18 +62,7 @@ class ResumePoints:
         """Get a cached copy or a newer resumepoints from VRT, or fall back to a cached file"""
         self.refresh_resumepoints(ttl)
         self.refresh_watchlater(ttl)
-
-    def refresh_watchlater(self, ttl=None):
-        """Get a cached copy or a newer watchLater list from VRT, or fall back to a cached file"""
-        if not self.is_activated():
-            return
-        watchlater_dict = get_cache(self.WATCHLATER_CACHE_FILE, ttl)
-        if not watchlater_dict:
-            watchlater_dict = self._generate_watchlater_dict(self.get_watchlater())
-        if watchlater_dict is not None:
-            from json import dumps
-            self._watchlater = watchlater_dict
-            update_cache(self.WATCHLATER_CACHE_FILE, dumps(self._watchlater))
+        self.refresh_continue(ttl)
 
     def refresh_resumepoints(self, ttl=None):
         """Get a cached copy or a newer resumepoints from VRT, or fall back to a cached file"""
@@ -85,6 +77,30 @@ class ResumePoints:
             resumepoints_json = get_url_json(url=resumepoints_url, cache=self.RESUMEPOINTS_CACHE_FILE, headers=headers)
         if resumepoints_json is not None:
             self._resumepoints = resumepoints_json
+
+    def refresh_watchlater(self, ttl=None):
+        """Get a cached copy or a newer watchLater list from VRT, or fall back to a cached file"""
+        if not self.is_activated():
+            return
+        watchlater_dict = get_cache(self.WATCHLATER_CACHE_FILE, ttl)
+        if not watchlater_dict:
+            watchlater_dict = self._generate_watchlater_dict(self.get_watchlater())
+        if watchlater_dict is not None:
+            from json import dumps
+            self._watchlater = watchlater_dict
+            update_cache(self.WATCHLATER_CACHE_FILE, dumps(self._watchlater))
+
+    def refresh_continue(self, ttl=None):
+        """Get a cached copy or a newer continue list from VRT, or fall back to a cached file"""
+        if not self.is_activated():
+            return
+        continue_dict = get_cache(self.CONTINUE_CACHE_FILE, ttl)
+        if not continue_dict:
+            continue_dict = self._generate_continue_dict(self.get_continue())
+        if continue_dict is not None:
+            from json import dumps
+            self._continue = continue_dict
+            update_cache(self.CONTINUE_CACHE_FILE, dumps(self._continue))
 
     @staticmethod
     def resumepoints_headers():
@@ -240,6 +256,26 @@ class ResumePoints:
             watchlater_json = get_url_json(url='{}?{}'.format(self.WATCHLATER_REST_URL, urlencode(payload)), cache=None, headers=headers, raise_errors='all')
         return watchlater_json
 
+    def get_continue(self):
+        """Get continue using VRT NU REST API"""
+        from tokenresolver import TokenResolver
+        vrtlogin_at = TokenResolver().get_token('vrtlogin-at')
+        continue_json = {}
+        if vrtlogin_at:
+            headers = {
+                'Authorization': 'Bearer ' + vrtlogin_at,
+                'Accept': 'application/json',
+            }
+            payload = dict(
+                contentType='video',
+                tileType='mixed-content',
+                tileContentType='episode',
+                tileOrientation='landscape',
+                layout='slider',
+                title='Programma\'s verder kijken')
+            continue_json = get_url_json(url='{}?{}'.format(self.CONTINUE_REST_URL, urlencode(payload)), cache=None, headers=headers, raise_errors='all')
+        return continue_json
+
     def set_watchlater_graphql(self, episode_id, title, watch_later=True):
         """Set watchLater episode using GraphQL API"""
         from tokenresolver import TokenResolver
@@ -285,6 +321,18 @@ class ResumePoints:
                     title=title)
         return watchlater_dict
 
+    @staticmethod
+    def _generate_continue_dict(continue_json):
+        """Generate a simple continue dict with episodeIds and episodeTitles"""
+        continue_dict = {}
+        if continue_json is not None:
+            for item in continue_json.get(':items', []):
+                episode_id = continue_json.get(':items')[item].get('data').get('episode').get('id')
+                title = continue_json.get(':items')[item].get('description')
+                continue_dict[episode_id] = dict(
+                    title=title)
+        return continue_dict
+
     def is_watchlater(self, episode_id):
         """Is an episode set to watch later ?"""
         return episode_id in self._watchlater
@@ -328,15 +376,9 @@ class ResumePoints:
         """Return all watchlater episode_id's"""
         return list(self._watchlater.keys())
 
-    def resumepoints_ids(self):
-        """Return all ids that have not been finished watching"""
-        ids = []
-        items = self._resumepoints.get('items')
-        if items:
-            for item in items:
-                if self.still_watching(item.get('at'), item.get('total')):
-                    ids.append(item.get('mediaId'))
-        return ids
+    def continue_ids(self):
+        """Return all continue episode_id's"""
+        return list(self._continue.keys())
 
     @staticmethod
     def still_watching(position, total):

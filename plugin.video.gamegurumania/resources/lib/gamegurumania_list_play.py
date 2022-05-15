@@ -12,7 +12,7 @@ import requests
 import xbmc
 import xbmcgui
 import xbmcplugin
-from .gamegurumania_const import LANGUAGE, IMAGES_PATH, ADDON, DATE, VERSION, HEADERS, convertToUnicodeString, log, getSoup
+from resources.lib.gamegurumania_const import LANGUAGE, IMAGES_PATH, ADDON, DATE, VERSION, HEADERS, convertToUnicodeString, log, getSoup
 
 #
 # Main class
@@ -39,14 +39,14 @@ class Main(object):
             self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
         except KeyError:
             self.plugin_category = LANGUAGE(30000)
-            self.video_list_page_url = "http://www.ggmania.com/more.php3?next=000"
+            self.video_list_page_url = "https://www.ggmania.com/more.php3?next=000"
             self.next_page_possible = "True"
 
         log("self.video_list_page_url", self.video_list_page_url)
 
         if self.next_page_possible == 'True':
             # Determine current item number, next item number, next_url
-            # http://www.ggmania.com/more.php3?next=000&kategory=movie
+            # https://www.ggmania.com/more.php3?next=000&kategory=movie
             pos_of_next = self.video_list_page_url.rfind('next=')
             item_number_str = str(
                 self.video_list_page_url[pos_of_next + len('next='):pos_of_next + len('next=') + len('000')])
@@ -88,7 +88,8 @@ class Main(object):
         #
         # Get HTML page
         #
-        response = requests.get(self.video_list_page_url, headers=HEADERS)
+
+        response = requests.get(self.video_list_page_url, headers=HEADERS, verify=False)
 
         html_source = response.text
         html_source = convertToUnicodeString(html_source)
@@ -96,10 +97,10 @@ class Main(object):
         # Parse response
         soup = getSoup(html_source)
 
-        # <b><a class="nadpis" name="middle-earth-shadow-of-war-gameplay-43762" href="http://www.ggmania.com/?smsid=middle-earth-shadow-of-war-gameplay-43762">Middle-earth: Shadow of War Gameplay</a></b></font><b><font color="black" size="-1" face="arial,helvetica"> - movie</font></b><br />
+        # <b><a class="nadpis" name="middle-earth-shadow-of-war-gameplay-43762" href="https://www.ggmania.com/?smsid=middle-earth-shadow-of-war-gameplay-43762">Middle-earth: Shadow of War Gameplay</a></b></font><b><font color="black" size="-1" face="arial,helvetica"> - movie</font></b><br />
         # <font style="color:#000080;text-decoration:none" face="arial,helvetica"><small>(hx) 09:46 AM EDT - Jul,17 2017
         #
-        # </small></font><a class="koment" href="http://www.ggmania.com/cf.php3?show=43762">Post a comment</a><br /><font class="textik"> Warner Bros and Monolith have shared a video, showing 40 minutes of new gameplay footage from Middle-earth: Shadow of War. This video showcases some of the new skills, abilities and upgrades, as well as the games enhanced combat mechanics and its improved environments. Middle Earth: Shadow of War is currently planned for an October 10th.
+        # </small></font><a class="koment" href="https://www.ggmania.com/cf.php3?show=43762">Post a comment</a><br /><font class="textik"> Warner Bros and Monolith have shared a video, showing 40 minutes of new gameplay footage from Middle-earth: Shadow of War. This video showcases some of the new skills, abilities and upgrades, as well as the games enhanced combat mechanics and its improved environments. Middle Earth: Shadow of War is currently planned for an October 10th.
         # <br /> <br />
         # <center>
         # <iframe src="https://player.twitch.tv/?video=v159159060&amp;autoplay=false" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe><a href="https://www.twitch.tv/monolithlive?tt_medium=live_embed&amp;tt_content=text_link" style="padding:2px 0px 4px; display:block; width:345px; font-weight:normal; font-size:10px; text-decoration:underline;">Watch live video from monolithlive on www.twitch.tv</a>

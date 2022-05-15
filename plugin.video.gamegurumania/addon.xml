@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.gamegurumania" 
 	name="Gamegurumania" 
-	version="1.0.7+matrix.1"
+	version="1.0.8+matrix.1"
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="3.0.0"/>
@@ -25,9 +25,13 @@
     <language>en</language>
     <platform>all</platform>
 	<license>GPL-2.0-or-later</license>
-    <forum>http://forum.xbmc.org/showthread.php?tid=203210</forum>
-    <website>http://ggmania.com</website>
+    <forum>https://forum.xbmc.org/showthread.php?tid=203210</forum>
+    <website>https://ggmania.com</website>
     <source>https://github.com/skipmodea1/plugin.video.gamegurumania.python3</source>
+    <news>v1.0.8 (2022-04-22)
+	- using https instead of http
+	- ignoring ssl error
+    </news>
     <assets>
       <icon>resources/icon.png</icon>
       <fanart>resources/fanart.jpg</fanart>

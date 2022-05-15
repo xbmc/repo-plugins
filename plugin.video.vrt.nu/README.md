@@ -59,6 +59,9 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.11 (2022-05-15)
+- Fix "All programs", "Categories","Most recent", "Soon offline" and "Channels" menu (@mediaminister)
+
 ### v2.5.10 (2022-04-29)
 - Fix watching from the tv guide (@mediaminister)
 - Fix season menu labels (@mediaminister)

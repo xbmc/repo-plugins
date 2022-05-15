@@ -316,13 +316,6 @@ def play_air_date(channel, start_date, end_date=None):
     VRTPlayer().play_episode_by_air_date(channel, start_date, end_date)
 
 
-@plugin.route('/play/whatson/<whatson_id>')
-def play_whatson_id(whatson_id):
-    """The API interface to play a video by using a whatson_id"""
-    from vrtplayer import VRTPlayer
-    VRTPlayer().play_episode_by_whatson_id(whatson_id=whatson_id)
-
-
 @plugin.route('/play/episode/<episode_id>')
 def play_episode_id(episode_id):
     """The API interface to play a video by using a episodeId"""

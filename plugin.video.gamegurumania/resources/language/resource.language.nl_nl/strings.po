@@ -12,136 +12,140 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
+"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "Addon Summary"
 msgid "Watch game videos made from ggmania.com"
-msgstr ""
+msgstr "Bekijk game videos van ggmania.com"
 
 msgctxt "Addon Description"
 msgid "Watch game videos made from ggmania.com"
-msgstr ""
+msgstr "Bekijk game videos van ggmania.com"
 
 msgctxt "Addon Disclaimer"
 msgid "For bugs, requests or general questions visit the ggmania.com thread on the XBMC forum."
-msgstr ""
+msgstr "Bugs of andere feedback op deze plugin kan geplaatst worden in de ggmania.com thread op het XBMC forum."
 
 msgctxt "#30000"
 msgid "All Videos"
-msgstr ""
+msgstr "Alle Videos"
 
 msgctxt "#30001"
 msgid "Movie"
-msgstr ""
+msgstr "Movie"
 
 msgctxt "#30002"
 msgid "Console"
-msgstr ""
+msgstr "Console"
 
 msgctxt "#30003"
 msgid "Preview"
-msgstr ""
+msgstr "Preview"
 
 msgctxt "#30004"
 msgid "Tech"
-msgstr ""
+msgstr "Tech"
 
 msgctxt "#30005"
 msgid "Demo"
-msgstr ""
+msgstr "Demo"
 
 msgctxt "#30006"
 msgid "Interview"
-msgstr ""
+msgstr "Interview"
 
 msgctxt "#30007"
 msgid "Freegame"
-msgstr ""
+msgstr "Freegame"
 
 msgctxt "#30008"
 msgid "Media"
-msgstr ""
+msgstr "Media"
 
 msgctxt "#30009"
 msgid "Gold"
-msgstr ""
+msgstr "Gold"
 
 msgctxt "#30100"
 msgid "Version"
-msgstr ""
+msgstr "Versie"
 
 msgctxt "#30101"
 msgid "Author"
-msgstr ""
+msgstr "Auteur"
 
 msgctxt "#30102"
 msgid "Website"
-msgstr ""
+msgstr "Website"
+
+msgctxt "#30103"
+msgid "General"
+msgstr "Algemeen"
 
 msgctxt "#30104"
 msgid "Refresh"
-msgstr ""
+msgstr "Ververs"
 
 msgctxt "#30105"
 msgid "Episode Info"
-msgstr ""
+msgstr "Aflevering Info"
 
 msgctxt "#30200"
 msgid "Video player"
-msgstr ""
+msgstr "Video player"
 
 msgctxt "#30201"
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 msgctxt "#30202"
 msgid "DVDPlayer"
-msgstr ""
+msgstr "DVDPlayer"
 
 msgctxt "#30203"
 msgid "MPlayer"
-msgstr ""
+msgstr "MPlayer"
 
 msgctxt "#30300"
 msgid "Maximum Video quality"
-msgstr ""
+msgstr "Maximum Video kwaliteit"
 
 msgctxt "#30301"
 msgid "Standard"
-msgstr ""
+msgstr "Standaard"
 
 msgctxt "#30302"
 msgid "High"
-msgstr ""
+msgstr "Hoog"
 
 msgctxt "#30400"
 msgid "Debug"
-msgstr ""
+msgstr "Debug"
 
 msgctxt "#30501"
 msgid "%s to %s"
-msgstr ""
+msgstr "%s tot %s"
 
 msgctxt "#30502"
 msgid "Page %u"
-msgstr ""
+msgstr "Pagina %u"
 
 msgctxt "#30503"
 msgid "Next page"
-msgstr ""
+msgstr "Volgende pagina"
 
 msgctxt "#30504"
 msgid "Getting video location..."
-msgstr ""
+msgstr "Video wordt opgehaald..."
 
 msgctxt "#30505"
 msgid "No video found."
-msgstr ""
+msgstr "Video niet gevonden."
 
 msgctxt "#30506"
 msgid "No media found for:"
-msgstr ""
+msgstr "Fout bij het afspelen van video."
 
 msgctxt "#30610"
 msgid "Only show All Videos category"

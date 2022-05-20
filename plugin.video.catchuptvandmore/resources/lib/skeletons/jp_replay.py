@@ -41,6 +41,14 @@ menu = {
         'enabled': True,
         'order': 3
     },
+    'cx': {
+        'route': '/resources/lib/channels/jp/tver:list_categories',
+        'label': 'Fuji TV フジテレビ',
+        'thumb': 'channels/jp/cx.png',
+        'fanart': 'channels/jp/cx_fanart.jpg',
+        'enabled': True,
+        'order': 4
+    },
     'ex': {
         'route': '/resources/lib/channels/jp/tver:list_categories',
         'label': 'テレビ朝日',
@@ -121,5 +129,4 @@ menu = {
         'enabled': True,
         'order': 16
     }
-
 }

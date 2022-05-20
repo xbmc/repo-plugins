@@ -14,7 +14,7 @@ import urlquick
 
 from resources.lib import web_utils
 from resources.lib.menu_utils import item_post_treatment
-from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info
+from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
 
 
 # TODO
@@ -158,7 +158,7 @@ def get_video_url(plugin,
 
     item = Listitem()
     item.path = json_parser["files"]["auto"]
-    item.property["inputstreamaddon"] = "inputstream.adaptive"
+    item.property[INPUTSTREAM_PROP] = "inputstream.adaptive"
     item.property["inputstream.adaptive.manifest_type"] = "mpd"
     item.label = get_selected_item_label()
     item.art.update(get_selected_item_art())
@@ -187,7 +187,7 @@ def get_live_url(plugin, item_id, **kwargs):
 
     item = Listitem()
     item.path = json_parser["files"]["auto"]
-    item.property["inputstreamaddon"] = "inputstream.adaptive"
+    item.property[INPUTSTREAM_PROP] = "inputstream.adaptive"
     item.property["inputstream.adaptive.manifest_type"] = "mpd"
     item.label = get_selected_item_label()
     item.art.update(get_selected_item_art())

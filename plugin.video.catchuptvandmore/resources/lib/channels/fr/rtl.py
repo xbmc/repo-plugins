@@ -9,24 +9,33 @@ import re
 
 from codequick import Resolver
 import urlquick
+import json
 
 from resources.lib import resolver_proxy, web_utils
+
+URL_ROOT = 'https://www.%s.fr'
+
+URL_LIVE = URL_ROOT + '/ws/live/live'
 
 
 # TODO
 # Add Replay
 
-URL_ROOT = "https://www.rtl.fr"
-
-URL_LIVE = URL_ROOT + '/direct/videoplayer'
-
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(
-        URL_LIVE, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    live_id = re.compile(r'dailymotion.com/embed/video/(.*?)[\?\"]').findall(resp.text)[0]
-    return resolver_proxy.get_stream_dailymotion(plugin,
-                                                 live_id,
-                                                 False)
+    try:
+        resp = urlquick.get(URL_LIVE % item_id, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
+        json_parser = json.loads(resp.text)
+        live_id = json_parser['video']['dailymotionId']
+    except Exception:
+        # Links seem to be stable
+        if item_id == 'funradio':
+            live_id = 'xxtuy6'
+        elif item_id == 'rtl':
+            live_id = 'xl1km0'
+        else:
+            live_id = 'x2tzzpj'
+
+    return resolver_proxy.get_stream_dailymotion(plugin, live_id, False)

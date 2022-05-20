@@ -129,6 +129,7 @@ def ListLive():
     channel_list = [
         ('bbc_one_hd',                       'BBC One'),
         ('bbc_two_england',                  'BBC Two'),
+        ('bbc_three_hd',                     'BBC Three'),
         ('bbc_four_hd',                      'BBC Four'),
         ('cbbc_hd',                          'CBBC'),
         ('cbeebies_hd',                      'CBeebies'),

@@ -45,6 +45,9 @@ elif mode == 101:
     # Prev and Next
     todays_games(game_day)
 
+# from context menu, use an extra parameter to force manual stream selection
+elif mode == 103:
+    stream_select(game_pk, spoiler, True)
 
 elif mode == 104:
     stream_select(game_pk, spoiler)
@@ -55,6 +58,14 @@ elif mode == 105:
     display_day = stringToDate(game_day, "%Y-%m-%d")
     prev_day = display_day - timedelta(days=1)
     todays_games(prev_day.strftime("%Y-%m-%d"))
+
+# highlights from context menu
+elif mode == 106:
+    list_highlights(game_pk)
+
+# play all highlights for game from context menu
+elif mode == 107:
+    play_all_highlights_for_game(game_pk)
 
 elif mode == 200:
     # Goto Date

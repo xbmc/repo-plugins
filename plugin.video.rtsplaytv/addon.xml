@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rtsplaytv" name="RTS Play TV" version="1.6.0" provider-name="Alexander Seiler">
+<addon id="plugin.video.rtsplaytv" name="RTS Play TV" version="1.6.1" provider-name="Alexander Seiler">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.srgssr" version="1.7.0"/>
@@ -23,6 +23,7 @@
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
     <forum>https://forum.kodi.tv/showthread.php?tid=336266</forum>
     <website>https://www.rts.ch/play/tv</website>
+    <broken>Plugin broken due to new service provider API. Please update to Kodi Matrix or newer.</broken>
     <email>seileralex@gmail.com</email>
     <source>https://github.com/goggle/plugin.video.rtsplaytv</source>
     <news>v1.6.0 (2019-10-09)

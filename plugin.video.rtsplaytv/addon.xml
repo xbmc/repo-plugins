@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.rtsplaytv" name="RTS Play TV" version="2.0.0" provider-name="Alexander Seiler">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.srgssr" version="2.0.0"/>
+    <import addon="script.module.youtube_channels" version="0.2.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="fr_FR">RTS Play vidéothèque</summary>
+    <summary lang="en_GB">RTS Play television video library</summary>
+    <summary lang="de_DE">RTS Play Videobibliothek</summary>
+    <summary lang="it_IT">Videoteca RTS Play</summary>
+    <description lang="fr_FR">Avec RTS Play TV vous pouvez regarder les vidéos de la vidéothèque de la Radio télévision suisse (RTS).</description>
+    <description lang="en_GB">RTS Play TV allows you to watch the content from the video library of Swiss Radio and Television (RTS).</description>
+    <description lang="de_DE">Mit RTS Play TV können Sie den Inhalt der RTS Play Videobibliothek des Schweizer Fernsehens anschauen.</description>
+    <description lang="it_IT">RTS Play TV ti permette di accedere alla videoteca della Radio e della Televisione Svizzera.</description>
+    <disclaimer lang="fr_FR">Certains contenus sont géo-bloqués et disponibles uniquement en Suisse.</disclaimer>
+    <disclaimer lang="en_GB">Some content is geo-blocked and only available in Switzerland.</disclaimer>
+    <disclaimer lang="de_DE">Einige Inhalte sind nur in der Schweiz verfügbar.</disclaimer>
+    <disclaimer lang="it_IT">Alcuni contenuti sono geograficamente bloccati e quindi visibili solo in Svizzera.</disclaimer>
+    <language>fr</language>
+    <platform>all</platform>
+    <license>GPL-3.0-or-later</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=336266</forum>
+    <website>https://www.rts.ch/play/tv</website>
+    <source>https://github.com/goggle/plugin.video.rtsplaytv</source>
+    <news>v2.0.0 (2022-05-03)
+  - Finalize Python 3 support.
+  - Adapt to SRGSSR APIv3.
+  - Remove support for audio because it is not included in the SRGSSR API anymore.
+</news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.png</fanart>
+        <screenshot>resources/screenshot-01.png</screenshot>
+        <screenshot>resources/screenshot-02.png</screenshot>
+        <screenshot>resources/screenshot-03.png</screenshot>
+        <screenshot>resources/screenshot-04.png</screenshot>
+        <screenshot>resources/screenshot-05.png</screenshot>
+    </assets>
+  </extension>
+</addon>

@@ -1,6 +1,7 @@
 v1.0.7 (2018-01-20)
 - addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
 Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.
+- adding a setting to only view all video category
 
 v1.0.6 (2017-07-12)
 - added listitem.setInfo video for Kodi 18 and up

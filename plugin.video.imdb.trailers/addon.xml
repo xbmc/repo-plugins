@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.14" provider-name="gujal">
+<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.15" provider-name="gujal">
   <requires>
     <import addon="xbmc.python" version="2.26.0"/>
     <import addon="script.module.requests" version="2.4.3"/>
@@ -33,10 +33,8 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=352127</forum>
     <website>https://www.imdb.com/trailers/</website>
     <email>gujal at protonmail dot com</email>
-    <news>v2.1.14 (20211015)
-      [fix] code breaking on Kodi18
-      [fix] Search dialog popup after playing a searched trailer
-      [fix] play by imdb_id
+    <news>v2.1.15 (20220523)
+      [fix] playback
     </news>
     <assets>
       <icon>icon.png</icon>

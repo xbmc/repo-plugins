@@ -23,7 +23,6 @@ import sys
 import datetime
 import json
 from kodi_six import xbmc, xbmcgui, xbmcplugin, xbmcaddon, xbmcvfs
-import base64
 from bs4 import BeautifulSoup, SoupStrainer
 import requests
 import six
@@ -66,7 +65,7 @@ CONTENT_URL = 'https://www.imdb.com/trailers/'
 SHOWING_URL = 'https://www.imdb.com/movies-in-theaters/'
 COMING_URL = 'https://www.imdb.com/movies-coming-soon/{}-{:02}'
 ID_URL = 'https://www.imdb.com/_json/video/{}'
-DETAILS_PAGE = "https://m.imdb.com/videoplayer/{}"
+DETAILS_PAGE = "https://www.imdb.com/video/{}/"
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17'
 quality = int(_settings("video_quality")[:-1])
 LOGINFO = xbmc.LOGINFO if six.PY3 else xbmc.LOGNOTICE
@@ -386,40 +385,24 @@ class Main(object):
     def fetch_video_url(self, video_id):
         if DEBUG:
             self.log('fetch_video_url("{0})'.format(video_id))
-        data = {"type": "VIDEO_PLAYER",
-                "subType": "FORCE_LEGACY",
-                "id": video_id}
-        data = json.dumps(data)
-        data = base64.b64encode(data.encode('utf-8')).decode('utf-8')
-        vidurl = 'https://m.imdb.com/ve/data/VIDEO_PLAYBACK_DATA?key={}'.format(data)
-        details = cache.cacheFunction(fetch, vidurl)
-        details = {i['definition']: i['url'] for i in details[0].get('videoLegacyEncodings', [])}
-        if quality == 480 or 'AUTO' not in details.keys():
-            vids = [(x[:-1], details[x]) for x in details.keys() if 'p' in x]
-            vids.sort(key=lambda x: int(x[0]), reverse=True)
-            if DEBUG:
-                self.log('Found %s videos' % len(vids))
-            for qual, vid in vids:
-                if int(qual) <= quality:
-                    if DEBUG:
-                        self.log('videoURL: %s' % vid)
-                    return vid
-        else:
-            vid = details['AUTO']
-            hls = cache.cacheFunction(fetch, vid)
-            hlspath = re.findall(r'(http.+/)', vid)[0]
-            quals = re.findall(r'BANDWIDTH=([^,]+)[^x]+x(\d+).+\n([^\n]+)', hls)
-            if DEBUG:
-                self.log('Found %s qualities' % len(quals))
-            quals = sorted(quals, key=lambda x: int(x[0]), reverse=True)
-            if DEBUG:
-                self.log('Found %s qualities after sort' % len(quals))
-            for _, qual, svid in quals:
-                if int(qual) <= quality:
-                    videoUrl = hlspath + svid
-                    if DEBUG:
-                        self.log('videoURL: %s' % videoUrl)
-                    return videoUrl
+        vidurl = DETAILS_PAGE.format(video_id)
+        pagedata = cache.cacheFunction(fetch, vidurl)
+        r = re.search(r'application/json">([^<]+)', pagedata)
+        if r:
+            details = json.loads(r.group(1)).get('props', {}).get('pageProps', {}).get('videoPlaybackData', {}).get('video')
+            if details:
+                details = {i.get('displayName').get('value'): i.get('url') for i in details.get('playbackURLs') if i.get('mimeType') == 'video/mp4'}
+                vids = [(x[:-1], details[x]) for x in details.keys() if 'p' in x]
+                vids.sort(key=lambda x: int(x[0]), reverse=True)
+                if DEBUG:
+                    self.log('Found %s videos' % len(vids))
+                for qual, vid in vids:
+                    if int(qual) <= quality:
+                        if DEBUG:
+                            self.log('videoURL: %s' % vid)
+                        return vid
+
+        return None
 
     def play(self):
         if DEBUG:

@@ -1,0 +1,60 @@
+# XBMC Media Center language file
+# Addon Name: Triple R
+# Addon id: plugin.audio.tripler
+# Addon version: 2.0.0
+# Addon Provider: Simon Mollema
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2022-03-01 00:00+0000\n"
+"PO-Revision-Date: 2022-03-01 00:00+0000\n"
+"Last-Translator: Simon Mollema <xbmc@molzy.com>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Listen to Triple R: an independent community radio station in Melbourne, Australia."
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "For more than 40 years Triple R has shaped and inspired the culture of Melbourne. Since its inception as an educational broadcaster in 1976, Triple R has become Australia's most influential community radio station with nearly 21,000 paid subscribers and broadcasting live to over 1,000,000 listeners per month across FM and digital (DAB+ digital radio, podcasts and online). Broadcasting on 102.7FM and 3RRR Digital, the Triple R grid houses over 60 diverse programs. Music shows cover every genre imaginable from pop to punk rock, from R&B and electro to jazz, hip hop, country and metal. Specialist talks programs delve into topics as varied as the environment, human rights, politics, medical issues, gardening, cultural ventures and local interests."
+msgstr ""
+
+#Plugin name
+
+msgctxt "#30000"
+msgid "Triple R"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Triple R - Live Stream"
+msgstr ""
+
+msgctxt "#30002"
+msgid "On Demand - Segments"
+msgstr ""
+
+msgctxt "#30003"
+msgid "On Demand - Episodes"
+msgstr ""
+
+msgctxt "#30004"
+msgid "On Demand - Audio Archives"
+msgstr ""
+
+msgctxt "#30005"
+msgid "> Next Page"
+msgstr ""
+
+msgctxt "#30006"
+msgid "aired %s"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Aired on %s."
+msgstr ""

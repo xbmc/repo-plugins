@@ -211,8 +211,8 @@ class TVGuide:
         """Return a playable plugin:// path for an episode"""
         now = datetime.now(dateutil.tz.tzlocal())
         end_date = dateutil.parser.parse(episode.get('endTime'))
-        if episode.get('url') and episode.get('episodeId'):
-            return url_for('play_episode_id', episode_id=episode.get('episodeId'))
+        if episode.get('url'):
+            return url_for('play_url', video_url=add_https_proto(episode.get('url')))
         if now - timedelta(hours=24) <= end_date <= now:
             return url_for('play_air_date', channel, episode.get('startTime')[:19], episode.get('endTime')[:19])
         return url_for('noop', episode_id=episode.get('episodeId', ''))
@@ -232,8 +232,8 @@ class TVGuide:
                 if epg_id not in epg_data:
                     epg_data[epg_id] = []
                 for episode in episodes:
-                    if episode.get('url') and episode.get('episodeId'):
-                        path = url_for('play_episode_id', episode_id=episode.get('episodeId'))
+                    if episode.get('url'):
+                        path = url_for('play_url', video_url=add_https_proto(episode.get('url')))
                     else:
                         path = None
                     epg_data[epg_id].append(dict(

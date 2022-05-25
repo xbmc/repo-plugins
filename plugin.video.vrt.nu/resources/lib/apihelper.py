@@ -213,10 +213,10 @@ class ApiHelper:
                 episode = episodes[0]
 
             season_items.append(TitleItem(
-                label=self._metadata.get_title(episode, season=season.get('name', '')),
+                label=self._metadata.get_title(episode, season=season.get('title', '')),
                 path=url_for('programs', program=program, season=season_key),
                 art_dict=self._metadata.get_art(episode, season=season.get('name', '')),
-                info_dict=self._metadata.get_info_labels(episode, season=season.get('name', '')),
+                info_dict=self._metadata.get_info_labels(episode, season=season.get('title', '')),
                 prop_dict=self._metadata.get_properties(episode),
             ))
         return season_items, sort, ascending, content
@@ -568,7 +568,8 @@ class ApiHelper:
         if program:
             params['orderBy'] = 'episodeId'
             params['order'] = 'desc'
-            params['q'] = program.replace('-', ' ')
+            program_query = program.split('---')[0].replace('-', ' ')  # Convert programName to query
+            params['q'] = ' '.join([word for word in program_query.split() if len(word) > 1])  # Remove single chars
 
         if season and season != 'allseasons':
             params['facets[seasonId]'] = season
@@ -623,7 +624,7 @@ class ApiHelper:
         # VRT Search API only returns a maximum of 10 seasons, to get all seasons we need to use the "model.json" API
         seasons = []
         if 'facets[seasonId]' not in unquote(search_url) and program:
-            season_json = get_url_json('https://www.vrt.be/vrtnu/a-z/%s.model.json' % program)
+            season_json = get_url_json('https://www.vrt.be/vrtnu/a-z/{}.model.json'.format(program))
             season_items = None
             try:
                 season_items = season_json.get('details').get('data').get('program').get('seasons')
@@ -632,7 +633,7 @@ class ApiHelper:
             if season_items:
                 seasons = []
                 for item in season_items:
-                    seasons.append(dict(key=item.get('id'), name=item.get('name')))
+                    seasons.append(dict(key=item.get('id'), name=item.get('name'), title=item.get('title').get('raw')))
 
         episodes = search_json.get('results', [{}])
         show_seasons = bool(season != 'allseasons')
@@ -666,7 +667,7 @@ class ApiHelper:
                     channel_filter.append(channel.get('name'))
             filtered_episodes = []
             for episode in episodes:
-                if episode.get('brands')[0] in channel_filter:
+                if episode.get('brands') and episode.get('brands')[0] in channel_filter:
                     filtered_episodes.append(episode)
             episodes = filtered_episodes
 

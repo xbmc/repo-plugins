@@ -124,36 +124,8 @@ msgctxt "#30307"
 msgid "Auto-select favorite/home video stream"
 msgstr ""
 
-msgctxt "#30300"
-msgid "In Market Streams"
-msgstr ""
-
 msgctxt "#30700"
 msgid "Sports"
-msgstr ""
-
-msgctxt "#30200"
-msgid "Proxy Settings"
-msgstr ""
-
-msgctxt "#30210"
-msgid "Enabled"
-msgstr ""
-
-msgctxt "#30220"
-msgid "Server"
-msgstr ""
-
-msgctxt "#30230"
-msgid "Port"
-msgstr ""
-
-msgctxt "#30240"
-msgid "Username"
-msgstr ""
-
-msgctxt "#30250"
-msgid "Password"
 msgstr ""
 
 msgctxt "#30260"
@@ -334,4 +306,12 @@ msgstr ""
 
 msgctxt "#30411"
 msgid "Play All"
+msgstr ""
+
+msgctxt "#30412"
+msgid "Auto-play live favorite games when starting addon"
+msgstr ""
+
+msgctxt "#30413"
+msgid "See Yesterday's Scores at inning"
 msgstr ""

@@ -3,7 +3,7 @@ import re
 import xbmcaddon
 import xmltodict
 
-def parse_opml(data):
+def parse_opml(data: str, limit=0) -> 'tuple[str,list[dict]]':
 
     def parse_outlines_from_opml(outline):
 
@@ -28,7 +28,8 @@ def parse_opml(data):
 
             if "@type" in o and o["@type"] == "rss" and "@xmlUrl" in o:
                 entry["params"] = [{
-                    "rss": o["@xmlUrl"]
+                    "rss": o["@xmlUrl"],
+                    "limit" : str(limit)
                 }]
                 entries.append(entry)
 
@@ -56,7 +57,7 @@ def parse_opml(data):
     return title, entries
 
 
-def open_opml_file(path):
+def open_opml_file(path: str) -> str:
 
     with open(path, encoding="utf-8") as _opml_file:
         return _opml_file.read()

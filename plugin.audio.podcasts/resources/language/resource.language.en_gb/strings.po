@@ -10,7 +10,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#32000"
@@ -161,8 +161,36 @@ msgctxt "#32051"
 msgid "Anchor for most recent podcast (good for bookmarking)"
 msgstr ""
 
+msgctxt "#32052"
+msgid "limit episodes"
+msgstr ""
+
 msgctxt "#32053"
 msgid "Untitled podcast from"
+msgstr ""
+
+msgctxt "#32054"
+msgid "no limit"
+msgstr ""
+
+msgctxt "#32055"
+msgid "30 episodes"
+msgstr ""
+
+msgctxt "#32056"
+msgid "60 episodes"
+msgstr ""
+
+msgctxt "#32057"
+msgid "120 episodes"
+msgstr ""
+
+msgctxt "#32058"
+msgid "180 episodes"
+msgstr ""
+
+msgctxt "#32059"
+msgid "365 episodes"
 msgstr ""
 
 msgctxt "#32060"
@@ -254,7 +282,7 @@ msgid "Saving OPML file failed"
 msgstr ""
 
 msgctxt "#32082"
-msgid "Saving OPML file failed for unknown reason."
+msgid "Saving OPML file failed for unknown reason"
 msgstr ""
 
 msgctxt "#32083"

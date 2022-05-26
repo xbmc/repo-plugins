@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.podcasts" name="RSS Podcasts" version="2.2.1" provider-name="Heckie">
+<addon id="plugin.audio.podcasts" name="RSS Podcasts" version="2.2.2" provider-name="Heckie">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.25.1" />
@@ -26,6 +26,10 @@ Dateien direkt eingehängt werden.
 		<website>https://github.com/Heckie75/kodi-addon-podcast</website>
 		<source>https://github.com/Heckie75/kodi-addon-podcast</source>
 		<news>
+v2.2.2 (2022-05-26)
+- Improved performance when loading rss feed with episodes (up to 50% faster on RPi 4, see issue #17) 
+- Added feature to limit episodes (see issue #17)
+
 v2.2.1 (2021-10-17)
 - less restrictive when parsing RSS feeds with no XML processing instruction (reported issue #16)
 - Forced UTF-8 encoding, reported problem starting with Kodi 19.2 (reported issue #15)

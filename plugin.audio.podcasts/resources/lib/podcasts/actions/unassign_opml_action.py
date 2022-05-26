@@ -9,7 +9,7 @@ class UnassignOpmlAction(Action):
     def __init__(self):
         super().__init__()
 
-    def unassign_opml(self):
+    def unassign_opml(self) -> None:
 
         # Step 1: Select slots
         slots = self._select_target_opml_slot(
@@ -25,7 +25,7 @@ class UnassignOpmlAction(Action):
         xbmcgui.Dialog().notification(self.addon.getLocalizedString(
             32085), self.addon.getLocalizedString(32086))
 
-    def _select_target_opml_slot(self, heading, multi=False):
+    def _select_target_opml_slot(self, heading: str, multi=False):
 
         selection = list()
         for g in range(self._GROUPS):

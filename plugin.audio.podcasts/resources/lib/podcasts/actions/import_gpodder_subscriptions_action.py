@@ -11,7 +11,7 @@ class ImportGPodderSubscriptionsAction(OpmlAction):
     def __init__(self):
         super().__init__()
 
-    def _query_subscriptions_from_gpodder(self):
+    def _query_subscriptions_from_gpodder(self) -> 'tuple[str,list]':
 
         try:
             host = self.addon.getSetting("gpodder_hostname")
@@ -28,7 +28,7 @@ class ImportGPodderSubscriptionsAction(OpmlAction):
             xbmcgui.Dialog().ok(self.addon.getLocalizedString(32151), error.message)
             return None, None
 
-    def import_gpodder_subscriptions(self, only_new_ones=False):
+    def import_gpodder_subscriptions(self, only_new_ones=False) -> None:
 
         def _filter_new_ones(entries):
             _known_urls = list()

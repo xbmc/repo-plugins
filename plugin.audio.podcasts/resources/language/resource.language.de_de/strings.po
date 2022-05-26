@@ -161,9 +161,37 @@ msgctxt "#32051"
 msgid "Anchor for most recent podcast (good for bookmarking)"
 msgstr "Anker für aktuelle Sendung (hilfreich zum Bookmarken)"
 
+msgctxt "#32052"
+msgid "limit episodes"
+msgstr "begrenze Episoden"
+
 msgctxt "#32053"
 msgid "Untitled podcast from"
 msgstr "Namenloser Podcast von"
+
+msgctxt "#32054"
+msgid "no limit"
+msgstr "keine Begrenzung"
+
+msgctxt "#32055"
+msgid "30 episodes"
+msgstr "30 Episoden"
+
+msgctxt "#32056"
+msgid "60 episodes"
+msgstr "60 Episoden"
+
+msgctxt "#32057"
+msgid "120 episodes"
+msgstr "120 Episoden"
+
+msgctxt "#32058"
+msgid "180 episodes"
+msgstr "180 Episoden"
+
+msgctxt "#32059"
+msgid "365 episodes"
+msgstr "365 Episoden"
 
 msgctxt "#32060"
 msgid "Actions"

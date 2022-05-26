@@ -11,7 +11,7 @@ class CommitGPodderAction(Action):
     def __init__(self):
         super().__init__()
 
-    def commit_gpodder(self):
+    def commit_gpodder(self) -> None:
 
         try:
             host = self.addon.getSetting("gpodder_hostname")

@@ -5,7 +5,6 @@ import os
 
 import xbmc
 import xbmcplugin
-import xbmcaddon
 
 GROUPS = 10
 ENTRIES = 10
@@ -18,7 +17,7 @@ class PodcastsAddon(AbstractRssAddon):
         super().__init__(addon_handle)
         self.anchor_for_latest = "true" == self.addon.getSetting("anchor")
 
-    def on_rss_loaded(self, url, title, description, image, items):
+    def on_rss_loaded(self, url: str, title: str, description: str, image: str, items: 'list[dict]'):
 
         # update image
         for g in range(GROUPS):
@@ -35,9 +34,9 @@ class PodcastsAddon(AbstractRssAddon):
                     self.addon.setSetting(
                         "group_%i_rss_%i_icon" % (g, e), image)
 
-    def _browse(self, dir_structure, path, updateListing=False):
+    def _browse(self, dir_structure: str, path: str, updateListing=False):
 
-        def _get_node_by_path(path):
+        def _get_node_by_path(path: str) -> dict:
 
             if path == "/":
                 return dir_structure[0]
@@ -70,6 +69,8 @@ class PodcastsAddon(AbstractRssAddon):
 
         groups = []
 
+        limit = self.addon.getSettingInt("limit_episodes")
+
         # opml files / podcasts lists
         for g in range(GROUPS):
 
@@ -80,7 +81,7 @@ class PodcastsAddon(AbstractRssAddon):
                 self.addon_dir, self.addon.getSetting("opml_file_%i" % g))
 
             try:
-                name, nodes = parse_opml(open_opml_file(path))
+                name, nodes = parse_opml(open_opml_file(path), limit=limit)
                 groups.append({
                     "path": "opml-%i" % g,
                     "name": name,
@@ -111,7 +112,8 @@ class PodcastsAddon(AbstractRssAddon):
                                                   % (g, e)),
                     "params": [
                         {
-                            "rss": self.addon.getSetting("group_%i_rss_%i_url" % (g, e))
+                            "rss": self.addon.getSetting("group_%i_rss_%i_url" % (g, e)),
+                            "limit" : str(limit)
                         }
                     ],
                     "icon": icon,

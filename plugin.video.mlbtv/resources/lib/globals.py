@@ -6,6 +6,7 @@ from datetime import date, datetime, timedelta
 from dateutil.parser import parse
 import json
 from kodi_six import xbmc, xbmcvfs, xbmcplugin, xbmcgui, xbmcaddon
+import random
 
 if sys.version_info[0] > 2:
     import http
@@ -39,7 +40,6 @@ OLD_USERNAME = str(settings.getSetting(id="old_username"))
 OLD_PASSWORD = str(settings.getSetting(id="old_password"))
 QUALITY = str(settings.getSetting(id="quality"))
 CDN = str(settings.getSetting(id="cdn"))
-IN_MARKET = str(settings.getSetting(id="in_market"))
 NO_SPOILERS = settings.getSetting(id="no_spoilers")
 FAV_TEAM = str(settings.getSetting(id="fav_team"))
 TEAM_NAMES = settings.getSetting(id="team_names")
@@ -48,6 +48,7 @@ SINGLE_TEAM = str(settings.getSetting(id='single_team'))
 AUTO_SELECT_STREAM = str(settings.getSetting(id='auto_select_stream'))
 CATCH_UP = str(settings.getSetting(id='catch_up'))
 ASK_TO_SKIP = str(settings.getSetting(id='ask_to_skip'))
+AUTO_PLAY_FAV = str(settings.getSetting(id='auto_play_fav'))
 ONLY_FREE_GAMES = str(settings.getSetting(id="only_free_games"))
 
 #Monitor setting
@@ -55,13 +56,6 @@ MLB_MONITOR_STARTED = settings.getSetting(id='mlb_monitor_started')
 if MLB_MONITOR_STARTED != '' and not xbmc.getCondVisibility("Player.HasMedia"):
     xbmc.log("MLB Monitor detection resetting due to no stream playing")
     settings.setSetting(id='mlb_monitor_started', value='')
-
-#Proxy Settings
-PROXY_ENABLED = str(settings.getSetting(id='use_proxy'))
-PROXY_SERVER = str(settings.getSetting(id='proxy_server'))
-PROXY_PORT = str(settings.getSetting(id='proxy_port'))
-PROXY_USER = str(settings.getSetting(id='proxy_user'))
-PROXY_PWD = str(settings.getSetting(id='proxy_pwd'))
 
 #Colors
 SCORE_COLOR = 'FF00B7EB'
@@ -100,8 +94,8 @@ UA_ANDROID = 'okhttp/3.12.1'
 VERIFY = True
 
 #Skip monitor
-#These are the break events to ignore
-BREAK_TYPES = ['Game Advisory', 'Pitching Substitution', 'Offensive Substitution', 'Defensive Sub', 'Defensive Switch', 'Runner Placed On Base']
+#These are the break events to skip
+BREAK_TYPES = ['Game Advisory', 'Pitching Substitution', 'Offensive Substitution', 'Defensive Sub', 'Defensive Switch', 'Runner Placed On Base', 'Injury']
 #These are the action events to keep, in addition to the last event of each at-bat, if we're skipping non-decision pitches
 ACTION_TYPES = ['Wild Pitch', 'Passed Ball', 'Stolen Base', 'Caught Stealing', 'Pickoff', 'Error', 'Out', 'Balk', 'Defensive Indiff']
 #Pad events at both start (-) and end (+)
@@ -153,18 +147,9 @@ def UTCToLocal(utc_dt):
     return local_dt.replace(microsecond=utc_dt.microsecond)
 
 
-def localToEastern():    
-    eastern = pytz.timezone('US/Eastern')    
-    local_to_utc = datetime.now(pytz.timezone('UTC'))  
+def localToEastern():
+    return get_eastern_game_date(datetime.now(pytz.timezone('UTC')))
 
-    eastern_hour = local_to_utc.astimezone(eastern).strftime('%H')    
-    eastern_date = local_to_utc.astimezone(eastern)
-    #Don't switch to the current day until 4:01 AM est
-    if int(eastern_hour) < 3:
-        eastern_date = eastern_date - timedelta(days=1)  
-
-    local_to_eastern = eastern_date.strftime('%Y-%m-%d')
-    return local_to_eastern
 
 def easternToUTC(eastern_time):    
     utc = pytz.utc
@@ -173,6 +158,23 @@ def easternToUTC(eastern_time):
     # Convert it from Eastern to UTC
     utc_time = eastern_time.astimezone(utc)
     return utc_time
+
+
+def get_eastern_game_date(timestamp):
+    eastern = pytz.timezone('US/Eastern')
+    eastern_hour = timestamp.astimezone(eastern).strftime('%H')
+    eastern_date = timestamp.astimezone(eastern)
+    #Don't switch to the current day until 4:01 AM est
+    if int(eastern_hour) < 3:
+        eastern_date = eastern_date - timedelta(days=1)
+    return eastern_date.strftime('%Y-%m-%d')
+
+
+def yesterdays_date():
+    game_day = localToEastern()
+    display_day = stringToDate(game_day, "%Y-%m-%d")
+    prev_day = display_day - timedelta(days=1)
+    return prev_day.strftime("%Y-%m-%d")
 
 
 def get_params():
@@ -194,13 +196,15 @@ def get_params():
     return param
 
 
-def add_stream(name, title, game_pk, icon=None, fanart=None, info=None, video_info=None, audio_info=None, stream_date=None, spoiler='True'):
+def add_stream(name, title, desc, game_pk, icon=None, fanart=None, info=None, video_info=None, audio_info=None, stream_date=None, spoiler='True', suspended=None, start_inning='False'):
     ok=True
-    u=sys.argv[0]+"?mode="+str(104)+"&name="+urllib.quote_plus(name)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&stream_date="+urllib.quote_plus(str(stream_date))+"&spoiler="+urllib.quote_plus(str(spoiler))
-
-    liz=xbmcgui.ListItem(name)
+    u_params = "&name="+urllib.quote_plus(title)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&stream_date="+urllib.quote_plus(str(stream_date))+"&spoiler="+urllib.quote_plus(str(spoiler))+"&suspended="+urllib.quote_plus(str(suspended))+"&start_inning="+urllib.quote_plus(str(start_inning))+"&description="+urllib.quote_plus(desc)
     if icon is None: icon = ICON
     if fanart is None: fanart = FANART
+    art_params = "&icon="+urllib.quote_plus(icon)+"&fanart="+urllib.quote_plus(fanart)
+    u=sys.argv[0]+"?mode="+str(104)+u_params+art_params
+
+    liz=xbmcgui.ListItem(name)
     liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
     liz.setProperty("IsPlayable", "true")
     liz.setInfo( type="Video", infoLabels={ "Title": title } )
@@ -212,7 +216,7 @@ def add_stream(name, title, game_pk, icon=None, fanart=None, info=None, video_in
         liz.addStreamInfo('audio', audio_info)
 
     # add Choose Stream and Highlights as context menu items
-    liz.addContextMenuItems([(LOCAL_STRING(30390), 'PlayMedia(plugin://plugin.video.mlbtv/?mode='+str(103)+'&name='+urllib.quote_plus(name)+'&game_pk='+urllib.quote_plus(str(game_pk))+'&stream_date='+urllib.quote_plus(str(stream_date))+'&spoiler='+urllib.quote_plus(str(spoiler))+')'), (LOCAL_STRING(30391), 'Container.Update(plugin://plugin.video.mlbtv/?mode='+str(106)+'&name='+urllib.quote_plus(name)+'&game_pk='+urllib.quote_plus(str(game_pk))+')')])
+    liz.addContextMenuItems([(LOCAL_STRING(30390), 'PlayMedia(plugin://plugin.video.mlbtv/?mode='+str(103)+u_params+art_params+')'), (LOCAL_STRING(30391), 'Container.Update(plugin://plugin.video.mlbtv/?mode='+str(106)+'&name='+urllib.quote_plus(title)+'&game_pk='+urllib.quote_plus(str(game_pk))+art_params+')')])
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
     xbmcplugin.setContent(addon_handle, 'episodes')
@@ -247,12 +251,13 @@ def addLink(name,url,title,icon,info=None,video_info=None,audio_info=None,fanart
     return ok
 
 
-def addDir(name,mode,icon,fanart=None,game_day=None):
+def addDir(name,mode,icon,fanart=None,game_day=None,start_inning='False'):
     ok=True
 
-    u=sys.argv[0]+"?mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(icon)
+    u_params="&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(icon)+'&start_inning='+urllib.quote_plus(str(start_inning))
     if game_day is not None:
-        u = u+"&game_day="+urllib.quote_plus(game_day)
+        u_params = u_params+"&game_day="+urllib.quote_plus(game_day)
+    u=sys.argv[0]+"?mode="+str(mode)+u_params
 
     liz = xbmcgui.ListItem(name)
     if icon is None: icon = ICON
@@ -360,10 +365,12 @@ def getFavTeamId():
                 'Texas Rangers': '140',
                 'Toronto Blue Jays': '141',
                 'Washington Nationals': '120'}
-    
-    fav_team_id = team_ids[FAV_TEAM]
 
-    return  fav_team_id
+    fav_team_id = None
+    if FAV_TEAM in team_ids:
+        fav_team_id = team_ids[FAV_TEAM]
+
+    return fav_team_id
 
 
 def getAudioVideoInfo():
@@ -405,12 +412,12 @@ def load_cookies():
     return cj
 
 
-def stream_to_listitem(stream_url, headers, spoiler='True', start='1', stream_type='video'):
+def stream_to_listitem(stream_url, headers, description, title, icon, fanart, start='1', stream_type='video', music_type_unset=False):
     # check if our stream is HLS
     if '.m3u8' in stream_url:
         # if not audio only, check if inputstream.adaptive is present and enabled, depending on Kodi version
         if stream_type != 'audio' and (xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)') or (KODI_VERSION >= 19 and xbmc.getCondVisibility('System.AddonIsEnabled(inputstream.adaptive)'))):
-            listitem = xbmcgui.ListItem(path=stream_url)
+            listitem = xbmcgui.ListItem(title, path=stream_url)
             if KODI_VERSION >= 19:
                 listitem.setProperty('inputstream', 'inputstream.adaptive')
             else:
@@ -418,17 +425,83 @@ def stream_to_listitem(stream_url, headers, spoiler='True', start='1', stream_ty
             listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
             listitem.setProperty('inputstream.adaptive.stream_headers', headers)
             listitem.setProperty('inputstream.adaptive.license_key', "|" + headers)
-            # start stream at beginning if no spoilers
-            if spoiler == "False":
+            # if not using Kodi's resume function, set the start time
+            if sys.argv[3] != 'resume:true' and start != '-1':
                 listitem.setProperty('ResumeTime', start)
                 listitem.setProperty('TotalTime', start)
         else:
-            listitem = xbmcgui.ListItem(path=stream_url + '|' + headers)
+            listitem = xbmcgui.ListItem(title, path=stream_url + '|' + headers)
 
         listitem.setMimeType("application/x-mpegURL")
     # otherwise, if not HLS, assume it is MP4
     else:
-        listitem = xbmcgui.ListItem(path=stream_url + '|' + headers)
+        listitem = xbmcgui.ListItem(title, path=stream_url + '|' + headers)
         listitem.setMimeType("video/mp4")
 
+    if title is not None and description is not None:
+        # don't set Music type for audio selection through Catch Up or context menu, otherwise playback will fail
+        if stream_type == 'audio' and music_type_unset is False:
+            listitem.setInfo( type="Music", infoLabels={ "Title": title, "Album": description } )
+        else:
+            listitem.setInfo( type="Video", infoLabels={ "Title": title, "Plot": description } )
+
+    if icon is not None and fanart is not None:
+        listitem.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
+
     return listitem
+
+
+# get the airings data, which contains the start time of the broadcast(s)
+def get_airings_data(content_id=None, game_pk=None):
+    xbmc.log('Get airings data')
+    url = 'https://search-api-mlbtv.mlb.com/svc/search/v2/graphql/persisted/query/core/Airings'
+    headers = {
+        'Accept': 'application/json',
+        'X-BAMSDK-Version': '4.3',
+        'X-BAMSDK-Platform': 'macintosh',
+        'User-Agent': UA_PC,
+        'Origin': 'https://www.mlb.com',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Content-type': 'application/json'
+    }
+    if content_id is not None:
+        data = {
+            'variables': '%7B%22contentId%22%3A%22' + content_id + '%22%7D'
+        }
+    else:
+        data = {
+            'variables': '{%22partnerProgramIds%22%3A[%22' + str(game_pk) + '%22]}'
+        }
+    r = requests.get(url, headers=headers, params=data, verify=VERIFY)
+    json_source = r.json()
+
+    return json_source
+
+
+def get_inning_start_options():
+    start_options = []
+    # add start options for each inning 1-12
+    for x in range(1, 13):
+        start_options.append(LOCAL_STRING(30409) + ' ' + LOCAL_STRING(30407) + ' ' + str(x)) # top
+        start_options.append(LOCAL_STRING(30410) + ' ' + LOCAL_STRING(30407) + ' ' + str(x)) # bottom
+    return start_options
+
+
+def calculate_inning_from_index(index):
+    inning_half = 'top'
+    inning = int(round(((index+0.5) / 2), 0))
+    if (index % 2) == 0 and ((index+1) % 2) == 1:
+        inning_half = 'bottom'
+    return inning, inning_half
+
+
+def get_last_name(full_name):
+    last_name = ''
+    try:
+        name_split = full_name.split()
+        last_name = name_split[len(name_split)-1]
+        if last_name.endswith('.'):
+            last_name = name_split[len(name_split)-2] + ' ' + last_name
+    except:
+        pass
+    return last_name

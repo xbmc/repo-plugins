@@ -2,6 +2,7 @@ from resources.lib.rssaddon.http_status_error import HttpStatusError
 from resources.lib.rssaddon.http_client import http_request
 import base64
 
+import xbmcaddon
 
 class GPodder:
 
@@ -14,13 +15,13 @@ class GPodder:
     _host = None
     _user = None
 
-    def __init__(self, addon, host, user):
+    def __init__(self, addon: xbmcaddon.Addon, host: str, user: str):
 
         self._addon = addon
         self._host = host
         self._user = user
 
-    def login(self, password):
+    def login(self, password: str) -> str:
         auth_string = "%s:%s" % (self._user, password)
         b64auth = {
             "Authorization": "Basic %s" % base64.urlsafe_b64encode(auth_string.encode("utf-8")).decode("utf-8")
@@ -34,7 +35,7 @@ class GPodder:
 
         return cookies["sessionid"]
 
-    def request_subscriptions(self, sessionid):
+    def request_subscriptions(self, sessionid: str) -> str:
 
         session_cookie = {
             "Cookie": "%s=%s" % ("sessionid", sessionid)

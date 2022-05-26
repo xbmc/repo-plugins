@@ -9,7 +9,7 @@ class ImportOpmlAction(OpmlAction):
     def __init__(self):
         super().__init__()
 
-    def import_opml(self):
+    def import_opml(self) -> None:
 
         # Step 1: Select target group
         group, freeslots = self._select_target_group()
@@ -33,7 +33,7 @@ class ImportOpmlAction(OpmlAction):
         xbmcgui.Dialog().notification(self.addon.getLocalizedString(
             32085), self.addon.getLocalizedString(32086))
 
-    def _select_opml_file(self):
+    def _select_opml_file(self) -> 'tuple[str,list]':
 
         path = xbmcgui.Dialog().browse(
             type=1, heading=self.addon.getLocalizedString(32070), shares="", mask=".xml|.opml")

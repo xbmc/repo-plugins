@@ -17,7 +17,7 @@ class Action:
         self.addon = xbmcaddon.Addon()
         self.addon_dir = xbmcvfs.translatePath(self.addon.getAddonInfo('path'))
 
-    def _select_target_group(self):
+    def _select_target_group(self) -> 'tuple[int,int]':
 
         names = list()
         freeslots = list()
@@ -48,7 +48,7 @@ class Action:
         else:
             return selected, freeslots[selected]
 
-    def _select_target_opml_slot(self, heading, multi=False):
+    def _select_target_opml_slot(self, heading: str, multi=False):
 
         selection = list()
         for g in range(self._GROUPS):

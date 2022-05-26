@@ -12,7 +12,7 @@ class DownloadGpodderSubscriptionsAction(Action):
     def __init__(self):
         super().__init__()
 
-    def download_gpodder_subscriptions(self):
+    def download_gpodder_subscriptions(self) -> None:
 
         # Step 1: download subscriptions from gPodder
         try:
@@ -50,7 +50,7 @@ class DownloadGpodderSubscriptionsAction(Action):
         xbmcgui.Dialog().notification(self.addon.getLocalizedString(
             32085), self.addon.getLocalizedString(32086))
 
-    def _save_opml_file(self, data):
+    def _save_opml_file(self, data: str):
 
         opml = xmltodict.parse(data)
         filename = "%s.opml" % re.sub(
@@ -64,7 +64,7 @@ class DownloadGpodderSubscriptionsAction(Action):
 
         try:
             fullpath = "%s%s" % (path, filename)
-            with open(fullpath, "w") as _file:
+            with open(fullpath, "w", encoding="utf-8") as _file:
                 _file.write(data)
 
             return fullpath, filename

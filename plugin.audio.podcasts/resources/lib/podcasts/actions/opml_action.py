@@ -7,7 +7,7 @@ class OpmlAction(Action):
     def __init__(self):
         super().__init__()
 
-    def _select_target_group(self):
+    def _select_target_group(self) -> 'tuple[int,int]':
 
         names = list()
         freeslots = list()
@@ -38,7 +38,7 @@ class OpmlAction(Action):
         else:
             return selected, freeslots[selected]
 
-    def _select_feeds(self, name, entries, freeslots):
+    def _select_feeds(self, name: str, entries: 'list[dict]', freeslots: 'list[int]') -> 'list[int]':
 
         selection = [e["name"]
                      for e in entries if "params" in e and len(e["params"]) == 1 and "rss" in e["params"][0]]
@@ -65,7 +65,7 @@ class OpmlAction(Action):
 
         return feeds
 
-    def _apply_to_group(self, entries, group, feeds):
+    def _apply_to_group(self, entries: dict, group: int, feeds: 'list[int]') -> None:
 
         self.addon.setSetting("group_%i_enable" % group, "True")
 

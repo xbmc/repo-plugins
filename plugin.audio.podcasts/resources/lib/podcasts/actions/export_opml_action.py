@@ -2,7 +2,6 @@ from datetime import datetime
 import xbmc
 import xbmcgui
 from resources.lib.podcasts.actions.opml_action import OpmlAction
-from resources.lib.podcasts.opml_file import open_opml_file, parse_opml
 
 
 class ExportOpmlAction(OpmlAction):
@@ -10,9 +9,9 @@ class ExportOpmlAction(OpmlAction):
     def __init__(self):
         super().__init__()
 
-    def _write_opml_file(self, path):
+    def _write_opml_file(self, path: str) -> bool:
 
-        def _get_rfc822_date(_dt):
+        def _get_rfc822_date(_dt: datetime) -> str:
 
             _month = ["Jan",  "Feb",  "Mar",  "Apr",  "May",  "Jun",
                       "Jul",  "Aug",  "Sep",  "Oct",  "Nov",  "Dec"]
@@ -20,7 +19,7 @@ class ExportOpmlAction(OpmlAction):
 
             return "%s, %i %s %i %s +0000" % (_day[int(_dt.strftime("%w"))], _dt.day, _month[_dt.month - 1], _dt.year, _dt.strftime("%H:%M:%S"))
 
-        def _escape(str):
+        def _escape(str: str) -> str:
             str = str.replace("&", "&amp;")
             str = str.replace("<", "&lt;")
             str = str.replace(">", "&gt;")
@@ -57,7 +56,7 @@ class ExportOpmlAction(OpmlAction):
         except:
             return False
 
-    def export_opml(self):
+    def export_opml(self) -> None:
 
         # Step 1: Select folder
         path = xbmcgui.Dialog().browse(type=3, heading=self.addon.getLocalizedString(

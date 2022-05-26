@@ -275,21 +275,32 @@ class Account:
             dialog.notification(LOCAL_STRING(30270), msg, self.icon, 5000, False)
             sys.exit()
 
-        broadcast_start = '1'
+        json_source = r.json()
+
+        playback_url = json_source['data']['Airings'][0]['playbackUrls'][0]['href']
+
+        broadcast_start_offset = '1'
+        broadcast_start_timestamp = None
         try:
-            offset_index = 0
-            if r.json()['data']['Airings'][0]['milestones'][0]['milestoneTime'][1]['type'] == 'offset':
-                offset_index = 1
-            broadcast_start = r.json()['data']['Airings'][0]['milestones'][0]['milestoneTime'][offset_index]['start']
-            if isinstance(broadcast_start, int):
-                broadcast_start = str(broadcast_start)
+            # make sure we have milestone data
+            if 'data' in json_source and 'Airings' in json_source['data'] and len(json_source['data']['Airings']) > 0 and 'milestones' in json_source['data']['Airings'][0]:
+                for milestone in json_source['data']['Airings'][0]['milestones']:
+                    if milestone['milestoneType'] == 'BROADCAST_START':
+                        offset_index = 1
+                        startDatetime_index = 0
+                        if milestone['milestoneTime'][0]['type'] == 'offset':
+                            offset_index = 0
+                            startDatetime_index = 1
+                        broadcast_start_offset = str(milestone['milestoneTime'][offset_index]['start'])
+                        broadcast_start_timestamp = parse(milestone['milestoneTime'][startDatetime_index]['startDatetime']) - timedelta(seconds=milestone['milestoneTime'][offset_index]['start'])
+                        break
         except:
             pass
-        
-        return auth, r.json()['data']['Airings'][0]['playbackUrls'][0]['href'], broadcast_start
+
+        return auth, playback_url, broadcast_start_offset, broadcast_start_timestamp
 
     def get_stream(self, content_id):
-        auth, url, broadcast_start = self.get_playback_url(content_id)
+        auth, url, broadcast_start_offset, broadcast_start_timestamp = self.get_playback_url(content_id)
 
         url = url.replace('{scenario}','browser~csai')
         headers = {
@@ -332,8 +343,8 @@ class Account:
             stream_url = stream_url.replace(l3c_url, akc_url)
         elif CDN == 'Level 3' and l3c_url not in stream_url:
             stream_url = stream_url.replace(akc_url, l3c_url)
-        
-        return stream_url, headers, broadcast_start
+
+        return stream_url, headers, broadcast_start_offset, broadcast_start_timestamp
 
     def get_stream_quality(self, stream_url):
         #Check if inputstream adaptive is on, if so warn user and return master m3u8

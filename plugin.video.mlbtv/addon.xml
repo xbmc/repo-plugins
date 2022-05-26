@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2022.5.6+matrix.1" provider-name="eracknaphobia">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2022.5.19+matrix.1" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -12,6 +12,7 @@
     <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>video</provides>
     </extension>
+    <extension point="xbmc.service" library="service.py" />
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
         <summary lang="en_GB">Watch live and archived games
@@ -21,10 +22,15 @@
         </description>
         <disclaimer lang="en_GB">Requires an MLB.tv account</disclaimer>
         <news>
-            - restored pass exceptions for game list items
-            - handle missing flags for postponements
-            - added setting for auto selecting a stream (favorite/home)
-            - added context menu item for choosing stream manually
+            - pad the end of archive videos if no spoilers (to avoid timeline spoilers)
+            - autoplay favorite team setting
+            - see scores at inning category
+            - hide bottom of 9th / extra innings as spoilers
+            - labels for suspended/resumed games/streams
+            - retain icon/fanart/probables through context menu navigation
+            - list favorite team's game(s) first
+            - removed unused/unnecessary settings (in market streams and proxy)
+            - added probable pitchers to game list titles
         </news>
         <language>en</language>
         <platform>all</platform>

@@ -30,7 +30,7 @@ class Channel(chn_class.Channel):
 
         if self.channelCode == "ketnet":
             self.noImage = "ketnetimage.jpg"
-            self.mainListUri = self.__get_graph_url("content/ketnet/nl/kijken.model.json")
+            self.mainListUri = self.__get_graph_url("content/ketnet/nl.model.json")
             self.baseUrl = "https://www.ketnet.be"
             self.mediaUrlRegex = r'playerConfig\W*=\W*(\{[\w\W]{0,2000}?);(?:.vamp|playerConfig)'
 
@@ -40,7 +40,11 @@ class Channel(chn_class.Channel):
         self._add_data_parser(
             self.mainListUri, json=True, name="MainList Parser for GraphQL",
             preprocessor=self.get_sub_swimlane,
-            parser=["data", "page", "pagecontent"], creator=self.create_typed_item)
+            parser=[
+                "data", "page", "pagecontent",
+                ("id", "/conf/tenants/ketnet/settings/wcm/templates/home-page-template/structure/jcr:content/root/heroes", 0),
+                "items"
+            ], creator=self.create_typed_item)
 
         self._add_data_parser("https://senior-bff.ketnet.be/graphql?query=query%20GetPage%28",
                               name="Generic GraphQL Parser", json=True,

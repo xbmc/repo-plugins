@@ -287,11 +287,13 @@ class MediaItem:
             Logger.warning("Cannot set EpisodeInfo without season and episode")
             return
 
-        self.season = int(season)
-        self.__infoLabels["Season"] = self.season
+        if season:
+            self.season = int(season)
+            self.__infoLabels["Season"] = self.season
 
-        self.episode = int(episode)
-        self.__infoLabels["Episode"] = self.episode
+        if episode:
+            self.episode = int(episode)
+            self.__infoLabels["Episode"] = self.episode
 
         if tv_show_title:
             self.tv_show_title = tv_show_title

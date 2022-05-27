@@ -13,6 +13,7 @@ import threading
 
 
 from resources.lib.auth import read_credentials, get_device_code
+# from resources.lib.ui.custom_filter_dialog import FilterDialog
 import resources.lib.utils as utils
 
 base_url = sys.argv[0]
@@ -69,7 +70,7 @@ def new_account():
         if status_code == 403:
             xbmc.sleep(10000)
         elif status_code != 202:
-            xbmc.log(status_code, xbmc.LOGWARNING)
+            xbmc.log(status_code, xbmc.LOGDEBUG)
         if time == 0:
             code_json = get_device_code()
             time = 100
@@ -79,13 +80,7 @@ def new_account():
         time -= 1
 
     login_dialog.close()
-    # TODO: Test this
     xbmc.executebuiltin('Container.Refresh')
-    # account_dialog.addControl(msg)
-
-    # resp = xbmcgui.Dialog().ok(
-    #     'Authenticate', f'Visit {config.base_url} and enter the code: {user_code}')
-    # win =
 
 
 def remove_account():
@@ -95,8 +90,12 @@ def remove_account():
 
 def list_options():
     items = []
-    modes = [('Search', 'search'), ('All Media', 'list_media', 'all'),
-             ('All Albums', 'list_albums', 'albums'), ('Shared Albums', 'list_albums', 'sharedAlbums')]
+
+    # Third string in the tuples are API endpoint's route
+    modes = [('All Media', 'list_media', 'all'),
+             ('All Albums', 'list_albums', 'albums'), ('Shared Albums',
+                                                       'list_albums', 'sharedAlbums'),
+             ('Custom Filter', 'custom_filter')]
 
     for mode in modes:
         if len(mode) == 2:
@@ -145,13 +144,21 @@ def get_items(pageToken=None) -> dict:
     list_type = args.get('type')[0]
     if list_type == 'all':
         error = 'Unable to retrieve media items from Google'
-        res = requests.get(config.service_endpoint + f'/mediaItems',
+        res = requests.get(config.service_endpoint + '/mediaItems',
                            headers=headers, params=params)
     elif list_type == 'album':
         error = 'Unable to load album items'
         params['albumId'] = args.get('id')[0]
-        res = requests.post(config.service_endpoint + f'/mediaItems:search',
+        res = requests.post(config.service_endpoint + '/mediaItems:search',
                             headers=headers, data=params)
+    elif list_type == 'filter':
+        # params
+        params['filters'] = utils.buildFilter(__addon__)
+        if not bool(params['filters']):
+            return None
+        error = 'Error in filtering photos'
+        res = requests.post(config.service_endpoint + '/mediaItems:search',
+                            headers=headers, json=params)
     if res.status_code != 200:
         dialog = xbmcgui.Dialog()
         dialog.notification(
@@ -161,7 +168,6 @@ def get_items(pageToken=None) -> dict:
 
 
 def get_items_bg(result, path):
-    xbmc.log("Image Loader started.", xbmc.LOGDEBUG)
     if 'nextPageToken' in result[-1]:
         pageToken = result[-1]["nextPageToken"]
         media = get_items(pageToken)
@@ -172,6 +178,7 @@ def get_items_bg(result, path):
 
 def list_media():
     # For all photo directories
+
     path = profile_path + config.media_filename
     if not args.get('call_type'):
         xbmcvfs.delete(path)
@@ -181,7 +188,11 @@ def list_media():
         media = get_items()
         if media:
             utils.storeData(path, media)
-        result = [media]
+            result = [media]
+        else:
+            xbmc.executebuiltin(
+                'Notification(No items, No Media Item to load, time=3000)')
+            return
     # List for media
     items = []
     for item in result:
@@ -190,9 +201,11 @@ def list_media():
     # Add list to directory
     xbmcplugin.addDirectoryItems(
         addon_handle, items, totalItems=len(items))
+
     if 'nextPageToken' in result[-1]:
         url = utils.build_url(base_url, {'mode': 'refresh', 'prev_q': qs})
         li = xbmcgui.ListItem('Show more...')
+        li.setProperty('IsPlayable', 'false')
         xbmcplugin.addDirectoryItem(addon_handle, url, li)
     if args.get('call_type'):
         updateListing = True
@@ -206,7 +219,6 @@ def list_media():
             result, path,))
         loader.start()
         loader.join()
-        xbmc.log("All Image links fetched.", xbmc.LOGDEBUG)
 
 
 def create_media_list(media: dict):
@@ -252,8 +264,14 @@ def play_video():
         xbmcplugin.setResolvedUrl(addon_handle, True, listitem=play_item)
 
 
-def search():
-    pass
+def custom_filter():
+    __addon__.openSettings()
+    url = utils.build_url(
+        base_url, {'mode': 'list_media', 'type': 'filter'}, qs)
+    li = xbmcgui.ListItem('Display Filtered Results')
+    li.setProperty('isPlayable', 'false')
+    xbmcplugin.addDirectoryItem(addon_handle, url, li, isFolder=True)
+    xbmcplugin.endOfDirectory(addon_handle)
 
 
 def list_albums():
@@ -261,7 +279,7 @@ def list_albums():
     # https://developers.google.com/photos/library/guides/list
 
     request_type = args.get('type')[0]
-    # Request for listing albums
+    # Request for listing albums or sharedAlbums
     params = {}
     if args.get('pageToken'):
         params['pageToken'] = args.get('pageToken')[0]
@@ -292,6 +310,7 @@ def list_albums():
                     f'=w{xbmcgui.getScreenWidth()}-h{xbmcgui.getScreenHeight()}'
                 li.setArt(
                     {'thumb': thumb_url})
+                # Better way must be there
                 items.append((url, li, True))
 
         xbmcplugin.addDirectoryItems(
@@ -337,3 +356,10 @@ else:
         creds = read_credentials(token_path)
         token = creds["token"]
     eval(mode[0] + '()')  # Fire up the actual function
+
+
+# Updates:
+    # Slideshow
+
+# Not on list
+    # Video seeking - Not possible due to API limitations

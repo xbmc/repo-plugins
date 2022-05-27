@@ -30,6 +30,7 @@ def sleep_time(time=300):
 
 
 def loadData(path):
+    # For caching links
     if not os.path.exists(path):
         return None
     data = []
@@ -50,3 +51,53 @@ def storeData(path, db: dict):
     dbfile.close()
 
 
+def buildFilter(__addon__):
+    is_date_filter_applied = __addon__.getSettingBool('date_filter')
+    start_date = __addon__.getSettingString('start_date')
+    end_date = __addon__.getSettingString('end_date')
+    media_type = __addon__.getSettingString('media_filter')
+    content_type = __addon__.getSettingString('content_filter')
+    favourites = __addon__.getSettingBool('favourites')
+    filters = {}
+    if (is_date_filter_applied and (start_date < end_date)):
+        sd = start_date.split('-')
+        ed = end_date.split('-')
+        filters['dateFilter'] = {
+            "ranges": [
+                {
+                    "startDate": {
+                        "year": sd[0],
+                        "month": sd[1],
+                        "day": sd[2]
+                    },
+                    "endDate":{
+                        "year": ed[0],
+                        "month": ed[1],
+                        "day": ed[2]
+                    }
+                }
+            ]
+        }
+
+    if media_type != 'All Media':
+        filters['mediaTypeFilter'] = {
+            'mediaTypes': [
+                media_type.upper().replace(' ', '_')
+            ]
+        }
+
+    if content_type != 'None':
+        filters['contentFilter'] = {
+            'includedContentCategories': [
+                content_type.upper()
+            ]
+        }
+
+    if favourites:
+        filters['featureFilter'] = {
+            "includedFeatures": [
+                'FAVOURITES'
+            ]
+        }
+
+    return filters

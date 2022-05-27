@@ -1,10 +1,106 @@
 <?xml version="1.0"?>
 <settings version="1">
   <section id="plugin.picture.googlephotos">
-    <category id="signin" label="30100" help="">
-      <group id="1" label="">
-        <setting id="baseUrl" type="urlencodedstring" label="30101" help="">
+    <category id="filters" label="30200" help="">
+      <group id="1" label="30201">
+        <setting id="date_filter" type="boolean" label="30213" help="">
           <level>0</level>
+          <default>false</default>
+          <control type="toggle" />
+        </setting>
+        <setting id="start_date" type="date" label="30202" help="">
+          <level>0</level>
+          <default>1700-01-01</default>
+          <dependencies>
+            <dependency type="enable" setting="date_filter">true</dependency>
+          </dependencies>
+          <control type="button" format="date">
+            <heading>30202</heading>
+          </control>
+        </setting>
+        <setting id="end_date" type="date" label="30203" help="">
+          <level>0</level>
+          <default>2200-01-01</default>
+          <dependencies>
+            <dependency type="enable" setting="date_filter">true</dependency>
+          </dependencies>
+          <control type="button" format="date">
+            <heading>30203</heading>
+          </control>
+        </setting>
+      </group>
+
+      <group id="2" label="30206">
+        <setting id="media_filter" type="string" label="30207" help="">
+          <level>0</level>
+          <default>All Media</default>
+          <constraints>
+            <options>
+              <option>All Media</option>
+              <option>Video</option>
+              <option>Photo</option>
+            </options>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="list" format="string">
+            <heading>30207</heading>
+          </control>
+        </setting>
+      </group>
+
+      <!-- Check for multiselect control -->
+      <group id="3" label="30204">
+        <setting id="content_filter" type="string" label="30205" help="">
+          <level>0</level>
+          <default>None</default>
+          <constraints>
+            <options>
+              <option>None</option>
+              <option>Landscapes</option>
+              <option>Receipts</option>
+              <option>Cityscapes</option>
+              <option>Landmarks</option>
+              <option>Selfies</option>
+              <option>People</option>
+              <option>Pets</option>
+              <option>Weddings</option>
+              <option>Birthdays</option>
+              <option>Documents</option>
+              <option>Travel</option>
+              <option>Animals</option>
+              <option>Food</option>
+              <option>Sport</option>
+              <option>Night</option>
+              <option>Performances</option>
+              <option>Whiteboards</option>
+              <option>Screenshots</option>
+              <option>Utility</option>
+              <option>Arts</option>
+              <option>Crafts</option>
+              <option>Fashion</option>
+              <option>Houses</option>
+              <option>Gardens</option>
+              <option>Flowers</option>
+              <option>Holidays</option>
+            </options>
+            <allowempty>false</allowempty>
+          </constraints>
+          <control type="list" format="string">
+            <heading>30205</heading>
+          </control>
+        </setting>
+        <setting id="favourites" type="boolean" label="30212" help="">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle" />
+        </setting>
+      </group>
+
+    </category>
+    <category id="signin" label="30100" help="">
+      <group id="4" label="">
+        <setting id="baseUrl" type="urlencodedstring" label="30101" help="">
+          <level>3</level>
           <default>http://localhost:8080</default>
           <constraints>
             <allowempty>false</allowempty>
@@ -13,7 +109,7 @@
         </setting>
 
         <setting id="deviceCodeUrl" type="urlencodedstring" label="30102" help="">
-          <level>0</level>
+          <level>3</level>
           <default>/device/code</default>
           <constraints>
             <allowempty>false</allowempty>
@@ -22,7 +118,7 @@
         </setting>
 
         <setting id="tokenUrl" type="urlencodedstring" label="30103" help="">
-          <level>0</level>
+          <level>3</level>
           <default>/token</default>
           <constraints>
             <allowempty>false</allowempty>
@@ -31,7 +127,7 @@
         </setting>
 
         <setting id="refreshUrl" type="urlencodedstring" label="30104" help="">
-          <level>0</level>
+          <level>3</level>
           <default>/refresh</default>
           <constraints>
             <allowempty>false</allowempty>

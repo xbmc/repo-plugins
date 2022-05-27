@@ -59,6 +59,10 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.12 (2022-05-25)
+- Fix playing from TV guide (@mediaminister)
+- Fix listing programs with a single char in their name (@mediaminister)
+
 ### v2.5.11 (2022-05-15)
 - Fix "All programs", "Categories","Most recent", "Soon offline" and "Channels" menu (@mediaminister)
 

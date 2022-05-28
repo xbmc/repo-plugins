@@ -47,12 +47,12 @@ def new_account():
     #         "Unable to get code from auth server. Check your server configuration in addon settings")
     login_dialog = xbmcgui.DialogProgress()
     baseUrl = __addon__.getSettingString('baseUrl')
-    dialog_msg = f'Visit {baseUrl} and enter the code:\n'
-    login_dialog.create('Authenticate', dialog_msg + user_code)
+    dialog_msg = __addon__.getLocalizedString(30400) + f' {baseUrl}:\n'
+    title = __addon__.getLocalizedString(30401)
+    login_dialog.create(title, dialog_msg + user_code)
 
     # Update progress dialog indicating time left for complete
     sleep_time = utils.sleep_time(code_json['expires_in'])
-    xbmc.log(str(sleep_time), xbmc.LOGDEBUG)
     time = 99
     while time >= 0:
         login_dialog.update(time)
@@ -65,7 +65,7 @@ def new_account():
         # TODO: Time parameter
         if status_code == 200:
             xbmc.executebuiltin(
-                'Notification(Success, Account added successfully, time=3000)')
+                f'Notification({__addon__.getLocalizedString(30402)}, time=3000)')
             break
         if status_code == 403:
             xbmc.sleep(10000)
@@ -76,7 +76,8 @@ def new_account():
             time = 100
             login_dialog.update(time, message=dialog_msg +
                                 code_json["userCode"])
-            xbmc.executebuiltin('Notification(Code refreshed, ,time=3000)')
+            xbmc.executebuiltin(
+                f'Notification({__addon__.getLocalizedString(30403)}, ,time=3000)')
         time -= 1
 
     login_dialog.close()
@@ -92,10 +93,10 @@ def list_options():
     items = []
 
     # Third string in the tuples are API endpoint's route
-    modes = [('All Media', 'list_media', 'all'),
-             ('All Albums', 'list_albums', 'albums'), ('Shared Albums',
-                                                       'list_albums', 'sharedAlbums'),
-             ('Custom Filter', 'custom_filter')]
+    modes = [(__addon__.getLocalizedString(30404), 'list_media', 'all'),
+             (__addon__.getLocalizedString(30405), 'list_albums', 'albums'),
+             (__addon__.getLocalizedString(30406), 'list_albums', 'sharedAlbums'),
+             (__addon__.getLocalizedString(30407), 'custom_filter')]
 
     for mode in modes:
         if len(mode) == 2:
@@ -143,11 +144,11 @@ def get_items(pageToken=None) -> dict:
     # Check type of required listing
     list_type = args.get('type')[0]
     if list_type == 'all':
-        error = 'Unable to retrieve media items from Google'
+        error = __addon__.getLocalizedString(30408)
         res = requests.get(config.service_endpoint + '/mediaItems',
                            headers=headers, params=params)
     elif list_type == 'album':
-        error = 'Unable to load album items'
+        error = __addon__.getLocalizedString(30409)
         params['albumId'] = args.get('id')[0]
         res = requests.post(config.service_endpoint + '/mediaItems:search',
                             headers=headers, data=params)
@@ -156,13 +157,13 @@ def get_items(pageToken=None) -> dict:
         params['filters'] = utils.buildFilter(__addon__)
         if not bool(params['filters']):
             return None
-        error = 'Error in filtering photos'
+        error = __addon__.getLocalizedString(30410)
         res = requests.post(config.service_endpoint + '/mediaItems:search',
                             headers=headers, json=params)
     if res.status_code != 200:
         dialog = xbmcgui.Dialog()
         dialog.notification(
-            'Error', f'{error}. Error Code:{res.status_code}', xbmcgui.NOTIFICATION_ERROR, 3000)
+            __addon__.getLocalizedString(30411), f'{error}. {__addon__.getLocalizedString(30412)}:{res.status_code}', xbmcgui.NOTIFICATION_ERROR, 3000)
         return None
     return res.json()
 
@@ -191,7 +192,7 @@ def list_media():
             result = [media]
         else:
             xbmc.executebuiltin(
-                'Notification(No items, No Media Item to load, time=3000)')
+                f'Notification({__addon__.getLocalizedString(30413)}, time=3000)')
             return
     # List for media
     items = []
@@ -204,7 +205,7 @@ def list_media():
 
     if 'nextPageToken' in result[-1]:
         url = utils.build_url(base_url, {'mode': 'refresh', 'prev_q': qs})
-        li = xbmcgui.ListItem('Show more...')
+        li = xbmcgui.ListItem(__addon__.getLocalizedString(30414))
         li.setProperty('IsPlayable', 'false')
         xbmcplugin.addDirectoryItem(addon_handle, url, li)
     if args.get('call_type'):
@@ -256,7 +257,7 @@ def play_video():
     # https://kodi.wiki/view/HOW-TO:Video_addon
     if args.get('status')[0] != 'READY':
         xbmc.executebuiltin(
-            'Notification(Error, Video is not ready for viewing yet, time=3000)')
+            f'Notification({__addon__.getLocalizedString(30415)}, time=3000)')
     else:
         # Create a playable item with a path to play.
         play_item = xbmcgui.ListItem(path=args.get('path')[0])
@@ -268,7 +269,7 @@ def custom_filter():
     __addon__.openSettings()
     url = utils.build_url(
         base_url, {'mode': 'list_media', 'type': 'filter'}, qs)
-    li = xbmcgui.ListItem('Display Filtered Results')
+    li = xbmcgui.ListItem(__addon__.getLocalizedString(30416))
     li.setProperty('isPlayable', 'false')
     xbmcplugin.addDirectoryItem(addon_handle, url, li, isFolder=True)
     xbmcplugin.endOfDirectory(addon_handle)
@@ -292,10 +293,9 @@ def list_albums():
     if res.status_code != 200:
         dialog = xbmcgui.Dialog()
         dialog.notification(
-            'Error', f'Unable to retrieve album list. Error Code:{res.status_code}', xbmcgui.NOTIFICATION_ERROR, 3000)
+            'Error', f'{__addon__.getLocalizedString(30417)}{res.status_code}', xbmcgui.NOTIFICATION_ERROR, 3000)
     else:
         album_data = res.json()  # { albums, nextPageToken}
-        # Album cover is also available in API. Useful for nameless albums
         items = []
         if album_data:
             for album in album_data[request_type]:
@@ -304,13 +304,13 @@ def list_albums():
                 if 'title' in album:
                     li = xbmcgui.ListItem(album["title"])
                 else:
-                    li = xbmcgui.ListItem(f'Nameless album {a_num}')
+                    li = xbmcgui.ListItem(
+                        f'{__addon__.getLocalizedString(30418)} {a_num}')
                     a_num += 1
                 thumb_url = album["coverPhotoBaseUrl"] + \
                     f'=w{xbmcgui.getScreenWidth()}-h{xbmcgui.getScreenHeight()}'
                 li.setArt(
                     {'thumb': thumb_url})
-                # Better way must be there
                 items.append((url, li, True))
 
         xbmcplugin.addDirectoryItems(
@@ -320,10 +320,7 @@ def list_albums():
         if 'nextPageToken' in album_data:
             url = utils.build_url(
                 base_url, {'mode': 'list_albums', 'pageToken': album_data['nextPageToken'], 'token_filename': token_path.name, 'type': request_type})
-            li = xbmcgui.ListItem('Next Page')
-            # icon = os.path.join(addon_path, 'resources',
-            #                     'lib', 'download.png')
-            # li.setArt({'thumb': icon, 'icon': icon})
+            li = xbmcgui.ListItem(__addon__.getLocalizedString(30419))
             xbmcplugin.addDirectoryItem(addon_handle, url, li, True)
 
         xbmcplugin.endOfDirectory(addon_handle)
@@ -340,13 +337,14 @@ if mode is None:
         li = xbmcgui.ListItem(email)
         removePath = utils.build_url(
             base_url, {'mode': 'remove_account', 'email': email, 'token_filename': file.name})
-        contextItems = [('Remove Account', f'RunPlugin({removePath})')]
+        contextItems = [(__addon__.getLocalizedString(
+            30420), f'RunPlugin({removePath})')]
         li.addContextMenuItems(contextItems)
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                     listitem=li, isFolder=True)
     # Add Account Button
     url = utils.build_url(base_url, {'mode': 'new_account'})
-    li = xbmcgui.ListItem('Add New Account')
+    li = xbmcgui.ListItem(__addon__.getLocalizedString(30421))
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li)
     xbmcplugin.endOfDirectory(addon_handle)

@@ -2,11 +2,7 @@
 <addon id="plugin.picture.googlephotos" version="0.0.1" name="Google Photos" provider-name="Pranjal Singhal">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
-    <!-- <import addon="script.module.pyasn1" version="0.4.8+matrix.1"/>
-  <import addon="script.module.pyasn1-modules" version="0.2.8+matrix.1" /> -->
     <import addon="script.module.requests" />
-    <!-- <import addon="script.module.googleapi" />
-  <import addon="script.module.googleauth" /> -->
   </requires>
 
   <extension point="xbmc.python.pluginsource" library="main.py">

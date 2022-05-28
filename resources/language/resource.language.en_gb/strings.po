@@ -193,6 +193,9 @@ msgctxt "#30421"
 msgid "Add New Account"
 msgstr ""
 
+msgctxt "#30422"
+msgid "Proxy Server is offline. Check your server configuration in addon(expert) settings"
+msgstr ""
 #  No need most probably
 #  #  Content filter
 #  msgctxt "#30301"

@@ -1,3 +1,4 @@
+import code
 import sys
 import requests
 from pathlib import Path
@@ -10,6 +11,7 @@ import xbmcvfs
 import xbmcgui
 import xbmcplugin
 import threading
+import datetime
 
 
 from resources.lib.auth import read_credentials, get_device_code
@@ -37,51 +39,58 @@ xbmcplugin.setContent(addon_handle, 'images')
 
 
 def new_account():
-    # try:
-    # Get User Code from auth server
-    code_json = get_device_code()
-    xbmc.log('Executing new_account function', xbmc.LOGDEBUG)
-    user_code = code_json["userCode"]
-    # except Exception as exec
-    #     raise Exception(
-    #         "Unable to get code from auth server. Check your server configuration in addon settings")
-    login_dialog = xbmcgui.DialogProgress()
-    baseUrl = __addon__.getSettingString('baseUrl')
-    dialog_msg = __addon__.getLocalizedString(30400) + f' {baseUrl}:\n'
-    title = __addon__.getLocalizedString(30401)
-    login_dialog.create(title, dialog_msg + user_code)
+    try:
+        xbmc.log('Executing new_account function', xbmc.LOGDEBUG)
+        # Get User Code from auth server
+        code_json = get_device_code()
+        init_time = datetime.datetime.utcnow()
+        min_time_to_refresh = (
+            100 / code_json["expires_in"]) * code_json['interval']
+        login_dialog = xbmcgui.DialogProgress()
+        baseUrl = __addon__.getSettingString('baseUrl')
+        dialog_msg = __addon__.getLocalizedString(30400) + f' {baseUrl}:\n'
+        title = __addon__.getLocalizedString(30401)
+        login_dialog.create(title, dialog_msg + code_json["userCode"])
 
-    # Update progress dialog indicating time left for complete
-    sleep_time = utils.sleep_time(code_json['expires_in'])
-    time = 99
-    while time >= 0:
-        login_dialog.update(time)
-        if login_dialog.iscanceled():
-            break
-        xbmc.sleep(sleep_time)
-        # TODO: Handle the case of server going down
-        status_code = auth.fetch_and_save_token(
-            code_json['deviceCode'], token_folder)
-        # TODO: Time parameter
-        if status_code == 200:
-            xbmc.executebuiltin(
-                f'Notification({__addon__.getLocalizedString(30402)}, time=3000)')
-            break
-        if status_code == 403:
-            xbmc.sleep(10000)
-        elif status_code != 202:
-            xbmc.log(status_code, xbmc.LOGDEBUG)
-        if time == 0:
-            code_json = get_device_code()
-            time = 100
-            login_dialog.update(time, message=dialog_msg +
-                                code_json["userCode"])
-            xbmc.executebuiltin(
-                f'Notification({__addon__.getLocalizedString(30403)}, ,time=3000)')
-        time -= 1
-
-    login_dialog.close()
-    xbmc.executebuiltin('Container.Refresh')
+        # Update progress dialog indicating time left for complete
+        sleep_time = code_json['interval'] * 1000
+        time = 99
+        while True:
+            login_dialog.update(time)
+            if login_dialog.iscanceled():
+                break
+            xbmc.sleep(sleep_time)
+            status_code = auth.fetch_and_save_token(
+                code_json['deviceCode'], token_folder)
+            if status_code == 200:
+                xbmc.executebuiltin(
+                    f'Notification({__addon__.getLocalizedString(30402)}, time=3000)')
+                break
+            if status_code == 403:
+                xbmc.sleep(10000)
+            elif status_code != 202:
+                xbmc.log(status_code, xbmc.LOGDEBUG)
+            if time <= min_time_to_refresh or status_code == 400:
+                code_json = get_device_code()
+                min_time_to_refresh = (
+                    100 / code_json["expires_in"]) * code_json['interval']
+                init_time = datetime.datetime.utcnow()
+                sleep_time = code_json['interval'] * 1000
+                login_dialog.update(time, message=dialog_msg +
+                                    code_json["userCode"])
+                xbmc.executebuiltin(
+                    f'Notification({__addon__.getLocalizedString(30403)}, ,time=3000)')
+            time = int((1 - (datetime.datetime.utcnow() -
+                             init_time).total_seconds() / code_json["expires_in"]) * 100)
+    except Exception as exec:
+        xbmc.log(str(exec), xbmc.LOGDEBUG)
+        err_dialog = xbmcgui.Dialog()
+        err_dialog.notification(__addon__.getLocalizedString(30411),
+                                __addon__.getLocalizedString(30422),
+                                xbmcgui.NOTIFICATION_ERROR, 3000)
+    finally:
+        login_dialog.close()
+        xbmc.executebuiltin('Container.Refresh')
 
 
 def remove_account():

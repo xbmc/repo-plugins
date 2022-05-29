@@ -955,7 +955,8 @@ def ParseMediaselector(stream_id):
                                         supplier = connection['supplier']
                                     if 'transferFormat' in connection:
                                         transfer_format = connection['transferFormat']
-                                    streams.append((href, protocol, supplier, transfer_format))
+                                    if protocol == 'https':
+                                        streams.append((href, protocol, supplier, transfer_format))
             elif 'result' in json_data:
                 if json_data['result'] == 'geolocation':
                     # print "Geoblock detected, raising error message"

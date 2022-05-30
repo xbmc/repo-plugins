@@ -203,6 +203,9 @@ class Main(object):
             list_item.setProperty('IsPlayable', 'true')
             is_folder = False
             url = youtube_url
+
+            log("url", url)
+
             list_item.setInfo("mediatype", "video")
             list_item.setInfo("video", meta)
             # Adding context menu items to context menu

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.picture.googlephotos" version="0.0.1" name="Google Photos" provider-name="Pranjal Singhal">
+<addon id="plugin.picture.googlephotos" version="1.0.0" name="Google Photos" provider-name="Pranjal Singhal">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
     <import addon="script.module.requests" />

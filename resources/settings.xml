@@ -101,7 +101,7 @@
       <group id="4" label="">
         <setting id="baseUrl" type="urlencodedstring" label="30101" help="">
           <level>3</level>
-          <default>http://localhost:8080</default>
+          <default>https://photos-kodi-login.herokuapp.com</default>
           <constraints>
             <allowempty>false</allowempty>
           </constraints>

@@ -28,7 +28,7 @@ token = None  # Access token
 
 # Addon dir path
 __addon__ = xbmcaddon.Addon()
-addon_path = __addon__.getAddonInfo('path')
+# addon_path = __addon__.getAddonInfo('path')
 profile_path = xbmcvfs.translatePath(
     __addon__.getAddonInfo('profile'))
 token_folder = Path(profile_path + config.token_folder)
@@ -39,58 +39,65 @@ xbmcplugin.setContent(addon_handle, 'images')
 
 
 def new_account():
-    try:
-        xbmc.log('Executing new_account function', xbmc.LOGDEBUG)
-        # Get User Code from auth server
-        code_json = get_device_code()
-        init_time = datetime.datetime.utcnow()
-        min_time_to_refresh = (
-            100 / code_json["expires_in"]) * code_json['interval']
-        login_dialog = xbmcgui.DialogProgress()
-        baseUrl = __addon__.getSettingString('baseUrl')
-        dialog_msg = __addon__.getLocalizedString(30400) + f' {baseUrl}:\n'
-        title = __addon__.getLocalizedString(30401)
-        login_dialog.create(title, dialog_msg + code_json["userCode"])
+    xbmc.log('Executing new_account function', xbmc.LOGDEBUG)
 
-        # Update progress dialog indicating time left for complete
-        sleep_time = code_json['interval'] * 1000
-        time = 99
-        while True:
-            login_dialog.update(time)
-            if login_dialog.iscanceled():
-                break
-            xbmc.sleep(sleep_time)
-            status_code = auth.fetch_and_save_token(
-                code_json['deviceCode'], token_folder)
-            if status_code == 200:
-                xbmc.executebuiltin(
-                    f'Notification({__addon__.getLocalizedString(30402)}, time=3000)')
-                break
-            if status_code == 403:
-                xbmc.sleep(10000)
-            elif status_code != 202:
-                xbmc.log(status_code, xbmc.LOGDEBUG)
-            if time <= min_time_to_refresh or status_code == 400:
-                code_json = get_device_code()
-                min_time_to_refresh = (
-                    100 / code_json["expires_in"]) * code_json['interval']
-                init_time = datetime.datetime.utcnow()
-                sleep_time = code_json['interval'] * 1000
-                login_dialog.update(time, message=dialog_msg +
-                                    code_json["userCode"])
-                xbmc.executebuiltin(
-                    f'Notification({__addon__.getLocalizedString(30403)}, ,time=3000)')
-            time = int((1 - (datetime.datetime.utcnow() -
-                             init_time).total_seconds() / code_json["expires_in"]) * 100)
-    except Exception as exec:
-        xbmc.log(str(exec), xbmc.LOGDEBUG)
-        err_dialog = xbmcgui.Dialog()
-        err_dialog.notification(__addon__.getLocalizedString(30411),
-                                __addon__.getLocalizedString(30422),
-                                xbmcgui.NOTIFICATION_ERROR, 3000)
-    finally:
-        login_dialog.close()
-        xbmc.executebuiltin('Container.Refresh')
+    # Open dialog
+    baseUrl = __addon__.getSettingString('baseUrl')
+    dialog_msg = __addon__.getLocalizedString(30400) + f' {baseUrl}:\n'
+    title = __addon__.getLocalizedString(30401)
+    load_msg = __addon__.getLocalizedString(30423)
+    login_dialog = xbmcgui.DialogProgress()
+    login_dialog.create(title, dialog_msg + load_msg)
+
+    # Get User Code from auth server
+    code_json = get_device_code()
+    init_time = datetime.datetime.utcnow()
+    min_time_to_refresh = (
+        100 / code_json["expires_in"]) * code_json['interval']
+    login_dialog.update(100, message=dialog_msg + code_json["userCode"])
+
+    # Update progress dialog indicating time left for complete
+    sleep_time = code_json['interval'] * 1000
+    time = 99
+    while True:
+        login_dialog.update(time)
+        if login_dialog.iscanceled():
+            break
+        xbmc.sleep(sleep_time)
+        status_code = auth.fetch_and_save_token(
+            code_json['deviceCode'], token_folder)
+        if status_code == 200:
+            xbmc.executebuiltin(
+                f'Notification({__addon__.getLocalizedString(30402)}, time=3000)')
+            break
+        if status_code == 403:
+            xbmc.sleep(10000)
+        elif status_code != 202:
+            xbmc.log(str(status_code), xbmc.LOGDEBUG)
+        time = int((1 - (datetime.datetime.utcnow() -
+                         init_time).total_seconds() / code_json["expires_in"]) * 100)
+        login_dialog.update(time)
+
+        if time <= min_time_to_refresh or status_code == 400:
+            code_json = get_device_code()
+            min_time_to_refresh = (
+                100 / code_json["expires_in"]) * code_json['interval']
+            init_time = datetime.datetime.utcnow()
+            sleep_time = code_json['interval'] * 1000
+            login_dialog.update(time, message=dialog_msg +
+                                code_json["userCode"])
+            xbmc.executebuiltin(
+                f'Notification({__addon__.getLocalizedString(30403)}, ,time=3000)')
+            time = 100
+    # except Exception as exec:
+    # xbmc.log(str(exec), xbmc.LOGDEBUG)
+    # err_dialog = xbmcgui.Dialog()
+    # err_dialog.notification(__addon__.getLocalizedString(30411),
+    #                         __addon__.getLocalizedString(30422),
+    #                         xbmcgui.NOTIFICATION_ERROR, 3000)
+    # finally:
+    login_dialog.close()
+    xbmc.executebuiltin('Container.Refresh')
 
 
 def remove_account():
@@ -339,7 +346,14 @@ if mode is None:
     # Display logged in accounts
     token_folder.mkdir(parents=True, exist_ok=True)
     for file in token_folder.iterdir():
-        creds = read_credentials(file)
+        try:
+            creds = read_credentials(file)
+        except:
+            err_dialog = xbmcgui.Dialog()
+            err_dialog.notification(__addon__.getLocalizedString(30411),
+                                    __addon__.getLocalizedString(30422),
+                                    xbmcgui.NOTIFICATION_ERROR, 3000)
+            exit()
         email = creds["email"]
         url = utils.build_url(
             base_url, {'mode': 'list_options', 'token_filename': file.name})
@@ -359,8 +373,15 @@ if mode is None:
     xbmcplugin.endOfDirectory(addon_handle)
 else:
     # Read account credentials if present
-    if token_path:
-        creds = read_credentials(token_path)
+    if token_path and mode[0] != 'remove_account':
+        try:
+            creds = read_credentials(token_path)
+        except:
+            err_dialog = xbmcgui.Dialog()
+            err_dialog.notification(__addon__.getLocalizedString(30411),
+                                    __addon__.getLocalizedString(30422),
+                                    xbmcgui.NOTIFICATION_ERROR, 3000)
+            exit()
         token = creds["token"]
     eval(mode[0] + '()')  # Fire up the actual function
 

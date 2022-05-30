@@ -5,6 +5,7 @@ from . import config
 import requests
 import json
 import xbmcaddon
+import xbmc
 
 
 SCOPES = ['https://www.googleapis.com/auth/photoslibrary.readonly',
@@ -26,6 +27,7 @@ def get_device_code():
         'baseUrl') + __addon__.getSettingString('deviceCodeUrl')
     res = requests.get(path)
     if res.status_code != 200:
+        xbmc.log(f'GP: {str(res.status_code)}', xbmc.LOGDEBUG)
         return None
     return res.json()
 
@@ -48,10 +50,10 @@ def fetch_and_save_token(device_code, tf_path):
     if res.status_code == 202 or res.status_code == 403:
         return res.status_code
     if res.status_code != 200:
-        return res.text
+        xbmc.log(res.text, xbmc.LOGDEBUG)
+        return res.status_code
 
     token_data = res.json()
-
     # Fetch email and a unique identifier(called sub) from Google
     headers = {'Authorization': 'Bearer ' + token_data["access_token"]}
     openid_res = requests.get(config.email_url, headers=headers)
@@ -82,8 +84,9 @@ def refresh_access_token(creds, path):
     # Returns new access token and expiry
     refresh_url = __addon__.getSettingString(
         'baseUrl') + __addon__.getSettingString('refreshUrl')
+
     res = requests.post(refresh_url, data={
-                        'refresh_token': creds["refresh_token"], 'grant_type': 'refresh_token'})
+        'refresh_token': creds["refresh_token"], 'grant_type': 'refresh_token'})
     if res.status_code != 200:
         return res.status_code
     token_data = res.json()
@@ -121,6 +124,6 @@ def read_credentials(path):
         status = refresh_access_token(
             creds, path)  # Refreshes creds
         if status != 200:
-            return status
+            xbmc.log(str(status), xbmc.LOGDEBUG)
 
     return creds

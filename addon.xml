@@ -10,8 +10,23 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">View Google Photos on Kodi!</summary>
-    <description lang="en_GB">The addon is in development phase. If video playback is failing, try the solution given in https://forum.kodi.tv/showthread.php?tid=361046 </description>
-    <disclaimer lang="en_GB">This addon is not affiliated by Google.</disclaimer>
+    <description lang="en_GB">See all your photos and videos on Kodi.
+      - Unlimited number of accounts.
+      - Custom Filter support
+      - With Pagination for small load times
+      Video Seeking does not work due to limitations in the API. If video playback is failing, try the solution given in https://forum.kodi.tv/showthread.php?tid=361046 </description>
+    <disclaimer lang="en_GB">
+        Google Photos for Kodi uses a third-party authentication mechanism commonly known as OAuth 2.0.
+        If you want to know more about OAuth 2.0 you can visit the following pages:
+        - https://oauth.net/2/
+        - https://developers.google.com/identity/protocols/OAuth2
+                
+        Kodi and I take no responsibility or liability.
+        
+        The authentication server URL is specified in Settings / Expert / Sign-in Server. The Sign-in Server implements the OAuth 2.0 protocol.
+        The complete source code of the Sign-in Server can be download here: https://github.com/pransin/Device-Authorization-Grant-Proxy-Server
+        You can clone the project and host it in your own server. 
+    </disclaimer>
     <license>	GPL-3.0-or-later</license>
     <assets>
       <icon>icon.png</icon>

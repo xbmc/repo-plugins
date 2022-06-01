@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 from xbmcaddon import Addon
 
-from resources.lib import kodiutils, kodilogging
+from resources.lib import kodilogging, kodiutils
 
 # Reinitialise ADDON every invocation to fix an issue that settings are not fresh.
 kodiutils.ADDON = Addon()

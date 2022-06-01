@@ -1,0 +1,152 @@
+# XBMC Media Center language file
+# Addon Name: Gamegurumania
+# Addon id: plugin.video.gamegurumania
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-06-04 07:34+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Watch game videos made from ggmania.com"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Watch game videos made from ggmania.com"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "For bugs, requests or general questions visit the ggmania.com thread on the XBMC forum."
+msgstr ""
+
+msgctxt "#30000"
+msgid "All Videos"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Movie"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Console"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Preview"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Tech"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Demo"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Interview"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Freegame"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Media"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Gold"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Version"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Author"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Website"
+msgstr ""
+
+msgctxt "#30103"
+msgid "General"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Refresh"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Episode Info"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Video player"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Auto"
+msgstr ""
+
+msgctxt "#30202"
+msgid "DVDPlayer"
+msgstr ""
+
+msgctxt "#30203"
+msgid "MPlayer"
+msgstr ""
+
+msgctxt "#30300"
+msgid "Maximum Video quality"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Standard"
+msgstr ""
+
+msgctxt "#30302"
+msgid "High"
+msgstr ""
+
+msgctxt "#30400"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#30501"
+msgid "%s to %s"
+msgstr ""
+
+msgctxt "#30502"
+msgid "Page %u"
+msgstr ""
+
+msgctxt "#30503"
+msgid "Next page"
+msgstr ""
+
+msgctxt "#30504"
+msgid "Getting video location..."
+msgstr ""
+
+msgctxt "#30505"
+msgid "No video found."
+msgstr ""
+
+msgctxt "#30506"
+msgid "No media found for:"
+msgstr ""
+
+msgctxt "#30610"
+msgid "Only show All Videos category"
+msgstr "Toon alleen Alle Videos categorie"

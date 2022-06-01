@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rsiplaytv" name="RSI Play TV" version="2.0.0" provider-name="Alexander Seiler">
+<addon id="plugin.video.rsiplaytv" name="RSI Play TV" version="2.1.0" provider-name="Alexander Seiler">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
-    <import addon="script.module.srgssr" version="2.0.0"/>
+    <import addon="script.module.srgssr" version="2.1.0"/>
     <import addon="script.module.youtube_channels" version="0.2.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
@@ -24,10 +24,15 @@
     <language>it</language>
     <platform>all</platform>
     <license>GPL-3.0-or-later</license>
-    <forum>https://forum.kodi.tv/showthread.php?tid=331129</forum>
+    <forum>https://github.com/goggle/plugin.video.rsiplaytv/discussions</forum>
     <website>https://www.rsi.ch/play/tv</website>
     <source>https://github.com/goggle/plugin.video.rsiplaytv</source>
-    <news>v2.0.0 (2022-05-03)
+    <news>v2.1.0 (2022-06-01)
+  - Add support for content presented on homepage.
+  - Add support for topics.
+  - Add support for playback of livestreams.
+
+v2.0.0 (2022-05-03)
   - Finalize Python 3 support.
   - Adapt to SRGSSR APIv3.
   - Remove support for audio because it is not included in the SRGSSR API anymore.</news>

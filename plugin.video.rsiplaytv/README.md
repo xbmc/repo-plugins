@@ -10,13 +10,13 @@ Get the [RSI Play TV media library](https://www.rsi.ch/play/tv) on your TV (or a
 ## Features
  - [x] Overview over all the shows
  - [x] Manage a list of your favourite RSI shows and get a list of your recently aired favourite shows
- - [ ] List and play segments for shows (if available), so you don't have to watch the whole episode if you are only interested in a specific section
+ - [x] Videos presented on homepage
+ - [x] Topics
  - [x] Shows by date
  - [x] Search videos
- - [x] Choose between SD and HD quality.
- - [x] Subtitle support.
- - [ ] Livestreams that are exclusively broadcasted on RSI.ch (only available in Switzerland).
- - [ ] Live TV support: RSI 1, RSI 2 and RSI info (only available in Switzerland).
+ - [x] Choose between SD and HD quality
+ - [x] Subtitle support
+ - [x] Livestreams
  - [x] RSI on YouTube: Browse the official RSI channels on YouTube.
 
 ## Installation

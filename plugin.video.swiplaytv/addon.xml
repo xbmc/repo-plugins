@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.swiplaytv" name="SWI Play TV" version="2.1.0" provider-name="Alexander Seiler">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.srgssr" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="fr_FR">Swissinfo vidéothèque</summary>
+    <summary lang="en_GB">Swissinfo television video library</summary>
+    <summary lang="de_DE">Swissinfo Videobibliothek</summary>
+    <summary lang="it_IT">Swissinfo Videoteca</summary>
+    <description lang="fr_FR">Avec SWI Play TV vous pouvez regarder les vidéos de la vidéothèque de Swissinfo.</description>
+    <description lang="en_GB">Access the video library of Swissinfo, a multilingual news and information platform produces by the Swiss Broadcasting Coroporation (SRG SSR)</description>
+    <description lang="de_DE">Mit SWI Play TV können Sie den Inhalt der Swissinfo Videobibliothek der SRG SSR anschauen.</description>
+    <description lang="it_IT">SWI Play TV ti permette di accedere alla videoteca di Swissinfo.</description>
+    <disclaimer lang="fr_FR">Certains contenus sont géo-bloqués et disponibles uniquement en Suisse.</disclaimer>
+    <disclaimer lang="en_GB">Some content is geo-blocked and only available in Switzerland.</disclaimer>
+    <disclaimer lang="de_DE">Einige Inhalte sind nur in der Schweiz verfügbar.</disclaimer>
+    <disclaimer lang="it_IT">Alcuni contenuti sono geograficamente bloccati e quindi visibili solo in Svizzera.</disclaimer>
+    <language>en</language>
+    <platform>all</platform>
+    <license>GPL-3.0-or-later</license>
+    <forum>https://github.com/goggle/plugin.video.swiplaytv/discussions</forum>
+    <website>https://play.swissinfo.ch/play/tv/</website>
+    <source>https://github.com/goggle/plugin.video.swiplaytv</source>
+    <news>v2.1.0 (2022-06-01)
+    - Initial release
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.png</fanart>
+        <screenshot>resources/screenshot-01.png</screenshot>
+        <screenshot>resources/screenshot-02.png</screenshot>
+        <screenshot>resources/screenshot-03.png</screenshot>
+    </assets>
+  </extension>
+</addon>

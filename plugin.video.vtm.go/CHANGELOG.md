@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.3.1](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.3.1) (2022-06-01)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.3.0...v1.3.1)
+
+**Fixed bugs:**
+
+- Upgrade VTMGO REST API to version 12 [\#325](https://github.com/add-ons/plugin.video.vtm.go/pull/325) ([CasvanDongen](https://github.com/CasvanDongen))
+
 ## [v1.3.0](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.3.0) (2021-12-19)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.2.12...v1.3.0)

@@ -7,10 +7,10 @@ API_ENDPOINT = 'https://lfvp-api.dpgmedia.net'
 API_ANDROID_ENDPOINT = 'https://lfvp-android-api.dpgmedia.net'
 
 # These seem to be hardcoded
-STOREFRONT_MAIN = '9620cc0b-0f97-4d96-902a-827dcfd0b227'
-STOREFRONT_MOVIES = 'e3fc0750-f110-4808-ae5f-246846ff940f'
-STOREFRONT_SERIES = '1c683de4-3fb0-4cc4-9d9c-c365eba1b155'
-STOREFRONT_KIDS = '73f34fbf-301c-4deb-b366-13ba39e25996'
+STOREFRONT_MAIN = 'main'
+STOREFRONT_MOVIES = 'movies'
+STOREFRONT_SERIES = 'series'
+STOREFRONT_KIDS = 'kids'
 
 
 class Profile:

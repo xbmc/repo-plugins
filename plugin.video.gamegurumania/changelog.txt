@@ -1,0 +1,44 @@
+v1.0.9 (2022-06-01)
+- updating a version for the leia branch (kodi 18)
+- updating a version for the matrix branch (kodi 19)
+
+v1.0.8 (2022-04-22)
+- using https instead of http
+- ignoring ssl error
+- leia branch (kodi 18)
+
+v1.0.7 (2018-01-20)
+- addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
+Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.
+- adding a setting to only view all video category
+
+v1.0.6 (2017-07-12)
+- added listitem.setInfo video for Kodi 18 and up
+- added sorting
+- added context item episode info
+- using requests
+
+v1.0.5 (2017-03-12):
+- using po-files
+- changed addon debugging info to kodi debugging info
+- fixed url in addon.xml as per request
+
+v1.0.4 (2016-03-12)
+- changed the listing and playing of videos
+- the contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point
+- updated to latest requirements for a Kodi-addon
+- added fanart-blurred
+- added 'refresh' in contextual menu
+
+v1.0.3 (2015-08-15):
+- added utf-8 stuff
+
+v1.0.2 (2014-10-02):
+- adjusted because of website changes
+
+v1.0.1 (2014-09-06):
+- fixed GNU licence
+- added forum link
+
+v1.0.0 (2014-08-25):
+- initial version

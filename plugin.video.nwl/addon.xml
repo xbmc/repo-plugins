@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.nwl" name="Northwoods League Baseball" version="2022.05.31" provider-name="tonywagner">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.pytz" />
+        <import addon="script.module.beautifulsoup4" />
+        <import addon="script.module.requests" />
+        <import addon="inputstream.adaptive" optional="true"/>
+        <import addon="script.module.kodi-six" />
+        <import addon="script.module.dateutil" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">Watch Northwoods League baseball
+        </summary>
+        <description lang="en_GB">Watch free live and on-demand summer college baseball from the Northwoods League</description>
+        <disclaimer lang="en_GB"></disclaimer>
+        <news>
+            - NWL-specific modification of eracknaphobia's add-on
+            - Code cleanup
+        </news>
+        <language>en</language>
+        <platform>all</platform>
+        <license>GPL-2.0-or-later</license>
+        <forum></forum>
+        <website>https://northwoodsleague.com/watch/</website>
+        <source>https://github.com/tonywagner/plugin.video.nwl</source>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

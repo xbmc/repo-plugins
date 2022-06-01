@@ -1,0 +1,86 @@
+# Kodi Media Center language file
+# Addon Name: NWL
+# Addon id: plugin.video.nwl
+# Addon Provider: eracknaphobia,tonywagner
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30010"
+msgid "Previous"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Next"
+msgstr ""
+
+msgctxt "#30159"
+msgid "Visual"
+msgstr ""
+
+msgctxt "#30180"
+msgid "Favorite Team"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Time Format"
+msgstr ""
+
+msgctxt "#30302"
+msgid "12 Hour Clock (ex. 6:00 pm)"
+msgstr ""
+
+msgctxt "#30303"
+msgid "24 Hour Clock (ex. 18:00)"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Ask to start from beginning or live"
+msgstr ""
+
+msgctxt "#30360"
+msgid "Back to "
+msgstr ""
+
+msgctxt "#30361"
+msgid "Today's Games"
+msgstr ""
+
+msgctxt "#30362"
+msgid "On Demand Games"
+msgstr ""
+
+msgctxt "#30383"
+msgid "Streams Not Found"
+msgstr ""
+
+msgctxt "#30384"
+msgid "No playable streams found"
+msgstr ""
+
+msgctxt "#30396"
+msgid "Select a Start Point"
+msgstr ""
+
+msgctxt "#30397"
+msgid "Catch Up"
+msgstr ""
+
+msgctxt "#30398"
+msgid "Beginning"
+msgstr ""
+
+msgctxt "#30399"
+msgid "Live"
+msgstr ""
+

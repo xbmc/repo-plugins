@@ -1,0 +1,152 @@
+# XBMC Media Center language file
+# Addon Name: Gamegurumania
+# Addon id: plugin.video.gamegurumania
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-06-04 07:34+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Watch game videos made from ggmania.com"
+msgstr "Bekijk game videos van ggmania.com"
+
+msgctxt "Addon Description"
+msgid "Watch game videos made from ggmania.com"
+msgstr "Bekijk game videos van ggmania.com"
+
+msgctxt "Addon Disclaimer"
+msgid "For bugs, requests or general questions visit the ggmania.com thread on the XBMC forum."
+msgstr "Bugs of andere feedback op deze plugin kan geplaatst worden in de ggmania.com thread op het XBMC forum."
+
+msgctxt "#30000"
+msgid "All Videos"
+msgstr "Alle Videos"
+
+msgctxt "#30001"
+msgid "Movie"
+msgstr "Movie"
+
+msgctxt "#30002"
+msgid "Console"
+msgstr "Console"
+
+msgctxt "#30003"
+msgid "Preview"
+msgstr "Preview"
+
+msgctxt "#30004"
+msgid "Tech"
+msgstr "Tech"
+
+msgctxt "#30005"
+msgid "Demo"
+msgstr "Demo"
+
+msgctxt "#30006"
+msgid "Interview"
+msgstr "Interview"
+
+msgctxt "#30007"
+msgid "Freegame"
+msgstr "Freegame"
+
+msgctxt "#30008"
+msgid "Media"
+msgstr "Media"
+
+msgctxt "#30009"
+msgid "Gold"
+msgstr "Gold"
+
+msgctxt "#30100"
+msgid "Version"
+msgstr "Versie"
+
+msgctxt "#30101"
+msgid "Author"
+msgstr "Auteur"
+
+msgctxt "#30102"
+msgid "Website"
+msgstr "Website"
+
+msgctxt "#30103"
+msgid "General"
+msgstr "Algemeen"
+
+msgctxt "#30104"
+msgid "Refresh"
+msgstr "Ververs"
+
+msgctxt "#30105"
+msgid "Episode Info"
+msgstr "Aflevering Info"
+
+msgctxt "#30200"
+msgid "Video player"
+msgstr "Video player"
+
+msgctxt "#30201"
+msgid "Auto"
+msgstr "Auto"
+
+msgctxt "#30202"
+msgid "DVDPlayer"
+msgstr "DVDPlayer"
+
+msgctxt "#30203"
+msgid "MPlayer"
+msgstr "MPlayer"
+
+msgctxt "#30300"
+msgid "Maximum Video quality"
+msgstr "Maximum Video kwaliteit"
+
+msgctxt "#30301"
+msgid "Standard"
+msgstr "Standaard"
+
+msgctxt "#30302"
+msgid "High"
+msgstr "Hoog"
+
+msgctxt "#30400"
+msgid "Debug"
+msgstr "Debug"
+
+msgctxt "#30501"
+msgid "%s to %s"
+msgstr "%s tot %s"
+
+msgctxt "#30502"
+msgid "Page %u"
+msgstr "Pagina %u"
+
+msgctxt "#30503"
+msgid "Next page"
+msgstr "Volgende pagina"
+
+msgctxt "#30504"
+msgid "Getting video location..."
+msgstr "Video wordt opgehaald..."
+
+msgctxt "#30505"
+msgid "No video found."
+msgstr "Video niet gevonden."
+
+msgctxt "#30506"
+msgid "No media found for:"
+msgstr "Fout bij het afspelen van video."
+
+msgctxt "#30610"
+msgid "Only show All Videos category"
+msgstr "Toon alleen Alle Videos categorie"

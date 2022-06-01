@@ -91,42 +91,6 @@ msgctxt "#30059"
 msgid "Most searched TV shows"
 msgstr "Am meisten gesuchte TV Sendungen"
 
-msgctxt "#30058"
-msgid "Today"
-msgstr "Heute"
-
-msgctxt "#30059"
-msgid "Yesterday"
-msgstr "Gestern"
-
-msgctxt "#30060"
-msgid "Monday"
-msgstr "Montag"
-
-msgctxt "#30061"
-msgid "Tuesday"
-msgstr "Dienstag"
-
-msgctxt "#30062"
-msgid "Wednesday"
-msgstr "Mittwoch"
-
-msgctxt "#30063"
-msgid "Thursday"
-msgstr "Donnerstag"
-
-msgctxt "#30064"
-msgid "Friday"
-msgstr "Freitag"
-
-msgctxt "#30065"
-msgid "Saturday"
-msgstr "Samstag"
-
-msgctxt "#30066"
-msgid "Sunday"
-msgstr "Sonntag"
-
 msgctxt "#30069"
 msgid "Choose your favourite shows"
 msgstr "Wählen Sie Ihre bevorzugten Sendungen"
@@ -158,3 +122,7 @@ msgstr "Suche"
 msgctxt "#30100"
 msgid "Failed to open URL."
 msgstr "Konnte URL nicht öffnen."
+
+msgctxt "#30060"
+msgid "Homepage"
+msgstr "Startseite"

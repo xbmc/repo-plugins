@@ -10,13 +10,13 @@ Get the [RTS Play TV media library](https://www.rts.ch/play/tv) on your TV (or a
 ## Features
  - [x] Overview over all the shows
  - [x] Manage a list of your favourite RTS shows and get a list of your recently aired favourite shows
- - [ ] List and play segments for shows (if available), so you don't have to watch the whole episode if you are only interested in a specific section
+ - [x] Videos presented on homepage
+ - [x] Topics
  - [x] Shows by date
  - [x] Search videos
- - [x] Choose between SD and HD quality.
- - [x] Subtitle support.
- - [ ] Livestreams that are exclusively broadcasted on RTS.ch (only available in Switzerland).
- - [ ] Live TV support: RTS 1, RTS 2 and RTS info (only available in Switzerland).
+ - [x] Choose between SD and HD quality
+ - [x] Subtitle support
+ - [x] Livestreams
  - [x] RTS on YouTube: Browse the official RTS channels on YouTube.
 
 ## Installation

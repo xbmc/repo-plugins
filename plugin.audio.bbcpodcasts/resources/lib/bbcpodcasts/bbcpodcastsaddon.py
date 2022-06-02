@@ -16,11 +16,11 @@ class BbcPodcastsAddon(AbstractRssAddon):
 
     RSS_URL_PATTERN = "https://podcasts.files.bbci.co.uk/%s.rss"
 
-    def __init__(self, addon_handle):
+    def __init__(self, addon_handle) -> None:
 
         super().__init__(addon_handle)
 
-    def _make_root_menu(self):
+    def _make_root_menu(self) -> None:
 
         entries = list()
         entries += self._get_entries_for_categories()
@@ -35,7 +35,7 @@ class BbcPodcastsAddon(AbstractRssAddon):
 
         xbmcplugin.endOfDirectory(self.addon_handle, updateListing=True)
 
-    def _make_menu(self, path, page=None):
+    def _make_menu(self, path: str, page=None) -> None:
 
         if path.endswith("/"):
             path = path[:-1]
@@ -51,13 +51,13 @@ class BbcPodcastsAddon(AbstractRssAddon):
 
         xbmcplugin.endOfDirectory(self.addon_handle, updateListing=False)
 
-    def _get_podcasts(self, url, page=None):
+    def _get_podcasts(self, url: str, page=None) -> 'list[dict]':
 
-        def _parse_pager(soup):
+        def _parse_pager(soup) -> int:
 
             navs = soup.select("nav")
-            if len(navs) == 3:
-                lis = navs[2].find_all("li")
+            if len(navs) >= 3:
+                lis = navs[-1].find_all("li")
                 if len(lis) > 0:
                     if lis[-1].a:
                         m = re.match(".*page=([0-9]+).*", lis[-1].a["href"])
@@ -102,7 +102,7 @@ class BbcPodcastsAddon(AbstractRssAddon):
 
         return entries
 
-    def _get_entries_for_categories(self):
+    def _get_entries_for_categories(self) -> 'list[dict]':
 
         _data, _cookies = http_request(self.addon,
                                        "%s%s" % (self.BBC_BASE_URL, self.PODCASTS_URL))
@@ -142,7 +142,7 @@ class BbcPodcastsAddon(AbstractRssAddon):
 
         return result
 
-    def _parse_podcast_tile(self, tile):
+    def _parse_podcast_tile(self, tile) -> dict:
 
         _more_episodes = tile.select("a.more-episodes")
         if len(_more_episodes) != 1:
@@ -167,7 +167,7 @@ class BbcPodcastsAddon(AbstractRssAddon):
 
         return entry
 
-    def check_disclaimer(self):
+    def check_disclaimer(self) -> bool:
 
         if self.addon.getSetting("agreement") != "1":
             answer = xbmcgui.Dialog().yesno(self.addon.getLocalizedString(32005),
@@ -182,7 +182,7 @@ class BbcPodcastsAddon(AbstractRssAddon):
         else:
             return True
 
-    def route(self, path, url_params):
+    def route(self, path: str, url_params: 'dict[str]') -> None:
 
         splitted_path = path.split("/")
 

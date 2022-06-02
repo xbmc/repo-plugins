@@ -61,7 +61,7 @@ def getEpisodeData(data, quality):
 
 
 def getDescription(content):
-    return content["images"]["aspect16x9"]["alt"].split(" (Quelle:")[0]
+    return content["images"]["aspect16x9"]["alt"]
 
 
 def getImage(content, width):
@@ -77,4 +77,4 @@ def getStream(streams, quality):
 
 
 def getDgs(content):
-    return "DGS-Logo" in content["images"]["aspect16x9"]["alt"]
+    return "mit Gebärdensprache" in content["shortTitle"]

@@ -1,18 +1,18 @@
-from datetime import datetime
-from resources.lib.rssaddon.http_status_error import HttpStatusError
-from resources.lib.rssaddon.http_client import http_request
-
 import base64
 import os
 import re
 import urllib.parse
-import xmltodict
+from datetime import datetime
+from io import StringIO
+from xml.etree.ElementTree import iterparse
 
 import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
 import xbmcvfs
+from resources.lib.rssaddon.http_client import http_request
+from resources.lib.rssaddon.http_status_error import HttpStatusError
 
 # see https://forum.kodi.tv/showthread.php?tid=112916
 _MONTHS = ["Jan", "Feb", "Mar", "Apr", "May",
@@ -32,7 +32,7 @@ class AbstractRssAddon:
         self.addon_handle = addon_handle
         self.addon_dir = xbmcvfs.translatePath(self.addon.getAddonInfo('path'))
 
-    def handle(self, argv):
+    def handle(self, argv: 'list[str]') -> None:
 
         path = urllib.parse.urlparse(argv[0]).path.replace("//", "/")
         url_params = urllib.parse.parse_qs(argv[2][1:])
@@ -43,7 +43,11 @@ class AbstractRssAddon:
 
         if "rss" in url_params:
             url = self.decode_param(url_params["rss"][0])
-            self.render_rss(path, url)
+            limit = int(self.decode_param(
+                url_params["limit"][0])) if "limit" in url_params else 0
+            offset = int(self.decode_param(
+                url_params["offset"][0])) if "offset" in url_params else 0
+            self.render_rss(path, url, limit=limit, offset=offset)
 
         elif "play_latest" in url_params:
             url = self.decode_param(url_params["play_latest"][0])
@@ -51,97 +55,128 @@ class AbstractRssAddon:
         else:
             self.route(path, url_params)
 
-    def decode_param(self, encoded_param):
+    def decode_param(self, encoded_param: str) -> str:
 
         return base64.urlsafe_b64decode(encoded_param).decode("utf-8")
 
-    def check_disclaimer(self):
+    def check_disclaimer(self) -> bool:
 
         return True
 
-    def route(self, path, url_params):
+    def route(self, path: str, url_params):
 
         pass
 
-    def is_force_http(self):
+    def is_force_http(self) -> bool:
 
         return False
 
-    def _load_rss(self, url):
+    def _load_rss(self, url: str) -> 'tuple[str,str,str,list[dict]]':
 
-        def _parse_item(_ci, fallback_image):
+        def parse_rss_feed(xml: str) -> 'tuple[str,str,str,list[dict]]':
 
-            if "enclosure" not in _ci or "@url" not in _ci["enclosure"]:
-                return None
+            path = list()
 
-            item = {
-                "name": _ci["title"],
-                "description": _ci["description"] if "description" in _ci else "",
-                "stream_url": _ci["enclosure"]["@url"] if not self.is_force_http() else _ci["enclosure"]["@url"].replace("https://", "http://"),
-                "type": "video" if _ci["enclosure"]["@type"].split("/")[0] == "video" else "music",
-                "icon": _ci["itunes:image"]["@href"] if "itunes:image" in _ci and "@href" in _ci["itunes:image"] else fallback_image
-            }
+            title = None
+            description = ""
+            image = None
+            items = list()
 
-            if "pubDate" in _ci:
-                _f = re.findall(
-                    "(\d{1,2}) (\w{3}) (\d{4}) (\d{2}):(\d{2}):(\d{2})", _ci["pubDate"])
+            for event, elem in iterparse(StringIO(xml), ("start", "end")):
 
-                if _f:
-                    _m = _MONTHS.index(_f[0][1]) + 1
-                    item["date"] = datetime(year=int(_f[0][2]), month=_m, day=int(_f[0][0]), hour=int(
-                        _f[0][3]), minute=int(_f[0][4]), second=int(_f[0][5]))
+                if event == "start":
+                    path.append(elem.tag)
 
-            if "itunes:duration" in _ci:
-                try:
-                    duration = 0
-                    for i, s in enumerate(reversed(_ci["itunes:duration"].split(":"))):
-                        duration += 60**i * int(s)
+                    if path == ["rss", "channel", "item"]:
+                        item = dict()
 
-                    item["duration"] = duration
+                elif event == "end":
 
-                except:
-                    pass
+                    if path == ["rss", "channel"]:
+                        pass
 
-            return item
+                    elif path == ["rss", "channel", "title"] and elem.text:
+                        title = elem.text.strip()
 
-        res, cookies = http_request(self.addon, url)
+                    elif path == ["rss", "channel", "description"] and elem.text:
+                        description = elem.text.strip()
 
-        if not res.startswith("<?xml") and not res.startswith("<rss"):
+                    elif path == ["rss", "channel", "image", "url"] and elem.text:
+                        image = elem.text.strip()
+
+                    elif (path == ["rss", "channel", "{http://www.itunes.com/dtds/podcast-1.0.dtd}image"]
+                            and "href" in elem.attrib and not image):
+                        image = elem.attrib["href"]
+
+                    elif path == ["rss", "channel", "item", "title"] and elem.text:
+                        item["name"] = elem.text.strip()
+
+                    elif path == ["rss", "channel", "item", "description"] and elem.text:
+                        item["description"] = elem.text.strip()
+
+                    elif path == ["rss", "channel", "item", "enclosure"]:
+                        item["stream_url"] = elem.attrib["url"] if not self.is_force_http(
+                        ) else elem.attrib["url"].replace("https://", "http://")
+                        item["type"] = "video" if elem.attrib["type"].split(
+                            "/")[0] == "video" else "music"
+
+                    elif (path == ["rss", "channel", "item", "{http://www.itunes.com/dtds/podcast-1.0.dtd}image"]
+                            and elem.attrib["href"]):
+                        item["icon"] = elem.attrib["href"]
+
+                    elif path == ["rss", "channel", "item", "pubDate"] and elem.text:
+                        _f = re.findall(
+                            "(\d{1,2}) (\w{3}) (\d{4}) (\d{2}):(\d{2}):(\d{2})", elem.text)
+
+                        if _f:
+                            _m = _MONTHS.index(_f[0][1]) + 1
+                            item["date"] = datetime(year=int(_f[0][2]), month=_m, day=int(_f[0][0]), hour=int(
+                                _f[0][3]), minute=int(_f[0][4]), second=int(_f[0][5]))
+
+                    elif path == ["rss", "channel", "item", "{http://www.itunes.com/dtds/podcast-1.0.dtd}duration"] and elem.text:
+                        try:
+                            duration = 0
+                            for i, s in enumerate(reversed(elem.text.split(":"))):
+                                duration += 60**i * int(s)
+
+                            item["duration"] = duration
+
+                        except:
+                            pass
+
+                    elif path == ["rss", "channel", "item"]:
+
+                        if "description" not in item:
+                            item["description"] = ""
+
+                        if "icon" not in item:
+                            item["icon"] = image
+
+                        if "stream_url" in item and item["stream_url"]:
+                            items.append(item)
+
+                    elem.clear()
+                    path.pop()
+
+            return title, description, image, items
+
+        xml, cookies = http_request(self.addon, url)
+
+        if not xml.startswith("<?xml") and not xml.startswith("<rss"):
             raise HttpStatusError("%s %s" % (
                 self.addon.getLocalizedString(32155), url))
 
-        else:
-            rss_feed = xmltodict.parse(res)
-
-        channel = rss_feed["rss"]["channel"]
-
-        title = channel["title"] if "title" in channel else ""
-        description = channel["description"] if "description" in channel else ""
-
-        if "image" in channel and "url" in channel["image"]:
-            image = channel["image"]["url"]
-        elif "itunes:image" in channel:
-            image = channel["itunes:image"]["@href"]
-        else:
-            image = None
-
-        items = []
-        _cis = channel["item"] if type(channel["item"]) is list else [
-            channel["item"]]
-        for _ci in _cis:
-            item = _parse_item(_ci, image)
-            if item is not None:
-                items += [item]
+        title, description, image, items = parse_rss_feed(xml=xml)
 
         self.on_rss_loaded(url, title, description, image, items)
 
         return title, description, image, items
 
-    def on_rss_loaded(self, url, title, description, image, items):
+    def on_rss_loaded(self, url: str, title: str, description: str, image: str, items: 'list[dict]') -> None:
 
         pass
 
-    def _create_list_item(self, item):
+    def _create_list_item(self, item: dict) -> xbmcgui.ListItem:
 
         li = xbmcgui.ListItem(label=item["name"])
 
@@ -183,9 +218,9 @@ class AbstractRssAddon:
 
         return li
 
-    def add_list_item(self, entry, path):
+    def add_list_item(self, entry: dict, path: str) -> None:
 
-        def _build_param_string(params, current=""):
+        def _build_param_string(params: 'list[str]', current="") -> str:
 
             if params == None:
                 return current
@@ -226,7 +261,7 @@ class AbstractRssAddon:
                                     url=url,
                                     isFolder=is_folder)
 
-    def render_rss(self, path, url):
+    def render_rss(self, path: str, url: str, limit=0, offset=0) -> None:
 
         try:
             title, description, image, items = self._load_rss(url)
@@ -254,19 +289,20 @@ class AbstractRssAddon:
                 }
                 self.add_list_item(entry, path)
 
-            for item in items:
-                li = self._create_list_item(item)
-                xbmcplugin.addDirectoryItem(handle=self.addon_handle,
-                                            listitem=li,
-                                            url=item["stream_url"],
-                                            isFolder=False)
+            for i, item in enumerate(items):
+                if i >= offset and (not limit or i < offset + limit):
+                    li = self._create_list_item(item)
+                    xbmcplugin.addDirectoryItem(handle=self.addon_handle,
+                                                listitem=li,
+                                                url=item["stream_url"],
+                                                isFolder=False)
 
             if li and "setDateTime" in dir(li):  # available since Kodi v20
                 xbmcplugin.addSortMethod(
                     self.addon_handle, xbmcplugin.SORT_METHOD_DATE)
             xbmcplugin.endOfDirectory(self.addon_handle)
 
-    def play_latest(self, url):
+    def play_latest(self, url: str) -> None:
 
         try:
             title, description, image, items = self._load_rss(url)

@@ -9,6 +9,7 @@ import urllib, requests
 from datetime import date, datetime, timedelta
 from dateutil.parser import parse
 from kodi_six import xbmc, xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs
+import html
 
 if sys.version_info[0] > 2:
     import http
@@ -37,6 +38,7 @@ ROOTDIR = ADDON.getAddonInfo('path')
 #Settings
 settings = xbmcaddon.Addon(id='plugin.video.nwl')
 FAV_TEAM = ADDON.getSettingString("fav_team")
+NO_SPOILERS = settings.getSetting(id="no_spoilers")
 TIME_FORMAT = ADDON.getSetting("time_format")
 CATCH_UP = str(settings.getSetting(id='catch_up'))
 
@@ -144,6 +146,13 @@ def get_eastern_game_date(timestamp):
     if int(eastern_hour) < 4:
         eastern_date = eastern_date - timedelta(days=1)
     return eastern_date.strftime('%Y-%m-%d')
+
+
+def yesterdays_date():
+    game_day = localToEastern()
+    display_day = stringToDate(game_day, "%Y-%m-%d")
+    prev_day = display_day - timedelta(days=1)
+    return prev_day.strftime("%Y-%m-%d")
 
 
 def get_params():
@@ -263,3 +272,15 @@ def stream_to_listitem(stream_url, start='-1'):
         listitem.setMimeType("video/mp4")
 
     return listitem
+
+
+def get_last_name(full_name):
+    last_name = ''
+    try:
+        name_split = full_name.split()
+        last_name = name_split[len(name_split)-1]
+        if last_name.endswith('.'):
+            last_name = name_split[len(name_split)-2] + ' ' + last_name
+    except:
+        pass
+    return last_name

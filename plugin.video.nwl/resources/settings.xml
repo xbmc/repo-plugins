@@ -2,6 +2,7 @@
 <settings>
   <category label="30159">
     <setting id="fav_team" type="labelenum" label="30180" default="None" values="None|Battle Creek Battle Jacks|Bismarck Larks|Duluth Huskies|Eau Claire Express|Fond du Lac Dock Spiders|Green Bay Rockers|Kalamazoo Growlers|Kenosha Kingfish|Kokomo Jackrabbits|La Crosse Loggers|Lakeshore Chinooks|Madison Mallards|Mankato MoonDogs|Minnesota Mud Puppies|Rochester Honkers|Rockford Rivets|St. Cloud Rox|Thunder Bay Border Cats|Traverse City Pit Spitters|Waterloo Bucks|Wausau Woodchucks|Willmar Stingers|Wisconsin Rapids Rafters" />
+    <setting id="no_spoilers" type="enum" label="30170" lvalues="30171|30172|30173|30174|30175" />
     <setting id="catch_up" type="bool" label="30304" default="true" />
     <setting id="time_format" type="select" label="30301" lvalues="30302|30303" default="0" />
   </category>

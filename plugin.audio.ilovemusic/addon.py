@@ -1,52 +1,34 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import xbmcplugin,xbmcaddon,xbmcgui,os,sys
+import xbmcplugin,xbmcaddon,xbmcgui,os,sys,requests
 
 addon = xbmcaddon.Addon()
 addon_path = addon.getAddonInfo('path').decode('utf-8')
-icons_path = os.path.join(addon_path,'resources','senderlogos')
+senderliste = os.path.join(addon_path,'resources','senderliste.txt')
 xbmcplugin.setContent(handle=int(sys.argv[1]), content='songs')
+enable_senderupdate = addon.getSetting('senderupdate')
+
+def sender_update():
+    addon_path = addon.getAddonInfo('path').decode('utf-8')
+    icons_path = os.path.join(addon_path,'resources','senderlogos')
+    senderliste = os.path.join(addon_path,'resources','senderliste.txt')
+    url = 'https://raw.githubusercontent.com/adiko01/plugin.audio.ilovemusic/Daten/Senderlisten/Senderliste-Stabel.txt'
+    r = requests.get(url, allow_redirects=True)
+    open(senderliste, 'wb').write(r.content)
 				
 def add_item(url,infolabels,img=''):
     listitem = xbmcgui.ListItem(infolabels['title'])
     listitem.setInfo('audio',infolabels)
     listitem.setArt({ 'thumb': img , 'icon' : img })
     listitem.setProperty('IsPlayable','true')
-    xbmcplugin.addDirectoryItem(int(sys.argv[1]),url,listitem)
+    xbmcplugin.addDirectoryItem(int(sys.argv[1]),url,listitem)    
 
-add_item('https://streams.ilovemusic.de/iloveradio1.mp3',{'title':'I LOVE RADIO'},os.path.join(icons_path,'i_love_radio.png'))
-add_item('https://streams.ilovemusic.de/iloveradio2.mp3',{'title':'I LOVE 2 DANCE'},os.path.join(icons_path,'i_love_2_dance.png'))
-add_item('https://streams.ilovemusic.de/iloveradio29.mp3',{'title':'I LOVE BASS BY HBZ'},os.path.join(icons_path,'i_love_BASS_BY_HBZ.png'))
-add_item('https://streams.ilovemusic.de/iloveradio17.mp3',{'title':'I LOVE CHILLHOP'},os.path.join(icons_path,'i_love_chillhop.png'))
-add_item('https://streams.ilovemusic.de/iloveradio36.mp3',{'title':'I LOVE DANCE 2022'},os.path.join(icons_path,'i_love_dance_2022.png'))
-add_item('https://streams.ilovemusic.de/iloveradio103.mp3',{'title':'I LOVE DANCE FIRST'},os.path.join(icons_path,'i_love_dance_first.png'))
-add_item('https://streams.ilovemusic.de/iloveradio26.mp3',{'title':'I LOVE DANCE HISTORY'},os.path.join(icons_path,'i_love_dance_history.png'))
-add_item('https://streams.ilovemusic.de/iloveradio6.mp3',{'title':'I LOVE DEUTSCHRAP BESTE'},os.path.join(icons_path,'i_love_deutschrap_beste.png'))
-add_item('https://streams.ilovemusic.de/iloveradio104.mp3',{'title':'I LOVE DEUTSCHRAP FIRST!'},os.path.join(icons_path,'i_love_deutschrap_first.png'))
-add_item('https://streams.ilovemusic.de/iloveradio16.mp3',{'title':'I LOVE GREATEST HITS'},os.path.join(icons_path,'i_love_greatest_hits.png'))
-add_item('https://streams.ilovemusic.de/iloveradio21.mp3',{'title':'I LOVE HARDSTYLE'},os.path.join(icons_path,'i_love_hardstyle.png'))
-add_item('https://streams.ilovemusic.de/iloveradio3.mp3',{'title':'I LOVE HIP HOP'},os.path.join(icons_path,'i_love_hip_hop.png'))
-add_item('https://streams.ilovemusic.de/iloveradio35.mp3',{'title':'I LOVE HIP HOP 2022'},os.path.join(icons_path,'i_love_hip_hop_2022.png'))
-add_item('https://streams.ilovemusic.de/iloveradio27.mp3',{'title':'I LOVE HIP HOP HISTORY'},os.path.join(icons_path,'i_love_hip_hop_history.png'))
-add_item('https://streams.ilovemusic.de/iloveradio109.mp3',{'title':'I LOVE HITS 2022'},os.path.join(icons_path,'i_love_hits_2022.png'))
-add_item('https://streams.ilovemusic.de/iloveradio12.mp3',{'title':'I LOVE HITS HISTORY'},os.path.join(icons_path,'i_love_hits_history.png'))
-add_item('https://streams.ilovemusic.de/iloveradio22.mp3',{'title':'I LOVE MAINSTAGE'},os.path.join(icons_path,'i_love_mainstage.png'))
-add_item('https://streams.ilovemusic.de/iloveradio5.mp3',{'title':'I LOVE MASHUP'},os.path.join(icons_path,'i_love_mashup.png'))
-add_item('https://streams.ilovemusic.de/iloveradio24.mp3',{'title':'I LOVE MONSTERCAT'},os.path.join(icons_path,'i_love_monstercat.png'))
-add_item('https://streams.ilovemusic.de/iloveradio10.mp3',{'title':'I LOVE MUSIC AND CHILL'},os.path.join(icons_path,'i_love_music_and_chill.png'))
-add_item('https://streams.ilovemusic.de/iloveradio11.mp3',{'title':'I LOVE NEW POP'},os.path.join(icons_path,'i_love_new_pop.png'))
-add_item('https://streams.ilovemusic.de/iloveradio14.mp3',{'title':'I LOVE PARTY HARD'},os.path.join(icons_path,'i_love_party_hard.png'))
-add_item('https://streams.ilovemusic.de/iloveradio28.mp3',{'title':'I LOVE RADIO FROM MARS'},os.path.join(icons_path,'i_love_radio_from_mars.png'))
-add_item('https://streams.ilovemusic.de/iloveradio25.mp3',{'title':'I LOVE REMIX RADIO'},os.path.join(icons_path,'i_love_remix_radio.png'))
-add_item('https://streams.ilovemusic.de/iloveradio18.mp3',{'title':'I LOVE ROBIN SCHULZ'},os.path.join(icons_path,'i_love_robin_schulz.png'))
-add_item('https://streams.ilovemusic.de/iloveradio7.mp3',{'title':'I LOVE THE BEACH'},os.path.join(icons_path,'i_love_the_beach.png'))
-add_item('https://streams.ilovemusic.de/iloveradio20.mp3',{'title':'I LOVE THE CLUB'},os.path.join(icons_path,'i_love_the_club.png'))
-add_item('https://streams.ilovemusic.de/iloveradio4.mp3',{'title':'I LOVE THE DJ BY DJ MAG'},os.path.join(icons_path,'i_love_the_dj_by_dj_mag.png'))
-add_item('https://streams.ilovemusic.de/iloveradio15.mp3',{'title':'I LOVE THE SUN'},os.path.join(icons_path,'i_love_the_sun.png'))
-add_item('https://streams.ilovemusic.de/iloveradio9.mp3',{'title':'I LOVE TOP 100 CHARTS'},os.path.join(icons_path,'i_love_the_top_100_charts.png'))
-add_item('https://streams.ilovemusic.de/iloveradio19.mp3',{'title':'I LOVE TRASHPOP'},os.path.join(icons_path,'i_love_trashpop.png'))
-add_item('https://streams.ilovemusic.de/iloveradio13.mp3',{'title':'I LOVE US ONLY RAP RADIO'},os.path.join(icons_path,'i_love_us_only_rap_radio.png'))
-add_item('https://streams.ilovemusic.de/iloveradio23.mp3',{'title':'I LOVE WORKOUT'},os.path.join(icons_path,'i_love_workout.png'))
-add_item('https://streams.ilovemusic.de/iloveradio8.mp3',{'title':'I LOVE X-MAS'},os.path.join(icons_path,'i_love_X-Mas.png'))
+if enable_senderupdate == 'true':
+    sender_update()
+
+datei = open(senderliste,'r')
+for zeile in datei:
+    sender2 = zeile.split(',')
+    add_item(sender2[0],{'title':sender2[1]},sender2[2])
 
 xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True, updateListing=False, cacheToDisc=True)

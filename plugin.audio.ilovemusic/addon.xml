@@ -1,7 +1,8 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.ilovemusic" name="I Love Music" version="2.3.0" provider-name="adiko01">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.ilovemusic" name="I Love Music" version="3.0.1" provider-name="adiko01">
     <requires>
 		<import addon="xbmc.python" version="2.26.0"/>
+        <import addon="script.module.requests" version="2.22.0" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>audio</provides>
@@ -21,19 +22,8 @@
 		<website>https://www.ilovemusic.de</website>
 		<email>dev@adiko01.de</email>
 		<source>https://github.com/adiko01/plugin.audio.ilovemusic</source>
-		<news>v2.3.0 (26/03/2022)
-			[new] Neue Kanäle:
-				I LOVE BASS BY HBZ
-				I LOVE DANCE 2022
-				I LOVE DANCE HISTORY
-				I LOVE HIP HOP 2022
-				I LOVE HIP HOP HISTORY
-				I LOVE HITS 2022
-				I LOVE RADIO FROM MARS
-				I LOVE REMIX RADIO
-				I LOVE WORKOUT
-			[new] Entfernte Kanäle:
-				I LOVE HITS 2020
+		<news>v3.0.1 (04/06/2022)
+			Die Senderliste kann nun auch ohne Plugin Update über Github aktualisiert werden. 
 		</news>
 		<assets>
 			<icon>resources/icon.png</icon>

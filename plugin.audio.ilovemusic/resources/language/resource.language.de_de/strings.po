@@ -1,0 +1,22 @@
+# Kodi Media Center language file
+# Addon Name: I LOVE MUSIC
+# Addon id: plugin.audio.ilovemusic
+# Addon Provider: adiko01
+# Addon Translator: adiko01
+
+msgid ""
+msgstr ""
+
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Channel list"
+msgstr "Senderliste"
+
+msgctxt "#30001"
+msgid "Channel list update"
+msgstr "Senderlistenupdate"

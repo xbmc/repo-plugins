@@ -275,12 +275,8 @@ def stream_to_listitem(stream_url, start='-1'):
 
 
 def get_last_name(full_name):
-    last_name = ''
     try:
-        name_split = full_name.split()
-        last_name = name_split[len(name_split)-1]
-        if last_name.endswith('.'):
-            last_name = name_split[len(name_split)-2] + ' ' + last_name
+        return full_name.split(' ', 1)[1]
     except:
         pass
-    return last_name
+    return full_name

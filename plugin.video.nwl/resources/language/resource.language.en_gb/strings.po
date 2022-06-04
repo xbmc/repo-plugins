@@ -73,7 +73,7 @@ msgid "Ask to start from beginning or live"
 msgstr ""
 
 msgctxt "#30360"
-msgid "Back to "
+msgid "Live and Upcoming Games"
 msgstr ""
 
 msgctxt "#30361"

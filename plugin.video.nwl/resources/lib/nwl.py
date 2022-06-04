@@ -5,23 +5,24 @@
 from resources.lib.globals import *
 
 
+def categories():
+    addDir(LOCAL_STRING(30360), 100)
+    addDir(LOCAL_STRING(30362), 101)
+
+
 def list_games(schedule_type='today', page_start=0):
     today = localToEastern()
     yesterday = yesterdays_date()
     #now = datetime.now(pytz.timezone('UTC'))
     if schedule_type == 'today':
-        dir_title = stringToDate(today, "%Y-%m-%d").strftime("%A, %m/%d/%Y")
+        dir_title = '[B][I]' + colorString(stringToDate(today, "%Y-%m-%d").strftime("%A, %m/%d/%Y"), GAMETIME_COLOR) + '[/I][/B]'
         dir_mode = 100
+        addDir(dir_title, dir_mode)
     else:
-        dir_title = LOCAL_STRING(30362)
         dir_mode = 101
 
-    dir_title = '[B][I]' + colorString(dir_title, GAMETIME_COLOR) + '[/I][/B]'
-
-    addDir(dir_title, dir_mode)
-
     if page_start > 0:
-        addDir('[B]<< %s[/B]' % LOCAL_STRING(30010), 101, (page_start-PAGE_LENGTH))
+        addDir('[B]<< %s[/B]' % LOCAL_STRING(30010), dir_mode, (page_start-PAGE_LENGTH))
 
     url = 'https://core.stretchlive.com/event/' + schedule_type + '/213934?ppv=true'
     r = requests.get(url,headers=HEADERS, verify=VERIFY)
@@ -106,12 +107,7 @@ def list_games(schedule_type='today', page_start=0):
         pass
 
     if len(json_source) >= page_end:
-        addDir('[B]%s >>[/B]' % LOCAL_STRING(30011), 101, (page_start+PAGE_LENGTH))
-
-    if schedule_type == 'today':
-        addDir('[B]%s[/B]' % LOCAL_STRING(30362), 101)
-    elif schedule_type == 'ondemand':
-        addDir('[B]<< %s[/B]' % (LOCAL_STRING(30360) + LOCAL_STRING(30361)), 102)
+        addDir('[B]%s >>[/B]' % LOCAL_STRING(30011), dir_mode, (page_start+PAGE_LENGTH))
 
 
 def create_game_listitem(game, game_time, game_day, today, score_details):

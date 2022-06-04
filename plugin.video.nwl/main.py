@@ -5,7 +5,7 @@
 from resources.lib.nwl import *
 
 params = get_params()
-mode = 100
+mode = None
 page_start = 0
 id = None
 
@@ -18,18 +18,16 @@ if 'page_start' in params:
 if 'id' in params:
     id = urllib.unquote_plus(params["id"])
 
+if mode is None:
+    categories()
+
 # Today's Games
-if mode == 100:
+elif mode == 100:
     list_games()
 
 # On Demand
 elif mode == 101:
     list_games('ondemand', page_start)
-
-# Back to Today's Games
-if mode == 102:
-    # Refresh will erase history, so navigating back won't bring up the on-demand games again
-    xbmc.executebuiltin('Container.Refresh("plugin://plugin.video.nwl/")')
 
 elif mode == 104:
     stream_select(id)

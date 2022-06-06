@@ -206,13 +206,12 @@ class VtmGo:
         else:
             movie = None
 
-        if movie is None:
+        if not movie:
             # Fetch from API
             response = util.http_get(API_ENDPOINT + '/%s/movies/%s' % (self._mode(), movie_id),
                                      token=self._tokens.access_token if self._tokens else None,
                                      profile=self._tokens.profile if self._tokens else None)
-            info = json.loads(response.text)
-            movie = info.get('movie', {})
+            movie = json.loads(response.text)
             kodiutils.set_cache(['movie', movie_id], movie)
 
         return Movie(
@@ -220,8 +219,9 @@ class VtmGo:
             name=movie.get('name'),
             description=movie.get('description'),
             duration=movie.get('durationSeconds'),
-            thumb=movie.get('teaserImageUrl'),
-            fanart=movie.get('bigPhotoUrl'),
+            thumb=movie.get('landscapeTeaserImageUrl'),
+            # portraitthumb=movie.get('portraitTeaserImageUrl'),
+            fanart=movie.get('backgroundImageUrl'),
             year=movie.get('productionYear'),
             geoblocked=movie.get('blockedFor') == 'GEO',
             remaining=movie.get('remainingDaysAvailable'),
@@ -244,7 +244,7 @@ class VtmGo:
         else:
             program = None
 
-        if program is None:
+        if not program:
             # Fetch from API
             response = util.http_get(API_ENDPOINT + '/%s/programs/%s' % (self._mode(), program_id),
                                      token=self._tokens.access_token if self._tokens else None,

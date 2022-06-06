@@ -1,5 +1,15 @@
 # Changelog
 
+## [v1.3.2](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.3.2) (2022-06-06)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.3.1...v1.3.2)
+
+**Fixed bugs:**
+
+- Allow to clear cache, and don't use empty cached items [\#330](https://github.com/add-ons/plugin.video.vtm.go/pull/330) ([michaelarnauts](https://github.com/michaelarnauts))
+- Throw decent error on a geoblock exception [\#329](https://github.com/add-ons/plugin.video.vtm.go/pull/329) ([michaelarnauts](https://github.com/michaelarnauts))
+- Fix empty movie entries in list after play [\#327](https://github.com/add-ons/plugin.video.vtm.go/pull/327) ([tatankat](https://github.com/tatankat))
+
 ## [v1.3.1](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.3.1) (2022-06-01)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.3.0...v1.3.1)

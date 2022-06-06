@@ -37,5 +37,7 @@
         <setting label="30893" type="action" action="RunAddon(script.kodi.loguploader)" visible="String.StartsWith(System.BuildVersion,18) + System.HasAddon(script.kodi.loguploader) | System.AddonIsEnabled(script.kodi.loguploader)" /> <!-- Open Kodi Logfile Uploader -->
         <setting label="30894" type="lsep"/> <!-- Authentication -->
         <setting label="30895" type="action" action="RunPlugin(plugin://plugin.video.vtm.go/auth/clear-tokens)"/>
+        <setting label="30896" type="lsep"/> <!-- Cache -->
+        <setting label="30897" type="action" action="RunPlugin(plugin://plugin.video.vtm.go/auth/clear-cache)"/>
     </category>
 </settings>

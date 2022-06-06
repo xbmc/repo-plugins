@@ -196,6 +196,10 @@ msgctxt "#30706"
 msgid "The authentication tokens are removed."
 msgstr ""
 
+msgctxt "#30707"
+msgid "The cache has been cleared."
+msgstr ""
+
 msgctxt "#30708"
 msgid "Please restart Kodi."
 msgstr ""
@@ -348,4 +352,12 @@ msgstr ""
 
 msgctxt "#30895"
 msgid "Clear authentication tokens…"
+msgstr ""
+
+msgctxt "#30896"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30897"
+msgid "Clear cache…"
 msgstr ""

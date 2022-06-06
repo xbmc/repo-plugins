@@ -3,13 +3,14 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
+import json
 import logging
 
 import requests
 from requests import HTTPError
 
 from resources.lib import kodiutils
-from resources.lib.vtmgo.exceptions import InvalidLoginException, InvalidTokenException, LimitReachedException, UnavailableException
+from resources.lib.vtmgo.exceptions import InvalidLoginException, InvalidTokenException, LimitReachedException, UnavailableException, StreamGeoblockedException
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -44,6 +45,12 @@ def http_get(url, params=None, token=None, profile=None, headers=None):
         if exc.response.status_code == 401:
             raise InvalidTokenException(exc)
         if exc.response.status_code == 403:
+            try:
+                body = json.loads(exc.response.content)
+            except Exception:  # pylint: disable=broad-except
+                body = {}
+            if body.get('type') == 'videoPlaybackGeoblocked':
+                raise StreamGeoblockedException(exc)
             raise InvalidLoginException(exc)
         if exc.response.status_code == 404:
             raise UnavailableException(exc)

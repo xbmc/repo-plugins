@@ -12,7 +12,6 @@ class InvalidTokenException(Exception):
     """ Is thrown when the token is invalid. """
 
 
-
 class NoStreamzSubscriptionException(Exception):
     """ Is thrown when you don't have an subscription with Streamz. """
 

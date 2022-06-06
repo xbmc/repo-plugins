@@ -56,6 +56,13 @@ def auth_clear_tokens():
     Authentication().clear_tokens()
 
 
+@routing.route('/auth/clear-cache')
+def auth_clear_cache():
+    """ Clear the cache """
+    from resources.lib.modules.authentication import Authentication
+    Authentication().clear_cache()
+
+
 @routing.route('/catalog/program/<program>')
 def show_catalog_program(program):
     """ Show a program from the catalog """

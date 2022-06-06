@@ -32,8 +32,8 @@ class StreamzAdapter(BaseAdapter):
 # Setup a static session that can be reused for all calls
 SESSION = requests.Session()
 SESSION.headers = {
-    'User-Agent': 'STREAMZ/11.19 (be.dpgmedia.streamz; build:14554; iOS 24) okhttp/4.9.1',
-    'x-app-version': '11',
+    'User-Agent': 'STREAMZ/12.16 (be.dpgmedia.streamz; build:16527; Android 24) okhttp/4.9.3',
+    'x-app-version': '12',
     'x-persgroep-mobile-app': 'true',
     'x-persgroep-os': 'android',
     'x-persgroep-os-version': '24',

@@ -110,3 +110,7 @@ msgstr "Suche"
 msgctxt "#30074"
 msgid "RSI on YouTube"
 msgstr "RSI auf YouTube"
+
+msgctxt "#30060"
+msgid "Homepage"
+msgstr "Startseite"

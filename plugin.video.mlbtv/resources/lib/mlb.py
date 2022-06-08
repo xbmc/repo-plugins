@@ -6,12 +6,14 @@ from .mlbmonitor import MLBMonitor
 def categories():
     addDir(LOCAL_STRING(30360), 100, ICON, FANART)
     addDir(LOCAL_STRING(30361), 105, ICON, FANART)
+    # see yesterday's scores at inning in the main menu
+    addDir(LOCAL_STRING(30413), 108, ICON, FANART)
     addDir(LOCAL_STRING(30362), 200, ICON, FANART)
     # show Featured Videos in the main menu
     addDir(LOCAL_STRING(30363), 300, ICON, FANART)
 
 
-def todays_games(game_day):
+def todays_games(game_day, start_inning='False'):
     if game_day is None:
         game_day = localToEastern()
 
@@ -21,14 +23,11 @@ def todays_games(game_day):
     #url_game_day = display_day.strftime('year_%Y/month_%m/day_%d')
     prev_day = display_day - timedelta(days=1)
 
-    addDir('[B]<< %s[/B]' % LOCAL_STRING(30010), 101, PREV_ICON, FANART, prev_day.strftime("%Y-%m-%d"))
+    addDir('[B]<< %s[/B]' % LOCAL_STRING(30010), 101, PREV_ICON, FANART, prev_day.strftime("%Y-%m-%d"), start_inning)
 
     date_display = '[B][I]' + colorString(display_day.strftime("%A, %m/%d/%Y"), GAMETIME_COLOR) + '[/I][/B]'
 
     addPlaylist(date_display, str(game_day), 900, ICON, FANART)
-
-    if ONLY_FREE_GAMES != 'true':
-        create_big_inning_listitem(game_day)
 
     #url = 'http://gdx.mlb.com/components/game/mlb/' + url_game_day + '/grid_ce.json'
     url = API_URL + '/api/v1/schedule'
@@ -44,17 +43,36 @@ def todays_games(game_day):
     r = requests.get(url,headers=headers, verify=VERIFY)
     json_source = r.json()
 
+    favorite_games = []
+    remaining_games = []
+
+    fav_team_id = getFavTeamId()
+    for game in json_source['dates'][0]['games']:
+        if fav_team_id is not None and fav_team_id in [str(game['teams']['home']['team']['id']), str(game['teams']['away']['team']['id'])]:
+            favorite_games.append(game)
+        else:
+            remaining_games.append(game)
+
     try:
-        for game in json_source['dates'][0]['games']:
-            create_game_listitem(game, game_day)
+        for game in favorite_games:
+            create_game_listitem(game, game_day, start_inning)
+    except:
+        pass
+
+    if ONLY_FREE_GAMES != 'true':
+        create_big_inning_listitem(game_day)
+
+    try:
+        for game in remaining_games:
+            create_game_listitem(game, game_day, start_inning)
     except:
         pass
 
     next_day = display_day + timedelta(days=1)
-    addDir('[B]%s >>[/B]' % LOCAL_STRING(30011), 101, NEXT_ICON, FANART, next_day.strftime("%Y-%m-%d"))
+    addDir('[B]%s >>[/B]' % LOCAL_STRING(30011), 101, NEXT_ICON, FANART, next_day.strftime("%Y-%m-%d"), start_inning)
 
 
-def create_game_listitem(game, game_day):
+def create_game_listitem(game, game_day, start_inning):
     #icon = ICON
     icon = 'https://img.mlbstatic.com/mlb-photos/image/upload/ar_167:215,c_crop/fl_relative,l_team:' + str(game['teams']['home']['team']['id']) + ':fill:spot.png,w_1.0,h_1,x_0.5,y_0,fl_no_overflow,e_distort:100p:0:200p:0:200p:100p:0:100p/fl_relative,l_team:' + str(game['teams']['away']['team']['id']) + ':logo:spot:current,w_0.38,x_-0.25,y_-0.16/fl_relative,l_team:' + str(game['teams']['home']['team']['id']) + ':logo:spot:current,w_0.38,x_0.25,y_0.16/w_750/team/' + str(game['teams']['away']['team']['id']) + '/fill/spot.png'
     # http://mlb.mlb.com/mlb/images/devices/ballpark/1920x1080/2681.jpg
@@ -75,7 +93,6 @@ def create_game_listitem(game, game_day):
         home_team = game['teams']['home']['team']['abbreviation']
 
     title = away_team + ' at ' + home_team
-    title = title
 
     is_free = False
     if 'content' in game and 'media' in game['content'] and 'freeGame' in game['content']['media']:
@@ -91,43 +108,87 @@ def create_game_listitem(game, game_day):
         home_team = colorString(home_team, getFavTeamColor())
 
     game_time = ''
+    suspended = 'False'
+    display_time = 'TBD'
+    relative_inning = None
+    spoiler = 'True'
+    today = localToEastern()
+    if NO_SPOILERS == '1' or (NO_SPOILERS == '2' and fav_game) or (NO_SPOILERS == '3' and game_day == today) or (NO_SPOILERS == '4' and game_day < today):
+        spoiler = 'False'
+
+    if 'gameDate' in game:
+        display_time = stringToDate(game['gameDate'], "%Y-%m-%dT%H:%M:%SZ")
+        display_time = UTCToLocal(display_time)
+
+        if TIME_FORMAT == '0':
+            display_time = display_time.strftime('%I:%M %p').lstrip('0')
+        else:
+            display_time = display_time.strftime('%H:%M')
+
     #if game['status']['abstractGameState'] == 'Preview':
     if game['status']['detailedState'].lower() == 'scheduled' or game['status']['detailedState'].lower() == 'pre-game':
-        if game['status']['startTimeTBD'] == True:
+        if game['status']['startTimeTBD'] is True:
             game_time = 'TBD'
         else:
-            game_time = game['gameDate']
-            game_time = stringToDate(game_time, "%Y-%m-%dT%H:%M:%SZ")
-            game_time = UTCToLocal(game_time)
-
-            if TIME_FORMAT == '0':
-                game_time = game_time.strftime('%I:%M %p').lstrip('0')
-            else:
-                game_time = game_time.strftime('%H:%M')
+            game_time = display_time
 
         game_time = colorString(game_time, UPCOMING)
 
     else:
         #game_time = game['status']['abstractGameState']
-        game_time = game['status']['detailedState']
+        game_state = game['status']['detailedState']
+        game_time = game_state
+        scheduled_innings = 9
+        if 'linescore' in game and 'scheduledInnings' in game['linescore']:
+            scheduled_innings = int(game['linescore']['scheduledInnings'])
 
-        if game_time == 'Final':
+        if game_state != 'Postponed':
+            # if we've requested to see scores at a particular inning
+            if start_inning != 'False' and 'linescore' in game:
+                relative_inning = (int(start_inning) - (9 - scheduled_innings))
+                if relative_inning > len(game['linescore']['innings']):
+                    relative_inning = len(game['linescore']['innings'])
+                if relative_inning > 0:
+                    game_time = 'T' + str(relative_inning)
+                else:
+                    game_time = display_time
+            elif game_state != 'Final' and game['status']['abstractGameState'] == 'Live' and 'linescore' in game:
+                if game['linescore']['isTopInning']:
+                    # up triangle
+                    # top_bottom = u"\u25B2"
+                    top_bottom = "T"
+                else:
+                    # down triangle
+                    # top_bottom = u"\u25BC"
+                    top_bottom = "B"
+
+                if game['linescore']['currentInning'] >= scheduled_innings and spoiler == 'False':
+                    game_time = str(scheduled_innings) + 'th+'
+                else:
+                    game_time = top_bottom + ' ' + game['linescore']['currentInningOrdinal']
+
+            try:
+                if 'resumeGameDate' in game or 'resumedFromDate' in game:
+                    suspended = 'archive'
+                    if 'resumeGameDate' in game:
+                        game_time += ' (Suspended)'
+                    elif 'resumedFromDate' in game:
+                        game_time += ' (Resumed)'
+                    for epg in game['content']['media']['epg'][0]['items']:
+                        if epg['mediaState'] == 'MEDIA_ON':
+                            suspended = 'live'
+                            break
+                        elif epg['mediaState'] == 'MEDIA_OFF':
+                            game_time = display_time + ' ' + game_time
+                            break
+            except:
+                pass
+
+        if game_state == 'Final' or game_state == 'Postponed':
             game_time = colorString(game_time, FINAL)
 
         elif game['status']['abstractGameState'] == 'Live':
-            if game['linescore']['isTopInning']:
-                # up triangle
-                # top_bottom = u"\u25B2"
-                top_bottom = "T"
-            else:
-                # down triangle
-                # top_bottom = u"\u25BC"
-                top_bottom = "B"
-
-            inning = game['linescore']['currentInningOrdinal']
-            game_time = top_bottom + ' ' + inning
-
-            if game['linescore']['currentInning'] >= 9:
+            if 'linescore' in game and game['linescore']['currentInning'] >= scheduled_innings:
                 color = CRITICAL
             else:
                 color = LIVE
@@ -147,34 +208,61 @@ def create_game_listitem(game, game_day):
     stream_date = str(game_day)
 
     desc = ''
+    probables = ' ('
     if 'probablePitcher' in game['teams']['away'] and 'fullName' in game['teams']['away']['probablePitcher']:
         desc += game['teams']['away']['probablePitcher']['fullName']
+        probables += get_last_name(game['teams']['away']['probablePitcher']['fullName'])
     else:
         desc += 'TBD'
+        probables += 'TBD'
     desc += ' vs. '
+    probables += ' vs '
     if 'probablePitcher' in game['teams']['home'] and 'fullName' in game['teams']['home']['probablePitcher']:
         desc += game['teams']['home']['probablePitcher']['fullName']
+        probables += get_last_name(game['teams']['home']['probablePitcher']['fullName'])
     else:
         desc += 'TBD'
+        probables += 'TBD'
+    if probables == ' (TBD vs TBD':
+        probables = ''
+    else:
+        probables = colorString((probables + ')'), FINAL)
     if 'venue' in game and 'name' in game['venue']:
         desc += ', from ' + game['venue']['name']
     if 'description' in game and game['description'] != "":
         desc += ' (' + game['description'] + ')'
-    spoiler = 'True'
-    if NO_SPOILERS == '1' or (NO_SPOILERS == '2' and fav_game) or (NO_SPOILERS == '3' and game_day == localToEastern()) or (NO_SPOILERS == '4' and game_day < localToEastern()) or game['status']['abstractGameState'] == 'Preview':
-        spoiler = 'False'
+    if game['status']['abstractGameState'] == 'Preview' or (start_inning == 'False' and spoiler == 'False'):
         name = game_time + ' ' + away_team + ' at ' + home_team
     else:
         name = game_time + ' ' + away_team
-        if 'linescore' in game: name += ' ' + colorString(str(game['linescore']['teams']['away']['runs']), SCORE_COLOR)
-        name += ' at ' + home_team
-        if 'linescore' in game: name += ' ' + colorString(str(game['linescore']['teams']['home']['runs']), SCORE_COLOR)
+        away_score = ''
+        home_score = ''
+        try:
+            if 'linescore' in game and game_state != 'Postponed':
+                away_score = 0
+                home_score = 0
+                if relative_inning is None:
+                    away_score = game['linescore']['teams']['away']['runs']
+                    home_score = game['linescore']['teams']['home']['runs']
+                else:
+                    for inning in game['linescore']['innings']:
+                        if int(inning['num']) < relative_inning:
+                            away_score += inning['away']['runs']
+                            home_score += inning['home']['runs']
+                        else:
+                            break
+                away_score = ' ' + colorString(str(away_score), SCORE_COLOR)
+                home_score = ' ' + colorString(str(home_score), SCORE_COLOR)
+        except:
+            pass
+
+        name += away_score + ' at ' + home_team + home_score
 
         # check flags
         if 'flags' in game:
-            if game['flags']['perfectGame'] == True:
+            if game['flags']['perfectGame'] is True:
                 name += ' ' + colorString('(Perfect Game)', CRITICAL)
-            elif game['flags']['noHitter'] == True:
+            elif game['flags']['noHitter'] is True:
                 name += ' ' + colorString('(No-Hitter)', CRITICAL)
 
     if game['doubleHeader'] != 'N':
@@ -195,7 +283,7 @@ def create_game_listitem(game, game_day):
     # If set only show free games in the list
     if ONLY_FREE_GAMES == 'true' and not is_free:
         return
-    add_stream(name, title, game_pk, icon, fanart, info, video_info, audio_info, stream_date, spoiler)
+    add_stream((name + probables), title, desc, game_pk, icon, fanart, info, video_info, audio_info, stream_date, spoiler, suspended, start_inning)
 
 
 # fetch a list of featured videos
@@ -228,10 +316,13 @@ def featured_videos(featured_video=None):
             if 'title' in item:
                 title = item['title']
                 liz=xbmcgui.ListItem(title)
-                liz.setInfo( type="Video", infoLabels={ "Title": title } )
 
                 # check if a video url is provided
                 if 'fields' in item:
+                    description = title
+                    if 'description' in item['fields']:
+                        description = item['fields']['description']
+                    liz.setInfo( type="Video", infoLabels={ "Title": title, "plot": description } )
                     video_url = None
                     if 'playbackScenarios' in item['fields']:
                         for playback in item['fields']['playbackScenarios']:
@@ -256,6 +347,7 @@ def featured_videos(featured_video=None):
                         isFolder=False
                 # if no video url is provided, we assume it is just another list
                 else:
+                    liz.setInfo( type="Video", infoLabels={ "Title": title } )
                     list_url = item['url']
                     xbmc.log('list url : ' + list_url)
                     if list_url == "":
@@ -366,168 +458,275 @@ def create_big_inning_listitem(game_day):
         pass
 
 
-def stream_select(game_pk, spoiler='True', from_context_menu=False):
+def stream_select(game_pk, spoiler, suspended, start_inning, description, name, icon, fanart, from_context_menu=False, autoplay=False):
+    # fetch the epg content using the game_pk
     url = API_URL + '/api/v1/game/' + game_pk + '/content'
     headers = {
         'User-Agent': UA_ANDROID
     }
     r = requests.get(url, headers=headers, verify=VERIFY)
     json_source = r.json()
+    # start with just video content, assumed to be at index 0
+    epg = json_source['media']['epg'][0]['items']
 
+    # define some default variables
     selected_content_id = None
+    selected_media_state = None
     stream_url = ''
-    start = '1'
+    broadcast_start_offset = '1' # offset to pass to inputstream adaptive
+    broadcast_start_timestamp = None # to pass to skip monitor
     stream_type = 'video'
-    skip_possible = False
+    skip_possible = True # to determine if possible to show skip options dialog
     skip_type = 0
-    is_live = False
-    start_inning = 0
+    is_live = False # to pass to skip monitor
+    # convert start inning values to integers
+    if start_inning == 'False':
+        start_inning = 0
+    else:
+        start_inning = int(start_inning)
     start_inning_half = 'top'
+    # define a dialog that we can use as needed
     dialog = xbmcgui.Dialog()
 
-    # if auto select stream is enabled and not bypassed with context menu item, loop through looking for favorite team's feed or home/national feed, in that order
-    if AUTO_SELECT_STREAM == 'true' and from_context_menu == False:
-        epg = json_source['media']['epg'][0]['items']
+    # auto select stream if enabled and not bypassed with context menu item and it's not an archived suspended game, or if autoplay is forced
+    if (AUTO_SELECT_STREAM == 'true' and from_context_menu is False and suspended != 'archive') or autoplay is True:
+        # loop through the streams to determine the best match
         for item in epg:
-            if item['mediaState'] != 'MEDIA_OFF':
-                if 'mediaFeedType' in item and item['mediaFeedType'] != 'IN_MARKET_HOME' and item['mediaFeedType'] != 'IN_MARKET_AWAY':
-                    if FAV_TEAM != 'None' and 'mediaFeedSubType' in item and item['mediaFeedSubType'] == getFavTeamId():
+            # ignore streams that haven't started yet, audio streams (without a mediaFeedType), and in-market streams
+            if item['mediaState'] != 'MEDIA_OFF' and 'mediaFeedType' in item and not item['mediaFeedType'].startswith('IN_'):
+                # check if our favorite team (if defined) is associated with this stream
+                # or if no favorite team match, look for the home or national streams
+                if (FAV_TEAM != 'None' and 'mediaFeedSubType' in item and item['mediaFeedSubType'] == getFavTeamId()) or (selected_content_id is None and 'mediaFeedType' in item and (item['mediaFeedType'] == 'HOME' or item['mediaFeedType'] == 'NATIONAL' )):
+                    # prefer live streams (suspended games can have both a live and archived stream available)
+                    if item['mediaState'] == 'MEDIA_ON':
                         selected_content_id = item['contentId']
-                        break
-                    elif selected_content_id is None and 'mediaFeedType' in item and (item['mediaFeedType'] == 'HOME' or item['mediaFeedType'] == 'NATIONAL' ):
+                        selected_media_state = item['mediaState']
+                        # once we've found a fav team live stream, we don't need to search any further
+                        if FAV_TEAM != 'None' and 'mediaFeedSubType' in item and item['mediaFeedSubType'] == getFavTeamId():
+                            break
+                    # fall back to the first available archive stream, but keep search in case there is a live stream (suspended)
+                    elif item['mediaState'] == 'MEDIA_ARCHIVE' and selected_content_id is None:
                         selected_content_id = item['contentId']
+                        selected_media_state = item['mediaState']
 
-    # fallback to manual stream selection if auto is disabled, bypassed, or didn't find anything
-    if selected_content_id is None:
+    # fallback to manual stream selection if auto selection is disabled, bypassed, or didn't find anything, and we're not looking to force autoplay
+    if selected_content_id is None and autoplay is False:
+        # default stream selection list starts with highlights option
+        stream_title = [LOCAL_STRING(30391)]
+        highlight_offset = 1
+        content_id = []
+        media_state = []
+        # if using Kodi's default resume ability, we'll omit highlights from our stream selection prompt
         if sys.argv[3] == 'resume:true':
             stream_title = []
             highlight_offset = 0
-        else:
-            stream_title = [LOCAL_STRING(30391)]
-            highlight_offset = 1
-        media_state = []
-        content_id = []
-        # combine tv and radio items
-        epg = json_source['media']['epg'][0]['items'] + json_source['media']['epg'][2]['items']
-        for item in epg:
-            xbmc.log(str(item))
-            if item['mediaState'] != 'MEDIA_OFF':
-                # tv and radio items use different variables for home/away
-                if 'mediaFeedType' in item:
-                    media_feed_type = str(item['mediaFeedType'])
-                else:
-                    media_feed_type = str(item['type'])
-                if IN_MARKET != 'Hide' or (media_feed_type != 'IN_MARKET_HOME' and media_feed_type != 'IN_MARKET_AWAY'):
-                    title = media_feed_type.title()
-                    title = title.replace('_', ' ')
-                    if 'mediaFeedType' in item:
-                        title += LOCAL_STRING(30392)
-                    else:
-                        if item['language'] == 'en':
-                            title += LOCAL_STRING(30394)
-                        elif item['language'] == 'es':
-                            title += LOCAL_STRING(30395)
-                        title += LOCAL_STRING(30393)
-                    if 'mediaFeedType' in item and ('HOME' in title.upper() or 'NATIONAL' in title.upper()):
-                        media_state.insert(0, item['mediaState'])
-                        content_id.insert(0, item['contentId'])
-                        stream_title.insert(highlight_offset, title + " (" + item['callLetters'] + ")")
-                    else:
-                        media_state.append(item['mediaState'])
-                        content_id.append(item['contentId'])
-                        stream_title.append(title + " (" + item['callLetters'] + ")")
 
-        # All past games should have highlights
+        # define some more variables used to handle suspended games
+        airings = None
+        game_date = None
+
+        # if not live, if suspended, or if live and not resuming, add audio streams to the video streams
+        if epg[0]['mediaState'] != "MEDIA_ON" or suspended != 'False' or (epg[0]['mediaState'] == "MEDIA_ON" and sys.argv[3] != 'resume:true'):
+            epg += json_source['media']['epg'][2]['items']
+
+        for item in epg:
+            #xbmc.log(str(item))
+            
+            # video and audio streams use different fields to indicate home/away
+            if 'mediaFeedType' in item:
+                media_feed_type = str(item['mediaFeedType'])
+            else:
+                media_feed_type = str(item['type'])
+
+            # only display if the stream is available (either live or archive) and not in_market
+            if item['mediaState'] != 'MEDIA_OFF' and not media_feed_type.startswith('IN_'):
+                title = media_feed_type.title()
+                title = title.replace('_', ' ')
+
+                # add TV to video stream
+                if 'mediaFeedType' in item:
+                    title += LOCAL_STRING(30392)
+                # add language to audio stream
+                else:
+                    if item['language'] == 'en':
+                        title += LOCAL_STRING(30394)
+                    elif item['language'] == 'es':
+                        title += LOCAL_STRING(30395)
+                    title += LOCAL_STRING(30393)
+                title = title + " (" + item['callLetters'] + ")"
+
+                # modify stream title based on suspension status, if necessary
+                if suspended != 'False':
+                    suspended_label = 'partial'
+                    try:
+                        # if the game hasn't finished, we can simply tell the status from the mediaState
+                        if suspended == 'live' and item['mediaState'] == 'MEDIA_ARCHIVE':
+                            suspended_label = 'Suspended'
+                        elif suspended == 'live':
+                            suspended_label = 'Resumed'
+                        # otherwise if the game is complete, we need to check the airings data
+                        else:
+                            if game_date is None and 'gameDate' in item:
+                                game_date = item['gameDate']
+                            if airings is None and game_date is not None:
+                                airings = get_airings_data(game_pk=game_pk)
+                            if game_date is not None and airings is not None and 'data' in airings and 'Airings' in airings['data']:
+                                for airing in airings['data']['Airings']:
+                                    if airing['contentId'] == item['contentId']:
+                                        # compare the start date of the airing with the provided game_date
+                                        start_date = get_eastern_game_date(parse(airing['startDate']))
+                                        # same day means it is resumed
+                                        if game_date == start_date:
+                                            suspended_label = 'Resumed'
+                                        # different day means it was suspended
+                                        else:
+                                            suspended_label = 'Suspended'
+                                        break
+                    except:
+                        pass
+                    title += ' (' + suspended_label + ')'
+
+                # insert home/national video streams at the top of the list
+                if 'mediaFeedType' in item and ('HOME' in title.upper() or 'NATIONAL' in title.upper()):
+                    content_id.insert(0, item['contentId'])
+                    media_state.insert(0, item['mediaState'])
+                    stream_title.insert(highlight_offset, title)
+                # otherwise append other streams to end of list
+                else:
+                    content_id.append(item['contentId'])
+                    media_state.append(item['mediaState'])
+                    stream_title.append(title)
+
+        # if we didn't find any streams, display an error and exit
         if len(stream_title) == 0:
-            dialog = xbmcgui.Dialog()
             dialog.notification(LOCAL_STRING(30383), LOCAL_STRING(30384), ICON, 5000, False)
             xbmcplugin.setResolvedUrl(addon_handle, False, xbmcgui.ListItem())
             sys.exit()
 
+        # stream selection dialog
         n = dialog.select(LOCAL_STRING(30390), stream_title)
-        if n == -1:
-            sys.exit()
+        # highlights selection will go to that function and stop processing here
+        if n == 0 and highlight_offset == 1:
+            highlight_select_stream(json_source['highlights']['highlights']['items'], from_context_menu=from_context_menu)
+        # stream selection
         elif n > -1 and stream_title[n] != LOCAL_STRING(30391):
-            # check if selected stream is a radio stream, which can't play with inputstream adaptive
+            # check if selected stream is a radio stream
             if LOCAL_STRING(30393) in stream_title[n]:
                 stream_type = 'audio'
             selected_content_id = content_id[n-highlight_offset]
+            selected_media_state = media_state[n-highlight_offset]
+        # cancel will exit
+        elif n == -1:
+            sys.exit()
 
+    # only proceed with start/skip dialogs if we have a content_id, either from auto-selection or the stream selection dialog
     if selected_content_id is not None:
+        # need to log in to get the stream url and headers
         account = Account()
-        stream_url, headers, broadcast_start = account.get_stream(selected_content_id)
-        if sys.argv[3] == 'resume:true':
-            spoiler = "True"
-            if stream_type == 'video':
-                skip_possible = True
-        elif epg[0]['mediaState'] == "MEDIA_ON" and CATCH_UP == 'true' and stream_type == 'video' and from_context_menu == False:
+        # get the broadcast start offset and timestamp too, to know where to start playback and calculate skip markers, if necessary
+        stream_url, headers, broadcast_start_offset, broadcast_start_timestamp = account.get_stream(selected_content_id)
+
+        if selected_media_state == 'MEDIA_ON':
             is_live = True
-            start_options = [LOCAL_STRING(30397), LOCAL_STRING(30398), LOCAL_STRING(30399)]
-            # add inning start options
-            for x in range(1, 12):
-                start_options.append(LOCAL_STRING(30409) + ' ' + LOCAL_STRING(30407) + ' ' + str(x))
-                start_options.append(LOCAL_STRING(30410) + ' ' + LOCAL_STRING(30407) + ' ' + str(x))
-            p = dialog.select(LOCAL_STRING(30396), start_options)
-            if p == 0:
-                listitem = stream_to_listitem(stream_url, headers)
-                highlight_select_stream(json_source['highlights']['highlights']['items'], listitem)
-                sys.exit()
-            elif p == 1 or p > 2:
-                spoiler = "False"
-                start = broadcast_start
-                skip_possible = True
-                if p > 2:
-                    p = p - 2
-                    start_inning = int(round(((p+0.5) / 2), 0))
-                    if (p % 2) == 0 and ((p+1) % 2) == 1:
-                        start_inning_half = 'bottom'
-            elif p == 2:
-                spoiler = "True"
-            elif p == -1:
-                sys.exit()
-        # don't offer to start live radio streams from beginning
-        elif epg[0]['mediaState'] == "MEDIA_ON" and CATCH_UP == 'true' and stream_type == 'audio' and from_context_menu == False:
-            p = dialog.select(LOCAL_STRING(30396), [LOCAL_STRING(30397), LOCAL_STRING(30399)])
-            if p == 0:
-                listitem = stream_to_listitem(stream_url, headers, 'True', '1', 'audio')
-                highlight_select_stream(json_source['highlights']['highlights']['items'], listitem)
-                sys.exit()
-            elif p == -1:
-                sys.exit()
-        elif stream_type == 'video' and from_context_menu == False:
-            skip_possible = True
-            # For archive games, offer to start at inning if catch up is enabled
-            if CATCH_UP == 'true':
-                start_options = [LOCAL_STRING(30398)]
+
+        if stream_type == 'audio':
+            skip_possible = False
+
+        # only show the start point dialog if not using Kodi's default resume ability, the "ask to catch up" option is enabled, no start inning is specified, and we're not looking to autoplay
+        if sys.argv[3] != 'resume:true' and CATCH_UP == 'true' and start_inning == 0 and autoplay is False:
+
+            # for live video streams
+            if selected_media_state == "MEDIA_ON" and stream_type == 'video':
+                # begin with catch up, beginning, and live as start point options
+                start_options = [LOCAL_STRING(30397), LOCAL_STRING(30398), LOCAL_STRING(30399)]
                 # add inning start options
-                for x in range(1, 12):
-                    start_options.append(LOCAL_STRING(30409) + ' ' + LOCAL_STRING(30407) + ' ' + str(x))
-                    start_options.append(LOCAL_STRING(30410) + ' ' + LOCAL_STRING(30407) + ' ' + str(x))
+                start_options += get_inning_start_options()
+
+                # start point selection dialog
                 p = dialog.select(LOCAL_STRING(30396), start_options)
-                if p > 0:
-                    start_inning = int(round(((p+0.5) / 2), 0))
-                    if (p % 2) == 0 and ((p+1) % 2) == 1:
-                        start_inning_half = 'bottom'
+                # catch up
+                if p == 0:
+                    # create an item for the video stream
+                    listitem = stream_to_listitem(stream_url, headers, description, name, icon, fanart)
+                    # pass along the highlights and the video stream item to play as a playlist and stop processing here
+                    highlight_select_stream(json_source['highlights']['highlights']['items'], catchup=listitem)
+                    sys.exit()
+                # beginning or inning
+                elif p == 1 or p > 2:
+                    # inning top/bottom calculation
+                    if p > 2:
+                        p = p - 2
+                        start_inning, start_inning_half = calculate_inning_from_index(p)
+                # live
+                elif p == 2:
+                    broadcast_start_offset = '-1'
+                    skip_possible = False
+                # cancel will exit
                 elif p == -1:
                     sys.exit()
 
-    if skip_possible == True and ASK_TO_SKIP == 'true' and from_context_menu == False:
-        skip_type = dialog.select(LOCAL_STRING(30403), [LOCAL_STRING(30404), LOCAL_STRING(30408), LOCAL_STRING(30405), LOCAL_STRING(30406)])
-        if skip_type == -1:
+            # for live audio streams
+            elif selected_media_state == "MEDIA_ON" and stream_type == 'audio':
+                # start point selection dialog, with only catch up and live
+                # omitting the beginning and inning start options (they don't work for live audio)
+                p = dialog.select(LOCAL_STRING(30396), [LOCAL_STRING(30397), LOCAL_STRING(30399)])
+                # catch up
+                if p == 0:
+                    # create an item for the audio stream
+                    listitem = stream_to_listitem(stream_url, headers, description, name, icon, fanart, stream_type='audio', music_type_unset=True)
+                    # pass along the highlights and the audio stream item to play as a playlist and stop processing here
+                    highlight_select_stream(json_source['highlights']['highlights']['items'], catchup=listitem)
+                    sys.exit()
+                # cancel will exit
+                elif p == -1:
+                    sys.exit()
+
+            # for archive video streams
+            elif stream_type == 'video':
+                # beginning is initial start point option
+                start_options = [LOCAL_STRING(30398)]
+                # add inning start options
+                start_options += get_inning_start_options()
+                # start point selection dialog
+                p = dialog.select(LOCAL_STRING(30396), start_options)
+                # inning
+                if p > 0:
+                    start_inning, start_inning_half = calculate_inning_from_index(p)
+                # cancel will exit
+                elif p == -1:
+                    sys.exit()
+
+        # show automatic skip dialog, if possible, enabled, and we're not looking to autoplay
+        if skip_possible is True and ASK_TO_SKIP == 'true' and autoplay is False:
+            # automatic skip dialog with options to skip nothing, breaks, breaks + idle time, breaks + idle time + non-action pitches
+            skip_type = dialog.select(LOCAL_STRING(30403), [LOCAL_STRING(30404), LOCAL_STRING(30408), LOCAL_STRING(30405), LOCAL_STRING(30406)])
+            # cancel will exit
+            if skip_type == -1:
+                sys.exit()
+
+        # if autoplay, join live
+        if autoplay is True:
+            broadcast_start_offset = '-1'
+        # if not live and no spoilers and not audio, generate a random number of segments to pad at end of proxy stream url
+        elif is_live is False and spoiler == 'False' and stream_type != 'audio':
+            pad = random.randint(720, 2160)
+            headers += '&pad=' + str(pad)
+            stream_url = 'http://127.0.0.1:43670/' + stream_url
+
+        # valid stream url
+        if '.m3u8' in stream_url:
+            play_stream(stream_url, headers, description, title=name, icon=icon, fanart=fanart, start=broadcast_start_offset, stream_type=stream_type, music_type_unset=from_context_menu)
+            # start the skip monitor if a skip type or start inning has been requested and we have a broadcast start timestamp
+            if (skip_type > 0 or start_inning > 0) and broadcast_start_timestamp is not None:
+                mlbmonitor = MLBMonitor()
+                mlbmonitor.skip_monitor(skip_type, game_pk, broadcast_start_timestamp, is_live, start_inning, start_inning_half)
+        # otherwise exit
+        else:
             sys.exit()
-
-    if '.m3u8' in stream_url:
-        play_stream(stream_url, headers, spoiler, start, stream_type, skip_type, selected_content_id, game_pk, is_live, start_inning, start_inning_half)
-
-    elif stream_title[n] == LOCAL_STRING(30391):
-        highlight_select_stream(json_source['highlights']['highlights']['items'], None, from_context_menu)
-
-    else:
-        sys.exit()
 
 
 # select a stream for a featured video
-def featured_stream_select(featured_video, name):
+def featured_stream_select(featured_video, name, description):
     xbmc.log('video select')
     account = Account()
     video_url = None
@@ -603,12 +802,12 @@ def featured_stream_select(featured_video, name):
         if name.startswith('LIVE') and 'Big Inning' in name and KODI_VERSION < 19 and not xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
             dialog = xbmcgui.Dialog()
             dialog.ok(LOCAL_STRING(30370), LOCAL_STRING(30369))
-        play_stream(video_stream_url, headers)
+        play_stream(video_stream_url, headers, description, title=name, start='-1')
     else:
         xbmc.log('unable to find stream for featured video')
 
 
-def list_highlights(game_pk):
+def list_highlights(game_pk, icon, fanart):
     url = API_URL + '/api/v1/game/' + game_pk + '/content'
     headers = {
         'User-Agent': UA_ANDROID
@@ -627,9 +826,12 @@ def list_highlights(game_pk):
 
         # play all
         liz=xbmcgui.ListItem(LOCAL_STRING(30411))
-        liz.setInfo( type="Video", infoLabels={ "Title": LOCAL_STRING(30411) } )
+        liz.setInfo( type="Video", infoLabels={ "Title": LOCAL_STRING(30411), "plot": LOCAL_STRING(30411) } )
+        if icon is None: icon = ICON
+        if fanart is None: fanart = FANART
+        liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
         liz.setProperty("IsPlayable", "true")
-        u=sys.argv[0]+"?mode="+str(107)+"&game_pk="+urllib.quote_plus(game_pk)
+        u=sys.argv[0]+"?mode="+str(107)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&fanart="+urllib.quote_plus(fanart)
         isFolder=False
 
         xbmcplugin.addDirectoryItem(handle=addon_handle,url=u,listitem=liz,isFolder=isFolder)
@@ -637,17 +839,17 @@ def list_highlights(game_pk):
 
         for clip in highlights:
             liz=xbmcgui.ListItem(clip['title'])
-            liz.setInfo( type="Video", infoLabels={ "Title": clip['title'] } )
-            liz.setArt({'icon': clip['icon'], 'thumb': clip['icon']})
+            liz.setInfo( type="Video", infoLabels={ "Title": clip['title'], "plot": clip['description'] } )
+            liz.setArt({'icon': icon, 'thumb': clip['icon'], 'fanart': fanart})
             liz.setProperty("IsPlayable", "true")
-            u=sys.argv[0]+"?mode="+str(301)+"&featured_video="+urllib.quote_plus(clip['url'])+"&name="+urllib.quote_plus(clip['title'])
+            u=sys.argv[0]+"?mode="+str(301)+"&featured_video="+urllib.quote_plus(clip['url'])+"&name="+urllib.quote_plus(clip['title'])+"&description="+urllib.quote_plus(clip['description'])
             isFolder=False
 
             xbmcplugin.addDirectoryItem(handle=addon_handle,url=u,listitem=liz,isFolder=isFolder)
             xbmcplugin.setContent(addon_handle, 'episodes')
 
 
-def play_all_highlights_for_game(game_pk):
+def play_all_highlights_for_game(game_pk, fanart):
     url = API_URL + '/api/v1/game/' + game_pk + '/content'
     headers = {
         'User-Agent': UA_ANDROID
@@ -662,8 +864,8 @@ def play_all_highlights_for_game(game_pk):
 
         for clip in highlights:
             listitem = xbmcgui.ListItem(clip['url'])
-            listitem.setArt({'icon': clip['icon'], 'thumb': clip['icon'], 'fanart': FANART})
-            listitem.setInfo(type="Video", infoLabels={"Title": clip['title']})
+            listitem.setArt({'icon': clip['icon'], 'thumb': clip['icon'], 'fanart': fanart})
+            listitem.setInfo(type="Video", infoLabels={"Title": clip['title'], "plot": clip['description']})
             playlist.add(clip['url'], listitem)
 
         xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=playlist[0])
@@ -680,13 +882,16 @@ def highlight_select_stream(json_source, catchup=None, from_context_menu=False):
 
     highlight_name = []
     highlight_url = []
-    if from_context_menu == False:
+    highlight_description = []
+    if from_context_menu is False:
         highlight_name.append(LOCAL_STRING(30411))
-        highlight_url.append('junk')
+        highlight_url.append('blank')
+        highlight_description.append(LOCAL_STRING(30411))
 
     for clip in highlights:
         highlight_name.append(clip['title'])
         highlight_url.append(clip['url'])
+        highlight_description.append(clip['description'])
 
     if catchup is None:
         dialog = xbmcgui.Dialog()
@@ -695,7 +900,8 @@ def highlight_select_stream(json_source, catchup=None, from_context_menu=False):
         a = 0
 
     if a > 0:
-        play_stream(highlight_url[a], '')
+        headers = 'User-Agent=' + UA_PC
+        play_stream(highlight_url[a], headers, highlight_description[a], highlight_name[a])
     elif a == 0:
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.clear()
@@ -703,7 +909,7 @@ def highlight_select_stream(json_source, catchup=None, from_context_menu=False):
         for clip in highlights:
             listitem = xbmcgui.ListItem(clip['url'])
             listitem.setArt({'icon': clip['icon'], 'thumb': clip['icon'], 'fanart': FANART})
-            listitem.setInfo(type="Video", infoLabels={"Title": clip['title']})
+            listitem.setInfo(type="Video", infoLabels={"Title": clip['title'], "plot": clip["description"]})
             playlist.add(clip['url'], listitem)
 
         if catchup is not None:
@@ -714,12 +920,9 @@ def highlight_select_stream(json_source, catchup=None, from_context_menu=False):
         sys.exit()
 
 
-def play_stream(stream_url, headers, spoiler='True', start='1', stream_type='video', skip_type=0, content_id=None, game_pk=None, is_live=False, start_inning=0, start_inning_half='top'):
-    listitem = stream_to_listitem(stream_url, headers, spoiler, start, stream_type)
+def play_stream(stream_url, headers, description, title, icon=None, fanart=None, start='1', stream_type='video', music_type_unset=False):
+    listitem = stream_to_listitem(stream_url, headers, description, title, icon, fanart, start=start, stream_type=stream_type, music_type_unset=music_type_unset)
     xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=listitem)
-    if skip_type > 0 or start_inning > 0:
-        mlbmonitor = MLBMonitor()
-        mlbmonitor.skip_monitor(skip_type, content_id, game_pk, is_live, start_inning, start_inning_half)
 
 
 def get_highlights(items):
@@ -732,7 +935,8 @@ def get_highlights(items):
                 break
         headline = item['headline']
         icon = item['image']['cuts'][0]['src']
-        highlights.append({'url': clip_url, 'title': headline, 'icon': icon})
+        description = item['blurb']
+        highlights.append({'url': clip_url, 'title': headline, 'icon': icon, 'description': description})
 
     return highlights
 
@@ -783,3 +987,58 @@ def playAllHighlights(stream_date):
 
     xbmc.Player().play(playlist)
 
+
+def live_fav_game():
+    game_day = localToEastern()
+
+    auto_play_game_date = str(settings.getSetting(id='auto_play_game_date'))
+
+    game_pk = None
+
+    fav_team_id = getFavTeamId()
+
+    # don't check if don't have a fav team id or if we've already flagged today's fav games as complete
+    if fav_team_id is not None and auto_play_game_date != game_day:
+        # don't check more often than 5 minute intervals
+        auto_play_game_checked = str(settings.getSetting(id='auto_play_game_checked'))
+        now = datetime.now()
+        if auto_play_game_checked == '' or (parse(auto_play_game_checked) + timedelta(minutes=5)) < now:
+            settings.setSetting(id='auto_play_game_checked', value=str(now))
+
+            url = API_URL + '/api/v1/schedule'
+            url += '?hydrate=game(content(media(epg)))'
+            url += '&sportId=1,51'
+            url += '&teamId=' + fav_team_id
+            url += '&date=' + game_day
+
+            headers = {
+                'User-Agent': UA_ANDROID
+            }
+            r = requests.get(url,headers=headers, verify=VERIFY)
+            json_source = r.json()
+
+            upcoming_game = False
+
+            if 'dates' in json_source and len(json_source['dates']) > 0 and 'games' in json_source['dates'][0]:
+                for game in json_source['dates'][0]['games']:
+                    try:
+                        # only check games that aren't final
+                        if game['status']['abstractGameState'] != 'Final':
+                            if 'content' in game and 'media' in game['content'] and 'epg' in game['content']['media'] and len(game['content']['media']['epg']) > 0 and 'items' in game['content']['media']['epg'][0]:
+                                for epg in game['content']['media']['epg'][0]['items']:
+                                    # if media is off, assume it is still upcoming
+                                    if epg['mediaState'] == 'MEDIA_OFF':
+                                        upcoming_game = True
+                                    # if media is on, that means it is live
+                                    elif game_pk is None and epg['mediaState'] == 'MEDIA_ON':
+                                        game_pk = str(game['gamePk'])
+                                        xbmc.log('Found live fav game ' + game_pk)
+                    except:
+                        pass
+
+            # set the date setting if there are no more upcoming fav games today
+            if upcoming_game is False:
+                xbmc.log('No more upcoming fav games today')
+                settings.setSetting(id='auto_play_game_date', value=game_day)
+
+    return game_pk

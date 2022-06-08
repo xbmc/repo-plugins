@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.cnet.podcasts"
        name="CNET Podcasts"
-       version="1.1.6"
+       version="1.1.7"
        provider-name="Skipmode A1, Divingmule">
   <requires>
     <import addon="xbmc.python"                   version="2.14.0"/>
-    <import addon="script.module.beautifulsoup4"  version="4.3.1"/>
+    <import addon="script.module.beautifulsoup4"  version="4.3.2"/>
 	<import addon="script.module.requests"        version="2.4.3"/>
     <import addon="script.module.future"          version="0.0.1"/>
   	<import addon="script.module.html5lib"        version="0.999.0"/>
@@ -20,10 +20,11 @@
 	<disclaimer lang="en">For bugs, requests or general questions visit the CNET Podcasts thread on the Kodi Video Add-ons forum.</disclaimer>
     <language>en</language>
     <platform>all</platform>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+    <license>GPL-2.0-or-later</license>
     <forum>http://forum.xbmc.org/showthread.php?tid=192868</forum>
     <website>http://www.cnet.com/cnet-podcasts</website>
     <email></email>
     <source>https://github.com/skipmodea1/plugin.video.cnet.podcasts</source>
+    <broken>Marked addon BROKEN due to major website update</broken>
   </extension>
 </addon>

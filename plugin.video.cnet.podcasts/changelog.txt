@@ -1,8 +1,13 @@
+v1.1.7 (2022-06-08)
+- Marked addon BROKEN due to major website update
+
 v1.1.6 (2018-01-20)
 - addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
 Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.
 - removed caching
 - adding a setting to only view all video category
+
+        <broken>Marked addon BROKEN due to major website update</broken>
 
 v1.1.5 (2017-07-16)
 - rolling back changed foldername for strings because that doesn't work for gotham

@@ -201,6 +201,10 @@ msgctxt "#30706"
 msgid "The authentication tokens are removed."
 msgstr "De authenticatietokens zijn gewist."
 
+msgctxt "#30707"
+msgid "The cache has been cleared."
+msgstr "De cache is leeg gemaakt."
+
 msgctxt "#30708"
 msgid "Please restart Kodi."
 msgstr "Gelieve Kodi te herstarten."
@@ -353,3 +357,11 @@ msgstr "Authenticatie"
 msgctxt "#30895"
 msgid "Clear authentication tokens…"
 msgstr "Verwijder authenticatietokens…"
+
+msgctxt "#30896"
+msgid "Cache"
+msgstr "Cache"
+
+msgctxt "#30897"
+msgid "Clear cache…"
+msgstr "Maak cache leeg…"

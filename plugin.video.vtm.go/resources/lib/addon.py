@@ -46,6 +46,13 @@ def auth_clear_tokens():
     Authentication().clear_tokens()
 
 
+@routing.route('/auth/clear-cache')
+def auth_clear_cache():
+    """ Clear the cache """
+    from resources.lib.modules.authentication import Authentication
+    Authentication().clear_cache()
+
+
 @routing.route('/channels')
 def show_channels():
     """ Shows Live TV channels """

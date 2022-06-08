@@ -15,9 +15,8 @@ def list_games(schedule_type='today', page_start=0):
     yesterday = yesterdays_date()
     #now = datetime.now(pytz.timezone('UTC'))
     if schedule_type == 'today':
-        dir_title = '[B][I]' + colorString(stringToDate(today, "%Y-%m-%d").strftime("%A, %m/%d/%Y"), GAMETIME_COLOR) + '[/I][/B]'
+        dir_title = None
         dir_mode = 100
-        addDir(dir_title, dir_mode)
     else:
         dir_mode = 101
 
@@ -41,6 +40,12 @@ def list_games(schedule_type='today', page_start=0):
                     utc_game_hour = str(utc_game_time.hour)
                     game_time = UTCToLocal(utc_game_time)
                     game_day = game_time.strftime("%Y-%m-%d")
+
+                    # show date header based on first live/upcoming game
+                    if schedule_type == 'today' and dir_title is None:
+                        dir_title = '[B][I]' + colorString(stringToDate(game_day, "%Y-%m-%d").strftime("%A, %m/%d/%Y"), GAMETIME_COLOR) + '[/I][/B]'
+                        addDir(dir_title, dir_mode)
+
                     # get scores for today or yesterday
                     if game_day not in scores and (game_day == today or game_day == yesterday):
                         scores[game_day] = dict()

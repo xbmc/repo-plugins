@@ -91,6 +91,10 @@ msgctxt "#30059"
 msgid "Most searched TV shows"
 msgstr "Am meisten gesuchte TV Sendungen"
 
+msgctxt "#30060"
+msgid "Homepage"
+msgstr "Startseite"
+
 msgctxt "#30069"
 msgid "Choose your favourite shows"
 msgstr "Wählen Sie Ihre bevorzugten Sendungen"

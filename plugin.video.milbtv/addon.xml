@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.milbtv" name="MiLB.TV®" version="2021.07.14" provider-name="tonywagner">
+<addon id="plugin.video.milbtv" name="MiLB.TV®" version="2022.06.07" provider-name="tonywagner">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -7,10 +7,12 @@
         <import addon="script.module.requests" />
         <import addon="inputstream.adaptive" optional="true"/>
         <import addon="script.module.kodi-six" />
+        <import addon="script.module.dateutil" />
     </requires>
     <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>video</provides>
     </extension>
+    <extension point="xbmc.service" library="service.py"/>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
         <summary lang="en_GB">Watch minor league baseball
@@ -18,8 +20,20 @@
         <description lang="en_GB">Watch live and archived minor league baseball games with your MiLB.TV account</description>
         <disclaimer lang="en_GB">Requires a valid MiLB.TV account (separate from MLB.TV)</disclaimer>
         <news>
-            - Added option to view affiliate games of favorite team
-            - Fixed games missing due to lack of resolution info
+            - options to automatically skip breaks and non-action pitches
+            - option to start at specific inning or start live from beginning
+            - pad the end of archive videos if no spoilers (to avoid timeline spoilers)
+            - see scores at inning category
+            - hide bottom of 9th / extra innings as spoilers
+            - labels for suspended/resumed games
+            - game icons and fanart
+            - probable pitchers
+            - added probable pitchers to game list titles
+            - doubleheader/TBD start times
+            - additional AddonIsEnabled detection for inputstream adaptive
+            - perfect game / no hitter flags
+            - code cleanup
+            - removed failing, unnecessary epg api call
         </news>
         <language>en</language>
         <platform>all</platform>

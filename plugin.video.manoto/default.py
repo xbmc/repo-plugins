@@ -12,7 +12,7 @@ def main():
     icons['720'] = xbmcvfs.translatePath(os.path.join(resources, 'hd.png'))
     icons['1080'] = xbmcvfs.translatePath(os.path.join(resources, 'fhd.png'))
 
-    streams = getStreamsFromPlayList()
+    streams = getStreamsFromPlayList(getVideoUrl())
     bitrates = list(streams.keys())
     bitrates.sort()
     bitrates.reverse()
@@ -28,19 +28,42 @@ def main():
 
     xbmcplugin.endOfDirectory(addon_handle)
 
-def getStreamsFromPlayList():
-    base_url = "https://d2rwmwucnr0d10.cloudfront.net/"
-    url = "{base_url}live.m3u8".format(base_url = base_url)
+def getVideoUrl():
+    baseUrl = "https://www.manototv.com"
+    livePageUrl = "{baseUrl}/live".format(baseUrl = baseUrl)
+    mainJsPath = getFromUrl(livePageUrl, 'src\s*=\s*"([^"]+main[^"]+js)"')
+    if mainJsPath:
+        jsUrl = "{baseUrl}{mainJsPath}".format(baseUrl = baseUrl, mainJsPath = mainJsPath)
+        showApiDomain = getFromUrl(jsUrl, 'showApiDomain\s*=\s*"([^"]+)"')
+        if showApiDomain:
+            detailsUrl = "{baseUrl}/api/v1/publicrole/livemodule/details".format(baseUrl = showApiDomain)
+            liveUrl = getFromUrl(detailsUrl, '"liveUrl"\s*:\s*"([^"]+)"')
+            return liveUrl
+
+def getFromUrl(url, pattern = None):
+    request = urllib.request.Request(url, headers={'User-Agent': 'Kodi'})
     try:
-        resp = urllib.request.urlopen(url)
+        response = urllib.request.urlopen(request)
+        content = response.read().decode('utf-8')
+        if not pattern:
+            return content
+        m = re.search(pattern, content)
+        if m:
+            return m.group(1)
     except urllib.error.URLError:
         return None
     except urllib.error.HTTPError:
         return None
 
-    lines = resp.read().decode('utf-8').split('\n')
-
+def getStreamsFromPlayList(url):
     streams = {}
+    if not url:
+        return streams
+    m = re.search("(http.*)/.*m3u8", url)
+    if not m:
+        return streams
+    baseUrl = m.group(1)
+    lines = getFromUrl(url).split('\n')    
     lines_iter = iter(lines)
     for line in lines_iter:
         if (line.startswith('#EXT-X-STREAM-INF')):
@@ -52,7 +75,7 @@ def getStreamsFromPlayList():
             if m:
                 bandwidth = int(m.group(1))
                 title = "{yRes}p - {:.2f} Mbps".format(bandwidth / 1000000.0, yRes=yRes)
-                itemUrl = "{base_url}{item}".format(base_url=base_url, item=next(lines_iter))
+                itemUrl = "{baseUrl}/{item}".format(baseUrl=baseUrl, item=next(lines_iter))
                 streams[bandwidth] = (title, itemUrl, yRes)
 
     streams[max(streams.keys()) + 1] = ('Auto', url, 'Auto')

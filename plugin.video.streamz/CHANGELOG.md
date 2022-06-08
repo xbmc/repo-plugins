@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.1.1](https://github.com/add-ons/plugin.video.streamz/tree/v1.1.1) (2022-06-06)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.1.0...v1.1.1)
+
+**Implemented enhancements:**
+
+- Allow to clear the cache and don't use bad cached values [\#48](https://github.com/add-ons/plugin.video.streamz/pull/48) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Fixed bugs:**
+
+- Changes for API 12 [\#47](https://github.com/add-ons/plugin.video.streamz/pull/47) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.1.0](https://github.com/add-ons/plugin.video.streamz/tree/v1.1.0) (2021-12-19)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.6...v1.1.0)

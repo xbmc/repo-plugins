@@ -99,11 +99,11 @@ def run():
             'All_Shows',
             'Favourite_Shows',
             'Newest_Favourite_Shows',
-            # 'Topics',
+            'Homepage',
+            'Topics',
             'Most_Searched_TV_Shows',
             'Shows_By_Date',
             'Search',
-            # 'Live_TV',
             'RTS_YouTube',
         ]
         RTSPlayTV().build_main_menu(identifiers)
@@ -131,8 +131,6 @@ def run():
         RTSPlayTV().build_date_menu(name)
     elif mode == 25:
         RTSPlayTV().pick_date()
-    # elif mode == 26:
-    #     RTSPlayTV().build_tv_menu()
     elif mode == 27:
         RTSPlayTV().build_search_menu()
     elif mode == 28:
@@ -151,6 +149,8 @@ def run():
         RTSPlayTV().play_livestream(name)
     elif mode == 100:
         RTSPlayTV().build_menu_by_urn(name)
+    elif mode == 200:
+        RTSPlayTV().build_homepage_menu()
     elif mode == 1000:
         RTSPlayTV().build_menu_apiv3(name, mode, page, page_hash)
 

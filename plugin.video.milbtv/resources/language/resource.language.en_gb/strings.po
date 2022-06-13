@@ -49,7 +49,7 @@ msgid "Stream Quality"
 msgstr ""
 
 msgctxt "#30170"
-msgid "Hide Scores"
+msgid "Hide Scores & Timeline Spoilers"
 msgstr ""
 
 msgctxt "#30171"
@@ -253,6 +253,10 @@ msgid "Live"
 msgstr ""
 
 msgctxt "#30428"
-msgid "Skip adjust in seconds (negative will start each play earlier; positive, later)"
+msgid "Skip adjust in seconds (negative, earlier; positive, later)"
+msgstr ""
+
+msgctxt "#30429"
+msgid "Disable video length padding (in case of proxy conflict)"
 msgstr ""
 

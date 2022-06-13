@@ -34,6 +34,7 @@
             - perfect game / no hitter flags
             - code cleanup
             - removed failing, unnecessary epg api call
+            - option to disable video length padding (in case of proxy conflicts)
         </news>
         <language>en</language>
         <platform>all</platform>

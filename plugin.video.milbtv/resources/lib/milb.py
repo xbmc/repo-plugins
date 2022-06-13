@@ -369,7 +369,7 @@ def stream_select(game_pk, spoiler, suspended, start_inning, status):
                     else:
                         skip_adjust = int(skip_adjust_options[p])
 
-        if is_live is False and spoiler == 'False':
+        if DISABLE_VIDEO_PADDING == 'false' and is_live is False and spoiler == 'False':
             pad = random.randint((3600 / SECONDS_PER_SEGMENT), (7200 / SECONDS_PER_SEGMENT))
             headers += '&pad=' + str(pad)
             stream_url = 'http://127.0.0.1:43671/' + stream_url

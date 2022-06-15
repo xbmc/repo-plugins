@@ -82,7 +82,7 @@ AFFILIATES = { 'Angels': '401,559,561,460', 'Astros': '3712,573,482,5434', 'Athl
 #These are the break events to skip
 BREAK_TYPES = ['Game Advisory', 'Pitching Substitution', 'Offensive Substitution', 'Defensive Sub', 'Defensive Switch', 'Runner Placed On Base', 'Injury']
 #These are the action events to keep, in addition to the last event of each at-bat, if we're skipping non-decision pitches
-ACTION_TYPES = ['Wild Pitch', 'Passed Ball', 'Stolen Base', 'Caught Stealing', 'Pickoff', 'Error', 'Out', 'Balk', 'Defensive Indiff']
+ACTION_TYPES = ['Wild Pitch', 'Passed Ball', 'Stolen Base', 'Caught Stealing', 'Pickoff', 'Error', 'Out', 'Balk', 'Defensive Indiff', 'Other Advance']
 #Pad events at both start (-) and end (+)
 EVENT_START_PADDING = 4
 EVENT_END_PADDING = 17

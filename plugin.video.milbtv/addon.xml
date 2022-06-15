@@ -35,6 +35,7 @@
             - code cleanup
             - removed failing, unnecessary epg api call
             - option to disable video length padding (in case of proxy conflicts)
+            - added additional action play type in skip monitor
         </news>
         <language>en</language>
         <platform>all</platform>

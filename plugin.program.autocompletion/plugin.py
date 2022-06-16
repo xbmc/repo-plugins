@@ -32,6 +32,8 @@ def start_info_actions(infos, params):
                 window = xbmcgui.Window(10103)
             except Exception:
                 return None
+            
+            xbmc.sleep(100)
             window.setFocusId(300)
             get_kodi_json(method="Input.SendText",
                           params='{"text":"%s", "done":false}' % params.get("id"))

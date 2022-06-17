@@ -1159,7 +1159,7 @@ class MenuList():
             play_item.setProperty("inputstream.adaptive.manifest_type", "mpd")
             if stream_type != "trailer":
                 license_url = stream["drm"]["licenseUrl"]
-                license_headers = "User-Agent=kodi.tv&{0}".format(
+                license_headers = "User-Agent=kodi.tv&Content-Type=&{0}".format(
                     urllib.parse.urlencode(stream["drm"]["headers"])
                 )
                 play_item.setProperty(

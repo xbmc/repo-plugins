@@ -15,5 +15,11 @@
 - Updated graphql hashes
 - Fixed broken menu entries
 
-1.2.3 [20220403]
-- Updated graphql hashes and fixed add/remove from my list
+1.2.3 [20220313]
+- Automatically retrieves graphql hashes from the dedicated github repository: https://github.com/Ikosse/teliaplay-graphql-hashes
+
+1.2.4 [20220617]
+- Fixed menu entries returning 400 error
+- Fixed widevine license url returning 500 error
+- Updated graphql hashes
+- Fixed search menu

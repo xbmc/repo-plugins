@@ -25,7 +25,6 @@ def error_check(response_json):
         raise TeliaException(response_json["message"])
 
 
-
 class TeliaPlay():
 
     def __init__(self, userdata):
@@ -42,16 +41,16 @@ class TeliaPlay():
 
     @property
     def graphql_hashes(self):
-        return {
+       return {
             "getMainMenu":      "f9c1eb6c91def27ee800da2296922d3798a54a8af32f79f25661afb621f1b45d",
-            "search":           "09f23a5c7c32057f94847098ab916031144bc9282b4d0723e8e2c144ef9585e2",
-            "getPage":          "224eeb20c30bbb3751a9c63d17609007395be5169851e3d6654f1f11bcb3beab",
-            "getTvChannels":    "2615623a9c746424ac4f5b84a7b653aebc7b08667f6f004ecb095ea7fad593dc",
-            "getTvChannel":     "5aff95917d396ffb0dc1574a4153968904c33ce49f87fba1063ce4ed7d3f17c0",
-            "getStorePage":     "ad128a72a1b44455ac3842f3ae1b38b537203aed063d4db0b23177a0d3aeb1a1",
-            "getPanel":         "82873e2fa838f9109740051444d0c0fb9adad9a7752cb7eda33c6dc92823271b",
-            "getSeries":        "af6df2f77b0594519af1f9e417460767076a6c62731afc75d45fc825ef62a681",
-            "getSeason":        "c54e9b322fec2b60c96b6218336de8399724de3a052ae6a7b8a59a0e889bca3c",
+            "search":           "dc9d71dbf7da4f5e5854d9e58e33274379581e07c353f8868cf0d7988c1330de",
+            "getPage":          "9bb1e827055ad3fa20a0a3bf652605f851dcdd34401ae24a3aea4b7b5ae257c4",
+            "getTvChannels":    "a16edac021bc6892ce4a17560cd364c716e1dd086fc4bd2a11e0b031577b3af7",
+            "getTvChannel":     "9af1a674ce9482ca4d89b1bb623a5b69b725cf3c9c6565a93a6c7b04f443891b",
+            "getStorePage":     "e2297df5af0241be95800fbb6758b502808cd00de3e10fdaed865e308e499f4e",
+            "getPanel":         "299f78202946997a0e56f9c4fa4360300f7404fdbe3fe77580bb3003843568b1",
+            "getSeries":        "4bbb65b9bf621902b3f3dc30ae036ff36d9fa57f024f6e3bd10cb55c57f0033d",
+            "getSeason":        "0772731aec9d8b4aecddb3d2dfd1743b32b1db8b0f6d8a03f37bf7ce6c032688",
             "addToMyList":      "a8369da660da6f45e0eabd53756effcd4c40668f1794a853c298c29e7903c7f9",
             "removeFromMyList": "630c2f99d817682d4f15d41084cdc2f40dc158a5dae0bd2ab0e815ce268da277"
         }
@@ -176,6 +175,7 @@ class TeliaPlay():
             "client-name": "web",
             "tv-client-boot-id": self.tv_client_boot_id,
             "Authorization": "Bearer " + self.token_data["accessToken"],
+            "x-country": "SE"
         }
 
         response_json = self.web_utils.make_request(
@@ -196,7 +196,8 @@ class TeliaPlay():
                         "q": query,
                         "limit": limit,
                         "offset": offset,
-                        "searchRentalsType": "ALL"
+                        "searchRentalsType": "ALL",
+                        "searchSubscriptionType": "IN_SUBSCRIPTION"
                     },
                     "extensions": {
                         "persistedQuery": {
@@ -212,6 +213,7 @@ class TeliaPlay():
             "client-name": "web",
             "tv-client-boot-id": self.tv_client_boot_id,
             "Authorization": "Bearer " + self.token_data["accessToken"],
+            "x-country": "SE"
         }
         response_json = self.web_utils.make_request(
             request, headers=headers
@@ -244,7 +246,8 @@ class TeliaPlay():
             "User-Agent": "kodi.tv",
             "client-name": "web",
             "tv-client-boot-id": self.tv_client_boot_id,
-            "Authorization": "Bearer " + self.token_data["accessToken"]
+            "Authorization": "Bearer " + self.token_data["accessToken"],
+            "x-country": "SE"
         }
 
         response_json = self.web_utils.make_request(
@@ -281,6 +284,7 @@ class TeliaPlay():
             "client-name": "web",
             "tv-client-boot-id": self.tv_client_boot_id,
             "Authorization": "Bearer " + self.token_data["accessToken"],
+            "x-country": "SE"
         }
 
         response_json = self.web_utils.make_request(
@@ -316,6 +320,7 @@ class TeliaPlay():
             "client-name": "web",
             "tv-client-boot-id": self.tv_client_boot_id,
             "Authorization": "Bearer " + self.token_data["accessToken"],
+            "x-country": "SE"
         }
 
         response_json = self.web_utils.make_request(
@@ -350,6 +355,7 @@ class TeliaPlay():
             "client-name": "web",
             "tv-client-boot-id": self.tv_client_boot_id,
             "Authorization": "Bearer " + self.token_data["accessToken"],
+            "x-country": "SE"
         }
 
         response_json = self.web_utils.make_request(
@@ -392,6 +398,7 @@ class TeliaPlay():
             "client-name": "web",
             "tv-client-boot-id": self.tv_client_boot_id,
             "Authorization": "Bearer " + self.token_data["accessToken"],
+            "x-country": "SE"
         }
 
         response_json = self.web_utils.make_request(
@@ -426,6 +433,7 @@ class TeliaPlay():
             "client-name": "web",
             "tv-client-boot-id": self.tv_client_boot_id,
             "Authorization": "Bearer " + self.token_data["accessToken"],
+            "x-country": "SE"
         }
         response_json = self.web_utils.make_request(
             request, headers=headers
@@ -462,6 +470,7 @@ class TeliaPlay():
             "client-name": "web",
             "tv-client-boot-id": self.tv_client_boot_id,
             "Authorization": "Bearer " + self.token_data["accessToken"],
+            "x-country": "SE"
         }
 
         response_json = self.web_utils.make_request(
@@ -562,10 +571,8 @@ class TeliaPlay():
         payload = {
             "operationName": "addToMyList",
             "variables": {
-                "input": {
-                    "id": media_id,
-                    "type": "SERIES" if media_id.startswith("s") else "MEDIA"
-                }
+                "id": media_id,
+                "type": "SERIES" if media_id.startswith("s") else "MEDIA"
             },
             "extensions": {
                 "persistedQuery": {
@@ -597,10 +604,8 @@ class TeliaPlay():
         payload = {
             "operationName": "removeFromMyList",
             "variables": {
-                "input": {
-                    "id": media_id,
-                    "type": "SERIES" if media_id.startswith("s") else "MEDIA"
-                }
+                "id": media_id,
+                "type": "SERIES" if media_id.startswith("s") else "MEDIA"
             },
             "extensions": {
                 "persistedQuery": {

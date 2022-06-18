@@ -1,13 +1,16 @@
 # -*- coding: utf8 -*-
+
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-import sys
 import xbmc
+import xbmcaddon
 import xbmcgui
 import xbmcplugin
-import xbmcaddon
+
 import json
+import sys
+
 import AutoCompletion
 
 ADDON = xbmcaddon.Addon()
@@ -15,7 +18,9 @@ ADDON_VERSION = ADDON.getAddonInfo('version')
 
 
 def get_kodi_json(method, params):
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "%s", "params": %s, "id": 1}' % (method, params))
+    query_params = {"jsonrpc": "2.0", "id": 1, "method": method, "params": params}
+    json_query = xbmc.executeJSONRPC(json.dumps(query_params))
+
     return json.loads(json_query)
 
 
@@ -24,22 +29,18 @@ def start_info_actions(infos, params):
         if info == 'autocomplete':
             listitems = AutoCompletion.get_autocomplete_items(params["id"], params.get("limit", 10))
         elif info == 'selectautocomplete':
-            if params.get("handle"):
-                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")),
-                                          succeeded=False,
-                                          listitem=xbmcgui.ListItem())
-            try:
-                window = xbmcgui.Window(10103)
-            except Exception:
-                return None
-            window.setFocusId(300)
-            get_kodi_json(method="Input.SendText",
-                          params='{"text":"%s", "done":false}' % params.get("id"))
+            xbmc.executebuiltin('Dialog.Close(busydialog)')
+            xbmc.sleep(500)
+            get_kodi_json(
+                method="Input.SendText",
+                params={"text": params.get("id"), "done": False},
+            )
             return None
-
-        pass_list_to_skin(data=listitems,
-                          handle=params.get("handle", ""),
-                          limit=params.get("limit", 20))
+        pass_list_to_skin(
+            data=listitems,
+            handle=params.get("handle", ""),
+            limit=params.get("limit", 20),
+        )
 
 
 def pass_list_to_skin(data=[], handle=None, limit=False):
@@ -49,9 +50,12 @@ def pass_list_to_skin(data=[], handle=None, limit=False):
         return None
     if data:
         items = create_listitems(data)
-        xbmcplugin.addDirectoryItems(handle=handle,
-                                     items=[(i.getProperty("path"), i, False) for i in items],
-                                     totalItems=len(items))
+        xbmcplugin.addDirectoryItems(
+            handle=handle,
+            items=[(i.getProperty("path"), i, False) for i in items],
+            totalItems=len(items),
+        )
+        xbmc.executebuiltin('Dialog.Close(busydialog)')
     xbmcplugin.endOfDirectory(handle)
 
 
@@ -94,3 +98,5 @@ if (__name__ == "__main__"):
                 pass
     if infos:
         start_info_actions(infos, params)
+
+xbmc.log('finished')

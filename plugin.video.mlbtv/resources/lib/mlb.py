@@ -14,8 +14,9 @@ def categories():
 
 
 def todays_games(game_day, start_inning='False'):
+    today = localToEastern()
     if game_day is None:
-        game_day = localToEastern()
+        game_day = today
 
     settings.setSetting(id='stream_date', value=game_day)
 
@@ -32,7 +33,7 @@ def todays_games(game_day, start_inning='False'):
     #url = 'http://gdx.mlb.com/components/game/mlb/' + url_game_day + '/grid_ce.json'
     url = API_URL + '/api/v1/schedule'
     # url += '?hydrate=broadcasts(all),game(content(all)),probablePitcher,linescore,team,flags'
-    url += '?hydrate=game(content(media(epg))),probablePitcher,linescore,team,flags'
+    url += '?hydrate=game(content(media(epg))),probablePitcher,linescore,team,flags,gameInfo'
     url += '&sportId=1,51'
     url += '&date=' + game_day
 
@@ -47,15 +48,31 @@ def todays_games(game_day, start_inning='False'):
     remaining_games = []
 
     fav_team_id = getFavTeamId()
+    fox_regional_games = False
+    fox_start_time = None
     for game in json_source['dates'][0]['games']:
         if fav_team_id is not None and fav_team_id in [str(game['teams']['home']['team']['id']), str(game['teams']['away']['team']['id'])]:
             favorite_games.append(game)
         else:
             remaining_games.append(game)
 
+        # while looping through games, check if any FOX national games have the same start time, which indicates regional broadcasts
+        game['fox_game'] = False
+        if game['seriesDescription'] == 'Regular Season' and 'content' in game and 'media' in game['content'] and 'epg' in game['content']['media']:
+            for epg in game['content']['media']['epg']:
+                if epg['title'] == 'MLBTV':
+                    for item in epg['items']:
+                        if item['callLetters'] == 'FOX':
+                            game['fox_game'] = True
+                            if fox_start_time is not None and game['gameDate'] == fox_start_time:
+                                fox_regional_games = True
+                            else:
+                                fox_start_time = game['gameDate']
+                    break
+
     try:
         for game in favorite_games:
-            create_game_listitem(game, game_day, start_inning)
+            create_game_listitem(game, game_day, start_inning, today, fox_regional_games)
     except:
         pass
 
@@ -64,7 +81,7 @@ def todays_games(game_day, start_inning='False'):
 
     try:
         for game in remaining_games:
-            create_game_listitem(game, game_day, start_inning)
+            create_game_listitem(game, game_day, start_inning, today, fox_regional_games)
     except:
         pass
 
@@ -72,7 +89,7 @@ def todays_games(game_day, start_inning='False'):
     addDir('[B]%s >>[/B]' % LOCAL_STRING(30011), 101, NEXT_ICON, FANART, next_day.strftime("%Y-%m-%d"), start_inning)
 
 
-def create_game_listitem(game, game_day, start_inning):
+def create_game_listitem(game, game_day, start_inning, today, fox_regional_games):
     #icon = ICON
     icon = 'https://img.mlbstatic.com/mlb-photos/image/upload/ar_167:215,c_crop/fl_relative,l_team:' + str(game['teams']['home']['team']['id']) + ':fill:spot.png,w_1.0,h_1,x_0.5,y_0,fl_no_overflow,e_distort:100p:0:200p:0:200p:100p:0:100p/fl_relative,l_team:' + str(game['teams']['away']['team']['id']) + ':logo:spot:current,w_0.38,x_-0.25,y_-0.16/fl_relative,l_team:' + str(game['teams']['home']['team']['id']) + ':logo:spot:current,w_0.38,x_0.25,y_0.16/w_750/team/' + str(game['teams']['away']['team']['id']) + '/fill/spot.png'
     # http://mlb.mlb.com/mlb/images/devices/ballpark/1920x1080/2681.jpg
@@ -117,13 +134,15 @@ def create_game_listitem(game, game_day, start_inning):
         spoiler = 'False'
 
     if 'gameDate' in game:
-        display_time = stringToDate(game['gameDate'], "%Y-%m-%dT%H:%M:%SZ")
-        display_time = UTCToLocal(display_time)
+        display_time = get_display_time(UTCToLocal(stringToDate(game['gameDate'], "%Y-%m-%dT%H:%M:%SZ")))
 
-        if TIME_FORMAT == '0':
-            display_time = display_time.strftime('%I:%M %p').lstrip('0')
-        else:
-            display_time = display_time.strftime('%H:%M')
+    game_state = game['status']['detailedState']
+
+    scheduled_innings = 9
+    if 'linescore' in game and 'scheduledInnings' in game['linescore']:
+        scheduled_innings = int(game['linescore']['scheduledInnings'])
+        if game_state.startswith('Completed Early') and 'currentInning' in game['linescore']:
+            scheduled_innings = int(game['linescore']['currentInning'])
 
     #if game['status']['abstractGameState'] == 'Preview':
     if game['status']['detailedState'].lower() == 'scheduled' or game['status']['detailedState'].lower() == 'pre-game':
@@ -136,11 +155,7 @@ def create_game_listitem(game, game_day, start_inning):
 
     else:
         #game_time = game['status']['abstractGameState']
-        game_state = game['status']['detailedState']
         game_time = game_state
-        scheduled_innings = 9
-        if 'linescore' in game and 'scheduledInnings' in game['linescore']:
-            scheduled_innings = int(game['linescore']['scheduledInnings'])
 
         if game_state != 'Postponed':
             # if we've requested to see scores at a particular inning
@@ -148,6 +163,7 @@ def create_game_listitem(game, game_day, start_inning):
                 relative_inning = (int(start_inning) - (9 - scheduled_innings))
                 if relative_inning > len(game['linescore']['innings']):
                     relative_inning = len(game['linescore']['innings'])
+                start_inning = relative_inning
                 if relative_inning > 0:
                     game_time = 'T' + str(relative_inning)
                 else:
@@ -198,39 +214,32 @@ def create_game_listitem(game, game_day, start_inning):
         else:
             game_time = colorString(game_time, LIVE)
 
-    #event_id = str(game['calendar_event_id'])
     game_pk = game['gamePk']
-    #gid = game['id']
-    gid = 'junk'
 
-    live_feeds = 0
-    archive_feeds = 0
     stream_date = str(game_day)
 
     desc = ''
-    probables = ' ('
-    if 'probablePitcher' in game['teams']['away'] and 'fullName' in game['teams']['away']['probablePitcher']:
-        desc += game['teams']['away']['probablePitcher']['fullName']
-        probables += get_last_name(game['teams']['away']['probablePitcher']['fullName'])
-    else:
-        desc += 'TBD'
-        probables += 'TBD'
-    desc += ' vs. '
-    probables += ' vs '
-    if 'probablePitcher' in game['teams']['home'] and 'fullName' in game['teams']['home']['probablePitcher']:
-        desc += game['teams']['home']['probablePitcher']['fullName']
-        probables += get_last_name(game['teams']['home']['probablePitcher']['fullName'])
-    else:
-        desc += 'TBD'
-        probables += 'TBD'
-    if probables == ' (TBD vs TBD':
-        probables = ''
-    else:
-        probables = colorString((probables + ')'), FINAL)
+    probables = ''
+    if ('probablePitcher' in game['teams']['away'] and 'fullName' in game['teams']['away']['probablePitcher']) or ('probablePitcher' in game['teams']['home'] and 'fullName' in game['teams']['home']['probablePitcher']):
+        probables = ' ('
+        if 'probablePitcher' in game['teams']['away'] and 'fullName' in game['teams']['away']['probablePitcher']:
+            desc += game['teams']['away']['probablePitcher']['fullName']
+            probables += get_last_name(game['teams']['away']['probablePitcher']['fullName'])
+        else:
+            desc += 'TBD'
+            probables += 'TBD'
+        desc += ' vs. '
+        probables += ' vs '
+        if 'probablePitcher' in game['teams']['home'] and 'fullName' in game['teams']['home']['probablePitcher']:
+            desc += game['teams']['home']['probablePitcher']['fullName']
+            probables += get_last_name(game['teams']['home']['probablePitcher']['fullName'])
+        else:
+            desc += 'TBD'
+            probables += 'TBD'
+        probables += ')'
+
     if 'venue' in game and 'name' in game['venue']:
-        desc += ', from ' + game['venue']['name']
-    if 'description' in game and game['description'] != "":
-        desc += ' (' + game['description'] + ')'
+        desc += '[CR]From ' + game['venue']['name']
     if game['status']['abstractGameState'] == 'Preview' or (start_inning == 'False' and spoiler == 'False'):
         name = game_time + ' ' + away_team + ' at ' + home_team
     else:
@@ -266,14 +275,47 @@ def create_game_listitem(game, game_day, start_inning):
                 name += ' ' + colorString('(No-Hitter)', CRITICAL)
 
     if game['doubleHeader'] != 'N':
-        name += ' (Game ' + str(game['gameNumber']) + ')'
+        doubleheader_label = 'Game ' + str(game['gameNumber'])
+        name += ' (' + doubleheader_label + ')'
+        desc += '[CR]' + doubleheader_label
 
-    name = name
+    if game['status']['abstractGameState'] == 'Final' and game_state != 'Final':
+        desc += '[CR]' + game_state
+
+    if 'description' in game and game['description'] != "":
+        desc += '[CR]' + game['description']
+
+    if scheduled_innings != 9:
+        desc += '[CR]' + str(scheduled_innings) + '-inning game'
+
+    # Check local/national blackout status
+    blackout = 'False'
+    try:
+        if game_day >= today and game_state != 'Postponed':
+            if game['fox_game'] == True and fox_regional_games == True:
+                desc += '[CR]Regional FOX game'
+            else:
+                blackout_type, blackout_time = get_blackout_status(game, suspended, scheduled_innings)
+
+                if blackout_type != 'False':
+                    name = blackoutString(name)
+                    desc += '[CR]' + blackout_type + ' video blackout until approx. 90 min. after the game'
+                    if blackout_time is None:
+                        blackout = 'True'
+                    else:
+                        blackout = blackout_time
+                        blackout_display_time = get_display_time(UTCToLocal(blackout_time))
+                        desc += ' (~' + blackout_display_time + ')'
+    except:
+        pass
+
     if fav_game:
         name = '[B]' + name + '[/B]'
 
     if is_free:
         name = colorString(name, FREE)
+
+    name += colorString(probables, FINAL)
 
     # Get audio/video info
     audio_info, video_info = getAudioVideoInfo()
@@ -283,7 +325,7 @@ def create_game_listitem(game, game_day, start_inning):
     # If set only show free games in the list
     if ONLY_FREE_GAMES == 'true' and not is_free:
         return
-    add_stream((name + probables), title, desc, game_pk, icon, fanart, info, video_info, audio_info, stream_date, spoiler, suspended, start_inning)
+    add_stream(name, title, desc, game_pk, icon, fanart, info, video_info, audio_info, stream_date, spoiler, suspended, start_inning, blackout)
 
 
 # fetch a list of featured videos
@@ -428,7 +470,8 @@ def create_big_inning_listitem(game_day):
             big_inning_end = parse(big_inning_schedule[game_day]['end'])
 
             # format the time for display
-            game_time = big_inning_start.strftime('%I:%M %p').lstrip('0') + ' - ' + big_inning_end.strftime('%I:%M %p').lstrip('0')
+
+            game_time = get_display_time(big_inning_start) + ' - ' + get_display_time(big_inning_end)
             now = datetime.now()
             if now < big_inning_start:
                 game_time = colorString(game_time, UPCOMING)
@@ -458,7 +501,7 @@ def create_big_inning_listitem(game_day):
         pass
 
 
-def stream_select(game_pk, spoiler, suspended, start_inning, description, name, icon, fanart, from_context_menu=False, autoplay=False):
+def stream_select(game_pk, spoiler, suspended, start_inning, blackout, description, name, icon, fanart, from_context_menu=False, autoplay=False):
     # fetch the epg content using the game_pk
     url = API_URL + '/api/v1/game/' + game_pk + '/content'
     headers = {
@@ -485,11 +528,16 @@ def stream_select(game_pk, spoiler, suspended, start_inning, description, name, 
     else:
         start_inning = int(start_inning)
     start_inning_half = 'top'
+    if blackout != 'False' and blackout != 'True':
+        utc=pytz.UTC
+        now = utc.localize(datetime.now())
+        blackout = parse(blackout)
     # define a dialog that we can use as needed
     dialog = xbmcgui.Dialog()
 
     # auto select stream if enabled and not bypassed with context menu item and it's not an archived suspended game, or if autoplay is forced
-    if (AUTO_SELECT_STREAM == 'true' and from_context_menu is False and suspended != 'archive') or autoplay is True:
+    # and if it's not blacked out or the blackout time has passed
+    if ((AUTO_SELECT_STREAM == 'true' and from_context_menu is False and suspended != 'archive') or autoplay is True) and (blackout == 'False' or (blackout != 'True' and blackout < now)):
         # loop through the streams to determine the best match
         for item in epg:
             # ignore streams that haven't started yet, audio streams (without a mediaFeedType), and in-market streams
@@ -586,6 +634,17 @@ def stream_select(game_pk, spoiler, suspended, start_inning, description, name, 
                         pass
                     title += ' (' + suspended_label + ')'
 
+                # display blackout status for video, if available
+                if 'mediaFeedType' in item and blackout != 'False':
+                    title = blackoutString(title)
+                    title += ' (blackout until ~'
+                    if blackout == 'True':
+                        title += '90 min. after'
+                    else:
+                        blackout_display_time = get_display_time(UTCToLocal(blackout))
+                        title += blackout_display_time
+                    title += ')'
+
                 # insert home/national video streams at the top of the list
                 if 'mediaFeedType' in item and ('HOME' in title.upper() or 'NATIONAL' in title.upper()):
                     content_id.insert(0, item['contentId'])
@@ -596,6 +655,12 @@ def stream_select(game_pk, spoiler, suspended, start_inning, description, name, 
                     content_id.append(item['contentId'])
                     media_state.append(item['mediaState'])
                     stream_title.append(title)
+
+                # add an option to directly play live YouTube streams in YouTube add-on
+                #if 'youtube' in item and 'videoId' in item['youtube']:
+                #    content_id.insert(0, item['youtube']['videoId'])
+                #    media_state.insert(0, item['mediaState'])
+                #    stream_title.insert(highlight_offset, LOCAL_STRING(30414))
 
         # if we didn't find any streams, display an error and exit
         if len(stream_title) == 0:
@@ -613,6 +678,11 @@ def stream_select(game_pk, spoiler, suspended, start_inning, description, name, 
             # check if selected stream is a radio stream
             if LOCAL_STRING(30393) in stream_title[n]:
                 stream_type = 'audio'
+            # directly play live YouTube streams in YouTube add-on, if requested
+            #if stream_title[n] == LOCAL_STRING(30414):
+            #    xbmc.executebuiltin('RunPlugin("plugin://plugin.video.youtube/play/?video_id=' + content_id[n-highlight_offset] + '")')
+            #    xbmcplugin.endOfDirectory(addon_handle)
+            #else:
             selected_content_id = content_id[n-highlight_offset]
             selected_media_state = media_state[n-highlight_offset]
         # cancel will exit
@@ -708,8 +778,8 @@ def stream_select(game_pk, spoiler, suspended, start_inning, description, name, 
         if autoplay is True:
             broadcast_start_offset = '-1'
         # if not live and no spoilers and not audio, generate a random number of segments to pad at end of proxy stream url
-        elif is_live is False and spoiler == 'False' and stream_type != 'audio':
-            pad = random.randint(720, 2160)
+        elif DISABLE_VIDEO_PADDING == 'false' and is_live is False and spoiler == 'False' and stream_type != 'audio':
+            pad = random.randint((3600 / SECONDS_PER_SEGMENT), (7200 / SECONDS_PER_SEGMENT))
             headers += '&pad=' + str(pad)
             stream_url = 'http://127.0.0.1:43670/' + stream_url
 
@@ -988,6 +1058,64 @@ def playAllHighlights(stream_date):
     xbmc.Player().play(playlist)
 
 
+# get the airings data, which contains the start time of the broadcast(s)
+def get_airings_data(content_id=None, game_pk=None):
+    xbmc.log('Get airings data')
+    url = 'https://search-api-mlbtv.mlb.com/svc/search/v2/graphql/persisted/query/core/Airings'
+    headers = {
+        'Accept': 'application/json',
+        'X-BAMSDK-Version': '4.3',
+        'X-BAMSDK-Platform': 'macintosh',
+        'User-Agent': UA_PC,
+        'Origin': 'https://www.mlb.com',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Content-type': 'application/json'
+    }
+    if content_id is not None:
+        data = {
+            'variables': '%7B%22contentId%22%3A%22' + content_id + '%22%7D'
+        }
+    else:
+        data = {
+            'variables': '{%22partnerProgramIds%22%3A[%22' + str(game_pk) + '%22]}'
+        }
+    r = requests.get(url, headers=headers, params=data, verify=VERIFY)
+    json_source = r.json()
+
+    return json_source
+
+
+# check blackout status
+def get_blackout_status(game, suspended='False', scheduled_innings=9):
+    blackout_type = 'False'
+    blackout_time = None
+    if re.match('^[0-9]{5}$', ZIP_CODE) and 'content' in game and 'media' in game['content'] and 'epg' in game['content']['media'] and len(game['content']['media']['epg']) > 0 and 'items' in game['content']['media']['epg'][0] and len(game['content']['media']['epg'][0]['items']) > 0 and 'mediaFeedType' in game['content']['media']['epg'][0]['items'][0] and game['content']['media']['epg'][0]['items'][0]['mediaFeedType'] == 'NATIONAL':
+        blackout_type = 'National'
+    elif game['seriesDescription'] != 'Spring Training' and (game['teams']['away']['team']['abbreviation'] in BLACKOUT_TEAMS or game['teams']['home']['team']['abbreviation'] in BLACKOUT_TEAMS):
+        blackout_type = 'Local'
+
+    # also calculate a blackout time for non-suspended, non-TBD games
+    if blackout_type != 'False' and suspended == 'False' and game['status']['startTimeTBD'] is False:
+        # avg 9 inning game was 3:11 in 2021, or 21.22 minutes per inning
+        gameDurationMinutes = 21.22 * scheduled_innings
+        # default to assuming the scheduled game time is the first pitch time
+        firstPitch = parse(game['gameDate'])
+        if 'gameInfo' in game:
+            # check if firstPitch has been updated with a valid time (later than the scheduled game time)
+            if 'firstPitch' in game['gameInfo'] and game['gameInfo']['firstPitch'] >= game['gameDate']:
+                firstPitch = parse(game['gameInfo']['firstPitch'])
+            # for completed games, get the duration too
+            if 'gameDurationMinutes' in game['gameInfo']:
+                gameDurationMinutes = game['gameInfo']['gameDurationMinutes']
+                # add any delays
+                if 'delayDurationMinutes' in game['gameInfo']:
+                    gameDurationMinutes += game['gameInfo']['delayDurationMinutes']
+        gameDurationMinutes += 90
+        blackout_time = firstPitch + timedelta(minutes=gameDurationMinutes)
+
+    return blackout_type, blackout_time
+
+
 def live_fav_game():
     game_day = localToEastern()
 
@@ -1024,15 +1152,18 @@ def live_fav_game():
                     try:
                         # only check games that aren't final
                         if game['status']['abstractGameState'] != 'Final':
-                            if 'content' in game and 'media' in game['content'] and 'epg' in game['content']['media'] and len(game['content']['media']['epg']) > 0 and 'items' in game['content']['media']['epg'][0]:
-                                for epg in game['content']['media']['epg'][0]['items']:
-                                    # if media is off, assume it is still upcoming
-                                    if epg['mediaState'] == 'MEDIA_OFF':
-                                        upcoming_game = True
-                                    # if media is on, that means it is live
-                                    elif game_pk is None and epg['mediaState'] == 'MEDIA_ON':
-                                        game_pk = str(game['gamePk'])
-                                        xbmc.log('Found live fav game ' + game_pk)
+                            # also only check games that aren't blacked out
+                            blackout_type, blackout_time = get_blackout_status(game)
+                            if blackout_type == 'False':
+                                if 'content' in game and 'media' in game['content'] and 'epg' in game['content']['media'] and len(game['content']['media']['epg']) > 0 and 'items' in game['content']['media']['epg'][0]:
+                                    for epg in game['content']['media']['epg'][0]['items']:
+                                        # if media is off, assume it is still upcoming
+                                        if epg['mediaState'] == 'MEDIA_OFF':
+                                            upcoming_game = True
+                                        # if media is on, that means it is live
+                                        elif game_pk is None and epg['mediaState'] == 'MEDIA_ON':
+                                            game_pk = str(game['gamePk'])
+                                            xbmc.log('Found live fav game ' + game_pk)
                     except:
                         pass
 

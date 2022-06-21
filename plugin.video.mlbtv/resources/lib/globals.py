@@ -41,6 +41,7 @@ OLD_PASSWORD = str(settings.getSetting(id="old_password"))
 QUALITY = str(settings.getSetting(id="quality"))
 CDN = str(settings.getSetting(id="cdn"))
 NO_SPOILERS = settings.getSetting(id="no_spoilers")
+DISABLE_VIDEO_PADDING = str(settings.getSetting(id='disable_video_padding'))
 FAV_TEAM = str(settings.getSetting(id="fav_team"))
 TEAM_NAMES = settings.getSetting(id="team_names")
 TIME_FORMAT = settings.getSetting(id="time_format")
@@ -97,11 +98,14 @@ VERIFY = True
 #These are the break events to skip
 BREAK_TYPES = ['Game Advisory', 'Pitching Substitution', 'Offensive Substitution', 'Defensive Sub', 'Defensive Switch', 'Runner Placed On Base', 'Injury']
 #These are the action events to keep, in addition to the last event of each at-bat, if we're skipping non-decision pitches
-ACTION_TYPES = ['Wild Pitch', 'Passed Ball', 'Stolen Base', 'Caught Stealing', 'Pickoff', 'Error', 'Out', 'Balk', 'Defensive Indiff']
+ACTION_TYPES = ['Wild Pitch', 'Passed Ball', 'Stolen Base', 'Caught Stealing', 'Pickoff', 'Error', 'Out', 'Balk', 'Defensive Indiff', 'Other Advance']
 #Pad events at both start (-) and end (+)
-EVENT_START_PADDING = -5
-EVENT_END_PADDING = 8
-MINIMUM_BREAK_DURATION = 10
+EVENT_START_PADDING = -3
+PITCH_END_PADDING = 3
+ACTION_END_PADDING = 8
+MINIMUM_BREAK_DURATION = 5
+
+SECONDS_PER_SEGMENT = 5
 
 def find(source,start_str,end_str):    
     start = source.find(start_str)
@@ -115,6 +119,10 @@ def find(source,start_str,end_str):
 
 def colorString(string, color):
     return '[COLOR='+color+']'+string+'[/COLOR]'
+
+
+def blackoutString(string):
+    return '* ' + string + ' *'
 
 
 def stringToDate(string, date_format):
@@ -177,6 +185,14 @@ def yesterdays_date():
     return prev_day.strftime("%Y-%m-%d")
 
 
+def get_display_time(timestamp):
+    if TIME_FORMAT == '0':
+        display_time = timestamp.strftime('%I:%M %p').lstrip('0')
+    else:
+        display_time = timestamp.strftime('%H:%M')
+    return display_time
+
+
 def get_params():
     param=[]
     paramstring=sys.argv[2]
@@ -196,9 +212,9 @@ def get_params():
     return param
 
 
-def add_stream(name, title, desc, game_pk, icon=None, fanart=None, info=None, video_info=None, audio_info=None, stream_date=None, spoiler='True', suspended=None, start_inning='False'):
+def add_stream(name, title, desc, game_pk, icon=None, fanart=None, info=None, video_info=None, audio_info=None, stream_date=None, spoiler='True', suspended=None, start_inning='False', blackout='False'):
     ok=True
-    u_params = "&name="+urllib.quote_plus(title)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&stream_date="+urllib.quote_plus(str(stream_date))+"&spoiler="+urllib.quote_plus(str(spoiler))+"&suspended="+urllib.quote_plus(str(suspended))+"&start_inning="+urllib.quote_plus(str(start_inning))+"&description="+urllib.quote_plus(desc)
+    u_params = "&name="+urllib.quote_plus(title)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&stream_date="+urllib.quote_plus(str(stream_date))+"&spoiler="+urllib.quote_plus(str(spoiler))+"&suspended="+urllib.quote_plus(str(suspended))+"&start_inning="+urllib.quote_plus(str(start_inning))+"&description="+urllib.quote_plus(desc)+"&blackout="+urllib.quote_plus(str(blackout))
     if icon is None: icon = ICON
     if fanart is None: fanart = FANART
     art_params = "&icon="+urllib.quote_plus(icon)+"&fanart="+urllib.quote_plus(fanart)
@@ -280,7 +296,7 @@ def addPlaylist(name,game_day,mode,icon,fanart=None):
     if fanart is None: fanart = FANART
     liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
-    game_day_display = parse(game_day).strftime('%A, %B %d, %Y')
+    game_day_display = parse(game_day).strftime('%A, %B %d, %Y').replace(' 0', ' ')
     info = {'plot': LOCAL_STRING(30375)+game_day_display,'tvshowtitle':'MLB','title':name,'originaltitle':name,'aired':game_day,'genre':LOCAL_STRING(700),'mediatype':'video'}
     # Get audio/video info
     audio_info, video_info = getAudioVideoInfo()
@@ -451,33 +467,6 @@ def stream_to_listitem(stream_url, headers, description, title, icon, fanart, st
     return listitem
 
 
-# get the airings data, which contains the start time of the broadcast(s)
-def get_airings_data(content_id=None, game_pk=None):
-    xbmc.log('Get airings data')
-    url = 'https://search-api-mlbtv.mlb.com/svc/search/v2/graphql/persisted/query/core/Airings'
-    headers = {
-        'Accept': 'application/json',
-        'X-BAMSDK-Version': '4.3',
-        'X-BAMSDK-Platform': 'macintosh',
-        'User-Agent': UA_PC,
-        'Origin': 'https://www.mlb.com',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Content-type': 'application/json'
-    }
-    if content_id is not None:
-        data = {
-            'variables': '%7B%22contentId%22%3A%22' + content_id + '%22%7D'
-        }
-    else:
-        data = {
-            'variables': '{%22partnerProgramIds%22%3A[%22' + str(game_pk) + '%22]}'
-        }
-    r = requests.get(url, headers=headers, params=data, verify=VERIFY)
-    json_source = r.json()
-
-    return json_source
-
-
 def get_inning_start_options():
     start_options = []
     # add start options for each inning 1-12
@@ -505,3 +494,36 @@ def get_last_name(full_name):
     except:
         pass
     return last_name
+
+
+# get the teams blacked out based on zip code
+def get_blackout_teams(zip_code):
+    xbmc.log('Resetting blackout teams')
+    blackout_teams = []
+    try:
+        if re.match('^[0-9]{5}$', zip_code):
+            xbmc.log('Fetching new blackout teams')
+            url = 'https://content.mlb.com/data/blackouts/' + zip_code + '.json'
+            headers = {
+                'User-Agent': UA_PC,
+                'Origin': 'https://www.mlb.com',
+                'Referer': 'https://www.mlb.com/'
+            }
+            r = requests.get(url, headers=headers, verify=VERIFY)
+            json_source = r.json()
+            if 'teams' in json_source:
+                blackout_teams = json_source['teams']
+    except:
+        pass
+
+    return blackout_teams
+
+
+ZIP_CODE = str(settings.getSetting(id='zip_code'))
+OLD_ZIP_CODE = str(settings.getSetting(id='old_zip_code'))
+if ZIP_CODE != OLD_ZIP_CODE:
+    settings.setSetting(id='old_zip_code', value=ZIP_CODE)
+    BLACKOUT_TEAMS = get_blackout_teams(ZIP_CODE)
+    settings.setSetting(id='blackout_teams', value=json.dumps(BLACKOUT_TEAMS))
+else:
+    BLACKOUT_TEAMS = json.loads(str(settings.getSetting(id='blackout_teams')))

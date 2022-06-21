@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2022.5.19+matrix.1" provider-name="eracknaphobia">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2022.6.9+matrix.1" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -22,15 +22,12 @@
         </description>
         <disclaimer lang="en_GB">Requires an MLB.tv account</disclaimer>
         <news>
-            - pad the end of archive videos if no spoilers (to avoid timeline spoilers)
-            - autoplay favorite team setting
-            - see scores at inning category
-            - hide bottom of 9th / extra innings as spoilers
-            - labels for suspended/resumed games/streams
-            - retain icon/fanart/probables through context menu navigation
-            - list favorite team's game(s) first
-            - removed unused/unnecessary settings (in market streams and proxy)
-            - added probable pitchers to game list titles
+            - optional zip code setting to detect and label blackout streams (does not circumvent blackouts)
+            - tweaked skip timings, particularly for non-action pitches and overturned reviews
+            - option to disable video length padding (in case of proxy conflicts)
+            - restored 24-hour time format label, applied it to Big Inning listitem
+            - label regional national games
+            - added additional action play type in skip monitor
         </news>
         <language>en</language>
         <platform>all</platform>

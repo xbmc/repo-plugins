@@ -57,7 +57,7 @@ msgid "CDN"
 msgstr ""
 
 msgctxt "#30170"
-msgid "Hide Scores"
+msgid "Hide Scores & Timeline Spoilers"
 msgstr ""
 
 msgctxt "#30171"
@@ -314,4 +314,16 @@ msgstr ""
 
 msgctxt "#30413"
 msgid "See Yesterday's Scores at inning"
+msgstr ""
+
+msgctxt "#30414"
+msgid "Watch in YouTube Add-on"
+msgstr ""
+
+msgctxt "#30415"
+msgid "Zip code (5 digits, for blackout labels)"
+msgstr ""
+
+msgctxt "#30416"
+msgid "Disable video length padding (in case of proxy conflict)"
 msgstr ""

@@ -153,14 +153,19 @@ class MLBMonitor(xbmc.Monitor):
                 if current_inning > start_inning or (current_inning == start_inning and (current_inning_half == start_inning_half or current_inning_half == 'bottom')):
                     # loop through events within each play
                     for index, playEvent in enumerate(play['playEvents']):
+                        # default to longer action end padding
+                        event_end_padding = ACTION_END_PADDING
                         # always exclude break types
                         if 'event' in playEvent['details'] and playEvent['details']['event'] in BREAK_TYPES:
                             # if we're in the process of skipping inning breaks, treat the first break type we find as another inning break
                             if skip_type == 1 and previous_inning > 0:
-                                break_start = (parse(playEvent['startTime']) - broadcast_start_timestamp).total_seconds() + EVENT_END_PADDING
+                                break_start = (parse(playEvent['startTime']) - broadcast_start_timestamp).total_seconds() + event_end_padding
                                 previous_inning = 0
                             continue
                         else:
+                            # for non-action plays, use shorter pitch end padding instead
+                            if index < (len(play['playEvents'])-1) and ('details' not in playEvent or 'event' not in playEvent['details'] or not any(substring in playEvent['details']['event'] for substring in ACTION_TYPES)):
+                                event_end_padding = PITCH_END_PADDING
                             action_index = None
                             # skip type 1 (breaks) and 2 (idle time) will look at all plays with an endTime
                             if skip_type <= 2 and 'endTime' in playEvent:
@@ -192,10 +197,17 @@ class MLBMonitor(xbmc.Monitor):
                                     # exit loop after found inning, if not skipping breaks
                                     if skip_type == 0:
                                         break
-                                break_start = (parse(play['playEvents'][action_index]['endTime']) - broadcast_start_timestamp).total_seconds() + EVENT_END_PADDING
+                                break_start = (parse(play['playEvents'][action_index]['endTime']) - broadcast_start_timestamp).total_seconds() + event_end_padding
                                 # add extra padding for overturned review plays
-                                if 'reviewDetails' in play and play['reviewDetails']['isOverturned'] == True:
-                                    break_start += 40
+                                if 'reviewDetails' in play:
+                                    isOverturned = play['reviewDetails']['isOverturned']
+                                    if isOverturned == False and 'additionalReviews' in play['reviewDetails'] and len(play['reviewDetails']['additionalReviews']) > 0:
+                                        for additionalReview in play['reviewDetails']['additionalReviews']:
+                                            isOverturned = additionalReview['isOverturned']
+                                            if isOverturned == True:
+                                                break
+                                    if isOverturned == True:
+                                        break_start += 40
 
         xbmc.log('Skip monitor for ' + game_pk + ' found ' + str(timedelta(seconds=total_skip_time)) + ' total skip time')
 

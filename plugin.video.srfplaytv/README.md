@@ -23,7 +23,11 @@ Get the [SRF Play TV media library](https://www.srf.ch/play/tv) on your TV (or a
 ## Installation
 
  - The plugin is available in the official "Kodi Add-on repository". This is the recommended way to get the plugin.
- - You can download the newest release as a zip file from the [release section](https://github.com/goggle/plugin.video.srfplaytv/releases) on github and manually install the plugin from the zip file. Keep in mind that you won't get any automatic updates if you choose this method.
+ - You can download the newest release as a zip file from the [release section](https://github.com/goggle/plugin.video.srfplaytv/releases) on github and manually install the plugin from the zip file. If you choose this method, make sure to have all the dependencies installed, especially
+   - [script.module.srgssr](https://github.com/goggle/script.module.srgssr)
+   - [script.module.youtube_channels](https://github.com/goggle/script.module.youtube_channels)
+
+   Keep in mind that you won't get any automatic updates if you choose this method.
 
 ## Support this plugin
 How you can help improving this plugin:

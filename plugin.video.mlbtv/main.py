@@ -11,6 +11,7 @@ stream_date = None
 spoiler = 'True'
 suspended = 'False'
 start_inning = 'False'
+blackout = 'False'
 icon = None
 fanart = None
 featured_video = None
@@ -49,6 +50,9 @@ if 'fanart' in params:
 if 'start_inning' in params:
     start_inning = urllib.unquote_plus(params["start_inning"])
 
+if 'blackout' in params:
+    blackout = urllib.unquote_plus(params["blackout"])
+
 if 'featured_video' in params:
     featured_video = urllib.unquote_plus(params["featured_video"])
 
@@ -77,15 +81,15 @@ elif mode == 101:
 
 # autoplay, use an extra parameter to force auto stream selection
 elif mode == 102:
-    stream_select(game_pk, spoiler, suspended, start_inning, description, name, icon, fanart, autoplay=True)
+    stream_select(game_pk, spoiler, suspended, start_inning, blackout, description, name, icon, fanart, autoplay=True)
 
 # from context menu, use an extra parameter to force manual stream selection
 elif mode == 103:
-    stream_select(game_pk, spoiler, suspended, start_inning, description, name, icon, fanart, from_context_menu=True)
+    stream_select(game_pk, spoiler, suspended, start_inning, blackout, description, name, icon, fanart, from_context_menu=True)
 
 # normal stream selection
 elif mode == 104:
-    stream_select(game_pk, spoiler, suspended, start_inning, description, name, icon, fanart)
+    stream_select(game_pk, spoiler, suspended, start_inning, blackout, description, name, icon, fanart)
 
 # Yesterday's Games
 elif mode == 105:

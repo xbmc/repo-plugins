@@ -1,0 +1,311 @@
+# Kodi Media Center language file
+# Addon Name: Google Photos 
+# Addon id: plugin.picture.googlephotos
+# Addon Provider: Pranjal Singhal
+msgid ""        
+msgstr ""
+
+#settings screen settings.xml
+#setting category
+msgctxt "#30100"
+msgid "Sign-in Server"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Base URL"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Device Code Subroute"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Access Token Subroute"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Refresh Token Subroute"
+msgstr ""
+
+#cache file name
+msgctxt "#30107"
+msgid "media_db"
+msgstr ""
+
+msgctxt "#30108"
+msgid "accounts/"
+msgstr ""
+
+#  filters
+msgctxt "#30200"
+msgid "Filter"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Date Filter"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Start Date"
+msgstr ""
+
+msgctxt "#30203"
+msgid "End Date"
+msgstr ""
+
+msgctxt "#30203"
+msgid "End Date"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Content Filter"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Content type"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Media Filter"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Media type"
+msgstr ""
+
+msgctxt "#30208"
+msgid "All Media"
+msgstr ""
+
+msgctxt "#30209"
+msgid "Video"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Photo"
+msgstr ""
+
+msgctxt "#30211"
+msgid "Feature Filter"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Show only favourites"
+msgstr ""
+
+msgctxt "#30213"
+msgid "Use date filter"
+msgstr ""
+
+msgctxt "#30400"
+msgid "Enter the following code at "
+msgstr ""
+
+msgctxt "#30401"
+msgid "Authenticate"
+msgstr ""
+
+msgctxt "#30402"
+msgid "Account added successfully"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Code refreshed"
+msgstr ""
+
+msgctxt "#30404"
+msgid "All Media"
+msgstr ""
+
+msgctxt "#30405"
+msgid "All Albums"
+msgstr ""
+
+msgctxt "#30406"
+msgid "Shared Albums"
+msgstr ""
+
+msgctxt "#30407"
+msgid "Custom Filter"
+msgstr ""
+
+msgctxt "#30408"
+msgid "Unable to retrieve media items from Google"
+msgstr ""
+
+msgctxt "#30409"
+msgid "Unable to load album items"
+msgstr ""
+
+msgctxt "#30410"
+msgid "Error in filtering photos"
+msgstr ""
+
+msgctxt "#30411"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30412"
+msgid "Error Code"
+msgstr ""
+
+msgctxt "#30413"
+msgid "No Media Item to load"
+msgstr ""
+
+msgctxt "#30414"
+msgid "Show more..."
+msgstr ""
+
+msgctxt "#30415"
+msgid "Video is not ready for viewing yet"
+msgstr ""
+
+msgctxt "#30416"
+msgid "Display Filtered Results"
+msgstr ""
+
+msgctxt "#30417"
+msgid "Unable to retrieve album list. Error Code:"
+msgstr ""
+
+msgctxt "#30418"
+msgid "Nameless album"
+msgstr ""
+
+msgctxt "#30419"
+msgid "Next Page"
+msgstr ""
+
+msgctxt "#30420"
+msgid "Remove Account"
+msgstr ""
+
+msgctxt "#30421"
+msgid "Add New Account"
+msgstr ""
+
+msgctxt "#30422"
+msgid "No response from proxy server. Try again."
+msgstr ""
+
+msgctxt "#30423"
+msgid "Loading..."
+msgstr ""
+
+msgctxt "#30424"
+msgid "Success"
+msgstr ""
+
+msgctxt "#30425"
+msgid "No items"
+msgstr ""
+#  No need most probably
+#  #  Content filter
+#  msgctxt "#30301"
+#  msgid "None"
+#  msgstr ""
+
+#  msgctxt "#30302"
+#  msgid "Landscapes"
+#  msgstr ""
+
+#  msgctxt "#30303"
+#  msgid "Receipts"
+#  msgstr ""
+
+#  msgctxt "#30304"
+#  msgid "Cityscapes"
+#  msgstr ""
+
+#  msgctxt "#30305"
+#  msgid "Landmarks"
+#  msgstr ""
+
+#  msgctxt "#30306"
+#  msgid "Selfies"
+#  msgstr ""
+
+#  msgctxt "#30307"
+#  msgid "People"
+#  msgstr ""
+
+#  msgctxt "#30308"
+#  msgid "Pets"
+#  msgstr ""
+
+#  msgctxt "#30309"
+#  msgid "Weddings"
+#  msgstr ""
+
+#  msgctxt "#30310"
+#  msgid "Birthdays"
+#  msgstr ""
+
+#  msgctxt "#30311"
+#  msgid "Documents"
+#  msgstr ""
+
+#  msgctxt "#30312"
+#  msgid "Travel"
+#  msgstr ""
+
+#  msgctxt "#30313"
+#  msgid "Animals"
+#  msgstr ""
+
+#  msgctxt "#30314"
+#  msgid "Food"
+#  msgstr ""
+
+#  msgctxt "#30315"
+#  msgid "Sport"
+#  msgstr ""
+
+#  msgctxt "#30316"
+#  msgid "Night"
+#  msgstr ""
+
+#  msgctxt "#30317"
+#  msgid "Performances"
+#  msgstr ""
+
+#  msgctxt "#30318"
+#  msgid "Whiteboards"
+#  msgstr ""
+
+#  msgctxt "#30319"
+#  msgid "Screenshots"
+#  msgstr ""
+
+#  msgctxt "#30320"
+#  msgid "Utility"
+#  msgstr ""
+
+#  msgctxt "#30321"
+#  msgid "Arts"
+#  msgstr ""
+
+#  msgctxt "#30322"
+#  msgid "Crafts"
+#  msgstr ""
+
+#  msgctxt "#30323"
+#  msgid "Fashion"
+#  msgstr ""
+
+#  msgctxt "#303024"
+#  msgid "Houses"
+#  msgstr ""
+
+#  msgctxt "#303025"
+#  msgid "Gardens"
+#  msgstr ""
+
+#  msgctxt "#303026"
+#  msgid "Flowers"
+#  msgstr ""
+
+#  msgctxt "#303027"
+#  msgid "Holidays"
+#  msgstr ""

@@ -915,54 +915,52 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
 def ParseMediaselector(stream_id):
     streams = []
     subtitles = []
-    # print "Parsing streams for PID: %s"%stream_id
+    # print("Parsing streams for PID: %s"%stream_id)
     # Open the page with the actual strem information and display the various available streams.
-    NEW_URL = "https://open.live.bbc.co.uk/mediaselector/6/select/version/2.0/mediaset/pc/vpid/%s/format/json/jsfunc/JS_callbacks0" % stream_id
+    NEW_URL = 'https://open.live.bbc.co.uk/mediaselector/6/select/version/2.0/mediaset/pc/vpid/%s/format/json/cors/1' % stream_id 
     html = OpenURL(NEW_URL)
-    match = re.search(r'JS_callbacks0.*?\((.*?)\);', html, re.DOTALL)
-    if match:
-        json_data = json.loads(match.group(1))
-        if json_data:
-            # print(json.dumps(json_data, sort_keys=True, indent=2))
-            if 'media' in json_data:
-                for media in json_data['media']:
-                    if 'kind' in media:
-                        if media['kind'] == 'captions':
-                            if 'connection' in media:
-                                for connection in media['connection']:
-                                    href = ''
-                                    protocol = ''
-                                    supplier = ''
-                                    if 'href' in connection:
-                                        href = connection['href']
-                                    if 'protocol' in connection:
-                                        protocol = connection['protocol']
-                                    if 'supplier' in connection:
-                                        supplier = connection['supplier']
-                                    subtitles.append((href, protocol, supplier))
-                        elif media['kind'].startswith('video'):
-                            if 'connection' in media:
-                                for connection in media['connection']:
-                                    href = ''
-                                    protocol = ''
-                                    supplier = ''
-                                    transfer_format = ''
-                                    if 'href' in connection:
-                                        href = connection['href']
-                                    if 'protocol' in connection:
-                                        protocol = connection['protocol']
-                                    if 'supplier' in connection:
-                                        supplier = connection['supplier']
-                                    if 'transferFormat' in connection:
-                                        transfer_format = connection['transferFormat']
-                                    if protocol == 'https':
-                                        streams.append((href, protocol, supplier, transfer_format))
-            elif 'result' in json_data:
-                if json_data['result'] == 'geolocation':
-                    # print "Geoblock detected, raising error message"
-                    dialog = xbmcgui.Dialog()
-                    dialog.ok(translation(30400), translation(30401))
-                    raise
+    json_data = json.loads(html)
+    if json_data:
+        # print(json.dumps(json_data, sort_keys=True, indent=2))
+        if 'media' in json_data:
+            for media in json_data['media']:
+                if 'kind' in media:
+                    if media['kind'] == 'captions':
+                        if 'connection' in media:
+                            for connection in media['connection']:
+                                href = ''
+                                protocol = ''
+                                supplier = ''
+                                if 'href' in connection:
+                                    href = connection['href']
+                                if 'protocol' in connection:
+                                    protocol = connection['protocol']
+                                if 'supplier' in connection:
+                                    supplier = connection['supplier']
+                                subtitles.append((href, protocol, supplier))
+                    elif media['kind'].startswith('video'):
+                        if 'connection' in media:
+                            for connection in media['connection']:
+                                href = ''
+                                protocol = ''
+                                supplier = ''
+                                transfer_format = ''
+                                if 'href' in connection:
+                                    href = connection['href']
+                                if 'protocol' in connection:
+                                    protocol = connection['protocol']
+                                if 'supplier' in connection:
+                                    supplier = connection['supplier']
+                                if 'transferFormat' in connection:
+                                    transfer_format = connection['transferFormat']
+                                if protocol == 'https':
+                                    streams.append((href, protocol, supplier, transfer_format))
+        elif 'result' in json_data:
+            if json_data['result'] == 'geolocation':
+                # print "Geoblock detected, raising error message"
+                dialog = xbmcgui.Dialog()
+                dialog.ok(translation(30400), translation(30401))
+                raise
     # print("Found streams:")
     # print(streams)
     # print(subtitles)

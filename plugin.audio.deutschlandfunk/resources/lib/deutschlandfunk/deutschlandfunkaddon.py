@@ -176,9 +176,11 @@ class DeutschlandfunkAddon(AbstractRssAddon):
         _data, _cookies = http_request(self.addon, url)
 
         soup = BeautifulSoup(_data, "html.parser")
-        _script_js_client_queries = soup.find_all(
+        main = soup.find("main")
+        _script_js_client_queries = main.find_all(
             "script", class_="js-client-queries")
 
+        entries = list()
         _img_src = None
 
         for _script in _script_js_client_queries:
@@ -195,6 +197,9 @@ class DeutschlandfunkAddon(AbstractRssAddon):
                     _img_src = _data_json["value"]["src"]
 
                 elif _data_json["value"]["__typename"] == "Teaser" and "pathPodcast" in _data_json["value"]:
+                    if not _data_json["value"]["pathPodcast"] or not _data_json["value"]["pathPodcast"].endswith(".xml"):
+                        continue
+
                     entry = {
                         "path": _data_json["value"]["sophoraId"],
                         "name": _data_json["value"]["title"],
@@ -206,10 +211,17 @@ class DeutschlandfunkAddon(AbstractRssAddon):
                         ],
                         "node": []
                     }
-                    self.add_list_item(entry, path)
+                    entries.append(entry)
 
             except:
-                pass
+                _img_src = None
+
+        uniq_entries = {entries[i]["params"][0]["rss"]: entries[i] for i in range(len(entries))}
+        uniq_entries = [uniq_entries[e] for e in uniq_entries]
+        uniq_entries.sort(key=lambda e: e["name"])
+
+        for entry in uniq_entries:
+            self.add_list_item(entry, path)
 
         xbmcplugin.addSortMethod(
             self.addon_handle, xbmcplugin.SORT_METHOD_LABEL)

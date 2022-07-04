@@ -24,7 +24,12 @@ def http_request(addon, url, headers=dict(), method="GET"):
         raise HttpStatusError(addon.getLocalizedString(32153))
 
     if res.status_code == 200:
-        return res.text, res.cookies
+        if res.encoding and res.encoding != "utf-8":
+            rv = res.text.encode(res.encoding).decode("utf-8")
+        else:
+            rv = res.text
+
+        return rv, res.cookies
 
     else:
         raise HttpStatusError(addon.getLocalizedString(

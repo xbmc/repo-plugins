@@ -11,6 +11,7 @@ stream_date = None
 spoiler = 'True'
 suspended = 'False'
 start_inning = 'False'
+blackout = 'False'
 icon = None
 fanart = None
 featured_video = None
@@ -49,6 +50,9 @@ if 'fanart' in params:
 if 'start_inning' in params:
     start_inning = urllib.unquote_plus(params["start_inning"])
 
+if 'blackout' in params:
+    blackout = urllib.unquote_plus(params["blackout"])
+
 if 'featured_video' in params:
     featured_video = urllib.unquote_plus(params["featured_video"])
 
@@ -77,15 +81,15 @@ elif mode == 101:
 
 # autoplay, use an extra parameter to force auto stream selection
 elif mode == 102:
-    stream_select(game_pk, spoiler, suspended, start_inning, description, name, icon, fanart, autoplay=True)
+    stream_select(game_pk, spoiler, suspended, start_inning, blackout, description, name, icon, fanart, autoplay=True)
 
 # from context menu, use an extra parameter to force manual stream selection
 elif mode == 103:
-    stream_select(game_pk, spoiler, suspended, start_inning, description, name, icon, fanart, from_context_menu=True)
+    stream_select(game_pk, spoiler, suspended, start_inning, blackout, description, name, icon, fanart, from_context_menu=True)
 
 # normal stream selection
 elif mode == 104:
-    stream_select(game_pk, spoiler, suspended, start_inning, description, name, icon, fanart)
+    stream_select(game_pk, spoiler, suspended, start_inning, blackout, description, name, icon, fanart)
 
 # Yesterday's Games
 elif mode == 105:
@@ -140,10 +144,17 @@ elif mode == 301:
 
 # Logout
 elif mode == 400:
+    from resources.lib.account import Account
     account = Account()
     account.logout()
     dialog = xbmcgui.Dialog()
     dialog.notification(LOCAL_STRING(30260), LOCAL_STRING(30261), ICON, 5000, False)
+
+# Game Changer
+elif mode == 500:
+    from resources.lib.mlbmonitor import MLBMonitor
+    mlbmonitor = MLBMonitor()
+    mlbmonitor.change_monitor(blackout.split(','))
 
 # play all recaps or condensed games for selected date
 elif mode == 900:

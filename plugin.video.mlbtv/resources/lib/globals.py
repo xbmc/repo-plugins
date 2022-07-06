@@ -7,6 +7,7 @@ from dateutil.parser import parse
 import json
 from kodi_six import xbmc, xbmcvfs, xbmcplugin, xbmcgui, xbmcaddon
 import random
+from collections import namedtuple, deque
 
 if sys.version_info[0] > 2:
     import http
@@ -51,10 +52,12 @@ CATCH_UP = str(settings.getSetting(id='catch_up'))
 ASK_TO_SKIP = str(settings.getSetting(id='ask_to_skip'))
 AUTO_PLAY_FAV = str(settings.getSetting(id='auto_play_fav'))
 ONLY_FREE_GAMES = str(settings.getSetting(id="only_free_games"))
+GAME_CHANGER_DELAY = int(settings.getSetting(id="game_changer_delay"))
 
 #Monitor setting
 MLB_MONITOR_STARTED = settings.getSetting(id='mlb_monitor_started')
-if MLB_MONITOR_STARTED != '' and not xbmc.getCondVisibility("Player.HasMedia"):
+now = datetime.now()
+if MLB_MONITOR_STARTED != '' and not xbmc.getCondVisibility("Player.HasMedia") and (parse(MLB_MONITOR_STARTED) + timedelta(seconds=5)) < now:
     xbmc.log("MLB Monitor detection resetting due to no stream playing")
     settings.setSetting(id='mlb_monitor_started', value='')
 
@@ -93,17 +96,6 @@ UA_PC = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, li
 UA_ANDROID = 'okhttp/3.12.1'
 
 VERIFY = True
-
-#Skip monitor
-#These are the break events to skip
-BREAK_TYPES = ['Game Advisory', 'Pitching Substitution', 'Offensive Substitution', 'Defensive Sub', 'Defensive Switch', 'Runner Placed On Base', 'Injury']
-#These are the action events to keep, in addition to the last event of each at-bat, if we're skipping non-decision pitches
-ACTION_TYPES = ['Wild Pitch', 'Passed Ball', 'Stolen Base', 'Caught Stealing', 'Pickoff', 'Error', 'Out', 'Balk', 'Defensive Indiff', 'Other Advance']
-#Pad events at both start (-) and end (+)
-EVENT_START_PADDING = -3
-PITCH_END_PADDING = 3
-ACTION_END_PADDING = 8
-MINIMUM_BREAK_DURATION = 5
 
 SECONDS_PER_SEGMENT = 5
 

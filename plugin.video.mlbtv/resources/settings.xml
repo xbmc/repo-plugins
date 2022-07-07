@@ -34,6 +34,7 @@
     <setting id="ask_to_skip" type="bool" label="30306" default="true" />
     <setting id="auto_play_fav" type="bool" label="30412" default="false" />
     <setting id="only_free_games" type="bool" label="30305" default="false" />
+    <setting id="game_changer_delay" type="labelenum" label="30420" default="0" values="0|10|20" />
 
     <setting id="old_username" type="text" label="" default="" visible="false"/>
     <setting id="old_password" type="text" label="" default="" visible="false"/>
@@ -43,6 +44,7 @@
     <setting id="big_inning_schedule" type="text" label="" default="" visible="false"/>
     <setting id="mlb_monitor_started" type="text" label="" default="" visible="false"/>
     <setting id="auto_play_game_date" type="text" label="" default="" visible="false"/>
+    <setting id="auto_play_next_game" type="text" label="" default="" visible="false"/>
     <setting id="auto_play_game_checked" type="text" label="" default="" visible="false"/>
   </category>
 </settings>

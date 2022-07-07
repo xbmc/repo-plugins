@@ -144,10 +144,17 @@ elif mode == 301:
 
 # Logout
 elif mode == 400:
+    from resources.lib.account import Account
     account = Account()
     account.logout()
     dialog = xbmcgui.Dialog()
     dialog.notification(LOCAL_STRING(30260), LOCAL_STRING(30261), ICON, 5000, False)
+
+# Game Changer
+elif mode == 500:
+    from resources.lib.mlbmonitor import MLBMonitor
+    mlbmonitor = MLBMonitor()
+    mlbmonitor.change_monitor(blackout.split(','))
 
 # play all recaps or condensed games for selected date
 elif mode == 900:

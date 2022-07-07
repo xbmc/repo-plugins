@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.viervijfzes" name="GoPlay" version="0.4.7" provider-name="Michaël Arnauts">
+<addon id="plugin.video.viervijfzes" name="GoPlay" version="0.4.8" provider-name="Michaël Arnauts">
     <requires>
         <import addon="xbmc.python" version="2.26.0" />
         <import addon="script.module.dateutil" version="2.6.0" />
@@ -21,8 +21,8 @@
         <disclaimer lang="en_GB">This add-on is not officially commissioned/supported by SBS Belgium and is provided 'as is' without any warranty of any kind. The Play4, Play5 and Play6 logos are property of SBS Belgium.</disclaimer>
         <platform>all</platform>
         <license>GPL-3.0-only</license>
-	    <news>v0.4.7 (2022-02-04)
-- Fix My List.</news>
+	    <news>v0.4.8 (2022-07-07)
+- Fix Addon due to API changes.</news>
         <source>https://github.com/add-ons/plugin.video.viervijfzes</source>
         <assets>
             <icon>resources/icon.png</icon>

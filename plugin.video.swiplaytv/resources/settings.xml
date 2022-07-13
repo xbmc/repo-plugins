@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="plugin.video.swiplaytv">
+		<category id="General" label="30010" help="">
+			<group id="1">
+				<setting id="Prefer_HD" type="boolean" label="30002" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="Extract_Subtitles" type="boolean" label="30004" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="Enable_Debugging" type="boolean" label="30000" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+		</category>
+		<category id="Main_Menu" label="30012" help="">
+			<group id="1">
+				<setting id="Homepage" type="boolean" label="30060" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="Topics" type="boolean" label="30058" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="Search" type="boolean" label="30085" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="SWI_YouTube" type="boolean" label="30074" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+		</category>
+	</section>
+</settings>

@@ -1,6 +1,4 @@
 import sys
-import json
-import requests
 from urllib.parse import parse_qsl
 from xbmcgui import Dialog
 from resources.lib.api import TeliaException

@@ -26,11 +26,11 @@ class Vualto(object):
     def get_stream_info(self, item, mzid, identity_token, live=False, hls_over_dash=False):  # NOSONAR
         """ Updates an item with Vualto stream data.
 
-        :param MediaItem item:      The Mediaitem to update
-        :param str mzid:            The MZ ID of the stream
-        :param str identity_token:  The identity token to use.
-        :param bool live:           Indicator if the stream is live or not
-        :param bool hls_over_dash:  Should we prefer HLS over Dash?
+        :param MediaItem item:           The Mediaitem to update
+        :param str mzid:                 The MZ ID of the stream
+        :param str|None identity_token:  The identity token to use.
+        :param bool live:                Indicator if the stream is live or not
+        :param bool hls_over_dash:       Should we prefer HLS over Dash?
 
         :return: An updated MediaItem
         :rtype: MediaItem

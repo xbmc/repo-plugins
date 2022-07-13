@@ -58,10 +58,9 @@ class Channel(chn_class.Channel):
         self.baseUrlLive = "https://www.npostart.nl"
 
         # live radio, the folders and items
-        self._add_data_parser("https://radio-app.omroep.nl/player/script/",
-                              name="Live Radio Streams",
-                              preprocessor=self.extract_json_for_live_radio, json=True,
-                              parser=[], creator=self.create_live_radio)
+        self._add_data_parser("https://start-api.npo.nl/page/live",
+                              name="Live Radio Streams", json=True,
+                              parser=["components", ("panel", "live.regular.1", 0), "epg"], creator=self.create_live_radio)
 
         self._add_data_parser("/live", match_type=ParserData.MatchEnd,
                               name="Main Live Stream HTML parser",
@@ -184,8 +183,8 @@ class Channel(chn_class.Channel):
         self.__NextPageAdded = False
         self.__jsonApiKeyHeader = {"apikey": "07896f1ee72645f68bc75581d7f00d54"}
         self.__useJson = True
-        self.__pageSize = 100
-        self.__max_page_count = 5
+        self.__pageSize = 60
+        self.__max_page_count = 10
         self.__has_premium_cache = None
         self.__timezone = pytz.timezone("Europe/Amsterdam")
 
@@ -239,10 +238,6 @@ class Channel(chn_class.Channel):
         if not bool(password):
             Logger.warning("No password found for %s", self)
             return False
-
-        # xsrf_token = self.__get_xsrf_token()[0]
-        # if not xsrf_token:
-        #     return False
 
         # Will redirect to the new id.npo.nl site with a return url given.
         data = UriHandler.open("https://www.npostart.nl/login", no_cache=True)
@@ -375,10 +370,11 @@ class Channel(chn_class.Channel):
 
         extra = FolderItem(
             LanguageHelper.get_localized_string(LanguageHelper.LiveRadio),
-            "https://radio-app.omroep.nl/player/script/player.js",
+            "https://start-api.npo.nl/page/live",
             content_type=contenttype.SONGS)
         extra.complete = True
         extra.dontGroup = True
+        extra.HttpHeaders = self.__jsonApiKeyHeader
         items.append(extra)
 
         extra = FolderItem(
@@ -855,7 +851,7 @@ class Channel(chn_class.Channel):
             return data, items
 
         # We will just try to download all items.
-        for i in range(0, self.__max_page_count - 1):
+        for _ in range(0, self.__max_page_count - 1):
             page_data = UriHandler.open(next_url, additional_headers=self.parentItem.HttpHeaders)
             page_json = JsonHelper(page_data)
             page_items = page_json.get_value("items")
@@ -1204,43 +1200,24 @@ class Channel(chn_class.Channel):
         """
 
         Logger.trace("Content = %s", result_set)
+        result_set = result_set["channel"]
+
         name = result_set["name"]
         if name == "demo":
             return None
 
-        item = MediaItem(name, "", media_type=mediatype.AUDIO)
+        url = "%s/live/%s" % (self.baseUrlLive, result_set["slug"])
+        item = MediaItem(name, url, media_type=mediatype.VIDEO)
         item.isLive = True
         item.complete = False
 
-        # noinspection PyTypeChecker
-        streams = result_set.get("audiostreams", [])
+        data = result_set.get("liveStream")
+        # see if there is a video stream.
+        if data:
+            video = data.get("visualRadioAsset")
+            if video:
+                item.metaData["live_pid"] = video
 
-        # first check for the video streams
-        # noinspection PyTypeChecker
-        for stream in result_set.get("videostreams", []):
-            Logger.trace(stream)
-            # url = stream["url"]
-            # if not url.endswith("m3u8"):
-            if not stream["protocol"] == "prid":
-                continue
-            item.url = "http://e.omroep.nl/metadata/%(url)s" % stream
-            item.complete = False
-            item.media_type = mediatype.EPISODE
-            return item
-
-        # else the radio streams
-        for stream in streams:
-            Logger.trace(stream)
-            if not stream["protocol"] or stream["protocol"] == "prid":
-                continue
-            bitrate = stream.get("bitrate", 0)
-            url = stream["url"]
-            item.add_stream(url, bitrate)
-            item.complete = True
-            # if not stream["protocol"] == "prid":
-            #     continue
-            # item.url = "http://e.omroep.nl/metadata/%(url)s" % stream
-            # item.complete = False
         return item
 
     def update_video_item(self, item):
@@ -1320,6 +1297,8 @@ class Channel(chn_class.Channel):
         """
 
         Logger.debug('Starting update_video_item: %s', item.name)
+        if "live_pid" in item.metaData:
+            return self.__update_video_item(item, item.metaData["live_pid"], False)
 
         # we need to determine radio or live tv
         Logger.debug("Fetching live stream data from item url: %s", item.url)
@@ -1387,7 +1366,7 @@ class Channel(chn_class.Channel):
 
         # get the subtitle
         if fetch_subtitles:
-            sub_title_url = "https://assetscdn.npostart.nl/subtitles/original/nl/%s.vtt" % (episode_id,)
+            sub_title_url = "https://rs.poms.omroep.nl/v1/api/subtitles/%s/nl_NL/CAPTION.vtt" % (episode_id,)
             sub_title_path = subtitlehelper.SubtitleHelper.download_subtitle(
                 sub_title_url, episode_id + ".nl.srt", format='srt')
             if sub_title_path:

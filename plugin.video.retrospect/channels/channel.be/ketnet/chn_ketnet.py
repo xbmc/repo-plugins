@@ -6,7 +6,6 @@ from resources.lib.mediaitem import MediaItem, FolderItem
 from resources.lib.logger import Logger
 from resources.lib.urihandler import UriHandler
 from resources.lib.helpers.jsonhelper import JsonHelper
-from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 
 
 class Channel(chn_class.Channel):
@@ -30,7 +29,7 @@ class Channel(chn_class.Channel):
 
         if self.channelCode == "ketnet":
             self.noImage = "ketnetimage.jpg"
-            self.mainListUri = self.__get_graph_url("content/ketnet/nl.model.json")
+            self.mainListUri = "#mainlist"
             self.baseUrl = "https://www.ketnet.be"
             self.mediaUrlRegex = r'playerConfig\W*=\W*(\{[\w\W]{0,2000}?);(?:.vamp|playerConfig)'
 
@@ -39,16 +38,17 @@ class Channel(chn_class.Channel):
 
         self._add_data_parser(
             self.mainListUri, json=True, name="MainList Parser for GraphQL",
-            preprocessor=self.get_sub_swimlane,
+            preprocessor=self.get_graphql_post,
             parser=[
                 "data", "page", "pagecontent",
                 ("id", "/conf/tenants/ketnet/settings/wcm/templates/home-page-template/structure/jcr:content/root/heroes", 0),
                 "items"
             ], creator=self.create_typed_item)
 
-        self._add_data_parser("https://senior-bff.ketnet.be/graphql?query=query%20GetPage%28",
+        self._add_data_parser("*",
                               name="Generic GraphQL Parser", json=True,
-                              parser=["data", "page", "tabs", ("type", "playlists", 0), "playlists"],
+                              preprocessor=self.get_graphql_post,
+                              parser=["data", "page", "tabsV2", ("type", "playlists", 0), "playlists"],
                               creator=self.create_typed_item, updater=self.update_video_item,
                               postprocessor=self.check_single_folder)
 
@@ -60,6 +60,35 @@ class Channel(chn_class.Channel):
 
         # ====================================== Actual channel setup STOPS here =======================================
         return
+
+    # noinspection PyUnusedLocal
+    def get_graphql_post(self, data=None, item=None):
+        """ Performs pre-process actions for data processing.
+
+        Accepts an data from the process_folder_list method, BEFORE the items are
+        processed. Allows setting of parameters (like title etc) for the channel.
+        Inside this method the <data> could be changed and additional items can
+        be created.
+
+        The return values should always be instantiated in at least ("", []).
+
+        :param str data: The retrieve data that was loaded for the current item and URL.
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+
+        """
+
+        if self.parentItem:
+            json_params = self.__get_graph_post_data("GetPage", self.parentItem.metaData["id"])
+        elif item:
+            json_params = self.__get_graph_post_data("GetPage", item.metaData["id"])
+        else:
+            json_params = self.__get_graph_post_data("GetPage", "content/ketnet/nl.model.json")
+        data = UriHandler.open("https://senior-bff.ketnet.be/graphql", json=json_params)
+
+        json_data = JsonHelper(data)
+        return json_data, []
 
     # noinspection PyUnusedLocal
     def check_single_folder(self, data, items):
@@ -133,9 +162,12 @@ class Channel(chn_class.Channel):
 
         """
 
-        url = self.__get_graph_url(result_set["id"])
+        item_id = result_set["id"]
+        # Set an #-url style
+        url = "#programId={}".format(item_id)
         item = MediaItem(result_set["title"], url)
-        item.poster = result_set["posterUrl"]
+        item.metaData["id"] = item_id
+        item.poster = result_set.get("posterUrl")
         return item
 
     def create_swimlane_item(self, result_set):
@@ -157,44 +189,11 @@ class Channel(chn_class.Channel):
             return None
 
         swimlane_id = result_set["id"]
-        item = FolderItem(title, self.mainListUri, content_type=contenttype.TVSHOWS)
+        url = "#swimlaneId={}".format(swimlane_id)
+        item = FolderItem(title, url, content_type=contenttype.TVSHOWS)
         item.description = result_set.get("description")
         item.metaData["id"] = swimlane_id
         return item
-
-    def get_sub_swimlane(self, data):
-        """ Performs pre-process actions for data processing.
-
-        Accepts an data from the process_folder_list method, BEFORE the items are
-        processed. Allows setting of parameters (like title etc) for the channel.
-        Inside this method the <data> could be changed and additional items can
-        be created.
-
-        The return values should always be instantiated in at least ("", []).
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        items = []
-        if not self.parentItem or not self.parentItem.metaData:
-            return data, items
-
-        json_data = JsonHelper(data)
-        data = json_data.get_value("data", "page", "pagecontent")
-        swim_lane_data = None
-        for sub_item in data:
-            if sub_item.get("id") == self.parentItem.metaData["id"]:
-                swim_lane_data = sub_item
-                break
-
-        if swim_lane_data:
-            json_data.json["data"]["page"]["pagecontent"] = swim_lane_data["items"]
-
-        return json_data, items
 
     def create_playlist_item(self, result_set):
         """ Creates a new MediaItem for a playlist of seasons.
@@ -210,8 +209,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        title = result_set["title"]
-        url = "{}/{}".format(self.parentItem.url, title)
+        url = "#playlist={}".format(result_set["name"])
         item = MediaItem(result_set["title"], url)
         item.poster = result_set.get("imageUrl")
         items = result_set["items"]
@@ -241,10 +239,14 @@ class Channel(chn_class.Channel):
         """
 
         Logger.trace(result_set)
+
         video_id = result_set["id"]
+        url = "#videoId={}".format(video_id)
         title = result_set.get("titlePlaylist", result_set.get("titleSwimlane"))
-        item = MediaItem(title, self.__get_graph_url(video_id))
+
+        item = MediaItem(title, url)
         item.media_type = mediatype.EPISODE
+        item.metaData["id"] = video_id
         item.description = result_set.get("description")
         item.thumb = result_set.get("imageUrl")
 
@@ -279,8 +281,8 @@ class Channel(chn_class.Channel):
         """
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
-        data = UriHandler.open(item.url)
-        json_data = JsonHelper(data)
+
+        json_data, _ = self.get_graphql_post(item=item)
         player_info = json_data.get_value("data", "page", "vrtPlayer")
         client_code = player_info["clientCode"]
         media_refernce_pbs = player_info["mediaReference"]
@@ -292,11 +294,15 @@ class Channel(chn_class.Channel):
         item = v.get_stream_info(item, media_refernce_pbs, None, hls_over_dash=hls_over_dash)
         return item
 
-    def __get_graph_url(self, id):
-        graph_query = "query GetPage($id: String!) { page(id: $id) { ... on Program { pageType ...program __typename } ... on Video { pageType ...video __typename } ... on Pagecontent { pageType ...pagecontent __typename } __typename } }  fragment program on Program { id title header { ...header __typename } activeTab tabs { name title type playlists { ...seasonOverviewTabItem __typename } pagecontent { ...pagecontentItem __typename } __typename } __typename }  fragment seasonOverviewTabItem on Playlist { name title type imageUrl items { id titlePlaylist subtitlePlaylist scaledPoster { ...scaledImage __typename } allowedRegion duration episodeNr seasonTitle imageUrl availableUntilDate publicationDate description __typename } __typename }  fragment video on Video { id videoType titleVideodetail subtitleVideodetail scaledPoster { ...scaledImage __typename } description availableUntilDate publicationDate duration episodeNr vrtPlayer { ...vrtPlayerFragment __typename } suggestions { id titleSuggestion subtitleSuggestion scaledPoster { ...scaledImage __typename } __typename } playlists { name title items { id titlePlaylist subtitlePlaylist scaledPoster { ...scaledImage __typename } description __typename } __typename } activePlaylist trackingData { programName seasonName episodeName episodeNr episodeBroadcastDate __typename } __typename }  fragment pagecontent on Pagecontent { pagecontent { ...pagecontentItem __typename } __typename }  fragment pagecontentItem on PagecontentItem { ... on Header { ...header __typename } ... on Highlight { ...highlight __typename } ... on Swimlane { ...swimlane __typename } __typename }  fragment highlight on Highlight { type title description link linkItem { ... on Game { id __typename } ... on Program { id __typename } ... on Story { id __typename } ... on Theme { id __typename } ... on Video { id __typename } __typename } buttonText imageUrl size __typename }  fragment swimlane on Swimlane { id type title style items { ... on Video { ...swimlaneVideo __typename } ... on Program { ...swimlaneProgram __typename } __typename } __typename }  fragment swimlaneVideo on Video { id type title imageUrl titleSwimlane subtitleSwimlane duration __typename }  fragment swimlaneProgram on Program { id type title accentColor imageUrl logoUrl posterUrl __typename }  fragment scaledImage on ScaledImage { small medium large __typename }  fragment vrtPlayerFragment on VrtPlayerConfig { mediaReference aggregatorUrl clientCode __typename }  fragment header on Header { type title description imageUrl logoUrl __typename }"
-        graph_id = "{{\"id\": \"{}\"}}".format(id)
-        graph_url = "https://senior-bff.ketnet.be/graphql?query={}&variables={}".format(
-            HtmlEntityHelper.url_encode(graph_query),
-            HtmlEntityHelper.url_encode(graph_id)
-        )
-        return graph_url
+    def __get_graph_post_data(self, operation, item_id):
+        graph_query = "query GetPage($id: String!, $feedPostPageSize: Int!, $feedPostCommentPageSize: Int!) { page(id: $id) { ... on Program { pageType ...program __typename } ... on Theme { pageType ...theme __typename } ... on Video { pageType ...video __typename } ... on Game { pageType ...game __typename } ... on Pagecontent { pageType ...pagecontent __typename } __typename }}fragment game on Game { id title imageUrl orientation gameUrl gameType requiresSdk hideCloseButton permissions __typename} fragment program on Program { id title header { ...header __typename } activeTab tabsV2 { ... on FeedTab { ...feedTab __typename } ... on PlaylistsTab { ...playlistsTab __typename } ... on PageContentTab { ...pageContentTab __typename } ... on LinkTab { ...linkTab __typename } __typename } __typename}fragment feedTab on FeedTab { id name title type disableComments paginatedPosts(first: $feedPostPageSize) { edges { node { ...postFragment ...ctaPostFragment __typename } cursor __typename } totalCount next __typename } characterFiltersTitle filterOnCharacters characters { id imageUrl title characterDisabled __typename } theming { backgroundColor foregroundColor buttonColor loginButtonColor __typename } __typename}fragment playlistsTab on PlaylistsTab { name title type playlists { ...seasonOverviewTabItem __typename } __typename}fragment pageContentTab on PageContentTab { name title type pagecontent { ...pagecontentItem __typename } __typename}fragment linkTab on LinkTab { id name linkItem { ... on Game { id userHasVoted gameType __typename } ... on Program { id __typename } ... on Story { id __typename } ... on Theme { id __typename } ... on Video { id __typename } __typename } title type __typename}fragment seasonOverviewTabItem on Playlist { name title type imageUrl items { id titlePlaylist subtitlePlaylist scaledPoster { ...scaledImage __typename } description duration __typename } __typename}fragment theme on Theme { id title header { ...header __typename } pagecontent { ...pagecontentItem __typename } __typename}fragment video on Video { id videoType titleVideodetail subtitleVideodetail metaTitle scaledPoster { ...scaledImage __typename } description availableUntilDate publicationDate duration episodeNr vrtPlayer { ...vrtPlayerFragment __typename } suggestions { id titleSuggestion subtitleSuggestion scaledPoster { ...scaledImage __typename } duration __typename } playlists { name title items { id titlePlaylist subtitlePlaylist scaledPoster { ...scaledImage __typename } description duration __typename } __typename } activePlaylist trackingData { programName seasonName episodeName episodeNr episodeBroadcastDate __typename } likedByMe likes __typename}fragment pagecontent on Pagecontent { title pagecontent { ...pagecontentItem __typename } __typename}fragment pagecontentItem on PagecontentItem { ... on Header { ...header __typename } ... on Highlight { ...highlight __typename } ... on Jumbotron { ...jumbotron __typename } ... on MultiHighlight { ...multiHighlight __typename } ... on Swimlane { ...swimlane __typename } __typename}fragment highlight on Highlight { type title description link linkItem { ... on Game { id __typename } ... on Program { id __typename } ... on Story { id __typename } ... on Theme { id __typename } ... on Video { id __typename } __typename } buttonText imageUrl size fullWidthEnabled fullWidthImageUrl fullWidthBackgroundUrl __typename}fragment jumbotron on Jumbotron { linkText link backgroundImageUrl showButtonTime onTime offTime type __typename}fragment multiHighlight on MultiHighlight { type highlights { type title description link linkItem { ... on Game { id __typename } ... on Program { id __typename } ... on Story { id __typename } ... on Theme { id __typename } ... on Video { id __typename } __typename } buttonText imageUrl size __typename } __typename}fragment swimlane on Swimlane { id type title style items { ... on Video { ...swimlaneVideo __typename } ... on Theme { ...swimlaneTheme __typename } ... on Game { ...swimlaneGame __typename } ... on Story { ...swimlaneStory __typename } ... on Program { ...swimlaneProgram __typename } ... on Peetie { ...swimlanePeetie __typename } __typename } __typename}fragment swimlaneVideo on Video { id type title imageUrl titleSwimlane subtitleSwimlane duration __typename}fragment swimlaneTheme on Theme { id type title accentColor imageUrl logoUrl animation __typename}fragment swimlaneGame on Game { id type title imageUrl gameType __typename}fragment swimlaneStory on Story { id type title imageUrl topReaction { ...storyReaction __typename } __typename}fragment swimlaneProgram on Program { id type title accentColor imageUrl logoUrl posterUrl __typename}fragment swimlanePeetie on Peetie { id alt type imageUrl imageUrls movies { alt position gifUrl webmUrl mp3Url gifFrames __typename } __typename}fragment scaledImage on ScaledImage { small medium large __typename}fragment vrtPlayerFragment on VrtPlayerConfig { mediaReference aggregatorUrl clientCode aspectRatio __typename}fragment header on Header { type title description imageUrl logoUrl height __typename}fragment postFragment on Post { id postedOn author { name avatarUrl __typename } message media { ... on PostMediaVideo { type vrtPlayer { ...vrtPlayerFragment __typename } scaledPoster { ...scaledImage __typename } __typename } ... on PostMediaPicture { type scaledImage { ...scaledImage __typename } __typename } __typename } paginatedComments(first: $feedPostCommentPageSize) { edges { node { ...postCommentFragment __typename } cursor __typename } totalCount next __typename } reactions { id count __typename } myReaction sticky type __typename}fragment ctaPostFragment on CtaPost { id title description ctaLinkItem { ... on Game { id type __typename } ... on Program { id type __typename } ... on Story { id type __typename } ... on Theme { id type __typename } ... on Video { id type __typename } __typename } ctaText ctaAlt type __typename}fragment postCommentFragment on PostComment { postId commentId author { name avatarUrl __typename } message postedOn mine __typename}fragment storyReaction on StoryReaction { name count __typename}"
+        graph_json = {
+            "operationName": operation,
+            "variables": {
+                "id": item_id,
+                "feedPostPageSize": 10,
+                "feedPostCommentPageSize": 3
+            },
+            "query": graph_query
+        }
+        return graph_json

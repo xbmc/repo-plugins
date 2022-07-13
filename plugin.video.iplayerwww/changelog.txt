@@ -1,3 +1,6 @@
+v4.0.5
+Adapted to new mediaselector URL.
+
 v4.0.4
 Removed http streams for video. Now only https streams will be available.
 

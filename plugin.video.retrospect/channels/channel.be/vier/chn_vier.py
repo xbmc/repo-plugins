@@ -418,7 +418,7 @@ class Channel(chn_class.Channel):
         item.thumb = result_set["image"]
         item.isGeoLocked = result_set.get("isProtected")
 
-        date_time = DateHelper.get_date_from_posix(result_set["createdDate"])
+        date_time = DateHelper.get_date_from_posix(int(result_set["createdDate"]))
         item.set_date(date_time.year, date_time.month, date_time.day, date_time.hour,
                       date_time.minute,
                       date_time.second)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.5.6+matrix.1"
+        version="5.5.7+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -122,21 +122,21 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.5.6 - Changelog - 2022-05-27[/B]
+        <news>[B]Retrospect v5.5.7 - Changelog - 2022-07-12[/B]
 
-This is a small service release fixing some channels (and related code).
+This minor update mainly fixes NPO and KetNet channels.
 
 [B]Framework related[/B]
-* Fixed: Make the season/episode setting a bit more rigid (See #1638).
+_None_
 
 [B]GUI/Settings/Language related[/B]
 _None_
 
 [B]Channel related[/B]
-* Fixed: Some VTT subtitles have guids (with hyphens) as lines (Fixes #1635).
-* Fixed: Vier.be broke if no episode number was present (Fixes #1638).
-* Fixed: KetNet broke due to API changes.
-* Removed: ViaFree channels as the moved to Pluto.TV.
+* Fixed: NPO Subtitles (Fixes #1644).
+* Fixed: Full listing of NPO.
+* Fixed: Live Radio for NPO.
+* Fixed: KetNet listings.
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

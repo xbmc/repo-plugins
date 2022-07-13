@@ -689,8 +689,8 @@ class ContentApi:
             season=data.get('seasonNumber'),
             season_uuid=season_uuid,
             number=episode_number,
-            aired=datetime.fromtimestamp(data.get('createdDate')),
-            expiry=datetime.fromtimestamp(data.get('unpublishDate')) if data.get('unpublishDate') else None,
+            aired=datetime.fromtimestamp(int(data.get('createdDate'))),
+            expiry=datetime.fromtimestamp(int(data.get('unpublishDate'))) if data.get('unpublishDate') else None,
             rating=data.get('parentalRating'),
             stream=data.get('path'),
         )

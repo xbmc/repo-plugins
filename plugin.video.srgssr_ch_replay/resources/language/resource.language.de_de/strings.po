@@ -9,8 +9,8 @@ msgid "SRF"
 msgstr "SRF"
 
 msgctxt "#30015"
-msgid "SRF Info"
-msgstr "SRF Info"
+msgid "SwissInfo"
+msgstr "SwissInfo"
 
 msgctxt "#30016"
 msgid "RTS"
@@ -29,24 +29,52 @@ msgid "# (numbers & special characters)"
 msgstr "# (Nummern & Sonderzeichen)"
 
 msgctxt "#30020"
-msgid "Older episodes (page {0} of {1})"
-msgstr "Ältere Ausstrahlungen (Seite {0} von {1})"
+msgid "Page {0}{1} >> more results"
+msgstr "Seite {0}{1} >> mehr Resultate"
 
 msgctxt "#30021"
-msgid "Search TV shows"
-msgstr "Suche nach Sendungen"
+msgid "All TV shows"
+msgstr "Alle Sendungen"
 
 msgctxt "#30022"
-msgid "Enter a TV show name to search for"
-msgstr "Einen Sendungsname eingeben für die Suche"
+msgid "TV Shows by letters"
+msgstr "Sendungen nach Buchstaben"
+
+msgctxt "#30023"
+msgid "Topics"
+msgstr "Nach Thema"
+
+msgctxt "#30024"
+msgid "Trending"
+msgstr "Aktuelle Sendungen"
+
+msgctxt "#30025"
+msgid "Search"
+msgstr "Suchen"
+
+msgctxt "#30031"
+msgid "Search TV shows"
+msgstr "Sendungen suchen"
+
+msgctxt "#30032"
+msgid "Search broadcasts"
+msgstr "Ausstrahlungen suchen"
+
+msgctxt "#30096"
+msgid "Incorrect '{0} API' credentials"
+msgstr "Falsche '{0} API' Zugangsdaten"
+
+msgctxt "#30097"
+msgid "Please check they are correctly entered in the add-on settings"
+msgstr "Bitte sicherstellen, dass die Zugangsdaten korrekt in den Add-on Einstellungen eingegeben wurden"
 
 msgctxt "#30098"
 msgid "In order to use this add-on a consumer key & secret in your add-on settings must be provided.[CR]See instructions: [B]https://github.com/ManBehindMooN/[CR]kodi_plugin_video_srgssr_ch_replay[/B][CR][CR]Sorry for the inconvenience."
 msgstr "Um das Add-on benutzen zu können braucht es Consumer Keys & Secrets in den Add-on Settings.[CR]Instruktionen unter: [B]https://github.com/ManBehindMooN/[CR]kodi_plugin_video_srgssr_ch_replay[/B][CR][CR]Sorry für die Umstände."
 
 msgctxt "#30099"
-msgid "Unexpected error"
-msgstr "Unerwarteter Fehler"
+msgid "API credentials missing"
+msgstr "API Zugangsdaten fehlen"
 
 msgctxt "#30100"
 msgid "SRG SSR API"
@@ -77,8 +105,20 @@ msgid "General"
 msgstr "Allgemein"
 
 msgctxt "#30201"
-msgid "Number of episodes shown per page"
-msgstr "Abzahl Austrahlungen pro Seite anzeigen"
+msgid "Default Business Unit"
+msgstr "Standard Business Unit (Kanal)"
+
+msgctxt "#30202"
+msgid "All"
+msgstr "Alle"
+
+msgctxt "#30203"
+msgid "Number of broadcasts per page"
+msgstr "Abzahl Ausstrahlungen pro Seite"
+
+msgctxt "#30204"
+msgid "Enable InputStream Adaptive"
+msgstr "Inputstream Adaptive einschalten"
 
 msgctxt "#30900"
 msgid "Experimental"
@@ -87,7 +127,3 @@ msgstr "Experimentell"
 msgctxt "#30901"
 msgid "Show inactive TV shows"
 msgstr "Inaktive Sendungen anzeigen"
-
-msgctxt "#30902"
-msgid "Disable letter menu"
-msgstr "Buchstabenauswahl deaktivieren"

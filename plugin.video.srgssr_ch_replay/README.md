@@ -3,7 +3,7 @@
 # Unofficial SRG SSR Replay
 
 ## Add-on description
-The "Unofficial SRG SSR Replay" add-on implements the new [SRG SSR API](https://developer.srgssr.ch/apis) in order to support more channels and upcoming features. Right now all the official channels (SRF, SRF Info, RTS, RSI and RTR) are supported and these TV shows can be listed and streamed. Some shows might be regional locked and can only be played by Swiss IP addresses.
+The "Unofficial SRG SSR Replay" add-on implements the new [SRG SSR API](https://developer.srgssr.ch/apis) in order to support more channels and upcoming features. Right now all the official channels (SRF, SwissInfo, RTS, RSI and RTR) are supported and these TV shows can be listed and streamed. Some shows might be regional locked and can only be played by Swiss IP addresses.
 
 Since version 3.0.0 the add-on is in the official [Kodi 19 (Matrix) repository](https://github.com/xbmc/repo-plugins/tree/matrix/plugin.video.srgssr_ch_replay) / [Kodi Add-on Page](https://kodi.tv/addons/matrix/plugin.video.srgssr_ch_replay).
 

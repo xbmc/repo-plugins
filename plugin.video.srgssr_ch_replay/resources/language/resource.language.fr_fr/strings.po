@@ -6,124 +6,124 @@ msgstr ""
 
 msgctxt "#30014"
 msgid "SRF"
-msgstr ""
+msgstr "SRF"
 
 msgctxt "#30015"
 msgid "SwissInfo"
-msgstr ""
+msgstr "SwissInfo"
 
 msgctxt "#30016"
 msgid "RTS"
-msgstr ""
+msgstr "RTS"
 
 msgctxt "#30017"
 msgid "RSI"
-msgstr ""
+msgstr "RSI"
 
 msgctxt "#30018"
 msgid "RTR"
-msgstr ""
+msgstr "RTR"
 
 msgctxt "#30019"
 msgid "# (numbers & special characters)"
-msgstr ""
+msgstr "# (Nombres et caractères spéciaux)"
 
 msgctxt "#30020"
 msgid "Page {0}{1} >> more results"
-msgstr ""
+msgstr "Page {0}{1} >> plus de résultats"
 
 msgctxt "#30021"
 msgid "All TV shows"
-msgstr ""
+msgstr "Toutes les émissions"
 
 msgctxt "#30022"
 msgid "TV Shows by letters"
-msgstr ""
+msgstr "Émissions par lettre"
 
 msgctxt "#30023"
 msgid "Topics"
-msgstr ""
+msgstr "Thèmes"
 
 msgctxt "#30024"
 msgid "Trending"
-msgstr ""
+msgstr "Vidéos Populaires"
 
 msgctxt "#30025"
 msgid "Search"
-msgstr ""
+msgstr "Recherche"
 
 msgctxt "#30031"
 msgid "Search TV shows"
-msgstr ""
+msgstr "Rechercher une émission"
 
 msgctxt "#30032"
 msgid "Search broadcasts"
-msgstr ""
+msgstr "Rechercher un épisode"
 
 msgctxt "#30096"
 msgid "Incorrect '{0} API' credentials"
-msgstr ""
+msgstr "Identifiants de l'API {0} incorrects. "
 
 msgctxt "#30097"
 msgid "Please check they are correctly entered in the add-on settings"
-msgstr ""
+msgstr "Veuillez contrôler qu'il sont correctement entrés dans les paramètres de l'add-on"
 
 msgctxt "#30098"
 msgid "In order to use this add-on a consumer key & secret in your add-on settings must be provided.[CR]See instructions: [B]https://github.com/ManBehindMooN/[CR]kodi_plugin_video_srgssr_ch_replay[/B][CR][CR]Sorry for the inconvenience."
-msgstr ""
+msgstr "Pour utiliser l'add-on, une clé et secret de l'API doivent être configurés dans les paramètres de l'add-on.[CR]Voir les instructions sur [B]https://github.com/ManBehindMooN/[CR]kodi_plugin_video_srgssr_ch_replay[/B][CR][CR]. Désolé pour le dérangement."
 
 msgctxt "#30099"
 msgid "API credentials missing"
-msgstr ""
+msgstr "Identifiants de l'API manquants"
 
 msgctxt "#30100"
 msgid "SRG SSR API"
-msgstr ""
+msgstr "SRG SSR API"
 
 msgctxt "#30101"
 msgid "Consumer Key"
-msgstr ""
+msgstr "Consumer Key"
 
 msgctxt "#30102"
 msgid "Consumer Secret"
-msgstr ""
+msgstr "Consumer Secret"
 
 msgctxt "#30103"
 msgid "Enable subtitle"
-msgstr ""
+msgstr "Activer les sous-titres"
 
 msgctxt "#30104"
 msgid "Subtitles Consumer Key"
-msgstr ""
+msgstr "Consumer Key des sous-titres"
 
 msgctxt "#30105"
 msgid "Subtitles Consumer Secret"
-msgstr ""
+msgstr "Consumer Secret des sous-titres"
 
 msgctxt "#30200"
 msgid "General"
-msgstr ""
+msgstr "Général"
 
 msgctxt "#30201"
 msgid "Default Business Unit"
-msgstr ""
+msgstr "Business Unit par défaut"
 
 msgctxt "#30202"
 msgid "All"
-msgstr ""
+msgstr "Tout"
 
 msgctxt "#30203"
 msgid "Number of broadcasts per page"
-msgstr ""
+msgstr "Nombre d'épisodes affichés par page"
 
 msgctxt "#30204"
 msgid "Enable InputStream Adaptive"
-msgstr ""
+msgstr "Activer l'Inputstream Adaptive"
 
 msgctxt "#30900"
 msgid "Experimental"
-msgstr ""
+msgstr "Expérimental"
 
 msgctxt "#30901"
 msgid "Show inactive TV shows"
-msgstr ""
+msgstr "Afficher les émissions inactives"

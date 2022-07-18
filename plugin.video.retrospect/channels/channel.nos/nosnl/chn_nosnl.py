@@ -101,7 +101,7 @@ class Channel(chn_class.Channel):
         live_title = LanguageHelper.get_localized_string(LanguageHelper.LiveTv)
 
         cats = {
-            "Meest Bekeken": "https://api.nos.nl/mobile/videos/most-viewed/phone.json",
+            # "Meest Bekeken": "https://api.nos.nl/mobile/videos/most-viewed/phone.json",
             "Nieuws": "https://api.nos.nl/nosapp/v3/items?mainCategories=nieuws&types=video&limit={0}".format(self.__pageSize),
             "Sport": "https://api.nos.nl/nosapp/v3/items?mainCategories=sport&types=video&limit={0}".format(self.__pageSize),
             "Alles": "https://api.nos.nl/nosapp/v3/items?types=video&limit={0}".format(self.__pageSize),

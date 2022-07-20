@@ -1,0 +1,263 @@
+# Kodi Media Center language file
+# Addon Name: Picta
+# Addon id: plugin.video.picta
+# Addon Provider: crmartinez, oleksis
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Spanish (http://www.transifex.com/projects/p/xbmc-addons/language/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Settings - General
+msgctxt "#30001"
+msgid "General"
+msgstr "General"
+
+msgctxt "#30011"
+msgid "Search"
+msgstr "Buscar"
+
+msgctxt "#30012"
+msgid "Items per page"
+msgstr "Elementos por página"
+
+msgctxt "#30013"
+msgid "History size"
+msgstr "Tamaño de Historial"
+
+msgctxt "#30014"
+msgid "Template"
+msgstr "Plantilla"
+
+msgctxt "#30015"
+msgid "Sort by"
+msgstr "Ordenar por"
+
+msgctxt "#300150"
+msgid "Relevance"
+msgstr "Relevancia"
+
+msgctxt "#300151"
+msgid "Popularity"
+msgstr "Popularidad"
+
+msgctxt "#300152"
+msgid "Most recent"
+msgstr "Más reciente"
+
+msgctxt "#300153"
+msgid "Alphabetical A-Z"
+msgstr "Alfabético A-Z"
+
+msgctxt "#300154"
+msgid "Alphabetical Z-A"
+msgstr "Alfabético Z-A"
+
+msgctxt "#300155"
+msgid "Longest"
+msgstr "Más larga"
+
+msgctxt "#300156"
+msgid "Shortest"
+msgstr "Más corta"
+
+msgctxt "#30020"
+msgid "Video"
+msgstr "Vídeo"
+
+msgctxt "#30021"
+msgid "Streaming"
+msgstr "Flujo"
+
+msgctxt "#30022"
+msgid "AOMedia Video 1 (AV1)"
+msgstr "AOMedia Video 1 (AV1)"
+
+msgctxt "#30023"
+msgid "Subtitles"
+msgstr "Subtítulo"
+
+# Settings - Advanced
+msgctxt "#30051"
+msgid "Advanced"
+msgstr "Avanzado"
+
+msgctxt "#30070"
+msgid "API"
+msgstr "API"
+
+msgctxt "#30071"
+msgid "Access Token"
+msgstr "Token de Acceso"
+
+msgctxt "#30080"
+msgid "Cache"
+msgstr "Cache"
+
+msgctxt "#30081"
+msgid "Clear cache"
+msgstr "Limpiar Cache"
+
+# GUI - Root
+msgctxt "#30101"
+msgid "Search"
+msgstr "Buscar"
+
+msgctxt "#30102"
+msgid "Featured"
+msgstr "Características"
+
+msgctxt "#30103"
+msgid "Trending"
+msgstr "Popularidad"
+
+msgctxt "#30104"
+msgid "Categories"
+msgstr "Categoría"
+
+msgctxt "#30105"
+msgid "Profile"
+msgstr "Perfil"
+
+msgctxt "#30108"
+msgid "Settings"
+msgstr "Ajustes"
+
+msgctxt "#30109"
+msgid "Log in"
+msgstr "Entrar"
+
+msgctxt "#30110"
+msgid "Log out"
+msgstr "Salir"
+
+# GUI - Auth
+msgctxt "#30151"
+msgid "Authorization"
+msgstr "Autorización"
+
+msgctxt "#30152"
+msgid "1. Open the link {}"
+msgstr "1. Abrir el enlace {}"
+
+msgctxt "#30153"
+msgid "2. Log in and enter the code {}"
+msgstr "2. Entrar e introduce el código {}"
+
+msgctxt "#30154"
+msgid "3. Authorize the app"
+msgstr "3. Autorizar la App"
+
+msgctxt "#30155"
+msgid "4. Confirm with {}"
+msgstr "4. Confirmar con {}"
+
+msgctxt "#30156"
+msgid "You are now logged in as {}!"
+msgstr "No se ha registrado como {}"
+
+# GUI - Search
+msgctxt "#30201"
+msgid "New search"
+msgstr "Nueva búsqueda"
+
+msgctxt "#30211"
+msgid "People"
+msgstr "Persona"
+
+msgctxt "#30212"
+msgid "Channels"
+msgstr "Canales"
+
+msgctxt "#30213"
+msgid "Videos"
+msgstr "Videos"
+
+msgctxt "#30213"
+msgid "Groups"
+msgstr "Grupos"
+
+# GUI - Info
+msgctxt "#30401"
+msgid "Picta account"
+msgstr "Cuenta de Picta"
+
+# GUI - Settings
+msgctxt "#30501"
+msgid "Cache cleared"
+msgstr "Limpiar cache"
+
+# GUI - Context menus
+msgctxt "#30601"
+msgid "Remove"
+msgstr "Eliminar"
+
+msgctxt "#30602"
+msgid "Clear"
+msgstr "Limpiar"
+
+# GUI - Profile
+msgctxt "#30701"
+msgid "Followers"
+msgstr "Seguidores"
+
+msgctxt "#30702"
+msgid "Following"
+msgstr "Siguiendo"
+
+msgctxt "#30703"
+msgid "Likes"
+msgstr "Me gusta"
+
+msgctxt "#30704"
+msgid "Albums"
+msgstr "Álbums"
+
+msgctxt "#30705"
+msgid "Watch Later"
+msgstr "Mirar luego"
+
+# GUI - Generic
+msgctxt "#30901"
+msgid "Channels"
+msgstr "Canales"
+
+msgctxt "#30902"
+msgid "Documentaries"
+msgstr "Documentales"
+
+msgctxt "#30903"
+msgid "Films"
+msgstr "Películas"
+
+msgctxt "#30904"
+msgid "Musicals"
+msgstr "Musicales"
+
+msgctxt "#30905"
+msgid "Series"
+msgstr "Series"
+
+msgctxt "#30910"
+msgid "Password"
+msgstr "Contraseña"
+
+msgctxt "#30911"
+msgid "Invalid password"
+msgstr "Contraseña inválida"
+
+msgctxt "#30912"
+msgid "Whoops! That password is invalid"
+msgstr "Whoops! La contraseña es inválida"
+
+msgctxt "#30913"
+msgid "Next page"
+msgstr "Próxima página"

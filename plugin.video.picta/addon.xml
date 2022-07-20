@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon
+    id="plugin.video.picta"
+    version="2.1.0"
+    name="Picta"
+    provider-name="crmartinez, oleksis">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.12.4"/>
+        <import addon="inputstream.adaptive" version="2.6.14"/>
+        <import addon="inputstream.ffmpegdirect" version="1.19.2"/>
+        <import addon="script.module.inputstreamhelper" version="0.2.2" optional="true"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Picta Plataforma de Contenidos Audiovisuales de Cuba</summary>
+        <description lang="en_GB">Video plugin for Kodi mediacenter for www.picta.cu.</description>
+        <disclaimer lang="en_GB">Videos are provided by www.picta.cu.</disclaimer>
+        <platform>all</platform>
+        <license>MIT</license>
+        <website>https://www.picta.cu</website>
+        <source>https://github.com/oleksis/plugin.video.picta/tree/kodi_19</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot-01.png</screenshot>
+        </assets>
+        <news>2.1.0 (2021-07-20)
+Add new Search item
+        </news>
+    </extension>
+</addon>

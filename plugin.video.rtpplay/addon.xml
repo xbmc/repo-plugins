@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rtpplay" name="RTP Play" version="6.0.1" provider-name="enen92, guipenedo">
+<addon id="plugin.video.rtpplay" name="RTP Play" version="6.0.2" provider-name="enen92, guipenedo">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.routing" version="0.2.0"/>
@@ -22,8 +22,8 @@
         <email>enen92@kodi.tv</email>
         <source>https://github.com/enen92/plugin.video.rtpplay</source>
         <news>
-            Version 6.0.1 (17/04/2022)
-                - Fixed auth after mobile api changes (@guipenedo)
+            Version 6.0.2 (20/07/2022)
+                - Minor fix to prefer hls over dash for now (until we have support for ISA)
         </news>
         <disclaimer lang="en_GB">The plugin is unofficial and not endorsed by RTP. Expect it to break. </disclaimer>
         <disclaimer lang="pt_PT">Este plugin não é oficial nem desenvolvido pela RTP. </disclaimer>

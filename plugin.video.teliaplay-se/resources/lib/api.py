@@ -44,11 +44,11 @@ class TeliaPlay():
        return {
             "getMainMenu":      "f9c1eb6c91def27ee800da2296922d3798a54a8af32f79f25661afb621f1b45d",
             "search":           "dc9d71dbf7da4f5e5854d9e58e33274379581e07c353f8868cf0d7988c1330de",
-            "getPage":          "9bb1e827055ad3fa20a0a3bf652605f851dcdd34401ae24a3aea4b7b5ae257c4",
+            "getPage":          "c1e11abcff0c056d1b6ff555defb7b5fe57d0717af0ce0dcac6cbfe53eaf760c",
             "getTvChannels":    "a16edac021bc6892ce4a17560cd364c716e1dd086fc4bd2a11e0b031577b3af7",
             "getTvChannel":     "9af1a674ce9482ca4d89b1bb623a5b69b725cf3c9c6565a93a6c7b04f443891b",
-            "getStorePage":     "e2297df5af0241be95800fbb6758b502808cd00de3e10fdaed865e308e499f4e",
-            "getPanel":         "299f78202946997a0e56f9c4fa4360300f7404fdbe3fe77580bb3003843568b1",
+            "getStorePage":     "586351a90105207a4f90de224771703532a30f42fb9ed93b2253ec6666d7c387",
+            "getPanel":         "5158ced8dfeb260635628a22a0069c6aad7e2573a74953c88e00f90dcff1b59b",
             "getSeries":        "4bbb65b9bf621902b3f3dc30ae036ff36d9fa57f024f6e3bd10cb55c57f0033d",
             "getSeason":        "0772731aec9d8b4aecddb3d2dfd1743b32b1db8b0f6d8a03f37bf7ce6c032688",
             "addToMyList":      "a8369da660da6f45e0eabd53756effcd4c40668f1794a853c298c29e7903c7f9",
@@ -479,7 +479,7 @@ class TeliaPlay():
             request, headers=headers
         ).json()
         error_check(response_json)
-        return response_json["data"]["season"]["episodes"]["episodeItems"]
+        return response_json["data"]["season"]["episodes"]["episodeList"]
 
     def validate_stream(self):
         request = {
@@ -666,7 +666,17 @@ class TeliaPlay():
             request, headers=headers, payload=payload
         ).json()
         error_check(response_json)
+        streams = response_json["streams"]
 
+        if stream_type == "trailer":
+            for stream in streams:
+                if "/trailer/" in stream["url"]:
+                    return stream
+
+        if stream_type == "rental" or stream_type == "vod":
+            for stream in streams:
+                if "/vod/" in stream["url"]:
+                    return stream
         try:
             return response_json["streams"][1]
         except IndexError:

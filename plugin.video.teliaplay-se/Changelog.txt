@@ -24,3 +24,8 @@
 - Updated graphql hashes
 - Fixed search menu
 - Fixed store panels
+
+1.2.5 [20220729]
+- Fixed Trailers
+- Fixed season menu
+- Updated graphql hashes

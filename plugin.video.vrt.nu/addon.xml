@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.5.12+matrix.1" provider-name="Martijn Moreel, dagwieers, mediaminister">
+<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.5.13+matrix.1" provider-name="Martijn Moreel, dagwieers, mediaminister">
   <requires>
     <import addon="resource.images.studios.white" version="0.0.22"/>
     <import addon="script.module.beautifulsoup4" version="4.6.2"/>
@@ -42,6 +42,9 @@
     <website>https://github.com/add-ons/plugin.video.vrt.nu/wiki</website>
     <source>https://github.com/add-ons/plugin.video.vrt.nu</source>
     <news>
+v2.5.13 (2022-08-05)
+- Support 1080p video on demand
+
 v2.5.12 (2022-05-25)
 - Fix playing from TV guide
 - Fix listing programs with a single char in their name

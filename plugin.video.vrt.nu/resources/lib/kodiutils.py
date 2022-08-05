@@ -742,7 +742,10 @@ def themecolour(kind):
 def colour(text):
     """Convert stub color bbcode into colors from the settings"""
     theme = get_setting('colour_theme', 'dark')
-    text = text.format(**COLOUR_THEMES.get(theme))
+    try:
+        text = text.format(**COLOUR_THEMES.get(theme))
+    except KeyError:
+        log_error('BBCode colouring failed.')
     return text
 
 

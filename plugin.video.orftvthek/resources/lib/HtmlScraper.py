@@ -734,6 +734,55 @@ class htmlScraper(Scraper):
             showDialog((self.translation(30052)))
             sys.exit()
 
+    # Returns Livestream Specials
+    def getLiveSpecials(self):
+        html = fetchPage({'link': self.__urlLive})
+        wrapper = parseDOM(html.get("content"), name='main', attrs={'class': 'main'})
+        section = parseDOM(wrapper, name='div', attrs={'class': 'b-special-livestreams-container.*?'})
+        items = parseDOM(section, name='div', attrs={'class': 'b-intro-teaser.*?'})
+        try:
+            xbmcaddon.Addon('inputstream.adaptive')
+        except RuntimeError:
+            self.html2ListItem("[COLOR red][I] -- %s -- [/I][/COLOR]" % self.translation(30067), self.defaultbanner, "", "", "", "", "Info", "addons://user/kodi.inputstream", None, True, False)
+
+        if items:
+            debugLog("Found %d Livestream Channels" % len(items))
+        for item in items:
+            channel = "Special"
+
+            debugLog("Processing %s Livestream" % channel)
+
+            figure = parseDOM(item, name='div', attrs={'class': 'img-container'}, ret=False)
+            image = parseDOM(figure, name='img', attrs={}, ret='src')
+            image = replaceHTMLCodes(image[0])
+
+            time = parseDOM(item, name='span', attrs={'class': 'time'}, ret=False)
+            time = replaceHTMLCodes(time[0])
+            time = stripTags(time)
+
+            title = parseDOM(item, name='h4', attrs={'class': 'special-livestream-headline.*?'})
+            title = replaceHTMLCodes(title[0])
+
+            desc = parseDOM(item, name='p', attrs={'class': 'description.*?'}, ret=False)
+            desc = replaceHTMLCodes(desc[0])
+            desc = stripTags(desc)
+
+            link = parseDOM(figure, name='a', attrs={}, ret="href")
+            link = replaceHTMLCodes(link[0])
+
+            online = parseDOM(item, name='span', attrs={'class': 'status-online'})
+            if len(online):
+                online = True
+            else:
+                online = False
+
+            restart = parseDOM(item, name='span', attrs={'class': 'is-restartable'})
+            if len(restart):
+                restart = True
+            else:
+                restart = False
+            self.buildLivestream(title, link, time, restart, channel, image, online, desc)
+
     # Returns Live Stream Listing
     def getLiveStreams(self):
         html = fetchPage({'link': self.__urlBase})
@@ -796,8 +845,9 @@ class htmlScraper(Scraper):
                         self.buildLivestream(bundesland_title, bundesland_link, "", True, channel, bundesland_image, True)
             else:
                 debugLog("Channel %s was skipped" % channel)
+        self.getLiveSpecials()
 
-    def buildLivestream(self, title, link, time, restart, channel, banner, online):
+    def buildLivestream(self, title, link, time, restart, channel, banner, online, description = ""):
         html = fetchPage({'link': link})
         debugLog("Loading Livestream Page %s for Channel %s" % (link, channel))
         container = parseDOM(html.get("content"), name='div', attrs={'class': "player_viewport.*?"})
@@ -808,6 +858,11 @@ class htmlScraper(Scraper):
                 state = (self.translation(30019))
             else:
                 state = (self.translation(30020))
+                
+            if description:
+                description = "%s \n\n %s" % (description, state)
+            else:
+                description = state
 
             if time:
                 time_str = " (%s)" % time
@@ -844,10 +899,10 @@ class htmlScraper(Scraper):
                     uhd_final_title = "%s[UHD] - %s%s" % (channel, title, time_str)
 
                 if not drm_lic_url:
-                    self.html2ListItem(uhd_final_title, banner, "", state, time, channel, channel, generateAddonVideoUrl(uhd_streaming_url), None, False, True, uhdContextMenuItems)
+                    self.html2ListItem(uhd_final_title, banner, "", description, time, channel, channel, generateAddonVideoUrl(uhd_streaming_url), None, False, True, uhdContextMenuItems)
                 elif inputstreamAdaptive:
                     drm_video_url = generateDRMVideoUrl(uhd_streaming_url, drm_lic_url)
-                    self.html2ListItem(uhd_final_title, banner, "", state, time, channel, channel, drm_video_url, None, False, True, uhdContextMenuItems)
+                    self.html2ListItem(uhd_final_title, banner, "", description, time, channel, channel, drm_video_url, None, False, True, uhdContextMenuItems)
 
             if streaming_url:
                 contextMenuItems = []
@@ -861,10 +916,10 @@ class htmlScraper(Scraper):
                     final_title = "%s - %s%s" % (channel, title, time_str)
 
                 if not drm_lic_url:
-                    self.html2ListItem(final_title, banner, "", state, time, channel, channel, generateAddonVideoUrl(streaming_url), None, False, True, contextMenuItems)
+                    self.html2ListItem(final_title, banner, "", description, time, channel, channel, generateAddonVideoUrl(streaming_url), None, False, True, contextMenuItems)
                 elif inputstreamAdaptive:
                     drm_video_url = generateDRMVideoUrl(streaming_url, drm_lic_url)
-                    self.html2ListItem(final_title, banner, "", state, time, channel, channel, drm_video_url, None, False,
+                    self.html2ListItem(final_title, banner, "", description, time, channel, channel, drm_video_url, None, False,
                                        True, contextMenuItems)
 
     def getDRMLicense(self, data):

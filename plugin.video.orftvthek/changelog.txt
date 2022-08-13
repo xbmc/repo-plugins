@@ -1,3 +1,6 @@
+* 0.12.5
+ - added livestream specials for htmlscraper
+
 * 0.12.4
  - added header to drm license server request (fixes error 500 for drm content) 
 

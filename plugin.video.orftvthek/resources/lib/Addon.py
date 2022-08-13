@@ -249,7 +249,7 @@ def run():
                 debugLog("Video Url: %s" % stream_url)
                 debugLog("DRM License Url: %s" % lic_url)
                 play_item = xbmcgui.ListItem(path=stream_url, offscreen=True)
-                headers = "User-Agent=%s&Content-Type=text/xml" % Settings.userAgent()
+                headers = "User-Agent=%s&Content-Type=application/octet-stream" % Settings.userAgent()
 
                 play_item.setContentLookup(False)
                 play_item.setMimeType(input_stream_mime)

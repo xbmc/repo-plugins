@@ -3,6 +3,7 @@
 	<category label="30000">
 		<setting id="video_quality" type="labelenum" label="30001" values="480p|720p|1080p" default="480p" />
 		<setting id="timeout" type="number" label="30002" default="8"/>
+		<setting id="clear_cache" type="action" label="30207" action="RunPlugin(plugin://plugin.video.imdb.trailers/?action=clear)"/>
 		<setting id="DebugMode" type="bool" label="30007" default="false"/>
 		<setting label="30003" type="lsep"/>
 		<setting id="forceViewMode" type="bool" label="30004" default="false"/>

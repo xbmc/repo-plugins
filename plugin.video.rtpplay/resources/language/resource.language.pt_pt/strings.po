@@ -71,3 +71,11 @@ msgstr "TV em direto"
 msgctxt "#32013"
 msgid "Live Radio"
 msgstr "Radio em direto"
+
+msgctxt "#32014"
+msgid "Prefer inputstream.adaptive addon for playback"
+msgstr "Preferir addon inputstream.adaptive para reprodução"
+
+msgctxt "#32015"
+msgid "All programs"
+msgstr "Todos os programas"

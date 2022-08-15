@@ -250,6 +250,10 @@ class MenuList():
                     menu = submenu["timelineContent"]
                 elif submenu["__typename"] == "RentalsPanel":
                     menu = submenu["rentalsContent"]
+                elif submenu["__typename"] == "ShowcasePanel":
+                    menu = submenu["showcaseContent"]
+                elif submenu["__typename"] == "SingleFeaturePanel":
+                    self.play_stream(submenu["id"], "vod")
                 elif submenu["__typename"] == "StoresPanel":
                     menu = submenu["storesContent"]
                     self.play_stores_menu(menu["items"])
@@ -768,13 +772,13 @@ class MenuList():
     @logging
     def series_menu(self, series_id):
         series = self.telia_play.get_series(series_id)
-
         if not series:
             return
 
-        items = []
-
         media = series["suggestedEpisode"]
+        if not media:
+            return
+
         try:
             icon = urllib.parse.unquote(
                 series["images"]["backdrop16x9"]["source"]
@@ -857,6 +861,7 @@ class MenuList():
             is_folder = False
             is_playable = True
 
+        items = []
         self._add_folder_item(
             items, label, plugin_url, icon, fanart, info=description,
             is_folder=is_folder, is_playable=is_playable, genre=genre,
@@ -903,6 +908,7 @@ class MenuList():
 
         items = []
         for episode in episodes:
+            episode = episode["episode"]
             try:
                 icon = urllib.parse.unquote(
                     episode["images"]["showcard2x3"]["source"]

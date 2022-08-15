@@ -13,8 +13,11 @@ import datetime as dt
 
 from urllib.parse import urlencode
 
+from inputstreamhelper import Helper
+
 ADDON = xbmcaddon.Addon()
 ICON = ADDON.getAddonInfo("icon")
+PROTOCOL = "hls"
 logger = logging.getLogger(ADDON.getAddonInfo('id'))
 kodilogging.config()
 plugin = routing.Plugin()
@@ -93,7 +96,6 @@ def search_paged(input_text, page):
                                 url=plugin.url_for(search_paged,
                                                     input_text=input_text,
                                                     page=nextpage))
-        
         endOfDirectory(plugin.handle)
 
 
@@ -130,13 +132,19 @@ def live():
         end = dt.datetime.fromisoformat(onair["real_end_date_time_utc"])
         start = dt.datetime.fromisoformat(onair["real_date_time_utc"])
         now = dt.datetime.now(dt.timezone.utc)
-        progpercent = round(100 * (now - start).seconds / (end - start).seconds)
+
+        if (end - start).seconds > 0:
+            progpercent = round(100 * (now - start).seconds / (end - start).seconds)
+            progpercent = str(progpercent) + "%" if progpercent <= 100 else ''
+        else:
+            progpercent = ''
+
         progimg = img
 
         liz = ListItem("[B][COLOR blue]{}[/COLOR][/B] ({}) [B]{}[/B]".format(
             name,
             onair["title"],
-            str(progpercent) + "%" if progpercent <= 100 else '')
+            progpercent)
         )
         liz.setArt({"thumb": progimg,
                     "icon": progimg,
@@ -151,7 +159,8 @@ def live():
                 label=name,
                 channel=channel["channel_id"],
                 img=progimg,
-                prog=onair["title"]
+                prog=onair["title"],
+                content=content_type
             ), liz, False)
     endOfDirectory(plugin.handle)
 
@@ -160,6 +169,7 @@ def live_play():
     channel = plugin.args["channel"][0]
     name = plugin.args["label"][0]
     prog = plugin.args["prog"][0]
+    content_type = plugin.args["content"][0]
 
     icon = ICON
     if "img" in plugin.args:
@@ -173,8 +183,16 @@ def live_play():
     )
     liz.setArt({"thumb": icon, "icon": icon})
     liz.setProperty('IsPlayable', 'true')
-
-    liz.setPath("{}|{}".format(get_stream_url(channel[0]), urlencode(HEADERS)))
+    if kodiutils.get_setting_as_bool("use_isa") and not content_type == "radio":
+        is_helper = Helper(PROTOCOL)
+        if is_helper.check_inputstream():
+            liz.setProperty('inputstream', is_helper.inputstream_addon)
+            liz.setProperty('inputstream.adaptive.manifest_type', PROTOCOL)
+            liz.setProperty('inputstream.adaptive.stream_selection_type', 'adaptive')
+            liz.setProperty('inputstream.adaptive.stream_headers', urlencode(HEADERS))
+            liz.setPath(get_stream_url(channel[0]))
+    else:
+        liz.setPath("{}|{}".format(get_stream_url(channel[0]), urlencode(HEADERS)))
     setResolvedUrl(plugin.handle, True, liz)
 
 
@@ -182,8 +200,8 @@ def live_play():
 def programs():
     categories = rtpplayapi.get_categories()
 
-    addDirectoryItem(handle=plugin.handle, listitem=ListItem("Todos os Programas"),
-                     isFolder=True, url=plugin.url_for(programs_category, name="Todos os Programas", id=0, page=1))
+    addDirectoryItem(handle=plugin.handle, listitem=ListItem(kodiutils.get_string(32015)),
+                     isFolder=True, url=plugin.url_for(programs_category, name=kodiutils.get_string(32015), id=0, page=1))
 
     for i, name in categories.items():
         name = name
@@ -315,7 +333,16 @@ def programs_play():
 
     episode = rtpplayapi.get_episode(prog_id, episode_id)["assets"][0]
 
-    liz.setPath("{}|{}".format(get_stream_url(episode), urlencode(HEADERS)))
+    if kodiutils.get_setting_as_bool("use_isa"):
+        is_helper = Helper(PROTOCOL)
+        if is_helper.check_inputstream():
+            liz.setProperty('inputstream', is_helper.inputstream_addon)
+            liz.setProperty('inputstream.adaptive.manifest_type', PROTOCOL)
+            liz.setProperty('inputstream.adaptive.stream_selection_type', 'adaptive')
+            liz.setProperty('inputstream.adaptive.stream_headers', urlencode(HEADERS))
+            liz.setPath(get_stream_url(episode))
+    else:
+        liz.setPath("{}|{}".format(get_stream_url(episode), urlencode(HEADERS)))
 
     subtitles = get_subtitles(episode)
     if subtitles:

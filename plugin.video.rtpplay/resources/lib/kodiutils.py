@@ -84,9 +84,11 @@ def format_date(date):
 
 
 def get_stream_url(source):
-    if "hls_url" in source:
+    if "hls_url_new" in source:
+        return source["hls_url_new"]
+    elif "hls_url" in source:
         return source["hls_url"]
-    if "dash_stream_name" in source:
+    elif "dash_stream_name" in source:
         return source["dash_stream_name"]
     return source["stream"]["clean"]["standard"]
 

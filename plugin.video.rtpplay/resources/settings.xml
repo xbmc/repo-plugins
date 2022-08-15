@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
     <setting id="debug" type="bool" label="32003" default="false"/>
+    <setting id="use_isa" type="bool" label="32014" default="true"/>
 </settings>
 

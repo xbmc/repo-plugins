@@ -21,8 +21,9 @@ class StreamService:
     """Collect and prepare stream info for Kodi Player"""
 
     _VUPLAY_API_URL = 'https://api.vuplay.co.uk'
-    _VUALTO_API_URL = 'https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v2'
-    _CLIENT = 'vrtvideo@PROD'
+    _VUALTO_API_URL = 'https://media-services-public.vrt.be/media-aggregator/v2'
+    _VUALTO_TOKEN_URL = 'https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v2/tokens'
+    _CLIENT = 'vrtnu-web@PROD'
     _UPLYNK_LICENSE_URL = 'https://content.uplynk.com/wv'
     _INVALID_LOCATION = 'INVALID_LOCATION'
     _INCOMPLETE_ROAMING_CONFIG = 'INCOMPLETE_ROAMING_CONFIG'
@@ -98,6 +99,7 @@ class StreamService:
 
     def _get_api_data(self, video):
         """Create api data object from video dictionary"""
+        api_data = None
         video_url = video.get('video_url')
         video_id = video.get('video_id')
         publication_id = video.get('publication_id')
@@ -125,8 +127,8 @@ class StreamService:
             return None
 
         # Store required html data attributes
-        client = video_data.get('client') or self._CLIENT
-        media_api_url = video_data.get('mediaapiurl')
+        client = self._CLIENT
+        media_api_url = self._VUALTO_API_URL
         video_id = video_data.get('videoid')
         publication_id = video_data.get('publicationid', '')
         # Live stream or on demand
@@ -155,16 +157,15 @@ class StreamService:
             if data:
                 return data
 
-        token_url = api_data.media_api_url + '/tokens'
         if api_data.is_live_stream:
-            playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'live', token_url, roaming=roaming)
+            playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'live', self._VUALTO_TOKEN_URL, roaming=roaming)
         else:
-            playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'ondemand', token_url, roaming=roaming)
+            playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'ondemand', self._VUALTO_TOKEN_URL, roaming=roaming)
 
         # Construct api_url and get video json
         if not playertoken:
             return None
-        api_url = api_data.media_api_url + '/videos/' + api_data.publication_id + \
+        api_url = api_data.media_api_url + '/media-items/' + api_data.publication_id + \
             api_data.video_id + '?vrtPlayerToken=' + playertoken + '&client=' + api_data.client
 
         stream_json = get_url_json(url=api_url)

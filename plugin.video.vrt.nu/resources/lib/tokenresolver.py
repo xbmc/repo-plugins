@@ -263,12 +263,87 @@ class TokenResolver:
                 xvrttoken = self.get_token('X-VRT-Token', 'user')
             if xvrttoken is None:
                 return None
-            payload = dict(identityToken=xvrttoken)
+            player_info = self._generate_playerinfo()
+            payload = dict(
+                identityToken=xvrttoken,
+                playerInfo=player_info
+            )
             data = dumps(payload).encode()
         playertoken = get_url_json(url=url, headers=headers, data=data)
         if playertoken:
             return playertoken
         return None
+
+    @staticmethod
+    def _generate_playerinfo():
+        import time
+        from json import dumps
+        import base64
+        import hmac
+        import hashlib
+        import re
+
+        playerinfo = None
+        data = None
+
+        # Get data from player javascript
+        player_url = 'https://player.vrt.be/vrtnu/js/main.js'
+        response = open_url(player_url)
+        if response:
+            data = response.read().decode('utf-8')
+
+        if data:
+            # Extract JWT key id and secret
+            crypt_rx = re.compile(r'atob\(\"(==[A-Za-z0-9+/]*)\"')
+            crypt_data = re.findall(crypt_rx, data)
+            if not crypt_data:
+                return playerinfo
+
+            kid_source = crypt_data[0]
+            secret_source = crypt_data[-1]
+            kid = base64.b64decode(kid_source[::-1]).decode('utf-8')
+            secret = base64.b64decode(secret_source[::-1]).decode('utf-8')
+
+            # Extract player version
+            player_version = '2.4.1'
+            pv_rx = re.compile(r'playerVersion:\"(\S*)\"')
+            match = re.search(pv_rx, data)
+            if match:
+                player_version = match.group(1)
+
+            # Generate JWT
+            segments = []
+            header = dict(
+                alg='HS256',
+                kid=kid
+            )
+            payload = dict(
+                exp=time.time() + 1000,
+                platform='desktop',
+                app=dict(
+                    type='browser',
+                    name='Firefox',
+                    version='102.0'
+                ),
+                device='undefined (undefined)',
+                os=dict(
+                    name='Linux',
+                    version='x86_64'
+                ),
+                player=dict(
+                    name='VRT web player',
+                    version=player_version
+                )
+            )
+            json_header = dumps(header).encode()
+            json_payload = dumps(payload).encode()
+            segments.append(base64.urlsafe_b64encode(json_header).decode('utf-8').replace('=', ''))
+            segments.append(base64.urlsafe_b64encode(json_payload).decode('utf-8').replace('=', ''))
+            signing_input = '.'.join(segments).encode()
+            signature = hmac.new(secret.encode(), signing_input, hashlib.sha256).digest()
+            segments.append(base64.urlsafe_b64encode(signature).decode('utf-8').replace('=', ''))
+            playerinfo = '.'.join(segments)
+        return playerinfo
 
     def delete_tokens(self):
         """Delete all cached tokens"""

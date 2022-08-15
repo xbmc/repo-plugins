@@ -59,6 +59,9 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.13 (2022-08-05)
+- Support 1080p video on demand (@mediaminister)
+
 ### v2.5.12 (2022-05-25)
 - Fix playing from TV guide (@mediaminister)
 - Fix listing programs with a single char in their name (@mediaminister)

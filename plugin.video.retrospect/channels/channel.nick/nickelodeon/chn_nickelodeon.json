@@ -1,0 +1,66 @@
+{
+  "channels": [
+    {
+      "guid": "8D4EBAE8-F3C6-11DD-92EE-F2FE55D89593",
+      "name": "Nickelodeon",
+      "description": {
+        "en": "The Dutch Nickelodeon channel with all your favorite episodes and clips from shows like SpongeBob, Henry Danger, De Thundermans, Victorious, iCarly and more.",
+        "nl": "Hier vind je nieuwe afleveringen van al je favoriete series en cartoons. Bekijk gratis online videos van al je favoriete Nickelodeon shows SpongeBob, Henry Danger, De Thundermans, Victorious, iCarly en nog veel meer!"
+      },
+      "icon": "nickelodeonlarge.png",
+      "category": "Kids",
+      "channelcode": "nickelodeon",
+      "sortorder": 22,
+      "language": "nl",
+      "poster": "nickposter.png",
+      "fanart": "nickfanart.jpg"
+    },
+    {
+      "guid": "47AA717E-F919-11E1-977F-0DEC6188709B",
+      "name": "Nickelodeon (Norge)",
+      "description": {
+        "en": "The Norwegian Nickelodeon channel with episodes and clips from your favorite shows.",
+        "no": "Sendinger fra Nickelodeon.no. Her finner du alle dine favoritt TV-serier og TV-programmer."
+      },
+      "icon": "nickelodeonlarge.png",
+      "category": "Kids",
+      "channelcode": "nickno",
+      "sortorder": 22,
+      "language": "no",
+      "poster": "nickposter.png",
+      "fanart": "nickfanart.jpg",
+      "ignore": true
+    },
+    {
+      "guid": "7C52452A-F2F9-11DD-BE3F-3F7356D89593",
+      "name": "MTV.nl",
+      "description": {
+        "en": "Episodes and videos from MTV.nl.",
+        "nl": "Afleveringen en video's van MTV.nl."
+      },
+      "icon": "mtvnllarge.png",
+      "category": "Video",
+      "channelcode": "mtvnl",
+      "sortorder": 20,
+      "language": "nl",
+      "fanart": "mtvfanart2.jpg",
+      "poster": "mtvposter.png"
+    },
+    {
+      "guid": "55635AAA-183C-11E2-ABEC-36706188709B",
+      "name": "MTV.de",
+      "description": {
+        "en": "Episodes and videos from MTV.de.",
+        "de": "Episoden und Videos von MTV.de.",
+        "nl": "Afleveringen en video's vna MTV.de."
+      },
+      "icon": "mtvnllarge.png",
+      "category": "Video",
+      "channelcode": "mtvde",
+      "sortorder": 20,
+      "language": "de",
+      "fanart": "mtvfanart2.jpg",
+      "poster": "mtvposter.png"
+    }
+  ]
+}

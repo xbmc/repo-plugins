@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.3satmediathek" name="3sat Mediathek" version="5.0.2" provider-name="sarbes">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.libzdf" version="5.0.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <language>de</language>
+		<license>GPL-2.0-only</license>
+		<source>https://github.com/sarbes/plugin.video.3satmediathek</source>
+        <forum>https://forum.kodi.tv/showthread.php?tid=353903</forum>
+        <website>https://www.3sat.de/</website>
+        <summary lang="en_GB">Videos from the 3sat Mediathek.</summary>
+        <description lang="en_GB">This add-on provides access to the 3sat Mediathek. Videos may be geolocked to Germany.</description>
+        <summary lang="de_DE">Sendungen und Beiträge aus der 3sat Mediathek.</summary>
+        <description lang="de_DE">Dieses Add-on bietet Zugriff auf die Mediathek von 3sat. Hier gibt es Sendungen und Dokumentationen zum Abruf.</description>
+        <disclaimer lang="de_DE">Dieses Add-on wird von keiner Sendeanstalt unterstützt und ist daher inoffiziell.</disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

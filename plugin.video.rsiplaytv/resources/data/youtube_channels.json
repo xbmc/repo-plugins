@@ -1,0 +1,28 @@
+{
+    "channels": [
+        {
+            "name": "Radiotelevisione svizzera (RSI)",
+            "channel": "UC2AH2KxP-0Afk0bc6XehWqA"
+        },
+        {
+            "name": "RSI News",
+            "channel": "UC6UUxoC7DGUUlUHcJvulsfQ"
+        },
+        {
+            "name": "RSI Sport",
+            "channel": "UC6S8pesV-uN9lRCTNLssZOg"
+        },
+        {
+            "name": "RSI Musica",
+            "channel": "UC-GHW-NrOPjbqLzL73UWWug"
+        },
+        {
+            "name": "RSI Edu",
+            "channel": "UCvB-T0ZxVz32jO9vRZvYSXA"
+        },
+        {
+            "name": "tvsvizzera",
+            "channel": "UCU4LZe3FBXoAdTtpOIWR48Q"
+        }
+    ]
+}

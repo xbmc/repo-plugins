@@ -1,0 +1,1056 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: STRINGS\n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Twilight0\n"
+"Language-Team: none\n"
+"Language: el_gr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+msgctxt "Addon Summary"
+msgid "Watch your favorite YouTube content on Kodi"
+msgstr "Δείτε το αγαπημένο σας περιεχόμενο από το Youtube στο Kodi"
+
+msgctxt "Addon Description"
+msgid "Browse your favorite content from YouTube; create, delete, and rename playlists; subscribe or unsubscribe from your favorite channels; and rate your favorite videos."
+msgstr "Περιηγηθείτε στο αγαπημένο σας περιεχόμενο στο Kodi, δημιουργήστε, διαγράψτε, μετονομάστε λίστες αναπαραγωγής, εγγραφτείτε στα αγαπημένα σας κανάλια, βαθμολογείστε τα αγαπημένα σας βίντεο."
+
+msgctxt "Addon Disclaimer"
+msgid "Tubed's use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed's Privacy Policy at https://panicked.xyz/tubed-privacy/"
+msgstr "Το Tubed κάνει χρήση πληροφοριών που λαμβάνονται από το API της Google και ακολουθεί της οδηγίες της πολιτικής χρήσης για τα προσωπικά δεδομένα της Google, συμπεριλαμβανομένου και τις απαιτήσεις περιορισμένης χρήσης. Για περισσότερες πληροφορίες και το πως επεξεργάζονται τα δεδομένα παρακαλώ δείτε την πολιτική απορρήτου του Tubed εδώ: https://panicked.xyz/tubed-privacy/"
+
+msgctxt "#30000"
+msgid "Most Popular"
+msgstr "Τα πιο δημοφιλή"
+
+msgctxt "#30001"
+msgid "Next Page"
+msgstr "Επόμενη σελίδα"
+
+msgctxt "#30002"
+msgid "Recommendations"
+msgstr "Προτάσεις"
+
+msgctxt "#30003"
+msgid "Search"
+msgstr "Αναζήτηση"
+
+msgctxt "#30004"
+msgid "My Channel"
+msgstr "Το κανάλι μου"
+
+msgctxt "#30005"
+msgid "Liked Videos"
+msgstr "Βίντεο που μου αρέσουν"
+
+msgctxt "#30006"
+msgid "Disliked Videos"
+msgstr "Βίντεο που δεν μου αρέσουν"
+
+msgctxt "#30007"
+msgid "Playlists"
+msgstr "Λίστες αναπαραγωγής"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "Κανάλια"
+
+msgctxt "#30009"
+msgid "Subscriptions"
+msgstr "Εγγραφές"
+
+msgctxt "#30010"
+msgid "Live"
+msgstr "Ζωντανά"
+
+msgctxt "#30011"
+msgid "Sign in with Google"
+msgstr "Είσοδος μέσω Google"
+
+msgctxt "#30012"
+msgid "Sign Out"
+msgstr "Έξοδος"
+
+msgctxt "#30013"
+msgid "Manage Users"
+msgstr "Διαχείριση χρηστών"
+
+msgctxt "#30014"
+msgid "New Search"
+msgstr "Νέα αναζήτηση"
+
+msgctxt "#30015"
+msgid "Enter your search term"
+msgstr "Εισάγετε τον όρο αναζήτησης"
+
+msgctxt "#30016"
+msgid "Go to %s and enter the following code:"
+msgstr "Πήγαινε στο %s και εισάγετε τον ακόλουθο κωδικό:"
+
+msgctxt "#30017"
+msgid "New user..."
+msgstr "Νέος χρήστης..."
+
+msgctxt "#30018"
+msgid "Rename user..."
+msgstr "Μετονομασία χρήστη..."
+
+msgctxt "#30019"
+msgid "Remove user..."
+msgstr "Αφαίρεση χρήστη..."
+
+msgctxt "#30020"
+msgid "New Username"
+msgstr "Νέο όνομα χρήστη"
+
+msgctxt "#30021"
+msgid "Remove User"
+msgstr "Αφαίρεση χρήστη"
+
+msgctxt "#30022"
+msgid "Removing %s, are you sure?"
+msgstr "Αφαίρεση του %s, είστε σίγουροι;"
+
+msgctxt "#30023"
+msgid "Uploads"
+msgstr "Μεταφορτώσεις"
+
+msgctxt "#30024"
+msgid "You are about to sign out, are you sure?"
+msgstr "Είστε σίγουροι ότι θέλετε να κάνετε έξοδο;"
+
+msgctxt "#30025"
+msgid "Categories"
+msgstr "Κατηγορίες"
+
+msgctxt "#30026"
+msgid "Remove..."
+msgstr "Αφαίρεση..."
+
+msgctxt "#30027"
+msgid "Clear history"
+msgstr "Εκκαθάριση ιστορικού"
+
+msgctxt "#30028"
+msgid "General"
+msgstr "Γενικά"
+
+msgctxt "#30029"
+msgid "Quality"
+msgstr "Ποιότητα"
+
+msgctxt "#30030"
+msgid "Choose the maximum playback quality for videos and live content"
+msgstr "Επιλογή της μέγιστης ποιότητας αναπαραγωγης για τα βίντεο και το ζωντανό περιεχόμενο"
+
+msgctxt "#30031"
+msgid "Limit to 30 fps"
+msgstr "Περιορισμός στα 30 κ/δ"
+
+msgctxt "#30032"
+msgid "Limit playback quality to 30 fps or less"
+msgstr "Περιορισμός ποιότητας αναπαραγωγής στα 30 κ/δ ή λιγότερα"
+
+msgctxt "#30033"
+msgid "HDR"
+msgstr "HDR"
+
+msgctxt "#30034"
+msgid "Use the best matching HDR streams for videos"
+msgstr "Κάνε χρήση του βέλτιστου ζεύγους HDR ροών για τα βίντεο"
+
+msgctxt "#30035"
+msgid "Adaptive (MP4/H264)"
+msgstr "Μεταβλητή (MP4/H264)"
+
+msgctxt "#30036"
+msgid "Adaptive (WEBM/VP9)"
+msgstr "Μεταβλητή (WEBM/VP9)"
+
+msgctxt "#30037"
+msgid "240p"
+msgstr "240p"
+
+msgctxt "#30038"
+msgid "360p"
+msgstr "360p"
+
+msgctxt "#30039"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30040"
+msgid "720p (HD)"
+msgstr "720p (HD)"
+
+msgctxt "#30041"
+msgid "1080p (FHD)"
+msgstr "1080p (FHD)"
+
+msgctxt "#30042"
+msgid "1440p (QHD)"
+msgstr "1440p (QHD)"
+
+msgctxt "#30043"
+msgid "2160p (4K)"
+msgstr "2160p (4K)"
+
+msgctxt "#30044"
+msgid "4320p (8K)"
+msgstr "4320p (8K)"
+
+msgctxt "#30045"
+msgid "Playback"
+msgstr "Αναπαραγωγή"
+
+msgctxt "#30046"
+msgid "Watch Later"
+msgstr "Δείτε αργότερα"
+
+msgctxt "#30047"
+msgid "Regional"
+msgstr "Τοπικά"
+
+msgctxt "#30048"
+msgid "Language"
+msgstr "Γλώσσα"
+
+msgctxt "#30049"
+msgid "Your preferred YouTube UI language"
+msgstr "Η προτιμώμενη γλώσσα για το UI του Youtube"
+
+msgctxt "#30050"
+msgid "Region"
+msgstr "Περιοχή"
+
+msgctxt "#30051"
+msgid "Your preferred content region"
+msgstr "Η προτιμώμενη"
+
+msgctxt "#30052"
+msgid "Configure regional preferences"
+msgstr "Ρύθμιση τοπικών προτιμήσεων"
+
+msgctxt "#30053"
+msgid "Configure your preferred language and region"
+msgstr "Ρύθμιση της προτιμώνενης γλώσσας και περιοχής"
+
+msgctxt "#30054"
+msgid "Configure subtitles"
+msgstr "Ρύθμιση υποτίτλων"
+
+msgctxt "#30055"
+msgid "Configure your preferred subtitle language"
+msgstr "Ρύθμιση της προτιμώμενης γλώσσας υποτίτλων"
+
+msgctxt "#30056"
+msgid "Subtitle language"
+msgstr "Γλώσσα υποτίτλων"
+
+msgctxt "#30057"
+msgid "Your preferred subtitle language"
+msgstr "Ο προτιμώμενη γλώσσα υποτίτλων"
+
+msgctxt "#30058"
+msgid "Subtitles"
+msgstr "Υπότιτλοι"
+
+msgctxt "#30059"
+msgid "%s with %s fallback"
+msgstr "%s με %s ως υπαναχώρηση"
+
+msgctxt "#30060"
+msgid "No auto-generated"
+msgstr "Χωρίς αυτόματα δημιουργημένες"
+
+msgctxt "#30061"
+msgid "None"
+msgstr "Καμία/Κανένα"
+
+msgctxt "#30062"
+msgid "Prompt"
+msgstr "Ερώτηση"
+
+msgctxt "#30063"
+msgid "Subscribe"
+msgstr "Εγγραφή"
+
+msgctxt "#30064"
+msgid "Subscribed"
+msgstr "Εγγρεγραμένος/η"
+
+msgctxt "#30065"
+msgid "Unsubscribe"
+msgstr "Αποεγγραφή"
+
+msgctxt "#30066"
+msgid "Unsubscribed"
+msgstr "Μη εγγεγραμένος"
+
+msgctxt "#30067"
+msgid "Error"
+msgstr "Σφάλμα"
+
+msgctxt "#30068"
+msgid "Play (Prompt for subtitles)"
+msgstr "Αναπαραγωγή (Ερώτηση για υποτίτλους)"
+
+msgctxt "#30069"
+msgid "Go to %s"
+msgstr "Πήγαινε στο %s"
+
+msgctxt "#30070"
+msgid "Subscribed to %s"
+msgstr "Εγγραφή στο %s"
+
+msgctxt "#30071"
+msgid "Unsubscribed from %s"
+msgstr "Έγινε αποεγγραφή από %s"
+
+msgctxt "#30072"
+msgid "Rate"
+msgstr "Βαθμολόγηση"
+
+msgctxt "#30073"
+msgid "I like this"
+msgstr "Μου αρέσει αυτό"
+
+msgctxt "#30074"
+msgid "I dislike this"
+msgstr "Δεν μου αρέσει αυτό"
+
+msgctxt "#30075"
+msgid "Remove rating"
+msgstr "Αφαίρεση βαθμολόγησης"
+
+msgctxt "#30076"
+msgid "Liked"
+msgstr "Μου αρέσει"
+
+msgctxt "#30077"
+msgid "Disliked"
+msgstr "Δεν μου αρέσει"
+
+msgctxt "#30078"
+msgid "Liked %s"
+msgstr "Μου άρεσε το %s"
+
+msgctxt "#30079"
+msgid "Disliked %s"
+msgstr "Δεν μου άρεσε το %s"
+
+msgctxt "#30080"
+msgid "Rating removed"
+msgstr "Έγινε αφαίρεση της βαθμολογίας"
+
+msgctxt "#30081"
+msgid "Rating removed from %s"
+msgstr "Έγινε αφαίρεση της βαθμολογίας από %s"
+
+msgctxt "#30082"
+msgid "New playlist"
+msgstr "Νέα λίστα αναπαραγωγής"
+
+msgctxt "#30083"
+msgid "Add to playlist"
+msgstr "Προσθήκη στην λίστα αναπαραγωγής"
+
+msgctxt "#30084"
+msgid "Remove from playlist"
+msgstr "Αφαίρεση από την λίστα αναπαραγωγής"
+
+msgctxt "#30085"
+msgid "Delete playlist"
+msgstr "Διαγραφή λίστας αναπαραγωγής"
+
+msgctxt "#30086"
+msgid "Enter your playlist title"
+msgstr "Εισαγωγή της ονομασίας της λίστας αναπαραγωγής"
+
+msgctxt "#30087"
+msgid "Added %s to %s"
+msgstr "Έγινε προσθήκη του %s στο %s"
+
+msgctxt "#30088"
+msgid "Removed from playlist"
+msgstr "Αφαίρεση από λίστα αναπαραγωγής"
+
+msgctxt "#30089"
+msgid "Removed %s from playlist"
+msgstr "Αφαίρεση του %s από την λίστα αναπαραγωγής"
+
+msgctxt "#30090"
+msgid "Playlist deleted"
+msgstr "Διαγραφή λίστας αναπαραγωγής"
+
+msgctxt "#30091"
+msgid "%s playlist deleted"
+msgstr "%s λίστα αναπαραγωγής διεγράφει"
+
+msgctxt "#30092"
+msgid "Rename playlist"
+msgstr "Μετονομασία λίστας αναπαραγωγής"
+
+msgctxt "#30093"
+msgid "Playlist renamed to %s"
+msgstr "Η λίστα αναπαραγωγής μετονομάσθηκε σε %s"
+
+msgctxt "#30094"
+msgid "%s renamed to %s"
+msgstr "%s μετονομάσθηκε σε %s"
+
+msgctxt "#30095"
+msgid "You are about to delete %s, are you sure?"
+msgstr "Είστε σίγουροι ότι θέλετε να διαγράψετε το/την %s;"
+
+msgctxt "#30096"
+msgid "You are about to delete a playlist, are you sure?"
+msgstr "Θα διαγράψετε μία λίστα αναπαραγωγής, είστε σίγουροι;"
+
+msgctxt "#30097"
+msgid "Upcoming"
+msgstr "Ανερχόμενα"
+
+msgctxt "#30098"
+msgid "Completed"
+msgstr "Ολοκληρωμένα"
+
+msgctxt "#30099"
+msgid "%s was scheduled to start %s"
+msgstr "%s έχει προγραμματιστεί να ξεκινήσει %s"
+
+msgctxt "#30100"
+msgid "%s is scheduled to start %s"
+msgstr "%s είχει προγραμματιστεί να ξεκινήσει %s"
+
+msgctxt "#30101"
+msgid "Related videos"
+msgstr "Σχετικά βίντεο"
+
+msgctxt "#30102"
+msgid "Cache"
+msgstr "Λανθάνουσα μνήμη"
+
+msgctxt "#30103"
+msgid "Data cache TTL (weeks)"
+msgstr "TTL μνήμης δεδομένων (εβδομάδες)"
+
+msgctxt "#30104"
+msgid "Function cache TTL (minutes)"
+msgstr "TTL μνήμης λειτουργιών (λεπτά)"
+
+msgctxt "#30105"
+msgid "Clear data cache"
+msgstr "Εκκαθάριση μνήμης δεδομένων"
+
+msgctxt "#30106"
+msgid "Clear function cache"
+msgstr "Εκκαθάριση μνήμης λειτουργιών"
+
+msgctxt "#30107"
+msgid "Data cache was cleared"
+msgstr "Η μνήμη δεδομένων έχει καθαριστεί"
+
+msgctxt "#30108"
+msgid "Function cache was cleared"
+msgstr "Η μνήμη λειτουργιών έχει καθαριστεί"
+
+msgctxt "#30109"
+msgid "Delete data cache"
+msgstr "Διαγραφή μνήμης δεδομένων"
+
+msgctxt "#30110"
+msgid "Delete function cache"
+msgstr "Διαγραφή μνήμης λειτουργιών"
+
+msgctxt "#30111"
+msgid "Data cache was deleted"
+msgstr "Η μνήμη δεδομένων έχει διαγραφεί"
+
+msgctxt "#30112"
+msgid "Function cache was deleted"
+msgstr "Η μνήμη λειτουργιών έχει διαγραφεί"
+
+msgctxt "#30113"
+msgid "Time to Live"
+msgstr "Χρόνος για ζωντανά"
+
+msgctxt "#30114"
+msgid "Maintenance"
+msgstr "Συντήρηση"
+
+msgctxt "#30115"
+msgid "How long until long term data cache expires in weeks"
+msgstr "Πόσο πρέπει να κρατήσει, ώστε να ληξει, η διατήρηση δεδομένων μαρκάς διάρκειας σε εβδομάδες"
+
+msgctxt "#30116"
+msgid "How long until short term function cache expires in minutes"
+msgstr "Πόσο πρέπει να κρατήσει, ώστε να ληξει, η διατήρηση δεδομένων βραχείας διάρκειας σε λεπτά"
+
+msgctxt "#30117"
+msgid "Clearing long term data cache will remove all entries from the database"
+msgstr "Η εκκαθάριση της μνήμης δεδομένων μακράς διάρκειας θα αφαιρέσει όλες τις καταχωρήσεις από την βάση δεδομένων"
+
+msgctxt "#30118"
+msgid "Clearing short term function cache will remove all cache entries"
+msgstr "Η εκκαθάριση της μνήμης λειτουργιών βραχείας διάρκειας θα αφαιρέσει όλες τις καταχωρήσεις από την προσωρινή μνήμη"
+
+msgctxt "#30119"
+msgid "Deleting long term data cache will delete the whole database"
+msgstr "Η διαγραφή της μνήμης δεδομένων μακράς διάρκειας θα διαγράψει ολόκληρη την βάση δεδομένων"
+
+msgctxt "#30120"
+msgid "Deleting short term function cache will delete the whole database"
+msgstr "Η διαγραφή της μνήμης λειτουργιών βραχείας διάρκειας θα διαγράψει ολόκληρη την βάση δεδομένων"
+
+msgctxt "#30121"
+msgid "Failed to clear function cache"
+msgstr "Αποτυχία εκκαθάρισης μνήμης λειτουργιών"
+
+msgctxt "#30122"
+msgid "Failed to clear data cache"
+msgstr "Αποτυχία εκκαθάρισης μνήμης δεδομένων"
+
+msgctxt "#30123"
+msgid "Failed to delete function cache"
+msgstr "Αποτυχία διαγραφής μνήμης λειτουργιών"
+
+msgctxt "#30124"
+msgid "Failed to delete data cache"
+msgstr "Αποτυχία διαγραφής μνήμης δεδομένων"
+
+msgctxt "#30125"
+msgid "Debug"
+msgstr "Αποσφαλμάτωση"
+
+msgctxt "#30126"
+msgid "Component Logging"
+msgstr "Καταγραφή συνιστωσών"
+
+msgctxt "#30127"
+msgid "API requests"
+msgstr "Αιτήματα API"
+
+msgctxt "#30128"
+msgid "Enable logging of API requests and responses"
+msgstr "Ενεργοποίηση καταγραφής των αιτημάτων API και αποκρίσεων"
+
+msgctxt "#30129"
+msgid "Comments"
+msgstr "Σχόλια"
+
+msgctxt "#30130"
+msgid "Comment"
+msgstr "Σχολιάστε"
+
+msgctxt "#30131"
+msgid "Read comment"
+msgstr "Ανάγνωση σχολίου"
+
+msgctxt "#30132"
+msgid "Likes"
+msgstr "Μου αρέσει"
+
+msgctxt "#30133"
+msgid "Replies"
+msgstr "Απαντήσεις"
+
+msgctxt "#30134"
+msgid "Comment has been edited"
+msgstr "Το σχόλιο έχει τροποποιηθεί"
+
+msgctxt "#30135"
+msgid "Limits"
+msgstr "Όρια"
+
+msgctxt "#30136"
+msgid "Data cache (MB)"
+msgstr "Μνήμη δεδομένων (ΜΒ)"
+
+msgctxt "#30137"
+msgid "The maximum size of long term data cache before being automatically resized"
+msgstr "Το μέγιστο μέγεθος της μνήμης δεδομένων μακράς διάρκειας πριν αυτομάτως αλλαχτεί σε μέγεθος"
+
+msgctxt "#30138"
+msgid "Sort order"
+msgstr "Τρόπος ταξινόμισης"
+
+msgctxt "#30139"
+msgid "Choose a sort order"
+msgstr "Επιλογή τρόπου ταξινόμισης"
+
+msgctxt "#30140"
+msgid "Alphabetical"
+msgstr "Αλφαβητική"
+
+msgctxt "#30141"
+msgid "Relevance"
+msgstr "Σχετικότητα"
+
+msgctxt "#30142"
+msgid "Activity"
+msgstr "Δραστηριότητα"
+
+msgctxt "#30143"
+msgid "Time"
+msgstr "Χρόνος"
+
+msgctxt "#30144"
+msgid "Date"
+msgstr "Ημερομηνία"
+
+msgctxt "#30145"
+msgid "Rating"
+msgstr "Βαθμολόγιση"
+
+msgctxt "#30146"
+msgid "Title"
+msgstr "Τίτλος"
+
+msgctxt "#30147"
+msgid "Video Count"
+msgstr "Αριθμός των βίντεο"
+
+msgctxt "#30148"
+msgid "View Count"
+msgstr "Αριθμός θεάσεων"
+
+msgctxt "#30149"
+msgid "Post Play"
+msgstr "Με το πέρας της αναπαραγωγής"
+
+msgctxt "#30150"
+msgid "Post play minimum watch percentage"
+msgstr "Ελάχιστο ποσοστό για το πέρας της αναπαραγωγής"
+
+msgctxt "#30151"
+msgid "What percent of the video's duration must be watched to trigger post play events"
+msgstr "Τι ποσοστό σε σχέση την διάρκεια του βίντεο πρέπει να παρακολουθηθεί ώστε να ενεργοποιήσει τις ενέργειες με το πέρας της αναπαραγωγής"
+
+msgctxt "#30152"
+msgid "Rate the video that just finished playing"
+msgstr "Βαθμολόγηση του βίντεο το οποίο μόλις έχει αναπαραχθεί"
+
+msgctxt "#30153"
+msgid "Rate during playlists"
+msgstr "Βαθμολόγηση κατά την διάρκεια των λιστών αναπαραγωγής"
+
+msgctxt "#30154"
+msgid "Should rating be requested while watching playlists"
+msgstr "Εάν θα πρέπει να υπάρξει αίτημα όσο παρακολουθείτε λίστες αναπαραγωγής"
+
+msgctxt "#30155"
+msgid "Autoplay related videos"
+msgstr "Αυτόματη αναπαραγωγή σχετικών βίντεο"
+
+msgctxt "#30156"
+msgid "Autoplay videos related to the previously played video"
+msgstr "Αυτόματη αναπαραγωγή σχετικών βίντεο σε σχεση με το προηγούμενο"
+
+msgctxt "#30157"
+msgid "Set as History"
+msgstr "Ορισμός ως ιστορικού"
+
+msgctxt "#30158"
+msgid "Set as Watch Later"
+msgstr "Ορισμός ως Δείτε Αργότερα"
+
+msgctxt "#30159"
+msgid "Remove as History"
+msgstr "Αφαίρεση από ιστορικό"
+
+msgctxt "#30160"
+msgid "Remove as Watch Later"
+msgstr "Αφαίρεση από Δείτε Αργότερα"
+
+msgctxt "#30161"
+msgid "History"
+msgstr "Ιστορικό"
+
+msgctxt "#30162"
+msgid "Watch later playlist configured"
+msgstr "Λίστα αναπαραγωγής ως Δείτε αργότερα έχει οριστεί"
+
+msgctxt "#30163"
+msgid "History playlist configured"
+msgstr "Έγινε ορισμός του ιστορικού αναπαραγωγής"
+
+msgctxt "#30164"
+msgid "%s was configured as your watch later playlist"
+msgstr "Η %s έχει ρυθμιστεί ως λίστα αναπαραγωγής Δείτε Αργότερα"
+
+msgctxt "#30165"
+msgid "%s was configured as your history playlist"
+msgstr "Η %s έχει ρυθμιστεί ως ιστορικό αναπαραγωγής"
+
+msgctxt "#30166"
+msgid "Watch later playlist is no longer configured"
+msgstr "Η λίστα αναπαραγωγής Δείτε Αργότερα δεν είναι πλέον ρυθμισμένη"
+
+msgctxt "#30167"
+msgid "History playlist is no longer configured"
+msgstr "Το ιστορικό αναπαραγωγής δεν είναι πλέον ρυθμισμένο"
+
+msgctxt "#30168"
+msgid "%s is no longer configured as your watch later playlist"
+msgstr "Η %s δεν είναι πλέον ορισμένη ως την λίστα αναπαραγωγής Δείτε Αργότερα"
+
+msgctxt "#30169"
+msgid "%s is no longer configured as your history playlist"
+msgstr "Η %s δεν είναι πλέον ορισμένη ως το ιστορικο αναπαραγωγής"
+
+msgctxt "#30170"
+msgid "Add to watch later"
+msgstr "Προσθήκη στα Δείτε Αργότερα"
+
+msgctxt "#30171"
+msgid "Favorite Channels"
+msgstr "Αγαπημένα κανάλια"
+
+msgctxt "#30172"
+msgid "Add to favorite channels"
+msgstr "Προσθήκη στα αγαπημένα κανάλια"
+
+msgctxt "#30173"
+msgid "Clear favorite channels"
+msgstr "Καθαρισμός αγαπημένων καναλιών"
+
+msgctxt "#30174"
+msgid "Added to favorite channels"
+msgstr "Προστέθηκε στα αγαπημένα κανάλια"
+
+msgctxt "#30175"
+msgid "Removed from favorite channels"
+msgstr "Αφαιρέθηκε από τα αγαπημένα κανάλια"
+
+msgctxt "#30176"
+msgid "Import from xml"
+msgstr "Εισαγωγή από xml"
+
+msgctxt "#30177"
+msgid "Import failed"
+msgstr "Αποτυχία εισαγωγής"
+
+msgctxt "#30178"
+msgid "Import completed successfully"
+msgstr "Η εισαγωγή έχει επιτυχώς ολοκληρωθεί"
+
+msgctxt "#30179"
+msgid "You are about to clear your favorite channels, are you sure?"
+msgstr "Πρόκειται να καθαρίστε τα αγαπημένα σας κανάλια, είστε σίγουροι;"
+
+msgctxt "#30180"
+msgid "Favorite channels cleared"
+msgstr "Τα αγαπημένα κανάλια έχουν καθαριστεί"
+
+msgctxt "#30181"
+msgid "Add %s to favorite channels"
+msgstr "Προσθήκη %s στα αγαπημένα κανάλια"
+
+msgctxt "#30182"
+msgid "Added %s to favorite channels"
+msgstr "Έγινε προσθήκη του %s στα αγαπημένα κανάλια"
+
+msgctxt "#30183"
+msgid "Removed %s from favorite channels"
+msgstr "Αφαιρέθηκε το %s από τα αγαπημένα κανάλια"
+
+msgctxt "#30184"
+msgid "Refresh"
+msgstr "Ανανέωση"
+
+msgctxt "#30185"
+msgid "Clear function cache on refresh"
+msgstr "Εκκαθάριση μνήμης λειτουργιών με την ανανέωση"
+
+msgctxt "#30186"
+msgid "Short term function cache will be cleared when using Refresh from the context menu"
+msgstr "Η μνήμη λειτουργιών βραχείας διάρκειας θα καθαριστεί με το που γίνει ανανέωση από το εναλλακτικό μενού"
+
+msgctxt "#30187"
+msgid "Choose watch later playlist"
+msgstr "Επιλογή λίστας αναπαραγωγής Δείτε Αργότερα"
+
+msgctxt "#30188"
+msgid "Added %s to the new watch later playlist %s"
+msgstr "Έγινε προσθήκη του %s στη νέα λίστα Δείτε Αργότερα %s"
+
+msgctxt "#30189"
+msgid "Search history items"
+msgstr "Αναζήτηση αντικειμένων ιστορικού"
+
+msgctxt "#30190"
+msgid "How many search history items should be kept for each user"
+msgstr "Πόσα αντικείμενα από το ιστορικό πρέπει να παραμείνουν για καθε χρήστη"
+
+msgctxt "#30191"
+msgid "Favorite channels"
+msgstr "Αγαπημένα κανάλια"
+
+msgctxt "#30192"
+msgid "How many favorite channels should be kept for each user"
+msgstr "Πόσα αγαπημένα κανάλια πρέπει να κρατηθούν για κάθε χρήστη"
+
+msgctxt "#30193"
+msgid "Play"
+msgstr "Αναπαραγωγή"
+
+msgctxt "#30194"
+msgid "Play from %s"
+msgstr "Αναπαραγωγή από %s"
+
+msgctxt "#30195"
+msgid "Most Popular Regionally"
+msgstr "Τα πιο δημοφιλή σε τοπικό επίπεδο"
+
+msgctxt "#30196"
+msgid "Main Menu"
+msgstr "Κυρίως μενού"
+
+msgctxt "#30197"
+msgid "Show/Hide this item on the main menu"
+msgstr "Δείξε/Κρύψε αυτό το αντικείμενο από το κυρίως μενού"
+
+msgctxt "#30198"
+msgid "Hide %s"
+msgstr "Κρύψε το %s"
+
+msgctxt "#30199"
+msgid "%s was hidden from the main menu"
+msgstr "Το %s έχει κρυφτεί από το κυρίως μενού"
+
+msgctxt "#30200"
+msgid "User is authenticated"
+msgstr "Ο χρήστης έχει πιστοποιηθεί"
+
+msgctxt "#30201"
+msgid "User is not authenticated"
+msgstr "Ο χρήστης δεν έχει πιστοποιηθεί"
+
+msgctxt "#30202"
+msgid "Create a new user"
+msgstr "Δημιουργία νέου χρήστη"
+
+msgctxt "#30203"
+msgid "Rename a current user"
+msgstr "Μετονομασία του τρέχοντος χρήστη"
+
+msgctxt "#30204"
+msgid "Remove a current user"
+msgstr "Αφαίρεση τρεχόντως χρήστη"
+
+msgctxt "#30205"
+msgid "Change avatar..."
+msgstr "Αλλαγή νέου αβατάρ..."
+
+msgctxt "#30206"
+msgid "Change a current user's avatar"
+msgstr "Αλλαγή του αβατάρ του τρέχοντος χρήστη"
+
+msgctxt "#30207"
+msgid "Choose a new avatar"
+msgstr "Επιλογή νέου αβατάρ"
+
+msgctxt "#30208"
+msgid "Up Next"
+msgstr "Επόμενο"
+
+msgctxt "#30209"
+msgid "Links in the description"
+msgstr "Σύνδεσμοι στην περιγραφή"
+
+msgctxt "#30210"
+msgid "There were no links found in the description"
+msgstr "Δεν βρέθηκαν σύνδεσμοι στην περιγραφή"
+
+msgctxt "#30211"
+msgid "Create a new playlist"
+msgstr "Δημιουργία νέας λίστας αναπαραγωγής"
+
+msgctxt "#30212"
+msgid "Go to the next page"
+msgstr "Πήγαινε στην επόμενη σελίδα"
+
+msgctxt "#30213"
+msgid "Rate the selected video"
+msgstr "Βαθμολόγησε το επιλεγμένο βίντεο"
+
+msgctxt "#30214"
+msgid "Rate %s"
+msgstr "Βαθμολόγησε %s"
+
+msgctxt "#30215"
+msgid "Dialogs"
+msgstr "Διάλογοι"
+
+msgctxt "#30216"
+msgid "Open the autoplay related video dialog for debugging"
+msgstr "Άνοιξε τον διάλογο του επόμενου βίντεο αυτόματης αναπαραγωγής για αποσφαλμάτωση"
+
+msgctxt "#30217"
+msgid "Open the sign in dialog for debugging"
+msgstr "Άνοιξε τον διάλογο εισόδου για αποσφαλμάτωση"
+
+msgctxt "#30218"
+msgid "likes"
+msgstr "μου αρέσει"
+
+msgctxt "#30219"
+msgid "dislikes"
+msgstr "δεν μου αρέσει"
+
+msgctxt "#30220"
+msgid "views"
+msgstr "θεάσεις"
+
+msgctxt "#30221"
+msgid "Chapters"
+msgstr "Κεφάλαια"
+
+msgctxt "#30222"
+msgid "Chapter starts at %s"
+msgstr "Το κεφάλαιο ξεκινα σε %s"
+
+msgctxt "#30223"
+msgid "API Module"
+msgstr "Μονάδα API"
+
+msgctxt "#30224"
+msgid "Configure API module"
+msgstr "Ρύθμιση μονάδας API"
+
+msgctxt "#30225"
+msgid "Open Tubed API settings to configure the API module"
+msgstr "Άνοιγμα των ρυθμίσεων API του Tubed για να ρυθμιστεί η μονάδα API"
+
+msgctxt "#30226"
+msgid "Favorite Playlists"
+msgstr "Αγαπημένες λίστες αναπαραγωγής"
+
+msgctxt "#30227"
+msgid "Add to favorite playlists"
+msgstr "Προσθήκη στις αγαπημένες λίστες αναπαραγωγής"
+
+msgctxt "#30228"
+msgid "Clear favorite playlists"
+msgstr "Καθαρισμός αγαπημένων λιστών αναπαραγωγής"
+
+msgctxt "#30229"
+msgid "Added to favorite playlists"
+msgstr "Προσθήκη στις αγαπημένες λίστες αναπαραγωγής"
+
+msgctxt "#30230"
+msgid "Removed from favorite playlists"
+msgstr "Αφαίρεση από τις αγαπημένες λίστες αναπαραγωγής"
+
+msgctxt "#30231"
+msgid "You are about to clear your favorite playlists, are you sure?"
+msgstr "Θα κάνετε καθαρισμό των αγαπημένων λιστών αναπαραγωγής, είστε σίγουροι;"
+
+msgctxt "#30232"
+msgid "Favorite playlists cleared"
+msgstr "Οι αγαπημένες λίστες αναπαραγωγής έχουν καθαριστεί"
+
+msgctxt "#30233"
+msgid "Add %s to favorite playlists"
+msgstr "Προσθήκη %s στις αγαπημένες λίστες αναπαραγωγής"
+
+msgctxt "#30234"
+msgid "Added %s to favorite playlists"
+msgstr "Προσθήκη %s στις αγαπημένες λίστες αναπαραγωγής"
+
+msgctxt "#30235"
+msgid "Removed %s from favorite playlists"
+msgstr "Αφαιρέθηκε το %s από τις αγαπημένες λίστες αναπαραγωγής"
+
+msgctxt "#30236"
+msgid "Favorite playlists"
+msgstr "Αγαπημένες λίστες αναπαραγωγής"
+
+msgctxt "#30237"
+msgid "How many favorite playlists should be kept for each user"
+msgstr "Πόσες αγαπημένες λίστες αναπαραγωγή πρέπει να κρατηθούν για κάθε χρήστη"
+
+msgctxt "#30238"
+msgid "Backup"
+msgstr "Αντίγραφο ασφαλείας"
+
+msgctxt "#30239"
+msgid "Make a backup"
+msgstr "Δημιουργία αντιγράφου ασφαλείας"
+
+msgctxt "#30240"
+msgid "Backup your Tubed settings, users, search history, favorite channels and favorite playlists"
+msgstr "Κράτα αντίγραφο των ρυθμίσεων, χρηστών, ιστορικού αναζήτησης, αγαπημένων καναλιών και αγαπημένων λιστών αναπαραγωγής του Tubed"
+
+msgctxt "#30241"
+msgid "Restore a backup"
+msgstr "Ανάκτηση αντιγράφου ασφαλείας"
+
+msgctxt "#30242"
+msgid "Restore your Tubed settings, users, search history, favorite channels and favorite playlists from a previous backup"
+msgstr "Επαναφορά των ρυθμίσεων, χρηστών, ιστορικού αναζήτησης, αγαπημένων καναλιών και αγαπημένων λιστών αναπαραγωγής του Tubed από ένα προηγούμενο αντίγραφο ασφαλείας"
+
+msgctxt "#30243"
+msgid "Choose a location to create backup"
+msgstr "Επιλογή διαδρομής για δημιουργία αντιγράφου"
+
+msgctxt "#30244"
+msgid "Choose a backup to restore"
+msgstr "Επιλογή αντιγράφου ασφαλείας για ανάκτηση"
+
+msgctxt "#30245"
+msgid "Failed to create backup at %s"
+msgstr "Αποτυχία δημιουργίας αντιγράφου ασφαλείας στο %s"
+
+msgctxt "#30246"
+msgid "Failed to restore backup from %s"
+msgstr "Αποτυχία ανάκτησης αντιγράφου ασφαλείας από %s"
+
+msgctxt "#30247"
+msgid "Backup successfully created at %s"
+msgstr "Το αντίγραφο ασφαλείας έχει δημιουργηθεί επιτυχώς στο %s"
+
+msgctxt "#30248"
+msgid "Backup successfully restored from %s"
+msgstr "Το αντίγραφο ασφαλείας έχει ανακτηθεί επιτυχώς από %s"
+
+msgctxt "#30249"
+msgid "Client ID: %s"
+msgstr "Αναγνωριστικό πελάτη: %s"
+
+msgctxt "#30250"
+msgid "Further use of Tubed will be subject to this privacy policy"
+msgstr "Περαιτέρω χρήση του Tubed υπόκειται σε αυτήν την πολιτική απορρήτου"
+
+msgctxt "#30251"
+msgid "Accept"
+msgstr "Αποδοχή"
+
+msgctxt "#30252"
+msgid "Decline"
+msgstr "Απόρριψη"
+
+msgctxt "#30253"
+msgid "Privacy Policy"
+msgstr "Πολιτική απορρήτου"
+
+msgctxt "#30254"
+msgid "Sign In"
+msgstr "Είσοδος"
+
+msgctxt "#30255"
+msgid "InputStream Adaptive is required and appears to be disabled. Would you like to enable InputStream Adaptive now?"
+msgstr "Το \"InputStream Adaptive\" απαιτείται και φαίνεται να είναι απενεργοποιημένο. Θέλετε να το ενεργοποιήσετε τώρα;"
+
+msgctxt "#30256"
+msgid "Settings"
+msgstr "Ρυθμίσεις"
+
+msgctxt "#30257"
+msgid "No entries found"
+msgstr "Δεν βρέθηκαν στοιχεία"

@@ -1,0 +1,130 @@
+v3.0.9+matrix.1 (31/12/2021)
+    - [new] Sync translations
+
+v3.0.8+matrix.1 (24/11/2021)
+    - [new] Sync translations
+    - [fix] Initialize empty context menu items
+
+v3.0.7+matrix.1 (3/10/2021)
+    - [new] New fanart without .de
+    - [new] Move art to the resources folder
+    - [fix] Fix playback and additions to the my_stations list if the stream url cannot be obtained
+    - [fix] hot reload of lists after addition/removal from the mystations table
+
+v3.0.4+matrix.0 (27/9/2020)
+    - [new] Add stationname property
+
+v3.0.3+matrix.6 (1/5/2020)
+    - [fix] Custom stations if the url is not a playlist
+    - [new] Spanish website radio.es and improved translations
+    - [new] screenshot support for addon-website
+
+v3.0.2+matrix.1 (1/5/2020)
+    - [fix] Custom stations if the url is not a playlist
+
+v3.0.1+matrix.1 (13/4/2020)
+    - [new] Use internal playlist resolver also in custom stations
+
+v3.0.0+matrix.1 (12/4/2020)
+    - [new] Automated submissions to matrix
+    - [new] Python3 only version
+    - [new] New language layout and other matrix fixes
+    - [fix] Playlist based stations
+    - [fix] Ratings
+
+v2.4.2 (9/2/2020)
+    - [add] sort methods for categories
+    - [add] setting to prefer http connections over https if http streams are available
+    - [fix] use sys.version_info[0] for compatibility with python2.6
+
+v2.4.1 (31/12/2019)
+    - [fix] Custom radio tracks
+
+v2.4.0 (29/12/2019)
+    - [new] Use radio API v2
+    - [fix] Remove dead code
+    - [new] Add radio.pt
+    - [new] Page listings
+    - [new] Better quality logos
+    - [new] Hide fanart setting
+
+v2.3.5 (25/12/2019)
+    - [fix] Artwork not available in player
+
+2.3.2 (07.06.2017)
+    - fixed playback
+
+2.3.1 (15.02.2015)
+    - updated translations
+
+2.3.0 (29.11.2013)
+    - added playback for asx playlists (e.g. BBC)
+    - added blayback for xml playlists
+    - improved station search
+
+2.2.1 (11.08.2013)
+    - updated translations
+    - added new addon.xml tags
+
+2.2.0 (11.03.2013)
+    - better station logos
+    - better add-on icon
+    - changed to xbmcswift2 v2.4.0
+    - small code improvements
+    - use random server on playlists (instead first one)
+    - update translations
+
+2.1.3 (26.12.2012)
+    - better station logos
+    - fix unicode error
+    - change to xbmcswift 1.3.0
+
+2.0.2 (16.12.2012)
+    - fix no genre available (resulted in script error)
+
+2.0.1 (03.11.2012)
+    - added migration code to convert old my_stations to new system
+    - fixed unicode in custom station title
+    - Added spanish translation (thx to Patrizia)
+    - Added french translation (thx to stombi)
+
+2.0.0 (unreleased)
+    - Code Rewrite
+    - Possibility to add custom (user defined) Stations
+    - Thumbnail View (You can disable in the add-on settings)
+    - Change to the xbmcswift2 framework
+    - New Icon
+    - Possibilty to add Stations to the XBMC Favorites
+
+1.1.1 (Unreleased)
+    - Added spanish translation (thx to Patrizia)
+
+1.1.0 (13.07.2012)
+    - New My Station logic (listing should be much faster after initial migration)
+    - Small fixes
+
+1.0.7 (unreleased)
+    - Fixed: error in language_guessing
+    - Fixed: routes (fix xbmcswift-xbox usecase)
+
+1.0.6 (05.03.2012)
+    - Fixed: error if a station was added to the list of mystations but has become unavailable
+    - Improved error catching
+    - Improved: Show bitrate in "kbit/s", not "B"
+
+1.0.5 (26.02.2012)
+    - Fixed .m3u playlists with empty lines (thx to Malte_Schroeder)
+
+1.0.4 (18.02.2012)
+    - Fixed python <2.5 error
+    - Added french translation (thx to stombi)
+
+1.0.3 (07.02.2012)
+    - added workaround for streams with .m3u and .pls files
+    - changed: show full context menu
+
+1.0.2 (29.01.2012)
+    - Fix error with UTF-8 characters in search string
+
+1.0.1 (13.01.2012)
+    - Initial Release

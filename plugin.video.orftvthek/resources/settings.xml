@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30062">
+        <setting id="autoPlayPrompt" type="bool" label="30028" visible="eq(3,false)" default="false" />
+        <setting id="useSubtitles" type="bool" label="30029" default="false" />
+        <setting id="enableBlacklist" type="bool" label="30043" visible="eq(1,false)" default="false" />
+        <setting id="useServiceAPI" type="bool" label="30026" default="false" />
+        <setting id="showLiveStreamSchedule" label="30061" type="bool" visible="eq(-1,true)" default="false" />
+        <setting id="usePlayAllPlaylist" label="30058" type="bool" default="true" />
+        <setting id="userAgent" default="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" visible="false" />
+    </category>
+</settings>

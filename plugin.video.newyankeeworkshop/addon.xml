@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.newyankeeworkshop" name="The New Yankee Workshop" version="0.0.4" provider-name="th0ma5w">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.requests" version="2.22.0" />
+		<import addon="script.module.beautifulsoup4" version="4.6.2" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Episodes of The New Yankee Workshop</summary>
+    <description lang="en_GB">Hosted by master carpenter Norm Abram, who is legendary for his woodworking skills, The New Yankee Workshop has guided millions of viewers through the hands-on process of furniture making.</description>
+<news>
+v0.0.4 (29.12.2020)
+  - Updates to video extraction code
+v0.0.3 (20.12.2020)
+  - Ported to Python 3
+v0.0.2 (17.05.2020)
+  - Updates to video extraction code
+v0.0.1 (09.09.2018)
+  - Initial Release
+</news>
+    <language>en</language>
+    <platform>all</platform>
+    <license>GPL-3.0-or-later</license>
+    <website>https://www.newyankee.com/</website>
+    <source>https://github.com/th0ma5w/repo-plugins/tree/newyankeeworkshop</source>
+    <assets>
+	    <icon>icon.png</icon>
+	    <fanart>fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

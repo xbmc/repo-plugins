@@ -1,0 +1,78 @@
+# Kodi Media Center language file
+# Addon Name: Nasa
+# Addon id: plugin.video.nasa
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-12-14 03:13+0000\n"
+"Last-Translator: Edson Armando <edsonarmando78@outlook.com>\n"
+"Language-Team: Spanish (Mexico) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-nasa/es_mx/>\n"
+"Language: es_mx\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.9.1\n"
+
+msgctxt "Addon Summary"
+msgid "Video plugin to access content from nasa.gov"
+msgstr "Complemento de video para acceder a contenido de nasa.gov"
+
+msgctxt "Addon Description"
+msgid "This video plugin provides access to more than 1800 videos, 8 vodcasts and 4 nasa-tv livestreams[CR]All content is dynamic and should be always up to date."
+msgstr "Este complemento de video provee acceso a más de 1800 videos, 8 vodcasts y 4 transmisiones en vivo de nasa-tv[CR]Todo el contenido es dinámico y debería estar siempre actualizado."
+
+msgctxt "#30001"
+msgid "Page"
+msgstr "Página"
+
+msgctxt "#30100"
+msgid "Livestreams"
+msgstr "Transmisiones en vivo"
+
+msgctxt "#30101"
+msgid "Videos"
+msgstr "Videos"
+
+msgctxt "#30103"
+msgid "Vodcasts"
+msgstr "Vodcasts"
+
+msgctxt "#30200"
+msgid "Search for Videos"
+msgstr "Buscar videos"
+
+msgctxt "#30201"
+msgid "Title"
+msgstr "Título"
+
+msgctxt "#30202"
+msgid "General"
+msgstr ""
+
+msgctxt "#30203"
+msgid "General Settings"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Add-on used for playback"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Select the Add-on used for playback"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Youtube Add-on"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Tubed Add-on"
+msgstr ""

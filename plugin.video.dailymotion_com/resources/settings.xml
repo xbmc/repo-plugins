@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+	<category label="30111">
+		<setting id="language" type="enum" label="30101" values="Argentina|Brasil|Canada (EN)|Canada (FR)|Deutschland|España|France|India|Indonesia|Italia|Ivory Coast|Malaysia|México|Pakistan|Pilipinas|Türkiye|United Kingdom|United States|Việt Nam|대한민국|台灣" default="16"/>
+		<setting id="dmUser" type="text" label="30106" default=""/>
+		<setting id="itemsPerPage" type="enum" label="30107" values="25|50|75|100" default="1"/>
+		<setting id="maxVideoQuality" type="enum" label="30105" values="240p|380p|SD|HD|FHD|QHD|UHD" default="2"/>
+	</category> 
+	<category label="30112">
+		<setting id="downloadDir" type="folder" label="30108" default=""/>
+	</category>
+	<category label="30102">
+		<setting id="forceViewMode" type="bool" label="30102" default="false"/>
+		<setting label="30111" type="lsep"/>
+		<setting id="MenuMode" type="number" label="30103" default="500" visible="eq(-2,true)" enable="!eq(-2,)"/>
+		<setting label="30041" type="lsep"/>
+		<setting id="VideoMode" type="number" label="30103" default="54" visible="eq(-4,true)" enable="!eq(-4,)"/>
+	</category>
+	<category label="30113">
+		<setting label="30114" type="lsep"/>
+        <setting id="family_filter" type="bool" label="30104" default="true"/>
+	</category>
+</settings>

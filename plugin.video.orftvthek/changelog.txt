@@ -1,0 +1,230 @@
+* 0.12.5
+ - added livestream specials for htmlscraper
+
+* 0.12.4
+ - added header to drm license server request (fixes error 500 for drm content) 
+
+* 0.12.3-1
+ - bugfix livestream restart (kodi <19 only)
+ - removed quality setting
+ - livestream active bugfix
+
+* 0.12.3
+ - service api fixes (auth & restart)
+ - minor logging improvements
+
+* 0.12.2
+ - drm for restart
+ - drm livestream license url
+ - better quality selection handling for livestreams
+ 
+* 0.12.1
+- fixed schedule error (serviceapi) #102
+
+* 0.12.0
+- added drm livestream playback
+
+* 0.11.1
+- fixed broken livestreams for serviceapi (kodi matrix only)
+
+* 0.11.0
+- kodi v19 support (older versions have to use 0.10.X for now)
+
+* 0.10.3
+- fixed broken livestream when "bundesland heute" videos are available
+
+* 0.10.2
+- tvthek added new quality strings. caused error on full hd setting
+
+* 0.10.1
+- fixed kodi crash when using the playlist listitem
+
+* 0.10.0
+- python2/3 compatible
+- added 'play full video' for htmlscraper
+- show listitems are absolute now and can be added to favourites
+- minor fixes for serviceapi & htmlscraper
+
+0.9.2
+- fixed frontpage (new html markup)
+- removed 'im fokus' & 'orf tipps'
+- changed url to https for the htmlscraper
+
+0.9.1
+- optimized live stream option for serviceapi (Issue #83)
+- removed scheduled livestream because it results in an endless loop of dialog boxes (serviceapi)
+
+0.9.0
+- fixed htmlscraper (new orf tvthek website structure)
+- "Im Fokus" added for the htmlscraper
+- "TV Programm" added for the htmlscraper
+- New icons/backdrops according to the new CI
+
+0.8.8
+- removed stream method option because its not available with the htmlscraper. Progressive streaming can still be used with the serviceAPI.
+
+0.8.7
+- another fix for the restart option
+
+0.8.6
+- fixed restart option
+
+0.8.5
+- added UHD livestream option
+- added Adaptive quality settings
+- fixed "play all" item (issue #66)
+- fixed "Bundesland Heute" livestream listing for the htmlscraper
+
+0.8.4
+- reverted playall fix because it resulted in a kodi crash (htmlscraper)
+
+0.8.3
+- fixed: don't set directory=true on the "play all" listitem (thx @wsnipex)
+- cleanup (thx @rechi)
+
+0.8.2
+- fixed 403 errors caused by uncommon UA
+
+0.8.1
+- fixed issue #56: db entries for the addon now start with plugin://
+
+0.8.0
+- Restart Option working (inputstream.adaptive needed)
+- minor changes and optimizations for the serviceAPI Scraper
+- code cleanup
+
+0.7.2
+- Fixed Livestream issue by passing UA
+
+0.7.1
+- Fixed missing thumbnails/banners after 0.7.0 Update
+- Fixed bad default value in settings.xml
+
+0.7.0
+- Bugfixes & Code Cleanup
+
+0.6.1
+- cleaned image resources
+- renamed "getArchiv" to "getSchedule"
+- prepare new "Archive" Main Menu Option
+
+0.6.0
+- fixed faulty liveurl from htmlscraper
+- livestreams with the same timestamp are playable now using the htmlscraper(Bundesland Heute)
+
+0.5.9
+- Service API V3
+- fixed runtime display for htmlscraper
+- added Autplay Prompt Option - only working for htmlscraper
+
+0.5.8
+- fix playlist errors caused by missing parameter
+
+0.5.7
+- Fixed Error on Playlist Views
+- Removed Service API Option for now
+- Removed AutoPlay Option - caused endless loop on video playlist
+- Fixed Invalid Handle on Playlist View
+
+0.5.6
+- Changed "Shows" scraper
+
+0.5.5
+- Fixed error caused by playlist change on the TVThek Website
+
+0.5.4
+- Fixed Errors caused by changes on the TVThek Website
+- Added Error Message for ServiceAPI Offline Status
+- Disable the ServiceAPI for now. All known urls are offline
+- Removed 'Disable GeoBlock' Option - doesnt seem to work anymore
+
+0.5.3
+- Added HD Stream Option (720p)
+
+0.5.2
+- fixed error when addon_data folder is already in place
+
+0.5.1
+- fixed addon.xml language format error
+
+0.5.0
+- added ability to blacklist items (use the context menu for that)
+
+0.4.5
+- changed live stream urls
+- new icons
+
+0.4.4
+- fixed Error on "Sendungen" caused by empty show entries
+- fixed showing " - " instead of "no results found"
+
+0.4.2
+- fixed htmlentities in subtitles - vtt file is now used
+
+0.4.1
+- fixed subtitle force
+
+0.4.0
+- new Structure
+- add JSON Scraper(ServiceAPI)(thx @Rechi)
+- added Subtitles (thx @Rechi)
+- added Trailers (thx @Rechi)
+
+
+0.3.3
+- Still waiting for the new icons from my gfx guy ... Sorry
+- FIX: wrong title in getCategoryList(thx @Rechi)
+- fixed error on the archive caused by empty descriptions
+- minor code optimizations
+
+0.3.2
+- fixed "Bundesland Heute" listing
+
+0.3.1
+- fixed 404 on list icon
+- changed fanart
+
+0.3.0
+- using parsedom now
+- optimized UI/Views
+- optimzed images/description scraping
+
+0.2.3
+- added sort methods
+- fixed error on "themen" items
+
+0.2.2
+- fixed parser errors
+- "Sendung verpasst?"
+
+0.2.1
+- fixed video link parser
+
+0.2.0
+- adjusted the addon to the new orf tvthek website
+- mp4 streaming is now stable on all platforms!!!
+- faster loading times
+
+
+0.1.3
+- added Search function
+- fixed the low resolution preview image problem
+- added History for Search function
+
+0.1.2
+- fixed bad view mode on aeon nox
+- added force view option
+- Fixed "Missed a Show?" Feature
+- A few optimizations for RPI
+
+0.1.1
+- Fixed a few Banner/Backdrop Fetching Issues
+- Fixed Livestream Exception
+- Decreased Loading Time
+- Experimental H264 MP4 Stream seams to work on Raspi[omxplayer] (Looks like the XBMC DVDPlayer is the issue)
+
+0.1.0
+- Streaming Video from http://tvthek.orf.at (mms)
+- Experimental High Quality MP4 Streaming from http://tvthek.orf.at (rtmp)
+- Livestream
+- Missed Shows

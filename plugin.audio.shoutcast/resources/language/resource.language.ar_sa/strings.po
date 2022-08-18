@@ -1,0 +1,94 @@
+# Kodi Media Center language file
+# Addon Name: SHOUTcast 2
+# Addon id: plugin.audio.shoutcast
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-05-07 15:36+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Arabic (Saudi Arabia) <https://kodi.weblate.cloud/projects/kodi-add-ons-music/plugin-audio-shoutcast/ar_sa/>\n"
+"Language: ar_sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Weblate 4.6.1\n"
+
+msgctxt "#30000"
+msgid "All subgenres"
+msgstr "جميع الانواع الفرعية"
+
+msgctxt "#30001"
+msgid "Top 500 Stations"
+msgstr "افضل 500 محطة"
+
+msgctxt "#30002"
+msgid "Browse by genre"
+msgstr "الاستعراض حسب النوع"
+
+msgctxt "#30003"
+msgid "My Stations"
+msgstr "المحطات الخاصة بي"
+
+msgctxt "#30004"
+msgid "Search Station by name"
+msgstr "البحث عن المحطة من خلال الأسم"
+
+msgctxt "#30005"
+msgid "Search Current Track playing Station"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Add to 'My Stations'"
+msgstr "الاضافة الى 'محطاتي المفضلة'"
+
+msgctxt "#30011"
+msgid "Remove from 'My Stations'"
+msgstr "الازالة من قائمة محطاتي المفضلة"
+
+msgctxt "#30100"
+msgid "Show Subgenres"
+msgstr "اضهار الفئات الفرعية"
+
+msgctxt "#30101"
+msgid "Num stations in list"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Show Bitrate in Title"
+msgstr "عرض معدل البت في العنوان"
+
+msgctxt "#30103"
+msgid "Choose a random server (Don't ask)"
+msgstr "اختيار ملقم خدمة عشوائي ( بدون سؤال)"
+
+msgctxt "#30104"
+msgid "Filter stations by minium Bitrate"
+msgstr "ترشيح المحطات من خلال الحد الادنى لمعدل البت"
+
+msgctxt "#30110"
+msgid "Minimum Bitrate"
+msgstr "الحد الأدنى لمعدل البت"
+
+msgctxt "#30111"
+msgid "96 kbit/s"
+msgstr "96 كيلو/بيت"
+
+msgctxt "#30112"
+msgid "128 kbit/s"
+msgstr "128 كيلو/بيت"
+
+msgctxt "#30113"
+msgid "160 kbit/s"
+msgstr "160 كيلو/بيت"
+
+msgctxt "#30114"
+msgid "192 kbit/s"
+msgstr "192 كيلو/بيت"
+
+msgctxt "#30200"
+msgid "Network Error"
+msgstr "خطاء بالشبكة"

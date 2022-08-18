@@ -1,0 +1,266 @@
+# Kodi Media Center language file
+# Addon Name: PS Vue
+# Addon id: plugin.video.psvue
+# Addon Provider: eracknaphobia
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30010"
+msgid "Previous"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Next"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Full Game"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Extended Highlights"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Recap"
+msgstr ""
+
+
+msgctxt "#30100"
+msgid "Login"
+msgstr ""
+
+msgctxt "#30110"
+msgid "CDN"
+msgstr ""
+
+msgctxt "#30140"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30150"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30159"
+msgid "Visual"
+msgstr ""
+
+msgctxt "#30155"
+msgid "Rogers Subscriber"
+msgstr ""
+
+msgctxt "#30156"
+msgid "Logout"
+msgstr ""
+
+msgctxt "#30160"
+msgid "Stream Quality"
+msgstr ""
+
+msgctxt "#30170"
+msgid "Hide Scores"
+msgstr ""
+
+msgctxt "#31700"
+msgid "Off"
+msgstr ""
+
+msgctxt "#31701"
+msgid "On"
+msgstr ""
+
+msgctxt "#31702"
+msgid "Only Favorite Team"
+msgstr ""
+
+msgctxt "#31703"
+msgid "Only Live Games"
+msgstr ""
+
+msgctxt "#31704"
+msgid "Only Archive Games"
+msgstr ""
+
+msgctxt "#30180"
+msgid "Favorite Team"
+msgstr ""
+
+msgctxt "#30190"
+msgid "Display Team Name as"
+msgstr ""
+
+msgctxt "#31900"
+msgid "City (ex: Pittsburgh)"
+msgstr ""
+
+msgctxt "#31901"
+msgid "Team (ex: Penguins)"
+msgstr ""
+
+msgctxt "#31902"
+msgid "Full (ex: Pittsburgh Penguins)"
+msgstr ""
+
+msgctxt "#31903"
+msgid "Abbreviated (ex: PIT)"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Time Format"
+msgstr ""
+
+msgctxt "#32000"
+msgid "12 Hour Clock (ex: 7:00 pm)"
+msgstr ""
+
+msgctxt "#32001"
+msgid "24 Hour Clock (ex: 19:00)"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Download Game Preview Info (Today's Games)"
+msgstr ""
+
+msgctxt "#30250"
+msgid "Misc."
+msgstr ""
+
+msgctxt "#30251"
+msgid "Generate Game Thumbnails"
+msgstr ""
+
+msgctxt "#30252"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#30300"
+msgid "Score Notification"
+msgstr ""
+
+msgctxt "#30320"
+msgid "Start / Stop Score Notifications"
+msgstr ""
+
+msgctxt "#30330"
+msgid "Number of Seconds to Display Score Notification"
+msgstr ""
+
+msgctxt "#30340"
+msgid "Goal Description"
+msgstr ""
+
+msgctxt "#30350"
+msgid "Choose Stream Quality"
+msgstr ""
+
+msgctxt "#30360"
+msgid "Today's Games"
+msgstr ""
+
+msgctxt "#30361"
+msgid "Yesterday's Games"
+msgstr ""
+
+msgctxt "#30362"
+msgid "'s Game Today"
+msgstr ""
+
+msgctxt "#30363"
+msgid "'s Recent Games"
+msgstr ""
+
+msgctxt "#30364"
+msgid "Goto Date"
+msgstr ""
+
+msgctxt "#30365"
+msgid "Featured Videos"
+msgstr ""
+
+msgctxt "#30366"
+msgid "Streams Not Found"
+msgstr ""
+
+msgctxt "#30367"
+msgid "No playable streams found"
+msgstr ""
+
+msgctxt "#30368"
+msgid "Error Fetching Stream"
+msgstr ""
+
+msgctxt "#30370"
+msgid "Game Blacked Out"
+msgstr ""
+
+msgctxt "#30371"
+msgid "The game you are trying to access is not currently available due to local or national blackout restrictions.\n Full game archives will be available 48 hours after completion of this game."
+msgstr ""
+
+msgctxt "#30372"
+msgid "Account Not Authorized"
+msgstr ""
+
+msgctxt "#30373"
+msgid "You do not have an active NHL.TV subscription. To access this content please purchase at www.NHL.TV or call customer support at 800-559-2333"
+msgstr ""
+
+msgctxt "#30374"
+msgid "No Game Today"
+msgstr ""
+
+msgctxt "#30375"
+msgid " doesn't play today"
+msgstr ""
+
+msgctxt "#30380"
+msgid "Please enter your username"
+msgstr ""
+
+msgctxt "#30381"
+msgid "Please enter your password"
+msgstr ""
+
+msgctxt "#30382"
+msgid "Authorization Not Found"
+msgstr ""
+
+msgctxt "#30383"
+msgid "Authorization Cookie couldn't be downloaded"
+msgstr ""
+
+msgctxt "#30384"
+msgid "Login Error"
+msgstr ""
+
+msgctxt "#30385"
+msgid "Please check that your username and password are correct"
+msgstr ""
+
+msgctxt "#30386"
+msgid "Logout Successful"
+msgstr ""
+
+msgctxt "#30387"
+msgid "Logout completed successfully"
+msgstr ""
+
+msgctxt "#30390"
+msgid "Favorite Team Not Set"
+msgstr ""
+
+msgctxt "#30391"
+msgid "Please select your favorite team from the addon settings"
+msgstr ""

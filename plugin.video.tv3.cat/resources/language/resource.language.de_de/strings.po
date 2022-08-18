@@ -1,0 +1,125 @@
+# Kodi Media Center language file
+# Addon Name: TV3cat
+# Addon id: plugin.video.tv3.cat
+# Addon Provider: jqandreu
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://github.com/jqandreu/plugin.video.tv3.cat/issues\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Connum\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Today Featured"
+msgstr "Empfehlungen des Tages"
+
+msgctxt "#30002"
+msgid "Don't miss"
+msgstr "Nicht verpassen"
+
+msgctxt "#30003"
+msgid "Most viewed"
+msgstr "Meistgesehen"
+
+msgctxt "#30004"
+msgid "Programs"
+msgstr "Programme"
+
+msgctxt "#30005"
+msgid "Series"
+msgstr "Serien"
+
+msgctxt "#30006"
+msgid "News"
+msgstr "Nachrichten"
+
+msgctxt "#30007"
+msgid "Entertainment"
+msgstr "Unterhaltung"
+
+msgctxt "#30008"
+msgid "Sports"
+msgstr "Sport"
+
+msgctxt "#30009"
+msgid "Documentaries"
+msgstr "Dokumentationen"
+
+msgctxt "#30010"
+msgid "Divulgation"
+msgstr "Verbreitung"
+
+msgctxt "#30011"
+msgid "Culture"
+msgstr "Kultur"
+
+msgctxt "#30012"
+msgid "Music"
+msgstr "Musik"
+
+msgctxt "#30013"
+msgid "All A-Z"
+msgstr "Alles A-Z"
+
+msgctxt "#30014"
+msgid "Aired A-Z"
+msgstr "Laufend A-Z"
+
+msgctxt "#30015"
+msgid ">>Next Page"
+msgstr ">>Nächste Seite"
+
+msgctxt "#30016"
+msgid ">>Previous Page"
+msgstr ">>Vorherige Seite"
+
+msgctxt "#30017"
+msgid "Live channels"
+msgstr "Live-Sender"
+
+msgctxt "#30018"
+msgid "TV3"
+msgstr "TV3"
+
+msgctxt "#30019"
+msgid "Canal 324"
+msgstr "Canal 324"
+
+msgctxt "#30020"
+msgid "Canal 33-Super 3"
+msgstr "Canal 33-Super 3"
+
+msgctxt "#30021"
+msgid "Esport 3"
+msgstr "Esport 3"
+
+msgctxt "#30022"
+msgid "Search"
+msgstr "Finden"
+
+msgctxt "#30023"
+msgid "Collections"
+msgstr "Sammlungen"
+
+msgctxt "#30024"
+msgid "TV3 (International broadcast)"
+msgstr "TV3 (International)"
+
+msgctxt "#30025"
+msgid "Canal 324 (International broadcast)"
+msgstr "Canal 324 (International)"
+
+msgctxt "#30026"
+msgid "Canal 33-Super 3 (International broadcast)"
+msgstr "Canal 33-Super 3 (International)"
+
+msgctxt "#30027"
+msgid "Esport 3 (International broadcast)"
+msgstr "Esport 3 (International)"

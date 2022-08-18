@@ -1,0 +1,52 @@
+{
+  "channels": [
+    {
+      "guid": "48DDDDCB-5500-4422-8AFC-8312B72E1ABA",
+      "name": "Nick Jr.",
+      "description": {
+        "en": "The Dutch NickJr channel. With your episodes of Blaze, PAW Patrol, Shimmer &amp; Shine and many more. Kids can watch their favourite videos here.",
+        "nl": "Het Nederlandstalige NickJr kanaal, de thuisplek van Blaze, PAW Patrol, Shimmer &amp; Shine en veel meer van je favoriete series! Kinderen kunnen hier hun favoriete filmpjes kijken."
+      },
+      "icon": "nickjrlarge.png",
+      "category": "Kids",
+      "channelcode": "nickjrnl",
+      "sortorder": 22,
+      "language": "nl",
+      "poster": "nickjrposter.png",
+      "fanart": "nickjrfanart.jpg",
+      "ignore": true
+    },
+    {
+      "guid": "27A74E50-838B-4F0D-98DE-82E7403567C8",
+      "name": "Nick Jr. International",
+      "description": {
+        "en": "Welcome to Nickjr.tv, the home of Blaze, PAW Patrol, Shimmer & Shine, and more of your preschooler's favorite shows! Kids can watch videos, play games, and interact with their Nick Jr. friends on desktop, tablet, and mobile devices. Plus, preschoolers will discover educational and silly surprises as they learn and explore.",
+        "nl": "Welkom bij Nickjr.tv, het kanaal van Blaze, PAW Patrol, Shimmer & Shine, en meer favoriete kinderprogramma's! Kinderen kunnen videos bekijken, games spelen en samenspelen met hun Nick Jr. vriendjes op desktop, tablet, en mobiele devices. Daarnaast zullen basisschoolkinderen educatieve en leuke verrassingen tegenkomen tijdens het leren en ontdekken."
+      },
+      "icon": "nickjrlarge.png",
+      "category": "Kids",
+      "channelcode": "nickjrintl",
+      "sortorder": 22,
+      "language": null,
+      "poster": "nickjrposter.png",
+      "fanart": "nickjrfanart.jpg",
+      "ignore": true
+    },
+    {
+      "guid": "8D1E5858-F926-11E1-BE1C-90F66188709B",
+      "name": "Nickelodeon (Sverige)",
+      "description": {
+        "en": "Welcome to the Swedish Nickelodeon channel. With your episodes of Blaze, PAW Patrol, Shimmer &amp; Shine and many more. Kids can watch their favourite videos here.",
+        "sv": "Välkommen till Nickelodeons kanal! Här kan du hitta alla dina favoritserier, TV-program från Nickelodeon och gratis onlinevideor. Kolla på gratis videor online med dina favoriter från SvampBob Fyrkant, Sam and Cat, Familjen Thunderman, Bella and the Bulldogs, Victorious, iCarly, Henry Danger, Big Time Rush, Nicky, Ricky, Dicky and Dawn och många fler!"
+      },
+      "icon": "nickelodeonlarge.png",
+      "category": "Kids",
+      "channelcode": "nickse",
+      "sortorder": 22,
+      "language": "se",
+      "poster": "nickposter.png",
+      "fanart": "nickfanart.jpg",
+      "ignore": true
+    }
+  ]
+}

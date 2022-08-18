@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+    <category label="128">
+        <setting label="$LOCALIZE[248]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32004]" type="text" id="mpaa_prefix" default="Rated "/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32005]" type="select" id="language" lvalues="30000|30001|30002|30003|30004|30005|30006|30007|30008|30009|30010|30011|30012|30013|30014|30015|30016|30017|30018|30019|30020|30021|30022|30023|30024|30025|30026|30027|30028|30029|30030|30031|30030|30033|30034|30035|30036|30037|30038|30039|30040|30041|30042|30043|30044|30045|30046|30047|30048|30049|30050|30051|30052|30053|30054|30055|30056|30057|30058|30059|30060|30061|30062|30063|30064|30065|30066|30067" default="18" />
+        <setting label="$LOCALIZE[439]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32367]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32038]" type="bool" id="local_db" default="false" />
+    </category>
+    <category label="$ADDON[plugin.video.themoviedb.helper 32088]">
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32089]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32023]" type="enum" id="default_select" lvalues="208|1024" default="0" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32090]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32073]" type="bool" id="hide_unaired_movies" default="false" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32084]" type="bool" id="hide_unaired_episodes" default="false" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32366]" type="bool" id="nodate_is_unaired" default="true" enable="eq(-1,True)|eq(-2,True)"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32091]" type="select" id="special_folders" default="0" lvalues="32378|32379|32380|32381|32382|32383|32384|32385" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32085]" type="bool" id="flatten_seasons" default="false" />
+    </category>
+    <category label="$ADDON[plugin.video.themoviedb.helper 32092]">
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32092]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32081]" type="bool" id="widgets_nextpage" default="false" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32142]" type="bool" id="widgets_hidewatched" default="false" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32368]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32156]" type="bool" id="nextaired_linklibrary" default="true" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32371]" type="enum" id="calendar_art" lvalues="32369|32372|32370" default="0" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32093]" type="labelenum" id="trakt_nextepisodesort" values="airdate|recentlywatched" default="airdate"/>
+    </category>
+    <category label="$LOCALIZE[14022]">
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32074]" type="lsep"/>
+        <setting label="$LOCALIZE[342]" type="folder" id="movies_library" source="video" option="writeable" default="special://profile/addon_data/plugin.video.themoviedb.helper/movies/"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32075]" type="folder" id="tvshows_library" source="video" option="writeable" default="special://profile/addon_data/plugin.video.themoviedb.helper/tvshows/"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32076]" type="bool" id="auto_update" default="true" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32086]" type="bool" id="library_autoupdate" default="false" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32130]" subsetting="true" type="enum" values="$HOURS" id="library_autoupdate_hour" enable="eq(-1,True)" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32131]" subsetting="true" type="action" action="RunScript(plugin.video.themoviedb.helper,monitor_userlist)" id="monitor_userlist"  enable="eq(-2,True)"/>
+        <setting type="text" id="monitor_userslug" visible="false"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32154]" subsetting="true" type="action" action="RunScript(plugin.video.themoviedb.helper,library_autoupdate,busy_dialog,force=select)" id="last_autoupdate" enable="eq(-4,True)"/>
+        <setting label="$LOCALIZE[10039]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32077]" type="bool" id="ignore_folderchecking" default="false" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32390]" type="bool" id="alternative_nfo" default="false" />
+        <setting type="bool" id="legacy_conversion" visible="false" default="false"/>
+    </category>
+    <category label="$ADDON[plugin.video.themoviedb.helper 32017]">
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32029]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32001]" type="text" id="omdb_apikey" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32030]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32019]" type="text" id="fanarttv_clientkey" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32021]" type="bool" id="fanarttv_lookup" default="false" subsetting="true" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32028]" type="bool" id="widget_fanarttv_lookup" default="false" subsetting="true" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32163]" type="bool" id="service_fanarttv_lookup" default="false" subsetting="true" />
+    </category>
+    <category label="$ADDON[plugin.video.themoviedb.helper 32083]">
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32031]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32010]" type="action" action="RunScript(plugin.video.themoviedb.helper,authenticate_trakt)" option="close" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32011]" type="text" id="trakt_token" default="" visible="False"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32169]" type="action" visible="!eq(-1,)" action="RunScript(plugin.video.themoviedb.helper,revoke_trakt)" option="close" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32034]" type="bool" id="trakt_watchedindicators" default="false" subsetting="true"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32346]" type="bool" id="trakt_localhack" default="false" subsetting="true"/>
+    </category>
+    <category label="$ADDON[plugin.video.themoviedb.helper 32014]">
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32033]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32024]" type="action" action="RunScript(plugin.video.themoviedb.helper, set_defaultplayer=movie)" id="default_player_movies" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32025]" type="action" action="RunScript(plugin.video.themoviedb.helper, set_defaultplayer=tv)" id="default_player_episodes" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32162]" type="bool" id="default_player_local" default="True" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32329]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32037]" type="bool" id="bundled_players" default="True" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32016]" type="action" action="RunScript(plugin.video.themoviedb.helper, update_players)" id="players_url" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32329]..." type="action" action="RunScript(plugin.video.themoviedb.helper, configure_players)"/>
+    </category>
+    <category label="$LOCALIZE[10039]">
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32351]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32352]" type="labelenum" id="dummy_duration" values="0.1|0.25|0.5|1.0|2.0|3.0|4.0|5.0" default="1.0"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32363]" type="labelenum" id="dummy_delay" values="0.1|0.25|0.5|1.0|1.5|2.0|2.5|3.0" default="1.0"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32364]" type="bool" id="force_xbmcplayer" default="True"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32373]" type="bool" id="only_resolve_strm" default="False"/>
+        <setting label="$LOCALIZE[14260]" type="lsep"/>
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32386]" type="action" action="RunScript(plugin.video.themoviedb.helper, delete_cache=select)" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32066]" type="bool" id="debug_logging" default="False" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32348]" type="action" action="RunScript(plugin.video.themoviedb.helper, log_request=tmdb)" />
+        <setting label="$ADDON[plugin.video.themoviedb.helper 32347]" type="action" action="RunScript(plugin.video.themoviedb.helper, log_request=trakt)" />
+    </category>
+</settings>

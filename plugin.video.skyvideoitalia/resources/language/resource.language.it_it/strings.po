@@ -1,0 +1,91 @@
+# Kodi Media Center language file
+# Addon Name: Sky Video Italia
+# Addon id: plugin.video.skyvideoitalia
+# Addon Provider: nixxo
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: it_IT\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "Generale"
+
+msgctxt "#31000"
+msgid "Playback"
+msgstr "Riproduzione"
+
+msgctxt "#31001"
+msgid "Use InputStream Adaptive"
+msgstr "Usa InputStream Adaptive"
+
+msgctxt "#31002"
+msgid "Maximum Quality"
+msgstr "Qualità Massima"
+
+msgctxt "#31003"
+msgid "Low"
+msgstr "Bassa"
+
+msgctxt "#31004"
+msgid "Medium"
+msgstr "Media"
+
+msgctxt "#31005"
+msgid "High"
+msgstr "Alta"
+
+msgctxt "#31006"
+msgid "High definition"
+msgstr "Alta definizione"
+
+msgctxt "#31010"
+msgid "Debug"
+msgstr "Debug"
+
+msgctxt "#31011"
+msgid "Enable developer mode"
+msgstr "Abilita modalita sviluppatore"
+
+msgctxt "#32001"
+msgid "Live Streaming"
+msgstr "Dirette Streaming"
+
+msgctxt "#32002"
+msgid "Playlists from {title}"
+msgstr "Playlist di {title}"
+
+msgctxt "#33000"
+msgid "Error retrieving URL. Check log."
+msgstr "Errore download pagina. Controlla log."
+
+msgctxt "#33001"
+msgid "JSON not found in webpage"
+msgstr "JSON non trovato nella pagina web"
+
+msgctxt "#33002"
+msgid "JSON decode error"
+msgstr "Errore decodifica JSON"
+
+msgctxt "#33003"
+msgid "Media URL not found"
+msgstr "URL video not trovato"
+
+msgctxt "#33004"
+msgid "Livestream URL not found"
+msgstr "URL stream diretta non trovato"
+
+msgctxt "#41001"
+msgid "Use InputStream Adaptive and demand quality selction to it."
+msgstr "Usa InputStream Adaptive e demanda la gestione della qualità ad esso."
+
+msgctxt "#41002"
+msgid "Maximum Quality used when InputstreamAdaptive is not selected."
+msgstr "Qualità Massima usata quando InputsreamAdaptive non è selezionato."
+
+msgctxt "#41011"
+msgid "Enable verbose log messages. Useful to troubleshoot problems."
+msgstr "Abilita messaggi di log più dettagliati. Utile per trovare problemi in caso di necessità."

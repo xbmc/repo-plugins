@@ -1,0 +1,93 @@
+# Kodi Media Center language file
+# Addon Name: SHOUTcast 2
+# Addon id: plugin.audio.shoutcast
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"Language: sv_SE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "All subgenres"
+msgstr "Alla undergenrer"
+
+msgctxt "#30001"
+msgid "Top 500 Stations"
+msgstr "Topp 500 stationer"
+
+msgctxt "#30002"
+msgid "Browse by genre"
+msgstr "Bläddra efter genre"
+
+msgctxt "#30003"
+msgid "My Stations"
+msgstr "Mina stationer"
+
+msgctxt "#30004"
+msgid "Search Station by name"
+msgstr "Sök station efter namn"
+
+msgctxt "#30005"
+msgid "Search Current Track playing Station"
+msgstr "Sök station som spelar låt"
+
+msgctxt "#30010"
+msgid "Add to 'My Stations'"
+msgstr "Lägg till i 'Mina stationer'"
+
+msgctxt "#30011"
+msgid "Remove from 'My Stations'"
+msgstr "Radera från 'Mina stationer'"
+
+msgctxt "#30100"
+msgid "Show Subgenres"
+msgstr "Visa undergenrer"
+
+msgctxt "#30101"
+msgid "Num stations in list"
+msgstr "Antal stationer i lista"
+
+msgctxt "#30102"
+msgid "Show Bitrate in Title"
+msgstr "Visa bitrate i titel"
+
+msgctxt "#30103"
+msgid "Choose a random server (Don't ask)"
+msgstr "Välj en slumpmässig server (fråga inte)"
+
+msgctxt "#30104"
+msgid "Filter stations by minium Bitrate"
+msgstr "Filtrera stationer efter minsta bitrate"
+
+msgctxt "#30110"
+msgid "Minimum Bitrate"
+msgstr "Minsta bitrate"
+
+msgctxt "#30111"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30112"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30113"
+msgid "160 kbit/s"
+msgstr "160 kbit/s"
+
+msgctxt "#30114"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30200"
+msgid "Network Error"
+msgstr "Nätverksfel"

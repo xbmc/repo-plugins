@@ -1,0 +1,170 @@
+# Kodi Media Center language file
+# Addon Name: Radio
+# Addon id: plugin.audio.radio_de
+# Addon Provider: Tristan Fischer, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-10-03 12:30+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Croatian <https://kodi.weblate.cloud/projects/kodi-add-ons-music/plugin-audio-radio_de/hr_hr/>\n"
+"Language: hr_hr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.8\n"
+
+msgctxt "Addon Summary"
+msgid "Access >30000 radio broadcasts"
+msgstr "Pristup >30000 radio emitiranja"
+
+msgctxt "Addon Description"
+msgid "Music plugin to access over 30000 international radio broadcasts from rad.io, radio.de, radio.fr, radio.pt and radio.es[CR]Currently features[CR]- English, german, french translated[CR]- Browse stations by location, genre, topic, country, city and language[CR]- Search for stations[CR]- 115 genres, 59 topics, 94 countrys, 1010 citys, 63 languages"
+msgstr "Glazbeni dodatak za pristup 30000 međunarodnih radio stanica na rad.io, radio.de i radio.fr[CR]Trenutne značajke[CR]- engleski, njemački i francuski prijevodi[CR]- Pregledavajte stanice prema lokaciji, žanru, temi, zemlji, gradu i jeziku[CR]- Pretraživanje stanica[CR]- 115 žanrova, 59 tema, 94 zemalja, 1010 gradova, 63 jezika"
+
+msgctxt "#30100"
+msgid "Editorials Recommendations"
+msgstr "Preporuke uredništva"
+
+msgctxt "#30101"
+msgid "Top Stations"
+msgstr "Top stanica"
+
+msgctxt "#30102"
+msgid "Browse by genre"
+msgstr "Pregled po žanru"
+
+msgctxt "#30103"
+msgid "Browse by topic"
+msgstr "Pregledaj po temi"
+
+msgctxt "#30104"
+msgid "Browse by country"
+msgstr "Pregled po državi"
+
+msgctxt "#30105"
+msgid "Browse by city"
+msgstr "Pregledaj po gradu"
+
+msgctxt "#30106"
+msgid "Browse by language"
+msgstr "Pregledaj po jeziku"
+
+msgctxt "#30107"
+msgid "Local Stations"
+msgstr "Lokalne stanice"
+
+msgctxt "#30108"
+msgid "My Stations"
+msgstr "Moje stanice"
+
+msgctxt "#30200"
+msgid "Search for station"
+msgstr "Pretraži stanice"
+
+msgctxt "#30300"
+msgid "Language"
+msgstr "Jezik"
+
+msgctxt "#30301"
+msgid "English"
+msgstr "Engleski"
+
+msgctxt "#30302"
+msgid "German"
+msgstr "Njemački"
+
+msgctxt "#30303"
+msgid "French"
+msgstr "Francuski"
+
+msgctxt "#30304"
+msgid "Portuguese"
+msgstr ""
+
+msgctxt "#30305"
+msgid "Spanish"
+msgstr ""
+
+msgctxt "#30310"
+msgid "Force ViewMode to Thumbnail"
+msgstr "Prisili način prikaza u 'Minijature'"
+
+msgctxt "#30400"
+msgid "Add to 'My Stations'"
+msgstr "Dodaj u 'Moje stanice'"
+
+msgctxt "#30401"
+msgid "Remove from 'My Stations'"
+msgstr "Ukloni iz 'Moje stanice'"
+
+msgctxt "#30402"
+msgid "Edit custom Station"
+msgstr "Uredi prilagođenu stanicu"
+
+msgctxt "#30500"
+msgid "Please enter %s"
+msgstr "Upišite %s"
+
+msgctxt "#30501"
+msgid "title"
+msgstr "naslov"
+
+msgctxt "#30502"
+msgid "thumbnail url or path"
+msgstr "URL minijature ili putanju"
+
+msgctxt "#30503"
+msgid "stream url"
+msgstr "URL streama"
+
+msgctxt "#30504"
+msgid "Add custom Station..."
+msgstr "Dodaj prilagođenu stanicu..."
+
+msgctxt "#30600"
+msgid "Network Error"
+msgstr "Greška mreže"
+
+msgctxt "#30601"
+msgid "General"
+msgstr "Općenito"
+
+msgctxt "#30602"
+msgid "Hide fanart"
+msgstr "Sakrij sliku omota"
+
+msgctxt "#30603"
+msgid "Most Popular"
+msgstr ""
+
+msgctxt "#30604"
+msgid "A-Z"
+msgstr ""
+
+msgctxt "#30605"
+msgid "Page (%s/%s) | Next >>"
+msgstr ""
+
+msgctxt "#30606"
+msgid "By country"
+msgstr ""
+
+msgctxt "#30607"
+msgid "Prefer HTTP streams over HTTS"
+msgstr ""
+
+msgctxt "#30608"
+msgid "Unable to get radio stream url"
+msgstr ""
+
+msgctxt "#30609"
+msgid "Sucessfully added to my stations!"
+msgstr ""
+
+msgctxt "#30610"
+msgid "Sucessfully removed from my stations!"
+msgstr ""

@@ -1,0 +1,25 @@
+{
+  "channels": [
+    {
+      "guid": "756FFEC8-B6BA-11E0-898D-1F434824019B",
+      "name": "Ketnet",
+      "description": {
+        "en": "Online broadcasts from www.ketnet.be.",
+        "nl": "Online uitzendingen van www.ketnet.be."
+      },
+      "icon": "ketnetlarge.png",
+      "category": "National",
+      "channelcode": "ketnet",
+      "sortorder": 12,
+      "language": "be",
+      "fanart": "ketnetfanart.jpg"
+    }
+  ],
+  "settings": [
+    {
+      "order": 1,
+      "id": "hls_over_dash",
+      "value": "label=\"30099\" type=\"bool\" default=\"\""
+    }
+  ]
+}

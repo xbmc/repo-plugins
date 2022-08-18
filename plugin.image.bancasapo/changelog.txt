@@ -1,0 +1,10 @@
+3.0.2:
+- Fix regex
+
+3.0.1:
+- Automatic submissions to krypton and matrix
+- Fix languages
+- Addon-check fixes
+
+v2.0.0
+- Old XBMC addon fixed to work for krypton

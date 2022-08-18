@@ -1,0 +1,25 @@
+0.1.2+matrix.1
+- version tag fix
+- Shoutcast livestream pattern changed.
+- Added settings for livestream (Shoutcast/HLS)
+- Added quality settings for livestreams
+
+0.1.1
+- Added sort for podcast & archive views
+
+0.1.0
+- KODI 19 compatible (older versions have to use 0.0.x for now)
+
+0.0.3
+- Added OE1 DD 5.1 Livestream
+
+0.0.2
+- Streaming Parameter fix causing Issue #1
+
+0.0.1
+- Initial version
+- Livestream
+- Broadcast with Cue Tracks
+- Highlights, Tags, Archive, Podcasts
+- Missed a Show
+- Search

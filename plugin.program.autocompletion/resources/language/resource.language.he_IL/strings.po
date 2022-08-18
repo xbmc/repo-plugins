@@ -1,0 +1,43 @@
+# Kodi language file
+# Addon Name: AutoCompletion for virtual keyboard
+# Addon id: plugin.program.autocompletion
+# Addon version: 1.0.0
+# Addon Provider: phil65
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.program.autocompletion\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2014-10-26 17:05+0000\n"
+"PO-Revision-Date: 2017-09-25 09:00+0300\n"
+"Last-Translator: A. Dambledore\n"
+"Language-Team: Eng2Heb\n"
+"Language: he_IL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.0.4\n"
+
+msgctxt "Addon Summary"
+msgid "AutoCompletion provider"
+msgstr "ספק השלמה אוטומטית"
+
+msgctxt "Addon Description"
+msgid ""
+"This script offers various possibilities to display online content inside "
+"Needs skin support for most functions."
+msgstr ""
+"קובץ  זה מציע אפשרויות שונות להצגת תוכן מקוון. הסקריפט דורש תמיכה "
+"של המעטפת עבור רוב הפונקציות."
+
+msgctxt "#32001"
+msgid "Autocompletion"
+msgstr "השלמה אוטומטית"
+
+msgctxt "#32002"
+msgid "Autocompletion language"
+msgstr "שפת השלמה אוטומטית"
+
+msgctxt "#32003"
+msgid "Autocompletion provider"
+msgstr "ספק השלמה אוטומטית"

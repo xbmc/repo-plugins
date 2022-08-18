@@ -1,0 +1,19 @@
+{
+  "channels": [
+    {
+      "guid": "66756700-6255-4973-AFFB-A1DE4FAF8678",
+      "name": "VTM Nieuws",
+      "description": {
+        "en": "Online videos and episodes from VTM Nieuws.",
+        "nl": "Online uitzendingen van VTM Nieuws."
+      },
+      "icon": "vtmlarge.png",
+      "category": "National",
+      "channelcode": "vtmnieuws",
+      "sortorder": 11,
+      "language": "be",
+      "fanart": "vtmfanart.jpg",
+      "addonUrl": "plugin://plugin.video.vtm.go/channels/vtmnieuws"
+    }
+  ]
+}

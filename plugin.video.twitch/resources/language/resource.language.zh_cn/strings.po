@@ -1,0 +1,1010 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: 2022-03-03 13:47+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Chinese (China) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/zh_cn/>\n"
+"Language: zh_cn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.11\n"
+
+msgctxt "Addon Summary"
+msgid "Twitch video plugin"
+msgstr "Twitch 视频插件"
+
+msgctxt "Addon Description"
+msgid "Watch your favorite gaming streams!"
+msgstr "观看您喜爱的游戏流！"
+
+msgctxt "#30001"
+msgid "Games"
+msgstr "游戏"
+
+msgctxt "#30002"
+msgid "Following"
+msgstr "关注"
+
+msgctxt "#30003"
+msgid "Search"
+msgstr "搜索"
+
+msgctxt "#30004"
+msgid "Settings"
+msgstr "设置"
+
+msgctxt "#30005"
+msgid "Popular Streams"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Teams"
+msgstr "团队"
+
+msgctxt "#30007"
+msgid "Search for channels"
+msgstr "搜索频道"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "频道"
+
+msgctxt "#30009"
+msgid "Live Channels"
+msgstr "直播频道"
+
+msgctxt "#30010"
+msgid "TwitchTV"
+msgstr ""
+
+msgctxt "#30011"
+msgid "next page..."
+msgstr "下一页..."
+
+msgctxt "#30012"
+msgid "-- Currently Live Streams --"
+msgstr "-- 当前直播流 --"
+
+msgctxt "#30013"
+msgid "-- Followed Channels --"
+msgstr "-- 关注的频道 --"
+
+# empty strings from id 30014 to 30019
+msgctxt "#30020"
+msgid "Http error"
+msgstr "Http 错误"
+
+msgctxt "#30021"
+msgid "No Live Data Found"
+msgstr "找不到直播数据"
+
+msgctxt "#30022"
+msgid "No archives found for"
+msgstr "没有找到档案关于"
+
+msgctxt "#30023"
+msgid "User Token Error"
+msgstr "用户令牌错误"
+
+msgctxt "#30024"
+msgid "Changed video settings"
+msgstr "更改了视频设置"
+
+msgctxt "#30025"
+msgid "Selected video settings are not available"
+msgstr "选定的视频设置不可用"
+
+msgctxt "#30026"
+msgid "TwitchApi error"
+msgstr "TwitchApi 错误"
+
+msgctxt "#30027"
+msgid "JSON error"
+msgstr "JSON 错误"
+
+msgctxt "#30028"
+msgid "Failed to parse the result set"
+msgstr "无法解析结果集"
+
+msgctxt "#30029"
+msgid "Please check your internet connection"
+msgstr "请检查您的互联网连接"
+
+# empty strings from id 30030 to 30039
+msgctxt "#30040"
+msgid "Video Quality"
+msgstr "视频质量"
+
+# empty strings from id 30041 to 30044
+msgctxt "#30045"
+msgid "Display titles"
+msgstr "显示标题"
+
+msgctxt "#30046"
+msgid "Streamer - Stream Title"
+msgstr "横幅 - 流标题"
+
+msgctxt "#30047"
+msgid "Viewers - Streamer - Stream Title"
+msgstr "观众 - 主播 - 流标题"
+
+msgctxt "#30048"
+msgid "Stream Title"
+msgstr "流标题"
+
+msgctxt "#30049"
+msgid "Streamer"
+msgstr "主播"
+
+msgctxt "#30050"
+msgid "Username"
+msgstr "用户名"
+
+msgctxt "#30051"
+msgid "Streamer - Game Title - Stream Title"
+msgstr "主播 - 游戏标题 - 流标题"
+
+msgctxt "#30052"
+msgid "Enable"
+msgstr "启用"
+
+msgctxt "#30053"
+msgid "Password (OAuth Token)"
+msgstr "密码（OAuth 令牌）"
+
+msgctxt "#30054"
+msgid "Language | Streamer - Stream Title"
+msgstr "语言 | 主播 - 流标题"
+
+# empty strings from id 30055 to 30059
+msgctxt "#30060"
+msgid "Unnamed Streamer"
+msgstr "未命名的主播"
+
+msgctxt "#30061"
+msgid "Untitled Stream"
+msgstr "无标题流"
+
+msgctxt "#30062"
+msgid "Unknown Number of Viewers"
+msgstr "未知观众数量"
+
+msgctxt "#30063"
+msgid "Unknown Language"
+msgstr "未知语言"
+
+msgctxt "#30064"
+msgid "Unknown Game"
+msgstr "未知游戏"
+
+msgctxt "#30065"
+msgid "Truncate displayed titles"
+msgstr "截断显示标题"
+
+msgctxt "#30066"
+msgid "Followed Games"
+msgstr "关注的游戏"
+
+msgctxt "#30067"
+msgid "Game Title Viewers | Streamer - Stream Title"
+msgstr "游戏标题 观众 | 主播 - 流标题"
+
+msgctxt "#30068"
+msgid "Content Type"
+msgstr "内容类型"
+
+msgctxt "#30069"
+msgid "Files"
+msgstr "文件"
+
+msgctxt "#30070"
+msgid "TV Shows"
+msgstr "电视节目"
+
+msgctxt "#30071"
+msgid "Movies"
+msgstr "电影"
+
+msgctxt "#30072"
+msgid "Episodes"
+msgstr "剧集"
+
+msgctxt "#30073"
+msgid "Music Videos"
+msgstr "音乐视频"
+
+msgctxt "#30074"
+msgid "Automatically refresh live preview cache"
+msgstr "自动刷新直播预览缓存"
+
+msgctxt "#30075"
+msgid "Install IrcChat (script.ircchat)"
+msgstr "安装 IrcChat (script.ircchat)"
+
+msgctxt "#30076"
+msgid "General"
+msgstr "常规"
+
+msgctxt "#30077"
+msgid "Play (Choose Quality)"
+msgstr "播放 (选择质量)"
+
+msgctxt "#30078"
+msgid "Past Broadcasts"
+msgstr "过去的直播"
+
+msgctxt "#30079"
+msgid "Video Highlights"
+msgstr "视频集锦"
+
+msgctxt "#30080"
+msgid "Could not find any playable urls"
+msgstr "找不到任何可播放的 URL"
+
+msgctxt "#30081"
+msgid "IRC Chat"
+msgstr "IRC 聊天"
+
+msgctxt "#30082"
+msgid "Live Previews"
+msgstr "直播预览"
+
+msgctxt "#30083"
+msgid "Live Preview Settings"
+msgstr "直播预览设置"
+
+msgctxt "#30084"
+msgid "Clear live preview cache"
+msgstr "清除直播预览缓存"
+
+msgctxt "#30085"
+msgid "***** WARNING *****"
+msgstr "***** 警告 *****"
+
+msgctxt "#30086"
+msgid "These settings may allow this add-on to delete database entries and images[CR]for cached live previews."
+msgstr "这些设置可能允许此加载项删除缓存的直播预览的[CR]数据库条目和图像。"
+
+msgctxt "#30087"
+msgid "Notifications"
+msgstr "通知"
+
+msgctxt "#30088"
+msgid "Game"
+msgstr "游戏"
+
+msgctxt "#30089"
+msgid "Viewers"
+msgstr "观众"
+
+msgctxt "#30090"
+msgid "Language"
+msgstr "语言"
+
+msgctxt "#30091"
+msgid "Mature"
+msgstr "成人"
+
+msgctxt "#30092"
+msgid "Partner"
+msgstr "搭档"
+
+msgctxt "#30093"
+msgid "Delay"
+msgstr "延迟"
+
+msgctxt "#30094"
+msgid "Automatic refresh interval (minutes)"
+msgstr "自动刷新间隔（分钟）"
+
+msgctxt "#30095"
+msgid "Username is required"
+msgstr "用户名是必需的"
+
+msgctxt "#30096"
+msgid "API"
+msgstr "API"
+
+msgctxt "#30097"
+msgid "OAuth Client ID"
+msgstr "OAuth 客户端 ID"
+
+msgctxt "#30098"
+msgid "Select Video by ID or URL"
+msgstr "按 ID 或 URL 选择视频"
+
+msgctxt "#30099"
+msgid "OAuth Token"
+msgstr "OAuth 令牌"
+
+msgctxt "#30100"
+msgid "Visit www.twitch.tv/settings/connections and [CR]'Register your application' for an OAuth Client-ID"
+msgstr "访问 www.twitch.tv/settings/connections 并[CR]“注册您的应用程序”以获得 OAuth 客户端 ID"
+
+msgctxt "#30101"
+msgid "Visit www.twitchapps.com/tmi to generate an OAuth token"
+msgstr "访问 www.twitchaps.com/tmi 生成 OAuth 令牌"
+
+msgctxt "#30102"
+msgid "Source"
+msgstr "来源"
+
+msgctxt "#30103"
+msgid "1080p60"
+msgstr ""
+
+msgctxt "#30104"
+msgid "1080p30"
+msgstr ""
+
+msgctxt "#30105"
+msgid "720p60"
+msgstr ""
+
+msgctxt "#30106"
+msgid "720p30"
+msgstr ""
+
+msgctxt "#30107"
+msgid "540p30"
+msgstr ""
+
+msgctxt "#30108"
+msgid "480p30"
+msgstr ""
+
+msgctxt "#30109"
+msgid "360p30"
+msgstr ""
+
+msgctxt "#30110"
+msgid "240p30"
+msgstr ""
+
+msgctxt "#30111"
+msgid "144p30"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Quality may result in best match"
+msgstr "质量可能会导致最佳匹配"
+
+msgctxt "#30113"
+msgid "Uploads"
+msgstr "上传"
+
+msgctxt "#30114"
+msgid "Confirm"
+msgstr "确认"
+
+msgctxt "#30115"
+msgid "Function cache has been reset"
+msgstr "函数缓存已重置"
+
+msgctxt "#30116"
+msgid "Function cache reset failed"
+msgstr "函数缓存重置失败"
+
+msgctxt "#30117"
+msgid "Reset function cache?"
+msgstr "重置函数缓存？"
+
+msgctxt "#30118"
+msgid "Developer"
+msgstr "开发者"
+
+msgctxt "#30120"
+msgid "Cache"
+msgstr "缓存"
+
+msgctxt "#30121"
+msgid "Cache expire time (minutes)"
+msgstr "缓存过期时间（分钟）"
+
+msgctxt "#30122"
+msgid "Reset function cache"
+msgstr "重置函数缓存"
+
+msgctxt "#30123"
+msgid "Items per page"
+msgstr "每页项目数"
+
+msgctxt "#30124"
+msgid "Video Id/Url"
+msgstr "视频 Id/Url"
+
+msgctxt "#30125"
+msgid "Streams"
+msgstr "流"
+
+msgctxt "#30126"
+msgid "Refresh"
+msgstr "刷新"
+
+msgctxt "#30127"
+msgid "Login"
+msgstr "登录"
+
+msgctxt "#30128"
+msgid "OAuth token is required"
+msgstr "OAuth 令牌是必需的"
+
+msgctxt "#30129"
+msgid "Error"
+msgstr "错误"
+
+msgctxt "#30130"
+msgid "Go to %s"
+msgstr "转到 %s"
+
+msgctxt "#30131"
+msgid "No results returned"
+msgstr "没有返回结果"
+
+msgctxt "#30132"
+msgid "OAuth token is required for access"
+msgstr ""
+
+msgctxt "#30133"
+msgid "Authorize"
+msgstr "授权"
+
+msgctxt "#30134"
+msgid "Get your OAuth token by logging in/signing up to Twitch.tv here:"
+msgstr "通过在此处 登录/注册 Twitch.tv 获取您的 OAuth 令牌:"
+
+msgctxt "#30135"
+msgid "Get OAuth token"
+msgstr "获取 OAuth 令牌"
+
+msgctxt "#30136"
+msgid "Always ask"
+msgstr "总是询问"
+
+msgctxt "#30138"
+msgid "*** Do NOT share your OAuth token. ***"
+msgstr "*** 不要分享您的 OAuth 令牌。***"
+
+msgctxt "#30139"
+msgid "Toggle follow"
+msgstr "切换关注"
+
+msgctxt "#30140"
+msgid "Now following %s"
+msgstr "现在关注 %s"
+
+msgctxt "#30141"
+msgid "Unfollowed %s"
+msgstr "取消关注 %s"
+
+msgctxt "#30142"
+msgid "Redirect URI"
+msgstr "重定向 URI"
+
+msgctxt "#30143"
+msgid "Would you like to follow %s?"
+msgstr "是否要关注 %s？"
+
+msgctxt "#30144"
+msgid "Are you sure you want to unfollow %s?"
+msgstr "确实要取消关注 %s 吗？"
+
+msgctxt "#30145"
+msgid "Toggle block user"
+msgstr "切换屏蔽用户"
+
+msgctxt "#30146"
+msgid "Blocked %s"
+msgstr "屏蔽 %s"
+
+msgctxt "#30147"
+msgid "Unblocked %s"
+msgstr "取消屏蔽 %s"
+
+msgctxt "#30148"
+msgid "Would you like to block %s?"
+msgstr "是否要屏蔽 %s？"
+
+msgctxt "#30149"
+msgid "Are you sure you want to unblock %s?"
+msgstr "确实要取消屏蔽 %s 吗？"
+
+msgctxt "#30150"
+msgid "Blacklist %s"
+msgstr "黑名单 %s"
+
+msgctxt "#30151"
+msgid "Blacklisted %s"
+msgstr "被列入黑名单的 %s"
+
+msgctxt "#30152"
+msgid "Lists"
+msgstr "列表"
+
+msgctxt "#30153"
+msgid "Blacklist"
+msgstr "黑名单"
+
+msgctxt "#30154"
+msgid "Remove a user"
+msgstr "删除用户"
+
+msgctxt "#30155"
+msgid "Remove a game"
+msgstr "删除游戏"
+
+msgctxt "#30156"
+msgid "Remove all users"
+msgstr "删除所有用户"
+
+msgctxt "#30157"
+msgid "Remove all games"
+msgstr "删除所有游戏"
+
+msgctxt "#30158"
+msgid "Remove %s from blacklist"
+msgstr "从黑名单中删除 %s"
+
+msgctxt "#30159"
+msgid "Removed %s from blacklist"
+msgstr "已从黑名单中删除 %s"
+
+msgctxt "#30160"
+msgid "Cleared %s %s"
+msgstr "已清除 %s %s"
+
+msgctxt "#30161"
+msgid "Are you sure you want to clear %s %s?"
+msgstr "确实要清除 %s %s 吗？"
+
+msgctxt "#30162"
+msgid "Clear list"
+msgstr "清除列表"
+
+msgctxt "#30163"
+msgid "Set default quality"
+msgstr "设置默认质量"
+
+msgctxt "#30164"
+msgid "Default '%s' quality '%s' set for %s"
+msgstr "默认“%s”质量“%s”用于设置 %s"
+
+msgctxt "#30165"
+msgid "Removed default '%s' quality for %s"
+msgstr "已删除的默认质量“%s”用于 %s"
+
+msgctxt "#30166"
+msgid "Remove %s quality"
+msgstr "删除 %s 质量"
+
+msgctxt "#30167"
+msgid "Default Qualities"
+msgstr "默认质量"
+
+msgctxt "#30168"
+msgid "Clear default quality"
+msgstr "清除默认质量"
+
+msgctxt "#30169"
+msgid "Choose Quality"
+msgstr "选择质量"
+
+msgctxt "#30170"
+msgid "Playlists"
+msgstr "播放列表"
+
+msgctxt "#30171"
+msgid "Collections"
+msgstr "收藏"
+
+msgctxt "#30172"
+msgid "Browse"
+msgstr "浏览"
+
+msgctxt "#30173"
+msgid "Xbox One"
+msgstr ""
+
+msgctxt "#30174"
+msgid "Playstation 4"
+msgstr ""
+
+msgctxt "#30175"
+msgid "Videos"
+msgstr "视频"
+
+msgctxt "#30176"
+msgid "Clips"
+msgstr "剪辑"
+
+msgctxt "#30177"
+msgid "Invalid OAuth token"
+msgstr "无效的 OAuth 令牌"
+
+msgctxt "#30178"
+msgid "Missing required scopes: %s"
+msgstr "缺少所需的作用域：%s"
+
+msgctxt "#30179"
+msgid "Client id mismatch"
+msgstr "客户端 id 不匹配"
+
+msgctxt "#30180"
+msgid "Go to '%s' - '%s' - '%s' to generate a new token"
+msgstr "转到“%s”-“%s”-“%s”生成新令牌"
+
+msgctxt "#30181"
+msgid "Are you sure you want to blacklist %s?"
+msgstr "确实要将 %s 列入黑名单吗？"
+
+msgctxt "#30184"
+msgid "Change sort by"
+msgstr "更改排序方式"
+
+msgctxt "#30185"
+msgid "Change sort direction"
+msgstr "更改排序方向"
+
+msgctxt "#30186"
+msgid "Change period"
+msgstr "更改时期"
+
+msgctxt "#30187"
+msgid "Popular"
+msgstr "流行的"
+
+msgctxt "#30188"
+msgid "Views"
+msgstr "观看"
+
+msgctxt "#30189"
+msgid "Add a language"
+msgstr "添加语言"
+
+msgctxt "#30190"
+msgid "Remove a language"
+msgstr "删除语言"
+
+msgctxt "#30191"
+msgid "Remove a stream quality"
+msgstr "删除流质量"
+
+msgctxt "#30192"
+msgid "Remove a video quality"
+msgstr "删除视频质量"
+
+msgctxt "#30193"
+msgid "Remove a clip quality"
+msgstr "删除剪辑质量"
+
+msgctxt "#30194"
+msgid "Remove all stream qualities"
+msgstr "删除所有流质量"
+
+msgctxt "#30195"
+msgid "Remove all video qualities"
+msgstr "删除所有视频质量"
+
+msgctxt "#30196"
+msgid "Remove all clip qualities"
+msgstr "删除所有剪辑质量"
+
+msgctxt "#30197"
+msgid "Requires confirmation"
+msgstr "需要确认"
+
+msgctxt "#30198"
+msgid "Requires subscription to %s"
+msgstr "需要订阅 %s"
+
+msgctxt "#30199"
+msgid "Connection failed"
+msgstr "连接失败"
+
+msgctxt "#30200"
+msgid "No %s found"
+msgstr "找不到 %s"
+
+msgctxt "#30201"
+msgid "Bandwidth"
+msgstr "带宽"
+
+msgctxt "#30202"
+msgid "Currently Live"
+msgstr "当前直播"
+
+msgctxt "#30203"
+msgid "Went Live"
+msgstr "上线"
+
+msgctxt "#30204"
+msgid "Live notifications"
+msgstr "直播通知"
+
+msgctxt "#30205"
+msgid "Audible"
+msgstr "有声的"
+
+msgctxt "#30206"
+msgid "Playback failed"
+msgstr "播放失败"
+
+msgctxt "#30207"
+msgid "Retrying in %d seconds"
+msgstr "%d 秒后重试"
+
+msgctxt "#30208"
+msgid "Attempting to reconnect to %s"
+msgstr "正在尝试重新连接到 %s"
+
+msgctxt "#30209"
+msgid "Attempt #%d"
+msgstr "尝试 #%d"
+
+msgctxt "#30210"
+msgid "Attempt reconnection to live streams"
+msgstr "尝试重新连接到直播流"
+
+msgctxt "#30211"
+msgid "Enabled"
+msgstr "已启用"
+
+msgctxt "#30212"
+msgid "Failed to connect to Twitch API"
+msgstr "无法连接到 Twitch API"
+
+msgctxt "#30213"
+msgid "Followers"
+msgstr "关注者"
+
+msgctxt "#30214"
+msgid "Items"
+msgstr "项目"
+
+msgctxt "#30215"
+msgid "Duration"
+msgstr "持续时间"
+
+msgctxt "#30216"
+msgid "Curated"
+msgstr "策划"
+
+msgctxt "#30217"
+msgid "Press OK to resolve"
+msgstr "按确定解决"
+
+msgctxt "#30218"
+msgid "Supported video ids: a123435, c123435, v123435, videos123435[CR]Example urls:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
+msgstr "支持的视频 ID: a123435, c123435, v123435, videos123435[CR]示例 URL:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
+
+msgctxt "#30219"
+msgid "Main Menu"
+msgstr "主菜单"
+
+msgctxt "#30220"
+msgid "Failed to get url, try again shortly."
+msgstr "获取 url 失败，请稍后重试。"
+
+msgctxt "#30221"
+msgid "Unknown"
+msgstr "未知"
+
+msgctxt "#30222"
+msgid "VODCast highlight color"
+msgstr "VODCast 高亮颜色"
+
+msgctxt "#30223"
+msgid "Use inputstream.adaptive"
+msgstr "使用 inputstream.adaptive"
+
+msgctxt "#30224"
+msgid "Configure inputstream.adaptive"
+msgstr "配置 inputstream.adaptive"
+
+msgctxt "#30225"
+msgid "inputstream.adaptive is enabled in the Twitch settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
+msgstr "inputstream.adaptive 在 Twitch 设置中已启用，但 inputstream.adaptive 似乎已禁用。是否要立即启用 inputstream.adaptive？"
+
+msgctxt "#30226"
+msgid "The installed inputstream.adaptive add-on does not meet the version requirement(%s), and has been disabled in the Twitch add-on settings."
+msgstr "安装的 inputstream.adaptive 加载项不符合版本要求（%s），已在 Twitch 加载项设置中禁用。"
+
+msgctxt "#30227"
+msgid "Revoke Token"
+msgstr "撤销令牌"
+
+msgctxt "#30228"
+msgid "Are you sure you want to revoke your OAuth token?"
+msgstr "是否确实要吊销 OAuth 令牌？"
+
+msgctxt "#30229"
+msgid "OAuth token has been revoked"
+msgstr "OAuth 令牌已被吊销"
+
+msgctxt "#30230"
+msgid "OAuth token has been updated"
+msgstr "OAuth 令牌已更新"
+
+msgctxt "#30231"
+msgid "%s started streaming %s"
+msgstr "%s 开始推流 %s"
+
+msgctxt "#30232"
+msgid "Notify at start"
+msgstr "开始时通知"
+
+msgctxt "#30233"
+msgid "Group notifications at start"
+msgstr "开始时群组通知"
+
+msgctxt "#30234"
+msgid "Reset cache on Refresh"
+msgstr "刷新时重置缓存"
+
+msgctxt "#30235"
+msgid "New search"
+msgstr "新搜索"
+
+msgctxt "#30236"
+msgid "Search history size"
+msgstr "搜索历史记录大小"
+
+msgctxt "#30237"
+msgid "Clear search history?"
+msgstr "清除搜索历史记录？"
+
+msgctxt "#30238"
+msgid "Remove %s from search history?"
+msgstr "是否从搜索历史记录中删除 %s？"
+
+msgctxt "#30239"
+msgid "Remove %s"
+msgstr "删除 %s"
+
+msgctxt "#30240"
+msgid "Clear search history"
+msgstr "清除搜索历史记录"
+
+msgctxt "#30241"
+msgid "Search history cleared"
+msgstr "已清除搜索历史记录"
+
+msgctxt "#30242"
+msgid "Removed %s from search history"
+msgstr "已从搜索历史记录中删除 %s"
+
+msgctxt "#30243"
+msgid "Maintenance"
+msgstr "维护"
+
+msgctxt "#30244"
+msgid "Search History"
+msgstr "搜索历史记录"
+
+msgctxt "#30245"
+msgid "Delete streams search history"
+msgstr "删除流搜索历史记录"
+
+msgctxt "#30246"
+msgid "Delete channels search history"
+msgstr "删除频道搜索历史记录"
+
+msgctxt "#30247"
+msgid "Delete games search history"
+msgstr "删除游戏搜索历史记录"
+
+msgctxt "#30248"
+msgid "Delete video id/url search history"
+msgstr "删除视频 id/url 搜索历史记录"
+
+msgctxt "#30249"
+msgid "Other"
+msgstr "其他"
+
+msgctxt "#30250"
+msgid "Delete storage.json"
+msgstr "删除 storage.json"
+
+msgctxt "#30251"
+msgid "Are you sure you want to delete %s?"
+msgstr "确实要删除 %s 吗？"
+
+msgctxt "#30252"
+msgid "Deleting %s succeeded"
+msgstr "删除 %s 成功"
+
+msgctxt "#30253"
+msgid "Deleting %s failed"
+msgstr "删除 %s 失败"
+
+msgctxt "#30254"
+msgid "Adaptive"
+msgstr "自适应"
+
+msgctxt "#30255"
+msgid "Thumbnail size"
+msgstr "缩略图尺寸"
+
+msgctxt "#30256"
+msgid "Large"
+msgstr "大"
+
+msgctxt "#30257"
+msgid "Medium"
+msgstr "中"
+
+msgctxt "#30258"
+msgid "Small"
+msgstr "小"
+
+msgctxt "#30259"
+msgid "Live preview refresh interval (minutes)"
+msgstr "直播预览刷新间隔（分钟）"
+
+msgctxt "#30260"
+msgid "Limit to 30 fps"
+msgstr "限制在每秒 30 帧"
+
+msgctxt "#30261"
+msgid "Private API Credentials"
+msgstr "私有 API 凭据"
+
+msgctxt "#30262"
+msgid "Change languages"
+msgstr "更改语言"
+
+msgctxt "#30263"
+msgid "Frame rate limit"
+msgstr "帧速率限制"
+
+msgctxt "#30264"
+msgid "Follow"
+msgstr "关注"
+
+msgctxt "#30265"
+msgid "Unfollow"
+msgstr "取消关注"
+
+msgctxt "#30266"
+msgid "Add to queue"
+msgstr ""
+
+msgctxt "#30267"
+msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr ""
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr ""
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr ""
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr ""
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr ""
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr ""
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
+msgstr ""
+
+#~ msgctxt "#30132"
+#~ msgid "OAuth token is required for access to authorized user functions."
+#~ msgstr "访问授权用户函数需要 OAuth 令牌。"
+
+#~ msgctxt "#30005"
+#~ msgid "Featured Streams"
+#~ msgstr "特色流"

@@ -1,0 +1,83 @@
+1.3.2+matrix.1 (2021.12.28)
+- Quick fix due to website changes (thanks to Itai0001).
+- Replaced Travis-CI by AppVeyor for unit tests.
+1.3.1+matrix.1 (2020.08.29)
+- Quick fix due to loglevel deprecation on matrix release.
+1.3.0+matrix.1 (2020.05.07)
+- Code updated for matrix onwards.
+1.1.1 (2020.05.06)
+- Quick fix due to website changes.
+1.1.0 (2019.01.27)
+- Updated add-on for Isengard+ due to missing add-on dependency.
+1.0.10 (2018.09.05)
+- Removed add-on dependencies.
+- Deprecated Gotham release due to missing add-on dependency.
+- Modified to allow upgrades from Helix release onwards.
+- Minor changes and refactoring.
+1.0.9 (2018.03.30)
+- Minor fixes due to website changes.
+- Added sort by most viewed/recent option from add-on settings menu.
+1.0.8 (2017.03.13)
+- Fixed video scraper due to Dailymotion website changes.
+- Fixed category menus due to website changes.
+- Fixed search option due to website changes.
+- Fixed Next/Previous Page entries due to website changes.
+- Improved Vimeo scraper to support non standard video resolutions.
+- Updated logging system.
+- Updated lutils library to latest version.
+- Updated category test case.
+- Improved video patterns.
+- Code refactored and cleaned.
+1.0.7 (2016.04.05)
+- Update Vimeo scraper due to Vimeo website changes.
+1.0.6 (2015.08.11)
+- Quick fix on scraper due to Dailymotion website changes.
+- Fixed Next/Previous Page entries due to website changes.
+1.0.5
+- Added filter to show All/Best videos from add-on setings menu.
+- Included category menu into the Next/Previous Page title entries.
+- Fixed last page regexp for Next Page entry to allow explore beyond nine.
+1.0.4
+- Fixed Next/Previous Page entries due to website changes.
+- Updated Dailymotion scraper to support more video formats.
+1.0.3
+- Rewriten video list parser to make it more tolerant to website changes.
+- Replaced builtin Disclose TV parser on behalf of Disclose TV add-on (credits: sphere)
+1.0.2
+- Added Travis-CI integration support for scraper API testing.
+- Added support for Disclose TV videos.
+- Modified video list parser due to website changes.
+- Improved Search option for retrieve all kind of videos.
+1.0.1
+- Added mail tag into addon.xml file.
+- Added settings.xml encoding line.
+- Modified add-on logging system according to recommendations.
+- Modified categories parser due to website changes.
+1.0.0
+- Fixed Vimeo custom scraper due to API change.
+- Modified video list parser due to website changes.
+- Added support for SnagFilms videos thanks to the SnagFilms add-on (credits: t1m).
+- Updated version number for official repo bump.
+0.1.0
+- Remove the Vimeo add-on dependency due to a problem found running on Gotham.
+- Made custom Vimeo scraper to support the Vimeo videos on Gotham.
+- Added forum thread to addon and README files.
+0.0.9
+- Clean up code and documentation.
+- prepare everything for first bump into git repo.
+0.0.8
+- Added fanart and icon.
+0.0.7
+- Added Search option for videos.
+0.0.6
+- Added internationalization support.
+0.0.5
+- Added support for Dailymotion, archive.org and kickstarter videos.
+0.0.4
+- Updated parser for page navigation.
+0.0.3
+- Suported videos for Youtube and Vimeo.
+0.0.2
+- added suport for info tags in videos.
+0.0.1
+- First Try.

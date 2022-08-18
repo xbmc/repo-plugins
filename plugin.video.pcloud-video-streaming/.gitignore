@@ -1,0 +1,5 @@
+*.pyo
+*.pyc
+zz*
+**/*.stackdump
+__init__.py

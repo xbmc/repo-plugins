@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.dailymotion_com" name="DailyMotion.com" version="2.4.3+matrix.1" provider-name="gujal">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.six" version="0.0.1"/>
+        <import addon="script.module.kodi-six" version="0.0.1"/>
+        <import addon="script.module.requests" version="2.4.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de_DE">Filme, TV, Musik, User-Clips und Live-Streams</summary>
+        <summary lang="en_GB">Movies, TV, Music, User-Clips, and Livestreams</summary>
+        <summary lang="fr_FR">Films, Séries TV, Musique, Clips, et Live</summary>
+        <summary lang="he_IL">סרטים, טלוויזיה, מוסיקה, סירטונים של המשתמש, תלת מימד והזרמה חיה</summary>
+        <description lang="de_DE">Dailymotion zieht 300 Millionen Nutzer aus der ganzen Welt an, die jeden Monat 3,5 Milliarden Videos auf ihrem Player ansehen.</description>
+        <description lang="en_GB">Dailymotion attracts 300 million users from around the world, who watch 3.5 billion videos on its player each month.</description>
+        <description lang="fr_FR">Dailymotion attire 300 millions d’utilisateurs qui regardent 3,5 milliards de vidéos sur son player chaque mois, à travers le monde.</description>
+        <description lang="he_IL">Dailymotion מושך 300 מיליון משתמשים מרחבי העולם שצופים ב -3.5 מיליארד סרטונים מדי חודש.</description>
+        <disclaimer lang="de_DE">Einige Teile dieses Addons sind in Ihrem Wohnsitzland möglicherweise nicht legal. Bitte informieren Sie sich vor der Installation bei den örtlichen Gesetzen.</disclaimer>
+        <disclaimer lang="en_GB">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+        <disclaimer lang="fr_FR">Certaines parties de cet addon peuvent ne pas être légales dans votre pays de résidence - s’il vous plaît vérifier avec vos lois locales avant d’installer.</disclaimer>
+        <disclaimer lang="he_IL">ייתכן שחלק מהתוספות האלו אינן חוקיות בארץ המגורים שלך - אנא בדוק את החוקים המקומיים שלך לפני ההתקנה.</disclaimer>
+        <news>
+[B]Version 2.4.3 - 02 Nov 2021[/B] 
+ - Fix search function prompting for keyboard input after playback
+ - Fix live playback issues
+ - Fix Nexus compatibility
+        </news>
+        <website>https://www.dailymotion.com</website>
+        <source>https://github.com/Gujal00/plugin.video.dailymotion_com</source>
+		<forum>https://forum.kodi.tv/showthread.php?tid=142626</forum>
+		<license>GPL-2.0-or-later</license>
+        <email>gujal at protonmail dot com</email>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot-01.jpg</screenshot>
+            <screenshot>resources/images/screenshot-02.jpg</screenshot>
+            <screenshot>resources/images/screenshot-03.jpg</screenshot>
+        </assets>
+    </extension>
+</addon>

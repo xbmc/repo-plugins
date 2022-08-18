@@ -1,0 +1,83 @@
+# Version 1.1.1
+
+- minor python 3 fixes & code improvements (from Kodi Travis CI)
+
+# Version 1.1.0
+
+- API fixes
+- Added add-on option to select video stream (language, subtitles...)
+
+# Version 1.0.2
+
+- weekly browse
+- bugfix (settings parsing #54)
+
+# Version 1.0.1
+
+Major encoding fix & html entities decode
+
+# Version 1.0.0
+
+Major rewrite.
+
+A lot of new features, feedback welcome.
+
+# Version 0.5.8
+
+thanks to https://github.com/cifera
+
+- Can now use new api see issue #35,
+- Now gets all videos for last 7 days (can take a while)
+- Most other functions removed
+
+# Version 0.5.4
+
+- updated dependency version
+- changed live stream to m3u8 to get around RTMP scaling issue
+- playing an item should no longer change the listitem label
+
+# Version 0.5.3
+
+- cosmetic improvements (inspired by http://www.kodinerds.net/index.php/Thread/48300-Release-Arte-tv-v3/)
+
+# Version 0.5.2
+
+- encoding fix (download notification)
+
+# Version 0.5.1
+
+- fixed download when RTMP playback is selected
+- fixed german translation (thanks to https://github.com/hstraub)
+- Added ability to browse by date
+- Added queuing system for videos via context menu
+
+# Version 0.5.0
+
+- Switched to a new API
+- Strings updated to match the new ARTE categories
+
+# Version 0.4.0
+
+- Fixed download procedure (got rid of simpledownloader for a more shitty solution)
+- Added download quality setting
+- Added very low quality setting (may not be available for every video \* fallbacks on highest)
+- You can choose to always play videos in subtitled original version rather than dubbed if available
+
+# Version 0.3.0
+
+- Added ability to browse by theme (thanks to https://github.com/zerty)
+
+# Version 0.2.0
+
+- Fixed quality setting
+- Added ability to download videos
+
+# Version 0.1.0
+
+Initial version
+
+- Choose between french and german language for videos
+- Choose preferred video quality (High, Medium, Low)
+- Choose between HTTP and RTMP protocol
+- Stream from New, Selection, Most Viewed and Last Chance categories
+- Stream live TV

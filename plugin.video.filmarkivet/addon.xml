@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.filmarkivet" name="Filmarkivet" version="3.3.0+matrix.1" provider-name="Anders Piniesjö (Creator), Ikosse (Maintainer)">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+    <import addon="script.module.beautifulsoup4" version="4.3.2+matrix.1" />
+    <import addon="script.module.requests-cache" version="0.4.13+matrix.1" />
+    <import addon="script.module.requests" version="2.22.0+matrix.1" />
+  </requires>
+  <extension library="addon.py" point="xbmc.python.pluginsource">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language>sv</language>
+    <email>andrelofgren@hotmail.co.uk</email>
+    <license>GPL-3.0-or-later</license>
+    <source>https://github.com/Ikosse/plugin.video.filmarkivet</source>
+    <summary lang="en_GB">Watch movies from the Swedish Film Institute film archive</summary>
+    <summary lang="sv_SE">Se filmer från Svenska Filminstitutets Filmarkivet</summary>
+    <summary lang="de_DE">Filme vom Filmarchiv des schwedisches Filminstituts</summary>
+    <description lang="en_GB">Filmarkivet is an archive of historical Swedish films, provided by the Swedish Film Institute.</description>
+    <description lang="sv_SE">Filmarkivet är ett arkiv med historiska svenska filmer, publicerade av Svenska Filminstitutet.</description>
+    <description lang="de_DE">Filmarkivet ist ein Archiv von historischen schwedischen Filmen, veröffentlicht bei Svenska Filminstitutet.</description>
+    <news>v3.2.0 (2021-04-26)
+      [fix] Support Filmarkivet web changes
+      [update] Adapted to Matrix 
+    </news>
+    <news>v3.3.0 (2021-06-03)
+      [update] Some minor optimizations
+      [update] Code refactoring
+	  [update] Added video info to context menu
+    </news>
+    <assets>
+      	<icon>resources/icon.png</icon>
+    </assets>
+  </extension>
+</addon>

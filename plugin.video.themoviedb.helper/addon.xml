@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.themoviedb.helper"
+version="4.4.0"
+name="TheMovieDb Helper"
+provider-name="jurialmunkey">
+<requires>
+  <import addon="xbmc.python" version="3.0.0"/>
+  <import addon="script.module.requests" version="2.9.1"/>
+  <import addon="script.module.pil" version="1.1.7"/>
+</requires>
+<extension point="xbmc.python.pluginsource" library="plugin.py">
+  <provides>video</provides>
+</extension>
+<extension point="xbmc.python.script" library="script.py" />
+<extension point="xbmc.service" library="service.py" />
+<extension point="kodi.context.item">
+  <menu id="kodi.core.main">
+    <item library="context-playusing.py">
+      <label>$ADDON[plugin.video.themoviedb.helper 32322]</label>
+      <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.playusing))</visible>
+    </item>
+    <item library="context-related.py">
+      <label>$ADDON[plugin.video.themoviedb.helper 32235]</label>
+      <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.related))</visible>
+    </item>
+    <item library="context-addlibrary.py">
+      <label>$LOCALIZE[20444]</label>
+      <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.addlibrary))</visible>
+    </item>
+    <item library="context-trakt.py">
+      <label>$ADDON[plugin.video.themoviedb.helper 32295]</label>
+      <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.trakt))</visible>
+    </item>
+    <item library="context-refresh.py">
+      <label>$ADDON[plugin.video.themoviedb.helper 32233]</label>
+      <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.refresh))</visible>
+    </item>
+    <item library="context-artwork.py">
+      <label>$ADDON[plugin.video.themoviedb.helper 32222]</label>
+      <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.artwork))</visible>
+    </item>
+    <item library="context-sorting.py">
+      <label>$ADDON[plugin.video.themoviedb.helper 32309]</label>
+      <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.sorting))</visible>
+    </item>
+  </menu>
+</extension>
+<extension point="xbmc.addon.metadata">
+  <summary lang="en_GB">TheMovieDb Helper - Now With Trakt Support!</summary>
+  <summary lang="es_ES">TheMovieDb Helper - ¡Ahora con soporte para Trakt!</summary>
+  <description lang="en_GB">TheMovieDb Helper provides details about movies, tvshows and actors from TMDb. Users can access a variety of lists from TMDb and Trakt.</description>
+  <description lang="es_ES">TheMovieDb Helper proporciona detalles sobre películas, programas de televisión y actores de TMDb. Los usuarios pueden acceder a una variedad de listas desde TMDb y Trakt.</description>
+  <disclaimer lang="en_GB">Provided by TheMovieDb and Trakt.</disclaimer>
+  <disclaimer lang="es_ES">Proporcionado por TheMovieDb y Trakt</disclaimer>
+  <license>GPL-3.0-or-later</license>
+  <website>https://github.com/jurialmunkey/plugin.video.themoviedb.helper</website>
+  <forum>https://forum.kodi.tv/showthread.php?tid=345847</forum>
+  <assets>
+    <icon>icon.png</icon>
+    <fanart>fanart.jpg</fanart>
+    <screenshot>resources/screenshot-01.jpg</screenshot>
+    <screenshot>resources/screenshot-02.jpg</screenshot>
+  </assets>
+  <news>Add some additional dbid checking based on title/year combo</news>
+</extension>
+</addon>

@@ -1,0 +1,265 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.lbry\n"
+"POT-Creation-Date: 2020-12-01 12:53+0100\n"
+"PO-Revision-Date: 2021-06-14 10:03+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# settings 300xx
+msgctxt "#30000"
+msgid "API Server"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Show NSFW"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Items per page"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Kludges"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Workaround server filter time out"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Options"
+msgstr ""
+
+# errors 301xx
+msgctxt "#30100"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Server Error"
+msgstr ""
+
+msgctxt "#30102"
+msgid "API Error"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Not implemented yet"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Save error"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Connection failed"
+msgstr ""
+
+msgctxt "#30106"
+msgid "API Server unreachable"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Comment API Error"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Comment API Server unreachable"
+msgstr ""
+
+# generic UI 302xx
+msgctxt "#30200"
+msgid "Followed Channels"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30202"
+msgid "New"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Next Page"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Payment required"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Follow %s"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Unfollow %s"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Go to %s"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Download"
+msgstr ""
+
+msgctxt "#30209"
+msgid "Enter search terms"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Playlists"
+msgstr ""
+
+msgctxt "#30211"
+msgid "Watch Later"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Add to %s"
+msgstr ""
+
+msgctxt "#30213"
+msgid "Remove from %s"
+msgstr ""
+
+msgctxt "#30214"
+msgid "Pay %.2f %s for this video?"
+msgstr ""
+
+msgctxt "#30215"
+msgid "Current balance: %.2f %s"
+msgstr ""
+
+msgctxt "#30216"
+msgid "Repost"
+msgstr ""
+
+msgctxt "#30217"
+msgid "Repost in %s"
+msgstr ""
+
+msgctxt "#30218"
+msgid "Recent"
+msgstr ""
+
+msgctxt "#30219"
+msgid "Loading comments..."
+msgstr ""
+
+msgctxt "#30220"
+msgid "Fetching Page"
+msgstr ""
+
+msgctxt "#30221"
+msgid "New Comment"
+msgstr ""
+
+msgctxt "#30222"
+msgid "Reply"
+msgstr ""
+
+msgctxt "#30223"
+msgid "Edit"
+msgstr ""
+
+msgctxt "#30224"
+msgid "Remove"
+msgstr ""
+
+msgctxt "#30225"
+msgid "Change User"
+msgstr ""
+
+msgctxt "#30226"
+msgid "Like"
+msgstr ""
+
+msgctxt "#30227"
+msgid "Dislike"
+msgstr ""
+
+msgctxt "#30228"
+msgid "Clear Vote"
+msgstr ""
+
+msgctxt "#30229"
+msgid "Select User Channel"
+msgstr ""
+
+msgctxt "#30230"
+msgid "No Comments"
+msgstr ""
+
+msgctxt "#30231"
+msgid "Loading user channel list..."
+msgstr ""
+
+msgctxt "#30232"
+msgid "No owned channels found."
+msgstr ""
+
+msgctxt "#30233"
+msgid "Found user."
+msgstr ""
+
+msgctxt "#30234"
+msgid "Multiple users found. Select a user."
+msgstr ""
+
+msgctxt "#30235"
+msgid "Verifying user channel..."
+msgstr ""
+
+msgctxt "#30236"
+msgid "User verified!"
+msgstr ""
+
+msgctxt "#30237"
+msgid "User could not be verified!"
+msgstr ""
+
+msgctxt "#30238"
+msgid "Comments"
+msgstr ""
+
+msgctxt "#30239"
+msgid "Post As"
+msgstr ""
+
+msgctxt "#30240"
+msgid "Refresh"
+msgstr ""
+
+msgctxt "#30241"
+msgid "Posting"
+msgstr ""
+
+msgctxt "#30242"
+msgid "Waiting for response..."
+msgstr ""
+
+msgctxt "#30243"
+msgid "Select channel"
+msgstr ""
+
+msgctxt "#30244"
+msgid "Channel: "
+msgstr ""
+
+msgctxt "#30245"
+msgid "Clear channel"
+msgstr ""
+
+msgctxt "#30246"
+msgid "Login"
+msgstr ""

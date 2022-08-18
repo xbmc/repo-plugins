@@ -1,0 +1,830 @@
+# Kodi Media Center language file
+# Addon Name: Catch-up TV & More
+# Addon id: plugin.video.catchuptvandmore
+# Addon Provider: SylvainCecchetto
+msgid ""
+msgstr ""
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+# Settings tabs/categories (from 30000 to 30019)
+
+msgctxt "#30000"
+msgid ""
+msgstr ""
+
+msgctxt "#30001"
+msgid ""
+msgstr ""
+
+msgctxt "#30002"
+msgid "Quality and content"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Downloads"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Accounts"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Advanced settings"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30007"
+msgid ""
+msgstr ""
+
+msgctxt "#30008"
+msgid ""
+msgstr ""
+
+msgctxt "#30009"
+msgid "General"
+msgstr ""
+
+
+# Settings line separators (from 30010 to 30029)
+
+msgctxt "#30010"
+msgid "Hide main menu categories"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Hide channels"
+msgstr ""
+
+msgctxt "#30012"
+msgid "To configure YTDL go settings of script.module.youtube.dl"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Hide countries"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Hide websites"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Hide live TV countries"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Hide catch-up TV countries"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Default values"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Unmask main menus items"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Unmask live TV channels"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Unmask replay TV channels"
+msgstr ""
+
+
+# Main menu (from 30030 to 30049)
+
+msgctxt "#30030"
+msgid "Live TV"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Catch-up TV"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Websites"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Favourites"
+msgstr ""
+
+
+# Countries (from 30050 to 30079)
+
+msgctxt "#30050"
+msgid "France"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Switzerland"
+msgstr ""
+
+msgctxt "#30052"
+msgid "United Kingdom"
+msgstr ""
+
+msgctxt "#30053"
+msgid "International"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Belgium"
+msgstr ""
+
+msgctxt "#30055"
+msgid "Japan"
+msgstr ""
+
+msgctxt "#30056"
+msgid "Canada"
+msgstr ""
+
+msgctxt "#30057"
+msgid "United States of America"
+msgstr ""
+
+msgctxt "#30058"
+msgid "Poland"
+msgstr ""
+
+msgctxt "#30059"
+msgid "Spain"
+msgstr ""
+
+msgctxt "#30060"
+msgid "Tunisia"
+msgstr ""
+
+msgctxt "#30061"
+msgid "Italia"
+msgstr ""
+
+msgctxt "#30062"
+msgid "Netherlands"
+msgstr ""
+
+msgctxt "#30063"
+msgid "China"
+msgstr ""
+
+msgctxt "#30064"
+msgid "Cameroon"
+msgstr ""
+
+msgctxt "#30065"
+msgid "Slovenia"
+msgstr ""
+
+msgctxt "#30066"
+msgid "Ethiopia"
+msgstr ""
+
+msgctxt "#30067"
+msgid "Morocco"
+msgstr ""
+
+msgctxt "#30068"
+msgid "Singapore"
+msgstr ""
+
+msgctxt "#30069"
+msgid "Lituania"
+msgstr ""
+
+
+# Channels (from 30080 to 30129)
+
+msgctxt "#30080"
+msgid "French channels"
+msgstr ""
+
+msgctxt "#30081"
+msgid "Belgian channels"
+msgstr ""
+
+msgctxt "#30082"
+msgid "Japanese channels"
+msgstr ""
+
+msgctxt "#30083"
+msgid "Switzerland channels"
+msgstr ""
+
+msgctxt "#30084"
+msgid "United Kingdom channels"
+msgstr ""
+
+msgctxt "#30085"
+msgid "International channels"
+msgstr ""
+
+msgctxt "#30086"
+msgid "Canadian channels"
+msgstr ""
+
+msgctxt "#30087"
+msgid "United States channels"
+msgstr ""
+
+msgctxt "#30088"
+msgid "Polish channels"
+msgstr ""
+
+msgctxt "#30089"
+msgid "Spanish channels"
+msgstr ""
+
+msgctxt "#30090"
+msgid "Tunisia channels"
+msgstr ""
+
+msgctxt "#30091"
+msgid "Italian channels"
+msgstr ""
+
+msgctxt "#30092"
+msgid "Dutch channels"
+msgstr ""
+
+msgctxt "#30093"
+msgid "Chinese channels"
+msgstr ""
+
+msgctxt "#30094"
+msgid "Cameroon channels"
+msgstr ""
+
+msgctxt "#30095"
+msgid "Slovenian channels"
+msgstr ""
+
+msgctxt "#30096"
+msgid "Ethiopian channels"
+msgstr ""
+
+msgctxt "#30097"
+msgid "Moroccan channels"
+msgstr ""
+
+
+# Websites (from 30130 to 30149)
+
+
+
+# Quality and content (from 30150 to 30199)
+
+msgctxt "#30150"
+msgid "Video quality"
+msgstr ""
+
+msgctxt "#30151"
+msgid "Video quality (BEST|DEFAULT|DIALOG)"
+msgstr ""
+
+msgctxt "#30152"
+msgid "Contents"
+msgstr ""
+
+msgctxt "#30153"
+msgid "Arte: Choose Channel"
+msgstr ""
+
+msgctxt "#30154"
+msgid "France 24: Choose Channel"
+msgstr ""
+
+msgctxt "#30155"
+msgid "Euronews: Choose Channel"
+msgstr ""
+
+msgctxt "#30156"
+msgid "MTV: Choose Channel"
+msgstr ""
+
+msgctxt "#30157"
+msgid "DW: Choose Channel"
+msgstr ""
+
+msgctxt "#30158"
+msgid "France 3 Régions: Choose region"
+msgstr ""
+
+msgctxt "#30159"
+msgid "La 1ère: Choose region"
+msgstr ""
+
+msgctxt "#30160"
+msgid "Bein Sports: Choose Channel"
+msgstr ""
+
+msgctxt "#30161"
+msgid "QVC: Choose Channel"
+msgstr ""
+
+msgctxt "#30162"
+msgid "NHK World: Choose Country"
+msgstr ""
+
+msgctxt "#30163"
+msgid "CGTN: Choose Channel"
+msgstr ""
+
+msgctxt "#30164"
+msgid "ICI Télé: Choose region"
+msgstr ""
+
+msgctxt "#30165"
+msgid "Realmadrid TV: Choose Channel"
+msgstr ""
+
+msgctxt "#30166"
+msgid "RT: Choose Channel"
+msgstr ""
+
+msgctxt "#30167"
+msgid "TVP 3: Choose region"
+msgstr ""
+
+msgctxt "#30168"
+msgid "Enable TV guide (slower)"
+msgstr ""
+
+msgctxt "#30169"
+msgid "Enable Subtitle if present in the content"
+msgstr ""
+
+msgctxt "#30170"
+msgid "CBC: Choose region"
+msgstr ""
+
+msgctxt "#30171"
+msgid "BFM Régions: Choose region"
+msgstr ""
+
+msgctxt "#30172"
+msgid "TV5 monde plus: Choose country"
+msgstr ""
+
+msgctxt "#30173"
+msgid "TV5 monde plus: Choose language"
+msgstr ""
+
+
+# Download (from 30200 to 30239)
+
+msgctxt "#30200"
+msgid "Download directory"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Quality of the video to download"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Download in background"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Automatically rename the video (download directory required)"
+msgstr ""
+
+
+# Accounts (from 30240 to 30269)
+
+msgctxt "#30240"
+msgid "NRJ Login"
+msgstr ""
+
+msgctxt "#30241"
+msgid "NRJ Password"
+msgstr ""
+
+msgctxt "#30242"
+msgid "VRT NU Login"
+msgstr ""
+
+msgctxt "#30243"
+msgid "VRT NU Password"
+msgstr ""
+
+msgctxt "#30244"
+msgid "6play Login"
+msgstr ""
+
+msgctxt "#30245"
+msgid "6play Password"
+msgstr ""
+
+msgctxt "#30246"
+msgid "RTLplay Login"
+msgstr ""
+
+msgctxt "#30247"
+msgid "RTLplay Password"
+msgstr ""
+
+msgctxt "#30248"
+msgid "ABWeb Login"
+msgstr ""
+
+msgctxt "#30249"
+msgid "ABWeb Password"
+msgstr ""
+
+msgctxt "#30250"
+msgid "UKTVPlay Login"
+msgstr ""
+
+msgctxt "#30251"
+msgid "UKTVPlay Password"
+msgstr ""
+
+msgctxt "#30252"
+msgid "RMCBFM Play Login"
+msgstr ""
+
+msgctxt "#30253"
+msgid "RMCBFM Play Password"
+msgstr ""
+
+# TV integration (from 30270 to 30289)
+
+msgctxt "#30270"
+msgid "TV integration"
+msgstr ""
+
+msgctxt "#30271"
+msgid "Kodi Live TV integration"
+msgstr ""
+
+msgctxt "#30272"
+msgid "Install IPTV Manager add-on"
+msgstr ""
+
+msgctxt "#30273"
+msgid "Enable Kodi Live TV integration"
+msgstr ""
+
+msgctxt "#30274"
+msgid "Open IPTV Manager settings"
+msgstr ""
+
+msgctxt "#30275"
+msgid "Select channels to enable"
+msgstr ""
+
+msgctxt "#30276"
+msgid "Failed to save TV integration settings"
+msgstr ""
+
+msgctxt "#30277"
+msgid "Select channels to enable in Kodi Live TV"
+msgstr ""
+
+
+
+# Reserved space for other tab/category in settins (from 30290 to 30339)
+
+
+
+
+
+# Advanced settings (from 30370 to 30399)
+
+msgctxt "#30370"
+msgid "Clear cache"
+msgstr ""
+
+msgctxt "#30371"
+msgid "Cache cleared"
+msgstr ""
+
+msgctxt "#30372"
+msgid "Send Kodi log to the developers when an error occurred"
+msgstr ""
+
+msgctxt "#30373"
+msgid "Delete favourites"
+msgstr ""
+
+msgctxt "#30374"
+msgid "Favourites deleted"
+msgstr ""
+
+
+# Settings of 'General' category (from 30400 to 30429)
+
+msgctxt "#30400"
+msgid "Restore default order of all menus"
+msgstr ""
+
+msgctxt "#30401"
+msgid "Unmask all hidden items"
+msgstr ""
+
+msgctxt "#30402"
+msgid "Select items to unmask"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Menu items"
+msgstr ""
+
+msgctxt "#30404"
+msgid ""
+msgstr ""
+
+msgctxt "#30405"
+msgid ""
+msgstr ""
+
+msgctxt "#30406"
+msgid ""
+msgstr ""
+
+msgctxt "#30407"
+msgid "Default order of all menus have been restored"
+msgstr ""
+
+msgctxt "#30408"
+msgid "All hidden items have been unmasked"
+msgstr ""
+
+
+# Advanced settings (from 30430 to 30449)
+
+msgctxt "#30430"
+msgid "Automatically start Catch-up TV & More when Kodi starts"
+msgstr ""
+
+
+# Reserved space for other tab/category in settins (from 30450 to 30499)
+
+
+
+# Context menu (from 30500 to 30599)
+
+msgctxt "#30500"
+msgid "Move down"
+msgstr ""
+
+msgctxt "#30501"
+msgid "Move up"
+msgstr ""
+
+msgctxt "#30502"
+msgid "Hide"
+msgstr ""
+
+msgctxt "#30503"
+msgid "Download"
+msgstr ""
+
+msgctxt "#30504"
+msgid "List Videos (type=extrait)"
+msgstr ""
+
+msgctxt "#30505"
+msgid "List Videos (type=episode)"
+msgstr ""
+
+
+# Dialog boxes (from 30600 to 30699)
+
+msgctxt "#30600"
+msgid "Information"
+msgstr ""
+
+msgctxt "#30601"
+msgid "To re-enable hidden items go to the plugin settings"
+msgstr ""
+
+msgctxt "#30602"
+msgid "This content is DRM protected. To be able to play it we invite you to update Kodi to the version 18 or above. Thank you for your understanding."
+msgstr ""
+
+msgctxt "#30603"
+msgid "This content is DRM protected. The download mode doesn't work for this kind of protection. Thank you for your understanding."
+msgstr ""
+
+msgctxt "#30604"
+msgid "Access to this content requires an account %s. You can provide your credentials for it in the settings of this add-on. If you don't have an account, you can create one at this url %s."
+msgstr ""
+
+msgctxt "#30605"
+msgid "You can now use Kodi's TV feature to watch live TV channels from Catch-up TV & More, follow the tutorial at https://catch-up-tv-and-more.github.io/live_tv_installation/."
+msgstr ""
+
+msgctxt "#30606"
+msgid "Do you want to see this information next time?"
+msgstr ""
+
+
+# Others (from 30700 to 30799)
+
+msgctxt "#30700"
+msgid "More videos..."
+msgstr ""
+
+msgctxt "#30701"
+msgid "All videos"
+msgstr ""
+
+msgctxt "#30702"
+msgid "DRM protected video"
+msgstr ""
+
+msgctxt "#30703"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30704"
+msgid "Last videos"
+msgstr ""
+
+msgctxt "#30705"
+msgid "From A to Z"
+msgstr ""
+
+msgctxt "#30706"
+msgid "Ascending"
+msgstr ""
+
+msgctxt "#30707"
+msgid "Descending"
+msgstr ""
+
+msgctxt "#30708"
+msgid "More programs..."
+msgstr ""
+
+msgctxt "#30709"
+msgid "Choose video quality"
+msgstr ""
+
+msgctxt "#30710"
+msgid "Video stream no longer exists"
+msgstr ""
+
+msgctxt "#30711"
+msgid "Authentication failed"
+msgstr ""
+
+msgctxt "#30712"
+msgid "Video with an account needed"
+msgstr ""
+
+msgctxt "#30713"
+msgid "Geo-blocked video"
+msgstr ""
+
+msgctxt "#30714"
+msgid "Search videos"
+msgstr ""
+
+msgctxt "#30715"
+msgid "Search programs"
+msgstr ""
+
+msgctxt "#30716"
+msgid "Video stream is not available"
+msgstr ""
+
+msgctxt "#30717"
+msgid "All programs"
+msgstr ""
+
+msgctxt "#30718"
+msgid "No videos found"
+msgstr ""
+
+msgctxt "#30719"
+msgid "Inputstream Adaptive not enable"
+msgstr ""
+
+msgctxt "#30720"
+msgid "Kodi 17.6 or > is required"
+msgstr ""
+
+msgctxt "#30721"
+msgid "Content requiring a subscription"
+msgstr ""
+
+msgctxt "#30722"
+msgid "TV guide"
+msgstr ""
+
+msgctxt "#30723"
+msgid "An error occurred while getting TV guide"
+msgstr ""
+
+msgctxt "#30724"
+msgid "Failed to guess your country based on your IP"
+msgstr ""
+
+msgctxt "#30725"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30726"
+msgid "Races"
+msgstr ""
+
+msgctxt "#30727"
+msgid "Most popular"
+msgstr ""
+
+msgctxt "#30728"
+msgid "Recently added"
+msgstr ""
+
+msgctxt "#30729"
+msgid "Emissions"
+msgstr ""
+
+
+# Favourites (from 30800 to 30859)
+
+msgctxt "#30800"
+msgid "Add to add-on favourites"
+msgstr ""
+
+msgctxt "#30801"
+msgid "Favourite name"
+msgstr ""
+
+msgctxt "#30802"
+msgid "Remove"
+msgstr ""
+
+msgctxt "#30803"
+msgid "Favourites"
+msgstr ""
+
+msgctxt "#30804"
+msgid "Rename"
+msgstr ""
+
+msgctxt "#30805"
+msgid "The item has been added to the favourites of the add-on"
+msgstr ""
+
+msgctxt "#30806"
+msgid "Add at least one favourite to access this menu"
+msgstr ""
+
+msgctxt "#30807"
+msgid "This favourite raises an error, would you like to delete it?"
+msgstr ""
+
+
+# Log uploader (from 30860 to 30889)
+
+msgctxt "#30860"
+msgid "This selection triggered an unexpected error, would you like to share your error log so that we can try to resolve this issue?"
+msgstr ""
+
+msgctxt "#30861"
+msgid "Share us the URL URL_TO_REPLACE by email directly via the QRcode or at catch.up.tv.and.more@gmail.com or in an issue on GitHub. Thank you!"
+msgstr ""
+
+msgctxt "#30862"
+msgid "Sorry, sharing your error log failed"
+msgstr ""
+
+
+# HTTP error (from 30890 to 30919)
+
+msgctxt "#30890"
+msgid "HTTP Error code"
+msgstr ""
+
+msgctxt "#30891"
+msgid "Inaccessible content"
+msgstr ""
+
+msgctxt "#30892"
+msgid "Authentication is required to access the resource"
+msgstr ""
+
+msgctxt "#30893"
+msgid "Access denied (Geographical restriction?)"
+msgstr ""
+
+msgctxt "#30894"
+msgid "This resource requires a payment or a subscription"
+msgstr ""
+
+msgctxt "#30895"
+msgid "This resource is no longer available"
+msgstr ""

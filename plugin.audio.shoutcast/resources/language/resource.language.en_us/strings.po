@@ -1,0 +1,93 @@
+# Kodi Media Center language file
+# Addon Name: SHOUTcast 2
+# Addon id: plugin.audio.shoutcast
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "All subgenres"
+msgstr "All subgenres"
+
+msgctxt "#30001"
+msgid "Top 500 Stations"
+msgstr "Top 500 Stations"
+
+msgctxt "#30002"
+msgid "Browse by genre"
+msgstr "Browse by genre"
+
+msgctxt "#30003"
+msgid "My Stations"
+msgstr "My Stations"
+
+msgctxt "#30004"
+msgid "Search Station by name"
+msgstr "Search Station by name"
+
+msgctxt "#30005"
+msgid "Search Current Track playing Station"
+msgstr "Search Current Track playing Station"
+
+msgctxt "#30010"
+msgid "Add to 'My Stations'"
+msgstr "Add to 'My Stations'"
+
+msgctxt "#30011"
+msgid "Remove from 'My Stations'"
+msgstr "Remove from 'My Stations'"
+
+msgctxt "#30100"
+msgid "Show Subgenres"
+msgstr "Show Subgenres"
+
+msgctxt "#30101"
+msgid "Num stations in list"
+msgstr "Num stations in list"
+
+msgctxt "#30102"
+msgid "Show Bitrate in Title"
+msgstr "Show Bitrate in Title"
+
+msgctxt "#30103"
+msgid "Choose a random server (Don't ask)"
+msgstr "Choose a random server (Don't ask)"
+
+msgctxt "#30104"
+msgid "Filter stations by minium Bitrate"
+msgstr "Filter stations by minimum Bitrate"
+
+msgctxt "#30110"
+msgid "Minimum Bitrate"
+msgstr "Minimum Bitrate"
+
+msgctxt "#30111"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30112"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30113"
+msgid "160 kbit/s"
+msgstr "160 kbit/s"
+
+msgctxt "#30114"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30200"
+msgid "Network Error"
+msgstr "Network Error"

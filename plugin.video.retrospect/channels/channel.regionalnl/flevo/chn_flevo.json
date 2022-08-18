@@ -1,0 +1,17 @@
+{
+  "channels": [
+    {
+      "guid": "D74952F3-B72B-4AF9-83E6-9394D37D786E",
+      "name": "Omroep Flevoland",
+      "description": {
+        "en": "Video on demand for Omroep Flevoland.\n\nOmroep Flevoland is the regional broadcaster of Flevoland. They bring news, sports, weather and traffic information via radio, television and internet.",
+        "nl": "Omroep Flevoland Uitzendinggemist.\n\nOmroep Flevoland is de regionale omroep van Flevoland. Ze brengen nieuws, sport, weer en verkeer via radio, televisie en internet."
+      },
+      "icon": "flevolarge.png",
+      "category": "Regional",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "flevofanart.jpg"
+    }
+  ]
+}

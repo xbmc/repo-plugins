@@ -1,0 +1,5 @@
+<settings>
+	 <category label="30001">
+	   <setting id="numberOfShowsPerPage" type="number" label="30004" default="10"/>
+	</category>
+</settings>

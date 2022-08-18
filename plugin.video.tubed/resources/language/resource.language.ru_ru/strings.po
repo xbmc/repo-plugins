@@ -1,0 +1,1058 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: STRINGS\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: 2021-07-24 17:29+0000\n"
+"Last-Translator: vdkbsd <valexgus@gmail.com>\n"
+"Language-Team: Russian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-tubed/ru_ru/>\n"
+"Language: ru_ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.7.2\n"
+
+msgctxt "Addon Summary"
+msgid "Watch your favorite YouTube content on Kodi"
+msgstr "Смотрите свои любимые видео с Youtube в Kodi"
+
+msgctxt "Addon Description"
+msgid "Browse your favorite content from YouTube; create, delete, and rename playlists; subscribe or unsubscribe from your favorite channels; and rate your favorite videos."
+msgstr "Просматривайте любимый контент с YouTube; создавайте, удаляйте, и переименовывайте плейлисты; подписывайтесь или отписывайтесь на каналы; оценивайте любимые видео."
+
+msgctxt "Addon Disclaimer"
+msgid "Tubed's use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed's Privacy Policy at https://panicked.xyz/tubed-privacy/"
+msgstr "Использование Tubed информации, полученной от Google API, будет соответствовать Политике в отношении пользовательских данных служб Google API, включая требования ограниченного использования. Для получения дополнительной информации о том, как обрабатываются ваши данные, см. Политику конфиденциальности Tubed по адресу https://panicked.xyz/tubed-privacy/"
+
+msgctxt "#30000"
+msgid "Most Popular"
+msgstr "Самое популярное"
+
+msgctxt "#30001"
+msgid "Next Page"
+msgstr "Следующая страница"
+
+msgctxt "#30002"
+msgid "Recommendations"
+msgstr "Рекомендуемое"
+
+msgctxt "#30003"
+msgid "Search"
+msgstr "Поиск"
+
+msgctxt "#30004"
+msgid "My Channel"
+msgstr "Мой канал"
+
+msgctxt "#30005"
+msgid "Liked Videos"
+msgstr "Понравившееся видео"
+
+msgctxt "#30006"
+msgid "Disliked Videos"
+msgstr "Непонравившееся видео"
+
+msgctxt "#30007"
+msgid "Playlists"
+msgstr "Плейлисты"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "Каналы"
+
+msgctxt "#30009"
+msgid "Subscriptions"
+msgstr "Подписки"
+
+msgctxt "#30010"
+msgid "Live"
+msgstr "Трансляции"
+
+msgctxt "#30011"
+msgid "Sign in with Google"
+msgstr "Войти с помощью Google"
+
+msgctxt "#30012"
+msgid "Sign Out"
+msgstr "Выйти"
+
+msgctxt "#30013"
+msgid "Manage Users"
+msgstr "Управление пользователями"
+
+msgctxt "#30014"
+msgid "New Search"
+msgstr "Новый поиск"
+
+msgctxt "#30015"
+msgid "Enter your search term"
+msgstr "Введите поисковый запрос"
+
+msgctxt "#30016"
+msgid "Go to %s and enter the following code:"
+msgstr "Зайдите в %s и введите следующий код:"
+
+msgctxt "#30017"
+msgid "New user..."
+msgstr "Новый пользователь..."
+
+msgctxt "#30018"
+msgid "Rename user..."
+msgstr "Сменить имя пользователя..."
+
+msgctxt "#30019"
+msgid "Remove user..."
+msgstr "Удалить пользователя..."
+
+msgctxt "#30020"
+msgid "New Username"
+msgstr "Новое имя пользователя"
+
+msgctxt "#30021"
+msgid "Remove User"
+msgstr "Удалить пользователя"
+
+msgctxt "#30022"
+msgid "Removing %s, are you sure?"
+msgstr "Пользователь %s будет удален, вы уверены?"
+
+msgctxt "#30023"
+msgid "Uploads"
+msgstr "Загрузки"
+
+msgctxt "#30024"
+msgid "You are about to sign out, are you sure?"
+msgstr "Вы собираетесь выйти, вы уверены?"
+
+msgctxt "#30025"
+msgid "Categories"
+msgstr "Категории"
+
+msgctxt "#30026"
+msgid "Remove..."
+msgstr "Удалить..."
+
+msgctxt "#30027"
+msgid "Clear history"
+msgstr "Очистить историю"
+
+msgctxt "#30028"
+msgid "General"
+msgstr "Общие"
+
+msgctxt "#30029"
+msgid "Quality"
+msgstr "Качество"
+
+msgctxt "#30030"
+msgid "Choose the maximum playback quality for videos and live content"
+msgstr "Выбор максимального качества для видео и прямых эфиров"
+
+msgctxt "#30031"
+msgid "Limit to 30 fps"
+msgstr "Лимит в 30 кадров в секунду"
+
+msgctxt "#30032"
+msgid "Limit playback quality to 30 fps or less"
+msgstr "Ограничить воспроизведение видео в 30 кадров в секунду или меньше"
+
+msgctxt "#30033"
+msgid "HDR"
+msgstr "HDR"
+
+msgctxt "#30034"
+msgid "Use the best matching HDR streams for videos"
+msgstr "Использовать наиболее подходящие HDR потоки для видео"
+
+msgctxt "#30035"
+msgid "Adaptive (MP4/H264)"
+msgstr "Adaptive (MP4/H264)"
+
+msgctxt "#30036"
+msgid "Adaptive (WEBM/VP9)"
+msgstr "Adaptive (WEBM/VP9)"
+
+msgctxt "#30037"
+msgid "240p"
+msgstr "240p"
+
+msgctxt "#30038"
+msgid "360p"
+msgstr "360p"
+
+msgctxt "#30039"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30040"
+msgid "720p (HD)"
+msgstr "720p (HD)"
+
+msgctxt "#30041"
+msgid "1080p (FHD)"
+msgstr "1080p (FHD)"
+
+msgctxt "#30042"
+msgid "1440p (QHD)"
+msgstr "1440p (QHD)"
+
+msgctxt "#30043"
+msgid "2160p (4K)"
+msgstr "2160p (4K)"
+
+msgctxt "#30044"
+msgid "4320p (8K)"
+msgstr "4320p (8K)"
+
+msgctxt "#30045"
+msgid "Playback"
+msgstr "Воспроизведение"
+
+msgctxt "#30046"
+msgid "Watch Later"
+msgstr "Смотреть позже"
+
+msgctxt "#30047"
+msgid "Regional"
+msgstr "Региональные"
+
+msgctxt "#30048"
+msgid "Language"
+msgstr "Язык"
+
+msgctxt "#30049"
+msgid "Your preferred YouTube UI language"
+msgstr "Язык интерфейса Youtube"
+
+msgctxt "#30050"
+msgid "Region"
+msgstr "Регион"
+
+msgctxt "#30051"
+msgid "Your preferred content region"
+msgstr "Предпочитаемый регион"
+
+msgctxt "#30052"
+msgid "Configure regional preferences"
+msgstr "Настройка языка и региона"
+
+msgctxt "#30053"
+msgid "Configure your preferred language and region"
+msgstr "Настройте подходящий язык и регион"
+
+msgctxt "#30054"
+msgid "Configure subtitles"
+msgstr "Настройка субтитров"
+
+msgctxt "#30055"
+msgid "Configure your preferred subtitle language"
+msgstr "Настройте подходящий язык субтитров"
+
+msgctxt "#30056"
+msgid "Subtitle language"
+msgstr "Язык субтитров"
+
+msgctxt "#30057"
+msgid "Your preferred subtitle language"
+msgstr "Предпочитаемый язык субтитров"
+
+msgctxt "#30058"
+msgid "Subtitles"
+msgstr "Субтитры"
+
+msgctxt "#30059"
+msgid "%s with %s fallback"
+msgstr "%s с альтернативой %s"
+
+msgctxt "#30060"
+msgid "No auto-generated"
+msgstr "Не создано автоматически"
+
+msgctxt "#30061"
+msgid "None"
+msgstr "Нет"
+
+msgctxt "#30062"
+msgid "Prompt"
+msgstr "Всегда спрашивать"
+
+msgctxt "#30063"
+msgid "Subscribe"
+msgstr "Подписаться"
+
+msgctxt "#30064"
+msgid "Subscribed"
+msgstr "Подписан"
+
+msgctxt "#30065"
+msgid "Unsubscribe"
+msgstr "Отписаться"
+
+msgctxt "#30066"
+msgid "Unsubscribed"
+msgstr "Отписан"
+
+msgctxt "#30067"
+msgid "Error"
+msgstr "Ошибка"
+
+msgctxt "#30068"
+msgid "Play (Prompt for subtitles)"
+msgstr "Воспроизвести (с выбором субтитров)"
+
+msgctxt "#30069"
+msgid "Go to %s"
+msgstr "Перейти в %s"
+
+msgctxt "#30070"
+msgid "Subscribed to %s"
+msgstr "Подписан на канал %s"
+
+msgctxt "#30071"
+msgid "Unsubscribed from %s"
+msgstr "Отписан от канала %s"
+
+msgctxt "#30072"
+msgid "Rate"
+msgstr "Оценить видео"
+
+msgctxt "#30073"
+msgid "I like this"
+msgstr "Мне понравилось"
+
+msgctxt "#30074"
+msgid "I dislike this"
+msgstr "Мне не понравилось"
+
+msgctxt "#30075"
+msgid "Remove rating"
+msgstr "Убрать оценку"
+
+msgctxt "#30076"
+msgid "Liked"
+msgstr "Оценка \"Нравится\" поставлена"
+
+msgctxt "#30077"
+msgid "Disliked"
+msgstr "Оценка \"Не нравится\" поставлена"
+
+msgctxt "#30078"
+msgid "Liked %s"
+msgstr "Оценка \"Нравиться\" поставлена для видео %s"
+
+msgctxt "#30079"
+msgid "Disliked %s"
+msgstr "Оценка \"Не нравиться\" поставлена для видео %s"
+
+msgctxt "#30080"
+msgid "Rating removed"
+msgstr "Оценка убрана"
+
+msgctxt "#30081"
+msgid "Rating removed from %s"
+msgstr "Оценка убрана с видео %s"
+
+msgctxt "#30082"
+msgid "New playlist"
+msgstr "Новый плейлист"
+
+msgctxt "#30083"
+msgid "Add to playlist"
+msgstr "Добавить в плейлист"
+
+msgctxt "#30084"
+msgid "Remove from playlist"
+msgstr "Убрать с плейлиста"
+
+msgctxt "#30085"
+msgid "Delete playlist"
+msgstr "Удалить плейлист"
+
+msgctxt "#30086"
+msgid "Enter your playlist title"
+msgstr "Введите название плейлиста"
+
+msgctxt "#30087"
+msgid "Added %s to %s"
+msgstr "Видео %s добавлно в плейлист %s"
+
+msgctxt "#30088"
+msgid "Removed from playlist"
+msgstr "Видео удалено с плейлиста"
+
+msgctxt "#30089"
+msgid "Removed %s from playlist"
+msgstr "Видео %s удалено с плейлиста"
+
+msgctxt "#30090"
+msgid "Playlist deleted"
+msgstr "Плейлист удален"
+
+msgctxt "#30091"
+msgid "%s playlist deleted"
+msgstr "Плейлист %s успешно удален"
+
+msgctxt "#30092"
+msgid "Rename playlist"
+msgstr "Переименовать плейлист"
+
+msgctxt "#30093"
+msgid "Playlist renamed to %s"
+msgstr "Плейлист переименован в %s"
+
+msgctxt "#30094"
+msgid "%s renamed to %s"
+msgstr "Плейлист %s переименован в %s"
+
+msgctxt "#30095"
+msgid "You are about to delete %s, are you sure?"
+msgstr "Вы собираетесь удалить плейлист %s, вы уверены?"
+
+msgctxt "#30096"
+msgid "You are about to delete a playlist, are you sure?"
+msgstr "Вы собираетесь удалить плейлист, вы уверены?"
+
+msgctxt "#30097"
+msgid "Upcoming"
+msgstr "Предстоящие трансляции"
+
+msgctxt "#30098"
+msgid "Completed"
+msgstr "Завершенные трансляции"
+
+msgctxt "#30099"
+msgid "%s was scheduled to start %s"
+msgstr "Трансляция %s должна была начаться %s"
+
+msgctxt "#30100"
+msgid "%s is scheduled to start %s"
+msgstr "Трансляция %s должна начаться %s"
+
+msgctxt "#30101"
+msgid "Related videos"
+msgstr "Похожие видео"
+
+msgctxt "#30102"
+msgid "Cache"
+msgstr "Кеш"
+
+msgctxt "#30103"
+msgid "Data cache TTL (weeks)"
+msgstr "TTL кеша данных (недели)"
+
+msgctxt "#30104"
+msgid "Function cache TTL (minutes)"
+msgstr "TTL кеша функций (минуты)"
+
+msgctxt "#30105"
+msgid "Clear data cache"
+msgstr "Очистить кеш данных"
+
+msgctxt "#30106"
+msgid "Clear function cache"
+msgstr "Очистить функциональный кеш"
+
+msgctxt "#30107"
+msgid "Data cache was cleared"
+msgstr "Кеш данных очищен"
+
+msgctxt "#30108"
+msgid "Function cache was cleared"
+msgstr "Функциональный кеш очищен"
+
+msgctxt "#30109"
+msgid "Delete data cache"
+msgstr "Удалить кеш данных"
+
+msgctxt "#30110"
+msgid "Delete function cache"
+msgstr "Удалить функциональный кеш"
+
+msgctxt "#30111"
+msgid "Data cache was deleted"
+msgstr "Кеш данных удален"
+
+msgctxt "#30112"
+msgid "Function cache was deleted"
+msgstr "Функциональный кеш удален"
+
+msgctxt "#30113"
+msgid "Time to Live"
+msgstr "Time to Live"
+
+msgctxt "#30114"
+msgid "Maintenance"
+msgstr "Обслуживание"
+
+msgctxt "#30115"
+msgid "How long until long term data cache expires in weeks"
+msgstr "Как долго кеш данных будет храниться в неделях"
+
+msgctxt "#30116"
+msgid "How long until short term function cache expires in minutes"
+msgstr "Как долго функциональный кеш будет храниться в минутах"
+
+msgctxt "#30117"
+msgid "Clearing long term data cache will remove all entries from the database"
+msgstr "Очистка кеша данных приведет к удалению всех записей с базы данных"
+
+msgctxt "#30118"
+msgid "Clearing short term function cache will remove all cache entries"
+msgstr "Очитска функционального кеша приведет к удалению всех кеш-записисей"
+
+msgctxt "#30119"
+msgid "Deleting long term data cache will delete the whole database"
+msgstr "Удаление кеша данных приведет к полному удалению базы данных"
+
+msgctxt "#30120"
+msgid "Deleting short term function cache will delete the whole database"
+msgstr "Удаление функционального кеша приведет к полному удалению базы данных"
+
+msgctxt "#30121"
+msgid "Failed to clear function cache"
+msgstr "Не удалось очистить функциональный кеш"
+
+msgctxt "#30122"
+msgid "Failed to clear data cache"
+msgstr "Не удалось очистить кеш данных"
+
+msgctxt "#30123"
+msgid "Failed to delete function cache"
+msgstr "Не удалось удалить функциональный кеш"
+
+msgctxt "#30124"
+msgid "Failed to delete data cache"
+msgstr "Не удалось удалить кеш данных"
+
+msgctxt "#30125"
+msgid "Debug"
+msgstr "Отладка"
+
+msgctxt "#30126"
+msgid "Component Logging"
+msgstr "Отслеживание компонентов"
+
+msgctxt "#30127"
+msgid "API requests"
+msgstr "API запросы"
+
+msgctxt "#30128"
+msgid "Enable logging of API requests and responses"
+msgstr "Включить отслеживание API запросов и ответов"
+
+msgctxt "#30129"
+msgid "Comments"
+msgstr "Комментарии"
+
+msgctxt "#30130"
+msgid "Comment"
+msgstr "Оставить комментарий"
+
+msgctxt "#30131"
+msgid "Read comment"
+msgstr "Прочитать комментарий"
+
+msgctxt "#30132"
+msgid "Likes"
+msgstr "Понравилось"
+
+msgctxt "#30133"
+msgid "Replies"
+msgstr "Ответов"
+
+msgctxt "#30134"
+msgid "Comment has been edited"
+msgstr "Комментарий был изменен"
+
+msgctxt "#30135"
+msgid "Limits"
+msgstr "Ограничения"
+
+msgctxt "#30136"
+msgid "Data cache (MB)"
+msgstr "Кеш данных (Мбайт)"
+
+msgctxt "#30137"
+msgid "The maximum size of long term data cache before being automatically resized"
+msgstr "Максимальный размер кеша данных до автоматического сжатия"
+
+msgctxt "#30138"
+msgid "Sort order"
+msgstr "Сортировка"
+
+msgctxt "#30139"
+msgid "Choose a sort order"
+msgstr "Выбор порядка сортировки"
+
+msgctxt "#30140"
+msgid "Alphabetical"
+msgstr "По алфавиту"
+
+msgctxt "#30141"
+msgid "Relevance"
+msgstr "По релевантности"
+
+msgctxt "#30142"
+msgid "Activity"
+msgstr "По активности"
+
+msgctxt "#30143"
+msgid "Time"
+msgstr "Время"
+
+msgctxt "#30144"
+msgid "Date"
+msgstr "По дате"
+
+msgctxt "#30145"
+msgid "Rating"
+msgstr "По рейтингу"
+
+msgctxt "#30146"
+msgid "Title"
+msgstr "По названию"
+
+msgctxt "#30147"
+msgid "Video Count"
+msgstr "По количеству видео"
+
+msgctxt "#30148"
+msgid "View Count"
+msgstr "По количеству просмотров"
+
+msgctxt "#30149"
+msgid "Post Play"
+msgstr "После просмотра"
+
+msgctxt "#30150"
+msgid "Post play minimum watch percentage"
+msgstr "Минимальный процент видео для полного просмотра"
+
+msgctxt "#30151"
+msgid "What percent of the video's duration must be watched to trigger post play events"
+msgstr "Какой процент длительности видео нужно просмотреть, чтобы сработали события после просмотра"
+
+msgctxt "#30152"
+msgid "Rate the video that just finished playing"
+msgstr "Оценивать видео после просмотра"
+
+msgctxt "#30153"
+msgid "Rate during playlists"
+msgstr "Оценивать видео в плейлистах"
+
+msgctxt "#30154"
+msgid "Should rating be requested while watching playlists"
+msgstr "Нужно ли оценивать видео во время просмотра плейлистов"
+
+msgctxt "#30155"
+msgid "Autoplay related videos"
+msgstr "Автоматически проигрывать похожее видео"
+
+msgctxt "#30156"
+msgid "Autoplay videos related to the previously played video"
+msgstr "Автоматически проигрывать видео, похожее на предыдущие"
+
+msgctxt "#30157"
+msgid "Set as History"
+msgstr "Привязать плейлист к истории"
+
+msgctxt "#30158"
+msgid "Set as Watch Later"
+msgstr "Привязать плейлист к \"Смотреть позже\""
+
+msgctxt "#30159"
+msgid "Remove as History"
+msgstr "Отвязать плейлист от истории"
+
+msgctxt "#30160"
+msgid "Remove as Watch Later"
+msgstr "Отвязать плейлист от \"Смотреть позже\""
+
+msgctxt "#30161"
+msgid "History"
+msgstr "История"
+
+msgctxt "#30162"
+msgid "Watch later playlist configured"
+msgstr "Плейлист \"Смотреть позже\" настроен"
+
+msgctxt "#30163"
+msgid "History playlist configured"
+msgstr "Плейлист \"История\" настроен"
+
+msgctxt "#30164"
+msgid "%s was configured as your watch later playlist"
+msgstr "Плейлист %s привязан к \"Смотреть позже\""
+
+msgctxt "#30165"
+msgid "%s was configured as your history playlist"
+msgstr "Плейлист %s привязан к \"История\""
+
+msgctxt "#30166"
+msgid "Watch later playlist is no longer configured"
+msgstr "Плейлист \"Смотреть позже\" больше не настроен"
+
+msgctxt "#30167"
+msgid "History playlist is no longer configured"
+msgstr "Плейлист \"История\" больше не настроен"
+
+msgctxt "#30168"
+msgid "%s is no longer configured as your watch later playlist"
+msgstr "Плейлист %s отвязан от \"Смотреть позже\""
+
+msgctxt "#30169"
+msgid "%s is no longer configured as your history playlist"
+msgstr "Плейлист %s отвязан от \"История\""
+
+msgctxt "#30170"
+msgid "Add to watch later"
+msgstr "Добавить в \"Cмотреть позже\""
+
+msgctxt "#30171"
+msgid "Favorite Channels"
+msgstr "Любимые каналы"
+
+msgctxt "#30172"
+msgid "Add to favorite channels"
+msgstr "Добавить в любимые каналы"
+
+msgctxt "#30173"
+msgid "Clear favorite channels"
+msgstr "Очистить любимые каналы"
+
+msgctxt "#30174"
+msgid "Added to favorite channels"
+msgstr "Добавлен в любимые каналы"
+
+msgctxt "#30175"
+msgid "Removed from favorite channels"
+msgstr "Убран из любимых каналов"
+
+msgctxt "#30176"
+msgid "Import from xml"
+msgstr "Импортировать из xml"
+
+msgctxt "#30177"
+msgid "Import failed"
+msgstr "Не удалость импортировать"
+
+msgctxt "#30178"
+msgid "Import completed successfully"
+msgstr "Импорт успешно выполнен"
+
+msgctxt "#30179"
+msgid "You are about to clear your favorite channels, are you sure?"
+msgstr "Вы собираетесь очистить список любимых каналов, вы уверены?"
+
+msgctxt "#30180"
+msgid "Favorite channels cleared"
+msgstr "Список любимых каналов очищен"
+
+msgctxt "#30181"
+msgid "Add %s to favorite channels"
+msgstr "Добавить %s в любимые каналы"
+
+msgctxt "#30182"
+msgid "Added %s to favorite channels"
+msgstr "%s добавлен в список любимых каналов"
+
+msgctxt "#30183"
+msgid "Removed %s from favorite channels"
+msgstr "%s убран из списка любимых каналов"
+
+msgctxt "#30184"
+msgid "Refresh"
+msgstr "Обновить"
+
+msgctxt "#30185"
+msgid "Clear function cache on refresh"
+msgstr "Очищать функциональный кеш при обновлении"
+
+msgctxt "#30186"
+msgid "Short term function cache will be cleared when using Refresh from the context menu"
+msgstr "Функциональный кеш будет очищаться при выборе пункта Обновить в контекстном меню"
+
+msgctxt "#30187"
+msgid "Choose watch later playlist"
+msgstr "Выберите плейлист для \"Смотреть позже\""
+
+msgctxt "#30188"
+msgid "Added %s to the new watch later playlist %s"
+msgstr "Добавлен плейлист %s для \"Смотреть позже\""
+
+msgctxt "#30189"
+msgid "Search history items"
+msgstr "Элементы истории поиска"
+
+msgctxt "#30190"
+msgid "How many search history items should be kept for each user"
+msgstr "Сколько элементов в истории поиска может храниться у каждого пользователя"
+
+msgctxt "#30191"
+msgid "Favorite channels"
+msgstr "Любимые каналы"
+
+msgctxt "#30192"
+msgid "How many favorite channels should be kept for each user"
+msgstr "Сколько любимых каналов может хранить каждый пользователь"
+
+msgctxt "#30193"
+msgid "Play"
+msgstr "Воспроизвести"
+
+msgctxt "#30194"
+msgid "Play from %s"
+msgstr "Воспроизвести с %s"
+
+msgctxt "#30195"
+msgid "Most Popular Regionally"
+msgstr "Популярное в регионе"
+
+msgctxt "#30196"
+msgid "Main Menu"
+msgstr "Главное меню"
+
+msgctxt "#30197"
+msgid "Show/Hide this item on the main menu"
+msgstr "Показать/скрыть этот пункт главного меню"
+
+msgctxt "#30198"
+msgid "Hide %s"
+msgstr "Скрыть %s"
+
+msgctxt "#30199"
+msgid "%s was hidden from the main menu"
+msgstr "%s убран с главного меню"
+
+msgctxt "#30200"
+msgid "User is authenticated"
+msgstr "Пользователь авторизован"
+
+msgctxt "#30201"
+msgid "User is not authenticated"
+msgstr "Пользователь не авторизован"
+
+msgctxt "#30202"
+msgid "Create a new user"
+msgstr "Создать нового пользователя"
+
+msgctxt "#30203"
+msgid "Rename a current user"
+msgstr "Сменить имя пользователя"
+
+msgctxt "#30204"
+msgid "Remove a current user"
+msgstr "Удалить пользователя"
+
+msgctxt "#30205"
+msgid "Change avatar..."
+msgstr "Изменить аватар..."
+
+msgctxt "#30206"
+msgid "Change a current user's avatar"
+msgstr "Изменить аватар у пользователя"
+
+msgctxt "#30207"
+msgid "Choose a new avatar"
+msgstr "Выберите новый аватар"
+
+msgctxt "#30208"
+msgid "Up Next"
+msgstr "Следующее видео"
+
+msgctxt "#30209"
+msgid "Links in the description"
+msgstr "Ссылки в описании"
+
+msgctxt "#30210"
+msgid "There were no links found in the description"
+msgstr "Ссылок в описании не найдено"
+
+msgctxt "#30211"
+msgid "Create a new playlist"
+msgstr "Создать новый плейлист"
+
+msgctxt "#30212"
+msgid "Go to the next page"
+msgstr "Следующая страница"
+
+msgctxt "#30213"
+msgid "Rate the selected video"
+msgstr "Оценить видео"
+
+msgctxt "#30214"
+msgid "Rate %s"
+msgstr "Оценить видео %s"
+
+msgctxt "#30215"
+msgid "Dialogs"
+msgstr "Диалоги"
+
+msgctxt "#30216"
+msgid "Open the autoplay related video dialog for debugging"
+msgstr "Открыть диалог запуска похожего видео для отладки"
+
+msgctxt "#30217"
+msgid "Open the sign in dialog for debugging"
+msgstr "Открыть диалог входа для отладки"
+
+msgctxt "#30218"
+msgid "likes"
+msgstr "нравится"
+
+msgctxt "#30219"
+msgid "dislikes"
+msgstr "не нравится"
+
+msgctxt "#30220"
+msgid "views"
+msgstr "просмотров"
+
+msgctxt "#30221"
+msgid "Chapters"
+msgstr "Главы"
+
+msgctxt "#30222"
+msgid "Chapter starts at %s"
+msgstr "Глава начинается с %s"
+
+msgctxt "#30223"
+msgid "API Module"
+msgstr "API модуль"
+
+msgctxt "#30224"
+msgid "Configure API module"
+msgstr "Настроить API модуль"
+
+msgctxt "#30225"
+msgid "Open Tubed API settings to configure the API module"
+msgstr "Открыть настройки Tubed API, для настройки API модуля"
+
+msgctxt "#30226"
+msgid "Favorite Playlists"
+msgstr "Любимые плейлисты"
+
+msgctxt "#30227"
+msgid "Add to favorite playlists"
+msgstr "Добавить в любимые плейлисты"
+
+msgctxt "#30228"
+msgid "Clear favorite playlists"
+msgstr "Очистить любимые плейлисты"
+
+msgctxt "#30229"
+msgid "Added to favorite playlists"
+msgstr "Добавлен в любимые плейлисты"
+
+msgctxt "#30230"
+msgid "Removed from favorite playlists"
+msgstr "Убран из любимых плейлистов"
+
+msgctxt "#30231"
+msgid "You are about to clear your favorite playlists, are you sure?"
+msgstr "Вы собираетесь очистить список любимых плейлистов, вы уверены?"
+
+msgctxt "#30232"
+msgid "Favorite playlists cleared"
+msgstr "Список любимых плейлистов очищен"
+
+msgctxt "#30233"
+msgid "Add %s to favorite playlists"
+msgstr "Добавить %s в любимые плейлисты"
+
+msgctxt "#30234"
+msgid "Added %s to favorite playlists"
+msgstr "%s добавлен в любимые плейлисты"
+
+msgctxt "#30235"
+msgid "Removed %s from favorite playlists"
+msgstr "%s убран из любимых плейлистов"
+
+msgctxt "#30236"
+msgid "Favorite playlists"
+msgstr "Любимые плейлисты"
+
+msgctxt "#30237"
+msgid "How many favorite playlists should be kept for each user"
+msgstr "Сколько любимых плейлистов может хранить каждый пользователь"
+
+msgctxt "#30238"
+msgid "Backup"
+msgstr "Резервные копии"
+
+msgctxt "#30239"
+msgid "Make a backup"
+msgstr "Сделать резервную копию"
+
+msgctxt "#30240"
+msgid "Backup your Tubed settings, users, search history, favorite channels and favorite playlists"
+msgstr "Сделать резервную копию настроек Tubed, пользователей, истории поиска, любимых каналов и плейлистов"
+
+msgctxt "#30241"
+msgid "Restore a backup"
+msgstr "Восстановить резервную копию"
+
+msgctxt "#30242"
+msgid "Restore your Tubed settings, users, search history, favorite channels and favorite playlists from a previous backup"
+msgstr "Восстановить настройки Tubed, пользователей, историю поиска, любимые каналы и плейлисты"
+
+msgctxt "#30243"
+msgid "Choose a location to create backup"
+msgstr "Выберите место хранения резервной копии"
+
+msgctxt "#30244"
+msgid "Choose a backup to restore"
+msgstr "Выберите резервную копию для восстановления"
+
+msgctxt "#30245"
+msgid "Failed to create backup at %s"
+msgstr "Не удалось создать резервную копию от %s"
+
+msgctxt "#30246"
+msgid "Failed to restore backup from %s"
+msgstr "Не удалось восстановиться из резервной копии от %s"
+
+msgctxt "#30247"
+msgid "Backup successfully created at %s"
+msgstr "Создана резервная копия от %s"
+
+msgctxt "#30248"
+msgid "Backup successfully restored from %s"
+msgstr "Восстановление из резервной копии от %s успешно выполнено"
+
+msgctxt "#30249"
+msgid "Client ID: %s"
+msgstr "ID клиента: %s"
+
+msgctxt "#30250"
+msgid "Further use of Tubed will be subject to this privacy policy"
+msgstr "Дальнейшее использование Tubed будет регулироваться этой политикой конфиденциальности"
+
+msgctxt "#30251"
+msgid "Accept"
+msgstr "Принять"
+
+msgctxt "#30252"
+msgid "Decline"
+msgstr "Отклонить"
+
+msgctxt "#30253"
+msgid "Privacy Policy"
+msgstr "Политика конфиденциальности"
+
+msgctxt "#30254"
+msgid "Sign In"
+msgstr "Войти"
+
+msgctxt "#30255"
+msgid "InputStream Adaptive is required and appears to be disabled. Would you like to enable InputStream Adaptive now?"
+msgstr "Требуется InputStream Adaptive, но дополнение отключено. Вы хотите включить InputStream Adaptive сейчас?"
+
+msgctxt "#30256"
+msgid "Settings"
+msgstr "Настройки"
+
+msgctxt "#30257"
+msgid "No entries found"
+msgstr "Ничего не найдено"

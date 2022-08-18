@@ -1,0 +1,93 @@
+# Kodi Media Center language file
+# Addon Name: SHOUTcast 2
+# Addon id: plugin.audio.shoutcast
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"Language: el_GR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "All subgenres"
+msgstr "Όλα τα υπο-είδη"
+
+msgctxt "#30001"
+msgid "Top 500 Stations"
+msgstr "Κορυφαίοι 500 Σταθμοί"
+
+msgctxt "#30002"
+msgid "Browse by genre"
+msgstr "Περιήγηση ανά είδος"
+
+msgctxt "#30003"
+msgid "My Stations"
+msgstr "Οι Σταθμοί μου"
+
+msgctxt "#30004"
+msgid "Search Station by name"
+msgstr "Αναζήτηση Σταθμού με βάση το όνομα"
+
+msgctxt "#30005"
+msgid "Search Current Track playing Station"
+msgstr "Αναζήτηση Σταθμού Τρέχοντος Τραγουδιού"
+
+msgctxt "#30010"
+msgid "Add to 'My Stations'"
+msgstr "Προσθήκη στους 'Σταθμούς μου'"
+
+msgctxt "#30011"
+msgid "Remove from 'My Stations'"
+msgstr "Αφαίρεση από τους 'Σταθμούς μου'"
+
+msgctxt "#30100"
+msgid "Show Subgenres"
+msgstr "Προβολή Υπο-Ειδών"
+
+msgctxt "#30101"
+msgid "Num stations in list"
+msgstr "Αριθμός σταθμών στη λίστα"
+
+msgctxt "#30102"
+msgid "Show Bitrate in Title"
+msgstr "Προβολή Bitrate στον Τίτλο"
+
+msgctxt "#30103"
+msgid "Choose a random server (Don't ask)"
+msgstr "Επιλογή τυχαίου διακομιστή (Χωρίς ερώτηση)"
+
+msgctxt "#30104"
+msgid "Filter stations by minium Bitrate"
+msgstr "Φιλτράρισμα σταθμών κατά ελάχιστο Bitrate"
+
+msgctxt "#30110"
+msgid "Minimum Bitrate"
+msgstr "Ελάχιστο Bitrate"
+
+msgctxt "#30111"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30112"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30113"
+msgid "160 kbit/s"
+msgstr "160 kbit/s"
+
+msgctxt "#30114"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30200"
+msgid "Network Error"
+msgstr "Σφάλμα Δικτύου"

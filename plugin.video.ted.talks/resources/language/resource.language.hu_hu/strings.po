@@ -1,0 +1,55 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.ted.talks\n"
+"Report-Msgid-Bugs-To: https://github.com/moreginger/xbmc-plugin.video.ted.talks\n"
+"POT-Creation-Date: 2017-01-13 22:42+000\n"
+"PO-Revision-Date: 2017-01-13 22:42+000\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Hungarian (http://www.transifex.com/projects/p/xbmc-addons/language/hu_HU/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hu_HU\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "TED Talks"
+msgstr "TED Talks"
+
+msgctxt "#30001"
+msgid "Newest Talks"
+msgstr "Legújabb Beszélgetések"
+
+msgctxt "#30031"
+msgid "TED is a nonprofit devoted to Ideas Worth Spreading. On this feed, you'll find TEDTalks video to inspire, intrigue and stir the imagination from some of the world's leading thinkers and doers, speaking from the stage at TED conferences, TEDx events and partner events around the world. This podcast is also available in high-def video and audio-only formats."
+msgstr "TED egy kicsi non-profit szervezet aminek célpontjában az Ötlet áll amit érdemes megosztani. A webhely kezdete 1984-re nyúlik vissza egy konferenciára ami 3 külön világot hozott össze: Technológia, Szórakozás, Tervezés. Azóta a kör csak bővült. Az éves TED konferenciával együtt Long Beach, Californiában és a globális konferenciával Oxfordban, a TED magába foglalja a díjnyertes TEDTalks videóoldalt is, valamint a nyílt fordítási programot, az új TEDx közösségi programot, az ezévi TEDIndia konferenciát és az éves TED díjat."
+
+msgctxt "#30002"
+msgid "Speakers"
+msgstr "Felszólalók"
+
+msgctxt "#30032"
+msgid "Thinkers. Doers. Idea-generators. These are the speakers who have delivered a talk featured on TED.com. Whether the talk was given at an official TED conference, at one of thousands of local, independently organized TEDx events, or on another stage altogether, these are the people who brought it to life."
+msgstr "Az előadók választéka a TED-nél kibővült tudósokkal, filozófusokkal, zenészekkel, vallási vezetőkkel, filantrópokkal és még sokan másokkal. Az évek folyamán a TED felszólalók között volt Bill Gates, Frank Gehry, Jane Goodall, Al Gore, Billy Graham, Peter Gabriel, Quincy Jones, Bono."
+
+msgctxt "#30004"
+msgid "Search"
+msgstr "Keresés"
+
+msgctxt "#30034"
+msgid "Search for Talks on TED.com"
+msgstr "Beszédek keresése a TED.com-on"
+
+msgctxt "#30007"
+msgid "Topics"
+msgstr "Téma"
+
+msgctxt "#30020"
+msgid "Next"
+msgstr "Következő"
+
+msgctxt "#30021"
+msgid "Previous"
+msgstr "Előző"
+
+

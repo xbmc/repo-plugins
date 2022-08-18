@@ -1,0 +1,60 @@
+# KODI Media Center language file
+# Addon Name: artemediathek
+# Addon id: plugin.video.artemediathek
+# Addon version: 1.0.0
+# Addon Provider: sarbes
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Main\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "Allgmein"
+
+msgctxt "#30010"
+msgid "Language"
+msgstr "Sprache"
+
+msgctxt "#30011"
+msgid "System (if available)"
+msgstr "System (wenn verfügbar)"
+
+msgctxt "#30012"
+msgid "English"
+msgstr "Englisch"
+
+msgctxt "#30013"
+msgid "German"
+msgstr "Deutsch"
+
+msgctxt "#30014"
+msgid "Spanish"
+msgstr "Spanisch"
+
+msgctxt "#30015"
+msgid "French"
+msgstr "Französisch"
+
+msgctxt "#30016"
+msgid "Hungarian"
+msgstr "Ungarisch"
+
+msgctxt "#30017"
+msgid "Italian"
+msgstr "Italienisch"
+
+msgctxt "#30018"
+msgid "Polish"
+msgstr "Polnisch"
+
+msgctxt "#30019"
+msgid "Portuguese"
+msgstr "Portugisisch"
+
+msgctxt "#30020"
+msgid "Romainian"
+msgstr "Romänisch"
+
+msgctxt "#30021"
+msgid "Ukrainian"
+msgstr "Ukrainisch"

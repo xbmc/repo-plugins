@@ -1,0 +1,94 @@
+# Kodi Media Center language file
+# Addon Name: SHOUTcast 2
+# Addon id: plugin.audio.shoutcast
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-05-07 15:36+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Dutch <https://kodi.weblate.cloud/projects/kodi-add-ons-music/plugin-audio-shoutcast/nl_nl/>\n"
+"Language: nl_nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6.1\n"
+
+msgctxt "#30000"
+msgid "All subgenres"
+msgstr "Alle subgenres"
+
+msgctxt "#30001"
+msgid "Top 500 Stations"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Browse by genre"
+msgstr "Blader op genre"
+
+msgctxt "#30003"
+msgid "My Stations"
+msgstr "Mijn Stations"
+
+msgctxt "#30004"
+msgid "Search Station by name"
+msgstr "Zoek Station op naam"
+
+msgctxt "#30005"
+msgid "Search Current Track playing Station"
+msgstr "Zoek huidige af spelende track Station"
+
+msgctxt "#30010"
+msgid "Add to 'My Stations'"
+msgstr "Voeg toe aan 'Mijn Stations'"
+
+msgctxt "#30011"
+msgid "Remove from 'My Stations'"
+msgstr "Verwijder van 'Mijn Stations'"
+
+msgctxt "#30100"
+msgid "Show Subgenres"
+msgstr "Weergave Subgenres"
+
+msgctxt "#30101"
+msgid "Num stations in list"
+msgstr "Aantal stations in lijst"
+
+msgctxt "#30102"
+msgid "Show Bitrate in Title"
+msgstr "Weergave Bitrate in Titel"
+
+msgctxt "#30103"
+msgid "Choose a random server (Don't ask)"
+msgstr "Kies een willekeurige server (Niet vragen)"
+
+msgctxt "#30104"
+msgid "Filter stations by minium Bitrate"
+msgstr "Filter stations bij minimale Bitrate"
+
+msgctxt "#30110"
+msgid "Minimum Bitrate"
+msgstr "Minimale Bitrate"
+
+msgctxt "#30111"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30112"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30113"
+msgid "160 kbit/s"
+msgstr "160 kbit/s"
+
+msgctxt "#30114"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30200"
+msgid "Network Error"
+msgstr "Netwerk fout"

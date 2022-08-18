@@ -1,0 +1,33 @@
+{
+  "channels": [
+    {
+      "guid": "3D4C7F88-FAB8-11E1-868D-8CDA6088709B",
+      "name": "Pathé Nederland (HTML)",
+      "description": {
+        "en": "At Pathé.nl you can find info on the latest films, and show dates. Watch movie trailers and easily buy tickets online.",
+        "nl": "Op Pathé.nl vind je de nieuwste films en een actuele filmagenda van alle Pathé bioscopen. Bekijk nieuwe filmtrailers en koop gemakkelijk online tickets."
+      },
+      "icon": "pathelarge.png",
+      "category": "Video",
+      "channelcode": "pathe",
+      "sortorder": 50,
+      "language": "nl",
+      "ignore": true
+    },
+    {
+      "guid": "66252BE4-E952-4AE5-B8EB-43E6271C688B",
+      "name": "Pathé Nederland",
+      "description": {
+        "en": "At Pathé.nl you can find info on the latest films, and show dates. Watch movie trailers and easily buy tickets online.",
+        "nl": "Op Pathé.nl vind je de nieuwste films en een actuele filmagenda van alle Pathé bioscopen. Bekijk nieuwe filmtrailers en koop gemakkelijk online tickets."
+      },
+      "icon": "pathelarge.png",
+      "category": "Video",
+      "channelcode": "pathejson",
+      "sortorder": 50,
+      "language": "nl",
+      "fanart": "pathefanart.jpg",
+      "poster": "patheposter_color.jpg"
+    }
+  ]
+}

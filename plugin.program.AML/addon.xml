@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.AML" name="Advanced MAME Launcher" version="1.0.2" provider-name="Wintermute0110">
+    <requires>
+        <!--
+            Check main addon versions in https://github.com/xbmc/xbmc/tree/master/addons
+            Change the branch according to the Kodi version.
+            Kodi 17 Krypton | xbmc.python 2.25.0 | script.module.pil 1.1.7
+            Kodi 18 Leia    | xbmc.python 2.26.0 | script.module.pil 1.1.7
+            Kodi 19 Matrix  | xbmc.python 3.0.0  | script.module.pil 5.1.0
+        -->
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.pil" version="5.1.0" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>executable game</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <!--
+            This must be commented when releasing the addon. Kodi must be restarted if this setting is changed.
+            See https://github.com/xbmc/xbmc/pull/13814
+        -->
+        <!-- <reuselanguageinvoker>false</reuselanguageinvoker> -->
+        <summary lang="en_GB">Kodi meets MAME!</summary>
+        <description lang="en_GB">MAME front-end for Kodi that supports both MAME machines and Software Lists. For help look at the Advanced MAME Launcher thread in the Kodi forum.</description>
+        <platform>android freebsd ios linux osx windows</platform>
+        <license>GPL-2.0-only</license>
+        <email>wintermute0110@gmail.com</email>
+        <forum>https://forum.kodi.tv/showthread.php?tid=304186</forum>
+        <website>https://github.com/Wintermute0110/plugin.program.AML.dev/wiki</website>
+        <source>https://github.com/Wintermute0110/plugin.program.AML.dev/</source>
+        <assets>
+            <icon>media/icon.png</icon>
+            <fanart>media/fanart.jpg</fanart>
+            <screenshot>media/shot_01_main_window.jpg</screenshot>
+            <screenshot>media/shot_02_MAME_pclone_list.jpg</screenshot>
+            <screenshot>media/shot_03_SL_pclone_list.jpg</screenshot>
+            <screenshot>media/shot_04_MAME_fanart.jpg</screenshot>
+            <screenshot>media/shot_05_SL_fanart.jpg</screenshot>
+            <screenshot>media/shot_06_MAME_3dbox.jpg</screenshot>
+            <screenshot>media/shot_07_SL_3dbox.jpg</screenshot>
+            <screenshot>media/shot_08_MAME_History_viewer.jpg</screenshot>
+            <screenshot>media/shot_09_MAME_ROMs_db.jpg</screenshot>
+            <screenshot>media/shot_10_MAME_Audit_db.jpg</screenshot>
+            <screenshot>media/shot_11_MAME_Audit_machine.jpg</screenshot>
+        </assets>
+        <news>See changelog.txt file in https://github.com/Wintermute0110/plugin.program.AML.dev/ for information about the latest release.</news>
+    </extension>
+</addon>

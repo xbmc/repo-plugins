@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30820"> <!-- Interface -->
+        <setting label="30821" type="lsep"/> <!-- Features -->
+        <setting label="30823" type="bool" id="interface_show_mylist" default="true"/>
+        <setting label="30826" type="bool" id="interface_show_continuewatching" default="false" visible="false"/>
+    </category>
+    <category label="30840"> <!-- Playback -->
+        <setting label="30841" type="lsep"/> <!-- Subtitles -->
+        <setting label="30842" type="bool" id="showsubtitles" default="true"/>
+        <setting label="30843" type="lsep"/> <!-- Streaming -->
+        <setting label="30844" type="select" id="max_bandwidth" default="0" values="0|256|512|1024|1536|2048|2560|3072|4096|6144|8192|10240|15360|20480|25600|30720"/>
+    </category>
+    <category label="30860"> <!-- Integrations -->
+        <setting label="30861" type="lsep"/> <!-- Up Next -->
+        <setting label="30862" type="action" action="InstallAddon(service.upnext)" option="close" visible="!System.HasAddon(service.upnext)"/>
+        <setting label="30863" type="bool" id="useupnext" default="true" visible="System.HasAddon(service.upnext)" />
+        <setting label="30864" type="action" action="Addon.OpenSettings(service.upnext)" enable="eq(-1,true)" option="close" visible="System.HasAddon(service.upnext)" subsetting="true"/>
+
+        <setting label="30866" type="lsep"/> <!-- IPTV Manager -->
+        <setting label="30867" type="action" action="InstallAddon(service.iptv.manager)" option="close" visible="!System.HasAddon(service.iptv.manager)"/> <!-- Install IPTV Manager add-on -->
+        <setting label="30868" type="bool" id="iptv.enabled" default="true" visible="String.StartsWith(System.BuildVersion,18) + System.HasAddon(service.iptv.manager) | System.AddonIsEnabled(service.iptv.manager)" />
+        <setting label="30869" type="action" action="Addon.OpenSettings(service.iptv.manager)" enable="eq(-1,true)" option="close" visible="String.StartsWith(System.BuildVersion,18) + System.HasAddon(service.iptv.manager) | System.AddonIsEnabled(service.iptv.manager)" subsetting="true"/> <!-- IPTV Manager settings -->
+        <setting id="iptv.channels_uri" default="plugin://plugin.video.vtm.go/iptv/channels" visible="false"/>
+        <setting id="iptv.epg_uri" default="plugin://plugin.video.vtm.go/iptv/epg" visible="false"/>
+    </category>
+    <category label="30880"> <!-- Expert -->
+        <setting label="30881" type="lsep"/> <!-- Streaming -->
+        <setting label="30883" type="action" id="ishelper_info" action="RunScript(script.module.inputstreamhelper, info)"/>
+        <setting label="30885" type="action" id="adaptive_settings" option="close" action="Addon.OpenSettings(inputstream.adaptive)" visible="System.HasAddon(inputstream.adaptive) + [String.StartsWith(System.BuildVersion,18) | String.StartsWith(System.BuildVersion,19)]"/>
+        <setting label="30887" type="action" id="ishelper_settings" option="close" action="Addon.OpenSettings(script.module.inputstreamhelper)"/>
+        <setting label="30888" type="bool" id="manifest_proxy" default="true"/>
+        <setting id="manifest_proxy_port" visible="false"/>
+        <setting label="30889" type="lsep"/> <!-- Logging -->
+        <setting label="30891" type="bool" id="debug_logging" default="false"/>
+        <setting label="30892" type="action" action="InstallAddon(script.kodi.loguploader)" option="close" visible="!System.HasAddon(script.kodi.loguploader)"/> <!-- Install Kodi Logfile Uploader -->
+        <setting label="30893" type="action" action="RunAddon(script.kodi.loguploader)" visible="String.StartsWith(System.BuildVersion,18) + System.HasAddon(script.kodi.loguploader) | System.AddonIsEnabled(script.kodi.loguploader)" /> <!-- Open Kodi Logfile Uploader -->
+        <setting label="30894" type="lsep"/> <!-- Authentication -->
+        <setting label="30895" type="action" action="RunPlugin(plugin://plugin.video.vtm.go/auth/clear-tokens)"/>
+        <setting label="30896" type="lsep"/> <!-- Cache -->
+        <setting label="30897" type="action" action="RunPlugin(plugin://plugin.video.vtm.go/auth/clear-cache)"/>
+    </category>
+</settings>

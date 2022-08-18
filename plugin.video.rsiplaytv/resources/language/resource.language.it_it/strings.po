@@ -1,0 +1,116 @@
+# Kodi Media Center language file
+# Addon Name: RSI Play TV
+# Addon id: plugin.video.rsiplaytv
+# Addon Provider: Alexander Seiler
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.rsiplaytv\n"
+"Report-Msgid-Bugs-To: seileralex@gmail.com\n"
+"POT-Creation-Date: 2018-10-30 15:58+0100\n"
+"PO-Revision-Date: 2018-11-21 13:48+0100\n"
+"Last-Translator: Alexander Seiler\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Enable debugging"
+msgstr "Abilita debug"
+
+msgctxt "#30001"
+msgid "Enable show segments"
+msgstr "Abilita spezzoni show"
+
+msgctxt "#30002"
+msgid "Prefer HD quality"
+msgstr "Dai priorità a qualità HD"
+
+msgctxt "#30003"
+msgid "Enable segments in topical playlists"
+msgstr "Abilita spezzoni nelle playlists attuali"
+
+msgctxt "#30004"
+msgid "Enable subtitles"
+msgstr "Abilita sottotitoli"
+
+msgctxt "#30005"
+msgid "Manage favourite shows"
+msgstr "Gestisci show preferiti"
+
+msgctxt "#30010"
+msgid "General"
+msgstr "Generali"
+
+msgctxt "#30011"
+msgid "Favourites"
+msgstr "Preferiti"
+
+msgctxt "#30012"
+msgid "Main menu"
+msgstr "Menu principale"
+
+msgctxt "#30050"
+msgid "All shows"
+msgstr "Tutti gli show"
+
+msgctxt "#30051"
+msgid "Favourite shows"
+msgstr "Show preferiti"
+
+msgctxt "#30052"
+msgid "Newest favourite shows"
+msgstr "Nuovi show preferiti"
+
+msgctxt "#30053"
+msgid "Recommendations"
+msgstr "Consigli"
+
+msgctxt "#30054"
+msgid "Newest videos (by topic)"
+msgstr "Nuovi video (per genere)"
+
+msgctxt "#30055"
+msgid "Most clicked videos (by topic)"
+msgstr "Video più cliccati (per genere)"
+
+msgctxt "#30056"
+msgid "Soon offline"
+msgstr "Presto offline"
+
+msgctxt "#30057"
+msgid "Shows by date"
+msgstr "Show per data"
+
+msgctxt "#30058"
+msgid "Topics"
+msgstr "temi"
+
+msgctxt "#30059"
+msgid "Most searched TV shows"
+msgstr "Programmi TV più cercati"
+
+msgctxt "#30069"
+msgid "Choose your favourite shows"
+msgstr "Scegli i tui show preferiti"
+
+msgctxt "#30070"
+msgid "SRF.ch Live"
+msgstr "Diretta SRF.ch"
+
+msgctxt "#30072"
+msgid "Live TV"
+msgstr "Diretta TV"
+
+msgctxt "#30085"
+msgid "Search"
+msgstr "Ricerca"
+
+msgctxt "#30074"
+msgid "RSI on YouTube"
+msgstr "RSI su YouTube"
+
+msgctxt "#30060"
+msgid "Homepage"
+msgstr "Pagina iniziale"

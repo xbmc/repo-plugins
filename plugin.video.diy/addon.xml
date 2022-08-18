@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.diy"
+       name="DIY Network"
+       version="4.0.1"
+       provider-name="t1m">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.t1mlib" version="4.0.0"/>
+    <import addon="script.module.requests" version="2.22.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">DIY Network</summary>
+    <description lang="en_GB">From remodeling to gardening to crafts DIYNetwork.com provides resources and knowledge through step-by-step photos and videos</description>
+    <disclaimer lang="en_GB">Feel free to use this script. For information visit the wiki.</disclaimer>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GPL-2.0-or-later</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=222451</forum>
+    <website>https://www.diynetwork.com/</website>
+    <source>https://github.com/learningit/repo-plugins/</source>
+    <news>Version 4.0.0 Initial release for Matrix
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+    </assets>
+    <broken>The DIY add-on is no longer supported.</broken>
+
+  </extension>
+</addon>

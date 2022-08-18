@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.sportschau" name="Sportschau" version="6.0.0" provider-name="sarbes">
+    <requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.libmediathek4" version="1.0.0"/>
+		<import addon="script.module.libard" version="6.0.0"/>
+		<import addon="script.module.requests" version="2.19.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+		<language>de</language>
+		<license>GPL-2.0-only</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=353903</forum>
+		<source>https://github.com/sarbes/plugin.video.sportschau</source>
+        <website>https://www.sportschau.de/</website>
+        <summary lang="en_GB">Videos und livestreams of the German Sportschau.</summary>
+        <description lang="en_GB">This add-on fetches videos and livestreams from www.sportschau.de. Most of the streams are geolocked to Germany.</description>
+        <summary lang="de_DE">Videos und Livesendungnen der Sportschau.</summary>
+        <description lang="de_DE">Dieses Add-on bietet Zugriff auf Videos und Livestreams von www.sportschau.de. Fast alle Streams sind nur aus Deutschland erreichbar.</description>
+        <disclaimer lang="de_DE">Dieses Add-on wird von keiner Sendeanstalt unterstützt und ist daher inoffiziell.</disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

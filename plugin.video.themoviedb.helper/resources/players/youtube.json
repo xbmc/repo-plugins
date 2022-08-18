@@ -1,0 +1,15 @@
+{
+    "name"              : "YouTube",
+    "plugin"            : "plugin.video.youtube",
+    "is_resolvable"     : "true",
+    "play_movie"        : [
+                            "plugin://plugin.video.youtube/search/?q={name_url}&search_type=notvalid",
+                            {"title": "(?i){title}"}
+                          ],
+    "play_episode"      : [
+                            "plugin://plugin.video.youtube/search/?q={name_url}&search_type=notvalid",
+                            {"dialog": "True"}
+                          ],
+    "search_movie"      : "plugin://plugin.video.youtube/search/?q={name_url}&search_type=notvalid",
+    "search_episode"    : "plugin://plugin.video.youtube/search/?q={name_url}&search_type=notvalid"
+}

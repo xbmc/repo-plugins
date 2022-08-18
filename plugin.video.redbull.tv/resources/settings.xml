@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <category label="30860"> <!--Integration -->
+    <setting label="30861" type="lsep"/> <!-- Integration with other add-ons -->
+    <!-- IPTV Manager -->
+    <setting label="30875" help="30876" type="action" action="InstallAddon(service.iptv.manager)" option="close" visible="!System.HasAddon(service.iptv.manager)"/> <!-- Install IPTV Manager add-on -->
+    <setting label="30877" help="30878" type="bool" id="iptv.enabled" default="true" visible="String.StartsWith(System.BuildVersion,18) + System.HasAddon(service.iptv.manager) | System.AddonIsEnabled(service.iptv.manager)" />
+    <setting label="30879" help="30880" type="action" action="Addon.OpenSettings(service.iptv.manager)" enable="eq(-1,true)" option="close" visible="String.StartsWith(System.BuildVersion,18) + System.HasAddon(service.iptv.manager) | System.AddonIsEnabled(service.iptv.manager)" subsetting="true"/> <!-- IPTV Manager settings -->
+    <setting type="text" id="iptv.channels_uri" default="plugin://plugin.video.redbull.tv/iptv/channels" visible="false"/>
+    <setting type="text" id="iptv.epg_uri" default="plugin://plugin.video.redbull.tv/iptv/epg" visible="false"/>
+  </category>
+</settings>

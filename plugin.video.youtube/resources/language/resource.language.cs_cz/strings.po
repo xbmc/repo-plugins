@@ -1,0 +1,1244 @@
+# Kodi Media Center language file
+# Addon Name: YouTube
+# Addon id: plugin.video.youtube
+# Addon Provider: bromix
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2015-09-21 11:01+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"Language: cs_CZ\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
+
+msgctxt "Addon Summary"
+msgid "Plugin for YouTube"
+msgstr "Plugin pro YouTube"
+
+msgctxt "Addon Description"
+msgid "YouTube is one of the biggest video-sharing websites of the world."
+msgstr "YouTube je jedna z největších webových stránek světa sdílející video."
+
+msgctxt "Addon Disclaimer"
+msgid "This plugin is not endorsed by Google"
+msgstr "Tento plugin není schválen společností Google"
+
+# msgctxt "Addon Summary"
+# msgid "Plugin for YouTube"
+# msgstr "Plugin pro YouTube"
+# msgctxt "Addon Description"
+# msgid "YouTube is a one of the biggest video-sharing websites of the world."
+# msgstr "YouTube je jedna z největších webových stránek světa sdílející video."
+# Kodion Settings
+msgctxt "#30000"
+msgid "General"
+msgstr "Obecné"
+
+msgctxt "#30001"
+msgid "Username"
+msgstr "Jméno"
+
+msgctxt "#30002"
+msgid "Password"
+msgstr "Heslo"
+
+# empty strings from id 30003 to 30006
+msgctxt "#30007"
+msgid "Use MPEG-DASH"
+msgstr "Použít MPEG-DASH"
+
+msgctxt "#30008"
+msgid "Configure InputStream Adaptive"
+msgstr "Konfigurovat InputStream Adaptive"
+
+msgctxt "#30009"
+msgid "Always ask for the video quality"
+msgstr "Vždy se zeptat na kvalitu"
+
+msgctxt "#30010"
+msgid "Video quality"
+msgstr "Kvalita videa"
+
+msgctxt "#30011"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30012"
+msgid "720p (HD)"
+msgstr "720p (HD)"
+
+msgctxt "#30013"
+msgid "1080p (HD)"
+msgstr "1080p (HD)"
+
+msgctxt "#30014"
+msgid "2160p (4k)"
+msgstr "2160p (4k)"
+
+msgctxt "#30015"
+msgid "4320p (8k)"
+msgstr "4320p (8k)"
+
+msgctxt "#30016"
+msgid "240p"
+msgstr "240p"
+
+msgctxt "#30017"
+msgid "360p"
+msgstr "360p"
+
+msgctxt "#30018"
+msgid "1080p Live / 720p (HD)"
+msgstr "1080p Živě / 720p (HD)"
+
+# empty strings 30019
+msgctxt "#30020"
+msgid "Allow 3D"
+msgstr "Povolit 3D"
+
+msgctxt "#30021"
+msgid "Show fanart"
+msgstr "Zobrazit fanart"
+
+msgctxt "#30022"
+msgid "Items per page"
+msgstr "Položek na stránku"
+
+msgctxt "#30023"
+msgid "Search history size"
+msgstr "Velikost historie vyhledávání"
+
+msgctxt "#30024"
+msgid "Cache size (MB)"
+msgstr "Velikost mezipaměti (MB)"
+
+msgctxt "#30025"
+msgid "Enable setup-wizard"
+msgstr "Povolit průvodce nastavením"
+
+msgctxt "#30026"
+msgid "Override view"
+msgstr "Vynutit zobrazení"
+
+msgctxt "#30027"
+msgid "View: Default"
+msgstr "Zobrazit: Výchozí"
+
+msgctxt "#30028"
+msgid "View: Episodes"
+msgstr "Zobrazit: Epizody"
+
+msgctxt "#30029"
+msgid "View: Movies"
+msgstr "Zobrazit: Filmy"
+
+msgctxt "#30030"
+msgid "Execute setup-wizard?"
+msgstr "Chcete spustit průvodce nastavením?"
+
+msgctxt "#30031"
+msgid "Advanced"
+msgstr "Pokročilé"
+
+msgctxt "#30032"
+msgid "View: TV Shows"
+msgstr "Zobrazit: TV Show"
+
+msgctxt "#30033"
+msgid "View: Songs"
+msgstr "Zobrazit: Skladby"
+
+msgctxt "#30034"
+msgid "View: Artists"
+msgstr "Zobrazit: Umělce"
+
+msgctxt "#30035"
+msgid "View: Albums"
+msgstr "Zobrazit: Alba"
+
+msgctxt "#30036"
+msgid "Support alternative player"
+msgstr "Podpora alternativního přehrávače"
+
+msgctxt "#30037"
+msgid "Custom Watch Later playlist id"
+msgstr "Vlastní ID seznam 'Shlédnout později'"
+
+msgctxt "#30038"
+msgid "Custom History playlist id"
+msgstr "Vlastní historie ID seznamu"
+
+# Kodion Common
+# empty strings from id 30039 to 30099
+msgctxt "#30100"
+msgid "Favourites"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Add to addon favs"
+msgstr "Přidat do oblíbených"
+
+msgctxt "#30102"
+msgid "Search"
+msgstr "Hledat"
+
+msgctxt "#30103"
+msgid "Library"
+msgstr "Knihovna"
+
+msgctxt "#30104"
+msgid "Highlights"
+msgstr "Zvýraznění"
+
+msgctxt "#30105"
+msgid "Archive"
+msgstr "Archiv"
+
+msgctxt "#30106"
+msgid "Next Page (%d)"
+msgstr "Další strana (%d)"
+
+msgctxt "#30107"
+msgid "Watch Later"
+msgstr "Shlédnout později"
+
+msgctxt "#30108"
+msgid "Remove"
+msgstr "Odstranit"
+
+msgctxt "#30109"
+msgid "Latest Videos"
+msgstr "Poslední videa"
+
+msgctxt "#30110"
+msgid "New Search"
+msgstr "Nové hledání"
+
+msgctxt "#30111"
+msgid "Sign In"
+msgstr "Přihlásit"
+
+msgctxt "#30112"
+msgid "Sign Out"
+msgstr "Odhlásit"
+
+msgctxt "#30113"
+msgid "Rename"
+msgstr "Přejmenovat"
+
+msgctxt "#30114"
+msgid "Confirm delete"
+msgstr "Potvrdit smazání"
+
+msgctxt "#30115"
+msgid "Confirm remove"
+msgstr "Potvrdit přesunutí"
+
+msgctxt "#30116"
+msgid "Delete \"%s\"?"
+msgstr "Smazat \"%s\"?"
+
+msgctxt "#30117"
+msgid "Remove \"%s\"?"
+msgstr "Přesunout \"%s\"?"
+
+msgctxt "#30118"
+msgid "Delete"
+msgstr "Smazat"
+
+msgctxt "#30119"
+msgid "Please wait..."
+msgstr "Čekejte..."
+
+msgctxt "#30120"
+msgid "Clear"
+msgstr "Vyčistit"
+
+# YouTube
+# empty strings from id 30121 to 30199
+msgctxt "#30200"
+msgid "API"
+msgstr ""
+
+msgctxt "#30201"
+msgid "API Key"
+msgstr "API KEY"
+
+msgctxt "#30202"
+msgid "API Id"
+msgstr "API ID"
+
+msgctxt "#30203"
+msgid "API Secret"
+msgstr "API SECRET"
+
+msgctxt "#30204"
+msgid "Enable personal API keys"
+msgstr "Povolit osobní API KEY"
+
+msgctxt "#30205"
+msgid "Use preset API key set"
+msgstr "Použít předvolbu nastavení API KEY"
+
+# YouTube
+# empty strings from id 30206 to 30499
+msgctxt "#30500"
+msgid "Channels"
+msgstr "Kanály"
+
+msgctxt "#30501"
+msgid "Playlists"
+msgstr "Seznamy přehrávání"
+
+msgctxt "#30502"
+msgid "Go to %s"
+msgstr "Přejít na %s"
+
+msgctxt "#30503"
+msgid "Show channel fanart"
+msgstr "Zobrazit fanart kanálu"
+
+msgctxt "#30504"
+msgid "Subscriptions"
+msgstr "Odběry"
+
+msgctxt "#30505"
+msgid "Unsubscribe"
+msgstr "Odhlásit odběr"
+
+msgctxt "#30506"
+msgid "Subscribe"
+msgstr "Přihlásit k odběru"
+
+msgctxt "#30507"
+msgid "My Channel"
+msgstr "Můj kanál"
+
+msgctxt "#30508"
+msgid "Liked Videos"
+msgstr "Videa, která se líbí"
+
+msgctxt "#30509"
+msgid "History"
+msgstr "Historie"
+
+msgctxt "#30510"
+msgid "My Subscriptions"
+msgstr "Moje odběry"
+
+msgctxt "#30511"
+msgid "Queue video"
+msgstr "Přidat video do fronty"
+
+msgctxt "#30512"
+msgid "Browse Channels"
+msgstr "Procházet kanály"
+
+msgctxt "#30513"
+msgid "Popular right now"
+msgstr "Populární videa"
+
+msgctxt "#30514"
+msgid "Related Videos"
+msgstr "Související videa"
+
+msgctxt "#30515"
+msgid "Auto-Remove from 'Watch Later'"
+msgstr "Automaticky odstranit ze 'Shlédnout později'"
+
+msgctxt "#30516"
+msgid "Folders"
+msgstr "Složky"
+
+msgctxt "#30517"
+msgid "Subscribe to %s"
+msgstr "Odebírat od %s"
+
+msgctxt "#30518"
+msgid "Go to '%s'"
+msgstr "Přejděte na '%s'"
+
+msgctxt "#30519"
+msgid "and enter the following code:"
+msgstr "a zadejte následující kód:"
+
+msgctxt "#30520"
+msgid "Add to..."
+msgstr "Přidat do..."
+
+msgctxt "#30521"
+msgid "Select playlist"
+msgstr "Vyberte seznam přehrávání"
+
+msgctxt "#30522"
+msgid "New playlist..."
+msgstr "Nový seznam přehrávání..."
+
+msgctxt "#30523"
+msgid "Language"
+msgstr "Jazyk"
+
+msgctxt "#30524"
+msgid "Select language"
+msgstr "Vyberte jazyk"
+
+msgctxt "#30525"
+msgid "Select region"
+msgstr "Vyberte region"
+
+msgctxt "#30526"
+msgid "Adjust"
+msgstr "Přizpůsobit"
+
+msgctxt "#30527"
+msgid "Language and region?"
+msgstr "Chcete vybrat jazyk a region?"
+
+msgctxt "#30528"
+msgid "Rate..."
+msgstr "Ohodnotit..."
+
+msgctxt "#30529"
+msgid "I like this"
+msgstr "Líbí se mi to"
+
+msgctxt "#30530"
+msgid "I dislike this"
+msgstr "Nelíbí se mi to"
+
+msgctxt "#30531"
+msgid "Play all"
+msgstr "Přehrát vše"
+
+msgctxt "#30532"
+msgid "Default"
+msgstr "Výchozí"
+
+msgctxt "#30533"
+msgid "Reverse"
+msgstr "Obráceně"
+
+msgctxt "#30534"
+msgid "Shuffle"
+msgstr "Náhodně"
+
+msgctxt "#30535"
+msgid "Select the order of the playlist"
+msgstr "Vyberte pořadí seznamu přehrávání"
+
+msgctxt "#30536"
+msgid "Updating Playlist..."
+msgstr "Obnovuji seznam přehrávání..."
+
+msgctxt "#30537"
+msgid "Play from here"
+msgstr "Přehrát odtud"
+
+msgctxt "#30538"
+msgid "Disliked Videos"
+msgstr "Videa, která se nelíbí"
+
+msgctxt "#30539"
+msgid "Live"
+msgstr "Živě"
+
+msgctxt "#30540"
+msgid "Play with..."
+msgstr "Přehrát pomocí..."
+
+msgctxt "#30541"
+msgid "Show channel name in description"
+msgstr "Zobrazit název kanálu v popisku"
+
+msgctxt "#30542"
+msgid "rtmpe streams are not supported"
+msgstr "RTMPE stream není podporován"
+
+msgctxt "#30543"
+msgid "Refresh"
+msgstr "Obnovit"
+
+msgctxt "#30544"
+msgid "More Links from the description"
+msgstr "Více odkazů z popisku"
+
+msgctxt "#30545"
+msgid "No further links found."
+msgstr "Žádné další odkazy nenalezeny"
+
+msgctxt "#30546"
+msgid "Please log in twice!"
+msgstr "Přihlaste se dvakrát!"
+
+msgctxt "#30547"
+msgid "You must enable two applications so that YouTube is functioning properly."
+msgstr "Je zapotřebí povolit dvě aplikace pro správnou funkci doplňku."
+
+msgctxt "#30548"
+msgid "More..."
+msgstr "Více..."
+
+msgctxt "#30549"
+msgid "No videos streams found"
+msgstr "Žádné streamy nenalezeny"
+
+msgctxt "#30550"
+msgid "Region"
+msgstr "Region"
+
+msgctxt "#30551"
+msgid "Recommendations"
+msgstr "Doporučené"
+
+msgctxt "#30552"
+msgid "Maintenance"
+msgstr "Podporované"
+
+msgctxt "#30553"
+msgid "Delete function cache database"
+msgstr "Smazat mezipaměť databáze"
+
+msgctxt "#30554"
+msgid "Delete search history database"
+msgstr "Smazat historii databáze"
+
+msgctxt "#30555"
+msgid "Clear function cache"
+msgstr "Smazat mezipaměť"
+
+msgctxt "#30556"
+msgid "Clear search history"
+msgstr "Smazat historii"
+
+msgctxt "#30557"
+msgid "function cache"
+msgstr "mezipaměť"
+
+msgctxt "#30558"
+msgid "search history"
+msgstr "historie"
+
+msgctxt "#30559"
+msgid "Delete settings.xml"
+msgstr "Odstranit settings.xml"
+
+msgctxt "#30560"
+msgid "Subtitle language"
+msgstr "Jazyk titulků"
+
+msgctxt "#30561"
+msgid "None"
+msgstr "Žádné"
+
+msgctxt "#30562"
+msgid "All"
+msgstr "Vše"
+
+msgctxt "#30563"
+msgid "Setting"
+msgstr "Nastavení"
+
+msgctxt "#30564"
+msgid "Setting, English"
+msgstr "Nastavení, Angličtina"
+
+msgctxt "#30565"
+msgid "English"
+msgstr "Angličtina"
+
+msgctxt "#30566"
+msgid "Prompt"
+msgstr "Přizpůsobit"
+
+msgctxt "#30567"
+msgid "Set as Watch Later"
+msgstr "Nastavit 'Shlédnout později'"
+
+msgctxt "#30568"
+msgid "Remove as Watch Later"
+msgstr "Odstranit 'Shlédnout později'"
+
+msgctxt "#30569"
+msgid "Are you sure you want to remove '%s' as your Watch Later list?"
+msgstr "Chcete odstranit '%s' ze seznamu 'Shlédnout později'?"
+
+msgctxt "#30570"
+msgid "Are you sure you want to replace your current Watch Later list with '%s'?"
+msgstr "Chcete nahradit aktuální seznam 'Shlédnout později' s '%s'?"
+
+msgctxt "#30571"
+msgid "Set as History"
+msgstr "Nastavit historii"
+
+msgctxt "#30572"
+msgid "Remove as History"
+msgstr "Odstranit historii"
+
+msgctxt "#30573"
+msgid "Are you sure you want to remove '%s' as your History list?"
+msgstr "Chcete odstranit '%s'ze seznamu historie?"
+
+msgctxt "#30574"
+msgid "Are you sure you want to replace your current History list with '%s'?"
+msgstr "Chcete nahradit aktuální seznam historie s '%s'?"
+
+msgctxt "#30575"
+msgid "Succeeded"
+msgstr "Úspěšně"
+
+msgctxt "#30576"
+msgid "Failed"
+msgstr "Neúspěšně"
+
+msgctxt "#30577"
+msgid "Settings"
+msgstr "Nastavení"
+
+msgctxt "#30578"
+msgid "Force SSL certificate verification"
+msgstr "Certifikát ověření Force SSL"
+
+msgctxt "#30579"
+msgid "MPEG-DASH is enabled in the YouTube settings, however InputStream Adaptive appears to be disabled. Would you like to enable InputStream Adaptive now?"
+msgstr "MPEG-DASH je povolený v nastavení the YouTube, ale InputStream Adaptive je zakázaný. Chcete povolit InputStream Adaptive?"
+
+msgctxt "#30580"
+msgid "Reset access manager"
+msgstr "Obnovit přístup pro správce"
+
+msgctxt "#30581"
+msgid "Are you sure you want to reset access manager?"
+msgstr "Chcete obnovit přístup pro správce?"
+
+msgctxt "#30582"
+msgid "Autoplay suggested videos"
+msgstr "Automatické přehrávání doporučeného videa"
+
+msgctxt "#30583"
+msgid "Automatic"
+msgstr "Automaticky"
+
+msgctxt "#30584"
+msgid "My Subscriptions (Filtered)"
+msgstr "Moje předplatné"
+
+msgctxt "#30585"
+msgid "Filtered channel list (comma delimited)"
+msgstr "Filtr seznamu kanálů"
+
+msgctxt "#30586"
+msgid "Blacklist"
+msgstr "Černý seznam"
+
+msgctxt "#30587"
+msgid "Add to My Subscriptions filter"
+msgstr "Přidat do mého předplatného"
+
+msgctxt "#30588"
+msgid "Remove from My Subscriptions filter"
+msgstr "Odstranit z mého předplatného"
+
+msgctxt "#30589"
+msgid "Added to My Subscriptions filter"
+msgstr "Přidáno do mého předplatného"
+
+msgctxt "#30590"
+msgid "Removed from My Subscriptions filter"
+msgstr "Odstraněno z mého předplatného"
+
+msgctxt "#30591"
+msgid "Thumbnail size"
+msgstr "Poměr stran náhledu"
+
+msgctxt "#30592"
+msgid "Medium (16:9)"
+msgstr "16:9"
+
+msgctxt "#30593"
+msgid "High (4:3)"
+msgstr "4:3"
+
+msgctxt "#30594"
+msgid "Safe search"
+msgstr "Bezpečné vyhledávání"
+
+msgctxt "#30595"
+msgid "Moderate"
+msgstr "Přibližné"
+
+msgctxt "#30596"
+msgid "Strict"
+msgstr "Přesné"
+
+msgctxt "#30597"
+msgid "Updated: %s"
+msgstr "Aktualizováno: %s"
+
+msgctxt "#30598"
+msgid "Personal API keys enabled"
+msgstr "Povolit osobní API KEY"
+
+msgctxt "#30599"
+msgid "Failed to enable personal API keys. Missing: %s"
+msgstr "Chyba povolení osobního API KEY. Chybí: %s"
+
+msgctxt "#30600"
+msgid "Configure subtitles"
+msgstr "Konfigurovat titulky"
+
+msgctxt "#30601"
+msgid "%s with %s fallback"
+msgstr "Nefunkční %s s %s"
+
+msgctxt "#30602"
+msgid "No auto-generated"
+msgstr "Žádné automatické generování"
+
+msgctxt "#30603"
+msgid "Age gate"
+msgstr "Věková skupina"
+
+msgctxt "#30604"
+msgid "Allow offensive content"
+msgstr "Povolit obsah"
+
+msgctxt "#30605"
+msgid "Quick Search"
+msgstr "Rychlé hledání"
+
+msgctxt "#30606"
+msgid "Quick Search (Incognito)"
+msgstr "Rychlé hledání (anonymní)"
+
+msgctxt "#30607"
+msgid "Audio only"
+msgstr "Pouze zvuk"
+
+msgctxt "#30608"
+msgid "Allow developer keys"
+msgstr "Povolit klíč pro vývojáře"
+
+msgctxt "#30609"
+msgid "Clear watch history"
+msgstr "Smazat historii sledování"
+
+msgctxt "#30610"
+msgid "This will clear your account's watch history from all devices. You can't undo this."
+msgstr "Tímto úkonem smažete historii sledování Vašeho účtu ze všech zařízení. Tento úkon nelze vzít zpět."
+
+msgctxt "#30611"
+msgid "Saved Playlists"
+msgstr "Uložit seznamy přehrávání"
+
+msgctxt "#30612"
+msgid "Retry"
+msgstr "Opakovat"
+
+msgctxt "#30613"
+msgid "Retrieve Watch Later playlist id"
+msgstr "Obnovit ID seznamu 'Shlédnout později'"
+
+msgctxt "#30614"
+msgid "Failed to retrieve Watch Later playlist id. Add a few videos to Watch Later via the web/app and retry."
+msgstr "Chyba obnovení ID seznamu 'Shlédnout později'. Přidejte sledovaná videa přes webovou aplikaci a zkuste to znovu."
+
+msgctxt "#30615"
+msgid "Cancel"
+msgstr "Zrušit"
+
+msgctxt "#30616"
+msgid "Must be signed in."
+msgstr "Musíte být přihlášen"
+
+msgctxt "#30617"
+msgid "MPEG-DASH"
+msgstr "MPEG-DASH"
+
+msgctxt "#30618"
+msgid "Enable mpeg-dash proxy"
+msgstr "Povolit Proxy MPEG-DASH"
+
+msgctxt "#30619"
+msgid "Port"
+msgstr "Port"
+
+msgctxt "#30620"
+msgid "Port %s already in use. Cannot start http server."
+msgstr "Port %s je již použiván. Nelze spustit HTTP Server."
+
+msgctxt "#30621"
+msgid "Proxy is required for mpeg-dash vods (see HTTP Server)"
+msgstr "Proxy je vyžadován pro MPEG-DASH"
+
+msgctxt "#30622"
+msgid "Purchases"
+msgstr "Nákupy"
+
+msgctxt "#30623"
+msgid "Install InputStream Helper"
+msgstr "Instalovat InputStream Helper"
+
+msgctxt "#30624"
+msgid "Requires Kodi 17+"
+msgstr "Vyžadován Kodi 17 a novější"
+
+msgctxt "#30625"
+msgid "InputStream Helper is already installed."
+msgstr "InputStream Helper je již nainstalován"
+
+msgctxt "#30626"
+msgid "Delete temporary files"
+msgstr "Smazat dočasné soubory"
+
+msgctxt "#30627"
+msgid "Rate video after watching"
+msgstr "Ohodnotit video po sledování"
+
+msgctxt "#30628"
+msgid "HTTP Server"
+msgstr "HTTP Server"
+
+msgctxt "#30629"
+msgid "IP whitelist (comma delimited)"
+msgstr "IP bílého seznamu (vymezeno čárkou)"
+
+msgctxt "#30630"
+msgid "Save"
+msgstr "Uložit"
+
+msgctxt "#30631"
+msgid "Successfully updated: %s"
+msgstr "Úspěšně aktualizováno: %s"
+
+msgctxt "#30632"
+msgid "Enable API configuration page"
+msgstr "Povolit konfigurační stránku API"
+
+msgctxt "#30633"
+msgid "http://<ipaddress>:<port>/api (see HTTP Server)"
+msgstr "http://<ipaddress>:<port>/api"
+
+msgctxt "#30634"
+msgid "YouTube Add-on API Configuration"
+msgstr "API konfigurace pro doplňky YouTube"
+
+msgctxt "#30635"
+msgid "No changes detected, API keys were not updated."
+msgstr "Žádné změny. API KEY nebyl aktualizován."
+
+msgctxt "#30636"
+msgid "Personal API keys are enabled."
+msgstr "Osobní API KEY jsou povolené"
+
+msgctxt "#30637"
+msgid "Personal API keys are disabled."
+msgstr "Osobní API KEY jsou zakázané"
+
+msgctxt "#30638"
+msgid "Bookmark this page to quickly add your keys in the future."
+msgstr "Záložka této stránky pro rychlé přidání Vašeho klíče."
+
+msgctxt "#30639"
+msgid "Found personal API keys in api_keys.json, would you like to restore them? Choosing no will overwrite them."
+msgstr "Nalezen osobní API KEY v api_keys.json. Chcete jej obnovit? Touto volbou nebude přepsán."
+
+msgctxt "#30640"
+msgid "Restore"
+msgstr "Obnovit"
+
+msgctxt "#30641"
+msgid "Delete api_keys.json"
+msgstr "Odstranit api_keys.json"
+
+msgctxt "#30642"
+msgid "Delete access_manager.json"
+msgstr "Odstranit access_manager.json"
+
+msgctxt "#30643"
+msgid "Listen on IP"
+msgstr "Poslech z IP"
+
+msgctxt "#30644"
+msgid "Select listen IP"
+msgstr "Vybrat poslech z IP"
+
+msgctxt "#30645"
+msgid "Refresh after watching"
+msgstr "Obnovit po sledování"
+
+msgctxt "#30646"
+msgid "Upcoming Live"
+msgstr "Aktuální Živě"
+
+msgctxt "#30647"
+msgid "Completed Live"
+msgstr "Kompletní Živě"
+
+msgctxt "#30648"
+msgid "API Key is incorrect. Settings - API - API Key"
+msgstr "Chyba API KEY. Nastavení - API - API Key"
+
+msgctxt "#30649"
+msgid "Client Id is incorrect. Settings - API - API Id"
+msgstr "Chyba ID klienta. Nastavení - API - API ID"
+
+msgctxt "#30650"
+msgid "Client Secret is incorrect. Settings - API - API Secret"
+msgstr "Chyba klienta SECRET. Nastavení - API - API SECRET"
+
+msgctxt "#30651"
+msgid "Location"
+msgstr "Poloha"
+
+msgctxt "#30652"
+msgid "Location radius (km)"
+msgstr "Poloměr polohy (km)"
+
+msgctxt "#30653"
+msgid "Perform geolocation? Used for [B]My Location[/B]"
+msgstr "Využíváte geolokaci? Použijte ji pro [B]Moje poloha[/B]"
+
+msgctxt "#30654"
+msgid "My Location"
+msgstr "Moje poloha"
+
+msgctxt "#30655"
+msgid "Switch User"
+msgstr "Přepnout uživatele"
+
+msgctxt "#30656"
+msgid "New user"
+msgstr "Nový uživatel"
+
+msgctxt "#30657"
+msgid "Unnamed"
+msgstr "Neoznačený"
+
+msgctxt "#30658"
+msgid "Enter a name for this user"
+msgstr "Vložte jméno uživatele"
+
+msgctxt "#30659"
+msgid "User is now '%s'"
+msgstr "Uživatelem je nyní '%s'"
+
+msgctxt "#30660"
+msgid "Users"
+msgstr "Uživatelé"
+
+msgctxt "#30661"
+msgid "Add a user"
+msgstr "Přidat uživatele"
+
+msgctxt "#30662"
+msgid "Remove a user"
+msgstr "Odstranit uživatele"
+
+msgctxt "#30663"
+msgid "Rename a user"
+msgstr "Přejmenovat uživatele"
+
+msgctxt "#30664"
+msgid "Switch user"
+msgstr "Přepnout uživatele"
+
+msgctxt "#30665"
+msgid "Switch to '%s' now?"
+msgstr "Přepnout nyní na '%s'?"
+
+msgctxt "#30666"
+msgid "Removed '%s'"
+msgstr "Odstraněn '%s'"
+
+msgctxt "#30667"
+msgid "Renamed '%s' to '%s'"
+msgstr "Přejmenován z '%s' na '%s"
+
+msgctxt "#30668"
+msgid "Play count minimum percent"
+msgstr "Minimálně přehrávané (%)"
+
+msgctxt "#30669"
+msgid "Mark unwatched"
+msgstr "Označit jako nesledované"
+
+msgctxt "#30670"
+msgid "Mark watched"
+msgstr "Označit jako sledované"
+
+msgctxt "#30671"
+msgid "Clear playback history"
+msgstr "Smazat historii přehrávání"
+
+msgctxt "#30672"
+msgid "Delete playback history"
+msgstr "Smazat historii přehrávání"
+
+msgctxt "#30673"
+msgid "playback history"
+msgstr "Historie přehrávání"
+
+msgctxt "#30674"
+msgid "Reset resume point"
+msgstr "Obnovit bod"
+
+msgctxt "#30675"
+msgid "Use playback history (watched, resume tracking)"
+msgstr "Použít historii pořehrávání"
+
+msgctxt "#30676"
+msgid "Just now"
+msgstr "Právě teď"
+
+msgctxt "#30677"
+msgid "A minute ago"
+msgstr "Před minutou"
+
+msgctxt "#30678"
+msgid "Recently"
+msgstr "Nedávno"
+
+msgctxt "#30679"
+msgid "An hour ago"
+msgstr "Před hodinou"
+
+msgctxt "#30680"
+msgid "Two hours ago"
+msgstr "Před 2 hodinami"
+
+msgctxt "#30681"
+msgid "Three hours ago"
+msgstr "Před 3 hodinami"
+
+msgctxt "#30682"
+msgid "Yesterday at"
+msgstr "Včera"
+
+msgctxt "#30683"
+msgid "Two days ago"
+msgstr "Před 2 dny"
+
+msgctxt "#30684"
+msgid "Today at"
+msgstr "Dnes"
+
+msgctxt "#30685"
+msgid "Delete data cache database"
+msgstr "Smazat data mezipaměti databáze"
+
+msgctxt "#30686"
+msgid "Clear data cache"
+msgstr "Smazat data mezipaměti"
+
+msgctxt "#30687"
+msgid "data cache"
+msgstr "data mezipaměti"
+
+msgctxt "#30688"
+msgid "Use for videos"
+msgstr "Použít pro videa"
+
+msgctxt "#30689"
+msgid "Use for live streams"
+msgstr "Použít pro stream Živě"
+
+msgctxt "#30690"
+msgid "InputStream Adaptive >= 2.0.12 is required for live streams"
+msgstr "InputStream Adaptive >= 2.0.12 je vyžadován pro stream Živě"
+
+msgctxt "#30691"
+msgid "Airing now"
+msgstr "Nyní přehráváno"
+
+msgctxt "#30692"
+msgid "In a minute"
+msgstr "Za minutu"
+
+msgctxt "#30693"
+msgid "Airing soon"
+msgstr "Krátce přehráváno"
+
+msgctxt "#30694"
+msgid "In over an hour"
+msgstr "Přes hodinu"
+
+msgctxt "#30695"
+msgid "In over two hours"
+msgstr "Přes 2 hodiny"
+
+msgctxt "#30696"
+msgid "Airing today at"
+msgstr "Dnes přehráváno"
+
+msgctxt "#30697"
+msgid "Tomorrow at"
+msgstr "Zítra"
+
+msgctxt "#30698"
+msgid "Check my IP"
+msgstr "Kontrola IP"
+
+msgctxt "#30699"
+msgid "HTTP server is not running"
+msgstr "HTTP Server není spuštěný"
+
+msgctxt "#30700"
+msgid "Client IP is %s"
+msgstr "IP klient %s"
+
+msgctxt "#30701"
+msgid "Failed to obtain client IP"
+msgstr "Chyba získání IP klienta"
+
+msgctxt "#30702"
+msgid "Play with subtitles"
+msgstr "Přehrát s titulky"
+
+msgctxt "#30703"
+msgid "Are you sure?"
+msgstr "Opravdu chcete?"
+
+msgctxt "#30704"
+msgid "Use YouTube website urls"
+msgstr "Použít URL webové stránky YouTube"
+
+msgctxt "#30705"
+msgid "Download subtitles"
+msgstr "Stáhnout titulky"
+
+msgctxt "#30706"
+msgid "Download subtitles before starting playback? (Default: No)"
+msgstr "Chcete stáhnout titulky před přehráváním? (Výhozí: Ne)"
+
+msgctxt "#30707"
+msgid "Untitled"
+msgstr "Neoznačené"
+
+msgctxt "#30708"
+msgid "Play audio only"
+msgstr "Přehrát pouze zvuk"
+
+msgctxt "#30709"
+msgid "Failed to retrieve Watch Later playlist id. To increase the chances of retrieval add 8-10 videos to Watch Later via the web/app and retry."
+msgstr "Chyba získání ID seznamu 'Shlédnout později'. Přidejte sledovaná videa přes webovou aplikaci a zkuste to znovu."
+
+msgctxt "#30710"
+msgid "Failed to retrieve Watch Later playlist id. Try again tomorrow without removing any of the videos."
+msgstr "Chyba získání ID seznamu 'Shlédnout později'. Zkuste to zítra bez odstranění videa."
+
+msgctxt "#30711"
+msgid "Searching for Watch Later... Page %s"
+msgstr "Vyhledávání pro 'Shlédnout později'... Strana %s"
+
+msgctxt "#30712"
+msgid "Rate videos in playlists"
+msgstr "Hodnocená videa v seznamu"
+
+msgctxt "#30713"
+msgid "Added to Watch Later"
+msgstr "Přidáno do 'Shlédnout později'"
+
+msgctxt "#30714"
+msgid "Added to playlist"
+msgstr "Přidáno do seznamu"
+
+msgctxt "#30715"
+msgid "Removed from playlist"
+msgstr "Odstraněno ze seznamu"
+
+msgctxt "#30716"
+msgid "Liked video"
+msgstr "Video,které se mně líbí"
+
+msgctxt "#30717"
+msgid "Disliked video"
+msgstr "Video, které se mně nelíbí"
+
+msgctxt "#30718"
+msgid "Rating removed"
+msgstr "Hodnocení odstraněno"
+
+msgctxt "#30719"
+msgid "Subscribed to channel"
+msgstr "Předplacené do kanálu"
+
+msgctxt "#30720"
+msgid "Unsubscribed from channel"
+msgstr "Nepředplacené z kanálu"
+
+msgctxt "#30721"
+msgid "Default to WEBM adaptation set (4K)"
+msgstr "Výchozí nastavení přizpůsobení WEBM (4K)"
+
+msgctxt "#30722"
+msgid "HDR"
+msgstr "HDR"
+
+msgctxt "#30723"
+msgid "Proxy is required for mpeg-dash vods (see HTTP Server)[CR]> 1080p and HDR requires InputStream Adaptive >= 2.3.14"
+msgstr "Proxy je vyžadován pro MPEG-DASH [CR]> 1080p a HDR vyžaduje InputStream Adaptive >= 2.3.14"
+
+msgctxt "#30724"
+msgid "Limit to 30fps"
+msgstr "Omezení do 30 sn/sek"
+
+msgctxt "#30725"
+msgid "1440p (HD)"
+msgstr "1440p (HD)"
+
+msgctxt "#30726"
+msgid "Uploads"
+msgstr "Nahrát"
+
+msgctxt "#30727"
+msgid "Adaptive (MP4/H264)"
+msgstr "Adaptivní (MP4/H264)"
+
+msgctxt "#30728"
+msgid "Adaptive (WEBM/VP9)"
+msgstr "Adaptivní (WEBM/VP9)"
+
+msgctxt "#30729"
+msgid "Remote friendly search"
+msgstr ""
+
+msgctxt "#30730"
+msgid "Play (Ask for quality)"
+msgstr ""
+
+msgctxt "#30731"
+msgid "The YouTube add-on now requires that you use your own API keys.[CR]For more information see the wiki: [B]https://ytaddon.page.link/keys[/B][CR][CR]Sorry for the inconvenience."
+msgstr ""
+
+msgctxt "#30732"
+msgid "Comments"
+msgstr ""
+
+msgctxt "#30733"
+msgid "Likes"
+msgstr ""
+
+msgctxt "#30734"
+msgid "Replies"
+msgstr ""
+
+msgctxt "#30735"
+msgid "Edited"
+msgstr ""
+
+# Kodion Common
+# empty strings from id 30039 to 30099
+#~ msgctxt "#30100"
+#~ msgid "Favorites"
+#~ msgstr "Oblíbené"
+
+# YouTube
+# empty strings from id 30121 to 30199
+#~ msgctxt "#30200"
+#~ msgid "API Key"
+#~ msgstr "API"

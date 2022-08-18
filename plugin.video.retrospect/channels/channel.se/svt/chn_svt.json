@@ -1,0 +1,31 @@
+{
+  "channels": [
+    {
+      "guid": "3AF9C61E-88B2-11E1-A03F-08F6BAE59B18",
+      "name": "SVT Play",
+      "description": {
+        "en": "Broadcasts and shows from the Sveriges Television (SVTPlay.se).",
+        "sv": "Sändningar från Sveriges Television (SVTPlay.se)."
+      },
+      "icon": "svtlarge.png",
+      "category": "National",
+      "channelcode": "svt",
+      "sortorder": 0,
+      "language": "se",
+      "fanart": "svtfanart.jpg",
+      "adaptiveAddonSelectable": true
+    }
+  ],
+  "settings": [
+    {
+      "order": 1,
+      "id": "show_programs_folder",
+      "value": "label=\"30582\" type=\"bool\" default=\"true\""
+    },
+    {
+      "order": 2,
+      "id": "show_accessibility_videos",
+      "value": "label=\"30587\" type=\"bool\" default=\"true\""
+    }
+  ]
+}

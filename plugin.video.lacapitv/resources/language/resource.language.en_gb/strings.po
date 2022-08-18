@@ -1,0 +1,32 @@
+# Kodi Media Center language file
+# Addon Name: La Capi TV
+# Addon id: plugin.video.lacapitv
+# Addon Provider: Ernesto Bazzano
+msgid ""
+msgstr ""
+"Report-Msgid-Bugs-To: info@lacapi.tv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Enter your e-mail address"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Enter your password"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Login"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Active"
+msgstr ""
+
+msgctxt "#30005"
+msgid "To view the complete video creates an account in play.lacapi.tv"
+msgstr ""

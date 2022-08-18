@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.audio.rne" name="RNE Podcasts" version="1.3.2+matrix.1" provider-name="Jose Antonio Montes (jamontes)">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">Listen to all the podcast from RNE.</summary>
+        <description lang="en_GB">This add-on allows you to listen to all the podcast of the emission programmes from the spanish national radio RNE website.[CR]From the add-on settings menu, it can be configured to navigate through all the programmes, or just currently on emission (default).</description>
+        <summary lang="es_ES">Escucha todos los podcasts de RNE.</summary>
+        <description lang="es_ES">Este add-on te permite escuchar todos los podcasts de las emisiones de los programas de RNE mostrados en su página web.[CR]Desde el menú de ajustes del add-on, se puede elegir entre la opción de mostrar todos los programas, o sólo aquellos actualmente en emisión (valor por defecto).</description>
+        <summary lang="de_DE">Hören sie alle podcast von RNE.</summary>
+        <description lang="de_DE">Dieses add-on ermöglicht es ihnen alle podcast von der spanischen nationalen radio RNE website erneut zu hören.[CR]Im add-on einstellungs-menü, kann man verschiedene sendungen auswählen oder sich das aktuelle live streaming anhören (default).</description>
+	<summary lang="fr_FR">Ecoute tous les podcasts de RNE.</summary>
+	<description lang="fr_FR">Cette add-on permet d'écouter tous les podcasts de les émissions des programmes de la Radio National Espagnole RNE présents sur sa page web.[CR]Depuis le menu de préférences du add-on, on peut choisir entre l´option de montrer tous les programmes ou seulement ceux en émission (valeur par défault).</description>
+        <language>es</language>
+        <license>GPL-3.0-or-later</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=224126</forum>
+        <source>https://github.com/jamontes/plugin.audio.rne</source>
+        <website>https://www.rtve.es/alacarta/rne/</website>
+	<news>
+           Version 1.3.2+matrix.1
+             * Quick fix for direct channels due to website changes (credits and great thanks to vicglez).
+	</news>
+        <assets>
+           <icon>icon.png</icon>
+	</assets>
+    </extension>
+</addon>

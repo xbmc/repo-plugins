@@ -1,0 +1,116 @@
+# Kodi Media Center language file
+# Addon Name: SRF Play TV
+# Addon id: plugin.video.srfplaytv
+# Addon Provider: Alexander Seiler
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.srfplaytv\n"
+"Report-Msgid-Bugs-To: seileralex@gmail.com\n"
+"POT-Creation-Date: 2018-04-11 10:32+0200\n"
+"PO-Revision-Date: 2018-11-21 14:48+0100\n"
+"Last-Translator: Alexander Seiler\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Enable debugging"
+msgstr "Aktiviere Debugging"
+
+msgctxt "#30001"
+msgid "Enable show segments"
+msgstr "Aktiviere Sendungssegmente"
+
+msgctxt "#30002"
+msgid "Prefer HD quality"
+msgstr "Bevorzuge HD-Qualität"
+
+msgctxt "#30003"
+msgid "Enable segments in topical playlists"
+msgstr "Aktiviere Sendungssegmente in themischen Playlisten"
+
+msgctxt "#30004"
+msgid "Enable subtitles"
+msgstr "Aktiviere Untertitel"
+
+msgctxt "#30005"
+msgid "Manage favourite shows"
+msgstr "Bevorzugte Sendungen verwalten"
+
+msgctxt "#30010"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30011"
+msgid "Favourites"
+msgstr "Favoriten"
+
+msgctxt "#30012"
+msgid "Main menu"
+msgstr "Hauptmenü"
+
+msgctxt "#30050"
+msgid "All shows"
+msgstr "Alle Sendungen"
+
+msgctxt "#30051"
+msgid "Favourite shows"
+msgstr "Bevorzugte Sendungen"
+
+msgctxt "#30052"
+msgid "Newest favourite shows"
+msgstr "Neuste bevorzugte Sendungen"
+
+msgctxt "#30053"
+msgid "Recommendations"
+msgstr "Empfehlungen"
+
+msgctxt "#30054"
+msgid "Newest videos (by topic)"
+msgstr "Neuste Videos (nach Thema)"
+
+msgctxt "#30055"
+msgid "Most clicked videos (by topic)"
+msgstr "Meistgesehene Videos (nach Thema)"
+
+msgctxt "#30056"
+msgid "Soon offline"
+msgstr "Nur noch kurze Zeit online"
+
+msgctxt "#30057"
+msgid "Shows by date"
+msgstr "Sendungen nach Datum"
+
+msgctxt "#30058"
+msgid "Topics"
+msgstr "Themen"
+
+msgctxt "#30059"
+msgid "Most searched TV shows"
+msgstr "Am meisten gesuchte TV Sendungen"
+
+msgctxt "#30060"
+msgid "Homepage"
+msgstr "Startseite"
+
+msgctxt "#30069"
+msgid "Choose your favourite shows"
+msgstr "Wählen Sie Ihre bevorzugten Sendungen"
+
+msgctxt "#30070"
+msgid "SRF.ch Live"
+msgstr "SRF.ch Live"
+
+msgctxt "#30072"
+msgid "Live TV"
+msgstr "Live TV"
+
+msgctxt "#30074"
+msgid "SRF on YouTube"
+msgstr "SRF auf YouTube"
+
+msgctxt "#30085"
+msgid "Search"
+msgstr "Suche"

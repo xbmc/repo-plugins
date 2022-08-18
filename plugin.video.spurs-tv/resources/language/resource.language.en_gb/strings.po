@@ -1,0 +1,118 @@
+# Kodi Media Center language file
+# Addon Name: Spurs TV
+# Addon id: plugin.video.spurs-tv
+# Addon Provider: Leopold
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"POT-Creation-Date: 2016-08-01 05:35+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#. Index page list item to show YouTube channel videos
+msgctxt "#30001"
+msgid "YouTube Channel"
+msgstr ""
+
+#. Index page list item to show latest Spurs TV videos
+msgctxt "#30010"
+msgid "All Videos"
+msgstr ""
+
+#. Index page list item to search for videos
+msgctxt "#30011"
+msgid "Search"
+msgstr ""
+
+#. List item to go to the next page of videos
+msgctxt "#30012"
+msgid "Next Page"
+msgstr ""
+
+#. List item to go to the previous page of videos
+msgctxt "#30013"
+msgid "Previous Page"
+msgstr ""
+
+#. List item to show the most popular YouTube videos
+msgctxt "#30015"
+msgid "Popular"
+msgstr ""
+
+#. List item to show YouTube channel playlists
+msgctxt "#30016"
+msgid "Playlists"
+msgstr ""
+
+#. Index page list item to show match highlights
+msgctxt "#30020"
+msgid "Match Highlights / Replays"
+msgstr ""
+
+#. Index page list item to show men's first team videos
+msgctxt "#30021"
+msgid "Men's First Team"
+msgstr ""
+
+#. Index page list item to show women's first team videos
+msgctxt "#30022"
+msgid "Women's First Team"
+msgstr ""
+
+#. Settings category for advanced options
+msgctxt "#30100"
+msgid "Advanced"
+msgstr ""
+
+#. Setting to enable more detailed logging to the Kodi log
+msgctxt "#30101"
+msgid "Enable debug logging"
+msgstr ""
+
+#. Setting to enable automatic sending of addon error reports
+msgctxt "#30102"
+msgid "Automatically send error reports"
+msgstr ""
+
+#. Main settings category
+msgctxt "#30110"
+msgid "Official Site"
+msgstr ""
+
+#. Setting to restrict the video resolution
+msgctxt "#30111"
+msgid "Maximum video resolution"
+msgstr ""
+
+#. Settings category for YouTube videos
+msgctxt "#30120"
+msgid "YouTube"
+msgstr ""
+
+#. Settings action to open YouTube addon settings
+msgctxt "#30121"
+msgid "Settings"
+msgstr ""
+
+#. Heading for the error reporting yes/no dialog
+msgctxt "#30130"
+msgid "Error Report"
+msgstr ""
+
+#. Line 1 of the error reporting yes/no dialog
+msgctxt "#30131"
+msgid "An error occurred:"
+msgstr ""
+
+#. Line 3 of the error reporting yes/no dialog
+msgctxt "#30133"
+msgid "Send error report?"
+
+#. Notification message that an error report was sent
+msgctxt "#30134"
+msgid "Error report sent"

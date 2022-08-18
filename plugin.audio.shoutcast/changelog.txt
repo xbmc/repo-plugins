@@ -1,0 +1,53 @@
+2.5.2+matrix.1 (07/05/2021)
+ Updated translations from Weblate
+ 
+ 2.5.1+matrix.0 (27/09/2020)
+ - Add stationname property (matrix only)
+
+2.5.0+matrix.1 (12.4.2020) - matrix edition
+ - Remove python2 support
+ - Remove simplejson
+ - New language folder layout
+ - Automated submissions to matrix branch
+ - Addon.xml cosmetics
+
+2.4.1 (29.3.2020)
+ - Fix requests
+
+2.4.0 (5.12.2019)
+ - Python3 compatibility for matrix
+ - Dependency bump
+
+2.3.0 (15.02.2015)
+ - fixed playback of some station (all should work now again)
+ - updated translations
+
+2.2.0 (23.04.2013)
+ - fixed unicode related error (Top 500 was broken)
+ - added bitrate filter
+ - updated translations
+
+2.1.1 (09.03.2013)
+ - updated translations
+ - migrated to xbmcswift2 v2.4.0
+
+2.1.0 (30.01.2013)
+ - Rename Add-on to "SHOUTcast" to match guidelines
+ - Changed to xbmcswift2 v1.3
+ - Fix Sorting
+ - updated translations
+
+2.0.1 (02.11.2012)
+ - added method and setting for auto choose server (don't ask for playlist entries)
+
+2.0.0 (unreleased)
+ - Initial Release
+ - Features:
+    Top 500 Stations
+    Browse by genre (and subgenre if enabled in settings)
+    Search Station by name
+    Search Stations by current playing track
+    You can manage a "My Stations"-list
+    bitrate and amount of listeners visible and sortable
+    500 Stations on each Page (can be changed in the settings)
+    uses cache (24h genre, 1h station listings)

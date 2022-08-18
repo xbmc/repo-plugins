@@ -1,0 +1,78 @@
+# Kodi Media Center language file
+# Addon Name: Nasa
+# Addon id: plugin.video.nasa
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-07-22 12:29+0000\n"
+"Last-Translator: queeup <queeup@zoho.com>\n"
+"Language-Team: Turkish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-nasa/tr_tr/>\n"
+"Language: tr_tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.7.2\n"
+
+msgctxt "Addon Summary"
+msgid "Video plugin to access content from nasa.gov"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "This video plugin provides access to more than 1800 videos, 8 vodcasts and 4 nasa-tv livestreams[CR]All content is dynamic and should be always up to date."
+msgstr ""
+
+msgctxt "#30001"
+msgid "Page"
+msgstr "Sayfa"
+
+msgctxt "#30100"
+msgid "Livestreams"
+msgstr "Canlı Akışlar"
+
+msgctxt "#30101"
+msgid "Videos"
+msgstr "Videolar"
+
+msgctxt "#30103"
+msgid "Vodcasts"
+msgstr "Vodcast'ler"
+
+msgctxt "#30200"
+msgid "Search for Videos"
+msgstr "Video Ara"
+
+msgctxt "#30201"
+msgid "Title"
+msgstr "Başlık"
+
+msgctxt "#30202"
+msgid "General"
+msgstr ""
+
+msgctxt "#30203"
+msgid "General Settings"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Add-on used for playback"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Select the Add-on used for playback"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Youtube Add-on"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Tubed Add-on"
+msgstr ""

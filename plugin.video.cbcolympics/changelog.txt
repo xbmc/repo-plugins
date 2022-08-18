@@ -1,0 +1,19 @@
+v1.0.0
+- Initial version for 2018 Winter Olympics
+
+v1.0.1
+- Added bitrate limit setting
+- Changed Python dependency to 2.24 for Kodi 16 compatibility
+- Added durations to video listing
+- Added start times to upcoming events
+
+v2.0.0
+- Re-written for the Tokyo 2020 Summer Olympics
+
+v2.1.0
+- Better handling of M3U8 files and bitrate selection since 7 Mbit 1080p streams were added.
+- More consistent handling of URLs containing Unicode characters
+- Added five more "features" categories
+
+v2.2.0
+- Updated for Beijing 2022

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.cnet.podcasts"
+       name="CNET Podcasts"
+       version="1.1.7+matrix.1"
+       provider-name="Skipmode A1, Divingmule">
+  <requires>
+    <import addon="xbmc.python"                   version="3.0.0"/>
+    <import addon="script.module.beautifulsoup4"  version="4.3.2"/>
+	<import addon="script.module.requests"        version="2.4.3"/>
+    <import addon="script.module.future"          version="0.0.1"/>
+  	<import addon="script.module.html5lib"        version="0.999.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+	<summary lang="en_GB">CNET Podcast Central</summary>
+	<description lang="en_GB">www.cnet.com/who-we-are/CNET shows you the exciting possibilities of how technology can enhance and enrich your life. We provide you with information, tools, and advice that help you decide what to buy and how to get the most out of your tech.
+    </description>
+	<disclaimer lang="en_GB">For bugs, requests or general questions visit the CNET Podcasts thread on the Kodi Video Add-ons forum.</disclaimer>
+    <language>en</language>
+    <platform>all</platform>
+    <license>GPL-2.0-or-later</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=192868</forum>
+    <website>http://www.cnet.com/cnet-podcasts</website>
+    <source>https://github.com/skipmodea1/plugin.video.cnet.podcasts.python3</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+        <broken>Marked addon BROKEN due to major website update</broken>
+  </extension>
+</addon>

@@ -1,0 +1,494 @@
+# Kodi Media Center language file
+# Addon Name: MediathekView
+# Addon id: plugin.video.mediathekview
+# Addon Provider: leo.moll@yeasoft.com
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: leo.moll@yeasoft.com\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Alex\n"
+"Language-Team: German (http://www.transifex.com/projects/p/xbmc-addons/language/de/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Settings categories
+msgctxt "#30001"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30002"
+msgid "Database"
+msgstr "Datenbank"
+
+msgctxt "#30003"
+msgid "Downloads"
+msgstr "Downloads"
+
+# Settings Page 1
+msgctxt "#30110"
+msgid "Prefer HD streams"
+msgstr "HD Streams bevorzugen"
+
+msgctxt "#30111"
+msgid "Autoplay Subtitles"
+msgstr "Untertitel automatisch abspielen"
+
+msgctxt "#30112"
+msgid "No future videos (usually trailers)"
+msgstr "Keine Filme aus der Zukunft (üblicherweise Trailer)"
+
+msgctxt "#30113"
+msgid "Minimum duration in minutes"
+msgstr "Minimale Länge in Minuten"
+
+msgctxt "#30114"
+msgid "Group shows of different channel"
+msgstr "Sendungen verschiedener Sender zusammenfassen"
+
+msgctxt "#30115"
+msgid "Limit search results"
+msgstr "Suchergebnisse eingrenzen"
+
+msgctxt "#30116"
+msgid "Max age of recents in days"
+msgstr "Maximales Alter der Neuigkeiten in Tagen"
+
+msgctxt "#30117"
+msgid "Recent calculated by"
+msgstr "Neuigkeit berechnet ab"
+
+msgctxt "#30118"
+msgid "Up-to-Date check interval [sec]"
+msgstr "Nach Updates suchen alle [sec]"
+
+msgctxt "#30119"
+msgid "Default Sort Method for film list"
+msgstr "Standard Sortierung der Filmliste"
+
+msgctxt "#30120"
+msgid "Sort by title"
+msgstr "Titel"
+
+msgctxt "#30121"
+msgid "Sort by date"
+msgstr "Sendedatum"
+
+msgctxt "#30122"
+msgid "Sort by added"
+msgstr "Hinzugefügt"
+
+msgctxt "#30123"
+msgid "Sort by size"
+msgstr "Dateigröße"
+
+msgctxt "#30124"
+msgid "Sort by duration"
+msgstr "Dauer"
+
+msgctxt "#30130"
+msgid "Content Type Filmliste"
+msgstr "Content Type Filmliste"
+
+msgctxt "#30131"
+msgid "none"
+msgstr "none"
+
+msgctxt "#30132"
+msgid "videos"
+msgstr "videos"
+
+msgctxt "#30133"
+msgid "movies"
+msgstr "movies"
+
+msgctxt "#30134"
+msgid "episodes"
+msgstr "episodes"
+
+msgctxt "#30135"
+msgid "tvshows"
+msgstr "tvshows"
+
+msgctxt "#30171"
+msgid "Aired Date"
+msgstr "Sendedatum"
+
+msgctxt "#30172"
+msgid "Added to Database"
+msgstr "Hinzugefügt zur Datenbank"
+
+msgctxt "#30173"
+msgid "Default"
+msgstr "Default"
+
+# Settings Page 2
+msgctxt "#30210"
+msgid "Database type"
+msgstr "Datenbank Typ"
+
+msgctxt "#30211"
+msgid "Database hostname"
+msgstr "Datenbank Hostname"
+
+msgctxt "#30212"
+msgid "Database port"
+msgstr "Datenbank Portnummer"
+
+msgctxt "#30213"
+msgid "Database username"
+msgstr "Datenbank Benutzername"
+
+msgctxt "#30214"
+msgid "Database password"
+msgstr "Datenbank Passwort"
+
+msgctxt "#30215"
+msgid "Database name"
+msgstr "Datenbank Name"
+
+msgctxt "#30221"
+msgid "Internal (sqlite)"
+msgstr "Intern (sqlite)"
+
+msgctxt "#30222"
+msgid "External (mysql)"
+msgstr "Extern (mysql)"
+
+msgctxt "#30231"
+msgid "Database Update Mode"
+msgstr "Datenbank-Aktualisierung"
+
+msgctxt "#30232"
+msgid "Update interval in hours"
+msgstr "Aktualisierungsintervall in Stunden"
+
+msgctxt "#30233"
+msgid "Fast Native Updates"
+msgstr "Schnelle Datenbankaktualisierung"
+
+msgctxt "#30234"
+msgid "Query Caching"
+msgstr "Abfragen zwischenspeichern"
+
+msgctxt "#30241"
+msgid "Disabled"
+msgstr "Abgeschaltet"
+
+msgctxt "#30242"
+msgid "Manual"
+msgstr "Manuell"
+
+msgctxt "#30243"
+msgid "On Start"
+msgstr "Nur beim Start"
+
+msgctxt "#30244"
+msgid "Automatic"
+msgstr "Automatisch"
+
+msgctxt "#30245"
+msgid "Continously"
+msgstr "Zeitgesteuert"
+
+# Settings Page 3
+msgctxt "#30310"
+msgid "Series download directory"
+msgstr "Serien Download-Verzeichnis"
+
+msgctxt "#30311"
+msgid "Movie download directory"
+msgstr "Filme Download-Verzeichnis"
+
+msgctxt "#30312"
+msgid "Download movies in separate folders"
+msgstr "Filme in getrennten Ordnern herunterladen"
+
+msgctxt "#30313"
+msgid "Include show name in movie name"
+msgstr "Sendungsname vor dem Filmnamen einfügen"
+
+msgctxt "#30314"
+msgid "Review filename before download"
+msgstr "Dateiname vor dem Download prüfen"
+
+msgctxt "#30315"
+msgid "Download Subtitles"
+msgstr "Untertitel herunterladen"
+
+msgctxt "#30316"
+msgid "Generate Metadata"
+msgstr "Metadaten generieren"
+
+msgctxt "#30340"
+msgid "No NFO File"
+msgstr "Keine NFO Datei"
+
+msgctxt "#30341"
+msgid "Basic NFO File"
+msgstr "Einfache NFO Datei"
+
+msgctxt "#30342"
+msgid "Enriched NFO File"
+msgstr "Angereicherte  NFO Datei"
+
+# Main Menu
+msgctxt "#30901"
+msgid "Search in Title"
+msgstr "Suchen in Titel"
+
+msgctxt "#30902"
+msgid "Search in Title and Description"
+msgstr "Suchen in Titel und Beschreibung"
+
+msgctxt "#30903"
+msgid "Livestreams"
+msgstr "Livestreams"
+
+msgctxt "#30904"
+msgid "Recently Added"
+msgstr "Vor Kurzem hinzugefügt"
+
+msgctxt "#30905"
+msgid "Recently Added by Channel"
+msgstr "Vor Kurzem hinzugefügt nach Sender"
+
+msgctxt "#30906"
+msgid "Browse by Show in all Channels"
+msgstr "Alle Sendungen"
+
+msgctxt "#30907"
+msgid "Browse Shows by Channel"
+msgstr "Alle Sendungen nach Sender"
+
+msgctxt "#30908"
+msgid "Database Information"
+msgstr "Datenbank Informationen"
+
+msgctxt "#30909"
+msgid "Update Database"
+msgstr "Datenbank aktualisieren"
+
+# Film Context Menu
+msgctxt "#30921"
+msgid "Play with Subtitles"
+msgstr "Abspielen mit Untertiteln"
+
+msgctxt "#30922"
+msgid "Download as Movie"
+msgstr "Als Film herunterladen"
+
+msgctxt "#30923"
+msgid "Download as HD Movie"
+msgstr "Als HD Film herunterladen"
+
+msgctxt "#30924"
+msgid "Download as TV episode"
+msgstr "Als Episode herunterladen"
+
+msgctxt "#30925"
+msgid "Download as HD TV episode"
+msgstr "Als HD Episode herunterladen"
+
+# Search Context Menu
+msgctxt "#30931"
+msgid "New Search..."
+msgstr "Neuer Suchvorgang..."
+
+msgctxt "#30932"
+msgid "Remove Search"
+msgstr "Suchvorgang Löschen"
+
+# Database status
+msgctxt "#30941"
+msgid "Not Initialized"
+msgstr "Nicht initialisiert"
+
+msgctxt "#30942"
+msgid "No Status Available"
+msgstr "Kein Status verfügbar"
+
+msgctxt "#30943"
+msgid "Idle"
+msgstr "Bereit"
+
+msgctxt "#30944"
+msgid "Updating..."
+msgstr "Aktualisierung läuft..."
+
+msgctxt "#30945"
+msgid "Last Update Aborted"
+msgstr "Letzte Aktualisierung abgebrochen"
+
+# Other Strings
+msgctxt "#30951"
+msgid "Mediathek Database Error"
+msgstr "Mediathek Datenbank Fehler"
+
+msgctxt "#30952"
+msgid "Download Error"
+msgstr "Dowload Fehler"
+
+msgctxt "#30953"
+msgid "Error while downloading {}: {}"
+msgstr "Fehler beim herunterladen von {}: {}"
+
+msgctxt "#30954"
+msgid "Required decompression program 'xz' not found on your system"
+msgstr "Der benötigte Entpacker 'xz' konnte nicht gefunden werden"
+
+msgctxt "#30955"
+msgid "Download Database Update"
+msgstr "Datenbank Update wird heruntergeladen"
+
+msgctxt "#30956"
+msgid "Mediathek Database Update"
+msgstr "Mediathek wird aktualisiert"
+
+msgctxt "#30957"
+msgid "Mediathek (%d): channels:%d, shows:%d, movies:%d ..."
+msgstr "Mediathek (%d): Sender:%d, Sendungen:%d, Filme:%d ..."
+
+msgctxt "#30958"
+msgid "Please set a download folder in the settings"
+msgstr "Bitte legen Sie das Download-Verzeichnis in den Einstellungen fest"
+
+msgctxt "#30959"
+msgid "Download directory could not be created: {}"
+msgstr "Fehler beim Erzeugen des Download-Verzeichnisses: {}"
+
+msgctxt "#30960"
+msgid "Download Successful"
+msgstr "Download Erfolgreich"
+
+msgctxt "#30961"
+msgid "Welcome to MediathekView"
+msgstr "Willkommen"
+
+msgctxt "#30962"
+msgid "This Kodi addon allows access to most video-platforms from German public service "
+"broadcasters using the database provided by the popular project of MediathekView.\n\n"
+"Without the endless effort of the MediathekView contributors, addons like this would not "
+"exist.\n\n"
+"Please consider donating to this awesome project! Visit MediathekView at https://mediathekview.de/"
+msgstr "Dieses Kodi Addon Ermöglicht den Zugriff auf fast alle deutschen Mediatheken der "
+"öffentlich Rechtlichen basierend auf der Datenbank des beliebten MediathekView Projektes.\n\n"
+"Ohne den unermüdlichen Einsatz des MediathekView-Teams wäre ein solches Addon nicht möglich.\n\n"
+"Um das Projekt zu unterstützen, besteht die Möglichkeit auf https://mediathekview.de/ eine "
+"Spende zu hinterlassen."
+
+msgctxt "#30963"
+msgid "Update Database"
+msgstr "Datenbank Aktualisierung"
+
+msgctxt "#30964"
+msgid "The database will be updated in the next few minutes..."
+msgstr "Die Datenbank wird in Kürze aktualisiert..."
+
+msgctxt "#30965"
+msgid "Database Status: %s"
+msgstr "Datenbank-Status: %s"
+
+msgctxt "#30966"
+msgid "This database was never updated"
+msgstr "Diese Datenbank wurde noch nicht aktualisiert"
+
+msgctxt "#30967"
+msgid "%s in progress...\nDatabase: %s\nAdditions: %d channels, %d shows, %d movies"
+msgstr "%s läuft...\nFilmdatenbank vom %s\nNeuzugänge: %d Sender, %d Sendungen, %d Filme"
+
+msgctxt "#30968"
+msgid "%s in progress...\nAdditions: %d channels, %d shows, %d movies"
+msgstr "%s läuft...\nNeuzugänge: %d Sender, %d Sendungen, %d Filme"
+
+msgctxt "#30969"
+msgid "Last %s: %s\nDatabase: %s\nAdditions: %d channels, %d shows, %d movies\nDeletions: %d channels, %d shows, %d movies"
+msgstr "Letzte %s: %s\nFilmdatenbank vom %s\nNeuzugänge: %d Sender, %d Sendungen, %d Filme\nLöschungen: %d Sender, %d Sendungen, %d Filme"
+
+msgctxt "#30970"
+msgid "Last %s: %s\nAdditions: %d channels, %d shows, %d movies\nDeletions: %d channels, %d shows, %d movies"
+msgstr "Letzte %s: %s\nNeuzugänge: %d Sender, %d Sendungen, %d Filme\nLöschungen: %d Sender, %d Sendungen, %d Filme"
+
+msgctxt "#30971"
+msgid "Total: %d channels, %d shows, %d movies"
+msgstr "Summen: %d Sender, %d Sendungen, %d Filme"
+
+msgctxt "#30972"
+msgid "Full Update"
+msgstr "Vollständige Aktualisierung"
+
+msgctxt "#30973"
+msgid "Differential Update"
+msgstr "Differentielle Aktualisierung"
+
+msgctxt "#30974"
+msgid "Downloading Video"
+msgstr "Video wird heruntergeladen"
+
+msgctxt "#30975"
+msgid "Error while downloading {}: {}"
+msgstr "Fehler beim Herunterladen von {}: {}"
+
+msgctxt "#30976"
+msgid "Video {} has been downloaded"
+msgstr "Video {} wurde heruntergeladen"
+
+msgctxt "#30977"
+msgid "Video Already Exists"
+msgstr "Das Video existiert bereits"
+
+msgctxt "#30978"
+msgid "Downloading Subtitles"
+msgstr "Untertitel werden heruntergeladen"
+
+msgctxt "#30979"
+msgid "Download path does not exist"
+msgstr "Download-Verzeichnis existiert nicht"
+
+msgctxt "#30980"
+msgid "Results Limited"
+msgstr "Ergebnisse Beschränkt"
+
+msgctxt "#30981"
+msgid "Only the first {} results are shown."
+msgstr "Es werden nur die ersten {} Ergebnisse angezeigt."
+
+msgctxt "#30982"
+msgid "Database Outdated"
+msgstr "Datenbank veraltet"
+
+msgctxt "#30983"
+msgid "Last {}: {}"
+msgstr "Letzte {}: {}"
+
+msgctxt "#30984"
+msgid "Database Schema Upgrade"
+msgstr "Datenbank-Schema-Aktualisierung"
+
+msgctxt "#30985"
+msgid "Please wait while the system upgrades the database schema."
+msgstr "Bitte warten Sie, bis das Schema der Datenbank aktualisiert wurde."
+
+msgctxt "#30986"
+msgid "Please Review Your Download Name"
+msgstr "Bitte prüfen Sie den Dateinamen"
+
+msgctxt "#30987"
+msgid "File already exists! Please change the filename"
+msgstr "Datei existiert bereits. Bitte ändern Sie den Dateinamen"
+
+msgctxt "#30988"
+msgid "Play Error"
+msgstr "Fehler beim Abspielen"
+
+msgctxt "#30989"
+msgid "Cannot retrieve Movie Information"
+msgstr "Es war nicht möglich die Sendung zu finden"
+
+msgctxt "#30990"
+msgid "Airdate: {0:s}[CR][CR]"
+msgstr "Ausgestrahlt: {0:s}[CR][CR]"

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon 
+	id="plugin.video.powerunlimited" 
+	name="PowerUnlimited Tv" 
+	version="1.0.7+matrix.1"
+	provider-name="Skipmode A1">
+  <requires>
+    <import addon="xbmc.python"                     version="3.0.0"/>
+    <import addon="script.module.beautifulsoup4"    version="4.3.2"/>
+    <import addon="script.module.requests"          version="2.4.3"/>
+    <import addon="script.module.future"            version="0.0.1"/>
+  	<import addon="script.module.html5lib"          version="0.999.0"/>
+    <import addon="plugin.video.youtube" 		    version="5.1.7" />
+  </requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>video</provides>
+	</extension>
+  <extension point="xbmc.addon.metadata">
+	<platform>all</platform>
+	<summary lang="en_GB">Watch videos from PowerUnlimited Tv (dutch)</summary>
+	<description lang="en_GB">Watch videos from PowerUnlimited Tv (dutch)</description>
+	<disclaimer lang="en_GB">For bugs, requests or general questions visit the PowerUnlimited Tv thread on the Kodi forum.</disclaimer>
+	<summary lang="nl_NL">Bekijk videos van PowerUnlimited Tv (dutch)</summary>
+	<description lang="nl_NL">Bekijk videos van PowerUnlimited Tv (dutch)</description>
+	<disclaimer lang="nl_NL">Bugs of andere feedback op deze plugin kan geplaatst worden in de PowerUnlimited Tv thread op het Kodi forum.</disclaimer>
+    <language>nl</language>
+    <platform>all</platform>
+	<license>GPL-2.0-or-later</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=203211</forum>
+    <website>http://www.pu.nl/</website>
+    <source>https://github.com/skipmodea1/plugin.video.powerunlimited.python3</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

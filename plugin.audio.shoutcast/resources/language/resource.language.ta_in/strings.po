@@ -1,0 +1,93 @@
+# Kodi Media Center language file
+# Addon Name: SHOUTcast 2
+# Addon id: plugin.audio.shoutcast
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"Language: ta_IN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "All subgenres"
+msgstr "அனைத்து துணைவகைகள்"
+
+msgctxt "#30001"
+msgid "Top 500 Stations"
+msgstr "உச்சி 500 நிலையங்கள்"
+
+msgctxt "#30002"
+msgid "Browse by genre"
+msgstr "வகைபடி உலாவு"
+
+msgctxt "#30003"
+msgid "My Stations"
+msgstr "என்னுடைய நிலையங்கள்"
+
+msgctxt "#30004"
+msgid "Search Station by name"
+msgstr "பெயர்படி நிலையத்தனி தேடுக"
+
+msgctxt "#30005"
+msgid "Search Current Track playing Station"
+msgstr "தற்போது வாசிக்கப்படும் பாடலின் நிலையத்தனி தேடுக"
+
+msgctxt "#30010"
+msgid "Add to 'My Stations'"
+msgstr "'என்னுடைய நிலையங்கள்' பட்டியலில் சேர்க்கவும்"
+
+msgctxt "#30011"
+msgid "Remove from 'My Stations'"
+msgstr "'என்னுடைய நிலையங்கள்' பட்டியலில் இருந்து நீக்கவும்"
+
+msgctxt "#30100"
+msgid "Show Subgenres"
+msgstr "துணை வகைகளை காண்பிக்கவும்"
+
+msgctxt "#30101"
+msgid "Num stations in list"
+msgstr "பட்டியலில் நிலையங்கள் எண்ணை காண்பி"
+
+msgctxt "#30102"
+msgid "Show Bitrate in Title"
+msgstr "தலைப்பில் பிட்டு விகிதத்தை காண்பி"
+
+msgctxt "#30103"
+msgid "Choose a random server (Don't ask)"
+msgstr "எதாவது சேவையகத்தை தேர்வுசெய் (கேள்வி தேவையில்லை)"
+
+msgctxt "#30104"
+msgid "Filter stations by minium Bitrate"
+msgstr "குறைந்தபட்ச பிட்டு விகிதப்படி நிலையங்களை வடிகட்டவும்"
+
+msgctxt "#30110"
+msgid "Minimum Bitrate"
+msgstr "குறைந்தபட்ச பிட்டு விகிதம்"
+
+msgctxt "#30111"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30112"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30113"
+msgid "160 kbit/s"
+msgstr "160 kbit/s"
+
+msgctxt "#30114"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30200"
+msgid "Network Error"
+msgstr "பிணைய பிழை"

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+
+  <!-- General -->
+  <category label="30900">
+    <setting id="page_limit" type="slider" label="30901" range="10,10,50" option="int" default="20"/>
+    <setting id="ext_info" type="bool" label="30904" default="false" enable="eq(-1,0)"/>
+    <setting id="thumb_size" type="enum" label="30902" lvalues="30940|30941|30942|30943|30944" default="2" />
+    <setting type="sep" />
+    <setting id="debug" type="bool" label="30903" default="false" />
+  </category>
+
+  <!-- Profile -->
+  <category label="30910">
+    <setting id="oath_code" type="text" label="30911" enable="false"/>
+    <setting id="access_token" type="text" label="30912" enable="false"/>
+    <setting type="sep" />
+    <setting type="action" label="30913" enable="!eq(-2,) + !eq(-2,'')" option="close" action="RunPlugin(plugin://plugin.audio.mixcloud?mode=profile&amp;key=logout)"/>
+  </category>
+
+  <!-- Resolver -->
+  <category label="30920">
+    <setting id="resolver_mixcloud" type="bool" label="30921" default="true"/>
+    <setting id="resolver_mixclouddownloader" type="bool" label="30922" default="false"/>
+    <setting id="resolver_offliberty" type="bool" label="30923" default="true"/>
+  </category>
+
+  <!-- History -->
+  <category label="30930">
+    <setting id="play_history_max" type="slider" label="30931" range="50,50,500" option="int" default="100"/>
+    <setting id="search_history_max" type="slider" label="30932" range="50,50,500" option="int" default="100"/>
+    <setting type="sep" />
+    <setting type="action" label="30933" option="close" action="RunPlugin(plugin://plugin.audio.mixcloud?mode=history&amp;key=clear)"/>
+  </category>
+
+</settings>

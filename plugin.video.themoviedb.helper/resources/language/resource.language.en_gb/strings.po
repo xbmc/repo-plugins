@@ -1,0 +1,2306 @@
+# XBMC Media Center language file
+# Addon Name: TheMovieDb Helper
+# Addon id: plugin.video.themoviedb.helper
+# Addon Provider: jurialmunkey
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2014-10-26 17:05+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30000"
+msgid "Arabic (United Arab Emirates)"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Arabic (Saudi Arabia)"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Belarusian (Belarus)"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Bulgarian (Bulgaria)"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Bengali (Bangladesh)"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Catalan (Spain)"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Chamorro (Guam)"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Czech (Czech Republic)"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Danish (Denmark)"
+msgstr ""
+
+msgctxt "#30009"
+msgid "German (Austria)"
+msgstr ""
+
+msgctxt "#30010"
+msgid "German (Switzerland)"
+msgstr ""
+
+msgctxt "#30011"
+msgid "German (Germany)"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Greek (Greece)"
+msgstr ""
+
+msgctxt "#30013"
+msgid "English (Australia)"
+msgstr ""
+
+msgctxt "#30014"
+msgid "English (Canada)"
+msgstr ""
+
+msgctxt "#30015"
+msgid "English (United Kingdom)"
+msgstr ""
+
+msgctxt "#30016"
+msgid "English (Ireland)"
+msgstr ""
+
+msgctxt "#30017"
+msgid "English (New Zealand)"
+msgstr ""
+
+msgctxt "#30018"
+msgid "English (United States of America)"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Esperanto (None)"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Spanish (Spain)"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Spanish (Mexico)"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Estonian (Estonia)"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Basque (Spain)"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Persian (Iran)"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Finnish (Finland)"
+msgstr ""
+
+msgctxt "#30026"
+msgid "French (Canada)"
+msgstr ""
+
+msgctxt "#30027"
+msgid "French (France)"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Galician (Spain)"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Hebrew (Israel)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32028"
+msgid "Use fanart.tv for widget artwork (increases load times)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32029"
+msgid "OMDb API"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32030"
+msgid "Fanart.tv API"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32031"
+msgid "Trakt API"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32032"
+msgid "Download Players"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32033"
+msgid "Default Players"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32034"
+msgid "Get watched indicators from Trakt"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32035"
+msgid "Get tvshow watched episode counts from Trakt"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32036"
+msgid "Bundled Players"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32037"
+msgid "Use bundled players"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32038"
+msgid "Get additional details from the local Kodi library database"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32039"
+msgid "Kodi Library DB"
+msgstr ""
+
+#: /resources/lib/player.py
+msgctxt "#32040"
+msgid "Item not found."
+msgstr ""
+
+#: /resources/lib/player.py
+msgctxt "#32041"
+msgid "The plugin returned no results."
+msgstr ""
+
+#: /resources/lib/player.py
+msgctxt "#32042"
+msgid "Choose Action"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32043"
+msgid "Up Next"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32044"
+msgid "Enter Search Query"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32045"
+msgid "Cache Refresh"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32046"
+msgid "Cached details were refreshed"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32047"
+msgid "Remove from Trakt Collection"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32048"
+msgid "Add to Trakt Collection"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32049"
+msgid "Remove from Trakt Watchlist"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32050"
+msgid "Add to Trakt Watchlist"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32051"
+msgid "Remove from Trakt Watched History"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32052"
+msgid "Add to Trakt Watched History"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32053"
+msgid "Refresh Cache"
+msgstr ""
+
+#: /resources/lib/downloader.py
+msgctxt "#32054"
+msgid "Would you like to clear existing players first?"
+msgstr ""
+
+#: /resources/lib/downloader.py
+msgctxt "#32055"
+msgid "Authentication Failed."
+msgstr ""
+
+#: /resources/lib/downloader.py
+msgctxt "#32056"
+msgid "Either the username or password were invalid. Would you like to try again?"
+msgstr ""
+
+#: /resources/lib/downloader.py
+msgctxt "#32057"
+msgid "Retry"
+msgstr ""
+
+#: /resources/lib/downloader.py
+msgctxt "#32058"
+msgid "The provided URL is either invalid or inaccesible."
+msgstr ""
+
+#: /resources/lib/downloader.py
+msgctxt "#32059"
+msgid "Success!"
+msgstr ""
+
+#: /resources/lib/downloader.py
+msgctxt "#32060"
+msgid "files extracted"
+msgstr ""
+
+#: /resources/lib/player.py
+msgctxt "#32061"
+msgid "Play with"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32062"
+msgid "Successfully Added TMDb ID {0} to {1}"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32063"
+msgid "Successfully Removed TMDb ID {0} from {1}"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32064"
+msgid ""
+"Do you wish to remove {0} from your Trakt {1}?\n"
+"\n"
+"TMDb {2} ID {3}"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32065"
+msgid ""
+"Do you wish to add {0} to your Trakt {1}?\n"
+"\n"
+"TMDb {2} ID {3}"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32066"
+msgid "Debug logging"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32067"
+msgid "Fuzzy local library matching"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32068"
+msgid "Allow fuzzy matches (ignore year) for movies"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32069"
+msgid "Allow fuzzy matches (ignore year) for tvshows"
+msgstr ""
+
+#: /resources/lib/tmdb.py
+msgctxt "#32070"
+msgid "Male"
+msgstr ""
+
+#: /resources/lib/tmdb.py
+msgctxt "#32071"
+msgid "Female"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32072"
+msgid "Unaired Items"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32073"
+msgid "Hide unaired movies"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32074"
+msgid "Library Integration"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32075"
+msgid "TV"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32076"
+msgid "Update library after adding items"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32077"
+msgid "Ignore folder creation checks"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32078"
+msgid "Expand Trakt list limit to 20 items"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32079"
+msgid "System Use Only"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32080"
+msgid "Other"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32081"
+msgid "Show next page item on widgets (requires skin reload)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32082"
+msgid "Watchlist sort method"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32083"
+msgid "Accounts"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32084"
+msgid "Hide unaired episodes"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32085"
+msgid "Flatten seasons"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32086"
+msgid "Auto-update library and add new/missing episodes"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32087"
+msgid "Use resolvedURL method for suppressing strm next playlist error"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32088"
+msgid "Navigation"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32089"
+msgid "Select Action"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32090"
+msgid "Content"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32091"
+msgid "Special season folders"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32092"
+msgid "Widgets"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32093"
+msgid "Next episodes sort method"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32094"
+msgid "Prioritise local files over default player"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32095"
+msgid "Enter the code"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32096"
+msgid "Go to [B]https://trakt.tv/activate[/B]"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32097"
+msgid "Trakt Authentication"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32098"
+msgid "Exists"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32099"
+msgid "A value has already been set for this parameter"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32100"
+msgid "Do you wish to clear the existing items or add more?"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32101"
+msgid "Clear Items"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32102"
+msgid "Add Items"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32103"
+msgid "No Value Added"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32104"
+msgid ""
+"TMDb ID for {} not found or none selected.\n"
+"Do you want to add another value?"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32105"
+msgid "Do you want to add another value?"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32106"
+msgid "Added"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32107"
+msgid "Set Match Method"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32108"
+msgid "Choose matching method for parameters with multiple values."
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32109"
+msgid "Match ANY Value"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32110"
+msgid "Match ALL Values"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32111"
+msgid "Select Items"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32112"
+msgid "Select Genres"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32113"
+msgid "Also accepts X days relative from today in the format T-X or T+X (e.g. T-10 is ten days ago)"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32114"
+msgid "Enter"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32115"
+msgid "Company"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32116"
+msgid "Network"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32117"
+msgid "Keyword"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32118"
+msgid "Person"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32119"
+msgid "Select Release Types"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32120"
+msgid "Select Region for Release"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32121"
+msgid "Clear Search History"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32122"
+msgid "XBMCVFS reports unable to create path"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32123"
+msgid "If error persists and the folders are created correctly, please disable folder path creation checking in TMDBHelper settings."
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32124"
+msgid "Adding"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32125"
+msgid "Add Trakt list to Kodi library"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32126"
+msgid "Are you sure you want to add this Trakt list to your Kodi library?"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32127"
+msgid "by user"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32128"
+msgid "This list contains"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32129"
+msgid "items"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32130"
+msgid "Auto-update library at time"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32131"
+msgid "Auto-update library from Trakt list(s)"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32132"
+msgid "Do you wish to update the library from the Trakt list(s) now?"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32133"
+msgid "Select List(s)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32134"
+msgid "User slug"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32135"
+msgid "Successfully removed {} {} from {} list."
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32136"
+msgid "Successfully added {} {} to {} list."
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32137"
+msgid "Failed to remove {} {} from {} list."
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32138"
+msgid "Failed to add {} {} to {} list."
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32139"
+msgid "Remove from Trakt list"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32140"
+msgid "Add to Trakt list"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32141"
+msgid "Create new list..."
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32142"
+msgid "Hide watched items on widgets"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32143"
+msgid "Cached details for {} successfully refreshed!"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32144"
+msgid "Refresh TheMovieDb Details"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32145"
+msgid "TMDbHelper Options"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32146"
+msgid "Play using (TMDbHelper)"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32147"
+msgid "Browse seasons (TMDbHelper)"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32148"
+msgid "Add/Remove from Trakt Watchlist"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32149"
+msgid "Add/Remove from Trakt History"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32150"
+msgid "Add/Remove from Trakt Collection"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32151"
+msgid "Add to Kodi Library"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32152"
+msgid "Remove from list"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32153"
+msgid "Refresh cached details"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32154"
+msgid "Update library now"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32155"
+msgid "Next Aired (Library)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32156"
+msgid "Next aired library calendar links to local tvshow"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32157"
+msgid "Unable to find TMDb ID for item."
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32158"
+msgid "Automatically use player if only one available"
+msgstr ""
+
+#: /resources/lib/container.py
+msgctxt "#32159"
+msgid "Select Original Language"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32160"
+msgid "Adding {} - {} to library..."
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32161"
+msgid "Do you wish to update the library with this list now?"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32162"
+msgid "Automatically play local files"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32163"
+msgid "Use fanart.tv for service monitor artwork"
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32164"
+msgid ""
+"Adding Trakt lists to library is limited to [B]{}[/B] TV Shows and [B]{}[/B] Movies per list.\n"
+"This limit is set to ensure that the APIs providing data for free are respected."
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32165"
+msgid "List length exceeds limits. Skipping..."
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32166"
+msgid "Adding items to library..."
+msgstr ""
+
+#: /resources/lib/context.py
+msgctxt "#32167"
+msgid "Updating"
+msgstr ""
+
+#: /resources/lib/libraryupdate.py
+msgctxt "#32168"
+msgid "[B]{}[/B] by user [B]{}[/B]"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32169"
+msgid "Logout of Trakt account..."
+msgstr ""
+
+#: /resources/lib/libraryupdate.py
+msgctxt "#32170"
+msgid "[B][COLOR=red]Warning[/COLOR][/B] This list contains [B]{}[/B] TV Shows and [B]{}[/B] Movies"
+msgstr ""
+
+#: /resources/lib/libraryupdate.py
+msgctxt "#32171"
+msgid "[B][COLOR=red]Warning[/COLOR][/B] This list contains {} items"
+msgstr ""
+
+#: /resources/lib/constants.py
+msgctxt "#32172"
+msgid "People"
+msgstr ""
+
+#: /resources/lib/constants.py
+msgctxt "#32173"
+msgid "Randomised"
+msgstr ""
+
+#: /resources/lib/constants.py
+msgctxt "#32174"
+msgid "Discover"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32175"
+msgid "Popular"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32176"
+msgid "Top Rated"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32177"
+msgid "Upcoming"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32178"
+msgid "Trending Today"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32179"
+msgid "Trending This Week"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32180"
+msgid "In Theatres"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32181"
+msgid "Airing Today"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32182"
+msgid "Currently Airing"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32183"
+msgid "Next Aired Library"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32184"
+msgid "Highest Revenue"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32185"
+msgid "Most Voted"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32186"
+msgid "All"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32187"
+msgid "Collections"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32188"
+msgid "Reviews"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32189"
+msgid "TV Networks"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32190"
+msgid "Movie Studios"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32191"
+msgid "Images"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32192"
+msgid "Collection"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32193"
+msgid "Watchlist"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32194"
+msgid "Your Recently Watched"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32195"
+msgid "Your Most Watched"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32196"
+msgid "Your In-Progress"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32197"
+msgid "Your Next Episodes"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32198"
+msgid "Recommended For You"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32199"
+msgid "Based on Recently Watched"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32200"
+msgid "Based on Most Watched"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32201"
+msgid "Your"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32202"
+msgid "Airing This Week"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32203"
+msgid "Calendar"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32204"
+msgid "Trending"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32205"
+msgid "Most Played"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32206"
+msgid "Anticipated"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32207"
+msgid "Top 10 Box Office"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32208"
+msgid "Trending Lists"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32209"
+msgid "Popular Lists"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32210"
+msgid "Liked Lists"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32211"
+msgid "Your Lists"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32212"
+msgid "Trakt user account logout"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32213"
+msgid "Do you wish to logout of your Trakt account?"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32214"
+msgid "Trakt access token not found"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32215"
+msgid "Logout failed!"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32216"
+msgid "Successfully logged out of Trakt user account"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32217"
+msgid "No artwork found for {} ID {}"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32218"
+msgid ""
+"Artwork found for {} ID {}\n"
+"{}"
+msgstr ""
+
+#: /resources/lib/fanarttv.py
+msgctxt "#32219"
+msgid "Language {} | {} likes | ID {}"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32220"
+msgid "Select artwork"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32221"
+msgid "Refresh all artwork"
+msgstr ""
+
+#: /resources/lib/listitem.py
+msgctxt "#32222"
+msgid "Manage artwork"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32223"
+msgid "Recommended"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32224"
+msgid "Similar"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32225"
+msgid "Crew"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32226"
+msgid "Posters"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32227"
+msgid "Cast in Movies"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32228"
+msgid "Cast in TV Shows"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32229"
+msgid "Crew in Movies"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32230"
+msgid "Crew in TV Shows"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32231"
+msgid "Thumbs"
+msgstr ""
+
+#: /resources/lib/plugin.py
+msgctxt "#32232"
+msgid "In Trakt Lists"
+msgstr ""
+
+#: /resources/lib/listitem.py
+msgctxt "#32233"
+msgid "Refresh details"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32234"
+msgid "Refreshed details for {} ID {}"
+msgstr ""
+
+#: /resources/lib/listitem.py
+msgctxt "#32235"
+msgid "Browse lists"
+msgstr ""
+
+#: /resources/lib/players.py
+msgctxt "#32236"
+msgid "Select Item"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32237"
+msgid "Clear Discover History"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32238"
+msgid "Discover {} w/ Below Settings"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32239"
+msgid "Match"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32240"
+msgid "Sorting"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32241"
+msgid "Save As"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32242"
+msgid "Premiere"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32243"
+msgid "Theatrical (limited)"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32244"
+msgid "Theatrical"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32245"
+msgid "Digital"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32246"
+msgid "Physical"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32247"
+msgid "With Cast"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32248"
+msgid "With Crew"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32249"
+msgid "With People"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32250"
+msgid "Primary Release Year"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32251"
+msgid "Primary Release Date After"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32252"
+msgid "Primary Release Date Before"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32253"
+msgid "Release Date After"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32254"
+msgid "Release Date Before"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32255"
+msgid "Release Type"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32256"
+msgid "Release Region"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32257"
+msgid "With Networks"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32258"
+msgid "Air Date After"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32259"
+msgid "Air Date Before"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32260"
+msgid "First Air Date After"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32261"
+msgid "First Air Date Before"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32262"
+msgid "First Air Year"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32263"
+msgid "With Genres"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32264"
+msgid "Without Genres"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32265"
+msgid "With Companies"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32266"
+msgid "Without"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32267"
+msgid "Without Keywords"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32268"
+msgid "With Keywords"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32269"
+msgid "With Original Language"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32270"
+msgid "Vote Count ( > or = )"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32271"
+msgid "Vote Count ( < or = )"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32272"
+msgid "Vote Average ( > or = )"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32273"
+msgid "Vote Average ( < or = )"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32274"
+msgid "Runtime (Minutes) ( > or = )"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32275"
+msgid "Runtime (Minutes) ( < or = )"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32276"
+msgid "Search for"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32277"
+msgid "Add Rule"
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32278"
+msgid "Enter Network IDs separated with \" / \""
+msgstr ""
+
+#: /resources/lib/userdiscover.py
+msgctxt "#32279"
+msgid "Enter Year"
+msgstr ""
+
+#: /resources/lib/basedir.py
+msgctxt "#32280"
+msgid "Last Fortnight"
+msgstr ""
+
+#: /resources/lib/basedir.py
+msgctxt "#32281"
+msgid "Last Week"
+msgstr ""
+
+#: /resources/lib/basedir.py
+msgctxt "#32282"
+msgid "Yesterday"
+msgstr ""
+
+#: /resources/lib/basedir.py
+msgctxt "#32283"
+msgid "Next Week"
+msgstr ""
+
+#: /resources/lib/basedir.py
+msgctxt "#32284"
+msgid "This Week"
+msgstr ""
+
+#: /resources/lib/basedir.py
+msgctxt "#32285"
+msgid "This Fortnight"
+msgstr ""
+
+#: /resources/lib/_trakt_itemlists.py
+msgctxt "#32286"
+msgid "Rank"
+msgstr ""
+
+#: /resources/lib/_trakt_itemlists.py
+msgctxt "#32287"
+msgid "Sort by"
+msgstr ""
+
+#: /resources/lib/traktlists.py
+msgctxt "#32288"
+msgid "Because you watched"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32289"
+msgid "Add to collection"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32290"
+msgid "Remove from collection"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32291"
+msgid "Add to watchlist"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32292"
+msgid "Remove from watchlist"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32293"
+msgid "Add to recommendations"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32294"
+msgid "Remove from recommendations"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32295"
+msgid "Trakt options"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32296"
+msgid ""
+"{} failed for {}!\n"
+"{} ID {}"
+msgstr ""
+
+#: /resources/lib/script.py
+msgctxt "#32297"
+msgid ""
+"{} was successful for {}!\n"
+"{} ID {}"
+msgstr ""
+
+#: /resources/lib/syncitem.py
+msgctxt "#32298"
+msgid "Add to user list"
+msgstr ""
+
+#: /resources/lib/syncitem.py
+msgctxt "#32299"
+msgid "Add to new list"
+msgstr ""
+
+#: /resources/lib/basedir.py
+msgctxt "#32300"
+msgid "Trending List"
+msgstr ""
+
+#: /resources/lib/basedir.py
+msgctxt "#32301"
+msgid "Popular List"
+msgstr ""
+
+#: /resources/lib/basedir.py
+msgctxt "#32302"
+msgid "Liked List"
+msgstr ""
+
+#: /resources/lib/basedir.py
+msgctxt "#32303"
+msgid "Your List"
+msgstr ""
+
+#: /resources/lib/trakt/sync.py
+msgctxt "#32304"
+msgid "View comments"
+msgstr ""
+
+#: /resources/lib/trakt/sync.py
+msgctxt "#32305"
+msgid "Comments"
+msgstr ""
+
+#: /resources/lib/trakt/sync.py
+msgctxt "#32306"
+msgid "No comments found!"
+msgstr ""
+
+#: /resources/lib/request/api.py
+msgctxt "#32307"
+msgid "Suppressing retries for {} seconds"
+msgstr ""
+
+#: /resources/lib/request/api.py
+msgctxt "#32308"
+msgid "ConnectionError: {}"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32309"
+msgid "Browse sorted list"
+msgstr ""
+
+#: /resources/lib/window/manager.py
+msgctxt "#32310"
+msgid "TMDb ID for {} not found!"
+msgstr ""
+
+#: /resources/lib/player/players.py
+msgctxt "#32311"
+msgid "Clear default player"
+msgstr ""
+
+#: /resources/lib/helpers/update.py
+msgctxt "#32312"
+msgid "Select lists"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32313"
+msgid "Enter URL to download players"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32314"
+msgid ""
+"Download players from URL?\n"
+"[B]{}[/B]"
+msgstr ""
+
+#: /resources/lib/trakt/api.py
+msgctxt "#32315"
+msgid "Add to liked lists"
+msgstr ""
+
+#: /resources/lib/trakt/api.py
+msgctxt "#32316"
+msgid "Successfully {} list!"
+msgstr ""
+
+#: /resources/lib/trakt/api.py
+msgctxt "#32317"
+msgid "Unable to {} list!"
+msgstr ""
+
+#: /resources/lib/trakt/api.py
+msgctxt "#32318"
+msgid "Error code: {}"
+msgstr ""
+
+#: /resources/lib/trakt/api.py
+msgctxt "#32319"
+msgid "Remove from liked lists"
+msgstr ""
+
+#: /resources/lib/trakt/api.py
+msgctxt "#32320"
+msgid "unliked"
+msgstr ""
+
+#: /resources/lib/trakt/api.py
+msgctxt "#32321"
+msgid "liked"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32322"
+msgid "Select player"
+msgstr ""
+
+#: /resources/lib/helpers/update.py
+msgctxt "#32323"
+msgid "Item added to library"
+msgstr ""
+
+#: /resources/lib/player/players.py
+msgctxt "#32324"
+msgid "Select Play Method"
+msgstr ""
+
+#: /resources/lib/player/players.py
+msgctxt "#32325"
+msgid ""
+"Configuration for player is missing \"is_resolvable\" flag. Please select resolve method.\n"
+"\n"
+"setResolvedUrl is the preferred method and generally should work for any player addon that plays files directly, uses inputstream adapative, or only prompts to select bitrate/quality. PlayMedia should be used for any player addon which first runs a script to scrape sources or otherwise does not work correctly using the setResolvedUrl method.\n"
+"\n"
+"To override this dialog, set a resolve method for the player in TMDbHelper's player settings configuration dialog."
+msgstr ""
+
+#: /resources/lib/helpers/timedate.py
+msgctxt "#32326"
+msgid "This Month"
+msgstr ""
+
+#: /resources/lib/helpers/timedate.py
+msgctxt "#32327"
+msgid "Last Month"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32328"
+msgid "Select Player to Configure"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32329"
+msgid "Configure players"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32330"
+msgid "Reset to Defaults"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32331"
+msgid "Enter New Name for {}"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32332"
+msgid "Choose resolve method for player"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32333"
+msgid "User Choice"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32334"
+msgid "Reset player to defaults?"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32335"
+msgid ""
+"Do you wish to reset the [B]{}[/B] player file back to its original unmodified state on disk?\n"
+"\n"
+"[B]WARNING:[/B] This action cannot be undone."
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32336"
+msgid "Save your changes?"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32337"
+msgid ""
+"The [B]{}[/B] player file has changed.\n"
+"Do you wish to save your changes?\n"
+"\n"
+"If you close without saving, your changes will be lost."
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32338"
+msgid "Close without Saving"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32339"
+msgid "{} playback URL resolve method"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32340"
+msgid ""
+"Please note that setResolvedUrl is Kodi's preferred method for resolving playback URLs. The PlayMedia method should only be used if you experience difficulties using setResolvedUrl with this particular player.\n"
+"\n"
+"Are you sure you want to set this player's resolve method to PlayMedia?"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32341"
+msgid "Choose fallback player method"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32342"
+msgid "Fallbacks for {}"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32343"
+msgid "Choose fallback for {} {}"
+msgstr ""
+
+#: /resources/lib/player/configure.py
+msgctxt "#32344"
+msgid "Enter New Priority for {}"
+msgstr ""
+
+#: /resources/lib/tmdb/api.py
+msgctxt "#32345"
+msgid "Episode groups"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32346"
+msgid "Use hack to get Kodi Trakt addon to scrobble local files"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32347"
+msgid "Log output of Trakt request"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32348"
+msgid "Log output of TMDb request"
+msgstr ""
+
+#: /resources/lib/kodi/library.py
+msgctxt "#32349"
+msgid "Creating movies playlist"
+msgstr ""
+
+#: /resources/lib/kodi/library.py
+msgctxt "#32350"
+msgid "Creating tvshows playlist"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32351"
+msgid "Dummy ResolvedURL"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32352"
+msgid "Dummy video duration (seconds)"
+msgstr ""
+
+#: /resources/lib/player/players.py
+msgctxt "#32353"
+msgid "Missing \"is_resolvable\" Flag"
+msgstr ""
+
+#: /resources/lib/player/players.py
+msgctxt "#32354"
+msgid ""
+"Does this player resolve directly to a single playable file?\n"
+"\n"
+"Select \"Yes\" for any player that plays directly from single source. Select \"No\" for players that scrape multiple sources or otherwise do not work with the setResolvedURL method."
+msgstr ""
+
+#: /resources/lib/script/sync.py
+msgctxt "#32355"
+msgid "Remove from user list"
+msgstr ""
+
+#: /resources/lib/script/sync.py
+msgctxt "#32356"
+msgid "Enter new list name"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32357"
+msgid ""
+"Are you sure you want to delete [B]{}[/B]?\n"
+"\n"
+"This action cannot be undone."
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32358"
+msgid "Delete user list"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32359"
+msgid "Enter new name"
+msgstr ""
+
+#: /resources/lib/addon/plugin.py
+msgctxt "#32360"
+msgid "Companies"
+msgstr ""
+
+#: /resources/lib/container/basedir.py
+msgctxt "#32361"
+msgid "Search Lists"
+msgstr ""
+
+#: /resources/lib/script/sync.py
+msgctxt "#32362"
+msgid "Do you want to add this item to the library now?"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32363"
+msgid "Delay before playing after dummy resolves (seconds)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32364"
+msgid "Reroute PlayMedia to call xbmc.Player() directly"
+msgstr ""
+
+#: /resources/lib/addon/plugin.py
+msgctxt "#32365"
+msgid "Combined"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32366"
+msgid "Hide items without airdates"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32367"
+msgid "Local Information"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32368"
+msgid "Next Aired / Next Episodes"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32369"
+msgid "thumbs"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32370"
+msgid "landscape"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32371"
+msgid "Preferred artwork for thumbs"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32372"
+msgid "fanart"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32373"
+msgid "Restrict dummy setResolvedUrl method to library strm"
+msgstr ""
+
+#: /resources/lib/player/players.py
+msgctxt "#32374"
+msgid "Constructing Players"
+msgstr ""
+
+#: /resources/lib/player/players.py
+msgctxt "#32375"
+msgid "Retrieving Item Details"
+msgstr ""
+
+#: /resources/lib/player/players.py
+msgctxt "#32376"
+msgid "Building Player Dialog"
+msgstr ""
+
+#: /resources/lib/trakt/api.py
+msgctxt "#32377"
+msgid "Playcount"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32378"
+msgid "Show All"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32379"
+msgid "Hide Specials"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32380"
+msgid "Hide Up Next"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32381"
+msgid "Hide Up Next and Specials"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32382"
+msgid "Hide Episode Groups"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32383"
+msgid "Hide Episode Groups and Specials"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32384"
+msgid "Hide Episode Groups and Up Next"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32385"
+msgid "Hide All"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32386"
+msgid "Delete Cache"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32387"
+msgid "Delete {} Cache"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32388"
+msgid ""
+"Are you sure you want to delete the {} cache? This action cannot be undone.\n"
+"\n"
+"TMDbHelper performs regular automatic cache management and cleaning. You should only delete the cache manually in cases of persistent cache related errors."
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32389"
+msgid "Cache deleted!"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32390"
+msgid "Use alternative .nfo filename to avoid externally managed .nfo conflicts"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32391"
+msgid "Select update type"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32392"
+msgid "Use [B]Quick Update[/B] to check for new items.\n\nUse [B]Forced Update[/B] to ignore previously cached update details and recheck all items. Forced updates should only be used when cleaning and rebuilding the Kodi library."
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32393"
+msgid "Forced Update"
+msgstr ""
+
+#: /resources/lib/script/router.py
+msgctxt "#32394"
+msgid "Quick Update"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Hindi (India)"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Hungarian (Hungary)"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Indonesian (Indonesia)"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Italian (Italy)"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Japanese (Japan)"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Georgian (Georgia)"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Kazakh (Kazakhstan)"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Kannada (India)"
+msgstr ""
+
+msgctxt "#30038"
+msgid "Korean (South Korea)"
+msgstr ""
+
+msgctxt "#30039"
+msgid "Lithuanian (Lithuania)"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Latvian (Latvia)"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Malayalam (India)"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Malay (Malaysia)"
+msgstr ""
+
+msgctxt "#30043"
+msgid "Malay (Singapore)"
+msgstr ""
+
+msgctxt "#30044"
+msgid "Norwegian Bokmål (Norway)"
+msgstr ""
+
+msgctxt "#30045"
+msgid "Dutch (Netherlands)"
+msgstr ""
+
+msgctxt "#30046"
+msgid "Norwegian (Norway)"
+msgstr ""
+
+msgctxt "#30047"
+msgid "Polish (Poland)"
+msgstr ""
+
+msgctxt "#30048"
+msgid "Portuguese (Brazil)"
+msgstr ""
+
+msgctxt "#30049"
+msgid "Portuguese (Portugal)"
+msgstr ""
+
+msgctxt "#30050"
+msgid "Romanian (Romania)"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Russian (Russia)"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Sinhalese (Sri Lanka)"
+msgstr ""
+
+msgctxt "#30053"
+msgid "Slovak (Slovakia)"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Slovenian (Slovenia)"
+msgstr ""
+
+msgctxt "#30055"
+msgid "Serbian (Serbia)"
+msgstr ""
+
+msgctxt "#30056"
+msgid "Swedish (Sweden)"
+msgstr ""
+
+msgctxt "#30057"
+msgid "Tamil (India)"
+msgstr ""
+
+msgctxt "#30058"
+msgid "Telugu (India)"
+msgstr ""
+
+msgctxt "#30059"
+msgid "Thai (Thailand)"
+msgstr ""
+
+msgctxt "#30060"
+msgid "Tagalog (Philippines)"
+msgstr ""
+
+msgctxt "#30061"
+msgid "Turkish (Turkey)"
+msgstr ""
+
+msgctxt "#30062"
+msgid "Ukrainian (Ukraine)"
+msgstr ""
+
+msgctxt "#30063"
+msgid "Vietnamese (Vietnam)"
+msgstr ""
+
+msgctxt "#30064"
+msgid "Mandarin (China)"
+msgstr ""
+
+msgctxt "#30065"
+msgid "Mandarin (Hong Kong)"
+msgstr ""
+
+msgctxt "#30066"
+msgid "Mandarin (Taiwan)"
+msgstr ""
+
+msgctxt "#30067"
+msgid "Zulu (South Africa)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32000"
+msgid "TMDb API key"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32001"
+msgid "OMDb API key"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32002"
+msgid "Days to cache details"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32003"
+msgid "Days to cache lists"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32004"
+msgid "MPAA rating prefix"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32005"
+msgid "Language and country"
+msgstr ""
+
+#: /resources/lib/utils.py
+msgctxt "#32006"
+msgid "Choose item"
+msgstr ""
+
+#: /resources/lib/requestapi.py
+msgctxt "#32007"
+msgid "Unauthorised 401 Error"
+msgstr ""
+
+#: /resources/lib/requestapi.py
+msgctxt "#32008"
+msgid "API Key"
+msgstr ""
+
+#: /resources/lib/requestapi.py
+msgctxt "#32009"
+msgid "API returned 401 unauthorised error. If you have entered an API key for this service$COMMA please check that it is correct. If this error relates to TMDb API$COMMA please post a debug log to [B]https://github.com/jurialmunkey/plugin.video.themoviedb.helper/issues[/B]"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32010"
+msgid "Authenticate Trakt account..."
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32011"
+msgid "Token"
+msgstr ""
+
+#: /resources/lib/traktapi.py
+msgctxt "#32012"
+msgid "You must authenticate your Trakt account to use this feature."
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32013"
+msgid "Display Trakt list management options in TMDb details list"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32014"
+msgid "Players"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32015"
+msgid "Players URL"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32016"
+msgid "Update players from URL"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32017"
+msgid "API Keys"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32018"
+msgid "Fanart.tv API key"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32019"
+msgid "Fanart.tv client key"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32020"
+msgid "Only use if default api key is deactivated"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32021"
+msgid "Use fanart.tv for plugin artwork (increases load times)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32022"
+msgid "Play / Open"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32023"
+msgid "Default select action in addon"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32024"
+msgid "Default player for movies"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32025"
+msgid "Default player for episodes"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32026"
+msgid "Choose default players"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32027"
+msgid "Clear default players"
+msgstr ""

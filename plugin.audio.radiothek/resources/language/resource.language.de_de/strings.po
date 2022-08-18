@@ -1,0 +1,111 @@
+# Kodi Media Center language file
+# Addon Name: ORF Radiothek
+# Addon id: plugin.audio.radiothek
+# Addon version: 0.0.1
+# Addon Provider: sofaking
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2019-12-01 15:20+0000\n\n"
+"PO-Revision-Date: 2019-12-01 15:20+0000\n\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+# Settings - General
+msgctxt "#30101"
+msgid "Station"
+msgstr "Sender"
+
+msgctxt "#30102"
+msgid "Broadcasted"
+msgstr "Sendedatum"
+
+msgctxt "#30103"
+msgid "Artist"
+msgstr "Interpret"
+
+msgctxt "#30104"
+msgid "Track"
+msgstr "Titel"
+
+msgctxt "#30105"
+msgid "Highlights"
+msgstr "Empfehlungen"
+
+msgctxt "#30106"
+msgid "Broadcasts"
+msgstr "Radio"
+
+msgctxt "#30107"
+msgid "Podcasts"
+msgstr "Podcasts"
+
+msgctxt "#30108"
+msgid "Topics"
+msgstr "Themen"
+
+msgctxt "#30109"
+msgid "Archive"
+msgstr "Archiv"
+
+msgctxt "#30110"
+msgid "Live"
+msgstr "Live"
+
+msgctxt "#30111"
+msgid "Search"
+msgstr "Suchen"
+
+msgctxt "#30112"
+msgid "Missed a show?"
+msgstr "Sendung verpasst?"
+
+msgctxt "#30113"
+msgid "Enter a search phrase ..."
+msgstr "Geben Sie einen Suchbegriff ein ..."
+
+msgctxt "#30114"
+msgid "Search ..."
+msgstr "Neue Suche ..."
+
+msgctxt "#30115"
+msgid "No items for this station"
+msgstr "Keine Ergebnisse für diesen Sender"
+
+msgctxt "#30116"
+msgid "Use HLS Livestream"
+msgstr "HLS Livestream verwenden"
+
+msgctxt "#30117"
+msgid "Low"
+msgstr "Niedrig"
+
+msgctxt "#30118"
+msgid "Medium"
+msgstr "Mittel"
+
+msgctxt "#30119"
+msgid "High"
+msgstr "Hoch"
+
+msgctxt "#30120"
+msgid "Very High"
+msgstr "Sehr hoch"
+
+msgctxt "#30121"
+msgid "Adaptive"
+msgstr "Adaptiv"
+
+msgctxt "#30122"
+msgid "Livestream Audio Quality"
+msgstr "Livestream Audio Qualität"
+
+msgctxt "#30123"
+msgid "Livestream"
+msgstr "Livestream"

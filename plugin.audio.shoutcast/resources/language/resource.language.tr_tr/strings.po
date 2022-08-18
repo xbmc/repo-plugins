@@ -1,0 +1,93 @@
+# Kodi Media Center language file
+# Addon Name: SHOUTcast 2
+# Addon id: plugin.audio.shoutcast
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"Language: tr_TR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "#30000"
+msgid "All subgenres"
+msgstr "Tüm Alt Türler"
+
+msgctxt "#30001"
+msgid "Top 500 Stations"
+msgstr "En İyi 500 İstasyon"
+
+msgctxt "#30002"
+msgid "Browse by genre"
+msgstr "Tarza göre gözat"
+
+msgctxt "#30003"
+msgid "My Stations"
+msgstr "Benim İstasyonlarım"
+
+msgctxt "#30004"
+msgid "Search Station by name"
+msgstr "Isme Göre Istasyon Ara"
+
+msgctxt "#30005"
+msgid "Search Current Track playing Station"
+msgstr "Geçerli Parçayı Çalan Istasyonu Ara"
+
+msgctxt "#30010"
+msgid "Add to 'My Stations'"
+msgstr "Benim İstasyonlarım'a Ekle"
+
+msgctxt "#30011"
+msgid "Remove from 'My Stations'"
+msgstr "Benim İstasyonlarım'dan Kaldır"
+
+msgctxt "#30100"
+msgid "Show Subgenres"
+msgstr "Alt tarzları göster"
+
+msgctxt "#30101"
+msgid "Num stations in list"
+msgstr "İstasyonları listede numaralandır"
+
+msgctxt "#30102"
+msgid "Show Bitrate in Title"
+msgstr "Başlıkta Bit Oranını Göster"
+
+msgctxt "#30103"
+msgid "Choose a random server (Don't ask)"
+msgstr "Rastgele Bir Sunucu Seç (Bir Daha Sorma)"
+
+msgctxt "#30104"
+msgid "Filter stations by minium Bitrate"
+msgstr "İstasyonları En Düşük Bit Oranına Göre Filtrele"
+
+msgctxt "#30110"
+msgid "Minimum Bitrate"
+msgstr "En Düşük Bit Oranı"
+
+msgctxt "#30111"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30112"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30113"
+msgid "160 kbit/s"
+msgstr "160 kbit/s"
+
+msgctxt "#30114"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30200"
+msgid "Network Error"
+msgstr "Ağ Hatası"

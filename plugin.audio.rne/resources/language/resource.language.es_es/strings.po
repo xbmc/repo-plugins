@@ -1,0 +1,59 @@
+# XBMC Media Center language file
+# Addon Name: RNE Podcasts
+# Addon id: plugin.audio.rne
+# Addon Provider: Jose Antonio Montes (jamontes)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Jose Antonio Montes (jamontes)\n"
+"Language-Team: Spanish (http://www.transifex.com/projects/p/xbmc-addons/language/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30010"
+msgid "Next page"
+msgstr "Siguiente página"
+
+msgctxt "#30011"
+msgid "Audio type not supported"
+msgstr "Tipo de audio no soportado"
+
+msgctxt "#30012"
+msgid "Couldn't locate audio url"
+msgstr "No se ha podido localizar la url de audio"
+
+msgctxt "#30013"
+msgid "Previous page"
+msgstr "Página anterior"
+
+msgctxt "#30014"
+msgid "Search"
+msgstr "Buscar"
+
+msgctxt "#30015"
+msgid "Search result"
+msgstr "Resultado de la búsqueda"
+
+# Empty strings from id 30016 to 30100
+
+msgctxt "#30101"
+msgid "Debug (enable logs)"
+msgstr "Debug (activa los logs)"
+
+msgctxt "#30102"
+msgid "Filter"
+msgstr "Filtro"
+
+msgctxt "#30103"
+msgid "Show only on emission programmes"
+msgstr "Mostrar sólo los programas en emisión"
+
+msgctxt "#30104"
+msgid "Show all the programmes"
+msgstr "Mostrar todos los programas"

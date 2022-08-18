@@ -1,0 +1,73 @@
+# Kodi Media Center language file
+# Addon Name: Bandcamp
+# Addon id: plugin.audio.kxmxpxtx.bandcamp
+# Addon Provider: kxmxpxtx
+
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@kodi.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Settings - General
+msgctxt "#30001"
+msgid "General"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Discover"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Top"
+msgstr ""
+
+msgctxt "#30012"
+msgid "New"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Recommended"
+msgstr ""
+
+# GUI main menu
+msgctxt "#30101"
+msgid "Discover"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Collection"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Add your username to access the collection"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Wishlist"
+msgstr ""
+
+# GUI - Discover
+msgctxt "#30201"
+msgid "All"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Go to the album"
+msgstr ""

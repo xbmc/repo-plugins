@@ -1,0 +1,326 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="plugin.video.iplayerwww">
+		<category id="general" label="30100" help="">
+			<group id="1" label="30103">
+				<setting id="" type="" label="" help="">
+					<control type="" format=""/>
+				</setting>
+                                <setting id="bbc_id_enabled" type="boolean" label="30140" help="">
+                                    <level>0</level>
+                                    <default>false</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="bbc_id_username" type="string" label="30141" help="" parent="bbc_id_enabled">
+                                    <default/>
+                                    <constraints>
+                                        <allowempty>true</allowempty>
+                                    </constraints>
+                                    <control type="edit" format="string">
+                                        <heading>30141</heading>
+                                    </control>
+                                    <dependencies>
+                                        <dependency type="enable" setting="bbc_id_enabled">true</dependency>
+                                    </dependencies>
+                                </setting>
+                                <setting id="bbc_id_password" type="string" label="30142" help="" parent="bbc_id_enabled">
+                                    <default/>
+                                    <constraints>
+                                        <allowempty>true</allowempty>
+                                    </constraints>
+                                    <control type="edit" format="string">
+                                        <heading>30142</heading>
+                                        <hidden>true</hidden>
+                                    </control>
+                                    <dependencies>
+                                        <dependency type="enable">
+                                            <and>
+                                                <condition setting="bbc_id_enabled">true</condition>
+                                                <condition setting="bbc_id_username" operator="!is"></condition>
+                                            </and>
+                                        </dependency>
+                                    </dependencies>
+                                </setting>
+                                <setting id="bbc_id_autologin" type="boolean" label="30143" help="" parent="bbc_id_enabled">
+                                    <level>0</level>
+                                    <default>false</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="kids_mode" type="action" label="30180" help="">
+                                    <level>0</level>
+                                    <data>XBMC.RunPlugin(plugin://plugin.video.iplayerwww?mode=1)</data>
+                                    <control type="button" format="action">
+                                        <close>true</close>
+                                    </control>
+                                </setting>
+			</group>
+			<group id="2" label="30101">
+                                <setting id="search_signed" type="boolean" label="30110" help="">
+                                    <level>0</level>
+                                    <default>false</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="search_ad" type="boolean" label="30120" help="">
+                                    <level>0</level>
+                                    <default>false</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="subtitles" type="boolean" label="30130" help="">
+                                    <level>0</level>
+                                    <default>false</default>
+                                    <control type="toggle"/>
+                                </setting>
+			</group>
+		</category>
+		<category id="display" label="30500" help="">
+			<group id="1" label="30101">
+                                <setting id="suppress_incomplete" type="boolean" label="30150" help="">
+                                    <level>0</level>
+                                    <default>false</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="scrape_atoz" type="integer" label="30160" help="">
+                                    <level>0</level>
+                                    <default>0</default>
+                                    <constraints>
+                                        <options>
+                                            <option label="30161">0</option>
+                                            <option label="30162">1</option>
+                                       </options>
+                                    </constraints>
+                                    <control type="spinner" format="string"/>
+                                </setting>
+                                <setting id="paginate_episodes" type="integer" label="30170" help="">
+                                    <level>0</level>
+                                    <default>1</default>
+                                    <constraints>
+                                        <options>
+                                            <option label="30171">0</option>
+                                            <option label="30172">1</option>
+                                       </options>
+                                    </constraints>
+                                    <control type="spinner" format="string"/>
+                                </setting>
+                                <setting id="redbutton_warning" type="boolean" label="30190" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+			</group>
+			<group id="2" label="30102">
+                                <setting id="radio_paginate_episodes" type="integer" label="30170" help="">
+                                    <level>0</level>
+                                    <default>1</default>
+                                    <constraints>
+                                        <options>
+                                            <option label="30171">0</option>
+                                            <option label="30172">1</option>
+                                       </options>
+                                    </constraints>
+                                    <control type="spinner" format="string"/>
+                                </setting>
+			</group>
+			<group id="3" label="30510">
+                                <setting id="menu_video_highlights" type="boolean" label="30511" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_video_channel_highlighty" type="boolean" label="30512" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_video_most_popular" type="boolean" label="30513" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_video_az" type="boolean" label="30514" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_video_channel_az" type="boolean" label="30515" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_video_categories" type="boolean" label="30516" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_video_search" type="boolean" label="30517" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_video_live" type="boolean" label="30518" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_video_red_button" type="boolean" label="30519" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_video_uhd_trial" type="boolean" label="30529" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_video_watching" type="boolean" label="30520" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_video_added" type="boolean" label="30521" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_radio_live" type="boolean" label="30522" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_radio_az" type="boolean" label="30523" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_radio_categories" type="boolean" label="30524" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_radio_search" type="boolean" label="30525" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_radio_most_popular" type="boolean" label="30526" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_radio_added" type="boolean" label="30527" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+                                <setting id="menu_radio_following" type="boolean" label="30528" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+			</group>
+		</category>
+		<category id="streams" label="30200" help="">
+			<group id="1" label="30103">
+                                <setting id="streams_autoplay" type="boolean" label="30205" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
+			</group>
+			<group id="2" label="30101">
+                                <setting id="catchup_source" type="integer" label="30210" help="">
+                                    <level>0</level>
+                                    <default>0</default>
+                                    <constraints>
+                                        <options>
+                                            <option label="30221">0</option>
+                                            <option label="30222">1</option>
+                                            <option label="30223">2</option>
+                                            <option label="30224">3</option>
+                                            <option label="30225">4</option>
+                                       </options>
+                                    </constraints>
+                                    <control type="spinner" format="string"/>
+                                </setting>
+                                <setting id="live_source" type="integer" label="30220" help="">
+                                    <level>0</level>
+                                    <default>0</default>
+                                    <constraints>
+                                        <options>
+                                            <option label="30221">0</option>
+                                            <option label="30222">1</option>
+                                            <option label="30223">2</option>
+                                            <option label="30224">3</option>
+                                            <option label="30225">4</option>
+                                       </options>
+                                    </constraints>
+                                    <control type="spinner" format="string"/>
+                                    <dependencies>
+                                        <dependency type="enable" setting="streams_autoplay">true</dependency>
+                                    </dependencies>
+                                </setting>
+                                <setting id="subtitle_source" type="integer" label="30240" help="">
+                                    <level>0</level>
+                                    <default>0</default>
+                                    <constraints>
+                                        <options>
+                                            <option label="30221">0</option>
+                                            <option label="30222">1</option>
+                                            <option label="30223">2</option>
+                                            <option label="30224">3</option>
+                                            <option label="30225">4</option>
+                                       </options>
+                                    </constraints>
+                                    <control type="spinner" format="string"/>
+                                </setting>
+			</group>
+			<group id="3" label="30102">
+                                <setting id="radio_source" type="integer" label="30231" help="">
+                                    <level>0</level>
+                                    <default>0</default>
+                                    <constraints>
+                                        <options>
+                                            <option label="30221">0</option>
+                                            <option label="30222">1</option>
+                                            <option label="30223">2</option>
+                                            <option label="30225">3</option>
+                                       </options>
+                                    </constraints>
+                                    <control type="spinner" format="string"/>
+                                    <dependencies>
+                                        <dependency type="enable" setting="streams_autoplay">true</dependency>
+                                    </dependencies>
+                                </setting>
+                                <setting id="radio_location" type="integer" label="30232" help="">
+                                    <level>0</level>
+                                    <default>0</default>
+                                    <constraints>
+                                        <options>
+                                            <option label="30238">0</option>
+                                            <option label="30239">1</option>
+                                       </options>
+                                    </constraints>
+                                    <control type="spinner" format="string"/>
+                                    <dependencies>
+                                        <dependency type="enable" setting="streams_autoplay">true</dependency>
+                                    </dependencies>
+                                </setting>
+                                <setting id="radio_live_bitrate" type="integer" label="30233" help="">
+                                    <level>0</level>
+                                    <default>3</default>
+                                    <constraints>
+                                        <options>
+                                            <option label="30234">0</option>
+                                            <option label="30235">1</option>
+                                            <option label="30236">2</option>
+                                            <option label="30237">3</option>
+                                       </options>
+                                    </constraints>
+                                    <control type="spinner" format="string"/>
+                                    <dependencies>
+                                        <dependency type="enable" setting="streams_autoplay">true</dependency>
+                                    </dependencies>
+                                </setting>
+			</group>
+		</category>
+	</section>
+</settings>

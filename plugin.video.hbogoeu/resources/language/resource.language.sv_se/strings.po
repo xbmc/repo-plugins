@@ -1,0 +1,495 @@
+# Kodi Media Center language file
+# Addon Name: HBO GO EU
+# Addon id: plugin.video.hbogoeu
+# Addon Provider: arvvoid
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.hbogoeu\n"
+"Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2020-05-12 13:49+0200\n"
+"Last-Translator: Sopor\n"
+"Language-Team: sv_SE\n"
+"Language: sv_SE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.3\n"
+
+msgctxt "#30000"
+msgid "ENG"
+msgstr "sv_hbon"
+
+msgctxt "#30001"
+msgid "ERROR"
+msgstr "FEL"
+
+msgctxt "#30002"
+msgid "Setup failed"
+msgstr "Konfigurationen misslyckades"
+
+msgctxt "#30003"
+msgid "Unsupported region"
+msgstr "Regionen stöds inte"
+
+msgctxt "#30004"
+msgid "An unexpected error has occurred."
+msgstr "Ett oväntat fel har uppstått."
+
+msgctxt "#30005"
+msgid "Error getting content from Hbo Go"
+msgstr "Det gick inte att hämta innehåll från Hbo Go"
+
+msgctxt "#30006"
+msgid "Error sending data to Hbo Go"
+msgstr "Det gick inte att skicka data till Hbo Go"
+
+msgctxt "#30007"
+msgid "Error deleting data from Hbo Go"
+msgstr "Det gick inte ta bort data från Hbo Go"
+
+msgctxt "#30008"
+msgid "Communication error, returned STATUS: "
+msgstr "Kommunikationsfel, STATUS:"
+
+msgctxt "#30009"
+msgid "The content is available from:"
+msgstr "Innehållet är tillgängligt från:"
+
+msgctxt "#30100"
+msgid "Web registration on "
+msgstr "Webbregistering på "
+
+msgctxt "#30101"
+msgid ""
+"PLEASE DON'T CONTACT YOUR OPERATOR SUPPORT ABOUT THIS ADD-ON, THIS IS AN "
+"UNOFFICIAL ADD-ON AND HAVE NO OFFICIAL SUPPORT! COMMUNITY HELP CAN BE FOUND "
+"ON THE ADD-ON GITHUB PAGE OR KODI FORUM"
+msgstr ""
+"KONTAKTA INTE DIN LEVERANTÖR ANGÅENDE DETTA TILLÄGG, DETTA ÄR INTE "
+"ETT OFFICIELLT TILLÄGG OCH DÄRFÖR FINNS INGEN OFFICIELL SUPPORT! FÖR HJÄLP "
+"OCH SUPPORT HÄNVISAS TILL DESS GITHUB-SIDA ELLER KODI-FORUM"
+
+msgctxt "#30102"
+msgid "Operators"
+msgstr "Leverantörer"
+
+msgctxt "#30103"
+msgid ""
+"Sorry, you are not correctly logged in, aborting playback. Try to login on "
+"the official site then try again, if the problem persists ask support with a "
+"full debug log"
+msgstr ""
+"Det verkar som om du inte är korrekt inloggad, uppspelningen avbryts. "
+"Försök logga in via en officiell sida och försök igen, om problemet kvarstår "
+"posta en full felsökningslogg med en beskrivning av problemet"
+
+msgctxt "#30104"
+msgid ""
+"Operator not selected. Please select your country/operator in the settings."
+msgstr ""
+"Leverantör har inte valts. Välj ditt land/leverantör i "
+"inställningar."
+
+msgctxt "#30105"
+msgid "Logout (Reset setup)"
+msgstr "Logga ut (Återställ konfigurationen)"
+
+msgctxt "#30106"
+msgid "Destroy current session"
+msgstr "Avsluta nuvarande session"
+
+msgctxt "#30440"
+msgid "Settings"
+msgstr "Inställningar"
+
+msgctxt "#30441"
+msgid "Choose your Country"
+msgstr "Välj ditt land"
+
+msgctxt "#30442"
+msgid "Enter e-mail/username"
+msgstr "Ange e-post/användarnamn"
+
+msgctxt "#30443"
+msgid "Enter password"
+msgstr "Ange lösenord"
+
+msgctxt "#30444"
+msgid "Setup failed, please try again"
+msgstr "Konfigurationen misslyckades, försök igen"
+
+msgctxt "#30445"
+msgid "Choose your operator"
+msgstr "Välj leverantör"
+
+msgctxt "#30660"
+msgid "DRM"
+msgstr "DRM"
+
+msgctxt "#30665"
+msgid "Inputstream Adaptive Settings (max bitrate, resolution, etc.)"
+msgstr "Inställningar för Inputsream Adaptive (högsta bithastighet, upplösning, etc.)"
+
+msgctxt "#30666"
+msgid "InputStream Helper information"
+msgstr "InputStream Helper-information"
+
+msgctxt "#30667"
+msgid "(Re)install Widevine CDM..."
+msgstr "(Åter)installera Widevine CDM..."
+
+msgctxt "#30668"
+msgid "Remove Widevine CDM..."
+msgstr "Ta bort Widevine CDM..."
+
+msgctxt "#30669"
+msgid "InputStream Helper settings..."
+msgstr "InputStream Helper-inställningar..."
+
+msgctxt "#30700"
+msgid "Find movies and TV Shows..."
+msgstr "Hitta filmer och TV-serier..."
+
+msgctxt "#30701"
+msgid "No results"
+msgstr "Inget resultat"
+
+msgctxt "#30702"
+msgid "Error"
+msgstr "Fel"
+
+msgctxt "#30703"
+msgid "Episode can be watched until:"
+msgstr "Avsnittet är tillgängligt till och med:"
+
+msgctxt "#30704"
+msgid "The movie can be watched until:"
+msgstr "Filmen är tillgänglig till och med:"
+
+msgctxt "#30705"
+msgid "EPISODE"
+msgstr "AVSNITT"
+
+msgctxt "#30706"
+msgid "SEASON"
+msgstr "SÄSONG"
+
+msgctxt "#30707"
+msgid "My List"
+msgstr "Min lista"
+
+msgctxt "#30708"
+msgid "Please enter your login details in the settings!"
+msgstr "Ange dina inloggningsuppgifter i inställningarna!"
+
+msgctxt "#30709"
+msgid "Login error, check your login details!"
+msgstr "Inloggningen misslyckades, kontrollera dina inloggningsuppgifter!"
+
+msgctxt "#30710"
+msgid "No operator defined! Check your settings!"
+msgstr "Ingen leverantör vald! Kontrollera dina inställningar!"
+
+msgctxt "#30711"
+msgid "Search..."
+msgstr "Sök..."
+
+msgctxt "#30712"
+msgid ""
+"WARNING. You enabled the [Include sensitive login data in debug log] option "
+"in this add-on expert settings. IF YOU DON'T EXACTLY KNOW WHY YOU ENABLED "
+"THAT DISABLE IT, THAT'S NOT NEEDED!! This means that if the debug log is "
+"enabled in Kodi, your sensitive and private login information and session "
+"data will be written to the debug log. Please don't share publicly such a "
+"log. IF YOU NEED TO POST A DEBUG LOG PUBLICLY DISABLE THAT OPTION. If you "
+"really have to send a log with that option enabled to debug a login/session "
+"related issue be very CAREFUL who you send that log too and do it privately "
+"and change your password as soon as possible. If you posted such a log "
+"publicly by accident, change your password as soon as possible. DO YOU WANT "
+"TO CONTINUE?"
+msgstr ""
+"VARNING. Du har aktiverat funktionen [Inkludera känsliga inloggningsdata i "
+"felsökningsloggen] i inställningarnas expertläge. OM DU INTE AKTIVERAT DETTA MED "
+"AVSIKT OCH INTE VET VAD DET INNEBÄR, INAKTIVERA FUNKTIONEN!! Detta innebär att om "
+"KODIs felsökningsläge är aktiverat, så kommer dina inloggningsuppgifter och "
+"sessionsdata finnas synliga i felsökningsloggen. Offentliggör inte en sådan "
+"loggfil. OM DU BEHÖVER POSTA EN FELSÖKNINGSLGG, AVAKTIVERA DENNA FUNKTION. "
+"Om du absolut behöver posta en felsökningsfil med denna funktion aktiverad "
+"för att felsöka ett inloggningsrelaterat problem var försiktig med till vem "
+"du skickar filen och gör det inte publikt samt ändra ditt lösenord så fort "
+"som möjligt. Om du råkat posta en sådan felsökningsfil öppet, ändra ditt "
+"lösenord omedelbart. VILL DU FORTSÄTTA?"
+
+msgctxt "#30713"
+msgid "INFORMATION"
+msgstr "INFORMATION"
+
+msgctxt "#30714"
+msgid "I understand the risks and continue"
+msgstr "Jag förstår riskerna och vill fortsätta"
+
+msgctxt "#30715"
+msgid "Stop, let me change the settings"
+msgstr "Stopp, låt mig ändra inställningarna"
+
+msgctxt "#30716"
+msgid "TV Shows"
+msgstr "TV-serier"
+
+msgctxt "#30717"
+msgid "Movies"
+msgstr "Filmer"
+
+msgctxt "#30718"
+msgid "Trending Now"
+msgstr "Populärt just nu"
+
+msgctxt "#30719"
+msgid "Add to My List"
+msgstr "Lägg till i Min lista"
+
+msgctxt "#30720"
+msgid "Remove from My List"
+msgstr "Ta bort från Min lista"
+
+msgctxt "#30721"
+msgid "Rate 5"
+msgstr "Betyg 5"
+
+msgctxt "#30722"
+msgid "Rate 4"
+msgstr "Betyg 4"
+
+msgctxt "#30723"
+msgid "Rate 3"
+msgstr "Betyg 3"
+
+msgctxt "#30724"
+msgid "Rate 2"
+msgstr "Betyg 2"
+
+msgctxt "#30725"
+msgid "Rate 1"
+msgstr "Betyg 1"
+
+msgctxt "#30726"
+msgid "Rate"
+msgstr "Betyg"
+
+msgctxt "#30727"
+msgid "Success"
+msgstr "Det lyckades"
+
+msgctxt "#30728"
+msgid "Login failed, do you want to input your credentials again?"
+msgstr "Inloggningen misslyckades, vill du ange dina inloggningsuppgifter igen?"
+
+msgctxt "#30729"
+msgid "KIDS"
+msgstr "BARN"
+
+msgctxt "#30730"
+msgid "Weekly Top"
+msgstr "Veckans topplista"
+
+msgctxt "#30731"
+msgid "History"
+msgstr "Historik"
+
+msgctxt "#30732"
+msgid "Continue Watching"
+msgstr "Fortsätt titta"
+
+msgctxt "#30733"
+msgid "Home Lists"
+msgstr "Hemlistor"
+
+msgctxt "#30734"
+msgid "New search"
+msgstr "Ny sök"
+
+msgctxt "#30735"
+msgid "Clear search history"
+msgstr "Rensa sökhistorik"
+
+msgctxt "#30736"
+msgid "Remove"
+msgstr "Ta bort"
+
+msgctxt "#30737"
+msgid "Kids only mode"
+msgstr "Barnläge"
+
+msgctxt "#30650"
+msgid "Language"
+msgstr "Språk"
+
+msgctxt "#30651"
+msgid "Always use default operator language"
+msgstr "Använd alltid leverantörens standardspråk"
+
+msgctxt "#30655"
+msgid "Subtitles"
+msgstr "Undertexter"
+
+msgctxt "#30656"
+msgid "Automatically turn on default subtitles"
+msgstr "Aktivera standardundertexter automatiskt"
+
+msgctxt "#30652"
+msgid "Always use original titles"
+msgstr "Använd alltid originaltitlar"
+
+msgctxt "#30653"
+msgid "Inject subtitles"
+msgstr "Lägg in undertexter"
+
+msgctxt "#30670"
+msgid "Expert"
+msgstr "Expert"
+
+msgctxt "#30671"
+msgid "Force scraper friendly titles"
+msgstr "Tvinga skrapvänliga titlar"
+
+msgctxt "#30672"
+msgid "Use generic video media type in listings"
+msgstr "Använd generisk typ av videomedia i listor"
+
+msgctxt "#30680"
+msgid "Session"
+msgstr "Session"
+
+msgctxt "#30681"
+msgid "Session valid for hours"
+msgstr "Antal timmar nuvarande session är giltig"
+
+msgctxt "#30682"
+msgid "Reset session, force re-login"
+msgstr "Återställ session och tvinga en återinloggning"
+
+msgctxt "#30690"
+msgid "Debug"
+msgstr "Felsökning"
+
+msgctxt "#30691"
+msgid "Include sensitive login data in debug log [DON'T POST PUBLICLY]"
+msgstr "Inkludera känslig inloggningsdata i felsökningsloggen [POSTA INTE DETTA OFFENTLIGT]"
+
+msgctxt "#30692"
+msgid ""
+"Are you sure you want to completely reset your setup (device registration "
+"will be lost ) ?"
+msgstr ""
+"Är det säkert att du helt vill återställa din installation (enhetsregistreringen "
+"kommer att gå förlorad ) ?"
+
+msgctxt "#30693"
+msgid "Include full details/RAW retrieved data in Debug log"
+msgstr "Inkludera fullständiga detaljer/RAW-hämtad data i felsökningslogg"
+
+msgctxt "#30694"
+msgid ""
+"Cryptodome dependency not present on your system, HBO Go add-on can't run. "
+"For help consult install instructions/official support thread"
+msgstr ""
+"Cryptodome-beroende finns inte i ditt system, tillägget HBO Go fungerar inte då. "
+"För hjälp se installationsinstruktioner/officiell supporttråd"
+
+msgctxt "#30696"
+msgid "Home Category"
+msgstr "Hemkategori"
+
+msgctxt "#30697"
+msgid "Group Home lists in special category"
+msgstr "Gruppera Hemlistorna i en speciell kategori"
+
+msgctxt "#30800"
+msgid "Sync play time with HBO Go"
+msgstr "Synkronisera speltiden med HBO Go"
+
+msgctxt "#30801"
+msgid "Send elapsed time to HBO Go"
+msgstr "Skicka förfluten tid till HBO Go"
+
+msgctxt "#30802"
+msgid "Get elapsed time from HBO Go"
+msgstr "Hämta förfluten tid från HBO Go"
+
+msgctxt "#30803"
+msgid "Set as watched on HBO Go"
+msgstr "Ange som tittad på hos HBO Go"
+
+msgctxt "#30804"
+msgid "Set as unwatched on HBO Go"
+msgstr "Ange som ej tittad på hos HBO Go"
+
+msgctxt "#30805"
+msgid "Ignore Kodi Watched status (Only display HBO Go Watched status)"
+msgstr "Ignorera Kodi:s titta på-status (visa endast HBO Go:s status"
+
+msgctxt "#30806"
+msgid "Cache"
+msgstr "Cache"
+
+msgctxt "#30807"
+msgid "Use request cache"
+msgstr "Använd cachen"
+
+msgctxt "#30808"
+msgid "Clear request cache"
+msgstr "Rensa cachen"
+
+msgctxt "#30809"
+msgid "Encrypt credentials"
+msgstr "Kryptera inloggningsuppgifterna"
+
+msgctxt "#30810"
+msgid ""
+"If you don't know why the option is disabled don't input credentials and "
+"exit now!\n"
+"\n"
+"If you disabled the option on purpose and know exactly why then please "
+"continue.\n"
+"\n"
+"If this is not intended for debugging/testing or because you experience "
+"problems with lost credentials on the device please do NOT continue.\n"
+"In case this is not intended, enable the credentials encryption option and "
+"simply try again.\n"
+"\n"
+"This message will appear only now on credential input."
+msgstr ""
+"Om du inte vet varför detta alternativet är inaktiverat ska du inte ange några "
+"inloggningsuppgifter och avsluta nu!\n"
+"\n"
+"Om du har medvetet inaktiverat detta alternativet och vet varför då kan du"
+"fortsätta.\n"
+"\n"
+"Om detta inte är avsett för felsökning/testning eller för att du upplever "
+"problem med förlorade inloggningsuppgifter på enheten så ska du INTE fortsätta.\n"
+"Om detta inte var meningen, aktivera krypteringen för inloggningsuppgifterna och "
+"helt enkelt försök igen.\n"
+"\n"
+"Det här meddelandet visas endast vid inmatning av inloggningsuppgifterna."
+
+msgctxt "#30811"
+msgid "[Encrypted]"
+msgstr "[Krypterad]"
+
+msgctxt "#30812"
+msgid "[NOT Encrypted]"
+msgstr "[INTE Krypterad]"
+
+msgctxt "#30813"
+msgid "WARNING: Credential Encryption disabled"
+msgstr "VARNING: Kryptering av inloggningsuppgifter inaktiverad"
+
+msgctxt "#30814"
+msgid "Subtitles cache cleaned"
+msgstr "Undertextcachen är tömd"
+
+msgctxt "#30815"
+msgid "Clean subtitles cache"
+msgstr "Töm undertextcachen"

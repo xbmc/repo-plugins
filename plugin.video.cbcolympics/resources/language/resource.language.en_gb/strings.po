@@ -1,0 +1,178 @@
+# Kodi Media Center language file
+# Addon Name: CBC Olympics
+# Addon id: plugin.video.cbcolympics
+msgid ""
+msgstr ""
+
+# General
+msgctxt "#30999"
+msgid "CBC Olympics"
+msgstr ""
+
+# Sport names
+msgctxt "#30000"
+msgid "All Sports"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Alpine Skiing"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Biathlon"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Bobsleigh"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Cross-Country Sikiing"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Curling"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Figure Skating"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Freestyle Skiing"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Hockey"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Luge"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Nordic Combined"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Skeleton"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Short Track Speed Skating"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Ski Jumping"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Snowboard"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Speed Skating"
+msgstr ""
+
+# Static categories
+msgctxt "#30200"
+msgid "Live Now & Upcoming"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Replays"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Sports"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Highlights"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Team Canada"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Features - ?"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Features - ??"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Features - ???"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Features - ????"
+msgstr ""
+
+msgctxt "#30209"
+msgid "Features - ?????"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Features - ??????"
+msgstr ""
+
+# General
+msgctxt "#30300"
+msgid ""
+msgstr ""
+
+msgctxt "#30301"
+msgid "General"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Bit rate limit (kbit/s)"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Upcoming at {0}"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Live since {0}"
+msgstr ""
+
+msgctxt "#30305"
+msgid "Replay"
+msgstr ""
+
+msgctxt "#30306"
+msgid "{0} page {1}..."
+msgstr ""
+
+# Errors
+msgctxt "#30900"
+msgid "No URL or ID provided for video"
+msgstr ""
+
+msgctxt "#30901"
+msgid "Invalid paramstring: {0}"
+msgstr ""
+
+msgctxt "#30902"
+msgid "The server did not return a valid stream. Please try again later."
+msgstr ""
+
+msgctxt "#30903"
+msgid "The server has denied the request. This is typically due to geoblocking. Be sure that you're on a Canadian IP address."
+msgstr ""
+
+msgctxt "#30904"
+msgid "The stream for this upcoming event is not yet available. Please wait and try again closer to its scheduled start time."
+msgstr ""
+
+msgctxt "#30905"
+msgid "This stream was not found."
+msgstr ""
+
+msgctxt "#30906"
+msgid "HTTP error {0}: {1}"
+msgstr ""

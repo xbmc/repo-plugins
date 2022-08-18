@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+	<category label="30000">
+		<setting id="video_quality" type="labelenum" label="30001" values="480p|720p|1080p" default="480p" />
+		<setting id="timeout" type="number" label="30002" default="8"/>
+		<setting id="clear_cache" type="action" label="30207" action="RunPlugin(plugin://plugin.video.imdb.trailers/?action=clear)"/>
+		<setting id="DebugMode" type="bool" label="30007" default="false"/>
+		<setting label="30003" type="lsep"/>
+		<setting id="forceViewMode" type="bool" label="30004" default="false"/>
+		<setting id="MenuMode" type="number" label="30005" default="500" visible="eq(-1,true)" enable="!eq(-1,)"/>
+		<setting id="VideoMode" type="number" label="30006" default="51" visible="eq(-2,true)" enable="!eq(-2,)"/>
+	</category>
+</settings>

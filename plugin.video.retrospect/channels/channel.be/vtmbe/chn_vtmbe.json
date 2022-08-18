@@ -1,0 +1,71 @@
+{
+  "channels": [
+    {
+      "guid": "7F92EAEE-6066-4ED5-911A-2C3DCF964D19",
+      "name": "VTM.be",
+      "description": {
+        "en": "Online broadcasts from VTM.be.\n\n[B]Streams from VTM.be require a Medialaan account[/B]. It can be configured via the Channel settings.",
+        "nl": "Online uitzendingen van VTM.be.\n\n[B]Voor het bekijken van streams van VTM.be is een Medialaan account nodig[/B]. Deze kan worden geconfigueerd via de kanaal instellingen."
+      },
+      "icon": "vtmbelogo.png",
+      "category": "National",
+      "channelcode": "vtm",
+      "sortorder": 10,
+      "language": "be",
+      "fanart": "vtmbefanart.jpg",
+      "addonUrl": "plugin://plugin.video.vtm.go"
+    },
+    {
+      "guid": "01C7064B-7E7A-4742-A042-E6F2F4EC5966",
+      "name": "Q2.be",
+      "description": {
+        "en": "Online broadcasts from Q2.be.\n\n[B]Streams from Q2.be require a Medialaan account[/B]. It can be configured via the Channel settings.",
+        "nl": "Online uitzendingen van Q2.be.\n\n[B]Voor het bekijken van streams van Q2.be is een Medialaan account nodig[/B]. Deze kan worden geconfigueerd via de kanaal instellingen."
+      },
+      "icon": "q2belogo.png",
+      "category": "National",
+      "channelcode": "q2",
+      "ignore": true,
+      "sortorder": 11,
+      "language": "be",
+      "fanart": "q2befanart.jpg"
+    },
+    {
+      "guid": "61AA2559-7D64-40A2-A3BE-56DD3F6BBD4A",
+      "name": "Stievie",
+      "description": {
+        "en": "Online broadcasts from Stievie.\n\n[B]Streams from Stievie require a Medialaan account[/B]. It can be configured via the Channel settings.",
+        "nl": "Online uitzendingen van Stievie.\n\n[B]Voor het bekijken van streams van Stievie is een Medialaan account nodig[/B]. Deze kan worden geconfigueerd via de kanaal instellingen."
+      },
+      "icon": "stievielogo.png",
+      "category": "National",
+      "channelcode": "stievie",
+      "sortorder": 11,
+      "language": "be",
+      "fanart": "stieviefanart2.jpg",
+      "addonUrl": "plugin://plugin.video.vtm.go"
+    }
+  ],
+  "settings": [
+    {
+      "order": 1,
+      "value": "id=\"mediaan_username\" type=\"text\" label=\"30094\" default=\"\"",
+      "id": "mediaan_username"
+    },
+    {
+      "order": 2,
+      "value": "id=\"mediaan_password\" default=\"\"",
+      "id": "mediaan_password"
+    },
+    {
+      "order": 3,
+      "value": "id=\"mediaan_password_set\" label=\"30093\" type=\"action\" action=\"RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=mediaan_password&amp;settingname=Mediaan Wachtwoord.be&amp;tabfocus=102)\" option=\"close\"",
+      "id": "mediaan_password_set"
+    },
+    {
+      "order": 4,
+      "value": "id=\"mediaan_signature\" default=\"\"",
+      "id": "mediaan_signature"
+    }
+  ]
+}

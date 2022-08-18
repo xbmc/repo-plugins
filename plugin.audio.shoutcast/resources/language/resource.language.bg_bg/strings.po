@@ -1,0 +1,93 @@
+# Kodi Media Center language file
+# Addon Name: SHOUTcast 2
+# Addon id: plugin.audio.shoutcast
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"Language: bg_BG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "All subgenres"
+msgstr "Всички поджанрове"
+
+msgctxt "#30001"
+msgid "Top 500 Stations"
+msgstr "Топ 500 станции"
+
+msgctxt "#30002"
+msgid "Browse by genre"
+msgstr "Търси по жанр"
+
+msgctxt "#30003"
+msgid "My Stations"
+msgstr "Моите станции"
+
+msgctxt "#30004"
+msgid "Search Station by name"
+msgstr "Търси станция по име"
+
+msgctxt "#30005"
+msgid "Search Current Track playing Station"
+msgstr "Търси станция по текущо слушаната песен"
+
+msgctxt "#30010"
+msgid "Add to 'My Stations'"
+msgstr "Добави в 'Моите станции'"
+
+msgctxt "#30011"
+msgid "Remove from 'My Stations'"
+msgstr "Премахни от 'Моите станции'"
+
+msgctxt "#30100"
+msgid "Show Subgenres"
+msgstr "Покажи поджанрове"
+
+msgctxt "#30101"
+msgid "Num stations in list"
+msgstr "Брой станции в списъка"
+
+msgctxt "#30102"
+msgid "Show Bitrate in Title"
+msgstr "Покажи битрейта в заглавието"
+
+msgctxt "#30103"
+msgid "Choose a random server (Don't ask)"
+msgstr "Избери случаен сървър (Не питай)"
+
+msgctxt "#30104"
+msgid "Filter stations by minium Bitrate"
+msgstr "Филтрирай станциите по минимален битрейт"
+
+msgctxt "#30110"
+msgid "Minimum Bitrate"
+msgstr "Минимален битрейт"
+
+msgctxt "#30111"
+msgid "96 kbit/s"
+msgstr "96 кбит/с"
+
+msgctxt "#30112"
+msgid "128 kbit/s"
+msgstr "128 кбит/с"
+
+msgctxt "#30113"
+msgid "160 kbit/s"
+msgstr "160 кбит/с"
+
+msgctxt "#30114"
+msgid "192 kbit/s"
+msgstr "192 кбит/с"
+
+msgctxt "#30200"
+msgid "Network Error"
+msgstr "Мрежова грешка"

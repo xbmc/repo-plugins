@@ -1,0 +1,77 @@
+# Kodi Media Center language file
+# Addon Name: Google Drive
+# Addon id: plugin.googledrive
+# Addon Provider: Carlos Guzman (cguZZman)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Account"
+msgstr "Conta"
+
+msgctxt "#32001"
+msgid "Video Library Export Folder"
+msgstr "Diretório de exportação da biblioteca de videos"
+
+msgctxt "#32002"
+msgid "Music Library Export Folder"
+msgstr "Diretório de exportação da biblioteca de música"
+
+msgctxt "#32003"
+msgid "Before export to library, remove previous files and folders"
+msgstr "Antes de exportar a biblioteca, remover arquivos e diretórios anteriores"
+
+msgctxt "#32004"
+msgid "When playing videos, set the subtitle file located next to the video (.srt)"
+msgstr "Quando tocar os videos, usar as legendas que estão no mesmo diretorio do video (.srt)"
+
+msgctxt "#32005"
+msgid "Auto-Refreshed slideshow"
+msgstr "Slideshow atualizado automaticamente"
+
+msgctxt "#32006"
+msgid "Refresh interval in minutes"
+msgstr "Tempo de atualização em minutos"
+
+msgctxt "#32007"
+msgid "Google Photos"
+msgstr "Google Fotos"
+
+msgctxt "#32008"
+msgid "-unused-Special: Camera Roll"
+msgstr "-unused-Special: Rolo de Camera"
+
+msgctxt "#32009"
+msgid "-unused-Special: Music"
+msgstr "-unused-Special: Musica"
+
+msgctxt "#32010"
+msgid "Recursive auto-refreshed slideshow"
+msgstr "Slideshow autalizado automaticamente de forma recursiva"
+
+msgctxt "#32011"
+msgid "Common Settings"
+msgstr "Configurações comuns"
+
+msgctxt "#32012"
+msgid "Open Cloud Drive Common Settings..."
+msgstr "Abrir configurações comuns doCloud Drive..."
+
+msgctxt "#32013"
+msgid "My Drive"
+msgstr "Meu Drive"
+
+msgctxt "#32014"
+msgid "Starred"
+msgstr "Com estrela"

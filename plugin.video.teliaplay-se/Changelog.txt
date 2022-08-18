@@ -1,0 +1,31 @@
+1.0.1 [20210804]
+- Release
+
+1.1.1 [20211030]
+- Updated graphql hashes
+- Fixed broken menu entries
+- Increased TV channel history
+
+1.2.1 [20211107]
+- Added paginator for channels menu
+- Added settings for controling the number of channels and movies per page
+- Separated search history for each user
+
+1.2.2 [20211230]
+- Updated graphql hashes
+- Fixed broken menu entries
+
+1.2.3 [20220403]
+- Updated graphql hashes and fixed add/remove from my list
+
+1.2.4 [20220617]
+- Fixed menu entries returning 400 error
+- Fixed widevine license url returning 500 error
+- Updated graphql hashes
+- Fixed search menu
+- Fixed store panels
+
+1.2.5 [20220729]
+- Fixed Trailers
+- Fixed season menu
+- Updated graphql hashes

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<!-- Account -->
+	<category label="30440">
+        <setting type="text" id="country_code" visible="false" default=""/>
+        <setting type="text" id="operator_id" visible="false" default=""/>
+        <setting type="text" id="operator_name" visible="false" default=""/>
+        <setting type="bool" id="operator_is_web" visible="false" default="true"/>
+        <setting type="text" id="operator_redirect_url" visible="false" default=""/>
+	    <setting type="text" id="individualization" visible="false" default=""/>
+        <setting type="text" id="customerId" visible="false" default=""/>
+        <setting type="text" id="username" visible="false" default=""/>
+        <setting type="text" id="password" option="hidden" visible="false" default=""/>
+        <setting id="delsetup" type="action" label="30105" action="RunPlugin(plugin://plugin.video.hbogoeu/?url=delsetup&amp;mode=6)" option="close"/>
+        <!-- Language -->
+        <setting label="30650" type="lsep"/>
+        <setting label="30651" type="bool" id="deflang" default="false"/>
+        <setting label="30652" type="bool" id="origtitles" default="false"/>
+        <setting label="30653" type="bool" id="forcesubs" default="true"/>
+        <!-- Watch status sync -->
+        <setting label="30800" type="lsep"/>
+        <setting label="30801" type="bool" id="send_elapsed" default="true"/>
+        <setting label="30802" type="bool" id="get_elapsed" default="true"/>
+        <setting label="30805" type="bool" id="ignore_kodi_watched" default="false"/>
+    </category>
+    <!-- Home Category -->
+    <category label="30696">
+        <setting label="30707" type="bool" id="show_mylist" default="true"/>
+        <setting label="30731" type="bool" id="show_history" default="false"/>
+        <setting label="30732" type="bool" id="show_continue" default="true"/>
+        <setting label="30729" type="bool" id="show_kids" default="true"/>
+        <setting label="30737" type="bool" id="enforce_kids" default="false"/>
+        <setting label="30697" type="bool" id="group_home" default="true"/>
+    </category>
+    <!-- Streaming -->
+    <category label="30660">
+        <setting id="is_settings" type="action" label="30665" action="Addon.OpenSettings(inputstream.adaptive)" enable="System.HasAddon(inputstream.adaptive)" option="close"/>
+        <setting label="Inputstream Helper" type="lsep"/>
+        <setting label="30666" type="action" id="ishelper_info" action="RunScript(script.module.inputstreamhelper,info)"/>
+        <setting label="30667" type="action" id="install_widevine" action="RunScript(script.module.inputstreamhelper,widevine_install)" visible="!system.platform.android"/>
+        <setting label="30668" type="action" id="remove_widevine" action="RunScript(script.module.inputstreamhelper, widevine_remove)" visible="!system.platform.android"/>
+        <setting label="" type="lsep"/>
+        <setting label="30669" type="action" id="ishelper_settings" option="close" action="Addon.OpenSettings(script.module.inputstreamhelper)"/>
+    </category>
+    <!-- Advanced -->
+	<category label="30670">
+        <setting label="30671" type="bool" id="forcescrap" default="false"/>
+        <setting label="30672" type="bool" id="forceepispdelisting" default="false"/>
+        <setting label="30680" type="lsep"/>
+        <setting id="logout" type="action" label="30106" action="RunPlugin(plugin://plugin.video.hbogoeu/?url=logou&amp;mode=7)" option="close"/>
+        <setting label="30806" type="lsep"/>
+        <setting label="30807" type="bool" id="use_req_cache" default="true"/>
+        <setting id="delcache" type="action" label="30808" action="RunPlugin(plugin://plugin.video.hbogoeu/?url=delcache&amp;mode=16)"/>
+        <setting id="delsubs" type="action" label="30815" action="RunPlugin(plugin://plugin.video.hbogoeu/?url=delsubs&amp;mode=17)"/>
+        <setting label="30690" type="lsep"/>
+        <setting label="30690" type="bool" id="debugon" default="false"/>
+        <setting label="30693" type="bool" id="lograwdata" default="false"/>
+        <setting label="30691" type="bool" id="sensitivedebug" default="false"/>
+        <setting label="30809" type="lsep"/>
+        <setting label="30809" type="bool" id="usedevkey" default="true"/>
+    </category>
+</settings>

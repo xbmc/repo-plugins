@@ -1,0 +1,494 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: hbogo kodi addon\n"
+"Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2020-12-15 08:51+0100\n"
+"Last-Translator: Lajos Koszti <ajnasz@ajnasz.hu>\n"
+"Language-Team: \n"
+"Language: hu_HU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "ENG"
+msgstr "HUN"
+
+msgctxt "#30001"
+msgid "ERROR"
+msgstr "HIBA"
+
+msgctxt "#30002"
+msgid "Setup failed"
+msgstr "A beállítás nem sikerült."
+
+msgctxt "#30003"
+msgid "Unsupported region"
+msgstr "Nem támogatott régió"
+
+msgctxt "#30004"
+msgid "An unexpected error has occurred."
+msgstr "Váratlan hiba történt."
+
+msgctxt "#30005"
+msgid "Error getting content from Hbo Go"
+msgstr "Nem sikerült a tartalmat beolvasni az HBO Go-ból"
+
+msgctxt "#30006"
+msgid "Error sending data to Hbo Go"
+msgstr "Nem sikerült az adatküldés az HBO Go-nak"
+
+msgctxt "#30007"
+msgid "Error deleting data from Hbo Go"
+msgstr "Nem sikerült az adattörlés az HBO Go-ból"
+
+msgctxt "#30008"
+msgid "Communication error, returned STATUS: "
+msgstr "Kommunikációs hiba, visszaadott állapot: "
+
+msgctxt "#30009"
+msgid "The content is available from:"
+msgstr "A tartalom elérhető:"
+
+msgctxt "#30100"
+msgid "Web registration on "
+msgstr "Webes regisztráció "
+
+msgctxt "#30101"
+msgid ""
+"PLEASE DON'T CONTACT YOUR OPERATOR SUPPORT ABOUT THIS ADD-ON, THIS IS AN "
+"UNOFFICIAL ADD-ON AND HAVE NO OFFICIAL SUPPORT! COMMUNITY HELP CAN BE FOUND "
+"ON THE ADD-ON GITHUB PAGE OR KODI FORUM"
+msgstr ""
+"KÉRJÜK, NE KÉRJEN SEGÍTSÉGET A SZOLGÁLTATÓJÁTÓL A KIEGÉSZÍTŐVEL "
+"KAPCSOLATBAN! KÖZÖSSÉGI SEGÍTSÉGET KAPHAT A KIEGÉSZÍTŐ GITHUB OLDALÁN VAGY A "
+"KODI FÓRUMON"
+
+msgctxt "#30102"
+msgid "Operators"
+msgstr "Szolgáltatók"
+
+msgctxt "#30103"
+msgid ""
+"Sorry, you are not correctly logged in, aborting playback. Try to login on "
+"the official site then try again, if the problem persists ask support with a "
+"full debug log"
+msgstr ""
+"Sajnáljuk, nincs helyesen bejelentkezve, a lejátszás megszakad. Próbáljon "
+"meg bejelentkezni a hivatalos webhelyre, majd próbálja újra, ha a probléma "
+"továbbra is fennáll, kérje a teljes hibakereső napló támogatását"
+
+msgctxt "#30104"
+msgid ""
+"Operator not selected. Please select your country/operator in the settings."
+msgstr ""
+"Az szolgáltató nincs kiválasztva. Kérjük, válassza ki az országot és "
+"szolgáltatót a beállításokban."
+
+msgctxt "#30105"
+msgid "Logout (Reset setup)"
+msgstr "Kijelentkezés (Beállítás visszaállítása)"
+
+msgctxt "#30106"
+msgid "Destroy current session"
+msgstr "Az aktuális munkamenetet törlése"
+
+msgctxt "#30440"
+msgid "Settings"
+msgstr "Beállítások"
+
+msgctxt "#30441"
+msgid "Choose your Country"
+msgstr "Válassza ki az országot"
+
+msgctxt "#30442"
+msgid "Enter e-mail/username"
+msgstr "Adja meg az e-mail / felhasználónevet"
+
+msgctxt "#30443"
+msgid "Enter password"
+msgstr "Írd be a jelszót"
+
+msgctxt "#30444"
+msgid "Setup failed, please try again"
+msgstr "A telepítés nem sikerült, próbálkozzon újra"
+
+msgctxt "#30445"
+msgid "Choose your operator"
+msgstr "Válassza ki a szolgáltatót"
+
+msgctxt "#30660"
+msgid "DRM"
+msgstr "DRM"
+
+msgctxt "#30665"
+msgid "Inputstream Adaptive Settings (max bitrate, resolution, etc.)"
+msgstr "Inputstream Adaptive beállítások (maximum bitráta, felbontás, stb.)"
+
+msgctxt "#30666"
+msgid "InputStream Helper information"
+msgstr "InputStream Helper információ"
+
+msgctxt "#30667"
+msgid "(Re)install Widevine CDM..."
+msgstr "Widevine CDM (újra) installálása..."
+
+msgctxt "#30668"
+msgid "Remove Widevine CDM..."
+msgstr "Widevine CDM törlése..."
+
+msgctxt "#30669"
+msgid "InputStream Helper settings..."
+msgstr "InputStream Helper beállítások..."
+
+msgctxt "#30700"
+msgid "Find movies and TV Shows..."
+msgstr "Filmek és TV-műsorok keresése..."
+
+msgctxt "#30701"
+msgid "No results"
+msgstr "Nincs eredmény"
+
+msgctxt "#30702"
+msgid "Error"
+msgstr "Hiba"
+
+msgctxt "#30703"
+msgid "Episode can be watched until:"
+msgstr "Az epizód megtekinthető eddig:"
+
+msgctxt "#30704"
+msgid "The movie can be watched until:"
+msgstr "A film megtekinthető eddig:"
+
+msgctxt "#30705"
+msgid "EPISODE"
+msgstr "Epizód"
+
+msgctxt "#30706"
+msgid "SEASON"
+msgstr "Évad"
+
+msgctxt "#30707"
+msgid "My List"
+msgstr "Saját lista"
+
+msgctxt "#30708"
+msgid "Please enter your login details in the settings!"
+msgstr "Kérjük, adja meg a bejelentkezési adatait a beállításoknál!"
+
+msgctxt "#30709"
+msgid "Login error, check your login details!"
+msgstr "Bejelentkezési hiba, ellenőrizze a bejelentkezési adatait!"
+
+msgctxt "#30710"
+msgid "No operator defined! Check your settings!"
+msgstr "Nincs megadva szolgáltató! Ellenőrizze a beállításokat!"
+
+msgctxt "#30711"
+msgid "Search..."
+msgstr "Keresés..."
+
+msgctxt "#30712"
+msgid ""
+"WARNING. You enabled the [Include sensitive login data in debug log] option "
+"in this add-on expert settings. IF YOU DON'T EXACTLY KNOW WHY YOU ENABLED "
+"THAT DISABLE IT, THAT'S NOT NEEDED!! This means that if the debug log is "
+"enabled in Kodi, your sensitive and private login information and session "
+"data will be written to the debug log. Please don't share publicly such a "
+"log. IF YOU NEED TO POST A DEBUG LOG PUBLICLY DISABLE THAT OPTION. If you "
+"really have to send a log with that option enabled to debug a login/session "
+"related issue be very CAREFUL who you send that log too and do it privately "
+"and change your password as soon as possible. If you posted such a log "
+"publicly by accident, change your password as soon as possible. DO YOU WANT "
+"TO CONTINUE?"
+msgstr ""
+"FIGYELEM! A kiegészítő szakértői beállításokban engedélyezte a [Érzékeny "
+"belépési adatok beszúrása a hibakereső naplóba] opciót. HA NEM TUDJA "
+"PONTOSAN, HOGY MIÉRT ENGEDÉYLEZTE, AKKOR EZ NEM SZÜKSÉGES! Ez azt jelenti, "
+"hogy ha a hibakereső napló engedélyezve van a Kodiban, az érzékeny és privát "
+"bejelentkezési adatok és a munkamenet adatok a hibakereső naplóba kerülnek. "
+"Kérjük, ne ossza meg nyilvánosan egy ilyen naplót. HA KÖZZÉ KELL TENNIE A "
+"HIBAKERES NAPLÓT, KAPCSOLJA KI EZT A BEÁLLÍTÁST! Ha tényleg meg kell "
+"küldenie egy naplót úgy, hogy ez a beállítás engedélyezve van, legyen nagyon "
+"óvatos, hogy kinek küldi azt el, és bizonyosodjon meg róla, hogy senki más "
+"nem férhet a naplóhoz! Változtassa meg a jelszavát a lehető leghamarabb. Ha "
+"ilyen naplót véletlenül közzétett, akkor a lehető leghamarabb változtassa "
+"meg a jelszavát. AKARJA FOLYTATNI?"
+
+msgctxt "#30713"
+msgid "INFORMATION"
+msgstr "Információ"
+
+msgctxt "#30714"
+msgid "I understand the risks and continue"
+msgstr "Megértem, hogy a kockázat továbbra is fennáll"
+
+msgctxt "#30715"
+msgid "Stop, let me change the settings"
+msgstr "Állítsa le, módosítsa a beállításokat"
+
+msgctxt "#30716"
+msgid "TV Shows"
+msgstr "Sorozatok"
+
+msgctxt "#30717"
+msgid "Movies"
+msgstr "Filmek"
+
+msgctxt "#30718"
+msgid "Trending Now"
+msgstr "Népszerű most"
+
+msgctxt "#30719"
+msgid "Add to My List"
+msgstr "Hozzáadás a Saját listához"
+
+msgctxt "#30720"
+msgid "Remove from My List"
+msgstr "Eltávolítás a Saját listáról"
+
+msgctxt "#30721"
+msgid "Rate 5"
+msgstr "Értékelés: 5"
+
+msgctxt "#30722"
+msgid "Rate 4"
+msgstr "Értékelés: 4"
+
+msgctxt "#30723"
+msgid "Rate 3"
+msgstr "Értékelés: 3"
+
+msgctxt "#30724"
+msgid "Rate 2"
+msgstr "Értékelés: 2"
+
+msgctxt "#30725"
+msgid "Rate 1"
+msgstr "Értékelés: 1"
+
+msgctxt "#30726"
+msgid "Rate"
+msgstr "Értékelés"
+
+msgctxt "#30727"
+msgid "Success"
+msgstr "Sikerült"
+
+msgctxt "#30728"
+msgid "Login failed, do you want to input your credentials again?"
+msgstr "A bejelentkezés sikertelen, meg szeretné adni a hitelesítési adatait?"
+
+msgctxt "#30729"
+msgid "KIDS"
+msgstr "Gyerekeknek"
+
+msgctxt "#30730"
+msgid "Weekly Top"
+msgstr "Heti top"
+
+msgctxt "#30731"
+msgid "History"
+msgstr "Előzmények"
+
+msgctxt "#30732"
+msgid "Continue Watching"
+msgstr "Lejátszás folytatása"
+
+msgctxt "#30733"
+msgid "Home Lists"
+msgstr "Főmenü listák"
+
+msgctxt "#30734"
+msgid "New search"
+msgstr "Új keresés"
+
+msgctxt "#30735"
+msgid "Clear search history"
+msgstr "Keresési előzmények törlése"
+
+msgctxt "#30736"
+msgid "Remove"
+msgstr "Eltávolítás"
+
+msgctxt "#30737"
+msgid "Kids only mode"
+msgstr "Gyermekbarát mód"
+
+msgctxt "#30650"
+msgid "Language"
+msgstr "Nyelv"
+
+msgctxt "#30651"
+msgid "Always use default operator language"
+msgstr "Mindig használja az alapértelmezett szolgáltató nyelvet"
+
+msgctxt "#30655"
+msgid "Subtitles"
+msgstr "Feliratok"
+
+msgctxt "#30656"
+msgid "Automatically turn on default subtitles"
+msgstr "Az alapértelmezett feliratok automatikus bekapcsolása"
+
+msgctxt "#30652"
+msgid "Always use original titles"
+msgstr "Mindig az eredeti címeket használja"
+
+msgctxt "#30653"
+msgid "Inject subtitles"
+msgstr "Feliratok beillesztése"
+
+msgctxt "#30670"
+msgid "Expert"
+msgstr "Szakértő"
+
+msgctxt "#30671"
+msgid "Force scraper friendly titles"
+msgstr "Keresőbarát címek kényszerítése"
+
+msgctxt "#30672"
+msgid "Use generic video media type in listings"
+msgstr "Általános videó használata a listákban"
+
+msgctxt "#30680"
+msgid "Session"
+msgstr "Munkamenet"
+
+msgctxt "#30681"
+msgid "Session valid for hours"
+msgstr "A munkamenet órákra érvényes"
+
+msgctxt "#30682"
+msgid "Reset session, force re-login"
+msgstr "A munkamenet visszaállítása, az újra bejelentkezés kényszerítése"
+
+msgctxt "#30690"
+msgid "Debug"
+msgstr "Hibakeresés"
+
+msgctxt "#30691"
+msgid "Include sensitive login data in debug log [DON'T POST PUBLICLY]"
+msgstr "Érzékeny belépési adatok beszúrása a hibakereső naplóba"
+
+msgctxt "#30692"
+msgid ""
+"Are you sure you want to completely reset your setup (device registration "
+"will be lost ) ?"
+msgstr ""
+"Az eszköz regisztráció el fog veszni. Biztosan szeretné teljesen törölni a "
+"beállításait?"
+
+msgctxt "#30693"
+msgid "Include full details/RAW retrieved data in Debug log"
+msgstr "Részletes és nyers adatok a beszúrása a hibakereső naplóba"
+
+msgctxt "#30694"
+msgid ""
+"Cryptodome dependency not present on your system, HBO Go add-on can't run. "
+"For help consult install instructions/official support thread"
+msgstr ""
+"A Cryptodome függőség nincs installálva a rendszeren. Segítségért nézze át a "
+"telepítési útmutatót vagy a hivatalos támogatói fórumot"
+
+msgctxt "#30696"
+msgid "Home Category"
+msgstr "Főmenü kategóriák"
+
+msgctxt "#30697"
+msgid "Group Home lists in special category"
+msgstr "Főmenü listák csoportosítása"
+
+msgctxt "#30800"
+msgid "Sync play time with HBO Go"
+msgstr "Lejátszási idő szinkronizálása az HBO Goval"
+
+msgctxt "#30801"
+msgid "Send elapsed time to HBO Go"
+msgstr "Folytatás pozíció elküldése HBO Go-ra"
+
+msgctxt "#30802"
+msgid "Get elapsed time from HBO Go"
+msgstr "Folytatás pozíció az HBO Go-ról"
+
+msgctxt "#30803"
+msgid "Set as watched on HBO Go"
+msgstr "Megnézettként megjelölés az HBO Go-n"
+
+msgctxt "#30804"
+msgid "Set as unwatched on HBO Go"
+msgstr "Nem látottként megjelölés az HBO Go-n"
+
+msgctxt "#30805"
+msgid "Ignore Kodi Watched status (Only display HBO Go Watched status)"
+msgstr ""
+"Kodin belüli látott állapot figyelmen kívül hagyása (Csak az HBO Go-n belüli "
+"látott állapot mutatása)"
+
+msgctxt "#30806"
+msgid "Cache"
+msgstr "Gyorsítótár"
+
+msgctxt "#30807"
+msgid "Use request cache"
+msgstr "Lekérések gyorsítótárazása"
+
+msgctxt "#30808"
+msgid "Clear request cache"
+msgstr "Lekérések gyorsítótárának ürítése"
+
+msgctxt "#30809"
+msgid "Encrypt credentials"
+msgstr "Hitelesítési adatok titkosítása"
+
+msgctxt "#30810"
+msgid ""
+"If you don't know why the option is disabled don't input credentials and "
+"exit now!\n"
+"\n"
+"If you disabled the option on purpose and know exactly why then please "
+"continue.\n"
+"\n"
+"If this is not intended for debugging/testing or because you experience "
+"problems with lost credentials on the device please do NOT continue.\n"
+"In case this is not intended, enable the credentials encryption option and "
+"simply try again.\n"
+"\n"
+"This message will appear only now on credential input."
+msgstr ""
+"Ha nem tudja, hogy a beállítás miért van kikapcsolva, ne írjon be adatokat, "
+"hanem lépjen ki most\n"
+"\n"
+"Ha szándékosan kapcsolta ki a beállítást és pontosan tudja, hogy miért, "
+"kérem folytassa.\n"
+"\n"
+"Ha nem hibakeresés vagy tesztelés céljából kapcsolta ki, vagy elvesztek a "
+"hitelesítési beállításai az eszközön, kérem NE folytassa.\n"
+"Ha nem szándékosan kapcsolta ki a beállítást, engedélyezze újra a "
+"hitelesítési adatok titkosítását és próbálja újra.\n"
+"\n"
+"Ez az üzenet csak a most, a hitelesítési adatok beírásánál lesz látható."
+
+msgctxt "#30811"
+msgid "[Encrypted]"
+msgstr "Titkosított"
+
+msgctxt "#30812"
+msgid "[NOT Encrypted]"
+msgstr "Nem titkosított"
+
+msgctxt "#30813"
+msgid "WARNING: Credential Encryption disabled"
+msgstr "FIGYELEM! A hitelesítési adatok titkosítása le van tiltva"
+
+msgctxt "#30814"
+msgid "Subtitles cache cleaned"
+msgstr "Felirat gyorsítótár kiürítve"
+
+msgctxt "#30815"
+msgid "Clean subtitles cache"
+msgstr "Felirat gyorsítótár ürítése"

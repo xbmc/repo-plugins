@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.onedrive" name="OneDrive" version="2.2.8+matrix.2" provider-name="Carlos Guzman (cguZZman)">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0" />
+		<import addon="script.module.clouddrive.common" version="1.3.9+matrix.2"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="entrypoint.py">
+		<provides>image audio video</provides>
+	</extension>
+	<extension point="xbmc.service" library="service.py" />
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en_GB">Microsoft OneDrive for KODI</summary>
+		<description lang="en_GB">
+Play all your media from OneDrive including Videos, Music and Pictures.
+ - Unlimited number of personal or business accounts.
+ - Search over your drive.
+ - Auto-Refreshed slideshow.
+ - Export your videos to your library (.strm files)
+ - Use OneDrive as a source
+ - This program is not affiliated with or sponsored by Microsoft.
+		</description>
+		<summary lang="he_IL">כונן OneDrive של מיקרוסופט עבור קודי</summary>
+		<description lang="he_IL">
+הפעל את כל המדיה שלך מ- OneDrive כולל וידאו, מוסיקה ותמונות.
+  - מספר בלתי מוגבל של חשבונות אישיים או עסקיים.
+  - חיפוש ומציאת הכונן שלך.
+  - ריענון מצגת אוטומטית.
+  - ייצוא קטעי הווידאו לספרייה שלך (קבצי .strm)
+  - שימוש ב-OneDrive כמקור
+  - תוכנית זו אינה מזוהה עם או בחסות מיקרוסופט.
+		</description>		
+		<license>GPL-3.0-or-later</license>
+		<source>https://github.com/cguZZman/plugin.onedrive</source>
+		<forum>https://github.com/cguZZman/plugin.onedrive/issues</forum>
+		<website>https://addons.kodi.tv/show/plugin.onedrive</website>
+		<assets>
+			<icon>icon.png</icon>
+			<fanart>fanart.jpg</fanart>
+		</assets>
+		<news>
+v2.2.8 released Nov 13, 2020:
+- Export improvements
+		</news>
+		<disclaimer lang="en_GB">
+This cloud drive addon uses a third-party authentication mechanism commonly known as OAuth 2.0.
+If you want to know more about OAuth 2.0 you can visit the following pages:
+- https://oauth.net/2/
+- https://developers.google.com/identity/protocols/OAuth2
+- https://docs.microsoft.com/en-us/onedrive/developer/rest-api/getting-started/msa-oauth
+
+Kodi and myself take no responsibility or liability.
+
+The authentication server URL is specified in Settings / Advanced / Sign-in Server. The Sign-in Server implements the OAuth 2.0 protocol.
+The complete source code of the Sign-in Server can be download here: https://github.com/cguZZman/drive-login
+You can clone the project and host it in your own server. 
+		</disclaimer>
+	</extension>
+</addon>

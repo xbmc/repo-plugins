@@ -1,0 +1,91 @@
+{
+  "channels": [
+    {
+      "guid": "60948038-60A4-11E2-B01B-8BE36188709B",
+      "name": "SBS 6",
+      "description": {
+        "en": "Athome in every street.\n\nOnline shows from SBS6 via kijk.nl.",
+        "nL": "Thuis in elke straat.\n\nOnline uitzendingen van SBS6 via kijk.nl."
+      },
+      "icon": "sbs6large.png",
+      "category": "National",
+      "channelcode": "sbs",
+      "sortorder": 6,
+      "language": "nl",
+      "fanart": "sbs6fanart.jpg",
+      "adaptiveAddonSelectable": true,
+      "ignore": true
+    },
+    {
+      "guid": "658A5A36-60A4-11E2-A236-8CE36188709B",
+      "name": "Net 5",
+      "description": {
+        "en": "Online shows from NET5 via kijk.nl.",
+        "nl": "Online uitzendingen van NET5 via kijk.nl."
+      },
+      "icon": "net5large.png",
+      "category": "National",
+      "channelcode": "net5",
+      "sortorder": 5,
+      "language": "nl",
+      "fanart": "net5fanart.jpg",
+      "adaptiveAddonSelectable": true,
+      "ignore": true
+    },
+    {
+      "guid": "6B32718A-60A4-11E2-87B1-A6E36188709B",
+      "name": "Veronica",
+      "description": {
+        "en": "Online shows from Veronica via kijk.nl.",
+        "nl": "Uitzendingen van Veronica via kijk.nl."
+      },
+      "icon": "veronicalarge.png",
+      "category": "National",
+      "channelcode": "veronica",
+      "sortorder": 10,
+      "language": "nl",
+      "fanart": "veronicafanart.png",
+      "adaptiveAddonSelectable": true,
+      "ignore": true
+    },
+    {
+      "guid": "C77710DE-21B6-467A-A547-0F64C6C6186E",
+      "name": "SBS 9",
+      "description": {
+        "en": "Online shows from SBS9 via kijk.nl.",
+        "nl": "Uitzendingen van SBS9 via kijk.nl."
+      },
+      "icon": "sbs9large.png",
+      "category": "National",
+      "channelcode": "sbs9",
+      "sortorder": 9,
+      "language": "nl",
+      "fanart": "sbs9fanart.jpg",
+      "adaptiveAddonSelectable": true,
+      "ignore": true
+    },
+    {
+      "guid": "271456ED-6E84-4FAB-A7AF-77A1C669F942",
+      "name": "Kijk.nl",
+      "description": {
+        "en": "All NET5, SBS6, SBS9 &amp; Veronica broadcasts available via kijk.nl.\n\n\"KIJK opens your eyes!\" and offers content from the channels SBS6, Net5, Veronica and SBS9. Besides these channels it also provides content from other Talpa Network brands such as LINDA, Stuk TV and Gierige Gasten.",
+        "nl": "Alle NET5, SBS6, SBS9 &amp; Veronica uitzendingen van kijk.nl.\n\n\"KIJK opent je ogen!\" en biedt content aan van de tv-zenders SBS6, Net5, Veronica en SBS9. Maar ook van andere Talpa Network merken, zoals LINDA, Stuk TV en Gierige Gasten."
+      },
+      "icon": "kijklarge.png",
+      "category": "National",
+      "channelcode": null,
+      "sortorder": 5,
+      "language": "nl",
+      "fanart": "kijkfanart.png",
+      "poster": "kijkposter.jpg",
+      "adaptiveAddonSelectable": true
+    }
+  ],
+  "settings": [
+    {
+      "order": 1,
+      "id": "hls_over_dash",
+      "value": "label=\"30099\" type=\"bool\" default=\"false\""
+    }
+  ]
+}

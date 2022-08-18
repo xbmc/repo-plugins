@@ -1,0 +1,93 @@
+# Kodi Media Center language file
+# Addon Name: SHOUTcast 2
+# Addon id: plugin.audio.shoutcast
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"Language: hr_HR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+msgctxt "#30000"
+msgid "All subgenres"
+msgstr "Svi podžanrovi"
+
+msgctxt "#30001"
+msgid "Top 500 Stations"
+msgstr "Top 500 stanica"
+
+msgctxt "#30002"
+msgid "Browse by genre"
+msgstr "Pregled po žanru"
+
+msgctxt "#30003"
+msgid "My Stations"
+msgstr "Moje stanice"
+
+msgctxt "#30004"
+msgid "Search Station by name"
+msgstr "Pretraži stanice po nazivu"
+
+msgctxt "#30005"
+msgid "Search Current Track playing Station"
+msgstr "Pretraži radio stanice za trenutno reproduciranu pjesmu"
+
+msgctxt "#30010"
+msgid "Add to 'My Stations'"
+msgstr "Dodaj u 'Moje stanice'"
+
+msgctxt "#30011"
+msgid "Remove from 'My Stations'"
+msgstr "Ukloni iz 'Moje stanice'"
+
+msgctxt "#30100"
+msgid "Show Subgenres"
+msgstr "Prikaži podkategorije"
+
+msgctxt "#30101"
+msgid "Num stations in list"
+msgstr "Broj stanica u popisu"
+
+msgctxt "#30102"
+msgid "Show Bitrate in Title"
+msgstr "Prikaži brzinu prijenosa u naslovu"
+
+msgctxt "#30103"
+msgid "Choose a random server (Don't ask)"
+msgstr "Odaberi naizmjenice poslužitelja (ne pitaj)"
+
+msgctxt "#30104"
+msgid "Filter stations by minium Bitrate"
+msgstr "Filtriraj stanice po minimalnoj brzini prijenosa"
+
+msgctxt "#30110"
+msgid "Minimum Bitrate"
+msgstr "Minimalna brzina prijenosa"
+
+msgctxt "#30111"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30112"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30113"
+msgid "160 kbit/s"
+msgstr "160 kbit/s"
+
+msgctxt "#30114"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30200"
+msgid "Network Error"
+msgstr "Greška mreže"

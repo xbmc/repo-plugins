@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Kodi settings -->
+<settings>
+    <category label="32001">
+        <setting label="32003" type="select" values="google|youtube|local|bing" id="autocomplete_provider" default="youtube"/>
+        <setting label="32002" visible="!eq(-1,local)+!eq(-1,bing)" type="select" values="bg|cs|da|de|el|en|es|fi|fr|he|hr|hu|it|ja|ko|nl|no|pl|pt|ru|sl|sv|tr|zh" id="autocomplete_lang" default="en"/>
+        <setting label="32002" visible="eq(-2,local)" type="select" values="en|de|fr|nl" id="autocomplete_lang_local" default="en"/>
+    </category>
+</settings>

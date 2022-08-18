@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.mixcloud"
+       name="Mixcloud"
+       version="3.0.2"
+       provider-name="jackyNIX">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+     <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">KODI plugin for Mixcloud</summary>
+    <summary lang="nl_NL">KODI plugin voor Mixcloud</summary>
+    <summary lang="fr_FR">KODI plugin pour Mixcloud</summary>
+    <summary lang="de_DE">KODI plugin für Mixcloud</summary>
+    <description lang="en_GB">Mixcloud is re-thinking radio. Listen to great radio shows, Podcasts and DJ mix sets on-demand.</description>
+    <description lang="nl_NL">Mixcloud herdefinieerd radio. Luister naar uitstekende radioshows, podcasts en dj sets on demand.</description>
+    <description lang="fr_FR">Mixcloud redéfinit la radio. Écoutez les émissions radio, podcasts et mixes DJ sur demande.</description>
+    <description lang="de_DE">Mixcloud erfindet Radio neu. Höre Radioshows, Podcasts und DJ Mixe wann immer Du willst.</description>
+    <news>
+      v3.0.2 (2020-10-07)
+      [fix] fixed local mixcloud resolver
+    </news>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GPL-3.0-or-later</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=116386</forum>
+    <website>https://www.mixcloud.com</website>
+    <source>https://github.com/jackyNIX/xbmc-mixcloud-plugin</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+    <reuselanguageinvoker>true</reuselanguageinvoker>
+  </extension>
+</addon>                       

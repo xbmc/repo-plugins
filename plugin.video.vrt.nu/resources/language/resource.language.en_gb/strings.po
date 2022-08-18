@@ -1,0 +1,1068 @@
+# Kodi Media Center language file
+# Addon Name: VRT NU
+# Addon id: plugin.video.vrt.nu
+# Addon Provider: pietje666
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"POT-Creation-Date: 2017-02-25 15:08+0001\n"
+"PO-Revision-Date: 2019-03-12 21:17+0001\n"
+"Last-Translator: Martijn Moreel\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+### MAIN MENU
+msgctxt "#30010"
+msgid "My favorites"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Browse only the programs you follow"
+msgstr ""
+
+msgctxt "#30012"
+msgid "All programs"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Alphabetically sorted list of programs"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30015"
+msgid "TV programs listed by category"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30017"
+msgid "TV programs listed by channel"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Live TV"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Watch TV channels live via Internet"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Most recent"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Recently published episodes"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Soon offline"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Episodes that will soon be offline"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Featured content"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Highlighted movies and TV programs"
+msgstr ""
+
+msgctxt "#30026"
+msgid "TV guide"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Browse channel TV guides"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Search VRT NU"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Search the complete VRT NU library"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Remove"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Search results"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Edit"
+msgstr ""
+
+
+### FAVORITES
+msgctxt "#30040"
+msgid "My programs"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Alphabetically sorted list of My TV programs"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30043"
+msgid "All movies available on VRT NU"
+msgstr ""
+
+msgctxt "#30044"
+msgid "Documentaries"
+msgstr ""
+
+msgctxt "#30045"
+msgid "All [I]one-off[/I] documentaries on VRT NU"
+msgstr ""
+
+msgctxt "#30046"
+msgid "Music"
+msgstr ""
+
+msgctxt "#30047"
+msgid "All [I]one-off[/I] music on VRT NU"
+msgstr ""
+
+msgctxt "#30048"
+msgid "Most recent"
+msgstr ""
+
+msgctxt "#30049"
+msgid "Recently published episodes of My TV programs"
+msgstr ""
+
+msgctxt "#30050"
+msgid "Soon offline"
+msgstr ""
+
+msgctxt "#30051"
+msgid "My episodes that will soon be offline"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Watch later"
+msgstr ""
+
+msgctxt "#30053"
+msgid "The videos you like to watch later"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Continue watching"
+msgstr ""
+
+msgctxt "#30055"
+msgid "Continue watching the videos you started earlier"
+msgstr ""
+
+
+### CATEGORIES
+msgctxt "#30070"
+msgid "Audio description"
+msgstr ""
+
+msgctxt "#30071"
+msgid "Culture"
+msgstr ""
+
+msgctxt "#30072"
+msgid "Documentary"
+msgstr ""
+
+msgctxt "#30073"
+msgid "Entertainment"
+msgstr ""
+
+msgctxt "#30074"
+msgid "Films"
+msgstr ""
+
+msgctxt "#30075"
+msgid "Human interest"
+msgstr ""
+
+msgctxt "#30076"
+msgid "Comedy"
+msgstr ""
+
+msgctxt "#30077"
+msgid "Children and youth"
+msgstr ""
+
+msgctxt "#30078"
+msgid "Cooking"
+msgstr ""
+
+msgctxt "#30079"
+msgid "Lifestyle"
+msgstr ""
+
+msgctxt "#30080"
+msgid "Music"
+msgstr ""
+
+msgctxt "#30081"
+msgid "News and current affairs"
+msgstr ""
+
+msgctxt "#30082"
+msgid "Series"
+msgstr ""
+
+msgctxt "#30083"
+msgid "Sports"
+msgstr ""
+
+msgctxt "#30084"
+msgid "Talk shows"
+msgstr ""
+
+msgctxt "#30085"
+msgid "Flemish Sign Language"
+msgstr ""
+
+msgctxt "#30086"
+msgid "Science and nature"
+msgstr ""
+
+msgctxt "#30087"
+msgid "Worldview"
+msgstr ""
+
+msgctxt "#30088"
+msgid "Nostalgia"
+msgstr ""
+
+
+### FEATURED
+msgctxt "#30100"
+msgid "Online exclusive"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Full season"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Complete series"
+msgstr ""
+
+msgctxt "#30103"
+msgid "From the archive"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Last chance"
+msgstr ""
+
+msgctxt "#30120"
+msgid "Short film"
+msgstr ""
+
+msgctxt "#30121"
+msgid "12+"
+msgstr ""
+
+msgctxt "#30122"
+msgid "Cinema Canvas"
+msgstr ""
+
+msgctxt "#30128"
+msgid "Climate"
+msgstr ""
+
+msgctxt "#30129"
+msgid "Cycling"
+msgstr ""
+
+msgctxt "#30130"
+msgid "De warmste week"
+msgstr ""
+
+### APPLICATION
+msgctxt "#30131"
+msgid "Season"
+msgstr ""
+
+msgctxt "#30132"
+msgid "Episode"
+msgstr ""
+
+msgctxt "#30133"
+msgid "* All seasons"
+msgstr ""
+
+msgctxt "#30134"
+msgid "Enter search string"
+msgstr ""
+
+msgctxt "#30135"
+msgid "Nothing found"
+msgstr ""
+
+msgctxt "#30136"
+msgid "Nothing was found when searching for: {keywords}"
+msgstr ""
+
+msgctxt "#30141"
+msgid "{label} live"
+msgstr ""
+
+msgctxt "#30142"
+msgid "Watch [B]{label}[/B] live via Internet"
+msgstr ""
+
+msgctxt "#30143"
+msgid "{label} on YouTube"
+msgstr ""
+
+msgctxt "#30144"
+msgid "Watch [B]{label}[/B] on YouTube"
+msgstr ""
+
+msgctxt "#30201"
+msgid "[COLOR={geoblocked}]Geo-blocked[/COLOR]"
+msgstr ""
+
+msgctxt "#30202"
+msgid "[COLOR={availability}][B]{years} more years[/B] available[/COLOR]"
+msgstr ""
+
+msgctxt "#30203"
+msgid "[COLOR={availability}][B]{months} more months[/B] available[/COLOR]"
+msgstr ""
+
+msgctxt "#30204"
+msgid "[COLOR={availability}][B]{days} more days[/B] available[/COLOR]"
+msgstr ""
+
+msgctxt "#30205"
+msgid "[COLOR={availability}][B]1 more day[/B] available[/COLOR]"
+msgstr ""
+
+msgctxt "#30206"
+msgid "[COLOR={availability}][B]{hours} more hours[/B] available[/COLOR]"
+msgstr ""
+
+msgctxt "#30207"
+msgid "[COLOR={availability}][B]1 more hour[/B] available[/COLOR]"
+msgstr ""
+
+msgctxt "#30208"
+msgid "[COLOR={availability}][B]{minutes} more minutes[/B] available[/COLOR]"
+msgstr ""
+
+msgctxt "#30300"
+msgid "[B][COLOR={highlighted}]More…[/COLOR][/B]"
+msgstr ""
+
+msgctxt "#30301"
+msgid "[B][I]Now on live TV[/I][/B]"
+msgstr ""
+
+msgctxt "#30302"
+msgid "TV guide for channel [B]{label}[/B]"
+msgstr ""
+
+msgctxt "#30303"
+msgid "{label} TV guide"
+msgstr ""
+
+msgctxt "#30330"
+msgid "2 days ago"
+msgstr ""
+
+msgctxt "#30331"
+msgid "Yesterday"
+msgstr ""
+
+msgctxt "#30332"
+msgid "Today"
+msgstr ""
+
+msgctxt "#30333"
+msgid "Tomorrow"
+msgstr ""
+
+msgctxt "#30334"
+msgid "In 2 days"
+msgstr ""
+
+msgctxt "#30401"
+msgid "Watch later"
+msgstr ""
+
+msgctxt "#30402"
+msgid "Remove from watch later"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Add {title} to watch later"
+msgstr ""
+
+msgctxt "#30404"
+msgid "Remove {title} from watch later"
+msgstr ""
+
+msgctxt "#30409"
+msgid "episode"
+msgstr ""
+
+msgctxt "#30410"
+msgid "program"
+msgstr ""
+
+msgctxt "#30411"
+msgid "Follow {title}"
+msgstr ""
+
+msgctxt "#30412"
+msgid "Unfollow {title}"
+msgstr ""
+
+msgctxt "#30413"
+msgid "Refresh menu"
+msgstr ""
+
+msgctxt "#30415"
+msgid "No followed programs found"
+msgstr ""
+
+msgctxt "#30416"
+msgid "We could not find any programs that are followed.\n\nEither right-click on a program or episode to follow a program, or follow a program on the VRT NU website."
+msgstr ""
+
+msgctxt "#30417"
+msgid "Go to program"
+msgstr ""
+
+msgctxt "#30418"
+msgid "No favorites found"
+msgstr ""
+
+msgctxt "#30419"
+msgid "Currently you have not followed any programs."
+msgstr ""
+
+msgctxt "#30420"
+msgid "Please unselect/select favorites to unfollow/follow."
+msgstr ""
+
+msgctxt "#30421"
+msgid "Now:"
+msgstr ""
+
+msgctxt "#30422"
+msgid "Next:"
+msgstr ""
+
+msgctxt "#30423"
+msgid "Retransmissions"
+msgstr ""
+
+msgctxt "#30424"
+msgid "[B]New search…[/B]"
+msgstr ""
+
+msgctxt "#30425"
+msgid "Perform a new search on VRT NU content"
+msgstr ""
+
+msgctxt "#30426"
+msgid "[B]Clear search history[/B]"
+msgstr ""
+
+msgctxt "#30427"
+msgid "Clear the search history"
+msgstr ""
+
+msgctxt "#30428"
+msgid "My"
+msgstr ""
+
+msgctxt "#30430"
+msgid "Quiet"
+msgstr ""
+
+msgctxt "#30431"
+msgid "Info"
+msgstr ""
+
+msgctxt "#30432"
+msgid "Verbose"
+msgstr ""
+
+msgctxt "#30433"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#30440"
+msgid "A-Z"
+msgstr ""
+
+msgctxt "#30450"
+msgid "Update add-on repositories"
+msgstr ""
+
+msgctxt "#30451"
+msgid "If a VRT NU add-on update is available, it should now be updating and you will be notified.\nMake sure you have [I]Auto-update[/I] enabled for the VRT NU add-on."
+msgstr ""
+
+msgctxt "#30452"
+msgid "Automatic updates are disabled"
+msgstr ""
+
+msgctxt "#30453"
+msgid "Kodi is configured to not update add-ons automatically, so you will not get VRT NU updates unless you fix this setting.\nWe will open de Kodi settings, please change this setting."
+msgstr ""
+
+msgctxt "#30454"
+msgid "from livestream cache"
+msgstr ""
+
+
+### SETTINGS
+msgctxt "#30700"
+msgid "Credentials"
+msgstr ""
+
+msgctxt "#30701"
+msgid "VRT NU login"
+msgstr ""
+
+msgctxt "#30703"
+msgid "Email address"
+msgstr ""
+
+msgctxt "#30704"
+msgid "Provide your VRT NU email address. In case this is a Google, Facebook or Apple account, please ensure that this login is enabled for normal username/password authentication. See the wiki for more information."
+msgstr ""
+
+msgctxt "#30705"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30706"
+msgid "Provide your VRT NU account password."
+msgstr ""
+
+msgctxt "#30740"
+msgid "Interface"
+msgstr ""
+
+msgctxt "#30741"
+msgid "My favorites"
+msgstr ""
+
+msgctxt "#30743"
+msgid "Enable My favorites"
+msgstr ""
+
+msgctxt "#30744"
+msgid "When enabled, the user can follow their favorite programs and list these separately. In this case the VRT NU add-on will download and update a list of your followed programs on the VRT NU website."
+msgstr ""
+
+msgctxt "#30745"
+msgid "Manage My favorites…"
+msgstr ""
+
+msgctxt "#30747"
+msgid "Enable watching activity"
+msgstr ""
+
+msgctxt "#30748"
+msgid "This enables 'watch later' and 'continue watching' menus and syncs playback position between different devices using the same VRT NU account."
+msgstr ""
+
+msgctxt "#30749"
+msgid "Add Movies subsection"
+msgstr ""
+
+msgctxt "#30751"
+msgid "Add Documentaries subsection"
+msgstr ""
+
+msgctxt "#30753"
+msgid "Add Music subsection"
+msgstr ""
+
+msgctxt "#30755"
+msgid "Features"
+msgstr ""
+
+msgctxt "#30757"
+msgid "Show one-off videos in between program folders"
+msgstr ""
+
+msgctxt "#30759"
+msgid "Show fanart"
+msgstr ""
+
+msgctxt "#30761"
+msgid "Number of items per page"
+msgstr ""
+
+msgctxt "#30763"
+msgid "Show episode permalink in plot"
+msgstr ""
+
+msgctxt "#30764"
+msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
+msgstr ""
+
+msgctxt "#30765"
+msgid "Colour preferences"
+msgstr ""
+
+msgctxt "#30767"
+msgid "Colour theme"
+msgstr ""
+
+msgctxt "#30769"
+msgid "Highlighted text"
+msgstr ""
+
+msgctxt "#30771"
+msgid "Greyed-out text"
+msgstr ""
+
+msgctxt "#30773"
+msgid "Availability text"
+msgstr ""
+
+msgctxt "#30775"
+msgid "Geo-blocked text"
+msgstr ""
+
+msgctxt "#30780"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30781"
+msgid "Subtitles"
+msgstr ""
+
+msgctxt "#30783"
+msgid "Always show subtitles when available"
+msgstr ""
+
+msgctxt "#30784"
+msgid "This enables subtitles by default for all content that includes subtitles."
+msgstr ""
+
+msgctxt "#30785"
+msgid "Streaming and DRM"
+msgstr ""
+
+msgctxt "#30787"
+msgid "Use Widevine DRM [COLOR=gray](for protected content)[/COLOR]"
+msgstr ""
+
+msgctxt "#30788"
+msgid "Most live streams are available in 720p HD-quality, but may require DRM to be enabled."
+msgstr ""
+
+msgctxt "#30789"
+msgid "Maximum bandwidth [COLOR=gray](in kbps)[/COLOR]"
+msgstr ""
+
+msgctxt "#30790"
+msgid "In case you have limited bandwidth available, you may want to specify a maximum bandwidth so that a lower bitrate stream can be selected for playback."
+msgstr ""
+
+msgctxt "#30820"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30821"
+msgid "Select channels to use for 'Most recent' and 'Soon offline' listings"
+msgstr ""
+
+msgctxt "#30823"
+msgid "Eén"
+msgstr ""
+
+msgctxt "#30824"
+msgid "Canvas"
+msgstr ""
+
+msgctxt "#30825"
+msgid "Ketnet"
+msgstr ""
+
+msgctxt "#30826"
+msgid "Ketnet Junior"
+msgstr ""
+
+msgctxt "#30827"
+msgid "Sporza"
+msgstr ""
+
+msgctxt "#30828"
+msgid "Radio 1"
+msgstr ""
+
+msgctxt "#30829"
+msgid "Radio 2"
+msgstr ""
+
+msgctxt "#30830"
+msgid "Klara"
+msgstr ""
+
+msgctxt "#30831"
+msgid "Studio Brussel"
+msgstr ""
+
+msgctxt "#30832"
+msgid "MNM"
+msgstr ""
+
+msgctxt "#30833"
+msgid "VRT NXT"
+msgstr ""
+
+msgctxt "#30834"
+msgid "VRT NWS"
+msgstr ""
+
+msgctxt "#30835"
+msgid "De Warmste Week"
+msgstr ""
+
+msgctxt "#30860"
+msgid "Integration"
+msgstr ""
+
+msgctxt "#30861"
+msgid "Integration with other Kodi add-ons"
+msgstr ""
+
+msgctxt "#30863"
+msgid "Install YouTube add-on…"
+msgstr ""
+
+msgctxt "#30864"
+msgid "Show YouTube channel content in the Channels menu."
+msgstr ""
+
+msgctxt "#30865"
+msgid "Enable YouTube integration"
+msgstr ""
+
+msgctxt "#30867"
+msgid "YouTube settings…"
+msgstr ""
+
+msgctxt "#30869"
+msgid "Install Up Next add-on…"
+msgstr ""
+
+msgctxt "#30870"
+msgid "This enables a Netflix style pop up notification for watching the next episode using the Up Next service add-on."
+msgstr ""
+
+msgctxt "#30871"
+msgid "Enable Up Next integration"
+msgstr ""
+
+msgctxt "#30873"
+msgid "Up Next settings…"
+msgstr ""
+
+msgctxt "#30874"
+msgid "Open Up Next service add-on settings."
+msgstr ""
+
+msgctxt "#30875"
+msgid "Install IPTV Manager add-on…"
+msgstr ""
+
+msgctxt "#30877"
+msgid "Enable IPTV Manager integration"
+msgstr ""
+
+msgctxt "#30879"
+msgid "IPTV Manager settings…"
+msgstr ""
+
+msgctxt "#30881"
+msgid "Install PySocks library…"
+msgstr ""
+
+msgctxt "#30890"
+msgid "Updates"
+msgstr ""
+
+msgctxt "#30891"
+msgid "Update the VRT NU add-on"
+msgstr ""
+
+msgctxt "#30893"
+msgid "Install the latest add-on updates…"
+msgstr ""
+
+msgctxt "#30895"
+msgid "Open Kodi add-ons settings… [COLOR=gray]to enable Kodi auto-updates)[/COLOR]"
+msgstr ""
+
+msgctxt "#30897"
+msgid "Open VRT NU add-on information…"
+msgstr ""
+
+msgctxt "#30900"
+msgid "Expert"
+msgstr ""
+
+msgctxt "#30901"
+msgid "Streaming and DRM"
+msgstr ""
+
+msgctxt "#30903"
+msgid "Please install or enable InputStream Adaptive to use this setting"
+msgstr ""
+
+msgctxt "#30905"
+msgid "Use InputStream Adaptive"
+msgstr ""
+
+msgctxt "#30907"
+msgid "InputStream Adaptive settings…"
+msgstr ""
+
+msgctxt "#30909"
+msgid "InputStream Helper information"
+msgstr ""
+
+msgctxt "#30911"
+msgid "InputStream Helper settings… [COLOR=gray](for protected content)[/COLOR]"
+msgstr ""
+
+msgctxt "#30913"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30915"
+msgid "Clear VRT tokens"
+msgstr ""
+
+msgctxt "#30917"
+msgid "Refresh favorites"
+msgstr ""
+
+msgctxt "#30919"
+msgid "Refresh watching activity"
+msgstr ""
+
+msgctxt "#30921"
+msgid "Use menu caching"
+msgstr ""
+
+msgctxt "#30922"
+msgid "When enabled, menus are being cached so they work more quickly. Only in very specific use-cases this is problematic as new episodes may not appear when they are expected. You can also use [B]Refresh[/B] from the context-menu."
+msgstr ""
+
+msgctxt "#30923"
+msgid "Use local HTTP caching"
+msgstr ""
+
+msgctxt "#30925"
+msgid "Invalidate local HTTP caches"
+msgstr ""
+
+msgctxt "#30927"
+msgid "Direct HTTP cache time-to-live [COLOR=gray](in minutes)[/COLOR]"
+msgstr ""
+
+msgctxt "#30929"
+msgid "Indirect HTTP cache time-to-live [COLOR=gray](in minutes)[/COLOR]"
+msgstr ""
+
+msgctxt "#30931"
+msgid "Logging"
+msgstr ""
+
+msgctxt "#30933"
+msgid "Log level"
+msgstr ""
+
+msgctxt "#30935"
+msgid "Install Kodi Logfile Uploader…"
+msgstr ""
+
+msgctxt "#30937"
+msgid "Open Kodi Logfile Uploader…"
+msgstr ""
+
+
+### MESSAGES
+msgctxt "#30951"
+msgid "Login failed!"
+msgstr ""
+
+msgctxt "#30952"
+msgid "Login succeeded."
+msgstr ""
+
+msgctxt "#30953"
+msgid "Invalid email address or password. Only VRT logins are supported, no Google, Facebook or Apple logins."
+msgstr ""
+
+msgctxt "#30954"
+msgid "Whoops something went wrong, check the kodi log for more details."
+msgstr ""
+
+msgctxt "#30955"
+msgid "Please fill in your email address to login."
+msgstr ""
+
+msgctxt "#30956"
+msgid "Please fill in your password to login."
+msgstr ""
+
+msgctxt "#30957"
+msgid "Please increase the maximum bandwidth. Maximum bandwidth is set to {max} kbps, but this stream needs a minimum of {min} kbps."
+msgstr ""
+
+msgctxt "#30958"
+msgid "There is a problem with this VRT NU {protocol} stream. Try again with {component} {state} or try to play this program from the VRT NU website. Please report this problem at https://www.vrt.be/vrtnu/help/"
+msgstr ""
+
+msgctxt "#30959"
+msgid "InputStream Adaptive and Widevine DRM"
+msgstr ""
+
+msgctxt "#30960"
+msgid "disabled"
+msgstr ""
+
+msgctxt "#30961"
+msgid "enabled"
+msgstr ""
+
+msgctxt "#30962"
+msgid "There is a problem with this VRT NU {protocol} stream and Kodi {version} does not support the alternative stream. Please upgrade to a newer Kodi version or try to play this program from the VRT NU website. Please report this problem at https://www.vrt.be/vrtnu/help/"
+msgstr ""
+
+msgctxt "#30963"
+msgid "This program cannot be played. You need a VRT account to play this program. Please register at https://www.vrt.be/vrtnu/"
+msgstr ""
+
+msgctxt "#30964"
+msgid "This program cannot be played. To view this program outside of Belgium, a Belgian mobile phone number must be linked to your VRT account at https://www.vrt.be/vrtnu/"
+msgstr ""
+
+msgctxt "#30965"
+msgid "This program cannot be played. It is blocked on your geographical location based on your IP address. More info at https://www.vrt.be/vrtnu/help/country/"
+msgstr ""
+
+msgctxt "#30966"
+msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
+msgstr ""
+
+msgctxt "#30967"
+msgid "Could not retrieve this program list. VRT Search API url is too long. Go to [B]VRT NU settings » Interface » Manage My favorites…[/B] and unfollow older favorite programs to fix this problem."
+msgstr ""
+
+msgctxt "#30968"
+msgid "No connection"
+msgstr ""
+
+msgctxt "#30969"
+msgid "There is a problem connecting to the Internet. This could be related to Kodi, your network, your ISP or VRT NU. Check out the Kodi log for more details."
+msgstr ""
+
+msgctxt "#30970"
+msgid "VRT NU authentication failed"
+msgstr ""
+
+msgctxt "#30971"
+msgid "There is an unknown problem authenticating your user credentials at VRT NU. Please check your VRT NU account at https://www.vrt.be/vrtnu/"
+msgstr ""
+
+msgctxt "#30972"
+msgid "There is a problem authenticating at VRT NU to enable favorites. Please check your VRT NU account at https://www.vrt.be/vrtnu/ or disable favorites in the add-on settings."
+msgstr ""
+
+msgctxt "#30973"
+msgid "This program can only be played from an European Union member state. It is blocked on your geographical location based on your IP address. More info at https://www.vrt.be/vrtnu/help/country/"
+msgstr ""
+
+msgctxt "#30975"
+msgid "Failed to get user token from VRT NU"
+msgstr ""
+
+msgctxt "#30976"
+msgid "Failed to (un)follow program '{program}' at VRT NU"
+msgstr ""
+
+msgctxt "#30977"
+msgid "Failed to update watch activity '{title}' at VRT NU"
+msgstr ""
+
+msgctxt "#30978"
+msgid "Welcome to VRT NU add-on v2.0.0"
+msgstr ""
+
+msgctxt "#30979"
+msgid "Because of important internal changes, existing Kodi favourites and watched history from VRT NU no longer work.\n[B]Please recreate all your VRT NU favorites.[/B]"
+msgstr ""
+
+msgctxt "#30981"
+msgid "Successfully invalidated caches."
+msgstr ""
+
+msgctxt "#30982"
+msgid "Successfully refreshed favorites."
+msgstr ""
+
+msgctxt "#30983"
+msgid "Successfully refreshed watching activity."
+msgstr ""
+
+msgctxt "#30985"
+msgid "Successfully cleared VRT tokens."
+msgstr ""
+
+msgctxt "#30986"
+msgid "No on demand stream available for {title}."
+msgstr ""
+
+msgctxt "#30987"
+msgid "No stream found, please try again!"
+msgstr ""
+
+msgctxt "#30988"
+msgid "InputStream Adaptive is not installed, therefore pause and timeshift of live streams may not work"
+msgstr ""
+
+msgctxt "#30989"
+msgid "Failed to load a compatible stream, please try toggling 'Use Widevine DRM' in the add-on Playback settings."
+msgstr ""
+
+msgctxt "#30990"
+msgid "This program cannot be played. Your VRT NU account is not allowed to access 12+ content. Please check your VRT NU account details at https://www.vrt.be/vrtnu/"
+msgstr ""

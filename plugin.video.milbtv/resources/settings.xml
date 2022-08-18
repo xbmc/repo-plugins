@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!--Login-->
+  <category label="30100">
+    <setting id="username" type="text" label="30140" default=""/>
+    <setting id="password" type="text" label="30150" option="hidden" default=""/>
+    <setting label="30156" type="action" action="RunPlugin(plugin://plugin.video.milbtv/?mode=400)" option="close" />
+    <!--Hidden-->
+    <setting id='last_login' type='text' visible="false" default=''/>
+    <setting id='login_token' type='text' visible="false" default=''/>
+    <setting id='last_access' type='text' visible="false" default=''/>
+    <setting id='access_token' type='text' visible="false" default=''/>
+  </category>
+
+  <category label="30159">
+    <setting id="quality" type="labelenum" label="30160" values="Best Available|Always Ask" default="Best Available" />
+    <setting id="no_spoilers" type="enum" label="30170" lvalues="30171|30172|30173|30174|30175" />
+    <setting id="disable_video_padding" type="bool" label="30429" default="false" />
+    <setting id="fav_team" type="labelenum" label="30180" default="None" values="None|Angels|Astros|Athletics|Blue Jays|Braves|Brewers|Cardinals|Cubs|Diamondbacks|Dodgers|Giants|Guardians|Mariners|Marlins|Mets|Nationals|Orioles|Padres|Phillies|Pirates|Rangers|Rays|Red Sox|Reds|Rockies|Royals|Tigers|Twins|White Sox|Yankees" />
+    <setting id="catch_up" type="bool" label="30304" default="true" />
+    <setting id="ask_to_skip" type="bool" label="30306" default="true" />
+
+    <setting id="time_format" type="select" label="30301" lvalues="30302|30303" default="0" />
+
+    <setting id="milb_monitor_started" type="text" label="" default="" visible="false"/>
+  </category>
+</settings>
+

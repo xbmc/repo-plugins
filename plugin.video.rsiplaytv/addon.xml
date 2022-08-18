@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.rsiplaytv" name="RSI Play TV" version="2.2.0" provider-name="Alexander Seiler">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.srgssr" version="2.2.0"/>
+    <import addon="script.module.youtube_channels" version="0.2.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="fr_FR">RSI Play vidéothèque</summary>
+    <summary lang="en_GB">RSI Play television video library</summary>
+    <summary lang="de_DE">RSI Play Videobibliothek</summary>
+    <summary lang="it_IT">Videoteca RSI Play</summary>
+    <description lang="fr_FR">Avec RSI Play TV vous pouvez regarder les vidéos de la vidéothèque de la Radio télévision suisse (RSI).</description>
+    <description lang="en_GB">RSI Play TV allows you to watch the content from the video library of Swiss Radio and Television (RSI).</description>
+    <description lang="de_DE">Mit RSI Play TV können Sie den Inhalt der RSI Play Videobibliothek des Schweizer Fernsehens anschauen.</description>
+    <description lang="it_IT">RSI Play TV ti permette di accedere alla videoteca della Radio e della Televisione Svizzera.</description>
+    <disclaimer lang="fr_FR">Certains contenus sont géo-bloqués et disponibles uniquement en Suisse.</disclaimer>
+    <disclaimer lang="en_GB">Some content is geo-blocked and only available in Switzerland.</disclaimer>
+    <disclaimer lang="de_DE">Einige Inhalte sind nur in der Schweiz verfügbar.</disclaimer>
+    <disclaimer lang="it_IT">Alcuni contenuti sono geograficamente bloccati e quindi visibili solo in Svizzera.</disclaimer>
+    <language>it</language>
+    <platform>all</platform>
+    <license>GPL-3.0-or-later</license>
+    <forum>https://github.com/goggle/plugin.video.rsiplaytv/discussions</forum>
+    <website>https://www.rsi.ch/play/tv</website>
+    <source>https://github.com/goggle/plugin.video.rsiplaytv</source>
+    <news>v2.2.0 (2022-06-24)
+  - Support WIDEVINE encrypted DASH streams
+
+v2.1.0 (2022-06-01)
+  - Add support for content presented on homepage.
+  - Add support for topics.
+  - Add support for playback of livestreams.
+
+v2.0.0 (2022-05-03)
+  - Finalize Python 3 support.
+  - Adapt to SRGSSR APIv3.
+  - Remove support for audio because it is not included in the SRGSSR API anymore.</news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.png</fanart>
+        <screenshot>resources/screenshot-01.png</screenshot>
+        <screenshot>resources/screenshot-02.png</screenshot>
+        <screenshot>resources/screenshot-03.png</screenshot>
+        <screenshot>resources/screenshot-04.png</screenshot>
+    </assets>
+  </extension>
+</addon>

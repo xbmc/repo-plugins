@@ -1,0 +1,231 @@
+# Kodi Media Center language file
+# Addon Name: Mixcloud
+# Addon id: plugin.audio.mixcloud
+# Addon Provider: jackyNIX
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+
+# main menu
+
+msgctxt "#30100"
+msgid "Profile..."
+msgstr ""
+
+msgctxt "#30101"
+msgid "Followings"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Followers"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Favorites"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Uploads"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Playlists"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Listen Later"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30108"
+msgid "History"
+msgstr ""
+
+msgctxt "#30109"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30110"
+msgid "More..."
+msgstr ""
+
+
+
+# search menu
+
+msgctxt "#30200"
+msgid "Search cloudcasts..."
+msgstr ""
+
+msgctxt "#30201"
+msgid "Search users..."
+msgstr ""
+
+
+
+# context menu
+
+msgctxt "#30300"
+msgid "Favorite cloudcast"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Unfavorite cloudcast"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Follow user"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Unfollow user"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Listen later"
+msgstr ""
+
+msgctxt "#30305"
+msgid "Do not listen later"
+msgstr ""
+
+
+
+# others
+
+msgctxt "#30400"
+msgid "No valid access token found."
+msgstr ""
+
+msgctxt "#30401"
+msgid "Please provide your authentication code."
+msgstr ""
+
+msgctxt "#30402"
+msgid "Logout?"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Clear history?"
+msgstr ""
+
+msgctxt "#30404"
+msgid "No active resolvers found. Please check your settings."
+msgstr ""
+
+
+
+# general settings
+
+msgctxt "#30900"
+msgid "General"
+msgstr ""
+
+msgctxt "#30901"
+msgid "Maximum rows on page"
+msgstr ""
+
+msgctxt "#30902"
+msgid "Thumbnail size"
+msgstr ""
+
+msgctxt "#30903"
+msgid "Debug mode"
+msgstr ""
+
+msgctxt "#30904"
+msgid "Extended info (slower)"
+msgstr ""
+
+
+
+# profile settings
+
+msgctxt "#30910"
+msgid "Profile"
+msgstr ""
+
+msgctxt "#30911"
+msgid "OAuth code"
+msgstr ""
+
+msgctxt "#30912"
+msgid "Access token"
+msgstr ""
+
+msgctxt "#30913"
+msgid "Log out..."
+msgstr ""
+
+
+
+# resolver settings
+
+msgctxt "#30920"
+msgid "Resolvers"
+msgstr ""
+
+msgctxt "#30921"
+msgid "mixcloud.com"
+msgstr ""
+
+msgctxt "#30922"
+msgid "mixcloud-downloader.com [BROKEN]"
+msgstr ""
+
+msgctxt "#30923"
+msgid "offliberty.online"
+msgstr ""
+
+
+
+# history settings
+
+msgctxt "#30930"
+msgid "History"
+msgstr ""
+
+msgctxt "#30931"
+msgid "Maximum play history"
+msgstr ""
+
+msgctxt "#30932"
+msgid "Maximum search history"
+msgstr ""
+
+msgctxt "#30933"
+msgid "Clear history..."
+msgstr ""
+
+
+
+# thumbnail sizes
+
+msgctxt "#30940"
+msgid "very small (25x25)"
+msgstr ""
+
+msgctxt "#30941"
+msgid "small (50x50)"
+msgstr ""
+
+msgctxt "#30942"
+msgid "medium (100x100)"
+msgstr ""
+
+msgctxt "#30943"
+msgid "large (300x300)"
+msgstr ""
+
+msgctxt "#30944"
+msgid "extra large (600x600)"
+msgstr ""

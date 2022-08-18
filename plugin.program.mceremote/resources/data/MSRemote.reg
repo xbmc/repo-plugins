@@ -1,0 +1,55 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\HidIr\Remotes\745a17a0-74d3-11d0-b6fe-00a0c90f57da]
+"ReportMappingTable"=hex:\
+  00,00,00,00,04,00,27,\ ; 0
+  01,00,00,00,04,00,1e,\ ; 1
+  02,00,00,00,04,00,1f,\ ; 2
+  03,00,00,00,04,00,20,\ ; 3
+  04,00,00,00,04,00,21,\ ; 4
+  05,00,00,00,04,00,22,\ ; 5
+  06,00,00,00,04,00,23,\ ; 6
+  07,00,00,00,04,00,24,\ ; 7
+  08,00,00,00,04,00,25,\ ; 8
+  09,00,00,00,04,00,26,\ ; 9
+  0a,00,00,00,04,00,29,\ ; Clear     - sends escape
+  0b,00,00,00,04,00,28,\ ; Enter     - sends return
+  0c,00,00,00,03,82,00,\ ; Power     - left at Windows default, use "04,04,3d" to send alt-F4
+  0d,00,00,00,04,03,1a,\ ; Windows   - sends ctrl-shift-W
+  0e,00,00,00,04,00,41,\ ; Mute      - was "01,e2,00" sends F8
+  0f,00,00,00,04,01,07,\ ; Info      - was "01,09,02" sends ctrl-D
+  10,00,00,00,04,00,43,\ ; vol up    - was "01,e9,00" sends F10
+  11,00,00,00,04,00,42,\ ; vol down  - was "01,ea,00" sends F9
+  12,00,00,00,04,00,4B,\ ; chan up   - was "01,9c,00" sends PgUp
+  13,00,00,00,04,00,4E,\ ; chan down - was "01,9d,00" sends PgDn
+  14,00,00,00,04,03,09,\ ; ff        - was "01,b3,00" sends ctrl-shift-F
+  15,00,00,00,04,03,05,\ ; rew       - was "01,b4,00" sends ctrl-shift-B
+  16,00,00,00,04,03,13,\ ; play      - was "01,b0,00" sends ctrl-shift-P
+  17,00,00,00,04,01,15,\ ; record    - was "01,b2,00" sends ctrl-R
+  18,00,00,00,04,01,13,\ ; pause     - was "01,b1,00" sends ctrl-P
+  19,00,00,00,04,03,16,\ ; stop      - was "01,b7,00" sends ctrl-shift-S
+  1a,00,00,00,04,01,09,\ ; next      - was "01,b5,00" sends ctrl-F
+  1b,00,00,00,04,01,05,\ ; prev      - was "01,b6,00" sends ctrl-B
+  1c,00,00,00,04,03,20,\ ; #         - sends ctrl-shift-3
+  1d,00,00,00,04,03,25,\ ; *         - sends strl-shift-8
+  1e,00,00,00,04,00,52,\ ; up
+  1f,00,00,00,04,00,51,\ ; down
+  20,00,00,00,04,00,50,\ ; left
+  21,00,00,00,04,00,4f,\ ; right
+  22,00,00,00,04,00,28,\ ; OK (return)
+  23,00,00,00,04,00,2a,\ ; back      - was "01,24,02" sends Backspace
+  24,00,00,00,04,03,10,\ ; DVD menu  - sends ctrl-shift-M
+  25,00,00,00,04,03,17,\ ; Live TV   - sends ctrl-shift-T
+  26,00,00,00,04,01,0a,\ ; Guide     - was "01,8d,00" sends ctrl-G
+  27,00,00,00,04,05,17,\ ; Unidentified top left button on Asrock remote - configured as ctrl-alt-T
+  47,00,00,00,04,01,10,\ ; Music     - sends ctrl-M
+  48,00,00,00,04,01,12,\ ; Recorded TV - sends ctrl-O
+  49,00,00,00,04,01,0C,\ ; Pictures  - sends ctrl-I
+  4A,00,00,00,04,01,08,\ ; Movies    - sends ctrl-E
+  4E,00,00,00,04,05,13,\ ; HP remote: Print button - sends ctrl-alt-P
+  50,00,00,00,04,01,04,\ ; Radio     - sends ctrl-A
+  5A,00,00,00,04,01,17,\ ; Teletext  - sends ctrl-T
+  5B,00,00,00,04,05,1e,\ ; Red       - sends ctrl-alt-1
+  5C,00,00,00,04,05,1f,\ ; Green     - sends ctrl-alt-2
+  5D,00,00,00,04,05,20,\ ; Yellow    - sends ctrl-alt-3
+  5E,00,00,00,04,05,21   ; Blue      - sends ctrl-alt-4

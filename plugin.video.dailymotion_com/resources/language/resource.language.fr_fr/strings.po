@@ -1,0 +1,258 @@
+# XBMC Media Center language file
+# Addon Name: DailyMotion.com
+# Addon id: plugin.video.dailymotion_com
+
+msgid ""
+msgstr ""
+
+msgctxt "Addon Summary"
+msgid "Movies, TV, Music, User-Clips, 3D and Livestreams"
+msgstr "Films, Séries TV, Musique, Clips, 3D et Live"
+
+msgctxt "Addon Description"
+msgid "Movies, TV, Music, User-Clips, 3D and Livestreams"
+msgstr "Films, Séries TV, Musique, Clips, 3D et Live"
+
+msgctxt "Addon Disclaimer"
+msgid "Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing."
+msgstr "Certaines parties de cet addon peuvent ne pas être légales dans votre pays de résidence - s’il vous plaît vérifier avec vos lois locales avant d’installer"
+
+msgctxt "#30001"
+msgid "Next Page"
+msgstr "Page suivante"
+
+msgctxt "#30002"
+msgid "Search"
+msgstr "Rechercher"
+
+msgctxt "#30003"
+msgid "Live"
+msgstr "Live"
+
+msgctxt "#30004"
+msgid "Movies"
+msgstr "Films"
+
+msgctxt "#30005"
+msgid "Popular"
+msgstr "Populaire"
+
+msgctxt "#30006"
+msgid "Channels"
+msgstr "Chaînes"
+
+msgctxt "#30007"
+msgid "Users"
+msgstr "Utilisateurs"
+
+msgctxt "#30008"
+msgid "Most Recent"
+msgstr "Les plus récent"
+
+msgctxt "#30009"
+msgid "Most Viewed"
+msgstr "Les plus regardé"
+
+msgctxt "#30010"
+msgid "Hour"
+msgstr "Heure"
+
+msgctxt "#30011"
+msgid "Today"
+msgstr "Aujourd'hui"
+
+msgctxt "#30012"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt "#30013"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "#30014"
+msgid "All Time"
+msgstr "Date indifférente"
+
+msgctxt "#30015"
+msgid "Trending"
+msgstr "Tendance"
+
+msgctxt "#30016"
+msgid "Featured"
+msgstr "Les plus connu"
+
+msgctxt "#30017"
+msgid "Official"
+msgstr "Officiel"
+
+msgctxt "#30018"
+msgid "Creative"
+msgstr "Créatif"
+
+msgctxt "#30019"
+msgid "Most Popular"
+msgstr "Les plus populaire"
+
+msgctxt "#30020"
+msgid "Most Commented"
+msgstr "Les plus commenté"
+
+msgctxt "#30021"
+msgid "Top Rated"
+msgstr "Meilleur classement"
+
+msgctxt "#30022"
+msgid "Video not available"
+msgstr "Vidéo non disponible"
+
+msgctxt "#30023"
+msgid "Added"
+msgstr "Ajouter"
+
+msgctxt "#30024"
+msgid "Favourites"
+msgstr "Favoris"
+
+msgctxt "#30025"
+msgid "What to Watch"
+msgstr "Recommandées pour vous"
+
+# empty strings from id 30026 to 30027
+
+msgctxt "#30028"
+msgid "Add user to favourites"
+msgstr "Ajouter l'utilisateur aux favoris"
+
+msgctxt "#30029"
+msgid "Remove from favourites"
+msgstr "Supprimer des favoris"
+
+msgctxt "#30030"
+msgid "Added user to favourites"
+msgstr "Ajouté aux favoris"
+
+msgctxt "#30031"
+msgid "Are you over 18 and would like to turn off the family filter?"
+msgstr "Vous avez plus de 18 ans et souhaitez désactiver le filtre familial?"
+
+msgctxt "#30032"
+msgid "Turn the family filter on?"
+msgstr "Activez le filtre familial?"
+
+msgctxt "#30033"
+msgid "Add user"
+msgstr "Ajouter un utilisateur"
+
+msgctxt "#30034"
+msgid "My stuff"
+msgstr "Mes affaires"
+
+msgctxt "#30035"
+msgid "Contacts"
+msgstr "Contacts"
+
+msgctxt "#30036"
+msgid "Following"
+msgstr "Prochain"
+
+msgctxt "#30037"
+msgid "Favourites"
+msgstr "Favoris"
+
+msgctxt "#30038"
+msgid "Playlists"
+msgstr "Playlists"
+
+msgctxt "#30039"
+msgid "3D"
+msgstr "3D"
+
+msgctxt "#30040"
+msgid "All"
+msgstr "Tout"
+
+msgctxt "#30041"
+msgid "Videos"
+msgstr "Vidéos"
+
+msgctxt "#30042"
+msgid "Groups"
+msgstr "Groupes"
+
+msgctxt "#30043"
+msgid "Add to queue"
+msgstr "Ajouter à la liste"
+
+msgctxt "#30044"
+msgid "Download video"
+msgstr "Télécharger la video"
+
+# empty strings from id 30045 to 30100
+
+msgctxt "#30101"
+msgid "Country"
+msgstr "Pays"
+
+msgctxt "#30102"
+msgid "Force View"
+msgstr "Forcer l'affichage"
+
+msgctxt "#30103"
+msgid "ViewID"
+msgstr "Affichage ID"
+
+msgctxt "#30104"
+msgid "Family Filter"
+msgstr "Filtre parental"
+
+msgctxt "#30105"
+msgid "Maximum resolution"
+msgstr "Résolution maximale"
+
+msgctxt "#30106"
+msgid "Dailymotion Username"
+msgstr "Nom d'utilisateur Dailymotion"
+
+msgctxt "#30107"
+msgid "Items per page"
+msgstr "Articles par page"
+
+msgctxt "#30108"
+msgid "Download directory"
+msgstr "Répertoire de téléchargement"
+
+msgctxt "#30109"
+msgid "File already exists"
+msgstr "Le fichier existe déjà"
+
+msgctxt "#30110"
+msgid "Choose download directory in Settings"
+msgstr "Choisissez le répertoire de téléchargement dans les paramètres"
+
+msgctxt "#30111"
+msgid "General"
+msgstr "Général"
+
+msgctxt "#30112"
+msgid "Download"
+msgstr "Téléchargement"
+
+msgctxt "#30113"
+msgid "Miscellaneous"
+msgstr "Divers"
+
+msgctxt "#30114"
+msgid "Mature Content"
+msgstr "Contenus adultes"
+
+msgctxt "#30115"
+msgid "Search history"
+msgstr "Historique des recherches"
+
+msgctxt "#30116"
+msgid "Clear search history"
+msgstr "Effacer l'historique des recherches"
+
+msgctxt "#30117"
+msgid "New Search term"
+msgstr "Nouveau terme de recherche"

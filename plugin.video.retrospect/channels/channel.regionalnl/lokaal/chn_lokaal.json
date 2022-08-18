@@ -1,0 +1,33 @@
+{
+  "channels": [
+    {
+      "guid": "B2AF5744-4697-44CD-9A54-CFD6A4273207",
+      "name": "Omroep Gelderland",
+      "description": {
+        "en": "Video on demand for Omroep Gelderland.\n\nKeep up-to-date with the latest news from Gelderland.",
+        "nl": "Omroep Gelderland Uitzendinggemist.\n\nAltijd op de hoogte van het laatste Gelderse nieuws."
+      },
+      "icon": "omroepgelderlandlarge.png",
+      "category": "Regional",
+      "channelcode": "omroepgelderland",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "omroepgelderlandfanart.jpg",
+      "ignore": true
+    },
+    {
+      "guid": "81CD5339-0D59-4019-9171-12A98815311C",
+      "name": "Omrop Fryslân",
+      "description": {
+        "en": "Video on demand for Omrop Fryslân.\n\nOmrop Fryslân is the regional broadcaster of Friesland. The broadcaster brings news on the internet, radio and TV.",
+        "nl": "Omrop Fryslân Uitzendinggemist.\n\nOmrop Fryslân is de regionale stjoerder fan Fryslân. De omrop bringt nijs op ynternet, radio en tv."
+      },
+      "icon": "omropfryslanlarge.png",
+      "category": "Regional",
+      "channelcode": "omropfryslan",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "omropfryslanfanart.jpg"
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+# XBMC Media Center language file
+# Addon Name: IMDb Trailers
+# Addon id: plugin.video.imdb.trailers
+
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-11-03 00:21+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "IMDb Trailers video add-on"
+msgstr "Module vidéo IMDb Trailers"
+
+msgctxt "Addon Description"
+msgid "Watch movie trailers available on IMDb"
+msgstr "Regarder les bandes-annonces disponibles sur IMDb"
+
+msgctxt "Addon Disclaimer"
+msgid "This third party addon is not in any way commissioned or endorsed by Amazon or IMDb"
+msgstr "Cet additif tiers n'est en aucun cas commandé ou approuvé par Amazon ou IMDb."
+
+
+msgctxt "#30000"
+msgid "IMDb Trailers"
+msgstr "Trailers IMDb"
+
+msgctxt "#30001"
+msgid "Video Quality"
+msgstr "Qualité vidéo"
+
+msgctxt "#30002"
+msgid "Cache Timeout in hours"
+msgstr "Cache Timeout en heures"
+
+msgctxt "#30003"
+msgid "View Mode"
+msgstr "Mode d'affichage"
+
+msgctxt "#30004"
+msgid "Force View Mode"
+msgstr "Mode d'affichage forcé"
+
+msgctxt "#30005"
+msgid "Main Menu Mode"
+msgstr "Mode du menu principal"
+
+msgctxt "#30006"
+msgid "Video Menu Mode"
+msgstr "Mode Menu Vidéo"
+
+msgctxt "#30007"
+msgid "Enable Debug Mode"
+msgstr "Activer le mode de débogage"
+
+# empty strings from id 30008 to 30200
+
+msgctxt "#30201"
+msgid "In Cinemas"
+msgstr "Dans les cinémas"
+
+msgctxt "#30202"
+msgid "Coming Soon"
+msgstr "Arrive bientôt"
+
+msgctxt "#30203"
+msgid "Popular Trailers"
+msgstr "Trailers populaires"
+
+msgctxt "#30204"
+msgid "Recent Trailers"
+msgstr "Trailers récents"
+
+msgctxt "#30205"
+msgid "Television Tonight"
+msgstr "Télévision ce soir"
+
+msgctxt "#30206"
+msgid "Search Title"
+msgstr "Recherche Titre"
+
+msgctxt "#30207"
+msgid "Clear Cache"
+msgstr "Vider le cache"
+
+msgctxt "#30208"
+msgid "Trending Trailers"
+msgstr "Trailers tendance"
+
+msgctxt "#30209"
+msgid "Most Anticipated"
+msgstr "Le plus attendu"
+
+msgctxt "#30210"
+msgid "Most Popular"
+msgstr "Les plus populaires"
+
+msgctxt "#30211"
+msgid "Recently Added"
+msgstr "Récemment ajouté"

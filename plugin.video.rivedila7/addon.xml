@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.rivedila7" name="LA7-LA7d" version="6.0.1" provider-name="Luivit, Testato">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.requests" version="0.0.0"/>
+    <import addon="script.module.inputstreamhelper" version="0.0.0"/>
+    <import addon="script.module.beautifulsoup4" version="0.0.0"/>
+    <import addon="script.module.html5lib" version="0.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <reuselanguageinvoker>true</reuselanguageinvoker>
+    <summary lang="en_GB">LA7-LA7d</summary>
+    <description lang="en_GB">Live Streaming, Replay the last week, LA7 Prime, On-Demand programs, News and Weather, Teche LA7-The Protagonists</description>
+    <summary lang="it_IT">LA7-LA7d</summary>
+    <description lang="it_IT">Diretta Live, Rivedi ultima settimana, LA7 Prime, Programmi On-Demand, Telegiornali e Meteo, Teche LA7-I Protagonisti</description>
+    <language>it</language>
+    <platform>all</platform>
+    <license>GPL-3.0-only</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=331064</forum>
+    <website>https://www.la7.it</website>
+    <email>luivit39@gmail.com, speednpower@gmail.com</email>
+    <source>https://github.com/luivit/plugin.video.rivedila7</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+      <screenshot>resources/screenshots/screenshot-00.jpg</screenshot>
+      <screenshot>resources/screenshots/screenshot-01.jpg</screenshot>
+      <screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
+    </assets>
+    <news>6.0.1 (2021-05-15)
+- inputstream.adaptive-2.6.15 adapt
+
+6.0.0 (2021-05-03)
+- Plugin reworked (thanks @CastagnaIT)
+- Temporary fix for Live  parameter suggestedPresentationDelay
+    
+5.4.0 (2021-04-17)
+- Temporary fix for decryption on L1 device
+    </news>
+  </extension>
+</addon>

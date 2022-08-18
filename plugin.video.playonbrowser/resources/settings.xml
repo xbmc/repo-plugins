@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="30018">
+    <setting label="30002" type="text"   id="playonserver"   default="http://localhost:54479"   enable="false"/>
+    <setting label="30005" type="text"   id="playonServerid" default=""                         enable="false"/>
+    <setting label="30003" type="enum"   id="playonmedia"    default="0"                        values="M3U8|UPNP|EXT" />
+    <setting label="30004" type="text"   id="playonUPNPid"   default=""                         enable="false" visible="eq(-1,1)"/>
+    <setting label="30000" type="bool"   id="debug"          default="false"/>
+  </category> 
+</settings>

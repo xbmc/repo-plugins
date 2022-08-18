@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.tekthing"
+       name="Tekthing"
+       version="1.0.5+matrix.1"
+       provider-name="Skipmode A1">
+  <requires>
+    <import addon="xbmc.python"                     version="3.0.0"/>
+    <import addon="xbmc.addon"                      version="12.0.0"/>
+	<import addon="script.module.beautifulsoup4"    version="4.3.2"/>
+    <import addon="script.module.requests"          version="2.4.3"/>
+    <import addon="script.module.future"            version="0.0.1"/>
+  	<import addon="script.module.html5lib"          version="0.999.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+	<summary lang="en_GB">You'll find something useful in every episode of TekThing: product reviews, how-to's, breakdowns on the big stories, and interviews with best experts around!</summary>
+	<description lang="en_GB">Whether tech is a passion, or something you deal with because you have to, you'll find something useful in every episode of TekThing: product reviews, how-to's, breakdowns on the big stories, and interviews with best experts around!</description>
+	<disclaimer lang="en_GB">For bugs, requests or general questions visit the Tekthing.com thread on the Kodi.tv forum</disclaimer>
+    <language>en</language>
+    <platform>all</platform>
+	<license>GPL-2.0-or-later</license>
+    <forum>http://forum.kodi.tv/showthread.php?tid=235175</forum>
+    <website>http://tekthing.com</website>
+    <source>https://github.com/skipmodea1/plugin.video.tekthing.python3</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+	<broken>Marked addon BROKEN due to discontinued show</broken>		
+  </extension>
+</addon>

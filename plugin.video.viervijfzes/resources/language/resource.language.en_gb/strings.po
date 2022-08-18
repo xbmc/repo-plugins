@@ -1,0 +1,231 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+### MENUS
+msgctxt "#30001"
+msgid "A-Z"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Alphabetically sorted list of programs"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Catalogue"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Browse the catalogue"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Recommendations"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Show the recommendations"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Show channel based overview"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Search trough the catalogue"
+msgstr ""
+
+msgctxt "#30011"
+msgid "My List"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Browse My List"
+msgstr ""
+
+msgctxt "#30013"
+msgid "TV guide"
+msgstr ""
+
+
+### SUBMENUS
+msgctxt "#30053"
+msgid "TV Guide for [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Browse the TV Guide for [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30055"
+msgid "Catalog for [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30056"
+msgid "Browse the Catalog for [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30059"
+msgid "Clips of [B]{program}[/B]"
+msgstr ""
+
+msgctxt "#30060"
+msgid "Watch short clips of [B]{program}[/B]"
+msgstr ""
+
+
+### CONTEXT MENU
+msgctxt "#30100"
+msgid "Add to My List"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Remove from My List"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Go to Program"
+msgstr ""
+
+
+### CODE
+msgctxt "#30204"
+msgid "All seasons"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Season {season}"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Watch [B]{label}[/B] on YouTube"
+msgstr ""
+
+
+### Dates
+msgctxt "#30301"
+msgid "Yesterday"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Today"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Tomorrow"
+msgstr ""
+
+
+### MESSAGES
+msgctxt "#30701"
+msgid "To watch a video, you need to enter your credentials. Do you want to enter them now?"
+msgstr ""
+
+msgctxt "#30702"
+msgid "An error occurred while authenticating: {error}."
+msgstr ""
+
+msgctxt "#30710"
+msgid "This video is geo-blocked and can't be played from your location."
+msgstr ""
+
+msgctxt "#30712"
+msgid "The video is unavailable and can't be played right now."
+msgstr ""
+
+msgctxt "#30713"
+msgid "The requested video was not found in the guide."
+msgstr ""
+
+msgctxt "#30717"
+msgid "This program is not available in the catalogue."
+msgstr ""
+
+msgctxt "#30718"
+msgid "There is no live stream available for {channel}."
+msgstr ""
+
+msgctxt "#30719"
+msgid "This video cannot be played."
+msgstr ""
+
+msgctxt "#30720"
+msgid "This video is not available abroad."
+msgstr ""
+
+
+### SETTINGS
+msgctxt "#30800"
+msgid "Credentials"
+msgstr ""
+
+msgctxt "#30801"
+msgid "Credentials"
+msgstr ""
+
+msgctxt "#30802"
+msgid "Email address"
+msgstr ""
+
+msgctxt "#30803"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30820"
+msgid "Interface"
+msgstr ""
+
+msgctxt "#30821"
+msgid "Show unavailable programs"
+msgstr ""
+
+msgctxt "#30840"
+msgid "Integration"
+msgstr ""
+
+msgctxt "#30841"
+msgid "IPTV Manager"
+msgstr ""
+
+msgctxt "#30842"
+msgid "Install IPTV Manager add-on…"
+msgstr ""
+
+msgctxt "#30843"
+msgid "Enable IPTV Manager integration"
+msgstr ""
+
+msgctxt "#30844"
+msgid "IPTV Manager settings…"
+msgstr ""
+
+msgctxt "#30880"
+msgid "Expert"
+msgstr ""
+
+msgctxt "#30881"
+msgid "Logging"
+msgstr ""
+
+msgctxt "#30882"
+msgid "Enable debug logging"
+msgstr ""
+
+msgctxt "#30883"
+msgid "Install Kodi Logfile Uploader…"
+msgstr ""
+
+msgctxt "#30884"
+msgid "Open Kodi Logfile Uploader…"
+msgstr ""

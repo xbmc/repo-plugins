@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.wdrmaus" name="WDR Maus" version="2.0.0" provider-name="sarbes">
+    <requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.requests" version="2.19.1"/>
+		<import addon="script.module.libwdr" version="2.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+		<language>de</language>
+		<license>GPL-2.0-only</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=353903</forum>
+		<source>https://github.com/sarbes/plugin.video.wdrmaus</source>
+        <website>https://www.wdrmaus.de/</website>
+        <summary lang="en_GB">View videos from the German tv broadcaster "WDR" catered towards children.</summary>
+        <description lang="en_GB">This add-on lists the videos of the WDR Maus website. Videos may be geolocked.</description>
+        <summary lang="de_DE">Die Kindermediathek des WDR.</summary>
+        <description lang="de_DE">Dieses Add-on bietet Zugriff auf die Kindermediathek des WDR.</description>
+        <disclaimer lang="de_DE">Dieses Add-on wird von keiner Sendeanstalt unterstützt und ist daher inoffiziell.</disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

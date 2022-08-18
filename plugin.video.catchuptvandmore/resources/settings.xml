@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+
+    <!-- General -->
+    <category label="30009">
+        <!-- General -->
+        <setting label="30009" type="lsep" />
+            <setting label="30430" type="bool" id="auto_run" default="false"/>
+            <setting label="30373" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/favourites/delete_favourites/)"/>
+
+        <!-- Menu items -->
+        <setting label="30403" type="lsep" />
+            <!-- Restore default order of all menus -->
+            <setting label="30400" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/restore_default_order/)"/>
+            <!-- Unmask all hidden items -->
+            <setting label="30401" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_all_hidden_items/)"/>
+            <!-- Select items to unmask -->
+            <setting label="30402" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/menu_utils/unmask_items/)"/>
+    </category>
+    <!-- General -->
+
+
+
+
+    <!-- Quality and Content -->
+    <category label="30002">
+
+        <!-- Video quality -->
+        <setting label="30150" type="lsep" />
+            <setting label="30151" type="labelenum" id="quality" values="BEST|DEFAULT|DIALOG" default="BEST"/>
+
+
+        <!-- Content -->
+        <setting label="30152" type="lsep" />
+
+            <!-- TV Guide -->
+            <setting label="30168" type="bool" id="tv_guide" default="true"/>
+
+            <!-- Subtitle -->
+            <setting label="30169" type="bool" id="active_subtitle" default="false"/>
+
+            <!-- International channels -->
+            <setting label="30085" type="lsep" subsetting="true" visible="eq(1,true)"/>
+            <!--<setting label="" type="bool" id="wo" default="true" visible="false"/>-->
+
+                <setting label="30153" type="labelenum" id="arte.language" values="FR|DE|EN|ES|PL|IT" default="FR"/>
+                <setting label="30155" type="labelenum" id="euronews.language" values="FR|EN|AR|DE|IT|ES|PT|RU|TR|FA|GR|HU" default="FR"/>
+                <setting label="30154" type="labelenum" id="france24.language" values="FR|EN|AR|ES" default="FR"/>
+                <setting label="30157" type="labelenum" id="dw.language" values="EN|DE|ES|AR" default="EN"/>
+                <setting label="30161" type="labelenum" id="qvc.language" values="JP|DE|IT|UK|US" default="UK"/>
+                <setting label="30162" type="labelenum" id="nhkworld.language" values="Outside Japan|In Japan" default="Outside Japan"/>
+                <setting label="30163" type="labelenum" id="cgtn.language" values="FR|EN|AR|ES|RU" default="FR"/>
+                <setting label="30166" type="labelenum" id="rt.language" values="FR|EN|AR|ES" default="FR"/>
+                <setting label="30172" type="labelenum" id="tv5mondeplus.country" values="FR|BE|DE|PT|DK|LT|HR|LV|UA|HU|MD|ME|IE|MK|EE|IL|IM|MT|IS|AL|IT|VA|AM|ES|AQ|AT|AX|AZ|JE|RO|NL|BA|NO|RS|FI|RU|BG|FO|SE|BV|SI|BY|SJ|SK|SM|GB|GE|GG|GI|GL|GR|XK|CY|CZ|PL|LI|TR" default="FR"/>
+                <setting label="30173" type="labelenum" id="tv5mondeplus.language" values="fr|en|de|es-LA" default="fr"/>
+
+            <!-- French channels -->
+            <setting label="30080" type="lsep" subsetting="true" visible="eq(1,true)"/>
+            <!--<setting label="" type="bool" id="fr" default="true" visible="false"/>-->
+
+                <setting label="30158" type="labelenum" id="france3regions.language" values="Alpes|Alsace|Aquitaine|Auvergne|Bourgogne|Bretagne|Centre-Val de Loire|Chapagne-Ardenne|Corse|Côte d'Azur|Franche-Comté|Languedoc-Roussillon|Limousin|Lorraine|Midi-Pyrénées|Nord-Pas-de-Calais|Basse-Normandie|Haute-Normandie|Paris Île-de-France|Pays de la Loire|Picardie|Poitou-Charentes|Provence-Alpes|Rhône-Alpes|Nouvelle-Aquitaine" default="Alpes"/>
+                <setting label="30159" type="labelenum" id="la_1ere.language" values="Guadeloupe|Guyane|Martinique|Mayotte|Nouvelle Calédonie|Polynésie|Réunion|St-Pierre et Miquelon|Wallis et Futuna|Outre-mer" default="Guadeloupe"/>
+                <setting label="30171" type="labelenum" id="BFM_Régions.language" values="BFM DICI HAUTE-PROVENCE|BFM Grand Lille|BFM Grand Littoral|BFM Lyon|BFM MARSEILLE PROVENCE|BFM NICE COTE D'AZUR|BFM Paris|BFM TOULON VAR" default="BFM Paris"/>
+
+            <!-- Spain channels -->
+            <setting label="30089" type="lsep" subsetting="true" visible="eq(1,true)"/>
+            <!--<setting label="" type="bool" id="es" default="true" visible="false"/>-->
+
+                <setting label="30165" type="labelenum" id="realmadridtv.language" values="ES|EN" default="ES"/>
+
+            <!-- Polish channels -->
+            <setting label="30088" type="lsep" subsetting="true" visible="eq(1,true)"/>
+            <!--<setting label="" type="bool" id="pl" default="true" visible="false"/>-->
+
+                <setting label="30167" type="labelenum" id="tvp3.language" values="Białystok|Bydgoszcz|Gdańsk|Gorzów Wielkopolski|Katowice|Kielce|Kraków|Lublin|Łódź|Olsztyn|Opole|Poznań|Rzeszów|Szczecin|Warszawa|Wrocław" default="Białystok"/>
+
+            <!-- Canadian channels -->
+            <setting label="30086" type="lsep" subsetting="true" visible="eq(1,true)"/>
+            <!--<setting label="" type="bool" id="pl" default="true" visible="false"/>-->
+
+                <setting label="30164" type="labelenum" id="icitele.language" values="Vancouver|Regina|Toronto|Edmonton|Rimouski|Québec|Winnipeg|Moncton|Ottawa|Sherbrooke|Trois-Rivières|Montréal" default="Montréal"/>
+                <setting label="30170" type="labelenum" id="cbc.language" values="Ottawa|Montreal|Charlottetown|Fredericton|Halifax|Windsor|Yellowknife|Winnipeg|Regina|Calgary|Edmonton|Vancouver|Toronto|St. John\'s" default="Ottawa"/>
+
+    </category>
+    <!-- Quality and Content -->
+
+
+
+
+    <!-- Downloads -->
+    <category label="30003">
+        <setting label="30012" type="lsep"/>
+        <setting label="30200" type="folder" id="dl_folder" source="" option="writeable"/>
+        <setting label="30201" type="labelenum" id="dl_quality" visible="true" values="SD|720p|1080p|Highest available" default="Highest available"/>
+        <setting label="30202" type="bool" id="dl_background" default="false" visible="true"/>
+        <setting label="30203" type="bool" id="dl_item_filename" default="false" visible="true"/>
+    </category>
+    <!-- Downloads -->
+
+
+
+
+    <!-- Accounts -->
+    <category label="30004">
+
+        <setting label="30080" type="lsep" subsetting="true" visible="eq(1,true)"/>
+        <!--<setting label="" type="bool" id="fr" default="true" visible="false"/>-->
+
+            <setting label="30240" type="text" id="nrj.login" default=""/>
+            <setting label="30241" type="text" id="nrj.password" option="hidden" default=""/>
+
+            <setting label="30244" type="text" id="6play.login" default=""/>
+            <setting label="30245" type="text" id="6play.password" option="hidden" default=""/>
+
+            <setting label="30248" type="text" id="abweb.login" default=""/>
+            <setting label="30249" type="text" id="abweb.password" option="hidden" default=""/>
+
+            <setting label="30252" type="text" id="rmcbfmplay.login" default=""/>
+            <setting label="30253" type="text" id="rmcbfmplay.password" option="hidden" default=""/>
+
+        <setting label="30081" type="lsep" subsetting="true" visible="eq(1,true)"/>
+        <!--<setting label="" type="bool" id="be" default="true" visible="false"/>-->
+
+            <setting label="30242" type="text" id="vrt.login" default=""/>
+            <setting label="30243" type="text" id="vrt.password" option="hidden" default=""/>
+
+            <setting label="30246" type="text" id="rtlplaybe.login" default=""/>
+            <setting label="30247" type="text" id="rtlplaybe.password" option="hidden" default=""/>
+
+        <setting label="30084" type="lsep" subsetting="true" visible="eq(1,true)"/>
+        <!--<setting label="" type="bool" id="be" default="true" visible="false"/>-->
+
+            <setting label="30250" type="text" id="uktvplay.login" default=""/>
+            <setting label="30251" type="text" id="uktvplay.password" option="hidden" default=""/>
+
+    </category>
+    <!-- Accounts -->
+
+
+    <!--TV integration -->
+    <category label="30270"> 
+        <!-- Kodi Live TV integration -->
+        <setting label="30271" type="lsep"/>
+            <!-- Install IPTV Manager add-on -->
+            <setting label="30272" type="action" action="InstallAddon(service.iptv.manager)" option="close" visible="!System.HasAddon(service.iptv.manager)"/>
+            <!-- Enable Kodi Live TV integration -->
+            <setting label="30273" type="bool" id="iptv.enabled" default="true" visible="System.HasAddon(service.iptv.manager)"/>
+            <!-- Select channels to enable -->
+            <setting label="30275" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/iptvmanager/select_channels/)" enable="eq(-1,true)" visible="System.HasAddon(service.iptv.manager)" subsetting="true"/>
+            <!-- Open IPTV Manager settings -->
+            <setting label="30274" type="action" action="Addon.OpenSettings(service.iptv.manager)" enable="eq(-2,true)" option="close" visible="System.HasAddon(service.iptv.manager)" subsetting="true"/>
+
+            <setting type="text" id="iptv.channels_uri" default="plugin://plugin.video.catchuptvandmore/resources/lib/iptvmanager/channels/" visible="false"/>
+            <setting type="text" id="iptv.epg_uri" default="plugin://plugin.video.catchuptvandmore/resources/lib/iptvmanager/epg/" visible="false"/>
+    </category>
+
+
+
+
+
+
+
+
+
+    <!-- Advanced settings / Tools and other things to save -->
+    <category label="30005">
+        <setting label="30372" type="bool" id="log_pop_up" default="true"/>
+        <setting label="30370" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/addon_utils/clear_cache/)"/>
+        <setting label="" type="bool" id="show_hidden_items_information" default="true" visible="false"/>
+        <setting label="" type="bool" id="show_live_tv_m3u_info" default="true" visible="false"/>
+        <setting label="X-Forwarded-For" type="text" id="header_x-forwarded-for" default=""/>
+    </category>
+    <!-- Advanced settings / Tools and other things to save -->
+
+
+
+
+</settings>

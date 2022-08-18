@@ -1,0 +1,33 @@
+{
+  "channels": [
+    {
+      "guid": "EF46E726-92F4-42FC-A6D4-68A888E23E96",
+      "name": "RTV Noord-Holland",
+      "description": {
+        "en": "Video on demand for RTV Noord-Holland.\n\nThe latest headlines from Noord-Holland, 24 hours a day, 7 days a week.",
+        "nl": "RTV Noord-Holland Uitzendinggemist.\n\nHet laatste nieuws uit Noord-Holland, 24 uur per dag, zeven dagen per week."
+      },
+      "icon": "rtvnhlarge.png",
+      "category": "Regional",
+      "channelcode": "rtvnh",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "rtvnhfanart.jpg"
+    },
+    {
+      "guid": "870EAD32-F2F9-11DD-B0E7-747356D89593",
+      "name": "AT5",
+      "description": {
+        "en": "Video on demand for AT5.\n\nAT5 is the news broadcaster from Amsterdam and surrounding area. Visit www.AT5.nl for the latest news from Amsterdam!",
+        "nl": "AT5 Uitzendinggemist.\n\nAT5 is de nieuwszender van Amsterdam en omgeving. Volg www.AT5.nl voor het laatste nieuws uit Amsterdam!"
+      },
+      "icon": "at5large.png",
+      "category": "Regional",
+      "sortorder": 100,
+      "language": "nl",
+      "fanart": "at5fanart.jpg",
+      "poster": "at5poster.jpg",
+      "adaptiveAddonSelectable": true
+    }
+  ]
+}

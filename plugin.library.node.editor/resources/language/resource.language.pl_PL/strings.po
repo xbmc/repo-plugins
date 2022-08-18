@@ -1,0 +1,326 @@
+# Kodi Media Center language file
+# Addon Name: Library Node Editor
+# Addon id: plugin.library.node.editor
+# Addon Provider: Unfledged, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-08-04 13:29+0000\n"
+"Last-Translator: Marek Adamski <fevbew@wp.pl>\n"
+"Language-Team: Polish <https://kodi.weblate.cloud/projects/kodi-add-ons-program/plugin-library-node-editor/pl_pl/>\n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.7.2\n"
+
+msgctxt "Addon Summary"
+msgid "Manage custom library nodes."
+msgstr "Zarządzanie niestandardowymi węzłami biblioteki."
+
+msgctxt "Addon Description"
+msgid "Create and edit custom library nodes."
+msgstr "Tworzenie i edytowanie niestandardowych węzłów biblioteki."
+
+msgctxt "#30000"
+msgid "Add content..."
+msgstr "Dodaj zawartość..."
+
+msgctxt "#30001"
+msgid "Add path..."
+msgstr "Dodaj ścieżkę..."
+
+msgctxt "#30002"
+msgid "Add order..."
+msgstr "Dodaj kolejność..."
+
+msgctxt "#30003"
+msgid "Add limit..."
+msgstr "Dodaj ograniczenie..."
+
+msgctxt "#30004"
+msgid "Add grouping..."
+msgstr "Dodaj grupowanie..."
+
+msgctxt "#30005"
+msgid "Add rule..."
+msgstr "Dodaj regułę..."
+
+msgctxt "#30006"
+msgid "New node..."
+msgstr "Dodaj węzeł..."
+
+msgctxt "#30007"
+msgid "New parent node..."
+msgstr "Nowy węzeł nadrzędny..."
+
+msgctxt "#30008"
+msgid "Reset library nodes to default..."
+msgstr "Przywróć domyśle węzły biblioteki..."
+
+msgctxt "#30009"
+msgid "Add component..."
+msgstr "Dodaj komponent..."
+
+msgctxt "#30010"
+msgid "Manually edit..."
+msgstr "Edytuj ręcznie..."
+
+msgctxt "#30091"
+msgid "Video Library"
+msgstr "Biblioteka wideo"
+
+msgctxt "#30092"
+msgid "Music Library"
+msgstr "Biblioteka muzyki"
+
+msgctxt "#30100"
+msgid "Delete"
+msgstr "Usuń"
+
+msgctxt "#30101"
+msgid "Edit label"
+msgstr "Edytuj etykietę"
+
+msgctxt "#30102"
+msgid "Edit icon"
+msgstr "Edytuj ikonę"
+
+msgctxt "#30103"
+msgid "Browse for icon"
+msgstr "Wybierz ikonę"
+
+msgctxt "#30104"
+msgid "Move node"
+msgstr "Przenieś węzeł"
+
+msgctxt "#30105"
+msgid "Edit visibility"
+msgstr "Edytuj widoczność"
+
+msgctxt "#30106"
+msgid "Add to main menu"
+msgstr "Dodaj do menu startowego"
+
+msgctxt "#30107"
+msgid "Browse for value"
+msgstr "Wybierz wartość"
+
+msgctxt "#30200"
+msgid "Content"
+msgstr "Zawartość"
+
+msgctxt "#30201"
+msgid "Order"
+msgstr "Kolejność"
+
+msgctxt "#30202"
+msgid "Grouping"
+msgstr "Grupowanie"
+
+msgctxt "#30203"
+msgid "Limit"
+msgstr "Ograniczenie"
+
+msgctxt "#30204"
+msgid "Path"
+msgstr "Ścieżka"
+
+msgctxt "#30205"
+msgid "Rule"
+msgstr "Reguła"
+
+msgctxt "#30206"
+msgid "Match"
+msgstr "Dopasowanie"
+
+msgctxt "#30300"
+msgid "Set name"
+msgstr "Ustaw nazwę"
+
+msgctxt "#30301"
+msgid "Set visibility condition"
+msgstr "Ustaw warunek widoczności"
+
+msgctxt "#30302"
+msgid "Set order index"
+msgstr "Ustaw indeks kolejności"
+
+msgctxt "#30303"
+msgid "Name of new parent node"
+msgstr "Nazwa nowego węzła nadrzędnego"
+
+msgctxt "#30304"
+msgid "Start with defaults"
+msgstr "Rozpocznij z domyślnymi"
+
+msgctxt "#30305"
+msgid "Field"
+msgstr "Pole"
+
+msgctxt "#30306"
+msgid "Operator"
+msgstr "Operator"
+
+msgctxt "#30307"
+msgid "Value"
+msgstr "Wartość"
+
+msgctxt "#30308"
+msgid "Content type"
+msgstr "Typ zawartości"
+
+msgctxt "#30309"
+msgid "Content"
+msgstr "Zawartość"
+
+msgctxt "#30310"
+msgid "Group"
+msgstr "Grupa"
+
+msgctxt "#30311"
+msgid "Limit"
+msgstr "Ograniczenie"
+
+msgctxt "#30312"
+msgid "Path"
+msgstr "Ścieżka"
+
+msgctxt "#30313"
+msgid "Icon"
+msgstr "Ikona"
+
+msgctxt "#30314"
+msgid "Order by"
+msgstr "Sortuj wg"
+
+msgctxt "#30315"
+msgid "Direction"
+msgstr "Kierunek"
+
+msgctxt "#30316"
+msgid "Name of new node"
+msgstr "Nazwa nowego węzła"
+
+msgctxt "#30317"
+msgid "Retrieving values..."
+msgstr "Pobieranie wartości..."
+
+msgctxt "#30318"
+msgid "Property"
+msgstr "Własność"
+
+msgctxt "#30400"
+msgid "Unable to copy default library nodes"
+msgstr "Nieudane kopiowanie domyślnych węzłów biblioteki"
+
+msgctxt "#30401"
+msgid "Are you sure you want to delete this node?"
+msgstr "Jesteś pewien, że chcesz usunąć ten węzeł?"
+
+msgctxt "#30402"
+msgid "Are you sure you want to reset all nodes?"
+msgstr "Jesteś pewien, że chcesz wyczyścić wszystkie węzły?"
+
+msgctxt "#30403"
+msgid "Are you sure you want to delete this property?"
+msgstr "Jesteś pewien, że chcesz usunąć tę właściwość?"
+
+msgctxt "#30404"
+msgid "Content parameter can't be deleted whilst this node still has an Order, Limit or Rule parameter."
+msgstr "Parametr zawartości nie może zostać usunięty, gdy ten węzeł ciągle ma parametr kolejności, ograniczenia lub regułę."
+
+msgctxt "#30405"
+msgid "Are you sure you want to delete this rule?"
+msgstr "Jesteś pewien, że chcesz usunąć tę regułę?"
+
+msgctxt "#30406"
+msgid "Order requires a Content parameter"
+msgstr "Kolejność wymaga parametru zawartości"
+
+msgctxt "#30407"
+msgid "Are you sure you want to delete this component?"
+msgstr "Czy na pewno chcesz usunąć ten komponent?"
+
+msgctxt "#30408"
+msgid "Custom property..."
+msgstr "Własność niestandardowa..."
+
+msgctxt "#30409"
+msgid "No options to select from were found"
+msgstr "Nie znaleziono opcji do wyboru"
+
+msgctxt "#30410"
+msgid "Getting plugin listings..."
+msgstr "Pobieranie listy wtyczek..."
+
+msgctxt "#30411"
+msgid "Link path to here"
+msgstr "Ścieżka łącza tutaj"
+
+msgctxt "#30500"
+msgid "Genre ID"
+msgstr "Identyfikator gatunku"
+
+msgctxt "#30501"
+msgid "Country ID"
+msgstr "Identyfikator kraju"
+
+msgctxt "#30502"
+msgid "Studio ID"
+msgstr "Identyfikator studia"
+
+msgctxt "#30503"
+msgid "Director ID"
+msgstr "Identyfikator reżysera"
+
+msgctxt "#30504"
+msgid "Actor ID"
+msgstr "Identyfikator aktora"
+
+msgctxt "#30505"
+msgid "Set ID"
+msgstr "Identyfikator zestawu"
+
+msgctxt "#30506"
+msgid "Tag ID"
+msgstr "Identyfikator znacznika"
+
+msgctxt "#30507"
+msgid "TV Show ID"
+msgstr "Identyfikator serialu"
+
+msgctxt "#30508"
+msgid "Artist ID"
+msgstr "Identyfikator artysty"
+
+msgctxt "#30509"
+msgid "Album ID"
+msgstr "Identyfikator albumu"
+
+msgctxt "#30510"
+msgid "Role ID"
+msgstr "Identyfikator roli"
+
+msgctxt "#30511"
+msgid "Song ID"
+msgstr "Identyfikator utworu"
+
+msgctxt "#30512"
+msgid "Album artists only"
+msgstr "Tylko wykonawcy albumów"
+
+msgctxt "#30513"
+msgid "Show singles"
+msgstr "Pokazuj single"
+
+msgctxt "#30514"
+msgid "Plugin..."
+msgstr "Wtyczka..."
+
+#~ msgctxt "#30104"
+#~ msgid "Edit order"
+#~ msgstr "Edytuj kolejność"

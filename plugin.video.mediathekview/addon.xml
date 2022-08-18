@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.mediathekview"
+	name="MediathekView"
+	version="0.6.7+matrix.1"
+	provider-name="MediathekView.de, Leo Moll">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.myconnpy" version="1.1.7"/>
+	</requires>
+	<extension
+		point="xbmc.python.pluginsource"
+		library="addon.py">
+		<provides>video</provides>
+	</extension>
+	<extension
+		point="xbmc.service"
+		library="service.py" />
+	<extension point="xbmc.addon.metadata">
+		<broken>TEMP REPO REVOKE</broken>
+		<summary lang="de_DE">Öffentlich-Rechtliche Mediatheken</summary>
+		<summary lang="en_GB">Public service video-platforms</summary>
+		<summary lang="it_IT">Piattaforme video dalle emittenti pubbliche</summary>
+		<description lang="de_DE">Ermöglicht den Zugriff auf fast alle deutschen Mediatheken der öffentlich Rechtlichen basierend auf der Datenbank von MediathekView.de</description>
+		<description lang="en_GB">Gives access to most video-platforms from German public service broadcasters using the database of MediathekView.de</description>
+		<description lang="it_IT">Fornisce l'accesso a gran parte delle piattaforme video operate dalle emittenti pubbliche tedesche usando la banca dati di MediathekView.de</description>
+		<news>
+v.0.6.6 (2020-11-20):
+- [fix] #175 fix for airdate 1969 (update mySql DB structure)
+- [other] #173 delay service startup by 10 sec to avoid error message 
+- [other] #171 / #170 improved memory usage
+- [new] #169 new sort order (airdate desc)
+- [new] define content type in settings to enable more skins
+- [new] Bulk insert for mySQL / update to latest mySql driver
+v.0.6.4 (2020-05-26):
+[fix]
+- #143 ijson issue on FireTvStick
+- #136 MySql caching_sha2_password issue
+- #135 HTTPMessage Header issue
+- #134 ijson issue
+- #124 Corrupt database
+- #166 Sorttitle missing in shows and channel list
+- #168 Added urlopen timeout
+- Fixed heading on DB-Status-Dialog
+[new]
+- #140 / #131 Datenbank check interval
+- #71 Default Sort
+- #95 Sort by time, date
+- #147 Show error message for 8 sec
+[others]
+- Update 3rd party code for Py3 (subtitles SRT-Files)
+- Update cache for sqlListe for invalidate after DB update
+- RBTV logo add
+- Python 3 compat
+- Kodi loglevel change (notice to info)
+- Add User Agent String for all request to fix issue with ORF
+</news>
+		<platform>all</platform>
+		<language>de fr</language>
+		<license>MIT</license>
+		<forum>https://forum.kodi.tv/showthread.php?tid=326799</forum>
+		<source>https://github.com/mediathekview/plugin.video.mediathekview</source>
+		<website>https://mediathekview.de/</website>
+		<email>info@mediathekview.de</email>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+			<screenshot>resources/screenshot1.png</screenshot>
+			<screenshot>resources/screenshot2.png</screenshot>
+			<screenshot>resources/screenshot3.png</screenshot>
+			<screenshot>resources/screenshot4.png</screenshot>
+		</assets>
+	</extension>
+</addon>

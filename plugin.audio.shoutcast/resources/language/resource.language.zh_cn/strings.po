@@ -1,0 +1,93 @@
+# Kodi Media Center language file
+# Addon Name: SHOUTcast 2
+# Addon id: plugin.audio.shoutcast
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Team-Kodi\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "#30000"
+msgid "All subgenres"
+msgstr "所有子类"
+
+msgctxt "#30001"
+msgid "Top 500 Stations"
+msgstr "500强站点"
+
+msgctxt "#30002"
+msgid "Browse by genre"
+msgstr "按类别浏览"
+
+msgctxt "#30003"
+msgid "My Stations"
+msgstr "我的电台"
+
+msgctxt "#30004"
+msgid "Search Station by name"
+msgstr "按名字搜索电台"
+
+msgctxt "#30005"
+msgid "Search Current Track playing Station"
+msgstr "按当前播放曲目搜索电台"
+
+msgctxt "#30010"
+msgid "Add to 'My Stations'"
+msgstr "加入“我的电台”"
+
+msgctxt "#30011"
+msgid "Remove from 'My Stations'"
+msgstr "从“我的电台”删除"
+
+msgctxt "#30100"
+msgid "Show Subgenres"
+msgstr "显示子类"
+
+msgctxt "#30101"
+msgid "Num stations in list"
+msgstr "列表中电台数"
+
+msgctxt "#30102"
+msgid "Show Bitrate in Title"
+msgstr "标题显示比特率"
+
+msgctxt "#30103"
+msgid "Choose a random server (Don't ask)"
+msgstr "选择一个随机服务器（不提问）"
+
+msgctxt "#30104"
+msgid "Filter stations by minium Bitrate"
+msgstr "按最小比特率筛选电台"
+
+msgctxt "#30110"
+msgid "Minimum Bitrate"
+msgstr "最小比特率"
+
+msgctxt "#30111"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30112"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30113"
+msgid "160 kbit/s"
+msgstr "160 kbit/s"
+
+msgctxt "#30114"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30200"
+msgid "Network Error"
+msgstr "网络错误"

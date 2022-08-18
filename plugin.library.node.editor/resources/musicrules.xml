@@ -1,0 +1,364 @@
+<rules>
+	<matches>
+		<match name="artist">
+			<label>557</label>
+			<artists>True</artists>
+			<albums>True</albums>
+			<songs>True</songs>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="genre">
+			<label>515</label>
+			<artists>True</artists>
+			<albums>True</albums>
+			<songs>True</songs>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="moods">
+			<label>175</label>
+			<artists>True</artists>
+			<albums>True</albums>
+			<songs>True</songs>
+			<operator>string</operator>
+		</match>
+		<match name="styles">
+			<label>176</label>
+			<artists>True</artists>
+			<albums>True</albums>
+			<operator>string</operator>
+		</match>
+		<match name="instruments">
+			<label>21892</label>
+			<artists>True</artists>
+			<operator>string</operator>
+		</match>
+		<match name="biography">
+			<label>21887</label>
+			<artists>True</artists>
+			<operator>string</operator>
+		</match>
+		<match name="born">
+			<label>21893</label>
+			<artists>True</artists>
+			<operator>string</operator>
+		</match>
+		<match name="formed">
+			<label>21894</label>
+			<artists>True</artists>
+			<operator>string</operator>
+		</match>
+		<match name="disbanded">
+			<label>21896</label>
+			<artists>True</artists>
+			<operator>string</operator>
+		</match>
+		<match name="died">
+			<label>21897</label>
+			<artists>True</artists>
+			<operator>string</operator>
+		</match>
+		<match name="playlist">
+			<label>559</label>
+			<artists>True</artists>
+			<albums>True</albums>
+			<songs>True</songs>
+			<operator>isornot</operator>
+			<browse>True</browse>
+		</match>
+		<match name="virtualfolder">
+			<label>614</label>
+			<artists>True</artists>
+			<albums>True</albums>
+			<songs>True</songs>
+			<operator>isornot</operator>
+			<browse>True</browse>
+		</match>
+		<match name="album">
+			<label>558</label>
+			<albums>True</albums>
+			<songs>True</songs>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="albumartist">
+			<label>566</label>
+			<albums>True</albums>
+			<songs>True</songs>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="year">
+			<label>345</label>
+			<albums>True</albums>
+			<songs>True</songs>
+			<operator>numeric</operator>
+			<browse>True</browse>
+		</match>
+		<match name="review">
+			<label>183</label>
+			<albums>True</albums>
+			<operator>string</operator>
+		</match>
+		<match name="themes">
+			<label>21895</label>
+			<albums>True</albums>
+			<operator>string</operator>
+		</match>
+		<match name="type">
+			<label>564</label>
+			<albums>True</albums>
+			<operator>string</operator>
+		</match>
+		<match name="label">
+			<label>21899</label>
+			<albums>True</albums>
+			<operator>string</operator>
+		</match>
+		<match name="rating">
+			<label>563</label>
+			<albums>True</albums>
+			<songs>True</songs>
+			<operator>numeric</operator>
+		</match>
+		<match name="playcount">
+			<label>567</label>
+			<albums>True</albums>
+			<songs>True</songs>
+			<operator>numeric</operator>
+		</match>
+		<match name="title">
+			<label>556</label>
+			<songs>True</songs>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="duration">
+			<label>180</label>
+			<songs>True</songs>
+			<operator>time</operator>
+		</match>
+		<match name="track">
+			<label>554</label>
+			<songs>True</songs>
+			<operator>numeric</operator>
+		</match>
+		<match name="file">
+			<label>561</label>
+			<songs>True</songs>
+			<operator>string</operator>
+		</match>
+		<match name="path">
+			<label>573</label>
+			<albums>True</albums>
+			<artists>True</artists>
+			<songs>True</songs>
+			<operator>string</operator>
+			<browse>True</browse>
+		</match>
+		<match name="lastplayed">
+			<label>568</label>
+			<albums>True</albums>
+			<songs>True</songs>
+			<operator>date</operator>
+		</match>
+		<match name="comment">
+			<label>569</label>
+			<songs>True</songs>
+			<operator>string</operator>
+		</match>
+		<match name="totaldiscs">
+			<label>38077</label>
+			<albums>True</albums>
+			<operator>numeric</operator>
+		</match>
+		<match name="samplerate">
+			<label>613</label>
+			<songs>True</songs>
+			<operator>numeric</operator>
+		</match>
+		<match name="bitrate">
+			<label>623</label>
+			<songs>True</songs>
+			<operator>numeric</operator>
+		</match>
+		<match name="channels">
+			<label>253</label>
+			<songs>True</songs>
+			<operator>numeric</operator>
+		</match>
+		<match name="bpm">
+			<label>38080</label>
+			<songs>True</songs>
+			<operator>numeric</operator>
+		</match>
+		<match name="albumstatus">
+			<label>38081</label>
+			<albums>True</albums>
+			<operator>string</operator>
+		</match>
+		<match name="albumduration">
+			<label>180</label>
+			<albums>True</albums>
+			<operator>seconds</operator>
+		</match>
+	</matches>
+	<operators>
+		<group name="string">
+			<operator label="21400">contains</operator>
+			<operator label="21401">doesnotcontain</operator>
+			<operator label="21404">startswith</operator>
+			<operator label="21405">endswith</operator>
+			<operator label="21402">is</operator>
+			<operator label="21403">isnot</operator>
+		</group>
+		<group name="numeric">
+			<operator label="21402">is</operator>
+			<operator label="21403">isnot</operator>
+			<operator label="21406">greaterthan</operator>
+			<operator label="21407">lessthan</operator>
+		</group>
+		<group name="time">
+			<operator label="21402">is</operator>
+			<operator label="21403">isnot</operator>
+			<operator label="21406">greaterthan</operator>
+			<operator label="21407">lessthan</operator>
+		</group>
+		<group name="date">
+			<operator label="21408">after</operator>
+			<operator label="21409">before</operator>
+			<operator label="21410" type="integer">inthelast</operator>
+			<operator label="21411" type="integer">notinthelast</operator>
+		</group>
+		<group name="isornot">
+			<operator label="21402">is</operator>
+			<operator label="21403">isnot</operator>
+		</group>
+	</operators>
+	<groupings>
+		<grouping name="none">
+			<label>16018</label>
+			<artists>True</artists>
+		</grouping>
+		<grouping name="genres">
+			<label>135</label>
+			<artists>True</artists>
+		</grouping>
+		<grouping name="years">
+			<label>652</label>
+			<albums>True</albums>
+		</grouping>
+	</groupings>
+	<orderby>
+		<type label="21430">ascending</type>
+		<type label="21431">descending</type>
+	</orderby>
+	<content>
+		<type label="133">artists</type>
+		<type label="132">albums</type>
+		<type label="134">songs</type>
+	</content>
+
+	<paths>
+		<type label="135" name="musicdb://genres"/>
+		<type label="133" name="musicdb://artists"/>
+		<type label="132" name="musicdb://albums"/>
+		<type label="1050" name="musicdb://singles"/>
+		<type label="134" name="musicdb://songs"/>
+		<type label="29994" name="musicdb://roles"/>
+		<type label="271" name="musicdb://top100">
+			<type label="134" name="songs"/>
+			<type label="132" name="albums"/>
+		</type>
+		<type label="359" name="musicdb://recentlyaddedalbums"/>
+		<type label="517" name="musicdb://recentlyplayedalbums"/>
+		<type label="521" name="musicdb://compilations"/>
+		<type label="652" name="musicdb://years"/>
+		<type label="744" name="sources://music">
+			<content>None</content>
+		</type>
+		<type label="136" name="special://videoplaylists">
+			<content>None</content>
+		</type>
+	</paths>
+
+	<pathRules>
+		<rule name="roleid" label="30510">
+			<value>integer</value>
+			<content>artists</content>
+			<content>albums</content>
+			<browse>musicdb://roles/</browse>
+		</rule>
+		<rule name="role" label="38033">
+			<value>string</value>
+			<content>artists</content>
+			<content>albums</content>
+			<browse>musicdb://roles/</browse>
+		</rule>
+		<rule name="artistid" label="30508">
+			<value>integer</value>
+			<content>artists</content>
+			<content>albums</content>
+			<content>songs</content>
+			<content>singles</content>
+			<browse>musicdb://artists/</browse>
+		</rule>
+		<rule name="genreid" label="30500">
+			<value>integer</value>
+			<content>artists</content>
+			<content>albums</content>
+			<content>songs</content>
+			<content>singles</content>
+			<browse>musicdb://genres/</browse>
+		</rule>
+		<rule name="genre" label="515">
+			<value>string</value>
+			<content>artists</content>
+			<content>albums</content>
+			<content>songs</content>
+			<content>singles</content>
+			<browse>musicdb://genres/</browse>
+		</rule>
+		<rule name="albumid" label="30509">
+			<value>integer</value>
+			<content>artists</content>
+			<content>songs</content>
+			<content>singles</content>
+			<browse>musicdb://albums/</browse>
+		</rule>
+		<rule name="album" label="558">
+			<value>string</value>
+			<content>artists</content>
+			<content>songs</content>
+			<content>singles</content>
+			<browse>musicdb://albums/</browse>
+		</rule>
+		<rule name="songid" label="30511">
+			<value>integer</value>
+			<content>artists</content>
+			<browse>musicdb://songs/</browse>
+		</rule>
+		<rule name="albumartistsonly" label="30512">
+			<value>boolean</value>
+			<content>artists</content>
+		</rule>
+		<rule name="year" label="345">
+			<value>integer</value>
+			<content>albums</content>
+			<content>songs</content>
+			<content>singles</content>
+			<browse>musicdb://years/</browse>
+		</rule>
+		<rule name="compilation" label="521">
+			<value>boolean</value>
+			<content>albums</content>
+			<content>songs</content>
+			<content>singles</content>
+		</rule>
+		<rule name="showsingles" label="30513">
+			<value>boolean</value>
+			<content>albums</content>
+		</rule>
+	</pathRules>
+</rules>

@@ -1,0 +1,18 @@
+{
+  "channels": [
+    {
+      "guid": "F9AE6336-74BD-4FDF-B453-3BE23187D201",
+      "name": "24 Classics",
+      "description": {
+        "en": "Discover the world of 24classics, the world of classical music. Enjoy to concerts en listen to their stories.",
+        "nl": "Ontdek de wereld van 24classics, de wereld van de klassieke muziek, ga naar concerten en hoor bijzondere verhalen."
+      },
+      "icon": "24classicsicon.png",
+      "category": "Radio",
+      "sortorder": 250,
+      "message": "",
+      "ignore": true,
+      "fanart": "24classicfanart.png"
+    }
+  ]
+}

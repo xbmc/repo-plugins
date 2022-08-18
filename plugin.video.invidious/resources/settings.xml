@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category id="general" label="30008">
+        <setting label="30007" type="text" id="instance_url" default="https://invidio.us"/>
+    </category>
+</settings>

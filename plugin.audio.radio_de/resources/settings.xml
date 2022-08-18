@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="30601">
+		<setting id="language" type="enum" label="30300" lvalues="30301|30302|30303|30304|30305" default="0" />
+		<setting id="hide-fanart" type="bool" label="30602" default="false"/>
+		<setting id="prefer-http" type="bool" label="30607" default="true"/>
+	</category>
+</settings>

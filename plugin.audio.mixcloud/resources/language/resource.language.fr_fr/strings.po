@@ -1,0 +1,245 @@
+# Kodi Media Center language file
+# Addon Name: Mixcloud
+# Addon id: plugin.audio.mixcloud
+# Addon Provider: jackyNIX
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+
+# Kodi Media Center language file
+# Addon Name: Mixcloud
+# Addon id: plugin.audio.mixcloud
+# Addon Provider: jackyNIX
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+
+# main menu
+
+msgctxt "#30100"
+msgid "Profil..."
+msgstr ""
+
+msgctxt "#30101"
+msgid "Followings"
+msgstr "Abonnements"
+
+msgctxt "#30102"
+msgid "Followers"
+msgstr "Abonnés"
+
+msgctxt "#30103"
+msgid "Favorites"
+msgstr "Favoris"
+
+msgctxt "#30104"
+msgid "Uploads"
+msgstr "Uploads"
+
+msgctxt "#30105"
+msgid "Playlists"
+msgstr "Listes de lecture"
+
+msgctxt "#30106"
+msgid "Listen Later"
+msgstr "Écouter plus tard"
+
+msgctxt "#30107"
+msgid "Categories"
+msgstr "Catégories"
+
+msgctxt "#30108"
+msgid "History"
+msgstr "Historique"
+
+msgctxt "#30109"
+msgid "Search"
+msgstr "Rechercher"
+
+msgctxt "#30110"
+msgid "More..."
+msgstr "Suivante..."
+
+
+
+# search menu
+
+msgctxt "#30200"
+msgid "Search cloudcasts..."
+msgstr "Rechercher des cloudcasts"
+
+msgctxt "#30201"
+msgid "Search users..."
+msgstr "Rechercher des utilisateurs..."
+
+
+
+# context menu
+
+msgctxt "#30300"
+msgid "Favorite cloudcast"
+msgstr "Ajouter aux favoris"
+
+msgctxt "#30301"
+msgid "Unfavorite cloudcast"
+msgstr "Retirer des favoris"
+
+msgctxt "#30302"
+msgid "Follow user"
+msgstr "Abonner"
+
+msgctxt "#30303"
+msgid "Unfollow user"
+msgstr "Désabonner"
+
+msgctxt "#30304"
+msgid "Listen later"
+msgstr "Écouter plus tard"
+
+msgctxt "#30305"
+msgid "Do not listen later"
+msgstr "N'écouter pas plus tard"
+
+
+
+# others
+
+msgctxt "#30400"
+msgid "No valid access token found."
+msgstr "Aucun token d'accès valide trouvé."
+
+msgctxt "#30401"
+msgid "Please provide your authentication code."
+msgstr "Entez votre code d'authorisation."
+
+msgctxt "#30402"
+msgid "Logout?"
+msgstr "Se déconnecter?"
+
+msgctxt "#30403"
+msgid "Clear history?"
+msgstr "Effacer l'historique?"
+
+msgctxt "#30404"
+msgid "No active resolvers found. Please check your settings."
+msgstr "Aucun résolveur actif trouvé. Veuillez vérifier vos paramètres."
+
+
+
+# general settings
+
+msgctxt "#30900"
+msgid "General"
+msgstr "Général"
+
+msgctxt "#30901"
+msgid "Maximum rows on page"
+msgstr "Nombre maximal de lignes par page"
+
+msgctxt "#30902"
+msgid "Thumbnail size"
+msgstr "Taille de la vignette"
+
+msgctxt "#30903"
+msgid "Debug mode"
+msgstr "Mode debug"
+
+msgctxt "#30904"
+msgid "Extended info (slower)"
+msgstr "Informations étendues (plus lent)"
+
+
+
+# profile settings
+
+msgctxt "#30910"
+msgid "Profile"
+msgstr "Profil"
+
+msgctxt "#30911"
+msgid "OAuth code"
+msgstr "Code OAuth"
+
+msgctxt "#30912"
+msgid "Access token"
+msgstr "Token d'accès"
+
+msgctxt "#30913"
+msgid "Log out..."
+msgstr "Se déconnecter..."
+
+
+
+# resolver settings
+
+msgctxt "#30920"
+msgid "Resolvers"
+msgstr "Résolveurs"
+
+msgctxt "#30921"
+msgid "mixcloud.com"
+msgstr ""
+
+msgctxt "#30922"
+msgid "mixcloud-downloader.com [BROKEN]"
+msgstr ""
+
+msgctxt "#30923"
+msgid "offliberty.online"
+msgstr "offliberty.online"
+
+
+
+# history settings
+
+msgctxt "#30930"
+msgid "History"
+msgstr "Historique"
+
+msgctxt "#30931"
+msgid "Maximum play history"
+msgstr "Nombre maximal de cloudcasts écoutés"
+
+msgctxt "#30932"
+msgid "Maximum search history"
+msgstr "Nombre maximal de recherches"
+
+msgctxt "#30933"
+msgid "Clear history..."
+msgstr "Effacer historique..."
+
+
+
+# thumbnail sizes
+
+msgctxt "#30940"
+msgid "very small (25x25)"
+msgstr "très petit (25x25)"
+
+msgctxt "#30941"
+msgid "small (50x50)"
+msgstr "petit (50x50)"
+
+msgctxt "#30942"
+msgid "medium (100x100)"
+msgstr ""
+
+msgctxt "#30943"
+msgid "large (300x300)"
+msgstr ""
+
+msgctxt "#30944"
+msgid "extra large (600x600)"
+msgstr ""

@@ -1,0 +1,91 @@
+
+﻿v1.4.9
+- Fixed server changes
+
+﻿v1.4.8
+- Adapted to Kodi 19
+- Fixed errors
+
+v1.4.7
+- Fixed direct channels urls
+
+1.4.6
+- Fixed server changes
+
+1.4.5
+- Fixed server changes
+
+v1.4.4
+- Fixed error in Libreelec with import lib2to3 script. Deleted old_div
+
+v1.4.3
+- Code redesigned and added Python 2/3 compatibility
+
+v1.4.2
+- Fixed website changes. Changed live urls channels
+
+v1.4.1
+- Fixed website changes. Fixed errors in "Today featured" and "Colecctions"
+
+v1.4.0
+- Corregits canvis al website
+
+-Fixed website changes
+
+v1.3.9
+- Canviada reproducció de videos a HD
+- Afegida traducció en alemany gràcies a Connum
+
+- Changed videos playback to HD
+- Added german translation thanks to Connum
+
+v1.3.8
+- Corregits canvis al website
+- Fixed website changes
+
+v1.3.7
+- Afegides urls per l'emissió internacional dels canals en directe. Gràcies a jrdfrncs
+- Afegida traducció del noruec. Gràcies a jrdfrncs
+- Correcció d'errors
+
+- Added urls to international broadcast of live channels. Thanks to jrdfrncs
+- Added norwegian translation. Thanks to jrdfrncs
+- Fixed minor errors
+
+v1.3.6
+- Fixed website changes
+- Improved efficiency in listing videos
+
+v1.3.5
+- Improved video info
+- Updated python version
+- Added new section Coleccions
+
+v1.3.4
+- Fixed website changes
+
+v1.3.3
+- Fixed website changes
+- Added search function
+- Added dependency on BeautifulSoup
+- Minor improvements
+
+v1.3.2
+- Fixed website changes
+
+v1.3.1
+- Fixes due to website changes
+
+v1.3.0
+- Fixed minor errors
+
+v1.2.9
+- Fixed minor errors
+
+v1.2.8
+- Added info on live channels
+
+v1.2.7
+- Initial version
+
+

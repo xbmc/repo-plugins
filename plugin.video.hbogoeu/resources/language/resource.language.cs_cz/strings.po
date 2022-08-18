@@ -1,0 +1,489 @@
+# Kodi Media Center language file
+# Addon Name: HBO GO EU
+# Addon id: plugin.video.hbogoeu
+# Addon Provider: arvvoid
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.hbogoeu\n"
+"Report-Msgid-Bugs-To: https://github.com/arvvoid/plugin.video.hbogoeu/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-06-1 20:04+0200\n"
+"Last-Translator: CZJohny\n"
+"Language-Team: Ike201,CZJohny\n"
+"Language: cs_CZ\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.2.4\n"
+
+msgctxt "#30000"
+msgid "ENG"
+msgstr "CZE"
+
+msgctxt "#30001"
+msgid "ERROR"
+msgstr "CHYBA"
+
+msgctxt "#30002"
+msgid "Setup failed"
+msgstr "Nastavení selhalo"
+
+msgctxt "#30003"
+msgid "Unsupported region"
+msgstr "Nepodporovaný region"
+
+msgctxt "#30004"
+msgid "An unexpected error has occurred."
+msgstr "Nastala neočekávaná chyba."
+
+msgctxt "#30005"
+msgid "Error getting content from Hbo Go"
+msgstr "Chyba při získávání obsahu z Hbo Go"
+
+msgctxt "#30006"
+msgid "Error sending data to Hbo Go"
+msgstr "Chyba při odesílání dat do Hbo Go"
+
+msgctxt "#30007"
+msgid "Error deleting data from Hbo Go"
+msgstr "Chyba při mazání dat z Hbo Go"
+
+msgctxt "#30008"
+msgid "Communication error, returned STATUS: "
+msgstr "Komunikační chyba, návratový STATUS: "
+
+msgctxt "#30009"
+msgid "The content is available from:"
+msgstr "Obsah je dostupný z:"
+
+msgctxt "#30100"
+msgid "Web registration on "
+msgstr "Webová registrace "
+
+msgctxt "#30101"
+msgid ""
+"PLEASE DON'T CONTACT YOUR OPERATOR SUPPORT ABOUT THIS ADD-ON, THIS IS AN "
+"UNOFFICIAL ADD-ON AND HAVE NO OFFICIAL SUPPORT! COMMUNITY HELP CAN BE FOUND "
+"ON THE ADD-ON GITHUB PAGE OR KODI FORUM"
+msgstr ""
+"PROSÍM NEKONTAKTUJTE SVÉHO OPERÁTORA OHLEDNĚ PODPORY TOHOTO DOPLŇKU, JDE O "
+"NEOFICIÁLNÍ DOPLNĚK A NEMÁ ŽÁDNOU OFICIÁLNÍ PODPORU! KOMUNITNÍ PODPORU "
+"TOHOTO DOPLŇKU LZE NAJÍT NA GITHUBU NEBO FÓRU KODI"
+
+msgctxt "#30102"
+msgid "Operators"
+msgstr "Operátoři"
+
+msgctxt "#30103"
+msgid ""
+"Sorry, you are not correctly logged in, aborting playback. Try to login on "
+"the official site then try again, if the problem persists ask support with a "
+"full debug log"
+msgstr ""
+"Omlouváme se, nejste správně přihlášen, přehrávání přerušeno. Zkuste se "
+"přihlásit na oficiální stránky a zkuzte to znovu. Jestliže problém přetrvává "
+"požádejte o podporu s úplným ladícím výpisem"
+
+msgctxt "#30104"
+msgid ""
+"Operator not selected. Please select your country/operator in the settings."
+msgstr "Operátor nevybrán. Vyberte prosím vaši zemi/operátora v nastavení."
+
+msgctxt "#30105"
+msgid "Logout (Reset setup)"
+msgstr "Odhlášení (Reset nastavení)"
+
+msgctxt "#30106"
+msgid "Destroy current session"
+msgstr "Odhlásit aktuální sezení"
+
+msgctxt "#30440"
+msgid "Settings"
+msgstr "Nastavení"
+
+msgctxt "#30441"
+msgid "Choose your Country"
+msgstr "Vyberte svoji zemi"
+
+msgctxt "#30442"
+msgid "Enter e-mail/username"
+msgstr "Zadejte e-mail/uživ. jméno"
+
+msgctxt "#30443"
+msgid "Enter password"
+msgstr "Zadejte heslo"
+
+msgctxt "#30444"
+msgid "Setup failed, please try again"
+msgstr "Nastavení selhalo, zkuste to znovu"
+
+msgctxt "#30445"
+msgid "Choose your operator"
+msgstr "Vyberte operátora"
+
+msgctxt "#30660"
+msgid "DRM"
+msgstr "DRM"
+
+msgctxt "#30665"
+msgid "Inputstream Adaptive Settings (max bitrate, resolution, etc.)"
+msgstr "Nastavení voleb pluginu InputStream (max. dat. tok, rozlišení, atd...)"
+
+msgctxt "#30666"
+msgid "InputStream Helper information"
+msgstr "InputStream informace"
+
+msgctxt "#30667"
+msgid "(Re)install Widevine CDM..."
+msgstr "(Re)instalace Widevine CDM..."
+
+msgctxt "#30668"
+msgid "Remove Widevine CDM..."
+msgstr "Odstranění Widevine CDM..."
+
+msgctxt "#30669"
+msgid "InputStream Helper settings..."
+msgstr "InputStream nastavení..."
+
+msgctxt "#30700"
+msgid "Find movies and TV Shows..."
+msgstr "Najít filmy a TV seriály…"
+
+msgctxt "#30701"
+msgid "No results"
+msgstr "Bez výsledku"
+
+msgctxt "#30702"
+msgid "Error"
+msgstr "Chyba"
+
+msgctxt "#30703"
+msgid "Episode can be watched until:"
+msgstr "Epizoda bude ke shlédnutí do:"
+
+msgctxt "#30704"
+msgid "The movie can be watched until:"
+msgstr "Film bude ke zhlédnutí do:"
+
+msgctxt "#30705"
+msgid "EPISODE"
+msgstr "EPIZODA"
+
+msgctxt "#30706"
+msgid "SEASON"
+msgstr "SEZÓNA"
+
+msgctxt "#30707"
+msgid "My List"
+msgstr "Můj seznam"
+
+msgctxt "#30708"
+msgid "Please enter your login details in the settings!"
+msgstr "Prosím zadejte přihlašovací údaje do nastavení!"
+
+msgctxt "#30709"
+msgid "Login error, check your login details!"
+msgstr "Chyba přihlášení, zkontrolujte přihlašovací údaje!"
+
+msgctxt "#30710"
+msgid "No operator defined! Check your settings!"
+msgstr "Není zadán operátor! Zkontrolujte nastavení!"
+
+msgctxt "#30711"
+msgid "Search..."
+msgstr "Hledat..."
+
+msgctxt "#30712"
+msgid ""
+"WARNING. You enabled the [Include sensitive login data in debug log] option "
+"in this add-on expert settings. IF YOU DON'T EXACTLY KNOW WHY YOU ENABLED "
+"THAT DISABLE IT, THAT'S NOT NEEDED!! This means that if the debug log is "
+"enabled in Kodi, your sensitive and private login information and session "
+"data will be written to the debug log. Please don't share publicly such a "
+"log. IF YOU NEED TO POST A DEBUG LOG PUBLICLY DISABLE THAT OPTION. If you "
+"really have to send a log with that option enabled to debug a login/session "
+"related issue be very CAREFUL who you send that log too and do it privately "
+"and change your password as soon as possible. If you posted such a log "
+"publicly by accident, change your password as soon as possible. DO YOU WANT "
+"TO CONTINUE?"
+msgstr ""
+"VAROVÁNÍ. Povolili jste volbu [Zahrnout citlivé přihlašovací údaje v ladicím "
+"logu] v expertním nastavení tohoto doplňku. JESTLIŽE NEVÍTE PŘESNÉ CO JSTE "
+"POVOLILI, TAK TO ZAKAŽTE, NENÍ TO NEZBYTNE NUTNÉ!! Znamená to, že když jsou "
+"ladicí informace zapnuté v Kodi, tak jsou citlivé a přihlašovací údaje a "
+"data sezení zapisována do ladicích výpisů. Prosím nesdílejte veřejně takový "
+"log. JESTLIŽE POTŘEBUJETE ZVEŘEJNIT LADÍCÍ VYPIS VYPNĚTE TUTO VOLBU. Jestli "
+"opravdu potřebujte poslat ladicí výpis s toutu volbu zapnutou, buďte VELMI "
+"opatrní komu výpis posíláte a posílejte ho soukromě a změňte heslo co "
+"nejdříve. Jestliže jste omylem zveřejnili log, změňte heslo co nejdříve. "
+"CHCETE OPRAVDU POKRAČOVAT?"
+
+msgctxt "#30713"
+msgid "INFORMATION"
+msgstr "INFORMACE"
+
+msgctxt "#30714"
+msgid "I understand the risks and continue"
+msgstr "Rozumím riziku pokračování"
+
+msgctxt "#30715"
+msgid "Stop, let me change the settings"
+msgstr "Stop, chci změnit nastavení"
+
+msgctxt "#30716"
+msgid "TV Shows"
+msgstr "TV seriály"
+
+msgctxt "#30717"
+msgid "Movies"
+msgstr "Filmy"
+
+msgctxt "#30718"
+msgid "Trending Now"
+msgstr "Populární"
+
+msgctxt "#30719"
+msgid "Add to My List"
+msgstr "Přidat na můj seznam"
+
+msgctxt "#30720"
+msgid "Remove from My List"
+msgstr "Odstranit z mého seznamu"
+
+msgctxt "#30721"
+msgid "Rate 5"
+msgstr "Ohodnotit 5"
+
+msgctxt "#30722"
+msgid "Rate 4"
+msgstr "Ohodnotit 4"
+
+msgctxt "#30723"
+msgid "Rate 3"
+msgstr "Ohodnotit 3"
+
+msgctxt "#30724"
+msgid "Rate 2"
+msgstr "Ohodnotit 2"
+
+msgctxt "#30725"
+msgid "Rate 1"
+msgstr "Ohodnotit 1"
+
+msgctxt "#30726"
+msgid "Rate"
+msgstr "Ohodnotit"
+
+msgctxt "#30727"
+msgid "Success"
+msgstr "Úspěch"
+
+msgctxt "#30728"
+msgid "Login failed, do you want to input your credentials again?"
+msgstr "Přihlášení selhalo, chcete zadat přihlašovací údaje znovu?"
+
+msgctxt "#30729"
+msgid "KIDS"
+msgstr "DĚTSKÉ"
+
+msgctxt "#30730"
+msgid "Weekly Top"
+msgstr "Týdenní žebříček"
+
+msgctxt "#30731"
+msgid "History"
+msgstr "Historie"
+
+msgctxt "#30732"
+msgid "Continue Watching"
+msgstr "Pokračovat ve sledování"
+
+msgctxt "#30733"
+msgid "Home Lists"
+msgstr "Vlastní seznam"
+
+msgctxt "#30734"
+msgid "New search"
+msgstr "Nové hledání"
+
+msgctxt "#30735"
+msgid "Clear search history"
+msgstr "Samazat historii vyhledávání"
+
+msgctxt "#30736"
+msgid "Remove"
+msgstr "Odstanit"
+
+msgctxt "#30737"
+msgid "Kids only mode"
+msgstr "Mod pro děti"
+
+msgctxt "#30650"
+msgid "Language"
+msgstr "Jazyk"
+
+msgctxt "#30651"
+msgid "Always use default operator language"
+msgstr "Vždy použít výchozí jazyk operátora"
+
+msgctxt "#30655"
+msgid "Subtitles"
+msgstr "Titulky"
+
+msgctxt "#30656"
+msgid "Automatically turn on default subtitles"
+msgstr "Automaticky zapnout výchozí titulky"
+
+msgctxt "#30652"
+msgid "Always use original titles"
+msgstr "Vždy použít originální titulky"
+
+msgctxt "#30653"
+msgid "Inject subtitles"
+msgstr "Vložit titulky"
+
+msgctxt "#30670"
+msgid "Expert"
+msgstr "Expert"
+
+msgctxt "#30671"
+msgid "Force scraper friendly titles"
+msgstr "Vynutit titulky kompatibilní s popisovači médií"
+
+msgctxt "#30672"
+msgid "Use generic video media type in listings"
+msgstr "Použít obecný typ média v seznamu"
+
+msgctxt "#30680"
+msgid "Session"
+msgstr "Sezení"
+
+msgctxt "#30681"
+msgid "Session valid for hours"
+msgstr "Sezení bude platné tolik hodin"
+
+msgctxt "#30682"
+msgid "Reset session, force re-login"
+msgstr "Resetovat sezení, vynutit znovu přihlášení"
+
+msgctxt "#30690"
+msgid "Debug"
+msgstr "Ladit"
+
+msgctxt "#30691"
+msgid "Include sensitive login data in debug log [DON'T POST PUBLICLY]"
+msgstr ""
+"Zahrnout citlivá přihlašovací data v ladícím výpisu [NESDÍLEJTE VEŘEJNĚ]"
+
+msgctxt "#30692"
+msgid ""
+"Are you sure you want to completely reset your setup (device registration "
+"will be lost ) ?"
+msgstr ""
+"Jste si jisti, že chcete kompletně resetovat vaše nastavení (registrace "
+"zařízení bude ztracena)?"
+
+msgctxt "#30693"
+msgid "Include full details/RAW retrieved data in Debug log"
+msgstr "Zahrnout plné získané detaily/surová data v do ladicího logu"
+
+msgctxt "#30694"
+msgid ""
+"Cryptodome dependency not present on your system, HBO Go add-on can't run. "
+"For help consult install instructions/official support thread"
+msgstr ""
+"Závislost na Cryptodome není vyřešena na vašem systému. HBO go plugin nemůže "
+"fungovat. Pro pomoc se podívejte do instalačního/oficiálního vlákna podpory."
+
+msgctxt "#30696"
+msgid "Home Category"
+msgstr "Kategorie Výchozí"
+
+msgctxt "#30697"
+msgid "Group Home lists in special category"
+msgstr "Zařadit výchozí seznamy do speciální kategorie"
+
+msgctxt "#30800"
+msgid "Sync play time with HBO Go"
+msgstr "Synchronizovat čas přehrávání s HBO Go"
+
+msgctxt "#30801"
+msgid "Send elapsed time to HBO Go"
+msgstr "Zaslat uplynulý čas na HBO Go"
+
+msgctxt "#30802"
+msgid "Get elapsed time from HBO Go"
+msgstr "Získat uplynulý čas na HBO Go"
+
+msgctxt "#30803"
+msgid "Set as watched on HBO Go"
+msgstr "Nastavit na HBO Go jako 'Shlédnuté'"
+
+msgctxt "#30804"
+msgid "Set as unwatched on HBO Go"
+msgstr "Nastavit na HBO Go jako 'Neshlédnuté'"
+
+msgctxt "#30805"
+msgid "Ignore Kodi Watched status (Only display HBO Go Watched status)"
+msgstr ""
+"Ignorovat Kodi status 'Shlédnuté' (Zobrazit jen HBO Go status 'Shlédnuté'"
+
+msgctxt "#30806"
+msgid "Cache"
+msgstr "Vyrovnávací pamět"
+
+msgctxt "#30807"
+msgid "Use request cache"
+msgstr "Použít vyrovnávací pamět pro požadavky"
+
+msgctxt "#30808"
+msgid "Clear request cache"
+msgstr "Smazat vyrovnávací pamět požadavků"
+
+msgctxt "#30809"
+msgid "Encrypt credentials"
+msgstr "Šifrovat pověření"
+
+msgctxt "#30810"
+msgid ""
+"If you don't know why the option is disabled don't input credentials and "
+"exit now!\n"
+"\n"
+"If you disabled the option on purpose and know exactly why then please "
+"continue.\n"
+"\n"
+"If this is not intended for debugging/testing or because you experience "
+"problems with lost credentials on the device please do NOT continue.\n"
+"In case this is not intended, enable the credentials encryption option and "
+"simply try again.\n"
+"\n"
+"This message will appear only now on credential input."
+msgstr ""
+"Jestliže nevíte proč je tato volba vypnutá, nevkládejte pověření a opusťte "
+"dialog\n"
+"Jestliže jste tuto volbu vypnuli úmyslně a víte přesně proč, tak pokračujte\n"
+"V případě, že to nebylo úmyslné, zapněte volbu šifrování pověření a zkuste "
+"to znovu.\n"
+"\n"
+"Tato zpráva se objeví jen teď při zadávání pověření."
+
+msgctxt "#30811"
+msgid "[Encrypted]"
+msgstr "[Šifrované]"
+
+msgctxt "#30812"
+msgid "[NOT Encrypted]"
+msgstr "[NEšifrované]"
+
+msgctxt "#30813"
+msgid "WARNING: Credential Encryption disabled"
+msgstr "VAROVÁNÍ: Šifrování pověření vypnuté"
+
+msgctxt "#30814"
+msgid "Subtitles cache cleaned"
+msgstr "Vyrovnávací paměť pro titulky vymazána"
+
+msgctxt "#30815"
+msgid "Clean subtitles cache"
+msgstr "Vymazat vyrovnávací paměť pro titulky"

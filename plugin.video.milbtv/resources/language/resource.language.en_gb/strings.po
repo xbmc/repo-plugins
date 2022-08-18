@@ -1,0 +1,262 @@
+# Kodi Media Center language file
+# Addon Name: MILB.TV
+# Addon id: plugin.video.milbtv
+# Addon Provider: eracknaphobia,tonywagner
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30010"
+msgid "Previous"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Next"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Login"
+msgstr ""
+
+msgctxt "#30140"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30150"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30156"
+msgid "Logout"
+msgstr ""
+
+msgctxt "#30159"
+msgid "Visual"
+msgstr ""
+
+msgctxt "#30160"
+msgid "Stream Quality"
+msgstr ""
+
+msgctxt "#30170"
+msgid "Hide Scores & Timeline Spoilers"
+msgstr ""
+
+msgctxt "#30171"
+msgid "Off"
+msgstr ""
+
+msgctxt "#30172"
+msgid "On"
+msgstr ""
+
+msgctxt "#30173"
+msgid "Favorite Team Only"
+msgstr ""
+
+msgctxt "#30174"
+msgid "Live Games Only"
+msgstr ""
+
+msgctxt "#30175"
+msgid "Archive Games Only"
+msgstr ""
+
+msgctxt "#30180"
+msgid "Favorite Team"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Time Format"
+msgstr ""
+
+msgctxt "#30302"
+msgid "12 Hour Clock (ex. 6:00 pm)"
+msgstr ""
+
+msgctxt "#30303"
+msgid "24 Hour Clock (ex. 18:00)"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Ask to start from beginning or from inning"
+msgstr ""
+
+msgctxt "#30306"
+msgid "Ask to automatically skip breaks"
+msgstr ""
+
+msgctxt "#30360"
+msgid "Today's Games"
+msgstr ""
+
+msgctxt "#30361"
+msgid "Yesterday's Games"
+msgstr ""
+
+msgctxt "#30362"
+msgid "Goto Date"
+msgstr ""
+
+msgctxt "#30363"
+msgid "Triple-A"
+msgstr ""
+
+msgctxt "#30364"
+msgid "Double-A"
+msgstr ""
+
+msgctxt "#30365"
+msgid "High-A"
+msgstr ""
+
+msgctxt "#30366"
+msgid "Single-A"
+msgstr ""
+
+msgctxt "#30367"
+msgid "All Levels"
+msgstr ""
+
+msgctxt "#30368"
+msgid " affiliates"
+msgstr ""
+
+msgctxt "#30371"
+msgid "Always Ask stream quality will not work when inputstream adaptive is enabled. Either disable inputstream adaptive or switch stream quality to Best Available."
+msgstr ""
+
+msgctxt "#30372"
+msgid "Choose Stream Quality"
+msgstr ""
+
+msgctxt "#30400"
+msgid "The date entered is not in the format required."
+msgstr ""
+
+msgctxt "#30401"
+msgid "Invalid Date"
+msgstr ""
+
+msgctxt "#30402"
+msgid "Logout Successful"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Logout completed successfully"
+msgstr ""
+
+msgctxt "#30404"
+msgid "Enter date (yyyy-mm-dd)"
+msgstr ""
+
+msgctxt "#30405"
+msgid "Please enter your username"
+msgstr ""
+
+msgctxt "#30406"
+msgid "Please enter your password"
+msgstr ""
+
+msgctxt "#30407"
+msgid "Login Failed"
+msgstr ""
+
+msgctxt "#30408"
+msgid "Please check your credentials and try again"
+msgstr ""
+
+msgctxt "#30409"
+msgid "Access Failed"
+msgstr ""
+
+msgctxt "#30410"
+msgid "Failed to Get Stream"
+msgstr ""
+
+msgctxt "#30411"
+msgid "Unknown error"
+msgstr ""
+
+msgctxt "#30412"
+msgid "Choose Stream Quality"
+msgstr ""
+
+msgctxt "#30413"
+msgid "kbps"
+msgstr ""
+
+msgctxt "#30414"
+msgid "No playable streams found."
+msgstr ""
+
+msgctxt "#30415"
+msgid "Streams Not Found"
+msgstr ""
+
+msgctxt "#30416"
+msgid "Automatically Skip"
+msgstr ""
+
+msgctxt "#30417"
+msgid "Skip nothing"
+msgstr ""
+
+msgctxt "#30418"
+msgid "Skip breaks"
+msgstr ""
+
+msgctxt "#30419"
+msgid "Skip breaks plus idle time"
+msgstr ""
+
+msgctxt "#30420"
+msgid "Skip breaks, idle time, and non-action pitches"
+msgstr ""
+
+msgctxt "#30421"
+msgid "Inning"
+msgstr ""
+
+msgctxt "#30422"
+msgid "Top"
+msgstr ""
+
+msgctxt "#30423"
+msgid "Bottom"
+msgstr ""
+
+msgctxt "#30424"
+msgid "See Yesterday's Scores at inning"
+msgstr ""
+
+msgctxt "#30425"
+msgid "Select a Start Point"
+msgstr ""
+
+msgctxt "#30426"
+msgid "Beginning"
+msgstr ""
+
+msgctxt "#30427"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30428"
+msgid "Skip adjust in seconds (negative, earlier; positive, later)"
+msgstr ""
+
+msgctxt "#30429"
+msgid "Disable video length padding (in case of proxy conflict)"
+msgstr ""
+

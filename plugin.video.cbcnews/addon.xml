@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.cbcnews"
+       name="CBC.ca News"
+       version="4.0.0"
+       provider-name="t1m">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.t1mlib" version="4.0.0"/>
+    <import addon="script.module.requests" version="2.22.0"/>
+    <import addon="inputstream.adaptive" version="2.6.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">CBC.ca News</summary>
+    <description lang="en_GB">CBC News - only for use in Canada. CBC.ca is Canada's Online Information Source. Comprehensive web site for news, entertainment, sports, and business.</description>
+    <disclaimer lang="en_GB">Feel free to use this script. For information visit the wiki.</disclaimer>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GPL-2.0-or-later</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=308873</forum>
+    <website>https://www.cbc.ca</website>
+    <source>https://github.com/learningit/</source>
+    <news>Version 4.0.0 Initial release for Matrix
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

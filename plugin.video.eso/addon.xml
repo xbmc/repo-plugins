@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.eso" name="ESO Videos" version="1.3.0+matrix.1" provider-name="Jose Antonio Montes (jamontes)">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">Watch the ESO videos from the ESO web site.</summary>
+        <description lang="en_GB">ESO, the European Southern Observatory, is the foremost intergovernmental astronomy organisation in Europe and the world's most productive astronomical observatory.[CR]This plugin allows to watch directly the ESO videos from your KODI.[CR]More than 2000 videos are available.[CR]Don't forget to choose your preferred subtitle language from System=>Appearance=>International=>Preferred Subtitle language.</description>
+        <summary lang="cs_CZ">ESO videa.</summary>
+        <description lang="cs_CZ">ESO, Evropská jižní observatoř, je nejvýznamnější mezivládní astronomická organizace v Evropě a nejproduktivnější astronomická observatoř na světě.[CR]Tento modul umožňuje sledovat přímo v ESO videa z Vašeho KODI.[CR]Více než 2000 videa jsou k dispozici.[CR]Nezapomeňte si vybrat preferovaný jazyk titulků z jazyka systému=>Vzhled=>International=>Preferovaný titulků.</description>
+        <summary lang="es_ES">Mira los vídeos de la ESO localizados en su página web.</summary>
+        <description lang="es_ES">ESO, el Observatorio Europeo Austral, es la principal organización astronómica intergubernamental en Europa y el observatorio astronómico más productivo del mundo.[CR]Este plugin te permite ver los vídeos de la ESO directamente desde tu KODI.[CR]Hay más de 2.000 vídeos disponibles.[CR]No te olvides de elegir tu idioma preferido para los subtítulos en Sistema=>Apariencia=>Internacional=>Idioma de subtitulos preferido.</description>
+        <summary lang="fr_FR">ESO vidéos.</summary>
+        <description lang="fr_FR">L’ESO – l’Observatoire Européen Austral – est la première organisation intergouvernementale pour l’astronomie en Europe et l’observatoire astronomique le plus productif au monde.[CR]Ce plugin permet de regarder directement les vidéos ESO à partir de votre KODI.[CR]Plus de 2000 vidéos sont disponibles.[CR]Ne oubliez pas de choisir votre langue préferée pour le sous-titres sur Système=>Apparence=>Région=>Langue préférée pour les sous-titres.</description>
+        <summary lang="de_DE">ESO videos.</summary>
+        <description lang="de_DE">Die Europäische Südsternwarte (engl. European Southern Observatory, kurz ESO) ist die führende europäische Organisation für astronomische Forschung und das wissenschaftlich produktivste Observatorium der Welt.[CR]Dieses Plugin erlaubt es, direkt beobachten die ESO Videos von Ihrem KODI.[CR]Mehr liefern als 2000 Videos stehen zur Verfügung.[CR]Vergessen Sie nicht, Ihre bevorzugte Untertitelsprache aus System=>Darstellung=>International=>Bevorzugte Untertitelsprache zu wählen.</description>
+        <summary lang="it_IT">ESO video.</summary>
+        <description lang="it_IT">L'ESO (European Southern Observatory) è la principale organizzazione intergovernativa di Astronomia in Europa e l'osservatorio astronomico più produttivo al mondo.[CR]Questo plugin permette di guardare direttamente i video dell'ESO dal KODI.[CR]Altri oltre 2000 video sono disponibili.[CR]Non dimenticare di scegliere la lingua dei sottotitoli preferita del Sistema=>Aspetto=>Internazionale=>Lingua preferita per i sottotitoli.</description>
+        <summary lang="pt_PT">ESO vídeos.</summary>
+        <description lang="pt_PT">O ESO, o Observatório Europeu do Sul, é a mais importante organização europeia intergovernamental para a investigação/pesquisas em Astronomia e é o observatório astronómico mais produtivo do mundo.[CR]Este plugin permite assistir diretamente os vídeos do ESO a partir do seu KODI.[CR]Mais de 2000 vídeos estão disponíveis.[CR]Não se esqueça de escolher o idioma de legenda preferido do Sistema=>Aparência=>Internacional=>Seleccionados Legenda.</description>
+        <language>cs en es fr de it pt</language>
+        <license>GPL-3.0-or-later</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=186024</forum>
+        <source>https://github.com/jamontes/plugin.video.eso</source>
+        <website>https://www.eso.org/</website>
+        <news>
+            Version 1.3.0+matrix.1
+              * Code updated for matrix onwards.
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

@@ -1,0 +1,185 @@
+# Kodi Media Center language file
+# Addon Name: Eventvods
+# Addon id: plugin.video.eventvods
+# Addon Provider: Ikosse
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@kodi.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Choose stream"
+msgstr "Välj stream"
+
+msgctxt "#30001"
+msgid "YouTube"
+msgstr "YouTube"
+
+msgctxt "#30002"
+msgid "Twitch"
+msgstr "Twitch"
+
+msgctxt "#30003"
+msgid "LoL"
+msgstr "LoL"
+
+msgctxt "#30003"
+msgid "League of Legends"
+msgstr "League of Legends"
+
+msgctxt "#30004"
+msgid "DotA 2"
+msgstr "DotA 2"
+
+msgctxt "#30005"
+msgid "Counter Strike: Global Offensive"
+msgstr "Counter Strike: Global Offensive"
+
+msgctxt "#30006"
+msgid "Overwatch"
+msgstr "Overwatch"
+
+msgctxt "#30007"
+msgid "Valorant"
+msgstr "Valorant"
+
+msgctxt "#30008"
+msgid "PlayerUnknown's Battleground"
+msgstr "PlayerUnknown's Battleground"
+
+msgctxt "#30009"
+msgid "Rocket League"
+msgstr "Rocket League"
+
+msgctxt "#30010"
+msgid "Featured"
+msgstr "Utvalda"
+
+msgctxt "#30011"
+msgid "All"
+msgstr "Alla"
+
+msgctxt "#30012"
+msgid "Team"
+msgstr "Lag"
+
+msgctxt "#30013"
+msgid "Match"
+msgstr "Match"
+
+msgctxt "#30014"
+msgid "Map"
+msgstr "Karta"
+
+msgctxt "#30015"
+msgid "Show teams"
+msgstr "Visa lag"
+
+msgctxt "#30016"
+msgid "Show hosts"
+msgstr "Visa värdar"
+
+msgctxt "#30017"
+msgid "Events"
+msgstr "Evenemang"
+
+msgctxt "#30018"
+msgid "All matches"
+msgstr "Alla matcher"
+
+msgctxt "#30019"
+msgid "Show competition format"
+msgstr "Visa tävlingsformat"
+
+msgctxt "#30020"
+msgid "No information available"
+msgstr "Ingen information tillgänglig"
+
+msgctxt "#30021"
+msgid "Failed to load events"
+msgstr "Inläsning av evenmang misslyckades"
+
+msgctxt "#30022"
+msgid "Failed to load matches"
+msgstr "Inläsning av matcher misslyckades"
+
+msgctxt "#30023"
+msgid "Failed to retrieve match information"
+msgstr "Inhämtning av matchinformation misslyckades"
+
+msgctxt "#30024"
+msgid "Failed to retrieve staff information"
+msgstr "Inhämtning av värdinformation misslyckades"
+
+msgctxt "#30025"
+msgid "Maps"
+msgstr "Kartor"
+
+msgctxt "#30026"
+msgid "Event"
+msgstr "Evenemang"
+
+msgctxt "#30027"
+msgid "Spoil matches"
+msgstr "Spoila matcher"
+
+msgctxt "#30028"
+msgid "Show match information"
+msgstr "Visa matchinformation"
+
+msgctxt "#30029"
+msgid "Search"
+msgstr "Sök"
+
+msgctxt "#30030"
+msgid "Search event"
+msgstr "Sök evenemang"
+
+msgctxt "#30031"
+msgid "Teams"
+msgstr "Lag"
+
+msgctxt "#30032"
+msgid "Failed to retrieve match information"
+msgstr "Misslyckades inhämta matchinformation"
+
+msgctxt "#30101"
+msgid "General"
+msgstr "Allmänt"
+
+msgctxt "#30102"
+msgid "Spoilers"
+msgstr "Spoilers"
+
+msgctxt "#30103"
+msgid "Show teams"
+msgstr "Visa lag"
+
+msgctxt "#30104"
+msgid "Show maps"
+msgstr "Visa kartor"
+
+msgctxt "#30105"
+msgid "Preferred stream"
+msgstr "Förvald stream"
+
+msgctxt "#30106"
+msgid "none"
+msgstr "ingen"
+
+msgctxt "#30107"
+msgid "YouTube player"
+msgstr "YouTube-spelare"
+
+msgctxt "#30108"
+msgid "Tubed"
+msgstr "Tubed"

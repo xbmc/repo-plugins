@@ -1,8 +1,11 @@
+* 0.12.6
+ - fixed drm content for restart (license server error 500)
+
 * 0.12.5
  - added livestream specials for htmlscraper
 
 * 0.12.4
- - added header to drm license server request (fixes error 500 for drm content) 
+ - added header to drm license server request (fixes error 500 for drm content)
 
 * 0.12.3-1
  - bugfix livestream restart (kodi <19 only)
@@ -17,7 +20,7 @@
  - drm for restart
  - drm livestream license url
  - better quality selection handling for livestreams
- 
+
 * 0.12.1
 - fixed schedule error (serviceapi) #102
 

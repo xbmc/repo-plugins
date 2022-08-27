@@ -6,21 +6,24 @@ import xbmcgui, xbmcaddon, xbmcplugin, xbmc
 def timeConvert(orgtime):				#  Verify CBC Sports time format
 
 
-    if len(orgtime) == 20 and orgtime[2] == '/' and orgtime[5] == '/' and orgtime[13] == ':':
-        retime = orgtime
-    elif orgtime[13] != ':' and len(orgtime) == 19:
-        retime = retime[:13] + ':' + retime[13:]
-    elif orgtime[2] != '/' and len(orgtime) == 19:
-        retime = retime[:2] + '/' + retime[2:]
-    elif orgtime[5] != '/' and len(orgtime) == 19:
-        retime = retime[:5] + '/' + retime[5:]
-    else:
-        retime = 'invalid'
+    try:
+        if len(orgtime) == 20 and orgtime[2] == '/' and orgtime[5] == '/' and orgtime[13] == ':':
+            retime = orgtime
+        elif orgtime[13] != ':' and len(orgtime) == 19:
+            retime = retime[:13] + ':' + retime[13:]
+        elif orgtime[2] != '/' and len(orgtime) == 19:
+            retime = retime[:2] + '/' + retime[2:]
+        elif orgtime[5] != '/' and len(orgtime) == 19:
+            retime = retime[:5] + '/' + retime[5:]
+        else:
+            retime = 'invalid'
 
-    if int(orgtime[11:13]) > 24:
-        retime = 'invalid'     
+        if int(orgtime[11:13]) > 24:
+            retime = 'invalid'     
 
-    return(retime)
+        return(retime)
+    except:
+        return('invalid')  
 
 
 def logging_level(cbclog):	

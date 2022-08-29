@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.15" provider-name="gujal">
+<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.16" provider-name="gujal">
   <requires>
     <import addon="xbmc.python" version="2.26.0"/>
-    <import addon="script.module.requests" version="2.4.3"/>
     <import addon="script.common.plugin.cache" version="2.6.0"/>
     <import addon="script.module.beautifulsoup4" version="4.0.0"/>
     <import addon="script.module.six" version="1.12.0"/>
@@ -33,8 +32,9 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=352127</forum>
     <website>https://www.imdb.com/trailers/</website>
     <email>gujal at protonmail dot com</email>
-    <news>v2.1.15 (20220523)
-      [fix] playback
+    <news>v2.1.16 (20220815)
+      [fix] Now Showing and Coming soon
+      [improvement] Use api calls for most functions
     </news>
     <assets>
       <icon>icon.png</icon>

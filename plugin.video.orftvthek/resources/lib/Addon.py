@@ -26,6 +26,7 @@ videoDelivery = "HLS"
 input_stream_protocol = 'mpd'
 input_stream_drm_version = 'com.widevine.alpha'
 input_stream_mime = 'application/dash+xml'
+input_stream_lic_content_type = 'application/octet-stream'
 
 # media resources
 resource_path = os.path.join(basepath, "resources")
@@ -203,7 +204,7 @@ def run():
             if is_helper.check_inputstream():
                 link = unqoute_url(link)
                 debugLog("Restart Source Link: %s" % link)
-                headers = "User-Agent=%s&Content-Type=text/xml" % Settings.userAgent()
+                headers = "User-Agent=%s&Content-Type=%s" % (Settings.userAgent(), input_stream_lic_content_type)
 
                 if params.get('lic_url'):
                     lic_url = unqoute_url(params.get('lic_url'))
@@ -249,7 +250,7 @@ def run():
                 debugLog("Video Url: %s" % stream_url)
                 debugLog("DRM License Url: %s" % lic_url)
                 play_item = xbmcgui.ListItem(path=stream_url, offscreen=True)
-                headers = "User-Agent=%s&Content-Type=application/octet-stream" % Settings.userAgent()
+                headers = "User-Agent=%s&Content-Type=%s" % (Settings.userAgent(), input_stream_lic_content_type)
 
                 play_item.setContentLookup(False)
                 play_item.setMimeType(input_stream_mime)

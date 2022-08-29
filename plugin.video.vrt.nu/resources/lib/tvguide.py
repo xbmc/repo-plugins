@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright: (c) 2019, Dag Wieers (@dagwieers) <dag@wieers.com>
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-"""Implements a VRT NU TV guide"""
+"""Implements a VRT MAX TV guide"""
 
 from __future__ import absolute_import, division, unicode_literals
 from datetime import datetime, timedelta
@@ -207,12 +207,52 @@ class TVGuide:
         return episode_items
 
     @staticmethod
-    def get_episode_path(episode, channel):
+    def get_stream_ids(episode_id=None):
+        """Get videoId and publicationId using VRT MAX REST API"""
+        from tokenresolver import TokenResolver
+        access_token = TokenResolver().get_token('vrtlogin-at')
+        video_id = None
+        publication_id = None
+        if access_token:
+            headers = {
+                'Authorization': 'Bearer ' + access_token,
+                'Content-Type': 'application/json',
+            }
+            graphql = """
+                query Stream($id: ID!) {
+                  catalogMember(id: $id) {
+                    ...stream
+                  }
+                }
+                fragment stream on Episode {
+                  watchAction {
+                    videoId
+                    publicationId
+                  }
+                }
+            """
+            payload = dict(
+                operationName='Stream',
+                variables=dict(
+                    id=episode_id
+                ),
+                query=graphql,
+            )
+            from json import dumps
+            data = dumps(payload).encode('utf-8')
+            url = 'https://www.vrt.be/vrtnu-api/graphql/v1'
+            data_json = get_url_json(url=url, cache=None, headers=headers, data=data, raise_errors='all')
+            video_id = data_json.get('data').get('catalogMember').get('watchAction').get('videoId')
+            publication_id = data_json.get('data').get('catalogMember').get('watchAction').get('publicationId')
+        return video_id, publication_id
+
+    def get_episode_path(self, episode, channel):
         """Return a playable plugin:// path for an episode"""
         now = datetime.now(dateutil.tz.tzlocal())
         end_date = dateutil.parser.parse(episode.get('endTime'))
-        if episode.get('url'):
-            return url_for('play_url', video_url=add_https_proto(episode.get('url')))
+        if episode.get('url') and episode.get('episodeId'):
+            video_id, publication_id = self.get_stream_ids(episode_id=episode.get('episodeId'))
+            return url_for('play_id', video_id=video_id, publication_id=publication_id)
         if now - timedelta(hours=24) <= end_date <= now:
             return url_for('play_air_date', channel, episode.get('startTime')[:19], episode.get('endTime')[:19])
         return url_for('noop', episode_id=episode.get('episodeId', ''))
@@ -232,8 +272,9 @@ class TVGuide:
                 if epg_id not in epg_data:
                     epg_data[epg_id] = []
                 for episode in episodes:
-                    if episode.get('url'):
-                        path = url_for('play_url', video_url=add_https_proto(episode.get('url')))
+                    if episode.get('url') and episode.get('episodeId'):
+                        video_id, publication_id = self.get_stream_ids(episode_id=episode.get('episodeId'))
+                        path = url_for('play_id', video_id=video_id, publication_id=publication_id)
                     else:
                         path = None
                     epg_data[epg_id].append(dict(

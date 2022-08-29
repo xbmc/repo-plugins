@@ -172,7 +172,7 @@ def show_listing(list_items, category=None, sort='unsorted', ascending=True, con
     category_label = ''
     if category:
         if not content:
-            category_label = 'VRT NU / '
+            category_label = 'VRT MAX / '
         if plugin.path.startswith(('/favorites/', '/resumepoints/')):
             category_label += localize(30428) + ' / '  # My
         if isinstance(category, int):
@@ -180,7 +180,7 @@ def show_listing(list_items, category=None, sort='unsorted', ascending=True, con
         else:
             category_label += category
     elif not content:
-        category_label = 'VRT NU'
+        category_label = 'VRT MAX'
     xbmcplugin.setPluginCategory(handle=plugin.handle, category=category_label)
 
     # FIXME: Since there is no way to influence descending order, we force it here
@@ -612,12 +612,12 @@ def get_playerid():
 
 def get_max_bandwidth():
     """Get the max bandwidth based on Kodi and add-on settings"""
-    vrtnu_max_bandwidth = int(get_setting('max_bandwidth', default='0'))
+    vrtmax_max_bandwidth = int(get_setting('max_bandwidth', default='0'))
     global_max_bandwidth = int(get_global_setting('network.bandwidth'))
-    if vrtnu_max_bandwidth != 0 and global_max_bandwidth != 0:
-        return min(vrtnu_max_bandwidth, global_max_bandwidth)
-    if vrtnu_max_bandwidth != 0:
-        return vrtnu_max_bandwidth
+    if vrtmax_max_bandwidth != 0 and global_max_bandwidth != 0:
+        return min(vrtmax_max_bandwidth, global_max_bandwidth)
+    if vrtmax_max_bandwidth != 0:
+        return vrtmax_max_bandwidth
     if global_max_bandwidth != 0:
         return global_max_bandwidth
     return 0

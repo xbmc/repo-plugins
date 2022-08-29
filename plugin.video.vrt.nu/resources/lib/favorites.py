@@ -75,7 +75,7 @@ class Favorites:
         return True
 
     def get_favorites(self):
-        """Get favorites using VRT NU REST API"""
+        """Get favorites using VRT MAX REST API"""
         from tokenresolver import TokenResolver
         vrtlogin_at = TokenResolver().get_token('vrtlogin-at')
         favorites_json = {}

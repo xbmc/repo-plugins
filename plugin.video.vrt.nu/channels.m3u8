@@ -1,44 +1,44 @@
 #EXTM3U
-#EXTINF:-1 tvg-id="een" tvg-name="Eén" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logo/een/een_LOGO_zwart.png",Eén
+#EXTINF:-1 tvg-id="een" tvg-name="Eén" group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/logo/een/een_LOGO_zwart.png",Eén
 plugin://plugin.video.vrt.nu/play/id/vualto_een_geo?ext=.pvr
 
-#EXTINF:-1 tvg-id="canvas" tvg-name="Canvas", group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logo/canvas/CANVAS_logo_lichtblauw.jpg",Canvas
+#EXTINF:-1 tvg-id="canvas" tvg-name="Canvas", group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/logo/canvas/CANVAS_logo_lichtblauw.jpg",Canvas
 plugin://plugin.video.vrt.nu/play/id/vualto_canvas_geo?ext=.pvr
 
-#EXTINF:-1 tvg-id="ketnet" tvg-name="Ketnet group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logo/ketnet/ketnet_LOGO_rood_geel.png",Ketnet
+#EXTINF:-1 tvg-id="ketnet" tvg-name="Ketnet group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/logo/ketnet/ketnet_LOGO_rood_geel.png",Ketnet
 plugin://plugin.video.vrt.nu/play/id/vualto_ketnet_geo?ext=.pvr
 
-#EXTINF:-1 tvg-id="ketnetjr" tvg-name="Ketnet Junior" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/2019/07/19/c309360a-aa10-11e9-abcc-02b7b76bf47f.png",Ketnet Junior
+#EXTINF:-1 tvg-id="ketnetjr" tvg-name="Ketnet Junior" group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/2019/07/19/c309360a-aa10-11e9-abcc-02b7b76bf47f.png",Ketnet Junior
 plugin://plugin.video.vrt.nu/play/id/ketnet_jr?ext=.pvr
 
-#EXTINF:-1 tvg-id="sporza" tvg-name="Sporza" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logo/sporza/sporza_logo_zwart.png",Sporza
+#EXTINF:-1 tvg-id="sporza" tvg-name="Sporza" group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/logo/sporza/sporza_logo_zwart.png",Sporza
 plugin://plugin.video.vrt.nu/play/id/vualto_sporza_geo?ext=.pvr
 
-#EXTINF:-1 tvg-id="vrtnws" tvg-name="VRT NWS" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logos/vrtnws.png",VRT NWS
+#EXTINF:-1 tvg-id="vrtnws" tvg-name="VRT NWS" group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/logos/vrtnws.png",VRT NWS
 plugin://plugin.video.vrt.nu/play/id/vualto_nieuws?ext=.pvr
 
-#EXTINF:-1 tvg-id="radio1tv" tvg-name="Radio 1" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logos/radio1.png",Radio 1
+#EXTINF:-1 tvg-id="radio1tv" tvg-name="Radio 1" group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/logos/radio1.png",Radio 1
 plugin://plugin.video.vrt.nu/play/id/vualto_radio1?ext=.pvr
 
-#EXTINF:-1 tvg-id="radio2tv" tvg-name="Radio 2" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logos/radio2.png",Radio 2
+#EXTINF:-1 tvg-id="radio2tv" tvg-name="Radio 2" group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/logos/radio2.png",Radio 2
 plugin://plugin.video.vrt.nu/play/id/vualto_radio2?ext=.pvr
 
-#EXTINF:-1 tvg-id="klaratv" tvg-name="Klara" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logos/klara.png",Klara
+#EXTINF:-1 tvg-id="klaratv" tvg-name="Klara" group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/logos/klara.png",Klara
 plugin://plugin.video.vrt.nu/play/id/vualto_klara?ext=.pvr
 
-#EXTINF:-1 tvg-id="stubrutv" tvg-name="Studio Brussel" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/2019/03/12/1e383cf5-44a7-11e9-abcc-02b7b76bf47f.png",Studio Brussel
+#EXTINF:-1 tvg-id="stubrutv" tvg-name="Studio Brussel" group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/2019/03/12/1e383cf5-44a7-11e9-abcc-02b7b76bf47f.png",Studio Brussel
 plugin://plugin.video.vrt.nu/play/id/vualto_stubru?ext=.pvr
 
-#EXTINF:-1 tvg-id="mnm" tvg-name="MNM" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logo/mnm/logo_witte_achtergrond.png",MNM
+#EXTINF:-1 tvg-id="mnm" tvg-name="MNM" group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/logo/mnm/logo_witte_achtergrond.png",MNM
 plugin://plugin.video.vrt.nu/play/id/vualto_mnm?ext=.pvr
 
-#EXTINF:-1 tvg-id="vrt-events1" tvg-name="VRT Events stream 1" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logo/vrt.png",VRT Events stream 1
+#EXTINF:-1 tvg-id="vrt-events1" tvg-name="VRT Events stream 1" group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/logo/vrt.png",VRT Events stream 1
 plugin://plugin.video.vrt.nu/play/id/vualto_events1_geo?ext=.pvr
 
-#EXTINF:-1 tvg-id="vrt-events2" tvg-name="VRT Events stream 2" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logo/vrt.png",VRT Events stream 2
+#EXTINF:-1 tvg-id="vrt-events2" tvg-name="VRT Events stream 2" group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/logo/vrt.png",VRT Events stream 2
 plugin://plugin.video.vrt.nu/play/id/vualto_events2_geo?ext=.pvr
 
-#EXTINF:-1 tvg-id="vrt-events3" tvg-name="VRT Events stream 3" group-title="VRT NU" tvg-logo="https://images.vrt.be/orig/logo/vrt.png",VRT Events stream 3
+#EXTINF:-1 tvg-id="vrt-events3" tvg-name="VRT Events stream 3" group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/logo/vrt.png",VRT Events stream 3
 plugin://plugin.video.vrt.nu/play/id/vualto_events3_geo?ext=.pvr
 
 #EXTINF:-1 radio="true" tvg-id="radio1" tvg-name="Radio 1" group-title="VRT Radio" tvg-logo="https://images.vrt.be/orig/logos/radio1.png",Radio 1

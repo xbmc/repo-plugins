@@ -71,7 +71,7 @@ class Search:
         show_listing(menu_items, category=30031, cache=False)
 
     def search(self, keywords=None, page=0, edit=False):
-        """The VRT NU add-on Search functionality and results"""
+        """The VRT MAX add-on Search functionality and results"""
         if keywords is None or edit is True:
             keywords = get_search_string(keywords)
 

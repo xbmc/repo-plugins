@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-"""Implements an ApiHelper class with common VRT NU API functionality"""
+"""Implements an ApiHelper class with common VRT MAX API functionality"""
 
 from __future__ import absolute_import, division, unicode_literals
 
@@ -21,11 +21,11 @@ from utils import (add_https_proto, html_to_kodi, find_entry, from_unicode, play
 
 
 class ApiHelper:
-    """A class with common VRT NU API functionality"""
+    """A class with common VRT MAX API functionality"""
 
-    _VRTNU_SEARCH_URL = 'https://search7.vrt.be/search'
-    _VRTNU_SUGGEST_URL = 'https://search7.vrt.be/suggest'
-    _VRTNU_SCREENSHOT_URL = 'https://www.vrt.be/vrtnu-static/screenshots'
+    _VRTMAX_SEARCH_URL = 'https://search7.vrt.be/search'
+    _VRTMAX_SUGGEST_URL = 'https://search7.vrt.be/suggest'
+    _VRTMAX_SCREENSHOT_URL = 'https://www.vrt.be/vrtmax-static/screenshots'
 
     def __init__(self, _favorites, _resumepoints):
         """Constructor for the ApiHelper class"""
@@ -52,7 +52,7 @@ class ApiHelper:
             cache_file = 'programs.json'
 
         querystring = '&'.join('{}={}'.format(key, value) for key, value in list(params.items()))
-        suggest_url = self._VRTNU_SUGGEST_URL + '?' + querystring
+        suggest_url = self._VRTMAX_SUGGEST_URL + '?' + querystring
         tvshows = get_cached_url_json(url=suggest_url, cache=cache_file, ttl=ttl('indirect'), fail=[])
 
         # Filter tvshows by channel
@@ -112,7 +112,7 @@ class ApiHelper:
 
     def list_episodes(self, program=None, season=None, category=None, feature=None, programtype=None,
                       page=None, use_favorites=False, variety=None, whatson_id=None, episode_id=None):
-        """Construct a list of episode or season TitleItems from VRT NU Search API data and filtered by favorites"""
+        """Construct a list of episode or season TitleItems from VRT MAX Search API data and filtered by favorites"""
         # Caching
         if not variety:
             cache_file = None
@@ -271,7 +271,7 @@ class ApiHelper:
         ), sort, ascending
 
     def list_search(self, keywords, page=0):
-        """Search VRT NU content for a given string"""
+        """Search VRT MAX content for a given string"""
         episodes = self.get_episodes(keywords=keywords, page=page)
         return self.__map_episodes(episodes, titletype='mixed_episodes')
 
@@ -500,7 +500,7 @@ class ApiHelper:
         api_data = self.get_episodes(program=program, variety='single')
         if len(api_data) != 1:
             return None
-        episode = api_data[0]
+        episode = next(iter(api_data), {})
         log(2, str(episode))
         video_item = TitleItem(
             label=self._metadata.get_label(episode),
@@ -513,7 +513,7 @@ class ApiHelper:
 
     def get_episodes(self, program=None, season=None, episodes=None, category=None, feature=None, programtype=None, keywords=None,
                      whatson_id=None, episode_id=None, video_id=None, video_url=None, page=None, use_favorites=False, variety=None, cache_file=None):
-        """Get episodes or season data from VRT NU Search API"""
+        """Get episodes or season data from VRT MAX Search API"""
 
         # Set VRT Search API params
         all_items = True
@@ -527,9 +527,11 @@ class ApiHelper:
             page = realpage(page)
             all_items = False
             items_per_page = get_setting_int('itemsperpage', default=50)
+            # Get 10 items more, because we get false positives that gets filtered afterwards
+            api_items_per_page = items_per_page + 10
             params = {
-                'from': ((page - 1) * items_per_page) + 1,
-                'size': items_per_page,
+                'from': ((page - 1) * api_items_per_page) + 1,
+                'size': api_items_per_page,
             }
         elif variety == 'single':
             all_items = False
@@ -542,7 +544,7 @@ class ApiHelper:
                 params['order'] = 'asc'
 
             if variety == 'oneoff':
-                params['facets[episodeNumber]'] = '[0,1]'  # This to avoid VRT NU metadata errors (see #670)
+                params['facets[episodeNumber]'] = '[0,1]'  # This to avoid VRT MAX metadata errors (see #670)
                 params['facets[programType]'] = 'oneoff'
 
             if variety == 'watchlater':
@@ -564,8 +566,9 @@ class ApiHelper:
             params['orderBy'] = 'episodeId'
             params['order'] = 'desc'
             program_query = program.split('---')[0].replace('-', ' ')  # Convert programName to query
+            program_query = program_query.replace('vrt', '').replace('nws', '')  # Remove VRT NWS
             program_query = ' '.join([word for word in program_query.split() if len(word) > 1])  # Remove single chars
-            program_query = ''.join([i for i in program_query if not i.isdigit()])  # Remove digits
+            program_query = program_query[:-1] if program_query[-1].isdigit() else program_query  # Remove digit if last character
             program_query = program_query[:24]  # Trim query to 24 digits
             params['q'] = program_query
 
@@ -610,9 +613,9 @@ class ApiHelper:
         if video_url:
             params['facets[url]'] = video_url
 
-        # Construct VRT NU Search API Url and get api data
+        # Construct VRT MAX Search API Url and get api data
         querystring = '&'.join('{}={}'.format(key, value) for key, value in list(params.items()))
-        search_url = self._VRTNU_SEARCH_URL + '?' + querystring.replace(' ', '%20')  # Only encode spaces to minimize url length
+        search_url = self._VRTMAX_SEARCH_URL + '?' + querystring.replace(' ', '%20')  # Only encode spaces to minimize url length
         if cache_file:
             search_json = get_cached_url_json(url=search_url, cache=cache_file, ttl=ttl('indirect'), fail={})
         else:
@@ -622,7 +625,7 @@ class ApiHelper:
         # VRT Search API only returns a maximum of 10 seasons, to get all seasons we need to use the "model.json" API
         seasons = []
         if 'facets[seasonId]' not in unquote(search_url) and program:
-            season_json = get_url_json('https://www.vrt.be/vrtnu/a-z/{}.model.json'.format(program))
+            season_json = get_url_json('https://www.vrt.be/vrtmax/a-z/{}.model.json'.format(program))
             season_items = None
             try:
                 season_items = season_json.get('details').get('data').get('program').get('seasons')
@@ -636,20 +639,19 @@ class ApiHelper:
         episodes = search_json.get('results', [{}])
         show_seasons = bool(season != 'allseasons')
 
-        # Return seasons
-        if show_seasons and len(seasons) > 1:
-            return (seasons, episodes)
+        # Check if we need to request more items
+        if all_items:
+            api_pages = search_json.get('meta').get('pages').get('total')
+            api_page_size = search_json.get('meta').get('pages').get('size')
+            total_results = search_json.get('meta').get('total_results')
+            print(total_results)
 
-        api_pages = search_json.get('meta').get('pages').get('total')
-        api_page_size = search_json.get('meta').get('pages').get('size')
-        total_results = search_json.get('meta').get('total_results')
-
-        if all_items and total_results > api_page_size:
-            for api_page in range(1, api_pages):
-                api_page_url = search_url + '&from=' + str(api_page * api_page_size + 1)
-                api_page_json = get_url_json(api_page_url)
-                if api_page_json is not None:
-                    episodes += api_page_json.get('results', [{}])
+            if total_results and total_results > api_page_size:
+                for api_page in range(1, api_pages):
+                    api_page_url = search_url + '&from=' + str(api_page * api_page_size + 1)
+                    api_page_json = get_url_json(api_page_url)
+                    if api_page_json is not None:
+                        episodes += api_page_json.get('results', [{}])
 
         # FIXME: Filter episodes because faceted search is broken
         if program:
@@ -671,12 +673,20 @@ class ApiHelper:
                     filtered_episodes.append(episode)
             episodes = filtered_episodes
 
+        # Trim filtered episodes
+        if page:
+            episodes = episodes[:items_per_page]
+
+        # Return seasons
+        if show_seasons and len(seasons) > 1:
+            return (seasons, episodes)
+
         # Return episodes
         return episodes
 
     def get_live_screenshot(self, channel):
         """Get a live screenshot for a given channel, only supports Eén, Canvas and Ketnet"""
-        url = '%s/%s.jpg' % (self._VRTNU_SCREENSHOT_URL, channel)
+        url = '%s/%s.jpg' % (self._VRTMAX_SCREENSHOT_URL, channel)
         delete_cached_thumbnail(url)
         return url
 
@@ -806,7 +816,7 @@ class ApiHelper:
         else:
             from data import FEATURED
 
-            # Add VRT NU website featured items
+            # Add VRT MAX website featured items
             featured.extend(self.get_featured_from_web())
 
             # Add hardcoded VRT Search API featured items
@@ -825,7 +835,7 @@ class ApiHelper:
         return featured_items
 
     def get_featured_from_api(self):
-        """Return a list of featured items from VRT NU Search API"""
+        """Return a list of featured items from VRT MAX Search API"""
         episodes = self.get_episodes(season='allseasons')
         taglist = []
         featured = []
@@ -841,9 +851,9 @@ class ApiHelper:
 
     @staticmethod
     def get_featured_from_web():
-        """Return a list of featured items from VRT NU website using AEM JSON Exporter"""
+        """Return a list of featured items from VRT MAX website using AEM JSON Exporter"""
         featured = []
-        data = get_url_json('https://www.vrt.be/vrtnu/jcr:content/par.model.json')
+        data = get_url_json('https://www.vrt.be/vrtmax/jcr:content/par.model.json')
         if data is not None:
             items = data.get(':items')
             if items:
@@ -855,9 +865,9 @@ class ApiHelper:
 
     @staticmethod
     def get_featured_media_from_web(feature):
-        """Return a list of featured media from VRT NU website using AEM JSON Exporter"""
+        """Return a list of featured media from VRT MAX website using AEM JSON Exporter"""
         media = []
-        data = get_url_json('https://www.vrt.be/vrtnu/jcr:content/par/%s.model.json' % feature)
+        data = get_url_json('https://www.vrt.be/vrtmax/jcr:content/par/%s.model.json' % feature)
         if data is not None:
             for item in data.get('items'):
                 mediatype = 'tvshows'
@@ -890,9 +900,9 @@ class ApiHelper:
 
     @staticmethod
     def get_online_categories():
-        """Return a list of categories from the VRT NU website"""
+        """Return a list of categories from the VRT MAX website"""
         categories = []
-        categories_json = get_url_json('https://www.vrt.be/vrtnu/categorieen/jcr:content/par/categories.model.json')
+        categories_json = get_url_json('https://www.vrt.be/vrtmax/categorieen/jcr:content/par/categories.model.json')
         if categories_json is not None:
             categories = []
             for category in categories_json.get('items'):

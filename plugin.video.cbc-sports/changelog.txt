@@ -1,3 +1,9 @@
+Version 1.0.5
+
+-  Added a generic check for all improperly formatted times being returned by the CBC
+   sports website.  Now an item will not be displayed if the time format is wrong vs.
+   causing an exception error and many items not being displayed.
+
 Version 1.0.4
 
 -  Added another check / fix for improperly formatted time on the CBC Sports website

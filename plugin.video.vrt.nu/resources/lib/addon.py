@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-"""This is the actual VRT NU video plugin entry point"""
+"""This is the actual VRT MAX video plugin entry point"""
 
 from __future__ import absolute_import, division, unicode_literals
 from routing import Plugin
@@ -18,7 +18,7 @@ plugin = Plugin()  # pylint: disable=invalid-name
 
 @plugin.route('/')
 def main_menu():
-    """The VRT NU plugin main menu"""
+    """The VRT MAX plugin main menu"""
     from vrtplayer import VRTPlayer
     VRTPlayer().show_main_menu()
 
@@ -285,13 +285,6 @@ def play_id(video_id, publication_id=None):
     """The API interface to play a video by video_id and/or publication_id"""
     from vrtplayer import VRTPlayer
     VRTPlayer().play(dict(video_id=video_id, publication_id=publication_id))
-
-
-@plugin.route('/play/url/<path:video_url>')
-def play_url(video_url):
-    """The API interface to play a video by using a URL"""
-    from vrtplayer import VRTPlayer
-    VRTPlayer().play(dict(video_url=video_url))
 
 
 @plugin.route('/play/latest/<program>')

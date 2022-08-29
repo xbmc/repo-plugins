@@ -13,8 +13,8 @@ except ImportError:  # Python 2
 
 from data import CHANNELS, SECONDS_MARGIN
 from kodiutils import colour, get_setting_bool, localize, localize_datelong, log, url_for
-from utils import (add_https_proto, capitalize, find_entry, from_unicode,
-                   html_to_kodi, reformat_url, reformat_image_url, shorten_link, to_unicode, unescape)
+from utils import (capitalize, find_entry, from_unicode, html_to_kodi, reformat_url,
+                   reformat_image_url, shorten_link, to_unicode, unescape)
 
 
 class Metadata:
@@ -28,7 +28,7 @@ class Metadata:
     def get_studio(api_data):
         """Get studio string from single item json api data"""
 
-        # VRT NU Search API or VRT NU Suggest API
+        # VRT MAX Search API or VRT MAX Suggest API
         if api_data.get('episodeType') or api_data.get('type') == 'program':
             brands = api_data.get('programBrands', []) or api_data.get('brands', [])
             if brands:
@@ -44,7 +44,7 @@ class Metadata:
                 studio = 'VRT'
             return studio
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return ''
 
@@ -62,11 +62,11 @@ class Metadata:
         if self._resumepoints.is_activated():
             episode_id = api_data.get('episodeId')
 
-            # VRT NU Search API
+            # VRT MAX Search API
             if api_data.get('episodeType'):
                 title = api_data.get('title')
 
-            # VRT NU Schedule API (some are missing vrt.whatson-id)
+            # VRT MAX Schedule API (some are missing vrt.whatson-id)
             elif api_data.get('vrt.whatson-id') or api_data.get('startTime'):
                 title = api_data.get('title')
 
@@ -94,7 +94,7 @@ class Metadata:
         # FOLLOW PROGRAM
         if self._favorites.is_activated():
 
-            # VRT NU Search API
+            # VRT MAX Search API
             if api_data.get('episodeType'):
                 program_id = api_data.get('programId')
                 program_title = api_data.get('programTitle')
@@ -102,7 +102,7 @@ class Metadata:
                 follow_suffix = localize(30410) if program_type != 'oneoff' else ''  # program
                 follow_enabled = True
 
-            # VRT NU Suggest API
+            # VRT MAX Suggest API
             elif api_data.get('type') == 'program':
                 # FIXME: No program_id in Suggest API
                 program_id = None
@@ -110,7 +110,7 @@ class Metadata:
                 follow_suffix = ''
                 follow_enabled = True
 
-            # VRT NU Schedule API (some are missing vrt.whatson-id)
+            # VRT MAX Schedule API (some are missing vrt.whatson-id)
             elif api_data.get('vrt.whatson-id') or api_data.get('startTime'):
                 program_id = api_data.get('programId')
                 program_title = api_data.get('title')
@@ -157,7 +157,7 @@ class Metadata:
         """Get asset_str from single item json api data"""
         asset_str = None
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             asset_str = '{program} - {season} - {title}'.format(
                 program=api_data.get('programTitle'),
@@ -171,25 +171,20 @@ class Metadata:
         """Get video_id from single item json api data"""
         video_id = None
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             video_id = api_data.get('videoId')
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         elif api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             video_id = api_data.get('videoId')
-
-        # Fallback to VRT NU website scraping
-        if not video_id and api_data.get('url'):
-            from webscraper import get_video_id
-            video_id = get_video_id(add_https_proto(api_data.get('url')))
 
         return video_id
 
     def get_playcount(self, api_data):
         """Get playcount from single item json api data"""
         playcount = -1
-        # Only fill in playcount when using VRT NU resumepoints because setting playcount breaks standard Kodi watched status
+        # Only fill in playcount when using VRT MAX resumepoints because setting playcount breaks standard Kodi watched status
         if self._resumepoints.is_activated():
             video_id = self.get_video_id(api_data)
             if video_id:
@@ -203,7 +198,7 @@ class Metadata:
         """Get properties from single item json api data"""
         properties = {}
 
-        # Only fill in properties when using VRT NU resumepoints because setting resumetime/totaltime breaks standard Kodi watched status
+        # Only fill in properties when using VRT MAX resumepoints because setting resumetime/totaltime breaks standard Kodi watched status
         if self._resumepoints.is_activated():
             video_id = self.get_video_id(api_data)
             if video_id:
@@ -236,15 +231,15 @@ class Metadata:
     def get_tvshowtitle(api_data):
         """Get tvshowtitle string from single item json api data"""
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             return api_data.get('programTitle', '???')
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         if api_data.get('type') == 'program':
             return api_data.get('title', '???')
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return api_data.get('title', 'Untitled')
 
@@ -255,7 +250,7 @@ class Metadata:
     def get_mpaa(api_data):
         """Get film rating string from single item json api data"""
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             if api_data.get('ageGroup'):
                 return api_data.get('ageGroup')
@@ -267,15 +262,15 @@ class Metadata:
     def get_duration(api_data):
         """Get duration int from single item json api data"""
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             return api_data.get('duration', int()) * 60  # Minutes to seconds
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         if api_data.get('type') == 'program':
             return int()
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             from datetime import timedelta
             import dateutil.parser
@@ -294,7 +289,7 @@ class Metadata:
         import dateutil.parser
         import dateutil.tz
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             if season is not False:
                 plot = html_to_kodi(api_data.get('programShortDescription', ''))
@@ -361,7 +356,7 @@ class Metadata:
                 plot = '%s\n\n[COLOR={highlighted}]%s[/COLOR]' % (plot, permalink)
             return colour(plot)
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         if api_data.get('type') == 'program':
             plot = unescape(api_data.get('description', '???'))
             # permalink = shorten_link(api_data.get('programUrl'))
@@ -369,7 +364,7 @@ class Metadata:
             #     plot = '%s\n\n[COLOR={highlighted}]%s[/COLOR]' % (plot, permalink)
             return colour(plot)
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             now = datetime.now(dateutil.tz.tzlocal())
             epg = self.parse(date, now)
@@ -387,7 +382,7 @@ class Metadata:
     @staticmethod
     def get_plotoutline(api_data, season=False):
         """Get plotoutline string from single item json api data"""
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             if season is not False:
                 plotoutline = html_to_kodi(api_data.get('programDescription', '') or api_data.get('programShortDescription', ''))
@@ -396,11 +391,11 @@ class Metadata:
             plotoutline = html_to_kodi(api_data.get('subtitle', ''))
             return plotoutline
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         if api_data.get('type') == 'program':
             return ''
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return html_to_kodi(api_data.get('shortDescription', '') or api_data.get('subtitle', ''))
 
@@ -410,7 +405,7 @@ class Metadata:
     def get_season(self, api_data):
         """Get season int from single item json api data"""
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             # If this is a oneoff video and the season is a year, don't return a season
             if api_data.get('programType') == 'oneoff' and self.get_year(api_data):
@@ -424,11 +419,11 @@ class Metadata:
                     season = api_data.get('seasonTitle')
             return season
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         if api_data.get('type') == 'program':
             return None
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return None
 
@@ -438,7 +433,7 @@ class Metadata:
     def get_episode(self, api_data):
         """Get episode int from single item json api data"""
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             # If this is a oneoff video and the season is a year, don't return an episode
             if api_data.get('programType') == 'oneoff' and self.get_year(api_data):
@@ -449,11 +444,11 @@ class Metadata:
                 episode = int()
             return episode
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         if api_data.get('type') == 'program':
             return int()
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return int()
 
@@ -464,16 +459,16 @@ class Metadata:
     def get_date(api_data):
         """Get date string from single item json api data"""
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             import dateutil.parser
             return dateutil.parser.parse(api_data.get('onTime')).strftime('%d.%m.%Y')
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         if api_data.get('type') == 'program':
             return ''
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return ''
 
@@ -483,7 +478,7 @@ class Metadata:
     def get_aired(self, api_data):
         """Get aired string from single item json api data"""
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             # FIXME: Due to a bug in Kodi, ListItem.Year, as shown in Info pane, is based on 'aired' when set
             # If this is a oneoff (e.g. movie) and we get a year of release, do not set 'aired'
@@ -496,11 +491,11 @@ class Metadata:
                 aired = datetime.fromtimestamp(api_data.get('broadcastDate', 0) / 1000, dateutil.tz.UTC).strftime('%Y-%m-%d')
             return aired
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         if api_data.get('type') == 'program':
             return ''
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             from datetime import datetime
             import dateutil.parser
@@ -515,16 +510,16 @@ class Metadata:
     def get_dateadded(api_data):
         """Get dateadded string from single item json api data"""
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             import dateutil.parser
             return dateutil.parser.parse(api_data.get('onTime')).strftime('%Y-%m-%d %H:%M:%S')
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         if api_data.get('type') == 'program':
             return ''
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return ''
 
@@ -536,7 +531,7 @@ class Metadata:
         """Get year integer from single item json api data"""
         from datetime import datetime
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             # Add proper year information when season falls in range
             # NOTE: Estuary skin is using premiered/aired year, which is incorrect
@@ -547,11 +542,11 @@ class Metadata:
                 pass
             return int()
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         if api_data.get('type') == 'program':
             return int()
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return int()
 
@@ -561,7 +556,7 @@ class Metadata:
     def get_mediatype(self, api_data, season=False):
         """Get art dict from single item json api data"""
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             if season is not False:
                 return 'season'
@@ -572,11 +567,11 @@ class Metadata:
 
             return 'episode'
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         if api_data.get('type') == 'program':
             return ''  # NOTE: We do not use 'tvshow' as it won't show as a folder
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             return 'episode'
 
@@ -587,7 +582,7 @@ class Metadata:
         """Get art dict from single item json api data"""
         art_dict = {}
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             if season is not False:
                 if get_setting_bool('showfanart', default=True):
@@ -615,7 +610,7 @@ class Metadata:
 
             return art_dict
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         if api_data.get('type') == 'program':
             if get_setting_bool('showfanart', default=True):
                 art_dict['thumb'] = reformat_image_url(api_data.get('thumbnail', 'DefaultAddonVideo.png'))
@@ -629,7 +624,7 @@ class Metadata:
 
             return art_dict
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             if get_setting_bool('showfanart', default=True):
                 art_dict['thumb'] = reformat_image_url(api_data.get('image', 'DefaultAddonVideo.png'))
@@ -646,7 +641,7 @@ class Metadata:
     def get_info_labels(self, api_data, season=False, date=None, channel=None):
         """Get infoLabels dict from single item json api data"""
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             info_labels = dict(
                 title=self.get_title(api_data, season=season),
@@ -670,7 +665,7 @@ class Metadata:
             )
             return info_labels
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         if api_data.get('type') == 'program':
             info_labels = dict(
                 tvshowtitle=self.get_tvshowtitle(api_data),
@@ -681,7 +676,7 @@ class Metadata:
             )
             return info_labels
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             info_labels = dict(
                 title=self.get_title(api_data),
@@ -706,15 +701,15 @@ class Metadata:
             title = '%s %s' % (localize(30131), season)  # Season X
             return title
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             title = html_to_kodi(api_data.get('title') or api_data.get('shortDescription', '???'))
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         elif api_data.get('type') == 'program':
             title = api_data.get('title', '???')
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         elif api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             title = html_to_kodi(api_data.get('subtitle', '???'))
 
@@ -722,9 +717,9 @@ class Metadata:
 
     @staticmethod
     def get_label(api_data, titletype=None, return_sort=False):
-        """Get an appropriate label string matching the type of listing and VRT NU provided displayOptions from single item json api data"""
+        """Get an appropriate label string matching the type of listing and VRT MAX provided displayOptions from single item json api data"""
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
 
             program_type = api_data.get('programType')
@@ -758,11 +753,11 @@ class Metadata:
                 label = api_data.get('program', label)
                 sort = 'label'
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         elif api_data.get('type') == 'program':
             label = api_data.get('title', '???')
 
-        # VRT NU Schedule API (some are missing vrt.whatson-id)
+        # VRT MAX Schedule API (some are missing vrt.whatson-id)
         elif api_data.get('vrt.whatson-id') or api_data.get('startTime'):
             title = html_to_kodi(api_data.get('subtitle', '') or api_data.get('shortDescription', ''))
             label = '{start} - [B]{program}[/B]{title}'.format(
@@ -784,13 +779,13 @@ class Metadata:
     def get_tag(api_data):
         """Return categories for a given episode"""
 
-        # VRT NU Search API
+        # VRT MAX Search API
         if api_data.get('episodeType'):
             from data import CATEGORIES
             return sorted([localize(find_entry(CATEGORIES, 'id', category, {}).get('msgctxt', category))
                            for category in api_data.get('categories', [])])
 
-        # VRT NU Suggest API
+        # VRT MAX Suggest API
         if api_data.get('type') == 'program':
             return ['Series']
 

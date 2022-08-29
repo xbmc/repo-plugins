@@ -42,19 +42,19 @@ class ResumePoints:
 
     @staticmethod
     def watchlater_headers(url=None):
-        """Generate http headers for VRT NU watchLater API"""
+        """Generate http headers for VRT MAX watchLater API"""
         from tokenresolver import TokenResolver
         xvrttoken = TokenResolver().get_token('X-VRT-Token', variant='user')
         headers = {}
         if xvrttoken:
-            url = 'https://www.vrt.be' + url if url else 'https://www.vrt.be/vrtnu'
+            url = 'https://www.vrt.be' + url if url else 'https://www.vrt.be/vrtmax'
             headers = {
                 'Authorization': 'Bearer ' + xvrttoken,
                 'Content-Type': 'application/json',
                 'Referer': url,
             }
         else:
-            log_error('Failed to get usertoken from VRT NU')
+            log_error('Failed to get usertoken from VRT MAX')
             notification(message=localize(30975))
         return headers
 
@@ -104,7 +104,7 @@ class ResumePoints:
 
     @staticmethod
     def resumepoints_headers():
-        """Generate http headers for VRT NU Resumepoint API"""
+        """Generate http headers for VRT MAX Resumepoint API"""
         from tokenresolver import TokenResolver
         vrtlogin_at = TokenResolver().get_token('vrtlogin-at')
         headers = {}
@@ -114,7 +114,7 @@ class ResumePoints:
                 'Content-Type': 'application/json',
             }
         else:
-            log_error('Failed to get access token from VRT NU')
+            log_error('Failed to get access token from VRT MAX')
             notification(message=localize(30975))
         return headers
 
@@ -134,10 +134,10 @@ class ResumePoints:
 
         # Update
         if (self.still_watching(position, total) or (path and path.startswith('plugin://plugin.video.vrt.nu/play/upnext'))):
-            # Normally, VRT NU resumepoints are deleted when an episode is (un)watched and Kodi GUI automatically sets
+            # Normally, VRT MAX resumepoints are deleted when an episode is (un)watched and Kodi GUI automatically sets
             # the (un)watched status when Kodi Player exits. This mechanism doesn't work with "Up Next" episodes because
             # these episodes are not initiated from a ListItem in Kodi GUI.
-            # For "Up Next" episodes, we should never delete the VRT NU resumepoints to make sure the watched status
+            # For "Up Next" episodes, we should never delete the VRT MAX resumepoints to make sure the watched status
             # can be forced in Kodi GUI using the playcount infolabel.
             log(3, "[Resumepoints] Update resumepoint '{video_id}' {position}/{total}", video_id=video_id, position=position, total=total)
 
@@ -159,7 +159,7 @@ class ResumePoints:
                 resumepoint_json = get_url_json('{api}/{video_id}'.format(api=self.RESUMEPOINTS_URL, video_id=video_id),
                                                 headers=self.resumepoints_headers(), data=dumps(payload).encode())
             except HTTPError as exc:
-                log_error('Failed to update resumepoint of {title} at VRT NU ({error})', title=title, error=exc)
+                log_error('Failed to update resumepoint of {title} at VRT MAX ({error})', title=title, error=exc)
                 notification(message=localize(30977, title=title))
                 return False
 
@@ -238,7 +238,7 @@ class ResumePoints:
         return True
 
     def get_watchlater(self):
-        """Get watchlater using VRT NU REST API"""
+        """Get watchlater using VRT MAX REST API"""
         from tokenresolver import TokenResolver
         vrtlogin_at = TokenResolver().get_token('vrtlogin-at')
         watchlater_json = {}
@@ -257,7 +257,7 @@ class ResumePoints:
         return watchlater_json
 
     def get_continue(self):
-        """Get continue using VRT NU REST API"""
+        """Get continue using VRT MAX REST API"""
         from tokenresolver import TokenResolver
         vrtlogin_at = TokenResolver().get_token('vrtlogin-at')
         continue_json = {}

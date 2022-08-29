@@ -33,7 +33,7 @@ CATEGORIES = [
 
 # TODO: Find a solution for the below VRT YouTube channels
 #     dict(label='VRT', url='https://www.youtube.com/channel/UCojJNXcer3yKj9Q-RWOFZuw'),
-#     dict(label='VRT NU', url='https://www.youtube.com/channel/UCt3RWMlMKf5jKg5cvqxC_xA'),
+#     dict(label='VRT MAX', url='https://www.youtube.com/channel/UCt3RWMlMKf5jKg5cvqxC_xA'),
 #     dict(label='VRT met VGT', url='https://www.youtube.com/channel/UC5M_bvCAK3WkszBw_eCXxKQ'),
 
 CHANNELS = [
@@ -42,7 +42,7 @@ CHANNELS = [
         name='een',
         label='Eén',
         studio='Een',
-        live_stream='https://www.vrt.be/vrtnu/livestream/#epgchannel=O8',
+        live_stream='https://www.vrt.be/vrtmax/livestream/#epgchannel=O8',
         live_stream_id='vualto_een_geo',
         youtube=[
             dict(label='Eén', url='https://www.youtube.com/user/welkombijeen'),
@@ -59,7 +59,7 @@ CHANNELS = [
         name='canvas',
         label='Canvas',
         studio='Canvas',
-        live_stream='https://www.vrt.be/vrtnu/livestream/#epgchannel=1H',
+        live_stream='https://www.vrt.be/vrtmax/livestream/#epgchannel=1H',
         live_stream_id='vualto_canvas_geo',
         youtube=[
             dict(label='Canvas', url='https://www.youtube.com/user/CanvasTV'),
@@ -77,7 +77,7 @@ CHANNELS = [
         name='ketnet',
         label='Ketnet',
         studio='Ketnet',
-        live_stream='https://www.vrt.be/vrtnu/kanalen/ketnet/',
+        live_stream='https://www.vrt.be/vrtmax/kanalen/ketnet/',
         live_stream_id='vualto_ketnet_geo',
         youtube=[
             dict(label='Ketnet', url='https://www.youtube.com/user/KetnetVideo'),

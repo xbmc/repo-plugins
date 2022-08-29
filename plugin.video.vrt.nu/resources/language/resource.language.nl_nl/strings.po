@@ -1,5 +1,5 @@
 # Kodi Media Center language file
-# Addon Name: VRT NU
+# Addon Name: VRT MAX
 # Addon id: plugin.video.vrt.nu
 # Addon Provider: pietje666
 msgid ""
@@ -89,12 +89,12 @@ msgid "Browse channel TV guides"
 msgstr "Doorblader de tv-gids per kanaal"
 
 msgctxt "#30028"
-msgid "Search VRT NU"
-msgstr "Doorzoek VRT NU"
+msgid "Search VRT MAX"
+msgstr "Doorzoek VRT MAX"
 
 msgctxt "#30029"
-msgid "Search the complete VRT NU library"
-msgstr "Doorzoek de hele VRT NU-bibliotheek"
+msgid "Search the complete VRT MAX library"
+msgstr "Doorzoek de hele VRT MAX-bibliotheek"
 
 msgctxt "#30030"
 msgid "Remove"
@@ -127,24 +127,24 @@ msgid "Movies"
 msgstr "Films"
 
 msgctxt "#30043"
-msgid "All movies available on VRT NU"
-msgstr "Alle films beschikbaar op VRT NU"
+msgid "All movies available on VRT MAX"
+msgstr "Alle films beschikbaar op VRT MAX"
 
 msgctxt "#30044"
 msgid "Documentaries"
 msgstr "Documentaires"
 
 msgctxt "#30045"
-msgid "All [I]one-off[/I] documentaries on VRT NU"
-msgstr "Alle [I]one-off[/I] documentaires op VRT NU"
+msgid "All [I]one-off[/I] documentaries on VRT MAX"
+msgstr "Alle [I]one-off[/I] documentaires op VRT MAX"
 
 msgctxt "#30046"
 msgid "Music"
 msgstr "Muziek"
 
 msgctxt "#30047"
-msgid "All [I]one-off[/I] music on VRT NU"
-msgstr "Alle [I]one-off[/I] muziek op VRT NU"
+msgid "All [I]one-off[/I] music on VRT MAX"
+msgstr "Alle [I]one-off[/I] muziek op VRT MAX"
 
 msgctxt "#30048"
 msgid "Most recent"
@@ -452,8 +452,8 @@ msgid "No followed programs found"
 msgstr "Geen programma's worden gevolgd"
 
 msgctxt "#30416"
-msgid "We could not find any programs that are followed.\n\nEither right-click on a program or episode to follow a program, or follow a program on the VRT NU website."
-msgstr "We konden geen programma's vinden die je volgt.\n\nKlik met de rechtermuisknop op een programma of aflevering om een programma te volgen of volg een programma op de VRT NU-website."
+msgid "We could not find any programs that are followed.\n\nEither right-click on a program or episode to follow a program, or follow a program on the VRT MAX website."
+msgstr "We konden geen programma's vinden die je volgt.\n\nKlik met de rechtermuisknop op een programma of aflevering om een programma te volgen of volg een programma op de VRT MAX-website."
 
 msgctxt "#30417"
 msgid "Go to program"
@@ -488,7 +488,7 @@ msgid "[B]New search…[/B]"
 msgstr "[B]Nieuwe zoekopdracht…[/B]"
 
 msgctxt "#30425"
-msgid "Perform a new search on VRT NU content"
+msgid "Perform a new search on VRT MAX content"
 msgstr "Geef een nieuwe zoekopdracht in"
 
 msgctxt "#30426"
@@ -528,16 +528,16 @@ msgid "Update add-on repositories"
 msgstr "Add-on repositories worden bijgewerkt"
 
 msgctxt "#30451"
-msgid "If a VRT NU add-on update is available, it should now be updating and you will be notified.\nMake sure you have [I]Auto-update[/I] enabled for the VRT NU add-on."
-msgstr "Als een VRT NU update beschikbaar is, zal deze nu geïnstalleerd worden en krijg je hiervan een melding.\nControleer wel dat [I]Automatische update[/I] is ingesteld voor de VRT NU add-on."
+msgid "If a VRT MAX add-on update is available, it should now be updating and you will be notified.\nMake sure you have [I]Auto-update[/I] enabled for the VRT MAX add-on."
+msgstr "Als een VRT MAX update beschikbaar is, zal deze nu geïnstalleerd worden en krijg je hiervan een melding.\nControleer wel dat [I]Automatische update[/I] is ingesteld voor de VRT MAX add-on."
 
 msgctxt "#30452"
 msgid "Automatic updates are disabled"
 msgstr "Automatische updates zijn uitgeschakeld"
 
 msgctxt "#30453"
-msgid "Kodi is configured to not update add-ons automatically, so you will not get VRT NU updates unless you fix this setting.\nWe will open de Kodi settings, please change this setting."
-msgstr "Kodi is ingesteld om add-ons niet automatisch bij te werken, dus je zal geen VRT NU updates ontvangen tenzij je deze instelling aanpast.\nWe openen nu de Kodi-instellingen zodat je dit kan wijzigen."
+msgid "Kodi is configured to not update add-ons automatically, so you will not get VRT MAX updates unless you fix this setting.\nWe will open de Kodi settings, please change this setting."
+msgstr "Kodi is ingesteld om add-ons niet automatisch bij te werken, dus je zal geen VRT MAX updates ontvangen tenzij je deze instelling aanpast.\nWe openen nu de Kodi-instellingen zodat je dit kan wijzigen."
 
 msgctxt "#30454"
 msgid "from livestream cache"
@@ -550,24 +550,24 @@ msgid "Credentials"
 msgstr "Inloggegevens"
 
 msgctxt "#30701"
-msgid "VRT NU login"
-msgstr "VRT NU login"
+msgid "VRT MAX login"
+msgstr "VRT MAX login"
 
 msgctxt "#30703"
 msgid "Email address"
 msgstr "E-mailadres"
 
 msgctxt "#30704"
-msgid "Provide your VRT NU email address. In case this is a Google, Facebook or Apple account, please ensure that this login is enabled for normal username/password authentication. See the wiki for more information."
-msgstr "Geef je VRT NU e-mailadres in. In het geval je een Google-, Facebook- of Apple-account gebruikt, controleer dat deze login geactiveerd werd voor normale gebruikersnaam/wachtwoord authenticatie. Zie de wiki pagina voor meer informatie."
+msgid "Provide your VRT MAX email address. In case this is a Google, Facebook or Apple account, please ensure that this login is enabled for normal username/password authentication. See the wiki for more information."
+msgstr "Geef je VRT MAX e-mailadres in. In het geval je een Google-, Facebook- of Apple-account gebruikt, controleer dat deze login geactiveerd werd voor normale gebruikersnaam/wachtwoord authenticatie. Zie de wiki pagina voor meer informatie."
 
 msgctxt "#30705"
 msgid "Password"
 msgstr "Wachtwoord"
 
 msgctxt "#30706"
-msgid "Provide your VRT NU account password."
-msgstr "Geef je VRT NU account paswoord in."
+msgid "Provide your VRT MAX account password."
+msgstr "Geef je VRT MAX account paswoord in."
 
 msgctxt "#30740"
 msgid "Interface"
@@ -582,8 +582,8 @@ msgid "Enable My favorites"
 msgstr "Toon Mijn favorieten"
 
 msgctxt "#30744"
-msgid "When enabled, the user can follow their favorite programs and list these separately. In this case the VRT NU add-on will download and update a list of your followed programs on the VRT NU website."
-msgstr "Indien actief kan de gebruiker zijn favoriete programma's volgen en apart aanroepen. Dit zorgt er wel voor dat de VRT NU add-on een lijst van favoriete programma's download en aanpast op de VRT NU website."
+msgid "When enabled, the user can follow their favorite programs and list these separately. In this case the VRT MAX add-on will download and update a list of your followed programs on the VRT MAX website."
+msgstr "Indien actief kan de gebruiker zijn favoriete programma's volgen en apart aanroepen. Dit zorgt er wel voor dat de VRT MAX add-on een lijst van favoriete programma's download en aanpast op de VRT MAX website."
 
 msgctxt "#30745"
 msgid "Manage My favorites…"
@@ -594,8 +594,8 @@ msgid "Enable watching activity"
 msgstr "Toon kijkactiviteit"
 
 msgctxt "#30748"
-msgid "This enables 'watch later' and 'continue watching' menus and syncs playback position between different devices using the same VRT NU account."
-msgstr "Dit activeert 'kijk later' en 'verderkijken' menu's and synchroniseert de afspeelpositie tussen verschillende toestellen die hetzelfde VRT NU account gebruiken."
+msgid "This enables 'watch later' and 'continue watching' menus and syncs playback position between different devices using the same VRT MAX account."
+msgstr "Dit activeert 'kijk later' en 'verderkijken' menu's and synchroniseert de afspeelpositie tussen verschillende toestellen die hetzelfde VRT MAX account gebruiken."
 
 msgctxt "#30749"
 msgid "Add Movies subsection"
@@ -631,7 +631,7 @@ msgstr "Toon aflevering permalink in beschrijving"
 
 msgctxt "#30764"
 msgid "When enabled, the video description will include a permanent link that points to this episode. This is useful for quickly opening an episode or movie on a mobile device."
-msgstr "Indien actief zal de beschrijving van iedere video een permanent link bevatten die je rechtstreeks naar de VRT NU website brengt. Dit is handig om snel een aflevering of film to openen op een mobiel toestel."
+msgstr "Indien actief zal de beschrijving van iedere video een permanent link bevatten die je rechtstreeks naar de VRT MAX website brengt. Dit is handig om snel een aflevering of film to openen op een mobiel toestel."
 
 msgctxt "#30765"
 msgid "Colour preferences"
@@ -818,8 +818,8 @@ msgid "Updates"
 msgstr "Updates"
 
 msgctxt "#30891"
-msgid "Update the VRT NU add-on"
-msgstr "Bijwerken van de VRT NU add-on"
+msgid "Update the VRT MAX add-on"
+msgstr "Bijwerken van de VRT MAX add-on"
 
 msgctxt "#30893"
 msgid "Install the latest add-on updates…"
@@ -830,8 +830,8 @@ msgid "Open Kodi add-ons settings… [COLOR=gray]to enable Kodi auto-updates)[/C
 msgstr "Open de Kodi add-ons instellingen… [COLOR=gray](voor Kodi automatische updates)[/COLOR]"
 
 msgctxt "#30897"
-msgid "Open VRT NU add-on information…"
-msgstr "Open VRT NU add-on informatie… [COLOR=gray](voor VRT NU automatisch updates)[/COLOR]"
+msgid "Open VRT MAX add-on information…"
+msgstr "Open VRT MAX add-on informatie… [COLOR=gray](voor VRT MAX automatisch updates)[/COLOR]"
 
 msgctxt "#30900"
 msgid "Expert"
@@ -948,8 +948,8 @@ msgid "Please increase the maximum bandwidth. Maximum bandwidth is set to {max} 
 msgstr "Verhoog de maximale bandbreedte alstublieft. De maximale bandbreedte is ingesteld op {max} kbps, maar deze stream heeft minimum {min} kbps nodig."
 
 msgctxt "#30958"
-msgid "There is a problem with this VRT NU {protocol} stream. Try again with {component} {state} or try to play this program from the VRT NU website. Please report this problem at https://www.vrt.be/vrtnu/help/"
-msgstr "Er is een probleem met deze VRT NU {protocol}-stream. Probeer het opnieuw met {component} {state} of probeer dit programma af te spelen vanaf de VRT NU-website. Meld dit probleem op https://www.vrt.be/vrtnu/help/"
+msgid "There is a problem with this VRT MAX {protocol} stream. Try again with {component} {state} or try to play this program from the VRT MAX website. Please report this problem at https://www.vrt.be/vrtmax/help/"
+msgstr "Er is een probleem met deze VRT MAX {protocol}-stream. Probeer het opnieuw met {component} {state} of probeer dit programma af te spelen vanaf de VRT MAX-website. Meld dit probleem op https://www.vrt.be/vrtmax/help/"
 
 msgctxt "#30959"
 msgid "InputStream Adaptive and Widevine DRM"
@@ -964,72 +964,72 @@ msgid "enabled"
 msgstr "ingeschakeld"
 
 msgctxt "#30962"
-msgid "There is a problem with this VRT NU {protocol} stream and Kodi {version} does not support the alternative stream. Please upgrade to a newer Kodi version or try to play this program from the VRT NU website. Please report this problem at https://www.vrt.be/vrtnu/help/"
-msgstr "Er is een probleem met deze VRT NU {protocol}-stream en Kodi {version} ondersteunt de alternatieve stream niet. Schakel over op een nieuwere versie van Kodi of probeer dit programma af te spelen vanaf de VRT NU-website. Meld dit probleem op https://www.vrt.be/vrtnu/help/"
+msgid "There is a problem with this VRT MAX {protocol} stream and Kodi {version} does not support the alternative stream. Please upgrade to a newer Kodi version or try to play this program from the VRT MAX website. Please report this problem at https://www.vrt.be/vrtmax/help/"
+msgstr "Er is een probleem met deze VRT MAX {protocol}-stream en Kodi {version} ondersteunt de alternatieve stream niet. Schakel over op een nieuwere versie van Kodi of probeer dit programma af te spelen vanaf de VRT MAX-website. Meld dit probleem op https://www.vrt.be/vrtmax/help/"
 
 msgctxt "#30963"
-msgid "This program cannot be played. You need a VRT account to play this program. Please register at https://www.vrt.be/vrtnu/"
-msgstr "Dit programma kan niet afgespeeld worden. Je hebt een VRT-account nodig om deze stream af te spelen. Registreer je op https://www.vrt.be/vrtnu/"
+msgid "This program cannot be played. You need a VRT account to play this program. Please register at https://www.vrt.be/vrtmax/"
+msgstr "Dit programma kan niet afgespeeld worden. Je hebt een VRT-account nodig om deze stream af te spelen. Registreer je op https://www.vrt.be/vrtmax/"
 
 msgctxt "#30964"
-msgid "This program cannot be played. To view this program outside of Belgium, a Belgian mobile phone number must be linked to your VRT account at https://www.vrt.be/vrtnu/"
-msgstr "Dit programma kan niet afgespeeld worden. Om dit programma buiten België te bekijken moet er een Belgisch gsm-nummer aan je VRT-account gekoppeld zijn op https://www.vrt.be/vrtnu/"
+msgid "This program cannot be played. To view this program outside of Belgium, a Belgian mobile phone number must be linked to your VRT account at https://www.vrt.be/vrtmax/"
+msgstr "Dit programma kan niet afgespeeld worden. Om dit programma buiten België te bekijken moet er een Belgisch gsm-nummer aan je VRT-account gekoppeld zijn op https://www.vrt.be/vrtmax/"
 
 msgctxt "#30965"
-msgid "This program cannot be played. It is blocked on your geographical location based on your IP address. More info at https://www.vrt.be/vrtnu/help/country/"
-msgstr "Dit programma kan niet afgespeeld worden. Het wordt geblokkeerd op jouw geografische locatie op basis van je IP-adres. Meer info op https://www.vrt.be/vrtnu/help/country/"
+msgid "This program cannot be played. It is blocked on your geographical location based on your IP address. More info at https://www.vrt.be/vrtmax/help/country/"
+msgstr "Dit programma kan niet afgespeeld worden. Het wordt geblokkeerd op jouw geografische locatie op basis van je IP-adres. Meer info op https://www.vrt.be/vrtmax/help/country/"
 
 msgctxt "#30966"
 msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) installed."
 msgstr "Het gebruik van SOCKS proxies vereist dat de PySocks library (script.module.pysocks) geïnstalleerd is."
 
 msgctxt "#30967"
-msgid "Could not retrieve this program list. VRT Search API url is too long. Go to [B]VRT NU settings » Interface » Manage My favorites…[/B] and unfollow older favorite programs to fix this problem."
-msgstr "Deze programmalijst kan niet opgehaald worden. VRT Search API url is te lang. Ga naar [B]VRT NU instellingen » Interface » Beheer Mijn favorieten[/B] en verwijder een aantal favoriete programma's om dit probleem op te lossen. "
+msgid "Could not retrieve this program list. VRT Search API url is too long. Go to [B]VRT MAX settings » Interface » Manage My favorites…[/B] and unfollow older favorite programs to fix this problem."
+msgstr "Deze programmalijst kan niet opgehaald worden. VRT Search API url is te lang. Ga naar [B]VRT MAX instellingen » Interface » Beheer Mijn favorieten[/B] en verwijder een aantal favoriete programma's om dit probleem op te lossen. "
 
 msgctxt "#30968"
 msgid "No connection"
 msgstr "Geen verbinding"
 
 msgctxt "#30969"
-msgid "There is a problem connecting to the Internet. This could be related to Kodi, your network, your ISP or VRT NU. Check out the Kodi log for more details."
-msgstr "Er is een probleem met het verbinden met internet. Dit kan liggen aan Kodi, aan jouw netwerk, aan jouw ISP of aan VRT NU. Bekijk de Kodi-log voor meer details."
+msgid "There is a problem connecting to the Internet. This could be related to Kodi, your network, your ISP or VRT MAX. Check out the Kodi log for more details."
+msgstr "Er is een probleem met het verbinden met internet. Dit kan liggen aan Kodi, aan jouw netwerk, aan jouw ISP of aan VRT MAX. Bekijk de Kodi-log voor meer details."
 
 msgctxt "#30970"
-msgid "VRT NU authentication failed"
-msgstr "VRT NU-verificatie is mislukt"
+msgid "VRT MAX authentication failed"
+msgstr "VRT MAX-verificatie is mislukt"
 
 msgctxt "#30971"
-msgid "There is an unknown problem authenticating your user credentials at VRT NU. Please check your VRT NU account at https://www.vrt.be/vrtnu/"
-msgstr "Er is een onbekend probleem bij het verifiëren van je gebruikersgegevens bij VRT NU. Controleer je VRT NU-account op https://www.vrt.be/vrtnu/"
+msgid "There is an unknown problem authenticating your user credentials at VRT MAX. Please check your VRT MAX account at https://www.vrt.be/vrtmax/"
+msgstr "Er is een onbekend probleem bij het verifiëren van je gebruikersgegevens bij VRT MAX. Controleer je VRT MAX-account op https://www.vrt.be/vrtmax/"
 
 msgctxt "#30972"
-msgid "There is a problem authenticating at VRT NU to enable favorites. Please check your VRT NU account at https://www.vrt.be/vrtnu/ or disable favorites in the add-on settings."
-msgstr "Er is een probleem met de authenticatie bij VRT NU om favorieten in te schakelen. Controleer je VRT NU-account op https://www.vrt.be/vrtnu/ of schakel favorieten uit in de add-on-instellingen."
+msgid "There is a problem authenticating at VRT MAX to enable favorites. Please check your VRT MAX account at https://www.vrt.be/vrtmax/ or disable favorites in the add-on settings."
+msgstr "Er is een probleem met de authenticatie bij VRT MAX om favorieten in te schakelen. Controleer je VRT MAX-account op https://www.vrt.be/vrtmax/ of schakel favorieten uit in de add-on-instellingen."
 
 msgctxt "#30973"
-msgid "This program can only be played from an European Union member state. It is blocked on your geographical location based on your IP address. More info at https://www.vrt.be/vrtnu/help/country/"
-msgstr "Dit programma kan alleen afgespeeld worden vanuit een lidstaat van de Europese Unie. Het wordt geblokkeerd op jouw geografische locatie op basis van je IP-adres. Meer info op https://www.vrt.be/vrtnu/help/country/"
+msgid "This program can only be played from an European Union member state. It is blocked on your geographical location based on your IP address. More info at https://www.vrt.be/vrtmax/help/country/"
+msgstr "Dit programma kan alleen afgespeeld worden vanuit een lidstaat van de Europese Unie. Het wordt geblokkeerd op jouw geografische locatie op basis van je IP-adres. Meer info op https://www.vrt.be/vrtmax/help/country/"
 
 msgctxt "#30975"
-msgid "Failed to get user token from VRT NU"
-msgstr "Ophalen van het gebruikerstoken van VRT NU is mislukt"
+msgid "Failed to get user token from VRT MAX"
+msgstr "Ophalen van het gebruikerstoken van VRT MAX is mislukt"
 
 msgctxt "#30976"
-msgid "Failed to (un)follow program '{program}' at VRT NU"
-msgstr "Het programma '{program}' op VRT NU volgen of vergeten is mislukt"
+msgid "Failed to (un)follow program '{program}' at VRT MAX"
+msgstr "Het programma '{program}' op VRT MAX volgen of vergeten is mislukt"
 
 msgctxt "#30977"
-msgid "Failed to update watch activity '{title}' at VRT NU"
-msgstr "Updaten van kijkactiviteit '{title}' bij VRT NU is mislukt"
+msgid "Failed to update watch activity '{title}' at VRT MAX"
+msgstr "Updaten van kijkactiviteit '{title}' bij VRT MAX is mislukt"
 
 msgctxt "#30978"
-msgid "Welcome to VRT NU add-on v2.0.0"
-msgstr "Welkom bij VRT NU add-on v2.0.0"
+msgid "Welcome to VRT MAX add-on v2.0.0"
+msgstr "Welkom bij VRT MAX add-on v2.0.0"
 
 msgctxt "#30979"
-msgid "Because of important internal changes, existing Kodi favourites and watched history from VRT NU no longer work.\n[B]Please recreate all your VRT NU favorites.[/B]"
-msgstr "Wegens belangrijke interne wijzigingen werken bestaande Kodi-favorieten en kijkgeschiedenis van VRT NU niet meer.\n[B]Gelieve al uw VRT NU-favorieten opnieuw aan te maken.[/B]"
+msgid "Because of important internal changes, existing Kodi favourites and watched history from VRT MAX no longer work.\n[B]Please recreate all your VRT MAX favorites.[/B]"
+msgstr "Wegens belangrijke interne wijzigingen werken bestaande Kodi-favorieten en kijkgeschiedenis van VRT MAX niet meer.\n[B]Gelieve al uw VRT MAX-favorieten opnieuw aan te maken.[/B]"
 
 msgctxt "#30981"
 msgid "Successfully invalidated caches."
@@ -1064,5 +1064,5 @@ msgid "Failed to load a compatible stream, please try toggling 'Use Widevine DRM
 msgstr "Kan geen compatibele stream laden, probeer 'Gebruik Widevine DRM' in of uit te schakelen in de add-on afspeelinstellingen."
 
 msgctxt "#30990"
-msgid "This program cannot be played. Your VRT NU account is not allowed to access 12+ content. Please check your VRT NU account details at https://www.vrt.be/vrtnu/"
-msgstr "Dit programma kan niet afgespeeld worden. Je VRT NU-account heeft geen toegang tot 12+ content. Controleer je VRT NU-account details op https://www.vrt.be/vrtnu/"
+msgid "This program cannot be played. Your VRT MAX account is not allowed to access 12+ content. Please check your VRT MAX account details at https://www.vrt.be/vrtmax/"
+msgstr "Dit programma kan niet afgespeeld worden. Je VRT MAX-account heeft geen toegang tot 12+ content. Controleer je VRT MAX-account details op https://www.vrt.be/vrtmax/"

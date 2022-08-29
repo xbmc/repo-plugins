@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vrt.nu" name="VRT NU" version="2.5.13" provider-name="Martijn Moreel, dagwieers, mediaminister">
+<addon id="plugin.video.vrt.nu" name="VRT MAX" version="2.5.14" provider-name="Martijn Moreel, dagwieers, mediaminister">
   <requires>
     <import addon="resource.images.studios.white" version="0.0.22"/>
     <import addon="script.module.beautifulsoup4" version="4.6.2"/>
@@ -13,28 +13,28 @@
   </extension>
   <extension point="xbmc.service" library="resources/lib/service_entry.py"/>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en_GB">Watch videos from VRT NU</summary>
-    <description lang="en_GB">VRT NU is the video-on-demand platform of the Flemish public broadcaster (VRT).
+    <summary lang="en_GB">Watch videos from VRT MAX</summary>
+    <description lang="en_GB">VRT MAX is the video-on-demand platform of the Flemish public broadcaster (VRT).
 
   - Track the programs you like
   - List all videos alphabetically by program, category, channel or feature
   - Watch live streams from Eén, Canvas, Ketnet, Ketnet Junior and Sporza
   - Discover recently added or soon offline content
-  - Browse the online TV guides or search VRT NU
+  - Browse the online TV guides or search VRT MAX
 
-[I]The VRT NU add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.[/I]</description>
-    <disclaimer lang="en_GB">The VRT NU add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.</disclaimer>
-    <summary lang="nl_NL">VRT NU videos bekijken.</summary>
-    <description lang="nl_NL">VRT NU is het video-on-demand platform van de Vlaamse publieke omroep (VRT).
+[I]The VRT MAX add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.[/I]</description>
+    <disclaimer lang="en_GB">The VRT MAX add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.</disclaimer>
+    <summary lang="nl_NL">VRT MAX videos bekijken.</summary>
+    <description lang="nl_NL">VRT MAX is het video-on-demand platform van de Vlaamse publieke omroep (VRT).
 
   - Volg je favoriete tv-programma's
   - Raadpleeg video's op basis van programma, categorie, kanaal of feature
   - Bekijk de livestreams van Eén, Canvas, Ketnet, Ketnet Junior en Sporza
   - Ontdek recent toegevoegde of binnenkort offline video's
-  - Doorblader de online tv-gids of doorzoek VRT NU
+  - Doorblader de online tv-gids of doorzoek VRT MAX
 
-[I]Deze VRT NU add-on wordt niet ondersteund door de VRT, en wordt aangeboden 'as is', zonder enige garantie.[/I]</description>
-    <disclaimer lang="nl_NL">Deze VRT NU add-on wordt niet ondersteund door de VRT, en wordt aangeboden 'as is', zonder enige garantie.</disclaimer>
+[I]Deze VRT MAX add-on wordt niet ondersteund door de VRT, en wordt aangeboden 'as is', zonder enige garantie.[/I]</description>
+    <disclaimer lang="nl_NL">Deze VRT MAX add-on wordt niet ondersteund door de VRT, en wordt aangeboden 'as is', zonder enige garantie.</disclaimer>
     <language>en nl</language>
     <platform>all</platform>
     <license>GPL-3.0-only</license>
@@ -42,6 +42,9 @@
     <website>https://github.com/add-ons/plugin.video.vrt.nu/wiki</website>
     <source>https://github.com/add-ons/plugin.video.vrt.nu</source>
     <news>
+v2.5.14 (2022-08-29)
+- VRT MAX rebranding
+
 v2.5.13 (2022-08-05)
 - Support 1080p video on demand
 

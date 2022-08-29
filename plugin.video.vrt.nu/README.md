@@ -5,42 +5,42 @@
 [![Contributors](https://img.shields.io/github/contributors/add-ons/plugin.video.vrt.nu.svg)](https://github.com/add-ons/plugin.video.vrt.nu/graphs/contributors)
 [![Donate!](https://img.shields.io/static/v1.svg?label=&message=Donate!&color=lightgrey&logo=paypal)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6C58R2PNAWTNW&source=url)
 
-# VRT NU Kodi add-on
+# VRT MAX Kodi add-on
 **plugin.video.vrt.nu** is a [Kodi](https://kodi.tv/) add-on for watching all live video streams *and* all video-on-demand
-content available on [VRT NU](https://vrt.be/vrtnu/).
+content available on [VRT MAX](https://vrt.be/vrtmax/).
 
-VRT NU is the video-on-demand platform of VRT, Flanders' public broadcasting service.
+VRT MAX is the video-on-demand platform of VRT, Flanders' public broadcasting service.
 
-This Kodi add-on can be used to watch all video content from VRT NU.
+This Kodi add-on can be used to watch all video content from VRT MAX.
 
 - Track the programs you like
 - List all videos alphabetically by program, category, channel or feature
 - Watch live streams from Eén, Canvas, Ketnet, Ketnet Junior and Sporza
 - Discover recently added or soon offline content
-- Browse the online TV guides or search VRT NU
+- Browse the online TV guides or search VRT MAX
 
-> Note: The VRT NU add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.
+> Note: The VRT MAX add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.
 
 ## Installing
-In Kodi, simply search the add-ons for `VRT` and install the VRT NU video add-on.
+In Kodi, simply search the add-ons for `VRT` and install the VRT MAX video add-on.
 
-> Note: Detailed information about installing and updating the VRT NU add-on is available on [our Wiki](https://github.com/add-ons/plugin.video.vrt.nu/wiki).
+> Note: Detailed information about installing and updating the VRT MAX add-on is available on [our Wiki](https://github.com/add-ons/plugin.video.vrt.nu/wiki).
 
 ## Using the plugin
-The [VRT NU](https://vrt.be/vrtnu) platform requires users to sign in before gaining access to video-on-demand content.
+The [VRT MAX](https://vrt.be/vrtmax) platform requires users to sign in before gaining access to video-on-demand content.
 Users can sign in with a user name and password, or sign in with their Google, or Facebook account.
 
 This plugin currently only supports signing in using the first method (user name and password). If you already
-have a VRT NU account and sign in with another method, it is easy to get a password:
+have a VRT MAX account and sign in with another method, it is easy to get a password:
 
-- Sign out of your VRT NU account;
+- Sign out of your VRT MAX account;
 - Click **Inloggen met e-mail**;
 - Click the **Wachtwoord vergeten?** hyperlink, and enter your email address.
 
 You will receive an email that allows you to set a password. Use this password to enter in the plugin when
 prompted.
 
-> For more information about the VRT NU Kodi add-on, look at [our GitHub Wiki page](https://github.com/add-ons/plugin.video.vrt.nu/wiki).
+> For more information about the VRT MAX Kodi add-on, look at [our GitHub Wiki page](https://github.com/add-ons/plugin.video.vrt.nu/wiki).
 
 ## Reporting issues
 You can report issues at [our GitHub project](https://github.com/add-ons/plugin.video.vrt.nu) or
@@ -59,6 +59,9 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.14 (2022-08-29)
+- VRT MAX rebranding (@mediaminister)
+
 ### v2.5.13 (2022-08-05)
 - Support 1080p video on demand (@mediaminister)
 

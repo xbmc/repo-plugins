@@ -109,41 +109,7 @@ class StreamService:
         # Prepare api_data for livestreams by video_id, e.g. vualto_strubru, vualto_mnm, ketnet_jr
         elif video_id and not video_url:
             api_data = ApiData(self._CLIENT, self._VUALTO_API_URL, video_id, '', True)
-        # Webscrape api_data with video_id fallback
-        elif video_url:
-            api_data = self._webscrape_api_data(video_url)
-            if video_id:
-                api_data = ApiData(self._CLIENT, self._VUALTO_API_URL, video_id, '', True)
         return api_data
-
-    def _webscrape_api_data(self, video_url):
-        """Scrape api data from VRT NU html page"""
-        from webscraper import get_video_attributes
-        video_data = get_video_attributes(video_url)
-
-        # Web scraping failed, log error
-        if not video_data:
-            log_error('Web scraping api data failed, empty video_data')
-            return None
-
-        # Store required html data attributes
-        client = self._CLIENT
-        media_api_url = self._VUALTO_API_URL
-        video_id = video_data.get('videoid')
-        publication_id = video_data.get('publicationid', '')
-        # Live stream or on demand
-        if video_id is None:
-            is_live_stream = True
-            video_id = video_data.get('livestream')
-        else:
-            is_live_stream = False
-            publication_id += quote('$')
-
-        if client is None or media_api_url is None or (video_id is None and publication_id is None):
-            log_error('Web scraping api data failed, required attributes missing')
-            return None
-
-        return ApiData(client, media_api_url, video_id, publication_id, is_live_stream)
 
     def _get_stream_json(self, api_data, roaming=False):
         """Get JSON with stream details from VRT API"""
@@ -182,8 +148,8 @@ class StreamService:
 
     @staticmethod
     def _fix_virtualsubclip(manifest_url, duration):
-        """VRT NU already offers some programs (mostly current affairs programs) as video on demand from the moment the live broadcast has started.
-           To do so, VRT NU adds start (and stop) timestamps to the livestream url to indicate the beginning (and the end) of a program.
+        """VRT MAX already offers some programs (mostly current affairs programs) as video on demand from the moment the live broadcast has started.
+           To do so, VRT MAX adds start (and stop) timestamps to the livestream url to indicate the beginning (and the end) of a program.
            So Unified Origin streaming platform knows it should return a time bounded manifest file, this is called a Live-to-VOD stream or virtual subclip:
            https://docs.unified-streaming.com/documentation/vod/player-urls.html#virtual-subclips
            e.g. https://live-cf-vrt.akamaized.net/groupc/live/8edf3bdf-7db3-41c3-a318-72cb7f82de66/live.isml/.mpd?t=2020-07-20T11:07:00
@@ -227,7 +193,7 @@ class StreamService:
                 message = localize(30964)  # Geoblock error: Cannot be played, need Belgian phone number validation
                 return self._handle_stream_api_error(message)
             # X-VRT-Token failed
-            message = localize(30963)  # You need a VRT NU account to play this stream.
+            message = localize(30963)  # You need a VRT MAX account to play this stream.
             return self._handle_stream_api_error(message)
 
         if 'targetUrls' in stream_json:
@@ -320,7 +286,7 @@ class StreamService:
             message = localize(30987)  # No stream found
             return self._handle_stream_api_error(message, stream_json)
         if stream_json.get('code') == 'ERROR_AGE_RESTRICTED':
-            message = localize(30990)  # Cannot be played, VRT NU account not allowed to access 12+ content
+            message = localize(30990)  # Cannot be played, VRT MAX account not allowed to access 12+ content
             return self._handle_stream_api_error(message, stream_json)
 
         # Failed to get stream, handle error
@@ -337,8 +303,8 @@ class StreamService:
 
     @staticmethod
     def _handle_bad_stream_error(protocol, code=None, reason=None):
-        """Show a localized error message in Kodi GUI for a failing VRT NU stream based on protocol: hls, hls_aes, mpeg_dash)
-            message: VRT NU stream <stream_type> problem, try again with (InputStream Adaptive) (and) (DRM) enabled/disabled:
+        """Show a localized error message in Kodi GUI for a failing VRT MAX stream based on protocol: hls, hls_aes, mpeg_dash)
+            message: VRT MAX stream <stream_type> problem, try again with (InputStream Adaptive) (and) (DRM) enabled/disabled:
                 30959=and DRM, 30960=disabled, 30961=enabled
        """
         # HLS AES DRM failed

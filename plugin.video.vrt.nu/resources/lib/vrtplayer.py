@@ -26,7 +26,7 @@ class VRTPlayer:
         wait_for_resumepoints()
 
     def show_main_menu(self):
-        """The VRT NU add-on main menu"""
+        """The VRT MAX add-on main menu"""
         # self._favorites.refresh(ttl=ttl('indirect'))
         main_items = []
 
@@ -121,7 +121,7 @@ class VRTPlayer:
         return False, settings_version, addon_version
 
     def show_favorites_menu(self):
-        """The VRT NU addon 'My programs' menu"""
+        """The VRT MAX addon 'My programs' menu"""
         self._favorites.refresh(ttl=ttl('indirect'))
         favorites_items = [
             TitleItem(label=localize(30040),  # My programs
@@ -184,21 +184,21 @@ class VRTPlayer:
             ok_dialog(heading=localize(30415), message=localize(30416))
 
     def show_favorites_docu_menu(self):
-        """The VRT NU add-on 'My documentaries' listing menu"""
+        """The VRT MAX add-on 'My documentaries' listing menu"""
         self._favorites.refresh(ttl=ttl('indirect'))
         self._resumepoints.refresh(ttl=ttl('indirect'))
         episode_items, sort, ascending, content = self._apihelper.list_episodes(category='docu', season='allseasons', programtype='oneoff')
         show_listing(episode_items, category=30044, sort=sort, ascending=ascending, content=content, cache=False)
 
     def show_favorites_music_menu(self):
-        """The VRT NU add-on 'My music' listing menu"""
+        """The VRT MAX add-on 'My music' listing menu"""
         self._favorites.refresh(ttl=ttl('indirect'))
         self._resumepoints.refresh(ttl=ttl('indirect'))
         episode_items, sort, ascending, content = self._apihelper.list_episodes(category='muziek', season='allseasons', programtype='oneoff')
         show_listing(episode_items, category=30046, sort=sort, ascending=ascending, content=content, cache=False)
 
     def show_tvshow_menu(self, use_favorites=False):
-        """The VRT NU add-on 'All programs' listing menu"""
+        """The VRT MAX add-on 'All programs' listing menu"""
         # My favorites menus may need more up-to-date favorites
         self._favorites.refresh(ttl=ttl('direct' if use_favorites else 'indirect'))
         self._resumepoints.refresh(ttl=ttl('direct' if use_favorites else 'indirect'))
@@ -206,7 +206,7 @@ class VRTPlayer:
         show_listing(tvshow_items, category=30440, sort='label', content='tvshows')  # A-Z
 
     def show_category_menu(self, category=None):
-        """The VRT NU add-on 'Categories' listing menu"""
+        """The VRT MAX add-on 'Categories' listing menu"""
         if category:
             self._favorites.refresh(ttl=ttl('indirect'))
             self._resumepoints.refresh(ttl=ttl('indirect'))
@@ -219,7 +219,7 @@ class VRTPlayer:
             show_listing(category_items, category=30014, sort='unsorted', content='files')  # Categories
 
     def show_channels_menu(self, channel=None):
-        """The VRT NU add-on 'Channels' listing menu"""
+        """The VRT MAX add-on 'Channels' listing menu"""
         if channel:
             from tvguide import TVGuide
             self._favorites.refresh(ttl=ttl('indirect'))
@@ -236,7 +236,7 @@ class VRTPlayer:
             show_listing(channel_items, category=30016, cache=False)
 
     def show_featured_menu(self, feature=None):
-        """The VRT NU add-on 'Featured content' listing menu"""
+        """The VRT MAX add-on 'Featured content' listing menu"""
         if feature:
             self._favorites.refresh(ttl=ttl('indirect'))
             self._resumepoints.refresh(ttl=ttl('indirect'))
@@ -265,12 +265,12 @@ class VRTPlayer:
             show_listing(featured_items, category=30024, sort='label', content='files')
 
     def show_livetv_menu(self):
-        """The VRT NU add-on 'Live TV' listing menu"""
+        """The VRT MAX add-on 'Live TV' listing menu"""
         channel_items = self._apihelper.list_channels()
         show_listing(channel_items, category=30018, cache=False)
 
     def show_episodes_menu(self, program, season=None):
-        """The VRT NU add-on episodes listing menu"""
+        """The VRT MAX add-on episodes listing menu"""
         self._favorites.refresh(ttl=ttl('indirect'))
         self._resumepoints.refresh(ttl=ttl('indirect'))
         episode_items, sort, ascending, content = self._apihelper.list_episodes(program=program, season=season)
@@ -278,7 +278,7 @@ class VRTPlayer:
         show_listing(episode_items, category=program.title(), sort=sort, ascending=ascending, content=content, cache=False)
 
     def show_recent_menu(self, page=0, use_favorites=False):
-        """The VRT NU add-on 'Most recent' and 'My most recent' listing menu"""
+        """The VRT MAX add-on 'Most recent' and 'My most recent' listing menu"""
 
         # My favorites menus may need more up-to-date favorites
         self._favorites.refresh(ttl=ttl('direct' if use_favorites else 'indirect'))
@@ -297,7 +297,7 @@ class VRTPlayer:
         show_listing(episode_items, category=30020, sort=sort, ascending=ascending, content=content, cache=False)
 
     def show_offline_menu(self, page=0, use_favorites=False):
-        """The VRT NU add-on 'Soon offline' and 'My soon offline' listing menu"""
+        """The VRT MAX add-on 'Soon offline' and 'My soon offline' listing menu"""
 
         # My favorites menus may need more up-to-date favorites
         self._favorites.refresh(ttl=ttl('direct' if use_favorites else 'indirect'))
@@ -317,7 +317,7 @@ class VRTPlayer:
         show_listing(episode_items, category=30022, sort=sort, ascending=ascending, content=content, cache=False)
 
     def show_watchlater_menu(self, page=0):
-        """The VRT NU add-on 'My watch later' listing menu"""
+        """The VRT MAX add-on 'My watch later' listing menu"""
 
         # My watch later menu may need more up-to-date favorites
         self._favorites.refresh(ttl=ttl('direct'))
@@ -327,7 +327,7 @@ class VRTPlayer:
         show_listing(episode_items, category=30052, sort=sort, ascending=ascending, content=content, cache=False)
 
     def show_continue_menu(self, page=0):
-        """The VRT NU add-on 'Continue waching' listing menu"""
+        """The VRT MAX add-on 'Continue waching' listing menu"""
 
         # Continue watching menu may need more up-to-date favorites
         self._favorites.refresh(ttl=ttl('direct'))
@@ -337,7 +337,7 @@ class VRTPlayer:
         show_listing(episode_items, category=30054, sort=sort, ascending=ascending, content=content, cache=False)
 
     def play_latest_episode(self, program):
-        """A hidden feature in the VRT NU add-on to play the latest episode of a program"""
+        """A hidden feature in the VRT MAX add-on to play the latest episode of a program"""
         video = self._apihelper.get_latest_episode(program)
         if not video:
             log_error('Play latest episode failed, program {program}', program=program)

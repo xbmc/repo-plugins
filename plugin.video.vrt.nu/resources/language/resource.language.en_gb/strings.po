@@ -1,5 +1,5 @@
 # Kodi Media Center language file
-# Addon Name: VRT NU
+# Addon Name: VRT MAX
 # Addon id: plugin.video.vrt.nu
 # Addon Provider: pietje666
 msgid ""
@@ -89,11 +89,11 @@ msgid "Browse channel TV guides"
 msgstr ""
 
 msgctxt "#30028"
-msgid "Search VRT NU"
+msgid "Search VRT MAX"
 msgstr ""
 
 msgctxt "#30029"
-msgid "Search the complete VRT NU library"
+msgid "Search the complete VRT MAX library"
 msgstr ""
 
 msgctxt "#30030"
@@ -127,7 +127,7 @@ msgid "Movies"
 msgstr ""
 
 msgctxt "#30043"
-msgid "All movies available on VRT NU"
+msgid "All movies available on VRT MAX"
 msgstr ""
 
 msgctxt "#30044"
@@ -135,7 +135,7 @@ msgid "Documentaries"
 msgstr ""
 
 msgctxt "#30045"
-msgid "All [I]one-off[/I] documentaries on VRT NU"
+msgid "All [I]one-off[/I] documentaries on VRT MAX"
 msgstr ""
 
 msgctxt "#30046"
@@ -143,7 +143,7 @@ msgid "Music"
 msgstr ""
 
 msgctxt "#30047"
-msgid "All [I]one-off[/I] music on VRT NU"
+msgid "All [I]one-off[/I] music on VRT MAX"
 msgstr ""
 
 msgctxt "#30048"
@@ -452,7 +452,7 @@ msgid "No followed programs found"
 msgstr ""
 
 msgctxt "#30416"
-msgid "We could not find any programs that are followed.\n\nEither right-click on a program or episode to follow a program, or follow a program on the VRT NU website."
+msgid "We could not find any programs that are followed.\n\nEither right-click on a program or episode to follow a program, or follow a program on the VRT MAX website."
 msgstr ""
 
 msgctxt "#30417"
@@ -488,7 +488,7 @@ msgid "[B]New search…[/B]"
 msgstr ""
 
 msgctxt "#30425"
-msgid "Perform a new search on VRT NU content"
+msgid "Perform a new search on VRT MAX content"
 msgstr ""
 
 msgctxt "#30426"
@@ -528,7 +528,7 @@ msgid "Update add-on repositories"
 msgstr ""
 
 msgctxt "#30451"
-msgid "If a VRT NU add-on update is available, it should now be updating and you will be notified.\nMake sure you have [I]Auto-update[/I] enabled for the VRT NU add-on."
+msgid "If a VRT MAX add-on update is available, it should now be updating and you will be notified.\nMake sure you have [I]Auto-update[/I] enabled for the VRT MAX add-on."
 msgstr ""
 
 msgctxt "#30452"
@@ -536,7 +536,7 @@ msgid "Automatic updates are disabled"
 msgstr ""
 
 msgctxt "#30453"
-msgid "Kodi is configured to not update add-ons automatically, so you will not get VRT NU updates unless you fix this setting.\nWe will open de Kodi settings, please change this setting."
+msgid "Kodi is configured to not update add-ons automatically, so you will not get VRT MAX updates unless you fix this setting.\nWe will open de Kodi settings, please change this setting."
 msgstr ""
 
 msgctxt "#30454"
@@ -550,7 +550,7 @@ msgid "Credentials"
 msgstr ""
 
 msgctxt "#30701"
-msgid "VRT NU login"
+msgid "VRT MAX login"
 msgstr ""
 
 msgctxt "#30703"
@@ -558,7 +558,7 @@ msgid "Email address"
 msgstr ""
 
 msgctxt "#30704"
-msgid "Provide your VRT NU email address. In case this is a Google, Facebook or Apple account, please ensure that this login is enabled for normal username/password authentication. See the wiki for more information."
+msgid "Provide your VRT MAX email address. In case this is a Google, Facebook or Apple account, please ensure that this login is enabled for normal username/password authentication. See the wiki for more information."
 msgstr ""
 
 msgctxt "#30705"
@@ -566,7 +566,7 @@ msgid "Password"
 msgstr ""
 
 msgctxt "#30706"
-msgid "Provide your VRT NU account password."
+msgid "Provide your VRT MAX account password."
 msgstr ""
 
 msgctxt "#30740"
@@ -582,7 +582,7 @@ msgid "Enable My favorites"
 msgstr ""
 
 msgctxt "#30744"
-msgid "When enabled, the user can follow their favorite programs and list these separately. In this case the VRT NU add-on will download and update a list of your followed programs on the VRT NU website."
+msgid "When enabled, the user can follow their favorite programs and list these separately. In this case the VRT MAX add-on will download and update a list of your followed programs on the VRT MAX website."
 msgstr ""
 
 msgctxt "#30745"
@@ -594,7 +594,7 @@ msgid "Enable watching activity"
 msgstr ""
 
 msgctxt "#30748"
-msgid "This enables 'watch later' and 'continue watching' menus and syncs playback position between different devices using the same VRT NU account."
+msgid "This enables 'watch later' and 'continue watching' menus and syncs playback position between different devices using the same VRT MAX account."
 msgstr ""
 
 msgctxt "#30749"
@@ -818,7 +818,7 @@ msgid "Updates"
 msgstr ""
 
 msgctxt "#30891"
-msgid "Update the VRT NU add-on"
+msgid "Update the VRT MAX add-on"
 msgstr ""
 
 msgctxt "#30893"
@@ -830,7 +830,7 @@ msgid "Open Kodi add-ons settings… [COLOR=gray]to enable Kodi auto-updates)[/C
 msgstr ""
 
 msgctxt "#30897"
-msgid "Open VRT NU add-on information…"
+msgid "Open VRT MAX add-on information…"
 msgstr ""
 
 msgctxt "#30900"
@@ -948,7 +948,7 @@ msgid "Please increase the maximum bandwidth. Maximum bandwidth is set to {max} 
 msgstr ""
 
 msgctxt "#30958"
-msgid "There is a problem with this VRT NU {protocol} stream. Try again with {component} {state} or try to play this program from the VRT NU website. Please report this problem at https://www.vrt.be/vrtnu/help/"
+msgid "There is a problem with this VRT MAX {protocol} stream. Try again with {component} {state} or try to play this program from the VRT MAX website. Please report this problem at https://www.vrt.be/vrtmax/help/"
 msgstr ""
 
 msgctxt "#30959"
@@ -964,19 +964,19 @@ msgid "enabled"
 msgstr ""
 
 msgctxt "#30962"
-msgid "There is a problem with this VRT NU {protocol} stream and Kodi {version} does not support the alternative stream. Please upgrade to a newer Kodi version or try to play this program from the VRT NU website. Please report this problem at https://www.vrt.be/vrtnu/help/"
+msgid "There is a problem with this VRT MAX {protocol} stream and Kodi {version} does not support the alternative stream. Please upgrade to a newer Kodi version or try to play this program from the VRT MAX website. Please report this problem at https://www.vrt.be/vrtmax/help/"
 msgstr ""
 
 msgctxt "#30963"
-msgid "This program cannot be played. You need a VRT account to play this program. Please register at https://www.vrt.be/vrtnu/"
+msgid "This program cannot be played. You need a VRT account to play this program. Please register at https://www.vrt.be/vrtmax/"
 msgstr ""
 
 msgctxt "#30964"
-msgid "This program cannot be played. To view this program outside of Belgium, a Belgian mobile phone number must be linked to your VRT account at https://www.vrt.be/vrtnu/"
+msgid "This program cannot be played. To view this program outside of Belgium, a Belgian mobile phone number must be linked to your VRT account at https://www.vrt.be/vrtmax/"
 msgstr ""
 
 msgctxt "#30965"
-msgid "This program cannot be played. It is blocked on your geographical location based on your IP address. More info at https://www.vrt.be/vrtnu/help/country/"
+msgid "This program cannot be played. It is blocked on your geographical location based on your IP address. More info at https://www.vrt.be/vrtmax/help/country/"
 msgstr ""
 
 msgctxt "#30966"
@@ -984,7 +984,7 @@ msgid "Using a SOCKS proxy requires the PySocks library (script.module.pysocks) 
 msgstr ""
 
 msgctxt "#30967"
-msgid "Could not retrieve this program list. VRT Search API url is too long. Go to [B]VRT NU settings » Interface » Manage My favorites…[/B] and unfollow older favorite programs to fix this problem."
+msgid "Could not retrieve this program list. VRT Search API url is too long. Go to [B]VRT MAX settings » Interface » Manage My favorites…[/B] and unfollow older favorite programs to fix this problem."
 msgstr ""
 
 msgctxt "#30968"
@@ -992,43 +992,43 @@ msgid "No connection"
 msgstr ""
 
 msgctxt "#30969"
-msgid "There is a problem connecting to the Internet. This could be related to Kodi, your network, your ISP or VRT NU. Check out the Kodi log for more details."
+msgid "There is a problem connecting to the Internet. This could be related to Kodi, your network, your ISP or VRT MAX. Check out the Kodi log for more details."
 msgstr ""
 
 msgctxt "#30970"
-msgid "VRT NU authentication failed"
+msgid "VRT MAX authentication failed"
 msgstr ""
 
 msgctxt "#30971"
-msgid "There is an unknown problem authenticating your user credentials at VRT NU. Please check your VRT NU account at https://www.vrt.be/vrtnu/"
+msgid "There is an unknown problem authenticating your user credentials at VRT MAX. Please check your VRT MAX account at https://www.vrt.be/vrtmax/"
 msgstr ""
 
 msgctxt "#30972"
-msgid "There is a problem authenticating at VRT NU to enable favorites. Please check your VRT NU account at https://www.vrt.be/vrtnu/ or disable favorites in the add-on settings."
+msgid "There is a problem authenticating at VRT MAX to enable favorites. Please check your VRT MAX account at https://www.vrt.be/vrtmax/ or disable favorites in the add-on settings."
 msgstr ""
 
 msgctxt "#30973"
-msgid "This program can only be played from an European Union member state. It is blocked on your geographical location based on your IP address. More info at https://www.vrt.be/vrtnu/help/country/"
+msgid "This program can only be played from an European Union member state. It is blocked on your geographical location based on your IP address. More info at https://www.vrt.be/vrtmax/help/country/"
 msgstr ""
 
 msgctxt "#30975"
-msgid "Failed to get user token from VRT NU"
+msgid "Failed to get user token from VRT MAX"
 msgstr ""
 
 msgctxt "#30976"
-msgid "Failed to (un)follow program '{program}' at VRT NU"
+msgid "Failed to (un)follow program '{program}' at VRT MAX"
 msgstr ""
 
 msgctxt "#30977"
-msgid "Failed to update watch activity '{title}' at VRT NU"
+msgid "Failed to update watch activity '{title}' at VRT MAX"
 msgstr ""
 
 msgctxt "#30978"
-msgid "Welcome to VRT NU add-on v2.0.0"
+msgid "Welcome to VRT MAX add-on v2.0.0"
 msgstr ""
 
 msgctxt "#30979"
-msgid "Because of important internal changes, existing Kodi favourites and watched history from VRT NU no longer work.\n[B]Please recreate all your VRT NU favorites.[/B]"
+msgid "Because of important internal changes, existing Kodi favourites and watched history from VRT MAX no longer work.\n[B]Please recreate all your VRT MAX favorites.[/B]"
 msgstr ""
 
 msgctxt "#30981"
@@ -1064,5 +1064,5 @@ msgid "Failed to load a compatible stream, please try toggling 'Use Widevine DRM
 msgstr ""
 
 msgctxt "#30990"
-msgid "This program cannot be played. Your VRT NU account is not allowed to access 12+ content. Please check your VRT NU account details at https://www.vrt.be/vrtnu/"
+msgid "This program cannot be played. Your VRT MAX account is not allowed to access 12+ content. Please check your VRT MAX account details at https://www.vrt.be/vrtmax/"
 msgstr ""

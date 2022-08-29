@@ -80,8 +80,8 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
                 set_property('vrtnu_resumepoints', None)
                 return
 
-        # Get episode data needed to update resumepoints from VRT NU Search API
-        # FIXME: Getting single episode data is broken, VRT NU Search API return a http error 400
+        # Get episode data needed to update resumepoints from VRT MAX Search API
+        # FIXME: Getting single episode data is broken, VRT MAX Search API return a http error 400
         # episode = self.apihelper.get_single_episode_data(video_id=ep_id.get('video_id'), whatson_id=ep_id.get('whatson_id'), video_url=ep_id.get('video_url'))
         episode = None
 
@@ -233,7 +233,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
             pass
 
     def virtualsubclip_seektozero(self):
-        """VRT NU already offers some programs (mostly current affairs programs) as video on demand while the program is still being broadcasted live.
+        """VRT MAX already offers some programs (mostly current affairs programs) as video on demand while the program is still being broadcasted live.
            To do so, a start timestamp is added to the livestream url so the Unified Origin streaming platform knows
            it should return a time bounded manifest file that indicates the beginning of the program.
            This is called a Live-to-VOD stream or virtual subclip: https://docs.unified-streaming.com/documentation/vod/player-urls.html#virtual-subclips
@@ -273,19 +273,19 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         """Update the total video time"""
         try:
             total = self.getTotalTime()
-            # Kodi Player sometimes returns a total time of 0.0 and this causes unwanted behaviour with VRT NU Resumepoints API.
+            # Kodi Player sometimes returns a total time of 0.0 and this causes unwanted behaviour with VRT MAX Resumepoints API.
             if total > 0.0:
                 self.total = total
         except RuntimeError:
             pass
 
     def push_position(self, position, total):
-        """Push player position to VRT NU resumepoints API and reload container"""
+        """Push player position to VRT MAX resumepoints API and reload container"""
         # Not all content has an video_id
         if not self.video_id:
             return
 
-        # Push resumepoint to VRT NU
+        # Push resumepoint to VRT MAX
         self.resumepoints.update_resumepoint(
             video_id=self.video_id,
             asset_str=self.asset_str,

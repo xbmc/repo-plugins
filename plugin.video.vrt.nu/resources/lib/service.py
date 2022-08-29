@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-"""This is the actual VRT NU service entry point"""
+"""This is the actual VRT MAX service entry point"""
 
 from __future__ import absolute_import, division, unicode_literals
 from xbmc import Monitor
@@ -14,7 +14,7 @@ from utils import to_unicode
 
 
 class VrtMonitor(Monitor, object):  # pylint: disable=useless-object-inheritance
-    """This is the class that monitors Kodi for the VRT NU video plugin"""
+    """This is the class that monitors Kodi for the VRT MAX video plugin"""
 
     def __init__(self):
         """VRT Monitor initialisation"""

@@ -15,7 +15,7 @@
         <summary lang="es_ES">Autocompletar para el teclado virtual (necesita soporte de skin)</summary>
         <description lang="es_ES">Autocompletar para el teclado virtual (necesita soporte de skin)</description>
         <platform>all</platform>
-        <license>GNU GENERAL PUBLIC LICENSE Version 2.1, February 1999</license>
+        <license>GPL-2.0-or-later</license>
         <source>https://github.com/phil65/plugin.program.autocompletion</source>
         <assets>
             <icon>resources/icon.png</icon>

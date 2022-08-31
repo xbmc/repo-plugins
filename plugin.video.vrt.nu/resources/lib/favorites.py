@@ -85,7 +85,7 @@ class Favorites:
                 'Accept': 'application/json',
             }
             querystring = 'tileType=program-poster&tileContentType=program&tileOrientation=portrait&layout=slider&title=Mijn+favoriete+programma%27s'
-            favorites_json = get_url_json(url='{}?{}'.format(self.FAVORITES_REST_URL, querystring), cache=None, headers=headers, raise_errors='all')
+            favorites_json = get_url_json(url='{}?{}'.format(self.FAVORITES_REST_URL, querystring), cache=None, headers=headers)
         return favorites_json
 
     def get_program_id_graphql(self, program_name):
@@ -181,13 +181,14 @@ class Favorites:
     def _generate_favorites_dict(favorites_json):
         """Generate a simple favorites dict with programIds and programNames"""
         favorites_dict = {}
-        for item in favorites_json.get(':items', []):
-            program_name = favorites_json.get(':items')[item].get('data').get('program').get('name')
-            program_id = favorites_json.get(':items')[item].get('data').get('program').get('id')
-            title = favorites_json.get(':items')[item].get('title')
-            favorites_dict[program_name] = dict(
-                program_id=program_id,
-                title=title)
+        if favorites_json is not None:
+            for item in favorites_json.get(':items', []):
+                program_name = favorites_json.get(':items')[item].get('data').get('program').get('name')
+                program_id = favorites_json.get(':items')[item].get('data').get('program').get('id')
+                title = favorites_json.get(':items')[item].get('title')
+                favorites_dict[program_name] = dict(
+                    program_id=program_id,
+                    title=title)
         return favorites_dict
 
     def manage(self):

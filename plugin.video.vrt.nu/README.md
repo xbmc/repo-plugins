@@ -59,6 +59,9 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.15 (2022-08-31)
+- Fix add-on crash (@mediaminister)
+
 ### v2.5.14 (2022-08-29)
 - VRT MAX rebranding (@mediaminister)
 

@@ -7,6 +7,10 @@ import threading
 
 import xbmc
 import requests
+import urllib
+
+if sys.version_info[0] > 2:
+    urllib = urllib.parse
 
 try:
     # Python3
@@ -27,7 +31,7 @@ URI_START_DELIMETER = 'URI="'
 URI_END_DELIMETER = '"'
 KEY_TEXT = '-KEY:METHOD=AES-128'
 ENDLIST_TEXT = '#EXT-X-ENDLIST'
-REMOVE_IN_HEADERS = ['upgrade', 'host', 'accept-encoding', 'pad']
+REMOVE_IN_HEADERS = ['upgrade', 'host', 'accept-encoding', 'pad', 'alternate_english', 'alternate_spanish']
 REMOVE_OUT_HEADERS = ['date', 'server', 'transfer-encoding', 'keep-alive', 'connection', 'content-length', 'content-md5', 'access-control-allow-credentials', 'content-encoding']
 
 class RequestHandler(BaseHTTPRequestHandler):
@@ -47,11 +51,17 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         headers = {}
         pad = 0
+        alternate_english = None
+        alternate_spanish = None
         for key in self.headers:
             if key.lower() not in REMOVE_IN_HEADERS:
                 headers[key] = self.headers[key]
             elif key.lower() == 'pad':
                 pad = int(self.headers[key])
+            elif key.lower() == 'alternate_english':
+                alternate_english = urllib.unquote_plus(self.headers[key])
+            elif key.lower() == 'alternate_spanish':
+                alternate_spanish = urllib.unquote_plus(self.headers[key])
 
         response = requests.get(url, headers=headers)
 
@@ -77,15 +87,20 @@ class RequestHandler(BaseHTTPRequestHandler):
                     line_split = line.split(URI_START_DELIMETER)
                     url_split = line_split[1].split(URI_END_DELIMETER, 1)
                     absolute_url = urljoin(url, url_split[0])
-                    if absolute_url.endswith(STREAM_EXTENSION):
+                    if absolute_url.endswith(STREAM_EXTENSION) and not absolute_url.startswith(PROXY_URL):
                         absolute_url = PROXY_URL + absolute_url
                     new_line = line_split[0] + URI_START_DELIMETER + absolute_url + URI_END_DELIMETER + url_split[1]
                     new_line_array.append(new_line)
                 else:
                     new_line_array.append(line)
+                    if line == '#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="aac",LANGUAGE="en",NAME="English",AUTOSELECT=YES,DEFAULT=YES':
+                        if alternate_english is not None:
+                            new_line_array.append('#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="aac",NAME="Alternate English",LANGUAGE="en",AUTOSELECT=YES,DEFAULT=NO,URI="' + PROXY_URL + alternate_english + '"')
+                        if alternate_spanish is not None:
+                            new_line_array.append('#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="aac",NAME="Alternate Spanish",LANGUAGE="es",AUTOSELECT=YES,DEFAULT=NO,URI="' + PROXY_URL + alternate_spanish + '"')
             elif line != '':
                 absolute_url = urljoin(url, line)
-                if absolute_url.endswith(STREAM_EXTENSION):
+                if absolute_url.endswith(STREAM_EXTENSION) and not absolute_url.startswith(PROXY_URL):
                     absolute_url = PROXY_URL + absolute_url
                 new_line_array.append(absolute_url)
 

@@ -325,7 +325,7 @@ msgid "Zip code (5 digits, for blackout labels)"
 msgstr ""
 
 msgctxt "#30416"
-msgid "Disable video length padding (in case of proxy conflict)"
+msgid "Disable proxy (used for padding and alternate audio)"
 msgstr ""
 
 msgctxt "#30417"
@@ -343,3 +343,12 @@ msgstr ""
 msgctxt "#30420"
 msgid "Game Changer delay (seconds)"
 msgstr ""
+
+msgctxt "#30421"
+msgid "Skip to specific batter(s) or pitcher(s)"
+msgstr ""
+
+msgctxt "#30422"
+msgid "Select batter(s) or pitcher(s) (one at a time, click Cancel when done)"
+msgstr ""
+

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2022.8.23+matrix.1" provider-name="eracknaphobia">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2022.9.5+matrix.1" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -22,15 +22,8 @@
         </description>
         <disclaimer lang="en_GB">Requires an MLB.tv account</disclaimer>
         <news>
-            - playback: added away radio streams to national games (using same proxy as video padding)
-            - game list: fixed bug for games completed early
-            - game changer: expanded initial game selection, if no games are active
-            - game changer: added display times
-            - game changer and skip options: improved break detection
-            - blackout labels: increased times to more closely match actual availability
-            - highlights: changed from HLS to MP4 because HLS wasn't starting at beginning properly
-            - YouTube games: enabled option to watch in YouTube addon (YouTube addon on Android may need to be limited to 480p to play properly)
-            - big inning: find stream even when it is not featured yet
+            - auto skip: added option to skip to specific batter(s) or pitcher(s)
+            - fixed game changer display time bug for start time TBD games
         </news>
         <language>en</language>
         <platform>all</platform>

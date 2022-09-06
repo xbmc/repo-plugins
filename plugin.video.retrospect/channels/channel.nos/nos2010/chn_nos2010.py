@@ -183,7 +183,7 @@ class Channel(chn_class.Channel):
         self.__NextPageAdded = False
         self.__jsonApiKeyHeader = {"apikey": "07896f1ee72645f68bc75581d7f00d54"}
         self.__useJson = True
-        self.__pageSize = 60
+        self.__pageSize = 50
         self.__max_page_count = 10
         self.__has_premium_cache = None
         self.__timezone = pytz.timezone("Europe/Amsterdam")

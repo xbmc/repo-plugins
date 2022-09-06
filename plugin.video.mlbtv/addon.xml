@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2022.6.29" provider-name="eracknaphobia">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2022.9.5" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.pytz" />
@@ -22,10 +22,8 @@
         </description>
         <disclaimer lang="en_GB">Requires an MLB.tv account</disclaimer>
         <news>
-            - live game changer based on leverage index
-            - streamlined blackout detection
-            - reduced autoplay checks
-            - improved monitor logging
+            - auto skip: added option to skip to specific batter(s) or pitcher(s)
+            - fixed game changer display time bug for start time TBD games
         </news>
         <language>en</language>
         <platform>all</platform>

@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2014 Tommy Winther, msj33, TermeHansen
+#      Copyright (C) 2014 Tommy Winther, TermeHansen
 #
 #  https://github.com/xbmc-danish-addons/plugin.video.drnu
 #
@@ -20,17 +20,10 @@
 #
 
 import os
-import sys
-
-import xbmc
 import xbmcaddon
 import xbmcgui
 
-if sys.version_info.major == 2:
-    # python 2
-    from xbmc import translatePath
-else:
-    from xbmcvfs import translatePath
+from xbmcvfs import translatePath
 
 ADDON = xbmcaddon.Addon('plugin.video.drnu')
 

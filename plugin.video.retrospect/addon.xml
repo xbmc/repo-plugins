@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.5.8+matrix.1"
+        version="5.5.9+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -122,9 +122,9 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.5.8 - Changelog - 2022-07-17[/B]
+        <news>[B]Retrospect v5.5.9 - Changelog - 2022-09-06[/B]
 
-This minor update mainly fixes NPO and KetNet channels.
+This minor update mainly fixes the NPO channel and the Kijk.nl search.
 
 [B]Framework related[/B]
 _None_
@@ -133,10 +133,9 @@ _None_
 _None_
 
 [B]Channel related[/B]
-* Fixed: NPO Subtitles (Fixes #1644).
-* Fixed: Full listing of NPO.
-* Fixed: Live Radio for NPO.
-* Fixed: KetNet listings.
+* Fixed: Kijk.nl search.
+* Fixed: Page size for NPO down to 50 to prevent some API glitches.
+
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

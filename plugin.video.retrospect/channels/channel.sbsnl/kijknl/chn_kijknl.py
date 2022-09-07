@@ -748,6 +748,10 @@ class Channel(chn_class.Channel):
         episode_number = result_set.get("tvSeasonEpisodeNumber")
 
         title_format = self.parentItem.metaData.get("title_format", "s{0:02d}e{1:02d} - {2}")
+        if title is None and result_set["series"] is None:
+            Logger.warning("Cannot format title. %s", result_set)
+            return None
+
         if title is None:
             serie_title = result_set["series"]["title"]
             title = title_format.format(season_number, episode_number, serie_title)
@@ -762,11 +766,12 @@ class Channel(chn_class.Channel):
             item.set_season_info(season_number, episode_number)
         self.__get_artwork(item, result_set.get("imageMedia"), mode="thumb")
 
-        updated = result_set["lastPubDate"] / 1000
-        date_time = DateHelper.get_date_from_posix(updated)
-        item.set_date(date_time.year, date_time.month, date_time.day, date_time.hour,
-                      date_time.minute,
-                      date_time.second)
+        if result_set["lastPubDate"]:
+            updated = result_set["lastPubDate"] / 1000
+            date_time = DateHelper.get_date_from_posix(updated)
+            item.set_date(date_time.year, date_time.month, date_time.day, date_time.hour,
+                          date_time.minute,
+                          date_time.second)
 
         # Find the media streams
         item.metaData["sources"] = result_set["sources"]

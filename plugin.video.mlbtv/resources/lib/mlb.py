@@ -76,9 +76,9 @@ def todays_games(game_day, start_inning='False'):
                 else:
                     if (game_changer_start is None or game['gameDate'] < game_changer_start) and 'rescheduleDate' not in game:
                         game_changer_start = game['gameDate']
-                    elif 'rescheduleDate' not in game:
+                    elif game_changer_start is not None and 'rescheduleDate' not in game:
                         if game['status']['startTimeTBD'] is True:
-                            game_changer_end = parse(game_changer_end) + timedelta(hours=4)
+                            game_changer_end = parse(game_changer_start) + timedelta(hours=4)
                             game_changer_end = game_changer_end.strftime("%Y-%m-%dT%H:%M:%SZ")
                         else:
                             game_changer_end = game['gameDate']
@@ -820,7 +820,7 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
         # show automatic skip dialog, if possible, enabled, and we're not looking to autoplay
         if skip_possible is True and ASK_TO_SKIP == 'true' and autoplay is False:
             # automatic skip dialog with options to skip nothing, breaks, breaks + idle time, breaks + idle time + non-action pitches
-            skip_type = dialog.select(LOCAL_STRING(30403), [LOCAL_STRING(30404), LOCAL_STRING(30408), LOCAL_STRING(30405), LOCAL_STRING(30406)])
+            skip_type = dialog.select(LOCAL_STRING(30403), [LOCAL_STRING(30404), LOCAL_STRING(30408), LOCAL_STRING(30405), LOCAL_STRING(30421), LOCAL_STRING(30406)])
             # cancel will exit
             if skip_type == -1:
                 sys.exit()

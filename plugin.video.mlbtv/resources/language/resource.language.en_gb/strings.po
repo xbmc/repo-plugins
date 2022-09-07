@@ -343,3 +343,12 @@ msgstr ""
 msgctxt "#30420"
 msgid "Game Changer delay (seconds)"
 msgstr ""
+
+msgctxt "#30421"
+msgid "Skip to specific batter(s) or pitcher(s)"
+msgstr ""
+
+msgctxt "#30422"
+msgid "Select batter(s) or pitcher(s) (one at a time, click Cancel when done)"
+msgstr ""
+

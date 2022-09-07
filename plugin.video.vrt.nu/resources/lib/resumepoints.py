@@ -253,7 +253,7 @@ class ResumePoints:
                 tileOrientation='landscape',
                 layout='slider',
                 title='Later kijken')
-            watchlater_json = get_url_json(url='{}?{}'.format(self.WATCHLATER_REST_URL, urlencode(payload)), cache=None, headers=headers, raise_errors='all')
+            watchlater_json = get_url_json(url='{}?{}'.format(self.WATCHLATER_REST_URL, urlencode(payload)), cache=None, headers=headers)
         return watchlater_json
 
     def get_continue(self):
@@ -273,7 +273,7 @@ class ResumePoints:
                 tileOrientation='landscape',
                 layout='slider',
                 title='Programma\'s verder kijken')
-            continue_json = get_url_json(url='{}?{}'.format(self.CONTINUE_REST_URL, urlencode(payload)), cache=None, headers=headers, raise_errors='all')
+            continue_json = get_url_json(url='{}?{}'.format(self.CONTINUE_REST_URL, urlencode(payload)), cache=None, headers=headers)
         return continue_json
 
     def set_watchlater_graphql(self, episode_id, title, watch_later=True):

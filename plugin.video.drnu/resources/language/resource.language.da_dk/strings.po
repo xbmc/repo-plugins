@@ -1,14 +1,14 @@
 # Kodi Media Center language file
 # Addon Name: DR TV
 # Addon id: plugin.video.drnu
-# Addon Provider: twinther, msj33, TermeHansen
+# Addon Provider: twinther, TermeHansen
 msgid ""
 msgstr ""
 "Project-Id-Version: Kodi Addons\n"
 "Report-Msgid-Bugs-To: https://github.com/xbmc-danish-addons/plugin.video.drnu\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: twinther, msj33, TermeHansen\n"
+"Last-Translator: twinther, TermeHansen\n"
 "Language-Team: Danish (Denmark) (http://www.transifex.com/projects/p/kodi-main/language/da_DK/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,14 +19,6 @@ msgstr ""
 msgctxt "#30000"
 msgid "Programs A-Z"
 msgstr "Programmer A-Å"
-
-msgctxt "#30001"
-msgid "Latest videos"
-msgstr "Nyeste videoer"
-
-msgctxt "#30002"
-msgid "Spotlight videos"
-msgstr "Spotlight videoer"
 
 msgctxt "#30003"
 msgid "Search videos"
@@ -48,14 +40,6 @@ msgctxt "#30010"
 msgid "Program removed"
 msgstr "Program fjernet"
 
-msgctxt "#30011"
-msgid "Most watched videos on DR NU"
-msgstr "Mest sete videoer på DR NU"
-
-msgctxt "#30012"
-msgid "Programs by area"
-msgstr "Program for område"
-
 msgctxt "#30013"
 msgid "The list is empty."
 msgstr "Listen er tom."
@@ -72,17 +56,9 @@ msgctxt "#30020"
 msgid "Your recently watched videos are automatically added."
 msgstr "De videoer du sidst har set tilføjes automatisk."
 
-msgctxt "#30025"
-msgid "Premiere videos"
-msgstr "Forpremiere"
-
 msgctxt "#30027"
 msgid "Live TV"
 msgstr "Live TV"
-
-msgctxt "#30028"
-msgid "Themes"
-msgstr "Temaer"
 
 msgctxt "#30100"
 msgid "DR TV Universe"
@@ -108,6 +84,10 @@ msgctxt "#30500"
 msgid "General"
 msgstr "Generelt"
 
+msgctxt "#30501"
+msgid "re-caching"
+msgstr "re-caching"
+
 msgctxt "#30503"
 msgid "Enable Hard-of-hearing subtitles"
 msgstr "Vis undertekster for hørehæmmedde"
@@ -117,20 +97,8 @@ msgid "Clear the favorite programs list"
 msgstr "Nulstil listen med foretrukne programmer"
 
 msgctxt "#30505"
-msgid "Remove programs from Ramasjang/Ultra in latest videos list"
-msgstr "Fjern programmer fra Ramasjang/Ultra under nyeste videoer"
-
-msgctxt "#30506"
-msgid "Hard-of-hearing"
-msgstr "For hørehæmmede"
-
-msgctxt "#30507"
-msgid "Subtitles"
-msgstr "Undertekster"
-
-msgctxt "#30508"
-msgid "empty"
-msgstr "Ingen undertekster"
+msgid "Remove programs from Ramasjang/Ultra in alphabetical lists"
+msgstr "Fjern programmer fra Ramasjang/Ultra fra alfabetisk oversigt"
 
 msgctxt "#30509"
 msgid "No subtitles on Ramasjang/Ultra episodes"
@@ -164,9 +132,25 @@ msgctxt "#30516"
 msgid "Minisjang"
 msgstr "Minisjang"
 
-msgctxt "#30520"
-msgid "Fanart image resolution"
-msgstr "Størrelse på fanart billeder"
+msgctxt "#30521"
+msgid "Inputstream type"
+msgstr "Inputstream type"
+
+msgctxt "#30531"
+msgid "re-cache all"
+msgstr "re-cache alt"
+
+msgctxt "#30532"
+msgid "cache expiration in hours"
+msgstr "cache holdbarhed i timer"
+
+msgctxt "#30533"
+msgid "re-cache all in: "
+msgstr "re-cache alt i: "
+
+msgctxt "#30534"
+msgid "Days between cleanup of sqlite db"
+msgstr "Antal dage imellem rengøring af database"
 
 msgctxt "#30900"
 msgid "There was an error while communicating with DR NU."
@@ -188,10 +172,6 @@ msgctxt "#30904"
 msgid "The video is no longer available and playback is not possible."
 msgstr "Videoen er ikke længere tilgængelig og kan ikke afspilles."
 
-msgctxt "#30905"
-msgid "Unknown Live TV Slug:"
-msgstr "Ukendt Live TV Slug:"
-
 msgctxt "#30906"
 msgid "Please report issue at github"
 msgstr "Rapporter gerne fejlen på github"
@@ -199,7 +179,3 @@ msgstr "Rapporter gerne fejlen på github"
 msgctxt "#30907"
 msgid "https://github.com/xbmc-danish-addons/plugin.video.drnu/issues"
 msgstr "https://github.com/xbmc-danish-addons/plugin.video.drnu/issues"
-
-msgctxt "#30908"
-msgid "see error at:"
-msgstr "se fejlen i:"

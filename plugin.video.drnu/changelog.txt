@@ -1,3 +1,10 @@
+[B]Version 6.0.0 - 2022-09-01[/B]
+- Major code re-factor for new API from dr.dk
+
+[B]Version 5.1.2 - 2022-06-01[/B]
+- catch failure in recache cleanup
+- add setting for inputstream api
+
 [B]Version 5.1.1 - 2022-04-20[/B]
 - hot-fix to use hls inputstreams
 

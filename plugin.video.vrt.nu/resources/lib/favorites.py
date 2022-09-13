@@ -13,13 +13,13 @@ except ImportError:  # Python 2
 from kodiutils import (container_refresh, get_cache, get_setting_bool, get_url_json,
                        has_credentials, input_down, invalidate_caches, localize,
                        multiselect, notification, ok_dialog, update_cache)
+from utils import url_to_program
 
 
 class Favorites:
     """Track, cache and manage VRT favorites"""
 
     GRAPHQL_URL = 'https://www.vrt.be/vrtnu-api/graphql/v1'
-    FAVORITES_REST_URL = 'https://www.vrt.be/vrtnu-api/rest/lists/vrtnu-favoritePrograms'
     FAVORITES_CACHE_FILE = 'favorites.json'
 
     def __init__(self):
@@ -75,27 +75,75 @@ class Favorites:
         return True
 
     def get_favorites(self):
-        """Get favorites using VRT MAX REST API"""
+        """Get favorites using GraphQL API"""
         from tokenresolver import TokenResolver
-        vrtlogin_at = TokenResolver().get_token('vrtlogin-at')
+        access_token = TokenResolver().get_token('vrtnu-site_profile_at')
         favorites_json = {}
-        if vrtlogin_at:
+        if access_token:
             headers = {
-                'Authorization': 'Bearer ' + vrtlogin_at,
-                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + access_token,
+                'Content-Type': 'application/json',
             }
-            querystring = 'tileType=program-poster&tileContentType=program&tileOrientation=portrait&layout=slider&title=Mijn+favoriete+programma%27s'
-            favorites_json = get_url_json(url='{}?{}'.format(self.FAVORITES_REST_URL, querystring), cache=None, headers=headers)
+            graphql = """
+                query Favs(
+                  $listId: ID!
+                  $endCursor: ID!
+                  $pageSize: Int!
+                ) {
+                  list(listId: $listId) {
+                    __typename
+                    ... on PaginatedTileList {
+                      paginated: paginatedItems(first: $pageSize, after: $endCursor) {
+                        edges {
+                          node {
+                            __typename
+                            ...programTile
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                fragment programTile on ProgramTile {
+                  id
+                  title
+                  description
+                  action {
+                    __typename
+                    ...action
+                  }
+                }
+                fragment action on Action {
+                  __typename
+                  ... on LinkAction {
+                    link
+                    linkType
+                    __typename
+                  }
+                }
+            """
+            payload = dict(
+                operationName='Favs',
+                variables=dict(
+                    listId='dynamic:/vrtnu.model.json@favorites-list-video',
+                    endCursor='1643276998214',
+                    pageSize=10,
+                ),
+                query=graphql,
+            )
+            from json import dumps
+            data = dumps(payload).encode('utf-8')
+            favorites_json = get_url_json(url=self.GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
         return favorites_json
 
     def get_program_id_graphql(self, program_name):
         """Get programId from programName using GraphQL API"""
         from tokenresolver import TokenResolver
-        vrtlogin_at = TokenResolver().get_token('vrtlogin-at')
+        access_token = TokenResolver().get_token('vrtnu-site_profile_at')
         program_id = None
-        if vrtlogin_at:
+        if access_token:
             headers = {
-                'Authorization': 'Bearer ' + vrtlogin_at,
+                'Authorization': 'Bearer ' + access_token,
                 'Content-Type': 'application/json',
             }
             graphql = """
@@ -122,11 +170,11 @@ class Favorites:
     def set_favorite_graphql(self, program_id, title, is_favorite=True):
         """Set favorite using GraphQL API"""
         from tokenresolver import TokenResolver
-        vrtlogin_at = TokenResolver().get_token('vrtlogin-at')
+        access_token = TokenResolver().get_token('vrtnu-site_profile_at')
         result_json = {}
-        if vrtlogin_at:
+        if access_token:
             headers = {
-                'Authorization': 'Bearer ' + vrtlogin_at,
+                'Authorization': 'Bearer ' + access_token,
                 'Content-Type': 'application/json',
             }
             graphql_query = """
@@ -182,10 +230,10 @@ class Favorites:
         """Generate a simple favorites dict with programIds and programNames"""
         favorites_dict = {}
         if favorites_json is not None:
-            for item in favorites_json.get(':items', []):
-                program_name = favorites_json.get(':items')[item].get('data').get('program').get('name')
-                program_id = favorites_json.get(':items')[item].get('data').get('program').get('id')
-                title = favorites_json.get(':items')[item].get('title')
+            for item in favorites_json.get('data').get('list').get('paginated').get('edges'):
+                program_name = url_to_program(item.get('node').get('action').get('link'))
+                program_id = item.get('node').get('id')
+                title = item.get('node').get('title')
                 favorites_dict[program_name] = dict(
                     program_id=program_id,
                     title=title)

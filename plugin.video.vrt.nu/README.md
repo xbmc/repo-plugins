@@ -59,6 +59,11 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.16 (2022-09-13)
+- Fix 'My Programs' menu (@mediaminister)
+- Hide resumepoints error messages (@mediaminister)
+- Implement new login api @mediaminister)
+
 ### v2.5.15 (2022-08-31)
 - Fix add-on crash (@mediaminister)
 

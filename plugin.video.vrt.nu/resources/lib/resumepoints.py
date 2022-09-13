@@ -40,29 +40,12 @@ class ResumePoints:
         """Is resumepoints activated in the menu and do we have credentials ?"""
         return get_setting_bool('usefavorites', default=True) and get_setting_bool('useresumepoints', default=True) and has_credentials()
 
-    @staticmethod
-    def watchlater_headers(url=None):
-        """Generate http headers for VRT MAX watchLater API"""
-        from tokenresolver import TokenResolver
-        xvrttoken = TokenResolver().get_token('X-VRT-Token', variant='user')
-        headers = {}
-        if xvrttoken:
-            url = 'https://www.vrt.be' + url if url else 'https://www.vrt.be/vrtmax'
-            headers = {
-                'Authorization': 'Bearer ' + xvrttoken,
-                'Content-Type': 'application/json',
-                'Referer': url,
-            }
-        else:
-            log_error('Failed to get usertoken from VRT MAX')
-            notification(message=localize(30975))
-        return headers
-
     def refresh(self, ttl=None):
         """Get a cached copy or a newer resumepoints from VRT, or fall back to a cached file"""
         self.refresh_resumepoints(ttl)
-        self.refresh_watchlater(ttl)
         self.refresh_continue(ttl)
+        # FIXME: It seems VRT removed the watch later function
+        # self.refresh_watchlater(ttl)
 
     def refresh_resumepoints(self, ttl=None):
         """Get a cached copy or a newer resumepoints from VRT, or fall back to a cached file"""
@@ -106,11 +89,11 @@ class ResumePoints:
     def resumepoints_headers():
         """Generate http headers for VRT MAX Resumepoint API"""
         from tokenresolver import TokenResolver
-        vrtlogin_at = TokenResolver().get_token('vrtlogin-at')
+        access_token = TokenResolver().get_token('vrtnu-site_profile_at')
         headers = {}
-        if vrtlogin_at:
+        if access_token:
             headers = {
-                'Authorization': 'Bearer ' + vrtlogin_at,
+                'Authorization': 'Bearer ' + access_token,
                 'Content-Type': 'application/json',
             }
         else:
@@ -240,11 +223,11 @@ class ResumePoints:
     def get_watchlater(self):
         """Get watchlater using VRT MAX REST API"""
         from tokenresolver import TokenResolver
-        vrtlogin_at = TokenResolver().get_token('vrtlogin-at')
+        access_token = TokenResolver().get_token('vrtnu-site_profile_at')
         watchlater_json = {}
-        if vrtlogin_at:
+        if access_token:
             headers = {
-                'Authorization': 'Bearer ' + vrtlogin_at,
+                'Authorization': 'Bearer ' + access_token,
                 'Accept': 'application/json',
             }
             payload = dict(
@@ -257,33 +240,67 @@ class ResumePoints:
         return watchlater_json
 
     def get_continue(self):
-        """Get continue using VRT MAX REST API"""
+        """Get continue using GraphQL API"""
         from tokenresolver import TokenResolver
-        vrtlogin_at = TokenResolver().get_token('vrtlogin-at')
+        access_token = TokenResolver().get_token('vrtnu-site_profile_at')
         continue_json = {}
-        if vrtlogin_at:
+        if access_token:
             headers = {
-                'Authorization': 'Bearer ' + vrtlogin_at,
-                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + access_token,
+                'Content-Type': 'application/json',
             }
+            graphql_query = """
+                query ContinueEpisodes(
+                  $listId: ID!
+                  $endCursor: ID!
+                  $pageSize: Int!
+                ) {
+                  list(listId: $listId) {
+                    __typename
+                    ... on PaginatedTileList {
+                      paginated: paginatedItems(first: $pageSize, after: $endCursor) {
+                        edges {
+                          node {
+                            __typename
+                            ...episodeTile
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                fragment episodeTile on EpisodeTile {
+                  __typename
+                  id
+                  title
+                  episode {
+                    title
+                    id
+                  }
+                }
+            """
             payload = dict(
-                contentType='video',
-                tileType='mixed-content',
-                tileContentType='episode',
-                tileOrientation='landscape',
-                layout='slider',
-                title='Programma\'s verder kijken')
-            continue_json = get_url_json(url='{}?{}'.format(self.CONTINUE_REST_URL, urlencode(payload)), cache=None, headers=headers)
+                operationName='ContinueEpisodes',
+                variables=dict(
+                    listId='dynamic:/vrtnu.model.json@resume-list-video',
+                    endCursor='',
+                    pageSize=50,
+                ),
+                query=graphql_query,
+            )
+            from json import dumps
+            data = dumps(payload).encode('utf-8')
+            continue_json = get_url_json(url=self.GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
         return continue_json
 
     def set_watchlater_graphql(self, episode_id, title, watch_later=True):
         """Set watchLater episode using GraphQL API"""
         from tokenresolver import TokenResolver
-        vrtlogin_at = TokenResolver().get_token('vrtlogin-at')
+        access_token = TokenResolver().get_token('vrtnu-site_profile_at')
         result_json = {}
-        if vrtlogin_at:
+        if access_token:
             headers = {
-                'Authorization': 'Bearer ' + vrtlogin_at,
+                'Authorization': 'Bearer ' + access_token,
                 'Content-Type': 'application/json',
             }
             graphql_query = """
@@ -323,14 +340,16 @@ class ResumePoints:
 
     @staticmethod
     def _generate_continue_dict(continue_json):
-        """Generate a simple continue dict with episodeIds and episodeTitles"""
+        """Generate a simple continue dict with episodeIds, programTitles and episodeTitles"""
         continue_dict = {}
         if continue_json is not None:
-            for item in continue_json.get(':items', []):
-                episode_id = continue_json.get(':items')[item].get('data').get('episode').get('id')
-                title = continue_json.get(':items')[item].get('description')
+            for item in continue_json.get('data').get('list').get('paginated').get('edges'):
+                episode_id = item.get('node').get('episode').get('id')
+                program_title = item.get('node').get('title')
+                episode_title = item.get('node').get('episode').get('title')
                 continue_dict[episode_id] = dict(
-                    title=title)
+                    program_title=program_title,
+                    episode_title=episode_title)
         return continue_dict
 
     def is_watchlater(self, episode_id):

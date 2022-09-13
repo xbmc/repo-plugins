@@ -22,7 +22,6 @@ class StreamService:
 
     _VUPLAY_API_URL = 'https://api.vuplay.co.uk'
     _VUALTO_API_URL = 'https://media-services-public.vrt.be/media-aggregator/v2'
-    _VUALTO_TOKEN_URL = 'https://media-services-public.vrt.be/vualto-video-aggregator-web/rest/external/v2/tokens'
     _CLIENT = 'vrtnu-web@PROD'
     _UPLYNK_LICENSE_URL = 'https://content.uplynk.com/wv'
     _INVALID_LOCATION = 'INVALID_LOCATION'
@@ -124,9 +123,9 @@ class StreamService:
                 return data
 
         if api_data.is_live_stream:
-            playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'live', self._VUALTO_TOKEN_URL, roaming=roaming)
+            playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'live')
         else:
-            playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'ondemand', self._VUALTO_TOKEN_URL, roaming=roaming)
+            playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'ondemand')
 
         # Construct api_url and get video json
         if not playertoken:

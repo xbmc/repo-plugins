@@ -210,7 +210,7 @@ class TVGuide:
     def get_stream_ids(episode_id=None):
         """Get videoId and publicationId using VRT MAX REST API"""
         from tokenresolver import TokenResolver
-        access_token = TokenResolver().get_token('vrtlogin-at')
+        access_token = TokenResolver().get_token('vrtnu-site_profile_at')
         video_id = None
         publication_id = None
         if access_token:
@@ -241,9 +241,10 @@ class TVGuide:
             from json import dumps
             data = dumps(payload).encode('utf-8')
             url = 'https://www.vrt.be/vrtnu-api/graphql/v1'
-            data_json = get_url_json(url=url, cache=None, headers=headers, data=data, raise_errors='all')
-            video_id = data_json.get('data').get('catalogMember').get('watchAction').get('videoId')
-            publication_id = data_json.get('data').get('catalogMember').get('watchAction').get('publicationId')
+            episode = get_url_json(url=url, cache=None, headers=headers, data=data, raise_errors='all').get('data').get('catalogMember')
+            if episode:
+                video_id = episode.get('watchAction').get('videoId')
+                publication_id = episode.get('watchAction').get('publicationId')
         return video_id, publication_id
 
     def get_episode_path(self, episode, channel):

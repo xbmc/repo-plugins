@@ -171,13 +171,13 @@ class TVGuide:
         episode_items = []
         for episode in episodes:
             program = url_to_program(episode.get('url', ''))
-            context_menu, favorite_marker, watchlater_marker = self._metadata.get_context_menu(episode, program, cache_file)
+            context_menu, favorite_marker = self._metadata.get_context_menu(episode, program, cache_file)
             label = self._metadata.get_label(episode)
             path = self.get_episode_path(episode, channel)
             # Playable item
             if '/play/' in path:
                 is_playable = True
-                label += favorite_marker + watchlater_marker
+                label += favorite_marker
             # Non-actionable item
             else:
                 is_playable = False

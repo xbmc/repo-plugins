@@ -162,14 +162,6 @@ msgctxt "#30051"
 msgid "My episodes that will soon be offline"
 msgstr ""
 
-msgctxt "#30052"
-msgid "Watch later"
-msgstr ""
-
-msgctxt "#30053"
-msgid "The videos you like to watch later"
-msgstr ""
-
 msgctxt "#30054"
 msgid "Continue watching"
 msgstr ""
@@ -411,22 +403,6 @@ msgctxt "#30334"
 msgid "In 2 days"
 msgstr ""
 
-msgctxt "#30401"
-msgid "Watch later"
-msgstr ""
-
-msgctxt "#30402"
-msgid "Remove from watch later"
-msgstr ""
-
-msgctxt "#30403"
-msgid "Add {title} to watch later"
-msgstr ""
-
-msgctxt "#30404"
-msgid "Remove {title} from watch later"
-msgstr ""
-
 msgctxt "#30409"
 msgid "episode"
 msgstr ""
@@ -594,7 +570,7 @@ msgid "Enable watching activity"
 msgstr ""
 
 msgctxt "#30748"
-msgid "This enables 'watch later' and 'continue watching' menus and syncs playback position between different devices using the same VRT MAX account."
+msgid "This enables 'continue watching' menus and syncs playback position between different devices using the same VRT MAX account."
 msgstr ""
 
 msgctxt "#30749"
@@ -1012,7 +988,7 @@ msgid "This program can only be played from an European Union member state. It i
 msgstr ""
 
 msgctxt "#30975"
-msgid "Failed to get user token from VRT MAX"
+msgid "Failed to get access token from VRT MAX"
 msgstr ""
 
 msgctxt "#30976"

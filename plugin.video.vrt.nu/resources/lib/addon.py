@@ -60,20 +60,6 @@ def unfollow(program_name, title, program_id=None):
     Favorites().unfollow(program_name=program_name, title=to_unicode(unquote_plus(from_unicode(title))), program_id=program_id, move_down=move_down)
 
 
-@plugin.route('/watchlater/<episode_id>/<title>')
-def watchlater(episode_id, title):
-    """The API interface to watch an episode used by the context menu"""
-    from resumepoints import ResumePoints
-    ResumePoints().watchlater(episode_id=episode_id, title=to_unicode(unquote_plus(from_unicode(title))))
-
-
-@plugin.route('/unwatchlater/<episode_id>/<title>')
-def unwatchlater(episode_id, title):
-    """The API interface to unwatch an episode used by the context menu"""
-    from resumepoints import ResumePoints
-    ResumePoints().unwatchlater(episode_id=episode_id, title=to_unicode(unquote_plus(from_unicode(title))))
-
-
 @plugin.route('/favorites')
 def favorites_menu():
     """The My favorites menu"""
@@ -147,13 +133,6 @@ def resumepoints_refresh():
     from resumepoints import ResumePoints
     ResumePoints().refresh(ttl=0)
     notification(message=localize(30983))
-
-
-@plugin.route('/resumepoints/watchlater')
-def resumepoints_watchlater():
-    """The resumepoints watchlater listing"""
-    from vrtplayer import VRTPlayer
-    VRTPlayer().show_watchlater_menu(page=1)
 
 
 @plugin.route('/programs')

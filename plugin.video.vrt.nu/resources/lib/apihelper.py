@@ -99,7 +99,7 @@ class ApiHelper:
         label = self._metadata.get_label(tvshow)
 
         if program:
-            context_menu, favorite_marker, _ = self._metadata.get_context_menu(tvshow, program, cache_file)
+            context_menu, favorite_marker = self._metadata.get_context_menu(tvshow, program, cache_file)
             label += favorite_marker
 
         return TitleItem(
@@ -126,7 +126,7 @@ class ApiHelper:
         # Titletype
         titletype = None
         # FIXME: Find a better way to determine cache file and mixed episodes titletype
-        if variety and variety.startswith('featured.') or variety in ('continue', 'offline', 'recent', 'watchlater'):
+        if variety and variety.startswith('featured.') or variety in ('continue', 'offline', 'recent'):
             titletype = 'mixed_episodes'
         else:
             titletype = variety
@@ -253,8 +253,8 @@ class ApiHelper:
         label, sort, ascending = self._metadata.get_label(episode, titletype, return_sort=True)
 
         if program:
-            context_menu, favorite_marker, watchlater_marker = self._metadata.get_context_menu(episode, program, cache_file)
-            label += favorite_marker + watchlater_marker
+            context_menu, favorite_marker = self._metadata.get_context_menu(episode, program, cache_file)
+            label += favorite_marker
 
         info_labels = self._metadata.get_info_labels(episode)
         # FIXME: Due to a bug in Kodi, ListItem.Title is used when Sort methods are used, not ListItem.Label
@@ -546,11 +546,6 @@ class ApiHelper:
             if variety == 'oneoff':
                 params['facets[episodeNumber]'] = '[0,1]'  # This to avoid VRT MAX metadata errors (see #670)
                 params['facets[programType]'] = 'oneoff'
-
-            if variety == 'watchlater':
-                self._resumepoints.refresh_watchlater(ttl=ttl('direct'))
-                episode_ids = self._resumepoints.watchlater_ids()
-                params['facets[episodeId]'] = '[%s]' % (','.join(episode_ids))
 
             if variety == 'continue':
                 self._resumepoints.refresh_continue(ttl=ttl('direct'))

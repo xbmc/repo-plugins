@@ -59,6 +59,11 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.17 (2022-09-21)
+- Fix watching VRT MAX abroad (@mediaminister)
+- Fix 'My Programs' menu (@mediaminister)
+- Fix login issue on Raspberry Pi (@mediaminister)
+
 ### v2.5.16 (2022-09-13)
 - Fix 'My Programs' menu (@mediaminister)
 - Hide resumepoints error messages (@mediaminister)

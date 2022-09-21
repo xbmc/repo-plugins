@@ -3,7 +3,7 @@
 """This module contains all functionality for VRT MAX API authentication."""
 
 from __future__ import absolute_import, division, unicode_literals
-from kodiutils import (addon_profile, delete, exists, get_cache, get_cache_dir, get_setting, open_url,
+from kodiutils import (addon_profile, delete, delete_cache, exists, get_cache, get_cache_dir, get_setting, open_url,
                        get_url_json, has_credentials, invalidate_caches, listdir,
                        localize, log, log_error, notification, ok_dialog,
                        open_settings, set_setting, update_cache)
@@ -26,9 +26,7 @@ class TokenResolver:
 
     def __init__(self):
         """Initialize Token Resolver class"""
-        self.session = None
-        self.oidcxsrf = None
-        self.oidcstate = None
+        self.token_dict = {}
 
     @staticmethod
     def _get_token_filename(name, variant=None):
@@ -39,14 +37,40 @@ class TokenResolver:
 
     def _set_cached_token(self, token, variant=None):
         """Save token to cache"""
-        from json import dumps
+        if not token:
+            return
+
+        # Get token name
         keys = list(token.keys())
         keys.remove('expirationDate')
-        cache_file = self._get_token_filename(keys[0], variant)
+        name = keys[0]
+
+        # Save to memory
+        self.token_dict[name] = token
+
+        # Save to disk
+        cache_file = self._get_token_filename(name, variant)
+        from json import dumps
         update_cache(cache_file, dumps(token), self._TOKEN_CACHE_DIR)
 
     def _get_cached_token(self, name, variant=None):
         """Return a cached token"""
+
+        # Get from memory
+        if self.token_dict.get(name):
+            expiration_date = self.token_dict.get(name).get('expirationDate', None)
+            if expiration_date:
+                from datetime import datetime
+                import dateutil.parser
+                import dateutil.tz
+                now = datetime.now(dateutil.tz.tzlocal())
+                exp = dateutil.parser.parse(expiration_date)
+                if exp <= now:
+                    log(2, "Memory token expired: '{name}'", name=name)
+                    return None
+            return self.token_dict.get(name)
+
+        # Get from disk
         cache_file = self._get_token_filename(name, variant)
         token = get_cache(cache_file, cache_dir=self._TOKEN_CACHE_DIR)
         if token:
@@ -63,14 +87,6 @@ class TokenResolver:
         for cookie in cookie_data:
             # Create token dictionary
             token = self._create_token_dictionary(cookie)
-
-            # Store session tokens
-            if token.get('OIDCXSRF'):
-                self.oidcxsrf = token.get('OIDCXSRF')
-            elif token.get('SESSION'):
-                self.session = token.get('SESSION')
-            elif token.get('oidcstate'):
-                self.oidcstate = token.get('oidcstate')
 
             # Cache token
             self._set_cached_token(token)
@@ -97,6 +113,9 @@ class TokenResolver:
         else:
             expires = 'Mon, 1 Jan 2052 06:00:00 GMT'
 
+        if cookie_info[0] == 'deleted':
+            return None
+
         token_dictionary = {
             cookie_name: cookie_info[0],
             'expirationDate': dateutil.parser.parse(expires).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
@@ -114,10 +133,11 @@ class TokenResolver:
         self._extract_tokens(response)
 
         # Perform login
+        oidcxsrf = self.get_token('OIDCXSRF')
         headers = {
             'Content-Type': 'application/json',
-            'OIDCXSRF': self.oidcxsrf,
-            'Cookie': 'SESSION={}; OIDCXSRF={}'.format(self.session, self.oidcxsrf),
+            'OIDCXSRF': oidcxsrf,
+            'Cookie': 'SESSION={}; OIDCXSRF={}'.format(self.get_token('SESSION'), oidcxsrf),
         }
         payload = dict(
             clientId='vrtnu-site',
@@ -165,37 +185,39 @@ class TokenResolver:
         redirect_url = login_info.get('redirectUrl')
 
         # Get new access token
-        return self._get_new_token(name='vrtnusite_profile_at', redirect_url=redirect_url)
+        return self._get_new_token(name='vrtnu-site_profile_at', redirect_url=redirect_url)
 
-    def _get_new_token(self, name, variant=None, redirect_url=None):
+    def _get_new_token(self, name, variant=None, redirect_url=None, roaming=False):
         """Return a new token"""
         if name == 'vrtPlayerToken':
-            return self._get_playertoken(variant)
+            return self._get_playertoken(variant, roaming)
 
         if not redirect_url:
-            redirect_url = self._get_login_info().get('redirectUrl')
+            return self.login()
 
         headers = {
             'Content-Type': 'application/json',
-            'Cookie': 'SESSION=' + self.session + '; oidcstate=' + self.oidcstate,
+            'Cookie': 'SESSION=' + self.get_token('SESSION') + '; oidcstate=' + self.get_token('oidcstate'),
         }
         response = open_url(redirect_url, headers=headers, follow_redirects=False)
 
         response = open_url(response.info().get('Location'), headers=headers, follow_redirects=False)
 
-        tokens = self._extract_tokens(response)
-        for token in tokens:
-            if token.get(name):
-                return token
+        if response:
+            tokens = self._extract_tokens(response)
+            for token in tokens:
+                if token.get(name):
+                    return token
         return None
 
-    def get_token(self, name, variant=None):
+    def get_token(self, name, variant=None, roaming=False):
         """Get a token"""
 
         # Try to get a cached token
-        token = self._get_cached_token(name, variant)
-        if token:
-            return token.get(name)
+        if not roaming:
+            token = self._get_cached_token(name, variant)
+            if token:
+                return token.get(name)
 
         # Try to refresh a token
         if name.startswith('vrtnu'):
@@ -206,7 +228,7 @@ class TokenResolver:
                     return token.get(name)
 
         # Get a new token
-        token = self._get_new_token(name, variant)
+        token = self._get_new_token(name, variant, roaming=roaming)
         if token:
             return token.get(name)
 
@@ -225,12 +247,16 @@ class TokenResolver:
                 return token
         return None
 
-    def _get_playertoken(self, variant):
+    def _get_playertoken(self, variant, roaming):
         """Get a vrtPlayerToken"""
         from json import dumps
         headers = {'Content-Type': 'application/json'}
         data = b''
-        if variant == 'ondemand':
+        if roaming or variant == 'ondemand':
+            if roaming:
+                # Delete cached vrtPlayerToken
+                cache_file = self._get_token_filename('vrtPlayerToken', variant)
+                delete_cache(cache_file, self._TOKEN_CACHE_DIR)
             videotoken = self.get_token('vrtnu-site_profile_vt')
             if videotoken is None:
                 return None
@@ -354,7 +380,7 @@ class TokenResolver:
         # Delete user-related caches
         invalidate_caches(
             'continue-*.json', 'favorites.json', 'my-offline-*.json', 'my-recent-*.json',
-            'resume_points.json', 'watchlater.json', 'watchlater-*.json')
+            'resume_points.json')
 
     def logged_in(self):
         """Whether there is an active login"""

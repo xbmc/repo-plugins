@@ -123,9 +123,9 @@ class StreamService:
                 return data
 
         if api_data.is_live_stream:
-            playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'live')
+            playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'live', roaming=roaming)
         else:
-            playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'ondemand')
+            playertoken = self._tokenresolver.get_token('vrtPlayerToken', 'ondemand', roaming=roaming)
 
         # Construct api_url and get video json
         if not playertoken:
@@ -264,7 +264,7 @@ class StreamService:
 
         # VRT Geoblock: failed to get stream, now try again with roaming enabled
         if stream_json.get('code') in self._GEOBLOCK_ERROR_CODES:
-            log_error('VRT Geoblock: {msg}', msg=stream_json.get('message'))
+            log_error('VRT Geoblock: {msg}', msg=stream_json)
             if not roaming:
                 return self.get_stream(video, roaming=True, api_data=api_data)
 

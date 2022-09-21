@@ -13,7 +13,7 @@ except ImportError:  # Python 2
 
 from data import CHANNELS, SECONDS_MARGIN
 from kodiutils import colour, get_setting_bool, localize, localize_datelong, log, url_for
-from utils import (capitalize, find_entry, from_unicode, html_to_kodi, reformat_url,
+from utils import (find_entry, from_unicode, html_to_kodi, reformat_url,
                    reformat_image_url, shorten_link, to_unicode, unescape)
 
 
@@ -55,41 +55,7 @@ class Metadata:
         """Get context menu"""
         from addon import plugin
         favorite_marker = ''
-        watchlater_marker = ''
         context_menu = []
-
-        # WATCH LATER
-        if self._resumepoints.is_activated():
-            episode_id = api_data.get('episodeId')
-
-            # VRT MAX Search API
-            if api_data.get('episodeType'):
-                title = api_data.get('title')
-
-            # VRT MAX Schedule API (some are missing vrt.whatson-id)
-            elif api_data.get('vrt.whatson-id') or api_data.get('startTime'):
-                title = api_data.get('title')
-
-            if episode_id is not None:
-                # We need to ensure forward slashes are quoted
-                title = to_unicode(quote_plus(from_unicode(title)))
-                if self._resumepoints.is_watchlater(episode_id):
-                    extras = {}
-                    # If we are in a watchlater menu, move cursor down before removing a favorite
-                    if plugin.path.startswith('/resumepoints/watchlater'):
-                        extras = dict(move_down=True)
-                    # Unwatch context menu
-                    context_menu.append((
-                        capitalize(localize(30402)),
-                        'RunPlugin(%s)' % url_for('unwatchlater', episode_id=episode_id, title=title, **extras)
-                    ))
-                    watchlater_marker = '[COLOR={highlighted}]ᶫ[/COLOR]'
-                else:
-                    # Watch context menu
-                    context_menu.append((
-                        capitalize(localize(30401)),
-                        'RunPlugin(%s)' % url_for('watchlater', episode_id=episode_id, title=title)
-                    ))
 
         # FOLLOW PROGRAM
         if self._favorites.is_activated():
@@ -138,7 +104,7 @@ class Metadata:
         # GO TO PROGRAM
         if api_data.get('programType') != 'oneoff' and program_name:
             if plugin.path.startswith(('/favorites/offline', '/favorites/recent', '/offline', '/recent',
-                                       '/resumepoints/continue', '/resumepoints/watchlater', '/tvguide')):
+                                       '/resumepoints/continue', '/tvguide')):
                 context_menu.append((
                     localize(30417),  # Go to program
                     'Container.Update(%s)' % url_for('programs', program_name=program_name, season='allseasons')
@@ -150,7 +116,7 @@ class Metadata:
             'RunPlugin(%s)' % url_for('delete_cache', cache_file=cache_file)
         ))
 
-        return context_menu, colour(favorite_marker), colour(watchlater_marker)
+        return context_menu, colour(favorite_marker)
 
     @staticmethod
     def get_asset_str(api_data):

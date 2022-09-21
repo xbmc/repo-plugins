@@ -293,6 +293,4 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
             position=position,
             total=total,
             path=self.path,
-            episode_id=self.episode_id,
-            episode_title=self.episode_title
         )

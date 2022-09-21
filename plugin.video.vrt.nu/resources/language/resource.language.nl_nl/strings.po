@@ -162,14 +162,6 @@ msgctxt "#30051"
 msgid "My episodes that will soon be offline"
 msgstr "Mijn afleveringen die binnenkort verdwijnen"
 
-msgctxt "#30052"
-msgid "Watch later"
-msgstr "Later bekijken"
-
-msgctxt "#30053"
-msgid "The videos you like to watch later"
-msgstr "Mijn afleveringen die ik later wil bekijken"
-
 msgctxt "#30054"
 msgid "Continue watching"
 msgstr "Verder kijken"
@@ -411,22 +403,6 @@ msgctxt "#30334"
 msgid "In 2 days"
 msgstr "Overmorgen"
 
-msgctxt "#30401"
-msgid "Watch later"
-msgstr "Later bekijken"
-
-msgctxt "#30402"
-msgid "Remove from watch later"
-msgstr "Niet later bekijken"
-
-msgctxt "#30403"
-msgid "Add {title} to watch later"
-msgstr "{title} later bekijken"
-
-msgctxt "#30404"
-msgid "Remove {title} from watch later"
-msgstr "{title} niet later bekijken"
-
 msgctxt "#30409"
 msgid "episode"
 msgstr "aflevering"
@@ -594,8 +570,8 @@ msgid "Enable watching activity"
 msgstr "Toon kijkactiviteit"
 
 msgctxt "#30748"
-msgid "This enables 'watch later' and 'continue watching' menus and syncs playback position between different devices using the same VRT MAX account."
-msgstr "Dit activeert 'kijk later' en 'verderkijken' menu's and synchroniseert de afspeelpositie tussen verschillende toestellen die hetzelfde VRT MAX account gebruiken."
+msgid "This enables 'continue watching' menus and syncs playback position between different devices using the same VRT MAX account."
+msgstr "Dit activeert 'verderkijken' menu's and synchroniseert de afspeelpositie tussen verschillende toestellen die hetzelfde VRT MAX account gebruiken."
 
 msgctxt "#30749"
 msgid "Add Movies subsection"
@@ -1012,8 +988,8 @@ msgid "This program can only be played from an European Union member state. It i
 msgstr "Dit programma kan alleen afgespeeld worden vanuit een lidstaat van de Europese Unie. Het wordt geblokkeerd op jouw geografische locatie op basis van je IP-adres. Meer info op https://www.vrt.be/vrtmax/help/country/"
 
 msgctxt "#30975"
-msgid "Failed to get user token from VRT MAX"
-msgstr "Ophalen van het gebruikerstoken van VRT MAX is mislukt"
+msgid "Failed to get access token from VRT MAX"
+msgstr "Ophalen van het toegangstoken van VRT MAX is mislukt"
 
 msgctxt "#30976"
 msgid "Failed to (un)follow program '{program}' at VRT MAX"

@@ -138,14 +138,8 @@ class VRTPlayer:
                       info_dict=dict(plot=localize(30051))),
         ]
 
-        # Only add 'My watch later' and 'Continue watching' when it has been activated
+        # Only add 'Continue watching' when it has been activated
         if self._resumepoints.is_activated():
-            favorites_items.append(TitleItem(
-                label=localize(30052),  # My watch later
-                path=url_for('resumepoints_watchlater'),
-                art_dict=dict(thumb='DefaultVideoPlaylists.png'),
-                info_dict=dict(plot=localize(30053)),
-            ))
             favorites_items.append(TitleItem(
                 label=localize(30054),  # Continue Watching
                 path=url_for('resumepoints_continue'),
@@ -315,16 +309,6 @@ class VRTPlayer:
         ))
 
         show_listing(episode_items, category=30022, sort=sort, ascending=ascending, content=content, cache=False)
-
-    def show_watchlater_menu(self, page=0):
-        """The VRT MAX add-on 'My watch later' listing menu"""
-
-        # My watch later menu may need more up-to-date favorites
-        self._favorites.refresh(ttl=ttl('direct'))
-        self._resumepoints.refresh(ttl=ttl('direct'))
-        page = realpage(page)
-        episode_items, sort, ascending, content = self._apihelper.list_episodes(page=page, variety='watchlater')
-        show_listing(episode_items, category=30052, sort=sort, ascending=ascending, content=content, cache=False)
 
     def show_continue_menu(self, page=0):
         """The VRT MAX add-on 'Continue waching' listing menu"""

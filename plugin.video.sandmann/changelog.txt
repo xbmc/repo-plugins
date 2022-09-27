@@ -1,3 +1,5 @@
+version 2.2.0:
+ * update mediathek url
 version 2.1.2:
  * fix detection of dgs-versions
 version 2.1.1:

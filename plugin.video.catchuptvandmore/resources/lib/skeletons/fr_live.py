@@ -532,20 +532,21 @@ menu = {
         'enabled': True,
         'order': 54
     },
-    'BFM_régions': {
+    'BFM_regions': {
         'resolver': '/resources/lib/channels/fr/rmcbfmplay:get_live_url',
         'label': 'BFM Régions',
         'thumb': 'channels/fr/bfmregions.png',
         'fanart': 'channels/fr/bfmregions_fanart.jpeg',
         'm3u_group': 'Région',
         'available_languages': {
+            "BFM ALSACE": {},
             "BFM DICI HAUTE-PROVENCE": {},
             "BFM Grand Lille": {},
             "BFM Grand Littoral": {},
             "BFM Lyon": {},
             "BFM MARSEILLE PROVENCE": {},
             "BFM NICE COTE D'AZUR": {},
-            "BFM Paris": {},
+            "BFM PARIS ILE-DE-FRANCE": {},
             "BFM TOULON VAR": {},
         },
         'enabled': True,
@@ -559,24 +560,6 @@ menu = {
         'm3u_group': 'Région',
         'enabled': True,
         'order': 70
-    },
-    'alsace20': {
-        'resolver': '/resources/lib/channels/fr/alsace20:get_live_url',
-        'label': 'Alsace 20',
-        'thumb': 'channels/fr/alsace20.png',
-        'fanart': 'channels/fr/alsace20_fanart.jpg',
-        'm3u_group': 'Région',
-        'enabled': True,
-        'order': 71
-    },
-    'azurtv': {
-        'resolver': '/resources/lib/channels/fr/azurtv:get_live_url',
-        'label': 'Azur TV',
-        'thumb': 'channels/fr/azurtv.png',
-        'fanart': 'channels/fr/azurtv_fanart.jpg',
-        'm3u_group': 'Région',
-        'enabled': True,
-        'order': 72
     },
     'biptv': {
         'resolver': '/resources/lib/channels/fr/biptv:get_live_url',
@@ -622,15 +605,6 @@ menu = {
         'm3u_group': 'Satellite/FAI',
         'enabled': False,
         'order': 77
-    },
-    'provenceazurtv': {
-        'resolver': '/resources/lib/channels/fr/azurtv:get_live_url',
-        'label': 'Provence Azur TV',
-        'thumb': 'channels/fr/provenceazurtv.png',
-        'fanart': 'channels/fr/provenceazurtv_fanart.jpg',
-        'm3u_group': 'Région',
-        'enabled': True,
-        'order': 78
     },
     'tebeo': {
         'resolver': '/resources/lib/channels/fr/tebeo:get_live_url',
@@ -749,15 +723,6 @@ menu = {
         'enabled': True,
         'order': 92
     },
-    'sportenfrance': {
-        'resolver': '/resources/lib/channels/fr/sportenfrance:get_live_url',
-        'label': 'Sport en France',
-        'thumb': 'channels/fr/sportenfrance.png',
-        'fanart': 'channels/fr/sportenfrance_fanart.jpg',
-        'm3u_group': 'Satellite/FAI',
-        'enabled': True,
-        'order': 100
-    },
     'luckyjack': {
         'resolver': '/resources/lib/channels/fr/abweb:get_live_url',
         'label': 'Lucky Jack',
@@ -814,9 +779,9 @@ menu = {
         'enabled': False,
         'order': 120
     },
-    '01TV': {
+    'TECH & CO': {
         'resolver': '/resources/lib/channels/fr/rmcbfmplay:get_live_url',
-        'label': '01Net TV',
+        'label': 'TECH & CO',
         'thumb': 'channels/fr/01net.png',
         'fanart': 'channels/fr/01net_fanart.jpg',
         'm3u_group': 'Satellite/FAI',
@@ -877,6 +842,33 @@ menu = {
         'enabled': True,
         'order': 127
     },
+    'sudradio': {
+        'resolver': '/resources/lib/channels/fr/sudradio:get_live_url',
+        'label': 'Sud Radio',
+        'thumb': 'channels/fr/sudradio.png',
+        'fanart': 'channels/fr/sudradio_fanart.jpg',
+        'm3u_group': 'Radio',
+        'enabled': True,
+        'order': 128
+    },
+    'sportenfrance': {
+        'resolver': '/resources/lib/channels/fr/sportenfrance:get_live_url',
+        'label': 'Sport en France',
+        'thumb': 'channels/fr/sportenfrance.png',
+        'fanart': 'channels/fr/sportenfrance_fanart.jpg',
+        'm3u_group': 'Satellite/FAI',
+        'enabled': True,
+        'order': 129
+    },
+    'lequipelive': {
+        'resolver': '/resources/lib/channels/fr/lequipe:get_live_url',
+        'label': 'L\'Equipe Live',
+        'thumb': 'channels/fr/lequipelive.png',
+        'fanart': 'channels/fr/lequipelive_fanart.png',
+        'm3u_group': 'TNT',
+        'enabled': True,
+        'order': 130
+    },
     'equidia-live2': {
         'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
         'label': 'Equidia',
@@ -885,7 +877,7 @@ menu = {
         'xmltv_id': 'C64.api.telerama.fr',
         'm3u_group': 'Satellite/FAI',
         'enabled': True,
-        'order': 128
+        'order': 131
     },
     'equidia-racingtrot': {
         'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
@@ -894,7 +886,7 @@ menu = {
         'fanart': 'channels/fr/equidiaracingtrot_fanart.jpg',
         'm3u_group': 'Satellite/FAI',
         'enabled': True,
-        'order': 129
+        'order': 132
     },
     'equidia-racingmag': {
         'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
@@ -903,7 +895,7 @@ menu = {
         'fanart': 'channels/fr/equidiaracingmag_fanart.jpg',
         'm3u_group': 'Satellite/FAI',
         'enabled': True,
-        'order': 130
+        'order': 133
     },
     'equidia-racinggalop': {
         'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
@@ -912,78 +904,25 @@ menu = {
         'fanart': 'channels/fr/equidiaracinggalop_fanart.jpg',
         'm3u_group': 'Satellite/FAI',
         'enabled': True,
-        'order': 131
-    },
-    'equidia-racing1': {
-        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
-        'label': 'Equidia Racing 1',
-        'thumb': 'channels/fr/equidiar1.png',
-        'fanart': 'channels/fr/equidiar1_fanart.jpg',
-        'm3u_group': 'Satellite/FAI',
-        'enabled': True,
-        'order': 132
-    },
-    'equidia-racing2': {
-        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
-        'label': 'Equidia Racing 2',
-        'thumb': 'channels/fr/equidiar2.png',
-        'fanart': 'channels/fr/equidiar2_fanart.jpg',
-        'm3u_group': 'Satellite/FAI',
-        'enabled': True,
-        'order': 133
-    },
-    'equidia-racing3': {
-        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
-        'label': 'Equidia Racing 3',
-        'thumb': 'channels/fr/equidiar3.png',
-        'fanart': 'channels/fr/equidiar3_fanart.jpg',
-        'm3u_group': 'Satellite/FAI',
-        'enabled': True,
         'order': 134
     },
-    'equidia-racing4': {
+    'equidia-racing': {
         'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
-        'label': 'Equidia Racing 4',
-        'thumb': 'channels/fr/equidiar4.png',
-        'fanart': 'channels/fr/eequidiar4_fanart.jpg',
+        'label': 'Equidia Racing',
+        'thumb': 'channels/fr/equidiar.png',
+        'fanart': 'channels/fr/equidiar_fanart.jpg',
         'm3u_group': 'Satellite/FAI',
+        'available_languages': {
+            "1": {},
+            "2": {},
+            "3": {},
+            "4": {},
+            "5": {},
+            "6": {},
+            "7": {},
+            "8": {},
+        },
         'enabled': True,
         'order': 135
     },
-    'equidia-racing5': {
-        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
-        'label': 'Equidia Racing 5',
-        'thumb': 'channels/fr/equidiar5.png',
-        'fanart': 'channels/fr/equidiar5_fanart.jpg',
-        'm3u_group': 'Satellite/FAI',
-        'enabled': True,
-        'order': 136
-    },
-    'equidia-racing6': {
-        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
-        'label': 'Equidia Racing 6',
-        'thumb': 'channels/fr/equidiar6.png',
-        'fanart': 'channels/fr/equidiar6_fanart.jpg',
-        'm3u_group': 'Satellite/FAI',
-        'enabled': True,
-        'order': 137
-    },
-    'equidia-racing7': {
-        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
-        'label': 'Equidia Racing 7',
-        'thumb': 'channels/fr/equidiar7.png',
-        'fanart': 'channels/fr/equidiar7_fanart.jpg',
-        'm3u_group': 'Satellite/FAI',
-        'enabled': True,
-        'order': 138
-    },
-    'equidia-racing8': {
-        'resolver': '/resources/lib/channels/fr/equidia:get_live_url',
-        'label': 'Equidia Racing 8',
-        'thumb': 'channels/fr/equidiar8.png',
-        'fanart': 'channels/fr/equidiar8_fanart.jpg',
-        'm3u_group': 'Satellite/FAI',
-        'enabled': True,
-        'order': 139
-    }
 }

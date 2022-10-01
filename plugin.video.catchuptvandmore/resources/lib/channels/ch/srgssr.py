@@ -60,10 +60,10 @@ EMISSIONS_NAME = {
 }
 
 LIVE_LIVE_CHANNEL_NAME = {
-    "rtsun": "RTS Un",
-    "rtsdeux": "RTS Deux",
+    "rtsun": "RTS 1",
+    "rtsdeux": "RTS 2",
     "rtsinfo": "RTS Info",
-    "rtscouleur3": "RTS Couleur 3",
+    "rtscouleur3": "Couleur 3",
     "rsila1": "RSI LA 1",
     "rsila2": "RSI LA 2",
     "srf1": "SRF 1",
@@ -367,26 +367,23 @@ def get_live_url(plugin, item_id, **kwargs):
 
         licence_drm_url = ''
         for stream_datas in json_parser2["chapterList"]:
-            if live_id not in stream_datas["id"]:
-                continue
-
-            for stream_datas_url in stream_datas["resourceList"]:
-                stream_url = stream_datas_url["url"]
-                for licence_drm_datas in stream_datas_url["drmList"]:
-                    if 'WIDEVINE' in licence_drm_datas["type"]:
-                        licence_drm_url = licence_drm_datas["licenseUrl"]
-
-        item = Listitem()
-        item.path = stream_url
-        item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
-        item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-        item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
-        item.property['inputstream.adaptive.license_key'] = licence_drm_url + '|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Host=srg.live.ott.irdeto.com|R{SSM}|'
-        item.property['inputstream.adaptive.manifest_update_parameter'] = 'full'
-        item.label = get_selected_item_label()
-        item.art.update(get_selected_item_art())
-        item.info.update(get_selected_item_info())
-        return item
+            if live_id in stream_datas["id"]:
+                for stream_datas_url in stream_datas["resourceList"]:
+                    stream_url = stream_datas_url["url"]
+                    for licence_drm_datas in stream_datas_url["drmList"]:
+                        if 'WIDEVINE' in licence_drm_datas["type"]:
+                            licence_drm_url = licence_drm_datas["licenseUrl"]
+                            item = Listitem()
+                            item.path = stream_url
+                            item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
+                            item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+                            item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+                            item.property['inputstream.adaptive.license_key'] = licence_drm_url + '|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Host=srg.live.ott.irdeto.com|R{SSM}|'
+                            item.property['inputstream.adaptive.manifest_update_parameter'] = 'full'
+                            item.label = get_selected_item_label()
+                            item.art.update(get_selected_item_art())
+                            item.info.update(get_selected_item_info())
+                            return item
 
     for stream_datas in json_parser2["chapterList"]:
         if live_id in stream_datas["id"]:

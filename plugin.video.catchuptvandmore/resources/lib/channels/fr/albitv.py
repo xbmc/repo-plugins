@@ -6,11 +6,14 @@
 
 import re
 import urlquick
-from resources.lib import web_utils
-from codequick import Listitem, Route, Resolver
+
+from codequick import Listitem, Route
+
+# noinspection PyUnresolvedReferences
+from codequick import Resolver
+
+from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
-from resources.lib.kodi_utils import (INPUTSTREAM_PROP, get_selected_item_art,
-                                      get_selected_item_info, get_selected_item_label)
 
 URL_ROOT = "https://www.albi-tv.fr"
 URL_CATCHUP = URL_ROOT + "/replay"
@@ -112,19 +115,14 @@ def get_video_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(item_id, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1).json()
 
-    item = Listitem()
-    item.path = resp["hls.m3u8"]
-    item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
-    item.property['inputstream.adaptive.manifest_type'] = 'hls'
-
-    item.label = get_selected_item_label()
-    item.art.update(get_selected_item_art())
-    item.info.update(get_selected_item_info())
-    return item
+    video_url = resp["hls.m3u8"]
+    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    return re.compile(r'file: "(.*?)[\?\"]').findall(resp.text)[0]
+    video_url = re.compile(r'file: "(.*?)[\?\"]').findall(resp.text)[0]
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

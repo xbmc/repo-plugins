@@ -15,6 +15,9 @@ from kodi_six import xbmc, xbmcvfs, xbmcgui
 from resources.lib.addon_utils import get_item_label
 import resources.lib.favourites as fav
 from resources.lib.kodi_utils import get_kodi_version
+# delete_for_submission_start
+from resources.lib.vpn import add_vpn_context
+# delete_for_submission_end
 
 MENUS_SETTINGS_FP = os.path.join(Script.get_info('profile'), "menus_settings.json")
 
@@ -210,6 +213,10 @@ def add_context_menus_to_item(item, item_id, item_index, menu_id, menu_len, is_p
                         item_id=item_id,
                         menu_id=menu_id)
 
+    # delete_for_submission_start
+    # Connect/Disconnect VPN
+    add_vpn_context(item)
+    # delete_for_submission_end
 
     # Add to add-on favourites
     item.context.script(fav.add_item_to_favourites,
@@ -241,6 +248,11 @@ def item_post_treatment(item, is_playable=False, is_downloadable=False):
     item.context.script(fav.add_item_to_favourites,
                         Script.localize(30800),
                         is_playable=is_playable)
+
+    # delete_for_submission_start
+    # Connect/Disconnect VPN
+    add_vpn_context(item)
+    # delete_for_submission_end
 
     return
 

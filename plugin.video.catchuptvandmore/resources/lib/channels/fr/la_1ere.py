@@ -21,7 +21,7 @@ from resources.lib.menu_utils import item_post_treatment
 # TODO: Add Emissions
 
 
-URL_ROOT = 'http://la1ere.francetvinfo.fr'
+URL_ROOT = 'https://la1ere.francetvinfo.fr'
 
 URL_LIVES_JSON = URL_ROOT + '/webservices/mobile/live.json'
 
@@ -150,6 +150,5 @@ def get_live_url(plugin, item_id, **kwargs):
     json_parser = json.loads(resp.text)
 
     region = utils.ensure_unicode(final_region)
-    id_sivideo = json_parser[LIVE_LA1ERE_REGIONS[region]]["id_sivideo"]
-    return resolver_proxy.get_francetv_live_stream(plugin,
-                                                   id_sivideo.split('@')[0])
+    id_sivideo = json_parser[LIVE_LA1ERE_REGIONS[region]]["id_sivideo"].split('@')[0]
+    return resolver_proxy.get_francetv_live_stream(plugin, id_sivideo)

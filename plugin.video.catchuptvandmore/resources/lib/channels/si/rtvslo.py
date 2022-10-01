@@ -6,7 +6,10 @@
 
 from __future__ import unicode_literals
 
+# noinspection PyUnresolvedReferences
 from codequick import Resolver
+
+from resources.lib import resolver_proxy, web_utils
 
 
 @Resolver.register
@@ -19,4 +22,6 @@ def get_live_url(plugin, item_id, **kwargs):
         'maribor': 'https://25-rtvslo-tv-mb-int.cdn.eurovisioncdn.net/playlist.m3u8',
         'mmc': 'https://29-rtvslo-tv-mmc-int.cdn.eurovisioncdn.net/playlist.m3u8'
     }
-    return m3u8[item_id]
+
+    video_url = m3u8[item_id]
+    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

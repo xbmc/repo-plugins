@@ -261,5 +261,13 @@ menu = {
         'fanart': 'channels/it/tgcom_fanart.jpg',
         'enabled': True,
         'order': 31
+    },
+    'rtl': {
+        'route': '/resources/lib/channels/it/rtl:list_lives',
+        'label': 'RTL 102.5 Radiovisione',
+        'thumb': 'channels/it/rtl-1025-radiovisione.png',
+        'fanart': 'channels/it/rtl-1025-radiovisione.png',
+        'enabled': True,
+        'order': 32
     }
 }

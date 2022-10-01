@@ -14,6 +14,7 @@ from kodi_six import xbmcgui
 import urlquick
 
 from resources.lib import download, resolver_proxy, web_utils
+from resources.lib.addon_utils import Quality
 from resources.lib.menu_utils import item_post_treatment
 from resources.lib.py_utils import old_div
 
@@ -164,7 +165,7 @@ def get_video_url(plugin,
 
     video_streams = json_parser['video']['medias']
     final_video_url = ''
-    if DESIRED_QUALITY == "DIALOG":
+    if DESIRED_QUALITY == Quality.DIALOG.value:
         all_datas_videos_quality = []
         all_datas_videos_path = []
 
@@ -184,7 +185,7 @@ def get_video_url(plugin,
         else:
             return False
 
-    elif DESIRED_QUALITY == 'BEST':
+    elif DESIRED_QUALITY == Quality.BEST.value:
         # GET LAST NODE (VIDEO BEST QUALITY)
         url_best_quality = ''
         for datas in video_streams:

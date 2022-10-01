@@ -13,6 +13,7 @@ import urlquick
 from codequick import Listitem, Resolver, Route, Script
 from kodi_six import xbmcgui
 from resources.lib import download, resolver_proxy, web_utils
+from resources.lib.addon_utils import Quality
 from resources.lib.menu_utils import item_post_treatment
 
 URL_ROOT = 'https://www.lfmtv.ch/'
@@ -116,14 +117,14 @@ def get_video_url(plugin,
             all_datas_videos_path.append(stream_url)
 
     url = ''
-    if desired_quality == "DIALOG":
+    if desired_quality == Quality.DIALOG.value:
         seleted_item = xbmcgui.Dialog().select(
             plugin.localize(30709),
             all_datas_videos_quality)
         if seleted_item == -1:
             url = ''
         url = all_datas_videos_path[seleted_item]
-    elif desired_quality == "BEST":
+    elif desired_quality == Quality.BEST.value:
         url_best = ''
         for data_video in all_datas_videos_path:
             url_best = data_video

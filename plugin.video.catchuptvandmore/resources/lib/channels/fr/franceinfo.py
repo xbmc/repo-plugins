@@ -15,6 +15,7 @@ from kodi_six import xbmcgui
 import urlquick
 
 from resources.lib import download, resolver_proxy, web_utils
+from resources.lib.addon_utils import Quality
 from resources.lib.menu_utils import item_post_treatment
 
 # Channels:
@@ -201,7 +202,7 @@ def get_video_url(plugin,
                 url_hd = url[1]
             url_default = url[1]
 
-        if DESIRED_QUALITY == "DIALOG":
+        if DESIRED_QUALITY == Quality.DIALOG.value:
             items = []
             for url in urls:
                 items.append(url[0])

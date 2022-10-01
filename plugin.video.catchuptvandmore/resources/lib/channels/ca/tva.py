@@ -13,7 +13,7 @@ import inputstreamhelper
 from codequick import Listitem, Resolver, Route
 import urlquick
 
-from resources.lib import web_utils
+from resources.lib import resolver_proxy, web_utils
 from resources.lib.addon_utils import get_item_media_path
 from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
 from resources.lib.menu_utils import item_post_treatment
@@ -258,19 +258,15 @@ def get_video_url(plugin,
     data_player = re.compile(
         r'data-player\=\"(.*?)\"').findall(resp.text)[0]
     data_video_id = re.compile(
-        r'data-video-id\=\"(.*?)\"').findall(resp.text)[0]
+        r'\"referenceId\":\"(.*?)\"').findall(resp.text)[0]
 
     # Method to get JSON from 'edge.api.brightcove.com'
     resp = urlquick.get(
-        URL_BRIGHTCOVE_VIDEO_JSON % (data_account, data_video_id),
+        URL_BRIGHTCOVE_VIDEO_JSON % (data_account, "ref:%s" % data_video_id),
         headers={
-            'User-Agent':
-            web_utils.get_random_ua(),
-            'Accept':
-            'application/json;pk=%s' %
-            (get_brightcove_policy_key(data_account, data_player)),
-            'X-Forwarded-For':
-            plugin.setting.get_string('header_x-forwarded-for')
+            'User-Agent': web_utils.get_random_ua(),
+            'Accept': 'application/json;pk=%s' % (get_brightcove_policy_key(data_account, data_player)),
+            'X-Forwarded-For': plugin.setting.get_string('header_x-forwarded-for')
         })
     json_parser = json.loads(resp.text)
 
@@ -301,8 +297,7 @@ def get_video_url(plugin,
     item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
     item.property['inputstream.adaptive.manifest_type'] = 'mpd'
     if is_protected_drm:
-        item.property[
-            'inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+        item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
         item.property[
             'inputstream.adaptive.license_key'] = licence_url + '|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36|R{SSM}|'
     return item
@@ -312,5 +307,6 @@ def get_video_url(plugin,
 def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE % item_id)
-    return re.compile(
-        r'videoSourceUrl\"\:\"(.*?)\"').findall(resp.text)[0]
+    video_url = re.compile(r'videoSourceUrl\"\:\"(.*?)\"').findall(resp.text)[0]
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

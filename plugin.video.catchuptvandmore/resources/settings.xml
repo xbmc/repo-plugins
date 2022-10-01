@@ -27,7 +27,11 @@
 
         <!-- Video quality -->
         <setting label="30150" type="lsep" />
-            <setting label="30151" type="labelenum" id="quality" values="BEST|DEFAULT|DIALOG" default="BEST"/>
+            <setting label="30150" type="enum" id="quality" lvalues="30192|30193|30194|30195" default="1"/>
+            <setting id="stream_bitrate_limit" type="select" label="30196" default="0" values="0|100|250|500|750|1000|1500|2000|2500|4000|8000|20000" />
+            <setting label="30198" type="bool" id="use_ia_hls_stream" default="true" enable="System.HasAddon(inputstream.adaptive)" />
+            <setting label="30197" type="action" subsetting="true"  action="Addon.OpenSettings(inputstream.adaptive)" option="close" enable="eq(-1,true)"/>
+            <setting label="30199" type="bool" id="use_ytdl_stream" default="false" enable="eq(-2,false) + !System.HasAddon(inputstream.adaptive)"/>
 
 
         <!-- Content -->
@@ -44,23 +48,25 @@
             <!--<setting label="" type="bool" id="wo" default="true" visible="false"/>-->
 
                 <setting label="30153" type="labelenum" id="arte.language" values="FR|DE|EN|ES|PL|IT" default="FR"/>
-                <setting label="30155" type="labelenum" id="euronews.language" values="FR|EN|AR|DE|IT|ES|PT|RU|TR|FA|GR|HU" default="FR"/>
+                <setting label="30155" type="labelenum" id="euronews.language" values="FR|EN|AR|DE|IT|ES|PT|RU|RO|TR|FA|GR|HU" default="FR"/>
                 <setting label="30154" type="labelenum" id="france24.language" values="FR|EN|AR|ES" default="FR"/>
-                <setting label="30157" type="labelenum" id="dw.language" values="EN|DE|ES|AR" default="EN"/>
+                <setting label="30157" type="labelenum" id="dw.language" values="EN|DE|DE+|ES|AR" default="EN"/>
                 <setting label="30161" type="labelenum" id="qvc.language" values="JP|DE|IT|UK|US" default="UK"/>
                 <setting label="30162" type="labelenum" id="nhkworld.language" values="Outside Japan|In Japan" default="Outside Japan"/>
                 <setting label="30163" type="labelenum" id="cgtn.language" values="FR|EN|AR|ES|RU" default="FR"/>
                 <setting label="30166" type="labelenum" id="rt.language" values="FR|EN|AR|ES" default="FR"/>
-                <setting label="30172" type="labelenum" id="tv5mondeplus.country" values="FR|BE|DE|PT|DK|LT|HR|LV|UA|HU|MD|ME|IE|MK|EE|IL|IM|MT|IS|AL|IT|VA|AM|ES|AQ|AT|AX|AZ|JE|RO|NL|BA|NO|RS|FI|RU|BG|FO|SE|BV|SI|BY|SJ|SK|SM|GB|GE|GG|GI|GL|GR|XK|CY|CZ|PL|LI|TR" default="FR"/>
+                <setting label="30177" type="enum" id="tv5monde.region" lvalues="30178|30179" default="0"/>
                 <setting label="30173" type="labelenum" id="tv5mondeplus.language" values="fr|en|de|es-LA" default="fr"/>
 
             <!-- French channels -->
             <setting label="30080" type="lsep" subsetting="true" visible="eq(1,true)"/>
             <!--<setting label="" type="bool" id="fr" default="true" visible="false"/>-->
 
+                <setting label="30176" type="enum" id="canalplusgroup" lvalues="30190|30191" default="0"/>
                 <setting label="30158" type="labelenum" id="france3regions.language" values="Alpes|Alsace|Aquitaine|Auvergne|Bourgogne|Bretagne|Centre-Val de Loire|Chapagne-Ardenne|Corse|Côte d'Azur|Franche-Comté|Languedoc-Roussillon|Limousin|Lorraine|Midi-Pyrénées|Nord-Pas-de-Calais|Basse-Normandie|Haute-Normandie|Paris Île-de-France|Pays de la Loire|Picardie|Poitou-Charentes|Provence-Alpes|Rhône-Alpes|Nouvelle-Aquitaine" default="Alpes"/>
                 <setting label="30159" type="labelenum" id="la_1ere.language" values="Guadeloupe|Guyane|Martinique|Mayotte|Nouvelle Calédonie|Polynésie|Réunion|St-Pierre et Miquelon|Wallis et Futuna|Outre-mer" default="Guadeloupe"/>
-                <setting label="30171" type="labelenum" id="BFM_Régions.language" values="BFM DICI HAUTE-PROVENCE|BFM Grand Lille|BFM Grand Littoral|BFM Lyon|BFM MARSEILLE PROVENCE|BFM NICE COTE D'AZUR|BFM Paris|BFM TOULON VAR" default="BFM Paris"/>
+                <setting label="30171" type="labelenum" id="BFM_regions.language" values="BFM ALSACE|BFM DICI HAUTE-PROVENCE|BFM Grand Lille|BFM Grand Littoral|BFM Lyon|BFM MARSEILLE PROVENCE|BFM NICE COTE D'AZUR|BFM PARIS ILE-DE-FRANCE|BFM TOULON VAR" default="BFM PARIS ILE-DE-FRANCE"/>
+                <setting label="30175" type="labelenum" id="equidia-racing.language" values="1|2|3|4|5|6|7|8" default="1"/>
 
             <!-- Spain channels -->
             <setting label="30089" type="lsep" subsetting="true" visible="eq(1,true)"/>
@@ -90,6 +96,7 @@
     <!-- Downloads -->
     <category label="30003">
         <setting label="30012" type="lsep"/>
+        <setting label="30012" type="action" action="Addon.OpenSettings(script.module.youtube.dl)" option="close" enable="System.HasAddon(script.module.youtube.dl)" />
         <setting label="30200" type="folder" id="dl_folder" source="" option="writeable"/>
         <setting label="30201" type="labelenum" id="dl_quality" visible="true" values="SD|720p|1080p|Highest available" default="Highest available"/>
         <setting label="30202" type="bool" id="dl_background" default="false" visible="true"/>
@@ -127,11 +134,21 @@
             <setting label="30246" type="text" id="rtlplaybe.login" default=""/>
             <setting label="30247" type="text" id="rtlplaybe.password" option="hidden" default=""/>
 
+            <setting label="30258" type="text" id="rtbf.login" default=""/>
+            <setting label="30259" type="text" id="rtbf.password" option="hidden" default=""/>
+
         <setting label="30084" type="lsep" subsetting="true" visible="eq(1,true)"/>
         <!--<setting label="" type="bool" id="be" default="true" visible="false"/>-->
 
             <setting label="30250" type="text" id="uktvplay.login" default=""/>
             <setting label="30251" type="text" id="uktvplay.password" option="hidden" default=""/>
+
+        <setting label="30254" type="lsep" subsetting="true" visible="eq(1,true)"/>
+
+            <setting label="30255" type="text" id="schedulesdirect.login" default=""/>
+            <setting label="30256" type="text" id="schedulesdirect.password" option="hidden" default=""/>
+            <setting label="30257" type="text" id="schedulesdirect.lineup" default="CAN-0005993-X"/>
+
 
     </category>
     <!-- Accounts -->
@@ -157,6 +174,21 @@
 
 
 
+    <!-- delete_for_submission_start -->
+    <!-- OpenVPN -->
+    <category label="OpenVPN">
+        <setting label="30340" type="bool" id="vpn.hide" default="true"/>
+        <setting label="30361" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/vpn/vpn_item_callback/)"  visible="eq(-1,true)"/>
+        <setting label="30341" type="file" id="vpn.openvpnfilepath" default="/usr/bin/openvpn" visible="eq(-2,true)"/>
+        <setting label="30342" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/vpn/import_ovpn/)"  visible="eq(-3,true)"/>
+        <setting label="30343" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/vpn/delete_ovpn/)"  visible="eq(-4,true)"/>
+        <setting label="30344" type="text" id="vpn.args" default="" visible="eq(-5,true)"/>
+        <setting label="30345" type="bool" id="vpn.sudo" default="false" visible="eq(-6,true)"/>
+        <setting label="30346" type="bool" id="vpn.sudopsw" default="false" enable="!eq(-1,false)" visible="eq(-7,true)"/>
+
+    </category>
+    <!-- OpenVPN -->
+    <!-- delete_for_submission_end -->
 
 
 

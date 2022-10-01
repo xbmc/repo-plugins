@@ -8,10 +8,11 @@ from __future__ import unicode_literals
 from builtins import str
 import re
 
+import json
 from codequick import Listitem, Resolver, Route
 import urlquick
 
-from resources.lib import download
+from resources.lib import download, resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
 
@@ -29,6 +30,8 @@ URL_LIVE_DATAS = URL_LIVE_DATAS_ROOT + '/player/embed/%s'
 URL_VIDEOS = URL_ROOT + '/videos'
 
 URL_EMISSIONS = URL_ROOT + '/emissions'
+
+LIVE_PLAYER = 'https://tvlocales-player.freecaster.com/embed/%s.json'
 
 
 @Route.register
@@ -130,7 +133,10 @@ def get_video_url(plugin,
 def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE, max_age=-1)
-    liveid = re.compile(r'embed\/(.*?)\?').findall(resp.text)[0]
+    root = resp.parse()
 
-    resp2 = urlquick.get(URL_LIVE_DATAS % liveid, max_age=-1)
-    return re.compile(r'file\"\:\"(.*?)\"').findall(resp2.text)[0] + '|referer=%s' % URL_LIVE_DATAS_ROOT
+    live_data = root.findall(".//div[@class='freecaster-player']")[0].get('data-fc-token')
+    resp2 = urlquick.get(LIVE_PLAYER % live_data, max_age=-1)
+    video_url = json.loads(resp2.text)['video']['src'][0]['src']
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

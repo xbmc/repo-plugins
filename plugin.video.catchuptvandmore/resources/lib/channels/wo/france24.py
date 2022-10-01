@@ -16,7 +16,7 @@ from resources.lib.menu_utils import item_post_treatment
 
 LANG = Script.setting['france24.language']
 TOKEN_APP = '66b85dad-3ad5-40f3-ab32-2305fc2357ea'
-URL_API = utils.urljoin_partial('http://apis.france24.com')
+URL_API = utils.urljoin_partial('https://apis.france24.com')
 
 
 @Route.register
@@ -307,47 +307,6 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
+    channels = {"FR": "gxG3pdKvlIs", "AR": "8BZpOolYLUA", "EN": "h3MuIUNCCzI", "ES": "XDJPzMznAjU"}
     final_language = kwargs.get('language', LANG)
-
-    root_json_url = 'products/get_product/78dcf358-9333-4fb2-a035-7b91e9705b13'
-    root_json_r = urlquick.get(URL_API(root_json_url),
-                               headers={'User-Agent': web_utils.get_random_ua()},
-                               params={'token_application': TOKEN_APP})
-    json_root = json.loads(root_json_r.text)
-
-    try:
-        json_languages = json_root['result']['list']['languages']
-    except Exception:
-        return False
-
-    # code in JSON: FR, EN, ES and AR
-    for json_language in json_languages:
-        if json_language['code'] != final_language:
-            continue
-
-        json_tv = json_language['tv']
-        if 'direct_tv' not in json_tv:
-            continue
-
-        guid = json_tv['direct_tv']['guid']
-        json_url = 'products/get_product/%s' % guid
-        json_r = urlquick.get(
-            URL_API(json_url),
-            params={'token_application': TOKEN_APP},
-            headers={'User-agent': web_utils.get_ua()})
-        json_v = json.loads(json_r.text)
-        try:
-            json_channels = json_v['result']['channels']
-        except Exception:
-            return False
-
-        for json_channel in json_channels:
-            if json_channel['code'] != 'direct_f24':
-                continue
-
-            for json_video in json_channel['videos']:
-                for json_format in json_video['formats']:
-                    if json_format['code'] == 'hls_web':
-                        return json_format['url']
-
-    return False
+    return resolver_proxy.get_stream_youtube(plugin, channels[final_language])

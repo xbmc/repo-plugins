@@ -6,7 +6,9 @@
 
 from __future__ import unicode_literals
 import re
+import json
 
+from resources.lib import resolver_proxy
 from codequick import Resolver
 import urlquick
 
@@ -18,20 +20,16 @@ URL_ROOT = 'https://www.telesambre.be'
 
 URL_LIVE = URL_ROOT + '/direct'
 
-URL_STREAM = 'https://telesambre.fcst.tv/player/embed/%s'
+LIVE_PLAYER = 'https://tvlocales-player.freecaster.com/embed/%s.json'
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-
     resp = urlquick.get(URL_LIVE, max_age=-1)
-    live_id = re.compile(
-        r'telesambre\.fcst\.tv\/player\/embed\/(.*?)\?').findall(resp.text)[0]
-    resp2 = urlquick.get(URL_STREAM % live_id, max_age=-1)
-    list_files = re.compile(
-        r'file\"\:\"(.*?)\"').findall(resp2.text)
-    url_stream = ''
-    for stream_datas in list_files:
-        if 'm3u8' in stream_datas:
-            url_stream = stream_datas
-    return url_stream + '|referer=https://telesambre.fcst.tv/'
+    root = resp.parse()
+
+    live_data = root.findall(".//div[@class='freecaster-player']")[0].get('data-fc-token')
+    resp2 = urlquick.get(LIVE_PLAYER % live_data, max_age=-1)
+    video_url = json.loads(resp2.text)['video']['src'][0]['src']
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

@@ -11,17 +11,18 @@ import re
 from builtins import str
 
 import urlquick
-from codequick import Listitem, Resolver, Route
-from resources.lib import download, web_utils
+# noinspection PyUnresolvedReferences
+from codequick import Listitem, Resolver, Route, Script
+from resources.lib import download, web_utils, resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
-from resources.lib.kodi_utils import (INPUTSTREAM_PROP, get_selected_item_art,
-                                      get_selected_item_info, get_selected_item_label)
 
 # TODO Rework filter for all videos
 
 URL_TV5MONDE_LIVE = 'http://live.tv5monde.com/'
 
 URL_TV5MONDE_ROOT = 'https://revoir.tv5monde.com'
+
+M3U8_NOT_FBS = 'https://ott.tv5monde.com/Content/HLS/Live/channel(europe)/variant.m3u8'
 
 LIST_LIVE_TV5MONDE = {'tv5mondefbs': 'fbs', 'tv5mondeinfo': 'infoplus'}
 
@@ -82,15 +83,13 @@ def list_programs(plugin, item_id, **kwargs):
 
 @Route.register
 def list_videos(plugin, item_id, program_url, page, **kwargs):
-
     resp = urlquick.get(program_url + '?page=%s' % page,
                         headers={'User-Agent': web_utils.get_random_ua()})
     root = resp.parse()
 
     for video_datas in root.iterfind(".//div[@class='bloc-episode-content']"):
         if video_datas.find('.//h3') is not None:
-            video_title = video_datas.find('.//h2').text.strip() + \
-                ' - ' + video_datas.find('.//h3').text.strip()
+            video_title = video_datas.find('.//h2').text.strip() + ' - ' + video_datas.find('.//h3').text.strip()
         else:
             video_title = video_datas.find('.//h2').text.strip()
         if 'http' in video_datas.find('.//img').get('src'):
@@ -117,7 +116,6 @@ def list_videos(plugin, item_id, program_url, page, **kwargs):
 
 @Route.register
 def list_videos_category(plugin, item_id, page, **kwargs):
-
     resp = urlquick.get(URL_TV5MONDE_ROOT +
                         '/toutes-les-videos?page=%s' % page,
                         headers={'User-Agent': web_utils.get_random_ua()})
@@ -125,8 +123,7 @@ def list_videos_category(plugin, item_id, page, **kwargs):
 
     for video_datas in root.iterfind(".//div[@class='bloc-episode-content']"):
         if video_datas.find('.//h3') is not None:
-            video_title = video_datas.find('.//h2').text.strip() + \
-                ' - ' + video_datas.find('.//h3').text.strip()
+            video_title = video_datas.find('.//h2').text.strip() + ' - ' + video_datas.find('.//h3').text.strip()
         else:
             video_title = video_datas.find('.//h2').text.strip()
         if 'http' in video_datas.find('.//img').get('src'):
@@ -156,7 +153,6 @@ def get_video_url(plugin,
                   video_url,
                   download_mode=False,
                   **kwargs):
-
     resp = urlquick.get(video_url,
                         headers={'User-Agent': web_utils.get_random_ua()},
                         max_age=-1)
@@ -175,6 +171,8 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
+    if bool(Script.setting['tv5monde.region']):
+        return resolver_proxy.get_stream_with_quality(plugin, video_url=M3U8_NOT_FBS, manifest_type="hls")
 
     live_id = ''
     for channel_name, live_id_value in list(LIST_LIVE_TV5MONDE.items()):
@@ -186,12 +184,4 @@ def get_live_url(plugin, item_id, **kwargs):
     live_json = re.compile(r'data-broadcast=\'(.*?)\'').findall(resp.text)[0]
     json_parser = json.loads(live_json)
 
-    item = Listitem()
-    item.path = json_parser[0]["url"]
-    item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
-    item.property['inputstream.adaptive.manifest_type'] = 'hls'
-
-    item.label = get_selected_item_label()
-    item.art.update(get_selected_item_art())
-    item.info.update(get_selected_item_info())
-    return item
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=json_parser[0]["url"], manifest_type="hls")

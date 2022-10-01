@@ -7,30 +7,38 @@
 from __future__ import unicode_literals
 import re
 
-from codequick import Resolver
+import json
+# noinspection PyUnresolvedReferences
+from codequick import Resolver, Route
+# noinspection PyUnresolvedReferences
+from codequick.utils import urljoin_partial
 import urlquick
 
-# TO DO
-# Add Replay
+from resources.lib import resolver_proxy
+from resources.lib.web_utils import get_random_ua
 
-URL_ROOT = 'https://www.antennecentre.tv'
+URL_ROOT = 'https://www.antennecentre.tv/'
+URL_LIVE = URL_ROOT + 'direct'
 
-URL_LIVE = URL_ROOT + '/direct'
+LIVE_PLAYER = 'https://tvlocales-player.freecaster.com/embed/%s.json'
 
-URL_STREAM = 'https://actv.fcst.tv/player/embed/%s'
+PATTERN_PLAYER = re.compile(r'actv\.fcst\.tv/player/embed/(.*?)\?')
+PATTERN_STREAM = re.compile(r'file\":\"(.*?)\"')
+
+
+@Route.register
+def list_programs(plugin, item_id, **kwargs):
+    # TODO Add Replay
+    pass
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-
     resp = urlquick.get(URL_LIVE, max_age=-1)
-    live_id = re.compile(
-        r'actv\.fcst\.tv\/player\/embed\/(.*?)\?').findall(resp.text)[0]
-    resp2 = urlquick.get(URL_STREAM % live_id, max_age=-1)
-    list_files = re.compile(
-        r'file\"\:\"(.*?)\"').findall(resp2.text)
-    url_stream = ''
-    for stream_datas in list_files:
-        if 'm3u8' in stream_datas:
-            url_stream = stream_datas
-    return url_stream + '|referer=https://actv.fcst.tv/'
+    root = resp.parse()
+
+    live_data = root.findall(".//div[@class='freecaster-player']")[0].get('data-fc-token')
+    resp2 = urlquick.get(LIVE_PLAYER % live_data, max_age=-1)
+    video_url = json.loads(resp2.text)['video']['src'][0]['src']
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

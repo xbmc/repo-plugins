@@ -10,13 +10,16 @@ import json
 import re
 
 import urlquick
+# noinspection PyUnresolvedReferences
 from codequick import Listitem, Resolver, Route, Script
+# noinspection PyUnresolvedReferences
 from kodi_six import xbmcplugin
 from resources.lib import resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
-# TO DO
-
+PATTERN_PLAYER = re.compile(r"PLAYER_ID:\"(.*?)\"")
+PATTERN_ACCOUNT = re.compile(r"ACCOUNT_ID:\"(.*?)\"")
+PATTERN_KEY = re.compile(r"POLICY_KEY:\"(.*?)\"")
 # Live
 URL_LIVE_JSON = "https://player.api.stv.tv/v1/streams/%s/"
 # channel name
@@ -130,37 +133,29 @@ def list_videos(plugin, item_id, program_guid=None, order_by=None, **kwargs):
             date_value = video_datas["schedule"]["startTime"].split("T")[0]
             item.info.date(date_value, "%Y-%m-%d")
 
-        item.set_callback(
-            get_video_url, item_id=item_id, video_id=video_id, subtitle=subtitle
-        )
+        item.set_callback(get_video_url, item_id=item_id, video_id=video_id, subtitle=subtitle)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
 
 @Resolver.register
 def get_video_url(plugin, item_id, video_id, subtitle, download_mode=False, **kwargs):
-
     resp = urlquick.get(URL_BRIGHTCOVE_DATAS)
 
-    data_account = re.compile(r"ACCOUNT_ID\:\"(.*?)\"").findall(resp.text)[1]
-    data_player = re.compile(r"PLAYER_ID\:\"(.*?)\"").findall(resp.text)[1]
+    data_account = PATTERN_ACCOUNT.findall(resp.text)[0]
+    data_player = PATTERN_PLAYER.findall(resp.text)[0]
+    key = PATTERN_KEY.findall(resp.text)[0]
     data_video_id = video_id
 
-    item = Listitem()
-    item.path = resolver_proxy.get_brightcove_video_json(
-        plugin, data_account, data_player, data_video_id, download_mode
-    )
-    if subtitle:
-        item.subtitles.append(subtitle)
-    return item
+    return resolver_proxy.get_brightcove_video_json(plugin, data_account, data_player, data_video_id, key, download_mode, subtitle)
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-
     if item_id == "stv_plusone":
         item_id = "stv-plus-1"
 
     resp = urlquick.get(URL_LIVE_JSON % item_id)
     json_parser = json.loads(resp.text)
-    return json_parser["results"]["streamUrl"]
+    url = json_parser["results"]["streamUrl"]
+    return resolver_proxy.get_stream_with_quality(plugin, url, manifest_type="hls")

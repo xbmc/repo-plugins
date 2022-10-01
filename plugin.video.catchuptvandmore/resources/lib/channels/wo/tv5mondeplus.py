@@ -1,45 +1,57 @@
 # -*- coding: utf-8 -*-
 # Copyright: (c) 2016-2020, Team Catch-up TV & More
+# Copyright: (c) 2022, darodi
 # GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-from builtins import str
-import json
 
-try:  # Python 3
-    from urllib.parse import urlencode
-except ImportError:  # Python 2
-    from urllib import urlencode
+import random
+from builtins import str
 
 import inputstreamhelper
-from codequick import Listitem, Resolver, Route, Script
-from kodi_six import xbmcgui
 import urlquick
+# noinspection PyUnresolvedReferences
+from codequick import Listitem, Resolver, Route, Script
+# noinspection PyUnresolvedReferences
+from codequick.utils import urljoin_partial
+# noinspection PyUnresolvedReferences
+from kodi_six import xbmcgui
 
+from resources.lib import web_utils
+from resources.lib.addon_utils import get_item_media_path
 from resources.lib.kodi_utils import (get_kodi_version, get_selected_item_art, get_selected_item_label,
                                       get_selected_item_info, INPUTSTREAM_PROP)
 from resources.lib.menu_utils import item_post_treatment
+from resources.lib.web_utils import urlencode, get_random_ua
 
-FAKE_DEVICE_ID = "69702f98-260a-ff2d-375c-ffffbf16f78c"
+RANDOM_UA = get_random_ua()
+COUNTRY = web_utils.geoip()
 
-URL_TV5MONDEPLUS_ROOT = 'https://api.tv5mondeplus.com'
 
-API = URL_TV5MONDEPLUS_ROOT + '/v2/whitelabel/customer/TV5MONDE/businessunit/TV5MONDEplus/config/sandwich'
+def generate_fake_id():
+    fake_id = ''.join(random.choice('0123456789abcdef') for _ in range(8))
+    fake_id += '-'
+    fake_id += ''.join(random.choice('0123456789abcdef') for _ in range(4))
+    fake_id += '-'
+    fake_id += ''.join(random.choice('0123456789abcdef') for _ in range(4))
+    fake_id += '-'
+    fake_id += ''.join(random.choice('0123456789abcdef') for _ in range(12))
+    return fake_id
 
-URL_TV5MONDEPLUS_ROOT_API = API + '?onlyPublished=true&allowedCountry=%s'
 
-URL_TV5MONDEPLUS_COMPONENT_API = API + '/component/%s?client=json&onlyPublished=true&allowedCountry=%s'
+FAKE_DEVICE_ID = generate_fake_id()
 
-URL_VIDEOS_DATA = 'https://www.tv5mondeplus.com/api/graphql/v1/'
+BASE_URL_API = 'https://api.tv5mondeplus.com'
+SANDWICH_API = BASE_URL_API + '/v2/whitelabel/customer/TV5MONDE/businessunit/TV5MONDEplus/config/sandwich'
+COMPONENT_API = SANDWICH_API + '/component/%s?client=json&onlyPublished=true&allowedCountry=%s'
+GRAPHQL_API = 'https://www.tv5mondeplus.com/api/graphql/v1/'
+URL_STREAM_DATA = BASE_URL_API + '/v2/customer/TV5MONDE/businessunit/TV5MONDEplus/entitlement/%s/play'
+AUTH_ANONYMOUS_API = BASE_URL_API + '/v1/customer/TV5MONDE/businessunit/TV5MONDEplus/auth/anonymous'
+SEARCH_API = BASE_URL_API + "/v2/customer/TV5MONDE/businessunit/TV5MONDEplus/content/search/query/%s"
 
-URL_STREAM_DATA = URL_TV5MONDEPLUS_ROOT + '/v2/customer/TV5MONDE/businessunit/TV5MONDEplus/entitlement/%s/play'
-# Video_Id
-
-URL_TV5MONDEPLUS_AUTH_ANONYMOUS_API = URL_TV5MONDEPLUS_ROOT + '/v1/customer/TV5MONDE/businessunit/TV5MONDEplus/auth/anonymous'
-
-# TODO compute hashes instead?
+# TODO compute hashes instead
 OPERATION_HASHES_WEB = {
     "VODCatalogSection": "TODO",  # TODO
     "VODContentDetailsList": "TODO",  # TODO
@@ -55,23 +67,6 @@ OPERATION_HASHES_WEB = {
     "VODTopLevelServices": "TODO"  # TODO
 }
 
-# see com.dotscreen.bokit.*Query classes in apk,
-# but they don't match queries in web app, queries minifier is not the same?
-OPERATION_HASHES_APK = {
-    "VODCatalogSection": "04cd97599525e71d64498613bf335a631c2f45c7c7c40101451dac2f7bc8fe76",
-    "VODContentDetailsList": "3fe0aac9d078b0f475c0a37a7c71c4e2743e084241e9a9c6fea34e784446a5e7",
-    "VODContentDetails": "4ade60432f176b60ac314bf6bec7601e2ea7ca4d4e162887ff41766fedfc1caa",
-    "VODContentEpisodes": "3a9eaeea6e03e802fa9399e562efb813d5381604ddce71b34a43cb3e3a1cc02f",
-    "VODContentOffers": "1cc9bef4009e32f4c1b6ce048f579f5941cc2df6156a19e5468c3e688b2414d0",
-    "VODContentSearch": "0bad359d056555d22f085626ae4d77aadf771746631856869ad8025006e09bca",
-    "VODContentSeasons": "7cdf52b778bf9795d7ffb59b76954b464583ede5b19baff28c23ac8e6df196ea",
-    "VODPlaybackInfos": "3adb119aaf31bb1a7b1bcc9ee35363fec01a2907f0b6d8ce6a7475a0ad89e256",
-    "VODSearchAutocomplete": "0a2db2d986574da358faad165e0339158add13e8fafacec30a2c4fa51210ad0e",
-    "VODSectionItems": "63d4e1b1735bddb661d532c3a551a630827af6b58cdf74ec53ecb0d63f14161d",
-    "VODSectionSubsections": "9419515f8ea16d402397f4dfbe72c49b62771205a8243e2bb0e3cbbe1c153626",
-    "VODTopLevelServices": "5e15d32bbb9c4b2e739223e1c10fb1a1b2e1d3a0a8542bd561700f270029c2e4"
-}
-
 
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
@@ -82,30 +77,73 @@ def list_categories(plugin, item_id, **kwargs):
     - Informations
     - ...
     """
-    country = Script.setting['tv5mondeplus.country']
-    resp = urlquick.get(URL_TV5MONDEPLUS_ROOT_API % country)
+
+    params = {
+        "onlyPublished": "true",
+        "allowedCountry": COUNTRY
+    }
+
+    resp = urlquick.get(SANDWICH_API, params=params)
     json_parser = resp.json()
     category_reference_id = json_parser["components"]["menu"][0]["referenceId"]
 
-    resp2 = urlquick.get(URL_TV5MONDEPLUS_COMPONENT_API % (category_reference_id, country))
+    resp2 = urlquick.get(COMPONENT_API % (category_reference_id, COUNTRY))
     json_parser2 = resp2.json()
 
-    for menu_category_datas in json_parser2["components"]["menuItems"]:
-        if 'appSubType' in menu_category_datas:
-            if 'Component' in menu_category_datas["appSubType"]:
-                if "" == menu_category_datas["presentation"]["fallback"]["title"]:
+    item = Listitem.search(list_videos_search, item_id=item_id, page='0')
+    item.label = plugin.localize(30715)
+    item_post_treatment(item)
+    yield item
+
+    for menu_category_data in json_parser2["components"]["menuItems"]:
+        if 'appSubType' in menu_category_data:
+            if 'Component' in menu_category_data["appSubType"]:
+                if "" == menu_category_data["presentation"]["fallback"]["title"]:
                     menu_category_title = json_parser["components"]["homePage"][0]["name"]
                 else:
-                    menu_category_title = menu_category_datas["presentation"]["fallback"]["title"]
-                menu_category_reference_id = menu_category_datas["actions"]["default"]["componentId"]
+                    menu_category_title = menu_category_data["presentation"]["fallback"]["title"]
+                menu_category_reference_id = menu_category_data["actions"]["default"]["componentId"]
 
                 item = Listitem()
                 item.label = menu_category_title
+                item.art["thumb"] = get_item_media_path('channels/wo/tv5mondeplus.png')
                 item.set_callback(list_menu_sub_categories,
                                   item_id=item_id,
                                   menu_category_reference_id=menu_category_reference_id)
                 item_post_treatment(item)
                 yield item
+
+
+@Route.register
+def list_videos_search(plugin, search_query, item_id, page, **kwargs):
+    language = Script.setting['tv5mondeplus.language']
+
+    headers = {
+        "User-Agent": RANDOM_UA,
+        "Accept": "*/*",
+        "Accept-Language": language + ";q=0.8,en-US;q=0.5,en;q=0.3",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-site",
+        "Pragma": "no-cache",
+        "Cache-Control": "no-cache",
+        "referrer": "https://www.tv5mondeplus.com/"
+    }
+
+    params = {
+        "locale": language,
+        "schemes": ["keyword", "subcategory", "category", "origin"],
+        "client": "json",
+        "allowedCountry": COUNTRY,
+        "onlyPublished": "true"
+    }
+    if search_query is None or len(search_query) == 0:
+        return False
+
+    resp = urlquick.get(SEARCH_API % search_query, params=params, headers=headers)
+    items = resp.json()["items"]
+    assets = [x['asset'] for x in items]
+    yield from list_items(item_id, assets, language)
 
 
 @Route.register
@@ -115,19 +153,19 @@ def list_menu_sub_categories(plugin, item_id, menu_category_reference_id, **kwar
     - Les feux de l'amour
     - ...
     """
-    country = Script.setting['tv5mondeplus.country']
-    resp = urlquick.get(URL_TV5MONDEPLUS_COMPONENT_API % (menu_category_reference_id, country))
+    resp = urlquick.get(COMPONENT_API % (menu_category_reference_id, COUNTRY))
     json_parser = resp.json()
 
-    for menu_sub_category_datas in json_parser["components"]["pageBody"]:
-        if 'appSubType' in menu_sub_category_datas:
-            if 'Curated' in menu_sub_category_datas["appSubType"] \
-                    or 'TagsQuery' in menu_sub_category_datas["appSubType"]:
-                menu_sub_category_title = menu_sub_category_datas["name"]
-                menu_sub_category_reference_id = menu_sub_category_datas["referenceId"]
+    for menu_sub_category_data in json_parser["components"]["pageBody"]:
+        if 'appSubType' in menu_sub_category_data:
+            if 'Curated' in menu_sub_category_data["appSubType"] \
+                    or 'TagsQuery' in menu_sub_category_data["appSubType"]:
+                menu_sub_category_title = menu_sub_category_data["name"]
+                menu_sub_category_reference_id = menu_sub_category_data["referenceId"]
 
                 item = Listitem()
                 item.label = menu_sub_category_title
+                item.art["thumb"] = get_item_media_path('channels/wo/tv5mondeplus.png')
                 item.set_callback(list_programs,
                                   item_id=item_id,
                                   program_reference_id=menu_sub_category_reference_id)
@@ -142,28 +180,30 @@ def list_programs(plugin, item_id, program_reference_id, **kwargs):
     - Les feux de l'amour
     - ...
     """
-    country = Script.setting['tv5mondeplus.country']
     language = Script.setting['tv5mondeplus.language']
-    resp = urlquick.get(URL_TV5MONDEPLUS_COMPONENT_API % (program_reference_id, country))
+    resp = urlquick.get(COMPONENT_API % (program_reference_id, COUNTRY))
     json_parser = resp.json()
 
-    new_url = URL_TV5MONDEPLUS_ROOT + json_parser["contentUrl"]["url"]
+    new_url = BASE_URL_API + json_parser["contentUrl"]["url"]
     resp2 = urlquick.get(new_url)
-    json_parser2 = resp2.json()
+    items = resp2.json()["items"]
+    yield from list_items(item_id, items, language)
 
-    for program_datas in json_parser2["items"]:
+
+def list_items(item_id, items, language):
+    for item in items:
         program_title = ''
         program_image = ''
         program_plot = ''
-        for localized_datas in program_datas["localized"]:
-            if language in localized_datas["locale"]:
-                program_title = localized_datas["title"]
-                program_plot = localized_datas["description"]
-                for images_datas in localized_datas["images"]:
-                    if 'poster' in images_datas["type"]:
-                        program_image = images_datas["url"]
-        program_asset_id = program_datas["assetId"]
-        program_type = program_datas["type"]
+        for localized_data in item["localized"]:
+            if language in localized_data["locale"]:
+                program_title = localized_data["title"]
+                program_plot = localized_data.get("description", "")
+                for images_data in localized_data["images"]:
+                    if 'poster' in images_data["type"]:
+                        program_image = images_data["url"]
+        program_asset_id = item["assetId"]
+        program_type = item["type"]
 
         item = Listitem()
         item.label = program_title
@@ -186,9 +226,9 @@ def list_seasons(plugin, item_id, program_asset_id, **kwargs):
     language = Script.setting['tv5mondeplus.language']
 
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0",
+        "User-Agent": RANDOM_UA,
         "Accept": "*/*",
-        "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
+        "Accept-Language": language + ";q=0.8,en-US;q=0.5,en;q=0.3",
         "content-type": "application/json",
         "Sec-Fetch-Dest": "empty",
         "Sec-Fetch-Mode": "cors",
@@ -204,7 +244,7 @@ def list_seasons(plugin, item_id, program_asset_id, **kwargs):
         'extensions': '{"persistedQuery":{"version":1,"sha256Hash":"%s"}}'
                       % OPERATION_HASHES_WEB['VODContentDetails']
     }
-    resp = urlquick.get(URL_VIDEOS_DATA, params=params, headers=headers)
+    resp = urlquick.get(GRAPHQL_API, params=params, headers=headers)
     json_parser = resp.json()
 
     if "PersistedQueryNotFound" in resp.text:
@@ -217,16 +257,16 @@ def list_seasons(plugin, item_id, program_asset_id, **kwargs):
         'extensions': '{"persistedQuery":{"version":1,"sha256Hash":"%s"}}'
                       % OPERATION_HASHES_WEB['VODContentSeasons']
     }
-    resp2 = urlquick.get(URL_VIDEOS_DATA, params=params2, headers=headers)
+    resp2 = urlquick.get(GRAPHQL_API, params=params2, headers=headers)
     json_parser2 = resp2.json()
 
     if "PersistedQueryNotFound" in resp2.text:
         plugin.notify(plugin.localize(30600), plugin.localize(30716))
         return False
 
-    for season_datas in json_parser2["data"]["lookupContent"]["seasons"]["items"]:
-        season_title = 'Season %s' % str(season_datas["seasonNumber"])
-        season_id = season_datas["id"]
+    for season_data in json_parser2["data"]["lookupContent"]["seasons"]["items"]:
+        season_title = 'Season %s' % str(season_data["seasonNumber"])
+        season_id = season_data["id"]
 
         item = Listitem()
         item.label = season_title
@@ -239,10 +279,12 @@ def list_seasons(plugin, item_id, program_asset_id, **kwargs):
 
 @Route.register
 def list_videos_of_season(plugin, item_id, season_id, **kwargs):
+    language = Script.setting['tv5mondeplus.language']
+
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0",
+        "User-Agent": RANDOM_UA,
         "Accept": "*/*",
-        "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
+        "Accept-Language": language + ";q=0.8,en-US;q=0.5,en;q=0.3",
         "content-type": "application/json",
         "Sec-Fetch-Dest": "empty",
         "Sec-Fetch-Mode": "cors",
@@ -257,18 +299,18 @@ def list_videos_of_season(plugin, item_id, season_id, **kwargs):
         'extensions': '{"persistedQuery":{"version":1,"sha256Hash":"%s"}}'
                       % OPERATION_HASHES_WEB['VODContentEpisodes']
     }
-    resp = urlquick.get(URL_VIDEOS_DATA, params=params, headers=headers)
+    resp = urlquick.get(GRAPHQL_API, params=params, headers=headers)
     json_parser = resp.json()
 
     if "PersistedQueryNotFound" in resp.text:
         plugin.notify(plugin.localize(30600), plugin.localize(30716))
         return False
 
-    for video_datas in json_parser["data"]["lookupContent"]["episodes"]["items"]:
-        video_title = 'Episode %s' % str(video_datas["episodeNumber"])
-        video_image = video_datas["artworks"][0]["source"]
-        video_plot = video_datas["description"]
-        video_id = video_datas["externalIds"][0]["identifier"]
+    for video_data in json_parser["data"]["lookupContent"]["episodes"]["items"]:
+        video_title = 'Episode %s' % str(video_data["episodeNumber"])
+        video_image = video_data["artworks"][0]["source"]
+        video_plot = video_data.get("description", '')
+        video_id = video_data["externalIds"][0]["identifier"]
 
         item = Listitem()
         item.label = video_title
@@ -286,9 +328,9 @@ def list_video_movie(plugin, item_id, program_asset_id, **kwargs):
     language = Script.setting['tv5mondeplus.language']
 
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0",
+        "User-Agent": RANDOM_UA,
         "Accept": "*/*",
-        "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
+        "Accept-Language": language + ";q=0.8,en-US;q=0.5,en;q=0.3",
         "content-type": "application/json",
         "Sec-Fetch-Dest": "empty",
         "Sec-Fetch-Mode": "cors",
@@ -304,19 +346,19 @@ def list_video_movie(plugin, item_id, program_asset_id, **kwargs):
         'extensions': '{"persistedQuery":{"version":1,"sha256Hash":"%s"}}'
                       % OPERATION_HASHES_WEB['VODContentDetails']
     }
-    resp = urlquick.get(URL_VIDEOS_DATA, params=params, headers=headers)
+    resp = urlquick.get(GRAPHQL_API, params=params, headers=headers)
     json_parser = resp.json()
 
     if "PersistedQueryNotFound" in resp.text:
         plugin.notify(plugin.localize(30600), plugin.localize(30716))
         return False
 
-    video_datas = json_parser["data"]["lookupContent"]
+    video_data = json_parser["data"]["lookupContent"]
 
-    video_title = video_datas["title"]
-    video_image = video_datas["artworks"][0]["source"]
-    video_plot = video_datas["description"]
-    video_id = video_datas["externalIds"][0]["identifier"]
+    video_title = video_data["title"]
+    video_image = video_data["artworks"][0]["source"]
+    video_plot = video_data.get("description", '')
+    video_id = video_data["externalIds"][0]["identifier"]
 
     item = Listitem()
     item.label = video_title
@@ -335,6 +377,8 @@ def get_video_url(plugin,
                   video_id,
                   download_mode=False,
                   **kwargs):
+    language = Script.setting['tv5mondeplus.language']
+
     if get_kodi_version() < 18:
         xbmcgui.Dialog().ok(plugin.localize(14116), plugin.localize(30602))
         return False
@@ -344,9 +388,9 @@ def get_video_url(plugin,
         return False
 
     headers_auth = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0",
+        "User-Agent": RANDOM_UA,
         "Accept": "application/json, text/plain, */*",
-        "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
+        "Accept-Language": language + ";q=0.8,en-US;q=0.5,en;q=0.3",
         "Content-Type": "application/json;charset=utf-8",
         "Sec-Fetch-Dest": "empty",
         "Sec-Fetch-Mode": "cors",
@@ -366,13 +410,13 @@ def get_video_url(plugin,
         "deviceId": FAKE_DEVICE_ID
     }
 
-    resp = urlquick.post(URL_TV5MONDEPLUS_AUTH_ANONYMOUS_API, json=json_body, headers=headers_auth)
+    resp = urlquick.post(AUTH_ANONYMOUS_API, json=json_body, headers=headers_auth)
     json_parser = resp.json()
 
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0",
+        "User-Agent": RANDOM_UA,
         "Accept": "application/json, text/plain, */*",
-        "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
+        "Accept-Language": language + ";q=0.8,en-US;q=0.5,en;q=0.3",
         'authorization': 'Bearer %s' % json_parser["sessionToken"],
         "Sec-Fetch-Dest": "empty",
         "Sec-Fetch-Mode": "cors",
@@ -403,9 +447,9 @@ def get_video_url(plugin,
     item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
 
     header_license = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0",
+        "User-Agent": RANDOM_UA,
         "Accept": "*/*",
-        "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
+        "Accept-Language": language + ";q=0.8,en-US;q=0.5,en;q=0.3",
         "Sec-Fetch-Dest": "empty",
         "Sec-Fetch-Mode": "cors",
         "Sec-Fetch-Site": "same-site",

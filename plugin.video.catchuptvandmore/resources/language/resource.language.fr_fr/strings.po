@@ -64,8 +64,8 @@ msgid "Hide channels"
 msgstr "Masquer des chaînes"
 
 msgctxt "#30012"
-msgid "To configure YTDL go settings of script.module.youtube.dl"
-msgstr "Pour configurer YTDL aller dans la configuration de script.module.youtube.dl"
+msgid "YTDL settings"
+msgstr "Paramètres YTDL"
 
 msgctxt "#30013"
 msgid "Hide countries"
@@ -81,7 +81,7 @@ msgstr "Masquer des pays pour la TV en direct"
 
 msgctxt "#30016"
 msgid "Hide catch-up TV countries"
-msgstr "Masquer des pays pour le replay TV"
+msgstr "Masquer des pays de la télévision de rattrapage"
 
 msgctxt "#30017"
 msgid "Default values"
@@ -97,7 +97,7 @@ msgstr "Démasquer les chaînes de la TV en direct"
 
 msgctxt "#30020"
 msgid "Unmask replay TV channels"
-msgstr "Démasquer les chaînes des replay TV"
+msgstr "Démasquer les chaînes de la télévision de rattrapage"
 
 
 # Main menu (from 30030 to 30049)
@@ -108,7 +108,7 @@ msgstr "TV en direct"
 
 msgctxt "#30031"
 msgid "Catch-up TV"
-msgstr "Replay TV"
+msgstr "Télévision de rattrapage"
 
 msgctxt "#30032"
 msgid "Websites"
@@ -201,6 +201,13 @@ msgctxt "#30069"
 msgid "Lituania"
 msgstr "Lituanie"
 
+msgctxt "#30070"
+msgid "Turkey"
+msgstr "Turquie"
+
+msgctxt "#30071"
+msgid "Slovakia"
+msgstr "Slovaquie"
 
 # Channels (from 30080 to 30129)
 
@@ -287,10 +294,6 @@ msgctxt "#30150"
 msgid "Video quality"
 msgstr "Qualité vidéo"
 
-msgctxt "#30151"
-msgid "Video quality (BEST|DEFAULT|DIALOG)"
-msgstr "Qualité vidéo (BEST|DEFAULT|DIALOG)"
-
 msgctxt "#30152"
 msgid "Contents"
 msgstr "Contenus"
@@ -371,13 +374,73 @@ msgctxt "#30171"
 msgid "BFM Régions: Choose region"
 msgstr "BFM Régions: Choix de la région"
 
-msgctxt "#30172"
-msgid "TV5 monde plus: Choose country"
-msgstr "TV5 monde plus: Choix du pays"
-
 msgctxt "#30173"
 msgid "TV5 monde plus: Choose language"
-msgstr "TV5 monde plus: Choix du langage"
+msgstr "TV5 monde plus: Choix de la langue"
+
+msgctxt "#30174"
+msgid "L\'Equipe: Choose live channel"
+msgstr "L'Equipe: Choix du direct"
+
+msgctxt "#30175"
+msgid "Equidia Racing: Choose race"
+msgstr "Equidia Racing: Choix de la course"
+
+msgctxt "#30176"
+msgid "Canal+ group channels"
+msgstr "Chaines du groupe Canal+"
+
+msgctxt "#30177"
+msgid "TV5 monde: Choose region"
+msgstr "TV5 monde: Choix de la région"
+
+msgctxt "#30178"
+msgid "France, Belgium, Switzerland"
+msgstr "France, Begique, Suisse"
+
+msgctxt "#30179"
+msgid "Europe, outside FBS"
+msgstr "Europe, hors FBS"
+
+msgctxt "#30190"
+msgid "MyCanal links"
+msgstr "Liens MyCanal"
+
+msgctxt "#30191"
+msgid "Dailymotion links"
+msgstr "Liens Dailymotion"
+
+msgctxt "#30192"
+msgid "BEST"
+msgstr "MAXIMALE"
+
+msgctxt "#30193"
+msgid "DEFAULT"
+msgstr "DEFAUT"
+
+msgctxt "#30194"
+msgid "DIALOG"
+msgstr "DIALOGUE"
+
+msgctxt "#30195"
+msgid "WORST"
+msgstr "MINIMALE"
+
+msgctxt "#30196"
+msgid "Maximum stream bitrate [COLOR=gray](0=disabled)[/COLOR]"
+msgstr "Débit maximal des flux [COLOR=gray](0=désactivé)[/COLOR]"
+
+msgctxt "#30197"
+msgid "Settings - InputStream adaptive"
+msgstr "Paramètres - InputStream adaptive"
+
+msgctxt "#30198"
+msgid "Use inputstream HLS?"
+msgstr "Utiliser inputstream HLS ?"
+
+msgctxt "#30199"
+msgid "Use ytdl for stream?"
+msgstr "Utiliser ytdl pour le flux ?"
 
 # Download (from 30200 to 30239)
 
@@ -456,6 +519,31 @@ msgctxt "#30253"
 msgid "RMCBFM Play Password"
 msgstr "Mot de passe RMCBFM Play"
 
+msgctxt "#30254"
+msgid "TV guides"
+msgstr "Guides TV"
+
+msgctxt "#30255"
+msgid "Schedules Direct login"
+msgstr "Login Schedules Direct"
+
+msgctxt "#30256"
+msgid "Schedules Direct password"
+msgstr "Mot de passe Schedules Direct"
+
+msgctxt "#30257"
+msgid "Schedules Direct lineup"
+msgstr "Lineup Schedules Direct"
+
+msgctxt "#30258"
+msgid "RTBF auvio Login"
+msgstr "Login RTBF auvio"
+
+msgctxt "#30259"
+msgid "RTBF auvio Password"
+msgstr "Mot de passe RTBF auvio"
+
+
 # TV integration (from 30270 to 30289)
 
 msgctxt "#30270"
@@ -488,14 +576,11 @@ msgstr "Échec lors de la sauvegarde des paramètres de l'intégration TV"
 
 msgctxt "#30277"
 msgid "Select channels to enable in Kodi Live TV"
-msgstr "Sélectionner les chaînes à activer dans la section Live TV de Kodi"
+msgstr "Sélectionner les chaînes à activer dans la section TV de Kodi"
 
 
 
-# Reserved space for other tab/category in settins (from 30290 to 30339)
-
-
-
+# Reserved space for other tab/category in settings (from 30290 to 30339)
 
 
 # Advanced settings (from 30370 to 30399)
@@ -689,11 +774,11 @@ msgstr "Vidéo géo-bloquée"
 
 msgctxt "#30714"
 msgid "Search videos"
-msgstr "Rechercher vidéos"
+msgstr "Rechercher des vidéos"
 
 msgctxt "#30715"
 msgid "Search programs"
-msgstr "Rechercher programmes"
+msgstr "Rechercher des programmes"
 
 msgctxt "#30716"
 msgid "Video stream is not available"
@@ -751,6 +836,13 @@ msgctxt "#30729"
 msgid "Emissions"
 msgstr "Émissions"
 
+msgctxt "#30730"
+msgid "Downloading TV guide..."
+msgstr "Téléchargement du guide TV"
+
+msgctxt "#30731"
+msgid "Homepage"
+msgstr "Accueil"
 
 # Favourites (from 30800 to 30859)
 

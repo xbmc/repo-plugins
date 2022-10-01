@@ -6,11 +6,35 @@
 # This file is part of Catch-up TV & More
 
 import json
+import sys
 from random import randint
 
+# noinspection PyUnresolvedReferences
 from codequick import Script
 import urlquick
 
+try:
+    from urllib.parse import urlencode
+except ImportError:
+    from urllib import urlencode
+
+try:  # Python 3
+    from urllib.parse import unquote_plus
+except ImportError:  # Python 2
+    # noinspection PyUnresolvedReferences
+    from urllib import unquote_plus
+
+if sys.version_info.major >= 3 and sys.version_info.minor >= 4:
+    import html as html_parser
+elif sys.version_info.major >= 3:
+    import html.parser
+
+    html_parser = html.parser.HTMLParser()
+else:
+    # noinspection PyUnresolvedReferences
+    import HTMLParser
+
+    html_parser = HTMLParser.HTMLParser()
 
 user_agents = [
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'

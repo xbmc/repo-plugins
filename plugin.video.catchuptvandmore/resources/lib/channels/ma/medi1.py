@@ -8,20 +8,21 @@ from __future__ import unicode_literals
 import re
 import urlquick
 
+# noinspection PyUnresolvedReferences
 from codequick import Resolver
 
-URL_LIVES = 'http://www.medi1tv.com/ar/live.aspx'
+from resources.lib import resolver_proxy, web_utils
+
+URL_LIVES = 'https://www.medi1tv.com/ar/live.aspx'
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVES)
-    pattern = r"Medi1TV\ %s[\S\s]*file\:\ \'(.*\.m3u8.*)\'[\S\s]*Medi1V_%s.jpg" % (item_id, item_id.lower())
-    manifesturl = re.compile(pattern).findall(resp.text)[0]
-    finalurl = ''
-    if manifesturl.startswith('https'):
-        finalurl = manifesturl
-    else:
-        finalurl = 'https:' + manifesturl
-    return finalurl
+    for possibility in resp.parse().findall('.//iframe'):
+        video_page = possibility.get('src')
+        if item_id in video_page:
+            resp2 = urlquick.get(video_page)
+            video_url = 'http:' + re.compile(r"file: \'(.*?)\'").findall(resp2.text)[0]
+            return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

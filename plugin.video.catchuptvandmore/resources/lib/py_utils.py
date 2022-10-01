@@ -5,6 +5,8 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
+
+import datetime
 import hashlib
 import numbers
 import time
@@ -46,3 +48,13 @@ def compute_md5(filepath):
             file_md5.update(chunk)
 
         return file_md5.hexdigest()
+
+
+def datetime_strptime(s, f):
+    """Simple workaroung to fix https://forum.kodi.tv/showthread.php?tid=112916
+
+    """
+    try:
+        return datetime.datetime.strptime(s, f)
+    except TypeError:
+        return datetime.datetime(*(time.strptime(s, f)[0:6]))

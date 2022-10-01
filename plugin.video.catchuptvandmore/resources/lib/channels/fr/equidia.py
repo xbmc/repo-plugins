@@ -173,8 +173,13 @@ def get_video_course_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
+    if item_id == 'equidia-racing':
+        temp_id = item_id + kwargs.get('language', Script.setting["equidia-racing.language"])
+    else:
+        temp_id = item_id
+
     resp = urlquick.get(
-        URL_MOBILE_API % item_id,
+        URL_MOBILE_API % temp_id,
         headers={
             "User-Agent": "Equidia/6036 CFNetwork/1220.1 Darwin/20.3.0",
             "Referer": "https://fr.equidia.app/"

@@ -19,7 +19,7 @@ from resources.lib.menu_utils import item_post_treatment
 #     * France 3 Régions (JT, Météo, Live TV)
 # TODO: Add Emissions
 
-URL_ROOT = 'http://france3-regions.francetvinfo.fr'
+URL_ROOT = 'https://france3-regions.francetvinfo.fr'
 
 URL_LIVES_JSON = URL_ROOT + '/webservices/mobile/live.json'
 

@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.channelsdvr" version="1.0.8" name="Channels DVR" provider-name="Lunatixz">
+<addon id="plugin.video.channelsdvr" version="1.2.2" name="Channels DVR" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.six" version="1.0.0"/>
         <import addon="script.module.kodi-six" version="0.1.3.1"/>
-        <import addon="script.module.simplecache" version="1.0.0"/>
         <import addon="script.module.requests" version="2.7.0"/> 
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.routing" version="0.2.3"/>
         <import addon="script.module.inputstreamhelper" version="0.3.3"/>
-        <import addon="pvr.iptvsimple" version="6.2.1" optional="true"/>
+        <import addon="inputstream.ffmpegdirect" version="1.16.0"/>
+        <import addon="pvr.iptvsimple" version="7.5.0" optional="true"/>
+        <import addon="service.iptv.manager" version="0.2.2" optional="true"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
     </extension>
-    <extension point="xbmc.service" library="service.py"/>
+    <extension point="xbmc.service" library="pseudotv_recommended.py"/>
     <extension point="xbmc.addon.metadata">
         <reuselanguageinvoker>true</reuselanguageinvoker>
-        <summary lang="en_GB">Live TV, everywhere</summary>
-        <description lang="en_GB">Watch your favorite programs on Kodi. Channels delivers a unified experience across all your TVs, devices, and streaming platforms.</description>
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <source>https://github.com/Lunatixz/KODI_Addons/tree/master/plugin.video.channelsdvr</source>
         <website>https://getchannels.com/</website>
         <forum>http://forum.kodi.tv/showthread.php?tid=357406</forum>
-        <news>Matrix</news>
+        <news>v.1.1.9[CR]- Playback Tweaks[CR]v.1.1.1[CR]- Matrix Support[CR]- IPTV Simple integration[CR]- Added timeshift support (enable in iptv-simple).[CR]- PseudoTV Live integration</news>
         <assets>
             <icon>resources/images/icon.png</icon>
             <fanart>resources/images/fanart.jpg</fanart>
@@ -31,5 +32,15 @@
             <screenshot>resources/images/screenshot03.png</screenshot>
             <screenshot>resources/images/screenshot04.png</screenshot>
         </assets>
+        <summary lang="da_DK">Direkte tv overalt</summary>
+        <summary lang="en_GB">Live TV, everywhere</summary>
+        <summary lang="es_ES">TV en directo en cualquier sitio</summary>
+        <summary lang="fi_FI">Televisiolähetykset, kaikkialla</summary>
+        <summary lang="it_IT">TV in diretta, ovunque</summary>
+        <description lang="da_DK">Se dine yndlingsprogrammer i Kodi. Kanaler leverer en samlet oplevelse på tværs af alle dine tv, enheder og streamingplatforme.</description>
+        <description lang="en_GB">Watch your favorite programs on Kodi. Channels delivers a unified experience across all your TVs, devices, and streaming platforms.</description>
+        <description lang="es_ES">Mira tus programas favoritos en Kodi. Canales entrega una experiencia unificada en todos tus dispositivos, TVs y plataformas de emisión.</description>
+        <description lang="fi_FI">Katsele suosikkiohjelmiasi Kodissa. Kanavat toimittavat yksilöllisen kokemuksen kaikille televisioillesi, laitteillesi ja suoratoistoalustoille.</description>
+        <description lang="it_IT">Guarda i tuoi programmi preferiti su Kodi. I canali offrono un&apos;esperienza unificata su tutti i tuoi TV, dispositivi e piattaforme di streaming.</description>
     </extension>
 </addon>

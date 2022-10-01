@@ -3,11 +3,19 @@
 	<category label="30008">
     <setting id="User_IP"          type="ipaddress" label="30009" default="127.0.0.1"/>
     <setting id="User_Port"        type="number"    label="30010" default="8089"/>
+    <setting id=""                 type="lsep"      label=""      default="" />
     <setting id="Enable_Debugging" type="bool"      label="30000" default="false"/>
     <setting id="Enable_TS"        type="bool"      label="30006" default="false"/>
-    <setting id="Enable_M3UXMLTV"  type="bool"      label="30004" default="false"/>
-    <setting id="Build_Favorites"  type="bool"      label="30016" default="false" visible="eq(-1,true)" subsetting="true"/>
-    <setting id="Enable_Config"    type="bool"      label="30011" default="false" visible="eq(-2,true)" subsetting="true"/>
-    <setting id="User_Folder"      type="folder"    label="30005" default="special://profile/addon_data/plugin.video.channelsdvr/" source="files" visible="eq(-3,true)" subsetting="true"/>
+    <setting id="Enable_Timeshift" type="bool"      label="30020" default="false" visible="!eq(-1,true)"/>
+  </category>
+  <category label="49000">
+    <setting label="49001"          type="action" action="InstallAddon(plugin.video.pseudotv.live)" option="close" visible="!System.HasAddon(plugin.video.pseudotv.live)"/>
+    <setting label="49002"          type="action" action="InstallAddon(service.iptv.manager)"       option="close" visible="!System.HasAddon(service.iptv.manager)"/>
+    <setting id="iptv.enabled"      type="bool"   label="49003" default="true"  visible="System.HasAddon(service.iptv.manager)" />
+    <setting id="Build_Favorites"   type="bool"   label="49006" default="false"                           enable="eq(-1,true)"                visible="System.HasAddon(service.iptv.manager)"       subsetting="true"/>
+    <setting label="49004"          type="action" action="Addon.OpenSettings(service.iptv.manager)"       enable="eq(-2,true)" option="close" visible="System.HasAddon(service.iptv.manager)"       subsetting="true"/>
+    <setting label="49005"          type="action" action="Addon.OpenSettings(plugin.video.pseudotv.live)" enable="eq(-3,true)" option="close" visible="System.HasAddon(plugin.video.pseudotv.live)" subsetting="true"/>
+    <setting id="iptv.channels_uri" default="plugin://plugin.video.channelsdvr/iptv/channels" visible="false"/>
+    <setting id="iptv.epg_uri"      default="plugin://plugin.video.channelsdvr/iptv/epg"      visible="false"/>
   </category>
 </settings>

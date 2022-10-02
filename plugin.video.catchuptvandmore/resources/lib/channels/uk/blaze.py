@@ -5,9 +5,9 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-import json
 import re
 
+# noinspection PyUnresolvedReferences
 from codequick import Listitem, Resolver, Route
 import urlquick
 
@@ -85,11 +85,11 @@ def get_video_url(plugin,
 
     resp = urlquick.get(URL_INFO_REPLAY % video_id)
     stream_id = re.compile(
-        r'uvid\"\:\"(.*?)\"').findall(resp.text)[2]
+        r'uvid\":\"(.*?)\"').findall(resp.text)[2]
 
     resp2 = urlquick.get(URL_REPLAY_TOKEN % stream_id,
                          headers={'X-Requested-With': 'XMLHttpRequest'})
-    json_parser = json.loads(resp2.text)
+    json_parser = resp2.json()
 
     video_url = json_parser['tokenizer']['url']
     token_value = json_parser['tokenizer']['token']
@@ -97,11 +97,11 @@ def get_video_url(plugin,
     uvid_value = json_parser['tokenizer']['uvid']
     resp3 = urlquick.get(video_url,
                          headers={'User-Agent': web_utils.get_random_ua(),
-                                  'token': token_value,
-                                  'token-expiry': token_expiry_value,
+                                  'token': ('%s' % token_value),
+                                  'token-expiry': ('%s' % token_expiry_value),
                                   'uvid': uvid_value},
                          max_age=-1)
-    json_parser2 = json.loads(resp3.text)
+    json_parser2 = resp3.json()
     return json_parser2["Streams"]["Adaptive"]
 
 
@@ -110,13 +110,13 @@ def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE)
     live_id = re.compile(
-        r'data-player-key\=\"(.*?)\"').findall(resp.text)[0]
+        r'data-player-key=\"(.*?)\"').findall(resp.text)[0]
     token_value = re.compile(
-        r'data-player-token\=\"(.*?)\"').findall(resp.text)[0]
+        r'data-player-token=\"(.*?)\"').findall(resp.text)[0]
     token_expiry_value = re.compile(
-        r'data-player-expiry\=\"(.*?)\"').findall(resp.text)[0]
+        r'data-player-expiry=\"(.*?)\"').findall(resp.text)[0]
     uvid_value = re.compile(
-        r'data-player-uvid\=\"(.*?)\"').findall(resp.text)[0]
+        r'data-player-uvid=\"(.*?)\"').findall(resp.text)[0]
     resp2 = urlquick.get(
         URL_LIVE_JSON % live_id,
         headers={
@@ -126,5 +126,5 @@ def get_live_url(plugin, item_id, **kwargs):
             'uvid': uvid_value
         },
         max_age=-1)
-    json_parser2 = json.loads(resp2.text)
+    json_parser2 = resp2.json()
     return json_parser2["Streams"]["Adaptive"]

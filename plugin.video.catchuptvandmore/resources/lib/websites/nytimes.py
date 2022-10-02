@@ -8,13 +8,14 @@ from __future__ import unicode_literals
 import base64
 import json
 
+# noinspection PyUnresolvedReferences
 from codequick import Listitem, Resolver, Route
 import urlquick
 
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
 
-# TO DO
+# TODO
 # Get sub-playlist
 
 URL_ROOT = 'https://www.nytimes.com'
@@ -43,7 +44,7 @@ HEADERS = {'Content-Type': 'application/json',
 
 
 def video_query(videoid='', playlistid='', genericid='', cursor=""):
-    _json = {"operationName": "VideoQuery",
+    _json = {"operationName": "VideoWatchQuery",
              "variables": {"id": videoid,
                            "playlistId": playlistid,
                            "genericId": genericid,
@@ -52,16 +53,18 @@ def video_query(videoid='', playlistid='', genericid='', cursor=""):
                            "cursor": cursor},
              "extensions": {"persistedQuery": {
                  "version": 1,
-                 "sha256Hash": "8af145c6645fb9be8f7ee65c76c652169c41b7f3294b5c45654b20a6b6a1925b"}}}
+                 "sha256Hash": "7d32782d33329093e28a10b3238ecd0408f008127e957241a3f23ad4774904d7"}}}
     return urlquick.request('POST', URL_REQUESTS, data=json.dumps(_json), headers=HEADERS, max_age=-1)
 
 
-def additional_playlists_query(playlistids=[]):
+def additional_playlists_query(playlistids=None):
+    if playlistids is None:
+        playlistids = []
     _json = {"operationName": "AdditionalPlaylistsQuery",
              "variables": {"playlistIds": playlistids},
              "extensions": {"persistedQuery": {
                  "version": 1,
-                 "sha256Hash": "768d2ef43ccae636ecc867da4f16825f7d2b94f7b37631e2ebd625f44f030f6c"}}}
+                 "sha256Hash": "99be195e9692ba8b9a28713feb3a54699b4b65565294c037eb331ced2e662f24"}}}
     return urlquick.request('POST', URL_REQUESTS, data=json.dumps(_json), headers=HEADERS, max_age=-1)
 
 
@@ -77,14 +80,26 @@ def website_root(plugin, item_id, **kwargs):
     """Add modes in the listing"""
 
     # import web_pdb; web_pdb.set_trace()
-    json_parser = video_query(genericid="/video/embedded/admin/100000006681488/main-video-navigation.html").json()
+    query = video_query(genericid="/video/embedded/admin/100000006681488/main-video-navigation.html")
+    json_parser = query.json()
+
+    if "PersistedQueryNotFound" in query.text:
+        plugin.notify(plugin.localize(30600), plugin.localize(30716))
+        return False
+
     categories = json_parser['data']['genericVideoPlaylists']['summary'].split(',')
 
     playlist = []
     for category in categories:
         playlist.append('/video/{}'.format(category.strip()))
 
-    json_parser2 = additional_playlists_query(playlistids=playlist).json()
+    playlists_query = additional_playlists_query(playlistids=playlist)
+
+    if "PersistedQueryNotFound" in playlists_query.text:
+        plugin.notify(plugin.localize(30600), plugin.localize(30716))
+        return False
+
+    json_parser2 = playlists_query.json()
     for anywork in json_parser2['data']['anyWorks']:
         item = Listitem()
         item.label = anywork['promotionalHeadline']
@@ -109,7 +124,13 @@ def website_root(plugin, item_id, **kwargs):
 def list_videos(plugin, item_id, playlistid, cursor="", **kwargs):
     """Build videos listing"""
 
-    videos_jsonparser = video_query(playlistid=playlistid, cursor=cursor).json()
+    query = video_query(playlistid=playlistid, cursor=cursor)
+
+    if "PersistedQueryNotFound" in query.text:
+        plugin.notify(plugin.localize(30600), plugin.localize(30716))
+        return False
+
+    videos_jsonparser = query.json()
 
     try:
         for video_data in videos_jsonparser['data']['playlist']['relatedVideos']['edges']:
@@ -130,7 +151,7 @@ def list_videos(plugin, item_id, playlistid, cursor="", **kwargs):
             yield item
 
         endcursor = videos_jsonparser['data']['playlist']['relatedVideos']['pageInfo']['endCursor']
-        nb_videos = int(base64.b64decode(endcursor).split(':')[1]) + 1
+        nb_videos = int(base64.b64decode(endcursor).decode('utf-8').split(':')[1]) + 1
         if nb_videos % 12 == 0:
             yield Listitem.next_page(
                 item_id=item_id,
@@ -148,7 +169,13 @@ def get_video_url(plugin,
                   download_mode=False,
                   **kwargs):
     """Get video URL and start video player"""
-    video_jsonparser = video_query(videoid=video_id).json()
+    query = video_query(videoid=video_id)
+
+    if "PersistedQueryNotFound" in query.text:
+        plugin.notify(plugin.localize(30600), plugin.localize(30716))
+        return False
+
+    video_jsonparser = query.json()
 
     video_url = ''
     for video in video_jsonparser['data']['video']['renditions']:

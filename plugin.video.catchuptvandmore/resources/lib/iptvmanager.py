@@ -72,7 +72,7 @@ def get_all_live_tv_channels():
     """
     country_channels = []
     live_tv_dict = importlib.import_module('resources.lib.skeletons.live_tv').menu
-    for country_id, country_infos in live_tv_dict.items():
+    for country_id, country_infos in list(live_tv_dict.items()):
         channels = []
         channels_dict = importlib.import_module('resources.lib.skeletons.' + country_id).menu
         for channel_id, channel_infos in list(channels_dict.items()):
@@ -137,8 +137,8 @@ def select_channels(plugin):
         return
 
     # By default, disable all channels in the setting file
-    for country_id in tv_integration_settings['enabled_channels'].keys():
-        for channel_key in tv_integration_settings['enabled_channels'][country_id].keys():
+    for country_id in list(tv_integration_settings['enabled_channels'].keys()):
+        for channel_key in list(tv_integration_settings['enabled_channels'][country_id].keys()):
             tv_integration_settings['enabled_channels'][country_id][channel_key]['enabled'] = False
 
     # Apply user selection and save settings
@@ -204,7 +204,7 @@ class IPTVManager:
 
                 # It seems that in Python 2 urlencode doesn't deal well with unicode data
                 # (see https://stackoverflow.com/a/3121311)
-                for k, v in params.items():
+                for k, v in list(params.items()):
                     params[k] = utils.ensure_native_str(v)
 
                 json_stream['stream'] = utils.ensure_native_str(PLUGIN_KODI_PATH + resolver + '/?') + urlencode(params)
@@ -252,7 +252,7 @@ class IPTVManager:
                     xmltv_ids_to_keep.append(xmltv_id)
 
         # Send all programmes of enables channels
-        for country_id, programmes in country_tv_guides.items():
+        for country_id, programmes in list(country_tv_guides.items()):
             for p in programmes:
                 if p.get('channel') not in xmltv_ids_to_keep:
                     continue

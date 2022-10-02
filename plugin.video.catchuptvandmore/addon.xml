@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.37" provider-name="SylvainCecchetto,wwark,joaopa">
+<addon id="plugin.video.catchuptvandmore" name="Catch-up TV &amp; More" version="0.2.38" provider-name="SylvainCecchetto,wwark,joaopa">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.codequick" version="0.9.13"/>
@@ -42,9 +42,9 @@
     <email>catch.up.tv.and.more at gmail dot com</email>
     <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Version 0.2.37]
-Changelog is too big for this version (thanks to the hard work of @joaopa00).
-See https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore/releases/tag/v0.2.37 for the changelog.
+[Version 0.2.38]
+Changelog is too big for this version.
+See https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore/releases/tag/v0.2.38 for the changelog.
     </news>
     <assets>
       <icon>icon.png</icon>

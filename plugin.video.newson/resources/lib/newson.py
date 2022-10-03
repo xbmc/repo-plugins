@@ -1,4 +1,4 @@
-#   Copyright (C) 2021 Lunatixz
+#   Copyright (C) 2022 Lunatixz
 #
 #
 # This file is part of NewsOn.
@@ -18,7 +18,7 @@
 
 # -*- coding: utf-8 -*-
 import os, sys, time, datetime, traceback, random, routing
-import socket, json, requests, collections, base64
+import socket, json, requests, collections, base64, gzip
 
 from six.moves     import urllib
 from itertools     import repeat, cycle, chain, zip_longest
@@ -26,18 +26,25 @@ from simplecache   import SimpleCache, use_cache
 from kodi_six      import xbmc, xbmcaddon, xbmcplugin, xbmcgui, xbmcvfs, py2_encode, py2_decode
 
 try:
-    from multiprocessing      import cpu_count
-    from multiprocessing.pool import ThreadPool 
-    ENABLE_POOL = True
-    CORES = cpu_count()
-except: ENABLE_POOL = False
+    from StringIO import StringIO ## for Python 2
+except ImportError:
+    from io import StringIO ## for Python 3
+    
+try:
+    if (xbmc.getCondVisibility('System.Platform.Android') or xbmc.getCondVisibility('System.Platform.Windows')):
+        from multiprocessing.dummy import Pool as ThreadPool
+    else:
+        from multiprocessing.pool  import ThreadPool
+        
+    from multiprocessing  import cpu_count
+    from _multiprocessing import SemLock, sem_unlink #hack to raise two python issues. _multiprocessing import error, sem_unlink missing from native python (android).
 
-PY2 = sys.version_info[0] == 2
-PY3 = sys.version_info[0] == 3
-if PY3: 
-    basestring = str
-    unicode = str
-  
+    SUPPORTS_POOL = True
+    CPU_COUNT     = cpu_count()
+except Exception as e:
+    CPU_COUNT     = 2
+    SUPPORTS_POOL = False
+
 # Plugin Info
 ADDON_ID      = 'plugin.video.newson'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
@@ -60,6 +67,7 @@ APIKEY           = REAL_SETTINGS.getSetting('MAPQUEST_API')
 DEBUG            = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 
 BASE_API      = 'https://newson.us/api'
+OLD_API       = 'http://watchnewson.com/api/linear/channels'
 LOGO_URL      = 'https://dummyimage.com/512x512/035e8b/FFFFFF.png&text=%s'
 FAN_URL       = 'https://dummyimage.com/1280x720/035e8b/FFFFFF.png&text=%s'
 MAP_URL       = 'https://www.mapquestapi.com/staticmap/v5/map?key=%s&center=%s&size=@2x'
@@ -67,7 +75,11 @@ MAP_URL       = 'https://www.mapquestapi.com/staticmap/v5/map?key=%s&center=%s&s
 @ROUTER.route('/')
 def buildMenu():
     NewsOn().buildMenu()
-    
+
+@ROUTER.route('/live')
+def buildLive(): pass
+    # NewsOn().browse('now')
+  
 @ROUTER.route('/now')
 def buildNow():
     NewsOn().browse('now')
@@ -99,7 +111,11 @@ def buildStation(chid):
 @ROUTER.route('/station/<chid>/<opt>')
 def browseDetails(chid,opt):
     NewsOn().browseStation(chid,opt)
-  
+    
+@ROUTER.route('/play/live')#unknown bug causing this route to be called during /ondemand parse. todo find issue.
+def dummy():
+    pass
+    
 @ROUTER.route('/play/live/<url>')
 def playURL(url):
     NewsOn().playVideo(url,opt='live')
@@ -112,11 +128,12 @@ def log(msg, level=xbmc.LOGDEBUG):
     xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
 
 def encodeString(text):
+    if not isinstance(text,str): text = str(text)
     return urllib.parse.quote_plus(text)
 
 def decodeString(text):
     return urllib.parse.unquote_plus(text)
- 
+
 class NewsOn(object):
     def __init__(self, sysARG=sys.argv):
         log('__init__, sysARG = %s'%(sysARG))
@@ -224,7 +241,8 @@ class NewsOn(object):
             duration = 0
         infoLabel   = {"mediatype":"video","label":label,"title":label,"plot":plot,"duration":duration,"genre":['News']}
         infoArt     = {"thumb":thumb,"poster":thumb,"fanart":self.getMAP((configValue.get('latitude','undefined'),configValue.get('longitude','undefined'))),"icon":chlogo,"logo":chlogo} 
-
+        if opt == 'local':infoArt['fanart'] = thumb
+        
         if opt == 'channels':
             self.addDir(chname,(buildStation,chid),infoArt={"thumb":chlogo,"poster":chlogo,"fanart":FANART,"icon":ICON,"logo":ICON})
             return True
@@ -232,7 +250,7 @@ class NewsOn(object):
             self.addLink(label, (playURL,encodeString(url)), infoList=infoLabel, infoArt=infoArt)
             return True
         
-
+        
     @use_cache(1)
     def getCoordinates(self):
         log('getCoordinates')
@@ -275,16 +293,19 @@ class NewsOn(object):
         except: return FANART
             
         
-    def openURL(self, url, param={}):
+    def openURL(self, url, param={}, life=datetime.timedelta(minutes=15)):
         try:
             log('openURL, url = %s'%(url))
             cacheName = '%s.openURL, url = %s.%s'%(ADDON_NAME,url,json.dumps(param))
             cacheresponse = self.cache.get(cacheName)
             if not cacheresponse:
-                req = requests.get(url, param, headers={'User-Agent':'Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)'})
-                cacheresponse = req.json()
+                req = requests.get(url, param, headers={'Accept-Encoding':'gzip','User-Agent':'Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)'})
+                try:
+                    cacheresponse = json.loads(gzip.GzipFile(fileobj=StringIO(req.content)))
+                except:
+                    cacheresponse = req.json()
                 req.close()
-                self.cache.set(cacheName, json.dumps(cacheresponse), checksum=len(json.dumps(cacheresponse)), expiration=datetime.timedelta(minutes=5))
+                self.cache.set(cacheName, json.dumps(cacheresponse), checksum=len(json.dumps(cacheresponse)), expiration=life)
                 return cacheresponse
             else: return json.loads(cacheresponse)
         except Exception as e: 
@@ -301,16 +322,16 @@ class NewsOn(object):
         liz.setProperty('IsInternetStream','true')
         xbmcplugin.setResolvedUrl(ROUTER.handle, True, liz)
 
-
+             
     def poolList(self, method, items=None, args=None, chunk=25):
         log("poolList")
         results = []
-        if ENABLE_POOL:
-            pool = ThreadPool(CORES)
+        if SUPPORTS_POOL:
+            pool = ThreadPool()
             if args is not None: 
-                results = pool.map(method, zip(items,repeat(args)))
+                results = pool.imap(method, zip(items,repeat(args)))
             elif items: 
-                results = pool.map(method, items)#, chunksize=chunk)
+                results = pool.imap(method, items)#, chunksize=chunk)
             pool.close()
             pool.join()
         else:
@@ -324,7 +345,6 @@ class NewsOn(object):
     def addPlaylist(self, name, path='', infoList={}, infoArt={}, infoVideo={}, infoAudio={}, infoType='video'):
         log('addPlaylist, name = %s'%name)
 
-    
     
     def addLink(self, name, uri=(''), infoList={}, infoArt={}, infoVideo={}, infoAudio={}, infoType='video', total=0):
         log('addLink, name = %s'%name)

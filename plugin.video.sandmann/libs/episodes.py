@@ -55,13 +55,13 @@ def getEpisodeData(data, quality):
         "fanart": getImage(data, 1920),
         "stream": getStream(streams, quality),
         "thumb": getImage(data, 640),
-        "title": data["shortTitle"],
+        "title": getTitle(data),
         "dgs": getDgs(data)
     }
 
 
 def getDescription(content):
-    return content["images"]["aspect16x9"]["alt"]
+    return content["images"]["aspect16x9"]["alt"].replace("Thumbnail: ", "")
 
 
 def getImage(content, width):
@@ -74,6 +74,12 @@ def getStream(streams, quality):
         return streams[index]
     else:
         return streams["auto"]
+
+
+def getTitle(content):
+    title_array = content["shortTitle"].split(" | ")
+    # date = title_array[2]
+    return title_array[0]
 
 
 def getDgs(content):

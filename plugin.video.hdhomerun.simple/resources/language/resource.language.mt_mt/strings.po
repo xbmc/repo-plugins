@@ -16,6 +16,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 0 : n==0 || ( n%100>1 && n%100<11) ? 1 : (n%100>10 && n%100<20 ) ? 2 : 3;\n"
 
+msgctxt "Addon Summary"
+msgid "Simple HDHomeRun Interface."
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Automatically find all the compatible HDHomeRun devices on your network, Simple and Easy HDHomeRun Interface."
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "Requires a compatible HDHomeRun device"
+msgstr ""
+
 msgctxt "#30000"
 msgid "Enable Debugging [Log errors]"
 msgstr ""

@@ -7,31 +7,31 @@ msgstr ""
 "Project-Id-Version: Composite\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
-"PO-Revision-Date: 2021-08-03 15:29+0000\n"
-"Last-Translator: Tommi Raulahti <traulahti@gmail.com>\n"
+"PO-Revision-Date: 2022-08-03 14:14+0000\n"
+"Last-Translator: Oskari Lavinto <olavinto@protonmail.com>\n"
 "Language-Team: Finnish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-composite_for_plex/fi_fi/>\n"
 "Language: fi_fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.13\n"
 
 msgctxt "Addon Description"
 msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
-msgstr "Selaa ja toista video-, musiikki- ja valokuvamediatiedostoja, joita Plex Media Server hallinnoi.[CR][CR]Hippojayn haaroitus PleXBMC:stä"
+msgstr "Selaa ja toista video-, musiikki- ja kuvamediatiedostoja, joita Plex Media Server hallinnoi.[CR][CR]kehittäjän Hippojay PleXBMC-kehityshaara"
 
 msgctxt "Addon Disclaimer"
 msgid "Composite is NOT an official Plex add-on and is not supported or endorsed by Plex."
-msgstr ""
+msgstr "Composite ei ole virallinen Plex-lisäosa, eikä Plex tue tai suosittele sen käyttöä."
 
 msgctxt "#30000"
 msgid "Confirm file delete?"
-msgstr "Vahvista tiedoston poisto?"
+msgstr "Vahvistetaanko tiedoston poisto?"
 
 msgctxt "#30001"
 msgid "Delete this item? This action will delete media and associated data files."
-msgstr "Poista tämä? Toiminto poistaa median ja siihen liittyvät tiedostot."
+msgstr "Poistetaanko kohde? Toiminto poistaa median ja siihen liittyvät tiedostot."
 
 msgctxt "#30002"
 msgid "Plex Online"
@@ -108,7 +108,7 @@ msgstr "Kokoelman mukaan"
 
 msgctxt "#30021"
 msgid "By First Letter"
-msgstr "Kirjaimen mukaan"
+msgstr "Alkukirjaimen mukaan"
 
 msgctxt "#30022"
 msgid "By Genre"
@@ -124,7 +124,7 @@ msgstr "Sisältöluokituksen mukaan"
 
 msgctxt "#30025"
 msgid "By Folder"
-msgstr "Hakemiston mukaan"
+msgstr "Kansion mukaan"
 
 msgctxt "#30026"
 msgid "Search Shows..."
@@ -160,7 +160,7 @@ msgstr ""
 
 msgctxt "#30034"
 msgid "By Folder"
-msgstr "Hakemiston mukaan"
+msgstr "Kansion mukaan"
 
 msgctxt "#30035"
 msgid "Search Artists..."
@@ -168,7 +168,7 @@ msgstr "Etsi esiintyjiä..."
 
 msgctxt "#30036"
 msgid "Search Albums..."
-msgstr "Etsi albumeja..."
+msgstr "Etsi albumeita..."
 
 msgctxt "#30037"
 msgid "Search Tracks..."
@@ -220,7 +220,7 @@ msgstr "Ohjaajan mukaan"
 
 msgctxt "#30049"
 msgid "By Starring Actor"
-msgstr "Pääosa esittäjän mukaan"
+msgstr "Pääosien mukaan"
 
 msgctxt "#30050"
 msgid "By Country"
@@ -232,7 +232,7 @@ msgstr "Sisältöluokituksen mukaan"
 
 msgctxt "#30052"
 msgid "By Rating"
-msgstr "Arvostelun mukaan"
+msgstr "Arvioiden mukaan"
 
 msgctxt "#30053"
 msgid "By Resolution"
@@ -240,15 +240,15 @@ msgstr "Resoluution mukaan"
 
 msgctxt "#30054"
 msgid "By First Letter"
-msgstr "Ensimmäisen kirjaimen mukaan"
+msgstr "Alkukirjaimen mukaan"
 
 msgctxt "#30055"
 msgid "By Folder"
-msgstr "Hakemiston mukaan"
+msgstr "Kansion mukaan"
 
 msgctxt "#30056"
 msgid "Search..."
-msgstr "Etsi..."
+msgstr "Haku..."
 
 msgctxt "#30057"
 msgid "All"
@@ -264,7 +264,7 @@ msgstr "Viimeksi lisätyt"
 
 msgctxt "#30060"
 msgid "Camera Make"
-msgstr "Kameran valmistaja"
+msgstr "Kameran merkki"
 
 msgctxt "#30061"
 msgid "Camera Model"
@@ -284,7 +284,7 @@ msgstr "ISO"
 
 msgctxt "#30065"
 msgid "Lens"
-msgstr "Linssit"
+msgstr "Objektiivi"
 
 msgctxt "#30066"
 msgid "Unable to see any media servers"
@@ -296,7 +296,7 @@ msgstr "Palvelimeen ei saada yhteyttä:"
 
 msgctxt "#30068"
 msgid "Library refresh started"
-msgstr "Kirjaston päivitys alkoi"
+msgstr "Kirjaston päivitys aloitettu"
 
 msgctxt "#30069"
 msgid "myPlex not configured"
@@ -304,11 +304,11 @@ msgstr ""
 
 msgctxt "#30070"
 msgid "Resume"
-msgstr "Palauta"
+msgstr "Jatka"
 
 msgctxt "#30071"
 msgid "Select media to play"
-msgstr "Valitse soitettava media"
+msgstr "Valitse toistettava media"
 
 msgctxt "#30072"
 msgid "Select subtitle"
@@ -320,7 +320,7 @@ msgstr "Valitse ääni"
 
 msgctxt "#30074"
 msgid "Select master server"
-msgstr "Valitse pääasiallinen palvelin"
+msgstr "Valitse ensisijainen palvelin"
 
 msgctxt "#30075"
 msgid "Known server list"
@@ -328,7 +328,7 @@ msgstr "Lista tunnetuista palvelimista"
 
 msgctxt "#30076"
 msgid "Switch User"
-msgstr "Vaihda käyttäjä"
+msgstr "Vaihda käyttäjää"
 
 msgctxt "#30077"
 msgid "Enter PIN"
@@ -344,11 +344,11 @@ msgstr "Aloita alusta"
 
 msgctxt "#30080"
 msgid "myPlex Queue"
-msgstr "myPlex jono"
+msgstr "myPlex-jono"
 
 msgctxt "#30081"
 msgid "Sign In"
-msgstr "Kirjaudu sisään"
+msgstr "Kirjaudu"
 
 msgctxt "#30082"
 msgid "Display Servers"
@@ -364,7 +364,7 @@ msgstr "Kanavat"
 
 msgctxt "#30085"
 msgid "Playlists"
-msgstr "Soittolistat"
+msgstr "Toistolistat"
 
 msgctxt "#30086"
 msgid "Play Transcoded"
@@ -384,7 +384,7 @@ msgstr ""
 
 msgctxt "#30090"
 msgid "Unplayed"
-msgstr "Ei soitetut"
+msgstr "Toistamattomat"
 
 # ##### SETTINGS
 msgctxt "#30500"
@@ -393,7 +393,7 @@ msgstr "Ensisijainen palvelimen osoite"
 
 msgctxt "#30501"
 msgid "Stream from PMS"
-msgstr "Striimaa PMS:stä"
+msgstr "Suoratoista PMS-palvelimelta"
 
 msgctxt "#30502"
 msgid "Get extended metadata from PMS"
@@ -409,11 +409,11 @@ msgstr ""
 
 msgctxt "#30505"
 msgid "PMS Username: "
-msgstr "PMS käyttäjänimi: "
+msgstr "PMS-käyttäjätunnus: "
 
 msgctxt "#30506"
 msgid "PMS Password: "
-msgstr "PMS salasana: "
+msgstr "PMS-salasana: "
 
 msgctxt "#30507"
 msgid "Always Transcode"
@@ -437,7 +437,7 @@ msgstr "Automaattinen"
 
 msgctxt "#30512"
 msgid "http"
-msgstr "http"
+msgstr "HTTP"
 
 msgctxt "#30513"
 msgid "smb"
@@ -477,7 +477,7 @@ msgstr ""
 
 msgctxt "#30522"
 msgid "Advanced"
-msgstr ""
+msgstr "Lisäasetukset"
 
 msgctxt "#30523"
 msgid "Use Wake On LAN"
@@ -485,27 +485,27 @@ msgstr ""
 
 msgctxt "#30524"
 msgid "myPlex user"
-msgstr "myPlex käyttäjä"
+msgstr "myPlex-käyttäjä"
 
 msgctxt "#30525"
 msgid "myPlex password"
-msgstr "myPlex salasana"
+msgstr "myPlex-salasana"
 
 msgctxt "#30526"
 msgid "Select master server..."
-msgstr "Valitse pääasiallinen palvelin..."
+msgstr "Valitse ensisijainen palvelin..."
 
 msgctxt "#30527"
 msgid "Authentication required?"
-msgstr "Tunnistus vaaditaan?"
+msgstr "Vaaditaanko todennus?"
 
 msgctxt "#30528"
 msgid "Load External Subtitles?"
-msgstr "Lataa ulkoiset tekstitykset?"
+msgstr "Ladataanko ulkoiset tekstitykset?"
 
 msgctxt "#30529"
 msgid "Always display subtitles?"
-msgstr "Näytä aina tekstitykset?"
+msgstr "Näytetäänkö tekstitykset aina?"
 
 msgctxt "#30530"
 msgid "Port Number"
@@ -525,11 +525,11 @@ msgstr "Aina"
 
 msgctxt "#30534"
 msgid "Audio stream selection"
-msgstr "Ääni streamin valinta"
+msgstr "Ääniraidan valinta"
 
 msgctxt "#30535"
 msgid "Subtitle stream selection"
-msgstr "Tekstitys streamin valinta"
+msgstr "Tekstitysraidan valinta"
 
 msgctxt "#30536"
 msgid "Kodi Control"
@@ -545,7 +545,7 @@ msgstr "Äänen ja tekstityksen valinta"
 
 msgctxt "#30539"
 msgid "Never show subtitles"
-msgstr "Älä koskaan näytä tekstityksiä"
+msgstr "Älä näytä tekstityksiä koskaan"
 
 msgctxt "#30540"
 msgid "Quality"
@@ -565,7 +565,7 @@ msgstr ""
 
 msgctxt "#30544"
 msgid "Server MAC address"
-msgstr "Palvelimen MAC osoite"
+msgstr "Palvelimen MAC-osoite"
 
 msgctxt "#30545"
 msgid "Plex Style Watched flags"
@@ -573,24 +573,24 @@ msgstr ""
 
 msgctxt "#30546"
 msgid "Windows Media Server?"
-msgstr "Windows media palvelin?"
+msgstr "Windows-mediapalvelin?"
 
 msgctxt "#30547"
 msgid "Use WOL?"
-msgstr "Käytä WOL?"
+msgstr "Käytetäänkö WOL-käynnistystä?"
 
 # 30548
 msgctxt "#30549"
 msgid "Skip Genre/director/writer"
-msgstr ""
+msgstr "Ohita lajityyppi/ohjaaja/käsikirjoittaja"
 
 msgctxt "#30550"
 msgid "Skip images (thumbs, fanart)"
-msgstr ""
+msgstr "Ohita kuvat (pienois-, fanart-kuvat)"
 
 msgctxt "#30551"
 msgid "Skip Media Flags"
-msgstr ""
+msgstr "Ohita mediatunnisteet"
 
 msgctxt "#30552"
 msgid "Skip Context Menus"
@@ -606,15 +606,15 @@ msgstr ""
 
 msgctxt "#30556"
 msgid "Play TV Theme Music"
-msgstr "Soita TV teemamusiikki"
+msgstr "Toista sarjojen tunnusmusiikkia"
 
 msgctxt "#30557"
 msgid "Select audio output"
-msgstr "Valitse äänen ulostulo"
+msgstr "Valitse äänilähtö"
 
 msgctxt "#30558"
 msgid "If only one season"
-msgstr "Vain jos yksi kausi"
+msgstr "Jos kausia on vain yksi"
 
 msgctxt "#30559"
 msgid "All seasons"
@@ -622,7 +622,7 @@ msgstr "Kaikki kaudet"
 
 msgctxt "#30560"
 msgid "Force DVD playback"
-msgstr "Pakota DVD toisto"
+msgstr "Pakota DVD-toisto"
 
 msgctxt "#30561"
 msgid "Override SMB location"
@@ -630,7 +630,7 @@ msgstr ""
 
 msgctxt "#30562"
 msgid "NAS IP Address"
-msgstr "NAS IP osoite"
+msgstr "NAS IP-osoite"
 
 msgctxt "#30563"
 msgid "AFP"
@@ -638,15 +638,15 @@ msgstr "AFP"
 
 msgctxt "#30564"
 msgid "NAS Username"
-msgstr "NAS käyttäjänimi"
+msgstr "NAS-käyttäjätunnus"
 
 msgctxt "#30565"
 msgid "NAS password"
-msgstr "NAS salasana"
+msgstr "NAS-salasana"
 
 msgctxt "#30566"
 msgid "NAS Root Folder"
-msgstr "NAS juurihakemisto"
+msgstr "NAS-juurikansio"
 
 msgctxt "#30567"
 msgid "Plex Control"
@@ -686,55 +686,55 @@ msgstr ""
 
 msgctxt "#30576"
 msgid "Skin Name"
-msgstr ""
+msgstr "Ulkoasun nimi"
 
 msgctxt "#30577"
 msgid "Movie View"
-msgstr ""
+msgstr "Elokuvanäkymä"
 
 msgctxt "#30578"
 msgid "TV View"
-msgstr ""
+msgstr "Sarjanäkymä"
 
 msgctxt "#30579"
 msgid "Season View"
-msgstr ""
+msgstr "Kausinäkymä"
 
 msgctxt "#30580"
 msgid "Episode View"
-msgstr ""
+msgstr "Jaksonäkymä"
 
 msgctxt "#30581"
 msgid "Music View"
-msgstr ""
+msgstr "Musiikkinäkymä"
 
 msgctxt "#30582"
 msgid "Enable Movie Shelf"
-msgstr ""
+msgstr "Käytä elokuvahyllyä"
 
 msgctxt "#30583"
 msgid "Enable TV Shelf"
-msgstr ""
+msgstr "Käytä sarjahyllyä"
 
 msgctxt "#30584"
 msgid "Enable Music Shelf"
-msgstr ""
+msgstr "Käytä musiikkihyllyä"
 
 msgctxt "#30585"
 msgid "Enable Channel Shelf"
-msgstr ""
+msgstr "Käytä kanavahyllyä"
 
 msgctxt "#30586"
 msgid "Content filter"
-msgstr "Sisältö suodatin"
+msgstr "Sisällön suodatus"
 
 msgctxt "#30587"
 msgid "Map unknown content as:"
-msgstr ""
+msgstr "Tuntemattoman sisällön luokitus:"
 
 msgctxt "#30588"
 msgid "RA Library filter"
-msgstr "RA kirjasto suodatin"
+msgstr "RA-kirjaston suodatin"
 
 msgctxt "#30589"
 msgid "Kids"
@@ -742,7 +742,7 @@ msgstr "Lapset"
 
 msgctxt "#30590"
 msgid "Teens"
-msgstr "Teinit"
+msgstr "Nuoriso"
 
 msgctxt "#30591"
 msgid "Adults"
@@ -750,11 +750,11 @@ msgstr "Aikuiset"
 
 msgctxt "#30592"
 msgid "Use menu for shared sections"
-msgstr ""
+msgstr "Käytä valikkoa jaetuille osioille"
 
 msgctxt "#30593"
 msgid "Cache Data"
-msgstr ""
+msgstr "Puskuroi tiedot"
 
 msgctxt "#30594"
 msgid "Manual"
@@ -762,15 +762,15 @@ msgstr "Manuaalinen"
 
 msgctxt "#30595"
 msgid "Use full resolution thumbs"
-msgstr ""
+msgstr "Käytä täyden tarkkuuden pienoiskuvia"
 
 msgctxt "#30596"
 msgid "Use full resolution fanart"
-msgstr ""
+msgstr "Käytä täyden tarkkuuden fanart-kuvia"
 
 msgctxt "#30597"
 msgid "Hide watched recently added items"
-msgstr ""
+msgstr "Piilota katsotut kohteet viimeksi lisätyistä"
 
 msgctxt "#30598"
 msgid "Info"
@@ -778,15 +778,15 @@ msgstr "Tiedot"
 
 msgctxt "#30599"
 msgid "Debug"
-msgstr ""
+msgstr "Vianselvitys"
 
 msgctxt "#30600"
 msgid "Debug+"
-msgstr ""
+msgstr "Vianselvitys+"
 
 msgctxt "#30601"
 msgid "Transcoder"
-msgstr ""
+msgstr "Transkooderi"
 
 msgctxt "#30602"
 msgid "Name"
@@ -794,15 +794,15 @@ msgstr "Nimi"
 
 msgctxt "#30603"
 msgid "Disable 'All Episodes'"
-msgstr ""
+msgstr "Poista \"Kaikki jaksot\" käytöstä"
 
 msgctxt "#30604"
 msgid "Enable Kodi view cache"
-msgstr ""
+msgstr "Käytä Kodin näkymävälimuistia"
 
 msgctxt "#30605"
 msgid "Manage myPlex"
-msgstr "Hallitse myPlex"
+msgstr "Hallitse myPlex-palvelua"
 
 msgctxt "#30606"
 msgid "Prefer Season artwork"
@@ -822,19 +822,19 @@ msgstr ""
 
 msgctxt "#30610"
 msgid "Use HTTPS"
-msgstr "Käytä HTTPS"
+msgstr "Käytä HTTPS-protokollaa"
 
 msgctxt "#30611"
 msgid "Transcode > 1080p"
-msgstr ""
+msgstr "Transkoodaa 1080p ja suuremmat resoluutiot"
 
 msgctxt "#30612"
 msgid "Transcode HEVC"
-msgstr ""
+msgstr "Transkoodaa HEVC-muoto"
 
 msgctxt "#30613"
 msgid "MAC Address"
-msgstr "MAC osoite"
+msgstr "MAC-osoite"
 
 msgctxt "#30614"
 msgid "Universal"
@@ -846,11 +846,11 @@ msgstr "Perinteinen"
 
 msgctxt "#30616"
 msgid "Refresh library section"
-msgstr ""
+msgstr "Päivitä kirjaston osio"
 
 msgctxt "#30617"
 msgid "Username:"
-msgstr "Käyttäjänimi:"
+msgstr "Käyttäjätunnus:"
 
 msgctxt "#30618"
 msgid "Password:"
@@ -870,27 +870,27 @@ msgstr "Manuaalinen"
 
 msgctxt "#30622"
 msgid "Use PIN"
-msgstr "Käytä PIN"
+msgstr "Käytä PIN-koodia"
 
 msgctxt "#30623"
 msgid "Done"
-msgstr "Tehty"
+msgstr "Valmis"
 
 msgctxt "#30624"
 msgid "Unable to sign in"
-msgstr "Kirjautuminen epäonnistui"
+msgstr "Kirjautuminen ei onnistu"
 
 msgctxt "#30625"
 msgid "From your computer, go to %s and enter the code below"
-msgstr "Tietokoneellasi, mene %s ja syötä yllä oleva koodi"
+msgstr "Avaa tietokonneellasi osoite %s ja syötä yllä oleva koodi"
 
 msgctxt "#30626"
 msgid "Successfully signed in"
-msgstr "Onnistuneesti sisäänkirjauduttu"
+msgstr "Kirjautuminen onnistui"
 
 msgctxt "#30627"
 msgid "Sign in not successful"
-msgstr "Kirjautuminen ei onnistunut"
+msgstr "Kirjautuminen epäonnistui"
 
 msgctxt "#30628"
 msgid "Email:"
@@ -902,7 +902,7 @@ msgstr ""
 
 msgctxt "#30630"
 msgid "Joined:"
-msgstr "Liitytty:"
+msgstr "Liittynyt:"
 
 msgctxt "#30631"
 msgid "Exit"
@@ -912,7 +912,7 @@ msgstr "Poistu"
 #  30633
 msgctxt "#30634"
 msgid "Enter your myPlex details below"
-msgstr "Syötä myPlex tietosi alle"
+msgstr "Syötä alle myPlex-tietosi"
 
 #  30635
 msgctxt "#30636"
@@ -921,7 +921,7 @@ msgstr "Tuntematon"
 
 msgctxt "#30637"
 msgid "myPlex Login"
-msgstr "myPlex kirjautuminen"
+msgstr "myPlex-kirjautuminen"
 
 msgctxt "#30638"
 msgid "Enter search term"
@@ -949,7 +949,7 @@ msgstr "Etä"
 
 msgctxt "#30644"
 msgid "Nearby"
-msgstr "Lähellä"
+msgstr "Lähistöllä"
 
 msgctxt "#30645"
 msgid "SSL"
@@ -961,7 +961,7 @@ msgstr "Ei turvallinen"
 
 msgctxt "#30647"
 msgid "Certificate Verification"
-msgstr "Sertifikaatin tarkistus"
+msgstr "Varmenteen vahvistus"
 
 msgctxt "#30648"
 msgid "Message"
@@ -997,11 +997,11 @@ msgstr ""
 
 msgctxt "#30656"
 msgid "Finished"
-msgstr "Lopetettu"
+msgstr "Valmis"
 
 msgctxt "#30657"
 msgid "Found servers:"
-msgstr "Löytyneet palvelimet:"
+msgstr "Löydetyt palvelimet:"
 
 msgctxt "#30658"
 msgid "No servers found"
@@ -1017,7 +1017,7 @@ msgstr "Laitteen nimi"
 
 msgctxt "#30661"
 msgid "Cache"
-msgstr ""
+msgstr "Välimuisti"
 
 msgctxt "#30662"
 msgid "Server Cache TTL (minutes)"
@@ -1041,7 +1041,7 @@ msgstr "Musiikki"
 
 msgctxt "#30667"
 msgid "TV Shows"
-msgstr "TV-sarjat"
+msgstr "Sarjat"
 
 msgctxt "#30668"
 msgid "Photos"
@@ -1061,11 +1061,11 @@ msgstr "Oletus"
 
 msgctxt "#30672"
 msgid "Go to %s"
-msgstr "Mene %s"
+msgstr "Avaa %s"
 
 msgctxt "#30673"
 msgid "Delete %s from the %s playlist?"
-msgstr "Poista %s %s:n soittolistalta?"
+msgstr "Poistetaanko \"%s\" toistolistalta \"%s\"?"
 
 msgctxt "#30674"
 msgid "Confirm playlist item delete?"
@@ -1073,35 +1073,35 @@ msgstr ""
 
 msgctxt "#30675"
 msgid "Delete from playlist"
-msgstr "Poista soittolistalta"
+msgstr "Poista toistolistalta"
 
 msgctxt "#30676"
 msgid "Select playlist"
-msgstr "Valitse soittolista"
+msgstr "Valitse toistolista"
 
 msgctxt "#30677"
 msgid "Add to playlist"
-msgstr "Lisää soittolistalle"
+msgstr "Lisää toistolistalle"
 
 msgctxt "#30678"
 msgid "Added %s to the %s playlist"
-msgstr "Lisätty %s %s soittolistalle"
+msgstr "\"%s\" lisättiin toistolistalle \"%s\""
 
 msgctxt "#30679"
 msgid "Failed to add %s to the %s playlist"
-msgstr "%s lisääminen %s soittolistalle epäonnistui"
+msgstr "\"%s\" lisäys toistolistalle \"%s\" epäonnistui"
 
 msgctxt "#30680"
 msgid "%s is already in the %s playlist"
-msgstr "%s on jo %s soittolistalla"
+msgstr "\"%s\" on jo toistolistalla \"%s\""
 
 msgctxt "#30681"
 msgid "%s has been removed the %s playlist"
-msgstr "%s poistettu %s soittolistalta"
+msgstr "\"%s\" poistettiin toistolistalta \"%s\""
 
 msgctxt "#30682"
 msgid "Unable to remove %s from the %s playlist"
-msgstr "%s poistaminen %s soittolistalta ei onnistu"
+msgstr "\"%s\" poisto toistolistalta \"%s\" ei onnistu"
 
 msgctxt "#30683"
 msgid "Show the 'Delete' context menu"
@@ -1109,7 +1109,7 @@ msgstr ""
 
 msgctxt "#30684"
 msgid "Up Next"
-msgstr "Seuraava ylöspäin"
+msgstr "Seuraavaksi"
 
 msgctxt "#30685"
 msgid "Enable Up Next"
@@ -1137,7 +1137,7 @@ msgstr ""
 
 msgctxt "#30691"
 msgid "Use episode thumbnails"
-msgstr ""
+msgstr "Käytä jaksojen pienoiskuvia"
 
 msgctxt "#30692"
 msgid "Widgets"
@@ -1169,19 +1169,19 @@ msgstr ""
 
 msgctxt "#30699"
 msgid "Recently Released Movies"
-msgstr "Lähiaikoina julkaistut elokuvat"
+msgstr "Hiljattain julkaistut elokuvat"
 
 msgctxt "#30700"
 msgid "Recently Aired TV Shows"
-msgstr "Lähiaikoinan lähetetyt TV-ohjelmat"
+msgstr "Hiljattain esitetyt sarjat"
 
 msgctxt "#30701"
 msgid "Recently Added Movies"
-msgstr "Lähiaikoina lisätyt elokuvat"
+msgstr "Viimeksi lisätyt elokuvat"
 
 msgctxt "#30702"
 msgid "Recently Added TV Shows"
-msgstr "Lähiaikoina lisätyt TV-ohjelmat"
+msgstr "Viimeksi lisätyt sarjat"
 
 msgctxt "#30703"
 msgid "Data Cache"
@@ -1205,7 +1205,7 @@ msgstr ""
 
 msgctxt "#30708"
 msgid "Enabled"
-msgstr "Päällä"
+msgstr "Käytössä"
 
 msgctxt "#30709"
 msgid "Port"
@@ -1213,7 +1213,7 @@ msgstr "Portti"
 
 msgctxt "#30710"
 msgid "Kodi's Web Server Settings"
-msgstr "Kodi web palvelimen asetukset"
+msgstr "Kodi-verkkopalvelimen asetukset"
 
 msgctxt "#30711"
 msgid "[COLOR=red]EXPERIMENTAL[/COLOR] - This feature is experimental[CR]Any changes to these settings will require a restart to take effect"
@@ -1221,7 +1221,7 @@ msgstr ""
 
 msgctxt "#30712"
 msgid "Username"
-msgstr "Käyttäjänimi"
+msgstr "Käyttäjätunnus"
 
 msgctxt "#30713"
 msgid "Password"
@@ -1253,7 +1253,7 @@ msgstr ""
 
 msgctxt "#30720"
 msgid "Metadata"
-msgstr "Metatieto"
+msgstr "Metatiedot"
 
 msgctxt "#30721"
 msgid "Transcoding"
@@ -1261,23 +1261,23 @@ msgstr ""
 
 msgctxt "#30722"
 msgid "Create a playlist"
-msgstr "Luo soittolista"
+msgstr "Luo toistolista"
 
 msgctxt "#30723"
 msgid "Enter a playlist title"
-msgstr "Syötä soittolistan otsikko"
+msgstr "Syötä toistolistan nimi"
 
 msgctxt "#30724"
 msgid "Delete playlist"
-msgstr "Poista soittolista"
+msgstr "Poista toistolista"
 
 msgctxt "#30725"
 msgid "Confirm playlist delete?"
-msgstr "Vahvista soittolistan poisto?"
+msgstr "Vahvistetaanko toistolistan poisto?"
 
 msgctxt "#30726"
 msgid "Are you sure you want to delete this playlist?"
-msgstr "Oletko varma että haluat poistaa tämän soittolistan?"
+msgstr "Haluatko varmasti poistaa toistolistan?"
 
 msgctxt "#30727"
 msgid "Notification encoding"
@@ -1285,7 +1285,7 @@ msgstr ""
 
 msgctxt "#30728"
 msgid "Episode sort method"
-msgstr "Jakson lajittelutapa"
+msgstr "Jaksojen lajittelutapa"
 
 msgctxt "#30729"
 msgid "Plex"
@@ -1309,7 +1309,7 @@ msgstr "Yhteyskokeilun tulokset"
 
 msgctxt "#30734"
 msgid "Default to forced subtitles"
-msgstr "Oletuksena pakotettu tekstitys"
+msgstr "Käytä oletusarvoisesti forced-tekstityksiä"
 
 msgctxt "#30735"
 msgid "Mixed content type"
@@ -1345,7 +1345,7 @@ msgstr ""
 
 msgctxt "#30743"
 msgid "All Artists"
-msgstr "Kaikki esiintyjät"
+msgstr "Kaikki esittäjät"
 
 msgctxt "#30744"
 msgid "All Photos"
@@ -1353,7 +1353,7 @@ msgstr "Kaikki kuvat"
 
 msgctxt "#30745"
 msgid "All Shows"
-msgstr "Kaikki ohjelmat"
+msgstr "Kaikki sarjat"
 
 msgctxt "#30746"
 msgid "All Movies"
@@ -1361,7 +1361,7 @@ msgstr "Kaikki elokuvat"
 
 msgctxt "#30747"
 msgid "Preferred lyrics format"
-msgstr ""
+msgstr "Ensisijainen sanoitusmuoto"
 
 msgctxt "#30748"
 msgid "Lyrics"
@@ -1393,7 +1393,7 @@ msgstr ""
 
 msgctxt "#30755"
 msgid "Show skip intro dialog"
-msgstr ""
+msgstr "Näytä intron ohitusvalinta"
 
 msgctxt "#30756"
 msgid "All %s"
@@ -1445,11 +1445,11 @@ msgstr "Sekoitettu"
 
 msgctxt "#30768"
 msgid "Play"
-msgstr "Soita"
+msgstr "Toista"
 
 msgctxt "#30769"
 msgid "Item Count"
-msgstr "Lukumäärä"
+msgstr "Kohteiden määrä"
 
 msgctxt "#30770"
 msgid "All Servers"
@@ -1469,11 +1469,11 @@ msgstr "Ei mitään"
 
 msgctxt "#30774"
 msgid "Generating Playlist"
-msgstr "Luodaan soittolistaa"
+msgstr "Luodaan toistolistaa"
 
 msgctxt "#30775"
 msgid "This may take a while..."
-msgstr "Tämä voi viedä hetken..."
+msgstr "Tämä voi kestää jonkin aikaa..."
 
 msgctxt "#30776"
 msgid "Retrieving server list..."
@@ -1497,7 +1497,7 @@ msgstr ""
 
 msgctxt "#30781"
 msgid "Adding %s to playlist..."
-msgstr "Lisätään %s soittolistaan..."
+msgstr "Lisätään %s toistolistalle..."
 
 msgctxt "#30782"
 msgid "Completed."
@@ -1557,7 +1557,7 @@ msgstr ""
 
 msgctxt "#30796"
 msgid "Kodi Library"
-msgstr "Kodi kirjasto"
+msgstr "Kodi-kirjasto"
 
 msgctxt "#30797"
 msgid "Select sections to include in library scans"
@@ -1573,8 +1573,8 @@ msgstr ""
 
 msgctxt "#30800"
 msgid "Continue Watching"
-msgstr "Jatka katsomista"
+msgstr "Jatka katselua"
 
 msgctxt "#30801"
 msgid "Detect Servers"
-msgstr "Etsi palvelimet"
+msgstr "Havaitse palvelimet"

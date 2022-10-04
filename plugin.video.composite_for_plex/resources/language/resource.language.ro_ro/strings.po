@@ -5,16 +5,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Composite\n"
-"Report-Msgid-Bugs-To: https://github.com/anxdpanic/plugin.video.composite_for_plex/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
-"PO-Revision-Date: 2020-01-18 21:15+0500\n"
-"Last-Translator: GITHUB USERNAME\n"
-"Language-Team: Romanian\n"
-"Language: ro_RO\n"
+"PO-Revision-Date: 2022-04-07 23:13+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Romanian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-composite_for_plex/ro_ro/>\n"
+"Language: ro_ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1))\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Description"
 msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
@@ -50,7 +51,7 @@ msgstr ""
 
 msgctxt "#30006"
 msgid "Sign Out"
-msgstr ""
+msgstr "Deconectare"
 
 msgctxt "#30007"
 msgid "To sign out you must be logged in as an admin user. Switch user and try again"
@@ -347,7 +348,7 @@ msgstr ""
 
 msgctxt "#30081"
 msgid "Sign In"
-msgstr ""
+msgstr "Conectare"
 
 msgctxt "#30082"
 msgid "Display Servers"
@@ -359,11 +360,11 @@ msgstr ""
 
 msgctxt "#30084"
 msgid "Channels"
-msgstr ""
+msgstr "Canale"
 
 msgctxt "#30085"
 msgid "Playlists"
-msgstr ""
+msgstr "Liste"
 
 msgctxt "#30086"
 msgid "Play Transcoded"
@@ -456,7 +457,7 @@ msgstr ""
 
 msgctxt "#30517"
 msgid "Playback"
-msgstr ""
+msgstr "Redare"
 
 msgctxt "#30518"
 msgid "Transcoding"
@@ -476,7 +477,7 @@ msgstr ""
 
 msgctxt "#30522"
 msgid "Advanced"
-msgstr ""
+msgstr "Avansat"
 
 msgctxt "#30523"
 msgid "Use Wake On LAN"
@@ -548,7 +549,7 @@ msgstr ""
 
 msgctxt "#30540"
 msgid "Quality"
-msgstr ""
+msgstr "Calitate"
 
 msgctxt "#30541"
 msgid "Proxy Port"
@@ -777,7 +778,7 @@ msgstr ""
 
 msgctxt "#30599"
 msgid "Debug"
-msgstr ""
+msgstr "Depanare"
 
 msgctxt "#30600"
 msgid "Debug+"
@@ -976,7 +977,7 @@ msgstr ""
 
 msgctxt "#30651"
 msgid "Please wait..."
-msgstr ""
+msgstr "Vă rugăm așteptați..."
 
 msgctxt "#30652"
 msgid "myPlex discovery..."
@@ -1016,7 +1017,7 @@ msgstr ""
 
 msgctxt "#30661"
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 msgctxt "#30662"
 msgid "Server Cache TTL (minutes)"
@@ -1056,11 +1057,11 @@ msgstr ""
 
 msgctxt "#30671"
 msgid "Default"
-msgstr ""
+msgstr "Implicit"
 
 msgctxt "#30672"
 msgid "Go to %s"
-msgstr ""
+msgstr "Mergi la %s"
 
 msgctxt "#30673"
 msgid "Delete %s from the %s playlist?"
@@ -1076,11 +1077,11 @@ msgstr ""
 
 msgctxt "#30676"
 msgid "Select playlist"
-msgstr ""
+msgstr "Selectați listă de redare"
 
 msgctxt "#30677"
 msgid "Add to playlist"
-msgstr ""
+msgstr "Adaugă la listă"
 
 msgctxt "#30678"
 msgid "Added %s to the %s playlist"
@@ -1108,7 +1109,7 @@ msgstr ""
 
 msgctxt "#30684"
 msgid "Up Next"
-msgstr ""
+msgstr "Urmează"
 
 msgctxt "#30685"
 msgid "Enable Up Next"
@@ -1220,15 +1221,15 @@ msgstr ""
 
 msgctxt "#30712"
 msgid "Username"
-msgstr ""
+msgstr "Nume utilizator"
 
 msgctxt "#30713"
 msgid "Password"
-msgstr ""
+msgstr "Parolă"
 
 msgctxt "#30714"
 msgid "Main Menu"
-msgstr ""
+msgstr "Meniu principal"
 
 msgctxt "#30715"
 msgid "Show [B]myPlex Queue[/B] menu"
@@ -1268,7 +1269,7 @@ msgstr ""
 
 msgctxt "#30724"
 msgid "Delete playlist"
-msgstr ""
+msgstr "Șterge listă"
 
 msgctxt "#30725"
 msgid "Confirm playlist delete?"
@@ -1316,7 +1317,7 @@ msgstr ""
 
 msgctxt "#30736"
 msgid "Default"
-msgstr ""
+msgstr "Implicit"
 
 msgctxt "#30737"
 msgid "Majority"
@@ -1444,7 +1445,7 @@ msgstr ""
 
 msgctxt "#30768"
 msgid "Play"
-msgstr ""
+msgstr "Redă"
 
 msgctxt "#30769"
 msgid "Item Count"
@@ -1456,7 +1457,7 @@ msgstr ""
 
 msgctxt "#30771"
 msgid "Shuffle"
-msgstr ""
+msgstr "Amestecă"
 
 msgctxt "#30772"
 msgid "Source"
@@ -1464,7 +1465,7 @@ msgstr ""
 
 msgctxt "#30773"
 msgid "None"
-msgstr ""
+msgstr "Nici una"
 
 msgctxt "#30774"
 msgid "Generating Playlist"

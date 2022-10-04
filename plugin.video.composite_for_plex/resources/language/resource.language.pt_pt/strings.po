@@ -5,16 +5,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Composite\n"
-"Report-Msgid-Bugs-To: https://github.com/anxdpanic/plugin.video.composite_for_plex/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
-"PO-Revision-Date: 2020-01-18 21:15+0500\n"
-"Last-Translator: GITHUB USERNAME\n"
-"Language-Team: Portuguese - Portugal\n"
-"Language: pt_PT\n"
+"PO-Revision-Date: 2022-04-07 23:13+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Portuguese (Portugal) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-composite_for_plex/pt_pt/>\n"
+"Language: pt_pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Description"
 msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
@@ -50,7 +51,7 @@ msgstr ""
 
 msgctxt "#30006"
 msgid "Sign Out"
-msgstr ""
+msgstr "Sair"
 
 msgctxt "#30007"
 msgid "To sign out you must be logged in as an admin user. Switch user and try again"
@@ -75,7 +76,7 @@ msgstr ""
 
 msgctxt "#30013"
 msgid "All"
-msgstr ""
+msgstr "Todas"
 
 msgctxt "#30014"
 msgid "Unwatched"
@@ -135,7 +136,7 @@ msgstr ""
 
 msgctxt "#30028"
 msgid "All"
-msgstr ""
+msgstr "Todas"
 
 msgctxt "#30029"
 msgid "By Album"
@@ -175,7 +176,7 @@ msgstr ""
 
 msgctxt "#30038"
 msgid "All"
-msgstr ""
+msgstr "Todas"
 
 msgctxt "#30039"
 msgid "Unwatched"
@@ -251,7 +252,7 @@ msgstr ""
 
 msgctxt "#30057"
 msgid "All"
-msgstr ""
+msgstr "Todas"
 
 msgctxt "#30058"
 msgid "By Year"
@@ -327,7 +328,7 @@ msgstr ""
 
 msgctxt "#30076"
 msgid "Switch User"
-msgstr ""
+msgstr "Mudar de Utilizador"
 
 msgctxt "#30077"
 msgid "Enter PIN"
@@ -347,7 +348,7 @@ msgstr ""
 
 msgctxt "#30081"
 msgid "Sign In"
-msgstr ""
+msgstr "Entrar"
 
 msgctxt "#30082"
 msgid "Display Servers"
@@ -359,11 +360,11 @@ msgstr ""
 
 msgctxt "#30084"
 msgid "Channels"
-msgstr ""
+msgstr "Canais"
 
 msgctxt "#30085"
 msgid "Playlists"
-msgstr ""
+msgstr "Listas de reprodução"
 
 msgctxt "#30086"
 msgid "Play Transcoded"
@@ -452,11 +453,11 @@ msgstr ""
 
 msgctxt "#30516"
 msgid "Server"
-msgstr ""
+msgstr "Servidor"
 
 msgctxt "#30517"
 msgid "Playback"
-msgstr ""
+msgstr "Reprodução"
 
 msgctxt "#30518"
 msgid "Transcoding"
@@ -476,7 +477,7 @@ msgstr ""
 
 msgctxt "#30522"
 msgid "Advanced"
-msgstr ""
+msgstr "Avançado"
 
 msgctxt "#30523"
 msgid "Use Wake On LAN"
@@ -548,7 +549,7 @@ msgstr ""
 
 msgctxt "#30540"
 msgid "Quality"
-msgstr ""
+msgstr "Qualidade"
 
 msgctxt "#30541"
 msgid "Proxy Port"
@@ -777,7 +778,7 @@ msgstr ""
 
 msgctxt "#30599"
 msgid "Debug"
-msgstr ""
+msgstr "Depuração"
 
 msgctxt "#30600"
 msgid "Debug+"
@@ -789,7 +790,7 @@ msgstr ""
 
 msgctxt "#30602"
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 msgctxt "#30603"
 msgid "Disable 'All Episodes'"
@@ -857,7 +858,7 @@ msgstr ""
 
 msgctxt "#30619"
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 msgctxt "#30620"
 msgid "Submit"
@@ -976,7 +977,7 @@ msgstr ""
 
 msgctxt "#30651"
 msgid "Please wait..."
-msgstr ""
+msgstr "Por favor aguarde..."
 
 msgctxt "#30652"
 msgid "myPlex discovery..."
@@ -1016,7 +1017,7 @@ msgstr ""
 
 msgctxt "#30661"
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 msgctxt "#30662"
 msgid "Server Cache TTL (minutes)"
@@ -1056,11 +1057,11 @@ msgstr ""
 
 msgctxt "#30671"
 msgid "Default"
-msgstr ""
+msgstr "Padrão"
 
 msgctxt "#30672"
 msgid "Go to %s"
-msgstr ""
+msgstr "Ir para %s"
 
 msgctxt "#30673"
 msgid "Delete %s from the %s playlist?"
@@ -1076,11 +1077,11 @@ msgstr ""
 
 msgctxt "#30676"
 msgid "Select playlist"
-msgstr ""
+msgstr "Selecionar Lista de Reprodução"
 
 msgctxt "#30677"
 msgid "Add to playlist"
-msgstr ""
+msgstr "Adicionou à lista de reprodução"
 
 msgctxt "#30678"
 msgid "Added %s to the %s playlist"
@@ -1108,7 +1109,7 @@ msgstr ""
 
 msgctxt "#30684"
 msgid "Up Next"
-msgstr ""
+msgstr "A seguir"
 
 msgctxt "#30685"
 msgid "Enable Up Next"
@@ -1204,11 +1205,11 @@ msgstr ""
 
 msgctxt "#30708"
 msgid "Enabled"
-msgstr ""
+msgstr "Ativo"
 
 msgctxt "#30709"
 msgid "Port"
-msgstr ""
+msgstr "Porta"
 
 msgctxt "#30710"
 msgid "Kodi's Web Server Settings"
@@ -1220,15 +1221,15 @@ msgstr ""
 
 msgctxt "#30712"
 msgid "Username"
-msgstr ""
+msgstr "Utilizador"
 
 msgctxt "#30713"
 msgid "Password"
-msgstr ""
+msgstr "Palavra-Passe"
 
 msgctxt "#30714"
 msgid "Main Menu"
-msgstr ""
+msgstr "Menú principal"
 
 msgctxt "#30715"
 msgid "Show [B]myPlex Queue[/B] menu"
@@ -1268,7 +1269,7 @@ msgstr ""
 
 msgctxt "#30724"
 msgid "Delete playlist"
-msgstr ""
+msgstr "Removeu lista de reprodução"
 
 msgctxt "#30725"
 msgid "Confirm playlist delete?"
@@ -1316,7 +1317,7 @@ msgstr ""
 
 msgctxt "#30736"
 msgid "Default"
-msgstr ""
+msgstr "Padrão"
 
 msgctxt "#30737"
 msgid "Majority"
@@ -1444,7 +1445,7 @@ msgstr ""
 
 msgctxt "#30768"
 msgid "Play"
-msgstr ""
+msgstr "Reproduzir"
 
 msgctxt "#30769"
 msgid "Item Count"
@@ -1456,7 +1457,7 @@ msgstr ""
 
 msgctxt "#30771"
 msgid "Shuffle"
-msgstr ""
+msgstr "Aleatório"
 
 msgctxt "#30772"
 msgid "Source"
@@ -1464,7 +1465,7 @@ msgstr ""
 
 msgctxt "#30773"
 msgid "None"
-msgstr ""
+msgstr "Nenhum"
 
 msgctxt "#30774"
 msgid "Generating Playlist"

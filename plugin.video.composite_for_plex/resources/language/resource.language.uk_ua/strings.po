@@ -5,16 +5,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Composite\n"
-"Report-Msgid-Bugs-To: https://github.com/anxdpanic/plugin.video.composite_for_plex/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
-"PO-Revision-Date: 2020-01-18 21:15+0500\n"
-"Last-Translator: Dukobpa3\n"
-"Language-Team: Ukrainian\n"
-"Language: uk_UA\n"
+"PO-Revision-Date: 2022-05-15 15:14+0000\n"
+"Last-Translator: A. <artem+weblate@molotov.work>\n"
+"Language-Team: Ukrainian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-composite_for_plex/uk_ua/>\n"
+"Language: uk_ua\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.12.2\n"
 
 msgctxt "Addon Description"
 msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
@@ -50,7 +51,7 @@ msgstr ""
 
 msgctxt "#30006"
 msgid "Sign Out"
-msgstr ""
+msgstr "Вийти"
 
 msgctxt "#30007"
 msgid "To sign out you must be logged in as an admin user. Switch user and try again"
@@ -347,7 +348,7 @@ msgstr ""
 
 msgctxt "#30081"
 msgid "Sign In"
-msgstr ""
+msgstr "Авторизація"
 
 msgctxt "#30082"
 msgid "Display Servers"
@@ -359,11 +360,11 @@ msgstr ""
 
 msgctxt "#30084"
 msgid "Channels"
-msgstr ""
+msgstr "Канали"
 
 msgctxt "#30085"
 msgid "Playlists"
-msgstr ""
+msgstr "Плейлисти"
 
 msgctxt "#30086"
 msgid "Play Transcoded"
@@ -408,11 +409,11 @@ msgstr "Розташування сервера"
 
 msgctxt "#30505"
 msgid "PMS Username: "
-msgstr "PMS Користувач:"
+msgstr "PMS Користувач: "
 
 msgctxt "#30506"
 msgid "PMS Password: "
-msgstr "PMS Пароль:"
+msgstr "PMS Пароль: "
 
 msgctxt "#30507"
 msgid "Always Transcode"
@@ -420,7 +421,7 @@ msgstr "Завжди транскодувати"
 
 msgctxt "#30508"
 msgid "Transcode format "
-msgstr "Формат транскодування"
+msgstr "Формат транскодування "
 
 msgctxt "#30509"
 msgid "Recent & OnDeck items"
@@ -516,7 +517,7 @@ msgstr "Використовувати налаштування локаліза
 
 msgctxt "#30532"
 msgid "Manual"
-msgstr "Уручну"
+msgstr "Вручну"
 
 msgctxt "#30533"
 msgid "Always"
@@ -729,7 +730,7 @@ msgstr "Фільтр контенту"
 
 msgctxt "#30587"
 msgid "Map unknown content as:"
-msgstr "Відмічати невідомий контент як"
+msgstr "Позначати невідомий вміст як:"
 
 msgctxt "#30588"
 msgid "RA Library filter"
@@ -976,7 +977,7 @@ msgstr ""
 
 msgctxt "#30651"
 msgid "Please wait..."
-msgstr ""
+msgstr "Будь ласка, почекайте..."
 
 msgctxt "#30652"
 msgid "myPlex discovery..."
@@ -1056,11 +1057,11 @@ msgstr ""
 
 msgctxt "#30671"
 msgid "Default"
-msgstr ""
+msgstr "Звичайний порядок"
 
 msgctxt "#30672"
 msgid "Go to %s"
-msgstr ""
+msgstr "Перейти до %s"
 
 msgctxt "#30673"
 msgid "Delete %s from the %s playlist?"
@@ -1076,7 +1077,7 @@ msgstr ""
 
 msgctxt "#30676"
 msgid "Select playlist"
-msgstr ""
+msgstr "Вибрати плейліст"
 
 msgctxt "#30677"
 msgid "Add to playlist"
@@ -1220,11 +1221,11 @@ msgstr ""
 
 msgctxt "#30712"
 msgid "Username"
-msgstr ""
+msgstr "Ім'я користувача"
 
 msgctxt "#30713"
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 msgctxt "#30714"
 msgid "Main Menu"
@@ -1316,7 +1317,7 @@ msgstr ""
 
 msgctxt "#30736"
 msgid "Default"
-msgstr ""
+msgstr "Звичайний порядок"
 
 msgctxt "#30737"
 msgid "Majority"
@@ -1456,7 +1457,7 @@ msgstr ""
 
 msgctxt "#30771"
 msgid "Shuffle"
-msgstr ""
+msgstr "Випадковий порядок"
 
 msgctxt "#30772"
 msgid "Source"

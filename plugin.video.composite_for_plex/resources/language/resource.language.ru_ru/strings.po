@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: Composite\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
-"PO-Revision-Date: 2021-09-01 17:29+0000\n"
-"Last-Translator: Dmitry Petrov <dimakrm361@gmail.com>\n"
+"PO-Revision-Date: 2022-03-01 18:13+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Russian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-composite_for_plex/ru_ru/>\n"
 "Language: ru_ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.11\n"
 
 msgctxt "Addon Description"
 msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
@@ -738,7 +738,7 @@ msgstr "RA-Фильтр библиотеки"
 
 msgctxt "#30589"
 msgid "Kids"
-msgstr ""
+msgstr "Дети"
 
 msgctxt "#30590"
 msgid "Teens"
@@ -858,7 +858,7 @@ msgstr ""
 
 msgctxt "#30619"
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
 msgctxt "#30620"
 msgid "Submit"
@@ -917,7 +917,7 @@ msgstr ""
 #  30635
 msgctxt "#30636"
 msgid "Unknown"
-msgstr ""
+msgstr "Неизвестно"
 
 msgctxt "#30637"
 msgid "myPlex Login"
@@ -977,7 +977,7 @@ msgstr ""
 
 msgctxt "#30651"
 msgid "Please wait..."
-msgstr ""
+msgstr "Пожалуйста, подождите..."
 
 msgctxt "#30652"
 msgid "myPlex discovery..."
@@ -1017,7 +1017,7 @@ msgstr ""
 
 msgctxt "#30661"
 msgid "Cache"
-msgstr ""
+msgstr "Кеш"
 
 msgctxt "#30662"
 msgid "Server Cache TTL (minutes)"
@@ -1033,7 +1033,7 @@ msgstr ""
 
 msgctxt "#30665"
 msgid "Movies"
-msgstr ""
+msgstr "Фильмы"
 
 msgctxt "#30666"
 msgid "Music"
@@ -1041,7 +1041,7 @@ msgstr ""
 
 msgctxt "#30667"
 msgid "TV Shows"
-msgstr ""
+msgstr "ТВ передачи"
 
 msgctxt "#30668"
 msgid "Photos"
@@ -1057,11 +1057,11 @@ msgstr ""
 
 msgctxt "#30671"
 msgid "Default"
-msgstr ""
+msgstr "в обычном порядке"
 
 msgctxt "#30672"
 msgid "Go to %s"
-msgstr ""
+msgstr "Перейти в %s"
 
 msgctxt "#30673"
 msgid "Delete %s from the %s playlist?"
@@ -1077,11 +1077,11 @@ msgstr ""
 
 msgctxt "#30676"
 msgid "Select playlist"
-msgstr ""
+msgstr "Выбрать плейлист"
 
 msgctxt "#30677"
 msgid "Add to playlist"
-msgstr ""
+msgstr "Добавить в плейлист"
 
 msgctxt "#30678"
 msgid "Added %s to the %s playlist"
@@ -1109,7 +1109,7 @@ msgstr ""
 
 msgctxt "#30684"
 msgid "Up Next"
-msgstr ""
+msgstr "Следующее видео"
 
 msgctxt "#30685"
 msgid "Enable Up Next"
@@ -1205,11 +1205,11 @@ msgstr ""
 
 msgctxt "#30708"
 msgid "Enabled"
-msgstr ""
+msgstr "Включить"
 
 msgctxt "#30709"
 msgid "Port"
-msgstr ""
+msgstr "Порт"
 
 msgctxt "#30710"
 msgid "Kodi's Web Server Settings"
@@ -1221,15 +1221,15 @@ msgstr ""
 
 msgctxt "#30712"
 msgid "Username"
-msgstr ""
+msgstr "Имя пользователя"
 
 msgctxt "#30713"
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 msgctxt "#30714"
 msgid "Main Menu"
-msgstr ""
+msgstr "Главное меню"
 
 msgctxt "#30715"
 msgid "Show [B]myPlex Queue[/B] menu"
@@ -1269,7 +1269,7 @@ msgstr ""
 
 msgctxt "#30724"
 msgid "Delete playlist"
-msgstr ""
+msgstr "Удалить плейлист"
 
 msgctxt "#30725"
 msgid "Confirm playlist delete?"
@@ -1317,7 +1317,7 @@ msgstr ""
 
 msgctxt "#30736"
 msgid "Default"
-msgstr ""
+msgstr "в обычном порядке"
 
 msgctxt "#30737"
 msgid "Majority"
@@ -1445,7 +1445,7 @@ msgstr ""
 
 msgctxt "#30768"
 msgid "Play"
-msgstr ""
+msgstr "Воспроизвести"
 
 msgctxt "#30769"
 msgid "Item Count"
@@ -1457,15 +1457,15 @@ msgstr ""
 
 msgctxt "#30771"
 msgid "Shuffle"
-msgstr ""
+msgstr "в случайном порядке"
 
 msgctxt "#30772"
 msgid "Source"
-msgstr ""
+msgstr "Источник"
 
 msgctxt "#30773"
 msgid "None"
-msgstr ""
+msgstr "Нет"
 
 msgctxt "#30774"
 msgid "Generating Playlist"

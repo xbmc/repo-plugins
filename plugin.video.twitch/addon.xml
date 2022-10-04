@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.twitch" version="2.6.1" name="Twitch" provider-name="anxdpanic, A Talented Community">
+<addon id="plugin.video.twitch" version="2.6.2" name="Twitch" provider-name="anxdpanic, A Talented Community">
     <requires>
         <import addon="xbmc.python" version="2.20.0"/>
         <import addon="script.module.six" version="1.11.0"/>
@@ -16,9 +16,6 @@
             <fanart>fanart.jpg</fanart>
         </assets>
         <news>
-[fix] notify of expired or invalid tokens
-[fix] don't show toggle follow context menu unless user has the proper credentials
-[chg] move subscriber and turbo benefits to own settings category
 [lang] updated translations from Weblate
         </news>
         <platform>all</platform>
@@ -31,6 +28,7 @@
         <summary lang="en_GB">Twitch video plugin</summary>
         <summary lang="es_ES">Complemento de vídeo para Twitch</summary>
         <summary lang="es_MX">Plugin de video de Twitch</summary>
+        <summary lang="fi_FI">Twitch-videolisäosa</summary>
         <summary lang="fr_FR">Twitch video plugin</summary>
         <summary lang="ko_KR">트위치 비디오 플러그인</summary>
         <summary lang="nb_NO">Tillegg for Twitch</summary>
@@ -44,6 +42,7 @@
         <description lang="en_GB">Watch your favorite gaming streams!</description>
         <description lang="es_ES">¡Mira los streams de tus juegos favoritos!</description>
         <description lang="es_MX">¡Mira tus transmisiones de videojuegos favoritas!</description>
+        <description lang="fi_FI">Katsele suosikkisuoratoistojasi videopeleistä!</description>
         <description lang="fr_FR">Regardez les streams de vos jeux favoris !</description>
         <description lang="ko_KR">좋아하는 게임 스트림을 시청하세요!</description>
         <description lang="nb_NO">Se dine favorittstrømmere!</description>

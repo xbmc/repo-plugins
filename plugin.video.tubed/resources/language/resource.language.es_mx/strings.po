@@ -1056,3 +1056,11 @@ msgstr "Configuración"
 msgctxt "#30257"
 msgid "No entries found"
 msgstr "No se encontraron entradas"
+
+msgctxt "#30258"
+msgid "v3 Data API Client"
+msgstr ""
+
+msgctxt "#30259"
+msgid "YouTube-TV API Client"
+msgstr ""

@@ -1,15 +1,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STRINGS\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-03-27 01:19+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Hungarian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-tubed/hu_hu/>\n"
 "Language: hu_hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Summary"
 msgid "Watch your favorite YouTube content on Kodi"
@@ -33,39 +35,39 @@ msgstr ""
 
 msgctxt "#30002"
 msgid "Recommendations"
-msgstr ""
+msgstr "Ajánlott videók"
 
 msgctxt "#30003"
 msgid "Search"
-msgstr ""
+msgstr "Keresés"
 
 msgctxt "#30004"
 msgid "My Channel"
-msgstr ""
+msgstr "Csatornám"
 
 msgctxt "#30005"
 msgid "Liked Videos"
-msgstr ""
+msgstr "Kedvelt videók"
 
 msgctxt "#30006"
 msgid "Disliked Videos"
-msgstr ""
+msgstr "Nem kedvelt videók"
 
 msgctxt "#30007"
 msgid "Playlists"
-msgstr ""
+msgstr "Lejátszási listák"
 
 msgctxt "#30008"
 msgid "Channels"
-msgstr ""
+msgstr "Csatornák"
 
 msgctxt "#30009"
 msgid "Subscriptions"
-msgstr ""
+msgstr "Feliratkozások"
 
 msgctxt "#30010"
 msgid "Live"
-msgstr ""
+msgstr "Élő"
 
 msgctxt "#30011"
 msgid "Sign in with Google"
@@ -73,7 +75,7 @@ msgstr ""
 
 msgctxt "#30012"
 msgid "Sign Out"
-msgstr ""
+msgstr "Kijelentkezés"
 
 msgctxt "#30013"
 msgid "Manage Users"
@@ -81,7 +83,7 @@ msgstr ""
 
 msgctxt "#30014"
 msgid "New Search"
-msgstr ""
+msgstr "Új keresés"
 
 msgctxt "#30015"
 msgid "Enter your search term"
@@ -117,7 +119,7 @@ msgstr ""
 
 msgctxt "#30023"
 msgid "Uploads"
-msgstr ""
+msgstr "Feltöltések"
 
 msgctxt "#30024"
 msgid "You are about to sign out, are you sure?"
@@ -137,7 +139,7 @@ msgstr ""
 
 msgctxt "#30028"
 msgid "General"
-msgstr ""
+msgstr "Általános"
 
 msgctxt "#30029"
 msgid "Quality"
@@ -157,7 +159,7 @@ msgstr ""
 
 msgctxt "#30033"
 msgid "HDR"
-msgstr ""
+msgstr "HDR"
 
 msgctxt "#30034"
 msgid "Use the best matching HDR streams for videos"
@@ -165,27 +167,27 @@ msgstr ""
 
 msgctxt "#30035"
 msgid "Adaptive (MP4/H264)"
-msgstr ""
+msgstr "Adaptív (Változó MP4/H264)"
 
 msgctxt "#30036"
 msgid "Adaptive (WEBM/VP9)"
-msgstr ""
+msgstr "Adaptív (Változó WEBM/VP9)"
 
 msgctxt "#30037"
 msgid "240p"
-msgstr ""
+msgstr "240p"
 
 msgctxt "#30038"
 msgid "360p"
-msgstr ""
+msgstr "360p"
 
 msgctxt "#30039"
 msgid "480p"
-msgstr ""
+msgstr "480p"
 
 msgctxt "#30040"
 msgid "720p (HD)"
-msgstr ""
+msgstr "720p (HD)"
 
 msgctxt "#30041"
 msgid "1080p (FHD)"
@@ -209,7 +211,7 @@ msgstr ""
 
 msgctxt "#30046"
 msgid "Watch Later"
-msgstr ""
+msgstr "Megnézendő videók"
 
 msgctxt "#30047"
 msgid "Regional"
@@ -217,7 +219,7 @@ msgstr ""
 
 msgctxt "#30048"
 msgid "Language"
-msgstr ""
+msgstr "Nyelv"
 
 msgctxt "#30049"
 msgid "Your preferred YouTube UI language"
@@ -225,7 +227,7 @@ msgstr ""
 
 msgctxt "#30050"
 msgid "Region"
-msgstr ""
+msgstr "Ország"
 
 msgctxt "#30051"
 msgid "Your preferred content region"
@@ -241,7 +243,7 @@ msgstr ""
 
 msgctxt "#30054"
 msgid "Configure subtitles"
-msgstr ""
+msgstr "Feliratok beállítása"
 
 msgctxt "#30055"
 msgid "Configure your preferred subtitle language"
@@ -249,7 +251,7 @@ msgstr ""
 
 msgctxt "#30056"
 msgid "Subtitle language"
-msgstr ""
+msgstr "Felirat nyelve"
 
 msgctxt "#30057"
 msgid "Your preferred subtitle language"
@@ -261,23 +263,23 @@ msgstr ""
 
 msgctxt "#30059"
 msgid "%s with %s fallback"
-msgstr ""
+msgstr "%s - %s visszajelzés"
 
 msgctxt "#30060"
 msgid "No auto-generated"
-msgstr ""
+msgstr "Nincs automatikusan generált"
 
 msgctxt "#30061"
 msgid "None"
-msgstr ""
+msgstr "Nincs"
 
 msgctxt "#30062"
 msgid "Prompt"
-msgstr ""
+msgstr "Súgás"
 
 msgctxt "#30063"
 msgid "Subscribe"
-msgstr ""
+msgstr "Feliratkozás"
 
 msgctxt "#30064"
 msgid "Subscribed"
@@ -285,7 +287,7 @@ msgstr ""
 
 msgctxt "#30065"
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Leiratkozás"
 
 msgctxt "#30066"
 msgid "Unsubscribed"
@@ -301,7 +303,7 @@ msgstr ""
 
 msgctxt "#30069"
 msgid "Go to %s"
-msgstr ""
+msgstr "Ugrás ide: %s"
 
 msgctxt "#30070"
 msgid "Subscribed to %s"
@@ -317,11 +319,11 @@ msgstr ""
 
 msgctxt "#30073"
 msgid "I like this"
-msgstr ""
+msgstr "Ez tetszik nekem"
 
 msgctxt "#30074"
 msgid "I dislike this"
-msgstr ""
+msgstr "Ez nem tetszik nekem"
 
 msgctxt "#30075"
 msgid "Remove rating"
@@ -345,7 +347,7 @@ msgstr ""
 
 msgctxt "#30080"
 msgid "Rating removed"
-msgstr ""
+msgstr "Értékelés törölve"
 
 msgctxt "#30081"
 msgid "Rating removed from %s"
@@ -377,7 +379,7 @@ msgstr ""
 
 msgctxt "#30088"
 msgid "Removed from playlist"
-msgstr ""
+msgstr "Eltávolítva a lejátszási listáról"
 
 msgctxt "#30089"
 msgid "Removed %s from playlist"
@@ -445,11 +447,11 @@ msgstr ""
 
 msgctxt "#30105"
 msgid "Clear data cache"
-msgstr ""
+msgstr "Adat gyorsítótár kiürítése"
 
 msgctxt "#30106"
 msgid "Clear function cache"
-msgstr ""
+msgstr "A funkció gyorsítótárának törlése"
 
 msgctxt "#30107"
 msgid "Data cache was cleared"
@@ -481,7 +483,7 @@ msgstr ""
 
 msgctxt "#30114"
 msgid "Maintenance"
-msgstr ""
+msgstr "Karbantartás"
 
 msgctxt "#30115"
 msgid "How long until long term data cache expires in weeks"
@@ -541,7 +543,7 @@ msgstr ""
 
 msgctxt "#30129"
 msgid "Comments"
-msgstr ""
+msgstr "Hozzászólások"
 
 msgctxt "#30130"
 msgid "Comment"
@@ -553,11 +555,11 @@ msgstr ""
 
 msgctxt "#30132"
 msgid "Likes"
-msgstr ""
+msgstr "Kedvelések"
 
 msgctxt "#30133"
 msgid "Replies"
-msgstr ""
+msgstr "Válaszok"
 
 msgctxt "#30134"
 msgid "Comment has been edited"
@@ -609,7 +611,7 @@ msgstr ""
 
 msgctxt "#30146"
 msgid "Title"
-msgstr ""
+msgstr "Cím"
 
 msgctxt "#30147"
 msgid "Video Count"
@@ -653,23 +655,23 @@ msgstr ""
 
 msgctxt "#30157"
 msgid "Set as History"
-msgstr ""
+msgstr "Keresési előzmények"
 
 msgctxt "#30158"
 msgid "Set as Watch Later"
-msgstr ""
+msgstr "Megtekintés később"
 
 msgctxt "#30159"
 msgid "Remove as History"
-msgstr ""
+msgstr "Eltávolítás az előzményekből"
 
 msgctxt "#30160"
 msgid "Remove as Watch Later"
-msgstr ""
+msgstr "Eltávolítás a megtekintendő videók közül"
 
 msgctxt "#30161"
 msgid "History"
-msgstr ""
+msgstr "Előzmények"
 
 msgctxt "#30162"
 msgid "Watch later playlist configured"
@@ -761,7 +763,7 @@ msgstr ""
 
 msgctxt "#30184"
 msgid "Refresh"
-msgstr ""
+msgstr "Frissítés"
 
 msgctxt "#30185"
 msgid "Clear function cache on refresh"
@@ -1041,7 +1043,7 @@ msgstr ""
 
 msgctxt "#30254"
 msgid "Sign In"
-msgstr ""
+msgstr "Bejelentkezés"
 
 msgctxt "#30255"
 msgid "InputStream Adaptive is required and appears to be disabled. Would you like to enable InputStream Adaptive now?"
@@ -1049,8 +1051,16 @@ msgstr ""
 
 msgctxt "#30256"
 msgid "Settings"
-msgstr ""
+msgstr "Beállítások"
 
 msgctxt "#30257"
 msgid "No entries found"
+msgstr ""
+
+msgctxt "#30258"
+msgid "v3 Data API Client"
+msgstr ""
+
+msgctxt "#30259"
+msgid "YouTube-TV API Client"
 msgstr ""

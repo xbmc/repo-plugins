@@ -1056,3 +1056,11 @@ msgstr "設定"
 msgctxt "#30257"
 msgid "No entries found"
 msgstr "沒有項目"
+
+msgctxt "#30258"
+msgid "v3 Data API Client"
+msgstr ""
+
+msgctxt "#30259"
+msgid "YouTube-TV API Client"
+msgstr ""

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: STRINGS\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: 2021-08-22 19:33+0000\n"
+"PO-Revision-Date: 2022-03-27 01:19+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Norwegian Bokmål <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-tubed/nb_no/>\n"
 "Language: nb_no\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Summary"
 msgid "Watch your favorite YouTube content on Kodi"
@@ -35,7 +35,7 @@ msgstr ""
 
 msgctxt "#30002"
 msgid "Recommendations"
-msgstr ""
+msgstr "Anbefalinger"
 
 msgctxt "#30003"
 msgid "Search"
@@ -43,19 +43,19 @@ msgstr "Søk"
 
 msgctxt "#30004"
 msgid "My Channel"
-msgstr ""
+msgstr "Min kanal"
 
 msgctxt "#30005"
 msgid "Liked Videos"
-msgstr ""
+msgstr "Likte videoer"
 
 msgctxt "#30006"
 msgid "Disliked Videos"
-msgstr ""
+msgstr "Mislikte videoer"
 
 msgctxt "#30007"
 msgid "Playlists"
-msgstr ""
+msgstr "Spillelister"
 
 msgctxt "#30008"
 msgid "Channels"
@@ -63,11 +63,11 @@ msgstr "Kanaler"
 
 msgctxt "#30009"
 msgid "Subscriptions"
-msgstr ""
+msgstr "Abonnementer"
 
 msgctxt "#30010"
 msgid "Live"
-msgstr ""
+msgstr "Direkte"
 
 msgctxt "#30011"
 msgid "Sign in with Google"
@@ -75,7 +75,7 @@ msgstr ""
 
 msgctxt "#30012"
 msgid "Sign Out"
-msgstr ""
+msgstr "Logg ut"
 
 msgctxt "#30013"
 msgid "Manage Users"
@@ -83,7 +83,7 @@ msgstr ""
 
 msgctxt "#30014"
 msgid "New Search"
-msgstr ""
+msgstr "Nytt søk"
 
 msgctxt "#30015"
 msgid "Enter your search term"
@@ -119,7 +119,7 @@ msgstr ""
 
 msgctxt "#30023"
 msgid "Uploads"
-msgstr ""
+msgstr "Opplastninger"
 
 msgctxt "#30024"
 msgid "You are about to sign out, are you sure?"
@@ -139,7 +139,7 @@ msgstr ""
 
 msgctxt "#30028"
 msgid "General"
-msgstr ""
+msgstr "Generelt"
 
 msgctxt "#30029"
 msgid "Quality"
@@ -175,19 +175,19 @@ msgstr ""
 
 msgctxt "#30037"
 msgid "240p"
-msgstr ""
+msgstr "240p"
 
 msgctxt "#30038"
 msgid "360p"
-msgstr ""
+msgstr "360p"
 
 msgctxt "#30039"
 msgid "480p"
-msgstr ""
+msgstr "480p"
 
 msgctxt "#30040"
 msgid "720p (HD)"
-msgstr ""
+msgstr "720p (HD)"
 
 msgctxt "#30041"
 msgid "1080p (FHD)"
@@ -211,15 +211,15 @@ msgstr ""
 
 msgctxt "#30046"
 msgid "Watch Later"
-msgstr ""
+msgstr "Se senere"
 
 msgctxt "#30047"
 msgid "Regional"
-msgstr ""
+msgstr "Regionalt"
 
 msgctxt "#30048"
 msgid "Language"
-msgstr ""
+msgstr "Språk"
 
 msgctxt "#30049"
 msgid "Your preferred YouTube UI language"
@@ -227,7 +227,7 @@ msgstr ""
 
 msgctxt "#30050"
 msgid "Region"
-msgstr ""
+msgstr "Region"
 
 msgctxt "#30051"
 msgid "Your preferred content region"
@@ -251,7 +251,7 @@ msgstr ""
 
 msgctxt "#30056"
 msgid "Subtitle language"
-msgstr ""
+msgstr "Språk for undertekst"
 
 msgctxt "#30057"
 msgid "Your preferred subtitle language"
@@ -271,15 +271,15 @@ msgstr ""
 
 msgctxt "#30061"
 msgid "None"
-msgstr ""
+msgstr "Ingen"
 
 msgctxt "#30062"
 msgid "Prompt"
-msgstr ""
+msgstr "Spør"
 
 msgctxt "#30063"
 msgid "Subscribe"
-msgstr ""
+msgstr "Abonner"
 
 msgctxt "#30064"
 msgid "Subscribed"
@@ -287,7 +287,7 @@ msgstr ""
 
 msgctxt "#30065"
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Avslutt abonnement"
 
 msgctxt "#30066"
 msgid "Unsubscribed"
@@ -295,7 +295,7 @@ msgstr ""
 
 msgctxt "#30067"
 msgid "Error"
-msgstr ""
+msgstr "Feil"
 
 msgctxt "#30068"
 msgid "Play (Prompt for subtitles)"
@@ -303,7 +303,7 @@ msgstr ""
 
 msgctxt "#30069"
 msgid "Go to %s"
-msgstr ""
+msgstr "Gå til %s"
 
 msgctxt "#30070"
 msgid "Subscribed to %s"
@@ -319,11 +319,11 @@ msgstr ""
 
 msgctxt "#30073"
 msgid "I like this"
-msgstr ""
+msgstr "Jeg liker dette"
 
 msgctxt "#30074"
 msgid "I dislike this"
-msgstr ""
+msgstr "Jeg misliker dette"
 
 msgctxt "#30075"
 msgid "Remove rating"
@@ -451,7 +451,7 @@ msgstr ""
 
 msgctxt "#30106"
 msgid "Clear function cache"
-msgstr ""
+msgstr "Rens mellomlagringen for funksjoner"
 
 msgctxt "#30107"
 msgid "Data cache was cleared"
@@ -483,7 +483,7 @@ msgstr ""
 
 msgctxt "#30114"
 msgid "Maintenance"
-msgstr ""
+msgstr "Velikehold"
 
 msgctxt "#30115"
 msgid "How long until long term data cache expires in weeks"
@@ -603,7 +603,7 @@ msgstr ""
 
 msgctxt "#30144"
 msgid "Date"
-msgstr ""
+msgstr "Dato"
 
 msgctxt "#30145"
 msgid "Rating"
@@ -611,7 +611,7 @@ msgstr ""
 
 msgctxt "#30146"
 msgid "Title"
-msgstr ""
+msgstr "Tittel"
 
 msgctxt "#30147"
 msgid "Video Count"
@@ -671,7 +671,7 @@ msgstr ""
 
 msgctxt "#30161"
 msgid "History"
-msgstr ""
+msgstr "Historikk"
 
 msgctxt "#30162"
 msgid "Watch later playlist configured"
@@ -763,7 +763,7 @@ msgstr ""
 
 msgctxt "#30184"
 msgid "Refresh"
-msgstr ""
+msgstr "Oppdater"
 
 msgctxt "#30185"
 msgid "Clear function cache on refresh"
@@ -1043,7 +1043,7 @@ msgstr ""
 
 msgctxt "#30254"
 msgid "Sign In"
-msgstr ""
+msgstr "Logg inn"
 
 msgctxt "#30255"
 msgid "InputStream Adaptive is required and appears to be disabled. Would you like to enable InputStream Adaptive now?"
@@ -1051,8 +1051,16 @@ msgstr ""
 
 msgctxt "#30256"
 msgid "Settings"
-msgstr ""
+msgstr "Innstillinger"
 
 msgctxt "#30257"
 msgid "No entries found"
+msgstr ""
+
+msgctxt "#30258"
+msgid "v3 Data API Client"
+msgstr ""
+
+msgctxt "#30259"
+msgid "YouTube-TV API Client"
 msgstr ""

@@ -1,15 +1,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STRINGS\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-03-27 01:19+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Hebrew (Israel) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-tubed/he_il/>\n"
 "Language: he_il\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && n % 10 == 0) ? 2 : 3));\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Summary"
 msgid "Watch your favorite YouTube content on Kodi"
@@ -33,39 +35,39 @@ msgstr ""
 
 msgctxt "#30002"
 msgid "Recommendations"
-msgstr ""
+msgstr "המלצות"
 
 msgctxt "#30003"
 msgid "Search"
-msgstr ""
+msgstr "חיפוש"
 
 msgctxt "#30004"
 msgid "My Channel"
-msgstr ""
+msgstr "הערוץ שלי"
 
 msgctxt "#30005"
 msgid "Liked Videos"
-msgstr ""
+msgstr "סרטונים שאהבתי"
 
 msgctxt "#30006"
 msgid "Disliked Videos"
-msgstr ""
+msgstr "בטל סימון אהבתי לוידיאו"
 
 msgctxt "#30007"
 msgid "Playlists"
-msgstr ""
+msgstr "רשימות השמעה"
 
 msgctxt "#30008"
 msgid "Channels"
-msgstr ""
+msgstr "ערוצים"
 
 msgctxt "#30009"
 msgid "Subscriptions"
-msgstr ""
+msgstr "הרשמות"
 
 msgctxt "#30010"
 msgid "Live"
-msgstr ""
+msgstr "שידור חי"
 
 msgctxt "#30011"
 msgid "Sign in with Google"
@@ -73,7 +75,7 @@ msgstr ""
 
 msgctxt "#30012"
 msgid "Sign Out"
-msgstr ""
+msgstr "התנתקות"
 
 msgctxt "#30013"
 msgid "Manage Users"
@@ -81,7 +83,7 @@ msgstr ""
 
 msgctxt "#30014"
 msgid "New Search"
-msgstr ""
+msgstr "חיפוש חדש"
 
 msgctxt "#30015"
 msgid "Enter your search term"
@@ -117,7 +119,7 @@ msgstr ""
 
 msgctxt "#30023"
 msgid "Uploads"
-msgstr ""
+msgstr "העלאות"
 
 msgctxt "#30024"
 msgid "You are about to sign out, are you sure?"
@@ -137,11 +139,11 @@ msgstr ""
 
 msgctxt "#30028"
 msgid "General"
-msgstr ""
+msgstr "כללי"
 
 msgctxt "#30029"
 msgid "Quality"
-msgstr ""
+msgstr "איכות"
 
 msgctxt "#30030"
 msgid "Choose the maximum playback quality for videos and live content"
@@ -173,19 +175,19 @@ msgstr ""
 
 msgctxt "#30037"
 msgid "240p"
-msgstr ""
+msgstr "240p"
 
 msgctxt "#30038"
 msgid "360p"
-msgstr ""
+msgstr "360p"
 
 msgctxt "#30039"
 msgid "480p"
-msgstr ""
+msgstr "480p"
 
 msgctxt "#30040"
 msgid "720p (HD)"
-msgstr ""
+msgstr "720p (HD)"
 
 msgctxt "#30041"
 msgid "1080p (FHD)"
@@ -205,11 +207,11 @@ msgstr ""
 
 msgctxt "#30045"
 msgid "Playback"
-msgstr ""
+msgstr "ניגון"
 
 msgctxt "#30046"
 msgid "Watch Later"
-msgstr ""
+msgstr "צפה בהמשך"
 
 msgctxt "#30047"
 msgid "Regional"
@@ -217,7 +219,7 @@ msgstr ""
 
 msgctxt "#30048"
 msgid "Language"
-msgstr ""
+msgstr "שפה"
 
 msgctxt "#30049"
 msgid "Your preferred YouTube UI language"
@@ -225,7 +227,7 @@ msgstr ""
 
 msgctxt "#30050"
 msgid "Region"
-msgstr ""
+msgstr "אזור"
 
 msgctxt "#30051"
 msgid "Your preferred content region"
@@ -241,7 +243,7 @@ msgstr ""
 
 msgctxt "#30054"
 msgid "Configure subtitles"
-msgstr ""
+msgstr "קביעת תצורת כתוביות"
 
 msgctxt "#30055"
 msgid "Configure your preferred subtitle language"
@@ -249,7 +251,7 @@ msgstr ""
 
 msgctxt "#30056"
 msgid "Subtitle language"
-msgstr ""
+msgstr "שפת כתוביות"
 
 msgctxt "#30057"
 msgid "Your preferred subtitle language"
@@ -261,23 +263,23 @@ msgstr ""
 
 msgctxt "#30059"
 msgid "%s with %s fallback"
-msgstr ""
+msgstr "%s עם %s מאוחזר"
 
 msgctxt "#30060"
 msgid "No auto-generated"
-msgstr ""
+msgstr "לא נוצר אוטומטית"
 
 msgctxt "#30061"
 msgid "None"
-msgstr ""
+msgstr "ללא"
 
 msgctxt "#30062"
 msgid "Prompt"
-msgstr ""
+msgstr "התראה"
 
 msgctxt "#30063"
 msgid "Subscribe"
-msgstr ""
+msgstr "הירשם"
 
 msgctxt "#30064"
 msgid "Subscribed"
@@ -285,7 +287,7 @@ msgstr ""
 
 msgctxt "#30065"
 msgid "Unsubscribe"
-msgstr ""
+msgstr "ביטול הרשמה"
 
 msgctxt "#30066"
 msgid "Unsubscribed"
@@ -293,7 +295,7 @@ msgstr ""
 
 msgctxt "#30067"
 msgid "Error"
-msgstr ""
+msgstr "שגיאה"
 
 msgctxt "#30068"
 msgid "Play (Prompt for subtitles)"
@@ -301,7 +303,7 @@ msgstr ""
 
 msgctxt "#30069"
 msgid "Go to %s"
-msgstr ""
+msgstr "עבור אל %s"
 
 msgctxt "#30070"
 msgid "Subscribed to %s"
@@ -317,11 +319,11 @@ msgstr ""
 
 msgctxt "#30073"
 msgid "I like this"
-msgstr ""
+msgstr "אהבתי את זה"
 
 msgctxt "#30074"
 msgid "I dislike this"
-msgstr ""
+msgstr "לא אהבתי את זה"
 
 msgctxt "#30075"
 msgid "Remove rating"
@@ -433,7 +435,7 @@ msgstr ""
 
 msgctxt "#30102"
 msgid "Cache"
-msgstr ""
+msgstr "מטמון"
 
 msgctxt "#30103"
 msgid "Data cache TTL (weeks)"
@@ -449,7 +451,7 @@ msgstr ""
 
 msgctxt "#30106"
 msgid "Clear function cache"
-msgstr ""
+msgstr "מחק מטמון"
 
 msgctxt "#30107"
 msgid "Data cache was cleared"
@@ -481,7 +483,7 @@ msgstr ""
 
 msgctxt "#30114"
 msgid "Maintenance"
-msgstr ""
+msgstr "תחזוקה"
 
 msgctxt "#30115"
 msgid "How long until long term data cache expires in weeks"
@@ -525,7 +527,7 @@ msgstr ""
 
 msgctxt "#30125"
 msgid "Debug"
-msgstr ""
+msgstr "ניפוי שגיאות"
 
 msgctxt "#30126"
 msgid "Component Logging"
@@ -609,7 +611,7 @@ msgstr ""
 
 msgctxt "#30146"
 msgid "Title"
-msgstr ""
+msgstr "כותרת"
 
 msgctxt "#30147"
 msgid "Video Count"
@@ -653,23 +655,23 @@ msgstr ""
 
 msgctxt "#30157"
 msgid "Set as History"
-msgstr ""
+msgstr "הגדר כהיסטוריה"
 
 msgctxt "#30158"
 msgid "Set as Watch Later"
-msgstr ""
+msgstr "הגדר לצפיה בהמשך"
 
 msgctxt "#30159"
 msgid "Remove as History"
-msgstr ""
+msgstr "הסר כהיסטוריה"
 
 msgctxt "#30160"
 msgid "Remove as Watch Later"
-msgstr ""
+msgstr "הסרה מצפייה בהמשך"
 
 msgctxt "#30161"
 msgid "History"
-msgstr ""
+msgstr "היסטוריה"
 
 msgctxt "#30162"
 msgid "Watch later playlist configured"
@@ -761,7 +763,7 @@ msgstr ""
 
 msgctxt "#30184"
 msgid "Refresh"
-msgstr ""
+msgstr "רענן"
 
 msgctxt "#30185"
 msgid "Clear function cache on refresh"
@@ -809,7 +811,7 @@ msgstr ""
 
 msgctxt "#30196"
 msgid "Main Menu"
-msgstr ""
+msgstr "תפריט ראשי"
 
 msgctxt "#30197"
 msgid "Show/Hide this item on the main menu"
@@ -1041,7 +1043,7 @@ msgstr ""
 
 msgctxt "#30254"
 msgid "Sign In"
-msgstr ""
+msgstr "התחברות"
 
 msgctxt "#30255"
 msgid "InputStream Adaptive is required and appears to be disabled. Would you like to enable InputStream Adaptive now?"
@@ -1049,8 +1051,16 @@ msgstr ""
 
 msgctxt "#30256"
 msgid "Settings"
-msgstr ""
+msgstr "הגדרות"
 
 msgctxt "#30257"
 msgid "No entries found"
+msgstr ""
+
+msgctxt "#30258"
+msgid "v3 Data API Client"
+msgstr ""
+
+msgctxt "#30259"
+msgid "YouTube-TV API Client"
 msgstr ""

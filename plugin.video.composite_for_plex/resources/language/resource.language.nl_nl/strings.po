@@ -5,16 +5,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Composite\n"
-"Report-Msgid-Bugs-To: https://github.com/anxdpanic/plugin.video.composite_for_plex/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
-"PO-Revision-Date: 2020-01-18 21:15+0500\n"
-"Last-Translator: GITHUB USERNAME\n"
-"Language-Team: Dutch\n"
-"Language: nl_NL\n"
+"PO-Revision-Date: 2022-03-11 09:05+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Dutch <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-composite_for_plex/nl_nl/>\n"
+"Language: nl_nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgctxt "Addon Description"
 msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
@@ -50,7 +51,7 @@ msgstr ""
 
 msgctxt "#30006"
 msgid "Sign Out"
-msgstr ""
+msgstr "Uitloggen"
 
 msgctxt "#30007"
 msgid "To sign out you must be logged in as an admin user. Switch user and try again"
@@ -75,7 +76,7 @@ msgstr ""
 
 msgctxt "#30013"
 msgid "All"
-msgstr ""
+msgstr "Alles"
 
 msgctxt "#30014"
 msgid "Unwatched"
@@ -135,7 +136,7 @@ msgstr ""
 
 msgctxt "#30028"
 msgid "All"
-msgstr ""
+msgstr "Alles"
 
 msgctxt "#30029"
 msgid "By Album"
@@ -175,7 +176,7 @@ msgstr ""
 
 msgctxt "#30038"
 msgid "All"
-msgstr ""
+msgstr "Alles"
 
 msgctxt "#30039"
 msgid "Unwatched"
@@ -251,7 +252,7 @@ msgstr ""
 
 msgctxt "#30057"
 msgid "All"
-msgstr ""
+msgstr "Alles"
 
 msgctxt "#30058"
 msgid "By Year"
@@ -327,7 +328,7 @@ msgstr ""
 
 msgctxt "#30076"
 msgid "Switch User"
-msgstr ""
+msgstr "Wissel van Gebruiker"
 
 msgctxt "#30077"
 msgid "Enter PIN"
@@ -347,7 +348,7 @@ msgstr ""
 
 msgctxt "#30081"
 msgid "Sign In"
-msgstr ""
+msgstr "Inloggen"
 
 msgctxt "#30082"
 msgid "Display Servers"
@@ -359,11 +360,11 @@ msgstr ""
 
 msgctxt "#30084"
 msgid "Channels"
-msgstr ""
+msgstr "Kanalen"
 
 msgctxt "#30085"
 msgid "Playlists"
-msgstr ""
+msgstr "Afspeellijst"
 
 msgctxt "#30086"
 msgid "Play Transcoded"
@@ -375,7 +376,7 @@ msgstr ""
 
 msgctxt "#30088"
 msgid "Season"
-msgstr ""
+msgstr "Seizoen"
 
 msgctxt "#30089"
 msgid "Search for"
@@ -857,7 +858,7 @@ msgstr ""
 
 msgctxt "#30619"
 msgid "Cancel"
-msgstr ""
+msgstr "Annuleren"
 
 msgctxt "#30620"
 msgid "Submit"
@@ -916,7 +917,7 @@ msgstr ""
 #  30635
 msgctxt "#30636"
 msgid "Unknown"
-msgstr ""
+msgstr "Onbekend"
 
 msgctxt "#30637"
 msgid "myPlex Login"
@@ -976,7 +977,7 @@ msgstr ""
 
 msgctxt "#30651"
 msgid "Please wait..."
-msgstr ""
+msgstr "Geduld AUB..."
 
 msgctxt "#30652"
 msgid "myPlex discovery..."
@@ -1016,7 +1017,7 @@ msgstr ""
 
 msgctxt "#30661"
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 msgctxt "#30662"
 msgid "Server Cache TTL (minutes)"
@@ -1032,7 +1033,7 @@ msgstr ""
 
 msgctxt "#30665"
 msgid "Movies"
-msgstr ""
+msgstr "Films"
 
 msgctxt "#30666"
 msgid "Music"
@@ -1040,7 +1041,7 @@ msgstr ""
 
 msgctxt "#30667"
 msgid "TV Shows"
-msgstr ""
+msgstr "TV shows"
 
 msgctxt "#30668"
 msgid "Photos"
@@ -1056,11 +1057,11 @@ msgstr ""
 
 msgctxt "#30671"
 msgid "Default"
-msgstr ""
+msgstr "Standaard"
 
 msgctxt "#30672"
 msgid "Go to %s"
-msgstr ""
+msgstr "Ga naar %s"
 
 msgctxt "#30673"
 msgid "Delete %s from the %s playlist?"
@@ -1076,7 +1077,7 @@ msgstr ""
 
 msgctxt "#30676"
 msgid "Select playlist"
-msgstr ""
+msgstr "Selecteer afspeellijst"
 
 msgctxt "#30677"
 msgid "Add to playlist"
@@ -1204,11 +1205,11 @@ msgstr ""
 
 msgctxt "#30708"
 msgid "Enabled"
-msgstr ""
+msgstr "Ingeschakeld"
 
 msgctxt "#30709"
 msgid "Port"
-msgstr ""
+msgstr "Poort"
 
 msgctxt "#30710"
 msgid "Kodi's Web Server Settings"
@@ -1220,15 +1221,15 @@ msgstr ""
 
 msgctxt "#30712"
 msgid "Username"
-msgstr ""
+msgstr "Gebruikersnaam"
 
 msgctxt "#30713"
 msgid "Password"
-msgstr ""
+msgstr "Wachtwoord"
 
 msgctxt "#30714"
 msgid "Main Menu"
-msgstr ""
+msgstr "Hoofdmenu"
 
 msgctxt "#30715"
 msgid "Show [B]myPlex Queue[/B] menu"
@@ -1316,7 +1317,7 @@ msgstr ""
 
 msgctxt "#30736"
 msgid "Default"
-msgstr ""
+msgstr "Standaard"
 
 msgctxt "#30737"
 msgid "Majority"
@@ -1456,15 +1457,15 @@ msgstr ""
 
 msgctxt "#30771"
 msgid "Shuffle"
-msgstr ""
+msgstr "Willekeurige volgorde"
 
 msgctxt "#30772"
 msgid "Source"
-msgstr ""
+msgstr "Bron"
 
 msgctxt "#30773"
 msgid "None"
-msgstr ""
+msgstr "Geen"
 
 msgctxt "#30774"
 msgid "Generating Playlist"

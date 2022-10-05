@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Composite\n"
-"Report-Msgid-Bugs-To: https://github.com/anxdpanic/plugin.video.composite_for_plex/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
-"PO-Revision-Date: 2021-06-28 08:29+0000\n"
+"PO-Revision-Date: 2022-08-03 14:14+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Danish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-composite_for_plex/da_dk/>\n"
 "Language: da_dk\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7\n"
+"X-Generator: Weblate 4.13\n"
 
 msgctxt "Addon Description"
 msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
@@ -35,7 +35,7 @@ msgstr ""
 
 msgctxt "#30002"
 msgid "Plex Online"
-msgstr "Plex Online"
+msgstr "Plex online"
 
 msgctxt "#30003"
 msgid "About to install"
@@ -176,7 +176,7 @@ msgstr ""
 
 msgctxt "#30038"
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 msgctxt "#30039"
 msgid "Unwatched"
@@ -252,7 +252,7 @@ msgstr ""
 
 msgctxt "#30057"
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 msgctxt "#30058"
 msgid "By Year"
@@ -328,7 +328,7 @@ msgstr ""
 
 msgctxt "#30076"
 msgid "Switch User"
-msgstr ""
+msgstr "Skift bruger"
 
 msgctxt "#30077"
 msgid "Enter PIN"
@@ -348,7 +348,7 @@ msgstr ""
 
 msgctxt "#30081"
 msgid "Sign In"
-msgstr ""
+msgstr "Log ind"
 
 msgctxt "#30082"
 msgid "Display Servers"
@@ -360,11 +360,11 @@ msgstr ""
 
 msgctxt "#30084"
 msgid "Channels"
-msgstr ""
+msgstr "Kanaler"
 
 msgctxt "#30085"
 msgid "Playlists"
-msgstr ""
+msgstr "Playlister"
 
 msgctxt "#30086"
 msgid "Play Transcoded"
@@ -453,11 +453,11 @@ msgstr ""
 
 msgctxt "#30516"
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 msgctxt "#30517"
 msgid "Playback"
-msgstr ""
+msgstr "Afspilning"
 
 msgctxt "#30518"
 msgid "Transcoding"
@@ -477,7 +477,7 @@ msgstr ""
 
 msgctxt "#30522"
 msgid "Advanced"
-msgstr ""
+msgstr "Avanceret"
 
 msgctxt "#30523"
 msgid "Use Wake On LAN"
@@ -549,7 +549,7 @@ msgstr ""
 
 msgctxt "#30540"
 msgid "Quality"
-msgstr ""
+msgstr "Kvalitet"
 
 msgctxt "#30541"
 msgid "Proxy Port"
@@ -778,7 +778,7 @@ msgstr ""
 
 msgctxt "#30599"
 msgid "Debug"
-msgstr ""
+msgstr "Fejlfinding"
 
 msgctxt "#30600"
 msgid "Debug+"
@@ -790,7 +790,7 @@ msgstr ""
 
 msgctxt "#30602"
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 msgctxt "#30603"
 msgid "Disable 'All Episodes'"
@@ -858,7 +858,7 @@ msgstr ""
 
 msgctxt "#30619"
 msgid "Cancel"
-msgstr ""
+msgstr "Annuller"
 
 msgctxt "#30620"
 msgid "Submit"
@@ -977,7 +977,7 @@ msgstr ""
 
 msgctxt "#30651"
 msgid "Please wait..."
-msgstr ""
+msgstr "Vent venligst..."
 
 msgctxt "#30652"
 msgid "myPlex discovery..."
@@ -1017,7 +1017,7 @@ msgstr ""
 
 msgctxt "#30661"
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 msgctxt "#30662"
 msgid "Server Cache TTL (minutes)"
@@ -1057,11 +1057,11 @@ msgstr ""
 
 msgctxt "#30671"
 msgid "Default"
-msgstr ""
+msgstr "Standard"
 
 msgctxt "#30672"
 msgid "Go to %s"
-msgstr ""
+msgstr "Gå til %s"
 
 msgctxt "#30673"
 msgid "Delete %s from the %s playlist?"
@@ -1077,11 +1077,11 @@ msgstr ""
 
 msgctxt "#30676"
 msgid "Select playlist"
-msgstr ""
+msgstr "Vælg playliste"
 
 msgctxt "#30677"
 msgid "Add to playlist"
-msgstr ""
+msgstr "Føj til playliste"
 
 msgctxt "#30678"
 msgid "Added %s to the %s playlist"
@@ -1109,7 +1109,7 @@ msgstr ""
 
 msgctxt "#30684"
 msgid "Up Next"
-msgstr ""
+msgstr "Næste"
 
 msgctxt "#30685"
 msgid "Enable Up Next"
@@ -1205,11 +1205,11 @@ msgstr ""
 
 msgctxt "#30708"
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiveret"
 
 msgctxt "#30709"
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 msgctxt "#30710"
 msgid "Kodi's Web Server Settings"
@@ -1221,15 +1221,15 @@ msgstr ""
 
 msgctxt "#30712"
 msgid "Username"
-msgstr ""
+msgstr "Brugernavn"
 
 msgctxt "#30713"
 msgid "Password"
-msgstr ""
+msgstr "Adgangskode"
 
 msgctxt "#30714"
 msgid "Main Menu"
-msgstr ""
+msgstr "Hovedmenu"
 
 msgctxt "#30715"
 msgid "Show [B]myPlex Queue[/B] menu"
@@ -1269,7 +1269,7 @@ msgstr ""
 
 msgctxt "#30724"
 msgid "Delete playlist"
-msgstr ""
+msgstr "Slet playliste"
 
 msgctxt "#30725"
 msgid "Confirm playlist delete?"
@@ -1317,7 +1317,7 @@ msgstr ""
 
 msgctxt "#30736"
 msgid "Default"
-msgstr ""
+msgstr "Standard"
 
 msgctxt "#30737"
 msgid "Majority"
@@ -1445,7 +1445,7 @@ msgstr ""
 
 msgctxt "#30768"
 msgid "Play"
-msgstr ""
+msgstr "Afspil"
 
 msgctxt "#30769"
 msgid "Item Count"
@@ -1457,7 +1457,7 @@ msgstr ""
 
 msgctxt "#30771"
 msgid "Shuffle"
-msgstr ""
+msgstr "Bland"
 
 msgctxt "#30772"
 msgid "Source"
@@ -1465,7 +1465,7 @@ msgstr ""
 
 msgctxt "#30773"
 msgid "None"
-msgstr ""
+msgstr "Ingen"
 
 msgctxt "#30774"
 msgid "Generating Playlist"

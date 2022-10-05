@@ -36,30 +36,29 @@ KODI_VERSION = float(re.findall(r'\d{2}\.\d{1}', xbmc.getInfoLabel("System.Build
 
 filter_ids = [
     "show-all",
-    "nbc-nfl",
-    "nbc-premier-league",
-    "nbc-nascar",
-    "nbc-nhl",
-    "nbc-golf",
-    "nbc-pga",
+    "nfl",
+    "premier-league",
+    "nascar",
+    "nhl",
+    "golf",
+    "pga",
     "nbc-nd",
-    "nbc-college-football",
-    "nbc-f1",
-    "nbc-nba",
-    "nbc-mlb",
-    "nbc-rugby",
-    "nbc-horses",
-    "nbc-tennis",
-    "nbc-indy",
-    "nbc-moto",
-    "nbc-olympic-sports",
+    "college football",
+    "nba",
+    "mlb",
+    "rugby",
+    "horses",
+    "tennis",
+    "indy",
+    "moto",
+    "olympic sports",
     "nbc-csn-bay-area",
     "nbc-csn-california",
     "nbc-csn-chicago",
     "nbc-csn-mid-atlantic",
     "nbc-csn-new-england",
-    "nbc-csn-philadelphia",
-    "nbc-sny"
+    "nbc-csn-philadelphia"
+
 ]
 
 # Create a filter list
@@ -77,7 +76,7 @@ LIVE = 'FF00B7EB'
 UPCOMING = 'FFFFB266'
 FREE_UPCOMING = 'FFCC66FF'
 
-VERIFY = False
+VERIFY = True
 # Add-on specific Adobepass variables
 SERVICE_VARS = {
     'public_key': 'nTWqX10Zj8H0q34OHAmCvbRABjpBk06w',

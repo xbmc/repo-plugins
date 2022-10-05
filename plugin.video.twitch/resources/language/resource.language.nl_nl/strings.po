@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: 2022-03-11 09:05+0000\n"
+"PO-Revision-Date: 2022-08-04 12:14+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Dutch <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/nl_nl/>\n"
 "Language: nl_nl\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.13\n"
 
 msgctxt "Addon Summary"
 msgid "Twitch video plugin"
@@ -39,7 +39,7 @@ msgstr "Instellingen"
 
 msgctxt "#30005"
 msgid "Popular Streams"
-msgstr ""
+msgstr "Populaire Streams"
 
 msgctxt "#30006"
 msgid "Teams"
@@ -443,7 +443,7 @@ msgstr "Geen resultaten gevonden"
 
 msgctxt "#30132"
 msgid "OAuth token is required for access"
-msgstr ""
+msgstr "OAuth token is benodigd voor toegang"
 
 msgctxt "#30133"
 msgid "Authorize"
@@ -883,19 +883,19 @@ msgstr "Zoekhistorie"
 
 msgctxt "#30245"
 msgid "Delete streams search history"
-msgstr ""
+msgstr "Stream zoekgeschiedenis verwijderen"
 
 msgctxt "#30246"
 msgid "Delete channels search history"
-msgstr ""
+msgstr "Kanaal zoekgeschiedenis verwijderen"
 
 msgctxt "#30247"
 msgid "Delete games search history"
-msgstr ""
+msgstr "Games zoekgeschiedenis verwijderen"
 
 msgctxt "#30248"
 msgid "Delete video id/url search history"
-msgstr ""
+msgstr "Video id/url zoekgeschiedenis verwijderen"
 
 msgctxt "#30249"
 msgid "Other"
@@ -903,23 +903,23 @@ msgstr "Overige"
 
 msgctxt "#30250"
 msgid "Delete storage.json"
-msgstr ""
+msgstr "storage.json verwijderen"
 
 msgctxt "#30251"
 msgid "Are you sure you want to delete %s?"
-msgstr ""
+msgstr "Weet u zeker dat u %s wilt verwijderen?"
 
 msgctxt "#30252"
 msgid "Deleting %s succeeded"
-msgstr ""
+msgstr "%s succesvol verwijderd"
 
 msgctxt "#30253"
 msgid "Deleting %s failed"
-msgstr ""
+msgstr "Verwijderen van %s mislukt"
 
 msgctxt "#30254"
 msgid "Adaptive"
-msgstr ""
+msgstr "Adaptief"
 
 msgctxt "#30255"
 msgid "Thumbnail size"
@@ -927,7 +927,7 @@ msgstr "Miniatuur formaat"
 
 msgctxt "#30256"
 msgid "Large"
-msgstr ""
+msgstr "Groot"
 
 msgctxt "#30257"
 msgid "Medium"
@@ -935,11 +935,11 @@ msgstr "Gemiddeld"
 
 msgctxt "#30258"
 msgid "Small"
-msgstr ""
+msgstr "Klein"
 
 msgctxt "#30259"
 msgid "Live preview refresh interval (minutes)"
-msgstr ""
+msgstr "Verversingsinterval Live-Preview (minuten)"
 
 msgctxt "#30260"
 msgid "Limit to 30 fps"
@@ -947,27 +947,27 @@ msgstr "Beperk tot 30 fps"
 
 msgctxt "#30261"
 msgid "Private API Credentials"
-msgstr ""
+msgstr "Privé API Inloggegevens"
 
 msgctxt "#30262"
 msgid "Change languages"
-msgstr ""
+msgstr "Taal wijzigen"
 
 msgctxt "#30263"
 msgid "Frame rate limit"
-msgstr ""
+msgstr "Frame rate limiet"
 
 msgctxt "#30264"
 msgid "Follow"
-msgstr ""
+msgstr "Volgen"
 
 msgctxt "#30265"
 msgid "Unfollow"
-msgstr ""
+msgstr "Ontvolgen"
 
 msgctxt "#30266"
 msgid "Add to queue"
-msgstr ""
+msgstr "Toevoegen aan wachtrij"
 
 msgctxt "#30267"
 msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"

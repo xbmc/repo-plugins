@@ -50,18 +50,27 @@ def getEpisodeData(data, quality):
         streams[stream["_quality"]] = stream["_stream"]
 
     return {
+        "date": getDate(data),
         "desc": getDescription(data),
+        "dgs": getDgs(data),
         "duration": data["duration"],
         "fanart": getImage(data, 1920),
         "stream": getStream(streams, quality),
         "thumb": getImage(data, 640),
-        "title": getTitle(data),
-        "dgs": getDgs(data)
+        "title": getTitle(data)
     }
 
 
+def getDate(content):
+    return content["broadcastedOn"].split("T")[0]
+
+
 def getDescription(content):
-    return content["images"]["aspect16x9"]["alt"].replace("Thumbnail: ", "")
+    return content["images"]["aspect16x9"]["alt"]
+
+
+def getDgs(content):
+    return "mit Gebärdensprache" in content["shortTitle"]
 
 
 def getImage(content, width):
@@ -77,10 +86,4 @@ def getStream(streams, quality):
 
 
 def getTitle(content):
-    title_array = content["shortTitle"].split(" | ")
-    # date = title_array[2]
-    return title_array[0]
-
-
-def getDgs(content):
-    return "mit Gebärdensprache" in content["shortTitle"]
+    return content["shortTitle"].split(" | ")[0]

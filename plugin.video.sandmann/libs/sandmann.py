@@ -73,18 +73,20 @@ def sandmann():
 
 
 def getListItem(item):
-    li = xbmcgui.ListItem(label=item["title"])
+    li = xbmcgui.ListItem()
+    li.setLabel(item["title"])
     li.setArt({
-        "thumb": item["thumb"],
-        "fanart": item["fanart"]
+        "fanart": item["fanart"],
+        "thumb": item["thumb"]
     })
     li.setInfo(
         type="video",
         infoLabels={
-            "title": item["title"],
-            "plot": item["desc"],
-            "duration": item["duration"]
+            "aired": item["date"],
+            "duration": item["duration"],
+            "plotoutline": item["desc"],
         }
     )
     li.setProperty("IsPlayable", "true")
+
     return li

@@ -1,3 +1,5 @@
+version 2.2.1:
+ * add date info
 version 2.2.0:
  * update mediathek url
 version 2.1.2:

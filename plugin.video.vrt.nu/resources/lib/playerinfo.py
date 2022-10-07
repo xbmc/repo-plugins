@@ -111,7 +111,8 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         self.quit.clear()
         self.update_position()
         self.update_total()
-        self.push_upnext()
+        # FIXME: VRT Search API is removed, so up next doesn't work
+        # self.push_upnext()
 
         # StreamPosition thread keeps running when watching multiple episode with "Up Next"
         # only start StreamPosition thread when it doesn't exist yet.

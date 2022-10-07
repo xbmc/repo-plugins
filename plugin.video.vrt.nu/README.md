@@ -59,6 +59,9 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.18 (2022-10-07)
+- Fix menu listings (@mediaminister)
+
 ### v2.5.17 (2022-09-21)
 - Fix watching VRT MAX abroad (@mediaminister)
 - Fix 'My Programs' menu (@mediaminister)

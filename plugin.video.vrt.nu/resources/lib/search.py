@@ -5,10 +5,11 @@
 
 from __future__ import absolute_import, division, unicode_literals
 from favorites import Favorites
-from kodiutils import (colour, addon_profile, container_refresh, container_update, end_of_directory, get_json_data,
-                       get_search_string, get_setting_int, input_down, localize, ok_dialog, open_file,
-                       show_listing, ttl, url_for)
+from kodiutils import (addon_profile, container_refresh, container_update, end_of_directory, get_json_data,
+                       get_search_string, input_down, localize, ok_dialog, open_file,
+                       show_listing, url_for)
 from resumepoints import ResumePoints
+from api import get_programs
 
 
 class Search:
@@ -70,7 +71,7 @@ class Search:
 
         show_listing(menu_items, category=30031, cache=False)
 
-    def search(self, keywords=None, page=0, edit=False):
+    def search(self, keywords=None, end_cursor='', edit=False):
         """The VRT MAX add-on Search functionality and results"""
         if keywords is None or edit is True:
             keywords = get_search_string(keywords)
@@ -82,30 +83,15 @@ class Search:
             container_update(url_for('search_query', keywords=keywords))
             return
 
-        from apihelper import ApiHelper
-        from utils import realpage
-        page = realpage(page)
-
         self.add(keywords)
 
-        search_items, sort, ascending, content = ApiHelper(self._favorites, self._resumepoints).list_search(keywords, page=page)
+        search_items = get_programs(keywords=keywords, end_cursor=end_cursor)
         if not search_items:
             ok_dialog(heading=localize(30135), message=localize(30136, keywords=keywords))
             end_of_directory()
             return
 
-        # Add 'More…' entry at the end
-        from helperobjects import TitleItem
-        if len(search_items) == get_setting_int('itemsperpage', default=50):
-            search_items.append(TitleItem(
-                label=colour(localize(30300)),  # More…
-                path=url_for('search_query', keywords=keywords, page=page + 1),
-                art_dict=dict(thumb='DefaultAddonSearch.png'),
-                info_dict={},
-            ))
-
-        self._favorites.refresh(ttl=ttl('indirect'))
-        show_listing(search_items, category=30032, sort=sort, ascending=ascending, content=content, cache=False)
+        show_listing(search_items, category=30032, content='tvshows', cache=False)
 
     def clear(self):
         """Clear the search history"""

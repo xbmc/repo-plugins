@@ -94,23 +94,23 @@ class ApiHelper:
 
         return self.__map_tvshows(tvshows, oneoffs, use_favorites=use_favorites, cache_file=cache_file)
 
-    def tvshow_to_listitem(self, tvshow, program, cache_file):
+    def tvshow_to_listitem(self, tvshow, program_name, cache_file):
         """Return a ListItem based on a Suggests API result"""
         label = self._metadata.get_label(tvshow)
 
-        if program:
-            context_menu, favorite_marker = self._metadata.get_context_menu(tvshow, program, cache_file)
+        if program_name:
+            context_menu, favorite_marker = self._metadata.get_context_menu(tvshow, program_name, cache_file)
             label += favorite_marker
 
         return TitleItem(
             label=label,
-            path=url_for('programs', program=program),
+            path=url_for('programs', program_name=program_name),
             art_dict=self._metadata.get_art(tvshow),
             info_dict=self._metadata.get_info_labels(tvshow),
             context_menu=context_menu,
         )
 
-    def list_episodes(self, program=None, season=None, category=None, feature=None, programtype=None,
+    def list_episodes(self, program_name=None, season=None, category=None, feature=None, programtype=None,
                       page=None, use_favorites=False, variety=None, whatson_id=None, episode_id=None):
         """Construct a list of episode or season TitleItems from VRT MAX Search API data and filtered by favorites"""
         # Caching
@@ -132,13 +132,13 @@ class ApiHelper:
             titletype = variety
 
         # Get data from api or cache
-        episodes = self.get_episodes(program=program, season=season, category=category, feature=feature, programtype=programtype, page=page,
+        episodes = self.get_episodes(program=program_name, season=season, category=category, feature=feature, programtype=programtype, page=page,
                                      use_favorites=use_favorites, variety=variety, cache_file=cache_file, whatson_id=whatson_id, episode_id=episode_id)
 
         if isinstance(episodes, tuple):
             seasons = episodes[0]
             episodes = episodes[1]
-            return self.__map_seasons(program, seasons, episodes)
+            return self.__map_seasons(program_name, seasons, episodes)
 
         return self.__map_episodes(episodes, titletype=titletype, season=season, use_favorites=use_favorites, cache_file=cache_file)
 
@@ -172,7 +172,7 @@ class ApiHelper:
 
         return episode_items, sort, ascending, content
 
-    def __map_seasons(self, program, seasons, episodes):
+    def __map_seasons(self, program_name, seasons, episodes):
         import random
         season_items = []
         sort = 'label'
@@ -190,7 +190,7 @@ class ApiHelper:
         if get_global_setting('videolibrary.showallitems') is True:
             season_items.append(TitleItem(
                 label=localize(30133),  # All seasons
-                path=url_for('programs', program=program, season='allseasons'),
+                path=url_for('programs', program_name=program_name, season='allseasons'),
                 art_dict=self._metadata.get_art(episode, season='allseasons'),
                 info_dict=dict(tvshowtitle=self._metadata.get_tvshowtitle(episode),
                                plot=self._metadata.get_plot(episode, season='allseasons'),
@@ -214,7 +214,7 @@ class ApiHelper:
 
             season_items.append(TitleItem(
                 label=self._metadata.get_title(episode, season=season.get('title', '')),
-                path=url_for('programs', program=program, season=season_key),
+                path=url_for('programs', program_name=program_name, season=season_key),
                 art_dict=self._metadata.get_art(episode, season=season.get('name', '')),
                 info_dict=self._metadata.get_info_labels(episode, season=season.get('title', '')),
                 prop_dict=self._metadata.get_properties(episode),
@@ -495,9 +495,9 @@ class ApiHelper:
             )
         return video
 
-    def get_latest_episode(self, program):
+    def get_latest_episode(self, program_name):
         """Get the latest episode of a program"""
-        api_data = self.get_episodes(program=program, variety='single')
+        api_data = self.get_episodes(program=program_name, variety='single')
         if len(api_data) != 1:
             return None
         episode = next(iter(api_data), {})
@@ -856,8 +856,9 @@ class ApiHelper:
             items = data.get(':items')
             if items:
                 for item in items:
-                    filled = items.get(item).get('items')
-                    if filled:
+                    filled = items.get(item).get(':items')
+                    title = items.get(item).get('title')
+                    if filled and title:
                         featured.append(dict(name=items.get(item).get('title'), id='jcr_%s' % item))
         return featured
 
@@ -867,7 +868,7 @@ class ApiHelper:
         media = []
         data = get_url_json('https://www.vrt.be/vrtmax/jcr:content/par/%s.model.json' % feature)
         if data is not None:
-            for item in data.get('items'):
+            for item in data.get(':items'):
                 mediatype = 'tvshows'
                 for action in item.get('actions'):
                     if 'episode' in action.get('type'):

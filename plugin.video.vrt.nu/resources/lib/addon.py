@@ -68,10 +68,11 @@ def favorites_menu():
 
 
 @plugin.route('/favorites/programs')
-def favorites_programs():
+@plugin.route('/favorites/programs/<end_cursor>')
+def favorites_programs(end_cursor=''):
     """The favorites 'My programs' listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_tvshow_menu(use_favorites=True)
+    VRTPlayer().show_tvshow_menu(end_cursor=end_cursor, use_favorites=True)
 
 
 @plugin.route('/favorites/docu')
@@ -90,19 +91,19 @@ def favorites_music():
 
 @plugin.route('/favorites/recent')
 @plugin.route('/favorites/recent')
-@plugin.route('/favorites/recent/<page>')
-def favorites_recent(page=1):
+@plugin.route('/favorites/recent/<end_cursor>')
+def favorites_recent(end_cursor=''):
     """The favorites recent listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_recent_menu(page=page, use_favorites=True)
+    VRTPlayer().show_recent_menu(end_cursor=end_cursor, use_favorites=True)
 
 
 @plugin.route('/favorites/offline')
-@plugin.route('/favorites/offline/<page>')
-def favorites_offline(page=1):
+@plugin.route('/favorites/offline/<end_cursor>')
+def favorites_offline(end_cursor=''):
     """The favorites offline listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_offline_menu(page=page, use_favorites=True)
+    VRTPlayer().show_offline_menu(end_cursor=end_cursor, use_favorites=True)
 
 
 @plugin.route('/favorites/refresh')
@@ -121,10 +122,11 @@ def favorites_manage():
 
 
 @plugin.route('/resumepoints/continue')
-def resumepoints_continue():
+@plugin.route('/resumepoints/continue/<end_cursor>')
+def resumepoints_continue(end_cursor=''):
     """The resumepoints continue listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_continue_menu(page=1)
+    VRTPlayer().show_continue_menu(end_cursor=end_cursor)
 
 
 @plugin.route('/resumepoints/refresh')
@@ -136,31 +138,33 @@ def resumepoints_refresh():
 
 
 @plugin.route('/programs')
-@plugin.route('/programs/<program>')
-@plugin.route('/programs/<program>/<season>')
-def programs(program=None, season=None):
+@plugin.route('/programs/<program_name>')
+@plugin.route('/programs/<program_name>/<season_name>')
+def programs(program_name=None, season_name=None):
     """The Programs / Seasons / Episodes listing"""
     from vrtplayer import VRTPlayer
-    if program:
-        VRTPlayer().show_episodes_menu(program=program, season=season)
+    if program_name:
+        VRTPlayer().show_episodes_menu(program_name=program_name, season_name=season_name)
     else:
         VRTPlayer().show_tvshow_menu()
 
 
 @plugin.route('/categories')
 @plugin.route('/categories/<category>')
-def categories(category=None):
+@plugin.route('/categories/<category>/<end_cursor>')
+def categories(category=None, end_cursor=''):
     """The categories menu and listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_category_menu(category=category)
+    VRTPlayer().show_category_menu(category=category, end_cursor=end_cursor)
 
 
 @plugin.route('/channels')
 @plugin.route('/channels/<channel>')
-def channels(channel=None):
+@plugin.route('/channels/<channel>/<end_cursor>')
+def channels(channel=None, end_cursor=''):
     """The channels menu and listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_channels_menu(channel=channel)
+    VRTPlayer().show_channels_menu(channel=channel, end_cursor=end_cursor)
 
 
 @plugin.route('/livetv')
@@ -171,27 +175,28 @@ def livetv():
 
 
 @plugin.route('/recent')
-@plugin.route('/recent/<page>')
-def recent(page=1):
+@plugin.route('/recent/<end_cursor>')
+def recent(end_cursor=''):
     """The most recent items listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_recent_menu(page=page)
+    VRTPlayer().show_recent_menu(end_cursor=end_cursor)
 
 
 @plugin.route('/offline')
-@plugin.route('/offline/<page>')
-def offline(page=1):
+@plugin.route('/offline/<end_cursor>')
+def offline(end_cursor=''):
     """The soon offline listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_offline_menu(page=page)
+    VRTPlayer().show_offline_menu(end_cursor=end_cursor)
 
 
 @plugin.route('/featured')
 @plugin.route('/featured/<feature>')
-def featured(feature=None):
+@plugin.route('/featured/<feature>/<end_cursor>')
+def featured(feature=None, end_cursor=''):
     """The featured menu and listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_featured_menu(feature=feature)
+    VRTPlayer().show_featured_menu(feature=feature, end_cursor=end_cursor)
 
 
 @plugin.route('/tvguide')
@@ -244,11 +249,11 @@ def edit_search(keywords=None):
 
 @plugin.route('/search/query')
 @plugin.route('/search/query/<keywords>')
-@plugin.route('/search/query/<keywords>/<page>')
-def search_query(keywords=None, page=1):
+@plugin.route('/search/query/<keywords>/<end_cursor>')
+def search_query(keywords=None, end_cursor=''):
     """The Search interface and query listing"""
     from search import Search
-    Search().search(keywords=keywords, page=page)
+    Search().search(keywords=keywords, end_cursor=end_cursor)
 
 
 @plugin.route('/search/remove/<keywords>')
@@ -266,11 +271,11 @@ def play_id(video_id, publication_id=None):
     VRTPlayer().play(dict(video_id=video_id, publication_id=publication_id))
 
 
-@plugin.route('/play/latest/<program>')
-def play_latest(program):
+@plugin.route('/play/latest/<program_name>')
+def play_latest(program_name):
     """The API interface to play the latest episode of a program"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().play_latest_episode(program=program)
+    VRTPlayer().play_latest_episode(program_name=program_name)
 
 
 @plugin.route('/play/upnext/<episode_id>')

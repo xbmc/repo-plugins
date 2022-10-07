@@ -5,24 +5,25 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Composite\n"
-"Report-Msgid-Bugs-To: https://github.com/anxdpanic/plugin.video.composite_for_plex/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
-"PO-Revision-Date: 2020-01-18 21:15+0500\n"
-"Last-Translator: GITHUB USERNAME\n"
-"Language-Team: Italian\n"
-"Language: it_IT\n"
+"PO-Revision-Date: 2022-09-23 03:14+0000\n"
+"Last-Translator: Massimo Pissarello <mapi68@gmail.com>\n"
+"Language-Team: Italian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-composite_for_plex/it_it/>\n"
+"Language: it_it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.14.1\n"
 
 msgctxt "Addon Description"
 msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
-msgstr ""
+msgstr "Sfoglia e riproduci file multimediali di video, musica e foto gestiti da Plex Media Server.[CR][CR]Fork di PleXBMC di Hippojay"
 
 msgctxt "Addon Disclaimer"
 msgid "Composite is NOT an official Plex add-on and is not supported or endorsed by Plex."
-msgstr ""
+msgstr "Composite NON è un componente aggiuntivo Plex ufficiale e non è supportato o approvato da Plex."
 
 msgctxt "#30000"
 msgid "Confirm file delete?"
@@ -58,7 +59,7 @@ msgstr "Per uscire devi essere loggato come utente amministrativo. Per favore ca
 
 msgctxt "#30008"
 msgid "myPlex"
-msgstr "myples"
+msgstr "myPlex"
 
 msgctxt "#30009"
 msgid "You are currently signed into myPlex. Are you sure you want to sign out?"
@@ -171,7 +172,7 @@ msgstr "Cerca Album..."
 
 msgctxt "#30037"
 msgid "Search Tracks..."
-msgstr "Cerca Tracce"
+msgstr "Cerca Tracce..."
 
 msgctxt "#30038"
 msgid "All"
@@ -408,11 +409,11 @@ msgstr "Ricerca Server"
 
 msgctxt "#30505"
 msgid "PMS Username: "
-msgstr "Nome Utente PMS"
+msgstr "Nome utente PMS: "
 
 msgctxt "#30506"
 msgid "PMS Password: "
-msgstr "Password PMS"
+msgstr "Password PMS: "
 
 msgctxt "#30507"
 msgid "Always Transcode"
@@ -492,7 +493,7 @@ msgstr "Password myPlex"
 
 msgctxt "#30526"
 msgid "Select master server..."
-msgstr "Seleziona il server master"
+msgstr "Seleziona il server master..."
 
 msgctxt "#30527"
 msgid "Authentication required?"
@@ -813,7 +814,7 @@ msgstr "Nascondi le informazioni uniche nel log"
 
 msgctxt "#30608"
 msgid "Use Kodi client name?"
-msgstr "Utilizza il nome del client Kodi"
+msgstr "Uso il nome del client Kodi?"
 
 msgctxt "#30609"
 msgid "Switch off playback monitor"
@@ -857,7 +858,7 @@ msgstr ""
 
 msgctxt "#30619"
 msgid "Cancel"
-msgstr ""
+msgstr "Annulla"
 
 msgctxt "#30620"
 msgid "Submit"
@@ -976,7 +977,7 @@ msgstr ""
 
 msgctxt "#30651"
 msgid "Please wait..."
-msgstr ""
+msgstr "Attendi..."
 
 msgctxt "#30652"
 msgid "myPlex discovery..."
@@ -1056,11 +1057,11 @@ msgstr ""
 
 msgctxt "#30671"
 msgid "Default"
-msgstr ""
+msgstr "Predefinito"
 
 msgctxt "#30672"
 msgid "Go to %s"
-msgstr ""
+msgstr "Vai a %s"
 
 msgctxt "#30673"
 msgid "Delete %s from the %s playlist?"
@@ -1076,7 +1077,7 @@ msgstr ""
 
 msgctxt "#30676"
 msgid "Select playlist"
-msgstr ""
+msgstr "Seleziona playlist"
 
 msgctxt "#30677"
 msgid "Add to playlist"
@@ -1208,7 +1209,7 @@ msgstr ""
 
 msgctxt "#30709"
 msgid "Port"
-msgstr ""
+msgstr "Porta"
 
 msgctxt "#30710"
 msgid "Kodi's Web Server Settings"
@@ -1220,11 +1221,11 @@ msgstr ""
 
 msgctxt "#30712"
 msgid "Username"
-msgstr ""
+msgstr "Nome utente"
 
 msgctxt "#30713"
 msgid "Password"
-msgstr ""
+msgstr "Password"
 
 msgctxt "#30714"
 msgid "Main Menu"
@@ -1316,7 +1317,7 @@ msgstr ""
 
 msgctxt "#30736"
 msgid "Default"
-msgstr ""
+msgstr "Predefinito"
 
 msgctxt "#30737"
 msgid "Majority"
@@ -1456,7 +1457,7 @@ msgstr ""
 
 msgctxt "#30771"
 msgid "Shuffle"
-msgstr ""
+msgstr "Mescolato"
 
 msgctxt "#30772"
 msgid "Source"
@@ -1464,7 +1465,7 @@ msgstr ""
 
 msgctxt "#30773"
 msgid "None"
-msgstr ""
+msgstr "Nessuno"
 
 msgctxt "#30774"
 msgid "Generating Playlist"

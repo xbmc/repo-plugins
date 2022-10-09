@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.themoviedb.helper"
-version="4.4.0"
+version="4.10.14"
 name="TheMovieDb Helper"
 provider-name="jurialmunkey">
 <requires>
   <import addon="xbmc.python" version="3.0.0"/>
   <import addon="script.module.requests" version="2.9.1"/>
   <import addon="script.module.pil" version="1.1.7"/>
+  <import addon="script.module.addon.signals" version="0.0.6" />
 </requires>
 <extension point="xbmc.python.pluginsource" library="plugin.py">
   <provides>video</provides>
@@ -15,43 +16,47 @@ provider-name="jurialmunkey">
 <extension point="xbmc.service" library="service.py" />
 <extension point="kodi.context.item">
   <menu id="kodi.core.main">
-    <item library="context-playusing.py">
+    <item library="context.py" args="playusing">
       <label>$ADDON[plugin.video.themoviedb.helper 32322]</label>
       <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.playusing))</visible>
     </item>
-    <item library="context-related.py">
+    <item library="context.py" args="related">
       <label>$ADDON[plugin.video.themoviedb.helper 32235]</label>
       <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.related))</visible>
     </item>
-    <item library="context-addlibrary.py">
+    <item library="context.py" args="addlibrary">
       <label>$LOCALIZE[20444]</label>
       <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.addlibrary))</visible>
     </item>
-    <item library="context-trakt.py">
+    <item library="context.py" args="trakt">
       <label>$ADDON[plugin.video.themoviedb.helper 32295]</label>
       <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.trakt))</visible>
     </item>
-    <item library="context-refresh.py">
+    <item library="context.py" args="refresh">
       <label>$ADDON[plugin.video.themoviedb.helper 32233]</label>
       <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.refresh))</visible>
     </item>
-    <item library="context-artwork.py">
+    <item library="context.py" args="artwork">
       <label>$ADDON[plugin.video.themoviedb.helper 32222]</label>
       <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.artwork))</visible>
     </item>
-    <item library="context-sorting.py">
+    <item library="context.py" args="sorting">
       <label>$ADDON[plugin.video.themoviedb.helper 32309]</label>
       <visible>!String.IsEmpty(ListItem.Property(tmdbhelper.context.sorting))</visible>
     </item>
   </menu>
 </extension>
 <extension point="xbmc.addon.metadata">
+  <reuselanguageinvoker>false</reuselanguageinvoker>
   <summary lang="en_GB">TheMovieDb Helper - Now With Trakt Support!</summary>
   <summary lang="es_ES">TheMovieDb Helper - ¡Ahora con soporte para Trakt!</summary>
+  <summary lang="fr_FR">TheMovieDb Helper - Maintenant avec support Trakt!</summary>
   <description lang="en_GB">TheMovieDb Helper provides details about movies, tvshows and actors from TMDb. Users can access a variety of lists from TMDb and Trakt.</description>
   <description lang="es_ES">TheMovieDb Helper proporciona detalles sobre películas, programas de televisión y actores de TMDb. Los usuarios pueden acceder a una variedad de listas desde TMDb y Trakt.</description>
+  <description lang="fr_FR">TheMovieDb Helper fournit des détails sur les films, les émissions de télévision et acteurs de TMDb. Les utilisateurs peuvent accéder à une variété de listes TMDb et Trakt.</description>
   <disclaimer lang="en_GB">Provided by TheMovieDb and Trakt.</disclaimer>
   <disclaimer lang="es_ES">Proporcionado por TheMovieDb y Trakt</disclaimer>
+  <disclaimer lang="fr_FR">Fourni par TheMovieDb et Trakt.</disclaimer>
   <license>GPL-3.0-or-later</license>
   <website>https://github.com/jurialmunkey/plugin.video.themoviedb.helper</website>
   <forum>https://forum.kodi.tv/showthread.php?tid=345847</forum>
@@ -61,6 +66,5 @@ provider-name="jurialmunkey">
     <screenshot>resources/screenshot-01.jpg</screenshot>
     <screenshot>resources/screenshot-02.jpg</screenshot>
   </assets>
-  <news>Add some additional dbid checking based on title/year combo</news>
 </extension>
 </addon>

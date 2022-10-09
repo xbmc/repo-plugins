@@ -1,0 +1,28 @@
+{
+    "name"              : "ABC iView",
+    "plugin"            : "plugin.video.abc_iview",
+    "priority"          : 1000,
+    "provider"          : "ABC iview",
+    "is_resolvable"     : "true",
+    "assert"            : {
+                            "play_movie":       ["title", "year"],
+                            "play_episode":     ["showname", "season", "episode"],
+                            "search_movie":     ["title"],
+                            "search_episode":   ["showname"]
+                          },
+    "play_movie"        : [
+                            "plugin://plugin.video.abc_iview/?action=searchhistory&name={title_url}",
+                            {"label": "(?i){title}"},
+                            {"label": "(?i){title}"}
+                          ],
+    "search_movie"      : "plugin://plugin.video.abc_iview/?action=searchhistory&name={title_url}",
+    "play_episode"      : [
+                            "plugin://plugin.video.abc_iview/?action=searchhistory&name={showname_url}",
+                            {"label": "(?i){showname}"},
+                            {"return": "true", "season": "^{season}$", "episode": "^{episode}$"},
+                            {"label": "^Series {season}$"},
+                            {"return": "true", "season": "^{season}$", "episode": "^{episode}$"},
+                            {"dialog": "true"}
+                          ],
+    "search_episode"    : "plugin://plugin.video.abc_iview/?action=searchhistory&name={showname_url}"
+}

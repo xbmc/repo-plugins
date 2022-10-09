@@ -1,0 +1,25 @@
+{
+    "name"              : "STR_PLUGINNAME",
+    "plugin"            : "STR_PLUGINID",
+    "priority"          : 100,
+    "is_resolvable"     : "true",
+    "make_playlist"     : "true",
+    "assert"            : {
+                            "play_movie":       ["title", "year"],
+                            "play_episode":     ["showname", "season", "episode"],
+                            "search_movie":     ["title"],
+                            "search_episode":   ["showname"]
+                          },
+    "play_movie"        : [
+                            "plugin://STR_PLUGINID/?_=search&query={title_url}",
+                            {"strict": "true", "title": "(?i)^(\\[.*\\])?.*{title}.*(\\[.*\\])?$", "year": "{year}", "dialog": "true"}
+                          ],
+    "play_episode"      : [
+                            "plugin://STR_PLUGINID/?_=search&query={showname_url}",
+                            {"title": "(?i)^(\\[.*\\])?{showname}(\\[.*\\])?$"},
+                            {"title": "(?i)^Season {season}$"},
+                            {"strict": "true", "season": "^{season}$", "episode": "^{episode}$", "dialog": "true"}
+                          ],
+    "search_movie"      : "plugin://STR_PLUGINID/?_=search&query={title_url}",
+    "search_episode"    : "plugin://STR_PLUGINID/?_=search&query={showname_url}"
+}

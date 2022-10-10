@@ -49,7 +49,9 @@ def scrape_videos(url):
         json_source = json_source['showCase']
 
     for item in json_source:
-        if 'show-all' in filter_list or item['sport'] in filter_list:
+        # if 'show-all' in filter_list or item['sport'] in filter_list:
+        #     build_video_link(item)
+        if 'show-all' in filter_list or any(x in item['tags'] for x in filter_list):
             build_video_link(item)
 
 

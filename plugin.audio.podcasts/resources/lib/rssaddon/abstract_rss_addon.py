@@ -289,6 +289,7 @@ class AbstractRssAddon:
                 }
                 self.add_list_item(entry, path)
 
+            li = None
             for i, item in enumerate(items):
                 if i >= offset and (not limit or i < offset + limit):
                     li = self._create_list_item(item)

@@ -281,11 +281,11 @@ msgid "Skip nothing"
 msgstr ""
 
 msgctxt "#30405"
-msgid "Skip breaks plus idle time"
+msgid "Skip all breaks plus idle time between pitches"
 msgstr ""
 
 msgctxt "#30406"
-msgid "Skip breaks, idle time, and non-action pitches"
+msgid "Skip all breaks and non-action pitches"
 msgstr ""
 
 msgctxt "#30407"
@@ -293,7 +293,7 @@ msgid "Inning"
 msgstr ""
 
 msgctxt "#30408"
-msgid "Skip breaks"
+msgid "Skip all breaks"
 msgstr ""
 
 msgctxt "#30409"
@@ -351,4 +351,17 @@ msgstr ""
 msgctxt "#30422"
 msgid "Select batter(s) or pitcher(s) (one at a time, click Cancel when done)"
 msgstr ""
+
+msgctxt "#30423"
+msgid "Skip commercial breaks"
+msgstr ""
+
+msgctxt "#30424"
+msgid "Skip adjust start (seconds)"
+msgstr ""
+
+msgctxt "#30425"
+msgid "Skip adjust end (seconds)"
+msgstr ""
+
 

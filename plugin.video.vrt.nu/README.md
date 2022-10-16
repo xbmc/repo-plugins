@@ -59,6 +59,11 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.19 (2022-10-16)
+- Fix categories and channels menu listings (@mediaminister)
+- Fix resumepoints and Up Next integration (@mediaminister)
+- Fix playing from VRT MAX url API interface (@mediaminister)
+
 ### v2.5.18 (2022-10-07)
 - Fix menu listings (@mediaminister)
 

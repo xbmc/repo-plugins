@@ -519,6 +519,10 @@ msgctxt "#30454"
 msgid "from livestream cache"
 msgstr ""
 
+msgctxt "#30455"
+msgid "Delete from this list"
+msgstr ""
+
 
 ### SETTINGS
 msgctxt "#30700"

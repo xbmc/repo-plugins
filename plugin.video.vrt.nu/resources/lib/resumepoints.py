@@ -11,7 +11,7 @@ except ImportError:  # Python 2
     from urllib2 import HTTPError
 
 from data import SECONDS_MARGIN
-from kodiutils import (get_cache, get_setting_bool, get_url_json, has_credentials, invalidate_caches,
+from kodiutils import (container_refresh, get_cache, get_setting_bool, get_url_json, has_credentials, invalidate_caches,
                        localize, log, log_error, notification, open_url, update_cache)
 
 
@@ -166,6 +166,41 @@ class ResumePoints:
             if menu_caches:
                 invalidate_caches(*menu_caches)
         return True
+
+    def delete_continue(self, episode_id):
+        """Delete a continue item from continue menu"""
+        self._delete_continue_graphql(episode_id)
+        container_refresh()
+
+    def _delete_continue_graphql(self, episode_id):
+        """Delete continue episode using GraphQL API"""
+        from tokenresolver import TokenResolver
+        access_token = TokenResolver().get_token('vrtnu-site_profile_at')
+        result_json = {}
+        if access_token:
+            headers = {
+                'Authorization': 'Bearer ' + access_token,
+                'Content-Type': 'application/json',
+            }
+            graphql_query = """
+                mutation listDelete($input: ListDeleteInput!) {
+                  listDelete(input: $input)
+                }
+            """
+            payload = dict(
+                operationName='listDelete',
+                variables=dict(
+                    input=dict(
+                        id=episode_id,
+                        listName='verderkijken',
+                    ),
+                ),
+                query=graphql_query,
+            )
+            from json import dumps
+            data = dumps(payload).encode('utf-8')
+            result_json = get_url_json(url=self.GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
+        return result_json
 
     def get_continue(self):
         """Get continue using GraphQL API"""

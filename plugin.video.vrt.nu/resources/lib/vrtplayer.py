@@ -3,7 +3,8 @@
 """Implements a VRTPlayer class"""
 
 from __future__ import absolute_import, division, unicode_literals
-from api import get_continue_episodes, get_featured, get_programs, get_episodes, get_favorite_programs, get_recent_episodes, get_offline_programs
+from api import (get_continue_episodes, get_featured, get_programs, get_episodes, get_favorite_programs, get_recent_episodes,
+                 get_offline_programs, get_single_episode)
 from apihelper import ApiHelper
 from favorites import Favorites
 from helperobjects import TitleItem
@@ -317,7 +318,8 @@ class VRTPlayer:
 
     def play_upnext(self, episode_id):
         """Play the next episode of a program by episode_id"""
-        video = self._apihelper.get_single_episode(episode_id=episode_id)
+        title_item = get_single_episode(episode_id=episode_id)
+        video = dict(listitem=title_item, video_id=title_item.path.split('/')[5], publication_id=title_item.path.split('/')[6])
         if not video:
             log_error('Play Up Next with episodeId {episode_id} failed', episode_id=episode_id)
             ok_dialog(message=localize(30954))

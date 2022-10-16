@@ -10,10 +10,13 @@ except ImportError:  # Python 2
     from urllib import quote_plus
 
 from helperobjects import TitleItem
-from kodiutils import colour, get_setting_bool, get_setting_int, get_url_json, localize, ttl, url_for
-from utils import from_unicode, shorten_link, to_unicode, url_to_program
+from kodiutils import colour, get_setting_bool, get_setting_int, get_url_json, has_credentials, localize, log, url_for
+from utils import from_unicode, reformat_image_url, shorten_link, to_unicode, url_to_program
+from graphql_data import EPISODE_TILE
 
 GRAPHQL_URL = 'https://www.vrt.be/vrtnu-api/graphql/v1'
+RESUMEPOINTS_URL = 'https://ddt.profiel.vrt.be/resumePoints'
+RESUMEPOINTS_MARGIN = 30  # The margin at start/end to consider a video as watched
 
 
 def get_sort(program_type):
@@ -36,8 +39,10 @@ def get_sort(program_type):
     return sort, ascending
 
 
-def get_context_menu(program_name, program_id, program_title, program_type, plugin_path, is_favorite):
+def get_context_menu(program_name, program_id, program_title, program_type, is_favorite, is_continue=False, episode_id=None):
     """Get context menu for listitem"""
+    from addon import plugin
+    plugin_path = plugin.path
     context_menu = []
 
     # Follow/unfollow
@@ -67,17 +72,23 @@ def get_context_menu(program_name, program_id, program_title, program_type, plug
                 'Container.Update(%s)' % url_for('programs', program_name=program_name)
             ))
 
+    # Delete continue
+    if is_continue:
+        context_menu.append((
+            localize(30455),  # Delete from this list
+            'RunPlugin(%s)' % url_for('resumepoints_continue_delete', episode_id=episode_id)
+        ))
     return context_menu
 
 
-def format_label(program_title, episode_title, program_type, ontime, is_favorite):
+def format_label(program_title, episode_title, program_type, ontime=None, is_favorite=False, item_type='episode'):
     """Format label"""
-    if program_type == 'mixed_episodes':
+    if item_type == 'program' or program_type == 'oneoff':
+        label = program_title
+    elif program_type == 'mixed_episodes':
         label = '[B]{}[/B] - {}'.format(program_title, episode_title)
     elif program_type == 'daily':
         label = '{} - {}'.format(ontime.strftime('%d/%m'), episode_title)
-    elif program_type == 'oneoff':
-        label = program_title
     else:
         label = episode_title
 
@@ -144,6 +155,206 @@ def format_plot(plot, region, product_placement, mpaa, offtime, permalink):
     return colour(plot)
 
 
+def resumepoints_is_activated():
+    """Is resumepoints activated in the menu and do we have credentials ?"""
+    return get_setting_bool('usefavorites', default=True) and get_setting_bool('useresumepoints', default=True) and has_credentials()
+
+
+def get_resumepoint_data(episode_id):
+    """Get resumepoint data from GraphQL API"""
+    data_json = get_single_episode_data(episode_id)
+    video_id = data_json.get('data').get('catalogMember').get('watchAction').get('videoId')
+    resumepoint_title = data_json.get('data').get('catalogMember').get('watchAction').get('resumePointTitle')
+    return video_id, resumepoint_title
+
+
+def get_next_info(episode_id):
+    """ Get up next data"""
+    import dateutil.parser
+    next_info = {}
+    data_json = get_single_episode_data(episode_id)
+    current_ep = data_json.get('data').get('catalogMember')
+    # Only get add data when there is a next episode
+    if current_ep.get('nextUp').get('title') == 'Volgende aflevering':
+        next_ep = current_ep.get('nextUp').get('tile').get('episode')
+
+        current_episode = dict(
+            episodeid=current_ep.get('id'),
+            tvshowid=current_ep.get('program').get('id'),
+            title=current_ep.get('title'),
+            art={
+                'tvshow.poster': reformat_image_url(current_ep.get('program').get('posterImage').get('templateUrl')),
+                'thumb': reformat_image_url(current_ep.get('image').get('templateUrl')),
+                'tvshow.fanart': reformat_image_url(current_ep.get('program').get('image').get('templateUrl')),
+                'tvshow.landscape': reformat_image_url(current_ep.get('image').get('templateUrl')),
+                'tvshow.clearart': None,
+                'tvshow.clearlogo': None,
+            },
+            plot=current_ep.get('description'),
+            showtitle=current_ep.get('program').get('title'),
+            playcount=None,
+            season=int(''.join(i for i in current_ep.get('season').get('titleRaw') if i.isdigit()) or 0),
+            episode=int(current_ep.get('episodeNumberRaw') or 0),
+            rating=None,
+            firstaired=dateutil.parser.parse(current_ep.get('analytics').get('airDate')).strftime('%Y-%m-%d'),
+            runtime=int(current_ep.get('durationSeconds')),
+        )
+
+        next_episode = dict(
+            episodeid=next_ep.get('id'),
+            tvshowid=next_ep.get('program').get('id'),
+            title=next_ep.get('title'),
+            art={
+                'tvshow.poster': reformat_image_url(next_ep.get('program').get('posterImage').get('templateUrl')),
+                'thumb': reformat_image_url(next_ep.get('image').get('templateUrl')),
+                'tvshow.fanart': reformat_image_url(next_ep.get('program').get('image').get('templateUrl')),
+                'tvshow.landscape': reformat_image_url(next_ep.get('image').get('templateUrl')),
+                'tvshow.clearart': None,
+                'tvshow.clearlogo': None,
+            },
+            plot=next_ep.get('description'),
+            showtitle=next_ep.get('program').get('title'),
+            playcount=None,
+            season=int(''.join(i for i in next_ep.get('season').get('titleRaw') if i.isdigit()) or 0),
+            episode=int(next_ep.get('episodeNumberRaw') or 0),
+            rating=None,
+            firstaired=dateutil.parser.parse(next_ep.get('analytics').get('airDate')).strftime('%Y-%m-%d'),
+            runtime=int(next_ep.get('durationSeconds')),
+        )
+
+        play_info = dict(
+            episode_id=next_ep.get('id'),
+        )
+
+        next_info = dict(
+            current_episode=current_episode,
+            next_episode=next_episode,
+            play_info=play_info,
+        )
+    return next_info
+
+
+def get_single_episode_data(episode_id):
+    """Get single episode data from GraphQL API"""
+    from tokenresolver import TokenResolver
+    access_token = TokenResolver().get_token('vrtnu-site_profile_at')
+    data_json = {}
+    if access_token:
+        headers = {
+            'Authorization': 'Bearer ' + access_token,
+            'Content-Type': 'application/json',
+        }
+        graphql_query = """
+            query PlayerData($id: ID!) {
+              catalogMember(id: $id) {
+                __typename
+              ...episode
+              }
+            }
+            fragment episode on Episode {
+              __typename
+              id
+              title
+              description
+              episodeNumberRaw
+              durationSeconds
+              offTimeRaw
+              onTimeRaw
+              image {
+                alt
+                templateUrl
+              }
+              analytics {
+                airDate
+                categories
+              }
+              program {
+                id
+                title
+                link
+                programType
+                image {
+                  alt
+                  templateUrl
+                }
+                posterImage {
+                  alt
+                  templateUrl
+                }
+              }
+              season {
+                titleRaw
+              }
+              watchAction {
+                avodUrl
+                completed
+                resumePoint
+                resumePointTotal
+                resumePointProgress
+                resumePointTitle
+                episodeId
+                videoId
+                publicationId
+                streamId
+              }
+              favoriteAction {
+                favorite
+                id
+                title
+              }
+              nextUp {
+                title
+                autoPlay
+                countdown
+                tile {
+                  __typename
+                  ...episodeTile
+                }
+              }
+            }
+            %s
+        """ % EPISODE_TILE
+        payload = dict(
+            operationName='PlayerData',
+            variables=dict(
+                id=episode_id
+            ),
+            query=graphql_query,
+        )
+        from json import dumps
+        data = dumps(payload).encode('utf-8')
+        data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
+    return data_json
+
+
+def set_resumepoint(video_id, title, position, total):
+    """Set resumepoint"""
+    # Respect resumepoint margins
+    if position and total:
+        if position < RESUMEPOINTS_MARGIN:
+            position = 0
+        if position > total - RESUMEPOINTS_MARGIN:
+            position = total
+
+    from tokenresolver import TokenResolver
+    access_token = TokenResolver().get_token('vrtnu-site_profile_at')
+    if access_token:
+        gdpr = '{} gekeken tot {} seconden.'.format(title, position)
+        headers = {
+            'Authorization': 'Bearer ' + access_token,
+            'Content-Type': 'application/json',
+        }
+        payload = dict(
+            at=position,
+            total=total,
+            gdpr=gdpr,
+        )
+        from json import dumps
+        data = dumps(payload).encode('utf-8')
+        data_json = get_url_json(url='{}/{}'.format(RESUMEPOINTS_URL, video_id), cache=None, headers=headers, data=data, raise_errors='all')
+        log(3, '[Resumepoints] Updated resumepoint {data}', data=data_json)
+
+
 def get_paginated_episodes(list_id, page_size, end_cursor=''):
     """Get paginated list of episodes from GraphQL API"""
     from tokenresolver import TokenResolver
@@ -167,7 +378,7 @@ def get_paginated_episodes(list_id, page_size, end_cursor=''):
                     edges {
                       node {
                         __typename
-                        ...ep
+                        ...episodeTile
                       }
                     }
                     pageInfo {
@@ -181,122 +392,8 @@ def get_paginated_episodes(list_id, page_size, end_cursor=''):
                 }
               }
             }
-            fragment ep on EpisodeTile {
-              __typename
-              id
-              title
-              episode {
-                __typename
-                id
-                name
-                available
-                whatsonId
-                title
-                description
-                subtitle
-                permalink
-                logo
-                brand
-                brandLogos {
-                  type
-                  mono
-                  primary
-                }
-                image {
-                  alt
-                  templateUrl
-                }
-
-                ageRaw
-                ageValue
-
-                durationRaw
-                durationValue
-                durationSeconds
-
-                episodeNumberRaw
-                episodeNumberValue
-                episodeNumberShortValue
-
-                onTimeRaw
-                onTimeValue
-                onTimeShortValue
-
-                offTimeRaw
-                offTimeValue
-                offTimeShortValue
-
-                productPlacementValue
-                productPlacementShortValue
-
-                regionRaw
-                regionValue
-                program {
-                  title
-                  id
-                  link
-                  programType
-                  description
-                  shortDescription
-                  subtitle
-                  announcementType
-                  announcementValue
-                  whatsonId
-                  image {
-                    alt
-                    templateUrl
-                  }
-                  posterImage {
-                    alt
-                    templateUrl
-                  }
-                }
-                season {
-                  id
-                  titleRaw
-                  titleValue
-                  titleShortValue
-                }
-                analytics {
-                  airDate
-                  categories
-                  contentBrand
-                  episode
-                  mediaSubtype
-                  mediaType
-                  name
-                  pageName
-                  season
-                  show
-                  }
-                primaryMeta {
-                  longValue
-                  shortValue
-                  type
-                  value
-                  __typename
-                }
-                secondaryMeta {
-                  longValue
-                  shortValue
-                  type
-                  value
-                  __typename
-                }
-                watchAction {
-                  avodUrl
-                  completed
-                  resumePoint
-                  resumePointProgress
-                  resumePointTitle
-                  episodeId
-                  videoId
-                  publicationId
-                  streamId
-                }
-              }
-            }
-        """
+            %s
+        """ % EPISODE_TILE
         # FIXME: Find a better way to change GraphQL typename
         if list_id.startswith('static:/'):
             graphql_query = graphql_query.replace('on PaginatedTileList', 'on StaticTileList')
@@ -384,6 +481,11 @@ def get_paginated_programs(list_id, page_size, end_cursor=''):
                   alt
                   templateUrl
                 }
+                favoriteAction {
+                  favorite
+                  id
+                  title
+                }
               }
             }
         """
@@ -408,25 +510,20 @@ def get_paginated_programs(list_id, page_size, end_cursor=''):
 
 def convert_programs(api_data, destination, use_favorites=False, **kwargs):
     """Convert paginated list of programs to Kodi list items"""
-    from addon import plugin
-    from favorites import Favorites
 
     programs = []
 
-    # Favorites for context menu
-    favorites = Favorites()
-    favorites.refresh(ttl=ttl('indirect'))
-    plugin_path = plugin.path
-
-    program_list = api_data.get('data').get('list')
-    if program_list:
-        for item in program_list.get('paginated').get('edges'):
+    item_list = api_data.get('data').get('list')
+    if item_list:
+        for item in item_list.get('paginated').get('edges'):
             program = item.get('node')
 
             program_name = url_to_program(program.get('link'))
             program_id = program.get('id')
             program_type = program.get('programType')
             program_title = program.get('title')
+            episode_title = None
+            ontime = None
             path = url_for('programs', program_name=program_name)
             plot = program.get('program').get('shortDescription') or program.get('program').get('description')
             plotoutline = program.get('subtitle')
@@ -435,28 +532,25 @@ def convert_programs(api_data, destination, use_favorites=False, **kwargs):
             fanart = ''
             poster_img = program.get('program').get('posterImage')
             if poster_img:
-                fanart = poster_img.get('templateUrl')
+                fanart = reformat_image_url(poster_img.get('templateUrl'))
             poster = fanart
             thumb = ''
             thumb_img = program.get('image')
             if thumb_img:
-                thumb = thumb_img.get('templateUrl')
+                thumb = reformat_image_url(thumb_img.get('templateUrl'))
 
             # Check favorite
-            is_favorite = favorites.is_favorite(program_name)
+            is_favorite = program.get('program').get('favoriteAction').get('favorite')
 
             # Filter favorites for favorites menu
             if use_favorites and is_favorite is False:
                 continue
 
             # Context menu
-            context_menu = get_context_menu(program_name, program_id, program_title, program_type, plugin_path, is_favorite)
+            context_menu = get_context_menu(program_name, program_id, program_title, program_type, is_favorite)
 
             # Label
-            if is_favorite:
-                label = program_title + colour('[COLOR={highlighted}]ᵛ[/COLOR]')
-            else:
-                label = program_title
+            label = format_label(program_title, episode_title, program_type, ontime, is_favorite, item_type='program')
 
             programs.append(
                 TitleItem(
@@ -502,107 +596,132 @@ def convert_programs(api_data, destination, use_favorites=False, **kwargs):
     return programs
 
 
-def convert_episodes(api_data, destination, use_favorites=False, **kwargs):
-    """Convert paginated list of episodes to Kodi list items"""
+def convert_episode(item, destination=None):
+    """Convert paginated episode item to TitleItem"""
     import dateutil.parser
-    from addon import plugin
-    from favorites import Favorites
+    data = item.get('node') or item.get('data')
+    episode = data.get('episode') or data.get('catalogMember')
+    episode_id = episode.get('id')
+    video_id = episode.get('watchAction').get('videoId')
+    publication_id = episode.get('watchAction').get('publicationId')
+    path = url_for('play_id', video_id=video_id, publication_id=publication_id, episode_id=episode_id)
+    program_name = url_to_program(episode.get('program').get('link'))
+    program_id = episode.get('program').get('id')
+    program_title = episode.get('program').get('title')
+    program_type = episode.get('program').get('programType')
 
+    # FIXME: Find a better way to determine mixed episodes
+    if destination in ('recent', 'favorites_recent', 'resumepoints_continue', 'featured'):
+        program_type = 'mixed_episodes'
+
+    episode_title = episode.get('title')
+    offtime = dateutil.parser.parse(episode.get('offTimeRaw'))
+    ontime = dateutil.parser.parse(episode.get('onTimeRaw'))
+    mpaa = episode.get('ageRaw') or ''
+    product_placement = True if episode.get('productPlacementShortValue') == 'pp' else False
+    region = episode.get('regionRaw')
+    permalink = episode.get('permalink')
+    plot = episode.get('description')
+    plot = format_plot(plot, region, product_placement, mpaa, offtime, permalink)
+    plotoutline = episode.get('program').get('subtitle')
+    duration = int(episode.get('durationSeconds'))
+    episode_no = int(episode.get('episodeNumberRaw') or 0)
+    season_no = int(''.join(i for i in episode.get('season').get('titleRaw') if i.isdigit()) or 0)
+    studio = episode.get('brand').title() if episode.get('brand') else 'VRT'
+    aired = dateutil.parser.parse(episode.get('analytics').get('airDate')).strftime('%Y-%m-%d')
+    dateadded = ontime.strftime('%Y-%m-%d %H:%M:%S')
+    year = int(dateutil.parser.parse(episode.get('onTimeRaw')).strftime('%Y'))
+    tag = [tag.title() for tag in episode.get('analytics').get('categories').split(',') if tag]
+
+    # Art
+    fanart = reformat_image_url(episode.get('program').get('image').get('templateUrl'))
+    poster = reformat_image_url(episode.get('program').get('posterImage').get('templateUrl'))
+    thumb = reformat_image_url(episode.get('image').get('templateUrl'))
+
+    # Check favorite
+    is_favorite = episode.get('favoriteAction').get('favorite')
+
+    # Check continue
+    is_continue = False
+    if destination == 'resumepoints_continue':
+        is_continue = True
+
+    # Context menu
+    context_menu = get_context_menu(program_name, program_id, program_title, program_type,
+                                    is_favorite, is_continue, episode_id)
+
+    # Label
+    label = format_label(program_title, episode_title, program_type, ontime, is_favorite)
+
+    # Sorting
+    sort, ascending = get_sort(program_type)
+
+    # Resumepoint
+    position = episode.get('watchAction').get('resumePoint')
+    total = episode.get('watchAction').get('resumePointTotal')
+    prop_dict = {}
+    playcount = -1
+
+    if resumepoints_is_activated():
+        # Override Kodi watch status
+        if position and total:
+            if RESUMEPOINTS_MARGIN < position < total - RESUMEPOINTS_MARGIN:
+                prop_dict['resumetime'] = position
+                prop_dict['totaltime'] = total
+            if position > total - RESUMEPOINTS_MARGIN:
+                playcount = 1
+
+    return sort, ascending, is_favorite, TitleItem(
+        label=label,
+        path=path,
+        art_dict=dict(
+            thumb=thumb,
+            poster=poster,
+            banner=fanart,
+            fanart=fanart,
+        ),
+        info_dict=dict(
+            title=label,
+            tvshowtitle=program_title,
+            aired=aired,
+            dateadded=dateadded,
+            episode=episode_no,
+            season=season_no,
+            playcount=playcount,
+            plot=plot,
+            plotoutline=plotoutline,
+            mpaa=mpaa,
+            tagline=plotoutline,
+            duration=duration,
+            studio=studio,
+            year=year,
+            tag=tag,
+            mediatype='episode',
+        ),
+        context_menu=context_menu,
+        is_playable=True,
+        prop_dict=prop_dict,
+    )
+
+
+def convert_episodes(api_data, destination, use_favorites=False, **kwargs):
+    """Convert paginated episode list to TitleItems"""
     episodes = []
     sort = 'unsorted'
     ascending = True
 
-    # Favorites for context menu
-    favorites = Favorites()
-    favorites.refresh(ttl=ttl('indirect'))
-    plugin_path = plugin.path
+    item_list = api_data.get('data').get('list')
+    if item_list:
+        for item in item_list.get('paginated').get('edges'):
 
-    episode_list = api_data.get('data').get('list')
-    if episode_list:
-        for item in episode_list.get('paginated').get('edges'):
-            episode = item.get('node').get('episode')
-            video_id = episode.get('watchAction').get('videoId')
-            publication_id = episode.get('watchAction').get('publicationId')
-            path = url_for('play_id', video_id=video_id, publication_id=publication_id)
-            program_name = url_to_program(episode.get('program').get('link'))
-            program_id = episode.get('program').get('id')
-            program_title = episode.get('program').get('title')
-            program_type = episode.get('program').get('programType')
-
-            # FIXME: Find a better way to determine mixed episodes
-            if destination in ('recent', 'favorites_recent', 'resumepoints_continue', 'featured'):
-                program_type = 'mixed_episodes'
-            episode_title = episode.get('title')
-            offtime = dateutil.parser.parse(episode.get('offTimeRaw'))
-            ontime = dateutil.parser.parse(episode.get('onTimeRaw'))
-            mpaa = episode.get('ageRaw') or ''
-            product_placement = True if episode.get('productPlacementShortValue') == 'pp' else False
-            region = episode.get('regionRaw')
-            permalink = episode.get('permalink')
-            plot = episode.get('description')
-            plot = format_plot(plot, region, product_placement, mpaa, offtime, permalink)
-            plotoutline = episode.get('program').get('subtitle')
-            duration = int(episode.get('durationSeconds'))
-            episode_no = int(episode.get('episodeNumberRaw') or 0)
-            season_no = int(''.join(i for i in episode.get('season').get('titleRaw') if i.isdigit()) or 0)
-            studio = episode.get('brand').title() if episode.get('brand') else 'VRT'
-            aired = dateutil.parser.parse(episode.get('analytics').get('airDate')).strftime('%Y-%m-%d')
-            dateadded = ontime.strftime('%Y-%m-%d %H:%M:%S')
-            year = int(dateutil.parser.parse(episode.get('onTimeRaw')).strftime('%Y'))
-            tag = [tag.title() for tag in episode.get('analytics').get('categories').split(',') if tag]
-
-            # Art
-            fanart = episode.get('program').get('image').get('templateUrl')
-            poster = episode.get('program').get('posterImage').get('templateUrl')
-            thumb = episode.get('image').get('templateUrl')
-
-            # Check favorite
-            is_favorite = favorites.is_favorite(program_name)
+            sort, ascending, is_favorite, title_item = convert_episode(item, destination)
 
             # Filter favorites for favorites menu
             if use_favorites and is_favorite is False:
                 continue
 
-            # Context menu
-            context_menu = get_context_menu(program_name, program_id, program_title, program_type, plugin_path, is_favorite)
+            episodes.append(title_item)
 
-            # Label
-            label = format_label(program_title, episode_title, program_type, ontime, is_favorite)
-
-            # Sorting
-            sort, ascending = get_sort(program_type)
-
-            episodes.append(
-                TitleItem(
-                    label=label,
-                    path=path,
-                    art_dict=dict(
-                        thumb=thumb,
-                        poster=poster,
-                        banner=fanart,
-                        fanart=fanart,
-                    ),
-                    info_dict=dict(
-                        title=label,
-                        tvshowtitle=program_title,
-                        aired=aired,
-                        dateadded=dateadded,
-                        episode=episode_no,
-                        season=season_no,
-                        plot=plot,
-                        plotoutline=plotoutline,
-                        mpaa=mpaa,
-                        tagline=plotoutline,
-                        duration=duration,
-                        studio=studio,
-                        year=year,
-                        tag=tag,
-                        mediatype='episode',
-                    ),
-                    context_menu=context_menu,
-                    is_playable=True,
-                )
-            )
         # Paging
         # Remove kwargs with None value
         kwargs = {k: v for k, v in kwargs.items() if v is not None}
@@ -625,6 +744,13 @@ def convert_episodes(api_data, destination, use_favorites=False, **kwargs):
     return episodes, sort, ascending
 
 
+def get_single_episode(episode_id):
+    """Get single episode"""
+    api_data = get_single_episode_data(episode_id)
+    _, _, _, title_item = convert_episode(api_data)
+    return title_item
+
+
 def get_favorite_programs(end_cursor=''):
     """Get favorite programs"""
     page_size = get_setting_int('itemsperpage', default=50)
@@ -643,13 +769,13 @@ def get_programs(category=None, channel=None, keywords=None, end_cursor=''):
     if category:
         destination = 'categories'
         facets = [dict(
-            name='categories',
+            name='programCategories',
             values=[category]
         )]
     elif channel:
         destination = 'channels'
         facets = [dict(
-            name='brands',
+            name='programBrands',
             values=[channel]
         )]
     elif keywords:

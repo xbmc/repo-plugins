@@ -22,6 +22,7 @@
 import hashlib
 import json
 from pathlib import Path
+import re
 import requests
 import requests_cache
 import time
@@ -157,6 +158,20 @@ class Api():
         else:
             raise ApiException(u.text)
 
+    def get_recommendations(self, id, use_cache=True):
+        url = URL + f'/recommendations/{id}'
+        data = {'page_size': '24'}
+        headers = {"X-Authorization": f'Bearer {self.profile_token()}'}
+
+        if use_cache:
+            u = self.session.get(url, params=data, headers=headers, timeout=GET_TIMEOUT)
+        else:
+            u = requests.get(url, params=data, headers=headers, timeout=GET_TIMEOUT)
+        if u.status_code == 200:
+            return u.json()
+        else:
+            raise ApiException(u.text)
+
     def kids_item(self, item):
         if 'classification' in item:
             if item['classification']['code'] in ['DR-Ramasjang', 'DR-Minisjang']:
@@ -168,15 +183,13 @@ class Api():
         return False
 
     def unfold_list(self, item, filter_kids=False):
-        items = []
+        items = item['items']
         if 'next' in item['paging']:
             next_js = self.get_next(item['paging']['next'])
             items += next_js['items']
             while 'next' in next_js['paging']:
                 next_js = self.get_next(next_js['paging']['next'])
                 items += next_js['items']
-        else:
-            items += item['items']
         if filter_kids:
             items = [item for item in items if not self.kids_item(item)]
         return items
@@ -207,8 +220,14 @@ class Api():
         js = self.get_programcard('/', data=data)
         items = [{'title': 'Programmer A-Å', 'path': '/a-aa', 'icon': 'all.png'}]
         for item in js['entries']:
-            if item['title'] not in ['', 'Se Live TV', 'Vi tror, du kan lide']:  # TODO activate again when login works
-                items.append({'title': item['title'], 'path': item['list']['path']})
+            title = item['title']
+            if title not in ['Se Live TV', 'Vi tror, du kan lide']:  # TODO activate again when login works
+                if title == '' and item['type'] == 'ListEntry':
+                    title = item['list'].get('title', '') # get the top spinner item
+                if title.startswith('DRTV Hero'):
+                    title = 'Daglige forslag'
+                if title:
+                    items.append({'title': title, 'path': item['list']['path']})
         return items
 
     def getLiveTV(self):
@@ -279,10 +298,57 @@ class Api():
         if u.status_code == 200:
             for stream in u.json():
                 if stream['accessService'] == 'StandardVideo':
+                    stream['srt_subtitles'] = self.handle_subtitle_vtts(stream['subtitles'])
                     return stream
             return None
         else:
             raise ApiException(u.text)
+
+    def handle_subtitle_vtts(self, subs):
+        subtitlesUri = []
+        for sub in subs:
+            if sub['language'] in ['DanishLanguageSubtitles', 'CombinedLanguageSubtitles']:
+                name = f'{self.cachePath}/{self.tr(30506)}.da.srt'
+            else:
+                name = f'{self.cachePath}/{self.tr(30507)}.da.srt'
+            u = self.session.get(sub['link'], timeout=10)
+            if u.status_code != 200:
+                u.close()
+                break
+            srt = self.vtt2srt(u.content)
+            with open(name.encode('utf-8'), 'wb') as fh:
+                fh.write(srt.encode('utf-8'))
+            u.close()
+            subtitlesUri.append(name)
+        return subtitlesUri
+
+    def vtt2srt(self, vtt):
+        if isinstance(vtt, bytes):
+            vtt = vtt.decode('utf-8')
+        srt = vtt.replace("\r\n", "\n")
+        srt = re.sub(r'([\d]+)\.([\d]+)', r'\1,\2', srt)
+        srt = re.sub(r'WEBVTT\n\n', '', srt)
+        srt = re.sub(r'^\d+\n', '', srt)
+        srt = re.sub(r'\n\d+\n', '\n', srt)
+        srt = re.sub(r'\n([\d]+)', r'\nputINDEXhere\n\1', srt)
+
+        srtout = ['1']
+        idx = 2
+        for line in srt.splitlines():
+            if line == 'putINDEXhere':
+                line = str(idx)
+                idx += 1
+            srtout.append(line)
+        return '\n'.join(srtout)
+
+    def get_livestream(self, path, with_subtitles=False):
+        channel = self.get_programcard(path)['entries'][0]
+        stream = {'subtitles': []}
+        if with_subtitles:
+            stream['url'] = channel['item']['customFields']['hlsWithSubtitlesURL']
+        else:
+            stream['url'] = channel['item']['customFields']['hlsURL']
+        return stream
 
     def get_info(self, item):
         title = item['title']
@@ -306,30 +372,46 @@ class Api():
                 infoLabels['year'] = int(broadcast.strftime('%Y'))
         if item.get('seasonNumber'):
             infoLabels['season'] = item['seasonNumber']
+        if item.get('episodeNumber'):
+            infoLabels['episode'] = item['episodeNumber']
         if item['type'] in ["movie", "season", "episode"]:
             infoLabels['mediatype'] = item['type']
         elif item['type'] == 'program':
             infoLabels['mediatype'] = 'tvshow'
         return title, infoLabels
 
-    def get_schedules(self, channels=CHANNEL_IDS, date=None, hour=None):
+    def get_schedules(self, channels=CHANNEL_IDS, date=None, hour=None, duration=6):
         url = URL + '/schedules?'
         now = datetime.now()
         if date is None:
             date = now.strftime("%Y-%m-%d")
         if hour is None:
             hour = int(now.strftime("%H"))
-        data = {
-            'date': date,
-            'hour': hour-2,
-            'duration': 6,
-            'channels': channels,
-        }
-        u = requests.get(url, params=data, timeout=GET_TIMEOUT)
-        if u.status_code == 200:
-            return u.json()
-        else:
-            raise ApiException(u.text)
+
+        if duration <= 24:
+            data = {
+                'date': date,
+                'hour': hour-2,
+                'duration': duration,
+                'channels': channels,
+            }
+            u = requests.get(url, params=data, timeout=GET_TIMEOUT)
+            if u.status_code == 200:
+                return u.json()
+            else:
+                raise ApiException(u.text)
+
+        schedules = []
+        for i in range(1, 8):
+            iter_date = (now + timedelta(days=i-1)).strftime("%Y-%m-%d")
+            if i*24 > duration:
+                hours = duration % ((i-1)*24)
+                if hours != 0:
+                    schedules += self.get_schedules(channels=channels, date=iter_date, hour=hour, duration=hours)
+                break
+            else:
+                schedules += self.get_schedules(channels=channels, date=iter_date, hour=hour, duration=24)
+        return schedules
 
     def get_channel_schedule_strings(self, channels=CHANNEL_IDS):
         out = {}

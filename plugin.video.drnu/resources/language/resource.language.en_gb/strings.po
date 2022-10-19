@@ -100,6 +100,18 @@ msgctxt "#30505"
 msgid "Remove programs from Ramasjang/Ultra in alphabetical lists"
 msgstr ""
 
+msgctxt "#30506"
+msgid "Danish (file)"
+msgstr ""
+
+msgctxt "#30507"
+msgid "Foreign language text (file)"
+msgstr ""
+
+msgctxt "#30508"
+msgid "Subtitles from file"
+msgstr ""
+
 msgctxt "#30509"
 msgid "No subtitles on Ramasjang/Ultra episodes"
 msgstr ""
@@ -130,6 +142,10 @@ msgstr ""
 
 msgctxt "#30516"
 msgid "Minisjang"
+msgstr ""
+
+msgctxt "#30517"
+msgid "Use simple Area Selector"
 msgstr ""
 
 msgctxt "#30521"

@@ -3,7 +3,9 @@
 	<category label="30500">
         <setting id="area" label="30510" type="enum" default="0" lvalues="30511|30512|30516|30513|30514" />
         <setting id="enable.subtitles" label="30503" type="bool" default="false" />
+        <setting id="enable.localsubtitles" label="30508" type="bool" default="false" />
         <setting id="enable.areaitem" label="30515" type="bool" default="false" />
+        <setting id="use.simpleareaitem" label="30517" type="bool" default="false" />
         <setting id="disable.kids" label="30505" type="bool" default="true" />
         <setting id="disable.kids.subtitles" label="30509" type="bool" default="true" />
         <setting id="inputstream" label="30521" type="labelenum" default="adaptive" values="adaptive|ffmpegdirect" />

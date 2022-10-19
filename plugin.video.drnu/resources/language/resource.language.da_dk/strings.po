@@ -100,6 +100,18 @@ msgctxt "#30505"
 msgid "Remove programs from Ramasjang/Ultra in alphabetical lists"
 msgstr "Fjern programmer fra Ramasjang/Ultra fra alfabetisk oversigt"
 
+msgctxt "#30506"
+msgid "Danish (file)"
+msgstr "Dansk (fil)"
+
+msgctxt "#30507"
+msgid "Foreign language text (file)"
+msgstr "Fremmedsprogstekster (fil)"
+
+msgctxt "#30508"
+msgid "Subtitles from file"
+msgstr "Undertekster fra fil"
+
 msgctxt "#30509"
 msgid "No subtitles on Ramasjang/Ultra episodes"
 msgstr "Ingen undertekster på episoder fra Ramasjang/Ultra"
@@ -131,6 +143,10 @@ msgstr "Vis områdevælger kategori i roden"
 msgctxt "#30516"
 msgid "Minisjang"
 msgstr "Minisjang"
+
+msgctxt "#30517"
+msgid "Use simple Area Selector"
+msgstr "Brug simpel områdevælger"
 
 msgctxt "#30521"
 msgid "Inputstream type"

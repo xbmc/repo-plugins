@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+     <category label="General">
+         <setting id="inhibitscreensaver" label="Inhibit Screensaver" type="bool" default="false" />
+         <setting id="inhibitidleshutdown" label="Inhibit Idle Shutdown" type="bool" default="false"  />         
+     </category>
+</settings>

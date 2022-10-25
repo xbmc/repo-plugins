@@ -125,6 +125,8 @@ def run():
         SRFPlayTV().build_episode_menu(name)
     elif mode == 24:
         SRFPlayTV().build_date_menu(name)
+    elif mode == 60:
+        SRFPlayTV().build_specific_date_menu(name)
     elif mode == 25:
         SRFPlayTV().pick_date()
     elif mode == 27:

@@ -1,10 +1,9 @@
 # coding=utf-8  # NOSONAR
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import os
 from datetime import datetime
-import binascii
 from functools import reduce
+from random import getrandbits
 
 import xbmcgui
 
@@ -109,12 +108,29 @@ class MediaItem:
 
         # GUID used for identification of the object. Do not set from script, MD5 needed
         # to prevent UTF8 issues
-        try:
-            self.guid = "%s%s" % (EncodingHelper.encode_md5(title), EncodingHelper.encode_md5(url or ""))
-        except:
-            Logger.error("Error setting GUID for title:'%s' and url:'%s'. Falling back to UUID", title, url, exc_info=True)
-            self.guid = self.__get_uuid()
-        self.guidValue = int("0x%s" % (self.guid,), 0)
+        self.__guid = None
+        self.__guid_value = None
+
+    @property
+    def guid(self):
+        """ Returns the item's GUID
+
+        :rtype: str
+
+        """
+
+        if not self.__guid:
+            self.__set_guids()
+
+        return self.__guid
+
+    @property
+    def guid_value(self):
+        """ Returns the guid's int value that can be used for hashing. """
+        if not self.__guid_value:
+            self.__set_guids()
+
+        return self.__guid_value
 
     def add_stream(self, url, bitrate=0, subtitle=None):
         """ Appends a single stream to  this MediaItem.
@@ -652,10 +668,24 @@ class MediaItem:
                 Logger.debug("Adding (Pre-Krypton) %s", proxy)
         return
 
-    def __get_uuid(self):
+    def __set_guids(self):
         """ Generates a Unique Identifier based on Time and Random Integers """
 
-        return binascii.hexlify(os.urandom(16)).upper()
+        try:
+            self.__guid = "%s%s" % (
+                EncodingHelper.encode_md5(self.name), EncodingHelper.encode_md5(self.url or ""))
+            self.__guid_value = int("0x%s" % (self.guid,), 0)
+
+            # For live items, append a random part to the textual guid.
+            if self.isLive:
+                self.__guid = "%s%s" % (self.__guid, ("%0x" % getrandbits(8 * 4)).upper())
+        except:
+            Logger.error("Error setting GUID for title:'%s' and url:'%s'. Falling back to UUID",
+                         self.title, self.url, exc_info=True)
+            # Slower code
+            # self.__guid = binascii.hexlify(os.urandom(16)).decode().upper()
+            self.__guid = "%0x" % getrandbits(32 * 4)
+            self.__guid_value = int("0x%s" % (self.guid,), 0)
 
     def __full_decode_text(self, string_value):
         """ Decodes a byte encoded string with HTML content into Unicode String
@@ -740,7 +770,7 @@ class MediaItem:
     def __hash__(self):
         """ returns the hash value """
 
-        return hash(self.guidValue)
+        return hash(self.guid_value)
 
     def __equals(self, other):
         """ Checks two MediaItems for equality
@@ -755,7 +785,7 @@ class MediaItem:
         if not other:
             return False
 
-        return self.guidValue == other.guidValue
+        return self.guid_value == other.guid_value
 
     def __update_title_and_description_with_limitations(self):
         """ Updates the title/name and description with the symbols for DRM, GEO and Paid.

@@ -104,7 +104,7 @@ class Channel(chn_class.Channel):
         self._add_data_parser("https://www.tv4play.se/alla-program", json=True,
                               name="Specific Program list API",
                               preprocessor=self.extract_tv_show_list,
-                              parser=["props", "pageProps", "initialApolloState"],
+                              parser=["props", "initialApolloState"],
                               creator=self.create_api_typed_item)
 
         self._add_data_parser("http://tv4live-i.akamaihd.net/hls/live/",
@@ -510,7 +510,8 @@ class Channel(chn_class.Channel):
 
         data = Regexer.do_regex(r'__NEXT_DATA__" type="application/json">(.*?)</script>', data)[0]
         json_data = JsonHelper(data)
-        json_data.json["props"]["pageProps"]["initialApolloState"] = list(json_data.json["props"]["pageProps"]["initialApolloState"].values())
+        # Make a list from the dictionary values.
+        json_data.json["props"]["initialApolloState"] = list(json_data.json["props"]["initialApolloState"].values())
         return json_data, []
 
     def add_next_page(self, data, items):

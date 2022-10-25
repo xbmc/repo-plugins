@@ -374,6 +374,7 @@ class Channel(chn_class.Channel):
             content_type=contenttype.SONGS)
         extra.complete = True
         extra.dontGroup = True
+        extra.isLive = True
         extra.HttpHeaders = self.__jsonApiKeyHeader
         items.append(extra)
 
@@ -383,6 +384,7 @@ class Channel(chn_class.Channel):
             content_type=contenttype.VIDEOS)
         extra.complete = True
         extra.dontGroup = True
+        extra.isLive = True
         items.append(extra)
 
         extra = FolderItem(

@@ -507,3 +507,10 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - Per-Eric Larsson
 - Arjen Heidinga
 - Jim Altis
+- Jelte Veldstra
+- Jules Harms
+- Peter Vollebregt
+- Danny Sikke
+- Stefan Abramsson
+- Ingos Data o PPDesign
+- Jeroen L. Hendrix

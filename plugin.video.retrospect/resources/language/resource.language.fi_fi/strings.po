@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-07-11 20:14+0000\n"
+"PO-Revision-Date: 2022-09-12 11:14+0000\n"
 "Last-Translator: Oskari Lavinto <olavinto@protonmail.com>\n"
 "Language-Team: Finnish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/fi_fi/>\n"
 "Language: fi_fi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.14\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -88,7 +88,7 @@ msgstr ""
 
 msgctxt "#30016"
 msgid "Sort by"
-msgstr "Lajittele"
+msgstr "Lajitteluperuste"
 
 msgctxt "#30017"
 msgid "Name"
@@ -108,7 +108,7 @@ msgstr "Toiston maksimi bittinopeus"
 
 msgctxt "#30021"
 msgid "Enable subtitles by default when available"
-msgstr "Tekstityksen moodi"
+msgstr "Näytä käytettävissä olevat tekstitykset oletusarvoisesti"
 
 msgctxt "#30022"
 msgid "If available"
@@ -368,7 +368,7 @@ msgstr "Piilota Fanitaide"
 
 msgctxt "#30087"
 msgid "Mix folders and streams while sorting"
-msgstr "Näytä kansiot ja striimit lajiteltuna"
+msgstr "Sekoita kansiot ja mediavirrat lajiteltaessa"
 
 msgctxt "#30088"
 msgid "Show thumbnail as fanart if no fanart is available"
@@ -612,7 +612,7 @@ msgstr ""
 
 msgctxt "#30358"
 msgid "Episodes"
-msgstr ""
+msgstr "Jaksot"
 
 msgctxt "#30359"
 msgid "Genres"
@@ -632,7 +632,7 @@ msgstr ""
 
 msgctxt "#30363"
 msgid "Popular"
-msgstr ""
+msgstr "Suosittua"
 
 msgctxt "#30364"
 msgid "Latest news"
@@ -761,11 +761,11 @@ msgstr "%s Uusi versio saatavilla: %s. Ole hyvä ja käy verkkosivustolla lataak
 
 msgctxt "#30520"
 msgid "Repository Warning"
-msgstr "Ohjelmavaraston Varoitus"
+msgstr "Ohjelmavaraston varoitus"
 
 msgctxt "#30521"
 msgid "The Retrospect repository is not installed.|Please install it to allow future updates."
-msgstr "Retrospectin ohjelmavarastoa ei ole asennettu.|Ole hyvä ja asenna se varmistaaksesi tulevat päivitykset."
+msgstr "Retrospect-ohjelmavarastoa ei ole asennettu.|Asenna se mahdollistaaksesi tulevat päivitykset."
 
 msgctxt "#30522"
 msgid "Channel message"
@@ -1001,11 +1001,11 @@ msgstr ""
 
 msgctxt "#30582"
 msgid "Split TV shows and single episodes in separate folders"
-msgstr ""
+msgstr "Jaa sarjat ja yksittäiset jaksot erillisiin kansioihin"
 
 msgctxt "#30583"
 msgid "Single episodes"
-msgstr ""
+msgstr "Yksittäiset jaksot"
 
 msgctxt "#30584"
 msgid "Fetching a long list of items using multiple API calls."

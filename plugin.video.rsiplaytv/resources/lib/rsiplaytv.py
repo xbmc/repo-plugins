@@ -126,6 +126,8 @@ def run():
         RSIPlayTV().build_episode_menu(name)
     elif mode == 24:
         RSIPlayTV().build_date_menu(name)
+    elif mode == 60:
+        RSIPlayTV().build_specific_date_menu(name)
     elif mode == 25:
         RSIPlayTV().pick_date()
     elif mode == 27:

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.5.9"
+        version="5.5.10"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -122,19 +122,19 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.5.9 - Changelog - 2022-09-06[/B]
+        <news>[B]Retrospect v5.5.10 - Changelog - 2022-10-25[/B]
 
-This minor update mainly fixes the NPO channel and the Kijk.nl search.
+A minor patch for NPO and TV4 streams.
 
 [B]Framework related[/B]
-_None_
+* Added: For live items, also append a random GUID to the item&#x27;s GUID to fix live folders in PickleStore (Fixes #1652).
 
 [B]GUI/Settings/Language related[/B]
 _None_
 
 [B]Channel related[/B]
-* Fixed: Kijk.nl search.
-* Fixed: Page size for NPO down to 50 to prevent some API glitches.
+* Fixed: NPO live TV Guide favorites broke after some time (Fixes #1652)
+* Fixed: TV4 Play TV Show list broke.
 
         </news>
         <assets>
@@ -152,7 +152,7 @@ _None_
         <summary lang="es_MX">Retrospect te permite ver repeticiones/actualizaciones de series disponibles desde sus emisoras oficiales.</summary>
         <summary lang="nl_NL">Retrospect maakt het mogelijk om afleveringen te bekijken van TV series die door de officiële zenders beschikbaar worden gesteld.</summary>
         <summary lang="ru_RU">Retrospect позволяет вам смотреть повторы/архив ТВ-передач, доступные через официальные телеканалы.</summary>
-        <summary lang="sv_SE">Retrospect möjliggör att visa playkanaler.</summary>
+        <summary lang="sv_SE">Retrospect möjliggör att visa playkanaler via sina officiella TV-leverantörer.</summary>
         <description lang="da_DK">Retrospect bruger de officielle websteder og frit tilgængelige streams fra forskellige tv-selskaber (hovedsageligt hollandske, belgiske, britiske, norske og svenske) til at gøre deres genudsendelser/indhentning af afsnit tilgængelige i Kodi-platformen.[CR][CR]Inkluderede kanaler er: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu , VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info og Ons.[CR][CR]Mere information kan findes på https://github.com/retrospect-addon/plugin.video.retrospect eller Retrospect-wikien på https://github.com/retrospect-addon/plugin.video.retrospect/wiki/.</description>
         <description lang="en_GB">Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/.</description>
         <description lang="en_US">Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/.</description>

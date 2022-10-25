@@ -6,21 +6,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-27 09:12+0000\n"
-"Last-Translator: bas <bas@kodi.tv>\n"
+"PO-Revision-Date: 2022-10-04 02:15+0000\n"
+"Last-Translator: Sopor <sopor@hotmail.com>\n"
 "Language-Team: Swedish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/sv_se/>\n"
 "Language: sv_se\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.14.1\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
-msgstr "Retrospect möjliggör att visa playkanaler."
+msgstr "Retrospect möjliggör att visa playkanaler via sina officiella TV-leverantörer."
 
 msgctxt "Addon Description"
 msgid "Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
@@ -132,7 +132,7 @@ msgstr "Inget"
 
 msgctxt "#30026"
 msgid "Group list if it exceeds # folders"
-msgstr "Gruppera listan om den överskrider"
+msgstr "Gruppera listan om den överskrider X antal mappar"
 
 msgctxt "#30027"
 msgid "Autorun Retrospect on Kodi start"
@@ -192,7 +192,7 @@ msgstr "Kanaler"
 
 msgctxt "#30041"
 msgid "Show \"All Favourites\" in main Channel listing"
-msgstr "Visa \"Alla favoriter\" i kanallistan"
+msgstr "Visa \"Alla favoriter\" i huvudkanallistan"
 
 msgctxt "#30042"
 msgid "Enabled"
@@ -605,11 +605,11 @@ msgstr "Livesändningar"
 
 msgctxt "#30354"
 msgid "Most viewed episodes"
-msgstr "Mest sedda avsnitt"
+msgstr "Mest sedda avsnitten"
 
 msgctxt "#30355"
 msgid "Most recent episodes"
-msgstr "Senaste avsnitt"
+msgstr "Senaste avsnitten"
 
 msgctxt "#30356"
 msgid "Live TV"
@@ -657,7 +657,7 @@ msgstr "Tillgänglig från"
 
 msgctxt "#30367"
 msgid "New on %s"
-msgstr "Nytt på %s"
+msgstr "Ny på %s"
 
 # empty strings from id 30365 to 30400
 msgctxt "#30401"
@@ -737,7 +737,7 @@ msgstr "Kanalfavoriter"
 
 msgctxt "#30504"
 msgid "Add to Favourites"
-msgstr "Lägg till som favorit"
+msgstr "Lägg till favoriter"
 
 msgctxt "#30505"
 msgid "Hide"
@@ -787,7 +787,7 @@ msgstr "Tilläggsförrådsvarning"
 
 msgctxt "#30521"
 msgid "The Retrospect repository is not installed.|Please install it to allow future updates."
-msgstr "Retrospects tilläggsförråd är inte installerat.|Installera detta för framtida uppdateringar."
+msgstr "Retrospects tilläggsförråd är inte installerat.|Installera detta för att tillåta framtida uppdateringar."
 
 msgctxt "#30522"
 msgid "Channel message"
@@ -816,11 +816,11 @@ msgstr "Uppdatera listan"
 
 msgctxt "#30530"
 msgid "Check for Retrospect updates"
-msgstr "Uppdatera Retrospect"
+msgstr "Sök efter Retrospect-uppdateringar"
 
 msgctxt "#30531"
 msgid "Missing 'InputStream Helper' add-on. Cannot install."
-msgstr "Tillägget 'InputStream Helper' saknas. Avbryter installationen."
+msgstr "Tillägget 'InputStream Helper' saknas. Installationen avbryts."
 
 msgctxt "#30532"
 msgid "Install Widevine using 'InputStream Helper' add-on"
@@ -836,7 +836,7 @@ msgstr "Installationen av Widevine misslyckades!"
 
 msgctxt "#30535"
 msgid "Installation of Widevine completed!"
-msgstr "Installationen av Widevine är klar!"
+msgstr "Widevine har installerats!"
 
 msgctxt "#30536"
 msgid "This stream requires Kodi Leia, an enabled InputStream Adaptive add-on and the Widevine library to be installed. The latter can be installed from within the Retrospect add-on settings."
@@ -896,7 +896,7 @@ msgstr "Kunde inte ta emot programlistan."
 
 msgctxt "#30550"
 msgid "No episodes found for the selected item."
-msgstr "Hittade inga program eller avsnitt."
+msgstr "Hittade inga avsnitt för det valda objektet."
 
 msgctxt "#30551"
 msgid "Today"
@@ -960,7 +960,7 @@ msgstr "Dolda objekt"
 
 msgctxt "#30566"
 msgid "To show a hidden item, first configure Retrospect to show hidden items. Then use the context menu's \"Show hidden item\"."
-msgstr "För att visa ett dolt objekt igen, ställ först in Retrospect att visa dolda objekt. Använd sedan innehållsmenyns \"Visa dolt objekt\"."
+msgstr "För att visa ett dolt objekt, ställ först in Retrospect att visa dolda objekt. Använd sedan innehållsmenyns \"Visa dolt objekt\"."
 
 msgctxt "#30567"
 msgid "Add-on(s) disabled"
@@ -1008,7 +1008,7 @@ msgstr "Bithastighet »"
 
 msgctxt "#30578"
 msgid "InputStream Adaptive add-on settings"
-msgstr "Inställningar för InputStream Adaptive-tillägget"
+msgstr "Inställningar för tillägget InputStream Adaptive"
 
 msgctxt "#30579"
 msgid "InputStream Adaptive add-on »"
@@ -1044,7 +1044,7 @@ msgstr "Antal sidor som skall laddas ner för huvudlistan"
 
 msgctxt "#30587"
 msgid "Show streams with accessibility features"
-msgstr "Visa program med syn och teckentolkat"
+msgstr "Visa strömmar med tillgänglighetstjänster (syntolkat/teckenspråkstolkning)"
 
 # empty strings from id 30584 to 30589
 msgctxt "#30590"

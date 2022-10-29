@@ -10,6 +10,7 @@ Live Streaming, Replay the last week, LA7 Prime, On-Demand programs, News & Weat
 6.1.0 (2022-10-29)
 - Improved Regex that repair many Programs view
 - Added "Una giornata particolare" to Programs
+- Filter Omnibus News vs Omnibus
 
 6.0.2 (2022-05-22)
 - Removed html5lib dependence

@@ -498,7 +498,7 @@ def video_programma():
         G.OMNIBUS_NEWS = True
         G.LINK = G.URL_BASE + '/omnibus'
 
-    if (G.PAGENUM == 0) and (G.LINK != G.URL_BASE + '/film'):
+    if (G.PAGENUM == 0) and (G.LINK != G.URL_BASE + '/film') and (G.LINK != G.URL_BASE + '/omnibus'):
         video_programma_landpage()
 
     if G.LINK != G.URL_TGLA7D:
@@ -530,18 +530,21 @@ def video_programma():
             titolo = first.find('div', class_='title_puntata').text.strip()
 
             if G.OMNIBUS_NEWS:
-                first_video(first, titolo, titolo.find(G.FILTRO_OMNIBUS) != -1)
+                # xbmc.log('FIRST NEWS: '+ titolo +str(titolo.find(G.FILTRO_OMNIBUS)),xbmc.LOGINFO)
+                first_video(first, titolo, (titolo.find(G.FILTRO_OMNIBUS) != -1))
             elif G.LINK == G.URL_BASE + '/omnibus':
-                first_video(first, titolo, titolo.find(G.FILTRO_OMNIBUS) == -1)
+                # xbmc.log('FIRST OMNI: '+ titolo +str(titolo.find(G.FILTRO_OMNIBUS)),xbmc.LOGINFO)
+                first_video(first, titolo, (titolo.find(G.FILTRO_OMNIBUS) == -1))
             else:
+                # xbmc.log('FIRST VIDEO----: '+str(titolo),xbmc.LOGINFO)
                 first_video(first, titolo, True)
-            # xbmc.log('FIRST VIDEO----: '+str(titolo),xbmc.LOGINFO)
 
             # WEEK VIDEO
             if html.findAll(text=" LA SETTIMANA"):
                 video_settimana = html.find('div', class_='home-block__content-carousel container-vetrina').find_all('div', class_='item')
                 # xbmc.log('LA SETTIMANA----: '+str(video_settimana),xbmc.LOGINFO)
                 if video_settimana:
+                    # xbmc.log('ROWS_WEEK: '+ titolo +str(titolo.find(G.FILTRO_OMNIBUS)),xbmc.LOGINFO)
                     get_rows_video(video_settimana)
             else:
                 xbmc.log('NO WEEK VIDEO', xbmc.LOGINFO)
@@ -559,6 +562,7 @@ def video_programma():
             html2 = BeautifulSoup(page2, 'html.parser')
             video_archivio = html2.find('div', class_='view-content clearfix').find_all('div', class_='views-row')
             if video_archivio:
+                # xbmc.log('ROWS_CULT: '+ titolo +str(titolo.find(G.FILTRO_OMNIBUS)),xbmc.LOGINFO)
                 get_rows_video(video_archivio)
 
                 if not G.OMNIBUS_NEWS:
@@ -604,7 +608,9 @@ def video_programma_teche_la7():
 
 
 def first_video(first, titolo, filtro):
+    # xbmc.log('FILTRO FIRST: '+ titolo + str(filtro), xbmc.LOGINFO)
     if filtro:
+        # xbmc.log('FILTRO TRUE', xbmc.LOGINFO)
         thumblink = first.find('div', class_='holder-bg lozad').get('data-background-image')
         if thumblink.startswith('//'):
             thumb = 'https:' + thumblink
@@ -655,7 +661,7 @@ def video_list(div, titolo, filtro):
 def get_rows_video(video):
     for div in video:
         titolo = div.find('div', class_='title').text.strip()
-        # xbmc.log('TITOLO: '+str(titolo.find(G.FILTRO_OMNIBUS)),xbmc.LOGINFO)
+        # xbmc.log('ROWS_FOR: '+ titolo +str(titolo.find(G.FILTRO_OMNIBUS)),xbmc.LOGINFO)
         if G.OMNIBUS_NEWS:
             video_list(div, titolo, titolo.find(G.FILTRO_OMNIBUS) != -1)
         elif G.LINK == G.URL_BASE + '/omnibus':

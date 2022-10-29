@@ -42,15 +42,15 @@ msgstr "Impossibile visualizzare questo programma"
 
 msgctxt "#32007"
 msgid "News & Weather"
-msgstr "Telegiornali & Meteo"
+msgstr "TG & Meteo"
 
 msgctxt "#32006"
-msgid "On-Demand Programs"
-msgstr "Programmi On-Demand"
+msgid "Programs"
+msgstr "Programmi"
 
 msgctxt "#32008"
-msgid "Teche LA7 - The Protagonists"
-msgstr "Teche LA7 - I Protagonisti"
+msgid "Protagonists"
+msgstr "Protagonisti"
 
 msgctxt "#32010"
 msgid "LA7 Prime"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.srfplayradio" name="SRF Play Radio" version="1.0.0" provider-name="Alexander Seiler">
+<addon id="plugin.audio.srfplayradio" name="SRF Play Radio" version="1.0.1" provider-name="Alexander Seiler">
   <requires>
     <import addon="xbmc.python" version="2.26.0"/>
     <import addon="script.module.srgssr" version="1.7.0"/>
@@ -22,6 +22,7 @@
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
     <website>https://www.srf.ch/play/radio</website>
+    <broken>SRGSSR APIv3 does not support audios anymore.</broken>
     <email>seileralex@gmail.com</email>
     <source>https://github.com/goggle/plugin.audio.srfplayradio</source>
     <news>v1.0.0 (2019-10-09)

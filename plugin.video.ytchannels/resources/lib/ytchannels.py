@@ -22,6 +22,7 @@ def ytchannels_main():
 	my_addon = xbmcaddon.Addon()
 	enable_playlists = my_addon.getSetting('enable_playlists')
 	enable_livestreams = my_addon.getSetting('enable_livestreams')
+	filter_shorts = my_addon.getSetting('filter_shorts')
 
 	addon_handle = int(sys.argv[1])
 	args = urllib.parse.parse_qs(sys.argv[2][1:])
@@ -193,14 +194,12 @@ def ytchannels_main():
 					items.append((local_string(30023), 'RunPlugin(%s)'%move_up_uri))
 					items.append((local_string(30024), 'RunPlugin(%s)'%move_down_uri))
 			li.addContextMenuItems(items)
-			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-								listitem=li,isFolder=True)
+			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li,isFolder=True)
 
 		url = build_url({'mode': 'add_channel', 'foldername': '%s'%foldername})
 		li = xbmcgui.ListItem('[COLOR green]%s[/COLOR] [COLOR blue]%s[/COLOR]'%(local_string(30009),foldername))
 		li.setArt({'icon':plus_img})
-		xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-								listitem=li,isFolder=True)
+		xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li,isFolder=True)
 
 		xbmcplugin.endOfDirectory(addon_handle)
 
@@ -235,7 +234,7 @@ def ytchannels_main():
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
 									listitem=li,isFolder=True)
 
-		game_list=get_latest_from_channel(id,page)
+		game_list=get_latest_from_channel(id, page, filter_shorts == 'true')
 		next_page=game_list[0]
 
 		xbmc_region = xbmc.getRegion('dateshort')

@@ -18,6 +18,11 @@
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="filter_shorts" type="boolean" label="30209">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
 				<setting id="result_number" type="integer" label="30203">
 					<level>0</level>
 					<default>20</default>

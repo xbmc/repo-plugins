@@ -243,8 +243,7 @@ def get_audio_list(program_url, localized=lambda x: x):
 def get_direct_channels():
     """This function makes the direct channels menu."""
 
-    direct_url  = '8u3m.niam_s%_enr/ten.deziamaka.3vmaertsevilevtr//:sptth'[::-1]
-    direct_url2 = '8u3m.retsam/s%/i/ten.dhiamaka.hl-0lgdmaevilslh//:sptth'[::-1]
+    direct_url  = '8u3m.niam_s%_enr/enr/cesevtr/ten.deziamaka.maertsevilevtr//:sptth'[::-1]
 
     channel_list  = (
             ( 'Radio Nacional',   'r1'),
@@ -252,10 +251,7 @@ def get_direct_channels():
             ( 'Radio 3',          'r3'),
             ( 'Ràdio 4',          'r4'),
             ( 'Radio 5',          'r5_madrid'),
-            )
-
-    channel_list2  = (
-            ( 'Radio Exterior',   'rneree_1@793572'),
+            ( 'Radio Exterior',   're'),
             )
 
     menu_entries  = []
@@ -264,14 +260,6 @@ def get_direct_channels():
                 'action' : 'play_audio',
                 'title'  : channel,
                 'url'    : direct_url % playlist,
-        }
-        menu_entries.append(menu_item)
-
-    for channel, playlist in channel_list2:
-        menu_item = {
-                'action' : 'play_audio',
-                'title'  : channel,
-                'url'    : direct_url2 % playlist,
         }
         menu_entries.append(menu_item)
 

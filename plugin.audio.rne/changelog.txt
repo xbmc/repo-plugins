@@ -1,3 +1,5 @@
+1.3.3+matrix.1 (2022.11.07)
+- Quick fix for direct channels due to website changes (thanks to vichman).
 1.3.2+matrix.1 (2022.01.15)
 - Quick fix for direct channels due to website changes (credits and great thanks to vicglez).
 1.3.1+matrix.1 (2020.08.29)

@@ -219,8 +219,7 @@ class SvtPlay:
         if channel_pattern.search(video_url):
             video_json = svt.getVideoJSON(video_url)
         else:
-            legacy_id = video_url.split("/")[2]
-            video_data = self.graphql.getVideoDataForLegacyId(legacy_id)
+            video_data = self.graphql.getVideoDataForVideoUrl(video_url)
             if self.settings.inappropriate_for_children and video_data["blockedForChildren"]:
                 raise BlockedForChildrenException()
             video_json = svt.getSvtVideoJson(video_data["svtId"])
@@ -270,7 +269,7 @@ class SvtPlay:
         fanart = play_item.fanart if play_item.item_type == PlayItem.VIDEO_ITEM else ""
         title = play_item.title
         if play_item.item_type == PlayItem.VIDEO_ITEM and play_item.season_title:
-            title = "{season} - {episode}".format(season=play_item.season_title, episode=play_item.title)
+            title = "{episode} ({season})".format(season=play_item.season_title, episode=play_item.title)
         self.__add_directory_item(title, params, play_item.thumbnail, folder, False, info, fanart)
 
     def __is_geo_restricted(self, play_item):
@@ -279,12 +278,12 @@ class SvtPlay:
     
     def __resolve_and_play_video(self, video_json):
         if video_json is None:
-            logging.log("ERROR: Could not get video JSON")
+            logging.error("Could not get video JSON")
             return
         try:
             show_obj = svt.resolveShowJson(video_json)
         except ValueError:
-            logging.log("Could not decode JSON for {}".format(video_json))
+            logging.error("Could not decode JSON for {}".format(video_json))
             return
         if show_obj["videoUrl"]:
             self.playback.play_video(show_obj["videoUrl"], show_obj.get("subtitleUrl", None), self.settings.show_subtitles)

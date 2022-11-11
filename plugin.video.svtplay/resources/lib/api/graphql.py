@@ -114,7 +114,7 @@ class GraphQL:
       for item in content["items"]:
         item = item["item"]
         season_title = ""
-        if content["type"] == "Season" and content["name"] and item["positionInSeason"]:
+        if content["type"] == "Season" and content["name"]:
           season_title = content["name"]
         title = item["name"]
         video_id = item["urls"]["svtplay"]
@@ -205,6 +205,23 @@ class GraphQL:
     return {
       "svtId" : json_data["listablesByEscenicId"][0]["svtId"],
       "blockedForChildren" : json_data["listablesByEscenicId"][0]["restrictions"]["blockedForChildren"]
+    }
+
+  def getVideoDataForVideoUrl(self, video_url):
+    """
+    Returns video data for any video url.
+
+    The returned data contains "svtId" and "blockedForChildren"
+    """
+    operation_name = "DetailsPageQuery"
+    query_hash = "5be42eb4028ed8f2680ce2302f6887df3fed2dcb6f61ac091ff5a37a3d0bf477"
+    variables = {"path":video_url}
+    json_data = self.__get(operation_name, query_hash, variables=variables)
+    if not json_data:
+      return None
+    return {
+      "svtId" : json_data["detailsPageByPath"]["video"]["svtId"],
+      "blockedForChildren": json_data["detailsPageByPath"]["moreDetails"]["restrictions"]["blockedForChildren"]
     }
 
   def getChannels(self):

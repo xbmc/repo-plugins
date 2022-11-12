@@ -129,6 +129,8 @@ def run():
         RTSPlayTV().build_episode_menu(name)
     elif mode == 24:
         RTSPlayTV().build_date_menu(name)
+    elif mode == 60:
+        RTSPlayTV().build_specific_date_menu(name)
     elif mode == 25:
         RTSPlayTV().pick_date()
     elif mode == 27:

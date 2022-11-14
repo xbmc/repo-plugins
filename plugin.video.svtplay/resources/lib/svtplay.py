@@ -1,10 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
-import os
 import re
-import sys
 
-import xbmc  # pylint: disable=import-error
 import xbmcaddon  # pylint: disable=import-error
 import xbmcgui  # pylint: disable=import-error
 import xbmcplugin  # pylint: disable=import-error
@@ -56,9 +53,6 @@ class SvtPlay:
         xbmcplugin.addSortMethod(plugin_handle, xbmcplugin.SORT_METHOD_UNSORTED)
         xbmcplugin.addSortMethod(plugin_handle, xbmcplugin.SORT_METHOD_LABEL)
         xbmcplugin.addSortMethod(plugin_handle, xbmcplugin.SORT_METHOD_DATEADDED)
-        self.default_fanart = os.path.join(
-            xbmc.translatePath(self.addon.getAddonInfo("path") + "/resources/images/"),
-            "background.png")
     
     def run(self, plugin_params):
         arg_params = helper.get_url_parameters(plugin_params)

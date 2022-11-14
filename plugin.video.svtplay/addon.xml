@@ -1,4 +1,4 @@
-<addon id="plugin.video.svtplay" name="SVT Play" provider-name="nilzen" version="5.1.15">
+<addon id="plugin.video.svtplay" name="SVT Play" provider-name="nilzen" version="5.1.16">
   <requires>
     <import addon="script.module.requests" version="2.22.0" />
     <import addon="xbmc.python" version="2.25.0" />
@@ -19,8 +19,8 @@
     <source>https://github.com/nilzen/xbmc-svtplay</source>
     <forum>https://forum.kodi.tv/showthread.php?tid=67110</forum>
     <news>
-- Fix broken playback and listing for some items
-- Change item listing to "TITLE (SEASON)" for easier episode overview
+- New icon and background for addon
+- Fix for compatibility with Kodi 20 (nexus)
     </news>
     <assets>
       <icon>icon.png</icon>

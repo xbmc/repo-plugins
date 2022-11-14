@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.audio.rne" name="RNE Podcasts" version="1.3.2+matrix.1" provider-name="Jose Antonio Montes (jamontes)">
+<addon id="plugin.audio.rne" name="RNE Podcasts" version="1.3.3+matrix.1" provider-name="Jose Antonio Montes (jamontes)">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
     </requires>
@@ -22,8 +22,8 @@
         <source>https://github.com/jamontes/plugin.audio.rne</source>
         <website>https://www.rtve.es/alacarta/rne/</website>
 	<news>
-           Version 1.3.2+matrix.1
-             * Quick fix for direct channels due to website changes (credits and great thanks to vicglez).
+           Version 1.3.3+matrix.1
+             * Quick fix for direct channels due to website changes (thanks to vichman).
 	</news>
         <assets>
            <icon>icon.png</icon>

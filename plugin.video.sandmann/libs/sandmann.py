@@ -48,6 +48,10 @@ source = addon.getSettingInt("source2")
 
 
 def sandmann():
+    if update == 1:
+        li_refresh = xbmcgui.ListItem(label=addon.getLocalizedString(30020))
+        xbmcplugin.addDirectoryItem(addon_handle, base_path, li_refresh, True)
+
     episodes_url = sources["rbb"]
     if source == 1:
         episodes_url = sources["mdr"]
@@ -64,10 +68,6 @@ def sandmann():
             item_list.append((episode["stream"], getListItem(episode), False))
 
     xbmcplugin.addDirectoryItems(addon_handle, item_list, len(item_list))
-
-    if update == 1:
-        li_refresh = xbmcgui.ListItem(label=addon.getLocalizedString(30020))
-        xbmcplugin.addDirectoryItem(addon_handle, base_path, li_refresh, True)
 
     xbmcplugin.endOfDirectory(addon_handle)
 

@@ -1,3 +1,5 @@
+1.0.15 (2022.11.07)
+- Quick fix for direct channels due to website changes (thanks to vichman).
 1.0.14 (2022.01.15)
 - Quick fix for direct channels due to website changes (credits and great thanks to vicglez).
 1.0.13 (2020.05.01)

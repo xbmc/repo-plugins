@@ -31,7 +31,9 @@ def todays_games(game_day, start_inning='False'):
     url = API_URL + '/api/v1/schedule'
     # url += '?hydrate=broadcasts(all),game(content(all)),probablePitcher,linescore,team,flags'
     url += '?hydrate=game(content(media(epg))),probablePitcher,linescore,team,flags,gameInfo'
-    url += '&sportId=1,51'
+    # 51 is international (i.e. World Baseball Classic) but they aren't streamed in the normal way
+    #url += '&sportId=1,51'
+    url += '&sportId=1'
     url += '&date=' + game_day
 
     headers = {
@@ -94,7 +96,10 @@ def todays_games(game_day, start_inning='False'):
 
     # Big Inning and game changer only available for non-free accounts
     if ONLY_FREE_GAMES != 'true':
-        create_big_inning_listitem(game_day)
+        # if the requested date is not in the past, we have games for this date, and it's a regular season date,
+        # then show the Big Inning listitem
+        if today <= game_day and len(games) > 0 and games[0]['seriesDescription'] == 'Regular Season':
+            create_big_inning_listitem(game_day)
 
         # if it's today, show the game changer listitem
         if today == game_day and game_changer_start is not None and game_changer_end is not None and (len(games) - len(blackouts)) > 1:
@@ -820,7 +825,7 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
         # show automatic skip dialog, if possible, enabled, and we're not looking to autoplay
         if skip_possible is True and ASK_TO_SKIP == 'true' and autoplay is False:
             # automatic skip dialog with options to skip nothing, breaks, breaks + idle time, breaks + idle time + non-action pitches
-            skip_type = dialog.select(LOCAL_STRING(30403), [LOCAL_STRING(30404), LOCAL_STRING(30408), LOCAL_STRING(30405), LOCAL_STRING(30421), LOCAL_STRING(30406)])
+            skip_type = dialog.select(LOCAL_STRING(30403), [LOCAL_STRING(30404), LOCAL_STRING(30423), LOCAL_STRING(30408), LOCAL_STRING(30405), LOCAL_STRING(30421), LOCAL_STRING(30406)])
             # cancel will exit
             if skip_type == -1:
                 sys.exit()
@@ -865,7 +870,7 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
             if (skip_type > 0 or start_inning > 0) and broadcast_start_timestamp is not None:
                 from .mlbmonitor import MLBMonitor
                 mlbmonitor = MLBMonitor()
-                mlbmonitor.skip_monitor(skip_type, game_pk, broadcast_start_timestamp, is_live, start_inning, start_inning_half)
+                mlbmonitor.skip_monitor(skip_type, game_pk, broadcast_start_timestamp, stream_url, is_live, start_inning, start_inning_half)
         # otherwise exit
         else:
             sys.exit()
@@ -1172,16 +1177,17 @@ def get_airings_data(content_id=None, game_pk=None):
 def get_blackout_status(game, regional_fox_games_exist):
     blackout_type = 'False'
     blackout_time = None
-    if re.match('^[0-9]{5}$', ZIP_CODE):
-        if 'content' in game and 'media' in game['content'] and 'epg' in game['content']['media'] and len(game['content']['media']['epg']) > 0 and 'items' in game['content']['media']['epg'][0] and len(game['content']['media']['epg'][0]['items']) > 0 and 'mediaFeedType' in game['content']['media']['epg'][0]['items'][0] and game['content']['media']['epg'][0]['items'][0]['mediaFeedType'] == 'NATIONAL':
-            if game['content']['media']['epg'][0]['items'][0]['callLetters'] == 'FOX':
-                if regional_fox_games_exist == False:
-                    blackout_type = 'National'
-            else:
+    national_blackout = re.match('^[0-9]{5}$', ZIP_CODE)
+
+    if 'content' in game and 'media' in game['content'] and 'epg' in game['content']['media'] and len(game['content']['media']['epg']) > 0 and 'items' in game['content']['media']['epg'][0] and len(game['content']['media']['epg'][0]['items']) > 0 and 'mediaFeedType' in game['content']['media']['epg'][0]['items'][0] and game['content']['media']['epg'][0]['items'][0]['mediaFeedType'] == 'NATIONAL':
+        if (game['content']['media']['epg'][0]['items'][0]['callLetters'] != 'FOX') or (game['content']['media']['epg'][0]['items'][0]['callLetters'] == 'FOX' and regional_fox_games_exist == False):
+            if game['seriesDescription'] != 'Spring Training' and game['seriesDescription'] != 'Regular Season':
+                blackout_type = 'International'
+            elif national_blackout:
                 blackout_type = 'National'
 
-        if blackout_type == 'False' and game['seriesDescription'] != 'Spring Training' and (game['teams']['away']['team']['abbreviation'] in BLACKOUT_TEAMS or game['teams']['home']['team']['abbreviation'] in BLACKOUT_TEAMS):
-            blackout_type = 'Local'
+    if national_blackout and blackout_type == 'False' and game['seriesDescription'] != 'Spring Training' and (game['teams']['away']['team']['abbreviation'] in BLACKOUT_TEAMS or game['teams']['home']['team']['abbreviation'] in BLACKOUT_TEAMS):
+        blackout_type = 'Local'
 
     # also calculate a blackout time for non-suspended, non-TBD games
     if blackout_type != 'False' and 'resumeGameDate' not in game and 'resumedFromDate' not in game and game['status']['startTimeTBD'] is False:

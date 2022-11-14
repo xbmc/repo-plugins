@@ -108,18 +108,51 @@ class DrDkTvAddon(object):
                 pass
 
     def showAreaSelector(self):
-        gui = tvgui.AreaSelectorDialog(tr, resources_path)
-        gui.doModal()
-        areaSelected = gui.areaSelected
-        del gui
-
-        if areaSelected == 'none':
-            pass
-        elif areaSelected == 'drtv':
-            self.showMainMenu()
+        if bool_setting('use.simpleareaitem'):
+            self.showSimpleAreaSelector()
         else:
-            items = self.api.get_children_front_items('dr-' + areaSelected)
-            self.listEpisodes(items)
+            gui = tvgui.AreaSelectorDialog(tr, resources_path)
+            gui.doModal()
+            areaSelected = gui.areaSelected
+            del gui
+
+            if areaSelected == 'none':
+                pass
+            elif areaSelected == 'drtv':
+                self.showMainMenu()
+            else:
+                items = self.api.get_children_front_items('dr-' + areaSelected)
+                self.listEpisodes(items)
+
+    def showSimpleAreaSelector(self):
+        items = list()
+        # DRTV
+        item = xbmcgui.ListItem('DR TV', offscreen=True)
+        item.setArt({'fanart': str(resources_path/'button-drtv.png'),
+                     'icon': str(resources_path/'button-drtv.png')})
+        item.addContextMenuItems(self.menuItems, False)
+        items.append((self._plugin_url + '?area=1', item, True))
+        # Minisjang
+        item = xbmcgui.ListItem('Minisjang', offscreen=True)
+        item.setArt({'fanart': str(resources_path/'button-minisjang.png'),
+                     'icon': str(resources_path/'button-minisjang.png')})
+        item.addContextMenuItems(self.menuItems, False)
+        items.append((self._plugin_url + '?area=2', item, True))
+        # Ramasjang
+        item = xbmcgui.ListItem('Ramasjang', offscreen=True)
+        item.setArt({'fanart': str(resources_path/'button-ramasjang.png'),
+                     'icon': str(resources_path/'button-ramasjang.png')})
+        item.addContextMenuItems(self.menuItems, False)
+        items.append((self._plugin_url + '?area=3', item, True))
+        # Ultra
+        item = xbmcgui.ListItem('Ultra', offscreen=True)
+        item.setArt({'fanart': str(resources_path/'button-ultra.png'),
+                     'icon': str(resources_path/'button-ultra.png')})
+        item.addContextMenuItems(self.menuItems, False)
+        items.append((self._plugin_url + '?area=4', item, True))
+
+        xbmcplugin.addDirectoryItems(self._plugin_handle, items)
+        xbmcplugin.endOfDirectory(self._plugin_handle)
 
     def showMainMenu(self):
         items = []
@@ -302,7 +335,11 @@ class DrDkTvAddon(object):
 
     def list_entries(self, path, seasons=False):
         entries = self.api.get_programcard(path)['entries']
-        if len(entries) > 1:
+        if len(entries) == 0:
+            # hack for get_programcard('/liste/306104') giving empty entries, but recommendations yields?!?
+            id = int(path.split('/')[-1])
+            self.listEpisodes(self.api.get_recommendations(id)['items'])
+        elif len(entries) > 1:
             self.listEpisodes(entries)
         else:
             item = entries[0]
@@ -323,8 +360,13 @@ class DrDkTvAddon(object):
                 raise tvapi.ApiException(f"{item['type']} unknown")
 
     def playVideo(self, id, kids_channel, path):
-        self.updateRecentlyWatched(path)
-        video = self.api.get_stream(id)
+        if path.startswith('/kanal'):
+            # live stream
+            video = self.api.get_livestream(path, with_subtitles=bool_setting('enable.subtitles'))
+        else:
+            self.updateRecentlyWatched(path)
+            video = self.api.get_stream(id)
+
         subs = {}
         for i, sub in enumerate(video['subtitles']):
             subs[sub['language']] = i
@@ -342,6 +384,9 @@ class DrDkTvAddon(object):
                 item.setProperty('inputstream', is_helper.inputstream_addon)
                 item.setProperty('inputstream.adaptive.manifest_type', 'hls')
 
+        local_subs_bool = bool_setting('enable.localsubtitles') or get_setting('inputstream') == 'ffmpegdirect'
+        if local_subs_bool and video['srt_subtitles']:
+            item.setSubtitles(video['srt_subtitles'])
         xbmcplugin.setResolvedUrl(self._plugin_handle, video['url'] is not None, item)
         if len(subs) == 0:
             return
@@ -364,6 +409,11 @@ class DrDkTvAddon(object):
             if all([bool_setting('disable.kids.subtitles') and kids_channel]):
                 player.showSubtitles(False)
             elif bool_setting('enable.subtitles'):
+                if local_subs_bool:
+                    player.setSubtitles(video['srt_subtitles'][-1])
+                    player.showSubtitles(True)
+                    return
+
                 for type in ['DanishLanguageSubtitles', 'CombinedLanguageSubtitles', 'ForeignLanguageSubtitles']:
                     if type in subs:
                         player.setSubtitleStream(subs[type])
@@ -371,6 +421,10 @@ class DrDkTvAddon(object):
                         return
             else:
                 if 'ForeignLanguageSubtitles' in subs:
+                    if local_subs_bool:
+                        player.setSubtitles(video['srt_subtitles'][0])
+                        player.showSubtitles(True)
+                        return
                     player.setSubtitleStream(subs['ForeignLanguageSubtitles'])
                     player.showSubtitles(True)
                 else:
@@ -447,17 +501,21 @@ class DrDkTvAddon(object):
                 self.api.recache_items(clear_expired=True, progress=progress)
                 progress.update(100)
                 progress.close()
-
             else:
                 area = int(get_setting('area'))
+                if 'area' in PARAMS:
+                    area = int(PARAMS['area'])
                 if area == 0:
                     self.showAreaSelector()
                 elif area == 1:
                     self.showMainMenu()
                 elif area == 2:
-                    items = self.api.get_children_front_items('dr-ramasjang')
+                    items = self.api.get_children_front_items('dr-minisjang')
                     self.listEpisodes(items)
                 elif area == 3:
+                    items = self.api.get_children_front_items('dr-ramasjang')
+                    self.listEpisodes(items)
+                elif area == 4:
                     items = self.api.get_children_front_items('dr-ultra')
                     self.listEpisodes(items)
 

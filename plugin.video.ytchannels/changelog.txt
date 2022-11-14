@@ -1,6 +1,11 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+
+v0.4.3 [05-November-2022]
+-Russian Language support (thanks to sryze)
+-Added functionality to filter out YouTube shorts
+
 v0.4.2 [24-April-2022]
 -Polish Language support (thanks to hevet)
 

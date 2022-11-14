@@ -14,173 +14,173 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en_GB\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 msgctxt "#30000"
 msgid "Remove folder"
-msgstr "Usun folder"
+msgstr "Удалить папку"
 
 msgctxt "#30001"
 msgid "Add folder"
-msgstr "Dodaj folder"
+msgstr "Добавить папку"
 
 msgctxt "#30002"
 msgid "Add channel to root"
-msgstr "Dodaj kanał do katalogu głównego"
+msgstr "Дообавить канал в корневую папку"
 
 msgctxt "#30003"
 msgid "Remove channel"
-msgstr "Usuń kanał"
+msgstr "Удалить канал"
 
 msgctxt "#30004"
 msgid "Playlists"
-msgstr "Listy odtwarzania"
+msgstr "Плейлисты"
 
 msgctxt "#30005"
 msgid "Next page"
-msgstr "Następna strona"
+msgstr "Следующая страница"
 
 msgctxt "#30006"
 msgid "Search for channel"
-msgstr "Wyszukaj kanał"
+msgstr "Поиск канала"
 
 msgctxt "#30007"
 msgid "Add by username"
-msgstr "Dodaj według nazwy użytkownika"
+msgstr "Добавить по имени пользователя"
 
 msgctxt "#30008"
 msgid "Choose option"
-msgstr "Wybierz opcję"
+msgstr "Выбрать опцию"
 
 msgctxt "#30009"
 msgid "Add channel to"
-msgstr "Dodaj kanał do"
+msgstr "Добавить канал в"
 
 msgctxt "#30010"
 msgid "root"
-msgstr "Katalog główny"
+msgstr "корневую папку"
 
 msgctxt "#30011"
 msgid "Folder name"
-msgstr "Nazwa folderu
+msgstr "Название папки"
 
 msgctxt "#30012"
 msgid "Search channel"
-msgstr "Wyszukaj kanał"
+msgstr "Найти канал"
 
 msgctxt "#30013"
 msgid "Choose channel"
-msgstr "Wybierz kanał"
+msgstr "Выбрать канал"
 
 msgctxt "#30014"
 msgid "Enter username"
-msgstr "Wpisz nazwę użytkownika"
+msgstr "Ввести имя пользователя"
 
 msgctxt "#30015"
 msgid "Erase database"
-msgstr "Usuń bazę danych"
+msgstr "Очистить базу данных"
 
 msgctxt "#30016"
 msgid "Do you wish to erase your Youtube Channels database?"
-msgstr "Czy chcesz usunąć bazę danych swoich kanałów YouTube?"
+msgstr "Вы действительно хотите очистить базу данных YouTube Channels?"
 
 msgctxt "#30017"
 msgid "Successfully erased folder database!"
-msgstr "Pomyślnie skasowano bazę danych folderów!"
+msgstr "База данных каталогов успешно очищена!"
 
 msgctxt "#30018"
 msgid "Channel with username"
-msgstr "Kanał z nazwą użytkownika"
+msgstr "Канал с именем пользователя"
 
 msgctxt "#30019"
 msgid "does not exist."
-msgstr "nie istnieje."
+msgstr "не существует."
 
 msgctxt "#30020"
 msgid "API Key Error"
-msgstr "Błąd klucza API"
+msgstr "Проблема с API-ключом"
 
 msgctxt "#30021"
 msgid "You must enter a YouTube API Key to continue. Please use the addon settings to set the API key."
-msgstr "Aby kontynuować, musisz wprowadzić klucz API YouTube. Użyj ustawień dodatku, aby ustawić klucz API."
+msgstr "Вы должны ввести ключ к YouTube API, чтобы продолжить. Пожалуйта, указите API-ключ в настройках дополнения."
 
 msgctxt "#30022"
 msgid "A YouTube API Key is required for this addon to work, please enter your API key now."
-msgstr "Aby ten dodatek działał, wymagany jest klucz API YouTube. Wprowadź teraz swój klucz API."
+msgstr "Для работы данного дополнения необходим ключ к YouTube API, пожалуйста, введите API-ключ сейчас."
 
 msgctxt "#30023"
 msgid "Move up"
-msgstr "Przesuń w górę"
+msgstr "Переместить вверх"
 
 msgctxt "#30024"
 msgid "Move down"
-msgstr "Przesuń w dół"
+msgstr "Переместить вниз"
 
 msgctxt "#30025"
 msgid "Change folder"
-msgstr "Zmień folder"
+msgstr "Сменить папку"
 
 msgctxt "#30026"
 msgid "Choose image"
-msgstr "Wybierz zdjęcie"
+msgstr "Выбрать изображение"
 
 msgctxt "#30027"
 msgid "Set thumbnail"
-msgstr "Ustaw miniaturę"
+msgstr "Установить миниатюру"
 
 msgctxt "#30028"
 msgid "Remove playlist"
-msgstr "Usun listę odtwarzania"
+msgstr "Удалить плейлист"
 
 msgctxt "#30029"
 msgid "Live"
-msgstr "Na żywo"
+msgstr "Прямой эфир"
 
 msgctxt "#30031"
 msgid "Playing using YouTube"
-msgstr "Odtwarzanie za pomocą YouTube"
+msgstr "Воспроизведение с помощью YouTube"
 
 msgctxt "#30099"
 msgid "Youtube channels"
-msgstr "Kanały YouTube"
+msgstr "Каналы YouTube"
 
 msgctxt "#30200"
 msgid "General"
-msgstr "Ogólne"
+msgstr "Общие"
 
 msgctxt "#30201"
 msgid "Enable playlists"
-msgstr "Włącz listy odtwarzania"
+msgstr "Разрешить плейлисты"
 
 msgctxt "#30202"
 msgid "Show 'add folder/channel' options"
-msgstr "Pokaż opcje 'dodaj folder/kanał'"
+msgstr "Показывать опции \"добавить папку/канал\""
 
 msgctxt "#30203"
 msgid "Number of videos per page"
-msgstr "Liczba filmów na stronie"
+msgstr "Количество видероликов на странице"
 
 msgctxt "#30204"
 msgid "Number of channel search results"
-msgstr "Liczba wyników wyszukiwania kanałów"
+msgstr "Количество результатов поиска канала"
 
 msgctxt "#30205"
 msgid "Erase database"
-msgstr "Wykasuj bazę danych"
+msgstr "Очистить базу данных"
 
 msgctxt "#30206"
 msgid "API Key"
-msgstr "Klucz API"
+msgstr "API-ключ"
 
 msgctxt "#30207"
 msgid "YouTube API Key"
-msgstr "Klucz API YouTube"
+msgstr "Ключ YouTube API"
 
 msgctxt "#30208"
 msgid "Enable live streams"
-msgstr "Włącz transmisje na żywo"
+msgstr "Разрешить прямые эфиры"
 
 msgctxt "#30209"
 msgid "Filter out shorts"
-msgstr "Nie pokazuj krótkich filmów"
+msgstr "Скрывать короткие видео"

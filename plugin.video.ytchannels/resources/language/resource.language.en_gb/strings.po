@@ -180,3 +180,7 @@ msgstr ""
 msgctxt "#30208"
 msgid "Enable live streams"
 msgstr ""
+
+msgctxt "#30209"
+msgid "Filter out shorts"
+msgstr ""

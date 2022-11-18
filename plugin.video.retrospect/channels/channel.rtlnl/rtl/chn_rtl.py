@@ -5,6 +5,7 @@ import datetime
 from resources.lib import chn_class
 from resources.lib import mediatype
 from resources.lib import contenttype
+from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.mediaitem import MediaItem
 from resources.lib.mediaitem import FolderItem
 from resources.lib.logger import Logger
@@ -620,6 +621,11 @@ class Channel(chn_class.Channel):
         }
         video_data = UriHandler.open(item.url, additional_headers=headers)
         video_json = JsonHelper(video_data)
+        error = video_json.get_value("error")
+        if error:
+            XbmcWrapper.show_notification(LanguageHelper.ErrorId, error["description"])
+            return item
+
         license_url = video_json.get_value("licenseUrl")
         video_manifest = video_json.get_value("manifest")
         token = video_json.get_value("token")

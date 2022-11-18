@@ -6,6 +6,7 @@ import datetime
 
 from resources.lib import chn_class, mediatype, contenttype
 from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.helpers.encodinghelper import EncodingHelper
 from resources.lib.mediaitem import MediaItem, FolderItem
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.helpers.jsonhelper import JsonHelper
@@ -15,6 +16,7 @@ from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.logger import Logger
 from resources.lib.streams.mpd import Mpd
+from resources.lib.vault import Vault
 from resources.lib.xbmcwrapper import XbmcWrapper
 from resources.lib.streams.m3u8 import M3u8
 from resources.lib.urihandler import UriHandler
@@ -112,16 +114,16 @@ class Channel(chn_class.Channel):
         self._add_data_parser("http://tv4events1-lh.akamaihd.net/i/EXTRAEVENT5_1",
                               updater=self.update_live_item)
 
-        self._add_data_parser("*", updater=self.update_video_item)
+        self._add_data_parser("*", updater=self.update_video_item, requires_logon=True)
 
-        #===============================================================================================================
+        # ===============================================================================================================
         # non standard items
         self.__maxPageSize = 100  # The Android app uses a page size of 20
         self.__program_fields = '{__typename,description,displayCategory,id,image,images{main16x9},name,nid,genres,videoPanels{id}}'
         self.__season_count_meta = "season_count"
         self.__timezone = pytz.timezone("Europe/Stockholm")
 
-        #===============================================================================================================
+        # ===============================================================================================================
         # Test cases:
         #   Batman - WideVine
         #   Antikdeckarna - Clips
@@ -130,109 +132,72 @@ class Channel(chn_class.Channel):
         return
 
     # No logon for now
-    # def log_on(self):
-    #     """ Makes sure that we are logged on. """
-    #
-    #     username = AddonSettings.get_setting("channel_tv4play_se_username")
-    #     if not username:
-    #         Logger.Info("No user name for TV4 Play, not logging in")
-    #         return False
-    #
-    #     # Fetch an existing token
-    #     tokenSettingId = "channel_tv4play_se_token"
-    #     token = AddonSettings.get_setting(tokenSettingId)
-    #     sessionToken = None
-    #     if token:
-    #         expiresAt, vimondSessionToken, sessionToken = token.split("|")
-    #         expireDate = DateHelper.get_date_from_posix(float(expiresAt))
-    #         if expireDate > datetime.datetime.now():
-    #             Logger.Info("Found existing valid TV4Play token (valid until: %s)", expireDate)
-    #             self.httpHeaders["Cookie"] = "JSESSIONID=%s; sessionToken=%s" % (vimondSessionToken, sessionToken)
-    #             return True
-    #         Logger.Warning("Found existing expired TV4Play token")
-    #
-    #     Logger.Info("Fetching a new TV4Play token")
-    #     data = None
-    #     if sessionToken:
-    #         # 2a: try reauthenticating
-    #         # POST https://account.services.tv4play.se/session/reauthenticate
-    #         # session_token=<sessionToken>&client=tv4play-web
-    #         # returns the same as authenticate
-    #         Logger.Info("Reauthenticating based on the old TV4Play token")
-    #         params = "session_token=%s&" \
-    #                  "client=tv4play-web" % (
-    #                      HtmlEntityHelper.url_encode(sessionToken)
-    #                  )
-    #         data = UriHandler.open("https://account.services.tv4play.se/session/reauthenticate",
-    #                                noCache=True, params=params)
-    #
-    #     if not data or "vimond_session_token" not in data:
-    #         # 1: https://www.tv4play.se/session/new
-    #         # Extract the "authenticity_token"
-    #         Logger.Info("Authenticating based on username and password")
-    #
-    #         v = Vault()
-    #         password = v.get_setting("channel_tv4play_se_password")
-    #         if not password:
-    #             XbmcWrapper.show_dialog(
-    #                 title=None,
-    #                 lines=LanguageHelper.get_localized_string(LanguageHelper.MissingCredentials),
-    #                 # notificationType=XbmcWrapper.Error,
-    #                 # displayTime=5000
-    #             )
-    #
-    #         # 2b: https://account.services.tv4play.se/session/authenticate
-    #         # Content-Type: application/x-www-form-urlencoded; charset=UTF-8
-    #         params = "username=%s&" \
-    #                  "password=%s&" \
-    #                  "remember_me=true&" \
-    #                  "client=tv4play-web" % (
-    #                      HtmlEntityHelper.url_encode(username),
-    #                      HtmlEntityHelper.url_encode(password),
-    #                  )
-    #         data = UriHandler.open("https://account.services.tv4play.se/session/authenticate",
-    #                                noCache=True, params=params)
-    #         if not data:
-    #             Logger.Error("Error logging in")
-    #             return
-    #
-    #     # Extract the data we need
-    #     data = JsonHelper(data)
-    #     vimondSessionToken = data.get_value('vimond_session_token')
-    #     # vimondRememberMe = data.get_value('vimond_remember_me')
-    #     sessionToken = data.get_value('session_token')
-    #
-    #     # 2c: alternative: POST https://account.services.tv4play.se/session/keep_alive
-    #     # vimond_session_token=<vimondSessionToken>&session_token=<sessionToken>&client=tv4play-web
-    #     # returns:
-    #     # {"vimond_session_token":".....", # "vimond_remember_me":"......"}
-    #
-    #     # 3: https://token.services.tv4play.se/jwt?jsessionid=<vimondSessionToken>&client=tv4play-web
-    #     # Get an OAuth token -> not really needed for the standard HTTP calls but it gets us the
-    #     # expiration date
-    #     tokenUrl = "https://token.services.tv4play.se/jwt?jsessionid=%s&client=tv4play-web" % (vimondSessionToken, )
-    #     token = UriHandler.open(tokenUrl, noCache=True)
-    #     # Figure out the expiration data
-    #     data, expires, other = token.split('.')
-    #     expires += "=" * (4 - len(expires) % 4)
-    #     Logger.Debug("Found data: \n%s\n%s\n%s", data, expires, other)
-    #     tokenData = EncodingHelper.decode_base64(expires)
-    #     tokenData = JsonHelper(tokenData)
-    #     expiresAt = tokenData.get_value("exp")
-    #
-    #     Logger.Debug("Token expires at: %s (%s)", DateHelper.get_date_from_posix(float(expiresAt)), expiresAt)
-    #     # AddonSettings.set_setting(tokenSettingId, "%s|%s" % (expiresAt, token))
-    #     AddonSettings.set_setting(tokenSettingId, "%s|%s|%s" % (expiresAt, vimondSessionToken, sessionToken))
-    #
-    #     # 4: use with: Authorization: Bearer <token>
-    #     # 4: use cookies:
-    #     #  Cookie: JSESSIONID=<vimondSessionToken>;
-    #     #  Cookie: sessionToken=<sessionToken>;
-    #     #  Cookie: rememberme=<sessionToken>;
-    #
-    #     # return {"JSESSIONID": vimondSessionToken, "sessionToken": sessionToken}
-    #     self.httpHeaders["Cookie"] = "JSESSIONID=%s; sessionToken=%s" % (vimondSessionToken, sessionToken)
-    #     return True
+    def log_on(self):
+        """ Makes sure that we are logged on. """
+
+        username = AddonSettings.get_setting("channel_tv4play_se_username")
+        if not username:
+            Logger.info("No user name for TV4 Play, not logging in")
+            return False
+
+        # Fetch an existing token
+        token_setting_id = "channel_tv4play_se_token"
+        token = AddonSettings.get_setting(token_setting_id)
+        if token and "|" in token:
+            token_username, token = token.split("|")
+            if token_username == username:
+                header, payload, signature = token.split(".")
+                payload_data = EncodingHelper.decode_base64(payload + '=' * (-len(payload) % 4))
+                payload = JsonHelper(payload_data)
+                expires_at = payload.get_value("exp")
+                expire_date = DateHelper.get_date_from_posix(float(expires_at), tz=pytz.UTC)
+                if expire_date > datetime.datetime.now().astimezone():
+                    Logger.info("Found existing valid TV4Play token (valid until: %s)", expire_date)
+                    return True
+                Logger.warning("Found existing expired TV4Play token")
+
+        Logger.info("Fetching a new TV4Play token")
+        data = None
+
+        if not data or "vimond_session_token" not in data:
+            Logger.info("Authenticating based on username and password")
+
+            v = Vault()
+            password = v.get_setting("channel_tv4play_se_password")
+            if not password:
+                XbmcWrapper.show_dialog(
+                    title=None,
+                    message=LanguageHelper.MissingCredentials,
+                )
+
+            # 2b: https://avod-auth-alb.a2d.tv/oauth/authorize
+            # Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+            params = {
+                "client_id": "tv4play-next",
+                "response_type": "token",
+                "credentials": {
+                    "username": username,
+                    "password": password
+                }
+            }
+            data = UriHandler.open(
+                "https://avod-auth-alb.a2d.tv/oauth/authorize", no_cache=True, json=params)
+
+            if not data:
+                Logger.error("Error logging in")
+                return
+
+        data = JsonHelper(data)
+        if "error" in data.json:
+            Logger.error(data.get_value("error"))
+            XbmcWrapper.show_notification(LanguageHelper.ErrorId, data.get_value("error", "message"))
+            AddonSettings.set_setting(token_setting_id, "")
+            return False
+
+        # Extract the data we need
+        token = data.get_value("access_token")
+        AddonSettings.set_setting(token_setting_id, "{}|{}".format(username, token))
+        return True
 
     def create_api_tag(self, result_set):
         """ Creates a new MediaItem for tag listing items
@@ -309,7 +274,9 @@ class Channel(chn_class.Channel):
 
         # https://graphql.tv4play.se/graphql?operationName=cdp&variables={"nid":"100-penisar"}&extensions={"persistedQuery":{"version":1,"sha256Hash":"255449d35b5679b2cb5a9b85e63afd532c68d50268ae2740ae82f24d83a84774"}}
         program_id = json["nid"]
-        url = self.__get_api_query('{program(nid:"%s"){name,description,videoPanels{id,name,subheading,assetType}}}' % (program_id,))
+        url = self.__get_api_query(
+            '{program(nid:"%s"){name,description,videoPanels{id,name,subheading,assetType}}}' % (
+                program_id,))
 
         item = FolderItem(title, url, content_type=contenttype.EPISODES)
         item.tv_show_title = title
@@ -318,13 +285,13 @@ class Channel(chn_class.Channel):
         item.thumb = result_set.get("image")
         if item.thumb is not None:
             item.thumb = "https://imageproxy.b17g.services/?format=jpg&shape=cut" \
-                         "&quality=70&resize=520x293&source={}"\
+                         "&quality=70&resize=520x293&source={}" \
                 .format(HtmlEntityHelper.url_encode(item.thumb))
 
         item.fanart = result_set.get("image")
         if item.fanart is not None:
             item.fanart = "https://imageproxy.b17g.services/?format=jpg&shape=cut" \
-                         "&quality=70&resize=1280x720&source={}" \
+                          "&quality=70&resize=1280x720&source={}" \
                 .format(HtmlEntityHelper.url_encode(item.fanart))
 
         item.isPaid = result_set.get("is_premium", False)
@@ -378,7 +345,8 @@ class Channel(chn_class.Channel):
         elif title.startswith("Nyheter"):
             title = LanguageHelper.get_localized_string(LanguageHelper.LatestNews)
 
-        item = FolderItem(title, "swipe://{}".format(HtmlEntityHelper.url_encode(title)), content_type=contenttype.VIDEOS)
+        item = FolderItem(title, "swipe://{}".format(HtmlEntityHelper.url_encode(title)),
+                          content_type=contenttype.VIDEOS)
         for card in result_set["cards"]:
             child = self.create_api_typed_item(card)
             if not child:
@@ -413,8 +381,13 @@ class Channel(chn_class.Channel):
         Logger.trace('starting FormatVideoItem for %s', self.channelName)
 
         program_id = result_set["id"]
-        url = "https://playback-api.b17g.net/media/{}?service=tv4&device=browser&protocol=dash".\
+        url = "https://playback2.a2d.tv/play/{}?service=tv4" \
+              "&device=browser&browser=GoogleChrome" \
+              "&protocol=hls%2Cdash" \
+              "&drm=widevine" \
+              "&capabilities=live-drm-adstitch-2%2Cexpired_assets". \
             format(program_id)
+        # url = "https://playback-api.b17g.net/media/{}?service=tv4&device=browser&protocol=dash". \
 
         name = result_set["title"]
         season = result_set.get("season", 0)
@@ -434,7 +407,7 @@ class Channel(chn_class.Channel):
                 name = "{} {}".format("Avsnitt", episode)
 
         item = MediaItem(name, url)
-        item.description = result_set["description"]
+        item.description = result_set.get("description")
         if item.description is None:
             item.description = item.name
 
@@ -479,7 +452,8 @@ class Channel(chn_class.Channel):
 
         item.isLive = result_set.get("live", False)
         if item.isLive:
-            item.name = "{:02d}:{:02d} - {}".format(broadcast_date.hour, broadcast_date.minute, name)
+            item.name = "{:02d}:{:02d} - {}".format(broadcast_date.hour, broadcast_date.minute,
+                                                    name)
             item.url = "{0}&is_live=true".format(item.url)
         if item.isDrmProtected:
             item.url = "{}&drm=widevine&is_drm=true".format(item.url)
@@ -511,7 +485,8 @@ class Channel(chn_class.Channel):
         data = Regexer.do_regex(r'__NEXT_DATA__" type="application/json">(.*?)</script>', data)[0]
         json_data = JsonHelper(data)
         # Make a list from the dictionary values.
-        json_data.json["props"]["initialApolloState"] = list(json_data.json["props"]["initialApolloState"].values())
+        json_data.json["props"]["initialApolloState"] = list(
+            json_data.json["props"]["initialApolloState"].values())
         return json_data, []
 
     def add_next_page(self, data, items):
@@ -547,7 +522,8 @@ class Channel(chn_class.Channel):
             url = self.__get_api_folder_url(folder_id, offset)
             data = UriHandler.open(url)
             json_data = JsonHelper(data)
-            extra_results = json_data.get_value("data", "videoPanel", "videoList", "videoAssets", fallback=[])
+            extra_results = json_data.get_value("data", "videoPanel", "videoList", "videoAssets",
+                                                fallback=[])
             Logger.debug("Adding %d extra results from next page", len(extra_results or []))
             for result in extra_results:
                 item = self.create_api_video_asset_type(result)
@@ -594,7 +570,7 @@ class Channel(chn_class.Channel):
     def add_categories_and_specials(self, data):
         """ Performs pre-process actions for data processing.
 
-        Accepts an data from the process_folder_list method, BEFORE the items are
+        Accepts a data from the process_folder_list method, BEFORE the items are
         processed. Allows setting of parameters (like title etc) for the channel.
         Inside this method the <data> could be changed and additional items can
         be created.
@@ -621,7 +597,8 @@ class Channel(chn_class.Channel):
                 "https://graphql.tv4play.se/graphql?query=query%7Btags%7D", None, False
             ),
             LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes): (
-                self.__get_api_url("LiveVideos", "9b3d0d2f039089311cde2989760744844f7c4bb5033b0ce5643676ee60cb0901"),
+                self.__get_api_url("LiveVideos",
+                                   "800a3ef456fa19eaa1cfa23aab646c50fab91a1a8f82660f56ec03c9bf61c028"),
                 None, False
             )
         }
@@ -658,7 +635,7 @@ class Channel(chn_class.Channel):
         # Actually add the extra items
         for name in extras:
             title = name
-            url, date, is_live = extras[name]   # type: str, datetime.datetime, bool
+            url, date, is_live = extras[name]  # type: str, datetime.datetime, bool
             item = FolderItem(title, url, content_type=contenttype.VIDEOS)
             item.dontGroup = True
             item.complete = True
@@ -666,7 +643,8 @@ class Channel(chn_class.Channel):
             item.isLive = is_live
 
             if date is not None:
-                item.set_date(date.year, date.month, date.day, 0, 0, 0, text=date.strftime("%Y-%m-%d"))
+                item.set_date(date.year, date.month, date.day, 0, 0, 0,
+                              text=date.strftime("%Y-%m-%d"))
 
             items.append(item)
 
@@ -690,7 +668,8 @@ class Channel(chn_class.Channel):
 
         """
 
-        url = self.__get_api_query('{programSearch(q:"",perPage:100){totalHits,programs%s}}' % self.__program_fields)
+        url = self.__get_api_query(
+            '{programSearch(q:"",perPage:100){totalHits,programs%s}}' % self.__program_fields)
         url = url.replace("%", "%%")
         url = url.replace("%%22%%22", "%%22%s%%22")
         return chn_class.Channel.search_site(self, url)
@@ -733,7 +712,13 @@ class Channel(chn_class.Channel):
                 """
 
         # retrieve the mediaurl
-        data = UriHandler.open(item.url)
+        # needs an "x-jwt: Bearer"  header.
+        token = AddonSettings.get_setting("channel_tv4play_se_token")
+        token = token.split("|")[1]
+        headers = {
+            "x-jwt": "Bearer {}".format(token)
+        }
+        data = UriHandler.open(item.url, additional_headers=headers)
         stream_info = JsonHelper(data)
         stream_url = stream_info.get_value("playbackItem", "manifestUrl")
         if stream_url is None:
@@ -827,7 +812,8 @@ class Channel(chn_class.Channel):
         return url
 
     def __get_api_query(self, query):
-        return "https://graphql.tv4play.se/graphql?query={}".format(HtmlEntityHelper.url_encode(query))
+        return "https://graphql.tv4play.se/graphql?query={}".format(
+            HtmlEntityHelper.url_encode(query))
 
     def __get_api_folder_url(self, folder_id, offset=0):
         return self.__get_api_query(

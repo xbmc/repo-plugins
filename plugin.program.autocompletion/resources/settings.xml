@@ -1,8 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<settings>
-    <category label="32001">
-        <setting label="32003" type="select" values="google|youtube|local|bing|tmdb" id="autocomplete_provider" default="google"/>
-        <setting label="32002" visible="!eq(-1,local)+!eq(-1,bing)" type="select" values="bg|cs|da|de|el|en|es|fi|fr|he|hr|hu|it|ja|ko|nl|no|pl|pt|ru|sl|sv|tr|zh" id="autocomplete_lang" default="en"/>
-        <setting label="32002" visible="eq(-2,local)" type="select" values="en|de|fr|nl" id="autocomplete_lang_local" default="en"/>
-    </category>
+<settings version="1">
+    <section id="plugin.program.autocompletion">
+        <category id="autocompletion" label="32001" help="">
+            <group id="1" label="">
+                <setting label="32003" id="autocomplete_provider" type="string" help="">
+                    <level>0</level>
+                    <default>google</default>
+                    <constraints>
+                        <options>
+                            <option>google</option>
+                            <option>youtube</option>
+                            <option>local</option>
+                            <option>bing</option>
+                            <option>tmdb</option>
+                        </options>
+                        <allowempty>false</allowempty>
+                    </constraints>
+                    <control type="spinner" format="string">
+                        <heading>32003</heading>
+                    </control>
+                </setting>
+
+                <setting label="32002" id="autocomplete_lang" type="string" help="">
+                    <level>0</level>
+                    <default>en</default>
+                    <constraints>
+                        <options>
+                            <option>bg</option>
+                            <option>cs</option>
+                            <option>da</option>
+                            <option>de</option>
+                            <option>el</option>
+                            <option>en</option>
+                            <option>es</option>
+                            <option>fi</option>
+                            <option>fr</option>
+                            <option>he</option>
+                            <option>hr</option>
+                            <option>hu</option>
+                            <option>it</option>
+                            <option>ja</option>
+                            <option>ko</option>
+                            <option>nl</option>
+                            <option>no</option>
+                            <option>pl</option>
+                            <option>pt</option>
+                            <option>ru</option>
+                            <option>sl</option>
+                            <option>sv</option>
+                            <option>tr</option>
+                            <option>zh</option>
+                        </options>
+                        <allowempty>false</allowempty>
+                    </constraints>
+                    <control type="spinner" format="string">
+                        <heading>32002</heading>
+                    </control>
+                    <dependencies>
+                        <dependency type="visible">
+                            <and>
+                                <condition operator="!is" setting="autocomplete_provider">local</condition>
+                                <condition operator="!is" setting="autocomplete_provider">bing</condition>
+                            </and>
+                        </dependency>
+                    </dependencies>
+                </setting>
+
+                <setting label="32002" id="autocomplete_lang_local" type="string" help="">
+                    <level>0</level>
+                    <default>en</default>
+                    <constraints>
+                        <options>
+                            <option>en</option>
+                            <option>de</option>
+                            <option>fr</option>
+                            <option>nl</option>
+                        </options>
+                        <allowempty>false</allowempty>
+                    </constraints>
+                    <control type="spinner" format="string">
+                        <heading>32002</heading>
+                    </control>
+                    <dependencies>
+                        <dependency type="visible" setting="autocomplete_provider">local</dependency>
+                    </dependencies>
+                </setting>
+            </group>
+        </category>
+    </section>
 </settings>

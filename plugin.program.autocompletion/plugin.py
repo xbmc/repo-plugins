@@ -10,6 +10,7 @@ import xbmcplugin
 
 import json
 import sys
+from urllib.parse import parse_qsl
 
 import AutoCompletion
 
@@ -35,7 +36,6 @@ def start_info_actions(infos, params):
                 method="Input.SendText",
                 params={"text": params.get("id"), "done": False},
             )
-            return None
         pass_list_to_skin(
             data=listitems,
             handle=params.get("handle", ""),
@@ -45,10 +45,9 @@ def start_info_actions(infos, params):
 
 def pass_list_to_skin(data=[], handle=None, limit=False):
     if data and limit and int(limit) < len(data):
-        data = data[:int(limit)]
-    if not handle:
-        return None
-    if data:
+        data = data[: int(limit)]
+
+    if handle and data:
         items = create_listitems(data)
         xbmcplugin.addDirectoryItems(
             handle=handle,
@@ -63,15 +62,15 @@ def create_listitems(data=None):
     if not data:
         return []
     itemlist = []
-    for (count, result) in enumerate(data):
+    for count, result in enumerate(data):
         listitem = xbmcgui.ListItem(str(count))
-        for (key, value) in result.items():
+        for key, value in result.items():
             if not value:
                 continue
             if key.lower() in ["label"]:
                 listitem.setLabel(value)
             elif key.lower() in ["search_string"]:
-                path = "plugin://plugin.program.autocompletion/?info=selectautocomplete&&id=%s" % value
+                path = f"plugin://plugin.program.autocompletion/?info=selectautocomplete&id={value}"
                 listitem.setPath(path=path)
                 listitem.setProperty('path', path)
         listitem.setProperty("index", str(count))
@@ -80,22 +79,17 @@ def create_listitems(data=None):
     return itemlist
 
 
-if (__name__ == "__main__"):
-    xbmc.log("version %s started" % ADDON_VERSION)
+if __name__ == "__main__":
+    xbmc.log(f"version {ADDON_VERSION} started")
     args = sys.argv[2][1:]
     handle = int(sys.argv[1])
     infos = []
     params = {"handle": handle}
-    delimiter = "&&"
-    for arg in args.split(delimiter):
-        param = arg.replace('"', '').replace("'", " ")
-        if param.startswith('info='):
-            infos.append(param[5:])
-        else:
-            try:
-                params[param.split("=")[0].lower()] = "=".join(param.split("=")[1:]).strip()
-            except Exception:
-                pass
+    params.update(dict(parse_qsl(args, keep_blank_values=True)))
+
+    if "info" in params:
+        infos.append(params['info'])
+
     if infos:
         start_info_actions(infos, params)
 

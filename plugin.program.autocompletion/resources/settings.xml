@@ -5,14 +5,14 @@
             <group id="1" label="">
                 <setting label="32003" id="autocomplete_provider" type="string" help="">
                     <level>0</level>
-                    <default>google</default>
+                    <default>Google</default>
                     <constraints>
                         <options>
-                            <option>google</option>
-                            <option>youtube</option>
-                            <option>local</option>
-                            <option>bing</option>
-                            <option>tmdb</option>
+                            <option>Google</option>
+                            <option>YouTube</option>
+                            <option>Local</option>
+                            <option>Bing</option>
+                            <option>TMDb</option>
                         </options>
                         <allowempty>false</allowempty>
                     </constraints>

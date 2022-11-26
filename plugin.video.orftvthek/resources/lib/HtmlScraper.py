@@ -789,6 +789,11 @@ class htmlScraper(Scraper):
         section = parseDOM(wrapper, name='section', attrs={'class': 'b-live-program.*?'})
         items = parseDOM(section, name='li', attrs={'class': 'channel orf.*?'})
 
+        try:
+            xbmcaddon.Addon('inputstream.adaptive')
+        except RuntimeError:
+            self.html2ListItem("[COLOR red][I] -- %s -- [/I][/COLOR]" % self.translation(30067), self.defaultbanner, "", "", "", "", "Info", "addons://user/kodi.inputstream", None, True, False)
+
         if items:
             debugLog("Found %d Livestream Channels" % len(items))
         for item in items:
@@ -875,8 +880,12 @@ class htmlScraper(Scraper):
                 channel = "LIVE"
 
             streaming_url = self.getLivestreamUrl(data, self.videoQuality)
+            # Remove Get Parameters because InputStream Adaptive cant handle it.
+            streaming_url = re.sub(r"\?[\S]+", '', streaming_url, 0)
             drm_lic_url = self.getLivestreamDRM(data)
             uhd_streaming_url = self.getLivestreamUrl(data, 'UHD', True)
+            if uhd_streaming_url:
+                uhd50_streaming_url = uhd_streaming_url.replace('_uhd_25/', '_uhd_50/')
 
             final_title = "[%s] %s - %s%s" % (self.translation(30063), channel, title, time_str)
 
@@ -889,14 +898,19 @@ class htmlScraper(Scraper):
                     uhd_restart_url = build_kodi_url(uhd_restart_parameters)
                     uhdContextMenuItems.append(('Restart', 'RunPlugin(%s)' % uhd_restart_url))
                     uhd_final_title = "[%s] %s [UHD] - %s%s" % (self.translation(30063), channel, title, time_str)
+                    uhd50_final_title = "[%s] %s [UHD 50fps] - %s%s" % (self.translation(30063), channel, title, time_str)
                 else:
                     uhd_final_title = "%s[UHD] - %s%s" % (channel, title, time_str)
+                    uhd50_final_title = "%s[UHD 50fps] - %s%s" % (channel, title, time_str)
 
                 if not drm_lic_url:
                     self.html2ListItem(uhd_final_title, banner, "", description, time, channel, channel, generateAddonVideoUrl(uhd_streaming_url), None, False, True, uhdContextMenuItems)
+                    self.html2ListItem(uhd50_final_title, banner, "", description, time, channel, channel, generateAddonVideoUrl(uhd50_streaming_url), None, False, True, uhdContextMenuItems)
                 elif inputstreamAdaptive:
                     drm_video_url = generateDRMVideoUrl(uhd_streaming_url, drm_lic_url)
                     self.html2ListItem(uhd_final_title, banner, "", description, time, channel, channel, drm_video_url, None, False, True, uhdContextMenuItems)
+                    drm50_video_url = generateDRMVideoUrl(uhd50_streaming_url, drm_lic_url)
+                    self.html2ListItem(uhd50_final_title, banner, "", description, time, channel, channel, drm50_video_url, None, False, True, uhdContextMenuItems)
 
             if streaming_url:
                 contextMenuItems = []

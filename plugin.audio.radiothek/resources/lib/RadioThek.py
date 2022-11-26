@@ -18,7 +18,7 @@ except ImportError:
 
 class RadioThek:
     local_resource_path = "./"
-    api_ref = "https://radiothek.orf.at/js/app.769b3884.js"
+    api_ref = "https://orf.at/app-infos/sound/web/1.0/bundle.json?_o=sound.orf.at"
     api_base = "https://audioapi.orf.at"
     tag_url = "/radiothek/api/tags/%s"
     broadcast_url = "/%s/json/4.0/broadcasts"
@@ -534,7 +534,7 @@ class RadioThek:
 
         for station in self.api_reference['stations']:
             item = self.api_reference['stations'][station]
-            title = item['title']
+            title = item['name']
             description = "%s Livestream" % title
 
             if station in self.livestream_dd:
@@ -547,8 +547,8 @@ class RadioThek:
                                       logo)
                     list_items.append(episode)
 
-            if 'livestream' in item:
-                link = self.build_livestream_url(station)
+            if 'liveStreamUrlTemplate' in item:
+                link = item['liveStreamUrlTemplate'].format(quality = self.stream_quality)
                 thumbnail = ""
                 backdrop = ""
                 logo = self.get_directory_image({'station': station}, 'logo')
@@ -591,7 +591,7 @@ class RadioThek:
     def get_api_reference(self):
         if not self.api_reference:
             content = self.request_url(self.api_ref, True, False)
-            self.api_reference = get_js_json(content)
+            self.api_reference = json.loads(content)
         return self.api_reference
 
     def get_stapled(self):

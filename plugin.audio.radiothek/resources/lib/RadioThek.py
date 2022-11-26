@@ -18,7 +18,7 @@ except ImportError:
 
 class RadioThek:
     local_resource_path = "./"
-    api_ref = "https://radiothek.orf.at/js/app.769b3884.js"
+    api_ref = "https://orf.at/app-infos/sound/web/1.0/bundle.json?_o=sound.orf.at"
     api_base = "https://audioapi.orf.at"
     tag_url = "/radiothek/api/tags/%s"
     broadcast_url = "/%s/json/4.0/broadcasts"
@@ -591,7 +591,7 @@ class RadioThek:
     def get_api_reference(self):
         if not self.api_reference:
             content = self.request_url(self.api_ref, True, False)
-            self.api_reference = get_js_json(content)
+            self.api_reference = json.loads(content)
         return self.api_reference
 
     def get_stapled(self):
@@ -615,6 +615,6 @@ class RadioThek:
     @staticmethod
     def log(msg):
         try:
-            radiothek_log(msg, True)
+            radiothek_log(msg)
         except Exception as e:
             radiothek_log(msg.encode('utf-8'))

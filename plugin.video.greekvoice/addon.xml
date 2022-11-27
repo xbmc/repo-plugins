@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.greekvoice" name="Greek Voice" version="4.0.0" provider-name="threshold84">
+    <requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.requests" version="2.27.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="start.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">Greek Voice addon</summary>
+        <description lang="en_GB">This addon offers live-streaming content in the greek language from the WPSO.com and XAMOSAM.com websites and its TV network located in Tampa, Florida, USA.</description>
+        <summary lang="el_GR">Πρόσθετο Greek Voice</summary>
+        <description lang="el_GR">Το πρόσθετο αυτό προσφέρει ζωντανές ροές στην ελληνική γλώσσα από τον ιστότοπο WPSO.com και XAMOSAM.com και το τηλεοπτικό του δίκτυο που βρίσκεται στην Τάμπα, Φλόριντα, ΗΠΑ.</description>
+        <language>en el</language>
+        <license>GPL-3.0, MIT Licence</license>
+        <website>http://www.wpso.com</website>
+        <email>angelo@wzra48.com</email>
+        <source>https://github.com/threshold84/plugin.video.greekvoice/</source>
+		<news>v4.0.0 :
+- Initial Kodi matrix version
+		</news>
+        <assets>
+            <icon>resources/art/icon.png</icon>
+            <fanart>resources/art/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

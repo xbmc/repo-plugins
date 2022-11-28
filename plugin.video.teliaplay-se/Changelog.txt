@@ -29,3 +29,6 @@
 - Fixed Trailers
 - Fixed season menu
 - Updated graphql hashes
+
+1.2.6 [20221128]
+- Updated graphql hashes

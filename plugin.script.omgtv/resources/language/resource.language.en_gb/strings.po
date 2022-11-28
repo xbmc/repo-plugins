@@ -1,0 +1,41 @@
+# Kodi Media Center language file
+# Addon Name: Backup
+# Addon id: plugin.script.omgtv
+# Addon Provider: omgtv
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2017-09-19 14:20+0000\n"
+"Last-Translator: Martijn Kaijser <machine.sanctum@gmail.com>\n"
+"Language-Team: English (http://www.transifex.com/teamxbmc/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "Addon Summary"
+msgid ""
+msgstr ""
+
+msgctxt "Addon Description"
+msgid  "The watch@omgtv.rocks address is our default set of channels. After creating an account at https:omgtv.rocks, enter your address to watch your favorite channels."
+msgstr  "The watch@omgtv.rocks address is our default set of channels. After creating an account at https:omgtv.rocks, enter your address to watch your favorite channels."
+
+msgctxt "#30010"
+msgid "General"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Email"
+msgstr "Email"
+
+msgctxt "#30012"
+msgid "The watch@omgtv.rocks address is our default. After creating an account at https:omgtv.rocks, enter your address to watch your favorite channels"
+msgstr ""
+#msgid "The watch@omgtv.rocks address is our default set of channels. After creating an account at https:omgtv.rocks, enter your address to watch your favorite channels."
+
+

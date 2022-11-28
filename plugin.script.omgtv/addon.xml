@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.script.omgtv" name="OMGTV!!!" version="1.0.0" provider-name="OMGTV!!! LLC, New Jersey, US">
+    <requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">OMGTV!!! addon</summary>
+        <description lang="en_GB">OMGTV!!! offers over 5,000 IPTV channels with electronic program guides including television, radio and CCTV.  This add on will enable Kodi to watch our free list of channels.  You can also watch your favorite channels.  Just create an account at OMGTV!!!, search our catalog and bookmark your favorites.  Then change the email address in this addon and watch your favorite channels on Kodi.  Its that easy!</description>
+        <language>en</language>
+        <license>GPL-3.0-or-later</license>
+        <website>https://omgtv.rocks</website>
+        <email>watch@omgtv.rocks</email>
+        <source>https://github.com/itsbaba/plugin.script.omgtv</source>
+        <assets>
+            <icon>icon.png</icon>
+        </assets>
+    </extension>
+</addon>

@@ -190,7 +190,7 @@ msgid "Featured Videos"
 msgstr ""
 
 msgctxt "#30366"
-msgid "Streams Not Found"
+msgid "Stream Not Found"
 msgstr ""
 
 msgctxt "#30367"
@@ -223,6 +223,10 @@ msgstr ""
 
 msgctxt "#30375"
 msgid " doesn't play today"
+msgstr ""
+
+msgctxt "#30376"
+msgid "This content is not available to you based on your current location"
 msgstr ""
 
 msgctxt "#30380"

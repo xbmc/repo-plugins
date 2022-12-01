@@ -82,6 +82,11 @@
                     <default>false</default>
                     <control type="toggle"/>
                 </setting>
+                <setting help="" id="youtube.hide_shorts" label="30736" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
                 <setting help="" id="kodion.play_count.percent" label="30668" type="integer">
                     <level>0</level>
                     <default>85</default>
@@ -154,11 +159,20 @@
                 </setting>
                 <setting help="" id="kodion.content.max_per_page" label="30022" type="integer">
                     <level>0</level>
-                    <default>50</default>
+                    <default>9</default>
                     <constraints>
-                        <minimum>5</minimum>
-                        <step>5</step>
-                        <maximum>50</maximum>
+                        <options>
+                            <option label="5">0</option>
+                            <option label="10">1</option>
+                            <option label="15">2</option>
+                            <option label="20">3</option>
+                            <option label="25">4</option>
+                            <option label="30">5</option>
+                            <option label="35">6</option>
+                            <option label="40">7</option>
+                            <option label="45">8</option>
+                            <option label="50">9</option>
+                        </options>
                     </constraints>
                     <control format="string" type="spinner"/>
                 </setting>
@@ -478,6 +492,11 @@
                     <control type="toggle"/>
                 </setting>
                 <setting help="" id="youtube.folder.subscriptions.show" label="30504" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="youtube.folder.tags.show" label="30900" type="boolean">
                     <level>0</level>
                     <default>true</default>
                     <control type="toggle"/>

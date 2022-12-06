@@ -111,17 +111,18 @@ class StreamService:
         elif video_url:
             model_url = video_url.strip('/') + '.model.json'
             data_json = get_url_json(model_url)
-            # Get streamId
-            stream_id = None
-            for action in data_json.get('details').get('actions'):
-                if action.get('type') == 'watch-episode':
-                    if action.get('videoType') == 'live':
-                        is_live_stream = True
-                        stream_id = action.get('streamId')
-                    else:
-                        is_live_stream = False
-                        stream_id = action.get('episodePublicationId') + quote('$') + action.get('episodeVideoId')
-            api_data = ApiData(self._CLIENT, self._VUALTO_API_URL, stream_id, '', is_live_stream)
+            if data_json:
+                # Get streamId
+                stream_id = None
+                for action in data_json.get('details').get('actions'):
+                    if action.get('type') == 'watch-episode':
+                        if action.get('videoType') == 'live':
+                            is_live_stream = True
+                            stream_id = action.get('streamId')
+                        else:
+                            is_live_stream = False
+                            stream_id = action.get('episodePublicationId') + quote('$') + action.get('episodeVideoId')
+                api_data = ApiData(self._CLIENT, self._VUALTO_API_URL, stream_id, '', is_live_stream)
         return api_data
 
     def _get_stream_json(self, api_data, roaming=False):

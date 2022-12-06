@@ -4,7 +4,6 @@
 
 from __future__ import absolute_import, division, unicode_literals
 from xbmc import Monitor
-from apihelper import ApiHelper
 from favorites import Favorites
 from kodiutils import container_refresh, log
 from playerinfo import PlayerInfo
@@ -21,7 +20,6 @@ class VrtMonitor(Monitor, object):  # pylint: disable=useless-object-inheritance
         self._resumepoints = ResumePoints()
         self._playerinfo = None
         self._favorites = None
-        self._apihelper = None
         self.init_watching_activity()
         super(VrtMonitor, self).__init__()
 
@@ -39,8 +37,6 @@ class VrtMonitor(Monitor, object):  # pylint: disable=useless-object-inheritance
                 self._playerinfo = PlayerInfo()
             if not self._favorites:
                 self._favorites = Favorites()
-            if not self._apihelper:
-                self._apihelper = ApiHelper(self._favorites, self._resumepoints)
         else:
             self._playerinfo = None
 

@@ -201,7 +201,12 @@ class TokenResolver:
         }
         response = open_url(redirect_url, headers=headers, follow_redirects=False)
 
-        response = open_url(response.info().get('Location'), headers=headers, follow_redirects=False)
+        next_location = response.info().get('Location')
+        if not next_location:
+            ok_dialog(heading=localize(30970), message=localize(30971))
+            return None
+
+        response = open_url(next_location, headers=headers, follow_redirects=False)
 
         if response:
             tokens = self._extract_tokens(response)

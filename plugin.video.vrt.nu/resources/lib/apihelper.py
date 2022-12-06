@@ -82,15 +82,13 @@ class ApiHelper:
         # FIXME: Get oneoffs
         cache_file = None
         oneoffs = []
-        '''
-        if get_setting_bool('showoneoff', default=True):
-            cache_file = 'oneoff.json'
-            oneoffs = self.get_episodes(variety='oneoff', cache_file=cache_file)
-        else:
-            cache_file = None
-            # Return empty list
-            oneoffs = []
-        '''
+        # if get_setting_bool('showoneoff', default=True):
+        #     cache_file = 'oneoff.json'
+        #     oneoffs = self.get_episodes(variety='oneoff', cache_file=cache_file)
+        # else:
+        #     cache_file = None
+        #     # Return empty list
+        #     oneoffs = []
 
         return self.__map_tvshows(tvshows, oneoffs, use_favorites=use_favorites, cache_file=cache_file)
 

@@ -59,6 +59,10 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.20 (2022-12-06)
+- Fix all programs menu (@mediaminister)
+- Fix latest episode API (@mediaminister)
+
 ### v2.5.19 (2022-10-16)
 - Fix categories and channels menu listings (@mediaminister)
 - Fix resumepoints and Up Next integration (@mediaminister)

@@ -6,12 +6,9 @@ from __future__ import absolute_import, division, unicode_literals
 from threading import Event, Thread
 from xbmc import getInfoLabel, Player, PlayList
 
-from apihelper import ApiHelper
 from api import get_next_info, get_resumepoint_data, set_resumepoint
 from data import CHANNELS
-from favorites import Favorites
 from kodiutils import addon_id, get_setting_bool, has_addon, jsonrpc, kodi_version_major, log, log_error, notify, set_property, url_for
-from resumepoints import ResumePoints
 from utils import play_url_to_id, to_unicode
 
 
@@ -20,8 +17,6 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
 
     def __init__(self):
         """PlayerInfo initialisation"""
-        self.resumepoints = ResumePoints()
-        self.apihelper = ApiHelper(Favorites(), self.resumepoints)
         self.last_pos = None
         self.listen = False
         self.paused = False

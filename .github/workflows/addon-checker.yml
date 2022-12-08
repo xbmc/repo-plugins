@@ -9,7 +9,7 @@ jobs:
     steps:
 
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
@@ -22,11 +22,13 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip3 install --user kodi-addon-checker
+
     - name: Extract job variables
       shell: bash
-      run: echo "##[set-output name=addon;]$(git diff --diff-filter=d --name-only HEAD~ | grep / | cut -d / -f1 | sort | uniq)"
+
+      run: |
+        echo "addon=$(git diff --diff-filter=d --name-only HEAD~ | grep / | cut -d / -f1 | sort | uniq)" >> $GITHUB_OUTPUT
       id: extract_vars
 
     - name: Addon-Check
       run: $HOME/.local/bin/kodi-addon-checker --branch=${{ github.event.pull_request.base.ref }} --PR ${{ steps.extract_vars.outputs.addon }}
-

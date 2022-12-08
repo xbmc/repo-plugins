@@ -82,6 +82,11 @@
                     <default>false</default>
                     <control type="toggle"/>
                 </setting>
+                <setting help="" id="youtube.hide_shorts" label="30736" type="boolean">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
                 <setting help="" id="kodion.play_count.percent" label="30668" type="integer">
                     <level>0</level>
                     <default>85</default>
@@ -160,7 +165,9 @@
                         <step>5</step>
                         <maximum>50</maximum>
                     </constraints>
-                    <control format="string" type="spinner"/>
+                    <control format="integer" type="slider">
+                        <popup>false</popup>
+                    </control>
                 </setting>
                 <setting help="" id="kodion.search.size" label="30023" type="integer">
                     <level>0</level>
@@ -478,6 +485,11 @@
                     <control type="toggle"/>
                 </setting>
                 <setting help="" id="youtube.folder.subscriptions.show" label="30504" type="boolean">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting help="" id="youtube.folder.tags.show" label="30900" type="boolean">
                     <level>0</level>
                     <default>true</default>
                     <control type="toggle"/>

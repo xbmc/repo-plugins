@@ -9,7 +9,7 @@ jobs:
     steps:
 
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
@@ -25,7 +25,9 @@ jobs:
 
     - name: Extract job variables
       shell: bash
-      run: echo "##[set-output name=addon;]$(git diff --diff-filter=d --name-only HEAD~ | grep / | cut -d / -f1 | sort | uniq)"
+
+      run: |
+        echo "addon=$(git diff --diff-filter=d --name-only HEAD~ | grep / | cut -d / -f1 | sort | uniq)" >> $GITHUB_OUTPUT
       id: extract_vars
 
     - name: Addon-Check

@@ -42,7 +42,7 @@ CHANNELS = [
         name='een',
         label='Eén',
         studio='Een',
-        live_stream='https://www.vrt.be/vrtmax/livestream/#epgchannel=O8',
+        live_stream='https://www.vrt.be/vrtmax/livestream/video/een/',
         live_stream_id='vualto_een_geo',
         youtube=[
             dict(label='Eén', url='https://www.youtube.com/user/welkombijeen'),
@@ -59,7 +59,7 @@ CHANNELS = [
         name='canvas',
         label='Canvas',
         studio='Canvas',
-        live_stream='https://www.vrt.be/vrtmax/livestream/#epgchannel=1H',
+        live_stream='https://www.vrt.be/vrtmax/livestream/video/canvas/',
         live_stream_id='vualto_canvas_geo',
         youtube=[
             dict(label='Canvas', url='https://www.youtube.com/user/CanvasTV'),
@@ -77,7 +77,7 @@ CHANNELS = [
         name='ketnet',
         label='Ketnet',
         studio='Ketnet',
-        live_stream='https://www.vrt.be/vrtmax/kanalen/ketnet/',
+        live_stream='https://www.vrt.be/vrtmax/livestream/video/ketnet/',
         live_stream_id='vualto_ketnet_geo',
         youtube=[
             dict(label='Ketnet', url='https://www.youtube.com/user/KetnetVideo'),

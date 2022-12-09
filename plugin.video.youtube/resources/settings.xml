@@ -489,11 +489,6 @@
                     <default>true</default>
                     <control type="toggle"/>
                 </setting>
-                <setting help="" id="youtube.folder.tags.show" label="30900" type="boolean">
-                    <level>0</level>
-                    <default>true</default>
-                    <control type="toggle"/>
-                </setting>
                 <setting help="" id="youtube.folder.browse_channels.show" label="30512" type="boolean">
                     <level>0</level>
                     <default>true</default>

@@ -10,7 +10,10 @@ import re
 import json
 import urlquick
 
+# noinspection PyUnresolvedReferences
 from codequick import Resolver
+
+from resources.lib import resolver_proxy, web_utils
 
 URL_LIVES = 'https://www.telemaroc.tv/liveTV'
 STREAM_INFO_URL = 'https://player-api.new.livestream.com/accounts/%s/events/%s/stream_info'
@@ -26,4 +29,6 @@ def get_live_url(plugin, item_id, **kwargs):
         r'\<iframe.*events\/(.*)\/player').findall(resp.text)[0]
     resp2 = urlquick.get(STREAM_INFO_URL % (accout_id, event_id))
     json_parser = json.loads(resp2.text)
-    return json_parser['secure_m3u8_url']
+    video_url = re.compile(r'(.*?)m3u8').findall(json_parser['secure_m3u8_url'])[0] + 'm3u8'
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

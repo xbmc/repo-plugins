@@ -154,7 +154,7 @@ menu = {
         'thumb': 'channels/be/nrjhitstvbe.png',
         'fanart': 'channels/be/nrjhitstvbe_fanart.jpg',
         'm3u_group': 'Belgique fr',
-        'enabled': False,
+        'enabled': True,
         'order': 17
     },
     'rtl_sport': {
@@ -175,11 +175,11 @@ menu = {
         'enabled': True,
         'order': 19
     },
-    'canalc': {
-        'resolver': '/resources/lib/channels/be/canalc:get_live_url',
-        'label': 'Canal C',
-        'thumb': 'channels/be/canalc.png',
-        'fanart': 'channels/be/canalc_fanart.jpg',
+    'bouke': {
+        'resolver': '/resources/lib/channels/be/bouke:get_live_url',
+        'label': 'Bouké',
+        'thumb': 'channels/be/bouke.png',
+        'fanart': 'channels/be/bouke.png',
         'm3u_group': 'Belgique fr',
         'enabled': True,
         'order': 20
@@ -323,7 +323,7 @@ menu = {
         'order': 35,
     },
     'hln_live': {
-        'resolver': '/resources/lib/channels/be/hln_live:get_live_url',
+        'resolver': '/resources/lib/channels/be/hln:get_live_url',
         'label': 'HLN Live',
         'thumb': 'channels/be/hln_live.png',
         'fanart': 'channels/be/hln_live_fanart.jpg',
@@ -331,4 +331,49 @@ menu = {
         'enabled': True,
         'order': 36,
     },
+    'canalzoom': {
+        'resolver': '/resources/lib/channels/be/canalzoom:get_live_url',
+        'label': 'Canal Zoom',
+        'thumb': 'channels/be/canalzoom.png',
+        'fanart': 'channels/be/canalzoom.png',
+        'm3u_group': 'Belgique fr',
+        'enabled': True,
+        'order': 37,
+    },
+    'matele': {
+        'resolver': '/resources/lib/channels/be/matele:get_live_url',
+        'label': 'MATELE',
+        'thumb': 'channels/be/matele.png',
+        'fanart': 'channels/be/matele.png',
+        'm3u_group': 'Belgique fr',
+        'enabled': True,
+        'order': 38,
+    },
+    'notele': {
+        'resolver': '/resources/lib/channels/be/notele:get_live_url',
+        'label': 'notélé',
+        'thumb': 'channels/be/notele.png',
+        'fanart': 'channels/be/notele_fanart.jpg',
+        'm3u_group': 'Belgique fr',
+        'enabled': True,
+        'order': 39,
+    },
+    'mnm': {
+        'resolver': '/resources/lib/channels/be/mnm:get_live_url',
+        'label': 'MNM',
+        'thumb': 'channels/be/mnm.png',
+        'fanart': 'channels/be/mnm.png',
+        'm3u_group': 'België nl',
+        'enabled': True,
+        'order': 40,
+    },
+    'citymusic': {
+        'resolver': '/resources/lib/channels/be/citymusic:get_live_url',
+        'label': 'City-Music',
+        'thumb': 'channels/be/citymusic.png',
+        'fanart': 'channels/be/citymusic.png',
+        'm3u_group': 'België nl',
+        'enabled': True,
+        'order': 41,
+    }
 }

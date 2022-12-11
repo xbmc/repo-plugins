@@ -5,6 +5,7 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
+
 from codequick import Script
 
 # The following dictionaries describe
@@ -68,7 +69,8 @@ menu = {
         'order': 6
     },
     'ca_live': {
-        'route': '/resources/lib/main:generic_menu',
+        'route': '/resources/lib/main:tv_guide_menu'
+        if TV_GUIDE else '/resources/lib/main:generic_menu',
         'label': 30056,
         'thumb': 'channels/ca.png',
         'enabled': True,
@@ -165,5 +167,19 @@ menu = {
         'thumb': 'channels/lt.png',
         'enabled': True,
         'order': 20
+    },
+    'tr_live': {
+        'route': '/resources/lib/main:generic_menu',
+        'label': 30070,
+        'thumb': 'channels/tr.png',
+        'enabled': True,
+        'order': 21
+    },
+    'sk_live': {
+        'route': '/resources/lib/main:generic_menu',
+        'label': 30071,
+        'thumb': 'channels/sk.png',
+        'enabled': True,
+        'order': 22
     }
 }

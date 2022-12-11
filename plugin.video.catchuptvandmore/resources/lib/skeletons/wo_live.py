@@ -36,7 +36,7 @@ menu = {
                 'xmltv_id': 'euronews.rai.it'
             },
             'ES': {},
-            'PT': {}, 'RU': {}, 'TR': {}, 'FA': {}, 'GR': {},
+            'PT': {}, 'RU': {}, 'RO': {}, 'TR': {}, 'FA': {}, 'GR': {},
             'HU': {}
         },
         'enabled': True,
@@ -136,14 +136,6 @@ menu = {
         'available_languages': {'JP': {}, 'DE': {}, 'IT': {}, 'UK': {}, 'US': {}},
         'enabled': True,
         'order': 15
-    },
-    'icirdi': {
-        'resolver': '/resources/lib/channels/wo/icirdi:get_live_url',
-        'label': 'ICI RDI',
-        'thumb': 'channels/wo/icirdi.png',
-        'fanart': 'channels/wo/icirdi_fanart.jpg',
-        'enabled': True,
-        'order': 16
     },
     'cgtn': {
         'resolver': '/resources/lib/channels/wo/cgtn:get_live_url',

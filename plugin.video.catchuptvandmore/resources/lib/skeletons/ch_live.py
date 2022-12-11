@@ -165,5 +165,13 @@ menu = {
         'fanart': 'channels/ch/lfmtv_fanart.jpg',
         'enabled': True,
         'order': 24
+    },
+    'latele': {
+        'resolver': '/resources/lib/channels/ch/latele:get_live_url',
+        'label': 'LATELE',
+        'thumb': 'channels/ch/latele.png',
+        'fanart': 'channels/ch/latele.png',
+        'enabled': True,
+        'order': 25
     }
 }

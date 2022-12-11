@@ -7,7 +7,11 @@
 from __future__ import unicode_literals
 import json
 
+from codequick import Listitem, Route
+# noinspection PyUnresolvedReferences
 from codequick import Resolver
+from resources.lib import resolver_proxy, web_utils
+
 import urlquick
 
 
@@ -28,4 +32,5 @@ def get_live_url(plugin, item_id, **kwargs):
 
     jsonparser = json.loads(defaultPayload_line)
 
-    return jsonparser["items"][0]["video2"]
+    video_url = jsonparser["items"][0]["video2"]
+    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

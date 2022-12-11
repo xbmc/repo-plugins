@@ -43,7 +43,7 @@ menu = {
     },
     'cx': {
         'route': '/resources/lib/channels/jp/tver:list_categories',
-        'label': 'Fuji TV フジテレビ',
+        'label': 'TVER: Fuji TV フジテレビ',
         'thumb': 'channels/jp/cx.png',
         'fanart': 'channels/jp/cx_fanart.jpg',
         'enabled': True,
@@ -51,7 +51,7 @@ menu = {
     },
     'ex': {
         'route': '/resources/lib/channels/jp/tver:list_categories',
-        'label': 'テレビ朝日',
+        'label': 'TVER: テレビ朝日',
         'thumb': 'channels/jp/ex.png',
         'fanart': 'channels/jp/ex_fanart.jpg',
         'enabled': True,
@@ -59,7 +59,7 @@ menu = {
     },
     'tbs': {
         'route': '/resources/lib/channels/jp/tver:list_categories',
-        'label': 'TBSテレビ',
+        'label': 'TVER: TBSテレビ',
         'thumb': 'channels/jp/tbs.png',
         'fanart': 'channels/jp/tbs_fanart.jpg',
         'enabled': True,
@@ -67,7 +67,7 @@ menu = {
     },
     'tx': {
         'route': '/resources/lib/channels/jp/tver:list_categories',
-        'label': 'テレビ東京',
+        'label': 'TVER: テレビ東京',
         'thumb': 'channels/jp/tx.png',
         'fanart': 'channels/jp/tx_fanart.jpg',
         'enabled': True,
@@ -75,7 +75,7 @@ menu = {
     },
     'mbs': {
         'route': '/resources/lib/channels/jp/tver:list_categories',
-        'label': 'MBSテレビ',
+        'label': 'TVER: MBSテレビ',
         'thumb': 'channels/jp/mbs.png',
         'fanart': 'channels/jp/mbs_fanart.jpg',
         'enabled': True,
@@ -83,7 +83,7 @@ menu = {
     },
     'abc': {
         'route': '/resources/lib/channels/jp/tver:list_categories',
-        'label': '朝日放送株式会社',
+        'label': 'TVER: 朝日放送株式会社',
         'thumb': 'channels/jp/abc.png',
         'fanart': 'channels/jp/abc_fanart.jpg',
         'enabled': True,
@@ -91,7 +91,7 @@ menu = {
     },
     'ytv': {
         'route': '/resources/lib/channels/jp/tver:list_categories',
-        'label': '読売テレビ',
+        'label': 'TVER: 読売テレビ',
         'thumb': 'channels/jp/ytv.png',
         'fanart': 'channels/jp/ytv_fanart.jpg',
         'enabled': True,
@@ -99,7 +99,7 @@ menu = {
     },
     'ntv': {
         'route': '/resources/lib/channels/jp/tver:list_categories',
-        'label': '日テレ',
+        'label': 'TVER: 日テレ',
         'thumb': 'channels/jp/ntv.png',
         'fanart': 'channels/jp/ntv_fanart.jpg',
         'enabled': True,
@@ -107,26 +107,34 @@ menu = {
     },
     'ktv': {
         'route': '/resources/lib/channels/jp/tver:list_categories',
-        'label': '関西テレビ',
+        'label': 'TVER: 関西テレビ',
         'thumb': 'channels/jp/ktv.png',
         'fanart': 'channels/jp/ktv_fanart.jpg',
         'enabled': True,
-        'order': 13
+        'order': 12
     },
     'tvo': {
         'route': '/resources/lib/channels/jp/tver:list_categories',
-        'label': 'テレビ大阪株式会社',
+        'label': 'TVER: テレビ大阪株式会社',
         'thumb': 'channels/jp/tvo.png',
         'fanart': 'channels/jp/tvo_fanart.jpg',
         'enabled': True,
-        'order': 15
+        'order': 13
     },
     'nhk': {
         'route': '/resources/lib/channels/jp/tver:list_categories',
-        'label': 'NHK',
+        'label': 'TVER: NHK',
         'thumb': 'channels/jp/nhk.png',
         'fanart': 'channels/jp/nhk_fanart.jpg',
         'enabled': True,
-        'order': 16
+        'order': 14
+    },
+    'tver': {
+        'route': '/resources/lib/channels/jp/tver:list_categories',
+        'label': 'TVER',
+        'thumb': 'channels/jp/nhk.png',
+        'fanart': 'channels/jp/nhk_fanart.jpg',
+        'enabled': True,
+        'order': 15
     }
 }

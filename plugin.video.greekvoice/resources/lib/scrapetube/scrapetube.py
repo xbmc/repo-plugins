@@ -1,19 +1,21 @@
 # -*- coding: utf-8 -*-
-
-'''
-    Scrapetube library
-    Original author dermasmid, modified for Greek Voice threshold84
-
-    SPDX-License-Identifier: MIT Licence
-    See LICENSE for more information.
-'''
+# Scrapetube library
+# Original author dermasmid, modified for Greek Voice threshold84
+# SPDX-License-Identifier: MIT Licence
+# See LICENSE for more information.
 
 import json
 import time
 import requests
 
+type_property_map = {
+    "videos": "videoRenderer",
+    "streams": "videoRenderer",
+    "shorts": "reelItemRenderer"
+}
 
-def get_channel(channel_id=None, channel_url=None, limit=None, sleep=1, sort_by="newest"):
+
+def get_channel(channel_id=None, channel_url=None, limit=None, sleep=1, content_type='videos', sort_by="newest"):
 
     """Get videos for a channel.
 
@@ -34,6 +36,9 @@ def get_channel(channel_id=None, channel_url=None, limit=None, sleep=1, sort_by=
             Seconds to sleep between API calls to youtube, in order to prevent getting blocked.
             Defaults to 1.
 
+        content_type (``str``, *optional*):
+           Can be either ``"videos"``, ``"shorts"``, ``"streams"``
+
         sort_by (``str``, *optional*):
             In what order to retrieve to videos. Pass one of the following values.
             ``"newest"``: Get the new videos first.
@@ -42,12 +47,12 @@ def get_channel(channel_id=None, channel_url=None, limit=None, sleep=1, sort_by=
     """
 
     sort_by_map = {"newest": "dd", "oldest": "da", "popular": "p"}
-    url = "{url}/videos?view=0&sort={sort_by}&flow=grid".format(
+    url = "{url}/{content_type}?view=0&sort={sort_by}&flow=grid".format(
         url=channel_url or "https://www.youtube.com/channel/{channel_id}".format(channel_id=channel_id),
-        sort_by=sort_by_map[sort_by],
+        content_type=content_type, sort_by=sort_by_map[sort_by]
     )
     api_endpoint = "https://www.youtube.com/youtubei/v1/browse"
-    videos = get_videos(url, api_endpoint, "videoRenderer", limit, sleep)
+    videos = get_videos(url, api_endpoint, type_property_map[content_type], limit, sleep)
     for video in videos:
         yield video
 
@@ -134,12 +139,12 @@ def get_videos(url, api_endpoint, selector, limit, sleep):
     session = requests.Session()
     session.headers[
         "User-Agent"
-    ] = "Mozilla/5.0 (Windows NT 6.1; rv:101.0) Gecko/20100101 Firefox/101.0"
+    ] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0"
     is_first = True
     _quit = False
     count = 0
 
-    while True:
+    while 1:
 
         if is_first:
 

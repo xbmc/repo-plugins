@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Scrapetube wrapper
+# Scrapetube wrapper for Kodi
 # SPDX-License-Identifier: GPL-3.0
 # See LICENSES/GPL-3.0 for more information.
 
@@ -29,7 +29,7 @@ def list_channel_videos(
     add_prefix=True, thumb_quality=-1
 ):
 
-    items_list = list(get_channel(channel_id, channel_url, limit, sleep, sort_by))
+    items_list = list(get_channel(channel_id, channel_url, limit, sleep, sort_by=sort_by))
 
     items_list = [
         dict(
@@ -86,8 +86,6 @@ def list_search(
             duration=duration_converter(i['thumbnailOverlays'][0]['thumbnailOverlayTimeStatusRenderer']['text']['simpleText'])
             ) for i in items_list
         ]
-
-        print(items_list)
 
         return items_list
 

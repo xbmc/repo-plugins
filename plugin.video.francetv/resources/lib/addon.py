@@ -20,6 +20,7 @@ from __future__ import unicode_literals
 import logging
 import os
 import re
+import xbmcvfs
 
 try:
     from typing import Dict
@@ -61,7 +62,7 @@ _KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split(".")[0])
 class FranceTVAddon:
     _ADDON_ID = "plugin.video.francetv"
     _ADDON = Addon()
-    _ADDON_DIR = xbmc.translatePath(_ADDON.getAddonInfo("path"))
+    _ADDON_DIR = xbmcvfs.translatePath(_ADDON.getAddonInfo("path"))
     _ADDON_MEDIA_DIR = os.path.join(_ADDON_DIR, "resources", "media")
     _ADDON_FANART = Addon().getAddonInfo("fanart")
     _USER_AGENT = (

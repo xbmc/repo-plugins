@@ -26,6 +26,7 @@ def get_kodi_json(method, params):
 
 
 def start_info_actions(infos, params):
+    listitems = []
     for info in infos:
         if info == 'autocomplete':
             listitems = AutoCompletion.get_autocomplete_items(params["id"], params.get("limit", 10))
@@ -36,6 +37,8 @@ def start_info_actions(infos, params):
                 method="Input.SendText",
                 params={"text": params.get("id"), "done": False},
             )
+            xbmc.executebuiltin('ActivateWindowAndFocus(virtualkeyboard,300,0)')
+
         pass_list_to_skin(
             data=listitems,
             handle=params.get("handle", ""),

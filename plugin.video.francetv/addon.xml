@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.francetv" name="france.tv" version="2.0.1+matrix.1" provider-name="melmorabity">
+<addon id="plugin.video.francetv" name="france.tv" version="2.0.2+matrix.1" provider-name="melmorabity">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.beautifulsoup4" version="4.8.2"/>
@@ -26,7 +26,11 @@
       <icon>resources/icon.png</icon>
       <fanart>resources/fanart.jpg</fanart>
     </assets>
-    <news>v2.0.1+matrix.1 (2021-02-22)
+    <news>v2.0.2+matrix.1 (2022-12-18)
+    - Fix for Kodi 20
+    - Enable artwork for special live event channels
+
+v2.0.1+matrix.1 (2021-02-22)
     - Bump version
 
 v2.0.1 (2021-02-16)

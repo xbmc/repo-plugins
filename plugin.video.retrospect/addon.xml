@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.5.11+matrix.1"
+        version="5.5.12+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -122,12 +122,13 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.5.11 - Changelog - 2022-11-18[/B]
+        <news>[B]Retrospect v5.5.12 - Changelog - 2022-12-22[/B]
 
-This update contains a fix for TV4.se that now requires logging in.
+This update contains a number of channel related fixes and a fix for corruption in the cookie-jar that is used for storing cookies from the `requests` module.
 
 [B]Framework related[/B]
-_None_
+* Fixed: Better handling of incorrect PIN codes for the Retrospect Vault.
+* Changed: Workaround for possible cookie corruption on some systems (Fixes #1666).
 
 [B]GUI/Settings/Language related[/B]
 _None_
@@ -135,6 +136,11 @@ _None_
 [B]Channel related[/B]
 * Updated: TV4.se requires login now (Fixes #1657).
 * Changed: Notify RTL users if a login error occurs (See #1658).
+* Fixed: `astimezone()` error in TV4 (Fixes #1660).
+* Fixed: TV4.se clips had no audio (Fixes #1662).
+* Fixed: Removed numeric tags in subtitles for TV4Play.se.
+* Fixed: Too many new lines in UR Play subtitles (Fixes #1663).
+* Fixed: Microsoft Channel 9 streams (Fixes #1667).
 
         </news>
         <assets>

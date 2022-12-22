@@ -9,7 +9,7 @@ if PY2:
     from cookielib import Cookie, CookieJar, MozillaCookieJar
 else:
     # noinspection PyCompatibility
-    from http.cookiejar import Cookie, CookieJar, MozillaCookieJar
+    from http.cookiejar import Cookie, CookieJar, MozillaCookieJar, LoadError
 from collections import namedtuple
 
 import requests
@@ -317,7 +317,16 @@ class _RequestsHandler(object):
             self.cookieJar = MozillaCookieJar(cookie_jar)
             if not os.path.isfile(cookie_jar):
                 self.cookieJar.save()
-            self.cookieJar.load()
+
+            # Load the content, or reset in case of #1666
+            try:
+                self.cookieJar.load()
+            except:
+                Logger.error(
+                    "Error loading cookiejar (It got corrupted). "
+                    "Saving those cookies that are left.", exc_info=True)
+                self.cookieJar.save()
+
             self.cookieJarFile = True
         else:
             self.cookieJar = CookieJar()

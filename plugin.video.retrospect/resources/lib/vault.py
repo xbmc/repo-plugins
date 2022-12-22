@@ -267,10 +267,16 @@ class Vault(object):
             XbmcWrapper.show_notification("", vault_incorrect_pin, XbmcWrapper.Error)
             raise RuntimeError("Incorrect Retrospect PIN specified")
         pin_key = self.__get_pbk(pin)
-        application_key = self.__decrypt(application_key_encrypted, pin_key)
+        try:
+            application_key = self.__decrypt(application_key_encrypted, pin_key)
+        except UnicodeDecodeError:
+            # An invalid pin usually causes a decode error.
+            Logger.critical("Error decoding Retrospect PIN", exc_info=True)
+            application_key = ""
+
         if not application_key.startswith(Vault.__APPLICATION_KEY_SETTING):
             Logger.critical("Invalid Retrospect PIN")
-            XbmcWrapper.show_notification("", vault_incorrect_pin, XbmcWrapper.Error)
+            XbmcWrapper.show_dialog(LanguageHelper.ErrorId, LanguageHelper.VaultIncorrectPin)
             raise RuntimeError("Incorrect Retrospect PIN specified")
 
         application_key_value = application_key[len(Vault.__APPLICATION_KEY_SETTING) + 1:]

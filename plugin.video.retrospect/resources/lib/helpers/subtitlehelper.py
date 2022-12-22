@@ -278,6 +278,8 @@ class SubtitleHelper(object):
                 continue
             elif Regexer.do_regex("^[0-9a-f]{8}-?([0-9a-f]{4}-?){3}[0-9a-f]{12}", line):
                 continue
+            elif line.isnumeric() and len(line) > 4:
+                continue
             else:
                 result = "%s\n%s" % (result, HtmlEntityHelper.convert_html_entities(line))
 
@@ -313,6 +315,8 @@ class SubtitleHelper(object):
                 text = sub[4].replace("<br />", "\n")
                 text = HtmlEntityHelper.convert_html_entities(text)
                 text = text.replace("\r\n", "")
+                text = text.replace("\n\n", "")
+                text = text.replace("\t", "")
                 srt = "%s\n%s\n%s --> %s\n%s\n" % (srt, i, start, end, text.strip())
                 i += 1
             except:

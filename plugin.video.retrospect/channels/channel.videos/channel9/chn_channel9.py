@@ -250,6 +250,11 @@ class Channel(chn_class.Channel):
             if high:
                 item.add_stream(high, bitrate=1400)
         item.complete = item.has_streams()
+
+        # Fix relative streams.
+        for stream in item.streams:
+            if not stream.Url.startswith("https://"):
+                stream.Url = "{}{}".format(self.baseUrl, stream.Url)
         return item
 
     def __set_date(self, date_value, item):

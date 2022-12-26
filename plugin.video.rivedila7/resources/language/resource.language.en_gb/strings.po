@@ -45,11 +45,11 @@ msgid "News & Weather"
 msgstr ""
 
 msgctxt "#32006"
-msgid "On-Demand Programs"
+msgid "Programs"
 msgstr ""
 
 msgctxt "#32008"
-msgid "Teche LA7 - The Protagonists"
+msgid "Protagonists"
 msgstr ""
 
 msgctxt "#32010"

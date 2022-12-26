@@ -29,15 +29,15 @@ def show_root_menu():
     li_style = xbmcgui.ListItem('[B]' + G.LANGUAGE(32004) + '[/B]', offscreen=True)
     li_style.setArt({'thumb': os.path.join(G.THUMB_PATH, 'rivedila7d.jpg'), 'fanart': G.FANART_PATH})
     add_directory_item_nodup({"mode": "rivedi_la7d"}, li_style)
-    li_style = xbmcgui.ListItem('[B]' + G.LANGUAGE(32010) + '[/B]', offscreen=True)
-    li_style.setArt({'thumb': os.path.join(G.THUMB_PATH, 'la7prime.jpg'), 'fanart': G.FANART_PATH})
-    add_directory_item_nodup({"mode": "la7_prime"}, li_style)
-    li_style = xbmcgui.ListItem('[B]' + G.LANGUAGE(32006) + '[/B]', offscreen=True)
-    li_style.setArt({'thumb': os.path.join(G.THUMB_PATH, 'programmila7la7d.jpg'), 'fanart': G.FANART_PATH})
-    add_directory_item_nodup({"mode": "tutti_programmi"}, li_style)
     li_style = xbmcgui.ListItem('[B]' + G.LANGUAGE(32007) + '[/B]', offscreen=True)
     li_style.setArt({'thumb': os.path.join(G.THUMB_PATH, 'tgmeteo.jpg'), 'fanart': G.FANART_PATH})
     add_directory_item_nodup({"mode": "tg_meteo"}, li_style)
+    li_style = xbmcgui.ListItem('[B]' + G.LANGUAGE(32006) + '[/B]', offscreen=True)
+    li_style.setArt({'thumb': os.path.join(G.THUMB_PATH, 'programmila7la7d.jpg'), 'fanart': G.FANART_PATH})
+    add_directory_item_nodup({"mode": "tutti_programmi"}, li_style)
+    li_style = xbmcgui.ListItem('[B]' + G.LANGUAGE(32010) + '[/B]', offscreen=True)
+    li_style.setArt({'thumb': os.path.join(G.THUMB_PATH, 'la7prime.jpg'), 'fanart': G.FANART_PATH})
+    add_directory_item_nodup({"mode": "la7_prime"}, li_style)
     li_style = xbmcgui.ListItem('[B]' + G.LANGUAGE(32008) + '[/B]', offscreen=True)
     li_style.setArt({'thumb': os.path.join(G.THUMB_PATH, 'techela7.jpg'), 'fanart': G.FANART_PATH})
     add_directory_item_nodup({"mode": "teche_la7"}, li_style)
@@ -62,6 +62,8 @@ def add_directory_item_nodup(parameters, li, title='', folder=True, is_live=Fals
 
 
 def play_dirette(url, live):
+    # xbmc.log('PAGE DIRETTE-----: '+str(url),xbmc.LOGINFO)
+
     url_title = ''
     regex5 = ''
     titolo_diretta = ''
@@ -77,7 +79,7 @@ def play_dirette(url, live):
 
         req = Request(url_title, headers={'user-agent': G.HEADERS_SET['user-agent']})
         page = urlopen(req).read()
-        html = page.decode()
+        html = page.decode(errors='replace')
         # xbmc.log('REGEX5-----: '+str(re.findall(regex5, html)),xbmc.LOGINFO)
         titolo_diretta = re.findall(regex5, html)[0]
         # xbmc.log('TITOLO DIRETTA-----: '+str(titolo_diretta),xbmc.LOGINFO)
@@ -141,10 +143,11 @@ def play_dirette(url, live):
 
 
 def play_video(page_video, live):
+    xbmc.log('PLAY VIDEO', xbmc.LOGINFO)
     # xbmc.log('PAGE VIDEO-----: '+str(page_video),xbmc.LOGINFO)
 
     # regex1 = 'vS = "(.*?)"'
-    regex2 = '/content/(.*?).mp4'
+    regex2 = '\.net/i/.*?content/(.*?)(?:\.mp4)'
     regex3 = 'm3u8: "(.*?)"'
     # regex4 = '  <iframe src="(.*?)"'
 
@@ -161,9 +164,14 @@ def play_video(page_video, live):
             # xbmc.log('REGEX2-----: '+str(re.findall(regex2, html)),xbmc.LOGINFO)
             link_video = 'https://awsvodpkg.iltrovatore.it/local/hls/,/content/' + re.findall(regex2, html)[0] + '.mp4.urlset/master.m3u8'
             # xbmc.log('LINK2-----: '+str(link_video),xbmc.LOGINFO)
+        # elif re.findall(regex5, html) or re.findall(regex5, html):
+        #     xbmc.log('REGEX5-----: '+str(re.findall(regex5, html)),xbmc.LOGINFO)
+        #     link_video = 'https://awsvodpkg.iltrovatore.it/local/hls/,/content/' + re.findall(regex5, html)[0] + '_1.mp4.urlset/master.m3u8'
+        #     xbmc.log('LINK5-----: '+str(link_video),xbmc.LOGINFO)
         elif re.findall(regex3, html):
             # xbmc.log('REGEX3-----: '+str(re.findall(regex3, html)),xbmc.LOGINFO)
             link_video = re.findall(regex3, html)[0]
+            # xbmc.log('LINK3-----: '+str(link_video),xbmc.LOGINFO)
         else:
             # xbmc.log('DECODIFICA DRM',xbmc.LOGINFO)
             play_dirette(page_video, False)
@@ -197,7 +205,7 @@ def play_video(page_video, live):
 def rivedi(url, thumb):
     req = Request(url, headers={'user-agent': G.HEADERS_SET['user-agent']})
     page = urlopen(req)
-    html = BeautifulSoup(page, 'html5lib')
+    html = BeautifulSoup(page, 'html.parser')
     G.GIORNO = html.find('div', class_='block block-system').find_all('div', class_=['item item--menu-guida-tv', 'item item--menu-guida-tv active'])
     # xbmc.log('GIORNO----------: '+str(G.GIORNO),xbmc.LOGINFO)
     if G.GIORNO:
@@ -215,7 +223,7 @@ def rivedi(url, thumb):
 def rivedi_giorno():
     req = Request(G.URL_BASE + G.GIORNO, headers={'user-agent': G.HEADERS_SET['user-agent']})
     page = urlopen(req)
-    html = BeautifulSoup(page, 'html5lib')
+    html = BeautifulSoup(page, 'html.parser')
     guida_tv = html.find(id="content_guida_tv_rivedi").find_all('div', class_='item item--guida-tv')
     if guida_tv:
         for div in guida_tv:
@@ -240,16 +248,16 @@ def rivedi_giorno():
 def programmi_lettera():
     req_p = Request(G.URL_PROGRAMMI, headers={'user-agent': G.HEADERS_SET['user-agent']})
     page_p = urlopen(req_p)
-    html_p = BeautifulSoup(page_p, 'html5lib')
+    html_p = BeautifulSoup(page_p, 'html.parser')
     programmi = html_p.find(id='container-programmi-list').find_all('div', class_='list-item')
     # xbmc.log('PROGRAMMI----------: '+str(programmi),xbmc.LOGINFO)
     req_pd = Request(G.URL_PROGRAMMILA7D, headers={'user-agent': G.HEADERS_SET['user-agent']})
     page_pd = urlopen(req_pd)
-    html_pd = BeautifulSoup(page_pd, 'html5lib')
+    html_pd = BeautifulSoup(page_pd, 'html.parser')
     programmila7d = html_pd.find(id='container-programmi-list').find_all('div', class_='list-item')
     req_tp = Request(G.URL_TUTTI_PROGRAMMI, headers={'user-agent': G.HEADERS_SET['user-agent']})
     page_tp = urlopen(req_tp)
-    html_tp = BeautifulSoup(page_tp, 'html5lib')
+    html_tp = BeautifulSoup(page_tp, 'html.parser')
     tutti_programmi = html_tp.find_all('div', class_='list-item')
 
     if programmi or programmila7d or tutti_programmi:
@@ -408,7 +416,7 @@ def programmi_la7prime():
 def programmi_lettera_teche_la7():
     req_teche = Request(G.URL_TECHE_LA7, headers={'user-agent': G.HEADERS_SET['user-agent']})
     page_teche = urlopen(req_teche)
-    html_teche = BeautifulSoup(page_teche, 'html5lib')
+    html_teche = BeautifulSoup(page_teche, 'html.parser')
     teche_la7 = html_teche.find_all('div', class_='list-item')
 
     if teche_la7:
@@ -489,7 +497,7 @@ def video_programma():
         G.OMNIBUS_NEWS = True
         G.LINK = G.URL_BASE + '/omnibus'
 
-    if (G.PAGENUM == 0) and (G.LINK != G.URL_BASE + '/film'):
+    if (G.PAGENUM == 0) and (G.LINK != G.URL_BASE + '/film') and (G.LINK != G.URL_BASE + '/omnibus'):
         video_programma_landpage()
 
     if G.LINK != G.URL_TGLA7D:
@@ -502,7 +510,7 @@ def video_programma():
             if xbmcgui.Dialog().ok(G.PLUGIN_NAME, G.LANGUAGE(32005)):
                 xbmcplugin.endOfDirectory(G.PLUGIN_HANDLE, succeeded=False)
                 return
-        html = BeautifulSoup(page, 'html5lib')
+        html = BeautifulSoup(page, 'html.parser')
 
         if G.PAGENUM == 0:
             xbmcplugin.addDirectoryItem(handle=G.PLUGIN_HANDLE, url='', listitem=xbmcgui.ListItem("[B][COLOR blue]" + 'SETTIMANA' + "[/COLOR][/B]", offscreen=True))
@@ -521,18 +529,21 @@ def video_programma():
             titolo = first.find('div', class_='title_puntata').text.strip()
 
             if G.OMNIBUS_NEWS:
-                first_video(first, titolo, titolo.find(G.FILTRO_OMNIBUS) != -1)
+                # xbmc.log('FIRST NEWS: '+ titolo +str(titolo.find(G.FILTRO_OMNIBUS)),xbmc.LOGINFO)
+                first_video(first, titolo, (titolo.find(G.FILTRO_OMNIBUS) != -1))
             elif G.LINK == G.URL_BASE + '/omnibus':
-                first_video(first, titolo, titolo.find(G.FILTRO_OMNIBUS) == -1)
+                # xbmc.log('FIRST OMNI: '+ titolo +str(titolo.find(G.FILTRO_OMNIBUS)),xbmc.LOGINFO)
+                first_video(first, titolo, (titolo.find(G.FILTRO_OMNIBUS) == -1))
             else:
+                # xbmc.log('FIRST VIDEO----: '+str(titolo),xbmc.LOGINFO)
                 first_video(first, titolo, True)
-            # xbmc.log('FIRST VIDEO----: '+str(titolo),xbmc.LOGINFO)
 
             # WEEK VIDEO
             if html.findAll(text=" LA SETTIMANA"):
                 video_settimana = html.find('div', class_='home-block__content-carousel container-vetrina').find_all('div', class_='item')
                 # xbmc.log('LA SETTIMANA----: '+str(video_settimana),xbmc.LOGINFO)
                 if video_settimana:
+                    # xbmc.log('ROWS_WEEK: '+ titolo +str(titolo.find(G.FILTRO_OMNIBUS)),xbmc.LOGINFO)
                     get_rows_video(video_settimana)
             else:
                 xbmc.log('NO WEEK VIDEO', xbmc.LOGINFO)
@@ -542,15 +553,15 @@ def video_programma():
 
         # CULT VIDEO
         if html.findAll(text="Puntate Cult"):
-            if (G.LINK == G.URL_BASE + '/chi-sceglie-la-seconda-casa') or (
-                    G.LINK == G.URL_BASE + '/lingrediente-perfetto'):
+            if (G.LINK == G.URL_BASE + '/chi-sceglie-la-seconda-casa') or (G.LINK == G.URL_BASE + '/lingrediente-perfetto') or (G.LINK == G.URL_BASE + '/una-giornata-particolare'):
                 req2 = Request(G.LINK + "/rivedila7", headers={'user-agent': G.HEADERS_SET['user-agent']})
             else:
                 req2 = Request(G.LINK + "/rivedila7/archivio?page=" + str(G.PAGENUM), headers={'user-agent': G.HEADERS_SET['user-agent']})
             page2 = urlopen(req2)
-            html2 = BeautifulSoup(page2, 'html5lib')
+            html2 = BeautifulSoup(page2, 'html.parser')
             video_archivio = html2.find('div', class_='view-content clearfix').find_all('div', class_='views-row')
             if video_archivio:
+                # xbmc.log('ROWS_CULT: '+ titolo +str(titolo.find(G.FILTRO_OMNIBUS)),xbmc.LOGINFO)
                 get_rows_video(video_archivio)
 
                 if not G.OMNIBUS_NEWS:
@@ -560,7 +571,7 @@ def video_programma():
     else:
         req = Request(G.LINK + "?page=" + str(G.PAGENUM), headers={'user-agent': G.HEADERS_SET['user-agent']})
         page = urlopen(req)
-        html = BeautifulSoup(page, 'html5lib')
+        html = BeautifulSoup(page, 'html.parser')
         video_tgla7d = html.find('div', class_='tgla7-category').find_all('article', class_='tgla7-new clearfix')
         if video_tgla7d:
             get_rows_video_tgla7d(video_tgla7d)
@@ -575,7 +586,7 @@ def video_programma_teche_la7():
     # xbmc.log('LINK------: '+str(G.LINK),xbmc.LOGINFO)
     req = Request(G.LINK + "?page=" + str(G.PAGENUM), headers={'user-agent': G.HEADERS_SET['user-agent']})
     page = urlopen(req)
-    html = BeautifulSoup(page, 'html5lib')
+    html = BeautifulSoup(page, 'html.parser')
 
     if G.PAGENUM == 0:
         # PREVIEW VIDEO
@@ -596,7 +607,9 @@ def video_programma_teche_la7():
 
 
 def first_video(first, titolo, filtro):
+    # xbmc.log('FILTRO FIRST: '+ titolo + str(filtro), xbmc.LOGINFO)
     if filtro:
+        # xbmc.log('FILTRO TRUE', xbmc.LOGINFO)
         thumblink = first.find('div', class_='holder-bg lozad').get('data-background-image')
         if thumblink.startswith('//'):
             thumb = 'https:' + thumblink
@@ -647,7 +660,7 @@ def video_list(div, titolo, filtro):
 def get_rows_video(video):
     for div in video:
         titolo = div.find('div', class_='title').text.strip()
-        # xbmc.log('TITOLO: '+str(titolo.find(G.FILTRO_OMNIBUS)),xbmc.LOGINFO)
+        # xbmc.log('ROWS_FOR: '+ titolo +str(titolo.find(G.FILTRO_OMNIBUS)),xbmc.LOGINFO)
         if G.OMNIBUS_NEWS:
             video_list(div, titolo, titolo.find(G.FILTRO_OMNIBUS) != -1)
         elif G.LINK == G.URL_BASE + '/omnibus':
@@ -728,7 +741,7 @@ def video_programma_landpage():
     else:
         req = Request(G.LINK, headers={'user-agent': G.HEADERS_SET['user-agent']})
     page = urlopen(req)
-    html = BeautifulSoup(page, 'html5lib')
+    html = BeautifulSoup(page, 'html.parser')
 
     # VIDEO INIZIALE
     video_iniziale = html.find('div', class_='ultima_puntata')
@@ -826,10 +839,10 @@ def run(argv):
         else:
             play_video(G.PLAY, False)
 
-    elif G.MODE == "la7_prime":
+    elif G.MODE == "tg_meteo":
         if G.PLAY == "":
             if G.LINK == "":
-                programmi_la7prime()
+                programmi_lettera_tg_meteo()
             else:
                 video_programma()
         else:
@@ -844,10 +857,10 @@ def run(argv):
         else:
             play_video(G.PLAY, False)
 
-    elif G.MODE == "tg_meteo":
+    elif G.MODE == "la7_prime":
         if G.PLAY == "":
             if G.LINK == "":
-                programmi_lettera_tg_meteo()
+                programmi_la7prime()
             else:
                 video_programma()
         else:

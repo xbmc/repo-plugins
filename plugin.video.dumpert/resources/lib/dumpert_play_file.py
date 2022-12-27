@@ -14,7 +14,7 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
-from dumpert_const import LANGUAGE, SETTINGS, convertToUnicodeString, log, getSoup
+from resources.lib.dumpert_const import LANGUAGE, SETTINGS, convertToUnicodeString, log, getSoup
 
 
 #

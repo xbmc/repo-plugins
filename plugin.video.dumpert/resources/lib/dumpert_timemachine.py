@@ -16,7 +16,7 @@ import xbmcplugin
 from datetime import datetime, timedelta
 import time
 
-from dumpert_const import LANGUAGE, IMAGES_PATH, log, DAY, WEEK, MONTH, DAY_TOPPERS_URL, WEEK_TOPPERS_URL, \
+from resources.lib.dumpert_const import LANGUAGE, IMAGES_PATH, log, DAY, WEEK, MONTH, DAY_TOPPERS_URL, WEEK_TOPPERS_URL, \
     MONTH_TOPPERS_URL
 
 

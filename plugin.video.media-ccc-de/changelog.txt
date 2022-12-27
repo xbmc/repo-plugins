@@ -1,3 +1,8 @@
+v0.3.0 (2022-12-27)
+- Add talk title to live streams (#35)
+- Show Re-Live videos (#34)
+- Test against modern Python versions
+
 v0.2.0 (2020-12-23)
 - The "F*** 2020" release
 - Remove option to fallback to unencrypted streams

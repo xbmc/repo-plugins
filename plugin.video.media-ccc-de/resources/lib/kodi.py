@@ -3,7 +3,10 @@ from __future__ import print_function, division, absolute_import
 
 import re
 
-import xbmc
+try:
+    import xbmc
+except ImportError:
+    xbmc = None
 
 
 def major_version():
@@ -12,3 +15,10 @@ def major_version():
     if match:
         return int(match.group(1))
     return None
+
+
+def log(msg):
+    if xbmc:
+        xbmc.log(msg)
+    else:
+        print(msg)

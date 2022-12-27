@@ -2,6 +2,7 @@
 from __future__ import print_function, division, absolute_import
 
 from .helpers import user_preference_sorter, maybe_json
+from .kodi import log
 
 
 class Recordings(object):
@@ -9,13 +10,13 @@ class Recordings(object):
         self.recordings = [Recording(elem) for elem in json['recordings']]
 
     def recordings_sorted(self, quality, format, video=True):
-        print("Requested quality %s and format %s" % (quality, format))
+        log('Requested quality %s and format %s' % (quality, format))
         typematch = "video" if video else "audio"
         want = sorted(filter(lambda rec: (rec.type == typematch
             and not rec.folder.startswith('slides')),
             self.recordings),
             key=user_preference_sorter(quality, format))
-        print(want)
+        log(str(want))
         return want
 
 

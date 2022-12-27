@@ -56,10 +56,16 @@ def show_dir(subdir=''):
 @plugin.route('/conference/<conf>')
 def show_conference(conf):
     data = None
+    relive = None
     try:
         data = http.fetch_data('conferences/' + conf)
     except http.FetchError:
         return
+
+    try:
+        relive = http.fetch_relive_index().by_conference(conf)
+    except http.FetchError:
+        pass # gui error shown by http class
 
     setContent(plugin.handle, 'movies')
 
@@ -91,6 +97,43 @@ def show_conference(conf):
         url = plugin.url_for(resolve_event,
                              event=event['url'].rsplit('/', 1)[1])
         addDirectoryItem(plugin.handle, url, item, False)
+
+    if relive is not None:
+        relive_item = ListItem('ReLive (unreleased)')
+        url = plugin.url_for(show_relive, conf=conf)
+        addDirectoryItem(plugin.handle, url, relive_item, True)
+
+    endOfDirectory(plugin.handle)
+
+
+@plugin.route('/relive/<conf>')
+def show_relive(conf):
+    data = None
+    try:
+        relive = http.fetch_relive_index().by_conference(conf)
+        data = http.fetch_relive_recordings(relive.get_url())
+    except http.FetchError:
+        return
+
+    setContent(plugin.handle, 'movies')
+
+    data = data.unreleased()
+
+    for recording in data:
+        item = ListItem(recording.title)
+        item.setArt({'thumb':  recording.get_thumb_url()})
+        item.setProperty('IsPlayable', 'true')
+
+        item.setInfo('video', {
+            'plot': recording.room,
+        })
+
+        item.addStreamInfo('video', {
+            'duration': recording.duration
+        })
+
+        addDirectoryItem(plugin.handle, recording.get_video_url(), item, False)
+
     endOfDirectory(plugin.handle)
 
 
@@ -144,7 +187,8 @@ def show_live():
                 extra = ''
                 if stream.translated:
                     extra = ' (Translated %i)' % id if id > 1 else ' (Translated)'
-                item = ListItem(conference.name + ': ' + room.display + extra)
+                talk_title = ' >> ' + room.current_talk_title if room.current_talk_title != '' else ''
+                item = ListItem(conference.name + ': ' + room.display + talk_title + extra)
                 item.setProperty('IsPlayable', 'true')
                 if stream.type == 'dash':
                     dashproperty = 'inputstream'

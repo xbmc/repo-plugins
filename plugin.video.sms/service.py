@@ -18,16 +18,17 @@ import requests
 import time
 import uuid
 import json
+import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
-import xbmc
+import xbmcvfs
 
 ################################################################################################
 
 addon = xbmcaddon.Addon('plugin.video.sms')
 addon_path = addon.getAddonInfo('path')
-libs = xbmc.translatePath(os.path.join(addon_path, 'resources', 'lib'))
+libs = xbmcvfs.translatePath(os.path.join(addon_path, 'resources', 'lib'))
 sys.path.append(libs)
 
 ################################################################################################

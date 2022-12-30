@@ -29,8 +29,8 @@ MONTH = "month"
 VIDEO_QUALITY_MOBILE = "mobile"
 VIDEO_QUALITY_TABLET = "tablet"
 VIDEO_QUALITY_720P = "720p"
-DATE = "2019-12-14"
-VERSION = "1.1.10"
+DATE = "2022-12-27"
+VERSION = "1.1.11"
 
 
 if sys.version_info[0] > 2:

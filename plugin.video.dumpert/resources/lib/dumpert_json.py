@@ -17,7 +17,7 @@ import xbmcgui
 import xbmcplugin
 import json
 
-from dumpert_const import LANGUAGE, IMAGES_PATH, SETTINGS, convertToUnicodeString, log, SFW_HEADERS, NSFW_HEADERS, \
+from resources.lib.dumpert_const import LANGUAGE, IMAGES_PATH, SETTINGS, convertToUnicodeString, log, SFW_HEADERS, NSFW_HEADERS, \
     DAY, WEEK, MONTH, DAY_TOPPERS_URL, WEEK_TOPPERS_URL, MONTH_TOPPERS_URL, LATEST_URL, VIDEO_QUALITY_MOBILE, \
     VIDEO_QUALITY_TABLET, VIDEO_QUALITY_720P
 

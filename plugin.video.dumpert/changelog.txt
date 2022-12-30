@@ -1,3 +1,6 @@
+v1.1.11 (2022-12-27)
+- Not using xbmc.translatePath anymore as that method has been removed in Kodi 20 and up
+
 v1.1.10 (2019-12-12) (thanks for the help Nixxor)
 - Removed Top as it is basically the same as Daily Top
 - Using different url for DumpertTV so that most recent items are at the top of the list

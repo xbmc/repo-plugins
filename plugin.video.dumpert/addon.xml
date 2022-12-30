@@ -2,7 +2,7 @@
 <addon
 	id="plugin.video.dumpert"
 	name="Dumpert"
-	version="1.1.10+matrix.1"
+	version="1.1.11+matrix.1"
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="3.0.0"/>
@@ -28,6 +28,9 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=162635</forum>
     <website>https://dumpert.nl</website>
     <source>https://github.com/skipmodea1/plugin.video.dumpert.python3</source>
+    <news>v1.1.11 (2022-12-27)
+    - Not using xbmc.translatePath anymore as that method has been removed in Kodi 20 and up.
+    </news>
     <assets>
       <icon>resources/icon.png</icon>
       <fanart>resources/fanart.jpg</fanart>

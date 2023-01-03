@@ -48,6 +48,7 @@ _fanart = _addon.getAddonInfo('fanart')
 _language = _addon.getLocalizedString
 _settings = _addon.getSetting
 _addonpath = 'special://profile/addon_data/{}/'.format(_addonID)
+_kodiver = float(xbmcaddon.Addon('xbmc.addon').getAddonInfo('version')[:4])
 # DEBUG
 DEBUG = _settings("DebugMode") == "true"
 # View Mode
@@ -166,11 +167,7 @@ class Main(object):
         search_text = urllib_parse.unquote(self.parameters('keyword'))
         if DEBUG:
             self.log('search_word("{0}")'.format(search_text))
-        # url = 'https://www.imdb.com/find?q={}&s=tt'.format(search_text)
-        # page_data = cache.cacheFunction(fetch, url)
-        # tlink = SoupStrainer('table', {'class': 'findList'})
-        # soup = BeautifulSoup(page_data, "html.parser", parse_only=tlink)
-        # items = soup.find_all('tr')
+
         api_url = 'https://graphql.prod.api.imdb.a2z.com/'
         searchTerm = 'searchTerm: "{0}"'.format(search_text)
         query = ("query {"
@@ -334,15 +331,11 @@ class Main(object):
                     if 'TV' in labels.get('mpaa'):
                         labels.update({'mediatype': 'tvshow'})
 
-                listitem = xbmcgui.ListItem(title)
+                listitem = self.make_listitem(labels, cast2)
                 listitem.setArt({'thumb': poster,
                                  'icon': poster,
                                  'poster': poster,
                                  'fanart': fanart})
-
-                listitem.setInfo(type='Video', infoLabels=labels)
-                if cast2:
-                    listitem.setCast(cast2)
 
                 listitem.setProperty('IsPlayable', 'true')
                 url = sys.argv[0] + '?' + urllib_parse.urlencode({'action': 'play',
@@ -371,7 +364,7 @@ class Main(object):
             imdbIDs = [x.find('div', {'class': 'lister-item-image'}).get('data-tconst') for x in videos]
         else:
             page_data = cache.cacheFunction(fetch, COMING_URL)
-            imdbIDs = re.findall(r'<li>\s*<a\s*href="/title/([^/]+)', page_data, re.DOTALL)
+            imdbIDs = re.findall(r'<a class="ipc-metadata-list-summary-item__t".+?href="/title/([^/]+)', page_data, re.DOTALL)
 
         for imdbId in imdbIDs:
             video = cache.cacheFunction(self.fetchdata_id, imdbId)
@@ -448,15 +441,12 @@ class Main(object):
                     if 'TV' in labels.get('mpaa'):
                         labels.update({'mediatype': 'tvshow'})
 
-                listitem = xbmcgui.ListItem(title)
+                listitem = self.make_listitem(labels, cast2)
+
                 listitem.setArt({'thumb': poster,
                                  'icon': poster,
                                  'poster': poster,
                                  'fanart': fanart})
-
-                listitem.setInfo(type='Video', infoLabels=labels)
-                if cast2:
-                    listitem.setCast(cast2)
 
                 listitem.setProperty('IsPlayable', 'true')
                 url = sys.argv[0] + '?' + urllib_parse.urlencode({'action': 'play',
@@ -611,14 +601,20 @@ class Main(object):
                 except AttributeError:
                     pass
 
-                cert = v_det.get('certificate')
-                if cert:
-                    labels.update({'mpaa': cert.get('rating')})
+                try:
+                    cert = v_det.get('certificate')
+                    if cert:
+                        labels.update({'mpaa': cert.get('rating')})
+                except AttributeError:
+                    pass
 
-                rating = v_det.get('ratingsSummary')
-                if rating.get('aggregateRating'):
-                    labels.update({'rating': rating.get('aggregateRating'),
-                                   'votes': rating.get('voteCount')})
+                try:
+                    rating = v_det.get('ratingsSummary')
+                    if rating.get('aggregateRating'):
+                        labels.update({'rating': rating.get('aggregateRating'),
+                                       'votes': rating.get('voteCount')})
+                except AttributeError:
+                    pass
 
                 try:
                     fanart = video.get('thumbnail').get('url')
@@ -649,15 +645,11 @@ class Main(object):
                 if 'TV' in labels.get('mpaa'):
                     labels.update({'mediatype': 'tvshow'})
 
-            listitem = xbmcgui.ListItem(title)
+            listitem = self.make_listitem(labels, cast2)
             listitem.setArt({'thumb': poster,
                              'icon': poster,
                              'poster': poster,
                              'fanart': fanart})
-
-            listitem.setInfo(type='Video', infoLabels=labels)
-            if cast2:
-                listitem.setCast(cast2)
 
             listitem.setProperty('IsPlayable', 'true')
             url = sys.argv[0] + '?' + urllib_parse.urlencode({'action': 'play',
@@ -698,18 +690,18 @@ class Main(object):
     def play(self):
         if DEBUG:
             self.log('play()')
-        title = xbmc.getInfoLabel("ListItem.Title")
-        thumbnail = xbmc.getInfoImage("ListItem.Thumb")
-        plot = xbmc.getInfoLabel("ListItem.Plot")
+        if _kodiver < 18.9:
+            title = xbmc.getInfoLabel("ListItem.Title")
+            thumbnail = xbmc.getInfoImage("ListItem.Thumb")
+            plot = xbmc.getInfoLabel("ListItem.Plot")
+        else:
+            vtag = xbmc.InfoTagVideo()
+            title = vtag.getTitle()
+            thumbnail = vtag.getPictureURL()
+            plot = vtag.getPlot()
         # only need to add label, icon and thumbnail, setInfo() and addSortMethod() takes care of label2
-        listitem = xbmcgui.ListItem(title)
+        listitem = self.make_plistitem(title, plot)
         listitem.setArt({'thumb': thumbnail})
-
-        # set the key information
-        listitem.setInfo('video', {'title': title,
-                                   'plot': plot,
-                                   'plotOutline': plot})
-
         listitem.setPath(cache.cacheFunction(self.fetch_video_url, self.parameters('videoid')))
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem=listitem)
 
@@ -732,16 +724,11 @@ class Main(object):
                 plot = plot.get('plotText').get('plainText')
             thumbnail = video.get('latestTrailer').get('thumbnail').get('url')
             poster = video.get('primaryImage').get('url')
-            listitem = xbmcgui.ListItem(title)
+            listitem = self.make_plistitem(title, plot, year)
             listitem.setArt({'thumb': poster,
                              'icon': poster,
                              'poster': poster,
                              'fanart': thumbnail})
-            # set the key information
-            listitem.setInfo('video', {'title': title,
-                                       'plot': plot,
-                                       'plotOutline': plot,
-                                       'year': year})
             listitem.setPath(cache.cacheFunction(self.fetch_video_url, videoid))
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem=listitem)
         else:
@@ -754,6 +741,50 @@ class Main(object):
         if isinstance(val, list):
             val = val[0]
         return val
+
+    def make_plistitem(self, title, plot, year=0):
+        li = xbmcgui.ListItem(title)
+        if _kodiver > 19.8:
+            vtag = li.getVideoInfoTag()
+            vtag.setTitle(title)
+            vtag.setOriginalTitle(title)
+            vtag.setPlot(plot or '')
+            vtag.setPlotOutline(plot or '')
+            vtag.setYear(int(year))
+        else:
+            li.setInfo('Video', {'title': title,
+                                 'plot': plot,
+                                 'plotOutline': plot})
+
+        return li
+
+    def make_listitem(self, labels, cast2):
+        li = xbmcgui.ListItem(labels.get('title'))
+        if _kodiver > 19.8:
+            vtag = li.getVideoInfoTag()
+            vtag.setMediaType(labels.get('mediatype'))
+            vtag.setTitle(labels.get('title'))
+            vtag.setOriginalTitle(labels.get('title'))
+            vtag.setPlot(labels.get('plot', '') or '')
+            vtag.setPlotOutline(labels.get('plot', '') or '')
+            vtag.setYear(int(labels.get('year', 0)))
+            vtag.setRating(float(labels.get('rating', '0') or '0'), labels.get('votes', 0), 'imdb')
+            vtag.setMpaa(labels.get('mpaa'))
+            vtag.setDuration(labels.get('duration'))
+            vtag.setGenres(labels.get('genre', []))
+            vtag.setDirectors(labels.get('director', []))
+            vtag.setWriters(labels.get('writer', []))
+
+            if cast2:
+                cast2 = [xbmc.Actor(p['name'], '', 0, p['thumbnail']) for p in cast2]
+                vtag.setCast(cast2)
+
+        else:
+            li.setInfo(type='Video', infoLabels=labels)
+            if cast2:
+                li.setCast(cast2)
+
+        return li
 
     def log(self, description):
         xbmc.log("[ADD-ON] '{} v{}': {}".format(_plugin, _version, description), LOGINFO)

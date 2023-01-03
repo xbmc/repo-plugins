@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.16" provider-name="gujal">
+<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.17" provider-name="gujal">
   <requires>
     <import addon="xbmc.python" version="2.26.0"/>
     <import addon="script.common.plugin.cache" version="2.6.0"/>
@@ -32,9 +32,10 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=352127</forum>
     <website>https://www.imdb.com/trailers/</website>
     <email>gujal at protonmail dot com</email>
-    <news>v2.1.16 (20220815)
-      [fix] Now Showing and Coming soon
-      [improvement] Use api calls for most functions
+    <news>v2.1.17 (20230103)
+      [fix] Coming soon
+      [fix] Recently added
+      [new] Kodi Nexus compliance
     </news>
     <assets>
       <icon>icon.png</icon>

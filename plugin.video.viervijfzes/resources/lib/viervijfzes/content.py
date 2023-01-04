@@ -309,7 +309,7 @@ class ContentApi:
             result = regex_video_data.search(page)
             if result:
                 video_id = json.loads(unescape(result.group(1)))['id']
-                video_json_data = self._get_url('%s/api/video/%s' % (self.SITE_URL, video_id))
+                video_json_data = self._get_url('%s/web/v1/videos/short-form/%s' % (self.API_GOPLAY, video_id))
                 video_json = json.loads(video_json_data)
                 return dict(video=video_json)
 
@@ -336,7 +336,7 @@ class ContentApi:
 
         if 'video' in data and data['video']:
             # We have found detailed episode information
-            episode = self._parse_episode_data(data['video'])
+            episode = self._parse_clip_data(data['video'])
             return episode
 
         if 'program' in data and 'episode' in data and data['program'] and data['episode']:
@@ -361,23 +361,33 @@ class ContentApi:
             raise UnavailableException
 
         if 'videoDash' in data:
-            # DRM protected stream
-            # See https://docs.unified-streaming.com/documentation/drm/buydrm.html#setting-up-the-client
-            drm_key = data['drmKey']['S']
 
-            _LOGGER.debug('Fetching Authentication XML with drm_key %s', drm_key)
-            response_drm = self._get_url(self.API_GOPLAY + '/video/xml/%s' % drm_key, authentication=self._auth.get_token())
-            data_drm = json.loads(response_drm)
+            if 'drmKey' in data:
+                # DRM protected stream
+                # See https://docs.unified-streaming.com/documentation/drm/buydrm.html#setting-up-the-client
+                drm_key = data['drmKey']['S']
 
+                _LOGGER.debug('Fetching Authentication XML with drm_key %s', drm_key)
+                response_drm = self._get_url(self.API_GOPLAY + '/video/xml/%s' % drm_key, authentication=self._auth.get_token())
+                data_drm = json.loads(response_drm)
+
+                # DRM protected DASH stream
+                return ResolvedStream(
+                    uuid=uuid,
+                    url=data['videoDash']['S'],
+                    stream_type=STREAM_DASH,
+                    license_url='https://wv-keyos.licensekeyserver.com/',
+                    auth=data_drm.get('auth'),
+                )
+
+            # Unprotected DASH stream
             return ResolvedStream(
                 uuid=uuid,
                 url=data['videoDash']['S'],
                 stream_type=STREAM_DASH,
-                license_url='https://wv-keyos.licensekeyserver.com/',
-                auth=data_drm.get('auth'),
             )
 
-        # Normal HLS stream
+        # Unprotected HLS stream
         return ResolvedStream(
             uuid=uuid,
             url=data['video']['S'],
@@ -693,6 +703,19 @@ class ContentApi:
             expiry=datetime.fromtimestamp(int(data.get('unpublishDate'))) if data.get('unpublishDate') else None,
             rating=data.get('parentalRating'),
             stream=data.get('path'),
+        )
+        return episode
+
+    @staticmethod
+    def _parse_clip_data(data):
+        """ Parse the Clip JSON.
+        :type data: dict
+        :rtype Episode
+        """
+        episode = Episode(
+            uuid=data.get('videoUuid'),
+            program_title=data.get('title'),
+            title=data.get('title'),
         )
         return episode
 

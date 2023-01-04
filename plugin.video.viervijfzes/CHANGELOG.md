@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.4.9](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.9) (2023-01-04)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.4.8...v0.4.9)
+
+**Fixed bugs:**
+
+- Add support for unprotected MPEG-DASH streams [\#111](https://github.com/add-ons/plugin.video.viervijfzes/pull/111) ([mediaminister](https://github.com/mediaminister))
+- Fix clips [\#108](https://github.com/add-ons/plugin.video.viervijfzes/pull/108) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v0.4.8](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.8) (2022-07-07)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.4.7...v0.4.8)

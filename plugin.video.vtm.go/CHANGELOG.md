@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.3.3](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.3.3) (2023-01-04)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.3.2...v1.3.3)
+
+**Fixed bugs:**
+
+- Filter category names [\#335](https://github.com/add-ons/plugin.video.vtm.go/pull/335) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Merged pull requests:**
+
+- Update to version 13 API [\#343](https://github.com/add-ons/plugin.video.vtm.go/pull/343) ([mediaminister](https://github.com/mediaminister))
+
 ## [v1.3.2](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.3.2) (2022-06-06)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.3.1...v1.3.2)

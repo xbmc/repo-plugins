@@ -9,7 +9,7 @@ API_ANDROID_ENDPOINT = 'https://lfvp-android-api.dpgmedia.net'
 # These seem to be hardcoded
 STOREFRONT_MAIN = 'main'
 STOREFRONT_MOVIES = 'movies'
-STOREFRONT_SERIES = 'series'
+STOREFRONT_SHORTIES = 'shorties'
 STOREFRONT_KIDS = 'kids'
 
 

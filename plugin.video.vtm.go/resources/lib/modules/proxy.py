@@ -78,7 +78,7 @@ class Proxy(BaseHTTPRequestHandler):
             params = parse_qs(urlparse(self.path).query)
             url = params.get('path')[0]
             _LOGGER.debug('Proxying to %s', url)
-            response = requests.get(url=url)
+            response = requests.get(url=url, timeout=30)
 
             # Return response code
             self.send_response(response.status_code)

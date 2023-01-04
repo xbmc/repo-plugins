@@ -125,7 +125,7 @@ class KodiPlayer(Player):
         if not self.av_started:
             # Check stream path
             import requests
-            response = requests.get(self.stream_path)
+            response = requests.get(self.stream_path, timeout=5)
             if response.status_code == 403:
                 message_id = 30720
             else:

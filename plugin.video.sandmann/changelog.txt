@@ -1,3 +1,5 @@
+version 2.3.0:
+ * performance improvements
 version 2.2.2:
  * move refresh-item on top of list
 version 2.2.1:

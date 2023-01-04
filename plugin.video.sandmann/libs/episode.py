@@ -15,17 +15,42 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import json
-
-try:
-    from urllib.request import urlopen
-except ImportError:
-    from urllib2 import urlopen
+from libs.network import getJsonFromUrl
 
 
-def getJsonFromUrl(url):
-    document = urlopen(url).read()
-    return json.loads(document)
+def mapEpisode(episode):
+    return {
+        "date": getDate(episode),
+        "desc": getDescription(episode),
+        "dgs": getDgs(episode),
+        "duration": episode["duration"],
+        "fanart": getImage(episode, 1920),
+        "thumb": getImage(episode, 640),
+        "title": getTitle(episode),
+        "url": episode["links"]["target"]["href"],
+    }
+
+
+def appendStreams(episode):
+    details = getJsonFromUrl(episode["url"])
+
+    streams_data = details["widgets"][0]["mediaCollection"]["embedded"]["_mediaArray"][0]
+    mediaStreamArray = streams_data["_mediaStreamArray"]
+
+    streams = {}
+    for stream in mediaStreamArray:
+        streams[stream["_quality"]] = stream["_stream"]
+
+    return {
+        "date": episode["date"],
+        "desc": episode["desc"],
+        "dgs": episode["dgs"],
+        "duration": episode["duration"],
+        "fanart": episode["fanart"],
+        "streams": streams,
+        "thumb": episode["thumb"],
+        "title": episode["title"]
+    }
 
 
 def getEpisodes(episodes_url, quality):
@@ -37,28 +62,6 @@ def getEpisodes(episodes_url, quality):
         item_list.append(getEpisodeData(episode, quality))
 
     return item_list
-
-
-def getEpisodeData(data, quality):
-    episode_url = data["links"]["target"]["href"]
-    episode_details = getJsonFromUrl(episode_url)
-    streams_data = episode_details["widgets"][0]["mediaCollection"]["embedded"]["_mediaArray"][0]
-    mediaStreamArray = streams_data["_mediaStreamArray"]
-
-    streams = {}
-    for stream in mediaStreamArray:
-        streams[stream["_quality"]] = stream["_stream"]
-
-    return {
-        "date": getDate(data),
-        "desc": getDescription(data),
-        "dgs": getDgs(data),
-        "duration": data["duration"],
-        "fanart": getImage(data, 1920),
-        "stream": getStream(streams, quality),
-        "thumb": getImage(data, 640),
-        "title": getTitle(data)
-    }
 
 
 def getDate(content):
@@ -75,14 +78,6 @@ def getDgs(content):
 
 def getImage(content, width):
     return content["images"]["aspect16x9"]["src"].replace("{width}", str(width))
-
-
-def getStream(streams, quality):
-    index = quality - 1
-    if index in streams:
-        return streams[index]
-    else:
-        return streams["auto"]
 
 
 def getTitle(content):

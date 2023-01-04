@@ -21,7 +21,8 @@ import xbmcplugin
 
 import sys
 
-from libs.episodes import getEpisodes
+from libs.show import getEpisodes
+from libs.episode import mapEpisode, appendStreams
 
 
 # -- Addon --
@@ -31,6 +32,7 @@ addon_name = addon.getAddonInfo("name")
 addon_icon = addon.getAddonInfo("icon")
 
 base_path = sys.argv[0]
+
 
 # -- Constants --
 sources = {
@@ -52,24 +54,41 @@ def sandmann():
         li_refresh = xbmcgui.ListItem(label=addon.getLocalizedString(30020))
         xbmcplugin.addDirectoryItem(addon_handle, base_path, li_refresh, True)
 
-    episodes_url = sources["rbb"]
+    url = sources["rbb"]
     if source == 1:
-        episodes_url = sources["mdr"]
+        url = sources["mdr"]
 
-    episodes_list = getEpisodes(episodes_url, quality)
+    episodes = getEpisodes(url)
+    episodes2 = map(mapEpisode, episodes)
+    episodes3 = filterDgs(episodes2, dgs)
+    episodes4 = map(appendStreams, episodes3)
 
     item_list = []
-    for episode in episodes_list:
-        if dgs == 0 and episode["dgs"] == False:
-            item_list.append((episode["stream"], getListItem(episode), False))
-        if dgs == 1:
-            item_list.append((episode["stream"], getListItem(episode), False))
-        if dgs == 2 and episode["dgs"] == True:
-            item_list.append((episode["stream"], getListItem(episode), False))
+    for episode in episodes4:
+        item_list.append((getStream(episode, quality), getListItem(episode), False))
 
     xbmcplugin.addDirectoryItems(addon_handle, item_list, len(item_list))
 
     xbmcplugin.endOfDirectory(addon_handle)
+
+
+def filterDgs(episodes, dgs):
+    if dgs == 0:
+        return [e for e in episodes if e["dgs"] == False]
+    elif dgs == 2:
+        return [e for e in episodes if e["dgs"] == True]
+    else:
+        return episodes
+
+
+def getStream(episode, quality):
+    streams = episode["streams"]
+
+    index = quality - 1
+    if index in streams:
+        return streams[index]
+    else:
+        return streams["auto"]
 
 
 def getListItem(item):
@@ -84,7 +103,7 @@ def getListItem(item):
         infoLabels={
             "aired": item["date"],
             "duration": item["duration"],
-            "plotoutline": item["desc"],
+            "plot": item["desc"],
         }
     )
     li.setProperty("IsPlayable", "true")

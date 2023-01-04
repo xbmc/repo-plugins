@@ -15,11 +15,11 @@ msgid "Browse through the movie-catalogue"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Series"
+msgid "Shorties"
 msgstr ""
 
 msgctxt "#30006"
-msgid "Browse through the series-catalogue"
+msgid "Browse through the shorties-catalogue"
 msgstr ""
 
 msgctxt "#30007"

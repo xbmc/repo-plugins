@@ -48,7 +48,7 @@ def run(context):
         LOG.debug('refresh info for %s' % context.params.get('url'))
         context.plex_network = plex.Plex(context.settings, load=True)
         server = context.plex_network.get_server_from_url(context.params.get('url'))
-        _list_content(context, server, context.params.get('url'))
+        _list_content(context, server, context.params.get('url'), content_type)
         xbmcplugin.endOfDirectory(get_handle(), cacheToDisc=False)
 
     else:
@@ -78,7 +78,8 @@ def run(context):
                         set_content(get_handle(), content_type)
                         _list_content(context, server,
                                       server.join_url(server.get_url_location(),
-                                                      section.get_path(), 'all'))
+                                                      section.get_path(), 'all'),
+                                      content_type)
 
         xbmcplugin.endOfDirectory(get_handle(), cacheToDisc=False)
 
@@ -93,24 +94,24 @@ def _get_content_type(path_mode):
     return content_type
 
 
-def _list_content(context, server, url):
+def _list_content(context, server, url, content_type):
     tree = server.processed_xml(url)
     if tree is None:
         return
 
     items = []
     append_item = items.append
+    content_iter = 'Video'
+
+    if 'movies' in content_type:
+        content_iter = 'Video'
+    if 'tvshows' in content_type:
+        content_iter = 'Directory'
 
     if PY3:
-        branches = tree.iter('Video')
+        branches = tree.iter(content_iter)
     else:
-        branches = tree.getiterator('Video')
-
-    if not branches:
-        if PY3:
-            branches = tree.iter('Directory')
-        else:
-            branches = tree.getiterator('Directory')
+        branches = tree.getiterator(content_iter)
 
     for content in branches:
         item = Item(server, url, tree, content)

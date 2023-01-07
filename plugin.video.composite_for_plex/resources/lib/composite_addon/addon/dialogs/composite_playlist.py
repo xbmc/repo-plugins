@@ -636,7 +636,7 @@ class RadioButton(pyxbmct.CompareMixin, xbmcgui.ControlRadioButton):
             'noFocusOffTexture': os.path.join(pyxbmct.skin.images,
                                               'RadioButton', 'radiobutton-nofocus.png')
         })
-        return super(RadioButton, cls).__new__(cls, -10, -10, 1, 1, *args, **kwargs)
+        return super(RadioButton, cls).__new__(cls, -10, -10, 1, 1, *args, **kwargs)  # pylint: disable=too-many-function-args
 
 
 if CONFIG['kodi_version'] >= 19:

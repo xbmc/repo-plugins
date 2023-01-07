@@ -137,7 +137,8 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
         if temp_token:
             response = requests.get('%s/users/account?X-Plex-Token=%s' %
                                     (self.myplex_server, temp_token),
-                                    headers=self.plex_identification_header())
+                                    headers=self.plex_identification_header(),
+                                    timeout=120)
             response.encoding = 'utf-8'
 
             LOG.debug('Status Code: %s' % response.status_code)
@@ -617,7 +618,8 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
         }
 
         response = requests.post('%s/users/sign_in.xml' % self.myplex_server,
-                                 headers=dict(self.plex_identification_header(), **myplex_headers))
+                                 headers=dict(self.plex_identification_header(), **myplex_headers),
+                                 timeout=120)
         response.encoding = 'utf-8'
 
         if response.status_code == 201:

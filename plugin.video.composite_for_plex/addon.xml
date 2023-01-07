@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.composite_for_plex" name="Composite" version="1.4.3+matrix.1" provider-name="anxdpanic">
+<addon id="plugin.video.composite_for_plex" name="Composite" version="1.4.4+matrix.1" provider-name="anxdpanic">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.kodi-six" version="0.0.2"/>
@@ -42,6 +42,7 @@
       <fanart>resources/media/fanart.png</fanart>
     </assets>
     <news>
+[fix] fix TV series not showing with library integration |contrib: mash2k3|
 [lang] update translations from Weblate
         </news>
     <platform>all</platform>

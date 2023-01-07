@@ -1,7 +1,7 @@
 # coding: utf-8
 from __future__ import print_function, division, absolute_import
 
-from .helpers import user_preference_sorter
+from .helpers import user_preference_sorter, maybe_json
 from .kodi import log
 
 
@@ -34,6 +34,8 @@ class Room(object):
         self.display = json["display"]
         if len(group) > 0:
             self.display = group + ": " + self.display
+
+        self.current_talk_title = maybe_json(maybe_json(maybe_json(json, 'talks', {}), 'current', {}), 'title', '')
 
     def streams_sorted(self, quality, format, dash=False, video=True):
         log('Requested quality %s and format %s' % (quality, format))

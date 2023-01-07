@@ -17,12 +17,12 @@ msgid "Browse through the movie-catalogue"
 msgstr "Doorblader de filmcatalogus"
 
 msgctxt "#30005"
-msgid "Series"
-msgstr "Programma's"
+msgid "Shorties"
+msgstr "Shorties"
 
 msgctxt "#30006"
-msgid "Browse through the series-catalogue"
-msgstr "Doorblader de programmacatalogus"
+msgid "Browse through the shorties-catalogue"
+msgstr "Doorblader de shortiescatalogus"
 
 msgctxt "#30007"
 msgid "Channels"

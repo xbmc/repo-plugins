@@ -40,7 +40,7 @@ class VtmGo:
 
     def _mode(self):
         """ Return the mode that should be used for API calls """
-        return 'vtmgo-kids' if self.get_product() == 'VTM_GO_KIDS' else 'vtmgo'
+        return 'vtmgo-kids' if self.get_product() == 'VTM_GO_KIDS' else 'VTM_GO'
 
     @staticmethod
     def get_config():
@@ -68,7 +68,7 @@ class VtmGo:
             if row.get('rowType') in ['SWIMLANE_DEFAULT', 'SWIMLANE_PORTRAIT', 'SWIMLANE_LANDSCAPE']:
                 items.append(Category(
                     category_id=row.get('id'),
-                    title=row.get('title'),
+                    title=row.get('title').strip(),
                 ))
                 continue
 
@@ -141,16 +141,16 @@ class VtmGo:
 
         return items
 
-    def add_mylist(self, video_type, content_id):
+    def add_mylist(self, content_id):
         """ Add an item to My List """
-        util.http_put(API_ENDPOINT + '/%s/userData/myList/%s/%s' % (self._mode(), video_type, content_id),
+        util.http_put(API_ENDPOINT + '/%s/userData/myList/%s' % (self._mode(), content_id),
                       token=self._tokens.access_token,
                       profile=self._tokens.profile)
         kodiutils.set_cache(['swimlane', 'my-list'], None)
 
-    def del_mylist(self, video_type, content_id):
+    def del_mylist(self, content_id):
         """ Delete an item from My List """
-        util.http_delete(API_ENDPOINT + '/%s/userData/myList/%s/%s' % (self._mode(), video_type, content_id),
+        util.http_delete(API_ENDPOINT + '/%s/userData/myList/%s' % (self._mode(), content_id),
                          token=self._tokens.access_token,
                          profile=self._tokens.profile)
         kodiutils.set_cache(['swimlane', 'my-list'], None)
@@ -246,7 +246,7 @@ class VtmGo:
 
         if not program:
             # Fetch from API
-            response = util.http_get(API_ENDPOINT + '/%s/programs/%s' % (self._mode(), program_id),
+            response = util.http_get(API_ENDPOINT + '/%s/detail/%s' % (self._mode(), program_id),
                                      token=self._tokens.access_token if self._tokens else None,
                                      profile=self._tokens.profile if self._tokens else None)
             program = json.loads(response.text)
@@ -259,10 +259,10 @@ class VtmGo:
             episodes = {}
 
             # Fetch season
-            season_response = util.http_get(API_ENDPOINT + '/%s/programs/%s/seasons/%s' % (self._mode(), program_id, item_season),
+            season_response = util.http_get(API_ENDPOINT + '/%s/detail/%s?selectedSeasonIndex=%s' % (self._mode(), program_id, item_season),
                                             token=self._tokens.access_token if self._tokens else None,
                                             profile=self._tokens.profile if self._tokens else None)
-            season = json.loads(season_response.text)
+            season = json.loads(season_response.text).get('selectedSeason')
 
             for item_episode in season.get('episodes', []):
                 episodes[item_episode.get('index')] = Episode(
@@ -274,8 +274,8 @@ class VtmGo:
                     name=item_episode.get('name'),
                     description=item_episode.get('description'),
                     duration=item_episode.get('durationSeconds'),
-                    thumb=item_episode.get('bigPhotoUrl'),
-                    fanart=item_episode.get('bigPhotoUrl'),
+                    thumb=item_episode.get('imageUrl'),
+                    fanart=item_episode.get('imageUrl'),
                     geoblocked=program.get('blockedFor') == 'GEO',
                     remaining=item_episode.get('remainingDaysAvailable'),
                     channel=channel,

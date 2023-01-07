@@ -118,7 +118,7 @@ class VtmGoAuth:
         self._account.refresh_token = auth_info.get('refresh_token')
 
         # Fetch an actual token we can use
-        response = util.http_post('https://lfvp-api.dpgmedia.net/vtmgo/tokens', data={
+        response = util.http_post('https://lfvp-api.dpgmedia.net/VTM_GO/tokens', data={
             'device': {
                 'id': str(uuid.uuid4()),
                 'name': 'VTM Go Addon on Kodi',
@@ -142,7 +142,7 @@ class VtmGoAuth:
             return self._account
 
         # We can refresh our old token so it's valid again
-        response = util.http_post('https://lfvp-api.dpgmedia.net/vtmgo/tokens/refresh', data={
+        response = util.http_post('https://lfvp-api.dpgmedia.net/VTM_GO/tokens/refresh', data={
             'lfvpToken': self._account.access_token,
         })
 
@@ -158,9 +158,9 @@ class VtmGoAuth:
 
         return self._account
 
-    def get_profiles(self, products='VTM_GO,VTM_GO_KIDS'):
+    def get_profiles(self):
         """ Returns the available profiles """
-        response = util.http_get(API_ENDPOINT + '/profiles', {'products': products}, token=self._account.access_token)
+        response = util.http_get(API_ENDPOINT + '/VTM_GO/profiles', token=self._account.access_token)
         result = json.loads(response.text)
 
         profiles = [
@@ -173,7 +173,7 @@ class VtmGoAuth:
                 color=profile.get('color', {}).get('start'),
                 color2=profile.get('color', {}).get('end'),
             )
-            for profile in result
+            for profile in result.get('profiles')
         ]
 
         return profiles

@@ -8,7 +8,7 @@ import logging
 from resources.lib import kodiutils
 from resources.lib.modules import CHANNELS
 from resources.lib.modules.menu import Menu
-from resources.lib.vtmgo import STOREFRONT_MAIN, STOREFRONT_MOVIES, STOREFRONT_SERIES, Category
+from resources.lib.vtmgo import STOREFRONT_MAIN, STOREFRONT_MOVIES, STOREFRONT_SHORTIES, Category
 from resources.lib.vtmgo.exceptions import UnavailableException
 from resources.lib.vtmgo.vtmgo import CACHE_PREVENT, ApiUpdateRequired, VtmGo
 from resources.lib.vtmgo.vtmgoauth import VtmGoAuth
@@ -144,8 +144,8 @@ class Catalog:
             else:
                 listing.append(Menu.generate_titleitem(item))
 
-        if storefront == STOREFRONT_SERIES:
-            label = 30005  # Series
+        if storefront == STOREFRONT_SHORTIES:
+            label = 30005  # Shorties
         elif storefront == STOREFRONT_MOVIES:
             label = 30003  # Movies
         else:
@@ -174,7 +174,7 @@ class Catalog:
         for item in result.content:
             listing.append(Menu.generate_titleitem(item))
 
-        if storefront == STOREFRONT_SERIES:
+        if storefront == STOREFRONT_SHORTIES:
             content = 'tvshows'
         elif storefront == STOREFRONT_MOVIES:
             content = 'movies'
@@ -203,20 +203,18 @@ class Catalog:
 
         kodiutils.show_listing(listing, 30017, content='files', sort=['unsorted', 'label', 'year', 'duration'])
 
-    def mylist_add(self, video_type, content_id):
+    def mylist_add(self, content_id):
         """ Add an item to "My List"
-        :type video_type: str
         :type content_id: str
          """
-        self._api.add_mylist(video_type, content_id)
+        self._api.add_mylist(content_id)
         kodiutils.end_of_directory()
 
-    def mylist_del(self, video_type, content_id):
+    def mylist_del(self, content_id):
         """ Remove an item from "My List"
-        :type video_type: str
         :type content_id: str
         """
-        self._api.del_mylist(video_type, content_id)
+        self._api.del_mylist(content_id)
         kodiutils.end_of_directory()
         kodiutils.container_refresh()
 

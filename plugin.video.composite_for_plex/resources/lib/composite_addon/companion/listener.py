@@ -44,7 +44,7 @@ class PlexCompanionHandler(BaseHTTPRequestHandler):
         self.client_details = self.settings.companion_receiver()
         BaseHTTPRequestHandler.__init__(self, *args, **kwargs)
 
-    def log_message(self, format, *args):  # pylint: disable=redefined-builtin, unused-argument, no-self-use
+    def log_message(self, format, *args):  # pylint: disable=redefined-builtin, unused-argument
         # I have my own logging, suppressing BaseHTTPRequestHandler's
         # LOG.debug(format % args)
         return True

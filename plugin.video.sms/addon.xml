@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.sms" name="Scoot Media Streamer" version="0.1.0" provider-name="Scott Ware">
+<addon id="plugin.video.sms" name="Scoot Media Streamer" version="0.1.1" provider-name="Scott Ware">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.22.0"/>
@@ -18,8 +18,12 @@
     <website>https://github.com/scoot-software</website>
     <email>scoot.software@gmail.com</email>
     <source>https://github.com/scoot-software/sms-kodi-addons</source>
-    <news>v0.1.0
-- Update to support latest SMS Server</news>
+    <news>
+v0.1.1
+- Support for Kodi Nexus v20
+v0.1.0
+- Update to support latest SMS Server
+    </news>
     <assets>
       <icon>resources/icon.png</icon>
       <fanart>resources/fanart.png</fanart>

@@ -1,0 +1,82 @@
+v3.0.1 (2023-01-11) Berkan Teber <berkan@put.io>
+    * Add compatibility with Kodi v20
+
+v3.0.0 (2021-03-02) Batu Aksoy <batuhan@put.io>
+    * Migrate to python3
+
+v2.3.0 (2019-08-05) Cenk Alti <cenk@put.io>
+    * Add support for loading all available subtitles
+
+v2.2.1 (2016-06-15) Ibrahim Gungor <ibrahim@put.io>
+    * Update client to sync with Put.io servers
+
+v2.2.0 (2016-05-02) Ibrahim Gungor <ibrahim@put.io>
+    * Show 'watched' icon if the video is played before
+    * Show video duration next to its title
+    * Sort-by-name sorts files and folders together
+    * Use put.io/kodi endpoint
+    * Several bugfixes regarding video resume
+
+v2.1.0 (2016-05-02) Ibrahim Gungor <ibrahim@put.io>
+    * Sort files by date
+    * Inform user if payment is expired
+    * Don't show delete context for shared files
+    * Fix errors dialogs popping up occasionally while watching a video
+    * Fix AttributeError where an audio file has no 'start_from' attribute
+
+v2.0.0 (2016-04-21) Ibrahim Gungor <ibrahim@put.io>
+    * Video resume support
+    * Sort files by name
+    * Sort files by size
+    * Delete file/directory support
+    * Proper subtitle support
+    * Refresh a directory for new changes
+    * Add Turkish locale
+
+2014-03-04  Burak Sezer  <burak@pilli.com>
+    * Improved authentication method
+
+2014-02-28  Burak Sezer  <burak@pilli.com>
+    * Improved subtitle support
+
+2011-05-22  Alper KANAT  <alper@put.io>
+
+    * new minor version release: 1.1.2
+    * fixed a bug (had to hardcode id despite it's in addons.xml :S) 
+    * new minor version release: 1.1.1
+    * fixed incorrect changelog dates
+    * omitted the use of getcwd due to request
+    * restructured project root due to Arne Morten Kvarving's (official
+    repository's maintainer) request
+
+2011-02-19  Alper Kanat  <alper@put.io>
+
+    * added subtitle support for playback of movie files. now when a file is
+    selected, a file with the same filename is being searched with a 'sub' or
+    'srt' extension and added to player if available.
+    * added new exception for missing api key/secret
+    * fixed some addons.xml bugs
+    * removed simplejson dependency (you need to create a zip of 
+    plugin.video.putio and add it via XBMC's Install from zip file option)
+
+2011-02-11  Alper Kanat  <alper@put.io>
+
+    * COPYING: added license information
+    * README: added readme information
+    * AUTHORS: added author information
+    * plugin.video.putio/addon.xml: added license information
+    * plugin.video.putio/default.py: added license information, removed
+    unnecessary import line
+    * plugin.video.putio/resources/__init__.py: added license information
+    * plugin.video.putio/resources/lib/__init__.py: added license information
+    * plugin.video.putio/resources/lib/common.py: added license information, 
+    added unwanted item types for excluding in listing
+    * plugin.video.putio/resources/lib/gui.py: added license information, 
+    added downloading item types for adding context menu (TODO), added 
+    thumbnails to movies
+    * plugin.video.putio/resources/settings.xml: added license information
+    * plugin.video.putio/resources/images/error.png: added error image for
+    notifications
+    * plugin.video.putio/resources/lib/download.py: added downloader script
+    for downloading files/folders
+

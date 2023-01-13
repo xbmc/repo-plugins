@@ -21,23 +21,25 @@ PRODUCT_STREAMZ_KIDS = 'STREAMZ_KIDS'
 class Profile:
     """ Defines a profile under your account. """
 
-    def __init__(self, key=None, product=None, name=None, gender=None, birthdate=None, color=None, color2=None):
+    def __init__(self, key=None, name=None, gender=None, birthdate=None, color=None, color2=None, main_profile=None, kids_profile=None):
         """
         :type key: str
-        :type product: str
         :type name: str
         :type gender: str
         :type birthdate: str
         :type color: str
         :type color2: str
+        :type main_profile: bool
+        :type kids_profile: bool
         """
         self.key = key
-        self.product = product
         self.name = name
         self.gender = gender
         self.birthdate = birthdate
         self.color = color
         self.color2 = color2
+        self.main_profile = main_profile
+        self.kids_profile = kids_profile
 
     def __repr__(self):
         return "%r" % self.__dict__
@@ -217,14 +219,14 @@ class Episode:
 class ResolvedStream:
     """ Defines a stream that we can play"""
 
-    def __init__(self, program=None, program_id=None, title=None, duration=None, url=None, license_url=None, subtitles=None, cookies=None):
+    def __init__(self, program=None, program_id=None, title=None, duration=None, url=None, license_key=None, subtitles=None, cookies=None):
         """
         :type program: str
         :type program_id: str
         :type title: str
         :type duration: str
         :type url: str
-        :type license_url: str
+        :type license_key: str
         :type subtitles: list[str]
         :type cookies: dict
         """
@@ -233,7 +235,7 @@ class ResolvedStream:
         self.title = title
         self.duration = duration
         self.url = url
-        self.license_url = license_url
+        self.license_key = license_key
         self.subtitles = subtitles
         self.cookies = cookies
 

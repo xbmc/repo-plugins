@@ -183,22 +183,20 @@ class Catalog:
         # Sort categories by default like in Streamz.
         kodiutils.show_listing(listing, 30017, content='files', sort=['unsorted', 'label', 'year', 'duration'])
 
-    def mylist_add(self, video_type, content_id):
+    def mylist_add(self, content_id):
         """ Add an item to "My List".
 
-        :type video_type: str
         :type content_id: str
          """
-        self._api.add_mylist(video_type, content_id)
+        self._api.add_mylist(content_id)
         kodiutils.end_of_directory()
 
-    def mylist_del(self, video_type, content_id):
+    def mylist_del(self, content_id):
         """ Remove an item from "My List".
 
-        :type video_type: str
         :type content_id: str
         """
-        self._api.del_mylist(video_type, content_id)
+        self._api.del_mylist(content_id)
         kodiutils.end_of_directory()
 
     def show_continuewatching(self):

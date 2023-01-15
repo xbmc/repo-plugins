@@ -10,96 +10,96 @@ msgstr ""
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
-"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"Language-Team: German (https://forum.kodi.tv/showthread.php?tid=354190&pid=2974663#pid2974663)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
+"Language: de_de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 # Settings - General
 msgctxt "#30001"
 msgid "General"
-msgstr ""
+msgstr "Generell"
 
 msgctxt "#30002"
 msgid "Username"
-msgstr ""
+msgstr "Benutzername"
 
 msgctxt "#30003"
 msgid "Discover"
-msgstr ""
+msgstr "Entdecken"
 
 msgctxt "#30011"
 msgid "Top"
-msgstr ""
+msgstr "Top"
 
 msgctxt "#30012"
 msgid "New"
-msgstr ""
+msgstr "Neu"
 
 msgctxt "#30013"
 msgid "Recommended"
-msgstr ""
+msgstr "Empfohlen"
 
 msgctxt "#30014"
 msgid "General settings for the Bandcamp addon"
-msgstr ""
+msgstr "Allgemeine Einstellungen für den Bandcamp"
 
 msgctxt "#30016"
 msgid "Choose what you will see in the Discover section"
-msgstr ""
+msgstr "Wählen Sie, was Sie im Abschnitt Discover sehen werden"
 
 msgctxt "#30020"
 msgid "Image Quality"
-msgstr ""
+msgstr "Bildqualität"
 
 msgctxt "#30021"
 msgid "Set the desired quality level for album art and band images"
-msgstr ""
+msgstr "Stellen Sie das gewünschte Qualitätsniveau für Albumkunst ein"
 
 msgctxt "#30022"
 msgid "High"
-msgstr ""
+msgstr "Hoch"
 
 msgctxt "#30023"
 msgid "Medium"
-msgstr ""
+msgstr "Mittel"
 
 msgctxt "#30024"
 msgid "Low"
-msgstr ""
+msgstr "Niedrig"
 
 # GUI main menu
 msgctxt "#30101"
 msgid "Discover"
-msgstr ""
+msgstr "Entdecken"
 
 msgctxt "#30102"
 msgid "Collection"
-msgstr ""
+msgstr "Kollektion"
 
 msgctxt "#30103"
 msgid "Search"
-msgstr ""
+msgstr "Suche"
 
 msgctxt "#30104"
 msgid "Add your username to access the collection"
-msgstr ""
+msgstr "Für Kollektionszugriff Benutzernamen eingeben"
 
 msgctxt "#30105"
 msgid "Wishlist"
-msgstr ""
+msgstr "Wunschliste"
 
 msgctxt "#30106"
 msgid "Group by Artist"
-msgstr ""
+msgstr "Sortieren Sie nach Künstler"
 
 # GUI - Discover
 msgctxt "#30201"
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 msgctxt "#30202"
 msgid "Go to the album"
-msgstr ""
+msgstr "Gehe zum Album" 

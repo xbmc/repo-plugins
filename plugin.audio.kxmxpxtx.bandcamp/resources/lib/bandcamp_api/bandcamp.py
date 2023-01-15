@@ -16,9 +16,10 @@ from html.parser import HTMLParser
 
 
 class Band:
-    def __init__(self, band_id=None, band_name=""):
+    def __init__(self, band_id=None, band_name="", band_img=None):
         self.band_name = band_name
         self.band_id = str(band_id)
+        self.band_img = band_img
 
     def __eq__(self, other):
         if type(other) is type(self):
@@ -29,20 +30,26 @@ class Band:
     def __hash__(self):
         return hash(self.band_id)
 
+    def get_art_img(self, quality=20):
+        if self.band_img:
+            return "https://f4.bcbits.com/img/{band_img}_{quality}.jpg".format(band_img=self.band_img, quality=quality)
+
 
 class Album:
     ALBUM_TYPE = "a"
     TRACK_TYPE = "t"
 
-    def __init__(self, album_id, album_name, art_id, item_type=ALBUM_TYPE, genre=""):
+    def __init__(self, album_id, album_name, art_id, item_type=ALBUM_TYPE, genre="", band=None):
         self.album_name = album_name
         self.art_id = art_id
         self.album_id = album_id
         self.item_type = item_type
         self.genre = genre
+        self.band = band
 
-    def get_art_img(self, quality=9):
-        return "https://f4.bcbits.com/img/a0{art_id}_{quality}.jpg".format(art_id=self.art_id, quality=quality)
+    def get_art_img(self, quality=2):
+        if self.art_id:
+            return "https://f4.bcbits.com/img/a0{art_id}_{quality}.jpg".format(art_id=self.art_id, quality=quality)
 
 
 class Track:
@@ -93,9 +100,10 @@ class Bandcamp:
             track = Track(item['featured_track']['title'], item['featured_track']['file']['mp3-128'],
                           item['featured_track']['duration'])
             album_genre = u'{genre} ({slice})'.format(genre=item['genre_text'], slice=slice)
+            band = Band(band_id=item['band_id'], band_name=item['secondary_text'],
+                        band_img=item['bio_image']['image_id'])
             album = Album(album_id=item['id'], album_name=item['primary_text'], art_id=item['art_id'],
-                          genre=album_genre, item_type=item['type'])
-            band = Band(band_id=item['band_id'], band_name=item['secondary_text'])
+                          genre=album_genre, item_type=item['type'], band=band)
             discover_list[band] = {album: [track]}
         return discover_list
 
@@ -108,7 +116,7 @@ class Bandcamp:
     def get_subgenres(self):
         return self._get_data_blob()['signup_params']['subgenres']
 
-    def get_collection(self, fan_id, count=1000):
+    def get_collection(self, fan_id, count=1000, return_albums=False):
         url = "https://bandcamp.com/api/fancollection/1/collection_items"
         token = self._get_token()
         body = '{{"fan_id": "{fan_id}", "older_than_token": "{token}", "count":"{count}"}}' \
@@ -116,16 +124,22 @@ class Bandcamp:
         x = requests.post(url, data=body)
         items = json.loads(x.text)['items']
         bands = {}
+        albums = []
         for item in items:
-            album = Album(album_id=item['tralbum_id'], album_name=item['item_title'],
-                          art_id=item['item_art_id'], item_type=item['tralbum_type'])
             band = Band(band_id=item['band_id'], band_name=item['band_name'])
+            album = Album(album_id=item['tralbum_id'], album_name=item['item_title'],
+                          art_id=item['item_art_id'], item_type=item['tralbum_type'],
+                          band=band)
             if band not in bands:
                 bands[band] = {}
             bands[band].update({album: [None]})
-        return bands
+            albums.append(album)
+        if return_albums:
+            return albums
+        else:
+            return bands
 
-    def get_wishlist(self, fan_id, count=1000):
+    def get_wishlist(self, fan_id, count=1000, return_albums=False):
         url = "https://bandcamp.com/api/fancollection/1/wishlist_items"
         token = self._get_token()
         body = '{{"fan_id": "{fan_id}", "older_than_token": "{token}", "count":"{count}"}}' \
@@ -133,14 +147,20 @@ class Bandcamp:
         x = requests.post(url, data=body)
         items = json.loads(x.text)['items']
         bands = {}
+        albums = []
         for item in items:
-            album = Album(album_id=item['tralbum_id'], album_name=item['item_title'],
-                          art_id=item['item_art_id'], item_type=item['tralbum_type'])
             band = Band(band_id=item['band_id'], band_name=item['band_name'])
+            album = Album(album_id=item['tralbum_id'], album_name=item['item_title'],
+                          art_id=item['item_art_id'], item_type=item['tralbum_type'],
+                          band=band)
             if band not in bands:
                 bands[band] = {}
             bands[band].update({album: [None]})
-        return bands
+            albums.append(album)
+        if return_albums:
+            return albums
+        else:
+            return bands
 
     def get_album(self, album_id, item_type=Album.ALBUM_TYPE, band_id=1):
         url = "https://bandcamp.com/api/mobile/24/tralbum_details" \
@@ -156,8 +176,9 @@ class Bandcamp:
                     Track(track['title'], track['streaming_url']['mp3-128'], track['duration'],
                           number=track['track_num']))
         art_id = album_details['art_id']
-        band = Band(band_name=album_details['band']['name'], band_id=album_details['band']['band_id'])
-        album = Album(album_id, album_details['title'], art_id)
+        band = Band(band_name=album_details['band']['name'], band_id=album_details['band']['band_id'],
+                    band_img=album_details['band']['image_id'])
+        album = Album(album_id, album_details['title'], art_id, band=band)
         return band, album, track_list
 
     def get_album_legacy(self, album_id, item_type="album"):
@@ -178,7 +199,7 @@ class Bandcamp:
         if item_type == "track":
             art_id = track['art_id']
         band = Band(band_name=player_data['artist'])
-        album = Album(album_id, player_data['album_title'], art_id)
+        album = Album(album_id, player_data['album_title'], art_id, band=band)
         return band, album, track_list
 
     def get_album_by_url(self, url):
@@ -199,11 +220,13 @@ class Bandcamp:
         body = '{{"band_id": "{band_id}"}}'.format(band_id=band_id)
         request = requests.post(url, data=body)
         band_details = json.loads(request.text)
-        band = Band(band_id=band_details['id'], band_name=band_details['name'])
+        band = Band(band_id=band_details['id'], band_name=band_details['name'],
+                    band_img=band_details['bio_image_id'])
         albums = []
         for album in band_details['discography']:
             albums.append(Album(album_id=album['item_id'], album_name=album['title'],
-                                art_id=album['art_id'], item_type=album['item_type'][0]))
+                                art_id=album['art_id'], item_type=album['item_type'][0],
+                                band=band))
         return band, albums
 
     def search(self, query):
@@ -215,10 +238,13 @@ class Bandcamp:
         items = []
         for result in results:
             if result['type'] == "b":
-                item = Band(band_id=result['id'], band_name=result['name'])
-            else:
+                item = Band(band_id=result['id'], band_name=result['name'],
+                            band_img=result['img'])
+            elif result['type'] == "a" or result['type'] == "t":
+                band = Band(band_id=result['band_id'], band_name=result['band_name'])
                 item = Album(album_id=result['id'], album_name=result['name'],
-                             art_id=result['art_id'], item_type=result['type'])
+                             art_id=result['art_id'], item_type=result['type'],
+                             band=band)
             if item is not None:
                 items.append(item)
         return items

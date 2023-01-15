@@ -10,96 +10,96 @@ msgstr ""
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
-"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"Language-Team: Dutch <https://github.com/molzy/plugin.audio.kxmxpxtx.bandcamp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
+"Language: nl_nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 # Settings - General
 msgctxt "#30001"
 msgid "General"
-msgstr ""
+msgstr "Algemeen"
 
 msgctxt "#30002"
 msgid "Username"
-msgstr ""
+msgstr "Gebruikersnaam"
 
 msgctxt "#30003"
 msgid "Discover"
-msgstr ""
+msgstr "Ontdek"
 
 msgctxt "#30011"
 msgid "Top"
-msgstr ""
+msgstr "Bovenaan"
 
 msgctxt "#30012"
 msgid "New"
-msgstr ""
+msgstr "Nieuw"
 
 msgctxt "#30013"
 msgid "Recommended"
-msgstr ""
+msgstr "Aanbevolen"
 
 msgctxt "#30014"
 msgid "General settings for the Bandcamp addon"
-msgstr ""
+msgstr "Algemeene instellingen voor Bandcamp"
 
 msgctxt "#30016"
 msgid "Choose what you will see in the Discover section"
-msgstr ""
+msgstr "Kies wat je ziet in het Ontdek sectie"
 
 msgctxt "#30020"
 msgid "Image Quality"
-msgstr ""
+msgstr "Beeldkwaliteit"
 
 msgctxt "#30021"
 msgid "Set the desired quality level for album art and band images"
-msgstr ""
+msgstr "Kies het kwaliteitsniveau voor alle beelden"
 
 msgctxt "#30022"
 msgid "High"
-msgstr ""
+msgstr "Hoog"
 
 msgctxt "#30023"
 msgid "Medium"
-msgstr ""
+msgstr "Gemiddled"
 
 msgctxt "#30024"
 msgid "Low"
-msgstr ""
+msgstr "Laag"
 
 # GUI main menu
 msgctxt "#30101"
 msgid "Discover"
-msgstr ""
+msgstr "Ontdek"
 
 msgctxt "#30102"
 msgid "Collection"
-msgstr ""
+msgstr "Verzameling"
 
 msgctxt "#30103"
 msgid "Search"
-msgstr ""
+msgstr "Zoek"
 
 msgctxt "#30104"
 msgid "Add your username to access the collection"
-msgstr ""
+msgstr "Voeg uw gebruikersnaam toe om de verzameling te bekijken"
 
 msgctxt "#30105"
 msgid "Wishlist"
-msgstr ""
+msgstr "Verlanglijst"
 
 msgctxt "#30106"
 msgid "Group by Artist"
-msgstr ""
+msgstr "Sorteer op groep"
 
 # GUI - Discover
 msgctxt "#30201"
 msgid "All"
-msgstr ""
+msgstr "Alles"
 
 msgctxt "#30202"
 msgid "Go to the album"
-msgstr ""
+msgstr "Ga naar het album"

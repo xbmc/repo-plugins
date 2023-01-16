@@ -11,7 +11,7 @@ account aanmaken op [goplay.be](https://www.goplay.be/).
 
 Meer informatie kan je vinden op de [Wiki pagina](https://github.com/add-ons/plugin.video.viervijfzes/wiki).
 
-> Let op dat er geen live-streams beschikbaar zijn op het GoPlay platform en je dus enkel kan kijken de beschikbare programma's in de catalogus.
+> Let op dat er geen live-streams beschikbaar zijn op het GoPlay platform en je dus enkel kan kijken naar de beschikbare programma's in de catalogus.
 
 ## Features
 

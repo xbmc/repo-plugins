@@ -183,7 +183,7 @@ class Menu:
 
             if item.uuid:
                 # We have an UUID and can play this item directly
-                path = kodiutils.url_for('play_catalog', uuid=item.uuid)
+                path = kodiutils.url_for('play_catalog', uuid=item.uuid, islongform=item.islongform)
             else:
                 # We don't have an UUID, and first need to fetch the video information from the page
                 path = kodiutils.url_for('play_from_page', page=quote(item.path, safe=''))

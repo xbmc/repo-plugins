@@ -109,7 +109,7 @@ class Episode:
     """ Defines an Episode. """
 
     def __init__(self, uuid=None, nodeid=None, path=None, channel=None, program_title=None, title=None, description=None, thumb=None, duration=None,
-                 season=None, season_uuid=None, number=None, rating=None, aired=None, expiry=None, stream=None):
+                 season=None, season_uuid=None, number=None, rating=None, aired=None, expiry=None, stream=None, islongform=False):
         """
         :type uuid: str
         :type nodeid: str
@@ -127,6 +127,7 @@ class Episode:
         :type aired: datetime
         :type expiry: datetime
         :type stream: string
+        :type islongform: bool
         """
         self.uuid = uuid
         self.nodeid = nodeid
@@ -144,6 +145,7 @@ class Episode:
         self.aired = aired
         self.expiry = expiry
         self.stream = stream
+        self.islongform = islongform
 
     def __repr__(self):
         return "%r" % self.__dict__
@@ -173,7 +175,6 @@ class Category:
 class ContentApi:
     """ GoPlay Content API"""
     SITE_URL = 'https://www.goplay.be'
-    API_VIERVIJFZES = 'https://api.viervijfzes.be'
     API_GOPLAY = 'https://api.goplay.be'
 
     def __init__(self, auth=None, cache_path=None):
@@ -349,50 +350,63 @@ class ContentApi:
 
         return None
 
-    def get_stream_by_uuid(self, uuid):
+    def get_stream_by_uuid(self, uuid, islongform):
         """ Get the stream URL to use for this video.
         :type uuid: str
+        :type islongform: bool
         :rtype str
         """
-        response = self._get_url(self.API_VIERVIJFZES + '/content/%s' % uuid, authentication=self._auth.get_token())
+        mode = 'long-form' if islongform else 'short-form'
+        response = self._get_url(self.API_GOPLAY + '/web/v1/videos/%s/%s' % (mode, uuid), authentication='Bearer %s' % self._auth.get_token())
         data = json.loads(response)
 
         if not data:
             raise UnavailableException
 
-        if 'videoDash' in data:
+        if data.get('manifestUrls'):
 
-            if 'drmKey' in data:
+            if data.get('drmXml'):
                 # DRM protected stream
                 # See https://docs.unified-streaming.com/documentation/drm/buydrm.html#setting-up-the-client
-                drm_key = data['drmKey']['S']
-
-                _LOGGER.debug('Fetching Authentication XML with drm_key %s', drm_key)
-                response_drm = self._get_url(self.API_GOPLAY + '/video/xml/%s' % drm_key, authentication=self._auth.get_token())
-                data_drm = json.loads(response_drm)
 
                 # DRM protected DASH stream
                 return ResolvedStream(
                     uuid=uuid,
-                    url=data['videoDash']['S'],
+                    url=data['manifestUrls']['dash'],
                     stream_type=STREAM_DASH,
                     license_url='https://wv-keyos.licensekeyserver.com/',
-                    auth=data_drm.get('auth'),
+                    auth=data['drmXml'],
                 )
+
+            if data.get('manifestUrls').get('dash'):
+                # Unprotected DASH stream
+                return ResolvedStream(
+                    uuid=uuid,
+                    url=data['manifestUrls']['dash'],
+                    stream_type=STREAM_DASH,
+                )
+
+            # Unprotected HLS stream
+            return ResolvedStream(
+                uuid=uuid,
+                url=data['manifestUrls']['hls'],
+                stream_type=STREAM_HLS,
+            )
+
+        # No manifest url found, get manifest from Server-Side Ad Insertion service
+        if data.get('adType') == 'SSAI' and data.get('ssai'):
+            url = 'https://pubads.g.doubleclick.net/ondemand/dash/content/%s/vid/%s/streams' % (data.get('ssai').get('contentSourceID'), data.get('ssai').get('videoID'))
+            ad_data = json.loads(self._post_url(url, data=''))
 
             # Unprotected DASH stream
             return ResolvedStream(
                 uuid=uuid,
-                url=data['videoDash']['S'],
+                url=ad_data['stream_manifest'],
                 stream_type=STREAM_DASH,
             )
 
-        # Unprotected HLS stream
-        return ResolvedStream(
-            uuid=uuid,
-            url=data['video']['S'],
-            stream_type=STREAM_HLS,
-        )
+        raise UnavailableException
+
 
     def get_program_tree(self, cache=CACHE_AUTO):
         """ Get a content tree with information about all the programs.
@@ -675,7 +689,6 @@ class ContentApi:
         :type season_uuid: str
         :rtype Episode
         """
-
         if data.get('episodeNumber'):
             episode_number = data.get('episodeNumber')
         else:
@@ -703,6 +716,7 @@ class ContentApi:
             expiry=datetime.fromtimestamp(int(data.get('unpublishDate'))) if data.get('unpublishDate') else None,
             rating=data.get('parentalRating'),
             stream=data.get('path'),
+            islongform=data.get('isLongForm'),
         )
         return episode
 
@@ -751,7 +765,7 @@ class ContentApi:
         else:
             response = self._session.post(url, params=params, json=data)
 
-        if response.status_code != 200:
+        if response.status_code not in (200, 201):
             _LOGGER.error(response.text)
             raise Exception('Could not fetch data')
 

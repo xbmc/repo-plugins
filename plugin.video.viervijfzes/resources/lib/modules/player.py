@@ -74,7 +74,7 @@ class Player:
 
         if episode.uuid:
             # Lookup the stream
-            resolved_stream = self._resolve_stream(episode.uuid)
+            resolved_stream = self._resolve_stream(episode.uuid, episode.islongform)
             _LOGGER.debug('Resolved stream: %s', resolved_stream)
 
         if resolved_stream:
@@ -95,16 +95,17 @@ class Player:
                            art_dict=titleitem.art_dict,
                            prop_dict=titleitem.prop_dict)
 
-    def play(self, uuid):
+    def play(self, uuid, islongform):
         """ Play the requested item.
         :type uuid: string
+        :type islongform: bool
         """
         if not uuid:
             kodiutils.ok_dialog(message=kodiutils.localize(30712))  # The video is unavailable...
             return
 
         # Lookup the stream
-        resolved_stream = self._resolve_stream(uuid)
+        resolved_stream = self._resolve_stream(uuid, islongform)
         if resolved_stream.license_url:
             # Generate license key
             license_key = self.create_license_key(resolved_stream.license_url, key_headers=dict(
@@ -116,9 +117,10 @@ class Player:
         kodiutils.play(resolved_stream.url, resolved_stream.stream_type, license_key)
 
     @staticmethod
-    def _resolve_stream(uuid):
+    def _resolve_stream(uuid, islongform):
         """ Resolve the stream for the requested item
         :type uuid: string
+        :type islongform: bool
         """
         try:
             # Check if we have credentials
@@ -135,7 +137,7 @@ class Player:
                 auth = AuthApi(kodiutils.get_setting('username'), kodiutils.get_setting('password'), kodiutils.get_tokens_path())
 
                 # Get stream information
-                resolved_stream = ContentApi(auth).get_stream_by_uuid(uuid)
+                resolved_stream = ContentApi(auth).get_stream_by_uuid(uuid, islongform)
                 return resolved_stream
 
             except (InvalidLoginException, AuthenticationException) as ex:

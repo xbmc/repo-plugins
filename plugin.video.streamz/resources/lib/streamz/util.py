@@ -32,11 +32,11 @@ class StreamzAdapter(BaseAdapter):
 # Setup a static session that can be reused for all calls
 SESSION = requests.Session()
 SESSION.headers = {
-    'User-Agent': 'STREAMZ/12.16 (be.dpgmedia.streamz; build:16527; Android 24) okhttp/4.9.3',
-    'x-app-version': '12',
+    'User-Agent': 'STREAMZ/13.8 (be.dpgmedia.streamz; build:17133; Android TV 28) okhttp/4.10.0',
+    'x-app-version': '13',
     'x-persgroep-mobile-app': 'true',
     'x-persgroep-os': 'android',
-    'x-persgroep-os-version': '24',
+    'x-persgroep-os-version': '28',
 }
 PROXIES = kodiutils.get_proxies()
 

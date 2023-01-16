@@ -7,7 +7,7 @@ import json
 import logging
 
 from resources.lib import kodiutils
-from resources.lib.streamz import API_ANDROID_ENDPOINT, API_ENDPOINT, PRODUCT_STREAMZ_KIDS, Category, Episode, Movie, Program, Season, util
+from resources.lib.streamz import API_ANDROID_ENDPOINT, API_ENDPOINT, Category, Episode, Movie, Program, Season, util
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ class Api:
 
     def _mode(self):
         """ Return the mode that should be used for API calls. """
-        return 'streamz-kids' if self._tokens.product == PRODUCT_STREAMZ_KIDS else 'streamz'
+        return self._tokens.product
 
     @staticmethod
     def get_config():
@@ -139,16 +139,16 @@ class Api:
 
         return items
 
-    def add_mylist(self, video_type, content_id):
+    def add_mylist(self, content_id):
         """ Add an item to My List. """
-        util.http_put(API_ENDPOINT + '/%s/userData/myList/%s/%s' % (self._mode(), video_type, content_id),
+        util.http_put(API_ENDPOINT + '/%s/userData/myList/%s' % (self._mode(), content_id),
                       token=self._tokens.access_token,
                       profile=self._tokens.profile)
         kodiutils.set_cache(['swimlane', 'my-list'], None)
 
-    def del_mylist(self, video_type, content_id):
+    def del_mylist(self, content_id):
         """ Delete an item from My List. """
-        util.http_delete(API_ENDPOINT + '/%s/userData/myList/%s/%s' % (self._mode(), video_type, content_id),
+        util.http_delete(API_ENDPOINT + '/%s/userData/myList/%s' % (self._mode(), content_id),
                          token=self._tokens.access_token,
                          profile=self._tokens.profile)
         kodiutils.set_cache(['swimlane', 'my-list'], None)
@@ -170,7 +170,7 @@ class Api:
 
         if not movie:
             # Fetch from API
-            response = util.http_get(API_ENDPOINT + '/%s/movies/%s' % (self._mode(), movie_id),
+            response = util.http_get(API_ENDPOINT + '/%s/detail/%s' % (self._mode(), movie_id),
                                      token=self._tokens.access_token,
                                      profile=self._tokens.profile)
             movie = json.loads(response.text)
@@ -211,7 +211,7 @@ class Api:
 
         if not program:
             # Fetch from API
-            response = util.http_get(API_ENDPOINT + '/%s/programs/%s' % (self._mode(), program_id),
+            response = util.http_get(API_ENDPOINT + '/%s/detail/%s' % (self._mode(), program_id),
                                      token=self._tokens.access_token,
                                      profile=self._tokens.profile)
             program = json.loads(response.text)
@@ -224,10 +224,10 @@ class Api:
             episodes = {}
 
             # Fetch season
-            season_response = util.http_get(API_ENDPOINT + '/%s/programs/%s/seasons/%s' % (self._mode(), program_id, item_season),
+            season_response = util.http_get(API_ENDPOINT + '/%s/detail/%s?selectedSeasonIndex=%s' % (self._mode(), program_id, item_season),
                                             token=self._tokens.access_token,
                                             profile=self._tokens.profile)
-            season = json.loads(season_response.text)
+            season = json.loads(season_response.text).get('selectedSeason')
 
             for item_episode in season.get('episodes', []):
                 episodes[item_episode.get('index')] = Episode(
@@ -315,7 +315,7 @@ class Api:
         :type episode_id: str
         :rtype Episode
         """
-        response = util.http_get(API_ENDPOINT + '/%s/play/episodes/%s' % (self._mode(), episode_id),
+        response = util.http_get(API_ENDPOINT + '/%s/play/%s' % (self._mode(), episode_id),
                                  token=self._tokens.access_token,
                                  profile=self._tokens.profile)
         episode = json.loads(response.text)

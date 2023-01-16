@@ -9,7 +9,7 @@ from time import sleep
 
 from resources.lib import kodiutils
 from resources.lib.kodiutils import TitleItem
-from resources.lib.streamz import PRODUCT_STREAMZ_KIDS
+from resources.lib.streamz import PRODUCT_STREAMZ, PRODUCT_STREAMZ_KIDS
 from resources.lib.streamz.auth import Auth
 
 _LOGGER = logging.getLogger(__name__)
@@ -84,7 +84,7 @@ class Authentication:
         if key:
             profile = [x for x in profiles if x.key == key][0]
             _LOGGER.debug('Setting profile to %s', profile)
-            self._auth.set_profile(profile.key, profile.product)
+            self._auth.set_profile(profile.key, PRODUCT_STREAMZ_KIDS if profile.kids_profile else PRODUCT_STREAMZ)
 
             kodiutils.redirect(kodiutils.url_for('show_main_menu'))
             return
@@ -128,7 +128,7 @@ class Authentication:
             title = '[COLOR %s]%s[/COLOR]' % (color_map.get(profile.color.upper()), kodiutils.to_unicode(title))
 
         # Append (Kids)
-        if profile.product == PRODUCT_STREAMZ_KIDS:
+        if profile.kids_profile:
             title = "%s (Kids)" % title
 
         return title

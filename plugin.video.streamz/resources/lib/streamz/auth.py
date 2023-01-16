@@ -10,7 +10,7 @@ import uuid
 
 from requests import HTTPError
 
-from resources.lib.streamz import API_ENDPOINT, Profile, util
+from resources.lib.streamz import API_ENDPOINT, PRODUCT_STREAMZ, Profile, util
 from resources.lib.streamz.exceptions import NoLoginException
 
 try:  # Python 3
@@ -123,7 +123,7 @@ class Auth:
         self._account.refresh_token = auth_info.get('refresh_token')
 
         # Fetch an actual token we can use
-        response = util.http_post('https://lfvp-api.dpgmedia.net/streamz/tokens', data={
+        response = util.http_post('https://lfvp-api.dpgmedia.net/STREAMZ/tokens', data={
             'device': {
                 'id': str(uuid.uuid4()),
                 'name': 'Streamz Addon on Kodi',
@@ -147,7 +147,7 @@ class Auth:
             return self._account
 
         # We can refresh our old token so it's valid again
-        response = util.http_post('https://lfvp-api.dpgmedia.net/streamz/tokens/refresh', data={
+        response = util.http_post('https://lfvp-api.dpgmedia.net/STREAMZ/tokens/refresh', data={
             'lfvpToken': self._account.access_token,
         })
 
@@ -155,31 +155,33 @@ class Auth:
         self._account.access_token = json.loads(response.text).get('lfvpToken')
 
         # We always use the main profile
-        # TODO: do something else here
-        profiles = self.get_profiles()
-        self._account.profile = profiles[0].key
-        self._account.product = profiles[0].product
+        if not self._account.profile:
+            profiles = self.get_profiles()
+            main_profile = next((p for p in profiles if p.main_profile), None)
+            self._account.profile = main_profile.key
+            self._account.product = PRODUCT_STREAMZ
 
         self._save_cache()
 
         return self._account
 
-    def get_profiles(self, products='STREAMZ,STREAMZ_KIDS'):
+    def get_profiles(self):
         """ Returns the available profiles """
-        response = util.http_get(API_ENDPOINT + '/profiles', {'products': products}, token=self._account.access_token)
+        response = util.http_get(API_ENDPOINT + '/STREAMZ/profiles', token=self._account.access_token)
         result = json.loads(response.text)
 
         profiles = [
             Profile(
                 key=profile.get('id'),
-                product=profile.get('product'),
                 name=profile.get('name'),
                 gender=profile.get('gender'),
                 birthdate=profile.get('birthDate'),
                 color=profile.get('color', {}).get('start'),
                 color2=profile.get('color', {}).get('end'),
+                main_profile=profile.get('mainProfile'),
+                kids_profile=profile.get('kidsProfile'),
             )
-            for profile in result
+            for profile in result.get('profiles')
         ]
 
         return profiles

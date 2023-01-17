@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon 
     id="plugin.video.gamekings"
-    name="GameKings"
-    version="1.2.19+matrix.1"
+    name="Gamekings"
+    version="1.2.20+matrix.1"
     provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="3.0.0"/>
@@ -11,6 +11,7 @@
     <import addon="script.module.future"            version="0.0.1"/>
     <import addon="script.module.html5lib"          version="0.999.0"/>
     <import addon="plugin.video.youtube" 		    version="5.1.7" />
+    <import addon="inputstream.adaptive" 		    version="19.0.7" />	
   </requires>
   <extension point="xbmc.python.pluginsource" 	library="addon.py">
     <provides>video</provides>
@@ -28,8 +29,9 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=161375</forum>
     <website>https://www.gamekings.tv</website>
     <source>https://github.com/skipmodea1/plugin.video.gamekings.python3</source>
-    <news>v1.2.19 (2020-11-10)
-    - fixed premium videos after a website change
+    <news>v1.2.20 (2023-01-15)
+    - fixed some youtube-id's by removing leading/trailing spaces
+	- fixed playing of videos using MPEG-DASH (kudo's to peak3d)
     </news>
     <assets>
       <icon>resources/icon.png</icon>

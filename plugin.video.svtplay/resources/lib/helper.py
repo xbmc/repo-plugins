@@ -36,3 +36,13 @@ def getInputFromKeyboard(heading):
   if keyboard.isConfirmed():
       text = keyboard.getText()
   return text
+
+def strip_html_tags(string):
+    if not string:
+        return string
+
+    try:
+        return re.sub('<[^<]+?>', '', string)
+    except Exception as e:
+        logging.error('An error occured while trying to strip tags from text: "{}". Exception: {}'.format(string, e))
+        return string

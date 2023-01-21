@@ -1,4 +1,4 @@
-<addon id="plugin.video.svtplay" name="SVT Play" provider-name="nilzen" version="5.1.16+matrix.1">
+<addon id="plugin.video.svtplay" name="SVT Play" provider-name="nilzen" version="5.1.17+matrix.1">
   <requires>
     <import addon="script.module.requests" version="2.22.0" />
     <import addon="xbmc.python" version="3.0.0" />
@@ -19,8 +19,7 @@
     <source>https://github.com/nilzen/xbmc-svtplay</source>
     <forum>https://forum.kodi.tv/showthread.php?tid=67110</forum>
     <news>
-- New icon and background for addon
-- Fix for compatibility with Kodi 20 (nexus)
+- Minor bug fixes (thank you @tomplast)
     </news>
     <assets>
       <icon>icon.png</icon>

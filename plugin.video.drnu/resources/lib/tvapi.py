@@ -31,8 +31,22 @@ from datetime import datetime, timezone, timedelta
 
 
 CHANNEL_IDS = [20875, 20876, 192099, 192100, 20892]
+CHANNEL_PRESET = {
+    'DR1': 1,
+    'DR2': 2,
+    'DR Ramasjang': 3,
+    'DRTV': 4,
+    'DRTV Ekstra': 5
+}
 URL = 'https://production.dr-massive.com/api'
 GET_TIMEOUT = 5
+
+
+def cache_path(path):
+    NO_CACHING = ['/liste/drtv-hero']
+    if any([path.startswith(item) for item in NO_CACHING]):
+        return False
+    return True
 
 
 class Api():
@@ -41,6 +55,8 @@ class Api():
         self.tr = getLocalizedString
         self.cleanup_every = int(get_setting('recache.cleanup'))
         self.expire_hours = int(get_setting('recache.expiration'))
+        self.caching = get_setting('recache.enabled') == 'true'
+        self.expire_seconds = 3600*self.expire_hours if self.expire_hours >= 0 else self.expire_hours
         self.init_sqlite_db()
 
         self.token_file = Path(f'{self.cachePath}/token.json')
@@ -53,7 +69,7 @@ class Api():
                 (self.cachePath/'requests.cache.sqlite').unlink()
         request_fname = str(self.cachePath/'requests.cache')
         self.session = requests_cache.CachedSession(
-            request_fname, backend='sqlite', expire_after=3600*self.expire_hours)
+            request_fname, backend='sqlite', expire_after=self.expire_seconds)
 
         if (self.cachePath/'requests_cleaned').exists():
             if (time.time() - (self.cachePath/'requests_cleaned').stat().st_mtime)/3600/24 < self.cleanup_every:
@@ -67,7 +83,7 @@ class Api():
             if (self.cachePath/'requests.cache.sqlite').exists():
                 (self.cachePath/'requests.cache.sqlite').unlink()
             self.session = requests_cache.CachedSession(
-                request_fname, backend='sqlite', expire_after=3600*self.expire_hours)
+                request_fname, backend='sqlite', expire_after=self.expire_seconds)
         (self.cachePath/'requests_cleaned').write_text(str(datetime.now()))
 
     def deviceid(self):
@@ -121,7 +137,7 @@ class Api():
                 'max_list_prefetch': '3',
                 'path': path
             }
-        if use_cache:
+        if use_cache and self.caching:
             u = self.session.get(url, params=data, timeout=GET_TIMEOUT)
         else:
             u = requests.get(url, params=data, timeout=GET_TIMEOUT)
@@ -130,9 +146,20 @@ class Api():
         else:
             raise ApiException(u.text)
 
+    def get_item(self, id, use_cache=True):
+        url = URL + f'/items/{int(id)}?'
+        if use_cache and self.caching:
+            u = self.session.get(url, timeout=GET_TIMEOUT)
+        else:
+            u = requests.get(url, timeout=GET_TIMEOUT)
+        if u.status_code == 200:
+            return u.json()
+        else:
+            raise ApiException(u.text)
+
     def get_next(self, path, use_cache=True):
         url = URL + path
-        if use_cache:
+        if use_cache and self.caching:
             u = self.session.get(url, timeout=GET_TIMEOUT)
         else:
             u = requests.get(url, timeout=GET_TIMEOUT)
@@ -149,7 +176,7 @@ class Api():
         if param != 'NoParam':
             data['param'] = param
 
-        if use_cache:
+        if use_cache and self.caching:
             u = self.session.get(url, params=data, timeout=GET_TIMEOUT)
         else:
             u = requests.get(url, params=data, timeout=GET_TIMEOUT)
@@ -163,7 +190,7 @@ class Api():
         data = {'page_size': '24'}
         headers = {"X-Authorization": f'Bearer {self.profile_token()}'}
 
-        if use_cache:
+        if use_cache and self.caching:
             u = self.session.get(url, params=data, headers=headers, timeout=GET_TIMEOUT)
         else:
             u = requests.get(url, params=data, headers=headers, timeout=GET_TIMEOUT)
@@ -343,12 +370,18 @@ class Api():
 
     def get_livestream(self, path, with_subtitles=False):
         channel = self.get_programcard(path)['entries'][0]
-        stream = {'subtitles': []}
-        if with_subtitles:
-            stream['url'] = channel['item']['customFields']['hlsWithSubtitlesURL']
-        else:
-            stream['url'] = channel['item']['customFields']['hlsURL']
+        stream = {
+            'subtitles': [],
+            'url': self.get_channel_url(channel, with_subtitles)
+            }
         return stream
+
+    def get_channel_url(self, channel, with_subtitles=False):
+        if with_subtitles:
+            url = channel['item']['customFields']['hlsWithSubtitlesURL']
+        else:
+            url = channel['item']['customFields']['hlsURL']
+        return url
 
     def get_info(self, item):
         title = item['title']
@@ -358,10 +391,14 @@ class Api():
             cont = item['contextualTitle']
             if cont.count('.') >= 1 and cont.split('.', 1)[1].strip() not in title:
                 title += f" ({item['contextualTitle']})"
+        if len(item.get('shortDescription', '')) >= 255 and item.get('description', '') == '':
+            item = self.get_item(item['id'])
 
         infoLabels = {'title': title}
-        if item.get('shortDescription', ''):
+        if item.get('shortDescription', '') and item['shortDescription'] != 'LinkItem':
             infoLabels['plot'] = item['shortDescription']
+        if item.get('description', ''):
+            infoLabels['plot'] = item['description']
         if item.get('tagline', ''):
             infoLabels['plotoutline'] = item['tagline']
         if item.get('customFields'):
@@ -382,16 +419,15 @@ class Api():
 
     def get_schedules(self, channels=CHANNEL_IDS, date=None, hour=None, duration=6):
         url = URL + '/schedules?'
-        now = datetime.now()
+        now = datetime.now() - timedelta(hours=2)
         if date is None:
             date = now.strftime("%Y-%m-%d")
         if hour is None:
             hour = int(now.strftime("%H"))
-
         if duration <= 24:
             data = {
                 'date': date,
-                'hour': hour-2,
+                'hour': hour,
                 'duration': duration,
                 'channels': channels,
             }

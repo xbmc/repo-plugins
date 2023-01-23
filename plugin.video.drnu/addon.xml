@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="6.0.2+matrix.1" name="DR TV" provider-name="TermeHansen">
+<addon id="plugin.video.drnu" version="6.1.0+matrix.1" name="DR TV" provider-name="TermeHansen">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.dateutil" version="2.8.2" />
@@ -24,9 +24,18 @@
         <website>https://www.dr.dk/</website>
         <source>https://github.com/xbmc-danish-addons/plugin.video.drnu</source>
         <assets>
-            <icon>resources/icon.png</icon>
-            <fanart>resources/fanart.jpg</fanart>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.jpg</fanart>
+            <screenshot>resources/media/Screenshot1.jpg</screenshot>
+            <screenshot>resources/media/Screenshot2.jpg</screenshot>
+            <screenshot>resources/media/Screenshot3.jpg</screenshot>
+            <screenshot>resources/media/Screenshot4.jpg</screenshot>
        </assets>
+       <news>[B]Version 6.1.0 - 2023-01-18[/B]
+        - IPTV Manager integration (CodingBullywug)
+        - fix for missing subtitles
+        - fix for missing item descriptions
+       </news>
        <news>[B]Version 6.0.2 - 2022-10-12[/B]
         - fix bug when fetching paged lists
         - fix bug for documentaries category

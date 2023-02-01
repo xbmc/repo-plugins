@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+import time
 
+from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.regexer import Regexer
 from resources.lib.streams.m3u8 import M3u8
@@ -58,16 +60,24 @@ class NpoStream(object):
             Logger.error("No url or streamId specified!")
             return None
 
+        # Get a XSRF Token and session.
         token_headers = {"x-requested-with": "XMLHttpRequest"}
         token_headers.update(headers or {})
-        data = UriHandler.open("https://www.npostart.nl/api/token",
-                               additional_headers=token_headers)
-        token = JsonHelper(data).get_value("token")
+        session = UriHandler.get_cookie("npo_session", "www.npostart.nl")
+        xsrf = UriHandler.get_cookie("XSRF-TOKEN", "www.npostart.nl")
+        now = time.time()
+        if not (session and session.expires < now and xsrf and xsrf.expires < now):
+            # Renew of fetch cookies
+            Logger.debug("Fetching XSRF cookies")
+            UriHandler.open("https://www.npostart.nl/api/token", additional_headers=token_headers)
+            xsrf = UriHandler.get_cookie("XSRF-TOKEN", "www.npostart.nl")
+        Logger.debug("Cookies: \nxsrf: %s, \nsession: %s, \nnow: %s", xsrf.expires, now)
 
-        post_data = {"_token": token}
+        # Fetch the XSRF token:
+        token_headers["x-xsrf-token"] = HtmlEntityHelper.url_decode(xsrf.value)
         data = UriHandler.open("https://www.npostart.nl/player/{0}".format(episode_id),
-                               additional_headers=headers,
-                               data=post_data)
+                               additional_headers=token_headers,
+                               data="")
         Logger.trace("Episode Data: %s", data)
 
         token = JsonHelper(data).get_value("token")

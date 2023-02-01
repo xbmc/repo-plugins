@@ -242,7 +242,7 @@ def GetCategoryPage(category, just_episodes=False):
     pDialog = xbmcgui.DialogProgressBG()
     pDialog.create(translation(30319))
 
-    page_base_url = 'https://www.bbc.co.uk/sounds/category/'+category
+    page_base_url = category
     page_url = page_base_url+'?sort=title'
     # print('Opening '+page_url)
     html = OpenURL(page_url)
@@ -311,9 +311,11 @@ def GetCategoryPage(category, just_episodes=False):
                                    # print(pro_syn)
                                    CheckAutoplay(pro_name, pro_url, pro_icon, pro_syn, '')
                                    if ('container' in programme and programme['container'] is not None):
+                                       # print('Has container')
                                        if programme['container']['type'] == 'brand':
                                            pro_brand = '[B]'+programme['container']['title']+'[/B]'
-                                           pro_brand_url = programme['container']['id']
+                                           pro_brand_url = 'https://www.bbc.co.uk/sounds/brand/'+programme['container']['id']
+                                           # print(pro_brand_url)
                                            if 'synopses' in programme['container']:
                                                if ('long' in programme['container']['synopses'] and
                                                    programme['container']['synopses']['long'] is not None):
@@ -324,7 +326,8 @@ def GetCategoryPage(category, just_episodes=False):
                                                elif ('short' in programme['container']['synopses'] and
                                                      programme['container']['synopses']['short'] is not None):
                                                    pro_brand_syn = programme['container']['synopses']['short']
-                                           AddMenuEntry(pro_brand, pro_brand_url, 137, pro_icon, pro_brand_syn, '')
+                                           if not(page_base_url.startswith(pro_brand_url)):
+                                               AddMenuEntry(pro_brand, pro_brand_url, 137, pro_icon, pro_brand_syn, '')
         percent = int(100*page/total_pages)
         pDialog.update(percent,translation(30319))
 
@@ -466,7 +469,7 @@ def ListGenres():
                             if 'image_url' in category:
                                 cat_image = category['image_url'].replace("{recipe}","624x624")
                             if 'id' in category:
-                                cat_url = category['id']
+                                cat_url = 'https://www.bbc.co.uk/sounds/category/'+category['id']
                             # print(cat_name)
                             # print(cat_image)
                             # print(cat_url)

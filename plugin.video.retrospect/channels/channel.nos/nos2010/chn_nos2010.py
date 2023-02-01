@@ -243,8 +243,11 @@ class Channel(chn_class.Channel):
         data = UriHandler.open("https://www.npostart.nl/login", no_cache=True)
 
         # Find the return url.
-        redirect_url = UriHandler.instance().status.url.split("ReturnUrl=")[-1]
-        redirect_url = HtmlEntityHelper.url_decode(redirect_url)
+        if "ReturnUrl" in UriHandler.instance().status.url:
+            redirect_url = UriHandler.instance().status.url.split("ReturnUrl=")[-1]
+            redirect_url = HtmlEntityHelper.url_decode(redirect_url)
+        else:
+            redirect_url = ""
 
         # Extract the verification token.
         verification_code = Regexer.do_regex(r'name="__RequestVerificationToken"[^>]+value="([^"]+)"', data)
@@ -617,7 +620,7 @@ class Channel(chn_class.Channel):
 
         profile_data = {"id": profile_id, "pinCode": ""}
 
-        xsrf_token = self.__get_xsrf_token()[0]
+        xsrf_token = self.__get_xsrf_token()
         UriHandler.open("https://www.npostart.nl/api/account/@me/profile/switch",
                         data=profile_data,
                         additional_headers={
@@ -1517,18 +1520,13 @@ class Channel(chn_class.Channel):
         """
 
         # get a token (why?), cookies and an xsrf token
-        token = UriHandler.open("https://www.npostart.nl/api/token",
-                                no_cache=True,
-                                additional_headers={"X-Requested-With": "XMLHttpRequest"})
-
-        json_token = JsonHelper(token)
-        token = json_token.get_value("token")
-        if not token:
-            return None, None
+        UriHandler.open("https://www.npostart.nl/api/token",
+                        no_cache=True,
+                        additional_headers={"X-Requested-With": "XMLHttpRequest"})
 
         xsrf_token = UriHandler.get_cookie("XSRF-TOKEN", "www.npostart.nl").value
         xsrf_token = HtmlEntityHelper.url_decode(xsrf_token)
-        return xsrf_token, token
+        return xsrf_token
 
     def __get_name_for_api_video(self, result_set, for_epg):
         """ Determines the name of the video item given the episode name, franchise name and

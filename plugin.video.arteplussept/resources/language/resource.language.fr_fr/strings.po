@@ -1,7 +1,7 @@
 # Kodi Media Center language file
 # Addon Name: Arte +7
 # Addon id: plugin.video.arteplussept
-# Addon Provider: bmf
+# Addon Provider: bmf, thomas-ernest
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -9,6 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30044"
+msgid "General"
+msgstr "General"
+
+msgctxt "#30045"
+msgid "Profile"
+msgstr "Profil"
 
 msgctxt "#30050"
 msgid "Language (Videos)"
@@ -21,6 +29,14 @@ msgstr "Qualité vidéo préferée"
 msgctxt "#30053"
 msgid "Show video stream options"
 msgstr "Afficher les options de flux vidéo"
+
+msgctxt "#30054"
+msgid "Email"
+msgstr "Adresse e-mail"
+
+msgctxt "#30055"
+msgid "Password"
+msgstr "Mot de passe"
 
 msgctxt "#30005"
 msgid "Most recent"
@@ -41,3 +57,67 @@ msgstr "Émissions A-Z"
 msgctxt "#30009"
 msgid "This week"
 msgstr "Cette semaine"
+
+msgctxt "#30010"
+msgid "My list"
+msgstr "Mes favoris"
+
+msgctxt "#30011"
+msgid "My history"
+msgstr "Mon historique"
+
+msgctxt "#30012"
+msgid "Search"
+msgstr "Recherche"
+
+msgctxt "#30020"
+msgid "Unable to authenticate"
+msgstr "Impossible de s'authentifier"
+
+msgctxt "#30021"
+msgid "Email or password missing"
+msgstr "E-mail ou mot de passe manquant"
+
+msgctxt "#30022"
+msgid "Update your profile in settings to fetch this content"
+msgstr "Mettez à jour votre profil dans la configuration pour télécharger ce contenu"
+
+msgctxt "#30023"
+msgid "Add to Arte favorites"
+msgstr "Ajouter aux favoris Arte"
+
+msgctxt "#30024"
+msgid "Remove from Arte favorites"
+msgstr "Retirer des favoris Arte"
+
+msgctxt "#30025"
+msgid "Successfully added to favorites"
+msgstr "Ajouté aux favoris avec succès"
+
+msgctxt "#30026"
+msgid "Failed to add to favorites"
+msgstr "Echec de l'ajout aux favoris"
+
+msgctxt "#30027"
+msgid "Successfully removed from favorites"
+msgstr "Retiré des favoris avec succès"
+
+msgctxt "#30028"
+msgid "Failed to remove from favorites"
+msgstr "Echec du retrait des favoris"
+
+msgctxt "#30029"
+msgid "Stream {strm} in {ln} is not available"
+msgstr "Stream {strm} en {ln} indisponible"
+
+msgctxt "#30030"
+msgid "Purge my history"
+msgstr "Purger mon historique"
+
+msgctxt "#30031"
+msgid "Successfully purged history"
+msgstr "Historique purgé avec succès"
+
+msgctxt "#30032"
+msgid "Failed to purge my history"
+msgstr "Echec de la purge de mon historique"

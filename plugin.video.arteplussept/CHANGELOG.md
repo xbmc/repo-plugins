@@ -1,3 +1,24 @@
+# Version 1.1.5
+
+- Populate root menu from Arte TV API instead of HBB TV. Still play video from HBB TV.
+- Manage favorites in Arte profile from context menu
+- Added Search in root menu
+
+# Version 1.1.4
+
+- Added Live stream in root menu
+- Got "Magazines A-Z" content from Arte TV instead of HBB TV API.
+- Fixed empty categories - discrepencies with Arte TV - Bug #79
+
+# Version 1.1.3
+
+- Added Polish translation
+- Added My list and My history content from Arte TV profile
+
+# Version 1.1.2
+
+- better date / locale handling & prevent crash when http error
+
 # Version 1.1.1
 
 - minor python 3 fixes & code improvements (from Kodi Travis CI)

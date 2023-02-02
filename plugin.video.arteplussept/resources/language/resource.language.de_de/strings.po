@@ -1,7 +1,7 @@
 # Kodi Media Center language file
 # Addon Name: Arte +7
 # Addon id: plugin.video.arteplussept
-# Addon Provider: bmf
+# Addon Provider: bmf, thomas-ernest
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -9,6 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30044"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30045"
+msgid "Profile"
+msgstr "Profil"
 
 msgctxt "#30050"
 msgid "Language (Videos)"
@@ -21,6 +29,14 @@ msgstr "Qualität des Videostreams"
 msgctxt "#30053"
 msgid "Show video stream options"
 msgstr "Show video stream options"
+
+msgctxt "#30054"
+msgid "Email"
+msgstr "E-Mail-Adresse"
+
+msgctxt "#30055"
+msgid "Password"
+msgstr "Passwort"
 
 msgctxt "#30005"
 msgid "Most recent"
@@ -41,3 +57,51 @@ msgstr "Sendungen A-Z"
 msgctxt "#30009"
 msgid "This week"
 msgstr "Diese Woche"
+
+msgctxt "#30010"
+msgid "My list"
+msgstr "Meine Liste"
+
+msgctxt "#30011"
+msgid "My history"
+msgstr "Mein Videoverlauf"
+
+msgctxt "#30012"
+msgid "Search"
+msgstr "Suche"
+
+msgctxt "#30020"
+msgid "Unable to authenticate"
+msgstr "Authentifizierungsfehler"
+
+msgctxt "#30021"
+msgid "Email or password missing"
+msgstr "E-Mail oder Passwort fehlen"
+
+msgctxt "#30022"
+msgid "Update your profile in settings to fetch this content"
+msgstr "Aktualisieren Sie Ihre Profil in den Einstellungen, um diesen Inhalt abzurufen"
+
+msgctxt "#30023"
+msgid "Add to Arte favorites"
+msgstr "Zu Arte-Favoriten hinzufügen"
+
+msgctxt "#30024"
+msgid "Remove from Arte favorites"
+msgstr "Aus Arte-Favoriten entfernen"
+
+msgctxt "#30025"
+msgid "Successfully added to favorites"
+msgstr "Erfolgreich zu Favoriten hinzugefügt"
+
+msgctxt "#30026"
+msgid "Failed to add to favorites"
+msgstr "Fehler beim Hinzufügen zu den Favoriten"
+
+msgctxt "#30027"
+msgid "Successfully remove from favorites"
+msgstr "Erfolgreich aus Favoriten entfernen"
+
+msgctxt "#30028"
+msgid "Failed to remove from favorites"
+msgstr "Entfernen aus Favoriten fehlgeschlagen"

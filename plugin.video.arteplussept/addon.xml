@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.arteplussept" name="Arte +7" version="1.1.1" provider-name="bmf">
+<addon id="plugin.video.arteplussept" name="Arte +7" version="1.1.5" provider-name="bmf, thomas-ernest">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.xbmcswift2" version="19.0.4"/>
         <import addon="script.module.requests" version="2.22.0"/>
+        <import addon="script.module.dateutil" version="2.8.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="resources/lib/addon.py">
         <provides>video</provides>
@@ -11,7 +12,7 @@
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
         <summary lang="en">Arte +7</summary>
-        <language>fr de en it</language>
+        <language>fr de en it pl</language>
         <description lang="fr">
 Regardez les vidéos de Arte +7
 Pour toute demande ou reporter un problème:
@@ -40,6 +41,13 @@ https://github.com/known-as-bmf/plugin.video.arteplussept/issues
 Nuovi contributi sono ben accetti:
 https://github.com/known-as-bmf/plugin.video.arteplussept
         </description>
+        <description lang="pl">
+Oglądaj wideos z Arte +7
+W przypadku problemów lub próśb o ulepszenie:
+https://github.com/known-as-bmf/plugin.video.arteplussept/issues
+Każda pomoc mile widziana:
+https://github.com/known-as-bmf/plugin.video.arteplussept
+        </description>
         <license>MIT</license>
         <source>https://github.com/known-as-bmf/plugin.video.arteplussept</source>
         <!--<forum></forum>
@@ -50,6 +58,19 @@ https://github.com/known-as-bmf/plugin.video.arteplussept
             <fanart>resources/fanart.jpg</fanart>
         </assets>
         <news>
+        v1.1.5
+        - Populate root menu from Arte TV API instead of HBB TV. Still play video from HBB TV.
+        - Manage favorites in Arte profile from context menu
+        - Added Search in root menu
+        v1.1.4
+        - Added Live stream in root menu
+        - Got &quote;Magazines A-Z&quote; content from Arte TV instead of HBB TV API.
+        - Fixed empty categories - discrepencies with Arte TV - Bug #79
+        v1.1.3
+        - Added Polish translation
+        - Added My list and My history content from Arte TV profile
+        v1.1.2
+        - better date / locale handling &amp; prevent crash when http error
         v1.1.1
         - minor python 3 fixes &amp; code improvements (from Kodi Travis CI)
         v1.1.0

@@ -1,7 +1,7 @@
 # Kodi Media Center language file
 # Addon Name: Arte +7
 # Addon id: plugin.video.arteplussept
-# Addon Provider: bmf
+# Addon Provider: bmf, thomas-ernest
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -9,6 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30044"
+msgid "General"
+msgstr "Generale"
+
+msgctxt "#30045"
+msgid "Profile"
+msgstr "Profilo"
 
 msgctxt "#30050"
 msgid "Language (Videos)"
@@ -21,6 +29,14 @@ msgstr "Qualità video"
 msgctxt "#30053"
 msgid "Show video stream options"
 msgstr "Show video stream options"
+
+msgctxt "#30054"
+msgid "Email"
+msgstr "Indirizzo email"
+
+msgctxt "#30055"
+msgid "Password"
+msgstr "Password"
 
 msgctxt "#30005"
 msgid "Most recent"
@@ -41,3 +57,51 @@ msgstr "Spettacoli A-Z"
 msgctxt "#30009"
 msgid "This week"
 msgstr "Questa settimana"
+
+msgctxt "#30010"
+msgid "My list"
+msgstr "La mia lista"
+
+msgctxt "#30011"
+msgid "My history"
+msgstr "Cronologia"
+
+msgctxt "#30012"
+msgid "Search"
+msgstr "Search"
+
+msgctxt "#30020"
+msgid "Unable to authenticate"
+msgstr "Impossibile autenticare"
+
+msgctxt "#30021"
+msgid "Email or password missing"
+msgstr "E-mail o password mancanti"
+
+msgctxt "#30022"
+msgid "Update your profile in settings to fetch this content"
+msgstr "Aggiorna il tuo profilo nelle impostazioni per recuperare questo contenuto"
+
+msgctxt "#30023"
+msgid "Add to Arte favorites"
+msgstr "Aggiungi ai preferiti di Arte"
+
+msgctxt "#30024"
+msgid "Remove from Arte favorites"
+msgstr "Rimuovi dai preferiti di Arte"
+
+msgctxt "#30025"
+msgid "Successfully added to favorites"
+msgstr "Aggiunto con successo ai preferiti"
+
+msgctxt "#30026"
+msgid "Failed to add to favorites"
+msgstr "Impossibile aggiungere ai preferiti"
+
+msgctxt "#30027"
+msgid "Successfully remove from favorites"
+msgstr "Rimozione riuscita dai preferiti"
+
+msgctxt "#30028"
+msgid "Failed to remove from favorites"
+msgstr "Impossibile rimuovere dai preferiti"

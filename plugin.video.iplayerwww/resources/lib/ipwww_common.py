@@ -71,54 +71,6 @@ def ParseImageUrl(url):
     return url.replace("{recipe}", "832x468")
 
 
-def getSubColor(line, styles):
-    color = None
-    match = re.search(r'^[^>]+style="(.*?)"', line, re.DOTALL)
-    if match:
-        style = match.group(1)
-        color = [value for (style_id,value) in styles if style_id == style]
-    else:
-        # fallback: sometimes, there is direct formatting in the text
-        match = re.search(r'^[^>]+color="(.*?)"', line, re.DOTALL)
-        if match:
-            color = [match.group(1)]
-        else:
-            # fallback 2: sometimes, there is no formatting at all, use default
-            color = [value for (style_id,value) in styles if style_id == 's0']
-    if color:
-        return color[0]
-    else:
-        return None
-
-
-def make_span_replacer(styles):
-    def replace_span(m_span):
-        repl_span = None
-        color_span = getSubColor(m_span.group(0), styles)
-        if color_span:
-            repl_span = '<font color="%s">%s</font>' % (color_span, m_span.group(1))
-        else:
-            repl_span = m_span.group(1)
-        return repl_span
-    return replace_span
-
-
-def format_subtitle(caption, span_replacer, index):
-    subtitle = None
-    text = caption['text']
-    text = re.sub(r'&#[0-9]+;', '', text)
-    text = re.sub(r'<br\s?/>', '\n', text)
-    text = re.sub(r'<span.*?>(.*?)</span>', span_replacer, text, flags=re.DOTALL)
-    if caption['color']:
-        text = re.sub(r'(^|</font>)([^<]+)(<font|$)', r'\1<font color="%s">\2</font>\3' % 
-            caption['color'], text, flags=re.DOTALL)
-        if not re.search(r'<font.*?>(.*?)</font>', text, re.DOTALL):
-            text = '<font color="%s">%s</font>' %  (caption['color'], text)
-    subtitle = "%d\n%s,%s --> %s,%s\n%s\n\n" % (
-        index, caption['start'], caption['start_mil'], caption['end'], caption['end_mil'], text)
-    return subtitle
-
-
 def download_subtitles(url):
     # Download and Convert the TTAF format to srt
     # SRT:
@@ -134,7 +86,7 @@ def download_subtitles(url):
     # TT:
     # <p begin="0:01:12.400" end="0:01:13.880">Thinking.</p>
     outfile = os.path.join(DIR_USERDATA, 'iplayer.srt')
-    # print "Downloading subtitles from %s to %s"%(url, outfile)
+    # print("Downloading subtitles from %s to %s",url, outfile)
     fw = codecs.open(outfile, 'w', encoding='utf-8')
 
     if not url:
@@ -143,7 +95,7 @@ def download_subtitles(url):
         return
 
     txt = OpenURL(url)
-    # print txt
+    # print(txt)
 
     # get styles
     styles = []
@@ -163,8 +115,16 @@ def download_subtitles(url):
                     if match.group(1).startswith('#'):
                         styles.append((id, match.group(1)[0:7]))
                     else:
-                        styles.append((id, match.group(1)))
-                    # span_replacer = make_span_replacer(styles)
+                        if (match.group(1)=='white'):
+                            styles.append((id, '#ffffff'))
+                        elif (match.group(1)=='yellow'):
+                            styles.append((id, '#ffff00'))
+                        elif (match.group(1)=='cyan'):
+                            styles.append((id, '#00ffff'))
+                        elif (match.group(1)=='lime'):
+                            styles.append((id, '#00ff00'))
+                        else:
+                            styles.append((id, match.group(1)))
     # print "Retrieved styles"
     # print styles
 
@@ -180,6 +140,7 @@ def download_subtitles(url):
             index = 1
             # print "Found %s frames"%len(frames)
             # print frames
+            p = re.compile(r'<span(.*?)>(.*?)</span>')
             for formatting, content in frames:
                 start = ''
                 match = re.search(r'begin=\"(.*?)"', formatting, re.DOTALL)
@@ -194,7 +155,10 @@ def download_subtitles(url):
                 if match:
                     style = match.group(1)
                 else:
-                    style = False
+                    # If no style is found, we assume that s0, the default style should be applied.
+                    # Note this is dangerous, as we also assume that s0 will always be defined.
+                    # If it is not, the add-on will return an error a little later.
+                    style = 's0'
                 start_split = re.split('\.',start)
                 # print start_split
                 if(len(start_split)>1):
@@ -211,6 +175,7 @@ def download_subtitles(url):
                 text = ''
                 spans = re.findall(r'<span.*?style="(.*?)">(.*?)</span>', content, re.DOTALL)
                 if (spans):
+                    # Old style ttml: Everything is encapsulated in <span style= statements
                     num_spans = len(spans)
                     for num, (substyle, line) in enumerate(spans):
                         if num >0:
@@ -219,12 +184,46 @@ def download_subtitles(url):
                         # print substyle, color, line.encode('utf-8')
                         text = text+'<font color="%s">%s</font>' %  (color[0], line)
                 else:
-                    if style:
-                        color = [value for (style_id, value) in styles if style == style_id]
-                        text = text+'<font color="%s">%s</font>' %  (color[0], content)
+                    # New style ttml: style is set per display (or not at all), and within each
+                    # display, there may be several substyles defined by <span tts:color=
+                    default_color = [value for (style_id, value) in styles if style == style_id]
+                    spans = re.search(r'<span', content, re.DOTALL)
+                    if (spans):
+                        cflag = False
+                        default_color = [value for (style_id, value) in styles if style == style_id]
+                        color = default_color[0]
+                        content_split=p.split(content)
+                        for part in content_split:
+                            if part:
+                                match = re.search(r'color="(.*?)"', part, re.DOTALL)
+                                if match:
+                                    if (match.group(1)=='white'):
+                                        color = '#ffffff'
+                                    elif (match.group(1)=='yellow'):
+                                        color = '#ffff00'
+                                    elif (match.group(1)=='cyan'):
+                                        color = '#00ffff'
+                                    elif (match.group(1)=='lime'):
+                                        color = '#00ff00'
+                                    else:
+                                        color = match.group(1)
+                                    cflag = True
+                                    continue
+                                elif (cflag==False):
+                                    color = default_color[0]
+                                text=text+'<font color="'+color+'">'+part+'</font>'
+                                cflag = False
                     else:
-                         text = text+content
+                        text=text+'<font color="'+default_color[0]+'">'+content+'</font>'
+                    # if style:
+                    #     color = [value for (style_id, value) in styles if style == style_id]
+                    #     text = text+'<font color="%s">%s</font>' %  (color[0], content)
+                    # else:
+                    #      text = text+content
                     # print substyle, color, line.encode('utf-8')
+
+                # Get correct line breaks according to SRT
+                text = re.sub(r'<br\s?/>', '\n', text)
                 entry = "%d\n%s,%s --> %s,%s\n%s\n\n" % (index, start_split[0], start_mil_f, end_split[0], end_mil_f, text)
                 if entry:
                     fw.write(entry)
@@ -434,18 +433,34 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
     listitem = xbmcgui.ListItem(label=name, label2=description)
     listitem.setArt({'icon':'DefaultFolder.png', 'thumb':iconimage})
 
-    if aired:
-        listitem.setInfo("video", {
-            "title": name,
-            "plot": description,
-            "plotoutline": description,
-            "date": date_string,
-            "aired": aired})
+    if mode in (201, 202, 203, 204, 205, 211, 212, 213):
+        if aired:
+            listitem.setInfo("video", {
+                "title": name,
+                "plot": description,
+                "plotoutline": description,
+                "date": date_string,
+                "aired": aired,
+                "mediatype" : "episode"})
+        else:
+            listitem.setInfo("video", {
+                "title": name,
+                "plot": description,
+                "plotoutline": description,
+                "mediatype" : "episode"})
     else:
-        listitem.setInfo("video", {
-            "title": name,
-            "plot": description,
-            "plotoutline": description})
+        if aired:
+            listitem.setInfo("video", {
+                "title": name,
+                "plot": description,
+                "plotoutline": description,
+                "date": date_string,
+                "aired": aired})
+        else:
+            listitem.setInfo("video", {
+                "title": name,
+                "plot": description,
+                "plotoutline": description})
 
     video_streaminfo = {'codec': 'h264'}
     if not isFolder:

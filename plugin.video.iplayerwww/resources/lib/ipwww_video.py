@@ -937,7 +937,8 @@ def ParseMediaselector(stream_id):
                                     protocol = connection['protocol']
                                 if 'supplier' in connection:
                                     supplier = connection['supplier']
-                                subtitles.append((href, protocol, supplier))
+                                if protocol == 'https':
+                                    subtitles.append((href, protocol, supplier))
                     elif media['kind'].startswith('video'):
                         if 'connection' in media:
                             for connection in media['connection']:

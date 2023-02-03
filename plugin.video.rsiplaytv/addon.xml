@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rsiplaytv" name="RSI Play TV" version="2.2.1" provider-name="Alexander Seiler">
+<addon id="plugin.video.rsiplaytv" name="RSI Play TV" version="2.2.2" provider-name="Alexander Seiler">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
-    <import addon="script.module.srgssr" version="2.2.1"/>
+    <import addon="script.module.srgssr" version="2.2.2"/>
     <import addon="script.module.youtube_channels" version="0.2.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
@@ -27,7 +27,10 @@
     <forum>https://github.com/goggle/plugin.video.rsiplaytv/discussions</forum>
     <website>https://www.rsi.ch/play/tv</website>
     <source>https://github.com/goggle/plugin.video.rsiplaytv</source>
-    <news>v.2.2.1 (2022-10-25)
+    <news>v2.2.2 (2023-01-29)
+  - Fix homepage and topics menu
+
+v.2.2.1 (2022-10-25)
   - Fix shows by date
 
 v2.2.0 (2022-06-24)

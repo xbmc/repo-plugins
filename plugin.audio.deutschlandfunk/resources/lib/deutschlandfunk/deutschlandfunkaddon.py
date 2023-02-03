@@ -230,7 +230,7 @@ class DeutschlandfunkAddon(AbstractRssAddon):
 
     def route(self, path, url_params):
 
-        splitted_path = list(filter(lambda n: n != "", path.split("/")))
+        splitted_path = [n for n in path.split("/") if n != ""]
         if len(splitted_path) == 2 and splitted_path[1] == DeutschlandfunkAddon.PATH_PODCASTS:
 
             if splitted_path[0] == DeutschlandfunkAddon.PATH_DLF:

@@ -200,7 +200,7 @@ class AbstractRssAddon:
             li.setInfo(item["type"], infos)
 
         if "icon" in item and item["icon"]:
-            li.setArt({"icon": item["icon"]})
+            li.setArt({"thumb": item["icon"]})
         else:
             addon_dir = xbmcvfs.translatePath(self.addon.getAddonInfo('path'))
             li.setArt({"icon": os.path.join(
@@ -289,6 +289,7 @@ class AbstractRssAddon:
                 }
                 self.add_list_item(entry, path)
 
+            li = None
             for i, item in enumerate(items):
                 if i >= offset and (not limit or i < offset + limit):
                     li = self._create_list_item(item)

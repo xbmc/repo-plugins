@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.swiplaytv" name="SWI Play TV" version="2.2.1" provider-name="Alexander Seiler">
+<addon id="plugin.video.swiplaytv" name="SWI Play TV" version="2.2.2" provider-name="Alexander Seiler">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
-    <import addon="script.module.srgssr" version="2.2.1"/>
+    <import addon="script.module.srgssr" version="2.2.2"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
@@ -26,7 +26,10 @@
     <forum>https://github.com/goggle/plugin.video.swiplaytv/discussions</forum>
     <website>https://play.swissinfo.ch/play/tv/</website>
     <source>https://github.com/goggle/plugin.video.swiplaytv</source>
-    <news>v2.2.0 (2022-06-24)
+    <news>v2.2.2 (2023-01-29)
+  - Fix homepage and topics menu
+
+v2.2.0 (2022-06-24)
   - Support WIDEVINE encrypted DASH streams.
 
 v2.1.0 (2022-06-01)

@@ -4,6 +4,7 @@
         <setting label="32002" type="text" id="password" option="hidden" default=""/>
         <setting label="32003" type="number" id="itemsperpage" default="500"/>
         <setting label="32004" type="bool" id="fullguide" default="false"/>
+        <setting label="32007" type="bool" id="sortmediaset" default="false"/>
         <setting label="32005" type="bool" id="splitlive" default="false"/>
         <setting label="32006" type="action" action="RunScript(script.module.inputstreamhelper,widevine_install)" visible="!system.platform.android"/>
 </settings>

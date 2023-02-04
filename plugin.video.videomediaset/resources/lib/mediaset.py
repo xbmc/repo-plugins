@@ -428,7 +428,7 @@ class Mediaset(rutils.RUtils):
                     '&assetTypes=HD,browser,widevine,geoIT|geoNo:HD,browser,geoIT|geoNo:HD,'
                     'geoIT|geoNo:SD,''browser,widevine,geoIT|geoNo:SD,browser,geoIT|geoNo:SD,'
                     'geoIT|geoNo')
-        text = self.getText(u)
+        text = self.getText(u).encode('utf-8')
         res = {'url': '', 'pid': '', 'type': '', 'security': False}
         root = ET.fromstring(text)
         for vid in root.findall('.//{http://www.w3.org/2005/SMIL21/Language}switch'):

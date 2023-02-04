@@ -42,6 +42,10 @@ msgctxt "#32006"
 msgid "Installa widevine per i contenuti protetti"
 msgstr "Installa widevine per i contenuti protetti"
 
+msgctxt "#32007"
+msgid "Ordina usando l'ordinamento mediaset (da più nuovo a più vecchio)"
+msgstr "Ordina usando l'ordinamento mediaset (da più nuovo a più vecchio)"
+
 msgctxt "#32101"
 msgid "Tutto A-Z"
 msgstr "Tutto A-Z"

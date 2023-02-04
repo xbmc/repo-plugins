@@ -29,8 +29,6 @@
         <setting label="30883" type="action" id="ishelper_info" action="RunScript(script.module.inputstreamhelper, info)"/>
         <setting label="30885" type="action" id="adaptive_settings" option="close" action="Addon.OpenSettings(inputstream.adaptive)" visible="System.HasAddon(inputstream.adaptive) + [String.StartsWith(System.BuildVersion,18) | String.StartsWith(System.BuildVersion,19)]"/>
         <setting label="30887" type="action" id="ishelper_settings" option="close" action="Addon.OpenSettings(script.module.inputstreamhelper)"/>
-        <setting label="30888" type="bool" id="manifest_proxy" default="true"/>
-        <setting id="manifest_proxy_port" visible="false"/>
         <setting label="30889" type="lsep"/> <!-- Logging -->
         <setting label="30891" type="bool" id="debug_logging" default="false"/>
         <setting label="30892" type="action" action="InstallAddon(script.kodi.loguploader)" option="close" visible="!System.HasAddon(script.kodi.loguploader)"/> <!-- Install Kodi Logfile Uploader -->

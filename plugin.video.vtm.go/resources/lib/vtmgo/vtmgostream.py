@@ -10,7 +10,7 @@ import random
 from datetime import timedelta
 
 from resources.lib import kodiutils
-from resources.lib.vtmgo import ResolvedStream, util
+from resources.lib.vtmgo import API_ENDPOINT, ResolvedStream, util
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -18,8 +18,7 @@ _LOGGER = logging.getLogger(__name__)
 class VtmGoStream:
     """ VTM GO Stream API """
 
-    _API_KEY = '3vjmWnsxF7SUTeNCBZlnUQ4Z7GQV8f6miQ514l10'
-    # _API_KEY = 'jL3yNhGpDsaew9CqJrDPq2UzMrlmNVbnadUXVOET'
+    _API_KEY = 'r9EOnHOp1pPL5L4FuGzBPSIHwrQnPu5TBfW16y75'
 
     def __init__(self, tokens=None):
         """ Initialise object """
@@ -27,30 +26,35 @@ class VtmGoStream:
 
     def _mode(self):
         """ Return the mode that should be used for API calls """
-        return 'vtmgo-kids' if self._tokens.product == 'VTM_GO_KIDS' else 'vtmgo'
+        return 'vtmgo-kids' if self._tokens.product == 'VTM_GO_KIDS' else 'VTM_GO'
 
     def get_stream(self, stream_type, stream_id):
         """ Return a ResolvedStream based on the stream type and id.
-        :type stream_type: str
-        :type stream_id: str
-        :rtype ResolvedStream
+        :param str stream_type:         Type of stream (episodes, movies or channels)
+        :param str stream_id:           ID of the stream
+        :rtype: ResolvedStream
         """
-        # We begin with asking the api about the stream info.
-        video_info = self._get_video_info(stream_type, stream_id)
+        # We begin with asking the api about the stream info
+        stream_tokens = self._get_stream_tokens(stream_type, stream_id)
+        player_token = stream_tokens.get('playerToken')
+
+        # Return video information
+        video_info = self._get_video_info(stream_type, stream_id, player_token)
 
         # Select the best stream from our stream_info.
         protocol, stream_info = self._extract_stream_from_video_info(video_info)
 
-        # Extract subtitles from our stream_info.
+        # Extract subtitles from our video_info
         subtitle_info = self._extract_subtitles_from_stream_info(video_info)
 
         if protocol == 'anvato':
             # Send a request for the stream info.
             anvato_stream_info = self._anvato_get_stream_info(anvato_info=stream_info.get('anvato'), stream_info=video_info)
 
-            # Get published urls.
+            # Get published urls
             url = anvato_stream_info['published_urls'][0]['embed_url']
             license_url = anvato_stream_info['published_urls'][0]['license_url']
+            license_key = self.create_license_key(license_url)
 
             # Get MPEG DASH manifest url.
             json_manifest = self._download_manifest(url)
@@ -65,11 +69,23 @@ class VtmGoStream:
                 subtitles = None
             else:
                 subtitles = self._download_and_delay_subtitles(subtitle_info, json_manifest)
-
         else:
-            # Get published urls.
+            # Get published urls
             url = stream_info.get('url')
             license_url = stream_info.get('drm', {}).get('com.widevine.alpha', {}).get('licenseUrl')
+            license_provider = stream_info.get('drm', {}).get('com.widevine.alpha', {}).get('provider')
+            if license_provider == 'drmtoday':
+                license_key = self.create_license_key(
+                    license_url,
+                    key_headers={
+                        'x-dt-auth-token': stream_info.get('drm', {}).get('com.widevine.alpha', {}).get('drmtoday', {}).get('authToken'),
+                        'Content-Type': 'application/octet-stream',
+                    },
+                    response_value='JBlicense'
+                )
+            else:
+                # Anvato DRM
+                license_key = self.create_license_key(license_url)
 
             # Download subtitles locally so we can give them a better name
             subtitles = self._download_subtitles(subtitle_info)
@@ -83,7 +99,7 @@ class VtmGoStream:
                 duration=video_info['video']['duration'],
                 url=url,
                 subtitles=subtitles,
-                license_url=license_url,
+                license_key=license_key,
                 cookies=util.SESSION.cookies.get_dict(),
             )
 
@@ -95,7 +111,7 @@ class VtmGoStream:
                 duration=video_info['video']['duration'],
                 url=url,
                 subtitles=subtitles,
-                license_url=license_url,
+                license_key=license_key,
                 cookies=util.SESSION.cookies.get_dict(),
             )
 
@@ -112,48 +128,70 @@ class VtmGoStream:
                 duration=None,
                 url=url,
                 subtitles=subtitles,
-                license_url=license_url,
+                license_key=license_key,
                 cookies=util.SESSION.cookies.get_dict()
             )
 
         raise Exception('Unknown video type {type}'.format(type=stream_type))
 
-    def _get_video_info(self, strtype, stream_id):
+    def _get_stream_tokens(self, stream_type, stream_id):
+        """ Get the stream info for the specified stream.
+        :param str stream_type:         Type of stream (episodes, movies or channels)
+        :param str stream_id:
+        :rtype: dict
+        """
+        if stream_type == 'channels':
+            url = API_ENDPOINT + '/%s/live' % (self._mode())
+        else:
+            url = API_ENDPOINT + '/%s/play/%s' % (self._mode(), stream_id)
+
+        _LOGGER.debug('Getting stream tokens from %s', url)
+        response = util.http_get(url, token=self._tokens.access_token, profile=self._tokens.profile)
+
+        return json.loads(response.text)
+
+    def _get_video_info(self, strtype, stream_id, player_token):
         """ Get the stream info for the specified stream.
         :param str strtype:
         :param str stream_id:
+        :param str player_token:
         :rtype: dict
         """
         url = 'https://videoplayer-service.dpgmedia.net/config/%s/%s' % (strtype, stream_id)
         _LOGGER.debug('Getting video info from %s', url)
-        response = util.http_get(url,
-                                 params={
-                                     'startPosition': '0.0',
-                                     'autoPlay': 'true',
-                                 },
-                                 headers={
-                                     'Accept': 'application/json',
-                                     'x-api-key': self._API_KEY,
-                                     'Popcorn-SDK-Version': '5',
-                                 })
+        response = util.http_post(url,
+                                  params={
+                                      'startPosition': '0.0',
+                                      'autoPlay': 'true',
+                                  },
+                                  data={
+                                      'deviceType': 'android-tv',
+                                      'zone': 'vtmgo',
+                                  },
+                                  headers={
+                                      'Accept': 'application/json',
+                                      'x-api-key': self._API_KEY,
+                                      'Popcorn-SDK-Version': '6',
+                                      'Authorization': 'Bearer ' + player_token,
+                                  })
 
         info = json.loads(response.text)
         return info
 
     @staticmethod
-    def _extract_stream_from_video_info(stream_info):
+    def _extract_stream_from_video_info(video_info):
         """ Extract the preferred stream details.
-        :type stream_info: dict
+        :type video_info: dict
         :rtype dict
         """
         # Loop over available streams, and return the requested stream
-        if stream_info.get('video'):
+        if video_info.get('video'):
             for stream_type in ['dash', 'anvato']:
-                for stream in stream_info.get('video').get('streams'):
+                for stream in video_info.get('video').get('streams'):
                     if stream.get('type') == stream_type:
                         return stream_type, stream
-        elif stream_info.get('code'):
-            _LOGGER.error('VTM GO Videoplayer service API error: %s', stream_info.get('type'))
+        elif video_info.get('code'):
+            _LOGGER.error('VTM GO Videoplayer service API error: %s', video_info.get('type'))
         raise Exception('No stream found that we can handle')
 
     @staticmethod
@@ -222,7 +260,7 @@ class VtmGoStream:
             hours, remainder = divmod(item.seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             millis = item.microseconds // 1000
-            sub_timings[idx] = '%02d:%02d:%02d,%03d' % (hours, minutes, seconds, millis)
+            sub_timings[idx] = '%02d:%02d:%02d.%03d' % (hours, minutes, seconds, millis)
         delayed_webvtt_timing = '\n{} --> {} '.format(sub_timings[0], sub_timings[1])
         return delayed_webvtt_timing
 
@@ -378,12 +416,13 @@ class VtmGoStream:
         return url
 
     @staticmethod
-    def create_license_key(key_url, key_type='R', key_headers=None, key_value=None):
+    def create_license_key(key_url, key_type='R', key_headers=None, key_value='', response_value=''):
         """ Create a license key string that we need for inputstream.adaptive.
         :type key_url: str
         :type key_type: str
         :type key_headers: dict[str, str]
         :type key_value: str
+        :type response_value: str
         :rtype str
         """
         try:  # Python 3
@@ -402,4 +441,4 @@ class VtmGoStream:
                 raise ValueError('Missing D{SSM} placeholder')
             key_value = quote(key_value)
 
-        return '%s|%s|%s|' % (key_url, header, key_value)
+        return '%s|%s|%s|%s' % (key_url, header, key_value, response_value)

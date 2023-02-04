@@ -17,7 +17,7 @@ _LOGGER = logging.getLogger(__name__)
 # Setup a static session that can be reused for all calls
 SESSION = requests.Session()
 SESSION.headers = {
-    'User-Agent': 'VTM_GO/13.8 (be.vmma.vtm.zenderapp; build:17133; Android TV 28) okhttp/4.10.0',
+    'User-Agent': 'VTM_GO/13.12 (be.vmma.vtm.zenderapp; build:17181; Android TV 28) okhttp/4.10.0',
     'x-app-version': '13',
     'x-persgroep-mobile-app': 'true',
     'x-persgroep-os': 'android',

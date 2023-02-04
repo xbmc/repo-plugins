@@ -1,5 +1,20 @@
 # Changelog
 
+## [v1.4.0](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.4.0) (2023-02-03)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.3.3...v1.4.0)
+
+**Implemented enhancements:**
+
+- Add EPG for VTM Non-Stop [\#352](https://github.com/add-ons/plugin.video.vtm.go/pull/352) ([michaelarnauts](https://github.com/michaelarnauts))
+- Remove manifest proxy [\#351](https://github.com/add-ons/plugin.video.vtm.go/pull/351) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Merged pull requests:**
+
+- Remove VTM Kids channel since they stopped airing [\#350](https://github.com/add-ons/plugin.video.vtm.go/pull/350) ([michaelarnauts](https://github.com/michaelarnauts))
+- Update to Popcorn SDK 6 [\#349](https://github.com/add-ons/plugin.video.vtm.go/pull/349) ([mediaminister](https://github.com/mediaminister))
+- Fix subtitles in Kodi 20 [\#347](https://github.com/add-ons/plugin.video.vtm.go/pull/347) ([mediaminister](https://github.com/mediaminister))
+
 ## [v1.3.3](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.3.3) (2023-01-04)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.3.2...v1.3.3)

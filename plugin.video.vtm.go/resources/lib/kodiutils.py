@@ -195,7 +195,7 @@ def show_listing(title_items, category=None, sort=None, content=None, cache=True
     xbmcplugin.endOfDirectory(routing.handle, succeeded, cacheToDisc=cache)
 
 
-def play(stream, license_key=None, title=None, art_dict=None, info_dict=None, prop_dict=None, stream_dict=None):
+def play(stream, license_key=None, title=None, art_dict=None, info_dict=None, prop_dict=None, stream_dict=None, subtitles=None):
     """Play the given stream"""
     from resources.lib.addon import routing
 
@@ -208,6 +208,8 @@ def play(stream, license_key=None, title=None, art_dict=None, info_dict=None, pr
         play_item.setProperties(prop_dict)
     if stream_dict:
         play_item.addStreamInfo('video', stream_dict)
+    if subtitles:
+        play_item.setSubtitles(subtitles)
 
     # Setup Inputstream Adaptive
     if kodi_version_major() >= 19:

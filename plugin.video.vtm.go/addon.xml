@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vtm.go" name="VTM GO" version="1.4.0" provider-name="Michaël Arnauts">
+<addon id="plugin.video.vtm.go" name="VTM GO" version="1.4.1" provider-name="Michaël Arnauts">
     <requires>
         <import addon="xbmc.python" version="2.26.0" />
         <import addon="script.module.dateutil" version="2.6.0" />
@@ -22,11 +22,8 @@
         <disclaimer lang="nl_NL">Deze add-on wordt niet ondersteund door DPG Media en wordt aangeboden 'as is', zonder enige garantie. De VTM GO naam, VTM GO logo en de kanaallogo's zijn eigendom van DPG Media en worden gebruikt in overeenstemming met de fair use policy.</disclaimer>
         <platform>all</platform>
         <license>GPL-3.0-only</license>
-        <news>v1.4.0 (2023-02-03)
-- Update API to support new DRM.
-- Fix subtitles on Kodi 20.
-- Add EPG for VTM Non-Stop.
-- Remove VTM Kids (no longer available).</news>
+        <news>v1.4.1 (2023-02-09)
+- Fix Live TV on older Kodi versions.</news>
         <source>https://github.com/add-ons/plugin.video.vtm.go</source>
         <assets>
             <icon>resources/icon.png</icon>

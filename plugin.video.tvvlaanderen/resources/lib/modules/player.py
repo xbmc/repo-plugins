@@ -7,9 +7,9 @@ import logging
 
 from resources.lib import kodiutils
 from resources.lib.modules.menu import Menu
-from resources.lib.solocoo import Channel, Program
+from resources.lib.solocoo import Channel, Epg, VodEpisode, VodMovie
+from resources.lib.solocoo.asset import AssetApi
 from resources.lib.solocoo.auth import AuthApi
-from resources.lib.solocoo.channel import ChannelApi
 from resources.lib.solocoo.exceptions import InvalidTokenException, NotAvailableInOfferException, UnavailableException
 
 _LOGGER = logging.getLogger(__name__)
@@ -24,36 +24,46 @@ class Player:
                              password=kodiutils.get_setting('password'),
                              tenant=kodiutils.get_setting('tenant'),
                              token_path=kodiutils.get_tokens_path())
-        self._channel_api = ChannelApi(self._auth)
+        self._api = AssetApi(self._auth)
 
     def play_asset(self, asset_id):
-        """ Play an asset (can be a program of a live channel).
+        """ Play an asset (can be an Epg of a Channel).
 
         :param string asset_id:         The ID of the asset to play.
         """
         # Get asset info
         if len(asset_id) == 32:
             # a locId is 32 chars
-            asset = self._channel_api.get_asset_by_locid(asset_id)
+            asset = self._api.get_asset_by_locid(asset_id)
         else:
             # an asset_id is 40 chars
-            asset = self._channel_api.get_asset(asset_id)
+            asset = self._api.get_asset(asset_id)
 
-        if isinstance(asset, Program):
-            item = Menu.generate_titleitem_program(asset)
+        if isinstance(asset, Epg):
+            item = Menu.generate_titleitem_epg(asset)
         elif isinstance(asset, Channel):
             item = Menu.generate_titleitem_channel(asset)
+        elif isinstance(asset, VodMovie):
+            item = Menu.generate_titleitem_vod_movie(asset)
+        elif isinstance(asset, VodEpisode):
+            item = Menu.generate_titleitem_vod_episode(asset)
         else:
             raise Exception('Unknown asset type: %s' % asset)
 
         # Get stream info
         try:
-            stream_info = self._channel_api.get_stream(asset.uid)
+            stream_info = self._api.get_stream(asset.uid)
         except InvalidTokenException:
             # Retry with fresh tokens
             self._auth.login(True)
-            stream_info = self._channel_api.get_stream(asset.uid)
-        except (NotAvailableInOfferException, UnavailableException) as exc:
+            stream_info = self._api.get_stream(asset.uid)
+        except NotAvailableInOfferException as exc:
+            _LOGGER.error(exc)
+            kodiutils.ok_dialog(message=kodiutils.localize(30713))  # The video is not available in you subscription.
+            kodiutils.end_of_directory()
+            return
+
+        except UnavailableException as exc:
             _LOGGER.error(exc)
             kodiutils.ok_dialog(message=kodiutils.localize(30712))  # The video is unavailable and can't be played right now.
             kodiutils.end_of_directory()

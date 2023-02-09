@@ -7,7 +7,7 @@ import logging
 
 from resources.lib import kodiutils
 from resources.lib.modules.menu import Menu
-from resources.lib.solocoo import Channel, Program
+from resources.lib.solocoo import Channel, Epg, EpgSeries
 from resources.lib.solocoo.auth import AuthApi
 from resources.lib.solocoo.search import SearchApi
 
@@ -43,13 +43,13 @@ class Search:
         # Generate the results
         listing = []
         for item in items:
-            if isinstance(item, Program):
-                if item.series_id:
-                    listing.append(Menu.generate_titleitem_series(item))
-                else:
-                    listing.append(Menu.generate_titleitem_program(item))
+            if isinstance(item, Epg):
+                listing.append(Menu.generate_titleitem_epg(item))
 
-            if isinstance(item, Channel) and item.available is not False:
+            elif isinstance(item, EpgSeries):
+                listing.append(Menu.generate_titleitem_epg_series(item))
+
+            elif isinstance(item, Channel) and item.available is not False:
                 listing.append(Menu.generate_titleitem_channel(item))
 
         # Sort like we get our results back.

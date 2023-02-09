@@ -12,7 +12,7 @@ import requests
 from requests import HTTPError
 
 from resources.lib import kodiutils
-from resources.lib.solocoo import Channel, Credit, Program
+from resources.lib.solocoo import Channel, Credit, Epg, EpgSeries, VodEpisode, VodGenre, VodMovie, VodSeries
 from resources.lib.solocoo.exceptions import InvalidTokenException
 
 _LOGGER = logging.getLogger(__name__)
@@ -63,8 +63,8 @@ def check_deals_entitlement(deals, offers):
     # deals = [{'offers': ['0', '1', '2', '11'], 'start': '2020-07-30T09:15:00Z', 'end': '2020-07-30T10:25:00Z'},
     #          {'offers': ['0', '1', '2', '11'], 'start': '2020-07-30T10:30:00Z', 'end': '2020-08-06T09:15:00Z'}]
 
-    # If we have no offers, this isn't allowed
-    if not offers:
+    # If we have no offers or deals, this isn't allowed
+    if not offers or not deals:
         return False
 
     our_offers = set(offers)
@@ -116,8 +116,8 @@ def parse_channel(channel, offers=None, station_id=None):
         icon=find_image(channel.get('images'), 'la'),  # landscape
         preview=find_image(channel.get('images'), 'lv'),  # live
         number=channel.get('params', {}).get('lcn'),
-        epg_now=parse_program(channel.get('params', {}).get('now')),
-        epg_next=parse_program(channel.get('params', {}).get('next')),
+        epg_now=parse_epg(channel.get('params', {}).get('now')),
+        epg_next=parse_epg(channel.get('params', {}).get('next')),
         radio=channel.get('params', {}).get('radio', False),
         replay=channel.get('params', {}).get('replayExpiry', False) is not False,
         available=check_deals_entitlement(channel.get('deals'), offers),
@@ -125,14 +125,14 @@ def parse_channel(channel, offers=None, station_id=None):
     )
 
 
-def parse_program(program, offers=None):
-    """ Parse a program dict from the TV API.
+def parse_epg(program, offers=None):
+    """ Parse an Epg dict from the TV API.
 
     :param dict program:                The program object to parse.
     :param List[str] offers:            A list of offers that we have.
 
     :returns:                           A program that is parsed.
-    :rtype: Program
+    :rtype: Epg
     """
     if not program:
         return None
@@ -144,7 +144,7 @@ def parse_program(program, offers=None):
     season = program.get('params', {}).get('seriesSeason')
     episode = program.get('params', {}).get('seriesEpisode')
 
-    return Program(
+    return Epg(
         uid=program.get('id'),
         title=program.get('title'),
         description=program.get('desc'),
@@ -170,14 +170,38 @@ def parse_program(program, offers=None):
     )
 
 
-def parse_program_capi(program, tenant):
-    """ Parse an program dict from the CAPI.
+def parse_epg_series(program):
+    """ Parse a EpgSeries dict from the TV API.
+
+    :param dict program:                The series object to parse.
+
+    :returns:                           A program that is parsed.
+    :rtype: Epg
+    """
+    if not program:
+        return None
+
+    return EpgSeries(
+        uid=program.get('id'),
+        title=program.get('title'),
+        description=program.get('desc'),
+        cover=find_image(program.get('images'), 'po'),  # poster
+        preview=find_image(program.get('images'), 'la'),  # landscape
+        channel_id=program.get('params', {}).get('channelId'),
+        formats=[epg_format.get('title') for epg_format in program.get('params', {}).get('formats')],
+        genres=[epg_genre.get('title') for epg_genre in program.get('params', {}).get('genres')],
+        age=program.get('params', {}).get('age'),
+    )
+
+
+def parse_epg_capi(program, tenant):
+    """ Parse a program dict from the CAPI.
 
     :param dict program:                The program object to parse.
     :param dict tenant:                 The tenant object to help with some URL's.
 
     :returns:                           A program that is parsed.
-    :rtype: EpgProgram
+    :rtype: Epg
     """
     if not program:
         return None
@@ -203,7 +227,7 @@ def parse_program_capi(program, tenant):
         elif credit.get('r') == 7:  # Composer
             credit_list.append(Credit(role=Credit.ROLE_COMPOSER, person=credit.get('p')))
 
-    return Program(
+    return Epg(
         uid=program.get('locId'),
         title=program.get('title'),
         description=program.get('description'),
@@ -225,6 +249,76 @@ def parse_program_capi(program, tenant):
         episode=program.get('episodeNo'),
         credit=credit_list,
         available=(program.get('flags') & 16) and (start < now),  # BIT_EPG_FLAG_REPLAY
+    )
+
+
+def parse_vod_genre(collection):
+    """ Parse a genre from the Collections API.
+
+    :param dict collection:             The collection object to parse.
+    :returns:                           A genre that is parsed.
+    :rtype: VodGenre
+    """
+    return VodGenre(
+        uid=None,
+        title=collection.get('title').capitalize() if collection.get('title') else VodGenre.map_label(collection.get('label')),
+        query=collection.get('query'),
+    )
+
+
+def parse_vod_movie(asset):
+    """ Parse a movie from the Collections API.
+
+    :param dict asset:                  The asset object to parse.
+    :returns:                           A movie that is parsed.
+    :rtype: VodMovie
+    """
+    return VodMovie(
+        uid=asset.get('id'),
+        title=asset.get('title'),
+        year=asset.get('params', {}).get('year'),
+        duration=asset.get('params', {}).get('duration'),
+        age=asset.get('params', {}).get('age'),
+        cover=find_image(asset.get('images'), 'po'),  # poster
+        preview=find_image(asset.get('images'), 'la'),  # landscape
+    )
+
+
+def parse_vod_series(asset):
+    """ Parse a series from the Collections API.
+
+    :param dict asset:                  The asset object to parse.
+    :returns:                           A series that is parsed.
+    :rtype: VodSeries
+    """
+    return VodSeries(
+        uid=asset.get('id'),
+        title=asset.get('title'),
+        year=asset.get('params', {}).get('year'),
+        age=asset.get('params', {}).get('age'),
+        cover=find_image(asset.get('images'), 'po'),  # poster
+        preview=find_image(asset.get('images'), 'la'),  # landscape
+    )
+
+
+def parse_vod_episode(asset):
+    """ Parse an episode from the Collections API.
+
+    :param dict asset:                  The asset object to parse.
+    :returns:                           An epsiode that is parsed.
+    :rtype: VodEpisode
+    """
+    return VodEpisode(
+        uid=asset.get('id'),
+        title=asset.get('title'),
+        year=asset.get('params', {}).get('year'),
+        duration=asset.get('params', {}).get('duration'),
+        age=asset.get('params', {}).get('age'),
+        cover=find_image(asset.get('images'), 'po'),  # poster
+        preview=find_image(asset.get('images'), 'la'),  # landscape
+        series_id=asset.get('params', {}).get('seriesId'),
+        season=asset.get('params', {}).get('seriesSeason'),
+        episode=asset.get('params', {}).get('seriesEpisode'),
     )
 
 

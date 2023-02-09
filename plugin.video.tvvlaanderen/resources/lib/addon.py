@@ -99,9 +99,44 @@ def show_channel_replay_series(series_id):
     Channels().show_channel_replay_series(series_id)
 
 
+@routing.route('/catalog')
+def show_catalog():
+    """ Shows the Catalog menu """
+    from resources.lib.modules.catalog import Catalog
+    Catalog().show_overview()
+
+
+@routing.route('/catalog/catalogs')
+def show_catalog_catalogs():
+    """ Shows the Catalog menu """
+    from resources.lib.modules.catalog import Catalog
+    Catalog().show_overview(True)
+
+
+@routing.route('/catalog/catalog/<catalog>')
+def show_catalog_by_catalog(catalog):
+    """ Show the Catalog menu of a specific catalog """
+    from resources.lib.modules.catalog import Catalog
+    Catalog().show_by_catalog(catalog)
+
+
+@routing.route('/catalog/query/<query>')
+def show_catalog_by_query(query):
+    """ Show the Catalog content by running a query """
+    from resources.lib.modules.catalog import Catalog
+    Catalog().show_by_query(query)
+
+
+@routing.route('/catalog/series/<asset>')
+def show_catalog_series(asset):
+    """ Show the seasons of a series """
+    from resources.lib.modules.catalog import Catalog
+    Catalog().show_series(asset)
+
+
 @routing.route('/play/asset/<asset_id>')
 def play_asset(asset_id):
-    """ PLay a Program """
+    """ Play a Program """
     from resources.lib.modules.player import Player
     Player().play_asset(asset_id)
 

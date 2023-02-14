@@ -46,6 +46,15 @@ def programmi_camera():
     liStyle.setProperty('isPlayable', 'true')
     xbmcplugin.addDirectoryItem(handle=G.PLUGIN_HANDLE, url=link, listitem=liStyle, isFolder=False)
 
+    titolo = 'Camera - Canale con sottotitoli automatici'
+    liStyle = xbmcgui.ListItem(titolo, offscreen=True)
+    link = 'plugin://plugin.video.tubed/?mode=play&video_id=4ZJz6alUDfc'
+    thumb = 'https://webtv.camera.it/system/events/thumbnails/000/014/843/large/AULAXVIIIC.gif'
+    liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
+    liStyle.setInfo('video', {})
+    liStyle.setProperty('isPlayable', 'true')
+    xbmcplugin.addDirectoryItem(handle=G.PLUGIN_HANDLE, url=link, listitem=liStyle, isFolder=False)   
+
     titolo = 'Camera - Canale Satellitare'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
     link = 'plugin://plugin.video.tubed/?mode=play&video_id=Cnjs83yowUM'
@@ -53,7 +62,7 @@ def programmi_camera():
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
     liStyle.setProperty('isPlayable', 'true')
-    xbmcplugin.addDirectoryItem(handle=G.PLUGIN_HANDLE, url=link, listitem=liStyle, isFolder=False)
+    xbmcplugin.addDirectoryItem(handle=G.PLUGIN_HANDLE, url=link, listitem=liStyle, isFolder=False) 
 
     xbmcplugin.endOfDirectory(handle=G.PLUGIN_HANDLE, succeeded=True)
 
@@ -61,7 +70,7 @@ def programmi_camera():
 def programmi_senato():
     titolo = 'Senato - Web TV 1'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://senato-live.morescreens.com/SENATO_1_001/playlist.m3u8?video_id=13440'
+    link = 'https://senato-live.morescreens.com/SENATO_1_001/playlist.m3u8'
     thumb = 'https://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
@@ -70,7 +79,7 @@ def programmi_senato():
 
     titolo = 'Senato - Web TV 2'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://senato-live.morescreens.com/SENATO_1_002/playlist.m3u8?video_id=13459'
+    link = 'https://senato-live.morescreens.com/SENATO_1_002/playlist.m3u8'
     thumb = 'https://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
@@ -79,7 +88,7 @@ def programmi_senato():
 
     titolo = 'Senato - Web TV 3'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://senato-live.morescreens.com/SENATO_1_003/playlist.m3u8?video_id=13462'
+    link = 'https://senato-live.morescreens.com/SENATO_1_003/playlist.m3u8'
     thumb = 'https://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
@@ -88,7 +97,7 @@ def programmi_senato():
 
     titolo = 'Senato - Web TV 4'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://senato-live.morescreens.com/SENATO_1_004/playlist.m3u8?video_id=13465'
+    link = 'https://senato-live.morescreens.com/SENATO_1_004/playlist.m3u8'
     thumb = 'https://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
@@ -97,7 +106,7 @@ def programmi_senato():
 
     titolo = 'Senato - Web TV 5'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://senato-live.morescreens.com/SENATO_1_005/playlist.m3u8?video_id=13466'
+    link = 'https://senato-live.morescreens.com/SENATO_1_005/playlist.m3u8'
     thumb = 'https://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
@@ -106,7 +115,7 @@ def programmi_senato():
 
     titolo = 'Senato - Web TV 6'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://senato-live.morescreens.com/SENATO_1_006/playlist.m3u8?video_id=13469'
+    link = 'https://senato-live.morescreens.com/SENATO_1_006/playlist.m3u8'
     thumb = 'https://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
@@ -115,7 +124,7 @@ def programmi_senato():
 
     titolo = 'Senato - Web TV 7'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://senato-live.morescreens.com/SENATO_1_007/playlist.m3u8?video_id=13472'
+    link = 'https://senato-live.morescreens.com/SENATO_1_007/playlist.m3u8'
     thumb = 'https://webtv.senato.it/application/xmanager/projects/leg18/img/webtv/logo_senatoTV.jpg'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
@@ -128,7 +137,7 @@ def programmi_senato():
 def programmi_tv():
     titolo = 'RaiNews24'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://rainews1-live.akamaized.net/hls/live/598326/rainews1/rainews1/playlist.m3u8'
+    link = 'https://8e7439fdb1694c8da3a0fd63e4dda518.msvdn.net/rainews1/hls/playlist_mo.m3u8?'
     thumb = 'https://www.rainews.it/dl/components/img/svg/RaiNewsBarra-logo.png'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
@@ -136,18 +145,22 @@ def programmi_tv():
     xbmcplugin.addDirectoryItem(handle=G.PLUGIN_HANDLE, url=link, listitem=liStyle, isFolder=False)
 
     titolo = 'TgCom24'
-    liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://live3-mediaset-it.akamaized.net/Content/hls_h0_clr_vos/live/channel(kf)/index.m3u8'
+    liStyle = xbmcgui.ListItem(titolo)
+    link = 'https://live3.msf.cdn.mediaset.net/content/dash_d0_clr_vos/live/channel(kf)/manifest.mpd'
     thumb = 'https://www.mimesi.com/wp-content/uploads/2017/11/tgcom24.jpg'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
     liStyle.setProperty('isPlayable', 'true')
+    liStyle.setProperty('inputstream', 'inputstream.adaptive')
+    liStyle.setProperty('inputstream.adaptive.manifest_type', 'mpd')
+    liStyle.setMimeType('application/dash+xml')
+    liStyle.setContentLookup(False)
     xbmcplugin.addDirectoryItem(handle=G.PLUGIN_HANDLE, url=link, listitem=liStyle, isFolder=False)
 
     titolo = 'SkyTg24'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://hlslive-web-gcdn-skycdn-it.akamaized.net/TACT/12221/web/master.m3u8?hdnea=st=1607532228~exp=1639564200~acl=/*~hmac=95d5dc1a73d45cff4b61cb3991e715d32150db9f77d2a478b89f9a52f6d6cbe9'
-    thumb = 'https://pbs.twimg.com/profile_images/1144638925736218624/0Q08kh8-_400x400.png'
+    link = 'https://hlslive-web-gcdn-skycdn-it.akamaized.net/TACT/12221/web/master.m3u8?hdnea=st=1639498341~exp=1702463400~acl=/*~hmac=c3c4c2de19ff0df4b4bb20587ce59af5232eadab2995f445b7506525413805dd'
+    thumb = 'https://www.motork.io/it/wp-content/uploads/sites/2/2020/02/skytg24-logo.jpg'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
     liStyle.setProperty('isPlayable', 'true')
@@ -164,7 +177,7 @@ def programmi_tv():
     
     titolo = 'Radio24 TV'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://radio24-lh.akamaihd.net/i/radio24video_1@379914/master.m3u8'
+    link = 'https://ilsole24ore-radiovisual.akamaized.net/hls/live/2035302/stream/master.m3u8'
     thumb = 'https://www.radio24.ilsole24ore.com/static/images/radio24_share_600x600.jpg'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
@@ -177,7 +190,7 @@ def programmi_tv():
 def programmi_radio():
     titolo = 'RaiGRParlamento'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://grparlamento1-lh.akamaihd.net/i/grparlamento1_1@586839/master.m3u8'
+    link = 'https://radioparlamento-live.akamaized.net/hls/live/2032597/radioparlamento/radioparlamento/playlist.m3u8'
     thumb = 'http://db.radioline.fr/pictures/radio_994f2bf74254de17bb2c096c0cbf9e21/logo200.jpg'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('music', {})
@@ -213,7 +226,7 @@ def programmi_radio():
 
     titolo = 'RadioPopolare'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://livex.radiopopolare.it/radiopop'
+    link = 'https://livex.radiopopolare.it/radiopop2'
     thumb = 'https://www.radiopopolare.it/wp-content/uploads/2019/08/icon-logo@2x-1.png'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('music', {})
@@ -222,7 +235,7 @@ def programmi_radio():
     
     titolo = 'Radio24'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://radio24-lh.akamaihd.net/i/radio24_1@99307/master.m3u8'
+    link = 'https://ilsole24ore-radio.akamaized.net/hls/live/2035301/radio24/playlist.m3u8'
     thumb = 'https://www.radio24.ilsole24ore.com/static/images/radio24_share_600x600.jpg'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('music', {})

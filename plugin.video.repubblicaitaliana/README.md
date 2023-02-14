@@ -2,9 +2,14 @@
 Italian politics - TV and Radio channels
 
 ### Install tips
-- You can install this plugin via the official Kodi19 repository
+- You can install this plugin via the official Kodi20 repository
 
 ### Changelog
+2.1.0 (11 Feb 2023)
+- New Camera channel with subtitles
+- Fix all TV and Radio channels
+- Reintroduced InputStream Adaptive
+
 2.0.0 (20 May 2021)
 - Plugin reworked
 - Removed InputStream Adaptive

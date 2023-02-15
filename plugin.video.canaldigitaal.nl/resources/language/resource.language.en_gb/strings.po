@@ -1,0 +1,225 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+### MENUS
+msgctxt "#30007"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Show channel based overview"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Search through the catalogue"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Catalog"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Browse the Video on Demand catalog"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Show catalogs"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Browse by catalogs"
+msgstr ""
+
+
+### SUBMENUS
+msgctxt "#30051"
+msgid "Watch live [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Restart [B]{program}[/B] from the beginning"
+msgstr ""
+
+msgctxt "#30053"
+msgid "TV guide for [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Browse the TV guide for [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30055"
+msgid "Replay for [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30056"
+msgid "Browse the replay catalog for [B]{channel}[/B]"
+msgstr ""
+
+
+### CODE
+msgctxt "#30203"
+msgid "Your credentials are not valid!"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Enter PIN"
+msgstr ""
+
+msgctxt "#30205"
+msgid "The PIN you have entered is invalid!"
+msgstr ""
+
+msgctxt "#30208"
+msgid "[B]{days} days[/B] remaining"
+msgstr ""
+
+msgctxt "#30209"
+msgid "[B]1 day[/B] remaining"
+msgstr ""
+
+msgctxt "#30210"
+msgid "[B]{hours} hours[/B] remaining"
+msgstr ""
+
+msgctxt "#30211"
+msgid "[B]1 hour[/B] remaining"
+msgstr ""
+
+msgctxt "#30212"
+msgid "[B]less then 1 hour[/B] remaining"
+msgstr ""
+
+msgctxt "#30213"
+msgid "[B]Now:[/B] {start} - {end}\n» {title}"
+msgstr ""
+
+msgctxt "#30214"
+msgid "[B]Next:[/B] {start} - {end}\n» {title}"
+msgstr ""
+
+
+### Dates
+msgctxt "#30301"
+msgid "Yesterday"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Today"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Tomorrow"
+msgstr ""
+
+
+### MESSAGES
+msgctxt "#30701"
+msgid "To watch a video, you need to enter your credentials. Do you want to enter them now?"
+msgstr ""
+
+msgctxt "#30702"
+msgid "An error occurred while authenticating: {error}."
+msgstr ""
+
+msgctxt "#30712"
+msgid "The video is unavailable and can't be played right now."
+msgstr ""
+
+msgctxt "#30713"
+msgid "The video is not available in you subscription."
+msgstr ""
+
+
+### SETTINGS
+msgctxt "#30800"
+msgid "Credentials"
+msgstr ""
+
+msgctxt "#30801"
+msgid "Credentials"
+msgstr ""
+
+msgctxt "#30802"
+msgid "Email address"
+msgstr ""
+
+msgctxt "#30803"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30804"
+msgid "Provider"
+msgstr ""
+
+msgctxt "#30820"
+msgid "Interface"
+msgstr ""
+
+msgctxt "#30821"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30822"
+msgid "Parental Content"
+msgstr ""
+
+msgctxt "#30823"
+msgid "Ask PIN for 18+ channels"
+msgstr ""
+
+msgctxt "#30824"
+msgid "Hide 18+ channels"
+msgstr ""
+
+msgctxt "#30825"
+msgid "Allow 18+ channels without asking PIN"
+msgstr ""
+
+msgctxt "#30840"
+msgid "Integration"
+msgstr ""
+
+msgctxt "#30841"
+msgid "IPTV Manager"
+msgstr ""
+
+msgctxt "#30842"
+msgid "Install IPTV Manager add-on…"
+msgstr ""
+
+msgctxt "#30843"
+msgid "Enable IPTV Manager integration"
+msgstr ""
+
+msgctxt "#30844"
+msgid "IPTV Manager settings…"
+msgstr ""
+
+msgctxt "#30880"
+msgid "Expert"
+msgstr ""
+
+msgctxt "#30881"
+msgid "Logging"
+msgstr ""
+
+msgctxt "#30882"
+msgid "Enable debug logging"
+msgstr ""
+
+msgctxt "#30883"
+msgid "Install Kodi Logfile Uploader…"
+msgstr ""
+
+msgctxt "#30884"
+msgid "Open Kodi Logfile Uploader…"
+msgstr ""

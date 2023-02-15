@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.canaldigitaal.nl" name="Canal Digitaal" version="1.0.6+matrix.1" provider-name="Michaël Arnauts">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.dateutil" version="2.6.0" />
+        <import addon="script.module.inputstreamhelper" version="0.5.1" />
+        <import addon="script.module.pysocks" version="1.6.8" optional="true" />
+        <import addon="script.module.requests" version="2.22.0" />
+        <import addon="script.module.routing" version="0.2.0" />
+        <import addon="script.module.pyjwt" version="1.6.4" />
+        <import addon="inputstream.adaptive" version="2.4.3" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon_entry.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="nl_NL">Bekijk Live en on-demand TV via je Canal Digitaal abonnement.</summary>
+        <description lang="nl_NL">Deze add-on geeft toegang tot de live TV kanalen en de video-on-demand content dat beschikbaar is via je Canal Digitaal abonnement.</description>
+        <disclaimer lang="nl_NL">Deze add-on wordt niet ondersteund door Canal Digitaal, en wordt aangeboden 'as is', zonder enige garantie. Canal Digitaal is een merk van Canal+ Luxembourg S. à r.l.</disclaimer>
+        <summary lang="en_GB">Watch Live TV and on-demand TV with your Canal Digitaal subscription.</summary>
+        <description lang="en_GB">This add-on gives access to the live tv channels and the video-on-demand content available in your Canal Digitaal subscription.</description>
+        <disclaimer lang="en_GB">This add-on is not officially commissioned/supported by Canal Digitaal and is provided 'as is' without any warranty of any kind. Canal Digitaal is a brand of Canal+ Luxembourg S. à r.l.</disclaimer>
+        <platform>all</platform>
+        <license>GPL-3.0-only</license>
+        <news>v1.0.6 (2023-02-09)
+- Add support for VOD.</news>
+        <source>https://github.com/add-ons/plugin.video.tvvlaanderen</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+    </extension>
+</addon>

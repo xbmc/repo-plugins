@@ -1,0 +1,230 @@
+#
+msgid ""
+msgstr ""
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# MENUS
+msgctxt "#30007"
+msgid "Channels"
+msgstr "Kanäle"
+
+msgctxt "#30008"
+msgid "Show channel based overview"
+msgstr "Zeige Übersicht der Kanäle"
+
+msgctxt "#30009"
+msgid "Search"
+msgstr "Suche"
+
+msgctxt "#30010"
+msgid "Search through the catalogue"
+msgstr "Durchsuche Katalog"
+
+msgctxt "#30011"
+msgid "Catalog"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Browse the Video on Demand catalog"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Show catalogs"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Browse by catalogs"
+msgstr ""
+
+# SUBMENUS
+msgctxt "#30051"
+msgid "Watch live [B]{channel}[/B]"
+msgstr "Schaue live [B]{channel}[/B]"
+
+msgctxt "#30052"
+msgid "Restart [B]{program}[/B] from the beginning"
+msgstr "Neustart [B]{program}[/B] von Anfang an"
+
+msgctxt "#30053"
+msgid "TV guide for [B]{channel}[/B]"
+msgstr "TV-Programm für [B]{channel}[/B]"
+
+msgctxt "#30054"
+msgid "Browse the TV guide for [B]{channel}[/B]"
+msgstr "Zeige TV-Programm für [B]{channel}[/B]"
+
+msgctxt "#30055"
+msgid "Replay for [B]{channel}[/B]"
+msgstr "Replay für [B]{channel}[/B]"
+
+msgctxt "#30056"
+msgid "Browse the replay catalog for [B]{channel}[/B]"
+msgstr "Zeige Replay Katalog für [B]{channel}[/B]"
+
+# CODE
+msgctxt "#30203"
+msgid "Your credentials are not valid!"
+msgstr "Die Login-Daten sind nicht korrekt!"
+
+msgctxt "#30204"
+msgid "Enter PIN"
+msgstr "Gib den PIN ein"
+
+msgctxt "#30205"
+msgid "The PIN you have entered is invalid!"
+msgstr "Der eingegebene PIN ist ungültig!"
+
+msgctxt "#30208"
+msgid "[B]{days} days[/B] remaining"
+msgstr "noch [B]{days} Tage[/B] verfügbar"
+
+msgctxt "#30209"
+msgid "[B]1 day[/B] remaining"
+msgstr "noch [B]1 Tag[/B] verfügbar"
+
+msgctxt "#30210"
+msgid "[B]{hours} hours[/B] remaining"
+msgstr "noch [B]{hours} Stunden[/B] verfügbar"
+
+msgctxt "#30211"
+msgid "[B]1 hour[/B] remaining"
+msgstr "noch [B]1 Stunde[/B] verfügbar"
+
+msgctxt "#30212"
+msgid "[B]less then 1 hour[/B] remaining"
+msgstr "[B]weniger als 1 Stunde[/B] verfügbar"
+
+msgctxt "#30213"
+msgid ""
+"[B]Now:[/B] {start} - {end}\n"
+"» {title}"
+msgstr ""
+"[B]Jetzt:[/B] {start} - {end}\n"
+"» {title}"
+
+msgctxt "#30214"
+msgid ""
+"[B]Next:[/B] {start} - {end}\n"
+"» {title}"
+msgstr ""
+"[B]Danach:[/B] {start} - {end}\n"
+"» {title}"
+
+# Dates
+msgctxt "#30301"
+msgid "Yesterday"
+msgstr "Gestern"
+
+msgctxt "#30302"
+msgid "Today"
+msgstr "Heute"
+
+msgctxt "#30303"
+msgid "Tomorrow"
+msgstr "Morgen"
+
+# MESSAGES
+msgctxt "#30701"
+msgid "To watch a video, you need to enter your credentials. Do you want to enter them now?"
+msgstr "Um dieses Service zu nutzen, musst du deine Login-Daten eingeben. Möchtest du das jetzt tun?"
+
+msgctxt "#30702"
+msgid "An error occurred while authenticating: {error}."
+msgstr "Es ist ein Fehler während der Anmeldung aufgetreten: {error}."
+
+msgctxt "#30712"
+msgid "The video is unavailable and can't be played right now."
+msgstr "Das video ist gerade nicht verfügbar und kann nicht abgespielt werden."
+
+msgctxt "#30713"
+msgid "The video is not available in you subscription."
+msgstr ""
+
+# SETTINGS
+msgctxt "#30800"
+msgid "Credentials"
+msgstr "Login-Daten"
+
+msgctxt "#30801"
+msgid "Credentials"
+msgstr "Login-Daten"
+
+msgctxt "#30802"
+msgid "Email address"
+msgstr "E-Mail Adresse"
+
+msgctxt "#30803"
+msgid "Password"
+msgstr "Passwort"
+
+msgctxt "#30804"
+msgid "Provider"
+msgstr "Anbieter"
+
+msgctxt "#30820"
+msgid "Interface"
+msgstr "Interface"
+
+msgctxt "#30821"
+msgid "Channels"
+msgstr "Kanäle"
+
+msgctxt "#30822"
+msgid "Parental Content"
+msgstr "Erwachsenen Inhalte"
+
+msgctxt "#30823"
+msgid "Ask PIN for 18+ channels"
+msgstr "Frage nach PIN für 18+ Kanäle"
+
+msgctxt "#30824"
+msgid "Hide 18+ channels"
+msgstr "Verberge 18+ Kanäle"
+
+msgctxt "#30825"
+msgid "Allow 18+ channels without asking PIN"
+msgstr "Zeige 18+ Kanäle ohne PIN Abfrage"
+
+msgctxt "#30840"
+msgid "Integration"
+msgstr "Integration"
+
+msgctxt "#30841"
+msgid "IPTV Manager"
+msgstr "IPTV Manager"
+
+msgctxt "#30842"
+msgid "Install IPTV Manager add-on…"
+msgstr "Installiere das IPTV Manager add-on…"
+
+msgctxt "#30843"
+msgid "Enable IPTV Manager integration"
+msgstr "Aktiviere IPTV Manager Integration"
+
+msgctxt "#30844"
+msgid "IPTV Manager settings…"
+msgstr "IPTV Manager Einstellungen…"
+
+msgctxt "#30880"
+msgid "Expert"
+msgstr "Experte"
+
+msgctxt "#30881"
+msgid "Logging"
+msgstr "Logging"
+
+msgctxt "#30882"
+msgid "Enable debug logging"
+msgstr "Aktiviere debug logging"
+
+msgctxt "#30883"
+msgid "Install Kodi Logfile Uploader…"
+msgstr "Installiere Kodi Logfile Uploader…"
+
+msgctxt "#30884"
+msgid "Open Kodi Logfile Uploader…"
+msgstr "Öffne Kodi Logfile Uploader…"

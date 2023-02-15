@@ -148,6 +148,10 @@ msgctxt "#30517"
 msgid "Use simple Area Selector"
 msgstr ""
 
+msgctxt "#30518"
+msgid "No seasons on children shows, unfold all episodes"
+msgstr ""
+
 msgctxt "#30521"
 msgid "Inputstream type"
 msgstr ""
@@ -166,6 +170,66 @@ msgstr ""
 
 msgctxt "#30534"
 msgid "Days between cleanup of sqlite db"
+msgstr ""
+
+msgctxt "#30535"
+msgid "Request caching"
+msgstr ""
+
+msgctxt "#30550"
+msgid "IPTV Manager"
+msgstr ""
+
+msgctxt "#30551"
+msgid "Install IPTV Manager add-on"
+msgstr ""
+
+msgctxt "#30552"
+msgid "Enable IPTV Manager integration"
+msgstr ""
+
+msgctxt "#30553"
+msgid "IPTV Manager settings..."
+msgstr ""
+
+msgctxt "#30554"
+msgid "TV channels"
+msgstr ""
+
+msgctxt "#30555"
+msgid "Enable DR1"
+msgstr ""
+
+msgctxt "#30556"
+msgid "Enable DR2"
+msgstr ""
+
+msgctxt "#30557"
+msgid "Enable DR Ramasjang"
+msgstr ""
+
+msgctxt "#30558"
+msgid "Enable DRTV"
+msgstr ""
+
+msgctxt "#30559"
+msgid "Enable DRTV Ekstra"
+msgstr ""
+
+msgctxt "#30560"
+msgid "Schedule"
+msgstr ""
+
+msgctxt "#30561"
+msgid "Look ahead in time [I](in hours)[/I]"
+msgstr ""
+
+msgctxt "#30562"
+msgid "Refresh interval [I](in hours)[/I]"
+msgstr ""
+
+msgctxt "#30563"
+msgid "Set using IPTV Manager settings"
 msgstr ""
 
 msgctxt "#30900"

@@ -27,7 +27,7 @@ class AreaSelectorDialog(xbmcgui.WindowDialog):
         self.areaSelected = 'none'
 
         # Background
-        background = xbmcgui.ControlImage(0, 0, 1280, 720, str(resources_path/'fanart.jpg'))
+        background = xbmcgui.ControlImage(0, 0, 1280, 720, str(resources_path/'media/fanart.jpg'))
 
         title = xbmcgui.ControlLabel(
             0, 60, 1280, 60, "[B]%s[/B][CR]%s" % (tr(30100), tr(30101)), 'font30', alignment=2)
@@ -38,26 +38,26 @@ class AreaSelectorDialog(xbmcgui.WindowDialog):
         x_border = 75
         self.drTvButton = xbmcgui.ControlButton(
             x_border, y_border, image_x, image_y, "",
-            focusTexture=str(resources_path/'button-drtv-focus.png'),
-            noFocusTexture=str(resources_path/'button-drtv.png')
+            focusTexture=str(resources_path/'media/button-drtv-focus.png'),
+            noFocusTexture=str(resources_path/'media/button-drtv.png')
         )
 
         self.ramasjangButton = xbmcgui.ControlButton(
             int(1280/2 - x_border - image_x), int(720 - y_border - image_y), image_x, image_y, "",
-            focusTexture=str(resources_path/'button-ramasjang-focus.png'),
-            noFocusTexture=str(resources_path/'button-ramasjang.png')
+            focusTexture=str(resources_path/'media/button-ramasjang-focus.png'),
+            noFocusTexture=str(resources_path/'media/button-ramasjang.png')
         )
 
         self.minisjangButton = xbmcgui.ControlButton(
             int(1280/2 + x_border), int(720 - y_border - image_y), image_x, image_y, "",
-            focusTexture=str(resources_path/'button-minisjang-focus.png'),
-            noFocusTexture=str(resources_path/'button-minisjang.png')
+            focusTexture=str(resources_path/'media/button-minisjang-focus.png'),
+            noFocusTexture=str(resources_path/'media/button-minisjang.png')
         )
 
         self.ultraButton = xbmcgui.ControlButton(
             int(1280 - x_border - image_x), y_border, image_x, image_y, "",
-            focusTexture=str(resources_path/'button-ultra-focus.png'),
-            noFocusTexture=str(resources_path/'button-ultra.png')
+            focusTexture=str(resources_path/'media/button-ultra-focus.png'),
+            noFocusTexture=str(resources_path/'media/button-ultra.png')
         )
 
         self.addControls([

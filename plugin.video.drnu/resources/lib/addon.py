@@ -33,14 +33,15 @@ from inputstreamhelper import Helper
 
 from resources.lib import tvapi
 from resources.lib import tvgui
+from resources.lib.iptvmanager import IPTVManager
 
 addon = xbmcaddon.Addon()
 get_setting = addon.getSetting
-addon_path = addon.getAddonInfo('path')
+set_setting = addon.setSetting
+get_addon_info = addon.getAddonInfo
+addon_path = get_addon_info('path')
+addon_name = get_addon_info('name')
 resources_path = Path(addon_path)/'resources'
-addon_name = addon.getAddonInfo('name')
-
-SLUG_ADULT = 'dr1,dr2,dr3,dr-k'
 
 
 def tr(id):
@@ -53,8 +54,18 @@ def bool_setting(name):
     return get_setting(name) == 'true'
 
 
-def make_notice(object):
-    xbmc.log(str(object), xbmc.LOGDEBUG)
+def make_notice(object, level=0):
+    xbmc.log(str(object), level)
+
+
+def kodi_version():
+    """Returns full Kodi version as string"""
+    return xbmc.getInfoLabel('System.BuildVersion').split(' ')[0]
+
+
+def kodi_version_major():
+    """Returns major Kodi version as integer"""
+    return int(kodi_version().split('.')[0])
 
 
 class DrDkTvAddon(object):
@@ -83,29 +94,59 @@ class DrDkTvAddon(object):
         self.area_item.setArt({'fanart': self.fanart_image, 'icon': str(resources_path/'icons/all.png')})
 
         self._load()
+        self._version_change_fixes()
 
     def _save(self):
         # save favorites
         self.favorites = dict(sorted(self.favorites.items()))
-        pickle.dump(self.favorites, self.favorites_path.open('wb'))
+        with self.favorites_path.open('wb') as fh:
+            pickle.dump(self.favorites, fh)
 
         self.recentlyWatched = self.recentlyWatched[0:25]  # Limit to 25 items
-        pickle.dump(self.recentlyWatched, self.recent_path.open('wb'))
+        with self.recent_path.open('wb') as fh:
+            pickle.dump(self.recentlyWatched, fh)
 
     def _load(self):
         # load favorites
         if self.favorites_path.exists():
             try:
-                self.favorites = pickle.load(self.favorites_path.open('rb'))
+                with self.favorites_path.open('rb') as fh:
+                    self.favorites = pickle.load(fh)
             except Exception:
                 pass
 
         # load recently watched
         if self.recent_path.exists():
             try:
-                self.recentlyWatched = pickle.load(self.recent_path.open('rb'))
+                with self.recent_path.open('rb') as fh:
+                    self.recentlyWatched = pickle.load(fh)
             except Exception:
                 pass
+
+    def _version_change_fixes(self):
+        first_run, settings_version, settings_tuple = self._version_check()
+        if first_run:
+            if settings_version == '' and kodi_version_major() <= 19:
+                # kodi matrix subtitle handling https://github.com/xbmc/inputstream.adaptive/issues/1037
+                set_setting('enable.localsubtitles', 'true')
+
+    def _version_check(self):
+        # Get version from settings.xml
+        settings_version = get_setting('version')
+
+        # Get version from addon.xml
+        addon_version = get_addon_info('version')
+
+        # Compare versions (settings_version was not present in version 6.0.2 and older)
+        settings_tuple = tuple(map(int, settings_version.split('+')[0].split('.'))) if settings_version != '' else (6, 0, 2)
+        addon_tuple = tuple(map(int, addon_version.split('+')[0].split('.')))
+
+        if addon_tuple > settings_tuple:
+            # New version found, save addon version to settings
+            set_setting('version', addon_version)
+            return True, settings_version, settings_tuple
+
+        return False, settings_version, settings_tuple
 
     def showAreaSelector(self):
         if bool_setting('use.simpleareaitem'):
@@ -128,26 +169,26 @@ class DrDkTvAddon(object):
         items = list()
         # DRTV
         item = xbmcgui.ListItem('DR TV', offscreen=True)
-        item.setArt({'fanart': str(resources_path/'button-drtv.png'),
-                     'icon': str(resources_path/'button-drtv.png')})
+        item.setArt({'fanart': str(resources_path/'media/button-drtv.png'),
+                     'icon': str(resources_path/'media/button-drtv.png')})
         item.addContextMenuItems(self.menuItems, False)
         items.append((self._plugin_url + '?area=1', item, True))
         # Minisjang
         item = xbmcgui.ListItem('Minisjang', offscreen=True)
-        item.setArt({'fanart': str(resources_path/'button-minisjang.png'),
-                     'icon': str(resources_path/'button-minisjang.png')})
+        item.setArt({'fanart': str(resources_path/'media/button-minisjang.png'),
+                     'icon': str(resources_path/'media/button-minisjang.png')})
         item.addContextMenuItems(self.menuItems, False)
         items.append((self._plugin_url + '?area=2', item, True))
         # Ramasjang
         item = xbmcgui.ListItem('Ramasjang', offscreen=True)
-        item.setArt({'fanart': str(resources_path/'button-ramasjang.png'),
-                     'icon': str(resources_path/'button-ramasjang.png')})
+        item.setArt({'fanart': str(resources_path/'media/button-ramasjang.png'),
+                     'icon': str(resources_path/'media/button-ramasjang.png')})
         item.addContextMenuItems(self.menuItems, False)
         items.append((self._plugin_url + '?area=3', item, True))
         # Ultra
         item = xbmcgui.ListItem('Ultra', offscreen=True)
-        item.setArt({'fanart': str(resources_path/'button-ultra.png'),
-                     'icon': str(resources_path/'button-ultra.png')})
+        item.setArt({'fanart': str(resources_path/'media/button-ultra.png'),
+                     'icon': str(resources_path/'media/button-ultra.png')})
         item.addContextMenuItems(self.menuItems, False)
         items.append((self._plugin_url + '?area=4', item, True))
 
@@ -203,8 +244,11 @@ class DrDkTvAddon(object):
         else:
             series = []
             for title, path in self.favorites.items():
-                series.extend([self.api.get_programcard(path)['entries'][0]['item']['show']])
-            self.listEpisodes(series, seasons=True)
+                item = self.api.get_item(path)
+                item['kodi_delfavorit'] = True
+                item['kodi_seasons'] = item['type'] != 'show'
+                series.append(item)
+            self.listEpisodes(series)
 
     def showRecentlyWatched(self):
         self._load()
@@ -227,6 +271,55 @@ class DrDkTvAddon(object):
         else:
             self.listEpisodes(videos)
 
+    def getIptvLiveChannels(self):
+        iptv_channels = []
+        for api_channel in self.api.getLiveTV():
+
+            lowername = api_channel['title'].lower().replace(' ', '')
+            if not bool_setting('iptv.channels.include.' + lowername):
+                 continue
+
+            iptv_channel = {
+                'name': api_channel['title'],
+                'stream': self.api.get_channel_url(api_channel, bool_setting('enable.subtitles')),
+                'logo': api_channel['item']['images']['logo'],
+                'id': 'drnu.' + api_channel['item']['id'],
+                'preset': tvapi.CHANNEL_PRESET[api_channel['title']]
+            }
+            iptv_channels.append(iptv_channel)
+        return iptv_channels
+
+    def getIptvEpg(self):
+        lookforward_hours = int(get_setting('iptv.schedule.lookahead'))
+        channel_schedules = self.api.get_schedules(duration=lookforward_hours)
+        epg = {}
+        for channel in channel_schedules:
+            channel_epg_id = 'drnu.' + channel['channelId']
+            if channel_epg_id not in epg:
+                epg[channel_epg_id] = []
+            channel_epg = []
+            for schedule in channel['schedules']:
+                schedule_dict = {
+                    'start' : schedule['startDate'],
+                    'stop' : schedule['endDate'],
+                    'title': schedule['item']['title'],
+                    'description': schedule['item']['description'],
+                    'image' : schedule['item']['images']['tile'],
+                                }
+                if ('seasonNumber' in schedule['item']) and ('episodeNumber' in schedule['item']):
+                    schedule_dict['episode'] = 'S{:02d}E{:02d}'.format(
+                        schedule['item']['seasonNumber'], schedule['item']['episodeNumber'])
+                if ('path' in schedule['item']):
+                    schedule_dict['stream'] = "{}?playVideo={}&kids={}&idpath={}".format(
+                        self._plugin_url,
+                        schedule['item']['id'],
+                        self.api.kids_item(schedule['item']),
+                        schedule['item']['path'],
+                    )
+                channel_epg.append(schedule_dict)
+            epg[channel_epg_id] += channel_epg
+        return epg
+
     def showLiveTV(self):
         items = []
         for channel in self.api.getLiveTV():
@@ -235,10 +328,7 @@ class DrDkTvAddon(object):
                          'icon': channel['item']['images']['logo'],
                          'fanart': channel['item']['images']['logo']})
             item.addContextMenuItems(self.menuItems, False)
-            if bool_setting('enable.subtitles'):
-                url = channel['item']['customFields']['hlsWithSubtitlesURL']
-            else:
-                url = channel['item']['customFields']['hlsURL']
+            url = self.api.get_channel_url(channel, bool_setting('enable.subtitles'))
             item.setInfo('video', {
                 'title': channel['title'],
                 'plot': channel['schedule_str'],
@@ -274,16 +364,18 @@ class DrDkTvAddon(object):
                         f'{key.capitalize()} ({search_results[key]["size"]} found)', offscreen=True), True,))
 
             if directoryItems:
-                pickle.dump(search_results, self.search_path.open('wb'))
+                with self.search_path.open('wb') as fh:
+                    pickle.dump(search_results, fh)
                 xbmcplugin.addDirectoryItems(self._plugin_handle, directoryItems)
                 xbmcplugin.endOfDirectory(self._plugin_handle)
 
     def kodi_item(self, item, is_season=False):
         menuItems = list(self.menuItems)
-        isFolder = item['type'] not in ['program', 'episode']
+        isFolder = item['type'] not in ['program', 'episode', 'link']
         if item['type'] in ['ImageEntry', 'TextEntry'] or item['title'] == '':
             return None
-
+        if 'kodi_seasons' in item:
+            is_season = item['kodi_seasons']
         title, infoLabels = self.api.get_info(item)
         listItem = xbmcgui.ListItem(title, offscreen=True)
         if 'images' in item:
@@ -295,12 +387,12 @@ class DrDkTvAddon(object):
             listItem.setArt({'fanart': self.fanart_image, 'icon': str(resources_path/'icons/star.png')})
 
         if isFolder:
-            if title in self.favorites:
+            if title in self.favorites or item.get('kodi_delfavorit', False):
                 runScript = f"RunPlugin(plugin://plugin.video.drnu/?delfavorite={title})"
                 menuItems.append((tr(30201), runScript))
             else:
                 if item['type'] not in ['ListEntry', 'RecommendationEntry']:
-                    runScript = f"RunPlugin(plugin://plugin.video.drnu/?addfavorite={title}&favoritepath={item['path']})"
+                    runScript = f"RunPlugin(plugin://plugin.video.drnu/?addfavorite={title}&favoritepath={item['id']})"
                     menuItems.append((tr(30200), runScript))
             if item.get('path', False):
                 url = self._plugin_url + f"?listVideos={item['path']}&seasons={is_season}"
@@ -334,7 +426,8 @@ class DrDkTvAddon(object):
         xbmcplugin.endOfDirectory(self._plugin_handle)
 
     def list_entries(self, path, seasons=False):
-        entries = self.api.get_programcard(path)['entries']
+        use_cache = tvapi.cache_path(path)
+        entries = self.api.get_programcard(path, use_cache=use_cache)['entries']
         if len(entries) == 0:
             # hack for get_programcard('/liste/306104') giving empty entries, but recommendations yields?!?
             id = int(path.split('/')[-1])
@@ -348,6 +441,16 @@ class DrDkTvAddon(object):
                     if seasons or item['item']['show']['availableSeasonCount'] == 1:
                         # we have shown the root of this series (or only one season anyhow)
                         self.listEpisodes(item['item']['episodes']['items'], seasons=False)
+                    elif self.api.kids_item(item['item']) and bool_setting('disable.kids.seasons'):
+                        # let's not have seasons on children items
+                        collect_episodes = []
+                        for season_item in item['item']['show']['seasons']['items']:
+                            if season_item['id'] == item['item']['episodes']['items'][0]['seasonId']:
+                                collect_episodes += self.api.unfold_list(item['item']['episodes'])
+                            else:
+                                newitem = self.api.get_programcard(season_item['path'])['entries'][0]
+                                collect_episodes += self.api.unfold_list(newitem['item']['episodes'])
+                        self.listEpisodes(collect_episodes, seasons=False)
                     else:
                         # list only the season items of this series
                         self.listEpisodes(item['item']['show']['seasons']['items'], seasons=True)
@@ -363,6 +466,7 @@ class DrDkTvAddon(object):
         if path.startswith('/kanal'):
             # live stream
             video = self.api.get_livestream(path, with_subtitles=bool_setting('enable.subtitles'))
+            video['srt_subtitles'] = []
         else:
             self.updateRecentlyWatched(path)
             video = self.api.get_stream(id)
@@ -434,15 +538,15 @@ class DrDkTvAddon(object):
         self._load()
         if title not in self.favorites:
             self.favorites[title] = path
-        self._save()
-        xbmcgui.Dialog().ok(addon_name, tr([30008, 30009]))
+            self._save()
+            xbmcgui.Dialog().ok(addon_name, tr([30008, 30009]))
 
     def delFavorite(self, title):
         self._load()
         if title in self.favorites:
             del self.favorites[title]
-        self._save()
-        xbmcgui.Dialog().ok(addon_name, tr([30008, 30010]))
+            self._save()
+            xbmcgui.Dialog().ok(addon_name, tr([30008, 30010]))
 
     def updateRecentlyWatched(self, path):
         self._load()
@@ -473,10 +577,16 @@ class DrDkTvAddon(object):
                     self.showRecentlyWatched()
                 elif PARAMS['show'] == 'areaselector':
                     self.showAreaSelector()
+            # iptv manager integration
+            elif 'iptv' in PARAMS:
+                if PARAMS['iptv'] == 'channels':
+                    IPTVManager(int(PARAMS['port']), channels=self.getIptvLiveChannels()).send_channels()
+                elif PARAMS['iptv'] == 'epg':
+                    IPTVManager(int(PARAMS['port']), epg=self.getIptvEpg()).send_epg()
             elif 'searchresult' in PARAMS:
-                search_results = pickle.load(self.search_path.open('rb'))
+                with self.search_path.open('rb') as fh:
+                    search_results = pickle.load(fh)
                 self.listEpisodes(search_results[PARAMS['searchresult']]['items'])
-
             elif 'listVideos' in PARAMS:
                 seasons = PARAMS.get('seasons', 'False') == 'True'
                 if PARAMS['listVideos'].startswith('ID_'):

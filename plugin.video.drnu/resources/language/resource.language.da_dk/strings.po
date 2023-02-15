@@ -148,6 +148,10 @@ msgctxt "#30517"
 msgid "Use simple Area Selector"
 msgstr "Brug simpel områdevælger"
 
+msgctxt "#30518"
+msgid "No seasons on children shows, unfold all episodes"
+msgstr "Ingen sæsonvisning på børneprogrammer"
+
 msgctxt "#30521"
 msgid "Inputstream type"
 msgstr "Inputstream type"
@@ -167,6 +171,66 @@ msgstr "re-cache alt i: "
 msgctxt "#30534"
 msgid "Days between cleanup of sqlite db"
 msgstr "Antal dage imellem rengøring af database"
+
+msgctxt "#30535"
+msgid "Request caching"
+msgstr "Brug caching for online requests"
+
+msgctxt "#30550"
+msgid "IPTV Manager"
+msgstr "IPTV Manager"
+
+msgctxt "#30551"
+msgid "Install IPTV Manager add-on"
+msgstr "Installér IPTV Manager add-on"
+
+msgctxt "#30552"
+msgid "Enable IPTV Manager integration"
+msgstr "Aktivér IPTV Manager integration"
+
+msgctxt "#30553"
+msgid "IPTV Manager settings..."
+msgstr "IPTV Manager indstillinger..."
+
+msgctxt "#30554"
+msgid "TV channels"
+msgstr "TV kanaler"
+
+msgctxt "#30555"
+msgid "Enable DR1"
+msgstr "Aktivér DR1"
+
+msgctxt "#30556"
+msgid "Enable DR2"
+msgstr "Aktivér DR2"
+
+msgctxt "#30557"
+msgid "Enable DR Ramasjang"
+msgstr "Aktivér DR Ramasjang"
+
+msgctxt "#30558"
+msgid "Enable DRTV"
+msgstr "Aktivér DRTV"
+
+msgctxt "#30559"
+msgid "Enable DRTV Ekstra"
+msgstr "Aktivér DRTV Ekstra"
+
+msgctxt "#30560"
+msgid "Schedule"
+msgstr "TV oversigt"
+
+msgctxt "#30561"
+msgid "Look ahead in time [I](in hours)[/I]"
+msgstr "Se fremad i tid [I](i timer)[/I]"
+
+msgctxt "#30562"
+msgid "Refresh interval [I](in hours)[/I]"
+msgstr "Opdateringsinterval [I](i timer)[/I]"
+
+msgctxt "#30563"
+msgid "Set using IPTV Manager settings"
+msgstr "Indstil via IPTV Manager indstillinger"
 
 msgctxt "#30900"
 msgid "There was an error while communicating with DR NU."

@@ -1,3 +1,8 @@
+[B]Version 6.1.0 - 2023-01-18[/B]
+- IPTV Manager integration (CodingBullywug)
+- fix for missing subtitles
+- fix for missing item descriptions
+
 [B]Version 6.0.2 - 2022-10-12[/B]
 - fix bug when fetching paged lists
 - fix bug for documentaries category

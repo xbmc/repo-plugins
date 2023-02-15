@@ -1,6 +1,14 @@
 # Changelog
 
-## [v1.4.0](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.4.0) (2023-02-03)
+## [v1.4.1](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.4.1) (2023-02-08)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.4.0...v1.4.1)
+
+**Fixed bugs:**
+
+- Fix livestreams on Kodi 19 [\#354](https://github.com/add-ons/plugin.video.vtm.go/pull/354) ([mediaminister](https://github.com/mediaminister))
+
+## [v1.4.0](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.4.0) (2023-02-04)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.3.3...v1.4.0)
 

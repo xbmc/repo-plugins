@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.arteplussept" name="Arte +7" version="1.1.1" provider-name="bmf">
+<addon
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/xbmc/xbmc/master/addons/xbmc.addon/metadata.xsd"
+        id="plugin.video.arteplussept" name="Arte +7" version="1.1.7" provider-name="bmf, thomas-ernest">
+    <!-- https://kodi.wiki/view/Addon.xml -->
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.xbmcswift2" version="19.0.4"/>
         <import addon="script.module.requests" version="2.22.0"/>
+        <import addon="script.module.dateutil" version="2.8.1"/>
     </requires>
-    <extension point="xbmc.python.pluginsource" library="resources/lib/addon.py">
+    <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <platform>all</platform>
-        <summary lang="en">Arte +7</summary>
-        <language>fr de en it</language>
+        <!-- https://github.com/xbmc/xbmc/blob/master/addons/xbmc.addon/metadata.xsd -->
+        <summary lang="en_GB">Arte +7</summary>
         <description lang="fr">
 Regardez les vidéos de Arte +7
 Pour toute demande ou reporter un problème:
@@ -26,7 +30,7 @@ https://github.com/known-as-bmf/plugin.video.arteplussept/issues
 Mithilfe ist willkommen:
 https://github.com/known-as-bmf/plugin.video.arteplussept
         </description>
-        <description lang="en">
+        <description lang="en_GB">
 Watch videos from Arte +7
 For feature requests / issues:
 https://github.com/known-as-bmf/plugin.video.arteplussept/issues
@@ -40,29 +44,34 @@ https://github.com/known-as-bmf/plugin.video.arteplussept/issues
 Nuovi contributi sono ben accetti:
 https://github.com/known-as-bmf/plugin.video.arteplussept
         </description>
+        <description lang="pl">
+Oglądaj wideos z Arte +7
+W przypadku problemów lub próśb o ulepszenie:
+https://github.com/known-as-bmf/plugin.video.arteplussept/issues
+Każda pomoc mile widziana:
+https://github.com/known-as-bmf/plugin.video.arteplussept
+        </description>
+        <language>fr de en it pl</language>
+        <platform>all</platform>
         <license>MIT</license>
-        <source>https://github.com/known-as-bmf/plugin.video.arteplussept</source>
-        <!--<forum></forum>
-        <email></email>-->
         <website>https://www.arte.tv/fr/</website>
+        <source>https://github.com/known-as-bmf/plugin.video.arteplussept</source>
+        <news>
+        Highlights since 1.1.2
+        - Integrate Arte account favorites, last viewed items and playback progress (thanks to Arte account to be configured in settings).
+        - Move from HBB TV to Arte TV API.
+        - Fixed playback progress / resume point retrieved from Arte TV
+        - Added synchronisation of playback progress with Arte TV when video playback paused, stopped or crashed
+        - Manage favorites in Arte profile from context menu
+        - Added Search in root menu
+        - Added Live stream in root menu
+        - Added Polish translation
+        - Added My list and My history content from Arte TV profile
+        - Added purge of my history
+        </news>
         <assets>
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
         </assets>
-        <news>
-        v1.1.1
-        - minor python 3 fixes &amp; code improvements (from Kodi Travis CI)
-        v1.1.0
-        - API fixes
-        - Added add-on option to select video stream (language, subtitles...)
-        v1.0.2
-        - weekly browse
-        - bugfix (settings parsing #54)
-        v1.0.1
-        - major bug hotfix
-        v1.0.0
-        - brand new version
-        - support for new arte api
-        </news>
     </extension>
 </addon>

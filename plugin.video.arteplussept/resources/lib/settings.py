@@ -17,3 +17,11 @@ class Settings:
         # defaults to False
         self.show_video_streams = plugin.get_setting(
             'show_video_streams', bool) or False
+		# Arte TV user name
+		# defaults to empty string to return false with if not str
+        self.username = plugin.get_setting(
+            'username') or ""
+		# Arte TV user password
+		# defaults to empty string to return false with if not str
+        self.password = plugin.get_setting(
+            'password') or ""

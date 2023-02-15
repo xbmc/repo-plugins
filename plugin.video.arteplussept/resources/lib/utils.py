@@ -1,10 +1,14 @@
-import time
 import datetime
+import dateutil.parser
+from xbmcswift2 import xbmc
 import html
 import urllib.parse
 
-import hof
 
+def format_live_title_and_subtitle(title, subtitle=None):
+    label = u'[COLOR ffffa500]LIVE[/COLOR] - '
+    label += format_title_and_subtitle(title, subtitle)
+    return label
 
 def colorize(text, color):
     """
@@ -34,16 +38,21 @@ def decode_string(str):
 
 
 def parse_date(datestr):
-    # remove weekday & timezone
-    datestr = str.join(' ', datestr.split(None)[1:5])
-
     date = None
-    # workaround for datetime.strptime not working (NoneType ???)
     try:
-        date = datetime.datetime.strptime(datestr, '%d %b %Y %H:%M:%S')
+        date = dateutil.parser.parse(datestr)
+    except dateutil.parser.ParserError as e:
+        logmsg = "[{addon_id}] Problem with parsing date: {error}".format(addon_id="plugin.video.arteplussept", error=e)
+        xbmc.log(msg=logmsg, level=xbmc.LOGWARNING)
+    return date
+
+
+def parse_artetv_date(datestr):
+    date = None
+    try:
+        date = datetime.datetime.strptime(datestr, '%Y-%m-%dT%H:%M:%S%z') # 2022-07-01T03:00:00Z
     except TypeError:
-        date = datetime.datetime.fromtimestamp(time.mktime(
-            time.strptime(datestr, '%d %b %Y %H:%M:%S')))
+        date = None
     return date
 
 

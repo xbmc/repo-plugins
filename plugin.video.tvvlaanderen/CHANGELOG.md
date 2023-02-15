@@ -1,5 +1,14 @@
 # Changelog
 
+## [v1.0.6](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.6) (2023-02-09)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.5...v1.0.6)
+
+**Implemented enhancements:**
+
+- Add support for playing from the VOD Catalog [\#52](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/52) ([michaelarnauts](https://github.com/michaelarnauts))
+- Add support for Canal Digitaal \(NL\) [\#50](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/50) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.0.5](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.5) (2022-01-22)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.4...v1.0.5)

@@ -18,6 +18,7 @@ De volgende features worden ondersteund:
 * Live TV
 * Restart TV, bekijk het huidige programma vanaf het begin (niet voor alle zenders)
 * Replay TV, bekijk een programma tot 7 dagen terug (niet voor alle zenders)
+* Catalog, bekijk films en series als die beschikbaar zijn in je abonnement
 * Doorzoeken van alle programma's
 * Integratie met [IPTV Manager](https://github.com/add-ons/service.iptv.manager)
 

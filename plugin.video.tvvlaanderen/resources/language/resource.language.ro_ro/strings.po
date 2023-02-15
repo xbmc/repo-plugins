@@ -1,11 +1,12 @@
+#
 msgid ""
 msgstr ""
+"Language: ro\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ro\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-### MENUS
+# MENUS
 msgctxt "#30007"
 msgid "Channels"
 msgstr "Canale"
@@ -22,8 +23,23 @@ msgctxt "#30010"
 msgid "Search through the catalogue"
 msgstr "Căutare în bibliotecă"
 
+msgctxt "#30011"
+msgid "Catalog"
+msgstr ""
 
-### SUBMENUS
+msgctxt "#30012"
+msgid "Browse the Video on Demand catalog"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Show catalogs"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Browse by catalogs"
+msgstr ""
+
+# SUBMENUS
 msgctxt "#30051"
 msgid "Watch live [B]{channel}[/B]"
 msgstr "Urmărește în direct [B]{channel}[/B]"
@@ -48,8 +64,7 @@ msgctxt "#30056"
 msgid "Browse the replay catalog for [B]{channel}[/B]"
 msgstr "Răsfoiește biblioteca replay pentru [B]{channel}[/B]"
 
-
-### CODE
+# CODE
 msgctxt "#30203"
 msgid "Your credentials are not valid!"
 msgstr "Datele dvs de logare nu sunt corecte!"
@@ -83,15 +98,22 @@ msgid "[B]less then 1 hour[/B] remaining"
 msgstr "[B]mai puțin de 1 oră[/B] rămasă"
 
 msgctxt "#30213"
-msgid "[B]Now:[/B] {start} - {end}\n» {title}"
-msgstr "[B]Acum:[/B] {start} - {end}\n» {title}"
+msgid ""
+"[B]Now:[/B] {start} - {end}\n"
+"» {title}"
+msgstr ""
+"[B]Acum:[/B] {start} - {end}\n"
+"» {title}"
 
 msgctxt "#30214"
-msgid "[B]Next:[/B] {start} - {end}\n» {title}"
-msgstr "[B]Urmează:[/B] {start} - {end}\n» {title}"
+msgid ""
+"[B]Next:[/B] {start} - {end}\n"
+"» {title}"
+msgstr ""
+"[B]Urmează:[/B] {start} - {end}\n"
+"» {title}"
 
-
-### Dates
+# Dates
 msgctxt "#30301"
 msgid "Yesterday"
 msgstr "Ieri"
@@ -104,8 +126,7 @@ msgctxt "#30303"
 msgid "Tomorrow"
 msgstr "Mâine"
 
-
-### MESSAGES
+# MESSAGES
 msgctxt "#30701"
 msgid "To watch a video, you need to enter your credentials. Do you want to enter them now?"
 msgstr "Pentru a viziona conținutul, trebuie să vă autentificați. Vă autentificați acum?"
@@ -118,8 +139,11 @@ msgctxt "#30712"
 msgid "The video is unavailable and can't be played right now."
 msgstr "Video-ul este indisponibil și nu poate fi redat momentan."
 
+msgctxt "#30713"
+msgid "The video is not available in you subscription."
+msgstr ""
 
-### SETTINGS
+# SETTINGS
 msgctxt "#30800"
 msgid "Credentials"
 msgstr "Autentificare"

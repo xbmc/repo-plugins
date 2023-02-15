@@ -12,8 +12,9 @@ from resources.lib import kodiutils
 from resources.lib.kodiutils import TitleItem
 from resources.lib.modules import SETTINGS_ADULT_ALLOW, SETTINGS_ADULT_HIDE
 from resources.lib.modules.menu import Menu
+from resources.lib.solocoo import Epg
+from resources.lib.solocoo.asset import AssetApi
 from resources.lib.solocoo.auth import AuthApi
-from resources.lib.solocoo.channel import ChannelApi
 from resources.lib.solocoo.epg import EpgApi
 
 _LOGGER = logging.getLogger(__name__)
@@ -28,18 +29,17 @@ class Channels:
                        password=kodiutils.get_setting('password'),
                        tenant=kodiutils.get_setting('tenant'),
                        token_path=kodiutils.get_tokens_path())
-        self._entitlements = auth.list_entitlements()
-        self._channel_api = ChannelApi(auth)
+        self._api = AssetApi(auth)
         self._epg_api = EpgApi(auth)
 
     def show_channels(self):
         """ Shows TV channels. """
-        channels = self._channel_api.get_channels(filter_pin=kodiutils.get_setting_int('interface_adult') == SETTINGS_ADULT_HIDE)
+        channels = self._api.get_channels(filter_pin=kodiutils.get_setting_int('interface_adult') == SETTINGS_ADULT_HIDE)
 
         # Load EPG details for the next 6 hours
         date_now = datetime.now(dateutil.tz.UTC)
         date_from = date_now.replace(minute=0, second=0, microsecond=0)
-        date_to = (date_from + timedelta(hours=6))
+        date_to = date_from + timedelta(hours=6)
         epg = self._epg_api.get_guide([channel.uid for channel in channels], date_from, date_to)
         for channel in channels:
             shows = [show for show in epg.get(channel.uid, {}) if show.end > date_now]
@@ -66,7 +66,7 @@ class Channels:
 
         :param str channel_id:          The channel we want to display.
         """
-        channel = self._channel_api.get_asset(channel_id.split(':')[0])
+        channel = self._api.get_asset(channel_id.split(':')[0])
 
         # Verify PIN
         if channel.pin and kodiutils.get_setting_int('interface_adult') != SETTINGS_ADULT_ALLOW:
@@ -76,7 +76,7 @@ class Channels:
                 kodiutils.end_of_directory()
                 return
 
-            if not self._channel_api.verify_pin(pin):
+            if not self._api.verify_pin(pin):
                 kodiutils.ok_dialog(message=kodiutils.localize(30205))  # The PIN you have entered is invalid!
                 kodiutils.end_of_directory()
                 return
@@ -90,7 +90,7 @@ class Channels:
 
         # Restart currently airing program
         if channel.epg_now and channel.epg_now.restart:
-            restart_titleitem = Menu.generate_titleitem_program(channel.epg_now)
+            restart_titleitem = Menu.generate_titleitem_epg(channel.epg_now)
             restart_titleitem.info_dict['title'] = kodiutils.localize(30052, program=channel.epg_now.title)  # Restart [B]{program}[/B]
             restart_titleitem.art_dict['thumb'] = 'DefaultInProgressShows.png'
             listing.append(restart_titleitem)
@@ -166,7 +166,7 @@ class Channels:
         # lookup_id = channel_id.split(':')[0]
         # programs = self._epg_api.get_guide([lookup_id], date)
 
-        listing = [Menu.generate_titleitem_program(item, timeline=True) for item in programs.get(lookup_id)]
+        listing = [Menu.generate_titleitem_epg(item, timeline=True) for item in programs.get(lookup_id)]
 
         kodiutils.show_listing(listing, 30013, content='files')
 
@@ -175,7 +175,7 @@ class Channels:
 
         :param str channel_id:          The channel for which we want to show the replay programs.
         """
-        programs = self._channel_api.get_replay(channel_id.split(':')[0])
+        programs = self._api.get_replay(channel_id.split(':')[0])
 
         listing = []
         for item in programs:
@@ -183,10 +183,10 @@ class Channels:
             if item.title == EpgApi.EPG_NO_BROADCAST:
                 continue
 
-            if item.series_id:
-                listing.append(Menu.generate_titleitem_series(item))
+            if isinstance(item, Epg):
+                listing.append(Menu.generate_titleitem_epg(item))
             else:
-                listing.append(Menu.generate_titleitem_program(item))
+                listing.append(Menu.generate_titleitem_epg_series(item))
 
         kodiutils.show_listing(listing, 30013, content='tvshows', sort=['label'])
 
@@ -196,9 +196,9 @@ class Channels:
         :param str series_id:           The series we want to show.
         """
 
-        programs = self._channel_api.get_series(series_id)
+        programs = self._api.get_replay_series(series_id)
 
-        listing = [Menu.generate_titleitem_program(item) for item in programs]
+        listing = [Menu.generate_titleitem_epg(item) for item in programs]
 
         kodiutils.show_listing(listing, 30013, content='episodes')
 

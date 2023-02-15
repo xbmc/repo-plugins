@@ -11,7 +11,7 @@ import dateutil.parser
 import dateutil.tz
 
 from resources.lib.solocoo import SOLOCOO_API, util
-from resources.lib.solocoo.util import parse_program, parse_program_capi
+from resources.lib.solocoo.util import parse_epg, parse_epg_capi
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ class EpgApi:
         :param str|datetime date_to:    The date of the guide we want to fetch.
 
         :returns:                       A parsed dict with EPG data.
-        :rtype: dict[str, list[resources.lib.solocoo.util.Program]]
+        :rtype: dict[str, list[resources.lib.solocoo.Epg]]
         """
         # Allow to specify one channel, and we map it to a list
         if not isinstance(channels, list):
@@ -60,7 +60,7 @@ class EpgApi:
         if date_to is not None:
             date_to = self._parse_date(date_to)
         else:
-            date_to = (date_from + timedelta(days=1))
+            date_to = date_from + timedelta(days=1)
 
         programs = {}
 
@@ -77,8 +77,8 @@ class EpgApi:
                                   token_bearer=self._tokens.jwt_token)
             data = json.loads(reply.text)
 
-            # Parse to a dict (channel: list[Program])
-            programs.update({channel: [parse_program(program, offers) for program in programs]
+            # Parse to a dict (channel: list[Epg])
+            programs.update({channel: [parse_epg(program, offers) for program in programs]
                              for channel, programs in data.get('epg', []).items()})
 
         return programs
@@ -91,7 +91,7 @@ class EpgApi:
         :param str|datetime date_to:    The date of the guide we want to fetch.
 
         :returns:                       A parsed dict with EPG data.
-        :rtype: dict[str, list[resources.lib.solocoo.util.Program]]
+        :rtype: dict[str, list[resources.lib.solocoo.Epg]]
         """
         # Allow to specify one channel, and we map it to a list
         if not isinstance(channels, list):
@@ -110,7 +110,7 @@ class EpgApi:
         if date_to is not None:
             date_to = self._parse_date(date_to)
         else:
-            date_to = (date_from + timedelta(days=1))
+            date_to = date_from + timedelta(days=1)
         date_to_posix = str(int((date_to - epoch).total_seconds())) + '000'
 
         programs = {}
@@ -140,8 +140,8 @@ class EpgApi:
 
             data = json.loads(reply.text)
 
-            # Parse to a dict (channel: list[Program])
-            programs.update({channel: [parse_program_capi(program, self._tenant) for program in programs]
+            # Parse to a dict (channel: list[Epg])
+            programs.update({channel: [parse_epg_capi(program, self._tenant) for program in programs]
                              for channel, programs in data[1].items()})
 
         return programs

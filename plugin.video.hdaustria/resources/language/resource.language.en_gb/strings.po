@@ -22,6 +22,22 @@ msgctxt "#30010"
 msgid "Search through the catalogue"
 msgstr ""
 
+msgctxt "#30011"
+msgid "Catalog"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Browse the Video on Demand catalog"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Show catalogs"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Browse by catalogs"
+msgstr ""
+
 
 ### SUBMENUS
 msgctxt "#30051"
@@ -116,6 +132,10 @@ msgstr ""
 
 msgctxt "#30712"
 msgid "The video is unavailable and can't be played right now."
+msgstr ""
+
+msgctxt "#30713"
+msgid "The video is not available in you subscription."
 msgstr ""
 
 

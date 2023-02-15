@@ -9,8 +9,8 @@ from collections import defaultdict
 from resources.lib import kodiutils
 from resources.lib.modules import SETTINGS_ADULT_HIDE
 from resources.lib.solocoo import Credit
+from resources.lib.solocoo.asset import AssetApi
 from resources.lib.solocoo.auth import AuthApi
-from resources.lib.solocoo.channel import ChannelApi
 from resources.lib.solocoo.epg import EpgApi
 
 _LOGGER = logging.getLogger(__name__)
@@ -47,7 +47,7 @@ class IPTVManager:
     @via_socket
     def send_channels(self):
         """ Return JSON-STREAMS formatted information to IPTV Manager. """
-        channel_api = ChannelApi(self._auth)
+        channel_api = AssetApi(self._auth)
 
         streams = []
 
@@ -66,7 +66,7 @@ class IPTVManager:
     @via_socket
     def send_epg(self):
         """ Return JSON-EPG formatted information to IPTV Manager. """
-        channel_api = ChannelApi(self._auth)
+        channel_api = AssetApi(self._auth)
         epg_api = EpgApi(self._auth)
 
         epg = defaultdict(list)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.hdaustria" name="HD Austria" version="1.0.5+matrix.1" provider-name="Michaël Arnauts">
+<addon id="plugin.video.hdaustria" name="HD Austria" version="1.0.6+matrix.1" provider-name="Michaël Arnauts">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.dateutil" version="2.6.0" />
@@ -22,10 +22,8 @@
         <disclaimer lang="en_GB">This add-on is not officially commissioned/supported by M7 Group and is provided 'as is' without any warranty of any kind.</disclaimer>
         <platform>all</platform>
         <license>GPL-3.0-only</license>
-        <news>v1.0.5 (2022-01-22)
-- Fix incorrect time in EPG view.
-- Fix hiding of adult channels in EPG view.
-- Add translations.</news>
+        <news>v1.0.6 (2023-02-09)
+- Add support for VOD.</news>
         <source>https://github.com/add-ons/plugin.video.tvvlaanderen</source>
         <assets>
             <icon>resources/icon.png</icon>

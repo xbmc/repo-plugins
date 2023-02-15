@@ -279,8 +279,12 @@ class KodiMediaset(object):
         kodiutils.endScript()
 
     def elenco_video_list(self, subBrandId, start):
+        if (kodiutils.getSettingAsBool('sortmediaset')):
+            sort = 'mediasetprogram$publishInfo_lastPublished|desc'
+        else:
+            sort = 'mediasetprogram$publishInfo_lastPublished'
         els = self.med.OttieniVideoSezione(
-            subBrandId, sort='mediasetprogram$publishInfo_lastPublished', erange=self.__imposta_range(start))
+            subBrandId, sort=sort, erange=self.__imposta_range(start))
         self.__analizza_elenco(els, True)
         if len(els) == self.iperpage:
             kodiutils.addListItem(kodiutils.LANGUAGE(32130),
@@ -349,7 +353,7 @@ class KodiMediaset(object):
                                                                      prog["mediasetlisting$epgTitle"])),
                                        'infos': _gather_info(prog),
                                        'arts': _gather_art(prog),
-                                       'restartAllowed': prog['mediasetlisting$restartAllowed']}
+                                       'restartAllowed': prog.get('mediasetlisting$restartAllowed', False)}
         els = self.med.OttieniCanaliLive(sort='ShortTitle')
         for prog in els:
             if (prog['callSign'] in chans and 'tuningInstruction' in prog and
@@ -382,7 +386,9 @@ class KodiMediaset(object):
 
     def __ottieni_vid_restart(self, guid):
         res = self.med.OttieniLiveStream(guid)
-        if ('currentListing' in res[0] and
+        if (res is not None and
+                res[0] is not None and
+                'currentListing' in res[0] and
                 res[0]['currentListing']['mediasetlisting$restartAllowed']):
             url = res[0]['currentListing']['restartUrl']
             return url.rpartition('/')[-1]

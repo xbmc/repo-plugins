@@ -143,7 +143,7 @@ class AuthApi:
             return self._account
 
         if not self._account.challenge_id or not self._account.challenge_secret:
-            # We don't have an challenge_id or challenge_secret, so we need to request one
+            # We don't have a challenge_id or challenge_secret, so we need to request one
             # This challenge can be kept for a longer time
             self._account.challenge_id, self._account.challenge_secret = self._do_challenge(
                 self._account.device_name,
@@ -342,10 +342,12 @@ class AuthApi:
                                    deviceModel=device_name,
                                    deviceType="PC",
                                    deviceSerial=device_serial,
-                                   osVersion="Linux undefined",
-                                   appVersion="84.0",
-                                   memberId="0",
+                                   osVersion="Linux",
+                                   appVersion="97.0.4692.71",
                                    brand=self._tenant.get('app'),
+                                   memberId='0',
+                                   featureLevel='1',
+                                   environment='p',
                                ))
         return json.loads(reply.text).get('token')
 

@@ -37,6 +37,17 @@ class Menu:
                 )
             ),
             TitleItem(
+                title=kodiutils.localize(30011),  # Catalog
+                path=kodiutils.url_for('show_catalog'),
+                art_dict=dict(
+                    icon='DefaultMovies.png',
+                    fanart=kodiutils.get_addon_info('fanart'),
+                ),
+                info_dict=dict(
+                    plot=kodiutils.localize(30012),
+                )
+            ),
+            TitleItem(
                 title=kodiutils.localize(30009),  # Search
                 path=kodiutils.url_for('show_search'),
                 art_dict=dict(
@@ -52,17 +63,17 @@ class Menu:
         kodiutils.show_listing(listing, sort=['unsorted'])
 
     @classmethod
-    def generate_titleitem_series(cls, item):
+    def generate_titleitem_epg_series(cls, item):
         """ Generate a TitleItem.
 
-        :param resources.lib.solocoo.util.Program item: The Program to convert to a TitleItem.
+        :param resources.lib.solocoo.EpgSeries item: The Program to convert to a TitleItem.
 
         :returns:                       A generated TitleItem for a Series.
         :rtype: TitleItem
         """
         return TitleItem(
             title=item.title,
-            path=kodiutils.url_for('show_channel_replay_series', series_id=item.series_id),
+            path=kodiutils.url_for('show_channel_replay_series', series_id=item.uid),
             art_dict={
                 'cover': item.cover,
                 'icon': item.preview,
@@ -78,10 +89,10 @@ class Menu:
         )
 
     @classmethod
-    def generate_titleitem_program(cls, item, timeline=False):
+    def generate_titleitem_epg(cls, item, timeline=False):
         """ Generate a TitleItem.
 
-        :param resources.lib.solocoo.util.Program item: The Program to convert to a TitleItem.
+        :param resources.lib.solocoo.Epg item: The Program to convert to a TitleItem.
         :param boolean timeline:                        Indicates that this TitleItem will be used in a timeline.
 
         :returns:                       A generated TitleItem for a Program.
@@ -142,7 +153,7 @@ class Menu:
     def generate_titleitem_channel(cls, item):
         """ Generate a TitleItem for a Channel.
 
-        :param resources.lib.solocoo.util.Channel item: The Channel to convert to a TitleItem.
+        :param resources.lib.solocoo.Channel item: The Channel to convert to a TitleItem.
 
         :returns:                       A generated TitleItem for a Channel.
         :rtype: TitleItem
@@ -180,7 +191,7 @@ class Menu:
     def _format_program_plot(cls, program):
         """ Format a plot for a program.
 
-        :param resources.lib.solocoo.util.Program program: The program we want to have a plot for.
+        :param resources.lib.solocoo.Epg program: The program we want to have a plot for.
 
         :returns:                       A formatted plot for this program.
         :rtype: str
@@ -189,7 +200,7 @@ class Menu:
 
         # Add remaining
         if isinstance(program.available, datetime):
-            time_left = (program.available - datetime.now(dateutil.tz.UTC))
+            time_left = program.available - datetime.now(dateutil.tz.UTC)
             if time_left.days > 1:
                 plot += '» ' + kodiutils.localize(30208, days=time_left.days) + "\n"  # [B]{days} days[/B] remaining
             elif time_left.days == 1:
@@ -213,7 +224,7 @@ class Menu:
     def _format_channel_plot(cls, channel):
         """ Format a plot for a channel.
 
-        :param resources.lib.solocoo.util.Channel channel: The channel we want to have a plot for.
+        :param resources.lib.solocoo.Channel channel: The channel we want to have a plot for.
 
         :returns:                       A formatted plot for this channel.
         :rtype: str
@@ -233,3 +244,111 @@ class Menu:
                                        title=channel.epg_next.title) + "\n"
 
         return plot
+
+    @classmethod
+    def generate_titleitem_vod_movie(cls, item):
+        """ Generate a TitleItem for a Movie.
+
+        :param resources.lib.solocoo.VodMovie item: The Movie to convert to a TitleItem.
+
+        :returns:                       A generated TitleItem for a Movie.
+        :rtype: TitleItem
+        """
+        return TitleItem(
+            title=item.title,
+            path=kodiutils.url_for('play_asset', asset_id=item.uid),
+            art_dict={
+                'cover': item.cover,
+                'icon': item.preview or item.cover,
+                'thumb': item.preview or item.cover,
+                'fanart': item.preview or item.cover,
+            },
+            info_dict={
+                'tvshowtitle': item.title,
+                'mpaa': item.age,
+                'mediatype': 'movie',
+                'duration': item.duration,
+                'cast':
+                    [(credit.person, credit.character) for credit in item.credit if credit.role == Credit.ROLE_ACTOR] +
+                    [credit.person for credit in item.credit if credit.role in [Credit.ROLE_PRESENTER, Credit.ROLE_GUEST]],
+                'director': [credit.person for credit in item.credit if credit.role in [Credit.ROLE_DIRECTOR, Credit.ROLE_PRODUCER]],
+            },
+            is_playable=True,
+        )
+
+    @classmethod
+    def generate_titleitem_vod_series(cls, item):
+        """ Generate a TitleItem for a Series.
+
+        :param resources.lib.solocoo.VodSeries item: The Series to convert to a TitleItem.
+
+        :returns:                       A generated TitleItem for a Series.
+        :rtype: TitleItem
+        """
+        return TitleItem(
+            title=item.title,
+            path=kodiutils.url_for('show_catalog_series', asset=item.uid),
+            art_dict={
+                'cover': item.cover,
+                'icon': item.preview or item.cover,
+                'thumb': item.preview or item.cover,
+                'fanart': item.preview or item.cover,
+            },
+            info_dict={
+                'tvshowtitle': item.title,
+                'mpaa': item.age,
+                'mediatype': 'tvshow',
+                'cast':
+                    [(credit.person, credit.character) for credit in item.credit if credit.role == Credit.ROLE_ACTOR] +
+                    [credit.person for credit in item.credit if credit.role in [Credit.ROLE_PRESENTER, Credit.ROLE_GUEST]],
+                'director': [credit.person for credit in item.credit if credit.role in [Credit.ROLE_DIRECTOR, Credit.ROLE_PRODUCER]],
+            },
+        )
+
+    @classmethod
+    def generate_titleitem_vod_season(cls, item):
+        """ Generate a TitleItem for a Season.
+
+        :param resources.lib.solocoo.VodSeason item: The Season to convert to a TitleItem.
+
+        :returns:                       A generated TitleItem for a Season.
+        :rtype: TitleItem
+        """
+        return TitleItem(
+            title='Season %s' % item.title,
+            path=kodiutils.url_for('show_catalog_by_query', query=item.query),
+        )
+
+    @classmethod
+    def generate_titleitem_vod_episode(cls, item):
+        """ Generate a TitleItem for an Episode.
+
+        :param resources.lib.solocoo.VodEpisode item: The Episode to convert to a TitleItem.
+
+        :returns:                       A generated TitleItem for an Episode.
+        :rtype: TitleItem
+        """
+        return TitleItem(
+            title=item.title,
+            path=kodiutils.url_for('play_asset', asset_id=item.uid),
+            art_dict={
+                'cover': item.cover,
+                'icon': item.preview or item.cover,
+                'thumb': item.preview or item.cover,
+                'fanart': item.preview or item.cover,
+            },
+            info_dict={
+                'tvshowtitle': item.title,
+                'title': item.title,
+                'season': item.season,
+                'episode': item.episode,
+                'mpaa': item.age,
+                'mediatype': 'episode',
+                'duration': item.duration,
+                'cast':
+                    [(credit.person, credit.character) for credit in item.credit if credit.role == Credit.ROLE_ACTOR] +
+                    [credit.person for credit in item.credit if credit.role in [Credit.ROLE_PRESENTER, Credit.ROLE_GUEST]],
+                'director': [credit.person for credit in item.credit if credit.role in [Credit.ROLE_DIRECTOR, Credit.ROLE_PRODUCER]],
+            },
+            is_playable=True,
+        )

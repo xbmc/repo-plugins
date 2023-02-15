@@ -13,8 +13,8 @@
     </extension>
     <extension point="xbmc.service" library="service.py" />
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">Put.io for Kodi</summary>
-        <description lang="en">Put.io is a service that combines cloud storage and bittorrent. You need an account to use this plug-in. Get one from https://put.io</description>
+        <summary lang="en_GB">Put.io for Kodi</summary>
+        <description lang="en_GB">Put.io is a service that combines cloud storage and bittorrent. You need an account to use this plug-in. Get one from https://put.io</description>
         <disclaimer lang="en_GB">Please read terms of service at https://put.io/terms-of-service/</disclaimer>
         <language>en tr</language>
         <platform>all</platform>

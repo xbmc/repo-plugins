@@ -8,18 +8,21 @@ import logging
 
 from requests import HTTPError
 
-from resources.lib.solocoo import SOLOCOO_API, StreamInfo, util
+from resources.lib.solocoo import SOLOCOO_API, StreamInfo, VodCatalog, VodSeason, util
 from resources.lib.solocoo.exceptions import NotAvailableInOfferException, UnavailableException
-from resources.lib.solocoo.util import parse_channel, parse_program
+from resources.lib.solocoo.util import parse_channel, parse_epg, parse_epg_series, parse_vod_episode, parse_vod_genre, parse_vod_movie, parse_vod_series
 
 _LOGGER = logging.getLogger(__name__)
 
 ASSET_TYPE_CHANNEL = 'Channel'
-ASSET_TYPE_PROGRAM = 'EPG'
+ASSET_TYPE_EPG = 'EPG'
+ASSET_TYPE_EPG_SERIES = 'EPGSeries'
+ASSET_TYPE_VOD = 'VOD'
+ASSET_TYPE_VOD_SERIES = 'VODSeries'
 
 
-class ChannelApi:
-    """ Solocoo Channel API """
+class AssetApi:
+    """ Solocoo Asset API """
 
     def __init__(self, auth):
         """ Initialisation of the class.
@@ -37,7 +40,7 @@ class ChannelApi:
         :param bool filter_pin:         Hide PIN-protected channels.
 
         :returns:                       A list of all channels.
-        :rtype: list[resources.lib.solocoo.util.Channel]
+        :rtype: list[resources.lib.solocoo.Channel]
         """
         entitlements = self._auth.list_entitlements()
         offers = entitlements.get('offers', [])
@@ -89,17 +92,28 @@ class ChannelApi:
         :param str asset_id:            The ID of the asset
 
         :returns:                       The requested asset.
-        :rtype: resources.lib.solocoo.util.Channel|resources.lib.solocoo.util.Program
+        :rtype: resources.lib.solocoo.Channel|resources.lib.solocoo.Epg|resources.lib.solocoo.VodMovie|resources.lib.solocoo.VodSeries|resources.lib.solocoo.VodEpisode
         """
         reply = util.http_get(SOLOCOO_API + '/assets/{asset_id}'.format(asset_id=asset_id),
                               token_bearer=self._tokens.jwt_token)
         data = json.loads(reply.text)
 
-        if data.get('type') == ASSET_TYPE_PROGRAM:
-            return parse_program(data)
+        if data.get('type') == ASSET_TYPE_EPG:
+            return parse_epg(data)
+
+        if data.get('type') == ASSET_TYPE_EPG_SERIES:
+            return parse_epg_series(data)
 
         if data.get('type') == ASSET_TYPE_CHANNEL:
             return parse_channel(data)
+
+        if data.get('type') == ASSET_TYPE_VOD:
+            if data.get('params', {}).get('seriesId'):
+                return parse_vod_episode(data)
+            return parse_vod_movie(data)
+
+        if data.get('type') == ASSET_TYPE_VOD_SERIES:
+            return parse_vod_series(data)
 
         raise Exception('Unknown asset type: %s' % data.get('type'))
 
@@ -109,7 +123,7 @@ class ChannelApi:
         :param str loc_id:              The locID of the asset.
 
         :returns:                       The matching Asset.
-        :rtype: resources.lib.solocoo.util.Channel|resources.lib.solocoo.util.Program
+        :rtype: resources.lib.solocoo.Channel|resources.lib.solocoo.Epg
         """
         reply = util.http_get(
             'https://{domain}/{env}/capi.aspx'.format(domain=self._tenant.get('domain'), env=self._tenant.get('env')),
@@ -122,61 +136,61 @@ class ChannelApi:
         data = json.loads(reply.text)
         return self.get_asset(data.get('assetId'))
 
+    def query_assets(self, query):
+        """ Get a list of assets of the specified query.
+
+        :param str query:               The query to execute.
+        :returns:                       A list of Assets.
+        :rtype: list[resources.lib.solocoo.VodMovie|resources.lib.solocoo.VodSeries|resources.lib.solocoo.VodEpisode]
+        """
+        entitlements = self._auth.list_entitlements()
+        offers = entitlements.get('offers', [])
+
+        # Execute query
+        reply = util.http_get(SOLOCOO_API + '/assets',
+                              params={
+                                  'query': query,
+                                  'limit': 1000,
+                              },
+                              token_bearer=self._tokens.jwt_token)
+        data = json.loads(reply.text)
+
+        # Parse list to VodMovie or VodSeries objects
+        assets = []
+        for asset in data.get('assets'):
+            if asset.get('type') == ASSET_TYPE_VOD:
+                if asset.get('params', {}).get('seriesId'):
+                    assets.append(parse_vod_episode(asset))
+                else:
+                    assets.append(parse_vod_movie(asset))
+            elif asset.get('type') == ASSET_TYPE_VOD_SERIES:
+                assets.append(parse_vod_series(asset))
+            elif asset.get('type') == ASSET_TYPE_EPG:
+                assets.append(parse_epg(asset, offers))
+            elif asset.get('type') == ASSET_TYPE_EPG_SERIES:
+                assets.append(parse_epg_series(asset))
+
+        return assets
+
     def get_replay(self, channel_id):
         """ Get a list of programs that are replayable from the given channel.
 
         :param str channel_id:          The ID of the asset.
 
         :returns:                       A list of Programs.
-        :rtype: list[resources.lib.solocoo.util.Program]
+        :rtype: list[resources.lib.solocoo.Epg|resources.lib.solocoo.EpgSeries]
         """
-        entitlements = self._auth.list_entitlements()
-        offers = entitlements.get('offers', [])
+        return self.query_assets('replay,groupedseries,station,' + channel_id)
 
-        # Execute query
-        reply = util.http_get(SOLOCOO_API + '/assets',
-                              params={
-                                  'query': 'replay,groupedseries,station,' + channel_id,
-                                  'limit': 1000,
-                              },
-                              token_bearer=self._tokens.jwt_token)
-        data = json.loads(reply.text)
-
-        # Parse list to Program objects
-        programs = [
-            parse_program(program, offers)
-            for program in data.get('assets', [])
-        ]
-
-        return programs
-
-    def get_series(self, series_id):
+    def get_replay_series(self, series_id):
         """ Get a list of programs of the specified series.
 
         :param str series_id:          The ID of the series.
 
-        :returns:                       A list of Programs.
-        :rtype: list[resources.lib.solocoo.util.Program]
+        :returns:                       A list of Epg.
+        :rtype: list[resources.lib.solocoo.EpgSeries]
         """
-        entitlements = self._auth.list_entitlements()
-        offers = entitlements.get('offers', [])
-
-        # Execute query
-        reply = util.http_get(SOLOCOO_API + '/assets',
-                              params={
-                                  'query': 'replayepisodes,' + series_id,
-                                  'limit': 1000,
-                              },
-                              token_bearer=self._tokens.jwt_token)
-        data = json.loads(reply.text)
-
-        # Parse list to Program objects
-        programs = [
-            parse_program(program, offers)
-            for program in data.get('assets', [])
-        ]
-
-        return programs
+        return self.query_assets('replayepisodes,' + series_id)
 
     def get_stream(self, asset_id):
         """ Get stream information for the requested asset.
@@ -243,3 +257,100 @@ class ChannelApi:
             return True
         except HTTPError:
             return False
+
+    def get_collection_catalogs(self):
+        """ Get all catalogs.
+
+        :returns:                       A list of all catalogs.
+        :rtype: list[resources.lib.solocoo.VodCatalog]
+        """
+        # Fetch owner info from TV API
+        reply = util.http_get(SOLOCOO_API + '/owners',
+                              token_bearer=self._tokens.jwt_token)
+        owners = json.loads(reply.text)
+
+        # Create a dict with the owner id and the preferred image (png, dark)
+        owner_images = {owner.get('id'): next((icon.get('url') for icon in owner.get('icons') if icon.get('format') == 'png' and icon.get('bg') == 'dark'), None)
+                        for owner in owners.get('owners')}
+
+        # Fetch channel listing from TV API
+        reply = util.http_get(SOLOCOO_API + '/collections/movies',
+                              params={
+                                  'group': 'owner,genre',
+                                  'sort': 'newest'
+                              },
+                              token_bearer=self._tokens.jwt_token)
+        data = json.loads(reply.text)
+
+        # Parse list to Channel objects
+        collections = [
+            VodCatalog(
+                uid=collection.get('owner'),
+                title=collection.get('title'),
+                cover=owner_images.get(collection.get('owner'))
+            )
+            for collection in data.get('collection', [])
+        ]
+
+        return collections
+
+    def get_collection_genres(self, catalog=None):
+        """ Get all genres.
+
+        :param str catalog:             An optional catalog to fetch the genres from.
+        :returns:                       A list of all genres.
+        :rtype: list[resources.lib.solocoo.VodGenre]
+        """
+        if catalog:
+            reply = util.http_get(SOLOCOO_API + '/collections/videos,owner,%s' % catalog,
+                                  params={
+                                      'group': 'genre',
+                                      'sort': 'newest'
+                                  },
+                                  token_bearer=self._tokens.jwt_token)
+        else:
+            reply = util.http_get(SOLOCOO_API + '/collections/movies',
+                                  params={
+                                      'group': 'genre',
+                                      'sort': 'newest'
+                                  },
+                                  token_bearer=self._tokens.jwt_token)
+
+        data = json.loads(reply.text)
+
+        # Parse list to Genre objects
+        collections = [
+            parse_vod_genre(collection)
+            for collection in data.get('collection', [])
+        ]
+
+        return collections
+
+    def get_collection_seasons(self, asset):
+        """ Get all seasons.
+
+        :param str asset:               An asset ID of the Series.
+        :returns:                       A list of all seasons.
+        :rtype: list[resources.lib.solocoo.VodSeason]
+        """
+        # Fetch seasons for this series asset
+        reply = util.http_get(SOLOCOO_API + '/collections/episodes',
+                              params={
+                                  'group': 'default',
+                                  'sort': 'default',
+                                  'asset': asset,
+                              },
+                              token_bearer=self._tokens.jwt_token)
+        data = json.loads(reply.text)
+
+        # Parse list to Season objects
+        collections = [
+            VodSeason(
+                uid=None,
+                title=collection.get('title'),
+                query=collection.get('query'),
+            )
+            for collection in data.get('collection', [])
+        ]
+
+        return collections

@@ -7,7 +7,7 @@ import json
 import logging
 
 from resources.lib.solocoo import SOLOCOO_API, util
-from resources.lib.solocoo.channel import ASSET_TYPE_CHANNEL
+from resources.lib.solocoo.asset import ASSET_TYPE_CHANNEL
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ class SearchApi:
         :param str query:               The query to search for.
 
         :returns:                        A list of results.
-        :rtype: list[resources.lib.solocoo.util.Channel|resources.lib.solocoo.util.Program]
+        :rtype: list[resources.lib.solocoo.Channel|resources.lib.solocoo.Epg]
         """
         if not query:
             return []
@@ -52,7 +52,7 @@ class SearchApi:
 
         # Parse replay
         replay = next((c for c in data.get('collection') if c.get('label') == 'sg.ui.search.replay'), {})
-        results.extend([util.parse_program(asset, offers)
+        results.extend([util.parse_epg(asset, offers)
                         for asset in replay.get('assets', [])])
 
         return results

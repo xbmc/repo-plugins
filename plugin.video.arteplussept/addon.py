@@ -73,13 +73,13 @@ def favorites():
     plugin.set_content('tvshows')
     return plugin.finish(view.build_favorites(plugin, settings))
 
-@plugin.route('/add_favorite/<program_id>', name='add_favorite')
-def add_favorite(program_id):
-    view.add_favorite(plugin, settings.username, settings.password, program_id)
+@plugin.route('/add_favorite/<program_id>/<label>', name='add_favorite')
+def add_favorite(program_id, label):
+    view.add_favorite(plugin, settings.username, settings.password, program_id, label)
 
-@plugin.route('/remove_favorite/<program_id>', name='remove_favorite')
-def remove_favorite(program_id):
-    view.remove_favorite(plugin, settings.username, settings.password, program_id)
+@plugin.route('/remove_favorite/<program_id>/<label>', name='remove_favorite')
+def remove_favorite(program_id, label):
+    view.remove_favorite(plugin, settings.username, settings.password, program_id, label)
 
 
 @plugin.route('/last_viewed', name='last_viewed')
@@ -153,9 +153,17 @@ def play(kind, program_id, audio_slot='1'):
     r = plugin.set_resolved_url(item)
     # wait 1s first to give a chance for playback to start
     # otherwise synched_player won't be able to listen
-    xbmc.sleep(1000)
-    while synched_player.isPlayback():
+    xbmc.sleep(500)
+    # start at 0 to synch progress at start-up
+    i = 1
+    # keep current method stack up to keep event callbacks up
+    while synched_player.is_playback():
+        # synch progress to Arte TV every minute, as on website
+        if i % 60 == 0:
+            synched_player.synch_progress()
+        i += 1
         xbmc.sleep(1000)
+    synched_player.synch_progress()
     del synched_player
     return r
 

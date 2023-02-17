@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
+"Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#30044"
@@ -91,23 +91,23 @@ msgid "Remove from Arte favorites"
 msgstr ""
 
 msgctxt "#30025"
-msgid "Successfully added to favorites"
+msgid "\"{label}\" successfully added to favorites"
 msgstr ""
 
 msgctxt "#30026"
-msgid "Failed to add to favorites"
+msgid "Failed to add \"{label}\" to favorites"
 msgstr ""
 
 msgctxt "#30027"
-msgid "Successfully removed from favorites"
+msgid "\"{label}\" successfully removed from favorites"
 msgstr ""
 
 msgctxt "#30028"
-msgid "Failed to remove from favorites"
+msgid "Failed to remove \"{label}\" from favorites"
 msgstr ""
 
 msgctxt "#30029"
-msgid "Stream {strm} in {ln} is not available"
+msgid "Stream \"{strm}\" in \"{ln}\" is not available"
 msgstr ""
 
 msgctxt "#30030"

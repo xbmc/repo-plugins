@@ -28,21 +28,40 @@ _endpoints = {
 _artetv_url = 'https://api.arte.tv/api'
 _artetv_rproxy_url = 'https://arte.tv/api/rproxy'
 _artetv_endpoints = {
-    'token': '/sso/v3/token', # POST
-    'get_favorites': '/sso/v3/favorites/{lang}?page={page}&limit={limit}', # needs token in authorization header
-    'add_favorite': '/sso/v3/favorites', #PUT needs token in authorization header
-    'remove_favorite': '/sso/v3/favorites/{program_id}', #DELETE needs token in authorization header
-    'get_last_viewed': '/sso/v3/lastvieweds/{lang}?page={page}&limit={limit}', # needs token in authorization header
-    'sync_last_viewed': '/sso/v3/lastvieweds', # payload {"programId":"110342-012-A","timecode":574} for 574s i.e. 9:34
-    'purge_last_viewed': '/sso/v3/lastvieweds/purge', # PATCH empty payload
+    # POST
+    'token': '/sso/v3/token',
+    # needs token in authorization header
+    'get_favorites': '/sso/v3/favorites/{lang}?page={page}&limit={limit}',
+    # PUT
+    # needs token in authorization header
+    'add_favorite': '/sso/v3/favorites',
+    # DELETE
+    # needs token in authorization header
+    'remove_favorite': '/sso/v3/favorites/{program_id}',
+    # needs token in authorization header
+    'get_last_viewed': '/sso/v3/lastvieweds/{lang}?page={page}&limit={limit}',
+    # PUT
+    # needs token in authorization header
+    # payload {'programId':'110342-012-A','timecode':574} for 574s i.e. 9:34
+    'sync_last_viewed': '/sso/v3/lastvieweds',
+    # PATCH empty payload
+    # needs token in authorization header
+    'purge_last_viewed': '/sso/v3/lastvieweds/purge',
     'magazines': '/sso/v3/magazines/{lang}?page={page}&limit={limit}',
-    'program': '/player/v2/config/{lang}/{program_id}', # program_id can be 103520-000-A or LIVE
-    'page': '/emac/v4/{lang}/{client}/pages/{category}/', #rproxy category=HOME, CIN, SER, SEARCH client=app, tv, web, orange, free
-    # not yet impl. 'guide_tv': '/emac/v3/{lang}/{client}/pages/TV_GUIDE/?day={DATE}', #rproxy date=2023-01-17
+    # program_id can be 103520-000-A or LIVE
+    'program': '/player/v2/config/{lang}/{program_id}',
+    # rproxy
+    # category=HOME, CIN, SER, SEARCH client=app, tv, web, orange, free
+    'page': '/emac/v4/{lang}/{client}/pages/{category}/',
+    # not yet impl.
+    # rproxy date=2023-01-17
+    # 'guide_tv': '/emac/v3/{lang}/{client}/pages/TV_GUIDE/?day={DATE}',
 }
 _artetv_headers = {
-    'authorization': 'I6k2z58YGO08P1X0E8A7VBOjDxr8Lecg', # required to use token endpoint
-    'client': 'tv', # required for Arte TV API. values like web, app, tv, orange, free
+    # required to use token endpoint
+    'authorization': 'I6k2z58YGO08P1X0E8A7VBOjDxr8Lecg',
+    # required for Arte TV API. values like web, app, tv, orange, free
+    'client': 'tv',
     'accept': 'application/json'
 }
 
@@ -72,7 +91,7 @@ def get_last_viewed(plugin, lang, usr, pwd):
 def sync_last_viewed(plugin, usr, pwd, program_id, time):
     url = _artetv_url + _artetv_endpoints['sync_last_viewed']
     headers = _add_auth_token(plugin, usr, pwd, _artetv_headers)
-    data = {'programId': program_id, "timecode": time}
+    data = {'programId': program_id, 'timecode': time}
     r = requests.put(url, data=data, headers=headers)
     return r.status_code
 
@@ -109,26 +128,27 @@ def subcategory(sub_category_code, lang):
 
 
 def collection(kind, collection_id, lang):
-    url = _endpoints['collection'].format(kind=kind,
-                                          collection_id=collection_id, lang=lang)
+    url = _endpoints['collection'].format(
+        kind=kind, collection_id=collection_id, lang=lang)
     subCollections = _load_json(url).get('subCollections', [])
     return hof.flat_map(lambda subCollections: subCollections.get('videos', []), subCollections)
 
 
 def video(program_id, lang):
-    url = _endpoints['video'] .format(
+    url = _endpoints['video'].format(
         program_id=program_id, lang=lang)
     return _load_json(url).get('videos', [])[0]
 
 
 def streams(kind, program_id, lang):
-    url = _endpoints['streams'] .format(
+    url = _endpoints['streams'].format(
         kind=kind, program_id=program_id, lang=lang)
     return _load_json(url).get('videoStreams', [])
 
 
 def magazines(lang):
-    url = _artetv_url + _artetv_endpoints['magazines'].format(lang=lang, page='1', limit='50')
+    url = _artetv_url + _artetv_endpoints['magazines'].format(
+        lang=lang, page='1', limit='50')
     return _load_json_full_url(url, _artetv_headers).get('data')
 
 
@@ -169,7 +189,7 @@ def _add_auth_token(plugin, usr, pwd, hdrs):
     tkn = token(plugin, usr, pwd)
     if not tkn:
         return None
-    headers=hdrs.copy()
+    headers = hdrs.copy()
     headers['authorization'] = tkn['token_type'] + ' ' + tkn['access_token']
     return headers
 
@@ -179,14 +199,14 @@ def _add_auth_token(plugin, usr, pwd, hdrs):
 #     - silenty if both parameters are empty
 #     - with a notification if one is not empty
 #   - connection to arte tv failed
-def token(plugin, username="", password="", headers=_artetv_headers):
+def token(plugin, username='', password='', headers=_artetv_headers):
     # unable to authenticate if either username or password are empty
     if not username and not password:
         plugin.notify(msg=plugin.addon.getLocalizedString(30022), image='info')
         return None
     # inform that settings are incomplete
     if not username or not password:
-        msg = plugin.addon.getLocalizedString(30020) + " : " + plugin.addon.getLocalizedString(30021)
+        msg = plugin.addon.getLocalizedString(30020) + ' : ' + plugin.addon.getLocalizedString(30021)
         plugin.notify(msg=msg, image='warning')
         return None
 

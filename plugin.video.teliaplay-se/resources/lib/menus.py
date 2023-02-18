@@ -67,10 +67,17 @@ class MenuList():
         ) - datetime.timedelta(minutes=30)
 
         time_now = datetime.datetime.now(pytz.timezone("Europe/Stockholm"))
-
         if time_now >= token_valid_time:
-            token_data = self.telia_play.refresh_token()
-            userdata["tokenData"] = token_data
+            try:
+                token_data = self.telia_play.refresh_token()
+                userdata["tokenData"] = token_data
+            except TeliaException as te:
+                if  "refresh token not found" in str(te).lower():
+                    userdata = self.telia_play.login(username, password)
+                    import json
+                    Dialog().textviewer("DEBUG", json.dumps(userdata, indent=4))
+                else:
+                    raise te
             self.userdata_handler.add(username, userdata)
 
     def _add_folder_item(

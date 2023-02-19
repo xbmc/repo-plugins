@@ -1,7 +1,6 @@
 import platform
 import uuid
 import json
-from resources.lib.kodiutils import AddonUtils
 from resources.lib.webutils import WebUtils
 
 
@@ -28,29 +27,24 @@ def error_check(response_json):
 class TeliaPlay():
 
     def __init__(self, userdata):
-        addon_utils = AddonUtils()
-
         self.tv_client_boot_id = userdata["bootUUID"]
         self.device_id = userdata["deviceUUID"]
         self.session_id = str(uuid.uuid4())
-        try:
-            self.token_data = userdata["tokenData"]
-        except KeyError:
-            self.token_data = None
+        self.token_data = userdata["tokenData"]
         self.web_utils = WebUtils()
 
     @property
     def graphql_hashes(self):
        return {
-            "getMainMenu":      "f9c1eb6c91def27ee800da2296922d3798a54a8af32f79f25661afb621f1b45d",
-            "search":           "c3272c2009479dddac2f289a0ae4f671fc579d38ccec18aa557529f1dd42e6cf",
-            "getPage":          "3d674c36dd68e05670c7886222953341db4239da4759c93ac8dfaf7d56399ff5",
-            "getTvChannels":    "1688507141f769dc7e77441f2ef2236ac15ebe21392fa7056ba90812e4231051",
-            "getTvChannel":     "9fb4abfe942f36d54ba8af530077c9567846795fb9e1bade17ae376d41e1424c",
-            "getStorePage":     "a57108f4736dafe49e7dd2fd05852da57bf756ed8c0741943c8529e942d24834",
-            "getPanel":         "6f1030258dc2f23a555e037b846c0bdb6bc506ec468d8c5bb035dc980e4efbf0",
-            "getSeries":        "38fdd519efbf703c2b67f6abc8e7573afd4cfaf257597810a0ae9d0b83d4362a",
-            "getSeason":        "6942467d20d3bce5cfd45843c0bc889eb5a64d9d648e558f7aeac50abbd4f31a",
+            "getMainMenu":      "90954cfc4db13a9e1112c7d22542a9b9889aa01afe9b28092a4a0b11e6e614ec",
+            "search":           "9175cf6ce6cef9eab9d8025f0ec1ff93aa62b798385aafa097e684bdddfe06ce",
+            "getPage":          "5e746d24bfd3ce1e178ac3d70fa40988242e1cbb41a0996feb14c67a6877bb41",
+            "getTvChannels":    "9784591ec506847d70e0bcdc122c5e7dc6bc9df1c0a0afd1b5230d22b7707a20",
+            "getTvChannel":     "123d20ce7c116b2c2f9df9ae4c07af021bb8c6b610476fa505d3c5a889ba97ef",
+            "getStorePage":     "2ad5fafd846ce292b22cb126fd03ce5404643cf8c88370ab7837b9dc69e2b2f7",
+            "getPanel":         "c9ef8a552c7f53000201e199e08a4c14396d56312c65687e4f523c100fc51804",
+            "getCdpSeries":     "bf07e6522b43c5fe892e60c998fff871493b6f0d3ca79d6eed011efc9ab8a9a2",
+            "getCdpSeason":     "80d43b806cd2d60973bca1419e17ad80c5cd4331777e84db82af6dac2a4a861b",
             "addToMyList":      "a8369da660da6f45e0eabd53756effcd4c40668f1794a853c298c29e7903c7f9",
             "removeFromMyList": "630c2f99d817682d4f15d41084cdc2f40dc158a5dae0bd2ab0e815ce268da277"
         }
@@ -416,14 +410,14 @@ class TeliaPlay():
                 "host": "graphql-telia.t6a.net",
                 "filename": "/graphql",
                 "query": {
-                    "operationName": "getSeries",
+                    "operationName": "getCdpSeries",
                     "variables": {
                         "id": series_id
                     },
                     "extensions": {
                         "persistedQuery": {
                             "version": 1,
-                            "sha256Hash": self.graphql_hashes["getSeries"]
+                            "sha256Hash": self.graphql_hashes["getCdpSeries"]
                         }
                     }
                 }
@@ -450,7 +444,7 @@ class TeliaPlay():
                 "host": "graphql-telia.t6a.net",
                 "filename": "/graphql",
                 "query": {
-                    "operationName": "getSeason",
+                    "operationName": "getCdpSeason",
                     "variables": {
                         "seasonId": season_id,
                         "sort": {

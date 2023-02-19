@@ -39,30 +39,30 @@ def add_directory_item(parameters, li, folder=True):
 def programmi_camera():
     titolo = 'Camera - Canale Assemblea'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'plugin://plugin.video.tubed/?mode=play&video_id=xXWZzIgbh4Y'
+    link = 'plugin://plugin.video.youtube/play/?video_id=xXWZzIgbh4Y'
     thumb = 'https://webtv.camera.it/system/events/thumbnails/000/014/843/large/AULAXVIIIC.gif'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
     liStyle.setProperty('isPlayable', 'true')
     xbmcplugin.addDirectoryItem(handle=G.PLUGIN_HANDLE, url=link, listitem=liStyle, isFolder=False)
 
-    titolo = 'Camera - Canale con sottotitoli automatici'
-    liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'plugin://plugin.video.tubed/?mode=play&video_id=4ZJz6alUDfc'
-    thumb = 'https://webtv.camera.it/system/events/thumbnails/000/014/843/large/AULAXVIIIC.gif'
-    liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
-    liStyle.setInfo('video', {})
-    liStyle.setProperty('isPlayable', 'true')
-    xbmcplugin.addDirectoryItem(handle=G.PLUGIN_HANDLE, url=link, listitem=liStyle, isFolder=False)   
-
     titolo = 'Camera - Canale Satellitare'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'plugin://plugin.video.tubed/?mode=play&video_id=Cnjs83yowUM'
+    link = 'plugin://plugin.video.youtube/play/?video_id=Cnjs83yowUM'
     thumb = 'https://webtv.camera.it/assets/thumbs/flash_7/2019/EI_20190520_ch4_14419.jpg'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
     liStyle.setProperty('isPlayable', 'true')
-    xbmcplugin.addDirectoryItem(handle=G.PLUGIN_HANDLE, url=link, listitem=liStyle, isFolder=False) 
+    xbmcplugin.addDirectoryItem(handle=G.PLUGIN_HANDLE, url=link, listitem=liStyle, isFolder=False)
+
+    titolo = 'Camera - Canale Sottotitolato'
+    liStyle = xbmcgui.ListItem(titolo, offscreen=True)
+    link = 'plugin://plugin.video.youtube/play/?video_id=4ZJz6alUDfc'
+    thumb = 'https://webtv.camera.it/assets/thumbs/flash_7/2019/EI_20190520_ch4_14419.jpg'
+    liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
+    liStyle.setInfo('video', {})
+    liStyle.setProperty('isPlayable', 'true')
+    xbmcplugin.addDirectoryItem(handle=G.PLUGIN_HANDLE, url=link, listitem=liStyle, isFolder=False)
 
     xbmcplugin.endOfDirectory(handle=G.PLUGIN_HANDLE, succeeded=True)
 
@@ -137,7 +137,7 @@ def programmi_senato():
 def programmi_tv():
     titolo = 'RaiNews24'
     liStyle = xbmcgui.ListItem(titolo, offscreen=True)
-    link = 'https://8e7439fdb1694c8da3a0fd63e4dda518.msvdn.net/rainews1/hls/playlist_mo.m3u8?'
+    link = 'https://8e7439fdb1694c8da3a0fd63e4dda518.msvdn.net/rainews1/hls/playlist_mo.m3u8'
     thumb = 'https://www.rainews.it/dl/components/img/svg/RaiNewsBarra-logo.png'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
     liStyle.setInfo('video', {})
@@ -145,7 +145,7 @@ def programmi_tv():
     xbmcplugin.addDirectoryItem(handle=G.PLUGIN_HANDLE, url=link, listitem=liStyle, isFolder=False)
 
     titolo = 'TgCom24'
-    liStyle = xbmcgui.ListItem(titolo)
+    liStyle = xbmcgui.ListItem(titolo, offscreen=True)
     link = 'https://live3.msf.cdn.mediaset.net/content/dash_d0_clr_vos/live/channel(kf)/manifest.mpd'
     thumb = 'https://www.mimesi.com/wp-content/uploads/2017/11/tgcom24.jpg'
     liStyle.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})

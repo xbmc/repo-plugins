@@ -1,8 +1,0 @@
-blank_issues_enabled: false
-contact_links:
-  - name: Kodi forums, add-ons section
-    url: https://forum.kodi.tv/forumdisplay.php?fid=27
-    about: Please ask and answer questions here.
-  - name: Pull requests
-    url: https://github.com/xbmc/repo-plugins/pulls
-    about: When you want to submit a new or updated add-on, please open a pull request here.

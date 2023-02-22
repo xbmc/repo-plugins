@@ -1,3 +1,6 @@
+v1.2.21 (2023-02-21)
+- fixed premium videos
+
 v1.2.20 (2023-01-15)
 - fixed some youtube-id's by removing leading/trailing spaces
 - fixed playing of videos using MPEG-DASH (kudo's to peak3d)

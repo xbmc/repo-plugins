@@ -492,10 +492,11 @@ class Main(object):
 
                     # log("html_source embed", html_source)
 
-                    video_url_start_pos = html_source.find("url")
+                    search_for_string = 'url": "'
+                    video_url_start_pos = html_source.find(search_for_string)
                     if video_url_start_pos >= 0:
                         # url": "https://cdn.muse.ai/u/Czi97La/f4e5310bc42adcde16ff1b14fa7a56f7e61380b78befa674f666f1bca7ad8953/data", "views": 2401, "visibility": "hidden", "width": 1920},
-                        video_url_start_pos = video_url_start_pos + len('url": "')
+                        video_url_start_pos = video_url_start_pos + len(search_for_string)
                         video_url_end_pos = html_source.find('"', video_url_start_pos)
                         if video_url_end_pos >= 0:
                             # https://cdn.muse.ai/u/Czi97La/f4e5310bc42adcde16ff1b14fa7a56f7e61380b78befa674f666f1bca7ad8953/data

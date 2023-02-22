@@ -121,17 +121,17 @@ class Main(object):
                             # and the username and password in settings are not ok.
                             if str(html_source).find('login_error') >= 0:
 
-                                log("Login Error!", "login was NOT succesfull!")
+                                log("Login Error!", "login was NOT successful!")
 
                                 xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30601), LANGUAGE(30602),
                                                     LANGUAGE(30603))
                                 sys.exit(1)
                             else:
-                                # dialog_wait.create("Login Successfull", "Currently looking for video")
+                                # dialog_wait.create("Login Successful", "Currently looking for video")
 
-                                log("Login", "login was succesfull!!")
+                                log("Login", "login was successful!!")
 
-                                # let's try getting the page after a succesful login, hopefully it contains a link to
+                                # let's try getting the page after a successful login, hopefully it contains a link to
                                 # the video now
                                 self.video_page_url = self.video_page_url + "?login=success"
 
@@ -492,10 +492,11 @@ class Main(object):
 
                     # log("html_source embed", html_source)
 
-                    video_url_start_pos = html_source.find("url")
+                    search_for_string = 'url": "'
+                    video_url_start_pos = html_source.find(search_for_string)
                     if video_url_start_pos >= 0:
                         # url": "https://cdn.muse.ai/u/Czi97La/f4e5310bc42adcde16ff1b14fa7a56f7e61380b78befa674f666f1bca7ad8953/data", "views": 2401, "visibility": "hidden", "width": 1920},
-                        video_url_start_pos = video_url_start_pos + len('url": "')
+                        video_url_start_pos = video_url_start_pos + len(search_for_string)
                         video_url_end_pos = html_source.find('"', video_url_start_pos)
                         if video_url_end_pos >= 0:
                             # https://cdn.muse.ai/u/Czi97La/f4e5310bc42adcde16ff1b14fa7a56f7e61380b78befa674f666f1bca7ad8953/data

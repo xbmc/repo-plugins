@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Scrapetube wrapper for Kodi
 # SPDX-License-Identifier: GPL-3.0
 # See LICENSES/GPL-3.0 for more information.

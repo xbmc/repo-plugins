@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Scrapetube library
 # Original author dermasmid, modified for Greek Voice threshold84
 # SPDX-License-Identifier: MIT Licence

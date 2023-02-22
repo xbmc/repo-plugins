@@ -165,10 +165,10 @@ def directory(kind=None):
             thumb = m['icon']
             fanart = m['fanart']
         list_item.setArt({'icon': thumb, 'thumb': thumb, 'fanart': fanart})
-        if kind == 'video':
-            list_item.setInfo(type="video", infoLabels={"title": m['title']})
-        else:
+        if kind == 'audio':
             list_item.setInfo(type="music", infoLabels={"title": m['title']})
+        else:
+            list_item.setInfo(type="video", infoLabels={"title": m['title']})
         list_item.setProperty('IsPlayable', 'true')
         url = 'plugin://{0}/?action={1}&url={2}&icon={3}'.format(
             ADDON_ID, 'play', quote_plus(m['url']), quote_plus(thumb)

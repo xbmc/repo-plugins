@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.greekvoice" name="Greek Voice" version="4.0.1" provider-name="threshold84">
+<addon id="plugin.video.greekvoice" name="Greek Voice" version="4.0.2" provider-name="threshold84">
     <requires>
 		<import addon="xbmc.python" version="3.0.0"/>
 		<import addon="script.module.requests" version="2.27.1"/>
@@ -18,7 +18,11 @@
         <website>http://www.wpso.com</website>
         <email>angelo@wzra48.com</email>
         <source>https://github.com/threshold84/plugin.video.greekvoice/</source>
-		<news>v4.0.1:
+		<news>v4.0.2:
+- Remove unneeded file encoding declaration
+- Improve conditional for setting info in nested playable items
+
+v4.0.1:
 - Remove print statement
 - Update scrapetube according to upstream sources
 

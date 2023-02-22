@@ -1,11 +1,7 @@
-# -*- coding: utf-8 -*-
+# URL Dispatcher library
 
-'''
-    URL Dispatcher library
-
-    SPDX-License-Identifier: GPL-3.0
-    See LICENSES/GPL-3.0 for more information.
-'''
+# SPDX-License-Identifier: GPL-3.0
+# See LICENSES/GPL-3.0 for more information.
 
 import xbmc
 

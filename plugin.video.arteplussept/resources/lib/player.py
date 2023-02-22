@@ -4,16 +4,17 @@ from . import api
 # this player send request to Arte TV API
 # to synchronise playback progress
 # when playback is paused or stopped or crashed
+# https://xbmc.github.io/docs.kodi.tv/master/kodi-dev-kit/group__python___player_c_b.html
 class Player(xbmc.Player):
 
     def __init__(self, plugin, settings, program_id):
         super(Player, self).__init__()
-        self.plugin=plugin
-        self.settings=settings
-        self.program_id=program_id
-        self.last_time=None
+        self.plugin = plugin
+        self.settings = settings
+        self.program_id = program_id
+        self.last_time = 0
 
-    def isPlayback(self):
+    def is_playback(self):
         try:
             # need to keep track of last time to avoid 
             # RuntimeError: Kodi is not playing any media file
@@ -23,35 +24,40 @@ class Player(xbmc.Player):
         except Exception:
             return False
 
+    def onAVStarted(self):
+        # Will be called when user stars playing
+        self.synch_progress()
+        pass
+
     def onPlayBackStopped(self):
-        # Will be called when user stops playing a file.
-        self.synchProgress()
+        # Will be called when user stops playing
+        self.synch_progress()
         pass
 
     def onPlayBackEnded(self):
-        # Will be called when kodi stops playing a file.
-        self.synchProgress()
+        # Will be called when kodi stops playing
+        self.synch_progress()
         pass
 
     def onPlayBackError(self):
-        # Will be called when kodi stops playing a file.
-        self.synchProgress()
+        # Will be called when kodi stops playing
+        self.synch_progress()
         pass
 
     def onPlayBackPaused(self):
-        # Will be called when kodi stops playing a file.
-        self.synchProgress()
+        # Will be called when kodi stops playing
+        self.synch_progress()
         pass
 
-    def synchProgress(self):
+    def synch_progress(self):
         if not self.settings.username or not self.settings.password:
-            xbmc.log("Unable to synchronise progress with Arte TV for {pid}".format(pid=self.program_id))
-            xbmc.log("Missing user or password to authenticate")
+            xbmc.log("Unable to synchronise progress with Arte TV for {pid}".format(pid=self.program_id), level=xbmc.LOGWARNING)
+            xbmc.log("Missing user or password to authenticate", level=xbmc.LOGWARNING)
             return 400
 
         if not self.last_time:
-            xbmc.log("Unable to synchronise progress with Arte TV for {pid}.".format(pid=self.program_id))
-            xbmc.log("Missing time to synch")
+            xbmc.log("Unable to synchronise progress with Arte TV for {pid}.".format(pid=self.program_id), level=xbmc.LOGWARNING)
+            xbmc.log("Missing time to synch", level=xbmc.LOGWARNING)
             return 400
 
         self.last_time = round(self.last_time)
@@ -59,5 +65,5 @@ class Player(xbmc.Player):
             self.plugin,
             self.settings.username, self.settings.password,
             self.program_id, self.last_time)
-        xbmc.log("Synchronisation of progress {t}s with Arte TV for {pid} ended with {status}".format(t=self.last_time, pid=self.program_id, status=status))
+        xbmc.log("Synchronisation of progress {t}s with Arte TV for {pid} ended with {status}".format(t=self.last_time, pid=self.program_id, status=status), level=xbmc.LOGINFO)
         return status

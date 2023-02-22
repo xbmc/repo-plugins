@@ -62,3 +62,9 @@ def past_week():
 
     for i in range(0, 8):  # TODO: find better interval
         yield today - (one_day * i)
+
+def is_playlist(program_id):
+    is_playlist = False
+    if isinstance(program_id, str):
+        is_playlist = program_id.startswith('RC-') or program_id.startswith('PL-')
+    return is_playlist

@@ -14,18 +14,18 @@ def map_categories(api_categories, show_video_streams, cached_categories):
             item['code'] = cat_code
             if item.get('teasers'):
                 # build cached categories
-                cached_categories[cat_code]=[map_generic_item(teaser, show_video_streams)
+                cached_categories[cat_code] = [map_generic_item(teaser, show_video_streams)
                         for teaser in item.get('teasers')]
                 categories.append(map_categories_item(item, 'cached_category'))
             else:
-                xbmc.log("category \"{cat_title}\" will be ignored, because it contains no teaser".format(cat_title=item.get('title')))
+                xbmc.log("Category \"{cat_title}\" will be ignored, because it contains no teaser".format(cat_title=item.get('title')))
         else:
             categories.append(map_categories_item(item, 'api_category'))
     return categories
 
 def map_categories_item(item, category_rule, category_code=None):
-    if(not category_code):
-        category_code=item.get('code')
+    if not category_code:
+        category_code = item.get('code')
     return {
         'label': utils.colorize(item.get('title'), item.get('color')),
         'path': plugin.url_for(category_rule, category_code=category_code)
@@ -40,7 +40,7 @@ def map_categories_item(item, category_rule, category_code=None):
 
 
 def create_favorites_item(label=None):
-    if(not label):
+    if not label:
         label = plugin.addon.getLocalizedString(30010)
     return {
         'label': label,
@@ -49,7 +49,7 @@ def create_favorites_item(label=None):
 
 
 def create_last_viewed_item(label=None):
-    if(not label):
+    if not label:
         label = plugin.addon.getLocalizedString(30011)
     return {
         'label': label,
@@ -115,9 +115,9 @@ def map_category_item(item, category_code):
 
 
 def map_generic_item(item, show_video_streams):
-    programId = item.get('programId')
+    program_id = item.get('programId')
 
-    is_playlist = programId.startswith('RC-') or programId.startswith('PL-')
+    is_playlist = utils.is_playlist(program_id)
     if not is_playlist:
         return map_video(item, show_video_streams)
     else:
@@ -126,7 +126,8 @@ def map_generic_item(item, show_video_streams):
 
 # Create a video menu item from a json returned by Arte HBBTV API
 def map_video(item, show_video_streams):
-    programId = item.get('programId')
+    program_id = item.get('programId')
+    label = utils.format_title_and_subtitle(item.get('title'), item.get('subtitle'))
     kind = item.get('kind')
     duration = item.get('durationSeconds')
     airdate = item.get('broadcastBegin')
@@ -134,8 +135,8 @@ def map_video(item, show_video_streams):
         airdate = str(utils.parse_date(airdate))
 
     return {
-        'label': utils.format_title_and_subtitle(item.get('title'), item.get('subtitle')),
-        'path': plugin.url_for('streams', program_id=programId) if show_video_streams else plugin.url_for('play', kind=kind, program_id=programId),
+        'label': label,
+        'path': plugin.url_for('streams', program_id=program_id) if show_video_streams else plugin.url_for('play', kind=kind, program_id=program_id),
         'thumbnail': item.get('imageUrl'),
         'is_playable': not show_video_streams,
         'info_type': 'video',
@@ -157,9 +158,9 @@ def map_video(item, show_video_streams):
         },
         'context_menu': [
             (plugin.addon.getLocalizedString(30023),
-                actions.background(plugin.url_for('add_favorite', program_id=programId))),
+                actions.background(plugin.url_for('add_favorite', program_id=program_id, label=label))),
             (plugin.addon.getLocalizedString(30024),
-                actions.background(plugin.url_for('remove_favorite', program_id=programId))),
+                actions.background(plugin.url_for('remove_favorite', program_id=program_id, label=label))),
         ],
     }
 
@@ -210,43 +211,44 @@ def map_video(item, show_video_streams):
 # }
 # Destination object : https://romanvm.github.io/Kodistubs/_autosummary/xbmcgui.html#xbmcgui.ListItem.setInfo
 def map_artetv_video(item):
-    programId = item.get('programId')
+    program_id = item.get('programId')
+    label = utils.format_title_and_subtitle(item.get('title'), item.get('subtitle'))
     kind = item.get('kind')
     duration = item.get('durationSeconds')
     airdate = item.get('beginsAt') # broadcastBegin
     if airdate is not None:
         airdate = str(utils.parse_artetv_date(airdate))
 
-    fanartUrl = ""
-    thumbnailUrl = ""
+    fanart_url = ""
+    thumbnail_url = ""
     if item.get('images') and item.get('images')[0] and item.get('images')[0].get('url'):
         # Remove query param type=TEXT to avoid title embeded in image
-        fanartUrl = item.get('images')[0].get('url').replace('?type=TEXT', '')
+        fanart_url = item.get('images')[0].get('url').replace('?type=TEXT', '')
         # Set same image for fanart and thumbnail to spare network bandwidth
         # and business logic easier to maintain
         #if item.get('images')[0].get('alternateResolutions'):
         #    smallerImage = item.get('images')[0].get('alternateResolutions')[3]
         #    if smallerImage and smallerImage.get('url'):
         #        thumbnailUrl = smallerImage.get('url').replace('?type=TEXT', '')
-    if(not fanartUrl):
-        fanartUrl = item.get('mainImage').get('url').replace('__SIZE__', '1920x1080')
-    thumbnailUrl = fanartUrl
+    if not fanart_url:
+        fanart_url = item.get('mainImage').get('url').replace('__SIZE__', '1920x1080')
+    thumbnail_url = fanart_url
 
     progress = item.get('lastviewed') and item.get('lastviewed').get('progress') or 0
     time_offset = item.get('lastviewed') and item.get('lastviewed').get('timecode') or 0
-    
-    if(not isinstance(kind, str)):
+
+    if not isinstance(kind, str):
         kind = kind.get('code')
-    if(kind == 'EXTERNAL'):
+    if kind == 'EXTERNAL':
         return None
 
-    is_playlist = programId.startswith('RC-') or programId.startswith('PL-')
-    path = plugin.url_for('collection' if is_playlist else 'play', kind=kind, program_id=programId)
+    is_playlist = utils.is_playlist(program_id)
+    path = plugin.url_for('collection' if is_playlist else 'play', kind=kind, program_id=program_id)
     
     return {
-        'label': utils.format_title_and_subtitle(item.get('title'), item.get('subtitle')),
+        'label': label,
         'path': path,
-        'thumbnail': thumbnailUrl,
+        'thumbnail': thumbnail_url,
         'is_playable': not is_playlist, # item.get('playable') # not show_video_streams
         'info_type': 'video',
         'info': {
@@ -261,50 +263,52 @@ def map_artetv_video(item):
             #'country': [country.get('label') for country in item.get('productionCountries', [])],
             #'director': item.get('director'),
             #'aired': airdate
-            'playcount': progress,
+            'playcount': '1' if progress >= 0.95 else '0',
         },
         'properties': {
-            'fanart_image': fanartUrl,
+            'fanart_image': fanart_url,
+            # ResumeTime and TotalTime deprecated. Use InfoTagVideo.setResumePoint() instead.
             'ResumeTime': str(time_offset),
+            'TotalTime': str(duration),
             'StartPercent': str(progress * 100)
         },
         'context_menu': [
             (plugin.addon.getLocalizedString(30023),
-                actions.background(plugin.url_for('add_favorite', program_id=programId))),
+                actions.background(plugin.url_for('add_favorite', program_id=program_id, label=label))),
             (plugin.addon.getLocalizedString(30024),
-                actions.background(plugin.url_for('remove_favorite', program_id=programId))),
+                actions.background(plugin.url_for('remove_favorite', program_id=program_id, label=label))),
         ],
     }
 
 
 def map_live_video(item, quality, audio_slot):
-    programId = item.get('id')
+    # program_id = item.get('id')
     attr = item.get('attributes')
     meta = attr.get('metadata')
 
     duration = meta.get('duration').get('seconds')
 
-    fanartUrl = ""
-    thumbnailUrl = ""
+    fanart_url = ""
+    thumbnail_url = ""
     if meta.get('images') and meta.get('images')[0] and meta.get('images')[0].get('url'):
         # Remove query param type=TEXT to avoid title embeded in image
-        fanartUrl = meta.get('images')[0].get('url').replace('?type=TEXT', '')
-        thumbnailUrl = fanartUrl
+        fanart_url = meta.get('images')[0].get('url').replace('?type=TEXT', '')
+        thumbnail_url = fanart_url
         # Set same image for fanart and thumbnail to spare network bandwidth
         # and business logic easier to maintain
         #if item.get('images')[0].get('alternateResolutions'):
         #    smallerImage = item.get('images')[0].get('alternateResolutions')[3]
         #    if smallerImage and smallerImage.get('url'):
         #        thumbnailUrl = smallerImage.get('url').replace('?type=TEXT', '')
-    streamUrl=map_playable(attr.get('streams'), quality, audio_slot, match_artetv).get('path')
+    stream_url=map_playable(attr.get('streams'), quality, audio_slot, match_artetv).get('path')
 
     return {
         'label': utils.format_live_title_and_subtitle(meta.get('title'), meta.get('subtitle')),
-        'path': plugin.url_for('play_live', streamUrl=streamUrl),
+        'path': plugin.url_for('play_live', streamUrl=stream_url),
         # playing the stream from program id makes the live starts from the beginning of the video
         # while it starts the video like the live tv, with the above
         #  'path': plugin.url_for('play', kind='SHOW', program_id=programId.replace('_fr', '')),
-        'thumbnail': thumbnailUrl,
+        'thumbnail': thumbnail_url,
         'is_playable': True, # not show_video_streams
         'info_type': 'video',
         'info': {
@@ -319,21 +323,21 @@ def map_live_video(item, quality, audio_slot):
             #'country': [country.get('label') for country in item.get('productionCountries', [])],
             #'director': item.get('director'),
             #'aired': airdate
-            'playcount': 0
+            'playcount': '0',
         },
         'properties': {
-            'fanart_image': fanartUrl,
+            'fanart_image': fanart_url,
         }
     }
 
 
 def map_playlist(item):
-    programId = item.get('programId')
+    program_id = item.get('programId')
     kind = item.get('kind')
 
     return {
         'label': utils.format_title_and_subtitle(item.get('title'), item.get('subtitle')),
-        'path': plugin.url_for('collection', kind=kind, collection_id=programId),
+        'path': plugin.url_for('collection', kind=kind, collection_id=program_id),
         'thumbnail': item.get('imageUrl'),
         'info': {
             'title': item.get('title'),
@@ -343,7 +347,7 @@ def map_playlist(item):
 
 
 def map_streams(item, streams, quality):
-    programId = item.get('programId')
+    program_id = item.get('programId')
     kind = item.get('kind')
 
     video_item = map_video(item, False)
@@ -368,7 +372,7 @@ def map_streams(item, streams, quality):
         video_item['label'] = audio_label
         video_item['is_playable'] = True
         video_item['path'] = plugin.url_for(
-            'play_specific', kind=kind, program_id=programId, audio_slot=str(audio_slot))
+            'play_specific', kind=kind, program_id=program_id, audio_slot=str(audio_slot))
 
         return video_item
 
@@ -403,18 +407,21 @@ def match_artetv(item, quality, audio_slot):
 def map_zone_to_item(zone, cached_categories):
     menu_item = None
     title = zone.get('title')
-    if(zone.get('id') == '9fc57105-847b-49c5-9b4a-f46863754059'):
+    if zone.get('id') == '9fc57105-847b-49c5-9b4a-f46863754059':
         menu_item = create_favorites_item(title)
-    elif(zone.get('id') == '67cea6f3-7af0-4ffa-a6c2-59b1da0ecd4b'):
+    elif zone.get('id') == '67cea6f3-7af0-4ffa-a6c2-59b1da0ecd4b':
         menu_item = create_last_viewed_item(title)
-    elif (zone.get('link')):
-        menu_item = map_categories_item(zone, 'api_category', zone.get('link').get('page'))
-    else:
+    elif zone.get('content') and zone.get('content').get('data'):
         cached_category = map_cached_categories(zone)
         if cached_category:
             category_code = zone.get('code')
             cached_categories[category_code] = cached_category
             menu_item = map_categories_item(zone, 'cached_category')
+    elif zone.get('link'):
+        menu_item = map_categories_item(zone, 'api_category', zone.get('link').get('page'))
+    else:
+        xbmc.log("Zone \"{zone_title}\" will be ignored. No link. No content. id unknown.".format(zone_title=title))
+
     return menu_item
 
 
@@ -422,6 +429,6 @@ def map_cached_categories(zone):
     cached_category = []
     for item in zone.get('content').get('data'):
         menu_video = map_artetv_video(item)
-        if(menu_video):
+        if menu_video:
             cached_category.append(menu_video)
     return cached_category

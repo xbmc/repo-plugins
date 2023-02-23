@@ -6,7 +6,6 @@
 import os
 import sys
 
-import xbmc
 import xbmcvfs
 import xbmcgui
 import xbmcplugin
@@ -65,7 +64,7 @@ def root():
     ]
 
     for m in menu:
-        list_item = xbmcgui.ListItem(m['title'])
+        list_item = xbmcgui.ListItem(m['title'], offscreen=True)
         list_item.setArt({'icon': m['icon'], 'thumb': m['icon'], 'fanart': m['fanart']})
         url = 'plugin://{0}/?action={1}&kind={2}'.format(ADDON_ID, 'directory', m['kind'])
         xbmcplugin.addDirectoryItem(__handle__, url, list_item, True)
@@ -157,7 +156,7 @@ def directory(kind=None):
 
     # noinspection PyUnboundLocalVariable
     for m in menu:
-        list_item = xbmcgui.ListItem(m['title'])
+        list_item = xbmcgui.ListItem(m['title'], offscreen=True)
         if kind == 'youtube':
             thumb = m['image']
             fanart = FANART

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.greekvoice" name="Greek Voice" version="4.0.2" provider-name="threshold84">
+<addon id="plugin.video.greekvoice" name="Greek Voice" version="4.0.3" provider-name="threshold84">
     <requires>
 		<import addon="xbmc.python" version="3.0.0"/>
 		<import addon="script.module.requests" version="2.27.1"/>
@@ -14,11 +14,15 @@
         <summary lang="el_GR">Πρόσθετο Greek Voice</summary>
         <description lang="el_GR">Το πρόσθετο αυτό προσφέρει ζωντανές ροές στην ελληνική γλώσσα από τον ιστότοπο WPSO.com και XAMOSAM.com και το τηλεοπτικό του δίκτυο που βρίσκεται στην Τάμπα, Φλόριντα, ΗΠΑ.</description>
         <language>en el</language>
-        <license>GPL-3.0, MIT Licence</license>
+        <license>GPL-3.0-only, MIT</license>
         <website>http://www.wpso.com</website>
         <email>angelo@wzra48.com</email>
         <source>https://github.com/threshold84/plugin.video.greekvoice/</source>
-		<news>v4.0.2:
+		<news>v4.0.3:
+- Tweak code in various aspects to comply with Team Kodi's recommendations
+- Remove unused import statement for xbmc module
+
+v4.0.2:
 - Remove unneeded file encoding declaration
 - Improve conditional for setting info in nested playable items
 

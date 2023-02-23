@@ -32,6 +32,9 @@ def to_play_item(context, play_item):
         list_item = xbmcgui.ListItem(label=utils.to_unicode(title), offscreen=True)
     else:
         list_item = xbmcgui.ListItem(label=utils.to_unicode(title))
+    if major_version >= 20:
+        from ....external.listitem import ListItemInfoTag
+        info_tag = ListItemInfoTag(list_item, tag_type='video')
 
     if not is_strm:
         list_item.setProperty('IsPlayable', 'true')
@@ -45,7 +48,7 @@ def to_play_item(context, play_item):
             list_item.setArt({'icon': thumb, 'thumb': thumb, 'fanart': fanart})
 
     if not play_item.use_dash() and not settings.is_support_alternative_player_enabled() and \
-            play_item.get_headers() and play_item.get_uri().startswith('http'):
+            play_item.get_headers() and play_item.get_uri().startswith('http') and major_version < 20:
         play_item.set_uri('|'.join([play_item.get_uri(), play_item.get_headers()]))
 
     if settings.is_support_alternative_player_enabled() and \
@@ -63,6 +66,7 @@ def to_play_item(context, play_item):
         list_item.setProperty(inputstream_property, 'inputstream.adaptive')
         list_item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
         if play_item.get_headers():
+            list_item.setProperty('inputstream.adaptive.manifest_headers', play_item.get_headers())
             list_item.setProperty('inputstream.adaptive.stream_headers', play_item.get_headers())
 
         if play_item.get_license_key():
@@ -95,9 +99,13 @@ def to_play_item(context, play_item):
         if 'duration' in _info_labels:
             duration = _info_labels['duration']
             del _info_labels['duration']
-            list_item.addStreamInfo('video', {'duration': duration})
+            func = info_tag.add_stream_info if major_version >= 20 else list_item.addStreamInfo
+            func('video', {'duration': duration})
 
-        list_item.setInfo(type='video', infoLabels=_info_labels)
+        if major_version >= 20:
+            info_tag.set_info(_info_labels)
+        else:
+            list_item.setInfo(type='video', infoLabels=_info_labels)
     return list_item
 
 
@@ -112,6 +120,9 @@ def to_video_item(context, video_item):
         item = xbmcgui.ListItem(label=utils.to_unicode(title), offscreen=True)
     else:
         item = xbmcgui.ListItem(label=utils.to_unicode(title))
+    if major_version >= 20:
+        from ....external.listitem import ListItemInfoTag
+        info_tag = ListItemInfoTag(item, tag_type='video')
     if video_item.get_fanart() and settings.show_fanart():
         fanart = video_item.get_fanart()
     if major_version <= 15:
@@ -150,9 +161,13 @@ def to_video_item(context, video_item):
     if 'duration' in _info_labels:
         duration = _info_labels['duration']
         del _info_labels['duration']
-        item.addStreamInfo('video', {'duration': duration})
+        func = info_tag.add_stream_info if major_version >= 20 else item.addStreamInfo
+        func('video', {'duration': duration})
 
-    item.setInfo(type='video', infoLabels=_info_labels)
+    if major_version >= 20:
+        info_tag.set_info(_info_labels)
+    else:
+        item.setInfo(type='video', infoLabels=_info_labels)
 
     if video_item.get_channel_id():  # make channel_id property available for keymapping
         item.setProperty('channel_id', video_item.get_channel_id())
@@ -180,6 +195,9 @@ def to_audio_item(context, audio_item):
         item = xbmcgui.ListItem(label=utils.to_unicode(title), offscreen=True)
     else:
         item = xbmcgui.ListItem(label=utils.to_unicode(title))
+    if major_version >= 20:
+        from ....external.listitem import ListItemInfoTag
+        info_tag = ListItemInfoTag(item, tag_type='music')
     if audio_item.get_fanart() and settings.show_fanart():
         fanart = audio_item.get_fanart()
     if major_version <= 15:
@@ -193,7 +211,10 @@ def to_audio_item(context, audio_item):
 
     item.setProperty('IsPlayable', 'true')
 
-    item.setInfo(type='music', infoLabels=info_labels.create_from_item(audio_item))
+    if major_version >= 20:
+        info_tag.set_info(info_labels.create_from_item(audio_item))
+    else:
+        item.setInfo(type='music', infoLabels=info_labels.create_from_item(audio_item))
     return item
 
 

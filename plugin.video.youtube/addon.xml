@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="6.8.24" provider-name="anxdpanic, bromix">
+<addon id="plugin.video.youtube" name="YouTube" version="6.8.25" provider-name="anxdpanic, bromix">
     <requires>
         <import addon="xbmc.python" version="2.20.0"/>
         <import addon="script.module.six" version="1.11.0"/>
@@ -13,9 +13,9 @@
     <extension point="xbmc.python.module" library="resources/lib/"/>
     <extension point="xbmc.addon.metadata">
         <news>
-[fixup] resolve playback history not being updated
-[add] add opus audio support
-[upd] use more descript reasons for failed playback
+[fix] Nexus compatibility with InfoTagVideo |contrib: jurialmunkey|
+[chg] make httpd /api url case insensitive due to skin choice of uppercase settings text
+[chg] use listitem property for Inputstream Adaptive headers instead of url piped on Nexus+
 [upd] Translations updated from Kodi Weblate
         </news>
         <assets>
@@ -67,7 +67,7 @@
         <description lang="hr_HR">YouTube je jedna od najvećih stranica za dijeljenje video sadržaja na svijetu.</description>
         <description lang="hu_HU">A YouTube világ egyik legnagyobb videómegosztó weboldala.</description>
         <description lang="id_ID">YouTube adalah salah satu situs web berbagi video terbesar di dunia.</description>
-        <description lang="it_IT">YouTube è uno dei più grandi siti web di condivisione video del mondo.</description>
+        <description lang="it_IT">YouTube è uno dei più grandi siti di condivisione video del mondo.</description>
         <description lang="ko_KR">유튜브는 세상에서 가장 큰 동영상 공유 사이트 중의 하나입니다.</description>
         <description lang="nb_NO">YouTube er en av verdens største nettsider for videodeling.</description>
         <description lang="nl_NL">YouTube is een van de grootste videodelenwebsite in de hele wereld.</description>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.composite_for_plex" name="Composite" version="2.0.0" provider-name="anxdpanic">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+        <import addon="script.module.requests" version="2.12.4"/>
+        <import addon="script.module.pyxbmct" version="1.2.0"/>
+        <import addon="script.module.infotagger" version="0.0.5"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="resources/lib/entry_point.py">
+        <provides>video audio image</provides>
+        <medialibraryscanpath content="movies">library/movies/</medialibraryscanpath>
+        <medialibraryscanpath content="tvshows">library/tvshows/</medialibraryscanpath>
+    </extension>
+    <extension point="xbmc.service" library="resources/lib/service_entry_point.py"/>
+    <extension point="xbmc.python.script" library="resources/lib/entry_point.py"/>
+    <extension point="kodi.context.item">
+        <menu id="kodi.core.main">
+            <menu>
+                <label>Composite</label>
+                <item library="resources/lib/composite_addon/context_menu_transcoded.py">
+                    <!-- Play Transcoded -->
+                    <label>30086</label>
+                    <visible>[Window.IsActive(10000) | Window.IsActive(10025)] + String.IsEmpty(Container.PluginName) + String.StartsWith(ListItem.FileNameAndPath,plugin://plugin.video.composite_for_plex/) + [String.IsEqual(ListItem.DBTYPE,video) | String.IsEqual(ListItem.DBTYPE,movie) | String.IsEqual(ListItem.DBTYPE,episode)]</visible>
+                </item>
+                <item library="resources/lib/composite_addon/context_menu_watched.py">
+                    <!-- Mark as watched -->
+                    <label>30792</label>
+                    <visible>[Window.IsActive(10000) | Window.IsActive(10025)] + String.IsEmpty(Container.PluginName) + String.StartsWith(ListItem.FileNameAndPath,plugin://plugin.video.composite_for_plex/) + [String.IsEqual(ListItem.DBTYPE,video) | String.IsEqual(ListItem.DBTYPE,movie) | String.IsEqual(ListItem.DBTYPE,episode)]</visible>
+                </item>
+                <item library="resources/lib/composite_addon/context_menu_unwatched.py">
+                    <!-- Mark as unwatched -->
+                    <label>30793</label>
+                    <visible>[Window.IsActive(10000) | Window.IsActive(10025)] + String.IsEmpty(Container.PluginName) + String.StartsWith(ListItem.FileNameAndPath,plugin://plugin.video.composite_for_plex/) + [String.IsEqual(ListItem.DBTYPE,video) | String.IsEqual(ListItem.DBTYPE,movie) | String.IsEqual(ListItem.DBTYPE,episode)]</visible>
+                </item>
+            </menu>
+        </menu>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <assets>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.png</fanart>
+        </assets>
+        <news>
+[add] Kodi Nexus v20 support
+[chg] changed settings format to the latest format
+[rem] removed support for all version of Kodi pre-Nexus v20
+[rem] removed Python 2 support
+[rem] removed dependency on kodi-six
+[rem] removed dependency on six
+[lang] update translations from Weblate
+        </news>
+        <platform>all</platform>
+        <license>GPL-2.0-or-later</license>
+        <source>https://github.com/anxdpanic/plugin.video.composite_for_plex</source>
+        <forum>https://composite.panicked.xyz/forum</forum>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+        <description lang="de_DE">Durchsuchen und Abspielen von Videos, Musik und Fotos, die vom Plex Media Server verwaltet werden.[CR][CR]Fork von Hippojay&apos;s PleXBMC</description>
+        <description lang="en_GB">Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay</description>
+        <description lang="es_ES">Explorar y reproducir archivos multimedia de vídeo, música y fotos gestionados por Plex Media Server.[CR][CR]Bifurcación de PleXBMC por Hippojay</description>
+        <description lang="es_MX">Explora y reproduce multimedia tal como video, música y e imágenes administrados por Plex Media Server.[CR][CR]Fork de PleXBMC por Hippojay</description>
+        <description lang="fi_FI">Selaa ja toista video-, musiikki- ja kuvamediatiedostoja, joita Plex Media Server hallinnoi.[CR][CR]kehittäjän Hippojay PleXBMC-kehityshaara</description>
+        <description lang="it_IT">Sfoglia e riproduci file multimediali di video, musica e foto gestiti da Plex Media Server.[CR][CR]Fork di PleXBMC di Hippojay</description>
+        <description lang="pl_PL">Przeglądaj i odtwarzaj pliki multimedialne zarządzane przez Plex Media Server.[CR] [CR] Jest to fork PleXBMC stworzonego przez Hippojay&apos;a</description>
+        <description lang="vi_VN">Duyệt và phát các tập tin đa phương tiện video, nhạc và ảnh do Plex Media Server quản lý.[CR][CR]Fork of PleXBMC by Hippojay</description>
+        <disclaimer lang="de_DE">Composite ist KEIN offizielles Plex-Addon und wird von Plex weder unterstützt noch gebilligt.</disclaimer>
+        <disclaimer lang="en_GB">Composite is NOT an official Plex add-on and is not supported or endorsed by Plex.</disclaimer>
+        <disclaimer lang="es_ES">Composite NO es un add-on oficial de Plex y no está apoyado ni respaldado por Plex.</disclaimer>
+        <disclaimer lang="es_MX">Composite NO es un complemento oficial de Plex y no tiene soporte o respaldo por parte de Plex.</disclaimer>
+        <disclaimer lang="fi_FI">Composite ei ole virallinen Plex-lisäosa, eikä Plex tue tai suosittele sen käyttöä.</disclaimer>
+        <disclaimer lang="it_IT">Composite NON è un componente aggiuntivo Plex ufficiale e non è supportato o approvato da Plex.</disclaimer>
+        <disclaimer lang="pl_PL">Composite NIE jest oficjalnym dodatkiem do programu Plex, nie jest wspierany ani zatwierdzany przez firmę Plex.</disclaimer>
+        <disclaimer lang="vi_VN">Composite KHÔNG phải là một tiện ích chính thức của Plex và không được Plex hỗ trợ hoặc xác nhận.</disclaimer>
+    </extension>
+</addon>

@@ -1,0 +1,1066 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: STRINGS\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: 2021-12-07 01:13+0000\n"
+"Last-Translator: Fabio <fabioihle+kodi@alunos.utfpr.edu.br>\n"
+"Language-Team: Portuguese (Brazil) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-tubed/pt_br/>\n"
+"Language: pt_br\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.9.1\n"
+
+msgctxt "Addon Summary"
+msgid "Watch your favorite YouTube content on Kodi"
+msgstr "Assista aos seus conteúdos favoritos do Youtube no Kodi"
+
+msgctxt "Addon Description"
+msgid "Browse your favorite content from YouTube; create, delete, and rename playlists; subscribe or unsubscribe from your favorite channels; and rate your favorite videos."
+msgstr "Navegue pelo seu conteúdo favorito do YouTube; criar, excluir e renomear listas de reprodução; inscreva-se ou cancele a inscrição de seus canais favoritos; e avalie seus vídeos favoritos."
+
+msgctxt "Addon Disclaimer"
+msgid "Tubed's use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed's Privacy Policy at https://panicked.xyz/tubed-privacy/"
+msgstr "Tubed's informações recebidas das APIs do Google obedecerá à Política de dados do usuário dos serviços de API do Google, incluindo os requisitos de uso limitado. Para obter mais informações sobre como seus dados são tratados, consulte a Política de privacidade da Tubed em https://panicked.xyz/tubed-privacy/"
+
+msgctxt "#30000"
+msgid "Most Popular"
+msgstr "Populares"
+
+msgctxt "#30001"
+msgid "Next Page"
+msgstr "Próxima Página"
+
+msgctxt "#30002"
+msgid "Recommendations"
+msgstr "Recomendações"
+
+msgctxt "#30003"
+msgid "Search"
+msgstr "Procurar"
+
+msgctxt "#30004"
+msgid "My Channel"
+msgstr "Meu Canal"
+
+msgctxt "#30005"
+msgid "Liked Videos"
+msgstr "Vídeos Curtidos"
+
+msgctxt "#30006"
+msgid "Disliked Videos"
+msgstr "Vídeos Não Curtidos"
+
+msgctxt "#30007"
+msgid "Playlists"
+msgstr "Listas de Reprodução"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "Canais"
+
+msgctxt "#30009"
+msgid "Subscriptions"
+msgstr "Subscrições"
+
+msgctxt "#30010"
+msgid "Live"
+msgstr "Ao Vivo"
+
+msgctxt "#30011"
+msgid "Sign in with Google"
+msgstr "Logar com Google"
+
+msgctxt "#30012"
+msgid "Sign Out"
+msgstr "deslogar"
+
+msgctxt "#30013"
+msgid "Manage Users"
+msgstr "Gerenciar Usuários"
+
+msgctxt "#30014"
+msgid "New Search"
+msgstr "Próxima Procura"
+
+msgctxt "#30015"
+msgid "Enter your search term"
+msgstr "Entre com o termo de sua procura"
+
+msgctxt "#30016"
+msgid "Go to %s and enter the following code:"
+msgstr "Vá para %s e entre o seguinte código:"
+
+msgctxt "#30017"
+msgid "New user..."
+msgstr "Novo usuário..."
+
+msgctxt "#30018"
+msgid "Rename user..."
+msgstr "Ronomear usuário..."
+
+msgctxt "#30019"
+msgid "Remove user..."
+msgstr "Remover usuário..."
+
+msgctxt "#30020"
+msgid "New Username"
+msgstr "Novo nome de usuário"
+
+msgctxt "#30021"
+msgid "Remove User"
+msgstr "Remover Usuário"
+
+msgctxt "#30022"
+msgid "Removing %s, are you sure?"
+msgstr "Removendo %s, tem certeza?"
+
+msgctxt "#30023"
+msgid "Uploads"
+msgstr "Envios"
+
+msgctxt "#30024"
+msgid "You are about to sign out, are you sure?"
+msgstr "Você está prestes a deslogar, tem certeza?"
+
+msgctxt "#30025"
+msgid "Categories"
+msgstr "Categorias"
+
+msgctxt "#30026"
+msgid "Remove..."
+msgstr "Remover..."
+
+msgctxt "#30027"
+msgid "Clear history"
+msgstr "Limpar histórico"
+
+msgctxt "#30028"
+msgid "General"
+msgstr "Geral"
+
+msgctxt "#30029"
+msgid "Quality"
+msgstr "Qualidade"
+
+msgctxt "#30030"
+msgid "Choose the maximum playback quality for videos and live content"
+msgstr "Escolha a qualidade máxima de reprodução para vídeos e conteúdos ao vivo"
+
+msgctxt "#30031"
+msgid "Limit to 30 fps"
+msgstr "Limitado a 30 fps"
+
+msgctxt "#30032"
+msgid "Limit playback quality to 30 fps or less"
+msgstr "Limite a qualidade da reprodução para 30 fps ou menos"
+
+msgctxt "#30033"
+msgid "HDR"
+msgstr "HDR"
+
+msgctxt "#30034"
+msgid "Use the best matching HDR streams for videos"
+msgstr "Use os melhores streams HDR correspondentes para vídeos"
+
+msgctxt "#30035"
+msgid "Adaptive (MP4/H264)"
+msgstr "Adaptativo (MP4/H264)"
+
+msgctxt "#30036"
+msgid "Adaptive (WEBM/VP9)"
+msgstr "Adaptativo (WEBM/VP9)"
+
+msgctxt "#30037"
+msgid "240p"
+msgstr "240p"
+
+msgctxt "#30038"
+msgid "360p"
+msgstr "360p"
+
+msgctxt "#30039"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30040"
+msgid "720p (HD)"
+msgstr "720p (HD)"
+
+msgctxt "#30041"
+msgid "1080p (FHD)"
+msgstr "1080p (FHD)"
+
+msgctxt "#30042"
+msgid "1440p (QHD)"
+msgstr "1440p (QHD)"
+
+msgctxt "#30043"
+msgid "2160p (4K)"
+msgstr "2160p (4K)"
+
+msgctxt "#30044"
+msgid "4320p (8K)"
+msgstr "4320p (8K)"
+
+msgctxt "#30045"
+msgid "Playback"
+msgstr "Reprodução"
+
+msgctxt "#30046"
+msgid "Watch Later"
+msgstr "Assistir depois"
+
+msgctxt "#30047"
+msgid "Regional"
+msgstr "Regional"
+
+msgctxt "#30048"
+msgid "Language"
+msgstr "Idioma"
+
+msgctxt "#30049"
+msgid "Your preferred YouTube UI language"
+msgstr "Seu ID de idioma preferido no Youtube"
+
+msgctxt "#30050"
+msgid "Region"
+msgstr "Região"
+
+msgctxt "#30051"
+msgid "Your preferred content region"
+msgstr "Sua região preferido para conteúdo"
+
+msgctxt "#30052"
+msgid "Configure regional preferences"
+msgstr "Configure as preferências regionais"
+
+msgctxt "#30053"
+msgid "Configure your preferred language and region"
+msgstr "Configure seu idioma e região preferido"
+
+msgctxt "#30054"
+msgid "Configure subtitles"
+msgstr "Configure legendas"
+
+msgctxt "#30055"
+msgid "Configure your preferred subtitle language"
+msgstr "Configure seu idioma de legenda preferido"
+
+msgctxt "#30056"
+msgid "Subtitle language"
+msgstr "Idioma legenda"
+
+msgctxt "#30057"
+msgid "Your preferred subtitle language"
+msgstr "Seu idioma de legenda preferido"
+
+msgctxt "#30058"
+msgid "Subtitles"
+msgstr "Legendas"
+
+msgctxt "#30059"
+msgid "%s with %s fallback"
+msgstr "$s com %s reserva"
+
+msgctxt "#30060"
+msgid "No auto-generated"
+msgstr "Sem geração automática"
+
+msgctxt "#30061"
+msgid "None"
+msgstr "Nenhum"
+
+msgctxt "#30062"
+msgid "Prompt"
+msgstr "Perguntar"
+
+msgctxt "#30063"
+msgid "Subscribe"
+msgstr "Subscrever"
+
+msgctxt "#30064"
+msgid "Subscribed"
+msgstr "Subscrito"
+
+msgctxt "#30065"
+msgid "Unsubscribe"
+msgstr "Remover subscrição"
+
+msgctxt "#30066"
+msgid "Unsubscribed"
+msgstr "Subscrição cancelada"
+
+msgctxt "#30067"
+msgid "Error"
+msgstr "Erro"
+
+msgctxt "#30068"
+msgid "Play (Prompt for subtitles)"
+msgstr "Reprodução (Prompt para legendas)"
+
+msgctxt "#30069"
+msgid "Go to %s"
+msgstr "Ir para %s"
+
+msgctxt "#30070"
+msgid "Subscribed to %s"
+msgstr "Subscrito para %s"
+
+msgctxt "#30071"
+msgid "Unsubscribed from %s"
+msgstr "Removido subscrição para %s"
+
+msgctxt "#30072"
+msgid "Rate"
+msgstr "Classificar"
+
+msgctxt "#30073"
+msgid "I like this"
+msgstr "Eu gosto disto"
+
+msgctxt "#30074"
+msgid "I dislike this"
+msgstr "Eu não gosto disto"
+
+msgctxt "#30075"
+msgid "Remove rating"
+msgstr "Remover classificação"
+
+msgctxt "#30076"
+msgid "Liked"
+msgstr "Curtido"
+
+msgctxt "#30077"
+msgid "Disliked"
+msgstr "Descurtido"
+
+msgctxt "#30078"
+msgid "Liked %s"
+msgstr "Curtido %s"
+
+msgctxt "#30079"
+msgid "Disliked %s"
+msgstr "Descurtido %s"
+
+msgctxt "#30080"
+msgid "Rating removed"
+msgstr "Classificação removida"
+
+msgctxt "#30081"
+msgid "Rating removed from %s"
+msgstr "Classificação removida de %s"
+
+msgctxt "#30082"
+msgid "New playlist"
+msgstr "Nova lista de reprodução"
+
+msgctxt "#30083"
+msgid "Add to playlist"
+msgstr "Adicionar para lista de reprodução"
+
+msgctxt "#30084"
+msgid "Remove from playlist"
+msgstr "Remover da lista de reprodução"
+
+msgctxt "#30085"
+msgid "Delete playlist"
+msgstr "Deletar lista de reprodução"
+
+msgctxt "#30086"
+msgid "Enter your playlist title"
+msgstr "Entre com título para lista de reprodução"
+
+msgctxt "#30087"
+msgid "Added %s to %s"
+msgstr "Adicionado %s para %s"
+
+msgctxt "#30088"
+msgid "Removed from playlist"
+msgstr "Removido da lista de reprodução"
+
+msgctxt "#30089"
+msgid "Removed %s from playlist"
+msgstr "Removido %s da lista de reprodução"
+
+msgctxt "#30090"
+msgid "Playlist deleted"
+msgstr "Lista de reprodução deletada"
+
+msgctxt "#30091"
+msgid "%s playlist deleted"
+msgstr "%s lista de reprodução deletada"
+
+msgctxt "#30092"
+msgid "Rename playlist"
+msgstr "Renomear lista de reprodução"
+
+msgctxt "#30093"
+msgid "Playlist renamed to %s"
+msgstr "Lista de reprodução renomeada para %s"
+
+msgctxt "#30094"
+msgid "%s renamed to %s"
+msgstr "% renomeada para %s"
+
+msgctxt "#30095"
+msgid "You are about to delete %s, are you sure?"
+msgstr "Você quer deletar %s, tem certeza?"
+
+msgctxt "#30096"
+msgid "You are about to delete a playlist, are you sure?"
+msgstr "Você está próximo de deletar uma lista de reprodução, tem certeza?"
+
+msgctxt "#30097"
+msgid "Upcoming"
+msgstr "Por vir"
+
+msgctxt "#30098"
+msgid "Completed"
+msgstr "Completado"
+
+msgctxt "#30099"
+msgid "%s was scheduled to start %s"
+msgstr "%s foi agendado para iniciar %s"
+
+msgctxt "#30100"
+msgid "%s is scheduled to start %s"
+msgstr "%s foi agendado para iniciar %s"
+
+msgctxt "#30101"
+msgid "Related videos"
+msgstr "Vídeos relacionados"
+
+msgctxt "#30102"
+msgid "Cache"
+msgstr "Cache"
+
+msgctxt "#30103"
+msgid "Data cache TTL (weeks)"
+msgstr "Cache dados TTL (semanas)"
+
+msgctxt "#30104"
+msgid "Function cache TTL (minutes)"
+msgstr "Função cache TTL (minutos)"
+
+msgctxt "#30105"
+msgid "Clear data cache"
+msgstr "Limpar dados de cache"
+
+msgctxt "#30106"
+msgid "Clear function cache"
+msgstr "Limpar função cache"
+
+msgctxt "#30107"
+msgid "Data cache was cleared"
+msgstr "Dados do cache foram limpos"
+
+msgctxt "#30108"
+msgid "Function cache was cleared"
+msgstr "Função cache foi limpa"
+
+msgctxt "#30109"
+msgid "Delete data cache"
+msgstr "Deletar dados do cache"
+
+msgctxt "#30110"
+msgid "Delete function cache"
+msgstr "Função deletar do cache"
+
+msgctxt "#30111"
+msgid "Data cache was deleted"
+msgstr "Dados cache foram deletados"
+
+msgctxt "#30112"
+msgid "Function cache was deleted"
+msgstr "Função cache foi deletada"
+
+msgctxt "#30113"
+msgid "Time to Live"
+msgstr "horário para ao vivo"
+
+msgctxt "#30114"
+msgid "Maintenance"
+msgstr "Manutenção"
+
+msgctxt "#30115"
+msgid "How long until long term data cache expires in weeks"
+msgstr "Quanto tempo até que o cache de dados de longo prazo expire em semanas"
+
+msgctxt "#30116"
+msgid "How long until short term function cache expires in minutes"
+msgstr "Quanto tempo até que o cache de função de curto prazo expire em minutos"
+
+msgctxt "#30117"
+msgid "Clearing long term data cache will remove all entries from the database"
+msgstr "Limpar dados de cache de longo prazo"
+
+msgctxt "#30118"
+msgid "Clearing short term function cache will remove all cache entries"
+msgstr "Limpar função de cache de curto prazo"
+
+msgctxt "#30119"
+msgid "Deleting long term data cache will delete the whole database"
+msgstr "Deletar função de longo prazo cache"
+
+msgctxt "#30120"
+msgid "Deleting short term function cache will delete the whole database"
+msgstr "Excluir função de curto prazo cache"
+
+msgctxt "#30121"
+msgid "Failed to clear function cache"
+msgstr "Falhou em limpar a função cache"
+
+msgctxt "#30122"
+msgid "Failed to clear data cache"
+msgstr "Falhou em limpar dados do cache"
+
+msgctxt "#30123"
+msgid "Failed to delete function cache"
+msgstr "Falhou ao deletar a função cache"
+
+msgctxt "#30124"
+msgid "Failed to delete data cache"
+msgstr "Falhou ao deletar dados do cache"
+
+msgctxt "#30125"
+msgid "Debug"
+msgstr "Depurar"
+
+msgctxt "#30126"
+msgid "Component Logging"
+msgstr "Depuração Componente"
+
+msgctxt "#30127"
+msgid "API requests"
+msgstr "Requisições API"
+
+msgctxt "#30128"
+msgid "Enable logging of API requests and responses"
+msgstr "Ativar registro de solicitações e respostas de API"
+
+msgctxt "#30129"
+msgid "Comments"
+msgstr "Comentários"
+
+msgctxt "#30130"
+msgid "Comment"
+msgstr "Comentário"
+
+msgctxt "#30131"
+msgid "Read comment"
+msgstr "Ler comentário"
+
+msgctxt "#30132"
+msgid "Likes"
+msgstr "Curtidos"
+
+msgctxt "#30133"
+msgid "Replies"
+msgstr "Respostas"
+
+msgctxt "#30134"
+msgid "Comment has been edited"
+msgstr "Comentário foi editado"
+
+msgctxt "#30135"
+msgid "Limits"
+msgstr "Limites"
+
+msgctxt "#30136"
+msgid "Data cache (MB)"
+msgstr "Cache Dados (MB)"
+
+msgctxt "#30137"
+msgid "The maximum size of long term data cache before being automatically resized"
+msgstr "O tamanho máximo do cache de dados de longo prazo antes de ser redimensionado automaticamente"
+
+msgctxt "#30138"
+msgid "Sort order"
+msgstr "Ordenar"
+
+msgctxt "#30139"
+msgid "Choose a sort order"
+msgstr "Escolher uma ordenação"
+
+msgctxt "#30140"
+msgid "Alphabetical"
+msgstr "Alfabética"
+
+msgctxt "#30141"
+msgid "Relevance"
+msgstr "Relevância"
+
+msgctxt "#30142"
+msgid "Activity"
+msgstr "Atividade"
+
+msgctxt "#30143"
+msgid "Time"
+msgstr "Tempo"
+
+msgctxt "#30144"
+msgid "Date"
+msgstr "Data"
+
+msgctxt "#30145"
+msgid "Rating"
+msgstr "Classificação"
+
+msgctxt "#30146"
+msgid "Title"
+msgstr "Título"
+
+msgctxt "#30147"
+msgid "Video Count"
+msgstr "Contador do vídeo"
+
+msgctxt "#30148"
+msgid "View Count"
+msgstr "Quantidade de visualizações"
+
+msgctxt "#30149"
+msgid "Post Play"
+msgstr "Após reprodução"
+
+msgctxt "#30150"
+msgid "Post play minimum watch percentage"
+msgstr "Porcentagem mínima de reprodução"
+
+msgctxt "#30151"
+msgid "What percent of the video's duration must be watched to trigger post play events"
+msgstr "Qual porcentagem da duração do vídeo deve ser assistida para acionar eventos pós-reprodução"
+
+msgctxt "#30152"
+msgid "Rate the video that just finished playing"
+msgstr "Avalie o vídeo que acabou de ser reproduzido"
+
+msgctxt "#30153"
+msgid "Rate during playlists"
+msgstr "Classificar durante playlists"
+
+msgctxt "#30154"
+msgid "Should rating be requested while watching playlists"
+msgstr "A classificação deve ser solicitada ao assistir playlists"
+
+msgctxt "#30155"
+msgid "Autoplay related videos"
+msgstr "Vídeos relacionados à reprodução automática"
+
+msgctxt "#30156"
+msgid "Autoplay videos related to the previously played video"
+msgstr "Vídeos de reprodução automática relacionados ao vídeo reproduzido anteriormente"
+
+msgctxt "#30157"
+msgid "Set as History"
+msgstr "Setar com Histórico"
+
+msgctxt "#30158"
+msgid "Set as Watch Later"
+msgstr "Setar para Assistir Depois"
+
+msgctxt "#30159"
+msgid "Remove as History"
+msgstr "Remover do Histórico"
+
+msgctxt "#30160"
+msgid "Remove as Watch Later"
+msgstr "Remover de Assistir Depois"
+
+msgctxt "#30161"
+msgid "History"
+msgstr "Histórico"
+
+msgctxt "#30162"
+msgid "Watch later playlist configured"
+msgstr "Lista de reprodução assistir depois configurada"
+
+msgctxt "#30163"
+msgid "History playlist configured"
+msgstr "Lista de reprodução de histórico configurada"
+
+msgctxt "#30164"
+msgid "%s was configured as your watch later playlist"
+msgstr "%s foi configurado como sua lista de reprodução para assistir mais tarde"
+
+msgctxt "#30165"
+msgid "%s was configured as your history playlist"
+msgstr "%s foi configurado como sua lista de reprodução de histórico"
+
+msgctxt "#30166"
+msgid "Watch later playlist is no longer configured"
+msgstr "Assistir mais tarde a lista de reprodução não está mais configurada"
+
+msgctxt "#30167"
+msgid "History playlist is no longer configured"
+msgstr "A lista de reprodução do histórico não está mais configurada"
+
+msgctxt "#30168"
+msgid "%s is no longer configured as your watch later playlist"
+msgstr "%s não está mais configurado como sua lista de reprodução para assistir mais tarde"
+
+msgctxt "#30169"
+msgid "%s is no longer configured as your history playlist"
+msgstr "%s não está mais configurado como sua lista de reprodução de histórico"
+
+msgctxt "#30170"
+msgid "Add to watch later"
+msgstr "Adicionar para assistir depois"
+
+msgctxt "#30171"
+msgid "Favorite Channels"
+msgstr "Canais Favoritos"
+
+msgctxt "#30172"
+msgid "Add to favorite channels"
+msgstr "Adicionar aos canais favoritos"
+
+msgctxt "#30173"
+msgid "Clear favorite channels"
+msgstr "Limpar canais favoritos"
+
+msgctxt "#30174"
+msgid "Added to favorite channels"
+msgstr "Adicionado ao canais favoritos"
+
+msgctxt "#30175"
+msgid "Removed from favorite channels"
+msgstr "Removido dos canais favoritos"
+
+msgctxt "#30176"
+msgid "Import from xml"
+msgstr "Importar do xml"
+
+msgctxt "#30177"
+msgid "Import failed"
+msgstr "Importar falhou"
+
+msgctxt "#30178"
+msgid "Import completed successfully"
+msgstr "Importar completado com sucesso"
+
+msgctxt "#30179"
+msgid "You are about to clear your favorite channels, are you sure?"
+msgstr "Você está prestes a limpar seus canais favoritos, tem certeza?"
+
+msgctxt "#30180"
+msgid "Favorite channels cleared"
+msgstr "Canais favoritos limpo"
+
+msgctxt "#30181"
+msgid "Add %s to favorite channels"
+msgstr "Adicionar %s para canais favoritos"
+
+msgctxt "#30182"
+msgid "Added %s to favorite channels"
+msgstr "Adicionado %s dos canais favoritos"
+
+msgctxt "#30183"
+msgid "Removed %s from favorite channels"
+msgstr "Removido %s dos canais favoritos"
+
+msgctxt "#30184"
+msgid "Refresh"
+msgstr "Atualizar"
+
+msgctxt "#30185"
+msgid "Clear function cache on refresh"
+msgstr "Função limpar cache ao atualizar"
+
+msgctxt "#30186"
+msgid "Short term function cache will be cleared when using Refresh from the context menu"
+msgstr "O cache de função de curto prazo será limpo ao usar Atualizar no menu de contexto"
+
+msgctxt "#30187"
+msgid "Choose watch later playlist"
+msgstr "Escolher uma lista de reprodução para assistir mais tarde"
+
+msgctxt "#30188"
+msgid "Added %s to the new watch later playlist %s"
+msgstr "Adicionado %s à nova lista de reprodução assistir mais tarde %s"
+
+msgctxt "#30189"
+msgid "Search history items"
+msgstr "Procurar itens no histórico"
+
+msgctxt "#30190"
+msgid "How many search history items should be kept for each user"
+msgstr "Quantos itens do histórico de pesquisa devem ser mantidos para cada usuário"
+
+msgctxt "#30191"
+msgid "Favorite channels"
+msgstr "Canais favoritos"
+
+msgctxt "#30192"
+msgid "How many favorite channels should be kept for each user"
+msgstr "Quantos canais favoritos devem ser mantidos para cada usuário"
+
+msgctxt "#30193"
+msgid "Play"
+msgstr "Reproduzir"
+
+msgctxt "#30194"
+msgid "Play from %s"
+msgstr "Reproduzir de %s"
+
+msgctxt "#30195"
+msgid "Most Popular Regionally"
+msgstr "Populares na Região"
+
+msgctxt "#30196"
+msgid "Main Menu"
+msgstr "Menu Principal"
+
+msgctxt "#30197"
+msgid "Show/Hide this item on the main menu"
+msgstr "Mostrar/Ocultar este item do menu principal"
+
+msgctxt "#30198"
+msgid "Hide %s"
+msgstr "Ocultar %s"
+
+msgctxt "#30199"
+msgid "%s was hidden from the main menu"
+msgstr "%s foi oculto do menu principal"
+
+msgctxt "#30200"
+msgid "User is authenticated"
+msgstr "Usuário foi autenticado"
+
+msgctxt "#30201"
+msgid "User is not authenticated"
+msgstr "Usuário não foi autenticado"
+
+msgctxt "#30202"
+msgid "Create a new user"
+msgstr "Criar um novo usuário"
+
+msgctxt "#30203"
+msgid "Rename a current user"
+msgstr "Renomear o usuário atual"
+
+msgctxt "#30204"
+msgid "Remove a current user"
+msgstr "Remover o usuário atual"
+
+msgctxt "#30205"
+msgid "Change avatar..."
+msgstr "Alterar avatar..."
+
+msgctxt "#30206"
+msgid "Change a current user's avatar"
+msgstr "Alterar o avatar do usuário atual"
+
+msgctxt "#30207"
+msgid "Choose a new avatar"
+msgstr "Escolher um novo avatar"
+
+msgctxt "#30208"
+msgid "Up Next"
+msgstr "A seguir"
+
+msgctxt "#30209"
+msgid "Links in the description"
+msgstr "Links na descrição"
+
+msgctxt "#30210"
+msgid "There were no links found in the description"
+msgstr "Nenhum link encontrado na descrição"
+
+msgctxt "#30211"
+msgid "Create a new playlist"
+msgstr "Criar uma nova lista de reprodução"
+
+msgctxt "#30212"
+msgid "Go to the next page"
+msgstr "ir para próxima página"
+
+msgctxt "#30213"
+msgid "Rate the selected video"
+msgstr "Classificar o vídeo selecionado"
+
+msgctxt "#30214"
+msgid "Rate %s"
+msgstr "Classificar %s"
+
+msgctxt "#30215"
+msgid "Dialogs"
+msgstr "Diálogos"
+
+msgctxt "#30216"
+msgid "Open the autoplay related video dialog for debugging"
+msgstr "Abra a caixa de diálogo de vídeo relacionada à reprodução automática para depuração"
+
+msgctxt "#30217"
+msgid "Open the sign in dialog for debugging"
+msgstr "Abra a caixa de diálogo de login para depuração"
+
+msgctxt "#30218"
+msgid "likes"
+msgstr "Curtidos"
+
+msgctxt "#30219"
+msgid "dislikes"
+msgstr "Descurtidos"
+
+msgctxt "#30220"
+msgid "views"
+msgstr "visualizações"
+
+msgctxt "#30221"
+msgid "Chapters"
+msgstr "Capítulos"
+
+msgctxt "#30222"
+msgid "Chapter starts at %s"
+msgstr "Capítulo inícia em %s"
+
+msgctxt "#30223"
+msgid "API Module"
+msgstr "Módulo API"
+
+msgctxt "#30224"
+msgid "Configure API module"
+msgstr "Configurar módulo API"
+
+msgctxt "#30225"
+msgid "Open Tubed API settings to configure the API module"
+msgstr "Abra as configurações da API Tubed para configurar o módulo API"
+
+msgctxt "#30226"
+msgid "Favorite Playlists"
+msgstr "Lista de reprodução favorita"
+
+msgctxt "#30227"
+msgid "Add to favorite playlists"
+msgstr "Adicionar para lista de reprodução favorita"
+
+msgctxt "#30228"
+msgid "Clear favorite playlists"
+msgstr "Limpar lista de reprodução favorita"
+
+msgctxt "#30229"
+msgid "Added to favorite playlists"
+msgstr "Adicionado para a lista de reprodução favorita"
+
+msgctxt "#30230"
+msgid "Removed from favorite playlists"
+msgstr "Removida da lista de reprodução favorita"
+
+msgctxt "#30231"
+msgid "You are about to clear your favorite playlists, are you sure?"
+msgstr "Você está próximo de limpar a lista de reprodução favorita, tem certeza?"
+
+msgctxt "#30232"
+msgid "Favorite playlists cleared"
+msgstr "Lista de reprodução favorita limpa"
+
+msgctxt "#30233"
+msgid "Add %s to favorite playlists"
+msgstr "Adicionar %s para lista de reprodução favorita"
+
+msgctxt "#30234"
+msgid "Added %s to favorite playlists"
+msgstr "Adicionado %s para lista de reprodução favorita"
+
+msgctxt "#30235"
+msgid "Removed %s from favorite playlists"
+msgstr "Removido %s da lista de reprodução favorita"
+
+msgctxt "#30236"
+msgid "Favorite playlists"
+msgstr "Listas de reprodução favorita"
+
+msgctxt "#30237"
+msgid "How many favorite playlists should be kept for each user"
+msgstr "Quantas playlists favoritas devem ser mantidas para cada usuário"
+
+msgctxt "#30238"
+msgid "Backup"
+msgstr "Backup"
+
+msgctxt "#30239"
+msgid "Make a backup"
+msgstr "Fazer um backup"
+
+msgctxt "#30240"
+msgid "Backup your Tubed settings, users, search history, favorite channels and favorite playlists"
+msgstr "Faça backup de suas configurações Tubed, usuários, histórico de pesquisa, canais favoritos e listas de reprodução favoritas"
+
+msgctxt "#30241"
+msgid "Restore a backup"
+msgstr "Restaurar um backup"
+
+msgctxt "#30242"
+msgid "Restore your Tubed settings, users, search history, favorite channels and favorite playlists from a previous backup"
+msgstr "Restaurar seus ajustes do Tubed, usuários, histórico de pesquisa, canais favoritos e listas de reprodução favoritas de um dos backups anteriores"
+
+msgctxt "#30243"
+msgid "Choose a location to create backup"
+msgstr "Escolher o local para criar o backup"
+
+msgctxt "#30244"
+msgid "Choose a backup to restore"
+msgstr "Escolher um backup para restaurar"
+
+msgctxt "#30245"
+msgid "Failed to create backup at %s"
+msgstr "Falhou para criar backup em %s"
+
+msgctxt "#30246"
+msgid "Failed to restore backup from %s"
+msgstr "Falhou para restaurar backup de %s"
+
+msgctxt "#30247"
+msgid "Backup successfully created at %s"
+msgstr "Backup criado com sucesso em %s"
+
+msgctxt "#30248"
+msgid "Backup successfully restored from %s"
+msgstr "Backup restaurado com sucesso de %s"
+
+msgctxt "#30249"
+msgid "Client ID: %s"
+msgstr "ID Cliente: %S"
+
+msgctxt "#30250"
+msgid "Further use of Tubed will be subject to this privacy policy"
+msgstr "O uso posterior do Tubed estará sujeito a esta política de privacidade"
+
+msgctxt "#30251"
+msgid "Accept"
+msgstr "Aceitar"
+
+msgctxt "#30252"
+msgid "Decline"
+msgstr "Declinar"
+
+msgctxt "#30253"
+msgid "Privacy Policy"
+msgstr "Política de privacidade"
+
+msgctxt "#30254"
+msgid "Sign In"
+msgstr "Logar"
+
+msgctxt "#30255"
+msgid "InputStream Adaptive is required and appears to be disabled. Would you like to enable InputStream Adaptive now?"
+msgstr "InputStream Adaptive é necessário e parece estar desativado. Gostaria de habilitar o InputStream Adaptive agora?"
+
+msgctxt "#30256"
+msgid "Settings"
+msgstr "Ajustes"
+
+msgctxt "#30257"
+msgid "No entries found"
+msgstr "nenhuma entrada localizada"
+
+msgctxt "#30258"
+msgid "v3 Data API Client"
+msgstr ""
+
+msgctxt "#30259"
+msgid "YouTube-TV API Client"
+msgstr ""

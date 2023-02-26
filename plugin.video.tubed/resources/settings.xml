@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+    <section id="plugin.video.tubed">
+        <category id="general" label="30028" help="">
+            <group id="1" label="30028">
+                <setting id="search.history.items" type="integer" label="30189" help="30190">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>1</step>
+                        <maximum>250</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="favorite.channel.items" type="integer" label="30191" help="30192">
+                    <level>0</level>
+                    <default>2500</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>1</step>
+                        <maximum>5000</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="favorite.playlist.items" type="integer" label="30236" help="30237">
+                    <level>0</level>
+                    <default>2500</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>1</step>
+                        <maximum>5000</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+            <group id="2" label="30047">
+                <setting id="configure.regional" type="action" label="30052" help="30053">
+                    <level>0</level>
+                    <data>RunScript(plugin.video.tubed,mode=configure_regional)</data>
+                    <control type="button" format="action">
+                        <close>true</close>
+                    </control>
+                </setting>
+                <setting id="language" type="string" label="30048" help="30049">
+                    <level>0</level>
+                    <default>en-US</default>
+                    <enable>false</enable>
+                    <constraints>
+                        <allowempty>false</allowempty>
+                    </constraints>
+                    <control type="edit" format="string">
+                        <heading>30048</heading>
+                    </control>
+                </setting>
+                <setting id="region" type="string" label="30050" help="30051">
+                    <level>0</level>
+                    <default>US</default>
+                    <enable>false</enable>
+                    <constraints>
+                        <allowempty>false</allowempty>
+                    </constraints>
+                    <control type="edit" format="string">
+                        <heading>30050</heading>
+                    </control>
+                </setting>
+            </group>
+        </category>
+        <category id="main.menu" label="30196" help="">
+            <group id="1" label="">
+                <setting id="main.menu.sign.in" type="boolean" label="30011" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.most.popular" type="boolean" label="30000" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.most.popular.regionally" type="boolean" label="30195" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.categories" type="boolean" label="30025" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.my.channel" type="boolean" label="30004" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.liked.videos" type="boolean" label="30005" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.disliked.videos" type="boolean" label="30006" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.history" type="boolean" label="30161" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.watch.later" type="boolean" label="30046" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.playlists" type="boolean" label="30007" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.subscriptions" type="boolean" label="30009" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.favorite.channels" type="boolean" label="30171" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.favorite.playlists" type="boolean" label="30226" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.live" type="boolean" label="30010" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.search" type="boolean" label="30003" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.sign.out" type="boolean" label="30012" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.manage.users" type="boolean" label="30013" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="main.menu.open.settings" type="boolean" label="30256" help="30197">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+        </category>
+        <category id="playback" label="30045" help="">
+            <group id="1" label="">
+                <setting id="quality" type="integer" label="30029" help="30030">
+                    <level>0</level>
+                    <default>4</default>
+                    <constraints>
+                        <options>
+                            <option label="30037">0</option>
+                            <option label="30038">1</option>
+                            <option label="30039">2</option>
+                            <option label="30040">3</option>
+                            <option label="30041">4</option>
+                            <option label="30042">5</option>
+                            <option label="30043">6</option>
+                            <option label="30044">7</option>
+                            <option label="30035">8</option>
+                            <option label="30036">9</option>
+                        </options>
+                    </constraints>
+                    <control type="spinner" format="string"/>
+                </setting>
+                <setting id="limit30" type="boolean" label="30031" help="30032">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="hdr" type="boolean" label="30033" help="30034">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+            <group id="2" label="30058">
+                <setting id="configure.subtitles" type="action" label="30054" help="30055">
+                    <level>0</level>
+                    <data>RunScript(plugin.video.tubed,mode=configure_subtitles)</data>
+                    <control type="button" format="action">
+                        <close>true</close>
+                    </control>
+                </setting>
+                <setting id="subtitle.language" type="integer" label="" help="">
+                    <level>0</level>
+                    <default>0</default>
+                    <enable>true</enable>
+                    <visible>false</visible>
+                    <control type="edit" format="integer">
+                        <heading></heading>
+                    </control>
+                </setting>
+                <setting id="subtitle.label" type="string" label="30056" help="30057">
+                    <level>0</level>
+                    <default>None</default>
+                    <enable>false</enable>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <control type="edit" format="string">
+                        <heading>30056</heading>
+                    </control>
+                </setting>
+            </group>
+            <group id="3" label="30149">
+                <setting id="post.play.min.progress" type="integer" label="30150" help="30151">
+                    <level>0</level>
+                    <default>80</default>
+                    <constraints>
+                        <minimum>2</minimum>
+                        <step>1</step>
+                        <maximum>98</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="post.play.autoplay.related" type="boolean" label="30155" help="30156">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="post.play.rate" type="boolean" label="30072" help="30152">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="post.play.rate.playlist" type="boolean" label="30153" help="30154" parent="post.play.rate">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                    <dependencies>
+                        <dependency type="enable" setting="post.play.rate">true</dependency>
+                    </dependencies>
+                </setting>
+            </group>
+        </category>
+        <category id="cache" label="30102" help="">
+            <group id="1" label="30113">
+                <setting id="cache.ttl.data" type="integer" label="30103" help="30115">
+                    <level>0</level>
+                    <default>6</default>
+                    <constraints>
+                        <minimum>1</minimum>
+                        <step>1</step>
+                        <maximum>16</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="cache.ttl.function" type="integer" label="30104" help="30116">
+                    <level>0</level>
+                    <default>7</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>1</step>
+                        <maximum>30</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+            <group id="2" label="30135">
+                <setting id="cache.limit.data" type="integer" label="30136" help="30137">
+                    <level>0</level>
+                    <default>15</default>
+                    <constraints>
+                        <minimum>5</minimum>
+                        <step>1</step>
+                        <maximum>1000</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+            <group id="3" label="30114">
+                <setting id="cache.clear.function.refresh" type="boolean" label="30185" help="30186">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="cache.clear.data" type="action" label="30105" help="30117">
+                    <level>0</level>
+                    <data>RunScript(plugin.video.tubed,mode=cache&amp;action=clear&amp;cache_type=data)</data>
+                    <control type="button" format="action">
+                        <close>false</close>
+                    </control>
+                </setting>
+                <setting id="cache.clear.function" type="action" label="30106" help="30118">
+                    <level>0</level>
+                    <data>RunScript(plugin.video.tubed,mode=cache&amp;action=clear&amp;cache_type=function)</data>
+                    <control type="button" format="action">
+                        <close>false</close>
+                    </control>
+                </setting>
+                <setting id="cache.delete.data" type="action" label="30109" help="30119">
+                    <level>0</level>
+                    <data>RunScript(plugin.video.tubed,mode=cache&amp;action=delete&amp;cache_type=data)</data>
+                    <control type="button" format="action">
+                        <close>false</close>
+                    </control>
+                </setting>
+                <setting id="cache.delete.function" type="action" label="30110" help="30120">
+                    <level>0</level>
+                    <data>RunScript(plugin.video.tubed,mode=cache&amp;action=delete&amp;cache_type=function)</data>
+                    <control type="button" format="action">
+                        <close>false</close>
+                    </control>
+                </setting>
+            </group>
+        </category>
+        <category id="backup" label="30238" help="">
+            <group id="1" label="30238">
+                <setting id="backup.settings" type="action" label="30239" help="30240">
+                    <level>0</level>
+                    <data>RunScript(plugin.video.tubed,mode=backup&amp;action=backup)</data>
+                    <control type="button" format="action">
+                        <close>true</close>
+                    </control>
+                </setting>
+                <setting id="restore.settings" type="action" label="30241" help="30242">
+                    <level>0</level>
+                    <data>RunScript(plugin.video.tubed,mode=backup&amp;action=restore)</data>
+                    <control type="button" format="action">
+                        <close>true</close>
+                    </control>
+                </setting>
+            </group>
+        </category>
+        <category id="api.module" label="30223" help="">
+            <group id="1" label="">
+                <setting id="api.module.settings" type="action" label="30224" help="30225">
+                    <level>0</level>
+                    <data>Addon.OpenSettings(script.module.tubed.api)</data>
+                    <control type="button" format="action">
+                        <close>true</close>
+                    </control>
+                </setting>
+            </group>
+        </category>
+        <category id="debug" label="30125" help="">
+            <group id="1" label="30126">
+                <setting id="log.api.requests" type="boolean" label="30127" help="30128">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+            <group id="2" label="30215">
+                <setting id="demo.dialog.sign.in" type="action" label="30254" help="30217">
+                    <level>0</level>
+                    <data>RunScript(plugin.video.tubed,mode=dialog_demo&amp;dialog_id=sign_in)</data>
+                    <control type="button" format="action">
+                        <close>false</close>
+                    </control>
+                </setting>
+                <setting id="demo.dialog.autoplay.related" type="action" label="30155" help="30216">
+                    <level>0</level>
+                    <data>RunScript(plugin.video.tubed,mode=dialog_demo&amp;dialog_id=autoplay_related)</data>
+                    <control type="button" format="action">
+                        <close>false</close>
+                    </control>
+                </setting>
+            </group>
+            <!-- group 99 is for non-visible settings, used internally -->
+            <group id="99" label="">
+                <setting id="privacy.policy.accepted" type="string" label="" help="">
+                    <!-- store privacy policy revision date as string ie. 10222020-->
+                    <level>0</level>
+                    <default>0</default>
+                    <enable>true</enable>
+                    <visible>false</visible>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <control type="edit" format="string">
+                        <heading></heading>
+                    </control>
+                </setting>
+            </group>
+        </category>
+    </section>
+</settings>

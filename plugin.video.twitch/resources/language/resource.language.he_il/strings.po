@@ -1,0 +1,1016 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Twitch-on-Kodi\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: 2022-03-27 01:19+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Hebrew (Israel) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/he_il/>\n"
+"Language: he_il\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && n % 10 == 0) ? 2 : 3));\n"
+"X-Generator: Weblate 4.11.2\n"
+
+msgctxt "Addon Summary"
+msgid "Twitch video plugin"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Watch your favorite gaming streams!"
+msgstr ""
+
+# Next available: 30041-30044, 30063, 30113
+# main menu
+msgctxt "#30001"
+msgid "Games"
+msgstr "משחקים"
+
+msgctxt "#30002"
+msgid "Following"
+msgstr "עוקב"
+
+msgctxt "#30003"
+msgid "Search"
+msgstr "חיפוש"
+
+msgctxt "#30004"
+msgid "Settings"
+msgstr "הגדרות"
+
+msgctxt "#30005"
+msgid "Popular Streams"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Teams"
+msgstr "צוותים"
+
+msgctxt "#30007"
+msgid "Search for channels"
+msgstr "חיפוש ערוצים"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "ערוצים"
+
+msgctxt "#30009"
+msgid "Live Channels"
+msgstr "עמוד לשידור החי"
+
+msgctxt "#30010"
+msgid "TwitchTV"
+msgstr "TwitchTV"
+
+msgctxt "#30011"
+msgid "next page..."
+msgstr "לעמוד הבא..."
+
+msgctxt "#30012"
+msgid "-- Currently Live Streams --"
+msgstr "-- הזרמות שכרגע פעילות --"
+
+msgctxt "#30013"
+msgid "-- Followed Channels --"
+msgstr "--הערוצים הבאים--"
+
+# empty strings from id 30014 to 30019
+msgctxt "#30020"
+msgid "Http error"
+msgstr "שגיאת HTTP"
+
+msgctxt "#30021"
+msgid "No Live Data Found"
+msgstr "לא נמצאו נתונים חיים"
+
+msgctxt "#30022"
+msgid "No archives found for"
+msgstr "לא נמצא ארכיב עבור"
+
+msgctxt "#30023"
+msgid "User Token Error"
+msgstr "שגיאת אסימון משתמש"
+
+msgctxt "#30024"
+msgid "Changed video settings"
+msgstr "הגדרות הווידאו השתנו"
+
+msgctxt "#30025"
+msgid "Selected video settings are not available"
+msgstr "הגדרות הוידאו שנבחרו אינן זמינות"
+
+msgctxt "#30026"
+msgid "TwitchApi error"
+msgstr "שגיאת TwitchApi"
+
+msgctxt "#30027"
+msgid "JSON error"
+msgstr "שגיאת JSON"
+
+msgctxt "#30028"
+msgid "Failed to parse the result set"
+msgstr "נכשל פיענוח בערכת התוצאות"
+
+msgctxt "#30029"
+msgid "Please check your internet connection"
+msgstr "אנא בדקו את חיבור האינטרנט שלכם"
+
+# empty strings from id 30030 to 30039
+msgctxt "#30040"
+msgid "Video Quality"
+msgstr "איכות וידאו"
+
+# empty strings from id 30041 to 30044
+msgctxt "#30045"
+msgid "Display titles"
+msgstr "הצג כותרות"
+
+msgctxt "#30046"
+msgid "Streamer - Stream Title"
+msgstr "סטרימר - כותרת הזרמה"
+
+msgctxt "#30047"
+msgid "Viewers - Streamer - Stream Title"
+msgstr "צופים - סטרימר - כותרת הזרמה"
+
+msgctxt "#30048"
+msgid "Stream Title"
+msgstr "כותרת הזרמה"
+
+msgctxt "#30049"
+msgid "Streamer"
+msgstr "סטרימר"
+
+msgctxt "#30050"
+msgid "Username"
+msgstr "שם משתמש"
+
+msgctxt "#30051"
+msgid "Streamer - Game Title - Stream Title"
+msgstr "סטרימר - כותרת המשחק - כותרת הזרמה"
+
+msgctxt "#30052"
+msgid "Enable"
+msgstr "מופעל"
+
+msgctxt "#30053"
+msgid "Password (OAuth Token)"
+msgstr "סיסמה (אסימון OAuth)"
+
+msgctxt "#30054"
+msgid "Language | Streamer - Stream Title"
+msgstr "שפה | סטרימר - כותרת הזרמה"
+
+# empty strings from id 30055 to 30059
+msgctxt "#30060"
+msgid "Unnamed Streamer"
+msgstr "סטרימר ללא שם"
+
+msgctxt "#30061"
+msgid "Untitled Stream"
+msgstr "הזרמה ללא שם"
+
+msgctxt "#30062"
+msgid "Unknown Number of Viewers"
+msgstr "מספר לא ידוע של צופים"
+
+msgctxt "#30063"
+msgid "Unknown Language"
+msgstr "שפה לא ידועה"
+
+msgctxt "#30064"
+msgid "Unknown Game"
+msgstr "משחק לא ידוע"
+
+msgctxt "#30065"
+msgid "Truncate displayed titles"
+msgstr "קצץ כותרות מוצגות"
+
+msgctxt "#30066"
+msgid "Followed Games"
+msgstr "המשחקים הבאים"
+
+msgctxt "#30067"
+msgid "Game Title Viewers | Streamer - Stream Title"
+msgstr "צופים בכותרת המשחק | - סטרימר - כותרת הזרמה"
+
+msgctxt "#30068"
+msgid "Content Type"
+msgstr "סוג התוכן"
+
+msgctxt "#30069"
+msgid "Files"
+msgstr "קבצים"
+
+msgctxt "#30070"
+msgid "TV Shows"
+msgstr "סדרות"
+
+msgctxt "#30071"
+msgid "Movies"
+msgstr "סרטים"
+
+msgctxt "#30072"
+msgid "Episodes"
+msgstr "פרקים"
+
+msgctxt "#30073"
+msgid "Music Videos"
+msgstr "סרטוני מוזיקה"
+
+msgctxt "#30074"
+msgid "Automatically refresh live preview cache"
+msgstr "רענון אוטומטי של מטמון תצוגה מקדימה חיה"
+
+msgctxt "#30075"
+msgid "Install IrcChat (script.ircchat)"
+msgstr "התקן IrcChat (script.ircchat)"
+
+msgctxt "#30076"
+msgid "General"
+msgstr "כללי"
+
+msgctxt "#30077"
+msgid "Play (Choose Quality)"
+msgstr "נגן (לבחור איכות)"
+
+# stream info
+msgctxt "#30078"
+msgid "Past Broadcasts"
+msgstr "אחרי השידורים"
+
+msgctxt "#30079"
+msgid "Video Highlights"
+msgstr "הדגשת וידאו"
+
+# notifications
+msgctxt "#30080"
+msgid "Could not find any playable urls"
+msgstr "לא מצאנו כתובות ה-url שניתן לנגנם"
+
+msgctxt "#30081"
+msgid "IRC Chat"
+msgstr "שיחות ב־ IRCName"
+
+msgctxt "#30082"
+msgid "Live Previews"
+msgstr "תצוגה מקדימה חיה"
+
+msgctxt "#30083"
+msgid "Live Preview Settings"
+msgstr "הגדרות תצוגה מקדימה חיה"
+
+msgctxt "#30084"
+msgid "Clear live preview cache"
+msgstr "נקה מטמון תצוגה מקדימה חיה"
+
+msgctxt "#30085"
+msgid "***** WARNING *****"
+msgstr "*****אזהרה*****"
+
+msgctxt "#30086"
+msgid "These settings may allow this add-on to delete database entries and images[CR]for cached live previews."
+msgstr "הגדרות אלה עשויות לאפשר להרחבה למחוק ערכי מסדי נתונים ותמונות[CR]עבור תצוגות מקדימות חיות."
+
+msgctxt "#30087"
+msgid "Notifications"
+msgstr "הודעות"
+
+msgctxt "#30088"
+msgid "Game"
+msgstr "משחק"
+
+msgctxt "#30089"
+msgid "Viewers"
+msgstr "מציג המזכרים"
+
+msgctxt "#30090"
+msgid "Language"
+msgstr "שפה"
+
+msgctxt "#30091"
+msgid "Mature"
+msgstr "בוגר"
+
+msgctxt "#30092"
+msgid "Partner"
+msgstr "שותף"
+
+msgctxt "#30093"
+msgid "Delay"
+msgstr "עיכוב"
+
+# title
+msgctxt "#30094"
+msgid "Automatic refresh interval (minutes)"
+msgstr "מרווח זמן לרענון אוטומטי (דקות)"
+
+msgctxt "#30095"
+msgid "Username is required"
+msgstr "חובה להזין שם משתמש"
+
+# settings
+msgctxt "#30096"
+msgid "API"
+msgstr "קוד API"
+
+msgctxt "#30097"
+msgid "OAuth Client ID"
+msgstr "מזהה לקוח OAuth"
+
+msgctxt "#30098"
+msgid "Select Video by ID or URL"
+msgstr "בחר וידאו על-ידי מזהה או כתובת URL"
+
+msgctxt "#30099"
+msgid "OAuth Token"
+msgstr "אסימון OAuth"
+
+msgctxt "#30100"
+msgid "Visit www.twitch.tv/settings/connections and [CR]'Register your application' for an OAuth Client-ID"
+msgstr "בקר בכתובת www.twitch.tv/settings/connections[CR] 'ורשום את בקשתך' עבור מזהה לקוח OAuth"
+
+msgctxt "#30101"
+msgid "Visit www.twitchapps.com/tmi to generate an OAuth token"
+msgstr "בקר בכתובת www.twitchapps.com/tmi כדי ליצור אסימון OAuth"
+
+msgctxt "#30102"
+msgid "Source"
+msgstr "מקור"
+
+msgctxt "#30103"
+msgid "1080p60"
+msgstr "1080p60"
+
+msgctxt "#30104"
+msgid "1080p30"
+msgstr "1080p30"
+
+msgctxt "#30105"
+msgid "720p60"
+msgstr "720p60"
+
+msgctxt "#30106"
+msgid "720p30"
+msgstr "720p30"
+
+msgctxt "#30107"
+msgid "540p30"
+msgstr "540p30"
+
+msgctxt "#30108"
+msgid "480p30"
+msgstr "480p30"
+
+msgctxt "#30109"
+msgid "360p30"
+msgstr "360p30"
+
+msgctxt "#30110"
+msgid "240p30"
+msgstr "240p30"
+
+msgctxt "#30111"
+msgid "144p30"
+msgstr "144p30"
+
+msgctxt "#30112"
+msgid "Quality may result in best match"
+msgstr "האיכות יכולה להביא להתאמה הטובה ביותר"
+
+msgctxt "#30113"
+msgid "Uploads"
+msgstr "העלאות"
+
+msgctxt "#30114"
+msgid "Confirm"
+msgstr "אישור"
+
+msgctxt "#30115"
+msgid "Function cache has been reset"
+msgstr "פונקציית המטמון אופסה"
+
+msgctxt "#30116"
+msgid "Function cache reset failed"
+msgstr "נכשל בניקוי פונקציית המטמון"
+
+msgctxt "#30117"
+msgid "Reset function cache?"
+msgstr "האם לנקות את פונקציית המטמון?"
+
+msgctxt "#30118"
+msgid "Developer"
+msgstr "מפתח"
+
+msgctxt "#30120"
+msgid "Cache"
+msgstr "מטמון"
+
+msgctxt "#30121"
+msgid "Cache expire time (minutes)"
+msgstr "זמן תפוגה לפונקציית המטמון (בדקות)"
+
+msgctxt "#30122"
+msgid "Reset function cache"
+msgstr "ניקוי לפונקציית המטמון"
+
+msgctxt "#30123"
+msgid "Items per page"
+msgstr "פריטים בכל עמוד"
+
+msgctxt "#30124"
+msgid "Video Id/Url"
+msgstr "מזהה וידאו/Url"
+
+msgctxt "#30125"
+msgid "Streams"
+msgstr "הזרמות"
+
+msgctxt "#30126"
+msgid "Refresh"
+msgstr "רענן"
+
+msgctxt "#30127"
+msgid "Login"
+msgstr "שם משתמש"
+
+msgctxt "#30128"
+msgid "OAuth token is required"
+msgstr "חובה להזין אסימון OAuth"
+
+msgctxt "#30129"
+msgid "Error"
+msgstr "שגיאה"
+
+msgctxt "#30130"
+msgid "Go to %s"
+msgstr "עבור אל %s"
+
+msgctxt "#30131"
+msgid "No results returned"
+msgstr "לא הוחזרו תוצאות"
+
+msgctxt "#30132"
+msgid "OAuth token is required for access"
+msgstr ""
+
+msgctxt "#30133"
+msgid "Authorize"
+msgstr "אישור"
+
+msgctxt "#30134"
+msgid "Get your OAuth token by logging in/signing up to Twitch.tv here:"
+msgstr "קבל את אסימון OAuth שלך על ידי כניסה / הרשמה ל- Twitch.tv כאן:"
+
+msgctxt "#30135"
+msgid "Get OAuth token"
+msgstr "קבלת אסימון OAuth"
+
+msgctxt "#30136"
+msgid "Always ask"
+msgstr "שאל תמיד"
+
+msgctxt "#30138"
+msgid "*** Do NOT share your OAuth token. ***"
+msgstr "*** אל תשתף אתהאסימון OAuth שלך. ***"
+
+msgctxt "#30139"
+msgid "Toggle follow"
+msgstr "החלף מצב עקיבה"
+
+msgctxt "#30140"
+msgid "Now following %s"
+msgstr "עוקב %s"
+
+msgctxt "#30141"
+msgid "Unfollowed %s"
+msgstr "אל תעקוב %s"
+
+msgctxt "#30142"
+msgid "Redirect URI"
+msgstr "מפנה URI"
+
+msgctxt "#30143"
+msgid "Would you like to follow %s?"
+msgstr "האם ברצונך לעקוב %s?"
+
+msgctxt "#30144"
+msgid "Are you sure you want to unfollow %s?"
+msgstr "האם אתה בטוח שברצונך לא לעקוב %s?"
+
+msgctxt "#30145"
+msgid "Toggle block user"
+msgstr "החלף מצב חסימת משתמש"
+
+msgctxt "#30146"
+msgid "Blocked %s"
+msgstr "%s חסום"
+
+msgctxt "#30147"
+msgid "Unblocked %s"
+msgstr "הסר חסימה %s"
+
+msgctxt "#30148"
+msgid "Would you like to block %s?"
+msgstr "האם ברצונך לחסום %s?"
+
+msgctxt "#30149"
+msgid "Are you sure you want to unblock %s?"
+msgstr "האם אתה בטוח שברצונך לבטל את החסימה של %s?"
+
+msgctxt "#30150"
+msgid "Blacklist %s"
+msgstr "הרשימה השחורה %s"
+
+msgctxt "#30151"
+msgid "Blacklisted %s"
+msgstr "ברשימה השחורה %s"
+
+msgctxt "#30152"
+msgid "Lists"
+msgstr "רשימות"
+
+msgctxt "#30153"
+msgid "Blacklist"
+msgstr "רשימה שחורה"
+
+msgctxt "#30154"
+msgid "Remove a user"
+msgstr "הסר משתמש"
+
+msgctxt "#30155"
+msgid "Remove a game"
+msgstr "הסר משחק"
+
+msgctxt "#30156"
+msgid "Remove all users"
+msgstr "הסר את כל המשתמשים"
+
+msgctxt "#30157"
+msgid "Remove all games"
+msgstr "הסר את כל המשחקים"
+
+msgctxt "#30158"
+msgid "Remove %s from blacklist"
+msgstr "הסר את %s מהרשימה השחורה"
+
+msgctxt "#30159"
+msgid "Removed %s from blacklist"
+msgstr "%s הוסר מהרשימה השחורה"
+
+msgctxt "#30160"
+msgid "Cleared %s %s"
+msgstr "%s %s נוקה"
+
+msgctxt "#30161"
+msgid "Are you sure you want to clear %s %s?"
+msgstr "האם אתה בטוח שברצונך לנקות את %s %s?"
+
+msgctxt "#30162"
+msgid "Clear list"
+msgstr "נקה רשימה"
+
+msgctxt "#30163"
+msgid "Set default quality"
+msgstr "קבע איכות כברירת מחדל"
+
+msgctxt "#30164"
+msgid "Default '%s' quality '%s' set for %s"
+msgstr "ברירת מחדל '%s' איכות '%s' עבור %s"
+
+msgctxt "#30165"
+msgid "Removed default '%s' quality for %s"
+msgstr "הסר ברירת מחדל '%s' לאיכות %s"
+
+msgctxt "#30166"
+msgid "Remove %s quality"
+msgstr "הסר %s איכות"
+
+msgctxt "#30167"
+msgid "Default Qualities"
+msgstr "ברירת מחדל לאיכות"
+
+msgctxt "#30168"
+msgid "Clear default quality"
+msgstr "נקה ברירת מחדל לאיכות"
+
+msgctxt "#30169"
+msgid "Choose Quality"
+msgstr "בחר איכות"
+
+msgctxt "#30170"
+msgid "Playlists"
+msgstr "רשימות השמעה"
+
+msgctxt "#30171"
+msgid "Collections"
+msgstr "אגדים"
+
+msgctxt "#30172"
+msgid "Browse"
+msgstr "סייר"
+
+msgctxt "#30173"
+msgid "Xbox One"
+msgstr "Xbox One"
+
+msgctxt "#30174"
+msgid "Playstation 4"
+msgstr "פלייסטיישן 4"
+
+msgctxt "#30175"
+msgid "Videos"
+msgstr "וידאו"
+
+msgctxt "#30176"
+msgid "Clips"
+msgstr "קליפים"
+
+msgctxt "#30177"
+msgid "Invalid OAuth token"
+msgstr "אסימון OAuth לא חוקי"
+
+msgctxt "#30178"
+msgid "Missing required scopes: %s"
+msgstr "הטווחים הנדרשים חסרים: %s"
+
+msgctxt "#30179"
+msgid "Client id mismatch"
+msgstr "אין התאמה של מזהה לקוח"
+
+msgctxt "#30180"
+msgid "Go to '%s' - '%s' - '%s' to generate a new token"
+msgstr "עבור אל '%s' - '%s' - '%s' כדי ליצור אסימון חדש"
+
+msgctxt "#30181"
+msgid "Are you sure you want to blacklist %s?"
+msgstr "האם אתה בטוח שברצונך להוסיף לרשימה השחורה %s?"
+
+msgctxt "#30184"
+msgid "Change sort by"
+msgstr "שינוי מיין לפי"
+
+msgctxt "#30185"
+msgid "Change sort direction"
+msgstr "שינוי כיוון מיון"
+
+msgctxt "#30186"
+msgid "Change period"
+msgstr "שנה תקופה"
+
+msgctxt "#30187"
+msgid "Popular"
+msgstr "פופולארי"
+
+msgctxt "#30188"
+msgid "Views"
+msgstr "צפיות"
+
+msgctxt "#30189"
+msgid "Add a language"
+msgstr "הוסף שפה"
+
+msgctxt "#30190"
+msgid "Remove a language"
+msgstr "הסר שפה"
+
+msgctxt "#30191"
+msgid "Remove a stream quality"
+msgstr "הסר איכות הזרמה"
+
+msgctxt "#30192"
+msgid "Remove a video quality"
+msgstr "הסר איכות וידאו"
+
+msgctxt "#30193"
+msgid "Remove a clip quality"
+msgstr "הסר איכות קליפ"
+
+msgctxt "#30194"
+msgid "Remove all stream qualities"
+msgstr "הסר את כל איכות ההזרמות"
+
+msgctxt "#30195"
+msgid "Remove all video qualities"
+msgstr "הסר את כל איכות הוידאו"
+
+msgctxt "#30196"
+msgid "Remove all clip qualities"
+msgstr "הסר את כל איכות הקליפים"
+
+msgctxt "#30197"
+msgid "Requires confirmation"
+msgstr "זקוק לאישור"
+
+msgctxt "#30198"
+msgid "Requires subscription to %s"
+msgstr "מחייב רישום אל %s"
+
+msgctxt "#30199"
+msgid "Connection failed"
+msgstr "החיבור נכשל"
+
+msgctxt "#30200"
+msgid "No %s found"
+msgstr "לא נמצא %s"
+
+msgctxt "#30201"
+msgid "Bandwidth"
+msgstr "רוחב פס"
+
+msgctxt "#30202"
+msgid "Currently Live"
+msgstr "משודר חי כרגע"
+
+msgctxt "#30203"
+msgid "Went Live"
+msgstr "עבר לשידור חי"
+
+msgctxt "#30204"
+msgid "Live notifications"
+msgstr "התראת מצב חי"
+
+msgctxt "#30205"
+msgid "Audible"
+msgstr "נשמע"
+
+msgctxt "#30206"
+msgid "Playback failed"
+msgstr "ניגון נכשל"
+
+msgctxt "#30207"
+msgid "Retrying in %d seconds"
+msgstr "מנסה שוב בעוד% d שניות"
+
+msgctxt "#30208"
+msgid "Attempting to reconnect to %s"
+msgstr "מנסה להתחבר אל %s"
+
+msgctxt "#30209"
+msgid "Attempt #%d"
+msgstr "ניסיון %d"
+
+msgctxt "#30210"
+msgid "Attempt reconnection to live streams"
+msgstr "מנסה להתחבר להזרמה חיה"
+
+msgctxt "#30211"
+msgid "Enabled"
+msgstr "מופעל"
+
+msgctxt "#30212"
+msgid "Failed to connect to Twitch API"
+msgstr "לא הצליח להתחבר אל Twitch API"
+
+msgctxt "#30213"
+msgid "Followers"
+msgstr "עוקבים"
+
+msgctxt "#30214"
+msgid "Items"
+msgstr "‎פריטים"
+
+msgctxt "#30215"
+msgid "Duration"
+msgstr "משך הקורס"
+
+msgctxt "#30216"
+msgid "Curated"
+msgstr "אוצר"
+
+msgctxt "#30217"
+msgid "Press OK to resolve"
+msgstr "לחץ על אישור כדי לפתור"
+
+msgctxt "#30218"
+msgid "Supported video ids: a123435, c123435, v123435, videos123435[CR]Example urls:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
+msgstr "מזהי וידאו נתמכים:a123435, c123435, v123435, videos123435[CR]דוגמאות לקישורים:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
+
+msgctxt "#30219"
+msgid "Main Menu"
+msgstr "תפריט ראשי"
+
+msgctxt "#30220"
+msgid "Failed to get url, try again shortly."
+msgstr "נכשלנו בהשגת הקישור. ננסה בשנית בקרוב."
+
+msgctxt "#30221"
+msgid "Unknown"
+msgstr "לא ידוע"
+
+msgctxt "#30222"
+msgid "VODCast highlight color"
+msgstr "צבע סימון VODCast"
+
+msgctxt "#30223"
+msgid "Use inputstream.adaptive"
+msgstr ""
+
+msgctxt "#30224"
+msgid "Configure inputstream.adaptive"
+msgstr ""
+
+msgctxt "#30225"
+msgid "inputstream.adaptive is enabled in the Twitch settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
+msgstr ""
+
+msgctxt "#30226"
+msgid "The installed inputstream.adaptive add-on does not meet the version requirement(%s), and has been disabled in the Twitch add-on settings."
+msgstr ""
+
+msgctxt "#30227"
+msgid "Revoke Token"
+msgstr ""
+
+msgctxt "#30228"
+msgid "Are you sure you want to revoke your OAuth token?"
+msgstr ""
+
+msgctxt "#30229"
+msgid "OAuth token has been revoked"
+msgstr ""
+
+msgctxt "#30230"
+msgid "OAuth token has been updated"
+msgstr ""
+
+msgctxt "#30231"
+msgid "%s started streaming %s"
+msgstr ""
+
+msgctxt "#30232"
+msgid "Notify at start"
+msgstr ""
+
+msgctxt "#30233"
+msgid "Group notifications at start"
+msgstr ""
+
+msgctxt "#30234"
+msgid "Reset cache on Refresh"
+msgstr ""
+
+msgctxt "#30235"
+msgid "New search"
+msgstr ""
+
+msgctxt "#30236"
+msgid "Search history size"
+msgstr "גודל היסטוריית חיפוש"
+
+msgctxt "#30237"
+msgid "Clear search history?"
+msgstr ""
+
+msgctxt "#30238"
+msgid "Remove %s from search history?"
+msgstr ""
+
+msgctxt "#30239"
+msgid "Remove %s"
+msgstr ""
+
+msgctxt "#30240"
+msgid "Clear search history"
+msgstr "נקה היסטורית החיפוש"
+
+msgctxt "#30241"
+msgid "Search history cleared"
+msgstr ""
+
+msgctxt "#30242"
+msgid "Removed %s from search history"
+msgstr ""
+
+msgctxt "#30243"
+msgid "Maintenance"
+msgstr "תחזוקה"
+
+msgctxt "#30244"
+msgid "Search History"
+msgstr ""
+
+msgctxt "#30245"
+msgid "Delete streams search history"
+msgstr ""
+
+msgctxt "#30246"
+msgid "Delete channels search history"
+msgstr ""
+
+msgctxt "#30247"
+msgid "Delete games search history"
+msgstr ""
+
+msgctxt "#30248"
+msgid "Delete video id/url search history"
+msgstr ""
+
+msgctxt "#30249"
+msgid "Other"
+msgstr ""
+
+msgctxt "#30250"
+msgid "Delete storage.json"
+msgstr ""
+
+msgctxt "#30251"
+msgid "Are you sure you want to delete %s?"
+msgstr ""
+
+msgctxt "#30252"
+msgid "Deleting %s succeeded"
+msgstr ""
+
+msgctxt "#30253"
+msgid "Deleting %s failed"
+msgstr ""
+
+msgctxt "#30254"
+msgid "Adaptive"
+msgstr ""
+
+msgctxt "#30255"
+msgid "Thumbnail size"
+msgstr "גודל תמונה ממוזערת"
+
+msgctxt "#30256"
+msgid "Large"
+msgstr ""
+
+msgctxt "#30257"
+msgid "Medium"
+msgstr ""
+
+msgctxt "#30258"
+msgid "Small"
+msgstr ""
+
+msgctxt "#30259"
+msgid "Live preview refresh interval (minutes)"
+msgstr ""
+
+msgctxt "#30260"
+msgid "Limit to 30 fps"
+msgstr ""
+
+msgctxt "#30261"
+msgid "Private API Credentials"
+msgstr ""
+
+msgctxt "#30262"
+msgid "Change languages"
+msgstr ""
+
+msgctxt "#30263"
+msgid "Frame rate limit"
+msgstr ""
+
+msgctxt "#30264"
+msgid "Follow"
+msgstr ""
+
+msgctxt "#30265"
+msgid "Unfollow"
+msgstr ""
+
+msgctxt "#30266"
+msgid "Add to queue"
+msgstr ""
+
+msgctxt "#30267"
+msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr ""
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr ""
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr ""
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr ""
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr ""
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr ""
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
+msgstr ""
+
+#~ msgctxt "#30132"
+#~ msgid "OAuth token is required for access to authorized user functions."
+#~ msgstr "חובה להזין אסימון OAuth עבור גישה לפונקציות משתמש מורשה."
+
+#~ msgctxt "#30005"
+#~ msgid "Featured Streams"
+#~ msgstr "הזרמות מומלצות"

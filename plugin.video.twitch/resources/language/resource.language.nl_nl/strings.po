@@ -1,0 +1,1006 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: 2022-08-04 12:14+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Dutch <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/nl_nl/>\n"
+"Language: nl_nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.13\n"
+
+msgctxt "Addon Summary"
+msgid "Twitch video plugin"
+msgstr "Twitch video plugin"
+
+msgctxt "Addon Description"
+msgid "Watch your favorite gaming streams!"
+msgstr "Bekijk je favoriete gaming-streams!"
+
+msgctxt "#30001"
+msgid "Games"
+msgstr "Games"
+
+msgctxt "#30002"
+msgid "Following"
+msgstr "Volgers"
+
+msgctxt "#30003"
+msgid "Search"
+msgstr "Zoeken"
+
+msgctxt "#30004"
+msgid "Settings"
+msgstr "Instellingen"
+
+msgctxt "#30005"
+msgid "Popular Streams"
+msgstr "Populaire Streams"
+
+msgctxt "#30006"
+msgid "Teams"
+msgstr "Teams"
+
+msgctxt "#30007"
+msgid "Search for channels"
+msgstr "Zoeken naar kanalen"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "Kanalen"
+
+msgctxt "#30009"
+msgid "Live Channels"
+msgstr "Live-kanalen"
+
+msgctxt "#30010"
+msgid "TwitchTV"
+msgstr "TwitchTV"
+
+msgctxt "#30011"
+msgid "next page..."
+msgstr "volgende pagina..."
+
+msgctxt "#30012"
+msgid "-- Currently Live Streams --"
+msgstr "-- Huidige live-streams --"
+
+msgctxt "#30013"
+msgid "-- Followed Channels --"
+msgstr "-- Gevolgde kanalen --"
+
+msgctxt "#30020"
+msgid "Http error"
+msgstr "HTTP-fout"
+
+msgctxt "#30021"
+msgid "No Live Data Found"
+msgstr "Geen live-data gevonden"
+
+msgctxt "#30022"
+msgid "No archives found for"
+msgstr "Geen archieven gevonden voor"
+
+msgctxt "#30023"
+msgid "User Token Error"
+msgstr "User Token Error"
+
+msgctxt "#30024"
+msgid "Changed video settings"
+msgstr "Video-instellingen gewijzigd"
+
+msgctxt "#30025"
+msgid "Selected video settings are not available"
+msgstr "De geselecteerde video-instellingen zijn niet beschikbaar"
+
+msgctxt "#30026"
+msgid "TwitchApi error"
+msgstr "TwitchApi error"
+
+msgctxt "#30027"
+msgid "JSON error"
+msgstr "JSON error"
+
+msgctxt "#30028"
+msgid "Failed to parse the result set"
+msgstr "Kon de resultaten niet inlezen"
+
+msgctxt "#30029"
+msgid "Please check your internet connection"
+msgstr "Controleer je internetverbinding"
+
+msgctxt "#30040"
+msgid "Video Quality"
+msgstr "Beeldkwaliteit"
+
+msgctxt "#30045"
+msgid "Display titles"
+msgstr "Titels weergeven"
+
+msgctxt "#30046"
+msgid "Streamer - Stream Title"
+msgstr "Streamer - streamtitel"
+
+msgctxt "#30047"
+msgid "Viewers - Streamer - Stream Title"
+msgstr "Kijkers - Streamer - Stream Titel"
+
+msgctxt "#30048"
+msgid "Stream Title"
+msgstr "Stream Titel"
+
+msgctxt "#30049"
+msgid "Streamer"
+msgstr "Streamer"
+
+msgctxt "#30050"
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+msgctxt "#30051"
+msgid "Streamer - Game Title - Stream Title"
+msgstr "Streamer - Spelnaam - Streamtitel"
+
+msgctxt "#30052"
+msgid "Enable"
+msgstr "Inschakelen"
+
+msgctxt "#30053"
+msgid "Password (OAuth Token)"
+msgstr "Wachtwoord (OAuth-token)"
+
+msgctxt "#30054"
+msgid "Language | Streamer - Stream Title"
+msgstr "Taal | Streamer - Streamtitel"
+
+msgctxt "#30060"
+msgid "Unnamed Streamer"
+msgstr "Naamloze streamer"
+
+msgctxt "#30061"
+msgid "Untitled Stream"
+msgstr "Naamloze stream"
+
+msgctxt "#30062"
+msgid "Unknown Number of Viewers"
+msgstr "Onbekend aantal kijkers"
+
+msgctxt "#30063"
+msgid "Unknown Language"
+msgstr "Onbekende taal"
+
+msgctxt "#30064"
+msgid "Unknown Game"
+msgstr "Onbekend Spel"
+
+msgctxt "#30065"
+msgid "Truncate displayed titles"
+msgstr "Afkappen te tonen titels"
+
+msgctxt "#30066"
+msgid "Followed Games"
+msgstr "Gevolgde spellen"
+
+msgctxt "#30067"
+msgid "Game Title Viewers | Streamer - Stream Title"
+msgstr "Kijkers speltitels | Streamer - Streamtitel"
+
+msgctxt "#30068"
+msgid "Content Type"
+msgstr "Contentsoort"
+
+msgctxt "#30069"
+msgid "Files"
+msgstr "Bestanden"
+
+msgctxt "#30070"
+msgid "TV Shows"
+msgstr "TV shows"
+
+msgctxt "#30071"
+msgid "Movies"
+msgstr "Films"
+
+msgctxt "#30072"
+msgid "Episodes"
+msgstr "Afleveringen"
+
+msgctxt "#30073"
+msgid "Music Videos"
+msgstr "Muziekvideo's"
+
+msgctxt "#30074"
+msgid "Automatically refresh live preview cache"
+msgstr "Automatisch live-preview cache verversen"
+
+msgctxt "#30075"
+msgid "Install IrcChat (script.ircchat)"
+msgstr "Installeer IrcChat (script.ircchat)"
+
+msgctxt "#30076"
+msgid "General"
+msgstr "Algemeen"
+
+msgctxt "#30077"
+msgid "Play (Choose Quality)"
+msgstr "Afspelen (Kies kwaliteit)"
+
+msgctxt "#30078"
+msgid "Past Broadcasts"
+msgstr "Vorige uitzendingen"
+
+msgctxt "#30079"
+msgid "Video Highlights"
+msgstr "Videohoogtepunten"
+
+msgctxt "#30080"
+msgid "Could not find any playable urls"
+msgstr "Kon geen afspeelbare URLs vinden"
+
+msgctxt "#30081"
+msgid "IRC Chat"
+msgstr "IRC Chat"
+
+msgctxt "#30082"
+msgid "Live Previews"
+msgstr "Live-voorbeelden"
+
+msgctxt "#30083"
+msgid "Live Preview Settings"
+msgstr "Live-voorbeeld instellingen"
+
+msgctxt "#30084"
+msgid "Clear live preview cache"
+msgstr "Leegmaken live-voorbeeld cache"
+
+msgctxt "#30085"
+msgid "***** WARNING *****"
+msgstr "***** WAARSCHUWING *****"
+
+msgctxt "#30086"
+msgid "These settings may allow this add-on to delete database entries and images[CR]for cached live previews."
+msgstr "Deze instellingen kunnen deze add-on toestaan om database-records en[CR]afbeeldingen te wissen voor gecachete live-voorbeelden."
+
+msgctxt "#30087"
+msgid "Notifications"
+msgstr "Meldingen"
+
+msgctxt "#30088"
+msgid "Game"
+msgstr "Spel"
+
+msgctxt "#30089"
+msgid "Viewers"
+msgstr "Kijkers"
+
+msgctxt "#30090"
+msgid "Language"
+msgstr "Taal"
+
+msgctxt "#30091"
+msgid "Mature"
+msgstr "Volwassen"
+
+msgctxt "#30092"
+msgid "Partner"
+msgstr "Partner"
+
+msgctxt "#30093"
+msgid "Delay"
+msgstr "Vertraging"
+
+msgctxt "#30094"
+msgid "Automatic refresh interval (minutes)"
+msgstr "Automatische ververs-interval (minuten)"
+
+msgctxt "#30095"
+msgid "Username is required"
+msgstr "Gebruikersnaam is vereist"
+
+msgctxt "#30096"
+msgid "API"
+msgstr "API"
+
+msgctxt "#30097"
+msgid "OAuth Client ID"
+msgstr "OAuth client-id"
+
+msgctxt "#30098"
+msgid "Select Video by ID or URL"
+msgstr "Kies video via ID of URL"
+
+msgctxt "#30099"
+msgid "OAuth Token"
+msgstr "OAuth Token"
+
+msgctxt "#30100"
+msgid "Visit www.twitch.tv/settings/connections and [CR]'Register your application' for an OAuth Client-ID"
+msgstr "Bezoek www.twitch.tv/settings/connections en [CR]'Register your application' voor een OAuth client-id"
+
+msgctxt "#30101"
+msgid "Visit www.twitchapps.com/tmi to generate an OAuth token"
+msgstr "Bezoek www.twitchapps.com/tmi om een OAuth-token aan te maken"
+
+msgctxt "#30102"
+msgid "Source"
+msgstr "Bron"
+
+msgctxt "#30103"
+msgid "1080p60"
+msgstr "1080p60"
+
+msgctxt "#30104"
+msgid "1080p30"
+msgstr "1080p30"
+
+msgctxt "#30105"
+msgid "720p60"
+msgstr "720p60"
+
+msgctxt "#30106"
+msgid "720p30"
+msgstr "720p30"
+
+msgctxt "#30107"
+msgid "540p30"
+msgstr "540p30"
+
+msgctxt "#30108"
+msgid "480p30"
+msgstr "480p30"
+
+msgctxt "#30109"
+msgid "360p30"
+msgstr "360p30"
+
+msgctxt "#30110"
+msgid "240p30"
+msgstr "240p30"
+
+msgctxt "#30111"
+msgid "144p30"
+msgstr "144p30"
+
+msgctxt "#30112"
+msgid "Quality may result in best match"
+msgstr "Kwaliteit bepaalt de beste keuze"
+
+msgctxt "#30113"
+msgid "Uploads"
+msgstr "Uploads"
+
+msgctxt "#30114"
+msgid "Confirm"
+msgstr "Bevestigen"
+
+msgctxt "#30115"
+msgid "Function cache has been reset"
+msgstr "Functie-cache is gereset"
+
+msgctxt "#30116"
+msgid "Function cache reset failed"
+msgstr "Functie-cache reset is mislukt"
+
+msgctxt "#30117"
+msgid "Reset function cache?"
+msgstr "Reset functie-cache?"
+
+msgctxt "#30118"
+msgid "Developer"
+msgstr "Ontwikkelaar"
+
+msgctxt "#30120"
+msgid "Cache"
+msgstr "Cache"
+
+msgctxt "#30121"
+msgid "Cache expire time (minutes)"
+msgstr "Cache vervaltijdstip (minuten)"
+
+msgctxt "#30122"
+msgid "Reset function cache"
+msgstr "Reset functie-cache"
+
+msgctxt "#30123"
+msgid "Items per page"
+msgstr "Items per pagina"
+
+msgctxt "#30124"
+msgid "Video Id/Url"
+msgstr "Video Id/Url"
+
+msgctxt "#30125"
+msgid "Streams"
+msgstr "Streams"
+
+msgctxt "#30126"
+msgid "Refresh"
+msgstr "Verversen"
+
+msgctxt "#30127"
+msgid "Login"
+msgstr "Inloggen"
+
+msgctxt "#30128"
+msgid "OAuth token is required"
+msgstr "OAuth-token is vereist"
+
+msgctxt "#30129"
+msgid "Error"
+msgstr "Fout"
+
+msgctxt "#30130"
+msgid "Go to %s"
+msgstr "Ga naar %s"
+
+msgctxt "#30131"
+msgid "No results returned"
+msgstr "Geen resultaten gevonden"
+
+msgctxt "#30132"
+msgid "OAuth token is required for access"
+msgstr "OAuth token is benodigd voor toegang"
+
+msgctxt "#30133"
+msgid "Authorize"
+msgstr "Toestaan"
+
+msgctxt "#30134"
+msgid "Get your OAuth token by logging in/signing up to Twitch.tv here:"
+msgstr "Krijg je OAuth-token door in te loggen / te registreren bij Twitch.tv hier:"
+
+msgctxt "#30135"
+msgid "Get OAuth token"
+msgstr "Verkrijg OAth-token"
+
+msgctxt "#30136"
+msgid "Always ask"
+msgstr "Altijd vragen"
+
+msgctxt "#30138"
+msgid "*** Do NOT share your OAuth token. ***"
+msgstr "*** Deel NIET je OAuth-token met anderen ***"
+
+msgctxt "#30139"
+msgid "Toggle follow"
+msgstr "Volgen in-/uitschakelen"
+
+msgctxt "#30140"
+msgid "Now following %s"
+msgstr "Nu volgend %s"
+
+msgctxt "#30141"
+msgid "Unfollowed %s"
+msgstr "Ontvolgd %s"
+
+msgctxt "#30142"
+msgid "Redirect URI"
+msgstr "Redigeer URI"
+
+msgctxt "#30143"
+msgid "Would you like to follow %s?"
+msgstr "Wil je %s graag volgen?"
+
+msgctxt "#30144"
+msgid "Are you sure you want to unfollow %s?"
+msgstr "Wil je echt %s ontvolgen?"
+
+msgctxt "#30145"
+msgid "Toggle block user"
+msgstr "In-/uitschakelen blokkering gebruiker"
+
+msgctxt "#30146"
+msgid "Blocked %s"
+msgstr "%s geblokkeerd"
+
+msgctxt "#30147"
+msgid "Unblocked %s"
+msgstr "%s vrijgegeven"
+
+msgctxt "#30148"
+msgid "Would you like to block %s?"
+msgstr "Wil je graag %s blokkeren?"
+
+msgctxt "#30149"
+msgid "Are you sure you want to unblock %s?"
+msgstr "Wil je echt %s vrijgeven?"
+
+msgctxt "#30150"
+msgid "Blacklist %s"
+msgstr "%s op de zwarte lijst plaatsen"
+
+msgctxt "#30151"
+msgid "Blacklisted %s"
+msgstr "%s op de zwarte lijst geplaatst"
+
+msgctxt "#30152"
+msgid "Lists"
+msgstr "Lijsten"
+
+msgctxt "#30153"
+msgid "Blacklist"
+msgstr "Zwarte lijst"
+
+msgctxt "#30154"
+msgid "Remove a user"
+msgstr "Verwijder een gebruiker"
+
+msgctxt "#30155"
+msgid "Remove a game"
+msgstr "Verwijder een spel"
+
+msgctxt "#30156"
+msgid "Remove all users"
+msgstr "Verwijder alle gebruikers"
+
+msgctxt "#30157"
+msgid "Remove all games"
+msgstr "Verwijder alle spellen"
+
+msgctxt "#30158"
+msgid "Remove %s from blacklist"
+msgstr "Verwijder %s van de zwarte lijst"
+
+msgctxt "#30159"
+msgid "Removed %s from blacklist"
+msgstr "%s verwijderd van de zwarte lijst"
+
+msgctxt "#30160"
+msgid "Cleared %s %s"
+msgstr "Wissen %s %s"
+
+msgctxt "#30161"
+msgid "Are you sure you want to clear %s %s?"
+msgstr "Wil je echt %s %s wissen?"
+
+msgctxt "#30162"
+msgid "Clear list"
+msgstr "Lijst wissen"
+
+msgctxt "#30163"
+msgid "Set default quality"
+msgstr "Stel standaardkwaliteit in"
+
+msgctxt "#30164"
+msgid "Default '%s' quality '%s' set for %s"
+msgstr "Standaard '%s' kwaliteit '%s' ingesteld voor %s"
+
+msgctxt "#30165"
+msgid "Removed default '%s' quality for %s"
+msgstr "Standaard '%s' kwaliteit voor %s verwijderd"
+
+msgctxt "#30166"
+msgid "Remove %s quality"
+msgstr "Verwijder %s kwaliteit"
+
+msgctxt "#30167"
+msgid "Default Qualities"
+msgstr "Standaardkwaliteiten"
+
+msgctxt "#30168"
+msgid "Clear default quality"
+msgstr "Wis standaardkwaliteit"
+
+msgctxt "#30169"
+msgid "Choose Quality"
+msgstr "Kies kwaliteit"
+
+msgctxt "#30170"
+msgid "Playlists"
+msgstr "Afspeellijsten"
+
+msgctxt "#30171"
+msgid "Collections"
+msgstr "Verzamelingen"
+
+msgctxt "#30172"
+msgid "Browse"
+msgstr "Zoeken"
+
+msgctxt "#30173"
+msgid "Xbox One"
+msgstr "XBox One"
+
+msgctxt "#30174"
+msgid "Playstation 4"
+msgstr "Playstation 4"
+
+msgctxt "#30175"
+msgid "Videos"
+msgstr "Video's"
+
+msgctxt "#30176"
+msgid "Clips"
+msgstr "Clips"
+
+msgctxt "#30177"
+msgid "Invalid OAuth token"
+msgstr "Foutief OAuth-token"
+
+msgctxt "#30178"
+msgid "Missing required scopes: %s"
+msgstr "Vereiste scopes afwezig: %s"
+
+msgctxt "#30179"
+msgid "Client id mismatch"
+msgstr "Klant-ID wijkt af"
+
+msgctxt "#30180"
+msgid "Go to '%s' - '%s' - '%s' to generate a new token"
+msgstr "Ga naar '%s' - '%s' - '%s' om een nieuw token aan te maken"
+
+msgctxt "#30181"
+msgid "Are you sure you want to blacklist %s?"
+msgstr "Wil je %s echt op de zwarte lijst plaatsen?"
+
+msgctxt "#30184"
+msgid "Change sort by"
+msgstr "Sorteer type op"
+
+msgctxt "#30185"
+msgid "Change sort direction"
+msgstr "Wijzig sorteerrichting"
+
+msgctxt "#30186"
+msgid "Change period"
+msgstr "Wijzig periode"
+
+msgctxt "#30187"
+msgid "Popular"
+msgstr "Populair"
+
+msgctxt "#30188"
+msgid "Views"
+msgstr "Bekeken"
+
+msgctxt "#30189"
+msgid "Add a language"
+msgstr "Voeg een taal toe"
+
+msgctxt "#30190"
+msgid "Remove a language"
+msgstr "Verwijder een taal"
+
+msgctxt "#30191"
+msgid "Remove a stream quality"
+msgstr "Verwijder een streamkwaliteit"
+
+msgctxt "#30192"
+msgid "Remove a video quality"
+msgstr "Verwijder een videokwaliteit"
+
+msgctxt "#30193"
+msgid "Remove a clip quality"
+msgstr "Verwijder een clipkwaliteit"
+
+msgctxt "#30194"
+msgid "Remove all stream qualities"
+msgstr "Verwijder alle streamkwaliteiten"
+
+msgctxt "#30195"
+msgid "Remove all video qualities"
+msgstr "Verwijder alle videokwaliteiten"
+
+msgctxt "#30196"
+msgid "Remove all clip qualities"
+msgstr "Verwijder alle clipkwaliteiten"
+
+msgctxt "#30197"
+msgid "Requires confirmation"
+msgstr "Bevestiging vereist"
+
+msgctxt "#30198"
+msgid "Requires subscription to %s"
+msgstr "Vereist abonnement op %s"
+
+msgctxt "#30199"
+msgid "Connection failed"
+msgstr "Verbinding mislukt"
+
+msgctxt "#30200"
+msgid "No %s found"
+msgstr "Geen %s gevonden"
+
+msgctxt "#30201"
+msgid "Bandwidth"
+msgstr "Bandbreedte"
+
+msgctxt "#30202"
+msgid "Currently Live"
+msgstr "Nu live"
+
+msgctxt "#30203"
+msgid "Went Live"
+msgstr "Live gegaan"
+
+msgctxt "#30204"
+msgid "Live notifications"
+msgstr "Live-meldingen"
+
+msgctxt "#30205"
+msgid "Audible"
+msgstr "Hoorbaar"
+
+msgctxt "#30206"
+msgid "Playback failed"
+msgstr "Afspelen mistlukt"
+
+msgctxt "#30207"
+msgid "Retrying in %d seconds"
+msgstr "Nieuwe poging in %d seconden"
+
+msgctxt "#30208"
+msgid "Attempting to reconnect to %s"
+msgstr "Poging tot verbinding met %s"
+
+msgctxt "#30209"
+msgid "Attempt #%d"
+msgstr "Poging #%d"
+
+msgctxt "#30210"
+msgid "Attempt reconnection to live streams"
+msgstr "Poging voor nieuwe verbinding met live streams"
+
+msgctxt "#30211"
+msgid "Enabled"
+msgstr "Ingeschakeld"
+
+msgctxt "#30212"
+msgid "Failed to connect to Twitch API"
+msgstr "Verbinding met Twitch API mislukt"
+
+msgctxt "#30213"
+msgid "Followers"
+msgstr "Volgers"
+
+msgctxt "#30214"
+msgid "Items"
+msgstr "Items"
+
+msgctxt "#30215"
+msgid "Duration"
+msgstr "Duur"
+
+msgctxt "#30216"
+msgid "Curated"
+msgstr "Geproduceerd"
+
+msgctxt "#30217"
+msgid "Press OK to resolve"
+msgstr "Druk OK om door te gaan"
+
+msgctxt "#30218"
+msgid "Supported video ids: a123435, c123435, v123435, videos123435[CR]Example urls:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
+msgstr "Ondersteunde video-IDs: a123435, c123435, v123435, videos123435[CR]Voorbeeld-URLs:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
+
+msgctxt "#30219"
+msgid "Main Menu"
+msgstr "Hoofdmenu"
+
+msgctxt "#30220"
+msgid "Failed to get url, try again shortly."
+msgstr "Kon geen URL ophalen, probeer het iets later."
+
+msgctxt "#30221"
+msgid "Unknown"
+msgstr "Onbekend"
+
+msgctxt "#30222"
+msgid "VODCast highlight color"
+msgstr "VODcast oplichtkleur"
+
+msgctxt "#30223"
+msgid "Use inputstream.adaptive"
+msgstr "Gebruik inputstream.adaptive"
+
+msgctxt "#30224"
+msgid "Configure inputstream.adaptive"
+msgstr "Configureer inputstream.adaptive"
+
+msgctxt "#30225"
+msgid "inputstream.adaptive is enabled in the Twitch settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
+msgstr "inputstream.adaptive is ingeschakeld in de Twitch-instellingen, echter inputstream.adaptive lijkt uitgeschakeld te zijn. Wil je graag enable inputstream.adaptive nu inschakelen?"
+
+msgctxt "#30226"
+msgid "The installed inputstream.adaptive add-on does not meet the version requirement(%s), and has been disabled in the Twitch add-on settings."
+msgstr "De geïnstalleerde inputstream.adaptive add-on voldoet niet aan de versie-vereisten (%s), en is uitgeschakeld in de Twitch add-on instellingen."
+
+msgctxt "#30227"
+msgid "Revoke Token"
+msgstr "Token intrekken"
+
+msgctxt "#30228"
+msgid "Are you sure you want to revoke your OAuth token?"
+msgstr "Wil je echt je OAuth-token intrekken?"
+
+msgctxt "#30229"
+msgid "OAuth token has been revoked"
+msgstr "Oath-token is ingetrokken"
+
+msgctxt "#30230"
+msgid "OAuth token has been updated"
+msgstr "OAth-token is bijgewerkt"
+
+msgctxt "#30231"
+msgid "%s started streaming %s"
+msgstr "%s streaming gestart %s"
+
+msgctxt "#30232"
+msgid "Notify at start"
+msgstr "Meld bij de start"
+
+msgctxt "#30233"
+msgid "Group notifications at start"
+msgstr "Groepsmeldingen bij de start"
+
+msgctxt "#30234"
+msgid "Reset cache on Refresh"
+msgstr "Reset cache bij verversen"
+
+msgctxt "#30235"
+msgid "New search"
+msgstr "Nieuwe zoekopdracht"
+
+msgctxt "#30236"
+msgid "Search history size"
+msgstr "Zoekhistorie omvang"
+
+msgctxt "#30237"
+msgid "Clear search history?"
+msgstr "Zoekhistorie wissen?"
+
+msgctxt "#30238"
+msgid "Remove %s from search history?"
+msgstr "Verwijder %s van de zoekhistorie?"
+
+msgctxt "#30239"
+msgid "Remove %s"
+msgstr "Verwijder %s"
+
+msgctxt "#30240"
+msgid "Clear search history"
+msgstr "Wis zoekhistorie"
+
+msgctxt "#30241"
+msgid "Search history cleared"
+msgstr "Zoekhistorie gewist"
+
+msgctxt "#30242"
+msgid "Removed %s from search history"
+msgstr "%s verwijderd uit de zoekhistorie"
+
+msgctxt "#30243"
+msgid "Maintenance"
+msgstr "Onderhoud"
+
+msgctxt "#30244"
+msgid "Search History"
+msgstr "Zoekhistorie"
+
+msgctxt "#30245"
+msgid "Delete streams search history"
+msgstr "Stream zoekgeschiedenis verwijderen"
+
+msgctxt "#30246"
+msgid "Delete channels search history"
+msgstr "Kanaal zoekgeschiedenis verwijderen"
+
+msgctxt "#30247"
+msgid "Delete games search history"
+msgstr "Games zoekgeschiedenis verwijderen"
+
+msgctxt "#30248"
+msgid "Delete video id/url search history"
+msgstr "Video id/url zoekgeschiedenis verwijderen"
+
+msgctxt "#30249"
+msgid "Other"
+msgstr "Overige"
+
+msgctxt "#30250"
+msgid "Delete storage.json"
+msgstr "storage.json verwijderen"
+
+msgctxt "#30251"
+msgid "Are you sure you want to delete %s?"
+msgstr "Weet u zeker dat u %s wilt verwijderen?"
+
+msgctxt "#30252"
+msgid "Deleting %s succeeded"
+msgstr "%s succesvol verwijderd"
+
+msgctxt "#30253"
+msgid "Deleting %s failed"
+msgstr "Verwijderen van %s mislukt"
+
+msgctxt "#30254"
+msgid "Adaptive"
+msgstr "Adaptief"
+
+msgctxt "#30255"
+msgid "Thumbnail size"
+msgstr "Miniatuur formaat"
+
+msgctxt "#30256"
+msgid "Large"
+msgstr "Groot"
+
+msgctxt "#30257"
+msgid "Medium"
+msgstr "Gemiddeld"
+
+msgctxt "#30258"
+msgid "Small"
+msgstr "Klein"
+
+msgctxt "#30259"
+msgid "Live preview refresh interval (minutes)"
+msgstr "Verversingsinterval Live-Preview (minuten)"
+
+msgctxt "#30260"
+msgid "Limit to 30 fps"
+msgstr "Beperk tot 30 fps"
+
+msgctxt "#30261"
+msgid "Private API Credentials"
+msgstr "Privé API Inloggegevens"
+
+msgctxt "#30262"
+msgid "Change languages"
+msgstr "Taal wijzigen"
+
+msgctxt "#30263"
+msgid "Frame rate limit"
+msgstr "Frame rate limiet"
+
+msgctxt "#30264"
+msgid "Follow"
+msgstr "Volgen"
+
+msgctxt "#30265"
+msgid "Unfollow"
+msgstr "Ontvolgen"
+
+msgctxt "#30266"
+msgid "Add to queue"
+msgstr "Toevoegen aan wachtrij"
+
+msgctxt "#30267"
+msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr ""
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr ""
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr ""
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr ""
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr ""
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr ""
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
+msgstr ""
+
+#~ msgctxt "#30132"
+#~ msgid "OAuth token is required for access to authorized user functions."
+#~ msgstr "OAuth-token is vereist voor toegang tot geauthorizeerde gebruikersfuncties."
+
+#~ msgctxt "#30005"
+#~ msgid "Featured Streams"
+#~ msgstr "Streams"

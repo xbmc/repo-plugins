@@ -1,0 +1,1066 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: STRINGS\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: 2022-09-20 16:14+0000\n"
+"Last-Translator: Oskari Lavinto <olavinto@protonmail.com>\n"
+"Language-Team: Finnish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-tubed/fi_fi/>\n"
+"Language: fi_fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.14.1\n"
+
+msgctxt "Addon Summary"
+msgid "Watch your favorite YouTube content on Kodi"
+msgstr "Katso YouTube-suosikkisisältöäsi Kodissa"
+
+msgctxt "Addon Description"
+msgid "Browse your favorite content from YouTube; create, delete, and rename playlists; subscribe or unsubscribe from your favorite channels; and rate your favorite videos."
+msgstr "Selaa YouTube-suosikkisisältöäsi, luo, poista ja nimeä soittolistoja, tilaa kanavia tai lopeta niiden tilauksia ja arvioi suosikkivideosi."
+
+msgctxt "Addon Disclaimer"
+msgid "Tubed's use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed's Privacy Policy at https://panicked.xyz/tubed-privacy/"
+msgstr "Tubed-lisäosan Googlen rajapinnoilta vastaanottamien tietojen käytössä noudatetaan Google API Services User Data Policy -käytäntöä, mukaan lukien rajoitetun käytön vaatimukset. Lisätietoja tietojesi käsittelystä löytyy Tubed-lisäosan tietosuojakäytännöstä, osoitteesta https://panicked.xyz/tubed-privacy/"
+
+msgctxt "#30000"
+msgid "Most Popular"
+msgstr "Suosituimmat"
+
+msgctxt "#30001"
+msgid "Next Page"
+msgstr "Seuraava sivu"
+
+msgctxt "#30002"
+msgid "Recommendations"
+msgstr "Suositukset"
+
+msgctxt "#30003"
+msgid "Search"
+msgstr "Haku"
+
+msgctxt "#30004"
+msgid "My Channel"
+msgstr "Oma kanava"
+
+msgctxt "#30005"
+msgid "Liked Videos"
+msgstr "Tykätyt videot"
+
+msgctxt "#30006"
+msgid "Disliked Videos"
+msgstr "Ei-tykätyt videot"
+
+msgctxt "#30007"
+msgid "Playlists"
+msgstr "Soittolistat"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "Kanavat"
+
+msgctxt "#30009"
+msgid "Subscriptions"
+msgstr "Tilaukset"
+
+msgctxt "#30010"
+msgid "Live"
+msgstr "Live"
+
+msgctxt "#30011"
+msgid "Sign in with Google"
+msgstr "Kirjaudu Google-tilillä"
+
+msgctxt "#30012"
+msgid "Sign Out"
+msgstr "Kirjaudu ulos"
+
+msgctxt "#30013"
+msgid "Manage Users"
+msgstr "Hallitse käyttäjiä"
+
+msgctxt "#30014"
+msgid "New Search"
+msgstr "Uusi haku"
+
+msgctxt "#30015"
+msgid "Enter your search term"
+msgstr "Syötä hakulauseke"
+
+msgctxt "#30016"
+msgid "Go to %s and enter the following code:"
+msgstr "Avaa \"%s\" ja syötä seuraava koodi:"
+
+msgctxt "#30017"
+msgid "New user..."
+msgstr "Uusi käyttäjä..."
+
+msgctxt "#30018"
+msgid "Rename user..."
+msgstr "Nimeä käyttäjä uudelleen..."
+
+msgctxt "#30019"
+msgid "Remove user..."
+msgstr "Poista käyttäjä..."
+
+msgctxt "#30020"
+msgid "New Username"
+msgstr "Uusi käyttäjänimi"
+
+msgctxt "#30021"
+msgid "Remove User"
+msgstr "Poista käyttäjä"
+
+msgctxt "#30022"
+msgid "Removing %s, are you sure?"
+msgstr "Haluatko varmasti poistaa käyttäjän \"%s\"?"
+
+msgctxt "#30023"
+msgid "Uploads"
+msgstr "Lähetykset"
+
+msgctxt "#30024"
+msgid "You are about to sign out, are you sure?"
+msgstr "Haluatko varmasti kirjautua ulos?"
+
+msgctxt "#30025"
+msgid "Categories"
+msgstr "Kategoriat"
+
+msgctxt "#30026"
+msgid "Remove..."
+msgstr "Poista..."
+
+msgctxt "#30027"
+msgid "Clear history"
+msgstr "Tyhjennä historia"
+
+msgctxt "#30028"
+msgid "General"
+msgstr "Yleiset"
+
+msgctxt "#30029"
+msgid "Quality"
+msgstr "Laatu"
+
+msgctxt "#30030"
+msgid "Choose the maximum playback quality for videos and live content"
+msgstr "Valitse videoiden ja live-sisällön toiston enimmäislaatu"
+
+msgctxt "#30031"
+msgid "Limit to 30 fps"
+msgstr "Rajoita 30 kuvaan sekunnissa (fps)"
+
+msgctxt "#30032"
+msgid "Limit playback quality to 30 fps or less"
+msgstr "Rajoita toiston laatu enintään 30 kuvaan sekunnissa (fps)."
+
+msgctxt "#30033"
+msgid "HDR"
+msgstr "HDR"
+
+msgctxt "#30034"
+msgid "Use the best matching HDR streams for videos"
+msgstr "Käytä videoille parhaiten sopivia HDR-mediavirtoja"
+
+msgctxt "#30035"
+msgid "Adaptive (MP4/H264)"
+msgstr "Mukautuva (MP4/H264)"
+
+msgctxt "#30036"
+msgid "Adaptive (WEBM/VP9)"
+msgstr "Mukautuva (WEBM/VP9)"
+
+msgctxt "#30037"
+msgid "240p"
+msgstr "240p"
+
+msgctxt "#30038"
+msgid "360p"
+msgstr "360p"
+
+msgctxt "#30039"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30040"
+msgid "720p (HD)"
+msgstr "720p (HD)"
+
+msgctxt "#30041"
+msgid "1080p (FHD)"
+msgstr "1080p (FHD)"
+
+msgctxt "#30042"
+msgid "1440p (QHD)"
+msgstr "1440p (QHD)"
+
+msgctxt "#30043"
+msgid "2160p (4K)"
+msgstr "2160p (4K)"
+
+msgctxt "#30044"
+msgid "4320p (8K)"
+msgstr "4320p (8K)"
+
+msgctxt "#30045"
+msgid "Playback"
+msgstr "Toisto"
+
+msgctxt "#30046"
+msgid "Watch Later"
+msgstr "Katso myöhemmin"
+
+msgctxt "#30047"
+msgid "Regional"
+msgstr "Alueelliset"
+
+msgctxt "#30048"
+msgid "Language"
+msgstr "Kieli"
+
+msgctxt "#30049"
+msgid "Your preferred YouTube UI language"
+msgstr "YouTube-käyttöliittymän ensisijainen kieli"
+
+msgctxt "#30050"
+msgid "Region"
+msgstr "Alue"
+
+msgctxt "#30051"
+msgid "Your preferred content region"
+msgstr "Sisällön ensisijainen alue"
+
+msgctxt "#30052"
+msgid "Configure regional preferences"
+msgstr "Määritä alueelliset asetukset"
+
+msgctxt "#30053"
+msgid "Configure your preferred language and region"
+msgstr "Määritä haluamasi kieli ja alue"
+
+msgctxt "#30054"
+msgid "Configure subtitles"
+msgstr "Määritä tekstitykset"
+
+msgctxt "#30055"
+msgid "Configure your preferred subtitle language"
+msgstr "Määritä ensisijainen tekstityskieli"
+
+msgctxt "#30056"
+msgid "Subtitle language"
+msgstr "Tekstityskieli"
+
+msgctxt "#30057"
+msgid "Your preferred subtitle language"
+msgstr "Ensisijainen tekstityskieli"
+
+msgctxt "#30058"
+msgid "Subtitles"
+msgstr "Tekstitykset"
+
+msgctxt "#30059"
+msgid "%s with %s fallback"
+msgstr "%s, varmistuksena %s"
+
+msgctxt "#30060"
+msgid "No auto-generated"
+msgstr "Ei automaattisesti luotuja"
+
+msgctxt "#30061"
+msgid "None"
+msgstr "Ei mitään"
+
+msgctxt "#30062"
+msgid "Prompt"
+msgstr "Kysy"
+
+msgctxt "#30063"
+msgid "Subscribe"
+msgstr "Tilaa"
+
+msgctxt "#30064"
+msgid "Subscribed"
+msgstr "Tilattiin"
+
+msgctxt "#30065"
+msgid "Unsubscribe"
+msgstr "Lopeta tilaus"
+
+msgctxt "#30066"
+msgid "Unsubscribed"
+msgstr "Tilaus lopetettiin"
+
+msgctxt "#30067"
+msgid "Error"
+msgstr "Virhe"
+
+msgctxt "#30068"
+msgid "Play (Prompt for subtitles)"
+msgstr "Toista (kysy tekstitystä)"
+
+msgctxt "#30069"
+msgid "Go to %s"
+msgstr "Avaa %s"
+
+msgctxt "#30070"
+msgid "Subscribed to %s"
+msgstr "Tilattiin kanava \"%s\""
+
+msgctxt "#30071"
+msgid "Unsubscribed from %s"
+msgstr "Kanavan \"%s\" tilaus lopetettiin"
+
+msgctxt "#30072"
+msgid "Rate"
+msgstr "Arvioi"
+
+msgctxt "#30073"
+msgid "I like this"
+msgstr "Tykkään tästä"
+
+msgctxt "#30074"
+msgid "I dislike this"
+msgstr "En tykkään tästä"
+
+msgctxt "#30075"
+msgid "Remove rating"
+msgstr "Poista arvio"
+
+msgctxt "#30076"
+msgid "Liked"
+msgstr "Tykätty"
+
+msgctxt "#30077"
+msgid "Disliked"
+msgstr "Ei-tykätty"
+
+msgctxt "#30078"
+msgid "Liked %s"
+msgstr "Tykkäsit videosta \"%s\""
+
+msgctxt "#30079"
+msgid "Disliked %s"
+msgstr "Et tykännyt videosta \"%s\""
+
+msgctxt "#30080"
+msgid "Rating removed"
+msgstr "Arvio poistettiin"
+
+msgctxt "#30081"
+msgid "Rating removed from %s"
+msgstr "Videon \"%s\" arvio poistettiin"
+
+msgctxt "#30082"
+msgid "New playlist"
+msgstr "Uusi soittolista"
+
+msgctxt "#30083"
+msgid "Add to playlist"
+msgstr "Lisää soittolistalle"
+
+msgctxt "#30084"
+msgid "Remove from playlist"
+msgstr "Poista soittolistalta"
+
+msgctxt "#30085"
+msgid "Delete playlist"
+msgstr "Poista soittolista"
+
+msgctxt "#30086"
+msgid "Enter your playlist title"
+msgstr "Syötä soittolistan nimi"
+
+msgctxt "#30087"
+msgid "Added %s to %s"
+msgstr "\"%s\" lisättiin soittolistalle \"%s\""
+
+msgctxt "#30088"
+msgid "Removed from playlist"
+msgstr "Poistettiin soittolistalta"
+
+msgctxt "#30089"
+msgid "Removed %s from playlist"
+msgstr "\"%s\" poistettiin soittolistalta"
+
+msgctxt "#30090"
+msgid "Playlist deleted"
+msgstr "Soittolista poistettiin"
+
+msgctxt "#30091"
+msgid "%s playlist deleted"
+msgstr "\"%s\" soittolista poistettiin"
+
+msgctxt "#30092"
+msgid "Rename playlist"
+msgstr "Nimeä soittolista uudelleen"
+
+msgctxt "#30093"
+msgid "Playlist renamed to %s"
+msgstr "Soittolistan uusi nimi on \"%s\""
+
+msgctxt "#30094"
+msgid "%s renamed to %s"
+msgstr "Soittolistan \"%s\" uusi nimi on \"%s\""
+
+msgctxt "#30095"
+msgid "You are about to delete %s, are you sure?"
+msgstr "Haluatko varmasti poistaa soittolistan \"%s\"?"
+
+msgctxt "#30096"
+msgid "You are about to delete a playlist, are you sure?"
+msgstr "Haluatko varmasti poistaa soittolistan?"
+
+msgctxt "#30097"
+msgid "Upcoming"
+msgstr "Tulevat"
+
+msgctxt "#30098"
+msgid "Completed"
+msgstr "Päättyneet"
+
+msgctxt "#30099"
+msgid "%s was scheduled to start %s"
+msgstr "Lähetyksen \"%s\" oli tarkoitus alkaa %s"
+
+msgctxt "#30100"
+msgid "%s is scheduled to start %s"
+msgstr "Lähetyksen \"%s\" on tarkoitus alkaa %s"
+
+msgctxt "#30101"
+msgid "Related videos"
+msgstr "Aiheeseen liittyvät videot"
+
+msgctxt "#30102"
+msgid "Cache"
+msgstr "Välimuisti"
+
+msgctxt "#30103"
+msgid "Data cache TTL (weeks)"
+msgstr "Tietovälimuistin elinaika (viikkoa)"
+
+msgctxt "#30104"
+msgid "Function cache TTL (minutes)"
+msgstr "Toimintovälimuistin elinaika (minuuttia)"
+
+msgctxt "#30105"
+msgid "Clear data cache"
+msgstr "Tyhjennä tietovälimuisti"
+
+msgctxt "#30106"
+msgid "Clear function cache"
+msgstr "Tyhjennä toimintovälimuisti"
+
+msgctxt "#30107"
+msgid "Data cache was cleared"
+msgstr "Tietovälimuisti tyhjennettiin"
+
+msgctxt "#30108"
+msgid "Function cache was cleared"
+msgstr "Toimintovälimuisti tyhjennettiin"
+
+msgctxt "#30109"
+msgid "Delete data cache"
+msgstr "Poista tietovälimuisti"
+
+msgctxt "#30110"
+msgid "Delete function cache"
+msgstr "Poista toimintovälimuisti"
+
+msgctxt "#30111"
+msgid "Data cache was deleted"
+msgstr "Tietovälimuisti poistettiin"
+
+msgctxt "#30112"
+msgid "Function cache was deleted"
+msgstr "Toimintovälimuisti poistettiin"
+
+msgctxt "#30113"
+msgid "Time to Live"
+msgstr "Elinaika"
+
+msgctxt "#30114"
+msgid "Maintenance"
+msgstr "Ylläpito"
+
+msgctxt "#30115"
+msgid "How long until long term data cache expires in weeks"
+msgstr "Pitkäaikaisen tietovälimuistin säilytysaika viikkoina"
+
+msgctxt "#30116"
+msgid "How long until short term function cache expires in minutes"
+msgstr "Lyhytaikaisen toimintovälimuistin säilytysaika minuutteina"
+
+msgctxt "#30117"
+msgid "Clearing long term data cache will remove all entries from the database"
+msgstr "Pitkäaikaisen tietovälimuistin tyhjennys poistaa kaikki kohteet tietokannasta"
+
+msgctxt "#30118"
+msgid "Clearing short term function cache will remove all cache entries"
+msgstr "Lyhytaikaisen toimintovälimuistin tyhjennys poistaa kaikki välimuistin kohteet"
+
+msgctxt "#30119"
+msgid "Deleting long term data cache will delete the whole database"
+msgstr "Pitkäaikaisen tietovälimuistin poisto poistaa koko tietokannan"
+
+msgctxt "#30120"
+msgid "Deleting short term function cache will delete the whole database"
+msgstr "Lyhytaikaisen toimintovälimuistin poisto poistaa koko tietokannan"
+
+msgctxt "#30121"
+msgid "Failed to clear function cache"
+msgstr "Toimintovälimuistin tyhjennys epäonnistui"
+
+msgctxt "#30122"
+msgid "Failed to clear data cache"
+msgstr "Tietovälimuistin tyhjennys epäonnistui"
+
+msgctxt "#30123"
+msgid "Failed to delete function cache"
+msgstr "Toimintovälimuistin poisto epäonnistui"
+
+msgctxt "#30124"
+msgid "Failed to delete data cache"
+msgstr "Tietovälimuistin poisto epäonnistui"
+
+msgctxt "#30125"
+msgid "Debug"
+msgstr "Vianselvitys"
+
+msgctxt "#30126"
+msgid "Component Logging"
+msgstr "Komponenttien kirjaus"
+
+msgctxt "#30127"
+msgid "API requests"
+msgstr "API-kutsut"
+
+msgctxt "#30128"
+msgid "Enable logging of API requests and responses"
+msgstr "Kirjaa API-pyynnöt ja -vastaukset"
+
+msgctxt "#30129"
+msgid "Comments"
+msgstr "Kommentit"
+
+msgctxt "#30130"
+msgid "Comment"
+msgstr "Kommentoi"
+
+msgctxt "#30131"
+msgid "Read comment"
+msgstr "Lue kommentti"
+
+msgctxt "#30132"
+msgid "Likes"
+msgstr "Tykkäykset"
+
+msgctxt "#30133"
+msgid "Replies"
+msgstr "Vastaukset"
+
+msgctxt "#30134"
+msgid "Comment has been edited"
+msgstr "Kommenttia on muokattu"
+
+msgctxt "#30135"
+msgid "Limits"
+msgstr "Rajoitukset"
+
+msgctxt "#30136"
+msgid "Data cache (MB)"
+msgstr "Tietovälimuisti (Mt)"
+
+msgctxt "#30137"
+msgid "The maximum size of long term data cache before being automatically resized"
+msgstr "Pitkäaikaisen tietovälimuistin koko ennen koon automaattista muutosta"
+
+msgctxt "#30138"
+msgid "Sort order"
+msgstr "Lajittelusuunta"
+
+msgctxt "#30139"
+msgid "Choose a sort order"
+msgstr "Valitse lajittelusuunta"
+
+msgctxt "#30140"
+msgid "Alphabetical"
+msgstr "Aakkosellinen"
+
+msgctxt "#30141"
+msgid "Relevance"
+msgstr "Merkityksellisyys"
+
+msgctxt "#30142"
+msgid "Activity"
+msgstr "Aktiivisuus"
+
+msgctxt "#30143"
+msgid "Time"
+msgstr "Kesto"
+
+msgctxt "#30144"
+msgid "Date"
+msgstr "Päiväys"
+
+msgctxt "#30145"
+msgid "Rating"
+msgstr "Arvio"
+
+msgctxt "#30146"
+msgid "Title"
+msgstr "Nimi"
+
+msgctxt "#30147"
+msgid "Video Count"
+msgstr "Videomäärä"
+
+msgctxt "#30148"
+msgid "View Count"
+msgstr "Toistomäärä"
+
+msgctxt "#30149"
+msgid "Post Play"
+msgstr "Toiston jälkitoiminto"
+
+msgctxt "#30150"
+msgid "Post play minimum watch percentage"
+msgstr "Toiston jälkitoiminnon vähimmäisprosentti"
+
+msgctxt "#30151"
+msgid "What percent of the video's duration must be watched to trigger post play events"
+msgstr "Toiston jälkitoiminnon suoritus edellyttää, että videosta on katsottu tämän prosenttiarvon verran."
+
+msgctxt "#30152"
+msgid "Rate the video that just finished playing"
+msgstr "Arvioi juuri toistettu video"
+
+msgctxt "#30153"
+msgid "Rate during playlists"
+msgstr "Arvioi videot toistettaessa soittolistoja"
+
+msgctxt "#30154"
+msgid "Should rating be requested while watching playlists"
+msgstr "Kysytäänkö arviota, kun katsotaan soittolistaa."
+
+msgctxt "#30155"
+msgid "Autoplay related videos"
+msgstr "Toista aiheeseen liittyviä videoita automaattisesti"
+
+msgctxt "#30156"
+msgid "Autoplay videos related to the previously played video"
+msgstr "Toista aiemmin toistettuun videoon liittyviä videoita automaattisesti."
+
+msgctxt "#30157"
+msgid "Set as History"
+msgstr "Määritä \"Historia\" -listaksi"
+
+msgctxt "#30158"
+msgid "Set as Watch Later"
+msgstr "Määritä \"Katso myöhemmin\" -listaksi"
+
+msgctxt "#30159"
+msgid "Remove as History"
+msgstr "Poista \"Historia\" -määritys"
+
+msgctxt "#30160"
+msgid "Remove as Watch Later"
+msgstr "Poista \"Katso myöhemmin\" -määritys"
+
+msgctxt "#30161"
+msgid "History"
+msgstr "Historia"
+
+msgctxt "#30162"
+msgid "Watch later playlist configured"
+msgstr "\"Katso myöhemmin\" -soittolista määritettiin"
+
+msgctxt "#30163"
+msgid "History playlist configured"
+msgstr "\"Historia\" -soittolista määritettiin"
+
+msgctxt "#30164"
+msgid "%s was configured as your watch later playlist"
+msgstr "\"%s\" määritettiin \"katso myöhemmin\" -soittolistaksi"
+
+msgctxt "#30165"
+msgid "%s was configured as your history playlist"
+msgstr "\"%s\" määritettiin \"Historia\" -soittolistaksi"
+
+msgctxt "#30166"
+msgid "Watch later playlist is no longer configured"
+msgstr "\"Katso myöhemmin\" -soittolistan määritys poistettiin"
+
+msgctxt "#30167"
+msgid "History playlist is no longer configured"
+msgstr "\"Historia\" -soittolistan määritys poistettiin"
+
+msgctxt "#30168"
+msgid "%s is no longer configured as your watch later playlist"
+msgstr "\"%s\" ei ole enää määritetty \"Katso myöhemmin\" -soittolistaksi"
+
+msgctxt "#30169"
+msgid "%s is no longer configured as your history playlist"
+msgstr "\"%s\" ei ole enää määritetty \"Historia\" -soittolistaksi"
+
+msgctxt "#30170"
+msgid "Add to watch later"
+msgstr "Lisää \"Katso myöhemmin\" -listalle"
+
+msgctxt "#30171"
+msgid "Favorite Channels"
+msgstr "Suosikkikanavat"
+
+msgctxt "#30172"
+msgid "Add to favorite channels"
+msgstr "Lisää suosikkikanaviin"
+
+msgctxt "#30173"
+msgid "Clear favorite channels"
+msgstr "Tyhjennä suosikkikanavat"
+
+msgctxt "#30174"
+msgid "Added to favorite channels"
+msgstr "Lisättiin suosikkikanaviin"
+
+msgctxt "#30175"
+msgid "Removed from favorite channels"
+msgstr "Poistettiin suosikkikanavista"
+
+msgctxt "#30176"
+msgid "Import from xml"
+msgstr "Tuo XML-tiedostosta"
+
+msgctxt "#30177"
+msgid "Import failed"
+msgstr "Tuonti epäonnistui"
+
+msgctxt "#30178"
+msgid "Import completed successfully"
+msgstr "Tuonti onnistui"
+
+msgctxt "#30179"
+msgid "You are about to clear your favorite channels, are you sure?"
+msgstr "Haluatko varmasti tyhjentää suosikkikanavat?"
+
+msgctxt "#30180"
+msgid "Favorite channels cleared"
+msgstr "Suosikkikanavat tyhjennettiin"
+
+msgctxt "#30181"
+msgid "Add %s to favorite channels"
+msgstr "Lisää \"%s\" suosikkikanaviin"
+
+msgctxt "#30182"
+msgid "Added %s to favorite channels"
+msgstr "\"%s\" lisättiin suosikkikanaviin"
+
+msgctxt "#30183"
+msgid "Removed %s from favorite channels"
+msgstr "\"%s\" poistettiin suosikkikanavista"
+
+msgctxt "#30184"
+msgid "Refresh"
+msgstr "Päivitä"
+
+msgctxt "#30185"
+msgid "Clear function cache on refresh"
+msgstr "Tyhjennä toimintovälimuisti päivityksen yhteydessä"
+
+msgctxt "#30186"
+msgid "Short term function cache will be cleared when using Refresh from the context menu"
+msgstr "Sisältövalikon päivitysvalinta tyhjentää lyhytaikaisen toimintovälimuistin"
+
+msgctxt "#30187"
+msgid "Choose watch later playlist"
+msgstr "Valitse \"Katso myöhemmin\" -soittolista"
+
+msgctxt "#30188"
+msgid "Added %s to the new watch later playlist %s"
+msgstr "\"%s\" lisättiin uudelle \"Katso myöhemmin\" -soittolistalle \"%s\""
+
+msgctxt "#30189"
+msgid "Search history items"
+msgstr "Etsi historian kohteita"
+
+msgctxt "#30190"
+msgid "How many search history items should be kept for each user"
+msgstr "Kuinka monta käyttäjäkohtaista hakuhistorian kohdetta säilytetään"
+
+msgctxt "#30191"
+msgid "Favorite channels"
+msgstr "Suosikkikanavat"
+
+msgctxt "#30192"
+msgid "How many favorite channels should be kept for each user"
+msgstr "Kuinka monta käyttäjäkohtaista suosikkikanavaa säilytetään"
+
+msgctxt "#30193"
+msgid "Play"
+msgstr "Toista"
+
+msgctxt "#30194"
+msgid "Play from %s"
+msgstr "Toista kohdasta %s"
+
+msgctxt "#30195"
+msgid "Most Popular Regionally"
+msgstr "Alueellisesti suosituimmat"
+
+msgctxt "#30196"
+msgid "Main Menu"
+msgstr "Päävalikko"
+
+msgctxt "#30197"
+msgid "Show/Hide this item on the main menu"
+msgstr "Näytä/piilota kohde päävalikosta"
+
+msgctxt "#30198"
+msgid "Hide %s"
+msgstr "Piilota \"%s\""
+
+msgctxt "#30199"
+msgid "%s was hidden from the main menu"
+msgstr "\"%s\" piilotettiin päävalikosta"
+
+msgctxt "#30200"
+msgid "User is authenticated"
+msgstr "Käyttäjä on todennettu"
+
+msgctxt "#30201"
+msgid "User is not authenticated"
+msgstr "Käyttäjää ei ole todennettu"
+
+msgctxt "#30202"
+msgid "Create a new user"
+msgstr "Luo uusi käyttäjä"
+
+msgctxt "#30203"
+msgid "Rename a current user"
+msgstr "Nimeä nykyinen käyttäjä uudelleen"
+
+msgctxt "#30204"
+msgid "Remove a current user"
+msgstr "Poista nykyinen käyttäjä"
+
+msgctxt "#30205"
+msgid "Change avatar..."
+msgstr "Vaihda kuvaa..."
+
+msgctxt "#30206"
+msgid "Change a current user's avatar"
+msgstr "Vaihda käyttäjän kuvaa"
+
+msgctxt "#30207"
+msgid "Choose a new avatar"
+msgstr "Valitse uusi kuva"
+
+msgctxt "#30208"
+msgid "Up Next"
+msgstr "Seuraavaksi"
+
+msgctxt "#30209"
+msgid "Links in the description"
+msgstr "Kuvauksen linkit"
+
+msgctxt "#30210"
+msgid "There were no links found in the description"
+msgstr "Kuvauksesta ei löytynyt linkkejä"
+
+msgctxt "#30211"
+msgid "Create a new playlist"
+msgstr "Luo uusi soittolista"
+
+msgctxt "#30212"
+msgid "Go to the next page"
+msgstr "Siirry seuraavalle sivulle"
+
+msgctxt "#30213"
+msgid "Rate the selected video"
+msgstr "Arvioi valittu video"
+
+msgctxt "#30214"
+msgid "Rate %s"
+msgstr "Arvioi \"%s\""
+
+msgctxt "#30215"
+msgid "Dialogs"
+msgstr "Valintaruudut"
+
+msgctxt "#30216"
+msgid "Open the autoplay related video dialog for debugging"
+msgstr "Avaa automaattitoistoon liittyvä videoruutu vidanselvitystä varten"
+
+msgctxt "#30217"
+msgid "Open the sign in dialog for debugging"
+msgstr "Avaa kirjautumisvalinta vianselvitystä varten"
+
+msgctxt "#30218"
+msgid "likes"
+msgstr "tykkäykset"
+
+msgctxt "#30219"
+msgid "dislikes"
+msgstr "ei-tykkäykset"
+
+msgctxt "#30220"
+msgid "views"
+msgstr "toistokerrat"
+
+msgctxt "#30221"
+msgid "Chapters"
+msgstr "Kappaleet"
+
+msgctxt "#30222"
+msgid "Chapter starts at %s"
+msgstr "Kappale alkaa %s"
+
+msgctxt "#30223"
+msgid "API Module"
+msgstr "API-moduuli"
+
+msgctxt "#30224"
+msgid "Configure API module"
+msgstr "Määritä API-moduuli"
+
+msgctxt "#30225"
+msgid "Open Tubed API settings to configure the API module"
+msgstr "Määritä API-moduuli Tubed-lisäosan API-asetuksista"
+
+msgctxt "#30226"
+msgid "Favorite Playlists"
+msgstr "Suosikkisoittolistat"
+
+msgctxt "#30227"
+msgid "Add to favorite playlists"
+msgstr "Lisää suosikkisoittolistoihin"
+
+msgctxt "#30228"
+msgid "Clear favorite playlists"
+msgstr "Tyhjennä suosikkisoittolistat"
+
+msgctxt "#30229"
+msgid "Added to favorite playlists"
+msgstr "Lisättiin suosikkisoittolistoihin"
+
+msgctxt "#30230"
+msgid "Removed from favorite playlists"
+msgstr "Poistettiin suosikkisoittolistoista"
+
+msgctxt "#30231"
+msgid "You are about to clear your favorite playlists, are you sure?"
+msgstr "Haluatko varmasti tyhjentää suosikkisoittolistasi?"
+
+msgctxt "#30232"
+msgid "Favorite playlists cleared"
+msgstr "Suosikkisoittolistat tyhjennettiin"
+
+msgctxt "#30233"
+msgid "Add %s to favorite playlists"
+msgstr "Lisää \"%s\" suosikkisoittolistoihin"
+
+msgctxt "#30234"
+msgid "Added %s to favorite playlists"
+msgstr "\"%s\" lisättiin suosikkisoittolistoihin"
+
+msgctxt "#30235"
+msgid "Removed %s from favorite playlists"
+msgstr "\"%s\" poistettiin suosikkisoittolistoista"
+
+msgctxt "#30236"
+msgid "Favorite playlists"
+msgstr "Suosikkisoittolistat"
+
+msgctxt "#30237"
+msgid "How many favorite playlists should be kept for each user"
+msgstr "Kuinka monta käyttäjäkohtaista suosikkisoittolistaa säilytetään"
+
+msgctxt "#30238"
+msgid "Backup"
+msgstr "Varmuuskopiointi"
+
+msgctxt "#30239"
+msgid "Make a backup"
+msgstr "Tallenna varmuuskopio"
+
+msgctxt "#30240"
+msgid "Backup your Tubed settings, users, search history, favorite channels and favorite playlists"
+msgstr "Varmuuskopioi Tubed-lisäosan asetukset, käyttäjät, hakuhistoria sekä suosikkikanavat ja -soittolistat"
+
+msgctxt "#30241"
+msgid "Restore a backup"
+msgstr "Palauta varmuuskopio"
+
+msgctxt "#30242"
+msgid "Restore your Tubed settings, users, search history, favorite channels and favorite playlists from a previous backup"
+msgstr "Palauta Tubed-lisäosan asetukset, käyttäjät, hakuhistoria sekä suosikkikanavat ja -soittolistat varmuuskopiosta"
+
+msgctxt "#30243"
+msgid "Choose a location to create backup"
+msgstr "Valitse varmuuskopion tallennuskohde"
+
+msgctxt "#30244"
+msgid "Choose a backup to restore"
+msgstr "Valitse palautettava varmuuskopio"
+
+msgctxt "#30245"
+msgid "Failed to create backup at %s"
+msgstr "Varmuuskopion tallennus kohteeseen \"%s\" epäonnistui"
+
+msgctxt "#30246"
+msgid "Failed to restore backup from %s"
+msgstr "Varmuuskopion palautus lähteestä \"%s\" epäonnistui"
+
+msgctxt "#30247"
+msgid "Backup successfully created at %s"
+msgstr "Varmuuskopio tallennettiin kohteeseen \"%s\""
+
+msgctxt "#30248"
+msgid "Backup successfully restored from %s"
+msgstr "Varmuuskopio palautettiin lähteestä \"%s\""
+
+msgctxt "#30249"
+msgid "Client ID: %s"
+msgstr "Client ID: %s"
+
+msgctxt "#30250"
+msgid "Further use of Tubed will be subject to this privacy policy"
+msgstr "Tubed-lisäosan käyttö edellyttää tämän tietosuojakäytännön hyväksyntää"
+
+msgctxt "#30251"
+msgid "Accept"
+msgstr "Hyväksy"
+
+msgctxt "#30252"
+msgid "Decline"
+msgstr "Hylkää"
+
+msgctxt "#30253"
+msgid "Privacy Policy"
+msgstr "Tietosuojakäytäntö"
+
+msgctxt "#30254"
+msgid "Sign In"
+msgstr "Kirjaudu sisään"
+
+msgctxt "#30255"
+msgid "InputStream Adaptive is required and appears to be disabled. Would you like to enable InputStream Adaptive now?"
+msgstr "InputStream Adaptive -lisäosa vaaditaan, mutta se ei näytä olevan käytössä. Haluatko ottaa sen käyttöön?"
+
+msgctxt "#30256"
+msgid "Settings"
+msgstr "Asetukset"
+
+msgctxt "#30257"
+msgid "No entries found"
+msgstr "Kohteita ei löytynyt"
+
+msgctxt "#30258"
+msgid "v3 Data API Client"
+msgstr "v3 Data API-asiakas"
+
+msgctxt "#30259"
+msgid "YouTube-TV API Client"
+msgstr "YouTube-TV API-asiakas"

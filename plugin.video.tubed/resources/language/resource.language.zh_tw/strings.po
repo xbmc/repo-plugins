@@ -1,0 +1,1066 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: STRINGS\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: 2021-11-04 04:05+0000\n"
+"Last-Translator: JuenTingShie <t104340042@ntut.org.tw>\n"
+"Language-Team: Chinese (Taiwan) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-tubed/zh_tw/>\n"
+"Language: zh_tw\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.8.1\n"
+
+msgctxt "Addon Summary"
+msgid "Watch your favorite YouTube content on Kodi"
+msgstr "在Kodi上觀看您最喜歡的YouTube內容"
+
+msgctxt "Addon Description"
+msgid "Browse your favorite content from YouTube; create, delete, and rename playlists; subscribe or unsubscribe from your favorite channels; and rate your favorite videos."
+msgstr "從YouTube瀏覽您喜歡的內容；新建，刪除和重命名播放列表；訂閱或取消訂閱您喜歡的頻道；對您喜歡的視頻進行評分。"
+
+msgctxt "Addon Disclaimer"
+msgid "Tubed's use of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements. For more information on how your data is handled see Tubed's Privacy Policy at https://panicked.xyz/tubed-privacy/"
+msgstr "Tubed對從Google API收到的訊息的使用將遵守Google API服務用戶數據政策，包括“限制使用”要求。有關如何處理數據的更多信息，請參見Tubed的隱私政策，網址為https://panicked.xyz/tubed-privacy/"
+
+msgctxt "#30000"
+msgid "Most Popular"
+msgstr "最受歡迎"
+
+msgctxt "#30001"
+msgid "Next Page"
+msgstr "下一頁"
+
+msgctxt "#30002"
+msgid "Recommendations"
+msgstr "為你推薦"
+
+msgctxt "#30003"
+msgid "Search"
+msgstr "搜尋"
+
+msgctxt "#30004"
+msgid "My Channel"
+msgstr "我的頻道"
+
+msgctxt "#30005"
+msgid "Liked Videos"
+msgstr "喜歡的影片"
+
+msgctxt "#30006"
+msgid "Disliked Videos"
+msgstr "不喜歡的影片"
+
+msgctxt "#30007"
+msgid "Playlists"
+msgstr "播放清單"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "頻道"
+
+msgctxt "#30009"
+msgid "Subscriptions"
+msgstr "訂閱內容"
+
+msgctxt "#30010"
+msgid "Live"
+msgstr "直播"
+
+msgctxt "#30011"
+msgid "Sign in with Google"
+msgstr "以Google帳號登入"
+
+msgctxt "#30012"
+msgid "Sign Out"
+msgstr "登出"
+
+msgctxt "#30013"
+msgid "Manage Users"
+msgstr "管理使用者"
+
+msgctxt "#30014"
+msgid "New Search"
+msgstr "新的搜尋"
+
+msgctxt "#30015"
+msgid "Enter your search term"
+msgstr "輸入你要搜尋的關鍵字"
+
+msgctxt "#30016"
+msgid "Go to %s and enter the following code:"
+msgstr "前往 %s 並輸入以下代號:"
+
+msgctxt "#30017"
+msgid "New user..."
+msgstr "新增使用者..."
+
+msgctxt "#30018"
+msgid "Rename user..."
+msgstr "重新命名使用者..."
+
+msgctxt "#30019"
+msgid "Remove user..."
+msgstr "移除使用者..."
+
+msgctxt "#30020"
+msgid "New Username"
+msgstr "新增使用者名稱"
+
+msgctxt "#30021"
+msgid "Remove User"
+msgstr "移除使用者"
+
+msgctxt "#30022"
+msgid "Removing %s, are you sure?"
+msgstr "正要移除 %s，你確定嗎?"
+
+msgctxt "#30023"
+msgid "Uploads"
+msgstr "你上傳的影片"
+
+msgctxt "#30024"
+msgid "You are about to sign out, are you sure?"
+msgstr "你正要登出此帳號，你確定嗎?"
+
+msgctxt "#30025"
+msgid "Categories"
+msgstr "類別"
+
+msgctxt "#30026"
+msgid "Remove..."
+msgstr "移除..."
+
+msgctxt "#30027"
+msgid "Clear history"
+msgstr "清除歷史紀錄"
+
+msgctxt "#30028"
+msgid "General"
+msgstr "一般"
+
+msgctxt "#30029"
+msgid "Quality"
+msgstr "畫質"
+
+msgctxt "#30030"
+msgid "Choose the maximum playback quality for videos and live content"
+msgstr "選擇影片以及直播的最高畫質"
+
+msgctxt "#30031"
+msgid "Limit to 30 fps"
+msgstr "限制至30fps"
+
+msgctxt "#30032"
+msgid "Limit playback quality to 30 fps or less"
+msgstr "限制影片畫質至30fps或更低"
+
+msgctxt "#30033"
+msgid "HDR"
+msgstr "HDR"
+
+msgctxt "#30034"
+msgid "Use the best matching HDR streams for videos"
+msgstr "使用最符合的HDR串流"
+
+msgctxt "#30035"
+msgid "Adaptive (MP4/H264)"
+msgstr "自適應(MP4/H264)"
+
+msgctxt "#30036"
+msgid "Adaptive (WEBM/VP9)"
+msgstr "自適應(WEBM/VP9)"
+
+msgctxt "#30037"
+msgid "240p"
+msgstr "240p"
+
+msgctxt "#30038"
+msgid "360p"
+msgstr "360p"
+
+msgctxt "#30039"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30040"
+msgid "720p (HD)"
+msgstr "720p (HD)"
+
+msgctxt "#30041"
+msgid "1080p (FHD)"
+msgstr "1080p (FHD)"
+
+msgctxt "#30042"
+msgid "1440p (QHD)"
+msgstr "1440p (QHD)"
+
+msgctxt "#30043"
+msgid "2160p (4K)"
+msgstr "2160p (4K)"
+
+msgctxt "#30044"
+msgid "4320p (8K)"
+msgstr "4320p (8K)"
+
+msgctxt "#30045"
+msgid "Playback"
+msgstr "重播"
+
+msgctxt "#30046"
+msgid "Watch Later"
+msgstr "稍後觀看"
+
+msgctxt "#30047"
+msgid "Regional"
+msgstr "你的位置"
+
+msgctxt "#30048"
+msgid "Language"
+msgstr "語言"
+
+msgctxt "#30049"
+msgid "Your preferred YouTube UI language"
+msgstr "你偏好的YouTube介面語言"
+
+msgctxt "#30050"
+msgid "Region"
+msgstr "地區"
+
+msgctxt "#30051"
+msgid "Your preferred content region"
+msgstr "你偏好內容的地區"
+
+msgctxt "#30052"
+msgid "Configure regional preferences"
+msgstr "設定你的位置"
+
+msgctxt "#30053"
+msgid "Configure your preferred language and region"
+msgstr "設定你偏好的語言以及地區"
+
+msgctxt "#30054"
+msgid "Configure subtitles"
+msgstr "設定字幕"
+
+msgctxt "#30055"
+msgid "Configure your preferred subtitle language"
+msgstr "設定你偏好的字幕語言"
+
+msgctxt "#30056"
+msgid "Subtitle language"
+msgstr "字幕語言"
+
+msgctxt "#30057"
+msgid "Your preferred subtitle language"
+msgstr "你偏好的字幕語言"
+
+msgctxt "#30058"
+msgid "Subtitles"
+msgstr "字幕"
+
+msgctxt "#30059"
+msgid "%s with %s fallback"
+msgstr "%s 倒退 %s"
+
+msgctxt "#30060"
+msgid "No auto-generated"
+msgstr "沒有自動產生"
+
+msgctxt "#30061"
+msgid "None"
+msgstr "無"
+
+msgctxt "#30062"
+msgid "Prompt"
+msgstr "提示"
+
+msgctxt "#30063"
+msgid "Subscribe"
+msgstr "訂閱"
+
+msgctxt "#30064"
+msgid "Subscribed"
+msgstr "已訂閱"
+
+msgctxt "#30065"
+msgid "Unsubscribe"
+msgstr "取消訂閱"
+
+msgctxt "#30066"
+msgid "Unsubscribed"
+msgstr "未訂閱"
+
+msgctxt "#30067"
+msgid "Error"
+msgstr "錯誤"
+
+msgctxt "#30068"
+msgid "Play (Prompt for subtitles)"
+msgstr "播放(提示字幕)"
+
+msgctxt "#30069"
+msgid "Go to %s"
+msgstr "前往 %s"
+
+msgctxt "#30070"
+msgid "Subscribed to %s"
+msgstr "訂閱 %s"
+
+msgctxt "#30071"
+msgid "Unsubscribed from %s"
+msgstr "取消訂閱 %s"
+
+msgctxt "#30072"
+msgid "Rate"
+msgstr "評價"
+
+msgctxt "#30073"
+msgid "I like this"
+msgstr "我喜歡這個"
+
+msgctxt "#30074"
+msgid "I dislike this"
+msgstr "我不喜歡這個"
+
+msgctxt "#30075"
+msgid "Remove rating"
+msgstr "移除評價"
+
+msgctxt "#30076"
+msgid "Liked"
+msgstr "喜歡了"
+
+msgctxt "#30077"
+msgid "Disliked"
+msgstr "不喜歡了"
+
+msgctxt "#30078"
+msgid "Liked %s"
+msgstr "喜歡 %s"
+
+msgctxt "#30079"
+msgid "Disliked %s"
+msgstr "不喜歡 %s"
+
+msgctxt "#30080"
+msgid "Rating removed"
+msgstr "評價已經移除"
+
+msgctxt "#30081"
+msgid "Rating removed from %s"
+msgstr "評價已經從 %s 移除"
+
+msgctxt "#30082"
+msgid "New playlist"
+msgstr "新增撥放清單"
+
+msgctxt "#30083"
+msgid "Add to playlist"
+msgstr "新增至播放清單"
+
+msgctxt "#30084"
+msgid "Remove from playlist"
+msgstr "自播放清單中移除"
+
+msgctxt "#30085"
+msgid "Delete playlist"
+msgstr "移除播放清單"
+
+msgctxt "#30086"
+msgid "Enter your playlist title"
+msgstr "輸入你的播放清單名稱"
+
+msgctxt "#30087"
+msgid "Added %s to %s"
+msgstr "新增 %s 至 %s"
+
+msgctxt "#30088"
+msgid "Removed from playlist"
+msgstr "已經從播放清單中移除"
+
+msgctxt "#30089"
+msgid "Removed %s from playlist"
+msgstr "從播放清單中移除 %s"
+
+msgctxt "#30090"
+msgid "Playlist deleted"
+msgstr "已經刪除播放清單"
+
+msgctxt "#30091"
+msgid "%s playlist deleted"
+msgstr "%s 播放清單刪除了"
+
+msgctxt "#30092"
+msgid "Rename playlist"
+msgstr "重新命名播放清單"
+
+msgctxt "#30093"
+msgid "Playlist renamed to %s"
+msgstr "播放清單重新命名為 %s"
+
+msgctxt "#30094"
+msgid "%s renamed to %s"
+msgstr "%s 重新命名為 %s"
+
+msgctxt "#30095"
+msgid "You are about to delete %s, are you sure?"
+msgstr "你正要刪除 %s，你確定嗎?"
+
+msgctxt "#30096"
+msgid "You are about to delete a playlist, are you sure?"
+msgstr "你正要刪除播放清單，你確定嗎?"
+
+msgctxt "#30097"
+msgid "Upcoming"
+msgstr "即將到來"
+
+msgctxt "#30098"
+msgid "Completed"
+msgstr "已完成"
+
+msgctxt "#30099"
+msgid "%s was scheduled to start %s"
+msgstr "%s 設定為在 %s 後開始"
+
+msgctxt "#30100"
+msgid "%s is scheduled to start %s"
+msgstr "%s 設定為在 %s 後開始"
+
+msgctxt "#30101"
+msgid "Related videos"
+msgstr "相關影片"
+
+msgctxt "#30102"
+msgid "Cache"
+msgstr "快取"
+
+msgctxt "#30103"
+msgid "Data cache TTL (weeks)"
+msgstr "數據快取TTL (週)"
+
+msgctxt "#30104"
+msgid "Function cache TTL (minutes)"
+msgstr "功能快取TTL (分鐘)"
+
+msgctxt "#30105"
+msgid "Clear data cache"
+msgstr "清除數據快取"
+
+msgctxt "#30106"
+msgid "Clear function cache"
+msgstr "清除功能快取"
+
+msgctxt "#30107"
+msgid "Data cache was cleared"
+msgstr "數據快取已被清除"
+
+msgctxt "#30108"
+msgid "Function cache was cleared"
+msgstr "功能快取已被清除"
+
+msgctxt "#30109"
+msgid "Delete data cache"
+msgstr "刪除數據快取"
+
+msgctxt "#30110"
+msgid "Delete function cache"
+msgstr "刪除功能快取"
+
+msgctxt "#30111"
+msgid "Data cache was deleted"
+msgstr "數據快取已被清除"
+
+msgctxt "#30112"
+msgid "Function cache was deleted"
+msgstr "功能快取已被清除"
+
+msgctxt "#30113"
+msgid "Time to Live"
+msgstr "直播時間"
+
+msgctxt "#30114"
+msgid "Maintenance"
+msgstr "維護"
+
+msgctxt "#30115"
+msgid "How long until long term data cache expires in weeks"
+msgstr "長期數據快取過期週數"
+
+msgctxt "#30116"
+msgid "How long until short term function cache expires in minutes"
+msgstr "短期功能快取過期分鐘"
+
+msgctxt "#30117"
+msgid "Clearing long term data cache will remove all entries from the database"
+msgstr "刪除長期數據快取將會全部自資料庫移除項目"
+
+msgctxt "#30118"
+msgid "Clearing short term function cache will remove all cache entries"
+msgstr "刪除短期功能快取將會全部自資料庫移除項目"
+
+msgctxt "#30119"
+msgid "Deleting long term data cache will delete the whole database"
+msgstr "刪除長期數據快取將會刪除全部資料庫"
+
+msgctxt "#30120"
+msgid "Deleting short term function cache will delete the whole database"
+msgstr "刪除短期功能快取將會刪除全部資料庫"
+
+msgctxt "#30121"
+msgid "Failed to clear function cache"
+msgstr "清除功能快取失敗"
+
+msgctxt "#30122"
+msgid "Failed to clear data cache"
+msgstr "清除數據快取失敗"
+
+msgctxt "#30123"
+msgid "Failed to delete function cache"
+msgstr "刪除功能快取失敗"
+
+msgctxt "#30124"
+msgid "Failed to delete data cache"
+msgstr "刪除數據快取失敗"
+
+msgctxt "#30125"
+msgid "Debug"
+msgstr "偵錯"
+
+msgctxt "#30126"
+msgid "Component Logging"
+msgstr "元件紀錄"
+
+msgctxt "#30127"
+msgid "API requests"
+msgstr "API存取"
+
+msgctxt "#30128"
+msgid "Enable logging of API requests and responses"
+msgstr "允許存取API要求及回應"
+
+msgctxt "#30129"
+msgid "Comments"
+msgstr "評論"
+
+msgctxt "#30130"
+msgid "Comment"
+msgstr "評論"
+
+msgctxt "#30131"
+msgid "Read comment"
+msgstr "瀏覽評論"
+
+msgctxt "#30132"
+msgid "Likes"
+msgstr "喜歡"
+
+msgctxt "#30133"
+msgid "Replies"
+msgstr "回覆"
+
+msgctxt "#30134"
+msgid "Comment has been edited"
+msgstr "評論已被編輯"
+
+msgctxt "#30135"
+msgid "Limits"
+msgstr "限制"
+
+msgctxt "#30136"
+msgid "Data cache (MB)"
+msgstr "數據快取(MB)"
+
+msgctxt "#30137"
+msgid "The maximum size of long term data cache before being automatically resized"
+msgstr "在自動調整大小之前，長期數據快取的最大大小"
+
+msgctxt "#30138"
+msgid "Sort order"
+msgstr "排序"
+
+msgctxt "#30139"
+msgid "Choose a sort order"
+msgstr "選擇排序"
+
+msgctxt "#30140"
+msgid "Alphabetical"
+msgstr "字母"
+
+msgctxt "#30141"
+msgid "Relevance"
+msgstr "關聯"
+
+msgctxt "#30142"
+msgid "Activity"
+msgstr "活耀"
+
+msgctxt "#30143"
+msgid "Time"
+msgstr "時間"
+
+msgctxt "#30144"
+msgid "Date"
+msgstr "日期"
+
+msgctxt "#30145"
+msgid "Rating"
+msgstr "評價"
+
+msgctxt "#30146"
+msgid "Title"
+msgstr "標題"
+
+msgctxt "#30147"
+msgid "Video Count"
+msgstr "影片數"
+
+msgctxt "#30148"
+msgid "View Count"
+msgstr "觀看數"
+
+msgctxt "#30149"
+msgid "Post Play"
+msgstr "播放後"
+
+msgctxt "#30150"
+msgid "Post play minimum watch percentage"
+msgstr "播放後的最低觀看百分比"
+
+msgctxt "#30151"
+msgid "What percent of the video's duration must be watched to trigger post play events"
+msgstr "在觀看多少百分比之後觸發撥放後事件"
+
+msgctxt "#30152"
+msgid "Rate the video that just finished playing"
+msgstr "觀看後評價"
+
+msgctxt "#30153"
+msgid "Rate during playlists"
+msgstr "播放清單中的評價"
+
+msgctxt "#30154"
+msgid "Should rating be requested while watching playlists"
+msgstr "瀏覽播放清單時必須要求評價"
+
+msgctxt "#30155"
+msgid "Autoplay related videos"
+msgstr "自動撥放相關影片"
+
+msgctxt "#30156"
+msgid "Autoplay videos related to the previously played video"
+msgstr "自動撥放與前一影片相關影片"
+
+msgctxt "#30157"
+msgid "Set as History"
+msgstr "設為觀看歷史"
+
+msgctxt "#30158"
+msgid "Set as Watch Later"
+msgstr "設為稍後觀看"
+
+msgctxt "#30159"
+msgid "Remove as History"
+msgstr "自觀看歷史中移除"
+
+msgctxt "#30160"
+msgid "Remove as Watch Later"
+msgstr "自稍後觀看中移除"
+
+msgctxt "#30161"
+msgid "History"
+msgstr "觀看歷史"
+
+msgctxt "#30162"
+msgid "Watch later playlist configured"
+msgstr "已經設為稍後觀看"
+
+msgctxt "#30163"
+msgid "History playlist configured"
+msgstr "已經設為觀看歷史"
+
+msgctxt "#30164"
+msgid "%s was configured as your watch later playlist"
+msgstr "%s 已經設為稍後觀看播放清單"
+
+msgctxt "#30165"
+msgid "%s was configured as your history playlist"
+msgstr "%s 已經設為觀看歷史播放清單"
+
+msgctxt "#30166"
+msgid "Watch later playlist is no longer configured"
+msgstr "稍後觀看播放清單尚未設定"
+
+msgctxt "#30167"
+msgid "History playlist is no longer configured"
+msgstr "觀看歷史播放清單尚未設定"
+
+msgctxt "#30168"
+msgid "%s is no longer configured as your watch later playlist"
+msgstr "%s 不再設為稍後觀看播放清單"
+
+msgctxt "#30169"
+msgid "%s is no longer configured as your history playlist"
+msgstr "%s 不再設為觀看歷史播放清單"
+
+msgctxt "#30170"
+msgid "Add to watch later"
+msgstr "加入至稍後觀看"
+
+msgctxt "#30171"
+msgid "Favorite Channels"
+msgstr "喜歡的頻道"
+
+msgctxt "#30172"
+msgid "Add to favorite channels"
+msgstr "加入至喜歡的頻道"
+
+msgctxt "#30173"
+msgid "Clear favorite channels"
+msgstr "清除喜歡的頻道"
+
+msgctxt "#30174"
+msgid "Added to favorite channels"
+msgstr "已經加入至喜歡的頻道"
+
+msgctxt "#30175"
+msgid "Removed from favorite channels"
+msgstr "已經自喜歡的頻道移除"
+
+msgctxt "#30176"
+msgid "Import from xml"
+msgstr "從xml匯入"
+
+msgctxt "#30177"
+msgid "Import failed"
+msgstr "匯入失敗"
+
+msgctxt "#30178"
+msgid "Import completed successfully"
+msgstr "匯入成功"
+
+msgctxt "#30179"
+msgid "You are about to clear your favorite channels, are you sure?"
+msgstr "你正要清除喜歡的頻道，你確定嗎?"
+
+msgctxt "#30180"
+msgid "Favorite channels cleared"
+msgstr "已經清除喜歡的頻道"
+
+msgctxt "#30181"
+msgid "Add %s to favorite channels"
+msgstr "%s 加入至喜歡的頻道"
+
+msgctxt "#30182"
+msgid "Added %s to favorite channels"
+msgstr "%s 已經加入至喜歡的頻道"
+
+msgctxt "#30183"
+msgid "Removed %s from favorite channels"
+msgstr "%s 已經自喜歡的頻道移除"
+
+msgctxt "#30184"
+msgid "Refresh"
+msgstr "重新整理"
+
+msgctxt "#30185"
+msgid "Clear function cache on refresh"
+msgstr "在重新整理時清除功能快取"
+
+msgctxt "#30186"
+msgid "Short term function cache will be cleared when using Refresh from the context menu"
+msgstr "在內容選單中使用“重新整理”時，短期功能快取將會被清除"
+
+msgctxt "#30187"
+msgid "Choose watch later playlist"
+msgstr "選擇稍後觀看播放清單"
+
+msgctxt "#30188"
+msgid "Added %s to the new watch later playlist %s"
+msgstr "新增 %s 至新的播放清單 %s"
+
+msgctxt "#30189"
+msgid "Search history items"
+msgstr "搜尋紀錄項目數"
+
+msgctxt "#30190"
+msgid "How many search history items should be kept for each user"
+msgstr "每位使用者保留多少搜尋項目紀錄"
+
+msgctxt "#30191"
+msgid "Favorite channels"
+msgstr "喜歡的頻道"
+
+msgctxt "#30192"
+msgid "How many favorite channels should be kept for each user"
+msgstr "每位使用者保留多少喜歡的頻道"
+
+msgctxt "#30193"
+msgid "Play"
+msgstr "撥放"
+
+msgctxt "#30194"
+msgid "Play from %s"
+msgstr "自 %s 開始撥放"
+
+msgctxt "#30195"
+msgid "Most Popular Regionally"
+msgstr "在地區中最後歡迎"
+
+msgctxt "#30196"
+msgid "Main Menu"
+msgstr "主選單"
+
+msgctxt "#30197"
+msgid "Show/Hide this item on the main menu"
+msgstr "自主選單中顯示/隱藏此項目"
+
+msgctxt "#30198"
+msgid "Hide %s"
+msgstr "隱藏 %s"
+
+msgctxt "#30199"
+msgid "%s was hidden from the main menu"
+msgstr "%s 已經自主選單中隱藏"
+
+msgctxt "#30200"
+msgid "User is authenticated"
+msgstr "使用者已經認證"
+
+msgctxt "#30201"
+msgid "User is not authenticated"
+msgstr "使用者尚未認證"
+
+msgctxt "#30202"
+msgid "Create a new user"
+msgstr "新增使用者"
+
+msgctxt "#30203"
+msgid "Rename a current user"
+msgstr "重新命名目前使用者"
+
+msgctxt "#30204"
+msgid "Remove a current user"
+msgstr "移除目前使用者"
+
+msgctxt "#30205"
+msgid "Change avatar..."
+msgstr "更換頭像..."
+
+msgctxt "#30206"
+msgid "Change a current user's avatar"
+msgstr "更換目前使用者頭像"
+
+msgctxt "#30207"
+msgid "Choose a new avatar"
+msgstr "選擇新的頭像"
+
+msgctxt "#30208"
+msgid "Up Next"
+msgstr "接著撥放"
+
+msgctxt "#30209"
+msgid "Links in the description"
+msgstr "網址在描述欄"
+
+msgctxt "#30210"
+msgid "There were no links found in the description"
+msgstr "描述欄沒有找到任何網址"
+
+msgctxt "#30211"
+msgid "Create a new playlist"
+msgstr "新增播放清單"
+
+msgctxt "#30212"
+msgid "Go to the next page"
+msgstr "前往下一頁"
+
+msgctxt "#30213"
+msgid "Rate the selected video"
+msgstr "評價選擇的影片"
+
+msgctxt "#30214"
+msgid "Rate %s"
+msgstr "評價 %s"
+
+msgctxt "#30215"
+msgid "Dialogs"
+msgstr "對話方塊"
+
+msgctxt "#30216"
+msgid "Open the autoplay related video dialog for debugging"
+msgstr "於偵錯模式開啟自動撥放對話方塊"
+
+msgctxt "#30217"
+msgid "Open the sign in dialog for debugging"
+msgstr "於偵錯模式開啟登入對話方塊"
+
+msgctxt "#30218"
+msgid "likes"
+msgstr "喜歡"
+
+msgctxt "#30219"
+msgid "dislikes"
+msgstr "不喜歡"
+
+msgctxt "#30220"
+msgid "views"
+msgstr "觀看數"
+
+msgctxt "#30221"
+msgid "Chapters"
+msgstr "章節數"
+
+msgctxt "#30222"
+msgid "Chapter starts at %s"
+msgstr "章節於 %s 開始"
+
+msgctxt "#30223"
+msgid "API Module"
+msgstr "API模組"
+
+msgctxt "#30224"
+msgid "Configure API module"
+msgstr "設定API模組"
+
+msgctxt "#30225"
+msgid "Open Tubed API settings to configure the API module"
+msgstr "開啟Tubed API設定頁面以設定APU模組"
+
+msgctxt "#30226"
+msgid "Favorite Playlists"
+msgstr "喜歡的播放清單"
+
+msgctxt "#30227"
+msgid "Add to favorite playlists"
+msgstr "新增至喜歡的摸放清單"
+
+msgctxt "#30228"
+msgid "Clear favorite playlists"
+msgstr "清除喜歡的播放清單"
+
+msgctxt "#30229"
+msgid "Added to favorite playlists"
+msgstr "已經新增至喜歡的播放清單"
+
+msgctxt "#30230"
+msgid "Removed from favorite playlists"
+msgstr "已經自喜歡的播放清單中移除"
+
+msgctxt "#30231"
+msgid "You are about to clear your favorite playlists, are you sure?"
+msgstr "你正要清除喜歡的播放清單，你確定嗎?"
+
+msgctxt "#30232"
+msgid "Favorite playlists cleared"
+msgstr "喜歡的播放清單已經清除"
+
+msgctxt "#30233"
+msgid "Add %s to favorite playlists"
+msgstr "新增 %s 至喜歡的播放清單"
+
+msgctxt "#30234"
+msgid "Added %s to favorite playlists"
+msgstr "%s 已經新增至喜歡的播放清單"
+
+msgctxt "#30235"
+msgid "Removed %s from favorite playlists"
+msgstr "%s 已經自喜歡的播放清單中移除"
+
+msgctxt "#30236"
+msgid "Favorite playlists"
+msgstr "喜歡的播放清單"
+
+msgctxt "#30237"
+msgid "How many favorite playlists should be kept for each user"
+msgstr "每位使用者要保留多少個喜歡的播放清單"
+
+msgctxt "#30238"
+msgid "Backup"
+msgstr "備份"
+
+msgctxt "#30239"
+msgid "Make a backup"
+msgstr "建立備份"
+
+msgctxt "#30240"
+msgid "Backup your Tubed settings, users, search history, favorite channels and favorite playlists"
+msgstr "備份你的Tubed設定、使用者、搜尋紀錄、喜歡的頻道以及喜歡的播放清單"
+
+msgctxt "#30241"
+msgid "Restore a backup"
+msgstr "回復備份"
+
+msgctxt "#30242"
+msgid "Restore your Tubed settings, users, search history, favorite channels and favorite playlists from a previous backup"
+msgstr "回復你的Tubed設定、使用者、搜尋紀錄、喜歡的頻道以及喜歡的播放清單自上一個備份"
+
+msgctxt "#30243"
+msgid "Choose a location to create backup"
+msgstr "選擇備份位置"
+
+msgctxt "#30244"
+msgid "Choose a backup to restore"
+msgstr "選擇要回復的備份"
+
+msgctxt "#30245"
+msgid "Failed to create backup at %s"
+msgstr "於 %s 建立備份失敗"
+
+msgctxt "#30246"
+msgid "Failed to restore backup from %s"
+msgstr "於 %s 回復備份失敗"
+
+msgctxt "#30247"
+msgid "Backup successfully created at %s"
+msgstr "備份成功建立於 %s"
+
+msgctxt "#30248"
+msgid "Backup successfully restored from %s"
+msgstr "回復備份成功建立於 %s"
+
+msgctxt "#30249"
+msgid "Client ID: %s"
+msgstr "用戶端ID: %s"
+
+msgctxt "#30250"
+msgid "Further use of Tubed will be subject to this privacy policy"
+msgstr "使用Tubed必須遵守隱私政策"
+
+msgctxt "#30251"
+msgid "Accept"
+msgstr "接受"
+
+msgctxt "#30252"
+msgid "Decline"
+msgstr "拒絕"
+
+msgctxt "#30253"
+msgid "Privacy Policy"
+msgstr "隱私政策"
+
+msgctxt "#30254"
+msgid "Sign In"
+msgstr "登入"
+
+msgctxt "#30255"
+msgid "InputStream Adaptive is required and appears to be disabled. Would you like to enable InputStream Adaptive now?"
+msgstr "InputStream Adaptive是必要的且取消中，你要開啟InputStream Adaptive嗎?"
+
+msgctxt "#30256"
+msgid "Settings"
+msgstr "設定"
+
+msgctxt "#30257"
+msgid "No entries found"
+msgstr "沒有項目"
+
+msgctxt "#30258"
+msgid "v3 Data API Client"
+msgstr ""
+
+msgctxt "#30259"
+msgid "YouTube-TV API Client"
+msgstr ""

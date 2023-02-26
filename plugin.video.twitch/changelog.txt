@@ -1,0 +1,326 @@
+2.6.0
+[update] Update Twitch API usage from v5 to Helix
+    - This change will require you to generate a new oauth token from the add-on settings
+    - Some favorites may need to be recreated
+    - This change requires an OAuth token for access to any content
+[add] Add to queue context menu item
+[rem] Blacklisting of content
+[lang] updated translations from Weblate
+
+2.5.12
+[add] new menu icons - Goldenfreddy0703
+[lang] updated translations from Weblate
+
+2.5.11
+[fix] fix follow/unfollow channels - apo86
+[lang] updated translations from Weblate
+
+2.5.10
+[fix] Playback of re-runs - apo86
+[fix] New OAuth token generation
+
+2.5.9
+[fix] Signal end_of_directory when an exception appears - DimmKG
+
+2.5.7
+[fix] Python 2 encoding issues - DimmKG
+[lang] update Russian translation - DimmKG
+
+2.5.6
+[fix] Python 2 encoding issues
+
+2.5.5
+[fix] dialogs
+[lang] added Russian translation - DimmKG
+
+2.5.4
+[fix] followed games for users with private oauth tokens
+[upd] use xbmcvfs.translatePath if available, clean up for Kodi 19
+
+2.5.3
+[rem] remove usage of xbmc.LOGSEVERE, it's being removed in Kodi 19
+
+2.5.2
+[add] Add additional stream properties at playback
+[fix] Get OAuth token on Kodi 19
+[upd] Use new settings format on Kodi 19
+[upd] Update material to reflect repository changes
+
+2.5.1
+[fix] encoding issue causing streams/videos/live notifications to be inaccessible with some languages
+
+2.5.0
+[fix] language setting
+[fix] show vodcasts in Following Live Channels
+[fix] logging in Kodi 19
+[upd] frame rate limiting to allow for 60 fps limit
+[lang] fr_FR |contrib: alan7000|
+
+2.4.10
+[fix] fix live notifications
+[fix] fix clips
+[fix] double entries in followed live streams
+
+2.4.9
+[fix] fix listing live streams
+
+2.4.8
+[fix] resolve indefinite busy dialog on failed playback
+[fix] sort by viewers for followed live channels, restoring previous behavior
+[fix] menu settings not taking effect
+[fix] handle no stream available error
+[rem] remove Playlists
+
+2.4.7
+[fix] remaining private api calls ie. following games, toggle following games
+
+2.4.6
+[add] Settings - Login - Private API Credentials
+[fix] basic playback, set default Private API Credentials - Client ID
+[fix] oauth short link generation w/ python 3
+[rem] Remove deprecated scope chat_login
+
+2.4.5
+[rem] Remove deprecated api Communities and related content
+
+2.4.4
+[fix] unable to clean up class left in memory; N9XBMCAddon7xbmcgui6WindowE |contrib: lekma|
+
+2.4.3
+[fix] ads causing playback issues with InputStream Adaptive
+[fix] migrate url shortener from Google URL Shortener to Google Firebase Dynamic Links
+[upd] move Live Notifications to it's own thread
+
+2.4.2
+[fix] fixed issue with Live Notifications if no followed channels are live
+
+2.4.1
+[chg] Settings and Refresh menu items to unplayable items instead of folders
+
+2.4.0
+[add] allow limiting framerate to 30 fps when video quality is set to Source
+[fix] change import from absolute to relative
+[chg] clips default to source quality instead of always ask
+[chg] refresh live previews by adding timestamp to urls
+[upd] re-write of search history
+[upd] use SPDX license identifiers
+
+2.3.5
+[fix] utf-8 file paths
+[fix] perpetual busy dialogs in Kodi 18
+
+2.3.4
+[fix] clean_title_value UnicodeDecodeError
+[fix] Game titles UnicodeEncodeError
+[fix] python 3 compat. urllib.quote_plus
+
+2.3.3
+[fix] Description template UnicodeDecodeError
+[chg] Use unicode punctuation space in description template
+
+2.3.2
+[fix] py3 encoding issues
+
+2.3.1
+[fix] i18n UnicodeEncodeError
+
+2.3.0
+[chg] refactor complex entry points
+[upd] Python 3 compat.
+
+2.2.4
+[fix] VOD's error 404
+
+2.2.3
+[add] Thumbnail size, Settings - General
+[fix] encoding and replace in clean_title_value
+[fix] unplayable videos on some systems, set curl opt verifypeer=false on playback urls
+
+2.2.2
+[add] refresh item to streams search when there are no results
+[upd] close chat on playback stopped [ccope]
+[upd] service start parameter to login
+
+2.2.1
+[add] allow Adaptive as default quality
+
+2.2.0
+[add] Search history
+[add] Settings - Maintenance
+[fix] VodCast highlighting
+
+2.1.1
+[fix] video default qualities
+[fix] setContentLookup AttributeError
+
+2.1.0
+[chg] string paths
+[fix] required changes for script.module.python.twitch v2.0.0 refactor
+[fix] multiple reconnections to same stream
+[upd] don't show watched marks for streams
+[upd] leave api logging to script.module.python.twitch
+[add] channel_name to play route, can use channel_id or channel_name
+[add] inputstream.adaptive support for inputstream.adaptive versions >= 2.0.10
+[add] Revoke token
+[add] Update token route
+[add] Reset cache on Refresh to Settings -> Cache
+[add] notify at start and group notifications at start to live notification settings
+[add] logo and game to live notifications
+[add] Hebrew strings [Eng2Heb]
+
+2.0.2
+[fix/upd] use display names for communities
+
+2.0.1
+[fix] only open chat for live streams
+[fix] notify to retry if goo.gl url shortening fails for authentication
+[fix] check for game value before adding Goto Game context menu
+[fix] blacklist filter excluding unset game
+[fix] use same quality on stream reconnection
+[fix] do not ask for search query on '..'
+[fix] remake cache path on clear
+[fix/upd] cache static menus to disk
+[fix/upd] pagination to Followed Games
+[add] Kodi per-page sort methods
+[add] quality parameter added to play route
+[add] channel and viewer count to Games where possible
+[add] VodCast colorization
+
+2.0.0
+*** NOT backwards compatible with v1 (favorites, routes will NOT work)
+*** New OAuth token required, see Settings - Get OAuth token
+- Kodi 17 ready, content/media types set per new official repository requirements
+- remove xbmcswift dependency
+- remove api portion in favor of new module script.module.python.twitch (based on python-twitch by ingwinlu)
+- remove Teams, end-points (no longer available)
+- use Twitch API v5
+- add caching for api calls, cache can be set/cleared from settings
+- add token generation, checking
+- add context menus:
+    - refresh
+    - 'go to' channel videos(display name) for streams
+    - 'go to' game for streams and videos
+- quality selection ask/source/bandwidth (clips excluded from bandwidth)
+- add Live notifications for following
+- add more search options
+- add Communities
+- add Follow/Unfollow
+- add blacklisting of users/games/communities (search excluded)
+- add set default quality for stream/video/clips per channel
+- add Playlists
+- add Collections
+- add Clips
+- add Languages
+- add Change sort by/period/direction
+- add support for timestamp in urls (Search - Video Id/Url)
+- add Attempt reconnection to live streams
+- add/remove menu items to/from the Main Menu
+
+1.4.6
+- Added new title formatting option which includes broadcaster language.
+- Added compatibility for new Twitch encoder names.
+1.4.5
+- Added compatibility for new Twitch encoder names.
+- Added Uploads
+1.4.4
+- HTTPS fix for Linux users + Kodi Offical repository compatibility fixes.
+1.4.3
+- various fixes to coincide with issues caused by evolving Twitch API
+1.4.2
+- Fixed incorrect default oauth value in settings
+1.4.1
+- Changes/updates to API calls in line with changes made by Twitch.
+1.4.0
+- Major code refactoring + IRC integration. Thanks to anxdpanic
+1.3.3
+- added French language
+1.3.1
+- fixed bug: addon would not play non-transcoded streams if requested quality was lower than source
+1.3.0
+- added ability to play new type twitch VODs + major code refactoring/optimisation and bug fixes (now utilising python-twitch [0.3.8] by ingwinlu). - ingwinlu
+1.2.0
+- fixed bug: removed error in code which prevented falling back to best available quality when preferred quality was not available
+1.1.9
+- fixed bug: past broadcasts were starting at second playlist item
+1.1.8
+- fixed unplayable streams issue due to Twich updates and various UI and error handling improvements, thx spiffomatic64, ntfwc, ingwinlu
+1.1.7
+- various UI and code optimisations + updated translations Thanks to ingwinlu, grocal, kokarn
+1.1.6
+- added Spanish language - thx G4RL1N
+1.1.5
+- Add listing streams by channel - thx ha107642
+1.1.4
+- added Czech language option - thx mCzolko
+1.1.3
+- added 'mobile (226p)' quality option
+1.1.2
+- major code optimisation to HLS playlist generation function - ingwinlu
+1.1.1
+- various bug fixes, code improvements
+1.1.0
+- added 'thumbnail' argument to enable support for third party skins + changed games list icon source for improved icons - Liquex
+1.0.9
+- added detection of restricted qualities (addon will now load best quality available if preferred quality is restricted) - MrSprigster
+1.0.8
+- version increment to force update on official xbmc repository
+1.0.7
+- fixed bug in quality settings
+1.0.6
+- rearranged string ids
+1.0.5
+- added ability to play archived videos (past broadcasts) - thx to Kr0nZ
+1.0.4
+- fixed bug: Viewer count could not be resolved
+1.0.3
+- added support for HLS streams - thx to MrSprigster
+1.0.2
+- fixed stream resolving
+1.0.1
+- fixed bug: streams with optional subscriptions
+1.0.0
+- thx to ccaspers
+- major code refactoring
+- extracted twitch api
+- new search function
+- changed code style to match pep8 requirements
+0.2.6
+- bug fix: crashes or wrong error messages, when opening streams
+0.2.5
+- serveral fixes and new features thx to grocal
+- fixed 'status' in favorite json data might be null
+- new translation: Polish
+- changed getting live favorite channels from on single .json query (user/favorite with live=true variable set)
+- channel listing in format "[channel_name] channel_status_text"
+0.2.4
+- fixed bug in following section
+- fixed bug in function getBestJtvTokenPossible
+0.2.3
+- code refactor
+- integration of xbmcswift2
+0.2.2
+- added teams section - thx to kokarn
+0.2.1
+- added featured streams section
+0.2.0
+- added selection of prefered video settings
+- added fallback-function, if selected video does not support video settings
+0.1.8
+- better error handling
+- localized strings in all notifications
+0.1.7
+- fixed bug in following list
+0.1.6
+- localized strings
+0.1.5
+- added "next page" in game sections
+0.1.4
+- better code quality
+- thumbnails in game sections
+0.1.3
+- updated to work with new twitch.tv website (games section)
+0.1.2
+- added thumbnails in games section
+- updated to work with new twitch.tv website
+0.1.1
+- first working version

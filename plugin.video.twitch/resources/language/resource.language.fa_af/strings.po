@@ -1,0 +1,1002 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: 2022-03-11 09:05+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Persian (Afghanistan) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/fa_af/>\n"
+"Language: fa_af\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.11.2\n"
+
+msgctxt "Addon Summary"
+msgid "Twitch video plugin"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Watch your favorite gaming streams!"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Games"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Following"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Popular Streams"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Teams"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Search for channels"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Live Channels"
+msgstr ""
+
+msgctxt "#30010"
+msgid "TwitchTV"
+msgstr ""
+
+msgctxt "#30011"
+msgid "next page..."
+msgstr ""
+
+msgctxt "#30012"
+msgid "-- Currently Live Streams --"
+msgstr ""
+
+msgctxt "#30013"
+msgid "-- Followed Channels --"
+msgstr ""
+
+# empty strings from id 30014 to 30019
+msgctxt "#30020"
+msgid "Http error"
+msgstr ""
+
+msgctxt "#30021"
+msgid "No Live Data Found"
+msgstr ""
+
+msgctxt "#30022"
+msgid "No archives found for"
+msgstr ""
+
+msgctxt "#30023"
+msgid "User Token Error"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Changed video settings"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Selected video settings are not available"
+msgstr ""
+
+msgctxt "#30026"
+msgid "TwitchApi error"
+msgstr ""
+
+msgctxt "#30027"
+msgid "JSON error"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Failed to parse the result set"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Please check your internet connection"
+msgstr ""
+
+# empty strings from id 30030 to 30039
+msgctxt "#30040"
+msgid "Video Quality"
+msgstr ""
+
+# empty strings from id 30041 to 30044
+msgctxt "#30045"
+msgid "Display titles"
+msgstr ""
+
+msgctxt "#30046"
+msgid "Streamer - Stream Title"
+msgstr ""
+
+msgctxt "#30047"
+msgid "Viewers - Streamer - Stream Title"
+msgstr ""
+
+msgctxt "#30048"
+msgid "Stream Title"
+msgstr ""
+
+msgctxt "#30049"
+msgid "Streamer"
+msgstr ""
+
+msgctxt "#30050"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Streamer - Game Title - Stream Title"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Enable"
+msgstr ""
+
+msgctxt "#30053"
+msgid "Password (OAuth Token)"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Language | Streamer - Stream Title"
+msgstr ""
+
+# empty strings from id 30055 to 30059
+msgctxt "#30060"
+msgid "Unnamed Streamer"
+msgstr ""
+
+msgctxt "#30061"
+msgid "Untitled Stream"
+msgstr ""
+
+msgctxt "#30062"
+msgid "Unknown Number of Viewers"
+msgstr ""
+
+msgctxt "#30063"
+msgid "Unknown Language"
+msgstr ""
+
+msgctxt "#30064"
+msgid "Unknown Game"
+msgstr ""
+
+msgctxt "#30065"
+msgid "Truncate displayed titles"
+msgstr ""
+
+msgctxt "#30066"
+msgid "Followed Games"
+msgstr ""
+
+msgctxt "#30067"
+msgid "Game Title Viewers | Streamer - Stream Title"
+msgstr ""
+
+msgctxt "#30068"
+msgid "Content Type"
+msgstr ""
+
+msgctxt "#30069"
+msgid "Files"
+msgstr ""
+
+msgctxt "#30070"
+msgid "TV Shows"
+msgstr ""
+
+msgctxt "#30071"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30072"
+msgid "Episodes"
+msgstr ""
+
+msgctxt "#30073"
+msgid "Music Videos"
+msgstr ""
+
+msgctxt "#30074"
+msgid "Automatically refresh live preview cache"
+msgstr ""
+
+msgctxt "#30075"
+msgid "Install IrcChat (script.ircchat)"
+msgstr ""
+
+msgctxt "#30076"
+msgid "General"
+msgstr ""
+
+msgctxt "#30077"
+msgid "Play (Choose Quality)"
+msgstr ""
+
+msgctxt "#30078"
+msgid "Past Broadcasts"
+msgstr ""
+
+msgctxt "#30079"
+msgid "Video Highlights"
+msgstr ""
+
+msgctxt "#30080"
+msgid "Could not find any playable urls"
+msgstr ""
+
+msgctxt "#30081"
+msgid "IRC Chat"
+msgstr ""
+
+msgctxt "#30082"
+msgid "Live Previews"
+msgstr ""
+
+msgctxt "#30083"
+msgid "Live Preview Settings"
+msgstr ""
+
+msgctxt "#30084"
+msgid "Clear live preview cache"
+msgstr ""
+
+msgctxt "#30085"
+msgid "***** WARNING *****"
+msgstr ""
+
+msgctxt "#30086"
+msgid "These settings may allow this add-on to delete database entries and images[CR]for cached live previews."
+msgstr ""
+
+msgctxt "#30087"
+msgid "Notifications"
+msgstr ""
+
+msgctxt "#30088"
+msgid "Game"
+msgstr ""
+
+msgctxt "#30089"
+msgid "Viewers"
+msgstr ""
+
+msgctxt "#30090"
+msgid "Language"
+msgstr ""
+
+msgctxt "#30091"
+msgid "Mature"
+msgstr ""
+
+msgctxt "#30092"
+msgid "Partner"
+msgstr ""
+
+msgctxt "#30093"
+msgid "Delay"
+msgstr ""
+
+msgctxt "#30094"
+msgid "Automatic refresh interval (minutes)"
+msgstr ""
+
+msgctxt "#30095"
+msgid "Username is required"
+msgstr ""
+
+msgctxt "#30096"
+msgid "API"
+msgstr ""
+
+msgctxt "#30097"
+msgid "OAuth Client ID"
+msgstr ""
+
+msgctxt "#30098"
+msgid "Select Video by ID or URL"
+msgstr ""
+
+msgctxt "#30099"
+msgid "OAuth Token"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Visit www.twitch.tv/settings/connections and [CR]'Register your application' for an OAuth Client-ID"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Visit www.twitchapps.com/tmi to generate an OAuth token"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Source"
+msgstr ""
+
+msgctxt "#30103"
+msgid "1080p60"
+msgstr ""
+
+msgctxt "#30104"
+msgid "1080p30"
+msgstr ""
+
+msgctxt "#30105"
+msgid "720p60"
+msgstr ""
+
+msgctxt "#30106"
+msgid "720p30"
+msgstr ""
+
+msgctxt "#30107"
+msgid "540p30"
+msgstr ""
+
+msgctxt "#30108"
+msgid "480p30"
+msgstr ""
+
+msgctxt "#30109"
+msgid "360p30"
+msgstr ""
+
+msgctxt "#30110"
+msgid "240p30"
+msgstr ""
+
+msgctxt "#30111"
+msgid "144p30"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Quality may result in best match"
+msgstr ""
+
+msgctxt "#30113"
+msgid "Uploads"
+msgstr ""
+
+msgctxt "#30114"
+msgid "Confirm"
+msgstr ""
+
+msgctxt "#30115"
+msgid "Function cache has been reset"
+msgstr ""
+
+msgctxt "#30116"
+msgid "Function cache reset failed"
+msgstr ""
+
+msgctxt "#30117"
+msgid "Reset function cache?"
+msgstr ""
+
+msgctxt "#30118"
+msgid "Developer"
+msgstr ""
+
+msgctxt "#30120"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Cache expire time (minutes)"
+msgstr ""
+
+msgctxt "#30122"
+msgid "Reset function cache"
+msgstr ""
+
+msgctxt "#30123"
+msgid "Items per page"
+msgstr ""
+
+msgctxt "#30124"
+msgid "Video Id/Url"
+msgstr ""
+
+msgctxt "#30125"
+msgid "Streams"
+msgstr ""
+
+msgctxt "#30126"
+msgid "Refresh"
+msgstr ""
+
+msgctxt "#30127"
+msgid "Login"
+msgstr ""
+
+msgctxt "#30128"
+msgid "OAuth token is required"
+msgstr ""
+
+msgctxt "#30129"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30130"
+msgid "Go to %s"
+msgstr ""
+
+msgctxt "#30131"
+msgid "No results returned"
+msgstr ""
+
+msgctxt "#30132"
+msgid "OAuth token is required for access"
+msgstr ""
+
+msgctxt "#30133"
+msgid "Authorize"
+msgstr ""
+
+msgctxt "#30134"
+msgid "Get your OAuth token by logging in/signing up to Twitch.tv here:"
+msgstr ""
+
+msgctxt "#30135"
+msgid "Get OAuth token"
+msgstr ""
+
+msgctxt "#30136"
+msgid "Always ask"
+msgstr ""
+
+msgctxt "#30138"
+msgid "*** Do NOT share your OAuth token. ***"
+msgstr ""
+
+msgctxt "#30139"
+msgid "Toggle follow"
+msgstr ""
+
+msgctxt "#30140"
+msgid "Now following %s"
+msgstr ""
+
+msgctxt "#30141"
+msgid "Unfollowed %s"
+msgstr ""
+
+msgctxt "#30142"
+msgid "Redirect URI"
+msgstr ""
+
+msgctxt "#30143"
+msgid "Would you like to follow %s?"
+msgstr ""
+
+msgctxt "#30144"
+msgid "Are you sure you want to unfollow %s?"
+msgstr ""
+
+msgctxt "#30145"
+msgid "Toggle block user"
+msgstr ""
+
+msgctxt "#30146"
+msgid "Blocked %s"
+msgstr ""
+
+msgctxt "#30147"
+msgid "Unblocked %s"
+msgstr ""
+
+msgctxt "#30148"
+msgid "Would you like to block %s?"
+msgstr ""
+
+msgctxt "#30149"
+msgid "Are you sure you want to unblock %s?"
+msgstr ""
+
+msgctxt "#30150"
+msgid "Blacklist %s"
+msgstr ""
+
+msgctxt "#30151"
+msgid "Blacklisted %s"
+msgstr ""
+
+msgctxt "#30152"
+msgid "Lists"
+msgstr ""
+
+msgctxt "#30153"
+msgid "Blacklist"
+msgstr ""
+
+msgctxt "#30154"
+msgid "Remove a user"
+msgstr ""
+
+msgctxt "#30155"
+msgid "Remove a game"
+msgstr ""
+
+msgctxt "#30156"
+msgid "Remove all users"
+msgstr ""
+
+msgctxt "#30157"
+msgid "Remove all games"
+msgstr ""
+
+msgctxt "#30158"
+msgid "Remove %s from blacklist"
+msgstr ""
+
+msgctxt "#30159"
+msgid "Removed %s from blacklist"
+msgstr ""
+
+msgctxt "#30160"
+msgid "Cleared %s %s"
+msgstr ""
+
+msgctxt "#30161"
+msgid "Are you sure you want to clear %s %s?"
+msgstr ""
+
+msgctxt "#30162"
+msgid "Clear list"
+msgstr ""
+
+msgctxt "#30163"
+msgid "Set default quality"
+msgstr ""
+
+msgctxt "#30164"
+msgid "Default '%s' quality '%s' set for %s"
+msgstr ""
+
+msgctxt "#30165"
+msgid "Removed default '%s' quality for %s"
+msgstr ""
+
+msgctxt "#30166"
+msgid "Remove %s quality"
+msgstr ""
+
+msgctxt "#30167"
+msgid "Default Qualities"
+msgstr ""
+
+msgctxt "#30168"
+msgid "Clear default quality"
+msgstr ""
+
+msgctxt "#30169"
+msgid "Choose Quality"
+msgstr ""
+
+msgctxt "#30170"
+msgid "Playlists"
+msgstr ""
+
+msgctxt "#30171"
+msgid "Collections"
+msgstr ""
+
+msgctxt "#30172"
+msgid "Browse"
+msgstr ""
+
+msgctxt "#30173"
+msgid "Xbox One"
+msgstr ""
+
+msgctxt "#30174"
+msgid "Playstation 4"
+msgstr ""
+
+msgctxt "#30175"
+msgid "Videos"
+msgstr "ویدئوها"
+
+msgctxt "#30176"
+msgid "Clips"
+msgstr ""
+
+msgctxt "#30177"
+msgid "Invalid OAuth token"
+msgstr ""
+
+msgctxt "#30178"
+msgid "Missing required scopes: %s"
+msgstr ""
+
+msgctxt "#30179"
+msgid "Client id mismatch"
+msgstr ""
+
+msgctxt "#30180"
+msgid "Go to '%s' - '%s' - '%s' to generate a new token"
+msgstr ""
+
+msgctxt "#30181"
+msgid "Are you sure you want to blacklist %s?"
+msgstr ""
+
+msgctxt "#30184"
+msgid "Change sort by"
+msgstr ""
+
+msgctxt "#30185"
+msgid "Change sort direction"
+msgstr ""
+
+msgctxt "#30186"
+msgid "Change period"
+msgstr ""
+
+msgctxt "#30187"
+msgid "Popular"
+msgstr ""
+
+msgctxt "#30188"
+msgid "Views"
+msgstr ""
+
+msgctxt "#30189"
+msgid "Add a language"
+msgstr ""
+
+msgctxt "#30190"
+msgid "Remove a language"
+msgstr ""
+
+msgctxt "#30191"
+msgid "Remove a stream quality"
+msgstr ""
+
+msgctxt "#30192"
+msgid "Remove a video quality"
+msgstr ""
+
+msgctxt "#30193"
+msgid "Remove a clip quality"
+msgstr ""
+
+msgctxt "#30194"
+msgid "Remove all stream qualities"
+msgstr ""
+
+msgctxt "#30195"
+msgid "Remove all video qualities"
+msgstr ""
+
+msgctxt "#30196"
+msgid "Remove all clip qualities"
+msgstr ""
+
+msgctxt "#30197"
+msgid "Requires confirmation"
+msgstr ""
+
+msgctxt "#30198"
+msgid "Requires subscription to %s"
+msgstr ""
+
+msgctxt "#30199"
+msgid "Connection failed"
+msgstr ""
+
+msgctxt "#30200"
+msgid "No %s found"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Bandwidth"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Currently Live"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Went Live"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Live notifications"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Audible"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Playback failed"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Retrying in %d seconds"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Attempting to reconnect to %s"
+msgstr ""
+
+msgctxt "#30209"
+msgid "Attempt #%d"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Attempt reconnection to live streams"
+msgstr ""
+
+msgctxt "#30211"
+msgid "Enabled"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Failed to connect to Twitch API"
+msgstr ""
+
+msgctxt "#30213"
+msgid "Followers"
+msgstr ""
+
+msgctxt "#30214"
+msgid "Items"
+msgstr ""
+
+msgctxt "#30215"
+msgid "Duration"
+msgstr ""
+
+msgctxt "#30216"
+msgid "Curated"
+msgstr ""
+
+msgctxt "#30217"
+msgid "Press OK to resolve"
+msgstr ""
+
+msgctxt "#30218"
+msgid "Supported video ids: a123435, c123435, v123435, videos123435[CR]Example urls:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
+msgstr ""
+
+msgctxt "#30219"
+msgid "Main Menu"
+msgstr ""
+
+msgctxt "#30220"
+msgid "Failed to get url, try again shortly."
+msgstr ""
+
+msgctxt "#30221"
+msgid "Unknown"
+msgstr ""
+
+msgctxt "#30222"
+msgid "VODCast highlight color"
+msgstr ""
+
+msgctxt "#30223"
+msgid "Use inputstream.adaptive"
+msgstr ""
+
+msgctxt "#30224"
+msgid "Configure inputstream.adaptive"
+msgstr ""
+
+msgctxt "#30225"
+msgid "inputstream.adaptive is enabled in the Twitch settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
+msgstr ""
+
+msgctxt "#30226"
+msgid "The installed inputstream.adaptive add-on does not meet the version requirement(%s), and has been disabled in the Twitch add-on settings."
+msgstr ""
+
+msgctxt "#30227"
+msgid "Revoke Token"
+msgstr ""
+
+msgctxt "#30228"
+msgid "Are you sure you want to revoke your OAuth token?"
+msgstr ""
+
+msgctxt "#30229"
+msgid "OAuth token has been revoked"
+msgstr ""
+
+msgctxt "#30230"
+msgid "OAuth token has been updated"
+msgstr ""
+
+msgctxt "#30231"
+msgid "%s started streaming %s"
+msgstr ""
+
+msgctxt "#30232"
+msgid "Notify at start"
+msgstr ""
+
+msgctxt "#30233"
+msgid "Group notifications at start"
+msgstr ""
+
+msgctxt "#30234"
+msgid "Reset cache on Refresh"
+msgstr ""
+
+msgctxt "#30235"
+msgid "New search"
+msgstr ""
+
+msgctxt "#30236"
+msgid "Search history size"
+msgstr ""
+
+msgctxt "#30237"
+msgid "Clear search history?"
+msgstr ""
+
+msgctxt "#30238"
+msgid "Remove %s from search history?"
+msgstr ""
+
+msgctxt "#30239"
+msgid "Remove %s"
+msgstr ""
+
+msgctxt "#30240"
+msgid "Clear search history"
+msgstr ""
+
+msgctxt "#30241"
+msgid "Search history cleared"
+msgstr ""
+
+msgctxt "#30242"
+msgid "Removed %s from search history"
+msgstr ""
+
+msgctxt "#30243"
+msgid "Maintenance"
+msgstr ""
+
+msgctxt "#30244"
+msgid "Search History"
+msgstr ""
+
+msgctxt "#30245"
+msgid "Delete streams search history"
+msgstr ""
+
+msgctxt "#30246"
+msgid "Delete channels search history"
+msgstr ""
+
+msgctxt "#30247"
+msgid "Delete games search history"
+msgstr ""
+
+msgctxt "#30248"
+msgid "Delete video id/url search history"
+msgstr ""
+
+msgctxt "#30249"
+msgid "Other"
+msgstr ""
+
+msgctxt "#30250"
+msgid "Delete storage.json"
+msgstr ""
+
+msgctxt "#30251"
+msgid "Are you sure you want to delete %s?"
+msgstr ""
+
+msgctxt "#30252"
+msgid "Deleting %s succeeded"
+msgstr ""
+
+msgctxt "#30253"
+msgid "Deleting %s failed"
+msgstr ""
+
+msgctxt "#30254"
+msgid "Adaptive"
+msgstr ""
+
+msgctxt "#30255"
+msgid "Thumbnail size"
+msgstr ""
+
+msgctxt "#30256"
+msgid "Large"
+msgstr ""
+
+msgctxt "#30257"
+msgid "Medium"
+msgstr ""
+
+msgctxt "#30258"
+msgid "Small"
+msgstr ""
+
+msgctxt "#30259"
+msgid "Live preview refresh interval (minutes)"
+msgstr ""
+
+msgctxt "#30260"
+msgid "Limit to 30 fps"
+msgstr ""
+
+msgctxt "#30261"
+msgid "Private API Credentials"
+msgstr ""
+
+msgctxt "#30262"
+msgid "Change languages"
+msgstr ""
+
+msgctxt "#30263"
+msgid "Frame rate limit"
+msgstr ""
+
+msgctxt "#30264"
+msgid "Follow"
+msgstr ""
+
+msgctxt "#30265"
+msgid "Unfollow"
+msgstr ""
+
+msgctxt "#30266"
+msgid "Add to queue"
+msgstr ""
+
+msgctxt "#30267"
+msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr ""
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr ""
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr ""
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr ""
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr ""
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr ""
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
+msgstr ""

@@ -1,0 +1,1014 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: 2022-09-16 18:14+0000\n"
+"Last-Translator: Andrei Stepanov <adem4ik@gmail.com>\n"
+"Language-Team: Russian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/ru_ru/>\n"
+"Language: ru_ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.14\n"
+
+msgctxt "Addon Summary"
+msgid "Twitch video plugin"
+msgstr "Видео плагин Twitch"
+
+msgctxt "Addon Description"
+msgid "Watch your favorite gaming streams!"
+msgstr "Смотрите любимые игровые трансляции!"
+
+msgctxt "#30001"
+msgid "Games"
+msgstr "Игры"
+
+msgctxt "#30002"
+msgid "Following"
+msgstr "Отслеживаемое"
+
+msgctxt "#30003"
+msgid "Search"
+msgstr "Поиск"
+
+msgctxt "#30004"
+msgid "Settings"
+msgstr "Настройки"
+
+msgctxt "#30005"
+msgid "Popular Streams"
+msgstr "Популярные трансляции"
+
+msgctxt "#30006"
+msgid "Teams"
+msgstr "Команды"
+
+msgctxt "#30007"
+msgid "Search for channels"
+msgstr "Поиск каналов"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "Каналы"
+
+msgctxt "#30009"
+msgid "Live Channels"
+msgstr "Каналы в эфире"
+
+msgctxt "#30010"
+msgid "TwitchTV"
+msgstr "TwitchTV"
+
+msgctxt "#30011"
+msgid "next page..."
+msgstr "следующая страница..."
+
+msgctxt "#30012"
+msgid "-- Currently Live Streams --"
+msgstr "-- Сейчас в прямом эфире --"
+
+msgctxt "#30013"
+msgid "-- Followed Channels --"
+msgstr "-- Отслеживаемые каналы --"
+
+# empty strings from id 30014 to 30019
+msgctxt "#30020"
+msgid "Http error"
+msgstr "Ошибка HTTP"
+
+msgctxt "#30021"
+msgid "No Live Data Found"
+msgstr "Данные о трансляции не найдены"
+
+msgctxt "#30022"
+msgid "No archives found for"
+msgstr "Не удалось найти аривы для"
+
+msgctxt "#30023"
+msgid "User Token Error"
+msgstr "Ошибка пользовательского токена"
+
+msgctxt "#30024"
+msgid "Changed video settings"
+msgstr "Изменены настройки видео"
+
+msgctxt "#30025"
+msgid "Selected video settings are not available"
+msgstr "Выбранные настройки видео не доступны"
+
+msgctxt "#30026"
+msgid "TwitchApi error"
+msgstr "Ошибка TwitchApi"
+
+msgctxt "#30027"
+msgid "JSON error"
+msgstr "Ошибка JSON"
+
+msgctxt "#30028"
+msgid "Failed to parse the result set"
+msgstr "Не удалось обработать результат"
+
+msgctxt "#30029"
+msgid "Please check your internet connection"
+msgstr "Пожалуйста проверьте интернет соединение"
+
+# empty strings from id 30030 to 30039
+msgctxt "#30040"
+msgid "Video Quality"
+msgstr "Качество видео"
+
+# empty strings from id 30041 to 30044
+msgctxt "#30045"
+msgid "Display titles"
+msgstr "Стиль заголовка"
+
+msgctxt "#30046"
+msgid "Streamer - Stream Title"
+msgstr "Стример - Название трансляции"
+
+msgctxt "#30047"
+msgid "Viewers - Streamer - Stream Title"
+msgstr "Зрители - Стример - Название трансляции"
+
+msgctxt "#30048"
+msgid "Stream Title"
+msgstr "Название трансляции"
+
+msgctxt "#30049"
+msgid "Streamer"
+msgstr "Стример"
+
+msgctxt "#30050"
+msgid "Username"
+msgstr "Имя пользователя"
+
+msgctxt "#30051"
+msgid "Streamer - Game Title - Stream Title"
+msgstr "Стример - Название игры - Название трансляции"
+
+msgctxt "#30052"
+msgid "Enable"
+msgstr "Включить"
+
+msgctxt "#30053"
+msgid "Password (OAuth Token)"
+msgstr "Пароль (OAuth Токен)"
+
+msgctxt "#30054"
+msgid "Language | Streamer - Stream Title"
+msgstr "Язык | Стример - Название трансляции"
+
+# empty strings from id 30055 to 30059
+msgctxt "#30060"
+msgid "Unnamed Streamer"
+msgstr "Безымянный стример"
+
+msgctxt "#30061"
+msgid "Untitled Stream"
+msgstr "Трансляция без названия"
+
+msgctxt "#30062"
+msgid "Unknown Number of Viewers"
+msgstr "Неизвестное число зрителей"
+
+msgctxt "#30063"
+msgid "Unknown Language"
+msgstr "Неизвестный язык"
+
+msgctxt "#30064"
+msgid "Unknown Game"
+msgstr "Неизвестная игра"
+
+msgctxt "#30065"
+msgid "Truncate displayed titles"
+msgstr "Усекать длинные заголовки"
+
+msgctxt "#30066"
+msgid "Followed Games"
+msgstr "Отслеживаемые игры"
+
+msgctxt "#30067"
+msgid "Game Title Viewers | Streamer - Stream Title"
+msgstr "Название игры Зрители | Стример - Название трансляции"
+
+msgctxt "#30068"
+msgid "Content Type"
+msgstr "Тип контента"
+
+msgctxt "#30069"
+msgid "Files"
+msgstr "Файлы"
+
+msgctxt "#30070"
+msgid "TV Shows"
+msgstr "ТВ передачи"
+
+msgctxt "#30071"
+msgid "Movies"
+msgstr "Фильмы"
+
+msgctxt "#30072"
+msgid "Episodes"
+msgstr "Эпизоды"
+
+msgctxt "#30073"
+msgid "Music Videos"
+msgstr "Музыкальные видео"
+
+msgctxt "#30074"
+msgid "Automatically refresh live preview cache"
+msgstr "Автоматически обновлять кеш предпросмотра трансляций"
+
+msgctxt "#30075"
+msgid "Install IrcChat (script.ircchat)"
+msgstr "Установить IrcChat (script.ircchat)"
+
+msgctxt "#30076"
+msgid "General"
+msgstr "Общие"
+
+msgctxt "#30077"
+msgid "Play (Choose Quality)"
+msgstr "Воспроизвести (Выбрать качество)"
+
+msgctxt "#30078"
+msgid "Past Broadcasts"
+msgstr "Прошедшие трансляции"
+
+msgctxt "#30079"
+msgid "Video Highlights"
+msgstr "Яркие моменты"
+
+msgctxt "#30080"
+msgid "Could not find any playable urls"
+msgstr "Не удалось найти не одной проигрываемой ссылки"
+
+msgctxt "#30081"
+msgid "IRC Chat"
+msgstr "IRC чат"
+
+msgctxt "#30082"
+msgid "Live Previews"
+msgstr "Предпросмотр трансляций"
+
+msgctxt "#30083"
+msgid "Live Preview Settings"
+msgstr "Настройки предпросмотра трансляций"
+
+msgctxt "#30084"
+msgid "Clear live preview cache"
+msgstr "Очистить кеш предпросмотра"
+
+msgctxt "#30085"
+msgid "***** WARNING *****"
+msgstr "***** ВНИМАНИЕ *****"
+
+msgctxt "#30086"
+msgid "These settings may allow this add-on to delete database entries and images[CR]for cached live previews."
+msgstr "Эти настройки позволят дополнению удалять записи с базы данных и картинки[CR]для предварительного просмотра."
+
+msgctxt "#30087"
+msgid "Notifications"
+msgstr "Уведомления"
+
+msgctxt "#30088"
+msgid "Game"
+msgstr "Игра"
+
+msgctxt "#30089"
+msgid "Viewers"
+msgstr "Зрителей"
+
+msgctxt "#30090"
+msgid "Language"
+msgstr "Язык"
+
+msgctxt "#30091"
+msgid "Mature"
+msgstr "Для взрослых"
+
+msgctxt "#30092"
+msgid "Partner"
+msgstr "Партнер"
+
+msgctxt "#30093"
+msgid "Delay"
+msgstr "Задержка"
+
+msgctxt "#30094"
+msgid "Automatic refresh interval (minutes)"
+msgstr "Интервал автоматического обновления (минуты)"
+
+msgctxt "#30095"
+msgid "Username is required"
+msgstr "Требуется имя пользователя"
+
+msgctxt "#30096"
+msgid "API"
+msgstr "API"
+
+msgctxt "#30097"
+msgid "OAuth Client ID"
+msgstr "OAuth ID клиента"
+
+msgctxt "#30098"
+msgid "Select Video by ID or URL"
+msgstr "Выберите видео по ID или ссылке"
+
+msgctxt "#30099"
+msgid "OAuth Token"
+msgstr "OAuth токен"
+
+msgctxt "#30100"
+msgid "Visit www.twitch.tv/settings/connections and [CR]'Register your application' for an OAuth Client-ID"
+msgstr "Посетите www.twitch.tv/settings/connections и [CR]'Register your application' для получения OAuth ID клиента"
+
+msgctxt "#30101"
+msgid "Visit www.twitchapps.com/tmi to generate an OAuth token"
+msgstr "Посетите www.twitchapps.com/tmi для создания OAuth токена"
+
+msgctxt "#30102"
+msgid "Source"
+msgstr "Источник"
+
+msgctxt "#30103"
+msgid "1080p60"
+msgstr "1080p60"
+
+msgctxt "#30104"
+msgid "1080p30"
+msgstr "1080p30"
+
+msgctxt "#30105"
+msgid "720p60"
+msgstr "720p60"
+
+msgctxt "#30106"
+msgid "720p30"
+msgstr "720p30"
+
+msgctxt "#30107"
+msgid "540p30"
+msgstr "540p30"
+
+msgctxt "#30108"
+msgid "480p30"
+msgstr "480p30"
+
+msgctxt "#30109"
+msgid "360p30"
+msgstr "360p30"
+
+msgctxt "#30110"
+msgid "240p30"
+msgstr "240p30"
+
+msgctxt "#30111"
+msgid "144p30"
+msgstr "144p30"
+
+msgctxt "#30112"
+msgid "Quality may result in best match"
+msgstr "Будет выбрано наиболее подходящее качество"
+
+msgctxt "#30113"
+msgid "Uploads"
+msgstr "Загрузки"
+
+msgctxt "#30114"
+msgid "Confirm"
+msgstr "Подтвердить"
+
+msgctxt "#30115"
+msgid "Function cache has been reset"
+msgstr "Функциональный кеш сброшен"
+
+msgctxt "#30116"
+msgid "Function cache reset failed"
+msgstr "Не удалось сбросить функциональный кеш"
+
+msgctxt "#30117"
+msgid "Reset function cache?"
+msgstr "Сбросить функциональный кеш?"
+
+msgctxt "#30118"
+msgid "Developer"
+msgstr "Разработчик"
+
+msgctxt "#30120"
+msgid "Cache"
+msgstr "Кеш"
+
+msgctxt "#30121"
+msgid "Cache expire time (minutes)"
+msgstr "Срок действия кеша (минуты)"
+
+msgctxt "#30122"
+msgid "Reset function cache"
+msgstr "Сбросить функциональный кеш"
+
+msgctxt "#30123"
+msgid "Items per page"
+msgstr "Количество элементов на странице"
+
+msgctxt "#30124"
+msgid "Video Id/Url"
+msgstr "ID видео/ссылка"
+
+msgctxt "#30125"
+msgid "Streams"
+msgstr "Трансляции"
+
+msgctxt "#30126"
+msgid "Refresh"
+msgstr "Обновить"
+
+msgctxt "#30127"
+msgid "Login"
+msgstr "Войти"
+
+msgctxt "#30128"
+msgid "OAuth token is required"
+msgstr "Требуется OAuth токен"
+
+msgctxt "#30129"
+msgid "Error"
+msgstr "Ошибка"
+
+msgctxt "#30130"
+msgid "Go to %s"
+msgstr "Перейти в %s"
+
+msgctxt "#30131"
+msgid "No results returned"
+msgstr "Ничего не получено"
+
+msgctxt "#30132"
+msgid "OAuth token is required for access"
+msgstr "Для доступа требуется OAuth токен"
+
+msgctxt "#30133"
+msgid "Authorize"
+msgstr "Авторизоваться"
+
+msgctxt "#30134"
+msgid "Get your OAuth token by logging in/signing up to Twitch.tv here:"
+msgstr "Получите свой OAuth токен, путем входа/регистрации на Twitch.tv здесь:"
+
+msgctxt "#30135"
+msgid "Get OAuth token"
+msgstr "Получить OAuth токен"
+
+msgctxt "#30136"
+msgid "Always ask"
+msgstr "Всегда спрашивать"
+
+msgctxt "#30138"
+msgid "*** Do NOT share your OAuth token. ***"
+msgstr "*** НИКОМУ НЕ отправляйте свой OAuth токен. ***"
+
+msgctxt "#30139"
+msgid "Toggle follow"
+msgstr "Переключить отслеживание"
+
+msgctxt "#30140"
+msgid "Now following %s"
+msgstr "Отслеживаем %s"
+
+msgctxt "#30141"
+msgid "Unfollowed %s"
+msgstr "Перестаём отслеживать %s"
+
+msgctxt "#30142"
+msgid "Redirect URI"
+msgstr "Redirect URI"
+
+msgctxt "#30143"
+msgid "Would you like to follow %s?"
+msgstr "Вы хотите отслеживать %s?"
+
+msgctxt "#30144"
+msgid "Are you sure you want to unfollow %s?"
+msgstr "Вы уверены, что хотите прекратить следить за %s?"
+
+msgctxt "#30145"
+msgid "Toggle block user"
+msgstr "Переключить блокировку пользователя"
+
+msgctxt "#30146"
+msgid "Blocked %s"
+msgstr "%s заблокирован"
+
+msgctxt "#30147"
+msgid "Unblocked %s"
+msgstr "%s разблокирован"
+
+msgctxt "#30148"
+msgid "Would you like to block %s?"
+msgstr "Вы хотите заблокировать %s?"
+
+msgctxt "#30149"
+msgid "Are you sure you want to unblock %s?"
+msgstr "Вы уверены, что хотите разблокировать %s?"
+
+msgctxt "#30150"
+msgid "Blacklist %s"
+msgstr "В чёрный список %s"
+
+msgctxt "#30151"
+msgid "Blacklisted %s"
+msgstr "%s добавлен в черный список"
+
+msgctxt "#30152"
+msgid "Lists"
+msgstr "Списки"
+
+msgctxt "#30153"
+msgid "Blacklist"
+msgstr "Чёрный список"
+
+msgctxt "#30154"
+msgid "Remove a user"
+msgstr "Удалить пользователя"
+
+msgctxt "#30155"
+msgid "Remove a game"
+msgstr "Удалить игру"
+
+msgctxt "#30156"
+msgid "Remove all users"
+msgstr "Удалить всех пользователей"
+
+msgctxt "#30157"
+msgid "Remove all games"
+msgstr "Удалить все игры"
+
+msgctxt "#30158"
+msgid "Remove %s from blacklist"
+msgstr "Удалить %s из чёрного списка"
+
+msgctxt "#30159"
+msgid "Removed %s from blacklist"
+msgstr "%s удалён из чёрного списка"
+
+msgctxt "#30160"
+msgid "Cleared %s %s"
+msgstr "Очищен %s %s"
+
+msgctxt "#30161"
+msgid "Are you sure you want to clear %s %s?"
+msgstr "Вы уверены, что хотите очистить %s %s?"
+
+msgctxt "#30162"
+msgid "Clear list"
+msgstr "Очистить список"
+
+msgctxt "#30163"
+msgid "Set default quality"
+msgstr "Установить качество"
+
+msgctxt "#30164"
+msgid "Default '%s' quality '%s' set for %s"
+msgstr "Качество '%s' установлено как '%s' для %s"
+
+msgctxt "#30165"
+msgid "Removed default '%s' quality for %s"
+msgstr "Удалено установленное качество '%s' для %s"
+
+msgctxt "#30166"
+msgid "Remove %s quality"
+msgstr "Сбросить установленное качество для %s"
+
+msgctxt "#30167"
+msgid "Default Qualities"
+msgstr "Установленные качества"
+
+msgctxt "#30168"
+msgid "Clear default quality"
+msgstr "Сбросить установленное качество"
+
+msgctxt "#30169"
+msgid "Choose Quality"
+msgstr "Выберите качество"
+
+msgctxt "#30170"
+msgid "Playlists"
+msgstr "Трансляции"
+
+msgctxt "#30171"
+msgid "Collections"
+msgstr "Коллекции"
+
+msgctxt "#30172"
+msgid "Browse"
+msgstr "Просмотр"
+
+msgctxt "#30173"
+msgid "Xbox One"
+msgstr "Xbox One"
+
+msgctxt "#30174"
+msgid "Playstation 4"
+msgstr "Playstation 4"
+
+msgctxt "#30175"
+msgid "Videos"
+msgstr "Видео"
+
+msgctxt "#30176"
+msgid "Clips"
+msgstr "Клипы"
+
+msgctxt "#30177"
+msgid "Invalid OAuth token"
+msgstr "Неверный OAuth токен"
+
+msgctxt "#30178"
+msgid "Missing required scopes: %s"
+msgstr "Отсутствуют необходимые области: %s"
+
+msgctxt "#30179"
+msgid "Client id mismatch"
+msgstr "Несоответствие ID клиента"
+
+msgctxt "#30180"
+msgid "Go to '%s' - '%s' - '%s' to generate a new token"
+msgstr "Зайдите в '%s' - '%s' - '%s' для создания нового токена"
+
+msgctxt "#30181"
+msgid "Are you sure you want to blacklist %s?"
+msgstr "Вы уверены что хотите добавить %s в чёрный список?"
+
+msgctxt "#30184"
+msgid "Change sort by"
+msgstr "Сортировать по"
+
+msgctxt "#30185"
+msgid "Change sort direction"
+msgstr "Изменить направление сортировки"
+
+msgctxt "#30186"
+msgid "Change period"
+msgstr "Изменить период"
+
+msgctxt "#30187"
+msgid "Popular"
+msgstr "Популярное"
+
+msgctxt "#30188"
+msgid "Views"
+msgstr "Просмотры"
+
+msgctxt "#30189"
+msgid "Add a language"
+msgstr "Добавить язык"
+
+msgctxt "#30190"
+msgid "Remove a language"
+msgstr "Удалить язык"
+
+msgctxt "#30191"
+msgid "Remove a stream quality"
+msgstr "Сбросить качество для трансляции"
+
+msgctxt "#30192"
+msgid "Remove a video quality"
+msgstr "Сбросить качество для видео"
+
+msgctxt "#30193"
+msgid "Remove a clip quality"
+msgstr "Сбросить качество для клипа"
+
+msgctxt "#30194"
+msgid "Remove all stream qualities"
+msgstr "Сбросить качество для всех трансляций"
+
+msgctxt "#30195"
+msgid "Remove all video qualities"
+msgstr "Сбросить качество для всех видео"
+
+msgctxt "#30196"
+msgid "Remove all clip qualities"
+msgstr "Сбросить качество для всех клипов"
+
+msgctxt "#30197"
+msgid "Requires confirmation"
+msgstr "Требуется подтверждение"
+
+msgctxt "#30198"
+msgid "Requires subscription to %s"
+msgstr "Требуется подписка на канал %s"
+
+msgctxt "#30199"
+msgid "Connection failed"
+msgstr "Потерянно соединение"
+
+msgctxt "#30200"
+msgid "No %s found"
+msgstr "Не удалось найти %s"
+
+msgctxt "#30201"
+msgid "Bandwidth"
+msgstr "Пропускная способность"
+
+msgctxt "#30202"
+msgid "Currently Live"
+msgstr "Сейчас в прямом эфире"
+
+msgctxt "#30203"
+msgid "Went Live"
+msgstr "Был в эфире"
+
+msgctxt "#30204"
+msgid "Live notifications"
+msgstr "Уведомления о трансляциях"
+
+msgctxt "#30205"
+msgid "Audible"
+msgstr "Со звуком"
+
+msgctxt "#30206"
+msgid "Playback failed"
+msgstr "Воспроизведение не удалось"
+
+msgctxt "#30207"
+msgid "Retrying in %d seconds"
+msgstr "Повтор через %d секунд"
+
+msgctxt "#30208"
+msgid "Attempting to reconnect to %s"
+msgstr "Пытаемся переподключиться к %s"
+
+msgctxt "#30209"
+msgid "Attempt #%d"
+msgstr "Попытка #%d"
+
+msgctxt "#30210"
+msgid "Attempt reconnection to live streams"
+msgstr "Пытаться переподключиться к трансляциям"
+
+msgctxt "#30211"
+msgid "Enabled"
+msgstr "Включить"
+
+msgctxt "#30212"
+msgid "Failed to connect to Twitch API"
+msgstr "Не удалось подключиться к Twitch API"
+
+msgctxt "#30213"
+msgid "Followers"
+msgstr "Фолловеры"
+
+msgctxt "#30214"
+msgid "Items"
+msgstr "Предметы"
+
+msgctxt "#30215"
+msgid "Duration"
+msgstr "Длительность"
+
+msgctxt "#30216"
+msgid "Curated"
+msgstr "Куратор"
+
+msgctxt "#30217"
+msgid "Press OK to resolve"
+msgstr "Нажмите OK для решения"
+
+msgctxt "#30218"
+msgid "Supported video ids: a123435, c123435, v123435, videos123435[CR]Example urls:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
+msgstr "Поддерживаются видео id a123435, c123435, v123435, videos123435[CR]Примеры ссылок:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
+
+msgctxt "#30219"
+msgid "Main Menu"
+msgstr "Главное меню"
+
+msgctxt "#30220"
+msgid "Failed to get url, try again shortly."
+msgstr "Не удалось получить ссылку, повторите попытку позже."
+
+msgctxt "#30221"
+msgid "Unknown"
+msgstr "Неизвестно"
+
+msgctxt "#30222"
+msgid "VODCast highlight color"
+msgstr "Цвет VODCast"
+
+msgctxt "#30223"
+msgid "Use inputstream.adaptive"
+msgstr "Использовать inputstream.adaptive"
+
+msgctxt "#30224"
+msgid "Configure inputstream.adaptive"
+msgstr "Настроить inputstream.adaptive"
+
+msgctxt "#30225"
+msgid "inputstream.adaptive is enabled in the Twitch settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
+msgstr "inputstream.adaptive включен в настройках Twitch, но inputstream.adaptive сейчас выключен. Хотите включить inputstream.adaptive сейчас?"
+
+msgctxt "#30226"
+msgid "The installed inputstream.adaptive add-on does not meet the version requirement(%s), and has been disabled in the Twitch add-on settings."
+msgstr "Установленное дополнение inputstream.adaptive не соответствует требуемой версии (%s) и будет выключено в настройках Twitch."
+
+msgctxt "#30227"
+msgid "Revoke Token"
+msgstr "Отозвать токен"
+
+msgctxt "#30228"
+msgid "Are you sure you want to revoke your OAuth token?"
+msgstr "Вы уверены, что хотите отозвать ваш OAuth токен?"
+
+msgctxt "#30229"
+msgid "OAuth token has been revoked"
+msgstr "OAuth токен отозван"
+
+msgctxt "#30230"
+msgid "OAuth token has been updated"
+msgstr "OAuth токен обновлен"
+
+msgctxt "#30231"
+msgid "%s started streaming %s"
+msgstr "%s начал трансляцию %s"
+
+msgctxt "#30232"
+msgid "Notify at start"
+msgstr "Уведомлять при запуске"
+
+msgctxt "#30233"
+msgid "Group notifications at start"
+msgstr "Групповые уведомления при запуске"
+
+msgctxt "#30234"
+msgid "Reset cache on Refresh"
+msgstr "Сбросить кеш при обновлении"
+
+msgctxt "#30235"
+msgid "New search"
+msgstr "Новый поиск"
+
+msgctxt "#30236"
+msgid "Search history size"
+msgstr "Размер истории поиска"
+
+msgctxt "#30237"
+msgid "Clear search history?"
+msgstr "Очистить историю поиска?"
+
+msgctxt "#30238"
+msgid "Remove %s from search history?"
+msgstr "Удалить %s из истории поиска?"
+
+msgctxt "#30239"
+msgid "Remove %s"
+msgstr "Удалить %s"
+
+msgctxt "#30240"
+msgid "Clear search history"
+msgstr "Очистить историю поиска"
+
+msgctxt "#30241"
+msgid "Search history cleared"
+msgstr "История поиска очищена"
+
+msgctxt "#30242"
+msgid "Removed %s from search history"
+msgstr "%s удален из истории поиска"
+
+msgctxt "#30243"
+msgid "Maintenance"
+msgstr "Обслуживание"
+
+msgctxt "#30244"
+msgid "Search History"
+msgstr "История поиска"
+
+msgctxt "#30245"
+msgid "Delete streams search history"
+msgstr "Удалить историю поиска трансляций"
+
+msgctxt "#30246"
+msgid "Delete channels search history"
+msgstr "Удалить историю поиска каналов"
+
+msgctxt "#30247"
+msgid "Delete games search history"
+msgstr "Удалить историю поиска игр"
+
+msgctxt "#30248"
+msgid "Delete video id/url search history"
+msgstr "Удалить историю поиска ID/ссылок"
+
+msgctxt "#30249"
+msgid "Other"
+msgstr "Другое"
+
+msgctxt "#30250"
+msgid "Delete storage.json"
+msgstr "Удалить storage.json"
+
+msgctxt "#30251"
+msgid "Are you sure you want to delete %s?"
+msgstr "Вы уверены что хотите удалить %s?"
+
+msgctxt "#30252"
+msgid "Deleting %s succeeded"
+msgstr "Удаление %s успешно завершено"
+
+msgctxt "#30253"
+msgid "Deleting %s failed"
+msgstr "Не удалось удалить %s"
+
+msgctxt "#30254"
+msgid "Adaptive"
+msgstr "Адаптивное"
+
+msgctxt "#30255"
+msgid "Thumbnail size"
+msgstr "Размер иконки"
+
+msgctxt "#30256"
+msgid "Large"
+msgstr "Большая"
+
+msgctxt "#30257"
+msgid "Medium"
+msgstr "Средняя"
+
+msgctxt "#30258"
+msgid "Small"
+msgstr "Маленькая"
+
+msgctxt "#30259"
+msgid "Live preview refresh interval (minutes)"
+msgstr "Интервал обновления картинок предпросмотра (минуты)"
+
+msgctxt "#30260"
+msgid "Limit to 30 fps"
+msgstr "Лимит в 30 FPS"
+
+msgctxt "#30261"
+msgid "Private API Credentials"
+msgstr "Реквизиты личного API"
+
+msgctxt "#30262"
+msgid "Change languages"
+msgstr "Изменить языки"
+
+msgctxt "#30263"
+msgid "Frame rate limit"
+msgstr "Лимит FPS"
+
+msgctxt "#30264"
+msgid "Follow"
+msgstr "Отслеживать"
+
+msgctxt "#30265"
+msgid "Unfollow"
+msgstr "Прекратить отслеживать"
+
+msgctxt "#30266"
+msgid "Add to queue"
+msgstr "Добавить в очередь"
+
+msgctxt "#30267"
+msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr "Для доступа требуется OAuth токен. Зайдите в '%s' - '%s' - '%s', чтобы получить его"
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr "Ошибка OAuth аутентификации"
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr "Неверные учетные данные OAuth. Зайдите в '%s' - '%s' - '%s', чтобы исправить проблему"
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr "Подписчик и преимущества Турбо"
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr "Для получения информация о получении этого токена посетите"
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr "https://twitchaddon.page.link/benefits"
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
+msgstr "Истёкший или неверный токен OAuth"
+
+#~ msgctxt "#30132"
+#~ msgid "OAuth token is required for access to authorized user functions."
+#~ msgstr "Требуется OAuth токен для доступа к функциям пользователя."
+
+#~ msgctxt "#30005"
+#~ msgid "Featured Streams"
+#~ msgstr "Рекомендуемые трансляции"
+
+#~ msgctxt "#30104"
+#~ msgid "1080p60"
+#~ msgstr "1080p60"

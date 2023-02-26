@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <!-- Login -->
+    <category label="30127">
+        <setting id="oauth_token_helix" type="text" label="30099" default=""/>
+        <setting label="30132" type="lsep"/>
+        <setting label="30135" id="show_token_url" type="action" action="RunPlugin(plugin://$ID/?mode=get_token_url)" option="close"/>
+        <setting label="30138" type="lsep"/>
+        <setting label="30227" id="revoke_token" type="action" action="RunPlugin(plugin://$ID/?mode=revoke_token)" option="close"/>
+    </category>
+    <!-- Main Menu -->
+    <category label="30219">
+        <setting label="30009" id="menu_browse_live" type="bool" default="true"/>
+        <setting label="30001" id="menu_browse_games" type="bool" default="true"/>
+        <setting label="30002" id="menu_following" type="bool" default="true"/>
+        <setting label="30003" id="menu_search" type="bool" default="true"/>
+        <setting label="30004" id="menu_settings" type="bool" default="true"/>
+        <setting label="30002" type="lsep"/>
+        <setting label="30009" id="menu_following_live" type="bool" default="false"/>
+        <setting label="30008" id="menu_following_channels" type="bool" default="false"/>
+        <setting label="30001" id="menu_following_games" type="bool" default="false"/>
+        <setting label="30003" type="lsep"/>
+        <setting label="30125" id="menu_search_streams" type="bool" default="false"/>
+        <setting label="30008" id="menu_search_channels" type="bool" default="false"/>
+        <setting label="30001" id="menu_search_games" type="bool" default="false"/>
+        <setting label="30124" id="menu_search_url" type="bool" default="false"/>
+    </category>
+    <!-- General -->
+    <category label="30076">
+        <!-- Video Quality -->
+        <setting id="video_quality" type="enum" label="30040" lvalues="30102|30136|30201|30254" default="0"/>
+        <setting id="bandwidth" type="number" label="30201" default="2500000" enable="eq(-1,2)" visible="eq(-1,2)" subsetting="true"/>
+        <setting label="30263" type="slider" id="source_frame_rate_limit" default="0" range="0,30,60" option="int"  enable="eq(-2,0)" visible="eq(-2,0)" subsetting="true"/>
+        <setting id="video_support_ia_builtin" type="bool" label="" visible="false" enable="true" default="false"/>
+        <setting id="video_support_ia_addon" type="bool" label="" visible="false" enable="true" default="false"/>
+        <setting id="video_quality_ia" type="bool" label="30223" default="false" enable="eq(-1,true)|eq(-2,true)"/>
+        <setting id="video_quality_ia_configure" type="action" label="30224" enable="eq(-1,true)+eq(-2,true)" visible="eq(-1,true)+eq(-2,true)" option="close" action="RunPlugin(plugin://$ID/?mode=configure_ia)"/>
+        <!-- Title Display -->
+        <setting id="title_display" type="enum" label="30045" lvalues="30046|30047|30048|30049|30051|30067|30054" default="0"/>
+        <!-- Truncate titles -->
+        <setting id="title_truncate" type="bool" label="30065" default="true"/>
+
+        <setting id="thumbnail_size" type="enum" label="30255" lvalues="30102|30256|30257|30258" default="2"/>
+
+        <!-- Live preview refresh interval -->
+        <setting label="30259" type="slider" id="refresh_interval" default="10" range="0,1,180" option="int"/>
+
+        <setting id="vodcast_highlight" type="enum" label="30222" values="aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanchedalmond|blue|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dodgerblue|firebrick|floralwhite|forestgreen|fuchsia|gainsboro|ghostwhite|gold|goldenrod|gray|green|greenyellow|honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgrey|lightgreen|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightsteelblue|lightyellow|lime|limegreen|linen|magenta|maroon|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|navy|none|oldlace|olive|olivedrab|orange|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|purple|red|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|silver|skyblue|slateblue|slategray|snow|springgreen|steelblue|tan|teal|thistle|tomato|turquoise|violet|wheat|white|whitesmoke|yellow|yellowgreen" default="79"/>
+
+        <setting label="30123" type="slider" id="items_per_page" default="25" range="10,100" option="int"/>
+        <setting label="30236" type="slider" id="search_history_size" default="25" range="0,200" option="int"/>
+
+        <setting label="30210" id="live_reconnect" type="bool" default="false"/>
+
+        <setting label="30204" type="lsep"/>
+        <setting label="30211" id="live_notify" type="bool" default="false"/>
+        <setting label="30205" id="live_notify_audible" type="bool" default="false" enable="eq(-1,true)" visible="eq(-1,true)"/>
+        <setting label="30232" id="live_notify_at_start" type="bool" default="true" enable="eq(-2,true)" visible="eq(-2,true)"/>
+        <setting label="30233" id="live_notify_group_start" type="bool" default="false" enable="eq(-1,true)" visible="eq(-1,true)"/>
+
+        <setting label="30090" type="lsep"/>
+        <setting label="30262" id="change_language" type="action" action="RunPlugin(plugin://$ID/?mode=edit_languages&amp;action=change)"/>
+
+        <setting label="30120" type="lsep"/>
+        <setting label="30234" id="refresh_cache" type="bool" default="false"/>
+        <setting label="30121" type="slider" id="cache_expire_time" default="3" range="0,60" option="int"/>
+    </category>
+    <!-- Login -->
+    <category label="30270">
+        <setting label="30261" type="lsep"/>
+        <setting id="private_oauth_clientid" type="text" label="30097" default="kimne78kx3ncx6brgo4mv6wki5h1ko"/>
+        <setting id="private_oauth_token" type="text" label="30099" default=""/>
+        <setting label="30271" type="lsep"/>
+        <setting id="label.dummy.01" type="text" label="" default="" visible="false" enable="false"/>
+        <setting label="30272" type="lsep"/>
+        <setting id="label.dummy.01" type="text" label="" default="" visible="false" enable="false"/>
+    </category>
+    <!-- Lists -->
+    <category label="30167">
+        <setting label="30191" id="remove_default_stream_quality" type="action" action="RunPlugin(plugin://$ID/?mode=edit_qualities&amp;remove=true&amp;content_type=stream)"/>
+        <setting label="30192" id="remove_default_video_quality" type="action" action="RunPlugin(plugin://$ID/?mode=edit_qualities&amp;remove=true&amp;content_type=video)"/>
+        <setting label="30193" id="remove_default_clip_quality" type="action" action="RunPlugin(plugin://$ID/?mode=edit_qualities&amp;remove=true&amp;content_type=clip)"/>
+
+        <setting label="30194" id="clear_default_stream_qualities" type="action" action="RunPlugin(plugin://$ID/?mode=clear_list&amp;list_type=stream&amp;list_name=qualities)"/>
+        <setting label="30195" id="clear_default_video_qualities" type="action" action="RunPlugin(plugin://$ID/?mode=clear_list&amp;list_type=video&amp;list_name=qualities)"/>
+        <setting label="30196" id="clear_default_clip_qualities" type="action" action="RunPlugin(plugin://$ID/?mode=clear_list&amp;list_type=clip&amp;list_name=qualities)"/>
+    </category>
+    <!-- IRC -->
+    <category label="30081">
+        <!-- Enable IRC Chat -->
+        <setting id="irc_enable" type="bool" label="30052" default="false" enable="System.HasAddon(script.ircchat)"/>
+        <setting label="30075" id="install_ircscript" type="action" action="RunPlugin(plugin://$ID/?mode=install_ircchat)"
+                 enable="!System.HasAddon(script.ircchat)" visible="!System.HasAddon(script.ircchat)" option="close"/>
+    </category>
+    <!-- Maintenance -->
+    <category label="30243">
+        <setting label="30120" type="lsep"/>
+        <setting label="30122" id="reset_cache" type="action" action="RunPlugin(plugin://$ID/?mode=reset_cache)"/>
+        <setting label="30244" type="lsep"/>
+        <setting label="30245" id="delete_streams_search" type="action" action="RunPlugin(plugin://$ID/?mode=maintain&amp;sub_mode=delete&amp;file_type=streams_search)"/>
+        <setting label="30246" id="delete_channels_search" type="action" action="RunPlugin(plugin://$ID/?mode=maintain&amp;sub_mode=delete&amp;file_type=channels_search)"/>
+        <setting label="30247" id="delete_games_search" type="action" action="RunPlugin(plugin://$ID/?mode=maintain&amp;sub_mode=delete&amp;file_type=games_search)"/>
+        <setting label="30248" id="delete_idurl_search" type="action" action="RunPlugin(plugin://$ID/?mode=maintain&amp;sub_mode=delete&amp;file_type=id_url_search)"/>
+        <setting label="30249" type="lsep"/>
+        <setting label="30250" id="delete_storage_json" type="action" action="RunPlugin(plugin://$ID/?mode=maintain&amp;sub_mode=delete&amp;file_type=storage_json)"/>
+    </category>
+    <!-- Developer -->
+    <category label="30118">
+        <!-- OAuth Client ID -->
+        <setting id="oauth_clientid" type="text" label="30097" default=""/>
+        <setting id="oauth_redirecturi" type="text" label="30142" default=""/>
+    </category>
+</settings>

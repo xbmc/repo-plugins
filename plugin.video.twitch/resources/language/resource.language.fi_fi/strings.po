@@ -1,0 +1,1002 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: 2022-12-11 19:15+0000\n"
+"Last-Translator: Oskari Lavinto <olavinto@protonmail.com>\n"
+"Language-Team: Finnish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/fi_fi/>\n"
+"Language: fi_fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.14.2\n"
+
+msgctxt "Addon Summary"
+msgid "Twitch video plugin"
+msgstr "Twitch-videolisäosa"
+
+msgctxt "Addon Description"
+msgid "Watch your favorite gaming streams!"
+msgstr "Katsele suosikkisuoratoistojasi videopeleistä!"
+
+msgctxt "#30001"
+msgid "Games"
+msgstr "Pelit"
+
+msgctxt "#30002"
+msgid "Following"
+msgstr "Seurataan"
+
+msgctxt "#30003"
+msgid "Search"
+msgstr "Haku"
+
+msgctxt "#30004"
+msgid "Settings"
+msgstr "Asetukset"
+
+msgctxt "#30005"
+msgid "Popular Streams"
+msgstr "Suositut suoratoistot"
+
+msgctxt "#30006"
+msgid "Teams"
+msgstr "Tiimit"
+
+msgctxt "#30007"
+msgid "Search for channels"
+msgstr "Etsi kanavia"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "Kanavat"
+
+msgctxt "#30009"
+msgid "Live Channels"
+msgstr "Live-kanavat"
+
+msgctxt "#30010"
+msgid "TwitchTV"
+msgstr "TwitchTV"
+
+msgctxt "#30011"
+msgid "next page..."
+msgstr "Seuraava sivu..."
+
+msgctxt "#30012"
+msgid "-- Currently Live Streams --"
+msgstr "-- Käynnissä olevat live-lähetykset --"
+
+msgctxt "#30013"
+msgid "-- Followed Channels --"
+msgstr "-- Seuratut kanavat --"
+
+# empty strings from id 30014 to 30019
+msgctxt "#30020"
+msgid "Http error"
+msgstr "HTTP-virhe"
+
+msgctxt "#30021"
+msgid "No Live Data Found"
+msgstr "Live-tietoja ei löytynyt"
+
+msgctxt "#30022"
+msgid "No archives found for"
+msgstr "Arkistoja ei löytynyt"
+
+msgctxt "#30023"
+msgid "User Token Error"
+msgstr "Käyttäjän Token-virhe"
+
+msgctxt "#30024"
+msgid "Changed video settings"
+msgstr "Muuttuneet videoasetukset"
+
+msgctxt "#30025"
+msgid "Selected video settings are not available"
+msgstr "Valitut videoasetukset eivät ole enää käytettävissä"
+
+msgctxt "#30026"
+msgid "TwitchApi error"
+msgstr "Twitch API -virhe"
+
+msgctxt "#30027"
+msgid "JSON error"
+msgstr "JSON-virhe"
+
+msgctxt "#30028"
+msgid "Failed to parse the result set"
+msgstr "Tulosjoukon jäsennys epäonnistui"
+
+msgctxt "#30029"
+msgid "Please check your internet connection"
+msgstr "Tarkista Internet-yhteytesi"
+
+# empty strings from id 30030 to 30039
+msgctxt "#30040"
+msgid "Video Quality"
+msgstr "Videon laatu"
+
+# empty strings from id 30041 to 30044
+msgctxt "#30045"
+msgid "Display titles"
+msgstr "Näytä nimet"
+
+msgctxt "#30046"
+msgid "Streamer - Stream Title"
+msgstr "Suoratoistaja - Suoratoiston nimi"
+
+msgctxt "#30047"
+msgid "Viewers - Streamer - Stream Title"
+msgstr "Katsojia - Suoratoistaja - Suoratoiston nimi"
+
+msgctxt "#30048"
+msgid "Stream Title"
+msgstr "Suoratoiston nimi"
+
+msgctxt "#30049"
+msgid "Streamer"
+msgstr "Suoratoistaja"
+
+msgctxt "#30050"
+msgid "Username"
+msgstr "Käyttäjätunnus"
+
+msgctxt "#30051"
+msgid "Streamer - Game Title - Stream Title"
+msgstr "Suoratoistaja - Pelin nimi - Suoratoiston nimi"
+
+msgctxt "#30052"
+msgid "Enable"
+msgstr "Käytä"
+
+msgctxt "#30053"
+msgid "Password (OAuth Token)"
+msgstr "Salasana (OAuth Token)"
+
+msgctxt "#30054"
+msgid "Language | Streamer - Stream Title"
+msgstr "Kieli | Suoratoistaja - Mediavirran nimi"
+
+# empty strings from id 30055 to 30059
+msgctxt "#30060"
+msgid "Unnamed Streamer"
+msgstr "Nimetön suoratoistaja"
+
+msgctxt "#30061"
+msgid "Untitled Stream"
+msgstr "Nimetön suoratoisto"
+
+msgctxt "#30062"
+msgid "Unknown Number of Viewers"
+msgstr "Tuntematon katsojamäärä"
+
+msgctxt "#30063"
+msgid "Unknown Language"
+msgstr "Tuntematon kieli"
+
+msgctxt "#30064"
+msgid "Unknown Game"
+msgstr "Tuntematon peli"
+
+msgctxt "#30065"
+msgid "Truncate displayed titles"
+msgstr "Lyhennä näytetyt nimet"
+
+msgctxt "#30066"
+msgid "Followed Games"
+msgstr "Seuratut pelit"
+
+msgctxt "#30067"
+msgid "Game Title Viewers | Streamer - Stream Title"
+msgstr "Pelin katsojat | Suoratoistaja - Suoratoiston nimi"
+
+msgctxt "#30068"
+msgid "Content Type"
+msgstr "Sisältötyyppi"
+
+msgctxt "#30069"
+msgid "Files"
+msgstr "Tiedostot"
+
+msgctxt "#30070"
+msgid "TV Shows"
+msgstr "Sarjat"
+
+msgctxt "#30071"
+msgid "Movies"
+msgstr "Elokuvat"
+
+msgctxt "#30072"
+msgid "Episodes"
+msgstr "Jaksot"
+
+msgctxt "#30073"
+msgid "Music Videos"
+msgstr "Musiikkivideot"
+
+msgctxt "#30074"
+msgid "Automatically refresh live preview cache"
+msgstr "Päivitä live-esikatselun välimuisti automaattisesti"
+
+msgctxt "#30075"
+msgid "Install IrcChat (script.ircchat)"
+msgstr "Asenna IcrChat-lisäosa (script.ircchat)"
+
+msgctxt "#30076"
+msgid "General"
+msgstr "Yleiset"
+
+msgctxt "#30077"
+msgid "Play (Choose Quality)"
+msgstr "Toista (valitse laatu)"
+
+msgctxt "#30078"
+msgid "Past Broadcasts"
+msgstr "Menneet lähetykset"
+
+msgctxt "#30079"
+msgid "Video Highlights"
+msgstr "Videon korostukset"
+
+msgctxt "#30080"
+msgid "Could not find any playable urls"
+msgstr "Toistettavia URL-osoitteita ei löytynyt"
+
+msgctxt "#30081"
+msgid "IRC Chat"
+msgstr "IRC Chat"
+
+msgctxt "#30082"
+msgid "Live Previews"
+msgstr "Live-esikatselut"
+
+msgctxt "#30083"
+msgid "Live Preview Settings"
+msgstr "Live-esikatselun asetukset"
+
+msgctxt "#30084"
+msgid "Clear live preview cache"
+msgstr "Tyhjennä live-esikatselun välimuisti"
+
+msgctxt "#30085"
+msgid "***** WARNING *****"
+msgstr "***** VAROITUS *****"
+
+msgctxt "#30086"
+msgid "These settings may allow this add-on to delete database entries and images[CR]for cached live previews."
+msgstr "Nämä asetukset saattavat mahdollistaa tälle lisäosalle puskuroitujen live-esikatseluiden tietokantamerkintöjen ja kuvien poiston."
+
+msgctxt "#30087"
+msgid "Notifications"
+msgstr "Ilmoitukset"
+
+msgctxt "#30088"
+msgid "Game"
+msgstr "Peli"
+
+msgctxt "#30089"
+msgid "Viewers"
+msgstr "Katsojia"
+
+msgctxt "#30090"
+msgid "Language"
+msgstr "Kieli"
+
+msgctxt "#30091"
+msgid "Mature"
+msgstr "Aikuisille"
+
+msgctxt "#30092"
+msgid "Partner"
+msgstr "Kumppani"
+
+msgctxt "#30093"
+msgid "Delay"
+msgstr "Viive"
+
+msgctxt "#30094"
+msgid "Automatic refresh interval (minutes)"
+msgstr "Automaattipäivityksen tiheys (minuuttia)"
+
+msgctxt "#30095"
+msgid "Username is required"
+msgstr "Käyttäjätunnus on pakollinen"
+
+msgctxt "#30096"
+msgid "API"
+msgstr "API"
+
+msgctxt "#30097"
+msgid "OAuth Client ID"
+msgstr "OAuth Client ID"
+
+msgctxt "#30098"
+msgid "Select Video by ID or URL"
+msgstr "Valitse video ID:n tai URL-osoitteen perusteella"
+
+msgctxt "#30099"
+msgid "OAuth Token"
+msgstr "OAuth Token"
+
+msgctxt "#30100"
+msgid "Visit www.twitch.tv/settings/connections and [CR]'Register your application' for an OAuth Client-ID"
+msgstr "Avaa https://dev.twitch.tv/console/apps ja paina \"Register Your Application\" saadaksesi OAuth Client ID:n"
+
+msgctxt "#30101"
+msgid "Visit www.twitchapps.com/tmi to generate an OAuth token"
+msgstr "Luo OAuth Token osoitteessa www.twitchapps.com/tmi"
+
+msgctxt "#30102"
+msgid "Source"
+msgstr "Lähde"
+
+msgctxt "#30103"
+msgid "1080p60"
+msgstr "1080p60"
+
+msgctxt "#30104"
+msgid "1080p30"
+msgstr "1080p30"
+
+msgctxt "#30105"
+msgid "720p60"
+msgstr "720p60"
+
+msgctxt "#30106"
+msgid "720p30"
+msgstr "720p30"
+
+msgctxt "#30107"
+msgid "540p30"
+msgstr "540p30"
+
+msgctxt "#30108"
+msgid "480p30"
+msgstr "480p30"
+
+msgctxt "#30109"
+msgid "360p30"
+msgstr "360p30"
+
+msgctxt "#30110"
+msgid "240p30"
+msgstr "240p30"
+
+msgctxt "#30111"
+msgid "144p30"
+msgstr "144p30"
+
+msgctxt "#30112"
+msgid "Quality may result in best match"
+msgstr "Laatu voi johtaa parhaaseen tulokseen"
+
+msgctxt "#30113"
+msgid "Uploads"
+msgstr "Tallennukset"
+
+msgctxt "#30114"
+msgid "Confirm"
+msgstr "Vahvista"
+
+msgctxt "#30115"
+msgid "Function cache has been reset"
+msgstr "Toimintovälimuisti tyhjennettiin"
+
+msgctxt "#30116"
+msgid "Function cache reset failed"
+msgstr "Toimintovälimuistin tyhjennys epäonnistui"
+
+msgctxt "#30117"
+msgid "Reset function cache?"
+msgstr "Tyhjennetäänkö toimintovälimuisti?"
+
+msgctxt "#30118"
+msgid "Developer"
+msgstr "Kehittäjä"
+
+msgctxt "#30120"
+msgid "Cache"
+msgstr "Välimuisti"
+
+msgctxt "#30121"
+msgid "Cache expire time (minutes)"
+msgstr "Välimuistin erääntymisaika (minuuttia)"
+
+msgctxt "#30122"
+msgid "Reset function cache"
+msgstr "Tyhjennä toimintovälimuisti"
+
+msgctxt "#30123"
+msgid "Items per page"
+msgstr "Kohteita sivulla"
+
+msgctxt "#30124"
+msgid "Video Id/Url"
+msgstr "Videon ID/URL"
+
+msgctxt "#30125"
+msgid "Streams"
+msgstr "Suoratoistot"
+
+msgctxt "#30126"
+msgid "Refresh"
+msgstr "Päivitä"
+
+msgctxt "#30127"
+msgid "Login"
+msgstr "Kirjaudu sisään"
+
+msgctxt "#30128"
+msgid "OAuth token is required"
+msgstr "OAuth Token on pakollinen"
+
+msgctxt "#30129"
+msgid "Error"
+msgstr "Virhe"
+
+msgctxt "#30130"
+msgid "Go to %s"
+msgstr "Avaa \"%s\""
+
+msgctxt "#30131"
+msgid "No results returned"
+msgstr "Ei tuloksia"
+
+msgctxt "#30132"
+msgid "OAuth token is required for access"
+msgstr "OAuth Token tarvitaan käyttöön"
+
+msgctxt "#30133"
+msgid "Authorize"
+msgstr "Todenna"
+
+msgctxt "#30134"
+msgid "Get your OAuth token by logging in/signing up to Twitch.tv here:"
+msgstr "Hanki OAuth Token kirjautumalla/rekisteröitymällä Twitch.tv-palveluun täällä:"
+
+msgctxt "#30135"
+msgid "Get OAuth token"
+msgstr "Hanki OAuth Token"
+
+msgctxt "#30136"
+msgid "Always ask"
+msgstr "Kysy aina"
+
+msgctxt "#30138"
+msgid "*** Do NOT share your OAuth token. ***"
+msgstr "*** ÄLÄ jaa OAuth Tokeniasi. ***"
+
+msgctxt "#30139"
+msgid "Toggle follow"
+msgstr "Kytke seuraaminen"
+
+msgctxt "#30140"
+msgid "Now following %s"
+msgstr "Seurataan käyttäjää %s"
+
+msgctxt "#30141"
+msgid "Unfollowed %s"
+msgstr "Lopetettiin käyttäjän %s seuraaminen"
+
+msgctxt "#30142"
+msgid "Redirect URI"
+msgstr "Uudelleenohjauksen URI"
+
+msgctxt "#30143"
+msgid "Would you like to follow %s?"
+msgstr "Haluatko seurata käyttäjää %s?"
+
+msgctxt "#30144"
+msgid "Are you sure you want to unfollow %s?"
+msgstr "Haluatko varmasti lopettaa käyttäjän %s seuraamisen?"
+
+msgctxt "#30145"
+msgid "Toggle block user"
+msgstr "Kytke käyttäjän esto"
+
+msgctxt "#30146"
+msgid "Blocked %s"
+msgstr "Estettiin käyttäjä %s"
+
+msgctxt "#30147"
+msgid "Unblocked %s"
+msgstr "Sallittiin käyttäjä %s"
+
+msgctxt "#30148"
+msgid "Would you like to block %s?"
+msgstr "Haluatko estää käyttäjän %s?"
+
+msgctxt "#30149"
+msgid "Are you sure you want to unblock %s?"
+msgstr "Haluatko sallia käyttäjän %s?"
+
+msgctxt "#30150"
+msgid "Blacklist %s"
+msgstr "Lisää %s estolistalle"
+
+msgctxt "#30151"
+msgid "Blacklisted %s"
+msgstr "%s lisättiin estolistalle"
+
+msgctxt "#30152"
+msgid "Lists"
+msgstr "Listat"
+
+msgctxt "#30153"
+msgid "Blacklist"
+msgstr "Estolista"
+
+msgctxt "#30154"
+msgid "Remove a user"
+msgstr "Poista käyttäjä"
+
+msgctxt "#30155"
+msgid "Remove a game"
+msgstr "Poista peli"
+
+msgctxt "#30156"
+msgid "Remove all users"
+msgstr "Poista kaikki käyttäjät"
+
+msgctxt "#30157"
+msgid "Remove all games"
+msgstr "Poista kaikki pelit"
+
+msgctxt "#30158"
+msgid "Remove %s from blacklist"
+msgstr "Poista %s estolistalta"
+
+msgctxt "#30159"
+msgid "Removed %s from blacklist"
+msgstr "Poistettiin %s estolistalta"
+
+msgctxt "#30160"
+msgid "Cleared %s %s"
+msgstr "Tyhjennettiin %s %s"
+
+msgctxt "#30161"
+msgid "Are you sure you want to clear %s %s?"
+msgstr "Haluatko varmasti tyhjentää %s %s?"
+
+msgctxt "#30162"
+msgid "Clear list"
+msgstr "Tyhjennä lista"
+
+msgctxt "#30163"
+msgid "Set default quality"
+msgstr "Aseta oletuslaatu"
+
+msgctxt "#30164"
+msgid "Default '%s' quality '%s' set for %s"
+msgstr "Oletusarvoinen '%s' laatu '%s' asetettiin kohteelle %s"
+
+msgctxt "#30165"
+msgid "Removed default '%s' quality for %s"
+msgstr "Poistettiin oletusarvoinen '%s' laatu kohteelta %s"
+
+msgctxt "#30166"
+msgid "Remove %s quality"
+msgstr "Poista %s laatu"
+
+msgctxt "#30167"
+msgid "Default Qualities"
+msgstr "Oletuslaadut"
+
+msgctxt "#30168"
+msgid "Clear default quality"
+msgstr "Tyhjennä oletuslaatu"
+
+msgctxt "#30169"
+msgid "Choose Quality"
+msgstr "Valitse laatu"
+
+msgctxt "#30170"
+msgid "Playlists"
+msgstr "Toistolistat"
+
+msgctxt "#30171"
+msgid "Collections"
+msgstr "Kokoelmat"
+
+msgctxt "#30172"
+msgid "Browse"
+msgstr "Selaa"
+
+msgctxt "#30173"
+msgid "Xbox One"
+msgstr "Xbox One"
+
+msgctxt "#30174"
+msgid "Playstation 4"
+msgstr "PlayStation 4"
+
+msgctxt "#30175"
+msgid "Videos"
+msgstr "Videot"
+
+msgctxt "#30176"
+msgid "Clips"
+msgstr "Leikkeet"
+
+msgctxt "#30177"
+msgid "Invalid OAuth token"
+msgstr "Virheellinen OAuth Token"
+
+msgctxt "#30178"
+msgid "Missing required scopes: %s"
+msgstr "Vaadittuja laajuuksia puuttuu: %s"
+
+msgctxt "#30179"
+msgid "Client id mismatch"
+msgstr "Client ID ei täsmää"
+
+msgctxt "#30180"
+msgid "Go to '%s' - '%s' - '%s' to generate a new token"
+msgstr "Avaa \"%s\" - \"%s\" - \"%s\" luodaksesi uuden Tokenin"
+
+msgctxt "#30181"
+msgid "Are you sure you want to blacklist %s?"
+msgstr "Haluatko varmasti lisätä kohteen %s estolistalle?"
+
+msgctxt "#30184"
+msgid "Change sort by"
+msgstr "Vaihda lajitteluperustetta"
+
+msgctxt "#30185"
+msgid "Change sort direction"
+msgstr "Vaihda lajittelusuuntaa"
+
+msgctxt "#30186"
+msgid "Change period"
+msgstr "Vaihda ajanjaksoa"
+
+msgctxt "#30187"
+msgid "Popular"
+msgstr "Suosittua"
+
+msgctxt "#30188"
+msgid "Views"
+msgstr "Katsottu"
+
+msgctxt "#30189"
+msgid "Add a language"
+msgstr "Lisää kieli"
+
+msgctxt "#30190"
+msgid "Remove a language"
+msgstr "Poista kieli"
+
+msgctxt "#30191"
+msgid "Remove a stream quality"
+msgstr "Poista suoratoistolaatu"
+
+msgctxt "#30192"
+msgid "Remove a video quality"
+msgstr "Poista videolaatu"
+
+msgctxt "#30193"
+msgid "Remove a clip quality"
+msgstr "Poista leikelaatu"
+
+msgctxt "#30194"
+msgid "Remove all stream qualities"
+msgstr "Poista kaikki suoratoistolaadut"
+
+msgctxt "#30195"
+msgid "Remove all video qualities"
+msgstr "Poista kaikki videolaadut"
+
+msgctxt "#30196"
+msgid "Remove all clip qualities"
+msgstr "Poista kaikki leikelaadut"
+
+msgctxt "#30197"
+msgid "Requires confirmation"
+msgstr "Vaatii vahvistuksen"
+
+msgctxt "#30198"
+msgid "Requires subscription to %s"
+msgstr "Vaatii kohteen %s tilauksen"
+
+msgctxt "#30199"
+msgid "Connection failed"
+msgstr "Yhteys epäonnistui"
+
+msgctxt "#30200"
+msgid "No %s found"
+msgstr "Kohdetta %s ei löytynyt"
+
+msgctxt "#30201"
+msgid "Bandwidth"
+msgstr "Kaistanleveys"
+
+msgctxt "#30202"
+msgid "Currently Live"
+msgstr "Live-lähetys on käynnissä"
+
+msgctxt "#30203"
+msgid "Went Live"
+msgstr "Aloitti live-lähetyksen"
+
+msgctxt "#30204"
+msgid "Live notifications"
+msgstr "Live-ilmoitukset"
+
+msgctxt "#30205"
+msgid "Audible"
+msgstr "Kuuluva"
+
+msgctxt "#30206"
+msgid "Playback failed"
+msgstr "Toisto epäonnistui"
+
+msgctxt "#30207"
+msgid "Retrying in %d seconds"
+msgstr "Yritetään uudelleen %d sekunnin kuluttua"
+
+msgctxt "#30208"
+msgid "Attempting to reconnect to %s"
+msgstr "Yritetään yhdistää kohteeseen %s uudelleen"
+
+msgctxt "#30209"
+msgid "Attempt #%d"
+msgstr "Yritys #%d"
+
+msgctxt "#30210"
+msgid "Attempt reconnection to live streams"
+msgstr "Yritä yhdistää live-suoratoistoihin uudelleen"
+
+msgctxt "#30211"
+msgid "Enabled"
+msgstr "Käytössä"
+
+msgctxt "#30212"
+msgid "Failed to connect to Twitch API"
+msgstr "Twitch API -yhteys epäonnistui"
+
+msgctxt "#30213"
+msgid "Followers"
+msgstr "Seuraajia"
+
+msgctxt "#30214"
+msgid "Items"
+msgstr "Kohteita"
+
+msgctxt "#30215"
+msgid "Duration"
+msgstr "Kesto"
+
+msgctxt "#30216"
+msgid "Curated"
+msgstr "Valikoidut"
+
+msgctxt "#30217"
+msgid "Press OK to resolve"
+msgstr "Ratkaise painamalla OK"
+
+msgctxt "#30218"
+msgid "Supported video ids: a123435, c123435, v123435, videos123435[CR]Example urls:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
+msgstr "Tuetut video-ID:t: a123435, c123435, v123435, videos123435[CR]URL-esimerkkejä:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
+
+msgctxt "#30219"
+msgid "Main Menu"
+msgstr "Päävalikko"
+
+msgctxt "#30220"
+msgid "Failed to get url, try again shortly."
+msgstr "URL-osoitteen nouto epäonnistui, yritä hetken kuluttua uudelleen."
+
+msgctxt "#30221"
+msgid "Unknown"
+msgstr "Tuntematon"
+
+msgctxt "#30222"
+msgid "VODCast highlight color"
+msgstr "VODCast-korostusväri"
+
+msgctxt "#30223"
+msgid "Use inputstream.adaptive"
+msgstr "Käytä InputStream Adaptive -lisäosaa"
+
+msgctxt "#30224"
+msgid "Configure inputstream.adaptive"
+msgstr "Määritä InputStream Adaptive -lisäosan asetukset"
+
+msgctxt "#30225"
+msgid "inputstream.adaptive is enabled in the Twitch settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
+msgstr "InputStream Adaptive -lisäosan käyttö Twitch-lisäosan kanssa on otettu käyttöön, mutta InputStream Adaptive ei näytä olevan käytössä. Haluatko ottaa sen käyttöön?"
+
+msgctxt "#30226"
+msgid "The installed inputstream.adaptive add-on does not meet the version requirement(%s), and has been disabled in the Twitch add-on settings."
+msgstr "InputStream Adaptive -lisäosan asennettu versio (%s) ei vastaa vaadittua versiota, joten sen käyttö Twitch-lisäosan kanssa on poistettu käytöstä."
+
+msgctxt "#30227"
+msgid "Revoke Token"
+msgstr "Peru Token"
+
+msgctxt "#30228"
+msgid "Are you sure you want to revoke your OAuth token?"
+msgstr "Haluatko varmasti perua OAuth Tokenisi?"
+
+msgctxt "#30229"
+msgid "OAuth token has been revoked"
+msgstr "OAuth Token peruttiin"
+
+msgctxt "#30230"
+msgid "OAuth token has been updated"
+msgstr "OAuth Token päivitettiin"
+
+msgctxt "#30231"
+msgid "%s started streaming %s"
+msgstr "%s aloitti suoratoiston %s"
+
+msgctxt "#30232"
+msgid "Notify at start"
+msgstr "Ilmoita aloitettassa"
+
+msgctxt "#30233"
+msgid "Group notifications at start"
+msgstr "Ryhmittele aloitusilmoitukset"
+
+msgctxt "#30234"
+msgid "Reset cache on Refresh"
+msgstr "Tyhjennä välimuisti päivitettäessä"
+
+msgctxt "#30235"
+msgid "New search"
+msgstr "Uusi haku"
+
+msgctxt "#30236"
+msgid "Search history size"
+msgstr "Hakuhistorian koko"
+
+msgctxt "#30237"
+msgid "Clear search history?"
+msgstr "Tyhjennetäänkö hakuhistoria?"
+
+msgctxt "#30238"
+msgid "Remove %s from search history?"
+msgstr "Poistetaanko %s hakuhistoriasta?"
+
+msgctxt "#30239"
+msgid "Remove %s"
+msgstr "Poista %s"
+
+msgctxt "#30240"
+msgid "Clear search history"
+msgstr "Tyhjennä hakuhistoria"
+
+msgctxt "#30241"
+msgid "Search history cleared"
+msgstr "Hakuhistoria tyhjennettiin"
+
+msgctxt "#30242"
+msgid "Removed %s from search history"
+msgstr "Poistettiin %s hakuhistoriasta"
+
+msgctxt "#30243"
+msgid "Maintenance"
+msgstr "Ylläpito"
+
+msgctxt "#30244"
+msgid "Search History"
+msgstr "Hakuhistoria"
+
+msgctxt "#30245"
+msgid "Delete streams search history"
+msgstr "Poista suoratoistojen hakuhistoria"
+
+msgctxt "#30246"
+msgid "Delete channels search history"
+msgstr "Poista kanavien hakuhistoria"
+
+msgctxt "#30247"
+msgid "Delete games search history"
+msgstr "Poista pelien hakuhistoria"
+
+msgctxt "#30248"
+msgid "Delete video id/url search history"
+msgstr "Poista videoiden ID-/URL-hakuhistoria"
+
+msgctxt "#30249"
+msgid "Other"
+msgstr "Muut"
+
+msgctxt "#30250"
+msgid "Delete storage.json"
+msgstr "Poista \"storage.json\" -tiedosto"
+
+msgctxt "#30251"
+msgid "Are you sure you want to delete %s?"
+msgstr "Haluatko varmasti poistaa kohteen %s?"
+
+msgctxt "#30252"
+msgid "Deleting %s succeeded"
+msgstr "Kohteen %s poisto onnistui"
+
+msgctxt "#30253"
+msgid "Deleting %s failed"
+msgstr "Kohteen %s poisto epäonnistui"
+
+msgctxt "#30254"
+msgid "Adaptive"
+msgstr "Mukautuva"
+
+msgctxt "#30255"
+msgid "Thumbnail size"
+msgstr "Pienoiskuvien koko"
+
+msgctxt "#30256"
+msgid "Large"
+msgstr "Suuri"
+
+msgctxt "#30257"
+msgid "Medium"
+msgstr "Keskikokoinen"
+
+msgctxt "#30258"
+msgid "Small"
+msgstr "Pieni"
+
+msgctxt "#30259"
+msgid "Live preview refresh interval (minutes)"
+msgstr "Live-esikatselun päivitystiheys (minuuttia)"
+
+msgctxt "#30260"
+msgid "Limit to 30 fps"
+msgstr "Rajoita 30 kuvaan sekunnissa (fps)"
+
+msgctxt "#30261"
+msgid "Private API Credentials"
+msgstr "Yksityiset API-käyttöoikeustiedot"
+
+msgctxt "#30262"
+msgid "Change languages"
+msgstr "Vaihda kieltä"
+
+msgctxt "#30263"
+msgid "Frame rate limit"
+msgstr "Kuvanopeusrajoitus"
+
+msgctxt "#30264"
+msgid "Follow"
+msgstr "Seuraa"
+
+msgctxt "#30265"
+msgid "Unfollow"
+msgstr "Lopeta seuraaminen"
+
+msgctxt "#30266"
+msgid "Add to queue"
+msgstr "Lisää toistojonoon"
+
+msgctxt "#30267"
+msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr "OAuth Token tarvitaan käyttöä varten. Avaa \"%s\" - \"%s\" - \"%s\" luodaksesi sellaisen."
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr "Yksityisen OAuth-todennuksen virhe"
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr "Yksityisen OAuth-todennuksen käyttöoikeustiedot ovat virheelliset. Avaa \"%s\" - \"%s\" - \"%s\" korjataksesi ongelman."
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr "Tilaaja- ja Turbo-edut"
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr "Lisätietoja tällaisen Tokenin hankinnasta saat osoitteesta"
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr "https://twitchaddon.page.link/benefits"
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
+msgstr "OAuth Token on erääntynyt tai virheellinen"

@@ -1,0 +1,1010 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: 2022-05-11 13:14+0000\n"
+"Last-Translator: Minho Park <parkmino@gmail.com>\n"
+"Language-Team: Korean <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/ko_kr/>\n"
+"Language: ko_kr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.12.1\n"
+
+msgctxt "Addon Summary"
+msgid "Twitch video plugin"
+msgstr "트위치 비디오 플러그인"
+
+msgctxt "Addon Description"
+msgid "Watch your favorite gaming streams!"
+msgstr "좋아하는 게임 스트림을 시청하세요!"
+
+msgctxt "#30001"
+msgid "Games"
+msgstr "게임"
+
+msgctxt "#30002"
+msgid "Following"
+msgstr "팔로우"
+
+msgctxt "#30003"
+msgid "Search"
+msgstr "검색"
+
+msgctxt "#30004"
+msgid "Settings"
+msgstr "설정"
+
+msgctxt "#30005"
+msgid "Popular Streams"
+msgstr "인기 스트림"
+
+msgctxt "#30006"
+msgid "Teams"
+msgstr "팀"
+
+msgctxt "#30007"
+msgid "Search for channels"
+msgstr "채널 검색"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "채널"
+
+msgctxt "#30009"
+msgid "Live Channels"
+msgstr "라이브 채널"
+
+msgctxt "#30010"
+msgid "TwitchTV"
+msgstr "트위치 TV"
+
+msgctxt "#30011"
+msgid "next page..."
+msgstr "다음 페이지..."
+
+msgctxt "#30012"
+msgid "-- Currently Live Streams --"
+msgstr "-- 현재 라이브 스트림 --"
+
+msgctxt "#30013"
+msgid "-- Followed Channels --"
+msgstr "-- 팔로우한 채널 --"
+
+# empty strings from id 30014 to 30019
+msgctxt "#30020"
+msgid "Http error"
+msgstr "HTTP 오류"
+
+msgctxt "#30021"
+msgid "No Live Data Found"
+msgstr "라이브 데이터를 찾을 수 없음"
+
+msgctxt "#30022"
+msgid "No archives found for"
+msgstr "다음 아카이브를 찾을 수 없음"
+
+msgctxt "#30023"
+msgid "User Token Error"
+msgstr "사용자 토큰 오류"
+
+msgctxt "#30024"
+msgid "Changed video settings"
+msgstr "변경된 동영상 설정"
+
+msgctxt "#30025"
+msgid "Selected video settings are not available"
+msgstr "선택한 비디오 설정을 사용할 수 없음"
+
+msgctxt "#30026"
+msgid "TwitchApi error"
+msgstr "TwitchApi 오류"
+
+msgctxt "#30027"
+msgid "JSON error"
+msgstr "JSON 오류"
+
+msgctxt "#30028"
+msgid "Failed to parse the result set"
+msgstr "결과 모음을 분석하지 못함"
+
+msgctxt "#30029"
+msgid "Please check your internet connection"
+msgstr "인터넷 연결을 확인하세요"
+
+# empty strings from id 30030 to 30039
+msgctxt "#30040"
+msgid "Video Quality"
+msgstr "비디오 품질"
+
+# empty strings from id 30041 to 30044
+msgctxt "#30045"
+msgid "Display titles"
+msgstr "제목 표시"
+
+msgctxt "#30046"
+msgid "Streamer - Stream Title"
+msgstr "스트리머 - 스트림 제목"
+
+msgctxt "#30047"
+msgid "Viewers - Streamer - Stream Title"
+msgstr "시청자 - 스트리머 - 스트림 제목"
+
+msgctxt "#30048"
+msgid "Stream Title"
+msgstr "스트림 제목"
+
+msgctxt "#30049"
+msgid "Streamer"
+msgstr "스트리머"
+
+msgctxt "#30050"
+msgid "Username"
+msgstr "사용자 이름"
+
+msgctxt "#30051"
+msgid "Streamer - Game Title - Stream Title"
+msgstr "스트리머 - 게임 제목 - 스트림 제목"
+
+msgctxt "#30052"
+msgid "Enable"
+msgstr "사용함"
+
+msgctxt "#30053"
+msgid "Password (OAuth Token)"
+msgstr "비밀번호(OAuth 토큰)"
+
+msgctxt "#30054"
+msgid "Language | Streamer - Stream Title"
+msgstr "언어 | 스트리머 - 스트림 제목"
+
+# empty strings from id 30055 to 30059
+msgctxt "#30060"
+msgid "Unnamed Streamer"
+msgstr "이름 없는 스트리머"
+
+msgctxt "#30061"
+msgid "Untitled Stream"
+msgstr "제목 없는 스트림"
+
+msgctxt "#30062"
+msgid "Unknown Number of Viewers"
+msgstr "알 수 없는 시청자 수"
+
+msgctxt "#30063"
+msgid "Unknown Language"
+msgstr "알 수 없는 언어"
+
+msgctxt "#30064"
+msgid "Unknown Game"
+msgstr "알 수 없는 게임"
+
+msgctxt "#30065"
+msgid "Truncate displayed titles"
+msgstr "표시된 제목 자르기"
+
+msgctxt "#30066"
+msgid "Followed Games"
+msgstr "팔로우한 게임"
+
+msgctxt "#30067"
+msgid "Game Title Viewers | Streamer - Stream Title"
+msgstr "게임 제목 뷰어 | 스트리머 - 스트림 제목"
+
+msgctxt "#30068"
+msgid "Content Type"
+msgstr "컨텐츠 타입"
+
+msgctxt "#30069"
+msgid "Files"
+msgstr "파일"
+
+msgctxt "#30070"
+msgid "TV Shows"
+msgstr "TV 쇼"
+
+msgctxt "#30071"
+msgid "Movies"
+msgstr "영화"
+
+msgctxt "#30072"
+msgid "Episodes"
+msgstr "에피소드"
+
+msgctxt "#30073"
+msgid "Music Videos"
+msgstr "뮤직 비디오"
+
+msgctxt "#30074"
+msgid "Automatically refresh live preview cache"
+msgstr "라이브 미리보기 캐시를 자동으로 새로 고침"
+
+msgctxt "#30075"
+msgid "Install IrcChat (script.ircchat)"
+msgstr "IrcChat 설치 (script.ircchat)"
+
+msgctxt "#30076"
+msgid "General"
+msgstr "일반"
+
+msgctxt "#30077"
+msgid "Play (Choose Quality)"
+msgstr "재생(품질 선택)"
+
+msgctxt "#30078"
+msgid "Past Broadcasts"
+msgstr "지난 방송"
+
+msgctxt "#30079"
+msgid "Video Highlights"
+msgstr "비디오 하이라이트"
+
+msgctxt "#30080"
+msgid "Could not find any playable urls"
+msgstr "재생 가능한 URL을 찾을 수 없습니다"
+
+msgctxt "#30081"
+msgid "IRC Chat"
+msgstr "IRC 채팅"
+
+msgctxt "#30082"
+msgid "Live Previews"
+msgstr "실시간 미리보기"
+
+msgctxt "#30083"
+msgid "Live Preview Settings"
+msgstr "라이브 미리보기 설정"
+
+msgctxt "#30084"
+msgid "Clear live preview cache"
+msgstr "실시간 미리보기 캐시 지우기"
+
+msgctxt "#30085"
+msgid "***** WARNING *****"
+msgstr "***** 경고 *****"
+
+msgctxt "#30086"
+msgid "These settings may allow this add-on to delete database entries and images[CR]for cached live previews."
+msgstr "이 설정을 통해 부가 기능이 캐시된 라이브 미리 보기에 대한 데이터베이스 항목 및 이미지[CR]를 삭제할 수 있습니다."
+
+msgctxt "#30087"
+msgid "Notifications"
+msgstr "알림"
+
+msgctxt "#30088"
+msgid "Game"
+msgstr "게임"
+
+msgctxt "#30089"
+msgid "Viewers"
+msgstr "시청자"
+
+msgctxt "#30090"
+msgid "Language"
+msgstr "언어"
+
+msgctxt "#30091"
+msgid "Mature"
+msgstr "성인"
+
+msgctxt "#30092"
+msgid "Partner"
+msgstr "파트너"
+
+msgctxt "#30093"
+msgid "Delay"
+msgstr "지연"
+
+msgctxt "#30094"
+msgid "Automatic refresh interval (minutes)"
+msgstr "자동 새로 고침 간격(분)"
+
+msgctxt "#30095"
+msgid "Username is required"
+msgstr "사용자 이름이 필요함"
+
+msgctxt "#30096"
+msgid "API"
+msgstr "API"
+
+msgctxt "#30097"
+msgid "OAuth Client ID"
+msgstr "OAuth 클라이언트 ID"
+
+msgctxt "#30098"
+msgid "Select Video by ID or URL"
+msgstr "ID 또는 URL로 동영상 선택"
+
+msgctxt "#30099"
+msgid "OAuth Token"
+msgstr "OAuth 토큰"
+
+msgctxt "#30100"
+msgid "Visit www.twitch.tv/settings/connections and [CR]'Register your application' for an OAuth Client-ID"
+msgstr "www.twitch.tv/settings/connections를 방문하여 [CR]'응용 프로그램 등록'에서 OAuth 클라이언트-ID를 확인하세요"
+
+msgctxt "#30101"
+msgid "Visit www.twitchapps.com/tmi to generate an OAuth token"
+msgstr "www.twitchapps.com/tmi를 방문하여 OAuth 토큰을 생성하세요"
+
+msgctxt "#30102"
+msgid "Source"
+msgstr "근원"
+
+msgctxt "#30103"
+msgid "1080p60"
+msgstr "1080p60"
+
+msgctxt "#30104"
+msgid "1080p30"
+msgstr "1080p30"
+
+msgctxt "#30105"
+msgid "720p60"
+msgstr "720p60"
+
+msgctxt "#30106"
+msgid "720p30"
+msgstr "720p30"
+
+msgctxt "#30107"
+msgid "540p30"
+msgstr "540p30"
+
+msgctxt "#30108"
+msgid "480p30"
+msgstr "480p30"
+
+msgctxt "#30109"
+msgid "360p30"
+msgstr "360p30"
+
+msgctxt "#30110"
+msgid "240p30"
+msgstr "240p30"
+
+msgctxt "#30111"
+msgid "144p30"
+msgstr "144p30"
+
+msgctxt "#30112"
+msgid "Quality may result in best match"
+msgstr "품질이 가장 일치할 수 있음"
+
+msgctxt "#30113"
+msgid "Uploads"
+msgstr "업로드"
+
+msgctxt "#30114"
+msgid "Confirm"
+msgstr "확인"
+
+msgctxt "#30115"
+msgid "Function cache has been reset"
+msgstr "기능 캐시가 재설정됨"
+
+msgctxt "#30116"
+msgid "Function cache reset failed"
+msgstr "기능 캐시 재설정 실패"
+
+msgctxt "#30117"
+msgid "Reset function cache?"
+msgstr "기능 캐시를 재설정할까요?"
+
+msgctxt "#30118"
+msgid "Developer"
+msgstr "개발자"
+
+msgctxt "#30120"
+msgid "Cache"
+msgstr "캐시"
+
+msgctxt "#30121"
+msgid "Cache expire time (minutes)"
+msgstr "캐시 만료 시간(분)"
+
+msgctxt "#30122"
+msgid "Reset function cache"
+msgstr "기능 캐시 재설정"
+
+msgctxt "#30123"
+msgid "Items per page"
+msgstr "페이지 당 항목"
+
+msgctxt "#30124"
+msgid "Video Id/Url"
+msgstr "동영상 ID/URL"
+
+msgctxt "#30125"
+msgid "Streams"
+msgstr "스트림"
+
+msgctxt "#30126"
+msgid "Refresh"
+msgstr "새로 고침"
+
+msgctxt "#30127"
+msgid "Login"
+msgstr "로그인"
+
+msgctxt "#30128"
+msgid "OAuth token is required"
+msgstr "OAuth 토큰 필요함"
+
+msgctxt "#30129"
+msgid "Error"
+msgstr "오류"
+
+msgctxt "#30130"
+msgid "Go to %s"
+msgstr "%s으로 이동"
+
+msgctxt "#30131"
+msgid "No results returned"
+msgstr "결과가 없음"
+
+msgctxt "#30132"
+msgid "OAuth token is required for access"
+msgstr "액세스하려면 OAuth 토큰이 필요합니다"
+
+msgctxt "#30133"
+msgid "Authorize"
+msgstr "승인"
+
+msgctxt "#30134"
+msgid "Get your OAuth token by logging in/signing up to Twitch.tv here:"
+msgstr "여기 Twitch.tv에 로그인/가입하여 OAuth 토큰을 받으세요:"
+
+msgctxt "#30135"
+msgid "Get OAuth token"
+msgstr "OAuth 토큰 가져오기"
+
+msgctxt "#30136"
+msgid "Always ask"
+msgstr "항상 묻기"
+
+msgctxt "#30138"
+msgid "*** Do NOT share your OAuth token. ***"
+msgstr "*** OAuth 토큰을 공유하지 마십시오. ***"
+
+msgctxt "#30139"
+msgid "Toggle follow"
+msgstr "팔로우 전환"
+
+msgctxt "#30140"
+msgid "Now following %s"
+msgstr "%s을(를) 팔로우 중"
+
+msgctxt "#30141"
+msgid "Unfollowed %s"
+msgstr "%s 팔로우 해제"
+
+msgctxt "#30142"
+msgid "Redirect URI"
+msgstr "리디렉션 URI"
+
+msgctxt "#30143"
+msgid "Would you like to follow %s?"
+msgstr "%s을(를) 팔로우할까요?"
+
+msgctxt "#30144"
+msgid "Are you sure you want to unfollow %s?"
+msgstr "%s의 팔로우를 해제할까요?"
+
+msgctxt "#30145"
+msgid "Toggle block user"
+msgstr "사용자 차단 전환"
+
+msgctxt "#30146"
+msgid "Blocked %s"
+msgstr "%s 차단됨"
+
+msgctxt "#30147"
+msgid "Unblocked %s"
+msgstr "%s 차단 해제됨"
+
+msgctxt "#30148"
+msgid "Would you like to block %s?"
+msgstr "%s을(를) 차단할까요?"
+
+msgctxt "#30149"
+msgid "Are you sure you want to unblock %s?"
+msgstr "%s을(를) 차단 해제할까요?"
+
+msgctxt "#30150"
+msgid "Blacklist %s"
+msgstr "블랙리스트 %s"
+
+msgctxt "#30151"
+msgid "Blacklisted %s"
+msgstr "블랙리스트 %s"
+
+msgctxt "#30152"
+msgid "Lists"
+msgstr "목록"
+
+msgctxt "#30153"
+msgid "Blacklist"
+msgstr "블랙리스트"
+
+msgctxt "#30154"
+msgid "Remove a user"
+msgstr "사용자 제거"
+
+msgctxt "#30155"
+msgid "Remove a game"
+msgstr "게임 제거"
+
+msgctxt "#30156"
+msgid "Remove all users"
+msgstr "모든 사용자 제거"
+
+msgctxt "#30157"
+msgid "Remove all games"
+msgstr "모든 게임 제거"
+
+msgctxt "#30158"
+msgid "Remove %s from blacklist"
+msgstr "블랙리스트에서 %s 제거"
+
+msgctxt "#30159"
+msgid "Removed %s from blacklist"
+msgstr "블랙리스트에서 %s을(를) 제거함"
+
+msgctxt "#30160"
+msgid "Cleared %s %s"
+msgstr "%s %s 삭제됨"
+
+msgctxt "#30161"
+msgid "Are you sure you want to clear %s %s?"
+msgstr "%s %s을(를) 지울까요?"
+
+msgctxt "#30162"
+msgid "Clear list"
+msgstr "목록 지우기"
+
+msgctxt "#30163"
+msgid "Set default quality"
+msgstr "기본 품질 설정"
+
+msgctxt "#30164"
+msgid "Default '%s' quality '%s' set for %s"
+msgstr "기본 '%s' 품질 '%s'이(가) %s에 대해 설정됨"
+
+msgctxt "#30165"
+msgid "Removed default '%s' quality for %s"
+msgstr "%s에 대한 기본 '%s' 품질을 제거함"
+
+msgctxt "#30166"
+msgid "Remove %s quality"
+msgstr "%s 품질 제거"
+
+msgctxt "#30167"
+msgid "Default Qualities"
+msgstr "기본 품질"
+
+msgctxt "#30168"
+msgid "Clear default quality"
+msgstr "기본 품질 지우기"
+
+msgctxt "#30169"
+msgid "Choose Quality"
+msgstr "품질 선택"
+
+msgctxt "#30170"
+msgid "Playlists"
+msgstr "재생 목록"
+
+msgctxt "#30171"
+msgid "Collections"
+msgstr "컬렉션"
+
+msgctxt "#30172"
+msgid "Browse"
+msgstr "검색"
+
+msgctxt "#30173"
+msgid "Xbox One"
+msgstr "Xbox One"
+
+msgctxt "#30174"
+msgid "Playstation 4"
+msgstr "Playstation 4"
+
+msgctxt "#30175"
+msgid "Videos"
+msgstr "비디오"
+
+msgctxt "#30176"
+msgid "Clips"
+msgstr "클립"
+
+msgctxt "#30177"
+msgid "Invalid OAuth token"
+msgstr "잘못된 OAuth 토큰"
+
+msgctxt "#30178"
+msgid "Missing required scopes: %s"
+msgstr "필수 범위 누락: %s"
+
+msgctxt "#30179"
+msgid "Client id mismatch"
+msgstr "클라이언트 ID 불일치"
+
+msgctxt "#30180"
+msgid "Go to '%s' - '%s' - '%s' to generate a new token"
+msgstr "'%s' - '%s' - '%s'로 이동하여 새 토큰을 생성하십시오"
+
+msgctxt "#30181"
+msgid "Are you sure you want to blacklist %s?"
+msgstr "%s을(를) 차단할까요?"
+
+msgctxt "#30184"
+msgid "Change sort by"
+msgstr "정렬 기준 변경"
+
+msgctxt "#30185"
+msgid "Change sort direction"
+msgstr "정렬 방향 변경"
+
+msgctxt "#30186"
+msgid "Change period"
+msgstr "기간 변경"
+
+msgctxt "#30187"
+msgid "Popular"
+msgstr "인기"
+
+msgctxt "#30188"
+msgid "Views"
+msgstr "조회수"
+
+msgctxt "#30189"
+msgid "Add a language"
+msgstr "언어 추가"
+
+msgctxt "#30190"
+msgid "Remove a language"
+msgstr "언어 제거"
+
+msgctxt "#30191"
+msgid "Remove a stream quality"
+msgstr "스트림 품질 제거"
+
+msgctxt "#30192"
+msgid "Remove a video quality"
+msgstr "비디오 품질 제거"
+
+msgctxt "#30193"
+msgid "Remove a clip quality"
+msgstr "클립 품질 제거"
+
+msgctxt "#30194"
+msgid "Remove all stream qualities"
+msgstr "모든 스트림 품질 제거"
+
+msgctxt "#30195"
+msgid "Remove all video qualities"
+msgstr "모든 비디오 품질 제거"
+
+msgctxt "#30196"
+msgid "Remove all clip qualities"
+msgstr "모든 클립 품질 제거"
+
+msgctxt "#30197"
+msgid "Requires confirmation"
+msgstr "확인 필요"
+
+msgctxt "#30198"
+msgid "Requires subscription to %s"
+msgstr "%s 구독이 필요함"
+
+msgctxt "#30199"
+msgid "Connection failed"
+msgstr "연결 실패"
+
+msgctxt "#30200"
+msgid "No %s found"
+msgstr "%s을(를) 찾을 수 없음"
+
+msgctxt "#30201"
+msgid "Bandwidth"
+msgstr "대역폭"
+
+msgctxt "#30202"
+msgid "Currently Live"
+msgstr "현재 라이브"
+
+msgctxt "#30203"
+msgid "Went Live"
+msgstr "지난 라이브"
+
+msgctxt "#30204"
+msgid "Live notifications"
+msgstr "라이브 알림"
+
+msgctxt "#30205"
+msgid "Audible"
+msgstr "들림"
+
+msgctxt "#30206"
+msgid "Playback failed"
+msgstr "재생 실패"
+
+msgctxt "#30207"
+msgid "Retrying in %d seconds"
+msgstr "%d 초 후에 재시도"
+
+msgctxt "#30208"
+msgid "Attempting to reconnect to %s"
+msgstr "%s에 다시 연결하는 중"
+
+msgctxt "#30209"
+msgid "Attempt #%d"
+msgstr "#%d 시도"
+
+msgctxt "#30210"
+msgid "Attempt reconnection to live streams"
+msgstr "실시간 스트림에 다시 연결 시도"
+
+msgctxt "#30211"
+msgid "Enabled"
+msgstr "사용함"
+
+msgctxt "#30212"
+msgid "Failed to connect to Twitch API"
+msgstr "Twitch API에 연결하지 못함"
+
+msgctxt "#30213"
+msgid "Followers"
+msgstr "팔로워"
+
+msgctxt "#30214"
+msgid "Items"
+msgstr "아이템"
+
+msgctxt "#30215"
+msgid "Duration"
+msgstr "지속"
+
+msgctxt "#30216"
+msgid "Curated"
+msgstr "큐레이트"
+
+msgctxt "#30217"
+msgid "Press OK to resolve"
+msgstr "확인을 눌러 해결"
+
+msgctxt "#30218"
+msgid "Supported video ids: a123435, c123435, v123435, videos123435[CR]Example urls:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v/113336135?t=1h52m35s"
+msgstr "지원되는 동영상 ID: a123435, c123435, v123435, videos123435[CR]예제 URL:[CR]https://twitch.tv/gamesdonequick...[CR].../v/113336135[CR].../v /113336135?t=1h52m35s"
+
+msgctxt "#30219"
+msgid "Main Menu"
+msgstr "주 메뉴"
+
+msgctxt "#30220"
+msgid "Failed to get url, try again shortly."
+msgstr "URL을 가져오지 못했습니다. 잠시 후 다시 시도하세요."
+
+msgctxt "#30221"
+msgid "Unknown"
+msgstr "알 수 없음"
+
+msgctxt "#30222"
+msgid "VODCast highlight color"
+msgstr "VODCast 하이라이트 색상"
+
+msgctxt "#30223"
+msgid "Use inputstream.adaptive"
+msgstr "inputstream.adaptive 사용"
+
+msgctxt "#30224"
+msgid "Configure inputstream.adaptive"
+msgstr "inputstream.adaptive 구성"
+
+msgctxt "#30225"
+msgid "inputstream.adaptive is enabled in the Twitch settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
+msgstr "inputstream.adaptive는 Twitch 설정에서 사용하지만, inputstream.adaptive는 사용하지 않는 것으로 보입니다. 지금 inputstream.adaptive를 사용할까요?"
+
+msgctxt "#30226"
+msgid "The installed inputstream.adaptive add-on does not meet the version requirement(%s), and has been disabled in the Twitch add-on settings."
+msgstr "설치된 inputstream.adaptive 애드온이 버전 요구 사항(%s)을 충족하지 않으며, Twitch 애드온 설정에서 사용하지 않도록 설정했습니다."
+
+msgctxt "#30227"
+msgid "Revoke Token"
+msgstr "토큰 취소"
+
+msgctxt "#30228"
+msgid "Are you sure you want to revoke your OAuth token?"
+msgstr "OAuth 토큰을 취소할까요?"
+
+msgctxt "#30229"
+msgid "OAuth token has been revoked"
+msgstr "OAuth 토큰이 취소됨"
+
+msgctxt "#30230"
+msgid "OAuth token has been updated"
+msgstr "OAuth 토큰이 업데이트됨"
+
+msgctxt "#30231"
+msgid "%s started streaming %s"
+msgstr "%s이(가) %s 스트리밍을 시작함"
+
+msgctxt "#30232"
+msgid "Notify at start"
+msgstr "시작 시 알림"
+
+msgctxt "#30233"
+msgid "Group notifications at start"
+msgstr "시작 시 그룹 알림"
+
+msgctxt "#30234"
+msgid "Reset cache on Refresh"
+msgstr "새로 고칠 때 캐시 재설정"
+
+msgctxt "#30235"
+msgid "New search"
+msgstr "새로운 검색"
+
+msgctxt "#30236"
+msgid "Search history size"
+msgstr "검색 기록 크기"
+
+msgctxt "#30237"
+msgid "Clear search history?"
+msgstr "검색 기록을 지울까요?"
+
+msgctxt "#30238"
+msgid "Remove %s from search history?"
+msgstr "검색 기록에서 %s을(를) 제거할까요?"
+
+msgctxt "#30239"
+msgid "Remove %s"
+msgstr "%s 제거"
+
+msgctxt "#30240"
+msgid "Clear search history"
+msgstr "검색 기록 지우기"
+
+msgctxt "#30241"
+msgid "Search history cleared"
+msgstr "검색 기록 삭제됨"
+
+msgctxt "#30242"
+msgid "Removed %s from search history"
+msgstr "검색 기록에서 %s을(를) 제거함"
+
+msgctxt "#30243"
+msgid "Maintenance"
+msgstr "유지"
+
+msgctxt "#30244"
+msgid "Search History"
+msgstr "검색 기록"
+
+msgctxt "#30245"
+msgid "Delete streams search history"
+msgstr "스트림 검색 기록 삭제"
+
+msgctxt "#30246"
+msgid "Delete channels search history"
+msgstr "채널 검색 기록 삭제"
+
+msgctxt "#30247"
+msgid "Delete games search history"
+msgstr "게임 검색 기록 삭제"
+
+msgctxt "#30248"
+msgid "Delete video id/url search history"
+msgstr "동영상 ID/URL 검색 기록 삭제"
+
+msgctxt "#30249"
+msgid "Other"
+msgstr "기타"
+
+msgctxt "#30250"
+msgid "Delete storage.json"
+msgstr "storage.json 삭제"
+
+msgctxt "#30251"
+msgid "Are you sure you want to delete %s?"
+msgstr "%s을(를) 지울까요?"
+
+msgctxt "#30252"
+msgid "Deleting %s succeeded"
+msgstr "%s 지움"
+
+msgctxt "#30253"
+msgid "Deleting %s failed"
+msgstr "%s 지우지 못함"
+
+msgctxt "#30254"
+msgid "Adaptive"
+msgstr "적응형"
+
+msgctxt "#30255"
+msgid "Thumbnail size"
+msgstr "썸네일 크기"
+
+msgctxt "#30256"
+msgid "Large"
+msgstr "크게"
+
+msgctxt "#30257"
+msgid "Medium"
+msgstr "중간"
+
+msgctxt "#30258"
+msgid "Small"
+msgstr "작게"
+
+msgctxt "#30259"
+msgid "Live preview refresh interval (minutes)"
+msgstr "실시간 미리보기 새로 고침 간격(분)"
+
+msgctxt "#30260"
+msgid "Limit to 30 fps"
+msgstr "30fps로 제한"
+
+msgctxt "#30261"
+msgid "Private API Credentials"
+msgstr "개인 API 자격 증명"
+
+msgctxt "#30262"
+msgid "Change languages"
+msgstr "언어 변경"
+
+msgctxt "#30263"
+msgid "Frame rate limit"
+msgstr "프레임 속도 제한"
+
+msgctxt "#30264"
+msgid "Follow"
+msgstr "팔로우"
+
+msgctxt "#30265"
+msgid "Unfollow"
+msgstr "언팔로우"
+
+msgctxt "#30266"
+msgid "Add to queue"
+msgstr "순서에 추가"
+
+msgctxt "#30267"
+msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr "액세스하려면 OAuth 토큰이 필요합니다. OAuth 토큰을 만들려면 '%s' - '%s' - '%s'로 이동하세요"
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr "비공개 OAuth 인증 오류"
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr "개인 OAuth 자격 증명이 잘못되었습니다. 문제를 해결하려면 '%s' - '%s' - '%s'(으)로 이동하세요"
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr "가입자 및 터보 혜택"
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr "이 토큰을 얻는 방법에 대한 정보는 다음을 방문하십시오"
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr "https://twitchaddon.page.link/benefits"
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
+msgstr "OAuth 토큰이 만료되었거나 유효하지 않습니다"
+
+#~ msgctxt "#30132"
+#~ msgid "OAuth token is required for access to authorized user functions."
+#~ msgstr "승인된 사용자 기능에 액세스하려면 OAuth 토큰이 필요합니다."
+
+#~ msgctxt "#30005"
+#~ msgid "Featured Streams"
+#~ msgstr "추천 스트림"

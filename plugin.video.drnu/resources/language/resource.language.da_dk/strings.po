@@ -176,6 +176,14 @@ msgctxt "#30535"
 msgid "Request caching"
 msgstr "Brug caching for online requests"
 
+msgctxt "#30536"
+msgid "re-cache cron job"
+msgstr "re-cache cron job"
+
+msgctxt "#30537"
+msgid "cron expression"
+msgstr "cron tidskode"
+
 msgctxt "#30550"
 msgid "IPTV Manager"
 msgstr "IPTV Manager"

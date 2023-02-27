@@ -34,6 +34,7 @@ from inputstreamhelper import Helper
 from resources.lib import tvapi
 from resources.lib import tvgui
 from resources.lib.iptvmanager import IPTVManager
+from resources.lib.cronjob import setup_cronjob
 
 addon = xbmcaddon.Addon()
 get_setting = addon.getSetting
@@ -94,6 +95,7 @@ class DrDkTvAddon(object):
         self.area_item.setArt({'fanart': self.fanart_image, 'icon': str(resources_path/'icons/all.png')})
 
         self._load()
+        setup_cronjob(addon_path, bool_setting, get_setting)
         self._version_change_fixes()
 
     def _save(self):

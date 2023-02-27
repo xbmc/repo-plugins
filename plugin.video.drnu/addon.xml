@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="6.1.0+matrix.1" name="DR TV" provider-name="TermeHansen">
+<addon id="plugin.video.drnu" version="6.1.1+matrix.1" name="DR TV" provider-name="TermeHansen">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.dateutil" version="2.8.2" />
         <import addon="script.module.requests" version="2.27.1+matrix.1" />
         <import addon="script.module.requests-cache" version="0.5.2+matrix.2"/>
         <import addon="script.module.inputstreamhelper" version="0.5.10+matrix.1"/>
+        <import addon="service.cronxbmc" version="0.1.6"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
@@ -31,6 +32,10 @@
             <screenshot>resources/media/Screenshot3.jpg</screenshot>
             <screenshot>resources/media/Screenshot4.jpg</screenshot>
        </assets>
+       <news>[B]Version 6.1.1 - 2023-03-01[/B]
+        - fix bug in token json writing
+        - added cron job
+       </news>
        <news>[B]Version 6.1.0 - 2023-01-18[/B]
         - IPTV Manager integration (CodingBullywug)
         - fix for missing subtitles

@@ -22,6 +22,7 @@
 import hashlib
 import json
 from pathlib import Path
+import pickle
 import re
 import requests
 import requests_cache
@@ -59,7 +60,7 @@ class Api():
         self.expire_seconds = 3600*self.expire_hours if self.expire_hours >= 0 else self.expire_hours
         self.init_sqlite_db()
 
-        self.token_file = Path(f'{self.cachePath}/token.json')
+        self.token_file = Path(f'{self.cachePath}/token.p')
         self._user_token = None
         self.refresh_tokens()
 
@@ -91,8 +92,7 @@ class Api():
         h = hashlib.md5(str(v).encode('utf-8')).hexdigest()
         return '-'.join([h[:8], h[8:12], h[12:16], h[16:20], h[20:32]])
 
-    def read_token(self, s):
-        tokens = json.loads(s)
+    def read_token(self, tokens):
         time_struct = time.strptime(tokens[0]['expirationDate'].split('.')[0], '%Y-%m-%dT%H:%M:%S')
         self._token_expire = datetime(*time_struct[0:6])
         self._user_token = tokens[0]['value']
@@ -106,15 +106,18 @@ class Api():
         u = requests.post(url, json=data, params=params)
         self._user_token = None
         if u.status_code == 200:
-            self.token_file.write_bytes(u.content)
-            self.read_token(u.content)
+            with self.token_file.open('wb') as fh:
+                tokens = json.loads(u.content)
+                pickle.dump(tokens, fh)
+            self.read_token(tokens)
         else:
             raise ApiException(f'Failed to get new token from: {url}')
 
     def refresh_tokens(self):
         if self._user_token is None:
             if self.token_file.exists():
-                self.read_token(self.token_file.read_bytes())
+                with self.token_file.open('rb') as fh:
+                    self.read_token(pickle.load(fh))
             else:
                 self.request_tokens()
         if (self._token_expire - datetime.now()).total_seconds() < 120:

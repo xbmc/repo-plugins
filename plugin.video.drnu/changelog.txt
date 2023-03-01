@@ -1,3 +1,7 @@
+[B]Version 6.1.1 - 2023-03-01[/B]
+- fix bug in token json writing
+- added cron job
+
 [B]Version 6.1.0 - 2023-01-18[/B]
 - IPTV Manager integration (CodingBullywug)
 - fix for missing subtitles

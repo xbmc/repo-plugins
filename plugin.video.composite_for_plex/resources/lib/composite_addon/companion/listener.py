@@ -13,7 +13,6 @@
 
 import re
 import traceback
-
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
 from socketserver import ThreadingMixIn
@@ -45,7 +44,7 @@ class PlexCompanionHandler(BaseHTTPRequestHandler):
         self.client_details = self.settings.companion_receiver()
         BaseHTTPRequestHandler.__init__(self, *args, **kwargs)
 
-    def log_message(self, format, *args):  # pylint: disable=redefined-builtin, unused-argument
+    def log_message(self, format, *args):  # pylint: disable=redefined-builtin
         # I have my own logging, suppressing BaseHTTPRequestHandler's
         # LOG.debug(format % args)
         return True

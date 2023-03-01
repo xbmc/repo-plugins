@@ -15,7 +15,6 @@ import hashlib
 import socket
 import traceback
 import xml.etree.ElementTree as ETree
-
 from urllib.parse import urlparse
 
 import requests

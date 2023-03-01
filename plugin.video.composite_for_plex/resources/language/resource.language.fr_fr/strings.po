@@ -5,17 +5,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Composite\n"
-"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"Report-Msgid-Bugs-To: https://github.com/anxdpanic/plugin.video.composite_for_plex/issues\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
-"PO-Revision-Date: 2022-03-11 09:05+0000\n"
-"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"PO-Revision-Date: 2023-02-23 18:02+0000\n"
+"Last-Translator: skypichat <skypichat@hotmail.fr>\n"
 "Language-Team: French (France) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-composite_for_plex/fr_fr/>\n"
 "Language: fr_fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.15.2\n"
 
 msgctxt "Addon Description"
 msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
@@ -328,7 +328,7 @@ msgstr ""
 
 msgctxt "#30076"
 msgid "Switch User"
-msgstr "Changer d'Utilisateur"
+msgstr "Changer d'utilisateur"
 
 msgctxt "#30077"
 msgid "Enter PIN"
@@ -1041,7 +1041,7 @@ msgstr ""
 
 msgctxt "#30667"
 msgid "TV Shows"
-msgstr "Émission"
+msgstr "Séries TV"
 
 msgctxt "#30668"
 msgid "Photos"
@@ -1125,10 +1125,6 @@ msgstr ""
 
 msgctxt "#30688"
 msgid "Up Next is enabled in the settings, however Up Next appears to be disabled. Would you like to enable Up Next now?"
-msgstr ""
-
-msgctxt "#30689"
-msgid "Up Next requires Kodi 18 or higher"
 msgstr ""
 
 msgctxt "#30690"
@@ -1577,4 +1573,52 @@ msgstr ""
 
 msgctxt "#30801"
 msgid "Detect Servers"
+msgstr ""
+
+msgctxt "#30802"
+msgid "420x420, 320Kbps"
+msgstr ""
+
+msgctxt "#30803"
+msgid "576x320, 720Kbps"
+msgstr ""
+
+msgctxt "#30804"
+msgid "720x480, 1.5Mbps"
+msgstr ""
+
+msgctxt "#30805"
+msgid "1024x768, 2Mbps"
+msgstr ""
+
+msgctxt "#30806"
+msgid "1280x720, 3Mbps"
+msgstr ""
+
+msgctxt "#30807"
+msgid "1280x720, 4Mbps"
+msgstr ""
+
+msgctxt "#30808"
+msgid "1920x1080, 8Mbps"
+msgstr ""
+
+msgctxt "#30809"
+msgid "1920x1080, 10Mbps"
+msgstr ""
+
+msgctxt "#30810"
+msgid "1920x1080, 12Mbps"
+msgstr ""
+
+msgctxt "#30811"
+msgid "1920x1080, 20Mbps"
+msgstr ""
+
+msgctxt "#30812"
+msgid "1920x1080, 40Mbps"
+msgstr ""
+
+msgctxt "#30813"
+msgid "1920x1080, unlimited"
 msgstr ""

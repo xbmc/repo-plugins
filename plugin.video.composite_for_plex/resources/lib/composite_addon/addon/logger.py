@@ -91,7 +91,6 @@ class Logger:
             msg = msg.decode('utf-8')
         except AttributeError:
             pass
-        msg = msg.encode('ascii', 'ignore')
 
         if self.privacy and not no_privacy:
             try:

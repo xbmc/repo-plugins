@@ -12,7 +12,6 @@
 
 import copy
 import json
-
 from urllib.parse import quote
 from urllib.parse import urlparse
 
@@ -44,7 +43,7 @@ def create_gui_item(context, item):
     list_item = item.CONSTRUCTOR(title, offscreen=True)
 
     # Set the properties of the item, such as summary, name, season, etc
-    info_type, info_labels = _get_info(item)
+    _, info_labels = _get_info(item)
 
     is_folder = item.extra.get('type', 'video').lower() in ('file', 'folder')
     info_tag = ListItemInfoTag(list_item)

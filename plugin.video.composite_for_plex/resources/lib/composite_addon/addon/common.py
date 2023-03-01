@@ -12,7 +12,6 @@
 
 import socket
 import sys
-
 from urllib.parse import unquote
 from urllib.parse import urlencode
 

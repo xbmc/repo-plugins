@@ -10,9 +10,10 @@
     See LICENSES/GPL-2.0-or-later.txt for more information.
 """
 
+from urllib.parse import urlencode
+
 import xbmc  # pylint: disable=import-error
 import xbmcgui  # pylint: disable=import-error
-from urllib.parse import urlencode
 
 from ..addon.logger import Logger
 from ..addon.strings import i18n

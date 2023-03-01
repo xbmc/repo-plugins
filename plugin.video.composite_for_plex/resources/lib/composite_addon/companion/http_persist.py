@@ -13,7 +13,6 @@
 
 import socket
 import traceback
-
 from http import client as http_client
 
 from ..addon.logger import Logger

@@ -12,11 +12,11 @@
 
 from urllib.parse import unquote
 
-from infotagger.listitem import ListItemInfoTag  # pylint: disable=import-error
 import xbmc  # pylint: disable=import-error
 import xbmcgui  # pylint: disable=import-error
 import xbmcplugin  # pylint: disable=import-error
 import xbmcvfs  # pylint: disable=import-error
+from infotagger.listitem import ListItemInfoTag  # pylint: disable=import-error
 
 from .common import get_handle
 from .common import is_resuming_video

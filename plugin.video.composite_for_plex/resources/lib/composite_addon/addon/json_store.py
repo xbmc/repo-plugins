@@ -13,8 +13,8 @@ import json
 import os
 from copy import deepcopy
 
-import xbmcvfs  # pylint: disable=import-error
 import xbmc  # pylint: disable=import-error
+import xbmcvfs  # pylint: disable=import-error
 
 from .common import CONFIG
 from .logger import Logger

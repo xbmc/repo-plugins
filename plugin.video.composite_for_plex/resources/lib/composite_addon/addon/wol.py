@@ -14,7 +14,6 @@ import socket
 import struct
 from contextlib import closing
 
-
 from .logger import Logger
 
 LOG = Logger()

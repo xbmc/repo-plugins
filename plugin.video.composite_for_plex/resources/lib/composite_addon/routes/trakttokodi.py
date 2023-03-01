@@ -11,7 +11,6 @@
 
 import string
 import xml.etree.ElementTree as ETree
-
 from urllib.parse import unquote
 
 import xbmc  # pylint: disable=import-error

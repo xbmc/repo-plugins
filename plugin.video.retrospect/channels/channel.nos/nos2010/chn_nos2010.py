@@ -98,6 +98,12 @@ class Channel(chn_class.Channel):
                               parser=[], creator=self.create_api_epg_item,
                               preprocessor=self.extract_epi_epg_items)
 
+        self._add_data_parser("https://start-api.npo.nl/page/franchise", json=True,
+                              name="API based video items for a franchise",
+                              parser=["items"],
+                              creator=self.create_api_video_item,
+                              preprocessor=self.process_franchise_page)
+
         # Alpha listing and paging for that list
         self._add_data_parser("#alphalisting", preprocessor=self.alpha_listing)
 
@@ -837,6 +843,69 @@ class Channel(chn_class.Channel):
 
         return item
 
+    def process_franchise_page(self, data):
+        """ Prepares the main folder for a show.
+
+        Lists the most recent episodes as shown on the website and app, and adds
+        folders for "Extra's" and "Fragmenten".
+
+        :param str data: The retrieve data that was loaded for the current item and URL.
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+
+        """
+
+        items = []
+        has_more_episodes = False
+        has_extras = False
+        has_fragments = False
+
+        data = JsonHelper(data)
+        # Create a list of episodes for the next processing step
+        data.json["items"] = []
+
+        # Parse the franchise JSON to find out which components are available
+        for component in data.get_value("components"):
+            Logger.debug(list(component.keys()))
+            if component["id"] in ("lane-last-published", "grid-episodes"):
+                # The most recent episodes, or the latest season
+                data.json["items"] += component["data"]["items"]
+                if "filter" in component and component["filter"] is not None:
+                    # There is a season filter, so there may be more episodes
+                    has_more_episodes = True
+                if component["data"]["_links"] is not None and "next" in component["data"]["_links"]:
+                    # There is a link to the next page with more episodes
+                    has_more_episodes = True
+            elif component["id"] == "grid-clips":
+                # There is an "Extra's" tab
+                has_extras = True
+            elif component["id"] == "grid-fragments":
+                # There is a "Fragmenten" tab
+                has_fragments = True
+
+        # Obtain the POM ID for this show
+        pom = Regexer.do_regex(r'https://start-api.npo.nl/page/franchise/([^/?]+)',
+                               self.parentItem.url)[0]
+
+        # Generate folders for episodes, extras, and fragments
+        links = [(LanguageHelper.AllEpisodes, "episodes", has_more_episodes),
+                 (LanguageHelper.Extras, "clips", has_extras),
+                 (LanguageHelper.Fragments, "fragments", has_fragments)]
+
+        for (title, path, available) in links:
+            if available:
+                url = 'https://start-api.npo.nl/media/series/%s/%s?pageSize=50' % (pom, path)
+                Logger.debug("Adding link to %s: %s", path, url)
+                title = LanguageHelper.get_localized_string(title)
+                item = FolderItem("\a.: %s :." % title, url, content_type=contenttype.EPISODES)
+                item.complete = True
+                item.HttpHeaders = self.__jsonApiKeyHeader
+                item.dontGroup = True
+                items.append(item)
+
+        return data, items
+
     def extract_api_pages(self, data):
         """ Extracts the JSON tiles data from the HTML.
 
@@ -1443,8 +1512,7 @@ class Channel(chn_class.Channel):
 
     def __get_url_for_pom(self, pom):
         if self.__useJson:
-            url = "https://start-api.npo.nl/media/series/{0}/episodes?pageSize={1}"\
-                .format(pom, self.__pageSize)
+            url = "https://start-api.npo.nl/page/franchise/{0}".format(pom)
             # The Franchise URL will give use seasons
             # url = "https://start-api.npo.nl/page/franchise/{0}".format(result_set['id'])
         else:
@@ -1544,6 +1612,8 @@ class Channel(chn_class.Channel):
         show_title = result_set["title"] or result_set["franchiseTitle"]
         show_title = show_title.strip(":")
         episode_title = result_set["episodeTitle"]
+        if result_set["type"] == "fragment":
+            episode_title = episode_title or result_set["title"]
         if for_epg:
             channel = result_set["channel"]
             name = "{} - {}".format(channel, show_title)

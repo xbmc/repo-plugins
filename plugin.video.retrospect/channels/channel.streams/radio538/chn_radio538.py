@@ -61,7 +61,7 @@ class Channel(chn_class.Channel):
                                 "https://hls.slam.nl/streaming/hls/"],
                                updater=self.update_live_stream_m3u8)
 
-        self._add_data_parser(r"https://radio538-nl.+\.m3u8", match_type=ParserData.MatchRegex,
+        self._add_data_parser(r"https://radio538(-nl)?.+\.m3u8", match_type=ParserData.MatchRegex,
                               updater=self.update_live_stream_m3u8)
 
         self._add_data_parser("https://playerservices.streamtheworld.com/api/livestream-redirect",
@@ -448,10 +448,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        for s, b in M3u8.get_streams_from_m3u8(item.url):
-            item.complete = True
-            item.add_stream(s, b)
-
+        M3u8.update_part_with_m3u8_streams(item, item.url, channel=self, encrypted=False)
         item.complete = True
         return item
 

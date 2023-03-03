@@ -1,6 +1,6 @@
 # Retrospect - Public GIT Repository #
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/retrospect-addon/plugin.video.retrospect)](https://github.com/retrospect-addon/plugin.video.retrospect/releases)
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/retrospect-addon/plugin.video.retrospect/Unit%20Tests/master)](https://github.com/retrospect-addon/plugin.video.retrospect/actions)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/retrospect-addon/plugin.video.retrospect/unittests.yml?branch=master)](https://github.com/retrospect-addon/plugin.video.retrospect/actions)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=retrospect-addon:plugin.video.retrospect&metric=alert_status)](https://sonarcloud.io/dashboard?id=retrospect-addon:plugin.video.retrospect)
 [![License](https://img.shields.io/github/license/retrospect-addon/plugin.video.retrospect)](https://github.com/retrospect-addon/plugin.video.retrospect/blob/master/LICENSE.md)
 [![Python](https://img.shields.io/badge/python-2.7%20%7C%203.6-blue?logo=python)](https://kodi.tv/article/attention-addon-developers-migration-python-3)
@@ -514,3 +514,17 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - Stefan Abramsson
 - Ingos Data o PPDesign
 - Jeroen L. Hendrix
+- Magnus Holmquist
+- Martin Skillingshage
+- Olle Damgaard
+- T Kuipers
+- Ingemar Pahtajärvi
+- Sape Sikkema
+- Ffj Winkelman
+- Magnus Holmquist
+- Pascal Rutgers
+- Ruben Van Dijk
+- Egbert Van der Haring
+- P G M Schoonderwoerd
+- Jonas Koekenbier 
+- Danny Sikke

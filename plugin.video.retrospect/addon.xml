@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.5.13+matrix.1"
+        version="5.5.14+matrix.1"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -122,9 +122,9 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.5.13 - Changelog - 2023-02-01[/B]
+        <news>[B]Retrospect v5.5.14 - Changelog - 2023-03-03[/B]
 
-This version fixes a log-in issue for the NPO Start channel.
+This updates fixes an issue with NPO and adds Extra&#x27;s and Fragments (Clips) for NPO (Thanks to @gvtulder). It also adds the Tweede Kamer Debat TV and fixes an issue with Radio 538 playback.
 
 [B]Framework related[/B]
 _None_
@@ -133,8 +133,10 @@ _None_
 _None_
 
 [B]Channel related[/B]
-* Fixed: NPO video playback broken (Fixes #1672).
-* Fixed: Log-in for NPO Start (See #1672).
+* Fixed: NPO video playback broken (Fixes #1679).
+* Added: Tweede Kamer Debat Direct (Fixes #1394).
+* Added: List NPO Start Extra&#x27;s and Fragmenten (Fixes #1649).
+* Fixed: Some Radio 538 Video streams did not play (Fixes #1685)
 
         </news>
         <assets>

@@ -91,7 +91,7 @@ class NpoStream(object):
                           "&mobile=0" \
                           "&isChromecast=0".format(episode_id, token)
 
-        data = UriHandler.open(stream_data_url, additional_headers=headers)
+        data = UriHandler.open(stream_data_url, additional_headers=headers, data="")
         Logger.trace("Stream Data: %s", data)
         stream_data = JsonHelper(data)
         error = stream_data.get_value("html")

@@ -71,6 +71,9 @@ class LanguageHelper(object):
     Movies = 30365
     AvailableFrom = 30366
     NewOnChannel = 30367
+    Extras = 30368
+    Fragments = 30369
+    AllEpisodes = 30370
 
     ChannelSelection = 30507
     ShortCutName = 30512

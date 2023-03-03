@@ -1,0 +1,18 @@
+{
+  "channels": [
+    {
+      "guid": "7C317B83-899A-4953-AF9E-F98DC9E83F0E",
+      "name": "Tweede Kamer Debat Direct",
+      "description": {
+        "en": "Debates from the Dutch parliament.",
+        "nl": "Debatten uit de Tweede Kamer via Debat Direct."
+      },
+      "icon": "tweedekamer.png",
+      "category": "Video",
+      "channelcode": "tweedekamer",
+      "sortorder": 200,
+      "language": "nl",
+      "fanart": "tweedekamer.jpg"
+    }
+  ]
+}

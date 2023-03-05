@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rivedila7" name="LA7-LA7d" version="6.1.0" provider-name="Luivit, Testato">
+<addon id="plugin.video.rivedila7" name="LA7-LA7d" version="6.2.0" provider-name="Luivit, Testato">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="0.0.0"/>
@@ -29,7 +29,10 @@
       <screenshot>resources/screenshots/screenshot-01.jpg</screenshot>
       <screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
     </assets>
-    <news>6.1.0 (2022-10-29)
+    <news>6.2.0 (2022-03-5)
+- Solved 4h Live delay problem
+
+6.1.0 (2022-10-29)
 - Improved Regex that repair many Programs view
 - Added "Una giornata particolare" to Programs
 - Filter Omnibus News vs Omnibus
@@ -37,9 +40,6 @@
 6.0.2 (2022-05-22)
 - Removed html5lib dependence
 - Fix for UnicodeDecodeError (thanks @marcocalm)
-
-6.0.1 (2021-05-15)
-- inputstream.adaptive-2.6.15 adapt
     </news>
   </extension>
 </addon>

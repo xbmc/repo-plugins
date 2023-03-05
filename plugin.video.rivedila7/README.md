@@ -7,6 +7,9 @@ Live Streaming, Replay the last week, LA7 Prime, On-Demand programs, News & Weat
 "sudo apt install kodi-inputstream-adaptive"
 
 ### Changelog
+6.2.0 (2022-03-5)
+- Solved 4h Live delay problem
+
 6.1.0 (2022-10-29)
 - Improved Regex that repair many Programs view
 - Added "Una giornata particolare" to Programs
@@ -21,7 +24,7 @@ Live Streaming, Replay the last week, LA7 Prime, On-Demand programs, News & Weat
 
 6.0.0 (2021-05-03)
 - Plugin reworked (thanks @CastagnaIT)
-- Temporary fix for Live  parameter suggestedPresentationDelay
+- Temporary fix for Live, parameter suggestedPresentationDelay
 
 5.4.0 (2021-04-17)
 - Temporary fix for decryption on L1 device

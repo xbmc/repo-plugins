@@ -18,7 +18,7 @@ class DeutschlandfunkAddon(AbstractRssAddon):
     URL_STREAMS_RPC = "https://srv.deutschlandradio.de/config-feed.2828.de.rpc"
 
     URL_PODCASTS_DLF = "https://www.deutschlandfunk.de/podcasts"
-    URL_PODCASTS_DLK = "https://www.deutschlandfunkkultur.de/sendungen-podcasts"
+    URL_PODCASTS_DFK = "https://www.deutschlandfunkkultur.de/program-and-podcast"
     URL_PODCASTS_NOVA = "https://www.deutschlandfunknova.de/podcasts"
 
     PATH_DLF = "dlf"
@@ -237,7 +237,7 @@ class DeutschlandfunkAddon(AbstractRssAddon):
                 self._parse_dlf(path, self.URL_PODCASTS_DLF)
 
             elif splitted_path[0] == DeutschlandfunkAddon.PATH_DLK:
-                self._parse_dlf(path, self.URL_PODCASTS_DLK)
+                self._parse_dlf(path, self.URL_PODCASTS_DFK)
 
             elif splitted_path[0] == DeutschlandfunkAddon.PATH_NOVA:
                 self._parse_nova(path)

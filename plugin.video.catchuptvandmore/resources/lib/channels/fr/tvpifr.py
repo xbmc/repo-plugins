@@ -13,9 +13,10 @@ import urlquick
 
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
+from resources.lib import resolver_proxy, web_utils
 
-
-URL_ROOT = 'http://www.tvpi.fr'
+URL_ROOT = 'https://www.sudouest.fr'
+URL_ROOT_TVPI = URL_ROOT + '/lachainetvpi/'
 
 
 @Route.register
@@ -24,78 +25,42 @@ def list_categories(plugin, item_id, **kwargs):
     Build categories listing
     - ...
     """
-    item = Listitem()
-    item.label = 'ACTUS'
-    category_url = URL_ROOT + '/categorie/actus/'
-    item.set_callback(list_videos_actus, item_id=item_id, category_url=category_url)
-    item_post_treatment(item)
-    yield item
+    resp = urlquick.get(URL_ROOT_TVPI)
+    root = resp.parse()
 
-    item = Listitem()
-    item.label = 'VIDÉOS'
-    category_url = URL_ROOT + '/autres-videos/'
-    item.set_callback(list_videos, item_id=item_id, category_url=category_url, page='1')
-    item_post_treatment(item)
-    yield item
+    for category in root.iterfind(".//section[@class=' gutter base-margin-bottom sm-base-padding-right sm-base-padding-left']"):
+        item = Listitem()
+        item.label = category.find(".//div[@class='section-title-text base-margin-bottom']").text
+        item.set_callback(list_videos, category)
+        item_post_treatment(item, is_playable=True, is_downloadable=True)
+        yield item
 
 
 @Route.register
-def list_videos_actus(plugin, item_id, category_url, **kwargs):
-
-    resp = urlquick.get(category_url)
-    root = resp.parse()
-
-    for video_datas in root.iterfind(".//article"):
-        video_title = video_datas.find(".//a[@class='lien']").text
-        video_image = video_datas.find('.//img').get('src')
-        video_url = video_datas.find('.//a').get('href')
-        date_value = video_datas.find(".//header[@class='fullwidth']").text
+def list_videos(plugin, category, **kwargs):
+    for video_datas in category.iterfind(".//article[@class='article ']"):
+        video_title = video_datas.find('.//a').get('title')
+        video_page = URL_ROOT + video_datas.find('.//a').get('href')
+        picture_source = video_datas.find('.//img').get('data-lazy').replace('&quote;', '"')
+        video_image = re.compile(r'src\"(.*?)\"').findall(picture_source)[0].replace('\\', '')
+        video_date = re.compile(r'(.*?)T').findall(video_datas.find(".//meta").get('content'))[0]
 
         item = Listitem()
         item.label = video_title
         item.art['thumb'] = item.art['landscape'] = video_image
-        item.info.date(date_value, "%d-%m-%Y")
-        item.set_callback(
-            get_video_url,
-            item_id=item_id,
-            video_url=video_url)
+        item.info.date(video_date, "%Y-%m-%d")
+        item.set_callback(get_video_url, video_page=video_page)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
-
-
-@Route.register
-def list_videos(plugin, item_id, category_url, page, **kwargs):
-
-    resp = urlquick.get(category_url + 'page/%s' % page)
-    root = resp.parse()
-
-    for video_datas in root.iterfind(".//div[@class='texte']"):
-        video_title = video_datas.find('.//a').text
-        video_url = video_datas.find('.//a').get('href')
-        date_value = video_datas.find(".//span[@class='date']").text
-
-        item = Listitem()
-        item.label = video_title
-        item.info.date(date_value, "%d-%m-%Y")
-        item.set_callback(
-            get_video_url,
-            item_id=item_id,
-            video_url=video_url)
-        item_post_treatment(item, is_playable=True, is_downloadable=True)
-        yield item
-
-    yield Listitem.next_page(item_id=item_id, category_url=category_url, page=str(int(page) + 1))
 
 
 @Resolver.register
-def get_video_url(plugin,
-                  item_id,
-                  video_url,
-                  download_mode=False,
-                  **kwargs):
+def get_video_url(plugin, video_page, download_mode=False, **kwargs):
+    resp = urlquick.get(video_page)
+    video_url = resp.parse().findall(".//figure")[0].find('.//iframe').get('src')
+
     resp = urlquick.get(video_url)
-    final_url = re.compile(
-        r'file\'\: \'(.*?)\'').findall(resp.text)[0]
+    final_url = re.compile(r'\"mp4_720\"\:\"(.*?)\"').findall(resp.text)[0].replace('\\', '')
 
     if download_mode:
         return download.download_video(final_url)
@@ -104,6 +69,10 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
+    try:
+        resp = urlquick.get(URL_ROOT_TVPI, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
+        live_id = re.compile(r'https://www.youtube.com/embed/(.*?)[\?\"]').findall(resp.text)[0]
+    except Exception:
+        live_id = 'iFSO8pJ_bQs'
 
-    resp = urlquick.get(URL_ROOT)
-    return re.compile(r'file\'\: \'(.*?)\'').findall(resp.text)[0]
+    return resolver_proxy.get_stream_youtube(plugin, live_id, download_mode=False)

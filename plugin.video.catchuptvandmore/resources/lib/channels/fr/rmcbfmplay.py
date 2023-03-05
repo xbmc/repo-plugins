@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 import base64
 import json
 import re
-import urllib.parse
+from six.moves import urllib
 from builtins import str
 
 import inputstreamhelper
@@ -24,6 +24,11 @@ from resources.lib.kodi_utils import (INPUTSTREAM_PROP, get_kodi_version,
                                       get_selected_item_info,
                                       get_selected_item_label)
 from resources.lib.menu_utils import item_post_treatment
+
+API_BACKEND = "https://ws-backendtv.rmcbfmplay.com/gaia-core/rest/api/"
+API_CDN_ROOT = "https://ws-cdn.tv.sfr.net/gaia-core/rest/api/"
+
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101 Firefox/96.0"
 
 
 @Route.register
@@ -42,11 +47,13 @@ def get_token():
         + ":"
         + addon.getSetting('rmcbfmplay.password')
     )
-    url = "https://sso-client.sfr.fr/cas/services/rest/3.2/createToken.json"
+
+    url = "https://sso.rmcbfmplay.com/cas/services/rest/3.2/createToken.json"
     params = {"duration": 86400}
     headers = {
         "secret": "Basic Uk1DQkZNUGxheUFuZHJvaWR2MTptb2ViaXVzMTk3MA==",
-        "Authorization": "Basic " + base64.b64encode(autorization.encode("utf-8")).decode("utf-8"),
+        "Authorization": "Basic %s" % base64.b64encode(autorization.encode("utf-8")).decode("utf-8"),
+        "User-Agent": USER_AGENT
     }
 
     resp = urlquick.get(url, params=params, headers=headers).json()
@@ -69,14 +76,6 @@ def get_account_id(token):
     return account_id
 
 
-API_BACKEND = "https://ws-backendtv.rmcbfmplay.com/gaia-core/rest/api/"
-API_CDN_ROOT = "https://ws-cdn.tv.sfr.net/gaia-core/rest/api/"
-
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101 Firefox/96.0"
-token = get_token()
-account_id = get_account_id(token)
-
-
 @Route.register
 def rmcbfmplay_root(plugin, path="", **kwargs):
     """Root menu of the app."""
@@ -88,6 +87,9 @@ def rmcbfmplay_root(plugin, path="", **kwargs):
         url = API_BACKEND + "web/v1/menu/RefMenuItem::rmcgo_home_" + path.replace(' ', '') + "/structure"
     else:
         url = API_BACKEND + "web/v1/menu/RefMenuItem::rmcgo_home/structure"
+
+    token = get_token()
+    account_id = get_account_id(token)
 
     params = {
         "app": "bfmrmc",
@@ -113,6 +115,8 @@ def menu(plugin, path, **kwargs):
 
     if "/spot/" in path or "/tile/" in path:
         url = API_BACKEND + path
+        token = get_token()
+        account_id = get_account_id(token)
         params = {
             "app": "bfmrmc",
             "device": "browser",
@@ -145,8 +149,8 @@ def menu(plugin, path, **kwargs):
     elif "tiles" in resp:
         key = "tiles"
     else:
-        pass
         # print("RESP", resp)
+        pass
 
     for elt in resp[key]:
         types = elt.get('contentType', "")
@@ -237,6 +241,9 @@ def video(plugin, path, title, **kwargs):
     }
 
     url = API_CDN_ROOT + path
+
+    token = get_token()
+    account_id = get_account_id(token)
 
     params = {
         "app": "bfmrmc",
@@ -344,8 +351,6 @@ def playpodcast(plugin, path, title, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    if item_id == 'BFM_régions':
-        item_id = kwargs.get('language', Script.setting['BFM_Régions.language'])
     headers = {
         'User-Agent': USER_AGENT,
         'Content-type': 'application/json',
@@ -353,6 +358,7 @@ def get_live_url(plugin, item_id, **kwargs):
     }
 
     url = "https://ws-backendtv.rmcbfmplay.com/sekai-service-plan/public/v2/service-list"
+    token = get_token()
 
     params = {
         "app": "bfmrmc",
@@ -362,8 +368,13 @@ def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(url, params=params, headers=headers).json()
 
+    if item_id == 'BFM_regions':
+        temp_id = kwargs.get('language', Script.setting['BFM_regions.language'])
+    else:
+        temp_id = item_id
+
     for data in resp:
-        if data["name"] == item_id:
+        if data["name"] == temp_id:
             item = Listitem()
             item.label = get_selected_item_label()
             item.art.update(get_selected_item_art())

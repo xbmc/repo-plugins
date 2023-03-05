@@ -7,11 +7,17 @@
 from __future__ import unicode_literals
 import re
 
-from codequick import Listitem, Resolver, Route
+from codequick import Listitem, Route
 import urlquick
 
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
+
+
+# noinspection PyUnresolvedReferences
+from codequick import Resolver
+
+from resources.lib import resolver_proxy, web_utils
 
 
 # TODO
@@ -116,9 +122,9 @@ def get_video_url(plugin,
 
     if download_mode:
         return download.download_video(stream_url)
-    return stream_url
+    return resolver_proxy.get_stream_with_quality(plugin, stream_url, manifest_type="hls")
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    return URL_STREAM
+    return resolver_proxy.get_stream_with_quality(plugin, URL_STREAM, manifest_type="hls")

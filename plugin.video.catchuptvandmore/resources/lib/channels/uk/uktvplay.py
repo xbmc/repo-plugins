@@ -63,7 +63,7 @@ URL_LIVE_KEY = 'https://mp.simplestream.com/uktv/1.0.4/ss.js'
 URL_LIVE_TOKEN = 'https://sctoken.uktvapi.co.uk/?stream_id=%s'
 # data_channel
 
-URL_LOGIN_TOKEN = 'https://uktvplay.uktv.co.uk/account/static/js/settings/settings.js'
+URL_LOGIN_TOKEN = 'https://s3-eu-west-1.amazonaws.com/uktv-static/fgprod/play/6fc13c8.js'
 
 URL_LOGIN_MODAL = 'https://uktvplay.uktv.co.uk/account/'
 
@@ -304,7 +304,7 @@ def get_live_url(plugin, item_id, **kwargs):
     session_requests.get(URL_LOGIN_MODAL)
 
     resptokenid = session_requests.get(URL_LOGIN_TOKEN)
-    token_id = re.compile(r'tokenId: \'(.*?)\'').findall(resptokenid.text)[2]
+    token_id = re.compile(r'tokenid\":\"(.*?)\"').findall(resptokenid.text)[0]
 
     if plugin.setting.get_string(
             'uktvplay.login') == '' or plugin.setting.get_string(

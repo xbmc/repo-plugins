@@ -129,7 +129,7 @@ menu = {
         'route': '/resources/lib/channels/wo/tv5mondeplus:list_categories',
         'label': 'TV5Monde Plus',
         'thumb': 'channels/wo/tv5mondeplus.png',
-        'fanart': 'channels/wo/tv5mondeplus_fanart.jpg',
+        'fanart': 'channels/wo/tv5mondeplus.png',
         'enabled': True,
         'order': 26
     }

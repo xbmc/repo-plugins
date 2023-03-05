@@ -4,16 +4,15 @@
 
 # This file is part of Catch-up TV & More
 
-from codequick import Listitem, Resolver
+
+from codequick import Listitem
+
+# noinspection PyUnresolvedReferences
+from codequick import Resolver
+
 import urlquick
 import json
-
-import inputstreamhelper
 from resources.lib import resolver_proxy, web_utils
-from resources.lib.kodi_utils import (INPUTSTREAM_PROP, get_selected_item_art,
-                                      get_selected_item_info,
-                                      get_selected_item_label)
-from resources.lib.menu_utils import item_post_treatment
 
 # TODO
 # Add Replay
@@ -27,14 +26,6 @@ URL_API = URL_ROOT + "/servisai/stream_url/live/get_live_url.php?channel=%s"
 def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_API % item_id, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1).json()
+    video_url = resp['response']['data']['content']
 
-    is_helper = inputstreamhelper.Helper("hls")
-    if not is_helper.check_inputstream():
-        return False
-
-    item = Listitem()
-    item.path = resp['response']['data']['content']
-    item.property[INPUTSTREAM_PROP] = "inputstream.adaptive"
-    item.property["inputstream.adaptive.manifest_type"] = "hls"
-
-    return item
+    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

@@ -210,7 +210,6 @@ def add_context_menus_to_item(item, item_id, item_index, menu_id, menu_len, is_p
                         item_id=item_id,
                         menu_id=menu_id)
 
-
     # Add to add-on favourites
     item.context.script(fav.add_item_to_favourites,
                         Script.localize(30800),
@@ -310,8 +309,8 @@ def restore_default_order(plugin):
     """
 
     menus_settings = get_menus_settings()
-    for menu_id, items in menus_settings.items():
-        for item_id, item in items.items():
+    for menu_id, items in list(menus_settings.items()):
+        for item_id, item in list(items.items()):
             item.pop('order', None)
     save_menus_settings(menus_settings)
     plugin.notify(plugin.localize(30407), '')
@@ -326,8 +325,8 @@ def unmask_all_hidden_items(plugin):
     """
 
     menus_settings = get_menus_settings()
-    for menu_id, items in menus_settings.items():
-        for item_id, item in items.items():
+    for menu_id, items in list(menus_settings.items()):
+        for item_id, item in list(items.items()):
             item.pop('hidden', None)
     save_menus_settings(menus_settings)
     plugin.notify(plugin.localize(30408), '')
@@ -346,8 +345,8 @@ def unmask_items(plugin):
     multiselect_map = []
     multiselect_items = []
 
-    for menu_id, items in menus_settings.items():
-        for item_id, item in items.items():
+    for menu_id, items in list(menus_settings.items()):
+        for item_id, item in list(items.items()):
             if not item.get('hidden', False):
                 continue
 

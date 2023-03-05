@@ -17,7 +17,7 @@ from codequick import Listitem, Resolver, Route, Script
 from kodi_six import xbmcgui
 
 from resources.lib import download, web_utils
-from resources.lib.addon_utils import get_item_media_path
+from resources.lib.addon_utils import get_item_media_path, Quality
 from resources.lib.kodi_utils import (INPUTSTREAM_PROP, get_kodi_version,
                                       get_selected_item_art,
                                       get_selected_item_info,
@@ -211,7 +211,6 @@ def list_videos_search(plugin, search_query, item_id, page, **kwargs):
                     item_post_treatment(item)
                     yield item
                 else:
-
                     is_downloadable = False
                     if get_kodi_version() < 18:
                         is_downloadable = True
@@ -618,7 +617,7 @@ def get_final_video_url(plugin, video_assets, asset_type=None):
     final_video_url = all_datas_videos_path[0]
 
     desired_quality = Script.setting.get_string('quality')
-    if desired_quality == "DIALOG":
+    if desired_quality == Quality['DIALOG']:
         selected_item = xbmcgui.Dialog().select(
             plugin.localize(30709),
             all_datas_videos_quality)
@@ -626,7 +625,7 @@ def get_final_video_url(plugin, video_assets, asset_type=None):
             return None
         final_video_url = all_datas_videos_path[selected_item]
 
-    elif desired_quality == "BEST":
+    elif desired_quality == Quality['BEST']:
         url_best = ''
         i = 0
         for data_video in all_datas_videos_quality:
@@ -634,6 +633,14 @@ def get_final_video_url(plugin, video_assets, asset_type=None):
                 url_best = all_datas_videos_path[i]
             i = i + 1
         final_video_url = url_best
+
+    elif desired_quality == Quality['WORST']:
+        final_video_url = all_datas_videos_path[0]
+        i = 0
+        for data_video in all_datas_videos_quality:
+            if 'lq' in data_video:
+                final_video_url = all_datas_videos_path[i]
+                return final_video_url
 
     return final_video_url
 

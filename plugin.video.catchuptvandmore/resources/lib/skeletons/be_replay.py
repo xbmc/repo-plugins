@@ -97,11 +97,11 @@ menu = {
         'enabled': True,
         'order': 19
     },
-    'canalc': {
-        'route': '/resources/lib/channels/be/canalc:list_programs',
-        'label': 'Canal C',
-        'thumb': 'channels/be/canalc.png',
-        'fanart': 'channels/be/canalc_fanart.jpg',
+    'bouke': {
+        'route': '/resources/lib/channels/be/bouke:list_programs',
+        'label': 'Bouké',
+        'thumb': 'channels/be/bouke.png',
+        'fanart': 'channels/be/bouke.png',
         'enabled': True,
         'order': 20
     },
@@ -111,6 +111,14 @@ menu = {
         'thumb': 'channels/be/robtv.png',
         'fanart': 'channels/be/robtv_fanart.jpg',
         'enabled': True,
-        'order': 21,
+        'order': 21
     },
+    'ln24': {
+        'route': '/resources/lib/channels/be/ln24:list_programs',
+        'label': 'LN24',
+        'thumb': 'channels/be/ln24.png',
+        'fanart': 'channels/be/ln24.png',
+        'enabled': True,
+        'order': 22
+    }
 }

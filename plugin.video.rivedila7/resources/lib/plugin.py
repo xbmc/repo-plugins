@@ -62,6 +62,7 @@ def add_directory_item_nodup(parameters, li, title='', folder=True, is_live=Fals
 
 
 def play_dirette(url, live):
+    # xbmc.log('PLAY DIRETTE', xbmc.LOGINFO)
     # xbmc.log('PAGE DIRETTE-----: '+str(url),xbmc.LOGINFO)
 
     url_title = ''
@@ -130,8 +131,6 @@ def play_dirette(url, live):
         if live:
             # listitem.setLabel(titolo_diretta)
             listitem.setInfo('video', {'plot': titolo_diretta, 'title': titolo_diretta})
-            listitem.setProperty('ResumeTime', '206')   # https://github.com/xbmc/inputstream.adaptive/issues/647#issuecomment-825203536
-            listitem.setProperty('TotalTime', '240')
         listitem.setProperty("inputstream", is_helper.inputstream_addon)
         listitem.setProperty("inputstream.adaptive.manifest_type", G.DRM_PROTOCOL)
         listitem.setProperty("inputstream.adaptive.license_type", G.DRM)

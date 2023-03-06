@@ -62,7 +62,7 @@ def add_directory_item_nodup(parameters, li, title='', folder=True, is_live=Fals
 
 
 def play_dirette(url, live):
-    xbmc.log('PLAY DIRETTE', xbmc.LOGINFO)
+    # xbmc.log('PLAY DIRETTE', xbmc.LOGINFO)
     # xbmc.log('PAGE DIRETTE-----: '+str(url),xbmc.LOGINFO)
 
     url_title = ''

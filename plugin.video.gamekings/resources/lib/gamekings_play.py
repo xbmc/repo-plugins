@@ -333,64 +333,91 @@ class Main(object):
                         no_url_found = False
 
 
-            # Maybe it's something like this. Let's try and find the youtube id
-            # <div id="videoplayer" data-autoplay="false" data-type="youtube" data-color="0567D8" data-url='https://youtu.be/hmGe65Wf9Hw' data-thumb='https://www.gamekings.tv/wp-content/uploads/robocop-terminator-mortal-kombat-11-1280x720.jpg' style='background-image: url(https://www.gamekings.tv/wp-content/uploads/robocop-terminator-mortal-kombat-11-1280x720.jpg);'>
-            if have_valid_url:
+        # data-url='https://youtu.be/HKvJtxI0QDE'
+        if have_valid_url:
+            pass
+        else:
+
+            log("trying method ", "2 (youtube)")
+
+            search_for_string = "data-url='https://youtu.be/"
+            start_pos_video_url = html_source.find(search_for_string)
+            if start_pos_video_url >= 0:
+                start_pos_youtube_id = start_pos_video_url + len(search_for_string)
+                end_pos_youtube_id = html_source.find("'", start_pos_youtube_id)
+                youtube_id = html_source[start_pos_youtube_id:end_pos_youtube_id]
+
+            if youtube_id == '':
                 pass
             else:
+                no_url_found = False
+                have_valid_url = True
 
-                log("trying method ", "2 (youtube)")
+                video_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
 
-                # lets ignore some urls
-                html_source = html_source.replace("https://www.youtube.com/gamekingsextra", "")
-                html_source = html_source.replace("https://www.youtube.com/Gamekingsextra", "")
-                html_source = html_source.replace("https://www.youtube.com/user/gamekingsextra/", "")
-                html_source = html_source.replace("https://www.youtube.com/user/Gamekingsextra/", "")
-                html_source = html_source.replace("www.youtube.com/channel/", "")
-                html_source = html_source.replace("www.youtube.com/Channel/", "")
+                # log("video_url", video_url)
 
-                start_pos_video_url = html_source.find("https://www.youtube.com/")
-                # let's try and something else
-                if start_pos_video_url < 0:
-                    start_pos_video_url = html_source.find("https://youtu.be/")
+                log("success with method ", "2a (youtube)")
 
-                if start_pos_video_url >= 0:
-                    # Let's only use the video_url part
-                    html_source_split = str(html_source[start_pos_video_url:]).split()
-                    video_url = html_source_split[0]
 
-                    # Remove the quote on the last position
-                    if video_url.endswith('"') or video_url.endswith("'"):
-                        video_url = video_url[0:len(video_url) - 1]
+        # Maybe it's something like this. Let's try and find the youtube id
+        # <div id="videoplayer" data-autoplay="false" data-type="youtube" data-color="0567D8" data-url='https://youtu.be/hmGe65Wf9Hw' data-thumb='https://www.gamekings.tv/wp-content/uploads/robocop-terminator-mortal-kombat-11-1280x720.jpg' style='background-image: url(https://www.gamekings.tv/wp-content/uploads/robocop-terminator-mortal-kombat-11-1280x720.jpg);'>
+        if have_valid_url:
+            pass
+        else:
 
-                    # log("video_url after split and removing trailing quote", video_url)
+            log("trying method ", "2 (youtube)")
 
-                    if video_url.find("target=") >= 0:
+            # lets ignore some urls
+            html_source = html_source.replace("https://www.youtube.com/gamekingsextra", "")
+            html_source = html_source.replace("https://www.youtube.com/Gamekingsextra", "")
+            html_source = html_source.replace("https://www.youtube.com/user/gamekingsextra/", "")
+            html_source = html_source.replace("https://www.youtube.com/user/Gamekingsextra/", "")
+            html_source = html_source.replace("www.youtube.com/channel/", "")
+            html_source = html_source.replace("www.youtube.com/Channel/", "")
+
+            start_pos_video_url = html_source.find("https://www.youtube.com/")
+            # let's try and something else
+            if start_pos_video_url < 0:
+                start_pos_video_url = html_source.find("https://youtu.be/")
+
+            if start_pos_video_url >= 0:
+                # Let's only use the video_url part
+                html_source_split = str(html_source[start_pos_video_url:]).split()
+                video_url = html_source_split[0]
+
+                # Remove the quote on the last position
+                if video_url.endswith('"') or video_url.endswith("'"):
+                    video_url = video_url[0:len(video_url) - 1]
+
+                # log("video_url after split and removing trailing quote", video_url)
+
+                if video_url.find("target=") >= 0:
+                    pass
+                else:
+                    youtube_id = str(video_url)
+                    # remove stuff that is not the youtube id itself
+                    youtube_id = youtube_id.replace("https://www.youtube.com/embed/", "")
+                    youtube_id = youtube_id.replace("https://www.youtube.com/watch?v=", "")
+                    youtube_id = youtube_id.replace("https://www.youtube.com/watch", "")
+                    youtube_id = youtube_id.replace("https://www.youtube.com/", "")
+                    youtube_id = youtube_id.replace("https://youtu.be/", "")
+                    start_pos_question_mark = youtube_id.find("?")
+                    if start_pos_question_mark >= 0:
+                        youtube_id = youtube_id[0:start_pos_question_mark]
+                    youtube_id = youtube_id.strip()
+
+                    if youtube_id == '':
                         pass
                     else:
-                        youtube_id = str(video_url)
-                        # remove stuff that is not the youtube id itself
-                        youtube_id = youtube_id.replace("https://www.youtube.com/embed/", "")
-                        youtube_id = youtube_id.replace("https://www.youtube.com/watch?v=", "")
-                        youtube_id = youtube_id.replace("https://www.youtube.com/watch", "")
-                        youtube_id = youtube_id.replace("https://www.youtube.com/", "")
-                        youtube_id = youtube_id.replace("https://youtu.be/", "")
-                        start_pos_question_mark = youtube_id.find("?")
-                        if start_pos_question_mark >= 0:
-                            youtube_id = youtube_id[0:start_pos_question_mark]
-                        youtube_id = youtube_id.strip()
+                        no_url_found = False
+                        have_valid_url = True
 
-                        if youtube_id == '':
-                            pass
-                        else:
-                            no_url_found = False
-                            have_valid_url = True
+                        video_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
 
-                            video_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
+                        # log("video_url", video_url)
 
-                            # log("video_url", video_url)
-
-                            log("success with method ", "2 (youtube)")
+                        log("success with method ", "2b (youtube)")
 
 
         if have_valid_url:

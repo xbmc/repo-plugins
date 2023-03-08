@@ -1,3 +1,6 @@
+v1.2.22 (2023-02-26)
+- fixed youtube videos
+
 v1.2.21 (2023-02-21)
 - fixed premium videos
 

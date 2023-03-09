@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.srfplaytv" name="SRF Play TV" version="2.2.2" provider-name="Alexander Seiler">
+<addon id="plugin.video.srfplaytv" name="SRF Play TV" version="2.2.3" provider-name="Alexander Seiler">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
-    <import addon="script.module.srgssr" version="2.2.2"/>
+    <import addon="script.module.srgssr" version="2.2.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
@@ -26,7 +26,10 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=331129</forum>
     <website>https://www.srf.ch/play/tv</website>
     <source>https://github.com/goggle/plugin.video.srfplaytv</source>
-    <news>v2.2.2 (2023-01-29)
+    <news>v2.2.3 (2023-03-09)
+  - Display date and time for scheduled live streams.
+
+v2.2.2 (2023-01-29)
   - Fix homepage and topics menu
 
 v2.2.1 (2022-10-25)

@@ -25,7 +25,12 @@ Get the [Swissinfo video library](https://play.swissinfo.ch/play/tv/) on your TV
    - [script.module.srgssr](https://github.com/goggle/script.module.srgssr)
    - [script.module.youtube_channels](https://github.com/goggle/script.module.youtube_channels)
 
-   Keep in mind that you won't get any automatic updates if you choose this method
+   Keep in mind that you won't get any automatic updates if you choose this method.
+
+## Reporting issues
+
+Please use [this](https://github.com/goggle/script.module.srgssr/issues) issue tracker to report issues.
+
 
 ## Support this plugin
 How you can help improving this plugin:

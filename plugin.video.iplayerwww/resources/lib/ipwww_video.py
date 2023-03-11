@@ -646,6 +646,8 @@ def ParseJSON(programme_data, current_url):
                 if 'props' in item:
                     meta = item.get('meta')
                     item = item.get('props')
+                elif 'contentItemProps' in item:
+                    item = item.get('contentItemProps')
                 ParseSingleJSON(meta, item, name, added_playables, added_directories)
 
         # The next section is for global and channel highlights. They are a bit tricky.

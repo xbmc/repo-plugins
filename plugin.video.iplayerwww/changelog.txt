@@ -1,3 +1,7 @@
+v4.0.7
+More subtitle optimizations.
+Preliminary fix for broken Most Popular (no thumbnails).
+
 v4.0.6
 Optimized subtitle support.
 

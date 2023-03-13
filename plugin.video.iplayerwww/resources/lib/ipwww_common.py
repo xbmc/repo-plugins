@@ -125,8 +125,8 @@ def download_subtitles(url):
                             styles.append((id, '#00ff00'))
                         else:
                             styles.append((id, match.group(1)))
-    # print "Retrieved styles"
-    # print styles
+    # print("Retrieved styles")
+    # print(styles)
 
     # get body
     body = []
@@ -155,10 +155,9 @@ def download_subtitles(url):
                 if match:
                     style = match.group(1)
                 else:
-                    # If no style is found, we assume that s0, the default style should be applied.
-                    # Note this is dangerous, as we also assume that s0 will always be defined.
-                    # If it is not, the add-on will return an error a little later.
-                    style = 's0'
+                    # If no style is found, we assume that first style should be applied.
+                    style = styles[0][0]
+                # print("Style is "+style)
                 start_split = re.split('\.',start)
                 # print start_split
                 if(len(start_split)>1):
@@ -173,54 +172,48 @@ def download_subtitles(url):
 
                 spans = []
                 text = ''
-                spans = re.findall(r'<span.*?style="(.*?)">(.*?)</span>', content, re.DOTALL)
+                default_color = [value for (style_id, value) in styles if style == style_id]
+                spans = re.search(r'<span', content, re.DOTALL)
                 if (spans):
-                    # Old style ttml: Everything is encapsulated in <span style= statements
-                    num_spans = len(spans)
-                    for num, (substyle, line) in enumerate(spans):
-                        if num >0:
-                            text = text+'\n'
-                        color = [value for (style_id, value) in styles if substyle == style_id]
-                        # print substyle, color, line.encode('utf-8')
-                        text = text+'<font color="%s">%s</font>' %  (color[0], line)
-                else:
-                    # New style ttml: style is set per display (or not at all), and within each
-                    # display, there may be several substyles defined by <span tts:color=
+                    cflag = False
                     default_color = [value for (style_id, value) in styles if style == style_id]
-                    spans = re.search(r'<span', content, re.DOTALL)
-                    if (spans):
-                        cflag = False
-                        default_color = [value for (style_id, value) in styles if style == style_id]
+                    if default_color:
                         color = default_color[0]
-                        content_split=p.split(content)
-                        for part in content_split:
-                            if part:
-                                match = re.search(r'color="(.*?)"', part, re.DOTALL)
-                                if match:
-                                    if (match.group(1)=='white'):
-                                        color = '#ffffff'
-                                    elif (match.group(1)=='yellow'):
-                                        color = '#ffff00'
-                                    elif (match.group(1)=='cyan'):
-                                        color = '#00ffff'
-                                    elif (match.group(1)=='lime'):
-                                        color = '#00ff00'
-                                    else:
-                                        color = match.group(1)
-                                    cflag = True
-                                    continue
-                                elif (cflag==False):
-                                    color = default_color[0]
-                                text=text+'<font color="'+color+'">'+part+'</font>'
-                                cflag = False
                     else:
-                        text=text+'<font color="'+default_color[0]+'">'+content+'</font>'
-                    # if style:
-                    #     color = [value for (style_id, value) in styles if style == style_id]
-                    #     text = text+'<font color="%s">%s</font>' %  (color[0], content)
-                    # else:
-                    #      text = text+content
-                    # print substyle, color, line.encode('utf-8')
+                        # Sometimes the style does not have any color information, use the color information of the first style instead.
+                        default_color = [styles[0][1]]
+                        color = default_color[0]
+                    content_split=p.split(content)
+                    for part in content_split:
+                        if part:
+                            match = re.search(r'color="(.*?)"', part, re.DOTALL)
+                            match2 = re.search(r'style="(.*?)"', part, re.DOTALL)
+                            if match:
+                                # New style ttml: style is set per display (or not at all), and within each
+                                # display, there may be several substyles defined by <span tts:color=
+                                if (match.group(1)=='white'):
+                                    color = '#ffffff'
+                                elif (match.group(1)=='yellow'):
+                                    color = '#ffff00'
+                                elif (match.group(1)=='cyan'):
+                                    color = '#00ffff'
+                                elif (match.group(1)=='lime'):
+                                    color = '#00ff00'
+                                else:
+                                    color = match.group(1)
+                                cflag = True
+                                continue
+                            elif match2:
+                                # Old style ttml: Everything is encapsulated in <span style= statements
+                                color = [value for (style_id, value) in styles if match2.group(1) == style_id][0]
+                                cflag = True
+                                continue
+                            elif (cflag==False):
+                                color = default_color[0]
+                            text=text+'<font color="'+color+'">'+part+'</font>'
+                            cflag = False
+                else:
+                    text=text+'<font color="'+default_color[0]+'">'+content+'</font>'
 
                 # Get correct line breaks according to SRT
                 text = re.sub(r'<br\s?/>', '\n', text)

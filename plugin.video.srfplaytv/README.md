@@ -29,6 +29,11 @@ Get the [SRF Play TV media library](https://www.srf.ch/play/tv) on your TV (or a
 
    Keep in mind that you won't get any automatic updates if you choose this method.
 
+## Reporting issues
+
+Please use [this](https://github.com/goggle/script.module.srgssr/issues) issue tracker to report issues.
+
+
 ## Support this plugin
 How you can help improving this plugin:
  - For bugs and feature requests use the [issue tracker](https://github.com/goggle/plugin.video.srfplaytv/issues) on the github page.

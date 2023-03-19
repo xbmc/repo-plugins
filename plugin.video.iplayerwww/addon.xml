@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="4.0.7" provider-name="CaptainT, Cas, ihurst, primaeval">
+<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="4.0.8" provider-name="CaptainT, Cas, ihurst, primaeval">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.7.0"/>
@@ -22,9 +22,10 @@
         <fanart>resources/fanart.jpg</fanart>
     </assets>
     <news>
-v4.0.7
-More subtitle optimizations.
-Preliminary fix for broken Most Popular (no thumbnails).
+v4.0.8
+Further adjustments for new JSON format.
+Fix for pagination in A-Z.
+Updated user agent.
 
 Known issues:
 - No Red Button

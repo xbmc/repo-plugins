@@ -225,12 +225,50 @@ def GetAtoZPage(url):
 
     Creates the list of programmes for one character.
     """
+    pDialog = xbmcgui.DialogProgressBG()
+    pDialog.create(translation(30319))
+
     current_url = 'https://www.bbc.co.uk/iplayer/a-z/%s' % url
+    # print("Opening "+current_url)
     html = OpenURL(current_url)
+
+    total_pages = 1
+    current_page = 1
+    page_range = list(range(1))
 
     json_data = ScrapeJSON(html)
     if json_data:
         ParseJSON(json_data, current_url)
+        if 'pagination' in json_data:
+            current_page = int(json_data['pagination']['currentPage'])
+            total_pages = int(json_data['pagination']['totalPages'])
+            percent = int(100*current_page/total_pages)
+            pDialog.update(percent,translation(30319))
+            # print('Current page: %s'%current_page)
+            # print('Total pages: %s'%total_pages)
+            if current_page<total_pages:
+                split_page_url = current_url.split('?')
+                page_base_url = split_page_url[0]
+                for part in split_page_url[1:len(split_page_url)]:
+                    if not part.startswith('page'):
+                        page_base_url = page_base_url+'?'+part
+                if '?' in page_base_url:
+                    page_base_url = page_base_url+'&page='
+                else:
+                    page_base_url = page_base_url+'?page='
+                for i in range(current_page+1,total_pages+1):
+                    current_url = page_base_url+str(i)
+                    # print("Opening "+current_url)
+                    html = OpenURL(current_url)
+
+                    json_data = ScrapeJSON(html)
+                    if json_data:
+                        ParseJSON(json_data, current_url)
+                    percent = int(100*i/total_pages)
+                    pDialog.update(percent,translation(30319))
+        else:
+            ParseJSON(json_data, current_url)
+    pDialog.close()
 
 
 def GetMultipleEpisodes(url):
@@ -541,7 +579,11 @@ def ParseSingleJSON(meta, item, name, added_playables, added_directories):
             url = item['href'].replace('http://www.bbc.co.uk','')
             url = url.replace('https://www.bbc.co.uk','')
             if url:
-                main_url = 'https://www.bbc.co.uk' + url
+                if meta == 'tleo-item':
+                    episodes_url = 'https://www.bbc.co.uk' + url
+                    print(episodes_url)
+                else:
+                    main_url = 'https://www.bbc.co.uk' + url
 
         if 'secondaryHref' in item:
             # Some strings already contain the full URL, need to work around this.
@@ -577,6 +619,9 @@ def ParseSingleJSON(meta, item, name, added_playables, added_directories):
 
         if 'imageTemplate' in item:
             icon = item['imageTemplate'].replace("{recipe}","832x468")
+        elif 'sources' in item:
+            temp = item['sources'][0]['srcset'].split()[0]
+            icon = re.sub(r'ic/.+?/','ic/832x468/',temp)
 
     if main_url:
         if not main_url in added_playables:
@@ -590,7 +635,9 @@ def ParseSingleJSON(meta, item, name, added_playables, added_directories):
             added_directories.append(main_url)
 
     if episodes_url:
-        if not main_url in added_directories:
+        if not episodes_url in added_directories:
+            if episodes_title=='':
+                episodes_title = title
             AddMenuEntry('[B]%s[/B]' % (episodes_title),
                          episodes_url, 128, icon, synopsis, '')
             added_directories.append(main_url)
@@ -647,6 +694,7 @@ def ParseJSON(programme_data, current_url):
                     meta = item.get('meta')
                     item = item.get('props')
                 elif 'contentItemProps' in item:
+                    meta = item.get('type')
                     item = item.get('contentItemProps')
                 ParseSingleJSON(meta, item, name, added_playables, added_directories)
 
@@ -1047,6 +1095,7 @@ def ScrapeAvailableStreams(url):
     stream_id_ad = []
 
     json_data = ScrapeJSON(html)
+    # print(json.dumps(json_data, indent=2, sort_keys=True))
     if json_data:
         if 'title' in json_data['episode']:
             name = json_data['episode']['title']

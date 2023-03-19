@@ -1,3 +1,8 @@
+v4.0.8
+Further adjustments for new JSON format.
+Fix for pagination in A-Z.
+Updated user agent.
+
 v4.0.7
 More subtitle optimizations.
 Preliminary fix for broken Most Popular (no thumbnails).

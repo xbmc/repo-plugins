@@ -38,7 +38,7 @@ class AmpacheConnect(object):
         self.id=None
         self.rating=None
         #force the latest version on the server
-        self.version="590001"
+        self.version="610001"
 
     def getBaseUrl(self):
         return '/server/xml.server.php'

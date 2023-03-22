@@ -4,7 +4,7 @@ import xbmcaddon
 #service class
 ampache = xbmcaddon.Addon("plugin.audio.ampache")
 
-from utils import get_objectId_from_fileURL
+from resources.lib.utils import get_objectId_from_fileURL
 
 class AmpacheMonitor( xbmc.Monitor ):
 
@@ -47,5 +47,4 @@ class AmpacheMonitor( xbmc.Monitor ):
                     xbmc.log("AmpacheMonitor::no playing file " , xbmc.LOGDEBUG)
                     return
                 xbmc.executebuiltin('RunPlugin(plugin://plugin.audio.ampache/?mode=205)')
-
 

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.audio.ampache" version="2.2.0+matrix.1" name="Ampache" provider-name="lusum">
+<addon id="plugin.audio.ampache" version="3.0.0+matrix.1" name="Ampache" provider-name="lusum">
     <requires>
-        <import addon="script.module.future" version="0.17.1"/>
+        <import addon="script.module.future" version="0.18.2"/>
         <import addon="xbmc.python" version="3.0.0"/>
     </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>audio</provides>
   </extension>
   <extension point="xbmc.python.module" library="resources/lib/"/>
-  <extension point="xbmc.service" library="resources/lib/service.py" />
+  <extension point="xbmc.service" library="service.py" />
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">Stream music from Ampache XML-API</summary>
     <summary lang="de_DE">Streame Musik von der Ampache XML-API</summary>

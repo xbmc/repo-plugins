@@ -1,0 +1,16 @@
+<settings>
+	<category label="30001">
+		<setting id="random_items" type="enum" label="30010" values="3|6|9|12|15|18|21" default="1"/>
+		<setting id="disable_ssl_certs" type="bool" label="30011" default="false"/>
+		<setting id="api-version" type="number" label="30012" default="350001"/>
+		<setting id="old-search-gui" type="bool" label="30013" default="false"/>
+		<setting id="images-long-list" type="bool" label="30014" default="false"/>
+		<setting id="auto-fullscreen" type="bool" label="30015" default="false"/>
+	</category>
+  <category label="30002">
+		<setting id="server.add" type="action" label="30020" action="RunPlugin(plugin://plugin.audio.ampache/?mode=301)"/>
+		<setting id="server.remove" type="action" label="30021" action="RunPlugin(plugin://plugin.audio.ampache/?mode=302)"/>
+		<setting id="server.modify" type="action" label="30022" action="RunPlugin(plugin://plugin.audio.ampache/?mode=303)"/>
+		<setting id="server.switch" type="action" label="30023" action="RunPlugin(plugin://plugin.audio.ampache/?mode=304)"/>
+  </category>
+</settings>

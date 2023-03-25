@@ -20,7 +20,7 @@
     <description lang="en">NRK Web TV gives you the opportunity to watch live TV as well as recordings of many shows.</description>
     <description lang="no">NRK Nett-TV gir deg muligheten til å se mange av NRKs programmer både direkte og i opptak.</description>
     <description lang="it">Questo addon per NRK rende possibile la visione di molti programmi di NRK sia in diretta che in differita.</description>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <license>GNU General Public License v3.0 only</license>
     <forum>https://forum.kodi.tv/showthread.php?tid=52824</forum>
     <source>https://github.com/tamland/xbmc-addon-nrk</source>
     <assets>

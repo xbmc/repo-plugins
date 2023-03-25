@@ -1,0 +1,253 @@
+# Kodi Media Center language file
+# Addon Name: Cinetree
+# Addon id: plugin.video.cinetree
+# Addon Provider: Dimitri Kroon
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2021-09-30 18:44+2\n"
+"PO-Revision-Date: 2021-09-30 18:44+2\n"
+"Last-Translator: Dimitri Kroon\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Settings
+msgctxt "#30100"
+msgid "General"
+msgstr "Algemeen"
+
+msgctxt "#30104"
+msgid "Prefer original trailer"
+msgstr "Geef voorkeur aan originele trailer"
+
+msgctxt "#30105"
+msgid "Log to:"
+msgstr "Log naar:"
+
+msgctxt "#30106"
+msgid "Kodi log,File,No logging"
+msgstr "Kodi log,File,Geen logging"
+
+msgctxt "#30107"
+msgid "Log level"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Cinetree account"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Log in"
+msgstr "Inloggen"
+
+msgctxt "#30202"
+msgid "Log out"
+msgstr "Uitloggen"
+
+msgctxt "#30203"
+msgid "Show password during entry"
+msgstr "Toon wachtwoord tijdens invoer."
+
+# Script texts
+msgctxt "#30501"
+msgid "only today!"
+msgstr "alleen vandaag nog!"
+
+msgctxt "#30502"
+msgid "only {} days left"
+msgstr "nog {} dagen beschikbaar"
+
+msgctxt "#30503"
+msgid "for members"
+msgstr "voor leden"
+
+msgctxt "#30511"
+msgid "price"
+msgstr "prijs"
+
+msgctxt "#30512"
+msgid "members price"
+msgstr "ledenprijs"
+
+# Texts in dialogs
+msgctxt "#30601"
+msgid "Rental film"
+msgstr "Huurfilm"
+
+msgctxt "#30602"
+msgid "You can watch this film after you´ve paid the rent via the Cinetree website, or the official Cinetree Apple/Android app."
+msgstr "U kunt deze film bekijken nadat u het huurbedrag hebt voldaan via de Cinetree-website of de officiële Cinetree Apple/Android app."
+
+msgctxt "#30604"
+msgid "More info"
+msgstr "Meer Informatie"
+
+msgctxt "#30605"
+msgid "Unfortunately, it is not possible to pay for a film directly from kodi.\n\n"
+"You must first rent the film on the Cinetree website, or by using the official Cinetree Android or iOS app. "
+"Usually it is easiest to goto 'Huur' on the website and make a search on the film title. Click on 'Nu kijken' and "
+"make the payment. Now you can close the web browser and watch the film from kodi.\n\nAll rented films are available "
+"in the menu 'My Films > Rented' for the duration of the rental period."
+msgstr "Helaas is het niet mogelijk om het huurbedrag te voldoen vanuit kodi.\n\n"
+"Je moet eerst de film huren via de cinetree-website of met de officiële Android of iOS app. Het is meestal het "
+"makkelijkste om op de website naar 'huur' te gaan en daar de film op titel te zoeken. Klik daarna op 'Nu kijken' "
+"en doe de betaling. Daarna kan je de browser sluiten en kan je de film vanuit kodi bekijken.\n\nAlle gehuurde films "
+"zijn beschikbaar via het menu 'Mijn Films > Gehuurd' voor zolang huurperiode niet verstreken is."
+
+msgctxt "#30606"
+msgid "This film is not available anymore."
+msgstr "Deze film is niet meer beschikbaar"
+
+msgctxt "#30607"
+msgid "Only available with a subscription"
+msgstr "Alleen beschikbaar met abonnement"
+
+msgctxt "#30608"
+msgid "Nothing found"
+msgstr "Niets gevonden"
+
+msgctxt "#30609"
+msgid "Too many results, not everything can be shown"
+msgstr "Teveel zoek resultaten, niet alles kan getoond worden"
+
+msgctxt "#30610"
+msgid "Account error"
+msgstr ""
+
+msgctxt "#30611"
+msgid "You need to log in to your Cinetree account.\n"
+"You can always log in and log out on the Cinetree addon's settings page."
+msgstr "Je moet inloggen op je Cinetree account.\n"
+"Je kunt altijd inloggen en uitloggen op de instellingen pagina van de Cinetree addon."
+
+msgctxt "#30612"
+msgid "Successfully logged in!"
+msgstr "Inloggen is gelukt!"
+
+msgctxt "#30613"
+msgid "Logged out!"
+msgstr "Uitgelogd!"
+
+msgctxt "#30614"
+msgid "User name"
+msgstr "Gebruikersnaam"
+
+msgctxt "#30615"
+msgid "Password"
+msgstr "Wachtwoord"
+
+msgctxt "#30616"
+msgid "Invalid username"
+msgstr "Ongeldige gebruikersnaam"
+
+msgctxt "#30617"
+msgid "Invalid password"
+msgstr "Ongeldig wachtwoord"
+
+msgctxt "#30618"
+msgid "Try again?"
+msgstr "Opnieuw proberen?"
+
+msgctxt "#30619"
+msgid "Resume from"
+msgstr "Hervat vanaf"
+
+msgctxt "#30620"
+msgid "Play from the start"
+msgstr "Speel vanaf het begin"
+
+msgctxt "#30621"
+msgid "Login now"
+msgstr "Nu inloggen"
+
+# Generic button texts
+msgctxt "#30790"
+msgid "OK"
+msgstr ""
+
+msgctxt "#30791"
+msgid "Cancel"
+msgstr "Annuleren"
+
+msgctxt "#30792"
+msgid "Yes"
+msgstr "Ja"
+
+msgctxt "#30793"
+msgid "No"
+msgstr "Nee"
+
+# Menu texts
+msgctxt "#30801"
+msgid "My Films"
+msgstr "Mijn Films"
+
+msgctxt "#30802"
+msgid "Recommended"
+msgstr "Aanbevolen"
+
+msgctxt "#30803"
+msgid "Month selection"
+msgstr "Maand Selectie"
+
+msgctxt "#30804"
+msgid "Rental Films"
+msgstr "Huurfilms"
+
+msgctxt "#30805"
+msgid "Rentals - collections"
+msgstr "Huurfilms - collecties"
+
+msgctxt "#30806"
+msgid "Rentals - genres"
+msgstr "Huurfilms - genres"
+
+msgctxt "#30807"
+msgid "Search"
+msgstr "Zoeken"
+
+msgctxt "#30808"
+msgid "Already Watched"
+msgstr "Reeds Bekeken"
+
+msgctxt "#30809"
+msgid "Rented"
+msgstr "Gehuurd"
+
+# Error texts
+msgctxt "#30901"
+msgid "Access not allowed."
+msgstr "Toegang geweigerd."
+
+msgctxt "#30902"
+msgid "Not logged in at Cinetree."
+msgstr "Niet ingelogd bij Cinetree"
+
+msgctxt "#30903"
+msgid "Login to account failed."
+msgstr "Account login mislukt."
+
+msgctxt "#30904"
+msgid "Service is not available in this area."
+msgstr "Dienst niet beschikbaar in deze regio"
+
+msgctxt "#30905"
+msgid "Connection error: {}."
+msgstr "Verbindingsfout: {}"
+
+msgctxt "#30906"
+msgid "Error parsing data."
+msgstr "Fout bij verwerken van data."
+
+msgctxt "#30920"
+msgid "Received invalid data."
+msgstr "Ongeldige data ontvangen"
+
+msgctxt "#30921"
+msgid "Stream info not available."
+msgstr "Stream info niet beschikbaar."
+

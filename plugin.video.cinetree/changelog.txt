@@ -1,0 +1,7 @@
+v.1.1.0
+- fix: some trailers from vimeo didn't play anymore.
+- fix: English texts for items in meny 'My Film'.
+- A few other minor changes.
+
+v.1.0.0
+- first published version

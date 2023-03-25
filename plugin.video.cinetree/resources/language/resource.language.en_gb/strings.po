@@ -1,0 +1,254 @@
+# Kodi Media Center language file
+# Addon Name: Cinetree
+# Addon id: plugin.video.cinetree
+# Addon Provider: Dimitri Kroon
+
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Settings
+msgctxt "#30100"
+msgid "General"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Prefer original trailer"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Logging"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Log to:"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Kodi log,File,No logging"
+msgstr ""
+
+msgctxt "#30113"
+msgid "Log level"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Cinetree account"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Log in"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Log out"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Show password during entry"
+msgstr ""
+
+
+# Script texts
+msgctxt "#30501"
+msgid "only today!"
+msgstr ""
+
+msgctxt "#30502"
+msgid "only {} days left"
+msgstr ""
+
+msgctxt "#30503"
+msgid "for members"
+msgstr ""
+
+msgctxt "#30511"
+msgid "price"
+msgstr ""
+
+msgctxt "#30512"
+msgid "members price"
+msgstr ""
+
+# Texts in dialogs
+msgctxt "#30601"
+msgid "Rental film"
+msgstr ""
+
+msgctxt "#30602"
+msgid "You can watch this film after you´ve paid the rent via the Cinetree website, or the official Cinetree Apple/Android app."
+msgstr ""
+
+msgctxt "#30604"
+msgid "More info"
+msgstr ""
+
+msgctxt "#30605"
+msgid "Unfortunately, it is not possible to pay for a film directly from kodi.\n\n"
+"You must first rent the film on the Cinetree website, or by using the official Cinetree Android or iOS app. "
+"Usually it is easiest to goto 'Huur' on the website and make a search for the film title. Click on 'Nu kijken' and "
+"make the payment. Now you can close the web browser and watch the film from kodi.\n\nAll rented films are available "
+"in the menu 'My Films'."
+msgstr ""
+
+msgctxt "#30606"
+msgid "This film is not available anymore."
+msgstr ""
+
+msgctxt "#30607"
+msgid "Only available with a subscription"
+msgstr ""
+
+msgctxt "#30608"
+msgid "Nothing found"
+msgstr ""
+
+msgctxt "#30609"
+msgid "Too many results, not everything can be shown"
+msgstr ""
+
+msgctxt "#30610"
+msgid "Account error"
+msgstr ""
+
+msgctxt "#30611"
+msgid "You need to log in to your Cinetree account.\n"
+"You can always log in and log out on the Cinetree addon's settings page."
+msgstr ""
+
+msgctxt "#30612"
+msgid "Successfully logged in!"
+msgstr ""
+
+msgctxt "#30613"
+msgid "Logged out!"
+msgstr ""
+
+msgctxt "#30614"
+msgid "User name"
+msgstr ""
+
+msgctxt "#30615"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30616"
+msgid "Invalid username"
+msgstr ""
+
+msgctxt "#30617"
+msgid "Invalid password"
+msgstr ""
+
+msgctxt "#30618"
+msgid "Try again?"
+msgstr ""
+
+msgctxt "#30619"
+msgid "Resume from"
+msgstr ""
+
+msgctxt "#30620"
+msgid "Play from the start"
+msgstr ""
+
+msgctxt "#30621"
+msgid "Login now"
+msgstr ""
+
+# Generic button texts
+msgctxt "#30790"
+msgid "OK"
+msgstr ""
+
+msgctxt "#30791"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "#30792"
+msgid "YES"
+msgstr ""
+
+msgctxt "#30793"
+msgid "NO"
+msgstr ""
+
+# Menu texts
+msgctxt "#30801"
+msgid "My Films"
+msgstr ""
+
+msgctxt "#30802"
+msgid "Recommended"
+msgstr ""
+
+msgctxt "#30803"
+msgid "Month selection"
+msgstr ""
+
+msgctxt "#30804"
+msgid "Rental Films"
+msgstr ""
+
+msgctxt "#30805"
+msgid "Rentals - collections"
+msgstr ""
+
+msgctxt "#30806"
+msgid "Rentals - genres"
+msgstr ""
+
+msgctxt "#30807"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30808"
+msgid "Already Watched"
+msgstr ""
+
+msgctxt "#30809"
+msgid "Rented"
+msgstr ""
+
+# Error texts
+msgctxt "#30901"
+msgid "Access not allowed."
+msgstr ""
+
+msgctxt "#30902"
+msgid "Not logged in at Cinetree."
+msgstr ""
+
+msgctxt "#30903"
+msgid "Login to account failed."
+msgstr ""
+
+msgctxt "#30904"
+msgid "Service is not available in this area."
+msgstr ""
+
+msgctxt "#30905"
+msgid "Connection error: {}."
+msgstr ""
+
+msgctxt "#30906"
+msgid "Error parsing data."
+msgstr ""
+
+msgctxt "#30920"
+msgid "Received invalid data."
+msgstr ""
+
+msgctxt "#30921"
+msgid "Stream info not available."
+msgstr ""
+

@@ -141,6 +141,8 @@ def download_subtitles(url):
             # print "Found %s frames"%len(frames)
             # print frames
             p = re.compile(r'<span(.*?)>(.*?)</span>')
+            old_split = 999
+            old_mil = 999
             for formatting, content in frames:
                 start = ''
                 match = re.search(r'begin=\"(.*?)"', formatting, re.DOTALL)
@@ -217,7 +219,12 @@ def download_subtitles(url):
 
                 # Get correct line breaks according to SRT
                 text = re.sub(r'<br\s?/>', '\n', text)
-                entry = "%d\n%s,%s --> %s,%s\n%s\n\n" % (index, start_split[0], start_mil_f, end_split[0], end_mil_f, text)
+                if (old_split == start_split[0] and old_mil == start_mil_f):
+                    entry = "%s\n" % (text)
+                else:
+                    entry = "\n%d\n%s,%s --> %s,%s\n%s\n" % (index, start_split[0], start_mil_f, end_split[0], end_mil_f, text)
+                old_split = start_split[0]
+                old_mil = start_mil_f
                 if entry:
                     fw.write(entry)
                     index += 1

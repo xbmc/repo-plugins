@@ -1,3 +1,6 @@
+v4.0.9
+Fix for multiple subtitles with identical timestamps.
+
 v4.0.8
 Further adjustments for new JSON format.
 Fix for pagination in A-Z.

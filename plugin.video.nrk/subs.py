@@ -18,7 +18,7 @@
 import os
 import re
 import xbmc
-import xbmcvfs    # ^zZz^  https://github.com/xbmc/xbmc/pull/19301
+import xbmcvfs    # a99b  https://github.com/xbmc/xbmc/pull/19301
 import requests
 from io import StringIO
 
@@ -34,8 +34,8 @@ def get_subtitles(video_id):
         return None
 
     content = _vtt_to_srt(subs)
-    filename = os.path.join(xbmcvfs.translatePath("special://temp"), 'nor.srt')  # ^zZz^  https://github.com/xbmc/xbmc/pull/19301
-    # filename = os.path.join(xbmc.translatePath("special://temp"), 'nor.srt')  # ^zZz^  https://github.com/xbmc/xbmc/pull/19301
+    filename = os.path.join(xbmcvfs.translatePath("special://temp"), 'nor.srt')  # a99b  https://github.com/xbmc/xbmc/pull/19301
+    # filename = os.path.join(xbmc.translatePath("special://temp"), 'nor.srt')  # a99b  https://github.com/xbmc/xbmc/pull/19301
     with open(filename, 'w' ,encoding='utf8') as f:
         f.write(content)
     return filename

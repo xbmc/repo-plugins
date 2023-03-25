@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+  <section id="plugin.video.nrk">
+    <category id="general" label="" help="">
+      <group id="1" label="">
+        <setting id="showsubtitles" type="integer" label="30002" help="">
+          <level>0</level>
+	  <default>1</default>
+	  <constraints>
+            <options>
+              <option label="30003">0</option>
+              <option label="30004">1</option>
+            </options>
+	  </constraints>
+	  <control type="spinner" format="string"/>
+        </setting>
+        <setting id="text1" type="string" label="30005" help="">
+          <level>0</level>
+          <default/>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="edit" format="string">
+            <heading>30005</heading>
+          </control>
+         </setting>
+        <setting id="text2" type="string" label="30006" help="">
+          <level>0</level>
+          <default/>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="edit" format="string">
+            <heading>30006</heading>
+          </control>
+         </setting>
+      </group>
+    </category>
+  </section>
+</settings>

@@ -272,12 +272,7 @@ def GetAtoZPage(url):
 
 
 def GetMultipleEpisodes(url):
-    html = OpenURL(url)
-    # There is a new layout for episodes, scrape it from the JSON received as part of the page
-    json_data = ScrapeJSON(html)
-
-    if json_data['episode']['tleoId']:
-        GetEpisodes(json_data['episode']['tleoId'])
+    GetEpisodes(url)
 
 
 def ParseAired(aired):
@@ -574,6 +569,10 @@ def ParseSingleJSON(meta, item, name, added_playables, added_directories):
             if 'default' in subitem.get('image'):
                 icon = subitem['image'].get('default').replace("{recipe}","832x468")
     else:
+        if 'count' in item:
+            num_episodes = str(item['count'])
+            if 'id' in item:
+                main_url = 'https://www.bbc.co.uk/iplayer/episodes/' + item.get('id')
         if 'href' in item:
             # Some strings already contain the full URL, need to work around this.
             url = item['href'].replace('http://www.bbc.co.uk','')
@@ -616,17 +615,17 @@ def ParseSingleJSON(meta, item, name, added_playables, added_directories):
 
         if 'synopsis' in item:
             synopsis = item['synopsis']
+        if 'synopses' in item:
+            synopsis = item['synopses']['small']
 
         if 'imageTemplate' in item:
             icon = item['imageTemplate'].replace("{recipe}","832x468")
+        if 'images' in item:
+            icon = item['images']['standard'].replace("{recipe}","832x468")
         elif 'sources' in item:
             temp = item['sources'][0]['srcset'].split()[0]
             icon = re.sub(r'ic/.+?/','ic/832x468/',temp)
 
-    if main_url:
-        if not main_url in added_playables:
-            CheckAutoplay(title , main_url, icon, synopsis, aired)
-            added_playables.append(main_url)
 
     if num_episodes:
         if not main_url in added_directories:
@@ -634,13 +633,17 @@ def ParseSingleJSON(meta, item, name, added_playables, added_directories):
             AddMenuEntry(title, main_url, 139, icon, synopsis, '')
             added_directories.append(main_url)
 
-    if episodes_url:
+    elif episodes_url:
         if not episodes_url in added_directories:
             if episodes_title=='':
                 episodes_title = title
             AddMenuEntry('[B]%s[/B]' % (episodes_title),
                          episodes_url, 128, icon, synopsis, '')
             added_directories.append(main_url)
+    elif main_url:
+        if not main_url in added_playables:
+            CheckAutoplay(title , main_url, icon, synopsis, aired)
+            added_playables.append(main_url)
 
 
 def ParseJSON(programme_data, current_url):
@@ -681,8 +684,13 @@ def ParseJSON(programme_data, current_url):
             current_letter = programme_data['currentLetter']
             programmes = programme_data['programmes'][current_letter]['entities']
         elif 'entities' in programme_data:
-            # This must be a category or most popular.
-            programmes = programme_data['entities']
+            if 'elements' in programme_data['entities']:
+                programmes = programme_data['entities']['elements']
+            if 'results' in programme_data['entities']:
+                programmes = programme_data['entities']['results']
+        elif 'relatedEpisodes' in programme_data:
+            if 'episodes' in programme_data['relatedEpisodes']:
+                programmes = programme_data['relatedEpisodes']['episodes']
         elif 'items' in programme_data:
             # This must be Added or Watching.
             programmes = programme_data['items']

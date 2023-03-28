@@ -1,3 +1,6 @@
+v4.0.10
+Fix for next round of JSON changes.
+
 v4.0.9
 Fix for multiple subtitles with identical timestamps.
 

@@ -1,12 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib.backtothefuture import PY2
-if PY2:
-    # noinspection PyPep8Naming,PyUnresolvedReferences
-    import cPickle as pickle
-else:
-    import pickle
-
+import pickle
 import os
 import io
 import sys

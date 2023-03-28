@@ -5,9 +5,7 @@ import os
 import datetime
 import time
 
-from resources.lib.backtothefuture import PY3
-if PY3:
-    import glob
+import glob
 
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.xbmcwrapper import XbmcWrapper
@@ -260,7 +258,7 @@ class ChannelIndex(object):
 
         # If we run Python 3 and no files are in the Python3 __pycache__ folders a channel is
         # also considered updated.
-        if PY3 and glob.glob(os.path.join(channel_info.path, "__pycache__", "*.py*")):
+        if glob.glob(os.path.join(channel_info.path, "__pycache__", "*.py*")):
             return False
 
         return True

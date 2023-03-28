@@ -4,8 +4,6 @@
 import re
 import json
 
-from resources.lib.backtothefuture import unichr
-
 
 #noinspection PyShadowingNames
 class JsonHelper(object):
@@ -105,7 +103,7 @@ class JsonHelper(object):
 
         hex_string = "0x%s" % (match.group(2))
         hex_value = int(hex_string, 16)
-        return unichr(hex_value)
+        return chr(hex_value)
 
     #noinspection PyUnboundLocalVariable
     def get_value(self, *args, **kwargs):

@@ -12,6 +12,7 @@ from resources.lib.regexer import Regexer
 from resources.lib.urihandler import UriHandler
 from resources.lib.parserdata import ParserData
 from resources.lib.streams.m3u8 import M3u8
+from resources.lib.streams.mpd import Mpd
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.addonsettings import AddonSettings
 from resources.lib.xbmcwrapper import XbmcWrapper
@@ -98,7 +99,7 @@ class Channel(chn_class.Channel):
                               parser=[], creator=self.create_epg_item)
 
         # Generic updater with login
-        self._add_data_parser("https://api.viervijfzes.be/content/",
+        self._add_data_parser("https://api.goplay.be/web/v1/videos/long-form/",
                               updater=self.update_video_item_with_id)
         self._add_data_parser("*", updater=self.update_video_item)
 
@@ -411,7 +412,7 @@ class Channel(chn_class.Channel):
 
         # Could be: title = result_set['episodeTitle']
         title = result_set['title']
-        url = "https://api.viervijfzes.be/content/{}".format(result_set['videoUuid'])
+        url = "https://api.goplay.be/web/v1/videos/long-form/{}".format(result_set['videoUuid'])
         item = MediaItem(title, url)
         item.media_type = mediatype.EPISODE
         item.description = HtmlHelper.to_text(result_set.get("description").replace(">\r\n", ">"))
@@ -504,7 +505,7 @@ class Channel(chn_class.Channel):
 
         # Set the correct url
         # videoId = resultSet["videoid"]
-        # item.url = "https://api.viervijfzes.be/content/%s" % (videoId, )
+        # item.url = "https://api.goplay.be/web/v1/videos/long-form/%s" % (videoId, )
         time_stamp = result_set.get("timestamp")
         if time_stamp:
             date_time = DateHelper.get_date_from_posix(int(result_set["timestamp"]))
@@ -543,7 +544,7 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
-        # https://api.viervijfzes.be/content/c58996a6-9e3d-4195-9ecf-9931194c00bf
+        # https://api.goplay.be/web/v1/videos/long-form/c58996a6-9e3d-4195-9ecf-9931194c00bf
         # videoId = item.url.split("/")[-1]
         # url = "%s/video/v3/embed/%s" % (self.baseUrl, videoId,)
         url = item.url
@@ -578,7 +579,7 @@ class Channel(chn_class.Channel):
         return self.__update_video(item, data)
 
     def __update_video(self, item, data):
-        if not item.url.startswith("https://api.viervijfzes.be/content/"):
+        if not item.url.startswith("https://api.goplay.be/web/v1/videos/long-form/"):
             regex = 'data-video-*id="([^"]+)'
             m3u8_url = Regexer.do_regex(regex, data)[-1]
             # we either have an URL now or an uuid
@@ -587,7 +588,7 @@ class Channel(chn_class.Channel):
 
         if ".m3u8" not in m3u8_url:
             Logger.info("Not a direct M3u8 file. Need to log in")
-            url = "https://api.viervijfzes.be/content/%s" % (m3u8_url, )
+            url = "https://api.goplay.be/web/v1/videos/long-form/%s" % (m3u8_url, )
 
             # We need to log in
             if not self.loggedOn:
@@ -595,12 +596,25 @@ class Channel(chn_class.Channel):
 
             # add authorization header
             authentication_header = {
-                "authorization": self.__idToken,
+                "authorization": "Bearer {}".format(self.__idToken),
                 "content-type": "application/json"
             }
             data = UriHandler.open(url, additional_headers=authentication_header)
             json_data = JsonHelper(data)
-            m3u8_url = json_data.get_value("video", "S")
+            m3u8_url = json_data.get_value("manifestUrls", "hls")
+
+            # If there's no m3u8 URL, try to use a SSAI stream instead
+            if m3u8_url is None and json_data.get_value("ssai") is not None:
+                return self.__get_ssai_streams(item, json_data)
+
+            elif m3u8_url is None and json_data.get_value('message') is not None:
+                error_message = json_data.get_value('message')
+                if error_message == "Locked":
+                    # set it for the error statistics
+                    item.isGeoLocked = True
+                Logger.info("No stream manifest found: {}".format(error_message))
+                item.complete = False
+                return item
 
         # Geo Locked?
         if "/geo/" in m3u8_url.lower():
@@ -610,4 +624,24 @@ class Channel(chn_class.Channel):
         item.complete = M3u8.update_part_with_m3u8_streams(
             item, m3u8_url, channel=self, encrypted=False)
 
+    def __get_ssai_streams(self, item, json_data):
+        Logger.info("No stream data found, trying SSAI data")
+        content_source_id = json_data.get_value("ssai", "contentSourceID")
+        video_id = json_data.get_value("ssai", "videoID")
+
+        streams_url = 'https://dai.google.com/ondemand/dash/content/{}/vid/{}/streams'.format(
+            content_source_id, video_id)
+        streams_input_data = {
+            "api-key": "null"
+        }
+        streams_headers = {
+            "content-type": "application/json"
+        }
+        data = UriHandler.open(streams_url, data=streams_input_data, additional_headers=streams_headers)
+        json_data = JsonHelper(data)
+        mpd_url = json_data.get_value("stream_manifest")
+
+        stream = item.add_stream(mpd_url, 0)
+        Mpd.set_input_stream_addon_input(stream)
+        item.complete = True
         return item

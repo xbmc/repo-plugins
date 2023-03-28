@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-03 23:13+0000\n"
+"PO-Revision-Date: 2023-03-06 11:18+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Spanish (Spain) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/es_es/>\n"
 "Language: es_es\n"
@@ -12,55 +12,55 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.15.2\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
-msgstr ""
+msgstr "Retrospect te permite ver reposiciones de programas de televisión disponibles a través de sus emisoras oficiales."
 
 msgctxt "Addon Description"
 msgid "Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
-msgstr ""
+msgstr "Retrospect utiliza los sitios web oficiales y las transmisiones de libre acceso de diferentes empresas de radiodifusión (principalmente holandesas, belgas, británicas, noruegas y suecas) para poner a disposición de la plataforma Kodi sus episodios reemitidos/actualizados. [CR][CR]Algunos canales que se incluyen son: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT. Now, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info y Ons. [CR][CR]Encontrará más información en https://github.com/retrospect-addon/plugin.video.retrospect o en la wiki de Retrospect en https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
 
 msgctxt "Addon Disclaimer"
 msgid "Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched using this add-on or any consequences of using this add-on to watch content via the content providers' platforms."
-msgstr ""
+msgstr "Retrospect se suministra tal cual. No asumimos ninguna responsabilidad por los posibles (aunque muy improbables) daños causados a su sistema. Tampoco nos hacemos responsables de los contenidos que se puedan ver con este add-on ni de las consecuencias de utilizar este add-on para ver contenidos a través de las plataformas de los proveedores de contenidos."
 
 msgctxt "#30000"
 msgid "Stream Quality"
-msgstr ""
+msgstr "Calidad de la transmisión"
 
 msgctxt "#30001"
 msgid "Low"
-msgstr ""
+msgstr "Bajo"
 
 msgctxt "#30002"
 msgid "Medium"
-msgstr ""
+msgstr "Medio"
 
 msgctxt "#30003"
 msgid "High"
-msgstr ""
+msgstr "Alta"
 
 msgctxt "#30004"
 msgid "Release channel for update notifications"
-msgstr ""
+msgstr "Canal de publicación de notificaciones de actualización"
 
 msgctxt "#30005"
 msgid "Stable"
-msgstr ""
+msgstr "Estable"
 
 msgctxt "#30006"
 msgid "Alpha/Beta"
-msgstr ""
+msgstr "Alfa/Beta"
 
 msgctxt "#30007"
 msgid "via other add-on"
-msgstr ""
+msgstr "mediante otro add-on"
 
 msgctxt "#30008"
 msgid "Retrospect"
-msgstr ""
+msgstr "Retrospectiva"
 
 msgctxt "#30009"
 msgid "General"
@@ -72,55 +72,55 @@ msgstr "Canales"
 
 msgctxt "#30011"
 msgid "Requires restart of Retrospect to take effect."
-msgstr ""
+msgstr "Es necesario reiniciar Retrospect para que surta efecto."
 
 msgctxt "#30012"
 msgid "Login Failed"
-msgstr ""
+msgstr "Error de inicio de sesión"
 
 msgctxt "#30013"
 msgid "Could not log on to the selected channel."
-msgstr ""
+msgstr "No se ha podido iniciar sesión en el canal seleccionado."
 
 msgctxt "#30015"
 msgid "via missing add-on"
-msgstr ""
+msgstr "mediante el add-on que falta"
 
 msgctxt "#30016"
 msgid "Sort by"
-msgstr ""
+msgstr "Ordenar por"
 
 msgctxt "#30017"
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 msgctxt "#30018"
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 msgctxt "#30019"
 msgid "Show DRM/Paid warning before playback"
-msgstr ""
+msgstr "Mostrar aviso de DRM/Pago antes de la reproducción"
 
 msgctxt "#30020"
 msgid "Maximum Stream Bitrate [COLOR=gray](0=disabled)[/COLOR]"
-msgstr ""
+msgstr "Máxima Tasa de Bits de Transmisión[COLOR=gray](0=desactivado)[/COLOR]"
 
 msgctxt "#30021"
 msgid "Enable subtitles by default when available"
-msgstr ""
+msgstr "Activar subtítulos por defecto cuando estén disponibles"
 
 msgctxt "#30022"
 msgid "If available"
-msgstr ""
+msgstr "Si está disponible"
 
 msgctxt "#30023"
 msgid "Never show"
-msgstr ""
+msgstr "No mostrar nunca"
 
 msgctxt "#30024"
 msgid "Recent"
-msgstr ""
+msgstr "Reciente"
 
 msgctxt "#30025"
 msgid "None"
@@ -128,19 +128,19 @@ msgstr "Ninguno"
 
 msgctxt "#30026"
 msgid "Group list if it exceeds # folders"
-msgstr ""
+msgstr "Agrupar lista si supera # carpetas"
 
 msgctxt "#30027"
 msgid "Autorun Retrospect on Kodi start"
-msgstr ""
+msgstr "Autoejecutar Retrospect al iniciar Kodi"
 
 msgctxt "#30028"
 msgid "Proxy"
-msgstr ""
+msgstr "Proxy"
 
 msgctxt "#30029"
 msgid "Server"
-msgstr ""
+msgstr "Servidor"
 
 msgctxt "#30030"
 msgid "Port"
@@ -148,23 +148,23 @@ msgstr "Puerto"
 
 msgctxt "#30031"
 msgid "Cache HTTP(S) requests"
-msgstr ""
+msgstr "Caché de peticiones HTTP(S)"
 
 msgctxt "#30032"
 msgid "Channel Settings"
-msgstr ""
+msgstr "Ajustes de canal"
 
 msgctxt "#30033"
 msgid "Expires at"
-msgstr ""
+msgstr "Expira en"
 
 msgctxt "#30034"
 msgid "No channel selected"
-msgstr ""
+msgstr "Ningún canal seleccionado"
 
 msgctxt "#30035"
 msgid "Username"
-msgstr "Usuario"
+msgstr "Nombre de usuario"
 
 msgctxt "#30036"
 msgid "Password"
@@ -172,15 +172,15 @@ msgstr "Contraseña"
 
 msgctxt "#30037"
 msgid "Use 'Up Next' to play next episode"
-msgstr ""
+msgstr "Usar 'Up Next' para reproducir el siguiente episodio"
 
 msgctxt "#30038"
 msgid "'Up Next' add-on settings"
-msgstr ""
+msgstr "Ajustes del add-on 'Up Next'"
 
 msgctxt "#30039"
 msgid "Up Next integration"
-msgstr ""
+msgstr "Integración de Up Next"
 
 msgctxt "#30040"
 msgid "Channels"
@@ -188,60 +188,60 @@ msgstr "Canales"
 
 msgctxt "#30041"
 msgid "Show \"All Favourites\" in main Channel listing"
-msgstr ""
+msgstr "Mostrar \"Todos los favoritos\" en la lista principal de canales"
 
 msgctxt "#30042"
 msgid "Enabled"
-msgstr ""
+msgstr "Activado"
 
 msgctxt "#30043"
 msgid "Folder prefix"
-msgstr ""
+msgstr "Prefijo de carpeta"
 
 msgctxt "#30044"
 msgid "Kodi update required"
-msgstr ""
+msgstr "Actualización de Kodi requerida"
 
 msgctxt "#30045"
 msgid "This feature of Retrospect requires a more recent version of Kodi. Please install the most recent version of your current Kodi build. Depending on your installation this can either be a 'stable' or 'nightly' build."
-msgstr ""
+msgstr "Esta función de Retrospect requiere una versión más reciente de Kodi. Por favor, instala la versión más reciente de tu compilación actual de Kodi. Dependiendo de tu instalación puede ser una compilación 'estable' o 'nocturna'."
 
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
-msgstr ""
+msgstr "Filtros DRM/Geobloqueo/Premium"
 
 msgctxt "#30047"
 msgid "Cannot playback this YouTube Video because the Kodi YouTube add-on is missing."
-msgstr ""
+msgstr "No se puede reproducir este vídeo de YouTube porque falta el add-on de YouTube de Kodi."
 
 # empty string with id 30047
 msgctxt "#30048"
 msgid "Log level"
-msgstr ""
+msgstr "Nivel de registro"
 
 msgctxt "#30049"
 msgid "Premium/Paid"
-msgstr ""
+msgstr "Premium/De pago"
 
 msgctxt "#30050"
 msgid "DRM Protected"
-msgstr ""
+msgstr "Protegido por DRM"
 
 msgctxt "#30051"
 msgid "Hidden item"
-msgstr ""
+msgstr "Elemento oculto"
 
 msgctxt "#30052"
 msgid "Send usage statistics"
-msgstr ""
+msgstr "Enviar estadísticas de uso"
 
 msgctxt "#30053"
 msgid "Appearance"
-msgstr ""
+msgstr "Apariencia"
 
 msgctxt "#30054"
 msgid "[COLOR gold][B]The Retrospect Password Vault[/B][/COLOR][CR]'The Vault' enables storing sensitive data in a more secure way. How does this work:[CR][CR]* The users selects a simple Vault PIN that is used as the main code for accessing the Vault data.[CR]* This PIN can be rather simple and short and easy to remember: for example 3145.[CR]* That PIN is then used to generate a much stronger and complexer encryption key using Scrypt.[CR]* As a user you will not need to know this complex key.[CR][CR][COLOR gold][B]Storing sensitive data[/B][/COLOR][CR]Whenever sensitive data is being [B]stored[/B]:[CR][CR]* The user will be asked for their PIN first.[CR]* After a correct PIN the actual data to store will be asked.[CR][CR][COLOR gold][B]Retrieving sensitive data[/B][/COLOR][CR]Whenever sensitive data is being [B]retrieved[/B]:[CR][CR]* The user will only be asked for their PIN.[CR]* That PIN is then used to securely fetch the actual data.[CR][CR][COLOR gold][B]Resetting the Vault[/B][/COLOR][CR]If a user has forgotten the PIN, there is no way of recovering the data. The only solution is to reset the Vault and pick a new PIN and generate a new Vault Key. [B]This will invalidate all encrypted data[/B]. This data must be entered again."
-msgstr ""
+msgstr "[COLOR gold][B]Bóveda de Contraseñas de Retrospect[/B][/COLOR][CR]'La Bóveda' permite almacenar datos confidenciales de forma más segura. Cómo funciona:[CR][CR]* Los usuarios seleccionan un sencillo PIN de Bóveda que se utiliza como código principal para acceder a los datos de la Bóveda.[CR]* Este PIN puede ser bastante simple, corto y fácil de recordar: por ejemplo 3145.[CR]* Ese PIN se utiliza entonces para generar una clave de cifrado mucho más fuerte y compleja utilizando Scrypt.[CR]* Como usuario, no necesitará conocer esta clave compleja.[CR][CR][COLOR gold][B]Almacenamiento de datos confidenciales[/B][/COLOR][CR]Siempre que se [B]almacenen[/B] datos confidenciales:[CR][CR]* Primero se le pedirá al usuario su PIN.[CR]* Tras introducir correctamente el PIN, se le pedirán los datos a almacenar.[CR][CR][COLOR gold][B]Recuperación de datos confidenciales[/B][/COLOR][CR]Siempre que se [B]recuperen[/B] datos confidenciales:[CR][CR]* Sólo se le pedirá al usuario su PIN.[CR]* El PIN se utiliza para obtener los datos reales de forma segura.[CR][CR][COLOR gold][B]Restablecer la Bóveda[/B][/COLOR][CR]Si un usuario ha olvidado el PIN, no hay forma de recuperar los datos. La única solución es restablecer la Bóveda, elegir un nuevo PIN y generar una nueva Clave de Bóveda. [B]Esto invalidará todos los datos encriptados[/B]. Estos datos deberán ser introducidos de nuevo."
 
 msgctxt "#30055"
 msgid "Advanced"
@@ -249,148 +249,148 @@ msgstr "Avanzado"
 
 msgctxt "#30056"
 msgid "Install the Up Next add-on"
-msgstr ""
+msgstr "Instalar el add-on Up Next"
 
 msgctxt "#30057"
 msgid "Enable the Up Next add-on"
-msgstr ""
+msgstr "Activar el add-on Up Next"
 
 # empty strings from id 30056 to 30058
 msgctxt "#30059"
 msgid "Other Countries"
-msgstr ""
+msgstr "Otros países"
 
 msgctxt "#30060"
 msgid "Enable/Disable channels by country of origin"
-msgstr ""
+msgstr "Activar/Desactivar canales por país de origen"
 
 msgctxt "#30061"
 msgid "Channel Origin"
-msgstr ""
+msgstr "Origen del canal"
 
 msgctxt "#30062"
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 msgctxt "#30063"
 msgid "Channel to configure"
-msgstr ""
+msgstr "Canal a configurar"
 
 msgctxt "#30064"
 msgid "Proxy Group"
-msgstr ""
+msgstr "Grupo Proxy"
 
 msgctxt "#30065"
 msgid "Country Settings"
-msgstr ""
+msgstr "Ajustes del país"
 
 msgctxt "#30066"
 msgid "DNS"
-msgstr ""
+msgstr "DNS"
 
 msgctxt "#30067"
 msgid "Show channels in categories"
-msgstr ""
+msgstr "Mostrar canales por categorías"
 
 msgctxt "#30068"
 msgid "Active"
-msgstr ""
+msgstr "Activo"
 
 msgctxt "#30069"
 msgid "Settings"
-msgstr "Configuración"
+msgstr "Ajustes"
 
 msgctxt "#30070"
 msgid "Let Kodi determine bitrate if possible"
-msgstr ""
+msgstr "Dejar que Kodi determine la tasa de bits si es posible"
 
 msgctxt "#30071"
 msgid "Set the proxy and local IP to all channels related to this country"
-msgstr ""
+msgstr "Ajustar el proxy y la IP local a todos los canales relacionados con este país"
 
 msgctxt "#30072"
 msgid "Proxy Type"
-msgstr ""
+msgstr "Tipo de proxy"
 
 msgctxt "#30073"
 msgid "- Geo-blocked = º, DRM protected = ^ and Premium = ª."
-msgstr ""
+msgstr "- Geobloqueado = º, Protegido con DRM = ^ y Premium = ª."
 
 msgctxt "#30074"
 msgid "Disabled"
-msgstr ""
+msgstr "Desactivado"
 
 msgctxt "#30075"
 msgid "Empty list behaviour"
-msgstr ""
+msgstr "Comportamiento de lista vacía"
 
 msgctxt "#30076"
 msgid "Show error"
-msgstr ""
+msgstr "Mostrar error"
 
 msgctxt "#30077"
 msgid "Show empty list"
-msgstr ""
+msgstr "Mostrar lista vacía"
 
 msgctxt "#30078"
 msgid "Show dummy item"
-msgstr ""
+msgstr "Mostrar elemento ficticio"
 
 msgctxt "#30079"
 msgid "Local IP (0.0.0.0=disabled)"
-msgstr ""
+msgstr "IP local (0.0.0.0=desactivada)"
 
 msgctxt "#30080"
 msgid "Filter DRM protected items"
-msgstr ""
+msgstr "Filtrar elementos protegidos con DRM"
 
 msgctxt "#30081"
 msgid "Filter Premium/Paid items"
-msgstr ""
+msgstr "Filtrar elementos Premium/De pago"
 
 msgctxt "#30082"
 msgid "Apply filter to"
-msgstr ""
+msgstr "Aplicar filtro a"
 
 msgctxt "#30083"
 msgid "Folders & Streams"
-msgstr ""
+msgstr "Carpetas y transmisiones"
 
 msgctxt "#30084"
 msgid "Streams Only"
-msgstr ""
+msgstr "Sólo transmisiones"
 
 msgctxt "#30085"
 msgid "Geo Location"
-msgstr ""
+msgstr "Geolocalización"
 
 msgctxt "#30086"
 msgid "Hide Fanart"
-msgstr ""
+msgstr "Ocultar Fanart"
 
 msgctxt "#30087"
 msgid "Mix folders and streams while sorting"
-msgstr ""
+msgstr "Mezclar carpetas y transmisiones al ordenar"
 
 msgctxt "#30088"
 msgid "Show thumbnail as fanart if no fanart is available"
-msgstr ""
+msgstr "Mostrar miniatura como fanart si no hay fanart disponible"
 
 msgctxt "#30089"
 msgid "Password Vault"
-msgstr ""
+msgstr "Bóveda de contraseñas"
 
 msgctxt "#30090"
 msgid "The 'Password Vault' protects stored password with encryption using a PIN."
-msgstr ""
+msgstr "La 'Bóveda de contraseñas' protege la contraseña almacenada con cifrado mediante un PIN."
 
 msgctxt "#30091"
 msgid "Change Vault Pin"
-msgstr ""
+msgstr "Cambiar Pin de Bóveda"
 
 msgctxt "#30092"
 msgid "Reset Vault"
-msgstr ""
+msgstr "Restablecer Bóveda"
 
 msgctxt "#30093"
 msgid "Password"
@@ -398,27 +398,27 @@ msgstr "Contraseña"
 
 msgctxt "#30094"
 msgid "Username"
-msgstr "Usuario"
+msgstr "Nombre de usuario"
 
 msgctxt "#30095"
 msgid "Show Hidden Items"
-msgstr ""
+msgstr "Mostrar elementos ocultos"
 
 msgctxt "#30096"
 msgid "Country"
-msgstr ""
+msgstr "País"
 
 msgctxt "#30097"
 msgid "Local IP"
-msgstr ""
+msgstr "IP local"
 
 msgctxt "#30098"
 msgid "Logging & Diagnostics"
-msgstr ""
+msgstr "Registro y diagnósticos"
 
 msgctxt "#30099"
 msgid "Use HLS instead of Dash for non-encrypted streams"
-msgstr ""
+msgstr "Usar HLS en lugar de Dash para transmisiones no encriptadas"
 
 msgctxt "#30100"
 msgid "None"
@@ -426,222 +426,222 @@ msgstr "Ninguno"
 
 msgctxt "#30101"
 msgid "Regional"
-msgstr ""
+msgstr "Regional"
 
 msgctxt "#30102"
 msgid "National"
-msgstr ""
+msgstr "Nacional"
 
 msgctxt "#30103"
 msgid "Video"
-msgstr ""
+msgstr "Vídeo"
 
 msgctxt "#30104"
 msgid "Radio"
-msgstr ""
+msgstr "Radio"
 
 msgctxt "#30105"
 msgid "Sport"
-msgstr ""
+msgstr "Deporte"
 
 msgctxt "#30106"
 msgid "Kids"
-msgstr ""
+msgstr "Niños"
 
 msgctxt "#30107"
 msgid "Tech"
-msgstr ""
+msgstr "Tecnología"
 
 msgctxt "#30108"
 msgid "Other"
-msgstr ""
+msgstr "Otro"
 
 # used for list limits
 # empty strings from id 30109 to 30189
 msgctxt "#30190"
 msgid "Monday"
-msgstr ""
+msgstr "Lunes"
 
 msgctxt "#30191"
 msgid "Tuesday"
-msgstr ""
+msgstr "Martes"
 
 msgctxt "#30192"
 msgid "Wednesday"
-msgstr ""
+msgstr "Miércoles"
 
 msgctxt "#30193"
 msgid "Thursday"
-msgstr ""
+msgstr "Jueves"
 
 msgctxt "#30194"
 msgid "Friday"
-msgstr ""
+msgstr "Viernes"
 
 msgctxt "#30195"
 msgid "Saturday"
-msgstr ""
+msgstr "Sábado"
 
 msgctxt "#30196"
 msgid "Sunday"
-msgstr ""
+msgstr "Domingo"
 
 msgctxt "#30199"
 msgid "10"
-msgstr ""
+msgstr "10"
 
 msgctxt "#30200"
 msgid "50"
-msgstr ""
+msgstr "50"
 
 msgctxt "#30201"
 msgid "75"
-msgstr ""
+msgstr "75"
 
 msgctxt "#30202"
 msgid "100"
-msgstr ""
+msgstr "100"
 
 msgctxt "#30203"
 msgid "150"
-msgstr ""
+msgstr "150"
 
 msgctxt "#30204"
 msgid "200"
-msgstr ""
+msgstr "200"
 
 msgctxt "#30205"
 msgid "1000"
-msgstr ""
+msgstr "1000"
 
 # language and countries
 # empty strings from id 30206 to 30299
 msgctxt "#30300"
 msgid "Other Countries"
-msgstr ""
+msgstr "Otros países"
 
 # nl
 msgctxt "#30301"
 msgid "The Netherlands"
-msgstr ""
+msgstr "Países Bajos"
 
 msgctxt "#30302"
 msgid "Sweden"
-msgstr ""
+msgstr "Suecia"
 
 msgctxt "#30303"
 msgid "Lithuania"
-msgstr ""
+msgstr "Lituania"
 
 msgctxt "#30304"
 msgid "Latvia"
-msgstr ""
+msgstr "Letonia"
 
 msgctxt "#30305"
 msgid "Norway"
-msgstr ""
+msgstr "Noruega"
 
 msgctxt "#30306"
 msgid "Belgium"
-msgstr ""
+msgstr "Bélgica"
 
 msgctxt "#30307"
 msgid "United Kingdom"
-msgstr ""
+msgstr "Reino Unido"
 
 msgctxt "#30308"
 msgid "Estonia"
-msgstr ""
+msgstr "Estonia"
 
 msgctxt "#30309"
 msgid "Germany"
-msgstr ""
+msgstr "Alemania"
 
 msgctxt "#30310"
 msgid "Denmark"
-msgstr ""
+msgstr "Dinamarca"
 
 msgctxt "#30311"
 msgid "Finland"
-msgstr ""
+msgstr "Finlandia"
 
 # empty strings from id 30312 to 30345
 msgctxt "#30346"
 msgid "Now Playing"
-msgstr ""
+msgstr "Reproducción en curso"
 
 msgctxt "#30347"
 msgid "Now"
-msgstr ""
+msgstr "Ahora"
 
 msgctxt "#30348"
 msgid "Next"
-msgstr ""
+msgstr "Siguiente"
 
 msgctxt "#30349"
 msgid "Later"
-msgstr ""
+msgstr "Más tarde"
 
 # empty strings from id 30312 to 30349
 msgctxt "#30350"
 msgid "Search"
-msgstr "Búsqueda"
+msgstr "Buscar"
 
 msgctxt "#30351"
 msgid "Categories"
-msgstr ""
+msgstr "Categorías"
 
 msgctxt "#30352"
 msgid "TV shows"
-msgstr ""
+msgstr "Series de TV"
 
 msgctxt "#30353"
 msgid "Currently playing"
-msgstr ""
+msgstr "Reproducción actual"
 
 msgctxt "#30354"
 msgid "Most viewed episodes"
-msgstr ""
+msgstr "Episodios más vistos"
 
 msgctxt "#30355"
 msgid "Most recent episodes"
-msgstr ""
+msgstr "Episodios más recientes"
 
 msgctxt "#30356"
 msgid "Live TV"
-msgstr ""
+msgstr "TV en directo"
 
 msgctxt "#30357"
 msgid "Live Radio"
-msgstr ""
+msgstr "Radio en directo"
 
 msgctxt "#30358"
 msgid "Episodes"
-msgstr "Capítulos"
+msgstr "Episodios"
 
 msgctxt "#30359"
 msgid "Genres"
-msgstr ""
+msgstr "Géneros"
 
 msgctxt "#30360"
 msgid "Full list"
-msgstr ""
+msgstr "Lista completa"
 
 msgctxt "#30361"
 msgid "Tags"
-msgstr ""
+msgstr "Etiquetas"
 
 msgctxt "#30362"
 msgid "Last chance"
-msgstr ""
+msgstr "Última oportunidad"
 
 msgctxt "#30363"
 msgid "Popular"
-msgstr ""
+msgstr "Popular"
 
 msgctxt "#30364"
 msgid "Latest news"
-msgstr ""
+msgstr "Últimas noticias"
 
 msgctxt "#30365"
 msgid "Movies"
@@ -649,79 +649,79 @@ msgstr "Películas"
 
 msgctxt "#30366"
 msgid "Available from"
-msgstr ""
+msgstr "Disponible en"
 
 msgctxt "#30367"
 msgid "New on %s"
-msgstr ""
+msgstr "Nuevo en %s"
 
 # empty strings from id 30365 to 30400
 msgctxt "#30401"
 msgid "Dutch"
-msgstr ""
+msgstr "Holandés"
 
 # se
 msgctxt "#30402"
 msgid "Swedish"
-msgstr ""
+msgstr "Sueco"
 
 # lt
 msgctxt "#30403"
 msgid "Lithuanian"
-msgstr ""
+msgstr "Lituania"
 
 # lv
 msgctxt "#30404"
 msgid "Latvian"
-msgstr ""
+msgstr "Letón"
 
 # no
 msgctxt "#30405"
 msgid "Norwegian"
-msgstr ""
+msgstr "Noruega"
 
 # be
 msgctxt "#30406"
 msgid "Belgian"
-msgstr ""
+msgstr "Belga"
 
 # en-gb
 msgctxt "#30407"
 msgid "British"
-msgstr ""
+msgstr "Británico"
 
 # ee
 msgctxt "#30408"
 msgid "Estonian"
-msgstr ""
+msgstr "Estonio"
 
 # de
 msgctxt "#30409"
 msgid "German"
-msgstr ""
+msgstr "Alemán"
 
 # dk
 msgctxt "#30410"
 msgid "Danish"
-msgstr ""
+msgstr "Danés"
 
 # fi
 msgctxt "#30411"
 msgid "Finnish"
-msgstr ""
+msgstr "Finlandés"
 
 # empty strings from id 30412 to 30498
 msgctxt "#30499"
 msgid "Contains all the Retrospect favourites that are available across all channels."
-msgstr ""
+msgstr "Contiene todos los favoritos de Retrospect disponibles en todos los canales."
 
 msgctxt "#30500"
 msgid "All Favourites"
-msgstr ""
+msgstr "Todos los favoritos"
 
 msgctxt "#30501"
 msgid "Favourite"
-msgstr ""
+msgstr "Favorito"
 
 msgctxt "#30502"
 msgid "Favourites"
@@ -729,65 +729,65 @@ msgstr "Favoritos"
 
 msgctxt "#30503"
 msgid "Channel Favourites"
-msgstr ""
+msgstr "Canales favoritos"
 
 msgctxt "#30504"
 msgid "Add to Favourites"
-msgstr ""
+msgstr "Añadir a favoritos"
 
 msgctxt "#30505"
 msgid "Hide"
-msgstr ""
+msgstr "Ocultar"
 
 msgctxt "#30506"
 msgid "Remove Favourite"
-msgstr ""
+msgstr "Quitar favorito"
 
 msgctxt "#30507"
 msgid "Select Channels »"
-msgstr ""
+msgstr "Seleccionar canales »"
 
 msgctxt "#30508"
 msgid "No favourites available"
-msgstr ""
+msgstr "No hay favoritos disponibles"
 
 msgctxt "#30509"
 msgid "Cannot start playback"
-msgstr ""
+msgstr "No se puede iniciar la reproducción"
 
 msgctxt "#30510"
 msgid "New version available"
-msgstr ""
+msgstr "Nueva versión disponible"
 
 msgctxt "#30511"
 msgid "Add shortcut"
-msgstr ""
+msgstr "Añadir acceso directo"
 
 msgctxt "#30512"
 msgid "Please provide a name for the shortcut."
-msgstr ""
+msgstr "Por favor, proporcione un nombre para el acceso directo."
 
 # empty strings from id 30511 to 30515
 msgctxt "#30516"
 msgid "New Version Available."
-msgstr ""
+msgstr "Nueva versión disponible."
 
 msgctxt "#30517"
 msgid "A new version of %s is available: %s. Please visit the website to download it."
-msgstr ""
+msgstr "Una nueva versión de %s está disponible: %s. Por favor, visite el sitio web para descargarla."
 
 # empty strings from id 30518 to 30519
 msgctxt "#30520"
 msgid "Repository Warning"
-msgstr ""
+msgstr "Advertencia de repositorio"
 
 msgctxt "#30521"
 msgid "The Retrospect repository is not installed.|Please install it to allow future updates."
-msgstr ""
+msgstr "El repositorio de Retrospect no está instalado.|Por favor, instálelo para permitir futuras actualizaciones."
 
 msgctxt "#30522"
 msgid "Channel message"
-msgstr ""
+msgstr "Mensaje del canal"
 
 msgctxt "#30523"
 msgid "Error"
@@ -795,48 +795,48 @@ msgstr "Error"
 
 msgctxt "#30524"
 msgid "No videos were found for the selected item."
-msgstr ""
+msgstr "No se han encontrado vídeos para el elemento seleccionado."
 
 msgctxt "#30525"
 msgid "The selected item does not have|any streams associated."
-msgstr ""
+msgstr "El elemento seleccionado no tiene|ninguna transmisión asociada."
 
 # empty strings from id 30526 to 30527
 msgctxt "#30528"
 msgid "Add-on Settings"
-msgstr ""
+msgstr "Ajustes del add-on"
 
 msgctxt "#30529"
 msgid "Refresh list"
-msgstr ""
+msgstr "Actualizar lista"
 
 msgctxt "#30530"
 msgid "Check for Retrospect updates"
-msgstr ""
+msgstr "Comprobar actualizaciones de Retrospect"
 
 msgctxt "#30531"
 msgid "Missing 'InputStream Helper' add-on. Cannot install."
-msgstr ""
+msgstr "Falta el add-on 'InputStream Helper'. No se puede instalar."
 
 msgctxt "#30532"
 msgid "Install Widevine using 'InputStream Helper' add-on"
-msgstr ""
+msgstr "Instalar Widevine con el add-on 'InputStream Helper'"
 
 msgctxt "#30533"
 msgid "Installing Widevine libraries using the 'InputStream Helper' add-on is done at your own risk and Retrospect is not responsible for any results. Nor is it guaranteed that Widevine will be installed correctly."
-msgstr ""
+msgstr "La instalación de las bibliotecas Widevine mediante el add-on 'InputStream Helper' se realiza bajo su propio riesgo y Retrospect no se hace responsable de los resultados. Tampoco se garantiza que Widevine se instale correctamente."
 
 msgctxt "#30534"
 msgid "Installation of Widevine failed!"
-msgstr ""
+msgstr "¡La instalación de Widevine ha fallado!"
 
 msgctxt "#30535"
 msgid "Installation of Widevine completed!"
-msgstr ""
+msgstr "¡Instalación de Widevine completada!"
 
 msgctxt "#30536"
 msgid "This stream requires Kodi Leia, an enabled InputStream Adaptive add-on and the Widevine library to be installed. The latter can be installed from within the Retrospect add-on settings."
-msgstr ""
+msgstr "Esta transmisión requiere la instalación de Kodi Leia, el add-on InputStream Adaptive activado y la biblioteca Widevine. Esta última puede instalarse desde los ajustes del add-on Retrospect."
 
 msgctxt "#30537"
 msgid "Page"
@@ -844,280 +844,280 @@ msgstr "Página"
 
 msgctxt "#30538"
 msgid "The selected live stream has not yet|begun."
-msgstr ""
+msgstr "La transmisión en directo seleccionada aún no ha|comenzado."
 
 msgctxt "#30539"
 msgid "Live stream"
-msgstr ""
+msgstr "Transmisión en directo"
 
 msgctxt "#30540"
 msgid "Geo-blocked"
-msgstr ""
+msgstr "Geobloqueado"
 
 msgctxt "#30541"
 msgid "Queue item"
-msgstr ""
+msgstr "Elemento en cola"
 
 msgctxt "#30542"
 msgid "Starting %s."
-msgstr ""
+msgstr "Iniciando %s."
 
 msgctxt "#30543"
 msgid "Season"
-msgstr ""
+msgstr "Temporada"
 
 msgctxt "#30544"
 msgid "Episode"
-msgstr ""
+msgstr "Episodio"
 
 msgctxt "#30545"
 msgid "Titles with '%s'"
-msgstr ""
+msgstr "Títulos con \"%s"
 
 msgctxt "#30546"
 msgid "Other Chars"
-msgstr ""
+msgstr "Otros caracteres"
 
 msgctxt "#30547"
 msgid "More Pages"
-msgstr ""
+msgstr "Más páginas"
 
 msgctxt "#30548"
 msgid "Clips"
-msgstr ""
+msgstr "Clips"
 
 msgctxt "#30549"
 msgid "Error retrieving the list of items."
-msgstr ""
+msgstr "Error recuperando la lista de elementos."
 
 msgctxt "#30550"
 msgid "No episodes found for the selected item."
-msgstr ""
+msgstr "No se han encontrado episodios para el elemento seleccionado."
 
 msgctxt "#30551"
 msgid "Today"
-msgstr ""
+msgstr "Hoy"
 
 msgctxt "#30552"
 msgid "Yesterday"
-msgstr ""
+msgstr "Ayer"
 
 msgctxt "#30553"
 msgid "Day before yesterday"
-msgstr ""
+msgstr "Anteayer"
 
 msgctxt "#30554"
 msgid "DRM Protection"
-msgstr ""
+msgstr "Protección DRM"
 
 msgctxt "#30555"
 msgid "The selected item is DRM protected and might not play on Kodi."
-msgstr ""
+msgstr "El elemento seleccionado está protegido por DRM y no se puede reproducir en Kodi."
 
 msgctxt "#30556"
 msgid "Initialising channel(s)."
-msgstr ""
+msgstr "Inicializando canal(es)."
 
 msgctxt "#30557"
 msgid "Channels have been updated or installed. Performing first time actions. This could take some time."
-msgstr ""
+msgstr "Se han actualizado o instalado canales. Realizando acciones de inicialización. Esto puede llevar algún tiempo."
 
 msgctxt "#30558"
 msgid "Fetching Textures"
-msgstr ""
+msgstr "Obtención de texturas"
 
 msgctxt "#30559"
 msgid "Fetching missing textures. This could take some time depending on the internet and system speed."
-msgstr ""
+msgstr "Obtención de las texturas que faltan. Esto puede llevar algún tiempo dependiendo de la velocidad de internet y del sistema."
 
 msgctxt "#30560"
 msgid "Paid video"
-msgstr ""
+msgstr "Vídeo de pago"
 
 msgctxt "#30561"
 msgid "The selected item is not free and might not play on Kodi."
-msgstr ""
+msgstr "El elemento seleccionado no es gratuito y no se puede reproducir en Kodi."
 
 msgctxt "#30562"
 msgid "Username and/or password not set in Add-on settings"
-msgstr ""
+msgstr "Nombre de usuario y/o contraseña no configurados en los ajustes del complemento"
 
 msgctxt "#30563"
 msgid "Hide Item"
-msgstr ""
+msgstr "Ocultar elemento"
 
 msgctxt "#30564"
 msgid "Show Hidden Item"
-msgstr ""
+msgstr "Mostrar elemento oculto"
 
 msgctxt "#30565"
 msgid "Hidden items"
-msgstr ""
+msgstr "Elementos ocultos"
 
 msgctxt "#30566"
 msgid "To show a hidden item, first configure Retrospect to show hidden items. Then use the context menu's \"Show hidden item\"."
-msgstr ""
+msgstr "Para mostrar un elemento oculto, primero configure Retrospect para mostrar elementos ocultos. A continuación, usar la opción \"Mostrar elemento oculto\" del menú contextual."
 
 msgctxt "#30567"
 msgid "Add-on(s) disabled"
-msgstr ""
+msgstr "Add-on(s) desactivado(s)"
 
 msgctxt "#30568"
 msgid "Some of the Retrospect Channel Add-ons are not enabled which will prevent them from auto updating. The Kodi add-on browser will now open and you should enable all Retrospect related add-ons. See http://kodi.wiki/view/add-on_manager."
-msgstr ""
+msgstr "Algunos de los add-ons de Retrospect Channel no están activados, lo que impedirá que se actualicen automáticamente. Ahora se abrirá el navegador de add-ons de Kodi y deberás activar todos los add-ons relacionados con Retrospect. Consulta http://kodi.wiki/view/add-on_manager."
 
 msgctxt "#30569"
 msgid "Ignore SSL verification errors (Security Risk!)"
-msgstr ""
+msgstr "Ignorar los errores de verificación SSL (¡Riesgo de seguridad!)"
 
 msgctxt "#30570"
 msgid "Hide channel initialisation messages"
-msgstr ""
+msgstr "Ocultar los mensajes de inicialización del canal"
 
 msgctxt "#30571"
 msgid "Use Kodi InputStream Adaptive add-on when possible"
-msgstr ""
+msgstr "Usar el add-on InputStream Adaptive de Kodi cuando sea posible"
 
 msgctxt "#30572"
 msgid "Retrospect Settings »"
-msgstr ""
+msgstr "Ajustes de Retrospect »"
 
 msgctxt "#30573"
 msgid "(Un-)Hide item »"
-msgstr ""
+msgstr "(Des-)Ocultar elemento »"
 
 msgctxt "#30574"
 msgid "Hide Channel"
-msgstr ""
+msgstr "Ocultar canal"
 
 msgctxt "#30575"
 msgid "Retrospect Favourites »"
-msgstr ""
+msgstr "Favoritos de Retrospect »"
 
 msgctxt "#30576"
 msgid "Select Countries"
-msgstr ""
+msgstr "Seleccionar países"
 
 msgctxt "#30577"
 msgid "Bitrate »"
-msgstr ""
+msgstr "Tasa de bits »"
 
 msgctxt "#30578"
 msgid "InputStream Adaptive add-on settings"
-msgstr ""
+msgstr "Ajustes del add-on InputStream Adaptive"
 
 msgctxt "#30579"
 msgid "InputStream Adaptive add-on »"
-msgstr ""
+msgstr "Add-on InputStream Adaptive »"
 
 msgctxt "#30580"
 msgid "Channel Options »"
-msgstr ""
+msgstr "Opciones de canal »"
 
 msgctxt "#30581"
 msgid "InputStream Adaptive add-on usage"
-msgstr ""
+msgstr "Uso del add-on InputStream Adaptive"
 
 msgctxt "#30582"
 msgid "Split TV shows and single episodes in separate folders"
-msgstr ""
+msgstr "Dividir programas de TV y episodios independientes en carpetas separadas"
 
 msgctxt "#30583"
 msgid "Single episodes"
-msgstr ""
+msgstr "Episodios independientes"
 
 msgctxt "#30584"
 msgid "Fetching a long list of items using multiple API calls."
-msgstr ""
+msgstr "Obtención de una lista larga de elementos mediante varias llamadas a la API."
 
 msgctxt "#30585"
 msgid "Page {} of {}"
-msgstr ""
+msgstr "Página {} de {}"
 
 msgctxt "#30586"
 msgid "Number of pages to load for the main listing"
-msgstr ""
+msgstr "Número de páginas a cargar para el listado principal"
 
 msgctxt "#30587"
 msgid "Show streams with accessibility features"
-msgstr ""
+msgstr "Mostrar transmisiones con funciones de accesibilidad"
 
 # empty strings from id 30584 to 30589
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"
-msgstr ""
+msgstr "Establecer un nuevo PIN para Retrospect"
 
 msgctxt "#30591"
 msgid "No Retrospect PIN specified"
-msgstr ""
+msgstr "No se ha especificado el PIN de Retrospect"
 
 msgctxt "#30592"
 msgid "Repeat the new Retrospect PIN"
-msgstr ""
+msgstr "Repita el nuevo PIN de Retrospect"
 
 msgctxt "#30593"
 msgid "PINs don't match"
-msgstr ""
+msgstr "Los pines no coinciden"
 
 msgctxt "#30594"
 msgid "Specify value for setting: '%s'"
-msgstr ""
+msgstr "Especifique el valor para el ajuste: '%s'"
 
 msgctxt "#30595"
 msgid "Input Retrospect PIN"
-msgstr ""
+msgstr "Introducir el PIN de Retrospect"
 
 msgctxt "#30596"
 msgid "Incorrect Retrospect PIN specified"
-msgstr ""
+msgstr "PIN de Retrospect incorrecto"
 
 msgctxt "#30597"
 msgid "Resetting the vault will invalidate all existing encrypted values. Are you sure?"
-msgstr ""
+msgstr "El restablecimiento de la bóveda invalidará todos los valores encriptados existentes. ¿Estás seguro?"
 
 msgctxt "#30598"
 msgid "Send retrospect.log »"
-msgstr ""
+msgstr "Enviar retrospect.log »"
 
 msgctxt "#30599"
 msgid "Logfile posted to: %s[CR][CR]Note the URL (especially the last characters) and use them to refer to these log files in posts."
-msgstr ""
+msgstr "Archivo de registro enviado a: %s[CR][CR]Anote la URL (especialmente los últimos caracteres) y utilícelos para hacer referencia a estos archivos de registro en los mensajes."
 
 msgctxt "#30600"
 msgid "Logfile successfully posted"
-msgstr ""
+msgstr "Archivo de registro enviado correctamente"
 
 msgctxt "#30601"
 msgid "Error posting logfile: %s"
-msgstr ""
+msgstr "Error al publicar el archivo de registro: %s"
 
 msgctxt "#30602"
 msgid "Error posting logfile"
-msgstr ""
+msgstr "Error al publicar el archivo de registro"
 
 msgctxt "#30603"
 msgid "Retrospect changed add-on ID. To prevent data loss, your user data will now be migrated. After this has been done, please restart Kodi to complete migration. After the restart update any shortcut you had to Retrospect. The Retrospect marked as \"broken\" in \"My add-ons\" can be uninstalled."
-msgstr ""
+msgstr "Retrospect ha cambiado el ID del add-on. Para evitar la pérdida de datos, ahora se migrarán sus datos de usuario. Una vez hecho esto, por favor reinicie Kodi para completar la migración. Después del reinicio, actualizar cualquier acceso directo que tuviera a Retrospect. El Retrospect marcado como \"roto\" en \"Mis add-ons\" se puede desinstalar."
 
 msgctxt "#30604"
 msgid "Clean-up cache and cookies »"
-msgstr ""
+msgstr "Limpiar caché y cookies »"
 
 msgctxt "#30605"
 msgid "Are you sure you want to clean all of Retrospect's cache and cookies? This action cannot be undone."
-msgstr ""
+msgstr "¿Está seguro de que desea limpiar todo el caché y las cookies de Retrospect? Esta acción no se puede deshacer."
 
 msgctxt "#30606"
 msgid "Minimum level for showing notifications"
-msgstr ""
+msgstr "Nivel mínimo para mostrar notificaciones"
 
 msgctxt "#30607"
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 msgctxt "#30608"
 msgid "Warning"
-msgstr ""
+msgstr "Advertencia"
 
 msgctxt "#30609"
 msgid "Error"

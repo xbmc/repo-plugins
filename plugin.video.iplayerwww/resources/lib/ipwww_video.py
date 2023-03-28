@@ -570,10 +570,15 @@ def ParseSingleJSON(meta, item, name, added_playables, added_directories):
                 icon = subitem['image'].get('default').replace("{recipe}","832x468")
     else:
         if 'count' in item:
-            num_episodes = str(item['count'])
-            if 'id' in item:
-                main_url = 'https://www.bbc.co.uk/iplayer/episodes/' + item.get('id')
-        if 'href' in item:
+            if item['count']>1:
+                num_episodes = str(item['count'])
+                if 'id' in item:
+                    main_url = 'https://www.bbc.co.uk/iplayer/episodes/' + item.get('id')
+            elif 'id' in item:
+                main_url = 'https://www.bbc.co.uk/iplayer/episode/' + item.get('id')
+        elif 'id' in item:
+            main_url = 'https://www.bbc.co.uk/iplayer/episode/' + item.get('id')
+        elif 'href' in item:
             # Some strings already contain the full URL, need to work around this.
             url = item['href'].replace('http://www.bbc.co.uk','')
             url = url.replace('https://www.bbc.co.uk','')
@@ -616,7 +621,12 @@ def ParseSingleJSON(meta, item, name, added_playables, added_directories):
         if 'synopsis' in item:
             synopsis = item['synopsis']
         if 'synopses' in item:
-            synopsis = item['synopses']['small']
+            if 'large' in item['synopses']:
+                synopsis = item['synopses']['large']
+            elif 'medium' in item['synopses']:
+                synopsis = item['synopses']['medium']
+            elif 'small' in item['synopses']:
+                synopsis = item['synopses']['small']
 
         if 'imageTemplate' in item:
             icon = item['imageTemplate'].replace("{recipe}","832x468")

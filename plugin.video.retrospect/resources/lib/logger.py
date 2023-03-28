@@ -7,8 +7,6 @@ import traceback
 import time
 import datetime
 
-from resources.lib.backtothefuture import PY2
-
 
 class Logger:
     LVL_CRITICAL = 50
@@ -270,7 +268,7 @@ class Logger:
         try:
             was_open = True
             self.close_log(log_closing=False)
-        except:
+        except:  # NOSONAR
             was_open = False
 
         (file_name, extension) = os.path.splitext(self.logFileName)
@@ -332,41 +330,35 @@ class Logger:
             lines = msg.splitlines()
             line_count = len(lines)
 
-            try:
-                # check if multiline
-                if line_count > 1:
-                    for i in range(0, line_count):
-                        # for line in lines:
-                        line = lines[i]
-                        if len(line) <= 0:
-                            continue
+            # check if multiline
+            if line_count > 1:
+                for i in range(0, line_count):
+                    # for line in lines:
+                    line = lines[i]
+                    if len(line) <= 0:
+                        continue
 
-                        # if last line:
-                        if i == line_count - 1:
-                            line = '+ %s' % (line, )
-                        elif i > 0:
-                            line = '| %s' % (line,)
+                    # if last line:
+                    if i == line_count - 1:
+                        line = '+ %s' % (line, )
+                    elif i > 0:
+                        line = '| %s' % (line,)
 
-                        formatted_message = self.logFormat % (
-                            timestamp,
-                            self.logLevelNames.get(log_level),
-                            source_file,
-                            source_line_number,
-                            line)
-                        self.logHandle.write(formatted_message)
-                else:
                     formatted_message = self.logFormat % (
                         timestamp,
                         self.logLevelNames.get(log_level),
                         source_file,
                         source_line_number,
-                        msg)
+                        line)
                     self.logHandle.write(formatted_message)
-            except UnicodeEncodeError:
-                if PY2:
-                    formatted_message = formatted_message.encode('raw_unicode_escape')
-                    self.logHandle.write(formatted_message)
-                raise
+            else:
+                formatted_message = self.logFormat % (
+                    timestamp,
+                    self.logLevelNames.get(log_level),
+                    source_file,
+                    source_line_number,
+                    msg)
+                self.logHandle.write(formatted_message)
 
             # Finally close the filehandle
             self.logEntryCount += 1
@@ -374,7 +366,7 @@ class Logger:
                 self.logEntryCount = 0
                 self.logHandle.flush()
             return
-        except:
+        except:  # NOSONAR
             if not self.logDual:
                 traceback.print_exc()
                 return
@@ -458,10 +450,7 @@ class Logger:
             # the file already exists. Now to prevent errors in Linux
             # we will open a file in Read + (Read and Update) mode
             # and set the pointer to the end.
-            if PY2:
-                self.logHandle = io.open(self.logFileName, "r+b")
-            else:
-                self.logHandle = io.open(self.logFileName, "r+", encoding='utf-8')
+            self.logHandle = io.open(self.logFileName, "r+", encoding='utf-8')
             self.logHandle.seek(0, 2)
             self.__write("XOT Logger :: Appending Existing logFile", level=Logger.LVL_INFO)
         else:
@@ -469,10 +458,7 @@ class Logger:
             if not os.path.isdir(log_dir):
                 os.makedirs(log_dir)
             # no file exists, so just create a new one for writing
-            if PY2:
-                self.logHandle = io.open(self.logFileName, "wb")
-            else:
-                self.logHandle = io.open(self.logFileName, "w", encoding='utf-8')
+            self.logHandle = io.open(self.logFileName, "w", encoding='utf-8')
 
         return
 

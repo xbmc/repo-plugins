@@ -1,13 +1,7 @@
 # coding=utf-8  # NOSONAR
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib.backtothefuture import PY2
-if PY2:
-    # noinspection PyUnresolvedReferences
-    import urlparse as parse
-else:
-    # noinspection PyUnresolvedReferences
-    import urllib.parse as parse
+import urllib.parse as parse
 
 from resources.lib.mediaitem import MediaItem, FolderItem, MediaStream
 from resources.lib import contenttype

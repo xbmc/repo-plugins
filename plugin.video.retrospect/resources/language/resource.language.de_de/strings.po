@@ -2,17 +2,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-31 22:29+0000\n"
-"Last-Translator: bas <bas@kodi.tv>\n"
+"PO-Revision-Date: 2023-03-06 11:18+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: German <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/de_de/>\n"
 "Language: de_de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.15.2\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -64,11 +64,11 @@ msgstr ""
 
 msgctxt "#30009"
 msgid "General"
-msgstr ""
+msgstr "Allgemein"
 
 msgctxt "#30010"
 msgid "Channels"
-msgstr ""
+msgstr "Kanäle"
 
 msgctxt "#30011"
 msgid "Requires restart of Retrospect to take effect."
@@ -96,7 +96,7 @@ msgstr ""
 
 msgctxt "#30018"
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 msgctxt "#30019"
 msgid "Show DRM/Paid warning before playback"
@@ -140,11 +140,11 @@ msgstr ""
 
 msgctxt "#30029"
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 msgctxt "#30030"
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 msgctxt "#30031"
 msgid "Cache HTTP(S) requests"
@@ -164,11 +164,11 @@ msgstr ""
 
 msgctxt "#30035"
 msgid "Username"
-msgstr ""
+msgstr "Benutzername"
 
 msgctxt "#30036"
 msgid "Password"
-msgstr ""
+msgstr "Passwort"
 
 msgctxt "#30037"
 msgid "Use 'Up Next' to play next episode"
@@ -184,7 +184,7 @@ msgstr ""
 
 msgctxt "#30040"
 msgid "Channels"
-msgstr ""
+msgstr "Kanäle"
 
 msgctxt "#30041"
 msgid "Show \"All Favourites\" in main Channel listing"
@@ -192,7 +192,7 @@ msgstr ""
 
 msgctxt "#30042"
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiviert"
 
 msgctxt "#30043"
 msgid "Folder prefix"
@@ -245,7 +245,7 @@ msgstr ""
 
 msgctxt "#30055"
 msgid "Advanced"
-msgstr ""
+msgstr "Erweitert"
 
 msgctxt "#30056"
 msgid "Install the Up Next add-on"
@@ -298,7 +298,7 @@ msgstr ""
 
 msgctxt "#30069"
 msgid "Settings"
-msgstr ""
+msgstr "Einstellungen"
 
 msgctxt "#30070"
 msgid "Let Kodi determine bitrate if possible"
@@ -394,11 +394,11 @@ msgstr ""
 
 msgctxt "#30093"
 msgid "Password"
-msgstr ""
+msgstr "Passwort"
 
 msgctxt "#30094"
 msgid "Username"
-msgstr ""
+msgstr "Benutzername"
 
 msgctxt "#30095"
 msgid "Show Hidden Items"
@@ -426,7 +426,7 @@ msgstr ""
 
 msgctxt "#30101"
 msgid "Regional"
-msgstr ""
+msgstr "Regional"
 
 msgctxt "#30102"
 msgid "National"
@@ -446,7 +446,7 @@ msgstr ""
 
 msgctxt "#30106"
 msgid "Kids"
-msgstr ""
+msgstr "Kinder"
 
 msgctxt "#30107"
 msgid "Tech"
@@ -454,7 +454,7 @@ msgstr ""
 
 msgctxt "#30108"
 msgid "Other"
-msgstr ""
+msgstr "Andere"
 
 # used for list limits
 # empty strings from id 30109 to 30189
@@ -585,11 +585,11 @@ msgstr ""
 # empty strings from id 30312 to 30349
 msgctxt "#30350"
 msgid "Search"
-msgstr ""
+msgstr "Suche"
 
 msgctxt "#30351"
 msgid "Categories"
-msgstr ""
+msgstr "Kategorien"
 
 msgctxt "#30352"
 msgid "TV shows"
@@ -617,7 +617,7 @@ msgstr ""
 
 msgctxt "#30358"
 msgid "Episodes"
-msgstr ""
+msgstr "Episoden"
 
 msgctxt "#30359"
 msgid "Genres"
@@ -637,7 +637,7 @@ msgstr ""
 
 msgctxt "#30363"
 msgid "Popular"
-msgstr ""
+msgstr "Beliebt"
 
 msgctxt "#30364"
 msgid "Latest news"
@@ -645,7 +645,7 @@ msgstr ""
 
 msgctxt "#30365"
 msgid "Movies"
-msgstr ""
+msgstr "Filme"
 
 msgctxt "#30366"
 msgid "Available from"
@@ -725,7 +725,7 @@ msgstr ""
 
 msgctxt "#30502"
 msgid "Favourites"
-msgstr ""
+msgstr "Favoriten"
 
 msgctxt "#30503"
 msgid "Channel Favourites"
@@ -791,7 +791,7 @@ msgstr ""
 
 msgctxt "#30523"
 msgid "Error"
-msgstr ""
+msgstr "Fehler"
 
 msgctxt "#30524"
 msgid "No videos were found for the selected item."
@@ -840,7 +840,7 @@ msgstr ""
 
 msgctxt "#30537"
 msgid "Page"
-msgstr ""
+msgstr "Seite"
 
 msgctxt "#30538"
 msgid "The selected live stream has not yet|begun."
@@ -864,7 +864,7 @@ msgstr ""
 
 msgctxt "#30543"
 msgid "Season"
-msgstr ""
+msgstr "Staffel"
 
 msgctxt "#30544"
 msgid "Episode"
@@ -884,7 +884,7 @@ msgstr ""
 
 msgctxt "#30548"
 msgid "Clips"
-msgstr ""
+msgstr "Clips"
 
 msgctxt "#30549"
 msgid "Error retrieving the list of items."
@@ -1113,7 +1113,7 @@ msgstr ""
 
 msgctxt "#30607"
 msgid "Info"
-msgstr ""
+msgstr "Information"
 
 msgctxt "#30608"
 msgid "Warning"
@@ -1121,4 +1121,4 @@ msgstr ""
 
 msgctxt "#30609"
 msgid "Error"
-msgstr ""
+msgstr "Fehler"

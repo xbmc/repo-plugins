@@ -2,6 +2,7 @@
 
 import datetime
 import pytz
+import urllib.parse
 
 from resources.lib import chn_class
 from resources.lib import contenttype
@@ -81,7 +82,7 @@ class Channel(chn_class.Channel):
                                   name="GraphQL search", json=True,
                                   parser=["data", "search", "items"], creator=self.create_api_typed_item)
 
-            self._add_data_parser("https://graph.kijk.nl/graphql-video",
+            self._add_data_parser("https://api.prd.video.talpa.network/graphql",
                                   updater=self.update_graphql_item)
 
             self._add_data_parser("https://graph.kijk.nl/graphql?operationName=programs",
@@ -667,9 +668,8 @@ class Channel(chn_class.Channel):
         if title is None:
             return None
 
-        url = self.__get_api_persisted_url(
-            "programs", "b6f65688f7e1fbe22aae20816d24ca5dcea8c86c8e72d80b462a345b5b70fa41",
-            variables={"programTypes": "MOVIE", "guid": result_set["guid"]})
+        guid = result_set["guid"]
+        url = self.__get_api_sources_url(guid)
 
         item = MediaItem(result_set["title"], url, media_type=mediatype.MOVIE)
         item.description = result_set.get("description")
@@ -691,10 +691,6 @@ class Channel(chn_class.Channel):
         if self.parentItem is None:
             item.fanart = item.thumb
 
-        sources = result_set.get("sources")
-        item.metaData["sources"] = sources
-        subs = result_set.get("tracks")
-        item.metaData["subtitles"] = subs
         return item
 
     def create_api_tvseason_type(self, result_set):
@@ -737,11 +733,8 @@ class Channel(chn_class.Channel):
 
         """
 
-        # This URL gives the URL that contains the show info with Season ID's
-        url = "https://graph.kijk.nl/graphql-video"
-
-        if not result_set.get("sources"):
-            return None
+        guid = result_set["guid"]
+        url = self.__get_api_sources_url(guid)
 
         title = result_set["title"]
         season_number = result_set.get("seasonNumber")
@@ -773,10 +766,6 @@ class Channel(chn_class.Channel):
                           date_time.minute,
                           date_time.second)
 
-        # Find the media streams
-        item.metaData["sources"] = result_set["sources"]
-        item.metaData["subtitles"] = result_set.get("tracks", [])
-
         # DRM only
         no_drm_items = [src for src in result_set["sources"] if not src["drm"]]
         item.isDrmProtected = len(no_drm_items) == 0
@@ -792,7 +781,12 @@ class Channel(chn_class.Channel):
 
         """
 
-        sources = item.metaData["sources"]
+        data = UriHandler.open(item.url)
+        json_data = JsonHelper(data)
+        sources = json_data.get_value("data", "programs", "items", 0, "sources")
+        if not sources and "sources" in item.metaData:
+            sources = item.metaData["sources"]
+
         hls_over_dash = self._get_setting("hls_over_dash") == "true"
 
         for src in sources:
@@ -828,7 +822,7 @@ class Channel(chn_class.Channel):
                     key_value=encryption_json,
                     key_headers={"Content-Type": "application/json", "authorization": "Basic {}".format(token)}
                 )
-                Mpd.set_input_stream_addon_input(stream, license_key=encryption_key)
+                Mpd.set_input_stream_addon_input(stream, license_key=encryption_key, headers={"user-agent": "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)"})
                 item.complete = True
 
             elif stream_type == "m3u8" and not drm:
@@ -840,9 +834,12 @@ class Channel(chn_class.Channel):
                 Logger.debug("Found incompatible stream: %s", src)
 
         subtitle = None
-        for sub in item.metaData.get("subtitles", []):
-            subtitle = sub["file"]
-        item.subtitle = subtitle
+        tracks = json_data.get_value("data", "programs", "items", 0, "tracks")
+        for track in tracks:
+            subtitle = track["file"]
+            subtitle = SubtitleHelper.download_subtitle(subtitle, format="webvtt")
+            item.subtitle = subtitle
+            break
 
         # If we are here, we can playback.
         item.isDrmProtected = False
@@ -904,3 +901,13 @@ class Channel(chn_class.Channel):
               "extensions={}".format(operation, variables, extensions)
         return url
     #endregion
+
+    def __get_api_sources_url(self, guid):
+        query = "query sources($guid:[String]){programs(guid:$guid){items{" \
+                "guid sources{type file drm __typename} tracks{file type} __typename}__typename}}"
+        query = urllib.parse.quote(query, safe="/()")
+        variables = "{\"guid\":\"%s\"}" % (guid, )
+        variables = urllib.parse.quote(variables)
+        url = "https://api.prd.video.talpa.network/graphql?query={}" \
+              "&operationName=sources&variables={}".format(query, variables)
+        return url

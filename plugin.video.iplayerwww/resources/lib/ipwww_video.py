@@ -701,6 +701,19 @@ def ParseJSON(programme_data, current_url):
         elif 'relatedEpisodes' in programme_data:
             if 'episodes' in programme_data['relatedEpisodes']:
                 programmes = programme_data['relatedEpisodes']['episodes']
+            if 'slices' in programme_data['relatedEpisodes']:
+                for series in programme_data['relatedEpisodes']['slices']:
+                    if 'episode' in programme_data:
+                        if 'title' in programme_data['episode']:
+                            name = programme_data['episode']['title']
+                    url_split = current_url.replace('&','?').split('?')
+                    current_series = programme_data['relatedEpisodes']['currentSliceId']
+                    if series['id'] == current_series:
+                        continue
+                    base_url = url_split[0]
+                    series_url = base_url + '?seriesId=' + series['id']
+                    AddMenuEntry('[B]%s: %s[/B]' % (name, series['title']['default']),
+                                 series_url, 128, '', '', '')
         elif 'items' in programme_data:
             # This must be Added or Watching.
             programmes = programme_data['items']

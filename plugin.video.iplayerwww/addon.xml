@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="4.0.11" provider-name="CaptainT, Cas, ihurst, primaeval">
+<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="4.0.12" provider-name="CaptainT, Cas, ihurst, primaeval">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.7.0"/>
@@ -22,9 +22,8 @@
         <fanart>resources/fanart.jpg</fanart>
     </assets>
     <news>
-v4.0.11
-Fixed Most Popular.
-Improved handling of new JSON format for single episodes and synopsis.
+v4.0.12
+Fix for new A-Z format.
 
 Known issues:
 - No Red Button

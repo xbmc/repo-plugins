@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.twitch" version="3.0.0" name="Twitch" provider-name="anxdpanic, A Talented Community">
+<addon id="plugin.video.twitch" version="3.0.1" name="Twitch" provider-name="anxdpanic, A Talented Community">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
         <import addon="script.module.requests" version="2.9.1"/>
@@ -15,9 +15,7 @@
             <fanart>resources/media/fanart.jpg</fanart>
         </assets>
         <news>
-[rem] removed support for versions of Kodi pre-Nexus v20
-[rem] removed support for python 2
-[rem] removed dependency on six
+[rem] toggle follow
 [lang] updated translations from Weblate
         </news>
         <platform>all</platform>

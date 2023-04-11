@@ -49,7 +49,6 @@ def cache_path(path):
         return False
     return True
 
-
 class Api():
     def __init__(self, cachePath, getLocalizedString, get_setting):
         self.cachePath = cachePath
@@ -248,7 +247,7 @@ class Api():
             segments='drtv,mt_K8q4Nz3,optedin',
         )
         js = self.get_programcard('/', data=data)
-        items = [{'title': 'Programmer A-Å', 'path': '/a-aa', 'icon': 'all.png'}]
+        items = [{'title': 'Programmer A-Å', 'path': '/kategorier/a-aa', 'icon': 'all.png'}]
         for item in js['entries']:
             title = item['title']
             if title not in ['Se Live TV', 'Vi tror, du kan lide']:  # TODO activate again when login works
@@ -274,7 +273,7 @@ class Api():
             self.session.remove_expired_responses()
             (self.cachePath/'requests_cleaned').write_text(str(datetime.now()))
 
-        js = self.get_programcard('/a-aa')
+        js = self.get_programcard('/kategorier/a-aa')
         maxidx = len(js['entries']) + 3
         i = 0
         for item in js['entries']:
@@ -302,7 +301,7 @@ class Api():
             'dr-ramasjang': '/ramasjang_a-aa',
             'dr-minisjang': '/minisjang/a-aa',
             'dr-ultra': '/ultra_a-aa',
-            'dr': '/a-aa',
+            'dr': '/kategorier/a-aa',
             }
         name = names[channel]
         js = self.get_programcard(name)
@@ -338,9 +337,9 @@ class Api():
         subtitlesUri = []
         for sub in subs:
             if sub['language'] in ['DanishLanguageSubtitles', 'CombinedLanguageSubtitles']:
-                name = f'{self.cachePath}/{self.tr(30506)}.da.srt'
+                name = f'{self.cachePath}/{self.tr(30050)}.da.srt'
             else:
-                name = f'{self.cachePath}/{self.tr(30507)}.da.srt'
+                name = f'{self.cachePath}/{self.tr(30051)}.da.srt'
             u = self.session.get(sub['link'], timeout=10)
             if u.status_code != 200:
                 u.close()

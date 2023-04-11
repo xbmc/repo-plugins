@@ -1,40 +1,212 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<settings>
-  <setting id="version" default="" visible="false"/>
-  <category label="30500">
-    <setting id="area" label="30510" type="enum" default="0" lvalues="30511|30512|30516|30513|30514" />
-    <setting id="enable.subtitles" label="30503" type="bool" default="false" />
-    <setting id="enable.localsubtitles" label="30508" type="bool" default="false" />
-    <setting id="enable.areaitem" label="30515" type="bool" default="false" />
-    <setting id="use.simpleareaitem" label="30517" type="bool" default="false" />
-    <setting id="disable.kids" label="30505" type="bool" default="true" />
-    <setting id="disable.kids.subtitles" label="30509" type="bool" default="true" />
-    <setting id="disable.kids.seasons" label="30518" type="bool" default="true" />
-    <setting id="inputstream" label="30521" type="labelenum" default="adaptive" values="adaptive|ffmpegdirect" />
-    <setting label="30504" type="action" action="RunScript($CWD/resources/lib/clearfavorites.py)" />
+<settings version="1">
+	<section id="plugin.video.drnu">
+
+  <setting id="version" label="version" type="string">
+    <level>0</level>
+    <default/>
+    <constraints>
+      <allowempty>true</allowempty>
+    </constraints>
+    <visible>false</visible>
+    <control type="edit" format="string"/>
+  </setting>
+
+  <category id="general_settings" label="30202">
+		<group id="1" label="">
+    <setting id="area" label="30204" type="integer">
+      <level>0</level>
+      <default>0</default>
+      <constraints>
+        <options>
+          <option label="30205">0</option>
+          <option label="30102">1</option>
+          <option label="30105">2</option>
+          <option label="30103">3</option>
+          <option label="30104">4</option>
+        </options>
+      </constraints>
+      <control type="spinner" format="string"/>
+    </setting>
+    <setting id="use.simpleareaitem" label="30210" type="boolean">
+      <level>0</level> <default>false</default> <control type="toggle"/>
+    </setting>
+    <setting id="enable.areaitem" label="30206" type="boolean">
+      <level>0</level> <default>false</default> <control type="toggle"/>
+    </setting>
+    <setting id="clearfavorits" label="30213" type="action">
+      <level>0</level>
+      <control type="button" format="action">
+        <data>RunPlugin(plugin://plugin.video.drnu/?clearfavorite=1)</data>
+      </control>
+    </setting>
+    <setting id="inputstream" label="30212" type="integer">
+      <level>2</level>
+      <default>0</default>
+      <constraints>
+        <options>
+          <option label="adaptive">0</option>
+          <option label="ffmpegdirect">1</option>
+        </options>
+      </constraints>
+      <control type="spinner" format="string"/>
+    </setting>
+		</group>
+
+		<group id="2" label="30200">
+    <setting id="enable.subtitles" label="30207" type="boolean">
+      <level>0</level> <default>false</default> <control type="toggle"/>
+    </setting>
+    <setting id="enable.localsubtitles" label="30214" type="boolean">
+      <level>2</level> <default>false</default> <control type="toggle"/>
+    </setting>
+    <setting id="disable.kids.subtitles" label="30209" type="boolean">
+      <level>0</level> <default>true</default> <control type="toggle"/>
+    </setting>
+		</group>
+
+		<group id="3" label="30201">
+    <setting id="disable.kids" label="30208" type="boolean">
+      <level>0</level> <default>true</default> <control type="toggle"/>
+    </setting>
+    <setting id="disable.kids.seasons" label="30211" type="boolean">
+      <level>0</level> <default>true</default> <control type="toggle"/>
+    </setting>
+		</group>
   </category>
-  <category label="30550">
-    <setting id="iptv.channels_uri" default="plugin://plugin.video.drnu?iptv=channels" visible="false"/>
-    <setting id="iptv.epg_uri" default="plugin://plugin.video.drnu?iptv=epg" visible="false"/>
-    <setting label="30551" type="action" action="InstallAddon(service.iptv.manager)" option="close" visible="!System.HasAddon(service.iptv.manager)"/>
-    <setting label="30552" type="bool" id="iptv.enabled" default="false" enable="System.HasAddon(service.iptv.manager)" />
-    <setting label="30553" type="action" action="Addon.OpenSettings(service.iptv.manager)" enable="eq(-1,true)" option="close" subsetting="true"/>
-    <setting type="lsep" label="30554"/>
-    <setting id="iptv.channels.include.dr1" type="bool" label="30555" default="true" enable="eq(-3,true)" />
-    <setting id="iptv.channels.include.dr2" type="bool" label="30556" default="true" enable="eq(-4,true)" />
-    <setting id="iptv.channels.include.drramasjang" type="bool" label="30557" default="true" enable="eq(-5,true)" />
-    <setting id="iptv.channels.include.drtv" type="bool" label="30558" default="true" enable="eq(-6,true)" />
-    <setting id="iptv.channels.include.drtvekstra" type="bool" label="30559" default="true" enable="eq(-7,true)" />
-    <setting type="lsep" label="30560"/>
-    <setting id="iptv.schedule.lookahead" label="30561" type="select" values="3|6|12|24|48|72|96|120|144|168" enable="eq(-9,true)" default="6" />
-    <setting id="iptv.schedule.referesh" label="30562" enable="false" type="text" default="Set using IPTV Manager settings" />
+
+  <category id="iptv" label="30550">
+		<group id="1" label="30550">
+    <setting id="installiptv" label="30551" type="action">
+      <level>0</level>
+      <data>InstallAddon(service.iptv.manager)</data>
+      <dependencies>
+        <dependency type="visible" on="property" operator="!is" name="infobool">System.HasAddon(service.iptv.manager)</dependency>      
+      </dependencies>
+      <control type="button" format="action">
+        <close>true</close>
+      </control>
+    </setting>
+
+    <setting id="iptv.channels_uri" type="string">
+      <level>0</level>
+      <default>plugin://plugin.video.drnu?iptv=channels</default>
+      <visible>false</visible>
+      <control type="edit" format="string"/>
+    </setting>
+    <setting id="iptv.epg_uri" type="string">
+      <level>0</level>
+      <default>plugin://plugin.video.drnu?iptv=epg</default>
+      <visible>false</visible>
+      <control type="edit" format="string"/>
+    </setting>
+    <setting id="iptv.enabled" label="30552" type="boolean">
+      <level>0</level> <default>false</default> <control type="toggle"/>
+        <dependencies>
+        	<dependency type="enable" on="property" name="infobool">System.HasAddon(service.iptv.manager)</dependency>      
+        </dependencies>
+    </setting>
+    <setting id="iptvmanager" label="30553" type="action">
+      <level>0</level>
+      <data>Addon.OpenSettings(service.iptv.manager)</data>
+      <dependencies> <dependency type="enable" setting="iptv.enabled">true</dependency> </dependencies>
+      <control type="button" format="action">
+        <close>true</close>
+      </control>
+    </setting>
+		</group>
+
+		<group id="2" label="30554">
+      <setting id="iptv.channels.include.dr1" label="30555" type="boolean">
+        <level>0</level> <default>true</default> <control type="toggle"/>
+        <dependencies> <dependency type="enable" setting="iptv.enabled">true</dependency> </dependencies>
+      </setting>
+      <setting id="iptv.channels.include.dr2" label="30556" type="boolean">
+        <level>0</level> <default>true</default> <control type="toggle"/>
+        <dependencies> <dependency type="enable" setting="iptv.enabled">true</dependency> </dependencies>
+      </setting>
+      <setting id="iptv.channels.include.drramasjang" label="30557" type="boolean">
+        <level>0</level> <default>true</default> <control type="toggle"/>
+        <dependencies> <dependency type="enable" setting="iptv.enabled">true</dependency> </dependencies>
+      </setting>
+      <setting id="iptv.channels.include.drtv" label="30558" type="boolean">
+        <level>0</level> <default>true</default> <control type="toggle"/>
+        <dependencies> <dependency type="enable" setting="iptv.enabled">true</dependency> </dependencies>
+      </setting>
+      <setting id="iptv.channels.include.drtvekstra" label="30559" type="boolean">
+        <level>0</level> <default>true</default> <control type="toggle"/>
+        <dependencies> <dependency type="enable" setting="iptv.enabled">true</dependency> </dependencies>
+      </setting>
+		</group>
+
+		<group id="3" label="30560">
+      <setting id="iptv.schedule.lookahead" label="30561" type="string">
+        <level>0</level>
+        <default>6</default>
+        <constraints>
+          <options>
+            <option>3</option>
+            <option>6</option>
+            <option>12</option>
+            <option>24</option>
+            <option>48</option>
+            <option>72</option>
+            <option>96</option>
+            <option>120</option>
+            <option>144</option>
+            <option>168</option>
+          </options>
+        </constraints>
+        <dependencies> <dependency type="enable" setting="iptv.enabled">true</dependency> </dependencies>
+        <control type="list" format="string">
+          <heading>30561</heading>
+        </control>
+      </setting>
+		</group>
   </category>
-  <category label="30501">
-    <setting label="30531" type="action" action="RunPlugin(plugin://plugin.video.drnu/?re-cache=1)" />
-    <setting id="recache.expiration" label="30532" type="number" default="24" />
-    <setting id="recache.cleanup" label="30534" type="number" default="7" />
-    <setting id="recache.enabled" label="30535" type="bool" default="true" />
-    <setting id="recache.cronjob" label="30536" type="bool" default="false"/>
-    <setting id="recache.cronexpression" label="30537" type="text" default="0 3 * * *"/>
+
+  <category id="caching" label="30203">
+		<group id="1" label="">
+    <setting id="recachenow" label="30220" type="action">
+      <level>0</level>
+      <data>RunPlugin(plugin://$ID/?re-cache=1)</data>
+      <control type="button" format="action">
+        <close>true</close>
+      </control>
+    </setting>
+
+    <setting id="recache.expiration" label="30221" type="integer">
+      <level>0</level>
+      <default>24</default>
+      <control type="edit" format="integer">
+        <heading>30221</heading>
+      </control>
+    </setting>
+    <setting id="recache.cleanup" label="30223" type="integer">
+      <level>0</level>
+      <default>7</default>
+      <control type="edit" format="integer">
+        <heading>30223</heading>
+      </control>
+    </setting>
+    <setting id="recache.enabled" label="30224" type="boolean">
+      <level>0</level> <default>true</default> <control type="toggle"/>
+    </setting>
+    <setting id="recache.cronjob" label="30225" type="boolean">
+      <level>0</level> <default>false</default> <control type="toggle"/>
+    </setting>
+    <setting id="recache.cronexpression" label="30226" type="string">
+      <level>0</level>
+      <default>0 3 * * *</default>
+      <constraints>
+        <allowempty>false</allowempty>
+      </constraints>
+      <control type="edit" format="string">
+        <heading>30226</heading>
+      </control>
+    </setting>
+		</group>
   </category>
+
+	</section>
 </settings>

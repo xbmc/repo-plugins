@@ -1,3 +1,7 @@
+[B]Version 6.2.0 - 2023-04-03[/B]
+- Complete retwrite of settings api
+- fix for categories api change from dr.dk
+
 [B]Version 6.1.1 - 2023-03-01[/B]
 - fix bug in token json writing
 - added cron job

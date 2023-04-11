@@ -20,46 +20,60 @@ msgctxt "#30000"
 msgid "Programs A-Z"
 msgstr ""
 
-msgctxt "#30003"
-msgid "Search videos"
-msgstr ""
-
-msgctxt "#30007"
-msgid "Recently watched videos"
-msgstr ""
-
-msgctxt "#30008"
-msgid "Favorite programs"
-msgstr ""
-
-msgctxt "#30009"
-msgid "Program added"
-msgstr ""
-
-msgctxt "#30010"
-msgid "Program removed"
-msgstr ""
-
-msgctxt "#30013"
-msgid "The list is empty."
-msgstr ""
-
-msgctxt "#30018"
-msgid "You can add program series to favorites using"
-msgstr ""
-
-msgctxt "#30019"
-msgid "the context menu."
-msgstr ""
-
-msgctxt "#30020"
-msgid "Your recently watched videos are automatically added."
-msgstr ""
-
-msgctxt "#30027"
+msgctxt "#30001"
 msgid "Live TV"
 msgstr ""
 
+msgctxt "#30002"
+msgid "Search videos"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Recently watched videos"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Favorite programs"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Program added"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Program removed"
+msgstr ""
+
+msgctxt "#30007"
+msgid "The list is empty."
+msgstr ""
+
+msgctxt "#30008"
+msgid "Your recently watched videos are automatically added."
+msgstr ""
+
+msgctxt "#30009"
+msgid "Add to favorite program series"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Remove from favorite program series"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Favorite program series cleared"
+msgstr ""
+
+msgctxt "#30050"
+msgid "Danish (file)"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Foreign language text (file)"
+msgstr ""
+
+
+# GUI
 msgctxt "#30100"
 msgid "DR TV Universe"
 msgstr ""
@@ -68,122 +82,114 @@ msgctxt "#30101"
 msgid "Choose area"
 msgstr ""
 
-msgctxt "#30200"
-msgid "Add to favorite program series"
-msgstr ""
-
-msgctxt "#30201"
-msgid "Remove from favorite program series"
-msgstr ""
-
-msgctxt "#30202"
-msgid "Favorite program series cleared"
-msgstr ""
-
-msgctxt "#30500"
-msgid "General"
-msgstr ""
-
-msgctxt "#30501"
-msgid "re-caching"
-msgstr ""
-
-msgctxt "#30503"
-msgid "Enable Hard-of-hearing subtitles"
-msgstr ""
-
-msgctxt "#30504"
-msgid "Clear the favorite programs list"
-msgstr ""
-
-msgctxt "#30505"
-msgid "Remove programs from Ramasjang/Ultra in alphabetical lists"
-msgstr ""
-
-msgctxt "#30506"
-msgid "Danish (file)"
-msgstr ""
-
-msgctxt "#30507"
-msgid "Foreign language text (file)"
-msgstr ""
-
-msgctxt "#30508"
-msgid "Subtitles from file"
-msgstr ""
-
-msgctxt "#30509"
-msgid "No subtitles on Ramasjang/Ultra episodes"
-msgstr ""
-
-msgctxt "#30510"
-msgid "Start in area"
-msgstr ""
-
-msgctxt "#30511"
-msgid "Show area chooser"
-msgstr ""
-
-msgctxt "#30512"
+msgctxt "#30102"
 msgid "DR TV"
 msgstr ""
 
-msgctxt "#30513"
+msgctxt "#30103"
 msgid "Ramasjang"
 msgstr ""
 
-msgctxt "#30514"
+msgctxt "#30104"
 msgid "Ultra"
 msgstr ""
 
-msgctxt "#30515"
-msgid "Show area chooser item in root"
-msgstr ""
-
-msgctxt "#30516"
+msgctxt "#30105"
 msgid "Minisjang"
 msgstr ""
 
-msgctxt "#30517"
+
+# SETTINGS
+msgctxt "#30200"
+msgid "Subtitles"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Kids"
+msgstr ""
+
+msgctxt "#30202"
+msgid "General"
+msgstr ""
+
+msgctxt "#30203"
+msgid "re-caching"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Start in area"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Show area chooser"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Show area chooser item in root"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Enable Hard-of-hearing subtitles"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Remove programs from Ramasjang/Ultra in alphabetical lists"
+msgstr ""
+
+msgctxt "#30209"
+msgid "No subtitles on Ramasjang/Ultra episodes"
+msgstr ""
+
+msgctxt "#30210"
 msgid "Use simple Area Selector"
 msgstr ""
 
-msgctxt "#30518"
+msgctxt "#30211"
 msgid "No seasons on children shows, unfold all episodes"
 msgstr ""
 
-msgctxt "#30521"
+msgctxt "#30212"
 msgid "Inputstream type"
 msgstr ""
 
-msgctxt "#30531"
+msgctxt "#30213"
+msgid "Clear the favorite programs list"
+msgstr ""
+
+msgctxt "#30214"
+msgid "Subtitles from file"
+msgstr ""
+
+msgctxt "#30220"
 msgid "re-cache all"
 msgstr ""
 
-msgctxt "#30532"
+msgctxt "#30221"
 msgid "cache expiration in hours"
 msgstr ""
 
-msgctxt "#30533"
+msgctxt "#30222"
 msgid "re-cache all in: "
 msgstr ""
 
-msgctxt "#30534"
+msgctxt "#30223"
 msgid "Days between cleanup of sqlite db"
 msgstr ""
 
-msgctxt "#30535"
+msgctxt "#30224"
 msgid "Request caching"
 msgstr ""
 
-msgctxt "#30536"
+msgctxt "#30225"
 msgid "re-cache cron job"
 msgstr ""
 
-msgctxt "#30537"
+msgctxt "#30226"
 msgid "cron expression"
 msgstr ""
 
+
+# IPTV
 msgctxt "#30550"
 msgid "IPTV Manager"
 msgstr ""
@@ -240,6 +246,8 @@ msgctxt "#30563"
 msgid "Set using IPTV Manager settings"
 msgstr ""
 
+
+# API
 msgctxt "#30900"
 msgid "There was an error while communicating with DR NU."
 msgstr ""

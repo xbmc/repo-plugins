@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="6.1.1+matrix.1" name="DR TV" provider-name="TermeHansen">
+<addon id="plugin.video.drnu" version="6.2.0+matrix.1" name="DR TV" provider-name="TermeHansen">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.dateutil" version="2.8.2" />
@@ -32,6 +32,10 @@
             <screenshot>resources/media/Screenshot3.jpg</screenshot>
             <screenshot>resources/media/Screenshot4.jpg</screenshot>
        </assets>
+       <news>[B]Version 6.2.0 - 2023-04-03[/B]
+        - Complete retwrite of settings api
+        - fix for categories api change from dr.dk
+       </news>
        <news>[B]Version 6.1.1 - 2023-03-01[/B]
         - fix bug in token json writing
         - added cron job

@@ -38,33 +38,6 @@ msgctxt "#30055"
 msgid "Password"
 msgstr "Passwort"
 
-msgctxt "#30005"
-msgid "Most recent"
-msgstr "Neuste"
-
-msgctxt "#30006"
-msgid "Most viewed"
-msgstr "Am meisten gesehen"
-
-msgctxt "#30007"
-msgid "Last chance"
-msgstr "Letzte chance"
-
-msgctxt "#30008"
-msgid "Magazines A-Z"
-msgstr "Sendungen A-Z"
-
-msgctxt "#30009"
-msgid "This week"
-msgstr "Diese Woche"
-
-msgctxt "#30010"
-msgid "My list"
-msgstr "Meine Liste"
-
-msgctxt "#30011"
-msgid "My history"
-msgstr "Mein Videoverlauf"
 
 msgctxt "#30012"
 msgid "Search"

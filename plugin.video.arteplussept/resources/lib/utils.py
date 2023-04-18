@@ -1,70 +1,78 @@
+"""Utility methods mainly to format strings and manipulate date"""
 import datetime
-import dateutil.parser
-from xbmcswift2 import xbmc
 import html
 import urllib.parse
+# pylint: disable=import-error
+import dateutil.parser
+# pylint: disable=import-error
+from xbmcswift2 import xbmc
 
 
 def format_live_title_and_subtitle(title, subtitle=None):
-    label = u'[COLOR ffffa500]LIVE[/COLOR] - '
-    label += format_title_and_subtitle(title, subtitle)
-    return label
+    """Orange prefix LIVE for live stream"""
+    return f"[COLOR ffffa500]LIVE[/COLOR] - {format_title_and_subtitle(title, subtitle)}"
 
 def colorize(text, color):
     """
-    color: a hex color string (RRGGBB or #RRGGBB) or None
+    Wrap text to be display with color
+    :param str text: text to colorize
+    :param str color: a hex color string (RRGGBB or #RRGGBB) or None
     """
     if not color:
         return text
     if color.startswith('#'):
         color = color[1:]
-    return '[COLOR ff' + color + ']' + text + '[/COLOR]'
+    return f"[COLOR ff{color}]{text}[/COLOR]"
 
 
 def format_title_and_subtitle(title, subtitle=None):
-    label = u'[B]{title}[/B]'.format(title=html.unescape(title))
+    """Build string for menu entry thanks to title and optionally subtitle"""
+    label = f"[B]{html.unescape(title)}[/B]"
     # suffixes
     if subtitle:
-        label += u' - {subtitle}'.format(subtitle=html.unescape(subtitle))
+        label += f" - {html.unescape(subtitle)}"
     return label
 
 
-def encode_string(str):
-    return urllib.parse.quote_plus(str, encoding='utf-8', errors='replace')
+def encode_string(string):
+    """Return escaped string to be used as URL. More details in
+    https://docs.python.org/3/library/urllib.parse.html#urllib.parse.quote_plus"""
+    return urllib.parse.quote_plus(string, encoding='utf-8', errors='replace')
 
 
-def decode_string(str):
-    return urllib.parse.unquote_plus(str, encoding='utf-8', errors='replace')
+def decode_string(string):
+    """Return unescaped string to be human readable. More details in
+    https://docs.python.org/3/library/urllib.parse.html#urllib.parse.unquote_plus"""
+    return urllib.parse.unquote_plus(string, encoding='utf-8', errors='replace')
 
 
-def parse_date(datestr):
+def parse_date_hbbtv(datestr):
+    """Try to parse ``datestr`` into a ``datetime`` object. Return ``None`` if parsing fails.
+    Similar to parse_date_artetv."""
     date = None
     try:
         date = dateutil.parser.parse(datestr)
-    except dateutil.parser.ParserError as e:
-        logmsg = "[{addon_id}] Problem with parsing date: {error}".format(addon_id="plugin.video.arteplussept", error=e)
-        xbmc.log(msg=logmsg, level=xbmc.LOGWARNING)
+    except dateutil.parser.ParserError as error:
+        xbmc.log(f"[plugin.video.arteplussept] Problem with parsing date: {error}",
+                 level=xbmc.LOGWARNING)
     return date
 
 
-def parse_artetv_date(datestr):
+def parse_date_artetv(datestr):
+    """Try to parse ``datestr`` into a ``datetime`` object like 2022-07-01T03:00:00Z for instance.
+     Return ``None`` if parsing fails.
+     Similar to ``parse_date_hbbtv``"""
     date = None
     try:
-        date = datetime.datetime.strptime(datestr, '%Y-%m-%dT%H:%M:%S%z') # 2022-07-01T03:00:00Z
+        date = datetime.datetime.strptime(datestr, '%Y-%m-%dT%H:%M:%S%z')
     except TypeError:
         date = None
     return date
 
 
-def past_week():
-    today = datetime.date.today()
-    one_day = datetime.timedelta(days=1)
-
-    for i in range(0, 8):  # TODO: find better interval
-        yield today - (one_day * i)
-
 def is_playlist(program_id):
-    is_playlist = False
+    """Return True if program_id is a str starting with PL- or RC-."""
+    is_playlist_var = False
     if isinstance(program_id, str):
-        is_playlist = program_id.startswith('RC-') or program_id.startswith('PL-')
-    return is_playlist
+        is_playlist_var = program_id.startswith('RC-') or program_id.startswith('PL-')
+    return is_playlist_var

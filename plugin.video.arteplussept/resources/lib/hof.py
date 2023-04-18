@@ -1,74 +1,53 @@
-import functools
+"""Utility methods for lists and dictionaries"""
 
-def find(findFn, l):
+def find(find_fctn, lst):
     """
-      Will return the first item matching the findFn
-      findFn: A function taking one param: value. MUST return a boolean
-      l: The list to search
+      Return the first item matching the findfctn
+      :param fn find_fctn: A function taking one param: value. MUST return a boolean
+      :param list lst: The list to search
     """
-    for item in l:
-        if findFn(item):
+    for item in lst:
+        if find_fctn(item):
             return item
     return None
 
 
-def find_dict(findFn, d):
+def find_dict(find_fctn, dictionary):
     """
-      Will return the first value matching the findFn
-      findFn: A function taking two params: value, key. MUST return a boolean
-      d: The dict to search
+      Return the first value matching the findfctn
+      :param fn find_fctn: A function taking two params: value, key. MUST return a boolean
+      :param dict dictionary: The dict to search
     """
-    for k, v in d.items():
-        if findFn(v, k):
-            return v
+    for key, value in dictionary.items():
+        if find_fctn(value, key):
+            return value
     return None
 
 
-def map_dict(mapFn, d):
+def map_dict(map_fctn, dictionary):
     """
-      mapFn: A function taking two params: value, key
-      d: The dict to map
+      :param fn map_fctn: A function taking two params: value, key
+      :param dict dictionary: The dict to map
     """
-    return {k: mapFn(v, k) for k, v in d.items()}
+    return {k: map_fctn(v, k) for k, v in dictionary.items()}
 
 
-def filter_dict(filterFn, d):
+def filter_dict(filter_fctn, dictionary):
     """
-      filterFn: A function taking two params: value, key. MUST return a boolean
-      d: The dict to filter
+      :param fn filter_fctn: A function taking two params: value, key. MUST return a boolean
+      :param dict dictionary: The dict to filter
     """
-    return {k: v for k, v in d.items() if filterFn(v, k)}
-
-
-def reject_dict(filterFn, d):
-    """
-      filterFn: A function taking two params: value, key. MUST return a boolean
-      d: The dict to filter
-    """
-    def invert(*args, **kwargs):
-        return not filterFn(*args, **kwargs)
-    return filter_dict(invert, d)
-
-
-def get_property(d, path, default=None):
-    def walk(sub_d, segment):
-        if sub_d is None:
-            return None
-        return sub_d.get(segment)
-    segments = path.split('.')
-    return functools.reduce(walk, segments, d) or default
-
+    return {key: value for key, value in dictionary.items() if filter_fctn(value, key)}
 
 def merge_dicts(*args):
+    """
+      Merge dictionaries in a single one. Precedence on lastest dictionaries in args
+    """
     result = {}
-    for d in args:
-        result.update(d)
+    for dictionary in args:
+        result.update(dictionary)
     return result
 
-
-def flatten(l):
-    return [item for sublist in l for item in sublist]
-
-
-def flat_map(f, lst):
-    return [item for list_item in lst for item in f(list_item)]
+def flat_map(fctn, lst):
+    """Return the results of applying fctn on sub elements of lst."""
+    return [item for list_item in lst for item in fctn(list_item)]

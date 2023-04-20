@@ -552,11 +552,16 @@ def ParseSingleJSON(meta, item, name, added_playables, added_directories):
             main_url = 'https://www.bbc.co.uk/iplayer/episode/' + subitem.get('id')
         if subitem.get('subtitle'):
             if 'default' in subitem.get('subtitle'):
+                sub = subitem['subtitle'].get('default')
+                if sub is not None:
+                    sub = ' - '+sub
+                else:
+                    sub = ''
                 if 'title' in subitem:
                     if 'default' in subitem.get('title'):
-                        title = '%s - %s' % (subitem['title'].get('default'), subitem['subtitle'].get('default'))
+                        title = '%s%s' % (subitem['title'].get('default'), sub)
                 else:
-                     title = '%s - %s' % (name, subitem['subtitle'].get('default'))
+                     title = '%s%s' % (name, sub)
         elif subitem.get('title'):
             if 'default' in subitem.get('title'):
                 title = subitem['title'].get('default')
@@ -577,7 +582,23 @@ def ParseSingleJSON(meta, item, name, added_playables, added_directories):
             elif 'id' in item:
                 main_url = 'https://www.bbc.co.uk/iplayer/episode/' + item.get('id')
         elif 'id' in item:
-            main_url = 'https://www.bbc.co.uk/iplayer/episode/' + item.get('id')
+            if 'initial_children' in item:
+                for ic in item['initial_children']:
+                    if 'id' in ic:
+                        if item['id'] == ic['id']:
+                            # This is just a playable, do not create a directory.
+                            # Use the initial children to create the entry as it normally contains more information.
+                            ParseSingleJSON(meta, ic, name, added_playables, added_directories)
+                        else:
+                            # There is a directory, and an initial episode.
+                            # We need to create one directory and one playable.
+                            ParseSingleJSON(meta, ic, name, added_playables, added_directories)
+                            episodes_url = 'https://www.bbc.co.uk/iplayer/episodes/' + item.get('id')
+                    else:
+                        # Never seen this, but seems possible. This is just a directory.
+                        episodes_url = 'https://www.bbc.co.uk/iplayer/episodes/' + item.get('id')
+            else:
+                main_url = 'https://www.bbc.co.uk/iplayer/episode/' + item.get('id')
         elif 'href' in item:
             # Some strings already contain the full URL, need to work around this.
             url = item['href'].replace('http://www.bbc.co.uk','')
@@ -621,7 +642,9 @@ def ParseSingleJSON(meta, item, name, added_playables, added_directories):
         if 'synopsis' in item:
             synopsis = item['synopsis']
         if 'synopses' in item:
-            if 'large' in item['synopses']:
+            if 'editorial' in item['synopses']:
+                synopsis = item['synopses']['editorial']
+            elif 'large' in item['synopses']:
                 synopsis = item['synopses']['large']
             elif 'medium' in item['synopses']:
                 synopsis = item['synopses']['medium']

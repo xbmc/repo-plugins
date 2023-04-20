@@ -1,3 +1,6 @@
+v4.0.14
+Fix for further changes to JSON format.
+
 v4.0.13
 Optimization for slice processing (which no longer seems to be needed at all).
 Fix for yet a different twist in A-Z.

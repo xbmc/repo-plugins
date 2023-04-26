@@ -44,6 +44,7 @@ CDN = str(settings.getSetting(id="cdn"))
 NO_SPOILERS = settings.getSetting(id="no_spoilers")
 DISABLE_VIDEO_PADDING = str(settings.getSetting(id='disable_video_padding'))
 FAV_TEAM = str(settings.getSetting(id="fav_team"))
+INCLUDE_FAV_AFFILIATES = str(settings.getSetting(id='include_fav_affiliates'))
 TEAM_NAMES = settings.getSetting(id="team_names")
 TIME_FORMAT = settings.getSetting(id="time_format")
 SINGLE_TEAM = str(settings.getSetting(id='single_team'))
@@ -99,7 +100,15 @@ VERIFY = True
 
 SECONDS_PER_SEGMENT = 5
 
-def find(source,start_str,end_str):    
+MLB_ID = '1'
+MILB_IDS = '11,12,13,14'
+MLB_TEAM_IDS = '108,109,110,111,112,113,114,115,116,117,118,119,120,121,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,158,159,160'
+
+AFFILIATE_TEAM_IDS = {"Los Angeles Angels":"401,559,460,561","Arizona Diamondbacks":"419,516,2310,5368","Baltimore Orioles":"418,568,548,488","Boston Red Sox":"428,414,533,546","Chicago Cubs":"521,451,550,553","Cincinnati Reds":"450,459,498,416","Cleveland Guardians":"445,402,437,481","Colorado Rockies":"259,486,342,538","Detroit Tigers":"512,570,582,106","Houston Astros":"482,5434,573,3712","Kansas City Royals":"1350,3705,541,565","Los Angeles Dodgers":"260,238,456,526","Washington Nationals":"436,534,547,426","New York Mets":"453,507,552,505","Oakland Athletics":"237,499,400,524","Pittsburgh Pirates":"3390,484,452,477","San Diego Padres":"103,510,584,4904","Seattle Mariners":"403,515,529,574","San Francisco Giants":"105,461,476,3410","St. Louis Cardinals":"279,235,440,443","Tampa Bay Rays":"2498,233,234,421","Texas Rangers":"102,485,540,448","Toronto Blue Jays":"424,435,463,422","Minnesota Twins":"492,509,1960,3898","Philadelphia Phillies":"427,522,1410,566","Atlanta Braves":"430,432,478,431","Chicago White Sox":"247,580,487,494","Miami Marlins":"479,564,554,4124","New York Yankees":"1956,587,531,537","Milwaukee Brewers":"249,572,556,5015"}
+
+ESPN_SUNDAY_NIGHT_BLACKOUT_COUNTRIES = ["Angola", "Anguilla", "Antigua and Barbuda", "Argentina", "Aruba", "Australia", "Bahamas", "Barbados", "Belize", "Belize", "Benin", "Bermuda", "Bolivia", "Bonaire", "Botswana", "Brazil", "British Virgin Islands", "Burkina Faso", "Burundi", "Cameroon", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "Colombia", "Comoros", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Curacao", "Democratic Republic of the Congo", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "El Salvador", "England", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Falkland Islands", "Falkland Islands", "Fiji", "French Guiana", "French Guiana", "French Polynesia", "Gabon", "Ghana", "Grenada", "Guadeloupe", "Guatemala", "Guinea", "Guinea Bissau", "Guyana", "Guyana", "Haiti", "Honduras", "Ireland", "Jamaica", "Kenya", "Kiribati", "Lesotho", "Liberia", "Madagascar", "Malawi", "Mali", "Marshall Islands", "Martinique", "Mayotte", "Mexico", "Micronesia", "Montserrat", "Mozambique", "Namibia", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Northern Ireland", "Palau Islands", "Panama", "Paraguay", "Peru", "Republic of Ireland", "Reunion", "Rwanda", "Saba", "Saint Maarten", "Samoa", "Sao Tome & Principe", "Scotland", "Senegal", "Seychelles", "Sierra Leone", "Solomon Islands", "Somalia", "South Africa", "St. Barthelemy", "St. Eustatius", "St. Kitts and Nevis", "St. Lucia", "St. Martin", "St. Vincent and the Grenadines", "Sudan", "Surinam", "Suriname", "Tahiti", "Tanzania & Zanzibar", "The Gambia", "The Republic of Congo", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Uruguay", "Venezuela", "Wales", "Zambia", "Zimbabwe"]
+
+def find(source,start_str,end_str):
     start = source.find(start_str)
     end = source.find(end_str,start+len(start_str))
 
@@ -204,13 +213,18 @@ def get_params():
     return param
 
 
-def add_stream(name, title, desc, game_pk, icon=None, fanart=None, info=None, video_info=None, audio_info=None, stream_date=None, spoiler='True', suspended=None, start_inning='False', blackout='False'):
+def add_stream(name, title, desc, game_pk, icon=None, fanart=None, info=None, video_info=None, audio_info=None, stream_date=None, spoiler='True', suspended=None, start_inning='False', blackout='False', milb=None):
     ok=True
-    u_params = "&name="+urllib.quote_plus(title)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&stream_date="+urllib.quote_plus(str(stream_date))+"&spoiler="+urllib.quote_plus(str(spoiler))+"&suspended="+urllib.quote_plus(str(suspended))+"&start_inning="+urllib.quote_plus(str(start_inning))+"&description="+urllib.quote_plus(desc)+"&blackout="+urllib.quote_plus(str(blackout))
-    if icon is None: icon = ICON
-    if fanart is None: fanart = FANART
-    art_params = "&icon="+urllib.quote_plus(icon)+"&fanart="+urllib.quote_plus(fanart)
-    u=sys.argv[0]+"?mode="+str(104)+u_params+art_params
+
+    if milb is not None:
+        u_params = "&featured_video="+urllib.quote_plus("https://dai.tv.milb.com/api/v2/playback-info/games/"+str(game_pk)+"/contents/14862/products/milb-carousel")+"&name="+urllib.quote_plus(title)+"&description="+urllib.quote_plus(desc)
+        u=sys.argv[0]+"?mode="+str(301)+u_params
+    else:
+        u_params = "&name="+urllib.quote_plus(title)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&stream_date="+urllib.quote_plus(str(stream_date))+"&spoiler="+urllib.quote_plus(str(spoiler))+"&suspended="+urllib.quote_plus(str(suspended))+"&start_inning="+urllib.quote_plus(str(start_inning))+"&description="+urllib.quote_plus(desc)+"&blackout="+urllib.quote_plus(str(blackout))
+        if icon is None: icon = ICON
+        if fanart is None: fanart = FANART
+        art_params = "&icon="+urllib.quote_plus(icon)+"&fanart="+urllib.quote_plus(fanart)
+        u=sys.argv[0]+"?mode="+str(104)+u_params+art_params
 
     liz=xbmcgui.ListItem(name)
     liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
@@ -224,7 +238,8 @@ def add_stream(name, title, desc, game_pk, icon=None, fanart=None, info=None, vi
         liz.addStreamInfo('audio', audio_info)
 
     # add Choose Stream and Highlights as context menu items
-    liz.addContextMenuItems([(LOCAL_STRING(30390), 'PlayMedia(plugin://plugin.video.mlbtv/?mode='+str(103)+u_params+art_params+')'), (LOCAL_STRING(30391), 'Container.Update(plugin://plugin.video.mlbtv/?mode='+str(106)+'&name='+urllib.quote_plus(title)+'&game_pk='+urllib.quote_plus(str(game_pk))+art_params+')')])
+    if milb is None:
+        liz.addContextMenuItems([(LOCAL_STRING(30390), 'PlayMedia(plugin://plugin.video.mlbtv/?mode='+str(103)+u_params+art_params+')'), (LOCAL_STRING(30391), 'Container.Update(plugin://plugin.video.mlbtv/?mode='+str(106)+'&name='+urllib.quote_plus(title)+'&game_pk='+urllib.quote_plus(str(game_pk))+art_params+')')])
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
     xbmcplugin.setContent(addon_handle, 'episodes')
@@ -259,10 +274,10 @@ def addLink(name,url,title,icon,info=None,video_info=None,audio_info=None,fanart
     return ok
 
 
-def addDir(name,mode,icon,fanart=None,game_day=None,start_inning='False'):
+def addDir(name,mode,icon,fanart=None,game_day=None,start_inning='False',sport=MLB_ID):
     ok=True
 
-    u_params="&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(icon)+'&start_inning='+urllib.quote_plus(str(start_inning))
+    u_params="&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(icon)+'&start_inning='+urllib.quote_plus(str(start_inning))+'&sport='+urllib.quote_plus(str(sport))
     if game_day is not None:
         u_params = u_params+"&game_day="+urllib.quote_plus(game_day)
     u=sys.argv[0]+"?mode="+str(mode)+u_params
@@ -491,7 +506,7 @@ def get_last_name(full_name):
 # get the teams blacked out based on zip code
 def get_blackout_teams(zip_code):
     xbmc.log('Resetting blackout teams')
-    blackout_teams = []
+    found_blackout_teams = []
     try:
         if re.match('^[0-9]{5}$', zip_code):
             xbmc.log('Fetching new blackout teams')
@@ -501,21 +516,30 @@ def get_blackout_teams(zip_code):
                 'Origin': 'https://www.mlb.com',
                 'Referer': 'https://www.mlb.com/'
             }
-            r = requests.get(url, headers=headers, verify=VERIFY)
+            # set verify to False here to avoid a Python request error "unable to get local issuer certificate"
+            r = requests.get(url, headers=headers, verify=False)
             json_source = r.json()
             if 'teams' in json_source:
-                blackout_teams = json_source['teams']
+                found_blackout_teams = json_source['teams']
     except:
         pass
 
-    return blackout_teams
+    return found_blackout_teams
 
-
+COUNTRY = str(settings.getSetting(id='country'))
+OLD_COUNTRY = str(settings.getSetting(id='old_country'))
 ZIP_CODE = str(settings.getSetting(id='zip_code'))
 OLD_ZIP_CODE = str(settings.getSetting(id='old_zip_code'))
-if ZIP_CODE != OLD_ZIP_CODE:
-    settings.setSetting(id='old_zip_code', value=ZIP_CODE)
-    BLACKOUT_TEAMS = get_blackout_teams(ZIP_CODE)
-    settings.setSetting(id='blackout_teams', value=json.dumps(BLACKOUT_TEAMS))
+BLACKOUT_TEAMS = json.loads(str(settings.getSetting(id='blackout_teams')))
+if COUNTRY == 'Canada':
+    BLACKOUT_TEAMS = ['TOR']
+elif COUNTRY == 'USA':
+    if ZIP_CODE != OLD_ZIP_CODE or COUNTRY != OLD_COUNTRY:
+        BLACKOUT_TEAMS = get_blackout_teams(ZIP_CODE)
 else:
-    BLACKOUT_TEAMS = json.loads(str(settings.getSetting(id='blackout_teams')))
+    BLACKOUT_TEAMS = []
+
+settings.setSetting(id='blackout_teams', value=json.dumps(BLACKOUT_TEAMS))
+settings.setSetting(id='old_zip_code', value=ZIP_CODE)
+settings.setSetting(id='old_country', value=COUNTRY)
+

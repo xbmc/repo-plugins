@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2023.3.28+matrix.1" provider-name="eracknaphobia">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2023.4.14+matrix.1" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -25,6 +25,8 @@
             - fixed bug on stream select for games without video
             - fixed data source for game changer
             - use full team names for non-MLB teams
+            - added MiLB (minor league) games
+            - added country setting for better labeling international blackouts
         </news>
         <language>en</language>
         <platform>all</platform>

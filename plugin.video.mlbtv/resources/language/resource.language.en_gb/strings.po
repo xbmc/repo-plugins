@@ -321,7 +321,7 @@ msgid "Watch in YouTube Add-on"
 msgstr ""
 
 msgctxt "#30415"
-msgid "Zip code (5 digits, for blackout labels)"
+msgid "USA Zip code (5 digits, for blackout labels)"
 msgstr ""
 
 msgctxt "#30416"
@@ -364,4 +364,15 @@ msgctxt "#30425"
 msgid "Skip adjust end (seconds)"
 msgstr ""
 
+msgctxt "#30426"
+msgid "Minor League Games"
+msgstr ""
+
+msgctxt "#30427"
+msgid "Include favorite team's affiliates"
+msgstr ""
+
+msgctxt "#30428"
+msgid "Country (for blackout labels)"
+msgstr ""
 

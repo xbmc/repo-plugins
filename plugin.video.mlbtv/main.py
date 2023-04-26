@@ -16,6 +16,7 @@ icon = None
 fanart = None
 featured_video = None
 description = None
+sport = MLB_ID
 
 if 'name' in params:
     name = urllib.unquote_plus(params["name"])
@@ -59,6 +60,9 @@ if 'featured_video' in params:
 if 'description' in params:
     description = urllib.unquote_plus(params["description"])
 
+if 'sport' in params:
+    sport = urllib.unquote_plus(params["sport"])
+
 # default addon home screen
 if mode is None:
     # autoplay fav team, if that setting is enabled and a live broadcast is in progress
@@ -73,11 +77,11 @@ if mode is None:
 
 # Today's Games
 elif mode == 100:
-    todays_games(None, start_inning)
+    todays_games(None, start_inning, sport)
 
 # Prev and Next
 elif mode == 101:
-    todays_games(game_day, start_inning)
+    todays_games(game_day, start_inning, sport)
 
 # autoplay, use an extra parameter to force auto stream selection
 elif mode == 102:
@@ -117,6 +121,10 @@ elif mode == 108:
     game_day = yesterdays_date()
     # Refresh will erase history, so navigating back won't bring up the inning prompt again
     xbmc.executebuiltin('Container.Refresh("plugin://plugin.video.mlbtv/?mode=101&game_day='+game_day+'&start_inning='+str(start_inning)+'")')
+
+# MiLB Games
+elif mode == 109:
+    todays_games(None, start_inning, "11,12,13,14,16")
 
 # Goto Date
 elif mode == 200:

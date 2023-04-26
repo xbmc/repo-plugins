@@ -6,11 +6,13 @@ def categories():
     # see yesterday's scores at inning in the main menu
     addDir(LOCAL_STRING(30413), 108, ICON, FANART)
     addDir(LOCAL_STRING(30362), 200, ICON, FANART)
+    # show MiLB games in the main menu
+    addDir(LOCAL_STRING(30426), 109, ICON, FANART)
     # show Featured Videos in the main menu
     addDir(LOCAL_STRING(30363), 300, ICON, FANART)
 
 
-def todays_games(game_day, start_inning='False'):
+def todays_games(game_day, start_inning='False', sport=MLB_ID):
     today = localToEastern()
     if game_day is None:
         game_day = today
@@ -21,7 +23,7 @@ def todays_games(game_day, start_inning='False'):
     #url_game_day = display_day.strftime('year_%Y/month_%m/day_%d')
     prev_day = display_day - timedelta(days=1)
 
-    addDir('[B]<< %s[/B]' % LOCAL_STRING(30010), 101, PREV_ICON, FANART, prev_day.strftime("%Y-%m-%d"), start_inning)
+    addDir('[B]<< %s[/B]' % LOCAL_STRING(30010), 101, PREV_ICON, FANART, prev_day.strftime("%Y-%m-%d"), start_inning, sport)
 
     date_display = '[B][I]' + colorString(display_day.strftime("%A, %m/%d/%Y"), GAMETIME_COLOR) + '[/I][/B]'
 
@@ -30,11 +32,17 @@ def todays_games(game_day, start_inning='False'):
     #url = 'http://gdx.mlb.com/components/game/mlb/' + url_game_day + '/grid_ce.json'
     url = API_URL + '/api/v1/schedule'
     # url += '?hydrate=broadcasts(all),game(content(all)),probablePitcher,linescore,team,flags'
-    url += '?hydrate=game(content(media(epg))),probablePitcher,linescore,team,flags,gameInfo'
+    url += '?hydrate=broadcasts(all),game(content(media(epg))),probablePitcher,linescore,team,flags,gameInfo'
     # 51 is international (i.e. World Baseball Classic) but they aren't streamed in the normal way
     #url += '&sportId=1,51'
-    url += '&sportId=1'
+    url += '&sportId=' + sport
+    if sport == MLB_ID and INCLUDE_FAV_AFFILIATES == 'true':
+        url += ',' + MILB_IDS
     url += '&date=' + game_day
+    if sport == MLB_ID:
+        url += '&teamId=' + MLB_TEAM_IDS
+        if INCLUDE_FAV_AFFILIATES == 'true' and FAV_TEAM != 'None':
+            url += ',' + AFFILIATE_TEAM_IDS[FAV_TEAM]
 
     headers = {
         'User-Agent': UA_ANDROID
@@ -94,8 +102,8 @@ def todays_games(game_day, start_inning='False'):
     except:
         pass
 
-    # Big Inning and game changer only available for non-free accounts
-    if ONLY_FREE_GAMES != 'true':
+    # Big Inning and game changer only available for non-free accounts (and not in minor league lists)
+    if ONLY_FREE_GAMES != 'true' and sport == MLB_ID:
         # if the requested date is not in the past, we have games for this date, and it's a regular season date,
         # then show the Big Inning listitem
         if today <= game_day and len(games) > 0 and games[0]['seriesDescription'] == 'Regular Season':
@@ -112,36 +120,92 @@ def todays_games(game_day, start_inning='False'):
         pass
 
     next_day = display_day + timedelta(days=1)
-    addDir('[B]%s >>[/B]' % LOCAL_STRING(30011), 101, NEXT_ICON, FANART, next_day.strftime("%Y-%m-%d"), start_inning)
+    addDir('[B]%s >>[/B]' % LOCAL_STRING(30011), 101, NEXT_ICON, FANART, next_day.strftime("%Y-%m-%d"), start_inning, sport)
 
 
 def create_game_listitem(game, game_day, start_inning, today):
-    #icon = ICON
-    icon = 'https://img.mlbstatic.com/mlb-photos/image/upload/ar_167:215,c_crop/fl_relative,l_team:' + str(game['teams']['home']['team']['id']) + ':fill:spot.png,w_1.0,h_1,x_0.5,y_0,fl_no_overflow,e_distort:100p:0:200p:0:200p:100p:0:100p/fl_relative,l_team:' + str(game['teams']['away']['team']['id']) + ':logo:spot:current,w_0.38,x_-0.25,y_-0.16/fl_relative,l_team:' + str(game['teams']['home']['team']['id']) + ':logo:spot:current,w_0.38,x_0.25,y_0.16/w_750/team/' + str(game['teams']['away']['team']['id']) + '/fill/spot.png'
-    # http://mlb.mlb.com/mlb/images/devices/ballpark/1920x1080/2681.jpg
-    # B&W
-    # fanart = 'http://mlb.mlb.com/mlb/images/devices/ballpark/1920x1080/'+game['venue_id']+'.jpg'
-    # Color
-    # fanart = 'http://www.mlb.com/mlb/images/devices/ballpark/1920x1080/color/' + str(game['venue']['id']) + '.jpg'
-    fanart = 'http://cd-images.mlbstatic.com/stadium-backgrounds/color/light-theme/1920x1080/%s.png' % game['venue']['id']
-
     game_pk = game['gamePk']
     xbmc.log(str(game_pk))
 
-    if TEAM_NAMES == "0":
-        away_team = game['teams']['away']['team']['teamName']
-        home_team = game['teams']['home']['team']['teamName']
+    milb = None
+    level_abbr = ''
+    # MiLB titles and graphics
+    if game['teams']['home']['team']['sport']['id'] != 1:
+        # Skip MiLB games without any broadcast
+        milb_broadcast = None
+        if 'broadcasts' in game:
+            for broadcast in game['broadcasts']:
+                if broadcast['name'] == 'MiLB.TV':
+                    milb_broadcast = broadcast
+                    break
+        if milb_broadcast is None:
+            return
+
+        milb = 'True'
+
+        level_abbr = game['teams']['home']['team']['sport']['name']
+        if level_abbr[0] == 'T':
+            level_abbr = 'AAA'
+        elif level_abbr[0] == 'D':
+            level_abbr = 'AA'
+        elif level_abbr[0] == 'H':
+            level_abbr = 'A+'
+        elif level_abbr[0] == 'S':
+            level_abbr = 'A'
+        level_abbr += ': '
+
+        away_name = game['teams']['away']['team']['shortName']
+        away_org = game['teams']['away']['team']['parentOrgName'].split()[-1]
+        if (away_org == 'Sox') or (away_org == 'Jays'):
+            away_org = game['teams']['away']['team']['parentOrgName'].split()[-2] + ' ' + game['teams']['away']['team']['parentOrgName'].split()[-1]
+
+        home_name = game['teams']['home']['team']['shortName']
+        home_org = game['teams']['home']['team']['parentOrgName'].split()[-1]
+        if (home_org == 'Sox') or (home_org == 'Jays'):
+            home_org = game['teams']['home']['team']['parentOrgName'].split()[-2] + ' ' + game['teams']['home']['team']['parentOrgName'].split()[-1]
+
+        away_team = away_name + ' (' + away_org + ')'
+        home_team = home_name + ' (' + home_org + ')'
+
+        title = level_abbr + away_team + ' at ' + home_team
+
+        icon_id = game['teams']['home']['team']['id']
+        if away_org in FAV_TEAM:
+            fav_game = True
+            away_team = colorString(away_team, getFavTeamColor())
+            icon_id = game['teams']['away']['team']['id']
+
+        if home_org in FAV_TEAM:
+            fav_game = True
+            home_team = colorString(home_team, getFavTeamColor())
+
+        icon = 'https://www.mlbstatic.com/team-logos/share/' + str(icon_id) + '.jpg'
+        fanart = FANART
+
+        desc = game['teams']['home']['team']['sport']['name'] + ' ' + game['teams']['home']['team']['league']['name'] + '[CR]' + game['teams']['away']['team']['name'] + ' at ' + game['teams']['home']['team']['name'] + '[CR]'
+
+    # MLB titles and graphics
     else:
-        away_team = game['teams']['away']['team']['abbreviation']
-        home_team = game['teams']['home']['team']['abbreviation']
 
-    # Use full team name for non-MLB teams
-    if game['teams']['away']['team']['sport']['name'] != 'Major League Baseball':
-        away_team = game['teams']['away']['team']['name']
-    if game['teams']['home']['team']['sport']['name'] != 'Major League Baseball':
-        home_team = game['teams']['home']['team']['name']
+        if TEAM_NAMES == "0":
+            away_team = game['teams']['away']['team']['teamName']
+            home_team = game['teams']['home']['team']['teamName']
+        else:
+            away_team = game['teams']['away']['team']['abbreviation']
+            home_team = game['teams']['home']['team']['abbreviation']
 
-    title = away_team + ' at ' + home_team
+        # Use full team name for non-MLB teams
+        if game['teams']['away']['team']['sport']['name'] != 'Major League Baseball':
+            away_team = game['teams']['away']['team']['name']
+        if game['teams']['home']['team']['sport']['name'] != 'Major League Baseball':
+            home_team = game['teams']['home']['team']['name']
+
+        title = away_team + ' at ' + home_team
+
+        icon = 'https://img.mlbstatic.com/mlb-photos/image/upload/ar_167:215,c_crop/fl_relative,l_team:' + str(game['teams']['home']['team']['id']) + ':fill:spot.png,w_1.0,h_1,x_0.5,y_0,fl_no_overflow,e_distort:100p:0:200p:0:200p:100p:0:100p/fl_relative,l_team:' + str(game['teams']['away']['team']['id']) + ':logo:spot:current,w_0.38,x_-0.25,y_-0.16/fl_relative,l_team:' + str(game['teams']['home']['team']['id']) + ':logo:spot:current,w_0.38,x_0.25,y_0.16/w_750/team/' + str(game['teams']['away']['team']['id']) + '/fill/spot.png'
+        fanart = 'http://cd-images.mlbstatic.com/stadium-backgrounds/color/light-theme/1920x1080/%s.png' % game['venue']['id']
+
+        desc = ''
 
     is_free = False
     if 'content' in game and 'media' in game['content'] and 'freeGame' in game['content']['media']:
@@ -242,7 +306,6 @@ def create_game_listitem(game, game_day, start_inning, today):
 
     stream_date = str(game_day)
 
-    desc = ''
     probables = ''
     if ('probablePitcher' in game['teams']['away'] and 'fullName' in game['teams']['away']['probablePitcher']) or ('probablePitcher' in game['teams']['home'] and 'fullName' in game['teams']['home']['probablePitcher']):
         probables = ' ('
@@ -265,9 +328,9 @@ def create_game_listitem(game, game_day, start_inning, today):
     if 'venue' in game and 'name' in game['venue']:
         desc += '[CR]From ' + game['venue']['name']
     if game['status']['abstractGameState'] == 'Preview' or (start_inning == 'False' and spoiler == 'False'):
-        name = game_time + ' ' + away_team + ' at ' + home_team
+        name = game_time + ' ' + level_abbr + away_team + ' at ' + home_team
     else:
-        name = game_time + ' ' + away_team
+        name = game_time + ' ' + level_abbr + away_team
         away_score = ''
         home_score = ''
         try:
@@ -312,6 +375,16 @@ def create_game_listitem(game, game_day, start_inning, today):
     if game['scheduled_innings'] != 9:
         desc += '[CR]' + str(game['scheduled_innings']) + '-inning game'
 
+    # Display TV broadcast info
+    broadcast_list = []
+    if 'broadcasts' in game:
+        for broadcast in game['broadcasts']:
+            # ignore non-TV and duplicate broadcasts
+            if broadcast['type'] == 'TV' and broadcast['name'] not in broadcast_list:
+                broadcast_list.append(broadcast['name'])
+    if len(broadcast_list) > 0:
+        desc += '[CR]' + ", ".join(broadcast_list)
+
     # Check local/national blackout status
     blackout = 'False'
     try:
@@ -344,7 +417,7 @@ def create_game_listitem(game, game_day, start_inning, today):
     # If set only show free games in the list
     if ONLY_FREE_GAMES == 'true' and not is_free:
         return
-    add_stream(name, title, desc, game_pk, icon, fanart, info, video_info, audio_info, stream_date, spoiler, suspended, start_inning, blackout)
+    add_stream(name, title, desc, game_pk, icon, fanart, info, video_info, audio_info, stream_date, spoiler, suspended, start_inning, blackout, milb)
 
 
 # fetch a list of featured videos
@@ -928,15 +1001,15 @@ def featured_stream_select(featured_video, name, description):
     # otherwise we need to authenticate and get the stream URL
     else:
         xbmc.log('fetching video stream from url')
-        # need a special token for Big Inning
-        okta_access_token = account.okta_access_token()
-        if okta_access_token is None:
-            xbmc.log('failed to get necessary okta access token')
+        # need a login token for Big Inning + MiLB games
+        login_token = account.login_token()
+        if login_token is None:
+            xbmc.log('failed to get necessary login token')
             sys.exit()
 
         headers = {
             'User-Agent': UA_PC,
-            'Authorization': 'Bearer ' + okta_access_token,
+            'Authorization': 'Bearer ' + login_token,
             'Accept': '*/*',
             'Origin': 'https://www.mlb.com',
             'Referer': 'https://www.mlb.com'
@@ -1183,17 +1256,27 @@ def get_airings_data(content_id=None, game_pk=None):
 def get_blackout_status(game, regional_fox_games_exist):
     blackout_type = 'False'
     blackout_time = None
-    national_blackout = re.match('^[0-9]{5}$', ZIP_CODE)
+    usa_blackout = re.match('^[0-9]{5}$', ZIP_CODE) and COUNTRY == 'USA'
 
+    # Check if "national" broadcast
     if 'content' in game and 'media' in game['content'] and 'epg' in game['content']['media'] and len(game['content']['media']['epg']) > 0 and 'items' in game['content']['media']['epg'][0] and len(game['content']['media']['epg'][0]['items']) > 0 and 'mediaFeedType' in game['content']['media']['epg'][0]['items'][0] and game['content']['media']['epg'][0]['items'][0]['mediaFeedType'] == 'NATIONAL':
+        # Make sure it's not a regional FOX broadcast
         if (game['content']['media']['epg'][0]['items'][0]['callLetters'] != 'FOX') or (game['content']['media']['epg'][0]['items'][0]['callLetters'] == 'FOX' and regional_fox_games_exist == False):
-            if game['seriesDescription'] != 'Spring Training' and game['seriesDescription'] != 'Regular Season':
-                blackout_type = 'International'
-            elif national_blackout:
+            # International blackouts according to https://www.mlb.com/live-stream-games/help-center/blackouts-available-games
+            # Apple TV+ games are blacked out everywhere
+            # ESPN Sunday Night games are blacked out in a list of countries
+            if game['content']['media']['epg'][0]['items'][0]['callLetters'] == 'Apple TV+':
+                blackout_type = 'Full International'
+            elif game['content']['media']['epg'][0]['items'][0]['callLetters'] == 'ESPN' and parse(game['gameDate']).weekday() == 6 and COUNTRY in ESPN_SUNDAY_NIGHT_BLACKOUT_COUNTRIES:
+                blackout_type = 'Partial International'
+            # USA national blackouts
+            elif usa_blackout:
                 blackout_type = 'National'
 
-    if national_blackout and blackout_type == 'False' and game['seriesDescription'] != 'Spring Training' and (game['teams']['away']['team']['abbreviation'] in BLACKOUT_TEAMS or game['teams']['home']['team']['abbreviation'] in BLACKOUT_TEAMS):
-        blackout_type = 'Local'
+    # Check local blackouts
+    if game['teams']['away']['team']['abbreviation'] in BLACKOUT_TEAMS or game['teams']['home']['team']['abbreviation'] in BLACKOUT_TEAMS:
+        if blackout_type == 'False' and game['seriesDescription'] != 'Spring Training':
+            blackout_type = 'Local'
 
     # also calculate a blackout time for non-suspended, non-TBD games
     if blackout_type != 'False' and 'resumeGameDate' not in game and 'resumedFromDate' not in game and game['status']['startTimeTBD'] is False:

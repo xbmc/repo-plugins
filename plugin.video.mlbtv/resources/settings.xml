@@ -6,18 +6,16 @@
     <setting id="password" type="text" label="30150" option="hidden" default=""/>
     <setting id="single_team" type="bool" label="30151" default="false"/>
     <setting id="zip_code" type="number" label="30415" default=""/>
+    <setting id="country" type="labelenum" label="30428" default="USA" values="USA|Angola|Anguilla|Antigua and Barbuda|Argentina|Aruba|Australia|Bahamas|Barbados|Belize|Belize|Benin|Bermuda|Bolivia|Bonaire|Botswana|Brazil|British Virgin Islands|Burkina Faso|Burundi|Canada|Cameroon|Cape Verde|Cayman Islands|Central African Republic|Chad|Chile|Colombia|Comoros|Cook Islands|Costa Rica|Cote d'Ivoire|Curacao|Democratic Republic of the Congo|Djibouti|Dominica|Dominican Republic|Ecuador|El Salvador|England|Equatorial Guinea|Eritrea|Eswatini|Ethiopia|Falkland Islands|Falkland Islands|Fiji|French Guiana|French Guiana|French Polynesia|Gabon|Ghana|Grenada|Guadeloupe|Guatemala|Guinea|Guinea Bissau|Guyana|Guyana|Haiti|Honduras|Ireland|Jamaica|Kenya|Kiribati|Lesotho|Liberia|Madagascar|Malawi|Mali|Marshall Islands|Martinique|Mayotte|Mexico|Micronesia|Montserrat|Mozambique|Namibia|Netherlands|New Zealand|Nicaragua|Niger|Nigeria|Niue|Northern Ireland|Palau Islands|Panama|Paraguay|Peru|Republic of Ireland|Reunion|Rwanda|Saba|Saint Maarten|Samoa|Sao Tome &amp; Principe|Scotland|Senegal|Seychelles|Sierra Leone|Solomon Islands|Somalia|South Africa|St. Barthelemy|St. Eustatius|St. Kitts and Nevis|St. Lucia|St. Martin|St. Vincent and the Grenadines|Sudan|Surinam|Suriname|Tahiti|Tanzania &amp; Zanzibar|The Gambia|The Republic of Congo|Togo|Tokelau|Tonga|Trinidad and Tobago|Turks and Caicos Islands|Tuvalu|Uganda|Uruguay|Venezuela|Wales|Zambia|Zimbabwe|other" />
+    <setting id="old_country" type="text" label="" default="" visible="false"/>
     <setting id="old_zip_code" type="number" label="" default="" visible="false"/>
     <setting id="blackout_teams" type="text" label="" default="[]" visible="false"/>
     <setting label="30156" type="action" action="RunPlugin(plugin://plugin.video.mlbtv/?url=junk&amp;mode=400)" option="close" />
     <!--Hidden-->
     <setting id='session_key' type='text' visible="false" default=''/>
     <setting id='device_id' type='text' visible="false" default=''/>
-    <setting id='last_login' type='text' visible="false" default=''/>
     <setting id='login_token' type='text' visible="false" default=''/>
-    <setting id="session_token" type="text" label="" default="" visible="false"/>
-    <setting id="okta_client_id" type="text" label="" default="" visible="false"/>
-    <setting id="okta_access_token" type="text" label="" default="" visible="false"/>
-    <setting id="okta_access_token_expiry" type="text" label="" default="" visible="false"/>
+    <setting id='login_token_expiry' type='text' visible="false" default=''/>
   </category>
 
   <category label="30159">
@@ -26,6 +24,7 @@
     <setting id="no_spoilers" type="enum" label="30170" lvalues="30171|30172|30173|30174|30175" />
     <setting id="disable_video_padding" type="bool" label="30416" default="false" />
     <setting id="fav_team" type="labelenum" label="30180" default="None" values="None|Washington Nationals|Toronto Blue Jays|Texas Rangers|Tampa Bay Rays|St. Louis Cardinals|Seattle Mariners|San Francisco Giants|San Diego Padres|Pittsburgh Pirates|Philadelphia Phillies|Oakland Athletics|New York Yankees|New York Mets|Minnesota Twins|Milwaukee Brewers|Miami Marlins|Los Angeles Dodgers|Los Angeles Angels|Kansas City Royals|Houston Astros|Detroit Tigers|Colorado Rockies|Cleveland Guardians|Cincinnati Reds|Chicago White Sox|Chicago Cubs|Boston Red Sox|Baltimore Orioles|Atlanta Braves|Arizona Diamondbacks" />
+    <setting id="include_fav_affiliates" type="bool" label="30427" default="true" />
 
     <setting id="team_names" type="select" label="30190" lvalues="30191|30192" default="0" />
     <setting id="time_format" type="select" label="30301" lvalues="30302|30303" default="0" />

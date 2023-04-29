@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<addon id="script.module.t1mlib" name="t1m Library Routines" provider-name="t1m" version="4.0.9">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+    <import addon="script.module.requests" version="2.22.0"/>
+    <import addon="inputstream.adaptive" version="2.6.0"/>
+  </requires>
+  <extension point="xbmc.python.module" library="lib"/>
+  <extension point="xbmc.addon.metadata">
+        <description lang="en_GB">t1m Library Routines</description>
+        <summary lang="en_GB">t1m Library Routines</summary>
+        <disclaimer lang="en_GB">Feel free to use this script.</disclaimer>
+        <license>GPL-2.0-or-later</license>
+        <platform>all</platform>
+        <forum>https://forum.kodi.tv/showthread.php?tid=247163</forum>
+        <source>https://github.com/learningit/repo-scripts></source>
+        <language>en</language>
+        <news>v4.0.8 - fixes for Nexus</news>
+        <assets>
+            <icon>resources/icon.png</icon>
+        </assets>
+   </extension>
+</addon>

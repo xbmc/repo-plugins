@@ -18,8 +18,9 @@
 
 import sys, os, urllib, urllib.parse, logging
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs
+#import web_pdb
 
-from libs.tagesschau_json_api import VideoContentProvider, JsonSource, LazyVideoContent
+from libs.tagesschau_json_api import VideoContentProvider, JsonSource, addon
 from libs.subtitles import download_subtitles
 
 # -- Constants ----------------------------------------------
@@ -36,7 +37,6 @@ DEFAULT_IMAGE_URL = 'https://www.tagesschau.de/image/sendung/ard_portal_vorspann
 logger = logging.getLogger("plugin.video.tagesschau.api")
 
 # -- Settings -----------------------------------------------
-addon = xbmcaddon.Addon(id=ADDON_ID)
 quality_id = addon.getSetting('quality')
 quality = ['M', 'L', 'X'][int(quality_id)]
 
@@ -44,8 +44,7 @@ quality = ['M', 'L', 'X'][int(quality_id)]
 language = addon.getLocalizedString
 strings = { 'latest_videos':       language(30100),
             'latest_broadcasts':   language(30101),
-            'dossiers':            language(30102),
-            'archived_broadcasts': language(30103)
+            'livestreams':         language(30102)
 }
 
 #-- Subtitles ------------------------------------------------
@@ -81,12 +80,7 @@ def getListItem(videocontent):
 
 def getUrl(videocontent, method):
     url_data = { ACTION_PARAM: 'play_video' }
-    # for LazyVideoContent let's defer its expensive video_url call
-    if isinstance(videocontent, LazyVideoContent):
-        url_data[FEED_PARAM] = method
-        url_data[ID_PARAM] = urllib.parse.quote(videocontent.tsid)
-    else:
-        url_data[URL_PARAM] = urllib.parse.quote(videocontent.video_url(quality))
+    url_data[URL_PARAM] = urllib.parse.quote(videocontent.video_url(quality))
     return 'plugin://' + ADDON_ID + '?' + urllib.parse.urlencode(url_data)
 
 def addVideoContentItem(videocontent, method):
@@ -163,7 +157,5 @@ def tagesschau():
         add_named_directory = lambda x: addVideoContentDirectory(strings[x], x)
         add_named_directory('latest_videos')
         add_named_directory('latest_broadcasts')
-        add_named_directory('dossiers')
-        add_named_directory('archived_broadcasts')
 
     xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.tagesschau"
-    version="2.3.2"
+    version="2.4.0"
     name="Tagesschau"
     provider-name="J.Schumacher, H.Saul, C.Prasch">
   <requires>
@@ -31,6 +31,10 @@
       <screenshot>resources/assets/screenshot_3.png</screenshot>
     </assets>
     <news>
+version 2.4.0 (2023-04-28)
+ * Switched to Tagesschau API2 because API1 was disabled by ARD
+ * New option to show age of news in title
+
 version 2.3.2 (2022-03-25)
  * Fixed HTTP redirect error: 308 (thanks to Josef Friedrich) 
 

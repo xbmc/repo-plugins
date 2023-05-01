@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.dr.dk.bonanza" version="3.2.1+matrix.1" name="DR.dk Bonanza" provider-name="termehansen">
+<addon id="plugin.video.dr.dk.bonanza" version="3.2.2+matrix.1" name="DR.dk Bonanza" provider-name="termehansen">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
-        <import addon="script.module.buggalo" version="1.2.0"/>
-        <import addon="script.module.requests" version="2.22.0+matrix.1" />
+        <import addon="script.module.dateutil" version="2.8.2" />
+        <import addon="script.module.requests" version="2.27.1+matrix.1" />
         <import addon="script.module.requests-cache" version="0.5.2+matrix.2"/>
+        <import addon="script.module.inputstreamhelper" version="0.5.10+matrix.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
@@ -26,6 +27,11 @@
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
        </assets>
+       <news>[B]Version 3.2.2 - 2023-05-01[/B]
+- use inputstream adaptive
+- re-factor for python3 only
+- change for new settings api
+    </news>
        <news>[B]Version 3.2.1 - 2020-03-06[/B]
 - Updated addon to match website changes
 - Moving "ownership" of the addon, hence Tommy have stopped developing on the addon.

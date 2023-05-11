@@ -159,7 +159,7 @@ def delete_database():
 def read_url(url):
     url = requote_uri(url)
     req = urllib.request.Request(url)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:33.0) Gecko/20100101 Firefox/33.0')
+    req.add_header('User-Agent', 'Mozilla/5.0 (Android 13; Mobile; rv:68.0) Gecko/68.0 Firefox/112.0')
     response = urllib.request.urlopen(req)
     link = response.read()
     response.close()
@@ -432,7 +432,7 @@ def is_short(videoId):
     opener = urllib.request.build_opener(RedirectFilter)
 
     req = urllib.request.Request(url, method="HEAD")
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:33.0) Gecko/20100101 Firefox/33.0')
+    req.add_header('User-Agent', 'Mozilla/5.0 (Android 13; Mobile; rv:68.0) Gecko/68.0 Firefox/112.0')
     try:
         xbmc.log("trying: "+url, level=xbmc.LOGINFO)
         response = opener.open(req)

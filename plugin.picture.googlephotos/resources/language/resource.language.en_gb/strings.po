@@ -27,6 +27,18 @@ msgctxt "#30104"
 msgid "Refresh Token Subroute"
 msgstr ""
 
+msgctxt "#30105"
+msgid "Client ID    "
+msgstr ""
+
+msgctxt "#30106"
+msgid "Client Secret"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Client Credentials"
+msgstr ""
+
 #cache file name
 msgctxt "#30107"
 msgid "media_db"
@@ -34,6 +46,10 @@ msgstr ""
 
 msgctxt "#30108"
 msgid "accounts/"
+msgstr ""
+
+msgctxt "#30109"
+msgid "Sign-in Details"
 msgstr ""
 
 #  filters
@@ -199,6 +215,22 @@ msgstr ""
 
 msgctxt "#30425"
 msgid "No items"
+msgstr ""
+
+msgctxt "#30426"
+msgid "Expires in"
+msgstr ""
+
+msgctxt "#30427"
+msgid "seconds"
+msgstr ""
+
+msgctxt "#30428"
+msgid "Credentials Required"
+msgstr ""
+
+msgctxt "#30429"
+msgid "Please input client ID and secret in settings. Follow the instructions at www.photos-kodi-addon.onrender.com/credentialsguide to generate credentials."
 msgstr ""
 #  No need most probably
 #  #  Content filter

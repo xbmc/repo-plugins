@@ -1,6 +1,64 @@
 <?xml version="1.0"?>
 <settings version="1">
   <section id="plugin.picture.googlephotos">
+
+    <category id="signin" label="30109" help="">
+      <group id="4" label="30107">
+        <setting id="client_id" type="string" label="30105" help="">
+          <level>0</level>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="edit" format="string"></control>
+        </setting>
+        <setting id="client_secret" type="string" label="30106" help="">
+          <level>0</level>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="edit" format="string"></control>
+        </setting>
+      </group>
+
+      <group id="5" label="30100">
+        <setting id="baseUrl" type="string" label="30101" help="">
+          <level>0</level>
+          <default>https://photos-kodi-addon.onrender.com</default>
+          <constraints>
+            <allowempty>false</allowempty>
+          </constraints>
+          <control type="edit" format="string"></control>
+        </setting>
+
+        <setting id="deviceCodeUrl" type="string" label="30102" help="">
+          <level>3</level>
+          <default>/device/code</default>
+          <constraints>
+            <allowempty>false</allowempty>
+          </constraints>
+          <control type="edit" format="string"></control>
+        </setting>
+
+        <setting id="tokenUrl" type="string" label="30103" help="">
+          <level>3</level>
+          <default>/token</default>
+          <constraints>
+            <allowempty>false</allowempty>
+          </constraints>
+          <control type="edit" format="urlencoded"></control>
+        </setting>
+
+        <setting id="refreshUrl" type="string" label="30104" help="">
+          <level>3</level>
+          <default>/refresh</default>
+          <constraints>
+            <allowempty>false</allowempty>
+          </constraints>
+          <control type="edit" format="string"></control>
+        </setting>
+      </group>
+    </category>
+
     <category id="filters" label="30200" help="">
       <group id="1" label="30201">
         <setting id="date_filter" type="boolean" label="30213" help="">
@@ -96,45 +154,6 @@
         </setting>
       </group>
 
-    </category>
-    <category id="signin" label="30100" help="">
-      <group id="4" label="">
-        <setting id="baseUrl" type="string" label="30101" help="">
-          <level>3</level>
-          <default>https://photos-kodi-login.herokuapp.com</default>
-          <constraints>
-            <allowempty>false</allowempty>
-          </constraints>
-          <control type="edit" format="string"></control>
-        </setting>
-
-        <setting id="deviceCodeUrl" type="string" label="30102" help="">
-          <level>3</level>
-          <default>/device/code</default>
-          <constraints>
-            <allowempty>false</allowempty>
-          </constraints>
-          <control type="edit" format="string"></control>
-        </setting>
-
-        <setting id="tokenUrl" type="string" label="30103" help="">
-          <level>3</level>
-          <default>/token</default>
-          <constraints>
-            <allowempty>false</allowempty>
-          </constraints>
-          <control type="edit" format="urlencoded"></control>
-        </setting>
-
-        <setting id="refreshUrl" type="string" label="30104" help="">
-          <level>3</level>
-          <default>/refresh</default>
-          <constraints>
-            <allowempty>false</allowempty>
-          </constraints>
-          <control type="edit" format="string"></control>
-        </setting>
-      </group>
     </category>
   </section>
 </settings>

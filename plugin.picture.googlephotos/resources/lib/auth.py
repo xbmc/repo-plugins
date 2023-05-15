@@ -19,6 +19,10 @@ SCOPES = ['https://www.googleapis.com/auth/photoslibrary.readonly',
 # time.
 
 __addon__ = xbmcaddon.Addon()
+clientCreds = {
+    'clientId': __addon__.getSettingString('client_id'),
+    'clientSecret': __addon__.getSettingString('client_secret')
+}
 
 
 def get_device_code():
@@ -26,8 +30,9 @@ def get_device_code():
     # Exception Possible
     path = join_path(__addon__.getSettingString(
         'baseUrl'), __addon__.getSettingString('deviceCodeUrl'))
-    print(path)
-    res = requests.get(path)
+
+    # Exchange client credentials for device code and user code
+    res = requests.post(path, data=clientCreds)
     if res.status_code != 200:
         xbmc.log(f'GP: {str(res.status_code)}', xbmc.LOGDEBUG)
         return None
@@ -87,8 +92,11 @@ def refresh_access_token(creds, path):
     refresh_url = join_path(__addon__.getSettingString(
         'baseUrl'), __addon__.getSettingString('refreshUrl'))
 
-    res = requests.post(refresh_url, data={
-        'refresh_token': creds["refresh_token"], 'grant_type': 'refresh_token'})
+    data = {
+        'refresh_token': creds["refresh_token"],
+        'grant_type': 'refresh_token'
+    }
+    res = requests.post(refresh_url, data={**data, **clientCreds})
     if res.status_code != 200:
         return res.status_code
     token_data = res.json()

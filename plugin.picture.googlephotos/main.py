@@ -1,4 +1,4 @@
-import code
+import json
 import sys
 import requests
 from pathlib import Path
@@ -11,11 +11,11 @@ import xbmcvfs
 import xbmcgui
 import xbmcplugin
 import threading
-import datetime
 import traceback
-
+import time
 
 from resources.lib.auth import read_credentials, get_device_code
+import resources.lib.dialogs as dialogs
 # from resources.lib.ui.custom_filter_dialog import FilterDialog
 import resources.lib.utils as utils
 
@@ -44,56 +44,45 @@ def new_account():
 
     # Open dialog
     baseUrl = __addon__.getSettingString('baseUrl')
-    dialog_msg = __addon__.getLocalizedString(30400) + f' {baseUrl}:\n'
-    title = __addon__.getLocalizedString(30401)
-    load_msg = __addon__.getLocalizedString(30423)
-    login_dialog = xbmcgui.DialogProgress()
-    login_dialog.create(title, dialog_msg + load_msg)
-
+    login_dialog = dialogs.QRDialogProgress.create()
+    login_dialog.show()
+    # Gives enough time for window to initialize before sending the device code request
+    xbmc.sleep(10)
     # Get User Code from auth server
     code_json = get_device_code()
-    init_time = datetime.datetime.utcnow()
-    min_time_to_refresh = (
-        100 / code_json["expires_in"]) * code_json['interval']
-    login_dialog.update(100, message=dialog_msg +
-                        f'[COLOR red][B]{code_json["userCode"]}[/B][/COLOR]')
+    expires_at = time.time() + 0.99 * float(code_json["expires_in"])
+    login_dialog.update(
+        int(code_json["expires_in"]), code=code_json["userCode"])
+    last_req_time = time.time()
 
     # Update progress dialog indicating time left for complete
-    sleep_time = code_json['interval'] * 1000
-    time = 99
     while not login_dialog.iscanceled():
-        login_dialog.update(time)
-        xbmc.sleep(sleep_time)
-        status_code = auth.fetch_and_save_token(
-            code_json['deviceCode'], token_folder)
-        if status_code == 200:
-            xbmcgui.Dialog().notification(__addon__.getLocalizedString(30424),
-                                          __addon__.getLocalizedString(30402), xbmcgui.NOTIFICATION_INFO, 3000)
-            break
-        if status_code == 403:      # 403 indicates rate limiting
-            xbmc.sleep(sleep_time)
-        time = int((1 - (datetime.datetime.utcnow() -
-                   init_time).total_seconds() / code_json["expires_in"]) * 100)
-        login_dialog.update(time)
+        time_left = round(expires_at - time.time())
+        login_dialog.update(time_left=time_left)
+        xbmc.sleep(1000)
 
-        if time <= min_time_to_refresh or status_code == 400:
+        status_code = -1  # Indicates no request sent
+        # Check if last request is sufficiently old
+        if (time_left > 0) and (time.time() - last_req_time >= code_json["interval"]):
+            status_code = auth.fetch_and_save_token(
+                code_json['deviceCode'], token_folder)
+            last_req_time = time.time()
+            if status_code == 200:
+                xbmcgui.Dialog().notification(__addon__.getLocalizedString(30424),
+                                              __addon__.getLocalizedString(30402), xbmcgui.NOTIFICATION_INFO, 3000)
+                break
+
+            if status_code == 403:      # 403 indicates rate limiting
+                xbmc.sleep(1000)
+
+        # Refresh Code if time is over
+        if (time_left < 0) or (status_code and (status_code == 400)):
             code_json = get_device_code()
-            min_time_to_refresh = (
-                100 / code_json["expires_in"]) * code_json['interval']
-            init_time = datetime.datetime.utcnow()
-            sleep_time = code_json['interval'] * 1000
-            login_dialog.update(100, message=dialog_msg +
-                                f'[COLOR red][B]{code_json["userCode"]}[/B][/COLOR]')
+            expires_at = time.time() + 0.99 * float(code_json["expires_in"])
+            login_dialog.update(
+                int(code_json["expires_in"]), code_json["userCode"])
             xbmcgui.Dialog().notification(__addon__.getLocalizedString(30424),
                                           __addon__.getLocalizedString(30403), xbmcgui.NOTIFICATION_INFO, 3000)
-            time = 100
-    # except Exception as exec:
-    # xbmc.log(str(exec), xbmc.LOGDEBUG)
-    # err_dialog = xbmcgui.Dialog()
-    # err_dialog.notification(__addon__.getLocalizedString(30411),
-    #                         __addon__.getLocalizedString(30422),
-    #                         xbmcgui.NOTIFICATION_ERROR, 3000)
-    # finally:
     login_dialog.close()
     xbmc.executebuiltin('Container.Refresh')
 
@@ -101,6 +90,12 @@ def new_account():
 def remove_account():
     xbmcvfs.delete(str(token_path))
     xbmc.executebuiltin('Container.Refresh')
+
+
+def remove_all_accounts():
+    token_folder.mkdir(parents=True, exist_ok=True)
+    for file in token_folder.iterdir():
+        xbmcvfs.delete(str(file))
 
 
 def list_options():
@@ -339,54 +334,84 @@ def list_albums():
 
         xbmcplugin.endOfDirectory(addon_handle)
 
+# Modify this function to force changes after update
 
-if mode is None:
-    # Display logged in accounts
-    token_folder.mkdir(parents=True, exist_ok=True)
-    for file in token_folder.iterdir():
+
+def make_changes():
+    version_file = profile_path + 'info'
+    xbmcvfs.mkdirs(profile_path)
+    with open(version_file, 'w+') as file:
         try:
-            creds = read_credentials(file)
+            past_info = json.load(file)
         except:
-            xbmc.log(str(traceback.format_exc()), xbmc.LOGDEBUG)
-            err_dialog = xbmcgui.Dialog()
-            err_dialog.notification(__addon__.getLocalizedString(30411),
-                                    __addon__.getLocalizedString(30422),
-                                    xbmcgui.NOTIFICATION_ERROR, 3000)
-            exit()
-        email = creds["email"]
-        url = utils.build_url(
-            base_url, {'mode': 'list_options', 'token_filename': file.name})
-        li = xbmcgui.ListItem(email)
-        removePath = utils.build_url(
-            base_url, {'mode': 'remove_account', 'email': email, 'token_filename': file.name})
-        contextItems = [(__addon__.getLocalizedString(
-            30420), f'RunPlugin({removePath})')]
-        li.addContextMenuItems(contextItems)
+            past_info = {}
+
+    if bool(past_info) or past_info.get('version') != __addon__.getAddonInfo('version'):
+        past_info['version'] = __addon__.getAddonInfo('version')
+        __addon__.setSettingString(
+            "baseUrl", "https://photos-kodi-addon.onrender.com")
+        with open(version_file, 'w') as file:
+            json.dump(past_info, file, default=str)
+
+
+def display_page_content():
+    if mode is None:
+        # Display logged in accounts
+        token_folder.mkdir(parents=True, exist_ok=True)
+        for file in token_folder.iterdir():
+            try:
+                creds = read_credentials(file)
+            except:
+                xbmc.log(str(traceback.format_exc()), xbmc.LOGDEBUG)
+                err_dialog = xbmcgui.Dialog()
+                err_dialog.notification(__addon__.getLocalizedString(30411),
+                                        __addon__.getLocalizedString(30422),
+                                        xbmcgui.NOTIFICATION_ERROR, 3000)
+                exit()
+            email = creds["email"]
+            url = utils.build_url(
+                base_url, {'mode': 'list_options', 'token_filename': file.name})
+            li = xbmcgui.ListItem(email)
+            removePath = utils.build_url(
+                base_url, {'mode': 'remove_account', 'email': email, 'token_filename': file.name})
+            contextItems = [(__addon__.getLocalizedString(
+                30420), f'RunPlugin({removePath})')]
+            li.addContextMenuItems(contextItems)
+            xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
+                                        listitem=li, isFolder=True)
+        # Add Account Button
+        url = utils.build_url(base_url, {'mode': 'new_account'})
+        li = xbmcgui.ListItem(__addon__.getLocalizedString(30421))
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-                                    listitem=li, isFolder=True)
-    # Add Account Button
-    url = utils.build_url(base_url, {'mode': 'new_account'})
-    li = xbmcgui.ListItem(__addon__.getLocalizedString(30421))
-    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-                                listitem=li)
-    xbmcplugin.endOfDirectory(addon_handle)
+                                    listitem=li)
+        xbmcplugin.endOfDirectory(addon_handle)
+    else:
+        # Read account credentials if present
+        if token_path and mode[0] != 'remove_account':
+            try:
+                creds = read_credentials(token_path)
+            except:
+                err_dialog = xbmcgui.Dialog()
+                err_dialog.notification(__addon__.getLocalizedString(30411),
+                                        __addon__.getLocalizedString(30422),
+                                        xbmcgui.NOTIFICATION_ERROR, 3000)
+                exit()
+            global token
+            token = creds["token"]
+        eval(mode[0] + '()')  # Fire up the actual function
+
+
+make_changes()
+# check for credentials
+if not __addon__.getSettingString('client_id') or not __addon__.getSettingString('client_secret'):
+    open_settings_dialog = xbmcgui.Dialog().ok(__addon__.getLocalizedString(30428),
+                                               __addon__.getLocalizedString(30429))
+    remove_all_accounts()
+    __addon__.openSettings()
 else:
-    # Read account credentials if present
-    if token_path and mode[0] != 'remove_account':
-        try:
-            creds = read_credentials(token_path)
-        except:
-            err_dialog = xbmcgui.Dialog()
-            err_dialog.notification(__addon__.getLocalizedString(30411),
-                                    __addon__.getLocalizedString(30422),
-                                    xbmcgui.NOTIFICATION_ERROR, 3000)
-            exit()
-        token = creds["token"]
-    eval(mode[0] + '()')  # Fire up the actual function
-
-
-# Updates:
+    display_page_content()
+    # Updates:
     # Slideshow
 
-# Not on list
+    # Not on list
     # Video seeking - Not possible due to API limitations

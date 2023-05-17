@@ -40,5 +40,13 @@ The following is for a season one episode of still standing that requies both
 device registration and user authorization.
 
 ```
-./test.py -v https://api-cbc.cloud.clearleap.com/cloffice/client/web/play/?contentId=5639c1a4-91ac-4c7b-bc36-b84257f40ab3&categoryId=2b9afb4e-49d2-4c2c-b1d2-32d9577c1638
+./test.py -s
+./test.py -C shows-categories-comedy
+./test.py -S crawford
+
+...
+crawford/s01e01 - I'm Not Crazy, I Love You - https://services.radio-canada.ca/media/validation/v2?appCode=gem&idMedia=932390&manifestType=desktop&output=json&tech=hls
+...
+
+./test.py -e https://services.radio-canada.ca/media/validation/v2?appCode=gem&idMedia=932390&manifestType=desktop&output=json&tech=hls
 ```

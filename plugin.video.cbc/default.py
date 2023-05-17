@@ -46,7 +46,7 @@ def authorize():
         password = None
         username = None
 
-    if not cbc.authorize(username, password, prog.update):
+    if not cbc.azure_authorize(username, password, prog.update):
         log('(authorize) unable to authorize', True)
         prog.close()
         xbmcgui.Dialog().ok(getString(30002), getString(30002))
@@ -106,7 +106,7 @@ def logout():
 def play_smil():
     """Play an SMIL file."""
     cbc = CBC()
-    url = cbc.parseSmil(plugin.args['url'][0])
+    url = cbc.parse_smil(plugin.args['url'][0])
     labels = dict(parse_qsl(plugin.args['labels'][0])) if 'labels' in plugin.args else None
     return play(labels, plugin.args['image'][0], url)
 
@@ -159,7 +159,7 @@ def live_channels_menu():
     for channel in chan_list:
         labels = CBC.get_labels(channel)
         callsign = cbc.get_callsign(channel)
-        image = cbc.getImage(channel)
+        image = cbc.get_image(channel)
         item = xbmcgui.ListItem(labels['title'])
         item.setArt({'thumb': image, 'poster': image})
         item.setInfo(type="Video", infoLabels=labels)

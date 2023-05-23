@@ -91,8 +91,8 @@ class TVGuide:
             date_items.append(TitleItem(
                 label=label,
                 path=path,
-                art_dict=dict(thumb='DefaultYear.png'),
-                info_dict=dict(plot=plot),
+                art_dict={'thumb': 'DefaultYear.png'},
+                info_dict={'plot': plot},
                 context_menu=[(
                     localize(30413),  # Refresh menu
                     'RunPlugin(%s)' % url_for('delete_cache', cache_file=cache_file)
@@ -144,7 +144,7 @@ class TVGuide:
                 path=path,
                 art_dict=art_dict,
                 context_menu=context_menu,
-                info_dict=dict(plot=plot, studio=chan.get('studio')),
+                info_dict={'plot': plot, 'studio': chan.get('studio')},
             ))
         return channel_items
 
@@ -231,13 +231,13 @@ class TVGuide:
                   }
                 }
             """
-            payload = dict(
-                operationName='Stream',
-                variables=dict(
-                    id=episode_id
-                ),
-                query=graphql,
-            )
+            payload = {
+                'operationName': 'Stream',
+                'variables': {
+                    'id': episode_id
+                },
+                'query': graphql,
+            }
             from json import dumps
             data = dumps(payload).encode('utf-8')
             url = 'https://www.vrt.be/vrtnu-api/graphql/v1'
@@ -278,15 +278,15 @@ class TVGuide:
                         path = url_for('play_id', video_id=video_id, publication_id=publication_id)
                     else:
                         path = None
-                    epg_data[epg_id].append(dict(
-                        start=episode.get('startTime'),
-                        stop=episode.get('endTime'),
-                        image=add_https_proto(episode.get('image', '')),
-                        title=episode.get('title'),
-                        subtitle=html_to_kodi(episode.get('subtitle', '')),
-                        description=html_to_kodi(episode.get('description', '')),
-                        stream=path,
-                    ))
+                    epg_data[epg_id].append({
+                        'start': episode.get('startTime'),
+                        'stop': episode.get('endTime'),
+                        'image': add_https_proto(episode.get('image', '')),
+                        'title': episode.get('title'),
+                        'subtitle': html_to_kodi(episode.get('subtitle', '')),
+                        'description': html_to_kodi(episode.get('description', '')),
+                        'stream': path,
+                    })
         return epg_data
 
     def playing_now(self, channel):

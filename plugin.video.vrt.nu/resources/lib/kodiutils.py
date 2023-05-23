@@ -27,20 +27,20 @@ except ImportError:  # Python 2
 ADDON = Addon()
 DEFAULT_CACHE_DIR = 'cache'
 
-SORT_METHODS = dict(
-    # date=xbmcplugin.SORT_METHOD_DATE,
-    dateadded=xbmcplugin.SORT_METHOD_DATEADDED,
-    duration=xbmcplugin.SORT_METHOD_DURATION,
-    episode=xbmcplugin.SORT_METHOD_EPISODE,
-    # genre=xbmcplugin.SORT_METHOD_GENRE,
-    # label=xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE,
-    label=xbmcplugin.SORT_METHOD_LABEL,
-    title=xbmcplugin.SORT_METHOD_TITLE,
-    # none=xbmcplugin.SORT_METHOD_UNSORTED,
+SORT_METHODS = {
+    # 'date': xbmcplugin.SORT_METHOD_DATE,
+    'dateadded': xbmcplugin.SORT_METHOD_DATEADDED,
+    'duration': xbmcplugin.SORT_METHOD_DURATION,
+    'episode': xbmcplugin.SORT_METHOD_EPISODE,
+    # 'genre': xbmcplugin.SORT_METHOD_GENRE,
+    # 'label': xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE,
+    'label': xbmcplugin.SORT_METHOD_LABEL,
+    'title': xbmcplugin.SORT_METHOD_TITLE,
+    # 'none': xbmcplugin.SORT_METHOD_UNSORTED,
     # FIXME: We would like to be able to sort by unprefixed title (ignore date/episode prefix)
-    # title=xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE,
-    unsorted=xbmcplugin.SORT_METHOD_UNSORTED,
-)
+    # 'title': xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE,
+    'unsorted': xbmcplugin.SORT_METHOD_UNSORTED,
+}
 
 WEEKDAY_LONG = {
     '0': xbmc.getLocalizedString(17),
@@ -217,11 +217,11 @@ def show_listing(list_items, category=None, sort='unsorted', ascending=True, con
 
         list_item = ListItem(label=title_item.label)
 
-        prop_dict = dict(
-            IsInternetStream='true' if is_playable else 'false',
-            IsPlayable='true' if is_playable else 'false',
-            IsFolder='false' if is_folder else 'true',
-        )
+        prop_dict = {
+            'IsInternetStream': 'true' if is_playable else 'false',
+            'IsPlayable': 'true' if is_playable else 'false',
+            'IsFolder': 'false' if is_folder else 'true',
+        }
         if title_item.prop_dict:
             title_item.prop_dict.update(prop_dict)
         else:
@@ -239,7 +239,7 @@ def show_listing(list_items, category=None, sort='unsorted', ascending=True, con
         if showfanart:
             # Add add-on fanart when fanart is missing
             if not title_item.art_dict:
-                title_item.art_dict = dict(fanart=addon_fanart())
+                title_item.art_dict = {'fanart': addon_fanart()}
             elif not title_item.art_dict.get('fanart'):
                 title_item.art_dict.update(fanart=addon_fanart())
             list_item.setArt(title_item.art_dict)
@@ -535,7 +535,7 @@ def open_settings():
 
 def get_global_setting(key):
     """Get a Kodi setting"""
-    result = jsonrpc(method='Settings.GetSettingValue', params=dict(setting=key))
+    result = jsonrpc(method='Settings.GetSettingValue', params={'setting': key})
     return result.get('result', {}).get('value')
 
 
@@ -590,11 +590,11 @@ def clear_property(key, window_id=10000):
 
 def notify(sender, message, data):
     """Send a notification to Kodi using JSON RPC"""
-    result = jsonrpc(method='JSONRPC.NotifyAll', params=dict(
-        sender=sender,
-        message=message,
-        data=data,
-    ))
+    result = jsonrpc(method='JSONRPC.NotifyAll', params={
+        'sender': sender,
+        'message': message,
+        'data': data,
+    })
     if result.get('result') != 'OK':
         log_error('Failed to send notification: {error}', error=result.get('error').get('message'))
         return False
@@ -656,13 +656,13 @@ def get_proxies():
 
     proxy_types = ['http', 'socks4', 'socks4a', 'socks5', 'socks5h']
 
-    proxy = dict(
-        scheme=proxy_types[httpproxytype] if 0 <= httpproxytype < 5 else 'http',
-        server=get_global_setting('network.httpproxyserver'),
-        port=get_global_setting('network.httpproxyport'),
-        username=get_global_setting('network.httpproxyusername'),
-        password=get_global_setting('network.httpproxypassword'),
-    )
+    proxy = {
+        'scheme': proxy_types[httpproxytype] if 0 <= httpproxytype < 5 else 'http',
+        'server': get_global_setting('network.httpproxyserver'),
+        'port': get_global_setting('network.httpproxyport'),
+        'username': get_global_setting('network.httpproxyusername'),
+        'password': get_global_setting('network.httpproxypassword'),
+    }
 
     if proxy.get('username') and proxy.get('password') and proxy.get('server') and proxy.get('port'):
         proxy_address = '{scheme}://{username}:{password}@{server}:{port}'.format(**proxy)
@@ -675,7 +675,7 @@ def get_proxies():
     else:
         return None
 
-    return dict(http=proxy_address, https=proxy_address)
+    return {'http': proxy_address, 'https': proxy_address}
 
 
 def get_cond_visibility(condition):
@@ -720,16 +720,26 @@ def supports_drm():
     return kodi_version_major() > 17
 
 
-COLOUR_THEMES = dict(
-    dark=dict(highlighted='yellow', availability='blue', geoblocked='red', greyedout='gray'),
-    light=dict(highlighted='brown', availability='darkblue', geoblocked='darkred', greyedout='darkgray'),
-    custom=dict(
-        highlighted=get_setting('colour_highlighted'),
-        availability=get_setting('colour_availability'),
-        geoblocked=get_setting('colour_geoblocked'),
-        greyedout=get_setting('colour_greyedout')
-    )
-)
+COLOUR_THEMES = {
+    'dark': {
+        'highlighted': 'yellow',
+        'availability': 'blue',
+        'geoblocked': 'red',
+        'greyedout': 'gray',
+    },
+    'light': {
+        'highlighted': 'brown',
+        'availability': 'darkblue',
+        'geoblocked': 'darkred',
+        'greyedout': 'darkgray',
+    },
+    'custom': {
+        'highlighted': get_setting('colour_highlighted'),
+        'availability': get_setting('colour_availability'),
+        'geoblocked': get_setting('colour_geoblocked'),
+        'greyedout': get_setting('colour_greyedout'),
+    }
+}
 
 
 def themecolour(kind):
@@ -819,13 +829,13 @@ def delete(path):
 def delete_cached_thumbnail(url):
     """Remove a cached thumbnail from Kodi in an attempt to get a realtime live screenshot"""
     # Get texture
-    result = jsonrpc(method='Textures.GetTextures', params=dict(
-        filter=dict(
-            field='url',
-            operator='is',
-            value=url,
-        ),
-    ))
+    result = jsonrpc(method='Textures.GetTextures', params={
+        'filter': {
+            'field': 'url',
+            'operator': 'is',
+            'value': url,
+        },
+    })
     if result.get('result', {}).get('textures') is None:
         log_error('URL {url} not found in texture cache', url=url)
         return False
@@ -837,7 +847,7 @@ def delete_cached_thumbnail(url):
     log(2, 'found texture_id {id} for url {url} in texture cache', id=texture_id, url=url)
 
     # Remove texture
-    result = jsonrpc(method='Textures.RemoveTexture', params=dict(textureid=texture_id))
+    result = jsonrpc(method='Textures.RemoveTexture', params={'textureid': texture_id})
     if result.get('result') != 'OK':
         log_error('failed to remove {url} from texture cache: {error}', url=url, error=result.get('error', {}).get('message'))
         return False

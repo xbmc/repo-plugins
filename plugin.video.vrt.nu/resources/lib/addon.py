@@ -144,16 +144,15 @@ def resumepoints_refresh():
     notification(message=localize(30983))
 
 
-@plugin.route('/programs')
 @plugin.route('/programs/<program_name>')
+@plugin.route('/programs/<program_name>/<end_cursor>')
 @plugin.route('/programs/<program_name>/<season_name>')
-def programs(program_name=None, season_name=None):
+@plugin.route('/programs/<program_name>/<season_name>/<end_cursor>')
+def programs(program_name=None, season_name=None, end_cursor=''):
     """The Programs / Seasons / Episodes listing"""
     from vrtplayer import VRTPlayer
     if program_name:
-        VRTPlayer().show_episodes_menu(program_name=program_name, season_name=season_name)
-    else:
-        VRTPlayer().show_tvshow_menu()
+        VRTPlayer().show_episodes_menu(program_name=program_name, season_name=season_name, end_cursor=end_cursor)
 
 
 @plugin.route('/categories')
@@ -276,14 +275,14 @@ def remove_search(keywords):
 def play_id(video_id, publication_id=None, episode_id=None):  # pylint: disable=unused-argument
     """The API interface to play a video by video_id and/or publication_id"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().play(dict(video_id=video_id, publication_id=publication_id))
+    VRTPlayer().play({'video_id': video_id, 'publication_id': publication_id})
 
 
 @plugin.route('/play/url/<path:video_url>')
 def play_url(video_url):
     """The API interface to play a video by using a VRT MAX URL"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().play(dict(video_url=video_url))
+    VRTPlayer().play({'video_url': video_url})
 
 
 @plugin.route('/play/latest/<program_name>')

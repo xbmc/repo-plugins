@@ -111,11 +111,11 @@ class ResumePoints:
 
             # Update online
             gdpr = '{asset_str} gekeken tot {at} seconden.'.format(asset_str=asset_str, at=position)
-            payload = dict(
-                at=position,
-                total=total,
-                gdpr=gdpr,
-            )
+            payload = {
+                'at': position,
+                'total': total,
+                'gdpr': gdpr,
+            }
             from json import dumps
             try:
                 resumepoint_json = get_url_json('{api}/{video_id}'.format(api=self.RESUMEPOINTS_URL, video_id=video_id),
@@ -187,16 +187,16 @@ class ResumePoints:
                   listDelete(input: $input)
                 }
             """
-            payload = dict(
-                operationName='listDelete',
-                variables=dict(
-                    input=dict(
-                        id=episode_id,
-                        listName='verderkijken',
-                    ),
-                ),
-                query=graphql_query,
-            )
+            payload = {
+                'operationName': 'listDelete',
+                'variables': {
+                    'input': {
+                        'id': episode_id,
+                        'listName': 'verderkijken',
+                    },
+                },
+                'query': graphql_query,
+            }
             from json import dumps
             data = dumps(payload).encode('utf-8')
             result_json = get_url_json(url=self.GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
@@ -242,15 +242,15 @@ class ResumePoints:
                   }
                 }
             """
-            payload = dict(
-                operationName='ContinueEpisodes',
-                variables=dict(
-                    listId='dynamic:/vrtnu.model.json@resume-list-video',
-                    endCursor='',
-                    pageSize=1000,
-                ),
-                query=graphql_query,
-            )
+            payload = {
+                'operationName': 'ContinueEpisodes',
+                'variables': {
+                    'listId': 'dynamic:/vrtnu.model.json@resume-list-video',
+                    'endCursor': '',
+                    'pageSize': 1000,
+                },
+                'query': graphql_query,
+            }
             from json import dumps
             data = dumps(payload).encode('utf-8')
             continue_json = get_url_json(url=self.GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
@@ -267,9 +267,10 @@ class ResumePoints:
                     episode_id = item.get('node').get('episode').get('id')
                     program_title = item.get('node').get('title')
                     episode_title = item.get('node').get('episode').get('title')
-                    continue_dict[episode_id] = dict(
-                        program_title=program_title,
-                        episode_title=episode_title)
+                    continue_dict[episode_id] = {
+                        'program_title': program_title,
+                        'episode_title': episode_title,
+                    }
         except AttributeError:
             pass
         return continue_dict

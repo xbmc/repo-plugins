@@ -89,7 +89,7 @@ class Metadata:
                     extras = {}
                     # If we are in a favorites menu, move cursor down before removing a favorite
                     if plugin.path.startswith('/favorites'):
-                        extras = dict(move_down=True)
+                        extras = {'move_down': True}
                     context_menu.append((
                         localize(30412, title=follow_suffix),  # Unfollow
                         'RunPlugin(%s)' % url_for('unfollow', program_name=program_name, title=program_title, program_id=program_id, **extras)
@@ -609,51 +609,51 @@ class Metadata:
 
         # VRT MAX Search API
         if api_data.get('episodeType'):
-            info_labels = dict(
-                title=self.get_title(api_data, season=season),
-                # sorttitle=self.get_title(api_data),  # NOTE: Does not appear to work
-                tvshowtitle=self.get_tvshowtitle(api_data),
-                # date=self.get_date(api_data),  # NOTE: Not sure when or how this is used
-                aired=self.get_aired(api_data),
-                dateadded=self.get_dateadded(api_data),
-                episode=self.get_episode(api_data),
-                season=self.get_season(api_data),
-                playcount=self.get_playcount(api_data),
-                plot=self.get_plot(api_data, season=season),
-                plotoutline=self.get_plotoutline(api_data, season=season),
-                mpaa=self.get_mpaa(api_data),
-                tagline=self.get_plotoutline(api_data, season=season),
-                duration=self.get_duration(api_data),
-                mediatype=self.get_mediatype(api_data, season=season),
-                studio=self.get_studio(api_data),
-                year=self.get_year(api_data),
-                tag=self.get_tag(api_data),
-            )
+            info_labels = {
+                'title': self.get_title(api_data, season=season),
+                # 'sorttitle': self.get_title(api_data),  # NOTE: Does not appear to work
+                'tvshowtitle': self.get_tvshowtitle(api_data),
+                # 'date': self.get_date(api_data),  # NOTE: Not sure when or how this is used
+                'aired': self.get_aired(api_data),
+                'dateadded': self.get_dateadded(api_data),
+                'episode': self.get_episode(api_data),
+                'season': self.get_season(api_data),
+                'playcount': self.get_playcount(api_data),
+                'plot': self.get_plot(api_data, season=season),
+                'plotoutline': self.get_plotoutline(api_data, season=season),
+                'mpaa': self.get_mpaa(api_data),
+                'tagline': self.get_plotoutline(api_data, season=season),
+                'duration': self.get_duration(api_data),
+                'mediatype': self.get_mediatype(api_data, season=season),
+                'studio': self.get_studio(api_data),
+                'year': self.get_year(api_data),
+                'tag': self.get_tag(api_data),
+            }
             return info_labels
 
         # VRT MAX Suggest API
         if api_data.get('type') == 'program':
-            info_labels = dict(
-                tvshowtitle=self.get_tvshowtitle(api_data),
-                plot=self.get_plot(api_data),
-                mediatype=self.get_mediatype(api_data, season=season),
-                studio=self.get_studio(api_data),
-                tag=self.get_tag(api_data),
-            )
+            info_labels = {
+                'tvshowtitle': self.get_tvshowtitle(api_data),
+                'plot': self.get_plot(api_data),
+                'mediatype': self.get_mediatype(api_data, season=season),
+                'studio': self.get_studio(api_data),
+                'tag': self.get_tag(api_data),
+            }
             return info_labels
 
         # VRT MAX Schedule API (some are missing vrt.whatson-id)
         if api_data.get('vrt.whatson-id') or api_data.get('startTime'):
-            info_labels = dict(
-                title=self.get_title(api_data),
-                # sorttitle=self.get_title(api_data),  # NOTE: Does not appear to work
-                tvshowtitle=self.get_tvshowtitle(api_data),
-                aired=self.get_aired(api_data),
-                plot=self.get_plot(api_data, date=date),
-                duration=self.get_duration(api_data),
-                mediatype=self.get_mediatype(api_data, season=season),
-                studio=channel.get('studio'),
-            )
+            info_labels = {
+                'title': self.get_title(api_data),
+                # 'sorttitle': self.get_title(api_data),  # NOTE: Does not appear to work
+                'tvshowtitle': self.get_tvshowtitle(api_data),
+                'aired': self.get_aired(api_data),
+                'plot': self.get_plot(api_data, date=date),
+                'duration': self.get_duration(api_data),
+                'mediatype': self.get_mediatype(api_data, season=season),
+                'studio': channel.get('studio'),
+            }
             return info_labels
 
         # Not Found

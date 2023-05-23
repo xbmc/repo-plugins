@@ -1,5 +1,5 @@
 #EXTM3U
-#EXTINF:-1 tvg-id="een" tvg-name="Eén" group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/logo/een/een_LOGO_zwart.png",Eén
+#EXTINF:-1 tvg-id="een" tvg-name="VRT 1" group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/2023/04/28/c448d669-e5c1-11ed-91d7-02b7b76bf47f.png",VRT 1
 plugin://plugin.video.vrt.nu/play/id/vualto_een_geo?ext=.pvr
 
 #EXTINF:-1 tvg-id="canvas" tvg-name="Canvas", group-title="VRT MAX" tvg-logo="https://images.vrt.be/orig/logo/canvas/CANVAS_logo_lichtblauw.jpg",Canvas

@@ -21,7 +21,7 @@ msgid "Authorizing Device"
 msgstr ""
 
 msgctxt "#30002"
-msgid "Authorizatoin Failed"
+msgid "Authorization Failed"
 msgstr ""
 
 msgctxt "#30003"

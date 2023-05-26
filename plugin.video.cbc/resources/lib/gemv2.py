@@ -80,6 +80,8 @@ class GemV2:
         }
         if 'episode' in episode:
             labels['episode'] = episode['episode']
+        if 'duration' in episode:
+            labels['duration'] = episode['duration']
         return labels
 
     @staticmethod

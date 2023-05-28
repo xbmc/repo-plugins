@@ -139,7 +139,7 @@ def map_artetv_video(item):
     progress = item.get('lastviewed') and item.get('lastviewed').get('progress') or 0
     time_offset = item.get('lastviewed') and item.get('lastviewed').get('timecode') or 0
 
-    if not isinstance(kind, str):
+    if not isinstance(kind, str) and kind is not None:
         kind = kind.get('code')
     if kind == 'EXTERNAL':
         return None
@@ -319,9 +319,9 @@ def map_zone_to_item(zone, cached_categories):
     Populate cached_categories for zones with videos available in child 'content'"""
     menu_item = None
     title = zone.get('title')
-    if zone.get('id') == '9fc57105-847b-49c5-9b4a-f46863754059':
+    if zone.get('id') == 'b1dfd8e0-4757-4236-9dab-6f6331cb5ea4':
         menu_item = create_favorites_item(title)
-    elif zone.get('id') == '67cea6f3-7af0-4ffa-a6c2-59b1da0ecd4b':
+    elif zone.get('id') == '823d6af6-fedd-4b54-8049-ddb7158eee64':
         menu_item = create_last_viewed_item(title)
     elif zone.get('content') and zone.get('content').get('data'):
         cached_category = map_cached_categories(zone)

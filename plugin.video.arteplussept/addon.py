@@ -119,8 +119,8 @@ def play_live(stream_url):
 @plugin.route('/play/<kind>/<program_id>/<audio_slot>', name='play_specific')
 def play(kind, program_id, audio_slot='1'):
     """Play content identified with program_id.
-    kind is a value of TODO (e.g. TRAILER, COLLECTION, LINK, ...)
-    audio_slot is a numeric
+    :param str kind: an enum in TODO (e.g. TRAILER, COLLECTION, LINK, CLIP, ...)
+    :param str audio_slot: a numeric to identify the audio stream to use e.g. 1 2
     """
     synched_player = Player(plugin, settings, program_id)
     item = view.build_stream_url(plugin, kind, program_id, int(audio_slot), settings)

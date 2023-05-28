@@ -1,5 +1,8 @@
 Changelog also available in file ./addon.xml xpath /addon/extension/news following Kodi guidelines https://kodi.wiki/view/Add-on_structure#changelog.txt
 
+v1.1.10 (2023-5-28)
+- Bugfix to display favorites and last vieweds following id change in Arte
+
 v1.1.9 (2023-4-18)
 - Improve security and performance by caching token to limit authentication requests
 - Fallback on clip, when stream is not available anymore. Same feature as on Arte mobile. For favorite content.

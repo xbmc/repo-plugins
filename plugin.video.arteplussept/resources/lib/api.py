@@ -10,7 +10,7 @@ from . import hof
 # Arte hbbtv - deprecated API since 2022 prefer Arte TV API
 _HBBTV_URL = 'http://www.arte.tv/hbbtvv2/services/web/index.php'
 _HBBTV_HEADERS = {
-    'user-agent': 'plugin.video.arteplussept/1.1.9'
+    'user-agent': 'plugin.video.arteplussept/1.1.10'
 }
 _HBBTV_ENDPOINTS = {
     'category': '/EMAC/teasers/category/v2/{category_code}/{lang}',
@@ -60,7 +60,7 @@ ARTETV_ENDPOINTS = {
     'login': '/login',
 }
 ARTETV_HEADERS = {
-    'user-agent': 'plugin.video.arteplussept/1.1.9',
+    'user-agent': 'plugin.video.arteplussept/1.1.10',
     # required to use token endpoint
     'authorization': 'I6k2z58YGO08P1X0E8A7VBOjDxr8Lecg',
     # required for Arte TV API. values like web, app, tv, orange, free

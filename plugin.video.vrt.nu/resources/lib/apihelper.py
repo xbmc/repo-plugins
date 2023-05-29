@@ -190,13 +190,15 @@ class ApiHelper:
                 label=localize(30133),  # All seasons
                 path=url_for('programs', program_name=program_name, season='allseasons'),
                 art_dict=self._metadata.get_art(episode, season='allseasons'),
-                info_dict=dict(tvshowtitle=self._metadata.get_tvshowtitle(episode),
-                               plot=self._metadata.get_plot(episode, season='allseasons'),
-                               plotoutline=self._metadata.get_plotoutline(episode, season='allseasons'),
-                               tagline=self._metadata.get_plotoutline(episode, season='allseasons'),
-                               mediatype=self._metadata.get_mediatype(episode, season='allseasons'),
-                               studio=self._metadata.get_studio(episode),
-                               tag=self._metadata.get_tag(episode)),
+                info_dict={
+                    'tvshowtitle': self._metadata.get_tvshowtitle(episode),
+                    'plot': self._metadata.get_plot(episode, season='allseasons'),
+                    'plotoutline': self._metadata.get_plotoutline(episode, season='allseasons'),
+                    'tagline': self._metadata.get_plotoutline(episode, season='allseasons'),
+                    'mediatype': self._metadata.get_mediatype(episode, season='allseasons'),
+                    'studio': self._metadata.get_studio(episode),
+                    'tag': self._metadata.get_tag(episode),
+                }
             ))
 
         # NOTE: Sort the episodes ourselves, because Kodi does not allow to set to 'ascending'
@@ -305,7 +307,7 @@ class ApiHelper:
         next_ep = upnext.get('next')
 
         if next_ep is None:
-            if current_ep is not None and current_ep.get('episodeNumber') == current_ep.get('seasonNbOfEpisodes') is not None:
+            if current_ep is not None and current_ep.get('episodeNumber') == current_ep.get('seasonNbOfEpisodes'):
                 log(2, '[Up Next] Already at last episode of last season for {program_title} S{season_num}E{episode_num}',
                     program_title=program_title, season_num=season_num, episode_num=episode_num)
             elif season_num and program_title:
@@ -316,11 +318,11 @@ class ApiHelper:
             return None
 
         art = self._metadata.get_art(current_ep)
-        current_episode = dict(
-            episodeid=current_ep.get('videoId'),
-            tvshowid=current_ep.get('programName'),
-            title=self._metadata.get_title(current_ep),
-            art={
+        current_episode = {
+            'episodeid': current_ep.get('videoId'),
+            'tvshowid': current_ep.get('programName'),
+            'title': self._metadata.get_title(current_ep),
+            'art': {
                 'tvshow.poster': art.get('thumb'),
                 'thumb': art.get('thumb'),
                 'tvshow.fanart': art.get('fanart'),
@@ -328,22 +330,22 @@ class ApiHelper:
                 'tvshow.clearart': None,
                 'tvshow.clearlogo': None,
             },
-            plot=self._metadata.get_plot(current_ep),
-            showtitle=self._metadata.get_tvshowtitle(current_ep),
-            playcount=info.get('playcount'),
-            season=self._metadata.get_season(current_ep),
-            episode=self._metadata.get_episode(current_ep),
-            rating=info.get('rating'),
-            firstaired=self._metadata.get_aired(current_ep),
-            runtime=info.get('runtime'),
-        )
+            'plot': self._metadata.get_plot(current_ep),
+            'showtitle': self._metadata.get_tvshowtitle(current_ep),
+            'playcount': info.get('playcount'),
+            'season': self._metadata.get_season(current_ep),
+            'episode': self._metadata.get_episode(current_ep),
+            'rating': info.get('rating'),
+            'firstaired': self._metadata.get_aired(current_ep),
+            'runtime': info.get('runtime'),
+        }
 
         art = self._metadata.get_art(next_ep)
-        next_episode = dict(
-            episodeid=next_ep.get('videoId'),
-            tvshowid=next_ep.get('programName'),
-            title=self._metadata.get_title(next_ep),
-            art={
+        next_episode = {
+            'episodeid': next_ep.get('videoId'),
+            'tvshowid': next_ep.get('programName'),
+            'title': self._metadata.get_title(next_ep),
+            'art': {
                 'tvshow.poster': art.get('thumb'),
                 'thumb': art.get('thumb'),
                 'tvshow.fanart': art.get('fanart'),
@@ -351,25 +353,25 @@ class ApiHelper:
                 'tvshow.clearart': None,
                 'tvshow.clearlogo': None,
             },
-            plot=self._metadata.get_plot(next_ep),
-            showtitle=self._metadata.get_tvshowtitle(next_ep),
-            playcount=None,
-            season=self._metadata.get_season(next_ep),
-            episode=self._metadata.get_episode(next_ep),
-            rating=None,
-            firstaired=self._metadata.get_aired(next_ep),
-            runtime=self._metadata.get_duration(next_ep),
-        )
+            'plot': self._metadata.get_plot(next_ep),
+            'showtitle': self._metadata.get_tvshowtitle(next_ep),
+            'playcount': None,
+            'season': self._metadata.get_season(next_ep),
+            'episode': self._metadata.get_episode(next_ep),
+            'rating': None,
+            'firstaired': self._metadata.get_aired(next_ep),
+            'runtime': self._metadata.get_duration(next_ep),
+        }
 
-        play_info = dict(
-            episode_id=next_ep.get('episodeId'),
-        )
+        play_info = {
+            'episode_id': next_ep.get('episodeId'),
+        }
 
-        next_info = dict(
-            current_episode=current_episode,
-            next_episode=next_episode,
-            play_info=play_info,
-        )
+        next_info = {
+            'current_episode': current_episode,
+            'next_episode': next_episode,
+            'play_info': play_info,
+        }
         return next_info
 
     def get_single_episode_data(self, video_id=None, whatson_id=None, video_url=None, episode_id=None):
@@ -399,7 +401,7 @@ class ApiHelper:
                 info_dict=self._metadata.get_info_labels(episode),
                 prop_dict=self._metadata.get_properties(episode),
             )
-            video = dict(listitem=video_item, video_id=episode.get('videoId'), publication_id=episode.get('publicationId'))
+            video = {'listitem': video_item, 'video_id': episode.get('videoId'), 'publication_id': episode.get('publicationId')}
         return video
 
     def get_episode_by_air_date(self, channel_name, start_date, end_date=None):
@@ -480,17 +482,17 @@ class ApiHelper:
                     info_dict=info,
                     prop_dict=self._metadata.get_properties(episode_guess),
                 )
-                video = dict(
-                    listitem=video_item,
-                    video_id=channel.get('live_stream_id'),
-                    start_date=start_date,
-                    end_date=end_date,
-                )
+                video = {
+                    'listitem': video_item,
+                    'video_id': channel.get('live_stream_id'),
+                    'start_date': start_date,
+                    'end_date': end_date,
+                }
                 return video
 
-            video = dict(
-                errorlabel=episode_guess.get('title')
-            )
+            video = {
+                'errorlabel': episode_guess.get('title')
+            }
         return video
 
     def get_latest_episode(self, program_name):
@@ -506,7 +508,7 @@ class ApiHelper:
             info_dict=self._metadata.get_info_labels(episode),
             prop_dict=self._metadata.get_properties(episode),
         )
-        video = dict(listitem=video_item, video_id=episode.get('videoId'), publication_id=episode.get('publicationId'))
+        video = {'listitem': video_item, 'video_id': episode.get('videoId'), 'publication_id': episode.get('publicationId')}
         return video
 
     def get_episodes(self, program=None, season=None, episodes=None, category=None, feature=None, programtype=None, keywords=None,
@@ -631,7 +633,7 @@ class ApiHelper:
             if season_items:
                 seasons = []
                 for item in season_items:
-                    seasons.append(dict(key=item.get('id'), name=item.get('name'), title=item.get('title').get('raw')))
+                    seasons.append({'key': item.get('id'), 'name': item.get('name'), 'title': item.get('title').get('raw')})
 
         episodes = search_json.get('results', [{}])
         show_seasons = bool(season != 'allseasons')
@@ -681,7 +683,7 @@ class ApiHelper:
         return episodes
 
     def get_live_screenshot(self, channel):
-        """Get a live screenshot for a given channel, only supports Eén, Canvas and Ketnet"""
+        """Get a live screenshot for a given channel, only supports VRT 1, Canvas and Ketnet"""
         url = '%s/%s.jpg' % (self._VRTMAX_SCREENSHOT_URL, channel)
         delete_cached_thumbnail(url)
         return url
@@ -710,7 +712,7 @@ class ApiHelper:
                 label = channel.get('label')
                 plot = '[B]%s[/B]' % channel.get('label')
                 is_playable = False
-                info_dict = dict(title=label, plot=plot, studio=channel.get('studio'), mediatype='video')
+                info_dict = {'title': label, 'plot': plot, 'studio': channel.get('studio'), 'mediatype': 'video'}
                 stream_dict = []
                 prop_dict = {}
             elif channel.get('live_stream') or channel.get('live_stream_id'):
@@ -733,9 +735,9 @@ class ApiHelper:
                 else:
                     plot = localize(30142, **channel)  # Watch live
                 # NOTE: Playcount and resumetime are required to not have live streams as "Watched" and resumed
-                info_dict = dict(title=label, plot=plot, studio=channel.get('studio'), mediatype='video', playcount=0, duration=0)
-                prop_dict = dict(resumetime=0)
-                stream_dict = dict(duration=0)
+                info_dict = {'title': label, 'plot': plot, 'studio': channel.get('studio'), 'mediatype': 'video', 'playcount': 0, 'duration': 0}
+                prop_dict = {'resumetime': 0}
+                stream_dict = {'duration': 0}
                 context_menu.append((
                     localize(30413),  # Refresh menu
                     'RunPlugin(%s)' % url_for('delete_cache', cache_file='channel.{channel}.json'.format(channel=channel)),
@@ -786,7 +788,7 @@ class ApiHelper:
                     label = '[B]%s[/B]' % label
                 plot = localize(30144, **youtube)  # Watch on YouTube
                 # NOTE: Playcount is required to not have live streams as "Watched"
-                info_dict = dict(title=label, plot=plot, studio=channel.get('studio'), mediatype='video', playcount=0)
+                info_dict = {'title': label, 'plot': plot, 'studio': channel.get('studio'), 'mediatype': 'video', 'playcount': 0}
 
                 context_menu = [(
                     localize(30413),  # Refresh menu
@@ -825,8 +827,8 @@ class ApiHelper:
             featured_items.append(TitleItem(
                 label=featured_name,
                 path=url_for('featured', feature=feature.get('id')),
-                art_dict=dict(thumb='DefaultCountry.png'),
-                info_dict=dict(plot='[B]%s[/B]' % feature.get('name'), studio='VRT'),
+                art_dict={'thumb': 'DefaultCountry.png'},
+                info_dict={'plot': '[B]%s[/B]' % feature.get('name'), 'studio': 'VRT'},
             ))
         return featured_items
 
@@ -842,7 +844,7 @@ class ApiHelper:
                     name = tag.get('name')
                     if name not in taglist:
                         taglist.append(name)
-                        featured.append(dict(name=title, id=name))
+                        featured.append({'name': title, 'id': name})
         return featured
 
     @staticmethod
@@ -857,7 +859,7 @@ class ApiHelper:
                     filled = items.get(item).get(':items')
                     title = items.get(item).get('title')
                     if filled and title:
-                        featured.append(dict(name=items.get(item).get('title'), id='jcr_%s' % item))
+                        featured.append({'name': items.get(item).get('title'), 'id': 'jcr_%s' % item})
         return featured
 
     @staticmethod
@@ -875,7 +877,7 @@ class ApiHelper:
                     media.append(item.get('data').get('episode').get('id'))
                 else:
                     media.append(item.get('programName'))
-        return dict(name=data.get('title'), mediatype=mediatype, medialist=media)
+        return {'name': data.get('title'), 'mediatype': mediatype, 'medialist': media}
 
     @staticmethod
     def localize_features(featured):
@@ -903,11 +905,11 @@ class ApiHelper:
         if categories_json is not None:
             categories = []
             for category in categories_json.get('items'):
-                categories.append(dict(
-                    id=category.get('name'),
-                    thumbnail=add_https_proto(category.get('image').get('src')),
-                    name=category.get('title'),
-                ))
+                categories.append({
+                    'id': category.get('name'),
+                    'thumbnail': add_https_proto(category.get('image').get('src')),
+                    'name': category.get('title'),
+                })
         return categories
 
     def get_categories(self):
@@ -944,8 +946,8 @@ class ApiHelper:
             category_items.append(TitleItem(
                 label=category.get('name'),
                 path=url_for('categories', category=category.get('id')),
-                art_dict=dict(thumb=thumbnail, icon='DefaultGenre.png'),
-                info_dict=dict(plot='[B]%s[/B]' % category.get('name'), studio='VRT'),
+                art_dict={'thumb': thumbnail, 'icon': 'DefaultGenre.png'},
+                info_dict={'plot': '[B]%s[/B]' % category.get('name'), 'studio': 'VRT'},
             ))
         return category_items
 

@@ -39,8 +39,8 @@ class Search:
             TitleItem(
                 label=localize(30424),  # New search...
                 path=url_for('search_query'),
-                art_dict=dict(thumb='DefaultAddonsSearch.png'),
-                info_dict=dict(plot=localize(30425)),
+                art_dict={'thumb': 'DefaultAddonsSearch.png'},
+                info_dict={'plot': localize(30425)},
                 is_playable=False,
             )
         ]
@@ -64,8 +64,8 @@ class Search:
             menu_items.append(TitleItem(
                 label=localize(30426),  # Clear search history
                 path=url_for('clear_search'),
-                info_dict=dict(plot=localize(30427)),
-                art_dict=dict(thumb='icons/infodialogs/uninstall.png'),
+                info_dict={'plot': localize(30427)},
+                art_dict={'thumb': 'icons/infodialogs/uninstall.png'},
                 is_playable=False,
             ))
 

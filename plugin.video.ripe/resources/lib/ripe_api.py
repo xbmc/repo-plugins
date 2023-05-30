@@ -64,7 +64,7 @@ def get_events():
         site_name = l.find_first(previous_section, previous_site_pattern)
         dates = l.find_first(previous_section, previous_date_pattern)
         event_number = l.find_first(event_name, number_pattern)
-        event_url = 'https://%s.ripe.net/archives/' % ripe_event
+        event_url = 'https://ripe%s.ripe.net/archives/' % event_number
         event_title = '%s - %s (%s)' % (event_name, site_name, dates)
         l.log('previous event url: "%s" name: "%s" site: "%s" dates: "%s"' % (event_url, event_name, site_name, dates))
         events_list.insert(0, (event_url, event_title, site_name))

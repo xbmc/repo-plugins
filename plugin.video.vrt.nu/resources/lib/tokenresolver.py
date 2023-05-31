@@ -139,11 +139,11 @@ class TokenResolver:
             'OIDCXSRF': oidcxsrf,
             'Cookie': 'SESSION={}; OIDCXSRF={}'.format(self.get_token('SESSION'), oidcxsrf),
         }
-        payload = dict(
-            clientId='vrtnu-site',
-            loginID=from_unicode(get_setting('username')),
-            password=from_unicode(get_setting('password')),
-        )
+        payload = {
+            'clientId': 'vrtnu-site',
+            'loginID': from_unicode(get_setting('username')),
+            'password': from_unicode(get_setting('password')),
+        }
         from json import dumps
         data = dumps(payload).encode()
         return get_url_json(self._SSO_LOGIN_URL, headers=headers, data=data, fail={})
@@ -256,7 +256,10 @@ class TokenResolver:
         """Get a vrtPlayerToken"""
         from json import dumps
         headers = {'Content-Type': 'application/json'}
-        data = b''
+        playerinfo = self._generate_playerinfo()
+        payload = {
+            'playerInfo': playerinfo
+        }
         if roaming or variant == 'ondemand':
             if roaming:
                 # Delete cached vrtPlayerToken
@@ -265,12 +268,8 @@ class TokenResolver:
             videotoken = self.get_token('vrtnu-site_profile_vt')
             if videotoken is None:
                 return None
-            playerinfo = self._generate_playerinfo()
-            payload = dict(
-                identityToken=videotoken,
-                playerInfo=playerinfo
-            )
-            data = dumps(payload).encode()
+            payload['identityToken'] = videotoken
+        data = dumps(payload).encode()
         playertoken = get_url_json(url=self._PLAYERTOKEN_URL, headers=headers, data=data)
         if playertoken:
             # Cache token
@@ -317,28 +316,28 @@ class TokenResolver:
 
             # Generate JWT
             segments = []
-            header = dict(
-                alg='HS256',
-                kid=kid
-            )
-            payload = dict(
-                exp=time.time() + 1000,
-                platform='desktop',
-                app=dict(
-                    type='browser',
-                    name='Firefox',
-                    version='102.0'
-                ),
-                device='undefined (undefined)',
-                os=dict(
-                    name='Linux',
-                    version='x86_64'
-                ),
-                player=dict(
-                    name='VRT web player',
-                    version=player_version
-                )
-            )
+            header = {
+                'alg': 'HS256',
+                'kid': kid
+            }
+            payload = {
+                'exp': time.time() + 1000,
+                'platform': 'desktop',
+                'app': {
+                    'type': 'browser',
+                    'name': 'Firefox',
+                    'version': '102.0'
+                },
+                'device': 'undefined (undefined)',
+                'os': {
+                    'name': 'Linux',
+                    'version': 'x86_64'
+                },
+                'player': {
+                    'name': 'VRT web player',
+                    'version': player_version
+                }
+            }
             json_header = dumps(header).encode()
             json_payload = dumps(payload).encode()
             segments.append(base64.urlsafe_b64encode(json_header).decode('utf-8').replace('=', ''))

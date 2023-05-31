@@ -12,7 +12,7 @@ except ImportError:  # Python 2
 from helperobjects import TitleItem
 from kodiutils import (colour, get_cache, get_setting_bool, get_setting_int, get_url_json, has_credentials,
                        localize, localize_from_data, log, update_cache, url_for)
-from utils import add_https_proto, from_unicode, reformat_image_url, shorten_link, to_unicode, url_to_program
+from utils import from_unicode, reformat_image_url, shorten_link, to_unicode, url_to_program
 from graphql_data import EPISODE_TILE
 
 GRAPHQL_URL = 'https://www.vrt.be/vrtnu-api/graphql/v1'
@@ -50,7 +50,7 @@ def get_context_menu(program_name, program_id, program_title, program_type, is_f
         extras = {}
         # If we are in a favorites menu, move cursor down before removing a favorite
         if plugin_path.startswith('/favorites'):
-            extras = dict(move_down=True)
+            extras = {'move_down': True}
         context_menu.append((
             localize(30412, title=follow_suffix),  # Unfollow
             'RunPlugin(%s)' % url_for('unfollow', program_name=program_name, title=encoded_program_title, program_id=program_id, **extras)
@@ -175,11 +175,11 @@ def get_next_info(episode_id):
     if current_ep.get('nextUp').get('title') == 'Volgende aflevering':
         next_ep = current_ep.get('nextUp').get('tile').get('episode')
 
-        current_episode = dict(
-            episodeid=current_ep.get('id'),
-            tvshowid=current_ep.get('program').get('id'),
-            title=current_ep.get('title'),
-            art={
+        current_episode = {
+            'episodeid': current_ep.get('id'),
+            'tvshowid': current_ep.get('program').get('id'),
+            'title': current_ep.get('title'),
+            'art': {
                 'tvshow.poster': reformat_image_url(current_ep.get('program').get('posterImage').get('templateUrl')),
                 'thumb': reformat_image_url(current_ep.get('image').get('templateUrl')),
                 'tvshow.fanart': reformat_image_url(current_ep.get('program').get('image').get('templateUrl')),
@@ -187,21 +187,21 @@ def get_next_info(episode_id):
                 'tvshow.clearart': None,
                 'tvshow.clearlogo': None,
             },
-            plot=current_ep.get('description'),
-            showtitle=current_ep.get('program').get('title'),
-            playcount=None,
-            season=int(''.join(i for i in current_ep.get('season').get('titleRaw') if i.isdigit()) or 0),
-            episode=int(current_ep.get('episodeNumberRaw') or 0),
-            rating=None,
-            firstaired=dateutil.parser.parse(current_ep.get('analytics').get('airDate')).strftime('%Y-%m-%d'),
-            runtime=int(current_ep.get('durationSeconds')),
-        )
+            'plot': current_ep.get('description'),
+            'showtitle': current_ep.get('program').get('title'),
+            'playcount': None,
+            'season': int(''.join(i for i in current_ep.get('season').get('titleRaw') if i.isdigit()) or 0),
+            'episode': int(current_ep.get('episodeNumberRaw') or 0),
+            'rating': None,
+            'firstaired': dateutil.parser.parse(current_ep.get('analytics').get('airDate')).strftime('%Y-%m-%d'),
+            'runtime': int(current_ep.get('durationSeconds')),
+        }
 
-        next_episode = dict(
-            episodeid=next_ep.get('id'),
-            tvshowid=next_ep.get('program').get('id'),
-            title=next_ep.get('title'),
-            art={
+        next_episode = {
+            'episodeid': next_ep.get('id'),
+            'tvshowid': next_ep.get('program').get('id'),
+            'title': next_ep.get('title'),
+            'art': {
                 'tvshow.poster': reformat_image_url(next_ep.get('program').get('posterImage').get('templateUrl')),
                 'thumb': reformat_image_url(next_ep.get('image').get('templateUrl')),
                 'tvshow.fanart': reformat_image_url(next_ep.get('program').get('image').get('templateUrl')),
@@ -209,25 +209,22 @@ def get_next_info(episode_id):
                 'tvshow.clearart': None,
                 'tvshow.clearlogo': None,
             },
-            plot=next_ep.get('description'),
-            showtitle=next_ep.get('program').get('title'),
-            playcount=None,
-            season=int(''.join(i for i in next_ep.get('season').get('titleRaw') if i.isdigit()) or 0),
-            episode=int(next_ep.get('episodeNumberRaw') or 0),
-            rating=None,
-            firstaired=dateutil.parser.parse(next_ep.get('analytics').get('airDate')).strftime('%Y-%m-%d'),
-            runtime=int(next_ep.get('durationSeconds')),
-        )
-
-        play_info = dict(
-            episode_id=next_ep.get('id'),
-        )
-
-        next_info = dict(
-            current_episode=current_episode,
-            next_episode=next_episode,
-            play_info=play_info,
-        )
+            'plot': next_ep.get('description'),
+            'showtitle': next_ep.get('program').get('title'),
+            'playcount': None,
+            'season': int(''.join(i for i in next_ep.get('season').get('titleRaw') if i.isdigit()) or 0),
+            'episode': int(next_ep.get('episodeNumberRaw') or 0),
+            'rating': None,
+            'firstaired': dateutil.parser.parse(next_ep.get('analytics').get('airDate')).strftime('%Y-%m-%d'),
+            'runtime': int(next_ep.get('durationSeconds')),
+        }
+        next_info = {
+            'current_episode': current_episode,
+            'next_episode': next_episode,
+            'play_info': {
+                'episode_id': next_ep.get('id'),
+            }
+        }
     return next_info
 
 
@@ -311,13 +308,13 @@ def get_single_episode_data(episode_id):
             }
             %s
         """ % EPISODE_TILE
-        payload = dict(
-            operationName='PlayerData',
-            variables=dict(
-                id=episode_id
-            ),
-            query=graphql_query,
-        )
+        payload = {
+            'operationName': 'PlayerData',
+            'variables': {
+                'id': episode_id,
+            },
+            'query': graphql_query,
+        }
         from json import dumps
         data = dumps(payload).encode('utf-8')
         data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
@@ -415,13 +412,13 @@ def get_latest_episode_data(program_name):
             }
             %s
         """ % EPISODE_TILE
-        payload = dict(
-            operationName='VideoProgramPage',
-            variables=dict(
-                pageId='/vrtnu/a-z/{}.model.json'.format(program_name),
-            ),
-            query=graphql_query,
-        )
+        payload = {
+            'operationName': 'VideoProgramPage',
+            'variables': {
+                'pageId': '/vrtnu/a-z/{}.model.json'.format(program_name),
+            },
+            'query': graphql_query,
+        }
         from json import dumps
         data = dumps(payload).encode('utf-8')
         data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
@@ -445,11 +442,11 @@ def set_resumepoint(video_id, title, position, total):
             'Authorization': 'Bearer ' + access_token,
             'Content-Type': 'application/json',
         }
-        payload = dict(
-            at=position,
-            total=total,
-            gdpr=gdpr,
-        )
+        payload = {
+            'at': position,
+            'total': total,
+            'gdpr': gdpr,
+        }
         from json import dumps
         data = dumps(payload).encode('utf-8')
         data_json = get_url_json(url='{}/{}'.format(RESUMEPOINTS_URL, video_id), cache=None, headers=headers, data=data, raise_errors='all')
@@ -499,15 +496,15 @@ def get_paginated_episodes(list_id, page_size, end_cursor=''):
         if list_id.startswith('static:/'):
             graphql_query = graphql_query.replace('on PaginatedTileList', 'on StaticTileList')
 
-        payload = dict(
-            operationName='ListedEpisodes',
-            variables=dict(
-                listId=list_id,
-                endCursor=end_cursor,
-                pageSize=page_size,
-            ),
-            query=graphql_query,
-        )
+        payload = {
+            'operationName': 'ListedEpisodes',
+            'variables': {
+                'listId': list_id,
+                'endCursor': end_cursor,
+                'pageSize': page_size,
+            },
+            'query': graphql_query,
+        }
         from json import dumps
         data = dumps(payload).encode('utf-8')
         data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
@@ -594,15 +591,15 @@ def get_paginated_programs(list_id, page_size, end_cursor=''):
         if list_id.startswith('static:/'):
             graphql_query = graphql_query.replace('on PaginatedTileList', 'on StaticTileList')
 
-        payload = dict(
-            operationName='PaginatedPrograms',
-            variables=dict(
-                listId=list_id,
-                endCursor=end_cursor,
-                pageSize=page_size,
-            ),
-            query=graphql_query,
-        )
+        payload = {
+            'operationName': 'PaginatedPrograms',
+            'variables': {
+                'listId': list_id,
+                'endCursor': end_cursor,
+                'pageSize': page_size,
+            },
+            'query': graphql_query,
+        }
         from json import dumps
         data = dumps(payload).encode('utf-8')
         data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
@@ -657,19 +654,19 @@ def convert_programs(api_data, destination, use_favorites=False, **kwargs):
                 TitleItem(
                     label=label,
                     path=path,
-                    art_dict=dict(
-                        thumb=thumb,
-                        poster=poster,
-                        banner=fanart,
-                        fanart=fanart,
-                    ),
-                    info_dict=dict(
-                        title=label,
-                        tvshowtitle=program_title,
-                        plot=plot,
-                        plotoutline=plotoutline,
-                        mediatype='tvshow',
-                    ),
+                    art_dict={
+                        'thumb': thumb,
+                        'poster': poster,
+                        'banner': fanart,
+                        'fanart': fanart,
+                    },
+                    info_dict={
+                        'title': label,
+                        'tvshowtitle': program_title,
+                        'plot': plot,
+                        'plotoutline': plotoutline,
+                        'mediatype': 'tvshow',
+                    },
                     context_menu=context_menu,
                     is_playable=False,
                 )
@@ -689,7 +686,7 @@ def convert_programs(api_data, destination, use_favorites=False, **kwargs):
                 TitleItem(
                     label=colour(localize(30300)),
                     path=url_for(destination, end_cursor=end_cursor, **kwargs),
-                    art_dict=dict(thumb='DefaultInProgressShows.png'),
+                    art_dict={'thumb': 'DefaultInProgressShows.png'},
                     info_dict={},
                 )
             )
@@ -786,30 +783,30 @@ def convert_episode(item, destination=None):
     return sort, ascending, is_favorite, TitleItem(
         label=label,
         path=path,
-        art_dict=dict(
-            thumb=thumb,
-            poster=poster,
-            banner=fanart,
-            fanart=fanart,
-        ),
-        info_dict=dict(
-            title=label,
-            tvshowtitle=program_title,
-            aired=aired,
-            dateadded=dateadded,
-            episode=episode_no,
-            season=season_no,
-            playcount=playcount,
-            plot=plot,
-            plotoutline=plotoutline,
-            mpaa=mpaa,
-            tagline=plotoutline,
-            duration=duration,
-            studio=studio,
-            year=year,
-            tag=tag,
-            mediatype='episode',
-        ),
+        art_dict={
+            'thumb': thumb,
+            'poster': poster,
+            'banner': fanart,
+            'fanart': fanart,
+        },
+        info_dict={
+            'title': label,
+            'tvshowtitle': program_title,
+            'aired': aired,
+            'dateadded': dateadded,
+            'episode': episode_no,
+            'season': season_no,
+            'playcount': playcount,
+            'plot': plot,
+            'plotoutline': plotoutline,
+            'mpaa': mpaa,
+            'tagline': plotoutline,
+            'duration': duration,
+            'studio': studio,
+            'year': year,
+            'tag': tag,
+            'mediatype': 'episode',
+        },
         context_menu=context_menu,
         is_playable=True,
         prop_dict=prop_dict,
@@ -848,7 +845,7 @@ def convert_episodes(api_data, destination, use_favorites=False, **kwargs):
                 TitleItem(
                     label=colour(localize(30300)),
                     path=url_for(destination, end_cursor=end_cursor, **kwargs),
-                    art_dict=dict(thumb='DefaultInProgressShows.png'),
+                    art_dict={'thumb': 'DefaultInProgressShows.png'},
                     info_dict={},
                 )
             )
@@ -887,7 +884,11 @@ def get_latest_episode(program_name):
             latest_episode = highest_ep
 
         _, _, _, title_item = convert_episode(latest_episode)
-        video = dict(listitem=title_item, video_id=title_item.path.split('/')[5], publication_id=title_item.path.split('/')[6])
+        video = {
+            'listitem': title_item,
+            'video_id': title_item.path.split('/')[5],
+            'publication_id': title_item.path.split('/')[6],
+        }
     return video
 
 
@@ -908,26 +909,26 @@ def get_programs(category=None, channel=None, keywords=None, end_cursor=''):
     query_string = None
     if category:
         destination = 'categories'
-        facets = [dict(
-            name='programCategories',
-            values=[category]
-        )]
+        facets = [{
+            'name': 'programCategories',
+            'values': [category]
+        }]
     elif channel:
         destination = 'channels'
-        facets = [dict(
-            name='programBrands',
-            values=[channel]
-        )]
+        facets = [{
+            'name': 'programBrands',
+            'values': [channel]
+        }]
     elif keywords:
         destination = 'search_query'
         facets = None
         query_string = keywords
 
-    search_dict = dict(
-        queryString=query_string,
-        facets=facets,
-        resultType='watch',
-    )
+    search_dict = {
+        'queryString': query_string,
+        'facets': facets,
+        'resultType': 'watch',
+    }
     encoded_search = base64.b64encode(dumps(search_dict).encode('utf-8'))
     list_id = 'uisearch:searchdata@{}'.format(encoded_search.decode('utf-8'))
 
@@ -984,7 +985,7 @@ def get_episodes(program_name, season_name=None, end_cursor=''):
     if program_name and season_name:
         list_id = 'static:/vrtnu/a-z/{}/{}.episodes-list.json'.format(program_name, season_name)
         api_data = get_paginated_episodes(list_id=list_id, page_size=page_size, end_cursor=end_cursor)
-        episodes, sort, ascending = convert_episodes(api_data, destination='noop')
+        episodes, sort, ascending = convert_episodes(api_data, destination='programs', program_name=program_name, season_name=season_name)
         return episodes, sort, ascending, 'episodes'
     return None
 
@@ -1001,10 +1002,10 @@ def convert_seasons(api_data, program_name):
             TitleItem(
                 label=label,
                 path=path,
-                info_dict=dict(
-                    title=label,
-                    mediatype='season',
-                ),
+                info_dict={
+                    'title': label,
+                    'mediatype': 'season',
+                },
                 is_playable=False,
             )
         )
@@ -1049,47 +1050,17 @@ def get_featured(feature=None, end_cursor=''):
                     TitleItem(
                         label=title,
                         path=url_for('featured', feature='{}_{}'.format(content_type, feature_id)),
-                        art_dict=dict(thumb='DefaultCountry.png'),
-                        info_dict=dict(
-                            title=title,
-                            plot='[B]%s[/B]' % title,
-                            studio='VRT',
-                            mediatype='season',
-                        ),
+                        art_dict={'thumb': 'DefaultCountry.png'},
+                        info_dict={
+                            'title': title,
+                            'plot': '[B]%s[/B]' % title,
+                            'studio': 'VRT',
+                            'mediatype': 'season',
+                        },
                         is_playable=False,
                     )
                 )
     return featured, sort, ascending, content
-
-
-def get_all_programs():
-    """Return an a-z list of all programs"""
-    programs = []
-    az_json = get_url_json('https://www.vrt.be/vrtnu/a-z/jcr:content/par/glossary.model.json')
-    if az_json is not None:
-        for program in az_json.get('items'):
-            if program.get('data').get('program').get('available'):
-                title = program.get('title')
-                thumb = None
-                plot = None
-                if program.get('image'):
-                    thumb = reformat_image_url(program.get('image').get('src'))
-                    plot = program.get('image').get('alt')
-                programs.append(
-                    TitleItem(
-                        label=title,
-                        path=url_for('programs', program_name=program.get('name')),
-                        art_dict=dict(thumb=thumb),
-                        info_dict=dict(
-                            title=title,
-                            plot=plot,
-                            studio='VRT',
-                            mediatype='tvshow',
-                        ),
-                        is_playable=False,
-                    )
-                )
-    return programs
 
 
 def get_categories_data():
@@ -1127,8 +1098,8 @@ def get_categories():
         categories.append(TitleItem(
             label=category.get('name'),
             path=url_for('categories', category=category.get('id')),
-            art_dict=dict(thumb=thumbnail, icon='DefaultGenre.png'),
-            info_dict=dict(plot='[B]%s[/B]' % category.get('name'), studio='VRT'),
+            art_dict={'thumb': thumbnail, 'icon': 'DefaultGenre.png'},
+            info_dict={'plot': '[B]%s[/B]' % category.get('name'), 'studio': 'VRT'},
         ))
     return categories
 
@@ -1136,14 +1107,196 @@ def get_categories():
 def get_online_categories():
     """Return a list of categories from the VRT MAX website"""
     categories = []
-    categories_json = get_url_json('https://www.vrt.be/vrtmax/categorieen/jcr:content/par/categories.model.json')
-    if categories_json is not None:
-        for category in categories_json.get('items'):
-            categories.append(dict(
-                id=category.get('name'),
-                thumbnail=add_https_proto(category.get('image').get('src')),
-                name=category.get('title'),
-            ))
+    from tokenresolver import TokenResolver
+    access_token = TokenResolver().get_token('vrtnu-site_profile_at')
+    categories_json = {}
+    if access_token:
+        headers = {
+            'Authorization': 'Bearer ' + access_token,
+            'Content-Type': 'application/json',
+            'x-vrt-client-name': 'MobileAndroid',
+        }
+        graphql_query = """
+            query Search(
+              $q: String
+              $mediaType: MediaType
+              $facets: [SearchFacetInput]
+            ) {
+              uiSearch(input: { q: $q, mediaType: $mediaType, facets: $facets }) {
+                __typename
+                ... on IIdentifiable {
+                  objectId
+                  __typename
+                }
+                ... on IComponent {
+                  componentType
+                  __typename
+                }
+                ...staticTileListFragment
+              }
+            }
+            fragment staticTileListFragment on StaticTileList {
+              __typename
+              id: objectId
+              objectId
+              listId
+              title
+              componentType
+              tileContentType
+              tileOrientation
+              displayType
+              expires
+              tileVariant
+              sort {
+                icon
+                order
+                title
+                __typename
+              }
+              actionItems {
+                ...actionItem
+                __typename
+              }
+              header {
+                action {
+                  ...action
+                  __typename
+                }
+                brand
+                brandLogos {
+                  height
+                  mono
+                  primary
+                  type
+                  width
+                  __typename
+                }
+                ctaText
+                description
+                image {
+                  ...imageFragment
+                  __typename
+                }
+                type
+                compactLayout
+                backgroundColor
+                textTheme
+                __typename
+              }
+              bannerSize
+              items {
+                ...tileFragment
+                __typename
+              }
+              ... on IComponent {
+                __typename
+              }
+            }
+            fragment tileFragment on Tile {
+              ... on IIdentifiable {
+                __typename
+                objectId
+              }
+              ... on IComponent {
+                title
+                componentType
+                __typename
+              }
+              ... on ITile {
+                title
+                action {
+                  ...action
+                  __typename
+                }
+                image {
+                  ...imageFragment
+                  __typename
+                }
+                __typename
+              }
+              ... on BannerTile {
+                id
+                backgroundColor
+                textTheme
+                active
+                description
+                __typename
+              }
+            }
+            fragment actionItem on ActionItem {
+              __typename
+              id: objectId
+              accessibilityLabel
+              action {
+                ...action
+                __typename
+              }
+              active
+              analytics {
+                __typename
+                eventId
+                interaction
+                interactionDetail
+                pageProgrambrand
+              }
+              icon
+              iconPosition
+              mode
+              objectId
+              title
+            }
+            fragment action on Action {
+              __typename
+              ... on SearchAction {
+                facets {
+                  name
+                  values
+                  __typename
+                }
+                mediaType
+                navigationType
+                q
+                __typename
+              }
+            }
+            fragment imageFragment on Image {
+              id: objectId
+              alt
+              title
+              focalPoint
+              objectId
+              templateUrl
+            }
+        """
+        payload = {
+            'operationName': 'Search',
+            'variables': {
+                'facets': [],
+                'mediaType': 'watch',
+                'q': '',
+            },
+            'query': graphql_query,
+        }
+        from json import dumps
+        data = dumps(payload).encode('utf-8')
+        categories_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
+        if categories_json is not None:
+            content_types = categories_json.get('data').get('uiSearch')[0].get('items')
+            genres = categories_json.get('data').get('uiSearch')[3].get('items')
+            category_items = content_types + genres
+            for category in category_items:
+                # Don't add podcasts
+                if category.get('title') == 'Podcasts':
+                    continue
+                thumb = category.get('image')
+                if thumb:
+                    thumb = thumb.get('templateUrl')
+                categories.append({
+                    'id': category.get('action').get('facets')[0].get('values')[0],
+                    'thumbnail': thumb,
+                    'name': category.get('title'),
+                })
+            categories.sort(key=lambda x: x.get('name'))
     return categories
 
 

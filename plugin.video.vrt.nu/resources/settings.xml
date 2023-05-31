@@ -37,7 +37,7 @@
     </category>
     <category label="30820"> <!--Channels -->
         <setting label="30821" type="lsep"/>
-        <setting label="30823" type="bool" id="een" default="true"/> <!-- Eén -->
+        <setting label="30823" type="bool" id="een" default="true"/> <!-- VRT 1 -->
         <setting label="30824" type="bool" id="canvas" default="true"/> <!-- Canvas -->
         <setting label="30825" type="bool" id="ketnet" default="false"/> <!-- Ketnet -->
         <setting label="30826" type="bool" id="ketnet-jr" default="false"/> <!-- Ketnet Junior -->

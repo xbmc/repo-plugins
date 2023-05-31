@@ -24,14 +24,6 @@ msgctxt "#30011"
 msgid "Browse only the programs you follow"
 msgstr ""
 
-msgctxt "#30012"
-msgid "All programs"
-msgstr ""
-
-msgctxt "#30013"
-msgid "Alphabetically sorted list of programs"
-msgstr ""
-
 msgctxt "#30014"
 msgid "Categories"
 msgstr ""
@@ -682,7 +674,7 @@ msgid "Select channels to use for 'Most recent' and 'Soon offline' listings"
 msgstr ""
 
 msgctxt "#30823"
-msgid "Eén"
+msgid "VRT 1"
 msgstr ""
 
 msgctxt "#30824"

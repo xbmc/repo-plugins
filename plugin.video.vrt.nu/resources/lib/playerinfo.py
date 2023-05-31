@@ -230,7 +230,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
             is_single_start_timestamp = bool(re.match(rgx, timestamp))
             if is_single_start_timestamp:
                 # Check resume status
-                resume_info = jsonrpc(method='Player.GetItem', params=dict(playerid=1, properties=['resume'])).get('result')
+                resume_info = jsonrpc(method='Player.GetItem', params={'playerid': 1, 'properties': ['resume']}).get('result')
                 if resume_info:
                     resume_position = resume_info.get('item').get('resume').get('position')
                     is_resumed = abs(resume_position - self.getTime()) < 1

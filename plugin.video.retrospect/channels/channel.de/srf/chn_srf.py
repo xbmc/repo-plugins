@@ -178,7 +178,7 @@ class Channel(chn_class.Channel):
         station = result_set["title"]
         description = []
 
-        next_item = result_set["next"]
+        next_item = result_set.get("next")
         if next_item:
             next_title = LanguageHelper.get_localized_string(LanguageHelper.Next)
             description.append("[B]{}[/B]: {}".format(next_title, next_item["title"]))

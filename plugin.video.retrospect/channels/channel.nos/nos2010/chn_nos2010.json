@@ -14,7 +14,8 @@
       "language": "nl",
       "fanart": "nosfanart4.jpg",
       "poster": "npoposter.png",
-      "message": "By using the NPO Start channel you are accepting the NPO Terms of Use: https://www.npostart.nl/npo-id-gebruiksvoorwaarden."
+      "message": "By using the NPO Start channel you are accepting the NPO Terms of Use: https://www.npostart.nl/npo-id-gebruiksvoorwaarden.",
+      "hasIptv": true
     }
   ],
   "settings": [

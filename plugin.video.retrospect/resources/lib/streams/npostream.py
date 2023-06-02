@@ -71,7 +71,7 @@ class NpoStream(object):
             Logger.debug("Fetching XSRF cookies")
             UriHandler.open("https://www.npostart.nl/api/token", additional_headers=token_headers)
             xsrf = UriHandler.get_cookie("XSRF-TOKEN", "www.npostart.nl")
-        Logger.debug("Cookies: \nxsrf: %s, \nsession: %s, \nnow: %s", xsrf.expires, now)
+        Logger.debug("Cookies: \nxsrf: %s, \nsession: %s, \nnow: %s", xsrf.expires, session, now)
 
         # Fetch the XSRF token:
         token_headers["x-xsrf-token"] = HtmlEntityHelper.url_decode(xsrf.value)

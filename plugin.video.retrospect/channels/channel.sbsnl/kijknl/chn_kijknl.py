@@ -837,6 +837,8 @@ class Channel(chn_class.Channel):
         tracks = json_data.get_value("data", "programs", "items", 0, "tracks")
         for track in tracks:
             subtitle = track["file"]
+            if "thumbnails" in subtitle:
+                continue
             subtitle = SubtitleHelper.download_subtitle(subtitle, format="webvtt")
             item.subtitle = subtitle
             break

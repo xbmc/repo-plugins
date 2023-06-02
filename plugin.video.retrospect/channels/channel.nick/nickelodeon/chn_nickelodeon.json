@@ -12,6 +12,7 @@
       "channelcode": "nickelodeon",
       "sortorder": 22,
       "language": "nl",
+      "ignore": true,
       "poster": "nickposter.png",
       "fanart": "nickfanart.jpg"
     },

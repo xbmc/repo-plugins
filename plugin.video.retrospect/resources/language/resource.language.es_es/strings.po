@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-03-06 11:18+0000\n"
-"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"PO-Revision-Date: 2023-05-01 22:12+0000\n"
+"Last-Translator: José Antonio Alvarado <jalvarado0.eses@gmail.com>\n"
 "Language-Team: Spanish (Spain) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/es_es/>\n"
 "Language: es_es\n"
 "MIME-Version: 1.0\n"
@@ -456,6 +456,22 @@ msgctxt "#30108"
 msgid "Other"
 msgstr "Otro"
 
+msgctxt "#30109"
+msgid "IPTV Manager"
+msgstr "IPTV Manager"
+
+msgctxt "#30110"
+msgid "Install IPTV Manager add-on"
+msgstr "Instalar add-on IPTV Manager"
+
+msgctxt "#30111"
+msgid "Enable IPTV Manager integration"
+msgstr "Activar integración con IPTV Manager"
+
+msgctxt "#30112"
+msgid "IPTV Manager settings…"
+msgstr "Ajustes de IPTV Manager…"
+
 # used for list limits
 # empty strings from id 30109 to 30189
 msgctxt "#30190"
@@ -654,6 +670,18 @@ msgstr "Disponible en"
 msgctxt "#30367"
 msgid "New on %s"
 msgstr "Nuevo en %s"
+
+msgctxt "#30368"
+msgid "Extras"
+msgstr "Extras"
+
+msgctxt "#30369"
+msgid "Fragments"
+msgstr "Fragmentos"
+
+msgctxt "#30370"
+msgid "All episodes"
+msgstr "Todos los episodios"
 
 # empty strings from id 30365 to 30400
 msgctxt "#30401"

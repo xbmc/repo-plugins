@@ -16,3 +16,4 @@ SET_ENCRYPTED_VALUE = "encryptsetting"      # : Used for setting an application 
 RESET_VAULT = "resetvault"                  # : Used for resetting the vault
 POST_LOG = "postlog"                        # : Used for sending log files to pastebin.com
 CLEANUP = "cleanup"                         # : Used for cleaning the cache and cookies
+IPTVMANAGER = "iptvmanager"                 # : Used by IPTV Manager to query channel data

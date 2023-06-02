@@ -154,6 +154,10 @@ class Plugin(ActionParser):
                 from resources.lib.actions.videoaction import VideoAction
                 addon_action = VideoAction(self, channel_object)
 
+            elif self.params[keyword.ACTION] == action.IPTVMANAGER:
+                from resources.lib.actions.iptvmanageraction import IPTVManagerAction
+                addon_action = IPTVManagerAction(self, self.params[keyword.REQUEST], int(self.params[keyword.PORT]))
+
             elif not self.params[keyword.ACTION] == "":
                 from resources.lib.actions.contextaction import ContextMenuAction
                 addon_action = ContextMenuAction(

@@ -840,6 +840,31 @@ class Channel:
 
         return TextureHandler.instance().get_texture_uri(self, image)
 
+    def create_iptv_streams(self, parameter_parser):
+        """ Fallback function, if not implemented
+        Fetch the available live channels using EPG endpoint and format them into JSON-STREAMS
+
+        :param ActionParser parameter_parser: a ActionParser object to is used to parse and
+                                                   create urls
+
+        :return: Formatted stations
+        :rtype: list
+        """
+        return []
+
+    
+    def create_iptv_epg(self, parameter_parser):
+        """ Fallback function if not implemented. 
+        Fetch the EPG using the EPG endpoint and format it into JSON-EPG
+
+        :param ActionParser parameter_parser: a ActionParser object to is used to parse and
+                                                   create urls
+
+        :return: Formatted stations
+        :rtype: dict
+        """
+        return dict()
+
     def _add_data_parsers(self, urls, name=None, preprocessor=None,
                           parser=None, creator=None, updater=None,
                           postprocessor=None,

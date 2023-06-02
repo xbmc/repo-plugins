@@ -474,8 +474,24 @@ msgctxt "#30108"
 msgid "Other"
 msgstr ""
 
+msgctxt "#30109"
+msgid "IPTV Manager"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Install IPTV Manager add-on"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Enable IPTV Manager integration"
+msgstr ""
+
+msgctxt "#30112"
+msgid "IPTV Manager settings…"
+msgstr ""
+
 # used for list limits
-# empty strings from id 30109 to 30189
+# empty strings from id 30113 to 30189
 
 msgctxt "#30190"
 msgid "Monday"

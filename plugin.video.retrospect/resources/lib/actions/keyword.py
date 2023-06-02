@@ -14,3 +14,5 @@ SETTING_TAB_FOCUS = "tabfocus"          # : Used for setting the tabcontrol to f
 SETTING_FOCUS = "settingfocus"          # : Used for setting the setting control to focus after changing a setting
 LANGUAGE = "lang"                       # : Used for the 2 char language information
 SHORTCUT = "shortcut"                   # : Used for storing the name of the shortcut to open.
+PORT = "port"                           # : Used for communicating the port that is used to open the socket to IPTV Manager
+REQUEST = "request"                     # : Used for communicating what data is requested by IPTV Manager

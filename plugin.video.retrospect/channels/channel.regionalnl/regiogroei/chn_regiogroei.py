@@ -100,7 +100,7 @@ class Channel(chn_class.Channel):
         elif self.channelCode == "rtvdrenthe":
             self.mainListUri = "https://api.regiogroei.cloud/page/tv/programs?rtvdrenthe"
             self.noImage = "rtvdrentheimage.png"
-            self.videoUrlFormat = "https://api.regiogroei.cloud/p/regiogroei_drenthe_web_videoplayer/c/{}.json"
+            self.videoUrlFormat = "https://rtvdrenthe.bbvms.com/p/regiogroei_drenthe_web_videoplayer/c/sourceid_string:{}.json"
             self.recentSlug = "tv-drenthe"
             self.httpHeaders["accept"] = "application/vnd.groei.drenthe+json;v=3.0"
             # self.liveUrl = ""

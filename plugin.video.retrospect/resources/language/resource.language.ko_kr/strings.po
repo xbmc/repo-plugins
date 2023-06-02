@@ -456,6 +456,22 @@ msgctxt "#30108"
 msgid "Other"
 msgstr "기타"
 
+msgctxt "#30109"
+msgid "IPTV Manager"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Install IPTV Manager add-on"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Enable IPTV Manager integration"
+msgstr ""
+
+msgctxt "#30112"
+msgid "IPTV Manager settings…"
+msgstr ""
+
 # used for list limits
 # empty strings from id 30109 to 30189
 msgctxt "#30190"
@@ -653,6 +669,18 @@ msgstr ""
 
 msgctxt "#30367"
 msgid "New on %s"
+msgstr ""
+
+msgctxt "#30368"
+msgid "Extras"
+msgstr ""
+
+msgctxt "#30369"
+msgid "Fragments"
+msgstr ""
+
+msgctxt "#30370"
+msgid "All episodes"
 msgstr ""
 
 # empty strings from id 30365 to 30400

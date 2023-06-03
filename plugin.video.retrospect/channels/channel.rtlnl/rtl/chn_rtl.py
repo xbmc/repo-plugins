@@ -156,6 +156,8 @@ class Channel(chn_class.Channel):
             return self.create_video_item(result_set, include_serie_title=True)
         elif item_type == "series":
             return self.create_series_item(result_set)
+        elif item_type == "program":
+            return self.create_program_item(result_set)
 
         Logger.error("Missing API type: %s", item_type)
         return None
@@ -173,6 +175,9 @@ class Channel(chn_class.Channel):
         :rtype: MediaItem|None
 
         """
+
+        if result_set["type"].lower() == "program":
+            return self.create_video_item(result_set)
 
         Logger.trace(result_set)
         serie_info = result_set["series"]

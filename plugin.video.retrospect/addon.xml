@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.6.1"
+        version="5.6.2"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -122,23 +122,18 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.6.1 - Changelog - 2023-06-02[/B]
+        <news>[B]Retrospect v5.6.2 - Changelog - 2023-06-03[/B]
 
-This update introduces IPTV Manager support (Thanks to @landgenoot) for NPO Start. Besides this, some minor bugs were squashed.
+Fixed a minor error in the RTL XL code.
 
 [B]Framework related[/B]
-* Added: IPTV Manager support (See #1674).
-* Fixed: Minor logging in issue for NPO.
+_None_
 
 [B]GUI/Settings/Language related[/B]
 _None_
 
 [B]Channel related[/B]
-* Fixed: RTV Drenthe playback.
-* Changed: Switched to the VRT MAX Add-on for now for VRT NU/MAX.
-* Fixed: Kijk.nl subtitle issue with image url&#x27;s instead of text (Fixes #1705).
-* Fixed: RTL XL broke due to API changes.
-* Removed: Nickelodeon.nl as they remove their content.
+* Fixed: RTL Single video entries.
 
         </news>
         <assets>

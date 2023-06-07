@@ -354,16 +354,29 @@ class Channel:
             for c in cloaked_items:
                 c.isCloaked = True
 
-        if len(items) != old_count:
+        items_length = len(items)
+        if items_length != old_count:
             Logger.info("Hidden %s items due to DRM/GEO/Premium/cloak filter (Hide Folders=%s)",
-                        old_count - len(items), hide_folders)
+                        old_count - items_length, hide_folders)
+
+        # In order to get a better performance in de-duplicating and keeping the sort order
+        # we first need to store the order in a lookup table. Then we use sorted(set()) and
+        # use that lookup table for sorting. Using sorted(set(), items.index) this will be
+        # an O(n) (for the index()) times O(n*log(n)) (for the sorted) = O(n^2*log(n)!.
+        # The dictionary lookup (O(1)) saves us an O(n).
+        # See https://wiki.python.org/moin/TimeComplexity
+        sorted_order = {}
+        for i in range(0, items_length):
+            sorted_order[items[i]] = i
+        items = sorted(set(items), key=sorted_order.get)
+
+        Logger.trace("Found '%d' items of which '%d' are unique.", items_length, len(items))
 
         # Check for grouping or not
         limit = AddonSettings.get_list_limit()
         folder_items = [i for i in items if i.is_folder]
 
         # we should also de-duplicate before calculating
-        folder_items = list(set(folder_items))
         folders = len(folder_items)
 
         if 0 < limit < folders:
@@ -419,19 +432,7 @@ class Channel:
 
             items = non_grouped + list(result.values())
 
-        # In order to get a better performance in de-duplicating and keeping the sort order
-        # we first need to store the order in a lookup table. Then we use sorted(set()) and
-        # use that lookup table for sorting. Using sorted(set(), items.index) this will be
-        # an O(n) (for the index()) times O(n*log(n)) (for the sorted) = O(n^2*log(n)!.
-        # The dictionary lookup (O(1)) saves us an O(n).
-        # See https://wiki.python.org/moin/TimeComplexity
-        sorted_order = {}
-        for i in range(0, len(items)):
-            sorted_order[items[i]] = i
-        unique_results = sorted(set(items), key=sorted_order.get)
-
-        Logger.trace("Found '%d' items of which '%d' are unique.", len(items), len(unique_results))
-        return unique_results
+        return items
 
     def process_video_item(self, item):
         """ Process a video item using the required dataparsers

@@ -60,6 +60,9 @@ class Logger:
 
         """
 
+        if "RETROSPECT_STDOUT_LOGGING" in os.environ:
+            log_file_name = None
+
         if Logger.__logger is None:
             Logger.__logger = Logger(log_file_name, application_name, min_log_level, append,
                                      dual_logger)

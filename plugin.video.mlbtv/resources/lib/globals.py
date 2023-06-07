@@ -104,7 +104,7 @@ MLB_ID = '1'
 MILB_IDS = '11,12,13,14'
 MLB_TEAM_IDS = '108,109,110,111,112,113,114,115,116,117,118,119,120,121,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,158,159,160'
 
-AFFILIATE_TEAM_IDS = {"Los Angeles Angels":"401,559,460,561","Arizona Diamondbacks":"419,516,2310,5368","Baltimore Orioles":"418,568,548,488","Boston Red Sox":"428,414,533,546","Chicago Cubs":"521,451,550,553","Cincinnati Reds":"450,459,498,416","Cleveland Guardians":"445,402,437,481","Colorado Rockies":"259,486,342,538","Detroit Tigers":"512,570,582,106","Houston Astros":"482,5434,573,3712","Kansas City Royals":"1350,3705,541,565","Los Angeles Dodgers":"260,238,456,526","Washington Nationals":"436,534,547,426","New York Mets":"453,507,552,505","Oakland Athletics":"237,499,400,524","Pittsburgh Pirates":"3390,484,452,477","San Diego Padres":"103,510,584,4904","Seattle Mariners":"403,515,529,574","San Francisco Giants":"105,461,476,3410","St. Louis Cardinals":"279,235,440,443","Tampa Bay Rays":"2498,233,234,421","Texas Rangers":"102,485,540,448","Toronto Blue Jays":"424,435,463,422","Minnesota Twins":"492,509,1960,3898","Philadelphia Phillies":"427,522,1410,566","Atlanta Braves":"430,432,478,431","Chicago White Sox":"247,580,487,494","Miami Marlins":"479,564,554,4124","New York Yankees":"1956,587,531,537","Milwaukee Brewers":"249,572,556,5015"}
+AFFILIATE_TEAM_IDS = {"Arizona Diamondbacks": "419,516,2310,5368", "Atlanta Braves": "430,432,478,431", "Baltimore Orioles": "418,568,548,488", "Boston Red Sox": "428,414,533,546", "Chicago Cubs": "521,451,550,553", "Chicago White Sox": "247,580,487,494", "Cincinnati Reds": "450,459,498,416", "Cleveland Guardians": "445,402,437,481", "Colorado Rockies": "259,486,342,538", "Detroit Tigers": "512,570,582,106", "Houston Astros": "482,5434,573,3712", "Kansas City Royals": "1350,3705,541,565", "Los Angeles Angels": "401,559,460,561", "Los Angeles Dodgers": "260,238,456,526", "Miami Marlins": "479,564,554,4124", "Milwaukee Brewers": "249,572,556,5015", "Minnesota Twins": "492,509,1960,3898", "New York Mets": "453,507,552,505", "New York Yankees": "1956,587,531,537", "Oakland Athletics": "237,499,400,524", "Philadelphia Phillies": "427,522,1410,566", "Pittsburgh Pirates": "3390,484,452,477", "San Diego Padres": "103,510,584,4904", "Seattle Mariners": "403,515,529,574", "San Francisco Giants": "105,461,476,3410", "St. Louis Cardinals": "279,235,440,443", "Tampa Bay Rays": "2498,233,234,421", "Texas Rangers": "102,485,540,448", "Toronto Blue Jays": "424,435,463,422", "Washington Nationals": "436,534,547,426"}
 
 ESPN_SUNDAY_NIGHT_BLACKOUT_COUNTRIES = ["Angola", "Anguilla", "Antigua and Barbuda", "Argentina", "Aruba", "Australia", "Bahamas", "Barbados", "Belize", "Belize", "Benin", "Bermuda", "Bolivia", "Bonaire", "Botswana", "Brazil", "British Virgin Islands", "Burkina Faso", "Burundi", "Cameroon", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "Colombia", "Comoros", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Curacao", "Democratic Republic of the Congo", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "El Salvador", "England", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Falkland Islands", "Falkland Islands", "Fiji", "French Guiana", "French Guiana", "French Polynesia", "Gabon", "Ghana", "Grenada", "Guadeloupe", "Guatemala", "Guinea", "Guinea Bissau", "Guyana", "Guyana", "Haiti", "Honduras", "Ireland", "Jamaica", "Kenya", "Kiribati", "Lesotho", "Liberia", "Madagascar", "Malawi", "Mali", "Marshall Islands", "Martinique", "Mayotte", "Mexico", "Micronesia", "Montserrat", "Mozambique", "Namibia", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Northern Ireland", "Palau Islands", "Panama", "Paraguay", "Peru", "Republic of Ireland", "Reunion", "Rwanda", "Saba", "Saint Maarten", "Samoa", "Sao Tome & Principe", "Scotland", "Senegal", "Seychelles", "Sierra Leone", "Solomon Islands", "Somalia", "South Africa", "St. Barthelemy", "St. Eustatius", "St. Kitts and Nevis", "St. Lucia", "St. Martin", "St. Vincent and the Grenadines", "Sudan", "Surinam", "Suriname", "Tahiti", "Tanzania & Zanzibar", "The Gambia", "The Republic of Congo", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Uruguay", "Venezuela", "Wales", "Zambia", "Zimbabwe"]
 
@@ -217,7 +217,7 @@ def add_stream(name, title, desc, game_pk, icon=None, fanart=None, info=None, vi
     ok=True
 
     if milb is not None:
-        u_params = "&featured_video="+urllib.quote_plus("https://dai.tv.milb.com/api/v2/playback-info/games/"+str(game_pk)+"/contents/14862/products/milb-carousel")+"&name="+urllib.quote_plus(title)+"&description="+urllib.quote_plus(desc)
+        u_params = "&featured_video="+urllib.quote_plus("https://dai.tv.milb.com/api/v2/playback-info/games/"+str(game_pk)+"/contents/14862/products/milb-carousel")+"&name="+urllib.quote_plus(title)+"&description="+urllib.quote_plus(desc)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&start_inning="+urllib.quote_plus(str(start_inning))
         u=sys.argv[0]+"?mode="+str(301)+u_params
     else:
         u_params = "&name="+urllib.quote_plus(title)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&stream_date="+urllib.quote_plus(str(stream_date))+"&spoiler="+urllib.quote_plus(str(spoiler))+"&suspended="+urllib.quote_plus(str(suspended))+"&start_inning="+urllib.quote_plus(str(start_inning))+"&description="+urllib.quote_plus(desc)+"&blackout="+urllib.quote_plus(str(blackout))
@@ -274,10 +274,10 @@ def addLink(name,url,title,icon,info=None,video_info=None,audio_info=None,fanart
     return ok
 
 
-def addDir(name,mode,icon,fanart=None,game_day=None,start_inning='False',sport=MLB_ID):
+def addDir(name,mode,icon,fanart=None,game_day=None,start_inning='False',sport=MLB_ID,teams='None'):
     ok=True
 
-    u_params="&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(icon)+'&start_inning='+urllib.quote_plus(str(start_inning))+'&sport='+urllib.quote_plus(str(sport))
+    u_params="&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(icon)+'&start_inning='+urllib.quote_plus(str(start_inning))+'&sport='+urllib.quote_plus(str(sport))+'&teams='+urllib.quote_plus(str(teams))
     if game_day is not None:
         u_params = u_params+"&game_day="+urllib.quote_plus(game_day)
     u=sys.argv[0]+"?mode="+str(mode)+u_params
@@ -501,6 +501,32 @@ def get_last_name(full_name):
     except:
         pass
     return last_name
+
+
+def get_broadcast_start_timestamp(stream_url):
+    broadcast_start_timestamp = None
+    is_live = True
+    try:
+        url = stream_url[:len(stream_url)-5] + '_1280x720_59_5472K.m3u8'
+        headers = {
+            'User-Agent': UA_PC,
+             'Origin': 'https://www.mlb.com',
+             'Referer': 'https://www.mlb.com/'
+        }
+        r = requests.get(url, headers=headers, verify=VERIFY)
+        content = r.text
+        line_array = content.splitlines()
+        for line in line_array:
+            if line.startswith('#EXT-X-PLAYLIST-TYPE:VOD'):
+                is_live = False
+            elif line.startswith('#EXT-X-PROGRAM-DATE-TIME:'):
+                broadcast_start_timestamp = parse(line[25:])
+                xbmc.log('Found broadcast start timestamp ' + str(broadcast_start_timestamp))
+                break
+    except:
+        xbmc.log('Failed to find broadcast start timestamp')
+        pass
+    return broadcast_start_timestamp, is_live
 
 
 # get the teams blacked out based on zip code

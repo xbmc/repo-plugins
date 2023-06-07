@@ -3,9 +3,14 @@
 import datetime
 from typing import Dict, Union, Any, Optional, List
 
+import pytz
+
 from resources.lib import chn_class
 from resources.lib import contenttype
 from resources.lib import mediatype
+from resources.lib.authentication.authenticator import Authenticator
+from resources.lib.authentication.rtlxlhandler import RtlXlHandler
+from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.logger import Logger
@@ -34,7 +39,7 @@ class Channel(chn_class.Channel):
         self.poster = "rtlposter.png"
 
         # setup the urls
-        self.mainListUri = "https://api.rtl.nl/rtlxl/missed/api/missed?dayOffset=1"
+        self.mainListUri = "https://api.rtl.nl/rtlxl/missed/api/missed"
 
         self.baseUrl = "http://www.rtl.nl"
 
@@ -46,7 +51,7 @@ class Channel(chn_class.Channel):
         self._add_data_parser("*", json=True,
                               parser=["items"], creator=self.create_api_typed_item)
 
-        self._add_data_parser("*", updater=self.update_video_item, requires_logon=True)
+        self._add_data_parser("*", updater=self.update_video_item)  #, requires_logon=True)
 
         #===============================================================================================================
         # non standard items
@@ -56,7 +61,10 @@ class Channel(chn_class.Channel):
             self.largeIconSet[channel] = self.get_image_location("%slarge.png" % (channel,))
 
         self.__ignore_cookie_law()
-        self.__authenticator = None
+        self.__timezone = pytz.timezone("Europe/Amsterdam")
+
+        handler = RtlXlHandler("rtlxl.nl", "3_R0XjstXd4MpkuqdK3kKxX20icLSE3FB27yQKl4zQVjVpqmgSyRCPKKLGdn5kjoKq")
+        self.__authenticator = Authenticator(handler)
 
         #===============================================================================================================
         # Test cases:
@@ -80,11 +88,6 @@ class Channel(chn_class.Channel):
         :rtype: bool
 
         """
-
-        from resources.lib.authentication.rtlxlhandler import RtlXlHandler
-        from resources.lib.authentication.authenticator import Authenticator
-        handler = RtlXlHandler("rtlxl.nl", "3_R0XjstXd4MpkuqdK3kKxX20icLSE3FB27yQKl4zQVjVpqmgSyRCPKKLGdn5kjoKq")
-        self.__authenticator = Authenticator(handler)
 
         # Always try to log on. If the username was changed to empty, we should clear the current
         # log in.
@@ -153,11 +156,11 @@ class Channel(chn_class.Channel):
         if item_type == "episode" and not recent:
             return self.create_video_item(result_set)
         elif item_type == "episode" and recent:
-            return self.create_video_item(result_set, include_serie_title=True)
+            return self.create_video_item(result_set, recent_listing=True)
         elif item_type == "series":
             return self.create_series_item(result_set)
         elif item_type == "program":
-            return self.create_program_item(result_set)
+            return self.create_video_item(result_set)
 
         Logger.error("Missing API type: %s", item_type)
         return None
@@ -235,7 +238,7 @@ class Channel(chn_class.Channel):
 
         return item
 
-    def create_video_item(self, result_set: Dict[str, Any], include_serie_title: bool = False) -> MediaItem:
+    def create_video_item(self, result_set: Dict[str, Any], recent_listing: bool = False) -> MediaItem:
         """ Creates a MediaItem of type 'video' using the result_set from the regex.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -247,8 +250,8 @@ class Channel(chn_class.Channel):
         self.update_video_item method is called if the item is focussed or selected
         for playback.
 
-        :param result_set: The result_set of the self.episodeItemRegex.
-        :param include_serie_title: Include the serie's title.
+        :param result_set:      The result_set of the self.episodeItemRegex.
+        :param recent_listing:  Include the serie's title.
 
         :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
 
@@ -256,8 +259,11 @@ class Channel(chn_class.Channel):
 
         Logger.trace(result_set)
         title = result_set["title"]
-        if include_serie_title:
+        if recent_listing:
             title = "{} - {}".format(result_set["series"]["title"], title)
+
+        if "channel" in result_set and result_set["channel"]:
+            title = "{} ({})".format(title, result_set["channel"]["name"])
 
         uuid = result_set["id"]
         url = "https://api.rtl.nl/watch/play/api/play/xl/{}?device=web&drm=widevine&format=dash".format(uuid)
@@ -285,6 +291,15 @@ class Channel(chn_class.Channel):
         date = result_set["scheduleDate"]
         year, month, day = date.split("-")
         item.set_date(year, month, day)
+
+        # broadcastDateTime=2023-06-03T11:30:00Z
+        if "broadcastDateTime" in result_set and recent_listing:
+            date_time = DateHelper.get_datetime_from_string(
+                result_set["broadcastDateTime"], date_format="%Y-%m-%dT%H:%M:%SZ", time_zone="UTC")
+            date_time = date_time.astimezone(self.__timezone)
+            item.set_date(date_time.year, date_time.month, date_time.day,
+                          date_time.hour, date_time.minute, date_time.second)
+            item.name = "{:02d}:{:02d}: {}".format(date_time.hour, date_time.minute, item.name)
 
         return item
 
@@ -332,6 +347,10 @@ class Channel(chn_class.Channel):
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
 
+        # If a username was configured, log in to make it possible to play from outside NL.
+        if self._get_setting("rtlxl_username", value_for_none=None):
+            self.log_on()
+
         # Get the authentication part right.
         token = self.__authenticator.get_authentication_token()
         headers = {
@@ -339,6 +358,7 @@ class Channel(chn_class.Channel):
         }
         video_data = UriHandler.open(item.url, additional_headers=headers)
         video_json = JsonHelper(video_data)
+        Logger.trace(video_data)
         error = video_json.get_value("error")
         if error:
             XbmcWrapper.show_notification(LanguageHelper.ErrorId, error["description"])

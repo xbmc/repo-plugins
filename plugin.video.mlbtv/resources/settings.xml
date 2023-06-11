@@ -31,8 +31,9 @@
     <setting id="auto_select_stream" type="bool" label="30307" default="false" />
     <setting id="catch_up" type="bool" label="30304" default="true" />
     <setting id="ask_to_skip" type="bool" label="30306" default="true" />
-    <setting id="skip_adjust_start" type="labelenum" label="30424" default="0" values="-7|-6|-5|-4|-3|-2|-1|0|1|2|3|4|5|6|7" />
-    <setting id="skip_adjust_end" type="labelenum" label="30425" default="0" values="-7|-6|-5|-4|-3|-2|-1|0|1|2|3|4|5|6|7" />
+    <setting id="skip_adjust_start" type="labelenum" label="30424" default="0" values="-10|-9|-8|-7|-6|-5|-4|-3|-2|-1|0|1|2|3|4|5|6|7|8|9|10" />
+    <setting id="skip_adjust_end" type="labelenum" label="30425" default="0" values="-10|-9|-8|-7|-6|-5|-4|-3|-2|-1|0|1|2|3|4|5|6|7|8|9|10" />
+    <setting id="milb_skip_adjust" type="labelenum" label="30435" default="-5" values="Always Ask|-15|-10|-5|0|5|10|15" />
     <setting id="auto_play_fav" type="bool" label="30412" default="false" />
     <setting id="only_free_games" type="bool" label="30305" default="false" />
     <setting id="game_changer_delay" type="labelenum" label="30420" default="0" values="0|10|20" />

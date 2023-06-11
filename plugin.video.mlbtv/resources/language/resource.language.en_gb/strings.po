@@ -376,3 +376,32 @@ msgctxt "#30428"
 msgid "Country (for blackout labels)"
 msgstr ""
 
+msgctxt "#30429"
+msgid "By Affiliate"
+msgstr ""
+
+msgctxt "#30430"
+msgid "AAA"
+msgstr ""
+
+msgctxt "#30431"
+msgid "AA"
+msgstr ""
+
+msgctxt "#30432"
+msgid "A+"
+msgstr ""
+
+msgctxt "#30433"
+msgid "A"
+msgstr ""
+
+msgctxt "#30434"
+msgid "Skip adjust in seconds (negative, earlier; positive, later)"
+msgstr ""
+
+msgctxt "#30435"
+msgid "Extra MiLB skip adjust (seconds)"
+msgstr ""
+
+

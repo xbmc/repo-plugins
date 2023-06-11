@@ -11,8 +11,19 @@ def categories():
     # show Featured Videos in the main menu
     addDir(LOCAL_STRING(30363), 300, ICON, FANART)
 
+def minor_league_categories():
+    addDir(LOCAL_STRING(30429), 110, ICON, FANART)
+    addDir(LOCAL_STRING(30430), 100, ICON, FANART, None, 'False', '11')
+    addDir(LOCAL_STRING(30431), 100, ICON, FANART, None, 'False', '12')
+    addDir(LOCAL_STRING(30432), 100, ICON, FANART, None, 'False', '13')
+    addDir(LOCAL_STRING(30433), 100, ICON, FANART, None, 'False', '14')
 
-def todays_games(game_day, start_inning='False', sport=MLB_ID):
+def affiliate_menu():
+    for affiliate in AFFILIATE_TEAM_IDS:
+        addDir(affiliate, 100, ICON, FANART, None, 'False', '11,12,13,14', AFFILIATE_TEAM_IDS[affiliate])
+
+
+def todays_games(game_day, start_inning='False', sport=MLB_ID, teams='None'):
     today = localToEastern()
     if game_day is None:
         game_day = today
@@ -23,7 +34,7 @@ def todays_games(game_day, start_inning='False', sport=MLB_ID):
     #url_game_day = display_day.strftime('year_%Y/month_%m/day_%d')
     prev_day = display_day - timedelta(days=1)
 
-    addDir('[B]<< %s[/B]' % LOCAL_STRING(30010), 101, PREV_ICON, FANART, prev_day.strftime("%Y-%m-%d"), start_inning, sport)
+    addDir('[B]<< %s[/B]' % LOCAL_STRING(30010), 101, PREV_ICON, FANART, prev_day.strftime("%Y-%m-%d"), start_inning, sport, teams)
 
     date_display = '[B][I]' + colorString(display_day.strftime("%A, %m/%d/%Y"), GAMETIME_COLOR) + '[/I][/B]'
 
@@ -39,7 +50,9 @@ def todays_games(game_day, start_inning='False', sport=MLB_ID):
     if sport == MLB_ID and INCLUDE_FAV_AFFILIATES == 'true':
         url += ',' + MILB_IDS
     url += '&date=' + game_day
-    if sport == MLB_ID:
+    if teams != 'None':
+        url += '&teamId=' + teams
+    elif sport == MLB_ID:
         url += '&teamId=' + MLB_TEAM_IDS
         if INCLUDE_FAV_AFFILIATES == 'true' and FAV_TEAM != 'None':
             url += ',' + AFFILIATE_TEAM_IDS[FAV_TEAM]
@@ -120,7 +133,7 @@ def todays_games(game_day, start_inning='False', sport=MLB_ID):
         pass
 
     next_day = display_day + timedelta(days=1)
-    addDir('[B]%s >>[/B]' % LOCAL_STRING(30011), 101, NEXT_ICON, FANART, next_day.strftime("%Y-%m-%d"), start_inning, sport)
+    addDir('[B]%s >>[/B]' % LOCAL_STRING(30011), 101, NEXT_ICON, FANART, next_day.strftime("%Y-%m-%d"), start_inning, sport, teams)
 
 
 def create_game_listitem(game, game_day, start_inning, today):
@@ -639,6 +652,7 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
     stream_type = 'video'
     skip_possible = True # to determine if possible to show skip options dialog
     skip_type = 0
+    skip_adjust = 0 # only used for MiLB games
     is_live = False # to pass to skip monitor
     # convert start inning values to integers
     if start_inning == 'False':
@@ -949,15 +963,33 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
             if (skip_type > 0 or start_inning > 0) and broadcast_start_timestamp is not None:
                 from .mlbmonitor import MLBMonitor
                 mlbmonitor = MLBMonitor()
-                mlbmonitor.skip_monitor(skip_type, game_pk, broadcast_start_timestamp, stream_url, is_live, start_inning, start_inning_half)
+                mlbmonitor.skip_monitor(skip_type, game_pk, broadcast_start_timestamp, skip_adjust, stream_url, is_live, start_inning, start_inning_half)
         # otherwise exit
         else:
             sys.exit()
 
 
 # select a stream for a featured video
-def featured_stream_select(featured_video, name, description):
+def featured_stream_select(featured_video, name, description, start_inning=None, game_pk=None):
     xbmc.log('video select')
+
+    start = '-1' # offset to pass to inputstream adaptive
+    broadcast_start_timestamp = None # to pass to skip monitor
+    skip_possible = True # to determine if possible to show skip options dialog
+    skip_type = 0
+    settings = xbmcaddon.Addon(id='plugin.video.mlbtv')
+    skip_adjust = settings.getSetting(id="milb_skip_adjust")
+    is_live = False # to pass to skip monitor
+    # convert start inning values to integers
+    if start_inning == 'False':
+        start_inning = 0
+    else:
+        start_inning = int(start_inning)
+    start_inning_half = 'top'
+
+    # define a dialog that we can use as needed
+    dialog = xbmcgui.Dialog()
+
     from .account import Account
     account = Account()
     video_url = None
@@ -1031,15 +1063,80 @@ def featured_stream_select(featured_video, name, description):
                 xbmc.log('found video stream url : ' + video_stream_url)
 
     if video_stream_url is not None:
+        # add start / skip menus for MiLB games
+        if game_pk is not None:
+            # get broadcast start timestamp from M3U
+            broadcast_start_timestamp, is_live = get_broadcast_start_timestamp(video_stream_url)
+
+            # only show the start point dialog if not using Kodi's default resume ability, the "ask to catch up" option is enabled, no start inning is specified
+            if sys.argv[3] != 'resume:true' and CATCH_UP == 'true' and start_inning == 0:
+
+                # begin with beginning as start point options
+                start_options = [LOCAL_STRING(30398)]
+                # add live start option, if applicable
+                live_offset = 0
+                if is_live is True:
+                    live_offset = 1
+                    start_options += [LOCAL_STRING(30399)]
+                # add inning start options
+                start_options += get_inning_start_options()
+
+                # start point selection dialog
+                p = dialog.select(LOCAL_STRING(30396), start_options)
+
+                # beginning or inning
+                if p == 0 or p > live_offset:
+                    start = '1'
+                    # inning top/bottom calculation
+                    if p > live_offset:
+                        p = p - live_offset
+                        start_inning, start_inning_half = calculate_inning_from_index(p)
+                # live
+                elif p == 1:
+                    broadcast_start_offset = '-1'
+                    skip_possible = False
+                # cancel will exit
+                elif p == -1:
+                    sys.exit()
+
+            # show automatic skip dialog, if possible and enabled
+            if skip_possible is True and ASK_TO_SKIP == 'true':
+                # automatic skip dialog with options to skip nothing, breaks, breaks + idle time, breaks + idle time + non-action pitches
+                skip_type = dialog.select(LOCAL_STRING(30403), [LOCAL_STRING(30404), LOCAL_STRING(30408), LOCAL_STRING(30405), LOCAL_STRING(30421), LOCAL_STRING(30406)])
+                # cancel will exit
+                if skip_type == -1:
+                    sys.exit()
+                elif skip_type > 1:
+                    skip_type += 1
+
+                if skip_type > 0 or start_inning > 0:
+                    if skip_adjust == 'Always Ask':
+                        # skip adjust dialog
+                        skip_adjust_options = ['-15', '-10', '-5', '0', '5', '10', '15']
+                        p = dialog.select(LOCAL_STRING(30434), skip_adjust_options)
+                        # cancel will exit
+                        if p == -1:
+                            sys.exit()
+                        else:
+                            skip_adjust = int(skip_adjust_options[p])
+                    else:
+                        skip_adjust = int(skip_adjust)
+
+
         headers = 'User-Agent=' + UA_PC
         if '.m3u8' in video_stream_url and QUALITY == 'Always Ask':
             video_stream_url = account.get_stream_quality(video_stream_url)
         # known issue warning: on Kodi 18 Leia WITHOUT inputstream adaptive, Big Inning starts at the beginning and can't seek
         # anyone with inputstream adaptive, or Kodi 19+, will not have this problem
         if name.startswith('LIVE') and 'Big Inning' in name and KODI_VERSION < 19 and not xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
-            dialog = xbmcgui.Dialog()
             dialog.ok(LOCAL_STRING(30370), LOCAL_STRING(30369))
-        play_stream(video_stream_url, headers, description, title=name, start='-1')
+        play_stream(video_stream_url, headers, description, title=name, start=start)
+
+        # start the skip monitor if MiLB game and a skip type or start inning has been requested and we have a broadcast start timestamp
+        if game_pk is not None and (skip_type > 0 or start_inning > 0) and broadcast_start_timestamp is not None:
+            from .mlbmonitor import MLBMonitor
+            mlbmonitor = MLBMonitor()
+            mlbmonitor.skip_monitor(skip_type, game_pk, broadcast_start_timestamp, skip_adjust, video_stream_url, is_live, start_inning, start_inning_half)
     else:
         xbmc.log('unable to find stream for featured video')
 
@@ -1100,10 +1197,12 @@ def play_all_highlights_for_game(game_pk, fanart):
         playlist.clear()
 
         for clip in highlights:
-            listitem = xbmcgui.ListItem(clip['url'])
-            listitem.setArt({'icon': clip['icon'], 'thumb': clip['icon'], 'fanart': fanart})
-            listitem.setInfo(type="Video", infoLabels={"Title": clip['title'], "plot": clip['description']})
-            playlist.add(clip['url'], listitem)
+            # Play All should only include game action tracking, non-analysis, non-reel highlights
+            if clip['game_action_tracking'] is True and clip['analysis'] is False and clip['highlight_reel'] is False:
+                listitem = xbmcgui.ListItem(clip['url'])
+                listitem.setArt({'icon': clip['icon'], 'thumb': clip['icon'], 'fanart': fanart})
+                listitem.setInfo(type="Video", infoLabels={"Title": clip['title'], "plot": clip['description']})
+                playlist.add(clip['url'], listitem)
 
         xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=playlist[0])
 
@@ -1144,10 +1243,12 @@ def highlight_select_stream(json_source, catchup=None, from_context_menu=False):
         playlist.clear()
 
         for clip in highlights:
-            listitem = xbmcgui.ListItem(clip['url'])
-            listitem.setArt({'icon': clip['icon'], 'thumb': clip['icon'], 'fanart': FANART})
-            listitem.setInfo(type="Video", infoLabels={"Title": clip['title'], "plot": clip["description"]})
-            playlist.add(clip['url'], listitem)
+            # Catch Up should only include game action tracking, non-analysis, non-reel highlights
+            if clip['game_action_tracking'] is True and clip['analysis'] is False and clip['highlight_reel'] is False:
+                listitem = xbmcgui.ListItem(clip['url'])
+                listitem.setArt({'icon': clip['icon'], 'thumb': clip['icon'], 'fanart': FANART})
+                listitem.setInfo(type="Video", infoLabels={"Title": clip['title'], "plot": clip["description"]})
+                playlist.add(clip['url'], listitem)
 
         if catchup is not None:
             playlist.add(catchup.getPath(), catchup)
@@ -1166,6 +1267,18 @@ def get_highlights(items):
     xbmc.log(str(items))
     highlights = []
     for item in sorted(items, key=lambda x: x['date']):
+        # label game action tracking, analysis, and highlight reels for filtering under Play All / Catch Up
+        game_action_tracking = False
+        analysis = False
+        highlight_reel = False
+        for keyword in item['keywordsAll']:
+            if keyword['displayName'] == 'game action tracking':
+                game_action_tracking = True
+            elif keyword['displayName'] == 'analysis':
+                analysis = True
+            elif keyword['displayName'].startswith('highlight reel'):
+                highlight_reel = True
+
         for playback in item['playbacks']:
             if 'mp4Avc' in playback['name']:
                 clip_url = playback['url']
@@ -1173,7 +1286,7 @@ def get_highlights(items):
         headline = item['headline']
         icon = item['image']['cuts'][0]['src']
         description = item['blurb']
-        highlights.append({'url': clip_url, 'title': headline, 'icon': icon, 'description': description})
+        highlights.append({'url': clip_url, 'title': headline, 'icon': icon, 'description': description, 'game_action_tracking': game_action_tracking, 'analysis': analysis, 'highlight_reel': highlight_reel})
 
     return highlights
 
@@ -1206,7 +1319,7 @@ def playAllHighlights(stream_date):
                 for item in game['content']['highlights']['highlights']['items']:
                     try:
                         title = item['headline']
-                        if (n == 0 and title.endswith(' Highlights')) or (n == 1 and item['headline'].startswith('CG: ')):
+                        if (n == 0 and 'ighlights' in title and ' vs' in title) or (n == 1 and title.startswith('Condensed ')):
                             for playback in item['playbacks']:
                                 if 'hlsCloud' in playback['name']:
                                     clip_url = playback['url']
@@ -1217,6 +1330,7 @@ def playAllHighlights(stream_date):
                             listitem.setInfo(type="Video", infoLabels={"Title": title})
                             xbmc.log('adding recap to playlist : ' + title)
                             playlist.add(clip_url, listitem)
+                            break
                     except:
                         pass
         except:

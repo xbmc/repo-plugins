@@ -834,7 +834,7 @@ class MLBMonitor(xbmc.Monitor):
             xbmc.log("MLB Monitor from " + self.mlb_monitor_started + " closing due to another monitor starting on " + new_mlb_monitor_started)
             self.mlb_monitor_started = ''
 
-    def skip_monitor(self, skip_type, game_pk, broadcast_start_timestamp, stream_url, is_live, start_inning, start_inning_half):
+    def skip_monitor(self, skip_type, game_pk, broadcast_start_timestamp, skip_adjust, stream_url, is_live, start_inning, start_inning_half):
         xbmc.log("Skip monitor for " + game_pk + " starting")
 
         self.mlb_monitor_started = str(datetime.now())
@@ -848,7 +848,7 @@ class MLBMonitor(xbmc.Monitor):
 
         # fetch skip markers
         self.skip_to_players = None
-        skip_markers, self.skip_to_players = self.get_skip_markers(skip_type, game_pk, broadcast_start_timestamp, monitor_name, self.skip_to_players, stream_url, 0, start_inning, start_inning_half)
+        skip_markers, self.skip_to_players = self.get_skip_markers(skip_type, game_pk, broadcast_start_timestamp, skip_adjust, monitor_name, self.skip_to_players, stream_url, 0, start_inning, start_inning_half)
         xbmc.log(monitor_name + ' skip markers : ' + str(skip_markers))
 
         while not self.monitor.abortRequested():
@@ -895,7 +895,7 @@ class MLBMonitor(xbmc.Monitor):
                         # refresh current time, and look ahead slightly
                         current_time = player.getTime() + 10
                         xbmc.log(monitor_name + ' refreshing skip markers from ' + str(current_time))
-                        skip_markers, self.skip_to_players = self.get_skip_markers(skip_type, game_pk, broadcast_start_timestamp, monitor_name, self.skip_to_players, stream_url, current_time)
+                        skip_markers, self.skip_to_players = self.get_skip_markers(skip_type, game_pk, broadcast_start_timestamp, skip_adjust, monitor_name, self.skip_to_players, stream_url, current_time)
                         xbmc.log(monitor_name + ' refreshed skip markers : ' + str(skip_markers))
             else:
                 if self.stream_started == False:
@@ -941,7 +941,7 @@ class MLBMonitor(xbmc.Monitor):
 
 
     # calculate skip markers from gameday events
-    def get_skip_markers(self, skip_type, game_pk, broadcast_start_timestamp, monitor_name, skip_to_players, stream_url, current_time=0, start_inning=0, start_inning_half='top'):
+    def get_skip_markers(self, skip_type, game_pk, broadcast_start_timestamp, skip_adjust, monitor_name, skip_to_players, stream_url, current_time=0, start_inning=0, start_inning_half='top'):
         xbmc.log(monitor_name + ' getting skip markers for skip type ' + str(skip_type))
         if current_time > 0:
             xbmc.log(monitor_name + ' searching beyond ' + str(current_time))
@@ -954,6 +954,10 @@ class MLBMonitor(xbmc.Monitor):
         settings = xbmcaddon.Addon(id='plugin.video.mlbtv')
         skip_adjust_start = int(settings.getSetting(id="skip_adjust_start"))
         skip_adjust_end = int(settings.getSetting(id="skip_adjust_end"))
+
+        # extra skip adjust (for MiLB games)
+        skip_adjust_start += skip_adjust
+        skip_adjust_end += skip_adjust
 
         # calculate total skip time (for fun)
         total_skip_time = 0

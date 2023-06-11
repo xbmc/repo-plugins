@@ -44,7 +44,9 @@ quality = ['M', 'L', 'X'][int(quality_id)]
 language = addon.getLocalizedString
 strings = { 'latest_videos':       language(30100),
             'latest_broadcasts':   language(30101),
-            'livestreams':         language(30102)
+            'livestreams':         language(30102),
+            'tagesschau_20':       language(30104),
+            'tagesthemen':         language(30105)
 }
 
 #-- Subtitles ------------------------------------------------
@@ -72,9 +74,19 @@ def getListItem(videocontent):
     li.setArt({'thumb':image_url})
     li.setProperty('Fanart_Image', FANART)
     li.setProperty('IsPlayable', 'true')
-    li.setInfo(type="Video", infoLabels={ "Title": str(title),
-                                          "Plot": str(videocontent.description),
-                                          "Duration": str((videocontent.duration or 0)/60) })
+    li.setInfo(type="Video",
+               infoLabels={ "Title": str(title),
+                            "Plot": str(videocontent.description),
+                            "Duration": str((videocontent.duration or 0)/60)
+                          }
+              )
+    if( videocontent.timestamp ):
+        li.setInfo(type="Video",
+                   infoLabels={ "premiered": str(videocontent.timestamp.strftime('%d.%m.%Y')),
+                                "aired": str(videocontent.timestamp.strftime('%d.%m.%Y')),
+                                "date": str(videocontent.timestamp.strftime('%d.%m.%Y'))
+                              }
+                  )
 
     return li
 
@@ -90,6 +102,7 @@ def addVideoContentItem(videocontent, method):
 
 def addVideoContentItems(videocontents, method):
     items = []
+    videocontents = sorted(videocontents)
     for videocontent in videocontents:
         li = getListItem(videocontent)
         url = getUrl(videocontent, method)
@@ -109,6 +122,7 @@ def tagesschau():
     # TODO: can't figure out how to set fanart for root/back folder of plugin
     # http://trac.xbmc.org/ticket/8228?
     xbmcplugin.setPluginFanart(int(sys.argv[1]), 'special://home/addons/' + ADDON_ID + '/resources/assets/fanart.jpg')
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
 
     params = get_params()
     provider = VideoContentProvider(JsonSource())
@@ -157,5 +171,7 @@ def tagesschau():
         add_named_directory = lambda x: addVideoContentDirectory(strings[x], x)
         add_named_directory('latest_videos')
         add_named_directory('latest_broadcasts')
+        add_named_directory('tagesschau_20')
+        add_named_directory('tagesthemen')
 
     xbmcplugin.endOfDirectory(int(sys.argv[1]))

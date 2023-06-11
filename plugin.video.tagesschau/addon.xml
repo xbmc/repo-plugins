@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.tagesschau"
-    version="2.4.0"
+    version="2.5.3"
     name="Tagesschau"
     provider-name="J.Schumacher, H.Saul, C.Prasch">
   <requires>
@@ -31,6 +31,14 @@
       <screenshot>resources/assets/screenshot_3.png</screenshot>
     </assets>
     <news>
+version 2.5.3 (2023-05-24)
+ * Bugfixes
+ * Added setting for the tagesthemen listing: show broadcasts, topics or both
+
+version 2.5.0 (2023-05-07)
+ * Added listing vor tagesschau 20:00 broadcasts
+ * Added listing vor tagesthemen broadcasts
+
 version 2.4.0 (2023-04-28)
  * Switched to Tagesschau API2 because API1 was disabled by ARD
  * New option to show age of news in title

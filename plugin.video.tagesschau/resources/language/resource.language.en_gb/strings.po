@@ -24,6 +24,22 @@ msgctxt "#30002"
 msgid "Show age of news in title"
 msgstr ""
 
+msgctxt "#30003"
+msgid "Tagesthemen Listing"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Broadcasts only"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Topics only"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Broadcasts and Topics"
+msgstr ""
+
 msgctxt "#30100"
 msgid "News"
 msgstr ""
@@ -38,4 +54,12 @@ msgstr ""
 
 msgctxt "#30103"
 msgid "ago"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Tagesschau 20:00"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Tagesthemen"
 msgstr ""

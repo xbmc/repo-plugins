@@ -291,61 +291,69 @@ class TokenResolver:
 
         # Get data from player javascript
         player_url = 'https://player.vrt.be/vrtnu/js/main.js'
-        response = open_url(player_url)
-        if response:
-            data = response.read().decode('utf-8')
+        crypt_data = None
+        while not crypt_data:
+            response = open_url(player_url)
+            if response:
+                data = response.read().decode('utf-8')
 
-        if data:
-            # Extract JWT key id and secret
-            crypt_rx = re.compile(r'atob\(\"(==[A-Za-z0-9+/]*)\"')
-            crypt_data = re.findall(crypt_rx, data)
-            if not crypt_data:
-                return playerinfo
+                if data:
+                    # Extract JWT key id and secret
+                    crypt_rx = re.compile(r'atob\(\"(==[A-Za-z0-9+/]*)\"')
+                    crypt_data = re.findall(crypt_rx, data)
+                    if not crypt_data:
+                        # Try redirect
+                        redirect_rx = re.compile(r"'(/[a-z]+\.[a-z0-9]{20}\.js)';")
+                        redirect_path = re.search(redirect_rx, data)
+                        if redirect_path:
+                            player_url = player_url[:player_url.rfind('/')] + redirect_path.group(1)
+                        else:
+                            return playerinfo
 
-            kid_source = crypt_data[0]
-            secret_source = crypt_data[-1]
-            kid = base64.b64decode(kid_source[::-1]).decode('utf-8')
-            secret = base64.b64decode(secret_source[::-1]).decode('utf-8')
+        kid_source = crypt_data[0]
+        secret_source = crypt_data[-1]
+        kid = base64.b64decode(kid_source[::-1]).decode('utf-8')
+        secret = base64.b64decode(secret_source[::-1]).decode('utf-8')
 
-            # Extract player version
-            player_version = '2.4.1'
-            pv_rx = re.compile(r'playerVersion:\"(\S*)\"')
-            match = re.search(pv_rx, data)
-            if match:
-                player_version = match.group(1)
+        # Extract player version
+        player_version = '3.0.3'
+        pv_rx = re.compile(r'playerVersion:\"(\S*)\"')
+        match = re.search(pv_rx, data)
+        if match:
+            player_version = match.group(1)
 
-            # Generate JWT
-            segments = []
-            header = {
-                'alg': 'HS256',
-                'kid': kid
+        # Generate JWT
+        segments = []
+        header = {
+            'alg': 'HS256',
+            'kid': kid
+        }
+        payload = {
+            'exp': time.time() + 1000,
+            'platform': 'desktop',
+            'app': {
+                'type': 'browser',
+                'name': 'Firefox',
+                'version': '114.0'
+            },
+            'device': 'undefined (undefined)',
+            'os': {
+                'name': 'Linux',
+                'version': 'x86_64'
+            },
+            'player': {
+                'name': 'VRT web player',
+                'version': player_version
             }
-            payload = {
-                'exp': time.time() + 1000,
-                'platform': 'desktop',
-                'app': {
-                    'type': 'browser',
-                    'name': 'Firefox',
-                    'version': '102.0'
-                },
-                'device': 'undefined (undefined)',
-                'os': {
-                    'name': 'Linux',
-                    'version': 'x86_64'
-                },
-                'player': {
-                    'name': 'VRT web player',
-                    'version': player_version
-                }
-            }
-            json_header = dumps(header).encode()
-            json_payload = dumps(payload).encode()
-            segments.append(base64.urlsafe_b64encode(json_header).decode('utf-8').replace('=', ''))
-            segments.append(base64.urlsafe_b64encode(json_payload).decode('utf-8').replace('=', ''))
-            signing_input = '.'.join(segments).encode()
-            signature = hmac.new(secret.encode(), signing_input, hashlib.sha256).digest()
-            segments.append(base64.urlsafe_b64encode(signature).decode('utf-8').replace('=', ''))
-            playerinfo = '.'.join(segments)
+        }
+        json_header = dumps(header).encode()
+        json_payload = dumps(payload).encode()
+        segments.append(base64.urlsafe_b64encode(json_header).decode('utf-8').replace('=', ''))
+        segments.append(base64.urlsafe_b64encode(json_payload).decode('utf-8').replace('=', ''))
+        signing_input = '.'.join(segments).encode()
+        signature = hmac.new(secret.encode(), signing_input, hashlib.sha256).digest()
+        segments.append(base64.urlsafe_b64encode(signature).decode('utf-8').replace('=', ''))
+        playerinfo = '.'.join(segments)
         return playerinfo
 
     def delete_tokens(self):

@@ -12,7 +12,7 @@ except ImportError:  # Python 2
 from helperobjects import TitleItem
 from kodiutils import (colour, get_cache, get_setting_bool, get_setting_int, get_url_json, has_credentials,
                        localize, localize_from_data, log, update_cache, url_for)
-from utils import from_unicode, reformat_image_url, shorten_link, to_unicode, url_to_program
+from utils import find_entry, from_unicode, reformat_image_url, shorten_link, to_unicode, url_to_program
 from graphql_data import EPISODE_TILE
 
 GRAPHQL_URL = 'https://www.vrt.be/vrtnu-api/graphql/v1'
@@ -1281,12 +1281,12 @@ def get_online_categories():
         data = dumps(payload).encode('utf-8')
         categories_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
         if categories_json is not None:
-            content_types = categories_json.get('data').get('uiSearch')[0].get('items')
-            genres = categories_json.get('data').get('uiSearch')[3].get('items')
+            content_types = find_entry(categories_json.get('data').get('uiSearch'), 'title', 'Aanbod').get('items')
+            genres = find_entry(categories_json.get('data').get('uiSearch'), 'title', 'Genres').get('items')
             category_items = content_types + genres
             for category in category_items:
-                # Don't add podcasts
-                if category.get('title') == 'Podcasts':
+                # Don't add audio-only categories
+                if category.get('title') in ('Podcasts', 'Radio'):
                     continue
                 thumb = category.get('image')
                 if thumb:

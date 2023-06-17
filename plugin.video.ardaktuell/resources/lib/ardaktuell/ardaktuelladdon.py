@@ -2,68 +2,63 @@ from resources.lib.rssaddon.abstract_rss_addon import AbstractRssAddon
 
 import xbmcgui
 import xbmcplugin
+from datetime import datetime
 
 
 class ArdAktuellAddon(AbstractRssAddon):
 
-    QUALITY_LEVEL = ["webxl", "webl", "webm", "webs"]
-
     BROADCASTS = [
         {
-            "name": "ARD Tagesschau",
-            "icon": "https://www.tagesschau.de/image/podcast/ts-1400.jpg",
-            "video_url": "https://www.tagesschau.de/export/video-podcast/%s/tagesschau_https/",
-            "audio_url": "https://www.tagesschau.de/export/podcast/tagesschau_https/"
+            "name": "ARD Tagesschau um 20 Uhr",
+            "icon": "https://images.tagesschau.de/image/eb0b0d74-03ac-45ec-9300-0851fd6823d3/AAABiE1u1f0/AAABg8tMMaM/1x1-1400/sendungslogo-tagesschau-100.jpg",
+            "video_url": "https://www.tagesschau.de/multimedia/sendung/tagesschau_20_uhr/podcast-ts2000-video-100~podcast.xml",
+            "date_format": "%d.%m.%Y"
         },
         {
-            "name": "ARD Tagesschau mit Gebärdensprache",
-            "icon": "https://www.tagesschau.de/image/podcast/tsg-1400.jpg",
-            "video_url": "https://www.tagesschau.de/export/video-podcast/%s/tagesschau-mit-gebaerdensprache_https/"
+            "name": "ARD Tagesschau um 20 Uhr mit Gebärdensprache",
+            "icon": "https://images.tagesschau.de/image/eb0b0d74-03ac-45ec-9300-0851fd6823d3/AAABiE1u1f0/AAABg8tMMaM/1x1-1400/sendungslogo-tagesschau-100.jpg",
+            "video_url": "https://www.tagesschau.de/multimedia/sendung/tagesschau_mit_gebaerdensprache/podcast-tsg-100~podcast.xml",
+            "date_format": "%d.%m.%Y"
         },
         {
             "name": "ARD Tagesschau in 100 Sekunden",
-            "icon": "https://www.tagesschau.de/image/podcast/ts100s-1400.jpg",
-            "video_url": "https://www.tagesschau.de/export/video-podcast/%s/tagesschau-in-100-sekunden_https/",
-            "audio_url": "https://www.tagesschau.de/export/podcast/hi/tagesschau-in-100-sekunden/"
+            "icon": "https://images.tagesschau.de/image/559ce6ba-91f3-495c-b36d-77115c440dd0/AAABiE1fSSM/AAABg8tMMaM/1x1-1400/sendungslogo-tsh-100.jpg",
+            "video_url": "https://www.tagesschau.de/multimedia/sendung/tagesschau_in_100_sekunden/podcast-ts100-video-100~podcast.xml",
+            "date_format": "%d.%m.%Y %H:%M"
         },
         {
             "name": "ARD Tagesthemen",
-            "icon": "https://www.tagesschau.de/image/podcast/tt-1400.jpg",
-            "video_url": "https://www.tagesschau.de/export/video-podcast/%s/tagesthemen_https/",
-            "audio_url": "https://www.tagesschau.de/export/podcast/tagesthemen_https/"
-        },
-        {
-            "name": "ARD Nachtmagazin",
-            "icon": "https://www.tagesschau.de/image/podcast/nm-1400.jpg",
-            "video_url": "https://www.tagesschau.de/export/video-podcast/%s/nachtmagazin_https/",
-            "audio_url": "https://www.tagesschau.de/export/podcast/nachtmagazin_https/"
-        },
-        {
-            "name": "ARD Bericht aus Berlin",
-            "icon": "https://www.tagesschau.de/image/podcast/bab-1400.jpg",
-            "video_url": "https://www.tagesschau.de/export/video-podcast/%s/bab_https/",
-            "audio_url": "https://www.tagesschau.de/export/podcast/bab_https/",
-            "type": "video"
-
+            "icon": "https://images.tagesschau.de/image/6b0ab906-0dcf-432f-807c-1d10f8a0a73a/AAABiE1uG-U/AAABg8tMMaM/1x1-1400/sendungslogo-tagesthemen-100.jpg",
+            "video_url": "https://www.tagesschau.de/multimedia/sendung/tagesthemen/podcast-tt-video-100~podcast.xml",
+            "date_format": "%d.%m.%Y"
         },
         {
             "name": "ARD Tagesschau vor 20 Jahren",
-            "icon": "https://www.tagesschau.de/image/podcast/tsv20-1997-1400.jpg",
-            "video_url": "https://www.tagesschau.de/export/video-podcast/%s/tagesschau-vor-20-jahren_https/",
-            "audio_url": "https://www.tagesschau.de/export/podcast/tagesschau-vor-20-jahren_https/",
-            "type": "video"
+            "icon": "https://images.tagesschau.de/image/2a6f7e91-d939-4fde-98b8-9d7fb54be721/AAABiB8Zoe4/AAABg8tMMaM/1x1-1400/tagesschau-logo-105.jpg",
+            "video_url": "https://www.tagesschau.de/multimedia/sendung/tagesschau_vor_20_jahren/podcast-tsv20-video-100~podcast.xml",
+            "type": "video",
+            "date_format": ""
         },
         {
             "name": "ARD Mal angenommen...",
-            "icon": "https://www.tagesschau.de/multimedia/bilder/mal-angenommen-podcast-cover-105~_v-original.jpg",
-            "audio_url": "https://www.tagesschau.de/multimedia/podcasts/mal-angenommen-feed-101.xml",
-            "type": "audio"
+            "icon": "https://images.tagesschau.de/image/d5f4c036-3eca-4b59-9a11-1acd53814639/AAABiB7_Ajo/AAABg8tMMaM/1x1-1400/podcast-mal-angenommen-102.jpg",
+            "audio_url": "https://www.tagesschau.de/multimedia/podcast/malangenommen/mal-angenommen-feed-101~podcast.xml",
+            "type": "audio",
+            "date_format": "%d.%m.%Y"
         },
         {
             "name": "Ideenimport",
-            "icon": "https://www.tagesschau.de/multimedia/bilder/auslandspodcast-de-tagesschau-ideenimport-109~_v-original.jpg",
-            "audio_url": "https://www.tagesschau.de/multimedia/podcasts/ideenimport-feed-105.xml",
-            "type": "audio"
+            "icon": "https://images.tagesschau.de/image/ab2459a5-283e-41be-ad3f-5e323ffb7c5a/AAABiGJ5xhQ/AAABg8tMMaM/1x1-1400/podcast-ideenimport-104.jpg",
+            "audio_url": "https://www.tagesschau.de/multimedia/podcast/ideenimport/ideenimport-feed-105~podcast.xml",
+            "type": "audio",
+            "date_format": "%d.%m.%Y"
+        },
+        {
+            "name": "faktenfinder",
+            "icon": "https://images.tagesschau.de/image/582386c7-f443-4560-baaa-688cb2773d25/AAABiB78cks/AAABg8tMMaM/1x1-1400/podcast-faktenfinder-104.jpg",
+            "audio_url": "https://www.tagesschau.de/multimedia/podcast/faktenfinder/faktenfinder-feed-101~podcast.xml",
+            "type": "audio",
+            "date_format": "%d.%m.%Y"
         }
     ]
 
@@ -83,6 +78,9 @@ class ArdAktuellAddon(AbstractRssAddon):
                 "params": [
                     {
                         "play_latest" if latest_only else "rss": url
+                    },
+                    {
+                        "date_format": broadcast["date_format"]
                     }
                 ]
             }
@@ -95,10 +93,9 @@ class ArdAktuellAddon(AbstractRssAddon):
         _nodes = []
         for i, broadcast in enumerate(self.BROADCASTS):
 
-            _quality = int(self.addon.getSetting("quality"))
-            if "video_url" in broadcast and _quality < 4:
+            if "video_url" in broadcast:
                 _nodes.append(_make_node(
-                    i, broadcast, "video", broadcast["video_url"] % self.QUALITY_LEVEL[_quality], self.addon.getSetting("archive") != "true"))
+                    i, broadcast, "video", broadcast["video_url"], self.addon.getSetting("archive") != "true"))
 
             elif "audio_url" in broadcast:
                 _nodes.append(_make_node(i, broadcast, "music",
@@ -153,6 +150,13 @@ class ArdAktuellAddon(AbstractRssAddon):
             return True
 
     def route(self, path, url_params):
-        
+
         _dir_structure = self._build_dir_structure()
         self._browse(dir_structure=_dir_structure, path=path)
+
+    def build_label(self, item, params: dict = None) -> str:
+
+        if params and "date_format" in params and params["date_format"] and "date" in item:
+            return "%s (%s)" % (item["name"], datetime.strftime(item["date"], params["date_format"]))
+        else:
+            return super().build_label(item)

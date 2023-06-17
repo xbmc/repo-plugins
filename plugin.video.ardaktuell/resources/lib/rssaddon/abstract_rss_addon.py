@@ -41,16 +41,18 @@ class AbstractRssAddon:
             path = "/"
             url_params = list()
 
+        for key in url_params:
+            url_params[key] = self.decode_param(url_params[key][0])
+
         if "rss" in url_params:
-            url = self.decode_param(url_params["rss"][0])
-            limit = int(self.decode_param(
-                url_params["limit"][0])) if "limit" in url_params else 0
-            offset = int(self.decode_param(
-                url_params["offset"][0])) if "offset" in url_params else 0
-            self.render_rss(path, url, limit=limit, offset=offset)
+            url = url_params["rss"]
+            limit = int(url_params["limit"]) if "limit" in url_params else 0
+            offset = int(url_params["offset"]) if "offset" in url_params else 0
+            self.render_rss(path, url, limit=limit,
+                            offset=offset, params=url_params)
 
         elif "play_latest" in url_params:
-            url = self.decode_param(url_params["play_latest"][0])
+            url = url_params["play_latest"]
             self.play_latest(url)
         else:
             self.route(path, url_params)
@@ -176,9 +178,13 @@ class AbstractRssAddon:
 
         pass
 
-    def _create_list_item(self, item: dict) -> xbmcgui.ListItem:
+    def build_label(self, item, params: dict = None) -> str:
 
-        li = xbmcgui.ListItem(label=item["name"])
+        return item["name"]
+
+    def _create_list_item(self, item: dict, params: dict = None) -> xbmcgui.ListItem:
+
+        li = xbmcgui.ListItem(label=self.build_label(item))
 
         if "description" in item:
             li.setProperty("label2", item["description"])
@@ -188,7 +194,7 @@ class AbstractRssAddon:
 
         if "type" in item:
             infos = {
-                "title": item["name"]
+                "title": self.build_label(item, params)
             }
 
             if item["type"] == "video":
@@ -261,7 +267,7 @@ class AbstractRssAddon:
                                     url=url,
                                     isFolder=is_folder)
 
-    def render_rss(self, path: str, url: str, limit=0, offset=0) -> None:
+    def render_rss(self, path: str, url: str, limit=0, offset=0, params: dict = None) -> None:
 
         try:
             title, description, image, items = self._load_rss(url)
@@ -278,7 +284,6 @@ class AbstractRssAddon:
                     "name": "%s (%s)" % (title, self.addon.getLocalizedString(32101)),
                     "description": description,
                     "icon": image,
-                    "date": datetime.now(),
                     "specialsort": "top",
                     "type": items[0]["type"],
                     "params": [
@@ -292,7 +297,7 @@ class AbstractRssAddon:
             li = None
             for i, item in enumerate(items):
                 if i >= offset and (not limit or i < offset + limit):
-                    li = self._create_list_item(item)
+                    li = self._create_list_item(item, params)
                     xbmcplugin.addDirectoryItem(handle=self.addon_handle,
                                                 listitem=li,
                                                 url=item["stream_url"],

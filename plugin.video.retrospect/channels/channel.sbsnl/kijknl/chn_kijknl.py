@@ -12,6 +12,7 @@ from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.helpers.subtitlehelper import SubtitleHelper
 
 from resources.lib.mediaitem import MediaItem, FolderItem
+from resources.lib.parserdata import ParserData
 from resources.lib.streams.m3u8 import M3u8
 from resources.lib.streams.mpd import Mpd
 from resources.lib.regexer import Regexer
@@ -44,23 +45,26 @@ class Channel(chn_class.Channel):
         if self.channelCode is None:
             self.noImage = "kijkimage.jpg"
             self.poster = "kijkposter.jpg"
-            self.mainListUri = self.__get_api_query_url(
-                "programs(programTypes:[SERIES],limit:1000)",
-                "{items{__typename,title,description,guid,updated,seriesTvSeasons{id},"
-                "imageMedia{url,label}}}")
+            # Fetched from the embedded JSON in https://www.kijk.nl/programmas (key=seriesJson)
+            self.mainListUri = "https://static.kijk.nl/all-series.json"
 
             self._add_data_parser("#recentgraphql", preprocessor=self.add_graphql_recents,
                                   name="GraphQL Recent listing")
 
-            self._add_data_parser("https://graph.kijk.nl/graphql?query=query%7Bprograms%28programTypes",
+            self._add_data_parser(self.mainListUri, match_type=ParserData.MatchExact,
                                   name="Main GraphQL Program parser", json=True,
                                   preprocessor=self.add_graphql_extras,
+                                  parser=[], creator=self.create_api_typed_item)
+
+            self._add_data_parser("https://graph.kijk.nl/graphql?query=query%7Bprograms%28programTypes",
+                                  name="Other GraphQL Program parser", json=True,
                                   parser=["data", "programs", "items"], creator=self.create_api_typed_item)
 
             self._add_data_parser("https://graph.kijk.nl/graphql?query=query%7Bprograms%28guid",
                                   name="Main GraphQL season overview parser", json=True,
                                   parser=["data", "programs", "items", 0, "seriesTvSeasons"],
-                                  creator=self.create_api_tvseason_type)
+                                  creator=self.create_api_tvseason_type,
+                                  postprocessor=self.single_season_check)
 
             self._add_data_parser("https://graph.kijk.nl/graphql?query=query%7BprogramsByDate",
                                   name="Main GraphQL programs per date parser", json=True,
@@ -118,7 +122,7 @@ class Channel(chn_class.Channel):
 
     # noinspection PyUnusedLocal
     def search_site(self, url=None):  # @UnusedVariable
-        """ Creates an list of items by searching the site.
+        """ Creates a list of items by searching the site.
 
         This method is called when the URL of an item is "searchSite". The channel
         calling this should implement the search functionality. This could also include
@@ -577,7 +581,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        api_type = result_set["__typename"].lower()
+        api_type = result_set.get("__typename", "").lower()
         custom_type = result_set.get("type")
         Logger.trace("%s: %s", api_type, result_set)
 
@@ -623,22 +627,11 @@ class Channel(chn_class.Channel):
         if title is None:
             return None
 
-        seasons = result_set["seriesTvSeasons"]
-        if len(seasons) == 0:
-            return None
-
-        if len(seasons) == 1:
-            # List the videos in that season
-            season_id = seasons[0]["id"].rsplit("/", 1)[-1]
-            url = self.__get_api_query_url(
-                query='programs(tvSeasonId:"{}",programTypes:EPISODE,skip:0,limit:{})'.format(season_id, self.__list_limit),
-                fields=self.__video_fields)
-        else:
-            # Fetch the season information
-            url = self.__get_api_query_url(
-                query='programs(guid:"{}")'.format(result_set["guid"]),
-                fields="{items{seriesTvSeasons{id,title,seasonNumber,__typename}}}"
-            )
+        # Fetch the season information
+        url = self.__get_api_query_url(
+            query='programs(guid:"{}")'.format(result_set["guid"]),
+            fields="{items{seriesTvSeasons{id,title,seasonNumber,__typename}}}"
+        )
 
         item = FolderItem(result_set["title"], url, content_type=contenttype.EPISODES)
         item.description = result_set.get("description")
@@ -718,6 +711,42 @@ class Channel(chn_class.Channel):
 
         item = FolderItem(title, url, content_type=contenttype.EPISODES, media_type=mediatype.SEASON)
         return item
+
+    # noinspection PyUnusedLocal
+    def single_season_check(self, data, items):
+        """ Performs post-process actions for data processing.
+
+        Accepts an data from the process_folder_list method, BEFORE the items are
+        processed. Allows setting of parameters (like title etc) for the channel.
+        Inside this method the <data> could be changed and additional items can
+        be created.
+
+        The return values should always be instantiated in at least ("", []).
+
+        :param str|JsonHelper data:     The retrieve data that was loaded for the
+                                         current item and URL.
+        :param list[MediaItem] items:   The currently available items
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: list[MediaItem]
+
+        """
+
+        Logger.info("Performing Post-Processing")
+
+        if len(items) == 1:
+            # Single season
+            data = UriHandler.open(items[0].url)
+            json_data = JsonHelper(data)
+            json_items = json_data.get_value("data", "programs", "items")
+            items = []
+            for result_set in json_items:
+                result = self.create_api_typed_item(result_set)
+                if result:
+                    items.append(result)
+
+        Logger.debug("Post-Processing finished")
+        return items
 
     def create_api_episode_type(self, result_set):
         """ Creates a new MediaItem for an episode.
@@ -833,7 +862,6 @@ class Channel(chn_class.Channel):
             else:
                 Logger.debug("Found incompatible stream: %s", src)
 
-        subtitle = None
         tracks = json_data.get_value("data", "programs", "items", 0, "tracks")
         for track in tracks:
             subtitle = track["file"]

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.6.3"
+        version="5.6.4"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -122,18 +122,19 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.6.3 - Changelog - 2023-06-07[/B]
+        <news>[B]Retrospect v5.6.4 - Changelog - 2023-06-18[/B]
 
-Fixed more RTL related issues.
+Minor channel fixes for TV4 and Kijk.nl.
 
 [B]Framework related[/B]
 _None_
 
 [B]GUI/Settings/Language related[/B]
-* Fixed: De-duplicate before grouping to prevent duplicate items in grouped folders.
+_None_
 
 [B]Channel related[/B]
-* Fixed: A number of RTL XL related bugs (Fixes #1708).
+* Fixed: TV4 Play TV Show list broke.
+* Fixed: Kijk.nl broke (again) due to API changes.
 
         </news>
         <assets>

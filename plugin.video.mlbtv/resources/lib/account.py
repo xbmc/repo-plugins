@@ -37,12 +37,12 @@ class Account:
         # Check if username and password are provided
         if self.username == '':
             dialog = xbmcgui.Dialog()
-            self.username = dialog.input(LOCAL_STRING(30240), type=xbmcgui.INPUT_ALPHANUM)
+            self.username = dialog.input(LOCAL_STRING(30140), type=xbmcgui.INPUT_ALPHANUM)
             self.addon.setSetting(id='username', value=self.username)
 
         if self.password == '':
             dialog = xbmcgui.Dialog()
-            self.password = dialog.input(LOCAL_STRING(30250), type=xbmcgui.INPUT_ALPHANUM,
+            self.password = dialog.input(LOCAL_STRING(30150), type=xbmcgui.INPUT_ALPHANUM,
                                     option=xbmcgui.ALPHANUM_HIDE_INPUT)
             self.addon.setSetting(id='password', value=self.password)
 
@@ -188,7 +188,8 @@ class Account:
         else:
             stream_url = r.json()['stream']['slide']
 
-        if QUALITY == 'Always Ask':
+        # skip asking for quality if it's an audio-only stream
+        if QUALITY == 'Always Ask' and '_AUDIO_' not in stream_url:
             stream_url = self.get_stream_quality(stream_url)
         headers = 'User-Agent=' + UA_PC
         headers += '&Authorization=' + auth
@@ -198,7 +199,7 @@ class Account:
             cookies = cookies.iteritems()
         for key, value in cookies:
             headers += key + '=' + value + '; '
-            
+
         #CDN
         akc_url = 'hlslive-aksc'
         l3c_url = 'hlslive-l3c'
@@ -227,8 +228,18 @@ class Account:
 
         for temp_url in line:
             if '#EXT' not in temp_url:
-                match = re.search(r'(\d.+?)K', temp_url, re.IGNORECASE)
-                bandwidth = match.group()
+                bandwidth = ''
+                # first check for bandwidth at beginning of URL (MLB game streams)
+                match = re.search(r'^(\d+?)K', temp_url, re.IGNORECASE)
+                if match is not None:
+                    bandwidth = match.group()
+                # if we didn't find the correct bandwidth at the beginning of the URL
+                if match is None or len(bandwidth) > 6:
+                    # check for bandwidth after an underscore (MILB games and featured videos)
+                    match = re.search(r'_(\d+?)K', temp_url, re.IGNORECASE)
+                    bandwidth = match.group()
+                    # remove preceding underscore
+                    bandwidth = bandwidth[1:]
                 if 0 < len(bandwidth) < 6:
                     bandwidth = bandwidth.replace('K', ' kbps')
                     stream_title.append(bandwidth)

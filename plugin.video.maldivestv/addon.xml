@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.maldivestv" version="1.1.0" name="Maldives TV" provider-name="Jawish Hameed">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.requests"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Maldives TV</summary>
+    <description lang="en">Kodi video plugin to view live streams of Maldives TV channels.</description>
+    <disclaimer lang="en">Live streams are currently from Dhiraagu play.mv.</disclaimer>
+    <platform>all</platform>
+    <license>GNU General Public License v2.0</license>
+		<website>www.jawish.org</website>
+		<email>jaa at jawish dot org</email>
+		<source>https://github.com/jawish/plugin.video.maldivestv</source>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
+    <news>Initial release!</news>
+  </extension>
+</addon>

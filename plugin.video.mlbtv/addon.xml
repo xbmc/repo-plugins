@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2023.6.6+matrix.1" provider-name="eracknaphobia">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2023.6.24+matrix.1" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -22,10 +22,9 @@
         </description>
         <disclaimer lang="en_GB">Requires an MLB.tv account</disclaimer>
         <news>
-            - added affiliate and level menus for finding MiLB (minor league) games
-            - fixed play all recaps / condensed games behavior when clicking on date
-            - start at inning / automatic skip for minor league games
-            - show only in-game highlights for play all highlights or catch up
+            - fix for proxied streams ending early when not using Inputstream Adaptive
+            - fix for Always Ask stream quality when not using Inputstream Adaptive
+            - fix username/password prompt labels
         </news>
         <language>en</language>
         <platform>all</platform>

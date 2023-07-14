@@ -1014,7 +1014,7 @@ def convert_seasons(api_data, program_name):
 
 def get_seasons(program_name):
     """Get seasons"""
-    season_json = get_url_json('https://www.vrt.be/vrtmax/a-z/{}.model.json'.format(program_name))
+    season_json = get_url_json('https://www.vrt.be/vrtnu/a-z/{}.model.json'.format(program_name))
     seasons = season_json.get('details').get('data').get('program').get('seasons')
     return seasons
 
@@ -1039,7 +1039,7 @@ def get_featured(feature=None, end_cursor=''):
             return episodes, sort, ascending, 'episodes'
     else:
         featured = []
-        featured_json = get_url_json('https://www.vrt.be/vrtmax/kijk.model.json')
+        featured_json = get_url_json('https://www.vrt.be/vrtnu/kijk.model.json')
         items = featured_json.get(':items').get('par').get(':items')
         for item in items:
             content_type = items.get(item).get('tileContentType')

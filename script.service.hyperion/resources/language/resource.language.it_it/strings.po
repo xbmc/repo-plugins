@@ -1,0 +1,63 @@
+# Kodi Media Center language file
+# Addon Name: Hyperion Ambilight
+# Addon id: script.service.hyperion
+# Addon Provider: hyperion-project
+
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: hyperion-project.org\n"
+"Last-Translator: hyperion-project\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it-IT\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32001"
+msgid "General"
+msgstr "Generale"
+
+msgctxt "#32002"
+msgid "Enable addon (Grabbing)"
+msgstr "Abilita l'Addon (Acquisizione)"
+
+msgctxt "#32003"
+msgid "Hyperion hostname or IP-address"
+msgstr "Nome host o indirizzo IP di Hyperion"
+
+msgctxt "#32004"
+msgid "Hyperion host PROTO-port"
+msgstr "Porta PROTO di Hyperion"
+
+msgctxt "#32005"
+msgid "Hyperion priority channel"
+msgstr "Canale prioritario di Hyperion"
+
+msgctxt "#32006"
+msgid "Reconnect timeout (s)"
+msgstr "Timeout riconnessione (s)"
+
+msgctxt "#32007"
+msgid "Enable when on screensaver"
+msgstr "Abilita con lo screen saver"
+
+msgctxt "#32008"
+msgid "Grabber picture width (pixel)"
+msgstr "Larghezza immagine acquisita (pixel)"
+
+msgctxt "#32010"
+msgid "Frame rate (fps)"
+msgstr "Frame rate (fps)"
+
+msgctxt "#32100"
+msgid "Error: Unable to connect to Hyperion. Wrong hostname or IP-address?"
+msgstr "Errore: Impossible connettersi a Hyperion. Nome host o indirizzo IP sbagliato?"
+
+msgctxt "#32101"
+msgid "Error: Unable to send image to Hyperion. Wrong PROTO-port?"
+msgstr "Errore: Impossibile inviare l'immagine a Hyperion. porta PROTO sbagliata?"
+
+msgctxt "#32102"
+msgid "ATTENTION: Higher the values below may lead to performance issues"
+msgstr "ATTENZIONE: Alzare i valori seguenti può portare a problemi di performance"

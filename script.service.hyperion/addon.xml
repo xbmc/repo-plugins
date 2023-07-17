@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.service.hyperion" name="Hyperion Ambilight" version="1.0.6" provider-name="hyperion-project">
+  <requires>
+    <import addon="xbmc.addon"  version="20.0.0"/>
+    <import addon="xbmc.python" version="3.0.1"/>
+    <import addon="script.module.protobuf" version="4.23.2"/>
+  </requires>
+  <extension point="xbmc.service" library="addon.py"/>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Capture and send your current Kodi-picture to your Hyperion Ambient Lighting system.</summary>
+    <summary lang="de_DE">Übermittle das aktuelle Kodi-Bild an dein Hyperion Ambient Lighting System.</summary>
+    <summary lang="it_IT">Cattura e invia l'immagine corrente di Kodi ad tuo sistema di Ambient Lighting Hyperion.</summary>
+    <description lang="en_GB">Hyperion is an opensource Bias or Ambient Lighting implementation which runs on many devices.[CR]This addon sends through the Hyperion PROTO-port your current picture to your Hyperion daemon for further processing like black border detection or smoothing.</description>
+    <description lang="de_DE">Hyperion ist ein Bias oder Ambient Lighting System, welches auf vielen Plattformen lauffähig ist.[CR]Dieses Addon sendet über den PROTO-Port laufend Bilder an Hyperion.</description>
+    <description lang="it_IT">Hyperion è un'implentazione open source di Bias o Ambient Lighting che supporta molti dispositivi.[CR]Questo addon invia l'immagine corrente alla porta PROTO del demone Hyperion per ulteriori elaborazioni come il rilevamento bordi neri o lo smoothing.</description>
+    <disclaimer lang="en_GB"></disclaimer>
+    <language>en de he</language>
+    <platform>all</platform>
+    <forum>https://hyperion-project.org/forum</forum>
+    <website>https://www.hyperion-project.org</website>
+    <source>https://github.com/hyperion-project/hyperion.kodi</source>
+    <license>MIT</license>
+    <news>v1.0.6
+      - Kodi Nexus support. Dropped earlier versions.
+      - Maintain aspect-ratio for grapped images
+    </news>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.png</fanart>
+      <screenshot>resources/screenshot-01.png</screenshot>
+    </assets>
+  </extension>  
+</addon>

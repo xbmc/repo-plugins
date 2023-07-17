@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="32001">
+		<setting id="hyperion_enable" type="bool" label="32002" default="true" />
+		<setting id="screensaver_enable" type="bool" label="32007" default="false" subsetting="true" visible="eq(-1,true)" enable="eq(-1,true)"/>
+		<setting id="hyperion_ip" type="text" label="32003" default="localhost" />
+		<setting id="hyperion_port" type="number" label="32004" default="19445" />
+		<setting id="hyperion_priority" type="number" label="32005" default="150" />
+		<setting id="reconnect_timeout" type="number" label="32006" default="30" />
+		<setting type="sep"/>
+		<setting label="32102" type="lsep"/>
+		<setting id="capture_width" type="number" label="32008" default="64" />
+		<setting id="framerate" type="number" label="32010" default="10" />
+	</category>
+</settings>

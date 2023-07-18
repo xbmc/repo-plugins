@@ -64,7 +64,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
 
         # Avoid setting resumepoints for livestreams
         for channel in CHANNELS:
-            if ep_id.get('video_id') and ep_id.get('video_id') == channel.get('live_stream_id'):
+            if ep_id.get('video_id') and ep_id.get('video_id') in (channel.get('live_stream_id'), channel.get('name')):
                 log(3, '[PlayerInfo {id}] Avoid setting resumepoints for livestream {video_id}', id=self.thread_id, video_id=ep_id.get('video_id'))
                 self.listen = False
 

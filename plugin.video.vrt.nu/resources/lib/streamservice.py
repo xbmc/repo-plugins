@@ -170,7 +170,7 @@ class StreamService:
 
            Right after a program is completely broadcasted, the stop timestamp is usually missing and should be added to the manifest_url.
         """
-        if '?t=' in manifest_url:
+        if any(param in manifest_url for param in ('?t=', '&t=')):
             try:  # Python 3
                 from urllib.parse import parse_qs, urlsplit
             except ImportError:  # Python 2
@@ -243,7 +243,17 @@ class StreamService:
 
                 # External virtual subclip, live-to-VOD from past 24 hours archived livestream (airdate feature)
                 if video.get('start_date') and video.get('end_date'):
-                    manifest_url += '?t=' + video.get('start_date') + '-' + video.get('end_date')
+                    if '?' in manifest_url:
+                        manifest_parts = manifest_url.split('?')
+                        uri = manifest_parts[0]
+                        querystring = '&' + manifest_parts[1]
+                    else:
+                        uri = manifest_url
+                        querystring = ''
+                    manifest_url = '{}?t={}-{}{}'.format(uri, video.get('start_date'), video.get('end_date'), querystring)
+
+                # FIXME: Remove '#' URI fragment identifier from manifest url because InputStream Adaptive refuses to play these urls
+                manifest_url = manifest_url.replace('#', '')
 
                 # Fix virtual subclip
                 from datetime import timedelta

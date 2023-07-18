@@ -303,10 +303,10 @@ class TokenResolver:
                     crypt_data = re.findall(crypt_rx, data)
                     if not crypt_data:
                         # Try redirect
-                        redirect_rx = re.compile(r"'(/[a-z]+\.[a-z0-9]{20}\.js)';")
+                        redirect_rx = re.compile(r"'([a-z]+\.[a-z0-9]{20}\.js)';")
                         redirect_path = re.search(redirect_rx, data)
                         if redirect_path:
-                            player_url = player_url[:player_url.rfind('/')] + redirect_path.group(1)
+                            player_url = '{}/{}'.format(player_url[:player_url.rfind('/')], redirect_path.group(1))
                         else:
                             return playerinfo
 
@@ -316,7 +316,7 @@ class TokenResolver:
         secret = base64.b64decode(secret_source[::-1]).decode('utf-8')
 
         # Extract player version
-        player_version = '3.0.3'
+        player_version = '3.1.1'
         pv_rx = re.compile(r'playerVersion:\"(\S*)\"')
         match = re.search(pv_rx, data)
         if match:

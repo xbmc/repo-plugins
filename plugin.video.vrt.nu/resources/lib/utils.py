@@ -206,6 +206,8 @@ def play_url_to_id(url):
         play_id['whatson_id'] = url.split('play/whatson/')[1]
     elif 'play/episode/' in url:
         play_id['episode_id'] = url.split('play/episode/')[1]
+    elif 'play/airdate/' in url:
+        play_id['video_id'] = url.split('play/airdate/')[1].split('/')[0]
     return play_id
 
 

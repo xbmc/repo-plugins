@@ -37,9 +37,11 @@ class RaiPlay:
     AzTvShowPath = "/dl/RaiTV/RaiPlayMobile/Prod/Config/programmiAZ-elenco.json"
     
     # Rai Sport urls
-    RaiSportMainUrl = 'https://www.raisport.rai.it'
-    RaiSportArchivioUrl = RaiSportMainUrl + '/archivio.html'        
-    RaiSportSearchUrl = RaiSportMainUrl +  "/atomatic/news-search-service/api/v1/search?transform=false"
+    RaiSportMainUrl = 'https://www.rainews.it/archivio/sport'
+    RaiSportArchivioUrl = RaiSportMainUrl
+    RaiSportCategoriesUrl = "https://www.rainews.it/category/6dd7493b-f116-45de-af11-7d28a3f33dd2.json"
+    RaiSportSearchUrl = "https://www.rainews.it/atomatic/news-search-service/api/v3/search"
+
     RaiPlayAddonHandle = None
     
     def __init__(self, addonHandle):
@@ -64,8 +66,8 @@ class RaiPlay:
         response = json.loads(utils.checkStr(urllib2.urlopen(self.onAirUrl).read()))
         return response["on_air"]
     
-    def getHomePage(self):
-        response = json.loads(utils.checkStr(urllib2.urlopen(self.baseUrl + 'index.json').read()))
+    def getHomePage(self, defaultUrl):
+        response = json.loads(utils.checkStr(urllib2.urlopen(self.baseUrl + defaultUrl).read()))
         return response["contents"]
       
     def getRaiSportLivePage(self):
@@ -78,49 +80,38 @@ class RaiPlay:
     
     def fillRaiSportKeys(self):
         # search for items in main menu
+        dominio = "RaiNews|Category-60bbaf3f-99b8-4aac-8a6d-69a98e11bfc1"
         RaiSportKeys=[]
         
         try:        
-            data = utils.checkStr(urllib2.urlopen(self.RaiSportMainUrl).read())
+            data = json.loads(utils.checkStr(urllib2.urlopen(self.RaiSportCategoriesUrl).read()))
         except :
             data = ''
+
+        RaiSportKeys=[]
         
-        m = re.search("<a href=\"javascript:void\(0\)\">Menu</a>(.*?)</div>", data,re.S)
-        if not m: 
-            return []
-        menu = m.group(0)
+        for c in data.get('children',[]):
+            
+            categName = c.get("name","")
+            categCode =  c.get("uniqueName","")
+            categChildren = c.get("children", [])
+            xbmc.log("Raisport: sto per aggiungere %s" % (categName + "|" + categCode) )
+            if categName:
+            
+                sub_keys = []
+                for c2 in categChildren:
+                    subcategName = c2.get("name","")
+                    subcategCode =  c2.get("uniqueName","")
+                    if subcategName:
+                        xbmc.log("Raisport: aggiunto %s" % (subcategName+"|"+subcategCode) )
+                        sub_keys.append({'title': subcategName , "dominio": dominio, "key" : (subcategName+"|"+subcategCode)})
+
+                xbmc.log("Raisport: aggiunto %s" % subcategName )
+                RaiSportKeys.append({'title': categName , "dominio": dominio, "key": (categName + "|" + categCode), 'sub_keys' : sub_keys })
         
-        links = re.findall("<a href=\"(?P<url>[^\"]+)\">(?P<title>[^<]+)</a>", menu)
-        good_links=[]
-        for l in links:
-            if ('/archivio.html?' in l[0]) and not ('&amp;' in l[0]):
-                good_links.append({'title': l[1], 'url' : l[0]})
-        
-        good_links.append({'title': self.RaiPlayAddonHandle.getLocalizedString(32015), 'url' : '/archivio.html?tematica=altri-sport'})
+        #good_links.append({'title': self.RaiPlayAddonHandle.getLocalizedString(32015), 'url' : '/archivio.html?tematica=altri-sport'})
         
         # open any single page in list and grab search keys
-        
-        for l in good_links:
-            try:
-                data = utils.checkStr(urllib2.urlopen(self.RaiSportMainUrl + l['url']).read())
-            except:
-                data = ''
-
-            dataDominio= re.findall("data-dominio=\"(.*?)\"", data)
-            dataTematica = re.findall("data-tematica=\"(.*?)\"", data)
-            xbmc.log(str(dataTematica))
-            if dataTematica:
-                if len(dataTematica) > 1:
-                    del(dataTematica[0])
-        
-                try:
-                    title=dataTematica[0].split('|')[0]
-                    title = utils.checkStr(HTMLParser.HTMLParser().unescape(title))
-                    params={'title': title, 'dominio': dataDominio[0], 'sub_keys' : dataTematica}
-                
-                    RaiSportKeys.append(params)
-                except:
-                    xbmc.log("error in key %s" % str(dataTematica))
         
         return RaiSportKeys
     
@@ -140,12 +131,15 @@ class RaiPlay:
         payload = {
             "page": page,
             "pageSize": pageSize,
+            "mode":"archive",
             "filters":{
                 "tematica":[key],
                 "dominio": domain
             }
         }
         postData=json.dumps(payload)
+        xbmc.log(postData)
+        
         try:
             req = urllib2.Request(self.RaiSportSearchUrl, postData, header)
             response = urllib2.urlopen(req)
@@ -157,39 +151,42 @@ class RaiPlay:
             return []
         
         data = utils.checkStr(response.read())
+        xbmc.log("Raisport: -------- risultati della ricerca -------------------------------------------------------------------")
+        xbmc.log(data)
+        xbmc.log("Raisport: -------- fine risultati della ricerca---------------------------------------------------------------")
+
         j = json.loads(data)
         
-        if 'hits' in j:
-            h = j['hits']
-            if 'hits' in h:
-                for hh in h['hits']:
-                    if '_source' in hh:
-                        news_type = hh['_source']['tipo']
-                        if news_type == 'Video' and 'media' in hh['_source']:
-                            relinker_url = hh['_source']['media']['mediapolis']
+        hits = j.get("hits",[])
+        
+        for h in hits:
+            title = h.get("title","")
+            dataType = h.get("data_type","")
 
-                            if 'durata' in hh['_source']['media']:
-                                d= hh['_source']['media']['durata'].split(":")
-                                duration = int(d[0])*3600 + int(d[1])*60 + int(d[2])
-                            else:
-                                duration = 0
+            if dataType == "video":
+                media = h.get('media',{})
+                relinker_url = media.get('mediapolis',"")
+                if 'durata' in media:
+                    d= media['durata'].split(":")
+                    duration = int(d[0])*3600 + int(d[1])*60 + int(d[2])
+                else:
+                    duration = 0                
+                icon = self.getThumbnailUrl2(h)
+                creation_date = h['create_date']
+                if "summary" in h: 
+                    desc = creation_date + '\n' + h['summary']
+                else:
+                     desc = creation_date 
 
-                            icon = self.RaiSportMainUrl + hh['_source']['immagini']['default']
-                            title = hh['_source']['titolo']
-                            creation_date = hh['_source']['data_creazione']
-                            if 'sommario' in hh['_source']: 
-                                desc = creation_date + '\n' + hh['_source']['sommario']
-                            else:
-                                desc = creation_date 
-
-                            params= {'mode':'raisport_video', 'title': title, 'url': relinker_url, 'icon': icon, 
+                params= {'mode':'raisport_video', 'title': title, 'url': relinker_url, 'icon': icon, 
                                      'duration' : duration, 'aired': creation_date, 'desc': desc}
-                            videos.append(params)
-
-            if h['total'] > (page + pageSize):
-                page += pageSize
-                params = {'mode':'raisport_subitem', 'title': xbmc.getLocalizedString(33078), 'page': page}
                 videos.append(params)
+
+
+        if j['total'] > (page + pageSize):
+            page += pageSize
+            params = {'mode':'raisport_subitem', 'title': xbmc.getLocalizedString(33078), 'page': page}
+            videos.append(params)
         
         return videos
     

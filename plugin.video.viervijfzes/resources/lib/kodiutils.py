@@ -17,19 +17,20 @@ try:  # Python 3
     from html import unescape
 except ImportError:  # Python 2
     from HTMLParser import HTMLParser
+
     unescape = HTMLParser().unescape
 
 ADDON = xbmcaddon.Addon()
 
-SORT_METHODS = dict(
-    unsorted=xbmcplugin.SORT_METHOD_UNSORTED,
-    label=xbmcplugin.SORT_METHOD_LABEL_IGNORE_FOLDERS,
-    title=xbmcplugin.SORT_METHOD_TITLE,
-    episode=xbmcplugin.SORT_METHOD_EPISODE,
-    duration=xbmcplugin.SORT_METHOD_DURATION,
-    year=xbmcplugin.SORT_METHOD_VIDEO_YEAR,
-    date=xbmcplugin.SORT_METHOD_DATE,
-)
+SORT_METHODS = {
+    'unsorted': xbmcplugin.SORT_METHOD_UNSORTED,
+    'label': xbmcplugin.SORT_METHOD_LABEL_IGNORE_FOLDERS,
+    'title': xbmcplugin.SORT_METHOD_TITLE,
+    'episode': xbmcplugin.SORT_METHOD_EPISODE,
+    'duration': xbmcplugin.SORT_METHOD_DURATION,
+    'year': xbmcplugin.SORT_METHOD_VIDEO_YEAR,
+    'date': xbmcplugin.SORT_METHOD_DATE
+}
 DEFAULT_SORT_METHODS = [
     'unsorted', 'title'
 ]
@@ -259,12 +260,17 @@ def play(stream, stream_type=STREAM_HLS, license_key=None, title=None, art_dict=
     elif stream_type == STREAM_DASH:
         play_item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
         play_item.setMimeType('application/dash+xml')
+        import inputstreamhelper
         if license_key is not None:
-            import inputstreamhelper
+            # DRM protected MPEG-DASH
             is_helper = inputstreamhelper.Helper('mpd', drm='com.widevine.alpha')
             if is_helper.check_inputstream():
                 play_item.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
                 play_item.setProperty('inputstream.adaptive.license_key', license_key)
+        else:
+            # Unprotected MPEG-DASH
+            is_helper = inputstreamhelper.Helper('mpd')
+            is_helper.check_inputstream()
 
     play_item.setContentLookup(False)
 
@@ -464,13 +470,74 @@ def open_settings():
 
 def get_global_setting(key):
     """Get a Kodi setting"""
-    result = jsonrpc(method='Settings.GetSettingValue', params=dict(setting=key))
+    result = jsonrpc(method='Settings.GetSettingValue', params={'setting': key})
     return result.get('result', {}).get('value')
 
 
 def set_global_setting(key, value):
     """Set a Kodi setting"""
-    return jsonrpc(method='Settings.SetSettingValue', params=dict(setting=key, value=value))
+    return jsonrpc(method='Settings.SetSettingValue', params={'setting': key, 'value': value})
+
+
+def has_socks():
+    """Test if socks is installed, and use a static variable to remember"""
+    if hasattr(has_socks, 'cached'):
+        return getattr(has_socks, 'cached')
+    try:
+        import socks  # noqa: F401; pylint: disable=unused-variable,unused-import
+    except ImportError:
+        has_socks.cached = False
+        return None  # Detect if this is the first run
+    has_socks.cached = True
+    return True
+
+
+def get_proxies():
+    """Return a usable proxies dictionary from Kodi proxy settings"""
+    # Use proxy settings from environment variables
+    env_http_proxy = os.environ.get('HTTP_PROXY')
+    env_https_proxy = os.environ.get('HTTPS_PROXY')
+    if env_http_proxy:
+        return {'http': env_http_proxy, 'https': env_https_proxy or env_http_proxy}
+
+    usehttpproxy = get_global_setting('network.usehttpproxy')
+    if usehttpproxy is not True:
+        return None
+
+    try:
+        httpproxytype = int(get_global_setting('network.httpproxytype'))
+    except ValueError:
+        httpproxytype = 0
+
+    socks_supported = has_socks()
+    if httpproxytype != 0 and not socks_supported:
+        # Only open the dialog the first time (to avoid multiple popups)
+        if socks_supported is None:
+            ok_dialog('', localize(30966))  # Requires PySocks
+        return None
+
+    proxy_types = ['http', 'socks4', 'socks4a', 'socks5', 'socks5h']
+
+    proxy = {
+        'scheme': proxy_types[httpproxytype] if 0 <= httpproxytype < 5 else 'http',
+        'server': get_global_setting('network.httpproxyserver'),
+        'port': get_global_setting('network.httpproxyport'),
+        'username': get_global_setting('network.httpproxyusername'),
+        'password': get_global_setting('network.httpproxypassword')
+    }
+
+    if proxy.get('username') and proxy.get('password') and proxy.get('server') and proxy.get('port'):
+        proxy_address = '{scheme}://{username}:{password}@{server}:{port}'.format(**proxy)
+    elif proxy.get('username') and proxy.get('server') and proxy.get('port'):
+        proxy_address = '{scheme}://{username}@{server}:{port}'.format(**proxy)
+    elif proxy.get('server') and proxy.get('port'):
+        proxy_address = '{scheme}://{server}:{port}'.format(**proxy)
+    elif proxy.get('server'):
+        proxy_address = '{scheme}://{server}'.format(**proxy)
+    else:
+        return None
+
+    return {'http': proxy_address, 'https': proxy_address}
 
 
 def get_cond_visibility(condition):

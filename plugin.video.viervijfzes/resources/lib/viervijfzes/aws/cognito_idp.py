@@ -77,7 +77,6 @@ class CognitoIdp:
         self.k = self.__hex_to_long(self.__hex_hash('00' + self.n_hex + '0' + self.g_hex))  # pylint: disable=invalid-name
         self.small_a_value = self.__generate_random_small_a()
         self.large_a_value = self.__calculate_a()
-        _LOGGER.debug("Created %s", self)
 
     def authenticate(self, username, password):
         """ Authenticate with a username and password. """

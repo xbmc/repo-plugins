@@ -79,11 +79,11 @@ class AuthApi:
         if not os.path.exists(self._token_path):
             os.makedirs(self._token_path)
         with open(os.path.join(self._token_path, self.TOKEN_FILE), 'w') as fdesc:
-            data = json.dumps(dict(
-                id_token=self._id_token,
-                refresh_token=self._refresh_token,
-                expiry=self._expiry,
-            ))
+            data = json.dumps({
+                'id_token': self._id_token,
+                'refresh_token': self._refresh_token,
+                'expiry': self._expiry
+            })
             fdesc.write(kodiutils.from_unicode(data))
 
         return self._id_token

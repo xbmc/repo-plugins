@@ -42,17 +42,17 @@ class IPTVManager:
         streams = []
         for key, channel in CHANNELS.items():
             if channel.get('iptv_id'):
-                streams.append(dict(
-                    id=channel.get('iptv_id'),
-                    name=channel.get('name'),
-                    logo='special://home/addons/{addon}/resources/logos/{logo}'.format(addon=kodiutils.addon_id(),
-                                                                                       logo=channel.get('logo')),
-                    preset=channel.get('iptv_preset'),
-                    stream='plugin://plugin.video.viervijfzes/play/live/{channel}'.format(channel=key),
-                    vod='plugin://plugin.video.viervijfzes/play/epg/{channel}/{{date}}'.format(channel=key)
-                ))
+                streams.append({
+                    'id': channel.get('iptv_id'),
+                    'name': channel.get('name'),
+                    'logo': 'special://home/addons/{addon}/resources/logos/{logo}'.format(addon=kodiutils.addon_id(),
+                                                                                          logo=channel.get('logo')),
+                    'preset': channel.get('iptv_preset'),
+                    'stream': 'plugin://plugin.video.viervijfzes/play/live/{channel}'.format(channel=key),
+                    'vod': 'plugin://plugin.video.viervijfzes/play/epg/{channel}/{{date}}'.format(channel=key)
+                })
 
-        return dict(version=1, streams=streams)
+        return {'version': 1, 'streams': streams}
 
     @via_socket
     def send_epg():  # pylint: disable=no-method-argument
@@ -78,20 +78,21 @@ class IPTVManager:
                     epg = epg_api.get_epg(key, date.strftime('%Y-%m-%d'))
 
                     results[iptv_id].extend([
-                        dict(
-                            start=program.start.isoformat(),
-                            stop=(program.start + timedelta(seconds=program.duration)).isoformat(),
-                            title=program.program_title,
-                            subtitle=program.episode_title,
-                            description=program.description,
-                            episode='S%sE%s' % (program.season, program.number) if program.season and program.number else None,
-                            genre=program.genre,
-                            genre_id=program.genre_id,
-                            image=program.thumb,
-                            stream=kodiutils.url_for('play_from_page',
-                                                     channel=key,
-                                                     page=quote(program.video_url, safe='')) if program.video_url else None)
+                        {
+                            'start': program.start.isoformat(),
+                            'stop': (program.start + timedelta(seconds=program.duration)).isoformat(),
+                            'title': program.program_title,
+                            'subtitle': program.episode_title,
+                            'description': program.description,
+                            'episode': 'S%sE%s' % (program.season, program.number) if program.season and program.number else None,
+                            'genre': program.genre,
+                            'genre_id': program.genre_id,
+                            'image': program.thumb,
+                            'stream': kodiutils.url_for('play_from_page',
+                                                        channel=key,
+                                                        page=quote(program.video_url, safe='')) if program.video_url else None
+                        }
                         for program in epg if program.duration
                     ])
 
-        return dict(version=1, epg=results)
+        return {'version': 1, 'epg': results}

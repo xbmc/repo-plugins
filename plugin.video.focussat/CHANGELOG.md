@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.7](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.7) (2023-07-26)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.6...v1.0.7)
+
+**Fixed bugs:**
+
+- Fix EPG parser [\#61](https://github.com/add-ons/plugin.video.tvvlaanderen/pull/61) ([mediaminister](https://github.com/mediaminister))
+
 ## [v1.0.6](https://github.com/add-ons/plugin.video.tvvlaanderen/tree/v1.0.6) (2023-02-09)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.tvvlaanderen/compare/v1.0.5...v1.0.6)

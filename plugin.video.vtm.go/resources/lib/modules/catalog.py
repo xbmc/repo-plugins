@@ -110,7 +110,7 @@ class Catalog:
             # Show the season that was selected
             seasons = [program_obj.seasons[season]]
 
-        listing = [Menu.generate_titleitem(e) for s in seasons for e in list(s.episodes.values())]
+        listing = [Menu.generate_titleitem(e) for s in seasons for e in s.episodes]
 
         # Sort by episode number by default. Takes seasons into account.
         kodiutils.show_listing(listing, program_obj.name, content='episodes', sort=['episode', 'duration'])

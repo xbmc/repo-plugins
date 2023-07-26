@@ -256,7 +256,7 @@ class VtmGo:
 
         seasons = {}
         for item_season in program.get('seasonIndices', []):
-            episodes = {}
+            episodes = []
 
             # Fetch season
             season_response = util.http_get(API_ENDPOINT + '/%s/detail/%s?selectedSeasonIndex=%s' % (self._mode(), program_id, item_season),
@@ -265,7 +265,7 @@ class VtmGo:
             season = json.loads(season_response.text).get('selectedSeason')
 
             for item_episode in season.get('episodes', []):
-                episodes[item_episode.get('index')] = Episode(
+                episodes.append(Episode(
                     episode_id=item_episode.get('id'),
                     program_id=program_id,
                     program_name=program.get('name'),
@@ -283,7 +283,7 @@ class VtmGo:
                     aired=item_episode.get('broadcastTimestamp'),
                     progress=item_episode.get('playerPositionSeconds', 0),
                     watched=item_episode.get('doneWatching', False),
-                )
+                ))
 
             seasons[item_season] = Season(
                 number=item_season,
@@ -314,7 +314,7 @@ class VtmGo:
         :rtype Episode
         """
         for season in list(program.seasons.values()):
-            for episode in list(season.episodes.values()):
+            for episode in season.episodes:
                 if episode.episode_id == episode_id:
                     return episode
 
@@ -331,7 +331,7 @@ class VtmGo:
         next_season_episode = None
 
         # First, try to find a match in the current season
-        for episode in [e for s in list(program.seasons.values()) for e in list(s.episodes.values())]:
+        for episode in [e for s in list(program.seasons.values()) for e in s.episodes]:
             if episode.season == season and episode.number == number + 1:
                 return episode
             if episode.season == season + 1 and episode.number == 1:

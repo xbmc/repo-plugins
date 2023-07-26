@@ -1,5 +1,14 @@
 # Changelog
 
+## [v1.4.2](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.4.2) (2023-07-26)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.4.1...v1.4.2)
+
+**Fixed bugs:**
+
+- Support multiple episodes with same index [\#363](https://github.com/add-ons/plugin.video.vtm.go/pull/363) ([michaelarnauts](https://github.com/michaelarnauts))
+- Fix subtitle delay function [\#355](https://github.com/add-ons/plugin.video.vtm.go/pull/355) ([mediaminister](https://github.com/mediaminister))
+
 ## [v1.4.1](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.4.1) (2023-02-08)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.4.0...v1.4.1)

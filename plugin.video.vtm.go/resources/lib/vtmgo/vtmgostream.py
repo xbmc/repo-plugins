@@ -263,11 +263,12 @@ class VtmGoStream:
         for timestamp in match.groups():
             hours, minutes, seconds, millis = (int(x) for x in [timestamp[:-10], timestamp[-9:-7], timestamp[-6:-4], timestamp[-3:]])
             sub_timings.append(timedelta(hours=hours, minutes=minutes, seconds=seconds, milliseconds=millis))
+        original_start_time = sub_timings[0]
         for ad_break in ad_breaks:
             # time format: seconds.fraction or seconds
             ad_break_start = timedelta(milliseconds=ad_break.get('start') * 1000)
             ad_break_duration = timedelta(milliseconds=ad_break.get('duration') * 1000)
-            if ad_break_start <= sub_timings[0]:
+            if ad_break_start <= original_start_time:
                 for idx, item in enumerate(sub_timings):
                     sub_timings[idx] += ad_break_duration
         for idx, item in enumerate(sub_timings):

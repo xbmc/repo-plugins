@@ -13,6 +13,7 @@ from datetime import datetime
 
 import requests
 
+from resources.lib import kodiutils
 from resources.lib.kodiutils import STREAM_DASH, STREAM_HLS, html_to_kodi
 from resources.lib.viervijfzes import ResolvedStream
 
@@ -28,6 +29,8 @@ _LOGGER = logging.getLogger(__name__)
 CACHE_AUTO = 1  # Allow to use the cache, and query the API if no cache is available
 CACHE_ONLY = 2  # Only use the cache, don't use the API
 CACHE_PREVENT = 3  # Don't use the cache
+
+PROXIES = kodiutils.get_proxies()
 
 
 class UnavailableException(Exception):
@@ -312,7 +315,7 @@ class ContentApi:
                 video_id = json.loads(unescape(result.group(1)))['id']
                 video_json_data = self._get_url('%s/web/v1/videos/short-form/%s' % (self.API_GOPLAY, video_id))
                 video_json = json.loads(video_json_data)
-                return dict(video=video_json)
+                return {'video': video_json}
 
             # Extract program JSON
             regex_program = re.compile(r'data-hero="([^"]+)', re.DOTALL)
@@ -328,7 +331,7 @@ class ContentApi:
                 episode_json_data = unescape(result.group(1))
                 episode_json = json.loads(episode_json_data)
 
-            return dict(program=program_json, episode=episode_json)
+            return {'program': program_json, 'episode': episode_json}
 
         # Fetch listing from cache or update if needed
         data = self._handle_cache(key=['episode', path], cache_mode=cache, update=update)
@@ -351,10 +354,10 @@ class ContentApi:
         return None
 
     def get_stream_by_uuid(self, uuid, islongform):
-        """ Get the stream URL to use for this video.
+        """ Return a ResolvedStream for this video.
         :type uuid: str
         :type islongform: bool
-        :rtype str
+        :rtype: ResolvedStream
         """
         mode = 'long-form' if islongform else 'short-form'
         response = self._get_url(self.API_GOPLAY + '/web/v1/videos/%s/%s' % (mode, uuid), authentication='Bearer %s' % self._auth.get_token())
@@ -363,50 +366,52 @@ class ContentApi:
         if not data:
             raise UnavailableException
 
+        # Get DRM license
+        license_key = None
+        if data.get('drmXml'):
+            # BuyDRM format
+            # See https://docs.unified-streaming.com/documentation/drm/buydrm.html#setting-up-the-client
+
+            # Generate license key
+            license_key = self.create_license_key('https://wv-keyos.licensekeyserver.com/', key_headers={
+                'customdata': data['drmXml']
+            })
+
+        # Get manifest url
         if data.get('manifestUrls'):
 
-            if data.get('drmXml'):
-                # DRM protected stream
-                # See https://docs.unified-streaming.com/documentation/drm/buydrm.html#setting-up-the-client
-
-                # DRM protected DASH stream
-                return ResolvedStream(
-                    uuid=uuid,
-                    url=data['manifestUrls']['dash'],
-                    stream_type=STREAM_DASH,
-                    license_url='https://wv-keyos.licensekeyserver.com/',
-                    auth=data['drmXml'],
-                )
-
             if data.get('manifestUrls').get('dash'):
-                # Unprotected DASH stream
+                # DASH stream
                 return ResolvedStream(
                     uuid=uuid,
                     url=data['manifestUrls']['dash'],
                     stream_type=STREAM_DASH,
+                    license_key=license_key,
                 )
 
-            # Unprotected HLS stream
+            # HLS stream
             return ResolvedStream(
                 uuid=uuid,
                 url=data['manifestUrls']['hls'],
                 stream_type=STREAM_HLS,
+                license_key=license_key,
             )
 
         # No manifest url found, get manifest from Server-Side Ad Insertion service
         if data.get('adType') == 'SSAI' and data.get('ssai'):
-            url = 'https://pubads.g.doubleclick.net/ondemand/dash/content/%s/vid/%s/streams' % (data.get('ssai').get('contentSourceID'), data.get('ssai').get('videoID'))
+            url = 'https://pubads.g.doubleclick.net/ondemand/dash/content/%s/vid/%s/streams' % (
+                data.get('ssai').get('contentSourceID'), data.get('ssai').get('videoID'))
             ad_data = json.loads(self._post_url(url, data=''))
 
-            # Unprotected DASH stream
+            # Server-Side Ad Insertion DASH stream
             return ResolvedStream(
                 uuid=uuid,
                 url=ad_data['stream_manifest'],
                 stream_type=STREAM_DASH,
+                license_key=license_key,
             )
 
         raise UnavailableException
-
 
     def get_program_tree(self, cache=CACHE_AUTO):
         """ Get a content tree with information about all the programs.
@@ -733,6 +738,34 @@ class ContentApi:
         )
         return episode
 
+    @staticmethod
+    def create_license_key(key_url, key_type='R', key_headers=None, key_value='', response_value=''):
+        """ Create a license key string that we need for inputstream.adaptive.
+        :type key_url: str
+        :type key_type: str
+        :type key_headers: dict[str, str]
+        :type key_value: str
+        :type response_value: str
+        :rtype str
+        """
+        try:  # Python 3
+            from urllib.parse import quote, urlencode
+        except ImportError:  # Python 2
+            from urllib import quote, urlencode
+
+        header = ''
+        if key_headers:
+            header = urlencode(key_headers)
+
+        if key_type in ('A', 'R', 'B'):
+            key_value = key_type + '{SSM}'
+        elif key_type == 'D':
+            if 'D{SSM}' not in key_value:
+                raise ValueError('Missing D{SSM} placeholder')
+            key_value = quote(key_value)
+
+        return '%s|%s|%s|%s' % (key_url, header, key_value, response_value)
+
     def _get_url(self, url, params=None, authentication=None):
         """ Makes a GET request for the specified URL.
         :type url: str
@@ -742,9 +775,9 @@ class ContentApi:
         if authentication:
             response = self._session.get(url, params=params, headers={
                 'authorization': authentication,
-            })
+            }, proxies=PROXIES)
         else:
-            response = self._session.get(url, params=params)
+            response = self._session.get(url, params=params, proxies=PROXIES)
 
         if response.status_code != 200:
             _LOGGER.error(response.text)
@@ -761,9 +794,9 @@ class ContentApi:
         if authentication:
             response = self._session.post(url, params=params, json=data, headers={
                 'authorization': authentication,
-            })
+            }, proxies=PROXIES)
         else:
-            response = self._session.post(url, params=params, json=data)
+            response = self._session.post(url, params=params, json=data, proxies=PROXIES)
 
         if response.status_code not in (200, 201):
             _LOGGER.error(response.text)
@@ -780,9 +813,9 @@ class ContentApi:
         if authentication:
             response = self._session.delete(url, params=params, headers={
                 'authorization': authentication,
-            })
+            }, proxies=PROXIES)
         else:
-            response = self._session.delete(url, params=params)
+            response = self._session.delete(url, params=params, proxies=PROXIES)
 
         if response.status_code != 200:
             _LOGGER.error(response.text)

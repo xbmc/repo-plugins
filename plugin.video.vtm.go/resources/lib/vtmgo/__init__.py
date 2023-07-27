@@ -179,7 +179,7 @@ class Season:
     def __init__(self, number=None, episodes=None, channel=None, legal=None):
         """
         :type number: str
-        :type episodes: dict[int, Episode]
+        :type episodes: list[Episode]
         :type channel: str
         :type legal: str
         """

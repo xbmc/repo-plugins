@@ -13,7 +13,11 @@ def create_favorites_item(label):
     """Return menu entry to access user favorites"""
     return {
         'label': label,
-        'path': plugin.url_for('favorites')
+        'path': plugin.url_for('favorites'),
+        'context_menu': [
+            (plugin.addon.getLocalizedString(30040),
+                actions.background(plugin.url_for('purge_favorites')))
+        ]
     }
 
 
@@ -57,31 +61,103 @@ def map_generic_item(item, show_video_streams):
     program_id = item.get('programId')
 
     if utils.is_playlist(program_id):
-        item = map_playlist(item)
+        item = map_collection_as_menu_item(item)
+        #item = map_video_as_playlist_item(item)
+    elif show_video_streams is True:
+        item = map_video_streams_as_menu(item)
     else:
-        item = map_video(item, show_video_streams)
+        item = map_video_as_item(item)
     return item
 
+def map_collection_as_playlist(arte_collection, req_start_program_id = None):
+    """
+    Map a collection from arte API to a list of items ready to build a playlist.
+    Playlist item will be in the same order as arte_collection, if start_program_id
+    is None, otherwise it starts from item with program id equals to start_program_id
+    (and the same order).
+    Return an empty list, if arte_collection is None or empty.
+    """
+    items_before_start = []
+    items_after_start = []
+    before_start = True
+    # assume arte_collection[0] will be mapped successfully with map_video_as_playlist_item
+    start_program_id = arte_collection[0].get('programId')
+    for arte_item in arte_collection or []:
+        xbmc_item = map_video_as_playlist_item(arte_item)
+        if xbmc_item is None:
+            break
 
-def map_video(item, show_video_streams):
+        # search for the start item until it is found once
+        if before_start:
+            if req_start_program_id is None:
+                # start from the first element not fully viewed
+                if utils.get_progress(arte_item) < 0.95:
+                    before_start = False
+                    start_program_id = arte_item.get('programId')
+            else:
+                # start from the requested element
+                if req_start_program_id == arte_item.get('programId'):
+                    before_start = False
+                    start_program_id = req_start_program_id
+
+        if before_start:
+            items_before_start.append(xbmc_item)
+        else:
+            items_after_start.append(xbmc_item)
+    return { 'collection': items_after_start + items_before_start,
+        'start_program_id': start_program_id}
+
+def map_video_as_playlist_item(item):
+    """
+    Create a video menu item without recursiveness to fetch parent collection
+    from a json returned by Arte HBBTV or ArteTV API
+    """
+    program_id = item.get('programId')
+    is_hbbtv_content = True
+    kind = item.get('kind')
+    if isinstance(kind, dict) and kind.get('code', False):
+        kind = kind.get('code')
+        is_hbbtv_content = False
+    if isinstance(item.get('lastviewed'), dict):
+        is_hbbtv_content = False
+
+    path = plugin.url_for(
+        'play_siblings', kind=kind, program_id=program_id, audio_slot='1', from_playlist='1')
+    result = map_generic_video(item, path, True) if is_hbbtv_content \
+        else map_artetv_item_new(item, path, True)
+    return result
+
+def map_video_streams_as_menu(item):
+    """Create a menu item for video streams from a json returned by Arte HBBTV API"""
+    program_id = item.get('programId')
+    path = plugin.url_for('streams', program_id=program_id)
+    return map_generic_video(item, path, False)
+
+def map_video_as_item(item):
+    """Create a playable video menu item from a json returned by Arte HBBTV API"""
+    program_id = item.get('programId')
+    kind = item.get('kind')
+    path = plugin.url_for('play', kind=kind, program_id=program_id)
+    return map_generic_video(item, path, True)
+
+def map_generic_video(item, path, is_playable):
     """Create a video menu item from a json returned by Arte HBBTV API"""
     program_id = item.get('programId')
     label = utils.format_title_and_subtitle(item.get('title'), item.get('subtitle'))
-    kind = item.get('kind')
     duration = item.get('durationSeconds')
+    if duration is None:
+        duration = item.get('duration', None)
+        if isinstance(duration, dict):
+            duration = duration.get('seconds', None)
     airdate = item.get('broadcastBegin')
     if airdate is not None:
         airdate = str(utils.parse_date_hbbtv(airdate))
-    if show_video_streams:
-        path = plugin.url_for('streams', program_id=program_id)
-    else:
-        path = plugin.url_for('play', kind=kind, program_id=program_id)
 
     return {
         'label': label,
         'path': path,
         'thumbnail': item.get('imageUrl'),
-        'is_playable': not show_video_streams,
+        'is_playable': is_playable,
         'info_type': 'video',
         'info': {
             'title': item.get('title'),
@@ -106,13 +182,58 @@ def map_video(item, show_video_streams):
             (plugin.addon.getLocalizedString(30024),
                 actions.background(plugin.url_for(
                     'remove_favorite', program_id=program_id, label=label))),
+            (plugin.addon.getLocalizedString(30035),
+                actions.background(plugin.url_for(
+                    'mark_as_watched', program_id=program_id, label=label))),
         ],
     }
 
-def map_artetv_video(item):
-    """Return video menu item to show content from Arte TV API
+PREFERED_KINDS = ['TV_SERIES', 'MAGAZINE']
+
+def map_artetv_item(item):
+    """
+    Return video menu item to show content from Arte TV API.
+    Manage specificities of various types : playlist, menu or video items
+    """
+    program_id = item.get('programId')
+    kind = item.get('kind')
+    if isinstance(kind, dict) and kind.get('code', False):
+        kind = kind.get('code')
+    if kind == 'EXTERNAL':
+        return None
+
+    additional_context_menu = []
+    if utils.is_playlist(program_id):
+        if kind in PREFERED_KINDS:
+            #content_type = Content.PLAYLIST
+            path = plugin.url_for('play_collection', kind=kind, collection_id=program_id)
+            is_playable = True
+            additional_context_menu = [
+                (plugin.addon.getLocalizedString(30011),
+                actions.update_view(plugin.url_for(
+                    'display_collection', program_id=program_id, kind=kind)))]
+        else:
+            #content_type = Content.MENU_ITEM
+            path = plugin.url_for('display_collection', kind=kind, program_id=program_id)
+            is_playable = False
+    else:
+        #content_type = Content.VIDEO
+        path = plugin.url_for('play', kind=kind, program_id=program_id)
+        is_playable = True
+
+    xbmc_item = map_artetv_item_new(item, path, is_playable)
+    if xbmc_item is not None:
+        xbmc_item['context_menu'].extend(additional_context_menu)
+    return xbmc_item
+
+
+def map_artetv_item_new(item, path, is_playable):
+    """
+    Return video menu item to show content from Arte TV API.
+    Generic method that tqke variables mapping in inputs.
     :rtype dict[str, Any] | None: To be used in
-    https://romanvm.github.io/Kodistubs/_autosummary/xbmcgui.html#xbmcgui.ListItem.setInfo"""
+    https://romanvm.github.io/Kodistubs/_autosummary/xbmcgui.html#xbmcgui.ListItem.setInfo
+    """
     program_id = item.get('programId')
     label = utils.format_title_and_subtitle(item.get('title'), item.get('subtitle'))
     kind = item.get('kind')
@@ -136,22 +257,19 @@ def map_artetv_video(item):
         fanart_url = item.get('mainImage').get('url').replace('__SIZE__', '1920x1080')
     thumbnail_url = fanart_url
 
-    progress = item.get('lastviewed') and item.get('lastviewed').get('progress') or 0
+    progress = utils.get_progress(item)
     time_offset = item.get('lastviewed') and item.get('lastviewed').get('timecode') or 0
 
-    if not isinstance(kind, str) and kind is not None:
+    if isinstance(kind, dict) and kind.get('code', False):
         kind = kind.get('code')
     if kind == 'EXTERNAL':
         return None
-
-    is_playlist = utils.is_playlist(program_id)
-    path = plugin.url_for('collection' if is_playlist else 'play', kind=kind, program_id=program_id)
 
     return {
         'label': label,
         'path': path,
         'thumbnail': thumbnail_url,
-        'is_playable': not is_playlist, # item.get('playable') # not show_video_streams
+        'is_playable': is_playable, # item.get('playable') # not show_video_streams
         'info_type': 'video',
         'info': {
             'title': item.get('title'),
@@ -172,7 +290,10 @@ def map_artetv_video(item):
             # ResumeTime and TotalTime deprecated. Use InfoTagVideo.setResumePoint() instead.
             'ResumeTime': str(time_offset),
             'TotalTime': str(duration),
-            'StartPercent': str(progress * 100)
+            #'StartPercent': str(progress * 100),
+            'StartPercent': '0' if duration is None else str(
+                float(time_offset if isinstance(time_offset, int) else 0) * 100.0
+                / float(duration)),
         },
         'context_menu': [
             (plugin.addon.getLocalizedString(30023),
@@ -181,6 +302,9 @@ def map_artetv_video(item):
             (plugin.addon.getLocalizedString(30024),
                 actions.background(plugin.url_for(
                     'remove_favorite', program_id=program_id, label=label))),
+            (plugin.addon.getLocalizedString(30035),
+                actions.background(plugin.url_for(
+                    'mark_as_watched', program_id=program_id, label=label))),
         ],
     }
 
@@ -236,14 +360,14 @@ def map_live_video(item, quality, audio_slot):
     }
 
 
-def map_playlist(item):
+def map_collection_as_menu_item(item):
     """Map JSON item to menu entry to access playlist content"""
     program_id = item.get('programId')
     kind = item.get('kind')
 
     return {
         'label': utils.format_title_and_subtitle(item.get('title'), item.get('subtitle')),
-        'path': plugin.url_for('collection', kind=kind, collection_id=program_id),
+        'path': plugin.url_for('display_collection', kind=kind, collection_id=program_id),
         'thumbnail': item.get('imageUrl'),
         'info': {
             'title': item.get('title'),
@@ -257,7 +381,7 @@ def map_streams(item, streams, quality):
     program_id = item.get('programId')
     kind = item.get('kind')
 
-    video_item = map_video(item, False)
+    video_item = map_video_as_item(item)
 
     filtered_streams = None
     for qlt in [quality] + [i for i in ['SQ', 'EQ', 'HQ', 'MQ'] if i is not quality]:
@@ -319,12 +443,12 @@ def map_zone_to_item(zone, cached_categories):
     Populate cached_categories for zones with videos available in child 'content'"""
     menu_item = None
     title = zone.get('title')
-    if zone.get('id') == 'b1dfd8e0-4757-4236-9dab-6f6331cb5ea4':
+    if get_authenticated_content_type(zone) == 'sso-favorites':
         menu_item = create_favorites_item(title)
-    elif zone.get('id') == '823d6af6-fedd-4b54-8049-ddb7158eee64':
+    elif get_authenticated_content_type(zone) == 'sso-personalzone':
         menu_item = create_last_viewed_item(title)
     elif zone.get('content') and zone.get('content').get('data'):
-        cached_category = map_cached_categories(zone)
+        cached_category = map_collection_as_menu(zone)
         if cached_category:
             category_code = zone.get('code')
             cached_categories[category_code] = cached_category
@@ -337,11 +461,23 @@ def map_zone_to_item(zone, cached_categories):
     return menu_item
 
 
-def map_cached_categories(zone):
+def get_authenticated_content_type(artetv_zone):
+    """
+    Return the value of artetv_zone.authenticatedContent.contentId or None.
+    Known values are sso-personalzone and sso-favorites
+    """
+    if not isinstance(artetv_zone, dict):
+        return None
+    if not isinstance(artetv_zone.get('authenticatedContent'), dict):
+        return None
+    return artetv_zone.get('authenticatedContent', {}).get('contentId', None)
+
+
+def map_collection_as_menu(zone):
     """Map JSON node zone from Arte TV API to a list of menu items."""
     cached_category = []
     for item in zone.get('content').get('data'):
-        menu_video = map_artetv_video(item)
+        menu_video = map_artetv_item(item)
         if menu_video:
             cached_category.append(menu_video)
     return cached_category

@@ -76,3 +76,20 @@ def is_playlist(program_id):
     if isinstance(program_id, str):
         is_playlist_var = program_id.startswith('RC-') or program_id.startswith('PL-')
     return is_playlist_var
+
+
+def get_progress(item):
+    """
+    Return item progress or 0 as float.
+    Never None, even if lastviewed or item is None.
+    """
+    # pylint raises that it is not snake_case. it's in uppercase, because it's a constant
+    # pylint: disable=invalid-name
+    DEFAULT_PROGRESS = 0.0
+    if not item:
+        return DEFAULT_PROGRESS
+    if not item.get('lastviewed'):
+        return DEFAULT_PROGRESS
+    if not item.get('lastviewed').get('progress'):
+        return DEFAULT_PROGRESS
+    return float(item.get('lastviewed') and item.get('lastviewed').get('progress'))

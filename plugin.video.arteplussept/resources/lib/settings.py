@@ -1,6 +1,7 @@
 """Add-on settings"""
 languages = ['fr', 'de', 'en', 'es', 'pl', 'it']
 qualities = ['SQ', 'EQ', 'HQ']
+loglevel = ['DEFAULT', 'API']
 
 
 class Settings:
@@ -23,7 +24,6 @@ class Settings:
 		# defaults to empty string to return false with if not str
         self.username = plugin.get_setting(
             'username') or ""
-		# Arte TV user password
-		# defaults to empty string to return false with if not str
-        self.password = plugin.get_setting(
-            'password') or ""
+        # Enable additional logs managed by plugin : API messages
+        self.loglevel = plugin.get_setting(
+            'loglevel', choices=loglevel) or loglevel[0]

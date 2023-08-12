@@ -34,26 +34,65 @@ msgctxt "#30054"
 msgid "Email"
 msgstr "Indirizzo email"
 
-msgctxt "#30055"
-msgid "Password"
-msgstr "Password"
+msgctxt "#30056"
+msgid "Log level"
+msgstr "Log level"
+
+msgctxt "#30057"
+msgid "Log in"
+msgstr "Per accedere"
+
+msgctxt "#30058"
+msgid "Log out"
+msgstr "Disconnessione"
+
+
+msgctxt "#30011"
+msgid "View collection as menu"
+msgstr "Visualizza la raccolta come menu"
 
 
 msgctxt "#30012"
 msgid "Search"
 msgstr "Search"
 
+
+msgctxt "#30014"
+msgid "Authentication needed in addon settings"
+msgstr "Autenticazione necessaria nelle impostazioni del componente aggiuntivo"
+
+msgctxt "#30015"
+msgid "User already logged in"
+msgstr "Utente già loggato"
+
+msgctxt "#30016"
+msgid "Do you want to log in as \"{new_user}\" instead of \"{old_user}\" ?"
+msgstr "Vuoi accedere come \"{new_user}\" invece che come \"{old_user}\" ?"
+
+msgctxt "#30017"
+msgid "Logged in as \"{user}\""
+msgstr "Effettuato l'accesso come \"{user}\""
+
+msgctxt "#30018"
+msgid "Logged out"
+msgstr "Disconnesso"
+
+msgctxt "#30019"
+msgid "Enter password please:"
+msgstr "Inserisci la password per favore:"
+
 msgctxt "#30020"
 msgid "Unable to authenticate"
 msgstr "Impossibile autenticare"
 
 msgctxt "#30021"
-msgid "Email or password missing"
-msgstr "E-mail o password mancanti"
+msgid "Email missing"
+msgstr "E-Mail mancanti"
 
 msgctxt "#30022"
-msgid "Update your profile in settings to fetch this content"
-msgstr "Aggiorna il tuo profilo nelle impostazioni per recuperare questo contenuto"
+msgid "Password missing"
+msgstr "Password mancanti"
+
 
 msgctxt "#30023"
 msgid "Add to Arte favorites"
@@ -83,14 +122,49 @@ msgctxt "#30029"
 msgid "Stream \"{strm}\" in \"{ln}\" is not available"
 msgstr "Lo streaming \"{strm}\" in \"{ln}\" non è disponibile"
 
+
 msgctxt "#30030"
 msgid "Purge my history"
 msgstr "Elimina la cronologia"
 
 msgctxt "#30031"
 msgid "Successfully purged history"
-msgstr "Cronologia eliminata con successo"
+msgstr "Cronologia eliminata correttamente"
 
 msgctxt "#30032"
 msgid "Failed to purge my history"
 msgstr "Impossibile eliminare la cronologia"
+
+msgctxt "#30033"
+msgid "Do you really want to purge your history ?"
+msgstr "Vuoi davvero eliminare la tua storia ?"
+
+
+msgctxt "#30035"
+msgid "Mark as watched in Arte"
+msgstr "Segna come guardato in Arte"
+
+msgctxt "#30036"
+msgid "\"{label}\" successfully marked as watched"
+msgstr "\"{label}\" contrassegnato con successo come guardato"
+
+msgctxt "#30037"
+msgid "Failed to mark as watched \"{label}\""
+msgstr "Impossibile contrassegnare come guardato \"{label}\""
+
+
+msgctxt "#30040"
+msgid "Purge my Arte favorites"
+msgstr "Elimina i miei preferiti di Arte"
+
+msgctxt "#30041"
+msgid "Successfully purged favorites"
+msgstr "Preferiti eliminati correttamente"
+
+msgctxt "#30042"
+msgid "Failed to purge favorites"
+msgstr "Impossibile eliminare i preferiti"
+
+msgctxt "#30043"
+msgid "Do you really want to purge Arte favorites ?"
+msgstr "Vuoi davvero eliminare i preferiti di Arte ?"

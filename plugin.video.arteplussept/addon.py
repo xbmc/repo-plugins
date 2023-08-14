@@ -26,7 +26,6 @@
 from xbmcswift2 import Plugin
 # pylint: disable=import-error
 from xbmcswift2 import xbmc
-from resources.lib import user
 from resources.lib import view
 from resources.lib.player import Player
 from resources.lib.settings import Settings
@@ -67,9 +66,7 @@ def play_collection(kind, collection_id):
     # Empty playlist, otherwise requested video is present twice in the playlist
     xbmc.PlayList(xbmc.PLAYLIST_VIDEO).clear()
     # Start playing with the first playlist item
-    synched_player = Player(
-        user.get_cached_token(plugin, settings.username, True),
-        playlist['start_program_id'])
+    synched_player = Player(plugin, settings, playlist['start_program_id'])
     # try to seek parent collection, when out of the context of playlist creation
     # Start playing with the first playlist item
     result = plugin.set_resolved_url(plugin.add_to_playlist(playlist['collection'])[0])
@@ -89,19 +86,19 @@ def add_favorite(program_id, label):
     """Add content program_id to user favorites.
     Notify about completion status with label,
     useful when several operations are requested in parallel."""
-    view.add_favorite(plugin, settings.username, program_id, label)
+    view.add_favorite(plugin, settings.username, settings.password, program_id, label)
 
 @plugin.route('/remove_favorite/<program_id>/<label>', name='remove_favorite')
 def remove_favorite(program_id, label):
     """Remove content program_id from user favorites
     Notify about completion status with label,
     useful when several operations are requested in parallel."""
-    view.remove_favorite(plugin, settings.username, program_id, label)
+    view.remove_favorite(plugin, settings.username, settings.password, program_id, label)
 
 @plugin.route('/purge_favorites', name='purge_favorites')
 def purge_favroties():
     """Flush user history and notify about completion status"""
-    view.purge_favorites(plugin, settings.username)
+    view.purge_favorites(plugin, settings.username, settings.password)
 
 
 @plugin.route('/mark_as_watched/<program_id>/<label>', name='mark_as_watched')
@@ -109,7 +106,7 @@ def mark_as_watched(program_id, label):
     """Mark program as watched in Arte
     Notify about completion status with label,
     useful when several operations are requested in parallel."""
-    view.mark_as_watched(plugin, settings.username, program_id, label)
+    view.mark_as_watched(plugin, settings.username, settings.password, program_id, label)
 
 
 @plugin.route('/last_viewed', name='last_viewed')
@@ -121,7 +118,7 @@ def last_viewed():
 @plugin.route('/purge_last_viewed', name='purge_last_viewed')
 def purge_last_viewed():
     """Flush user history and notify about completion status"""
-    view.purge_last_viewed(plugin, settings.username)
+    view.purge_last_viewed(plugin, settings.username, settings.password)
 
 
 @plugin.route('/display_collection/<kind>/<program_id>', name='display_collection')
@@ -158,7 +155,7 @@ def play(kind, program_id, audio_slot='1', from_playlist='0'):
     :param str kind: an enum in TODO (e.g. TRAILER, COLLECTION, LINK, CLIP, ...)
     :param str audio_slot: a numeric to identify the audio stream to use e.g. 1 2
     """
-    synched_player = Player(user.get_cached_token(plugin, settings.username, True), program_id)
+    synched_player = Player(plugin, settings, program_id)
     # try to seek parent collection, when out of the context of playlist creation
     sibling_playlist = None
     if from_playlist == '0':
@@ -198,17 +195,6 @@ def search():
     """Display the keyboard to search for content. Then, display the menu of search results"""
     plugin.set_content('tvshows')
     return plugin.finish(view.search(plugin, settings))
-
-
-@plugin.route('/user/login', name='user_login')
-def user_login():
-    """Login user with email already set in settings by creating and persisting a token."""
-    return plugin.finish(succeeded=user.login(plugin, settings))
-
-@plugin.route('/user/logout', name='user_logout')
-def user_logout():
-    """Discard token of user in settings."""
-    return plugin.finish(succeeded=user.logout(plugin, settings))
 
 # plugin bootstrap
 if __name__ == '__main__':

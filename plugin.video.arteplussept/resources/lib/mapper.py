@@ -15,7 +15,7 @@ def create_favorites_item(label):
         'label': label,
         'path': plugin.url_for('favorites'),
         'context_menu': [
-            (plugin.addon.getLocalizedString(30040),
+            (plugin.addon.getLocalizedString(30036),
                 actions.background(plugin.url_for('purge_favorites')))
         ]
     }
@@ -182,7 +182,7 @@ def map_generic_video(item, path, is_playable):
             (plugin.addon.getLocalizedString(30024),
                 actions.background(plugin.url_for(
                     'remove_favorite', program_id=program_id, label=label))),
-            (plugin.addon.getLocalizedString(30035),
+            (plugin.addon.getLocalizedString(30033),
                 actions.background(plugin.url_for(
                     'mark_as_watched', program_id=program_id, label=label))),
         ],
@@ -302,7 +302,7 @@ def map_artetv_item_new(item, path, is_playable):
             (plugin.addon.getLocalizedString(30024),
                 actions.background(plugin.url_for(
                     'remove_favorite', program_id=program_id, label=label))),
-            (plugin.addon.getLocalizedString(30035),
+            (plugin.addon.getLocalizedString(30033),
                 actions.background(plugin.url_for(
                     'mark_as_watched', program_id=program_id, label=label))),
         ],

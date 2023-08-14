@@ -1,15 +1,5 @@
 Changelog also available in file ./addon.xml xpath /addon/extension/news following Kodi guidelines https://kodi.wiki/view/Add-on_structure#changelog.txt
 
-v1.3.1 (2023-8-12)
-- Add context menu to view collection as menu instead of playlist
-- Set resume point to 0 when video was fully watched. Avoid crash when playing seq of watched videos in playlist.
-
-v1.3.0 (2023-8-6)
-- Improve security with better password management
-  - Stop storing password on filesystem though addon settings
-- Make thomas-ernest fork official in addon.xml for visibility in wiki
-- Minor fix/clean-up in translation
-
 v1.2.1 (2023-8-12)
 - Add context menu to view collection as menu instead of playlist
 - Set resume point to 0 when video was fully watched. Avoid crash when playing seq of watched videos in playlist.

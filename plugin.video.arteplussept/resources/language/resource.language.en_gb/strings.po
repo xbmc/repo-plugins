@@ -34,17 +34,13 @@ msgctxt "#30054"
 msgid "Email"
 msgstr ""
 
+msgctxt "#30055"
+msgid "Password"
+msgstr ""
+
 msgctxt "#30056"
 msgid "Log level"
 msgstr "Log level"
-
-msgctxt "#30057"
-msgid "Log in"
-msgstr ""
-
-msgctxt "#30058"
-msgid "Log out"
-msgstr ""
 
 
 msgctxt "#30011"
@@ -56,43 +52,17 @@ msgctxt "#30012"
 msgid "Search"
 msgstr ""
 
-
-msgctxt "#30014"
-msgid "Authentication needed in addon settings"
-msgstr ""
-
-msgctxt "#30015"
-msgid "User already logged in"
-msgstr ""
-
-msgctxt "#30016"
-msgid "Do you want to log in as \"{new_user}\" instead of \"{old_user}\" ?"
-msgstr ""
-
-msgctxt "#30017"
-msgid "Logged in as \"{user}\""
-msgstr ""
-
-msgctxt "#30018"
-msgid "Logged out"
-msgstr ""
-
-msgctxt "#30019"
-msgid "Enter password please :"
-msgstr ""
-
 msgctxt "#30020"
 msgid "Unable to authenticate"
 msgstr ""
 
 msgctxt "#30021"
-msgid "Email missing"
+msgid "Email or password missing"
 msgstr ""
 
 msgctxt "#30022"
-msgid "Password missing"
+msgid "Update your profile in settings to fetch this content"
 msgstr ""
-
 
 msgctxt "#30023"
 msgid "Add to Arte favorites"
@@ -135,34 +105,26 @@ msgid "Failed to purge my history"
 msgstr ""
 
 msgctxt "#30033"
-msgid "Do you really want to purge your history ?"
-msgstr ""
-
-msgctxt "#30035"
 msgid "Mark as watched in Arte"
 msgstr ""
 
-msgctxt "#30036"
+msgctxt "#30034"
 msgid "\"{label}\" successfully marked as watched"
 msgstr ""
 
-msgctxt "#30037"
+msgctxt "#30035"
 msgid "Failed to mark as watched \"{label}\""
 msgstr ""
 
 
-msgctxt "#30040"
+msgctxt "#30036"
 msgid "Purge my Arte favorites"
 msgstr ""
 
-msgctxt "#30041"
+msgctxt "#30037"
 msgid "Successfully purged favorites"
 msgstr ""
 
-msgctxt "#30042"
+msgctxt "#30038"
 msgid "Failed to purge favorites"
-msgstr ""
-
-msgctxt "#30043"
-msgid "Do you really want to purge Arte favorites ?"
 msgstr ""

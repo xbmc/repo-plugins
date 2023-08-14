@@ -34,17 +34,13 @@ msgctxt "#30054"
 msgid "Email"
 msgstr "E-mail"
 
+msgctxt "#30055"
+msgid "Password"
+msgstr "Hasło"
+
 msgctxt "#30056"
 msgid "Log level"
 msgstr "Log level"
-
-msgctxt "#30057"
-msgid "Log in"
-msgstr "Zalogować się"
-
-msgctxt "#30058"
-msgid "Log out"
-msgstr "Wyloguj się"
 
 
 msgctxt "#30011"
@@ -56,43 +52,17 @@ msgctxt "#30012"
 msgid "Search"
 msgstr "Wyszukiwanie"
 
-
-msgctxt "#30014"
-msgid "Authentication needed in addon settings"
-msgstr "Wymagane uwierzytelnienie w ustawieniach dodatku"
-
-msgctxt "#30015"
-msgid "User already logged in"
-msgstr "Użytkownik jest już zalogowany"
-
-msgctxt "#30016"
-msgid "Do you want to log in as \"{new_user}\" instead of \"{old_user}\" ?"
-msgstr "Czy chcesz się zalogować jako \"{new_user}\" zamiast \"{old_user}\" ?"
-
-msgctxt "#30017"
-msgid "Logged in as \"{user}\""
-msgstr "Zalogowany jako \"{user}\""
-
-msgctxt "#30018"
-msgid "Logged out"
-msgstr "Wylogowano"
-
-msgctxt "#30019"
-msgid "Enter password please:"
-msgstr "Proszę wprowadzić hasło:"
-
 msgctxt "#30020"
 msgid "Unable to authenticate"
 msgstr "Nie można uwierzytelnić"
 
 msgctxt "#30021"
-msgid "Email missing"
-msgstr "Brak e-mail"
+msgid "Email or password missing"
+msgstr "Brak e-mail lub hasła"
 
 msgctxt "#30022"
-msgid "Password missing"
-msgstr "Brak hasła"
-
+msgid "Update your profile in settings to fetch this content"
+msgstr "Zaktualizuj swój profil w ustawieniach, aby pobrać tę zawartość"
 
 msgctxt "#30023"
 msgid "Add to Arte favorites"
@@ -135,35 +105,26 @@ msgid "Failed to purge my history"
 msgstr "Nie udało się wyczyścić mojej historii"
 
 msgctxt "#30033"
-msgid "Do you really want to purge your history ?"
-msgstr "Czy naprawdę chcesz wyczyścić swoją historię ?"
-
-
-msgctxt "#30035"
 msgid "Mark as watched in Arte"
 msgstr "Oznacz jako obejrzane w Arte"
 
-msgctxt "#30036"
+msgctxt "#30034"
 msgid "\"{label}\" successfully marked as watched"
 msgstr "Pomyślnie oznaczone \"{label}\" jako obejrzane"
 
-msgctxt "#30037"
+msgctxt "#30035"
 msgid "Failed to mark as watched \"{label}\""
 msgstr "Nie udało się oznaczyć jako oglądane \"{label}\""
 
 
-msgctxt "#30040"
+msgctxt "#30036"
 msgid "Purge my Arte favorites"
 msgstr "Wyczyść moje ulubione Arte"
 
-msgctxt "#30041"
+msgctxt "#30037"
 msgid "Successfully purged favorites"
 msgstr "Pomyślnie wyczyszczono ulubione"
 
-msgctxt "#30042"
+msgctxt "#30038"
 msgid "Failed to purge favorites"
 msgstr "Nie udało się wyczyścić ulubionych"
-
-msgctxt "#30043"
-msgid "Do you really want to purge Arte favorites ?"
-msgstr "Czy naprawdę chcesz wyczyścić ulubione Arte ?"

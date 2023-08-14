@@ -34,26 +34,65 @@ msgctxt "#30054"
 msgid "Email"
 msgstr "Adresse e-mail"
 
-msgctxt "#30055"
-msgid "Password"
-msgstr "Mot de passe"
+msgctxt "#30056"
+msgid "Log level"
+msgstr "Log level"
+
+msgctxt "#30057"
+msgid "Log in"
+msgstr "Se connecter"
+
+msgctxt "#30058"
+msgid "Log out"
+msgstr "Se déconnecter"
+
+
+msgctxt "#30011"
+msgid "View collection as menu"
+msgstr "Voir la collection dans un menu"
 
 
 msgctxt "#30012"
 msgid "Search"
 msgstr "Recherche"
 
+
+msgctxt "#30014"
+msgid "Authentication needed in addon settings"
+msgstr "Authentification nécessaire dans les paramètres de l'addon"
+
+msgctxt "#30015"
+msgid "User already logged in"
+msgstr "Utilisateur déjà connecté"
+
+msgctxt "#30016"
+msgid "Do you want to log in as \"{new_user}\" instead of \"{old_user}\" ?"
+msgstr "Voulez vous connecter en tant que \"{new_user}\" au lieu de \"{old_user}\" ?"
+
+msgctxt "#30017"
+msgid "Logged in as \"{user}\""
+msgstr "Connecté en tant que \"{user}\""
+
+msgctxt "#30018"
+msgid "Logged out"
+msgstr "Déconnecté"
+
+msgctxt "#30019"
+msgid "Enter password please:"
+msgstr "Entrez votre mot de passe s'il vous plaît:"
+
 msgctxt "#30020"
 msgid "Unable to authenticate"
 msgstr "Impossible de s'authentifier"
 
 msgctxt "#30021"
-msgid "Email or password missing"
-msgstr "E-mail ou mot de passe manquant"
+msgid "Email missing"
+msgstr "E-Mail manquant"
 
 msgctxt "#30022"
-msgid "Update your profile in settings to fetch this content"
-msgstr "Mettez à jour votre profil dans la configuration pour télécharger ce contenu"
+msgid "Password missing"
+msgstr "Mot de passe manquant"
+
 
 msgctxt "#30023"
 msgid "Add to Arte favorites"
@@ -94,3 +133,37 @@ msgstr "Historique purgé avec succès"
 msgctxt "#30032"
 msgid "Failed to purge my history"
 msgstr "Echec de la purge de mon historique"
+
+msgctxt "#30033"
+msgid "Do you really want to purge your history ?"
+msgstr "Voulez vous vraiment purger votre historique ?"
+
+
+msgctxt "#30035"
+msgid "Mark as watched in Arte"
+msgstr "Marquer comme lu dans Arte"
+
+msgctxt "#30036"
+msgid "\"{label}\" successfully marked as watched"
+msgstr "\"{label}\" marqué comme lu avec succès"
+
+msgctxt "#30037"
+msgid "Failed to mark as watched \"{label}\""
+msgstr "Echec pour marquer comme lu \"{label}\""
+
+
+msgctxt "#30040"
+msgid "Purge my Arte favorites"
+msgstr "Purger mes favoris Arte"
+
+msgctxt "#30041"
+msgid "Successfully purged favorites"
+msgstr "Favoris purgés avec succès"
+
+msgctxt "#30042"
+msgid "Failed to purge favorites"
+msgstr "Echec de la purge des favoris"
+
+msgctxt "#30043"
+msgid "Do you really want to purge Arte favorites ?"
+msgstr "Voulez vous vraiment purger les favoris Arte ?"

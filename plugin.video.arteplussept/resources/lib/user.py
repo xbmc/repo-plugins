@@ -15,6 +15,7 @@ _STORAGE_KEY = 'token'
 # Time to live of 30d
 _TTL = 30*24*60
 
+
 def login(plugin, settings):
     """
     Get user password from UI, create a token with Arte API, persist it in storage
@@ -105,6 +106,7 @@ def update_settings_state(plugin, usr):
         message = plugin.addon.getLocalizedString(30018)
     return plugin.set_setting('login_acc', message)
 
+
 def is_logged_in_as(plugin):
     """Extract the logged in user from settings state"""
     login_acc = plugin.get_setting('login_acc')
@@ -125,21 +127,24 @@ def get_cached_token(plugin, token_idx, silent=False):
     cached_token = plugin.get_storage(_STORAGE_KEY, TTL=_TTL)
     if token_idx in cached_token and isinstance(cached_token[token_idx], dict):
         tokens = cached_token[token_idx]
-    else :
+    else:
         tokens = None
         if not silent:
             plugin.notify(msg=plugin.addon.getLocalizedString(30014), image='warning')
     return tokens
+
 
 def set_cached_token(plugin, token_idx, tokens):
     """Set cached token"""
     cached_token = plugin.get_storage(_STORAGE_KEY)
     cached_token[token_idx] = tokens
 
+
 def clear_cached_tokens(plugin):
     """Clear every tokens. Not just the one of the user in parameter."""
     cached_token = plugin.get_storage(_STORAGE_KEY)
     cached_token.clear()
+
 
 def erase_password_in_old_config(plugin):
     """

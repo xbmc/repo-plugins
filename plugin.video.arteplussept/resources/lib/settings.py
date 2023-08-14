@@ -1,11 +1,14 @@
 """Add-on settings"""
+
+import dataclasses
+
 languages = ['fr', 'de', 'en', 'es', 'pl', 'it']
 qualities = ['SQ', 'EQ', 'HQ']
 loglevel = ['DEFAULT', 'API']
 
 
+@dataclasses.dataclass
 class Settings:
-    # pylint: disable=too-few-public-methods
     """Add-on settings"""
     def __init__(self, plugin):
         # Language used to query arte api
@@ -20,8 +23,8 @@ class Settings:
         # defaults to False
         self.show_video_streams = plugin.get_setting(
             'show_video_streams', bool) or False
-		# Arte TV user name
-		# defaults to empty string to return false with if not str
+        # Arte TV user name
+        # defaults to empty string to return false with if not str
         self.username = plugin.get_setting(
             'username') or ""
         # Enable additional logs managed by plugin : API messages

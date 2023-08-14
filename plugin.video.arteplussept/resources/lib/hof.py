@@ -1,5 +1,6 @@
 """Utility methods for lists and dictionaries"""
 
+
 def find(find_fctn, lst):
     """
       Return the first item matching the findfctn
@@ -39,6 +40,7 @@ def filter_dict(filter_fctn, dictionary):
     """
     return {key: value for key, value in dictionary.items() if filter_fctn(value, key)}
 
+
 def merge_dicts(*args):
     """
       Merge dictionaries in a single one. Precedence on lastest dictionaries in args
@@ -47,6 +49,7 @@ def merge_dicts(*args):
     for dictionary in args:
         result.update(dictionary)
     return result
+
 
 def flat_map(fctn, lst):
     """Return the results of applying fctn on sub elements of lst."""

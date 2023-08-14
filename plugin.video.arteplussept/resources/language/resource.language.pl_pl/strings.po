@@ -152,6 +152,15 @@ msgid "Failed to mark as watched \"{label}\""
 msgstr "Nie udało się oznaczyć jako oglądane \"{label}\""
 
 
+msgctxt "#30038"
+msgid "Next page"
+msgstr "Następna strona"
+
+msgctxt "#30039"
+msgid "Previous page"
+msgstr "Poprzednia strona"
+
+
 msgctxt "#30040"
 msgid "Purge my Arte favorites"
 msgstr "Wyczyść moje ulubione Arte"

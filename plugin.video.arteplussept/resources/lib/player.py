@@ -1,7 +1,8 @@
 """Events enhancing behavior of default Kodi player"""
 # pylint: disable=import-error
 from xbmcswift2 import xbmc
-from . import api
+from resources.lib import api
+
 
 # this player send request to Arte TV API
 # to synchronise playback progress

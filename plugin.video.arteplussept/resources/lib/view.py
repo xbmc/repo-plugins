@@ -1,96 +1,53 @@
 """Manage views like home menu, dynamic menus, search, favorites..."""
 # pylint: disable=import-error
 from xbmcswift2 import xbmc
-# pylint: disable=import-error
-from xbmcswift2 import xbmcgui
 
-from . import api
-from . import hof
-from . import mapper
-from . import settings as stg
-from . import user
+from resources.lib.mapper.arteitem import ArteItem
+from resources.lib.mapper.live import ArteLiveItem
+from resources.lib.mapper.artesearch import ArteSearch
+from resources.lib import api
+from resources.lib import hof
+from resources.lib.mapper import mapper
+from resources.lib import settings as stg
+from resources.lib import user
 
 
-def build_home_page(cached_categories, settings):
+def build_home_page(plugin, settings, cached_categories):
     """Display home menu based on fixed entries and then content from API home page"""
     addon_menu = [
-        mapper.create_search_item(),
+        ArteSearch(plugin, settings).build_item()
     ]
     try:
-        live_stream_data = api.player_video(settings.language, 'LIVE')
-        live_stream_item = mapper.map_live_video(
-            live_stream_data, settings.quality, '1')
-        addon_menu.append(live_stream_item)
+        addon_menu.append(
+            ArteLiveItem(plugin, api.player_video(settings.language, 'LIVE'))
+            .build_item_live(settings.quality, '1'))
     # pylint: disable=broad-exception-caught
     # Could be improve. possible exceptions are limited to auth. errors
-    except Exception:
+    except Exception as error:
         xbmc.log("Unable to build live stream item with " +
-                 f"lang:{settings.language} quality:{settings.quality}")
+                 f"lang:{settings.language} quality:{settings.quality} " +
+                 f"because \"{str(error)}\"")
 
     arte_home = api.page_content(settings.language)
     for zone in arte_home.get('zones'):
-        menu_item = mapper.map_zone_to_item(zone, cached_categories)
+        menu_item = mapper.map_zone_to_item(plugin, settings, zone, cached_categories)
         if menu_item:
             addon_menu.append(menu_item)
     return addon_menu
 
 
-def build_api_category(category_code, settings):
+def build_api_category(plugin, category_code, settings):
     """Build the menu for a category that needs an api call"""
-    category = [mapper.map_category_item(item, category_code) for item in
+    category = [mapper.map_category_item(plugin, item, category_code) for item in
                 api.category(category_code, settings.language)]
 
     return category
 
 
-def get_cached_category(category_title, most_viewed_categories):
+def get_cached_category(zone_id, cached_categories):
     """Return the menu for a category that is stored
     in cache from previous api call like home page"""
-    return most_viewed_categories[category_title]
-
-
-def build_favorites(plugin, settings):
-    """Build the menu for user favorites thanks to API call"""
-    return [mapper.map_artetv_item(item) for item in api.get_favorites(
-                settings.language, user.get_cached_token(plugin, settings.username)) or
-            # display an empty list in case of error. error should be display in a notification
-            []]
-
-
-def add_favorite(plugin, usr, program_id, label):
-    """Add content program_id to user favorites.
-    Notify about completion success or failure with label."""
-    if 200 == api.add_favorite(user.get_cached_token(plugin, usr), program_id):
-        msg = plugin.addon.getLocalizedString(30025).format(label=label)
-        plugin.notify(msg=msg, image='info')
-    else:
-        msg = plugin.addon.getLocalizedString(30026).format(label=label)
-        plugin.notify(msg=msg, image='error')
-
-
-def remove_favorite(plugin, usr, program_id, label):
-    """Remove content program_id from user favorites.
-    Notify about completion success or failure with label."""
-    if 200 == api.remove_favorite(user.get_cached_token(plugin, usr), program_id):
-        msg = plugin.addon.getLocalizedString(30027).format(label=label)
-        plugin.notify(msg=msg, image='info')
-    else:
-        msg = plugin.addon.getLocalizedString(30028).format(label=label)
-        plugin.notify(msg=msg, image='error')
-
-
-def purge_favorites(plugin, usr):
-    """Flush user favorites and notify about success or failure"""
-    purge_confirmed = xbmcgui.Dialog().yesno(
-        plugin.addon.getLocalizedString(30040),
-        plugin.addon.getLocalizedString(30043),
-        autoclose=10000)
-
-    if purge_confirmed:
-        if 200 == api.purge_favorites(user.get_cached_token(plugin, usr)):
-            plugin.notify(msg=plugin.addon.getLocalizedString(30041), image='info')
-        else:
-            plugin.notify(msg=plugin.addon.getLocalizedString(30042), image='error')
+    return cached_categories[zone_id]
 
 
 def mark_as_watched(plugin, usr, program_id, label):
@@ -115,34 +72,13 @@ def mark_as_watched(plugin, usr, program_id, label):
         plugin.notify(msg=msg, image='error')
 
 
-def build_last_viewed(plugin, settings):
-    """Build the menu of user history"""
-    return [mapper.map_artetv_item(item) for item in api.get_last_viewed(
-                settings.language, user.get_cached_token(plugin, settings.username)) or
-            # display an empty list in case of error. error should be display in a notification
-            []]
-
-
-def purge_last_viewed(plugin, usr):
-    """Flush user history and notify about success or failure"""
-    purge_confirmed = xbmcgui.Dialog().yesno(
-        plugin.addon.getLocalizedString(30030),
-        plugin.addon.getLocalizedString(30033),
-        autoclose=10000)
-    if purge_confirmed:
-        if 200 == api.purge_last_viewed(user.get_cached_token(plugin, usr)):
-            plugin.notify(msg=plugin.addon.getLocalizedString(30031), image='info')
-        else:
-            plugin.notify(msg=plugin.addon.getLocalizedString(30032), image='error')
-
-
-def build_mixed_collection(kind, collection_id, settings):
+def build_mixed_collection(plugin, kind, collection_id, settings):
     """Build menu of content available in collection collection_id thanks to HBB TV API"""
-    return [mapper.map_generic_item(item, settings.show_video_streams) for item in
+    return [mapper.map_generic_item(plugin, item, settings.show_video_streams) for item in
             api.collection(kind, collection_id, settings.language)]
 
 
-def build_video_streams(program_id, settings):
+def build_video_streams(plugin, settings, program_id):
     """Build the menu with the audio streams available for content program_id"""
     item = api.video(program_id, settings.language)
 
@@ -153,7 +89,7 @@ def build_video_streams(program_id, settings):
     kind = item.get('kind')
 
     return mapper.map_streams(
-        item, api.streams(kind, program_id, settings.language), settings.quality)
+        plugin, item, api.streams(kind, program_id, settings.language), settings.quality)
 
 
 def build_sibling_playlist(plugin, settings, program_id):
@@ -164,7 +100,7 @@ def build_sibling_playlist(plugin, settings, program_id):
     """
     parent_program = None
     # get parent of prefered kind first. for the moment TV_SERIES only
-    for prefered_kind in mapper.PREFERED_KINDS:
+    for prefered_kind in ArteItem.PREFERED_KINDS:
         # pylint: disable=cell-var-from-loop
         parent_program = hof.find(
             lambda parent: api.is_of_kind(parent, prefered_kind),
@@ -179,15 +115,17 @@ def build_sibling_playlist(plugin, settings, program_id):
         return mapper.map_collection_as_playlist(sibling_arte_items, program_id)
     return None
 
+
 def build_collection_playlist(plugin, settings, kind, collection_id):
     """
     Return a pair with collection with collection_id
     and program id of the first element in the collection
     """
-    return mapper.map_collection_as_playlist(api.collection_with_last_viewed(
+    return mapper.map_collection_as_playlist(plugin, api.collection_with_last_viewed(
         settings.language,
         user.get_cached_token(plugin, settings.username, True),
         kind, collection_id))
+
 
 def build_stream_url(plugin, kind, program_id, audio_slot, settings):
     """
@@ -197,35 +135,15 @@ def build_stream_url(plugin, kind, program_id, audio_slot, settings):
     # first try with content
     program_stream = api.streams(kind, program_id, settings.language)
     if program_stream:
-        return mapper.map_playable(program_stream, settings.quality, audio_slot, mapper.match_hbbtv)
+        return mapper.map_playable(
+            program_stream, settings.quality, audio_slot, mapper.match_hbbtv)
     # second try to fallback clip. It allows to display a trailer,
     # when a documentary is not available anymore like on arte tv website
     clip_stream = api.streams('CLIP', program_id, settings.language)
     if clip_stream:
-        return mapper.map_playable(clip_stream, settings.quality, audio_slot, mapper.match_hbbtv)
+        return mapper.map_playable(
+            clip_stream, settings.quality, audio_slot, mapper.match_hbbtv)
     # otherwise raise the error
     msg = plugin.addon.getLocalizedString(30029)
     plugin.notify(msg=msg.format(strm=program_id, ln=settings.language), image='error')
     return None
-
-
-def search(plugin, settings):
-    """Display the keyboard to search for content. Then, display the menu of search results.
-    Do not display an empty, if search is aborted or search for empty string"""
-    query = get_search_query(plugin)
-    if not query:
-        plugin.end_of_directory(succeeded=False)
-    return mapper.map_collection_as_menu(api.search(settings.language, query))
-
-
-def get_search_query(plugin):
-    """Display the keyboard to enter the search query and return it"""
-    search_query = ''
-    keyboard = xbmc.Keyboard(search_query, plugin.addon.getLocalizedString(30012))
-    keyboard.doModal()
-    if keyboard.isConfirmed() is False:
-        return None
-    search_query = keyboard.getText()
-    if len(search_query) == 0:
-        return None
-    return search_query

@@ -1,5 +1,9 @@
 Changelog also available in file ./addon.xml xpath /addon/extension/news following Kodi guidelines https://kodi.wiki/view/Add-on_structure#changelog.txt
 
+v1.4.0 (2023-8-14)
+- Add support for content over multiple pages. Manage pagination for favorites, history, search and collections : when there are more items in the history or favorities than the page size (currently 50), it is now possible to navigate through pages.
+- Refactor most of the code in OO style. Factorize duplicated code.
+
 v1.3.1 (2023-8-12)
 - Add context menu to view collection as menu instead of playlist
 - Set resume point to 0 when video was fully watched. Avoid crash when playing seq of watched videos in playlist.

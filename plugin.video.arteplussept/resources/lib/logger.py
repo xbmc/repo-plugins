@@ -8,6 +8,7 @@ from xbmcswift2 import Plugin
 from xbmcswift2 import xbmcvfs
 from . import settings
 
+
 def log_json(reply, log_suffix):
     """save request and response in reply into a file
     with file name containing log_suffix in addon user data
@@ -17,7 +18,7 @@ def log_json(reply, log_suffix):
     """
     plugin = Plugin()
     msettings = settings.Settings(plugin)
-    if (not reply or msettings.loglevel != settings.loglevel[1]):
+    if (reply is None or msettings.loglevel != settings.loglevel[1]):
         return
 
     base_path = plugin.storage_path
@@ -35,6 +36,7 @@ def log_json(reply, log_suffix):
         log_file.write(f"{reshdrs}\n")
         log_file.write(f"payload : {reply.text}")
 
-def format_headers (headers):
+
+def format_headers(headers):
     """Map headers into a readable string to be logged"""
     return '\n'.join(f'{k}: {v}' for k, v in headers.items())

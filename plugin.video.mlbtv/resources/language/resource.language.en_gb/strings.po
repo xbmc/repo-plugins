@@ -404,4 +404,12 @@ msgctxt "#30435"
 msgid "Extra MiLB skip adjust (seconds)"
 msgstr ""
 
+msgctxt "#30436"
+msgid "Hide scores ticker"
+msgstr ""
+
+msgctxt "#30437"
+msgid "Disable closed captions"
+msgstr ""
+
 

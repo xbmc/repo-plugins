@@ -42,7 +42,9 @@ OLD_PASSWORD = str(settings.getSetting(id="old_password"))
 QUALITY = str(settings.getSetting(id="quality"))
 CDN = str(settings.getSetting(id="cdn"))
 NO_SPOILERS = settings.getSetting(id="no_spoilers")
+HIDE_SCORES_TICKER = str(settings.getSetting(id='hide_scores_ticker'))
 DISABLE_VIDEO_PADDING = str(settings.getSetting(id='disable_video_padding'))
+DISABLE_CLOSED_CAPTIONS = str(settings.getSetting(id='disable_closed_captions'))
 FAV_TEAM = str(settings.getSetting(id="fav_team"))
 INCLUDE_FAV_AFFILIATES = str(settings.getSetting(id='include_fav_affiliates'))
 TEAM_NAMES = settings.getSetting(id="team_names")
@@ -54,13 +56,6 @@ ASK_TO_SKIP = str(settings.getSetting(id='ask_to_skip'))
 AUTO_PLAY_FAV = str(settings.getSetting(id='auto_play_fav'))
 ONLY_FREE_GAMES = str(settings.getSetting(id="only_free_games"))
 GAME_CHANGER_DELAY = int(settings.getSetting(id="game_changer_delay"))
-
-#Monitor setting
-MLB_MONITOR_STARTED = settings.getSetting(id='mlb_monitor_started')
-now = datetime.now()
-if MLB_MONITOR_STARTED != '' and not xbmc.getCondVisibility("Player.HasMedia") and (parse(MLB_MONITOR_STARTED) + timedelta(seconds=5)) < now:
-    xbmc.log("MLB Monitor detection resetting due to no stream playing")
-    settings.setSetting(id='mlb_monitor_started', value='')
 
 #Colors
 SCORE_COLOR = 'FF00B7EB'
@@ -82,6 +77,7 @@ ICON = os.path.join(ROOTDIR,"icon.png")
 FANART = os.path.join(ROOTDIR,"fanart.jpg")
 PREV_ICON = os.path.join(ROOTDIR,"icon.png")
 NEXT_ICON = os.path.join(ROOTDIR,"icon.png")
+BLACK_IMAGE = os.path.join(ROOTDIR, "resources", "img", "black.png")
 
 if SINGLE_TEAM == 'true':
     MASTER_FILE_TYPE = 'master_wired.m3u8'

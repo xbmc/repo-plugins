@@ -18,6 +18,7 @@ featured_video = None
 description = None
 sport = MLB_ID
 teams = 'None'
+gamechanger = 'False'
 
 if 'name' in params:
     name = urllib.unquote_plus(params["name"])
@@ -67,6 +68,9 @@ if 'sport' in params:
 if 'teams' in params:
     teams = urllib.unquote_plus(params["teams"])
 
+if 'gamechanger' in params:
+    gamechanger = urllib.unquote_plus(params["gamechanger"])
+
 # default addon home screen
 if mode is None:
     # autoplay fav team, if that setting is enabled and a live broadcast is in progress
@@ -89,7 +93,7 @@ elif mode == 101:
 
 # autoplay, use an extra parameter to force auto stream selection
 elif mode == 102:
-    stream_select(game_pk, spoiler, suspended, start_inning, blackout, description, name, icon, fanart, autoplay=True)
+    stream_select(game_pk, spoiler, suspended, start_inning, blackout, description, name, icon, fanart, autoplay=True, gamechanger=gamechanger)
 
 # from context menu, use an extra parameter to force manual stream selection
 elif mode == 103:

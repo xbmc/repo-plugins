@@ -21,15 +21,12 @@ import re
 import sys
 import datetime
 import json
+import threading
 from kodi_six import xbmc, xbmcgui, xbmcplugin, xbmcaddon, xbmcvfs
 from bs4 import BeautifulSoup, SoupStrainer
-from resources.lib import client
+from resources.lib import client, cache
 import six
 from six.moves import urllib_parse
-try:
-    import StorageServer
-except:
-    import storageserverdummy as StorageServer
 
 # HTMLParser() deprecated in Python 3.4 and removed in Python 3.9
 if sys.version_info >= (3, 4, 0):
@@ -60,14 +57,11 @@ if force_mode:
 if not xbmcvfs.exists(_addonpath):
     xbmcvfs.mkdir(_addonpath)
 
-cache = StorageServer.StorageServer(_plugin if six.PY3 else _plugin.encode('utf8'), _settings('timeout'))
-CONTENT_URL = 'https://www.imdb.com/trailers/'
-SHOWING_URL = 'https://www.imdb.com/showtimes/location/'
-COMING_URL = 'https://www.imdb.com/calendar/'
-ID_URL = 'https://www.imdb.com/_json/video/{0}'
-SHOWING_TRAILER = 'https://www.imdb.com/showtimes/title/{0}/'
+SHOWING_URL = 'https://www.imdb.com/showtimes/_ajax/location/'
+COMING_URL = 'https://www.imdb.com/calendar/?type=MOVIE'
 DETAILS_PAGE = "https://www.imdb.com/video/{0}/"
 quality = int(_settings("video_quality")[:-1])
+cache_duration = int(_settings('timeout'))
 LOGINFO = xbmc.LOGINFO if six.PY3 else xbmc.LOGNOTICE
 
 if not xbmcvfs.exists(_addonpath + 'settings.xml'):
@@ -76,6 +70,12 @@ if not xbmcvfs.exists(_addonpath + 'settings.xml'):
 
 class Main(object):
     def __init__(self):
+        self.api_url = 'https://graphql.prod.api.imdb.a2z.com/'
+        self.headers = {
+            'Referer': 'https://www.imdb.com/',
+            'Origin': 'https://www.imdb.com'
+        }
+        self.litems = []
         action = self.parameters('action')
         if action == 'list2':
             self.list_contents2()
@@ -93,6 +93,10 @@ class Main(object):
             self.clear_cache()
         else:
             self.main_menu()
+
+    def gqlmin(self, q):
+        q = re.sub(' {4}', '', q)
+        return q
 
     def main_menu(self):
         if DEBUG:
@@ -139,8 +143,7 @@ class Main(object):
         if DEBUG:
             self.log('clear_cache()')
         msg = 'Cached Data has been cleared'
-        cache.table_name = _plugin
-        cache.cacheDelete(r'%fetch%')
+        cache.cache_clear()
         xbmcgui.Dialog().notification(_plugin, msg, _icon, 3000, False)
 
     def search(self):
@@ -168,94 +171,98 @@ class Main(object):
         if DEBUG:
             self.log('search_word("{0}")'.format(search_text))
 
-        api_url = 'https://graphql.prod.api.imdb.a2z.com/'
-        searchTerm = 'searchTerm: "{0}"'.format(search_text)
-        query = ("query {"
-                 "  mainSearch("
-                 "      first: 5"
-                 "      options: {"
-                 + searchTerm +  # noQA
-                 "      isExactMatch: false"
-                 "      type: TITLE"
-                 "      titleSearchOptions: { type: MOVIE }"
-                 "      }"
-                 "  ) {"
-                 "      edges {"
-                 "      node {"
-                 "          entity {"
-                 "            ... on Title {"
-                 "              id"
-                 "              titleText {"
-                 "                text"
-                 "              }"
-                 "              plot {"
-                 "                plotText {"
-                 "                  plainText"
-                 "                }"
-                 "              }"
-                 "              primaryImage {"
-                 "                url"
-                 "              }"
-                 "              releaseDate {"
-                 "                year"
-                 "              }"
-                 "              ratingsSummary {"
-                 "                aggregateRating"
-                 "                voteCount"
-                 "              }"
-                 "              certificate {"
-                 "              rating"
-                 "              }"
-                 "              titleGenres {"
-                 "                genres {"
-                 "                  genre {"
-                 "                    text"
-                 "                  }"
-                 "                }"
-                 "              }"
-                 "              directors: credits(first: 5, filter: { categories: [\"director\"] }) {"
-                 "                edges {"
-                 "                  node {"
-                 "                    name {"
-                 "                      nameText {"
-                 "                        text"
-                 "                      }"
-                 "                    }"
-                 "                  }"
-                 "                }"
-                 "              }"
-                 "              cast: credits(first: 10, filter: { categories: [\"actor\", \"actress\"] }) {"
-                 "                edges {"
-                 "                  node {"
-                 "                    name {"
-                 "                      nameText {"
-                 "                        text"
-                 "                      }"
-                 "                      primaryImage {"
-                 "                        url"
-                 "                      }"
-                 "                    }"
-                 "                  }"
-                 "                }"
-                 "              }"
-                 "              latestTrailer {"
-                 "                id"
-                 "                  runtime {"
-                 "                    value"
-                 "                  }"
-                 "                  thumbnail {"
-                 "                    url"
-                 "                  }"
-                 "              }"
-                 "            }"
-                 "         }"
-                 "      }"
-                 "    }"
-                 "  }"
-                 "}")
+        variables = {
+            'searchTerm': search_text,
+        }
+        query = '''query (
+            $searchTerm: String!
+        ) {
+            mainSearch(
+                first: 5
+                options: {
+                    searchTerm: $searchTerm
+                    isExactMatch: false
+                    type: TITLE
+                    titleSearchOptions: { type: MOVIE }
+                }
+            ) {
+                edges {
+                    node {
+                        entity {
+                            ... on Title {
+                                id
+                                titleText {
+                                    text
+                                }
+                                plot {
+                                    plotText {
+                                        plainText
+                                    }
+                                }
+                                primaryImage {
+                                    url
+                                }
+                                releaseDate {
+                                    year
+                                }
+                                ratingsSummary {
+                                    aggregateRating
+                                    voteCount
+                                }
+                                certificate {
+                                    rating
+                                }
+                                titleGenres {
+                                    genres {
+                                        genre {
+                                            text
+                                        }
+                                    }
+                                }
+                                directors: credits(first: 5, filter: { categories: ["director"] }) {
+                                    edges {
+                                        node {
+                                            name {
+                                                nameText {
+                                                    text
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                cast: credits(first: 10, filter: { categories: ["actor", "actress"] }) {
+                                    edges {
+                                        node {
+                                            name {
+                                                nameText {
+                                                    text
+                                                }
+                                                primaryImage {
+                                                    url
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                latestTrailer {
+                                    id
+                                    runtime {
+                                        value
+                                    }
+                                    thumbnail {
+                                        url
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        '''
 
-        qstr = urllib_parse.quote(query, "(")
-        data = cache.cacheFunction(fetch, "{0}?query={1}".format(api_url, qstr))
+        pdata = {'query': self.gqlmin(query), 'variables': variables}
+        data = cache.get(client.request, cache_duration, self.api_url, headers=self.headers, post=pdata)
         items = data.get('data').get('mainSearch').get('edges')
         for item in items:
             video = item.get('node').get('entity')
@@ -351,107 +358,130 @@ class Main(object):
         # End of directory...
         xbmcplugin.endOfDirectory(int(sys.argv[1]), updateListing=True, cacheToDisc=False)
 
+    def process_imdbid(self, imdbID):
+        video = self.fetchdata_id(imdbID)
+        video = video.get('data').get('title')
+        title = video.get('titleText').get('text')
+        if video.get('latestTrailer'):
+            videoId = video.get('latestTrailer').get('id')
+            duration = video.get('latestTrailer').get('runtime').get('value')
+            labels = {'title': title,
+                      'duration': duration}
+            plot = video.get('plot')
+            if plot:
+                labels.update({'plot': plot.get('plotText').get('plainText')})
+
+            try:
+                director = [x.get('node').get('name').get('nameText').get('text') for x in video.get('directors').get('edges')]
+                labels.update({'director': director})
+            except AttributeError:
+                pass
+
+            try:
+                writer = [x.get('node').get('name').get('nameText').get('text') for x in video.get('writers').get('edges')]
+                labels.update({'writer': writer})
+            except AttributeError:
+                pass
+
+            try:
+                cast = [x.get('node').get('name').get('nameText').get('text') for x in video.get('cast').get('edges')]
+                labels.update({'cast': cast})
+                cast2 = [
+                    {'name': x.get('node').get('name').get('nameText').get('text'),
+                        'thumbnail': x.get('node').get('name').get('primaryImage').get('url')
+                        if x.get('node').get('name').get('primaryImage') else ''}
+                    for x in video.get('cast').get('edges')
+                ]
+
+            except AttributeError:
+                cast2 = []
+                pass
+
+            try:
+                genre = [x.get('genre').get('text') for x in video.get('titleGenres').get('genres')]
+                labels.update({'genre': genre})
+            except AttributeError:
+                pass
+
+            cert = video.get('certificate')
+            if cert:
+                labels.update({'mpaa': cert.get('rating')})
+
+            rating = video.get('ratingsSummary')
+            if rating.get('aggregateRating'):
+                labels.update({'rating': rating.get('aggregateRating'),
+                               'votes': rating.get('voteCount')})
+
+            try:
+                fanart = video.get('latestTrailer').get('thumbnail').get('url')
+            except AttributeError:
+                fanart = ''
+            try:
+                poster = video.get('primaryImage').get('url')
+            except AttributeError:
+                poster = fanart
+            try:
+                year = video.get('releaseDate').get('year')
+            except AttributeError:
+                year = ''
+
+            if year:
+                labels.update({'year': year})
+
+            labels.update({'mediatype': 'movie'})
+            if 'mpaa' in labels.keys():
+                if 'TV' in labels.get('mpaa'):
+                    labels.update({'mediatype': 'tvshow'})
+
+            art = {
+                'thumb': poster,
+                'icon': poster,
+                'poster': poster,
+                'fanart': fanart
+            }
+            self.litems.append({'labels': labels, 'cast2': cast2, 'art': art, 'videoId': videoId})
+        return
+
     def list_contents1(self):
         key = self.parameters('key')
         if DEBUG:
             self.log('list_contents1({0})'.format(key))
 
         if key == 'showing':
-            page_data = cache.cacheFunction(fetch, SHOWING_URL)
+            page_data = cache.get(client.request, cache_duration, SHOWING_URL, headers=self.headers)
             tlink = SoupStrainer('div', {'class': 'lister-list'})
             mdiv = BeautifulSoup(page_data, "html.parser", parse_only=tlink)
             videos = mdiv.find_all('div', {'class': 'lister-item'})
             imdbIDs = [x.find('div', {'class': 'lister-item-image'}).get('data-tconst') for x in videos]
         else:
-            page_data = cache.cacheFunction(fetch, COMING_URL)
+            page_data = cache.get(client.request, cache_duration, COMING_URL, headers=self.headers)
             imdbIDs = re.findall(r'<a class="ipc-metadata-list-summary-item__t".+?href="/title/([^/]+)', page_data, re.DOTALL)
 
-        for imdbId in imdbIDs:
-            video = cache.cacheFunction(self.fetchdata_id, imdbId)
-            video = video.get('data').get('title')
-            title = video.get('titleText').get('text')
-            if video.get('latestTrailer'):
-                videoId = video.get('latestTrailer').get('id')
-                duration = video.get('latestTrailer').get('runtime').get('value')
-                labels = {'title': title,
-                          'duration': duration}
-                plot = video.get('plot')
-                if plot:
-                    labels.update({'plot': plot.get('plotText').get('plainText')})
+        self.litems = []
+        loops = int(len(imdbIDs) / 20)
+        rem = len(imdbIDs) % 20
+        if loops > 0:
+            for i in range(loops):
+                threads = []
+                for j in range(20):
+                    threads.append(threading.Thread(target=self.process_imdbid, args=(imdbIDs[i * 20 + j],)))
+                [i.start() for i in threads]
+                [i.join() for i in threads]
 
-                try:
-                    director = [x.get('node').get('name').get('nameText').get('text') for x in video.get('directors').get('edges')]
-                    labels.update({'director': director})
-                except AttributeError:
-                    pass
+        if rem > 0:
+            threads = []
+            for i in range(rem):
+                threads.append(threading.Thread(target=self.process_imdbid, args=(imdbIDs[loops * 20 + i],)))
+            [i.start() for i in threads]
+            [i.join() for i in threads]
 
-                try:
-                    writer = [x.get('node').get('name').get('nameText').get('text') for x in video.get('writers').get('edges')]
-                    labels.update({'writer': writer})
-                except AttributeError:
-                    pass
-
-                try:
-                    cast = [x.get('node').get('name').get('nameText').get('text') for x in video.get('cast').get('edges')]
-                    labels.update({'cast': cast})
-                    cast2 = [
-                        {'name': x.get('node').get('name').get('nameText').get('text'),
-                         'thumbnail': x.get('node').get('name').get('primaryImage').get('url')
-                            if x.get('node').get('name').get('primaryImage') else ''}
-                        for x in video.get('cast').get('edges')
-                    ]
-
-                except AttributeError:
-                    cast2 = []
-                    pass
-
-                try:
-                    genre = [x.get('genre').get('text') for x in video.get('titleGenres').get('genres')]
-                    labels.update({'genre': genre})
-                except AttributeError:
-                    pass
-
-                cert = video.get('certificate')
-                if cert:
-                    labels.update({'mpaa': cert.get('rating')})
-
-                rating = video.get('ratingsSummary')
-                if rating.get('aggregateRating'):
-                    labels.update({'rating': rating.get('aggregateRating'),
-                                   'votes': rating.get('voteCount')})
-
-                try:
-                    fanart = video.get('latestTrailer').get('thumbnail').get('url')
-                except AttributeError:
-                    fanart = ''
-                try:
-                    poster = video.get('primaryImage').get('url')
-                except AttributeError:
-                    poster = fanart
-                try:
-                    year = video.get('releaseDate').get('year')
-                except AttributeError:
-                    year = ''
-
-                if year:
-                    labels.update({'year': year})
-
-                labels.update({'mediatype': 'movie'})
-                if 'mpaa' in labels.keys():
-                    if 'TV' in labels.get('mpaa'):
-                        labels.update({'mediatype': 'tvshow'})
-
-                listitem = self.make_listitem(labels, cast2)
-
-                listitem.setArt({'thumb': poster,
-                                 'icon': poster,
-                                 'poster': poster,
-                                 'fanart': fanart})
-
-                listitem.setProperty('IsPlayable', 'true')
-                url = sys.argv[0] + '?' + urllib_parse.urlencode({'action': 'play',
-                                                                  'videoid': videoId})
-                xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, False)
+        for litem in self.litems:
+            listitem = self.make_listitem(litem.get('labels'), litem.get('cast2'))
+            listitem.setArt(litem.get('art'))
+            listitem.setProperty('IsPlayable', 'true')
+            url = sys.argv[0] + '?' + urllib_parse.urlencode({'action': 'play',
+                                                              'videoid': litem.get('videoId')})
+            xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, False)
 
         # Sort methods and content type...
         xbmcplugin.setContent(int(sys.argv[1]), 'movies')
@@ -467,7 +497,7 @@ class Main(object):
         if DEBUG:
             self.log('content_list3("{0}")'.format(key))
 
-        videos = cache.cacheFunction(self.fetchdata, key)
+        videos = self.fetchdata(key)
         for video in videos:
             if DEBUG:
                 self.log(repr(video))
@@ -669,7 +699,7 @@ class Main(object):
         if DEBUG:
             self.log('fetch_video_url("{0})'.format(video_id))
         vidurl = DETAILS_PAGE.format(video_id)
-        pagedata = cache.cacheFunction(fetch, vidurl)
+        pagedata = client.request(vidurl, headers=self.headers)
         r = re.search(r'application/json">([^<]+)', pagedata)
         if r:
             details = json.loads(r.group(1)).get('props', {}).get('pageProps', {}).get('videoPlaybackData', {}).get('video')
@@ -702,7 +732,7 @@ class Main(object):
         # only need to add label, icon and thumbnail, setInfo() and addSortMethod() takes care of label2
         listitem = self.make_plistitem(title, plot)
         listitem.setArt({'thumb': thumbnail})
-        listitem.setPath(cache.cacheFunction(self.fetch_video_url, self.parameters('videoid')))
+        listitem.setPath(cache.get(self.fetch_video_url, cache_duration, self.parameters('videoid')))
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem=listitem)
 
     def play_id(self):
@@ -710,7 +740,7 @@ class Main(object):
         if DEBUG:
             self.log('play_id("{0})'.format(imdb_id))
 
-        video = cache.cacheFunction(self.fetchdata_id, imdb_id)
+        video = self.fetchdata_id(imdb_id)
         video = video.get('data').get('title')
         if video.get('latestTrailer'):
             videoid = video.get('latestTrailer').get('id')
@@ -729,7 +759,7 @@ class Main(object):
                              'icon': poster,
                              'poster': poster,
                              'fanart': thumbnail})
-            listitem.setPath(cache.cacheFunction(self.fetch_video_url, videoid))
+            listitem.setPath(cache.get(self.fetch_video_url, cache_duration, videoid))
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem=listitem)
         else:
             msg = 'No Trailers available'
@@ -790,134 +820,162 @@ class Main(object):
         xbmc.log("[ADD-ON] '{} v{}': {}".format(_plugin, _version, description), LOGINFO)
 
     def fetchdata_id(self, imdb_id):
-        api_url = 'https://graphql.prod.api.imdb.a2z.com/'
-        title = "title(id: \"{}\") {{".format(imdb_id)
-        query = ("query {"
-                 + title +  # noQA
-                 "  titleText {"
-                 "    text"
-                 "  }"
-                 "  plot {"
-                 "    plotText {"
-                 "      plainText"
-                 "    }"
-                 "  }"
-                 "  primaryImage {"
-                 "    url"
-                 "  }"
-                 "  releaseDate {"
-                 "    year"
-                 "  }"
-                 "  ratingsSummary {"
-                 "    aggregateRating"
-                 "    voteCount"
-                 "  }"
-                 "  certificate {"
-                 "  rating"
-                 "  }"
-                 "  titleGenres {"
-                 "    genres {"
-                 "      genre {"
-                 "        text"
-                 "      }"
-                 "    }"
-                 "  }"
-                 "  directors: credits(first: 5, filter: { categories: [\"director\"] }) {"
-                 "    edges {"
-                 "      node {"
-                 "        name {"
-                 "          nameText {"
-                 "            text"
-                 "          }"
-                 "        }"
-                 "      }"
-                 "    }"
-                 "  }"
-                 "  writers: credits(first: 5, filter: { categories: [\"writer\"] }) {"
-                 "    edges {"
-                 "      node {"
-                 "        name {"
-                 "          nameText {"
-                 "            text"
-                 "          }"
-                 "        }"
-                 "      }"
-                 "    }"
-                 "  }"
-                 "  cast: credits(first: 10, filter: { categories: [\"actor\", \"actress\"] }) {"
-                 "    edges {"
-                 "      node {"
-                 "        name {"
-                 "          nameText {"
-                 "            text"
-                 "          }"
-                 "          primaryImage {"
-                 "            url"
-                 "          }"
-                 "        }"
-                 "      }"
-                 "    }"
-                 "  }"
-                 "  latestTrailer {"
-                 "    id"
-                 "      runtime {"
-                 "        value"
-                 "      }"
-                 "      thumbnail {"
-                 "        url"
-                 "      }"
-                 "  }"
-                 "}"
-                 "}")
+        variables = {'id': imdb_id}
+        query = '''query (
+            $id: ID!
+        ) {
+            title(
+                id: $id
+            ) {
+                titleText {
+                    text
+                }
+                plot {
+                    plotText {
+                        plainText
+                    }
+                }
+                primaryImage {
+                    url
+                }
+                releaseDate {
+                    year
+                }
+                ratingsSummary {
+                    aggregateRating
+                    voteCount
+                }
+                certificate {
+                    rating
+                }
+                titleGenres {
+                    genres {
+                        genre {
+                            text
+                        }
+                    }
+                }
+                directors: credits(first: 5, filter: { categories: ["director"] }) {
+                    edges {
+                        node {
+                            name {
+                                nameText {
+                                    text
+                                }
+                            }
+                        }
+                    }
+                }
+                writers: credits(first: 5, filter: { categories: ["writer"] }) {
+                    edges {
+                        node {
+                            name {
+                                nameText {
+                                    text
+                                }
+                            }
+                        }
+                    }
+                }
+                cast: credits(first: 10, filter: { categories: ["actor", "actress"] }) {
+                    edges {
+                        node {
+                            name {
+                                nameText {
+                                    text
+                                }
+                                primaryImage {
+                                    url
+                                }
+                            }
+                        }
+                    }
+                }
+                latestTrailer {
+                    id
+                    runtime {
+                        value
+                    }
+                    thumbnail {
+                        url
+                    }
+                }
+            }
+        }
+        '''
 
-        qstr = urllib_parse.quote(query, "(")
-        data = cache.cacheFunction(fetch, "{0}?query={1}".format(api_url, qstr))
+        pdata = {'query': self.gqlmin(query), 'variables': variables}
+        data = cache.get(client.request, cache_duration, self.api_url, headers=self.headers, post=pdata)
         return data
 
     def fetchdata(self, key):
-        api_url = 'https://graphql.prod.api.imdb.a2z.com/'
         vpar = {'limit': 100}
         if key == 'trending':
-            query_pt1 = ("query TrendingTitles($limit: Int!, $paginationToken: String) {"
-                         "  trendingTitles(limit: $limit, paginationToken: $paginationToken) {"
-                         "    titles {"
-                         "      latestTrailer {"
-                         "        ...TrailerVideoMeta"
-                         "      }"
-                         "      ...TrailerTitleMeta"
-                         "    }"
-                         "    paginationToken"
-                         "  }"
-                         "}")
+            query_pt1 = '''query TrendingTitles(
+                $limit: Int!,
+                $paginationToken: String
+            ) {
+                trendingTitles(
+                    limit: $limit,
+                    paginationToken: $paginationToken
+                ) {
+                    titles {
+                        latestTrailer {
+                            ...TrailerVideoMeta
+                        }
+                        ...TrailerTitleMeta
+                    }
+                    paginationToken
+                }
+            }
+            '''
             ptoken = "60"
             opname = "TrendingTitles"
         elif key == 'recent':
-            query_pt1 = ("query RecentVideos($limit: Int!, $paginationToken: String, $queryFilter: RecentVideosQueryFilter!) {"
-                         "  recentVideos(limit: $limit, paginationToken: $paginationToken, queryFilter: $queryFilter) {"
-                         "    videos {"
-                         "      ...TrailerVideoMeta"
-                         "      primaryTitle {"
-                         "        ...TrailerTitleMeta"
-                         "      }"
-                         "    }"
-                         "    paginationToken"
-                         "  }"
-                         "}")
+            query_pt1 = '''query RecentVideos(
+                $limit: Int!,
+                $paginationToken: String,
+                $queryFilter: RecentVideosQueryFilter!
+            ) {
+                recentVideos(
+                    limit: $limit,
+                    paginationToken: $paginationToken,
+                    queryFilter: $queryFilter
+                ) {
+                    videos {
+                        ...TrailerVideoMeta
+                        primaryTitle {
+                            ...TrailerTitleMeta
+                        }
+                    }
+                    paginationToken
+                }
+            }
+            '''
             ptoken = "blank"
             opname = "RecentVideos"
             vpar.update({'queryFilter': {"contentTypes": ["TRAILER"]}})
         elif key == 'anticipated' or key == 'popular':
-            query_pt1 = ("query PopularTitles($limit: Int!, $paginationToken: String, $queryFilter: PopularTitlesQueryFilter!) {"
-                         "  popularTitles(limit: $limit, paginationToken: $paginationToken, queryFilter: $queryFilter) {"
-                         "    titles {"
-                         "      latestTrailer {"
-                         "        ...TrailerVideoMeta"
-                         "      }"
-                         "      ...TrailerTitleMeta"
-                         "    }"
-                         "    paginationToken"
-                         "  }"
-                         "}")
+            query_pt1 = '''query PopularTitles(
+                $limit: Int!,
+                $paginationToken: String,
+                $queryFilter: PopularTitlesQueryFilter!
+            ) {
+                popularTitles(
+                    limit: $limit,
+                    paginationToken: $paginationToken,
+                    queryFilter: $queryFilter
+                ) {
+                    titles {
+                        latestTrailer {
+                            ...TrailerVideoMeta
+                        }
+                        ...TrailerTitleMeta
+                    }
+                    paginationToken
+                }
+            }
+            '''
             ptoken = "blank"
             opname = "PopularTitles"
             d1 = datetime.date.today().isoformat()
@@ -927,171 +985,187 @@ class Main(object):
                 vpar.update({'queryFilter': {"releaseDateRange": {"end": d1}}})
 
         if key == 'popular':
-            query_pt2 = ("fragment TrailerTitleMeta on Title {"
-                         "  id"
-                         "  titleText {"
-                         "    text"
-                         "  }"
-                         "  plot {"
-                         "    plotText {"
-                         "      plainText"
-                         "    }"
-                         "  }"
-                         "  primaryImage {"
-                         "    url"
-                         "  }"
-                         "  releaseDate {"
-                         "    year"
-                         "  }"
-                         "  ratingsSummary {"
-                         "    aggregateRating"
-                         "    voteCount"
-                         "  }"
-                         "  certificate {"
-                         "  rating"
-                         "  }"
-                         "  titleGenres {"
-                         "    genres {"
-                         "      genre {"
-                         "        text"
-                         "      }"
-                         "    }"
-                         "  }"
-                         "  directors: credits(first: 5, filter: { categories: [\"director\"] }) {"
-                         "    edges {"
-                         "      node {"
-                         "        name {"
-                         "          nameText {"
-                         "            text"
-                         "          }"
-                         "        }"
-                         "      }"
-                         "    }"
-                         "  }"
-                         "  cast: credits(first: 10, filter: { categories: [\"actor\", \"actress\"] }) {"
-                         "    edges {"
-                         "      node {"
-                         "        name {"
-                         "          nameText {"
-                         "            text"
-                         "          }"
-                         "          primaryImage {"
-                         "            url"
-                         "          }"
-                         "        }"
-                         "      }"
-                         "    }"
-                         "  }"
-                         "}"
-                         "fragment TrailerVideoMeta on Video {"
-                         "  id"
-                         "  name {"
-                         "    value"
-                         "  }"
-                         "  runtime {"
-                         "    value"
-                         "  }"
-                         "  description {"
-                         "    value"
-                         "  }"
-                         "  thumbnail {"
-                         "    url"
-                         "  }"
-                         "}")
+            query_pt2 = '''fragment TrailerTitleMeta on Title {
+                id
+                titleText {
+                    text
+                }
+                plot {
+                    plotText {
+                        plainText
+                    }
+                }
+                primaryImage {
+                    url
+                }
+                releaseDate {
+                    year
+                }
+                ratingsSummary {
+                    aggregateRating
+                    voteCount
+                }
+                certificate {
+                    rating
+                }
+                titleGenres {
+                    genres {
+                        genre {
+                            text
+                        }
+                    }
+                }
+                directors: credits(
+                    first: 5,
+                    filter: { categories: ["director"] }
+                ) {
+                    edges {
+                        node {
+                            name {
+                                nameText {
+                                    text
+                                }
+                            }
+                        }
+                    }
+                }
+                writers: credits(
+                    first: 5,
+                    filter: { categories: ["writer"] }
+                ) {
+                    edges {
+                        node {
+                            name {
+                                nameText {
+                                    text
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            fragment TrailerVideoMeta on Video {
+                id
+                name {
+                    value
+                }
+                runtime {
+                    value
+                }
+                description {
+                    value
+                }
+                thumbnail {
+                    url
+                }
+            }
+            '''
         else:
-            query_pt2 = ("fragment TrailerTitleMeta on Title {"
-                         "  id"
-                         "  titleText {"
-                         "    text"
-                         "  }"
-                         "  plot {"
-                         "    plotText {"
-                         "      plainText"
-                         "    }"
-                         "  }"
-                         "  primaryImage {"
-                         "    url"
-                         "  }"
-                         "  releaseDate {"
-                         "    year"
-                         "  }"
-                         "  ratingsSummary {"
-                         "    aggregateRating"
-                         "    voteCount"
-                         "  }"
-                         "  certificate {"
-                         "  rating"
-                         "  }"
-                         "  titleGenres {"
-                         "    genres {"
-                         "      genre {"
-                         "        text"
-                         "      }"
-                         "    }"
-                         "  }"
-                         "  directors: credits(first: 5, filter: { categories: [\"director\"] }) {"
-                         "    edges {"
-                         "      node {"
-                         "        name {"
-                         "          nameText {"
-                         "            text"
-                         "          }"
-                         "        }"
-                         "      }"
-                         "    }"
-                         "  }"
-                         "  writers: credits(first: 5, filter: { categories: [\"writer\"] }) {"
-                         "    edges {"
-                         "      node {"
-                         "        name {"
-                         "          nameText {"
-                         "            text"
-                         "          }"
-                         "        }"
-                         "      }"
-                         "    }"
-                         "  }"
-                         "  cast: credits(first: 10, filter: { categories: [\"actor\", \"actress\"] }) {"
-                         "    edges {"
-                         "      node {"
-                         "        name {"
-                         "          nameText {"
-                         "            text"
-                         "          }"
-                         "          primaryImage {"
-                         "            url"
-                         "          }"
-                         "        }"
-                         "      }"
-                         "    }"
-                         "  }"
-                         "}"
-                         "fragment TrailerVideoMeta on Video {"
-                         "  id"
-                         "  name {"
-                         "    value"
-                         "  }"
-                         "  runtime {"
-                         "    value"
-                         "  }"
-                         "  description {"
-                         "    value"
-                         "  }"
-                         "  thumbnail {"
-                         "    url"
-                         "  }"
-                         "}")
+            query_pt2 = '''fragment TrailerTitleMeta on Title {
+                id
+                titleText {
+                    text
+                }
+                plot {
+                    plotText {
+                        plainText
+                    }
+                }
+                primaryImage {
+                    url
+                }
+                releaseDate {
+                    year
+                }
+                ratingsSummary {
+                    aggregateRating
+                    voteCount
+                }
+                certificate {
+                    rating
+                }
+                titleGenres {
+                    genres {
+                        genre {
+                            text
+                        }
+                    }
+                }
+                directors: credits(
+                    first: 5,
+                    filter: { categories: ["director"] }
+                ) {
+                    edges {
+                        node {
+                            name {
+                                nameText {
+                                    text
+                                }
+                            }
+                        }
+                    }
+                }
+                writers: credits(
+                    first: 5,
+                    filter: { categories: ["writer"] }
+                ) {
+                    edges {
+                        node {
+                            name {
+                                nameText {
+                                    text
+                                }
+                            }
+                        }
+                    }
+                }
+                cast: credits(
+                    first: 10,
+                    filter: { categories: ["actor", "actress"] }
+                ) {
+                    edges {
+                        node {
+                            name {
+                                nameText {
+                                    text
+                                }
+                                primaryImage {
+                                    url
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            fragment TrailerVideoMeta on Video {
+                id
+                name {
+                    value
+                }
+                runtime {
+                    value
+                }
+                description {
+                    value
+                }
+                thumbnail {
+                    url
+                }
+            }
+            '''
 
-        qstr = urllib_parse.quote(query_pt1 + query_pt2, "(")
         items = []
         pages = 0
 
         while len(items) < 200 and ptoken and pages < 5:
             if ptoken != "blank":
                 vpar.update({"paginationToken": ptoken})
-
-            vtxt = urllib_parse.quote(json.dumps(vpar).replace(" ", ""))
-            data = cache.cacheFunction(fetch, "{0}?operationName={1}&query={2}&variables={3}".format(api_url, opname, qstr, vtxt))
+            pdata = {
+                'operationName': opname,
+                'query': self.gqlmin(query_pt1 + query_pt2),
+                'variables': vpar
+            }
+            data = cache.get(client.request, cache_duration, self.api_url, headers=self.headers, post=pdata)
             pages += 1
             data = data.get('data')
 
@@ -1115,12 +1189,3 @@ class Main(object):
                 ptoken = data.get('paginationToken')
 
         return items
-
-
-def fetch(url):
-    headers = {'Referer': 'https://www.imdb.com/',
-               'Origin': 'https://www.imdb.com'}
-    if 'graphql' in url:
-        headers.update({'content-type': 'application/json'})
-    r = client.request(url, headers=headers)
-    return r

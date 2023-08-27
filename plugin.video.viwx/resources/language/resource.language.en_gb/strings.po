@@ -1,0 +1,281 @@
+# Kodi Media Center language file
+# Addon Name: viwX
+# Addon id: plugin.video.viwx
+# Addon Provider: Dim Kroon
+
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Settings
+msgctxt "#30100"
+msgid "General"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Catchup programs"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Use subtitles whenever available"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Use coloured subtitles"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Hide premium content"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Maximum number of items per page"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Minimum number of items for A-Z listing."
+msgstr ""
+
+msgctxt "#30110"
+msgid "Logging"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Log to:"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Kodi log,File,No logging"
+msgstr ""
+
+msgctxt "#30113"
+msgid "Log level"
+msgstr ""
+
+msgctxt "#30120"
+msgid "Live channels"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Offer to play from the start"
+msgstr ""
+
+msgctxt "#30200"
+msgid "itvX account"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Sign in"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Sign out"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Show password"
+msgstr ""
+
+# Help texts
+
+msgctxt "#30302"
+msgid "These settings only apply to catchup programs. Live programs may have embedded subtitles."
+msgstr ""
+
+msgctxt "#30303"
+msgid "If enabled subtitles will have different colours for different speakers, wherever possible.\n"
+"If disabled all subtitles are shown in white."
+msgstr ""
+
+msgctxt "#30304"
+msgid "Hide content that is only available with a paid itvX-premium account."
+msgstr ""
+
+msgctxt "#30305"
+msgid "The number of items per page. Listings with more items are split up into multiple pages.\n"
+"This affects a listing of a category or a collection."
+msgstr ""
+
+msgctxt "#30306"
+msgid "When a category or collection has more items than specified here, items will be alphabetically subdivided."
+msgstr ""
+
+msgctxt "#30311"
+msgid "Target of itvX logging.\n"
+"Default is the standard 'Kodi log' - nothing will be logged until 'debug logging' is enabled in Kodi's settings.\n"
+"'File' logs to itvX's own log file stored in the addon's user data directory. Only of use if you know where to "
+"find that file.\n"
+"'No logging' if you want to ensure the addon spends as little time on logging as possible."
+msgstr ""
+
+msgctxt "#30321"
+msgid "Show a dialog with the option to play the current program from the start each time a live channel is being started.\n"
+"When disabled 'play form the start' is still available on the context menu of the main live channels."
+msgstr ""
+
+msgctxt "#30401"
+msgid "You will be asked to enter your username and password after which the addon will try to sign in to "
+"your account. You will remain signed in until you sign out or sign in with another account."
+msgstr ""
+
+msgctxt "#30402"
+msgid "Sign out of your itvX account"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Show password in plain text while you type.\n"
+"If disabled the password will be masked with '*' characters, making your password invisible to others, and yourself."
+msgstr ""
+
+# Script texts
+
+# Texts in dialogs
+msgctxt "#30604"
+msgid "More info"
+msgstr ""
+
+msgctxt "#30608"
+msgid "No items found"
+msgstr ""
+
+msgctxt "#30610"
+msgid "Account error"
+msgstr ""
+
+msgctxt "#30611"
+msgid "You need to sign in to your itvX account.\n"
+"You can sign in and out on the addon's settings page."
+msgstr ""
+
+msgctxt "#30612"
+msgid "Successfully signed in!"
+msgstr ""
+
+msgctxt "#30613"
+msgid "Signed out!"
+msgstr ""
+
+msgctxt "#30614"
+msgid "User name"
+msgstr ""
+
+msgctxt "#30615"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30616"
+msgid "Invalid username"
+msgstr ""
+
+msgctxt "#30617"
+msgid "Invalid password"
+msgstr ""
+
+msgctxt "#30618"
+msgid "Try again?"
+msgstr ""
+
+msgctxt "#30619"
+msgid "Resume from"
+msgstr ""
+
+msgctxt "#30620"
+msgid "Play from the start"
+msgstr ""
+
+msgctxt "#30621"
+msgid "Open settings"
+msgstr ""
+
+msgctxt "#30622"
+msgid "This stream is only available to users with an itvX premium account"
+msgstr ""
+
+# Generic button texts
+msgctxt "#30790"
+msgid "OK"
+msgstr ""
+
+msgctxt "#30791"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "#30792"
+msgid "YES"
+msgstr ""
+
+msgctxt "#30793"
+msgid "NO"
+msgstr ""
+
+# Menu texts
+msgctxt "#30801"
+msgid ""
+msgstr ""
+
+msgctxt "#30802"
+msgid ""
+msgstr ""
+
+msgctxt "#30803"
+msgid ""
+msgstr ""
+
+msgctxt "#30804"
+msgid ""
+msgstr ""
+
+msgctxt "#30805"
+msgid ""
+msgstr ""
+
+msgctxt "#30806"
+msgid ""
+msgstr ""
+
+msgctxt "#30807"
+msgid "Search"
+msgstr ""
+
+# Error texts
+msgctxt "#30901"
+msgid "Access not allowed."
+msgstr ""
+
+msgctxt "#30902"
+msgid "Not signed in at itvX."
+msgstr ""
+
+msgctxt "#30903"
+msgid "Sign in to account failed."
+msgstr ""
+
+msgctxt "#30904"
+msgid "Service is not available in this area."
+msgstr ""
+
+msgctxt "#30905"
+msgid "Connection error: {}."
+msgstr ""
+
+msgctxt "#30906"
+msgid "Error parsing data."
+msgstr ""
+
+msgctxt "#30920"
+msgid "Received invalid data."
+msgstr ""
+
+msgctxt "#30921"
+msgid "Stream info not available."
+msgstr ""
+

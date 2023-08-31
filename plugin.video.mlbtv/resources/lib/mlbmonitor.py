@@ -9,9 +9,12 @@ from resources.lib.mlb import *
 
 class MLBMonitor(xbmc.Monitor):
     stream_started = False
-    stream_start_tries = 5
     verify = True
     broadcast_start_timestamp = None
+    window = None
+    overlay = None
+    mlb_monitor_started = ''
+    mlb_monitor_file = ''
 
     #Skip monitor
     #These are the break events to skip
@@ -828,82 +831,184 @@ class MLBMonitor(xbmc.Monitor):
     # override the onSettingsChanged method to detect if a new MLB monitor has started (so we can close this one)
     def onSettingsChanged(self):
         xbmc.log("MLB Monitor detected settings changed")
-        settings = xbmcaddon.Addon(id='plugin.video.mlbtv')
-        new_mlb_monitor_started = str(settings.getSetting(id="mlb_monitor_started"))
-        if self.mlb_monitor_started != new_mlb_monitor_started:
-            xbmc.log("MLB Monitor from " + self.mlb_monitor_started + " closing due to another monitor starting on " + new_mlb_monitor_started)
-            self.mlb_monitor_started = ''
+        if self.mlb_monitor_started != '':
+            settings = xbmcaddon.Addon(id='plugin.video.mlbtv')
+            new_mlb_monitor_started = str(settings.getSetting(id="mlb_monitor_started"))
+            if new_mlb_monitor_started != '' and self.mlb_monitor_started != new_mlb_monitor_started:
+                xbmc.log("MLB Monitor from " + self.mlb_monitor_started + " closing due to another monitor starting on " + new_mlb_monitor_started)
+                self.mlb_monitor_started = ''
 
-    def skip_monitor(self, skip_type, game_pk, broadcast_start_timestamp, skip_adjust, stream_url, is_live, start_inning, start_inning_half):
-        xbmc.log("Skip monitor for " + game_pk + " starting")
+    def get_playing_file(self, player):
+        try:
+            return player.getPlayingFile()
+        except:
+            return ''
 
-        self.mlb_monitor_started = str(datetime.now())
-        settings.setSetting(id='mlb_monitor_started', value=self.mlb_monitor_started)
-        monitor_name = 'Skip monitor for ' + game_pk
-        xbmc.log(monitor_name + ' started at ' + self.mlb_monitor_started)
+    def wait_for_stream(self, game_pk):
+        monitor_name = 'Wait for stream monitor for ' + game_pk
+        self.stream_started = False
+        stream_start_tries = 10
 
-        # initialize player to monitor play time
+        # initialize player to monitor playing file
         player = xbmc.Player()
-        last_time = None
-
-        # fetch skip markers
-        self.skip_to_players = None
-        skip_markers, self.skip_to_players = self.get_skip_markers(skip_type, game_pk, broadcast_start_timestamp, skip_adjust, monitor_name, self.skip_to_players, stream_url, 0, start_inning, start_inning_half)
-        xbmc.log(monitor_name + ' skip markers : ' + str(skip_markers))
 
         while not self.monitor.abortRequested():
             if self.monitor.waitForAbort(1):
                 xbmc.log(monitor_name + " aborting")
                 break
-            elif len(skip_markers) == 0:
-                xbmc.log(monitor_name + " closing due to no more skip markers")
+            elif xbmc.getCondVisibility("Player.HasMedia") and self.mlb_monitor_file != self.get_playing_file(player):
+                xbmc.log(monitor_name + ' detected stream start')
+                self.stream_started = True
+                self.mlb_monitor_file = self.get_playing_file(player)
+                # just for fun, we can log our stream duration, to compare it against skip time detected
+                try:
+                    total_stream_time = player.getTotalTime()
+                    xbmc.log(monitor_name + ' total stream time ' + str(timedelta(seconds=total_stream_time)))
+                except:
+                    pass
                 break
-            elif self.stream_started == True and not xbmc.getCondVisibility("Player.HasMedia"):
-                xbmc.log(monitor_name + " closing due to stream stopped")
-                break
-            elif self.mlb_monitor_started == '':
-                xbmc.log(monitor_name + " closing due to reset")
-                break
-            elif xbmc.getCondVisibility("Player.HasMedia"):
-                if self.stream_started == False:
-                    xbmc.log(monitor_name + ' detected stream start')
-                    self.stream_started = True
-                    # just for fun, we can log our stream duration, to compare it against skip time detected
-                    if start_inning == 0:
-                        try:
-                            total_stream_time = player.getTotalTime()
-                            xbmc.log(monitor_name + ' total stream time ' + str(timedelta(seconds=total_stream_time)))
-                        except:
-                            pass
-                current_time = player.getTime()
-                # make sure we're not paused, and current time is valid (less than 10 hours) -- sometimes Kodi was returning a crazy large current time as the stream was starting
-                if current_time > 0 and current_time != last_time and current_time < 36000:
-                    last_time = current_time
-                    # remove any past skip markers so user can seek backward freely
-                    while len(skip_markers) > 0 and current_time > skip_markers[0][1]:
-                        xbmc.log(monitor_name + " removed skip marker at " + str(skip_markers[0][1]) + ", before current time " + str(current_time))
-                        skip_markers.pop(0)
-                    # seek to end of break if we fall within skip marker range, then remove marker so user can seek backward freely
-                    if len(skip_markers) > 0 and current_time >= skip_markers[0][0] and current_time < skip_markers[0][1]:
-                        xbmc.log(monitor_name + " processed skip marker at " + str(skip_markers[0][1]))
-                        player.seekTime(skip_markers[0][1])
-                        skip_markers.pop(0)
-                        # since we just processed a skip marker, we can delay further processing a little bit
-                        xbmc.sleep(2000)
-                    # if we've run out of skip markers and it's a live event and we're skipping things, check for more
-                    if len(skip_markers) == 0 and is_live == True and skip_type > 0:
-                        # refresh current time, and look ahead slightly
-                        current_time = player.getTime() + 10
-                        xbmc.log(monitor_name + ' refreshing skip markers from ' + str(current_time))
-                        skip_markers, self.skip_to_players = self.get_skip_markers(skip_type, game_pk, broadcast_start_timestamp, skip_adjust, monitor_name, self.skip_to_players, stream_url, current_time)
-                        xbmc.log(monitor_name + ' refreshed skip markers : ' + str(skip_markers))
             else:
-                if self.stream_started == False:
-                    xbmc.log(monitor_name + " waiting for stream to start")
-                    self.stream_start_tries -= 1
-                    if self.stream_start_tries < 1:
-                        xbmc.log(monitor_name + " closing due to stream not starting")
-                        break
+                xbmc.log(monitor_name + " waiting for stream to start")
+                stream_start_tries -= 1
+                if stream_start_tries < 1:
+                    xbmc.log(monitor_name + " stopping due to stream not starting")
+                    break
+
+        return self.stream_started
+
+
+    def start_overlay(self, game_pk):
+        monitor_name = 'Overlay monitor for ' + game_pk
+        # use local stream_started flag, so as not to interfere with subsequent monitors
+        stream_started = False
+        self.window = xbmcgui.Window(12005)
+
+        # initialize player to monitor playing file
+        player = xbmc.Player()
+
+        # wait an extra 2 seconds, to get the correct window size
+        #xbmc.sleep(2000)
+        # Bally ticker is size 640x42 at coordinates 640,654 within a 1280x720 video frame
+        # we need to calulate that size/position relative to Kodi fullscreen video player window size
+        self.window = xbmcgui.Window(12005)
+        w = self.window.getWidth()
+        h = self.window.getHeight()
+        vh = 0.5625 * w
+        ox = int(w / 2)
+        oy = int(((h - vh) / 2) + (vh * (654/720)))
+        ow = ox
+        oh = int(0.0328125 * w)
+        # for debugging overlay position and size, if necessary
+        #xbmc.log(monitor_name + " overlay position " + str(ox) + ":" + str(oy) + ", size " + str(ow) + "x" + str(oh) + " within " + str(w) + "x" + str(h) + " window")
+        self.overlay = xbmcgui.ControlImage(ox, oy, ow, oh, BLACK_IMAGE)
+        self.window.addControl(self.overlay)
+        xbmc.log(monitor_name + " overlay started")
+
+    def stop_overlay(self, monitor_name):
+        if self.window is not None and self.overlay is not None:
+            try:
+                self.window.removeControl(self.overlay)
+            except:
+                pass
+            self.window = None
+            self.overlay = None
+            xbmc.log(monitor_name + ' overlay stopped')
+
+    def stop_captions(self, game_pk):
+        monitor_name = 'Captions monitor for ' + game_pk
+
+        # initialize player
+        player = xbmc.Player()
+
+        player.showSubtitles(False)
+        xbmc.log(monitor_name + " captions disabled")
+
+    def game_monitor(self, skip_type, game_pk, broadcast_start_timestamp, skip_adjust, stream_url, is_live, start_inning, start_inning_half):
+        xbmc.log("Game monitor for " + game_pk + " starting")
+
+        self.mlb_monitor_started = str(datetime.now())
+        settings.setSetting(id='mlb_monitor_started', value=self.mlb_monitor_started)
+
+        # skip monitor
+        if (skip_type > 0 or start_inning > 0) and broadcast_start_timestamp is not None:
+            monitor_name = 'Skip'
+            if self.overlay is not None:
+                monitor_name += ' and Overlay'
+        # overlay only monitor
+        else:
+            monitor_name = 'Overlay'
+
+        monitor_name += ' monitor for ' + game_pk
+        xbmc.log(monitor_name + ' started at ' + self.mlb_monitor_started)
+
+        # initialize player to monitor play time and/or playing file
+        player = xbmc.Player()
+
+        # skip monitor, if necessary
+        if (skip_type > 0 or start_inning > 0) and broadcast_start_timestamp is not None:
+            last_time = None
+
+            # fetch skip markers
+            self.skip_to_players = None
+            skip_markers, self.skip_to_players = self.get_skip_markers(skip_type, game_pk, broadcast_start_timestamp, skip_adjust, monitor_name, self.skip_to_players, stream_url, 0, start_inning, start_inning_half)
+            xbmc.log(monitor_name + ' skip markers : ' + str(skip_markers))
+
+            while not self.monitor.abortRequested():
+                if self.monitor.waitForAbort(1):
+                    xbmc.log(monitor_name + " aborting")
+                    self.stop_overlay(monitor_name)
+                    break
+                elif len(skip_markers) == 0:
+                    xbmc.log(monitor_name + " closing due to no more skip markers")
+                    break
+                elif self.stream_started == True and (not xbmc.getCondVisibility("Player.HasMedia") or (self.mlb_monitor_file != self.get_playing_file(player))):
+                    xbmc.log(monitor_name + " closing due to stream stopped or changed")
+                    self.stop_overlay(monitor_name)
+                    break
+                elif self.mlb_monitor_started == '':
+                    xbmc.log(monitor_name + " closing due to reset")
+                    self.stop_overlay(monitor_name)
+                    break
+                elif xbmc.getCondVisibility("Player.HasMedia"):
+                    current_time = player.getTime()
+                    # make sure we're not paused, and current time is valid (less than 10 hours) -- sometimes Kodi was returning a crazy large current time as the stream was starting
+                    if current_time > 0 and current_time != last_time and current_time < 36000:
+                        last_time = current_time
+                        # remove any past skip markers so user can seek backward freely
+                        while len(skip_markers) > 0 and current_time > skip_markers[0][1]:
+                            xbmc.log(monitor_name + " removed skip marker at " + str(skip_markers[0][1]) + ", before current time " + str(current_time))
+                            skip_markers.pop(0)
+                        # seek to end of break if we fall within skip marker range, then remove marker so user can seek backward freely
+                        if len(skip_markers) > 0 and current_time >= skip_markers[0][0] and current_time < skip_markers[0][1]:
+                            xbmc.log(monitor_name + " processed skip marker at " + str(skip_markers[0][1]))
+                            player.seekTime(skip_markers[0][1])
+                            skip_markers.pop(0)
+                            # since we just processed a skip marker, we can delay further processing a little bit
+                            xbmc.sleep(2000)
+                        # if we've run out of skip markers and it's a live event and we're skipping things, check for more
+                        if len(skip_markers) == 0 and is_live == True and skip_type > 0:
+                            # refresh current time, and look ahead slightly
+                            current_time = player.getTime() + 10
+                            xbmc.log(monitor_name + ' refreshing skip markers from ' + str(current_time))
+                            skip_markers, self.skip_to_players = self.get_skip_markers(skip_type, game_pk, broadcast_start_timestamp, skip_adjust, monitor_name, self.skip_to_players, stream_url, current_time)
+                            xbmc.log(monitor_name + ' refreshed skip markers : ' + str(skip_markers))
+
+        # continue monitoring if overlay is still active
+        if self.overlay is not None:
+            monitor_name = 'Overlay monitor for ' + game_pk
+            while not self.monitor.abortRequested():
+                if self.monitor.waitForAbort(1):
+                    xbmc.log(monitor_name + " overlay aborting")
+                    break
+                elif self.stream_started == True and (not xbmc.getCondVisibility("Player.HasMedia") or (self.mlb_monitor_file != self.get_playing_file(player))):
+                    xbmc.log(monitor_name + " overlay closing due to stream stopped or changed")
+                    break
+                elif self.mlb_monitor_started == '':
+                    xbmc.log(monitor_name + " overlay closing due to reset")
+                    break
+
+        # stop overlay if necessary
+        self.stop_overlay(monitor_name)
 
         xbmc.log(monitor_name + " closed")
 
@@ -1175,7 +1280,7 @@ class MLBMonitor(xbmc.Monitor):
         self.break_expiries = dict()
         curr_game = None
 
-        u_params = '&name=' + video_title + '&description=' + urllib.quote_plus(LOCAL_STRING(30418)) + '&icon=' + urllib.quote_plus(ICON)
+        u_params = '&name=' + video_title + '&description=' + urllib.quote_plus(LOCAL_STRING(30418)) + '&icon=' + urllib.quote_plus(ICON) + '&gamechanger=True'
 
         today = localToEastern()
         #date_string = today[0:4] + '/month_' + today[5:7] + '/day_' + today[8:10]
@@ -1226,44 +1331,48 @@ class MLBMonitor(xbmc.Monitor):
                             self.stream_started = False
                             refresh_sec = stream_refresh_sec
                             #player.stop()
+                            # stop overlay if necessary
+                            self.stop_overlay(monitor_name)
+                            needs_overlay = stream_select(game['state'].game_pk, 'True', 'False', 'False', 'False', LOCAL_STRING(30418), video_title, ICON, None, autoplay=True, overlay_check='True')
                             # next line helps avoid a crash per https://github.com/xbmc/xbmc/issues/14838#issuecomment-750289254
                             xbmc.executebuiltin('Dialog.Close(all,true)')
+                            try:
+                                self.mlb_monitor_file = self.get_playing_file(player)
+                            except:
+                                pass
                             #xbmc.Player().play('plugin://plugin.video.mlbtv/?mode=102&game_pk='+game['state'].game_pk+u_params)
                             xbmc.executebuiltin('PlayMedia("plugin://plugin.video.mlbtv/?mode=102&game_pk='+game['state'].game_pk+u_params+'")')
                             xbmcplugin.endOfDirectory(addon_handle)
-                            xbmc.log(monitor_name + ' loaded game ' + game['state'].teams)
+                            # wait for stream start before proceeding
+                            if self.wait_for_stream(game['state'].game_pk) is True:
+                                xbmc.log(monitor_name + ' loaded stream for ' + game['state'].teams)
+                                refresh_sec = game_refresh_sec
+                                if needs_overlay is True or DISABLE_CLOSED_CAPTIONS == 'true':
+                                    # wait an extra second
+                                    #xbmc.sleep(1000)
+                                    if needs_overlay is True:
+                                        self.start_overlay(game['state'].game_pk)
+                                    if DISABLE_CLOSED_CAPTIONS == 'true':
+                                        self.stop_captions(game['state'].game_pk)
+                                xbmc.log(monitor_name + ' loaded game ' + game['state'].teams)
                             break
                         elif large_leverage_diff:
                             xbmc.log(monitor_name + ' ' + game['state'].teams + ' is a better game, but ' + curr_game['state'].teams + ' still has a batter at the plate')
                         elif game_better:
                             xbmc.log(monitor_name + ' ' + game['state'].teams + ' is better game, but not enough better to switch from ' + curr_game['state'].teams)
 
-            if xbmc.getCondVisibility("Player.HasMedia"):
-                if self.stream_started == False:
-                    xbmc.log(monitor_name + " detected stream start")
-                    self.stream_started = True
-                    refresh_sec = game_refresh_sec
-            else:
-                if self.stream_started == False:
-                    xbmc.log(monitor_name + " waiting for stream to start")
-                    self.stream_start_tries -= 1
-                    if self.stream_start_tries < 1:
-                        xbmc.log(monitor_name + " closing due to stream not starting")
-                        break
-
             if self.monitor.waitForAbort(refresh_sec):
                 xbmc.log(monitor_name + " aborting")
                 break
-            elif self.stream_started == True:
-                if not xbmc.getCondVisibility("Player.HasMedia"):
-                    xbmc.log(monitor_name + " closing due to stream stopped")
-                    break
-                elif player.getVideoInfoTag().getTitle() != video_title:
-                    xbmc.log(monitor_name + " closing due to stream changed")
-                    break
+            elif self.stream_started == True and (not xbmc.getCondVisibility("Player.HasMedia") or (self.mlb_monitor_file != self.get_playing_file(player)) or (player.getVideoInfoTag().getTitle() != video_title)):
+                xbmc.log(monitor_name + " closing due to stream stopped or changed")
+                break
             elif self.mlb_monitor_started == '':
                 xbmc.log(monitor_name + " closing due to reset")
                 break
+
+        # stop overlay if necessary
+        self.stop_overlay(monitor_name)
 
         xbmc.log(monitor_name + " closed")
 

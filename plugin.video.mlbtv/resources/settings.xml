@@ -22,7 +22,9 @@
     <setting id="quality" type="labelenum" label="30160" values="Best Available|Always Ask" default="Best Available" />
     <setting id="cdn" type="labelenum" label="30165" values="Akamai|Level 3|No Preference" default="No Preference"/>
     <setting id="no_spoilers" type="enum" label="30170" lvalues="30171|30172|30173|30174|30175" />
+    <setting id="hide_scores_ticker" type="bool" label="30436" default="false" />
     <setting id="disable_video_padding" type="bool" label="30416" default="false" />
+    <setting id="disable_closed_captions" type="bool" label="30437" default="false" />
     <setting id="fav_team" type="labelenum" label="30180" default="None" values="None|Washington Nationals|Toronto Blue Jays|Texas Rangers|Tampa Bay Rays|St. Louis Cardinals|Seattle Mariners|San Francisco Giants|San Diego Padres|Pittsburgh Pirates|Philadelphia Phillies|Oakland Athletics|New York Yankees|New York Mets|Minnesota Twins|Milwaukee Brewers|Miami Marlins|Los Angeles Dodgers|Los Angeles Angels|Kansas City Royals|Houston Astros|Detroit Tigers|Colorado Rockies|Cleveland Guardians|Cincinnati Reds|Chicago White Sox|Chicago Cubs|Boston Red Sox|Baltimore Orioles|Atlanta Braves|Arizona Diamondbacks" />
     <setting id="include_fav_affiliates" type="bool" label="30427" default="true" />
 

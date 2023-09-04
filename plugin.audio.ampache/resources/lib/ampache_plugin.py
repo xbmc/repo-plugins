@@ -145,17 +145,23 @@ def get_infolabels(elem_type , node):
     return infoLabels
 
 def getNestedTypeText(node, elem_tag ,elem_type):
-    obj_elem = node.find(elem_type)
-    if obj_elem is not None or obj_elem != '':
-        obj_tag = obj_elem.findtext(elem_tag)
-        return obj_tag
+    try:
+        obj_elem = node.find(elem_type)
+        if obj_elem is not None or obj_elem != '':
+            obj_tag = obj_elem.findtext(elem_tag)
+            return obj_tag
+    except:
+        return None
     return None
 
 def getNestedTypeId(node,elem_type):
-    obj_elem = node.find(elem_type)
-    if obj_elem is not None or obj_elem != '':
-        obj_id = obj_elem.attrib["id"]
-        return obj_id
+    try:
+        obj_elem = node.find(elem_type)
+        if obj_elem is not None or obj_elem != '':
+            obj_id = obj_elem.attrib["id"]
+            return obj_id
+    except:
+        return None
     return None
 
 #this function is used to speed up the loading of the images using differents
@@ -231,6 +237,11 @@ def addLinks(elem,elem_type,useCacheArt,mode):
         elif elem_type == "playlist":
             if useCacheArt:
                 image = art.get_art(object_id,"playlist")
+            try:
+                numItems = str(node.findtext("items"))
+                name = name + " (" + numItems + ")"
+            except:
+                pass
         else:
             useCacheArt = False
 

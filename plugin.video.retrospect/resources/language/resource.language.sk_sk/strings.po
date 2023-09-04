@@ -2,17 +2,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-03 23:13+0000\n"
-"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"PO-Revision-Date: 2023-05-13 20:16+0000\n"
+"Last-Translator: Patrik Špaňo <patrik.spano@gmail.com>\n"
 "Language-Team: Slovak <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/sk_sk/>\n"
 "Language: sk_sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.15.2\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -456,6 +456,22 @@ msgctxt "#30108"
 msgid "Other"
 msgstr ""
 
+msgctxt "#30109"
+msgid "IPTV Manager"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Install IPTV Manager add-on"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Enable IPTV Manager integration"
+msgstr ""
+
+msgctxt "#30112"
+msgid "IPTV Manager settings…"
+msgstr ""
+
 # used for list limits
 # empty strings from id 30109 to 30189
 msgctxt "#30190"
@@ -654,6 +670,18 @@ msgstr ""
 msgctxt "#30367"
 msgid "New on %s"
 msgstr ""
+
+msgctxt "#30368"
+msgid "Extras"
+msgstr ""
+
+msgctxt "#30369"
+msgid "Fragments"
+msgstr ""
+
+msgctxt "#30370"
+msgid "All episodes"
+msgstr "Všetky epizódy"
 
 # empty strings from id 30365 to 30400
 msgctxt "#30401"

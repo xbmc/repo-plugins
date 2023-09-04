@@ -9,9 +9,9 @@
           <constraints>
             <options>
               <option label="XL (1280x720)">0</option>
-              <option label="L (960x544)">1</option>
-              <option label="M (512x288)">2</option>
-              <option label="S (320x180)">3</option>
+              <option label="L (960x540)">1</option>
+              <option label="M (640x360)">2</option>
+              <option label="S (480x270)">3</option>
               <option label="Audio">4</option>
             </options>
           </constraints>

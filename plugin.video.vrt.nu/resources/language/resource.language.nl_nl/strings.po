@@ -24,14 +24,6 @@ msgctxt "#30011"
 msgid "Browse only the programs you follow"
 msgstr "Bekijk alleen de tv-programma's die je volgt"
 
-msgctxt "#30012"
-msgid "All programs"
-msgstr "Alle programma's"
-
-msgctxt "#30013"
-msgid "Alphabetically sorted list of programs"
-msgstr "Alle tv-programma's in alfabetische volgorde"
-
 msgctxt "#30014"
 msgid "Categories"
 msgstr "Categorieën"
@@ -682,8 +674,8 @@ msgid "Select channels to use for 'Most recent' and 'Soon offline' listings"
 msgstr "Selecteer kanalen voor de 'Meest recent' en 'Binnenkort offline' lijsten"
 
 msgctxt "#30823"
-msgid "Eén"
-msgstr "Eén"
+msgid "VRT 1"
+msgstr "VRT 1"
 
 msgctxt "#30824"
 msgid "Canvas"

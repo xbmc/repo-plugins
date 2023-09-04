@@ -33,11 +33,11 @@ addon_handle = int(sys.argv[1])
 # https://stackoverflow.com/a/49976787
 def yt_time(duration="P1W2DT6H21M32S"):
     """
-	Converts YouTube duration (ISO 8061)
-	into Seconds
+    Converts YouTube duration (ISO 8061)
+    into Seconds
 
-	see http://en.wikipedia.org/wiki/ISO_8601#Durations
-	"""
+    see http://en.wikipedia.org/wiki/ISO_8601#Durations
+    """
     ISO_8601 = re.compile(
         'P'  # designates a period
         '(?:(?P<years>\d+)Y)?'  # years
@@ -159,7 +159,7 @@ def delete_database():
 def read_url(url):
     url = requote_uri(url)
     req = urllib.request.Request(url)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:33.0) Gecko/20100101 Firefox/33.0')
+    req.add_header('User-Agent', 'Mozilla/5.0 (Android 13; Mobile; rv:68.0) Gecko/68.0 Firefox/112.0')
     response = urllib.request.urlopen(req)
     link = response.read()
     response.close()
@@ -413,7 +413,7 @@ def get_latest_from_channel(channel_id, page, filter_shorts):
         seconds = yt_time(duration)
         date = re.search("[0-9]{4}-[0-9]{2}-[0-9]{2}", sorted_data[x]['snippet']['publishedAt'])
         xbmc.log("checking for short: " + video_id, level=xbmc.LOGINFO)
-        if filter_shorts and is_short(video_id):
+        if filter_shorts and is_short(video_id, seconds):
             xbmc.log("is a short ", level=xbmc.LOGINFO)
             continue
 
@@ -426,22 +426,10 @@ class RedirectFilter(urllib.request.HTTPRedirectHandler):
         return None  # do not redirect, HTTPError will be raised
 
 
-def is_short(videoId):
-    url = "https://www.youtube.com/shorts/" + videoId
-    url = requote_uri(url)
-    opener = urllib.request.build_opener(RedirectFilter)
-
-    req = urllib.request.Request(url, method="HEAD")
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:33.0) Gecko/20100101 Firefox/33.0')
-    try:
-        xbmc.log("trying: "+url, level=xbmc.LOGINFO)
-        response = opener.open(req)
-        response.close()
-    except urllib.error.HTTPError as error:
-        xbmc.log(json.dumps(error.reason), level=xbmc.LOGINFO)
-        return False
-
-    return True
+def is_short(videoId, seconds):
+    if seconds <= 60:
+        return True
+    return False
 
 
 def get_playlists(channelID, page):

@@ -6,7 +6,6 @@ from math import floor
 import requests
 import xbmc
 import xbmcgui
-import traceback
 
 
 class CSAuthFailed(Exception):
@@ -117,12 +116,9 @@ class CuriosityStream(object):
                     session["cookies"]
                 )
                 self._session.headers.update(session["headers"])
-        except FileNotFoundError:
-            # session just didn't exist yet
+        except IOError:
+            # unable to read the file
             pass
-        except:
-            # other errors are potentially a problem, so log a warning.
-            xbmc.log(traceback.format_exc(), xbmc.LOGWARNING)
 
     def authenticate(self, force=False):
         if (
@@ -137,6 +133,7 @@ class CuriosityStream(object):
                 raise CSAuthFailed(
                     "Please provide username and password in the profile settings"
                 )
+            self._session.headers.update({"User-Agent": "Mozilla/5.0"})
             response = self._session.post(
                 "{}login".format(self._base_url),
                 json={"email": self._username, "password": self._password},
@@ -145,7 +142,8 @@ class CuriosityStream(object):
                 raise CSAuthFailed("Login attempt failed")
             data = response.json()
             self._session.headers.update(
-                {"x-auth-token": data["message"]["auth_token"]}
+                {"x-auth-token": data["message"]["auth_token"],
+				 "User-Agent": "Mozilla/5.0"}
             )
             self._save_session()
 
@@ -493,7 +491,7 @@ class CuriosityStream(object):
             "streams": [
                 encoding
                 for encoding in data["data"]["encodings"]
-                if encoding["type"] == "hd"
+                if encoding["type"].lower() == "hd"
             ],
             "subtitles": data["data"]["closed_captions"]
             if "closed_captions" in data["data"]

@@ -9,11 +9,10 @@ else:
     from urlparse import parse_qsl
 
 import xbmcgui
-import xbmcvfs
 import xbmcplugin
 import xbmcaddon
 import xbmc
-import traceback
+import xbmcvfs
 from resources.lib import curiositystream as cs
 
 tr = xbmcaddon.Addon().getLocalizedString
@@ -36,7 +35,6 @@ def authorize_context():
         xbmcgui.Dialog().ok(tr(30002), e.error_message)
     except Exception as e:
         dialog.close()
-        xbmc.log(traceback.format_exc(), xbmc.LOGERROR)
         xbmcgui.Dialog().ok(tr(30002), "Internal error: {}".format(str(e)))
 
 
@@ -110,12 +108,9 @@ class Router(object):
         listing = [
             root_entry("watchlist", tr(30013)),
             root_entry("list_categories", tr(30014)),
-            root_entry("list_collections2", tr(30015)),
-            root_entry("history", tr(30016)),
             root_entry("list_popular", tr(30018)),
             root_entry("watching", tr(30019)),
             root_entry("recently_added", tr(30020)),
-            root_entry("recommended", tr(30021)),
             root_entry("search", tr(30022)),
         ]
         xbmcplugin.addDirectoryItems(self._plugin_handle, listing, len(listing))
@@ -233,6 +228,9 @@ class Router(object):
         stream = self._cs_api.media_stream_info(media)
         play_item = xbmcgui.ListItem(path=stream["streams"][0]["master_playlist_url"])
         play_item.setSubtitles([c["file"] for c in stream["subtitles"]])
+        
+        play_item.setProperty('inputstream', 'inputstream.adaptive')
+        play_item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
         xbmcplugin.setResolvedUrl(self._plugin_handle, True, listitem=play_item)
 
     def _change_watchlist(self, media_id, is_bookmarked, is_collection):

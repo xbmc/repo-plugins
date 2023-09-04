@@ -6,11 +6,24 @@ def categories():
     # see yesterday's scores at inning in the main menu
     addDir(LOCAL_STRING(30413), 108, ICON, FANART)
     addDir(LOCAL_STRING(30362), 200, ICON, FANART)
+    # show MiLB games in the main menu
+    addDir(LOCAL_STRING(30426), 109, ICON, FANART)
     # show Featured Videos in the main menu
     addDir(LOCAL_STRING(30363), 300, ICON, FANART)
 
+def minor_league_categories():
+    addDir(LOCAL_STRING(30429), 110, ICON, FANART)
+    addDir(LOCAL_STRING(30430), 100, ICON, FANART, None, 'False', '11')
+    addDir(LOCAL_STRING(30431), 100, ICON, FANART, None, 'False', '12')
+    addDir(LOCAL_STRING(30432), 100, ICON, FANART, None, 'False', '13')
+    addDir(LOCAL_STRING(30433), 100, ICON, FANART, None, 'False', '14')
 
-def todays_games(game_day, start_inning='False'):
+def affiliate_menu():
+    for affiliate in AFFILIATE_TEAM_IDS:
+        addDir(affiliate, 100, ICON, FANART, None, 'False', '11,12,13,14', AFFILIATE_TEAM_IDS[affiliate])
+
+
+def todays_games(game_day, start_inning='False', sport=MLB_ID, teams='None'):
     today = localToEastern()
     if game_day is None:
         game_day = today
@@ -21,7 +34,7 @@ def todays_games(game_day, start_inning='False'):
     #url_game_day = display_day.strftime('year_%Y/month_%m/day_%d')
     prev_day = display_day - timedelta(days=1)
 
-    addDir('[B]<< %s[/B]' % LOCAL_STRING(30010), 101, PREV_ICON, FANART, prev_day.strftime("%Y-%m-%d"), start_inning)
+    addDir('[B]<< %s[/B]' % LOCAL_STRING(30010), 101, PREV_ICON, FANART, prev_day.strftime("%Y-%m-%d"), start_inning, sport, teams)
 
     date_display = '[B][I]' + colorString(display_day.strftime("%A, %m/%d/%Y"), GAMETIME_COLOR) + '[/I][/B]'
 
@@ -30,11 +43,19 @@ def todays_games(game_day, start_inning='False'):
     #url = 'http://gdx.mlb.com/components/game/mlb/' + url_game_day + '/grid_ce.json'
     url = API_URL + '/api/v1/schedule'
     # url += '?hydrate=broadcasts(all),game(content(all)),probablePitcher,linescore,team,flags'
-    url += '?hydrate=game(content(media(epg))),probablePitcher,linescore,team,flags,gameInfo'
+    url += '?hydrate=broadcasts(all),game(content(media(epg))),probablePitcher,linescore,team,flags,gameInfo'
     # 51 is international (i.e. World Baseball Classic) but they aren't streamed in the normal way
     #url += '&sportId=1,51'
-    url += '&sportId=1'
+    url += '&sportId=' + sport
+    if sport == MLB_ID and INCLUDE_FAV_AFFILIATES == 'true':
+        url += ',' + MILB_IDS
     url += '&date=' + game_day
+    if teams != 'None':
+        url += '&teamId=' + teams
+    elif sport == MLB_ID:
+        url += '&teamId=' + MLB_TEAM_IDS
+        if INCLUDE_FAV_AFFILIATES == 'true' and FAV_TEAM != 'None':
+            url += ',' + AFFILIATE_TEAM_IDS[FAV_TEAM]
 
     headers = {
         'User-Agent': UA_ANDROID
@@ -51,6 +72,7 @@ def todays_games(game_day, start_inning='False'):
     remaining_games = []
 
     fav_team_id = getFavTeamId()
+    game_changer_starts = []
     game_changer_start = None
     game_changer_end = None
     inprogress_exists = False
@@ -72,18 +94,12 @@ def todays_games(game_day, start_inning='False'):
         if game_day >= today:
             game['blackout_type'], game['blackout_time'] = get_blackout_status(game, regional_fox_games_exist)
             if game_day == today:
-                # while looping through today's games, also count in progress, non-blackout games for Game Changer
+                # while looping through today's games, also count in progress, non-blackout MLB games for Game Changer
                 if game['blackout_type'] != 'False':
                     blackouts.append(str(game['gamePk']))
                 else:
-                    if (game_changer_start is None or game['gameDate'] < game_changer_start) and 'rescheduleDate' not in game:
-                        game_changer_start = game['gameDate']
-                    elif game_changer_start is not None and 'rescheduleDate' not in game:
-                        if game['status']['startTimeTBD'] is True:
-                            game_changer_end = parse(game_changer_start) + timedelta(hours=4)
-                            game_changer_end = game_changer_end.strftime("%Y-%m-%dT%H:%M:%SZ")
-                        else:
-                            game_changer_end = game['gameDate']
+                    if game['teams']['home']['team']['sport']['id'] == 1 and 'rescheduleDate' not in game:
+                        game_changer_starts.append(game['gameDate'])
 
                     if not inprogress_exists and game['status']['detailedState'] == 'In Progress':
                         inprogress_exists = True
@@ -94,15 +110,19 @@ def todays_games(game_day, start_inning='False'):
     except:
         pass
 
-    # Big Inning and game changer only available for non-free accounts
-    if ONLY_FREE_GAMES != 'true':
+    # Big Inning and game changer only available for non-free accounts (and not in minor league lists)
+    if ONLY_FREE_GAMES != 'true' and sport == MLB_ID:
         # if the requested date is not in the past, we have games for this date, and it's a regular season date,
         # then show the Big Inning listitem
         if today <= game_day and len(games) > 0 and games[0]['seriesDescription'] == 'Regular Season':
             create_big_inning_listitem(game_day)
 
-        # if it's today, show the game changer listitem
-        if today == game_day and game_changer_start is not None and game_changer_end is not None and (len(games) - len(blackouts)) > 1:
+        # if it's today and there's more than one non-blackout MLB game, show the game changer listitem
+        if today == game_day and len(game_changer_starts) > 1:
+            # use second game and second-to-last game for game changer display times
+            game_changer_starts.sort()
+            game_changer_start = game_changer_starts[1]
+            game_changer_end = game_changer_starts[len(game_changer_starts) - 2]
             create_game_changer_listitem(blackouts, inprogress_exists, game_changer_start, game_changer_end)
 
     try:
@@ -112,30 +132,92 @@ def todays_games(game_day, start_inning='False'):
         pass
 
     next_day = display_day + timedelta(days=1)
-    addDir('[B]%s >>[/B]' % LOCAL_STRING(30011), 101, NEXT_ICON, FANART, next_day.strftime("%Y-%m-%d"), start_inning)
+    addDir('[B]%s >>[/B]' % LOCAL_STRING(30011), 101, NEXT_ICON, FANART, next_day.strftime("%Y-%m-%d"), start_inning, sport, teams)
 
 
 def create_game_listitem(game, game_day, start_inning, today):
-    #icon = ICON
-    icon = 'https://img.mlbstatic.com/mlb-photos/image/upload/ar_167:215,c_crop/fl_relative,l_team:' + str(game['teams']['home']['team']['id']) + ':fill:spot.png,w_1.0,h_1,x_0.5,y_0,fl_no_overflow,e_distort:100p:0:200p:0:200p:100p:0:100p/fl_relative,l_team:' + str(game['teams']['away']['team']['id']) + ':logo:spot:current,w_0.38,x_-0.25,y_-0.16/fl_relative,l_team:' + str(game['teams']['home']['team']['id']) + ':logo:spot:current,w_0.38,x_0.25,y_0.16/w_750/team/' + str(game['teams']['away']['team']['id']) + '/fill/spot.png'
-    # http://mlb.mlb.com/mlb/images/devices/ballpark/1920x1080/2681.jpg
-    # B&W
-    # fanart = 'http://mlb.mlb.com/mlb/images/devices/ballpark/1920x1080/'+game['venue_id']+'.jpg'
-    # Color
-    # fanart = 'http://www.mlb.com/mlb/images/devices/ballpark/1920x1080/color/' + str(game['venue']['id']) + '.jpg'
-    fanart = 'http://cd-images.mlbstatic.com/stadium-backgrounds/color/light-theme/1920x1080/%s.png' % game['venue']['id']
-
     game_pk = game['gamePk']
     xbmc.log(str(game_pk))
 
-    if TEAM_NAMES == "0":
-        away_team = game['teams']['away']['team']['teamName']
-        home_team = game['teams']['home']['team']['teamName']
-    else:
-        away_team = game['teams']['away']['team']['abbreviation']
-        home_team = game['teams']['home']['team']['abbreviation']
+    milb = None
+    level_abbr = ''
+    # MiLB titles and graphics
+    if game['teams']['home']['team']['sport']['id'] != 1:
+        # Skip MiLB games without any broadcast
+        milb_broadcast = None
+        if 'broadcasts' in game:
+            for broadcast in game['broadcasts']:
+                if broadcast['name'] == 'MiLB.TV':
+                    milb_broadcast = broadcast
+                    break
+        if milb_broadcast is None:
+            return
 
-    title = away_team + ' at ' + home_team
+        milb = 'True'
+
+        level_abbr = game['teams']['home']['team']['sport']['name']
+        if level_abbr[0] == 'T':
+            level_abbr = 'AAA'
+        elif level_abbr[0] == 'D':
+            level_abbr = 'AA'
+        elif level_abbr[0] == 'H':
+            level_abbr = 'A+'
+        elif level_abbr[0] == 'S':
+            level_abbr = 'A'
+        level_abbr += ': '
+
+        away_name = game['teams']['away']['team']['shortName']
+        away_org = game['teams']['away']['team']['parentOrgName'].split()[-1]
+        if (away_org == 'Sox') or (away_org == 'Jays'):
+            away_org = game['teams']['away']['team']['parentOrgName'].split()[-2] + ' ' + game['teams']['away']['team']['parentOrgName'].split()[-1]
+
+        home_name = game['teams']['home']['team']['shortName']
+        home_org = game['teams']['home']['team']['parentOrgName'].split()[-1]
+        if (home_org == 'Sox') or (home_org == 'Jays'):
+            home_org = game['teams']['home']['team']['parentOrgName'].split()[-2] + ' ' + game['teams']['home']['team']['parentOrgName'].split()[-1]
+
+        away_team = away_name + ' (' + away_org + ')'
+        home_team = home_name + ' (' + home_org + ')'
+
+        title = level_abbr + away_team + ' at ' + home_team
+
+        icon_id = game['teams']['home']['team']['id']
+        if away_org in FAV_TEAM:
+            fav_game = True
+            away_team = colorString(away_team, getFavTeamColor())
+            icon_id = game['teams']['away']['team']['id']
+
+        if home_org in FAV_TEAM:
+            fav_game = True
+            home_team = colorString(home_team, getFavTeamColor())
+
+        icon = 'https://www.mlbstatic.com/team-logos/share/' + str(icon_id) + '.jpg'
+        fanart = FANART
+
+        desc = game['teams']['home']['team']['sport']['name'] + ' ' + game['teams']['home']['team']['league']['name'] + '[CR]' + game['teams']['away']['team']['name'] + ' at ' + game['teams']['home']['team']['name'] + '[CR]'
+
+    # MLB titles and graphics
+    else:
+
+        if TEAM_NAMES == "0":
+            away_team = game['teams']['away']['team']['teamName']
+            home_team = game['teams']['home']['team']['teamName']
+        else:
+            away_team = game['teams']['away']['team']['abbreviation']
+            home_team = game['teams']['home']['team']['abbreviation']
+
+        # Use full team name for non-MLB teams
+        if game['teams']['away']['team']['sport']['name'] != 'Major League Baseball':
+            away_team = game['teams']['away']['team']['name']
+        if game['teams']['home']['team']['sport']['name'] != 'Major League Baseball':
+            home_team = game['teams']['home']['team']['name']
+
+        title = away_team + ' at ' + home_team
+
+        icon = 'https://img.mlbstatic.com/mlb-photos/image/upload/ar_167:215,c_crop/fl_relative,l_team:' + str(game['teams']['home']['team']['id']) + ':fill:spot.png,w_1.0,h_1,x_0.5,y_0,fl_no_overflow,e_distort:100p:0:200p:0:200p:100p:0:100p/fl_relative,l_team:' + str(game['teams']['away']['team']['id']) + ':logo:spot:current,w_0.38,x_-0.25,y_-0.16/fl_relative,l_team:' + str(game['teams']['home']['team']['id']) + ':logo:spot:current,w_0.38,x_0.25,y_0.16/w_750/team/' + str(game['teams']['away']['team']['id']) + '/fill/spot.png'
+        fanart = 'http://cd-images.mlbstatic.com/stadium-backgrounds/color/light-theme/1920x1080/%s.png' % game['venue']['id']
+
+        desc = ''
 
     is_free = False
     if 'content' in game and 'media' in game['content'] and 'freeGame' in game['content']['media']:
@@ -210,6 +292,8 @@ def create_game_listitem(game, game_day, start_inning, today):
                         game_time += ' (Suspended)'
                     elif 'resumedFromDate' in game:
                         game_time += ' (Resumed)'
+                        if stringToDate(game['gameDate'], "%Y-%m-%dT%H:%M:%SZ") > datetime.now():
+                            game_time = display_time + ' ' + game_time
                     for epg in game['content']['media']['epg'][0]['items']:
                         if epg['mediaState'] == 'MEDIA_ON':
                             suspended = 'live'
@@ -236,7 +320,6 @@ def create_game_listitem(game, game_day, start_inning, today):
 
     stream_date = str(game_day)
 
-    desc = ''
     probables = ''
     if ('probablePitcher' in game['teams']['away'] and 'fullName' in game['teams']['away']['probablePitcher']) or ('probablePitcher' in game['teams']['home'] and 'fullName' in game['teams']['home']['probablePitcher']):
         probables = ' ('
@@ -259,9 +342,9 @@ def create_game_listitem(game, game_day, start_inning, today):
     if 'venue' in game and 'name' in game['venue']:
         desc += '[CR]From ' + game['venue']['name']
     if game['status']['abstractGameState'] == 'Preview' or (start_inning == 'False' and spoiler == 'False'):
-        name = game_time + ' ' + away_team + ' at ' + home_team
+        name = game_time + ' ' + level_abbr + away_team + ' at ' + home_team
     else:
-        name = game_time + ' ' + away_team
+        name = game_time + ' ' + level_abbr + away_team
         away_score = ''
         home_score = ''
         try:
@@ -306,6 +389,16 @@ def create_game_listitem(game, game_day, start_inning, today):
     if game['scheduled_innings'] != 9:
         desc += '[CR]' + str(game['scheduled_innings']) + '-inning game'
 
+    # Display TV broadcast info
+    broadcast_list = []
+    if 'broadcasts' in game:
+        for broadcast in game['broadcasts']:
+            # ignore non-TV and duplicate broadcasts
+            if broadcast['type'] == 'TV' and broadcast['name'] not in broadcast_list:
+                broadcast_list.append(broadcast['name'])
+    if len(broadcast_list) > 0:
+        desc += '[CR]' + ", ".join(broadcast_list)
+
     # Check local/national blackout status
     blackout = 'False'
     try:
@@ -338,7 +431,7 @@ def create_game_listitem(game, game_day, start_inning, today):
     # If set only show free games in the list
     if ONLY_FREE_GAMES == 'true' and not is_free:
         return
-    add_stream(name, title, desc, game_pk, icon, fanart, info, video_info, audio_info, stream_date, spoiler, suspended, start_inning, blackout)
+    add_stream(name, title, desc, game_pk, icon, fanart, info, video_info, audio_info, stream_date, spoiler, suspended, start_inning, blackout, milb)
 
 
 # fetch a list of featured videos
@@ -519,7 +612,7 @@ def create_game_changer_listitem(blackouts, inprogress_exists, game_changer_star
     display_title = LOCAL_STRING(30417)
 
     # format the time for display
-    game_time = get_display_time(UTCToLocal(stringToDate(game_changer_start, "%Y-%m-%dT%H:%M:%SZ"))) + ' - ' + get_display_time(UTCToLocal(stringToDate(game_changer_end, "%Y-%m-%dT%H:%M:%SZ") + timedelta(hours=4)))
+    game_time = get_display_time(UTCToLocal(stringToDate(game_changer_start, "%Y-%m-%dT%H:%M:%SZ"))) + ' - ' + get_display_time(UTCToLocal(stringToDate(game_changer_end, "%Y-%m-%dT%H:%M:%SZ") + timedelta(hours=3) + timedelta(minutes=30)))
 
     if inprogress_exists:
         display_title = LOCAL_STRING(30367) + LOCAL_STRING(30417)
@@ -539,7 +632,7 @@ def create_game_changer_listitem(blackouts, inprogress_exists, game_changer_star
     xbmcplugin.setContent(addon_handle, 'episodes')
 
 
-def stream_select(game_pk, spoiler='True', suspended='False', start_inning='False', blackout='False', description=None, name=None, icon=None, fanart=None, from_context_menu=False, autoplay=False):
+def stream_select(game_pk, spoiler='True', suspended='False', start_inning='False', blackout='False', description=None, name=None, icon=None, fanart=None, from_context_menu=False, autoplay=False, overlay_check='False', gamechanger='False'):
     # fetch the epg content using the game_pk
     url = API_URL + '/api/v1/game/' + game_pk + '/content'
     headers = {
@@ -553,6 +646,7 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
     # define some default variables
     selected_content_id = None
     selected_media_state = None
+    selected_call_letters = None
     selected_media_type = None
     stream_url = ''
     broadcast_start_offset = '1' # offset to pass to inputstream adaptive
@@ -560,6 +654,7 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
     stream_type = 'video'
     skip_possible = True # to determine if possible to show skip options dialog
     skip_type = 0
+    skip_adjust = 0 # only used for MiLB games
     is_live = False # to pass to skip monitor
     # convert start inning values to integers
     if start_inning == 'False':
@@ -588,6 +683,7 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
                     if item['mediaState'] == 'MEDIA_ON':
                         selected_content_id = item['contentId']
                         selected_media_state = item['mediaState']
+                        selected_call_letters = item['callLetters']
                         if 'mediaFeedType' in item:
                             selected_media_type = item['mediaFeedType']
                         # once we've found a fav team live stream, we don't need to search any further
@@ -597,8 +693,16 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
                     elif item['mediaState'] == 'MEDIA_ARCHIVE' and selected_content_id is None:
                         selected_content_id = item['contentId']
                         selected_media_state = item['mediaState']
+                        selected_call_letters = item['callLetters']
                         if 'mediaFeedType' in item:
                             selected_media_type = item['mediaFeedType']
+
+    # if coming from the game changer, just return a flag to indicate whether we need to start an overlay
+    if overlay_check == 'True':
+        if HIDE_SCORES_TICKER == 'true' and stream_type == 'video' and selected_call_letters.startswith('BS'):
+            return True
+        else:
+            return False
 
     # loop through the streams to count video broadcasts (for determining whether we need alternate audio)
     broadcast_count = 0
@@ -614,6 +718,7 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
         highlight_offset = 1
         content_id = []
         media_state = []
+        call_letters = []
         media_type = []
         # if using Kodi's default resume ability, we'll omit highlights from our stream selection prompt
         if sys.argv[3] == 'resume:true':
@@ -624,13 +729,13 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
         airings = None
         game_date = None
 
-        # if not live, if suspended, or if live and not resuming, add audio streams to the video streams
-        if len(json_source['media']['epg']) >= 3 and 'items' in json_source['media']['epg'][2] and (epg[0]['mediaState'] != "MEDIA_ON" or suspended != 'False' or (epg[0]['mediaState'] == "MEDIA_ON" and sys.argv[3] != 'resume:true')):
+        # if no video, not live, if suspended, or if live and not resuming, add audio streams to the video streams
+        if len(json_source['media']['epg']) >= 3 and 'items' in json_source['media']['epg'][2] and (len(epg) == 0 or (epg[0]['mediaState'] != "MEDIA_ON" or suspended != 'False' or (epg[0]['mediaState'] == "MEDIA_ON" and sys.argv[3] != 'resume:true'))):
             epg += json_source['media']['epg'][2]['items']
 
         for item in epg:
             #xbmc.log(str(item))
-            
+
             # video and audio streams use different fields to indicate home/away
             if 'mediaFeedType' in item:
                 media_feed_type = str(item['mediaFeedType'])
@@ -700,12 +805,14 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
                 if 'mediaFeedType' in item and ('HOME' in title.upper() or 'NATIONAL' in title.upper()):
                     content_id.insert(0, item['contentId'])
                     media_state.insert(0, item['mediaState'])
+                    call_letters.insert(0, item['callLetters'])
                     media_type.insert(0, media_feed_type)
                     stream_title.insert(highlight_offset, title)
                 # otherwise append other streams to end of list
                 else:
                     content_id.append(item['contentId'])
                     media_state.append(item['mediaState'])
+                    call_letters.append(item['callLetters'])
                     media_type.append(media_feed_type)
                     stream_title.append(title)
 
@@ -713,6 +820,7 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
                 if 'youtube' in item and 'videoId' in item['youtube']:
                     content_id.insert(0, item['youtube']['videoId'])
                     media_state.insert(0, item['mediaState'])
+                    call_letters.insert(0, item['callLetters'])
                     media_type.insert(0, media_feed_type)
                     stream_title.insert(highlight_offset, LOCAL_STRING(30414))
 
@@ -739,6 +847,7 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
             else:
                 selected_content_id = content_id[n-highlight_offset]
                 selected_media_state = media_state[n-highlight_offset]
+                selected_call_letters = call_letters[n-highlight_offset]
                 selected_media_type = media_type[n-highlight_offset]
         # cancel will exit
         elif n == -1:
@@ -857,28 +966,67 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
 
         # add alternate audio tracks, if necessary
         if DISABLE_VIDEO_PADDING == 'false' and (alternate_english is not None or alternate_spanish is not None):
-            stream_url = 'http://127.0.0.1:43670/' + stream_url
             if alternate_english is not None:
                 headers += '&alternate_english=' + urllib.quote_plus(alternate_english)
             if alternate_spanish is not None:
                 headers += '&alternate_spanish=' + urllib.quote_plus(alternate_spanish)
+            if not stream_url.startswith('http://127.0.0.1:43670/'):
+                stream_url = 'http://127.0.0.1:43670/' + stream_url
 
         # valid stream url
         if '.m3u8' in stream_url:
             play_stream(stream_url, headers, description, title=name, icon=icon, fanart=fanart, start=broadcast_start_offset, stream_type=stream_type, music_type_unset=from_context_menu)
-            # start the skip monitor if a skip type or start inning has been requested and we have a broadcast start timestamp
-            if (skip_type > 0 or start_inning > 0) and broadcast_start_timestamp is not None:
+
+            # start the monitor if a skip type or start inning has been requested and we have a broadcast start timestamp
+            # or if an overlay is required (overlay enabled for a Bally video stream)
+            # or if we want to disable captions
+            if gamechanger == 'False' and stream_type == 'video' and (((skip_type > 0 or start_inning > 0) and broadcast_start_timestamp is not None) or (HIDE_SCORES_TICKER == 'true' and selected_call_letters.startswith('BS')) or DISABLE_CLOSED_CAPTIONS == 'true'):
                 from .mlbmonitor import MLBMonitor
                 mlbmonitor = MLBMonitor()
-                mlbmonitor.skip_monitor(skip_type, game_pk, broadcast_start_timestamp, stream_url, is_live, start_inning, start_inning_half)
+
+                # wait for stream start to be detected before proceeding
+                if mlbmonitor.wait_for_stream(game_pk) is True:
+
+                    if (HIDE_SCORES_TICKER == 'true' and selected_call_letters.startswith('BS')) or DISABLE_CLOSED_CAPTIONS == 'true':
+                        # wait an extra second
+                        xbmc.sleep(1000)
+
+                        if HIDE_SCORES_TICKER == 'true' and selected_call_letters.startswith('BS'):
+                            mlbmonitor.start_overlay(game_pk)
+
+                        if DISABLE_CLOSED_CAPTIONS == 'true':
+                            mlbmonitor.stop_captions(game_pk)
+
+                    # call the game monitor for skips and/or to stop the overlay
+                    if ((skip_type > 0 or start_inning > 0) and broadcast_start_timestamp is not None) or (HIDE_SCORES_TICKER == 'true' and selected_call_letters.startswith('BS')):
+                        mlbmonitor.game_monitor(skip_type, game_pk, broadcast_start_timestamp, skip_adjust, stream_url, is_live, start_inning, start_inning_half)
+
         # otherwise exit
         else:
             sys.exit()
 
 
 # select a stream for a featured video
-def featured_stream_select(featured_video, name, description):
+def featured_stream_select(featured_video, name, description, start_inning=None, game_pk=None):
     xbmc.log('video select')
+
+    start = '-1' # offset to pass to inputstream adaptive
+    broadcast_start_timestamp = None # to pass to skip monitor
+    skip_possible = True # to determine if possible to show skip options dialog
+    skip_type = 0
+    settings = xbmcaddon.Addon(id='plugin.video.mlbtv')
+    skip_adjust = settings.getSetting(id="milb_skip_adjust")
+    is_live = False # to pass to skip monitor
+    # convert start inning values to integers
+    if start_inning == 'False':
+        start_inning = 0
+    else:
+        start_inning = int(start_inning)
+    start_inning_half = 'top'
+
+    # define a dialog that we can use as needed
+    dialog = xbmcgui.Dialog()
+
     from .account import Account
     account = Account()
     video_url = None
@@ -922,15 +1070,15 @@ def featured_stream_select(featured_video, name, description):
     # otherwise we need to authenticate and get the stream URL
     else:
         xbmc.log('fetching video stream from url')
-        # need a special token for Big Inning
-        okta_access_token = account.okta_access_token()
-        if okta_access_token is None:
-            xbmc.log('failed to get necessary okta access token')
+        # need a login token for Big Inning + MiLB games
+        login_token = account.login_token()
+        if login_token is None:
+            xbmc.log('failed to get necessary login token')
             sys.exit()
 
         headers = {
             'User-Agent': UA_PC,
-            'Authorization': 'Bearer ' + okta_access_token,
+            'Authorization': 'Bearer ' + login_token,
             'Accept': '*/*',
             'Origin': 'https://www.mlb.com',
             'Referer': 'https://www.mlb.com'
@@ -952,15 +1100,80 @@ def featured_stream_select(featured_video, name, description):
                 xbmc.log('found video stream url : ' + video_stream_url)
 
     if video_stream_url is not None:
+        # add start / skip menus for MiLB games
+        if game_pk is not None:
+            # get broadcast start timestamp from M3U
+            broadcast_start_timestamp, is_live = get_broadcast_start_timestamp(video_stream_url)
+
+            # only show the start point dialog if not using Kodi's default resume ability, the "ask to catch up" option is enabled, no start inning is specified
+            if sys.argv[3] != 'resume:true' and CATCH_UP == 'true' and start_inning == 0:
+
+                # begin with beginning as start point options
+                start_options = [LOCAL_STRING(30398)]
+                # add live start option, if applicable
+                live_offset = 0
+                if is_live is True:
+                    live_offset = 1
+                    start_options += [LOCAL_STRING(30399)]
+                # add inning start options
+                start_options += get_inning_start_options()
+
+                # start point selection dialog
+                p = dialog.select(LOCAL_STRING(30396), start_options)
+
+                # beginning or inning
+                if p == 0 or p > live_offset:
+                    start = '1'
+                    # inning top/bottom calculation
+                    if p > live_offset:
+                        p = p - live_offset
+                        start_inning, start_inning_half = calculate_inning_from_index(p)
+                # live
+                elif p == 1:
+                    broadcast_start_offset = '-1'
+                    skip_possible = False
+                # cancel will exit
+                elif p == -1:
+                    sys.exit()
+
+            # show automatic skip dialog, if possible and enabled
+            if skip_possible is True and ASK_TO_SKIP == 'true':
+                # automatic skip dialog with options to skip nothing, breaks, breaks + idle time, breaks + idle time + non-action pitches
+                skip_type = dialog.select(LOCAL_STRING(30403), [LOCAL_STRING(30404), LOCAL_STRING(30408), LOCAL_STRING(30405), LOCAL_STRING(30421), LOCAL_STRING(30406)])
+                # cancel will exit
+                if skip_type == -1:
+                    sys.exit()
+                elif skip_type > 1:
+                    skip_type += 1
+
+                if skip_type > 0 or start_inning > 0:
+                    if skip_adjust == 'Always Ask':
+                        # skip adjust dialog
+                        skip_adjust_options = ['-15', '-10', '-5', '0', '5', '10', '15']
+                        p = dialog.select(LOCAL_STRING(30434), skip_adjust_options)
+                        # cancel will exit
+                        if p == -1:
+                            sys.exit()
+                        else:
+                            skip_adjust = int(skip_adjust_options[p])
+                    else:
+                        skip_adjust = int(skip_adjust)
+
+
         headers = 'User-Agent=' + UA_PC
         if '.m3u8' in video_stream_url and QUALITY == 'Always Ask':
             video_stream_url = account.get_stream_quality(video_stream_url)
         # known issue warning: on Kodi 18 Leia WITHOUT inputstream adaptive, Big Inning starts at the beginning and can't seek
         # anyone with inputstream adaptive, or Kodi 19+, will not have this problem
         if name.startswith('LIVE') and 'Big Inning' in name and KODI_VERSION < 19 and not xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
-            dialog = xbmcgui.Dialog()
             dialog.ok(LOCAL_STRING(30370), LOCAL_STRING(30369))
-        play_stream(video_stream_url, headers, description, title=name, start='-1')
+        play_stream(video_stream_url, headers, description, title=name, start=start)
+
+        # start the skip monitor if MiLB game and a skip type or start inning has been requested and we have a broadcast start timestamp
+        if game_pk is not None and (skip_type > 0 or start_inning > 0) and broadcast_start_timestamp is not None:
+            from .mlbmonitor import MLBMonitor
+            mlbmonitor = MLBMonitor()
+            mlbmonitor.game_monitor(skip_type, game_pk, broadcast_start_timestamp, skip_adjust, video_stream_url, is_live, start_inning, start_inning_half)
     else:
         xbmc.log('unable to find stream for featured video')
 
@@ -1021,10 +1234,12 @@ def play_all_highlights_for_game(game_pk, fanart):
         playlist.clear()
 
         for clip in highlights:
-            listitem = xbmcgui.ListItem(clip['url'])
-            listitem.setArt({'icon': clip['icon'], 'thumb': clip['icon'], 'fanart': fanart})
-            listitem.setInfo(type="Video", infoLabels={"Title": clip['title'], "plot": clip['description']})
-            playlist.add(clip['url'], listitem)
+            # Play All should only include game action tracking, non-analysis, non-reel highlights
+            if clip['game_action_tracking'] is True and clip['analysis'] is False and clip['highlight_reel'] is False:
+                listitem = xbmcgui.ListItem(clip['url'])
+                listitem.setArt({'icon': clip['icon'], 'thumb': clip['icon'], 'fanart': fanart})
+                listitem.setInfo(type="Video", infoLabels={"Title": clip['title'], "plot": clip['description']})
+                playlist.add(clip['url'], listitem)
 
         xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=playlist[0])
 
@@ -1065,10 +1280,12 @@ def highlight_select_stream(json_source, catchup=None, from_context_menu=False):
         playlist.clear()
 
         for clip in highlights:
-            listitem = xbmcgui.ListItem(clip['url'])
-            listitem.setArt({'icon': clip['icon'], 'thumb': clip['icon'], 'fanart': FANART})
-            listitem.setInfo(type="Video", infoLabels={"Title": clip['title'], "plot": clip["description"]})
-            playlist.add(clip['url'], listitem)
+            # Catch Up should only include game action tracking, non-analysis, non-reel highlights
+            if clip['game_action_tracking'] is True and clip['analysis'] is False and clip['highlight_reel'] is False:
+                listitem = xbmcgui.ListItem(clip['url'])
+                listitem.setArt({'icon': clip['icon'], 'thumb': clip['icon'], 'fanart': FANART})
+                listitem.setInfo(type="Video", infoLabels={"Title": clip['title'], "plot": clip["description"]})
+                playlist.add(clip['url'], listitem)
 
         if catchup is not None:
             playlist.add(catchup.getPath(), catchup)
@@ -1087,6 +1304,18 @@ def get_highlights(items):
     xbmc.log(str(items))
     highlights = []
     for item in sorted(items, key=lambda x: x['date']):
+        # label game action tracking, analysis, and highlight reels for filtering under Play All / Catch Up
+        game_action_tracking = False
+        analysis = False
+        highlight_reel = False
+        for keyword in item['keywordsAll']:
+            if keyword['displayName'] == 'game action tracking':
+                game_action_tracking = True
+            elif keyword['displayName'] == 'analysis':
+                analysis = True
+            elif keyword['displayName'].startswith('highlight reel'):
+                highlight_reel = True
+
         for playback in item['playbacks']:
             if 'mp4Avc' in playback['name']:
                 clip_url = playback['url']
@@ -1094,7 +1323,7 @@ def get_highlights(items):
         headline = item['headline']
         icon = item['image']['cuts'][0]['src']
         description = item['blurb']
-        highlights.append({'url': clip_url, 'title': headline, 'icon': icon, 'description': description})
+        highlights.append({'url': clip_url, 'title': headline, 'icon': icon, 'description': description, 'game_action_tracking': game_action_tracking, 'analysis': analysis, 'highlight_reel': highlight_reel})
 
     return highlights
 
@@ -1126,8 +1355,8 @@ def playAllHighlights(stream_date):
             if 'highlights' in game['content']:
                 for item in game['content']['highlights']['highlights']['items']:
                     try:
-                        title = item['headline']
-                        if (n == 0 and title.endswith(' Highlights')) or (n == 1 and item['headline'].startswith('CG: ')):
+                        title = item['headline'].strip().lower()
+                        if (n == 0 and (' vs ' in title or ' vs. ' in title or ' versus ' in title or ' at ' in title or '@' in title) and (title.endswith(' highlights') or title.endswith(' recap'))) or (n == 1 and title.includes('condensed')):
                             for playback in item['playbacks']:
                                 if 'hlsCloud' in playback['name']:
                                     clip_url = playback['url']
@@ -1135,9 +1364,10 @@ def playAllHighlights(stream_date):
                             listitem = xbmcgui.ListItem(clip_url)
                             icon = item['image']['cuts'][0]['src']
                             listitem.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
-                            listitem.setInfo(type="Video", infoLabels={"Title": title})
-                            xbmc.log('adding recap to playlist : ' + title)
+                            listitem.setInfo(type="Video", infoLabels={"Title": item['headline']})
+                            xbmc.log('adding recap to playlist : ' + item['headline'])
                             playlist.add(clip_url, listitem)
+                            break
                     except:
                         pass
         except:
@@ -1177,17 +1407,27 @@ def get_airings_data(content_id=None, game_pk=None):
 def get_blackout_status(game, regional_fox_games_exist):
     blackout_type = 'False'
     blackout_time = None
-    national_blackout = re.match('^[0-9]{5}$', ZIP_CODE)
+    usa_blackout = re.match('^[0-9]{5}$', ZIP_CODE) and COUNTRY == 'USA'
 
-    if 'content' in game and 'media' in game['content'] and 'epg' in game['content']['media'] and len(game['content']['media']['epg']) > 0 and 'items' in game['content']['media']['epg'][0] and len(game['content']['media']['epg'][0]['items']) > 0 and 'mediaFeedType' in game['content']['media']['epg'][0]['items'][0] and game['content']['media']['epg'][0]['items'][0]['mediaFeedType'] == 'NATIONAL':
+    # Check if "national" broadcast
+    if 'content' in game and 'media' in game['content'] and 'epg' in game['content']['media'] and len(game['content']['media']['epg']) > 0 and 'items' in game['content']['media']['epg'][0] and len(game['content']['media']['epg'][0]['items']) > 0 and 'mediaFeedType' in game['content']['media']['epg'][0]['items'][0] and ((game['content']['media']['epg'][0]['items'][0]['mediaFeedType'] == 'NATIONAL') or check_pay_tv(game['content']['media']['epg'][0]['items'])):
+        # Make sure it's not a regional FOX broadcast
         if (game['content']['media']['epg'][0]['items'][0]['callLetters'] != 'FOX') or (game['content']['media']['epg'][0]['items'][0]['callLetters'] == 'FOX' and regional_fox_games_exist == False):
-            if game['seriesDescription'] != 'Spring Training' and game['seriesDescription'] != 'Regular Season':
-                blackout_type = 'International'
-            elif national_blackout:
+            # International blackouts according to https://www.mlb.com/live-stream-games/help-center/blackouts-available-games
+            # Apple TV+ games are blacked out everywhere
+            # ESPN Sunday Night games are blacked out in a list of countries
+            if game['content']['media']['epg'][0]['items'][0]['callLetters'] == 'Apple TV+':
+                blackout_type = 'Full International'
+            elif game['content']['media']['epg'][0]['items'][0]['callLetters'] == 'ESPN' and parse(game['gameDate']).weekday() == 6 and COUNTRY in ESPN_SUNDAY_NIGHT_BLACKOUT_COUNTRIES:
+                blackout_type = 'Partial International'
+            # USA national blackouts
+            elif usa_blackout:
                 blackout_type = 'National'
 
-    if national_blackout and blackout_type == 'False' and game['seriesDescription'] != 'Spring Training' and (game['teams']['away']['team']['abbreviation'] in BLACKOUT_TEAMS or game['teams']['home']['team']['abbreviation'] in BLACKOUT_TEAMS):
-        blackout_type = 'Local'
+    # Check local blackouts
+    if game['teams']['away']['team']['abbreviation'] in BLACKOUT_TEAMS or game['teams']['home']['team']['abbreviation'] in BLACKOUT_TEAMS:
+        if blackout_type == 'False' and game['seriesDescription'] != 'Spring Training':
+            blackout_type = 'Local'
 
     # also calculate a blackout time for non-suspended, non-TBD games
     if blackout_type != 'False' and 'resumeGameDate' not in game and 'resumedFromDate' not in game and game['status']['startTimeTBD'] is False:
@@ -1195,8 +1435,8 @@ def get_blackout_status(game, regional_fox_games_exist):
         if 'scheduled_innings' not in game:
             game['scheduled_innings'] = get_scheduled_innings(game)
         innings = max(game['scheduled_innings'], get_current_inning(game))
-        # avg 9 inning game was 3:11 in 2021, or 21.22 minutes per inning
-        gameDurationMinutes = 21.22 * innings
+        # avg 9 inning game is 2:40 in 2023, or 17.78 minutes per inning
+        gameDurationMinutes = 17.78 * innings
         # default to assuming the scheduled game time is the first pitch time
         firstPitch = parse(game['gameDate'])
         if 'gameInfo' in game:
@@ -1220,7 +1460,7 @@ def check_regional_fox_games(games):
     fox_start_time = None
     regional_fox_games_exist = False
     for game in games:
-        if game['seriesDescription'] == 'Regular Season' and 'content' in game and 'media' in game['content'] and 'epg' in game['content']['media']:
+        if 'content' in game and 'media' in game['content'] and 'epg' in game['content']['media']:
             for epg in game['content']['media']['epg']:
                 if epg['title'] == 'MLBTV':
                     for item in epg['items']:
@@ -1232,6 +1472,15 @@ def check_regional_fox_games(games):
                     break
 
     return regional_fox_games_exist
+
+
+# check if any broadcast requires pay TV credentials
+def check_pay_tv(items):
+    for item in items:
+        if ('abcAuthRequired' in item and item['abcAuthRequired'] is True) or ('espnAuthRequired' in item and item['espnAuthRequired'] is True) or ('espn2AuthRequired' in item and item['espn2AuthRequired'] is True) or ('foxAuthRequired' in item and item['foxAuthRequired'] is True) or ('fs1AuthRequired' in item and item['fs1AuthRequired'] is True) or ('mlbnAuthRequired' in item and item['mlbnAuthRequired'] is True) or ('tbsAuthRequired' in item and item['tbsAuthRequired'] is True):
+            return True
+
+    return False
 
 
 def get_scheduled_innings(game):

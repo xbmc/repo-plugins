@@ -321,7 +321,7 @@ msgid "Watch in YouTube Add-on"
 msgstr ""
 
 msgctxt "#30415"
-msgid "Zip code (5 digits, for blackout labels)"
+msgid "USA Zip code (5 digits, for blackout labels)"
 msgstr ""
 
 msgctxt "#30416"
@@ -362,6 +362,54 @@ msgstr ""
 
 msgctxt "#30425"
 msgid "Skip adjust end (seconds)"
+msgstr ""
+
+msgctxt "#30426"
+msgid "Minor League Games"
+msgstr ""
+
+msgctxt "#30427"
+msgid "Include favorite team's affiliates"
+msgstr ""
+
+msgctxt "#30428"
+msgid "Country (for blackout labels)"
+msgstr ""
+
+msgctxt "#30429"
+msgid "By Affiliate"
+msgstr ""
+
+msgctxt "#30430"
+msgid "AAA"
+msgstr ""
+
+msgctxt "#30431"
+msgid "AA"
+msgstr ""
+
+msgctxt "#30432"
+msgid "A+"
+msgstr ""
+
+msgctxt "#30433"
+msgid "A"
+msgstr ""
+
+msgctxt "#30434"
+msgid "Skip adjust in seconds (negative, earlier; positive, later)"
+msgstr ""
+
+msgctxt "#30435"
+msgid "Extra MiLB skip adjust (seconds)"
+msgstr ""
+
+msgctxt "#30436"
+msgid "Hide scores ticker"
+msgstr ""
+
+msgctxt "#30437"
+msgid "Disable closed captions"
 msgstr ""
 
 

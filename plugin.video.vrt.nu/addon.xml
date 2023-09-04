@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vrt.nu" name="VRT MAX" version="2.5.20+matrix.1" provider-name="Martijn Moreel, dagwieers, mediaminister">
+<addon id="plugin.video.vrt.nu" name="VRT MAX" version="2.5.24+matrix.1" provider-name="Martijn Moreel, dagwieers, mediaminister">
   <requires>
     <import addon="resource.images.studios.white" version="0.0.22"/>
     <import addon="script.module.beautifulsoup4" version="4.6.2"/>
@@ -18,7 +18,7 @@
 
   - Track the programs you like
   - List all videos alphabetically by program, category, channel or feature
-  - Watch live streams from Eén, Canvas, Ketnet, Ketnet Junior and Sporza
+  - Watch live streams from VRT 1, Canvas, Ketnet, Ketnet Junior and Sporza
   - Discover recently added or soon offline content
   - Browse the online TV guides or search VRT MAX
 
@@ -29,7 +29,7 @@
 
   - Volg je favoriete tv-programma's
   - Raadpleeg video's op basis van programma, categorie, kanaal of feature
-  - Bekijk de livestreams van Eén, Canvas, Ketnet, Ketnet Junior en Sporza
+  - Bekijk de livestreams van VRT 1, Canvas, Ketnet, Ketnet Junior en Sporza
   - Ontdek recent toegevoegde of binnenkort offline video's
   - Doorblader de online tv-gids of doorzoek VRT MAX
 
@@ -42,6 +42,21 @@
     <website>https://github.com/add-ons/plugin.video.vrt.nu/wiki</website>
     <source>https://github.com/add-ons/plugin.video.vrt.nu</source>
     <news>
+v2.5.24 (2023-07-18)
+- Fix 1080p quality and playback issue
+
+v2.5.23 (2023-07-11)
+- Fix episode and featured listings
+
+v2.5.22 (2023-06-14)
+- Fix categories menu
+- Fix 1080p
+
+v2.5.21 (2023-05-23)
+- Fix 1080p for livestreams
+- Remove All programs menu
+- Fix paging in episode listings
+
 v2.5.20 (2022-12-06)
 - Fix all programs menu
 - Fix latest episode API

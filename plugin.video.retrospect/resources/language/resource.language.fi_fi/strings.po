@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-09-12 11:14+0000\n"
+"PO-Revision-Date: 2023-05-07 07:16+0000\n"
 "Last-Translator: Oskari Lavinto <olavinto@protonmail.com>\n"
 "Language-Team: Finnish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/fi_fi/>\n"
 "Language: fi_fi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14\n"
+"X-Generator: Weblate 4.15.2\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -454,6 +454,22 @@ msgctxt "#30108"
 msgid "Other"
 msgstr "Muut"
 
+msgctxt "#30109"
+msgid "IPTV Manager"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Install IPTV Manager add-on"
+msgstr "Asenna IPTV Manager -lisäosa"
+
+msgctxt "#30111"
+msgid "Enable IPTV Manager integration"
+msgstr "Käytä IPTV Manager -integrointia"
+
+msgctxt "#30112"
+msgid "IPTV Manager settings…"
+msgstr "IPTV Manager -asetukset…"
+
 # used for list limits
 # empty strings from id 30109 to 30189
 msgctxt "#30190"
@@ -649,6 +665,18 @@ msgstr ""
 msgctxt "#30367"
 msgid "New on %s"
 msgstr ""
+
+msgctxt "#30368"
+msgid "Extras"
+msgstr ""
+
+msgctxt "#30369"
+msgid "Fragments"
+msgstr ""
+
+msgctxt "#30370"
+msgid "All episodes"
+msgstr "Kaikki jaksot"
 
 msgctxt "#30401"
 msgid "Dutch"

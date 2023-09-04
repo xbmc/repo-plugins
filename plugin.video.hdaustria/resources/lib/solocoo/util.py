@@ -213,7 +213,7 @@ def parse_epg_capi(program, tenant):
 
     # Parse credits
     credit_list = []
-    for credit in program.get('credits', []):
+    for credit in program.get('credits', []) or []:
         if not credit.get('r'):  # Actor
             credit_list.append(Credit(role=Credit.ROLE_ACTOR, person=credit.get('p'), character=credit.get('c')))
         elif credit.get('r') == 1:  # Director

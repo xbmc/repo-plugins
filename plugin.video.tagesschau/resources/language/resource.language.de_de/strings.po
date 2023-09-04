@@ -20,18 +20,46 @@ msgctxt "#30001"
 msgid "Preferred Quality"
 msgstr "Bevorzugte Qualität"
 
+msgctxt "#30002"
+msgid "Show age of news in title"
+msgstr "Zeige Alter der Nachricht im Titel"
+
+msgctxt "#30003"
+msgid "Tagesthemen Listing"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Broadcasts only"
+msgstr "Nur ganze Sendungen"
+
+msgctxt "#30005"
+msgid "Topics only"
+msgstr "Nur einzelne Beiträge"
+
+msgctxt "#30006"
+msgid "Broadcasts and Topics"
+msgstr "Sendungen und Beiträge"
+
 msgctxt "#30100"
-msgid "Latest Videos"
-msgstr "Aktuelle Videos"
+msgid "News"
+msgstr "Nachrichten"
 
 msgctxt "#30101"
-msgid "Latest Broadcasts"
-msgstr "Aktuelle Sendungen"
+msgid "Broadcasts"
+msgstr "Sendungen"
 
 msgctxt "#30102"
-msgid "Dossiers"
-msgstr "Dossiers"
+msgid "Livestream"
+msgstr "Livestream"
 
 msgctxt "#30103"
-msgid "Archived Broadcasts"
-msgstr "Sendungsarchiv"
+msgid "ago"
+msgstr "Vor"
+
+msgctxt "#30104"
+msgid "Tagesschau 20:00"
+msgstr "Tagesschau 20 Uhr"
+
+msgctxt "#30105"
+msgid "Tagesthemen"
+msgstr "Tagesthemen"

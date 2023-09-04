@@ -19,39 +19,37 @@
 #  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 #  http://www.gnu.org/copyleft/gpl.html
 #
-import os
+from urllib.parse import parse_qsl
 import re
-import sys
-import requests
 import requests_cache
-import buggalo
+from pathlib import Path
+import time
+from datetime import datetime
+from inputstreamhelper import Helper
+import traceback
 
 import xbmc
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
+from html import unescape
 
-if sys.version_info.major == 2:
-    # python 2
-    from urlparse import parse_qsl
-    import HTMLParser
-    parser = HTMLParser.HTMLParser()
-else:
-    import html.parser
-    parser = html.parser.HTMLParser()
-    from urllib.parse import parse_qsl
 
 BASE_URL = 'http://www.dr.dk/bonanza/'
 addon = xbmcaddon.Addon()
+get_setting = addon.getSetting
 tr = addon.getLocalizedString
-addon_path = addon.getAddonInfo('path')
+addon_path = Path(addon.getAddonInfo('path'))
 addon_name = addon.getAddonInfo('name')
-ICON = os.path.join(addon_path, 'resources', 'icon.png')
-FANART = os.path.join(addon_path, 'resources', 'fanart.jpg')
-CACHE = os.path.join(addon_path, 'requests_cache')
+ICON = str(addon_path/'resources/icon.png')
+FANART = str(addon_path/'resources/fanart.jpg')
+HOURS_EXPIRE = 24
+cleanup_every = 7
+
 
 def make_notice(object):
-    xbmc.log(str(object), xbmc.LOGDEBUG )
+    xbmc.log(str(object), xbmc.LOGINFO)
+
 
 class BonanzaException(Exception):
     pass
@@ -61,10 +59,31 @@ class Bonanza(object):
     def __init__(self, plugin_url, plugin_handle):
         self._plugin_url = plugin_url
         self._plugin_handle = plugin_handle
+        self.cachePath = Path(addon_path)
+        self.init_sqlite_db()
 
-        #cache expires after: 86400=1 day   604800=7 days
-        requests_cache.install_cache(CACHE, backend='sqlite', expire_after=86400 )
-        requests_cache.remove_expired_responses()
+    def init_sqlite_db(self):
+        if not (self.cachePath/'requests_cleaned').exists():
+            if (self.cachePath/'requests.cache.sqlite').exists():
+                (self.cachePath/'requests.cache.sqlite').unlink()
+        request_fname = str(self.cachePath/'requests.cache')
+        self.session = requests_cache.CachedSession(
+            request_fname, backend='sqlite', expire_after=3600*HOURS_EXPIRE)
+
+        if (self.cachePath/'requests_cleaned').exists():
+            if (time.time() - (self.cachePath/'requests_cleaned').stat().st_mtime)/3600/24 < cleanup_every:
+                # less than self.cleanup_every days since last cleaning, no need...
+                return
+
+        # doing recache.db cleanup
+        try:
+            self.session.remove_expired_responses()
+        except Exception:
+            if (self.cachePath/'requests.cache.sqlite').exists():
+                (self.cachePath/'requests.cache.sqlite').unlink()
+            self.session = requests_cache.CachedSession(
+                request_fname, backend='sqlite', expire_after=3600*self.expire_hours)
+        (self.cachePath/'requests_cleaned').write_text(str(datetime.now()))
 
     def search(self):
         keyboard = xbmc.Keyboard('', tr(30001))
@@ -80,8 +99,8 @@ class Bonanza(object):
             for m in re.finditer(pattern, html, re.DOTALL):
                 url = BASE_URL + m.group(1)
                 image = 'http:' + m.group(2)
-                title = parser.unescape(m.group(3))
-                description = parser.unescape(m.group(4))
+                title = unescape(m.group(3))
+                description = unescape(m.group(4))
 
                 infoLabels = {
                     'title': title,
@@ -143,8 +162,8 @@ class Bonanza(object):
         for m in re.finditer(pattern, html, re.DOTALL):
             url = BASE_URL + m.group(1)
             image = 'http:' + m.group(2)
-            title = parser.unescape(m.group(3))
-            description = parser.unescape(m.group(4))
+            title = unescape(m.group(3))
+            description = unescape(m.group(4))
 
             item = xbmcgui.ListItem(title, offscreen=True)
             item.setArt({'fanart': FANART, 'icon': image})
@@ -160,12 +179,12 @@ class Bonanza(object):
         pattern = '<a href="/bonanza/(serie/.*?)".*?title="([^"]+)".*?' \
                   'data-src="(//asset\.dr\.dk/[^"]+)".*?' \
                   '<h3>([^<]+)</h3>'
-        html = html.split('<div class="list-footer"></div>',1)[0]
+        html = html.split('<div class="list-footer"></div>', 1)[0]
         for m in re.finditer(pattern, html, re.DOTALL):
             url = BASE_URL + m.group(1)
-            description = parser.unescape(m.group(2))
+            description = unescape(m.group(2))
             image = 'http:' + m.group(3)
-            title = parser.unescape(m.group(4))
+            title = unescape(m.group(4))
             infoLabels = {
                 'title': title,
                 'plot': description,
@@ -180,21 +199,25 @@ class Bonanza(object):
             items.append((self._plugin_url + url, item, False))
         xbmcplugin.addDirectoryItems(self._plugin_handle, items)
 
-
     def playContent(self, url):
         html = self._downloadUrl(url)
         pattern = '<source.*?src="([^"]+)"'
         m = re.search(pattern, html, re.DOTALL)
         if m is not None:
             item = xbmcgui.ListItem(path=m.group(1))
+            if int(get_setting('inputstream')) == 0 and '.mp3' not in m.group(1):
+                is_helper = Helper('hls')
+                if is_helper.check_inputstream():
+                    item.setProperty('inputstream', is_helper.inputstream_addon)
+                    item.setProperty('inputstream.adaptive.manifest_type', 'hls')
+
             xbmcplugin.setResolvedUrl(self._plugin_handle, True, item)
         else:
             xbmcplugin.setResolvedUrl(self._plugin_handle, False, xbmcgui.ListItem())
 
     def _downloadUrl(self, url):
         try:
-            xbmc.log(url)
-            u = requests.get(url)
+            u = self.session.get(url)
             if u.status_code == 200:
                 data = u.text
                 u.close()
@@ -203,10 +226,8 @@ class Bonanza(object):
             raise BonanzaException(ex)
 
     def showError(self, message):
-        heading = buggalo.getRandomHeading()
-        line1 = tr(30900)
-        line2 = tr(30901)
-        xbmcgui.Dialog().ok(heading, line1, line2, message)
+        heading = 'API error'
+        xbmcgui.Dialog().ok(heading, '\n'.join([tr(30900), tr(30901), message]))
 
     def route(self, query):
         try:
@@ -226,5 +247,8 @@ class Bonanza(object):
         except BonanzaException as ex:
             self.showError(str(ex))
 
-        except Exception:
-            buggalo.onExceptionRaised()
+        except Exception as ex:
+            stack = traceback.format_exc()
+            heading = 'dr bonaza addon crash'
+            xbmcgui.Dialog().ok(heading, '\n'.join([tr(30906), tr(30907), str(stack)]))
+            raise ex

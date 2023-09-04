@@ -8,7 +8,6 @@ import random
 import string
 import hashlib
 
-from resources.lib.backtothefuture import PY2
 from resources.lib.logger import Logger
 from resources.lib.addonsettings import AddonSettings, LOCAL, KODI
 from resources.lib.xbmcwrapper import XbmcWrapper
@@ -99,11 +98,8 @@ class Vault(object):
                 XbmcWrapper.Error)
             return False
 
-        if PY2:
-            encrypted_key = "%s=%s" % (self.__APPLICATION_KEY_SETTING, application_key)
-        else:
-            # make it text to store
-            encrypted_key = "%s=%s" % (self.__APPLICATION_KEY_SETTING, application_key.decode())
+        # make it text to store
+        encrypted_key = "%s=%s" % (self.__APPLICATION_KEY_SETTING, application_key.decode())
 
         # let's generate a pin using the scrypt password-based key derivation
         pin_key = self.__get_pbk(pin)
@@ -281,8 +277,6 @@ class Vault(object):
 
         application_key_value = application_key[len(Vault.__APPLICATION_KEY_SETTING) + 1:]
         Logger.info("Successfully decrypted the ApplicationKey.")
-        if PY2:
-            return application_key_value
 
         # We return bytes on Python 3
         return application_key_value.encode()
@@ -300,8 +294,6 @@ class Vault(object):
 
         Logger.debug("Encrypting with keysize: %s", len(key))
         aes = pyaes.AESModeOfOperationCTR(key)
-        if PY2:
-            return base64.b64encode(aes.encrypt(data))
         return base64.b64encode(aes.encrypt(data)).decode()
 
     def __decrypt(self, data, key):
@@ -319,8 +311,6 @@ class Vault(object):
         Logger.debug("Decrypting with keysize: %s", len(key))
         aes = pyaes.AESModeOfOperationCTR(key)
 
-        if PY2:
-            return aes.decrypt(base64.b64decode(data))
         return aes.decrypt(base64.b64decode(data)).decode()
 
     def __get_new_key(self, length=32):
@@ -335,8 +325,6 @@ class Vault(object):
 
         new_key = ''.join(random.choice(string.digits + string.ascii_letters + string.punctuation)
                           for _ in range(length))
-        if PY2:
-            return new_key
 
         # The key is bytes in Py3
         return new_key.encode()
@@ -352,8 +340,8 @@ class Vault(object):
         """
 
         salt = AddonSettings.get_client_id()
-        pbk = pyscrypt.hash(password=pin if PY2 else pin.encode(),
-                            salt=salt if PY2 else salt.encode(),
+        pbk = pyscrypt.hash(password=pin.encode(),
+                            salt=salt.encode(),
                             N=2 ** 7,  # should be so that Raspberry Pi can handle it
                             # N=1024,
                             r=1,

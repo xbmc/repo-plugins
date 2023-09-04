@@ -333,96 +333,73 @@ class Main(object):
                         no_url_found = False
 
 
-        # data-url='https://youtu.be/HKvJtxI0QDE'
+        dash_file_found = False
         if have_valid_url:
             pass
         else:
 
-            log("trying method ", "2 (youtube)")
+            log("trying method ", "2 (dash)")
 
-            search_for_string = "data-url='https://youtu.be/"
-            start_pos_video_url = html_source.find(search_for_string)
-            if start_pos_video_url >= 0:
-                start_pos_youtube_id = start_pos_video_url + len(search_for_string)
-                end_pos_youtube_id = html_source.find("'", start_pos_youtube_id)
-                youtube_id = html_source[start_pos_youtube_id:end_pos_youtube_id]
+            # https://muse.ai/embed/6EG5Wob?search=0&links=0&logo=0
+            start_pos_video_url_embed = html_source.find("https://muse.ai/embed/")
+            if start_pos_video_url_embed >= 0:
+                end_pos_video_url_embed = html_source.find('"', start_pos_video_url_embed)
+                if end_pos_video_url_embed >= 0:
+                    video_url_embed = html_source[start_pos_video_url_embed:end_pos_video_url_embed]
 
-            if youtube_id == '':
-                pass
-            else:
-                no_url_found = False
-                have_valid_url = True
+                    # log("video_url_embed", video_url_embed)
 
-                video_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
+                    headers = {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                    'Accept-Language': 'en-US,en;q=0.5',
+                    'Referer': 'https://www.gamekings.tv/',
+                    'DNT': '1',
+                    'Connection': 'keep-alive',
+                    'Upgrade-Insecure-Requests': '1',
+                    'Sec-Fetch-Dest': 'iframe',
+                    'Sec-Fetch-Mode': 'navigate',
+                    'Sec-Fetch-Site': 'cross-site'
+                    }
 
-                # log("video_url", video_url)
+                    # response = session.get("https://muse.ai/embed/6EG5Wob?search=0&links=0&logo=0", headers=headers)
+                    response = session.get(video_url_embed, headers=headers)
 
-                log("success with method ", "2a (youtube)")
+                    html_source = response.text
+                    html_source = convertToUnicodeString(html_source)
 
+                    # log("html_source embed", html_source)
 
-        # Maybe it's something like this. Let's try and find the youtube id
-        # <div id="videoplayer" data-autoplay="false" data-type="youtube" data-color="0567D8" data-url='https://youtu.be/hmGe65Wf9Hw' data-thumb='https://www.gamekings.tv/wp-content/uploads/robocop-terminator-mortal-kombat-11-1280x720.jpg' style='background-image: url(https://www.gamekings.tv/wp-content/uploads/robocop-terminator-mortal-kombat-11-1280x720.jpg);'>
-        if have_valid_url:
-            pass
-        else:
+                    search_for_string = 'url": "'
+                    video_url_start_pos = html_source.find(search_for_string)
+                    if video_url_start_pos >= 0:
+                        # url": "https://cdn.muse.ai/u/Czi97La/f4e5310bc42adcde16ff1b14fa7a56f7e61380b78befa674f666f1bca7ad8953/data", "views": 2401, "visibility": "hidden", "width": 1920},
+                        video_url_start_pos = video_url_start_pos + len(search_for_string)
+                        video_url_end_pos = html_source.find('"', video_url_start_pos)
+                        if video_url_end_pos >= 0:
+                            # https://cdn.muse.ai/u/Czi97La/f4e5310bc42adcde16ff1b14fa7a56f7e61380b78befa674f666f1bca7ad8953/data
+                            video_url_data = html_source[video_url_start_pos:video_url_end_pos]
 
-            log("trying method ", "2 (youtube)")
+                            # log("video_url_data", video_url_data)
 
-            # lets ignore some urls
-            html_source = html_source.replace("https://www.youtube.com/gamekingsextra", "")
-            html_source = html_source.replace("https://www.youtube.com/Gamekingsextra", "")
-            html_source = html_source.replace("https://www.youtube.com/user/gamekingsextra/", "")
-            html_source = html_source.replace("https://www.youtube.com/user/Gamekingsextra/", "")
-            html_source = html_source.replace("www.youtube.com/channel/", "")
-            html_source = html_source.replace("www.youtube.com/Channel/", "")
+                            # https://cdn-eu.muse.ai/u/Czi97La/f4e5310bc42adcde16ff1b14fa7a56f7e61380b78befa674f666f1bca7ad8953/videos/dash.mpd
+                            video_url_dash = video_url_data.replace("/data", "/videos/dash.mpd")
 
-            start_pos_video_url = html_source.find("https://www.youtube.com/")
-            # let's try and something else
-            if start_pos_video_url < 0:
-                start_pos_video_url = html_source.find("https://youtu.be/")
+                            # log("video_url_dash", video_url_dash)
 
-            if start_pos_video_url >= 0:
-                # Let's only use the video_url part
-                html_source_split = str(html_source[start_pos_video_url:]).split()
-                video_url = html_source_split[0]
+                            video_url = video_url_dash
+                            
+                            dash_file_found = True
+                            no_url_found = False
+                            have_valid_url = True
 
-                # Remove the quote on the last position
-                if video_url.endswith('"') or video_url.endswith("'"):
-                    video_url = video_url[0:len(video_url) - 1]
+                            # log("video_url dash", video_url)
 
-                # log("video_url after split and removing trailing quote", video_url)
-
-                if video_url.find("target=") >= 0:
-                    pass
-                else:
-                    youtube_id = str(video_url)
-                    # remove stuff that is not the youtube id itself
-                    youtube_id = youtube_id.replace("https://www.youtube.com/embed/", "")
-                    youtube_id = youtube_id.replace("https://www.youtube.com/watch?v=", "")
-                    youtube_id = youtube_id.replace("https://www.youtube.com/watch", "")
-                    youtube_id = youtube_id.replace("https://www.youtube.com/", "")
-                    youtube_id = youtube_id.replace("https://youtu.be/", "")
-                    start_pos_question_mark = youtube_id.find("?")
-                    if start_pos_question_mark >= 0:
-                        youtube_id = youtube_id[0:start_pos_question_mark]
-                    youtube_id = youtube_id.strip()
-
-                    if youtube_id == '':
-                        pass
-                    else:
-                        no_url_found = False
-                        have_valid_url = True
-
-                        video_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
-
-                        # log("video_url", video_url)
-
-                        log("success with method ", "2b (youtube)")
+                            log("success with method ", "2 (dash)")
 
 
         if have_valid_url:
             pass
-        # I guess we try another way
         else:
 
             log("trying method ", "3 (vimeo)")
@@ -481,70 +458,94 @@ class Main(object):
                     log("success with method ", "3 (vimeo)")
 
 
-        dash_file_found = False
+        # data-url='https://youtu.be/HKvJtxI0QDE'
         if have_valid_url:
             pass
-        # I guess we try yet another way
         else:
 
-            log("trying method ", "4 (dash)")
+            log("trying method ", "4a (youtube)")
 
-            # https://muse.ai/embed/6EG5Wob?search=0&links=0&logo=0
-            start_pos_video_url_embed = html_source.find("https://muse.ai/embed/")
-            if start_pos_video_url_embed >= 0:
-                end_pos_video_url_embed = html_source.find('"', start_pos_video_url_embed)
-                if end_pos_video_url_embed >= 0:
-                    video_url_embed = html_source[start_pos_video_url_embed:end_pos_video_url_embed]
+            search_for_string = "data-url='https://youtu.be/"
+            start_pos_video_url = html_source.find(search_for_string)
+            if start_pos_video_url >= 0:
+                start_pos_youtube_id = start_pos_video_url + len(search_for_string)
+                end_pos_youtube_id = html_source.find("'", start_pos_youtube_id)
+                youtube_id = html_source[start_pos_youtube_id:end_pos_youtube_id]
 
-                    # log("video_url_embed", video_url_embed)
+            if youtube_id == '':
+                pass
+            else:
+                no_url_found = False
+                have_valid_url = True
 
-                    headers = {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0',
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-                    'Accept-Language': 'en-US,en;q=0.5',
-                    'Referer': 'https://www.gamekings.tv/',
-                    'DNT': '1',
-                    'Connection': 'keep-alive',
-                    'Upgrade-Insecure-Requests': '1',
-                    'Sec-Fetch-Dest': 'iframe',
-                    'Sec-Fetch-Mode': 'navigate',
-                    'Sec-Fetch-Site': 'cross-site'
-                    }
+                video_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
 
-                    # response = session.get("https://muse.ai/embed/6EG5Wob?search=0&links=0&logo=0", headers=headers)
-                    response = session.get(video_url_embed, headers=headers)
+                # log("video_url", video_url)
 
-                    html_source = response.text
-                    html_source = convertToUnicodeString(html_source)
+                log("success with method ", "4a (youtube)")
 
-                    # log("html_source embed", html_source)
 
-                    search_for_string = 'url": "'
-                    video_url_start_pos = html_source.find(search_for_string)
-                    if video_url_start_pos >= 0:
-                        # url": "https://cdn.muse.ai/u/Czi97La/f4e5310bc42adcde16ff1b14fa7a56f7e61380b78befa674f666f1bca7ad8953/data", "views": 2401, "visibility": "hidden", "width": 1920},
-                        video_url_start_pos = video_url_start_pos + len(search_for_string)
-                        video_url_end_pos = html_source.find('"', video_url_start_pos)
-                        if video_url_end_pos >= 0:
-                            # https://cdn.muse.ai/u/Czi97La/f4e5310bc42adcde16ff1b14fa7a56f7e61380b78befa674f666f1bca7ad8953/data
-                            video_url_data = html_source[video_url_start_pos:video_url_end_pos]
+        # Maybe it's something like this. Let's try and find the youtube id
+        # <div id="videoplayer" data-autoplay="false" data-type="youtube" data-color="0567D8" data-url='https://youtu.be/hmGe65Wf9Hw' data-thumb='https://www.gamekings.tv/wp-content/uploads/robocop-terminator-mortal-kombat-11-1280x720.jpg' style='background-image: url(https://www.gamekings.tv/wp-content/uploads/robocop-terminator-mortal-kombat-11-1280x720.jpg);'>
+        if have_valid_url:
+            pass
+        else:
 
-                            # log("video_url_data", video_url_data)
+            log("trying method ", "4b (youtube)")
 
-                            # https://cdn-eu.muse.ai/u/Czi97La/f4e5310bc42adcde16ff1b14fa7a56f7e61380b78befa674f666f1bca7ad8953/videos/dash.mpd
-                            video_url_dash = video_url_data.replace("/data", "/videos/dash.mpd")
+            # lets ignore some urls
+            html_source = html_source.replace("https://www.youtube.com/gamekingsextra", "")
+            html_source = html_source.replace("https://www.youtube.com/Gamekingsextra", "")
+            html_source = html_source.replace("https://www.youtube.com/user/gamekingsextra/", "")
+            html_source = html_source.replace("https://www.youtube.com/user/Gamekingsextra/", "")
+            html_source = html_source.replace("www.youtube.com/channel/", "")
+            html_source = html_source.replace("www.youtube.com/Channel/", "")
 
-                            # log("video_url_dash", video_url_dash)
+            start_pos_video_url = html_source.find("https://www.youtube.com/")
+            # let's try and something else
+            if start_pos_video_url < 0:
+                start_pos_video_url = html_source.find("https://youtu.be/")
 
-                            video_url = video_url_dash
-                            
-                            dash_file_found = True
-                            no_url_found = False
-                            have_valid_url = True
+            if start_pos_video_url >= 0:
+                # Let's only use the video_url part
+                html_source_split = str(html_source[start_pos_video_url:]).split()
+                video_url = html_source_split[0]
 
-                            # log("video_url dash", video_url)
+                # Remove the quote on the last position
+                if video_url.endswith('"') or video_url.endswith("'"):
+                    video_url = video_url[0:len(video_url) - 1]
 
-                            log("success with method ", "4 (dash)")
+                # log("video_url after split and removing trailing quote", video_url)
+
+                if video_url.find("target=") >= 0:
+                    pass
+                elif video_url.find("<span=") >= 0:
+                    pass
+                else:
+                    youtube_id = str(video_url)
+                    # remove stuff that is not the youtube id itself
+                    youtube_id = youtube_id.replace("https://www.youtube.com/embed/", "")
+                    youtube_id = youtube_id.replace("https://www.youtube.com/watch?v=", "")
+                    youtube_id = youtube_id.replace("https://www.youtube.com/watch", "")
+                    youtube_id = youtube_id.replace("https://www.youtube.com/", "")
+                    youtube_id = youtube_id.replace("https://youtu.be/", "")
+                    start_pos_question_mark = youtube_id.find("?")
+                    if start_pos_question_mark >= 0:
+                        youtube_id = youtube_id[0:start_pos_question_mark]
+                    youtube_id = youtube_id.strip()
+
+                    if youtube_id == '':
+                        pass
+                    else:
+                        no_url_found = False
+                        have_valid_url = True
+
+                        video_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
+
+                        # log("video_url", video_url)
+
+                        log("success with method ", "4b (youtube)")
+
 
         # Play video
         if have_valid_url:

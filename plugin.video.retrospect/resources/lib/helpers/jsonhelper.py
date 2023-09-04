@@ -4,8 +4,6 @@
 import re
 import json
 
-from resources.lib.backtothefuture import unichr
-
 
 #noinspection PyShadowingNames
 class JsonHelper(object):
@@ -105,7 +103,7 @@ class JsonHelper(object):
 
         hex_string = "0x%s" % (match.group(2))
         hex_value = int(hex_string, 16)
-        return unichr(hex_value)
+        return chr(hex_value)
 
     #noinspection PyUnboundLocalVariable
     def get_value(self, *args, **kwargs):
@@ -118,18 +116,32 @@ class JsonHelper(object):
 
         """
 
+        return JsonHelper.get_from(self.json, *args, logger=self.logger, **kwargs)
+
+    #noinspection PyUnboundLocalVariable
+    @staticmethod
+    def get_from(data, *args, logger=None, **kwargs):
+        """ Retrieves data from a generic JSON object based on the input parameters
+
+        :param str data         The JSON data
+        :param str args|int:    The dictionary keys, or list indexes.
+        :param any kwargs:      Possible value = fallback and allows the specification of a fallback value.
+
+        :return: the selected JSON object
+
+        """
+
         try:
-            data = self.json
             for arg in args:
                 data = data[arg]
         except KeyError:
             if "fallback" in kwargs:
-                if self.logger:
-                    self.logger.debug("Key ['%s'] not found in Json", arg)
+                if logger:
+                    logger.debug("Key ['%s'] not found in Json", arg)
                 return kwargs["fallback"]
 
-            if self.logger:
-                self.logger.warning("Key ['%s'] not found in Json", arg, exc_info=True)
+            if logger:
+                logger.warning("Key ['%s'] not found in Json", arg, exc_info=True)
             return None
 
         return data

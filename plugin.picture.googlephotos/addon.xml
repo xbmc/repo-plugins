@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.picture.googlephotos" version="1.0.0" name="Google Photos" provider-name="Pranjal Singhal">
+<addon id="plugin.picture.googlephotos" version="2.0.0" name="Google Photos" provider-name="Pranjal Singhal">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
     <import addon="script.module.requests" />
+    <import addon="script.module.pyqrcode" />
   </requires>
 
   <extension point="xbmc.python.pluginsource" library="main.py">
@@ -23,7 +24,7 @@ If you want to know more about OAuth 2.0 you can visit the following pages:
         
 Kodi and I take no responsibility or liability.
 
-The authentication server URL is specified in Settings / Expert / Sign-in Server. The Sign-in Server implements the OAuth 2.0 protocol.
+The authentication server URL is specified in Settings / Sign-in Server. The Sign-in Server implements the OAuth 2.0 protocol.
 The complete source code of the Sign-in Server can be download here: https://github.com/pransin/Device-Authorization-Grant-Proxy-Server
 You can clone the project and host it in your own server. 
     </disclaimer>
@@ -32,5 +33,12 @@ You can clone the project and host it in your own server.
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>
     </assets>
+
+    <news>v2.0.0 (2022-09-14)
+      CONTAINS BREAKING CHANGES. WILL REMOVE SAVED ACCOUNTS.
+      - Changed sign-in server to photos-kodi-login.onrender.com
+      - Client credentials must be entered in the settings to use the addon
+      Note: I will update the addon if I find a way to simplify the login procedure 
+    </news>
   </extension>
 </addon>

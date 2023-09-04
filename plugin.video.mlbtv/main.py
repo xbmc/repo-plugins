@@ -16,6 +16,9 @@ icon = None
 fanart = None
 featured_video = None
 description = None
+sport = MLB_ID
+teams = 'None'
+gamechanger = 'False'
 
 if 'name' in params:
     name = urllib.unquote_plus(params["name"])
@@ -59,6 +62,15 @@ if 'featured_video' in params:
 if 'description' in params:
     description = urllib.unquote_plus(params["description"])
 
+if 'sport' in params:
+    sport = urllib.unquote_plus(params["sport"])
+
+if 'teams' in params:
+    teams = urllib.unquote_plus(params["teams"])
+
+if 'gamechanger' in params:
+    gamechanger = urllib.unquote_plus(params["gamechanger"])
+
 # default addon home screen
 if mode is None:
     # autoplay fav team, if that setting is enabled and a live broadcast is in progress
@@ -73,15 +85,15 @@ if mode is None:
 
 # Today's Games
 elif mode == 100:
-    todays_games(None, start_inning)
+    todays_games(None, start_inning, sport, teams)
 
 # Prev and Next
 elif mode == 101:
-    todays_games(game_day, start_inning)
+    todays_games(game_day, start_inning, sport, teams)
 
 # autoplay, use an extra parameter to force auto stream selection
 elif mode == 102:
-    stream_select(game_pk, spoiler, suspended, start_inning, blackout, description, name, icon, fanart, autoplay=True)
+    stream_select(game_pk, spoiler, suspended, start_inning, blackout, description, name, icon, fanart, autoplay=True, gamechanger=gamechanger)
 
 # from context menu, use an extra parameter to force manual stream selection
 elif mode == 103:
@@ -118,6 +130,14 @@ elif mode == 108:
     # Refresh will erase history, so navigating back won't bring up the inning prompt again
     xbmc.executebuiltin('Container.Refresh("plugin://plugin.video.mlbtv/?mode=101&game_day='+game_day+'&start_inning='+str(start_inning)+'")')
 
+# MiLB Games menu
+elif mode == 109:
+    minor_league_categories()
+
+# By Affiliate menu
+elif mode == 110:
+    affiliate_menu()
+
 # Goto Date
 elif mode == 200:
     search_txt = ''
@@ -140,7 +160,7 @@ elif mode == 300:
 
 # Featured stream select
 elif mode == 301:
-    featured_stream_select(featured_video, name, description)
+    featured_stream_select(featured_video, name, description, start_inning, game_pk)
 
 # Logout
 elif mode == 400:

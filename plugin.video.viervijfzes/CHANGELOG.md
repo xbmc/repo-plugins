@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.4.11](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.11) (2023-07-26)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.4.10...v0.4.11)
+
+**Implemented enhancements:**
+
+- Add support for proxies [\#126](https://github.com/add-ons/plugin.video.viervijfzes/pull/126) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Fixed bugs:**
+
+- Add DRM support for all streams [\#121](https://github.com/add-ons/plugin.video.viervijfzes/pull/121) ([mediaminister](https://github.com/mediaminister))
+- Use inputstreamhelper for unprotected MPEG-DASH [\#118](https://github.com/add-ons/plugin.video.viervijfzes/pull/118) ([mediaminister](https://github.com/mediaminister))
+
 ## [v0.4.10](https://github.com/add-ons/plugin.video.viervijfzes/tree/v0.4.10) (2023-01-16)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.viervijfzes/compare/v0.4.9...v0.4.10)

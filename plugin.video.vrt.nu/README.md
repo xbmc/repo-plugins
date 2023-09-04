@@ -15,7 +15,7 @@ This Kodi add-on can be used to watch all video content from VRT MAX.
 
 - Track the programs you like
 - List all videos alphabetically by program, category, channel or feature
-- Watch live streams from Eén, Canvas, Ketnet, Ketnet Junior and Sporza
+- Watch live streams from VRT 1, Canvas, Ketnet, Ketnet Junior and Sporza
 - Discover recently added or soon offline content
 - Browse the online TV guides or search VRT MAX
 
@@ -59,6 +59,21 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.24 (2023-07-18)
+- Fix 1080p quality and playback issue (@mediaminister)
+
+### v2.5.23 (2023-07-11)
+- Fix episode and featured listings (@mediaminister)
+
+### v2.5.22 (2023-06-14)
+- Fix categories menu (@mediaminister)
+- Fix 1080p (@mediaminister)
+
+### v2.5.21 (2023-05-23)
+- Fix 1080p for livestreams (@mediaminister)
+- Remove All programs menu (@mediaminister)
+- Fix paging in episode listings (@mediaminister)
+
 ### v2.5.20 (2022-12-06)
 - Fix all programs menu (@mediaminister)
 - Fix latest episode API (@mediaminister)

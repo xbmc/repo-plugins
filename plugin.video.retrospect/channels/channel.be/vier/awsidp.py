@@ -6,7 +6,6 @@ import binascii
 
 import datetime
 
-from resources.lib.backtothefuture import basestring
 from resources.lib.urihandler import UriHandler
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.logger import Logger
@@ -314,7 +313,7 @@ class AwsIdp:
         """
 
         # noinspection PyTypeChecker
-        if not isinstance(long_int, basestring):
+        if not isinstance(long_int, str):
             hash_str = AwsIdp.__long_to_hex(long_int)
         else:
             hash_str = long_int

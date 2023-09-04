@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.arteplussept" name="Arte +7" version="1.1.8" provider-name="bmf, thomas-ernest">
+<addon id="plugin.video.arteplussept" name="Arte +7" version="1.4.0" provider-name="bmf, thomas-ernest">
     <!-- https://kodi.wiki/view/Addon.xml -->
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -18,55 +18,55 @@
         <description lang="fr_FR">
 Regardez les vidéos de Arte +7
 Pour toute demande ou reporter un problème:
-https://github.com/known-as-bmf/plugin.video.arteplussept/issues
+https://github.com/thomas-ernest/plugin.video.arteplussept/issues
 Les contributions sont les bienvenues:
-https://github.com/known-as-bmf/plugin.video.arteplussept
+https://github.com/thomas-ernest/plugin.video.arteplussept
         </description>
         <description lang="de_DE">
 Sehen Sie Videos von Arte +7
 Für Fehlerberichte und Verbesserungsvorschläge:
-https://github.com/known-as-bmf/plugin.video.arteplussept/issues
+https://github.com/thomas-ernest/plugin.video.arteplussept/issues
 Mithilfe ist willkommen:
-https://github.com/known-as-bmf/plugin.video.arteplussept
+https://github.com/thomas-ernest/plugin.video.arteplussept
         </description>
         <description lang="en_GB">
 Watch videos from Arte +7
 For feature requests / issues:
-https://github.com/known-as-bmf/plugin.video.arteplussept/issues
+https://github.com/thomas-ernest/plugin.video.arteplussept/issues
 Contributions are welcome:
-https://github.com/known-as-bmf/plugin.video.arteplussept
+https://github.com/thomas-ernest/plugin.video.arteplussept
         </description>
         <description lang="it_IT">
 Guarda video da Arte +7
 Per richiedere nuove funzionalità o segnalare problemi:
-https://github.com/known-as-bmf/plugin.video.arteplussept/issues
+https://github.com/thomas-ernest/plugin.video.arteplussept/issues
 Nuovi contributi sono ben accetti:
-https://github.com/known-as-bmf/plugin.video.arteplussept
+https://github.com/thomas-ernest/plugin.video.arteplussept
         </description>
         <description lang="pl_PL">
 Oglądaj wideos z Arte +7
 W przypadku problemów lub próśb o ulepszenie:
-https://github.com/known-as-bmf/plugin.video.arteplussept/issues
+https://github.com/thomas-ernest/plugin.video.arteplussept/issues
 Każda pomoc mile widziana:
-https://github.com/known-as-bmf/plugin.video.arteplussept
+https://github.com/thomas-ernest/plugin.video.arteplussept
         </description>
         <language>fr de en it pl</language>
         <platform>all</platform>
         <license>MIT</license>
         <website>https://www.arte.tv/fr/</website>
-        <source>https://github.com/known-as-bmf/plugin.video.arteplussept</source>
+        <source>https://github.com/thomas-ernest/plugin.video.arteplussept</source>
         <news>
-        Highlights since 1.1.2
-        - Integrate Arte account favorites, last viewed items and playback progress (thanks to Arte account to be configured in settings).
-        - Move from HBB TV to Arte TV API.
-        - Fixed playback progress / resume point retrieved from Arte TV
-        - Added synchronisation of playback progress with Arte TV when video playback paused, stopped or crashed
-        - Manage favorites in Arte profile from context menu
-        - Added Search in root menu
-        - Added Live stream in root menu
-        - Added Polish translation
-        - Added My list and My history content from Arte TV profile
-        - Added purge of my history
+v1.4.0 (2023-8-14)
+- Add support for content over multiple pages.
+- Refactor most of the code in OO style
+v1.3.1 (2023-8-12)
+- Add context menu to view collection as menu instead of playlist
+- Set resume point to 0 when video was fully watched. Avoid crash when playing seq of watched videos in playlist.
+v1.3.0 (2023-8-6)
+- Improve security with better password management
+        - Stop storing password on filesystem though addon settings
+- Make thomas-ernest fork official in addon.xml for visibility in wiki
+- Minor fix/clean-up in translation
         </news>
         <assets>
             <icon>resources/icon.png</icon>

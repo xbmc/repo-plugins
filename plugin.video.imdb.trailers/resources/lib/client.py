@@ -27,7 +27,7 @@ TRANSLATEPATH = xbmcvfs.translatePath if six.PY3 else xbmc.translatePath
 CERT_FILE = TRANSLATEPATH('special://xbmc/system/certs/cacert.pem')
 
 
-def request(url, headers={}, timeout='20'):
+def request(url, headers=None, post=None, timeout='20'):
     _headers = {}
     if headers:
         _headers.update(headers)
@@ -53,6 +53,13 @@ def request(url, headers={}, timeout='20'):
         _headers['Accept-Encoding'] = 'gzip'
 
     req = urllib_request.Request(url)
+
+    if post is not None:
+        post = json.dumps(post)
+        post = six.ensure_binary(post)
+        req = urllib_request.Request(url, post)
+        req.add_header('Content-Type', 'application/json')
+
     _add_request_header(req, _headers)
 
     try:

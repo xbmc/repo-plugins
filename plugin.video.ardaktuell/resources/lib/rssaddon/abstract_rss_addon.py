@@ -32,28 +32,33 @@ class AbstractRssAddon:
         self.addon_handle = addon_handle
         self.addon_dir = xbmcvfs.translatePath(self.addon.getAddonInfo('path'))
 
+        self.params = dict()
+
     def handle(self, argv: 'list[str]') -> None:
 
         path = urllib.parse.urlparse(argv[0]).path.replace("//", "/")
         url_params = urllib.parse.parse_qs(argv[2][1:])
 
         if not self.check_disclaimer():
-            path = "/"
-            url_params = list()
+            self.route("/", dict())
+            return
 
-        if "rss" in url_params:
-            url = self.decode_param(url_params["rss"][0])
-            limit = int(self.decode_param(
-                url_params["limit"][0])) if "limit" in url_params else 0
-            offset = int(self.decode_param(
-                url_params["offset"][0])) if "offset" in url_params else 0
+        self.params = {key: self.decode_param(
+            url_params[key][0]) for key in url_params}
+
+        if "rss" in self.params:
+            url = self.params["rss"]
+            limit = int(self.params["limit"]
+                        ) if "limit" in self.params else 0
+            offset = int(self.params["offset"]
+                         ) if "offset" in self.params else 0
             self.render_rss(path, url, limit=limit, offset=offset)
 
-        elif "play_latest" in url_params:
-            url = self.decode_param(url_params["play_latest"][0])
+        elif "play_latest" in self.params:
+            url = self.params["play_latest"]
             self.play_latest(url)
         else:
-            self.route(path, url_params)
+            self.route(path)
 
     def decode_param(self, encoded_param: str) -> str:
 
@@ -63,7 +68,7 @@ class AbstractRssAddon:
 
         return True
 
-    def route(self, path: str, url_params):
+    def route(self, path: str):
 
         pass
 
@@ -176,23 +181,35 @@ class AbstractRssAddon:
 
         pass
 
+    def build_label(self, item) -> str:
+
+        return item["name"]
+
+    def build_plot(self, item) -> str:
+
+        return item["description"] if "description" in item else ""
+
+    def build_url(self, item) -> str:
+
+        return item["stream_url"]
+
     def _create_list_item(self, item: dict) -> xbmcgui.ListItem:
 
-        li = xbmcgui.ListItem(label=item["name"])
+        li = xbmcgui.ListItem(label=self.build_label(item))
 
         if "description" in item:
             li.setProperty("label2", item["description"])
 
         if "stream_url" in item:
-            li.setPath(item["stream_url"])
+            li.setPath(self.build_url(item))
 
         if "type" in item:
             infos = {
-                "title": item["name"]
+                "title": self.build_label(item)
             }
 
             if item["type"] == "video":
-                infos["plot"] = item["description"] if "description" in item else ""
+                infos["plot"] = self.build_plot(item)
 
             if "duration" in item and item["duration"] >= 0:
                 infos["duration"] = item["duration"]
@@ -247,7 +264,7 @@ class AbstractRssAddon:
         li = self._create_list_item(entry)
 
         if "stream_url" in entry:
-            url = entry["stream_url"]
+            url = self.build_url(entry)
 
         else:
             url = "".join(
@@ -278,7 +295,6 @@ class AbstractRssAddon:
                     "name": "%s (%s)" % (title, self.addon.getLocalizedString(32101)),
                     "description": description,
                     "icon": image,
-                    "date": datetime.now(),
                     "specialsort": "top",
                     "type": items[0]["type"],
                     "params": [
@@ -295,7 +311,7 @@ class AbstractRssAddon:
                     li = self._create_list_item(item)
                     xbmcplugin.addDirectoryItem(handle=self.addon_handle,
                                                 listitem=li,
-                                                url=item["stream_url"],
+                                                url=self.build_url(item),
                                                 isFolder=False)
 
             if li and "setDateTime" in dir(li):  # available since Kodi v20

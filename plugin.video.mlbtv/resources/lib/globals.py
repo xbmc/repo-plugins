@@ -42,8 +42,11 @@ OLD_PASSWORD = str(settings.getSetting(id="old_password"))
 QUALITY = str(settings.getSetting(id="quality"))
 CDN = str(settings.getSetting(id="cdn"))
 NO_SPOILERS = settings.getSetting(id="no_spoilers")
+HIDE_SCORES_TICKER = str(settings.getSetting(id='hide_scores_ticker'))
 DISABLE_VIDEO_PADDING = str(settings.getSetting(id='disable_video_padding'))
+DISABLE_CLOSED_CAPTIONS = str(settings.getSetting(id='disable_closed_captions'))
 FAV_TEAM = str(settings.getSetting(id="fav_team"))
+INCLUDE_FAV_AFFILIATES = str(settings.getSetting(id='include_fav_affiliates'))
 TEAM_NAMES = settings.getSetting(id="team_names")
 TIME_FORMAT = settings.getSetting(id="time_format")
 SINGLE_TEAM = str(settings.getSetting(id='single_team'))
@@ -53,13 +56,6 @@ ASK_TO_SKIP = str(settings.getSetting(id='ask_to_skip'))
 AUTO_PLAY_FAV = str(settings.getSetting(id='auto_play_fav'))
 ONLY_FREE_GAMES = str(settings.getSetting(id="only_free_games"))
 GAME_CHANGER_DELAY = int(settings.getSetting(id="game_changer_delay"))
-
-#Monitor setting
-MLB_MONITOR_STARTED = settings.getSetting(id='mlb_monitor_started')
-now = datetime.now()
-if MLB_MONITOR_STARTED != '' and not xbmc.getCondVisibility("Player.HasMedia") and (parse(MLB_MONITOR_STARTED) + timedelta(seconds=5)) < now:
-    xbmc.log("MLB Monitor detection resetting due to no stream playing")
-    settings.setSetting(id='mlb_monitor_started', value='')
 
 #Colors
 SCORE_COLOR = 'FF00B7EB'
@@ -81,6 +77,7 @@ ICON = os.path.join(ROOTDIR,"icon.png")
 FANART = os.path.join(ROOTDIR,"fanart.jpg")
 PREV_ICON = os.path.join(ROOTDIR,"icon.png")
 NEXT_ICON = os.path.join(ROOTDIR,"icon.png")
+BLACK_IMAGE = os.path.join(ROOTDIR, "resources", "img", "black.png")
 
 if SINGLE_TEAM == 'true':
     MASTER_FILE_TYPE = 'master_wired.m3u8'
@@ -99,7 +96,15 @@ VERIFY = True
 
 SECONDS_PER_SEGMENT = 5
 
-def find(source,start_str,end_str):    
+MLB_ID = '1'
+MILB_IDS = '11,12,13,14'
+MLB_TEAM_IDS = '108,109,110,111,112,113,114,115,116,117,118,119,120,121,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,158,159,160'
+
+AFFILIATE_TEAM_IDS = {"Arizona Diamondbacks": "419,516,2310,5368", "Atlanta Braves": "430,432,478,431", "Baltimore Orioles": "418,568,548,488", "Boston Red Sox": "428,414,533,546", "Chicago Cubs": "521,451,550,553", "Chicago White Sox": "247,580,487,494", "Cincinnati Reds": "450,459,498,416", "Cleveland Guardians": "445,402,437,481", "Colorado Rockies": "259,486,342,538", "Detroit Tigers": "512,570,582,106", "Houston Astros": "482,5434,573,3712", "Kansas City Royals": "1350,3705,541,565", "Los Angeles Angels": "401,559,460,561", "Los Angeles Dodgers": "260,238,456,526", "Miami Marlins": "479,564,554,4124", "Milwaukee Brewers": "249,572,556,5015", "Minnesota Twins": "492,509,1960,3898", "New York Mets": "453,507,552,505", "New York Yankees": "1956,587,531,537", "Oakland Athletics": "237,499,400,524", "Philadelphia Phillies": "427,522,1410,566", "Pittsburgh Pirates": "3390,484,452,477", "San Diego Padres": "103,510,584,4904", "Seattle Mariners": "403,515,529,574", "San Francisco Giants": "105,461,476,3410", "St. Louis Cardinals": "279,235,440,443", "Tampa Bay Rays": "2498,233,234,421", "Texas Rangers": "102,485,540,448", "Toronto Blue Jays": "424,435,463,422", "Washington Nationals": "436,534,547,426"}
+
+ESPN_SUNDAY_NIGHT_BLACKOUT_COUNTRIES = ["Angola", "Anguilla", "Antigua and Barbuda", "Argentina", "Aruba", "Australia", "Bahamas", "Barbados", "Belize", "Belize", "Benin", "Bermuda", "Bolivia", "Bonaire", "Botswana", "Brazil", "British Virgin Islands", "Burkina Faso", "Burundi", "Cameroon", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "Colombia", "Comoros", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Curacao", "Democratic Republic of the Congo", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "El Salvador", "England", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Falkland Islands", "Falkland Islands", "Fiji", "French Guiana", "French Guiana", "French Polynesia", "Gabon", "Ghana", "Grenada", "Guadeloupe", "Guatemala", "Guinea", "Guinea Bissau", "Guyana", "Guyana", "Haiti", "Honduras", "Ireland", "Jamaica", "Kenya", "Kiribati", "Lesotho", "Liberia", "Madagascar", "Malawi", "Mali", "Marshall Islands", "Martinique", "Mayotte", "Mexico", "Micronesia", "Montserrat", "Mozambique", "Namibia", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Northern Ireland", "Palau Islands", "Panama", "Paraguay", "Peru", "Republic of Ireland", "Reunion", "Rwanda", "Saba", "Saint Maarten", "Samoa", "Sao Tome & Principe", "Scotland", "Senegal", "Seychelles", "Sierra Leone", "Solomon Islands", "Somalia", "South Africa", "St. Barthelemy", "St. Eustatius", "St. Kitts and Nevis", "St. Lucia", "St. Martin", "St. Vincent and the Grenadines", "Sudan", "Surinam", "Suriname", "Tahiti", "Tanzania & Zanzibar", "The Gambia", "The Republic of Congo", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Uruguay", "Venezuela", "Wales", "Zambia", "Zimbabwe"]
+
+def find(source,start_str,end_str):
     start = source.find(start_str)
     end = source.find(end_str,start+len(start_str))
 
@@ -204,13 +209,18 @@ def get_params():
     return param
 
 
-def add_stream(name, title, desc, game_pk, icon=None, fanart=None, info=None, video_info=None, audio_info=None, stream_date=None, spoiler='True', suspended=None, start_inning='False', blackout='False'):
+def add_stream(name, title, desc, game_pk, icon=None, fanart=None, info=None, video_info=None, audio_info=None, stream_date=None, spoiler='True', suspended=None, start_inning='False', blackout='False', milb=None):
     ok=True
-    u_params = "&name="+urllib.quote_plus(title)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&stream_date="+urllib.quote_plus(str(stream_date))+"&spoiler="+urllib.quote_plus(str(spoiler))+"&suspended="+urllib.quote_plus(str(suspended))+"&start_inning="+urllib.quote_plus(str(start_inning))+"&description="+urllib.quote_plus(desc)+"&blackout="+urllib.quote_plus(str(blackout))
-    if icon is None: icon = ICON
-    if fanart is None: fanart = FANART
-    art_params = "&icon="+urllib.quote_plus(icon)+"&fanart="+urllib.quote_plus(fanart)
-    u=sys.argv[0]+"?mode="+str(104)+u_params+art_params
+
+    if milb is not None:
+        u_params = "&featured_video="+urllib.quote_plus("https://dai.tv.milb.com/api/v2/playback-info/games/"+str(game_pk)+"/contents/14862/products/milb-carousel")+"&name="+urllib.quote_plus(title)+"&description="+urllib.quote_plus(desc)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&start_inning="+urllib.quote_plus(str(start_inning))
+        u=sys.argv[0]+"?mode="+str(301)+u_params
+    else:
+        u_params = "&name="+urllib.quote_plus(title)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&stream_date="+urllib.quote_plus(str(stream_date))+"&spoiler="+urllib.quote_plus(str(spoiler))+"&suspended="+urllib.quote_plus(str(suspended))+"&start_inning="+urllib.quote_plus(str(start_inning))+"&description="+urllib.quote_plus(desc)+"&blackout="+urllib.quote_plus(str(blackout))
+        if icon is None: icon = ICON
+        if fanart is None: fanart = FANART
+        art_params = "&icon="+urllib.quote_plus(icon)+"&fanart="+urllib.quote_plus(fanart)
+        u=sys.argv[0]+"?mode="+str(104)+u_params+art_params
 
     liz=xbmcgui.ListItem(name)
     liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
@@ -224,7 +234,8 @@ def add_stream(name, title, desc, game_pk, icon=None, fanart=None, info=None, vi
         liz.addStreamInfo('audio', audio_info)
 
     # add Choose Stream and Highlights as context menu items
-    liz.addContextMenuItems([(LOCAL_STRING(30390), 'PlayMedia(plugin://plugin.video.mlbtv/?mode='+str(103)+u_params+art_params+')'), (LOCAL_STRING(30391), 'Container.Update(plugin://plugin.video.mlbtv/?mode='+str(106)+'&name='+urllib.quote_plus(title)+'&game_pk='+urllib.quote_plus(str(game_pk))+art_params+')')])
+    if milb is None:
+        liz.addContextMenuItems([(LOCAL_STRING(30390), 'PlayMedia(plugin://plugin.video.mlbtv/?mode='+str(103)+u_params+art_params+')'), (LOCAL_STRING(30391), 'Container.Update(plugin://plugin.video.mlbtv/?mode='+str(106)+'&name='+urllib.quote_plus(title)+'&game_pk='+urllib.quote_plus(str(game_pk))+art_params+')')])
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
     xbmcplugin.setContent(addon_handle, 'episodes')
@@ -259,10 +270,10 @@ def addLink(name,url,title,icon,info=None,video_info=None,audio_info=None,fanart
     return ok
 
 
-def addDir(name,mode,icon,fanart=None,game_day=None,start_inning='False'):
+def addDir(name,mode,icon,fanart=None,game_day=None,start_inning='False',sport=MLB_ID,teams='None'):
     ok=True
 
-    u_params="&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(icon)+'&start_inning='+urllib.quote_plus(str(start_inning))
+    u_params="&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(icon)+'&start_inning='+urllib.quote_plus(str(start_inning))+'&sport='+urllib.quote_plus(str(sport))+'&teams='+urllib.quote_plus(str(teams))
     if game_day is not None:
         u_params = u_params+"&game_day="+urllib.quote_plus(game_day)
     u=sys.argv[0]+"?mode="+str(mode)+u_params
@@ -488,10 +499,36 @@ def get_last_name(full_name):
     return last_name
 
 
+def get_broadcast_start_timestamp(stream_url):
+    broadcast_start_timestamp = None
+    is_live = True
+    try:
+        url = stream_url[:len(stream_url)-5] + '_1280x720_59_5472K.m3u8'
+        headers = {
+            'User-Agent': UA_PC,
+             'Origin': 'https://www.mlb.com',
+             'Referer': 'https://www.mlb.com/'
+        }
+        r = requests.get(url, headers=headers, verify=VERIFY)
+        content = r.text
+        line_array = content.splitlines()
+        for line in line_array:
+            if line.startswith('#EXT-X-PLAYLIST-TYPE:VOD'):
+                is_live = False
+            elif line.startswith('#EXT-X-PROGRAM-DATE-TIME:'):
+                broadcast_start_timestamp = parse(line[25:])
+                xbmc.log('Found broadcast start timestamp ' + str(broadcast_start_timestamp))
+                break
+    except:
+        xbmc.log('Failed to find broadcast start timestamp')
+        pass
+    return broadcast_start_timestamp, is_live
+
+
 # get the teams blacked out based on zip code
 def get_blackout_teams(zip_code):
     xbmc.log('Resetting blackout teams')
-    blackout_teams = []
+    found_blackout_teams = []
     try:
         if re.match('^[0-9]{5}$', zip_code):
             xbmc.log('Fetching new blackout teams')
@@ -501,21 +538,30 @@ def get_blackout_teams(zip_code):
                 'Origin': 'https://www.mlb.com',
                 'Referer': 'https://www.mlb.com/'
             }
-            r = requests.get(url, headers=headers, verify=VERIFY)
+            # set verify to False here to avoid a Python request error "unable to get local issuer certificate"
+            r = requests.get(url, headers=headers, verify=False)
             json_source = r.json()
             if 'teams' in json_source:
-                blackout_teams = json_source['teams']
+                found_blackout_teams = json_source['teams']
     except:
         pass
 
-    return blackout_teams
+    return found_blackout_teams
 
-
+COUNTRY = str(settings.getSetting(id='country'))
+OLD_COUNTRY = str(settings.getSetting(id='old_country'))
 ZIP_CODE = str(settings.getSetting(id='zip_code'))
 OLD_ZIP_CODE = str(settings.getSetting(id='old_zip_code'))
-if ZIP_CODE != OLD_ZIP_CODE:
-    settings.setSetting(id='old_zip_code', value=ZIP_CODE)
-    BLACKOUT_TEAMS = get_blackout_teams(ZIP_CODE)
-    settings.setSetting(id='blackout_teams', value=json.dumps(BLACKOUT_TEAMS))
+BLACKOUT_TEAMS = json.loads(str(settings.getSetting(id='blackout_teams')))
+if COUNTRY == 'Canada':
+    BLACKOUT_TEAMS = ['TOR']
+elif COUNTRY == 'USA':
+    if ZIP_CODE != OLD_ZIP_CODE or COUNTRY != OLD_COUNTRY:
+        BLACKOUT_TEAMS = get_blackout_teams(ZIP_CODE)
 else:
-    BLACKOUT_TEAMS = json.loads(str(settings.getSetting(id='blackout_teams')))
+    BLACKOUT_TEAMS = []
+
+settings.setSetting(id='blackout_teams', value=json.dumps(BLACKOUT_TEAMS))
+settings.setSetting(id='old_zip_code', value=ZIP_CODE)
+settings.setSetting(id='old_country', value=COUNTRY)
+

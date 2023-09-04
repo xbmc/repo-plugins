@@ -64,7 +64,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
 
         # Avoid setting resumepoints for livestreams
         for channel in CHANNELS:
-            if ep_id.get('video_id') and ep_id.get('video_id') == channel.get('live_stream_id'):
+            if ep_id.get('video_id') and ep_id.get('video_id') in (channel.get('live_stream_id'), channel.get('name')):
                 log(3, '[PlayerInfo {id}] Avoid setting resumepoints for livestream {video_id}', id=self.thread_id, video_id=ep_id.get('video_id'))
                 self.listen = False
 
@@ -230,7 +230,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
             is_single_start_timestamp = bool(re.match(rgx, timestamp))
             if is_single_start_timestamp:
                 # Check resume status
-                resume_info = jsonrpc(method='Player.GetItem', params=dict(playerid=1, properties=['resume'])).get('result')
+                resume_info = jsonrpc(method='Player.GetItem', params={'playerid': 1, 'properties': ['resume']}).get('result')
                 if resume_info:
                     resume_position = resume_info.get('item').get('resume').get('position')
                     is_resumed = abs(resume_position - self.getTime()) < 1

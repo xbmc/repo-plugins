@@ -102,13 +102,6 @@ class Channel(chn_class.Channel):
                               parser=["data", "liveVideos", "videoAssets"],
                               creator=self.create_api_typed_item)
 
-        # self._add_data_parser("https://www.tv4play.se/_next", json=True,
-        self._add_data_parser("https://www.tv4play.se/alla-program", json=True,
-                              name="Specific Program list API",
-                              preprocessor=self.extract_tv_show_list,
-                              parser=["props", "initialApolloState"],
-                              creator=self.create_api_typed_item)
-
         self._add_data_parser("http://tv4live-i.akamaihd.net/hls/live/",
                               updater=self.update_live_item)
         self._add_data_parser("http://tv4events1-lh.akamaihd.net/i/EXTRAEVENT5_1",
@@ -461,34 +454,6 @@ class Channel(chn_class.Channel):
         item.set_info_label("duration", int(result_set.get("duration", 0)))
         return item
 
-    def extract_tv_show_list(self, data):
-        """ Performs pre-process actions and converts the dictionary to a proper list
-
-        Accepts an data from the process_folder_list method, BEFORE the items are
-        processed. Allows setting of parameters (like title etc) for the channel.
-        Inside this method the <data> could be changed and additional items can
-        be created.
-
-        The return values should always be instantiated in at least ("", []).
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        # Find the build id for the current CMS build
-        # build_id = Regexer.do_regex(r'"buildId"\W*:\W*"([^"]+)"', data)[0]
-        # data = UriHandler.open("https://www.tv4play.se/_next/data/{}/allprograms.json".format(build_id))
-
-        data = Regexer.do_regex(r'__NEXT_DATA__" type="application/json">(.*?)</script>', data)[0]
-        json_data = JsonHelper(data)
-        # Make a list from the dictionary values.
-        json_data.json["props"]["initialApolloState"] = list(
-            json_data.json["props"]["initialApolloState"].values())
-        return json_data, []
-
     def add_next_page(self, data, items):
         """ Performs post-process actions for data processing.
 
@@ -590,7 +555,10 @@ class Channel(chn_class.Channel):
         extras = {
             LanguageHelper.get_localized_string(LanguageHelper.Search): ("searchSite", None, False),
             LanguageHelper.get_localized_string(LanguageHelper.TvShows): (
-                "https://www.tv4play.se/alla-program",
+                # "https://www.tv4play.se/alla-program",
+                self.__get_api_query("query{programSearch(per_page:1000){__typename,programs{"
+                                     "__typename,description,displayCategory,id,image,"
+                                     "images{main16x9},name,nid,genres},totalHits}}"),
                 None, False
             ),
             LanguageHelper.get_localized_string(LanguageHelper.Categories): (

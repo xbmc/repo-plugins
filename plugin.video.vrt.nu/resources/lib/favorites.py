@@ -59,9 +59,9 @@ class Favorites:
 
         # Update local favorites cache
         if is_favorite is True:
-            self._favorites[program_name] = dict(
-                program_id=program_id,
-                title=title)
+            self._favorites[program_name] = {
+                'program_id': program_id,
+                'title': title}
         else:
             del self._favorites[program_name]
 
@@ -122,15 +122,15 @@ class Favorites:
                   }
                 }
             """
-            payload = dict(
-                operationName='Favs',
-                variables=dict(
-                    listId='dynamic:/vrtnu.model.json@favorites-list-video',
-                    endCursor='',
-                    pageSize=1000,
-                ),
-                query=graphql,
-            )
+            payload = {
+                'operationName': 'Favs',
+                'variables': {
+                    'listId': 'dynamic:/vrtnu.model.json@favorites-list-video',
+                    'endCursor': '',
+                    'pageSize': 1000,
+                },
+                'query': graphql,
+            }
             from json import dumps
             data = dumps(payload).encode('utf-8')
             favorites_json = get_url_json(url=self.GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
@@ -155,12 +155,12 @@ class Favorites:
                   }
                 }
             """
-            payload = dict(
-                variables=dict(
-                    id='/vrtnu/a-z/{}.model.json'.format(program_name)
-                ),
-                query=graphql,
-            )
+            payload = {
+                'variables': {
+                    'id': '/vrtnu/a-z/{}.model.json'.format(program_name)
+                },
+                'query': graphql,
+            }
             from json import dumps
             data = dumps(payload).encode('utf-8')
             page_json = get_url_json(url=self.GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
@@ -186,17 +186,17 @@ class Favorites:
                   }
                 }
             """
-            payload = dict(
-                operationName='setFavorite',
-                variables=dict(
-                    input=dict(
-                        id=program_id,
-                        title=title,
-                        favorite=is_favorite,
-                    ),
-                ),
-                query=graphql_query,
-            )
+            payload = {
+                'operationName': 'setFavorite',
+                'variables': {
+                    'input': {
+                        'id': program_id,
+                        'title': title,
+                        'favorite': is_favorite,
+                    },
+                },
+                'query': graphql_query,
+            }
             from json import dumps
             data = dumps(payload).encode('utf-8')
             result_json = get_url_json(url=self.GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
@@ -238,9 +238,9 @@ class Favorites:
                     program_name = url_to_program(item.get('node').get('action').get('link'))
                     program_id = item.get('node').get('id')
                     title = item.get('node').get('title')
-                    favorites_dict[program_name] = dict(
-                        program_id=program_id,
-                        title=title)
+                    favorites_dict[program_name] = {
+                        'program_id': program_id,
+                        'title': title}
         except AttributeError:
             pass
         return favorites_dict
@@ -257,8 +257,8 @@ class Favorites:
             _, value = tup
             return value.get('title')
 
-        items = [dict(program_id=value.get('program_id'), program_name=key,
-                      title=unquote(value.get('title'))) for key, value in sorted(list(self._favorites.items()), key=by_title)]
+        items = [{'program_id': value.get('program_id'), 'program_name': key,
+                  'title': unquote(value.get('title'))} for key, value in sorted(list(self._favorites.items()), key=by_title)]
         titles = [item['title'] for item in items]
         preselect = list(range(0, len(items)))
         selected = multiselect(localize(30420), options=titles, preselect=preselect)  # Please select/unselect to follow/unfollow

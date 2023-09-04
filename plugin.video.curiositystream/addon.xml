@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.curiositystream" name="Curiositystream" version="2.0.2+matrix.2" provider-name="GMaxera">
+<addon id="plugin.video.curiositystream" name="Curiositystream" version="2.0.5+matrix.1" provider-name="GMaxera,mintsoft">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.22.0"/>
@@ -21,8 +21,10 @@ The add-on only provides an interface to access CuriosityStream media from Kodi.
     <email>gmaxera@gmail.com</email>
     <source>https://github.com/GMaxera/repo-plugins/tree/curiositystream-leia/plugin.video.curiositystream</source>
     <news>
-v2.0.2+matrix.2
-- Fix storing authentication sessions with Python 3
+v2.0.5
+- Fix issues breaking all playback (thanks wa3573)
+- Support for kodi 20
+- Tidy up some broken menu items
 
 v2.0.1+matrix.2
 - More resilient when API returns 500

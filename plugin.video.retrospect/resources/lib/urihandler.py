@@ -3,13 +3,9 @@
 import os
 import time
 
-from resources.lib.backtothefuture import PY2
-if PY2:
-    # noinspection PyCompatibility,PyUnresolvedReferences
-    from cookielib import Cookie, CookieJar, MozillaCookieJar
-else:
-    # noinspection PyCompatibility
-    from http.cookiejar import Cookie, CookieJar, MozillaCookieJar, LoadError
+from http.cookiejar import Cookie, CookieJar, MozillaCookieJar
+import http.client
+http.client._MAXHEADERS = 200
 from collections import namedtuple
 
 import requests
@@ -321,7 +317,7 @@ class _RequestsHandler(object):
             # Load the content, or reset in case of #1666
             try:
                 self.cookieJar.load()
-            except:
+            except:  # NOSONAR
                 Logger.error(
                     "Error loading cookiejar (It got corrupted). "
                     "Saving those cookies that are left.", exc_info=True)
@@ -395,11 +391,8 @@ class _RequestsHandler(object):
 
         retrieved_bytes = 0
         total_size = int(r.headers.get('Content-Length', '0').strip())
-        # There is an issue with the way Requests checks for input and it does not like the newInt.
-        if PY2:
-            chunk_size = 10 * 1024
-        else:
-            chunk_size = 1024 if total_size == 0 else total_size // 100
+        # There is an issue with the way Requests checks for input: It does not like the newInt.
+        chunk_size = 1024 if total_size == 0 else total_size // 100
         cancel = False
         with open(download_path, 'wb') as fd:
             for chunk in r.iter_content(chunk_size=chunk_size):

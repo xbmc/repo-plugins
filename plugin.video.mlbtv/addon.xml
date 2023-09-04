@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2022.10.9+matrix.1" provider-name="eracknaphobia">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2023.7.17+matrix.1" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -22,14 +22,13 @@
         </description>
         <disclaimer lang="en_GB">Requires an MLB.tv account</disclaimer>
         <news>
-            - auto skip: added option to skip to specific batter(s) or pitcher(s)
-            - fixed game changer display time bug for start time TBD games
-            - option to skip only commercial breaks
-            - tweaked idle time / specific player skipping
-            - added international blackout labels for postseason games
-            - removed unnecessary Big Inning checks
-            - removed non-playable WBC qualifier games from list
-            - added skip adjust start and end settings (recommend 7 and 5 for postseason so far)
+            - option to hide scores ticker with black overlay
+            - option to disable closed captions for games
+            - fix gamechanger start/end time display
+            - shorter estimated game lengths
+            - improved recap detection
+            - tweaked fox/national/all-star blackout detection
+            - removed potential for double-proxied stream
         </news>
         <language>en</language>
         <platform>all</platform>

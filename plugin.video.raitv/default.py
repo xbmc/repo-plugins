@@ -142,7 +142,8 @@ def show_tgr_list(mode, url):
 
 def play(url, pathId="", srt=[]):
     KODI_VERSION_MAJOR = int(xbmc.getInfoLabel('System.BuildVersion').split('.')[0])
-    xbmc.log("Playing...")
+    xbmc.log("*******************************************************************************************************************") 
+    xbmc.log("************************   plugin.video.raitv    Playing.... ******************************************************") 
     
     ct = ""
     key = ""
@@ -161,7 +162,14 @@ def play(url, pathId="", srt=[]):
             srt = [raiplay.baseUrl[:-1] + sub['url'] for sub in metadata.get("subtitlesArray", [])]
 
         if srt:
-            xbmc.log("SRT URL: {}".format(srt))
+            srt2 = []
+            for s in srt:
+                s= urlparse.quote(s, safe=':/')
+                srt2.append(s)
+            
+            srt = srt2
+            xbmc.log("Subtitles Url: {}".format(srt))
+
 
     if "relinkerServlet" in url:
         url = url.replace ("https:", "http:")
@@ -185,7 +193,7 @@ def play(url, pathId="", srt=[]):
     except: 
         item=xbmcgui.ListItem(path=url + '|User-Agent=' + urllib.parse.quote_plus(Relinker.UserAgent))
     
-    if "dash" in ct :
+    if "dash" in ct or "mpd" in ct :
         if KODI_VERSION_MAJOR >= 19:
             item.setProperty('inputstream', 'inputstream.adaptive')
         else:
@@ -194,11 +202,33 @@ def play(url, pathId="", srt=[]):
         item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
         item.setMimeType('application/dash+xml')
         if key:
+            
+            if "anycast.nagra.com" in key:
+                posAuth = key.find("?Authorization")     
+                key1 = key[:posAuth]
+                
+                license_headers = {
+                    "Accept":"application/octet-stream",
+                    "Content-Type":"application/octet-stream",
+                    'Nv-Authorizations': key[posAuth + 15:]  ,
+                    "Referer":"https://www.raiplay.it/",
+                    'Origin': 'https://www.raiplay.it',
+                    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'
+                }
+                
+                key_string = key1 + "|" + urlencode(license_headers) + "|R{SSM}|"
+
+            else:
+                key_string = key + "||R{SSM}|"
+            
             item.setProperty("inputstream.adaptive.license_type", 'com.widevine.alpha')
-            item.setProperty("inputstream.adaptive.license_key",  key + "||R{SSM}|")
-    
+            item.setProperty("inputstream.adaptive.license_key",  key_string)
+            xbmc.log("Key string: %s" % key_string) 
+
     if srt:
         item.setSubtitles(srt)
+
+    xbmc.log("*******************************************************************************************************************") 
     xbmcplugin.setResolvedUrl(handle=handle, succeeded=True, listitem=item)
 
 def show_tv_channels():
@@ -209,7 +239,7 @@ def show_tv_channels():
     
     for station in tv_stations:
         chName = station["channel"]
-        current = ""
+        current = thumb = ""
         for d in onAirJson:
             if chName == d["channel"]:
                 current = d["currentItem"].get("name","")
@@ -251,17 +281,18 @@ def show_radio_stations():
         
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
-def show_home():
+def show_home(defaultUrl="index.json"):
     raiplay = RaiPlay(Addon)
-    response = raiplay.getHomePage()
+    response = raiplay.getHomePage(defaultUrl)
     
     for item in response:
         item_type = item.get("type","")
-
         if item_type == "RaiPlay Hero Block":
             for item2 in item["contents"]:
                 sub_type = item2["type"]
-                liStyle = xbmcgui.ListItem("%s: %s" % (Addon.getLocalizedString(32013), item2['name']))
+                item2_name = item2.get("name", "[No name]")
+
+                liStyle = xbmcgui.ListItem("%s: %s" % (Addon.getLocalizedString(32013), item2_name))
                 liStyle.setArt({"thumb": raiplay.getThumbnailUrl2(item2)})
 
                 if sub_type == "RaiPlay Diretta Item":
@@ -294,7 +325,8 @@ def show_home():
             # populate subItems array
             subItems=[]
             for item2 in item["contents"]:
-                subItems.append({"mode": "ondemand", "name": item2["name"], "path_id": item2["path_id"], "video_url": item2.get("video_url",""), "sub_type": item2["type"], "icon": raiplay.getThumbnailUrl2(item2)})
+                item2_name = item2.get("name", "[No name]")
+                subItems.append({"mode": "ondemand", "name": item2_name, "path_id": item2["path_id"], "video_url": item2.get("video_url",""), "sub_type": item2["type"], "icon": raiplay.getThumbnailUrl2(item2)})
                 
             liStyle = xbmcgui.ListItem(item['name'])
             addDirectoryItem({"mode": "ondemand_slider", "sub_items": json.dumps(subItems)}, liStyle)
@@ -324,10 +356,16 @@ def show_slider_items(subItems):
         liStyle = xbmcgui.ListItem(item.get("name",""))
         liStyle.setArt({"thumb": item["icon"]})
         if item.get("sub_type","") == "RaiPlay Video Item":
+            xbmc.log("Link: " + item.get("name","") + " " + item["video_url"])
             liStyle.setInfo("video", {})
             addLinkItem({"mode": "play", "url": item["video_url"]}, liStyle)
         else:
-            addDirectoryItem({"mode": "ondemand", "path_id": item["path_id"], "sub_type": item["sub_type"]}, liStyle)
+            pathId = item["path_id"]
+            xbmc.log("Directory: " + item.get("name","") + " " + pathId)
+            if "tipologia/" in pathId:
+                addDirectoryItem({"mode": "ondemand_subhome", "path_id": pathId}, liStyle)
+            else:
+                addDirectoryItem({"mode": "ondemand", "path_id": item["path_id"], "sub_type": item["sub_type"]}, liStyle)
     
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
         
@@ -499,18 +537,44 @@ def show_ondemand_root():
         if item["sub-type"] in ("RaiPlay Tipologia Page", "RaiPlay Genere Page", "RaiPlay Tipologia Editoriale Page" ):
  
             if not (item["name"] in ("Teatro", "Musica")):
-                liStyle = xbmcgui.ListItem(item["name"])
                 
                 # new urls 
                 # i.e. change "/raiplay/programmi/?json" to "/raiplay/tipologia/programmi/index.json"
                 m = re.findall("raiplay/(.*?)/[?]json", item["PathID"])
                 if m:
-                    item["PathID"] = "/raiplay/tipologia/%s/index.json" % m[0]   
+                    
+                    if m[0]=="fiction":
+                        liStyle = xbmcgui.ListItem("Serie italiane")
+                        liStyle.setArt({"thumb": raiplay.getThumbnailUrl("http://www.rai.it/dl/img/2018/06/04/1528107006058_ico-fiction.png")})
+                        addDirectoryItem({"mode": "ondemand", "path_id": "/raiplay/tipologia/serieitaliane/index.json", "sub_type": item["sub-type"]}, liStyle)
+                        liStyle = xbmcgui.ListItem("Original")
+                        liStyle.setArt({"thumb": raiplay.getThumbnailUrl("http://www.rai.it/dl/img/2018/06/04/1528107006058_ico-fiction.png")})
+                        addDirectoryItem({"mode": "ondemand_subhome", "path_id": "/raiplay/tipologia/original/index.json", "sub_type": item["sub-type"]}, liStyle)
+                    elif m[0]=="serietv":
+                        liStyle = xbmcgui.ListItem("Serie internazionali")
+                        liStyle.setArt({"thumb": raiplay.getThumbnailUrl("http://www.rai.it/dl/img/2018/06/04/1528107006058_ico-fiction.png")})
+                        addDirectoryItem({"mode": "ondemand_subhome", "path_id": "/raiplay/tipologia/serieinternazionali/index.json", "sub_type": item["sub-type"]}, liStyle)
+                    elif m[0]=="bambini" or m[0]=="bambini/":
+                        liStyle = xbmcgui.ListItem("Bambini")
+                        if "image" in item:
+                            liStyle.setArt({"thumb": raiplay.getThumbnailUrl(item["image"])})
+                        addDirectoryItem({"mode": "ondemand_subhome", "path_id": "/raiplay/tipologia/bambini/index.json", "sub_type": item["sub-type"]}, liStyle)
 
-                addDirectoryItem({"mode": "ondemand", "path_id": item["PathID"], "sub_type": item["sub-type"]}, liStyle)
+                        liStyle = xbmcgui.ListItem("Teen")
+                        if "image" in item:
+                            liStyle.setArt({"thumb": raiplay.getThumbnailUrl(item["image"])})
+                        addDirectoryItem({"mode": "ondemand_subhome", "path_id": "/raiplay/tipologia/teen/index.json", "sub_type": item["sub-type"]}, liStyle)
+
+                    else:
+                        liStyle = xbmcgui.ListItem(item["name"])
+                        if "image" in item:
+                            liStyle.setArt({"thumb": raiplay.getThumbnailUrl(item["image"])})
+                        item["PathID"] = "/raiplay/tipologia/%s/index.json" % m[0]   
+                        addDirectoryItem({"mode": "ondemand", "path_id": item["PathID"], "sub_type": item["sub-type"]}, liStyle)
     
     # add new item not in old json
     liStyle = xbmcgui.ListItem(Addon.getLocalizedString(32012))
+    liStyle.setArt({"thumb": raiplay.getThumbnailUrl("/dl/img/2018/06/04/1528115285089_ico-teatro.png")})
     addDirectoryItem({"mode": "ondemand", "path_id": "https://www.raiplay.it/performing-arts/index.json", "sub_type": "RaiPlay Tipologia Page"}, liStyle)
 
     liStyle = xbmcgui.ListItem("Cerca")
@@ -719,26 +783,32 @@ def get_raisport_main():
     raiplay = RaiPlay(Addon)
     
     for k in raisport_keys:
-        liStyle = xbmcgui.ListItem(k['title'])
-        addDirectoryItem({"mode": "raisport_item", 'dominio': k['dominio'], 'sub_keys': k['sub_keys']}, liStyle)
+        title = k.get("title","")
+        
+        if title:
+            liStyle = xbmcgui.ListItem(title)
+            addDirectoryItem({"mode": "raisport_item", "dominio": k["dominio"], "key": k["key"], "sub_keys": k.get("sub_keys",[])}, liStyle)
 
     xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_NONE)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def get_raisport_items(params):
     dominio = params.get('dominio','')
+    key = params.get('key','')
+    
     sub_keys = eval(params.get("sub_keys","[]"))
     xbmc.log("Build Rai Sport menu of item %s " % sub_keys[0])
 
+    liStyle = xbmcgui.ListItem("Tutti i video")
+    addDirectoryItem({"mode": "raisport_subitem", "dominio" : dominio , "key": key}, liStyle)
+
     for i in range(0, len(sub_keys)):
         key = sub_keys[i]
-        title = key.split("|")[0]
+        title = key.get("title","")
         title = utils.checkStr(HTMLParser.HTMLParser().unescape(title))
-        if i==0:
-            title = "Tutto su " + title
         
         liStyle = xbmcgui.ListItem(title)
-        addDirectoryItem({"mode": "raisport_subitem", 'dominio': dominio, 'key': key}, liStyle)
+        addDirectoryItem({"mode": "raisport_subitem", "dominio" : key["dominio"] , "key": key["key"]}, liStyle)
 
     xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_NONE)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
@@ -750,7 +820,6 @@ def get_raisport_videos(params):
     key = params.get('key','')
     dominio = params.get('dominio','')
     page = params.get('page',0)
-    
     
     response = raiplay.getRaiSportVideos(key, dominio, page)
     for r in response:
@@ -793,7 +862,7 @@ elif mode == "live_radio":
     show_radio_stations()
 
 elif mode == "home":
-    show_home()
+    show_home("index.json")
     
 elif mode == "replay":
     if date == "":
@@ -837,6 +906,8 @@ elif mode == "ondemand_collection":
 elif mode == "ondemand_slider":
     subItems = params.get("sub_items", [])
     show_slider_items(subItems)
+elif mode == "ondemand_subhome":
+    show_home(pathId)
 
 elif mode == "tg":
     show_tg_root()

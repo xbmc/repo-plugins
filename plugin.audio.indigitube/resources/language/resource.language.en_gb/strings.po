@@ -1,0 +1,96 @@
+# Kodi Media Center language file
+# Addon Name: Indigitube
+# Addon id: plugin.audio.indigitube
+# Addon Provider: Simon Mollema
+
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@kodi.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Settings - General
+msgctxt "#30001"
+msgid "General"
+msgstr ""
+
+msgctxt "#30011"
+msgid "General settings for the indigiTUBE addon"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Image Quality"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Set the desired quality level for album art and band images"
+msgstr ""
+
+msgctxt "#30022"
+msgid "High"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Medium"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Low"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Allow Explicit Language"
+msgstr ""
+
+msgctxt "#30031"
+msgid "When turned off, content containing explicit language will be filtered."
+msgstr ""
+
+msgctxt "#30032"
+msgid "WARNING: Some content contains explicit language.\nAllow explicit language?\nYour selection can be changed later in the add-on settings."
+msgstr ""
+
+msgctxt "#30033"
+msgid "Contains Explicit Language"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Explicit language is disabled in the add-on settings."
+msgstr ""
+
+msgctxt "#30040"
+msgid "Allow Content Containing Deceased People"
+msgstr ""
+
+msgctxt "#30041"
+msgid "When turned off, content containing deceased people will be filtered."
+msgstr ""
+
+msgctxt "#30032"
+msgid "WARNING: Some content contains images, voices and names of deceased people.\nAllow this content?\nYour selection can be changed later in the add-on settings."
+msgstr ""
+
+msgctxt "#30098"
+msgid "Acknowledgement Of Country"
+msgstr ""
+
+msgctxt "#30099"
+msgid "indigiTUBE acknowledges our traditional custodians of country where we live and work.\n\nWe pay respect to Elders past, present and emerging, and acknowledge our continuous connection and contribution to land, sea and community.\n\nWARNING: This add-on contains images, voices and names of deceased people."
+msgstr ""
+
+# GUI main menu
+msgctxt "#30101"
+msgid "Listen To Live Radio"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Search"
+msgstr ""

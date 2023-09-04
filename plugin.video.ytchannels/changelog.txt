@@ -1,6 +1,11 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.4.5 [04-June-2023]
+-Reimplemented shorts filtering out so that any video <= 60 seconds long is regarded as a short
+
+v0.4.4 [11-May-2023]
+-Tweak to the useragent to reduce "Content not available" errors (thanks to mcarni)
 
 v0.4.3 [05-November-2022]
 -Russian Language support (thanks to sryze)

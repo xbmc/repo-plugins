@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.ardaktuell" name="ARD Aktuell" version="1.0.3" provider-name="Heckie">
+<addon id="plugin.video.ardaktuell" name="ARD Aktuell" version="1.0.5" provider-name="Heckie">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.25.1" />
@@ -23,6 +23,16 @@
         <website>https://github.com/Heckie75/kodi-addon-ard-aktuell</website>
         <source>https://github.com/Heckie75/kodi-addon-ard-aktuell/tree/main/plugin.video.ardaktuell</source>
         <news>
+v1.0.5 (2023-08-06)
+- reactivated quality in settings (see issue #4)
+- Refactoring
+
+v1.0.4 (2023-06-17)
+- Updated URLs to feeds
+- removed unsupported feeds
+- removed quality settings since feeds don't support quality anymore
+- added date information to rss items
+
 v1.0.3 (2023-02-02)
 - Improved thumbnail if item has been added to favourites
 

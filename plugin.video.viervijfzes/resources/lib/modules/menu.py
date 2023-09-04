@@ -31,68 +31,68 @@ class Menu:
             TitleItem(
                 title=kodiutils.localize(30001),  # A-Z
                 path=kodiutils.url_for('show_catalog'),
-                art_dict=dict(
-                    icon='DefaultMovieTitle.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30002),
-                )
+                art_dict={
+                    'icon': 'DefaultMovieTitle.png',
+                    'fanart': kodiutils.get_addon_info('fanart')
+                },
+                info_dict={
+                    'plot': kodiutils.localize(30002)
+                }
             ),
             TitleItem(
                 title=kodiutils.localize(30007),  # TV Channels
                 path=kodiutils.url_for('show_channels'),
-                art_dict=dict(
-                    icon='DefaultAddonPVRClient.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30008),
-                )
+                art_dict={
+                    'icon': 'DefaultAddonPVRClient.png',
+                    'fanart': kodiutils.get_addon_info('fanart')
+                },
+                info_dict={
+                    'plot': kodiutils.localize(30008)
+                }
             ),
             TitleItem(
                 title=kodiutils.localize(30003),  # Catalog
                 path=kodiutils.url_for('show_categories'),
-                art_dict=dict(
-                    icon='DefaultGenre.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30004),
-                )
+                art_dict={
+                    'icon': 'DefaultGenre.png',
+                    'fanart': kodiutils.get_addon_info('fanart')
+                },
+                info_dict={
+                    'plot': kodiutils.localize(30004)
+                }
             ),
             TitleItem(
                 title=kodiutils.localize(30005),  # Recommendations
                 path=kodiutils.url_for('show_recommendations'),
-                art_dict=dict(
-                    icon='DefaultFavourites.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30006),
-                )
+                art_dict={
+                    'icon': 'DefaultFavourites.png',
+                    'fanart': kodiutils.get_addon_info('fanart')
+                },
+                info_dict={
+                    'plot': kodiutils.localize(30006)
+                }
             ),
             TitleItem(
                 title=kodiutils.localize(30011),  # My List
                 path=kodiutils.url_for('show_mylist'),
-                art_dict=dict(
-                    icon='DefaultPlaylist.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30012),
-                )
+                art_dict={
+                    'icon': 'DefaultPlaylist.png',
+                    'fanart': kodiutils.get_addon_info('fanart')
+                },
+                info_dict={
+                    'plot': kodiutils.localize(30012)
+                }
             ),
             TitleItem(
                 title=kodiutils.localize(30009),  # Search
                 path=kodiutils.url_for('show_search'),
-                art_dict=dict(
-                    icon='DefaultAddonsSearch.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30010),
-                )
+                art_dict={
+                    'icon': 'DefaultAddonsSearch.png',
+                    'fanart': kodiutils.get_addon_info('fanart')
+                },
+                info_dict={
+                    'plot': kodiutils.localize(30010)
+                }
             )
         ]
 

@@ -49,7 +49,7 @@ class LiveChannels:
                 continue
 
             labels = CBC.get_labels(channel)
-            image = cbc.getImage(channel)
+            image = cbc.get_image(channel)
             values = {
                 'url': channel['content'][0]['url'],
                 'image': image,

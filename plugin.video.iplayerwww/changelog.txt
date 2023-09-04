@@ -1,3 +1,23 @@
+v4.0.14
+Fix for further changes to JSON format.
+
+v4.0.13
+Optimization for slice processing (which no longer seems to be needed at all).
+Fix for yet a different twist in A-Z.
+
+v4.0.12
+Fix for new A-Z format.
+
+v4.0.11
+Fixed Most Popular.
+Improved handling of new JSON format for single episodes and synopsis.
+
+v4.0.10
+Fix for next round of JSON changes.
+
+v4.0.9
+Fix for multiple subtitles with identical timestamps.
+
 v4.0.8
 Further adjustments for new JSON format.
 Fix for pagination in A-Z.

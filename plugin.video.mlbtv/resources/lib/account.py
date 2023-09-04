@@ -37,12 +37,12 @@ class Account:
         # Check if username and password are provided
         if self.username == '':
             dialog = xbmcgui.Dialog()
-            self.username = dialog.input(LOCAL_STRING(30240), type=xbmcgui.INPUT_ALPHANUM)
+            self.username = dialog.input(LOCAL_STRING(30140), type=xbmcgui.INPUT_ALPHANUM)
             self.addon.setSetting(id='username', value=self.username)
 
         if self.password == '':
             dialog = xbmcgui.Dialog()
-            self.password = dialog.input(LOCAL_STRING(30250), type=xbmcgui.INPUT_ALPHANUM,
+            self.password = dialog.input(LOCAL_STRING(30150), type=xbmcgui.INPUT_ALPHANUM,
                                     option=xbmcgui.ALPHANUM_HIDE_INPUT)
             self.addon.setSetting(id='password', value=self.password)
 
@@ -60,8 +60,9 @@ class Account:
             r = requests.post(url, headers=headers, data=payload, verify=self.verify)
             if r.ok:
                 login_token = r.json()['access_token']
+                login_token_expiry = datetime.now() + timedelta(seconds=int(r.json()['expires_in']))
                 self.addon.setSetting('login_token', login_token)
-                self.addon.setSetting('last_login', str(time.time()))
+                self.addon.setSetting('login_token_expiry', str(login_token_expiry))
             else:
                 dialog = xbmcgui.Dialog()
                 msg = LOCAL_STRING(30263)
@@ -69,173 +70,35 @@ class Account:
                     msg = r.json()['error_description']
                 dialog.notification(LOCAL_STRING(30262), msg, ICON, 5000, False)
                 self.addon.setSetting('login_token', '')
-                self.addon.setSetting('last_login', '')
+                self.addon.setSetting('login_token_expiry', '')
                 sys.exit()
 
 
     def logout(self):
         self.util.delete_cookies()
         self.addon.setSetting('login_token', '')
-        self.addon.setSetting('last_login', '')
+        self.addon.setSetting('login_token_expiry', '')
         self.addon.setSetting('username', '')
         self.addon.setSetting('password', '')
-        self.addon.setSetting('okta_client_id', '')
-        self.addon.setSetting('session_token', '')
-        self.addon.setSetting('okta_access_token', '')
-        self.addon.setSetting('okta_access_token_expiry', '')
 
     def media_entitlement(self):
-        if self.addon.getSetting('last_login') == '' or \
-                (time.time() - float(self.addon.getSetting('last_login')) >= 86400):
-            self.login()
-
         url = 'https://media-entitlement.mlb.com/api/v3/jwt?os=Android&appname=AtBat&did=' + self.device_id()
         headers = {'User-Agent': UA_ANDROID,
-                   'Authorization': 'Bearer ' + self.addon.getSetting('login_token')
+                   'Authorization': 'Bearer ' + self.login_token()
                    }
 
         r = requests.get(url, headers=headers, verify=self.verify)
 
         return r.text
 
-    # the okta client id is used to get an okta access token (for featured videos like Big Inning)
-    # doesn't change, can be cached until logout
-    def okta_client_id(self):
-        if self.addon.getSetting('okta_client_id') == '':
-            xbmc.log('fetching okta_client_id')
-            url = 'https://www.mlbstatic.com/mlb.com/vendor/mlb-okta/mlb-okta.js'
-            headers = {
-                'User-Agent': UA_PC,
-                'Origin': 'https://www.mlb.com'
-            }
-
-            r = requests.get(url, headers=headers, verify=self.verify)
-            e = re.search('production:{clientId:"([^"]+)",', r.text)
-            if e:
-                xbmc.log('found okta_client_id')
-                okta_client_id = e.group(1)
-                xbmc.log('okta_client_id: ' + okta_client_id)
-                self.addon.setSetting(id='okta_client_id', value=okta_client_id)
-                return okta_client_id
-        else:
-            return self.addon.getSetting('okta_client_id')
-
-    # the session token is used to get an okta access token (for featured videos like Big Inning)
-    # doesn't change much, can be cached until logout or until reset by okta_access_token function as needed
-    def session_token(self):
-        xbmc.log('requesting new session_token')
-
-        # Check if username and password are provided
-        if self.username == '':
-            dialog = xbmcgui.Dialog()
-            self.username = dialog.input(LOCAL_STRING(30240), type=xbmcgui.INPUT_ALPHANUM)
-            self.addon.setSetting(id='username', value=self.username)
-
-        if self.password == '':
-            dialog = xbmcgui.Dialog()
-            self.password = dialog.input(LOCAL_STRING(30250), type=xbmcgui.INPUT_ALPHANUM,
-                                    option=xbmcgui.ALPHANUM_HIDE_INPUT)
-            self.addon.setSetting(id='password', value=self.password)
-
-        if self.username == '' or self.password == '':
-            sys.exit()
-        else:
-            url = 'https://ids.mlb.com/api/v1/authn'
-            headers = {
-                'User-Agent': UA_PC,
-                'Accept-Encoding': 'identity',
-                'Content-Type': 'application/json'
-            }
-            data = {
-              'username': self.username,
-              'password': self.password,
-              'options': {
-                'multiOptionalFactorEnroll': False,
-                'warnBeforePasswordExpired': True
-              }
-            }
-            r = requests.post(url, headers=headers, json=data, verify=self.verify)
-            xbmc.log(r.text)
-            if 'sessionToken' in r.json():
-                xbmc.log('found session_token')
-                session_token = r.json()['sessionToken']
-                self.addon.setSetting(id='session_token', value=session_token)
-
-    # generate a random string of specified length, using numbers and uppercase letters
-    # used for two variables in okta access token request
-    def get_random_string(self, length):
-        characters = string.ascii_uppercase + string.digits
-        result_str = ''.join(random.choice(characters) for i in range(length))
-        return result_str
-
-    # the okta access token is used to access featured videos like Big Inning
-    # can be cached until the specified expiry
-    def okta_access_token(self, retry=False):
-        # log in first, if needed
-        if self.addon.getSetting('last_login') == '' or \
-                (time.time() - float(self.addon.getSetting('last_login')) >= 86400):
+    # need to login to access featured videos like Big Inning and MiLB games
+    def login_token(self):
+        if self.addon.getSetting('login_token_expiry') == '' or \
+                parse(self.addon.getSetting('login_token_expiry')) < datetime.now():
             self.login()
-        # check if we don't have it cached, or the cache has expired
-        if self.addon.getSetting('okta_access_token') == '' or \
-                parse(self.addon.getSetting('okta_access_token_expiry')) < datetime.now():
-            xbmc.log('okta access token not set or expired')
-            # check if we have a cached session token (shouldn't expire often)
-            if self.addon.getSetting('session_token') == '':
-                self.session_token()
 
-            url = 'https://ids.mlb.com/oauth2/aus1m088yK07noBfh356/v1/authorize'
-            xbmc.log('url : ' + url)
-            headers = {
-                'User-Agent': UA_PC,
-                'accept-encoding': 'identity'
-            }
-            data = {
-                'client_id': self.okta_client_id(),
-                'redirect_uri': 'https://www.mlb.com/login',
-                'response_type': 'id_token token',
-                'response_mode': 'okta_post_message',
-                'state': self.get_random_string(64),
-                'nonce': self.get_random_string(64),
-                'prompt': 'none',
-                'sessionToken': self.addon.getSetting('session_token'),
-                'scope': 'openid email'
-            }
-            r = requests.get(url, headers=headers, params=data, verify=self.verify)
-            # check if the response indicates we need a new session token
-            e = re.search("data.error = 'login_required'", r.text)
-            if e:
-                # if this is our second try, and we're still getting this error, just abort
-                if retry == True:
-                    xbmc.log('log in error, aborting')
-                    sys.exit()
-                else:
-                    xbmc.log('not logged in, trying again')
-                    self.addon.setSetting(id='session_token', value='')
-                    okta_access_token = self.okta_access_token(True)
-            else:
-                xbmc.log('logged in')
-                e = re.search("data.access_token = '([^']+)'", r.text)
-                if e:
-                    xbmc.log('found token')
-                    # new token response likely contains a hyphen that needs to be decoded/un-escaped
-                    okta_access_token = e.group(1).replace('\\x2D', '-')
-                    xbmc.log('token result: ' + okta_access_token)
-                    self.addon.setSetting(id='okta_access_token', value=okta_access_token)
-                    # default token expiry is 86400 seconds (24 hours)
-                    okta_access_token_expires_in = '86400'
-                    e = re.search("data.expires_in = '([^']+)'", r.text)
-                    if e:
-                        xbmc.log('found expiry')
-                        okta_access_token_expires_in = e.group(1)
-                        xbmc.log('expires in: ' + okta_access_token_expires_in)
-                    okta_access_token_expiry = datetime.now() + timedelta(seconds=int(okta_access_token_expires_in))
-                    xbmc.log('expiry: ' + str(okta_access_token_expiry))
-                    self.addon.setSetting(id='okta_access_token_expiry', value=str(okta_access_token_expiry))
-        else:
-            # cached token response likely contains a hyphen that needs to be decoded/un-escaped
-            okta_access_token = self.addon.getSetting('okta_access_token').replace('\\x2D', '-')
+        return self.addon.getSetting('login_token')
 
-        return okta_access_token
 
     def access_token(self):
         url = 'https://us.edge.bamgrid.com/token'
@@ -325,7 +188,8 @@ class Account:
         else:
             stream_url = r.json()['stream']['slide']
 
-        if QUALITY == 'Always Ask':
+        # skip asking for quality if it's an audio-only stream
+        if QUALITY == 'Always Ask' and '_AUDIO_' not in stream_url:
             stream_url = self.get_stream_quality(stream_url)
         headers = 'User-Agent=' + UA_PC
         headers += '&Authorization=' + auth
@@ -335,7 +199,7 @@ class Account:
             cookies = cookies.iteritems()
         for key, value in cookies:
             headers += key + '=' + value + '; '
-            
+
         #CDN
         akc_url = 'hlslive-aksc'
         l3c_url = 'hlslive-l3c'
@@ -364,8 +228,18 @@ class Account:
 
         for temp_url in line:
             if '#EXT' not in temp_url:
-                match = re.search(r'(\d.+?)K', temp_url, re.IGNORECASE)
-                bandwidth = match.group()
+                bandwidth = ''
+                # first check for bandwidth at beginning of URL (MLB game streams)
+                match = re.search(r'^(\d+?)K', temp_url, re.IGNORECASE)
+                if match is not None:
+                    bandwidth = match.group()
+                # if we didn't find the correct bandwidth at the beginning of the URL
+                if match is None or len(bandwidth) > 6:
+                    # check for bandwidth after an underscore (MILB games and featured videos)
+                    match = re.search(r'_(\d+?)K', temp_url, re.IGNORECASE)
+                    bandwidth = match.group()
+                    # remove preceding underscore
+                    bandwidth = bandwidth[1:]
                 if 0 < len(bandwidth) < 6:
                     bandwidth = bandwidth.replace('K', ' kbps')
                     stream_title.append(bandwidth)

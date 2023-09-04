@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.viervijfzes" name="GoPlay" version="0.4.10+matrix.1" provider-name="Michaël Arnauts">
+<addon id="plugin.video.viervijfzes" name="GoPlay" version="0.4.11+matrix.1" provider-name="Michaël Arnauts">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.dateutil" version="2.6.0" />
@@ -21,8 +21,8 @@
         <disclaimer lang="en_GB">This add-on is not officially commissioned/supported by SBS Belgium and is provided 'as is' without any warranty of any kind. The Play4, Play5 and Play6 logos are property of SBS Belgium.</disclaimer>
         <platform>all</platform>
         <license>GPL-3.0-only</license>
-        <news>v0.4.10 (2023-01-16)
-- Update API</news>
+        <news>v0.4.11 (2023-07-26)
+- Fixes for DRM protected VOD.</news>
         <source>https://github.com/add-ons/plugin.video.viervijfzes</source>
         <assets>
             <icon>resources/icon.png</icon>

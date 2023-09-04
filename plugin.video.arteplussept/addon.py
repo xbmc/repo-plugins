@@ -1,4 +1,4 @@
-
+"""Main module for Kodi add-on plugin.video.arteplussept"""
 # coding=utf-8
 # -*- coding: utf-8 -*-
 #
@@ -22,9 +22,16 @@
 #
 # https://xbmcswift2.readthedocs.io/en/latest/api.html
 # https://github.com/XBMC-Addons/script.module.xbmcswift2
+# pylint: disable=import-error
 from xbmcswift2 import Plugin
+# pylint: disable=import-error
 from xbmcswift2 import xbmc
+from resources.lib import user
 from resources.lib import view
+from resources.lib.mapper.artefavorites import ArteFavorites
+from resources.lib.mapper.artehistory import ArteHistory
+from resources.lib.mapper.artesearch import ArteSearch
+from resources.lib.mapper.artezone import ArteZone
 from resources.lib.player import Player
 from resources.lib.settings import Settings
 
@@ -32,114 +39,130 @@ from resources.lib.settings import Settings
 # plugin stuff
 plugin = Plugin()
 
-
-class PluginInformation:
-    name = plugin.name
-    version = plugin.addon.getAddonInfo('version')
-
-
 settings = Settings(plugin)
 
 
 @plugin.route('/', name='index')
 def index():
-    # return view.build_categories(plugin, plugin.get_storage('cached_categories', TTL=60), settings)
-    return view.build_home_page(plugin, plugin.get_storage('cached_categories', TTL=60), settings)
+    """Display home menu"""
+    return view.build_home_page(plugin, settings, plugin.get_storage('cached_categories', TTL=60))
 
 
 @plugin.route('/api_category/<category_code>', name='api_category')
 def api_category(category_code):
-    return view.build_api_category(category_code, settings)
+    """Display the menu for a category that needs an api call"""
+    return view.build_api_category(plugin, category_code, settings)
 
 
-@plugin.route('/cached_category/<category_code>', name='cached_category')
-def cached_category(category_code):
-    return view.get_cached_category(category_code, plugin.get_storage('cached_categories', TTL=60))
+@plugin.route('/cached_category/<zone_id>', name='cached_category')
+def cached_category(zone_id):
+    """Display the menu for a category that is stored
+    in cache from previous api call like home page"""
+    return view.get_cached_category(zone_id, plugin.get_storage('cached_categories', TTL=60))
 
 
-# @plugin.route('/creative', name='creative')
-# def creative():
-#     return []
+@plugin.route('/category_page/<zone_id>/<page>/<page_id>', name='category_page')
+def category_page(zone_id, page, page_id):
+    """Display the menu for a category that needs an api call"""
+    return ArteZone(plugin, settings, plugin.get_storage('cached_categories', TTL=60)) \
+        .build_menu(zone_id, page, page_id)
 
 
-@plugin.route('/magazines', name='magazines')
-def magazines():
+@plugin.route('/play_collection/<kind>/<collection_id>', name='play_collection')
+def play_collection(kind, collection_id):
+    """
+    Load a playlist and start playing its first item.
+    """
+    playlist = view.build_collection_playlist(plugin, settings, kind, collection_id)
+
+    # Empty playlist, otherwise requested video is present twice in the playlist
+    xbmc.PlayList(xbmc.PLAYLIST_VIDEO).clear()
+    # Start playing with the first playlist item
+    synched_player = Player(
+        user.get_cached_token(plugin, settings.username, True),
+        playlist['start_program_id'])
+    # try to seek parent collection, when out of the context of playlist creation
+    # Start playing with the first playlist item
+    result = plugin.set_resolved_url(plugin.add_to_playlist(playlist['collection'])[0])
+    synch_during_playback(synched_player)
+    del synched_player
+    return result
+
+
+@plugin.route('/favorites', name='favorites_default')
+@plugin.route('/favorites/<page>', name='favorites')
+def favorites(page=1):
+    """Display the menu for user favorites"""
     plugin.set_content('tvshows')
-    return plugin.finish(view.build_magazines(settings))
+    return plugin.finish(ArteFavorites(plugin, settings).build_menu(page))
 
-
-@plugin.route('/favorites', name='favorites')
-def favorites():
-    plugin.set_content('tvshows')
-    return plugin.finish(view.build_favorites(plugin, settings))
 
 @plugin.route('/add_favorite/<program_id>/<label>', name='add_favorite')
 def add_favorite(program_id, label):
-    view.add_favorite(plugin, settings.username, settings.password, program_id, label)
+    """Add content program_id to user favorites.
+    Notify about completion status with label,
+    useful when several operations are requested in parallel."""
+    ArteFavorites(plugin, settings).add_favorite(program_id, label)
+
 
 @plugin.route('/remove_favorite/<program_id>/<label>', name='remove_favorite')
 def remove_favorite(program_id, label):
-    view.remove_favorite(plugin, settings.username, settings.password, program_id, label)
+    """Remove content program_id from user favorites
+    Notify about completion status with label,
+    useful when several operations are requested in parallel."""
+    ArteFavorites(plugin, settings).remove_favorite(program_id, label)
 
 
-@plugin.route('/last_viewed', name='last_viewed')
-def last_viewed():
+@plugin.route('/purge_favorites', name='purge_favorites')
+def purge_favroties():
+    """Flush user history and notify about completion status"""
+    ArteFavorites(plugin, settings).purge()
+
+
+@plugin.route('/mark_as_watched/<program_id>/<label>', name='mark_as_watched')
+def mark_as_watched(program_id, label):
+    """Mark program as watched in Arte
+    Notify about completion status with label,
+    useful when several operations are requested in parallel."""
+    view.mark_as_watched(plugin, settings.username, program_id, label)
+
+
+@plugin.route('/last_viewed', name='last_viewed_default')
+@plugin.route('/last_viewed/<page>', name='last_viewed')
+def last_viewed(page=1):
+    """Display the menu of user history"""
     plugin.set_content('tvshows')
-    return plugin.finish(view.build_last_viewed(plugin, settings))
+    return plugin.finish(ArteHistory(plugin, settings).build_menu(page))
+
 
 @plugin.route('/purge_last_viewed', name='purge_last_viewed')
 def purge_last_viewed():
-    view.purge_last_viewed(plugin, settings.username, settings.password)
+    """Flush user history and notify about completion status"""
+    ArteHistory(plugin, settings).purge()
 
 
-@plugin.route('/newest', name='newest')
-def newest():
+@plugin.route('/display_collection/<kind>/<program_id>', name='display_collection')
+def display_collection(kind, program_id):
+    """Display menu for collection of content"""
     plugin.set_content('tvshows')
-    return plugin.finish(view.build_newest(settings))
-
-
-@plugin.route('/most_viewed', name='most_viewed')
-def most_viewed():
-    plugin.set_content('tvshows')
-    return plugin.finish(view.build_most_viewed(settings))
-
-
-@plugin.route('/last_chance', name='last_chance')
-def last_chance():
-    plugin.set_content('tvshows')
-    return plugin.finish(view.build_last_chance(settings))
-
-
-@plugin.route('/sub_category/<sub_category_code>', name='sub_category_by_code')
-def sub_category_by_code(sub_category_code):
-    plugin.set_content('tvshows')
-    return plugin.finish(view.build_sub_category_by_code(sub_category_code, settings))
-
-
-@plugin.route('/sub_category/<category_code>/<sub_category_title>', name='sub_category_by_title')
-def sub_category_by_title(category_code, sub_category_title):
-    plugin.set_content('tvshows')
-    return plugin.finish(view.build_sub_category_by_title(category_code, sub_category_title, settings))
-
-
-@plugin.route('/collection/<kind>/<program_id>', name='collection')
-def collection(kind, program_id):
-    plugin.set_content('tvshows')
-    return plugin.finish(view.build_mixed_collection(kind, program_id, settings))
+    return plugin.finish(view.build_mixed_collection(plugin, kind, program_id, settings))
 
 
 @plugin.route('/streams/<program_id>', name='streams')
 def streams(program_id):
-    return plugin.finish(view.build_video_streams(program_id, settings))
+    """Play a multi language content."""
+    return plugin.finish(view.build_video_streams(plugin, settings, program_id))
 
-@plugin.route('/play_live/<streamUrl>', name='play_live')
-def play_live(streamUrl):
-    return plugin.set_resolved_url({'path': streamUrl})
+
+@plugin.route('/play_live/<stream_url>', name='play_live')
+def play_live(stream_url):
+    """Play live content."""
+    return plugin.set_resolved_url({'path': stream_url})
 
 # Cannot read video new arte tv program API. Blocked by FFMPEG issue #10149
 # @plugin.route('/play_artetv/<program_id>', name='play_artetv')
 # def play_artetv(program_id):
-#     item = api.program_video(settings.language, program_id)
+#     item = api.player_video(settings.language, program_id)
 #     attr = item.get('attributes')
 #     streamUrl=attr.get('streams')[0].get('url')
 #     return plugin.set_resolved_url({'path': streamUrl})
@@ -147,10 +170,32 @@ def play_live(streamUrl):
 
 @plugin.route('/play/<kind>/<program_id>', name='play')
 @plugin.route('/play/<kind>/<program_id>/<audio_slot>', name='play_specific')
-def play(kind, program_id, audio_slot='1'):
-    synched_player = Player(plugin, settings, program_id)
-    item = view.build_stream_url(plugin, kind, program_id, int(audio_slot), settings)
-    r = plugin.set_resolved_url(item)
+@plugin.route('/play/<kind>/<program_id>/<audio_slot>/<from_playlist>', name='play_siblings')
+def play(kind, program_id, audio_slot='1', from_playlist='0'):
+    """Play content identified with program_id.
+    :param str kind: an enum in TODO (e.g. TRAILER, COLLECTION, LINK, CLIP, ...)
+    :param str audio_slot: a numeric to identify the audio stream to use e.g. 1 2
+    """
+    synched_player = Player(user.get_cached_token(plugin, settings.username, True), program_id)
+    # try to seek parent collection, when out of the context of playlist creation
+    sibling_playlist = None
+    if from_playlist == '0':
+        sibling_playlist = view.build_sibling_playlist(plugin, settings, program_id)
+    if sibling_playlist is not None and len(sibling_playlist['collection']) > 1:
+        # Empty playlist, otherwise requested video is present twice in the playlist
+        xbmc.PlayList(xbmc.PLAYLIST_VIDEO).clear()
+        # Start playing with the first playlist item
+        result = plugin.set_resolved_url(plugin.add_to_playlist(sibling_playlist['collection'])[0])
+    else:
+        item = view.build_stream_url(plugin, kind, program_id, int(audio_slot), settings)
+        result = plugin.set_resolved_url(item)
+    synch_during_playback(synched_player)
+    del synched_player
+    return result
+
+
+def synch_during_playback(synched_player):
+    """Manage timeframe to send synchronization events to Arte TV API"""
     # wait 1s first to give a chance for playback to start
     # otherwise synched_player won't be able to listen
     xbmc.sleep(500)
@@ -164,19 +209,33 @@ def play(kind, program_id, audio_slot='1'):
         i += 1
         xbmc.sleep(1000)
     synched_player.synch_progress()
-    del synched_player
-    return r
 
 
-@plugin.route('/weekly', name='weekly')
-def weekly():
+@plugin.route('/search', name='search_default')
+def search_default():
+    """Display the keyboard to search for content. Then, display the menu of search results"""
     plugin.set_content('tvshows')
-    return plugin.finish(view.build_weekly(settings))
+    return plugin.finish(ArteSearch(plugin, settings).init_search())
 
-@plugin.route('/search', name='search')
-def weekly():
+
+@plugin.route('/search/<zone_id>/<page>/<query>', name='search')
+def search_page(zone_id, page, query):
+    """Display the keyboard to search for content. Then, display the menu of search results"""
     plugin.set_content('tvshows')
-    return plugin.finish(view.search(plugin, settings))
+    return plugin.finish(ArteSearch(plugin, settings).get_search_page(zone_id, page, query))
+
+
+@plugin.route('/user/login', name='user_login')
+def user_login():
+    """Login user with email already set in settings by creating and persisting a token."""
+    return plugin.finish(succeeded=user.login(plugin, settings))
+
+
+@plugin.route('/user/logout', name='user_logout')
+def user_logout():
+    """Discard token of user in settings."""
+    return plugin.finish(succeeded=user.logout(plugin, settings))
+
 
 # plugin bootstrap
 if __name__ == '__main__':

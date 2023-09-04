@@ -13,6 +13,8 @@ from resources.lib.viervijfzes.content import CACHE_ONLY, ContentApi, Program
 
 _LOGGER = logging.getLogger(__name__)
 
+PROXIES = kodiutils.get_proxies()
+
 
 class SearchApi:
     """ GoPlay Search API """
@@ -37,9 +39,9 @@ class SearchApi:
                 "query": query,
                 "page": 0,
                 "mode": "programs"
-            }
+            },
+            proxies=PROXIES
         )
-        _LOGGER.debug(response.content)
         response.raise_for_status()
 
         data = json.loads(response.text)

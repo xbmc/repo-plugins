@@ -1,5 +1,37 @@
 Changelog also available in file ./addon.xml xpath /addon/extension/news following Kodi guidelines https://kodi.wiki/view/Add-on_structure#changelog.txt
 
+v1.4.0 (2023-8-14)
+- Add support for content over multiple pages. Manage pagination for favorites, history, search and collections : when there are more items in the history or favorities than the page size (currently 50), it is now possible to navigate through pages.
+- Refactor most of the code in OO style. Factorize duplicated code.
+
+v1.3.1 (2023-8-12)
+- Add context menu to view collection as menu instead of playlist
+- Set resume point to 0 when video was fully watched. Avoid crash when playing seq of watched videos in playlist.
+
+v1.3.0 (2023-8-6)
+- Improve security with better password management
+  - Stop storing password on filesystem though addon settings
+- Make thomas-ernest fork official in addon.xml for visibility in wiki
+- Minor fix/clean-up in translation
+
+v1.2.1 (2023-8-12)
+- Add context menu to view collection as menu instead of playlist
+- Set resume point to 0 when video was fully watched. Avoid crash when playing seq of watched videos in playlist.
+
+v1.2.0 (2023-7-26)
+- Manage collections TV_SERIES and MAGAZINE as video playlist
+- Add a context menu item to purge favorites
+- Add a context menu item to mark as video as watched in Arte
+
+v1.1.10 (2023-5-28)
+- Bugfix to display favorites and last vieweds following id change in Arte
+
+v1.1.9 (2023-4-18)
+- Improve security and performance by caching token to limit authentication requests
+- Fallback on clip, when stream is not available anymore. Same feature as on Arte mobile. For favorite content.
+- Clean-up and lint code
+- Add CI with Pylint and Kodi addon submitter
+
 v1.1.8 (2023-2-17)
 - Improve synchronization of playback progress with Arte TV
     - Synchronize progress every minute

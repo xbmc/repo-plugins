@@ -194,25 +194,6 @@ class GraphQL:
       results.append(play_item)
     return results
 
-  def getVideoDataForLegacyId(self, legacy_id):
-    """
-    legacy_id is the integer part of a video URL.
-    24186626 in the case of /video/24186626/filip-och-mona/filip-och-mona-sasong-1-avsnitt-1
-    """
-    operation_name = "VideoPage"
-    query_hash = "ae75c500d4f6f8743f6673f8ade2f8af89fb019d4b23f464ad84658734838c78"
-    variables = {"legacyIds":[legacy_id]}
-    json_data = self.__get(operation_name, query_hash, variables=variables)
-    if not json_data:
-      return None
-    if not json_data["listablesByEscenicId"]:
-      logging.error("Could not find legacy ID {}".format(legacy_id))
-      return None
-    return {
-      "svtId" : json_data["listablesByEscenicId"][0]["svtId"],
-      "blockedForChildren" : json_data["listablesByEscenicId"][0]["restrictions"]["blockedForChildren"]
-    }
-
   def getVideoDataForVideoUrl(self, video_url):
     """
     Returns video data for any video url.
@@ -282,12 +263,13 @@ class GraphQL:
     if not selection:
       logging.error("Selection {selection_id} was not found in selections".format(selection_id=selection_id))
       return None
-    video_items = []
+    list_items = []
     for item in selection["items"]:
       image_id = item["images"]["wide"]["id"]
       image_changed = item["images"]["wide"]["changed"]
       title = "{show} - {episode}".format(show=item["heading"], episode=item["subHeading"])
       item = item["item"]
+      type_name = item["__typename"]
       video_id = item["urls"]["svtplay"]
       thumbnail = self.get_thumbnail_url(image_id, image_changed)
       geo_restricted = item["restrictions"]["onlyAvailableInSweden"]
@@ -295,9 +277,14 @@ class GraphQL:
         "plot": item["longDescription"]
       }
       fanart = self.get_fanart_url(image_id, image_changed)
-      video_item = VideoItem(title, video_id, thumbnail, geo_restricted, info=video_info, fanart=fanart)
-      video_items.append(video_item)
-    return video_items
+      if self.__is_video(type_name):
+        list_items.append(VideoItem(title, video_id, thumbnail, geo_restricted, info=video_info, fanart=fanart))
+      elif self.__is_show(type_name):
+        slug = video_id.split("/")[-1]
+        list_items.append(ShowItem(title, slug, thumbnail, geo_restricted, info=video_info, fanart=fanart))
+      else:
+        raise ValueError("Type {} is not supported!".format(type_name))
+    return list_items
 
   def __get_all_programs(self):
     operation_name = "ProgramsListing"
@@ -384,4 +371,8 @@ class GraphQL:
       logging.error("Request failed, code: {code}, url: {url}".format(code=response.status_code, url=url))
       return None
     json_data = response.json()
-    return json_data["data"]
+    try:
+      return json_data["data"]
+    except KeyError:
+      logging.error("Missing key 'data' in JSON response: {} for operationName={}, variables={}, queryHash={}".format(response.json(), operation_name, variables, query_hash))
+      return None

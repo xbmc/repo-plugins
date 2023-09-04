@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.ripe" name="RIPE Meetings" version="1.0.1" provider-name="Jose Antonio Montes (jamontes)">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">RIPE Meetings videos</summary>
+        <description lang="en_GB">RIPE Meetings. This Add-on allows you to watch the RIPE Meetings videos from the RIPE website.[CR]More than 2,500 videos are available.</description>
+        <summary lang="es_ES">RIPE Meetings vídeos</summary>
+        <description lang="es_ES">RIPE Meetings. Este Add-on permite ver los vídeos de RIPE Meetings mostrados en su página web.[CR]Más de 2500 vídeos están disponibles.</description>
+        <summary lang="fr_FR">RIPE Meetings médiathèque</summary>
+        <description lang="fr_FR">Cette plugin permetre de regarder le RIPE Meetings médiathèque qui se trouve sur leur site web.</description>
+        <summary lang="de_DE">RIPE Meetings videos</summary>
+        <description lang="de_DE">Dieses plugin erlaubt es, die videos aus dem RIPE Meetings website zu sehen.</description>
+        <language>en</language>
+        <license>GPL-3.0-or-later</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=372989</forum>
+        <source>https://github.com/jamontes/plugin.video.ripe</source>
+        <website>https://www.ripe.net/</website>
+	<news>
+          v1.0.1 (2023.05.30)
+          [fix] Quick fix to watch the latest RIPE event
+          v1.0.0 (2023.05.01)
+          [new] First Try
+        </news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

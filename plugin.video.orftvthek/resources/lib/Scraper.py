@@ -39,3 +39,7 @@ class Scraper(object):
     @abc.abstractmethod
     def getArchiv(self):
         pass
+
+    @abc.abstractmethod
+    def getLivestreamByChannel(self, channel):
+        pass

@@ -24,6 +24,18 @@ class htmlScraper(Scraper):
 
     __videoQualities = ["Q1A", "Q4A", "Q6A", "Q8C", "QXB", "QXA"]
 
+    _bundeslandMap = {
+        'orf2b': 'Burgenland',
+        'orf2stmk': 'Steiermark',
+        'orf2w': 'Wien',
+        'orf2ooe': 'Oberösterreich',
+        'orf2k': 'Kärnten',
+        'orf2n': 'Niederösterreich',
+        'orf2s': 'Salzburg',
+        'orf2v': 'Vorarlberg',
+        'orf2t': 'Tirol',
+    }
+
     def __init__(self, xbmc, settings, pluginhandle, quality, protocol, delivery, defaultbanner, defaultbackdrop, usePlayAllPlaylist):
         self.translation = settings.getLocalizedString
         self.xbmc = xbmc
@@ -37,6 +49,53 @@ class htmlScraper(Scraper):
         self.usePlayAllPlaylist = usePlayAllPlaylist
         debugLog('HTML Scraper - Init done')
 
+    def getLivestreamByChannel(self, channel):
+        html = fetchPage({'link': self.__urlLive})
+        wrapper = parseDOM(html.get("content"), name='div', attrs={'class': 'b-livestream-per-channel'})
+        channels = parseDOM(wrapper, name='div', attrs={'class': 'b-lane.*?'})
+
+        for result in channels:
+            channel_detail_url = False
+            channel_logo = parseDOM(result, name='img', attrs={'class': 'channel-logo'}, ret='src')
+            channel_id = re.findall(r'[^\/]+(?=\.)', str(channel_logo))[0].replace('-logo', '')
+            channel_program = parseDOM(result, name='a', attrs={'class': 'js-link-box'}, ret='title')[0]
+
+            if channel in self._bundeslandMap:
+                channel = 'orf2'
+                bundesland_article = parseDOM(result, name='li', attrs={'class': '.*?is-bundesland-heute.*?'}, ret='data-jsb')
+                if len(bundesland_article):
+                    bundesland_data = replaceHTMLCodes(bundesland_article[0])
+                    bundesland_data = json.loads(bundesland_data)
+                    for bundesland_item_key in bundesland_data:
+                        bundesland_item = bundesland_data.get(bundesland_item_key)
+                        if bundesland_item and bundesland_item is not True and len(bundesland_item):
+                            if self._bundeslandMap[channel] == bundesland_item.get('bundesland'):
+                                channel_detail_url = bundesland_item.get('url')
+
+            if not channel_detail_url and channel_id == channel:
+                channel_detail_url = parseDOM(result, name='a', attrs={'class': 'js-link-box'}, ret='href')[0]
+
+            if channel_detail_url:
+                channel_html = fetchPage({'link': channel_detail_url})
+                player = parseDOM(channel_html.get("content"), name='div', attrs={'class': "player_viewport.*?"})
+                player_meta = parseDOM(channel_html.get("content"), name='section', attrs={'class': "b-video-details.*?"})
+                if len(player):
+                    data = parseDOM(player[0], name='div', attrs={}, ret="data-jsb")
+                    channel_description = parseDOM(player_meta[0], name='p', attrs={'class': "description-text.*?"})[0]
+                    license_url = self.getLivestreamDRM(data)
+                    video_url = self.getLivestreamUrl(data, self.videoQuality)
+                    # Remove Get Parameters because InputStream Adaptive cant handle it.
+                    video_url = re.sub(r"\?[\S]+", '', video_url, 0)
+
+                    uhd_25_video_url = self.getLivestreamUrl(data, 'UHD', True)
+                    if uhd_25_video_url:
+                        uhd_50_video_url = uhd_25_video_url.replace('_uhd_25/', '_uhd_50/')
+                        video_url = uhd_50_video_url
+                if license_url:
+                    return {'title': channel_program, 'description': channel_description, 'url': video_url,'license': license_url}
+                else:
+                    return {'title': channel_program, 'description': channel_description, 'url': video_url}
+        return []
 
     def getMostViewed(self):
         self.getTeaserList(self.__urlMostViewed, "b-teasers-list")

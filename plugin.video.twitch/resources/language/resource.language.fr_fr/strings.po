@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: 2023-02-25 20:15+0000\n"
-"Last-Translator: skypichat <skypichat@hotmail.fr>\n"
+"PO-Revision-Date: 2023-05-29 16:42+0000\n"
+"Last-Translator: maximemenager <maxime.menager@netc.eu>\n"
 "Language-Team: French (France) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/fr_fr/>\n"
 "Language: fr_fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.17\n"
 
 msgctxt "Addon Summary"
 msgid "Twitch video plugin"
@@ -35,7 +35,7 @@ msgstr "Rechercher"
 
 msgctxt "#30004"
 msgid "Settings"
-msgstr "Paramètre"
+msgstr "Paramètres"
 
 msgctxt "#30005"
 msgid "Popular Streams"
@@ -47,7 +47,7 @@ msgstr "Équipes"
 
 msgctxt "#30007"
 msgid "Search for channels"
-msgstr "Rechercher d'une chaine"
+msgstr "Rechercher des chaines"
 
 msgctxt "#30008"
 msgid "Channels"
@@ -67,11 +67,11 @@ msgstr "page suivante..."
 
 msgctxt "#30012"
 msgid "-- Currently Live Streams --"
-msgstr "-- Chaines en Direct --"
+msgstr "-- Chaines en direct --"
 
 msgctxt "#30013"
 msgid "-- Followed Channels --"
-msgstr "-- Chaines Suivit --"
+msgstr "-- Chaines suivies --"
 
 msgctxt "#30020"
 msgid "Http error"
@@ -79,11 +79,11 @@ msgstr "Erreur HTTP"
 
 msgctxt "#30021"
 msgid "No Live Data Found"
-msgstr "Pas de données trouvées"
+msgstr "Aucune donnée trouvée"
 
 msgctxt "#30022"
 msgid "No archives found for"
-msgstr "Pas d'archive trouvées pour"
+msgstr "Aucune archive trouvée pour"
 
 msgctxt "#30023"
 msgid "User Token Error"
@@ -111,7 +111,7 @@ msgstr "Échec de l'analyse des résultats"
 
 msgctxt "#30029"
 msgid "Please check your internet connection"
-msgstr "S'il vous plaît vérifier votre connexion Internet"
+msgstr "Vérifiez votre connexion internet"
 
 msgctxt "#30040"
 msgid "Video Quality"
@@ -119,23 +119,23 @@ msgstr "Qualité vidéo"
 
 msgctxt "#30045"
 msgid "Display titles"
-msgstr "Afficher le titre"
+msgstr "Afficher les titres"
 
 msgctxt "#30046"
 msgid "Streamer - Stream Title"
-msgstr "Chaine - Titre"
+msgstr "Streamer - Titre du flux"
 
 msgctxt "#30047"
 msgid "Viewers - Streamer - Stream Title"
-msgstr "Spectateur - Chaine - Titre"
+msgstr "Spectateur - Streamer - Titre du flux"
 
 msgctxt "#30048"
 msgid "Stream Title"
-msgstr "Titre"
+msgstr "Titre du flux"
 
 msgctxt "#30049"
 msgid "Streamer"
-msgstr "Chaine"
+msgstr "Streamer"
 
 msgctxt "#30050"
 msgid "Username"
@@ -143,7 +143,7 @@ msgstr "Nom d'utilisateur"
 
 msgctxt "#30051"
 msgid "Streamer - Game Title - Stream Title"
-msgstr "Chaine - Titre du jeu - Titre"
+msgstr "Streamer - Titre du jeu - Titre du flux"
 
 msgctxt "#30052"
 msgid "Enable"
@@ -155,15 +155,15 @@ msgstr "Mot de passe (OAuth Token)"
 
 msgctxt "#30054"
 msgid "Language | Streamer - Stream Title"
-msgstr "Langage | Streamer - Titre du stream"
+msgstr "Langage | Streamer - Titre du flux"
 
 msgctxt "#30060"
 msgid "Unnamed Streamer"
-msgstr "Chaine anonyme"
+msgstr "Streamer anonyme"
 
 msgctxt "#30061"
 msgid "Untitled Stream"
-msgstr "Titre inconnu"
+msgstr "Flux sans titre"
 
 msgctxt "#30062"
 msgid "Unknown Number of Viewers"
@@ -179,7 +179,7 @@ msgstr "Jeu inconnu"
 
 msgctxt "#30065"
 msgid "Truncate displayed titles"
-msgstr "Tronquer les titres"
+msgstr "Tronquer les titres affichés"
 
 msgctxt "#30066"
 msgid "Followed Games"
@@ -187,7 +187,7 @@ msgstr "Jeux Suivis"
 
 msgctxt "#30067"
 msgid "Game Title Viewers | Streamer - Stream Title"
-msgstr "Titre du jeu Spectateur | Chaine - Titre"
+msgstr "Titre du jeu Spectateur | Streamer - Titre du flux"
 
 msgctxt "#30068"
 msgid "Content Type"
@@ -195,15 +195,15 @@ msgstr "Type de contenus"
 
 msgctxt "#30069"
 msgid "Files"
-msgstr "Fichier"
+msgstr "Fichiers"
 
 msgctxt "#30070"
 msgid "TV Shows"
-msgstr "Émission"
+msgstr "Séries TV"
 
 msgctxt "#30071"
 msgid "Movies"
-msgstr "Film"
+msgstr "Films"
 
 msgctxt "#30072"
 msgid "Episodes"
@@ -223,7 +223,7 @@ msgstr "Installer IrcChat (script.ircchat)"
 
 msgctxt "#30076"
 msgid "General"
-msgstr "General"
+msgstr "Général"
 
 msgctxt "#30077"
 msgid "Play (Choose Quality)"
@@ -235,7 +235,7 @@ msgstr "Rediffusion"
 
 msgctxt "#30079"
 msgid "Video Highlights"
-msgstr "Video en vedette"
+msgstr "Videos en vedette"
 
 msgctxt "#30080"
 msgid "Could not find any playable urls"
@@ -251,7 +251,7 @@ msgstr "Aperçus en direct"
 
 msgctxt "#30083"
 msgid "Live Preview Settings"
-msgstr "Paramètre d'Aperçus en direct"
+msgstr "Paramètres des aperçus en direct"
 
 msgctxt "#30084"
 msgid "Clear live preview cache"
@@ -263,7 +263,7 @@ msgstr "***** ATTENTION *****"
 
 msgctxt "#30086"
 msgid "These settings may allow this add-on to delete database entries and images[CR]for cached live previews."
-msgstr "Ces paramètres peuvent permettre à cet add-on de supprimer des informations et des images de la base de données pour les aperçus"
+msgstr "Ces paramètres peuvent permettre à cet add-on de supprimer des informations et des images de la base de données pour les aperçus."
 
 msgctxt "#30087"
 msgid "Notifications"
@@ -275,7 +275,7 @@ msgstr "Jeu"
 
 msgctxt "#30089"
 msgid "Viewers"
-msgstr "Spectateur"
+msgstr "Spectateurs"
 
 msgctxt "#30090"
 msgid "Language"
@@ -283,7 +283,7 @@ msgstr "Langue"
 
 msgctxt "#30091"
 msgid "Mature"
-msgstr "Mature"
+msgstr "Adulte"
 
 msgctxt "#30092"
 msgid "Partner"
@@ -295,7 +295,7 @@ msgstr "Delais"
 
 msgctxt "#30094"
 msgid "Automatic refresh interval (minutes)"
-msgstr "intervalle d'actualisation automatique (minutes)"
+msgstr "Intervalle d'actualisation automatique (minutes)"
 
 msgctxt "#30095"
 msgid "Username is required"
@@ -311,19 +311,19 @@ msgstr "ID du client OAuth"
 
 msgctxt "#30098"
 msgid "Select Video by ID or URL"
-msgstr "Sélectionnez la vidéo par son ID ou son URL"
+msgstr "Sélectionner la vidéo par son ID ou son URL"
 
 msgctxt "#30099"
 msgid "OAuth Token"
-msgstr "Jeton OAuth"
+msgstr "Token OAuth"
 
 msgctxt "#30100"
 msgid "Visit www.twitch.tv/settings/connections and [CR]'Register your application' for an OAuth Client-ID"
-msgstr "Visitez www.twitch.tv/settings/connections et [CR] \"Enregistrez votre demande\" pour obtenir un ID-client OAuth"
+msgstr "Visiter www.twitch.tv/settings/connections et [CR] \"Enregistrer votre demande\" pour obtenir un ID-client OAuth"
 
 msgctxt "#30101"
 msgid "Visit www.twitchapps.com/tmi to generate an OAuth token"
-msgstr "Visitez www.twitchapps.com/tmi pour générer un jeton OAuth"
+msgstr "Visiter www.twitchapps.com/tmi pour générer un jeton OAuth"
 
 msgctxt "#30102"
 msgid "Source"
@@ -367,7 +367,7 @@ msgstr "144p30"
 
 msgctxt "#30112"
 msgid "Quality may result in best match"
-msgstr "La qualité peut donner lieu à une meilleure adaptation"
+msgstr "La qualité peut donner lieu à la meilleure correspondance"
 
 msgctxt "#30113"
 msgid "Uploads"
@@ -403,7 +403,7 @@ msgstr "Durée d'expiration du cache (en minutes)"
 
 msgctxt "#30122"
 msgid "Reset function cache"
-msgstr "Réinitialisation de la fonctionnalité du cache"
+msgstr "Réinitialiser le cache de la fonction"
 
 msgctxt "#30123"
 msgid "Items per page"
@@ -411,7 +411,7 @@ msgstr "Éléments par page"
 
 msgctxt "#30124"
 msgid "Video Id/Url"
-msgstr "Id/Url de la vidéo"
+msgstr "Id de la vidéo/Url"
 
 msgctxt "#30125"
 msgid "Streams"
@@ -427,7 +427,7 @@ msgstr "Connexion"
 
 msgctxt "#30128"
 msgid "OAuth token is required"
-msgstr "Le jeton OAuth est requis"
+msgstr "Le Token OAuth est requis"
 
 msgctxt "#30129"
 msgid "Error"
@@ -439,7 +439,7 @@ msgstr "Aller à %s"
 
 msgctxt "#30131"
 msgid "No results returned"
-msgstr "Aucun résultat n'a été communiqué"
+msgstr "Aucun résultat renvoyé"
 
 msgctxt "#30132"
 msgid "OAuth token is required for access"
@@ -451,11 +451,11 @@ msgstr "Autoriser"
 
 msgctxt "#30134"
 msgid "Get your OAuth token by logging in/signing up to Twitch.tv here:"
-msgstr "Get your OAuth token by logging in/signing up to Twitch.tv here :"
+msgstr "Obtenir votre Token OAuth en vous connectant/inscrivant à Twitch.tv ici :"
 
 msgctxt "#30135"
 msgid "Get OAuth token"
-msgstr "Obtenir un jeton OAuth"
+msgstr "Obtenir un Token OAuth"
 
 msgctxt "#30136"
 msgid "Always ask"
@@ -463,7 +463,7 @@ msgstr "Toujours demander"
 
 msgctxt "#30138"
 msgid "*** Do NOT share your OAuth token. ***"
-msgstr "*** Ne partagez pas votre jeton OAuth. ***"
+msgstr "*** Ne partagez pas votre Token OAuth. ***"
 
 msgctxt "#30139"
 msgid "Toggle follow"
@@ -483,15 +483,15 @@ msgstr "Rediriger l'URI"
 
 msgctxt "#30143"
 msgid "Would you like to follow %s?"
-msgstr "Souhaitez-vous suivre %s"
+msgstr "Souhaitez-vous suivre %s ?"
 
 msgctxt "#30144"
 msgid "Are you sure you want to unfollow %s?"
-msgstr "Êtes-vous sûr de vouloir ne plus suivre %s ?"
+msgstr "Êtes-vous sûr de ne plus vouloir suivre %s ?"
 
 msgctxt "#30145"
 msgid "Toggle block user"
-msgstr "Modifier le blocage de l'utilisateur"
+msgstr "Activer/désactiver le blocage de l'utilisateur"
 
 msgctxt "#30146"
 msgid "Blocked %s"
@@ -503,11 +503,11 @@ msgstr "Débloqué %s"
 
 msgctxt "#30148"
 msgid "Would you like to block %s?"
-msgstr "Souhaitez-vous bloquer %s ?"
+msgstr "Souhaitez-vous bloquer %s ?"
 
 msgctxt "#30149"
 msgid "Are you sure you want to unblock %s?"
-msgstr "Êtes-vous sûr de vouloir débloquer %s ?"
+msgstr "Êtes-vous sûr de vouloir débloquer %s ?"
 
 msgctxt "#30150"
 msgid "Blacklist %s"
@@ -547,19 +547,19 @@ msgstr "Supprimer %s de la liste noire"
 
 msgctxt "#30159"
 msgid "Removed %s from blacklist"
-msgstr "Supprimé %s de la liste noire"
+msgstr "%s supprimé de la liste noire"
 
 msgctxt "#30160"
 msgid "Cleared %s %s"
-msgstr "Classé %s %s"
+msgstr "%s %s classé"
 
 msgctxt "#30161"
 msgid "Are you sure you want to clear %s %s?"
-msgstr "Êtes-vous sûr de vouloir classer %s %s ?"
+msgstr "Êtes-vous sûr de vouloir classer %s %s ?"
 
 msgctxt "#30162"
 msgid "Clear list"
-msgstr "Nettoyage de la liste"
+msgstr "Effacer la liste"
 
 msgctxt "#30163"
 msgid "Set default quality"
@@ -591,7 +591,7 @@ msgstr "Choisir la qualité"
 
 msgctxt "#30170"
 msgid "Playlists"
-msgstr "Playlists"
+msgstr "Listes de lecture"
 
 msgctxt "#30171"
 msgid "Collections"
@@ -619,12 +619,11 @@ msgstr "Clips"
 
 msgctxt "#30177"
 msgid "Invalid OAuth token"
-msgstr "Jeton OAuth invalide"
+msgstr "Token OAuth invalide"
 
-#, fuzzy
 msgctxt "#30178"
 msgid "Missing required scopes: %s"
-msgstr "Portées requises manquantes : %s"
+msgstr "Scopes requis manquants : %s"
 
 msgctxt "#30179"
 msgid "Client id mismatch"
@@ -632,7 +631,7 @@ msgstr "Non-concordance de l'ID du client"
 
 msgctxt "#30180"
 msgid "Go to '%s' - '%s' - '%s' to generate a new token"
-msgstr "Allez sur '%s' - '%s' - '%s' pour générer un nouveau jeton"
+msgstr "Aller sur '%s' - '%s' - '%s' pour générer un nouveau Token"
 
 msgctxt "#30181"
 msgid "Are you sure you want to blacklist %s?"
@@ -738,7 +737,6 @@ msgctxt "#30208"
 msgid "Attempting to reconnect to %s"
 msgstr "Tentative de reconnexion dans %s"
 
-#, fuzzy
 msgctxt "#30209"
 msgid "Attempt #%d"
 msgstr "Tentative #%d"
@@ -767,7 +765,6 @@ msgctxt "#30215"
 msgid "Duration"
 msgstr "Durée"
 
-#, fuzzy
 msgctxt "#30216"
 msgid "Curated"
 msgstr "Conservée"

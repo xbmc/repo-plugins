@@ -187,8 +187,8 @@ class Twitch:
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_followed_channels(self, from_id='', to_id='', after='MA==', before='MA==', first=20):
-        results = self.api.users.get_follows(from_id=from_id, to_id=to_id, after=after, before=before, first=first)
+    def get_followed_channels(self, user_id='', after='MA==', first=20):
+        results = self.api.users.get_follows(user_id=user_id, after=after, first=first)
         return self.error_check(results)
 
     @api_error_handler

@@ -20,6 +20,7 @@ class serviceAPI(Scraper):
     __urlBase = 'https://api-tvthek.orf.at/api/v3/'
     __urlBaseV4 = 'https://api-tvthek.orf.at/api/v4.2/'
     __urlLive = 'livestreams/24hours?limit=20'
+    __urlLiveChannels = 'livestreams'
     __urlMostViewed = 'page/startpage'
     __urlNewest = 'page/startpage/newest'
     __urlSearch = __urlBase + 'search/%s?limit=1000'
@@ -29,6 +30,24 @@ class serviceAPI(Scraper):
     __urlChannel = 'channel/'
     __urlDRMLic = 'https://drm.ors.at/acquire-license/widevine'
     __brandIdDRM = '13f2e056-53fe-4469-ba6d-999970dbe549'
+    __bundeslandMap = {
+        'orf2b': 'Burgenland',
+        'orf2stmk': 'Steiermark',
+        'orf2w': 'Wien',
+        'orf2ooe': 'Oberösterreich',
+        'orf2k': 'Kärnten',
+        'orf2n': 'Niederösterreich',
+        'orf2s': 'Salzburg',
+        'orf2v': 'Vorarlberg',
+        'orf2t': 'Tirol',
+    }
+    __channelMap = {
+        'orf1': 'ORF 1',
+        'orf2': 'ORF 2',
+        'orf3': 'ORF III',
+        'orfs': 'ORF Sport+',
+        'live_special': 'Special'
+    }
 
     serviceAPIEpisode = 'episode/%s'
     serviceAPIDate = 'schedule/%s?limit=1000'
@@ -51,6 +70,39 @@ class serviceAPI(Scraper):
         self.defaultbackdrop = defaultbackdrop
         self.usePlayAllPlaylist = usePlayAllPlaylist
         debugLog('ServiceAPI  - Init done', xbmc.LOGDEBUG)
+
+    def getLivestreamByChannel(self, channel):
+        response = self.__makeRequestV4(self.__urlLiveChannels)
+        response_raw = response.read().decode('UTF-8')
+        channels = json.loads(response_raw)
+
+        live_link = False
+        for result in channels:
+            if channel in self.__bundeslandMap:
+                channel_items =  channels[result].get('items')
+                for channel_item in channel_items:
+                    if channel_item.get('title') == "%s heute" % self.__bundeslandMap[channel]:
+                        live_link = channel_item.get('_links').get('self').get('href')
+            if result == channel or channel in self.__bundeslandMap and result == channel[0:4] and not live_link:
+                live_link = channels[result].get('items')[0].get('_links').get('self').get('href')
+
+        if live_link:
+            response = url_get_request(live_link, self.httpauth)
+            response_raw = response.read().decode('UTF-8')
+            live_json = json.loads(response_raw)
+            if live_json.get('is_drm_protected'):
+                video_url = self.JSONStreamingDrmURL(live_json)
+                uhd_25_video_url = self.JSONStreamingDrmURL(live_json, 'uhdbrowser')
+                if uhd_25_video_url:
+                    video_url = uhd_25_video_url;
+                uhd_50_video_url = self.JSONStreamingDrmURL(live_json, 'uhdsmarttv')
+                if uhd_50_video_url:
+                    video_url = uhd_50_video_url
+                license_url = self.JSONLicenseDrmURL(live_json)
+                return {'title': live_json.get('title'), 'description': live_json.get('share_subject'), 'url': video_url,'license': license_url}
+            else:
+                video_url = self.JSONStreamingURL(live_json.get('sources'))
+                return {'title': live_json.get('title'), 'description': live_json.get('share_subject'), 'url': video_url}
 
     def getHighlights(self):
         try:
@@ -100,7 +152,7 @@ class serviceAPI(Scraper):
                     self.__JSONVideoItem2ListItem(result.get('_embedded').get('video_item'))
 
         else:
-            debugLog('ServiceAPI not available ... switch back to HTML Parsing in the Addon Settings', level=xbmc.LOGDEBUG)
+            debugLog('ServiceAPI not available for %s ... switch back to HTML Parsing in the Addon Settings' % urlAPI, level=xbmc.LOGDEBUG)
             showDialog(self.translation(30045).encode('UTF-8'), self.translation(30046).encode('UTF-8'))
 
     # Useful  Methods for JSON Parsing
@@ -130,8 +182,10 @@ class serviceAPI(Scraper):
 
         for streamingUrl in jsonVideos.get('hls'):
             if streamingUrl.get('quality_key') == self.videoQuality:
-                return generateAddonVideoUrl(streamingUrl.get('src'))
-            source = streamingUrl.get('src')
+                # Remove Get Parameters because InputStream Adaptive cant handle it.
+                source = re.sub(r"\?[\S]+", '', streamingUrl.get('src'), 0)
+                return generateAddonVideoUrl(source)
+            source = re.sub(r"\?[\S]+", '', streamingUrl.get('src'), 0)
         if source is not None:
             return generateAddonVideoUrl(source)
         else:
@@ -145,10 +199,18 @@ class serviceAPI(Scraper):
             debugLog("DRM License Url %s" % license_url)
             return license_url
 
-    def JSONStreamingDrmURL(self, jsonData):
+    def JSONStreamingDrmURL(self, jsonData, uhd_profile = False):
         if jsonData.get('drm_token') is not None:
             license_url = self.JSONLicenseDrmURL(jsonData)
             jsonVideos = jsonData.get('sources')
+
+            if uhd_profile:
+                for streamingUrl in jsonVideos.get('dash'):
+                    if streamingUrl.get('is_uhd') and streamingUrl.get('quality_key').lower() == uhd_profile:
+                        source = re.sub(r"\?[\S]+", '', streamingUrl.get('src'), 0)
+                        return generateDRMVideoUrl(source, license_url)
+                return False
+
             for streamingUrl in jsonVideos.get('dash'):
                 if streamingUrl.get('quality_key').lower()[0:3] == self.videoQuality:
                     return generateDRMVideoUrl(streamingUrl.get('src'), license_url)
@@ -298,64 +360,93 @@ class serviceAPI(Scraper):
             u = build_kodi_url(parameters)
             createListItem(title, None, None, None, date.strftime('%Y-%m-%d'), '', u, False, True, self.defaultbackdrop, self.pluginhandle)
 
+    # Fetch stream details.
+    def getStreamInfos(self, item, inputstreamAdaptive):
+        infos = {}
+        live_link = item.get('_links').get('self').get('href')
+        response = url_get_request(live_link, self.httpauth)
+        response_raw = response.read().decode('UTF-8')
+        infos['live'] = json.loads(response_raw)
+        infos['drmurl'] = self.JSONLicenseDrmURL(infos['live'])
+        if inputstreamAdaptive and infos['live'].get('is_drm_protected'):
+            infos['stream'] = self.JSONStreamingDrmURL(infos['live'])
+        else:
+            infos['stream'] = self.JSONStreamingURL(infos['live'].get('sources'))
+
+        infos['uhd25_stream'] = self.JSONStreamingDrmURL(infos['live'], 'uhdbrowser')
+        infos['uhd50_stream'] = self.JSONStreamingDrmURL(infos['live'], 'uhdsmarttv')
+        infos['items'] = {}
+        return infos
+
+    # Builds a livestream item.
+    def buildStreamItem(self, item, channel, stream_imfo, inputstreamAdaptive, use_restart=True):
+        description = item.get('description')
+        title = item.get('title')
+        programName = channel
+        if channel in self.__channelMap:
+            programName = self.__channelMap[channel]
+        livestreamStart = time.strptime(item.get('start')[0:19], '%Y-%m-%dT%H:%M:%S')
+        livestreamEnd = time.strptime(item.get('end')[0:19], '%Y-%m-%dT%H:%M:%S')
+        duration = max(time.mktime(livestreamEnd) - max(time.mktime(livestreamStart), time.mktime(time.localtime())), 1)
+        contextMenuItems = []
+        restart_url = False
+        if inputstreamAdaptive and item.get('restart'):
+            restart_parameters = {"mode": "liveStreamRestart", "link": item.get('id'), "lic_url": stream_imfo['drmurl']}
+            restart_url = build_kodi_url(restart_parameters)
+            contextMenuItems.append((self.translation(30063), 'RunPlugin(%s)' % restart_url))
+
+        banner = self.JSONImage(item.get('_embedded').get('image'))
+        item_title = "[%s] %s %s (%s)" % (programName, "[%s]" % self.translation(30063) if inputstreamAdaptive and restart_url else '', title, time.strftime('%H:%M', livestreamStart))
+        if item.get('uhd') and stream_imfo['uhd25_stream']:
+            createListItem("[UHD] %s" % item_title, banner, description, duration,time.strftime('%Y-%m-%d', livestreamStart), programName, stream_imfo['uhd25_stream'], True, False, self.defaultbackdrop, self.pluginhandle)
+        if item.get('uhd') and stream_imfo['uhd50_stream']:
+            createListItem("[UHD 50fps] %s" % item_title, banner, description, duration,time.strftime('%Y-%m-%d', livestreamStart), programName, stream_imfo['uhd50_stream'], True, False, self.defaultbackdrop, self.pluginhandle)
+
+        createListItem(item_title, banner, description, duration, time.strftime('%Y-%m-%d', livestreamStart), programName, stream_imfo['stream'], True, False, self.defaultbackdrop, self.pluginhandle, contextMenuItems=contextMenuItems)
+
     # Returns Live Stream Listing
     def getLiveStreams(self):
         try:
-            response = self.__makeRequestV4(self.__urlLive)
-            responseCode = response.getcode()
-        except HTTPError as error:
-            responseCode = error.getcode()
+            xbmcaddon.Addon('inputstream.adaptive')
+            inputstreamAdaptive = True
+        except RuntimeError:
+            inputstreamAdaptive = False
 
-        if responseCode == 200:
-            try:
-                xbmcaddon.Addon('inputstream.adaptive')
-                inputstreamAdaptive = True
-            except RuntimeError:
-                inputstreamAdaptive = False
+        showFullSchedule = xbmcaddon.Addon().getSetting('showLiveStreamSchedule') == 'true'
 
-            foundProgram = []
-            showFullSchedule = xbmcaddon.Addon().getSetting('showLiveStreamSchedule') == 'true'
+        response = self.__makeRequestV4(self.__urlLiveChannels)
+        response_raw = response.read().decode('UTF-8')
+        channels = json.loads(response_raw)
+        channelresults = {}
 
-            for result in json.loads(response.read().decode('UTF-8')).get('_embedded').get('items'):
-                drm_lic_url = self.JSONLicenseDrmURL(result)
-                description = result.get('description')
-                programName = result.get('_embedded').get('channel').get('name')
-                livestreamStart = time.strptime(result.get('start')[0:19], '%Y-%m-%dT%H:%M:%S')
-                livestreamEnd = time.strptime(result.get('end')[0:19], '%Y-%m-%dT%H:%M:%S')
-                duration = max(time.mktime(livestreamEnd) - max(time.mktime(livestreamStart), time.mktime(time.localtime())), 1)
-                contextMenuItems = []
+        # Prefetch the stream infos to limit request for each stream.
+        for channel in channels:
+            channelresults[channel] = {}
+            channel_items =  channels[channel].get('items')
+            for channel_item in channel_items:
+                channelresults[channel] = self.getStreamInfos(channel_item, inputstreamAdaptive)
+                channelresults[channel]['items'] = channel_items
+                break
 
-                if programName not in foundProgram or showFullSchedule:
-                    foundProgram.append(programName)
-                    if inputstreamAdaptive and result.get('is_drm_protected'):
-                        debugLog('DRM is active for %s' % result.get('title'))
-                        link = self.JSONStreamingDrmURL(result)
-                    else:
-                        link = self.JSONStreamingURL(result.get('sources'))
+        # Render current streams first.
+        for channel in channels:
+            for upcoming in channelresults[channel]['items']:
+                if not 'upcoming' in channels[channel] or ('upcoming' in channels[channel] and upcoming.get('start')[0:17] == channels[channel]['upcoming'].get('start')[0:17]):
+                    if not 'upcoming' in channels[channel]:
+                        channels[channel]['upcoming'] = upcoming
+                    elif upcoming.get('start')[0:17] == channels[channel]['upcoming'].get('start')[0:17] and upcoming.get('id') != channels[channel]['upcoming'].get('id'):
+                        channelresults[channel] = self.getStreamInfos(upcoming, inputstreamAdaptive)
+                    self.buildStreamItem(upcoming, channel, channelresults[channel], inputstreamAdaptive)
 
-                    if inputstreamAdaptive and result.get('restart'):
+        # Render upcoming streams last for better list item order.
+        if showFullSchedule:
+            addDirectory('[COLOR red]----------------[/COLOR]', None, self.defaultbackdrop, "", "", 'getLive', self.pluginhandle)
+            for channel in channels:
+                for upcoming in channelresults[channel]['items']:
+                    if not 'upcoming' in channels[channel] or channels[channel]['upcoming'].get('id') != upcoming.get('id'):
+                        self.buildStreamItem(upcoming, channel, channelresults[channel], inputstreamAdaptive, False)
 
-                        restart_parameters = {"mode": "liveStreamRestart", "link": result.get('id'), "lic_url": drm_lic_url}
-                        restart_url = build_kodi_url(restart_parameters)
-                        contextMenuItems.append((self.translation(30063), 'RunPlugin(%s)' % restart_url))
-
-                    title = "[%s] %s %s (%s)" % (programName, self.translation(30063) if inputstreamAdaptive and result.get('restart') else '', result.get('title'), time.strftime('%H:%M', livestreamStart))
-
-                    banner = self.JSONImage(result.get('_embedded').get('image'))
-
-                    for stream in result.get('sources').get('dash'):
-                        if stream.get('is_uhd') and stream.get('quality_key').lower() == 'uhdbrowser':
-                            uhd_video_url = generateDRMVideoUrl(stream.get('src'), drm_lic_url)
-                            createListItem("[UHD] %s" % title, banner, description, duration,time.strftime('%Y-%m-%d', livestreamStart), programName, uhd_video_url, True, False, self.defaultbackdrop, self.pluginhandle)
-                        if stream.get('is_uhd') and stream.get('quality_key').lower() == 'uhdsmarttv':
-                            uhd_video_url = generateDRMVideoUrl(stream.get('src'), drm_lic_url)
-                            createListItem("[UHD 50fps] %s" % title, banner, description, duration,time.strftime('%Y-%m-%d', livestreamStart), programName, uhd_video_url, True, False, self.defaultbackdrop, self.pluginhandle)
-
-                    createListItem(title, banner, description, duration, time.strftime('%Y-%m-%d', livestreamStart), programName, link, True, False, self.defaultbackdrop, self.pluginhandle,
-                                   contextMenuItems=contextMenuItems)
-        else:
-            showDialog(self.translation(30045).encode('UTF-8'), self.translation(30046).encode('UTF-8'))
-
+    # Restart callback.
     def liveStreamRestart(self, link, protocol):
         try:
             xbmcaddon.Addon('inputstream.adaptive')

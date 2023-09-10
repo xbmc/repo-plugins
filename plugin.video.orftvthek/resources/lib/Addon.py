@@ -265,6 +265,54 @@ def run():
             listCallback(False, pluginhandle)
         except:
             userNotification((translation(30067)).encode("utf-8"))
+    elif mode == 'pvr':
+        channel = params.get('channel')
+        debugLog("Loading channel %s" % channel)
+        data = scraper.getLivestreamByChannel(channel)
+        if data:
+            video_url = "%s|User-Agent=%s" % (data['url'], Settings.userAgent())
+
+            if 'license' in data:
+                import inputstreamhelper
+                license = data['license']
+
+                is_helper = inputstreamhelper.Helper(input_stream_protocol, drm=input_stream_drm_version)
+                if is_helper.check_inputstream():
+                    debugLog("Video Url: %s" % video_url)
+                    debugLog("DRM License Url: %s" % license)
+                    play_item = xbmcgui.ListItem(path=video_url)
+                    play_item.setLabel(data['title'])
+                    play_item.setLabel2(channel)
+                    play_item.setProperty('IsPlayable', 'true')
+                    item_infos = {
+                        'title': data['title'],
+                        'plot': data['description'],
+                        'plotoutline': data['description'],
+                    }
+                    play_item.setInfo(type="Video", infoLabels=item_infos)
+
+                    if 'logo' in data:
+                        item_art = {
+                            'clearlogo': data['logo'],
+                            'icon': data['logo'],
+                        }
+                        play_item.setArt(item_art)
+
+                    headers = "User-Agent=%s&Content-Type=%s" % (Settings.userAgent(), input_stream_lic_content_type)
+
+                    play_item.setContentLookup(False)
+                    play_item.setMimeType(input_stream_mime)
+                    play_item.setProperty('inputstream.adaptive.stream_headers', headers)
+                    play_item.setProperty('inputstream', is_helper.inputstream_addon)
+                    play_item.setProperty('inputstream.adaptive.manifest_type', input_stream_protocol)
+                    play_item.setProperty('inputstream.adaptive.license_type', input_stream_drm_version)
+                    play_item.setProperty('inputstream.adaptive.license_key', license + '|' + headers + '|R{SSM}|')
+                    xbmcplugin.setResolvedUrl(pluginhandle, True, listitem=play_item)
+                else:
+                    userNotification((translation(30066)).encode("utf-8"))
+            else:
+                play_item = xbmcgui.ListItem(path=video_url)
+                xbmcplugin.setResolvedUrl(pluginhandle, True, listitem=play_item)
     elif sys.argv[2] == '':
         getMainMenu()
     else:

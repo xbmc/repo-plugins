@@ -1,3 +1,9 @@
+* 0.12.9
+ - fixed livestream endpoint changes serviceapi
+
+* 0.12.8
+ - added direct uri for simple iptv (livestreams) #108
+
 * 0.12.7
  - fixed url parameters for drm livestreams
  - added UHD 50fps option for livestreams

@@ -29,7 +29,6 @@ class SvtPlay:
     # List modes
     MODE_LIVE_PROGRAMS = "live"
     MODE_LATEST = "latest"
-    MODE_LATEST_NEWS = 'news'
     MODE_POPULAR = "popular"
     MODE_LAST_CHANCE = "last_chance"
     MODE_CHANNELS = "kanaler"
@@ -100,8 +99,6 @@ class SvtPlay:
             mode == self.MODE_LAST_CHANCE or \
             mode == self.MODE_LIVE_PROGRAMS:
             self.view_start_section(mode)
-        elif mode == self.MODE_LATEST_NEWS:
-            self.view_latest_news()
         elif mode == self.MODE_CHANNELS:
             self.view_channels()
         elif mode == self.MODE_LETTER:
@@ -112,7 +109,6 @@ class SvtPlay:
     def view_start(self):
         self.__add_directory_item(self.localize(30009), {"mode": self.MODE_POPULAR})
         self.__add_directory_item(self.localize(30003), {"mode": self.MODE_LATEST})
-        self.__add_directory_item(self.localize(30004), {"mode": self.MODE_LATEST_NEWS})
         self.__add_directory_item(self.localize(30010), {"mode": self.MODE_LAST_CHANCE})
         self.__add_directory_item(self.localize(30002), {"mode": self.MODE_LIVE_PROGRAMS})
         self.__add_directory_item(self.localize(30008), {"mode": self.MODE_CHANNELS})

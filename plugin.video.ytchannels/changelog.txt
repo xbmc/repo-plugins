@@ -1,6 +1,9 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.4.6 [12-Sept-2023]
+-Fixed bug where playlists that didn't have a thumbnail would blow up the addon
+
 v0.4.5 [04-June-2023]
 -Reimplemented shorts filtering out so that any video <= 60 seconds long is regarded as a short
 

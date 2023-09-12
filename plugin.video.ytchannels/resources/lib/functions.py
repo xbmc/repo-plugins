@@ -451,7 +451,9 @@ def get_playlists(channelID, page):
         if decoded_data['items'][i]['kind'] == 'youtube#playlist':
             playlist_id = decoded_data['items'][i]['id']
             playlist_name = decoded_data['items'][i]['snippet']['title']
-            thumb = decoded_data['items'][i]['snippet']['thumbnails']['high']['url']
+            thumb = None
+            if 'high' in decoded_data['items'][i]['snippet']['thumbnails']:
+                thumb = decoded_data['items'][i]['snippet']['thumbnails']['high']['url']
 
             playlists.append([playlist_id, playlist_name, thumb])
     return playlists

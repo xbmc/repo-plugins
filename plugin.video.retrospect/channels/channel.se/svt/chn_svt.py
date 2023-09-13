@@ -42,10 +42,8 @@ class Channel(chn_class.Channel):
 
         self.__show_program_folder = self._get_setting("show_programs_folder", "true") == "true"
         self.__program_url = self.__get_api_url(
-            "ProgramsListing", "1eeb0fb08078393c17658c1a22e7eea3fbaa34bd2667cec91bbc4db8d778580f", {})
-        self.__nyheter_url = self.__get_api_url(
-            "GenreLists", "90dca0b51b57904ccc59a418332e43e17db21c93a2346d1c73e05583a9aa598c",
-            variables={"genre": ["nyheter"]})
+            "ProgramsListing", "17252e11da632f5c0d1b924b32be9191f6854723a0f50fb2adb35f72bb670efa",
+            {})
 
         if self.channelCode == "oppetarkiv":
             self.mainListUri = "#genre_item"
@@ -60,10 +58,6 @@ class Channel(chn_class.Channel):
         # that generates the list
         self._add_data_parser("#mainlist", preprocessor=self.add_live_items_and_genres)
 
-        # # If there is an actual url, then include the pre-processor:
-        # self._add_data_parser(self.__program_url,
-        #                       preprocessor=self.add_live_items_and_genres)
-        # And the other video items depending on the url.
         self._add_data_parser(self.__program_url,
                               match_type=ParserData.MatchStart, json=True,
                               preprocessor=self.folders_or_clips,
@@ -79,34 +73,31 @@ class Channel(chn_class.Channel):
         self._add_data_parser("#program_item", json=True,
                               name="Folder parser for show listing via API",
                               parser=["folders"], creator=self.create_api_typed_item)
-
         self._add_data_parser("#program_item", json=True,
                               name="video parser for show listing via API",
                               parser=["videos"], creator=self.create_api_typed_item)
 
-        self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=GridPage",
-                              name="Default GraphQL GridePage parsers", json=True,
-                              parser=["data", "startForSvtPlay", "selections", 0, "items"],
+        self._add_data_parser("https://api.svt.se/contento/graphql?operationName=CategoryPageQuery",
+                              json=True, name="New on SVT GraphQL",
+                              parser=["data", "categoryPage", "lazyLoadedTabs", ("slug", "all", 0),
+                                      "selections", 0, "items"],
                               creator=self.create_api_typed_item)
 
-        self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=FionaPage",
+        self._add_data_parser("https://api.svt.se/contento/graphql?operationName=GridPage",
+                              name="Default GraphQL GridePage parsers", json=True,
+                              parser=["data", "selectionById", "items"],
+                              creator=self.create_api_typed_item)
+
+        self._add_data_parser("https://api.svt.se/contento/graphql?operationName=FionaPage",
                               name="GraphQL FionaPage parsers for Nytt pa Play", json=True,
                               parser=["data", "selectionById", "items"],
                               creator=self.create_api_typed_item)
 
-        self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=StartPage",
-                              name="GraphQL StartPage parsers for Nytt pa Play", json=True,
-                              parser=["data", "startForSvtPlay", "selections", ("name", "Nytt på Play", 0), "items"],
+        self._add_data_parser("https://api.svt.se/contento/graphql?operationName=MainGenres",
+                              name="GraphQL for main genre listding", json=True,
+                              parser=["data", "genresInMain", "genres"],
                               creator=self.create_api_typed_item)
 
-        self._add_data_parser(self.__nyheter_url, name="Latest news", json=True,
-                              parser=["data", "genres", 0, "selectionsForWeb", 1, "items"],
-                              creator=self.create_api_typed_item)
-
-        self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=AllGenres",
-                              json=True, name="Genre GraphQL",
-                              parser=["data", "genresSortedByName", "genres"],
-                              creator=self.create_api_typed_item)
         self._add_data_parser("#genre_item", json=True,
                               name="Genre data retriever for GraphQL",
                               preprocessor=self.fetch_genre_api_data)
@@ -120,15 +111,17 @@ class Channel(chn_class.Channel):
                               creator=self.create_api_typed_item)
 
         # Setup channel listing based on JSON data in the HTML
-        self._add_data_parser("https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=ChannelsQuery",
-                              name="Live streams", json=True,
-                              parser=["data", "channels", "channels"],
-                              creator=self.create_channel_item)
+        self._add_data_parser(
+            "https://api.svt.se/contento/graphql?operationName=BroadcastSchedule",
+            name="Live streams", json=True,
+            parser=["data", "channels", "channels"],
+            creator=self.create_channel_item)
 
         # Searching
         self._add_data_parser("https://contento-search.svt.se/graphql",
                               json=True,
-                              parser=["data", "searchPage", "flat", "hits"], creator=self.create_api_typed_item)
+                              parser=["data", "searchPage", "flat", "hits"],
+                              creator=self.create_api_typed_item)
 
         # Generic updating of videos
         self._add_data_parser("https://api.svt.se/videoplayer-api/video/",
@@ -138,7 +131,8 @@ class Channel(chn_class.Channel):
         self._add_data_parser("https://www.svtplay.se/klipp/", updater=self.update_video_html_item)
 
         # Update via the new API urls
-        self._add_data_parser("https://www.svt.se/videoplayer-api/", updater=self.update_video_api_item)
+        self._add_data_parser("https://www.svt.se/videoplayer-api/",
+                              updater=self.update_video_api_item)
 
         # ===============================================================================================================
         # non standard items
@@ -172,61 +166,68 @@ class Channel(chn_class.Channel):
         items = []
 
         # Specify the name, url and whether or not to filter out some subheadings:
+        # https://api.svt.se/contento/graphql?operationName=BroadcastSchedule
+        # &variables={"day":"2023-09-11"}&extensions={"persistedQuery":{"sha256Hash":"464905fb9c6f51510427f3b913fde66cb43fa5b7f9197bcd13815800758a599b","version":1}}&ua=svtplaywebb-render-low-prio-client
+        now = datetime.datetime.now() - datetime.timedelta(hours=6)
         extra_items = {
             LanguageHelper.get_localized_string(LanguageHelper.LiveTv): (
-                self.__get_api_url("ChannelsQuery", "65ceeccf67cc8334bc14eb495eb921cffebf34300562900076958856e1a58d37", {}),
+                self.__get_api_url(
+                    "BroadcastSchedule",
+                    "464905fb9c6f51510427f3b913fde66cb43fa5b7f9197bcd13815800758a599b",
+                    {"day": "{:04}-{:02}-{:02}".format(now.year, now.month, now.day)}),
                 False),
 
             LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes): (
-                self.__get_api_url("GridPage",
-                                   "b30578b1b188242ce190c8a2cefe3d4694efafd17a929d08d273ae224a302b24",
-                                   variables={"selectionId": "live"}),
-                True),
+                self.__get_api_url(
+                    "GridPage",
+                    "a8248fc130da34208aba94c4d5cc7bd44187b5f36476d8d05e03724321aafb40",
+                    variables={"includeFullOppetArkiv": True, "selectionId": "live_start"}),
+                False),
 
             LanguageHelper.get_localized_string(LanguageHelper.Search): (
                 "searchSite", False),
 
             LanguageHelper.get_localized_string(LanguageHelper.Recent): (
-                self.__get_api_url("GridPage",
-                                   "b30578b1b188242ce190c8a2cefe3d4694efafd17a929d08d273ae224a302b24",
-                                   variables={"selectionId": "latest"}),
+                self.__get_api_url(
+                    "GridPage",
+                    "a8248fc130da34208aba94c4d5cc7bd44187b5f36476d8d05e03724321aafb40",
+                    variables={"includeFullOppetArkiv": True, "selectionId": "latest_start"}),
                 False),
 
             LanguageHelper.get_localized_string(LanguageHelper.LastChance): (
-                self.__get_api_url("GridPage",
-                                   "b30578b1b188242ce190c8a2cefe3d4694efafd17a929d08d273ae224a302b24",
-                                   variables={"selectionId": "lastchance"}),
+                self.__get_api_url(
+                    "GridPage",
+                    "a8248fc130da34208aba94c4d5cc7bd44187b5f36476d8d05e03724321aafb40",
+                    variables={"includeFullOppetArkiv": True, "selectionId": "lastchance_start"}),
                 False),
 
             LanguageHelper.get_localized_string(LanguageHelper.MostViewedEpisodes): (
                 self.__get_api_url("GridPage",
-                                   "b30578b1b188242ce190c8a2cefe3d4694efafd17a929d08d273ae224a302b24",
-                                   variables={"selectionId": "popular"}),
+                                   "a8248fc130da34208aba94c4d5cc7bd44187b5f36476d8d05e03724321aafb40",
+                                   variables={"includeFullOppetArkiv": True,
+                                              "selectionId": "popular_start"}),
                 False),
 
-            # https://api.svt.se/contento/graphql?operationName=GenreLists&variables=%7B%22genre%22:%5B%22nyheter%22%5D%7D&extensions=%7B%22persistedQuery%22:%7B%22version%22:1,%22sha256Hash%22:%2290dca0b51b57904ccc59a418332e43e17db21c93a2346d1c73e05583a9aa598c%22%7D%7D&ua=svtplaywebb-play-render-prod-client
             LanguageHelper.get_localized_string(LanguageHelper.LatestNews): (
-                self.__nyheter_url,
+                self.__get_api_url(
+                    "CategoryPageQuery",
+                    "00be06320342614f4b186e9c7710c29a7fc235a1936bde08a6ab0f427131bfaf",
+                    variables={"id": "nyheter", "includeFullOppetArkiv": True, "tab": "all"}),
                 False
             ),
 
             # The selection ID might change over time.
             LanguageHelper.get_localized_string(LanguageHelper.NewOnChannel) % self.channelName: (
-                # self.__get_api_url("FionaPage",
-                #                    "0d50e0ae57df3a99f8b7fb0b94e1159fea64f04297d7dcb7c75f0358f09a1a48",
-                #                    variables={"includeFullOppetArkiv": True, "selectionId": "e6YwkAY"}),
-                # False)
-
-                # Perhaps we should extract it from the main page.
-                # https://api.svt.se/contento/graphql?operationName=StartPage&variables=%7B%22abTestVariants%22%3A%5B%5D%2C%22includeFullOppetArkiv%22%3Atrue%7D&extensions=%7B%22persistedQuery%22%3A%7B%22sha256Hash%22%3A%22b2a022f7353fbe891696aacd173a74c964a5f382f6f9153f0fcf129cecd4b9ac%22%2C%22version%22%3A1%7D%7D&ua=svtplaywebb-render-low-prio-client
-                self.__get_api_url("StartPage",
-                                   "b2a022f7353fbe891696aacd173a74c964a5f382f6f9153f0fcf129cecd4b9ac",
-                                   variables={"abTestVariants": [], "includeFullOppetArkiv": True}),
+                self.__get_api_url(
+                    "FionaPage",
+                    "dc8f85e195903fe6227a76ec1e1d300d470ee8ea123bea6bee26215cc6e4959d",
+                    variables={"includeFullOppetArkiv": True, "selectionId": "svtId_egWQ3y7"}),
                 False)
         }
+        # https://api.svt.se/contento/graphql?operationName=FionaPage&variables={"includeFullOppetArkiv":true,"selectionId":"svtId_egWQ3y7","userIsAbroad":true}&extensions={"persistedQuery":{"sha256Hash":"dc8f85e195903fe6227a76ec1e1d300d470ee8ea123bea6bee26215cc6e4959d","version":1}}&ua=svtplaywebb-render-low-prio-client
 
         for title, (url, include_subheading) in extra_items.items():
-            new_item = FolderItem("\a.: %s :." % (title, ), url, content_type=contenttype.VIDEOS)
+            new_item = FolderItem("\a.: %s :." % (title,), url, content_type=contenttype.VIDEOS)
             new_item.complete = True
             new_item.dontGroup = True
             new_item.metaData[self.__filter_subheading] = include_subheading
@@ -237,7 +238,9 @@ class Channel(chn_class.Channel):
             LanguageHelper.get_localized_string(LanguageHelper.Tags).lower()
         )
 
-        genre_url = self.__get_api_url("AllGenres", "6bef51146d05b427fba78f326453127f7601188e46038c9a5c7b9c2649d4719c", {})
+        genre_url = self.__get_api_url("MainGenres",
+                                       "65b3d9bccd1adf175d2ad6b1aaa482bb36f382f7bad6c555750f33322bc2b489",
+                                       {})
         genre_item = FolderItem(genre_tags, genre_url, content_type=contenttype.VIDEOS)
         genre_item.complete = True
         genre_item.dontGroup = True
@@ -316,7 +319,8 @@ class Channel(chn_class.Channel):
 
         category_title = "\a.: {} :.".format(
             LanguageHelper.get_localized_string(LanguageHelper.Categories))
-        new_item = FolderItem(category_title, "https://www.svtplay.se/genre", content_type=contenttype.VIDEOS)
+        new_item = FolderItem(category_title, "https://www.svtplay.se/genre",
+                              content_type=contenttype.VIDEOS)
         new_item.complete = True
         new_item.dontGroup = True
 
@@ -338,7 +342,8 @@ class Channel(chn_class.Channel):
 
         if self.__show_program_folder:
             clips = FolderItem(
-                "\a.: {} :.".format(LanguageHelper.get_localized_string(LanguageHelper.SingleEpisodes)),
+                "\a.: {} :.".format(
+                    LanguageHelper.get_localized_string(LanguageHelper.SingleEpisodes)),
                 self.__program_url, content_type=contenttype.VIDEOS
             )
             items.append(clips)
@@ -382,7 +387,13 @@ class Channel(chn_class.Channel):
         #     self.__show_folders = True
         #     self.__show_videos = False
 
-        return data, items
+        json_data = JsonHelper(data)
+        flat = []
+        for r in json_data.get_value("data", "programAtillO", "selections"):
+            flat += r["items"]
+
+        json_data.json["data"]["programAtillO"]["flat"] = flat
+        return json_data, items
 
     def create_api_typed_item(self, result_set, add_parent_title=False):
         """ Creates a new MediaItem based on the __typename attribute.
@@ -455,10 +466,7 @@ class Channel(chn_class.Channel):
         item.isGeoLocked = result_set.get('restrictions', {}).get('onlyAvailableInSweden', False)
         item.description = result_set.get('longDescription')
 
-        image_info = result_set.get("image")
-        if image_info:
-            item.thumb = self.__get_thumb(image_info, width=720)
-            item.fanart = self.__get_thumb(image_info)
+        self.__extract_artwork(result_set.get("images"), item)
         return item
 
     def create_api_tvshow_type(self, result_set):
@@ -487,9 +495,7 @@ class Channel(chn_class.Channel):
         item.tv_show_title = item.name
         item.isGeoLocked = result_set.get('restrictions', {}).get('onlyAvailableInSweden', False)
         item.description = result_set.get('description')
-        image_info = result_set.get("image")
-        if image_info:
-            item.thumb = self.__get_thumb(image_info)
+        self.__extract_artwork(result_set.get("images"), item)
         return item
 
     def create_api_selection_type(self, result_set):
@@ -549,8 +555,8 @@ class Channel(chn_class.Channel):
 
         """
 
-        if not self.__show_folders:
-            return None
+        # if not self.__show_folders:
+        #     return None
 
         title = result_set.get("heading")
         sub_heading = result_set.get("subHeading")
@@ -578,9 +584,7 @@ class Channel(chn_class.Channel):
             new_result_set["longDescription"] = result_set.get("description")
 
         if "images" in result_set:
-            images = result_set.get("images", {}).get("wide")
-            if images:
-                new_result_set["image"] = images
+            new_result_set["images"] = result_set["images"]
         item = self.create_api_typed_item(result_set["item"])
         return item
 
@@ -633,6 +637,7 @@ class Channel(chn_class.Channel):
 
         if "image" in result_set:
             item.thumb = self.__get_thumb(result_set["image"], width=720)
+        self.__extract_artwork(result_set.get("images"), item)
 
         valid_from = result_set.get("validFrom", None)
         if bool(valid_from) and valid_from.endswith("Z"):
@@ -723,11 +728,8 @@ class Channel(chn_class.Channel):
         item.media_type = mediatype.VIDEO
         item.description = result_set.get('longDescription')
 
-        image_info = result_set.get("image")
-        if image_info:
-            item.thumb = self.__get_thumb(image_info, width=720)
-            item.fanart = self.__get_thumb(image_info)
-        item.isGeoLocked = result_set['restrictions']['onlyAvailableInSweden']
+        self.__extract_artwork(result_set.get("images"), item)
+        item.isGeoLocked = result_set.get('restrictions', {}).get('onlyAvailableInSweden', False)
 
         duration = int(result_set.get("duration", 0))
         if duration > 0:
@@ -759,9 +761,6 @@ class Channel(chn_class.Channel):
         if not self.__show_videos:
             return None
 
-        if not self.__show_videos:
-            return None
-
         title = result_set['name']
         svt_video_id = result_set.get("videoSvtId", result_set.get("svtId", None))
         if svt_video_id:
@@ -776,9 +775,7 @@ class Channel(chn_class.Channel):
         item.description = result_set.get('longDescription')
         item.isGeoLocked = result_set['restrictions']['onlyAvailableInSweden']
 
-        image_info = result_set.get("image")
-        if image_info:
-            item.thumb = self.__get_thumb(image_info)
+        self.__extract_artwork(result_set.get("images"), item)
 
         duration = int(result_set.get("duration", 0))
         item.set_info_label("duration", duration)
@@ -812,6 +809,14 @@ class Channel(chn_class.Channel):
 
         item = FolderItem(result_set["name"], "#genre_item", content_type=contenttype.VIDEOS)
         item.metaData[self.__genre_id] = result_set["id"]
+
+
+        image_info = result_set.get("image")
+        if image_info:
+            item.thumb = self.__get_thumb(image_info, width=720)
+            item.fanart = self.__get_thumb(image_info)
+        else:
+            self.__extract_artwork(result_set.get("images"), item)
         return item
 
     def create_api_search_hit(self, result_set):
@@ -873,7 +878,8 @@ class Channel(chn_class.Channel):
         items = []
         slug = self.parentItem.metaData["slug"]
         variables = {"includeFullOppetArkiv": True, "path": slug}
-        hash_value = "d4539b09f69378792486cf87e676af62e9f8ac6de274de616c58b93e86b26da1"
+        # https://api.svt.se/contento/graphql?ua=svtplaywebb-render-low-prio-client
+        hash_value = "e240d515657bbb54f33cf158cea581f6303b8f01f3022ea3f9419fbe3a5614b0"
         url = self.__get_api_url("DetailsPageQuery", hash_value, variables)
         data = UriHandler.open(url)
         json_data = JsonHelper(data)
@@ -885,12 +891,14 @@ class Channel(chn_class.Channel):
         possible_folders = [p for p in possible_folders if p["id"] != "upcoming"]
 
         if self._get_setting("show_accessibility_videos") == "false":
-            possible_folders = [p for p in possible_folders if p.get("selectionType") != "accessibility"]
+            possible_folders = [p for p in possible_folders if
+                                p.get("selectionType") != "accessibility"]
 
         if self.__folder_id in self.parentItem.metaData:
             folder_id = self.parentItem.metaData[self.__folder_id]
             Logger.debug("Retrieving folder with id='%s'", folder_id)
-            json_data.json = {"videos": [f for f in possible_folders if f["id"] == folder_id][0]["items"]}
+            json_data.json = {
+                "videos": [f for f in possible_folders if f["id"] == folder_id][0]["items"]}
 
         elif len(possible_folders) == 1:
             json_data.json = {"videos": possible_folders[0]["items"]}
@@ -899,9 +907,11 @@ class Channel(chn_class.Channel):
             json_data.json = {"folders": possible_folders}
 
         if "folders" in json_data.json:
-            [folder.update({self.__parent_images: parent_item_thumb_data}) for folder in json_data.json["folders"]]
+            [folder.update({self.__parent_images: parent_item_thumb_data}) for folder in
+             json_data.json["folders"]]
         if "videos" in json_data.json:
-            [video.update({self.__parent_images: parent_item_thumb_data}) for video in json_data.json["videos"]]
+            [video.update({self.__parent_images: parent_item_thumb_data}) for video in
+             json_data.json["videos"]]
 
         return json_data, items
 
@@ -913,19 +923,18 @@ class Channel(chn_class.Channel):
             genre = self.parentItem.metaData[self.__genre_id]
 
         url = self.__get_api_url(
-            "GenreProgramsAO",
-            "189b3613ec93e869feace9a379cca47d8b68b97b3f53c04163769dcffa509318",
-            {"genre": [genre]}
+            "CategoryPageQuery",
+            "00be06320342614f4b186e9c7710c29a7fc235a1936bde08a6ab0f427131bfaf",
+            {"id": genre, "tab": "all", "includeFullOppetArkiv": True}
         )
 
         data = UriHandler.open(url)
         json_data = JsonHelper(data)
-        possible_lists = json_data.get_value("data", "genres", 0,  "selectionsForWeb")
-        program_items = [genres["items"] for genres in possible_lists if genres["selectionType"] == "all"]
-        clip_items = [genres["items"] for genres in possible_lists if genres["selectionType"] == "clips"]
+        possible_lists = json_data.get_value("data", "categoryPage", "lazyLoadedTabs", 1, "selections")
+        program_items = [genres["items"] for genres in possible_lists if
+                         genres["selectionType"] == "all"]
         json_data.json = {
             "programs": [p["item"] for p in program_items[0]],
-            "videos": [c["item"] for c in clip_items[0]]
         }
         return json_data, []
 
@@ -960,31 +969,58 @@ class Channel(chn_class.Channel):
             channel_id = "kunskapskanalen"
 
         # Running data
-        running = channel["running"]
+        schedule = channel["schedule"]
+        running = None
+        upcoming = None
+        for epg in schedule:
+            if running:
+                upcoming = epg
+                break
+
+            if epg["state"] != "running":
+                continue
+
+            running = epg
+
+        if not running:
+            return None
+
         title = running["name"]
         episode = running.get("subHeading", None)
-        thumb = self.__get_thumb(running["image"], width=720)
-        date_format = "%Y-%m-%dT%H:%M:%S"
-        start_time = DateHelper.get_date_from_string(running["start"][:19], date_format)
-        end_time = DateHelper.get_date_from_string(running["end"][:19], date_format)
+        thumb = None
+        if "image" in running:
+            thumb = self.__get_thumb(running["image"], width=720)
+        elif "item" in running and running["item"]:
+            if "image" in running["item"]:
+                thumb = self.__get_thumb(running["item"]["image"], width=720)
+            elif "parent" in running["item"] and running["item"]["parent"] and "images" in running["item"]["parent"] and running["item"]["parent"]["images"]:
+                thumb = self.__get_thumb(running["item"]["parent"]["images"]["wide"], width=720)
+
         description = running.get("description")
 
+        date_format = "%Y-%m-%dT%H:%M:%S"
+        start_time = DateHelper.get_date_from_string(running["start"][:19], date_format)
+        end_time = None
+        if upcoming:
+            end_time = DateHelper.get_date_from_string(upcoming["start"][:19], date_format)
+
         if episode:
-            title = "%s: %s - %s (%02d:%02d - %02d:%02d)" \
-                    % (channel_title, title, episode,
-                       start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min)
-            # Hide the description for now
-            # description = "{:02d}:{:02d} - {:02d}:{:02d}: {} - {}\n\n{}".format(
-            #     start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min,
-            #     title, episode or "", description)
+            if end_time:
+                title = "%s: %s - %s (%02d:%02d - %02d:%02d)" \
+                        % (channel_title, title, episode,
+                           start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min)
+            else:
+                title = "%s: %s - %s (%02d:%02d)" \
+                        % (channel_title, title, episode, start_time.tm_hour, start_time.tm_min)
         else:
-            title = "%s: %s (%02d:%02d - %02d:%02d)" \
-                    % (channel_title, title,
-                       start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min)
-            # Hide the description for now
-            # description = "{:02d}:{:02d} - {:02d}:{:02d}: {}\n\n{}".format(
-            #     start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min,
-            #     title, description)
+            if end_time:
+                title = "%s: %s (%02d:%02d - %02d:%02d)" \
+                        % (channel_title, title,
+                           start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min)
+            else:
+                title = "%s: %s (%02d:%02d - %02d:%02d)" \
+                        % (channel_title, title,
+                           start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min)
 
         channel_item = MediaItem(
             title,
@@ -1018,18 +1054,13 @@ class Channel(chn_class.Channel):
 
         """
 
-        # https://contento-search.svt.se/graphql?operationName=AutoCompleteSearch&variables=%7B%22abTestVariants%22%3A%5B%5D%2C%22querystring%22%3A%22nyheter%22%2C%22searchClickHistory%22%3A%5B%5D%7D&extensions=%7B%22persistedQuery%22%3A%7B%22sha256Hash%22%3A%228989b62115022fda8a6129d0f512b94f4d2de3bf2110415647c09c4316ce4a91%22%2C%22version%22%3A1%7D%7D&ua=svtplaywebb-render-production-client
-        # url = self.__get_api_url(
-        #     "AutoCompleteSearch", "8989b62115022fda8a6129d0f512b94f4d2de3bf2110415647c09c4316ce4a91",
-        #     {"querystring": "----", "abTestVariants": [], "searchClickHistory": []}
-        # )
-        # https://contento-search.svt.se/graphql?operationName=SearchPage&variables=%7B%22abTestVariants%22%3A%5B%5D%2C%22querystring%22%3A%22nyheter%22%7D&extensions=%7B%22persistedQuery%22%3A%7B%22sha256Hash%22%3A%22ab8c604fc76d14885dcedd0f377b76afae9aabcde73b3324676f60ca86d12606%22%2C%22version%22%3A1%7D%7D&ua=svtplaywebb-render-production-client
         url = self.__get_api_url(
-            "SearchPage", "ab8c604fc76d14885dcedd0f377b76afae9aabcde73b3324676f60ca86d12606",
-            {"querystring": "----", "abTestVariants": [], "searchClickHistory": []}
+            "AutoCompleteSearch", "8989b62115022fda8a6129d0f512b94f4d2de3bf2110415647c09c4316ce4a91",
+            {"querystring": "----", "searchClickHistory": []}
         )
 
-        url = url.replace("https://api.svt.se/contento/graphql", "https://contento-search.svt.se/graphql")
+        url = url.replace("https://api.svt.se/contento/graphql",
+                          "https://contento-search.svt.se/graphql")
         url = url.replace("%", "%%")
         url = url.replace("----", "%s")
         return chn_class.Channel.search_site(self, url)
@@ -1065,8 +1096,9 @@ class Channel(chn_class.Channel):
             channel_tag = channel_data["urlName"]
             # find the corresponding episode
             channel_list[channel_tag] = channel_data
-            
-        programs = dict([kv for kv in json_data.get_value("guidePage", "programs").items() if kv[1].get("isActiveBroadcast", False)])
+
+        programs = dict([kv for kv in json_data.get_value("guidePage", "programs").items() if
+                         kv[1].get("isActiveBroadcast", False)])
         schedules = json_data.get_value("guidePage", "schedules")
         for channel_name, program_ids in schedules.items():
             channel_tag = channel_name.split(":")[0]
@@ -1164,14 +1196,16 @@ class Channel(chn_class.Channel):
 
         try:
             if expire_date.endswith("z"):
-                valid_to = DateHelper.get_datetime_from_string(expire_date, "%Y-%m-%dT%H:%M:%SZ", "UTC")
+                valid_to = DateHelper.get_datetime_from_string(expire_date, "%Y-%m-%dT%H:%M:%SZ",
+                                                               "UTC")
                 valid_to = valid_to.astimezone(self.__timezone)
                 item.set_expire_datetime(timestamp=valid_to)
             else:
                 expire_date = expire_date.split("+")[0].replace("T", " ")
                 year = expire_date.split("-")[0]
                 if len(year) == 4 and int(year) < datetime.datetime.now().year + 50:
-                    expire_date = DateHelper.get_datetime_from_string(expire_date, date_format="%Y-%m-%d %H:%M:%S")
+                    expire_date = DateHelper.get_datetime_from_string(expire_date,
+                                                                      date_format="%Y-%m-%d %H:%M:%S")
                     item.set_expire_datetime(timestamp=expire_date)
         except:
             Logger.warning("Error setting expire date from: %s", expire_date)
@@ -1188,6 +1222,26 @@ class Channel(chn_class.Channel):
 
         return "https://www.svtstatic.se/image/wide/{}/{}/{}?quality=70".format(
             width, thumb_data["id"], thumb_data["changed"])
+
+    def __extract_artwork(self, images: dict, item: MediaItem) -> None:
+        if not images:
+            return
+
+        def create_url(image: dict, art: str, width: int) -> str:
+            return f"https://www.svtstatic.se/image/{art}/{width}/{image['id']}/{image['changed']}?quality=70"
+
+        if "wide" in images:
+            item.thumb = create_url(images["wide"], "wide", width=720)
+            item.fanart = create_url(images["wide"], "wide", width=1920)
+        elif "cleanWide" in images:
+            item.thumb = create_url(images["cleanWide"], "wide", width=720)
+            item.fanart = create_url(images["cleanWide"], "wide", width=1920)
+
+        # if "portrait" in images:
+        #     item.poster = create_url(images["portrait"], "portrait", width=512)
+        # if "cleanPortrait" in images:
+        #     item.poster = create_url(images["cleanPortrait"], "portrait", width=512)
+        return
 
     def __extract_json_data(self, data, root):
         """ Performs pre-process actions for data processing
@@ -1223,10 +1277,10 @@ class Channel(chn_class.Channel):
         variables = HtmlEntityHelper.url_encode(JsonHelper.dump(variables, pretty_print=False))
 
         url = "https://api.svt.se/contento/graphql?" \
-              "ua=svtplaywebb-play-render-prod-client&" \
               "operationName={}&" \
               "variables={}&" \
-              "extensions={}".format(operation, variables, extensions)
+              "extensions={}&" \
+              "ua=svtplaywebb-play-render-prod-client".format(operation, variables, extensions)
         return url
 
     def __update_item_from_video_references(self, item, videos, subtitles=None):  # NOSONAR

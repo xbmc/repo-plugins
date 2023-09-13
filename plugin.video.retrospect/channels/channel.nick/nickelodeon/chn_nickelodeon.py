@@ -299,6 +299,8 @@ class Channel(chn_class.Channel):
 
         if "." in date_value:
             date = DateHelper.get_date_from_string(date_value, date_format="%d.%m.%Y")
+        elif "-" in date_value:
+            date = DateHelper.get_date_from_string(date_value, date_format="%d-%m-%Y")
         else:
             date = DateHelper.get_date_from_string(date_value, date_format="%d/%m/%Y")
         item.set_date(*date[0:6])

@@ -38,7 +38,7 @@ class AmpacheConnect(object):
         self.id=None
         self.rating=None
         #force the latest version on the server
-        self.version="610001"
+        self.version="600001"
 
     def getBaseUrl(self):
         return '/server/xml.server.php'
@@ -127,12 +127,21 @@ class AmpacheConnect(object):
         try:
             req = urllib.request.Request(url)
             if ut.strBool_to_bool(ssl_certs_str):
-                gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
-                response = urllib.request.urlopen(req, context=gcontext, timeout=400)
-                xbmc.log("AmpachePlugin::handle_request: ssl",xbmc.LOGDEBUG)
+                if PY2:
+                    response = urllib.request.urlopen(req, timeout=400)
+                else:
+                    gcontext = ssl.create_default_context()
+                    gcontext.check_hostname = False
+                    gcontext.verify_mode = ssl.CERT_NONE
+                    response = urllib.request.urlopen(req, context=gcontext, timeout=400)
+                xbmc.log("AmpachePlugin::handle_request: disable ssl certificates",xbmc.LOGDEBUG)
             else:
-                response = urllib.request.urlopen(req, timeout=400)
-                xbmc.log("AmpachePlugin::handle_request: nossl",xbmc.LOGDEBUG)
+                if PY2:
+                    gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+                    response = urllib.request.urlopen(req, context=gcontext, timeout=400)
+                else:
+                    response = urllib.request.urlopen(req, timeout=400)
+                xbmc.log("AmpachePlugin::handle_request: ssl certificates",xbmc.LOGDEBUG)
         except urllib.error.HTTPError as e:
             xbmc.log("AmpachePlugin::handle_request: HTTPError " +\
                     repr(e),xbmc.LOGDEBUG)

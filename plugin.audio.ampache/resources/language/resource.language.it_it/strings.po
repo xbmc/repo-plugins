@@ -424,19 +424,19 @@ msgstr "Plugin Ampache"
 
 msgctxt "#30190"
 msgid "Recently Played Artists..."
-msgstr "Artisti suonati recentemente..."
+msgstr "Artisti ascoltati recentemente..."
 
 msgctxt "#30191"
 msgid "Recently Played Albums..."
-msgstr "Album suonati recentemente..."
+msgstr "Album ascoltati recentemente..."
 
 msgctxt "#30192"
 msgid "Recently Played Songs..."
-msgstr "Canzoni suonate recentemente..."
+msgstr "Canzoni ascoltate recentemente..."
 
 msgctxt "#30193"
 msgid "Recently Played..."
-msgstr "Suonati recentemente..."
+msgstr "Ascoltati recentemente..."
 
 msgctxt "#30194"
 msgid "Next items..."

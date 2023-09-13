@@ -8,8 +8,6 @@
     See LICENSES/GPL-2.0-only for more information.
 """
 
-from six import PY3
-
 import xbmc
 import xbmcgui
 
@@ -85,11 +83,8 @@ class XbmcContextUI(AbstractContextUI):
     def on_select(self, title, items=None):
         if items is None:
             items = []
-        major_version = self._context.get_system_version().get_version()[0]
-        if isinstance(items[0], tuple) and len(items[0]) == 4 and major_version <= 16:
-            items = [(item[0], item[2]) for item in items]
 
-        use_details = (isinstance(items[0], tuple) and len(items[0]) == 4 and major_version > 16)
+        use_details = (isinstance(items[0], tuple) and len(items[0]) == 4)
 
         _dict = {}
         _items = []
@@ -128,7 +123,7 @@ class XbmcContextUI(AbstractContextUI):
         if not _image:
             _image = self._context.get_icon()
 
-        if PY3 and isinstance(message, str):
+        if isinstance(message, str):
             message = utils.to_unicode(message)
 
         try:

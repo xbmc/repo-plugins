@@ -16,9 +16,9 @@ import traceback
 import xml.etree.ElementTree as ET
 
 import requests
-from six import PY3
 
 from .login_client import LoginClient
+from ..youtube_exceptions import YouTubeException
 from ..helper.video_info import VideoInfo
 from ...kodion import Context
 from ...kodion.utils import datetime_parser
@@ -97,7 +97,7 @@ class YouTube(LoginClient):
 
     def get_video_streams(self, context, video_id):
         video_info = VideoInfo(context, access_token=self._access_token_tv,
-                               api_key=self._config_tv['key'], language=self._language)
+                               language=self._language)
 
         video_streams = video_info.load_stream_infos(video_id)
 
@@ -127,9 +127,9 @@ class YouTube(LoginClient):
                                                 video_stream['audio']['bitrate'])
 
             elif 'audio' in video_stream or 'video' in video_stream:
-                encoding = video_stream.get('audio', dict()).get('encoding')
+                encoding = video_stream.get('audio', {}).get('encoding')
                 if not encoding:
-                    encoding = video_stream.get('video', dict()).get('encoding')
+                    encoding = video_stream.get('video', {}).get('encoding')
                 if encoding:
                     title = '%s (%s; %s)' % (context.get_ui().bold(video_stream['title']),
                                              video_stream['container'],
@@ -628,7 +628,7 @@ class YouTube(LoginClient):
             params['pageToken'] = page_token
 
         return self.perform_v3_request(method='GET', path='search', params=params)
-        
+
     def get_parent_comments(self, video_id, page_token='', max_results=0):
         max_results = self._max_results if max_results <= 0 else max_results
 
@@ -640,9 +640,9 @@ class YouTube(LoginClient):
                   'maxResults': str(max_results)}
         if page_token:
             params['pageToken'] = page_token
-        
+
         return self.perform_v3_request(method='GET', path='commentThreads', params=params, no_login=True)
-            
+
     def get_child_comments(self, parent_id, page_token='', max_results=0):
         max_results = self._max_results if max_results <= 0 else max_results
 
@@ -653,7 +653,7 @@ class YouTube(LoginClient):
                   'maxResults': str(max_results)}
         if page_token:
             params['pageToken'] = page_token
-        
+
         return self.perform_v3_request(method='GET', path='comments', params=params, no_login=True)
 
     def get_channel_videos(self, channel_id, page_token=''):
@@ -822,15 +822,21 @@ class YouTube(LoginClient):
                     'Accept-Language': 'en-US,en;q=0.7,de;q=0.3'
                 }
 
+                session = requests.Session()
+                session.headers = headers
+                session.verify = self._verify
+                adapter = requests.adapters.HTTPAdapter(pool_maxsize=5, pool_block=True)
+                session.mount("https://", adapter)
                 responses = []
 
                 def fetch_xml(_url, _responses):
                     try:
-                        _response = requests.get(_url, {}, headers=headers, verify=self._verify, allow_redirects=True)
-                    except:
-                        _response = None
+                        _response = session.get(_url, timeout=(3.05, 27))
+                        _response.raise_for_status()
+                    except requests.exceptions.RequestException as error:
+                        _context.log_debug('Response: {0}'.format(error.response and error.response.text))
                         _context.log_error('Failed |%s|' % traceback.print_exc())
-
+                        return
                     _responses.append(_response)
 
                 threads = []
@@ -844,15 +850,13 @@ class YouTube(LoginClient):
                     thread.start()
 
                 for thread in threads:
-                    thread.join()
+                    thread.join(30)
+                session.close()
 
                 for response in responses:
                     if response:
                         response.encoding = 'utf-8'
-                        if PY3:
-                            xml_data = to_unicode(response.content).replace('\n', '')
-                        else:
-                            xml_data = response.content.replace('\n', '')
+                        xml_data = to_unicode(response.content).replace('\n', '')
 
                         root = ET.fromstring(xml_data)
 
@@ -861,14 +865,14 @@ class YouTube(LoginClient):
                         media_ns = '{http://search.yahoo.com/mrss/}'
 
                         for entry in root.findall(ns + "entry"):
-                            # empty news dictionary 
+                            # empty news dictionary
                             entry_data = {
                                 'id': entry.find(yt_ns + 'videoId').text,
                                 'title': entry.find(media_ns + "group").find(media_ns + 'title').text,
                                 'channel': entry.find(ns + "author").find(ns + "name").text,
                                 'published': entry.find(ns + 'published').text,
                             }
-                            # append items list 
+                            # append items list
                             _result['items'].append(entry_data)
 
                 # sorting by publish date
@@ -1041,63 +1045,67 @@ class YouTube(LoginClient):
 
         return result
 
-    def perform_v3_request(self, method='GET', headers=None, path=None, post_data=None, params=None,
-                           allow_redirects=True, no_login=False):
+    def _request(self, url, method='GET',
+                 cookies=None, data=None, headers=None, json=None, params=None,
+                 error_msg=None, raise_error=False, timeout=(3.05, 27), **_):
+        try:
+            result = requests.request(method, url,
+                                      verify=self._verify,
+                                      allow_redirects=True,
+                                      timeout=timeout,
+                                      cookies=cookies,
+                                      data=data,
+                                      headers=headers,
+                                      json=json,
+                                      params=params)
+            result.raise_for_status()
+        except requests.exceptions.RequestException as error:
+            response = error.response and error.response.text
+            _context.log_debug('Response: {0}'.format(response))
+            _context.log_error('{0}\n{1}'.format(
+                error_msg or 'Request failed', traceback.format_exc()
+            ))
+            if raise_error:
+                raise YouTubeException(error_msg) from error
+            return None
+        return result
 
-        yt_config = self._config
-
-        if not yt_config.get('key'):
-            return {
-                'error':
-                    {
-                        'errors': [{'reason': 'accessNotConfigured'}],
-                        'message': 'No API keys provided'
-                    }
-            }
+    def perform_v3_request(self, method='GET', headers=None, path=None,
+                           post_data=None, params=None, no_login=False):
 
         # params
-        if not params:
-            params = {}
-        _params = {'key': yt_config['key']}
-        _params.update(params)
+        _params = {}
 
         # headers
-        if not headers:
-            headers = {}
         _headers = {'Host': 'www.googleapis.com',
                     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.36 Safari/537.36',
                     'Accept-Encoding': 'gzip, deflate'}
+
         # a config can decide if a token is allowed
-        if self._access_token and yt_config.get('token-allowed', True) and not no_login:
+        if self._access_token and self._config.get('token-allowed', True) and not no_login:
             _headers['Authorization'] = 'Bearer %s' % self._access_token
-        _headers.update(headers)
+        else:
+            _params['key'] = self._config_tv['key']
 
         # url
         _url = 'https://www.googleapis.com/youtube/v3/%s' % path.strip('/')
 
-        result = None
-        log_params = copy.deepcopy(params)
-        if 'location' in log_params:
-            log_params['location'] = 'xx.xxxx,xx.xxxx'
+        if headers:
+            _headers.update(headers)
+        if params:
+            _params.update(params)
+            log_params = copy.deepcopy(params)
+            if 'location' in log_params:
+                log_params['location'] = 'xx.xxxx,xx.xxxx'
+        else:
+            log_params = None
         _context.log_debug('[data] v3 request: |{0}| path: |{1}| params: |{2}| post_data: |{3}|'.format(method, path, log_params, post_data))
-        if method == 'GET':
-            result = requests.get(_url, params=_params, headers=_headers, verify=self._verify, allow_redirects=allow_redirects)
-        elif method == 'POST':
-            _headers['content-type'] = 'application/json'
-            result = requests.post(_url, json=post_data, params=_params, headers=_headers, verify=self._verify,
-                                   allow_redirects=allow_redirects)
-        elif method == 'PUT':
-            _headers['content-type'] = 'application/json'
-            result = requests.put(_url, json=post_data, params=_params, headers=_headers, verify=self._verify,
-                                  allow_redirects=allow_redirects)
-        elif method == 'DELETE':
-            result = requests.delete(_url, params=_params, headers=_headers, verify=self._verify,
-                                     allow_redirects=allow_redirects)
 
-        _context.log_debug('[data] v3 response: |{0}| headers: |{1}|'.format(result.status_code, result.headers))
-
+        result = self._request(_url, method=method, headers=_headers, json=post_data, params=_params)
         if result is None:
             return {}
+
+        _context.log_debug('[data] v3 response: |{0}| headers: |{1}|'.format(result.status_code, result.headers))
 
         if result.headers.get('content-type', '').startswith('application/json'):
             try:
@@ -1107,20 +1115,15 @@ class YouTube(LoginClient):
                     'status_code': result.status_code,
                     'payload': result.text
                 }
-
         return {}
 
-    def perform_v1_tv_request(self, method='GET', headers=None, path=None, post_data=None, params=None,
-                              allow_redirects=True):
+    def perform_v1_tv_request(self, method='GET', headers=None, path=None,
+                              post_data=None, params=None, no_login=False):
+
         # params
-        if not params:
-            params = {}
-        _params = {'key': self._config_tv['key']}
-        _params.update(params)
+        _params = {}
 
         # headers
-        if not headers:
-            headers = {}
         _headers = {
             'User-Agent': ('Mozilla/5.0 (Linux; Android 7.0; SM-G892A Build/NRD90M;'
                            ' wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0'
@@ -1131,32 +1134,37 @@ class YouTube(LoginClient):
             'Accept-Language': 'en-US,en;q=0.5',
         }
 
-        if self._access_token_tv:
-            _headers['Authorization'] = 'Bearer %s' % self._access_token_tv
-        _headers.update(headers)
+        if self._access_token and self._config.get('token-allowed', True) and not no_login:
+            _headers['Authorization'] = 'Bearer %s' % self._access_token
+        else:
+            _params = {'key': self._config_tv['key']}
 
         # url
         _url = 'https://www.googleapis.com/youtubei/v1/%s' % path.strip('/')
 
-        result = None
+        if headers:
+            _headers.update(headers)
+        if params:
+            _params.update(params)
+            log_params = copy.deepcopy(params)
+            if 'location' in log_params:
+                log_params['location'] = 'xx.xxxx,xx.xxxx'
+        else:
+            log_params = None
+        _context.log_debug('[data] v1 request: |{0}| path: |{1}| params: |{2}| post_data: |{3}|'.format(method, path, log_params, post_data))
 
-        _context.log_debug('[i] v1 request: |{0}| path: |{1}| params: |{2}| post_data: |{3}|'.format(method, path, params, post_data))
-        if method == 'GET':
-            result = requests.get(_url, params=_params, headers=_headers, verify=self._verify, allow_redirects=allow_redirects)
-        elif method == 'POST':
-            _headers['content-type'] = 'application/json'
-            result = requests.post(_url, json=post_data, params=_params, headers=_headers, verify=self._verify,
-                                   allow_redirects=allow_redirects)
-        elif method == 'PUT':
-            _headers['content-type'] = 'application/json'
-            result = requests.put(_url, json=post_data, params=_params, headers=_headers, verify=self._verify,
-                                  allow_redirects=allow_redirects)
-        elif method == 'DELETE':
-            result = requests.delete(_url, params=_params, headers=_headers, verify=self._verify,
-                                     allow_redirects=allow_redirects)
-
+        result = self._request(_url, method=method, headers=_headers, json=post_data, params=_params)
         if result is None:
             return {}
 
+        _context.log_debug('[data] v1 response: |{0}| headers: |{1}|'.format(result.status_code, result.headers))
+
         if result.headers.get('content-type', '').startswith('application/json'):
-            return result.json()
+            try:
+                return result.json()
+            except ValueError:
+                return {
+                    'status_code': result.status_code,
+                    'payload': result.text
+                }
+        return {}

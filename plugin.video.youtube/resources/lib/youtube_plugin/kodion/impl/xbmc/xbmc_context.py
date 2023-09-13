@@ -8,13 +8,15 @@
     See LICENSES/GPL-2.0-only for more information.
 """
 
-from six.moves import urllib
-
 import datetime
 import json
 import os
 import sys
 import weakref
+from urllib.parse import quote
+from urllib.parse import unquote
+from urllib.parse import urlparse
+from urllib.parse import parse_qsl
 
 import xbmc
 import xbmcaddon
@@ -51,8 +53,8 @@ class XbmcContext(AbstractContext):
         # first the path of the uri
         if override:
             self._uri = sys.argv[0]
-            comps = urllib.parse.urlparse(self._uri)
-            self._path = urllib.parse.unquote(comps.path)
+            comps = urlparse(self._uri)
+            self._path = unquote(comps.path)
 
             # after that try to get the params
             if len(sys.argv) > 2:
@@ -61,7 +63,7 @@ class XbmcContext(AbstractContext):
                     self._uri = '?'.join([self._uri, params])
 
                     self._params = {}
-                    params = dict(urllib.parse.parse_qsl(params))
+                    params = dict(parse_qsl(params))
                     for _param in params:
                         item = params[_param]
                         self._params[_param] = item
@@ -134,6 +136,11 @@ class XbmcContext(AbstractContext):
         '''
 
         return 'en-US'
+
+    def get_language_name(self, lang_id=None):
+        if lang_id is None:
+            lang_id = self.get_language()
+        return xbmc.convertLanguage(lang_id, xbmc.ENGLISH_NAME).split(';')[0]
 
     def get_video_playlist(self):
         if not self._video_playlist:
@@ -276,56 +283,63 @@ class XbmcContext(AbstractContext):
     def send_notification(self, method, data):
         data = json.dumps(data)
         self.log_debug('send_notification: |%s| -> |%s|' % (method, data))
-        data = '\\"[\\"%s\\"]\\"' % urllib.parse.quote(data)
+        data = '\\"[\\"%s\\"]\\"' % quote(data)
         self.execute('NotifyAll(plugin.video.youtube,%s,%s)' % (method, data))
 
     def use_inputstream_adaptive(self):
-        addon_enabled = self.addon_enabled('inputstream.adaptive')
-        if self._settings.use_dash() and not addon_enabled:
-            if self.get_ui().on_yes_no_input(self.get_name(), self.localize(30579)):
-                use_dash = self.set_addon_enabled('inputstream.adaptive')
+        if self._settings.use_mpd_videos() or self._settings.use_adaptive_live_streams():
+            if self.addon_enabled('inputstream.adaptive'):
+                success = True
+            elif self.get_ui().on_yes_no_input(self.get_name(), self.localize(30579)):
+                success = self.set_addon_enabled('inputstream.adaptive')
             else:
-                use_dash = False
-        elif self._settings.use_dash() and addon_enabled:
-            use_dash = True
+                success = False
         else:
-            use_dash = False
-        return use_dash
+            success = False
+        return success
+
+    # Values of capability map can be any of the following:
+    # - required version number as string for comparison with actual installed InputStream.Adaptive version
+    # - any Falsey value to exclude capability regardless of version
+    # - True to include capability regardless of version
+    _IA_CAPABILITIES = {
+        'live': '2.0.12',
+        'drm': '2.2.12',
+        # audio codecs
+        'vorbis': '2.3.14',
+        'opus': '19.0.7',
+        'mp4a': True,
+        'ac-3': '2.1.15',
+        'ec-3': '2.1.15',
+        'dts': '2.1.15',
+        # video codecs
+        'avc1': True,
+        'av01': '20.3.0',
+        'vp8': False,
+        'vp9': '2.3.14',
+    }
 
     def inputstream_adaptive_capabilities(self, capability=None):
         # return a list inputstream.adaptive capabilities, if capability set return version required
 
-        capabilities = []
-
-        use_dash = self.use_inputstream_adaptive()
         try:
             inputstream_version = xbmcaddon.Addon('inputstream.adaptive').getAddonInfo('version')
         except RuntimeError:
             inputstream_version = ''
 
-        if not use_dash or not inputstream_version:
-            return None if capability is not None else capabilities
+        if not self.use_inputstream_adaptive() or not inputstream_version:
+            return frozenset() if capability is None else None
 
-        capability_map = {
-            'live': '2.0.12',
-            'drm': '2.2.12',
-            'vp9': '2.3.14',
-            'vp9.2': '2.3.14',
-            'vorbis': None,
-            'opus': '19.0.7',
-            'av1': '20.3.0',
-        }
-
+        ia_loose_version = utils.loose_version(inputstream_version)
         if capability is None:
-            ia_loose_version = utils.loose_version(inputstream_version)
-
-            for key in list(capability_map.keys()):
-                if capability_map[key] and (ia_loose_version >= utils.loose_version(capability_map[key])):
-                    capabilities.append(key)
-
+            capabilities = frozenset(
+                capability for capability, version in self._IA_CAPABILITIES.items()
+                if version is True
+                or version and ia_loose_version >= utils.loose_version(version)
+            )
             return capabilities
-        else:
-            return capability_map[capability] if capability_map.get(capability) else None
+        version = self._IA_CAPABILITIES.get(capability)
+        return version is True or version and ia_loose_version >= utils.loose_version(version)
 
     def inputstream_adaptive_auto_stream_selection(self):
         try:

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="6.8.25+matrix.1" provider-name="anxdpanic, bromix">
+<addon id="plugin.video.youtube" name="YouTube" version="7.0.2+matrix.1" provider-name="anxdpanic, bromix">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
-    <import addon="script.module.six" version="1.11.0"/>
     <import addon="script.module.requests" version="2.12.4"/>
+    <import addon="inputstream.adaptive" version="20.3.1"/>
     <import addon="script.module.inputstreamhelper" version="0.2.2" optional="true"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="resources/lib/default.py">
@@ -13,14 +13,19 @@
   <extension point="xbmc.python.module" library="resources/lib/"/>
   <extension point="xbmc.addon.metadata">
     <news>
-[fix] Nexus compatibility with InfoTagVideo |contrib: jurialmunkey|
-[chg] make httpd /api url case insensitive due to skin choice of uppercase settings text
-[chg] use listitem property for Inputstream Adaptive headers instead of url piped on Nexus+
+[new] quality and stream feature selection
+[new] enable HLS live streams
+[new] stream and language labelling
+[chg] separately enable local/remote history
+[chg] restore unsupported compatibility for Kodi v19 (Matrix)
+[fix] fix various playback issues |contrib: various|
+[fix] Limit host connections getting subscription feeds |contrib: cas--|
+[fix] fix handling of connection failures
 [upd] Translations updated from Kodi Weblate
         </news>
     <assets>
-      <icon>icon.png</icon>
-      <fanart>fanart.jpg</fanart>
+      <icon>resources/media/icon.png</icon>
+      <fanart>resources/media/fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
     <license>GPL-2.0-only</license>

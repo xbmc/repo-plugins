@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.twitch" version="3.0.1" name="Twitch" provider-name="anxdpanic, A Talented Community">
+<addon id="plugin.video.twitch" version="3.0.2" name="Twitch" provider-name="anxdpanic, A Talented Community">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
         <import addon="script.module.requests" version="2.9.1"/>
-        <import addon="script.module.python.twitch" version="3.0.0"/>
+        <import addon="script.module.python.twitch" version="3.0.2"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="resources/lib/addon_runner.py">
         <provides>video</provides>
@@ -15,7 +15,7 @@
             <fanart>resources/media/fanart.jpg</fanart>
         </assets>
         <news>
-[rem] toggle follow
+[fix] Following Channels
 [lang] updated translations from Weblate
         </news>
         <platform>all</platform>
@@ -23,6 +23,7 @@
         <license>GPL-3.0-only</license>
         <forum>https://twitchaddon.panicked.xyz/forum</forum>
         <reuselanguageinvoker>true</reuselanguageinvoker>
+        <summary lang="ca_ES">Connector de vídeo de Twitch</summary>
         <summary lang="da_DK">Twitch video-plugin</summary>
         <summary lang="de_DE">Twitch Video-Plugin</summary>
         <summary lang="en_GB">Twitch video plugin</summary>
@@ -30,6 +31,7 @@
         <summary lang="es_MX">Plugin de video de Twitch</summary>
         <summary lang="fi_FI">Twitch-videolisäosa</summary>
         <summary lang="fr_FR">Twitch video plugin</summary>
+        <summary lang="it_IT">Plugin video Twitch</summary>
         <summary lang="ko_KR">트위치 비디오 플러그인</summary>
         <summary lang="nb_NO">Tillegg for Twitch</summary>
         <summary lang="nl_NL">Twitch video plugin</summary>
@@ -37,6 +39,7 @@
         <summary lang="ru_RU">Видео плагин Twitch</summary>
         <summary lang="zh_CN">Twitch 视频插件</summary>
         <summary lang="zh_TW">Twitch 影片插件</summary>
+        <description lang="ca_ES">Mira les teves transmissions de videojocs favorites!</description>
         <description lang="da_DK">Se dine favorit gaming-streams!</description>
         <description lang="de_DE">Die besten Gaming-Streams ansehen!</description>
         <description lang="en_GB">Watch your favorite gaming streams!</description>

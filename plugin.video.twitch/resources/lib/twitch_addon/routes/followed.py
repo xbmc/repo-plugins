@@ -68,11 +68,11 @@ def route(api, content, after='MA=='):
         all_items = list()
         followed_ids = list()
 
-        followed = api.get_followed_channels(from_id=user_id, after=after, first=per_page)
+        followed = api.get_followed_channels(user_id=user_id, after=after, first=per_page)
         if Keys.DATA in followed:
             for follow in followed[Keys.DATA]:
-                if follow.get(Keys.TO_ID):
-                    followed_ids.append(follow[Keys.TO_ID])
+                if follow.get(Keys.BROADCASTER_ID):
+                    followed_ids.append(follow[Keys.BROADCASTER_ID])
 
         channels = api.get_users(followed_ids)
         if Keys.DATA in channels:

@@ -8,9 +8,8 @@
     See LICENSES/GPL-2.0-only for more information.
 """
 
-from six.moves import urllib
-
 import os
+from urllib.parse import urlencode
 
 from .. import constants
 from .. import logger
@@ -53,6 +52,9 @@ class AbstractContext(object):
         raise NotImplementedError()
 
     def get_language(self):
+        raise NotImplementedError()
+
+    def get_language_name(self):
         raise NotImplementedError()
 
     def get_region(self):
@@ -156,7 +158,7 @@ class AbstractContext(object):
                     params[param] = str(params[param])
 
                 uri_params[param] = to_utf8(params[param])
-            uri = '?'.join([uri, urllib.parse.urlencode(uri_params)])
+            uri = '?'.join([uri, urlencode(uri_params)])
 
         return uri
 
@@ -186,10 +188,10 @@ class AbstractContext(object):
         raise NotImplementedError()
 
     def get_icon(self):
-        return os.path.join(self.get_native_path(), 'icon.png')
+        return self.create_resource_path('media/icon.png')
 
     def get_fanart(self):
-        return os.path.join(self.get_native_path(), 'fanart.jpg')
+        return self.create_resource_path('media/fanart.jpg')
 
     def create_resource_path(self, *args):
         path_comps = []

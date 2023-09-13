@@ -70,7 +70,7 @@ class IPTVManagerAction(AddonAction):
         for channel in channels:
             if channel.has_iptv:
                 Logger.debug("Create EPG for '%s'", channel.channelName)
-                fetched_channel = channel.get_channel();
+                fetched_channel = channel.get_channel()
                 epg.update(fetched_channel.create_iptv_epg(self.__parameter_parser))
 
         return dict(version=1, epg=epg)

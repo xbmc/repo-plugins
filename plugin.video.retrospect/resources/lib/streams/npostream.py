@@ -2,8 +2,8 @@
 import time
 
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
+from resources.lib.helpers.htmlhelper import HtmlHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
-from resources.lib.regexer import Regexer
 from resources.lib.streams.m3u8 import M3u8
 from resources.lib.streams.mpd import Mpd
 from resources.lib.helpers.subtitlehelper import SubtitleHelper
@@ -94,12 +94,14 @@ class NpoStream(object):
         data = UriHandler.open(stream_data_url, additional_headers=headers, data="")
         Logger.trace("Stream Data: %s", data)
         stream_data = JsonHelper(data)
-        error = stream_data.get_value("html")
+        error = stream_data.get_value("error")
         if error:
-            error = Regexer.do_regex(r'message">\s*<p[^>]*>([^<]+)', error)
-            if bool(error):
-                return error[0]
-            return "Unspecified error retrieving streams"
+            try:
+                error_text = HtmlHelper.to_text(error)
+                error_text = error_text.split("\n")
+                return error_text[0]
+            except:
+                return "Unspecified error retrieving streams"
 
         stream_url = stream_data.get_value("stream", "src")
         if stream_url is None:

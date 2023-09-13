@@ -528,3 +528,7 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - P G M Schoonderwoerd
 - Jonas Koekenbier 
 - Danny Sikke
+- M J Poortman
+- Robert Wijnands
+- Roger Ekholm
+- Magnus Holmquist

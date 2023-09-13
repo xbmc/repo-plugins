@@ -1475,7 +1475,7 @@ class Channel(chn_class.Channel):
                         title=JsonHelper.get_from(program, "program", "title"),
                         description=JsonHelper.get_from(program, "program","descriptionLong"),
                         image=JsonHelper.get_from(program, "program", "images", "header", "formats", "tv", "source"),
-                        genre=JsonHelper.get_from(program, "program", "genres", 0, "terms"),
+                        genre=JsonHelper.get_from(program, "program", "genres", 0, "terms") if JsonHelper.get_from(program, "program", "genres") else [],
                         stream=parameter_parser.create_action_url(self, action=action.PLAY_VIDEO, item=media_item, store_id=parent.guid),
                     ))
         parameter_parser.pickler.store_media_items(parent.guid, parent, media_items)

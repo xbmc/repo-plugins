@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.viwx" name="viwX" version="1.0.0" provider-name="Dimitri Kroon">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="inputstream.adaptive" version="19.0.5"/>
+    <import addon="script.module.requests" version="2.31.0"/>
+    <import addon="script.module.pytz"/>
+    <import addon="script.module.tzlocal"/>
+    <import addon="script.module.codequick" version="1.0.3"/>
+    <import addon="script.module.inputstreamhelper"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en_GB">Live TV and video on-demand from ITVX (UK only, ITVX account required)</summary>
+    <description lang="en_GB">
+      A Vibrant ITVX Web eXperience. Play live TV and video on-demand from the webservices of British broadcaster ITV. An ITVX account is required, either free or premium, to play any stream.[CR][CR]This add-on is not developed by ITV and is no way affiliated with, or endorsed by ITV.
+    </description>
+    <disclaimer lang="en_GB">
+      This addon is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    </disclaimer>
+    <language>en</language>
+    <license>GPL-2.0-or-later</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=374239</forum>
+    <source>https://github.com/dimkroon/itvx-for-kodi</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.png</fanart>
+    </assets>
+    <news>
+      First stable release
+    </news>
+    <reuselanguageinvoker>true</reuselanguageinvoker>
+  </extension>
+</addon>

@@ -332,9 +332,12 @@ def get_latest_episode_data(program_name):
             'Content-Type': 'application/json',
         }
         graphql_query = """
-            query VideoProgramPage($pageId: ID!, $lazyItemCount: Int = 500, $after: ID) {
+            query VideoProgramPage(
+              $pageId: ID!) {
               page(id: $pageId) {
                 ... on ProgramPage {
+                  id
+                  permalink
                   components {
                     __typename
                     ... on PageHeader {
@@ -349,53 +352,87 @@ def get_latest_episode_data(program_name):
                       }
                       __typename
                     }
+                    ... on PaginatedTileList {
+                      __typename
+                      id: objectId
+                      objectId
+                      listId
+                      title
+                      tileContentType
+                    }
                     ... on ContainerNavigation {
+                      id: objectId
+                      navigationType
                       items {
+                        id: objectId
                         title
+                        active
                         components {
                           __typename
                           ... on PaginatedTileList {
                             __typename
-                            paginatedItems(first: $lazyItemCount, after: $after) {
-                              __typename
-                              edges {
-                                __typename
-                                cursor
-                                node {
-                                  __typename
-                                  ... on EpisodeTile {
-                                    id
-                                    description
-                                    ...episodeTile
-                                  }
-                                }
-                              }
-                            }
+                            id: objectId
+                            objectId
+                            listId
+                            title
+                            tileContentType
                           }
-                          ... on ContainerNavigation {
-                            items {
-                              title
-                              components {
-                                __typename
-                                ... on PaginatedTileList {
+                          ... on StaticTileList {
+                            __typename
+                            id: objectId
+                            objectId
+                            listId
+                            title
+                            tileContentType
+                          }
+                          ... on LazyTileList {
+                            __typename
+                            id: objectId
+                            objectId
+                            listId
+                            title
+                            tileContentType
+                          }
+                          ... on IComponent {
+                            ... on ContainerNavigation {
+                              id: objectId
+                              navigationType
+                              items {
+                                id: objectId
+                                title
+                                components {
                                   __typename
-                                  paginatedItems(first: $lazyItemCount, after: $after) {
-                                    __typename
-                                    edges {
+                                  ... on Component {
+                                    ... on PaginatedTileList {
                                       __typename
-                                      cursor
-                                      node {
-                                        __typename
-                                        ... on EpisodeTile {
-                                          id
-                                          description
-                                          ...episodeTile
-                                        }
-                                      }
+                                      id: objectId
+                                      objectId
+                                      listId
+                                      title
+                                      tileContentType
                                     }
+                                    ... on StaticTileList {
+                                      __typename
+                                      id: objectId
+                                      objectId
+                                      listId
+                                      title
+                                      tileContentType
+                                    }
+                                    ... on LazyTileList {
+                                      __typename
+                                      id: objectId
+                                      objectId
+                                      listId
+                                      title
+                                      tileContentType
+                                    }
+                                    __typename
                                   }
                                 }
+                                __typename
                               }
+                              __typename
                             }
                             __typename
                           }
@@ -404,6 +441,7 @@ def get_latest_episode_data(program_name):
                       }
                       __typename
                     }
+                    __typename
                   }
                   __typename
                 }
@@ -994,16 +1032,15 @@ def convert_seasons(api_data, program_name):
     """Convert seasons"""
     seasons = []
     for season in api_data:
-        season_title = season.get('title').get('raw')
+        season_title = season.get('title')
         season_name = season.get('name')
-        label = '{} {}'.format(localize(30131), season_title)  # Season X
         path = url_for('programs', program_name=program_name, season_name=season_name)
         seasons.append(
             TitleItem(
-                label=label,
+                label=season_title,
                 path=path,
                 info_dict={
-                    'title': label,
+                    'title': season_title,
                     'mediatype': 'season',
                 },
                 is_playable=False,
@@ -1011,13 +1048,135 @@ def convert_seasons(api_data, program_name):
         )
     return seasons
 
+def create_season_dict(data_json):
+    """Create season dictionary"""
+    season_title = data_json.get('title')
+    # list_id
+    if data_json.get('components'):
+        list_id = data_json.get('components')[0].get('listId')
+    else:
+        list_id = data_json.get('listId')
+
+    if '.episodes-list.json' in list_id:
+        season_name = list_id.split('.episodes-list.json')[0].split('/')[-1]
+    else:
+        season_name = list_id.split('_')[-1]
+    return {'title': season_title, 'name': season_name}
 
 def get_seasons(program_name):
     """Get seasons"""
-    season_json = get_url_json('https://www.vrt.be/vrtnu/a-z/{}.model.json'.format(program_name))
-    seasons = season_json.get('details').get('data').get('program').get('seasons')
+    seasons = []
+    # FIXME: The current codebase only supports seasons and not the extra content. So we need to select seasons using a whitelist.
+    whitelist = ['Afleveringen', 'Alle seizoenen', 'Journaals', 'Reeksen', 'Docu']
+    components = get_latest_episode_data(program_name).get('data').get('page').get('components')
+    # Extract season data from components
+    for component in components:
+        # Check component type
+        if component.get('navigationType') == 'bar':
+            # Get items
+            for item in component.get('items'):
+                # Select whitelist item
+                if item.get('title') in whitelist:
+                    # Get components
+                    for nested_component in item.get('components'):
+                        # Append component
+                        components.append(nested_component)
+        elif component.get('navigationType') == 'select':
+            # Get items
+            for item in component.get('items'):
+                # Store season
+                seasons.append(create_season_dict(item))
+            # Extraction done, remove component
+            components.remove(component)
+        elif component.get('__typename') == 'PaginatedTileList' and component.get('tileContentType') == 'episode':
+            # Store season
+            seasons.append(create_season_dict(component))
+            # Extraction done, remove component
+            components.remove(component)
     return seasons
 
+def get_featured_data():
+    """Get featured data"""
+    from tokenresolver import TokenResolver
+    access_token = TokenResolver().get_token('vrtnu-site_profile_at')
+    data_json = {}
+    if access_token:
+        headers = {
+            'Authorization': 'Bearer ' + access_token,
+            'Content-Type': 'application/json',
+            'x-vrt-client-name': 'MobileAndroid',
+        }
+        graphql_query = """
+            query Page(
+              $pageId: ID!
+              $lazyItemCount: Int = 10
+              $after: ID
+              $before: ID
+              $componentCount: Int = 5
+              $componentAfter: ID
+            ) {
+              page(id: $pageId) {
+                ... on IPage {
+                  title
+                  permalink
+                  paginatedComponents(first: $componentCount, after: $componentAfter) {
+                    __typename
+                    edges {
+                      __typename
+                      node {
+                        ... on PaginatedTileList {
+                          __typename
+                          listId
+                          componentType
+                          paginatedItems(first: $lazyItemCount, after: $after, before: $before) {
+                            __typename
+                            edges {
+                              __typename
+                              node {
+                                __typename
+                              }
+                            }
+                          }
+                          tileContentType
+                          title
+                          __typename
+                        }
+                        ... on StaticTileList {
+                          __typename
+                          listId
+                          title
+                          header {
+                            brand
+                            ctaText
+                            description
+                          }
+                          componentType
+                          tileContentType
+                        }
+                        __typename
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        """
+        payload = {
+            'operationName': 'Page',
+            'variables': {
+                'pageId': '/vrtmax/',
+                'pageContext': {
+                    'mediaType': 'watch'
+                },
+                'componentAfter': '',
+                'componentCount': 50,
+            },
+            'query': graphql_query,
+        }
+        from json import dumps
+        data = dumps(payload).encode('utf-8')
+        data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
+    return data_json
 
 def get_featured(feature=None, end_cursor=''):
     """Get featured menu items"""
@@ -1027,25 +1186,25 @@ def get_featured(feature=None, end_cursor=''):
     if feature:
         page_size = get_setting_int('itemsperpage', default=50)
         if feature.startswith('program_'):
-            list_id = 'static:/vrtnu/kijk.model.json@{}'.format(feature.split('program_')[1])
+            list_id = feature.replace('_proto_', ':/').split('program_')[1]
             api_data = get_paginated_programs(list_id=list_id, page_size=page_size, end_cursor=end_cursor)
             programs = convert_programs(api_data, destination='featured', feature=feature)
             return programs, sort, ascending, 'tvshows'
 
         if feature.startswith('episode_'):
-            list_id = 'static:/vrtnu/kijk.model.json@{}'.format(feature.split('episode_')[1])
+            list_id = feature.replace('_proto_', ':/').split('episode_')[1]
             api_data = get_paginated_episodes(list_id=list_id, page_size=page_size, end_cursor=end_cursor)
             episodes, sort, ascending = convert_episodes(api_data, destination='featured', feature=feature)
             return episodes, sort, ascending, 'episodes'
     else:
         featured = []
-        featured_json = get_url_json('https://www.vrt.be/vrtnu/kijk.model.json')
-        items = featured_json.get(':items').get('par').get(':items')
-        for item in items:
-            content_type = items.get(item).get('tileContentType')
+        featured_json = get_featured_data()
+        for edge in featured_json.get('data').get('page').get('paginatedComponents').get('edges'):
+            node = edge.get('node')
+            content_type = node.get('tileContentType')
             if content_type in ('program', 'episode'):
-                title = items.get(item).get('title')
-                feature_id = items.get(item).get('id')
+                title = node.get('title').strip() or node.get('header').get('description')
+                feature_id = node.get('listId').replace(':/', '_proto_')
                 featured.append(
                     TitleItem(
                         label=title,

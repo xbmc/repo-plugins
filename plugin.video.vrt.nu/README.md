@@ -59,6 +59,9 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.25 (2023-09-14)
+- Fix episode listings and featured menu (@mediaminister)
+
 ### v2.5.24 (2023-07-18)
 - Fix 1080p quality and playback issue (@mediaminister)
 

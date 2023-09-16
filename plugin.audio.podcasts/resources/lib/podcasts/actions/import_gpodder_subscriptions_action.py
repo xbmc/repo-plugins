@@ -1,14 +1,14 @@
-from resources.lib.podcasts.actions.opml_action import OpmlAction
-from resources.lib.rssaddon.http_status_error import HttpStatusError
-from resources.lib.podcasts.opml_file import parse_opml
-from resources.lib.podcasts.gpodder import GPodder
-from resources.lib.podcasts.podcastsaddon import ENTRIES, GROUPS
-
 import xbmcgui
+from resources.lib.podcasts.actions.opml_action import OpmlAction
+from resources.lib.podcasts.gpodder import GPodder
+from resources.lib.podcasts.opml_file import parse_opml
+from resources.lib.podcasts.util import get_asset_path
+from resources.lib.rssaddon.http_status_error import HttpStatusError
+
 
 class ImportGPodderSubscriptionsAction(OpmlAction):
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def _query_subscriptions_from_gpodder(self) -> 'tuple[str,list]':
@@ -65,5 +65,5 @@ class ImportGPodderSubscriptionsAction(OpmlAction):
         self._apply_to_group(entries, group, feeds)
 
         # Success
-        xbmcgui.Dialog().notification(self.addon.getLocalizedString(
-            32085), self.addon.getLocalizedString(32086))
+        xbmcgui.Dialog().notification(heading=self.addon.getLocalizedString(
+            32085), message=self.addon.getLocalizedString(32086), icon=get_asset_path("notification.png"))

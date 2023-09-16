@@ -15,7 +15,7 @@ class GPodder:
     _host = None
     _user = None
 
-    def __init__(self, addon: xbmcaddon.Addon, host: str, user: str):
+    def __init__(self, addon: xbmcaddon.Addon, host: str, user: str) -> None:
 
         self._addon = addon
         self._host = host

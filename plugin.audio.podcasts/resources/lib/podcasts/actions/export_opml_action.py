@@ -1,13 +1,11 @@
 from datetime import datetime
-import xbmc
+
 import xbmcgui
 from resources.lib.podcasts.actions.opml_action import OpmlAction
+from resources.lib.podcasts.util import get_asset_path
 
 
 class ExportOpmlAction(OpmlAction):
-
-    def __init__(self):
-        super().__init__()
 
     def _write_opml_file(self, path: str) -> bool:
 
@@ -67,8 +65,8 @@ class ExportOpmlAction(OpmlAction):
         # Step 2: Write file
         if self._write_opml_file(path):
             # Success
-            xbmcgui.Dialog().notification(self.addon.getLocalizedString(
-                32091), self.addon.getLocalizedString(32086))
+            xbmcgui.Dialog().notification(heading=self.addon.getLocalizedString(
+                32091), message=self.addon.getLocalizedString(32086), icon=get_asset_path("notification.png"))
         else:
-            xbmcgui.Dialog().notification(self.addon.getLocalizedString(
-                32092), self.addon.getLocalizedString(32086))
+            xbmcgui.Dialog().notification(heading=self.addon.getLocalizedString(
+                32092), message=self.addon.getLocalizedString(32086), icon=get_asset_path("notification.png"))

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.podcasts" name="RSS Podcasts" version="2.2.3" provider-name="Heckie">
+<addon id="plugin.audio.podcasts" name="RSS Podcasts" version="2.3.0" provider-name="Heckie">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.25.1" />
@@ -11,11 +11,11 @@
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en_GB">RSS Podcasts in KODI</summary>
 		<summary lang="de_DE">RSS Podcasts in KODI</summary>
-		<description lang="en_GB">This addon allows to import your audio and video podcasts from gPodder.net or from OPML files.
+		<description lang="en_GB">This addon allows to import your audio and video podcasts from gPodder.net, Nextcloud Gpoddersync or from OPML files.
 You can make use of up to 10 categories in order to manage your podcasts. You can also directly enter the URLs of your podcasts
 or attach up to 10 OPML files directly.
 		</description>
-		<description lang="de_DE">Dieses Addon ermöglicht den Import Deiner Audio und Video Podcasts von gPodder.net oder aus OPML Dateien.
+		<description lang="de_DE">Dieses Addon ermöglicht den Import Deiner Audio und Video Podcasts von gPodder.net, Nextcloud Gpoddersync oder aus OPML Dateien.
 Du kannst Deine Podcasts in bis zu 10 Kategorien einsortieren. RSS Feeds können auch manuell gepflegt werden. Weiterhin können bis zu 10 OPML
 Dateien direkt eingehängt werden.	
 		</description>
@@ -26,6 +26,16 @@ Dateien direkt eingehängt werden.
 		<website>https://github.com/Heckie75/kodi-addon-podcast</website>
 		<source>https://github.com/Heckie75/kodi-addon-podcast</source>
 		<news>
+v2.3.0 (2023-08-06)
+- Added feature in order to search for podcasts in fyyd.de podcast directory
+- Support for Nextcloud Gpoddersync
+- Improved thumbnail if item is added to favourites
+- Added help texts in settings
+- refactoring
+
+v2.2.3 (2022-10-04)
+- Fixed error if feed is empty (see issue #18)
+
 v2.2.2 (2022-05-26)
 - Improved performance when loading rss feed with episodes (up to 50% faster on RPi 4, see issue #17) 
 - Added feature to limit episodes (see issue #17)
@@ -55,9 +65,7 @@ v2.0.2 (2021-05-14)
 
 v2.0.1 (2021-05-12)
 - Bugfix for Kodi v19 which has no order by date. Only availble in Kodi v20
-
-v2.0.0 (2021-05-11)
-- Migration to Kodi 19 (Matrix)</news>
+</news>
 		<assets>
 			<icon>resources/assets/icon.png</icon>
 			<fanart>resources/assets/fanart.png</fanart>

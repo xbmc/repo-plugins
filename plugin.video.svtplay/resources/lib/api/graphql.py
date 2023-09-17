@@ -23,16 +23,16 @@ class GraphQL:
     pass
 
   def getPopular(self):
-    return self.getGridPageContents("popular_start")
+    return self.getFionaPageContainer("popular_start")
 
   def getLatest(self):
-    return self.getGridPageContents("latest_start")
+    return self.getFionaPageContainer("latest_start")
   
   def getLastChance(self):
-    return self.getGridPageContents("lastchance_start")
+    return self.getFionaPageContainer("lastchance_start")
 
   def getLive(self):
-    return self.getGridPageContents("live_start")
+    return self.getFionaPageContainer("live_start")
 
   def getAtoO(self):
     return self.__get_all_programs()
@@ -86,19 +86,20 @@ class GraphQL:
       item = teaser["item"]
       title = item["name"]
       item_id = item["urls"]["svtplay"]
-      thumbnail = self.get_thumbnail_url(item["image"]["id"], item["image"]["changed"]) if "image" in item else ""
+      thumbnail = self.get_thumbnail_url(teaser["images"]["wide"]["id"], teaser["images"]["wide"]["changed"]) if "images" in teaser else ""
+      fanart = self.get_fanart_url(item["images"]["cleanWide"]["id"], item["images"]["cleanWide"]["changed"]) if "images" in item else ""
       geo_restricted = item["restrictions"]["onlyAvailableInSweden"]
       info = {
-        "plot" : teaser["subHeading"]
+        "plot" : teaser.get("description", "")
       }
       type_name = item["__typename"]
-      play_item = self.__create_item(title, type_name, item_id, geo_restricted, thumbnail, info)
+      play_item = self.__create_item(title, type_name, item_id, geo_restricted, thumbnail, info, fanart)
       programs.append(play_item)
     return programs
-  
-  def getGridPageContents(self, selectionId):
+
+  def getFionaPageContainer(self, selectionId):
     operation_name = "GridPage"
-    query_hash = "a8248fc130da34208aba94c4d5cc7bd44187b5f36476d8d05e03724321aafb40"
+    query_hash = "1e2d15ff7ffa578d33ebf1287d3f7af7fd47125552b564e96fd277a744345a69"
     variables = {"selectionId" : selectionId}
     json_data = self.__get(operation_name, query_hash, variables=variables)
     if not json_data:
@@ -123,7 +124,7 @@ class GraphQL:
       list_items.append(self.__create_item(title, item["__typename"], item_id, geo_restricted, thumbnail, info, fanart))
     return list_items
 
-  def getVideoContent(self, slug):
+  def getEpisodesForPath(self, slug):
     operation_name = "DetailsPageQuery"
     query_hash = "e240d515657bbb54f33cf158cea581f6303b8f01f3022ea3f9419fbe3a5614b0"
     variables = {"path":"/{}".format(slug)}

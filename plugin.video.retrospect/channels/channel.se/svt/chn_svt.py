@@ -580,8 +580,14 @@ class Channel(chn_class.Channel):
         # Transfer some items
         new_result_set[self.__parent_images] = result_set.get(self.__parent_images)
 
-        if "longDescription" not in new_result_set:
-            new_result_set["longDescription"] = result_set.get("description")
+        badge = (result_set.get("badge") or {}).get("altText")
+        description = result_set.get("description")
+        if badge and description:
+            new_result_set["longDescription"] = f"[COLOR gold]{badge}[/COLOR]\n\n{description}"
+        elif badge:
+            new_result_set["longDescription"] = f"[COLOR gold]{badge}[/COLOR]"
+        elif description:
+            new_result_set["longDescription"] = description
 
         if "images" in result_set:
             new_result_set["images"] = result_set["images"]
@@ -678,6 +684,9 @@ class Channel(chn_class.Channel):
                 minute = start_time.tm_min
 
             item.name = "{:02}:{:02} - {}".format(hour, minute, item.name)
+
+        elif "live just nu" in item.description.lower():
+            item.name = "{} [COLOR gold](live)[/COLOR]".format(item.name)
 
         item.media_type = mediatype.VIDEO
         season_info = result_set.get("positionInSeason")
@@ -934,7 +943,7 @@ class Channel(chn_class.Channel):
         program_items = [genres["items"] for genres in possible_lists if
                          genres["selectionType"] == "all"]
         json_data.json = {
-            "programs": [p["item"] for p in program_items[0]],
+            "programs": [p for p in program_items[0]],
         }
         return json_data, []
 
@@ -1018,9 +1027,8 @@ class Channel(chn_class.Channel):
                         % (channel_title, title,
                            start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min)
             else:
-                title = "%s: %s (%02d:%02d - %02d:%02d)" \
-                        % (channel_title, title,
-                           start_time.tm_hour, start_time.tm_min, end_time.tm_hour, end_time.tm_min)
+                title = "%s: %s (%02d:%02d)" \
+                        % (channel_title, title, start_time.tm_hour, start_time.tm_min)
 
         channel_item = MediaItem(
             title,
@@ -1230,12 +1238,20 @@ class Channel(chn_class.Channel):
         def create_url(image: dict, art: str, width: int) -> str:
             return f"https://www.svtstatic.se/image/{art}/{width}/{image['id']}/{image['changed']}?quality=70"
 
+        description = None
         if "wide" in images:
             item.thumb = create_url(images["wide"], "wide", width=720)
             item.fanart = create_url(images["wide"], "wide", width=1920)
+            description = images["wide"].get("description")
         elif "cleanWide" in images:
             item.thumb = create_url(images["cleanWide"], "wide", width=720)
             item.fanart = create_url(images["cleanWide"], "wide", width=1920)
+            description = images["wide"].get("description")
+
+        if description and item.description:
+            item.description = f"{item.description}\n\n{description}"
+        elif description:
+            item.description = description
 
         # if "portrait" in images:
         #     item.poster = create_url(images["portrait"], "portrait", width=512)

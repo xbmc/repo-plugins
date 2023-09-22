@@ -109,20 +109,17 @@ class StreamService:
         elif video_id and not video_url:
             api_data = ApiData(self._CLIENT, self._VUALTO_API_URL, video_id, '', True)
         elif video_url:
-            model_url = video_url.strip('/') + '.model.json'
-            data_json = get_url_json(model_url)
-            if data_json:
-                # Get streamId
-                stream_id = None
-                for action in data_json.get('details').get('actions'):
-                    if action.get('type') == 'watch-episode':
-                        if action.get('videoType') == 'live':
-                            is_live_stream = True
-                            stream_id = action.get('streamId')
-                        else:
-                            is_live_stream = False
-                            stream_id = action.get('episodePublicationId') + quote('$') + action.get('episodeVideoId')
-                api_data = ApiData(self._CLIENT, self._VUALTO_API_URL, stream_id, '', is_live_stream)
+            from api import get_stream_id_data
+            data_json = get_stream_id_data(video_url)
+            episode_data = data_json.get('data').get('page')
+            stream_id = ''
+            is_live_stream = False
+            if episode_data and episode_data.get('episode'):
+                stream_id = episode_data.get('episode').get('watchAction').get('streamId')
+            elif episode_data and episode_data.get('player'):
+                stream_id = episode_data.get('player').get('watchAction').get('streamId')
+                is_live_stream = True
+            api_data = ApiData(self._CLIENT, self._VUALTO_API_URL, stream_id, '', is_live_stream)
         return api_data
 
     def _get_stream_json(self, api_data, roaming=False):

@@ -228,6 +228,54 @@ def get_next_info(episode_id):
     return next_info
 
 
+def get_stream_id_data(vrtmax_url):
+    """Get stream_id from from GraphQL API"""
+    from tokenresolver import TokenResolver
+    access_token = TokenResolver().get_token('vrtnu-site_profile_at')
+    data_json = {}
+    if access_token:
+        headers = {
+            'Authorization': 'Bearer ' + access_token,
+            'Content-Type': 'application/json',
+        }
+        page_id = vrtmax_url.split('www.vrt.be')[1].replace('/vrtmax/', '/vrtnu/').rstrip('/') + '.model.json'
+        graphql_query = """
+             query StreamId($pageId: ID!) {
+              page(id: $pageId) {
+                ... on IPage {
+                  ... on LivestreamPage {
+                    player {
+                      watchAction {
+                        ... on LiveWatchAction {
+                          streamId
+                        }
+                      }
+                    }
+                  }
+                }
+                ... on EpisodePage {
+                  episode {
+                    watchAction {
+                      streamId
+                    }
+                  }
+                }
+              }
+            }
+        """
+        payload = {
+            'operationName': 'StreamId',
+            'variables': {
+                'pageId': page_id
+            },
+            'query': graphql_query,
+        }
+        from json import dumps
+        data = dumps(payload).encode('utf-8')
+        data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
+    return data_json
+
+
 def get_single_episode_data(episode_id):
     """Get single episode data from GraphQL API"""
     from tokenresolver import TokenResolver
@@ -323,6 +371,110 @@ def get_single_episode_data(episode_id):
 
 def get_latest_episode_data(program_name):
     """Get latest episode data from GraphQL API"""
+    from tokenresolver import TokenResolver
+    access_token = TokenResolver().get_token('vrtnu-site_profile_at')
+    data_json = {}
+    if access_token:
+        headers = {
+            'Authorization': 'Bearer ' + access_token,
+            'Content-Type': 'application/json',
+        }
+        graphql_query = """
+            query VideoProgramPage($pageId: ID!, $lazyItemCount: Int = 500, $after: ID) {
+              page(id: $pageId) {
+                ... on ProgramPage {
+                  components {
+                    __typename
+                    ... on PageHeader {
+                      mostRelevantEpisodeTile {
+                        __typename
+                        title
+                        tile {
+                          ...episodeTile
+                          __typename
+                        }
+                        __typename
+                      }
+                      __typename
+                    }
+                    ... on ContainerNavigation {
+                      items {
+                        title
+                        components {
+                          __typename
+                          ... on PaginatedTileList {
+                            __typename
+                            paginatedItems(first: $lazyItemCount, after: $after) {
+                              __typename
+                              edges {
+                                __typename
+                                cursor
+                                node {
+                                  __typename
+                                  ... on EpisodeTile {
+                                    id
+                                    description
+                                    ...episodeTile
+                                  }
+                                }
+                              }
+                            }
+                          }
+                          ... on ContainerNavigation {
+                            items {
+                              title
+                              components {
+                                __typename
+                                ... on PaginatedTileList {
+                                  __typename
+                                  paginatedItems(first: $lazyItemCount, after: $after) {
+                                    __typename
+                                    edges {
+                                      __typename
+                                      cursor
+                                      node {
+                                        __typename
+                                        ... on EpisodeTile {
+                                          id
+                                          description
+                                          ...episodeTile
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                            __typename
+                          }
+                        }
+                        __typename
+                      }
+                      __typename
+                    }
+                  }
+                  __typename
+                }
+                __typename
+              }
+            }
+            %s
+        """ % EPISODE_TILE
+        payload = {
+            'operationName': 'VideoProgramPage',
+            'variables': {
+                'pageId': '/vrtnu/a-z/{}.model.json'.format(program_name),
+            },
+            'query': graphql_query,
+        }
+        from json import dumps
+        data = dumps(payload).encode('utf-8')
+        data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
+    return data_json
+
+
+def get_seasons_data(program_name):
+    """Get seasons data from GraphQL API"""
     from tokenresolver import TokenResolver
     access_token = TokenResolver().get_token('vrtnu-site_profile_at')
     data_json = {}
@@ -1006,7 +1158,7 @@ def get_offline_programs(end_cursor='', use_favorites=False):
 
 def get_episodes(program_name, season_name=None, end_cursor=''):
     """Get episodes"""
-    sort = 'label'
+    sort = 'unsorted'
     ascending = True
     content = 'files'
     page_size = get_setting_int('itemsperpage', default=50)
@@ -1021,7 +1173,10 @@ def get_episodes(program_name, season_name=None, end_cursor=''):
             return seasons, sort, ascending, content
 
     if program_name and season_name:
-        list_id = 'static:/vrtnu/a-z/{}/{}.episodes-list.json'.format(program_name, season_name)
+        if season_name.startswith('parsys'):
+            list_id = 'static:/vrtnu/a-z/{}.model.json@{}'.format(program_name, season_name)
+        else:
+            list_id = 'static:/vrtnu/a-z/{}/{}.episodes-list.json'.format(program_name, season_name)
         api_data = get_paginated_episodes(list_id=list_id, page_size=page_size, end_cursor=end_cursor)
         episodes, sort, ascending = convert_episodes(api_data, destination='programs', program_name=program_name, season_name=season_name)
         return episodes, sort, ascending, 'episodes'
@@ -1032,68 +1187,80 @@ def convert_seasons(api_data, program_name):
     """Convert seasons"""
     seasons = []
     for season in api_data:
-        season_title = season.get('title')
-        season_name = season.get('name')
-        path = url_for('programs', program_name=program_name, season_name=season_name)
-        seasons.append(
-            TitleItem(
-                label=season_title,
-                path=path,
-                info_dict={
-                    'title': season_title,
-                    'mediatype': 'season',
-                },
-                is_playable=False,
+        if season.get('name') == 'mostRelevantEpisode':
+            _, _, _, title_item = convert_episode(season.get('episode'))
+            title_item.label = '[B]{}:[/B] {}'.format(season.get('title'), title_item.label)
+            title_item.info_dict['title'] = '[B]{}:[/B] {}'.format(season.get('title'), title_item.info_dict.get('title'))
+            seasons.append(title_item)
+        else:
+            season_title = season.get('title')
+            season_name = season.get('name')
+            path = url_for('programs', program_name=program_name, season_name=season_name)
+            seasons.append(
+                TitleItem(
+                    label=season_title,
+                    path=path,
+                    info_dict={
+                        'title': season_title,
+                        'mediatype': 'season',
+                    },
+                    is_playable=False,
+                )
             )
-        )
     return seasons
+
 
 def create_season_dict(data_json):
     """Create season dictionary"""
-    season_title = data_json.get('title')
+    season_dict = {}
+    # title
+    season_dict['title'] = data_json.get('title') or data_json.get('mostRelevantEpisodeTile').get('title')
+
     # list_id
     if data_json.get('components'):
         list_id = data_json.get('components')[0].get('listId')
+    elif data_json.get('mostRelevantEpisodeTile'):
+        list_id = 'mostRelevantEpisode'
+        season_dict['episode'] = data_json.get('mostRelevantEpisodeTile')
     else:
         list_id = data_json.get('listId')
 
+    # season name
     if '.episodes-list.json' in list_id:
-        season_name = list_id.split('.episodes-list.json')[0].split('/')[-1]
+        season_dict['name'] = list_id.split('.episodes-list.json')[0].split('/')[-1]
     else:
-        season_name = list_id.split('_')[-1]
-    return {'title': season_title, 'name': season_name}
+        season_dict['name'] = list_id.split('@')[-1]
+    return season_dict
+
 
 def get_seasons(program_name):
     """Get seasons"""
     seasons = []
-    # FIXME: The current codebase only supports seasons and not the extra content. So we need to select seasons using a whitelist.
-    whitelist = ['Afleveringen', 'Alle seizoenen', 'Journaals', 'Reeksen', 'Docu']
-    components = get_latest_episode_data(program_name).get('data').get('page').get('components')
+    components = get_seasons_data(program_name).get('data').get('page').get('components')
     # Extract season data from components
     for component in components:
         # Check component type
         if component.get('navigationType') == 'bar':
             # Get items
             for item in component.get('items'):
-                # Select whitelist item
-                if item.get('title') in whitelist:
-                    # Get components
-                    for nested_component in item.get('components'):
-                        # Append component
-                        components.append(nested_component)
+                # Get components
+                for nested_component in item.get('components'):
+                    # Append component
+                    components.append(nested_component)
         elif component.get('navigationType') == 'select':
             # Get items
             for item in component.get('items'):
                 # Store season
-                seasons.append(create_season_dict(item))
-            # Extraction done, remove component
-            components.remove(component)
+                if item.get('title'):
+                    seasons.append(create_season_dict(item))
         elif component.get('__typename') == 'PaginatedTileList' and component.get('tileContentType') == 'episode':
             # Store season
+            if component.get('title'):
+                seasons.append(create_season_dict(component))
+        elif component.get('__typename') == 'PageHeader' and component.get('mostRelevantEpisodeTile'):
             seasons.append(create_season_dict(component))
-            # Extraction done, remove component
-            components.remove(component)
     return seasons
+
 
 def get_featured_data():
     """Get featured data"""
@@ -1177,6 +1344,7 @@ def get_featured_data():
         data = dumps(payload).encode('utf-8')
         data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
     return data_json
+
 
 def get_featured(feature=None, end_cursor=''):
     """Get featured menu items"""

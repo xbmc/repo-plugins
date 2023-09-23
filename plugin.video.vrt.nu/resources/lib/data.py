@@ -57,12 +57,12 @@ CHANNELS = [
     {
         'id': '1H',
         'name': 'canvas',
-        'label': 'Canvas',
+        'label': 'VRT Canvas',
         'studio': 'Canvas',
-        'live_stream': 'https://www.vrt.be/vrtmax/livestream/video/canvas/',
+        'live_stream': 'https://www.vrt.be/vrtmax/livestream/video/vrt-canvas/',
         'live_stream_id': 'vualto_canvas_geo',
         'youtube': [
-            {'label': 'Canvas', 'url': 'https://www.youtube.com/user/CanvasTV'},
+            {'label': 'VRT Canvas', 'url': 'https://www.youtube.com/user/CanvasTV'},
             {'label': 'Sporza', 'url': 'https://www.youtube.com/user/SporzaOfficial'},
             {'label': 'Terzake', 'url': 'https://www.youtube.com/user/terzaketv'},
         ],

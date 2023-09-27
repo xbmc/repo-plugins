@@ -8,9 +8,6 @@ from resources.lib.rssaddon.http_status_error import HttpStatusError
 
 class CommitGPodderAction(Action):
 
-    def __init__(self):
-        super().__init__()
-
     def commit_gpodder(self) -> None:
 
         try:
@@ -24,6 +21,4 @@ class CommitGPodderAction(Action):
         except HttpStatusError as error:
             xbmcgui.Dialog().ok(self.addon.getLocalizedString(32151), error.message)
 
-        addon = xbmcaddon.Addon()
-        xbmc.executebuiltin("Addon.OpenSettings(%s)" %
-                            addon.getAddonInfo("id"))
+        xbmcaddon.Addon().openSettings()

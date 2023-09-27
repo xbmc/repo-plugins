@@ -1,10 +1,10 @@
-from resources.lib.rssaddon.abstract_rss_addon import AbstractRssAddon
-from resources.lib.podcasts.opml_file import parse_opml, open_opml_file
-
 import os
+from datetime import datetime
 
 import xbmc
 import xbmcplugin
+from resources.lib.podcasts.opml_file import open_opml_file, parse_opml
+from resources.lib.rssaddon.abstract_rss_addon import AbstractRssAddon
 
 GROUPS = 10
 ENTRIES = 10
@@ -12,10 +12,14 @@ ENTRIES = 10
 
 class PodcastsAddon(AbstractRssAddon):
 
-    def __init__(self, addon_handle):
+    def __init__(self, addon_handle) -> None:
 
         super().__init__(addon_handle)
         self.anchor_for_latest = "true" == self.addon.getSetting("anchor")
+
+    def load_rss(self, url) -> 'tuple[str,str,str,list[dict]]':
+
+        return self._load_rss(url)
 
     def on_rss_loaded(self, url: str, title: str, description: str, image: str, items: 'list[dict]'):
 
@@ -34,7 +38,7 @@ class PodcastsAddon(AbstractRssAddon):
                     self.addon.setSetting(
                         "group_%i_rss_%i_icon" % (g, e), image)
 
-    def _browse(self, dir_structure: str, path: str, updateListing=False):
+    def _browse(self, dir_structure: str, path: str, updateListing=False) -> None:
 
         def _get_node_by_path(path: str) -> dict:
 
@@ -65,7 +69,7 @@ class PodcastsAddon(AbstractRssAddon):
         xbmcplugin.endOfDirectory(
             self.addon_handle, updateListing=updateListing)
 
-    def _build_dir_structure(self):
+    def _build_dir_structure(self) -> None:
 
         groups = []
 
@@ -113,7 +117,7 @@ class PodcastsAddon(AbstractRssAddon):
                     "params": [
                         {
                             "rss": self.addon.getSetting("group_%i_rss_%i_url" % (g, e)),
-                            "limit" : str(limit)
+                            "limit": str(limit)
                         }
                     ],
                     "icon": icon,
@@ -133,7 +137,18 @@ class PodcastsAddon(AbstractRssAddon):
             }
         ]
 
-    def route(self, path, url_params):
+    def route(self, path) -> None:
 
         _dir_structure = self._build_dir_structure()
         self._browse(dir_structure=_dir_structure, path=path)
+
+    def build_plot(self, item) -> str:
+
+        plot = list()
+        if "description" in item:
+            plot.append(item["description"])
+
+        if "date" in item:
+            plot.append(datetime.strftime(item["date"], "%Y-%m-%d %H:%M"))
+
+        return "\n".join(plot)

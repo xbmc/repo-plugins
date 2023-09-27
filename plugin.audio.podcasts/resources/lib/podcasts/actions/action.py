@@ -12,7 +12,7 @@ class Action:
     _GROUPS = 10
     _ENTRIES = 10
 
-    def __init__(self):
+    def __init__(self) -> None:
 
         self.addon = xbmcaddon.Addon()
         self.addon_dir = xbmcvfs.translatePath(self.addon.getAddonInfo('path'))

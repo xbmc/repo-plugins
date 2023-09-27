@@ -325,12 +325,104 @@ msgctxt "#32092"
 msgid "Backup failed"
 msgstr ""
 
+msgctxt "#32093"
+msgid "Provider"
+msgstr ""
+
+msgctxt "#32094"
+msgid "Nextcloud Gpoddersync"
+msgstr ""
+
 msgctxt "#32095"
-msgid "Authentification at gPodder failed. Missing session"
+msgid "Authentification failed."
+msgstr ""
+
+msgctxt "#32096"
+msgid "Automatic synchronization"
+msgstr ""
+
+msgctxt "#32097"
+msgid "off"
+msgstr ""
+
+msgctxt "#32098"
+msgid "once per day"
+msgstr ""
+
+msgctxt "#32099"
+msgid "once per week"
 msgstr ""
 
 msgctxt "#32101"
 msgid "most recent episode"
+msgstr ""
+
+msgctxt "#32111"
+msgid "Full synchronization"
+msgstr ""
+
+msgctxt "#32112"
+msgid "Synchronize now"
+msgstr ""
+
+msgctxt "#32113"
+msgid "Synchronizing with Nextcloud..."
+msgstr ""
+
+msgctxt "#32114"
+msgid "Inspecting new feeds..."
+msgstr ""
+
+msgctxt "#32115"
+msgid "Select feeds to delete in Kodi?"
+msgstr ""
+
+msgctxt "#32116"
+msgid "Select feeds to add to group in Kodi?"
+msgstr ""
+
+msgctxt "#32117"
+msgid "Synchronization completed"
+msgstr ""
+
+msgctxt "#32118"
+msgid "Export to Nextcloud"
+msgstr ""
+
+msgctxt "#32119"
+msgid "Select feeds to add in Nextcloud?"
+msgstr ""
+
+msgctxt "#32120"
+msgid "Select feeds to delete in Nextcloud?"
+msgstr ""
+
+msgctxt "#32121"
+msgid "Search podcasts directories"
+msgstr ""
+
+msgctxt "#32122"
+msgid "Search fyyd.de"
+msgstr ""
+
+msgctxt "#32123"
+msgid "Enter search term in order to find podcast"
+msgstr ""
+
+msgctxt "#32124"
+msgid "Search for %s"
+msgstr ""
+
+msgctxt "#32125"
+msgid "No results for %s found"
+msgstr ""
+
+msgctxt "#32126"
+msgid "Choose podcasts in order to subscribe"
+msgstr ""
+
+msgctxt "#32127"
+msgid "Successfully subscribed to podcasts"
 msgstr ""
 
 msgctxt "#32151"
@@ -351,4 +443,100 @@ msgstr ""
 
 msgctxt "#32155"
 msgid "Unexpected content for podcast"
+msgstr ""
+
+msgctxt "#32200"
+msgid "Select a remote type if you want to synchronize your subscriptions between Kodi and other devices. Supported protocols are gPodder.net and Nextcloud Gpoddersync."
+msgstr ""
+
+msgctxt "#32201"
+msgid "Enter the hostname of your server, e.g. https://myserver.net:443"
+msgstr ""
+
+msgctxt "#32202"
+msgid "Enter your username in order to login to server."
+msgstr ""
+
+msgctxt "#32203"
+msgid "Enter your password in order to login to server. Note: Password is stored in plain text in settings file of this addon!"
+msgstr ""
+
+msgctxt "#32204"
+msgid "Apply changes in order to check if hostname, username and password work as expected."
+msgstr ""
+
+msgctxt "#32205"
+msgid "Select an update interval in order to get reminded if subscriptions has changed on your remote."
+msgstr ""
+
+msgctxt "#32206"
+msgid "Request all available subscriptions from gPodder.net and subscribe to them by assigning these to groups."
+msgstr ""
+
+msgctxt "#32207"
+msgid "Request only subscriptions from gPodder.net that are not subscribed in Kodi yet and subscribe to them by assigning these to groups."
+msgstr ""
+
+msgctxt "#32208"
+msgid "Request all available subscriptions from gPodder.net and download these as OPML file."
+msgstr ""
+
+msgctxt "#32209"
+msgid "Synchronize all subscriptions with Nextcloud Gpoddersync. You can subscribe to new podcasts and will be asked to remove subscriptions in Kodi that has been deleted on other devices."
+msgstr ""
+
+msgctxt "#32210"
+msgid "Synchronize only changes with Nextcloud Gpoddersync since last synchronization. You can subscribe to new podcasts and will be asked to remove subscriptions in Kodi that has been deleted on other devices."
+msgstr ""
+
+msgctxt "#32211"
+msgid "Import subscriptions by loading an OPML file."
+msgstr ""
+
+msgctxt "#32212"
+msgid "Click here If you want to detach an OPML file. File won't be deleted."
+msgstr ""
+
+msgctxt "#32213"
+msgid "Click here If you want to make a backup of your subscriptions. A OPML file will be written."
+msgstr ""
+
+msgctxt "#32214"
+msgid "Slot in order to attach an OPML file."
+msgstr "Platz, um eine OPML Datei einzuhängen."
+
+msgctxt "#32215"
+msgid "Toggle switch in order to display or hide this group."
+msgstr ""
+
+msgctxt "#32216"
+msgid "Enter the displayname of this group."
+msgstr ""
+
+msgctxt "#32217"
+msgid "Mark this slot as free or occupied. If it is marked as free you can use this slot in order to subscribe to other podcasts e.g. by synchronization with other devices."
+msgstr ""
+
+msgctxt "#32218"
+msgid "Enter the displayname of this subscription."
+msgstr ""
+
+msgctxt "#32219"
+msgid "Here you can enter or change the URL of the subscription manually."
+msgstr ""
+
+msgctxt "#32220"
+msgid "Activate this button in order to display a solid list item on top of each subscription which represents the latest episode. This is very helpful if you want to bookmark latest episode by using Kodi's favorites menu."
+msgstr ""
+
+msgctxt "#32221"
+msgid "Sometimes a subscription contains hundrets of episodes. Then you would probably like to limit number of episodes displayed in list."
+msgstr ""
+
+msgctxt "#32222"
+msgid "Export subscriptions in Kodi to Nextcloud."
+msgstr ""
+
+msgctxt "#32223"
+msgid "Search fyyd.de for podcasts. You can subscribe to new podcasts by adding them to groups."
 msgstr ""

@@ -2,11 +2,12 @@ import xbmc
 import xbmcgui
 from resources.lib.podcasts.actions.opml_action import OpmlAction
 from resources.lib.podcasts.opml_file import open_opml_file, parse_opml
+from resources.lib.podcasts.util import get_asset_path
 
 
 class ImportOpmlAction(OpmlAction):
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def import_opml(self) -> None:
@@ -30,8 +31,8 @@ class ImportOpmlAction(OpmlAction):
         self._apply_to_group(entries, group, feeds)
 
         # Success
-        xbmcgui.Dialog().notification(self.addon.getLocalizedString(
-            32085), self.addon.getLocalizedString(32086))
+        xbmcgui.Dialog().notification(heading=self.addon.getLocalizedString(
+            32085), message=self.addon.getLocalizedString(32086), icon=get_asset_path("notification.png"))
 
     def _select_opml_file(self) -> 'tuple[str,list]':
 

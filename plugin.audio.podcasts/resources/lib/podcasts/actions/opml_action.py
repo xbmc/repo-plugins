@@ -4,9 +4,6 @@ from resources.lib.podcasts.actions.action import Action
 
 class OpmlAction(Action):
 
-    def __init__(self):
-        super().__init__()
-
     def _select_target_group(self) -> 'tuple[int,int]':
 
         names = list()
@@ -70,7 +67,7 @@ class OpmlAction(Action):
         self.addon.setSetting("group_%i_enable" % group, "True")
 
         i, j = 0, 0
-        while(i < self._ENTRIES):
+        while (i < self._ENTRIES):
 
             if j < len(feeds) and "false" == self.addon.getSetting("group_%i_rss_%i_enable" % (group, i)):
                 self.addon.setSetting("group_%i_rss_%i_enable" %

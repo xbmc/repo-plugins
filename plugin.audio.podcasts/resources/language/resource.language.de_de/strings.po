@@ -325,13 +325,105 @@ msgctxt "#32092"
 msgid "Backup failed"
 msgstr "Sicherung gescheitert"
 
+msgctxt "#32093"
+msgid "Provider"
+msgstr "Provider"
+
+msgctxt "#32094"
+msgid "Nextcloud Gpoddersync"
+msgstr "Nextcloud Gpoddersync"
+
 msgctxt "#32095"
-msgid "Authentification at gPodder failed. Missing session"
-msgstr "Anmeldung an gPodder fehlgeschlagen"
+msgid "Authentification failed."
+msgstr "Anmeldung fehlgeschlagen"
+
+msgctxt "#32096"
+msgid "Automatic synchronization"
+msgstr "Automatische Synchronisierung"
+
+msgctxt "#32097"
+msgid "off"
+msgstr "aus"
+
+msgctxt "#32098"
+msgid "once per day"
+msgstr "einmal pro Tag"
+
+msgctxt "#32099"
+msgid "once per week"
+msgstr "einmal pro Woche"
 
 msgctxt "#32101"
 msgid "most recent episode"
 msgstr "aktuelle Sendung"
+
+msgctxt "#32111"
+msgid "Full synchronization"
+msgstr "Komplette Synchronisation"
+
+msgctxt "#32112"
+msgid "Synchronize now"
+msgstr "Änderungen synchronisieren"
+
+msgctxt "#32113"
+msgid "Synchronizing with Nextcloud..."
+msgstr "Synchronisiere mit Nextcloud..."
+
+msgctxt "#32114"
+msgid "Inspecting new feeds..."
+msgstr "Prüfe neue Feeds..."
+
+msgctxt "#32115"
+msgid "Select feeds to delete in Kodi?"
+msgstr "Wähle Feeds zum Löschen in Kodi aus?"
+
+msgctxt "#32116"
+msgid "Select feeds to add to group in Kodi?"
+msgstr "Wähle Feeds zum Hinzufügen in eine Gruppe in Kodi aus?"
+
+msgctxt "#32117"
+msgid "Synchronization completed"
+msgstr "Synchronisation fertig"
+
+msgctxt "#32118"
+msgid "Export to Nextcloud"
+msgstr "Exportiere nach Nextcloud"
+
+msgctxt "#32119"
+msgid "Select feeds to add in Nextcloud?"
+msgstr "Wähle Feeds zum Hinzufügen in Nextcloud aus?"
+
+msgctxt "#32120"
+msgid "Select feeds to delete in Nextcloud?"
+msgstr "Wähle Feeds zum Löschen in Nextcloud aus?"
+
+msgctxt "#32121"
+msgid "Search podcasts directories"
+msgstr "Durchsuche Podcast Verzeichnisse"
+
+msgctxt "#32122"
+msgid "Search fyyd.de"
+msgstr "Durchsuche fyyd.de"
+
+msgctxt "#32123"
+msgid "Enter search term in order to find podcast"
+msgstr "Gebe Suchbegriff ein, um einen Podcast zu finden"
+
+msgctxt "#32124"
+msgid "Search for %s"
+msgstr "Suche nach %s"
+
+msgctxt "#32125"
+msgid "No results for %s found"
+msgstr "Keine Ergebnisse für %s"
+
+msgctxt "#32126"
+msgid "Choose podcasts in order to subscribe"
+msgstr "Wähle Podcasts zum Abonnieren aus"
+
+msgctxt "#32127"
+msgid "Successfully subscribed to podcasts"
+msgstr "Podcast erfolgreich abonniert"
 
 msgctxt "#32151"
 msgid "Connection Error"
@@ -352,3 +444,99 @@ msgstr "Unerwarteter HTTP Status %i für %s"
 msgctxt "#32155"
 msgid "Unexpected content for podcast"
 msgstr "Unerwarteter Inhalt für Podcast"
+
+msgctxt "#32200"
+msgid "Select a remote type if you want to synchronize your subscriptions between Kodi and other devices. Supported protocols are gPodder.net and Nextcloud Gpoddersync."
+msgstr "Wählen einen Servertypen aus, wenn Du deine Abos zwischen Deinen Geräten synchronisieren möchtest. Unterstützte Protokolle sind gPodder.net und Nextcloud Gpoddersync."
+
+msgctxt "#32201"
+msgid "Enter the hostname of your server, e.g. https://myserver.net:443"
+msgstr "Gebe hier den Hostnamen deines Servers ein, z.B. https://myserver.net:443"
+
+msgctxt "#32202"
+msgid "Enter your username in order to login to server."
+msgstr "Gebe deinen Nutzernamen an, mit dem Du dich an dem Server anmeldest."
+
+msgctxt "#32203"
+msgid "Enter your password in order to login to server. Note: Password is stored in plain text in settings file of this addon!"
+msgstr "Gebe dein Passwort ein, mit dem Du dich an dem Server anmeldest. Hinweis: Das Passwort wird unverschlüsselt in Kodi gespeichert."
+
+msgctxt "#32204"
+msgid "Apply changes in order to check if hostname, username and password work as expected."
+msgstr "Übernehme Änderungen, um zu prüfen ob Hostname, Nutzername und Passwort funktionieren."
+
+msgctxt "#32205"
+msgid "Select an update interval in order to get reminded if subscriptions has changed on your remote."
+msgstr "Wähle ein Aktualisierungsinterval, um über Änderungen deiner Abos auf anderen Geräten erinnert zu werden."
+
+msgctxt "#32206"
+msgid "Request all available subscriptions from gPodder.net and subscribe to them by assigning these to groups."
+msgstr "Frage alle Abos von gPodder.net ab und abonniere diese, in dem Du diese Gruppen zuweist."
+
+msgctxt "#32207"
+msgid "Request only subscriptions from gPodder.net that are not subscribed in Kodi yet and subscribe to them by assigning these to groups."
+msgstr "Frage nur Abos von gPodder.net ab, die noch nicht in Kodi abonniert wurden, und abonniere diese, in dem Du diese Gruppen zuweist."
+
+msgctxt "#32208"
+msgid "Request all available subscriptions from gPodder.net and download these as OPML file."
+msgstr "Frage alle Abos von gPodder.net ab und speichere diese als OPML-Datei."
+
+msgctxt "#32209"
+msgid "Synchronize all subscriptions with Nextcloud Gpoddersync. You can subscribe to new podcasts and will be asked to remove subscriptions in Kodi that has been deleted on other devices."
+msgstr "Synchronisiere alle Abos über Nextcloud Gpoddersync. Du kannst neue Podcasts übernehmen und wirst gefragt, gelöschte Abos in Kodi zu löschen, die auf anderen Geräten entfernt wurden."
+
+msgctxt "#32210"
+msgid "Synchronize only changes with Nextcloud Gpoddersync since last synchronization. You can subscribe to new podcasts and will be asked to remove subscriptions in Kodi that has been deleted on other devices."
+msgstr "Synchronisiere nur Änderungen über Nextcloud Gpoddersync seit der letzten Synchronisation. Du kannst neue Podcasts übernehmen und wirst gefragt, gelöschte Abos in Kodi zu löschen, die auf anderen Geräten entfernt wurden."
+
+msgctxt "#32211"
+msgid "Import subscriptions by loading an OPML file."
+msgstr "Importiere Abos aus einer OMPL Datei."
+
+msgctxt "#32212"
+msgid "Click here If you want to detach an OPML file. File won't be deleted."
+msgstr "Klicke hier, um eine OPML Datei auszuhängen. Die Datei wird dabei nicht gelöscht."
+
+msgctxt "#32213"
+msgid "Click here If you want to make a backup of your subscriptions. A OPML file will be written."
+msgstr "Klicke hier, um eine Sicherung deiner Abos zu machen. Es wird eine OPML Datei geschrieben."
+
+msgctxt "#32214"
+msgid "Slot in order to attach an OPML file."
+msgstr "Platz, um eine OPML Datei einzuhängen."
+
+msgctxt "#32215"
+msgid "Toggle switch in order to display or hide this group."
+msgstr "Stelle den Schalter ein, um diese Gruppe ein- oder auszublenden."
+
+msgctxt "#32216"
+msgid "Enter the displayname of this group."
+msgstr "Gebe hier den Anzeigenamen der Gruppe ein."
+
+msgctxt "#32217"
+msgid "Mark this slot as free or occupied. If it is marked as free you can use this slot in order to subscribe to other podcasts e.g. by synchronization with other devices."
+msgstr "Markiere diesen Platz als frei oder belegt. Wenn der Platz frei ist, kann dieser für neue Abos verwendet werden, z.B. während der Synchronisation mit anderen Geräten."
+
+msgctxt "#32218"
+msgid "Enter the displayname of this subscription."
+msgstr "Gebe hier den Anzeigenamen des Abos ein."
+
+msgctxt "#32219"
+msgid "Here you can enter or change the URL of the subscription manually."
+msgstr "Hier kannst Du die URL des Abos manuell eingeben oder ändern."
+
+msgctxt "#32220"
+msgid "Activate this button in order to display a solid list item on top of each subscription which represents the latest episode. This is very helpful if you want to bookmark latest episode by using Kodi's favorites menu."
+msgstr "Aktiviere diesen Schalter, wenn Du am Anfang jeder Liste einen festen Eintrag für die aktuellste Episode haben möchtest. Dies ist hilfreich, um einen entsprechenden Eintrag im Favoritenmenü von Kodi hinzuzufügen."
+
+msgctxt "#32221"
+msgid "Sometimes a subscription contains hundrets of episodes. Then you would probably like to limit number of episodes displayed in list."
+msgstr "Manchmal haben Abos hunderte Episoden. In diesem Fall möchtest Du vielleicht die Liste der angezeigten Episoden begrenzen."
+
+msgctxt "#32222"
+msgid "Export subscriptions in Kodi to Nextcloud. Active and inactive subscriptions will be taken into account."
+msgstr "Exportiere Abos zu Nextcloud. Es werden aktive und deaktivierte Abos berücksichtigt."
+
+msgctxt "#32223"
+msgid "Search fyyd.de for podcasts. You can subscribe to new podcasts by adding them to groups."
+msgstr "Durchsuche fyyd.de nach Podcasts. Du kannst diese abonnieren und Gruppen zuordnen."

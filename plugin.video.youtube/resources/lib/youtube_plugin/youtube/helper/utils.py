@@ -475,8 +475,8 @@ def update_play_info(provider, context, video_id, video_item, video_stream, use_
     if 'headers' in video_stream:
         video_item.set_headers(video_stream['headers'])
 
-    # set uses_dash
-    video_item.set_use_dash(settings.use_dash())
+    # set uses_mpd
+    video_item.set_use_mpd_video(settings.use_mpd_videos())
 
     license_info = video_stream.get('license_info', {})
 
@@ -682,8 +682,10 @@ def filter_short_videos(context, items):
         shorts_filtered = []
 
         for item in items:
-            if hasattr(item, '_duration') and (0 < item.get_duration() <= 60):
-                continue
+            if hasattr(item, '_duration'):
+                item_duration = 0 if item.get_duration() is None else item.get_duration()
+                if 0 < item_duration <= 60:
+                    continue
             shorts_filtered += [item]
 
         return shorts_filtered

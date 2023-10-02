@@ -19,11 +19,11 @@ class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
       ilist = self.addMenuItem('NHK Live','GS', ilist, 'Live', self.addonIcon, self.addonFanart, {}, isFolder=True)
-      b = requests.get('https://nwapi.nhk.jp/nhkworld/vodpglist/v7b/en/voice/list.json', headers=self.defaultHeaders).json()
+      b = requests.get('https://nwapi.nhk.jp/nhkworld/vodpglist/v8b/en/voice/list.json', headers=self.defaultHeaders).json()
       b = b['vod_programs']['programs']
       b = sorted(b.items(),key=lambda t:t[1]["sort_key"])
       for a in b:
-         url = ''.join(['https://nwapi.nhk.jp/nhkworld/vodesdlist/v7b/program/',a[0],'/en/all/all.json'])
+         url = ''.join(['https://nwapi.nhk.jp/nhkworld/vodesdlist/v8b/program/',a[0],'/en/all/all.json'])
          a = a[1]
          name = a['title']
          thumb  =  a['image']
@@ -70,7 +70,6 @@ class myAddon(t1mAddon):
 
 
   def getAddonShows(self,url,ilist):
-#      nhkurl = 'https://nhkwlive-xjp.akamaized.net/hls/live/2003458/nhkwlive-xjp-en/index.m3u8'
       nhkurl = 'https://nhkwlive-ojp.akamaized.net/hls/live/2003459/nhkwlive-ojp-en/index.m3u8'
       b = requests.get('https://nwapi.nhk.jp/nhkworld/epg/v7b/world/now.json', headers=self.defaultHeaders).json()
       for a in b['channel']['item']:
@@ -99,20 +98,12 @@ class myAddon(t1mAddon):
           url = ''.join(['https://nwapi.nhk.jp/nhkworld/vodesdlist/v7b/episode/',datakey,'/en/all/all.json'])
           a = requests.get(url, headers=self.defaultHeaders).json()
           uid = a['data']['episodes'][0]['vod_id']
-          url = ''.join(['https://movie-s.nhk.or.jp/v/refid/nhkworld/prefid/',uid,'?embed=js&targetId=videoplayer&de-responsive=true&de-callback-method=nwCustomCallback&de-appid=',uid,'&de-subtitle-on=false'])
-          html = requests.get(url, headers=self.defaultHeaders).text
-          akey = re.compile("'data-de-api-key','(.+?)'", re.DOTALL).search(html).group(1)
-          uuid = re.compile("'data-de-program-uuid','(.+?)'", re.DOTALL).search(html).group(1)
-          a = requests.get(''.join(['https://movie-s.nhk.or.jp/ws/ws_program/api/',str(akey),'/apiv/5/mode/json?v=',str(uuid)])).json()
-          b = a['response']['WsProgramResponse']['program']['asset']['referenceFile']
-          if b['videoWidth'] >= 1920:
-              url = a['response']['WsProgramResponse']['program']['asset']['m3u8AndroidURL']
-              stream1080 = b['rtmp']['stream_name']
-              stream1080 = re.compile('flvmedia/(.+?)\?', re.DOTALL).search(stream1080).group(1)
-              ux = url.split('&media=',1)
-              url = ''.join([ux[0],'&media=',str(b['videoBitrate']),':',stream1080,',',ux[1].split(',')[0]])
-          else:
-              url = a['response']['WsProgramResponse']['program']['asset']['ipadM3u8Url']
+          html = requests.get('https://movie-a.nhk.or.jp/world/player/js/movie-player.js', headers=self.defaultHeaders).text
+          token = re.compile('prod:.+?token:"(.+?)"', re.DOTALL).search(html).group(1)
+          url = ''.join(['https://api01-platform.stream.co.jp/apiservice/getMediaByParam/?token=',token,'&type=json&optional_id=',uid,'&active_flg=1'])
+          a = requests.get(url, headers=self.defaultHeaders).json()
+          url = a['meta'][0]["movie_url"]["mb_hd"]
+
       liz = xbmcgui.ListItem(path = url, offscreen=True)
       liz.setProperty('inputstream','inputstream.adaptive')
       liz.setProperty('inputstream.adaptive.manifest_type','hls')

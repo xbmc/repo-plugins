@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.playonbrowser" name="PlayOn Browser" version="2.1.0" provider-name="Lunatixz">
+<addon id="plugin.video.playonbrowser" name="PlayOn Browser" version="2.1.1" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.six" version="1.0.0"/>
@@ -27,16 +27,25 @@
             <screenshot>resources/images/screenshot04.png</screenshot>
         </assets>
         <summary lang="da_DK">Gennemse PlayOn fra Kodi.</summary>
+        <summary lang="de_DE">PlayOn über Kodi durchblättern.</summary>
         <summary lang="en_GB">Browse PlayOn from Kodi.</summary>
+        <summary lang="es_ES">Navega por PlayOn desde Kodi.</summary>
         <summary lang="es_MX">Explora PlayOn desde Kodi.</summary>
+        <summary lang="it_IT">Sfoglia PlayOn da Kodi.</summary>
         <summary lang="ru_RU">Просматривайте PlayOn из Kodi.</summary>
         <description lang="da_DK">PlayOn er et streaming mediemærke og softwaresuite, der gør det muligt for brugere at se og optage videoer fra adskillige online indholdsudbydere.</description>
+        <description lang="de_DE">PlayOn ist eine Medienstreaming-Marke und eine Software-Suite, die es Nutzern ermöglicht, Videos von zahlreichen Online-Anbietern anzusehen und aufzunehmen.</description>
         <description lang="en_GB">PlayOn is a streaming media brand and software suite that enables users to view and record videos from numerous online content providers.</description>
+        <description lang="es_ES">PlayOn es una marca de transmisión de contenidos multimedia y un paquete de software que permite a los usuarios ver y grabar vídeos de numerosos proveedores de contenidos en línea.</description>
         <description lang="es_MX">PlayOn es una compañía de transmisión de medios y una suite de software que permite a sus usuarios ver y grabar videos de numerosos proveedores de contenido en línea.</description>
+        <description lang="it_IT">PlayOn è un marchio di streaming multimediale e una suite di software che consente agli utenti di visualizzare e registrare video da numerosi fornitori di contenuti online.</description>
         <description lang="ru_RU">PlayOn - это бренд потокового мультимедиа и программный пакет, который позволяет пользователям просматривать и записывать видео от многочисленных поставщиков онлайн контента.</description>
         <disclaimer lang="da_DK">Kræver Playon server software</disclaimer>
+        <disclaimer lang="de_DE">Erfordert Playon-Serversoftware</disclaimer>
         <disclaimer lang="en_GB">Requires Playon Server Software</disclaimer>
+        <disclaimer lang="es_ES">Requiere el software Playon Server</disclaimer>
         <disclaimer lang="es_MX">Requiere el software de servidor Playon</disclaimer>
+        <disclaimer lang="it_IT">Richiede il software Playon Server</disclaimer>
         <disclaimer lang="ru_RU">Требуется серверное ПО Playon</disclaimer>
     </extension>
 </addon>

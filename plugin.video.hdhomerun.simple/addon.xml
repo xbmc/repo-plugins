@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.hdhomerun.simple" name="HDHomerun Simple" provider-name="Lunatixz" version="1.0.9">
+<addon id="plugin.video.hdhomerun.simple" name="HDHomerun Simple" provider-name="Lunatixz" version="1.0.10">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.six" version="1.0.0"/>
@@ -34,12 +34,18 @@
         </assets>
         <summary lang="da_DK">Simpel HDHomeRun brugerflade.</summary>
         <summary lang="en_GB">Simple HDHomeRun Interface.</summary>
+        <summary lang="es_ES">Interfaz sencilla HDHomeRun.</summary>
         <summary lang="fi_FI">Yksinkertainen HDHomeRun-käyttöliittymä.</summary>
+        <summary lang="it_IT">Interfaccia semplice HDHomeRun.</summary>
         <description lang="da_DK">Find automatisk alle de kompatible HDHomeRun-enheder på dit netværk, enkel og nem HDHomeRun-brugerflade.</description>
         <description lang="en_GB">Automatically find all the compatible HDHomeRun devices on your network, Simple and Easy HDHomeRun Interface.</description>
+        <description lang="es_ES">Encuentra automáticamente todos los dispositivos HDHomeRun compatibles en tu red, Interfaz HDHomeRun simple y fácil.</description>
         <description lang="fi_FI">Etsi yhteensopivat HDHomeRun-laitteet verkostasi automaattisesti. Yksinkertainen ja helppokäyttöinen HDHomeRun-käyttöliittymä.</description>
+        <description lang="it_IT">Trova automaticamente tutti i dispositivi HDHomeRun compatibili sulla tua rete, interfaccia HDHomeRun semplice e facile.</description>
         <disclaimer lang="da_DK">Kræver en kompatibel HDHomeRun-enhed</disclaimer>
         <disclaimer lang="en_GB">Requires a compatible HDHomeRun device</disclaimer>
+        <disclaimer lang="es_ES">Se necesita un dispositivo HDHomeRun compatible</disclaimer>
         <disclaimer lang="fi_FI">Vaatii yhteensopivan HDHomeRun-laitteen</disclaimer>
+        <disclaimer lang="it_IT">Richiede un dispositivo HDHomeRun compatibile</disclaimer>
     </extension>
 </addon>

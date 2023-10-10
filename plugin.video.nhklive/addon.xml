@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.nhklive"
        name="NHK Live"
-       version="4.0.8"
+       version="4.0.9"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
@@ -23,7 +23,7 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=263652</forum>
     <website>https://www3.nhk.or.jp/</website>
     <source>https://github.com/learningit/repo-plugins</source>
-    <news>Version 4.0.5 Update for Matrix version new API fixes
+    <news>Version 4.0.9 Update for new API fixes
     </news>
     <assets>
         <icon>resources/icon.png</icon>

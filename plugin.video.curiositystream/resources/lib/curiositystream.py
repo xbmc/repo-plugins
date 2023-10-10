@@ -491,7 +491,7 @@ class CuriosityStream(object):
             "streams": [
                 encoding
                 for encoding in data["data"]["encodings"]
-                if encoding["type"].lower() == "hd"
+                if encoding["type"].lower() == "hd" or encoding["type"].lower() == "4k"
             ],
             "subtitles": data["data"]["closed_captions"]
             if "closed_captions" in data["data"]

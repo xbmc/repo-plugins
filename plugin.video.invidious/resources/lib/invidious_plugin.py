@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import json
+import os
 import requests
 import sys
 from urllib.parse import urlencode
@@ -25,6 +26,11 @@ class SearchHistory():
     def __init__(self, history_path, depth=10):
         self.history_path = history_path
         self.depth = depth
+
+        d = os.path.dirname(history_path)
+        if not os.path.exists(d):
+            xbmc.log(f'invidous created state directory {d}.', xbmc.LOGDEBUG)
+            os.mkdir(d)
 
 
     def push(self, query):
@@ -235,7 +241,12 @@ class InvidiousPlugin:
                 "premiered": datestr,
                 "duration": str(video_info["lengthSeconds"])
         })
-        xbmcplugin.setResolvedUrl(self.addon_handle, succeeded=True, listitem=listitem)
+        # basilgello: calling 'RunPlugin' via kodi-send results in CScriptRunner::ExecuteScript
+        # which in turn sets add9n_handle to -1 breaking the playback 
+        if self.addon_handle > -1:
+            xbmcplugin.setResolvedUrl(self.addon_handle, succeeded=True, listitem=listitem)
+        else:
+            xbmc.Player().play(url, listitem)
 
     def display_main_menu(self):
         def add_list_item(label, path):

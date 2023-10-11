@@ -201,7 +201,7 @@ class Account:
             headers += key + '=' + value + '; '
 
         #CDN
-        akc_url = 'hlslive-aksc'
+        akc_url = 'hlslive-akc'
         l3c_url = 'hlslive-l3c'
         if CDN == 'Akamai' and akc_url not in stream_url:
             stream_url = stream_url.replace(l3c_url, akc_url)

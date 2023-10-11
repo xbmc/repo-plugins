@@ -25,7 +25,7 @@
     <setting id="hide_scores_ticker" type="bool" label="30436" default="false" />
     <setting id="disable_video_padding" type="bool" label="30416" default="false" />
     <setting id="disable_closed_captions" type="bool" label="30437" default="false" />
-    <setting id="fav_team" type="labelenum" label="30180" default="None" values="None|Washington Nationals|Toronto Blue Jays|Texas Rangers|Tampa Bay Rays|St. Louis Cardinals|Seattle Mariners|San Francisco Giants|San Diego Padres|Pittsburgh Pirates|Philadelphia Phillies|Oakland Athletics|New York Yankees|New York Mets|Minnesota Twins|Milwaukee Brewers|Miami Marlins|Los Angeles Dodgers|Los Angeles Angels|Kansas City Royals|Houston Astros|Detroit Tigers|Colorado Rockies|Cleveland Guardians|Cincinnati Reds|Chicago White Sox|Chicago Cubs|Boston Red Sox|Baltimore Orioles|Atlanta Braves|Arizona Diamondbacks" />
+    <setting id="fav_team" type="select" multiselect="true" label="30180" default="None" values="None|Washington Nationals|Toronto Blue Jays|Texas Rangers|Tampa Bay Rays|St. Louis Cardinals|Seattle Mariners|San Francisco Giants|San Diego Padres|Pittsburgh Pirates|Philadelphia Phillies|Oakland Athletics|New York Yankees|New York Mets|Minnesota Twins|Milwaukee Brewers|Miami Marlins|Los Angeles Dodgers|Los Angeles Angels|Kansas City Royals|Houston Astros|Detroit Tigers|Colorado Rockies|Cleveland Guardians|Cincinnati Reds|Chicago White Sox|Chicago Cubs|Boston Red Sox|Baltimore Orioles|Atlanta Braves|Arizona Diamondbacks" />
     <setting id="include_fav_affiliates" type="bool" label="30427" default="true" />
 
     <setting id="team_names" type="select" label="30190" lvalues="30191|30192" default="0" />
@@ -33,12 +33,12 @@
     <setting id="auto_select_stream" type="bool" label="30307" default="false" />
     <setting id="catch_up" type="bool" label="30304" default="true" />
     <setting id="ask_to_skip" type="bool" label="30306" default="true" />
-    <setting id="skip_adjust_start" type="labelenum" label="30424" default="0" values="-10|-9|-8|-7|-6|-5|-4|-3|-2|-1|0|1|2|3|4|5|6|7|8|9|10" />
-    <setting id="skip_adjust_end" type="labelenum" label="30425" default="0" values="-10|-9|-8|-7|-6|-5|-4|-3|-2|-1|0|1|2|3|4|5|6|7|8|9|10" />
-    <setting id="milb_skip_adjust" type="labelenum" label="30435" default="-5" values="Always Ask|-15|-10|-5|0|5|10|15" />
+    <setting id="skip_adjust_start" type="slider" label="30424" default="0" range="-10,1,10" />
+    <setting id="skip_adjust_end" type="slider" label="30425" default="0" range="-10,1,10" />
+    <setting id="milb_skip_adjust" type="slider" label="30435" default="-5" values="Always Ask|-15|-10|-5|0|5|10|15" />
     <setting id="auto_play_fav" type="bool" label="30412" default="false" />
     <setting id="only_free_games" type="bool" label="30305" default="false" />
-    <setting id="game_changer_delay" type="labelenum" label="30420" default="0" values="0|10|20" />
+    <setting id="game_changer_delay" type="slider" label="30420" default="0" range="0,5,20" />
 
     <setting id="old_username" type="text" label="" default="" visible="false"/>
     <setting id="old_password" type="text" label="" default="" visible="false"/>

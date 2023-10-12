@@ -9,8 +9,8 @@
     See LICENSES/GPL-2.0-or-later.txt for more information.
 """
 
-from kodi_six.xbmc import Player  # pylint: disable=import-error
-from kodi_six.xbmcgui import WindowXMLDialog  # pylint: disable=import-error
+from xbmc import Player  # pylint: disable=import-error
+from xbmcgui import WindowXMLDialog  # pylint: disable=import-error
 
 from ..logger import Logger
 

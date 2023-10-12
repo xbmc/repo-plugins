@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.composite_for_plex" name="Composite" version="2.0.1" provider-name="anxdpanic">
+<addon id="plugin.video.composite_for_plex" name="Composite" version="2.0.2" provider-name="anxdpanic">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
         <import addon="script.module.requests" version="2.12.4"/>
@@ -41,8 +41,7 @@
             <fanart>resources/media/fanart.png</fanart>
         </assets>
         <news>
-[fix] encoding error in logging
-[upd] linting
+[fix] leftover kodi-six imports
 [lang] update translations from Weblate
         </news>
         <platform>all</platform>
@@ -55,7 +54,7 @@
         <description lang="es_ES">Explorar y reproducir archivos multimedia de vídeo, música y fotos gestionados por Plex Media Server.[CR][CR]Bifurcación de PleXBMC por Hippojay</description>
         <description lang="es_MX">Explora y reproduce multimedia tal como video, música y e imágenes administrados por Plex Media Server.[CR][CR]Fork de PleXBMC por Hippojay</description>
         <description lang="fi_FI">Selaa ja toista video-, musiikki- ja kuvamediatiedostoja, joita Plex Media Server hallinnoi.[CR][CR]kehittäjän Hippojay PleXBMC-kehityshaara</description>
-        <description lang="it_IT">Sfoglia e riproduci file multimediali di video, musica e foto gestiti da Plex Media Server.[CR][CR]Fork di PleXBMC di Hippojay</description>
+        <description lang="it_IT">Sfoglia e riproduci video, musica e foto gestiti da Plex Media Server.[CR][CR]Fork di PleXBMC di Hippojay</description>
         <description lang="pl_PL">Przeglądaj i odtwarzaj pliki multimedialne zarządzane przez Plex Media Server.[CR] [CR] Jest to fork PleXBMC stworzonego przez Hippojay&apos;a</description>
         <description lang="vi_VN">Duyệt và phát các tập tin đa phương tiện video, nhạc và ảnh do Plex Media Server quản lý.[CR][CR]Fork of PleXBMC by Hippojay</description>
         <disclaimer lang="de_DE">Composite ist KEIN offizielles Plex-Addon und wird von Plex weder unterstützt noch gebilligt.</disclaimer>
@@ -63,7 +62,7 @@
         <disclaimer lang="es_ES">Composite NO es un add-on oficial de Plex y no está apoyado ni respaldado por Plex.</disclaimer>
         <disclaimer lang="es_MX">Composite NO es un complemento oficial de Plex y no tiene soporte o respaldo por parte de Plex.</disclaimer>
         <disclaimer lang="fi_FI">Composite ei ole virallinen Plex-lisäosa, eikä Plex tue tai suosittele sen käyttöä.</disclaimer>
-        <disclaimer lang="it_IT">Composite NON è un componente aggiuntivo Plex ufficiale e non è supportato o approvato da Plex.</disclaimer>
+        <disclaimer lang="it_IT">Composite NON è un add-on ufficiale di Plex e non è supportato o approvato da Plex.</disclaimer>
         <disclaimer lang="pl_PL">Composite NIE jest oficjalnym dodatkiem do programu Plex, nie jest wspierany ani zatwierdzany przez firmę Plex.</disclaimer>
         <disclaimer lang="vi_VN">Composite KHÔNG phải là một tiện ích chính thức của Plex và không được Plex hỗ trợ hoặc xác nhận.</disclaimer>
     </extension>

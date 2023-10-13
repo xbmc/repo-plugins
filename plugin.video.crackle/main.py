@@ -41,5 +41,12 @@ elif mode == 103:
     if stream_type == "movies": media_id = get_movie_id(media_id)
     get_stream(media_id)
 
+elif mode == 104:
+    dialog = xbmcgui.Dialog()
+    search_phrase = dialog.input('Search Text', type=xbmcgui.INPUT_ALPHANUM)
+    if search_phrase != "":
+        search(search_phrase)
+        xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=True)
 
-xbmcplugin.endOfDirectory(addon_handle)
+if mode != 104:
+    xbmcplugin.endOfDirectory(addon_handle)

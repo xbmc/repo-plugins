@@ -95,9 +95,9 @@ class Main(object):
             # log("html_source", html_source)
 
             # A bit of a dirty hack, but let's try it anyway...
-            # so.addVariable("file","http://hw-videos.worldstarhiphop.com/u/vid/2015/09/SAWGSqGpaohk.mp4");
+            # so.addVariable("file","https://hw-videos.worldstarhiphop.com/u/vid/2015/09/SAWGSqGpaohk.mp4");
             # or
-            # <source src="http://hw-videos.worldstarhiphop.com/u/vid/2017/04/Gtlg3yKHNNqP.mp4" type="video/mp4">
+            # <source src="https://hw-videos.worldstarhiphop.com/u/vid/2017/04/Gtlg3yKHNNqP.mp4" type="video/mp4">
             pos_vid_url = str(html_source).find("hw-videos.worldstarhiphop.com/")
             if pos_vid_url >= 0:
                 pos_start_quote = str(html_source).rfind('"', 0, pos_vid_url)

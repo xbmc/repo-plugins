@@ -16,7 +16,7 @@ import xbmcgui
 import xbmcplugin
 import requests
 
-from resources.lib.worldstarhiphop_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, HEADERS, BASEURL, convertToUnicodeString, log, getSoup
+from resources.lib.worldstarhiphop_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, HEADERS, BASEURLWS, BASEURLWSHH, convertToUnicodeString, log, getSoup
 
 
 
@@ -42,12 +42,14 @@ class Main(object):
         # Parse parameters...
         if len(sys.argv[2]) == 0:
             self.plugin_category = LANGUAGE(30000)
-            self.video_list_page_url = BASEURL + "/videos/?start=001"
+            self.video_list_page_url = BASEURLWS + "/videos/?start=001"
             self.next_page_possible = "True"
         else:
             self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
             self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
             self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+
+        # log("self.video_list_page_url", self.video_list_page_url)
 
         if self.next_page_possible == 'True':
             # Determine current item number, next item number, next_url
@@ -64,6 +66,7 @@ class Main(object):
                 else:
                     page_number_next_str = '00' + str(page_number_next)
                 self.next_url = str(self.video_list_page_url).replace(page_number_str, page_number_next_str)
+                self.next_url = str(self.next_url).replace(BASEURLWS, BASEURLWSHH)
 
                 log("self.next_url", self.next_url)
 

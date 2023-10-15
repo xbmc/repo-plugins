@@ -17,7 +17,7 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
-from resources.lib.worldstarhiphop_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION, BASEURL, HEADERS, convertToUnicodeString, log, getSoup
+from resources.lib.worldstarhiphop_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION, HEADERS, BASEURLWSHH, convertToUnicodeString, log, getSoup
 #
 # Main class
 #
@@ -49,7 +49,7 @@ class Main(object):
             keyboard.doModal()
             if keyboard.isConfirmed():
                 self.search_string = keyboard.getText()
-                self.video_list_page_url = "http://www.worldstarhiphop.com/videos/search.php?s=%s&start=001" % (
+                self.video_list_page_url = BASEURLWSHH + "/videos/search.php?s=%s&start=001" % (
                 self.search_string)
 
         if self.next_page_possible == 'True':
@@ -112,7 +112,6 @@ class Main(object):
 
         for item in items:
             try:
-                # video_page_url = BASEURL + str(item['href'])
                 video_page_url = str(item['href'])
             except:
                 # skip the item if it does not have a href

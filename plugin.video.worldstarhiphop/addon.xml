@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.worldstarhiphop" 
 	name="World Star Hip Hop" 
-	version="1.0.14+matrix.1"
+	version="1.0.15+matrix.1"
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="3.0.0"/>
@@ -30,7 +30,7 @@
       <icon>resources/icon.png</icon>
       <fanart>resources/fanart.jpg</fanart>
     </assets>
-    <news>v1.0.14 (2022-04-21)
+    <news>v1.0.15 (2023-10-11) (Kudos to jdig4240)
     - changes due to website changes
     </news>
   </extension>

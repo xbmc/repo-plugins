@@ -57,7 +57,7 @@ def sort_title(title: str):
     The returned sort title is lowercase and stripped of a possible leading 'The'
     """
     l_title = title.lower()
-    return l_title[4:] if l_title. startswith('the ') else l_title
+    return l_title[4:] if l_title.startswith('the ') else l_title
 
 
 def scrape_json(html_page):
@@ -76,6 +76,7 @@ def scrape_json(html_page):
     raise ParseError('No data available')
 
 
+# noinspection PyTypedDict
 def parse_hero_content(hero_data):
     # noinspection PyBroadException
     try:
@@ -86,10 +87,9 @@ def parse_hero_content(hero_data):
             'art': {'thumb': hero_data['imageTemplate'].format(**IMG_PROPS_THUMB),
                     'fanart': hero_data['imageTemplate'].format(**IMG_PROPS_FANART)},
             'info': {'title': ''.join(('[B][COLOR orange]', title, '[/COLOR][/B]'))}
-
         }
-        brand_img = item.get('brandImageTemplate')
 
+        brand_img = hero_data.get('brandImageTemplate')
         if brand_img:
             item['art']['fanart'] = brand_img.format(**IMG_PROPS_FANART)
 
@@ -121,36 +121,73 @@ def parse_hero_content(hero_data):
             return None
         return {'type': item_type, 'show': item}
     except:
-        logger.warning("Failed to parse hero item '%s':\n", hero_data.get('title','unknown title'), exc_info=True)
+        logger.warning("Failed to parse hero item '%s':\n", hero_data.get('title', 'unknown title'), exc_info=True)
+
+
+def parse_short_form_slider(slider_data, url=None):
+    """Parse a shortFormSlider from the main page or a collection page.
+
+    Returns the link to the collection page associated with the shortFormSlider.
+
+    """
+    # noinspection PyBroadException
+    try:
+        header = slider_data['header']
+        link = header.get('linkHref')
+        title = header.get('title') or header.get('iconTitle', '')
+        if url:
+            # A shortFormSlider from a collection page.
+            params = {'url': url, 'slider': 'shortFormSlider'}
+        elif link:
+            # A shortFormSlider from the main page
+            params = {'url': 'https://www.itv.com' + link}
+        else:
+            return
+
+        return {'type': 'collection',
+                'show': {'label': title,
+                         'params': params,
+                         'info': {'sorttitle': sort_title(title)}
+                         }
+                }
+    except:
+        logger.error("Unexpected error parsing shorFormSlider.", exc_info=True)
+        return None
 
 
 def parse_slider(slider_name, slider_data):
-    coll_data = slider_data['collection']
-    page_link = coll_data.get('headingLink')
-    base_url = 'https://www.itv.com/watch'
-    if page_link:
-        # Link to the collection's page if available
-        params = {'url': base_url + page_link['href']}
-    else:
-        # Provide the slider name when the collection content is to be obtained from the main page.
-        params = {'slider': slider_name}
+    """Parse editorialSliders from the main page or from a collection."""
+    # noinspection PyBroadException
+    try:
+        coll_data = slider_data['collection']
+        page_link = coll_data.get('headingLink')
+        base_url = 'https://www.itv.com/watch'
+        if page_link:
+            # Link to the collection's page if available
+            params = {'url': base_url + page_link['href']}
+        else:
+            # Provide the slider name when the collection content is to be obtained from the main page.
+            params = {'slider': slider_name}
 
-    return {'type': 'collection',
-            'playable': False,
-            'show': {'label': coll_data['headingTitle'],
-                     'params': params,
-                     'info': {'sorttitle': sort_title(coll_data['headingTitle'])}}}
+        return {'type': 'collection',
+                'show': {'label': coll_data['headingTitle'],
+                         'params': params,
+                         'info': {'sorttitle': sort_title(coll_data['headingTitle'])}}}
+    except:
+        logger.error("Unexpected error parsing editorialSlider %s", slider_name, exc_info=True)
+        return None
 
 
 def parse_collection_item(show_data, hide_paid=False):
     """Parse a show item from a collection page
 
-    Very much like category content, but not quite.
+    Very much like category content, but not just quite.
+
     """
     # noinspection PyBroadException
     try:
         content_type = show_data.get('contentType') or show_data['type']
-        is_playable = content_type in ('episode', 'film', 'special', 'title')
+        is_playable = content_type in ('episode', 'film', 'special', 'title', 'fastchannelspot', 'simulcastspot')
         title = show_data['title']
         content_info = show_data.get('contentInfo', '')
 
@@ -171,47 +208,60 @@ def parse_collection_item(show_data, hide_paid=False):
             'info': {'title': title if is_playable else '[B]{}[/B] {}'.format(title, content_info),
                      'plot': plot,
                      'sorttitle': sort_title(title)},
-            'params': {'url': build_url(show_data['titleSlug'],
-                                        show_data['encodedProgrammeId']['letterA'],
-                                        show_data.get('encodedEpisodeId', {}).get('letterA'))}
         }
 
-        if 'FILMS' in show_data['categories']:
+        if content_type in ('fastchannelspot', 'simulcastspot'):
+            programme_item['params'] = {'channel': show_data['channel'], 'url': None}
+            # TODO: Enable watch from the start on simulcastspots
+        else:
+            programme_item['params'] = {'url': build_url(show_data['titleSlug'],
+                                        show_data['encodedProgrammeId']['letterA'],
+                                        show_data.get('encodedEpisodeId', {}).get('letterA'))}
+
+        if 'FILMS' in show_data.get('categories', ''):
             programme_item['art']['poster'] = show_data['imageTemplate'].format(**IMG_PROPS_POSTER)
 
         if is_playable:
             programme_item['info']['duration'] = utils.duration_2_seconds(content_info)
-        return {'playable': is_playable,
+        return {'type': content_type,
                 'show': programme_item}
-    except Exception:
-        logger.warning("Failed to parse collection_item:\n%s", json.dumps(show_data, indent=4))
+    except Exception as err:
+        logger.warning("Failed to parse collection_item: %r\n%s", err, json.dumps(show_data, indent=4))
         return None
 
+
 # noinspection GrazieInspection
-def parse_news_collection_item(news_item, time_zone, time_fmt, hide_paid=False):
+def parse_shortform_item(item_data, time_zone, time_fmt, hide_paid=False):
+    """Parse an item from a shortFormSlider.
+
+    ShortFormSliders are found on the main page, some collection pages.
+    Items from heroAndLatest and curatedRails in category news also have a shortForm-like content.
+
+    """
     """Parse data found in news collection and in short news clips from news sub-categories
 
     """
     try:
-        if 'encodedProgrammeId' in news_item.keys():
+        if 'encodedProgrammeId' in item_data.keys():
             # The news item is a 'normal' catchup title. Is usually just the latest ITV news.
             # Do not use field 'href' as it is known to have non-a-encoded program and episode Id's which doesn't work.
             url = '/'.join(('https://www.itv.com/watch',
-                            news_item['titleSlug'],
-                            news_item['encodedProgrammeId']['letterA'],
-                            news_item.get('encodedEpisodeId', {}).get('letterA', ''))).rstrip('/')
+                            item_data['titleSlug'],
+                            item_data['encodedProgrammeId']['letterA'],
+                            item_data.get('encodedEpisodeId', {}).get('letterA', ''))).rstrip('/')
         else:
-            # This news item is a 'short item', aka 'news clip'.
-            url = '/'.join(('https://www.itv.com/watch/news', news_item['titleSlug'], news_item['episodeId']))
+            # This item is a 'short item', aka 'news clip'.
+            href = item_data.get('href', '/watch/news/undefined')
+            url = ''.join(('https://www.itv.com', href, '/', item_data['episodeId']))
 
         # dateTime field occasionally has milliseconds. Strip these when present.
-        item_time = pytz.UTC.localize(utils.strptime(news_item['dateTime'][:19], '%Y-%m-%dT%H:%M:%S'))
+        item_time = pytz.UTC.localize(utils.strptime(item_data['dateTime'][:19], '%Y-%m-%dT%H:%M:%S'))
         loc_time = item_time.astimezone(time_zone)
-        title = news_item.get('episodeTitle')
-        plot = '\n'.join((loc_time.strftime(time_fmt), news_item.get('synopsis', title)))
+        title = item_data.get('episodeTitle')
+        plot = '\n'.join((loc_time.strftime(time_fmt), item_data.get('synopsis', title)))
 
         # Does paid news exists?
-        if news_item.get('isPaid'):
+        if item_data.get('isPaid'):
             if hide_paid:
                 return None
             plot = premium_plot(plot)
@@ -219,16 +269,16 @@ def parse_news_collection_item(news_item, time_zone, time_fmt, hide_paid=False):
         # TODO: consider adding poster image, but it is not always present.
         #       Add date.
         return {
-            'playable': True,
+            'type': 'title',
             'show': {
                 'label': title,
-                'art': {'thumb': news_item['imageUrl'].format(**IMG_PROPS_THUMB)},
-                'info': {'plot': plot, 'sorttitle': sort_title(title), 'duration': news_item.get('duration')},
-                'params': {'url': url }
+                'art': {'thumb': item_data['imageUrl'].format(**IMG_PROPS_THUMB)},
+                'info': {'plot': plot, 'sorttitle': sort_title(title), 'duration': item_data.get('duration')},
+                'params': {'url': url}
             }
         }
-    except Exception:
-        logger.warning("Failed to parse news_collection_item:\n%s", json.dumps(news_item, indent=4))
+    except Exception as err:
+        logger.error("Unexpected error parsing a shortForm item: %r\n%s", err, json.dumps(item_data, indent=4))
         return None
 
 
@@ -252,8 +302,8 @@ def parse_trending_collection_item(trending_item, hide_paid=False):
         # should not be necessary, but for episodes they are a requirement otherwise the page
         # will always return the first episode.
 
-        return{
-            'playable': True,
+        return {
+            'type': 'title',
             'show': {
                 'label': trending_item['title'],
                 'art': {'thumb': trending_item['imageUrl'].format(**IMG_PROPS_THUMB)},
@@ -308,7 +358,7 @@ def parse_category_item(prog, category):
         programme_item['params'] = {'url': build_url(title,
                                                      prog['encodedProgrammeId']['letterA'],
                                                      prog['encodedEpisodeId']['letterA'])}
-    return {'playable': is_playable,
+    return {'type': 'title' if is_playable else 'series',
             'show': programme_item}
 
 
@@ -332,7 +382,7 @@ def parse_item_type_collection(item_data):
                                     item_data.get('titleSlug', ''),
                                     item_data.get('collectionId')))}
     }
-    return {'type': 'collection', 'playable': False, 'show': item}
+    return {'type': 'collection', 'show': item}
 
 
 def parse_episode_title(title_data, brand_fanart=None):
@@ -443,7 +493,7 @@ def parse_search_result(search_data):
         return None
 
     return {
-        'playable': entity_type != 'programme',
+        'type': entity_type,
         'show': {
             'label': prog_name,
             'art': {'thumb': img_url.format(**IMG_PROPS_THUMB)},

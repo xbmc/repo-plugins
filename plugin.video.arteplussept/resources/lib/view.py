@@ -112,7 +112,7 @@ def build_sibling_playlist(plugin, settings, program_id):
         sibling_arte_items = api.collection_with_last_viewed(
             settings.language, user.get_cached_token(plugin, settings.username, True),
             parent_program.get('kind'), parent_program.get('programId'))
-        return mapper.map_collection_as_playlist(sibling_arte_items, program_id)
+        return mapper.map_collection_as_playlist(plugin, sibling_arte_items, program_id)
     return None
 
 

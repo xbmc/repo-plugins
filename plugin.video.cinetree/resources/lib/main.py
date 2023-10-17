@@ -6,6 +6,10 @@
 #  See LICENSE.txt
 # ------------------------------------------------------------------------------
 
+import xbmcplugin
+import sys
+
+from xbmcgui import ListItem as XbmcListItem
 
 from codequick import Route, Resolver, Listitem, Script
 from codequick import run as cc_run
@@ -167,15 +171,14 @@ def create_hls_item(url, title):
         logger.warning('No support for protocol %s', PROTOCOL)
         return False
 
-    play_item = Listitem()
-    play_item.label = title
-    play_item.set_path(url, is_playable=True)
+    play_item = XbmcListItem(title, offscreen=True)
+    if title:
+        play_item.setInfo('video', {'title': title})
 
-    play_item.listitem.setContentLookup(False)
+    play_item.setPath(url)
+    play_item.setContentLookup(False)
 
-    play_item.property['inputstream'] = 'inputstream.adaptive'
-    play_item.property['inputstream.adaptive.manifest_type'] = PROTOCOL
-    play_item.property['inputstream.adaptive.stream_headers'] = ''.join((
+    stream_headers = ''.join((
             'User-Agent=',
             constants.USER_AGENT,
             '&Referer=https://www.cinetree.nl/&'
@@ -183,31 +186,39 @@ def create_hls_item(url, title):
             'Sec-Fetch-Dest=empty&'
             'Sec-Fetch-Mode=cors&'
             'Sec-Fetch-Site=same-site'))
+
+    play_item.setProperties({
+        'IsPlayable': 'true',
+        'inputstream': 'inputstream.adaptive',
+        'inputstream.adaptive.manifest_type': PROTOCOL,
+        'inputstream.adaptive.stream_headers': stream_headers
+    })
+
     return play_item
 
 
 def play_ct_video(stream_info: dict, title: str = ''):
     """ From the info provided in *stream_info*, prepare subtitles and build
-    a playable codequick.Listitem to play a film, short film, or trailer
+    a playable xbmc.ListItem to play a film, short film, or trailer
     from Cinetree.
 
     """
     try:
-        subtitles_file = ct_api.get_subtitles(stream_info['subtitles']['nl'])
-        logger.debug("using subtitles '%s'", subtitles_file)
+        subtitles = [ct_api.get_subtitles(url, lang) for lang, url in stream_info['subtitles'].items()]
+        logger.debug("using subtitles '%s'", subtitles)
     except KeyError:
         logger.debug("No subtitels available for video '%s'", title)
-        subtitles_file = None
+        subtitles = None
     except errors.FetchError as e:
         logger.error("Failed to fetch subtitles: %r", e)
-        subtitles_file = None
+        subtitles = None
 
     play_item = create_hls_item(stream_info.get('url'), title)
     if play_item is False:
         return False
 
-    if subtitles_file:
-        play_item.subtitles = (subtitles_file, )
+    if subtitles:
+        play_item.setSubtitles(subtitles)
 
     resume_time = stream_info.get('playtime')
     if resume_time and int(resume_time):
@@ -217,9 +228,11 @@ def play_ct_video(stream_info: dict, title: str = ''):
             logger.debug("User canceled resume play dialog")
             return False
         elif result == 0:
-            play_item.info['playcount'] = 1
-            play_item.property['ResumeTime'] = str(resume_time)
-            play_item.property['TotalTime'] = '4800'
+            play_item.setInfo('video', {'playcount': 1})
+            play_item.setProperties({
+                'ResumeTime': str(resume_time),
+                'TotalTime': '7200'
+            })
             logger.debug("Play from %s", resume_time)
         else:
             logger.debug("Play from start")
@@ -283,4 +296,5 @@ def play_trailer(plugin, url):
 
 
 def run():
-    cc_run()
+    if isinstance(cc_run(), Exception):
+        xbmcplugin.endOfDirectory(int(sys.argv[1]), False)

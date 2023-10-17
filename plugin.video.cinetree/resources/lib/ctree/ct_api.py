@@ -107,7 +107,7 @@ def get_stream_info(url):
     return data
 
 
-def get_subtitles(url: str) -> str:
+def get_subtitles(url: str, lang: str) -> str:
     """Download vtt subtitles file, convert it to srt and save it locally.
     Return the full path to the local file.
 
@@ -120,7 +120,7 @@ def get_subtitles(url: str) -> str:
     #     f.write(vtt_titles)
     srt_titles = utils.vtt_to_srt(vtt_titles)
     logger.debug("VTT subtitles of length %s converted to SRT of length=%s.", len(vtt_titles), len(srt_titles))
-    subt_file = utils.get_subtitles_temp_file()
+    subt_file = utils.get_subtitles_temp_file(lang)
     with open(subt_file, 'w', encoding='utf8') as f:
         f.write(srt_titles)
     return subt_file

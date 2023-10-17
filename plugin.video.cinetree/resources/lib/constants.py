@@ -8,6 +8,6 @@
 
 
 PLUGIN_ID = 'plugin.video.cinetree'
-WEB_TIMEOUT = 4
-USER_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:101.0) Gecko/20100101 Firefox/101.0'
+WEB_TIMEOUT = (4, 8)
+USER_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/118.0'
 

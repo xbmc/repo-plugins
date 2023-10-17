@@ -53,10 +53,10 @@ def get_os():
     return os_type
 
 
-def get_subtitles_temp_file():
+def get_subtitles_temp_file(language='nl'):
     tmp_dir = os.path.join(addon_info['profile'], 'subtitles')
     os.makedirs(tmp_dir, exist_ok=True)
-    return os.path.join(tmp_dir, 'subtitles.srt')
+    return os.path.join(tmp_dir, 'subtitles.{}.srt'.format(language))
 
 
 def random_string(length):

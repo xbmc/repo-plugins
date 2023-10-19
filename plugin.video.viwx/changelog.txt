@@ -1,3 +1,6 @@
+v 1.1.1
+- fix: playing VOD on kodi Omega failed with error.
+
 v 1.1.0
 - Updated user-agent string to Firefox 118.
 - Added support for Live TV items in collections. Fixes: collection 'ITVX Live Channels' is empty.

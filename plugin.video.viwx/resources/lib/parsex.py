@@ -408,7 +408,7 @@ def parse_episode_title(title_data, brand_fanart=None):
                 },
         'info': {'title': info_title,
                  'plot': plot,
-                 'duration': int(utils.iso_duration_2_seconds(title_data['notFormattedDuration'])),
+                 'duration': utils.iso_duration_2_seconds(title_data['notFormattedDuration']),
                  'date': title_data['dateTime'],
                  'episode': episode_nr,
                  'season': title_data.get('series'),

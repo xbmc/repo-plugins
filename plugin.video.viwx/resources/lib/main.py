@@ -425,7 +425,8 @@ def create_dash_stream_item(name: str, manifest_url, key_service_url, resume_tim
         # Ensure to clear the Content-Type header to force curl to make the right request.
         'inputstream.adaptive.license_key': ''.join(
                 (key_service_url, '|Content-Type=application/octet-stream|R{SSM}|')),
-        'inputstream.adaptive.stream_headers': stream_headers
+        'inputstream.adaptive.stream_headers': stream_headers,
+        'inputstream.adaptive.manifest_headers': stream_headers
     })
 
     if resume_time:

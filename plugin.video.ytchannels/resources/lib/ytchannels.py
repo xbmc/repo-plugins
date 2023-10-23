@@ -50,7 +50,7 @@ def ytchannels_main():
 
 		YOUTUBE_API_KEY = my_addon.getSetting('youtube_api_key')
 
-	from .functions import build_url, delete_database, get_folders, add_folder, remove_folder, get_channels, get_channel_id_from_uploads_id, add_channel, remove_channel, search_channel, search_channel_by_username, get_latest_from_channel, get_playlists, add_sort_db, init_sort, move_up, move_down, check_sort_db, change_folder, set_folder_thumbnail, get_folder_thumbnail, check_thumb_db, add_thumb_db, get_livestreams
+	from .functions import build_url, delete_database, get_folders, add_folder, remove_folder, get_channels, get_channel_id_from_uploads_id, add_channel, remove_channel, search_channel, search_channel_by_username, get_latest_from_channel, get_playlists, add_sort_db, init_sort, move_up, move_down, check_sort_db, change_folder, set_folder_thumbnail, get_folder_thumbnail, check_thumb_db, add_thumb_db, get_livestreams, sort_folder_alphabetically, fix_duplicate_sorts
 
 	SORT_INIT = check_sort_db()
 	THUMB_INIT = check_thumb_db()
@@ -98,12 +98,16 @@ def ytchannels_main():
 			addch_uri = build_url({'mode': 'add_channel', 'foldername': 'Other'})
 			move_down_uri = build_url({'mode': 'move_down', 'id': '%s'%channels[i][4]})
 			move_up_uri = build_url({'mode': 'move_up', 'id': '%s'%channels[i][4]})
+
+			sort_this_uri = build_url({'mode': 'sort_this', 'curfolder': 'Other'})
+
 			items = []
 			items.append((local_string(30028 if channels[i][1].startswith('PL', 0, 2) else 30003), 'RunPlugin(%s)'%rem_uri))
 			items.append((local_string(30025), 'RunPlugin(%s)'%move_uri))
 			items.append((local_string(30001), 'RunPlugin(%s)'%add_uri))
 			items.append((local_string(30002), 'RunPlugin(%s)'%addch_uri))
 			if len(channels) > 1:
+				items.append((local_string(30032), 'RunPlugin(%s)'%sort_this_uri))
 				if channels[i][3] == 1:
 					items.append((local_string(30024), 'RunPlugin(%s)'%move_down_uri))
 				elif channels[i][3] == len(channels):
@@ -111,13 +115,11 @@ def ytchannels_main():
 				else:
 					items.append((local_string(30023), 'RunPlugin(%s)'%move_up_uri))
 					items.append((local_string(30024), 'RunPlugin(%s)'%move_down_uri))
-
 			li.addContextMenuItems(items)
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
 								listitem=li,isFolder=True)
 
 		if show_adds !='false':
-
 			url = build_url({'mode': 'add_folder', 'foldername': 'Add folder'})
 			li = xbmcgui.ListItem('[COLOR green]%s[/COLOR]'%local_string(30001))
 			li.setArt({'icon':plus_img})
@@ -125,9 +127,8 @@ def ytchannels_main():
 			addch_uri = build_url({'mode': 'add_channel', 'foldername': 'Other'})
 			li.addContextMenuItems([(local_string(30001), 'RunPlugin(%s)'%add_uri),
 									(local_string(30002), 'RunPlugin(%s)'%addch_uri)])
-
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-									listitem=li,isFolder=True)
+									listitem=li,isFolder=False)
 
 			url = build_url({'mode': 'add_channel', 'foldername': 'Other'})
 			li = xbmcgui.ListItem('[COLOR green]%s[/COLOR] [COLOR blue]%s[/COLOR]'%(local_string(30009),local_string(30010)))
@@ -138,7 +139,7 @@ def ytchannels_main():
 									(local_string(30002), 'RunPlugin(%s)'%addch_uri)])
 
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-									listitem=li,isFolder=True)
+									listitem=li,isFolder=False)
 
 		xbmcplugin.endOfDirectory(addon_handle)
 
@@ -156,6 +157,11 @@ def ytchannels_main():
 		move_down(id[0])
 		xbmc.executebuiltin("Container.Refresh")
 
+	elif mode[0] == "sort_this":
+		foldername = args.get("curfolder", None)
+		sort_folder_alphabetically(foldername[0])
+		xbmc.executebuiltin("Container.Refresh")
+
 	elif mode[0]=='add_folder':
 		keyboard = xbmc.Keyboard('', '%s:'%local_string(30011), False)
 		keyboard.doModal()
@@ -164,6 +170,7 @@ def ytchannels_main():
 			folder_name = keyboard.getText()
 
 			add_folder(folder_name)
+
 		xbmc.executebuiltin("Container.Refresh")
 
 	elif mode[0]=='open_folder':
@@ -182,10 +189,13 @@ def ytchannels_main():
 			move_uri = build_url({'mode': 'change_folder', 'channel_id': '%s'%str(channels[i][1]), 'curfolder': '%s'%str(foldername)})
 			move_down_uri = build_url({'mode': 'move_down', 'id': '%s'%channels[i][4]})
 			move_up_uri = build_url({'mode': 'move_up', 'id': '%s'%channels[i][4]})
+			sort_this_uri = build_url({'mode': 'sort_this', 'curfolder': '%s'%str(foldername)})
+
 			items = []
 			items.append((local_string(30028 if channels[i][1].startswith('PL', 0, 2) else 30003), 'RunPlugin(%s)'%rem_uri))
 			items.append((local_string(30025), 'RunPlugin(%s)'%move_uri))
 			if len(channels) > 1:
+				items.append((local_string(30032), 'RunPlugin(%s)'%sort_this_uri))
 				if channels[i][3] == 1:
 					items.append((local_string(30024), 'RunPlugin(%s)'%move_down_uri))
 				elif channels[i][3] == len(channels):
@@ -220,7 +230,6 @@ def ytchannels_main():
 			playlista = True
 
 		if not playlista and enable_playlists=='true':
-
 			url = build_url({'mode': 'open_playlists', 'id':'%s'%id, 'page':'1'})
 			li = xbmcgui.ListItem('[COLOR yellow]%s[/COLOR]'%local_string(30004))
 			li.setArt({'icon':playlist_img})

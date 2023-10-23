@@ -1,6 +1,11 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.5.0 [23-Oct-2023]
+-Fixed non-refresh of the list when adding channels or folders (#32)
+-Added the ability to sort a folder A-Z
+-Fixed the sort index being inconsistent, the sort number should now always be unique in a given folder
+
 v0.4.6 [12-Sept-2023]
 -Fixed bug where playlists that didn't have a thumbnail would blow up the addon
 

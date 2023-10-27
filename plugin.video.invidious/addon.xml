@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.invidious"
   name="Invidious"
-  version="0.2.6+nexus.0"
+  version="0.2.7+nexus.0"
   provider-name="petterreinholdtsen">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>

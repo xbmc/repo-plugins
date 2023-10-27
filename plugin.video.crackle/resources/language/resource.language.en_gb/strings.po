@@ -19,3 +19,15 @@ msgstr ""
 msgctxt "#30000"
 msgid "Crackle"
 msgstr ""
+
+msgctxt "#30001"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30002"
+msgid "TV Shows"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Search"
+msgstr ""

@@ -13,7 +13,8 @@ from bs4 import BeautifulSoup
 ADDON = "plugin.video.worldstarhiphop"
 SETTINGS = xbmcaddon.Addon()
 LANGUAGE = SETTINGS.getLocalizedString
-BASEURL = "http://www.worldstarhiphop.com"
+BASEURLWSHH = "https://worldstarhiphop.com"
+BASEURLWS = "https://worldstar.com"
 IMAGES_PATH = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources')
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 DATE = "2022-04-21"

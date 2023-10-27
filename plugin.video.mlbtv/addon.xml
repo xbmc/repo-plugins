@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2023.7.17+matrix.1" provider-name="eracknaphobia">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2023.10.11+matrix.1" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -22,13 +22,7 @@
         </description>
         <disclaimer lang="en_GB">Requires an MLB.tv account</disclaimer>
         <news>
-            - option to hide scores ticker with black overlay
-            - option to disable closed captions for games
-            - fix gamechanger start/end time display
-            - shorter estimated game lengths
-            - improved recap detection
-            - tweaked fox/national/all-star blackout detection
-            - removed potential for double-proxied stream
+            - improve settings type
         </news>
         <language>en</language>
         <platform>all</platform>

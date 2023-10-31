@@ -189,7 +189,7 @@ msgid "Resume from"
 msgstr ""
 
 msgctxt "#30620"
-msgid "Play from the start"
+msgid "Watch from the start"
 msgstr ""
 
 msgctxt "#30621"

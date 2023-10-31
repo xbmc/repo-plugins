@@ -18,7 +18,7 @@ from xbmcgui import ListItem
 from codequick import Route, Resolver, Listitem, Script, run as cc_run
 from codequick.support import logger_id, build_path, dispatcher
 
-from resources.lib import itv, itv_account, itvx
+from resources.lib import itv, itvx
 from resources.lib import utils
 from resources.lib import parsex
 from resources.lib import fetch
@@ -64,18 +64,19 @@ def dynamic_listing(func=None):
         # Codequick will always pass a Router object as 1st positional argument and all other parameters
         # as keyword arguments, but others, like tests, may use position arguments.
         if not kwargs and len(args) < 2:
-            logger.info("Function called without kwargs; return False")
+            logger.debug("Function called without kwargs; return False ")
             # Just return false, which results in Kodi returning to the main menu.
             return False
         else:
             args[0].register_delayed(cache.clean)
+            logger.debug("wrapper diverts route to: %s", func.__name__)
             result = func(*args, **kwargs)
             if isinstance(result, typing.Generator):
                 result = list(result)
             if result:
                 return result
             else:
-                # Anything evaluating to False is 'no items found'.
+                # Anything that evaluates to False is 'no items found'.
                 return empty_folder()
     if func is None:
         return wrapper()
@@ -98,10 +99,12 @@ class Paginator:
         try:
             list_len = len(items_list)
         except TypeError:
+            logger.warning("Items list is not a list: '%s'", items_list)
             if items_list in (None, False):
+                # None and False are valid values for 'no items'.
                 return False
-            logger.error("Paginator does not support items_list of type '%s'", type(items_list))
-            raise ParseError("Paginator items of type '{}'".format(type(items_list)))
+            else:
+                raise ParseError
         if not self._filter and az_len and list_len >= az_len:
             logger.debug("List size %s exceeds maximum of %s items; creating A-Z subdivision", list_len, az_len)
             return True
@@ -143,12 +146,11 @@ class Paginator:
             next_page_nr = 0
 
         for show in shows_list:
-            if show.get('type') == 'collection':
-                yield Listitem.from_dict(list_collection_content, **show['show'])
-            elif show['playable']:
-                yield Listitem.from_dict(play_title, **show['show'])
-            else:
-                yield Listitem.from_dict(list_productions, **show['show'])
+            try:
+                yield Listitem.from_dict(callb_map[show['type']], **show['show'])
+            except KeyError:
+                logger.warning("Cannot list '%s': unknown item type '%s'",
+                               show['show'].get('info', {}).get('sorttitle', ''), show['type'])
 
         if next_page_nr:
             li = Listitem.next_page(filter_char=self._filter, page_nr=next_page_nr, **self._kwargs)
@@ -165,13 +167,6 @@ class Paginator:
 @Route.register(content_type='videos')
 def root(_):
     yield Listitem.from_dict(sub_menu_live, 'Live', params={'_cache_to_disc_': False})
-    callb_map = {
-        'collection': list_collection_content,
-        'series': list_productions,
-        'brand': list_productions,
-        'simulcastspot': play_stream_live,
-        'fastchannelspot': play_stream_live
-    }
     for item in itvx.main_page_items():
         callback = callb_map.get(item['type'], play_title)
         yield Listitem.from_dict(callback, **item['show'])
@@ -242,25 +237,38 @@ def sub_menu_live(_):
 
 @Route.register(content_type='videos')
 def list_collections(_):
-    slider_data = itvx.get_page_data('https://www.itv.com', cache_time=3600)['editorialSliders']
-    return [Listitem.from_dict(list_collection_content, **parsex.parse_slider(*slider)['show'])
-            for slider in slider_data.items()]
+    main_page = itvx.get_page_data('https://www.itv.com', cache_time=3600)
+    for slider in main_page['shortFormSliderContent']:
+        if slider['key'] == 'newsShortForm':
+            # News is already on the home page by default.
+            continue
+        item  = parsex.parse_short_form_slider(slider)
+        if item:
+            yield Listitem.from_dict(list_collection_content, **item['show'])
+
+    for slider in main_page['editorialSliders'].items():
+        item = parsex.parse_slider(*slider)
+        if item:
+            yield Listitem.from_dict(list_collection_content, **item['show'])
+
 
 
 @Route.register(cache_ttl=-1, content_type='videos')
 @dynamic_listing
 def list_collection_content(addon, url='', slider='', filter_char=None, page_nr=0):
+    """Return the contents of a collection"""
     addon.add_sort_methods(xbmcplugin.SORT_METHOD_UNSORTED,
                            xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE,
                            disable_autosort=True)
-    shows_list = itvx.collection_content(url, slider, addon.setting.get_boolean('hide_paid'))
+    shows_list = list(filter(None, itvx.collection_content(url, slider, addon.setting.get_boolean('hide_paid'))))
     logger.info("Listed collection %s%s with %s items", url, slider, len(shows_list) if shows_list else 0)
     paginator = Paginator(shows_list, filter_char, page_nr, url=url)
     yield from paginator
 
 
-@Route.register(content_type='videos')
+@Route.register(content_type='videos')  # 24 * 60)
 def list_categories(addon):
+    """Return a list of all available categories."""
     addon.add_sort_methods(xbmcplugin.SORT_METHOD_UNSORTED,
                            xbmcplugin.SORT_METHOD_TITLE,
                            disable_autosort=True)
@@ -273,6 +281,7 @@ def list_categories(addon):
 @Route.register(content_type='videos')
 @dynamic_listing
 def list_category(addon, path, filter_char=None, page_nr=0):
+    """Return the contents of a category"""
     addon.add_sort_methods(xbmcplugin.SORT_METHOD_UNSORTED,
                            xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE,
                            disable_autosort=True)
@@ -307,7 +316,10 @@ def list_news_sub_category(addon, path, subcat, rail=None, filter_char=None, pag
 @Route.register(content_type='videos')
 @dynamic_listing
 def list_productions(plugin, url, series_idx=None):
+    """List the series of a programme (now called brand) or the episodes of a particular
+    series if parameter `series_idx` is not None.
 
+    """
     logger.info("Getting productions for series '%s' of '%s'", series_idx, url)
 
     plugin.add_sort_methods(xbmcplugin.SORT_METHOD_UNSORTED,
@@ -352,9 +364,7 @@ def do_search(addon, search_query):
         return
 
     items = [
-        Listitem.from_dict(play_title, **result['show'])
-        if result['playable']
-        else Listitem.from_dict(list_productions, **result['show'])
+        Listitem.from_dict(callb_map.get(result['type'], play_title), **result['show'])
         for result in search_results if result is not None
     ]
     return items
@@ -415,7 +425,8 @@ def create_dash_stream_item(name: str, manifest_url, key_service_url, resume_tim
         # Ensure to clear the Content-Type header to force curl to make the right request.
         'inputstream.adaptive.license_key': ''.join(
                 (key_service_url, '|Content-Type=application/octet-stream|R{SSM}|')),
-        'inputstream.adaptive.stream_headers': stream_headers
+        'inputstream.adaptive.stream_headers': stream_headers,
+        'inputstream.adaptive.manifest_headers': stream_headers
     })
 
     if resume_time:
@@ -464,8 +475,10 @@ def play_stream_live(addon, channel, url, title=None, start_time=None, play_from
 
     list_item = create_dash_stream_item(channel, manifest_url, key_service_url)
     if list_item:
+        # list_item.setProperty('inputstream.adaptive.manifest_update_parameter', 'full')
         if 't=' in manifest_url:
             list_item.setProperty('inputstream.adaptive.play_timeshift_buffer', 'true')
+            # list_item.property['inputstream.adaptive.live_delay'] = '2'
             logger.debug("play live stream - timeshift_buffer enabled")
         else:
             logger.debug("play live stream  timeshift_buffer disabled")
@@ -525,3 +538,22 @@ def play_title(plugin, url, name=''):
 def run():
     if isinstance(cc_run(), Exception):
         xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
+
+
+"""
+Mapping of item types to callback.
+Used to map items in collections, categories and search result to the right handler.
+"""
+
+callb_map = {
+    'collection': list_collection_content,
+    'series': list_productions,
+    'brand': list_productions,
+    'programme': list_productions,
+    'simulcastspot': play_stream_live,
+    'fastchannelspot': play_stream_live,
+    'episode': play_title,
+    'special': play_title,
+    'film': play_title,
+    'title': play_title
+}

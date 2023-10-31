@@ -21,7 +21,7 @@ from resources.lib import utils
 
 
 WEB_TIMEOUT = (3.5, 7)
-USER_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/110.0'
+USER_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/118.0'
 
 
 logger = logging.getLogger('.'.join((logger_id, __name__.split('.', 2)[-1])))

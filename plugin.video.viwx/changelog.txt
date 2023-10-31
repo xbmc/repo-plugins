@@ -1,3 +1,13 @@
+v 1.1.1
+- fix: playing VOD on kodi Omega failed with error.
+
+v 1.1.0
+- Updated user-agent string to Firefox 118.
+- Added support for Live TV items in collections. Fixes: collection 'ITVX Live Channels' is empty.
+- Added support for shortFromSlider in collection, like the folder with short news-like items in the collection 'Rugby World Cup'.
+- Added support for shorForm collections. Fixes: absence of the collection 'Rugby World Cup 2023'.
+- Adapt to a change at itvx causing an empty 'Kids Collection'.
+
 v 1.0.0
  - First release.
 

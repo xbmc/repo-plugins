@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.cinetree" name="Cinetree" version="1.1.0" provider-name="Dimitri Kroon">
+<addon id="plugin.video.cinetree" name="Cinetree" version="1.2.0" provider-name="Dimitri Kroon">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="inputstream.adaptive" version="19.0.5"/>
-    <import addon="script.module.requests"/>
-    <import addon="script.module.inputstreamhelper"/>
-    <import addon="script.module.codequick"/>
-    <import addon="script.module.pytz"/>
+    <import addon="script.module.requests" version="2.31.0"/>
+    <import addon="script.module.inputstreamhelper" version="0.6.1"/>
+    <import addon="script.module.codequick" version="1.0.3"/>
+    <import addon="script.module.pytz" version="2023.3.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-    <summary lang="en">Films and documentaries from Cinetree.nl (Benelux countries only, account required)</summary>
-    <summary lang="nl">Films en documentaires van Cinetree.nl (Alleen in de Benelux, account vereist)</summary>
-    <description lang="en">
+    <summary lang="en_GB">Films and documentaries from Cinetree.nl (Benelux countries only, account required)</summary>
+    <summary lang="nl_NL">Films en documentaires van Cinetree.nl (Alleen in de Benelux, account vereist)</summary>
+    <description lang="en_GB">
       This add-on enables playing films and documentaries from Dutch film platform Cinetree.[CR]This an unofficial addon. It is not created or endorsed by Cinetree.[CR][CR]To be able to play any content a Cinetree account is required. Films available in the monthy subscription account can be played directly from kodi. You can also browse through the whole rental collection.[CR]Just like the official TV-apps, it's not possible to rent a film directly from this addon. In order to watch a rental film you first have to make the payment via Cinetree's website or the official Cinetree Android/Apple app. Once paid the film will be available in the menu 'My Films' > 'Rented' for the duration of the rental period, which is usually 48 hours.
     </description>
-    <description lang="nl">
+    <description lang="nl_NL">
       Met deze addon kunnen films en documentaires worden afgespeeld van het Nederlandse filmplatform Cinetree.[CR]Dit is een onofficiële addon. Het is niet gemaakt of goedgekeurd door Cinetree.[CR][CR]Een Cinetree-account is vereist om films af te spelen. Films die beschikbaar zijn binnen het maand abonnement kan je direct bekijken en je kan het hele assortiment aan huurfilms doorzoeken.[CR]Net zoals met de officiële TV-apps kan je films niet direct huren vanuit deze addon. Om een huurfilm te kunnen bekijken moet je eerst betalen via de Cinetree-website of de officiële Cinetree Android/Apple app. Zodra er betaald is, is de film beschikbaar in het menu 'Mijn Films' > 'Gehuurd' voor de duur van de huurperiode, wat doorgaans 48 uur is.
     </description>
-    <disclaimer lang="en">
+    <disclaimer lang="en_GB">
       This addon is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     </disclaimer>
-    <disclaimer lang="nl">
+    <disclaimer lang="nl_NL">
       Deze addon is gedistribueerd in de hoop dat het nuttig zal zijn maar ZONDER ENIGE GARANTIE; zelfs zonder de impliciete garantie voor BRUIKBAARHEID VOOR EEN SPECIFIEK DOEL.
     </disclaimer>
     <language>nl</language>
@@ -36,5 +36,12 @@
       <fanart>resources/fanart.jpg</fanart>
     </assets>
     <reuselanguageinvoker>true</reuselanguageinvoker>
+    <news>
+- Fix: Some folders failed to open with parse error.
+- Added support for all available subtitles in various languages.
+- Info like plot and cast is now available while the video plays.
+- Fix: Kodi-20 freezes for a long time after an error in the add-on.
+- Increased timeout for web requests.
+    </news>
   </extension>
 </addon>

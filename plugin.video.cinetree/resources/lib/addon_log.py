@@ -38,7 +38,8 @@ class KodiLogHandler(logging.Handler):
 
 class CtFileHandler(RotatingFileHandler):
     def __init__(self):
-        logfile = os.path.join(Script.get_info('profile'), logger_id + '.log')
+        file_name = (logger_id or 'addon') + '.log'
+        logfile = os.path.join(Script.get_info('profile'), file_name)
         super(CtFileHandler, self).__init__(filename=logfile, mode='w', maxBytes=1000000, backupCount=2, encoding='utf8')
         self.setFormatter(logging.Formatter('%(asctime)s %(levelname)-8s [%(name)s]: %(message)s'))
 

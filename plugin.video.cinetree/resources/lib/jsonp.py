@@ -56,25 +56,15 @@ def parse(document: str) -> dict:
         # assigning some values to variables, followed by a return statement.
         # In either way, we are only interested in the returned object.
         start = funct.find('return {', 1)
-        # Strip the matching closing brace.
+        # Strip anything up to the matching closing brace.
         funct = funct[start + 7:]
 
         # create a lists of parameters
         param_list = params.split(",")
-
-        # create a string af arguments and parse it to a list of arguments
-        # As json.loads() un-escapes everything we need to escape backslashes again in order to
-        # preserve them in the final json load of the function body. But this effectively unescapes
-        # escaped quotes, so we need to add en extra backslash to solve that.
-        arg_str = ''.join(('[', args[1:].rstrip('});'), ']'))
-        arg_str = arg_str.replace('\\', '\\\\').replace(r'\"', r'\\"')
+        # Create a list of arguments
+        args_list = _create_args_list(args)
     except(IndexError, ValueError, TypeError, AttributeError):
         logger.error("JSONP parse error: document does not have the expected structure", exc_info=True)
-        raise ParseError
-    try:
-        args_list = json.loads(arg_str)
-    except json.JSONDecodeError:
-        logger.error("JSONP parse error: failed to parse arguments list", exc_info=True)
         raise ParseError
 
     # create mapping af parameter to their respective argument
@@ -87,6 +77,61 @@ def parse(document: str) -> dict:
         return json.loads(funct)
     except json.JSONDecodeError:
         logger.error("JSONP parse error: failed to parse jsonp return statement.", exc_info=True)
+        raise ParseError
+
+
+def _create_args_list(args: str) -> list:
+    """Return a list of arguments from the string `args_str`.
+
+    Modify args_str in such a way it can be parsed as json string and data
+    are preserved in their original type, like text, numbers, True, False and None.
+    Parse the result and return the arguments as list.
+
+    :param args: raw string of arguments
+    :return: list of arguments
+
+    """
+    # Create JSON list from the raw args
+    arg_str = ''.join(('[', args[1:].rstrip('});'), ']'))
+
+    # Since json.loads() un-escapes everything we need to escape backslashes again in order to
+    # preserve them for the final json load of the function body. But this effectively unescapes
+    # escaped quotes, so we need to add en extra backslash to solve that.
+    arg_str = arg_str.replace('\\', '\\\\').replace(r'\"', r'\\"')
+
+    # Filter out any argument that is not a text, number, true, false or null.
+    # e.g. a js function, or a variable.
+    def replace_str(match):
+        match_txt = match.group(1)
+        if match_txt in ('true', 'false', 'null'):
+            return match.group(0)
+        else:
+            return ',null'
+
+    # Find text that:
+    #   - starts with a comma,
+    #   - followed not by normal upper or lower case letter,
+    #     thus excluding normal text, starting with '"' and numbers.
+    #   - followed by any number of 'normal' characters found in js functions, including whitespace,
+    #     but excluding '"'.
+    #   - Must be followed by a comma.
+    #     As such specifically excluding normal text that ends with '",'.
+    #
+    # FIXME: This kinda relies on arguments of type text to have a space after a comma
+    #        when there is a comma within that text.
+    #        However, it will only be a problem when the text has more than one comma
+    #        and the character directly following the comma is a normal letter. Any other
+    #        characters, like a space or special markdown character will cause the whole
+    #        text to be disregarded. As well as text with a single comma and missing
+    #        whitespace, because the text will then end with a '"'.
+    #        In all not a perfect solution, but working in practice.
+
+    arg_str = re.sub(r',([a-zA-Z][\w(){}[\]\s]+)(?=,)', replace_str, arg_str)
+
+    try:
+        return json.loads(arg_str)
+    except json.JSONDecodeError:
+        logger.error("JSONP parse error: failed to parse arguments list", exc_info=True)
         raise ParseError
 
 

@@ -96,7 +96,7 @@ msgstr "Helaas is het niet mogelijk om het huurbedrag te voldoen vanuit kodi.\n\
 "Je moet eerst de film huren via de cinetree-website of met de officiële Android of iOS app. Het is meestal het "
 "makkelijkste om op de website naar 'huur' te gaan en daar de film op titel te zoeken. Klik daarna op 'Nu kijken' "
 "en doe de betaling. Daarna kan je de browser sluiten en kan je de film vanuit kodi bekijken.\n\nAlle gehuurde films "
-"zijn beschikbaar via het menu 'Mijn Films > Gehuurd' voor zolang huurperiode niet verstreken is."
+"zijn gedurende de huurperiode beschikbaar via het menu 'Mijn Films > Gehuurd'."
 
 msgctxt "#30606"
 msgid "This film is not available anymore."

@@ -1,0 +1,4 @@
+v1.0.1
+- [fix]  Make the plugin work again
+- [fix]  Refresh access_token before usage if expired
+- [feat] Add watchlist support

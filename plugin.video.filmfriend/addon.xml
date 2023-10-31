@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.filmfriend" name="Filmfriend.de" version="1.0.0" provider-name="sarbes">
+<addon id="plugin.video.filmfriend" name="Filmfriend.de" version="1.0.1" provider-name="Ingo-FP-Angel,sarbes">
     <requires>
 		<import addon="xbmc.python" version="3.0.0"/>
 		<import addon="script.module.libmediathek4" version="1.0.0"/>
+		<import addon="script.module.pyjwt" version="1.7.1"/>
 		<import addon="script.module.requests" version="2.19.1"/>
 		<import addon="inputstream.adaptive" version="2.5.4"/>
     </requires>
@@ -13,11 +14,16 @@
         <platform>all</platform>
 		<language>en de fr</language>
 		<license>GPL-2.0-only</license>
-        <forum>https://forum.kodi.tv/showthread.php?tid=353903</forum>
-		<source>https://github.com/sarbes/plugin.video.filmfriend</source>
+        <forum>https://forum.kodi.tv/showthread.php?tid=374894</forum>
+		<source>https://github.com/Ingo-FP-Angel/repo-plugins/tree/matrix/plugin.video.filmfriend</source>
+		<news>v1.0.1 (2023-10-31)
+            [fix] make the plugin work again
+            [new] play videos from your personal watchlist
+		</news>
         <website>https://www.filmfriend.de/</website>
         <summary lang="en_GB">This video add-on provides access to shows and movies of Filmfriend.de.</summary>
         <description lang="en_GB">This video add-on provides access to shows and movies of Filmfriend.de. A valid library account is reqired in order to use this add-on.</description>
+        <disclaimer lang="en_GB">This add-on is unofficial.</disclaimer>
         <summary lang="de_DE">Dieses Add-on bietet Zugriff auf Filme und Serien von Filmfriend.de.</summary>
         <description lang="de_DE">Dieses Add-on bietet Zugriff auf Filme und Serien von Filmfriend.de. Ein Bibliotheksaccount ist zur Nutzung dieses Dienstes nötig.</description>
         <disclaimer lang="de_DE">Dieses Add-on ist inoffiziell.</disclaimer>

@@ -141,6 +141,10 @@ msgctxt "#30031"
 msgid "Playing using YouTube"
 msgstr "Odtwarzanie za pomocą YouTube"
 
+msgctxt "#30032"
+msgid "Sort Channels A-Z"
+msgstr "Sortuj kanały A-Z"
+
 msgctxt "#30099"
 msgid "Youtube channels"
 msgstr "Kanały YouTube"

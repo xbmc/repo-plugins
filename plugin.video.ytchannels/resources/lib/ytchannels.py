@@ -206,10 +206,11 @@ def ytchannels_main():
 			li.addContextMenuItems(items)
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li,isFolder=True)
 
-		url = build_url({'mode': 'add_channel', 'foldername': '%s'%foldername})
-		li = xbmcgui.ListItem('[COLOR green]%s[/COLOR] [COLOR blue]%s[/COLOR]'%(local_string(30009),foldername))
-		li.setArt({'icon':plus_img})
-		xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li,isFolder=True)
+		if show_adds !='false':
+			url = build_url({'mode': 'add_channel', 'foldername': '%s'%foldername})
+			li = xbmcgui.ListItem('[COLOR green]%s[/COLOR] [COLOR blue]%s[/COLOR]'%(local_string(30009),foldername))
+			li.setArt({'icon':plus_img})
+			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li,isFolder=True)
 
 		xbmcplugin.endOfDirectory(addon_handle)
 

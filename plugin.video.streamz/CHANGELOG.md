@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.1.3](https://github.com/add-ons/plugin.video.streamz/tree/v1.1.3) (2023-11-04)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.1.2...v1.1.3)
+
+**Fixed bugs:**
+
+- Upgrade API to 14 [\#58](https://github.com/add-ons/plugin.video.streamz/pull/58) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.1.2](https://github.com/add-ons/plugin.video.streamz/tree/v1.1.2) (2023-01-13)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.1.1...v1.1.2)

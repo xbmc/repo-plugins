@@ -51,7 +51,6 @@ mode = None
 iconimage = None
 description = None
 subtitles_url = None
-logged_in = False
 keyword = None
 
 
@@ -81,10 +80,6 @@ except:
     pass
 try:
     subtitles_url = Common.utf8_unquote_plus(params["subtitles_url"])
-except:
-    pass
-try:
-    logged_in = params['logged_in'] == 'True'
 except:
     pass
 try:
@@ -119,10 +114,10 @@ elif mode == 106:
     Video.ListHighlights(url)
 
 elif mode == 107:
-    Video.ListWatching(logged_in)
+    Video.ListWatching()
 
 elif mode == 108:
-    Video.ListFavourites(logged_in)
+    Video.ListFavourites()
 
 elif mode == 109:
     Video.ListChannelHighlights()
@@ -143,10 +138,10 @@ elif mode == 116:
     Radio.ListMostPopular()
 
 elif mode == 117:
-    Radio.ListListenList(logged_in)
+    Radio.ListListenList()
 
 elif mode == 199:
-    Radio.ListFollowing(logged_in)
+    Radio.ListFollowing()
 
 elif mode == 118:
     Video.RedButtonDialog()

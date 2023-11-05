@@ -246,83 +246,90 @@ def InitialiseCookieJar():
 cookie_jar = InitialiseCookieJar()
 
 
-def SignInBBCiD():
-    sign_in_url="https://account.bbc.com/signin"
+def SignInBBCiD(cookies=cookie_jar):
+    with requests.Session() as session:
+        session.headers = headers
+        session.cookies = cookies
+        # Obtain token cookies for domain .bbc.co.uk.
+        resp = session.get('https://session.bbc.co.uk/session')
+        if resp.url.startswith('https://www.bbc.co.uk/'):
+            # Being redirected to the main page: already signed in, or expired tokens have been refreshed
+            return True
+        match = re.search('action="([^"]+)"', resp.text)
+        # The link obtained by the regex refers to a url used by webbrowsers to post only the username.
+        # We skip that, and immediately post both username and password.
+        # Strip the path part from the link to obtain the query string
+        query_string = unescape(match[1][5:])
+        login_url = 'https://account.bbc.com/auth/password' + query_string
+        resp = session.post(login_url,
+                            data={'username': ADDON.getSetting('bbc_id_username'),
+                                  'password': ADDON.getSetting('bbc_id_password')})
+        # If sign in is successful the response should redirect several times and end up on
+        # www.bbc.co.uk. The authentication cookies are set in the intermediate responses.
+        # Authentication failures are redirected to account.bbc.com/auth.
+        if not resp.url.startswith('https://www.bbc.co.uk'):
+            return False
 
-    username=ADDON.getSetting('bbc_id_username')
-    password=ADDON.getSetting('bbc_id_password')
+        # Obtain, or refresh token cookies for domain .bbc.com
+        # With cookies for account.bbc.com now present, there is no need to provide credentials again.
+        # Just follow all redirects to pick up the authentication cookies and check if the final
+        # page is www.bbc.com or www.bbc.co.uk.
+        resp = session.head('https://session.bbc.com/session', allow_redirects=True)
+        if not resp.url.startswith('https://www.bbc.co'):
+            return False
 
-    post_data={
-               'username': username,
-               'password': password,
-               'attempts':'0'}
-    
-    #Regular expression to get 'nonce' from login page
-    p = re.compile('action="([^""]*)"')
-    
-    with requests.Session() as s:
-        resp = s.get('https://www.bbc.com/', headers=headers)
-
-        # Call the login page to get a 'nonce' for actual login
-        signInUrl = 'https://session.bbc.com/session'
-        resp = s.get(signInUrl, headers=headers)
-        m = p.search(resp.text)
-        url = m.group(1)
-
-        url = "https://account.bbc.com%s" % unescape(url)
-        resp = s.post(url, data=post_data, headers=headers)
-    
-        for cookie in s.cookies:
-            cookie_jar.set_cookie(cookie)
-        cookie_jar.save(ignore_discard=True)
-    
-    with requests.Session() as s:
-        resp = s.get('https://www.bbc.co.uk/iplayer', headers=headers)
-
-        # Call the login page to get a 'nonce' for actual login
-        signInUrl = 'https://www.bbc.co.uk/session'
-        resp = s.get(signInUrl, headers=headers)
-        m = p.search(resp.text)
-        url = m.group(1)
-
-        url = "https://account.bbc.com%s" % unescape(url)
-        resp = s.post(url, data=post_data, headers=headers)
-    
-        for cookie in s.cookies:
-            cookie_jar.set_cookie(cookie)
-        cookie_jar.save(ignore_discard=True)
-
-    #if (r.status_code == 302):
-    #    xbmcgui.Dialog().notification(translation(30308), translation(30309))
-    #else:
-    #    xbmcgui.Dialog().notification(translation(30308), translation(30310))
+    cookies.save(ignore_discard=True)
+    # xbmcgui.Dialog().notification(translation(30308), translation(30309))
+    return True
 
 
 def SignOutBBCiD():
+    """Sign out from BBC account
+
+    Clearing the cookie jar is absolutely enough to get signed out, but
+    let's be nice and inform the Beeb as well.
+    """
     sign_out_url="https://account.bbc.com/signout"
     OpenURL(sign_out_url)
     cookie_jar.clear()
     cookie_jar.save()
-    if (StatusBBCiD()):
-        xbmcgui.Dialog().notification(translation(30326), translation(30310))
-    else:
-        xbmcgui.Dialog().notification(translation(30326), translation(30309))
+    xbmcgui.Dialog().notification(translation(30326), translation(30309))
 
 
-def StatusBBCiD():
-    r = requests.head("https://account.bbc.com/account", cookies=cookie_jar,
-                      headers=headers, allow_redirects=False)
-    if r.status_code == 200:
+def StatusBBCiD(cookies=cookie_jar):
+    """Check authentication status.
+    Return True if already authenticated or token refresh succeeded.
+    Return False when the user needs to sign-in.
+
+    Authentication check is done by a request to account.bbc.com/account.
+    - If the server returns the account page the current access tokens are valid.
+    - If not, the server redirects to session.bbc.com/session.
+    At a request to session.bbc.com/session the server either:
+    - redirects to account.bbc.com/auth, i.e. the user needs to sign in.
+    - or sets new token cookies for domain bbc.com and redirects to
+      session.bbc.co.uk/session,
+    which sets new token cookies for domain bbc.co.uk and redirects back to
+    account.bbc.com/account; the page that was originally requested.
+
+    """
+    account_page = 'https://account.bbc.com/account'
+
+    with requests.Session() as session:
+        session.cookies = cookies
+        # Make a request to the account page and follow all redirects
+        response = session.head(account_page, headers=headers, allow_redirects=True)
+
+    if response.url == account_page:
+        if response.history:
+            # Access token has been refreshed when redirected.
+            cookies.save()
         return True
-    else: 
+    else:
         return False
 
 
-def CheckLogin(logged_in):
-    if(logged_in == True or StatusBBCiD() == True):
-        logged_in = True
-        return True
-    elif ADDON.getSetting('bbc_id_enabled') != 'true':
+def CheckLogin():
+    if ADDON.getSetting('bbc_id_enabled') != 'true':
         xbmcgui.Dialog().ok(translation(30308), translation(30311))
     else:
         if ADDON.getSetting('bbc_id_autologin') == 'true':
@@ -330,34 +337,35 @@ def CheckLogin(logged_in):
         else:
             attemptLogin = xbmcgui.Dialog().yesno(translation(30308), translation(30312))
         if attemptLogin:
-            SignInBBCiD()
-            if(StatusBBCiD()):
+            if SignInBBCiD():
                 if ADDON.getSetting('bbc_id_autologin') == 'false':
                     xbmcgui.Dialog().notification(translation(30308), translation(30309))
-                logged_in = True;
-                return True;
+                return True
             else:
                 xbmcgui.Dialog().notification(translation(30308), translation(30310))
-
     return False
 
 
 def OpenURL(url):
-    try:
-        r = requests.get(url, headers=headers, cookies=cookie_jar)
-    except requests.exceptions.RequestException as e:
-        dialog = xbmcgui.Dialog()
-        dialog.ok(translation(30400), "%s" % e)
-        sys.exit(1)
-    try:
-        for cookie in r.cookies:
-            cookie_jar.set_cookie(cookie)
-        #Set ignore_discard to overcome issue of not having session
-        #as cookie_jar is reinitialised for each action.
-        cookie_jar.save(ignore_discard=True)
-    except:
-        pass
-    return unescape(r.content.decode('utf-8'))
+    with requests.Session() as session:
+        session.cookies = cookie_jar
+        session.headers = headers
+        try:
+            r = session.get(url)
+        except requests.exceptions.RequestException as e:
+            dialog = xbmcgui.Dialog()
+            dialog.ok(translation(30400), "%s" % e)
+            sys.exit(1)
+        try:
+            #Set ignore_discard to overcome issue of not having session
+            #as cookie_jar is reinitialised for each action.
+            # Refreshed token cookies are set on intermediate requests.
+            # Only save if there have been any.
+            if r.history:
+                cookie_jar.save(ignore_discard=True)
+        except:
+            pass
+        return unescape(r.content.decode('utf-8'))
 
 
 def OpenURLPost(url, post_data):
@@ -400,7 +408,7 @@ def utf8_unquote_plus(str):
     return urllib.parse.unquote_plus(str)
 
 
-def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=None, resolution=None, logged_in=False):
+def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=None, resolution=None):
     """Adds a new line to the Kodi list of playables.
     It is used in multiple ways in the plugin, which are distinguished by modes.
     """
@@ -411,8 +419,7 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
                     "&name=" + utf8_quote_plus(name) +
                     "&iconimage=" + utf8_quote_plus(iconimage) +
                     "&description=" + utf8_quote_plus(description) +
-                    "&subtitles_url=" + utf8_quote_plus(subtitles_url) +
-                    "&logged_in=" + str(logged_in))
+                    "&subtitles_url=" + utf8_quote_plus(subtitles_url))
     if mode in (101,203,113,213):
         listitem_url = listitem_url + "&time=" + str(time.time())
     if aired:

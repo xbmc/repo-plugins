@@ -1,3 +1,6 @@
+v4.0.15
+Fix for new login mechanism. Credits to dimkroon/kereltje.
+
 v4.0.14
 Fix for further changes to JSON format.
 

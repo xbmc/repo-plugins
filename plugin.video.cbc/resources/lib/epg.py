@@ -12,8 +12,19 @@ from resources.lib.livechannels import LiveChannels
 
 # Y/M/D
 GUIDE_URL_FMT = 'https://www.cbc.ca/programguide/daily/{}/cbc_television'
-NEWSNET_URL_FMT = 'https://www.cbc.ca/programguide/daily/{}/cbc_news_network'
 
+# This is a combination of actual callsigns (NN for newsnet) and guid values
+# for over-the-top-only services. No doubt, someone will come back here some
+# day and have questions. When this was written, channels in LIST_URL (from
+# livechannels.py) had callsigns, guids or both (and maybe neither). Where
+# we don't have a callsign, get_callsign (from cbc.py) uses a guid instead.
+# Also important is that there needs to be symmetry between get_iptv_epg and
+# get_iptv_channels (from livechannels.py) because of how iptvmanager works.
+SPECIAL_GUIDES = {
+    'NN': 'https://www.cbc.ca/programguide/daily/{}/cbc_news_network',
+    '2265331267748': 'https://www.cbc.ca/programguide/daily/{}/cbc_comedy_fast',
+    '2076284995790': 'https://www.cbc.ca/programguide/daily/{}/cbc_news_explore',
+}
 
 def get_iptv_epg():
     """Get the EPG Data."""
@@ -32,17 +43,13 @@ def get_iptv_epg():
     log('Starting EPG update')
     with futures.ThreadPoolExecutor(max_workers=20) as executor:
         for callsign, guide_id in channel_map.items():
-
-            # determine if we're dealing with news network
-            newsnetwork = callsign == 'NN'
-
             # add empty array of programs
             epg_data[callsign] = []
 
             # submit three concurrent requests for a days guide data
             for day_offset in [0, 1, 2]:
                 dttm = datetime.now() + timedelta(days=day_offset)
-                future = executor.submit(get_channel_data, dttm, guide_id, newsnetwork)
+                future = executor.submit(get_channel_data, dttm, guide_id, callsign)
                 future_to_callsign[future] = callsign
 
         for future in futures.as_completed(future_to_callsign):
@@ -58,7 +65,7 @@ def map_channel_ids(unblocked):
     soup = BeautifulSoup(data, features="html.parser")
     select = soup.find('select', id="selectlocation-tv")
     options = select.find_all('option')
-    channel_map = {'NN': None}
+    channel_map = { sign: None for sign in SPECIAL_GUIDES.keys()}
     for option in options:
         title = option.get_text()
         value = option['value']
@@ -68,10 +75,11 @@ def map_channel_ids(unblocked):
     return channel_map
 
 
-def call_guide_url(dttm, location=None, newsnetwork=False):
+def call_guide_url(dttm, location=None, callsign=None):
     """Call the guide URL and return the response body."""
     date_str = dttm.strftime('%Y/%m/%d')
-    url = (NEWSNET_URL_FMT if newsnetwork else GUIDE_URL_FMT).format(date_str)
+    url_fmt = SPECIAL_GUIDES[callsign] if callsign in SPECIAL_GUIDES else GUIDE_URL_FMT
+    url = url_fmt.format(date_str)
     cookies = {}
     if location is not None:
         cookies['pgTvLocation'] = location
@@ -82,10 +90,10 @@ def call_guide_url(dttm, location=None, newsnetwork=False):
     return resp.content
 
 
-def get_channel_data(dttm, channel, newsnetwork=False):
+def get_channel_data(dttm, channel, callsign):
     """Get channel program data for a specified date."""
     epg_data = []
-    data = call_guide_url(dttm, channel, newsnetwork)
+    data = call_guide_url(dttm, channel, callsign)
     soup = BeautifulSoup(data, features="html.parser")
 
     select = soup.find('table', id="sched-table").find('tbody')

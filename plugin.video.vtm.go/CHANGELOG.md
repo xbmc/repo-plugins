@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.4.3](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.4.3) (2023-11-04)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.4.2...v1.4.3)
+
+**Fixed bugs:**
+
+- Upgrade API to 14 [\#369](https://github.com/add-ons/plugin.video.vtm.go/pull/369) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.4.2](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.4.2) (2023-07-26)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.4.1...v1.4.2)

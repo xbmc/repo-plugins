@@ -380,8 +380,8 @@ class VtmGo:
         :type search: str
         :rtype list[Union[Movie, Program]]
         """
-        response = util.http_get(API_ENDPOINT + '/%s/search/?query=%s' % (self._mode(),
-                                                                          kodiutils.to_unicode(quote(kodiutils.from_unicode(search)))),
+        response = util.http_get(API_ENDPOINT + '/%s/search?query=%s' % (self._mode(),
+                                                                         kodiutils.to_unicode(quote(kodiutils.from_unicode(search)))),
                                  token=self._tokens.access_token if self._tokens else None,
                                  profile=self._tokens.profile if self._tokens else None)
         results = json.loads(response.text)

@@ -445,7 +445,7 @@ def ScrapeAtoZEpisodes(page_url):
                 else:
                     page_base_url = page_url+"?page="
                 if current_page < last_page:
-                    next_page = curent_page+1
+                    next_page = current_page+1
                 else:
                    next_page = current_page
                 page_range = list(range(current_page, current_page+1))
@@ -945,34 +945,37 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
         AddMenuEntry(title, url, 201, iconimage, '', '')
 
 
-def ListWatching(logged_in):
+def GetJsonDataWithBBCid(url, retry=True):
+    html = OpenURL(url)
+    json_data = ScrapeJSON(html)
+    if not json_data:
+        xbmc.log(f"[ipwww_video] [Warning] No JSON data on page '{url}'.")
+        return
+    if json_data['id']['signedIn']:
+        return json_data
 
-    if(CheckLogin(logged_in) == False):
-        CreateBaseDirectory('video')
+    if retry:
+        if CheckLogin():
+            return GetJsonDataWithBBCid(url, retry=False)
+        else:
+            CreateBaseDirectory('video')
+    else:
+        xbmc.log('[ipwww_video] [Error] GetJsonDataWithBBCid(): still not signed in at second attempt')
         return
 
-    cookie_jar = None
-    cookie_jar = GetCookieJar()
+
+def ListWatching():
     url = "https://www.bbc.co.uk/iplayer/watching"
-    html = OpenURL(url)
-    json_data = ScrapeJSON(html)
-    if json_data:
-        ParseJSON(json_data, url)
+    data = GetJsonDataWithBBCid(url)
+    if data:
+        ParseJSON(data, url)
 
 
-def ListFavourites(logged_in):
-
-    if(CheckLogin(logged_in) == False):
-        CreateBaseDirectory('video')
-        return
-
-    cookie_jar = None
-    cookie_jar = GetCookieJar()
+def ListFavourites():
     url = "https://www.bbc.co.uk/iplayer/added"
-    html = OpenURL(url)
-    json_data = ScrapeJSON(html)
-    if json_data:
-        ParseJSON(json_data, url)
+    data = GetJsonDataWithBBCid(url)
+    if data:
+        ParseJSON(data, url)
 
 
 def PlayStream(name, url, iconimage, description, subtitles_url):

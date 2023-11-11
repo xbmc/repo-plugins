@@ -2,6 +2,9 @@
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
 
+v0.5.2 [11-Nov-2023]
+-Removing noisy logging of shorts
+
 v0.5.1 [01-Nov-2023]
 -Added Czech translation (thanks @jirkoun)
 -Fixed: The setting parameter "Show 'add folder/channels'" doesn't work correctly in Folder list #41 (thanks @jirkoun)

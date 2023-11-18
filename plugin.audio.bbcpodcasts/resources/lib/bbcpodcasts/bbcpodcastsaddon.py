@@ -53,11 +53,11 @@ class BbcPodcastsAddon(AbstractRssAddon):
 
     def _get_podcasts(self, url: str, page=None) -> 'list[dict]':
 
-        def _parse_pager(soup) -> int:
+        def _parse_pager(soup: BeautifulSoup) -> int:
 
-            navs = soup.select("nav")
-            if len(navs) >= 3:
-                lis = navs[-1].find_all("li")
+            navs = soup.find_all("nav", attrs={"aria-label" : "Page Navigation"})
+            if len(navs) == 1:
+                lis = navs[0].find_all("li")
                 if len(lis) > 0:
                     if lis[-1].a:
                         m = re.match(".*page=([0-9]+).*", lis[-1].a["href"])

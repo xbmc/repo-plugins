@@ -10,8 +10,6 @@ from resources.lib.cbc import CBC
 LIST_URL = 'https://tpfeed.cbc.ca/f/ExhSPC/t_t3UKJR6MAT?pretty=true&sort=pubDate%7Cdesc'
 LIST_ELEMENT = 'entries'
 
-
-
 class LiveChannels:
     """Class for live channels."""
 

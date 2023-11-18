@@ -13,6 +13,7 @@ from .utils import save_cookies, loadCookies, saveAuthorization, log
 # http_client.HTTPConnection.debuglevel = 1
 
 CALLSIGN = 'cbc$callSign'
+CHANNEL_GUID = 'guid'
 API_KEY = '3f4beddd-2061-49b0-ae80-6f1f2ed65b37'
 SCOPES = 'openid '\
         'offline_access '\
@@ -262,7 +263,11 @@ class CBC:
     @staticmethod
     def get_callsign(item):
         """Get the callsign for a channel."""
-        return item[CALLSIGN] if CALLSIGN in item else None
+        if CALLSIGN in item:
+            return item[CALLSIGN]
+        if CHANNEL_GUID in item:
+            return item[CHANNEL_GUID]
+        return None
 
     @staticmethod
     def get_labels(item):

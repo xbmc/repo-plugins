@@ -60,65 +60,30 @@ class NpoStream(object):
             Logger.error("No url or streamId specified!")
             return None
 
-        # Get a XSRF Token and session.
-        token_headers = {"x-requested-with": "XMLHttpRequest"}
-        token_headers.update(headers or {})
-        session = UriHandler.get_cookie("npo_session", "www.npostart.nl")
-        xsrf = UriHandler.get_cookie("XSRF-TOKEN", "www.npostart.nl")
-        now = time.time()
-        if not (session and session.expires < now and xsrf and xsrf.expires < now):
-            # Renew of fetch cookies
-            Logger.debug("Fetching XSRF cookies")
-            UriHandler.open("https://www.npostart.nl/api/token", additional_headers=token_headers)
-            xsrf = UriHandler.get_cookie("XSRF-TOKEN", "www.npostart.nl")
-        Logger.debug("Cookies: \nxsrf: %s, \nsession: %s, \nnow: %s", xsrf.expires, session, now)
+        token_data = {"productId": episode_id}
+        token = UriHandler.open("https://npo.nl/start/api/domain/player-token", json=token_data)
+        token_json = JsonHelper(token)
+        token_value = token_json.get_value("token")
 
-        # Fetch the XSRF token:
-        token_headers["x-xsrf-token"] = HtmlEntityHelper.url_decode(xsrf.value)
-        data = UriHandler.open("https://www.npostart.nl/player/{0}".format(episode_id),
-                               additional_headers=token_headers,
-                               data="")
-        Logger.trace("Episode Data: %s", data)
+        video_headers = {"authorization": token_value}
+        video_data = {
+            "profileName": "dash",
+            "drmType": "widevine",
+            "referrerUrl": "https://npo.nl/start/serie/boer-zoekt-vrouw/seizoen-14_1/boer-zoekt-vrouw-europa_9/afspelen"
+        }
+        data = UriHandler.open("https://prod.npoplayer.nl/stream-link", json=video_data, additional_headers=video_headers)
+        video_info = JsonHelper(data)
 
-        token = JsonHelper(data).get_value("token")
-        Logger.debug("Found token %s", token)
-
-        stream_data_url = "https://start-player.npo.nl/video/{0}/streams?" \
-                          "profile=dash-widevine" \
-                          "&quality=npo" \
-                          "&tokenId={1}" \
-                          "&streamType=broadcast" \
-                          "&mobile=0" \
-                          "&isChromecast=0".format(episode_id, token)
-
-        data = UriHandler.open(stream_data_url, additional_headers=headers, data="")
-        Logger.trace("Stream Data: %s", data)
-        stream_data = JsonHelper(data)
-        error = stream_data.get_value("error")
-        if error:
-            try:
-                error_text = HtmlHelper.to_text(error)
-                error_text = error_text.split("\n")
-                return error_text[0]
-            except:
-                return "Unspecified error retrieving streams"
-
-        stream_url = stream_data.get_value("stream", "src")
-        if stream_url is None:
-            return None
+        drm_token = video_info.get_value("stream", "drmToken")
+        stream_url = video_info.get_value("stream", "streamURL")
 
         # Encryption?
-        license_url = stream_data.get_value("stream", "keySystemOptions", 0, "options", "licenseUrl")
-        if license_url:
+        if drm_token:
+            drm_url = f"https://npo-drm-gateway.samgcloud.nepworldwide.nl/authentication?custom_data={drm_token}"
             Logger.info("Using encrypted Dash for NPO")
-            license_headers = stream_data.get_value("stream", "keySystemOptions", 0, "options", "httpRequestHeaders")
-            if license_headers:
-                license_headers = '&'.join(["{}={}".format(k, v) for k, v in license_headers.items()])
-            license_type = stream_data.get_value("stream", "keySystemOptions", 0, "name")
-            license_key = "{0}|{1}|R{{SSM}}|".format(license_url, license_headers or "")
+            license_key = "{0}|{1}|R{{SSM}}|".format(drm_url, "")
         else:
             Logger.info("Using non-encrypted Dash for NPO")
-            license_type = None
             license_key = None
 
         # Actually set the stream
@@ -126,9 +91,7 @@ class NpoStream(object):
         Mpd.set_input_stream_addon_input(stream,
                                          headers,
                                          license_key=license_key,
-                                         license_type=license_type,
                                          manifest_update=None if not live else "full")
-
         return None
 
     @staticmethod

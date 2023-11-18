@@ -17,3 +17,4 @@ RESET_VAULT = "resetvault"                  # : Used for resetting the vault
 POST_LOG = "postlog"                        # : Used for sending log files to pastebin.com
 CLEANUP = "cleanup"                         # : Used for cleaning the cache and cookies
 IPTVMANAGER = "iptvmanager"                 # : Used by IPTV Manager to query channel data
+EXEC = "execute"                            # : Used to execute a command in a channel

@@ -16,3 +16,4 @@ LANGUAGE = "lang"                       # : Used for the 2 char language informa
 SHORTCUT = "shortcut"                   # : Used for storing the name of the shortcut to open.
 PORT = "port"                           # : Used for communicating the port that is used to open the socket to IPTV Manager
 REQUEST = "request"                     # : Used for communicating what data is requested by IPTV Manager
+COMMAND = "command"                     # : User for executing a command.

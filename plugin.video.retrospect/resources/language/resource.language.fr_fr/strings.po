@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-08 21:42+0000\n"
+"PO-Revision-Date: 2023-10-24 00:11+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: French (France) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/fr_fr/>\n"
 "Language: fr_fr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 5.0.2\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -462,14 +462,62 @@ msgstr ""
 
 msgctxt "#30110"
 msgid "Install IPTV Manager add-on"
-msgstr ""
+msgstr "Installer l'extension IPTV Manager"
 
 msgctxt "#30111"
 msgid "Enable IPTV Manager integration"
-msgstr ""
+msgstr "Activer l'intégration IPTV Manager"
 
 msgctxt "#30112"
 msgid "IPTV Manager settings…"
+msgstr "Paramètres IPTV Manager…"
+
+msgctxt "#30113"
+msgid "Set refresh token"
+msgstr ""
+
+msgctxt "#30114"
+msgid "Retrospect Web Dialog"
+msgstr ""
+
+msgctxt "#30115"
+msgid "Setting up Retrospect webserver"
+msgstr ""
+
+msgctxt "#30116"
+msgid "Starting webserver on port {}"
+msgstr ""
+
+msgctxt "#30117"
+msgid "Waiting for input from browser"
+msgstr ""
+
+msgctxt "#30118"
+msgid "Input received from browser"
+msgstr ""
+
+msgctxt "#30119"
+msgid "Open a browser and navigate to http://{}:{}"
+msgstr ""
+
+msgctxt "#30120"
+msgid "Browser input cancelled"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Paste refresh token here."
+msgstr ""
+
+msgctxt "#30122"
+msgid "Invalid Refresh Token"
+msgstr ""
+
+msgctxt "#30123"
+msgid "Expired Refresh Token"
+msgstr ""
+
+msgctxt "#30124"
+msgid "Find the <b>refresh token</b> for your account by examining the site's cookies and paste the <b>value</b> of the refresh token cookie here."
 msgstr ""
 
 # used for list limits

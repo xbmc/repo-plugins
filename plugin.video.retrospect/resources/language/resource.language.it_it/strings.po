@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-05 18:31+0000\n"
+"PO-Revision-Date: 2023-11-13 00:11+0000\n"
 "Last-Translator: Massimo Pissarello <mapi68@gmail.com>\n"
 "Language-Team: Italian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/it_it/>\n"
 "Language: it_it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 5.1\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -20,11 +20,11 @@ msgstr "Retrospect ti consente di guardare e recuperare le serie TV replicate re
 
 msgctxt "Addon Description"
 msgid "Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
-msgstr "Retrospect utilizza i siti web ufficiali e gli stream disponibili gratuitamente di diverse società di trasmissione (principalmente olandesi, belghe, britanniche, norvegesi e svedesi) per rendere disponibili e recuperare gli episodi replicati sulla piattaforma Kodi. [CR][CR]Alcuni canali inclusi sono: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV North, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo, Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, One, Four, VRT. nu , VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info e Ons.[CR][CR]È possibile trovare ulteriori informazioni su https://github.com/retrospect-addon/plugin.video.retrospect o il wiki di Retrospect su https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
+msgstr "Retrospect usa i siti web ufficiali e gli stream disponibili gratuitamente di diverse società di trasmissione (principalmente olandesi, belghe, britanniche, norvegesi e svedesi) per rendere disponibili e recuperare gli episodi replicati sulla piattaforma Kodi. [CR][CR]Alcuni canali inclusi sono: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV North, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo, Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, One, Four, VRT. nu , VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info e Ons.[CR][CR]È possibile trovare ulteriori informazioni su https://github.com/retrospect-addon/plugin.video.retrospect o il wiki di Retrospect su https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
 
 msgctxt "Addon Disclaimer"
 msgid "Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched using this add-on or any consequences of using this add-on to watch content via the content providers' platforms."
-msgstr "Retrospect viene fornito così com'è. Non ci assumiamo alcuna responsabilità per possibili (ma altamente improbabili) danni causati al tuo sistema. Né ci assumiamo la responsabilità per il contenuto che può essere guardato utilizzando questo add-on o qualsiasi conseguenza dell'utilizzo di questo add-on per guardare contenuti tramite le piattaforme dei fornitori di contenuti."
+msgstr "Retrospect viene fornito così com'è. Non ci assumiamo alcuna responsabilità per possibili (ma altamente improbabili) danni causati al tuo sistema. Né ci assumiamo la responsabilità per il contenuto che può essere guardato usando questo add-on o qualsiasi conseguenza dell'utilizzo di questo add-on per guardare contenuti tramite le piattaforme dei fornitori di contenuti."
 
 msgctxt "#30000"
 msgid "Stream Quality"
@@ -128,15 +128,15 @@ msgstr "Nessuno"
 
 msgctxt "#30026"
 msgid "Group list if it exceeds # folders"
-msgstr ""
+msgstr "Elenco dei gruppi se supera # cartelle"
 
 msgctxt "#30027"
 msgid "Autorun Retrospect on Kodi start"
-msgstr ""
+msgstr "Avvia automaticamente Retrospect all'avvio di Kodi"
 
 msgctxt "#30028"
 msgid "Proxy"
-msgstr ""
+msgstr "Proxy"
 
 msgctxt "#30029"
 msgid "Server"
@@ -148,19 +148,19 @@ msgstr "Porta"
 
 msgctxt "#30031"
 msgid "Cache HTTP(S) requests"
-msgstr ""
+msgstr "Memorizza nella cache le richieste HTTP(S)"
 
 msgctxt "#30032"
 msgid "Channel Settings"
-msgstr ""
+msgstr "Impostazioni canale"
 
 msgctxt "#30033"
 msgid "Expires at"
-msgstr ""
+msgstr "Scade alle"
 
 msgctxt "#30034"
 msgid "No channel selected"
-msgstr ""
+msgstr "Nessun canale selezionato"
 
 msgctxt "#30035"
 msgid "Username"
@@ -172,15 +172,15 @@ msgstr "Password"
 
 msgctxt "#30037"
 msgid "Use 'Up Next' to play next episode"
-msgstr ""
+msgstr "Usa 'Up Next' per riprodurre l'episodio successivo"
 
 msgctxt "#30038"
 msgid "'Up Next' add-on settings"
-msgstr ""
+msgstr "Impostazioni add-on 'Up Next'"
 
 msgctxt "#30039"
 msgid "Up Next integration"
-msgstr ""
+msgstr "Integrazione Up Next"
 
 msgctxt "#30040"
 msgid "Channels"
@@ -188,31 +188,31 @@ msgstr "Canali"
 
 msgctxt "#30041"
 msgid "Show \"All Favourites\" in main Channel listing"
-msgstr ""
+msgstr "Mostra \"Tutti i preferiti\" nell'elenco dei canali principali"
 
 msgctxt "#30042"
 msgid "Enabled"
-msgstr ""
+msgstr "Abilitato"
 
 msgctxt "#30043"
 msgid "Folder prefix"
-msgstr ""
+msgstr "Prefisso cartella"
 
 msgctxt "#30044"
 msgid "Kodi update required"
-msgstr ""
+msgstr "È richiesto l'aggiornamento di Kodi"
 
 msgctxt "#30045"
 msgid "This feature of Retrospect requires a more recent version of Kodi. Please install the most recent version of your current Kodi build. Depending on your installation this can either be a 'stable' or 'nightly' build."
-msgstr ""
+msgstr "Questa funzionalità di Retrospect richiede una versione più recente di Kodi. Installa la versione più recente della tua attuale build Kodi. A seconda dell'installazione, questa può essere una build 'stable' o 'nightly'."
 
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
-msgstr ""
+msgstr "Filtri DRM/Geobloccati/Premium"
 
 msgctxt "#30047"
 msgid "Cannot playback this YouTube Video because the Kodi YouTube add-on is missing."
-msgstr ""
+msgstr "Impossibile riprodurre questo video di YouTube perché manca il componente aggiuntivo Kodi YouTube."
 
 # empty string with id 30047
 msgctxt "#30048"
@@ -225,7 +225,7 @@ msgstr ""
 
 msgctxt "#30050"
 msgid "DRM Protected"
-msgstr ""
+msgstr "Protetto da DRM"
 
 msgctxt "#30051"
 msgid "Hidden item"
@@ -270,7 +270,7 @@ msgstr ""
 
 msgctxt "#30062"
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 msgctxt "#30063"
 msgid "Channel to configure"
@@ -472,6 +472,54 @@ msgctxt "#30112"
 msgid "IPTV Manager settings…"
 msgstr "Impostazioni IPTV Manager…"
 
+msgctxt "#30113"
+msgid "Set refresh token"
+msgstr ""
+
+msgctxt "#30114"
+msgid "Retrospect Web Dialog"
+msgstr ""
+
+msgctxt "#30115"
+msgid "Setting up Retrospect webserver"
+msgstr ""
+
+msgctxt "#30116"
+msgid "Starting webserver on port {}"
+msgstr ""
+
+msgctxt "#30117"
+msgid "Waiting for input from browser"
+msgstr ""
+
+msgctxt "#30118"
+msgid "Input received from browser"
+msgstr ""
+
+msgctxt "#30119"
+msgid "Open a browser and navigate to http://{}:{}"
+msgstr ""
+
+msgctxt "#30120"
+msgid "Browser input cancelled"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Paste refresh token here."
+msgstr ""
+
+msgctxt "#30122"
+msgid "Invalid Refresh Token"
+msgstr ""
+
+msgctxt "#30123"
+msgid "Expired Refresh Token"
+msgstr ""
+
+msgctxt "#30124"
+msgid "Find the <b>refresh token</b> for your account by examining the site's cookies and paste the <b>value</b> of the refresh token cookie here."
+msgstr ""
+
 # used for list limits
 # empty strings from id 30109 to 30189
 msgctxt "#30190"
@@ -609,7 +657,7 @@ msgstr "Categorie"
 
 msgctxt "#30352"
 msgid "TV shows"
-msgstr ""
+msgstr "Serie TV"
 
 msgctxt "#30353"
 msgid "Currently playing"
@@ -661,7 +709,7 @@ msgstr ""
 
 msgctxt "#30365"
 msgid "Movies"
-msgstr ""
+msgstr "Film"
 
 msgctxt "#30366"
 msgid "Available from"
@@ -848,11 +896,11 @@ msgstr "Add-on \"Assistente di InputStream\" mancante. Impossibile installare."
 
 msgctxt "#30532"
 msgid "Install Widevine using 'InputStream Helper' add-on"
-msgstr "Installa Widevine utilizzando l'add-on \"Assistente di InputStream\""
+msgstr "Installa Widevine usando l'add-on \"Assistente di InputStream\""
 
 msgctxt "#30533"
 msgid "Installing Widevine libraries using the 'InputStream Helper' add-on is done at your own risk and Retrospect is not responsible for any results. Nor is it guaranteed that Widevine will be installed correctly."
-msgstr "L'installazione delle librerie Widevine utilizzando l'add-on \"Assistente di InputStream\" viene eseguita a proprio rischio e Retrospect non è responsabile per eventuali risultati. Né è garantito che Widevine verrà installato correttamente."
+msgstr "L'installazione delle librerie Widevine usando l'add-on \"Assistente di InputStream\" viene eseguita a proprio rischio e Retrospect non è responsabile per eventuali risultati. Né è garantito che Widevine verrà installato correttamente."
 
 msgctxt "#30534"
 msgid "Installation of Widevine failed!"

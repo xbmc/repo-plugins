@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-01 22:12+0000\n"
+"PO-Revision-Date: 2023-11-09 22:11+0000\n"
 "Last-Translator: José Antonio Alvarado <jalvarado0.eses@gmail.com>\n"
 "Language-Team: Spanish (Spain) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/es_es/>\n"
 "Language: es_es\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 5.1\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -471,6 +471,54 @@ msgstr "Activar integración con IPTV Manager"
 msgctxt "#30112"
 msgid "IPTV Manager settings…"
 msgstr "Ajustes de IPTV Manager…"
+
+msgctxt "#30113"
+msgid "Set refresh token"
+msgstr "Establecer token de actualización"
+
+msgctxt "#30114"
+msgid "Retrospect Web Dialog"
+msgstr "Diálogo web de Retrospect"
+
+msgctxt "#30115"
+msgid "Setting up Retrospect webserver"
+msgstr "Configuración del servidor web de Retrospect"
+
+msgctxt "#30116"
+msgid "Starting webserver on port {}"
+msgstr "Iniciando servidor web en el puerto {}"
+
+msgctxt "#30117"
+msgid "Waiting for input from browser"
+msgstr "Esperando datos del navegador"
+
+msgctxt "#30118"
+msgid "Input received from browser"
+msgstr "Información recibida del navegador"
+
+msgctxt "#30119"
+msgid "Open a browser and navigate to http://{}:{}"
+msgstr "Abra un navegador y vaya a http://{}:{}"
+
+msgctxt "#30120"
+msgid "Browser input cancelled"
+msgstr "Entrada del navegador cancelada"
+
+msgctxt "#30121"
+msgid "Paste refresh token here."
+msgstr "Pegue aquí el token de actualización."
+
+msgctxt "#30122"
+msgid "Invalid Refresh Token"
+msgstr "Token de actualización no válido"
+
+msgctxt "#30123"
+msgid "Expired Refresh Token"
+msgstr "Token de actualización caducado"
+
+msgctxt "#30124"
+msgid "Find the <b>refresh token</b> for your account by examining the site's cookies and paste the <b>value</b> of the refresh token cookie here."
+msgstr "Encuentre el <b>token de actualización</b> para su cuenta examinando las cookies del sitio y pegue el <b>valor</b> de la cookie del token de actualización aquí."
 
 # used for list limits
 # empty strings from id 30109 to 30189

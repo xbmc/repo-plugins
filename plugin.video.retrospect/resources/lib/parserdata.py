@@ -5,7 +5,7 @@ import re
 
 class ParserData(object):
     __slots__ = ["Name", "Match", "PreProcessor", "PostProcessor",
-                 "Parser", "Creator", "Updater",
+                 "Parser", "Creator", "Updater", "Label",
                  "IsJson", "MatchType", "LogOnRequired"]
 
     # define them here so we can just refer to them instead of using the strings all
@@ -21,6 +21,7 @@ class ParserData(object):
         """ Creates an instance of ParserData with default values for the properties. """
         self.Match = match
         self.Name = None
+        self.Label = None
         self.PreProcessor = None
         self.Parser = None
         self.Creator = None

@@ -1,3 +1,6 @@
+v4.0.17
+Live radio authentication token fixes and simplifications.
+
 v4.0.16
 Live radio now needs an authentication token. Credits to dimkroon/kereltje once again.
 

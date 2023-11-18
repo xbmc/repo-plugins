@@ -11,7 +11,6 @@ import urllib
 import html
 import codecs
 import time
-import json
 
 import xbmc
 import xbmcvfs
@@ -26,6 +25,14 @@ except:
     cookielib = http.cookiejar
 
 ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
+
+
+class IpwwwError(Exception):
+    pass
+
+
+class GeoBlockedError(IpwwwError):
+    pass
 
 
 def tp(path):
@@ -393,35 +400,6 @@ def OpenURLPost(url, post_data):
     except:
         pass
     return r
-
-
-def GetJWT(url):
-    with requests.Session() as session:
-        session.cookies = cookie_jar
-        session.headers = headers
-        try:
-            r = session.get(url, allow_redirects=False)
-        except requests.exceptions.RequestException as e:
-            dialog = xbmcgui.Dialog()
-            dialog.ok(translation(30400), "%s" % e)
-            sys.exit(1)
-        try:
-            #Set ignore_discard to overcome issue of not having session
-            #as cookie_jar is reinitialised for each action.
-            # Refreshed token cookies are set on intermediate requests.
-            # Only save if there have been any.
-            if r.history:
-                cookie_jar.save(ignore_discard=True)
-            if r.text:
-                match = re.search(r'<script> window.__PRELOADED_STATE__ = (.*?);\s*</script>', r.text, re.DOTALL)
-                if match:
-                    json_data = json.loads(match[1])
-                    if 'smp' in json_data:
-                        if 'liveStreamJwt' in json_data['smp']:
-                            return json_data['smp']['liveStreamJwt']
-        except:
-            pass
-        return None
 
 
 def GetCookieJar():

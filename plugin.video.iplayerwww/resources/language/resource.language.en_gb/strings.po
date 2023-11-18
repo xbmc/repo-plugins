@@ -392,6 +392,10 @@ msgctxt "#30413"
 msgid "Please check you installed this plugin correctly."
 msgstr ""
 
+msgctxt "#30414"
+msgid "This BBC Sounds programme is available to play in the UK only."
+msgstr ""
+
 msgctxt "#30500"
 msgid "Display"
 msgstr ""
@@ -475,4 +479,3 @@ msgstr ""
 msgctxt "#30529"
 msgid "iPlayer: UHD Trial Channels"
 msgstr ""
-

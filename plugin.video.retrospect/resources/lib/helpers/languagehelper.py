@@ -37,6 +37,11 @@ class LanguageHelper(object):
     UpdateToNewKodi = 30045
     YouTubeMissing = 30047
 
+    PasteRefreshToken = 30121
+    InvalidRefreshToken = 30122
+    ExpireRefreshToken = 30123
+    SetRefreshToken = 30124
+
     Monday = 30190
     Tuesday = 30191
     Wednesday = 30192
@@ -74,6 +79,7 @@ class LanguageHelper(object):
     Extras = 30368
     Fragments = 30369
     AllEpisodes = 30370
+    Trending = 30371
 
     ChannelSelection = 30507
     ShortCutName = 30512

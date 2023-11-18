@@ -37,13 +37,14 @@ class AddonAction(object):
     def execute(self):
         raise NotImplementedError
 
-    def _get_context_menu_items(self, channel, item=None):
+    def _get_context_menu_items(self, channel, item=None, store_id=None):
         """ Retrieves the custom context menu items to display.
 
         :param Channel|None channel:    The channel from which to get the context menu items.
                                          The channel might be None in case of some actions that
                                          do not require a channel.
         :param MediaItem|None item:     The item to which the context menu belongs.
+        :param str store_id:            The ID of the pickle store
 
         :return: A list of context menu names and their commands.
         :rtype: list[tuple[str,str]]
@@ -88,7 +89,7 @@ class AddonAction(object):
                     continue
 
                 cmd_url = self.parameter_parser.create_action_url(
-                    channel, action=menu_item.functionName, item=item)
+                    channel, action=menu_item.functionName, item=item, store_id=store_id)
 
                 cmd = "RunPlugin(%s)" % (cmd_url,)
                 title = "Retro: %s" % (menu_item.label,)

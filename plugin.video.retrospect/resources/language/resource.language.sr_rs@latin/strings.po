@@ -473,6 +473,54 @@ msgctxt "#30112"
 msgid "IPTV Manager settings…"
 msgstr ""
 
+msgctxt "#30113"
+msgid "Set refresh token"
+msgstr ""
+
+msgctxt "#30114"
+msgid "Retrospect Web Dialog"
+msgstr ""
+
+msgctxt "#30115"
+msgid "Setting up Retrospect webserver"
+msgstr ""
+
+msgctxt "#30116"
+msgid "Starting webserver on port {}"
+msgstr ""
+
+msgctxt "#30117"
+msgid "Waiting for input from browser"
+msgstr ""
+
+msgctxt "#30118"
+msgid "Input received from browser"
+msgstr ""
+
+msgctxt "#30119"
+msgid "Open a browser and navigate to http://{}:{}"
+msgstr ""
+
+msgctxt "#30120"
+msgid "Browser input cancelled"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Paste refresh token here."
+msgstr ""
+
+msgctxt "#30122"
+msgid "Invalid Refresh Token"
+msgstr ""
+
+msgctxt "#30123"
+msgid "Expired Refresh Token"
+msgstr ""
+
+msgctxt "#30124"
+msgid "Find the <b>refresh token</b> for your account by examining the site's cookies and paste the <b>value</b> of the refresh token cookie here."
+msgstr ""
+
 # used for list limits
 # empty strings from id 30109 to 30189
 msgctxt "#30190"

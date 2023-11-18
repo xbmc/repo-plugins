@@ -1,5 +1,9 @@
 # coding=utf-8  # NOSONAR
 # SPDX-License-Identifier: GPL-3.0-or-later
+import json
+import math
+import time
+from typing import Optional, Union, List, Tuple
 
 import pytz
 import datetime
@@ -8,16 +12,16 @@ from resources.lib import chn_class, mediatype, contenttype
 from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.helpers.encodinghelper import EncodingHelper
 from resources.lib.mediaitem import MediaItem, FolderItem
-from resources.lib.addonsettings import AddonSettings
+from resources.lib.addonsettings import AddonSettings, LOCAL
 from resources.lib.helpers.jsonhelper import JsonHelper
 
-from resources.lib.regexer import Regexer
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.logger import Logger
+from resources.lib.retroconfig import Config
 from resources.lib.streams.mpd import Mpd
-from resources.lib.vault import Vault
-from resources.lib.xbmcwrapper import XbmcWrapper
+from resources.lib.webdialogue import WebDialogue
+from resources.lib.xbmcwrapper import XbmcWrapper, XbmcDialogProgressWrapper
 from resources.lib.streams.m3u8 import M3u8
 from resources.lib.urihandler import UriHandler
 from resources.lib.helpers.subtitlehelper import SubtitleHelper
@@ -38,182 +42,225 @@ class Channel(chn_class.Channel):
         chn_class.Channel.__init__(self, channel_info)
 
         # ============== Actual channel setup STARTS here and should be overwritten from derived classes ===============
-        self.__channelId = "tv4"
-        self.mainListUri = self.__get_api_query(
-            '{indexPage{panels{__typename,...on SwipeModule{title,subheading,cards{__typename,'
-            '... on ProgramCard{title,program{name,id,nid,description,image}}}}}}}')
+        self.__max_page_size = 100
+        self.__access_token = None
 
         if self.channelCode == "tv4segroup":
             self.noImage = "tv4image.png"
-
-        elif self.channelCode == "tv4se":
-            self.noImage = "tv4image.png"
-            self.__channelId = "tv4"
-
-        elif self.channelCode == "tv7se":
-            self.noImage = "tv7image.png"
-            self.__channelId = "sjuan"
-
-        elif self.channelCode == "tv12se":
-            self.noImage = "tv12image.png"
-            self.__channelId = "tv12"
-
+            self.httpHeaders = {"Content-Type": "application/json", "Client-Name": "tv4-web",
+                                "Client-Version": "4.0.0"}
         else:
             raise Exception("Invalid channel code")
 
-        # setup the urls
-        # self.mainListUri = "https://api.tv4play.se/play/programs?is_active=true&platform=tablet&per_page=1000" \
-        #                    "&fl=nid,name,program_image&start=0"
+        self._add_data_parser(
+            "https://client-gateway.tv4.a2d.tv/graphql?operationName=PageList&",
+            name="Main TV4 pages", json=True, requires_logon=False,
+            parser=["data", "pageList", "content"],
+            creator=self.create_api_typed_item)
 
-        self.baseUrl = "http://www.tv4play.se"
-        self.swfUrl = "http://www.tv4play.se/flash/tv4playflashlets.swf"
+        self.mainListUri = "#mainlist"
+        self._add_data_parser(
+            "#mainlist", name="Main TV4 page", json=True, preprocessor=self.list_main_content)
 
-        self._add_data_parser(self.mainListUri, json=True,
-                              name="GraphQL mainlist parser",
-                              preprocessor=self.add_categories_and_specials,
-                              parser=["data", "indexPage", "panels"],
-                              creator=self.create_api_typed_item)
+        # If logon is set to True, panels that are not available to the user, will not show.
+        self._add_data_parser(
+            "https://client-gateway.tv4.a2d.tv/graphql?operationName=Page&",
+            name="Main TV4 pages", json=True, requires_logon=True,
+            parser=["data", "page", "content", "panels"],
+            creator=self.create_api_typed_item)
 
-        # noinspection PyTypeChecker
-        self._add_data_parser("https://graphql.tv4play.se/graphql?query=query%7Btags%7D",
-                              name="Tag overview", json=True,
-                              parser=["data", "tags"], creator=self.create_api_tag)
+        self._add_data_parser(
+            "https://client-gateway.tv4.a2d.tv/graphql?operationName=MediaIndex&",
+            name="Main show/movie list", json=True,
+            preprocessor=self.fetch_mainlist_pages,
+            parser=["data", "mediaIndex", "contentList", "items"],
+            creator=self.create_api_typed_item)
 
-        self._add_data_parser("https://graphql.tv4play.se/graphql?query=%7Bprogram%28nid",
-                              name="GraphQL seasons/folders for program listing", json=True,
-                              preprocessor=self.detect_single_folder,
-                              parser=["data", "program", "videoPanels"],
-                              creator=self.create_api_videopanel_type)
+        # Requires logon to list all seasons.
+        self._add_data_parser(
+            "https://client-gateway.tv4.a2d.tv/graphql?operationName=ContentDetailsPage&",
+            name="Seasons for show", json=True, requires_logon=True,
+            parser=["data", "media", "allSeasonLinks"], creator=self.create_api_typed_item,
+            postprocessor=self.check_for_seasons)
 
-        self._add_data_parser("https://graphql.tv4play.se/graphql?query=%7BvideoPanel%28id%3A",
-                              name="GraphQL single season/folder listing", json=True,
-                              postprocessor=self.add_next_page,
-                              parser=["data", "videoPanel", "videoList", "videoAssets"],
-                              creator=self.create_api_video_asset_type)
+        self._add_data_parsers(
+            ["https://client-gateway.tv4.a2d.tv/graphql?operationName=Panel&",
+             "https://client-gateway.tv4.a2d.tv/graphql?operationName=LivePanel&"],
+            name="Panel results", json=True, requires_logon=False,
+            parser=["data", "panel", "content", "items"],
+            creator=self.create_api_typed_item)
 
-        self._add_data_parsers(["https://graphql.tv4play.se/graphql?query=query%7BprogramSearch",
-                                "https://graphql.tv4play.se/graphql?query=%7BprogramSearch"],
-                               name="GraphQL search results and show listings", json=True,
-                               parser=["data", "programSearch", "programs"],
-                               creator=self.create_api_typed_item)
+        self._add_data_parser(
+            "https://client-gateway.tv4.a2d.tv/graphql?operationName=SeasonEpisodes&",
+            name="Episodes for a season", json=True, requires_logon=False,
+            parser=["data", "season", "episodes", "items"],
+            creator=self.create_api_typed_item)
 
-        self._add_data_parser("https://graphql.tv4play.se/graphql?operationName=LiveVideos",
-                              name="GraphQL currently playing", json=True,
-                              parser=["data", "liveVideos", "videoAssets"],
-                              creator=self.create_api_typed_item)
-
-        self._add_data_parser("http://tv4live-i.akamaihd.net/hls/live/",
-                              updater=self.update_live_item)
-        self._add_data_parser("http://tv4events1-lh.akamaihd.net/i/EXTRAEVENT5_1",
-                              updater=self.update_live_item)
+        self._add_data_parser(
+            "https://client-gateway.tv4.a2d.tv/graphql?operationName=PanelSearch&",
+            name="Search results", json=True, requires_logon=False,
+            preprocessor=self.merge_search,
+            parser=[],
+            creator=self.create_api_typed_item)
 
         self._add_data_parser("*", updater=self.update_video_item, requires_logon=True)
 
         # ===============================================================================================================
         # non standard items
-        self.__maxPageSize = 100  # The Android app uses a page size of 20
-        self.__program_fields = '{__typename,description,displayCategory,id,image,images{main16x9},name,nid,genres,videoPanels{id}}'
-        self.__season_count_meta = "season_count"
         self.__timezone = pytz.timezone("Europe/Stockholm")
+        self.__refresh_token_setting_id = "refresh_token"
 
         # ===============================================================================================================
         # Test cases:
-        #   Batman - WideVine
-        #   Antikdeckarna - Clips
 
         # ====================================== Actual channel setup STOPS here =======================================
         return
 
+    def fetch_token(self) -> Optional[str]:
+        wd = WebDialogue()
+        token, cancelled = wd.input(
+            LanguageHelper.SetRefreshToken, LanguageHelper.PasteRefreshToken, time_out=120)
+
+        if not token or cancelled:
+            return None
+
+        split_data = token.split(".")
+        if len(split_data) != 3:
+            AddonSettings.set_channel_setting(
+                self, self.__refresh_token_setting_id, "", store=LOCAL)
+            XbmcWrapper.show_notification(
+                LanguageHelper.InvalidRefreshToken, LanguageHelper.InvalidRefreshToken)
+            # Retry
+            return self.fetch_token()
+
+        header, payload, signature = split_data
+        payload_data = EncodingHelper.decode_base64(payload + '=' * (-len(payload) % 4))
+        payload = JsonHelper(payload_data)
+        expires_at = payload.get_value("exp")
+        expire_date = DateHelper.get_date_from_posix(float(expires_at), tz=pytz.UTC)
+        if expire_date < datetime.datetime.now(tz=pytz.UTC).astimezone(tz=pytz.UTC):
+            Logger.info("Found expired TV4Play token (valid until: %s)", expire_date)
+            AddonSettings.set_channel_setting(
+                self, self.__refresh_token_setting_id, "", store=LOCAL)
+            XbmcWrapper.show_notification(
+                LanguageHelper.InvalidRefreshToken, LanguageHelper.ExpireRefreshToken)
+            # Retry
+            return self.fetch_token()
+
+        # (Re)Store the valid token.
+        Logger.info("Found existing valid TV4Play token (valid until: %s)", expire_date)
+        AddonSettings.set_channel_setting(self, self.__refresh_token_setting_id, token, store=LOCAL)
+        return token
+
     # No logon for now
-    def log_on(self):
+    def log_on(self) -> bool:
         """ Makes sure that we are logged on. """
 
-        username = AddonSettings.get_setting("channel_tv4play_se_username")
-        if not username:
-            Logger.info("No user name for TV4 Play, not logging in")
-            return False
+        if self.__access_token:
+            return True
 
         # Fetch an existing token
-        token_setting_id = "channel_tv4play_se_token"
-        token = AddonSettings.get_setting(token_setting_id)
-        if token and "|" in token:
-            token_username, token = token.split("|")
-            if token_username == username:
-                header, payload, signature = token.split(".")
-                payload_data = EncodingHelper.decode_base64(payload + '=' * (-len(payload) % 4))
-                payload = JsonHelper(payload_data)
-                expires_at = payload.get_value("exp")
-                expire_date = DateHelper.get_date_from_posix(float(expires_at), tz=pytz.UTC)
-                if expire_date > datetime.datetime.now(tz=pytz.UTC).astimezone(tz=pytz.UTC):
-                    Logger.info("Found existing valid TV4Play token (valid until: %s)", expire_date)
-                    return True
-                Logger.warning("Found existing expired TV4Play token")
+        token: str = AddonSettings.get_channel_setting(
+            self, self.__refresh_token_setting_id, store=LOCAL)
+        if not token:
+            token = self.fetch_token()
 
-        Logger.info("Fetching a new TV4Play token")
-        data = None
-
-        if not data or "vimond_session_token" not in data:
-            Logger.info("Authenticating based on username and password")
-
-            v = Vault()
-            password = v.get_setting("channel_tv4play_se_password")
-            if not password:
-                XbmcWrapper.show_dialog(
-                    title=None,
-                    message=LanguageHelper.MissingCredentials,
-                )
-
-            # 2b: https://avod-auth-alb.a2d.tv/oauth/authorize
-            # Content-Type: application/x-www-form-urlencoded; charset=UTF-8
-            params = {
-                "client_id": "tv4play-next",
-                "response_type": "token",
-                "credentials": {
-                    "username": username,
-                    "password": password
-                }
-            }
-            data = UriHandler.open(
-                "https://avod-auth-alb.a2d.tv/oauth/authorize", no_cache=True, json=params)
-
-            if not data:
-                Logger.error("Error logging in")
-                return
-
-        data = JsonHelper(data)
-        if "error" in data.json:
-            Logger.error(data.get_value("error"))
-            XbmcWrapper.show_notification(LanguageHelper.ErrorId, data.get_value("error", "message"))
-            AddonSettings.set_setting(token_setting_id, "")
+        if not token:
             return False
 
-        # Extract the data we need
-        token = data.get_value("access_token")
-        AddonSettings.set_setting(token_setting_id, "{}|{}".format(username, token))
-        return True
+        url = "https://avod-auth-alb.a2d.tv/oauth/refresh"
+        result = UriHandler.open(
+            url, json={"refresh_token": token, "client_id": "tv4-web"}, no_cache=True)
+        result = JsonHelper(result)
+        self.__access_token = result.get_value("access_token", fallback=None)
 
-    def create_api_tag(self, result_set):
-        """ Creates a new MediaItem for tag listing items
+        # Update headers for future calls
+        self.httpHeaders.update({
+            "Authorization": f"Bearer {self.__access_token}"
+        })
 
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
+        # Also update headers for the current parent item
+        if self.parentItem:
+            self.parentItem.HttpHeaders.update(self.httpHeaders)
+        return bool(self.__access_token)
 
-        :param str result_set: The result_set of the self.episodeItemRegex
+    def list_main_content(self, data: str) -> Tuple[str, List[MediaItem]]:
+        items: List[MediaItem] = []
 
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
+        def __create_item(lang_id: int, url: str, json: Optional[dict] = None):
+            name = LanguageHelper.get_localized_string(lang_id)
+            item = FolderItem(name, url, content_type=contenttype.VIDEOS)
+            item.dontGroup = True
+            item.postJson = json
+            return item
 
-        """
+        tvshow_url, tvshow_data = self.__get_api_query(
+            "MediaIndex",
+            {"input": {"letterFilters": list("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+                       "limit": self.__max_page_size, "offset": 0}},
+            use_get=True)
+        items.append(__create_item(LanguageHelper.TvShows, tvshow_url, tvshow_data))
 
-        Logger.trace(result_set)
-        query = 'query{programSearch(tag:"%s",per_page:1000){__typename,programs' \
-                '%s,' \
-                'totalHits}}' % (result_set, self.__program_fields)
-        query = HtmlEntityHelper.url_encode(query)
-        url = "https://graphql.tv4play.se/graphql?query={}".format(query)
-        item = MediaItem(result_set, url)
-        return item
+        recent_url, recent_data = self.__get_api_query("Panel", {"panelId": "1pDPvWRfhEg0wa5SvlP28N", "limit": self.__max_page_size, "offset": 0})
+        items.append(__create_item(LanguageHelper.Recent, recent_url, recent_data))
+
+        popular_url, popular_data = self.__get_api_query("Panel", {"panelId": "3QnNaigt4Szgkyz8yMU9oF", "limit": self.__max_page_size, "offset": 0})
+        items.append(__create_item(LanguageHelper.Popular, popular_url, popular_data))
+
+        latest_news_url, latest_news_data = self.__get_api_query("Panel", {"panelId": "5Rqb0w0SN16A6YHt5Mx8BU", "limit": self.__max_page_size, "offset": 0})
+        items.append(__create_item(LanguageHelper.LatestNews, latest_news_url, latest_news_data))
+
+        category_url, json_data = self.__get_api_query("PageList", {"pageListId": "categories"})
+        items.append(__create_item(LanguageHelper.Categories, category_url, json_data))
+
+        items.append(__create_item(LanguageHelper.Search, "searchSite"))
+        return data, items
+
+    def fetch_mainlist_pages(self, data: str) -> Tuple[str, List[MediaItem]]:
+        items = []
+        data = JsonHelper(data)
+        page_data = data
+        count = 0
+
+        item_count = page_data.get_value("data", "mediaIndex", "contentList", "pageInfo", "totalCount")
+        number_of_pages = math.ceil(1.0 * item_count / self.__max_page_size)
+
+        # Use a progress bar
+        status = LanguageHelper.get_localized_string(LanguageHelper.FetchMultiApi)
+        updated = LanguageHelper.get_localized_string(LanguageHelper.PageOfPages)
+        progress = XbmcDialogProgressWrapper("{} - {}".format(Config.appName, self.channelName), status)
+
+        try:
+            while count < 25:
+                count += 1
+                if progress.progress_update(count, number_of_pages, int(count * 100 / number_of_pages), False, updated.format(count, number_of_pages)):
+                    break
+
+                next_offset = page_data.get_value("data", "mediaIndex", "contentList", "pageInfo", "nextPageOffset")
+                if not next_offset or next_offset <= 0:
+                    break
+
+                tvshow_url, tvshow_data = self.__get_api_query(
+                    "MediaIndex",
+                    {"input": {
+                        "letterFilters": list("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+                        "limit": self.__max_page_size, "offset": next_offset}
+                    },
+                    use_get=True
+                )
+                new_data = UriHandler.open(
+                    tvshow_url, additional_headers=self.httpHeaders, json=tvshow_data,
+                    force_cache_duration=60 * 60)
+
+                page_data = JsonHelper(new_data)
+                data_items = page_data.get_value(*self.currentParser.Parser)
+                list_items = data.get_value(*self.currentParser.Parser)
+                list_items += data_items
+        finally:
+            progress.close()
+
+        Logger.debug("Pre-Processing finished")
+        return data, items
 
     def create_api_typed_item(self, result_set):
         """ Creates a new MediaItem based on the __typename attribute.
@@ -229,398 +276,243 @@ class Channel(chn_class.Channel):
 
         """
 
-        api_type = result_set["__typename"]
-        Logger.trace("%s: %s", api_type, result_set)
+        api_type = result_set.get("__typename")
+        Logger.trace(f"`create_api_typed_item` resulted in `{api_type}`")
+        if not api_type:
+            Logger.warning(result_set)
+            raise IndexError("`__typename` missing")
 
-        if api_type == "Program":
-            item = self.create_api_program_type(result_set)
-        elif api_type == "ProgramCard":
-            item = self.create_api_program_type(result_set.get("program"))
-        elif api_type == "VideoAsset":
-            item = self.create_api_video_asset_type(result_set)
-        elif api_type == "SwipeModule":
-            item = self.create_api_swipefolder_type(result_set)
-        elif api_type == "VideoPanel":
-            item = self.create_api_videopanel_type(result_set)
+        if api_type == "Series":
+            item = self.create_api_series(result_set)
+        elif api_type == "MediaPanelSeriesItem":
+            item = self.create_api_series(result_set["series"])
+        elif api_type == "MediaIndexSeriesItem":
+            item = self.create_api_typed_item(result_set["series"])
+
+        elif api_type == "Clip":
+            item = self.create_api_clip(result_set)
+        elif api_type == "ClipsPanelItem":
+            item = self.create_api_typed_item(result_set["clip"])
+
+        elif api_type == "Episode":
+            item = self.create_api_episode(result_set)
+
+        elif api_type == "Movie":
+            item = self.create_api_movie(result_set)
+        elif api_type == "MediaPanelMovieItem":
+            item = self.create_api_movie(result_set["movie"])
+        elif api_type == "MediaIndexMovieItem":
+            item = self.create_api_typed_item(result_set["movie"])
+
+        elif api_type == "SeasonLink":
+            item = self.create_api_season(result_set)
+        elif api_type == "PageReference":
+            item = self.create_api_page(result_set)
+        elif api_type == "PageReferenceItem":
+            item = self.create_api_page(result_set["pageReference"])
+        elif api_type == "StaticPageItem":
+            item = self.create_api_static_page(result_set)
+
+        elif api_type == "SinglePanel":
+            item = self.create_api_typed_item(result_set["link"])
+        elif api_type == "SinglePanelMovieLink":
+            item = self.create_api_movie(result_set["movie"])
+
+        elif (api_type == "MediaPanel" or api_type == "ClipsPanel" or
+              api_type == "PagePanel" or api_type == "SportEventPanel"):
+            item = self.create_api_panel(result_set)
+        elif api_type == "LivePanel":
+            item = self.create_api_live_panel(result_set)
+        elif api_type == "PagePanelPageItem":
+            item = self.create_api_typed_item(result_set["page"])
+        elif api_type == "SportEventPanelItem":
+            item = self.create_api_sport_event(result_set["sportEvent"])
+        elif api_type == "LivePanelEpisodeItem":
+            item = self.create_api_typed_item(result_set["episode"])
+
+        elif api_type == "ThemePanel":
+            item = self.create_api_theme_panel(result_set)
+
         else:
             Logger.warning("Missing type: %s", api_type)
             return None
 
         return item
 
-    def create_api_program_type(self, result_set):
-        """ Creates a new MediaItem for an episode.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param list[str]|dict result_set:   The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
-        json = result_set
-        title = json["name"]
-
-        # https://graphql.tv4play.se/graphql?operationName=cdp&variables={"nid":"100-penisar"}&extensions={"persistedQuery":{"version":1,"sha256Hash":"255449d35b5679b2cb5a9b85e63afd532c68d50268ae2740ae82f24d83a84774"}}
-        program_id = json["nid"]
-        url = self.__get_api_query(
-            '{program(nid:"%s"){name,description,videoPanels{id,name,subheading,assetType}}}' % (
-                program_id,))
-
-        item = FolderItem(title, url, content_type=contenttype.EPISODES)
-        item.tv_show_title = title
-        item.description = result_set.get("description", None)
-
-        item.thumb = result_set.get("image")
-        if item.thumb is not None:
-            item.thumb = "https://imageproxy.b17g.services/?format=jpg&shape=cut" \
-                         "&quality=70&resize=520x293&source={}" \
-                .format(HtmlEntityHelper.url_encode(item.thumb))
-
-        item.fanart = result_set.get("image")
-        if item.fanart is not None:
-            item.fanart = "https://imageproxy.b17g.services/?format=jpg&shape=cut" \
-                          "&quality=70&resize=1280x720&source={}" \
-                .format(HtmlEntityHelper.url_encode(item.fanart))
-
-        item.isPaid = result_set.get("is_premium", False)
-
-        return item
-
-    def create_api_videopanel_type(self, result_set):
-        """ Creates a new MediaItem for a folder listing
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param dict result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
-        title = result_set["name"]
-        folder_id = result_set["id"]
-        url = self.__get_api_folder_url(folder_id)
-        item = FolderItem(title, url, content_type=contenttype.EPISODES)
-        item.metaData["offset"] = 0
-        item.metaData["folder_id"] = folder_id
-        return item
-
-    def create_api_swipefolder_type(self, result_set):
-        """ Creates a new MediaItem for a folder listing
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param dict result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
+    def create_api_movie(self, result_set: dict) -> Optional[MediaItem]:
+        video_id: str = result_set["id"]
+        url = self.__get_video_url(video_id)
         title = result_set["title"]
-
-        if title == "Sista chansen":
-            title = LanguageHelper.get_localized_string(LanguageHelper.LastChance)
-        elif title == "Mest sedda programmen":
-            title = LanguageHelper.get_localized_string(LanguageHelper.MostViewedEpisodes)
-        elif title.startswith("Popul"):
-            title = LanguageHelper.get_localized_string(LanguageHelper.Popular)
-        elif title.startswith("Nyheter"):
-            title = LanguageHelper.get_localized_string(LanguageHelper.LatestNews)
-
-        item = FolderItem(title, "swipe://{}".format(HtmlEntityHelper.url_encode(title)),
-                          content_type=contenttype.VIDEOS)
-        for card in result_set["cards"]:
-            child = self.create_api_typed_item(card)
-            if not child:
-                continue
-
-            item.items.append(child)
-
-        if not item.items:
+        if not title:
             return None
 
-        return item
-
-    def create_api_video_asset_type(self, result_set):
-        """ Creates a MediaItem of type 'video' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace('starting FormatVideoItem for %s', self.channelName)
-
-        program_id = result_set["id"]
-        url = "https://playback2.a2d.tv/play/{}?service=tv4" \
-              "&device=browser&browser=GoogleChrome" \
-              "&protocol=hls%2Cdash" \
-              "&drm=widevine" \
-              "&capabilities=live-drm-adstitch-2%2Cexpired_assets". \
-            format(program_id)
-        # url = "https://playback-api.b17g.net/media/{}?service=tv4&device=browser&protocol=dash". \
-
-        name = result_set["title"]
-        season = result_set.get("season", 0)
-        episode = result_set.get("episode", 0)
-        is_episodic = 0 < season < 1900 and not episode == 0
-        is_live = result_set.get("live", False)
-        if is_episodic and not is_live:
-            episode_text = None
-            if " del " in name:
-                name, episode_text = name.split(" del ", 1)
-                episode_text = episode_text.lstrip("0123456789")
-
-            if episode_text:
-                episode_text = episode_text.lstrip(" -")
-                name = episode_text
-            else:
-                name = "{} {}".format("Avsnitt", episode)
-
-        item = MediaItem(name, url)
-        item.description = result_set.get("description")
-        if item.description is None:
-            item.description = item.name
-
-        if is_episodic and not is_live:
-            item.set_season_info(season, episode)
-
-        # premium_expire_date_time=2099-12-31T00:00:00+01:00
-        expire_in_days = result_set.get("daysLeftInService", 0)
-        if 0 < expire_in_days < 10000:
-            item.set_expire_datetime(
-                timestamp=datetime.datetime.now() + datetime.timedelta(days=expire_in_days))
-
-        date = result_set["broadcastDateTime"]
-        broadcast_date = DateHelper.get_datetime_from_string(date, "%Y-%m-%dT%H:%M:%SZ", "UTC")
-        broadcast_date = broadcast_date.astimezone(self.__timezone)
-        item.set_date(broadcast_date.year,
-                      broadcast_date.month,
-                      broadcast_date.day,
-                      broadcast_date.hour,
-                      broadcast_date.minute,
-                      0)
-
-        item.fanart = result_set.get("program_image", self.parentItem.fanart)
-        thumb_url = result_set.get("image", result_set.get("program_image"))
-        # some images need to come via a proxy:
-        if thumb_url and "://img.b17g.net/" in thumb_url:
-            item.thumb = "https://imageproxy.b17g.services/?format=jpg&shape=cut" \
-                         "&quality=70&resize=520x293&source={}" \
-                .format(HtmlEntityHelper.url_encode(thumb_url))
-        else:
-            item.thumb = thumb_url
-
-        item.media_type = mediatype.EPISODE
-        item.complete = False
+        item = MediaItem(title, url, media_type=mediatype.MOVIE)
         item.isGeoLocked = True
-        # For now, none are paid.
-        # item.isPaid = not result_set.get("freemium", False)
-        if "drmProtected" in result_set:
-            item.isDrmProtected = result_set["drmProtected"]
-        elif "is_drm_protected" in result_set:
-            item.isDrmProtected = result_set["is_drm_protected"]
-
-        item.isLive = result_set.get("live", False)
-        if item.isLive:
-            item.name = "{:02d}:{:02d} - {}".format(broadcast_date.hour, broadcast_date.minute,
-                                                    name)
-            item.url = "{0}&is_live=true".format(item.url)
-        if item.isDrmProtected:
-            item.url = "{}&drm=widevine&is_drm=true".format(item.url)
-
-        item.set_info_label("duration", int(result_set.get("duration", 0)))
+        item = self.__update_base_typed_item(item, result_set)
         return item
 
-    def add_next_page(self, data, items):
-        """ Performs post-process actions for data processing.
+    def create_api_clip(self, result_set: dict) -> Optional[MediaItem]:
+        clip_id = result_set["id"]
+        url = self.__get_video_url(clip_id)
+        title = result_set["title"]
+        if not title:
+            return None
 
-        Accepts an data from the process_folder_list method, BEFORE the items are
-        processed. Allows setting of parameters (like title etc) for the channel.
-        Inside this method the <data> could be changed and additional items can
-        be created.
+        item = MediaItem(title, url, media_type=mediatype.VIDEO)
+        item = self.__update_base_typed_item(item, result_set)
+        item.isPaid = result_set.get("upsell") is not None
+        item.isLive = result_set.get("isLiveContent", False)
 
-        The return values should always be instantiated in at least ("", []).
+        duration = JsonHelper.get_from(result_set, "clipVideo", "duration", "seconds", fallback=0)
+        if duration:
+            item.set_info_label(MediaItem.LabelDuration, duration)
+        return item
 
-        :param str|JsonHelper data:     The retrieve data that was loaded for the
-                                         current item and URL.
-        :param list[MediaItem] items:   The currently available items
+    def create_api_episode(self, result_set: dict) -> Optional[MediaItem]:
+        Logger.trace(result_set)
+        video_id: str = result_set["id"]
+        url = self.__get_video_url(video_id)
+        title = result_set["title"]
+        if not title:
+            return None
 
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: list[MediaItem]
+        item = MediaItem(title, url, media_type=mediatype.MOVIE)
+        item = self.__update_base_typed_item(item, result_set)
+        item.isGeoLocked = True
+        item.isPaid = result_set.get("upsell") is not None
+        item.isLive = result_set.get("isLiveContent", False)
+        item.description = result_set.get("synopsis", {}).get("medium", "")
 
-        """
+        duration = JsonHelper.get_from(result_set, "video", "duration", "seconds", fallback=0)
+        if duration:
+            item.set_info_label(MediaItem.LabelDuration, duration)
 
-        Logger.info("Performing Post-Processing")
+        # Playable from
+        self.__set_playback_window(item, result_set)
+        return item
 
-        total_hits = data.get_value('data', 'videoPanel', 'videoList', 'totalHits')
-        if total_hits > len(items):
-            Logger.debug("Adding items from next page")
-            offset = self.parentItem.metaData.get("offset", 0) + self.__maxPageSize
-            folder_id = self.parentItem.metaData.get("folder_id")
-            if not folder_id:
-                Logger.warning("Cannot find 'folder_id' in MediaItem")
-                return items
+    def create_api_series(self, result_set: dict) -> Optional[MediaItem]:
+        series_id = result_set["id"]
 
-            url = self.__get_api_folder_url(folder_id, offset)
-            data = UriHandler.open(url)
-            json_data = JsonHelper(data)
-            extra_results = json_data.get_value("data", "videoPanel", "videoList", "videoAssets",
-                                                fallback=[])
-            Logger.debug("Adding %d extra results from next page", len(extra_results or []))
-            for result in extra_results:
-                item = self.create_api_video_asset_type(result)
-                if item:
-                    items.append(item)
+        url, data = self.__get_api_query(
+            operation="ContentDetailsPage",
+            variables={"mediaId": series_id, "panelsInput": {"offset": 0, "limit": 20}},
+            use_get=True
+        )
+        title = result_set["title"]
+        if not title:
+            return None
 
-        Logger.debug("Post-Processing finished")
-        return items
+        item = FolderItem(title, url, content_type=contenttype.EPISODES, media_type=mediatype.TVSHOW)
+        item = self.__update_base_typed_item(item, result_set)
+        item.postJson = data
+        item.HttpHeaders.update({"feature_flag_enable_season_upsell_on_cdp": "true"})
+        item.isPaid = result_set.get("upsell") is not None
+        return item
 
-    def detect_single_folder(self, data):
-        """ Performs pre-process actions and detect single folder items
+    def create_api_season(self, result_set: dict) -> Optional[MediaItem]:
+        title = result_set["title"]
+        season_id = result_set["seasonId"]
+        url, json_data = self.__get_api_query("SeasonEpisodes", {"seasonId": season_id, "input": {"limit": self.__max_page_size, "offset": 0}})
+        item = FolderItem(title, url, content_type=contenttype.EPISODES, media_type=mediatype.FOLDER)
+        item.postJson = json_data
+        item.metaData["seasonId"] = result_set["seasonId"]
+        return item
 
-        Accepts an data from the process_folder_list method, BEFORE the items are
-        processed. Allows setting of parameters (like title etc) for the channel.
-        Inside this method the <data> could be changed and additional items can
-        be created.
+    def create_api_page(self, result_set: dict) -> Optional[MediaItem]:
+        title = result_set["title"]
+        page_id = result_set["id"]
 
-        The return values should always be instantiated in at least ("", []).
+        # Link goes to a page
+        url, data = self.__get_api_query(
+            operation="Page",
+            variables={"pageId": page_id, "input": {"limit": self.__max_page_size, "offset": 0}},
+            use_get=False
+        )
 
-        :param str data: The retrieve data that was loaded for the current item and URL.
+        item = FolderItem(title, url, content_type=contenttype.TVSHOWS, media_type=mediatype.FOLDER)
+        item.postJson = data
 
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+        self.__set_art(item, result_set.get("images"))
+        return item
 
-        """
+    def create_api_panel(self, result_set: dict) -> Optional[MediaItem]:
+        panel_id = result_set["id"]
+        title = result_set["title"]
+        url, data = self.__get_api_query(
+            "Panel",
+            {"panelId": panel_id, "limit": self.__max_page_size, "offset": 0}
+        )
 
-        json_data = JsonHelper(data)
-        panels = json_data.get_value("data", "program", "videoPanels")
-        if len(panels) != 1:
-            return data, []
+        item = FolderItem(title, url, content_type=contenttype.VIDEOS)
+        item.postJson = data
+        return item
 
-        items = []
-        item = self.create_api_videopanel_type(panels[0])
-        data = UriHandler.open(item.url)
-        json_data = JsonHelper(data)
-        assets = json_data.get_value("data", "videoPanel", "videoList", "videoAssets")
-        for asset in assets:
-            item = self.create_api_video_asset_type(asset)
-            if item:
-                items.append(item)
+    def create_api_live_panel(self, result_set: dict) -> Optional[MediaItem]:
+        panel_id = result_set["id"]
+        title = result_set["title"]
+        url, data = self.__get_api_query(
+            operation="LivePanel",
+            variables={"panelId": panel_id, "limit": self.__max_page_size, "offset": 0},
+            use_get=True
+        )
 
-        return "", items
+        item = FolderItem(title, url, content_type=contenttype.VIDEOS)
+        item.postJson = data
+        return item
 
-    def add_categories_and_specials(self, data):
-        """ Performs pre-process actions for data processing.
+    def create_api_sport_event(self, result_set: dict) -> Optional[MediaItem]:
+        title = result_set["title"]
+        event_id = result_set["id"]
+        url = self.__get_video_url(event_id)
 
-        Accepts a data from the process_folder_list method, BEFORE the items are
-        processed. Allows setting of parameters (like title etc) for the channel.
-        Inside this method the <data> could be changed and additional items can
-        be created.
+        item = MediaItem(title, url, media_type=mediatype.VIDEO)
+        item.isLive = result_set.get("isLiveContent", False)
+        item.description = result_set.get("league")
+        self.__set_art(item, result_set["images"])
+        self.__set_playback_window(item, result_set)
+        return item
 
-        The return values should always be instantiated in at least ("", []).
+    def create_api_theme_panel(self, result_set: dict) -> Optional[MediaItem]:
+        return None
 
-        :param str data: The retrieve data that was loaded for the current item and URL.
+    def create_api_static_page(self, result_set: dict) -> Optional[MediaItem]:
+        result_set = result_set["staticPage"]
+        page_id = result_set["id"]
+        if page_id != "alphabetical":
+            return None
 
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+        title = result_set["title"]
+        url, data = self.__get_api_query(
+            "MediaIndex",
+            {"input": {
+                "letterFilters": list("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), "limit": self.__max_page_size, "offset": 0}
+            }
+        )
+        item = FolderItem(title, url, content_type=contenttype.VIDEOS, media_type=mediatype.FOLDER)
+        item.postJson = data
 
-        """
+        self.__set_art(item, result_set.get("images"))
+        return item
 
-        Logger.info("Performing Pre-Processing")
-        items = []
+    # noinspection PyUnusedLocal
+    def check_for_seasons(self, data: JsonHelper, items: List[MediaItem]) -> List[MediaItem]:
+        # If not seasons, or just one, fetch the episodes
+        if len(items) != 1:
+            return items
 
-        extras = {
-            LanguageHelper.get_localized_string(LanguageHelper.Search): ("searchSite", None, False),
-            LanguageHelper.get_localized_string(LanguageHelper.TvShows): (
-                # "https://www.tv4play.se/alla-program",
-                self.__get_api_query("query{programSearch(per_page:1000){__typename,programs{"
-                                     "__typename,description,displayCategory,id,image,"
-                                     "images{main16x9},name,nid,genres},totalHits}}"),
-                None, False
-            ),
-            LanguageHelper.get_localized_string(LanguageHelper.Categories): (
-                "https://graphql.tv4play.se/graphql?query=query%7Btags%7D", None, False
-            ),
-            LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes): (
-                self.__get_api_url("LiveVideos",
-                                   "800a3ef456fa19eaa1cfa23aab646c50fab91a1a8f82660f56ec03c9bf61c028"),
-                None, False
-            )
-        }
+        # Retry with just this url.
+        season_id = items[0].metaData["seasonId"]
+        url, data = self.__get_api_query(
+            "SeasonEpisodes",
+            {"seasonId": season_id, "input": {"limit": self.__max_page_size, "offset": 0}}
+        )
+        self.parentItem.url = url
+        self.parentItem.postJson = data
+        return self.process_folder_list(self.parentItem)
 
-        # No more extras
-        # today = datetime.datetime.now()
-        # days = [LanguageHelper.get_localized_string(LanguageHelper.Monday),
-        #         LanguageHelper.get_localized_string(LanguageHelper.Tuesday),
-        #         LanguageHelper.get_localized_string(LanguageHelper.Wednesday),
-        #         LanguageHelper.get_localized_string(LanguageHelper.Thursday),
-        #         LanguageHelper.get_localized_string(LanguageHelper.Friday),
-        #         LanguageHelper.get_localized_string(LanguageHelper.Saturday),
-        #         LanguageHelper.get_localized_string(LanguageHelper.Sunday)]
-        # for i in range(0, 7, 1):
-        #     start_date = today - datetime.timedelta(i)
-        #     end_date = start_date + datetime.timedelta(1)
-        #
-        #     day = days[start_date.weekday()]
-        #     if i == 0:
-        #         day = LanguageHelper.get_localized_string(LanguageHelper.Today)
-        #     elif i == 1:
-        #         day = LanguageHelper.get_localized_string(LanguageHelper.Yesterday)
-        #
-        #     Logger.trace("Adding item for: %s - %s", start_date, end_date)
-        #     url = "https://api.tv4play.se/play/video_assets?exclude_node_nids=" \
-        #           "&platform=tablet&is_live=false&product_groups=2&type=episode&per_page=100"
-        #     url = "%s&broadcast_from=%s&broadcast_to=%s&" % (url, start_date.strftime("%Y%m%d"), end_date.strftime("%Y%m%d"))
-        #     extras[day] = (url, start_date, False)
-        #
-        # extras[LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes)] = (
-        #     "https://api.tv4play.se/play/video_assets?exclude_node_nids=&platform=tablet&"
-        #     "is_live=true&product_groups=2&type=episode&per_page=100", None, False)
-
-        # Actually add the extra items
-        for name in extras:
-            title = name
-            url, date, is_live = extras[name]  # type: str, datetime.datetime, bool
-            item = FolderItem(title, url, content_type=contenttype.VIDEOS)
-            item.dontGroup = True
-            item.complete = True
-            item.HttpHeaders = self.httpHeaders
-            item.isLive = is_live
-
-            if date is not None:
-                item.set_date(date.year, date.month, date.day, 0, 0, 0,
-                              text=date.strftime("%Y-%m-%d"))
-
-            items.append(item)
-
-        Logger.debug("Pre-Processing finished")
-        return data, items
-
-    def search_site(self, url=None):
-        """ Creates an list of items by searching the site.
+    def search_site(self, url: Optional[str] = None) -> List[MediaItem]:
+        """ Creates a list of items by searching the site.
 
         This method is called when the URL of an item is "searchSite". The channel
         calling this should implement the search functionality. This could also include
@@ -636,11 +528,30 @@ class Channel(chn_class.Channel):
 
         """
 
-        url = self.__get_api_query(
-            '{programSearch(q:"",perPage:100){totalHits,programs%s}}' % self.__program_fields)
-        url = url.replace("%", "%%")
-        url = url.replace("%%22%%22", "%%22%s%%22")
-        return chn_class.Channel.search_site(self, url)
+        needle = XbmcWrapper.show_key_board()
+        if not needle:
+            return []
+
+        variables = {"input": {"query": needle}, "limit": 10, "offset": 0,
+                "shouldFetchMovieSeries": True, "shouldFetchMovieSeriesUpsell": True,
+                "shouldFetchClip": True, "shouldFetchPage": True, "shouldFetchSportEvent": True,
+                "shouldFetchSportEventUpsell": True}
+        url, data = self.__get_api_query("PanelSearch", variables)
+
+        search = MediaItem("Search", url, mediatype.FOLDER)
+        search.postJson = data
+        return self.process_folder_list(search)
+
+    def merge_search(self, data):
+        items = []
+        results = JsonHelper("[]")
+
+        data = JsonHelper(data)
+        for cat, result in data.get_value("data", "panelSearch", "data").items():
+            result_items = result["content"]["items"]
+            results.json += result_items
+
+        return results, items
 
     def update_video_item(self, item):
         """ Updates an existing MediaItem with more data.
@@ -681,8 +592,7 @@ class Channel(chn_class.Channel):
 
         # retrieve the mediaurl
         # needs an "x-jwt: Bearer"  header.
-        token = AddonSettings.get_setting("channel_tv4play_se_token")
-        token = token.split("|")[1]
+        token = self.__access_token
         headers = {
             "x-jwt": "Bearer {}".format(token)
         }
@@ -695,29 +605,10 @@ class Channel(chn_class.Channel):
         if ".mpd" in stream_url:
             return self.__update_dash_video(item, stream_info)
 
-        # Clips can play with input stream adaptive. Normal shows not as they will never stop.
-        is_clip = stream_info.get_value("metadata", "isClip")
-        if True:  # AddonSettings.use_adaptive_stream_add_on() and is_clip:
-            subtitle = M3u8.get_subtitle(stream_url)
-            stream = item.add_stream(stream_url, 0)
-            M3u8.set_input_stream_addon_input(stream)
-            item.complete = True
-        else:
-            m3u8_data = UriHandler.open(stream_url)
-            subtitle = M3u8.get_subtitle(stream_url, play_list_data=m3u8_data)
-            for s, b, a in M3u8.get_streams_from_m3u8(stream_url,
-                                                      play_list_data=m3u8_data, map_audio=True):
-                item.complete = True
-                if not item.isLive and "-video" not in s:
-                    continue
-
-                if a and "-audio" not in s:
-                    # remove any query parameters
-                    video_part = s.rsplit("?", 1)[0]
-                    video_part = video_part.rsplit("-", 1)[-1]
-                    video_part = "-%s" % (video_part,)
-                    s = a.replace(".m3u8", video_part)
-                item.add_stream(s, b)
+        subtitle = M3u8.get_subtitle(stream_url)
+        stream = item.add_stream(stream_url, 0)
+        M3u8.set_input_stream_addon_input(stream)
+        item.complete = True
 
         if subtitle:
             subtitle = subtitle.replace(".m3u8", ".webvtt")
@@ -755,42 +646,276 @@ class Channel(chn_class.Channel):
         item.complete = True
         return item
 
-    def __get_api_url(self, operation, hash_value, variables=None):  # NOSONAR
-        """ Generates a GraphQL url
+    def __update_base_typed_item(
+            self, item: Union[MediaItem, FolderItem], result_set: dict) -> Union[
+        MediaItem, FolderItem]:
 
-        :param str operation:   The operation to use
-        :param str hash_value:  The hash of the Query
-        :param dict variables:  Any variables to pass
+        self.__set_art(item, result_set.get("images"))
+        return item
 
-        :return: A GraphQL string
-        :rtype: str
+    def __get_video_url(self, program_id: str):
+        # https://playback2.a2d.tv/play/8d1eb26ad728c9125de8?service=tv4play&device=browser&protocol=hls%2Cdash&drm=widevine&browser=GoogleChrome&capabilities=live-drm-adstitch-2%2Cyospace3
+        url = "https://playback2.a2d.tv/play/{}?service=tv4play" \
+              "&device=browser&browser=GoogleChrome" \
+              "&protocol=hls%2Cdash" \
+              "&drm=widevine" \
+              "&capabilities=live-drm-adstitch-2%2Cexpired_assets". \
+            format(program_id)
+        return url
+
+    def __set_art(self, item: MediaItem, art_info: Optional[dict]):
+        if not art_info:
+            return
+
+        for k, v in art_info.items():
+            if isinstance(v, str) or not v:
+                continue
+
+            encoded_url = v.get("sourceEncoded")
+            if not encoded_url:
+                continue
+
+            url = HtmlEntityHelper.url_decode(encoded_url)
+            if k == "cover2x3" or k == "image2x3":
+                item.set_artwork(poster=url)
+            elif k == "main16x9Annotated":
+                item.set_artwork(thumb=url, fanart=url)
+            elif k == "main16x9" or k == "image16x9":
+                # Only thumbs should be set (not fanart)
+                item.set_artwork(thumb=url)
+            elif k == "image4x3":
+                item.set_artwork(thumb=url)
+            elif k == "logo":
+                pass
+            else:
+                Logger.warning("Unknown image format: %s", k)
+
+    # def __get_api_persistent_query(self, operation, hash_value, variables=None):  # NOSONAR
+    #     """ Generates a GraphQL url
+    #
+    #     :param str operation:   The operation to use
+    #     :param str hash_value:  The hash of the Query
+    #     :param dict variables:  Any variables to pass
+    #
+    #     :return: A GraphQL string
+    #     :rtype: str
+    #
+    #     """
+    #
+    #     extensions = {"persistedQuery": {"version": 1, "sha256Hash": hash_value}}
+    #     extensions = HtmlEntityHelper.url_encode(JsonHelper.dump(extensions, pretty_print=False))
+    #
+    #     final_vars = {"order_by": "NAME", "per_page": 1000}
+    #     if variables:
+    #         final_vars = variables
+    #     final_vars = HtmlEntityHelper.url_encode(JsonHelper.dump(final_vars, pretty_print=False))
+    #
+    #     url = "https://client-gateway.tv4.a2d.tv/graphql?" \
+    #           "operationName={}&" \
+    #           "variables={}&" \
+    #           "extensions={}".format(operation, final_vars, extensions)
+    #     return url
+
+    def __get_api_query(self, operation: str, variables: dict, use_get: bool = False) -> Tuple[str, Optional[dict]]:
+        """ Creates a POST or GET for a GraphQL operation.
+
+        :param operation:   Name of the operation.
+        :param variables:   The input variables (dict).
+        :param use_get:     Use a GET or POST (5000+ chars cannot be used in a GET).
+
+        :return: a tuple with url and json post data.
 
         """
 
-        extensions = {"persistedQuery": {"version": 1, "sha256Hash": hash_value}}
-        extensions = HtmlEntityHelper.url_encode(JsonHelper.dump(extensions, pretty_print=False))
+        base_url = f"https://client-gateway.tv4.a2d.tv/graphql?operationName={operation}&"
+        query = ""
 
-        final_vars = {"order_by": "NAME", "per_page": 1000}
-        if variables:
-            final_vars = variables
-        final_vars = HtmlEntityHelper.url_encode(JsonHelper.dump(final_vars, pretty_print=False))
+        # 1:1 Generated from javascript source
+        fragments = {
+            "CdpPanelsFields": "fragment CdpPanelsFields on CdpPanels { items { ... on ClipsPanel { id title } } }",
+            "ChannelFields": "fragment ChannelFields on Channel { __typename id title description tagline slug type images { logo { ...ImageFieldsLight } main16x9 { ...ImageFieldsLight } } access { hasAccess } epg { end start title } } ",
+            "ChannelPanels": "fragment ChannelPanels on ChannelPanel { __typename id title content(input: {limit: 100, offset: 0}) { items { channel { __typename id title images { logo { ...ImageFieldsLight } } } } } }",
+            "ChannelVideoFields": "fragment ChannelVideoFields on Channel { title id slug isDrmProtected access { hasAccess } epg { end start title type images { main16x9 { isFallback id source sourceEncoded } } } images { logo { ...ImageFieldsLight } main16x9 { ...ImageFieldsLight source } } }",
+            "ClipFieldsLight": "fragment ClipFieldsLight on Clip { id slug title clipVideo: video { ...VideoFields } images { main16x9 { ...ImageFieldsLight } } playableFrom { readableDistance } mediaClassification parent { ... on ClipParentSeriesLink { id title } ... on ClipParentMovieLink { id title } } }",
+            "ClipVideoFields": "fragment ClipVideoFields on Clip { id slug title images { main16x9 { ...ImageFieldsLight source } } playableFrom { humanDateTime readableDistance isoString } mediaClassification parent { ... on ClipParentSeriesLink { id title } ... on ClipParentMovieLink { id title } } clipVideo: video { ...VideoFields } isPollFeatureEnabled description playableUntil { isoString humanDateTime } }",
+            "ContestantFields": "fragment ContestantFields on Contestant {  name shortName avatar { avatar1x1 { ...ImageFieldsLight } } confirmation { headline image { action1x1 { ...ImageFieldsLight } } text } thankYou { headline image { action1x1 { ...ImageFieldsLight } } text } }",
+            "ContinueWatchingFields": "fragment ContinueWatchingFields on ContinueWatchingItem { continueWatchingEntryId labelText media { ... on ContinueWatchingEpisodeItem { episode { ...EpisodeFields progress { percent timeLeft } series { id images { main16x9Annotated { ...ImageFieldsLight } } } } } ... on ContinueWatchingMovieItem { movie { ...MovieFieldsLight progress { percent timeLeft } video { ...VideoFields } } } } }",
+            "EliminationPollFields": "fragment EliminationPollFields on EliminationPoll { id accentColor backgroundColor eliminatedContestants { ...ContestantFields } liveTriggerTimestamps options { contestant { ...ContestantFields } id } rules { maxVotesPerOption } status eliminationSubtitle: subtitle title vodTriggerTimes }",
+            "EpisodeFields": "fragment EpisodeFields on Episode { id slug title isLiveContent isStartOverEnabled series { id title slug } images { main16x9 { ...ImageFieldsLight } } liveEventEnd { isoString } playableUntil { readableDistance(type: DAYS_LEFT) humanDateTime } playableFrom { humanDateTime isoString } video { ...VideoFields } upsell { tierId } }",
+            "EpisodeFieldsFull": "fragment EpisodeFieldsFull on Episode { ...EpisodeFields synopsis { medium } parentalRating { ...ParentalRatingFields } upsell { tierId } }",
+            "EpisodeVideoFields": "fragment EpisodeVideoFields on Episode { id slug title extendedTitle isPollFeatureEnabled isLiveContent liveEventEnd { isoString } series { title id slug } synopsis { medium } images { main16x9 { ...ImageFieldsLight source } } parentalRating { ...ParentalRatingFields } video { ...VideoFields } playableFrom { isoString humanDateTime } playableUntil { isoString humanDateTime } }",
+            "ImageFieldsFull": "fragment ImageFieldsFull on Image { sourceEncoded meta { muteBgColor { hex } } }",
+            "ImageFieldsLight": "fragment ImageFieldsLight on Image { sourceEncoded isFallback }",
+            "LabelFields": "fragment LabelFields on Label { id airtime announcement recurringBroadcast }",
+            "ListSearchCountFields": "fragment ListSearchCountFields on ListSearchCount { clips movies pages series sportEvents }",
+            "MediaPanels": "fragment MediaPanels on MediaPanel { id title content(input: {limit: 4, offset: 0}) { items { ... on MediaPanelSeriesItem { series { id title images { cover2x3 { ...ImageFieldsLight } } } } ... on MediaPanelMovieItem { movie { id title images { cover2x3 { ...ImageFieldsLight } } } } } } }",
+            "MovieCreditsFields": "fragment MovieCreditsFields on MovieCredits { actors { characterName name type } directors { name type } }",
+            "MovieFieldsLight": "fragment MovieFieldsLight on Movie { id slug title genres productionYear isLiveContent productionCountries { name } parentalRating { ...ParentalRatingFields } liveEventEnd { isoString } label { ...LabelFields } images { cover2x3 { ...ImageFieldsFull } main16x9Annotated { ...ImageFieldsLight } } playableUntil { readableDistance(type: DAYS_LEFT) } playableFrom { isoString humanDateTime readableDate } trailers { mp4 webm } upsell { tierId } }",
+            "MovieVideoFields": "fragment MovieVideoFields on Movie { id slug title isPollFeatureEnabled liveEventEnd { isoString } isLiveContent synopsis { medium } images { main16x9 { ...ImageFieldsLight source } brandLogo { ...ImageFieldsLight } } parentalRating { ...ParentalRatingFields } video { ...VideoFields } playableFrom { isoString humanDateTime } playableUntil { isoString humanDateTime } }",
+            "PageInfoFields": "fragment PageInfoFields on PageInfo { hasNextPage nextPageOffset totalCount }",
+            "PageListFields": "fragment PageListFields on PageReference { id title images { image16x9 { ...ImageFieldsFull } image4x3 { ...ImageFieldsFull } logo { ...ImageFieldsLight isFallback } } }",
+            "PagePanels": "fragment PagePanels on PagePanel { id title content(input: {limit: 10, offset: 0}) { items { ... on PagePanelPageItem { page { id title images { logo { ...ImageFieldsLight } } } } } } }",
+            "ParentalRatingFields": "fragment ParentalRatingFields on ParentalRating { finland { ageRestriction reason } sweden { ageRecommendation suitableForChildren } }",
+            "ProgressFields": "fragment ProgressFields on Progress { percent position timeLeft }",
+            "Recommendations": "fragment Recommendations on MediaRecommendationsResult { pageInfo { ...PageInfoFields } items { ... on RecommendedMovie { movie { ...MovieFieldsLight } } ... on RecommendedSeries { series { ...SeriesFieldsLight } } ... on RecommendedClip { clip { ...ClipFieldsLight } } } }",
+            "SeriesCreditsFields": "fragment SeriesCreditsFields on SeriesCredits { directors { name type } hosts { name type } actors { characterName name type } }",
+            "SeriesFieldsLight": "fragment SeriesFieldsLight on Series { id slug title genres mediaClassification numberOfAvailableSeasons label { ...LabelFields } images { cover2x3 { ...ImageFieldsFull } main16x9Annotated { ...ImageFieldsLight } } parentalRating { ...ParentalRatingFields } trailers { mp4 webm } upsell { tierId } }",
+            "SinglePanelFields": "fragment SinglePanelFields on SinglePanel { id secondaryLinkText images { image16x9 { ...ImageFieldsFull } image2x3 { ...ImageFieldsFull } brandLogo { ...ImageFieldsLight } } link { __typename ... on SinglePanelPageLink { page { id } } ... on SinglePanelSportEventLink { sportEvent { ...SportEventFieldsLight } } ... on SinglePanelSeriesLink { series { ...SeriesFieldsLight } } ... on SinglePanelMovieLink { movie { ...MovieFieldsLight } } ... on SinglePanelEpisodeLink { episode { ...EpisodeFields } } ... on SinglePanelClipLink { clip { ...ClipFieldsLight } } ... on SinglePanelChannelLink { channel { ...ChannelFields } } } trailers { ...TrailerFields } linkText title pitch shortPitch }",
+            "SportEventFieldsLight": "fragment SportEventFieldsLight on SportEvent { title slug id league round images { main16x9 { ...ImageFieldsLight } brandLogo { ...ImageFieldsLight } } playableFrom { humanDateTime isoString } liveEventEnd { isoString } isLiveContent upsell { tierId } } ",
+            "SportEventVideoFields": "fragment SportEventVideoFields on SportEvent { title id slug isLiveContent isDrmProtected access { hasAccess } synopsis { medium } images { logo { ...ImageFieldsLight } main16x9 { ...ImageFieldsLight source } brandLogo { ...ImageFieldsLight } } playableUntil { isoString humanDateTime } playableFrom { humanDateTime isoString readableDistance } liveEventEnd { isoString } }",
+            "SurveyPollFields": "fragment SurveyPollFields on SurveyPoll { buttonText color endTime id image { main4x3 { ...ImageFieldsFull } } inactiveSubtitle inactiveTitle liveTriggerTimestamps options { id image { option1x1 { ...ImageFieldsLight } } text } publishing { metadataIds videoAssetIds } resultConfiguration { isResultPublic isResultStatic } resultSubtitle resultTitle status subtitle title vodTriggerTimes }",
+            "ThemePanelFields": "fragment ThemePanelFields on ThemePanel { id title pitch hexColor images { image16x9 { ...ImageFieldsFull } } link { ... on ThemePanelSeriesLink { series { id slug genres numberOfAvailableSeasons parentalRating { ...ParentalRatingFields } images { brandLogo { ...ImageFieldsLight } } upsell { tierId } } } ... on ThemePanelMovieLink { movie { id slug genres productionCountries { countryCode name } productionYear parentalRating { ...ParentalRatingFields } images { brandLogo { ...ImageFieldsLight } } upsell { tierId } } } ... on ThemePanelEpisodeLink { episode { id slug upsell { tierId } } } ... on ThemePanelClipLink { clip { id slug } } ... on ThemePanelPageLink { page { id } } ... on ThemePanelUrlsLink { webUrl } ... on ThemePanelSportEventLink { sportEvent { id slug arena league round playableFrom { humanDateTime isoString readableDate } images { brandLogo { ...ImageFieldsLight } } upsell { tierId } } } } themePanelLinkText: linkText showMetadataForLink subtitle trailers { ...TrailerFields } showUpsellLabel }",
+            "TierPanels": "fragment TierPanels on TiersPanel { id title }",
+            "TrailerFields": "fragment TrailerFields on Trailers { mp4 webm }",
+            "UpcomingEpisodeFields": "fragment UpcomingEpisodeFields on UpcomingEpisode { id title seasonTitle playableFrom { humanDateTime isoString readableDateShort } image { main16x9 { ...ImageFieldsLight } } upsell { tierId } } ",
+            "VideoFields": "fragment VideoFields on Video { id duration { readableShort readableMinutes seconds } isLiveContent access { hasAccess } isDrmProtected }",
+        }
 
-        url = "https://graphql.tv4play.se/graphql?" \
-              "operationName={}&" \
-              "variables={}&" \
-              "extensions={}".format(operation, final_vars, extensions)
-        return url
+        if operation == "SeasonEpisodes":
+            query = """
+                query SeasonEpisodes($input: SeasonEpisodesInput!, $seasonId: ID!) { 
+                    season(id: $seasonId) { id numberOfEpisodes episodes(input: $input) { initialSortOrder pageInfo { ...PageInfoFields } items { __typename ...EpisodeFieldsFull } } } } 
+                %(PageInfoFields)s %(EpisodeFieldsFull)s %(EpisodeFields)s %(ParentalRatingFields)s %(ImageFieldsLight)s %(VideoFields)s
+            """ % fragments
 
-    def __get_api_query(self, query):
-        return "https://graphql.tv4play.se/graphql?query={}".format(
-            HtmlEntityHelper.url_encode(query))
+        elif operation == "PageList":
+            query = """
+                query PageList($pageListId: ID!) { pageList(id: $pageListId) { id content { ... 
+                    on PageReferenceItem { pageReference { ...PageListFields __typename } __typename } ... 
+                    on StaticPageItem { staticPage { id title type images { image4x3 { ...ImageFieldsFull __typename } __typename } __typename } __typename } __typename } __typename }} 
+                %(PageListFields)s %(ImageFieldsFull)s %(ImageFieldsLight)s
+            """ % fragments
 
-    def __get_api_folder_url(self, folder_id, offset=0):
-        return self.__get_api_query(
-            '{videoPanel(id: "%s"){name,videoList(limit: %s, offset:%d, '
-            'sortOrder: "broadcastDateTime"){totalHits,videoAssets'
-            '{title,id,description,season,episode,daysLeftInService,broadcastDateTime,image,'
-            'freemium,drmProtected,live,duration}}}}' % (folder_id, self.__maxPageSize, offset))
+        elif operation == "Panel":
+            query = """
+                query Panel($panelId: ID!, $offset: Int!, $limit: Int!) { panel(id: $panelId) { ... on ContinueWatchingPanel { id } ... on PagePanel 
+                { id content(input: {offset: $offset, limit: $limit}) { pageInfo { ...PageInfoFields } items { ... 
+                    on PagePanelPageItem { page { ...PageListFields } } } } } ... 
+                    on SportEventPanel { id content(input: {offset: $offset, limit: $limit}) { pageInfo { ...PageInfoFields } items { sportEvent { ...SportEventFieldsLight } } } } ... 
+                    on ClipsPanel { id title content(input: {offset: $offset, limit: $limit}) { pageInfo { ...PageInfoFields } items { __typename clip { __typename ...ClipFieldsLight } } } } ... 
+                    on EpisodesPanel { id title content(input: {offset: $offset, limit: $limit}) { pageInfo { ...PageInfoFields } items { episode { ...EpisodeFields } labelText } } } ... 
+                    on MediaPanel { __typename id slug title content(input: {offset: $offset, limit: $limit}) { __typename pageInfo { ...PageInfoFields } items { ... 
+                        on MediaPanelMovieItem { __typename movie { ...MovieFieldsLight __typename } } ... 
+                        on MediaPanelSeriesItem { __typename series { ...SeriesFieldsLight __typename} } } } } ... 
+                        on ChannelPanel { id title type content(input: {offset: $offset, limit: $limit}) { pageInfo { ...PageInfoFields } items { channel { ...ChannelFields } } } } } }
+                %(ImageFieldsFull)s %(ParentalRatingFields)s %(ImageFieldsLight)s %(VideoFields)s %(EpisodeFields)s 
+                %(LabelFields)s %(MovieFieldsLight)s %(SportEventFieldsLight)s %(SeriesFieldsLight)s %(ClipFieldsLight)s 
+                %(ChannelFields)s %(PageListFields)s %(PageInfoFields)s
+            """ % fragments
+
+        elif operation == "MediaIndex":
+            query = """
+                query MediaIndex($input: MediaIndexListInput!, $genres: [String!]) { mediaIndex(genres: $genres) { overview { letterIndex { letter totalCount } } contentList(input: $input) { __typename 
+                items { 
+                    ... on MediaIndexSeriesItem { __typename letter series { ...SeriesFieldsLight __typename } } 
+                    ... on MediaIndexMovieItem { __typename letter movie { ...MovieFieldsLight __typename } } 
+                } pageInfo { hasMoreForLastLetter totalCount lastLetter nextPageOffset } } } }
+                %(SeriesFieldsLight)s %(MovieFieldsLight)s %(LabelFields)s %(ImageFieldsFull)s %(ImageFieldsLight)s %(ParentalRatingFields)s 
+            """ % fragments
+
+        elif operation == "ContentDetailsPage":
+            query = """
+                query ContentDetailsPage($mediaId: ID!, $panelsInput: CdpPanelsInput!) { media(id: $mediaId) { 
+                    ... on SportEvent { __typename id slug title league arena commentators country round season inStudio isLiveContent isStartOverEnabled humanCallToAction editorialInfoText synopsis { brief long } trailers { ...TrailerFields } playableFrom { humanDateTime isoString readableDate } playableUntil { readableDate } liveEventEnd { isoString } images { poster2x3 { ...ImageFieldsFull } main16x9 { ...ImageFieldsFull } logo { ...ImageFieldsLight } brandLogo { ...ImageFieldsLight } } upsell { tierId } } 
+                    ... on Movie { __typename id slug title genres humanCallToAction isPollFeatureEnabled productionYear isLiveContent isStartOverEnabled liveEventEnd { isoString } productionCountries { countryCode name } playableFrom { isoString readableDate humanDateTime readableDistance } playableUntil { isoString readableDate } video { ...VideoFields } parentalRating { ...ParentalRatingFields } credits { ...MovieCreditsFields } images { poster2x3 { ...ImageFieldsFull } main16x9 { ...ImageFieldsFull } logo { ...ImageFieldsLight } brandLogo { ...ImageFieldsLight } } synopsis { brief long } trailers { ...TrailerFields } label { ...LabelFields } panels(input: $panelsInput) { ...CdpPanelsFields } hasPanels editorialInfoText upsell { tierId } } 
+                    ... on Series { __typename id slug title numberOfAvailableSeasons genres isPollFeatureEnabled 
+                        upcomingEpisode { ...UpcomingEpisodeFields } 
+                        trailers { ...TrailerFields } 
+                        parentalRating { ...ParentalRatingFields } 
+                        credits { ...SeriesCreditsFields } 
+                        images { 
+                            poster2x3 { ...ImageFieldsFull } 
+                            main16x9 { ...ImageFieldsFull } 
+                            logo { ...ImageFieldsLight } 
+                            brandLogo { ...ImageFieldsLight } } 
+                        synopsis { brief long } 
+                        allSeasonLinks { __typename seasonId title numberOfEpisodes } 
+                        label { ...LabelFields } 
+                        panels(input: $panelsInput) { ...CdpPanelsFields } 
+                        hasPanels editorialInfoText upsell { tierId } }
+                    } 
+                }
+                %(TrailerFields)s %(ImageFieldsFull)s %(ImageFieldsLight)s %(VideoFields)s %(ParentalRatingFields)s 
+                %(MovieCreditsFields)s %(LabelFields)s %(CdpPanelsFields)s %(UpcomingEpisodeFields)s %(SeriesCreditsFields)s
+            """ % fragments
+
+        elif operation == "Page":
+            query = """
+                query Page($pageId: ID!, $input: PageContentInput!) { page(id: $pageId) { id title content(input: $input) { pageInfo { ...PageInfoFields } panels { 
+                    __typename
+                    ... on TiersPanel { __typename id title detailed } 
+                    ... on ContinueWatchingPanel { __typename id title } 
+                    ... on MediaPanel { __typename id slug title displayHint { mediaPanelImageRatio } } 
+                    ... on SportEventPanel { __typename id title } 
+                    ... on ClipsPanel { __typename id title } 
+                    ... on EpisodesPanel { __typename id title } 
+                    ... on LivePanel { __typename id title } 
+                    ... on PagePanel { __typename id title } 
+                    ... on ChannelPanel { __typename id title type } 
+                    ... on ThemePanel { __typename ...ThemePanelFields } 
+                    ... on SinglePanel { __typename ...SinglePanelFields } 
+                    ... on TiersPanel { __typename id title } 
+                } } } } 
+                %(PageInfoFields)s %(ThemePanelFields)s %(SinglePanelFields)s %(ImageFieldsFull)s %(ParentalRatingFields)s 
+                %(ImageFieldsLight)s %(TrailerFields)s %(SportEventFieldsLight)s %(SeriesFieldsLight)s %(MovieFieldsLight)s 
+                %(EpisodeFields)s %(ClipFieldsLight)s %(ChannelFields)s %(LabelFields)s %(VideoFields)s
+            """ % fragments
+
+        elif operation == "LivePanel":
+            query = """
+                query LivePanel($panelId: ID!, $offset: Int!, $limit: Int!) { panel(id: $panelId) { __typename 
+                ... on LivePanel { __typename id title playOutOfView content(input: {offset: $offset, limit: $limit}) { pageInfo { ...PageInfoFields } items { 
+                    ... on LivePanelChannelItem { __typename channel { __typename ...ChannelVideoFields } } 
+                    ... on LivePanelEpisodeItem { __typename episode { __typename ...EpisodeVideoFields } } 
+                    ... on LivePanelMovieItem { __typename movie { __typename ...MovieVideoFields } } 
+                    ... on LivePanelSportEventItem { __typename sportEvent { __typename ...SportEventVideoFields } } } } } } } 
+                %(PageInfoFields)s %(ChannelVideoFields)s %(EpisodeVideoFields)s %(MovieVideoFields)s 
+                %(SportEventVideoFields)s %(ImageFieldsLight)s %(ParentalRatingFields)s %(VideoFields)s
+            """ % fragments
+
+        elif operation == "PanelSearch":
+            query = """ 
+                query PanelSearch($input: PanelSearchInput!, $limit: Int!, $offset: Int!, $shouldFetchMovieSeries: Boolean!, $shouldFetchMovieSeriesUpsell: Boolean!, $shouldFetchClip: Boolean!, $shouldFetchPage: Boolean!, $shouldFetchSportEvent: Boolean!, $shouldFetchSportEventUpsell: Boolean!) { 
+                    panelSearch(input: $input) { 
+                        data { 
+                            movieSeries @include(if: $shouldFetchMovieSeries) { id title content(input: {limit: $limit, offset: $offset}) { items { ... on MediaPanelSeriesItem { __typename series { __typename ...SeriesFieldsLight } } ... on MediaPanelMovieItem { __typename movie { __typename ...MovieFieldsLight } } } pageInfo { ...PageInfoFields } } } 
+                            movieSeriesUpsell @include(if: $shouldFetchMovieSeriesUpsell) { id title content(input: {limit: $limit, offset: $offset}) { items { ... on MediaPanelSeriesItem { __typename series { __typename ...SeriesFieldsLight } } ... on MediaPanelMovieItem { __typename movie { __typename ...MovieFieldsLight } } } pageInfo { ...PageInfoFields } } } 
+                            clip @include(if: $shouldFetchClip) { id title content(input: {limit: $limit, offset: $offset}) { items { __typename clip { __typename ...ClipFieldsLight } } pageInfo { ...PageInfoFields } } } 
+                            page @include(if: $shouldFetchPage) { id title content(input: {limit: $limit, offset: $offset}) { items { __typename ... on PagePanelPageItem { __typename page { __typename ...PageListFields } } } pageInfo { ...PageInfoFields } } } 
+                            sportEvent @include(if: $shouldFetchSportEvent) { id title content(input: {limit: $limit, offset: $offset}) { items { __typename sportEvent { __typename ...SportEventFieldsLight } } pageInfo { ...PageInfoFields } } } 
+                            sportEventUpsell @include(if: $shouldFetchSportEventUpsell) { id title content(input: {limit: $limit, offset: $offset}) { items { __typename sportEvent { __typename ...SportEventFieldsLight } } pageInfo { ...PageInfoFields } } } } pageInfo { totalCountAll { clips movies pages series sportEvents } } order 
+                        } 
+                    }
+                    %(SeriesFieldsLight)s %(MovieFieldsLight)s %(PageInfoFields)s %(ClipFieldsLight)s %(PageListFields)s %(SportEventFieldsLight)s
+                    %(LabelFields)s %(ImageFieldsFull)s %(ImageFieldsLight)s %(ParentalRatingFields)s %(VideoFields)s
+            """ % fragments
+
+        else:
+            raise IndexError(f"Missing operation `{operation}`.")
+
+        if not query:
+            raise IndexError
+
+        query = query.strip()
+        query_lines = query.splitlines(keepends=False)
+        query_lines = [l.strip() for l in query_lines]
+        query = " ".join(query_lines)
+
+        # Perhaps add __typename to everything?
+        # query = query.replace("__typename ", "")
+        # query = query.replace("}", " __typename }")
+
+        if not use_get:
+            data = {
+                "operationName": operation,
+                "query": query,
+                "variables": variables
+            }
+            return base_url, data
+
+        # For GETs (but the request URLs become to long!)
+        url =  f"{base_url}query={HtmlEntityHelper.url_encode(query)}&variables={HtmlEntityHelper.url_encode(json.dumps(variables))}"
+        return url, None
 
     def __update_dash_video(self, item, stream_info):
         """
@@ -830,3 +955,23 @@ class Channel(chn_class.Channel):
 
         item.complete = True
         return item
+
+    def __set_playback_window(self, item: MediaItem, result_set: dict):
+        if "playableFrom" in result_set:
+            from_date = result_set["playableFrom"]["isoString"]
+            # isoString=2022-07-27T22:01:00.000Z
+            time_stamp = DateHelper.get_date_from_string(from_date, "%Y-%m-%dT%H:%M:%S.%fZ")
+            item.set_date(*time_stamp[0:6])
+
+            # Playable to
+        if "playableUntil" in result_set and result_set["playableUntil"]:
+            until_data = result_set["playableUntil"]["humanDateTime"]
+            expires = "[COLOR gold]{}: {}[/COLOR]".format(MediaItem.ExpiresAt, until_data)
+            item.description = f"{expires}\n\n{item.description}"
+
+        elif "liveEventEnd" in result_set and result_set["liveEventEnd"]:
+            until_data = result_set["liveEventEnd"]["isoString"]
+            time_stamp = DateHelper.get_date_from_string(until_data, "%Y-%m-%dT%H:%M:%S.%fZ")
+            time_value = time.strftime('%Y-%m-%d %H:%M:%S', time_stamp)
+            expires = "[COLOR gold]{}: {}[/COLOR]".format(MediaItem.ExpiresAt, time_value)
+            item.description = f"{expires}\n\n{item.description}"

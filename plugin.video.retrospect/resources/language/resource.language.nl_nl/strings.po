@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-05-01 22:12+0000\n"
+"PO-Revision-Date: 2023-11-13 00:11+0000\n"
 "Last-Translator: bas <bas@kodi.tv>\n"
 "Language-Team: Dutch <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/nl_nl/>\n"
 "Language: nl_nl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 5.1\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -474,6 +474,54 @@ msgstr "IPTV Manager integratie inschakelen"
 msgctxt "#30112"
 msgid "IPTV Manager settings…"
 msgstr "IPTV Manager instellingen…"
+
+msgctxt "#30113"
+msgid "Set refresh token"
+msgstr "Stel refresh-token in"
+
+msgctxt "#30114"
+msgid "Retrospect Web Dialog"
+msgstr "Retrospect web-dialoogvenster"
+
+msgctxt "#30115"
+msgid "Setting up Retrospect webserver"
+msgstr "Instellen van de Retrospect webserver"
+
+msgctxt "#30116"
+msgid "Starting webserver on port {}"
+msgstr "Webserver starten op poort {}"
+
+msgctxt "#30117"
+msgid "Waiting for input from browser"
+msgstr "Wachten op invoer van de webbrowser"
+
+msgctxt "#30118"
+msgid "Input received from browser"
+msgstr "Invoer van de webbrowser ontvangen"
+
+msgctxt "#30119"
+msgid "Open a browser and navigate to http://{}:{}"
+msgstr "Open een webbrowser en navigeer naar http://{}:{}"
+
+msgctxt "#30120"
+msgid "Browser input cancelled"
+msgstr "Webbrowser invoer geannuleerd"
+
+msgctxt "#30121"
+msgid "Paste refresh token here."
+msgstr "Plak hier de inhoud van de refresh-token."
+
+msgctxt "#30122"
+msgid "Invalid Refresh Token"
+msgstr "Ongeldige refresh-token"
+
+msgctxt "#30123"
+msgid "Expired Refresh Token"
+msgstr "Verlopen refresh-token"
+
+msgctxt "#30124"
+msgid "Find the <b>refresh token</b> for your account by examining the site's cookies and paste the <b>value</b> of the refresh token cookie here."
+msgstr "Zoek de <b>refresh-token</b> voor het account door de cookies van de website te inspecteren. Plak de <b>inhoud</b> van het refresh-token-cookie hier."
 
 # used for list limits
 # empty strings from id 30109 to 30189

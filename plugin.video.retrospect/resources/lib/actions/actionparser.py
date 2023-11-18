@@ -156,6 +156,9 @@ class ActionParser(object):
         if channel:
             params[keyword.CHANNEL] = channel.url_id
 
+        if item is None and channel is not None:
+            params[keyword.RANDOM_LIVE] = random.randint(10000, 99999)
+
         params[keyword.ACTION] = action
 
         # it might have an item or not

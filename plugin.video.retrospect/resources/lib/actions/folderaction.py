@@ -101,7 +101,7 @@ class FolderAction(AddonAction):
                                            is_favourite=self.__favorites is not None)
 
                 # Get the context menu items
-                context_menu_items = self._get_context_menu_items(self.__channel, item=media_item)
+                context_menu_items = self._get_context_menu_items(self.__channel, item=media_item, store_id=parent_guid)
                 kodi_item.addContextMenuItems(context_menu_items)
 
                 # Get the action URL
@@ -285,11 +285,11 @@ class FolderAction(AddonAction):
                 sort_methods.insert(0, xbmcplugin.SORT_METHOD_TRACKNUM)
 
             # Check for episodes
-            if all([i.has_info_label(MediaItem.LabelEpisode) for i in items if i.is_playable]):
+            if all([(i.has_info_label(MediaItem.LabelEpisode) and i.is_playable) for i in items]):
                 # All playable items have episodes, pre-sort them on that.
                 sort_methods.insert(0, xbmcplugin.SORT_METHOD_EPISODE)  # 24
 
-            elif any([i.has_info_label(MediaItem.LabelEpisode)] for i in items):
+            elif any([i.has_info_label(MediaItem.LabelEpisode) for i in items]):
                 # Some items have episodes, only add the sorting options.
                 sort_methods.append(xbmcplugin.SORT_METHOD_EPISODE)  # 24
 

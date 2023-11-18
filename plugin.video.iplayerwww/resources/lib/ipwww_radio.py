@@ -5,7 +5,7 @@ import os
 import re
 from operator import itemgetter
 from resources.lib.ipwww_common import translation, AddMenuEntry, OpenURL, \
-                                       CheckLogin, CreateBaseDirectory
+                                       CheckLogin, CreateBaseDirectory, GetJWT
 
 import xbmc
 import xbmcvfs
@@ -342,7 +342,9 @@ def GetEpisodes(url):
 
 def AddAvailableLiveStreamItem(name, channelname, iconimage):
     """Play a live stream based on settings for preferred live source and bitrate."""
-    streams = ParseStreams(channelname)
+    URL = 'https://www.bbc.co.uk/sounds/play/live:'+channelname
+    jwt = GetJWT(URL)
+    streams = ParseStreams(channelname, jwt)
     # print('Located live streams')
     # print(streams)
     source = int(ADDON.getSetting('radio_source'))
@@ -360,7 +362,9 @@ def AddAvailableLiveStreamItem(name, channelname, iconimage):
 
 
 def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
-    streams = ParseStreams(channelname)
+    URL = 'https://www.bbc.co.uk/sounds/play/live:'+channelname
+    jwt = GetJWT(URL)
+    streams = ParseStreams(channelname, jwt)
     suppliers = ['', 'Akamai', 'Limelight', 'Cloudfront']
     for href, protocol, supplier, transfer_format, bitrate in streams:
         title = name + ' - [I][COLOR ffd3d3d3]%s - %s kbps[/COLOR][/I]' % (suppliers[supplier], bitrate)
@@ -391,7 +395,7 @@ def PlayStream(name, url, iconimage, description, subtitles_url):
 def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
     """Will create one menu entry for each available stream of a particular stream_id"""
 
-    streams = ParseStreams(stream_id)
+    streams = ParseStreams(stream_id, None)
     suppliers = ['', 'Akamai', 'Limelight', 'Cloudfront']
     for href, protocol, supplier, transfer_format, bitrate in streams:
         title = name + ' - [I][COLOR ffd3d3d3]%s - %s kbps[/COLOR][/I]' % (suppliers[supplier], bitrate)
@@ -405,7 +409,7 @@ def AddAvailableStreamItem(name, url, iconimage, description):
         #TODO check CBeeBies for special cases
         xbmcgui.Dialog().ok(translation(30403), translation(30404))
         return
-    streams = ParseStreams(stream_ids)
+    streams = ParseStreams(stream_ids, None)
     source = int(ADDON.getSetting('radio_source'))
     if source > 0:
         # Case 1: Selected source
@@ -479,22 +483,31 @@ def ListGenres():
 def ListLive():
     channel_list = [
         ('bbc_radio_one', 'BBC Radio 1'),
+        ('bbc_radio_one_dance', 'BBC Radio 1 Dance'),
+        ('bbc_radio_one_relax', 'BBC Radio 1 Relax'),
         ('bbc_1xtra', 'BBC Radio 1Xtra'),
         ('bbc_radio_two', 'BBC Radio 2'),
         ('bbc_radio_three', 'BBC Radio 3'),
-        ('bbc_radio_fourfm', 'BBC Radio 4 FM'),
+        ('bbc_radio_fourfm', 'BBC Radio 4'),
         ('bbc_radio_fourlw', 'BBC Radio 4 LW'),
         ('bbc_radio_four_extra', 'BBC Radio 4 Extra'),
-        ('bbc_radio_five_live', 'BBC Radio 5 live'),
-        ('bbc_radio_five_live_sports_extra', 'BBC Radio 5 live sports extra'),
+        ('bbc_radio_five_live', 'BBC Radio 5 Live'),
+        ('bbc_radio_five_live_sports_extra', 'BBC Radio 5 Sports Extra'),
         ('bbc_6music', 'BBC Radio 6 Music'),
         ('bbc_asian_network', 'BBC Asian Network'),
+        ('bbc_world_service', 'BBC World Service'),
         ('bbc_radio_scotland_fm', 'BBC Radio Scotland'),
+        ('bbc_radio_scotland_mw', 'BBC Radio Scotland Extra'),
+        ('bbc_radio_orkney', 'BBC Radio Orkney'),
+        ('bbc_radio_shetland', 'BBC Radio Shetland'),
         ('bbc_radio_nan_gaidheal', u'BBC Radio nan Gàidheal'),
         ('bbc_radio_ulster', 'BBC Radio Ulster'),
         ('bbc_radio_foyle', 'BBC Radio Foyle'),
         ('bbc_radio_wales_fm', 'BBC Radio Wales'),
+        ('bbc_radio_wales_am', 'BBC Radio Wales Extra'),
         ('bbc_radio_cymru', 'BBC Radio Cymru'),
+        ('bbc_radio_cymru_2', 'BBC Radio Cymru 2'),
+        ('cbeebies_radio', 'CBeebies Radio'),
         ('bbc_radio_berkshire', 'BBC Radio Berkshire'),
         ('bbc_radio_bristol', 'BBC Radio Bristol'),
         ('bbc_radio_cambridge', 'BBC Radio Cambridgeshire'),
@@ -525,6 +538,7 @@ def ListLive():
         ('bbc_radio_sheffield', 'BBC Radio Sheffield'),
         ('bbc_radio_shropshire', 'BBC Radio Shropshire'),
         ('bbc_radio_solent', 'BBC Radio Solent'),
+        ('bbc_radio_solent_west_dorset', 'BBC Radio Solent Dorset'),
         ('bbc_radio_somerset_sound', 'BBC Somerset'),
         ('bbc_radio_stoke', 'BBC Radio Stoke'),
         ('bbc_radio_suffolk', 'BBC Radio Suffolk'),
@@ -533,7 +547,7 @@ def ListLive():
         ('bbc_tees', 'BBC Tees'),
         ('bbc_three_counties_radio', 'BBC Three Counties Radio'),
         ('bbc_radio_wiltshire', 'BBC Wiltshire'),
-        ('bbc_wm', 'BBC WM 95.6'),
+        ('bbc_wm', 'BBC WM'),
         ('bbc_radio_york', 'BBC Radio York'),
     ]
     for id, name in channel_list:
@@ -809,12 +823,15 @@ def GetAvailableStreams(name, url, iconimage, description):
         AddAvailableStreamsDirectory(name, stream_ids, iconimage, description)
 
 
-def ParseStreams(stream_id):
+def ParseStreams(stream_id, jwt):
     retlist = []
     # print('Parsing streams for PID:')
     # print(stream_id)
     # Open the page with the actual strem information and display the various available streams.
-    NEW_URL = 'https://open.live.bbc.co.uk/mediaselector/6/select/version/2.0/mediaset/pc/vpid/%s/format/json/jsfunc/JS_callbacks0' % stream_id
+    if jwt:
+        NEW_URL = 'https://open.live.bbc.co.uk/mediaselector/6/select/version/2.0/mediaset/pc/vpid/%s/format/json/jsfunc/JS_callbacks0?jwt_auth=%s' % (stream_id, jwt)
+    else:
+        NEW_URL = 'https://open.live.bbc.co.uk/mediaselector/6/select/version/2.0/mediaset/pc/vpid/%s/format/json/jsfunc/JS_callbacks0' % stream_id
     # print(NEW_URL)
     html = OpenURL(NEW_URL)
 

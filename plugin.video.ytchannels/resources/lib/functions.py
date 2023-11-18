@@ -440,9 +440,7 @@ def get_latest_from_channel(channel_id, page, filter_shorts):
         duration = sorted_data[x]['contentDetails']['duration']
         seconds = yt_time(duration)
         date = re.search("[0-9]{4}-[0-9]{2}-[0-9]{2}", sorted_data[x]['snippet']['publishedAt'])
-        xbmc.log("checking for short: " + video_id, level=xbmc.LOGINFO)
         if filter_shorts and is_short(video_id, seconds):
-            xbmc.log("is a short ", level=xbmc.LOGINFO)
             continue
 
         listout.append([title, video_id, thumb, desc, seconds, date.group()])

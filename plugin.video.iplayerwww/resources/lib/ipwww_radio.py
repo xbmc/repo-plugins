@@ -5,7 +5,7 @@ import os
 import re
 from operator import itemgetter
 from resources.lib.ipwww_common import translation, AddMenuEntry, OpenURL, \
-                                       CheckLogin, CreateBaseDirectory, GetJWT
+                                       CheckLogin, CreateBaseDirectory, GeoBlockedError
 
 import xbmc
 import xbmcvfs
@@ -16,6 +16,21 @@ import random
 import json
 
 ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
+
+
+def GetJWT(url):
+    html = OpenURL(url)
+    try:
+        match = re.search(r'<script> window.__PRELOADED_STATE__ = (.*?);\s*</script>', html, re.DOTALL)
+        if match:
+            json_data = json.loads(match[1])
+            if 'smp' in json_data:
+                if 'liveStreamJwt' in json_data['smp']:
+                   return json_data['smp']['liveStreamJwt']
+    except:
+        pass
+    return None
+
 
 def GetAtoZPage(page_url, just_episodes=False):
     """   Generic Radio page scraper.   """
@@ -378,9 +393,7 @@ def PlayStream(name, url, iconimage, description, subtitles_url):
         '<H1>Access Denied</H1>', html)
     if check_geo or not html:
         # print "Geoblock detected, raising error message"
-        dialog = xbmcgui.Dialog()
-        dialog.ok(translation(30400), translation(30401))
-        raise
+        raise GeoBlockedError(translation(30414))
     liz = xbmcgui.ListItem(name)
     liz.setArt({'icon':'DefaultVideo.png', 'thumb':iconimage})
 
@@ -874,9 +887,7 @@ def ParseStreams(stream_id, jwt):
             elif 'result' in json_data:
                 if json_data['result'] == 'geolocation':
                     # print "Geoblock detected, raising error message"
-                    dialog = xbmcgui.Dialog()
-                    dialog.ok(translation(30400), translation(30401))
-                    raise
+                    raise GeoBlockedError(translation(30414))
     return retlist
 
 

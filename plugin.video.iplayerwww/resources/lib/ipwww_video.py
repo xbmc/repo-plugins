@@ -11,7 +11,7 @@ import json
 from operator import itemgetter
 from resources.lib.ipwww_common import translation, AddMenuEntry, OpenURL, \
                                        CheckLogin, CreateBaseDirectory, GetCookieJar, \
-                                       ParseImageUrl, download_subtitles
+                                       ParseImageUrl, download_subtitles, GeoBlockedError
 
 import xbmc
 import xbmcvfs
@@ -986,9 +986,7 @@ def PlayStream(name, url, iconimage, description, subtitles_url):
         '<H1>Access Denied</H1>', html)
     if check_geo or not html:
         # print "Geoblock detected, raising error message"
-        dialog = xbmcgui.Dialog()
-        dialog.ok(translation(30400), translation(30401))
-        raise
+        raise GeoBlockedError(translation(30401))
     liz = xbmcgui.ListItem(name)
     liz.setArt({'icon':'DefaultVideo.png', 'thumb':iconimage})
     liz.setInfo(type='Video', infoLabels={'Title': name})
@@ -1067,9 +1065,7 @@ def ParseMediaselector(stream_id):
         elif 'result' in json_data:
             if json_data['result'] == 'geolocation':
                 # print "Geoblock detected, raising error message"
-                dialog = xbmcgui.Dialog()
-                dialog.ok(translation(30400), translation(30401))
-                raise
+                raise GeoBlockedError(translation(30401))
     # print("Found streams:")
     # print(streams)
     # print(subtitles)

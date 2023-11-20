@@ -1,8 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-import time
+from typing import Optional
 
-from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
-from resources.lib.helpers.htmlhelper import HtmlHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.streams.m3u8 import M3u8
 from resources.lib.streams.mpd import Mpd
@@ -31,7 +29,8 @@ class NpoStream(object):
         return SubtitleHelper.download_subtitle(sub_title_url, stream_id + ".srt", format='srt')
 
     @staticmethod
-    def add_mpd_stream_from_npo(url, episode_id, item, headers=None, live=False):
+    def add_mpd_stream_from_npo(url, episode_id: str, item: MediaItem,
+                                headers: Optional[dict] = None, live: bool = False) -> Optional[str]:
         """ Extracts the Dash streams for the given url or episode id
 
         :param str|None url:        The url to download
@@ -73,6 +72,11 @@ class NpoStream(object):
         }
         data = UriHandler.open("https://prod.npoplayer.nl/stream-link", json=video_data, additional_headers=video_headers)
         video_info = JsonHelper(data)
+
+        status = video_info.get_value("status", fallback=0)
+        if status:
+            message = video_info.get_value("body")
+            return message
 
         drm_token = video_info.get_value("stream", "drmToken")
         stream_url = video_info.get_value("stream", "streamURL")

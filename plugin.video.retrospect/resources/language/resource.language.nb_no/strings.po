@@ -726,6 +726,10 @@ msgctxt "#30370"
 msgid "All episodes"
 msgstr ""
 
+msgctxt "#30371"
+msgid "Trending"
+msgstr ""
+
 msgctxt "#30401"
 msgid "Dutch"
 msgstr "Nederlandsk"

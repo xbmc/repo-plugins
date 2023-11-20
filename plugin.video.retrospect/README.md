@@ -505,7 +505,7 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - Olle Brink
 - Magnus Bertilsson
 - Per-Eric Larsson
-- Arjen Heidinga
+- Arjen Heidinga (Monthly)
 - Jim Altis
 - Jelte Veldstra
 - Jules Harms
@@ -532,3 +532,16 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - Robert Wijnands
 - Roger Ekholm
 - Magnus Holmquist
+- Lars-Gunnar Carlsson
+- Daniel Polders
+- Tim Hosman
+- Tobias Skoglund
+- M J Poortman
+- Steven Hoving
+- Remco Wulms
+- A Majoor
+- Dimitri Dekker
+- Gfp Van Dijck
+- Matthijs Droes
+- John L Lardee
+- Philip Johansson

@@ -2,13 +2,14 @@
 
 import datetime
 import time
-from typing import Optional, List, Tuple, Dict
+from typing import Optional, List, Tuple, Dict, Union
 
 import pytz
 
 from resources.lib import chn_class
 from resources.lib import contenttype
 from resources.lib import mediatype
+from resources.lib.channelinfo import ChannelInfo
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.logger import Logger
 from resources.lib.regexer import Regexer
@@ -30,7 +31,7 @@ class Channel(chn_class.Channel):
     main class from which all channels inherit
     """
 
-    def __init__(self, channel_info):
+    def __init__(self, channel_info: ChannelInfo):
         """ Initialisation of the class.
 
         All class variables should be instantiated here and this method should not
@@ -199,13 +200,21 @@ class Channel(chn_class.Channel):
         # ====================================== Actual channel setup STOPS here =======================================
         return
 
-    def log_on(self):
+    def log_on(self) -> bool:
+        if self.loggedOn:
+            return True
+
         return self.__log_on(False)
 
-    def __log_on(self, force_log_off=False):
+    def __log_on(self, force_log_off: bool = False) -> bool:
         """ Makes sure that we are logged on. """
 
-        def log_out_npo():
+        def log_out_npo() -> None:
+            # Old cookies
+            UriHandler.delete_cookie(domain=".npostart.nl")
+            UriHandler.delete_cookie(domain=".npo.nl")
+            UriHandler.delete_cookie(domain="www.npostart.nl")
+            # New cookies
             UriHandler.delete_cookie(domain="id.npo.nl")
             UriHandler.delete_cookie(domain="npo.nl")
             AddonSettings.set_channel_setting(self, "previous_username", username, store=LOCAL)
@@ -259,6 +268,9 @@ class Channel(chn_class.Channel):
                          datetime.datetime.utcfromtimestamp(expires).strftime('%Y-%m-%d %H:%M:%S'))
             return bool(profile.json)
 
+        # Force a full check-out
+        log_out_npo()
+
         Logger.info("Starting new NPO log in.")
         v = Vault()
         password = v.get_channel_setting(self.guid, "password")
@@ -292,7 +304,7 @@ class Channel(chn_class.Channel):
             return False
         return bool(JsonHelper(profile).json)
 
-    def get_initial_folder_items(self, data):
+    def get_initial_folder_items(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
         """ Creates the initial folder items for this channel.
 
         :param str data: The retrieve data that was loaded for the current item and URL.
@@ -390,13 +402,12 @@ class Channel(chn_class.Channel):
 
         return data, items
 
-    def get_additional_live_items(self, data):
+    def get_additional_live_items(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
         """ Adds some missing live items to the list of live items.
 
-        :param str data: The retrieve data that was loaded for the current item and URL.
+        :param data: The retrieve data that was loaded for the current item and URL.
 
         :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
 
         """
 
@@ -448,7 +459,7 @@ class Channel(chn_class.Channel):
             items.append(item)
         return data, items
 
-    def create_profile_item(self, result_set):
+    def create_profile_item(self, result_set: dict) -> Optional[MediaItem]:
         """ Creates a new MediaItem for a the profiles in NPO Start.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -470,7 +481,7 @@ class Channel(chn_class.Channel):
         item.metaData["id"] = result_set["guid"]
         return item
 
-    def switch_profile(self, data):
+    def switch_profile(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
         """ Switches to the selected profile.
 
         :param str data: The retrieve data that was loaded for the current item and URL.
@@ -602,7 +613,7 @@ class Channel(chn_class.Channel):
             title = f"{title} - {label}"
         url = f"https://npo.nl/start/api/domain/programs-by-season?guid={guid}"
         item = FolderItem(title, url, content_type=contenttype.EPISODES,
-                          media_type=mediatype.SEASON)
+                          media_type=mediatype.FOLDER)
         item.description = result_set.get("synopsis")
         item.metaData["seasonKey"] = result_set["seasonKey"]
 
@@ -622,10 +633,12 @@ class Channel(chn_class.Channel):
         MediaItem]:
         title = result_set["title"]
         poms = result_set["productId"]
+        serie_info = result_set.get("series", {})
 
         if show_info and result_set["series"]:
             show_title = result_set["series"]["title"]
-            title = f"{show_title} - {title}"
+            if show_title:
+                title = f"{show_title} - {title}"
 
         item = MediaItem(title, poms, media_type=mediatype.EPISODE)
 
@@ -644,19 +657,42 @@ class Channel(chn_class.Channel):
             item.set_date(date_time.year, date_time.month, date_time.day, date_time.hour,
                           date_time.minute, date_time.second)
 
+            serie_slug = serie_info.get("slug", "")
+            if serie_slug in ("nos-journaal", "nos-journaal-met-gebarentaal"):
+                item.name = f"{item.name} {date_time.hour:02d}:{round(date_time.minute, -1):02d}"
+
         if "restrictions" in result_set:
             for restriction in result_set["restrictions"]:
                 subscription = restriction.get("subscriptionType", "free")
-                if subscription == "free":
+                has_stream = restriction.get("isStreamReady", False)
+                if subscription == "free" and has_stream:
+                    # Check if the 'till' date was in the past
+                    till_stamp = restriction.get("available", {}).get("till", 0) or 0
+                    till = DateHelper.get_date_from_posix(till_stamp, tz=pytz.UTC)
+                    if till_stamp and till < datetime.datetime.now(tz=pytz.UTC):
+                        item.isPaid = True
+                        # Due to a bug in the NPO API, this content could be viewed for free.
+                        # for now we just don't show it.
+                        if not self.__has_premium():
+                            return None
+                        else:
+                            break
                     item.isPaid = False
                     # Always stop after a "free"
                     break
                 if subscription == "premium":
                     item.isPaid = True
+
+        episode_number = result_set.get("programKey")
+        season_number = result_set.get("season", {}).get("seasonKey")
+        show_type = serie_info.get("type")
+        if episode_number and season_number and show_type.endswith("series"):
+            item.set_season_info(season_number, episode_number)
+
         return item
 
 
-    def create_api_live_tv(self, result_set):
+    def create_api_live_tv(self, result_set: dict, show_info: bool = False) -> Optional[MediaItem]:
         """ Creates a MediaItem for a live item of type 'video' using the result_set from the regex.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -691,7 +727,7 @@ class Channel(chn_class.Channel):
         item.isLive = True
         return item
 
-    def create_api_epg_tree(self, data: str) -> Tuple[JsonHelper, List[MediaItem]]:
+    def create_api_epg_tree(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
         data = JsonHelper(data)
         # Keep a list of the days.
         day_lookup: Dict[str, MediaItem] = {}
@@ -705,6 +741,8 @@ class Channel(chn_class.Channel):
             # Fetch channel EPG
             url = f"https://npo.nl/start/api/domain/guide-channel?guid={guid}"
             channel_info = JsonHelper(UriHandler.open(url))
+            # The time to add to the "Today" end-time.
+            delta = datetime.timedelta(hours=5)
 
             for day_info in channel_info.get_value("days"):
                 # Check if a day already exists
@@ -714,34 +752,43 @@ class Channel(chn_class.Channel):
                     day, month, year = date.split("-")
                     time_stamp = datetime.datetime(int(year), int(month), int(day))
                     # See"Today" as the day before until 05:00 AM.
-                    now = datetime.datetime.now() - datetime.timedelta(hours=5)
-                    if time_stamp > now:
+                    now = datetime.datetime.now() - delta
+                    if time_stamp <= now:
+                        # Only add days up until "Today"
+                        days = LanguageHelper.get_days_list()
+                        day_name = days[time_stamp.weekday()]
+
+                        if time_stamp.date() == now.date():
+                            day_name = LanguageHelper.get_localized_string(LanguageHelper.Today)
+                        elif time_stamp.date() == now.date() - datetime.timedelta(days=1):
+                            day_name = LanguageHelper.get_localized_string(LanguageHelper.Yesterday)
+
+                        day_item = FolderItem(f"{date} - {day_name}", "", content_type=contenttype.EPISODES)
+                        day_item.set_date(year, month, day)
+                        day_lookup[date] = day_item
+                    elif time_stamp > now + datetime.timedelta(days=1):
+                        # Don't add show after "Tomorrow". That way the `delta` after midnight of
+                        # `Today` can be filled.
                         continue
-
-                    days = LanguageHelper.get_days_list()
-                    day_name = days[time_stamp.weekday()]
-
-                    if time_stamp.date() == now.date():
-                        day_name = LanguageHelper.get_localized_string(LanguageHelper.Today)
-                    elif time_stamp.date() == now.date() - datetime.timedelta(days=1):
-                        day_name = LanguageHelper.get_localized_string(LanguageHelper.Yesterday)
-
-                    day_item = FolderItem(f"{date} - {day_name}", "", content_type=contenttype.EPISODES)
-                    day_item.set_date(year, month, day)
-                    day_lookup[date] = day_item
 
                 for program in day_info["scheduledPrograms"]:
                     item = self.create_api_epg_item(program, channel)
                     if not item:
                         continue
 
-                    # We should show all shows until 5:00 am the next day so link them up.
                     date_stamp = DateHelper.get_date_from_posix(program["programStart"], tz=pytz.UTC)
                     date_stamp = date_stamp.astimezone(tz=self.__timezone)
                     date_label = date_stamp.strftime("%d-%m-%Y")
                     if date_label in day_lookup:
                         day_item = day_lookup[date_label]
                         day_item.items.append(item)
+                    else:
+                        # See if we passed midnight on today.
+                        date_stamp -= delta
+                        date_label = date_stamp.strftime("%d-%m-%Y")
+                        if date_label in day_lookup:
+                            day_item = day_lookup[date_label]
+                            day_item.items.append(item)
 
         return data, list(day_lookup.values())
 
@@ -808,7 +855,7 @@ class Channel(chn_class.Channel):
             item.description = image_data.get("description")
         return item
 
-    def update_epg_series_item(self, item: MediaItem):
+    def update_epg_series_item(self, item: MediaItem) -> MediaItem:
         # Go from season slug, show slug & program guid ->
         # ?? https://npo.nl/start/api/domain/series-detail?slug=boer-zoekt-vrouw
         # ?? Fetch the type
@@ -834,7 +881,7 @@ class Channel(chn_class.Channel):
         return self.__update_video_item(item, product_id)
 
     # noinspection PyUnusedLocal
-    def search_site(self, url=None):  # @UnusedVariable
+    def search_site(self, url=None) -> List[MediaItem]:  # @UnusedVariable
         """ Creates an list of items by searching the site.
 
         This method is called when the URL of an item is "searchSite". The channel
@@ -1066,7 +1113,7 @@ class Channel(chn_class.Channel):
     #     item.isGeoLocked = any([r for r in region_restrictions if r != "PLUSVOD:EU"])
     #     return item
 
-    def create_live_radio(self, result_set):
+    def create_live_radio(self, result_set: dict) -> Optional[MediaItem]:
         """ Creates a MediaItem for a live radio item of type 'video' using the
         result_set from the regex.
 
@@ -1107,7 +1154,7 @@ class Channel(chn_class.Channel):
 
         return item
 
-    def update_video_item(self, item):
+    def update_video_item(self, item: MediaItem) -> MediaItem:
         """ Updates an existing MediaItem with more data.
 
         Used to update none complete MediaItems (self.complete = False). This
@@ -1136,7 +1183,7 @@ class Channel(chn_class.Channel):
         whatson_id = item.url
         return self.__update_video_item(item, whatson_id)
 
-    def update_video_item_live(self, item):
+    def update_video_item_live(self, item: MediaItem) -> MediaItem:
         """ Updates an existing Live MediaItem with more data.
 
         Used to update none complete MediaItems (self.complete = False). This
@@ -1285,17 +1332,20 @@ class Channel(chn_class.Channel):
         parameter_parser.pickler.store_media_items(parent.guid, parent, media_items)
         return iptv_epg
 
-    def __has_premium(self):
+    def __has_premium(self) -> bool:
         if self.__has_premium_cache is None:
+            if not self.loggedOn:
+                self.log_on()
+
             data = UriHandler.open("https://npo.nl/start/api/auth/session")
             json = JsonHelper(data)
-            subscriptions = json.get_value("subscription", None)
+            subscriptions = json.get_value("subscription", fallback=None)
             self.__has_premium_cache = subscriptions is not None
             Logger.debug("Found subscriptions: %s", subscriptions)
 
         return self.__has_premium_cache
 
-    def __update_video_item(self, item, episode_id, fetch_subtitles=True):
+    def __update_video_item(self, item: MediaItem, episode_id: str, fetch_subtitles: bool = True) -> MediaItem:
         """ Updates an existing MediaItem with more data.
 
         Used to update none complete MediaItems (self.complete = False). This
@@ -1379,7 +1429,7 @@ class Channel(chn_class.Channel):
         #     )
         return item
 
-    def __ignore_cookie_law(self):
+    def __ignore_cookie_law(self) -> None:
         """ Accepts the cookies from UZG in order to have the site available """
 
         Logger.info("Setting the Cookie-Consent cookie for www.uitzendinggemist.nl")
@@ -1390,10 +1440,6 @@ class Channel(chn_class.Channel):
         UriHandler.set_cookie(name='site_cookie_consent', value='yes', domain='.npostart.nl')
         UriHandler.set_cookie(name='npo_cc', value='30', domain='.npostart.nl')
         return
-
-    def __get_url_for_pom(self, pom):
-        url = "https://start-api.npo.nl/page/franchise/{0}".format(pom)
-        return url
 
     def __get_xsrf_token(self) -> str:
         """ Retrieves a JSON Token and XSRF token
@@ -1406,40 +1452,3 @@ class Channel(chn_class.Channel):
         data = UriHandler.open("https://npo.nl/start/api/auth/csrf", no_cache=True)
         csrf_token = JsonHelper(data).get_value("csrfToken")
         return csrf_token
-
-    def __get_name_for_api_video(self, result_set, for_epg):
-        """ Determines the name of the video item given the episode name, franchise name and
-        show title.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-        :param bool for_epg: use this item in an EPG listing
-
-        :return: The name of the video item
-        :rtype: string
-
-        """
-
-        # We need to strip the : because some shows have them and they make no sense.
-        show_title = result_set["title"] or result_set["franchiseTitle"]
-        show_title = show_title.strip(":")
-        episode_title = result_set["episodeTitle"]
-        if result_set["type"] == "fragment":
-            episode_title = episode_title or result_set["title"]
-        if for_epg:
-            channel = result_set["channel"]
-            name = "{} - {}".format(channel, show_title)
-            if episode_title and show_title != episode_title:
-                name = "{} - {}".format(name, episode_title)
-        else:
-            name = episode_title
-            if not bool(name):
-                name = result_set.get('franchiseTitle')
-
-            # In some cases the title of the show (not episode) is different from the franchise
-            # title. In that case we want to add the title of the show in front of the name, but
-            # only if that does not lead to duplication
-            elif show_title != result_set.get('franchiseTitle') \
-                    and show_title != name:
-                name = "{} - {}".format(show_title, name)
-
-        return name

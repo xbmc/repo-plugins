@@ -268,8 +268,8 @@ class Channel(chn_class.Channel):
                          datetime.datetime.utcfromtimestamp(expires).strftime('%Y-%m-%d %H:%M:%S'))
             return bool(profile.json)
 
-        # Force a full check-out
-        log_out_npo()
+        # Force a full check-out -> This can't be done as it removes the XSRF tokens.
+        # log_out_npo()
 
         Logger.info("Starting new NPO log in.")
         v = Vault()

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.7.1"
+        version="5.7.2"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -122,7 +122,7 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.7.1 - Changelog - 2023-11-20[/B]
+        <news>[B]Retrospect v5.7.2 - Changelog - 2023-11-20[/B]
 
 Minor &#x27;after-care&#x27;-updates for the NPO channel. After the large update for both TV4 Play (Sweden) en NPO Start (Netherlands). Both channels had their API renewed and needed a complete rewrite.
 

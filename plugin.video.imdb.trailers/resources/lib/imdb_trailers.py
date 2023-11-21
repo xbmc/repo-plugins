@@ -704,7 +704,7 @@ class Main(object):
         if r:
             details = json.loads(r.group(1)).get('props', {}).get('pageProps', {}).get('videoPlaybackData', {}).get('video')
             if details:
-                details = {i.get('displayName').get('value'): i.get('url') for i in details.get('playbackURLs') if i.get('mimeType') == 'video/mp4'}
+                details = {i.get('displayName').get('value'): i.get('url') for i in details.get('playbackURLs') if i.get('videoMimeType') == 'MP4'}
                 vids = [(x[:-1], details[x]) for x in details.keys() if 'p' in x]
                 vids.sort(key=lambda x: int(x[0]), reverse=True)
                 if DEBUG:

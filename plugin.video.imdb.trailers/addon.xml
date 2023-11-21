@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.18" provider-name="gujal">
+<addon id="plugin.video.imdb.trailers" name="IMDb Trailers" version="2.1.19" provider-name="gujal">
   <requires>
     <import addon="xbmc.python" version="2.26.0"/>
     <import addon="script.module.beautifulsoup4" version="4.0.0"/>
@@ -31,9 +31,8 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=352127</forum>
     <website>https://www.imdb.com/trailers/</website>
     <email>gujal at protonmail dot com</email>
-    <news>v2.1.18 (20230825)
-      [fix] Popular
-      [new] Threading
+    <news>v2.1.19 (20231122)
+      [fix] Playback
     </news>
     <assets>
       <icon>icon.png</icon>

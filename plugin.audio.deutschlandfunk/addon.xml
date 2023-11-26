@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.deutschlandfunk" name="Deutschlandfunk" version="2.0.7" provider-name="Heckie">
+<addon id="plugin.audio.deutschlandfunk" name="Deutschlandfunk" version="2.0.8" provider-name="Heckie">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.25.1" />
@@ -25,6 +25,9 @@ sämtliche Podcasts der Sender gestreamt werden.</description>
         <website>https://github.com/Heckie75/kodi-addon-deutschlandfunk</website>
         <source>https://github.com/Heckie75/kodi-addon-deutschlandfunk/tree/master/plugin.audio.deutschlandfunk</source>
         <news>
+v2.0.8 (2023-11-26)
+- Fixed URLs of live streams
+
 v2.0.7 (2023-03-05)
 - Changed URL of Deutschlandfunk Kultur podcasts
 

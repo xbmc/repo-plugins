@@ -41,4 +41,6 @@ class PutioApiHandler(object):
 
     def is_account_active(self):
         r = self.client.Account.info()
-        return r['info']['account_active']
+        if r['info'] and r['info']['account_status'] and r['info']['account_status'] == 'active':
+            return True
+        return False

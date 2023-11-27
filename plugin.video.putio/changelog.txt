@@ -1,3 +1,7 @@
+v3.0.2 (2023-11-27) Berkan Teber <berkan@put.io>
+    * Update Kodi API endpoint (#20)
+    * Use `account_status` to verify if account is active (#20)
+
 v3.0.1 (2023-01-11) Berkan Teber <berkan@put.io>
     * Add compatibility with Kodi v20
 

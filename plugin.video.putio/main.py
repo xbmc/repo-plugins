@@ -35,7 +35,7 @@ PLUGIN_URL = sys.argv[0]  # base URL ('plugin://plugin.video.putio/')
 PLUGIN_HANDLE = int(sys.argv[1])  # process handle, as a numeric string
 PLUGIN_ARGS = parse_qs(sys.argv[2].lstrip('?'))  # query string, ('?action=list&item=3')
 
-PUTIO_KODI_ENDPOINT = 'https://put.io/kodi'
+PUTIO_KODI_ENDPOINT = 'https://api.put.io/kodi'
 RESOURCE_PATH = os.path.join(SETTINGS.getAddonInfo('path'), 'resources', 'media')
 
 

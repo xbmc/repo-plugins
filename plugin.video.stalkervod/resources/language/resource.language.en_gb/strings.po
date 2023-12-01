@@ -1,0 +1,53 @@
+# Kodi Media Center language file
+# Addon Name: Skin Widgets
+# Addon id: service.skin.widgets
+# Addon Provider: Martijn, phil65
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (https://kodi.weblate.cloud/languages/en_gb/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32001"
+msgid "Portal"
+msgstr ""
+
+msgctxt "#32002"
+msgid "MAC Address"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Server Address"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Time Zone"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Serial Number"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Device ID"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Device ID 2"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Signature"
+msgstr ""

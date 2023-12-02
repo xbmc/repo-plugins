@@ -15,7 +15,9 @@ class DeutschlandfunkAddon(AbstractRssAddon):
 
     __PLUGIN_ID__ = "plugin.audio.deutschlandfunk"
 
-    URL_STREAMS_RPC = "https://srv.deutschlandradio.de/config-feed.2828.de.rpc"
+    URL_STREAM_DLF = "https://st01.sslstream.dlf.de/dlf/01/high/aac/stream.aac?aggregator=web"
+    URL_STREAM_DFK = "https://st02.sslstream.dlf.de/dlf/02/high/aac/stream.aac?aggregator=web"
+    URL_STREAM_NOVA = "https://st03.sslstream.dlf.de/dlf/03/high/aac/stream.aac?aggregator=web"
 
     URL_PODCASTS_DLF = "https://www.deutschlandfunk.de/podcasts"
     URL_PODCASTS_DFK = "https://www.deutschlandfunkkultur.de/program-and-podcast"
@@ -65,16 +67,6 @@ class DeutschlandfunkAddon(AbstractRssAddon):
 
     def _make_station_menu(self, station):
 
-        try:
-            _json, _cookies = http_request(self.addon, self.URL_STREAMS_RPC)
-            meta = json.loads(_json)
-
-        except HttpStatusError as error:
-            xbmc.log("HTTP Status Error: %s, station=%s" %
-                     (error.message, station), xbmc.LOGERROR)
-            xbmcgui.Dialog().notification(self.addon.getLocalizedString(32151), error.message)
-            return
-
         nodes = list()
         if DeutschlandfunkAddon.PATH_DLF == station:
             nodes.append({
@@ -82,7 +74,7 @@ class DeutschlandfunkAddon(AbstractRssAddon):
                 "name": "Deutschlandfunk",
                 "icon": os.path.join(
                         self.addon_dir, "resources", "assets", "icon_dlf.png"),
-                "stream_url": meta['livestreams']['dlf']['mp3']['high'],
+                "stream_url": DeutschlandfunkAddon.URL_STREAM_DLF,
                 "type": "music",
                 "specialsort": "top"
             })
@@ -100,7 +92,7 @@ class DeutschlandfunkAddon(AbstractRssAddon):
                 "name": "Deutschlandfunk Kultur",
                 "icon": os.path.join(
                         self.addon_dir, "resources", "assets", "icon_drk.png"),
-                "stream_url": meta['livestreams']['dlf_kultur']['mp3']['high'],
+                "stream_url": DeutschlandfunkAddon.URL_STREAM_DFK,
                 "type": "music",
                 "specialsort": "top"
             })
@@ -118,7 +110,7 @@ class DeutschlandfunkAddon(AbstractRssAddon):
                 "name": "Deutschlandfunk Nova",
                 "icon": os.path.join(
                         self.addon_dir, "resources", "assets", "icon_nova.png"),
-                "stream_url": meta['livestreams']['dlf_nova']['mp3']['high'],
+                "stream_url": DeutschlandfunkAddon.URL_STREAM_NOVA,
                 "type": "music",
                 "specialsort": "top"
             })

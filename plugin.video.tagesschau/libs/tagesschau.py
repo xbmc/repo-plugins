@@ -61,8 +61,9 @@ def addVideoContentDirectory(title, method):
     url_data = { ACTION_PARAM: 'list_feed', FEED_PARAM: method  }
     url = 'plugin://' + ADDON_ID + '/?' + urllib.parse.urlencode(url_data)
     li = xbmcgui.ListItem(str(title))
-    li.setArt({'thumb':DEFAULT_IMAGE_URL})
+    li.setArt({'thumb':DEFAULT_IMAGE_URL, 'landscape':DEFAULT_IMAGE_URL})
     li.setProperty('Fanart_Image', FANART)
+    xbmcplugin.setContent(int(sys.argv[1]), 'videos')
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=True)
 
 def getListItem(videocontent):
@@ -71,17 +72,18 @@ def getListItem(videocontent):
     if(not image_url):
         image_url = DEFAULT_IMAGE_URL
     li = xbmcgui.ListItem(title)
-    li.setArt({'thumb':image_url})
+    li.setArt({'thumb':image_url, 'landscape':image_url})
     li.setProperty('Fanart_Image', FANART)
     li.setProperty('IsPlayable', 'true')
-    li.setInfo(type="Video",
+    li.setInfo(type="video",
                infoLabels={ "Title": str(title),
                             "Plot": str(videocontent.description),
-                            "Duration": str((videocontent.duration or 0)/60)
+                            "Duration": str((videocontent.duration or 0)/60),
+                            "mediatype": "video"
                           }
               )
     if( videocontent.timestamp ):
-        li.setInfo(type="Video",
+        li.setInfo(type="video",
                    infoLabels={ "premiered": str(videocontent.timestamp.strftime('%d.%m.%Y')),
                                 "aired": str(videocontent.timestamp.strftime('%d.%m.%Y')),
                                 "date": str(videocontent.timestamp.strftime('%d.%m.%Y'))
@@ -98,6 +100,7 @@ def getUrl(videocontent, method):
 def addVideoContentItem(videocontent, method):
     li = getListItem(videocontent)
     url = getUrl(videocontent, method)
+    xbmcplugin.setContent(int(sys.argv[1]), 'videos')
     return xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, li, False)
 
 def addVideoContentItems(videocontents, method):
@@ -107,6 +110,7 @@ def addVideoContentItems(videocontents, method):
         li = getListItem(videocontent)
         url = getUrl(videocontent, method)
         items.append((url, li, False))
+    xbmcplugin.setContent(int(sys.argv[1]), 'videos')
     return xbmcplugin.addDirectoryItems(int(sys.argv[1]), items, len(items))
 
 def get_params():

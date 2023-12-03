@@ -40,6 +40,14 @@ msgctxt "#30006"
 msgid "Broadcasts and Topics"
 msgstr ""
 
+msgctxt "#30007"
+msgid "Hide \"Europadruck\" in news"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Hide \"Aktueller Wolkenfilm\" in news"
+msgstr ""
+
 msgctxt "#30100"
 msgid "News"
 msgstr ""

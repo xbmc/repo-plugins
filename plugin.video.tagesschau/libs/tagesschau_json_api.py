@@ -31,6 +31,8 @@ base_url = "https://www.tagesschau.de/api2u/"
 addon = xbmcaddon.Addon(id=ADDON_ID)
 showage = addon.getSettingBool('ShowAge')
 tt_listopt = addon.getSetting('tt_list')
+hide_europadruck = addon.getSettingBool('hide_europadruck')
+hide_wolkenfilm = addon.getSettingBool('hide_wolkenfilm')
 
 class VideoContent(object):
     """Represents a single video or broadcast.
@@ -231,13 +233,19 @@ class VideoContentProvider(object):
                 A list of VideoContent items.
         """
         self._logger.info("retrieving videos")
+
         videos = []
         data = self._jsonsource.latest_videos()
         for jsonvideo in data["news"]:
             try:
                 if( (jsonvideo["type"] == "video") and (jsonvideo["tracking"][0]["src"] == "ard-aktuell") ):
-                    video = self._parser.parse_video(jsonvideo)
-                    videos.append(video)
+                    if( hide_europadruck and ("Europadruck" in jsonvideo["title"]) ):
+                        pass
+                    elif( hide_wolkenfilm and ("Wolkenfilm" in jsonvideo["title"]) ):
+                        pass
+                    else:
+                        video = self._parser.parse_video(jsonvideo)
+                        videos.append(video)
             except:
                 self._logger.info("ignoring")
 

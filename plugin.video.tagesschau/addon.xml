@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.tagesschau"
-    version="2.5.3"
+    version="2.5.4"
     name="Tagesschau"
     provider-name="J.Schumacher, H.Saul, C.Prasch">
   <requires>
@@ -31,6 +31,10 @@
       <screenshot>resources/assets/screenshot_3.png</screenshot>
     </assets>
     <news>
+version 2.5.4 (2023-12-03)
+ * Fixed content types so that skins use landscape viewtype
+ * Added setting to hide "Europadruck" and "Aktueller Wolkenfilm" from news list
+
 version 2.5.3 (2023-05-24)
  * Bugfixes
  * Added setting for the tagesthemen listing: show broadcasts, topics or both

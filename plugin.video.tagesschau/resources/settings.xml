@@ -3,4 +3,6 @@
   <setting id="quality" type="enum" label="30001" values="Small (480x272)|Medium (640x368)|Large (1280x720)" default="2" />
   <setting id="ShowAge" type="bool" label="30002" default="true" />
   <setting id="tt_list" type="enum" label="30003" lvalues="30004|30005|30006" default="2" />
+  <setting id="hide_europadruck" type="bool" label="30007" default="true" />
+  <setting id="hide_wolkenfilm"  type="bool" label="30008" default="true" />
 </settings>

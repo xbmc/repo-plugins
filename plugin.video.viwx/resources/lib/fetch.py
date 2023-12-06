@@ -22,6 +22,7 @@ from resources.lib import utils
 
 WEB_TIMEOUT = (3.5, 7)
 USER_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/118.0'
+USER_AGENT_VERSION = '118.0'
 
 
 logger = logging.getLogger('.'.join((logger_id, __name__.split('.', 2)[-1])))
@@ -132,14 +133,14 @@ def set_default_cookies(cookiejar: RequestsCookieJar = None):
     Return the cookiejar
 
     """
+    s = requests.Session()
+    if isinstance(cookiejar, RequestsCookieJar):
+        s.cookies = cookiejar
+    elif cookiejar is not None:
+        raise ValueError("Parameter cookiejar must be an instance of RequestCookiejar")
+
     # noinspection PyBroadException
     try:
-        s = requests.Session()
-        if isinstance(cookiejar, RequestsCookieJar):
-            s.cookies = cookiejar
-        elif cookiejar is not None:
-            raise ValueError("Parameter cookiejar must be an instance of RequestCookiejar")
-
         # Make a request to reject all cookies.
         resp = s.get(
             'https://identityservice.syrenis.com/Home/SaveConsent',
@@ -258,6 +259,20 @@ def put_json(url, data, headers=None, **kwargs):
     caller for status, etc."""
     resp = web_request('PUT', url, headers, data, **kwargs)
     return resp
+
+
+def delete_json(url, data, headers=None, **kwargs):
+    """DELETE JSON data and return the response object or None if no data has been returned."""
+    dflt_headers = {'Accept': 'application/json'}
+    if headers:
+        dflt_headers.update(headers)
+    resp = web_request('DELETE', url, dflt_headers, data, **kwargs)
+    if resp.status_code == 204:     # No Content
+        return None
+    try:
+        return resp.json()
+    except json.JSONDecodeError:
+        raise FetchError(Script.localize(30920))
 
 
 def get_document(url, headers=None, **kwargs):

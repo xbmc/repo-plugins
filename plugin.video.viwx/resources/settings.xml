@@ -87,7 +87,7 @@
 					<level>0</level>
 					<data>RunPlugin(plugin://$ID/resources/lib/settings/login)</data>
 					<control type="button" format="action">
-						<close>true</close>
+						<close>false</close>
 					</control>
 				</setting>
 				<setting id="account-sign-out" label="30202" type="action" help="30402">

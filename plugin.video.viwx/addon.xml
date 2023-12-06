@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.viwx" name="viwX" version="1.1.1" provider-name="Dimitri Kroon">
+<addon id="plugin.video.viwx" name="viwX" version="1.2.0" provider-name="Dimitri Kroon">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="inputstream.adaptive" version="19.0.5"/>
@@ -30,15 +30,24 @@
       <fanart>resources/fanart.png</fanart>
     </assets>
     <news>
-[B]v1.1.1[/B]
-- fix: playing VOD on kodi Omega failed with error.
+[B]v1.2.0[/B]
+[B]Fixes:[/B]
+* All categories failed to open due to various changes at ITVX.
+* Error on opening some series named 'Other Episodes', due to changes at ITVX.
+* Some sub-collections failed with error 'Not Found', due to error in ITVX data'
+* Added support for hero and collections items of type 'page'. Fixes some collections being empty, or hero item not shown.
 
-[B]v1.1.0[/B]
-- Updated user-agent string to Firefox 118.
-- Added support for Live TV items in collections. Fixes: collection 'ITVX Live Channels' is empty.
-- Added support for shortFromSlider in collection, like the folder with short news-like items in the collection 'Rugby World Cup'.
-- Added support for shorForm collections. Fixes: absence of the collection 'Rugby World Cup 2023'.
-- Adapt to a change at itvx causing an empty 'Kids Collection'.
+[B]New features:[/B]
+* Added a 'My itvX' entry in the main menu with:
+    - My List - ITVX's My List.
+    - Continue Watching: supports continue watching on different devices and different platforms.
+    - Because You Watched: recommendations by ITV based on a recently watched programme.
+    - Recommended: general recommendations by ITV.
+* All programmes and series now have a context menu item to add/remove the programme to/from My List.
+
+[B]Changes:[/B]
+* When not signed in, a user is now always offered to sign in via viwX's settings when an item was opened that required authentication.
+* Search now respects setting 'Hide premium content'.
     </news>
     <reuselanguageinvoker>true</reuselanguageinvoker>
   </extension>

@@ -1,3 +1,23 @@
+v1.2.0
+Fixes:
+- All categories failed to open due to various changes at ITVX.
+- Error on opening some series named 'Other Episodes', due to changes at ITVX.
+- Some sub-collections failed with error 'Not Found', due to error in ITVX data.
+- Added support for hero and collections items of type 'page'. Fixes some collections being empty, or hero item not shown.
+
+New features:
+- Added a 'My itvX' entry in the main menu with:
+    - My List - ITVX's My List.
+    - Continue Watching: supports continue watching on different devices and different platforms.
+    - Because You Watched: recommendations by ITV based on a recently watched programme.
+    - Recommended: general recommendations by ITV.
+- All programmes and series now have a context menu item to add/remove the programme to/from My List.
+
+Changes:
+- When not signed in, a user is now always offered to sign in via viwX's settings when an item was opened that required authentication.
+- Search now respects setting 'Hide premium content'.
+- Brushed up README thanks to JohnVeness.
+
 v 1.1.1
 - fix: playing VOD on kodi Omega failed with error.
 

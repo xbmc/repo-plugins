@@ -29,6 +29,7 @@ def login(_=None):
     uname = None
     passw = None
 
+    logger.debug("Starting Login...")
     while True:
         uname, passw = kodi_utils.ask_credentials(uname, passw)
         if not all((uname, passw)):
@@ -37,6 +38,10 @@ def login(_=None):
         try:
             itv_account.itv_session().login(uname, passw)
             kodi_utils.show_login_result(success=True)
+            from resources.lib import itvx
+            import xbmc
+            itvx.initialise_my_list()
+            xbmc.executebuiltin('Container.Refresh')
             return
         except errors.AuthenticationError as e:
             if not kodi_utils.ask_login_retry(str(e)):
@@ -51,6 +56,10 @@ def logout(_):
         Script.notify(Script.localize(kodi_utils.TXT_ITV_ACCOUNT),
                       Script.localize(kodi_utils.MSG_LOGGED_OUT_SUCCESS),
                       Script.NOTIFY_INFO)
+        from resources.lib import cache
+        import xbmc
+        cache.my_list_programmes = None
+        xbmc.executebuiltin('Container.Refresh')
 
 
 @Script.register()

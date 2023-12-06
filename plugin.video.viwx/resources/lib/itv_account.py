@@ -4,7 +4,7 @@
 #  SPDX-License-Identifier: GPL-2.0-or-later
 #  See LICENSE.txt
 # ----------------------------------------------------------------------------------------------------------------------
-
+import sys
 import time
 import os
 import json
@@ -24,6 +24,9 @@ SESS_DATA_VERS = 2
 
 class ItvSession:
     def __init__(self):
+        self._user_id = ''
+        self._user_nickname = ''
+        self._expire_time = 0
         self.account_data = {}
         self.read_account_data()
 
@@ -34,27 +37,27 @@ class ItvSession:
 
         """
         try:
-            if self.account_data['refreshed'] < time.time() - 4 * 3600:
-                # renew tokens periodically
-                logger.debug("Token cache time has expired.")
-                self.refresh()
-
             return self.account_data['itv_session']['access_token']
         except (KeyError, TypeError):
-            logger.debug("Cannot produce access token from account data: %s", self.account_data)
-            raise AuthenticationError
+            logger.debug("Cannot produce access token from account data: %s.", self.account_data)
+            return ''
 
     @property
     def cookie(self):
         """Return a dict containing the cookie required for authentication"""
         try:
-            if self.account_data['refreshed'] < time.time() - 2 * 3600:
-                # renew tokens periodically
-                self.refresh()
             return self.account_data['cookies']
         except (KeyError, TypeError):
-            logger.debug("Cannot produce cookies from account data: %s", self.account_data)
-            raise AuthenticationError
+            logger.debug("Cannot produce cookies from account data: %s.", self.account_data)
+            return {}
+
+    @property
+    def user_id(self):
+        return self._user_id or ''
+
+    @property
+    def user_nickname(self):
+        return self._user_nickname or ''
 
     def read_account_data(self):
         session_file = os.path.join(utils.addon_info.profile, "itv_session")
@@ -74,13 +77,15 @@ class ItvSession:
             self.save_account_data()
         else:
             self.account_data = acc_data
+        access_token = self.account_data.get('itv_session', {}).get('access_token')
+        self._user_id, self._user_nickname, self._expire_time = parse_token(access_token)
 
     def save_account_data(self):
         session_file = os.path.join(utils.addon_info.profile, "itv_session")
         data_str = json.dumps(self.account_data)
         with open(session_file, 'w') as f:
             f.write(data_str)
-        logger.info("ITV account data saved to file")
+        logger.info("ITV account data saved to file.")
 
     def login(self, uname: str, passw: str):
         """Sign in to itv account with `uname` and `passw`.
@@ -125,7 +130,8 @@ class ItvSession:
             else:
                 raise
         else:
-            logger.info("Sign in successful")
+            logger.info("Sign in successful.")
+            self._user_id, self._user_nickname, self._expire_time = parse_token(session_data.get('access_token'))
             self.save_account_data()
             return True
 
@@ -153,7 +159,9 @@ class ItvSession:
             logger.debug("New Itv.Session cookie: %s" % sess_cookie_str)
             self.account_data['cookies']['Itv.Session'] = sess_cookie_str
             self.account_data['refreshed'] = time.time()
+            self._user_id, self._user_nickname, self._expire_time = parse_token(session_data.get('access_token'))
             self.save_account_data()
+            logger.info("Tokens refreshed.")
             return True
         except (KeyError, ValueError, FetchError) as e:
             logger.warning("Failed to refresh ITVtokens - %s: %s" % (type(e), e))
@@ -162,9 +170,35 @@ class ItvSession:
         return False
 
     def log_out(self):
+        logger.info("Signing out to ITV account")
         self.account_data = {}
         self.save_account_data()
+        self._user_id = None
+        self._user_nickname = None
         return True
+
+
+def parse_token(token):
+    """Return user_id, user nickname and token expiration time obtained from an access token.
+
+    Token has other fields which we currently don't parse, like:
+    accountProfileIdInUse
+    auth_time
+    scope
+    nonce
+    iat
+    """
+    import binascii
+    try:
+        token_parts = token.split('.')
+        # Since some padding errors have been observed with refresh tokens, add the maximum just
+        # to be sure padding errors won't occur. a2b_base64 automatically removes excess padding.
+        token_data = binascii.a2b_base64(token_parts[1] + '==')
+        data = json.loads(token_data)
+        return data['sub'], data['name'], data['exp']
+    except (KeyError, AttributeError, IndexError, binascii.Error) as err:
+        logger.error("Failed to parse token: '%r'", err)
+        return None, None, int(time.time()) + time.timezone
 
 
 def build_cookie(session_data):
@@ -185,7 +219,7 @@ def itv_session():
     return _itv_session_obj
 
 
-def fetch_authenticated(funct, url, **kwargs):
+def fetch_authenticated(funct, url, login=True, **kwargs):
     """Call one of the fetch function with user authentication.
 
     Call the specified function with authentication header and return the result.
@@ -201,20 +235,38 @@ def fetch_authenticated(funct, url, **kwargs):
 
     for tries in range(2):
         try:
+            access_token = account.access_token
+            auth_cookies = account.cookie
+            if not (access_token and auth_cookies):
+                raise AuthenticationError
+
+            try:
+                if account.account_data['refreshed'] < time.time() - 4 * 3600:
+                    # renew tokens periodically
+                    logger.debug("Token cache time has expired.")
+                    raise AuthenticationError
+            except (KeyError, TypeError):
+                raise AuthenticationError
+
             cookies = kwargs.setdefault('cookies', {})
-            cookies.update(account.cookie)
+            headers = kwargs.setdefault('headers', {})
+            headers['authorization'] = 'Bearer ' + account.access_token
+            cookies.update(auth_cookies)
             return funct(url=url, **kwargs)
         except AuthenticationError:
-            if tries == 0:
-                logger.debug("Authentication failed on first attempt")
-                if account.refresh() is False:
-                    logger.debug("")
-                    from . import settings
-                    if not (kodi_utils.show_msg_not_logged_in() and settings.login()):
-                        raise
-            else:
+            if tries > 0:
                 logger.warning("Authentication failed on second attempt")
                 raise AccessRestrictedError
+
+            logger.debug("Authentication failed on first attempt")
+            if account.refresh() is False:
+                if login:
+                    if kodi_utils.show_msg_not_logged_in():
+                        from xbmc import executebuiltin
+                        executebuiltin('Addon.OpenSettings({})'.format(utils.addon_info.id))
+                    sys.exit(1)
+                else:
+                    raise
 
 
 def convert_session_data(acc_data: dict) -> dict:

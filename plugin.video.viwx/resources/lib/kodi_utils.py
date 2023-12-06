@@ -70,6 +70,7 @@ def show_msg_not_logged_in():
             Script.localize(MSG_LOGIN),
             nolabel=Script.localize(BTN_TXT_CANCEL),
             yeslabel=Script.localize(TXT_LOGIN_NOW))
+    logger.debug("Dialog 'Open settings to login' result: {}".format('YES' if result else 'NO' ))
     return result
 
 
@@ -85,7 +86,7 @@ def show_login_result(success: bool, message: str = None):
 
 
 def ask_login_retry(reason):
-    """Show a message that login has failed and ask whether to try again"""
+    """Show a message that login has failed and ask whether to try again."""
 
     if reason.lower() == 'invalid username':
         reason = Script.localize(TXT_INVALID_USERNAME)

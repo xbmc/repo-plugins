@@ -27,6 +27,9 @@ DFLT_EXPIRE_TIME = 600
 __cache = {}
 
 
+my_list_programmes = None
+
+
 def get_item(key):
     """Return the cached data if present in the cache and not expired.
     Return None otherwise.

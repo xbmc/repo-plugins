@@ -19,8 +19,6 @@ from . import utils
 from . import fetch
 from . import kodi_utils
 
-from .errors import AuthenticationError
-
 
 logger = logging.getLogger(logger_id + '.itv')
 
@@ -89,48 +87,33 @@ stream_req_data = {
 }
 
 
-def _request_stream_data(url, stream_type='live', retry_on_error=True):
-    from .itv_account import itv_session
+def _request_stream_data(url, stream_type='live'):
+    from .itv_account import itv_session, fetch_authenticated
     session = itv_session()
 
-    try:
-        stream_req_data['user']['token'] = session.access_token
-        stream_req_data['client']['supportsAdPods'] = stream_type != 'live'
+    stream_req_data['user']['token'] = session.access_token
+    stream_req_data['client']['supportsAdPods'] = stream_type != 'live'
 
-        if stream_type == 'live':
-            accept_type = 'application/vnd.itv.online.playlist.sim.v3+json'
-            # Live MUST have a featureset containing an item without outband-webvtt, or a bad request is returned.
-            min_features = ['mpeg-dash', 'widevine']
-        else:
-            accept_type = 'application/vnd.itv.vod.playlist.v2+json'
-            # ITV appears now to use the min feature for catchup streams, causing subtitles
-            # to go missing if not specified here. Min and max both specifying webvtt appears to
-            # be no problem for catchup streams that don't have subtitles.
-            min_features = ['mpeg-dash', 'widevine', 'outband-webvtt', 'hd', 'single-track']
+    if stream_type == 'live':
+        accept_type = 'application/vnd.itv.online.playlist.sim.v3+json'
+        # Live MUST have a featureset containing an item without outband-webvtt, or a bad request is returned.
+        min_features = ['mpeg-dash', 'widevine']
+    else:
+        accept_type = 'application/vnd.itv.vod.playlist.v2+json'
+        # ITV appears now to use the min feature for catchup streams, causing subtitles
+        # to go missing if not specified here. Min and max both specifying webvtt appears to
+        # be no problem for catchup streams that don't have subtitles.
+        min_features = ['mpeg-dash', 'widevine', 'outband-webvtt', 'hd', 'single-track']
 
-        stream_req_data['variantAvailability']['featureset']['min'] = min_features
+    stream_req_data['variantAvailability']['featureset']['min'] = min_features
 
-        stream_data = fetch.post_json(
-            url, stream_req_data,
-            headers={'Accept': accept_type},
-            cookies=session.cookie)
+    stream_data = fetch_authenticated(
+        fetch.post_json, url,
+        data=stream_req_data,
+        headers={'Accept': accept_type},
+        cookies=session.cookie)
 
-        http_status = stream_data.get('StatusCode', 0)
-        if http_status == 401:
-            raise AuthenticationError
-
-        return stream_data
-    except AuthenticationError:
-        if retry_on_error:
-            if session.refresh():
-                return _request_stream_data(url, stream_type, retry_on_error=False)
-            else:
-                if kodi_utils.show_msg_not_logged_in():
-                    from xbmc import executebuiltin
-                    executebuiltin('Addon.OpenSettings({})'.format(utils.addon_info.id))
-                raise
-        else:
-            raise
+    return stream_data
 
 
 def get_live_urls(url=None, title=None, start_time=None, play_from_start=False):
@@ -178,12 +161,12 @@ def get_catchup_urls(episode_url):
         subtitles = stream_data['Subtitles'][0]['Href']
     except (TypeError, KeyError, IndexError):
         subtitles = None
-    return dash_url, key_service, subtitles, playlist['VideoType']
+    return dash_url, key_service, subtitles, playlist['VideoType'], playlist['ProductionId']
 
 
 def get_vtt_subtitles(subtitles_url):
     """Return a tuple with the file paths to rst subtitles files. The tuple usually
-    has only one single element, but could contain more.
+    has only a single element, but could contain more.
 
     Return None if subtitles_url does not point to a valid Web-vvt subtitle file or
     subtitles are not te be shown by user setting.

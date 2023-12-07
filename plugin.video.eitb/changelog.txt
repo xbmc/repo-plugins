@@ -1,0 +1,25 @@
+[B]3.0.0[/B]
+- Works with new version of the API [erral]
+[B]2.1.1[/B]
+- Translate listings [erral]
+[B]2.1.0[/B]
+- New browsing options using program types [bipoza]
+- Add latest added program list [bipoza]
+[B]2.0.0[/B]
+- Updates for Kodi Matrix (v19) [bipoza]
+[B]1.0.5[/B]
+- Fix plugin id on addon.xml
+[B]1.0.4[/B]
+- First version published on Kodi repository
+[B]1.0.3[/B]
+- Test version
+[B]1.0.2[/B]
+- Nothing changed yet.
+
+[B]1.0.1[/B]
+- Add install information and improve readme. [erral]
+
+- Fixed python3 string formatting compatibility that created issues in Android [erral]
+
+[B]1.0.0[/B]
+- Initial release. [erral]

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-19 10:11+0000\n"
+"PO-Revision-Date: 2023-11-25 21:11+0000\n"
 "Last-Translator: Sopor <sopor@hotmail.com>\n"
 "Language-Team: Swedish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/sv_se/>\n"
 "Language: sv_se\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0.2\n"
+"X-Generator: Weblate 5.2.1\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -478,50 +478,54 @@ msgstr "Inställningar för IPTV Manager…"
 
 msgctxt "#30113"
 msgid "Set refresh token"
-msgstr ""
+msgstr "Ställ in uppdateringstoken"
 
 msgctxt "#30114"
 msgid "Retrospect Web Dialog"
-msgstr ""
+msgstr "Retrospektiv webbdialog"
 
 msgctxt "#30115"
 msgid "Setting up Retrospect webserver"
-msgstr ""
+msgstr "Kör i gång Retrospect webbserver"
 
 msgctxt "#30116"
 msgid "Starting webserver on port {}"
-msgstr ""
+msgstr "Startar webbserver på port {}"
 
 msgctxt "#30117"
 msgid "Waiting for input from browser"
-msgstr ""
+msgstr "Väntar på inmatning från webbläsaren"
 
 msgctxt "#30118"
 msgid "Input received from browser"
-msgstr ""
+msgstr "Inmatning från webbläsaren mottagen"
 
 msgctxt "#30119"
 msgid "Open a browser and navigate to http://{}:{}"
-msgstr ""
+msgstr "Öppna en webbläsare och navigera till http://{}:{}"
 
 msgctxt "#30120"
 msgid "Browser input cancelled"
-msgstr ""
+msgstr "Webbläsarinmatning avbröts"
 
 msgctxt "#30121"
 msgid "Paste refresh token here."
-msgstr ""
+msgstr "Klistra in uppdateringstoken här."
 
 msgctxt "#30122"
 msgid "Invalid Refresh Token"
-msgstr ""
+msgstr "Ogiltig uppdateringstoken"
 
 msgctxt "#30123"
 msgid "Expired Refresh Token"
-msgstr ""
+msgstr "Utgången uppdateringstoken"
 
 msgctxt "#30124"
 msgid "Find the <b>refresh token</b> for your account by examining the site's cookies and paste the <b>value</b> of the refresh token cookie here."
+msgstr "Leta upp <b>uppdateringstoken</b> för ditt konto genom att granska webbplatsens cookies och klistra in <b>värdet</b> för uppdateringstoken-cookien här."
+
+msgctxt "#30125"
+msgid "Show future episodes under 'Recent > Today'"
 msgstr ""
 
 # used for list limits
@@ -737,7 +741,7 @@ msgstr "Alla avsnitt"
 
 msgctxt "#30371"
 msgid "Trending"
-msgstr ""
+msgstr "Trendigt"
 
 # empty strings from id 30365 to 30400
 msgctxt "#30401"

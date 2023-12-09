@@ -64,7 +64,6 @@ class Channel(chn_class.Channel):
 
         self._add_data_parser("https://npo.nl/start/api/domain/guide-channels",
                               name="Main Live TV Streams json", json=True,
-                              preprocessor=self.get_additional_live_items,
                               requires_logon=True,
                               parser=[],
                               creator=self.create_api_live_tv,
@@ -152,10 +151,16 @@ class Channel(chn_class.Channel):
 
         # OLD but still working?
         # live radio, the folders and items
-        self._add_data_parser("https://start-api.npo.nl/page/live",
-                              name="Live Radio Streams", json=True,
-                              parser=["components", ("panel", "live.regular.1", 0), "epg"],
-                              creator=self.create_live_radio)
+        self._add_data_parser(
+            "https://www.npoluister.nl/", name="Live Radio Streams",
+            parser=Regexer.from_expresso('<li><a[^>]+href="(?<url>https:[^"]+)"[^>]*><img[^>]+src="(?<thumb>https:[^"]+)[^>]+alt="(?<title>[^"]+)"'),
+            creator=self.create_live_radio
+        )
+        self._add_data_parser(
+            "*", name="Live Radio Streams Updater",
+            updater=self.update_live_radio,
+            label="liveRadio"
+        )
 
         # Alpha listing based on JSON API
         # self._add_data_parser("https://start-api.npo.nl/page/catalogue", json=True,
@@ -359,7 +364,7 @@ class Channel(chn_class.Channel):
                  content_type=contenttype.TVSHOWS)
 
         live_radio = add_item(
-            LanguageHelper.LiveRadio, "https://start-api.npo.nl/page/live",
+            LanguageHelper.LiveRadio, "https://www.npoluister.nl/",
             content_type=contenttype.SONGS, headers=self.__jsonApiKeyHeader)
         live_radio.isLive = True
 
@@ -398,65 +403,9 @@ class Channel(chn_class.Channel):
         recent.complete = True
         recent.dontGroup = True
         recent.metaData["retrospect:parser"] = "recent"
+        recent.cacheToDisc = False
         items.append(recent)
 
-        return data, items
-
-    def get_additional_live_items(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
-        """ Adds some missing live items to the list of live items.
-
-        :param data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-
-        """
-
-        Logger.info("Processing Live items")
-
-        items = []
-
-        # let's add the 3FM live stream
-        parent = self.parentItem
-
-        live_streams = {
-            "3FM Live": {
-                "poms": "LI_3FM_300881",
-                "url": "https://npo.nl/start/live?channel=LI_3FM_300881",
-                "thumb": self.get_image_location("3fm-artwork.jpg")
-            },
-            "Radio 2 Live": {
-                "poms": "LI_RADIO2_300879",
-                "url": "https://npo.nl/start/live?channel=LI_RADIO2_300879",
-                "thumb": self.get_image_location("radio2image.jpg")
-                # "thumb": "http://www.radio2.nl/image/rm/48254/NPO_RD2_Logo_RGB_1200dpi.jpg?width=848&height=477"
-            },
-            "Radio 1 Live": {
-                "poms": "LI_RADIO1_300877",
-                "url": "https://npo.nl/start/live?channel=LI_RADIO1_300877",
-                "thumb": self.get_image_location("radio1image.jpg")
-            },
-            "Radio 4 Live": {
-                "poms": "LI_RA4_698901",
-                "url": "https://npo.nl/start/live?channel=LI_RA4_698901",
-                "thumb": self.get_image_location("radio4image.jpg")
-            },
-            "FunX": {
-                "poms": "LI_3FM_603983",
-                "url": "https://npo.nl/start/live?channel=LI_3FM_603983",
-                "thumb": self.get_image_location("funx.jpg")
-            }
-        }
-
-        for name, live_data in live_streams.items():
-            Logger.debug("Adding video item to '%s' sub item list: %s", parent, name)
-            item = MediaItem(name, live_data["url"], mediatype.VIDEO)
-            item.icon = parent.icon
-            item.metaData["live_pid"] = live_data["poms"]
-            item.thumb = live_data["thumb"]
-            item.isLive = True
-            item.isGeoLocked = True
-            item.complete = False
-            items.append(item)
         return data, items
 
     def create_profile_item(self, result_set: dict) -> Optional[MediaItem]:
@@ -557,7 +506,7 @@ class Channel(chn_class.Channel):
         guid = result_set["guid"]
 
         # timebound_daily, timeless_series
-        if item_type.endswith("series"):
+        if item_type and item_type.endswith("series"):
             # Series go by season
             url = f"https://npo.nl/start/api/domain/series-seasons?slug={slug}&type={item_type}"
         else:
@@ -633,7 +582,7 @@ class Channel(chn_class.Channel):
         MediaItem]:
         title = result_set["title"]
         poms = result_set["productId"]
-        serie_info = result_set.get("series", {})
+        serie_info = result_set.get("series") or {}
 
         if show_info and result_set["series"]:
             show_title = result_set["series"]["title"]
@@ -646,7 +595,7 @@ class Channel(chn_class.Channel):
             image_data = result_set["images"][0]
             item.set_artwork(thumb=image_data["url"])
 
-        item.description = result_set.get("synopsis", {}).get("long")
+        item.description = (result_set.get("synopsis") or {}).get("long")
         item.set_info_label(MediaItem.LabelDuration, result_set.get("durationInSeconds", 0))
 
         # 'firstBroadcastDate'
@@ -684,7 +633,7 @@ class Channel(chn_class.Channel):
                     item.isPaid = True
 
         episode_number = result_set.get("programKey")
-        season_number = result_set.get("season", {}).get("seasonKey")
+        season_number = (result_set.get("season") or {}).get("seasonKey")
         show_type = serie_info.get("type")
         if episode_number and season_number and show_type.endswith("series"):
             item.set_season_info(season_number, episode_number)
@@ -731,6 +680,7 @@ class Channel(chn_class.Channel):
         data = JsonHelper(data)
         # Keep a list of the days.
         day_lookup: Dict[str, MediaItem] = {}
+        show_future = self._get_setting("show_future", "true") == "true"
 
         for channel in data.get_value():
             guid = channel["guid"]
@@ -779,6 +729,10 @@ class Channel(chn_class.Channel):
                     date_stamp = DateHelper.get_date_from_posix(program["programStart"], tz=pytz.UTC)
                     date_stamp = date_stamp.astimezone(tz=self.__timezone)
                     date_label = date_stamp.strftime("%d-%m-%Y")
+
+                    if not show_future and date_stamp > datetime.datetime.now(tz=pytz.UTC):
+                        continue
+
                     if date_label in day_lookup:
                         day_item = day_lookup[date_label]
                         day_item.items.append(item)
@@ -1134,25 +1088,42 @@ class Channel(chn_class.Channel):
         """
 
         Logger.trace("Content = %s", result_set)
-        result_set = result_set["channel"]
-
-        name = result_set["name"]
-        if name == "demo":
+        # url = f"{result_set['url']}/live"
+        url = result_set["url"].rstrip("/")
+        if "blend" in url:
             return None
-
-        url = "%s/live/%s" % (self.baseUrlLive, result_set["slug"])
-        item = MediaItem(name, url, media_type=mediatype.VIDEO)
+        title = result_set["title"]
+        logo = result_set["thumb"]
+        item = MediaItem(title, url, media_type=mediatype.VIDEO)
         item.isLive = True
         item.complete = False
-
-        data = result_set.get("liveStream")
-        # see if there is a video stream.
-        if data:
-            video = data.get("visualRadioAsset")
-            if video:
-                item.metaData["live_pid"] = video
-
+        item.thumb = logo
+        item.isLive = True
+        item.metaData["retrospect:parser"] = "liveRadio"
         return item
+
+
+
+    def update_live_radio(self, item: MediaItem) -> MediaItem:
+        # First fetch the Javascript data file
+        www_data = UriHandler.open(item.url)
+        js_data_url = Regexer.do_regex(r'(_next/static/chunks/pages/_app[^"]+.js)', www_data)[0]
+        js_data = UriHandler.open(f"{item.url}/{js_data_url}")
+
+        # Then fetch the slug
+        # slug = Regexer.do_regex(r'slug\W*:\W*"([^"]+)"', js_data)[0]
+        slug = Regexer.do_regex(r'var\W*r\W*=\W*"(npo[^"]+)"', js_data)[0]
+
+        # Get the channel info and media info.
+        channel_json = JsonHelper(UriHandler.open(f"{item.url}/api/miniplayer/info?channel={slug}"))
+        media_info = channel_json.get_value("data", "coreChannels", "data", 0, "liveVideo")
+        if not media_info:
+            media_info = channel_json.get_value("data", "coreChannels", "data", 0, "liveAudio")
+        token_url = media_info["tokenUrl"]
+        token_json = JsonHelper(UriHandler.open(token_url))
+
+        mid = token_json.get_value("mid")
+        return self.__update_video_item(item, mid, fetch_subtitles=False)
 
     def update_video_item(self, item: MediaItem) -> MediaItem:
         """ Updates an existing MediaItem with more data.
@@ -1373,16 +1344,9 @@ class Channel(chn_class.Channel):
 
         # get the subtitle
         if fetch_subtitles:
-            sub_title_url = "https://assetscdn.npostart.nl/subtitles/original/nl/%s.vtt" % (
-                episode_id,)
+            sub_title_url = f"https://cdn.npoplayer.nl/subtitles/nl/{episode_id}.vtt"
             sub_title_path = subtitlehelper.SubtitleHelper.download_subtitle(
                 sub_title_url, episode_id + ".nl.srt", format='srt')
-
-            if not sub_title_path:
-                sub_title_url = "https://rs.poms.omroep.nl/v1/api/subtitles/%s/nl_NL/CAPTION.vtt" % (
-                    episode_id,)
-                sub_title_path = subtitlehelper.SubtitleHelper.download_subtitle(
-                    sub_title_url, episode_id + ".nl.srt", format='srt')
 
             if sub_title_path:
                 item.subtitle = sub_title_path

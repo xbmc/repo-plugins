@@ -538,8 +538,12 @@ msgctxt "#30124"
 msgid "Find the <b>refresh token</b> for your account by examining the site's cookies and paste the <b>value</b> of the refresh token cookie here."
 msgstr ""
 
+msgctxt "#30125"
+msgid "Show future episodes under 'Recent > Today'"
+msgstr ""
+
 # used for list limits
-# empty strings from id 30125 to 30189
+# empty strings from id 30126 to 30189
 
 msgctxt "#30190"
 msgid "Monday"

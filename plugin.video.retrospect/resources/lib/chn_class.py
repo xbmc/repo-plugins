@@ -457,7 +457,8 @@ class Channel:
 
         """
 
-        data_parsers = self.__get_data_parsers(item.url)
+        parser_label = item.metaData.get("retrospect:parser")
+        data_parsers = self.__get_data_parsers(item.url, parser_label=parser_label)
         if not data_parsers:
             Logger.error("No dataparsers found cannot update item.")
             return item

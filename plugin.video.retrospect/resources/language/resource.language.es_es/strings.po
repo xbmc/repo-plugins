@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-11-09 22:11+0000\n"
+"PO-Revision-Date: 2023-11-21 18:11+0000\n"
 "Last-Translator: José Antonio Alvarado <jalvarado0.eses@gmail.com>\n"
 "Language-Team: Spanish (Spain) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/es_es/>\n"
 "Language: es_es\n"
@@ -520,6 +520,10 @@ msgctxt "#30124"
 msgid "Find the <b>refresh token</b> for your account by examining the site's cookies and paste the <b>value</b> of the refresh token cookie here."
 msgstr "Encuentre el <b>token de actualización</b> para su cuenta examinando las cookies del sitio y pegue el <b>valor</b> de la cookie del token de actualización aquí."
 
+msgctxt "#30125"
+msgid "Show future episodes under 'Recent > Today'"
+msgstr ""
+
 # used for list limits
 # empty strings from id 30109 to 30189
 msgctxt "#30190"
@@ -733,7 +737,7 @@ msgstr "Todos los episodios"
 
 msgctxt "#30371"
 msgid "Trending"
-msgstr ""
+msgstr "Tendencias"
 
 # empty strings from id 30365 to 30400
 msgctxt "#30401"

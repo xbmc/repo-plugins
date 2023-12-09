@@ -276,6 +276,9 @@ class Channel(chn_class.Channel):
 
         """
 
+        if not result_set:
+            return None
+
         api_type = result_set.get("__typename")
         Logger.trace(f"`create_api_typed_item` resulted in `{api_type}`")
         if not api_type:

@@ -128,7 +128,8 @@ class FolderAction(AddonAction):
             self.__add_breadcrumb(self.handle, self.__channel, selected_item)
             self.__add_content_type(self.handle, self.__channel, selected_item)
 
-            xbmcplugin.endOfDirectory(self.handle, ok)
+            cache_to_disk = selected_item.cacheToDisc if selected_item else True
+            xbmcplugin.endOfDirectory(self.handle, ok, cacheToDisc=cache_to_disk)
         except Exception:
             Logger.error("Plugin::Error Processing FolderList", exc_info=True)
             XbmcWrapper.show_notification(

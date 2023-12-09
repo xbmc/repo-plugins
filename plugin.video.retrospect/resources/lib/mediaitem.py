@@ -83,6 +83,7 @@ class MediaItem:
 
         self.dontGroup = False                    # : if set to True this item will not be auto grouped.
         self.isLive = False                       # : if set to True, the item will have a random QuerySting param
+        self.cacheToDisc = True                   # : cache the content to disk so Kodi will not refetch
         self.isGeoLocked = False                  # : if set to True, the item is GeoLocked to the channels language (o)
         self.isDrmProtected = False               # : if set to True, the item is DRM protected and cannot be played (^)
         self.isPaid = False                       # : if set to True, the item is a Paid item and cannot be played (*)

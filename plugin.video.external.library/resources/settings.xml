@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings version="1">
+  <section id="plugin.video.external.library">
+    <category id="access" label="32000" help="">
+      <group id="1">
+        <setting id="kodi_host" type="string" label="32001" help="32015">
+          <level>0</level>
+          <default/>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="edit" format="string">
+            <heading>32001</heading>
+          </control>
+        </setting>
+        <setting id="kodi_port" type="integer" label="32002" help="">
+          <level>0</level>
+          <default>8080</default>
+          <control type="edit" format="integer">
+            <heading>32002</heading>
+          </control>
+        </setting>
+        <setting id="kodi_login" type="string" label="32013" help="">
+          <level>0</level>
+          <default/>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="edit" format="string">
+            <heading>32013</heading>
+          </control>
+        </setting>
+        <setting id="kodi_password" type="string" label="32014" help="">
+          <level>0</level>
+          <default/>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="edit" format="string">
+            <heading>32014</heading>
+            <hidden>true</hidden>
+          </control>
+        </setting>
+      </group>
+    </category>
+    <category id="sections" label="32021" help="">
+      <group id="2">
+         <setting id="show_movies" type="boolean" label="32003" help="">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="show_recent_movies" type="boolean" label="32004" help="">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="show_tvshows" type="boolean" label="32005" help="">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="show_recent_episodes" type="boolean" label="32006" help="">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="flatten_seasons" type="integer" label="32009" help="">
+          <level>0</level>
+          <default>1</default>
+          <constraints>
+            <options>
+              <option label="20420">0</option>
+              <option label="20421">1</option>
+              <option label="20422">2</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="show_music_videos" type="boolean" label="32027" help="">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="show_recent_music_videos" type="boolean" label="32028" help="">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+    </category>
+    <category id="playback" label="32022" help="">
+      <group id="3">
+        <setting id="files_on_shares" type="boolean" label="32019" help="32020">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="playtime_to_skip" type="integer" label="32024" help="32025">
+          <level>0</level>
+          <default>60</default>
+          <constraints>
+            <minimum>30</minimum>
+            <step>30</step>
+            <maximum>120</maximum>
+          </constraints>
+          <control type="slider" format="integer">
+            <popup>false</popup>
+          </control>
+        </setting>
+        <setting id="watched_threshold_percent" type="integer" label="32012" help="32026">
+          <level>0</level>
+          <default>95</default>
+          <constraints>
+            <minimum>85</minimum>
+            <step>1</step>
+            <maximum>100</maximum>
+          </constraints>
+          <control type="slider" format="percentage">
+            <popup>false</popup>
+          </control>
+        </setting>
+      </group>
+    </category>
+  </section>
+</settings>

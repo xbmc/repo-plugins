@@ -1,0 +1,124 @@
+# Kodi Media Center language file
+msgid ""
+msgstr ""
+
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+
+msgctxt "#32000"
+msgid "Access"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Remote Kodi host"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Remote Kodi port"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Recently added movies"
+msgstr ""
+
+msgctxt "#32005"
+msgid "TV Shows"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Recently added episodes"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Unable to connect to the remote Kodi host!"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Unable to retrieve data from the remote Kodi library!"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Flatten TV show seasons"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Mark as watched"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Mark as unwatched"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Watched status threshold"
+msgstr ""
+
+msgctxt "#32013"
+msgid "Kodi login"
+msgstr ""
+
+msgctxt "#32014"
+msgid "Kodi password"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Kodi hostname or IP address (without protocol)"
+msgstr ""
+
+msgctxt "#32016"
+msgid "Kodi Medialibrary on {kodi_host}"
+msgstr ""
+
+msgctxt "#32017"
+msgid "Kodi External Video Library Client"
+msgstr ""
+
+msgctxt "#32018"
+msgid "Please run this addon from \"Video addons\" section."
+msgstr ""
+
+msgctxt "#32019"
+msgid "Mediafiles on network shares"
+msgstr ""
+
+msgctxt "#32020"
+msgid "Enable if your mediafiles are stored on network shares accessible from this device."
+msgstr ""
+
+msgctxt "#32021"
+msgid "Videolibrary Sections"
+msgstr ""
+
+msgctxt "#32022"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#32023"
+msgid "Seasons"
+msgstr ""
+
+msgctxt "#32024"
+msgid "Playtime to start tracking progress (seconds)"
+msgstr ""
+
+msgctxt "#32025"
+msgid "Playtime after which the plugin starts tracking playback progress."
+msgstr ""
+
+msgctxt "#32026"
+msgid "Playback percentage after which the plugin marks a played video as watched."
+msgstr ""
+
+msgctxt "#32027"
+msgid "Music videos"
+msgstr ""
+
+msgctxt "#32028"
+msgid "Recently added music videos"
+msgstr ""

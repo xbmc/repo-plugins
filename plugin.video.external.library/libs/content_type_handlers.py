@@ -42,7 +42,7 @@ VIDEO_URL = urljoin(REMOTE_KODI_URL, 'vfs')
 class BaseContentTypeHandler:
     mediatype: str
     item_is_folder: bool
-    should_save_to_mem_storage: bool
+    should_save_to_mem_storage: bool = False
     api_class: Type[json_rpc_api.BaseMediaItemsRetriever]
 
     def __init__(self, tvshowid: Optional[int] = None,
@@ -128,7 +128,6 @@ class RecentMoviesHandler(MoviesHandler):
 class TvShowsHandler(BaseContentTypeHandler):
     mediatype = 'tvshow'
     item_is_folder = True
-    should_save_to_mem_storage = False
     api_class = json_rpc_api.GetTVShows
 
     class FlattenSeasons(enum.IntEnum):
@@ -161,7 +160,6 @@ class TvShowsHandler(BaseContentTypeHandler):
 class SeasonsHandler(BaseContentTypeHandler):
     mediatype = 'season'
     item_is_folder = True
-    should_save_to_mem_storage = False
     api_class = json_rpc_api.GetSeasons
 
     def get_plugin_category(self) -> str:
@@ -203,6 +201,11 @@ class RecentEpisodesHandler(EpisodesHandler):
 
     def get_sort_methods(self) -> List[int]:
         return []
+
+    def get_media_items(self) -> Iterable[Dict[str, Any]]:
+        for media_item in super().get_media_items():
+            media_item['title'] = f'{media_item["showtitle"]} - {media_item["label"]}'
+            yield media_item
 
 
 class MusicVideosHandler(PlayableContentMixin, BaseContentTypeHandler):

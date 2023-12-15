@@ -48,6 +48,10 @@ msgctxt "#30008"
 msgid "Hide \"Aktueller Wolkenfilm\" in news"
 msgstr ""
 
+msgctxt "#30009"
+msgid "Show preview image also as fanart"
+msgstr ""
+
 msgctxt "#30100"
 msgid "News"
 msgstr ""

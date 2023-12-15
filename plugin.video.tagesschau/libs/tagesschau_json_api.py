@@ -109,6 +109,11 @@ class VideoContent(object):
         imageurl = self._imageurls.get("16x9-640")
         return imageurl
 
+    def fanart_url(self):
+        """Returns the URL String of the highres image for this video."""
+        fanarturl = self._imageurls.get("16x9-1920")
+        return fanarturl
+
     def __str__(self):
         """Returns a String representation for development/testing."""
         if(self.timestamp):

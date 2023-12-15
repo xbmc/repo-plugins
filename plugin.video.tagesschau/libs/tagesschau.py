@@ -25,13 +25,13 @@ from libs.subtitles import download_subtitles
 
 # -- Constants ----------------------------------------------
 ADDON_ID = 'plugin.video.tagesschau'
-FANART = xbmcvfs.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/fanart.jpg')
+FANART_IMG = xbmcvfs.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/fanart.jpg')
+LOGO_IMG   = xbmcvfs.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/logo.jpg')
+ICON_IMG   = xbmcvfs.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/icon.png')
 ACTION_PARAM = 'action'
 FEED_PARAM = 'feed'
 ID_PARAM = 'tsid'
 URL_PARAM = 'url'
-
-DEFAULT_IMAGE_URL = 'https://www.tagesschau.de/image/sendung/ard_portal_vorspann_ts.jpg'
 
 # -- Settings -----------------------------------------------
 logger = logging.getLogger("plugin.video.tagesschau.api")
@@ -39,6 +39,7 @@ logger = logging.getLogger("plugin.video.tagesschau.api")
 # -- Settings -----------------------------------------------
 quality_id = addon.getSetting('quality')
 quality = ['M', 'L', 'X'][int(quality_id)]
+show_fanart = addon.getSettingBool('show_fanart')
 
 # -- I18n ---------------------------------------------------
 language = addon.getLocalizedString
@@ -61,19 +62,26 @@ def addVideoContentDirectory(title, method):
     url_data = { ACTION_PARAM: 'list_feed', FEED_PARAM: method  }
     url = 'plugin://' + ADDON_ID + '/?' + urllib.parse.urlencode(url_data)
     li = xbmcgui.ListItem(str(title))
-    li.setArt({'thumb':DEFAULT_IMAGE_URL, 'landscape':DEFAULT_IMAGE_URL})
-    li.setProperty('Fanart_Image', FANART)
-    xbmcplugin.setContent(int(sys.argv[1]), 'videos')
+    li.setArt({'thumb':ICON_IMG, 'landscape':LOGO_IMG, 'icon':ICON_IMG})
+    li.setProperty('Fanart_Image', FANART_IMG)
+    li.setInfo(type="video", infoLabels={ "Title": str(title), "Plot": str(title) })    #"mediatype": "video"
+    xbmcplugin.setContent(int(sys.argv[1]), 'files')
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=True)
 
 def getListItem(videocontent):
     title = str(videocontent.title)
+
     image_url = videocontent.image_url()
     if(not image_url):
-        image_url = DEFAULT_IMAGE_URL
+        image_url = LOGO_IMG
+
+    fanart_url = videocontent.fanart_url()
+    if((not fanart_url) or (not show_fanart)):
+        fanart_url = FANART_IMG
+
     li = xbmcgui.ListItem(title)
     li.setArt({'thumb':image_url, 'landscape':image_url})
-    li.setProperty('Fanart_Image', FANART)
+    li.setProperty('Fanart_Image', fanart_url)
     li.setProperty('IsPlayable', 'true')
     li.setInfo(type="video",
                infoLabels={ "Title": str(title),
@@ -169,7 +177,14 @@ def tagesschau():
         # check whether there is a livestream
         videos = provider.livestreams()
         if(len(videos) == 1):
-            addVideoContentItem(videos[0], "livestreams")
+            li = xbmcgui.ListItem(strings['livestreams'])
+            li.setArt({'thumb':ICON_IMG, 'landscape':LOGO_IMG, 'icon':ICON_IMG})
+            li.setProperty('Fanart_Image', FANART_IMG)
+            li.setProperty('IsPlayable', 'true')
+            li.setInfo(type="video", infoLabels={ "Title": strings['livestreams'], "Plot": strings['livestreams'] })
+            url = getUrl(videos[0], "livestreams")
+            xbmcplugin.setContent(int(sys.argv[1]), 'videos')
+            xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, li, False)
 
         # add directories for other feeds
         add_named_directory = lambda x: addVideoContentDirectory(strings[x], x)

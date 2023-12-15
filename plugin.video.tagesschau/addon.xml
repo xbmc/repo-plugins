@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.tagesschau"
-    version="2.5.4"
+    version="2.5.6"
     name="Tagesschau"
     provider-name="J.Schumacher, H.Saul, C.Prasch">
   <requires>
@@ -31,6 +31,13 @@
       <screenshot>resources/assets/screenshot_3.png</screenshot>
     </assets>
     <news>
+version 2.5.6 (2023-12-010)
+ * Use default image from local ressources instead of non-working ARD url
+ * For some skins the category listing is now available in landscape and icon viewtype
+ 
+version 2.5.5 (2023-12-05)
+ * Added setting to show preview images also as fanart (default on)
+ 
 version 2.5.4 (2023-12-03)
  * Fixed content types so that skins use landscape viewtype
  * Added setting to hide "Europadruck" and "Aktueller Wolkenfilm" from news list

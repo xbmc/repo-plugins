@@ -5,4 +5,5 @@
   <setting id="tt_list" type="enum" label="30003" lvalues="30004|30005|30006" default="2" />
   <setting id="hide_europadruck" type="bool" label="30007" default="true" />
   <setting id="hide_wolkenfilm"  type="bool" label="30008" default="true" />
+  <setting id="show_fanart"      type="bool" label="30009" default="true" />
 </settings>

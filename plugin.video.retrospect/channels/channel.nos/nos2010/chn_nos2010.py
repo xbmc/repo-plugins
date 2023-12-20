@@ -2,7 +2,7 @@
 
 import datetime
 import time
-from typing import Optional, List, Tuple, Dict, Union
+from typing import Optional, List, Tuple, Union
 
 import pytz
 
@@ -71,15 +71,11 @@ class Channel(chn_class.Channel):
 
         self._add_data_parser("https://npo.nl/start/api/domain/guide-channels",
                               name="Recent Items", label="recent", json=True,
-                              # Should we have an EPG per day
-                              preprocessor=self.create_api_epg_tree,
-                              # Should we have an EPG per channel
-                              # parser=[], creator=self.create_api_recent_item
-                              )
+                              preprocessor=self.create_epg_days)
 
-        self._add_data_parser("https://npo.nl/start/api/domain/guide-channel?guid=",
-                              name="EPG listing", json=True,
-                              parser=["days"], creator=self.create_api_epg_day)
+        self._add_data_parser("#recentday", name="EPG listing", json=True,
+                              preprocessor=self.load_all_epg_channels,
+                              parser=[], creator=self.create_api_epg_item)
 
         self._add_data_parser("https://npo.nl/start/live?channel=",
                               name="Live Video Updater from json",
@@ -162,24 +158,6 @@ class Channel(chn_class.Channel):
             label="liveRadio"
         )
 
-        # Alpha listing based on JSON API
-        # self._add_data_parser("https://start-api.npo.nl/page/catalogue", json=True,
-        # self._add_data_parser("https://start-api.npo.nl/media/series", json=True,
-        #                       parser=["items"],
-        #                       creator=self.create_json_episode_item,
-        #                       preprocessor=self.extract_old_api_pages)
-        #
-        # self._add_data_parser("https://start-api.npo.nl/media/series/", json=True,
-        #                       name="API based video items",
-        #                       parser=["items", ], creator=self.create_old_api_video_item,
-        #                       preprocessor=self.extract_old_api_pages)
-        #
-        # self._add_data_parser("https://start-api.npo.nl/page/franchise", json=True,
-        #                       name="API based video items for a franchise",
-        #                       parser=["items"],
-        #                       creator=self.create_old_api_video_item,
-        #                       preprocessor=self.process_old_franchise_page)
-
         self.__ignore_cookie_law()
 
         # ===============================================================================================================
@@ -188,6 +166,7 @@ class Channel(chn_class.Channel):
         self.__max_page_count = 10
         self.__has_premium_cache = None
         self.__timezone = pytz.timezone("Europe/Amsterdam")
+        self.__show_future = self._get_setting("show_future", "true") == "true"
 
         # use a dictionary so the lookup is O(1)
         self.__channel_name_map = {
@@ -676,105 +655,62 @@ class Channel(chn_class.Channel):
         item.isLive = True
         return item
 
-    def create_api_epg_tree(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
+    def create_epg_days(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
+        items = []
         data = JsonHelper(data)
-        # Keep a list of the days.
-        day_lookup: Dict[str, MediaItem] = {}
-        show_future = self._get_setting("show_future", "true") == "true"
-
+        channels = {}
         for channel in data.get_value():
+            title = channel["title"]
             guid = channel["guid"]
-            channel = channel["title"]
-            if channel not in ["NPO1", "NPO2", "NPO3"]:
+            if title not in ["NPO1", "NPO2", "NPO3"]:
                 continue
+            channels[guid] = title
 
-            # Fetch channel EPG
-            url = f"https://npo.nl/start/api/domain/guide-channel?guid={guid}"
-            channel_info = JsonHelper(UriHandler.open(url))
-            # The time to add to the "Today" end-time.
-            delta = datetime.timedelta(hours=5)
-
-            for day_info in channel_info.get_value("days"):
-                # Check if a day already exists
-                date = day_info["date"]
-                if date not in day_lookup:
-                    # Create a Day media-item
-                    day, month, year = date.split("-")
-                    time_stamp = datetime.datetime(int(year), int(month), int(day))
-                    # See"Today" as the day before until 05:00 AM.
-                    now = datetime.datetime.now() - delta
-                    if time_stamp <= now:
-                        # Only add days up until "Today"
-                        days = LanguageHelper.get_days_list()
-                        day_name = days[time_stamp.weekday()]
-
-                        if time_stamp.date() == now.date():
-                            day_name = LanguageHelper.get_localized_string(LanguageHelper.Today)
-                        elif time_stamp.date() == now.date() - datetime.timedelta(days=1):
-                            day_name = LanguageHelper.get_localized_string(LanguageHelper.Yesterday)
-
-                        day_item = FolderItem(f"{date} - {day_name}", "", content_type=contenttype.EPISODES)
-                        day_item.set_date(year, month, day)
-                        day_lookup[date] = day_item
-                    elif time_stamp > now + datetime.timedelta(days=1):
-                        # Don't add show after "Tomorrow". That way the `delta` after midnight of
-                        # `Today` can be filled.
-                        continue
-
-                for program in day_info["scheduledPrograms"]:
-                    item = self.create_api_epg_item(program, channel)
-                    if not item:
-                        continue
-
-                    date_stamp = DateHelper.get_date_from_posix(program["programStart"], tz=pytz.UTC)
-                    date_stamp = date_stamp.astimezone(tz=self.__timezone)
-                    date_label = date_stamp.strftime("%d-%m-%Y")
-
-                    if not show_future and date_stamp > datetime.datetime.now(tz=pytz.UTC):
-                        continue
-
-                    if date_label in day_lookup:
-                        day_item = day_lookup[date_label]
-                        day_item.items.append(item)
-                    else:
-                        # See if we passed midnight on today.
-                        date_stamp -= delta
-                        date_label = date_stamp.strftime("%d-%m-%Y")
-                        if date_label in day_lookup:
-                            day_item = day_lookup[date_label]
-                            day_item.items.append(item)
-
-        return data, list(day_lookup.values())
-
-    def create_api_epg_day(self, result_set: dict) -> Optional[MediaItem]:
-        date = result_set["date"]
-        day, month, year = date.split("-")
-        time_stamp = datetime.datetime(int(year), int(month), int(day))
-        if time_stamp > datetime.datetime.now():
-            return None
-
+        today = datetime.datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(self.__timezone)
         days = LanguageHelper.get_days_list()
-        day_name = days[time_stamp.weekday()]
+        for i in range(0, 7, 1):
+            air_date = today - datetime.timedelta(i)
+            Logger.trace("Adding item for: %s", air_date)
 
-        if time_stamp.date() == datetime.datetime.now().date():
-            day_name = LanguageHelper.get_localized_string(LanguageHelper.Today)
-        elif time_stamp.date() == datetime.datetime.now().date() - datetime.timedelta(days=1):
-            day_name = LanguageHelper.get_localized_string(LanguageHelper.Yesterday)
-        # elif time_stamp.date() == datetime.datetime.now().date() - datetime.timedelta(days=2):
-        #     day_name = LanguageHelper.get_localized_string(LanguageHelper.DayBeforeYesterday)
+            # Determine a nice display date
+            day = days[air_date.weekday()]
+            if i == 0:
+                day = LanguageHelper.get_localized_string(LanguageHelper.Today)
+            elif i == 1:
+                day = LanguageHelper.get_localized_string(LanguageHelper.Yesterday)
+            # elif i == 2:
+            #     day = LanguageHelper.get_localized_string(LanguageHelper.DayBeforeYesterday)
+            title = "%04d-%02d-%02d - %s" % (air_date.year, air_date.month, air_date.day, day)
 
-        day_item = FolderItem(f"{date} - {day_name}", "", content_type=contenttype.EPISODES)
-        day_item.set_date(year, month, day)
+            extra = FolderItem(title, "#recentday", content_type=contenttype.EPISODES)
+            extra.complete = True
+            extra.dontGroup = True
+            extra.metaData["date"] = f"{air_date.day:02}-{air_date.month:02}-{air_date.year}"
+            extra.metaData["channels"] = channels
+            extra.set_date(air_date.year, air_date.month, air_date.day, text="")
+            items.append(extra)
 
-        # process the sub items
-        for result in result_set["scheduledPrograms"]:
-            sub_item = self.create_api_epg_item(result)
-            if sub_item:
-                day_item.items.append(sub_item)
-        return day_item
+        return data, items
 
-    def create_api_epg_item(self, result_set: dict, channel: Optional[str] = None) -> Optional[MediaItem]:
-        series_slug = result_set["series"].get("slug")
+    def load_all_epg_channels(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
+        channels = self.parentItem.metaData["channels"]
+        date = self.parentItem.metaData["date"]
+
+        epg_data = None
+        for guid, title in channels.items():
+
+            data = JsonHelper(UriHandler.open(f"https://npo.nl/start/api/domain/guide-channel?guid={guid}&date={date}"))
+            for item in data.json:
+                item["channel"] = title
+            if not epg_data:
+                epg_data = data
+            else:
+                epg_data.json += data.json
+
+        return epg_data, []
+
+    def create_api_epg_item(self, result_set: dict) -> Optional[MediaItem]:
+        series_slug = (result_set["series"] or {}).get("slug")
         if not series_slug:
             return None
         program_guid = (result_set["program"] or {}).get("guid")
@@ -785,14 +721,13 @@ class Channel(chn_class.Channel):
         name = result_set["title"]
         season_slug = result_set["season"]["slug"]
         start = result_set["programStart"]
+        channel = result_set["channel"]
 
-        date_stamp = DateHelper.get_date_from_posix(start, tz=pytz.UTC)
-        date_stamp = date_stamp.astimezone(self.__timezone)
+        date_stamp = DateHelper.get_date_from_posix(start, tz=self.__timezone)
+        if date_stamp > datetime.datetime.now(tz=pytz.UTC):
+            return None
 
-        if channel:
-            item = MediaItem(f"{date_stamp.hour:02d}:{date_stamp.minute:02d} - {channel} - {name}", url, media_type=mediatype.EPISODE)
-        else:
-            item = MediaItem(f"{date_stamp.hour:02d}:{date_stamp.minute:02d} - {name}", url, media_type=mediatype.EPISODE)
+        item = MediaItem(f"{date_stamp.hour:02d}:{date_stamp.minute:02d} - {channel} - {name}", url, media_type=mediatype.EPISODE)
         item.metaData = {
             "season_slug": season_slug,
             "program_guid": program_guid

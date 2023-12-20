@@ -146,7 +146,18 @@ class DateHelper(object):
         #   OSError on localtime() or gmtime() failure. It's common for this to be restricted
         #   to years in 1970 through 2038
         # return datetime.datetime.fromtimestamp(posix, tz)
-        return datetime.datetime(1970, 1, 1, tzinfo=tz) + datetime.timedelta(seconds=posix)
+
+        if tz:
+            result = pytz.UTC.localize(datetime.datetime(1970, 1, 1))
+            result += datetime.timedelta(seconds=posix)
+            # Set the correct time zone. The TZ object depends on the actual time (historical values,
+            # DST and so on), so should be set at the end.
+            result = result.astimezone(tz=tz)
+        else:
+            result = datetime.datetime(1970, 1, 1)
+            result += datetime.timedelta(seconds=posix)
+
+        return result
 
     @staticmethod
     def get_datetime_from_string(value, date_format="%Y-%m-%dT%H:%M:%S", time_zone=None):

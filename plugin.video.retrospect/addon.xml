@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.7.3"
+        version="5.7.4"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -122,24 +122,18 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.7.3 - Changelog - 2023-12-09[/B]
+        <news>[B]Retrospect v5.7.4 - Changelog - 2023-12-20[/B]
 
-Another minor &#x27;after-care&#x27;-updates for the NPO channel. This patch also fixes a minor TV4 Play issue.
+Minor fix for the NPO `Recent` items.
 
 [B]Framework related[/B]
-* Added: Option to disable the Kodi directory cache.
-* Added: Use `retrospect:parser` for updaters.
+* None
 
 [B]GUI/Settings/Language related[/B]
 * None
 
 [B]Channel related[/B]
-* Fixed: Items without type break NPO.
-* Fixed: Don&#x27;t cache the &quot;recent&quot; list by Kodi.
-* Fixed: Radio live streams for NPO.
-* Fixed: NPO subtitles (Fixes #1742).
-* Fixed: TV4 Play main list not working.
-* Added: Option to not show future items in NPO Start &quot;Recent&quot; listings.
+* Fixed: Recent times broke (Fixes #1750).
 
         </news>
         <assets>

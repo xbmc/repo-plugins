@@ -14,6 +14,46 @@ class Token:
     value: str = None
 
 
+def _refresh_token(token):
+    """Refresh token"""
+    _url = G.portal_config.portal_base_url + G.portal_config.context_path
+    _mac_cookie = G.portal_config.mac_cookie
+    _portal_url = G.portal_config.portal_url
+    requests.get(url=_url,
+                 headers={'Cookie': _mac_cookie, 'Authorization': 'Bearer ' + token,
+                          'X-User-Agent': 'Model: MAG250; Link: WiFi', 'Referrer': _portal_url},
+                 params={
+                     'type': 'stb',
+                     'action': 'get_profile',
+                     'hd': '1',
+                     'auth_second_step': '0',
+                     'num_banks': '1',
+                     'stb_type': 'MAG250',
+                     'image_version': '216',
+                     'hw_version': '1.7-BD-00',
+                     'not_valid_token': '0',
+                     'device_id': G.portal_config.device_id,
+                     'device_id2': G.portal_config.device_id_2,
+                     'signature': G.portal_config.signature,
+                     'sn': G.portal_config.serial_number,
+                     'ver': 'ImageDescription:%200.2.18-r23-pub-254;%20ImageDate:%20Wed%20Aug%2029%2010:49:26'
+                            '%20EEST%202018;%20PORTAL%20version:%205.1.1;%20API%20Version:%20JS%20API'
+                            '%20version:%20328;%20STB%20API%20version:%20134;%20Player%20Engine%20version'
+                            ':%200x566'
+                 },
+                 timeout=30
+                 )
+    requests.get(url=_url,
+                 headers={'Cookie': _mac_cookie, 'Authorization': 'Bearer ' + token,
+                          'X-User-Agent': 'Model: MAG250; Link: WiFi', 'Referrer': _portal_url},
+                 params={
+                     'type': 'watchdog', 'action': 'get_events',
+                     'init': '0', 'cur_play_type': '1', 'event_active_id': '0'
+                 },
+                 timeout=30
+                 )
+
+
 class Auth:
     """Auth API"""
 
@@ -24,10 +64,12 @@ class Auth:
         self._token = Token()
         self._load_cache()
 
-    def get_token(self):
+    def get_token(self, refresh_token):
         """Get Token"""
         Logger.debug('Token path {}'.format(self._token_path))
         if self._token.value:
+            if refresh_token:
+                _refresh_token(self._token.value)
             return self._token.value
 
         _url = G.portal_config.portal_base_url + G.portal_config.context_path

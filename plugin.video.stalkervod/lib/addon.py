@@ -51,11 +51,14 @@ def list_categories():
     categories = get_categories()
     for category in categories:
         list_item = xbmcgui.ListItem(label=category['title'])
-        url = G.get_plugin_url({'action': 'search', 'category': category['title'], 'category_id': category['id']})
-        list_item.addContextMenuItems([('Search', f'RunPlugin({url}, False)')])
+        fav_url = G.get_plugin_url({'action': 'listing', 'category': category['title'], 'category_id': category['id'],
+                                    'page': 1, 'update_listing': False, 'search_term': '', 'fav': 1})
+        search_url = G.get_plugin_url({'action': 'search', 'category': category['title'],
+                                       'category_id': category['id'], 'fav': 0})
+        list_item.addContextMenuItems([('Favorites', f'Container.Update({fav_url})'), ('Search', f'RunPlugin({search_url}, False)')])
         # list_item.setInfo('video', {'title': category['title'], 'mediatype': 'video'})
         url = G.get_plugin_url({'action': 'listing', 'category': category['title'], 'category_id': category['id'],
-                                'page': 1, 'update_listing': False, 'search_term': ''})
+                                'page': 1, 'update_listing': False, 'search_term': '', 'fav': 0})
         xbmcplugin.addDirectoryItem(G.get_handle(), url, list_item, True)
     xbmcplugin.endOfDirectory(G.get_handle(), succeeded=True, updateListing=False, cacheToDisc=False)
 
@@ -101,7 +104,7 @@ def list_videos(params):
     search_term = params.get('search_term', '')
     xbmcplugin.setPluginCategory(G.get_handle(), params['category'])
     xbmcplugin.setContent(G.get_handle(), 'videos')
-    videos = get_videos(params['category_id'], params['page'], search_term)
+    videos = get_videos(params['category_id'], params['page'], search_term, params.get('fav', 0))
     create_video_listing(videos, params)
 
 
@@ -157,7 +160,7 @@ def create_video_listing(videos, params):
         video_info.setDateAdded(video['added'])
         if video['year'].isdigit():
             video_info.setYear(int(video['year']))
-        list_item.setArt({'poster': poster_url})
+        list_item.setArt({'poster': poster_url, 'fanart': poster_url})
         directory_items.append((url, list_item, is_folder))
     # Add navigation items
     if int(videos['total_items']) > item_count:
@@ -220,7 +223,7 @@ def list_episodes(params):
         else:
             video_info.setMediaType('movie')
         list_item.setProperties({'IsPlayable': 'true'})
-        list_item.setArt({'poster': params['poster_url']})
+        list_item.setArt({'poster': params['poster_url'], 'fanart': params['poster_url']})
         url = G.get_plugin_url({'action': 'play', 'video_id': params['video_id'], 'series': episode_no})
         xbmcplugin.addDirectoryItem(G.get_handle(), url, list_item, False)
     xbmcplugin.endOfDirectory(G.get_handle(), succeeded=True, updateListing=False, cacheToDisc=False)

@@ -16,7 +16,7 @@ def __call_stalker_portal(params):
     _portal_url = G.portal_config.portal_url
     _auth = Auth()
     while True:
-        token = _auth.get_token()
+        token = _auth.get_token(retries > 0)
         response = requests.get(url=_url,
                                 headers={'Cookie': _mac_cookie,
                                          'Authorization': 'Bearer ' + token,
@@ -24,9 +24,10 @@ def __call_stalker_portal(params):
                                 params=params,
                                 timeout=30
                                 )
-        if response.content.decode('utf-8') != 'Authorization failed.' or retries == G.addon_config.max_retries:
+        if response.content.decode('utf-8').find('Authorization failed') == -1 or retries == G.addon_config.max_retries:
             break
-        _auth.clear_cache()
+        if retries > 1:
+            _auth.clear_cache()
         retries += 1
     return response.json()
 
@@ -67,9 +68,9 @@ def get_tv_channels(category_id, page):
     return get_listing(params, page)
 
 
-def get_videos(category_id, page, search_term):
+def get_videos(category_id, page, search_term, fav):
     """Get videos for a category"""
-    params = {'type': 'vod', 'action': 'get_ordered_list', 'category': category_id, 'sortby': 'added'}
+    params = {'type': 'vod', 'action': 'get_ordered_list', 'category': category_id, 'sortby': 'added', 'fav': fav}
     if bool(search_term.strip()):
         params.update({'search': search_term})
     return get_listing(params, page)

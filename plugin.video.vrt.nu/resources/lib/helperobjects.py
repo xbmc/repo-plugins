@@ -20,11 +20,12 @@ class ApiData:
 class StreamURLS:
     """This helper object holds all information to be used when playing streams"""
 
-    def __init__(self, stream_url, subtitle_url=None, license_key=None, use_inputstream_adaptive=False):
+    def __init__(self, stream_url, subtitle_url=None, license_url=None, license_headers=None, use_inputstream_adaptive=False):
         """The constructor for the StreamURLS class"""
         self.stream_url = stream_url
         self.subtitle_url = subtitle_url
-        self.license_key = license_key
+        self.license_url = license_url
+        self.license_headers = license_headers
         self.use_inputstream_adaptive = use_inputstream_adaptive
         self.video_id = None
 

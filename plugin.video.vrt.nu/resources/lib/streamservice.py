@@ -6,9 +6,8 @@ from __future__ import absolute_import, division, unicode_literals
 
 try:  # Python 3
     from urllib.error import HTTPError
-    from urllib.parse import quote, urlencode
+    from urllib.parse import quote
 except ImportError:  # Python 2
-    from urllib import urlencode
     from urllib2 import quote, HTTPError
 
 from helperobjects import ApiData, StreamURLS
@@ -55,46 +54,6 @@ class StreamService:
         settingsdir = addon_profile()
         if not exists(settingsdir):
             mkdir(settingsdir)
-
-    @staticmethod
-    def _get_license_key(key_url, key_type='R', key_headers=None, key_value=None):
-        """Generates a proper Widevine license key value
-
-            # A{SSM} -> not implemented
-            # R{SSM} -> raw format
-            # B{SSM} -> base64 format
-            # D{SSM} -> decimal format
-
-            The generic format for a LicenseKey is:
-            |<url>|<headers>|<key with placeholders|
-
-            The Widevine Decryption Key Identifier (KID) can be inserted via the placeholder {KID}
-
-            @type key_url: str
-            @param key_url: the URL where the license key can be obtained
-
-            @type key_type: str
-            @param key_type: the key type (A, R, B or D)
-
-            @type key_headers: dict
-            @param key_headers: A dictionary that contains the HTTP headers to pass
-
-            @type key_value: str
-            @param key_value: i
-            @return:
-       """
-        header = ''
-        if key_headers:
-            header = urlencode(key_headers)
-
-        if key_type in ('A', 'R', 'B'):
-            key_value = key_type + '{SSM}'
-        elif key_type == 'D':
-            if 'D{SSM}' not in key_value:
-                raise ValueError('Missing D{SSM} placeholder')
-            key_value = quote(key_value)
-
-        return '{key_url}|{header}|{key_value}|'.format(key_url=key_url, header=header, key_value=key_value)
 
     def _get_api_data(self, video):
         """Create api data object from video dictionary"""
@@ -261,15 +220,19 @@ class StreamService:
                 if protocol == 'mpeg_dash' and drm_stream:
                     log(2, 'Protocol: mpeg_dash drm')
                     if vudrm_token:
-                        encryption_json = '{{"token":"{0}","drm_info":[D{{SSM}}],"kid":"{{KID}}"}}'.format(vudrm_token)
-                        license_key = self._get_license_key(key_url=vualto_license_url,
-                                                            key_type='D',
-                                                            key_value=encryption_json,
-                                                            key_headers={'Content-Type': 'text/plain;charset=UTF-8'})
+                        stream = StreamURLS(
+                            manifest_url,
+                            license_url=vualto_license_url,
+                            license_headers={'X-VUDRM-TOKEN': vudrm_token},
+                            use_inputstream_adaptive=True
+                        )
                     else:
-                        license_key = self._get_license_key(key_url=self._UPLYNK_LICENSE_URL, key_type='R')
-
-                    stream = StreamURLS(manifest_url, license_key=license_key, use_inputstream_adaptive=True)
+                        stream = StreamURLS(
+                            manifest_url,
+                            license_url=self._UPLYNK_LICENSE_URL,
+                            license_headers={},
+                            use_inputstream_adaptive=True
+                        )
                 elif protocol == 'mpeg_dash':
                     log(2, 'Protocol: mpeg_dash')
                     stream = StreamURLS(manifest_url, use_inputstream_adaptive=True)

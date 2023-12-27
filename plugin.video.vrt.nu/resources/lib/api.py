@@ -1608,8 +1608,8 @@ def get_online_categories():
         data = dumps(payload).encode('utf-8')
         categories_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
         if categories_json is not None:
-            content_types = find_entry(categories_json.get('data').get('uiSearch'), 'title', 'Aanbod').get('items')
-            genres = find_entry(categories_json.get('data').get('uiSearch'), 'title', 'Genres').get('items')
+            content_types = find_entry(categories_json.get('data').get('uiSearch'), 'listId', 'initialsearchcontenttypes').get('items')
+            genres = find_entry(categories_json.get('data').get('uiSearch'), 'listId', 'initialsearchgenres').get('items')
             category_items = content_types + genres
             for category in category_items:
                 # Don't add audio-only categories

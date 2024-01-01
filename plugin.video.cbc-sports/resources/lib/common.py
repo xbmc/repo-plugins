@@ -18,7 +18,7 @@ def timeConvert(orgtime):				#  Verify CBC Sports time format
         else:
             retime = 'invalid'
 
-        if int(orgtime[11:13]) > 24:
+        if int(orgtime[11:13]) > 23:
             retime = 'invalid'     
 
         return(retime)

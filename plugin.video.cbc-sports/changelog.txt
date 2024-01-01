@@ -1,3 +1,7 @@
+Version 1.0.6
+
+- Fixed a bug where an invalid hour of 24 wasn't being caught
+
 Version 1.0.5
 
 -  Added a generic check for all improperly formatted times being returned by the CBC

@@ -1,5 +1,10 @@
 Changelog also available in file ./addon.xml xpath /addon/extension/news following Kodi guidelines https://kodi.wiki/view/Add-on_structure#changelog.txt
 
+v1.4.2 (2024-1-3)
+- Rename quality parameter.
+- Use https to get HBB TV Stream info.
+- Fix bug preventing to open series menu
+
 v1.4.1 (2023-10-10)
 - Fix playing videos with siblings.
 

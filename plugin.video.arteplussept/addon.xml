@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.arteplussept" name="Arte +7" version="1.4.1" provider-name="bmf, thomas-ernest">
+<addon id="plugin.video.arteplussept" name="Arte +7" version="1.4.2" provider-name="bmf, thomas-ernest">
     <!-- https://kodi.wiki/view/Addon.xml -->
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -56,19 +56,15 @@ https://github.com/thomas-ernest/plugin.video.arteplussept
         <website>https://www.arte.tv/fr/</website>
         <source>https://github.com/thomas-ernest/plugin.video.arteplussept</source>
         <news>
+v1.4.2 (2024-1-3)
+- Rename quality parameter.
+- Use https to get HBB TV Stream info.
+- Fix bug preventing to open series menu
 v1.4.1 (2023-10-10)
 - Fix playing videos with siblings.
 v1.4.0 (2023-8-14)
 - Add support for content over multiple pages.
 - Refactor most of the code in OO style
-v1.3.1 (2023-8-12)
-- Add context menu to view collection as menu instead of playlist
-- Set resume point to 0 when video was fully watched. Avoid crash when playing seq of watched videos in playlist.
-v1.3.0 (2023-8-6)
-- Improve security with better password management
-        - Stop storing password on filesystem though addon settings
-- Make thomas-ernest fork official in addon.xml for visibility in wiki
-- Minor fix/clean-up in translation
         </news>
         <assets>
             <icon>resources/icon.png</icon>

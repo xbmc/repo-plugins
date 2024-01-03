@@ -31,7 +31,7 @@ class AddOnConfig:
     handle: str = None
     addon_data_path: str = None
     max_page_limit: int = 2
-    max_retries: int = 2
+    max_retries: int = 3
     token_path: str = None
 
 

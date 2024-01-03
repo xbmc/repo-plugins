@@ -11,7 +11,7 @@ from resources.lib import logger
 _PLUGIN_NAME = Plugin().name
 _PLUGIN_VERSION = Plugin().addon.getAddonInfo('version')
 # Arte hbbtv - deprecated API since 2022 prefer Arte TV API
-_HBBTV_URL = 'http://www.arte.tv/hbbtvv2/services/web/index.php'
+_HBBTV_URL = 'https://www.arte.tv/hbbtvv2/services/web/index.php'
 _HBBTV_HEADERS = {
     'user-agent': f"{_PLUGIN_NAME}/{_PLUGIN_VERSION}"
 }

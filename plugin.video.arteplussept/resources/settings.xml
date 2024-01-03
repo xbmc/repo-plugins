@@ -12,8 +12,8 @@
 			id="quality"
 			type="enum"
 			label="30052"
-			values="SQ (High)|EQ (Medium)|HQ (Low)"
-			default="0"/>
+			values="Low|Medium|High"
+			default="2"/>
 		<setting
 			id="show_video_streams"
 			type="bool"

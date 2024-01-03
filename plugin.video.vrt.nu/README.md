@@ -59,6 +59,9 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.27 (2023-12-27)
+- Fix categories listing (@mediaminister)
+
 ### v2.5.26 (2023-09-22)
 - Fix program listings (@mediaminister)
 - Add extra content to program listings (@mediaminister)

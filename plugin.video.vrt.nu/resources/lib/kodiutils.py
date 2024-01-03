@@ -20,9 +20,11 @@ from xbmcaddon import Addon
 from utils import from_unicode, to_unicode
 
 try:  # Python 3
+    from urllib.parse import quote, urlencode
     from urllib.request import HTTPErrorProcessor
 except ImportError:  # Python 2
-    from urllib2 import HTTPErrorProcessor
+    from urllib import urlencode
+    from urllib2 import quote, HTTPErrorProcessor
 
 ADDON = Addon()
 DEFAULT_CACHE_DIR = 'cache'
@@ -309,12 +311,13 @@ def play(stream, video=None):
             play_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
             play_item.setMimeType('application/vnd.apple.mpegurl')
 
-        if stream.license_key is not None:
+        if stream.license_url is not None:
             import inputstreamhelper
             is_helper = inputstreamhelper.Helper('mpd', drm='com.widevine.alpha')
             if is_helper.check_inputstream():
                 play_item.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
-                play_item.setProperty('inputstream.adaptive.license_key', stream.license_key)
+                license_key = generate_ia_license_key(stream.license_url, license_headers=stream.license_headers)
+                play_item.setProperty('inputstream.adaptive.license_key', license_key)
 
     subtitles_visible = get_setting_bool('showsubtitles', default=True)
     # Separate subtitle url for hls-streams
@@ -337,6 +340,21 @@ def get_search_string(search_string=None):
     if keyboard.isConfirmed():
         search_string = to_unicode(keyboard.getText())
     return search_string
+
+
+def generate_ia_license_key(license_url, license_headers='', postdata_type='R', postdata_value='', response_type=''):
+    """Generates an InputStream Adaptive license_key"""
+    if license_headers:
+        license_headers = urlencode(license_headers)
+
+    if postdata_type in ('A', 'R', 'B'):
+        postdata_value = postdata_type + '{SSM}'
+    elif postdata_type == 'D':
+        if 'D{SSM}' not in postdata_value:
+            raise ValueError('Missing D{SSM} placeholder')
+        postdata_value = quote(postdata_value)
+
+    return '{}|{}|{}|{}'.format(license_url, license_headers, postdata_value, response_type)
 
 
 def ok_dialog(heading='', message=''):

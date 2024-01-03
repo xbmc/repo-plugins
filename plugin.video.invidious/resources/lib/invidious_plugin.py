@@ -91,10 +91,17 @@ class InvidiousPlugin:
             if 'https' == instance['type']:
                 instance_url = instance['uri']
                 # Make sure the instance work for us.  This test avoid
-                # those rejecting us with HTTP status 429.
+                # those rejecting us with HTTP status 429.  Some
+                # instances return a sensible value for the special
+                # lists but not for an individual video, so test with
+                # a fairly randomly picked video id to avoid partly
+                # working instances.
+                test_video_id = '1l2_uCyBXQ0'
                 api_client = invidious_api.InvidiousAPIClient(instance_url)
-                if api_client.fetch_special_list(self.SPECIAL_LISTS[0]):
+                if api_client.fetch_video_information(test_video_id):
                     return instance_url
+                else:
+                    xbmc.log(f'rejecting non-working instance {instanceinfo}', xbmc.LOGDEBUG)
 
         xbmc.log('invidious no working https type instance returned from api.invidious.io.', xbmc.LOGWARNING)
         # FIXME figure out how to show failing autodetection to the user.

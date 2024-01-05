@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.stalkervod" name="Stalker VOD Client" version="0.0.2" provider-name="rickey">
+<addon id="plugin.video.stalkervod" name="Stalker VOD Client" version="0.0.3" provider-name="rickey">
 	<requires>
 		<import addon="xbmc.python" version="3.0.1"/>
 		<import addon="script.module.requests" version="2.27.1"/>
@@ -22,10 +22,15 @@
 			<screenshot>resources/media/screenshot_2.png</screenshot>
 			<screenshot>resources/media/screenshot_3.png</screenshot>
 		</assets>
-		<news>v0.0.2  (2023-12-27)
-			- Add favorites context menu option and re-use existing token if possible
-			v0.0.1  (2023-10-22)
-			- Initial Release
+		<news>
+v0.0.3  (2024-01-05)
+- Minor bug fixes and highlight favorites
+
+v0.0.2  (2023-12-27)
+- Add favorites context menu option and re-use existing token if possible
+
+v0.0.1  (2023-10-22)
+- Initial Release
 		</news>
 	</extension>
 </addon>

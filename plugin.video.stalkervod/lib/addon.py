@@ -14,12 +14,13 @@ from .api import (get_categories, get_tv_genres, remove_favorites, add_favorites
                   get_tv_channels, get_videos, get_vod_stream_url, get_tv_stream_url)
 
 
-def remove_favorites_refresh(params):
-    """Remove from favorites and refresh"""
-    remove_favorites(params['video_id'])
-    url = G.get_plugin_url({'action': 'favorites', 'page': params['page'], 'update_listing': False})
-    func_str = f'Container.Update({url})'
-    xbmc.executebuiltin(func_str)
+def toggle_favorites(video_id, add):
+    """Remove/add favorites and refresh"""
+    if add:
+        add_favorites(video_id)
+    else:
+        remove_favorites(video_id)
+    xbmc.executebuiltin('Container.Refresh')
 
 
 def play_video(video_id, series):
@@ -88,6 +89,8 @@ def list_channels(params):
     for video in videos['data']:
         label = video['name']
         list_item = xbmcgui.ListItem(label, label)
+        video_info = list_item.getVideoInfoTag()
+        video_info.setPlaycount(0)
         list_item.setProperty('IsPlayable', 'true')
         url = G.get_plugin_url({'action': 'tv_play', 'cmd': video['cmd']})
         directory_items.append((url, list_item, False))
@@ -95,14 +98,14 @@ def list_channels(params):
         add_navigation_items(params, videos, directory_items)
         item_count = item_count + 2
     xbmcplugin.addDirectoryItems(G.get_handle(), directory_items, item_count)
-    xbmcplugin.addSortMethod(G.get_handle(), xbmcplugin.SORT_METHOD_NONE, '%DA')
     xbmcplugin.endOfDirectory(G.get_handle(), succeeded=True, updateListing=update_listing == 'True', cacheToDisc=False)
 
 
 def list_videos(params):
     """List videos for a category"""
     search_term = params.get('search_term', '')
-    xbmcplugin.setPluginCategory(G.get_handle(), params['category'])
+    plugin_category = params['category'] if params.get('fav', '0') != '1' else params['category'] + ' - FAVORITES'
+    xbmcplugin.setPluginCategory(G.get_handle(), plugin_category)
     xbmcplugin.setContent(G.get_handle(), 'videos')
     videos = get_videos(params['category_id'], params['page'], search_term, params.get('fav', 0))
     create_video_listing(videos, params)
@@ -124,8 +127,10 @@ def create_video_listing(videos, params):
     directory_items = []
     for video in videos['data']:
         label = video['name'] if video['hd'] == 1 else video['name'] + ' (SD)'
-        list_item = xbmcgui.ListItem(label, label)
-        if params['action'] == 'favorites':
+        if video['fav'] == 1:
+            label = label + ' ★'
+        list_item = xbmcgui.ListItem(label=label, label2=label)
+        if video['fav'] == 1:
             url = G.get_plugin_url({'action': 'remove_fav', 'video_id': video['id'], 'page': page})
             list_item.addContextMenuItems([('Remove from favorites', f'RunPlugin({url}, False)')])
         else:
@@ -133,7 +138,7 @@ def create_video_listing(videos, params):
             list_item.addContextMenuItems([('Add to favorites', f'RunPlugin({url}, False)')])
 
         is_folder = False
-        poster_url = G.portal_config.portal_base_url + video['screenshot_uri']
+        poster_url = G.portal_config.portal_base_url + video['screenshot_uri'] if isinstance(video['screenshot_uri'], str) else None
         video_info = list_item.getVideoInfoTag()
         if video['series']:
             url = G.get_plugin_url({'action': 'sub_folder', 'video_id': video['id'], 'start': video['series'][0],
@@ -142,8 +147,8 @@ def create_video_listing(videos, params):
             video_info.setMediaType('season')
         else:
             url = G.get_plugin_url({'action': 'play', 'video_id': video['id'], 'series': 0})
-            # if video['time'] and video['time'] != '0':
-            #     video_info.setDuration(int(video['time']) * 60)
+            if video['time'] and video['time'] != '0':
+                video_info.setDuration(int(video['time']) * 60)
             video_info.setMediaType('movie')
             list_item.setProperty('IsPlayable', 'true')
 
@@ -160,14 +165,13 @@ def create_video_listing(videos, params):
         video_info.setDateAdded(video['added'])
         if video['year'].isdigit():
             video_info.setYear(int(video['year']))
-        list_item.setArt({'poster': poster_url, 'fanart': poster_url})
+        list_item.setArt({'poster': poster_url})
         directory_items.append((url, list_item, is_folder))
     # Add navigation items
     if int(videos['total_items']) > item_count:
         add_navigation_items(params, videos, directory_items)
         item_count = item_count + 2
     xbmcplugin.addDirectoryItems(G.get_handle(), directory_items, item_count)
-    xbmcplugin.addSortMethod(G.get_handle(), xbmcplugin.SORT_METHOD_NONE, '%DA')
     xbmcplugin.endOfDirectory(G.get_handle(), succeeded=True, updateListing=update_listing == 'True', cacheToDisc=False)
 
 
@@ -223,7 +227,7 @@ def list_episodes(params):
         else:
             video_info.setMediaType('movie')
         list_item.setProperties({'IsPlayable': 'true'})
-        list_item.setArt({'poster': params['poster_url'], 'fanart': params['poster_url']})
+        list_item.setArt({'poster': params['poster_url']})
         url = G.get_plugin_url({'action': 'play', 'video_id': params['video_id'], 'series': episode_no})
         xbmcplugin.addDirectoryItem(G.get_handle(), url, list_item, False)
     xbmcplugin.endOfDirectory(G.get_handle(), succeeded=True, updateListing=False, cacheToDisc=False)
@@ -260,9 +264,9 @@ def router(param_string):
         elif params['action'] == 'favorites':
             list_favorites(params)
         elif params['action'] == 'remove_fav':
-            remove_favorites_refresh(params)
+            toggle_favorites(params['video_id'], False)
         elif params['action'] == 'add_fav':
-            add_favorites(params['video_id'])
+            toggle_favorites(params['video_id'], True)
         else:
             raise ValueError('Invalid param string: {}!'.format(param_string))
     else:

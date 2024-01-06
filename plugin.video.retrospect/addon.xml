@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.5.14"
+        version="5.5.15"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -120,6 +120,7 @@
     <extension point="xbmc.addon.metadata">
         <reuselanguageinvoker>true</reuselanguageinvoker>
         <platform>all</platform>
+        <broken>Kodi Leia is no longer supported. Please use Kodi Matrix or newer.</broken>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
         <news>[B]Retrospect v5.5.14 - Changelog - 2023-03-03[/B]

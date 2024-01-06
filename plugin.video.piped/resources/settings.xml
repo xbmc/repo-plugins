@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+		<category label="30100">
+				<setting label="30101" type="text" id="instance" default="https://pipedapi.kavin.rocks" />
+				<setting label="30102" type="bool" id="use_login" default="false" />
+				<setting label="30103" type="text" id="username" subsetting="true" visible="eq(-1,true)" default="" />
+				<setting label="30104" type="text" id="password" subsetting="true" option="hidden" visible="eq(-2,true)" default="" />
+				<setting label="auth_token" type="text" id="auth_token" subsetting="true" option="hidden" visible="false" default="" />
+		</category>
+		<category label="30200">
+				<setting label="30201" type="bool" id="watch_history_enable" default="false" />
+				<setting label="30202" type="text" id="watch_history_playlist" subsetting="true" default="" visible="eq(-1,true)" />
+				<setting label="30203" type="bool" id="watch_history_hide_watched_feed" subsetting="true" default="false" visible="eq(-2,true)" />
+				<setting label="30204" type="bool" id="watch_history_hide_watched_channels" subsetting="true" default="false" visible="eq(-3,true)" />
+				<setting label="30205" type="bool" id="watch_history_hide_watched_playlists" subsetting="true" default="false" visible="eq(-4,true)" />
+				<setting label="30206" type="bool" id="watch_history_hide_watched_trending" subsetting="true" default="false" visible="eq(-5,true)" />
+				<setting label="30207" type="bool" id="watch_history_hide_watched_search" subsetting="true" default="false" visible="eq(-6,true)" />
+				<setting label="30208" type="number" id="watch_history_refresh" subsetting="true" default="30" visible="eq(-6,true)" />
+		</category>
+		<category label="30300">
+				<setting label="30301" type="bool" id="http_port_random" default="true" />
+				<setting label="30302" type="number" id="http_port" subsetting="true" visible="eq(-1,false)" default="8243" />
+		</category>
+		<category label="30400">
+				<setting label="30401" type="bool" id="audio_prefer_original_lang" default="true" />
+				<setting label="30402" type="bool" id="audio_prefer_kodi_lang" subsetting="true" default="true" visible="eq(-1,false)" />
+				<setting label="30403" type="text" id="audio_custom_lang" subsetting="true" default="en" visible="eq(-1,false)+eq(-2,false)" />
+				<setting label="30404" type="bool" id="subtitles_load" default="true" />
+		</category>
+</settings>

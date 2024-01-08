@@ -14,7 +14,7 @@
 		<description lang="en_GB">An addon which allows you to access any Piped instance, login and manage your playlists and watch history</description>
 		<disclaimer lang="en_GB">This plugin is neither affiliated with nor endorsed by TeamPiped</disclaimer>
 		<platform>all</platform>
-		<license>GPL-3.0-only</license>
+		<license>AGPL-3.0-only</license>
 		<source>https://github.com/syhlx/plugin.video.piped</source>
 		<news>None</news>
 		<assets>

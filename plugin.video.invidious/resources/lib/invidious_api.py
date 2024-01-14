@@ -69,25 +69,13 @@ class InvidiousAPIClient:
 
         if response.status_code > 300:
             xbmc.log(f'invidious API request {assembled_url} with {params} failed with HTTP status {response.status_code}: {response.reason}.', xbmc.LOGWARNING)
-            dialog = xbmcgui.Dialog()
-            msg = self.addon.getLocalizedString(30014).format(
-                request_url=assembled_url,
-                request_params=params,
-                status_code=response.status_code,
-                status_reason=response.reason,
-            )
-            dialog.notification(
-                self.addon.getLocalizedString(30011),
-                msg,
-                "error"
-            )
             return None
 
         return response
 
     def parse_response(self, response):
         if not response:
-            return
+            return None
         data = response.json()
 
         # If a channel or playlist is opened, the videos are packaged
@@ -165,10 +153,9 @@ class InvidiousAPIClient:
 
     def fetch_video_information(self, video_id):
         response = self.make_get_request("videos/", video_id)
-
-        data = response.json()
-
-        return data
+        if not response:
+            return None
+        return response.json()
 
     def fetch_channel_list(self, channel_id):
         response = self.make_get_request(f"channels/videos/{channel_id}")

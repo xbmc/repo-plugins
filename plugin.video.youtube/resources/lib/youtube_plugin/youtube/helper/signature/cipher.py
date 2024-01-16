@@ -8,11 +8,10 @@
     See LICENSES/GPL-2.0-only for more information.
 """
 
-from six.moves import range
+from __future__ import absolute_import, division, unicode_literals
 
 import re
 
-from ....kodion.utils import FunctionCache
 from .json_script_engine import JsonScriptEngine
 
 
@@ -26,15 +25,18 @@ class Cipher(object):
 
     def get_signature(self, signature):
         function_cache = self._context.get_function_cache()
-        json_script = function_cache.get_cached_only(self._load_javascript, self._javascript)
+        json_script = function_cache.get_cached_only(self._load_javascript,
+                                                     self._javascript)
         if not json_script:
-            json_script = function_cache.get(FunctionCache.ONE_DAY, self._load_javascript, self._javascript)
+            json_script = function_cache.get(self._load_javascript,
+                                             function_cache.ONE_DAY,
+                                             self._javascript)
 
         if json_script:
             json_script_engine = JsonScriptEngine(json_script)
             return json_script_engine.execute(signature)
 
-        return u''
+        return ''
 
     def _load_javascript(self, javascript):
         function_name = self._find_signature_function_name(javascript)
@@ -69,11 +71,7 @@ class Cipher(object):
                 parameter = cipher_match.group('parameter').split(',')
                 for i in range(len(parameter)):
                     param = parameter[i].strip()
-                    if i == 0:
-                        param = '%SIG%'
-                    else:
-                        param = int(param)
-
+                    param = '%SIG%' if i == 0 else int(param)
                     parameter[i] = param
 
                 # get function from object
@@ -110,30 +108,30 @@ class Cipher(object):
 
     @staticmethod
     def _find_signature_function_name(javascript):
-        # match_patterns source is youtube-dl
-        # https://github.com/ytdl-org/youtube-dl/blob/master/youtube_dl/extractor/youtube.py#L1344
+        # match_patterns source is from youtube-dl
+        # https://github.com/ytdl-org/youtube-dl/blob/master/youtube_dl/extractor/youtube.py#L1553
         # LICENSE: The Unlicense
 
-        match_patterns = [
-            r'\b[cs]\s*&&\s*[adf]\.set\([^,]+\s*,\s*encodeURIComponent\s*\(\s*(?P<name>[a-zA-Z0-9$]+)\(',
-            r'\b[a-zA-Z0-9]+\s*&&\s*[a-zA-Z0-9]+\.set\([^,]+\s*,\s*encodeURIComponent\s*\(\s*(?P<name>[a-zA-Z0-9$]+)\(',
-            r'(?:\b|[^a-zA-Z0-9$])(?P<name>[a-zA-Z0-9$]{2})\s*=\s*function\(\s*a\s*\)\s*{\s*a\s*=\s*a\.split\(\s*""\s*\)',
-            r'(?P<name>[a-zA-Z0-9$]+)\s*=\s*function\(\s*a\s*\)\s*{\s*a\s*=\s*a\.split\(\s*""\s*\)',
-            r'(["\'])signature\1\s*,\s*(?P<name>[a-zA-Z0-9$]+)\(',
-            r'\.sig\|\|(?P<name>[a-zA-Z0-9$]+)\(',
-            r'yt\.akamaized\.net/\)\s*\|\|\s*.*?\s*[cs]\s*&&\s*[adf]\.set\([^,]+\s*,\s*(?:encodeURIComponent\s*\()?\s*'
-            r'(?P<name>[a-zA-Z0-9$]+)\(',
-            r'\b[cs]\s*&&\s*[adf]\.set\([^,]+\s*,\s*(?P<name>[a-zA-Z0-9$]+)\(',
-            r'\b[a-zA-Z0-9]+\s*&&\s*[a-zA-Z0-9]+\.set\([^,]+\s*,\s*(?P<name>[a-zA-Z0-9$]+)\(',
-            r'\bc\s*&&\s*a\.set\([^,]+\s*,\s*\([^)]*\)\s*\(\s*(?P<name>[a-zA-Z0-9$]+)\(',
-            r'\bc\s*&&\s*[a-zA-Z0-9]+\.set\([^,]+\s*,\s*\([^)]*\)\s*\(\s*(?P<name>[a-zA-Z0-9$]+)\(',
-            r'\bc\s*&&\s*[a-zA-Z0-9]+\.set\([^,]+\s*,\s*\([^)]*\)\s*\(\s*(?P<name>[a-zA-Z0-9$]+)\('
-        ]
+        match_patterns = (
+            r'\b[cs]\s*&&\s*[adf]\.set\([^,]+\s*,\s*encodeURIComponent\s*\(\s*(?P<sig>[a-zA-Z0-9$]+)\(',
+            r'\b[a-zA-Z0-9]+\s*&&\s*[a-zA-Z0-9]+\.set\([^,]+\s*,\s*encodeURIComponent\s*\(\s*(?P<sig>[a-zA-Z0-9$]+)\(',
+            r'\bm=(?P<sig>[a-zA-Z0-9$]{2,})\(decodeURIComponent\(h\.s\)\)',
+            r'\bc&&\(c=(?P<sig>[a-zA-Z0-9$]{2,})\(decodeURIComponent\(c\)\)',
+            r'(?:\b|[^a-zA-Z0-9$])(?P<sig>[a-zA-Z0-9$]{2,})\s*=\s*function\(\s*a\s*\)\s*{\s*a\s*=\s*a\.split\(\s*""\s*\)(?:;[a-zA-Z0-9$]{2}\.[a-zA-Z0-9$]{2}\(a,\d+\))?',
+            r'(?P<sig>[a-zA-Z0-9$]+)\s*=\s*function\(\s*a\s*\)\s*{\s*a\s*=\s*a\.split\(\s*""\s*\)',
+            # Obsolete patterns
+            r'("|\')signature\1\s*,\s*(?P<sig>[a-zA-Z0-9$]+)\(',
+            r'\.sig\|\|(?P<sig>[a-zA-Z0-9$]+)\(',
+            r'yt\.akamaized\.net/\)\s*\|\|\s*.*?\s*[cs]\s*&&\s*[adf]\.set\([^,]+\s*,\s*(?:encodeURIComponent\s*\()?\s*(?P<sig>[a-zA-Z0-9$]+)\(',
+            r'\b[cs]\s*&&\s*[adf]\.set\([^,]+\s*,\s*(?P<sig>[a-zA-Z0-9$]+)\(',
+            r'\b[a-zA-Z0-9]+\s*&&\s*[a-zA-Z0-9]+\.set\([^,]+\s*,\s*(?P<sig>[a-zA-Z0-9$]+)\(',
+            r'\bc\s*&&\s*[a-zA-Z0-9]+\.set\([^,]+\s*,\s*\([^)]*\)\s*\(\s*(?P<sig>[a-zA-Z0-9$]+)\('
+        )
 
         for pattern in match_patterns:
             match = re.search(pattern, javascript)
             if match:
-                return re.escape(match.group('name'))
+                return re.escape(match.group('sig'))
 
         return ''
 
@@ -159,15 +157,14 @@ class Cipher(object):
     def _get_object_function(self, object_name, function_name, javascript):
         if object_name not in self._object_cache:
             self._object_cache[object_name] = {}
-        else:
-            if function_name in self._object_cache[object_name]:
-                return self._object_cache[object_name][function_name]
+        elif function_name in self._object_cache[object_name]:
+            return self._object_cache[object_name][function_name]
 
         _object_body = self._find_object_body(object_name, javascript)
         _object_body = _object_body.split('},')
         for _function in _object_body:
             if not _function.endswith('}'):
-                _function = ''.join([_function, '}'])
+                _function = ''.join((_function, '}'))
             _function = _function.strip()
 
             match = re.match(r'(?P<name>[^:]*):function\((?P<parameter>[^)]*)\){(?P<body>[^}]+)}', _function)

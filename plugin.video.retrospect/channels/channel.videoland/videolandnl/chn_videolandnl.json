@@ -1,0 +1,40 @@
+{
+  "channels": [
+    {
+      "guid": "C5182B93-6B71-44BE-948F-0B74E6C2BAA6",
+      "name": "Videoland",
+      "description": {
+        "en": "Broadcasts of Videoland.",
+        "nl": "Uitzendingen van Videoland."
+      },
+      "icon": "videolandnl-icon.png",
+      "category": "National",
+      "sortorder": 4,
+      "language": "nl",
+      "fanart": "videolandnl-fanart-red.jpg",
+      "poster": "videolandnl-poster.jpg"
+    }
+  ],
+  "settings": [
+    {
+      "order": 1,
+      "value": "type=\"text\" label=\"30094\" default=\"\"",
+      "id": "videolandnl_username"
+    },
+    {
+      "order": 2,
+      "value": "default=\"\"",
+      "id": "videolandnl_password"
+    },
+    {
+      "order": 3,
+      "value": "label=\"30093\" type=\"action\" action=\"RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=channel_C5182B93-6B71-44BE-948F-0B74E6C2BAA6_videolandnl_password&amp;settingname=Videoland&amp;tabfocus=102)\" option=\"close\"",
+      "id": "videolandnl_password_set"
+    },
+    {
+      "order": 4,
+      "value": "type=\"select\" lvalues=\"30126|30127|30128\" default=\"0\" label=\"30081\"",
+      "id": "filter_premium"
+    }
+  ]
+}

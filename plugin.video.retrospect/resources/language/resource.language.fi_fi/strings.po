@@ -522,6 +522,18 @@ msgctxt "#30125"
 msgid "Show future episodes under 'Recent > Today'"
 msgstr ""
 
+msgctxt "#30126"
+msgid "Default"
+msgstr ""
+
+msgctxt "#30127"
+msgid "Show All"
+msgstr ""
+
+msgctxt "#30128"
+msgid "Filter Premium"
+msgstr ""
+
 # used for list limits
 # empty strings from id 30109 to 30189
 msgctxt "#30190"

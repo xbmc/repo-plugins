@@ -16,7 +16,7 @@ An addon which allows you to access any Piped instance, login and manage your pl
 - [x] Compatible with Sponsor Block
 - [ ] Watch live streams (can be watched once finished, for now)
 
-**User Features (logged in to a Piped instance)**
+**Account Features (logged in to a Piped instance)**
 
 - [x] Personal Feed
 - [x] Subscriptions
@@ -42,4 +42,4 @@ But, you can also choose your favourite Piped instance or host your own and chan
 This plugin is neither affiliated with nor endorsed by TeamPiped.
 
 # License
-Piped Addon for Kodi is licensed under the AGPL v3 License. See [LICENSE](LICENSE) for details.
+Piped Addon for Kodi is licensed under the AGPL v3 License. See [LICENSE](LICENSE.txt) for details.

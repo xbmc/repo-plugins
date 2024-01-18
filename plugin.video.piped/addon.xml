@@ -2,8 +2,8 @@
 <addon id="plugin.video.piped" name="Piped" version="1.0.0" provider-name="Syhlx">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="inputstream.adaptive" version="19.1.0" />
-		<import addon="script.module.requests" version="2.31.0" />
+		<import addon="inputstream.adaptive" version="19.0.0" />
+		<import addon="script.module.requests" version="2.27.0" />
 		</requires>
 	<extension point="xbmc.service" library="service.py" />
 	<extension point="xbmc.python.pluginsource" library="default.py">

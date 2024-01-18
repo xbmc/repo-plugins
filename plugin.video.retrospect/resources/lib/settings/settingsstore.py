@@ -16,7 +16,7 @@ class SettingsStore(object):
 
         self._logger = logger
         # What settings should we not expose via the logger?
-        self._secure_setting_ids = ["application_key", "client_id"]
+        self._secure_setting_ids = ["application_key", "client_id", "jwt", "password"]
 
     def set_setting(self, setting_id, setting_value, channel=None):
         """ Returns a boolean value for the given setting_id.
@@ -99,8 +99,10 @@ class SettingsStore(object):
 
         """
 
-        if setting_id in self._secure_setting_ids:
+        if (setting_id in self._secure_setting_ids or
+                any([v in setting_id.lower() for v in self._secure_setting_ids])):
             return "<no of your business>"
+
         return setting_value
 
     def __del__(self):

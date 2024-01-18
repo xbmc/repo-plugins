@@ -36,21 +36,25 @@ class Channel(chn_class.Channel):
             self.noImage = "nickelodeonimage.png"
             self.mainListUri = "https://www.nickelodeon.nl/shows"
             self.baseUrl = "https://www.nickelodeon.nl"
+            self.__mgid = ""
 
         elif self.channelCode == "nickno":
             self.noImage = "nickelodeonimage.png"
             self.mainListUri = "https://www.nickelodeon.no/shows"
             self.baseUrl = "https://www.nickelodeon.no"
+            self.__mgid = ""
 
         elif self.channelCode == "mtvnl":
             self.mainListUri = "https://www.mtv.nl/shows"
             self.baseUrl = "https://www.mtv.nl"
             self.noImage = "mtvnlimage.png"
+            self.__mgid = "mtv.nl"
 
         elif self.channelCode == "mtvde":
             self.mainListUri = "https://www.mtv.de/shows"
             self.baseUrl = "https://www.mtv.de"
             self.noImage = "mtvnlimage.png"
+            self.__mgid = "mtv.de"
         else:
             raise NotImplementedError("Unknown channel code")
 
@@ -287,7 +291,8 @@ class Channel(chn_class.Channel):
         if sub_heading:
             name = "{} - {}".format(name, sub_heading)
 
-        url = "{}{}".format(self.baseUrl, result_set["url"])
+        url = f"https://topaz.viacomcbs.digital/topaz/api/mgid:arc:episode:{self.__mgid}:{result_set['id']}/mica.json?clientPlatform=desktop"
+        url = f"https://topaz.viacomcbs.digital/topaz/api/mgid:arc:episode:mtv.nl:84c9904e-6fed-11e9-9fb2-70df2f866ace/mica.json?clientPlatform=desktop&ssus=44545c3d-6208-45e5-953e-801abf27ae7b&browser=Chrome&device=Desktop&os=Windows+10"
         item = MediaItem(name, url, media_type=EPISODE)
         item.description = meta.get("description")
         item.thumb = result_set.get("media", {}).get("image", {}).get("url")
@@ -333,26 +338,9 @@ class Channel(chn_class.Channel):
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
         from resources.lib.streams.m3u8 import M3u8
 
-        data = UriHandler.open(item.url)
-        video_id = Regexer.do_regex(r'{"video":{"config":{"uri":"([^"]+)', data)[0]
-        url = "http://media.mtvnservices.com/pmt/e1/access/index.html?uri={}&configtype=edge".format(video_id)
-        meta_data = UriHandler.open(url, referer=self.baseUrl)
-        meta = JsonHelper(meta_data)
-        stream_parts = meta.get_value("feed", "items")
-        for stream_part in stream_parts:
-            stream_url = stream_part["group"]["content"]
-            stream_url = stream_url.replace("&device={device}", "")
-            stream_url = "%s&format=json&acceptMethods=hls" % (stream_url,)
-            stream_data = UriHandler.open(stream_url)
-            stream = JsonHelper(stream_data)
+        data = JsonHelper(UriHandler.open(item.url))
+        stream_url = data.get_value("stitchedstream", "source")
+        item.complete |= M3u8.update_part_with_m3u8_streams(item, stream_url)
 
-            # subUrls = stream.get_value("package", "video", "item", 0, "transcript", 0, "typographic")  # NOSONAR
-
-            hls_streams = stream.get_value("package", "video", "item", 0, "rendition")
-            for hls_stream in hls_streams:
-                hls_url = hls_stream["src"]
-                item.complete |= M3u8.update_part_with_m3u8_streams(item, hls_url)
-
-        item.complete = True
         Logger.trace("Media url: %s", item)
         return item

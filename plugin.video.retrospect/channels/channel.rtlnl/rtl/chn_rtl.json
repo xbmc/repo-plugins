@@ -13,7 +13,8 @@
       "language": "nl",
       "fanart": "rtlfanart.png",
       "poster": "rtlposter_white.png",
-      "adaptiveAddonSelectable": false
+      "adaptiveAddonSelectable": false,
+      "ignore": true
     }
   ],
   "settings": [

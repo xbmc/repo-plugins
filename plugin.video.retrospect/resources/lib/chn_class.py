@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import urllib.parse as parse
-from typing import Optional, List
+from typing import Optional, List, Union
 
 from resources.lib.mediaitem import MediaItem, FolderItem, MediaStream
 from resources.lib import contenttype
@@ -141,6 +141,12 @@ class Channel:
     @property
     def sort_key(self):
         return "{0}-{1}".format(self.sortOrderPerCountry, self.channelName)
+
+    def filter_premium(self) -> Optional[bool]:
+        """ Does the channel have a specific 'filter premium' filter. If not None, it will
+        override the main Retrospect one """
+
+        return None
 
     def process_folder_list(self, parent_item: Optional[MediaItem]=None) -> List[MediaItem]:  # NOSONAR
         """ Process the selected item and gets it's child items using the available dataparsers.
@@ -336,10 +342,13 @@ class Channel:
             Logger.trace("Post-processing returned %d items", len(items))
         self.currentParser = None
 
+        # Hide premium. First consider a channel setting, otherwise overall.
+        hide_premium = self.filter_premium()
+        hide_premium = AddonSettings.hide_premium_items() if hide_premium is None else hide_premium
+
         # should we exclude DRM/GEO?
         hide_geo_locked = AddonSettings.hide_geo_locked_items_for_location(self.language)
         hide_drm_protected = AddonSettings.hide_drm_items()
-        hide_premium = AddonSettings.hide_premium_items()
         hide_folders = AddonSettings.hide_restricted_folders()
         type_to_exclude = []
         if not hide_folders:
@@ -522,7 +531,7 @@ class Channel:
 
         return items
 
-    def create_episode_item(self, result_set):
+    def create_episode_item(self, result_set: Union[str, dict]) -> Union[MediaItem, List[MediaItem], None]:
         """ Creates a new MediaItem for an episode.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -733,7 +742,7 @@ class Channel:
         item.complete = False
         return item
 
-    def update_video_item(self, item):
+    def update_video_item(self, item: MediaItem) -> MediaItem:
         """ Updates an existing MediaItem with more data.
 
         Used to update none complete MediaItems (self.complete = False). This
@@ -931,7 +940,7 @@ class Channel:
         :param str|list[str|int|tuple] parser:  The parser (regex or json).
 
         :param creator:                         The creator called with the results from the parser
-        :type creator:                          (list[str]|dict) -> MediaItem|None
+        :type creator:                          (list[str]|dict) -> MediaItem|None|list[MediaItem]
 
         :param updater:                         The updater called for updating a item
         :type updater:                          MediaItem -> MediaItem

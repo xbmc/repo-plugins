@@ -1,13 +1,15 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from typing import Optional
 
 from .authenticationhandler import AuthenticationHandler
 from .authenticationresult import AuthenticationResult
 from ..logger import Logger
 from ..vault import Vault
+from ..xbmcwrapper import XbmcWrapper
 
 
 class Authenticator(object):
-    def __init__(self, handler):
+    def __init__(self, handler: AuthenticationHandler):
         """ Main logic handler for authentication.
 
         :param AuthenticationHandler handler:   The authentication handler to use.
@@ -22,31 +24,31 @@ class Authenticator(object):
 
         self.__hander = handler
 
-    def log_on(self, username, password=None, setting_id=None, channel_guid=None):
-        """ Peforms the logon of a user. Either with the specified password or via a lookup
+    def log_on(self, username: str, password: Optional[str] = None, setting_id: Optional[str] = None, channel_guid: Optional[str] = None):
+        """ Peforms the logon of a user. Either with the specified password or via a lookup. Also
+        logs off a previous user if the username has changed from previous logins.
 
-        :param str username:             The username
-        :param str|None password:        The password to use
-        :param str|None setting_id:      The ID of the setting where the password is stored
-        :param str|None channel_guid:    The GUID of the channel, if the password is stored in a
-                                          channel setting.
+        :param username:        The username
+        :param password:        The password to use
+        :param setting_id:      The ID of the setting where the password is stored
+        :param channel_guid:    The GUID of the channel, if the password is stored in a
+                                channel setting.
 
         :returns: An indication of a successful login.
-        :rtype: AuthenticationResult
 
         """
 
         res = self.__hander.active_authentication()
         logged_on_user = res.username
 
-        # Check if the existing log in is the same as the requested one.
+        # Check if the existing login is the same as the requested one.
         if logged_on_user and logged_on_user != username:
             Logger.warning("Existing but different authenticated user (%s) found. Logging of first.",
                            self.__safe_log(logged_on_user))
             self.__hander.log_off(logged_on_user)
 
         elif logged_on_user and logged_on_user == username:
-            Logger.warning("Existing authenticated user (%s) found.", self.__safe_log(logged_on_user))
+            Logger.info("Existing authenticated user (%s) found.", self.__safe_log(logged_on_user))
             return res
 
         if not username:
@@ -67,9 +69,11 @@ class Authenticator(object):
             return AuthenticationResult(None)
 
         res = self.__hander.log_on(username, password)
+        if res.error:
+            XbmcWrapper.show_dialog(None, res.error)
         return res
 
-    def active_authentication(self):
+    def active_authentication(self) -> AuthenticationResult:
         """ Check if the user with the given name is currently authenticated.
 
         :returns: a AuthenticationResult with the account data
@@ -79,11 +83,10 @@ class Authenticator(object):
 
         return self.__hander.active_authentication()
 
-    def get_authentication_token(self):
+    def get_authentication_token(self) -> Optional[str]:
         """ Fetches an authentication token for the given login
 
         :return: token value
-        :rtype: str
 
         """
 

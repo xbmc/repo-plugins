@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-11-13 00:11+0000\n"
+"PO-Revision-Date: 2023-12-11 11:11+0000\n"
 "Last-Translator: Massimo Pissarello <mapi68@gmail.com>\n"
 "Language-Team: Italian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/it_it/>\n"
 "Language: it_it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1\n"
+"X-Generator: Weblate 5.2.1\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -524,6 +524,18 @@ msgctxt "#30125"
 msgid "Show future episodes under 'Recent > Today'"
 msgstr ""
 
+msgctxt "#30126"
+msgid "Default"
+msgstr ""
+
+msgctxt "#30127"
+msgid "Show All"
+msgstr ""
+
+msgctxt "#30128"
+msgid "Filter Premium"
+msgstr ""
+
 # used for list limits
 # empty strings from id 30109 to 30189
 msgctxt "#30190"
@@ -685,7 +697,7 @@ msgstr ""
 
 msgctxt "#30358"
 msgid "Episodes"
-msgstr ""
+msgstr "Episodi"
 
 msgctxt "#30359"
 msgid "Genres"

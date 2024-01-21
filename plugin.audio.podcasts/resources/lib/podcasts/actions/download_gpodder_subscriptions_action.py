@@ -1,6 +1,7 @@
 import re
 
 import xbmcgui
+import xbmcvfs
 import xmltodict
 from resources.lib.podcasts.actions.action import Action
 from resources.lib.podcasts.gpodder import GPodder
@@ -62,7 +63,7 @@ class DownloadGpodderSubscriptionsAction(Action):
 
         try:
             fullpath = "%s%s" % (path, filename)
-            with open(fullpath, "w", encoding="utf-8") as _file:
+            with xbmcvfs.File(fullpath, 'w') as _file:
                 _file.write(data)
 
             return fullpath, filename

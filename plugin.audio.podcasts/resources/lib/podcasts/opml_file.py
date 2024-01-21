@@ -1,7 +1,9 @@
 import re
 
 import xbmcaddon
+import xbmcvfs
 import xmltodict
+
 
 def parse_opml(data: str, limit=0) -> 'tuple[str,list[dict]]':
 
@@ -29,7 +31,7 @@ def parse_opml(data: str, limit=0) -> 'tuple[str,list[dict]]':
             if "@type" in o and o["@type"] == "rss" and "@xmlUrl" in o:
                 entry["params"] = [{
                     "rss": o["@xmlUrl"],
-                    "limit" : str(limit)
+                    "limit": str(limit)
                 }]
                 entries.append(entry)
 
@@ -59,5 +61,5 @@ def parse_opml(data: str, limit=0) -> 'tuple[str,list[dict]]':
 
 def open_opml_file(path: str) -> str:
 
-    with open(path, encoding="utf-8") as _opml_file:
+    with xbmcvfs.File(path, 'r') as _opml_file:
         return _opml_file.read()

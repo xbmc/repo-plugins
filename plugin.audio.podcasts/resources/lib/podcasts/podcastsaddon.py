@@ -1,8 +1,8 @@
-import os
 from datetime import datetime
 
 import xbmc
 import xbmcplugin
+import xbmcvfs
 from resources.lib.podcasts.opml_file import open_opml_file, parse_opml
 from resources.lib.rssaddon.abstract_rss_addon import AbstractRssAddon
 
@@ -81,9 +81,8 @@ class PodcastsAddon(AbstractRssAddon):
             if self.addon.getSetting("opml_file_%i" % g) == "":
                 continue
 
-            path = os.path.join(
-                self.addon_dir, self.addon.getSetting("opml_file_%i" % g))
-
+            path = xbmcvfs.translatePath(
+                self.addon.getSetting("opml_file_%i" % g))
             try:
                 name, nodes = parse_opml(open_opml_file(path), limit=limit)
                 groups.append({

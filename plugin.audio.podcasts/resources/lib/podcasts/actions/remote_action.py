@@ -8,7 +8,7 @@ class RemoteAction(OpmlAction):
     def __init__(self) -> None:
         super().__init__()
 
-    def subscribe_feeds(self, feeds: list[dict]) -> 'tuple[list[dict], bool]':
+    def subscribe_feeds(self, feeds: 'list[dict]') -> 'tuple[list[dict], bool]':
 
         items: 'list[xbmcgui.ListItem]' = list()
         for f in feeds:

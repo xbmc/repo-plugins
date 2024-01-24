@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import xbmcgui
+import xbmcvfs
 from resources.lib.podcasts.actions.opml_action import OpmlAction
 from resources.lib.podcasts.util import get_asset_path
 
@@ -45,9 +46,8 @@ class ExportOpmlAction(OpmlAction):
             title, created, "".join(outlines))
 
         try:
-            with open("%s%s.opml" % (path, title), mode="w") as _file:
-                _file.writelines(_xml)
-                _file.close()
+            with xbmcvfs.File("%s%s.opml" % (path, title), 'w') as _file:
+                _file.write(_xml)
 
             return True
 

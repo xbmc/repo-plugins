@@ -59,6 +59,9 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.28 (2024-01-24)
+- Fix 'My favorites' listing (@mediaminister)
+
 ### v2.5.27 (2023-12-27)
 - Fix categories listing (@mediaminister)
 

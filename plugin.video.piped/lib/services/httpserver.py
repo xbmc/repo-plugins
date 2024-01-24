@@ -1,3 +1,4 @@
+from threading import Thread
 from http.server import SimpleHTTPRequestHandler
 from socketserver import TCPServer
 from urllib.parse import parse_qsl
@@ -25,8 +26,17 @@ class HttpRequestHandler(SimpleHTTPRequestHandler):
 
 		return
 
-def HttpService():
-	http_port: int = 0 if Addon().getSettingBool('http_port_random') else Addon().getSettingInt('http_port')
-	with TCPServer(('127.0.0.1', http_port), HttpRequestHandler) as httpd:
-		Addon().setSettingInt('http_port', httpd.socket.getsockname()[1])
-		httpd.serve_forever()
+class HttpService(Thread):
+	def __init__(self):
+		super(HttpService, self).__init__()
+		self.httpd = None
+
+	def run(self):
+		http_port: int = 0 if Addon().getSettingBool('http_port_random') else Addon().getSettingInt('http_port')
+		with TCPServer(('127.0.0.1', http_port), HttpRequestHandler) as self.httpd:
+			Addon().setSettingInt('http_port', self.httpd.socket.getsockname()[1])
+			self.httpd.serve_forever()
+
+	def stop(self, timeout=1):
+		if self.httpd is not None: self.httpd.shutdown()
+		self.join(timeout)

@@ -83,6 +83,8 @@ class Favorites:
             headers = {
                 'Authorization': 'Bearer ' + access_token,
                 'Content-Type': 'application/json',
+                'x-vrt-client-name': 'WEB',
+                'x-vrt-client-version': '1.5.0',
             }
             graphql = """
                 query Favs(
@@ -145,6 +147,8 @@ class Favorites:
             headers = {
                 'Authorization': 'Bearer ' + access_token,
                 'Content-Type': 'application/json',
+                'x-vrt-client-name': 'WEB',
+                'x-vrt-client-version': '1.5.0',
             }
             graphql = """
                 query Page($id: ID!) {
@@ -176,6 +180,8 @@ class Favorites:
             headers = {
                 'Authorization': 'Bearer ' + access_token,
                 'Content-Type': 'application/json',
+                'x-vrt-client-name': 'WEB',
+                'x-vrt-client-version': '1.5.0',
             }
             graphql_query = """
                 mutation setFavorite($input: FavoriteActionInput!) {

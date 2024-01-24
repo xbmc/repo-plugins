@@ -230,368 +230,314 @@ def get_next_info(episode_id):
 
 def get_stream_id_data(vrtmax_url):
     """Get stream_id from from GraphQL API"""
-    from tokenresolver import TokenResolver
-    access_token = TokenResolver().get_token('vrtnu-site_profile_at')
-    data_json = {}
-    if access_token:
-        headers = {
-            'Authorization': 'Bearer ' + access_token,
-            'Content-Type': 'application/json',
-        }
-        page_id = vrtmax_url.split('www.vrt.be')[1].replace('/vrtmax/', '/vrtnu/').rstrip('/') + '.model.json'
-        graphql_query = """
-             query StreamId($pageId: ID!) {
-              page(id: $pageId) {
-                ... on IPage {
-                  ... on LivestreamPage {
-                    player {
-                      watchAction {
-                        ... on LiveWatchAction {
-                          streamId
-                        }
-                      }
-                    }
-                  }
-                }
-                ... on EpisodePage {
-                  episode {
-                    watchAction {
+    page_id = vrtmax_url.split('www.vrt.be')[1].replace('/vrtmax/', '/vrtnu/').rstrip('/') + '.model.json'
+    graphql_query = """
+         query StreamId($pageId: ID!) {
+          page(id: $pageId) {
+            ... on IPage {
+              ... on LivestreamPage {
+                player {
+                  watchAction {
+                    ... on LiveWatchAction {
                       streamId
                     }
                   }
                 }
               }
             }
-        """
-        payload = {
-            'operationName': 'StreamId',
-            'variables': {
-                'pageId': page_id
-            },
-            'query': graphql_query,
+            ... on EpisodePage {
+              episode {
+                watchAction {
+                  streamId
+                }
+              }
+            }
+          }
         }
-        from json import dumps
-        data = dumps(payload).encode('utf-8')
-        data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
-    return data_json
+    """
+    operation_name = 'StreamId'
+    variables = {
+        'pageId': page_id
+    }
+    return api_req(graphql_query, operation_name, variables)
 
 
 def get_single_episode_data(episode_id):
     """Get single episode data from GraphQL API"""
-    from tokenresolver import TokenResolver
-    access_token = TokenResolver().get_token('vrtnu-site_profile_at')
-    data_json = {}
-    if access_token:
-        headers = {
-            'Authorization': 'Bearer ' + access_token,
-            'Content-Type': 'application/json',
+    graphql_query = """
+        query PlayerData($id: ID!) {
+          catalogMember(id: $id) {
+            __typename
+          ...episode
+          }
         }
-        graphql_query = """
-            query PlayerData($id: ID!) {
-              catalogMember(id: $id) {
-                __typename
-              ...episode
-              }
+        fragment episode on Episode {
+          __typename
+          id
+          title
+          description
+          episodeNumberRaw
+          durationSeconds
+          offTimeRaw
+          onTimeRaw
+          image {
+            alt
+            templateUrl
+          }
+          analytics {
+            airDate
+            categories
+          }
+          program {
+            id
+            title
+            link
+            programType
+            image {
+              alt
+              templateUrl
             }
-            fragment episode on Episode {
+            posterImage {
+              alt
+              templateUrl
+            }
+          }
+          season {
+            titleRaw
+          }
+          watchAction {
+            avodUrl
+            completed
+            resumePoint
+            resumePointTotal
+            resumePointProgress
+            resumePointTitle
+            episodeId
+            videoId
+            publicationId
+            streamId
+          }
+          favoriteAction {
+            favorite
+            id
+            title
+          }
+          nextUp {
+            title
+            autoPlay
+            countdown
+            tile {
               __typename
-              id
-              title
-              description
-              episodeNumberRaw
-              durationSeconds
-              offTimeRaw
-              onTimeRaw
-              image {
-                alt
-                templateUrl
-              }
-              analytics {
-                airDate
-                categories
-              }
-              program {
-                id
-                title
-                link
-                programType
-                image {
-                  alt
-                  templateUrl
-                }
-                posterImage {
-                  alt
-                  templateUrl
-                }
-              }
-              season {
-                titleRaw
-              }
-              watchAction {
-                avodUrl
-                completed
-                resumePoint
-                resumePointTotal
-                resumePointProgress
-                resumePointTitle
-                episodeId
-                videoId
-                publicationId
-                streamId
-              }
-              favoriteAction {
-                favorite
-                id
-                title
-              }
-              nextUp {
-                title
-                autoPlay
-                countdown
-                tile {
-                  __typename
-                  ...episodeTile
-                }
-              }
+              ...episodeTile
             }
-            %s
-        """ % EPISODE_TILE
-        payload = {
-            'operationName': 'PlayerData',
-            'variables': {
-                'id': episode_id,
-            },
-            'query': graphql_query,
+          }
         }
-        from json import dumps
-        data = dumps(payload).encode('utf-8')
-        data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
-    return data_json
+        %s
+    """ % EPISODE_TILE
+    operation_name = 'PlayerData'
+    variables = {
+        'id': episode_id,
+    }
+    return api_req(graphql_query, operation_name, variables)
 
 
 def get_latest_episode_data(program_name):
     """Get latest episode data from GraphQL API"""
-    from tokenresolver import TokenResolver
-    access_token = TokenResolver().get_token('vrtnu-site_profile_at')
-    data_json = {}
-    if access_token:
-        headers = {
-            'Authorization': 'Bearer ' + access_token,
-            'Content-Type': 'application/json',
-        }
-        graphql_query = """
-            query VideoProgramPage($pageId: ID!, $lazyItemCount: Int = 500, $after: ID) {
-              page(id: $pageId) {
-                ... on ProgramPage {
-                  components {
+    graphql_query = """
+        query VideoProgramPage($pageId: ID!, $lazyItemCount: Int = 500, $after: ID) {
+          page(id: $pageId) {
+            ... on ProgramPage {
+              components {
+                __typename
+                ... on PageHeader {
+                  mostRelevantEpisodeTile {
                     __typename
-                    ... on PageHeader {
-                      mostRelevantEpisodeTile {
-                        __typename
-                        title
-                        tile {
-                          ...episodeTile
-                          __typename
-                        }
-                        __typename
-                      }
+                    title
+                    tile {
+                      ...episodeTile
                       __typename
                     }
-                    ... on ContainerNavigation {
-                      items {
-                        title
-                        components {
+                    __typename
+                  }
+                  __typename
+                }
+                ... on ContainerNavigation {
+                  items {
+                    title
+                    components {
+                      __typename
+                      ... on PaginatedTileList {
+                        __typename
+                        paginatedItems(first: $lazyItemCount, after: $after) {
                           __typename
-                          ... on PaginatedTileList {
+                          edges {
                             __typename
-                            paginatedItems(first: $lazyItemCount, after: $after) {
+                            cursor
+                            node {
                               __typename
-                              edges {
-                                __typename
-                                cursor
-                                node {
-                                  __typename
-                                  ... on EpisodeTile {
-                                    id
-                                    description
-                                    ...episodeTile
-                                  }
-                                }
+                              ... on EpisodeTile {
+                                id
+                                description
+                                ...episodeTile
                               }
                             }
                           }
-                          ... on ContainerNavigation {
-                            items {
-                              title
-                              components {
+                        }
+                      }
+                      ... on ContainerNavigation {
+                        items {
+                          title
+                          components {
+                            __typename
+                            ... on PaginatedTileList {
+                              __typename
+                              paginatedItems(first: $lazyItemCount, after: $after) {
                                 __typename
-                                ... on PaginatedTileList {
+                                edges {
                                   __typename
-                                  paginatedItems(first: $lazyItemCount, after: $after) {
+                                  cursor
+                                  node {
                                     __typename
-                                    edges {
-                                      __typename
-                                      cursor
-                                      node {
-                                        __typename
-                                        ... on EpisodeTile {
-                                          id
-                                          description
-                                          ...episodeTile
-                                        }
-                                      }
+                                    ... on EpisodeTile {
+                                      id
+                                      description
+                                      ...episodeTile
                                     }
                                   }
                                 }
                               }
                             }
-                            __typename
                           }
                         }
                         __typename
                       }
-                      __typename
                     }
+                    __typename
                   }
                   __typename
                 }
-                __typename
               }
+              __typename
             }
-            %s
-        """ % EPISODE_TILE
-        payload = {
-            'operationName': 'VideoProgramPage',
-            'variables': {
-                'pageId': '/vrtnu/a-z/{}.model.json'.format(program_name),
-            },
-            'query': graphql_query,
+            __typename
+          }
         }
-        from json import dumps
-        data = dumps(payload).encode('utf-8')
-        data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
-    return data_json
+        %s
+    """ % EPISODE_TILE
+    operation_name = 'VideoProgramPage'
+    variables = {
+        'pageId': '/vrtnu/a-z/{}.model.json'.format(program_name),
+    }
+    return api_req(graphql_query, operation_name, variables)
 
 
 def get_seasons_data(program_name):
     """Get seasons data from GraphQL API"""
-    from tokenresolver import TokenResolver
-    access_token = TokenResolver().get_token('vrtnu-site_profile_at')
-    data_json = {}
-    if access_token:
-        headers = {
-            'Authorization': 'Bearer ' + access_token,
-            'Content-Type': 'application/json',
-        }
-        graphql_query = """
-            query VideoProgramPage(
-              $pageId: ID!) {
-              page(id: $pageId) {
-                ... on ProgramPage {
-                  id
-                  permalink
-                  components {
+    graphql_query = """
+        query VideoProgramPage(
+          $pageId: ID!) {
+          page(id: $pageId) {
+            ... on ProgramPage {
+              id
+              permalink
+              components {
+                __typename
+                ... on PageHeader {
+                  mostRelevantEpisodeTile {
                     __typename
-                    ... on PageHeader {
-                      mostRelevantEpisodeTile {
-                        __typename
-                        title
-                        tile {
-                          ...episodeTile
-                          __typename
-                        }
-                        __typename
-                      }
+                    title
+                    tile {
+                      ...episodeTile
                       __typename
                     }
-                    ... on PaginatedTileList {
+                    __typename
+                  }
+                  __typename
+                }
+                ... on PaginatedTileList {
+                  __typename
+                  id: objectId
+                  objectId
+                  listId
+                  title
+                  tileContentType
+                }
+                ... on ContainerNavigation {
+                  id: objectId
+                  navigationType
+                  items {
+                    id: objectId
+                    title
+                    active
+                    components {
                       __typename
-                      id: objectId
-                      objectId
-                      listId
-                      title
-                      tileContentType
-                    }
-                    ... on ContainerNavigation {
-                      id: objectId
-                      navigationType
-                      items {
+                      ... on PaginatedTileList {
+                        __typename
                         id: objectId
+                        objectId
+                        listId
                         title
-                        active
-                        components {
-                          __typename
-                          ... on PaginatedTileList {
-                            __typename
+                        tileContentType
+                      }
+                      ... on StaticTileList {
+                        __typename
+                        id: objectId
+                        objectId
+                        listId
+                        title
+                        tileContentType
+                      }
+                      ... on LazyTileList {
+                        __typename
+                        id: objectId
+                        objectId
+                        listId
+                        title
+                        tileContentType
+                      }
+                      ... on IComponent {
+                        ... on ContainerNavigation {
+                          id: objectId
+                          navigationType
+                          items {
                             id: objectId
-                            objectId
-                            listId
                             title
-                            tileContentType
-                          }
-                          ... on StaticTileList {
-                            __typename
-                            id: objectId
-                            objectId
-                            listId
-                            title
-                            tileContentType
-                          }
-                          ... on LazyTileList {
-                            __typename
-                            id: objectId
-                            objectId
-                            listId
-                            title
-                            tileContentType
-                          }
-                          ... on IComponent {
-                            ... on ContainerNavigation {
-                              id: objectId
-                              navigationType
-                              items {
-                                id: objectId
-                                title
-                                components {
+                            components {
+                              __typename
+                              ... on Component {
+                                ... on PaginatedTileList {
                                   __typename
-                                  ... on Component {
-                                    ... on PaginatedTileList {
-                                      __typename
-                                      id: objectId
-                                      objectId
-                                      listId
-                                      title
-                                      tileContentType
-                                    }
-                                    ... on StaticTileList {
-                                      __typename
-                                      id: objectId
-                                      objectId
-                                      listId
-                                      title
-                                      tileContentType
-                                    }
-                                    ... on LazyTileList {
-                                      __typename
-                                      id: objectId
-                                      objectId
-                                      listId
-                                      title
-                                      tileContentType
-                                    }
-                                    __typename
-                                  }
+                                  id: objectId
+                                  objectId
+                                  listId
+                                  title
+                                  tileContentType
+                                }
+                                ... on StaticTileList {
+                                  __typename
+                                  id: objectId
+                                  objectId
+                                  listId
+                                  title
+                                  tileContentType
+                                }
+                                ... on LazyTileList {
+                                  __typename
+                                  id: objectId
+                                  objectId
+                                  listId
+                                  title
+                                  tileContentType
                                 }
                                 __typename
                               }
-                              __typename
                             }
                             __typename
                           }
+                          __typename
                         }
                         __typename
                       }
-                      __typename
                     }
                     __typename
                   }
@@ -599,20 +545,18 @@ def get_seasons_data(program_name):
                 }
                 __typename
               }
+              __typename
             }
-            %s
-        """ % EPISODE_TILE
-        payload = {
-            'operationName': 'VideoProgramPage',
-            'variables': {
-                'pageId': '/vrtnu/a-z/{}.model.json'.format(program_name),
-            },
-            'query': graphql_query,
+            __typename
+          }
         }
-        from json import dumps
-        data = dumps(payload).encode('utf-8')
-        data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
-    return data_json
+        %s
+    """ % EPISODE_TILE
+    operation_name = 'VideoProgramPage'
+    variables = {
+        'pageId': '/vrtnu/a-z/{}.model.json'.format(program_name),
+    }
+    return api_req(graphql_query, operation_name, variables)
 
 
 def set_resumepoint(video_id, title, position, total):
@@ -645,155 +589,126 @@ def set_resumepoint(video_id, title, position, total):
 
 def get_paginated_episodes(list_id, page_size, end_cursor=''):
     """Get paginated list of episodes from GraphQL API"""
-    from tokenresolver import TokenResolver
-    access_token = TokenResolver().get_token('vrtnu-site_profile_at')
-    data_json = {}
-    if access_token:
-        headers = {
-            'Authorization': 'Bearer ' + access_token,
-            'Content-Type': 'application/json',
-        }
-        graphql_query = """
-            query ListedEpisodes(
-              $listId: ID!
-              $endCursor: ID!
-              $pageSize: Int!
-            ) {
-              list(listId: $listId) {
-                __typename
-                ... on PaginatedTileList {
-                  paginated: paginatedItems(first: $pageSize, after: $endCursor) {
-                    edges {
-                      node {
-                        __typename
-                        ...episodeTile
-                      }
-                    }
-                    pageInfo {
-                      startCursor
-                      endCursor
-                      hasNextPage
-                      hasPreviousPage
-                      __typename
-                    }
+    graphql_query = """
+        query ListedEpisodes(
+          $listId: ID!
+          $endCursor: ID!
+          $pageSize: Int!
+        ) {
+          list(listId: $listId) {
+            __typename
+            ... on PaginatedTileList {
+              paginated: paginatedItems(first: $pageSize, after: $endCursor) {
+                edges {
+                  node {
+                    __typename
+                    ...episodeTile
                   }
+                }
+                pageInfo {
+                  startCursor
+                  endCursor
+                  hasNextPage
+                  hasPreviousPage
+                  __typename
                 }
               }
             }
-            %s
-        """ % EPISODE_TILE
-        # FIXME: Find a better way to change GraphQL typename
-        if list_id.startswith('static:/'):
-            graphql_query = graphql_query.replace('on PaginatedTileList', 'on StaticTileList')
-
-        payload = {
-            'operationName': 'ListedEpisodes',
-            'variables': {
-                'listId': list_id,
-                'endCursor': end_cursor,
-                'pageSize': page_size,
-            },
-            'query': graphql_query,
+          }
         }
-        from json import dumps
-        data = dumps(payload).encode('utf-8')
-        data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
-    return data_json
+        %s
+    """ % EPISODE_TILE
+    # FIXME: Find a better way to change GraphQL typename
+    if list_id.startswith('static:/'):
+        graphql_query = graphql_query.replace('on PaginatedTileList', 'on StaticTileList')
+
+    operation_name = 'ListedEpisodes'
+    variables = {
+        'listId': list_id,
+        'endCursor': end_cursor,
+        'pageSize': page_size,
+    }
+    return api_req(graphql_query, operation_name, variables)
 
 
-def get_paginated_programs(list_id, page_size, end_cursor=''):
+def get_paginated_programs(list_id, page_size, end_cursor='', client='WEB'):
     """Get paginated list of episodes from GraphQL API"""
-    from tokenresolver import TokenResolver
-    access_token = TokenResolver().get_token('vrtnu-site_profile_at')
-    data_json = {}
-    if access_token:
-        headers = {
-            'Authorization': 'Bearer ' + access_token,
-            'Content-Type': 'application/json',
-            'x-vrt-client-name': 'MobileAndroid',
-        }
-        graphql_query = """
-            query PaginatedPrograms(
-              $listId: ID!
-              $endCursor: ID!
-              $pageSize: Int!
-            ) {
-              list(listId: $listId) {
-                __typename
-                ... on PaginatedTileList {
-                  paginated: paginatedItems(first: $pageSize, after: $endCursor) {
-                    edges {
-                      node {
-                        __typename
-                        ...ep
-                      }
-                    }
-                    pageInfo {
-                      startCursor
-                      endCursor
-                      hasNextPage
-                      hasPreviousPage
-                      __typename
-                    }
+    graphql_query = """
+        query PaginatedPrograms(
+          $listId: ID!
+          $endCursor: ID!
+          $pageSize: Int!
+        ) {
+          list(listId: $listId) {
+            __typename
+            ... on PaginatedTileList {
+              paginated: paginatedItems(first: $pageSize, after: $endCursor) {
+                edges {
+                  node {
+                    __typename
+                    ...ep
                   }
                 }
-              }
-            }
-            fragment ep on ProgramTile {
-              __typename
-              objectId
-              id
-              link
-              tileType
-              image {
-                alt
-                templateUrl
-              }
-              title
-              program {
-                title
-                id
-                link
-                programType
-                description
-                shortDescription
-                subtitle
-                announcementType
-                announcementValue
-                whatsonId
-                image {
-                  alt
-                  templateUrl
-                }
-                posterImage {
-                  alt
-                  templateUrl
-                }
-                favoriteAction {
-                  favorite
-                  id
-                  title
+                pageInfo {
+                  startCursor
+                  endCursor
+                  hasNextPage
+                  hasPreviousPage
+                  __typename
                 }
               }
             }
-        """
-        # FIXME: Find a better way to change GraphQL typename
-        if list_id.startswith('static:/'):
-            graphql_query = graphql_query.replace('on PaginatedTileList', 'on StaticTileList')
-
-        payload = {
-            'operationName': 'PaginatedPrograms',
-            'variables': {
-                'listId': list_id,
-                'endCursor': end_cursor,
-                'pageSize': page_size,
-            },
-            'query': graphql_query,
+          }
         }
-        from json import dumps
-        data = dumps(payload).encode('utf-8')
-        data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
-    return data_json
+        fragment ep on ProgramTile {
+          __typename
+          objectId
+          id
+          link
+          tileType
+          image {
+            alt
+            templateUrl
+          }
+          title
+          program {
+            title
+            id
+            link
+            programType
+            description
+            shortDescription
+            subtitle
+            announcementType
+            announcementValue
+            whatsonId
+            image {
+              alt
+              templateUrl
+            }
+            posterImage {
+              alt
+              templateUrl
+            }
+            favoriteAction {
+              favorite
+              id
+              title
+            }
+          }
+        }
+    """
+    # FIXME: Find a better way to change GraphQL typename
+    if list_id.startswith('static:/'):
+        graphql_query = graphql_query.replace('on PaginatedTileList', 'on StaticTileList')
+
+    operation_name = 'PaginatedPrograms'
+    variables = {
+        'listId': list_id,
+        'endCursor': end_cursor,
+        'pageSize': page_size,
+    }
+    return api_req(graphql_query, operation_name, variables, client)
 
 
 def convert_programs(api_data, destination, use_favorites=False, **kwargs):
@@ -1122,7 +1037,7 @@ def get_programs(category=None, channel=None, keywords=None, end_cursor=''):
     encoded_search = base64.b64encode(dumps(search_dict).encode('utf-8'))
     list_id = 'uisearch:searchdata@{}'.format(encoded_search.decode('utf-8'))
 
-    api_data = get_paginated_programs(list_id=list_id, page_size=page_size, end_cursor=end_cursor)
+    api_data = get_paginated_programs(list_id=list_id, page_size=page_size, end_cursor=end_cursor, client='MobileAndroid')
     programs = convert_programs(api_data, destination=destination, category=category, channel=channel, keywords=keywords)
     return programs
 
@@ -1262,88 +1177,97 @@ def get_seasons(program_name):
     return seasons
 
 
-def get_featured_data():
-    """Get featured data"""
+def api_req(graphql_query, operation_name, variables, client='WEB'):
+    """GraphQL API Request"""
+    from json import dumps
     from tokenresolver import TokenResolver
     access_token = TokenResolver().get_token('vrtnu-site_profile_at')
     data_json = {}
     if access_token:
+        payload = {
+            'operationName': operation_name,
+            'query': graphql_query,
+            'variables': variables,
+        }
+        data = dumps(payload).encode('utf-8')
         headers = {
+            'Accept': 'application/json',
             'Authorization': 'Bearer ' + access_token,
             'Content-Type': 'application/json',
-            'x-vrt-client-name': 'MobileAndroid',
+            'x-vrt-client-name': client,
+            'x-vrt-client-version': '1.5.0',
         }
-        graphql_query = """
-            query Page(
-              $pageId: ID!
-              $lazyItemCount: Int = 10
-              $after: ID
-              $before: ID
-              $componentCount: Int = 5
-              $componentAfter: ID
-            ) {
-              page(id: $pageId) {
-                ... on IPage {
-                  title
-                  permalink
-                  paginatedComponents(first: $componentCount, after: $componentAfter) {
-                    __typename
-                    edges {
+        data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
+    return data_json
+
+
+def get_featured_data():
+    """Get featured data"""
+    graphql_query = """
+        query Page(
+          $pageId: ID!
+          $lazyItemCount: Int = 10
+          $after: ID
+          $before: ID
+          $componentCount: Int = 5
+          $componentAfter: ID
+        ) {
+          page(id: $pageId) {
+            ... on IPage {
+              title
+              permalink
+              paginatedComponents(first: $componentCount, after: $componentAfter) {
+                __typename
+                edges {
+                  __typename
+                  node {
+                    ... on PaginatedTileList {
                       __typename
-                      node {
-                        ... on PaginatedTileList {
-                          __typename
-                          listId
-                          componentType
-                          paginatedItems(first: $lazyItemCount, after: $after, before: $before) {
-                            __typename
-                            edges {
-                              __typename
-                              node {
-                                __typename
-                              }
-                            }
-                          }
-                          tileContentType
-                          title
-                          __typename
-                        }
-                        ... on StaticTileList {
-                          __typename
-                          listId
-                          title
-                          header {
-                            brand
-                            ctaText
-                            description
-                          }
-                          componentType
-                          tileContentType
-                        }
+                      listId
+                      componentType
+                      paginatedItems(first: $lazyItemCount, after: $after, before: $before) {
                         __typename
+                        edges {
+                          __typename
+                          node {
+                            __typename
+                          }
+                        }
                       }
+                      tileContentType
+                      title
+                      __typename
                     }
+                    ... on StaticTileList {
+                      __typename
+                      listId
+                      title
+                      header {
+                        brand
+                        ctaText
+                        description
+                      }
+                      componentType
+                      tileContentType
+                    }
+                    __typename
                   }
                 }
               }
             }
-        """
-        payload = {
-            'operationName': 'Page',
-            'variables': {
-                'pageId': '/vrtmax/',
-                'pageContext': {
-                    'mediaType': 'watch'
-                },
-                'componentAfter': '',
-                'componentCount': 50,
-            },
-            'query': graphql_query,
+          }
         }
-        from json import dumps
-        data = dumps(payload).encode('utf-8')
-        data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
-    return data_json
+    """
+    operation_name = 'Page'
+    variables = {
+        'pageId': '/vrtmax/',
+        'pageContext': {
+            'mediaType': 'watch'
+        },
+        'componentAfter': '',
+        'componentCount': 50,
+    }
+    return api_req(graphql_query, operation_name, variables)
 
 
 def get_featured(feature=None, end_cursor=''):
@@ -1434,196 +1358,182 @@ def get_categories():
 def get_online_categories():
     """Return a list of categories from the VRT MAX website"""
     categories = []
-    from tokenresolver import TokenResolver
-    access_token = TokenResolver().get_token('vrtnu-site_profile_at')
-    categories_json = {}
-    if access_token:
-        headers = {
-            'Authorization': 'Bearer ' + access_token,
-            'Content-Type': 'application/json',
-            'x-vrt-client-name': 'MobileAndroid',
-        }
-        graphql_query = """
-            query Search(
-              $q: String
-              $mediaType: MediaType
-              $facets: [SearchFacetInput]
-            ) {
-              uiSearch(input: { q: $q, mediaType: $mediaType, facets: $facets }) {
-                __typename
-                ... on IIdentifiable {
-                  objectId
-                  __typename
-                }
-                ... on IComponent {
-                  componentType
-                  __typename
-                }
-                ...staticTileListFragment
-              }
-            }
-            fragment staticTileListFragment on StaticTileList {
-              __typename
-              id: objectId
+    graphql_query = """
+        query Search(
+          $q: String
+          $mediaType: MediaType
+          $facets: [SearchFacetInput]
+        ) {
+          uiSearch(input: { q: $q, mediaType: $mediaType, facets: $facets }) {
+            __typename
+            ... on IIdentifiable {
               objectId
-              listId
-              title
+              __typename
+            }
+            ... on IComponent {
               componentType
-              tileContentType
-              tileOrientation
-              displayType
-              expires
-              tileVariant
-              sort {
-                icon
-                order
-                title
-                __typename
-              }
-              actionItems {
-                ...actionItem
-                __typename
-              }
-              header {
-                action {
-                  ...action
-                  __typename
-                }
-                brand
-                brandLogos {
-                  height
-                  mono
-                  primary
-                  type
-                  width
-                  __typename
-                }
-                ctaText
-                description
-                image {
-                  ...imageFragment
-                  __typename
-                }
-                type
-                compactLayout
-                backgroundColor
-                textTheme
-                __typename
-              }
-              bannerSize
-              items {
-                ...tileFragment
-                __typename
-              }
-              ... on IComponent {
-                __typename
-              }
-            }
-            fragment tileFragment on Tile {
-              ... on IIdentifiable {
-                __typename
-                objectId
-              }
-              ... on IComponent {
-                title
-                componentType
-                __typename
-              }
-              ... on ITile {
-                title
-                action {
-                  ...action
-                  __typename
-                }
-                image {
-                  ...imageFragment
-                  __typename
-                }
-                __typename
-              }
-              ... on BannerTile {
-                id
-                backgroundColor
-                textTheme
-                active
-                description
-                __typename
-              }
-            }
-            fragment actionItem on ActionItem {
               __typename
-              id: objectId
-              accessibilityLabel
-              action {
-                ...action
-                __typename
-              }
-              active
-              analytics {
-                __typename
-                eventId
-                interaction
-                interactionDetail
-                pageProgrambrand
-              }
-              icon
-              iconPosition
-              mode
-              objectId
-              title
             }
-            fragment action on Action {
-              __typename
-              ... on SearchAction {
-                facets {
-                  name
-                  values
-                  __typename
-                }
-                mediaType
-                navigationType
-                q
-                __typename
-              }
-            }
-            fragment imageFragment on Image {
-              id: objectId
-              alt
-              title
-              focalPoint
-              objectId
-              templateUrl
-            }
-        """
-        payload = {
-            'operationName': 'Search',
-            'variables': {
-                'facets': [],
-                'mediaType': 'watch',
-                'q': '',
-            },
-            'query': graphql_query,
+            ...staticTileListFragment
+          }
         }
-        from json import dumps
-        data = dumps(payload).encode('utf-8')
-        categories_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
-        if categories_json is not None:
-            content_types = find_entry(categories_json.get('data').get('uiSearch'), 'listId', 'initialsearchcontenttypes').get('items')
-            genres = find_entry(categories_json.get('data').get('uiSearch'), 'listId', 'initialsearchgenres').get('items')
-            category_items = content_types + genres
-            for category in category_items:
-                # Don't add audio-only categories
-                if category.get('title') in ('Podcasts', 'Radio'):
-                    continue
-                thumb = category.get('image')
-                if thumb:
-                    thumb = thumb.get('templateUrl')
-                categories.append({
-                    'id': category.get('action').get('facets')[0].get('values')[0],
-                    'thumbnail': thumb,
-                    'name': category.get('title'),
-                })
-            categories.sort(key=lambda x: x.get('name'))
+        fragment staticTileListFragment on StaticTileList {
+          __typename
+          id: objectId
+          objectId
+          listId
+          title
+          componentType
+          tileContentType
+          tileOrientation
+          displayType
+          expires
+          tileVariant
+          sort {
+            icon
+            order
+            title
+            __typename
+          }
+          actionItems {
+            ...actionItem
+            __typename
+          }
+          header {
+            action {
+              ...action
+              __typename
+            }
+            brand
+            brandLogos {
+              height
+              mono
+              primary
+              type
+              width
+              __typename
+            }
+            ctaText
+            description
+            image {
+              ...imageFragment
+              __typename
+            }
+            type
+            compactLayout
+            backgroundColor
+            textTheme
+            __typename
+          }
+          bannerSize
+          items {
+            ...tileFragment
+            __typename
+          }
+          ... on IComponent {
+            __typename
+          }
+        }
+        fragment tileFragment on Tile {
+          ... on IIdentifiable {
+            __typename
+            objectId
+          }
+          ... on IComponent {
+            title
+            componentType
+            __typename
+          }
+          ... on ITile {
+            title
+            action {
+              ...action
+              __typename
+            }
+            image {
+              ...imageFragment
+              __typename
+            }
+            __typename
+          }
+          ... on BannerTile {
+            id
+            backgroundColor
+            textTheme
+            active
+            description
+            __typename
+          }
+        }
+        fragment actionItem on ActionItem {
+          __typename
+          id: objectId
+          accessibilityLabel
+          action {
+            ...action
+            __typename
+          }
+          active
+          analytics {
+            __typename
+            eventId
+            interaction
+            interactionDetail
+            pageProgrambrand
+          }
+          icon
+          iconPosition
+          mode
+          objectId
+          title
+        }
+        fragment action on Action {
+          __typename
+          ... on SearchAction {
+            facets {
+              name
+              values
+              __typename
+            }
+            mediaType
+            navigationType
+            q
+            __typename
+          }
+        }
+        fragment imageFragment on Image {
+          id: objectId
+          alt
+          title
+          focalPoint
+          objectId
+          templateUrl
+        }
+    """
+    operation_name = 'Search'
+    variables = {
+        'facets': [],
+        'mediaType': 'watch',
+        'q': '',
+    }
+    categories_json = api_req(graphql_query, operation_name, variables, client='MobileAndroid')
+    if categories_json is not None:
+        content_types = find_entry(categories_json.get('data').get('uiSearch'), 'listId', 'initialsearchcontenttypes').get('items')
+        genres = find_entry(categories_json.get('data').get('uiSearch'), 'listId', 'initialsearchgenres').get('items')
+        category_items = content_types + genres
+        for category in category_items:
+            # Don't add audio-only categories
+            if category.get('title') in ('Podcasts', 'Radio'):
+                continue
+            thumb = category.get('image')
+            if thumb:
+                thumb = thumb.get('templateUrl')
+            categories.append({
+                'id': category.get('action').get('facets')[0].get('values')[0],
+                'thumbnail': thumb,
+                'name': category.get('title'),
+            })
+        categories.sort(key=lambda x: x.get('name'))
     return categories
 
 

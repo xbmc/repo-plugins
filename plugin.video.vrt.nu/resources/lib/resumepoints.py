@@ -74,6 +74,8 @@ class ResumePoints:
             headers = {
                 'Authorization': 'Bearer ' + access_token,
                 'Content-Type': 'application/json',
+                'x-vrt-client-name': 'WEB',
+                'x-vrt-client-version': '1.5.0',
             }
         else:
             log_error('Failed to get access token from VRT MAX')
@@ -175,29 +177,54 @@ class ResumePoints:
     def _delete_continue_graphql(self, episode_id):
         """Delete continue episode using GraphQL API"""
         from tokenresolver import TokenResolver
+        from json import dumps
+        import base64
         access_token = TokenResolver().get_token('vrtnu-site_profile_at')
         result_json = {}
         if access_token:
             headers = {
                 'Authorization': 'Bearer ' + access_token,
                 'Content-Type': 'application/json',
+                'x-vrt-client-name': 'WEB',
+                'x-vrt-client-version': '1.5.0',
             }
             graphql_query = """
-                mutation listDelete($input: ListDeleteInput!) {
-                  listDelete(input: $input)
+                mutation listDelete($input: ListDeleteActionInput!) {
+                  setListDeleteActionItem(input: $input) {
+                    title
+                    active
+                    action {
+                      __typename
+                      ... on NoAction {
+                        __typename
+                        reason
+                      }
+                      ... on ListTileDeletedAction {
+                        __typename
+                        listId
+                        listName
+                        id
+                      }
+                    }
+                    __typename
+                  }
                 }
             """
+            list_name = {
+                'listId': 'dynamic:/vrtnu.model.json@resume-list-video',
+                'listType': 'verderkijken',
+            }
+            encoded_list_name = base64.b64encode(dumps(list_name).encode('utf-8'))
             payload = {
                 'operationName': 'listDelete',
                 'variables': {
                     'input': {
                         'id': episode_id,
-                        'listName': 'verderkijken',
+                        'listName': encoded_list_name.decode('utf-8'),
                     },
                 },
                 'query': graphql_query,
             }
-            from json import dumps
             data = dumps(payload).encode('utf-8')
             result_json = get_url_json(url=self.GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
         return result_json
@@ -205,12 +232,15 @@ class ResumePoints:
     def get_continue(self):
         """Get continue using GraphQL API"""
         from tokenresolver import TokenResolver
+        from json import dumps
         access_token = TokenResolver().get_token('vrtnu-site_profile_at')
         continue_json = {}
         if access_token:
             headers = {
                 'Authorization': 'Bearer ' + access_token,
                 'Content-Type': 'application/json',
+                'x-vrt-client-name': 'WEB',
+                'x-vrt-client-version': '1.5.0',
             }
             graphql_query = """
                 query ContinueEpisodes(
@@ -251,7 +281,6 @@ class ResumePoints:
                 },
                 'query': graphql_query,
             }
-            from json import dumps
             data = dumps(payload).encode('utf-8')
             continue_json = get_url_json(url=self.GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
         return continue_json

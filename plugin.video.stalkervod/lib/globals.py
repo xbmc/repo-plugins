@@ -6,8 +6,8 @@ import sys
 from urllib.parse import urlencode, urlsplit
 import dataclasses
 import xbmcaddon
-
-ADDON = xbmcaddon.Addon()
+import xbmcvfs
+from .utils import Logger
 
 
 @dataclasses.dataclass
@@ -28,6 +28,7 @@ class AddOnConfig:
     """Addon config"""
     url: str = None
     addon_id: str = None
+    name: str = None
     handle: str = None
     addon_data_path: str = None
     max_page_limit: int = 2
@@ -40,33 +41,33 @@ class GlobalVariables:
 
     def __init__(self):
         """Init class"""
-        self.is_addd_on_first_run = None
+        self.__addon = xbmcaddon.Addon()
+        self.__is_addd_on_first_run = None
         self.addon_config = AddOnConfig()
         self.portal_config = PortalConfig()
 
     def init_globals(self):
         """Init global settings"""
-        self.is_addd_on_first_run = self.is_addd_on_first_run is None
+        self.__is_addd_on_first_run = self.__is_addd_on_first_run is None
         self.addon_config.url = sys.argv[0]
-        if self.is_addd_on_first_run:
-            self.addon_config.addon_id = ADDON.getAddonInfo('id')
-            self.addon_config.addon_data_path = ADDON.getAddonInfo('path')
-            self.addon_config.token_path = os.path.join(self.addon_config.addon_data_path, 'resources', 'tokens')
+        if self.__is_addd_on_first_run:
+            Logger.debug("First run, loading global variables")
+            self.addon_config.addon_id = self.__addon.getAddonInfo('id')
+            self.addon_config.name = self.__addon.getAddonInfo('name')
+            self.addon_config.addon_data_path = self.__addon.getAddonInfo('path')
+            token_path = xbmcvfs.translatePath(self.__addon.getAddonInfo('profile'))
+            if not xbmcvfs.exists(token_path):
+                xbmcvfs.mkdirs(token_path)
+            self.addon_config.token_path = token_path
             self.addon_config.handle = int(sys.argv[1])
-            self.portal_config.mac_cookie = 'mac=' + ADDON.getSetting('mac_address')
-            self.portal_config.portal_url = ADDON.getSetting('server_address')
-            self.portal_config.device_id = ADDON.getSetting('device_id')
-            self.portal_config.device_id_2 = ADDON.getSetting('device_id_2')
-            self.portal_config.signature = ADDON.getSetting('signature')
-            self.portal_config.serial_number = ADDON.getSetting('serial_number')
-            self.portal_config.portal_base_url = self.get_portal_base_url(self.portal_config.portal_url)
+            self.portal_config.mac_cookie = 'mac=' + self.__addon.getSetting('mac_address')
+            self.portal_config.portal_url = self.__addon.getSetting('server_address')
+            self.portal_config.device_id = self.__addon.getSetting('device_id')
+            self.portal_config.device_id_2 = self.__addon.getSetting('device_id_2')
+            self.portal_config.signature = self.__addon.getSetting('signature')
+            self.portal_config.serial_number = self.__addon.getSetting('serial_number')
+            self.portal_config.portal_base_url = self.__get_portal_base_url()
             self.portal_config.context_path = '/stalker_portal/server/load.php'
-
-    @staticmethod
-    def get_portal_base_url(url):
-        """Get portal base url"""
-        split_url = urlsplit(url)
-        return split_url.scheme + '://' + split_url.netloc
 
     def get_handle(self):
         """Get addon handle"""
@@ -79,6 +80,11 @@ class GlobalVariables:
     def get_plugin_url(self, params):
         """Get plugin url"""
         return '{}?{}'.format(self.addon_config.url, urlencode(params))
+
+    def __get_portal_base_url(self):
+        """Get portal base url"""
+        split_url = urlsplit(self.portal_config.portal_url)
+        return split_url.scheme + '://' + split_url.netloc
 
 
 G = GlobalVariables()

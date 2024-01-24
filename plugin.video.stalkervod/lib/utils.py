@@ -2,10 +2,13 @@
 from __future__ import absolute_import, division, unicode_literals
 import xbmc
 import xbmcgui
-from .globals import G  # pylint: disable=import-error
+import xbmcaddon
+
+__addon__ = xbmcaddon.Addon()
 
 
-def _ask_for_input(category):
+def ask_for_input(category):
+    """Input dialog box"""
     return xbmcgui.Dialog().input(
         defaultt='',
         heading='Search in ' + category,
@@ -17,7 +20,7 @@ class Logger:
     @staticmethod
     def log(message, level=xbmc.LOGDEBUG):
         """Generic log method defaults to debug"""
-        xbmc.log('{0}: {1}'.format(G.addon_config.addon_id, message), level)
+        xbmc.log('{0}: {1}'.format(__addon__.getAddonInfo('id'), message), level)
 
     @staticmethod
     def info(message):

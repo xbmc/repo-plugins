@@ -401,7 +401,7 @@ def get_channel_id(channel_username):
         return 'not found'
 
 
-def get_latest_from_channel(channel_id, page, filter_shorts):
+def get_latest_from_channel(channel_id, page, filter_shorts, minimum_duration_in_seconds):
     my_addon = xbmcaddon.Addon()
     result_num = my_addon.getSetting('result_number')
 
@@ -440,7 +440,7 @@ def get_latest_from_channel(channel_id, page, filter_shorts):
         duration = sorted_data[x]['contentDetails']['duration']
         seconds = yt_time(duration)
         date = re.search("[0-9]{4}-[0-9]{2}-[0-9]{2}", sorted_data[x]['snippet']['publishedAt'])
-        if filter_shorts and is_short(video_id, seconds):
+        if filter_shorts and is_too_short(video_id, seconds, minimum_duration_in_seconds):
             continue
 
         listout.append([title, video_id, thumb, desc, seconds, date.group()])
@@ -452,8 +452,8 @@ class RedirectFilter(urllib.request.HTTPRedirectHandler):
         return None  # do not redirect, HTTPError will be raised
 
 
-def is_short(videoId, seconds):
-    if seconds <= 60:
+def is_too_short(videoId, seconds, minimum_duration_in_seconds):
+    if seconds <= minimum_duration_in_seconds:
         return True
     return False
 

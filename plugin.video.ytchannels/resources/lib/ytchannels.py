@@ -23,6 +23,7 @@ def ytchannels_main():
 	enable_playlists = my_addon.getSetting('enable_playlists')
 	enable_livestreams = my_addon.getSetting('enable_livestreams')
 	filter_shorts = my_addon.getSetting('filter_shorts')
+	minimum_duration_in_seconds = my_addon.getSetting('minimum_duration_in_seconds')
 
 	addon_handle = int(sys.argv[1])
 	args = urllib.parse.parse_qs(sys.argv[2][1:])
@@ -244,18 +245,18 @@ def ytchannels_main():
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
 									listitem=li,isFolder=True)
 
-		game_list=get_latest_from_channel(id, page, filter_shorts == 'true')
-		next_page=game_list[0]
+		video_list=get_latest_from_channel(id, page, filter_shorts == 'true', minimum_duration_in_seconds)
+		next_page=video_list[0]
 
 		xbmc_region = xbmc.getRegion('dateshort')
 
-		for i in range(1,len(game_list)):
-			title=game_list[i][0]
-			video_id=game_list[i][1]
-			thumb=game_list[i][2]
-			desc=game_list[i][3]
-			seconds=game_list[i][4]
-			date=game_list[i][5]
+		for i in range(1,len(video_list)):
+			title=video_list[i][0]
+			video_id=video_list[i][1]
+			thumb=video_list[i][2]
+			desc=video_list[i][3]
+			seconds=video_list[i][4]
+			date=video_list[i][5]
 
 			try:
 				pub = datetime.datetime.strftime(datetime.datetime.strptime(date, '%Y-%m-%d'), xbmc_region)
@@ -269,7 +270,7 @@ def ytchannels_main():
 			li.setProperty('IsPlayable', 'true')
 			li.setInfo('video', { 'genre': 'YouTube', 'plot': plot, 'duration': seconds } )
 
-			xbmcplugin.addDirectoryItem(handle=addon_handle, url=uri, listitem=li)#,isFolder=True)
+			xbmcplugin.addDirectoryItem(handle=addon_handle, url=uri, listitem=li)
 
 		if next_page!='1':
 			if playlista:

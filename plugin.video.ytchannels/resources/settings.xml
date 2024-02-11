@@ -23,6 +23,19 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="minimum_duration_in_seconds" type="integer" label="30210">
+					<level>0</level>
+					<default>61</default>
+					<dependencies>
+						<dependency type="visible" setting="filter_shorts">true</dependency>
+					</dependencies>
+					<constraints>
+						<minimum>0</minimum>
+					</constraints>
+					<control type="edit" format="integer">
+						<heading>30210</heading>
+					</control>
+				</setting>
 				<setting id="result_number" type="integer" label="30203">
 					<level>0</level>
 					<default>20</default>

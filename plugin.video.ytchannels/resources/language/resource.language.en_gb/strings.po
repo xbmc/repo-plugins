@@ -186,5 +186,9 @@ msgid "Enable live streams"
 msgstr ""
 
 msgctxt "#30209"
-msgid "Filter out shorts"
+msgid "Filter out short videos"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Minimum duration to display (in seconds)"
 msgstr ""

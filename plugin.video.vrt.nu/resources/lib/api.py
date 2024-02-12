@@ -1013,15 +1013,19 @@ def get_programs(category=None, channel=None, keywords=None, end_cursor=''):
     page_size = get_setting_int('itemsperpage', default=50)
     query_string = None
     if category:
+        facet_name = 'genre'
+        # VRT MAX uses 'contenttype' facet name instead of 'genre' for some categories
+        if category in ('docu', 'films', 'series', 'talkshows'):
+            facet_name = 'contenttype'
         destination = 'categories'
         facets = [{
-            'name': 'programCategories',
+            'name': facet_name,
             'values': [category]
         }]
     elif channel:
         destination = 'channels'
         facets = [{
-            'name': 'programBrands',
+            'name': 'brand',
             'values': [channel]
         }]
     elif keywords:

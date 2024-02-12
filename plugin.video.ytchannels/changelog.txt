@@ -1,6 +1,9 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.5.4 [12-Feb-2024]
+- Fixing total-breakage bug
+
 v0.5.3 [25-Jan-2024]
 - Users can now change the minimum length a video needs to be to visible
 

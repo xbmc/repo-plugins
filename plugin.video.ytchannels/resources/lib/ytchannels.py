@@ -23,7 +23,7 @@ def ytchannels_main():
 	enable_playlists = my_addon.getSetting('enable_playlists')
 	enable_livestreams = my_addon.getSetting('enable_livestreams')
 	filter_shorts = my_addon.getSetting('filter_shorts')
-	minimum_duration_in_seconds = my_addon.getSetting('minimum_duration_in_seconds')
+	minimum_duration_in_seconds = int(my_addon.getSetting('minimum_duration_in_seconds'))
 
 	addon_handle = int(sys.argv[1])
 	args = urllib.parse.parse_qs(sys.argv[2][1:])

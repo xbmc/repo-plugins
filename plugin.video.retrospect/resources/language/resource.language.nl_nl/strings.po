@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-12-11 11:11+0000\n"
+"PO-Revision-Date: 2024-01-21 12:13+0000\n"
 "Last-Translator: bas <bas@kodi.tv>\n"
 "Language-Team: Dutch <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/nl_nl/>\n"
 "Language: nl_nl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 5.3\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -529,15 +529,15 @@ msgstr "Toon toekomstige afleveringen in 'Recent > Vandaag'"
 
 msgctxt "#30126"
 msgid "Default"
-msgstr ""
+msgstr "Standaard"
 
 msgctxt "#30127"
 msgid "Show All"
-msgstr ""
+msgstr "Toon alles"
 
 msgctxt "#30128"
 msgid "Filter Premium"
-msgstr ""
+msgstr "Verberg premium"
 
 # used for list limits
 # empty strings from id 30126 to 30189

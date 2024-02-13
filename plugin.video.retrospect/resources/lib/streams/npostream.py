@@ -30,7 +30,8 @@ class NpoStream(object):
 
     @staticmethod
     def add_mpd_stream_from_npo(url, episode_id: str, item: MediaItem,
-                                headers: Optional[dict] = None, live: bool = False) -> Optional[str]:
+                                headers: Optional[dict] = None, live: bool = False,
+                                use_post: bool = False) -> Optional[str]:
         """ Extracts the Dash streams for the given url or episode id
 
         :param str|None url:        The url to download
@@ -38,6 +39,7 @@ class NpoStream(object):
         :param MediaItem item:      The Media item to update
         :param dict headers:        Possible HTTP Headers
         :param bool live:           Is this a live stream?
+        :param bool use_post:       Use a POST request.
 
         :rtype: str|None
         :return: An error message if an error occurred.
@@ -59,8 +61,12 @@ class NpoStream(object):
             Logger.error("No url or streamId specified!")
             return None
 
-        token_data = {"productId": episode_id}
-        token = UriHandler.open("https://npo.nl/start/api/domain/player-token", json=token_data)
+        if use_post:
+            token_data = {"productId": episode_id}
+            token = UriHandler.open("https://npo.nl/start/api/domain/player-token", json=token_data)
+        else:
+            token = UriHandler.open(f"https://npo.nl/start/api/domain/player-token?productId={episode_id}", no_cache=True)
+
         token_json = JsonHelper(token)
         token_value = token_json.get_value("token")
 
@@ -68,7 +74,7 @@ class NpoStream(object):
         video_data = {
             "profileName": "dash",
             "drmType": "widevine",
-            "referrerUrl": "https://npo.nl/start/serie/boer-zoekt-vrouw/seizoen-14_1/boer-zoekt-vrouw-europa_9/afspelen"
+            "referrerUrl": "https://npo.nl/"
         }
         data = UriHandler.open("https://prod.npoplayer.nl/stream-link", json=video_data, additional_headers=video_headers)
         video_info = JsonHelper(data)

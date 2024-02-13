@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.7.5"
+        version="5.7.6"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -123,23 +123,18 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.7.5 - Changelog - 2024-01-18[/B]
+        <news>[B]Retrospect v5.7.6 - Changelog - 2024-02-13[/B]
 
-This release fixes issues with MTV and NPO. It also restores the IPTV functionality for NPO and introduces Videoland as a replacement for RTL XL.
+This is a quick for the NPO channel.
 
 [B]Framework related[/B]
-* Fixed: For search results, keep the sort order as &quot;unsorted&quot;.
-* Changed: Various fixes for log-in and log-out.
+_None_
 
 [B]GUI/Settings/Language related[/B]
-* Added: Option to have a channel dedicated filter of premium items.
+_None_
 
 [B]Channel related[/B]
-* Fixed: NPO Recent items did not display videos unrelated to shows.
-* Fixed: MTV channels.
-* Fixed: NPO IPTV Support.
-* Fixed: SVT `new`-items
-
+* Fixed: NPO Playback (Fixes #1762).
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

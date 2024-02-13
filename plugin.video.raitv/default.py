@@ -192,13 +192,15 @@ def play(url, pathId="", srt=[]):
         item=xbmcgui.ListItem(path=url + '|User-Agent=' + urllib.quote_plus(Relinker.UserAgent))
     except: 
         item=xbmcgui.ListItem(path=url + '|User-Agent=' + urllib.parse.quote_plus(Relinker.UserAgent))
-    
-    if "dash" in ct or "mpd" in ct :
-        if KODI_VERSION_MAJOR >= 19:
-            item.setProperty('inputstream', 'inputstream.adaptive')
-        else:
-            item.setProperty('inputstreamaddon', 'inputstream.adaptive')
 
+    if KODI_VERSION_MAJOR >= 19:
+        item.setProperty('inputstream', 'inputstream.adaptive')
+    else:
+        item.setProperty('inputstreamaddon', 'inputstream.adaptive')
+
+    if "hls" in ct:
+        item.setProperty('inputstream.adaptive.manifest_type', 'hls')
+    elif "dash" in ct or "mpd" in ct :
         item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
         item.setMimeType('application/dash+xml')
         if key:
@@ -230,6 +232,7 @@ def play(url, pathId="", srt=[]):
 
     xbmc.log("*******************************************************************************************************************") 
     xbmcplugin.setResolvedUrl(handle=handle, succeeded=True, listitem=item)
+
 
 def show_tv_channels():
     xbmc.log("Raiplay: get Rai channels: ")
@@ -703,29 +706,26 @@ def show_ondemand_items(url):
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
     
 def search_ondemand_programmes():
+    search = Search()
+    raiplay = RaiPlay(Addon)
+
     kb = xbmc.Keyboard()    
     kb.setHeading(Addon.getLocalizedString(32001))
     kb.doModal()
     if kb.isConfirmed():
-        try: name = kb.getText().decode('utf8').lower()
-        except: name = kb.getText().lower()
-        xbmc.log("Searching for programme: " + name)
-        raiplay = RaiPlay(Addon)
-        # old style of json
-        dir = raiplay.getProgrammeListOld(raiplay.AzTvShowPath)
-        for letter in dir:
-            for item in dir[letter]:
-                if item["name"].lower().find(name) != -1:
-                    #fix old version of url
-                    if "PathID" in item:
-                        url = item["PathID"]
-                        if url.endswith('/?json'):
-                            url = url.replace('/?json', '.json')
-                        
-                        liStyle = xbmcgui.ListItem(item["name"])
-                        liStyle.setArt({"thumb": raiplay.getThumbnailUrl2(item)})
-                        addDirectoryItem({"mode": "ondemand", "path_id": url , "sub_type": "PLR programma Page"}, liStyle)
-        xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_LABEL)
+        try: 
+            name = kb.getText().decode('utf8').lower()
+        except: 
+            name = kb.getText().lower()       
+        
+        s = search.searchByName(name)
+
+        for item in s:
+            url = item["path_id"]
+            liStyle = xbmcgui.ListItem(item["titolo"])        
+            liStyle.setArt({"thumb": raiplay.getThumbnailUrl(item["immagine"])})
+            addDirectoryItem({"mode": "ondemand", "path_id": url , "sub_type": "PLR programma Page"}, liStyle)
+
         xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
     
 def show_news_providers():

@@ -27,7 +27,8 @@ class Relinker:
     # Firefox 52 ESR on Linux
     # UserAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0"
     # Chrome 64 on Windows 10
-    UserAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"
+    #UserAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"
+    UserAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36&Accept=*/*&Accept-Encoding=gzip,deflate,br&Accept-Language=it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7&Connection=keep-alive&Origin=https://www.raiplay.it&Referer=https://www.raiplay.it/&sec-ch-ua="Not A(Brand";v="99","Google Chrome";v="121","Chromium";v="121"&sec-ch-ua-mobile=?0&sec-ch-ua-platform="Linux"'
     # Raiplay android app
     #UserAgent = "Android 4.2.2 (smart) / RaiPlay 2.1.3 / WiFi"
     
@@ -52,7 +53,6 @@ class Relinker:
         if "output" in qs:
             del(qs['output'])
         
-        #qs['output'] = "20" # only url
         qs['output'] = "56" # xml stream data  
         
         query = urlencode(qs, True)

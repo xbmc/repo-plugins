@@ -124,7 +124,7 @@ class Channel(chn_class.Channel):
             pow_id = item.url.rsplit("/", -1)
 
         from resources.lib.streams.npostream import NpoStream
-        error = NpoStream.add_mpd_stream_from_npo(None, pow_id, item, live=item.isLive)
+        error = NpoStream.add_mpd_stream_from_npo(None, pow_id, item, live=item.isLive, use_post=True)
         if error:
             XbmcWrapper.show_dialog(LanguageHelper.ErrorId, error)
         else:

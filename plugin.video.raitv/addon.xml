@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.raitv"
        name="Rai Play"
-       version="3.9.5"
+       version="4.1.1"
        provider-name="Nightflyer, cttynul, maxbambi, fabpolli">
   <requires>
         <import addon="xbmc.python" version="3.0.0"/>    
@@ -30,18 +30,12 @@ Source: https://github.com/maxbambi/plugin.video.raitv/
     <website>https://github.com/maxbambi/plugin.video.raitv/</website>
     <email></email>
     <news>
-[B]3.9.5[/B]
-- New playing informations written in log
-[B]3.9.4[/B]
-- Fix playing of Widevine encrypted content
-[B]3.9.3[/B]
-- Fix Raisport Archive
-[B]3.9.2[/B]
-- Fix subtitles with filename with spaces 
-[B]3.9.1[/B]
-- Fix Home Page Menu 
-[B]3.9.0[/B]
-- Fix Fiction Menu empty
+[B]4.1.1[/B]
+- Try to fix streaming - new headers
+[B]4.1.0[/B]
+- Try to fix streaming
+[B]4.0.0[/B]
+- New search API
     </news>
     <source>https://github.com/maxbambi/plugin.video.raitv/</source>
     <assets>

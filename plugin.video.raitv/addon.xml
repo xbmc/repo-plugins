@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.raitv"
        name="Rai Play"
-       version="4.1.1"
+       version="4.1.2"
        provider-name="Nightflyer, cttynul, maxbambi, fabpolli">
   <requires>
         <import addon="xbmc.python" version="3.0.0"/>    
@@ -30,6 +30,8 @@ Source: https://github.com/maxbambi/plugin.video.raitv/
     <website>https://github.com/maxbambi/plugin.video.raitv/</website>
     <email></email>
     <news>
+[B]4.1.2[/B]
+- Try to fix streaming
 [B]4.1.1[/B]
 - Try to fix streaming - new headers
 [B]4.1.0[/B]

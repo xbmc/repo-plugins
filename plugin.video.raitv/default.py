@@ -198,9 +198,7 @@ def play(url, pathId="", srt=[]):
     else:
         item.setProperty('inputstreamaddon', 'inputstream.adaptive')
 
-    if "hls" in ct:
-        item.setProperty('inputstream.adaptive.manifest_type', 'hls')
-    elif "dash" in ct or "mpd" in ct :
+    if "dash" in ct or "mpd" in ct :
         item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
         item.setMimeType('application/dash+xml')
         if key:
@@ -226,6 +224,10 @@ def play(url, pathId="", srt=[]):
             item.setProperty("inputstream.adaptive.license_type", 'com.widevine.alpha')
             item.setProperty("inputstream.adaptive.license_key",  key_string)
             xbmc.log("Key string: %s" % key_string) 
+    
+    else:
+        item.setProperty('inputstream.adaptive.manifest_type', 'hls')
+
 
     if srt:
         item.setSubtitles(srt)

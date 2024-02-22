@@ -59,7 +59,7 @@ class BbcPodcastsAddon(AbstractRssAddon):
         entries = list()
 
         for _d in _json["data"]:
-            if "uris" not in _d or "download" not in _d or not _d["download"] or "quality_variants" not in _d["download"]:
+            if "uris" not in _d or "download" not in _d or not _d["download"] or "quality_variants" not in _d["download"] or not _d["container"]:
                 continue
 
             has_media = [True for _quality in _d["download"]["quality_variants"]

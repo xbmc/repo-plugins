@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.bbcpodcasts" name="BBC Podcasts" version="2.0.6" provider-name="Heckie">
+<addon id="plugin.audio.bbcpodcasts" name="BBC Podcasts" version="2.0.7" provider-name="Heckie">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.25.1" />
@@ -23,6 +23,9 @@
         <website>https://github.com/Heckie75/kodi-addon-bbc-podcasts</website>
         <source>https://github.com/Heckie75/kodi-addon-bbc-podcasts/tree/main/plugin.audio.bbcpodcasts</source>
         <news>
+v2.0.7 (2024-02-21)
+- Minor bugfix
+
 v2.0.6 (2024-02-10)
 - Changed parser after changes on website, i.e. switched to API
 

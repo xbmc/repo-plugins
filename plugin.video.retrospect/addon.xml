@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.7.6"
+        version="5.7.7"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -123,9 +123,9 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.7.6 - Changelog - 2024-02-13[/B]
+        <news>[B]Retrospect v5.7.7 - Changelog - 2024-02-23[/B]
 
-This is a quick for the NPO channel.
+This is a quick fix for the NPO and ONS channel.
 
 [B]Framework related[/B]
 _None_
@@ -134,7 +134,8 @@ _None_
 _None_
 
 [B]Channel related[/B]
-* Fixed: NPO Playback (Fixes #1762).
+* Fixed: ONS Playback (Fixes #1761)
+* Fixed: NPO Playback (Fixes #1762)
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

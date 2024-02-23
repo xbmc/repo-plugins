@@ -1,8 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from typing import Union, List
 
-from resources.lib import chn_class
-from resources.lib.regexer import Regexer
-from resources.lib.mediaitem import MediaItem
+from resources.lib import chn_class, contenttype, mediatype
+from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.logger import Logger
+from resources.lib.mediaitem import MediaItem, FolderItem
 
 
 class Channel(chn_class.Channel):
@@ -21,39 +23,84 @@ class Channel(chn_class.Channel):
 
         # ============== Actual channel setup STARTS here and should be overwritten from derived classes ===============
         # setup the urls
+
+        # https://api.ibbroadcast.nl/IB_API.pdf
         self.baseUrl = "https://www.kijkbijons.nl"
-        self.mainListUri = "https://www.kijkbijons.nl/programmas"
+        self.api_key = "hU6YJdwThYkjsb1Z4qRDQ795UduP2CYRYm1An2amlxk="
+        self.mainListUri = f"https://api.ibbroadcast.nl/clips.ashx?key={self.api_key}" \
+                           "&output=json&mode=searchClips&sort=lasttransmissiontime" \
+                           "&cliptype=1&sortdirection=DESC&amount=200&page=1"
 
         # Setup textures
-        self.noImage = "onsimage.png"
+        self.noImage = "onsimage.jpg"
 
         # Define parsers
-        episode_regex = r'<a class="clipItem"[^>]*href="(?<url>[^"]+)[^>]*>\s*<span class="clipItemImage">\s*<img[^>]*src="(?<thumburl>[^"]+)"[^>]+alt="(?<title>[^"]+)"[^>]*>'
-        self._add_data_parser(self.mainListUri, name="Main Programlist", 
-                              parser=Regexer.from_expresso(episode_regex),
+        self._add_data_parser("https://api.ibbroadcast.nl/clips.ashx", json=True,
+                              name="Main Programlist",
+                              parser=[],
                               creator=self.create_episode_item)
 
-        video_regex = r'<a class="clipItem"\s+href="(?<url>[^"]+item\?(?<id>[^"]+))"[^>]+>\s+<[^>]+>\s*<img src="(?<thumb>[^"]+)[^>]*>\s*(?:[^>]+>\s*){4}(?<title>[^\n\r<]+)'
-        self._add_data_parser("*", name="Main Video parsers",
-                              parser=Regexer.from_expresso(video_regex),
-                              creator=self.create_video_item,
-                              updater=self.update_video_item)
+        self._add_data_parser("https://api.ibbroadcast.nl/clips.ashx", json=True,
+                              name="Parser that filters the folders", label="folder",
+                              parser=[],
+                              creator=self.create_video_item)
+
+        self._add_data_parser("*", updater=self.update_video_item)
 
         #===============================================================================================================
         # non standard items
 
         return
 
-    def create_video_item(self, result_set):
-        item = chn_class.Channel.create_video_item(self, result_set)
-        if item is None:
+    def create_episode_item(self, result_set: dict) -> Union[MediaItem, List[MediaItem], None]:
+        folder_id = result_set["folder"]["id"]
+        folder_name = result_set["folder"]["name"]
+        url = self.mainListUri
+        item = FolderItem(folder_name, url, content_type=contenttype.EPISODES)
+        item.metaData["folder_id"] = folder_id
+        item.metaData["retrospect:parser"] = "folder"
+        return item
+
+    def create_video_item(self, result_set: dict):
+        folder_id = result_set["folder"]["id"]
+        if folder_id != self.parentItem.metaData["folder_id"]:
             return None
 
-        item.url = "https://api.ibbroadcast.nl/clips.ashx?" \
-                   "key=hU6YJdwThYkjsb1Z4qRDQ795UduP2CYRYm1An2amlxk=&" \
-                   "mode=getclip&" \
-                   "output=jsonp&" \
-                   "id={}".format(result_set["id"])
+        clip_id = result_set["id"]
+        name = result_set["name"]
+        url = f"http://api.ibbroadcast.nl/clips.ashx?key={self.api_key}&mode=getclip&id={clip_id}&output=json"
+        item = MediaItem(name, url, media_type=mediatype.EPISODE)
+        item.description = result_set["description"]
+        item.set_artwork(thumb=result_set["screenshot"])
+
+        # date: '01-02-2024 11:15:09'
+        changed = result_set.get("changedate")
+        if changed:
+            time_stamp = DateHelper.get_date_from_string(changed, "%d-%m-%Y %H:%M:%S")
+            item.set_date(*time_stamp[0:6])
+
+        # duration=00:25:16.4800000
+        durations = result_set.get("duration", "0:0:0")
+        Logger.debug(durations)
+        duration_parts = durations.split(":")
+        duration = 60 * 60 * int(duration_parts[0]) + 60 * int(duration_parts[1]) + int(duration_parts[2][0:2])
+        Logger.trace(f"Duration: {durations} -> {duration}")
+        item.set_info_label(MediaItem.LabelDuration, duration)
+
+        params = result_set.get("parameters") or []
+        episode = 0
+        season = 0
+        for param in params:
+            if not param["name"]:
+                continue
+            if param["name"].lower() == "episode":
+                episode = param["values"][0]["name"]
+            elif param["name"].lower() == "season":
+                season = param["values"][0]["name"]
+
+        if episode and season:
+            item.set_season_info(season, episode)
+
         return item
 
     def update_video_item(self, item):
@@ -83,7 +130,7 @@ class Channel(chn_class.Channel):
 
         data = UriHandler.open(item.url)
         json_data = JsonHelper(data)
-        streams = json_data.get_value("clip", "previews")
+        streams = json_data.get_value("previews")
         for stream_info in streams:
             name = stream_info["name"]
             # for now we only take the numbers as bitrate:

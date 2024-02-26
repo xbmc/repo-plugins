@@ -18,7 +18,6 @@ _LOGGER = logging.getLogger(__name__)
 class VtmGoStream:
     """ VTM GO Stream API """
 
-    _V5_API_KEY = '3vjmWnsxF7SUTeNCBZlnUQ4Z7GQV8f6miQ514l10'
     _V6_API_KEY = 'r9EOnHOp1pPL5L4FuGzBPSIHwrQnPu5TBfW16y75'
 
     def __init__(self, tokens=None):
@@ -160,34 +159,21 @@ class VtmGoStream:
         """
         url = 'https://videoplayer-service.dpgmedia.net/config/%s/%s' % (strtype, stream_id)
         _LOGGER.debug('Getting video info from %s', url)
-        # Live channels: Fallback to old Popcorn SDK 5 for Kodi 19 and lower, because new livestream format is not supported
-        if kodiutils.kodi_version_major() <= 19 and strtype == 'channels':
-            response = util.http_get(url,
-                                     params={
-                                         'startPosition': '0.0',
-                                         'autoPlay': 'true',
-                                     },
-                                     headers={
-                                         'Accept': 'application/json',
-                                         'x-api-key': self._V5_API_KEY,
-                                         'Popcorn-SDK-Version': '5',
-                                     })
-        else:
-            response = util.http_post(url,
-                                      params={
-                                          'startPosition': '0.0',
-                                          'autoPlay': 'true',
-                                      },
-                                      data={
-                                          'deviceType': 'android-tv',
-                                          'zone': 'vtmgo',
-                                      },
-                                      headers={
-                                          'Accept': 'application/json',
-                                          'x-api-key': self._V6_API_KEY,
-                                          'Popcorn-SDK-Version': '6',
-                                          'Authorization': 'Bearer ' + player_token,
-                                      })
+        response = util.http_post(url,
+                                  params={
+                                      'startPosition': '0.0',
+                                      'autoPlay': 'true',
+                                  },
+                                  data={
+                                      'deviceType': 'android-tv',
+                                      'zone': 'vtmgo',
+                                  },
+                                  headers={
+                                      'Accept': 'application/json',
+                                      'x-api-key': self._V6_API_KEY,
+                                      'Popcorn-SDK-Version': '6',
+                                      'Authorization': 'Bearer ' + player_token,
+                                  })
 
         info = json.loads(response.text)
         return info

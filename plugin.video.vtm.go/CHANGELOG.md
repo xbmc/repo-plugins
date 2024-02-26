@@ -1,5 +1,14 @@
 # Changelog
 
+## [v1.4.4](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.4.4) (2024-02-26)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.4.3...v1.4.4)
+
+**Fixed bugs:**
+
+- Fix recommendations and drop usage of Popcorn V5 API [\#377](https://github.com/add-ons/plugin.video.vtm.go/pull/377) ([michaelarnauts](https://github.com/michaelarnauts))
+- Upgrade User-Agent to v15 \(\#375\) [\#376](https://github.com/add-ons/plugin.video.vtm.go/pull/376) ([mrtreg](https://github.com/mrtreg))
+
 ## [v1.4.3](https://github.com/add-ons/plugin.video.vtm.go/tree/v1.4.3) (2023-11-04)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.vtm.go/compare/v1.4.2...v1.4.3)

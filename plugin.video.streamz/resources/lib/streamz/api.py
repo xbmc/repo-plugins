@@ -102,7 +102,7 @@ class Api:
         result = json.loads(response.text)
 
         items = []
-        for item in result.get('teasers'):
+        for item in result.get('row', {}).get('teasers', []):
             if item.get('target', {}).get('type') == CONTENT_TYPE_MOVIE:
                 items.append(self._parse_movie_teaser(item))
 

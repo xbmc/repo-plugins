@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.viwx" name="viwX" version="1.2.0" provider-name="Dimitri Kroon">
+<addon id="plugin.video.viwx" name="viwX" version="1.2.1" provider-name="Dimitri Kroon">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="inputstream.adaptive" version="19.0.5"/>
@@ -30,24 +30,12 @@
       <fanart>resources/fanart.png</fanart>
     </assets>
     <news>
-[B]v1.2.0[/B]
+[B]v1.2.1[/B]
 [B]Fixes:[/B]
-* All categories failed to open due to various changes at ITVX.
-* Error on opening some series named 'Other Episodes', due to changes at ITVX.
-* Some sub-collections failed with error 'Not Found', due to error in ITVX data'
-* Added support for hero and collections items of type 'page'. Fixes some collections being empty, or hero item not shown.
-
-[B]New features:[/B]
-* Added a 'My itvX' entry in the main menu with:
-    - My List - ITVX's My List.
-    - Continue Watching: supports continue watching on different devices and different platforms.
-    - Because You Watched: recommendations by ITV based on a recently watched programme.
-    - Recommended: general recommendations by ITV.
-* All programmes and series now have a context menu item to add/remove the programme to/from My List.
+* All categories failed to open with KeyError('pathSegment') due to a change at ITVX.
 
 [B]Changes:[/B]
-* When not signed in, a user is now always offered to sign in via viwX's settings when an item was opened that required authentication.
-* Search now respects setting 'Hide premium content'.
+* Schedules of live channels are now listed up to 6 hours in the future (was 4 hrs).
     </news>
     <reuselanguageinvoker>true</reuselanguageinvoker>
   </extension>

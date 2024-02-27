@@ -1,6 +1,6 @@
 
 # ----------------------------------------------------------------------------------------------------------------------
-#  Copyright (c) 2022-2023 Dimitri Kroon.
+#  Copyright (c) 2022-2024 Dimitri Kroon.
 #  This file is part of plugin.video.viwx.
 #  SPDX-License-Identifier: GPL-2.0-or-later
 #  See LICENSE.txt
@@ -124,7 +124,7 @@ def get_live_channels(local_tz=None):
         local_tz = pytz.timezone('Europe/London')
 
     schedule = get_now_next_schedule(local_tz)
-    main_schedule = get_live_schedule(local_tz=local_tz)
+    main_schedule = get_live_schedule(6, local_tz=local_tz)
 
     # Replace the schedule of the main channels with the longer one obtained from get_live_schedule().
     for channel in schedule:
@@ -383,7 +383,7 @@ def category_content(url: str, hide_paid=False):
         return cached_data['items_list']
 
     cat_data = get_page_data(url + '/all', cache_time=0)
-    category = cat_data['category']['pathSegment']
+    category = cat_data['category']['id']
     progr_list = cat_data.get('programmes')
 
     parse_progr = parsex.parse_category_item
@@ -514,7 +514,7 @@ def my_list(user_id, programme_id=None, operation=None, offer_login=True, use_ca
     data = itv_account.fetch_authenticated(fetcher, url, data=None, login=offer_login)
     # Empty lists will return HTTP status 204, which results in data being None.
     if data:
-        my_list_items = [parsex.parse_my_list_item(item) for item in data]
+        my_list_items = list(filter(None, (parsex.parse_my_list_item(item) for item in data)))
     else:
         my_list_items = []
     cache.set_item('mylist_' + user_id, my_list_items, 1800)

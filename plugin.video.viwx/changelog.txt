@@ -1,3 +1,10 @@
+v1.2.1
+Fixes:
+- All categories failed to open with KeyError('pathSegment') due to a change at ITVX.
+
+Changes:
+- Schedules of live channels are now listed up to 6 hours in the future (was 4 hrs).
+
 v1.2.0
 Fixes:
 - All categories failed to open due to various changes at ITVX.

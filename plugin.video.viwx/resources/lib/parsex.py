@@ -1,6 +1,6 @@
 
 # ----------------------------------------------------------------------------------------------------------------------
-#  Copyright (c) 2022-2023 Dimitri Kroon.
+#  Copyright (c) 2022-2024 Dimitri Kroon.
 #  This file is part of plugin.video.viwx.
 #  SPDX-License-Identifier: GPL-2.0-or-later
 #  See LICENSE.txt
@@ -22,7 +22,7 @@ logger = logging.getLogger(logger_id + '.parse')
 # NOTE: The resolutions below are those specified by Kodi for their respective usage. There is no guarantee that
 #       the image returned by itvX is of that exact resolution.
 IMG_PROPS_THUMB = {'treatment': 'title', 'aspect_ratio': '16x9', 'class': '04_DesktopCTV_RailTileLandscape',
-                   'distributionPartner': '', 'fallback': 'standard', 'width': '960', 'height': '540',
+                   'distributionPartner': '', 'fallback': 'default', 'width': '960', 'height': '540',
                    'quality': '80', 'blur': 0, 'bg': 'false', 'image_format': 'jpg'}
 IMG_PROPS_POSTER = {'treatment': 'title', 'aspect_ratio': '2x3', 'class': '07_RailTilePortrait',
                     'distributionPartner': '', 'fallback': 'standard', 'width': '1000', 'height': '1500',
@@ -327,7 +327,7 @@ def parse_trending_collection_item(trending_item, hide_paid=False):
         return None
 
 
-def parse_category_item(prog, category):
+def parse_category_item(prog, category_id):
     # At least all items without an encodedEpisodeId are playable.
     # Unfortunately there are items that do have an episodeId, but are in fact single
     # episodes, and thus playable, but there is no reliable way of detecting these,
@@ -359,7 +359,9 @@ def parse_category_item(prog, category):
                  'sorttitle': sort_title(title)},
     }
 
-    if category == 'films':
+    # Currently the films category has id 'FILM' while in other data the plural 'FILMS' is used.
+    # Ensure a future change to 'FILMS' will not break the add-on again.
+    if category_id and 'FILM' in category_id:
         programme_item['art']['poster'] = prog['imageTemplate'].format(**IMG_PROPS_POSTER)
 
     if is_playable:
@@ -545,7 +547,7 @@ def parse_my_list_item(item, hide_paid=False):
         progr_id = item['programmeId'].replace('/', '_')
         num_episodes = item['numberOfEpisodes']
         content_info = ' - {} episodes'.format(num_episodes) if num_episodes is not None else ''
-        img_link = item.get('itvxImageLink') or item.get('imageUrl')
+        img_link = item.get('itvxImageLink') or item.get('itvxImageUrl')
         is_playable = item['contentType'].lower() != 'programme'
 
         item_dict = {

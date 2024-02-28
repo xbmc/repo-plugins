@@ -6,25 +6,21 @@
     See LICENSES/GPL-2.0-only for more information.
 """
 
-import xbmcvfs
-import requests
+from __future__ import absolute_import, division, unicode_literals
+
+import os
+
+from ...kodion.compatibility import (
+    parse_qs,
+    unescape,
+    urlencode,
+    urljoin,
+    urlsplit,
+    xbmcvfs,
+)
+from ...kodion.constants import TEMP_PATH
+from ...kodion.network import BaseRequestsClass
 from ...kodion.utils import make_dirs
-
-from six.moves.urllib_parse import parse_qs
-from six.moves.urllib_parse import urlencode
-from six.moves.urllib_parse import urlsplit
-from six.moves.urllib_parse import urlunsplit
-
-from six import PY2
-
-try:
-    from six.moves import html_parser
-
-    unescape = html_parser.HTMLParser().unescape
-except AttributeError:
-    import html
-
-    unescape = html.unescape
 
 
 class Subtitles(object):
@@ -33,219 +29,409 @@ class Subtitles(object):
     LANG_CURR_FALLBACK = 2
     LANG_CURR = 3
     LANG_CURR_NO_ASR = 4
+    LANG_ALL = 5
 
-    BASE_PATH = 'special://temp/plugin.video.youtube/'
-    SRT_FILE = ''.join([BASE_PATH, '%s.%s.srt'])
+    BASE_PATH = make_dirs(TEMP_PATH)
 
-    def __init__(self, context, headers, video_id, captions):
-        self.context = context
-        self._verify = context.get_settings().verify_ssl()
+    def __init__(self, context, video_id, captions, headers=None):
         self.video_id = video_id
-        self.language = context.get_settings().get_string('youtube.language', 'en_US').replace('_', '-')
-        self.headers = headers.copy()
+        self._context = context
 
-        self.caption_track = {}
+        settings = context.get_settings()
+        self.lang_code = settings.get_language()
+        self.pre_download = settings.subtitle_download()
+        self.subtitle_languages = settings.subtitle_languages()
+
+        if not headers and 'headers' in captions:
+            headers = captions['headers']
+            headers.pop('Authorization', None)
+            headers.pop('Content-Length', None)
+            headers.pop('Content-Type', None)
+        self.headers = headers
+
+        ui = context.get_ui()
+        self.prompt_override = (ui.get_property('prompt_for_subtitles')
+                                == video_id)
+        ui.clear_property('prompt_for_subtitles')
+
         self.renderer = captions.get('playerCaptionsTracklistRenderer', {})
         self.caption_tracks = self.renderer.get('captionTracks', [])
         self.translation_langs = self.renderer.get('translationLanguages', [])
 
-        default_audio = self.renderer.get('defaultAudioTrackIndex')
-        if default_audio is not None:
-            audio_tracks = self.renderer.get('audioTracks', [])
-            try:
-                audio_track = audio_tracks[default_audio]
-            except:
-                audio_track = None
-            if audio_track:
-                default_caption = audio_track.get('defaultCaptionTrackIndex')
-                if default_caption is None:
-                    default_caption = audio_track.get('captionTrackIndices')
-                    if (default_caption is not None) and (isinstance(default_caption, list)):
-                        default_caption = default_caption[0]
-                if default_caption is not None:
-                    try:
-                        self.caption_track = self.caption_tracks[default_caption]
-                    except:
-                        pass
-
-        ui = self.context.get_ui()
-        self.prompt_override = ui.get_home_window_property('prompt_for_subtitles') == video_id
-        ui.clear_home_window_property('prompt_for_subtitles')
-
-    def srt_filename(self, sub_language):
-        return self.SRT_FILE % (self.video_id, sub_language)
-
-    def _write_file(self, _file, contents):
-        if not make_dirs(self.BASE_PATH):
-            self.context.log_debug('Failed to create directories: %s' % self.BASE_PATH)
-            return False
-        self.context.log_debug('Writing subtitle file: %s' % _file)
         try:
-            f = xbmcvfs.File(_file, 'w')
-            f.write(contents)
-            f.close()
-            return True
-        except:
-            self.context.log_debug('File write failed for: %s' % _file)
-            return False
+            default_audio = self.renderer.get('defaultAudioTrackIndex')
+            default_audio = self.renderer.get('audioTracks')[default_audio]
+        except (IndexError, TypeError):
+            default_audio = None
+
+        self.defaults = {
+            'caption': {},
+            'lang_code': 'und',
+            'is_asr': False,
+            'translation_base': None,
+        }
+        if default_audio is None:
+            return
+
+        default_caption = self.renderer.get(
+            'defaultTranslationSourceTrackIndices', [None]
+        )[0]
+
+        if default_caption is None and default_audio.get('hasDefaultTrack'):
+            default_caption = default_audio.get('defaultCaptionTrackIndex')
+
+        if default_caption is None:
+            try:
+                default_caption = default_audio.get('captionTrackIndices')[0]
+            except (IndexError, TypeError):
+                default_caption = 0
+
+        try:
+            default_caption = self.caption_tracks[default_caption] or {}
+        except IndexError:
+            return
+
+        self.defaults = {
+            'caption': default_caption,
+            'lang_code': default_caption.get('languageCode') or 'und',
+            'is_asr': default_caption.get('kind') == 'asr',
+            'translation_base': None,
+        }
+        if default_caption.get('isTranslatable'):
+            self.defaults['translation_base'] = default_caption
+        else:
+            for track in self.caption_tracks:
+                if track.get('isTranslatable'):
+                    self.defaults['translation_base'] = track
+                    break
 
     def _unescape(self, text):
         try:
-            text = text.decode('utf8', 'ignore')
-        except:
-            self.context.log_debug('Subtitle unescape: failed to decode utf-8')
-        try:
             text = unescape(text)
         except:
-            self.context.log_debug('Subtitle unescape: failed to unescape text')
+            self._context.log_error('Subtitles._unescape - failed: |{text}|'
+                                    .format(text=text))
         return text
+
+    def get_default_lang(self):
+        return {
+            'code': self.defaults['lang_code'],
+            'is_asr': self.defaults['is_asr'],
+        }
 
     def get_subtitles(self):
         if self.prompt_override:
             languages = self.LANG_PROMPT
         else:
-            languages = self.context.get_settings().subtitle_languages()
-        self.context.log_debug('Subtitle get_subtitles: for setting |%s|' % str(languages))
-        if languages == self.LANG_NONE:
-            return []
-        elif languages == self.LANG_CURR:
-            list_of_subs = []
-            list_of_subs.extend(self._get(self.language))
-            list_of_subs.extend(self._get(language=self.language.split('-')[0]))
-            return list(set(list_of_subs))
-        elif languages == self.LANG_CURR_NO_ASR:
-            list_of_subs = []
-            list_of_subs.extend(self._get(self.language, no_asr=True))
-            list_of_subs.extend(self._get(language=self.language.split('-')[0], no_asr=True))
-            return list(set(list_of_subs))
-        elif languages == self.LANG_PROMPT:
-            return self._prompt()
-        elif languages == self.LANG_CURR_FALLBACK:
-            list_of_subs = []
-            list_of_subs.extend(self._get(language=self.language))
-            list_of_subs.extend(self._get(language=self.language.split('-')[0]))
-            list_of_subs.extend(self._get('en'))
-            list_of_subs.extend(self._get('en-US'))
-            list_of_subs.extend(self._get('en-GB'))
-            return list(set(list_of_subs))
-        else:
-            self.context.log_debug('Unknown language_enum: %s for subtitles' % str(languages))
+            languages = self.subtitle_languages
 
-    def _get_all(self):
-        list_of_subs = []
-        for language in self.translation_langs:
-            list_of_subs.extend(self._get(language=language.get('languageCode')))
-        return list(set(list_of_subs))
+        if languages == self.LANG_NONE:
+            return None
+
+        if languages == self.LANG_ALL:
+            return self.get_all(sub_format='vtt')
+
+        if languages == self.LANG_PROMPT:
+            return self._prompt()
+
+        no_asr = languages == self.LANG_CURR_NO_ASR
+        if languages == self.LANG_CURR_FALLBACK:
+            lang_codes = ('en', 'en-US', 'en-GB')
+        else:
+            lang_codes = {self.lang_code, self.lang_code.partition('-')[0]}
+
+        subtitles = {}
+        default_lang_code = self.defaults['lang_code']
+        for lang_code in lang_codes:
+            track, language, kind, is_translation = self._get_track(
+                lang_code, no_asr=no_asr
+            )
+            if not track:
+                continue
+            subtitles[lang_code] = {
+                'default': lang_code == default_lang_code,
+                'kind': kind,
+                'language': language,
+                'mime_type': 'text/vtt',
+                'url': self._get_url(
+                    caption_track=track,
+                    lang_code=lang_code,
+                    is_translation=is_translation,
+                    sub_format='vtt',
+                ),
+            }
+        return subtitles
+
+    def get_all(self, sub_format='vtt'):
+        if sub_format == 'vtt':
+            mime_type = 'text/vtt'
+        else:
+            sub_format = 'ttml'
+            mime_type = 'application/ttml+xml'
+
+        subtitles = {}
+
+        default_lang_code = self.defaults['lang_code']
+        for track in self.caption_tracks:
+            track_lang_code = track.get('languageCode')
+            track_language = self._get_language_name(track)
+            url = self._get_url(
+                caption_track=track,
+                lang_code=track_lang_code,
+                sub_format=sub_format,
+                download=False,
+            )
+            if url:
+                subtitles[track_lang_code] = {
+                    'default': track_lang_code == default_lang_code,
+                    'kind': track.get('kind'),
+                    'language': track_language,
+                    'mime_type': mime_type,
+                    'url': url,
+                }
+
+        translation_base = self.defaults['translation_base']
+        if translation_base:
+            for track in self.translation_langs:
+                track_lang_code = track.get('languageCode')
+                if track_lang_code in subtitles:
+                    continue
+                track_language = self._get_language_name(track)
+                url = self._get_url(
+                    caption_track=translation_base,
+                    lang_code=track_lang_code,
+                    is_translation=True,
+                    sub_format=sub_format,
+                    download=False,
+                )
+                if url:
+                    subtitles[track_lang_code] = {
+                        'default': track_lang_code == default_lang_code,
+                        'kind': 'translation',
+                        'language': track_language,
+                        'mime_type': mime_type,
+                        'url': url,
+                    }
+
+        return subtitles
 
     def _prompt(self):
-        tracks = [(track.get('languageCode'), self._get_language_name(track)) for track in self.caption_tracks]
-        translations = [(track.get('languageCode'), self._get_language_name(track)) for track in self.translation_langs]
-        languages = tracks + translations
-        if languages:
-            choice = self.context.get_ui().on_select(self.context.localize(30560), [language_name for language, language_name in languages])
-            if choice != -1:
-                return self._get(language=languages[choice][0], language_name=languages[choice][1])
-            else:
-                self.context.log_debug('Subtitle selection cancelled')
-                return []
+        captions = [
+            (track.get('languageCode'), self._get_language_name(track))
+            for track in self.caption_tracks
+        ]
+        translations = [
+            (track.get('languageCode'), self._get_language_name(track))
+            for track in self.translation_langs
+        ] if self.defaults['translation_base'] else []
+        num_captions = len(captions)
+        num_translations = len(translations)
+        num_total = num_captions + num_translations
+
+        if not num_total:
+            self._context.log_debug('No subtitles found for prompt')
         else:
-            self.context.log_debug('No subtitles found for prompt')
-            return []
+            translation_lang = self._context.localize('subtitles.translation')
+            choice = self._context.get_ui().on_select(
+                self._context.localize('subtitles.language'),
+                [name for _, name in captions] +
+                [translation_lang % name for _, name in translations]
+            )
 
-    def _get(self, language='en', language_name=None, no_asr=False):
-        fname = self.srt_filename(language)
-        if xbmcvfs.exists(fname):
-            self.context.log_debug('Subtitle exists for: %s, filename: %s' % (language, fname))
-            return [fname]
-
-        caption_track = None
-        asr_track = None
-        has_translation = False
-        for track in self.caption_tracks:
-            if language == track.get('languageCode'):
-                if language_name is not None:
-                    if language_name == self._get_language_name(track):
-                        caption_track = track
-                        break
-                else:
-                    if no_asr and (track.get('kind') == 'asr'):
-                        continue
-                    elif track.get('kind') == 'asr':
-                        asr_track = track
-                    else:
-                        caption_track = track
-
-        if (caption_track is None) and (asr_track is not None):
-            caption_track = asr_track
-
-        for lang in self.translation_langs:
-            if language == lang.get('languageCode'):
-                has_translation = True
-                break
-
-        if (self.caption_track.get('languageCode') != language) and (not has_translation) and (caption_track is None):
-            self.context.log_debug('No subtitles found for: %s' % language)
-            return []
-
-        subtitle_url = None
-        if (caption_track is None) and has_translation:
-            base_url = self.caption_track.get('baseUrl')
-            if base_url:
-                subtitle_url = self.set_query_param(base_url, 'type', 'track')
-                subtitle_url = self.set_query_param(subtitle_url, 'tlang', language)
-        elif caption_track is not None:
-            base_url = caption_track.get('baseUrl')
-            if base_url:
-                subtitle_url = self.set_query_param(base_url, 'type', 'track')
-
-        if subtitle_url:
-            subtitle_url = self.set_query_param(subtitle_url, 'fmt', 'vtt')
-            self.context.log_debug('Subtitle url: %s' % subtitle_url)
-            if not self.context.get_settings().subtitle_download():
-                return [subtitle_url]
+            if 0 <= choice < num_captions:
+                track = self.caption_tracks[choice]
+                kind = track.get('kind')
+                choice = captions[choice - num_captions]
+                is_translation = False
+            elif num_captions <= choice < num_total:
+                track = self.defaults['translation_base']
+                kind = 'translation'
+                choice = translations[choice - num_captions]
+                is_translation = True
             else:
-                result_auto = requests.get(subtitle_url, headers=self.headers,
-                                           verify=self._verify, allow_redirects=True)
+                self._context.log_debug('Subtitle selection cancelled')
+                return None
 
-                if result_auto.text:
-                    self.context.log_debug('Subtitle found for: %s' % language)
-                    self._write_file(fname, bytearray(self._unescape(result_auto.text), encoding='utf8', errors='ignore'))
-                    return [fname]
-                else:
-                    self.context.log_debug('Failed to retrieve subtitles for: %s' % language)
-                    return []
-        else:
-            self.context.log_debug('No subtitles found for: %s' % language)
-            return []
-
-    def _get_language_name(self, track):
-        key = 'languageName' if 'languageName' in track else 'name'
-        lang_name = track.get(key, {}).get('simpleText')
-        if not lang_name:
-            track_name = track.get(key, {}).get('runs', [{}])
-            if isinstance(track_name, list) and len(track_name) >= 1:
-                lang_name = track_name[0].get('text')
-
-        if lang_name:
-            return self._recode_language_name(lang_name)
-
+            url = self._get_url(
+                caption_track=track,
+                lang_code=choice[0],
+                is_translation=is_translation,
+                sub_format='vtt',
+            )
+            if url:
+                return {
+                    choice[0]: {
+                        'default': True,
+                        'kind': kind,
+                        'language': choice[1],
+                        'mime_type': 'text/vtt',
+                        'url': url,
+                    },
+                }
+            self._context.log_debug('No subtitle found for selection: |{lang}|'
+                                    .format(lang=choice[0]))
         return None
 
+    def _get_url(self,
+                 caption_track,
+                 lang_code,
+                 is_translation=False,
+                 sub_format='vtt',
+                 download=None):
+        if download is None:
+            download = self.pre_download
+        if download:
+            sub_format = 'vtt'
+            filename = '.'.join((self.video_id, lang_code, 'srt'))
+            if not self.BASE_PATH:
+                self._context.log_error('Subtitles._get_url'
+                                        ' - unable to access temp directory')
+                return None
+
+            filepath = os.path.join(self.BASE_PATH, filename)
+            if xbmcvfs.exists(filepath):
+                self._context.log_debug('Subtitles._get_url'
+                                        ' - use existing: |{lang}: {file}|'
+                                        .format(lang=lang_code, file=filepath))
+                return filepath
+
+        base_url = self._normalize_url(caption_track.get('baseUrl'))
+        if not base_url:
+            self._context.log_error('Subtitles._get_url - no url for: |{lang}|'
+                                    .format(lang=lang_code))
+            return None
+
+        subtitle_url = self._set_query_param(
+            base_url,
+            ('type', 'track'),
+            ('fmt', sub_format),
+            ('tlang', lang_code) if is_translation else (None, None),
+        )
+        if not is_translation:
+            self._context.log_debug('Subtitles._get_url: |{lang}: {url}|'
+                                    .format(lang=lang_code, url=subtitle_url))
+
+        if not download:
+            return subtitle_url
+
+        response = BaseRequestsClass().request(
+            subtitle_url,
+            headers=self.headers,
+            error_info=('Subtitles._get_url - GET failed for: {lang}: {{exc}}'
+                        .format(lang=lang_code))
+        )
+        response = response and response.text
+        if not response:
+            return None
+
+        output = bytearray(self._unescape(response),
+                           encoding='utf8',
+                           errors='ignore')
+        try:
+            with xbmcvfs.File(filepath, 'w') as srt_file:
+                success = srt_file.write(output)
+        except (IOError, OSError):
+            self._context.log_error('Subtitles._get_url'
+                                    ' - write failed for: {file}'
+                                    .format(file=filepath))
+        if success:
+            return filepath
+        return None
+
+    def _get_track(self,
+                   lang_code='en',
+                   language=None,
+                   no_asr=False):
+        caption_track = caption_language = caption_kind = None
+        is_translation = False
+
+        for track in self.caption_tracks:
+            track_language = self._get_language_name(track)
+            track_kind = track.get('kind')
+            if lang_code == track.get('languageCode'):
+                if language is not None:
+                    if language == track_language:
+                        caption_track = track
+                        caption_language = track_language
+                        caption_kind = track_kind
+                        break
+                elif no_asr and track_kind == 'asr':
+                    continue
+                else:
+                    caption_track = track
+                    caption_language = track_language
+                    caption_kind = track_kind
+
+        if not caption_track and self.defaults['translation_base']:
+            for track in self.translation_langs:
+                if lang_code == track.get('languageCode'):
+                    caption_track = self.defaults['translation_base']
+                    caption_language = self._get_language_name(track)
+                    caption_kind = 'translation'
+                    is_translation = True
+                    break
+
+        if caption_track:
+            return caption_track, caption_language, caption_kind, is_translation
+
+        self._context.log_debug('Subtitles._get - no subtitle for: |{lang}|'
+                                .format(lang=lang_code))
+        return None, None, None, None
+
     @staticmethod
-    def _recode_language_name(language_name):
-        if PY2:
-            language_name = language_name.encode('utf-8')
+    def _get_language_name(track):
+        lang_obj = None
+        if 'languageName' in track:
+            lang_obj = track['languageName']
+        elif 'name' in track:
+            lang_obj = track['name']
 
-        return language_name
+        if not lang_obj:
+            return None
+
+        lang_name = lang_obj.get('simpleText')
+        if lang_name:
+            return lang_name
+
+        track_name = lang_obj.get('runs')
+        if isinstance(track_name, (list, tuple)) and len(track_name) >= 1:
+            lang_name = track_name[0].get('text')
+
+        return lang_name
 
     @staticmethod
-    def set_query_param(url, name, value):
-        scheme, netloc, path, query_string, fragment = urlsplit(url)
-        query_params = parse_qs(query_string)
+    def _set_query_param(url, *pairs):
+        if not url or not pairs:
+            return url
 
-        query_params[name] = [value]
-        new_query_string = urlencode(query_params, doseq=True)
-        if isinstance(scheme, bytes):
-            new_query_string = new_query_string.encode('utf-8')
+        num_params = len(pairs)
+        if not num_params:
+            return url
+        if not isinstance(pairs[0], (list, tuple)):
+            if num_params >= 2:
+                pairs = zip(*[iter(pairs)] * 2)
+            else:
+                return url
 
-        return urlunsplit((scheme, netloc, path, new_query_string, fragment))
+        components = urlsplit(url)
+        query_params = parse_qs(components.query)
+
+        for name, value in pairs:
+            if name:
+                query_params[name] = [value]
+
+        return components._replace(
+            query=urlencode(query_params, doseq=True)
+        ).geturl()
+
+    @staticmethod
+    def _normalize_url(url):
+        if not url:
+            url = ''
+        elif url.startswith(('http://', 'https://')):
+            pass
+        elif url.startswith('//'):
+            url = urljoin('https:', url)
+        elif url.startswith('/'):
+            url = urljoin('https://www.youtube.com', url)
+        return url

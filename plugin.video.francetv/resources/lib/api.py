@@ -17,11 +17,11 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 from __future__ import unicode_literals
+
 import logging
 from os.path import dirname
 from os.path import join
 import re
-
 import time
 
 try:
@@ -96,6 +96,7 @@ _CHANNEL_ICONS = {
     "slash": join(_MEDIA_DIR, "slash.png"),
     "okoo": join(_MEDIA_DIR, "okoo.png"),
     "culturebox": join(_MEDIA_DIR, "culturebox.png"),
+    "serie": join(_MEDIA_DIR, "serie.png"),
 }  # type: Dict[Optional[Text], Text]
 
 _ALL_TV_SHOWS_ICON = join(_MEDIA_DIR, "all-tv-shows.png")

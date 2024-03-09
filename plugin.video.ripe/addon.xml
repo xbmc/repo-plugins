@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.ripe" name="RIPE Meetings" version="1.0.1" provider-name="Jose Antonio Montes (jamontes)">
+<addon id="plugin.video.ripe" name="RIPE Meetings" version="1.0.2" provider-name="Jose Antonio Montes (jamontes)">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
     </requires>
@@ -22,6 +22,8 @@
         <source>https://github.com/jamontes/plugin.video.ripe</source>
         <website>https://www.ripe.net/</website>
 	<news>
+          v1.0.2 (2023.03.08)
+          [fix] Quick fix due to website changes
           v1.0.1 (2023.05.30)
           [fix] Quick fix to watch the latest RIPE event
           v1.0.0 (2023.05.01)

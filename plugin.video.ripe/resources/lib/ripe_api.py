@@ -33,41 +33,32 @@ def set_debug(debug_flag, func_log=l.local_log):
 def get_events():
     """This function gest all the RIPE events from the RIPE website."""
     event_entry_sep       = '<tr>'
+    event_section_sep     = '<td>'
     event_pattern         = '(ripe[0-9]+)'
     name_pattern          = '>(RIPE [^<]+)'
-    site_pattern          = '<td>([^<]+)</td>'
-    dates_pattern         = '">([^<]+)</td>'
-    previous_pattern_sep  = '"collection_item">'
-    previous_date_pattern = 'line_date">([^<]+)</span>'
-    previous_site_pattern = '"location nobreak">([^<]+)</span>'
-    number_pattern        = '([0-9]+)'
+    field_pattern         = '<p data-block-key="[^"]+">([^<]+)</p>'
 
-    buffer_url = l.carga_web("https://www.ripe.net/participate/meetings/ripe-meetings/archive")
+    buffer_url = l.carga_web("https://www.ripe.net/membership/meetings/ripe-meetings/archive")
     events_list = []
     names_list = []
-    for event_section in buffer_url.split(event_entry_sep)[1:]:
+    for event_section in buffer_url.split(event_entry_sep)[2:]:
         ripe_event = l.find_first(event_section, event_pattern)
         if ripe_event == "ripe60": # From this event to backwards there are no playable videos
             break                  # into the presentations section.
         event_url = 'https://%s.ripe.net/archives/' % ripe_event
         event_name = l.find_first(event_section, name_pattern)
         names_list.append(event_name)
-        site_name = l.find_first(event_section, site_pattern)
-        dates = l.find_first(event_section, dates_pattern)
+        section_fields = event_section.split(event_section_sep)
+        if len(section_fields) == 4:
+            site_name = l.find_first(section_fields[2], field_pattern)
+            dates = l.find_first(section_fields[3], field_pattern)
+        else:
+            site_name = ""
+            dates = ""
+
         event_title = '%s - %s (%s)' % (event_name, site_name, dates)
         l.log('event url: "%s" name: "%s" site: "%s" dates: "%s"' % (event_url, event_name, site_name, dates))
         events_list.append((event_url, event_title, site_name))
-
-    previous_section = buffer_url.split(previous_pattern_sep)[2] or ''
-    event_name       = l.find_first(previous_section, name_pattern)
-    if previous_section and event_name not in names_list:
-        site_name = l.find_first(previous_section, previous_site_pattern)
-        dates = l.find_first(previous_section, previous_date_pattern)
-        event_number = l.find_first(event_name, number_pattern)
-        event_url = 'https://ripe%s.ripe.net/archives/' % event_number
-        event_title = '%s - %s (%s)' % (event_name, site_name, dates)
-        l.log('previous event url: "%s" name: "%s" site: "%s" dates: "%s"' % (event_url, event_name, site_name, dates))
-        events_list.insert(0, (event_url, event_title, site_name))
 
     return events_list
 

@@ -39,7 +39,6 @@
                 </setting>
                 <setting id="kodion.subtitle.configure" type="action" label="30600" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/config/subtitles/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
@@ -51,6 +50,7 @@
                             <condition name="InfoBool" on="property">true</condition>
                         </dependency>
                     </dependencies>
+                    <data>RunScript($ID,config/subtitles)</data>
                     <control format="action" type="button">
                         <close>true</close>
                     </control>
@@ -200,11 +200,11 @@
                 </setting>
             </group>
         </category>
-        <category id="mpeg-dash" label="30617" help="">
+        <category id="inputstream-adaptive" label="30617" help="">
             <group id="1">
-                <setting id="kodion.video.quality.mpd" type="boolean" label="30007" help="">
+                <setting id="kodion.video.quality.isa" type="boolean" label="30007" help="">
                     <level>0</level>
-                    <default>false</default>
+                    <default>true</default>
                     <dependencies>
                         <dependency type="enable">
                             <condition name="InfoBool" on="property">System.HasAddon(inputstream.adaptive)</condition>
@@ -212,17 +212,17 @@
                     </dependencies>
                     <control type="toggle"/>
                 </setting>
-                <setting id="kodion.video.quality.mpd.configure" type="action" label="30008" help="">
+                <setting id="kodion.video.quality.isa.configure" type="action" parent="kodion.video.quality.isa" label="30008" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/config/mpd/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
                     <dependencies>
                         <dependency type="enable">
-                            <condition setting="kodion.video.quality.mpd" operator="is">true</condition>
+                            <condition setting="kodion.video.quality.isa" operator="is">true</condition>
                         </dependency>
                     </dependencies>
+                    <data>RunScript($ID,config/isa)</data>
                     <control format="action" type="button">
                         <close>true</close>
                     </control>
@@ -234,7 +234,7 @@
                     <default>true</default>
                     <dependencies>
                         <dependency type="enable">
-                            <condition setting="kodion.video.quality.mpd" operator="is">true</condition>
+                            <condition setting="kodion.video.quality.isa" operator="is">true</condition>
                         </dependency>
                     </dependencies>
                     <control type="toggle"/>
@@ -262,15 +262,25 @@
                     <control format="string" type="spinner"/>
                 </setting>
                 <setting id="kodion.mpd.stream.features" type="list[string]" parent="kodion.mpd.videos" label="30748" help="">
-                   <level>0</level>
-                   <default>avc1,vp9,av01,hdr,hfr,vorbis,opus,mp4a,ssa,ac-3,ec-3,dts,filter</default>  <!-- All features -->
-                   <constraints>
+                    <level>0</level>
+                    <!--
+                    All selections enabled except:
+                        - Opus audio
+                        - no HFR at max quality
+                        - no fractional framerate hinting
+                        - no framerate hinting
+                    -->
+                    <default>avc1,vp9,av01,hdr,hfr,vorbis,mp4a,ssa,ac-3,ec-3,dts,filter</default>
+                    <constraints>
                         <options>
                             <option label="30727">avc1</option>
                             <option label="30728">vp9</option>
                             <option label="30749">av01</option>
                             <option label="30722">hdr</option>
                             <option label="30724">hfr</option>
+                            <option label="30768">no_hfr_max</option>
+                            <option label="30771">no_frac_fr_hint</option>
+                            <option label="30772">no_fr_hint</option>
                             <option label="30750">vorbis</option>
                             <option label="30751">opus</option>
                             <option label="30752">mp4a</option>
@@ -282,20 +292,20 @@
                         </options>
                         <delimiter>,</delimiter>
                         <minimumitems>1</minimumitems>
-                   </constraints>
-                   <dependencies>
+                    </constraints>
+                    <dependencies>
                         <dependency type="enable">
                             <condition setting="kodion.mpd.videos" operator="is">true</condition>
                         </dependency>
                     </dependencies>
-                   <control type="list" format="string">
-                       <multiselect>true</multiselect>
-                       <hidevalue>true</hidevalue>
-                   </control>
+                    <control type="list" format="string">
+                        <multiselect>true</multiselect>
+                        <hidevalue>true</hidevalue>
+                    </control>
                 </setting>
                 <setting id="kodion.mpd.stream.select" type="integer" parent="kodion.mpd.videos" label="30758" help="">
                     <level>0</level>
-                    <default>1</default>  <!-- auto -->
+                    <default>3</default>  <!-- auto+list -->
                     <constraints>
                         <options>
                             <option label="30583">1</option>  <!-- auto -->
@@ -312,37 +322,36 @@
                 </setting>
             </group>
             <group id="3" label="30690">
-                <setting id="kodion.mpd.live_stream.selection.1" type="integer" label="30689" help="">
+                <setting id="kodion.live_stream.selection.1" type="integer" label="30689" help="">
                     <level>0</level>
-                    <default>0</default>  <!-- mpegts -->
+                    <default>2</default>  <!-- isa_hls -->
                     <constraints>
                         <options>
-                            <option label="30740">0</option>  <!-- mpegts --> 
+                            <option label="30740">0</option>  <!-- mpegts -->
                             <option label="30741">1</option>  <!-- hls -->
-                            <option label="30742">2</option>  <!-- ia_hls -->
-                            <option label="30743">3</option>  <!-- ia_mpd -->
+                            <option label="30742">2</option>  <!-- isa_hls -->
+                            <option label="30743">3</option>  <!-- isa_mpd -->
                         </options>
                     </constraints>
                     <control format="string" type="spinner"/>
                     <dependencies>
                         <dependency type="visible">
-                            <condition setting="kodion.video.quality.mpd" operator="is">true</condition>
+                            <condition setting="kodion.video.quality.isa" operator="is">true</condition>
                         </dependency>
                     </dependencies>
                 </setting>
-                <setting id="kodion.mpd.live_stream.selection.2" type="integer" label="30689" help="">
+                <setting id="kodion.live_stream.selection.2" type="integer" label="30689" help="">
                     <level>0</level>
                     <default>0</default>  <!-- mpegts -->
                     <constraints>
                         <options>
                             <option label="30740">0</option>  <!-- mpegts -->
                             <option label="30741">1</option>  <!-- hls -->
-                            <option label="30742">2</option>  <!-- ia_hls -->
                         </options>
                     </constraints>
                     <dependencies>
                         <dependency type="visible">
-                            <condition setting="kodion.video.quality.mpd" operator="is">false</condition>
+                            <condition setting="kodion.video.quality.isa" operator="is">false</condition>
                         </dependency>
                     </dependencies>
                     <control format="string" type="spinner"/>
@@ -351,19 +360,19 @@
             <group id="4">
                 <setting id="kodion.install.inputstreamhelper" type="action" label="30623" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/maintain/inputstreamhelper/install/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
                     <dependencies>
                         <dependency type="enable">
                             <or>
-                                <condition setting="kodion.video.quality.mpd" operator="is">true</condition>
-                                <condition setting="kodion.mpd.live_stream.selection.1" operator="gt">1</condition>
-                                <condition setting="kodion.mpd.live_stream.selection.2" operator="gt">1</condition>
+                                <condition setting="kodion.video.quality.isa" operator="is">true</condition>
+                                <condition setting="kodion.live_stream.selection.1" operator="gt">1</condition>
+                                <condition setting="kodion.live_stream.selection.2" operator="gt">1</condition>
                             </or>
                         </dependency>
                     </dependencies>
+                    <data>RunScript($ID,config/inputstreamhelper)</data>
                     <control format="action" type="button"/>
                 </setting>
             </group>
@@ -417,6 +426,11 @@
                     </control>
                 </setting>
                 <setting id="youtube.folder.recommendations.show" type="boolean" label="30551" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="youtube.folder.related.show" type="boolean" label="30514" help="">
                     <level>0</level>
                     <default>true</default>
                     <control type="toggle"/>
@@ -578,34 +592,34 @@
             <group id="1">
                 <setting id="kodion.users.add" type="action" label="30661" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/users/add/?refresh=false)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,users/add)</data>
                     <control format="action" type="button"/>
                 </setting>
                 <setting id="kodion.users.remove" type="action" label="30662" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/users/remove/?refresh=false)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,users/remove)</data>
                     <control format="action" type="button"/>
                 </setting>
                 <setting id="kodion.users.rename" type="action" label="30663" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/users/rename/?refresh=false)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,users/rename)</data>
                     <control format="action" type="button"/>
                 </setting>
                 <setting id="kodion.users.switch" type="action" label="30664" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/users/switch/?refresh=false)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,users/switch/refresh=True)</data>
                     <control format="action" type="button"/>
                 </setting>
             </group>
@@ -624,10 +638,36 @@
                     </constraints>
                     <control format="string" type="spinner"/>
                 </setting>
-                <setting id="simple.requests.ssl.verify" type="boolean" label="30578" help="">
+                <setting id="requests.ssl.verify" type="boolean" label="30578" help="">
                     <level>0</level>
                     <default>true</default>
                     <control type="toggle"/>
+                </setting>
+                <setting id="requests.timeout.connect" type="integer" label="30764" help="">
+                    <level>0</level>
+                    <default>9</default>
+                    <constraints>
+                        <minimum>3</minimum>
+                        <step>3</step>
+                        <maximum>120</maximum>
+                    </constraints>
+                    <control format="integer" type="slider">
+                        <popup>false</popup>
+                        <formatlabel>14045</formatlabel>
+                    </control>
+                </setting>
+                <setting id="requests.timeout.read" type="integer" label="30765" help="">
+                    <level>0</level>
+                    <default>27</default>
+                    <constraints>
+                        <minimum>10</minimum>
+                        <step>1</step>
+                        <maximum>120</maximum>
+                    </constraints>
+                    <control format="integer" type="slider">
+                        <popup>false</popup>
+                        <formatlabel>14045</formatlabel>
+                    </control>
                 </setting>
                 <setting id="kodion.support.alternative_player" type="boolean" label="30036" help="">
                     <level>0</level>
@@ -644,7 +684,12 @@
                     </dependencies>
                     <control type="toggle"/>
                 </setting>
-                <setting id="youtube.view.description.show_channel_name" type="boolean" label="30541" help="">
+                <setting id="youtube.view.description.details" type="boolean" label="30541" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="youtube.view.label.details" type="boolean" label="30773" help="">
                     <level>0</level>
                     <default>true</default>
                     <control type="toggle"/>
@@ -653,7 +698,7 @@
             <group id="2">
                 <setting id="kodion.history.local" type="boolean" label="30675" help="">
                     <level>0</level>
-                    <default>false</default>
+                    <default>true</default>
                     <control type="toggle"/>
                 </setting>
                 <setting id="kodion.history.remote" type="boolean" label="30761" help="">
@@ -665,7 +710,7 @@
             <group id="3">
                 <setting id="kodion.cache.size" type="integer" label="30024" help="">
                     <level>0</level>
-                    <default>10</default>
+                    <default>20</default>
                     <constraints>
                         <minimum>5</minimum>
                         <step>1</step>
@@ -756,17 +801,21 @@
                 </setting>
                 <setting id="kodion.http.listen.select" type="action" label="30644" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/config/listen_ip/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,config/listen_ip)</data>
                     <control format="action" type="button">
                         <close>true</close>
                     </control>
                 </setting>
-                <setting id="kodion.mpd.proxy.port" type="integer" label="30619" help="">
+                <setting id="kodion.http.port" type="integer" label="30619" help="">
                     <level>0</level>
                     <default>50152</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <maximum>65535</maximum>
+                    </constraints>
                     <dependencies>
                         <dependency type="enable">
                             <condition name="InfoBool" on="property">true</condition>
@@ -793,10 +842,10 @@
                 </setting>
                 <setting id="kodion.http.client.ip" type="action" label="30698" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/show_client_ip/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,config/show_client_ip)</data>
                     <control format="action" type="button"/>
                 </setting>
             </group>
@@ -851,78 +900,78 @@
             <group id="1">
                 <setting id="kodion.maintain.clear.func" type="action" label="30555" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/maintain/function_cache/clear/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,maintenance/clear/function_cache)</data>
                     <control format="action" type="button"/>
                 </setting>
                 <setting id="kodion.maintain.clear.data" type="action" label="30686" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/maintain/data_cache/clear/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,maintenance/clear/data_cache)</data>
                     <control format="action" type="button"/>
                 </setting>
                 <setting id="kodion.maintain.clear.search" type="action" label="30556" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/maintain/search_cache/clear/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,maintenance/clear/search_cache)</data>
                     <control format="action" type="button"/>
                 </setting>
                 <setting id="kodion.maintain.clear.playback.history" type="action" label="30671" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/maintain/playback_history/clear/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,maintenance/clear/playback_history)</data>
                     <control format="action" type="button"/>
                 </setting>
             </group>
             <group id="2">
                 <setting id="kodion.maintain.delete.func" type="action" label="30553" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/maintain/function_cache/delete/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,maintenance/delete/function_cache)</data>
                     <control format="action" type="button"/>
                 </setting>
                 <setting id="kodion.maintain.delete.data" type="action" label="30685" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/maintain/data_cache/delete/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,maintenance/delete/data_cache)</data>
                     <control format="action" type="button"/>
                 </setting>
                 <setting id="kodion.maintain.delete.search" type="action" label="30554" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/maintain/search_cache/delete/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,maintenance/delete/search_cache)</data>
                     <control format="action" type="button"/>
                 </setting>
                 <setting id="kodion.maintain.delete.playback.history" type="action" label="30672" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/maintain/playback_history/delete/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,maintenance/delete/playback_history)</data>
                     <control format="action" type="button"/>
                 </setting>
             </group>
             <group id="3">
                 <setting id="kodion.maintain.reset.accessmanager" type="action" label="30580" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/maintain/access_manager/reset/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunPlugin(plugin://$ID/maintenance/reset/access_manager)</data>
                     <control format="action" type="button">
                         <close>true</close>
                     </control>
@@ -931,94 +980,37 @@
             <group id="4">
                 <setting id="kodion.maintain.delete.settings" type="action" label="30559" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/maintain/settings_xml/delete/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,maintenance/delete/settings_xml)</data>
                     <control format="action" type="button">
                         <close>true</close>
                     </control>
                 </setting>
                 <setting id="kodion.maintain.delete.api_keys" type="action" label="30641" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/maintain/api_keys/delete/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,maintenance/delete/api_keys)</data>
                     <control format="action" type="button"/>
                 </setting>
                 <setting id="kodion.maintain.delete.access_manager" type="action" label="30642" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/maintain/access_manager/delete/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,maintenance/delete/access_manager)</data>
                     <control format="action" type="button"/>
                 </setting>
                 <setting id="kodion.maintain.delete.temp" type="action" label="30626" help="">
                     <level>0</level>
-                    <data>RunPlugin(plugin://plugin.video.youtube/maintain/temp_files/delete/)</data>
                     <constraints>
                         <allowempty>true</allowempty>
                     </constraints>
+                    <data>RunScript($ID,maintenance/delete/temp_files)</data>
                     <control format="action" type="button"/>
-                </setting>
-                <setting id="kodion.access_token" type="string" label="" help="">
-                    <level>0</level>
-                    <default/>
-                    <constraints>
-                        <allowempty>true</allowempty>
-                    </constraints>
-                    <dependencies>
-                        <dependency type="visible">
-                            <condition name="InfoBool" on="property">false</condition>
-                        </dependency>
-                    </dependencies>
-                    <control format="string" type="edit">
-                        <heading/>
-                    </control>
-                </setting>
-                <setting id="kodion.refresh_token" type="string" label="" help="">
-                    <level>0</level>
-                    <default/>
-                    <constraints>
-                        <allowempty>true</allowempty>
-                    </constraints>
-                    <dependencies>
-                        <dependency type="visible">
-                            <condition name="InfoBool" on="property">false</condition>
-                        </dependency>
-                    </dependencies>
-                    <control format="string" type="edit">
-                        <heading/>
-                    </control>
-                </setting>
-                <setting id="kodion.access_token.expires" type="integer" label="" help="">
-                    <level>0</level>
-                    <default>0</default>
-                    <dependencies>
-                        <dependency type="visible">
-                            <condition name="InfoBool" on="property">false</condition>
-                        </dependency>
-                    </dependencies>
-                    <control format="integer" type="edit">
-                        <heading/>
-                    </control>
-                </setting>
-                <setting id="youtube.api.last.hash" type="string" label="" help="">
-                    <level>0</level>
-                    <default/>
-                    <constraints>
-                        <allowempty>true</allowempty>
-                    </constraints>
-                    <dependencies>
-                        <dependency type="visible">
-                            <condition name="InfoBool" on="property">false</condition>
-                        </dependency>
-                    </dependencies>
-                    <control format="string" type="edit">
-                        <heading/>
-                    </control>
                 </setting>
             </group>
         </category>

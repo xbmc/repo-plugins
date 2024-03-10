@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.bluetoothctl" name="Bluetoothctl" version="1.0.1" provider-name="JimMadge">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="xbmc.addon" version="18.9.701"/>
+        <import addon="xbmc.gui" version="5.15.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <news>
+            v1.0.1 (2022-03-06)
+            [fix] Improve support for Python &lt; 3.9
+        </news>
+        <platform>linux</platform>
+        <summary lang="en">Interface to bluetoothctl</summary>
+        <description lang="en">Manage bluetooth devices using bluetoothctl</description>
+        <license>GPL-3.0-only</license>
+        <source>https://github.com/JimMadge/plugin.program.bluetoothctl</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

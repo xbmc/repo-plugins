@@ -8,8 +8,6 @@
     See LICENSES/GPL-2.0-only for more information.
 """
 
-from six.moves import range
-
 
 class JsonScriptEngine(object):
     def __init__(self, json_script):
@@ -20,7 +18,7 @@ class JsonScriptEngine(object):
 
         _actions = self._json_script['actions']
         for action in _actions:
-            func = ''.join(['_', action['func']])
+            func = ''.join(('_', action['func']))
             params = action['params']
 
             if func == '_return':

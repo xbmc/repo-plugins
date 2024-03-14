@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-03-22 22:39+0000\n"
+"PO-Revision-Date: 2024-03-09 00:13+0000\n"
 "Last-Translator: Minho Park <parkmino@gmail.com>\n"
 "Language-Team: Korean <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/ko_kr/>\n"
 "Language: ko_kr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 5.4\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -526,7 +526,7 @@ msgstr ""
 
 msgctxt "#30126"
 msgid "Default"
-msgstr ""
+msgstr "기본"
 
 msgctxt "#30127"
 msgid "Show All"
@@ -749,7 +749,7 @@ msgstr ""
 
 msgctxt "#30371"
 msgid "Trending"
-msgstr ""
+msgstr "인기 급상승"
 
 # empty strings from id 30365 to 30400
 msgctxt "#30401"

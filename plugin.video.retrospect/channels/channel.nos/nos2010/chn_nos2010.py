@@ -715,8 +715,9 @@ class Channel(chn_class.Channel):
         return epg_data, []
 
     def create_api_epg_item(self, result_set: dict) -> Optional[MediaItem]:
-        series_slug = (result_set["series"] or {}).get("slug")
-        program_guid = (result_set["program"] or {}).get("guid")
+        Logger.debug(result_set)
+        series_slug = (result_set.get("series") or {}).get("slug")
+        program_guid = (result_set.get("program") or {}).get("guid")
         season_slug = None
 
         if not series_slug and program_guid:

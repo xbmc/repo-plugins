@@ -122,6 +122,8 @@ class CacheHTTPAdapter(HTTPAdapter):
 
         if "cache-control" in headers:
             cache_control = headers['cache-control']
+            #Some responses contain ';' as a delimiter. Fixing that.
+            cache_control = cache_control.replace(";", ",")
             for entry in cache_control.strip().split(","):
                 if entry.find("=") > 0:
                     (key, value) = entry.split("=")

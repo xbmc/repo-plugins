@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.7.7"
+        version="5.7.8"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -123,9 +123,9 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.7.7 - Changelog - 2024-02-23[/B]
+        <news>[B]Retrospect v5.7.8 - Changelog - 2024-03-14[/B]
 
-This is a quick fix for the NPO and ONS channel.
+This release contains a number of fixes for the NRK, TV4 and NPO channels.
 
 [B]Framework related[/B]
 _None_
@@ -134,8 +134,12 @@ _None_
 _None_
 
 [B]Channel related[/B]
-* Fixed: ONS Playback (Fixes #1761)
-* Fixed: NPO Playback (Fixes #1762)
+* Fixed: NRK occasionally using timestamps with sub-second precision.
+* Fixed: Some TV4 seasons did not have a title, which broke listings (Fixes #1766).
+* Fixed: NRK Categories.
+* Fixed: NRK Recommended (See #1770).
+* Fixed: NPO Recent parsing (Fixes #1771).
+
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

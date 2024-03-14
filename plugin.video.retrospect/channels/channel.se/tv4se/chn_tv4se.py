@@ -415,6 +415,8 @@ class Channel(chn_class.Channel):
 
     def create_api_season(self, result_set: dict) -> Optional[MediaItem]:
         title = result_set["title"]
+        if not title:
+            return None
         season_id = result_set["seasonId"]
         url, json_data = self.__get_api_query("SeasonEpisodes", {"seasonId": season_id, "input": {"limit": self.__max_page_size, "offset": 0}})
         item = FolderItem(title, url, content_type=contenttype.EPISODES, media_type=mediatype.FOLDER)

@@ -2,11 +2,13 @@
 # encoding: UTF-8
 
 from __future__ import absolute_import
+
+from urllib.parse import quote_plus as quote
+
+import sarpur
 import xbmc
 import xbmcgui
 import xbmcplugin
-from urllib.parse import quote_plus as quote
-import sarpur
 from sarpur import logger  # noqa
 from util import strptime
 
@@ -30,19 +32,18 @@ class GUI(object):
         format_params = {
             "base_url": self.base_url,
             "key": quote(action_key),
-            "value": quote(action_value.encode('utf-8')),
-            "name": quote(name.encode('utf-8'))
+            "value": quote(action_value.encode("utf-8")),
+            "name": quote(name.encode("utf-8")),
         }
-        return (
-            "{base_url}?action_key={key}&"
-            "action_value={value}&name={name}".format(**format_params)
+        return "{base_url}?action_key={key}&" "action_value={value}&name={name}".format(
+            **format_params
         )
 
     def _add_dir(
         self,
         name,
-        action_key='',
-        action_value='',
+        action_key="",
+        action_value="",
         image=None,
         is_folder=False,
         extra_info=None,
@@ -66,9 +67,9 @@ class GUI(object):
         list_item.setArt({"icon": image, "thumbnail": ""})
         if selectable:
             url = self._get_url(action_key, action_value, name)
-            list_item.setProperty('IsPlayable', 'true')
+            list_item.setProperty("IsPlayable", "true")
         else:
-            url = ''
+            url = ""
 
         info_labels = {"Title": name}
         if extra_info:
@@ -84,13 +85,10 @@ class GUI(object):
             list_item.setSubtitles([sub for sub in subtitles if sub])
 
         xbmcplugin.addDirectoryItem(
-            handle=self.addon_handle,
-            url=url,
-            listitem=list_item,
-            isFolder=is_folder)
+            handle=self.addon_handle, url=url, listitem=list_item, isFolder=is_folder
+        )
 
-    def add_dir(self, name, action_key, action_value,
-                image='DefaultFolder.png'):
+    def add_dir(self, name, action_key, action_value, image="DefaultFolder.png"):
         """
         Create link that leads to another folder (or "folder")
 
@@ -107,9 +105,16 @@ class GUI(object):
             is_folder=True,
         )
 
-    def add_item(self, name, action_key, action_value,
-                 image='DefaultMovies.png', extra_info=None, context_menu=[],
-                 subtitles=None):
+    def add_item(
+        self,
+        name,
+        action_key,
+        action_value,
+        image="DefaultMovies.png",
+        extra_info=None,
+        context_menu=[],
+        subtitles=None,
+    ):
         """
         Create link to playable item (wrapper function for _addDir).
 
@@ -130,7 +135,7 @@ class GUI(object):
         )
 
     def add_unselectable_item(self, name, image, extra_info=None):
-        unselectable_name = '[COLOR red]{0}[/COLOR]'.format(name)
+        unselectable_name = "[COLOR red]{0}[/COLOR]".format(name)
         self._add_dir(
             name=unselectable_name,
             image=image,
@@ -139,48 +144,50 @@ class GUI(object):
         )
 
     def add_program_dir(self, program):
-        title = program['title'] or program['foreign_title']
+        title = program["title"] or program["foreign_title"]
         if title:
             self.add_dir(
                 title,
-                'list_program_episodes',
-                str(program['id']),
-                image=program.get('image'),
+                "list_program_episodes",
+                str(program["id"]),
+                image=program["image"],
             )
 
     def add_program_episode(self, program, episode):
-        if episode['title'] and program['title']:
-            title = '{0} - {1}'.format(program['title'], episode['title'])
-        elif episode['title']:
-            title = episode['title']
+        if episode["title"] and program["title"]:
+            title = "{0} - {1}".format(program["title"], episode["title"])
+        elif episode["title"]:
+            title = episode["title"]
         else:
-            title = program['title']
+            title = program["title"]
         context_menu = []
-        if program['web_available_episodes'] > 1:
-            context_menu.append((
-                sarpur.getLocalizedString(30910),
-                'XBMC.Container.Update({0})'.format(
-                    self._get_url(
-                        'list_program_episodes',
-                        str(program['id']),
-                        title,
-                    )
+        if program["web_available_episodes"] > 1:
+            context_menu.append(
+                (
+                    sarpur.getLocalizedString(30910),
+                    "XBMC.Container.Update({0})".format(
+                        self._get_url(
+                            "list_program_episodes",
+                            str(program["id"]),
+                            title,
+                        )
+                    ),
                 )
-            ))
+            )
         self.add_item(
             title,
-            'play_video',
-            episode['file'],
-            image=program.get('image'),
-            subtitles=[episode.get('subtitles_url')],
+            "play_video",
+            episode["file"],
+            image=program.get("image"),
+            subtitles=[episode.get("subtitles_url")],
             extra_info={
-                'Episode': program['episodes'][0]['number'],
-                'Premiered': strptime(
-                    program['episodes'][0]['firstrun'],
-                    '%Y-%m-%d %H:%M:%S',
-                ).strftime('%d.%m.%Y'),
-                'TotalEpisodes': program['web_available_episodes'],
-                'Plot': '\n'.join(program.get('description', []))
+                "Episode": program["episodes"][0]["number"],
+                "Premiered": strptime(
+                    program["episodes"][0]["firstrun"],
+                    "%Y-%m-%dT%H:%M:%S",
+                ).strftime("%d.%m.%Y"),
+                "TotalEpisodes": program["web_available_episodes"],
+                "Plot": "\n".join(program.get("description", [])),
             },
             context_menu=context_menu,
         )
@@ -203,7 +210,7 @@ class GUI(object):
         :param title: Name of the modal window
         :return: User's input or None
         """
-        keyboard = xbmc.Keyboard('', title)
+        keyboard = xbmc.Keyboard("", title)
         keyboard.doModal()
         if keyboard.isConfirmed():
             return keyboard.getText().strip()

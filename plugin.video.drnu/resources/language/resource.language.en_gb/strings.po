@@ -82,6 +82,10 @@ msgctxt "#30105"
 msgid "Minisjang"
 msgstr ""
 
+msgctxt "#30106"
+msgid "Gensyn"
+msgstr ""
+
 
 # SETTINGS
 msgctxt "#30200"

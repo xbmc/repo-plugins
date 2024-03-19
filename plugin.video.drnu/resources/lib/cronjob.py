@@ -7,7 +7,7 @@ cmd_js = {
     "method": "Addons.ExecuteAddon",
     "params": {
         "addonid": "plugin.video.drnu",
-        "params": ["?reCache=1"]
+        "params": ["?reCache=2"]
         },
     "id": "1"
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="6.3.1" name="DR TV" provider-name="TermeHansen">
+<addon id="plugin.video.drnu" version="6.4.0" name="DR TV" provider-name="TermeHansen">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.dateutil" version="2.8.2" />
@@ -32,6 +32,11 @@
             <screenshot>resources/media/Screenshot3.jpg</screenshot>
             <screenshot>resources/media/Screenshot4.jpg</screenshot>
        </assets>
+       <news>[B]Version 6.4.0 - 2024-03-19[/B]
+        - add the new Gensyn area
+        - change Ultra area to not be kids area
+        - fix link item issue
+       </news>
        <news>[B]Version 6.3.1 - 2024-03-05[/B]
         - fix refresh token bug
         - fix watchlist missing resume time bug

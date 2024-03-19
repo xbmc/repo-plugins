@@ -60,6 +60,13 @@ class AreaSelectorDialog(xbmcgui.WindowDialog):
             noFocusTexture=str(resources_path/'media/button-ultra.png')
         )
 
+        self.gensynButton = xbmcgui.ControlButton(
+            int(1280/2 - 150), int(y_border + 100), 300, 150, "",
+            focusTexture=str(resources_path/'media/gensyn-focus.png'),
+            noFocusTexture=str(resources_path/'media/gensyn.png')
+        )
+
+
         self.addControls([
             background,
             title,
@@ -67,21 +74,26 @@ class AreaSelectorDialog(xbmcgui.WindowDialog):
             self.ramasjangButton,
             self.minisjangButton,
             self.ultraButton,
+            self.gensynButton,
         ])
 
-        self.drTvButton.controlRight(self.ramasjangButton)
+        self.drTvButton.controlRight(self.gensynButton)
         self.drTvButton.controlDown(self.ramasjangButton)
         self.drTvButton.controlLeft(self.ultraButton)
 
         self.ramasjangButton.controlLeft(self.drTvButton)
-        self.ramasjangButton.controlUp(self.drTvButton)
+        self.ramasjangButton.controlUp(self.gensynButton)
         self.ramasjangButton.controlRight(self.minisjangButton)
+
+        self.gensynButton.controlRight(self.ultraButton)
+        self.gensynButton.controlDown(self.ramasjangButton)
+        self.gensynButton.controlLeft(self.drTvButton)
 
         self.minisjangButton.controlLeft(self.ramasjangButton)
         self.minisjangButton.controlUp(self.ultraButton)
         self.minisjangButton.controlRight(self.ultraButton)
 
-        self.ultraButton.controlLeft(self.minisjangButton)
+        self.ultraButton.controlLeft(self.gensynButton)
         self.ultraButton.controlDown(self.minisjangButton)
         self.ultraButton.controlRight(self.drTvButton)
 
@@ -89,6 +101,7 @@ class AreaSelectorDialog(xbmcgui.WindowDialog):
         self.areaSelected = 'drtv'
 
         self.id_to_handle = {
+            self.gensynButton.getId(): 'gensyn',
             self.drTvButton.getId(): 'drtv',
             self.ramasjangButton.getId(): 'ramasjang',
             self.minisjangButton.getId(): 'minisjang',

@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<settings version="1">
+  <section id="plugin.program.ryujinx">
+    <category help="" id="general" label="32000">
+      <group id="1">
+        <setting help="" id="emulator_path" label="32001" type="path">
+          <level>0</level>
+          <default/>
+          <constraints>
+            <writable>false</writable>
+            <masking>executable</masking>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control format="file" type="button">
+            <heading>32001</heading>
+          </control>
+        </setting>
+        <setting help="" id="game_dir_path" label="32002" type="path">
+          <level>0</level>
+          <default/>
+          <constraints>
+            <writable>false</writable>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control format="path" type="button">
+            <heading>32002</heading>
+          </control>
+        </setting>
+      </group>
+    </category>
+  </section>
+</settings>

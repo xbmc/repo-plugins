@@ -1,3 +1,8 @@
+[B]Version 6.4.0 - 2024-03-19[/B]
+- add the new Gensyn area
+- change Ultra area to not be kids area
+- fix link item issue
+
 [B]Version 6.3.1 - 2024-03-05[/B]
 - fix refresh token bug
 - fix watchlist missing resume time bug

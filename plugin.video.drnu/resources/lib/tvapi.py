@@ -292,11 +292,16 @@ class Api():
         data = {'page_size': '24'}
         if param != 'NoParam':
             data['param'] = param
-        return self._request_get(url, params=data, use_cache=use_cache)
+        ret = self._request_get(url, params=data, use_cache=use_cache)
+        if len(ret['items']) == 0:
+            ret = self.get_recommendations(id, use_cache=use_cache, param=param)
+        return ret
 
-    def get_recommendations(self, id, use_cache=True):
+    def get_recommendations(self, id, use_cache=True, param=[]):
         url = URL + f'/recommendations/{id}'
         data = {'page_size': '24'}
+        if param:
+            data['param'] = param
         headers = {"X-Authorization": f'Bearer {self.profile_token()}'}
         return self._request_get(url, params=data, headers=headers, use_cache=use_cache)
 
@@ -357,7 +362,7 @@ class Api():
             if item['classification']['code'] in ['DR-Ramasjang', 'DR-Minisjang']:
                 return True
         if 'categories' in item:
-            for cat in ['dr minisjang', 'dr ramasjang', 'dr ultra']:
+            for cat in ['dr minisjang', 'dr ramasjang']:
                 if cat in item['categories']:
                     return True
         return False

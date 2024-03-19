@@ -91,6 +91,7 @@ class DrDkTvAddon(object):
         # Area Selector
         self.area_item = xbmcgui.ListItem(tr(30101), offscreen=True)
         self.area_item.setArt({'fanart': self.fanart_image, 'icon': str(resources_path/'icons/all.png')})
+        self.current_area = 'drtv'
 
         setup_cronjob(addon_path, bool_setting, get_setting)
         self._version_change_fixes()
@@ -138,6 +139,12 @@ class DrDkTvAddon(object):
                 pass
             elif areaSelected == 'drtv':
                 self.showMainMenu()
+            elif areaSelected == 'gensyn':
+                self.current_area = 'gensyn'
+                self.list_entries('/gensyn')
+            elif areaSelected == 'ultra':
+                self.current_area = 'ultra'
+                self.list_entries('/ultra')
             else:
                 items = self.api.get_children_front_items('dr-' + areaSelected)
                 self.listEpisodes(items)
@@ -168,6 +175,12 @@ class DrDkTvAddon(object):
                      'icon': str(resources_path/'media/button-ultra.png')})
         item.addContextMenuItems(self.menuItems, False)
         items.append((self._plugin_url + '?area=4', item, True))
+        # Gensyn
+        item = xbmcgui.ListItem('Gensyn', offscreen=True)
+        item.setArt({'fanart': str(resources_path/'media/gensyn.png'),
+                     'icon': str(resources_path/'media/gensyn.png')})
+        item.addContextMenuItems(self.menuItems, False)
+        items.append((self._plugin_url + '?area=5', item, True))
 
         xbmcplugin.addDirectoryItems(self._plugin_handle, items)
         xbmcplugin.endOfDirectory(self._plugin_handle)
@@ -315,7 +328,7 @@ class DrDkTvAddon(object):
     def kodi_item(self, item, is_season=False):
         menuItems = list(self.menuItems)
         isFolder = item['type'] not in ['program', 'episode']
-        if item['type'] == 'link':
+        if item.get('path','').startswith('/kanal/') and item['type'] == 'link':
             isFolder = False
         if item['type'] in ['ImageEntry', 'TextEntry'] or item['title'] == '':
             return None
@@ -332,9 +345,14 @@ class DrDkTvAddon(object):
                              'fanart': item['images']['wallpaper']
                              })
         else:
-            listItem.setArt({'fanart': self.fanart_image, 'icon': str(resources_path/'icons/star.png')})
+            icon_file = str(resources_path/'icons/star.png')
+            if self.current_area == 'ultra':
+                icon_file = str(resources_path/'icons/ultra.png')
+            elif self.current_area == 'gensyn':
+                icon_file = str(resources_path/'icons/gensyn.png')
+            listItem.setArt({'fanart': self.fanart_image, 'icon': icon_file})
 
-        log(title + ' -- ' + item['id'] + ' | ' + item['type'], level=2)
+        log(f'{title} -- {item["id"]} | {item["type"]} | {item.get("path")}', level=2)
         if item.get('in_mylist', False):
             runScript = f"RunPlugin(plugin://plugin.video.drnu/?delfavorite={item['id']})"
             menuItems.append((tr(30010), runScript))
@@ -486,8 +504,8 @@ class DrDkTvAddon(object):
                     player.showSubtitles(True)
                 else:
                     player.showSubtitles(False)
-    def resfresh_ui(self):
-        xbmc.executebuiltin(f'Container.Update({self._plugin_url})')
+    def resfresh_ui(self, params=''):
+        xbmc.executebuiltin(f'Container.Update({self._plugin_url + params})')
 
     def login(self):
         err = self.api.request_tokens()
@@ -502,7 +520,7 @@ class DrDkTvAddon(object):
                 self.displayError(err)
             else:
                 xbmcgui.Dialog().ok(tr(30303), tr(30305))
-                self.resfresh_ui()
+                self.resfresh_ui('?area=1')
 
     def displayError(self, message='n/a'):
         heading = 'API error'
@@ -541,7 +559,10 @@ class DrDkTvAddon(object):
                 seasons = PARAMS.get('seasons', 'False') == 'True'
                 if PARAMS['listVideos'].startswith('ID_'):
                     items = self.api.get_list(PARAMS['listVideos'], PARAMS['list_param'])
-                    self.listEpisodes(self.api.unfold_list(items, filter_kids=bool_setting('disable.kids')))
+                    filter_kids = bool_setting('disable.kids')
+                    if 'Ultra' in items['title']:
+                        filter_kids = False
+                    self.listEpisodes(self.api.unfold_list(items, filter_kids=filter_kids))
                 else:
                     self.list_entries(PARAMS['listVideos'], seasons)
 
@@ -552,8 +573,10 @@ class DrDkTvAddon(object):
                 self.api.add_to_mylist(PARAMS['addfavorite'])
             elif 'delfavorite' in PARAMS:
                 self.api.delete_from_mylist(PARAMS['delfavorite'])
+                self.resfresh_ui('?show=mylist')
             elif 'delwatched' in PARAMS:
                 self.api.delete_from_watched(PARAMS['delwatched'])
+                self.resfresh_ui('?show=continue')
 
             elif 'loginnow' in PARAMS:
                 self.login()
@@ -565,6 +588,9 @@ class DrDkTvAddon(object):
                 self.api.recache_items(clear_expired=True, progress=progress)
                 progress.update(100)
                 progress.close()
+                if PARAMS['re-cache'] == 2:
+                    xbmc.executebuiltin('ActivateWindow(Home)')
+
             else:
                 area = int(get_setting('area'))
                 if 'area' in PARAMS:
@@ -580,8 +606,11 @@ class DrDkTvAddon(object):
                     items = self.api.get_children_front_items('dr-ramasjang')
                     self.listEpisodes(items)
                 elif area == 4:
-                    items = self.api.get_children_front_items('dr-ultra')
-                    self.listEpisodes(items)
+                    self.current_area = 'ultra'
+                    self.list_entries('/ultra')
+                elif area == 5:
+                    self.current_area = 'gensyn'
+                    self.list_entries('/gensyn')
 
         except tvapi.ApiException as ex:
             self.displayError(str(ex))

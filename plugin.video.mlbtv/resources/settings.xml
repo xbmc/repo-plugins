@@ -25,7 +25,7 @@
     <setting id="hide_scores_ticker" type="bool" label="30436" default="false" />
     <setting id="disable_video_padding" type="bool" label="30416" default="false" />
     <setting id="disable_closed_captions" type="bool" label="30437" default="false" />
-    <setting id="fav_team" type="select" multiselect="true" label="30180" default="None" values="None|Washington Nationals|Toronto Blue Jays|Texas Rangers|Tampa Bay Rays|St. Louis Cardinals|Seattle Mariners|San Francisco Giants|San Diego Padres|Pittsburgh Pirates|Philadelphia Phillies|Oakland Athletics|New York Yankees|New York Mets|Minnesota Twins|Milwaukee Brewers|Miami Marlins|Los Angeles Dodgers|Los Angeles Angels|Kansas City Royals|Houston Astros|Detroit Tigers|Colorado Rockies|Cleveland Guardians|Cincinnati Reds|Chicago White Sox|Chicago Cubs|Boston Red Sox|Baltimore Orioles|Atlanta Braves|Arizona Diamondbacks" />
+    <setting id="fav_team" type="select" label="30180" default="None" values="None|Washington Nationals|Toronto Blue Jays|Texas Rangers|Tampa Bay Rays|St. Louis Cardinals|Seattle Mariners|San Francisco Giants|San Diego Padres|Pittsburgh Pirates|Philadelphia Phillies|Oakland Athletics|New York Yankees|New York Mets|Minnesota Twins|Milwaukee Brewers|Miami Marlins|Los Angeles Dodgers|Los Angeles Angels|Kansas City Royals|Houston Astros|Detroit Tigers|Colorado Rockies|Cleveland Guardians|Cincinnati Reds|Chicago White Sox|Chicago Cubs|Boston Red Sox|Baltimore Orioles|Atlanta Braves|Arizona Diamondbacks" />
     <setting id="include_fav_affiliates" type="bool" label="30427" default="true" />
 
     <setting id="team_names" type="select" label="30190" lvalues="30191|30192" default="0" />

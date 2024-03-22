@@ -961,17 +961,18 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
         # if not live and no spoilers and not audio, generate a random number of segments to pad at end of proxy stream url
         elif DISABLE_VIDEO_PADDING == 'false' and is_live is False and spoiler == 'False' and stream_type != 'audio':
             pad = random.randint((3600 / SECONDS_PER_SEGMENT), (7200 / SECONDS_PER_SEGMENT))
-            headers += '&pad=' + str(pad)
-            stream_url = 'http://127.0.0.1:43670/' + stream_url
+            # pass padding as URL querystring parameter
+            stream_url = 'http://127.0.0.1:43670/' + stream_url + '?pad=' + str(pad)
 
-        # add alternate audio tracks, if necessary
+        # add extra alternate audio tracks, if necessary
         if DISABLE_VIDEO_PADDING == 'false' and (alternate_english is not None or alternate_spanish is not None):
-            if alternate_english is not None:
-                headers += '&alternate_english=' + urllib.quote_plus(alternate_english)
-            if alternate_spanish is not None:
-                headers += '&alternate_spanish=' + urllib.quote_plus(alternate_spanish)
+            # pass any extra alternate audio tracks as URL querystring parameters
             if not stream_url.startswith('http://127.0.0.1:43670/'):
-                stream_url = 'http://127.0.0.1:43670/' + stream_url
+                stream_url = 'http://127.0.0.1:43670/' + stream_url + '?'
+            if alternate_english is not None:
+                stream_url += '&alternate_english=' + urllib.quote_plus(alternate_english)
+            if alternate_spanish is not None:
+                stream_url += '&alternate_spanish=' + urllib.quote_plus(alternate_spanish)
 
         # valid stream url
         if '.m3u8' in stream_url:

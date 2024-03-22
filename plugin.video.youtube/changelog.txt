@@ -1,3 +1,66 @@
+## v7.0.4
+### Fixed
+- Fix issues with Profiler running without timer when debug logging was enabled
+- Fix additional Python 2 unicode handling issues when accessing My Subscription #639
+
+ ### Changed
+ - Only set combined cache size to 20 MB in Setup Wizard if value is not already larger
+ - Cached playlist items will be forced to reload when deleting item from playlist rather than waiting 5 minutes
+
+ ### New
+ - Make colours used for extra details in video listings customisable in Kodi 20+
+
+## v7.0.4+beta.2
+### Fixed
+- Overhaul of http server settings to try and fix #633
+- Fix unicode handling error when accessing My Subscriptions in Kodi 18 #636
+- Update url resolver
+  - remove redundant resolving attempt
+  - attempt to bypass cookie consent redirect #631
+
+### Changed
+- Live stream sorting changed
+  - Upcoming sorted by date
+  - Live sorted by most viewed
+  - Completed by most viewed in last 3 days
+- Update setup wizard performance tier settings
+  - Disable MPEG-DASH for old devices
+  - Enable VP9 for low powered devices
+
+### New
+- Kodi 18 (Leia) release available
+  - These releases are unsupported and may not be completely functional
+  - If something works, then that is good
+  - If something doesn't work, it will not be addressed unless it applies to Kodi 19+
+  - Known issues:
+    - accessing script actions through settings does not work (e.g. maintenance and user actions)
+- Setup wizard will disable use of website urls if no playercorefactory.xml is found #632
+
+## v7.0.4+beta.1
+### Fixed
+- Workarounds for buggy language and region details in Kodi
+- Incorrect language fallbacks for subtitles
+- Trying to use InputStream.Adaptive to load downloaded subtitles #624
+- Duplicated/overridden subtitles with same language but different type
+- Missing order parameter used when loading playlists #607
+
+### Changed
+- Setup Wizard replaces Settings in main menu
+  - Settings available as seperate item
+- Settings have been re-organised to group similar settings together
+  - Less commonly changed settings have all been moved to Advanced settings tab
+- Updated client versions used for API, login, and player requests
+- Improve language display for subtitles loaded through InputStream.Adaptive
+- Updated translatons to reflect API config page moving to http://<ipaddress>:<port>/youtube/api #618
+- Update script.module.requests min version required #610
+
+### New
+- Setup Wizard now provides ability to set recommended setting values
+- Old search history and playback history will be imported when Setup Wizard is run #619
+- Respect Kodi preferred subtitle language setting when attempting to load subtitles
+- Include original video language as a default fallback language for subtitles
+- Enable profiler when Kodi debug logging is enabled
+
 ## v7.0.3.2
 ### Fixed
 - Fix settings not being saved and setup wizard repeatedly activating in Kodi 20 and lower #604

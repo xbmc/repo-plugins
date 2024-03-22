@@ -110,3 +110,7 @@ msgstr "Serien"
 msgctxt "#30601"
 msgid "Movies"
 msgstr "Filme"
+
+msgctxt "#30602"
+msgid "Watchlist"
+msgstr "Watchlist"

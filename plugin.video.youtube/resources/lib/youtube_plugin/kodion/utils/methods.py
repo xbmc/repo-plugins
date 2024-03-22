@@ -28,7 +28,8 @@ __all__ = (
     'find_best_fit',
     'find_video_id',
     'friendly_number',
-    'get_kodi_setting',
+    'get_kodi_setting_bool',
+    'get_kodi_setting_value',
     'loose_version',
     'make_dirs',
     'merge_dicts',
@@ -38,6 +39,7 @@ __all__ = (
     'select_stream',
     'strip_html_from_text',
     'to_unicode',
+    'validate_ip_address',
 )
 
 
@@ -309,7 +311,7 @@ def merge_dicts(item1, item2, templates=None, _=Ellipsis):
     return new or _
 
 
-def get_kodi_setting(setting):
+def get_kodi_setting_value(setting):
     json_query = xbmc.executeJSONRPC(json.dumps({
         'jsonrpc': '2.0',
         'method': 'Settings.GetSettingValue',
@@ -318,3 +320,18 @@ def get_kodi_setting(setting):
     }))
     json_query = json.loads(json_query)
     return json_query.get('result', {}).get('value')
+
+
+def get_kodi_setting_bool(setting):
+    return xbmc.getCondVisibility('System.GetBool({0})'.format(setting))
+
+
+def validate_ip_address(ip_address):
+    try:
+        octets = [octet for octet in map(int, ip_address.split('.'))
+                  if 0 <= octet <= 255]
+        if len(octets) != 4:
+            raise ValueError
+    except ValueError:
+        return (0, 0, 0, 0)
+    return tuple(octets)

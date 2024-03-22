@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="7.0.3.2" provider-name="anxdpanic, bromix">
+<addon id="plugin.video.youtube" name="YouTube" version="+nexus.1" provider-name="anxdpanic, bromix">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
-        <import addon="script.module.requests" version="2.12.4"/>
+        <import addon="script.module.requests" version="2.27.1"/>
         <import addon="inputstream.adaptive" version="20.0.0"/>
         <import addon="script.module.inputstreamhelper" version="0.2.2" optional="true"/>
         <import addon="script.module.infotagger" version="0.0.5"/>
@@ -100,8 +100,15 @@
         <disclaimer lang="vi_VN">Plugin này không được xác nhận bởi Google</disclaimer>
         <disclaimer lang="zh_CN">此插件未被谷歌认可</disclaimer>
         <disclaimer lang="zh_TW">此附加元件未由Google支持</disclaimer>
-    <news>## v7.0.3.2
+    <news>## v7.0.4
 ### Fixed
-- Fix settings not being saved and setup wizard repeatedly activating in Kodi 20 and lower
-- Fix plugin refresh on settings change</news></extension>
+- Fix issues with Profiler running without timer when debug logging was enabled
+- Fix additional Python 2 unicode handling issues when accessing My Subscription
+
+ ### Changed
+ - Only set combined cache size to 20 MB in Setup Wizard if value is not already larger
+ - Cached playlist items will be forced to reload when deleting item from playlist rather than waiting 5 minutes
+
+ ### New
+ - Make colours used for extra details in video listings customisable in Kodi 20+</news></extension>
 </addon>

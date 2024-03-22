@@ -12,8 +12,8 @@ from __future__ import absolute_import, division, unicode_literals
 import json
 import os
 import re
+import socket
 from io import open
-from socket import error as socket_error
 from textwrap import dedent
 
 from .requests import BaseRequestsClass
@@ -29,6 +29,7 @@ from ..compatibility import (
 from ..constants import ADDON_ID, TEMP_PATH, paths
 from ..logger import log_debug, log_error
 from ..settings import XbmcPluginSettings
+from ..utils import validate_ip_address
 
 
 _addon = xbmcaddon.Addon(ADDON_ID)
@@ -45,9 +46,9 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
     BASE_PATH = xbmcvfs.translatePath(TEMP_PATH)
     chunk_size = 1024 * 64
     local_ranges = (
-        '10.',
-        '172.16.',
-        '192.168.',
+        ((10, 0, 0, 0), (10, 255, 255, 255)),
+        ((172, 16, 0, 0), (172, 31, 255, 255)),
+        ((192, 168, 0, 0), (192, 168, 255, 255)),
         '127.0.0.1',
         'localhost',
         '::1',
@@ -59,16 +60,24 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
 
     def connection_allowed(self):
         client_ip = self.client_address[0]
+        octets = validate_ip_address(client_ip)
         log_lines = ['HTTPServer: Connection from |%s|' % client_ip]
-        conn_allowed = client_ip.startswith(self.local_ranges)
+        conn_allowed = False
+        for ip_range in self.local_ranges:
+            if ((any(octets)
+                 and isinstance(ip_range, tuple)
+                 and ip_range[0] <= octets <= ip_range[1])
+                    or client_ip == ip_range):
+                conn_allowed = True
+                break
         log_lines.append('Local range: |%s|' % str(conn_allowed))
         if not conn_allowed:
             conn_allowed = client_ip in self.whitelist_ips
             log_lines.append('Whitelisted: |%s|' % str(conn_allowed))
 
         if not conn_allowed:
-            log_debug('HTTPServer: Connection from |{client_ip| not allowed'.
-                      format(client_ip=client_ip))
+            log_debug('HTTPServer: Connection from |{client_ip| not allowed'
+                      .format(client_ip=client_ip))
         elif self.path != paths.PING:
             log_debug(' '.join(log_lines))
         return conn_allowed
@@ -80,7 +89,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
         # Strip trailing slash if present
         stripped_path = self.path.rstrip('/')
         if stripped_path != paths.PING:
-            log_debug('HTTPServer: GET uri path |{path}|'.format(path=self.path))
+            log_debug('HTTPServer: GET |{path}|'.format(path=self.path))
 
         if not self.connection_allowed():
             self.send_error(403)
@@ -97,7 +106,6 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
         elif self.path.startswith(paths.MPD):
             filepath = os.path.join(self.BASE_PATH, self.path[len(paths.MPD):])
             file_chunk = True
-            log_debug('HTTPServer: GET filepath |{path}|'.format(path=filepath))
             try:
                 with open(filepath, 'rb') as f:
                     self.send_response(200)
@@ -189,7 +197,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
 
     # noinspection PyPep8Naming
     def do_HEAD(self):
-        log_debug('HTTPServer: HEAD uri path |{path}|'.format(path=self.path))
+        log_debug('HTTPServer: HEAD |{path}|'.format(path=self.path))
 
         if not self.connection_allowed():
             self.send_error(403)
@@ -212,7 +220,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
 
     # noinspection PyPep8Naming
     def do_POST(self):
-        log_debug('HTTPServer: POST uri path |{path}|'.format(path=self.path))
+        log_debug('HTTPServer: POST |{path}|'.format(path=self.path))
 
         if not self.connection_allowed():
             self.send_error(403)
@@ -525,13 +533,11 @@ class Pages(object):
     }
 
 
-def get_http_server(address=None, port=None):
-    address = _settings.httpd_listen(for_request=False, ip_address=address)
-    port = _settings.httpd_port(port)
+def get_http_server(address, port):
     try:
         server = BaseHTTPServer.HTTPServer((address, port), RequestHandler)
         return server
-    except socket_error as exc:
+    except socket.error as exc:
         log_error('HTTPServer: Failed to start |{address}:{port}| |{response}|'
                   .format(address=address, port=port, response=str(exc)))
         xbmcgui.Dialog().notification(_addon_name,
@@ -542,9 +548,8 @@ def get_http_server(address=None, port=None):
         return None
 
 
-def is_httpd_live(address=None, port=None):
-    address = _settings.httpd_listen(for_request=True, ip_address=address)
-    port = _settings.httpd_port(port=port)
+def httpd_status():
+    address, port = get_connect_address()
     url = 'http://{address}:{port}{path}'.format(address=address,
                                                  port=port,
                                                  path=paths.PING)
@@ -553,17 +558,16 @@ def is_httpd_live(address=None, port=None):
     if result == 204:
         return True
 
-    log_debug('HTTPServer: Ping |{address}:{port}| |{response}|'
+    log_debug('HTTPServer: Ping |{address}:{port}| - |{response}|'
               .format(address=address,
                       port=port,
                       response=result or 'failed'))
     return False
 
 
-def get_client_ip_address(address=None, port=None):
+def get_client_ip_address():
     ip_address = None
-    address = _settings.httpd_listen(for_request=True, ip_address=address)
-    port = _settings.httpd_port(port=port)
+    address, port = get_connect_address()
     url = 'http://{address}:{port}{path}'.format(address=address,
                                                  port=port,
                                                  path=paths.IP)
@@ -573,3 +577,24 @@ def get_client_ip_address(address=None, port=None):
         if response_json:
             ip_address = response_json.get('ip')
     return ip_address
+
+
+def get_connect_address():
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    except socket.error:
+        return xbmc.getIPAddress()
+
+    address = _settings.httpd_listen()
+    port = _settings.httpd_port()
+    if address == '0.0.0.0':
+        address = '127.0.0.1'
+
+    sock.settimeout(0)
+    try:
+        sock.connect((address, 0))
+        return sock.getsockname()[0], port
+    except socket.error:
+        return xbmc.getIPAddress(), port
+    finally:
+        sock.close()

@@ -17,11 +17,15 @@ try:
     from http.server import BaseHTTPRequestHandler, HTTPServer
     from socketserver import ThreadingMixIn
     from urllib.parse import urljoin
+    from urllib.parse import urlparse
+    from urllib.parse import parse_qs
 except:
     # Python2
     from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
     from SocketServer import ThreadingMixIn
     from urlparse import urljoin
+    from urlparse import urlparse
+    from urlparse import parse_qs
 
 HOST = '127.0.0.1'
 PORT = 43670
@@ -31,7 +35,7 @@ URI_START_DELIMETER = 'URI="'
 URI_END_DELIMETER = '"'
 KEY_TEXT = '-KEY:METHOD=AES-128'
 ENDLIST_TEXT = '#EXT-X-ENDLIST'
-REMOVE_IN_HEADERS = ['upgrade', 'host', 'pad', 'alternate_english', 'alternate_spanish']
+REMOVE_IN_HEADERS = ['upgrade', 'host']
 REMOVE_OUT_HEADERS = ['date', 'server', 'transfer-encoding', 'keep-alive', 'connection', 'content-length', 'content-range', 'content-md5', 'access-control-allow-credentials', 'content-encoding']
 
 class RequestHandler(BaseHTTPRequestHandler):
@@ -45,7 +49,10 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.send_error(404)
 
     def do_GET(self):
-        url = self.path.lstrip('/').strip('\\')
+        # parse path of the incoming request into components
+        parsed_url = urlparse(self.path.lstrip('/').strip('\\'))
+        # build our outgoing request URL without the querystring parameters
+        url = parsed_url.scheme + '://' + parsed_url.netloc + parsed_url.path
         if not url.endswith(STREAM_EXTENSION):
             self.send_error(404)
 
@@ -53,15 +60,19 @@ class RequestHandler(BaseHTTPRequestHandler):
         pad = 0
         alternate_english = None
         alternate_spanish = None
+
+        # parse the querystring parameters component
+        parsed_qs = parse_qs(parsed_url.query)
+        if 'pad' in parsed_qs:
+            pad = int(parsed_qs['pad'][0])
+        if 'alternate_english' in parsed_qs:
+            alternate_english = urllib.unquote_plus(parsed_qs['alternate_english'][0])
+        if 'alternate_spanish' in parsed_qs:
+            alternate_spanish = urllib.unquote_plus(parsed_qs['alternate_spanish'][0])
+
         for key in self.headers:
             if key.lower() not in REMOVE_IN_HEADERS:
                 headers[key] = self.headers[key]
-            elif key.lower() == 'pad':
-                pad = int(self.headers[key])
-            elif key.lower() == 'alternate_english':
-                alternate_english = urllib.unquote_plus(self.headers[key])
-            elif key.lower() == 'alternate_spanish':
-                alternate_spanish = urllib.unquote_plus(self.headers[key])
 
         response = requests.get(url, headers=headers)
 
@@ -88,20 +99,20 @@ class RequestHandler(BaseHTTPRequestHandler):
                     url_split = line_split[1].split(URI_END_DELIMETER, 1)
                     absolute_url = urljoin(url, url_split[0])
                     if absolute_url.endswith(STREAM_EXTENSION) and not absolute_url.startswith(PROXY_URL):
-                        absolute_url = PROXY_URL + absolute_url
+                        absolute_url = PROXY_URL + absolute_url + '?' + parsed_url.query
                     new_line = line_split[0] + URI_START_DELIMETER + absolute_url + URI_END_DELIMETER + url_split[1]
                     new_line_array.append(new_line)
                 else:
                     new_line_array.append(line)
                     if line == '#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="aac",LANGUAGE="en",NAME="English",AUTOSELECT=YES,DEFAULT=YES':
                         if alternate_english is not None:
-                            new_line_array.append('#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="aac",NAME="Alternate English",LANGUAGE="en",AUTOSELECT=YES,DEFAULT=NO,URI="' + PROXY_URL + alternate_english + '"')
+                            new_line_array.append('#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="aac",NAME="Alternate English",LANGUAGE="en",AUTOSELECT=YES,DEFAULT=NO,URI="' + PROXY_URL + alternate_english + '?' + parsed_url.query + '"')
                         if alternate_spanish is not None:
-                            new_line_array.append('#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="aac",NAME="Alternate Spanish",LANGUAGE="es",AUTOSELECT=YES,DEFAULT=NO,URI="' + PROXY_URL + alternate_spanish + '"')
+                            new_line_array.append('#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="aac",NAME="Alternate Spanish",LANGUAGE="es",AUTOSELECT=YES,DEFAULT=NO,URI="' + PROXY_URL + alternate_spanish + '?' + parsed_url.query + '"')
             elif line != '':
                 absolute_url = urljoin(url, line)
                 if absolute_url.endswith(STREAM_EXTENSION) and not absolute_url.startswith(PROXY_URL):
-                    absolute_url = PROXY_URL + absolute_url
+                    absolute_url = PROXY_URL + absolute_url + '?' + parsed_url.query
                 new_line_array.append(absolute_url)
 
         # pad the end of the stream by the requested number of segments

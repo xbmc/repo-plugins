@@ -73,7 +73,7 @@ class XbmcContextUI(AbstractContextUI):
         result_map = {}
         dialog_items = []
         for idx, item in enumerate(items):
-            if isinstance(item, tuple):
+            if isinstance(item, (list, tuple)):
                 num_details = len(item)
                 if num_details > 2:
                     list_item = xbmcgui.ListItem(label=item[0],
@@ -131,6 +131,15 @@ class XbmcContextUI(AbstractContextUI):
         # xbmc.executebuiltin("Container.Refresh")
         xbmc.executebuiltin('RunScript({addon_id},action/refresh)'.format(
             addon_id=ADDON_ID
+        ))
+
+    def reload_container(self, path=None):
+        context = self._context
+        xbmc.executebuiltin('ReplaceWindow(Videos, {0})'.format(
+            context.create_uri(
+                path or context.get_path(),
+                dict(context.get_params(), refresh=True),
+            )
         ))
 
     @staticmethod
@@ -209,7 +218,7 @@ class XbmcContextUI(AbstractContextUI):
     def set_focus_next_item(self):
         list_id = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getFocusId()
         try:
-            position = self._context.get_infolabel('Container.Position')
+            position = xbmc.getInfoLabel('Container.Position')
             next_position = int(position) + 1
             self._context.execute('SetFocus({list_id},{position})'.format(
                 list_id=list_id, position=next_position

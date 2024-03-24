@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.stalkervod" name="Stalker VOD Client" version="0.0.4" provider-name="rickey">
+<addon id="plugin.video.stalkervod" name="Stalker VOD Client" version="0.0.5" provider-name="rickey">
 	<requires>
 		<import addon="xbmc.python" version="3.0.1"/>
 		<import addon="script.module.requests" version="2.27.1"/>
@@ -21,8 +21,14 @@
 			<screenshot>resources/media/screenshot_1.png</screenshot>
 			<screenshot>resources/media/screenshot_2.png</screenshot>
 			<screenshot>resources/media/screenshot_3.png</screenshot>
+			<screenshot>resources/media/screenshot_4.png</screenshot>
 		</assets>
 		<news>
+v0.0.5  (2024-03-23)
+- Fix for portals with no stalker_portal in context path
+Please try re-entering the server address based on the format provided if it does not work after upgrading to v0.0.5
+https://github.com/rickeylohia/plugin.video.stalkervod/issues/12
+
 v0.0.4  (2024-01-20)
 - Refactor, debug logs and fix for https://github.com/rickeylohia/plugin.video.stalkervod/issues/10
 

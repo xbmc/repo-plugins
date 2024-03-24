@@ -21,33 +21,37 @@ msgid "Portal"
 msgstr ""
 
 msgctxt "#32002"
-msgid "MAC Address"
+msgid "Server Address (ex. http://xyz:888/c/ or http://xyz:888/stalker_portal/c/)"
 msgstr ""
 
 msgctxt "#32003"
-msgid "Server Address"
+msgid "Server"
 msgstr ""
 
 msgctxt "#32004"
-msgid "Time Zone"
+msgid "Client"
 msgstr ""
 
 msgctxt "#32005"
-msgid "Advanced"
+msgid "MAC Address"
 msgstr ""
 
 msgctxt "#32006"
-msgid "Serial Number"
+msgid "Advanced"
 msgstr ""
 
 msgctxt "#32007"
-msgid "Device ID"
+msgid "Serial Number"
 msgstr ""
 
 msgctxt "#32008"
-msgid "Device ID 2"
+msgid "Device ID"
 msgstr ""
 
 msgctxt "#32009"
+msgid "Device ID 2"
+msgstr ""
+
+msgctxt "#32010"
 msgid "Signature"
 msgstr ""

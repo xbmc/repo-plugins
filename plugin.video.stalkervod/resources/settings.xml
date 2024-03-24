@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
     <category label="32001">
-        <setting label="32002" type="text" id="mac_address" default=""/>
+        <setting label="32002" type="lsep"/>
         <setting label="32003" type="text" id="server_address" default=""/>
-        <setting label="32004" type="text" id="time_zone" default="America/Toronto"/>
         <setting type="sep"/>
-        <setting label="32005" type="lsep"/>
-        <setting label="32006" type="text" id="serial_number" default=""/>
-        <setting label="32007" type="text" id="device_id" default=""/>
-        <setting label="32008" type="text" id="device_id_2" default=""/>
-        <setting label="32009" type="text" id="signature" default=""/>
+        <setting label="32004" type="lsep"/>
+        <setting label="32005" type="text" id="mac_address" default=""/>
+        <setting type="sep"/>
+        <setting label="32006" type="lsep"/>
+        <setting label="32007" type="text" id="serial_number" default=""/>
+        <setting label="32008" type="text" id="device_id" default=""/>
+        <setting label="32009" type="text" id="device_id_2" default=""/>
+        <setting label="32010" type="text" id="signature" default=""/>
     </category>
 </settings>

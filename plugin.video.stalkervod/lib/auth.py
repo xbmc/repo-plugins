@@ -25,9 +25,9 @@ class Auth:
         self.__token_path = os.path.join(G.addon_config.token_path, self.__TOKEN_FILE)
         self.__token = Token()
         self.__load_cache()
-        self.__url = G.portal_config.portal_base_url + G.portal_config.context_path
+        self.__url = G.portal_config.portal_url
         self.__mac_cookie = G.portal_config.mac_cookie
-        self.__portal_url = G.portal_config.portal_url
+        self.__referrer = G.portal_config.server_address
 
     def get_token(self, refresh_token):
         """Get Token"""
@@ -40,7 +40,7 @@ class Auth:
         Logger.debug('Getting token from {}'.format(self.__url))
         response = requests.get(url=self.__url,
                                 headers={'Cookie': self.__mac_cookie, 'X-User-Agent': 'Model: MAG250; Link: WiFi',
-                                         'Referrer': self.__portal_url},
+                                         'Referrer': self.__referrer},
                                 params={'type': 'stb', 'action': 'handshake'},
                                 timeout=30
                                 )
@@ -65,7 +65,7 @@ class Auth:
         Logger.debug('Refreshing token')
         requests.get(url=self.__url,
                      headers={'Cookie': self.__mac_cookie, 'Authorization': 'Bearer ' + self.__token.value,
-                              'X-User-Agent': 'Model: MAG250; Link: WiFi', 'Referrer': self.__portal_url},
+                              'X-User-Agent': 'Model: MAG250; Link: WiFi', 'Referrer': self.__referrer},
                      params={
                          'type': 'stb',
                          'action': 'get_profile',
@@ -89,7 +89,7 @@ class Auth:
                      )
         requests.get(url=self.__url,
                      headers={'Cookie': self.__mac_cookie, 'Authorization': 'Bearer ' + self.__token.value,
-                              'X-User-Agent': 'Model: MAG250; Link: WiFi', 'Referrer': self.__portal_url},
+                              'X-User-Agent': 'Model: MAG250; Link: WiFi', 'Referrer': self.__referrer},
                      params={
                          'type': 'watchdog', 'action': 'get_events',
                          'init': '0', 'cur_play_type': '1', 'event_active_id': '0'

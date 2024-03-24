@@ -18,9 +18,9 @@ class Api:
     def __call_stalker_portal(params):
         """Method to call portal"""
         retries = 0
-        url = G.portal_config.portal_base_url + G.portal_config.context_path
+        url = G.portal_config.portal_url
         mac_cookie = G.portal_config.mac_cookie
-        portal_url = G.portal_config.portal_url
+        referrer = G.portal_config.server_address
         auth = Auth()
         while True:
             token = auth.get_token(retries > 0)
@@ -28,7 +28,7 @@ class Api:
             response = requests.get(url=url,
                                     headers={'Cookie': mac_cookie,
                                              'Authorization': 'Bearer ' + token,
-                                             'X-User-Agent': 'Model: MAG250; Link: WiFi', 'Referrer': portal_url},
+                                             'X-User-Agent': 'Model: MAG250; Link: WiFi', 'Referrer': referrer},
                                     params=params,
                                     timeout=30
                                     )

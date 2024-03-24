@@ -20,7 +20,7 @@ class PortalConfig:
     signature: str = None
     serial_number: str = None
     portal_base_url: str = None
-    context_path: str = None
+    server_address: str = None
 
 
 @dataclasses.dataclass
@@ -61,13 +61,11 @@ class GlobalVariables:
             self.addon_config.token_path = token_path
             self.addon_config.handle = int(sys.argv[1])
             self.portal_config.mac_cookie = 'mac=' + self.__addon.getSetting('mac_address')
-            self.portal_config.portal_url = self.__addon.getSetting('server_address')
             self.portal_config.device_id = self.__addon.getSetting('device_id')
             self.portal_config.device_id_2 = self.__addon.getSetting('device_id_2')
             self.portal_config.signature = self.__addon.getSetting('signature')
             self.portal_config.serial_number = self.__addon.getSetting('serial_number')
-            self.portal_config.portal_base_url = self.__get_portal_base_url()
-            self.portal_config.context_path = '/stalker_portal/server/load.php'
+            self.__set_portal_addresses()
 
     def get_handle(self):
         """Get addon handle"""
@@ -83,8 +81,23 @@ class GlobalVariables:
 
     def __get_portal_base_url(self):
         """Get portal base url"""
-        split_url = urlsplit(self.portal_config.portal_url)
+        split_url = urlsplit(self.portal_config.server_address)
         return split_url.scheme + '://' + split_url.netloc
+
+    def __set_portal_addresses(self):
+        """Set portal urls"""
+        self.portal_config.server_address = self.__addon.getSetting('server_address')
+        self.portal_config.portal_base_url = self.__get_portal_base_url()
+        self.portal_config.portal_url = self.get_portal_url()
+
+    def get_portal_url(self):
+        """Get portal url"""
+        portal_url = self.portal_config.portal_base_url + '/stalker_portal/server/load.php'
+        if self.portal_config.server_address.endswith('/c/'):
+            portal_url = self.portal_config.server_address.replace('/c/', '') + '/server/load.php'
+        elif self.portal_config.server_address.endswith('/c'):
+            portal_url = self.portal_config.server_address.replace('/c', '') + '/server/load.php'
+        return portal_url
 
 
 G = GlobalVariables()

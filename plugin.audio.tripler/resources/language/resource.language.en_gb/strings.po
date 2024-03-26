@@ -25,6 +25,10 @@ msgctxt "Addon Description"
 msgid "For more than 40 years Triple R has shaped and inspired the culture of Melbourne. Since its inception as an educational broadcaster in 1976, Triple R has become Australia's most influential community radio station with nearly 21,000 paid subscribers and broadcasting live to over 1,000,000 listeners per month across FM and digital (DAB+ digital radio, podcasts and online). Broadcasting on 102.7FM and 3RRR Digital, the Triple R grid houses over 60 diverse programs. Music shows cover every genre imaginable from pop to punk rock, from R&B and electro to jazz, hip hop, country and metal. Specialist talks programs delve into topics as varied as the environment, human rights, politics, medical issues, gardening, cultural ventures and local interests."
 msgstr ""
 
+msgctxt "#30999"
+msgid ""
+msgstr ""
+
 #Plugin name
 
 msgctxt "#30000"
@@ -32,23 +36,15 @@ msgid "Triple R"
 msgstr ""
 
 msgctxt "#30001"
-msgid "Triple R - Live Stream"
-msgstr ""
-
-msgctxt "#30002"
-msgid "On Demand - Segments"
-msgstr ""
-
-msgctxt "#30003"
-msgid "On Demand - Episodes"
+msgid "Listen Live!"
 msgstr ""
 
 msgctxt "#30004"
-msgid "On Demand - Audio Archives"
+msgid "> Next Page"
 msgstr ""
 
 msgctxt "#30005"
-msgid "> Next Page"
+msgid ">> Last Page"
 msgstr ""
 
 msgctxt "#30006"
@@ -56,5 +52,297 @@ msgid "aired %s"
 msgstr ""
 
 msgctxt "#30007"
-msgid "Aired on %s."
+msgid "Dated %s, Melbourne time."
+msgstr ""
+
+msgctxt "#30008"
+msgid "Play with %s"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Settings"
+msgstr ""
+
+# Settings - Account
+
+msgctxt "#30010"
+msgid "Subscriber Account"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Use Account"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Email Address"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Sign In"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Sign Out"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Enter Email Address"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Enter Password"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Full Name"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Sign in to your Triple R account using your email address and password"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Sign out of your Triple R account"
+msgstr ""
+
+# Settings - Image Quality
+
+msgctxt "#30022"
+msgid "Image Quality"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Set the desired quality level for album art and band images"
+msgstr ""
+
+msgctxt "#30024"
+msgid "High"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Medium"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Low"
+msgstr ""
+
+# Main Menu
+
+msgctxt "#30032"
+msgid "Browse by Program"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Browse by Date"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Latest Programs"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Latest Segments"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Audio Archives"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Album Of The Week"
+msgstr ""
+
+msgctxt "#30038"
+msgid "Soundscapes"
+msgstr ""
+
+msgctxt "#30039"
+msgid "Events"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Subscriber Giveaways"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Videos"
+msgstr ""
+
+# Broadcasts
+
+msgctxt "#30049"
+msgid "Broadcast"
+msgstr ""
+
+msgctxt "#30050"
+msgid "Full Broadcast"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Segment"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Track Search"
+msgstr ""
+
+# Date Selection
+
+msgctxt "#30059"
+msgid "Next Day (%s)"
+msgstr ""
+
+msgctxt "#30060"
+msgid "Today (%s)"
+msgstr ""
+
+msgctxt "#30061"
+msgid "Previous Day (%s)"
+msgstr ""
+
+msgctxt "#30062"
+msgid "%s (%s)"
+msgstr ""
+
+msgctxt "#30063"
+msgid "This Month (%s)"
+msgstr ""
+
+msgctxt "#30064"
+msgid "This Year (%s)"
+msgstr ""
+
+msgctxt "#30065"
+msgid "Select Date (%s)"
+msgstr ""
+
+# Searching
+
+msgctxt "#30066"
+msgid "Search playlists instead"
+msgstr ""
+
+msgctxt "#30067"
+msgid "Enter Search Query"
+msgstr ""
+
+msgctxt "#30068"
+msgid "Enter Playlist Search Query"
+msgstr ""
+
+# Subscription
+
+msgctxt "#30069"
+msgid "Enter Giveaway"
+msgstr ""
+
+msgctxt "#30070"
+msgid "Select to enter this giveaway."
+msgstr ""
+
+msgctxt "#30071"
+msgid "Giveaway Entered"
+msgstr ""
+
+msgctxt "#30072"
+msgid "Thanks for being a Triple R subscriber!"
+msgstr ""
+
+msgctxt "#30073"
+msgid "Cannot Enter Giveaway"
+msgstr ""
+
+msgctxt "#30074"
+msgid "Already entered!"
+msgstr ""
+
+msgctxt "#30075"
+msgid "Is your subscription active?"
+msgstr ""
+
+msgctxt "#30076"
+msgid "Subscribe and sign in to enter!"
+msgstr ""
+
+msgctxt "#30077"
+msgid "%s signed in"
+msgstr ""
+
+msgctxt "#30078"
+msgid "Thanks for subscribing!"
+msgstr ""
+
+msgctxt "#30079"
+msgid "%s signed out"
+msgstr ""
+
+msgctxt "#30081"
+msgid "Subscribe To Listen"
+msgstr ""
+
+msgctxt "#30082"
+msgid "https://www.rrr.org.au/subscribe - Subscribe and sign in to enter the below giveaways!"
+msgstr ""
+
+msgctxt "#30083"
+msgid "https://www.rrr.org.au/subscribe - Subscribe and sign in to listen to all audio archives!"
+msgstr ""
+
+msgctxt "#30084"
+msgid "Subscribers Only"
+msgstr ""
+
+msgctxt "#30085"
+msgid "Sign in failure"
+msgstr ""
+
+msgctxt "#30086"
+msgid "%s could not sign in"
+msgstr ""
+
+msgctxt "#30087"
+msgid "Sign out failure"
+msgstr ""
+
+msgctxt "#30088"
+msgid "%s could not sign out"
+msgstr ""
+
+# Context Menus
+
+msgctxt "#30100"
+msgid "%s using the context menu."
+msgstr ""
+
+msgctxt "#30101"
+msgid "View playlist"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Search for this track"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Search for this artist"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Search for '%s'"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Search for '%s' on Triple R"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Search for '%s' on Bandcamp"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Search for '%s' on YouTube"
 msgstr ""

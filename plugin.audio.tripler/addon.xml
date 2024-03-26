@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.tripler" name="Triple R" version="2.0.0" provider-name="Simon Mollema">
+<addon id="plugin.audio.tripler" name="Triple R" version="3.0.0" provider-name="Simon Mollema">
 	<requires>
-		<import addon="xbmc.python" version="3.0.0"/>
-		<import addon="script.module.xbmcswift2" version="19.0.7"/>
-		<import addon="script.module.beautifulsoup4" version="4.9.3+matrix.1"/>
+		<import addon="xbmc.python" version="3.0.0" />
+		<import addon="script.module.pytz" version="2021.3.0+matrix.1" />
+		<import addon="script.module.beautifulsoup4" version="4.9.3+matrix.1" />
+		<import addon="plugin.video.youtube" version="6.8.18+matrix.1" optional="true" />
+		<import addon="plugin.audio.kxmxpxtx.bandcamp" version="0.4.1+matrix.1" optional="true" />
+		<import addon="plugin.audio.soundcloud" version="4.0.2" optional="true" />
+		<import addon="plugin.audio.indigitube" version="1.0.0" optional="true" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>audio</provides>
@@ -11,20 +15,30 @@
 	<extension point="xbmc.addon.metadata">
 		<platform>all</platform>
 		<language>en</language>
-		<summary lang="en_GB">Listen to podcasts avaliable from the Triple R: Independent Melbourne Radio station.</summary>
+		<summary lang="en_GB">Listen to Triple R: an independent community radio station in Melbourne, Australia.</summary>
 		<description lang="en_GB">For more than 40 years Triple R has shaped and inspired the culture of Melbourne. Since its inception as an educational broadcaster in 1976, Triple R has become Australia's most influential community radio station with nearly 21,000 paid subscribers and broadcasting live to over 1,000,000 listeners per month across FM and digital (DAB+ digital radio, podcasts and online). Broadcasting on 102.7FM and 3RRR Digital, the Triple R grid houses over 60 diverse programs. Music shows cover every genre imaginable from pop to punk rock, from R&amp;B and electro to jazz, hip hop, country and metal. Specialist talks programs delve into topics as varied as the environment, human rights, politics, medical issues, gardening, cultural ventures and local interests.</description>
 		<license>MIT</license>
 		<email>xbmc@molzy.com</email>
 		<source>https://github.com/molzy/plugin.audio.tripler</source>
-		<news>Version 2.0.0
-- Rewritten for Matrix / Python 3.
-- Now scraping media information directly from new Triple R website.
-
-Version 1.0.1
-- Initial working version</news>
+		<news>Version 3.0.0
+- Rewritten with more flexible parser
+- More content added from website
+- Improved user interface and menus
+- Browsing programs by name and date now possible
+- Broadcast track playlists are available
+- Support for playing music through Bandcamp, YouTube and indigiTUBE
+- Support for searching for music content by title and artist
+- Subscriber-only giveaways can now be entered by signing in
+		</news>
 		<assets>
 			<icon>resources/icon.png</icon>
 			<fanart>resources/fanart.png</fanart>
+			<screenshot>resources/screenshots/menu.jpg</screenshot>
+			<screenshot>resources/screenshots/browse-by-program.jpg</screenshot>
+			<screenshot>resources/screenshots/browse-by-date.jpg</screenshot>
+			<screenshot>resources/screenshots/broadcast-playlist.jpg</screenshot>
+			<screenshot>resources/screenshots/album-of-the-week.jpg</screenshot>
+			<screenshot>resources/screenshots/soundscape.jpg</screenshot>
 		</assets>
 	</extension>
 </addon>

@@ -93,8 +93,8 @@ class myAddon(t1mAddon):
 
   def getAddonVideo(self,url):
       if not url.endswith('.m3u8'):
-          html = requests.get(url, headers=self.defaultHeaders).text
-          datakey = re.compile('data-key="(.+?)"', re.DOTALL).search(html).group(1)
+          datakey = re.compile('/shows/(.+?)/', re.DOTALL).search(url).group(1)
+          datakey = datakey[0:4]+'-'+datakey[4:]
           url = ''.join(['https://nwapi.nhk.jp/nhkworld/vodesdlist/v7b/episode/',datakey,'/en/all/all.json'])
           a = requests.get(url, headers=self.defaultHeaders).json()
           uid = a['data']['episodes'][0]['vod_id']

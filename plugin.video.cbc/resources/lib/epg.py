@@ -61,7 +61,8 @@ def get_iptv_epg():
 
 def map_channel_ids(unblocked):
     """Map channel IDs to guide names."""
-    data = call_guide_url(datetime.now())
+    url = get_guide_url(datetime.now())
+    data = call_guide_url(url)
     soup = BeautifulSoup(data, features="html.parser")
     select = soup.find('select', id="selectlocation-tv")
     options = select.find_all('option')
@@ -75,11 +76,16 @@ def map_channel_ids(unblocked):
     return channel_map
 
 
-def call_guide_url(dttm, location=None, callsign=None):
-    """Call the guide URL and return the response body."""
+def get_guide_url(dttm, callsign=None):
+    """Get the guide data URL location."""
     date_str = dttm.strftime('%Y/%m/%d')
     url_fmt = SPECIAL_GUIDES[callsign] if callsign in SPECIAL_GUIDES else GUIDE_URL_FMT
     url = url_fmt.format(date_str)
+    return url
+
+
+def call_guide_url(url, location=None):
+    """Call the guide URL and return the response body."""
     cookies = {}
     if location is not None:
         cookies['pgTvLocation'] = location
@@ -93,7 +99,8 @@ def call_guide_url(dttm, location=None, callsign=None):
 def get_channel_data(dttm, channel, callsign):
     """Get channel program data for a specified date."""
     epg_data = []
-    data = call_guide_url(dttm, channel, callsign)
+    url = get_guide_url(dttm, callsign)
+    data = call_guide_url(url, channel)
     soup = BeautifulSoup(data, features="html.parser")
 
     select = soup.find('table', id="sched-table").find('tbody')
@@ -108,12 +115,18 @@ def get_channel_data(dttm, channel, callsign):
                 prog_js['start'] = datetime.utcfromtimestamp(int(cell['data-start-time-epoch'])/1000).isoformat()
 
             if cell_class == 'program':
-                prog_js['title'] = cell.find('a').get_text()
+                # in situations where we have no title the data is 'to be determined' so just skip it
+                # and hopefully at a future date it gets meaningful information
+                title_cell = cell.find('a')
+                if not title_cell:
+                    prog_js = {}
+                    break
+                prog_js['title'] = title_cell.get_text()
                 prog_js['description'] = cell.find('dd').get_text()
 
         # skip the header row
         if len(prog_js.items()) == 0:
-            log('Invalid CBC program data for "{}"'.format(channel), True)
+            log('Invalid CBC program data at "{}"'.format(url), True)
         else:
             epg_data.append(prog_js)
 

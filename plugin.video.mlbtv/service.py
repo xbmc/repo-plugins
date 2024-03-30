@@ -120,17 +120,19 @@ class RequestHandler(BaseHTTPRequestHandler):
         if new_line_array[last_item_index] == ENDLIST_TEXT and int(pad) > 0:
             new_line_array.pop()
             last_item_index -= 1
-            url_line = None
+            #url_line = None
             extinf_line = None
             while extinf_line is None:
                 if new_line_array[last_item_index].startswith('#EXTINF:5'):
                     extinf_line = new_line_array[last_item_index]
-                    url_line = new_line_array[last_item_index+1]
+                    #url_line = new_line_array[last_item_index+1]
                     break
                 last_item_index -= 1
             for x in range(0, pad):
                 new_line_array.append(extinf_line)
-                new_line_array.append(url_line)
+                # use base proxy URL for more graceful stream padding, instead of repeating last segment
+                #new_line_array.append(url_line)
+                new_line_array.append(PROXY_URL)
             new_line_array.append(ENDLIST_TEXT)
 
         content = "\n".join(new_line_array)

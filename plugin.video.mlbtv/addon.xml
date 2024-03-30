@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2024.3.1+matrix.1" provider-name="eracknaphobia">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2024.3.29+matrix.1" provider-name="eracknaphobia, tonywagner">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
         <import addon="script.module.beautifulsoup4" />
         <import addon="script.module.requests" />
-        <import addon="inputstream.adaptive" optional="true"/>
+        <import addon="inputstream.adaptive"/>
         <import addon="script.module.kodi-six" />
         <import addon="script.module.dateutil" />
     </requires>
@@ -22,7 +22,12 @@
         </description>
         <disclaimer lang="en_GB">Requires an MLB.tv account</disclaimer>
         <news>
-            - fixed stream padding to avoid timeline spoilers
+            - further fixed stream padding to avoid timeline spoilers
+            - fixed Big Inning schedule
+            - updated affiliates list
+            - require InputStream Adaptive
+            - more graceful stream padding
+            - potential Omega compatibility fix
         </news>
         <language>en</language>
         <platform>all</platform>

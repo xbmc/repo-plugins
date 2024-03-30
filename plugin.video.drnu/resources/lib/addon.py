@@ -352,7 +352,7 @@ class DrDkTvAddon(object):
                 icon_file = str(resources_path/'icons/gensyn.png')
             listItem.setArt({'fanart': self.fanart_image, 'icon': icon_file})
 
-        log(f'{title} -- {item["id"]} | {item["type"]} | {item.get("path")}', level=2)
+        log(f'{title} -- {item["id"]} | {item["type"]} | {item.get("path")}', level=1)
         if item.get('in_mylist', False):
             runScript = f"RunPlugin(plugin://plugin.video.drnu/?delfavorite={item['id']})"
             menuItems.append((tr(30010), runScript))
@@ -588,8 +588,9 @@ class DrDkTvAddon(object):
                 self.api.recache_items(clear_expired=True, progress=progress)
                 progress.update(100)
                 progress.close()
-                if PARAMS['re-cache'] == 2:
-                    xbmc.executebuiltin('ActivateWindow(Home)')
+                if PARAMS['re-cache'] == '2':
+                    self.showSimpleAreaSelector()
+                    xbmc.executebuiltin('ActivateWindow(home)')
 
             else:
                 area = int(get_setting('area'))

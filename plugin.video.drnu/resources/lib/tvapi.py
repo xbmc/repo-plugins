@@ -273,7 +273,8 @@ class Api():
                 'item_detail_expand': 'all',
                 'list_page_size': '24',
                 'max_list_prefetch': '3',
-                'path': path
+                'path': path,
+                'sub': 'Registered'
             }
         return self._request_get(url, params=data, use_cache=use_cache)
 
@@ -476,7 +477,7 @@ class Api():
             'ff': 'idp,ldp,rpt',
             'lang': 'da',
             'resolution': 'HD-1080',
-            'sub': 'Anonymous'
+            'sub': 'Registered'
         }
 
         u = self.session.get(url, params=data, headers=headers, timeout=GET_TIMEOUT)
@@ -534,11 +535,18 @@ class Api():
             }
         return stream
 
-    def get_channel_url(self, channel, with_subtitles=False):
+    def get_channel_url(self, channel, with_subtitles=False, use_cache=True):
+        id = channel['item']['id']
+        url = URL + f'/channels/{id}/liveStreams?'
+        headers = {"X-Authorization": f'Bearer {self.profile_token()}'}
+        js = self._request_get(url, headers=headers, use_cache=use_cache)
+        links = {item['type']:item['link'] for item in js}
+
+        EU = 'Eu' if 'hlsURLEu' in links else ''
         if with_subtitles:
-            url = channel['item']['customFields']['hlsWithSubtitlesURL']
+            url = links['hlsWithSubtitlesURL' + EU]
         else:
-            url = channel['item']['customFields']['hlsURL']
+            url = links['hlsURL' + EU]
         return url
 
     def get_title(self, item):

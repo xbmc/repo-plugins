@@ -406,7 +406,7 @@ class Channel(chn_class.Channel):
         if not title:
             return None
 
-        item = FolderItem(title, url, content_type=contenttype.EPISODES, media_type=mediatype.TVSHOW)
+        item = FolderItem(title, url, content_type=contenttype.EPISODES, media_type=mediatype.FOLDER)
         item = self.__update_base_typed_item(item, result_set)
         item.postJson = data
         item.HttpHeaders.update({"feature_flag_enable_season_upsell_on_cdp": "true"})
@@ -672,6 +672,14 @@ class Channel(chn_class.Channel):
         if not art_info:
             return
 
+        def proxy_image(url_encoded: str, width: int = 0) -> str:
+            # return HtmlEntityHelper.url_decode(url_encoded)
+            # https://imageproxy.a2d.tv/?source=https:%2F%2Fimg.tv4.incomet.io%2F0cd5a547-3f20-435a-bbe3-ef9a26d7f98d%2Fcrop16x9.jpg&width=2048
+            if width:
+                return f"https://imageproxy.a2d.tv/?source={url_encoded}&width={width}"
+            else:
+                return f"https://imageproxy.a2d.tv/?source={url_encoded}"
+
         for k, v in art_info.items():
             if isinstance(v, str) or not v:
                 continue
@@ -680,15 +688,18 @@ class Channel(chn_class.Channel):
             if not encoded_url:
                 continue
 
-            url = HtmlEntityHelper.url_decode(encoded_url)
             if k == "cover2x3" or k == "image2x3":
+                url = proxy_image(encoded_url, width=350)
                 item.set_artwork(poster=url)
             elif k == "main16x9Annotated":
+                url = proxy_image(encoded_url, width=2048)
                 item.set_artwork(thumb=url, fanart=url)
             elif k == "main16x9" or k == "image16x9":
                 # Only thumbs should be set (not fanart)
+                url = proxy_image(encoded_url, width=550)
                 item.set_artwork(thumb=url)
             elif k == "image4x3":
+                url = proxy_image(encoded_url, width=550)
                 item.set_artwork(thumb=url)
             elif k == "logo":
                 pass

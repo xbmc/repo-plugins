@@ -220,7 +220,7 @@ class Channel(chn_class.Channel):
             LanguageHelper.get_localized_string(LanguageHelper.LatestNews): (
                 self.__get_api_url(
                     "CategoryPageQuery",
-                    "00be06320342614f4b186e9c7710c29a7fc235a1936bde08a6ab0f427131bfaf",
+                    "c51c2c12a390014f864a03a319e89c3e1332cf81cf39ef8f59cd01d1858ec989",
                     variables={"id": "nyheter", "includeFullOppetArkiv": True, "tab": "all"}),
                 False
             ),
@@ -1396,22 +1396,17 @@ class Channel(chn_class.Channel):
                 item.add_stream(url, 0)
 
         if subtitles:
-            Logger.info("Found subtitles to play")
-            for sub in subtitles:
-                sub_format = sub["format"].lower()
-                url = sub["url"]
-                if sub_format == "websrt":
-                    sub_url = url
-                elif sub_format == "webvtt":
-                    sub_url = url
-                else:
-                    # look for more
-                    continue
+            types = {s["type"]: s for s in subtitles if s["format"].lower() in ["websrt", "webvtt"]}
+            if "caption-sdh" in types:
+                sub_url = types["caption-sdh"]["url"]
+            elif len(types) > 0:
+                sub_url = list(types.values())[0]["url"]
+            else:
+                sub_url = None
 
+            if sub_url:
                 item.subtitle = subtitlehelper.SubtitleHelper.download_subtitle(
                     sub_url, format="srt", replace={"&amp;": "&"})
-                # stop when finding one
-                break
 
         item.complete = True
         return item

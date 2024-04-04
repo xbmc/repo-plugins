@@ -14,13 +14,12 @@ import json
 from datetime import date, datetime
 from hashlib import md5
 
-from ..compatibility import string_type, unescape
+from ..compatibility import datetime_infolabel, string_type, to_str, unescape
 from ..constants import MEDIA_PATH
 
 
 class BaseItem(object):
     VERSION = 3
-    INFO_DATE = 'date'  # (string) iso 8601
 
     _playable = False
 
@@ -48,43 +47,19 @@ class BaseItem(object):
         self._next_page = False
 
     def __str__(self):
-        name = self._name
-        uri = self._uri
-        image = self._image
-        obj_str = "------------------------------\n'%s'\nURI: %s\nImage: %s\n------------------------------" % (name, uri, image)
-        return obj_str
+        return ('------------------------------\n'
+                'Name: |{0}|\n'
+                'URI: |{1}|\n'
+                'Image: |{2}|\n'
+                '------------------------------'.format(self._name,
+                                                        self._uri,
+                                                        self._image))
 
     def to_dict(self):
         return {'type': self.__class__.__name__, 'data': self.__dict__}
 
     def dumps(self):
-        def _encoder(obj):
-            if isinstance(obj, (date, datetime)):
-                class_name = obj.__class__.__name__
-
-                if 'fromisoformat' in dir(obj):
-                    return {
-                        '__class__': class_name,
-                        '__isoformat__': obj.isoformat(),
-                    }
-
-                if class_name == 'datetime':
-                    if obj.tzinfo:
-                        format_string = '%Y-%m-%dT%H:%M:%S%z'
-                    else:
-                        format_string = '%Y-%m-%dT%H:%M:%S'
-                else:
-                    format_string = '%Y-%m-%d'
-
-                return {
-                    '__class__': class_name,
-                    '__format_string__': format_string,
-                    '__value__': obj.strftime(format_string)
-                }
-
-            return json.JSONEncoder().default(obj)
-
-        return json.dumps(self.to_dict(), ensure_ascii=False, default=_encoder)
+        return json.dumps(self.to_dict(), ensure_ascii=False, cls=_Encoder)
 
     def get_id(self):
         """
@@ -172,13 +147,15 @@ class BaseItem(object):
     def set_date_from_datetime(self, date_time):
         self._date = date_time
 
-    def get_date(self, as_text=False, short=False):
+    def get_date(self, as_text=False, short=False, as_info_label=False):
         if not self._date:
             return ''
         if short:
             return self._date.date().strftime('%x')
         if as_text:
             return self._date.strftime('%x %X')
+        if as_info_label:
+            return datetime_infolabel(self._date)
         return self._date
 
     def set_dateadded(self, year, month, day, hour=0, minute=0, second=0):
@@ -192,11 +169,13 @@ class BaseItem(object):
     def set_dateadded_from_datetime(self, date_time):
         self._dateadded = date_time
 
-    def get_dateadded(self, as_text=False):
+    def get_dateadded(self, as_text=False, as_info_label=False):
         if not self._dateadded:
             return ''
         if as_text:
             return self._dateadded.strftime('%x %X')
+        if as_info_label:
+            return datetime_infolabel(self._date)
         return self._dateadded
 
     def set_added_utc(self, date_time):
@@ -226,5 +205,43 @@ class BaseItem(object):
         self._next_page = bool(value)
 
     @property
-    def playable(cls):
-        return cls._playable
+    def playable(self):
+        return self._playable
+
+
+class _Encoder(json.JSONEncoder):
+    def encode(self, obj):
+        if isinstance(obj, string_type):
+            return to_str(obj)
+
+        if isinstance(obj, dict):
+            return {to_str(key): self.encode(value)
+                    for key, value in obj.items()}
+
+        if isinstance(obj, (list, tuple)):
+            return [self.encode(item) for item in obj]
+
+        if isinstance(obj, (date, datetime)):
+            class_name = obj.__class__.__name__
+
+            if 'fromisoformat' in dir(obj):
+                return {
+                    '__class__': class_name,
+                    '__isoformat__': obj.isoformat(),
+                }
+
+            if class_name == 'datetime':
+                if obj.tzinfo:
+                    format_string = '%Y-%m-%dT%H:%M:%S%z'
+                else:
+                    format_string = '%Y-%m-%dT%H:%M:%S'
+            else:
+                format_string = '%Y-%m-%d'
+
+            return {
+                '__class__': class_name,
+                '__format_string__': format_string,
+                '__value__': obj.strftime(format_string)
+            }
+
+        return self.iterencode(obj)

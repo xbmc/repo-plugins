@@ -15,6 +15,11 @@ from ...kodion.utils import merge_dicts
 
 
 class YouTubeRequestClient(BaseRequestsClass):
+    _ANDROID_PARAMS = 'CgIIAdgDAQ=='
+    # yt-dlp has chosen the following value, but this results in the android
+    # player response returning unexpected details sometimes. To be investigated
+    # _ANDROID_PARAMS = 'CgIIAQ=='
+
     CLIENTS = {
         # 4k no VP9 HDR
         # Limited subtitle availability
@@ -22,14 +27,14 @@ class YouTubeRequestClient(BaseRequestsClass):
             '_id': 30,
             '_query_subtitles': True,
             'json': {
-                'params': '2AMBCgIQBg',
+                'params': _ANDROID_PARAMS,
                 'context': {
                     'client': {
                         'clientName': 'ANDROID_TESTSUITE',
                         'clientVersion': '1.9',
-                        'androidSdkVersion': '29',
+                        'androidSdkVersion': '34',
                         'osName': 'Android',
-                        'osVersion': '10',
+                        'osVersion': '14',
                         'platform': 'MOBILE',
                     },
                 },
@@ -51,14 +56,14 @@ class YouTubeRequestClient(BaseRequestsClass):
             '_id': 3,
             '_query_subtitles': True,
             'json': {
-                'params': '2AMBCgIQBg',
+                'params': _ANDROID_PARAMS,
                 'context': {
                     'client': {
                         'clientName': 'ANDROID',
-                        'clientVersion': '19.09.37',
-                        'androidSdkVersion': '30',
+                        'clientVersion': '19.12.36',
+                        'androidSdkVersion': '34',
                         'osName': 'Android',
-                        'osVersion': '11',
+                        'osVersion': '14',
                         'platform': 'MOBILE',
                     },
                 },
@@ -82,15 +87,15 @@ class YouTubeRequestClient(BaseRequestsClass):
             '_id': 55,
             '_query_subtitles': True,
             'json': {
-                'params': '2AMBCgIQBg',
+                'params': _ANDROID_PARAMS,
                 'context': {
                     'client': {
                         'clientName': 'ANDROID_EMBEDDED_PLAYER',
-                        'clientVersion': '19.09.37',
+                        'clientVersion': '19.12.36',
                         'clientScreen': 'EMBED',
-                        'androidSdkVersion': '30',
+                        'androidSdkVersion': '34',
                         'osName': 'Android',
-                        'osVersion': '11',
+                        'osVersion': '14',
                         'platform': 'MOBILE',
                     },
                 },
@@ -118,14 +123,14 @@ class YouTubeRequestClient(BaseRequestsClass):
             '_id': 29,
             '_query_subtitles': True,
             'json': {
-                'params': '2AMBCgIQBg',
+                'params': _ANDROID_PARAMS,
                 'context': {
                     'client': {
                         'clientName': 'ANDROID_UNPLUGGED',
-                        'clientVersion': '6.36',
-                        'androidSdkVersion': '29',
+                        'clientVersion': '8.12.0',
+                        'androidSdkVersion': '34',
                         'osName': 'Android',
-                        'osVersion': '10',
+                        'osVersion': '14',
                         'platform': 'MOBILE',
                     },
                 },
@@ -145,14 +150,20 @@ class YouTubeRequestClient(BaseRequestsClass):
         },
         'ios': {
             '_id': 5,
+            '_os': {
+                'major': '17',
+                'minor': '4',
+                'patch': '1',
+                'build': '21E236',
+            },
             'json': {
                 'context': {
                     'client': {
                         'clientName': 'IOS',
-                        'clientVersion': '19.09.3',
-                        'deviceModel': 'iPhone14,5',
+                        'clientVersion': '19.12.3',
+                        'deviceModel': 'iPhone16,2',
                         'osName': 'iOS',
-                        'osVersion': '17_4',
+                        'osVersion': '{_os[major]}.{_os[minor]}.{_os[patch]}.{_os[build]}',
                         'platform': 'MOBILE',
                     },
                 },
@@ -162,7 +173,7 @@ class YouTubeRequestClient(BaseRequestsClass):
                                '{json[context][client][clientVersion]}'
                                ' ({json[context][client][deviceModel]};'
                                ' U; CPU {json[context][client][osName]}'
-                               ' {json[context][client][osVersion]}'
+                               ' {_os[major]}_{_os[minor]}_{_os[patch]}'
                                ' like Mac OS X)'),
                 'X-YouTube-Client-Name': '{_id}',
                 'X-YouTube-Client-Version': '{json[context][client][clientVersion]}',
@@ -193,6 +204,22 @@ class YouTubeRequestClient(BaseRequestsClass):
                                ' AppleWebKit/537.36 (KHTML, like Gecko)'
                                ' 85.0.4183.93/6.5 TV Safari/537.36'),
             },
+            'params': {
+                'key': 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8',
+            },
+        },
+        'media_connect_frontend': {
+            '_id': 95,
+            '_access_token': KeyError,
+            'json': {
+                'context': {
+                    'client': {
+                        'clientName': 'MEDIA_CONNECT_FRONTEND',
+                        'clientVersion': '0.1',
+                    },
+                },
+            },
+            'headers': {},
             'params': {
                 'key': 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8',
             },
@@ -229,6 +256,10 @@ class YouTubeRequestClient(BaseRequestsClass):
                     'client': {
                         'gl': None,
                         'hl': None,
+                    },
+                    'request': {
+                        'internalExperimentFlags': [],
+                        'useSsl': True,
                     },
                 },
                 'playbackContext': {
@@ -324,8 +355,9 @@ class YouTubeRequestClient(BaseRequestsClass):
         if data:
             client = merge_dicts(client, data)
         client = merge_dicts(cls.CLIENTS['_common'], client, templates)
+        client['_name'] = client_name
 
-        if data and '_access_token' in data:
+        if client.get('_access_token'):
             del client['params']['key']
         elif 'Authorization' in client['headers']:
             del client['headers']['Authorization']

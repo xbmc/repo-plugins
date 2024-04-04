@@ -13,7 +13,7 @@ from __future__ import absolute_import, division, unicode_literals
 import sys
 
 from ..constants import settings
-from ..utils import validate_ip_address
+from ..utils import current_system_version, validate_ip_address
 
 
 class AbstractSettings(object):
@@ -30,7 +30,7 @@ class AbstractSettings(object):
     _echo = False
     _cache = {}
     _check_set = True
-    _type = None
+    _instance = None
 
     @classmethod
     def flush(cls, xbmc_addon):
@@ -345,7 +345,7 @@ class AbstractSettings(object):
         value = self.get_int(settings.MPD_STREAM_SELECT, default)
         if value in self._STREAM_SELECT:
             return self._STREAM_SELECT[value]
-        self._STREAM_SELECT[default]
+        return self._STREAM_SELECT[default]
 
     def hide_short_videos(self):
         return self.get_bool(settings.HIDE_SHORT_VIDEOS, False)
@@ -383,6 +383,17 @@ class AbstractSettings(object):
     def set_history_playlist(self, value):
         return self.set_string(settings.HISTORY_PLAYLIST, value)
 
-    def get_label_color(self, label_part):
-        setting_name = '.'.join((settings.LABEL_COLOR, label_part))
-        return self.get_string(setting_name, 'white')
+    if current_system_version.compatible(20, 0):
+        def get_label_color(self, label_part):
+            setting_name = '.'.join((settings.LABEL_COLOR, label_part))
+            return self.get_string(setting_name, 'white')
+    else:
+        _COLOR_MAP = {
+            'commentCount': 'cyan',
+            'favoriteCount': 'gold',
+            'likeCount': 'lime',
+            'viewCount': 'lightblue',
+        }
+
+        def get_label_color(self, label_part):
+            return self._COLOR_MAP.get(label_part, 'white')

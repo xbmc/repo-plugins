@@ -10,7 +10,6 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
-import json
 import sys
 import weakref
 
@@ -30,9 +29,11 @@ from ...ui import XbmcContextUI
 from ...utils import (
     current_system_version,
     get_kodi_setting_value,
+    jsonrpc,
     loose_version,
     make_dirs,
     to_unicode,
+    wait,
 )
 
 
@@ -54,6 +55,8 @@ class XbmcContext(AbstractContext):
         'client.ip': 30700,
         'client.ip.failed': 30701,
         'client.secret.incorrect': 30650,
+        'content.clear': 30121,
+        'content.clear.confirm': 30120,
         'content.delete': 30116,
         'content.delete.confirm': 30114,
         'content.remove': 30117,
@@ -151,7 +154,7 @@ class XbmcContext(AbstractContext):
         'retry': 30612,
         'saved.playlists': 30611,
         'search': 30102,
-        'search.clear': 30120,
+        'search.clear': 30556,
         'search.new': 30110,
         'search.quick': 30605,
         'search.quick.incognito': 30606,
@@ -163,11 +166,12 @@ class XbmcContext(AbstractContext):
         'settings': 30577,
         'setup_wizard': 30526,
         'setup_wizard.capabilities': 30786,
-        'setup_wizard.capabilities.old': 30787,
-        'setup_wizard.capabilities.low': 30788,
-        'setup_wizard.capabilities.medium': 30789,
-        'setup_wizard.capabilities.high': 30790,
-        'setup_wizard.capabilities.recent': 30791,
+        'setup_wizard.capabilities.720p30': 30787,
+        'setup_wizard.capabilities.1080p30': 30788,
+        'setup_wizard.capabilities.1080p60': 30796,
+        'setup_wizard.capabilities.4k30': 30789,
+        'setup_wizard.capabilities.4k60': 30790,
+        'setup_wizard.capabilities.4k60_av1': 30791,
         'setup_wizard.capabilities.max': 30792,
         'setup_wizard.locale.language': 30524,
         'setup_wizard.locale.region': 30525,
@@ -268,10 +272,7 @@ class XbmcContext(AbstractContext):
                  override=True):
         super(XbmcContext, self).__init__(path, params, plugin_name, plugin_id)
 
-        if plugin_id:
-            self._addon = xbmcaddon.Addon(id=plugin_id)
-        else:
-            self._addon = xbmcaddon.Addon(id=ADDON_ID)
+        self._addon = xbmcaddon.Addon(id=(plugin_id if plugin_id else ADDON_ID))
 
         """
         I don't know what xbmc/kodi is doing with a simple uri, but we have to extract the information from the
@@ -336,7 +337,7 @@ class XbmcContext(AbstractContext):
     def format_time(time_obj, str_format=None):
         if str_format is None:
             str_format = (xbmc.getRegion('time')
-                          .replace("%H%H", "%H")
+                          .replace('%H%H', '%H')
                           .replace(':%S', ''))
         return time_obj.strftime(str_format)
 
@@ -449,23 +450,25 @@ class XbmcContext(AbstractContext):
                 (sort.LASTPLAYED,       '%T \u2022 %P',           '%D | %J'),
                 (sort.PLAYCOUNT,        '%T \u2022 %P',           '%D | %J'),
                 (sort.UNSORTED,         '%T \u2022 %P',           '%D | %J'),
-                (sort.LABEL_IGNORE_THE, '%T \u2022 %P',           '%D | %J'),
+                (sort.LABEL,            '%T \u2022 %P',           '%D | %J'),
             ) if detailed_labels else self.add_sort_method(
                 (sort.LASTPLAYED,),
                 (sort.PLAYCOUNT,),
                 (sort.UNSORTED,),
-                (sort.LABEL_IGNORE_THE,),
+                (sort.LABEL,),
             )
         else:
             self.add_sort_method(
                 (sort.UNSORTED,         '%T \u2022 %P',           '%D | %J'),
-                (sort.LABEL_IGNORE_THE, '%T \u2022 %P',           '%D | %J'),
+                (sort.LABEL,            '%T \u2022 %P',           '%D | %J'),
             ) if detailed_labels else self.add_sort_method(
                 (sort.UNSORTED,),
-                (sort.LABEL_IGNORE_THE,),
+                (sort.LABEL,),
             )
         if content_type == content.VIDEO_CONTENT:
             self.add_sort_method(
+                (sort.CHANNEL,          '[%A - ]%T \u2022 %P',    '%D | %J'),
+                (sort.ARTIST,           '%T \u2022 %P | %D | %J', '%A'),
                 (sort.PROGRAM_COUNT,    '%T \u2022 %P | %D | %J', '%C'),
                 (sort.VIDEO_RATING,     '%T \u2022 %P | %D | %J', '%R'),
                 (sort.DATE,             '%T \u2022 %P | %D',      '%J'),
@@ -473,12 +476,14 @@ class XbmcContext(AbstractContext):
                 (sort.VIDEO_RUNTIME,    '%T \u2022 %P | %J',      '%D'),
                 (sort.TRACKNUM,         '[%N. ]%T \u2022 %P',     '%D | %J'),
             ) if detailed_labels else self.add_sort_method(
+                (sort.CHANNEL,          '[%A - ]%T'),
+                (sort.ARTIST,),
                 (sort.PROGRAM_COUNT,),
                 (sort.VIDEO_RATING,),
                 (sort.DATE,),
                 (sort.DATEADDED,),
                 (sort.VIDEO_RUNTIME,),
-                (sort.TRACKNUM,),
+                (sort.TRACKNUM,         '[%N. ]%T '),
             )
 
     def add_sort_method(self, *sort_methods):
@@ -509,7 +514,7 @@ class XbmcContext(AbstractContext):
 
         return new_context
 
-    def execute(self, command, wait=True, wait_for=None):
+    def execute(self, command, wait=False, wait_for=None):
         xbmc.executebuiltin(command, wait)
         if wait_for:
             ui = self.get_ui()
@@ -520,55 +525,42 @@ class XbmcContext(AbstractContext):
                     break
 
     @staticmethod
-    def sleep(milli_seconds):
-        xbmc.sleep(milli_seconds)
+    def sleep(timeout=None):
+        wait(timeout)
 
     def addon_enabled(self, addon_id):
-        rpc_request = json.dumps({"jsonrpc": "2.0",
-                                  "method": "Addons.GetAddonDetails",
-                                  "id": 1,
-                                  "params": {"addonid": "%s" % addon_id,
-                                             "properties": ["enabled"]}
-                                  })
-        response = json.loads(xbmc.executeJSONRPC(rpc_request))
+        response = jsonrpc(method='Addons.GetAddonDetails',
+                           params={'addonid': addon_id,
+                                   'properties': ['enabled']})
         try:
             return response['result']['addon']['enabled'] is True
-        except KeyError:
-            message = response['error']['message']
-            code = response['error']['code']
-            error = 'Requested |%s| received error |%s| and code: |%s|' % (rpc_request, message, code)
-            self.log_error(error)
+        except (KeyError, TypeError):
+            error = response.get('error', {})
+            self.log_error('XbmcContext.addon_enabled error - |{0}: {1}|'
+                           .format(error.get('code', 'unknown'),
+                                   error.get('message', 'unknown')))
             return False
 
     def set_addon_enabled(self, addon_id, enabled=True):
-        rpc_request = json.dumps({"jsonrpc": "2.0",
-                                  "method": "Addons.SetAddonEnabled",
-                                  "id": 1,
-                                  "params": {"addonid": "%s" % addon_id,
-                                             "enabled": enabled}
-                                  })
-        response = json.loads(xbmc.executeJSONRPC(rpc_request))
+        response = jsonrpc(method='Addons.SetAddonEnabled',
+                           params={'addonid': addon_id,
+                                   'enabled': enabled})
         try:
             return response['result'] == 'OK'
-        except KeyError:
-            message = response['error']['message']
-            code = response['error']['code']
-            error = 'Requested |%s| received error |%s| and code: |%s|' % (rpc_request, message, code)
-            self.log_error(error)
+        except (KeyError, TypeError):
+            error = response.get('error', {})
+            self.log_error('XbmcContext.set_addon_enabled error - |{0}: {1}|'
+                           .format(error.get('code', 'unknown'),
+                                   error.get('message', 'unknown')))
             return False
 
     def send_notification(self, method, data):
         self.log_debug('send_notification: |%s| -> |%s|' % (method, data))
-        xbmc.executeJSONRPC(json.dumps({
-            'jsonrpc': '2.0',
-            'id': 1,
-            'method': 'JSONRPC.NotifyAll',
-            'params': {
-                'sender': ADDON_ID,
-                'message': method,
-                'data': data,
-            },
-        }))
+        jsonrpc(method='JSONRPC.NotifyAll',
+                params={'sender': ADDON_ID,
+                        'message': method,
+                        'data': data},
+                no_response=True)
 
     def use_inputstream_adaptive(self):
         if self._settings.use_isa():
@@ -656,3 +648,8 @@ class XbmcContext(AbstractContext):
             if attr else
             'Container.ListItem(0).Property({0})'.format(detail_name)
         )
+
+    def tear_down(self):
+        self._settings.flush()
+        del self._addon
+        self._addon = None

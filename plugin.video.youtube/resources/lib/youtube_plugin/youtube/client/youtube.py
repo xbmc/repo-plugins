@@ -20,7 +20,7 @@ from random import randint
 from .login_client import LoginClient
 from ..helper.video_info import VideoInfo
 from ..youtube_exceptions import InvalidJSON, YouTubeException
-from ...kodion.compatibility import string_type
+from ...kodion.compatibility import string_type, to_str
 from ...kodion.utils import (
     current_system_version,
     datetime_parser,
@@ -99,7 +99,15 @@ class YouTube(LoginClient):
                     'client': {
                         'gl': None,
                         'hl': None,
+                        'utcOffsetMinutes': 0,
                     },
+                    'request': {
+                        'internalExperimentFlags': [],
+                        'useSsl': True,
+                    }
+                },
+                'user': {
+                    'lockedSafetyMode': False
                 },
             },
             'headers': {
@@ -1052,6 +1060,7 @@ class YouTube(LoginClient):
         :param order: one of: 'date', 'rating', 'relevance', 'title', 'videoCount', 'viewCount'
         :param page_token:
         :param location: bool, use geolocation
+        :param after: str, RFC 3339 formatted date-time value (1970-01-01T00:00:00Z)
         :return:
         """
         # prepare page token
@@ -1533,13 +1542,15 @@ class YouTube(LoginClient):
                 for thread in threads:
                     thread.join(30)
 
+                do_encode = not current_system_version.compatible(19, 0)
+
                 for response in responses:
                     if response:
                         response.encoding = 'utf-8'
                         xml_data = to_unicode(response.content)
                         xml_data = xml_data.replace('\n', '')
-                        if not current_system_version.compatible(19, 0):
-                            xml_data = xml_data.encode('utf-8')
+                        if do_encode:
+                            xml_data = to_str(xml_data)
 
                         root = ET.fromstring(xml_data)
 

@@ -30,6 +30,7 @@ __all__ = (
     'friendly_number',
     'get_kodi_setting_bool',
     'get_kodi_setting_value',
+    'jsonrpc',
     'loose_version',
     'make_dirs',
     'merge_dicts',
@@ -40,6 +41,7 @@ __all__ = (
     'strip_html_from_text',
     'to_unicode',
     'validate_ip_address',
+    'wait',
 )
 
 
@@ -79,16 +81,22 @@ def find_best_fit(data, compare_method=None):
     return result
 
 
-def select_stream(context, stream_data_list, quality_map_override=None, ask_for_quality=None, audio_only=None):
+def select_stream(context,
+                  stream_data_list,
+                  quality_map_override=None,
+                  ask_for_quality=None,
+                  audio_only=None):
     # sort - best stream first
     def _sort_stream_data(_stream_data):
         return _stream_data.get('sort', (0, 0))
 
     settings = context.get_settings()
     use_adaptive = context.use_inputstream_adaptive()
-    ask_for_quality = context.get_settings().ask_for_video_quality() if ask_for_quality is None else ask_for_quality
-    video_quality = settings.get_video_quality(quality_map_override=quality_map_override)
-    audio_only = audio_only if audio_only is not None else settings.audio_only()
+    if ask_for_quality is None:
+        ask_for_quality = context.get_settings().ask_for_video_quality()
+    video_quality = settings.get_video_quality(quality_map_override)
+    if audio_only is None:
+        audio_only = settings.audio_only()
     adaptive_live = settings.use_isa_live_streams() and context.inputstream_adaptive_capabilities('live')
 
     if not ask_for_quality:
@@ -100,7 +108,7 @@ def select_stream(context, stream_data_list, quality_map_override=None, ask_for_
     if not ask_for_quality and audio_only:  # check for live stream, audio only not supported
         context.log_debug('Select stream: Audio only')
         for item in stream_data_list:
-            if item.get('Live', False):
+            if item.get('Live'):
                 context.log_debug('Select stream: Live stream, audio only not available')
                 audio_only = False
                 break
@@ -296,7 +304,11 @@ def seconds_to_duration(seconds):
 
 def merge_dicts(item1, item2, templates=None, _=Ellipsis):
     if not isinstance(item1, dict) or not isinstance(item2, dict):
-        return item1 if item2 is _ else _ if item2 is KeyError else item2
+        return (
+            item1 if item2 is _ else
+            _ if KeyError in (item1, item2) else
+            item2
+        )
     new = {}
     keys = set(item1)
     keys.update(item2)
@@ -311,15 +323,16 @@ def merge_dicts(item1, item2, templates=None, _=Ellipsis):
     return new or _
 
 
-def get_kodi_setting_value(setting):
-    json_query = xbmc.executeJSONRPC(json.dumps({
-        'jsonrpc': '2.0',
-        'method': 'Settings.GetSettingValue',
-        'params': {'setting': setting},
-        'id': 1,
-    }))
-    json_query = json.loads(json_query)
-    return json_query.get('result', {}).get('value')
+def get_kodi_setting_value(setting, process=None):
+    response = jsonrpc(method='Settings.GetSettingValue',
+                       params={'setting': setting})
+    try:
+        value = response['result']['value']
+        if process:
+            return process(value)
+    except (KeyError, TypeError, ValueError):
+        return None
+    return value
 
 
 def get_kodi_setting_bool(setting):
@@ -335,3 +348,31 @@ def validate_ip_address(ip_address):
     except ValueError:
         return (0, 0, 0, 0)
     return tuple(octets)
+
+
+def jsonrpc(batch=None, **kwargs):
+    """
+    Perform JSONRPC calls
+    """
+
+    if not batch and not kwargs:
+        return None
+
+    do_response = False
+    for request_id, kwargs in enumerate(batch or (kwargs, )):
+        do_response = (not kwargs.pop('no_response', False)) or do_response
+        if do_response and 'id' not in kwargs:
+            kwargs['id'] = request_id
+        kwargs['jsonrpc'] = '2.0'
+
+    request = json.dumps(batch or kwargs, default=tuple, ensure_ascii=False)
+    response = xbmc.executeJSONRPC(request)
+    return json.loads(response) if do_response else None
+
+
+def wait(timeout=None):
+    if not timeout:
+        timeout = 0
+    elif timeout < 0:
+        timeout = 0.1
+    return xbmc.Monitor().waitForAbort(timeout)

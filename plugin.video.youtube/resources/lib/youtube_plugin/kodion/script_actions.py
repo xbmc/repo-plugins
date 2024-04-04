@@ -139,7 +139,7 @@ def _maintenance_actions(context, action, params):
         if target not in targets:
             return
 
-        if ui.on_remove_content(
+        if ui.on_clear_content(
             localize('maintenance.{0}'.format(target))
         ):
             targets[target]().clear()
@@ -347,4 +347,5 @@ def run(argv):
             _user_actions(context, action, params)
             return
     finally:
+        context.tear_down()
         ui.clear_property(WAIT_FLAG)

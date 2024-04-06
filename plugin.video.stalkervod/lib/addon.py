@@ -148,7 +148,7 @@ class StalkerAddon:
                 video_info.setMediaType('season')
             else:
                 url = G.get_plugin_url({'action': 'play', 'video_id': video['id'], 'series': 0})
-                if video['time'] and video['time'] != '0':
+                if video['time'] and video['time'].isnumeric() and video['time'] != '0':
                     video_info.setDuration(int(video['time']) * 60)
                 video_info.setMediaType('movie')
                 list_item.setProperty('IsPlayable', 'true')

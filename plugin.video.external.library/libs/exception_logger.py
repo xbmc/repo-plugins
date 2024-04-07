@@ -15,6 +15,7 @@
 """Exception logger with extended diagnostic info"""
 
 import inspect
+import logging
 import sys
 from contextlib import contextmanager
 from platform import uname
@@ -23,9 +24,7 @@ from typing import Any, Dict, Callable, Generator, Iterable, Optional
 
 import xbmc
 
-
-def _log_error(message: str) -> None:
-    xbmc.log(message, level=xbmc.LOGERROR)
+logger = logging.getLogger(__name__)
 
 
 def _format_vars(variables: Dict[str, Any]) -> str:
@@ -156,7 +155,9 @@ def format_exception(exc_obj: Optional[Exception] = None) -> str:
 
 
 @contextmanager
-def catch_exception(logger_func: Callable[[str], None] = _log_error) -> Generator[None, None, None]:
+def catch_exception(
+        logger_func: Callable[[str], None] = logger.error
+) -> Generator[None, None, None]:
     """
     Diagnostic helper context manager
 
@@ -187,7 +188,7 @@ def catch_exception(logger_func: Callable[[str], None] = _log_error) -> Generato
     try:
         yield
     except Exception as exc:
-        message = format_exception(exc)
+        message = format_exception(exc)  # pylint: disable=logging-not-lazy
         # pylint: disable=line-too-long
         logger_func('\n*********************************** Unhandled exception detected ***********************************\n'
                     + message)

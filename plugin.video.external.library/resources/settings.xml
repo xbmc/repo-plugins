@@ -20,6 +20,11 @@
             <heading>32002</heading>
           </control>
         </setting>
+        <setting id="use_https" type="boolean" label="32029" help="">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
         <setting id="kodi_login" type="string" label="32013" help="">
           <level>0</level>
           <default/>

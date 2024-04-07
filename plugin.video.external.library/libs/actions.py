@@ -18,7 +18,7 @@ import sys
 from urllib.parse import parse_qsl
 
 import xbmcplugin
-from xbmcgui import Dialog, ListItem
+from xbmcgui import Dialog, ListItem, NOTIFICATION_ERROR
 
 from libs.content_type_handlers import (
     MoviesHandler,
@@ -31,7 +31,8 @@ from libs.content_type_handlers import (
     RecentMusicVideosHandler,
 )
 from libs.exceptions import NoDataError, RemoteKodiError
-from libs.kodi_service import ADDON, ADDON_ID, GettextEmulator, get_plugin_url
+from libs.json_rpc_api import VideoLibraryScan
+from libs.kodi_service import ADDON, ADDON_ID, ADDON_NAME, GettextEmulator, get_plugin_url
 from libs.media_info_service import set_info, set_art
 from libs.mem_storage import MemStorage
 
@@ -94,6 +95,10 @@ def root():
                           'thumb': 'DefaultRecentlyAddedMusicVideos.png'})
         url = get_plugin_url(content_type='recent_music_videos')
         xbmcplugin.addDirectoryItem(HANDLE, url, list_item, isFolder=True)
+    list_item = ListItem(_('Update remote videolibrary'))
+    list_item.setArt({'icon': 'DefaultAddonsUpdates.png', 'thumb': 'DefaultAddonsUpdates.png'})
+    url = get_plugin_url(action='update_library')
+    xbmcplugin.addDirectoryItem(HANDLE, url, list_item, isFolder=False)
 
 
 def show_media_items(content_type, tvshowid=None, season=None, parent_category=None):
@@ -109,11 +114,12 @@ def show_media_items(content_type, tvshowid=None, season=None, parent_category=N
         logger.exception('Unable to retrieve %s from the remote Kodi library',
                          content_type)
         DIALOG.notification(ADDON_ID, _('Unable to retrieve data from the remote Kodi library!'),
-                            icon='error')
+                            icon=NOTIFICATION_ERROR)
         return
     except RemoteKodiError as exc:
         logger.exception('Unable to connect to %s', str(exc))
-        DIALOG.notification(ADDON_ID, _('Unable to connect to the remote Kodi host!'), icon='error')
+        DIALOG.notification(ADDON_ID, _('Unable to connect to the remote Kodi host!'),
+                            icon=NOTIFICATION_ERROR)
         return
     logger.debug('Creating a list of %s items...', content_type)
     directory_items = []
@@ -145,16 +151,24 @@ def show_media_items(content_type, tvshowid=None, season=None, parent_category=N
     logger.debug('Finished creating a list of %s items.', content_type)
 
 
+def update_remote_library():
+    VideoLibraryScan().send_json_rpc()
+    DIALOG.ok(ADDON_NAME, _('Updating the remote videolibrary started.'))
+
+
 def router(paramstring):
     params = dict(parse_qsl(paramstring))
     logger.debug('Called addon with params: %s', str(sys.argv))
-    if 'content_type' not in params:
-        root()
-    else:
+    if 'content_type' in params:
         if (tvshowid := params.get('tvshowid')) is not None:
             tvshowid = int(tvshowid)
         if (season := params.get('season')) is not None:
             season = int(season)
         parent_category = params.get('parent_category')
         show_media_items(params['content_type'], tvshowid, season, parent_category)
+    elif params.get('action') == 'update_library':
+        update_remote_library()
+        return
+    else:
+        root()
     xbmcplugin.endOfDirectory(HANDLE)

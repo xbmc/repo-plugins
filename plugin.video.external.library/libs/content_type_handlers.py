@@ -30,6 +30,8 @@ __all__ = [
     'SeasonsHandler',
     'EpisodesHandler',
     'RecentEpisodesHandler',
+    'MusicVideosHandler',
+    'RecentMusicVideosHandler',
 ]
 
 _ = GettextEmulator.gettext

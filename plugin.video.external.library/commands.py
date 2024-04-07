@@ -12,7 +12,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 import logging
 import sys
 
@@ -39,5 +38,5 @@ def main():
 
 
 if __name__ == '__main__':
-    with catch_exception(logger.error):
+    with catch_exception():
         main()

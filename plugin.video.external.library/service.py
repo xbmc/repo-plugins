@@ -24,7 +24,7 @@ from libs.monitor import PlayMonitor
 initialize_logging()
 logger = logging.getLogger(__name__)
 
-with catch_exception(logger.error):
+with catch_exception():
     logger.debug('Starting playback monitoring service...')
     kodi_monitor = xbmc.Monitor()
     play_monitor = PlayMonitor()

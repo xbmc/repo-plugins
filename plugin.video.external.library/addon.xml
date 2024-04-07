@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.external.library"
-    version="1.0.1"
+    version="1.1.0"
     name="External Kodi Videolibrary Client"
     provider-name="Roman V.M.">
   <requires>
@@ -20,9 +20,9 @@
       <icon>icon.png</icon>
     </assets>
     <source>https://github.com/romanvm/kodi.external.library</source>
-    <news>1.0.1: Add show titles to recent episode item labels.
-
-1.0.0: Initial public release.</news>
+    <news>1.1.0:
+- Add a menu item for updating the remote videolibrary.
+- Allow to access the remote videolibary via HTTPS.</news>
     <reuselanguageinvoker>true</reuselanguageinvoker>
   </extension>
 </addon>

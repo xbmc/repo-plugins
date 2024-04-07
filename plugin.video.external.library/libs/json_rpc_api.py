@@ -16,7 +16,7 @@
 
 import logging
 from pprint import pformat
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 from libs import simple_requests as requests
 from libs.exceptions import NoDataError, RemoteKodiError
@@ -36,9 +36,11 @@ class BaseJsonRpcApi:
         request = {
             'jsonrpc': '2.0',
             'method': self.method,
-            'params': self.get_params(),
             'id': '1',
         }
+        params = self.get_params()  # pylint: disable=assignment-from-none
+        if params is not None:
+            request['params'] = params
         logger.debug('JSON-RPC request: %s', pformat(request))
         auth = None
         login = ADDON.getSetting('kodi_login')
@@ -53,9 +55,9 @@ class BaseJsonRpcApi:
         logger.debug('JSON-RPC reply: %s', pformat(json_reply))
         return json_reply
 
-    def get_params(self) -> Dict[str, Any]:
+    def get_params(self) -> Optional[Dict[str, Any]]:
         """Get params to send to Kodi JSON-RPC API"""
-        raise NotImplementedError
+        return None
 
 
 class BaseMediaItemsRetriever(BaseJsonRpcApi):
@@ -259,6 +261,10 @@ class SetMovieDetails(BaseJsonRpcApi):
 
 class SetEpisodeDetails(SetMovieDetails):
     method = 'VideoLibrary.SetEpisodeDetails'
+
+
+class VideoLibraryScan(BaseJsonRpcApi):
+    method = 'VideoLibrary.Scan'
 
 
 SET_DETAILS_API_MAP = {

@@ -186,6 +186,8 @@ def get_remote_kodi_url(with_credentials=False):
     port = ADDON.getSetting('kodi_port')
     login = ADDON.getSetting('kodi_login')
     password = ADDON.getSetting('kodi_password')
+    use_https = ADDON.getSettingBool('use_https')
+    protocol = 'https' if use_https else 'http'
     if not with_credentials or not login:
-        return f'http://{host}:{port}'
-    return f'http://{login}:{password}@{host}:{port}'
+        return f'{protocol}://{host}:{port}'
+    return f'{protocol}://{login}:{password}@{host}:{port}'

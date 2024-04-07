@@ -122,3 +122,15 @@ msgstr ""
 msgctxt "#32028"
 msgid "Recently added music videos"
 msgstr ""
+
+msgctxt "#32029"
+msgid "Use HTTPS"
+msgstr ""
+
+msgctxt "#32030"
+msgid "Update remote videolibrary"
+msgstr ""
+
+msgctxt "#32031"
+msgid "Updating the remote videolibrary started."
+msgstr ""

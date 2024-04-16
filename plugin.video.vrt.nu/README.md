@@ -59,6 +59,9 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.30 (2024-04-16)
+- Fix playing from TV guide (@mediaminister)
+
 ### v2.5.29 (2024-02-12)
 - Fix program listings (@mediaminister)
 

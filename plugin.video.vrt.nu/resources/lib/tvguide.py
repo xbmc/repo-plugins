@@ -209,42 +209,30 @@ class TVGuide:
     @staticmethod
     def get_stream_ids(episode_id=None):
         """Get videoId and publicationId using VRT MAX REST API"""
-        from tokenresolver import TokenResolver
-        access_token = TokenResolver().get_token('vrtnu-site_profile_at')
+        from api import api_req
         video_id = None
         publication_id = None
-        if access_token:
-            headers = {
-                'Authorization': 'Bearer ' + access_token,
-                'Content-Type': 'application/json',
+        graphql_query = """
+            query Stream($id: ID!) {
+              catalogMember(id: $id) {
+                ...stream
+              }
             }
-            graphql = """
-                query Stream($id: ID!) {
-                  catalogMember(id: $id) {
-                    ...stream
-                  }
-                }
-                fragment stream on Episode {
-                  watchAction {
-                    videoId
-                    publicationId
-                  }
-                }
-            """
-            payload = {
-                'operationName': 'Stream',
-                'variables': {
-                    'id': episode_id
-                },
-                'query': graphql,
+            fragment stream on Episode {
+              watchAction {
+                videoId
+                publicationId
+              }
             }
-            from json import dumps
-            data = dumps(payload).encode('utf-8')
-            url = 'https://www.vrt.be/vrtnu-api/graphql/v1'
-            episode = get_url_json(url=url, cache=None, headers=headers, data=data, raise_errors='all').get('data').get('catalogMember')
-            if episode:
-                video_id = episode.get('watchAction').get('videoId')
-                publication_id = episode.get('watchAction').get('publicationId')
+        """
+        operation_name = 'Stream'
+        variables = {
+            'id': episode_id
+        }
+        episode = api_req(graphql_query, operation_name, variables).get('data').get('catalogMember')
+        if episode:
+            video_id = episode.get('watchAction').get('videoId')
+            publication_id = episode.get('watchAction').get('publicationId')
         return video_id, publication_id
 
     def get_episode_path(self, episode, channel):

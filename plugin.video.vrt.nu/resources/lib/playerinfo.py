@@ -197,10 +197,10 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
     def update_position(self):
         """Update the player position, when possible"""
         try:
-            last_pos = self.getTime()
+            pos = self.getTime()
             # Kodi Player sometimes returns a time of 0.0 and this causes unwanted behaviour with VRT MAX Resumepoints API.
-            if last_pos > 0.0:
-                self.last_pos = last_pos
+            if pos > 0.0:
+                self.last_pos = pos
         except RuntimeError:
             pass
 
@@ -244,9 +244,9 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
     def update_total(self):
         """Update the total video time"""
         try:
-            total = self.getTotalTime()
+            tot = self.getTotalTime()
             # Kodi Player sometimes returns a total time of 0.0 and this causes unwanted behaviour with VRT MAX Resumepoints API.
-            if total > 0.0:
-                self.total = total
+            if tot > 0.0:
+                self.total = tot
         except RuntimeError:
             pass

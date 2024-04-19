@@ -47,26 +47,31 @@ def todays_games(game_day):
 
     add_dir('[B]%s >>[/B]' % LOCAL_STRING(30011), '/live', 101, NEXT_ICON, FANART, next_day.strftime("%Y-%m-%d"))
 
-def stream_select(home_id, away_id, highlight_id):
-    xbmc.log(f"home_id: {home_id}")
-    xbmc.log(f"away_id: {home_id}")
+def stream_select(stream1_id, stream2_id, stream3_id, stream1_name, stream2_name, stream3_name, highlight_id):
+    xbmc.log(f"stream1_id: {stream1_id}, stream1_name: {stream1_name}")
+    xbmc.log(f"stream2_id: {stream2_id}, stream2_name: {stream2_name}")
+    xbmc.log(f"stream3_id: {stream3_id}, stream3_name: {stream3_name}")
     xbmc.log(f"highlight_id: {highlight_id}")
 
-    options = ["National"]
-    if away_id != "":
-        options.remove("National")
-        options.append("Home")
-        options.append("Away")
+    options = []
+    if stream1_id != "":
+        options.append(stream1_name)
+    if stream2_id != "":
+        options.append(stream2_name)
+    if stream3_id != "":
+        options.append(stream3_name)
     if highlight_id != "":
         options.append("Highlights")
 
     dialog = xbmcgui.Dialog()
     n = dialog.select('Choose Stream', options)
     if n > -1:
-        if options[n] == "National" or options[n] == "Home":
-            id = home_id
-        elif options[n] == "Away":
-            id = away_id
+        if options[n] == stream1_name:
+            id = stream1_id
+        elif options[n] == stream2_name:
+            id = stream2_id
+        elif options[n] == stream3_name:
+            id = stream3_id
         elif options[n] == "Highlights":
             id = highlight_id
     else:

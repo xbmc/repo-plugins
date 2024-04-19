@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nhlgcl" name="NHL TV™" version="2022.11.29+matrix.1" provider-name="eracknaphobia">
+<addon id="plugin.video.nhlgcl" name="NHL TV™" version="2024.4.18+matrix.1" provider-name="eracknaphobia">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -18,7 +18,7 @@
             restrictions apply, including national blackouts.
         </disclaimer>
         <news>
-            - Update to new endpoints
+            - allow greater flexibility in stream choice
         </news>
         <language>en</language>
         <platform>all</platform>

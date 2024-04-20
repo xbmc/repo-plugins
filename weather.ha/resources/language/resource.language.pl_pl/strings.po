@@ -1,0 +1,302 @@
+# Kodi Media Center language file
+# Addon Name: Home Assistant Weather
+# Addon id: weather.ha
+# Addon Provider: eugeniusz.gienek
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi add-ons\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2024-04-15 19:30+1000\n"
+"Last-Translator: Eugeniusz Gienek <-@-.pl>\n"
+"Language-Team: Polish <https://kodi.weblate.cloud/projects/kodi-add-ons-weather/weather-ha/pl_pl/>\n"
+"Language: pl_pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.10.1\n"
+
+msgctxt "Addon Summary"
+msgid "Home Assistant Weather forecast"
+msgstr "Prognoza pogody Home Assistant"
+
+msgctxt "Addon Description"
+msgid "Weather forecast provided by Home Assistant"
+msgstr "Prognoza pogody dostarczona przez Home Assistant"
+
+msgctxt "#30001"
+msgid "Connection"
+msgstr "Połączenie"
+
+msgctxt "#30002"
+msgid "Home Assistant Server URL (with protocol)"
+msgstr "URL Serwera Home Assistant (z protokołem)"
+
+msgctxt "#30003"
+msgid "Home Assistant Long Live Token"
+msgstr "Home Assistant Long Live Token"
+
+msgctxt "#30004"
+msgid "Home Assistant Weather REST API url for current forecast (e.g. /api/...)"
+msgstr "REST API pogody Home Assistant dla pogody obecnej (np. /api/...)"
+
+msgctxt "#30005"
+msgid "Home Assistant Weather REST API data for current URL (JSON)"
+msgstr "Dane JSON dla obecnej prognozy"
+
+msgctxt "#30006"
+msgid "Home Assistant Weather REST API url for daily forecast (e.g. /api/....)"
+msgstr "REST API pogody Home Assistant dla pogody dziennej (np. /api/...)"
+
+msgctxt "#30007"
+msgid "Home Assistant Weather REST API data for daily URL (JSON)"
+msgstr "Dane JSON dla dziennej prognozy"
+
+msgctxt "#30008"
+msgid "Debug"
+msgstr "Debug"
+
+msgctxt "#30009"
+msgid "Enable logging"
+msgstr "Włącz logowanie"
+
+msgctxt "#30010"
+msgid "Please provide settings for the Home Assistant Weather plugin - it won't work without it."
+msgstr "Żeby wtyczka Pogody Home Assistant działała poprawnie musisz podać dane w ustawieniach."
+
+msgctxt "#30011"
+msgid "Please check your token - it seems to be not accepted."
+msgstr "Wygląda na to że token nie był zaapceptowany."
+
+msgctxt "#30012"
+msgid "Error received - method not allowed. That's weird."
+msgstr "Błąd - metoda nie jest dozwolona. Dziwne."
+
+msgctxt "#30013"
+msgid "Some unknown error happened. Please check IP address or if server is even online."
+msgstr "Coś się stało - warto sprawdzić czy adres URL/IP jest poprawny no i czy serwer jest włączony."
+
+msgctxt "#30014"
+msgid "Unexpected response from Home Assistant weather server. This is an error."
+msgstr "Dostaliśmy nieoczeniwaną odpowiedź od serwera Home Assistant - to jest błąd."
+
+msgctxt "#30015"
+msgid "Home Assistant Weather REST API url for hourly forecast (e.g. /api/...)"
+msgstr "REST API pogody Home Assistant dla pogody godzinowej (np. /api/...)"
+
+msgctxt "#30016"
+msgid "Home Assistant Weather REST API data for hourly URL (JSON)"
+msgstr "Dane JSON dla godzinowej prognozy"
+
+msgctxt "#30017"
+msgid "Method"
+msgstr "Metoda"
+
+msgctxt "#30018"
+msgid "General"
+msgstr "Ogólne"
+
+msgctxt "#30019"
+msgid "Location title displayed"
+msgstr "Wyświetlana nazwa lokacji"
+
+msgctxt "#30020"
+msgid "Use HA location name"
+msgstr "Używaj nazwy lokacji z HA"
+
+msgctxt "#30099"
+msgid "unknown"
+msgstr "nieznane"
+
+msgctxt "#30100"
+msgid "tornado"
+msgstr "trąba powietrzna"
+
+msgctxt "#30101"
+msgid "tropical-storm"
+msgstr "burza tropikalna"
+
+msgctxt "#30102"
+msgid "hurricane"
+msgstr "huragan"
+
+msgctxt "#30103"
+msgid "lightning-rainy"
+msgstr "silne burze z piorunami"
+
+msgctxt "#30104"
+msgid "lightning"
+msgstr "burze z piorunami"
+
+msgctxt "#30105"
+msgid "snowy-rainy"
+msgstr "opady mieszane deszczu i śniegu"
+
+msgctxt "#30106"
+msgid "mixed-rain-and-sleet"
+msgstr "opady mieszane deszczu i deszczu lodowego"
+
+msgctxt "#30107"
+msgid "mixed-snow-and-sleet"
+msgstr "opady mieszane śniegu i deszczu lodowego"
+
+msgctxt "#30108"
+msgid "freezing-drizzle"
+msgstr "marznąca mżawka"
+
+msgctxt "#30109"
+msgid "drizzle"
+msgstr "mżawka"
+
+msgctxt "#30110"
+msgid "freezing-rain"
+msgstr "marznący deszcz"
+
+msgctxt "#30111"
+msgid "pouring"
+msgstr "przelotne deszcze"
+
+msgctxt "#30112"
+msgid "rainy"
+msgstr "deszcz"
+
+msgctxt "#30113"
+msgid "snow-flurries"
+msgstr "tumany śniegu"
+
+msgctxt "#30114"
+msgid "light-snow-showers"
+msgstr "lekkie opady śniegu"
+
+msgctxt "#30115"
+msgid "blowing-snow"
+msgstr "śnieg podmuchowy"
+
+msgctxt "#30116"
+msgid "snowy"
+msgstr "śnieg"
+
+msgctxt "#30117"
+msgid "hail"
+msgstr "grad"
+
+msgctxt "#30118"
+msgid "sleet"
+msgstr "deszcz lodowy"
+
+msgctxt "#30119"
+msgid "dust"
+msgstr "pył"
+
+msgctxt "#30120"
+msgid "fog"
+msgstr "mglisto"
+
+msgctxt "#30121"
+msgid "haze"
+msgstr "mgiełka"
+
+msgctxt "#30122"
+msgid "smoky"
+msgstr "dymno"
+
+msgctxt "#30123"
+msgid "blustery"
+msgstr "porywiście"
+
+msgctxt "#30124"
+msgid "windy"
+msgstr "wietrznie"
+
+msgctxt "#30125"
+msgid "cold"
+msgstr "zimno"
+
+msgctxt "#30126"
+msgid "cloudy"
+msgstr "pochmurno"
+
+msgctxt "#30127"
+msgid "mostly-cloudy-night"
+msgstr "głównie pochmurno"
+
+msgctxt "#30128"
+msgid "mostly-cloudy-day"
+msgstr "łównie pochmurno"
+
+msgctxt "#30129"
+msgid "partly-cloudy-night"
+msgstr "częściowo pochmurno"
+
+msgctxt "#30130"
+msgid "partly-cloudy-day"
+msgstr "częściowo pochmurno"
+
+msgctxt "#30131"
+msgid "clear-night"
+msgstr "bezchmurnie"
+
+msgctxt "#30132"
+msgid "sunny"
+msgstr "słonecznie"
+
+msgctxt "#30133"
+msgid "fair-night"
+msgstr "umiarkowanie"
+
+msgctxt "#30134"
+msgid "fair-day"
+msgstr "umiarkowanie"
+
+msgctxt "#30135"
+msgid "mixed-rain-and-hail"
+msgstr "mieszane opady deszczu i gradu"
+
+msgctxt "#30136"
+msgid "hot"
+msgstr "gorąco"
+
+msgctxt "#30137"
+msgid "isolated-thunderstorms"
+msgstr "pojedyncze burze"
+
+msgctxt "#30138"
+msgid "scattered-thunderstorms"
+msgstr "rozproszone burze z piorunami"
+
+msgctxt "#30139"
+msgid "scattered-thunderstorms2"
+msgstr "rozproszone burze z piorunami"
+
+msgctxt "#30140"
+msgid "scattered-showers"
+msgstr "ulewa"
+
+msgctxt "#30141"
+msgid "heavy-snow"
+msgstr "duże opady śniegu"
+
+msgctxt "#30142"
+msgid "scattered-snow-showers"
+msgstr "rozproszone lekkie opady śniegu"
+
+msgctxt "#30143"
+msgid "heavy-snow"
+msgstr "duże opady śniegu"
+
+msgctxt "#30144"
+msgid "partlycloudy"
+msgstr "częściowo pochmurnie"
+
+msgctxt "#30145"
+msgid "thundershowers"
+msgstr "burze z piorunami"
+
+msgctxt "#30146"
+msgid "snow-showers"
+msgstr "przelotne opady śniegu"
+
+msgctxt "#30147"
+msgid "isolated-thundershowers"
+msgstr "pojedyncze burze"

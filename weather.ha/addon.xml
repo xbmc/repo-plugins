@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="weather.ha" name="Home Assistant Weather" version="0.0.5" provider-name="eugeniusz.gienek">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+        <import addon="script.module.requests" version="2.27.1"/>
+        <import addon="script.module.iso8601" version="0.1.12"/>
+        <import addon="script.module.yaml" version="5.3.0"/>
+        <import addon="script.module.dateutil" version="2.8.1"/>
+    </requires>
+    <extension point="xbmc.python.weather" library="default.py"/>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Weather forecast from Home Assistant</summary>
+        <description lang="en_GB">Weather forecast provided by Your Home Assistant server</description>
+        <summary lang="pl_PL">Prognoza Pogody Home Assistant</summary>
+        <description lang="pl_PL">Prognoza pogody od Twojego lokalnego serwera Home Assistant</description>
+        <platform>all</platform>
+        <language>en pl</language>
+        <license>GPL-3.0</license>
+        <source>https://github.com/Eugeniusz-Gienek/kodi_weather_ha</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.png</fanart>
+            <banner>resources/banner.png</banner>
+        </assets>
+    </extension>
+</addon>

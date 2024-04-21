@@ -87,6 +87,14 @@ try:
 except:
     pass
 
+episode_id = Common.utf8_unquote_plus(params.get('episode_id', ''))
+stream_id = Common.utf8_unquote_plus(params.get('stream_id', ''))
+resume_time = params.get('resume_time', '')
+total_time = params.get('total_time', '')
+watch_from_start = params.get('watch_from_start') == 'True'
+replay_chan_id = params.get('replay_chan_id', '')
+
+
 try:
     # These are the modes which tell the plugin where to go.
     if mode == 1:
@@ -158,10 +166,10 @@ try:
         Video.GetEpisodes(url)
 
     elif mode == 122:
-        Video.GetAvailableStreams(name, url, iconimage, description)
+        Video.GetAvailableStreams(name, url, iconimage, description, resume_time, total_time)
 
     elif mode == 123:
-        Video.AddAvailableLiveStreamsDirectory(name, url, iconimage)
+        Video.AddAvailableLiveStreamsDirectory(name, url, iconimage, watch_from_start)
 
     elif mode == 124:
         Video.GetAtoZPage(url)
@@ -207,13 +215,13 @@ try:
 
     # Modes 201-299 will create a playable menu entry, not a directory
     elif mode == 201:
-        Video.PlayStream(name, url, iconimage, description, subtitles_url)
+        Video.PlayStream(name, url, iconimage, description, subtitles_url, episode_id, stream_id, replay_chan_id)
 
     elif mode == 202:
         Video.AddAvailableStreamItem(name, url, iconimage, description)
 
     elif mode == 203:
-        Video.AddAvailableLiveStreamItemSelector(name, url, iconimage)
+        Video.AddAvailableLiveStreamItemSelector(name, url, iconimage, watch_from_start)
 
     elif mode == 204:
         Video.AddAvailableRedButtonItem(name, url)
@@ -232,6 +240,14 @@ try:
 
     elif mode == 197:
         Video.ListUHDTrial()
+
+    elif mode == 198:
+        Video.ListRecommendations()
+
+    # Modes 301 - 399: Context menu handlers
+    elif mode == 301:
+        Video.RemoveWatching(episode_id)
+
 except Common.IpwwwError as err:
     xbmcgui.Dialog().ok(Common.translation(30400), str(err))
     sys.exit(1)

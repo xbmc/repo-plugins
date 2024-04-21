@@ -181,6 +181,11 @@
                                     <default>true</default>
                                     <control type="toggle"/>
                                 </setting>
+                                <setting id="menu_video_recommendations" type="boolean" label="30530" help="">
+                                    <level>0</level>
+                                    <default>true</default>
+                                    <control type="toggle"/>
+                                </setting>
                                 <setting id="menu_radio_live" type="boolean" label="30522" help="">
                                     <level>0</level>
                                     <default>true</default>

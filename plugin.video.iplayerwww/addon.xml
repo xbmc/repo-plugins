@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="4.0.17" provider-name="CaptainT, Cas, ihurst, primaeval">
+<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="4.1.0" provider-name="CaptainT, Cas, ihurst, primaeval, ">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.7.0"/>
     <import addon="inputstream.adaptive" version="2.6.0"/>
+    <import addon="script.module.pytz"/>
+    <import addon="script.module.tzlocal"/>
     <import addon="resource.images.iplayerwww" version="1.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
@@ -22,8 +24,14 @@
         <fanart>resources/fanart.jpg</fanart>
     </assets>
     <news>
-v4.0.17
-Live radio authentication token fixes and simplifications.
+v4.1.0
+New features:
+- Watching status synced when logged in. Thus, resuming is possible on other devices using the same BBCiD.
+- Live programmes can be watched from the start. Right click on the item to and select "Watch from the start".
+Massive thanks to @dimkroon for the contribution.
+Bug fixes:
+- Introduced stream prioritisation. This improves the availability of subtitles as they are sometimes released with replacement streams only.
+- Removed empty lines in subtitle conversion, which caused parts of the subtitles to be lost.
 
 Known issues:
 - No Red Button

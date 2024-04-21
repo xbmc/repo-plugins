@@ -336,6 +336,10 @@ msgctxt "#30335"
 msgid "UHD Trial Channels"
 msgstr ""
 
+msgctxt "#30336"
+msgid "Recommendations"
+msgstr ""
+
 msgctxt "#30400"
 msgid "Error"
 msgstr ""
@@ -394,6 +398,22 @@ msgstr ""
 
 msgctxt "#30414"
 msgid "This BBC Sounds programme is available to play in the UK only."
+msgstr ""
+
+msgctxt "#30415"
+msgid "The start position of the current programme is not available.\nPlaying live now."
+msgstr ""
+
+msgctxt "#30416"
+msgid "This programme started too long ago and cannot be played from the start anymore."
+msgstr ""
+
+msgctxt "#30417"
+msgid "Play from 2 hours back"
+msgstr ""
+
+msgctxt "#30418"
+msgid "Play live"
 msgstr ""
 
 msgctxt "#30500"
@@ -478,4 +498,20 @@ msgstr ""
 
 msgctxt "#30529"
 msgid "iPlayer: UHD Trial Channels"
+msgstr ""
+
+msgctxt "#30530"
+msgid "iPlayer: Recommendations"
+msgstr ""
+
+msgctxt "#30600"
+msgid "View all episodes"
+msgstr ""
+
+msgctxt "#30601"
+msgid "Remove"
+msgstr ""
+
+msgctxt "#30603"
+msgid "Watch from the start"
 msgstr ""

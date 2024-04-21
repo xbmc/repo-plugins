@@ -8,10 +8,15 @@ import re
 import datetime
 import time
 import json
+
+from datetime import timedelta
 from operator import itemgetter
-from resources.lib.ipwww_common import translation, AddMenuEntry, OpenURL, \
+
+from resources.lib.ipwww_common import translation, AddMenuEntry, OpenURL, OpenRequest, \
                                        CheckLogin, CreateBaseDirectory, GetCookieJar, \
-                                       ParseImageUrl, download_subtitles, GeoBlockedError
+                                       ParseImageUrl, download_subtitles, GeoBlockedError, \
+                                       iso_duration_2_seconds, PostJson, strptime, addonid
+from resources.lib import ipwww_progress
 
 import xbmc
 import xbmcvfs
@@ -127,46 +132,65 @@ def AddAvailableUHDTrialItem(name, channelname):
 # ListLive creates menu entries for all live channels.
 def ListLive():
     channel_list = [
-        ('bbc_one_hd',                       'BBC One'),
-        ('bbc_two_england',                  'BBC Two'),
-        ('bbc_three_hd',                     'BBC Three'),
-        ('bbc_four_hd',                      'BBC Four'),
-        ('cbbc_hd',                          'CBBC'),
-        ('cbeebies_hd',                      'CBeebies'),
-        ('bbc_news24',                       'BBC News Channel'),
-        ('bbc_parliament',                   'BBC Parliament'),
-        ('bbc_alba',                         'Alba'),
-        ('bbc_scotland_hd',                  'BBC Scotland',),
-        ('s4cpbs',                           'S4C'),
-        ('bbc_one_london',                   'BBC One London'),
-        ('bbc_one_scotland_hd',              'BBC One Scotland'),
-        ('bbc_one_northern_ireland_hd',      'BBC One Northern Ireland'),
-        ('bbc_one_wales_hd',                 'BBC One Wales'),
-        ('bbc_two_scotland',                 'BBC Two Scotland'),
-        ('bbc_two_northern_ireland_digital', 'BBC Two Northern Ireland'),
-        ('bbc_two_wales_digital',            'BBC Two Wales'),
-        ('bbc_two_england',                  'BBC Two England',),
-        ('bbc_one_cambridge',                'BBC One Cambridge',),
-        ('bbc_one_channel_islands',          'BBC One Channel Islands',),
-        ('bbc_one_east',                     'BBC One East',),
-        ('bbc_one_east_midlands',            'BBC One East Midlands',),
-        ('bbc_one_east_yorkshire',           'BBC One East Yorkshire',),
-        ('bbc_one_north_east',               'BBC One North East',),
-        ('bbc_one_north_west',               'BBC One North West',),
-        ('bbc_one_oxford',                   'BBC One Oxford',),
-        ('bbc_one_south',                    'BBC One South',),
-        ('bbc_one_south_east',               'BBC One South East',),
-        ('bbc_one_south_west',               'BBC One South West',),
-        ('bbc_one_west',                     'BBC One West',),
-        ('bbc_one_west_midlands',            'BBC One West Midlands',),
-        ('bbc_one_yorks',                    'BBC One Yorks',),
+        ('bbc_one_hd',                       'BBC One',                  'bbc_one_london'),
+        ('bbc_two_england',                  'BBC Two',                  'bbc_two_england'),
+        ('bbc_three_hd',                     'BBC Three',                'bbc_three'),
+        ('bbc_four_hd',                      'BBC Four',                 'bbc_four'),
+        ('cbbc_hd',                          'CBBC',                     'cbbc'),
+        ('cbeebies_hd',                      'CBeebies',                 'cbeebies'),
+        ('bbc_news24',                       'BBC News Channel',         'bbc_news24'),
+        ('bbc_parliament',                   'BBC Parliament',           'bbc_parliament'),
+        ('bbc_alba',                         'Alba',                     'bbc_alba'),
+        ('bbc_scotland_hd',                  'BBC Scotland',             'bbc_scotland'),
+        ('s4cpbs',                           'S4C',                      's4cpbs'),
+        ('bbc_one_london',                   'BBC One London',           'bbc_one_london'),
+        ('bbc_one_scotland_hd',              'BBC One Scotland',         'bbc_one_london'),
+        ('bbc_one_northern_ireland_hd',      'BBC One Northern Ireland', 'bbc_one_london'),
+        ('bbc_one_wales_hd',                 'BBC One Wales',            'bbc_one_london'),
+        ('bbc_two_scotland',                 'BBC Two Scotland',         'bbc_two_england'),
+        ('bbc_two_northern_ireland_digital', 'BBC Two Northern Ireland', 'bbc_two_northern_ireland_digital'),
+        ('bbc_two_wales_digital',            'BBC Two Wales',            'bbc_two_wales_digital'),
+        ('bbc_two_england',                  'BBC Two England',          'bbc_two_england'),
+        ('bbc_one_cambridge',                'BBC One Cambridge',        'bbc_one_london'),
+        ('bbc_one_channel_islands',          'BBC One Channel Islands',  'bbc_one_london'),
+        ('bbc_one_east',                     'BBC One East',             'bbc_one_london'),
+        ('bbc_one_east_midlands',            'BBC One East Midlands',    'bbc_one_london'),
+        ('bbc_one_east_yorkshire',           'BBC One East Yorkshire',   'bbc_one_london'),
+        ('bbc_one_north_east',               'BBC One North East',       'bbc_one_london'),
+        ('bbc_one_north_west',               'BBC One North West',       'bbc_one_london'),
+        ('bbc_one_oxford',                   'BBC One Oxford',           'bbc_one_london'),
+        ('bbc_one_south',                    'BBC One South',            'bbc_one_london'),
+        ('bbc_one_south_east',               'BBC One South East',       'bbc_one_london'),
+        ('bbc_one_south_west',               'BBC One South West',       'bbc_one_london'),
+        ('bbc_one_west',                     'BBC One West',             'bbc_one_london'),
+        ('bbc_one_west_midlands',            'BBC One West Midlands',    'bbc_one_london'),
+        ('bbc_one_yorks',                    'BBC One Yorks',            'bbc_one_london'),
     ]
-    for id, name in channel_list:
+    from urllib.parse import urlencode
+    schedules = GetSchedules(channel_list)
+    for id, name, schedule_chan_id in channel_list:
+        now_on, schedule = schedules.get(schedule_chan_id, ('', ''))
+        title = '{}    [COLOR orange]{}[/COLOR]'.format(name, now_on)
         iconimage = 'resource://resource.images.iplayerwww/media/'+id+'.png'
+
         if ADDON.getSetting('streams_autoplay') == 'true':
-            AddMenuEntry(name, id, 203, iconimage, '', '')
+            mode = 203
+            restart_action = 'PlayMedia'
         else:
-            AddMenuEntry(name, id, 123, iconimage, '', '')
+            mode = 123
+            restart_action = "Container.Update"
+        querystring = urlencode({'name': name,
+                                 'url': id,
+                                 'mode': mode,
+                                 'iconimage': iconimage,
+                                 'watch_from_start': 'True'})
+        ctx_mnu = [(translation(30603),     # 'Watch from the start'
+                    ''.join((restart_action, '(plugin://', addonid, '?', querystring,
+                             ', noresume)' if mode == 203 else ')'))
+                    )]
+        AddMenuEntry(title, id, mode, iconimage, schedule, '', resume_time='0', context_mnu=ctx_mnu)
+    xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)
+    sys.exit()
 
 
 def ListAtoZ():
@@ -511,7 +535,7 @@ def ListCategoryFilters(url):
 
 def GetFilteredCategory(url):
     """Parses the programmes available in the category view."""
-    NEW_URL = 'https://www.bbc.co.uk/iplayer/categories/%s/all?sort=atoz' % url
+    NEW_URL = 'https://www.bbc.co.uk/iplayer/categories/%s/a-z' % url
 
     ScrapeEpisodes(NEW_URL)
 
@@ -606,7 +630,7 @@ def ParseSingleJSON(meta, item, name, added_playables, added_directories):
             if url:
                 if meta == 'tleo-item':
                     episodes_url = 'https://www.bbc.co.uk' + url
-                    print(episodes_url)
+                    # print(episodes_url)
                 else:
                     main_url = 'https://www.bbc.co.uk' + url
 
@@ -822,6 +846,54 @@ def ParseJSON(programme_data, current_url):
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
 
 
+def SetSortMethods(*additional_methods):
+    """Set a few standard sort methods and optional additional methods"""
+    sort_methods = [xbmcplugin.SORT_METHOD_UNSORTED,
+                    xbmcplugin.SORT_METHOD_TITLE,
+                    xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE]
+    sort_methods.extend(additional_methods)
+    handle = int(sys.argv[1])
+    for method in sort_methods:
+        xbmcplugin.addSortMethod(handle, method)
+
+
+def SelectSynopsis(synopses):
+    if synopses is None:
+        return ''
+    return (synopses.get('editorial')
+            or synopses.get('medium')
+            or synopses.get('large')
+            or synopses.get('small')
+            or synopses.get('programme_small', ''))
+
+
+def SelectImage(images):
+    if not images:
+        return 'DefaultFolder.png'
+    return(images.get('standard')
+           or images.get('promotional')
+           or images.get('promotional_with_logo')
+           or images.get('portrait', 'DefaultFolder.png')).replace('{recipe}', '832x468')
+
+
+def ParseEpisode(episode_data):
+    title = episode_data.get('title', '')
+    subtitle = episode_data.get('subtitle')
+    if subtitle:
+        title = ' - '.join((title, subtitle))
+    version_data = episode_data['versions'][0]
+    description = SelectSynopsis(episode_data.get('synopses'))
+
+    return {
+        'url': 'https://www.bbc.co.uk/iplayer/episode/' + episode_data['id'],
+        'name': title,
+        'iconimage': SelectImage(episode_data.get('images')),
+        'description': description,
+        'aired': episode_data.get('release_date_time', '').split('T')[0],
+        # 'total_time': str(iso_duration_2_seconds(version_data['duration']['value']))
+    }
+
+
 def ListHighlights(highlights_url):
     """Creates a list of the programmes in the highlights section.
     """
@@ -855,10 +927,13 @@ def AddAvailableStreamItem(name, url, iconimage, description):
         description = stream_ids['description']
     if ((not stream_ids['stream_id_st']) or (ADDON.getSetting('search_ad') == 'true')) and stream_ids['stream_id_ad']:
         streams_all = ParseStreamsHLSDASH(stream_ids['stream_id_ad'])
+        strm_id = stream_ids['stream_id_ad']
     elif ((not stream_ids['stream_id_st']) or (ADDON.getSetting('search_signed') == 'true')) and stream_ids['stream_id_sl']:
         streams_all = ParseStreamsHLSDASH(stream_ids['stream_id_sl'])
+        strm_id = stream_ids['stream_id_sl']
     else:
         streams_all = ParseStreamsHLSDASH(stream_ids['stream_id_st'])
+        strm_id = stream_ids['stream_id_st']
     if streams_all[1]:
         # print "Setting subtitles URL"
         subtitles_url = streams_all[1][0][1]
@@ -873,10 +948,11 @@ def AddAvailableStreamItem(name, url, iconimage, description):
         match = [x for x in streams if (x[0] == source)]
     else:
         match = streams
-    PlayStream(name, match[0][2], iconimage, description, subtitles_url)
+    PlayStream(name, match[0][2], iconimage, description, subtitles_url,
+               episode_id=stream_ids['episode_id'], stream_id=strm_id)
 
 
-def GetAvailableStreams(name, url, iconimage, description):
+def GetAvailableStreams(name, url, iconimage, description, resume_time='', total_time=''):
     """Calls AddAvailableStreamsDirectory based on user settings"""
     #print url
     stream_ids = ScrapeAvailableStreams(url)
@@ -888,13 +964,16 @@ def GetAvailableStreams(name, url, iconimage, description):
         description = stream_ids['description']
     # If we found standard streams, append them to the list.
     if stream_ids['stream_id_st']:
-        AddAvailableStreamsDirectory(name, stream_ids['stream_id_st'], iconimage, description)
+        AddAvailableStreamsDirectory(name, stream_ids['stream_id_st'], iconimage, description,
+                                     stream_ids['episode_id'], resume_time, total_time)
     # If we searched for Audio Described programmes and they have been found, append them to the list.
     if stream_ids['stream_id_ad'] or not stream_ids['stream_id_st']:
-        AddAvailableStreamsDirectory(name + ' - (Audio Described)', stream_ids['stream_id_ad'], iconimage, description)
+        AddAvailableStreamsDirectory(name + ' - (Audio Described)', stream_ids['stream_id_ad'], iconimage,
+                                     description, stream_ids['episode_id'], resume_time, total_time)
     # If we search for Signed programmes and they have been found, append them to the list.
     if stream_ids['stream_id_sl'] or not stream_ids['stream_id_st']:
-        AddAvailableStreamsDirectory(name + ' - (Signed)', stream_ids['stream_id_sl'], iconimage, description)
+        AddAvailableStreamsDirectory(name + ' - (Signed)', stream_ids['stream_id_sl'], iconimage,
+                                     description, stream_ids['episode_id'], resume_time, total_time)
 
 
 def Search(search_entered):
@@ -912,12 +991,11 @@ def Search(search_entered):
     ScrapeEpisodes(NEW_URL)
 
 
-def AddAvailableLiveStreamItemSelector(name, channelname, iconimage):
-    return AddAvailableLiveDASHStreamItem(name, channelname, iconimage)
+def AddAvailableLiveStreamItemSelector(name, channelname, iconimage, watch_from_start=False):
+    return AddAvailableLiveDASHStreamItem(name, channelname, iconimage, watch_from_start)
 
 
-def AddAvailableLiveDASHStreamItem(name, channelname, iconimage):
-
+def AddAvailableLiveDASHStreamItem(name, channelname, iconimage, watch_from_start=False):
     streams = ParseLiveDASHStreams(channelname)
 
     source = int(ADDON.getSetting('live_source'))
@@ -927,22 +1005,29 @@ def AddAvailableLiveDASHStreamItem(name, channelname, iconimage):
             match = streams
     else:
         match = streams
-    PlayStream(name, match[0][2], iconimage, '', '')
+    if watch_from_start:
+        PlayStream(name, match[0][2], iconimage, '', '', replay_chan_id=channelname)
+    else:
+        PlayStream(name, match[0][2], iconimage, '', '')
 
 
-def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
+def AddAvailableLiveStreamsDirectory(name, channelname, iconimage, watch_from_start=False):
     """Retrieves the available live streams for a channel
 
     Args:
         name: only used for displaying the channel.
         iconimage: only used for displaying the channel.
         channelname: determines which channel is queried.
+        watch_from_start: True if the current programme is to be played from the start.
     """
     streams = ParseLiveDASHStreams(channelname)
     suppliers = ['', 'Akamai', 'Limelight', 'Bidi','Cloudfront']
     for supplier, bitrate, url, resolution in streams:
         title = name + ' - [I][COLOR fff1f1f1]%s[/COLOR][/I]' % (suppliers[supplier])
-        AddMenuEntry(title, url, 201, iconimage, '', '')
+        if watch_from_start:
+            AddMenuEntry(title, url, 201, iconimage, resume_time='0', replay_chan_id=channelname)
+        else:
+            AddMenuEntry(title, url, 201, iconimage, resume_time='0')
 
 
 def GetJsonDataWithBBCid(url, retry=True):
@@ -967,8 +1052,53 @@ def GetJsonDataWithBBCid(url, retry=True):
 def ListWatching():
     url = "https://www.bbc.co.uk/iplayer/watching"
     data = GetJsonDataWithBBCid(url)
-    if data:
-        ParseJSON(data, url)
+    if not data:
+        return
+
+    for watching_item in data['items']['elements']:
+        episode = watching_item['episode']
+        programme = watching_item['programme']
+        item_data = ParseEpisode(episode)
+
+        # Lacking a field synopses, a watching item's description is empty. Since the
+        # remaining playtime is presented in the title instead of the usual episode name,
+        # place the original title/sub-title in the description.
+        item_data['description'] = item_data['name']
+        remaining_seconds = watching_item.get('remaining')
+        if remaining_seconds:
+            total_seconds = int(remaining_seconds * 100 / (100 - watching_item['progress']))
+            item_data['name'] = '{} - [I]{} min left[/I]'.format(episode.get('title', ''), int(remaining_seconds / 60))
+            # Resume a little bit earlier, so it's easier to recognise where you've left off.
+            item_data['resume_time'] = str(max(total_seconds - remaining_seconds - 10, 0))
+            item_data['total_time'] = str(total_seconds)
+        else:
+            item_data['name'] = '{} - [I]next episode[/I]'.format(episode.get('title', ''))
+
+        item_data['context_mnu'] = ct_menus = []
+        programme_id = episode.get('tleo_id')
+
+        if episode.get('id') != programme_id:
+            # A programme with multiple episodes; add a 'View all episodes' context menu item.
+            all_episodes_link = 'https://www.bbc.co.uk/iplayer/episodes/' + programme['id']
+            ct_menus.append((translation(30600),
+                             f'Container.Update(plugin://plugin.video.iplayerwww/?mode=128&url={all_episodes_link})'))
+
+        if programme_id:
+            # Add a context menu item 'Remove'
+            ct_menus.append((translation(30601),
+                             f'RunPlugin(plugin://plugin.video.iplayerwww?mode=301&episode_id={programme_id}&url=url)'))
+
+        CheckAutoplay(**item_data)
+
+
+def RemoveWatching(episode_id):
+    """Remove an item from the 'Continue Watching' list.
+    Handler for the context menu option 'Remove' on list items in 'Continue watching'.
+
+    """
+    PostJson('https://user.ibl.api.bbc.co.uk/ibl/v1/user/hides',
+             {'id': episode_id})
+    xbmc.executebuiltin('Container.Refresh')
 
 
 def ListFavourites():
@@ -978,7 +1108,26 @@ def ListFavourites():
         ParseJSON(data, url)
 
 
-def PlayStream(name, url, iconimage, description, subtitles_url):
+def ListRecommendations():
+    data = GetJsonDataWithBBCid('https://www.bbc.co.uk/iplayer/recommendations')
+    if not data:
+        return
+    for recommended_item in data['items']['elements']:
+        episode = recommended_item['episode']
+        item_data = ParseEpisode(episode)
+        if not item_data:
+            continue
+        tleo_id = episode['tleo_id']
+        if tleo_id != episode['id']:
+            all_episodes_link = 'https://www.bbc.co.uk/iplayer/episodes/' + tleo_id
+            item_data['context_mnu'] = [
+                (translation(30600),
+                 f'Container.Update(plugin://plugin.video.iplayerwww/?mode=128&url={all_episodes_link})')]
+        CheckAutoplay(**item_data)
+    SetSortMethods(xbmcplugin.SORT_METHOD_DATE)
+
+
+def PlayStream(name, url, iconimage, description='', subtitles_url='', episode_id=None, stream_id=None, replay_chan_id=''):
     if iconimage == '':
         iconimage = 'DefaultVideo.png'
     html = OpenURL(url)
@@ -998,10 +1147,62 @@ def PlayStream(name, url, iconimage, description, subtitles_url):
         # print "Downloading subtitles"
         subtitles_file = download_subtitles(subtitles_url)
         liz.setSubtitles([subtitles_file])
+    if replay_chan_id:
+        resume_point = GetLiveStartPosition(replay_chan_id)
+        if resume_point is not None:
+            liz.setProperties({'ResumeTime': str(resume_point),
+                               'TotalTime': '7200',
+                               'inputstream.adaptive.play_timeshift_buffer': 'true'})
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
+    ipwww_progress.monitor_progress(episode_id, stream_id)
 
 
-def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
+def GetLiveStartPosition(chan_id):
+    """Return the start position of the current programme relative to the beginning of the stream.
+
+    :returns: The start position in seconds, or None if the start position is not available.
+    """
+    if not chan_id:
+        return
+
+    from datetime import datetime, timezone
+
+    # Apart from bbc_one_hd, schedules from HD channels must be requested by their non-HD counterpart.
+    if chan_id.endswith('_hd') and not chan_id.startswith('bbc_one'):
+        chan_id = chan_id[:-3]
+
+    now = datetime.now(timezone.utc)
+    resp = None
+    try:
+        # Get schedules of the current channel to obtain the start time of the current programme.
+        url = (f'https://ibl.api.bbc.co.uk/ibl/v1/channels/{chan_id}/broadcasts?per_page=2&from_date=' +
+               now.strftime('%Y-%m-%dT%H:%M'))
+        resp = OpenRequest('get', url)
+        data = json.loads(resp)
+        cur_broadcast = data['broadcasts']['elements'][0]
+        # transmission_start is more accurate, but not always available.
+        start = cur_broadcast.get('transmission_start') or cur_broadcast['scheduled_start']
+        start_dt = strptime(start, '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
+    except Exception as e:
+        xbmcgui.Dialog().ok(translation(30400), translation(30415)) # Error msg start time not available.
+        xbmc.log(f'[ipwww_video] [Error] Failed to get live resume point: {e!r}\n{resp}')
+        return
+    # Need to get the start of the current programme relative to the start of the stream.
+    # Since a live stream has a 2 hrs timeshift window, the live edge is at 7200 seconds from the start.
+    start_position = 7200 - (now - start_dt).total_seconds()
+    if start_position < 0:
+        if xbmcgui.Dialog().yesno(
+                translation(30405),             # warning
+                translation(30416),             # msg program started too long ago
+                yeslabel=translation(30417),    # play from 2hrs back
+                nolabel=translation(30418)):    # play live
+            start_position = 0
+        else:
+            return
+    return start_position
+
+
+def AddAvailableStreamsDirectory(name, stream_id, iconimage, description, episode_id, resume_time="", total_time=""):
     """Will create one menu entry for each available stream of a particular stream_id"""
     # print("Stream ID: %s"%stream_id)
     streams = ParseStreamsHLSDASH(stream_id)
@@ -1015,7 +1216,8 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
     suppliers = ['', 'Akamai', 'Limelight', 'Bidi','Cloudfront']
     for supplier, bitrate, url, resolution, protocol in streams[0]:
         title = name + ' - [I][COLOR ffd3d3d3]%s[/COLOR][/I]' % (suppliers[supplier])
-        AddMenuEntry(title, url, 201, iconimage, description, subtitles_url, resolution=resolution)
+        AddMenuEntry(title, url, 201, iconimage, description, subtitles_url, resolution=resolution,
+                     episode_id=episode_id, stream_id=stream_id, resume_time=resume_time, total_time=total_time)
 
 
 def ParseMediaselector(stream_id):
@@ -1165,14 +1367,27 @@ def ScrapeAvailableStreams(url):
                 description = synopses['editorial']
         if 'standard' in json_data['episode']['images']:
             image = json_data['episode']['images']['standard'].replace('{recipe}','832x468')
+        st = []
+        ty = []
         for stream in json_data['versions']:
-            if ((stream['kind'] == 'original') or
-               (stream['kind'] == 'iplayer-version') or
-               (stream['kind'] == 'technical-replacement') or
-               (stream['kind'] == 'editorial') or
-               (stream['kind'] == 'shortened') or
-               (stream['kind'] == 'webcast')):
-                stream_id_st = stream['id']
+            if (stream['kind'] == 'original'):
+                st.append(stream['id'])
+                ty.append(1)
+            elif (stream['kind'] == 'iplayer-version'):
+                st.append(stream['id'])
+                ty.append(2)
+            elif (stream['kind'] == 'technical-replacement'):
+                st.append(stream['id'])
+                ty.append(0)
+            elif (stream['kind'] == 'editorial'):
+                st.append(stream['id'])
+                ty.append(2)
+            elif (stream['kind'] == 'shortened'):
+                st.append(stream['id'])
+                ty.append(3)
+            elif (stream['kind'] == 'webcast'):
+                st.append(stream['id'])
+                ty.append(2)
             elif (stream['kind'] == 'signed'):
                 stream_id_sl = stream['id']
             elif (stream['kind'] == 'audio-described'):
@@ -1181,7 +1396,12 @@ def ScrapeAvailableStreams(url):
                 xbmc.log("iPlayer WWW warning: New stream kind: %s" % stream['kind'])
                 stream_id_st = stream['id']
 
-    return {'stream_id_st': stream_id_st, 'stream_id_sl': stream_id_sl, 'stream_id_ad': stream_id_ad, 'name': name, 'image':image, 'description': description}
+            if st:
+                st_st = [x for _,x in sorted(zip(ty,st))]
+                stream_id_st = st_st[0]
+
+    return {'stream_id_st': stream_id_st, 'stream_id_sl': stream_id_sl, 'stream_id_ad': stream_id_ad,
+            'name': name, 'image':image, 'description': description, 'episode_id': json_data['episode'].get('id', '')}
 
 
 def ScrapeJSON(html):
@@ -1203,9 +1423,81 @@ def ScrapeJSON(html):
     return json_data
 
 
-def CheckAutoplay(name, url, iconimage, plot, aired=None):
+def CheckAutoplay(name, url, iconimage, description, aired=None, resume_time="", total_time="", context_mnu=None):
     if ADDON.getSetting('streams_autoplay') == 'true':
-        AddMenuEntry(name, url, 202, iconimage, plot, '', aired=aired)
+        mode = 202
     else:
-        AddMenuEntry(name, url, 122, iconimage, plot, '', aired=aired)
+        mode = 122
+    AddMenuEntry(name, url, mode, iconimage, description, '', aired=aired,
+                 resume_time=resume_time, total_time=total_time, context_mnu=context_mnu)
 
+
+def GetSchedules(channel_list):
+    """Obtain the schedule for each channel in channel_list.
+
+    :param channel_list: A list of tuples like defined in ListLive().
+        The third item of each tuple is to be the channel_id used to obtain the schedule.
+    :returns: A mapping of channel_id's to schedules.
+
+    The schedules of the regional BBC one channels only differ in the title of the
+    regional news. This function renames this titel of BBC One London to a more
+    generic "BBC News where you are". This way the schedules of BBC One London can be
+    used for all regional BBC One channels, which will greatly reduce the number of
+    HTTP request.
+
+    Schedules for each channel is a tuple with two elements. The first is the title of the
+    programme that is now on, the second is single multi-line string, with the
+    time and name of each programme on a separate line. These strings are intended
+    to be used in the info fields of the ListItems of live channels.
+
+    """
+    import pytz
+    from concurrent import futures
+
+    utc_tz = pytz.utc
+    utc_now = datetime.datetime.now(utc_tz)
+    utc_tomorrow = utc_now + timedelta(hours=20)
+
+    try:
+        # Get local timezone from Kodi's settings
+        cmd_str = '{"jsonrpc": "2.0", "method": "Settings.GetSettingValue", "params": ["locale.timezone"], "id": 1}'
+        resp_data = json.loads(xbmc.executeJSONRPC(cmd_str))
+        local_tz = pytz.timezone(resp_data['result']['value'])
+    except(KeyError, json.JSONDecodeError):
+        # Get from tzlocal as fallback if something fails.
+        from tzlocal import get_localzone
+        local_tz = get_localzone()
+
+    # Use the user's local time format without seconds. Fix weird kodi formatting for 12-hour clock.
+    local_time_format = xbmc.getRegion('time').replace(':%S', '').replace('%I%I:', '%I:')
+
+    def get_schedule(channel):
+        try:
+            url = ''.join(('https://ibl.api.bbc.co.uk/ibl/v1/channels/',
+                          channel,
+                          '/broadcasts?per_page=12&from_date=',
+                          utc_now.strftime('%Y-%m-%dT%H:%M')))
+            resp = OpenRequest('get', url)
+            schedule_list = json.loads(resp)['broadcasts']['elements']
+            text_items = []
+            now_on = schedule_list[0]['episode']['title']
+            for item in schedule_list:
+                start_t = utc_tz.localize(strptime(item['scheduled_start'], '%Y-%m-%dT%H:%M:%S.%fZ'))
+                if start_t >= utc_tomorrow:
+                    break
+                title = item['episode']['title']
+                subtitle = item['episode'].get('subtitle', '')
+                if title == 'BBC London' and 'News' in subtitle:
+                    title = 'BBC News where You Are'
+                text_items.append(' - '.join((start_t.astimezone(local_tz).strftime(local_time_format), title)))
+            return now_on, '\n'.join(text_items)
+        except Exception as e:
+            xbmc.log(f"Failed to get schedule of channel {channel}: {e!r}")
+            return '', ''
+
+    schedule_channels = list({item[2] for item in channel_list})
+
+    with futures.ThreadPoolExecutor(max_workers=16) as executor:
+        res = [executor.submit(get_schedule, chan) for chan in schedule_channels]
+        futures.wait(res)
+    return dict(zip(schedule_channels, (r.result() for r in res)))

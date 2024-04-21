@@ -3,6 +3,8 @@
 import sys
 import os
 import re
+from datetime import datetime
+
 import requests
 from requests.packages import urllib3
 #Below is required to get around an ssl issue
@@ -133,6 +135,9 @@ def download_subtitles(url):
                             styles.append((id, '#00ff00'))
                         else:
                             styles.append((id, match.group(1)))
+    else:
+        # In case no styles are found, we at least need to define the default (white).
+        styles = [('0', '#ffffff')]
     # print("Retrieved styles")
     # print(styles)
 
@@ -140,14 +145,14 @@ def download_subtitles(url):
     body = []
     body = re.search(r'<body.*?>(.+?)</body>', txt, re.DOTALL)
     if body:
-        # print "Located body"
-        # print body.group(1).encode('utf-8')
+        # print("Located body")
+        # print(body.group(1).encode('utf-8'))
         frames = re.findall(r'<p(.*?)>(.*?)</p>', body.group(1), re.DOTALL)
         # frames = re.findall(r'<p.*?begin=\"(.*?)".*?end=\"(.*?)".*?style="(.*?)".*?>(.*?)</p>', body.group(1), re.DOTALL)
         if frames:
             index = 1
-            # print "Found %s frames"%len(frames)
-            # print frames
+            # print("Found %s frames"%len(frames))
+            # print(frames)
             p = re.compile(r'<span(.*?)>(.*?)</span>')
             old_split = 999
             old_mil = 999
@@ -234,7 +239,9 @@ def download_subtitles(url):
                 old_split = start_split[0]
                 old_mil = start_mil_f
                 if entry:
-                    fw.write(entry)
+                    # Remove empty line breaks
+                    final = re.sub(r'\n\s*\n', '\n', entry)
+                    fw.write(final)
                     index += 1
 
     fw.close()
@@ -354,26 +361,37 @@ def CheckLogin():
     return False
 
 
-def OpenURL(url):
+def OpenRequest(method, url, *args, **kwargs):
     with requests.Session() as session:
         session.cookies = cookie_jar
         session.headers = headers
+        exit_on_error = kwargs.pop('exit_on_error', False)
         try:
-            r = session.get(url)
+            resp = session.request(method, url, *args, **kwargs)
+            resp.raise_for_status()
         except requests.exceptions.RequestException as e:
-            dialog = xbmcgui.Dialog()
-            dialog.ok(translation(30400), "%s" % e)
-            sys.exit(1)
+            if exit_on_error:
+                dialog = xbmcgui.Dialog()
+                dialog.ok(translation(30400), "%s" % e)
+                sys.exit(1)
+            else:
+                xbmc.log(f"'{method}' request to '{url}' failed: {e!r}")
+                raise
         try:
-            #Set ignore_discard to overcome issue of not having session
-            #as cookie_jar is reinitialised for each action.
+            # Set ignore_discard to overcome issue of not having session
+            # as cookie_jar is reinitialised for each action.
             # Refreshed token cookies are set on intermediate requests.
             # Only save if there have been any.
-            if r.history:
+            if resp.history:
                 cookie_jar.save(ignore_discard=True)
         except:
             pass
-        return unescape(r.content.decode('utf-8'))
+        return resp.content.decode('utf-8')
+
+
+def OpenURL(url):
+    r = OpenRequest('get', url, exit_on_error=True)
+    return unescape(r)
 
 
 def OpenURLPost(url, post_data):
@@ -402,6 +420,10 @@ def OpenURLPost(url, post_data):
     return r
 
 
+def PostJson(url, data):
+    return OpenRequest('post', url, json=data, exit_on_error=True)
+
+
 def GetCookieJar():
     return cookie_jar
 
@@ -416,18 +438,51 @@ def utf8_unquote_plus(str):
     return urllib.parse.unquote_plus(str)
 
 
-def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=None, resolution=None):
+def iso_duration_2_seconds(iso_str: str) -> int:
+    """Convert an ISO 8601 duration string into seconds.
+
+    Simple parser to match durations found in films and tv episodes.
+    Handles only hours, minutes and seconds.
+
+    """
+    try:
+        if len(iso_str) > 3:
+            import re
+            match = re.match(r'^PT(?:([\d.]+)H)?(?:([\d.]+)M)?(?:([\d.]+)S)?$', iso_str)
+            if match:
+                hours, minutes, seconds = match.groups(default=0)
+                return int(float(hours) * 3600 + float(minutes) * 60 + float(seconds))
+    except (ValueError, AttributeError, TypeError):
+        pass
+    return None
+
+
+def strptime(dt_str: str, format: str):
+    """A bug free alternative to `datetime.datetime.strptime(...)`"""
+    return datetime(*(time.strptime(dt_str, format)[0:6]))
+
+
+def AddMenuEntry(name, url, mode, iconimage, description='', subtitles_url='', aired=None, resolution=None,
+                 resume_time='', total_time='', episode_id='', stream_id='', context_mnu=None, replay_chan_id=''):
     """Adds a new line to the Kodi list of playables.
     It is used in multiple ways in the plugin, which are distinguished by modes.
     """
 
     if not iconimage:
         iconimage="DefaultFolder.png"
-    listitem_url = (sys.argv[0] + "?url=" + utf8_quote_plus(url) + "&mode=" + str(mode) +
-                    "&name=" + utf8_quote_plus(name) +
-                    "&iconimage=" + utf8_quote_plus(iconimage) +
-                    "&description=" + utf8_quote_plus(description) +
-                    "&subtitles_url=" + utf8_quote_plus(subtitles_url))
+    listitem_url = ''.join((
+        sys.argv[0],
+        "?url=", utf8_quote_plus(url),
+        "&mode=", str(mode),
+        "&name=", utf8_quote_plus(name),
+        "&iconimage=", utf8_quote_plus(iconimage),
+        "&description=", utf8_quote_plus(description),
+        "&subtitles_url=", utf8_quote_plus(subtitles_url),
+        "&episode_id=", utf8_quote_plus(episode_id),
+        "&stream_id=", utf8_quote_plus(stream_id),
+        "&resume_time=", resume_time,
+        "&total_time=", total_time,
+        "&replay_chan_id=", replay_chan_id))
     if mode in (101,203,113,213):
         listitem_url = listitem_url + "&time=" + str(time.time())
     if aired:
@@ -463,6 +518,9 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
                 "plot": description,
                 "plotoutline": description,
                 "mediatype" : "episode"})
+        if resume_time:
+            listitem.setProperty('ResumeTime', resume_time)
+            listitem.setProperty('TotalTime', total_time if total_time else '7200')
     else:
         if aired:
             listitem.setInfo("video", {
@@ -476,6 +534,9 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
                 "title": name,
                 "plot": description,
                 "plotoutline": description})
+
+    if context_mnu:
+        listitem.addContextMenuItems(context_mnu)
 
     video_streaminfo = {'codec': 'h264'}
     if not isFolder:
@@ -494,6 +555,7 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
                                 url=listitem_url, listitem=listitem, isFolder=isFolder)
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return True
+
 
 def KidsMode():
     dialog = xbmcgui.Dialog()
@@ -558,6 +620,8 @@ def CreateBaseDirectory(content_type):
             AddMenuEntry(translation(30306), 'url', 107, icondir+'favourites.png', '', '')
         if ADDON.getSetting("menu_video_added") == 'true':
             AddMenuEntry(translation(30307), 'url', 108, icondir+'favourites.png', '', '')
+        if ADDON.getSetting("menu_video_recommendations") == 'true':
+            AddMenuEntry(translation(30336), 'url', 198, icondir+'top_rated.png', '', '')
         AddMenuEntry(translation(30325), 'url', 119, icondir+'settings.png',  '', '')
     elif content_type == "audio":
         if ADDON.getSetting("menu_radio_live") == 'true':
@@ -615,6 +679,9 @@ def CreateBaseDirectory(content_type):
         if ADDON.getSetting("menu_video_added") == 'true':
             AddMenuEntry((translation(30323)+translation(30307)), 'url', 108,
                          icondir+'favourites.png', '', '')
+        if ADDON.getSetting("menu_video_recommendations") == 'true':
+            AddMenuEntry(translation(30323)+translation(30336), 'url', 198,
+                         icondir+'top_rated.png', '', '')
 
         if ADDON.getSetting("menu_radio_live") == 'true':
             AddMenuEntry((translation(30324)+translation(30321)), 'url', 113,

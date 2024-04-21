@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vrt.nu" name="VRT MAX" version="2.5.30+matrix.1" provider-name="Martijn Moreel, dagwieers, mediaminister">
+<addon id="plugin.video.vrt.nu" name="VRT MAX" version="2.5.31+matrix.1" provider-name="Martijn Moreel, dagwieers, mediaminister">
   <requires>
     <import addon="resource.images.studios.white" version="0.0.22"/>
     <import addon="script.module.beautifulsoup4" version="4.6.2"/>
@@ -42,6 +42,9 @@
     <website>https://github.com/add-ons/plugin.video.vrt.nu/wiki</website>
     <source>https://github.com/add-ons/plugin.video.vrt.nu</source>
     <news>
+v2.5.31 (2024-04-21)
+- Fix program menu listings
+
 v2.5.30 (2024-04-16)
 - Fix playing from TV guide
 

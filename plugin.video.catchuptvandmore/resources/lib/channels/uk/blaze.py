@@ -6,12 +6,13 @@
 
 from __future__ import unicode_literals
 import re
+import json
 
 # noinspection PyUnresolvedReferences
 from codequick import Listitem, Resolver, Route
 import urlquick
 
-from resources.lib import web_utils
+from resources.lib import web_utils, resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
 
@@ -20,9 +21,7 @@ from resources.lib.menu_utils import item_post_treatment
 
 URL_API = 'https://watch.blaze.tv'
 # Live
-URL_LIVE = URL_API + '/live/'
-URL_LIVE_JSON = 'https://live.blaze.tv/stream-live.php?key=%s&platform=chrome'
-# Key
+URL_LIVE = URL_API + '/stream/live/widevine/553'
 
 # Replay
 URL_REPLAY = URL_API + '/replay/553'
@@ -30,6 +29,8 @@ URL_REPLAY = URL_API + '/replay/553'
 URL_INFO_REPLAY = URL_API + '/watch/replay/%s'
 URL_REPLAY_TOKEN = URL_API + '/stream/replay/widevine/%s'
 # video ID
+
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 
 @Route.register
@@ -108,23 +109,7 @@ def get_video_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE)
-    live_id = re.compile(
-        r'data-player-key=\"(.*?)\"').findall(resp.text)[0]
-    token_value = re.compile(
-        r'data-player-token=\"(.*?)\"').findall(resp.text)[0]
-    token_expiry_value = re.compile(
-        r'data-player-expiry=\"(.*?)\"').findall(resp.text)[0]
-    uvid_value = re.compile(
-        r'data-player-uvid=\"(.*?)\"').findall(resp.text)[0]
-    resp2 = urlquick.get(
-        URL_LIVE_JSON % live_id,
-        headers={
-            'User-Agent': web_utils.get_random_ua(),
-            'token': token_value,
-            'token-expiry': token_expiry_value,
-            'uvid': uvid_value
-        },
-        max_age=-1)
-    json_parser2 = resp2.json()
-    return json_parser2["Streams"]["Adaptive"]
+    resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
+    video_url = json.loads(resp.text)["playerSource"]["sources"][0]["src"]
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url)

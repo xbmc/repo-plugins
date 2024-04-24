@@ -7,7 +7,6 @@
 
 from __future__ import unicode_literals
 from builtins import str
-import json
 import time
 
 from codequick import Listitem, Resolver, Route, Script, utils
@@ -99,8 +98,7 @@ def list_categories(plugin, item_id, **kwargs):
 @Route.register
 def list_programs(plugin, item_id, next_url, **kwargs):
 
-    resp = urlquick.get(next_url)
-    json_parser = json.loads(resp.text)
+    json_parser = urlquick.get(next_url).json()
 
     for program_datas in json_parser['programs']:
         program_title = program_datas['label']
@@ -121,8 +119,7 @@ def list_programs(plugin, item_id, next_url, **kwargs):
 @Route.register
 def list_videos(plugin, item_id, next_url, page, **kwargs):
 
-    resp = urlquick.get(next_url + '/page/' + page)
-    json_parser = json.loads(resp.text)
+    json_parser = urlquick.get(next_url + '/page/' + page).json()
     if 'videos' in json_parser:
         list_id = 'videos'
     elif 'contents' in json_parser:
@@ -133,7 +130,7 @@ def list_videos(plugin, item_id, next_url, page, **kwargs):
         at_least_one_item = True
         video_title = video_datas['title']
         video_plot = video_datas['description']
-        date_epoch = video_datas['lastPublicationDate']
+        date_epoch = video_datas['firstPublicationDate']
         date_value = time.strftime('%Y-%m-%d', time.localtime(date_epoch))
         video_url = URL_STREAM_ROOT + video_datas['url']
         video_image = ''
@@ -170,8 +167,7 @@ def get_video_url(plugin,
                   download_mode=False,
                   **kwargs):
 
-    resp = urlquick.get(video_url)
-    json_parser = json.loads(resp.text)
+    json_parser = urlquick.get(video_url).json()
 
     method = None
     id_diffusion = ''
@@ -231,10 +227,9 @@ def get_video_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE_JSON,
-                        headers={'User-Agent': web_utils.get_random_ua()},
-                        max_age=-1)
-    json_parser = json.loads(resp.text)
+    json_parser = urlquick.get(URL_LIVE_JSON,
+                               headers={'User-Agent': web_utils.get_random_ua()},
+                               max_age=-1).json()
 
     for live in json_parser["result"]:
         if live["channel"] == item_id:

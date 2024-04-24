@@ -20,9 +20,13 @@ import xbmcgui
 # Rework Date/AIred
 URL_ROOT = 'https://www.lequipe.fr'
 
-URL_LIVE = URL_ROOT + '/lachainelequipe/'
+URL_LIVE = URL_ROOT + '/tv'
 
 URL_API_LEQUIPE = URL_ROOT + '/equipehd/applis/filtres/videosfiltres.json'
+
+EMBEDER_URL = URL_LIVE + '/videos/live/%s'
+
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
 
 
 @Route.register
@@ -80,35 +84,29 @@ def list_videos(plugin, item_id, program_url, page, **kwargs):
 @Resolver.register
 def get_video_url(plugin, item_id, video_id, download_mode=False, **kwargs):
 
-    return resolver_proxy.get_stream_dailymotion(plugin, video_id, download_mode)
+    embeder = EMBEDER_URL % video_id
+    return resolver_proxy.get_stream_dailymotion(plugin, video_id, download_mode, embeder)
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
+    return resolver_proxy.get_stream_dailymotion(plugin, 'x2lefik', False, EMBEDER_URL % 'x2lefik')
 
-    if item_id == 'lequipelive':
-        resp = urlquick.get("https://www.lequipe.fr/directs", headers={'user-agent': web_utils.get_random_ua()}, max_age=-1)
-        live_id = re.compile(r'<article.+?<a href="(.+?)".+?alt="(.+?)"').findall(resp.text)
-        list_url = []
-        list_q = []
 
-        for a in live_id:
-            list_url.append(a[0])
-            list_q.append(a[1])
-
-        if len(list_url) == 0:
-            return ''
-        if len(list_url) == 1:
-            return list_url[0]
-
-        ret = xbmcgui.Dialog().select(Script.localize(30174), list_q)
-        if ret > -1:
-            live_id = list_url[ret]
-        resp = urlquick.get(live_id, headers={'user-agent': web_utils.get_random_ua()}, max_age=-1)
-        live_id = re.compile(r'"EmbedUrl": "(.+?)",').findall(resp.text)[0].rsplit('/', 1)[-1]
-
-    else:
-        resp = urlquick.get(URL_LIVE, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
-        live_id = re.compile(r'video-id\=\"(.*?)\"', re.DOTALL).findall(resp.text)[0]
-
-    return resolver_proxy.get_stream_dailymotion(plugin, live_id, False)
+@Route.register
+def get_multi_live_url(plugin, item_id, **kwargs):
+    resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse()
+    for video_list in root.iterfind('.//a[@class="Link"]'):
+        item = Listitem()
+        for div_title in video_list.iterfind('.//div'):
+            if div_title is not None and div_title.get('class') == "ArticleTags__items js-ob-internal-reco":
+                for d_title in div_title.iterfind('.//div[@class="ArticleTags__item"]'):
+                    if 'font' not in d_title.get('style'):
+                        item.label = d_title.text
+                item.info['plot'] = video_list.find('.//h2[@class="ColeaderWidget__title"]').text
+                item.art["thumb"] = item.art["thumb"] = video_list.find(".//img").get('src')
+                video_id = re.compile(r'live\/(.*?)$').findall(video_list.get('href'))[0]
+                item.set_callback(get_video_url, item_id, video_id=video_id)
+                item_post_treatment(item)
+                yield item

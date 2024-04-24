@@ -145,7 +145,7 @@ def tv_guide_menu(plugin, item_id, **kwargs):
 
             # Credits
             credits = []
-            for credit, l in list(guide_infos.get('credits', {}).items()):
+            for credit, l in guide_infos.get('credits', {}).items():
                 for s in l:
                     credits.append(s)
             item.info['credits'] = credits

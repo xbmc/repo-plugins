@@ -18,8 +18,7 @@ from resources.lib.addon_utils import get_item_media_path
 from resources.lib.menu_utils import item_post_treatment
 from resources.lib.web_utils import html_parser
 
-PATTERN_MEDIA_OBJECT = re.compile(r'data-media-object="(.*?)"')
-PATTERN_BACKGROUND_IMAGE_URL = re.compile(r'url\((.*)\)')
+PATTERN_BACKGROUND_IMAGE_URL = re.compile(r'url\(\s*(.*?)\s*\)')
 
 URL_ROOT = "https://play.rtl.it"
 
@@ -44,29 +43,29 @@ def list_lives(plugin, item_id, **kwargs):
         if live_url_anchor is None:
             continue
 
-        live_url = URL_ROOT + live_url_anchor.get('href')
+        channel_url = URL_ROOT + live_url_anchor.get('href')
 
-        resp = urlquick.get(live_url)
-        media_objects = PATTERN_MEDIA_OBJECT.findall(resp.text)
-        if len(media_objects) == 0:
+        resp = urlquick.get(channel_url).parse()
+        json_media_object = None
+        buttons = resp.findall(".//div[@class='rtl-play-info-container']//button")
+        for button in buttons:
+            if button.findtext('.//span') == 'Radiovisione':
+                resp2 = urlquick.get(button.get('data-media-url'))
+                json_media_object = resp2.json()
+                break
+
+        if json_media_object is None:
             continue
-        media_object = html_parser.unescape(media_objects[0])
-        json_media_object = json.loads(media_object)
-        live_plot = live_title = json_media_object['mediaInfo']['title']
 
-        style = channel.find('.//img').get('style')
+        media_info = json_media_object['data']['mediaInfo']
+        live_plot = live_title = media_info['title']
+
+        style = resp.find('.//picture/img').get('style')
         img_array = PATTERN_BACKGROUND_IMAGE_URL.findall(style)
         if len(img_array) > 0:
             live_image = img_array[0]
 
-        on_focus = channel.find(".//div[@class='on-focus-state-info']")
-        if on_focus is not None:
-            img = on_focus.find(".//img")
-            if img is not None:
-                live_image = img.get('src')
-            live_plot = on_focus.find(".//div[@class='info-title']").text
-
-        url = json_media_object['mediaInfo']['uri']
+        url = media_info['uri']
 
         item = Listitem()
         item.label = live_title

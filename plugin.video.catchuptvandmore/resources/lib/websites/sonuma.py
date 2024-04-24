@@ -58,7 +58,8 @@ def website_root(plugin, item_id, **kwargs):
     item_post_treatment(item)
     yield item
 
-    yield from yield_thematique(item_id)
+    for i in yield_thematique(item_id):
+        yield i
 
 
 @Route.register
@@ -121,7 +122,8 @@ def list_search(plugin, search_query, item_id, start=0, **kwargs):
         plugin.notify(plugin.localize(30718), '')
         yield False
 
-    yield from yield_assets(json_parser)
+    for i in yield_assets(json_parser):
+        yield i
 
     new_start = (start + rows)
     if num_found is not None and int(num_found) > rows and new_start < num_found:
@@ -187,7 +189,8 @@ def list_thematique(plugin, item_id, thematique_id, start=0, **kwargs):
         plugin.notify(plugin.localize(30718), '')
         yield False
 
-    yield from yield_assets(json_parser)
+    for i in yield_assets(json_parser):
+        yield i
 
     new_start = (start + rows)
     if num_found is not None and int(num_found) > rows and new_start < num_found:
@@ -219,7 +222,8 @@ def latest(plugin, item_id, start=0, **kwargs):
         plugin.notify(plugin.localize(30718), '')
         yield False
 
-    yield from yield_assets(json_parser)
+    for i in yield_assets(json_parser):
+        yield i
 
     new_start = (start + rows)
     if num_found is not None and int(num_found) > rows and new_start < num_found:
@@ -240,7 +244,8 @@ def list_mediablock(plugin, item_id, mediablock, start=0, **kwargs):
         plugin.notify(plugin.localize(30718), '')
         yield False
 
-    yield from yield_assets(json_parser)
+    for i in yield_assets(json_parser):
+        yield i
 
     new_start = (start + rows)
     if num_found is not None and int(num_found) > rows and new_start < int(num_found):

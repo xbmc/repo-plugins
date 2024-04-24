@@ -132,5 +132,13 @@ menu = {
         'fanart': 'channels/wo/tv5mondeplus.png',
         'enabled': True,
         'order': 26
+    },
+    'aljazeera': {
+        'route': '/resources/lib/channels/wo/aljazeera:list_programs',
+        'label': 'Aljazeera',
+        'thumb': 'channels/wo/aljazeera.png',
+        'fanart': 'channels/wo/aljazeera_fanart.png',
+        'enabled': True,
+        'order': 27
     }
 }

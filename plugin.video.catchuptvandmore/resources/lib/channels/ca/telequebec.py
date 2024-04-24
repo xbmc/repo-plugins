@@ -9,35 +9,51 @@ import json
 import time
 import urlquick
 
+# noinspection PyUnresolvedReferences
 from codequick import Listitem, Resolver, Route
 
 from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 
-# TO DO
-# Add info LIVE TV, Replay
+# TODO Add info LIVE TV, Replay
 
 URL_API = 'https://beacon.playback.api.brightcove.com/telequebec/api'
 
-URL_LIVE_DATAS = URL_API + '/epg?device_type=web&device_layout=web&datetimestamp=%s'
 # datetimestamp
+URL_LIVE_DATAS = URL_API + '/epg?device_type=web&device_layout=web&datetimestamp=%s'
 
-URL_BRIGHTCOVE_DATAS = URL_API + '/assets/%s/streams/%s'
 # ContentId, StreamId
+URL_BRIGHTCOVE_DATAS = URL_API + '/assets/%s/streams/%s'
 
 URL_CATEGORIES = URL_API + '/menus/0/option/29060-sur-demande?device_type=web&device_layout=web'
+URL_EN_VEDETTE = URL_API + '/menus/0/option/13916-home?device_type=web&device_layout=web'
 
 URL_ALL_PROGRAMS_PER_CATEGORY = URL_API + '/playlists/%s/assets?limit=30&device_type=web&device_layout=web&layout_id=347&page=%s'
 
-URL_PROGRAM_ASSETS = URL_API + '/assets/%s?device_type=web&device_layout=web&asset_id=%s'
 # ProgramId, ProgramId
+URL_PROGRAM_ASSETS = URL_API + '/assets/%s?device_type=web&device_layout=web&asset_id=%s'
 
-URL_SEASON_VIDEOS = URL_API + '/tvshow/%s/season/%s/episodes?device_type=web&device_layout=web&layout_id=317&limit=1000'
 # ProgramId, SeasonSlug
+URL_SEASON_VIDEOS = URL_API + '/tvshow/%s/season/%s/episodes?device_type=web&device_layout=web&layout_id=317&limit=1000'
 
 
 @Route.register
-def list_categories(plugin, item_id, **kwargs):
+def list_root(plugin, item_id, **kwargs):
+    menus = [
+        ('En vedette', URL_EN_VEDETTE),
+        ('Sur demande', URL_CATEGORIES),
+    ]
+
+    for (label, category_url) in menus:
+        item = Listitem()
+        item.label = label
+        item.set_callback(list_categories, item_id, category_url)
+        item_post_treatment(item)
+        yield item
+
+
+@Route.register
+def list_categories(plugin, item_id, category_url=None, **kwargs):
     """
     Build categories listing
     - Tous les programmes
@@ -45,7 +61,9 @@ def list_categories(plugin, item_id, **kwargs):
     - Informations
     - ...
     """
-    resp = urlquick.get(URL_CATEGORIES)
+    category_url_requested = URL_CATEGORIES if category_url is None else category_url
+
+    resp = urlquick.get(category_url_requested)
     json_parser = json.loads(resp.text)
 
     for category_datas in json_parser['data']['screen']['blocks']:
@@ -54,15 +72,13 @@ def list_categories(plugin, item_id, **kwargs):
 
         item = Listitem()
         item.label = category_title
-        item.set_callback(
-            list_programs, item_id=item_id, category_id=category_id)
+        item.set_callback(list_programs, item_id=item_id, category_id=category_id)
         item_post_treatment(item)
         yield item
 
 
 @Route.register
 def list_programs(plugin, item_id, category_id, **kwargs):
-
     item = Listitem()
     item.label = plugin.localize(30717)
     item.set_callback(list_all_programs, item_id=item_id, category_id=category_id, page='1')
@@ -98,7 +114,6 @@ def list_programs(plugin, item_id, category_id, **kwargs):
 
 @Route.register
 def list_all_programs(plugin, item_id, category_id, page, **kwargs):
-
     resp = urlquick.get(URL_ALL_PROGRAMS_PER_CATEGORY % (category_id, page))
     json_parser = json.loads(resp.text)
 
@@ -129,7 +144,6 @@ def list_all_programs(plugin, item_id, category_id, page, **kwargs):
 
 @Route.register
 def list_seasons(plugin, item_id, program_id, **kwargs):
-
     resp = urlquick.get(URL_PROGRAM_ASSETS % (program_id, program_id))
     json_parser = json.loads(resp.text)
 
@@ -146,7 +160,6 @@ def list_seasons(plugin, item_id, program_id, **kwargs):
 
 @Route.register
 def list_season_videos(plugin, item_id, program_id, season_slug, **kwargs):
-
     resp = urlquick.get(URL_SEASON_VIDEOS % (program_id, season_slug))
     json_parser = json.loads(resp.text)
 
@@ -169,7 +182,6 @@ def list_season_videos(plugin, item_id, program_id, season_slug, **kwargs):
 
 @Route.register
 def list_movie_videos(plugin, item_id, program_id, **kwargs):
-
     resp = urlquick.get(URL_PROGRAM_ASSETS % (program_id, program_id))
     json_parser = json.loads(resp.text)
     video_datas = json_parser['data']['asset']
@@ -195,7 +207,6 @@ def get_video_url(plugin,
                   video_id,
                   download_mode=False,
                   **kwargs):
-
     payload = {
         "device_layout": "web",
         "device_type": "web"
@@ -208,13 +219,11 @@ def get_video_url(plugin,
     data_account = json_parser2["data"]["stream"]["video_provider_details"]["account_id"]
     data_player = 'default'
     data_video_id = json_parser2["data"]["stream"]["url"]
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
-                                                    data_player, data_video_id)
+    return resolver_proxy.get_brightcove_video_json(plugin, data_account, data_player, data_video_id, None, download_mode)
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-
     unix_time = time.time()
     resp = urlquick.get(URL_LIVE_DATAS % unix_time)
     json_parser = json.loads(resp.text)

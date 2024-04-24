@@ -120,5 +120,13 @@ menu = {
         'fanart': 'channels/be/ln24.png',
         'enabled': True,
         'order': 22
+    },
+    'telesambre': {
+        'route': '/resources/lib/channels/be/telesambre:list_root',
+        'label': 'Télésambre',
+        'thumb': 'channels/be/telesambre.png',
+        'fanart': 'channels/be/telesambre_fanart.jpg',
+        'enabled': True,
+        'order': 23
     }
 }

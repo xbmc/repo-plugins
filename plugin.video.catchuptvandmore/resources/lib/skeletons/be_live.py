@@ -25,7 +25,7 @@ menu = {
         'xmltv_id': 'C168.api.telerama.fr',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 2
+        'order': 1
     },
     'plug_rtl': {
         'resolver': '/resources/lib/channels/be/rtlplaybe:get_live_url',
@@ -35,7 +35,7 @@ menu = {
         'xmltv_id': 'C377.api.telerama.fr',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 3
+        'order': 2
     },
     'club_rtl': {
         'resolver': '/resources/lib/channels/be/rtlplaybe:get_live_url',
@@ -45,7 +45,7 @@ menu = {
         'xmltv_id': 'C50.api.telerama.fr',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 4
+        'order': 3
     },
     'telemb': {
         'resolver': '/resources/lib/channels/be/telemb:get_live_url',
@@ -54,7 +54,7 @@ menu = {
         'fanart': 'channels/be/telemb_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 6
+        'order': 4
     },
     'rtc': {
         'resolver': '/resources/lib/channels/be/rtc:get_live_url',
@@ -63,7 +63,7 @@ menu = {
         'fanart': 'channels/be/rtc_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 7
+        'order': 5
     },
     'auvio': {
         'route': '/resources/lib/channels/be/rtbf:list_lives',
@@ -72,7 +72,7 @@ menu = {
         'fanart': 'channels/be/auvio_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 8
+        'order': 6
     },
     'tvlux': {
         'resolver': '/resources/lib/channels/be/tvlux:get_live_url',
@@ -81,16 +81,16 @@ menu = {
         'fanart': 'channels/be/tvlux_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 9
+        'order': 7
     },
-    'rtl_info': {
+    'rtl_play': {
         'resolver': '/resources/lib/channels/be/rtlplaybe:get_live_url',
-        'label': 'RTL INFO',
-        'thumb': 'channels/be/rtlinfo.png',
-        'fanart': 'channels/be/rtlinfo_fanart.jpg',
+        'label': 'RTL Play',
+        'thumb': 'channels/be/rtlplay.png',
+        'fanart': 'channels/be/rtlplay_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 10
+        'order': 8
     },
     'bel_rtl': {
         'resolver': '/resources/lib/channels/be/rtlplaybe:get_live_url',
@@ -99,7 +99,7 @@ menu = {
         'fanart': 'channels/be/belrtl_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 11
+        'order': 9
     },
     'contact': {
         'resolver': '/resources/lib/channels/be/rtlplaybe:get_live_url',
@@ -108,7 +108,7 @@ menu = {
         'fanart': 'channels/be/contact_fanart.jpg',
         'm3u_group': 'Belgique fr Radio',
         'enabled': True,
-        'order': 12
+        'order': 10
     },
     'bx1': {
         'resolver': '/resources/lib/channels/be/bx1:get_live_url',
@@ -117,7 +117,7 @@ menu = {
         'fanart': 'channels/be/bx1_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 13
+        'order': 11
     },
     'een': {
         'resolver': '/resources/lib/channels/be/vrt:get_live_url',
@@ -127,7 +127,7 @@ menu = {
         'xmltv_id': 'C23.api.telerama.fr',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 14
+        'order': 12
     },
     'canvas': {
         'resolver': '/resources/lib/channels/be/vrt:get_live_url',
@@ -136,7 +136,7 @@ menu = {
         'fanart': 'channels/be/canvas_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 15
+        'order': 13
     },
     'ketnet': {
         'resolver': '/resources/lib/channels/be/vrt:get_live_url',
@@ -146,7 +146,7 @@ menu = {
         'xmltv_id': 'C1280.api.telerama.fr',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 16
+        'order': 14
     },
     'nrjhitstvbe': {
         'resolver': '/resources/lib/channels/be/nrjhitstvbe:get_live_url',
@@ -155,16 +155,7 @@ menu = {
         'fanart': 'channels/be/nrjhitstvbe_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 17
-    },
-    'rtl_sport': {
-        'resolver': '/resources/lib/channels/be/rtlplaybe:get_live_url',
-        'label': 'RTL Sport',
-        'thumb': 'channels/be/rtlsport.png',
-        'fanart': 'channels/be/rtlsport_fanart.jpg',
-        'm3u_group': 'Belgique fr',
-        'enabled': True,
-        'order': 18
+        'order': 15
     },
     'tvcom': {
         'resolver': '/resources/lib/channels/be/tvcom:get_live_url',
@@ -173,7 +164,7 @@ menu = {
         'fanart': 'channels/be/tvcom_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 19
+        'order': 16
     },
     'bouke': {
         'resolver': '/resources/lib/channels/be/bouke:get_live_url',
@@ -182,7 +173,7 @@ menu = {
         'fanart': 'channels/be/bouke.png',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 20
+        'order': 17
     },
     'abxplore': {
         'resolver': '/resources/lib/channels/be/abbe:get_live_url',
@@ -191,7 +182,7 @@ menu = {
         'fanart': 'channels/be/abxplore_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 21
+        'order': 18
     },
     'ab3': {
         'resolver': '/resources/lib/channels/be/abbe:get_live_url',
@@ -200,7 +191,7 @@ menu = {
         'fanart': 'channels/be/ab3_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 22
+        'order': 19
     },
     'ln24': {
         'resolver': '/resources/lib/channels/be/ln24:get_live_url',
@@ -209,7 +200,7 @@ menu = {
         'fanart': 'channels/be/ln24_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 23
+        'order': 20
     },
     'laune': {
         'resolver': '/resources/lib/channels/be/rtbf:set_live_url',
@@ -219,7 +210,7 @@ menu = {
         'xmltv_id': 'C164.api.telerama.fr',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 24
+        'order': 21
     },
     'tipiktv': {
         'resolver': '/resources/lib/channels/be/rtbf:set_live_url',
@@ -229,7 +220,7 @@ menu = {
         'xmltv_id': 'C187.api.telerama.fr',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 25
+        'order': 22
     },
     'latrois': {
         'resolver': '/resources/lib/channels/be/rtbf:set_live_url',
@@ -239,7 +230,7 @@ menu = {
         'xmltv_id': 'C892.api.telerama.fr',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 26
+        'order': 23
     },
     'tipik': {
         'resolver': '/resources/lib/channels/be/rtbf:set_live_url',
@@ -248,7 +239,7 @@ menu = {
         'fanart': 'channels/be/tipik_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 27
+        'order': 24
     },
     'actv': {
         'resolver': '/resources/lib/channels/be/actv:get_live_url',
@@ -257,7 +248,7 @@ menu = {
         'fanart': 'channels/be/actv_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 28
+        'order': 25
     },
     'telesambre': {
         'resolver': '/resources/lib/channels/be/telesambre:get_live_url',
@@ -266,7 +257,7 @@ menu = {
         'fanart': 'channels/be/telesambre_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 29
+        'order': 26
     },
     'atv': {
         'resolver': '/resources/lib/channels/be/atv:get_live_url',
@@ -275,7 +266,7 @@ menu = {
         'fanart': 'channels/be/atv_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 30,
+        'order': 27,
     },
     'bruzz': {
         'resolver': '/resources/lib/channels/be/bruzz:get_live_url',
@@ -284,7 +275,7 @@ menu = {
         'fanart': 'channels/be/bruzz_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 31,
+        'order': 28,
     },
     'focuswtv': {
         'resolver': '/resources/lib/channels/be/focuswtv:get_live_url',
@@ -293,7 +284,7 @@ menu = {
         'fanart': 'channels/be/focuswtv_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 32,
+        'order': 29,
     },
     'robtv': {
         'resolver': '/resources/lib/channels/be/robtv:get_live_url',
@@ -302,7 +293,7 @@ menu = {
         'fanart': 'channels/be/robtv_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 33,
+        'order': 30,
     },
     'tvl': {
         'resolver': '/resources/lib/channels/be/tvl:get_live_url',
@@ -311,7 +302,7 @@ menu = {
         'fanart': 'channels/be/tvl_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 34,
+        'order': 31,
     },
     'tvoost': {
         'resolver': '/resources/lib/channels/be/tvoost:get_live_url',
@@ -320,7 +311,7 @@ menu = {
         'fanart': 'channels/be/tvoost_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 35,
+        'order': 32,
     },
     'hln_live': {
         'resolver': '/resources/lib/channels/be/hln:get_live_url',
@@ -329,7 +320,7 @@ menu = {
         'fanart': 'channels/be/hln_live_fanart.jpg',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 36,
+        'order': 33,
     },
     'canalzoom': {
         'resolver': '/resources/lib/channels/be/canalzoom:get_live_url',
@@ -338,7 +329,7 @@ menu = {
         'fanart': 'channels/be/canalzoom.png',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 37,
+        'order': 34,
     },
     'matele': {
         'resolver': '/resources/lib/channels/be/matele:get_live_url',
@@ -347,7 +338,7 @@ menu = {
         'fanart': 'channels/be/matele.png',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 38,
+        'order': 35,
     },
     'notele': {
         'resolver': '/resources/lib/channels/be/notele:get_live_url',
@@ -356,7 +347,7 @@ menu = {
         'fanart': 'channels/be/notele_fanart.jpg',
         'm3u_group': 'Belgique fr',
         'enabled': True,
-        'order': 39,
+        'order': 36,
     },
     'mnm': {
         'resolver': '/resources/lib/channels/be/mnm:get_live_url',
@@ -365,7 +356,7 @@ menu = {
         'fanart': 'channels/be/mnm.png',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 40,
+        'order': 37,
     },
     'citymusic': {
         'resolver': '/resources/lib/channels/be/citymusic:get_live_url',
@@ -374,6 +365,6 @@ menu = {
         'fanart': 'channels/be/citymusic.png',
         'm3u_group': 'België nl',
         'enabled': True,
-        'order': 41,
+        'order': 38,
     }
 }

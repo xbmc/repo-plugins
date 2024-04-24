@@ -10,24 +10,24 @@ import re
 from codequick import Resolver
 import urlquick
 
+from resources.lib import resolver_proxy, web_utils
 
 # TO DO
 # Replay add emissions
 
-URL_ROOT = 'http://ntv.ca'
+URL_LIVE = 'https://ntvplus.ca'
 
-URL_LIVE = URL_ROOT + '/web-tv/'
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE, max_age=-1)
+    resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
     root = resp.parse()
-    live_datas = root.find('.//iframe')
-    resp2 = urlquick.get(live_datas.get('src'), max_age=-1)
-    stream_url = ''
-    for url in re.compile(r'\"url\"\:\"(.*?)\"').findall(resp2.text):
+    live_url = root.find('.//iframe').get('src')
+    resp = urlquick.get(live_url, headers=GENERIC_HEADERS, max_age=-1)
+    for url in re.compile(r'\"url\"\:\"(.*?)\"').findall(resp.text):
         if 'm3u8' in url and 'msoNum' not in url:
-            stream_url = url
-    return stream_url
+            video_url = url
+    return resolver_proxy.get_stream_with_quality(plugin, video_url)

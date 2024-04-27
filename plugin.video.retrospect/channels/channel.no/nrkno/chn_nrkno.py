@@ -88,7 +88,7 @@ class Channel(chn_class.Channel):
         # The new Series/Instalments API (https://psapi-catalog-prod-we.azurewebsites.net/swagger/index.html)
         self._add_data_parser("https://psapi.nrk.no/tv/catalog/series/",
                               json=True, name="Main Series parser",
-                              parser=["_links", "seasons"], creator=self.create_instalment_season_item)
+                              parser=["_embedded", "seasons"], creator=self.create_instalment_season_item)
 
         self._add_data_parser("https://psapi.nrk.no/tv/catalog/series/[^/]+/seasons/", json=True,
                               match_type=ParserData.MatchRegex,
@@ -101,9 +101,10 @@ class Channel(chn_class.Channel):
                               parser=["_embedded", "episodes"],
                               creator=self.create_instalment_video_item)
 
-        self._add_data_parser("https://psapi-ne.nrk.no/autocomplete?q=", json=True,
-                              name="Search regex item",
-                              parser=["result", ],
+        #https://psapi.nrk.no/documentation/redoc/search/
+        self._add_data_parser("https://psapi.nrk.no/tv/titleSearch/global?q=", json=True,
+                              name="Search result item",
+                              parser=["results", "plugs"],
                               creator=self.create_search_item)
 
         # The old Series API (http://nrkpswebapi2ne.cloudapp.net/swagger/ui/index#/)
@@ -208,7 +209,7 @@ class Channel(chn_class.Channel):
 
         """
 
-        url = "https://psapi-ne.nrk.no/autocomplete?q=%s&apiKey={}".format(self.__api_key)
+        url = "https://psapi.nrk.no/tv/titleSearch/global?q=%s&apiKey={}".format(self.__api_key)
         return chn_class.Channel.search_site(self, url)
 
     def create_alpha_item(self, result_set):
@@ -320,6 +321,36 @@ class Channel(chn_class.Channel):
         #
         # return self.create_generic_item(result_set, program_type)
 
+    def create_search_item(self, result_set):
+        """ Creates a MediaItem of type 'folder' for a search result using the result_set
+        from the regex.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        :param list[str]|dict[str,Any] result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'folder' or 'video'.
+        :rtype: MediaItem|None
+
+        """
+
+        title = result_set["title"]
+        content_id = result_set["contentId"]
+
+        if result_set["type"] == "series":
+            url = "https://psapi.nrk.no/tv/catalog/series/{}?apiKey={}".format(content_id, self.__api_key)
+            item = FolderItem(title, url, content_type=contenttype.TVSHOWS)
+        else:
+            url = self.__get_video_url(content_id)
+            item = MediaItem(title, url, media_type=mediatype.VIDEO)
+
+        self.__set_image(item, result_set["webImages"], "width", "uri", False)
+
+
+        return item
+
     def create_episode_item(self, result_set):
         """ Creates a MediaItem of type 'folder' using the result_set from the regex.
 
@@ -342,26 +373,6 @@ class Channel(chn_class.Channel):
             return None
 
         return self.create_generic_item(result_set, program_type)
-
-    def create_search_item(self, result_set):
-        """ Creates a MediaItem of type 'folder' for a search result using the result_set
-        from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param list[str]|dict[str,Any] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
-        if "_source" not in result_set:
-            return None
-
-        return self.create_generic_item(result_set["_source"], "series")
 
     def create_video_item(self, result_set):
         """ Creates a MediaItem of type 'video' using the result_set from the regex.
@@ -434,7 +445,7 @@ class Channel(chn_class.Channel):
             return item
 
         # noinspection PyTypeChecker
-        item.thumb = self.__get_image(result_set["image"]["webImages"], "pixelWidth", "imageUrl")
+        self.__set_image(item, result_set["image"]["webImages"], "pixelWidth", "imageUrl", False)
 
         # see if there is a date?
         self.__set_date(result_set, item)
@@ -476,7 +487,7 @@ class Channel(chn_class.Channel):
 
         if "images" in result_set:
             # noinspection PyTypeChecker
-            item.thumb = self.__get_image(result_set["images"], "width", "uri")
+            self.__set_image(item, result_set["images"], "width", "uri",False)
 
         # see if there is a date?
         self.__set_date(result_set, item)
@@ -544,7 +555,7 @@ class Channel(chn_class.Channel):
         item.type = 'video'
 
         # noinspection PyTypeChecker
-        item.thumb = self.__get_image(result_set["image"]["webImages"], "pixelWidth", "imageUrl")
+        self.__set_image(item, result_set["image"]["webImages"], "pixelWidth", "imageUrl", False)
         item.description = result_set.get("longDescription", "")
         if not item.description:
             item.description = result_set.get("shortDescription", "")
@@ -572,14 +583,20 @@ class Channel(chn_class.Channel):
 
         """
 
-        title = result_set["title"]
-        season_id = result_set["name"]
-        if title != season_id and not season_id.isnumeric():
-            title = "{} - {}".format(season_id, title)
+        title = result_set["titles"]["title"]
+        sub_title = result_set["titles"].get("subtitle", None)
+        if sub_title:
+            title = "{} - {}".format(title, sub_title)
 
-        url = "{}{}?apiKey={}".format(self.baseUrl, result_set["href"], self.__api_key)
+        url = "{}{}?apiKey={}".format(self.baseUrl, result_set["_links"]["self"]["href"], self.__api_key)
 
-        item = MediaItem(title, url)
+        item = MediaItem(title, url, media_type=mediatype.SEASON)
+
+        if "backdropImage" in result_set:
+            self.__set_image(item, result_set["backdropImage"], "width", "url", False)
+        if "posterImage" in result_set:
+            self.__set_image(item, result_set["posterImage"], "width", "url", True)
+
         return item
 
     def create_instalment_video_item(self, result_set):
@@ -611,7 +628,7 @@ class Channel(chn_class.Channel):
 
         url = self.__get_video_url(result_set["prfId"])
         item = MediaItem(title, url, media_type=mediatype.EPISODE)
-        item.thumb = self.__get_image(result_set["image"], "width", "url")
+        self.__set_image(item, result_set["image"], "width", "url", False)
 
         # noinspection PyTypeChecker
         item.isGeoLocked = result_set.get("usageRights", {}).get("geoBlock", {}).get("isGeoBlocked", False)
@@ -665,7 +682,7 @@ class Channel(chn_class.Channel):
         item.isGeoLocked = live_data.get("isGeoBlocked")
 
         # noinspection PyTypeChecker
-        self.__get_image(live_data["posters"][0]["image"]["items"], "pixelWidth", "url")
+        self.__set_image(item, live_data["posters"][0]["image"]["items"], "pixelWidth", "url", False)
         return item
 
     def update_live_channel(self, item):
@@ -828,20 +845,6 @@ class Channel(chn_class.Channel):
             if len(date_parts) == 3:
                 item.set_date(date_parts[2], date_parts[1], date_parts[0])
         return
-
-    def __get_image(self, images, width_attribute, url_attribute):
-        max_width = 0
-        thumb = None
-        for image_data in images:
-            src = image_data[url_attribute]
-            width = image_data[width_attribute]
-            # No Fanart for now
-            # if  width > max_width:
-            #     item.fanart = src
-            if max_width < width < 521:
-                thumb = src
-
-        return thumb
 
     def __set_image(self, item: MediaItem, images: List, width_attribute: str, url_attribute: str, portrait: bool):
         max_width = 0

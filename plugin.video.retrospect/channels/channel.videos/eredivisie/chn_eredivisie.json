@@ -12,7 +12,8 @@
       "channelcode": "eredivisie",
       "sortorder": 210,
       "language": "nl",
-      "fanart": "foxsportfanart.jpg"
+      "fanart": "foxsportfanart.jpg",
+      "poster": "foxsportposter.jpg"
     }
   ]
 }

@@ -12,7 +12,8 @@
       "channelcode": "bvntv",
       "sortorder": 101,
       "language": "nl",
-      "fanart": "bvntvfanart.jpg"
+      "fanart": "bvntvfanart.jpg",
+      "poster": "bvntvposter.png"
     }
   ]
 }

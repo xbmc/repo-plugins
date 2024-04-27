@@ -12,7 +12,8 @@
       "channelcode": "omroepbrabant",
       "sortorder": 100,
       "language": "nl",
-      "fanart": "omroepbrabantfanart.png"
+      "fanart": "omroepbrabantfanart.png",
+      "poster": "omroepbrabantposter.png"
     }
   ]
 }

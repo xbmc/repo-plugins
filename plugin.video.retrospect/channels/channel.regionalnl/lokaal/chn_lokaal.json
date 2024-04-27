@@ -27,7 +27,8 @@
       "channelcode": "omropfryslan",
       "sortorder": 100,
       "language": "nl",
-      "fanart": "omropfryslanfanart.jpg"
+      "fanart": "omropfryslanfanart.jpg",
+      "poster": "omropfryslanposter.jpg"
     }
   ]
 }

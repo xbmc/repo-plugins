@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 import datetime
+import re
 from typing import Union, List, Optional, Tuple, Dict
 
 import pytz
@@ -55,6 +56,7 @@ class Channel(chn_class.Channel):
             match_type=ParserData.MatchRegex,
             name="Main processor that create content items (folders/videos) from blocks",
             json=True, requires_logon=True,
+            postprocessor=self.postprocess_episodes,
             parser=["content", "items"], creator=self.create_content_item)
 
         self._add_data_parser(
@@ -254,6 +256,36 @@ class Channel(chn_class.Channel):
         json_data = JsonHelper(data)
         self.__program_id = json_data.get_value("entity", "id", fallback=None)
         return json_data, []
+
+    def postprocess_episodes(self, data, items: List[MediaItem]) -> List[MediaItem]:
+        # Season episodes can be named ["Aflevering 1", "Aflevering 2"] and so on, or ["Some episode name", "Another episode name", "Yet another episode name"]
+        # without an episode number. Some episodes have a date, and some have no date, even within a single season.
+
+        # All this messes up Kodi episode ordering by either date or name:
+        # If no episodes have a date, Kodi orders by name, so "Another episode name" becomes the first episode instead of the second.
+        # If some episodes have a date and some later ones don't, Kodi shows the later ones as the first episodes (mindate), followed by the ones with a date.
+
+        # This postprocessing function fixes name ordering by adding an episode number in front of the title if the episodes
+        # are not like "Aflevering 1", "Aflevering 2" and so on.
+        # Episode names become ["01 Some episode name", "02 Another episode name", "03 Yet another episode name"].
+        # Numbered episodes are fairly common, and in this case it is useful to achieve the right sort order by name.
+
+        # This postprocessing function fixes date ordering by setting the date of an episode, if it has no date, to the date of the previous episode.
+        # This is probably not the real broadcast date, but it at least fixes the order.
+        if (len(items) > 1
+            and data.json.get("featureId") == "videos_by_season_by_program"
+            and all(item.media_type == mediatype.EPISODE and not re.match("[Aa]flevering \d+", item.name) for item in items)):
+            date = ""
+            for index, item in enumerate(items, start=1):
+                item.name = f"{index:02} {item.name}"
+                if (not item.has_date() and date):
+                    previous_episode_date = DateHelper.get_datetime_from_string(date, "%Y-%m-%d")
+                    item.set_date(previous_episode_date.year, previous_episode_date.month, previous_episode_date.day)
+                    item.name = f"{item.name} [date unknown]"
+                else:
+                    date = item.get_date()
+
+        return items
 
     def create_program_item(self, result_set: dict) -> Union[MediaItem, List[MediaItem], None]:
         if not result_set["title"]:

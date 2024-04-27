@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 import json
 import re
 
+from kodi_six import xbmcgui
 from codequick import Listitem, Resolver, Route, Script, utils
 import urlquick
 
@@ -21,9 +22,11 @@ from resources.lib.menu_utils import item_post_treatment
 
 URL_ROOT = 'https://france3-regions.francetvinfo.fr'
 
-URL_LIVES_JSON = URL_ROOT + '/webservices/mobile/live.json'
+URL_PROGRAMMES = URL_ROOT + '/programmes'
 
 URL_EMISSIONS = URL_ROOT + '/%s/emissions'
+
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
 
 LIVE_FR3_REGIONS = {
     "Alpes": "alpes",
@@ -154,17 +157,33 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    final_region = kwargs.get('language', Script.setting['france3regions.language'])
+    resp = urlquick.get(URL_PROGRAMMES, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse()
+    region = []
+    url_region = []
+    for place in root.iterfind(".//li[@class='program_home__regionList__item']"):
+        available_region = place.find('.//a').get('href')
+        url_region.append(available_region)
+        region.append(place.find('.//span').text.strip())
 
-    resp = urlquick.get(URL_LIVES_JSON,
-                        headers={'User-Agent': web_utils.get_random_ua()},
-                        max_age=-1)
-    json_parser = json.loads(resp.text)
+    choice = url_region[xbmcgui.Dialog().select(Script.localize(30158), region)]
+    resp = urlquick.get(choice, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse()
 
-    region = utils.ensure_unicode(final_region)
-    if 'Nouvelle-Aquitaine' in region:
-        id_sivideo = json_parser['noa']["id_sivideo"]
+    region = []
+    url_region = []
+    for old in root.iterfind(".//li[@class='direct-item ']"):
+        url_region.append(URL_ROOT + old.find(".//a").get('href'))
+        place = re.compile(r'France 3 (.*?)$').findall(old.find('.//img').get('alt'))[0]
+        region.append(place)
+
+    if len(region) > 1:
+        choice = url_region[xbmcgui.Dialog().select(Script.localize(30182), region)]
     else:
-        id_sivideo = json_parser[LIVE_FR3_REGIONS[region]]["id_sivideo"]
-    return resolver_proxy.get_francetv_live_stream(plugin,
-                                                   id_sivideo.split('@')[0])
+        choice = url_region[0]
+
+    resp = urlquick.get(choice, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse()
+    video_id = root.find('.//div[@class="magneto"]').get('data-id')
+
+    return resolver_proxy.get_francetv_live_stream(plugin, broadcast_id=video_id)

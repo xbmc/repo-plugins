@@ -10,34 +10,33 @@ import re
 from codequick import Resolver
 import urlquick
 
-from resources.lib import resolver_proxy
+from resources.lib import resolver_proxy, web_utils
+
+# channel_name
+URL_ROOT = 'http://www.%s.tn/'
+
+# Live
+URL_LIVE = URL_ROOT + 'البث-المباشر/محتوى'
+
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
 
 
 # TODO
 # Add Replay
 
-# Live
-URL_ROOT = 'http://www.%s.tn'
-# channel_name
-
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_ROOT % item_id)
+    resp = urlquick.get(URL_LIVE % item_id, headers=GENERIC_HEADERS, max_age=-1)
     root = resp.parse()
 
-    if root.find(".//section[@id='block-block-2']") is not None:
-        live_url = root.find(".//section[@id='block-block-2']").findall(
-            './/a')[0].get('href')
-    else:
-        live_url = root.find(".//section[@id='block-block-4']").findall(
-            './/a')[0].get('href')
-    live_html = urlquick.get(live_url)
-    live_id_channel = re.compile('www.youtube.com/embed/(.*?)\"').findall(
-        live_html.text)[1]
-    live_youtube_html = urlquick.get('https://www.youtube.com/embed/' +
-                                     live_id_channel)
-    live_id = re.compile(r'VIDEO_ID\"\:\"(.*?)\"').findall(
-        live_youtube_html.text)[0]
-    return resolver_proxy.get_stream_youtube(plugin, live_id, False)
+    for link in root.iterfind('.//script'):
+        source = link.get('src')
+        if source is not None and 'global.js' in source:
+            break
+
+    resp = urlquick.get(source, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.text
+    video_url = re.compile("source\: \'(.*?)\'").findall(root)[0]
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url)

@@ -23,7 +23,7 @@ from resources.lib.menu_utils import item_post_treatment
 
 URL_ROOT = 'http://www.lcp.fr'
 
-URL_LIVE_SITE = URL_ROOT + '/le-direct'
+URL_LIVE_SITE = 'https://lcp.fr/direct-lcp-5434'
 
 URL_CATEGORIES = URL_ROOT + '/%s'
 
@@ -35,6 +35,8 @@ CATEGORIES = {
     'documentaires': 'Documentaires',
     'emissions': 'Emission A-Z'
 }
+
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
 
 
 @Route.register
@@ -174,9 +176,12 @@ def get_video_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE_SITE,
-                        headers={'User-Agent': web_utils.get_random_ua()},
-                        max_age=-1)
-    video_id = re.compile(
-        r'www.dailymotion.com/embed/video/(.*?)[\?\"]').findall(resp.text)[0]
-    return resolver_proxy.get_stream_dailymotion(plugin, video_id, False)
+    try:
+        resp = urlquick.get(URL_LIVE_SITE, headers=GENERIC_HEADERS, max_age=-1)
+        root = resp.parse()
+        url_video = root.find('.//iframe').get('data-src')
+        live_id = re.compile(r'www.dailymotion.com/embed/video/(.*?)[\?\"]').findall(url_video)[0]
+    except Exception:
+        live_id = 'xgepjr'
+
+    return resolver_proxy.get_stream_dailymotion(plugin, live_id, False)

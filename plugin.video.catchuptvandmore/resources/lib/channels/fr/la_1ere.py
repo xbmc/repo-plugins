@@ -9,12 +9,12 @@ from __future__ import unicode_literals
 import json
 import re
 
+# noinspection PyUnresolvedReferences
 from codequick import Listitem, Resolver, Route, Script, utils
 import urlquick
 
 from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
-
 
 # Channels:
 #     * La 1ère (JT, Météo, Live TV)
@@ -23,7 +23,7 @@ from resources.lib.menu_utils import item_post_treatment
 
 URL_ROOT = 'https://la1ere.francetvinfo.fr'
 
-URL_LIVES_JSON = URL_ROOT + '/webservices/mobile/live.json'
+URL_LIVE = 'https://www.france.tv/la1ere/%s/direct.html'
 
 URL_EMISSIONS = URL_ROOT + '/%s/emissions'
 # region
@@ -93,7 +93,6 @@ def list_programs(plugin, item_id, **kwargs):
 
 @Route.register
 def list_videos(plugin, item_id, program_url, **kwargs):
-
     resp = urlquick.get(program_url)
     root = resp.parse()
 
@@ -135,20 +134,14 @@ def get_video_url(plugin,
                   id_diffusion,
                   download_mode=False,
                   **kwargs):
-
     return resolver_proxy.get_francetv_video_stream(plugin, id_diffusion,
                                                     download_mode)
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    final_region = kwargs.get('language', Script.setting['la_1ere.language'])
+    final_region = LIVE_LA1ERE_REGIONS[utils.ensure_unicode(Script.setting['la_1ere.language'])]
+    resp = urlquick.get(URL_LIVE % final_region, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
+    broadcast_id = re.compile(r'videoId\"\:\"(.*?)\"', re.DOTALL).findall(resp.text)[0]
 
-    resp = urlquick.get(URL_LIVES_JSON,
-                        headers={'User-Agent': web_utils.get_random_ua()},
-                        max_age=-1)
-    json_parser = json.loads(resp.text)
-
-    region = utils.ensure_unicode(final_region)
-    id_sivideo = json_parser[LIVE_LA1ERE_REGIONS[region]]["id_sivideo"].split('@')[0]
-    return resolver_proxy.get_francetv_live_stream(plugin, id_sivideo)
+    return resolver_proxy.get_francetv_live_stream(plugin, broadcast_id)

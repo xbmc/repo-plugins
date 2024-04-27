@@ -11,17 +11,33 @@ import re
 
 import urlquick
 # noinspection PyUnresolvedReferences
-from codequick import Listitem, Resolver, Route
+from codequick import Listitem, Resolver, Route, Script
 # noinspection PyUnresolvedReferences
 from codequick.utils import urljoin_partial
 
 from resources.lib import resolver_proxy
+from resources.lib.addon_utils import Quality
 from resources.lib.menu_utils import item_post_treatment
 
 URL_ROOT = 'https://www.ln24.be/'
 url_constructor = urljoin_partial(URL_ROOT)
 URL_LIVE = url_constructor('direct')
+
+# "media_sources": {
+#     "live": {"src": "https:\/\/live.digiteka.com\/1\/bEg0RmFLb1JMYXRI\/dGhqbmIw\/hls\/live\/playlist.m3u8",
+#              "id": "b7wfnkvf"}}
 PATTERN_VIDEO_M3U8 = re.compile(r'\"src\":\s*\"(.*?\.m3u8)\"')
+
+# "media_sources": {
+#     "mp4": {
+#         "mp4_720": "https:\/\/ngs15c.digiteka.com\/720p\/...2f074e4ae.mp4",
+#         "mp4_480": "https:\/\/ngs27c.digiteka.com\/480p\/...c03f229b3.mp4",
+#         "mp4_360": "https:\/\/ngs14c.digiteka.com\/360p\/...1fb8fcbcb.mp4",
+#         "mp4_240": "https:\/\/ngs21c.digiteka.com\/240p\/...c11e385a5.mp4"
+#     }
+# },
+PATTERN_VIDEO_BEST = re.compile(r'"mp4_720":\s*"([^"]*\.mp4)"')
+PATTERN_VIDEO_WORST = re.compile(r'"mp4_240":\s*"([^"]*\.mp4)"')
 
 
 @Route.register
@@ -56,7 +72,8 @@ def list_videos_search(plugin, search_query, **kwargs):
     if search_query is None or len(search_query) == 0:
         return False
 
-    yield from video_list(plugin, url_constructor("recherche?ft=%s") % search_query)
+    for i in video_list(plugin, url_constructor("recherche?ft=%s") % search_query):
+        yield i
 
 
 @Route.register
@@ -102,21 +119,34 @@ def video_list(plugin, url):
 @Resolver.register
 def play_video(plugin, url):
     resp = urlquick.get(url)
-    root_elem = resp.parse("video", attrs={"id": "ln24-video"})
-    video_url = root_elem.find(".//source").get('src')
-    return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, manifest_type="hls")
+    try:
+        root_elem = resp.parse("video", attrs={"id": "ln24-video"})
+        video_url = root_elem.find(".//source").get('src')
+        return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, manifest_type="hls")
+    except Exception:
+        root_elem = resp.parse("div", attrs={"class": "row video_embed"})
+        frame_url = root_elem.find(".//iframe").get('src')
+        resp2 = urlquick.get("https:" + frame_url)
+
+        quality = Script.setting.get_string('quality')
+        if quality == Quality['WORST']:
+            mp4_videos = PATTERN_VIDEO_WORST.findall(resp2.text)
+        else:
+            mp4_videos = PATTERN_VIDEO_BEST.findall(resp2.text)
+
+        if len(mp4_videos) == 0:
+            return False
+
+        video_url = mp4_videos[0].replace("\\", "")
+        return video_url
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
     resp = urlquick.get(URL_LIVE)
-    root_elem = resp.parse("iframe")
-    frame_url = root_elem.get('src')
+    root_elem = resp.parse("div", attrs={"role": "main"})
+    frame_url = root_elem.find(".//iframe").get('src')
     resp2 = urlquick.get("https:" + frame_url)
-
-    # "media_sources": {
-    #     "live": {"src": "https:\/\/live.digiteka.com\/1\/bEg0RmFLb1JMYXRI\/dGhqbmIw\/hls\/live\/playlist.m3u8",
-    #              "id": "b7wfnkvf"}}
 
     m3u8_array = PATTERN_VIDEO_M3U8.findall(resp2.text)
     if len(m3u8_array) == 0:

@@ -33,7 +33,7 @@ def channels(plugin, **kwargs):
         ('cardifflocal', 'Cardiff Local TV', 'cardifflocal.png', 'cardifflocal_fanart.jpg'),
         ('leedslocal', 'Leeds Local TV', 'leedslocal.png', 'leedslocal_fanart.jpg'),
         ('liverpoollocal', 'Liverpool Local TV', 'liverpoollocal.png', 'liverpoollocal_fanart.jpg'),
-        ('northwaleslocal', 'North Whales Local TV', 'northwaleslocal.png', 'northwaleslocal_fanart.jpg'),
+        ('northwaleslocal', 'North Wales Local TV', 'northwaleslocal.png', 'northwaleslocal_fanart.jpg'),
         ('teessidelocal', 'Teesside Local TV', 'teessidelocal.png', 'teessidelocal_fanart.jpg'),
         ('twlocal', 'Tyne & Wear Local TV', 'twlocal.png', 'twlocal_fanart.jpg')
     ]

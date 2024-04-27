@@ -17,21 +17,13 @@ from __future__ import unicode_literals
 root = 'live_tv'
 
 menu = {
-    'watania1': {
-        'resolver': '/resources/lib/channels/tn/watania:get_live_url',
-        'label': 'التلفزة التونسية الوطنية 1',
-        'thumb': 'channels/tn/watania1.png',
-        'fanart': 'channels/tn/watania1_fanart.jpg',
+    'elhiwarettounsi': {
+        'resolver': '/resources/lib/channels/tn/elhiwarettounsi:get_live_url',
+        'label': 'Elhiwar Ettounsi',
+        'thumb': 'channels/tn/elhiwarettounsi.png',
+        'fanart': 'channels/tn/elhiwarettounsi_fanart.jpg',
         'enabled': True,
         'order': 1
-    },
-    'watania2': {
-        'resolver': '/resources/lib/channels/tn/watania:get_live_url',
-        'label': 'التلفزة التونسية الوطنية 2',
-        'thumb': 'channels/tn/watania2.png',
-        'fanart': 'channels/tn/watania2_fanart.jpg',
-        'enabled': True,
-        'order': 2
     },
     'nessma': {
         'resolver': '/resources/lib/channels/tn/nessma:get_live_url',
@@ -39,6 +31,22 @@ menu = {
         'thumb': 'channels/tn/nessma.png',
         'fanart': 'channels/tn/nessma_fanart.jpg',
         'enabled': True,
+        'order': 2
+    },
+    'watania1': {
+        'resolver': '/resources/lib/channels/tn/watania:get_live_url',
+        'label': 'التلفزة التونسية الوطنية 1',
+        'thumb': 'channels/tn/watania1.png',
+        'fanart': 'channels/tn/watania1_fanart.jpg',
+        'enabled': True,
         'order': 3
+    },
+    'watania2': {
+        'resolver': '/resources/lib/channels/tn/watania:get_live_url',
+        'label': 'التلفزة التونسية الوطنية 2',
+        'thumb': 'channels/tn/watania2.png',
+        'fanart': 'channels/tn/watania2_fanart.jpg',
+        'enabled': True,
+        'order': 4
     }
 }

@@ -118,6 +118,10 @@ msgctxt "#30033"
 msgid "Favourites"
 msgstr ""
 
+msgctxt "#30034"
+msgid "Internet service providers"
+msgstr ""
+
 
 # Countries (from 30050 to 30079)
 
@@ -209,6 +213,22 @@ msgctxt "#30071"
 msgid "Slovakia"
 msgstr ""
 
+msgctxt "#30072"
+msgid "Greece"
+msgstr ""
+
+msgctxt "#30073"
+msgid "Peru"
+msgstr ""
+
+msgctxt "#30074"
+msgid "Venezuela"
+msgstr ""
+
+msgctxt "#30075"
+msgid "Luxembourg"
+msgstr ""
+
 # Channels (from 30080 to 30129)
 
 msgctxt "#30080"
@@ -283,6 +303,9 @@ msgctxt "#30097"
 msgid "Moroccan channels"
 msgstr ""
 
+msgctxt "#30098"
+msgid "Peruvian channels"
+msgstr ""
 
 # Websites (from 30130 to 30149)
 
@@ -292,6 +315,10 @@ msgstr ""
 
 msgctxt "#30150"
 msgid "Video quality"
+msgstr ""
+
+msgctxt "#30151"
+msgid "Device is L1 certified"
 msgstr ""
 
 msgctxt "#30152"
@@ -379,15 +406,11 @@ msgid "TV5 monde plus: Choose language"
 msgstr ""
 
 msgctxt "#30174"
-msgid "L\'Equipe: Choose live channel"
+msgid "Choose live channel"
 msgstr ""
 
 msgctxt "#30175"
 msgid "Equidia Racing: Choose race"
-msgstr ""
-
-msgctxt "#30176"
-msgid "Canal+ group channels"
 msgstr ""
 
 msgctxt "#30177"
@@ -402,12 +425,16 @@ msgctxt "#30179"
 msgid "Europe, outside FBS"
 msgstr ""
 
-msgctxt "#30190"
-msgid "MyCanal links"
+msgctxt "#30180"
+msgid "Video quality"
 msgstr ""
 
-msgctxt "#30191"
-msgid "Dailymotion links"
+msgctxt "#30181"
+msgid "Choose version"
+msgstr ""
+
+msgctxt "#30182"
+msgid "France 3 Régions: Choose subregion"
 msgstr ""
 
 msgctxt "#30192"
@@ -462,14 +489,6 @@ msgstr ""
 
 
 # Accounts (from 30240 to 30269)
-
-msgctxt "#30240"
-msgid "NRJ Login"
-msgstr ""
-
-msgctxt "#30241"
-msgid "NRJ Password"
-msgstr ""
 
 msgctxt "#30242"
 msgid "VRT NU Login"
@@ -543,6 +562,22 @@ msgctxt "#30259"
 msgid "RTBF auvio Password"
 msgstr ""
 
+msgctxt "#30260"
+msgid "MyTF1 Login"
+msgstr ""
+
+msgctxt "#30261"
+msgid "MyTF1 Password"
+msgstr ""
+
+msgctxt "#30262"
+msgid "SFR TV login"
+msgstr ""
+
+msgctxt "#30263"
+msgid "SFR TV password"
+msgstr ""
+
 
 # TV integration (from 30270 to 30289)
 
@@ -577,6 +612,12 @@ msgstr ""
 msgctxt "#30277"
 msgid "Select channels to enable in Kodi Live TV"
 msgstr ""
+
+
+
+# Reserved space for other tab/category in settings (from 30290 to 30339)
+
+
 
 
 # Advanced settings (from 30370 to 30399)
@@ -800,10 +841,6 @@ msgctxt "#30721"
 msgid "Content requiring a subscription"
 msgstr ""
 
-msgctxt "#30722"
-msgid "TV guide"
-msgstr ""
-
 msgctxt "#30723"
 msgid "An error occurred while getting TV guide"
 msgstr ""
@@ -832,13 +869,14 @@ msgctxt "#30729"
 msgid "Emissions"
 msgstr ""
 
-msgctxt "#30730"
-msgid "Downloading TV guide..."
-msgstr ""
-
 msgctxt "#30731"
 msgid "Homepage"
 msgstr ""
+
+msgctxt "#30732"
+msgid "This content requires a payment. To buy or rent it, go to %s website at this URL : %s"
+msgstr ""
+
 
 # Favourites (from 30800 to 30859)
 

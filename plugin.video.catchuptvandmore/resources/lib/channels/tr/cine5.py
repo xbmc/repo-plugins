@@ -20,8 +20,11 @@ URL_ROOT = 'https://www.cine5tv.com'
 def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_ROOT, headers={"User-Agent": web_utils.get_random_ua()})
-    player_url = re.compile('src=\"(.*?)\"').findall(resp.text)[1]
+    player_url = re.compile('<script src=\"(.*?)\"').findall(resp.text)[0]
+    player_url = player_url.replace("#038;", "").replace("//", "https://")
+
     resp = urlquick.get(player_url)
-    video_url = re.compile('src=\"(.*?)\"').findall(resp.text)[0]
+    video_url = re.compile('var yayincomtr4=\"(.*?)\"').findall(resp.text)[0]
+    video_url = video_url.replace("//", "https://")
 
     return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

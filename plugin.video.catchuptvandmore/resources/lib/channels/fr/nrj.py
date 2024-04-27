@@ -6,19 +6,13 @@
 
 from __future__ import unicode_literals
 import json
-import requests
 
 from codequick import Listitem, Resolver, Route
-import htmlement
 import urlquick
 
-from resources.lib import resolver_proxy, download
+from resources.lib import resolver_proxy, download, web_utils
 from resources.lib.addon_utils import get_item_media_path
 from resources.lib.menu_utils import item_post_treatment
-
-
-# TO DO
-# Fix Live TV
 
 URL_ROOT = 'https://www.nrj-play.fr'
 
@@ -31,6 +25,8 @@ URL_COMPTE_LOGIN = 'https://user-api2.nrj.fr/api/5/login'
 URL_LIVE_WITH_TOKEN = URL_ROOT + '/compte/live?channel=%s'
 # channel (nrj12, ...) -
 # call this url after get session (url live with token inside this page)
+
+URL_TOKEN = 'https://www.nrj-play.fr/replay/token'
 
 
 @Route.register
@@ -176,47 +172,19 @@ def get_video_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    # Live TV Not working / find a way to dump html received
-
-    # Create session
-    # KO - session_urlquick = urlquick.Session()
-    session_requests = requests.session()
-
-    # Build PAYLOAD
-    payload = {
-        "email": plugin.setting.get_string('nrj.login'),
-        "password": plugin.setting.get_string('nrj.password')
-    }
     headers = {
-        'accept': 'application/json, text/javascript, */*; q=0.01',
-        'origin': 'https://www.nrj-play.fr',
-        'referer': 'https://www.nrj-play.fr/'
+        'referer': URL_LIVE_WITH_TOKEN % item_id,
+        'User_Agent': web_utils.get_random_ua(),
     }
+    resp = urlquick.post(URL_TOKEN, headers=headers, max_age=-1)
+    token = json.loads(resp.text)['token']
 
-    # LOGIN
-    # KO - resp2 = session_urlquick.post(
-    #     URL_COMPTE_LOGIN, data=payload,
-    #     headers={'User-Agent': web_utils.get_ua, 'referer': URL_COMPTE_LOGIN})
-    resp2 = session_requests.post(URL_COMPTE_LOGIN,
-                                  data=payload,
-                                  headers=headers)
-    if 'error alert alert-danger' in repr(resp2.text):
-        plugin.notify('ERROR', 'NRJ : ' + plugin.localize(30711))
-        return False
+    resp = urlquick.get(URL_LIVE_WITH_TOKEN % item_id, headers=headers, max_age=-1)
 
-    # GET page with url_live with the session logged
-    # KO - resp3 = session_urlquick.get(
-    #     URL_LIVE_WITH_TOKEN % item_id,
-    #     headers={'User-Agent': web_utils.get_ua, 'referer': URL_LIVE_WITH_TOKEN % item_id})
-    resp3 = session_requests.get(URL_LIVE_WITH_TOKEN % (item_id),
-                                 headers=dict(referer=URL_LIVE_WITH_TOKEN %
-                                              (item_id)))
-
-    parser = htmlement.HTMLement()
-    parser.feed(resp3.text)
-    root = parser.close()
-    live_data = root.find(".//div[@class='player']")
-
+    live_data = resp.parse('div', attrs={"class": "player"})
     url_live_json = live_data.get('data-options')
-    url_live_json_jsonparser = json.loads(url_live_json)
-    return resolver_proxy.get_stream_with_quality(plugin, url_live_json_jsonparser["file"], manifest_type="hls")
+    jsonparser = json.loads(url_live_json)
+    token_name = jsonparser['tokenName']
+
+    video_url = jsonparser["file"] + '?' + token_name + '=' + token
+    return resolver_proxy.get_stream_with_quality(plugin, video_url)

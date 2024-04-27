@@ -11,7 +11,7 @@ from xml.etree import ElementTree
 
 import urlquick
 # noinspection PyUnresolvedReferences
-from codequick import Listitem, Resolver, Route, Script
+from codequick import Listitem, Resolver, Route
 # noinspection PyUnresolvedReferences
 from codequick.utils import urljoin_partial, strip_tags
 
@@ -33,13 +33,16 @@ STREAM_API = "https://v2-streams-elb.simplestreamcdn.com/api/%s/stream/%s?key=%s
 SEASON_EPISODE_PATTERN = re.compile(r'S(\d+)\s.*Ep(\d+)')
 DURATION_PATTERN = re.compile(r'(\d+) min')
 
+GENERIC_HEADERS = {"User-Agent": get_random_ua()}
+
 
 @Route.register
 def website_root(plugin, item_id, **kwargs):
-    resp = urlquick.get(URL_ROOT, max_age=-1)
+    resp = urlquick.get(URL_ROOT, headers=GENERIC_HEADERS, max_age=-1)
 
     # Home page carousels
-    yield from yield_carousels(URL_ROOT)
+    for i in yield_carousels(URL_ROOT):
+        yield i
 
     # Navbar
     root_nav = resp.parse("ul", attrs={"class": "nav navbar-nav"})
@@ -55,7 +58,7 @@ def website_root(plugin, item_id, **kwargs):
 
 
 def yield_carousels(url):
-    main = urlquick.get(url, max_age=-1).parse("main")
+    main = urlquick.get(url, headers=GENERIC_HEADERS, max_age=-1).parse("main")
 
     found_plot = main.find(".//div[@class='series-hero__infoblock']")
     found_image = main.find(".//div[@class='series-hero__carousel']//img")
@@ -161,11 +164,8 @@ def list_items(plugin, items, **kwargs):
 def list_programs(plugin, url, **kwargs):
     program = url_constructor(url)
 
-    if (URL_LIVE == program) or (URL_LIVE + '/' == program):
-        return False
-
-    elif (URL_ON_DEMAND == program) or (URL_ON_DEMAND + '/' == program):
-        resp = urlquick.get(program, max_age=-1)
+    if (URL_ON_DEMAND == program) or (URL_ON_DEMAND + '/' == program):
+        resp = urlquick.get(program, headers=GENERIC_HEADERS, max_age=-1)
         root_elem = resp.parse("main").find(".//div[@class='container-fluid']")
         for url_tag in root_elem.iterfind(".//a"):
             if url_tag.get("class") is None or "thumbnail" not in url_tag.get("class"):
@@ -178,8 +178,9 @@ def list_programs(plugin, url, **kwargs):
             item.art["thumb"] = append_schema(img_src)
             item.set_callback(list_programs, url=tag_url)
             yield item
-    else:
-        yield from yield_carousels(program)
+    elif (URL_LIVE != program) and (URL_LIVE + '/' != program):
+        for i in yield_carousels(program):
+            yield i
 
 
 def append_schema(url):
@@ -201,31 +202,8 @@ def play_video(plugin, url, **kwargs):
         prefix = DATA_PLAYER_PREFIX
         resource = "live"
 
-    headers1 = {
-        "User-Agent": get_random_ua(),
-        "Accept": "*/*",
-        "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "cross-site",
-        "Pragma": "no-cache",
-        "Cache-Control": "no-cache",
-        "referrer": URL_ROOT
-    }
-
-    main = urlquick.get(full_url, headers=headers1, max_age=-1).parse("main")
+    main = urlquick.get(full_url, headers=GENERIC_HEADERS, max_age=-1).parse("main")
     player = main.find(player_path)
-    headers2 = {
-        "User-Agent": get_random_ua(),
-        "Accept": "*/*",
-        "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "cross-site",
-        "Pragma": "no-cache",
-        "Cache-Control": "no-cache",
-        "referrer": URL_ROOT
-    }
 
     data_id = player.get("%sid" % prefix)
     data_env = player.get("%senv" % prefix)
@@ -233,32 +211,18 @@ def play_video(plugin, url, **kwargs):
     data_key = player.get("%skey" % prefix)
     data_token = player.get("%stoken" % prefix)
     data_expiry = player.get("%sexpiry" % prefix)
-    urlquick.get(SSMP_API % (data_id, data_env),
-                 headers=headers2,
-                 max_age=-1).json()
+    urlquick.get(SSMP_API % (data_id, data_env), headers=GENERIC_HEADERS, max_age=-1).json()
 
-    headers3 = {
+    headers = {
         "User-Agent": get_random_ua(),
-        "Accept": "*/*",
-        "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
         "Uvid": data_uvid,
         "Token": data_token,
         "Token-Expiry": data_expiry,
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "cross-site",
-        "Pragma": "no-cache",
-        "Cache-Control": "no-cache",
         "referrer": URL_ROOT,
     }
 
-    json_api3 = urlquick.get(STREAM_API % (resource, data_uvid, data_key),
-                             headers=headers3,
-                             max_age=-1).json()
-
-    Script.log("json_api3 = %s" % json_api3, args=None, lvl=Script.ERROR)
-
-    stream_url = json_api3["response"]["stream"]
+    json_api = urlquick.get(STREAM_API % (resource, data_uvid, data_key), headers=headers, max_age=-1).json()
+    stream_url = json_api["response"]["stream"]
     stream_url = re.sub(r'\.m3u8.*', '.m3u8', stream_url)
 
-    return resolver_proxy.get_stream_with_quality(plugin, video_url=stream_url, manifest_type="hls")
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=stream_url)

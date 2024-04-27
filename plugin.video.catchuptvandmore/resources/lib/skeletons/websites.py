@@ -89,45 +89,13 @@ menu = {
         'enabled': True,
         'order': 9
     },
-    'nytimes': {
-        'route': '/resources/lib/websites/nytimes:website_root',
-        'label': 'New York Times',
-        'thumb': 'websites/nytimes.png',
-        'fanart': 'websites/nytimes_fanart.jpg',
-        'enabled': True,
-        'order': 10
-    },
-    'fosdem': {
-        'route': '/resources/lib/websites/fosdem:website_root',
-        'label': 'Fosdem',
-        'thumb': 'websites/fosdem.png',
-        'fanart': 'websites/fosdem_fanart.jpg',
-        'enabled': True,
-        'order': 11
-    },
     'ina': {
         'route': '/resources/lib/websites/ina:website_root',
         'label': 'Ina',
         'thumb': 'websites/ina.png',
         'fanart': 'websites/ina_fanart.jpg',
         'enabled': True,
-        'order': 12
-    },
-    'onf': {
-        'route': '/resources/lib/websites/onf:website_root',
-        'label': 'Office National du Film du Canada',
-        'thumb': 'websites/onf.png',
-        'fanart': 'websites/onf_fanart.jpg',
-        'enabled': True,
-        'order': 13
-    },
-    'nfb': {
-        'route': '/resources/lib/websites/nfb:website_root',
-        'label': 'National Film Board Of Canada',
-        'thumb': 'websites/nfb.png',
-        'fanart': 'websites/nfb_fanart.jpg',
-        'enabled': True,
-        'order': 14
+        'order': 10
     },
     'marmiton': {
         'route': '/resources/lib/websites/marmiton:website_root',
@@ -135,15 +103,7 @@ menu = {
         'thumb': 'websites/marmiton.png',
         'fanart': 'websites/marmiton_fanart.jpg',
         'enabled': True,
-        'order': 15
-    },
-    'lesargonautes': {
-        'route': '/resources/lib/websites/lesargonautes:website_root',
-        'label': 'Les Argonautes',
-        'thumb': 'websites/lesargonautes.png',
-        'fanart': 'websites/lesargonautes_fanart.jpg',
-        'enabled': False,  # broken, disabled
-        'order': 16
+        'order': 11
     },
     'fff': {
         'route': '/resources/lib/websites/fff:website_root',
@@ -151,7 +111,7 @@ menu = {
         'thumb': 'websites/nationalfff.png',
         'fanart': 'websites/nationalfff_fanart.jpg',
         'enabled': True,
-        'order': 17
+        'order': 12
     },
     'philharmoniedeparis': {
         'route': '/resources/lib/websites/philharmoniedeparis:website_root',
@@ -159,7 +119,23 @@ menu = {
         'thumb': 'websites/philharmoniedeparis.png',
         'fanart': 'websites/philharmoniedeparis_fanart.jpg',
         'enabled': True,
-        'order': 18
+        'order': 13
+    },
+    'fosdem': {
+        'route': '/resources/lib/websites/fosdem:website_root',
+        'label': 'Fosdem',
+        'thumb': 'websites/fosdem.png',
+        'fanart': 'websites/fosdem_fanart.jpg',
+        'enabled': True,
+        'order': 14
+    },
+    'sonuma': {
+        'route': '/resources/lib/websites/sonuma:website_root',
+        'label': 'sonuma',
+        'thumb': 'websites/sonuma.png',
+        'fanart': 'websites/sonuma.png',
+        'enabled': True,
+        'order': 15
     },
     'veely': {
         'route': '/resources/lib/websites/veely:website_root',
@@ -167,13 +143,37 @@ menu = {
         'thumb': 'websites/veely.png',
         'fanart': 'websites/veely.png',
         'enabled': True,
+        'order': 16
+    },
+    'onf': {
+        'route': '/resources/lib/websites/onf:website_root',
+        'label': 'Office National du Film du Canada',
+        'thumb': 'websites/onf.png',
+        'fanart': 'websites/onf_fanart.jpg',
+        'enabled': True,
+        'order': 17
+    },
+    'nfb': {
+        'route': '/resources/lib/websites/nfb:website_root',
+        'label': 'National Film Board Of Canada',
+        'thumb': 'websites/nfb.png',
+        'fanart': 'websites/nfb_fanart.jpg',
+        'enabled': True,
+        'order': 18
+    },
+    'telequebec': {
+        'route': '/resources/lib/websites/telequebec:website_root',
+        'label': 'Squat Télé Québec',
+        'thumb': 'websites/telequebec.png',
+        'fanart': 'websites/telequebec_fanart.png',
+        'enabled': True,
         'order': 19
     },
-    'sonuma': {
-        'route': '/resources/lib/websites/sonuma:website_root',
-        'label': 'sonuma',
-        'thumb': 'websites/sonuma.png',
-        'fanart': 'websites/sonuma.png',
+    'nytimes': {
+        'route': '/resources/lib/websites/nytimes:website_root',
+        'label': 'New York Times',
+        'thumb': 'websites/nytimes.png',
+        'fanart': 'websites/nytimes_fanart.jpg',
         'enabled': True,
         'order': 20
     }

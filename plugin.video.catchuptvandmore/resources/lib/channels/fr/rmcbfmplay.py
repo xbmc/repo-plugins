@@ -12,14 +12,13 @@ import re
 from six.moves import urllib
 from builtins import str
 
-import inputstreamhelper
 import urlquick
 import xbmcaddon
 from codequick import Listitem, Resolver, Route, Script
 from kodi_six import xbmcgui
-from resources.lib import download, web_utils
+from resources.lib import download, web_utils, resolver_proxy
 from resources.lib.addon_utils import get_item_media_path
-from resources.lib.kodi_utils import (INPUTSTREAM_PROP, get_kodi_version,
+from resources.lib.kodi_utils import (get_kodi_version,
                                       get_selected_item_art,
                                       get_selected_item_info,
                                       get_selected_item_label)
@@ -27,8 +26,13 @@ from resources.lib.menu_utils import item_post_treatment
 
 API_BACKEND = "https://ws-backendtv.rmcbfmplay.com/gaia-core/rest/api/"
 API_CDN_ROOT = "https://ws-cdn.tv.sfr.net/gaia-core/rest/api/"
+LICENSE_URL = "https://ws-backendtv.rmcbfmplay.com/asgard-drm-widevine/public/licence"
+SERVICE_URL = "https://ws-backendtv.rmcbfmplay.com/sekai-service-plan/public/v2/service-list"
+PROFILES_URL = "https://ws-backendtv.rmcbfmplay.com/heimdall-core/public/api/v2/userProfiles"
+CUSTOMDATALIVE = "description={}&deviceId=byPassARTHIUS&deviceName=Firefox-96.0----Windows&deviceType=PC&osName=Windows&osVersion=10&persistent=false&resolution=1600x900&tokenType=castoken&tokenSSO={}&type=LIVEOTT&accountId={}"
+CUSTOMDATAREPLAY = CUSTOMDATALIVE + '&entitlementId={}'
 
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101 Firefox/96.0"
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
 
 
 @Route.register
@@ -53,7 +57,7 @@ def get_token():
     headers = {
         "secret": "Basic Uk1DQkZNUGxheUFuZHJvaWR2MTptb2ViaXVzMTk3MA==",
         "Authorization": "Basic %s" % base64.b64encode(autorization.encode("utf-8")).decode("utf-8"),
-        "User-Agent": USER_AGENT
+        "User-Agent": web_utils.get_random_ua(),
     }
 
     resp = urlquick.get(url, params=params, headers=headers).json()
@@ -62,7 +66,6 @@ def get_token():
 
 
 def get_account_id(token):
-    url = "https://ws-backendtv.rmcbfmplay.com/heimdall-core/public/api/v2/userProfiles"
     params = {
         "app": "bfmrmc",
         "device": "browser",
@@ -70,8 +73,7 @@ def get_account_id(token):
         "token": token,
         "tokenType": "casToken",
     }
-    headers = {"User-Agent": USER_AGENT}
-    resp = urlquick.get(url, params=params, headers=headers).json()
+    resp = urlquick.get(PROFILES_URL, params=params, headers=GENERIC_HEADERS).json()
     account_id = resp["nexttvId"]
     return account_id
 
@@ -99,8 +101,7 @@ def rmcbfmplay_root(plugin, path="", **kwargs):
         "operators": "NEXTTV",
         "noTracking": "false"
     }
-    headers = {"User-Agent": USER_AGENT}
-    resp = urlquick.get(url, params=params, headers=headers).json()
+    resp = urlquick.get(url, params=params, headers=GENERIC_HEADERS).json()
     for spot in resp["spots"]:
         item = Listitem()
         item.label = spot["title"]
@@ -137,8 +138,7 @@ def menu(plugin, path, **kwargs):
             "noTracking": "false"
         }
 
-    headers = {"User-Agent": USER_AGENT}
-    resp = urlquick.get(url, params=params, headers=headers).json()
+    resp = urlquick.get(url, params=params, headers=GENERIC_HEADERS).json()
 
     if "items" in resp:
         key = "items"
@@ -235,7 +235,7 @@ def menu(plugin, path, **kwargs):
 def video(plugin, path, title, **kwargs):
     """Menu of the app with v1 API."""
     headers = {
-        'User-Agent': USER_AGENT,
+        'User-Agent': web_utils.get_random_ua(),
         'Content-type': 'application/json',
         'Accept': 'application/json, text/plain, */*',
     }
@@ -274,31 +274,21 @@ def video(plugin, path, title, **kwargs):
                 json=data,
             ).json()["entitlementId"]
 
-            item = Listitem()
-            item.label = get_selected_item_label()
-            item.art.update(get_selected_item_art())
-            item.info.update(get_selected_item_info())
-            item.path = stream["url"]
-            item.property[INPUTSTREAM_PROP] = "inputstream.adaptive"
-            item.property["inputstream.adaptive.manifest_type"] = "mpd"
-            item.property["inputstream.adaptive.license_type"] = "com.widevine.alpha"
-            customdata = "description={}&deviceId=byPassARTHIUS&deviceName=Firefox-96.0----Windows&deviceType=PC&osName=Windows&osVersion=10&persistent=false&resolution=1600x900&tokenType=castoken&tokenSSO={}&entitlementId={}&type=LIVEOTT&accountId={}".format(
-                USER_AGENT, token, entitlementId, account_id
-            )
+            video_url = stream["url"]
+            customdata = CUSTOMDATAREPLAY.format(web_utils.get_random_ua(), token, account_id, entitlementId)
 
-            customdata = urllib.parse.quote(customdata)
-            item.property["inputstream.adaptive.license_key"] = (
-                "https://ws-backendtv.rmcbfmplay.com/asgard-drm-widevine/public/licence|User-Agent=" + USER_AGENT + "&customdata="
-                + customdata + "&Origin=https://www.rmcbfmplay.com&Content-Type="
-                + "|R{SSM}|"
-            )
-            return item
+            headers = {
+                'User-Agent': web_utils.get_random_ua(),
+                'customdata': customdata,
+                'Origin': 'https://www.rmcbfmplay.com',
+                'Content-Type': '',
+            }
+            return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, license_url=LICENSE_URL, manifest_type='mpd', headers=headers)
 
 
 @Route.register
 def podscast(plugin, path, **kwargs):
-    headers = {"User-Agent": USER_AGENT}
-    resp = urlquick.get(path, headers=headers).text
+    resp = urlquick.get(path, headers=GENERIC_HEADERS).text
 
     if "bfmtv.com" in path:
         data = re.compile('margin-top">.+?<a href="(.+?)".+?name">(.+?)<.+?description">(.+?)<', re.DOTALL | re.MULTILINE).findall(resp)
@@ -338,10 +328,9 @@ def playpodcast(plugin, path, title, **kwargs):
 
     # Deezer send directly the final url.
     if ".mp3" in path:
-        item.path = path + "|User-Agent=" + USER_AGENT + "&Referer=https://www.deezer.com/"
+        item.path = path + "|User-Agent=" + web_utils.get_random_ua() + "&Referer=https://www.deezer.com/"
     else:
-        headers = {"User-Agent": USER_AGENT}
-        resp = urlquick.get(path, headers=headers)
+        resp = urlquick.get(path, headers=GENERIC_HEADERS)
         data = resp.parse()
         if "bfmtv.com" in path:
             item.path = data.find(".//div[@class='audio-player']").get('data-media-url')
@@ -352,21 +341,19 @@ def playpodcast(plugin, path, title, **kwargs):
 def get_live_url(plugin, item_id, **kwargs):
 
     headers = {
-        'User-Agent': USER_AGENT,
+        'User-Agent': web_utils.get_random_ua(),
         'Content-type': 'application/json',
         'Accept': 'application/json, text/plain, */*',
     }
 
-    url = "https://ws-backendtv.rmcbfmplay.com/sekai-service-plan/public/v2/service-list"
     token = get_token()
-
     params = {
         "app": "bfmrmc",
         "device": "browser",
         "token": token,
     }
 
-    resp = urlquick.get(url, params=params, headers=headers).json()
+    resp = urlquick.get(SERVICE_URL, params=params, headers=headers).json()
 
     if item_id == 'BFM_regions':
         temp_id = kwargs.get('language', Script.setting['BFM_regions.language'])
@@ -375,29 +362,17 @@ def get_live_url(plugin, item_id, **kwargs):
 
     for data in resp:
         if data["name"] == temp_id:
-            item = Listitem()
-            item.label = get_selected_item_label()
-            item.art.update(get_selected_item_art())
-            item.info.update(get_selected_item_info())
-
             for stream in data["streams"]:
                 if stream["drm"] == "WIDEVINE":
 
                     # Workaround for IA bug : https://github.com/xbmc/inputstream.adaptive/issues/804
-                    response = urlquick.get(stream["url"])
-                    item.path = re.search('<Location>([^<]+)</Location>', response.text).group(1).replace(';', '&')
-
-                    item.property[INPUTSTREAM_PROP] = "inputstream.adaptive"
-                    item.property["inputstream.adaptive.manifest_type"] = "mpd"
-                    item.property["inputstream.adaptive.license_type"] = "com.widevine.alpha"
-                    customdata = "description={}&deviceId=byPassARTHIUS&deviceName=Firefox-96.0----Windows&deviceType=PC&osName=Windows&osVersion=10&persistent=false&resolution=1600x900&tokenType=castoken&tokenSSO={}&type=LIVEOTT&accountId={}".format(
-                        USER_AGENT, token, "undefined"
-                    )
-
-                    customdata = urllib.parse.quote(customdata)
-                    item.property["inputstream.adaptive.license_key"] = (
-                        "https://ws-backendtv.rmcbfmplay.com/asgard-drm-widevine/public/licence|User-Agent=" + USER_AGENT + "&customdata="
-                        + customdata + "&Origin=https://www.rmcbfmplay.com&Content-Type="
-                        + "|R{SSM}|"
-                    )
-                    return item
+                    response = urlquick.get(stream["url"], headers=GENERIC_HEADERS, max_age=-1)
+                    video_url = re.search('<Location>([^<]+)</Location>', response.text).group(1).replace(';', '&')
+                    customdata = CUSTOMDATALIVE.format(web_utils.get_random_ua(), token, "undefined")
+                    headers = {
+                        'User-Agent': web_utils.get_random_ua(),
+                        'customdata': customdata,
+                        'Origin': 'https://www.rmcbfmplay.com',
+                        'Content-Type': ''
+                    }
+                    return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, license_url=LICENSE_URL, manifest_type='mpd', headers=headers)

@@ -83,6 +83,4 @@ def get_video_url(plugin,
     data_video_id = video_datas.get('data-video-id')
     data_player = video_datas.get('data-player')
 
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
-                                                    data_player, data_video_id,
-                                                    download_mode)
+    return resolver_proxy.get_brightcove_video_json(plugin, data_account, data_player, data_video_id, None, download_mode)

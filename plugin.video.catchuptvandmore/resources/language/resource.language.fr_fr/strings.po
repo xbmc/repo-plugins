@@ -118,6 +118,10 @@ msgctxt "#30033"
 msgid "Favourites"
 msgstr "Favoris"
 
+msgctxt "#30034"
+msgid "Internet service providers"
+msgstr "Fournisseurs d'accès internet"
+
 
 # Countries (from 30050 to 30079)
 
@@ -209,6 +213,22 @@ msgctxt "#30071"
 msgid "Slovakia"
 msgstr "Slovaquie"
 
+msgctxt "#30072"
+msgid "Greece"
+msgstr "Grèce"
+
+msgctxt "#30073"
+msgid "Peru"
+msgstr "Pérou"
+
+msgctxt "#30074"
+msgid "Venezuela"
+msgstr "Venezuela"
+
+msgctxt "#30075"
+msgid "Luxembourg"
+msgstr "Luxembourg"
+
 # Channels (from 30080 to 30129)
 
 msgctxt "#30080"
@@ -283,6 +303,9 @@ msgctxt "#30097"
 msgid "Moroccan channels"
 msgstr "Chaînes marocaines"
 
+msgctxt "#30098"
+msgid "Peruvian channels"
+msgstr "Chaînes péruviennes"
 
 # Websites (from 30130 to 30149)
 
@@ -293,6 +316,10 @@ msgstr "Chaînes marocaines"
 msgctxt "#30150"
 msgid "Video quality"
 msgstr "Qualité vidéo"
+
+msgctxt "#30151"
+msgid "Device is L1 certified"
+msgstr "Périph. certifié L1"
 
 msgctxt "#30152"
 msgid "Contents"
@@ -379,16 +406,12 @@ msgid "TV5 monde plus: Choose language"
 msgstr "TV5 monde plus: Choix de la langue"
 
 msgctxt "#30174"
-msgid "L\'Equipe: Choose live channel"
-msgstr "L'Equipe: Choix du direct"
+msgid "Choose live channel"
+msgstr "Choix du direct"
 
 msgctxt "#30175"
 msgid "Equidia Racing: Choose race"
 msgstr "Equidia Racing: Choix de la course"
-
-msgctxt "#30176"
-msgid "Canal+ group channels"
-msgstr "Chaines du groupe Canal+"
 
 msgctxt "#30177"
 msgid "TV5 monde: Choose region"
@@ -402,13 +425,17 @@ msgctxt "#30179"
 msgid "Europe, outside FBS"
 msgstr "Europe, hors FBS"
 
-msgctxt "#30190"
-msgid "MyCanal links"
-msgstr "Liens MyCanal"
+msgctxt "#30180"
+msgid "Video quality"
+msgstr "Qualité vidéo"
 
-msgctxt "#30191"
-msgid "Dailymotion links"
-msgstr "Liens Dailymotion"
+msgctxt "#30181"
+msgid "Choose version"
+msgstr "Choix de la version"
+
+msgctxt "#3082"
+msgid "France 3 Régions: Choose region"
+msgstr "France 3 Régions : Choix de la sous-région"
 
 msgctxt "#30192"
 msgid "BEST"
@@ -462,14 +489,6 @@ msgstr "Renommer automatiquement la vidéo (répertoire de téléchargement requ
 
 
 # Accounts (from 30240 to 30269)
-
-msgctxt "#30240"
-msgid "NRJ Login"
-msgstr "Login NRJ"
-
-msgctxt "#30241"
-msgid "NRJ Password"
-msgstr "Mot de passe NRJ"
 
 msgctxt "#30242"
 msgid "VRT NU Login"
@@ -542,6 +561,22 @@ msgstr "Login RTBF auvio"
 msgctxt "#30259"
 msgid "RTBF auvio Password"
 msgstr "Mot de passe RTBF auvio"
+
+msgctxt "#30260"
+msgid "Login MyTF1"
+msgstr ""
+
+msgctxt "#30261"
+msgid "Mot de passe MyTF1"
+msgstr ""
+
+msgctxt "#30262"
+msgid "SFR TV login"
+msgstr "Login SFR TV"
+
+msgctxt "#30263"
+msgid "SFR TV password"
+msgstr "Mot de passe SFR TV"
 
 
 # TV integration (from 30270 to 30289)
@@ -703,7 +738,7 @@ msgstr "Ce contenu est protégé par DRM. Le mode téléchargement ne fonctionne
 
 msgctxt "#30604"
 msgid "Access to this content requires an account %s. You can provide your credentials for it in the settings of this add-on. If you don't have an account, you can create one at this url %s."
-msgstr "Accèss à ce contenu nécessite un compte %s. Vous pouvez configurer votre identifiant et votre mot de passe dans la configuration de cette extension. Si vous n'avez pas de compte, vous pouvez le créer à cette URL %s."
+msgstr "Accéder à ce contenu nécessite un compte %s. Vous pouvez configurer votre identifiant et votre mot de passe dans la configuration de cette extension. Si vous n'avez pas de compte, vous pouvez le créer à cette URL %s."
 
 msgctxt "#30605"
 msgid "You can now use Kodi's TV feature to watch live TV channels from Catch-up TV & More, follow the tutorial at https://catch-up-tv-and-more.github.io/live_tv_installation/."
@@ -804,10 +839,6 @@ msgctxt "#30721"
 msgid "Content requiring a subscription"
 msgstr "Contenu nécessitant un abonnement"
 
-msgctxt "#30722"
-msgid "TV guide"
-msgstr "Guide TV"
-
 msgctxt "#30723"
 msgid "An error occurred while getting TV guide"
 msgstr "Une erreur s'est produite lors de l'obtention du guide TV"
@@ -836,13 +867,14 @@ msgctxt "#30729"
 msgid "Emissions"
 msgstr "Émissions"
 
-msgctxt "#30730"
-msgid "Downloading TV guide..."
-msgstr "Téléchargement du guide TV"
-
 msgctxt "#30731"
 msgid "Homepage"
 msgstr "Accueil"
+
+msgctxt "#30732"
+msgid "This content requires a payment. To buy or rent it, go to %s website at this URL : %s"
+msgstr "Ce contenu est payant. Pour l'acheter ou le louer, rendez-vous sur le site %s à cette URL : %s"
+
 
 # Favourites (from 30800 to 30859)
 

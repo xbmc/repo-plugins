@@ -11,7 +11,8 @@
       "category": "Regional",
       "sortorder": 100,
       "language": "nl",
-      "fanart": "flevofanart.jpg"
+      "fanart": "flevofanart.jpg",
+      "poster": "flevoposter.jpg"
     }
   ]
 }

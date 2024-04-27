@@ -12,7 +12,8 @@
       "sortorder": 211,
       "language": "nl",
       "fanart": "onsfanart.jpg",
-      "adaptiveAddonSelectable": false
+      "adaptiveAddonSelectable": false,
+      "poster": "onsposter.jpg"
     }
   ]
 }

@@ -33,7 +33,6 @@ class Channel(chn_class.Channel):
         chn_class.Channel.__init__(self, channel_info)
 
         # ============== Actual channel setup STARTS here and should be overwritten from derived classes ===============
-        self.noImage = "at5image.png"
         self.apiFormat = None
 
         # setup the urls
@@ -41,10 +40,12 @@ class Channel(chn_class.Channel):
             self.mainListUri = "https://www.nhnieuws.nl/media"
             self.apiFormat = "https://ditisdesupercooleappapi.nhnieuws.nl/api/news?source=web&slug=themas&page={}"
             self.baseUrl = "https://ditisdesupercooleappapi.nhnieuws.nl"
+            self.noImage = "rtvnhimage.png"
         else:
             self.mainListUri = "http://www.at5.nl/gemist/tv"
             self.apiFormat = "https://ditisdesupercooleappapi.at5.nl/api/news?source=web&slug=tv&page={}"
             self.baseUrl = "https://ditisdesupercooleappapi.at5.nl"
+            self.noImage = "at5image.png"
 
         self.mainListUri = "#json_episodes"
 
@@ -289,8 +290,17 @@ class Channel(chn_class.Channel):
         """
 
         Logger.debug("Updating the live stream")
-        url = "https://rrr.sz.xlcdn.com/?account=atvijf" \
-              "&file=live&type=live&service=wowza&protocol=https&output=playlist.m3u8"
+
+        if self.channelCode == "rtvnh":
+            url = "https://takeoff.jetstre.am/?account=nhnieuws" \
+                  "&file=live" \
+                  "&type=live" \
+                  "&service=wowza" \
+                  "&protocol=https" \
+                  "&output=playlist.m3u8"
+        else:
+            url = "https://rrr.sz.xlcdn.com/?account=atvijf" \
+                  "&file=live&type=live&service=wowza&protocol=https&output=playlist.m3u8"
 
         item.complete = \
             M3u8.update_part_with_m3u8_streams(item, url, channel=self)

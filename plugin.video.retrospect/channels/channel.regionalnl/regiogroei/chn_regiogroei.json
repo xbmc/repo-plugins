@@ -12,7 +12,8 @@
       "channelcode": "rtvutrecht",
       "sortorder": 100,
       "language": "nl",
-      "fanart": "rtvutrechtfanart.png"
+      "fanart": "rtvutrechtfanart.png",
+      "poster": "rtvutrechtposter.png"
     },
     {
       "guid": "8B4A56C7-44D5-40C2-A890-2287C4C1D74B",
@@ -26,7 +27,8 @@
       "channelcode": "omroepzeeland",
       "sortorder": 100,
       "language": "nl",
-      "fanart": "omroepzeelandfanart.jpg"
+      "fanart": "omroepzeelandfanart.jpg",
+      "poster": "omroepzeelandposter.jpg"
     },
     {
       "guid": "7C40EEE7-40F4-40ED-8A70-FAAB42B7A2B1",
@@ -40,7 +42,8 @@
       "channelcode": "rtvnoord",
       "sortorder": 100,
       "language": "nl",
-      "fanart": "rtvnoordfanart.png"
+      "fanart": "rtvnoordfanart.png",
+      "poster": "rtvnoordposter.png"
     },
     {
       "guid": "BF2B907D-D437-46DB-B802-F946850098FB",
@@ -54,7 +57,8 @@
       "channelcode": "rtvrijnmond",
       "sortorder": 100,
       "language": "nl",
-      "fanart": "rtvrijnmondfanart.png"
+      "fanart": "rtvrijnmondfanart.png",
+      "poster": "rtvrijnmondposter2.png"
     },
     {
       "guid": "EFE57022-9F52-41F9-8775-13CCD001FA56",
@@ -68,7 +72,8 @@
       "channelcode": "omroepwest",
       "sortorder": 100,
       "language": "nl",
-      "fanart": "omroepwestfanart.jpg"
+      "fanart": "omroepwestfanart.jpg",
+      "poster": "omroepwestposter.jpg"
     },
     {
       "guid": "9CC8EF1B-8840-42F1-B0A1-0D20652DB68F",
@@ -97,7 +102,8 @@
       "channelcode": "rtvoost",
       "sortorder": 100,
       "language": "nl",
-      "fanart": "rtvoostfanart.jpg"
+      "fanart": "rtvoostfanart.jpg",
+      "poster": "rtvoostposter.jpg"
     },
     {
       "guid": "B7EB69DF-18C4-4935-BA83-0B2A89295178",
@@ -111,7 +117,8 @@
       "channelcode": "rtvdrenthe",
       "sortorder": 100,
       "language": "nl",
-      "fanart": "rtvdrenthefanart.jpg"
+      "fanart": "rtvdrenthefanart.jpg",
+      "poster": "rtvdrentheposter.png"
     }
   ]
 }

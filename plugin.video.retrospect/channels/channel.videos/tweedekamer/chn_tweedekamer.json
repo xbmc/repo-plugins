@@ -12,7 +12,8 @@
       "channelcode": "tweedekamer",
       "sortorder": 200,
       "language": "nl",
-      "fanart": "tweedekamer.jpg"
+      "fanart": "tweedekamer.jpg",
+      "poster": "tweedekamerposter.jpg"
     }
   ]
 }

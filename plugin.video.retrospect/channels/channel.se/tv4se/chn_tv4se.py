@@ -204,7 +204,7 @@ class Channel(chn_class.Channel):
         recent_url, recent_data = self.__get_api_query("Panel", {"panelId": "1pDPvWRfhEg0wa5SvlP28N", "limit": self.__max_page_size, "offset": 0})
         items.append(__create_item(LanguageHelper.Recent, recent_url, recent_data))
 
-        popular_url, popular_data = self.__get_api_query("Panel", {"panelId": "3QnNaigt4Szgkyz8yMU9oF", "limit": self.__max_page_size, "offset": 0})
+        popular_url, popular_data = self.__get_api_query("Panel", {"panelId": "4nNp00Z12bjEiNboaW2uxB", "limit": self.__max_page_size, "offset": 0})
         items.append(__create_item(LanguageHelper.Popular, popular_url, popular_data))
 
         latest_news_url, latest_news_data = self.__get_api_query("Panel", {"panelId": "5Rqb0w0SN16A6YHt5Mx8BU", "limit": self.__max_page_size, "offset": 0})
@@ -662,10 +662,11 @@ class Channel(chn_class.Channel):
         # https://playback2.a2d.tv/play/8d1eb26ad728c9125de8?service=tv4play&device=browser&protocol=hls%2Cdash&drm=widevine&browser=GoogleChrome&capabilities=live-drm-adstitch-2%2Cyospace3
         url = "https://playback2.a2d.tv/play/{}?service=tv4play" \
               "&device=browser&browser=GoogleChrome" \
-              "&protocol=hls%2Cdash" \
+              "&protocol=dash" \
               "&drm=widevine" \
               "&capabilities=live-drm-adstitch-2%2Cexpired_assets". \
             format(program_id)
+        # "&protocol=hls%2Cdash"
         return url
 
     def __set_art(self, item: MediaItem, art_info: Optional[dict]):

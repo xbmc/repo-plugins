@@ -97,6 +97,7 @@ _CHANNEL_ICONS = {
     "okoo": join(_MEDIA_DIR, "okoo.png"),
     "culturebox": join(_MEDIA_DIR, "culturebox.png"),
     "serie": join(_MEDIA_DIR, "serie.png"),
+    "documentaire": join(_MEDIA_DIR, "documentaire.png"),
 }  # type: Dict[Optional[Text], Text]
 
 _ALL_TV_SHOWS_ICON = join(_MEDIA_DIR, "all-tv-shows.png")

@@ -5,8 +5,7 @@ url = None
 name = None
 mode = None
 game_day = None
-home_id = None
-away_id = None
+stream_ids = None
 highlight_id = None
 teams_stream = None
 stream_date = None
@@ -19,10 +18,8 @@ if "mode" in params:
     mode = int(params["mode"])
 if "game_day" in params:
     game_day = urllib.unquote_plus(params["game_day"])
-if "home_id" in params:
-    home_id = urllib.unquote_plus(params["home_id"])
-if "away_id" in params:
-    away_id = urllib.unquote_plus(params["away_id"])
+if "stream_ids" in params:
+    stream_ids = ast.literal_eval(params["stream_ids"])
 if "highlight_id" in params:
     highlight_id = urllib.unquote_plus(params["highlight_id"])
 
@@ -34,7 +31,7 @@ elif mode == 100 or mode == 101:
     todays_games(game_day)
 
 elif mode == 104:
-    stream_select(home_id, away_id, highlight_id)
+    stream_select(stream_ids, highlight_id)
 
 elif mode == 105:
     # Yesterday"s Games

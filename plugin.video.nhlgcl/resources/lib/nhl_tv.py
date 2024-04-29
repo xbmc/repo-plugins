@@ -47,31 +47,24 @@ def todays_games(game_day):
 
     add_dir('[B]%s >>[/B]' % LOCAL_STRING(30011), '/live', 101, NEXT_ICON, FANART, next_day.strftime("%Y-%m-%d"))
 
-def stream_select(home_id, away_id, highlight_id):
-    xbmc.log(f"home_id: {home_id}")
-    xbmc.log(f"away_id: {home_id}")
+def stream_select(stream_ids, highlight_id):
+    for stream_name in stream_ids.keys():
+        xbmc.log(f"stream id for {stream_name}: {stream_ids[stream_name]}")
     xbmc.log(f"highlight_id: {highlight_id}")
 
-    options = ["National"]
-    if away_id != "":
-        options.remove("National")
-        options.append("Home")
-        options.append("Away")
+    options = list(stream_ids.keys())
     if highlight_id != "":
         options.append("Highlights")
 
     dialog = xbmcgui.Dialog()
     n = dialog.select('Choose Stream', options)
     if n > -1:
-        if options[n] == "National" or options[n] == "Home":
-            id = home_id
-        elif options[n] == "Away":
-            id = away_id
-        elif options[n] == "Highlights":
+        if options[n] == "Highlights":
             id = highlight_id
+        else:
+            id = stream_ids[options[n]]
     else:
         sys.exit()
-
 
     if options[n] != "Highlights":
         update_user_token()

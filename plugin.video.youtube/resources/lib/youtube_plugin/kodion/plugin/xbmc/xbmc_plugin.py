@@ -13,6 +13,7 @@ from __future__ import absolute_import, division, unicode_literals
 from traceback import format_stack
 
 from ..abstract_plugin import AbstractPlugin
+from ...constants import BUSY_FLAG, PLAYLIST_POSITION
 from ...compatibility import xbmcplugin
 from ...exceptions import KodionException
 from ...items import (
@@ -40,24 +41,23 @@ class XbmcPlugin(AbstractPlugin):
         settings = context.get_settings()
         ui = context.get_ui()
 
-        if ui.get_property('busy').lower() == 'true':
-            ui.clear_property('busy')
+        if ui.get_property(BUSY_FLAG).lower() == 'true':
             if ui.busy_dialog_active():
-                playlist = XbmcPlaylist('auto', context)
+                xbmcplugin.endOfDirectory(
+                    self.handle,
+                    succeeded=False,
+                    updateListing=True,
+                )
+
+                playlist = XbmcPlaylist('auto', context, retry=3)
+                position, remaining = playlist.get_position()
+                items = playlist.get_items() if remaining else None
                 playlist.clear()
-                xbmcplugin.endOfDirectory(self.handle, succeeded=False)
 
                 context.log_warning('Multiple busy dialogs active - '
                                     'playlist cleared to avoid Kodi crash')
 
-                num_items = 0
-                items = ui.get_property('playlist')
-                position = ui.get_property('position')
-
-                if position and items:
-                    position = int(position)
-                    ui.clear_property('playlist')
-
+                if items:
                     max_wait_time = 30
                     while ui.busy_dialog_active():
                         max_wait_time -= 1
@@ -69,10 +69,12 @@ class XbmcPlugin(AbstractPlugin):
 
                     context.log_warning('Multiple busy dialogs active - '
                                         'reloading playlist')
-                    num_items = playlist.add_items(items, loads=True)
+                    num_items = playlist.add_items(items)
 
-                if position and num_items:
-                    position += 1
+                    old_position = ui.get_property(PLAYLIST_POSITION)
+                    if old_position and position == int(old_position):
+                        position += 1
+
                     max_wait_time = min(position, num_items)
                     while ui.busy_dialog_active() or playlist.size() < position:
                         max_wait_time -= 1
@@ -84,7 +86,12 @@ class XbmcPlugin(AbstractPlugin):
                     else:
                         playlist.play_playlist_item(position)
 
+                ui.clear_property(BUSY_FLAG)
+                ui.clear_property(PLAYLIST_POSITION)
                 return False
+
+            ui.clear_property(BUSY_FLAG)
+            ui.clear_property(PLAYLIST_POSITION)
 
         if settings.is_setup_wizard_enabled():
             provider.run_wizard(context)
@@ -97,12 +104,22 @@ class XbmcPlugin(AbstractPlugin):
                     exc=exc, details=''.join(format_stack())
                 ))
                 ui.on_ok("Error in ContentProvider", exc.__str__())
-            xbmcplugin.endOfDirectory(self.handle, succeeded=False)
+            xbmcplugin.endOfDirectory(
+                self.handle,
+                succeeded=False,
+                updateListing=True,
+            )
             return False
 
         result, options = results
+        if result is None:
+            result = False
         if isinstance(result, bool):
-            xbmcplugin.endOfDirectory(self.handle, succeeded=result)
+            xbmcplugin.endOfDirectory(
+                self.handle,
+                succeeded=result,
+                updateListing=True,
+            )
             return result
 
         show_fanart = settings.show_fanart()
@@ -128,7 +145,11 @@ class XbmcPlugin(AbstractPlugin):
                 for item in result
             ]
         else:
-            # handle exception
+            xbmcplugin.endOfDirectory(
+                self.handle,
+                succeeded=False,
+                updateListing=True,
+            )
             return False
 
         succeeded = xbmcplugin.addDirectoryItems(
@@ -148,12 +169,10 @@ class XbmcPlugin(AbstractPlugin):
         if base_item.playable:
             ui = context.get_ui()
             if not context.is_plugin_path(uri) and ui.busy_dialog_active():
-                ui.set_property('busy', 'true')
+                ui.set_property(BUSY_FLAG, 'true')
                 playlist = XbmcPlaylist('auto', context)
-                position, remaining = playlist.get_position()
-                if remaining:
-                    ui.set_property('playlist', playlist.get_items(dumps=True))
-                    ui.set_property('position', str(position))
+                position, _ = playlist.get_position()
+                ui.set_property(PLAYLIST_POSITION, str(position))
 
             item = playback_item(context, base_item, show_fanart)
             xbmcplugin.setResolvedUrl(self.handle,
@@ -170,6 +189,6 @@ class XbmcPlugin(AbstractPlugin):
 
         xbmcplugin.endOfDirectory(self.handle,
                                   succeeded=False,
-                                  updateListing=False,
+                                  updateListing=True,
                                   cacheToDisc=False)
         return False

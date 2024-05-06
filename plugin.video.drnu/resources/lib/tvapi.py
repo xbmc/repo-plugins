@@ -282,9 +282,9 @@ class Api():
         url = URL + f'/items/{int(id)}?'
         return self._request_get(url)
 
-    def get_next(self, path, use_cache=True):
+    def get_next(self, path, use_cache=True, headers=None):
         url = URL + path
-        return self._request_get(url, use_cache=use_cache)
+        return self._request_get(url, headers=headers, use_cache=use_cache)
 
     def get_list(self, id, param, use_cache=True):
         if isinstance(id, str):
@@ -338,7 +338,8 @@ class Api():
         url = URL + '/account/profile/bookmarks/list'
         data = {'page_size': '24'}
         headers = {"X-Authorization": f'Bearer {self.profile_token()}'}
-        items = self._request_get(url, params=data, headers=headers, use_cache=use_cache)['items']
+        item = self._request_get(url, params=data, headers=headers, use_cache=use_cache)
+        items = self.unfold_list(item, headers=headers)
         for item in items:
             item['in_mylist'] = True
         return items
@@ -347,7 +348,8 @@ class Api():
         url = URL + '/account/profile/continue-watching/list'
         data = {'page_size': '24'}
         headers = {"X-Authorization": f'Bearer {self.profile_token()}'}
-        items = self._request_get(url, params=data, headers=headers, use_cache=use_cache)['items']
+        item = self._request_get(url, params=data, headers=headers, use_cache=use_cache)
+        items = self.unfold_list(item, headers=headers)
         watched = self.get_profile()['watched']
         for item in items:
             item['ResumeTime'] = float(watched.get(str(item['id']), {'position':0.0})['position'])
@@ -368,13 +370,13 @@ class Api():
                     return True
         return False
 
-    def unfold_list(self, item, filter_kids=False):
+    def unfold_list(self, item, filter_kids=False, headers=None):
         items = item['items']
         if 'next' in item['paging']:
-            next_js = self.get_next(item['paging']['next'])
+            next_js = self.get_next(item['paging']['next'], headers=headers)
             items += next_js['items']
             while 'next' in next_js['paging']:
-                next_js = self.get_next(next_js['paging']['next'])
+                next_js = self.get_next(next_js['paging']['next'], headers=headers)
                 items += next_js['items']
         if filter_kids:
             items = [item for item in items if not self.kids_item(item)]

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="6.4.1" name="DR TV" provider-name="TermeHansen">
+<addon id="plugin.video.drnu" version="6.4.2" name="DR TV" provider-name="TermeHansen">
     <requires>
-        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="xbmc.python" version="3.0.1"/>
         <import addon="script.module.dateutil" version="2.8.2" />
         <import addon="script.module.requests" version="2.31.0" />
         <import addon="script.module.requests-cache" version="0.5.2+matrix.2"/>
@@ -32,6 +32,9 @@
             <screenshot>resources/media/Screenshot3.jpg</screenshot>
             <screenshot>resources/media/Screenshot4.jpg</screenshot>
        </assets>
+       <news>[B]Version 6.4.2 - 2024-05-06[/B]
+        - Fix not unfolding my-list
+       </news>
        <news>[B]Version 6.4.1 - 2024-03-29[/B]
         - Fix live channels not working from EU
        </news>

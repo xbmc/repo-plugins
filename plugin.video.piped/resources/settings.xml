@@ -1,30 +1,219 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-		<category label="30100">
-				<setting label="30101" type="text" id="instance" default="https://pipedapi.kavin.rocks" />
-				<setting label="30102" type="bool" id="use_login" default="false" />
-				<setting label="30103" type="text" id="username" subsetting="true" visible="eq(-1,true)" default="" />
-				<setting label="30104" type="text" id="password" subsetting="true" option="hidden" visible="eq(-2,true)" default="" />
-				<setting label="auth_token" type="text" id="auth_token" subsetting="true" option="hidden" visible="false" default="" />
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<settings version="1">
+	<section id="plugin.video.piped">
+		<category id="instance_basics" label="30100">
+			<group id="instance_uri">
+				<setting id="instance" label="30101" type="string">
+					<level>0</level>
+					<default>https://pipedapi.kavin.rocks</default>
+					<constraints>
+						<allowempty>false</allowempty>
+					</constraints>
+					<control type="edit" format="string" />
+				</setting>
+			</group>
+			<group id="instance_login">
+				<setting id="use_login" label="30102" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle" />
+				</setting>
+
+				<setting id="username" label="30103" type="string" parent="use_login">
+					<level>0</level>
+					<default />
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string" />
+					<dependencies>
+						<dependency type="visible" setting="use_login" operator="is">true</dependency>
+					</dependencies>
+				</setting>
+
+				<setting id="password" label="30104" type="string" parent="use_login">
+					<level>0</level>
+					<default />
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string" />
+					<dependencies>
+						<dependency type="visible" setting="use_login" operator="is">true</dependency>
+					</dependencies>
+				</setting>
+
+				<setting id="auth_token" label="30105" type="string" parent="use_login">
+					<level>4</level>
+					<default />
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string" />
+					<visible>false</visible>
+				</setting>
+			</group>
 		</category>
-		<category label="30200">
-				<setting label="30201" type="bool" id="watch_history_enable" default="false" />
-				<setting label="30202" type="text" id="watch_history_playlist" subsetting="true" default="" visible="eq(-1,true)" />
-				<setting label="30203" type="bool" id="watch_history_hide_watched_feed" subsetting="true" default="false" visible="eq(-2,true)" />
-				<setting label="30204" type="bool" id="watch_history_hide_watched_channels" subsetting="true" default="false" visible="eq(-3,true)" />
-				<setting label="30205" type="bool" id="watch_history_hide_watched_playlists" subsetting="true" default="false" visible="eq(-4,true)" />
-				<setting label="30206" type="bool" id="watch_history_hide_watched_trending" subsetting="true" default="false" visible="eq(-5,true)" />
-				<setting label="30207" type="bool" id="watch_history_hide_watched_search" subsetting="true" default="false" visible="eq(-6,true)" />
-				<setting label="30208" type="number" id="watch_history_refresh" subsetting="true" default="30" visible="eq(-6,true)" />
+		<category id="history" label="30200">
+			<group id="watch_history_basics">
+				<setting id="watch_history_enable" label="30201" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle" />
+				</setting>
+
+				<setting id="watch_history_playlist" label="30202" type="string" parent="watch_history_enable">
+					<level>0</level>
+					<default />
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string" />
+					<dependencies>
+						<dependency type="visible" setting="watch_history_enable" operator="is">true</dependency>
+					</dependencies>
+				</setting>
+			</group>
+			<group id="watch_history_hide">
+				<setting id="watch_history_hide_watched_feed" label="30203" type="boolean" parent="watch_history_enable">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle" />
+					<dependencies>
+						<dependency type="visible" setting="watch_history_enable" operator="is">true</dependency>
+						<dependency type="enable" setting="watch_history_enable" operator="is">true</dependency>
+					</dependencies>
+				</setting>
+		
+				<setting id="watch_history_hide_watched_channels" label="30204" type="boolean" parent="watch_history_enable">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle" />
+					<dependencies>
+						<dependency type="visible" setting="watch_history_enable" operator="is">true</dependency>
+						<dependency type="enable" setting="watch_history_enable" operator="is">true</dependency>
+					</dependencies>
+				</setting>
+		
+				<setting id="watch_history_hide_watched_playlists" label="30205" type="boolean" parent="watch_history_enable">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle" />
+					<dependencies>
+						<dependency type="visible" setting="watch_history_enable" operator="is">true</dependency>
+						<dependency type="enable" setting="watch_history_enable" operator="is">true</dependency>
+					</dependencies>
+				</setting>
+		
+				<setting id="watch_history_hide_watched_trending" label="30206" type="boolean" parent="watch_history_enable">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle" />
+					<dependencies>
+						<dependency type="visible" setting="watch_history_enable" operator="is">true</dependency>
+						<dependency type="enable" setting="watch_history_enable" operator="is">true</dependency>
+					</dependencies>
+				</setting>
+		
+				<setting id="watch_history_hide_watched_search" label="30207" type="boolean" parent="watch_history_enable">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle" />
+					<dependencies>
+						<dependency type="visible" setting="watch_history_enable" operator="is">true</dependency>
+						<dependency type="enable" setting="watch_history_enable" operator="is">true</dependency>
+					</dependencies>
+				</setting>
+			</group>
+			<group id="watch_history_advanced">
+				<setting id="watch_history_refresh" label="30208" type="integer" parent="watch_history_enable">
+					<level>2</level>
+					<default>30</default>
+					<constraints>
+						<allowempty>false</allowempty>
+					</constraints>
+					<control type="edit" format="integer" />
+					<dependencies>
+						<dependency type="visible" setting="watch_history_enable" operator="is">true</dependency>
+					</dependencies>
+				</setting>
+			</group>
 		</category>
-		<category label="30300">
-				<setting label="30301" type="bool" id="http_port_random" default="true" />
-				<setting label="30302" type="number" id="http_port" subsetting="true" visible="eq(-1,false)" default="8243" />
+		<category id="service" label="30300">
+			<group id="service_port">
+				<setting id="http_port_random" label="30301" type="boolean">
+					<level>3</level>
+					<default>true</default>
+					<control type="toggle" />
+				</setting>
+
+				<setting id="http_port" label="30302" type="integer" parent="http_port_random">
+					<level>3</level>
+					<default>8243</default>
+					<constraints>
+						<allowempty>false</allowempty>
+					</constraints>
+					<control type="edit" format="integer" />
+					<dependencies>
+						<dependency type="visible" setting="http_port_random" operator="is">false</dependency>
+					</dependencies>
+				</setting>
+			</group>
 		</category>
-		<category label="30400">
-				<setting label="30401" type="bool" id="audio_prefer_original_lang" default="true" />
-				<setting label="30402" type="bool" id="audio_prefer_kodi_lang" subsetting="true" default="true" visible="eq(-1,false)" />
-				<setting label="30403" type="text" id="audio_custom_lang" subsetting="true" default="en" visible="eq(-1,false)+eq(-2,false)" />
-				<setting label="30404" type="bool" id="subtitles_load" default="true" />
+		<category id="media" label="30400">
+			<group id="audio_language">
+				<setting id="audio_prefer_original_lang" label="30401" type="boolean">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle" />
+				</setting>
+
+				<setting id="audio_prefer_kodi_lang" label="30402" type="boolean" parent="audio_prefer_original_lang">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle" />
+					<dependencies>
+						<dependency type="visible" setting="audio_prefer_original_lang" operator="is">false</dependency>
+					</dependencies>
+				</setting>
+
+				<setting id="audio_custom_lang" label="30403" type="string" parent="audio_prefer_kodi_lang">
+					<level>0</level>
+					<default>en</default>
+					<constraints>
+						<allowempty>false</allowempty>
+					</constraints>
+					<control type="edit" format="string" />
+					<dependencies>
+						<dependency type="visible" setting="audio_prefer_kodi_lang" operator="is">false</dependency>
+					</dependencies>
+				</setting>
+			</group>
+			<group id="subtitles">
+				<setting id="subtitles_load" label="30404" type="boolean">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle" />
+				</setting>
+			</group>
+			<group id="codecs">
+				<setting id="video_codec_priority" label="30405" type="string">
+					<level>3</level>
+					<default>_</default>
+					<constraints>
+						<options>
+							<option label="-">_</option>
+							<option label="AV1 > VP9 > H.264">av01,vp9,avc1</option>
+							<option label="AV1 > H.264 > VP9">av01,avc1,vp9</option>
+							<option label="VP9 > AV1 > H.264">vp9,av01,avc1</option>
+							<option label="VP9 > H.264 > AV1">vp9,avc1,av01</option>
+							<option label="H.264 > AV1 > VP9">avc1_av01,vp9</option>
+							<option label="H.264 > VP9 > AV1">avc1_vp9,av01</option>
+						</options>
+					</constraints>
+					<control type="list" format="string" />
+				</setting>
+			</group>
 		</category>
+	</section>
 </settings>

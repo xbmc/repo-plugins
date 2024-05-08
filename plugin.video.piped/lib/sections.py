@@ -8,7 +8,7 @@ from xbmcvfs import translatePath
 import xbmcgui
 import xbmcplugin
 
-from lib.authentication import get_auth_token
+from lib.authentication import authenticated_request
 from lib.history import set_watch_history, mark_as_watched, mark_as_unwatched
 from lib.utils import get_component, human_format
 
@@ -94,12 +94,7 @@ def list_videos(videos: list, hide_watched: bool=False, nextpage: str='') -> Non
 	xbmcplugin.endOfDirectory(addon_handle)
 
 def feed() -> None:
-	instance: str = addon.getSettingString('instance')
-	auth_token = get_auth_token()
-
-	videos = get(f'{instance}/feed?authToken={auth_token}').json()
-
-	list_videos(videos, addon.getSettingBool('watch_history_hide_watched_feed'))
+	list_videos(authenticated_request('/feed?authToken=', True), addon.getSettingBool('watch_history_hide_watched_feed'))
 
 def list_channels(channels: list, nextpage: str='') -> None:
 	for channel in channels:
@@ -130,17 +125,14 @@ def list_channels(channels: list, nextpage: str='') -> None:
 	xbmcplugin.endOfDirectory(addon_handle)
 
 def subscriptions() -> None:
-	instance: str = addon.getSettingString('instance')
-	auth_token = get_auth_token()
-
-	list_channels(get(f'{instance}/subscriptions', headers={'Authorization': auth_token}).json())
+	list_channels(authenticated_request('/subscriptions'))
 
 def list_playlists(playlists: list, nextpage: str='') -> None:
 	for playlist in playlists:
 		info: str = ''
 		if 'shortDescription' in playlist and playlist['shortDescription'] is not None: info += playlist['shortDescription'] + "\n\n"
 		elif 'description' in playlist and playlist['description'] is not None: info += playlist['description'] + "\n\n"
-		info += f"{addon.getLocalizedString(30018)}: {playlist['videos']}"
+		if 'videos' in playlist and playlist['videos'] is not None: info += f"{addon.getLocalizedString(30018)}: {playlist['videos']}"
 
 		if 'id' not in playlist:
 			playlist['id'] = get_component(playlist['url'])['params']['list']
@@ -163,10 +155,7 @@ def list_playlists(playlists: list, nextpage: str='') -> None:
 	xbmcplugin.endOfDirectory(addon_handle)
 
 def playlists() -> None:
-	instance: str = addon.getSettingString('instance')
-	auth_token = get_auth_token()
-
-	list_playlists(get(f'{instance}/user/playlists', headers={'Authorization': auth_token}).json())
+	list_playlists(authenticated_request('/user/playlists'))
 
 def playlist(playlist_id: str, hide_watched=None) -> None:
 	instance: str = addon.getSettingString('instance')

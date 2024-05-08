@@ -7,24 +7,23 @@ from xbmcaddon import Addon
 from lib.dash import generate_dash
 
 class HttpRequestHandler(SimpleHTTPRequestHandler):
-	def do_GET(self):
+	def gen_headers(self, content_length: int = 0):
 		if self.path.startswith('/watch?v='):
-			self.send_response(200)
-			self.send_header('Content type', 'application/dash+xml')
+			self.send_response(200, 'OK')
+			if content_length > 0: self.send_header('Content-Length', str(content_length))
+			self.send_header('Content-Type', 'application/dash+xml; charset=utf-8')
+			self.send_header("Connection", "close")
 			self.end_headers()
-			self.wfile.write(generate_dash(parse_qsl(self.path)[0][1]).encode('utf-8'))
 		else:
 			self.send_error(404, "File not Found")
+		
+	def do_GET(self):
+		content = generate_dash(parse_qsl(self.path)[0][1]).encode('utf-8')
+		self.gen_headers(len(content))
+		self.wfile.write(content)
 
 	def do_HEAD(self):
-		if self.path.startswith('/watch?v='):
-			self.send_response(200)
-			self.send_header('Content type', 'application/dash+xml')
-			self.end_headers()
-		else:
-			self.send_error(404, "File not Found")
-
-		return
+		self.gen_headers()
 
 class HttpService(Thread):
 	def __init__(self):

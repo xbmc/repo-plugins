@@ -19,6 +19,12 @@ class YouTubeRequestClient(BaseRequestsClass):
     # yt-dlp has chosen the following value, but this results in the android
     # player response returning unexpected details sometimes. To be investigated
     # _ANDROID_PARAMS = 'CgIIAQ=='
+    _API_KEYS = {
+        'android': 'AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w',
+        'android_embedded': 'AIzaSyCjc_pVEDi4qsv5MtC2dMXzpIaDoRFLsxw',
+        'ios': 'AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc',
+        'web': 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8',
+    }
 
     CLIENTS = {
         # 4k no VP9 HDR
@@ -49,18 +55,18 @@ class YouTubeRequestClient(BaseRequestsClass):
                 'X-YouTube-Client-Version': '{json[context][client][clientVersion]}',
             },
             'params': {
-                'key': 'AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w',
+                'key': _API_KEYS['android'],
             },
         },
         'android': {
             '_id': 3,
-            '_query_subtitles': True,
+            '_disabled': True,
+            '_query_subtitles': 'optional',
             'json': {
-                'params': _ANDROID_PARAMS,
                 'context': {
                     'client': {
                         'clientName': 'ANDROID',
-                        'clientVersion': '19.12.36',
+                        'clientVersion': '19.17.34',
                         'androidSdkVersion': '34',
                         'osName': 'Android',
                         'osVersion': '14',
@@ -77,21 +83,18 @@ class YouTubeRequestClient(BaseRequestsClass):
                 'X-YouTube-Client-Name': '{_id}',
                 'X-YouTube-Client-Version': '{json[context][client][clientVersion]}',
             },
-            'params': {
-                'key': 'AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w',
-            },
         },
         # Only for videos that allow embedding
         # Limited to 720p on some videos
         'android_embedded': {
             '_id': 55,
-            '_query_subtitles': True,
+            '_query_subtitles': 'optional',
             'json': {
                 'params': _ANDROID_PARAMS,
                 'context': {
                     'client': {
                         'clientName': 'ANDROID_EMBEDDED_PLAYER',
-                        'clientVersion': '19.12.36',
+                        'clientVersion': '19.17.34',
                         'clientScreen': 'EMBED',
                         'androidSdkVersion': '34',
                         'osName': 'Android',
@@ -111,9 +114,6 @@ class YouTubeRequestClient(BaseRequestsClass):
                                ' {json[context][client][gl]}) gzip'),
                 'X-YouTube-Client-Name': '{_id}',
                 'X-YouTube-Client-Version': '{json[context][client][clientVersion]}',
-            },
-            'params': {
-                'key': 'AIzaSyCjc_pVEDi4qsv5MtC2dMXzpIaDoRFLsxw',
             },
         },
         # 4k with HDR
@@ -145,7 +145,7 @@ class YouTubeRequestClient(BaseRequestsClass):
                 'X-YouTube-Client-Version': '{json[context][client][clientVersion]}',
             },
             'params': {
-                'key': 'AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w',
+                'key': _API_KEYS['android'],
             },
         },
         'ios': {
@@ -160,7 +160,7 @@ class YouTubeRequestClient(BaseRequestsClass):
                 'context': {
                     'client': {
                         'clientName': 'IOS',
-                        'clientVersion': '19.12.3',
+                        'clientVersion': '19.16.3',
                         'deviceModel': 'iPhone16,2',
                         'osName': 'iOS',
                         'osVersion': '{_os[major]}.{_os[minor]}.{_os[patch]}.{_os[build]}',
@@ -177,9 +177,6 @@ class YouTubeRequestClient(BaseRequestsClass):
                                ' like Mac OS X)'),
                 'X-YouTube-Client-Name': '{_id}',
                 'X-YouTube-Client-Version': '{json[context][client][clientVersion]}',
-            },
-            'params': {
-                'key': 'AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc',
             },
         },
         # Used to requests captions for clients that don't provide them
@@ -205,7 +202,7 @@ class YouTubeRequestClient(BaseRequestsClass):
                                ' 85.0.4183.93/6.5 TV Safari/537.36'),
             },
             'params': {
-                'key': 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8',
+                'key': _API_KEYS['web'],
             },
         },
         'media_connect_frontend': {
@@ -221,7 +218,7 @@ class YouTubeRequestClient(BaseRequestsClass):
             },
             'headers': {},
             'params': {
-                'key': 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8',
+                'key': _API_KEYS['web'],
             },
         },
         # Used for misc api requests by default
@@ -245,7 +242,7 @@ class YouTubeRequestClient(BaseRequestsClass):
                 'Referer': 'https://www.youtube.com/watch?v={json[videoId]}'
             },
             'params': {
-                'key': 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8',
+                'key': _API_KEYS['web'],
             },
         },
         '_common': {
@@ -347,20 +344,30 @@ class YouTubeRequestClient(BaseRequestsClass):
         return result
 
     @classmethod
-    def build_client(cls, client_name, data=None):
+    def build_client(cls, client_name=None, data=None):
         templates = {}
 
-        client = (cls.CLIENTS.get(client_name)
-                  or YouTubeRequestClient.CLIENTS['web']).copy()
+        client = None
+        if client_name:
+            client = cls.CLIENTS.get(client_name)
+            if client and client.get('_disabled'):
+                return None
+        if not client:
+            client = YouTubeRequestClient.CLIENTS['web']
+        client = client.copy()
+
         if data:
             client = merge_dicts(client, data)
         client = merge_dicts(cls.CLIENTS['_common'], client, templates)
         client['_name'] = client_name
 
-        if client.get('_access_token'):
-            del client['params']['key']
-        elif 'Authorization' in client['headers']:
-            del client['headers']['Authorization']
+        try:
+            if client.get('_access_token'):
+                del client['params']['key']
+            elif 'Authorization' in client['headers']:
+                del client['headers']['Authorization']
+        except KeyError:
+            pass
 
         for values, template_id, template in templates.values():
             if template_id in values:

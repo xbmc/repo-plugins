@@ -1140,11 +1140,18 @@ class VideoInfo(YouTubeRequestClient):
         client_name = reason = status = None
         client = playability_status = result = None
 
+        reasons = (
+            self._context.localize(574, 'country').lower(),
+            # not available error appears to vary by language/region/video type
+            # disable this check for now
+            # self._context.localize(10005, 'not available').lower(),
+        )
+
         client_data = {'json': {'videoId': video_id}}
         if self._access_token:
             client_data['_access_token'] = self._access_token
 
-        for _ in range(2):
+        while 1:
             for client_name in self._prioritised_clients:
                 if status and status != 'OK':
                     self._context.log_warning(
@@ -1159,6 +1166,8 @@ class VideoInfo(YouTubeRequestClient):
                         )
                     )
                 client = self.build_client(client_name, client_data)
+                if not client:
+                    continue
 
                 result = self.request(
                     video_info_url,
@@ -1188,14 +1197,18 @@ class VideoInfo(YouTubeRequestClient):
                     # Geo-blocked video with error reasons like:
                     # "This video contains content from XXX, who has blocked it in your country on copyright grounds"
                     # "The uploader has not made this video available in your country"
-                    if status == 'UNPLAYABLE' and 'country' in reason:
+                    # Reason language will vary based on Accept-Language and
+                    # client hl, Kodi localised language is used for comparison
+                    # but may not match reason language
+                    if (status == 'UNPLAYABLE'
+                            and any(why in reason for why in reasons)):
                         break
                     if status != 'ERROR':
                         continue
                     # This is used to check for error like:
                     # "The following content is not available on this app."
-                    # Text will vary depending on Accept-Language and client hl
-                    # YouTube support url is checked instead
+                    # Reason language will vary based on Accept-Language and
+                    # client hl, so YouTube support url is checked instead
                     url = self._get_error_details(
                         playability_status,
                         details=(
@@ -1211,9 +1224,9 @@ class VideoInfo(YouTubeRequestClient):
                     if url and url.startswith('//support.google.com/youtube/answer/12318250'):
                         status = 'CONTENT_NOT_AVAILABLE_IN_THIS_APP'
                         continue
-                if video_id != video_details.get('videoId'):
+                if video_details and video_id != video_details.get('videoId'):
                     status = 'CONTENT_NOT_AVAILABLE_IN_THIS_APP'
-                    reason = 'WATCH_ON_LATEST_VERSION_OF_YOUTUBE'
+                    reason = 'Watch on the latest version of YouTube'
                     continue
                 break
             # Only attempt to remove Authorization header if clients iterable
@@ -1372,7 +1385,7 @@ class VideoInfo(YouTubeRequestClient):
             self._player_js = self._get_player_js()
             self._cipher = Cipher(self._context, javascript=self._player_js)
 
-        manifest_url = main_stream = None
+        manifest_url = None
 
         if live_type == 'isa_mpd' and 'dashManifestUrl' in streaming_data:
             manifest_url = streaming_data['dashManifestUrl']
@@ -1401,9 +1414,16 @@ class VideoInfo(YouTubeRequestClient):
         else:
             live_type = None
 
-        if not live_type and client.get('_query_subtitles'):
+        subtitles = Subtitles(self._context, video_id)
+        query_subtitles = client.get('_query_subtitles')
+        if (not live_type or live_dvr) and (
+                query_subtitles is True
+                or (query_subtitles
+                    and subtitles.sub_selection == subtitles.LANG_ALL)):
             for client_name in ('smarttv_embedded', 'web', 'android'):
                 caption_client = self.build_client(client_name, client_data)
+                if not caption_client:
+                    continue
                 result = self.request(
                     video_info_url,
                     'POST',
@@ -1424,15 +1444,10 @@ class VideoInfo(YouTubeRequestClient):
             captions = result.get('captions')
             caption_client = client
         if captions:
-            captions = Subtitles(
-                self._context,
-                video_id,
-                captions,
-                caption_client['headers']
-            )
-            default_lang = captions.get_lang_details()
-            subs_data = captions.get_subtitles()
-            if subs_data and (not use_mpd_vod or captions.pre_download):
+            subtitles.load(captions, caption_client['headers'])
+            default_lang = subtitles.get_lang_details()
+            subs_data = subtitles.get_subtitles()
+            if subs_data and (not use_mpd_vod or subtitles.pre_download):
                 meta_info['subtitles'] = [
                     subtitle['url'] for subtitle in subs_data.values()
                 ]
@@ -1607,11 +1622,11 @@ class VideoInfo(YouTubeRequestClient):
                     mime_group = '{0}_{1}.{2}'.format(
                         mime_type, language_code, role_type
                     )
-                    if (language_code == self._language_base and (
+                    if language_code == self._language_base and (
                             not preferred_audio['id']
                             or role == 'main'
                             or role_type > preferred_audio['role_type']
-                    )):
+                    ):
                         preferred_audio = {
                             'id': '_{0}.{1}'.format(language_code, role_type),
                             'language_code': language_code,

@@ -248,6 +248,10 @@ def parse_shortform_item(item_data, time_zone, time_fmt, hide_paid=False):
     ShortFormSliders are found on the main page, some collection pages.
     Items from heroAndLatest and curatedRails in category news also have a shortForm-like content.
 
+    # TODO: Shortform items snow have a field contentType, which has value 'shortform' when the item
+            has a shortform format, or something else like 'episode' when the item is a normal
+            episode. Wait for the occasion to be able to check a sports shortform slider before
+            differentiating based on content type.
     """
     try:
         if 'encodedProgrammeId' in item_data.keys():
@@ -340,7 +344,7 @@ def parse_category_item(prog, category_id):
 
     # TODO: Both regular and news category items now have a field contentType
 
-    is_playable = prog['encodedEpisodeId']['letterA'] == ''
+    is_playable = prog.get('encodedEpisodeId') is None
     playtime = utils.duration_2_seconds(prog['contentInfo'])
     title = prog['title']
 
@@ -368,9 +372,14 @@ def parse_category_item(prog, category_id):
         programme_item['info']['duration'] = playtime
         programme_item['params'] = {'url': build_url(title, prog['encodedProgrammeId']['letterA'])}
     else:
+        # A Workaround for an issue at ITVX where news programmes' programmeId already contain an
+        # episodeId and programme and episode IDs are the same. On the website these programmes
+        # end up at page saying "Oops something went wrong".
+        prog_id = prog['encodedProgrammeId']['letterA']
+        episode_id = prog['encodedEpisodeId']['letterA']
         programme_item['params'] = {'url': build_url(title,
-                                                     prog['encodedProgrammeId']['letterA'],
-                                                     prog['encodedEpisodeId']['letterA'])}
+                                                     prog_id,
+                                                     episode_id if prog_id != episode_id else None)}
     return {'type': 'title' if is_playable else 'series',
             'programme_id': prog['encodedProgrammeId']['underscore'],
             'show': programme_item}
@@ -410,7 +419,7 @@ def parse_episode_title(title_data, brand_fanart=None):
     # Note: episodeTitle may be None
     title = title_data['episodeTitle'] or title_data['heroCtaLabel']
     img_url = title_data['image']
-    plot = '\n\n'.join((title_data['longDescription'], title_data['guidance'] or ''))
+    plot = '\n\n'.join(t for t in (title_data['longDescription'], title_data.get('guidance')) if t)
     if title_data['premium']:
         plot = premium_plot(plot)
 
@@ -638,3 +647,39 @@ def parse_last_watched_item(item, utc_now):
     if item['contentType'] == 'FILM':
         item_dict['show']['art']['poster'] = img_link.format(**IMG_PROPS_POSTER)
     return item_dict
+
+
+def parse_schedule_item(data):
+    """Parse and item from the html page /watch/guide.
+
+    Used to create EPG data for IPTV manager.
+    """
+    from urllib.parse import quote
+
+    plugin_id = utils.addon_info.id
+
+    try:
+        item = {
+            'start': data['start'],
+            'stop': data['end'],
+            'title': data['title'],
+            'description': '\n\n'.join(t for t in (data.get('description'), data.get('guidance')) if t),
+            'genre': data.get('genres', [{}])[0].get('name'),
+        }
+
+        episode_nr = data.get('episodeNumber')
+        if episode_nr:
+            # It is not uncommon for seriesNumber to be None while episodeNumber does have a value.
+            series_nr = data.get('seriesNumber') or 0
+            item['episode'] = 'S{:02d}E{:02d}'.format(series_nr, episode_nr)
+
+        episode_link = data.get('episodeLink')
+        if episode_link:
+            episode_url = '/watch' + episode_link
+            item['stream'] = ''.join(('plugin://',
+                                      plugin_id,
+                                      '/resources/lib/main/play_title/?url=',
+                                      quote(episode_url, safe='')))
+        return item
+    except:
+        logger.error("Failed to parse html schedule item", exc_info=True)

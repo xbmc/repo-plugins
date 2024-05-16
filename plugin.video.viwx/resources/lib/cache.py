@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------------------------------------------------
-#  Copyright (c) 2022-2023 Dimitri Kroon.
+#  Copyright (c) 2022-2024 Dimitri Kroon.
 #  This file is part of plugin.video.viwx.
 #  SPDX-License-Identifier: GPL-2.0-or-later
 #  See LICENSE.txt
@@ -26,7 +26,14 @@ DFLT_EXPIRE_TIME = 600
 
 __cache = {}
 
-
+# A list of programmeId's of programmes currently present in itvX's 'My List'.
+# Used to determine whether to add an 'Add' or a 'Remove' option to a list
+# item's context menu.
+# Possible values are:
+# None: The list has not yet been retrieved from ITVX.
+# False: The list could not be obtained from ITVX, e.g. the user is not signed in.
+# List: The list is initialised with the actual programmes in My List, could still
+#       be an empty list of course.
 my_list_programmes = None
 
 

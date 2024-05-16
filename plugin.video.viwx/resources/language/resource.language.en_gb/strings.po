@@ -69,6 +69,18 @@ msgctxt "#30121"
 msgid "Offer to play from the start"
 msgstr ""
 
+msgctxt "#30131"
+msgid "Install IPTV Manager"
+msgstr ""
+
+msgctxt "#30132"
+msgid "Enable IPTV Manager integration"
+msgstr ""
+
+msgctxt "#30133"
+msgid "Go to IPTV Manager settings"
+msgstr ""
+
 msgctxt "#30200"
 msgid "itvX account"
 msgstr ""

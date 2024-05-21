@@ -36,6 +36,7 @@ class ApiHelper:
     def get_tvshows(self, category=None, channel=None, feature=None):
         """Get all TV shows for a given category, channel or feature, optionally filtered by favorites"""
         params = {}
+        cache_file = None
 
         # Facet-selection
         if category:
@@ -95,6 +96,7 @@ class ApiHelper:
     def tvshow_to_listitem(self, tvshow, program_name, cache_file):
         """Return a ListItem based on a Suggests API result"""
         label = self._metadata.get_label(tvshow)
+        context_menu = None
 
         if program_name:
             context_menu, favorite_marker = self._metadata.get_context_menu(tvshow, program_name, cache_file)
@@ -146,6 +148,8 @@ class ApiHelper:
         sort = 'episode'
         ascending = True
         content = 'episodes'
+        favorite_programs = []
+
         if use_favorites:
             favorite_programs = self._favorites.programs()
 
@@ -224,6 +228,7 @@ class ApiHelper:
     def __map_tvshows(self, tvshows, oneoffs, use_favorites=False, cache_file=None):
         """Construct a list of TV show and Oneoff TitleItems and filtered by favorites"""
         items = []
+        favorite_programs = []
 
         if use_favorites:
             favorite_programs = self._favorites.programs()
@@ -249,7 +254,7 @@ class ApiHelper:
 
     def episode_to_listitem(self, episode, program, cache_file, titletype):
         """Return a ListItem based on a Search API result"""
-
+        context_menu = None
         label, sort, ascending = self._metadata.get_label(episode, titletype, return_sort=True)
 
         if program:
@@ -700,6 +705,7 @@ class ApiHelper:
 
             context_menu = []
             art_dict = {}
+            path = None
 
             # Try to use the white icons for thumbnails (used for icons as well)
             if has_addon('resource.images.studios.white'):

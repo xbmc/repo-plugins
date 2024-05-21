@@ -56,6 +56,9 @@ class Metadata:
         from addon import plugin
         favorite_marker = ''
         context_menu = []
+        follow_enabled = False
+        follow_suffix = ''
+        program_id = None
 
         # FOLLOW PROGRAM
         if self._favorites.is_activated():
@@ -73,7 +76,6 @@ class Metadata:
                 # FIXME: No program_id in Suggest API
                 program_id = None
                 program_title = api_data.get('title')
-                follow_suffix = ''
                 follow_enabled = True
 
             # VRT MAX Schedule API (some are missing vrt.whatson-id)
@@ -684,6 +686,8 @@ class Metadata:
     @staticmethod
     def get_label(api_data, titletype=None, return_sort=False):
         """Get an appropriate label string matching the type of listing and VRT MAX provided displayOptions from single item json api data"""
+        sort = 'unsorted'
+        ascending = True
 
         # VRT MAX Search API
         if api_data.get('episodeType'):
@@ -693,8 +697,6 @@ class Metadata:
                 titletype = program_type
 
             label = html_to_kodi(api_data.get('title', '') or api_data.get('shortDescription', ''))
-            sort = 'unsorted'
-            ascending = True
 
             if titletype == 'mixed_episodes':
                 ascending = False

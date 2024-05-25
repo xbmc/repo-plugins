@@ -51,7 +51,45 @@
 				<setting id="live_play_from_start" label="30121" type="boolean" help="30321">
 					<level>0</level>
 					<default>false</default>
+					<control type="toggle" />
+				</setting>
+				<setting id="install_iptvmanager" label="30131" type="action" help="">
+					<level>0</level>
+					<data>InstallAddon(service.iptv.manager)</data>
+					<control type="button" format="action">
+						<close>true</close>
+					</control>
+					<dependencies>
+						<dependency type="visible" on="property" name="infobool" operator="!is">System.HasAddon(service.iptv.manager)</dependency>
+					</dependencies>
+				</setting>
+				<setting id="iptv.enabled" label="30132" type="boolean" help="">
+					<level>0</level>
+					<default>true</default>
 					<control type="toggle"/>
+					<dependencies>
+						<dependency type="visible" on="property" name="infobool">System.HasAddon(service.iptv.manager)</dependency>
+					</dependencies>
+				</setting>
+				<setting id="iptvmanager-settings" label="30133" type="action" help="" parent="iptv.enabled">
+					<data>Addon.OpenSettings(service.iptv.manager)</data>
+					<dependencies>
+						<dependency type="enable" setting="iptv.enabled">true</dependency>
+						<dependency type="visible" on="property" name="infobool">System.HasAddon(service.iptv.manager)</dependency>
+					</dependencies>
+					<control type="button" format="action">
+						<close>true</close>
+					</control>
+				</setting>
+				<setting id="iptv.channels_uri" label="" type="string" help="">
+					<default>plugin://plugin.video.viwx/resources/lib/iptvmanager/channels</default>
+					<visible>false</visible>
+					<control type="edit" format="string" />
+				</setting>
+				<setting id="iptv.epg_uri" label="" type="string" help="">
+					<default>plugin://plugin.video.viwx/resources/lib/iptvmanager/epg</default>
+					<visible>false</visible>
+					<control type="edit" format="string" />
 				</setting>
 			</group>
 			<group id="grp2" label="30110">
@@ -103,4 +141,5 @@
 			</group>
         </category>
     </section>
+
 </settings>

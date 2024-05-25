@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------------------------------------------------
-#  Copyright (c) 2022-2023 Dimitri Kroon.
+#  Copyright (c) 2022-2024 Dimitri Kroon.
 #  This file is part of plugin.video.viwx.
 #  SPDX-License-Identifier: GPL-2.0-or-later
 #  See LICENSE.txt
@@ -203,13 +203,19 @@ def sub_menu_my_itvx(_):
     yield Listitem.from_dict(generic_list, 'Recommended for You', params={'list_type':'recommended'})
 
 
-def _my_list_context_mnu(list_item, programme_id, refresh=True):
-    """If `list_item` contains a programme_id, check if the id is in 'My List'
+def _my_list_context_mnu(list_item, programme_id, refresh=True, retry=True):
+    """If programme_id is non-empty, check if the id is in 'My List'
     and add a context menu to add or remove the item from the list accordingly.
+
+    If my_list_programmes is None, initialise the list and try again.
+    If my_list_programmes is False, it has already been initialised, but the list
+    is not available - possibly the user is not signed in. In that case do not create
+    a context menu at all.
 
     """
     if not programme_id:
         return
+
     try:
         if programme_id in cache.my_list_programmes:
             list_item.context.script(update_mylist, "Remove from My List",
@@ -218,8 +224,9 @@ def _my_list_context_mnu(list_item, programme_id, refresh=True):
             list_item.context.script(update_mylist, "Add to My List",
                                      progr_id=programme_id, operation='add', refresh=refresh)
     except TypeError:
-        # The cached list of programme ID's is not intialised; do not set a context menu
-        logger.warning("Cannot create 'My List' context menu")
+        if retry and cache.my_list_programmes is None:
+            itvx.initialise_my_list()
+            _my_list_context_mnu(list_item, programme_id, refresh, False)
 
 
 @Route.register(content_type='videos')
@@ -490,7 +497,7 @@ def create_dash_stream_item(name: str, manifest_url, key_service_url, resume_tim
             'Sec-Fetch-Dest=empty&'
             'Sec-Fetch-Mode=cors&'
             'Sec-Fetch-Site=same-site&'
-            'Cookie=', 'hdntl=', hdntl_cookie))
+            'cookie=', 'hdntl=', hdntl_cookie))
 
     play_item.setProperties({
         'inputstream': is_helper.inputstream_addon,
@@ -500,7 +507,8 @@ def create_dash_stream_item(name: str, manifest_url, key_service_url, resume_tim
         'inputstream.adaptive.license_key': ''.join(
                 (key_service_url, '|Content-Type=application/octet-stream|R{SSM}|')),
         'inputstream.adaptive.stream_headers': stream_headers,
-        'inputstream.adaptive.manifest_headers': stream_headers
+        'inputstream.adaptive.manifest_headers': stream_headers,
+        'inputstream.adaptive.internal_cookies': 'true'
     })
 
     if resume_time:
@@ -650,9 +658,3 @@ callb_map = {
     'title': play_title,
     'vodstream': play_stream_catchup
 }
-
-
-# A rather hacky method to ensure the cached list of programmeId's in itvx's My List
-# is updated each time the addon starts, but not on settings callbacks.
-if cache.my_list_programmes is None and 'resources/lib/settings' not in sys.argv[0]:
-    itvx.initialise_my_list()

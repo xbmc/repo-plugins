@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------------------------------------------------
-#  Copyright (c) 2022-2023 Dimitri Kroon.
+#  Copyright (c) 2022-2024 Dimitri Kroon.
 #  This file is part of plugin.video.viwx.
 #  SPDX-License-Identifier: GPL-2.0-or-later
 #  See LICENSE.txt
@@ -102,6 +102,24 @@ class HttpSession(requests.sessions.Session):
         return resp
 
 
+def convert_consent(cookiejar):
+    """Replace Cassie consent cookies for Syrenis.
+
+    """
+    to_be_removed = []
+    # RequestCookieJar's items() returns a list of tuples
+    try:
+        for name, value in cookiejar.items():
+            if name.startswith("Cassie"):
+                del cookiejar[name]
+
+        set_default_cookies(cookiejar)
+        cookiejar.cassie_converted = True
+        cookiejar.save()
+    except:
+        logger.error("Error converting consent cookies:\n", exc_info=True)
+
+
 def _create_cookiejar():
     """Restore a cookiejar from file. If the file does not exist create new one and
     apply the default cookies.
@@ -117,6 +135,9 @@ def _create_cookiejar():
             # if the file has been copied from another system.
             cj.filename = cookie_file
             logger.info("Restored cookies from file")
+            if not getattr(cj, "cassie_converted", None):
+                convert_consent(cj)
+
     except (FileNotFoundError, pickle.UnpicklingError):
         cj = set_default_cookies(PersistentCookieJar(cookie_file))
         logger.info("Created new cookiejar")
@@ -124,63 +145,84 @@ def _create_cookiejar():
 
 
 def set_default_cookies(cookiejar: RequestsCookieJar = None):
-    """Make a request to reject all cookies.
+    """Post a cookie consent form rejecting all cookies.
 
-    Ironically, the response sets third-party cookies to store that data.
-    Because of that they are rejected by requests, so the cookies are added
-    manually to the cookiejar.
-
+    On success, set the required consent and other cookies.
     Return the cookiejar
 
     """
+    from uuid import uuid4
+
     s = requests.Session()
     if isinstance(cookiejar, RequestsCookieJar):
         s.cookies = cookiejar
     elif cookiejar is not None:
         raise ValueError("Parameter cookiejar must be an instance of RequestCookiejar")
 
+    my_guid  = str(uuid4())
+
     # noinspection PyBroadException
     try:
         # Make a request to reject all cookies.
-        resp = s.get(
-            'https://identityservice.syrenis.com/Home/SaveConsent',
-            params={'accessKey': '213aea86-31e5-43f3-8d6b-e01ba0d420c7',
-                    'domain': '*.itv.com',
-                    'consentedCookieIds': [],
-                    'cookieFormConsent': '[{"FieldID":"s122_c113","IsChecked":0},{"FieldID":"s135_c126","IsChecked":0},'
-                                         '{"FieldID":"s134_c125","IsChecked":0},{"FieldID":"s138_c129","IsChecked":0},'
-                                         '{"FieldID":"s157_c147","IsChecked":0},{"FieldID":"s136_c127","IsChecked":0},'
-                                         '{"FieldID":"s137_c128","IsChecked":0}]',
-                    'runFirstCookieIds': '[]',
-                    'privacyCookieIds': '[]',
-                    'custom1stPartyData': '[]',
-                    'privacyLink': '1'},
+        resp = s.post(
+            'https://cscript-irl.cassiecloud.com/cookiesapi/submit',
             headers={'User-Agent': USER_AGENT,
                      'Accept': 'application/json',
                      'Origin': 'https://www.itv.com/',
                      'Referer': 'https://www.itv.com/'},
-            timeout=WEB_TIMEOUT
+            timeout=WEB_TIMEOUT,
+            json={
+                "CookieFormID":5,
+                "LicenseID":"9FA306B9-83BD-4F83-A061-52D3589ABADB",
+                "DivID":"cassie-widget",
+                "Preferences":[
+                    {"FieldID":"s122_c113","IsChecked":0},
+                    {"FieldID":"s135_c126","IsChecked":0},
+                    {"FieldID":"s134_c125","IsChecked":0},
+                    {"FieldID":"s138_c129","IsChecked":0},
+                    {"FieldID":"s157_c147","IsChecked":0},
+                    {"FieldID":"s136_c127","IsChecked":0},
+                    {"FieldID":"s137_c128","IsChecked":0}],
+                "appCodeName":"Mozilla",
+                "appName":"Netscape",
+                "appVersion":"5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                "cookieEnabled":True,
+                "geolocation":"",
+                "language":"en",
+                "platform":"Linux x86_64",
+                "referrer":"",
+                "submissionSource":"prebanner_reject_all",
+                "visitGUID":my_guid,
+                "WebsiteURL":"https://www.itv.com/",
+                "PrivacyPolicyID":"1",
+                "custom1stPartyData":None}
         )
-        s.close()
         resp.raise_for_status()
-        consent = resp.json()['CassieConsent']
-        cookie_data = json.loads(consent)
-        jar = s.cookies
+        if resp.text != "Post Sucessful":
+            logger.warning("Unexpected response to cookie consent form: %s", resp.text)
 
+        jar = s.cookies
         std_cookie_args = {'domain': '.itv.com', 'expires': time.time() + 3650 * 86400, 'discard': False}
-        for cookie_name, cookie_value in cookie_data.items():
-            jar.set(cookie_name, cookie_value, **std_cookie_args)
-        logger.info("updated cookies consent")
+
+        # Set consent cookies to reject all.
+        jar.set('SyrenisGuid_213aea86-31e5-43f3-8d6b-e01ba0d420c7', my_guid, **std_cookie_args)
+        jar.set('SyrenisCookieFormConsent_213aea86-31e5-43f3-8d6b-e01ba0d420c7',
+                '[{"FieldID":"s122_c113","IsChecked":0},{"FieldID":"s135_c126","IsChecked":0},{"FieldID":"s134_c125","IsChecked":0},{"FieldID":"s138_c129","IsChecked":0},{"FieldID":"s157_c147","IsChecked":0},{"FieldID":"s136_c127","IsChecked":0},{"FieldID":"s137_c128","IsChecked":0}]',
+                **std_cookie_args)
+        jar.set('SyrenisCookiePrivacyLink_213aea86-31e5-43f3-8d6b-e01ba0d420c7', '1', **std_cookie_args)
+        jar.set('SyrenisCookieConsentDate_213aea86-31e5-43f3-8d6b-e01ba0d420c7', str(int(time.time() * 1000)), **std_cookie_args)
+        logger.info("Updated consent cookies.")
 
         # set other cookies
-        import uuid
-        jar.set('Itv.Cid', str(uuid.uuid4()), **std_cookie_args)
+        jar.set('Itv.Cid', str(uuid4()), **std_cookie_args)
         jar.set('Itv.Region', 'ITV|null', **std_cookie_args)
         jar.set("Itv.ParentalControls", '{"active":false,"pin":null,"question":null,"answer":null}', **std_cookie_args)
         return jar
     except:
         logger.error("Unexpected exception while updating cookie consent", exc_info=True)
         return cookiejar
+    finally:
+        s.close()
 
 
 def web_request(method, url, headers=None, data=None, **kwargs):

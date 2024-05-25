@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.viwx" name="viwX" version="1.2.1" provider-name="Dimitri Kroon">
+<addon id="plugin.video.viwx" name="viwX" version="1.3.0" provider-name="Dimitri Kroon">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="inputstream.adaptive" version="19.0.5"/>
@@ -30,12 +30,16 @@
       <fanart>resources/fanart.png</fanart>
     </assets>
     <news>
-[B]v1.2.1[/B]
+[B]v1.3.0[/B]
 [B]Fixes:[/B]
-* All categories failed to open with KeyError('pathSegment') due to a change at ITVX.
+* Freezing streams on Kodi 21 (Omega).
+* A lot of timeout errors, only experienced by new users, particularly when trying to sign in or open a stream.
+* All categories failed to open with KeyError('encodeEpisodeId') due to a change at ITVX.
+* A workaround for a bug in ITVX causing full news programmes to fail with FetchError('Not Found').
+* Sometimes an episodes listing failed with KeyError('guidance').
 
-[B]Changes:[/B]
-* Schedules of live channels are now listed up to 6 hours in the future (was 4 hrs).
+[B]New Features:[/B]
+* Support for IPTV Manager.
     </news>
     <reuselanguageinvoker>true</reuselanguageinvoker>
   </extension>

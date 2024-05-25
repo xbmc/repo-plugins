@@ -1,3 +1,14 @@
+v1.3.0
+Fixes:
+- Freezing streams on Kodi 21 (Omega).
+- A lot of timeout errors, only experienced by new users, particularly when trying to sign in or open a stream.
+- All categories failed to open with KeyError('encodeEpisodeId') due to a change at ITVX.
+- A workaround for a bug in ITVX causing full news programmes to fail with FetchError('Not Found').
+- Sometimes an episodes listing failed with KeyError('guidance').
+
+New features:
+
+
 v1.2.1
 Fixes:
 - All categories failed to open with KeyError('pathSegment') due to a change at ITVX.

@@ -346,7 +346,7 @@ def get_live_url(plugin, item_id, **kwargs):
         channel_uktvplay_id = item_id
 
     respdatachannel = session_requests.get(URL_LIVE % channel_uktvplay_id)
-    data_channel = re.compile(r'data\-channel\=\"(.*?)\"').findall(
+    data_channel = re.compile(r'channelStreamId:(.*?)}').findall(
         respdatachannel.text)[0]
 
     respkey = session_requests.get(URL_LIVE_KEY)

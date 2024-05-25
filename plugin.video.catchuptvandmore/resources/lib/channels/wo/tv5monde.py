@@ -26,6 +26,11 @@ M3U8_NOT_FBS = 'https://ott.tv5monde.com/Content/HLS/Live/channel(europe)/varian
 
 LIST_LIVE_TV5MONDE = {'tv5mondefbs': 'fbs', 'tv5mondeinfo': 'infoplus'}
 
+LIVETYPE = {
+    "FBS": "0",
+    "NOT_FBS": "1"
+}
+
 
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
@@ -171,7 +176,8 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    if bool(Script.setting['tv5monde.region']):
+    region = Script.setting['tv5monde.region']
+    if region == LIVETYPE['NOT_FBS']:
         return resolver_proxy.get_stream_with_quality(plugin, video_url=M3U8_NOT_FBS, manifest_type="hls")
 
     live_id = ''

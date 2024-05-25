@@ -484,6 +484,7 @@ xmltv_infos = {
             'keyword': 'tv_guide_ca_'
         }
 }
+xmltv_infos['sfrtv_live'] = xmltv_infos['fr_live']
 
 
 def get_xmltv_url(country_id, date):
@@ -538,10 +539,6 @@ def download_xmltv_file(country_id, date, xmltv_fp):
                 need_to_downlod_xmltv_file = True
 
         if need_to_downlod_xmltv_file:
-            Script.notify(
-                Script.localize(30722),
-                Script.localize(30730),
-                display_time=5000)
             r = urlquick.get(xmltv_url, max_age=-1)
             with open(xmltv_fp, 'wb') as f:
                 f.write(r.content)
@@ -579,10 +576,6 @@ def download_xmltv_file(country_id, date, xmltv_fp):
             date.strftime('%Y-%m-%d'),
             xmltv_ids
         )
-        Script.notify(
-            Script.localize(30722),
-            Script.localize(30730),
-            display_time=5000)
         sd.get_xmltv()
 
     else:

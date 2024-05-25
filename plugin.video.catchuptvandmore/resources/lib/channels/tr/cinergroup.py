@@ -6,6 +6,7 @@
 
 from __future__ import unicode_literals
 import json
+import re
 
 from codequick import Resolver
 import urlquick
@@ -28,11 +29,11 @@ def get_live_url(plugin, item_id, **kwargs):
     resp = urlquick.get(URL_LIVE[item_id])
     root = resp.parse()
 
-    if item_id == 'bloomberght':
-        dict = json.loads(root.findall(".//div[@class='htplay_video']")[1].attrib['data-ht'])
+    if item_id in ['bloomberght', 'haberturk']:
+        video_url = re.compile('var videoUrl = \"(.*?)\"').findall(resp.text)[0]
+    elif item_id == 'showtv':
+        video_url = json.loads(root.findall(".//div[@class='htplay']")[0].attrib['data-ht'])['ht_stream_m3u8']
     else:
-        dict = json.loads(root.findall(".//div[@class='htplay_video']")[0].attrib['data-ht'])
-
-    video_url = dict['ht_stream_m3u8']
+        video_url = json.loads(root.findall(".//div[@class='htplay_video']")[0].attrib['data-ht'])['ht_stream_m3u8']
 
     return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

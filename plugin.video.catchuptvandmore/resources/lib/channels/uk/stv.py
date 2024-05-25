@@ -58,9 +58,9 @@ def list_categories(plugin, item_id, **kwargs):
     for category_datas in json_parser["results"]:
         item = Listitem()
         item.label = category_datas["name"]
-        item.art["thumb"] = item.art["landscape"] = category_datas["images"][
-            "_filepath"
-        ]
+        if "images" in category_datas and category_datas["images"] is not None:
+            if "_filepath" in category_datas["images"]:
+                item.art["thumb"] = item.art["landscape"] = category_datas["images"]["_filepath"]
         item.set_callback(
             list_programs, item_id=item_id, category_guid=category_datas["guid"]
         )

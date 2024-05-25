@@ -16,7 +16,7 @@ from resources.lib import resolver_proxy, web_utils
 # TODO
 # Add Replay
 
-URL_ROOT = "https://www.franceinter.fr"
+URL_ROOT = "https://www.radiofrance.fr/franceinter"
 
 URL_LIVE = URL_ROOT + '/direct'
 
@@ -24,9 +24,4 @@ URL_LIVE = URL_ROOT + '/direct'
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(
-        URL_LIVE, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    live_id = re.compile(r'dailymotion.com/embed/video/(.*?)[\?\"]').findall(resp.text)[0]
-    return resolver_proxy.get_stream_dailymotion(plugin,
-                                                 live_id,
-                                                 False)
+    return resolver_proxy.get_stream_dailymotion(plugin, 'x17qw0a', embeder=URL_LIVE)

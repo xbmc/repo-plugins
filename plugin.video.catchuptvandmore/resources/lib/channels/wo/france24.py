@@ -14,9 +14,12 @@ import urlquick
 from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 
+URL_LIVE = 'https://www.france24.com/%s/%s'
 LANG = Script.setting['france24.language']
 TOKEN_APP = '66b85dad-3ad5-40f3-ab32-2305fc2357ea'
 URL_API = utils.urljoin_partial('https://apis.france24.com')
+
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
 
 
 @Route.register
@@ -307,6 +310,10 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    channels = {"FR": "gxG3pdKvlIs", "AR": "8BZpOolYLUA", "EN": "h3MuIUNCCzI", "ES": "XDJPzMznAjU"}
-    final_language = kwargs.get('language', LANG)
-    return resolver_proxy.get_stream_youtube(plugin, channels[final_language])
+    live_translation = {"FR": "direct", "AR": "البث-المباشر", "EN": "live", "ES": "en-vivo"}
+    language = kwargs.get('language', LANG)
+
+    root = urlquick.get(URL_LIVE % (language, live_translation[language]), headers=GENERIC_HEADERS, max_age=-1)
+    video_id = root.parse('video-player').get('video-id')
+
+    return resolver_proxy.get_stream_youtube(plugin, video_id)

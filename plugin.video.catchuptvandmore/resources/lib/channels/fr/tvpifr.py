@@ -7,6 +7,7 @@
 from __future__ import unicode_literals
 from builtins import str
 import re
+import json
 
 from codequick import Listitem, Resolver, Route
 import urlquick
@@ -16,7 +17,9 @@ from resources.lib.menu_utils import item_post_treatment
 from resources.lib import resolver_proxy, web_utils
 
 URL_ROOT = 'https://www.sudouest.fr'
-URL_ROOT_TVPI = URL_ROOT + '/lachainetvpi/'
+URL_ROOT_TVPI = URL_ROOT + '/lachainetv7'
+
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 
 @Route.register
@@ -25,7 +28,7 @@ def list_categories(plugin, item_id, **kwargs):
     Build categories listing
     - ...
     """
-    resp = urlquick.get(URL_ROOT_TVPI)
+    resp = urlquick.get(URL_ROOT_TVPI, headers=GENERIC_HEADERS)
     root = resp.parse()
 
     for category in root.iterfind(".//section[@class=' gutter base-margin-bottom sm-base-padding-right sm-base-padding-left']"):
@@ -69,10 +72,11 @@ def get_video_url(plugin, video_page, download_mode=False, **kwargs):
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    try:
-        resp = urlquick.get(URL_ROOT_TVPI, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-        live_id = re.compile(r'https://www.youtube.com/embed/(.*?)[\?\"]').findall(resp.text)[0]
-    except Exception:
-        live_id = 'iFSO8pJ_bQs'
+    resp = urlquick.get(URL_ROOT_TVPI, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse('iframe', attrs={"class": "iframe-responsive iframe-16-9"})
+    url_player = 'https:' + root.get('src')
+    player = urlquick.get(url_player, headers=GENERIC_HEADERS, max_age=-1)
+    data_json = json.loads(re.compile(r'DtkPlayer.init\((.*?)\, \{\"topic').findall(player.text)[0])
+    video_url = data_json['video']['media_sources']['live']['src']
 
-    return resolver_proxy.get_stream_youtube(plugin, live_id, download_mode=False)
+    return resolver_proxy.get_stream_with_quality(plugin, video_url)

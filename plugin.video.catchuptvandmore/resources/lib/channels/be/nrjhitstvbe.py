@@ -44,7 +44,8 @@ def list_categories(plugin, item_id, **kwargs):
 
 @Route.register
 def list_videos_in_section(plugin, item_id, section, **kwargs):
-    yield from list_videos(item_id, section)
+    for i in list_videos(item_id, section):
+        yield i
 
     next_btn = section.find(".//a[@class='btn btn-dark']")
     if next_btn is not None:
@@ -98,7 +99,8 @@ def list_videos(item_id, section):
 def get_more_videos(plugin, item_id, url, **kwargs):
     root = urlquick.get(url).parse("main")
 
-    yield from list_videos(item_id, root)
+    for i in list_videos(item_id, root):
+        yield i
 
     next_btn = root.find(".//nav/ul/li[last()]/button")
     if next_btn is not None:

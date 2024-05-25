@@ -27,7 +27,7 @@ menu = {
         'order': 1
     },
     'telequebec': {
-        'route': '/resources/lib/channels/ca/telequebec:list_categories',
+        'route': '/resources/lib/channels/ca/telequebec:list_root',
         'label': 'Télé-Québec',
         'thumb': 'channels/ca/telequebec.png',
         'fanart': 'channels/ca/telequebec_fanart.jpg',

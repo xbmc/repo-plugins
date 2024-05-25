@@ -5,31 +5,37 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
+
 import json
 import re
 
-import inputstreamhelper
-from codequick import Listitem, Resolver, Route
-from kodi_six import xbmcgui
 import urlquick
+# noinspection PyUnresolvedReferences
+from codequick import Listitem, Resolver, Route
 
-from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
+from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
-
 
 URL_ROOT = 'https://www.bvn.tv'
 
 # LIVE :
-URL_LIVE = URL_ROOT + '/bvnlive/'
+URL_LIVE = URL_ROOT + '/bvnlive'
+
+# STREAM_LINK :
+URL_STRAM_LINK = 'https://prod.npoplayer.nl/stream-link'
 
 # REPLAY :
 URL_DAYS = URL_ROOT + '/uitzendinggemist/'
 
 # STREAM :
-URL_STREAM = 'https://start-player.npo.nl/video/%s/streams?profile=dash-widevine&quality=npo&tokenId=%s&streamType=broadcast&mobile=0&ios=0&isChromecast=0'
+URL_STREAM = 'https://start-player.npo.nl/video/%s/streams'
 # Id video, tokenId
 URL_SUBTITLE = 'https://rs.poms.omroep.nl/v1/api/subtitles/%s'
-# Id Video
+
+# License URL
+LICENSE_URL = "https://npo-drm-gateway.samgcloud.nepworldwide.nl/authentication?custom_data=%s"
+
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
 
 
 @Route.register
@@ -41,7 +47,7 @@ def list_days(plugin, item_id, **kwargs):
     - ...
     """
 
-    resp = urlquick.get(URL_DAYS)
+    resp = urlquick.get(URL_DAYS, headers=GENERIC_HEADERS, max_age=-1)
     root = resp.parse("div", attrs={"id": "missed"})
 
     day_id = 0
@@ -58,8 +64,8 @@ def list_days(plugin, item_id, **kwargs):
 
 @Route.register
 def list_videos(plugin, item_id, day_id, **kwargs):
-    resp = urlquick.get(URL_DAYS)
-    root = resp.parse("ul", attrs={"id": "slick-missed-day-%s" % (day_id)})
+    resp = urlquick.get(URL_DAYS, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse("ul", attrs={"id": "slick-missed-day-%s" % day_id})
 
     for broadcast in root.iterfind(".//li"):
         video_time = broadcast.find(
@@ -71,7 +77,7 @@ def list_videos(plugin, item_id, day_id, **kwargs):
         subtitle = broadcast.find(
             "span[@class='m-section__scroll__item__bottom__title--sub']")
         if subtitle is not None and subtitle.text is not None:
-            video_title += ": " + subtitle
+            video_title += ": " + subtitle.text
 
         video_image = URL_ROOT + broadcast.find('.//img').get('data-src')
         video_url = URL_ROOT + broadcast.find('.//a').get('href')
@@ -88,27 +94,27 @@ def list_videos(plugin, item_id, day_id, **kwargs):
 
 
 @Resolver.register
-def get_video_url(plugin,
-                  item_id,
-                  video_url,
-                  download_mode=False,
-                  **kwargs):
+def get_video_url(plugin, item_id, video_url, download_mode=False, **kwargs):
 
-    if get_kodi_version() < 18:
-        xbmcgui.Dialog().ok('Info', plugin.localize(30602))
-        return False
+    resp = urlquick.get(video_url, headers=GENERIC_HEADERS, max_age=-1)
 
-    is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
-    if not is_helper.check_inputstream():
-        return False
-
-    resp = urlquick.get(video_url, max_age=-1)
-
-    token_id = re.compile(r'start\-player\.npo\.nl\/embed\/(.*?)\"').findall(
+    token_id = re.compile(r'start-player\.npo\.nl/embed/(.*?)\"').findall(
         resp.text)[0]
-    video_id = re.compile(r'\"iframe\-(.*?)\"').findall(resp.text)[0]
+    video_id = re.compile(r'\"iframe-(.*?)\"').findall(resp.text)[0]
 
-    resp2 = urlquick.get(URL_STREAM % (video_id, token_id), max_age=-1)
+    params = {
+        'profile': 'dash-widevine',
+        'quality': 'npo',
+        'tokenId': token_id,
+        'streamType': 'broadcast',
+        'isYospace': '0',
+        'videoAgeRating': 'null',
+        'isChromecast': '0',
+        'mobile': '0',
+        'ios': '0'
+    }
+
+    resp2 = urlquick.post(URL_STREAM % video_id, params=params, headers=GENERIC_HEADERS, max_age=-1)
     json_parser = json.loads(resp2.text)
 
     if "html" in json_parser and "Deze video mag niet bekeken worden vanaf jouw locatie" in json_parser[
@@ -121,77 +127,47 @@ def get_video_url(plugin,
         plugin.notify('ERROR', plugin.localize(30716))
         return False
 
-    licence_url = json_parser["stream"]["keySystemOptions"][0]["options"][
-        "licenseUrl"]
-    licence_url_header = json_parser["stream"]["keySystemOptions"][0][
-        "options"]["httpRequestHeaders"]
-    xcdata_value = licence_url_header["x-custom-data"]
+    license_url = json_parser["stream"]["keySystemOptions"][0]["options"]["licenseUrl"]
+    xcdata_value = json_parser["stream"]["keySystemOptions"][0]["options"]["httpRequestHeaders"]["x-custom-data"]
 
-    item = Listitem()
-    item.path = json_parser["stream"]["src"]
-    item.label = get_selected_item_label()
-    item.art.update(get_selected_item_art())
-    item.info.update(get_selected_item_info())
+    video_url = json_parser["stream"]["src"]
 
     if plugin.setting.get_boolean('active_subtitle'):
-        item.subtitles.append(URL_SUBTITLE % video_id)
+        subtitles = URL_SUBTITLE % video_id
+    else:
+        subtitles = None
 
-    item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
-    item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-    item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
-    item.property[
-        'inputstream.adaptive.license_key'] = licence_url + '|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&x-custom-data=%s|R{SSM}|' % xcdata_value
+    headers = {
+        'Content-Type': '',
+        'User-Agent': web_utils.get_random_ua(),
+        'x-custom-data': xcdata_value
+    }
 
-    return item
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, manifest_type="mpd", license_url=license_url, headers=headers, subtitles=subtitles)
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
+    resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
+    jwt = re.compile('let jwt[^=]*= \"(.*?)\"').findall(resp.text)[0]
 
-    if get_kodi_version() < 18:
-        xbmcgui.Dialog().ok('Info', plugin.localize(30602))
-        return False
+    headers = {
+        'Authorization': jwt,
+        'User-Agent': web_utils.get_random_ua()
+    }
 
-    is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
-    if not is_helper.check_inputstream():
-        return False
+    json_data = {
+        'profileName': 'dash',
+        'drmType': 'widevine',
+    }
 
-    resp = urlquick.get(URL_LIVE, max_age=-1)
+    resp = urlquick.post(URL_STRAM_LINK, headers=headers, json=json_data, max_age=-1)
 
-    token_id = re.compile(r'start\-player\.npo\.nl\/embed\/(.*?)\"').findall(
-        resp.text)[0]
-    live_id = re.compile(r'\"iframe\-(.*?)\"').findall(resp.text)[0]
+    json_parser = resp.json()
 
-    resp2 = urlquick.get(URL_STREAM % (live_id, token_id), max_age=-1)
-    json_parser = json.loads(resp2.text)
+    drm_token = json_parser["stream"]['drmToken']
+    license_url = LICENSE_URL % drm_token
 
-    if "html" in json_parser and "Deze video mag niet bekeken worden vanaf jouw locatie" in json_parser[
-            "html"]:
-        plugin.notify('ERROR', plugin.localize(30713))
-        return False
+    video_url = json_parser["stream"]["streamURL"]
 
-    if "html" in json_parser and "Deze video is niet beschikbaar" in json_parser[
-            "html"]:
-        plugin.notify('ERROR', plugin.localize(30716))
-        return False
-
-    licence_url = json_parser["stream"]["keySystemOptions"][0]["options"][
-        "licenseUrl"]
-    licence_url_header = json_parser["stream"]["keySystemOptions"][0][
-        "options"]["httpRequestHeaders"]
-    xcdata_value = licence_url_header["x-custom-data"]
-
-    item = Listitem()
-    item.path = json_parser["stream"]["src"]
-    item.label = get_selected_item_label()
-    item.art.update(get_selected_item_art())
-    item.info.update(get_selected_item_info())
-    if plugin.setting.get_boolean('active_subtitle'):
-        item.subtitles.append(URL_SUBTITLE % item_id)
-    item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
-    item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-    item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
-    item.property[
-        'inputstream.adaptive.license_key'] = licence_url + '|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&x-custom-data=%s|R{SSM}|' % xcdata_value
-
-    return item
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, manifest_type="mpd", license_url=license_url)

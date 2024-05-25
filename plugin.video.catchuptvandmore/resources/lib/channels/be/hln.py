@@ -12,4 +12,4 @@ from codequick import Resolver
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    return 'https://dpg-eventstreams.akamaized.net/hlnlive-tzo/streamx/hlnlive.m3u8'
+    return 'https://dpg-eventstreams.akamaized.net/hlnlivesrt-xmr/streamx/hlnlivesrt_720p.m3u8'

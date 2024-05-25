@@ -6,22 +6,46 @@
 
 from __future__ import unicode_literals
 
+import re
+import json
+import urlquick
+
 # noinspection PyUnresolvedReferences
 from codequick import Resolver
 
 from resources.lib import resolver_proxy, web_utils
 
+URL_ROOT = 'https://www.rtvslo.si/tv/vzivo/tv%s'
+API_URL = 'https://api.rtvslo.si/ava/getLiveStream/tv.%s'
+
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
+
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    m3u8 = {
-        'slo1': 'https://31-rtvslo-tv-slo1-int.cdn.eurovisioncdn.net/playlist.m3u8',
-        'slo2': 'https://21-rtvslo-tv-slo2-int.cdn.eurovisioncdn.net/playlist.m3u8',
-        'slo3': 'https://16-rtvslo-tv-slo3-int.cdn.eurovisioncdn.net/playlist.m3u8',
-        'koper': 'https://27-rtvslo-tv-kp-int.cdn.eurovisioncdn.net/playlist.m3u8',
-        'maribor': 'https://25-rtvslo-tv-mb-int.cdn.eurovisioncdn.net/playlist.m3u8',
-        'mmc': 'https://29-rtvslo-tv-mmc-int.cdn.eurovisioncdn.net/playlist.m3u8'
+    shortcut = {
+        'slo1': 's1',
+        'slo2': 's2',
+        'slo3': 's3',
+        'mb1': 'mb',
+        'kp1': 'kp',
+        'mmctv': 'mmc'
     }
 
-    video_url = m3u8[item_id]
-    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")
+    client = urlquick.get(URL_ROOT % shortcut[item_id], headers=GENERIC_HEADERS, max_age=-1)
+    client_id = re.compile('client_id\=(.*?)\&').findall(client.text)[0]
+
+    params = {
+        'callback': 'ava_',
+        'client_id': client_id
+    }
+
+    datas_url = urlquick.get(API_URL % item_id, headers=GENERIC_HEADERS, params=params, max_age=-1)
+    json_datas = datas_url.text
+    startidx = json_datas.find('(')
+    endidx = json_datas.rfind(')')
+    datas = json.loads((json_datas)[startidx + 1:endidx])
+    video_root = datas['response']['mediaFiles'][0]
+    video_url = video_root['streamer'] + video_root['file']
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url)

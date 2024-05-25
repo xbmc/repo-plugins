@@ -8,6 +8,9 @@ from __future__ import unicode_literals
 from builtins import str
 import json
 import re
+import pytz
+import time
+from datetime import datetime
 
 import inputstreamhelper
 from codequick import Listitem, Resolver, Route
@@ -16,7 +19,7 @@ import urlquick
 
 from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
 from resources.lib.menu_utils import item_post_treatment
-
+from resources.lib import web_utils
 
 # TO DO
 
@@ -27,20 +30,36 @@ URL_LIVE_ID = URL_ROOT + '/live/%s'
 URL_TOKEN_ID = URL_ROOT + '/player/%s'
 # Id video
 URL_TOKEN_API = URL_ROOT + '/api/token'
-URL_STREAM = 'https://start-player.npo.nl/video/%s/streams?profile=dash-widevine&quality=npo&tokenId=%s&streamType=broadcast&mobile=0&ios=0&isChromecast=0'
+URL_STREAM = 'https://start-player.npo.nl/video/%s/streams'
 # Id video, tokenId
 URL_SUBTITLE = 'https://rs.poms.omroep.nl/v1/api/subtitles/%s'
 # Id Video
 
 URL_API = 'https://start-api.npo.nl'
 
-URL_CATEGORIES = URL_API + '/page/catalogue?ApiKey=%s'
+URL_CATEGORIES = URL_API + '/page/catalogue'
 # ApiKey
 
 API_KEY = '07896f1ee72645f68bc75581d7f00d54'
 
-URL_IMAGE = 'https://images.poms.omroep.nl/image/s1280/c1280x720/%s.jpg'
+URL_IMAGE = 'https://images.poms.omroep.nl/image/s1280/c1280x720/%s'
 # ImageId
+
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
+
+
+def get_localized_datetime(timestamp):
+    try:
+        utc_datetime = datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
+    except TypeError:
+        utc_datetime = datetime(*(time.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')[0:6]))
+
+    utc_datetime = pytz.utc.localize(utc_datetime)
+
+    local_timezone = pytz.timezone('Europe/Amsterdam')
+    local_datetime = utc_datetime.astimezone(local_timezone)
+
+    return local_datetime
 
 
 @Route.register
@@ -50,10 +69,11 @@ def list_categories(plugin, item_id, **kwargs):
     - Les feux de l'amour
     - ...
     """
-    resp = urlquick.get(URL_CATEGORIES % API_KEY)
+    params = {'ApiKey': API_KEY}
+    resp = urlquick.get(URL_CATEGORIES, params=params, headers=GENERIC_HEADERS, max_age=-1)
     json_parser = json.loads(resp.text)
 
-    for category in json_parser["components"][0]["filters"]:
+    for category in json_parser['components'][0]['filters']:
         category_name = category['title']
         category_filter_argument = category['filterArgument']
 
@@ -69,14 +89,15 @@ def list_categories(plugin, item_id, **kwargs):
 
 @Route.register
 def list_sub_categories(plugin, item_id, category_filter_argument, **kwargs):
-
-    resp = urlquick.get(URL_CATEGORIES % API_KEY)
+    params = {'ApiKey': API_KEY}
+    resp = urlquick.get(URL_CATEGORIES, params=params, headers=GENERIC_HEADERS, max_age=-1)
     json_parser = json.loads(resp.text)
 
-    for category in json_parser["components"][0]["filters"]:
-        if category_filter_argument in category['filterArgument']:
+    for category in json_parser['components'][0]['filters']:
+        if category['filterArgument'] and category_filter_argument in category['filterArgument']:
             for sub_category_datas in category['options']:
                 sub_category_name = sub_category_datas['display']
+
                 sub_category_value = ''
                 if sub_category_datas['value'] is not None:
                     sub_category_value = sub_category_datas['value']
@@ -97,19 +118,24 @@ def list_sub_categories(plugin, item_id, category_filter_argument, **kwargs):
 def list_programs(plugin, item_id, category_filter_argument,
                   sub_category_value, page, **kwargs):
 
-    resp = urlquick.get(URL_CATEGORIES % API_KEY + '&%s=%s&page=%s' %
-                        (category_filter_argument, sub_category_value, page))
+    params = {
+        'ApiKey': API_KEY,
+        'page': page,
+        category_filter_argument: sub_category_value
+    }
+
+    resp = urlquick.get(URL_CATEGORIES, params=params, headers=GENERIC_HEADERS, max_age=-1)
     json_parser = json.loads(resp.text)
 
-    for program_datas in json_parser["components"][1]["data"]["items"]:
+    for program_datas in json_parser['components'][1]['data']['items']:
+        program_title = program_datas['title']
 
-        program_title = program_datas["title"]
-        if 'header' in program_datas["images"]:
-            program_image = URL_IMAGE % program_datas["images"]["header"]["id"]
-        else:
-            program_image = ''
-        program_plot = program_datas["description"]
-        program_url = program_datas["_links"]["page"]["href"]
+        program_image = ''
+        if 'header' in program_datas['images']:
+            program_image = URL_IMAGE % program_datas['images']['header']['id']
+
+        program_plot = program_datas['description']
+        program_url = program_datas['_links']['page']['href']
 
         item = Listitem()
         item.label = program_title
@@ -123,6 +149,7 @@ def list_programs(plugin, item_id, category_filter_argument,
         else:
             item.set_callback(
                 list_videos_episodes, item_id=item_id, program_url=program_url)
+
         item_post_treatment(item)
         yield item
 
@@ -135,122 +162,110 @@ def list_programs(plugin, item_id, category_filter_argument,
 
 @Route.register
 def list_videos_episodes(plugin, item_id, program_url, **kwargs):
-
     resp = urlquick.get(program_url + '?ApiKey=%s' % API_KEY)
     json_parser = json.loads(resp.text)
 
-    video_datas = json_parser["components"][0]["episode"]
-    video_title = video_datas["title"]
-    if 'header' in video_datas["images"]:
-        video_image = URL_IMAGE % video_datas["images"]["header"]["id"]
-    else:
-        video_image = ''
-    video_plot = video_datas["description"]
-    video_id = video_datas["id"]
-    video_duration = video_datas["duration"]
-    date_value = video_datas['broadcastDate'].split('T')[0]
+    video_data = json_parser['components'][0]['episode']
+    video_title = video_data['title']
+
+    video_image = ''
+    if 'header' in video_data['images']:
+        video_image = URL_IMAGE % video_data['images']['header']['id']
+
+    video_plot = video_data['description']
+    video_id = video_data['id']
+    video_duration = video_data['duration']
+
+    broadcast_datetime = get_localized_datetime(video_data['broadcastDate'])
+    date_value = broadcast_datetime.strftime('%Y-%m-%d')
 
     item = Listitem()
     item.label = video_title
     item.art['thumb'] = item.art['landscape'] = video_image
     item.info['plot'] = video_plot
     item.info['duration'] = video_duration
-    item.info.date(date_value, "%Y-%m-%d")
-    item.set_callback(
-        get_video_url,
-        item_id=item_id,
-        video_id=video_id)
+    item.info.date(date_value, '%Y-%m-%d')
+    item.set_callback(get_video_url, item_id=item_id, video_id=video_id)
     item_post_treatment(item, is_playable=True, is_downloadable=False)
     yield item
 
 
 @Route.register
 def list_videos_franchise(plugin, item_id, program_url, **kwargs):
-
     if 'page=' in program_url:
         resp = urlquick.get(program_url + '&ApiKey=%s' % (API_KEY))
         json_parser = json.loads(resp.text)
-
-        for video_datas in json_parser["items"]:
-            if 'title' not in video_datas:
-                continue
-
-            if not video_datas['title']:
-                continue
-
-            subtitle = ''
-            if 'seasonNumber' in video_datas and 'episodeNumber' in video_datas:
-                if video_datas['seasonNumber'] is not None and video_datas['episodeNumber'] is not None:
-                    subtitle = " - S%sE%s" % (
-                        str(video_datas['seasonNumber']),
-                        str(video_datas['episodeNumber']))
-
-            video_title = video_datas["title"] + subtitle
-            if 'header' in video_datas["images"]:
-                video_image = URL_IMAGE % video_datas["images"]["header"]["id"]
-            else:
-                video_image = ''
-            video_plot = video_datas["description"]
-            video_id = video_datas["id"]
-            video_duration = video_datas["duration"]
-            date_value = video_datas['broadcastDate'].split('T')[0]
-
-            item = Listitem()
-            item.label = video_title
-            item.art['thumb'] = item.art['landscape'] = video_image
-            item.info['plot'] = video_plot
-            item.info['duration'] = video_duration
-            item.info.date(date_value, "%Y-%m-%d")
-            item.set_callback(
-                get_video_url,
-                item_id=item_id,
-                video_id=video_id)
-            item_post_treatment(item, is_playable=True, is_downloadable=False)
-            yield item
-
-        if 'next' in json_parser["_links"]:
-            yield Listitem.next_page(
-                item_id=item_id,
-                program_url=json_parser["_links"]['next']['href'])
-
+        response_data = json_parser
     else:
         resp = urlquick.get(program_url.replace('/router', '') + '?ApiKey=%s' % API_KEY)
         json_parser = json.loads(resp.text)
+        response_data = json_parser['components'][2]['data']
 
-        for video_datas in json_parser["components"][2]["data"]["items"]:
-            try:
-                video_title = str(video_datas["title"] + " - S%sE%s" % (
-                    str(video_datas['seasonNumber']),
-                    str(video_datas['episodeNumber'])))
-            except Exception:
-                video_title = str(video_datas["title"])
-            if 'header' in video_datas["images"]:
-                video_image = URL_IMAGE % video_datas["images"]["header"]["id"]
-            else:
-                video_image = ''
-            video_plot = video_datas["description"]
-            video_id = video_datas["id"]
-            video_duration = video_datas["duration"]
-            date_value = video_datas['broadcastDate'].split('T')[0]
+    # Check if there's a second episode on the same day
+    include_time_string = False
+    for video_data in response_data['items']:
+        broadcast_datetime = get_localized_datetime(video_data['broadcastDate'])
 
-            item = Listitem()
-            item.label = video_title
-            item.art['thumb'] = item.art['landscape'] = video_image
-            item.info['plot'] = video_plot
-            item.info['duration'] = video_duration
-            item.info.date(date_value, "%Y-%m-%d")
-            item.set_callback(
-                get_video_url,
-                item_id=item_id,
-                video_id=video_id)
-            item_post_treatment(item, is_playable=True, is_downloadable=False)
-            yield item
+        for ref_video_data in response_data['items']:
+            ref_broadcast_datetime = get_localized_datetime(ref_video_data['broadcastDate'])
+            if (video_data['episodeTitle'] == ref_video_data['episodeTitle']
+                    and video_data['id'] != ref_video_data['id']
+                    and broadcast_datetime.strftime('%Y-%m-%d') == ref_broadcast_datetime.strftime('%Y-%m-%d')):
 
-        if 'next' in json_parser["components"][2]["data"]["_links"]:
-            yield Listitem.next_page(
-                item_id=item_id,
-                program_url=json_parser["components"][2]["data"]["_links"][
-                    'next']['href'])
+                include_time_string = True
+                break
+
+        if include_time_string:
+            break
+
+    for video_data in response_data['items']:
+        if 'title' not in video_data or not video_data['title']:
+            continue
+
+        broadcast_datetime = get_localized_datetime(video_data['broadcastDate'])
+
+        time_string = ''
+        if include_time_string:
+            time_string = ' (%s)' % broadcast_datetime.strftime('%H:%M')
+
+        subtitle = ''
+        if ('seasonNumber' in video_data
+                and 'episodeNumber' in video_data
+                and video_data['seasonNumber']
+                and video_data['episodeNumber']):
+
+            subtitle = ' - S%sE%s' % (
+                str(video_data['seasonNumber']),
+                str(video_data['episodeNumber']))
+
+        video_title = video_data['title'] + time_string + subtitle
+
+        video_image = ''
+        if 'header' in video_data['images']:
+            video_image = URL_IMAGE % video_data['images']['header']['id']
+
+        video_plot = video_data['description']
+        video_id = video_data['id']
+        video_duration = video_data['duration']
+        date_value = broadcast_datetime.strftime('%Y-%m-%d')
+
+        item = Listitem()
+        item.label = video_title
+        item.art['thumb'] = item.art['landscape'] = video_image
+        item.info['plot'] = video_plot
+        item.info['duration'] = video_duration
+        item.info.date(date_value, '%Y-%m-%d')
+        item.set_callback(
+            get_video_url,
+            item_id=item_id,
+            video_id=video_id)
+        item_post_treatment(item, is_playable=True, is_downloadable=False)
+        yield item
+
+    if 'next' in response_data['_links']:
+        yield Listitem.next_page(
+            item_id=item_id,
+            program_url=response_data['_links']['next']['href'])
 
 
 @Resolver.register
@@ -277,39 +292,46 @@ def get_video_url(plugin,
     api_token = json_parser_token['token']
 
     # Build PAYLOAD
-    payload = {"_token": api_token}
+    payload = {'_token': api_token}
+    cookies = {'npo_session': session_token}
 
-    cookies = {"npo_session": session_token}
-
-    resp2 = urlquick.post(
-        URL_TOKEN_ID % video_id, cookies=cookies, data=payload, max_age=-1)
-    json_parser = json.loads(resp2.text)
+    resp = urlquick.post(URL_TOKEN_ID % video_id, cookies=cookies, data=payload, headers=GENERIC_HEADERS, max_age=-1)
+    json_parser = json.loads(resp.text)
     token_id = json_parser['token']
 
-    resp3 = urlquick.get(URL_STREAM % (video_id, token_id), max_age=-1)
-    json_parser2 = json.loads(resp3.text)
+    params = {
+        'profile': 'dash-widevine',
+        'quality': 'npo',
+        'tokenId': token_id,
+        'streamType': 'broadcast',
+        'mobile': '0',
+        'ios': '0',
+        'isChromecast': '0'
+    }
 
-    if "html" in json_parser2 and "Dit programma mag niet bekeken worden vanaf jouw locatie (33)." in json_parser2["html"]:
+    resp = urlquick.get(URL_STREAM % video_id, params=params, headers=GENERIC_HEADERS, max_age=-1)
+    json_parser = json.loads(resp.text)
+
+    if 'html' in json_parser and 'Dit programma mag niet bekeken worden vanaf jouw locatie (33).' in json_parser['html']:
         plugin.notify('ERROR', plugin.localize(30713))
         return False
 
-    if "html" in json_parser2 and "Dit programma is niet (meer) beschikbaar (15)." in json_parser2["html"]:
+    if 'html' in json_parser and 'Dit programma is niet (meer) beschikbaar (15).' in json_parser['html']:
         plugin.notify('ERROR', plugin.localize(30710))
         return False
 
-    licence_url = json_parser2["stream"]["keySystemOptions"][0]["options"][
-        "licenseUrl"]
-    licence_url_header = json_parser2["stream"]["keySystemOptions"][0][
-        "options"]["httpRequestHeaders"]
-    xcdata_value = licence_url_header["x-custom-data"]
+    licence_url = json_parser['stream']['keySystemOptions'][0]['options']['licenseUrl']
+    licence_url_header = json_parser['stream']['keySystemOptions'][0]['options']['httpRequestHeaders']
+    xcdata_value = licence_url_header['x-custom-data']
 
     item = Listitem()
-    item.path = json_parser2["stream"]["src"]
+    item.path = json_parser['stream']['src']
     item.label = get_selected_item_label()
     item.art.update(get_selected_item_art())
     item.info.update(get_selected_item_info())
     if plugin.setting.get_boolean('active_subtitle'):
         item.subtitles.append(URL_SUBTITLE % video_id)
+
     item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
     item.property['inputstream.adaptive.manifest_type'] = 'mpd'
     item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
@@ -338,7 +360,7 @@ def get_live_url(plugin, item_id, **kwargs):
     json_parser_token = json.loads(resp_token.text)
     api_token = json_parser_token['token']
 
-    resp = urlquick.get(URL_LIVE_ID % item_id, max_age=-1)
+    resp = urlquick.get(URL_LIVE_ID % item_id, headers=GENERIC_HEADERS, max_age=-1)
 
     video_id = ''
     list_media_id = re.compile(r'media-id\=\"(.*?)\"').findall(resp.text)
@@ -347,38 +369,41 @@ def get_live_url(plugin, item_id, **kwargs):
             video_id = media_id
 
     # Build PAYLOAD
-    payload = {"_token": api_token}
+    payload = {'_token': api_token}
+    cookies = {'npo_session': session_token}
 
-    cookies = {"npo_session": session_token}
-
-    resp2 = urlquick.post(URL_TOKEN_ID % video_id,
-                          cookies=cookies,
-                          data=payload,
-                          max_age=-1)
-    json_parser = json.loads(resp2.text)
+    resp = urlquick.post(URL_TOKEN_ID % video_id, cookies=cookies, data=payload, headers=GENERIC_HEADERS, max_age=-1)
+    json_parser = json.loads(resp.text)
     token_id = json_parser['token']
 
-    resp3 = urlquick.get(URL_STREAM % (video_id, token_id), max_age=-1)
-    json_parser2 = json.loads(resp3.text)
+    params = {
+        'profile': 'dash-widevine',
+        'quality': 'npo',
+        'tokenId': token_id,
+        'streamType': 'broadcast',
+        'mobile': '0',
+        'ios': '0',
+        'isChromecast': '0'
+    }
+    resp = urlquick.get(URL_STREAM % video_id, params=params, headers=GENERIC_HEADERS, max_age=-1)
+    json_parser = json.loads(resp.text)
 
-    if "html" in json_parser2 and "Vanwege uitzendrechten is het niet mogelijk om deze uitzending buiten Nederland te bekijken." in json_parser2[
-            "html"]:
+    if 'html' in json_parser and 'Vanwege uitzendrechten is het niet mogelijk om deze uitzending buiten Nederland te bekijken.' in json_parser['html']:
         plugin.notify('ERROR', plugin.localize(30713))
         return False
 
-    licence_url = json_parser2["stream"]["keySystemOptions"][0]["options"][
-        "licenseUrl"]
-    licence_url_header = json_parser2["stream"]["keySystemOptions"][0][
-        "options"]["httpRequestHeaders"]
-    xcdata_value = licence_url_header["x-custom-data"]
+    licence_url = json_parser['stream']['keySystemOptions'][0]['options']['licenseUrl']
+    licence_url_header = json_parser['stream']['keySystemOptions'][0]['options']['httpRequestHeaders']
+    xcdata_value = licence_url_header['x-custom-data']
 
     item = Listitem()
-    item.path = json_parser2["stream"]["src"]
+    item.path = json_parser['stream']['src']
     item.label = get_selected_item_label()
     item.art.update(get_selected_item_art())
     item.info.update(get_selected_item_info())
     if plugin.setting.get_boolean('active_subtitle'):
         item.subtitles.append(URL_SUBTITLE % video_id)
+
     item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
     item.property['inputstream.adaptive.manifest_type'] = 'mpd'
     item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'

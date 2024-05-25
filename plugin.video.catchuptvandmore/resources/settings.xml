@@ -32,7 +32,9 @@
             <setting label="30198" type="bool" id="use_ia_hls_stream" default="true" enable="System.HasAddon(inputstream.adaptive)" />
             <setting label="30197" type="action" subsetting="true"  action="Addon.OpenSettings(inputstream.adaptive)" option="close" enable="eq(-1,true)"/>
             <setting label="30199" type="bool" id="use_ytdl_stream" default="false" enable="eq(-2,false) + !System.HasAddon(inputstream.adaptive)"/>
-
+            <setting label="30151" type="bool" id="device_l1" default="false" enable="System.HasAddon(inputstream.adaptive)">
+                <level>3</level>
+            </setting>
 
         <!-- Content -->
         <setting label="30152" type="lsep" />
@@ -48,24 +50,23 @@
             <!--<setting label="" type="bool" id="wo" default="true" visible="false"/>-->
 
                 <setting label="30153" type="labelenum" id="arte.language" values="FR|DE|EN|ES|PL|IT" default="FR"/>
-                <setting label="30155" type="labelenum" id="euronews.language" values="FR|EN|AR|DE|IT|ES|PT|RU|RO|TR|FA|GR|HU" default="FR"/>
+                <setting label="30155" type="labelenum" id="euronews.language" values="FR|EN|AR|DE|IT|ES|PT|RU|RO|TR|FA|GR|HU|BG" default="FR"/>
                 <setting label="30154" type="labelenum" id="france24.language" values="FR|EN|AR|ES" default="FR"/>
                 <setting label="30157" type="labelenum" id="dw.language" values="EN|DE|DE+|ES|AR" default="EN"/>
                 <setting label="30161" type="labelenum" id="qvc.language" values="JP|DE|IT|UK|US" default="UK"/>
                 <setting label="30162" type="labelenum" id="nhkworld.language" values="Outside Japan|In Japan" default="Outside Japan"/>
                 <setting label="30163" type="labelenum" id="cgtn.language" values="FR|EN|AR|ES|RU" default="FR"/>
                 <setting label="30166" type="labelenum" id="rt.language" values="FR|EN|AR|ES" default="FR"/>
-                <setting label="30177" type="enum" id="tv5monde.region" lvalues="30178|30179" default="30178"/>
+                <setting label="30177" type="enum" id="tv5monde.region" lvalues="30178|30179" default="0"/>
                 <setting label="30173" type="labelenum" id="tv5mondeplus.language" values="fr|en|de|es-LA" default="fr"/>
 
             <!-- French channels -->
             <setting label="30080" type="lsep" subsetting="true" visible="eq(1,true)"/>
             <!--<setting label="" type="bool" id="fr" default="true" visible="false"/>-->
 
-                <setting label="30176" type="enum" id="canalplusgroup" lvalues="30190|30191" default="30190"/>
                 <setting label="30158" type="labelenum" id="france3regions.language" values="Alpes|Alsace|Aquitaine|Auvergne|Bourgogne|Bretagne|Centre-Val de Loire|Chapagne-Ardenne|Corse|Côte d'Azur|Franche-Comté|Languedoc-Roussillon|Limousin|Lorraine|Midi-Pyrénées|Nord-Pas-de-Calais|Basse-Normandie|Haute-Normandie|Paris Île-de-France|Pays de la Loire|Picardie|Poitou-Charentes|Provence-Alpes|Rhône-Alpes|Nouvelle-Aquitaine" default="Alpes"/>
                 <setting label="30159" type="labelenum" id="la_1ere.language" values="Guadeloupe|Guyane|Martinique|Mayotte|Nouvelle Calédonie|Polynésie|Réunion|St-Pierre et Miquelon|Wallis et Futuna|Outre-mer" default="Guadeloupe"/>
-                <setting label="30171" type="labelenum" id="BFM_regions.language" values="BFM ALSACE|BFM DICI HAUTE-PROVENCE|BFM Grand Lille|BFM Grand Littoral|BFM Lyon|BFM MARSEILLE PROVENCE|BFM NICE COTE D'AZUR|BFM PARIS ILE-DE-FRANCE|BFM TOULON VAR" default="BFM PARIS ILE-DE-FRANCE"/>
+                <setting label="30171" type="labelenum" id="BFM_regions.language" values="BFM ALSACE|BFM DICI HAUTE-PROVENCE|BFM Grand Lille|BFM Grand Littoral|BFM Lyon|BFM MARSEILLE PROVENCE|BFM NICE COTE D'AZUR|BFM NORMANDIE|BFM PARIS ILE-DE-FRANCE|BFM TOULON VAR" default="BFM PARIS ILE-DE-FRANCE"/>
                 <setting label="30175" type="labelenum" id="equidia-racing.language" values="1|2|3|4|5|6|7|8" default="1"/>
 
             <!-- Spain channels -->
@@ -113,8 +114,8 @@
         <setting label="30080" type="lsep" subsetting="true" visible="eq(1,true)"/>
         <!--<setting label="" type="bool" id="fr" default="true" visible="false"/>-->
 
-            <setting label="30240" type="text" id="nrj.login" default=""/>
-            <setting label="30241" type="text" id="nrj.password" option="hidden" default=""/>
+            <setting label="30260" type="text" id="mytf1.login" default=""/>
+            <setting label="30261" type="text" id="mytf1.password" option="hidden" default=""/>
 
             <setting label="30244" type="text" id="6play.login" default=""/>
             <setting label="30245" type="text" id="6play.password" option="hidden" default=""/>
@@ -143,6 +144,11 @@
             <setting label="30250" type="text" id="uktvplay.login" default=""/>
             <setting label="30251" type="text" id="uktvplay.password" option="hidden" default=""/>
 
+        <setting label="30034" type="lsep" subsetting="true" visible="eq(1,true)"/>
+
+            <setting label="30262" type="text" id="sfrtv.login" default=""/>
+            <setting label="30263" type="text" id="sfrtv.password" option="hidden" default=""/>
+
         <setting label="30254" type="lsep" subsetting="true" visible="eq(1,true)"/>
 
             <setting label="30255" type="text" id="schedulesdirect.login" default=""/>
@@ -170,16 +176,6 @@
             <setting type="text" id="iptv.channels_uri" default="plugin://plugin.video.catchuptvandmore/resources/lib/iptvmanager/channels/" visible="false"/>
             <setting type="text" id="iptv.epg_uri" default="plugin://plugin.video.catchuptvandmore/resources/lib/iptvmanager/epg/" visible="false"/>
     </category>
-
-
-    <!-- Advanced settings / Tools and other things to save -->
-    <category label="30005">
-        <setting label="30372" type="bool" id="log_pop_up" default="true"/>
-        <setting label="30370" type="action" action="RunPlugin(plugin://plugin.video.catchuptvandmore/resources/lib/addon_utils/clear_cache/)"/>
-        <setting label="" type="bool" id="show_hidden_items_information" default="true" visible="false"/>
-        <setting label="" type="bool" id="show_live_tv_m3u_info" default="true" visible="false"/>
-    </category>
-    <!-- Advanced settings / Tools and other things to save -->
 
 
 

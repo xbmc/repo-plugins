@@ -17,7 +17,7 @@ from codequick import Listitem, Resolver, Route
 import htmlement
 import urlquick
 
-from resources.lib import download, resolver_proxy
+from resources.lib import download, resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 
 
@@ -43,6 +43,8 @@ URL_OOYALA_VOD = 'https://player.ooyala.com/sas/player_api/v2/authorization/' \
 URL_PCODE_EMBED_TOKEN = 'http://www.skysports.com/watch/video/auth/v4/23'
 
 VIDEO_PER_PAGE = 12
+
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 
 @Route.register
@@ -199,7 +201,10 @@ def get_video_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE_SKYNEWS)
-    live_id = re.compile(r'www.youtube.com/embed/(.*?)\?').findall(
-        resp.text)[0]
-    return resolver_proxy.get_stream_youtube(plugin, live_id, False)
+    resp = urlquick.get(URL_LIVE_SKYNEWS, headers=GENERIC_HEADERS, max_age=-1)
+    player = resp.parse().find(".//div[@class='sdc-site-video sdc-article-widget callfn']")
+    data_account = player.get('data-account-id')
+    data_player = player.get('data-player-id')
+    data_video_id = player.get('data-video-id')
+
+    return resolver_proxy.get_brightcove_video_json(plugin, data_account, data_player, data_video_id)

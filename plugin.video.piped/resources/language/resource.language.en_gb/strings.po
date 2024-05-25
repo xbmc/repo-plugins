@@ -94,10 +94,6 @@ msgctxt "#30019"
 msgid "Channels"
 msgstr ""
 
-msgctxt "#3001"
-msgid ""
-msgstr ""
-
 msgctxt "#30100"
 msgid "Instance"
 msgstr ""
@@ -184,4 +180,8 @@ msgstr ""
 
 msgctxt "#30404"
 msgid "Load subtitles"
+msgstr ""
+
+msgctxt "#30405"
+msgid "Video codec priority"
 msgstr ""

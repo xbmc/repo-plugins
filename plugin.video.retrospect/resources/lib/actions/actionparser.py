@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import random
+import time
 
 from resources.lib.retroconfig import Config
 from resources.lib.logger import Logger
@@ -195,7 +196,10 @@ class ActionParser(object):
             # we should not use the store
             return None
 
-        return channel.guid if parent_item is None else parent_item.guid
+        # If it was a channel as root, append a timestamp, otherwise the containers get overridden
+        # with each call to the main channel (the `channel.guid` will always be the same and hence
+        # it will generate the same Pickle Guid.
+        return f"{channel.guid}-{hex(int(time.time())).upper()[2:]}" if parent_item is None else parent_item.guid
 
     def __get_parameters(self, query_string):
         """ Extracts the actual parameters as a dictionary from the passed in querystring.

@@ -42,7 +42,7 @@ class Authenticator(object):
         logged_on_user = res.username
 
         # Check if the existing login is the same as the requested one.
-        if logged_on_user and logged_on_user != username:
+        if logged_on_user and logged_on_user.lower() != username.lower():
             Logger.warning("Existing but different authenticated user (%s) found. Logging of first.",
                            self.__safe_log(logged_on_user))
             self.__hander.log_off(logged_on_user)

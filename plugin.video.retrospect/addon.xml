@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.7.10"
+        version="5.7.11"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -123,22 +123,19 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.7.10 - Changelog - 2024-04-27[/B]
+        <news>[B]Retrospect v5.7.11 - Changelog - 2024-05-25[/B]
 
-This update includes minor fixes for some channels.
+Fixed an issue with Kodi Favourites that are in the root of a channel and fixed a case-insensitive comparison of usernames.
 
 [B]Framework related[/B]
-_None_
+* Fixed: Case-insensitive comparison of logged on users (Fixes #1791).
+* Fixed: Rootfolders of channels could not be added to Kodi favourites as they broke fast (Fixes #1794).
 
 [B]GUI/Settings/Language related[/B]
 _None_
 
 [B]Channel related[/B]
-* Fixed: RTV NH Live stream (Fixes #1782).
-* Updated: Posters for Dutch channels.
-* Removed: Apple Movie Trailers (Fixes #1785).
-* Changed: Default to Dash streams for TV4.
-* Fixed: NRK broken search
+_None_
 
         </news>
         <assets>

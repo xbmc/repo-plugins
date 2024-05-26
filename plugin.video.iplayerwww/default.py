@@ -26,7 +26,7 @@ except ImportError as error:
 
 
 def get_params():
-    param = []
+    param = {}
     paramstring = sys.argv[2]
     if len(paramstring) >= 2:
         params = sys.argv[2]

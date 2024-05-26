@@ -1,3 +1,7 @@
+v4.1.1
+Fixed initialization of param dictionary.
+Fix for JSON changes on the website.
+
 v4.1.0
 New features:
 - Watching status synced when logged in. Thus, resuming is possible on other devices using the same BBCiD.

@@ -1,3 +1,7 @@
+v.1.2.1
+- Fix: Listings of subscription films failed with error Not Found.
+- Some other minor issues.
+
 v.1.2.0
 - Fix: Some folders fail to open with parse error.
 - Added support for all available subtitles in various languages.

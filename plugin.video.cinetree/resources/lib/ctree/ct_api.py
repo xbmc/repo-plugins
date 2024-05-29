@@ -73,6 +73,23 @@ def get_jsonp(path):
     return resp_dict
 
 
+def get_recommended():
+    """Return the uuids of the hero items on the subscription page"""
+    data, _ = storyblok.get_url('stories//films-en-documentaires',
+                                params={'from_release': 'undefined', 'resolve_relations': 'menu,selectedBy'})
+    page_top = data['story']['content']['top']
+    for section in page_top:
+        if section['component'] == 'row-featured-films':
+            return section['films']
+    return []
+
+
+def get_subscription_films():
+    """Return a list of ID's of the current subscription films"""
+    resp = fetch.get_json('https://api.cinetree.nl/films/svod')
+    return resp
+
+
 def create_stream_info_url(film_uuid, slug=None):
     """Return the url to the stream info (json) document.
 
@@ -140,7 +157,7 @@ def get_watched_films(finished=False):
 
     for film in my_films:
         duration = utils.duration_2_seconds(film['content'].get('duration', 0))
-        if duration - history[film['uuid']]['playtime'] < min(20, duration * 0.02):
+        if duration - history[film['uuid']]['playtime'] < max(20, duration * 0.02):
             finished_films.append(film)
         else:
             watched_films.append(film)

@@ -1,0 +1,25 @@
+{
+    "name"              : "BBC iPlayer",
+    "plugin"            : "plugin.video.iplayerwww",
+    "priority"          : 1000,
+    "is_resolvable"     : "true",
+    "assert"            : {
+                            "play_movie":       ["title"],
+                            "play_episode":     ["showname", "season", "episode"]
+                          },
+    "play_movie"        : [
+                            "plugin://plugin.video.iplayerwww",
+                            {"label": "(?i).*Categories.*"},
+                            {"label": "(?i).*Films.*"},
+                            {"dialog": "true", "strict": "true", "label": "(?i).*{title}.*"}
+                          ],
+    "play_episode"      : [
+                            "plugin://plugin.video.iplayerwww",
+                            {"label": "(?i).*Programme List A-Z.*"},
+                            {"label": "(?i){showname[0]}"},
+                            {"label": "(?i).*{showname}.*available$"},
+                            {"return": "true", "label": "(?i).*{episode}\\. {title}.*"},
+                            {"dialog": "true", "label": "(?i).*Series {season}"},
+                            {"dialog": "true", "label": "(?i).*{episode}\\. {title}.*"}
+                          ]
+}

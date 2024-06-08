@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="dialog">
+    <defaultcontrol always="true">9902</defaultcontrol>
+    <onload>SetProperty(TMDbHelper.ServicePause,1)</onload>
+    <controls>
+
+        <control type="group">
+            <include>Animation_Right_Delay</include>
+            <include content="List_Button_Row">
+                <param name="id">9902</param>
+                <param name="orientation">vertical</param>
+                <param name="offset_y">40</param>
+                <param name="item_w">360</param>
+                <param name="itemlayout_w">400</param>
+                <param name="itemlayout_include">Layout_DiscoverButton</param>
+                <focusposition>1</focusposition>
+                <movement>5</movement>
+                <top>160</top>
+                <bottom>60</bottom>
+                <onright>61</onright>
+                <preloaditems>0</preloaditems>
+            </include>
+
+
+
+            <control type="group">
+                <include>Dimension_Info</include>
+                <control type="group">
+                    <left>440</left>
+                    <!-- <left>624</left> -->
+                    <control type="label" id="9901">
+                        <aligny>center</aligny>
+                        <height>80</height>
+                        <textcolor>main_fg_100</textcolor>
+                        <font>font_weatherlabel</font>
+                    </control>
+                    <control type="textbox" id="9903">
+                        <top>100</top>
+                        <align>left</align>
+                        <textcolor>main_fg_70</textcolor>
+                        <font>font_plotbox_dialog</font>
+                        <pagecontrol>61</pagecontrol>
+                        <autoscroll delay="8000" time="4000" repeat="12000">!Control.HasFocus(61)</autoscroll>
+                        <bottom>120</bottom>
+                        <right>400</right>
+                    </control>
+                    <control type="image" id="9905">
+                        <width>200</width>
+                        <height>40</height>
+                        <bottom>0</bottom>
+                        <right>0</right>
+                        <aspectratio align="right">keep</aspectratio>
+                    </control>
+                    <control type="textbox" id="9904">
+                        <right>80</right>
+                        <align>left</align>
+                        <textcolor>main_fg_70</textcolor>
+                        <font>font_mini</font>
+                        <bottom>0</bottom>
+                        <height>80</height>
+                        <aligny>center</aligny>
+                    </control>
+                    <control type="group">
+                        <bottom>view_pad</bottom>
+                        <right>0</right>
+                        <width>320</width>
+                        <visible>!String.IsEmpty(Window.Property(Image))</visible>
+                        <control type="image">
+                            <top>80</top>
+                            <aspectratio align="center" aligny="top">keep</aspectratio>
+                            <texture background="true">$INFO[Window.Property(Image)]</texture>
+                            <bottom>160</bottom>
+                        </control>
+                        <control type="textbox">
+                            <aligny>center</aligny>
+                            <align>center</align>
+                            <height>120</height>
+                            <bottom>0</bottom>
+                            <textcolor>main_fg_100</textcolor>
+                            <font>font_plotbox_mini</font>
+                            <label>$INFO[Window.Property(ImageText)]</label>
+                        </control>
+                    </control>
+                </control>
+            </control>
+
+            <control type="scrollbar" id="61">
+                <onleft>9902</onleft>
+                <onright>9902</onright>
+                <orientation>vertical</orientation>
+                <width>8</width>
+                <top>280</top>
+                <bottom>view_top</bottom>
+                <centerright>440</centerright>
+                <include content="Object_TextureSliderBackground" condition="!Skin.String(DividerStyle,Fade)">
+                    <param name="colordiffuse">00ffffff</param>
+                    <param name="border">4</param>
+                    <param name="texture">scrollbar/scrollv_line.png</param>
+                </include>
+                <texturesliderbackground colordiffuse="main_fg_12" border="4">scrollbar/scrollv_line.png</texturesliderbackground>
+                <texturesliderbar colordiffuse="00ffffff" border="4">scrollbar/scrollv_line.png</texturesliderbar>
+                <include>Texture_Scrollbar_V</include>
+                <visible allowhiddenfocus="true">Control.HasFocus(61)</visible>
+            </control>
+        </control>
+
+        <include content="Furniture_Top_Left">
+            <param name="label" value="Wikipedia" />
+        </include>
+        <include>Furniture_Top_Right</include>
+
+    </controls>
+</window>

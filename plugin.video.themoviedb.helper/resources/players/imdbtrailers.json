@@ -1,0 +1,22 @@
+{
+    "name"              : "IMDb Trailers",
+    "plugin"            : "plugin.video.imdb.trailers",
+    "priority"          : 500,
+    "is_resolvable"     : "true",
+    "play_movie"        : [
+                            "plugin://plugin.video.imdb.trailers/?action=search_word&keyword={title_escaped}",
+                            {"title": "{title}"}
+                          ],
+    "search_movie"      : [
+                            "plugin://plugin.video.imdb.trailers/?action=search_word&keyword={title_escaped}",
+                            {"dialog": "true"}
+                          ],
+    "play_episode"      : [
+                            "plugin://plugin.video.imdb.trailers/?action=search_word&keyword={showname_escaped}",
+                            {"title": "{showname}"}
+                          ],
+    "search_episode"    : [
+                            "plugin://plugin.video.imdb.trailers/?action=search_word&keyword={showname_escaped}",
+                            {"dialog": "true"}
+                          ]
+}

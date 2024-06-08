@@ -1,0 +1,31 @@
+{
+    "name"              : "Composite",
+    "plugin"            : "plugin.video.composite_for_plex",
+    "priority"          : 200,
+    "assert"            : {
+                            "play_movie":       ["title", "year"],
+                            "play_episode":     ["title", "showname", "season", "episode"],
+                            "search_movie":     ["title"],
+                            "search_episode":   ["title"]
+                          },
+    "fallback"          : {
+                            "play_movie": "composite_for_plex.json search_movie",
+                            "play_episode": "composite_for_plex.json search_episode"
+                          },
+    "play_movie"        : [
+                            "plugin://plugin.video.composite_for_plex/?mode=32&video_type=movie&query={title}",
+                            {"title": "{title}", "year": "{year}"}
+                          ],
+    "play_episode"      : [
+                            "plugin://plugin.video.composite_for_plex/?mode=32&video_type=episode&query={title}",
+                            {"showtitle": "{showname}", "season": "{season}", "episode": "{episode}"}
+                          ],
+    "search_movie"      : [
+                            "plugin://plugin.video.composite_for_plex/?mode=32&video_type=movie&query={title}",
+                            {"dialog": "auto"}
+                          ],
+    "search_episode"    : [
+                            "plugin://plugin.video.composite_for_plex/?mode=32&video_type=episode&query={title}",
+                            {"dialog": "auto"}
+                          ]
+}

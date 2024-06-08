@@ -1,0 +1,25 @@
+{
+    "name" : "EmbyCon",
+    "plugin" : "plugin.video.embycon",
+    "priority" : 200,
+    "assert": {"play_episode": ["epid"]},
+    "fallback": {"play_movie": "embycon.json search_movie",
+                 "play_episode": "embycon.json search_episode",
+                 "search_episode": "embycon.parentid.json search_episode"},
+    "play_movie" : [
+                    "plugin://plugin.video.embycon/?content_type=video&media_type=movies&mode=GET_CONTENT&url=%7Bserver%7D%2Femby%2FUsers%2F%7Buserid%7D%2FItems%3FIncludeItemTypes%3Dmovie%26Recursive%3Dtrue%26fields%3DMediaStreams%26ImageTypeLimit%3D1%26AnyProviderIdEquals%3Dtvdb.{tvdb},imdb.{imdb},tmdb.{tmdb},trakt.{trakt}",
+                    {"dialog": "auto"}
+                   ],
+    "search_movie" : [
+                    "plugin://plugin.video.embycon/?content_type=video&mode=GET_CONTENT&media_type=movies&url=%7Bserver%7D%2Femby%2FUsers%2F%7Buserid%7D%2FItems%3FIncludeItemTypes%movie%26IncludeMedia%3Dtrue%26filters%3DIsNotFolder%26fields%3DMediaStreams%26Recursive%3Dtrue%26Years%3D{year}%26ImageTypeLimit%3D1%26Limit%3D16%26searchTerm%3D{title_+}",
+                    {"dialog": "auto"}
+                   ],
+    "play_episode" : [
+                      "plugin://plugin.video.embycon/?content_type=video&mode=GET_CONTENT&media_type=episodes&url=%7Bserver%7D%2Femby%2FUsers%2F%7Buserid%7D%2FItems%3FIncludeItemTypes%3Depisode%26filters%3DIsNotFolder%26fields%3DMediaStreams%26Recursive%3Dtrue%26ImageTypeLimit%3D1%26Limit%3D16%26AnyProviderIdEquals%3Dtvdb.{epid}",
+                      {"dialog":"auto"}
+                    ],
+     "search_episode" : [
+                      "plugin://plugin.video.embycon/?content_type=video&mode=GET_CONTENT&media_type=episodes&url=%7Bserver%7D%2Femby%2FUsers%2F%7Buserid%7D%2FItems%3FYears%3D{year}%26IncludeItemTypes%3Depisode%26IncludeMedia%3Dtrue%26filters%3DIsNotFolder%26fields%3DMediaStreams%26Recursive%3Dtrue%26ImageTypeLimit%3D1%26MinPremiereDate%3D{premiered}T00:00:00%26MaxPremiereDate%3D{premiered}T23:59:59%26searchTerm%3D{title_escaped+}%26Limit%3D16",
+                      {"dialog":"auto"}
+                    ]
+}

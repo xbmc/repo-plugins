@@ -1,0 +1,9 @@
+{
+    "name" : "JellyCon (by show name)",
+    "plugin" : "plugin.video.jellycon",
+    "priority" : 200,
+    "search_episode" : [
+        "plugin://plugin.video.jellycon/?content_type=video&mode=NEW_SEARCH&item_type=series&query={showname}",
+        {"dialog":"auto"}
+    ]
+}

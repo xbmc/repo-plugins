@@ -1,0 +1,25 @@
+{
+    "name"          : "UPnP",
+    "plugin"        : "xbmc.core",
+    "icon"          : "{}/resources/icons/other/upnp.png",
+    "priority"      : 10000,
+    "is_resolvable" : "true",
+    "play_movie"    : [
+                        "upnp://",
+                        {"label": "Kodi.*"},
+                        {"label": "Video Library"},
+                        {"label": "Movies"},
+                        {"label": "Titles"},
+                        {"title": "{title}", "year": "{year}"}
+                      ],
+    "play_episode"  : [
+                        "upnp://",
+                        {"label": "Kodi.*"},
+                        {"label": "Video Library"},
+                        {"label": "TV shows"},
+                        {"label": "Titles"},
+                        {"label": "{showname}"},
+                        {"label": ".* {season}"},
+                        {"season": "{season}", "episode": "{episode}"}
+                      ]
+}

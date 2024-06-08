@@ -1,0 +1,48 @@
+[
+    {
+        "id": 496243,
+        "rank": 1,
+        "adult": 0,
+        "title": "Parasite",
+        "imdb_id": "tt6751668",
+        "mediatype": "movie",
+        "release_year": 2019,
+        "language": "en",
+        "spoken_language": "en"
+    },
+    {
+        "id": 361743,
+        "rank": 2,
+        "adult": 0,
+        "title": "Top Gun: Maverick",
+        "imdb_id": "tt1745960",
+        "mediatype": "movie",
+        "release_year": 2022,
+        "language": "en",
+        "spoken_language": "en"
+    },
+    {
+        "id": 1399,
+        "rank": 3,
+        "adult": 0,
+        "title": "Game of Thrones",
+        "mediatype": "show"
+    },
+    {
+        "id": 1399,
+        "rank": 4,
+        "adult": 0,
+        "description": "GOT: Season 2",
+        "mediatype": "season",
+        "season": 2
+    },
+    {
+        "id": 1399,
+        "rank": 5,
+        "adult": 0,
+        "description": "GOT: Season 2 Episode 4",
+        "mediatype": "episode",
+        "season": 2,
+        "episode": 4
+    }
+]

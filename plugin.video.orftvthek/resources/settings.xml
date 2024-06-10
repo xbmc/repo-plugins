@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <category label="30062">
-        <setting id="autoPlayPrompt" type="bool" label="30028" visible="eq(3,false)" default="false" />
-        <setting id="useSubtitles" type="bool" label="30029" default="false" />
-        <setting id="enableBlacklist" type="bool" label="30043" visible="eq(1,false)" default="false" />
-        <setting id="useServiceAPI" type="bool" label="30026" default="false" />
-        <setting id="showLiveStreamSchedule" label="30061" type="bool" visible="eq(-1,true)" default="false" />
-        <setting id="usePlayAllPlaylist" label="30058" type="bool" default="true" />
-        <setting id="userAgent" default="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" visible="false" />
+    <category label="30101">
+        <setting id="useSubtitles" type="bool" label="30102" default="false" />
+        <setting id="hideOEGS" type="bool" label="30103" default="false" />
+        <setting id="hideAD" type="bool" label="30104" default="false" />
+        <setting id="useTimeshift" type="bool" label="30152" default="true" />
+        <setting id="useSegments" type="bool" label="30149" default="true" />
+        <setting id="showSegments" type="bool" label="30151" visible="eq(-1,true)" default="false" />
+        <setting id="pagerLimit" type="labelenum" values="25|50|100|150" label="30105" option="int" default="50"/>
+        <setting id="userAgent" default="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36" visible="false" />
+    </category>
+    <category label="30106">
+        <setting label="30107" type="action" action="RunPlugin(plugin://plugin.video.orftvthek/dialog/reload_cache)"/>
+        <setting id="maxCacheAge" type="labelenum" values="1|2|3|4|5|6|7" label="30108" option="int" default="1"/>
+        <setting type="sep"/>
+        <setting label="30109" type="action" action="RunPlugin(plugin://plugin.video.orftvthek/dialog/clear_search_history)"/>
     </category>
 </settings>

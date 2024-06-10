@@ -1,3 +1,36 @@
+v1.0.2 (2024-06-08)
+- new Livestream (timeshift)
+- added setting to use old livestream format
+- LF conversion
+- list callback fix main menu
+- add license
+- forum fix addon.xml
+
+v1.0.1 beta (2024-06-05)
+- fix routing requirement
+- show segment option added
+- cache reload fix
+- related video option
+- fix UA stream errors (#6)
+- orf tvthek has been disabled
+
+v1.0.0 beta (2024-01-06)
+- inital ORF ON addon
+- beta version
+- most stuff is working but everything needs to be tested a little more
+- orf on is still in beta so stuff might change until the final release in april 2024
+- translation stuff is still missing
+
+* 0.12.12
+ - ORF TVthek is down and replaced by ORF On
+ - ServiceAPI is forced on this version
+
+* 0.12.11
+ - Major API Change on ServiceAPI regarding assets and json structure (#137)
+
+* 0.12.10
+ - fixed livestream multistream not available #133
+
 * 0.12.9
  - fixed livestream endpoint changes serviceapi
 

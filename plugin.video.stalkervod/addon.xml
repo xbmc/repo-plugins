@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.stalkervod" name="Stalker VOD Client" version="0.0.6" provider-name="rickey">
+<addon id="plugin.video.stalkervod" name="Stalker VOD Client" version="0.0.7" provider-name="rickey">
 	<requires>
 		<import addon="xbmc.python" version="3.0.1"/>
 		<import addon="script.module.requests" version="2.27.1"/>
@@ -24,7 +24,7 @@
 			<screenshot>resources/media/screenshot_4.png</screenshot>
 		</assets>
 		<news>
-v0.0.6 (2024-04-06)
+v0.0.7  (2024-06-10)
 - Bug fix
 		</news>
 	</extension>

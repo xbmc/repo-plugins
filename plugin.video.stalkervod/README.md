@@ -1,6 +1,8 @@
 # Stalker VOD Kodi add-on
 **plugin.video.stalkervod** is a [Kodi](https://kodi.tv/) add-on for Stalker platform IPTV Client. You can watch Video On-Demand as well as TV Channels.
 
+v0.0.7 - Bug fix
+
 v0.0.6 - Bug fix
 
 v0.0.5 - Fix for portals with no stalker_portal in context path

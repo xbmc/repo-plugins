@@ -183,7 +183,7 @@ class DateHelper(object):
         return aware_datetime
 
     @staticmethod
-    def get_date_from_string(value, date_format="%Y-%m-%dT%H:%M:%S+00:00"):
+    def get_date_from_string(value: str, date_format: str = "%Y-%m-%dT%H:%M:%S+00:00", fallback_format: str = None) -> time.struct_time:
         """ Converts a formatted date-time string to a time struct.
 
         time.struct_time values:
@@ -208,7 +208,12 @@ class DateHelper(object):
 
         """
 
-        return time.strptime(value, date_format)
+        try:
+            return time.strptime(value, date_format)
+        except:
+            if fallback_format:
+                return time.strptime(value, fallback_format)
+            raise
 
     @staticmethod
     def __get_month_from_name(month, language, short=True):

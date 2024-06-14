@@ -1071,7 +1071,7 @@ class Channel:
         if not data_parsers:
             # Let's use a fallback
             key = "*"
-            data_parsers = self.dataParsers.get(key, None)
+            data_parsers = self.dataParsers.get(key, [])
 
         if parser_label:
             data_parsers = [d for d in data_parsers if d.Label == parser_label]

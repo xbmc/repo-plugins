@@ -9,7 +9,7 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 from .globals import G
-from .utils import ask_for_input
+from .utils import ask_for_input, get_int_value
 from .api import Api
 
 
@@ -94,7 +94,8 @@ class StalkerAddon:
             list_item.setProperty('IsPlayable', 'true')
             url = G.get_plugin_url({'action': 'tv_play', 'cmd': video['cmd']})
             directory_items.append((url, list_item, False))
-        if int(videos['total_items']) > item_count:
+        total_items = get_int_value(videos, 'total_items')
+        if total_items > item_count:
             StalkerAddon.__add_navigation_items(params, videos, directory_items)
             item_count = item_count + 2
         xbmcplugin.addDirectoryItems(G.get_handle(), directory_items, item_count)
@@ -138,8 +139,12 @@ class StalkerAddon:
                 list_item.addContextMenuItems([('Add to favorites', f'RunPlugin({url}, False)')])
 
             is_folder = False
-            poster_url = G.portal_config.portal_base_url + video['screenshot_uri'] \
-                if isinstance(video['screenshot_uri'], str) else None
+            poster_url = None
+            if 'screenshot_uri' in video and isinstance(video['screenshot_uri'], str):
+                if video['screenshot_uri'].startswith('http'):
+                    poster_url = video['screenshot_uri']
+                else:
+                    poster_url = G.portal_config.portal_base_url + video['screenshot_uri']
             video_info = list_item.getVideoInfoTag()
             if video['series']:
                 url = G.get_plugin_url({'action': 'sub_folder', 'video_id': video['id'], 'start': video['series'][0], 'end': video['series'][-1],
@@ -148,15 +153,17 @@ class StalkerAddon:
                 video_info.setMediaType('season')
             else:
                 url = G.get_plugin_url({'action': 'play', 'video_id': video['id'], 'series': 0})
-                if video['time'] and video['time'].isnumeric() and video['time'] != '0':
-                    video_info.setDuration(int(video['time']) * 60)
+                time = get_int_value(video, 'time')
+                if time != 0:
+                    video_info.setDuration(time * 60)
                 video_info.setMediaType('movie')
                 list_item.setProperty('IsPlayable', 'true')
 
             video_info.setTitle(video['name'])
             video_info.setOriginalTitle(video['name'])
             video_info.setSortTitle(video['name'])
-            video_info.setCountries([video['country']])
+            if 'country' in video:
+                video_info.setCountries([video['country']])
             video_info.setDirectors([video['director']])
             video_info.setPlot(video['description'])
             video_info.setPlotOutline(video['description'])
@@ -164,12 +171,14 @@ class StalkerAddon:
             video_info.setCast(actors)
             video_info.setLastPlayed(video['last_played'])
             video_info.setDateAdded(video['added'])
-            if video['year'].isdigit():
-                video_info.setYear(int(video['year']))
+            year = get_int_value(video, 'year')
+            if year != 0:
+                video_info.setYear(year)
             list_item.setArt({'poster': poster_url})
             directory_items.append((url, list_item, is_folder))
         # Add navigation items
-        if int(videos['total_items']) > item_count:
+        total_items = get_int_value(videos, 'total_items')
+        if total_items > item_count:
             StalkerAddon.__add_navigation_items(params, videos, directory_items)
             item_count = item_count + 2
         xbmcplugin.addDirectoryItems(G.get_handle(), directory_items, item_count)
@@ -178,26 +187,28 @@ class StalkerAddon:
     @staticmethod
     def __add_navigation_items(params, videos, directory_items):
         """Add navigation list items"""
-        page = params['page']
-        total_pages = int(math.ceil(float(videos['total_items']) / float(videos['max_page_items'])))
+        page = int(params['page'])
+        total_items = get_int_value(videos, 'total_items')
+        max_page_items = get_int_value(videos, 'max_page_items')
+        total_pages = int(math.ceil(float(total_items) / float(max_page_items)))
         _max_page_limit = G.addon_config.max_page_limit
         if _max_page_limit > 1:
             total_pages = total_pages if (total_pages % _max_page_limit) == 0 else total_pages + _max_page_limit - (
                     total_pages % _max_page_limit)
-        label = '<< Last Page' if int(page) == 1 else '<< Previous Page'
+        label = '<< Last Page' if page == 1 else '<< Previous Page'
         list_item = xbmcgui.ListItem(label)
         list_item.setArt({'thumb': G.get_custom_thumb_path('pagePrevious.png')})
         list_item.setProperty('specialsort', 'top')
-        prev_page = total_pages - _max_page_limit + 1 if int(page) == 1 else int(page) - _max_page_limit
+        prev_page = total_pages - _max_page_limit + 1 if page == 1 else page - _max_page_limit
         params.update({'page': prev_page, 'update_listing': True})
         url = G.get_plugin_url(params)
         directory_items.insert(0, (url, list_item, True))
 
-        label = 'First Page >>' if int(page) == total_pages - _max_page_limit + 1 else 'Next Page >>'
+        label = 'First Page >>' if page == total_pages - _max_page_limit + 1 else 'Next Page >>'
         list_item = xbmcgui.ListItem(label)
         list_item.setArt({'thumb': G.get_custom_thumb_path('pageNext.png')})
         list_item.setProperty('specialsort', 'bottom')
-        next_page = 1 if int(page) == total_pages - _max_page_limit + 1 else int(page) + _max_page_limit
+        next_page = 1 if page == total_pages - _max_page_limit + 1 else page + _max_page_limit
         params.update({'page': next_page, 'update_listing': True})
         url = G.get_plugin_url(params)
         directory_items.append((url, list_item, True))
@@ -214,7 +225,9 @@ class StalkerAddon:
         if match:
             season = int(match.string[1:])
             name = ' '.join(temp[:-1])
-        for episode_no in range(int(params['start']), int(params['end']) + 1):
+        start = get_int_value(params, 'start')
+        end = get_int_value(params, 'end')
+        for episode_no in range(start, end + 1):
             list_item = xbmcgui.ListItem(label='Episode ' + str(episode_no))
             video_info = list_item.getVideoInfoTag()
             video_info.setTitle(name)

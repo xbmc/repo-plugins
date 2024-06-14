@@ -15,6 +15,15 @@ def ask_for_input(category):
         type=xbmcgui.INPUT_ALPHANUM) or None
 
 
+def get_int_value(dictionary, key):
+    """Helper method to get int value"""
+    if key in dictionary:
+        val = str(dictionary[key])
+        if val.isnumeric():
+            return int(val)
+    return 0
+
+
 class Logger:
     """Logger class"""
     @staticmethod

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.7.12"
+        version="5.7.13"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -123,21 +123,20 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.7.12 - Changelog - 2024-05-27[/B]
+        <news>[B]Retrospect v5.7.13 - Changelog - 2024-06-14[/B]
 
-Fixed another issue with Kodi Favourites and content views.
+Fixed a number of Swedish channel issues.
 
 [B]Framework related[/B]
-* Fixed: Case-insensitive comparison of logged on users (Fixes #1791).
-* Fixed: Rootfolders of channels could not be added to Kodi favourites as they broke fast (Fixes #1794).
-* Fixed: Don&#x27;t replace PickleStore items but append new items (Fixes #1794) and keep favourites in the store on clean (Fixes #1797).
+* Added: Fallback format option to DateHelper.
 
 [B]GUI/Settings/Language related[/B]
 _None_
 
 [B]Channel related[/B]
-_None_
-
+* Fixed: ONS TV season/episode issue.
+* Fixed: Playback of some SVT streams (Fixes #1801).
+* Fixed: Some timestamps are with and some without milliseconds (Fixes #1800).
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

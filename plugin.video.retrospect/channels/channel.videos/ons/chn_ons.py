@@ -95,6 +95,8 @@ class Channel(chn_class.Channel):
                 continue
             if param["name"].lower() == "episode":
                 episode = param["values"][0]["name"]
+                if "-" in episode:
+                    episode = episode.split("-")[0]
             elif param["name"].lower() == "season":
                 season = param["values"][0]["name"]
 

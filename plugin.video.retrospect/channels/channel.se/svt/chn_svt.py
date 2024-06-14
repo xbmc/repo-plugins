@@ -133,8 +133,11 @@ class Channel(chn_class.Channel):
                               creator=self.create_api_typed_item)
 
         # Generic updating of videos
-        self._add_data_parser("https://api.svt.se/videoplayer-api/video/",
+        self._add_data_parser("https://api.svt.se/videoplayer-api/video/", name="Old API",
                               updater=self.update_video_api_item)
+        self._add_data_parser("https://video.svt.se/video/", name="New API",
+                              updater=self.update_video_api_item)
+
         # Update via HTML pages
         self._add_data_parser("https://www.svtplay.se/video/", updater=self.update_video_html_item)
         self._add_data_parser("https://www.svtplay.se/klipp/", updater=self.update_video_html_item)
@@ -634,7 +637,7 @@ class Channel(chn_class.Channel):
         svt_video_id = result_set.get("videoSvtId", result_set.get("svtId", None))
         if svt_video_id:
             # API style
-            url = "https://api.svt.se/videoplayer-api/video/{}".format(svt_video_id)
+            url = "https://video.svt.se/video/{}".format(svt_video_id)
         else:
             # HTML style
             url = "{}{}".format(self.baseUrl, result_set['urls']['svtplay'])
@@ -1054,7 +1057,8 @@ class Channel(chn_class.Channel):
 
         channel_item = MediaItem(
             title,
-            "https://www.svt.se/videoplayer-api/video/%s" % (channel_id.lower(),)
+            # "https://www.svt.se/videoplayer-api/video/%s" % (channel_id.lower(),)
+            "https://video.svt.se/video/%s" % (channel_id.lower(),)
         )
         channel_item.media_type = mediatype.VIDEO
         channel_item.isLive = True
@@ -1186,8 +1190,9 @@ class Channel(chn_class.Channel):
         json = JsonHelper(data, logger=Logger.instance())
         videos = json.get_value("videoReferences")
         subtitles = json.get_value("subtitleReferences")
+        rights = json.get_value("rights")
         Logger.trace(videos)
-        return self.__update_item_from_video_references(item, videos, subtitles)
+        return self.__update_item_from_video_references(item, videos, subtitles, rights=rights)
 
     def update_video_html_item(self, item):
         """ Updates an existing MediaItem with more data.
@@ -1321,7 +1326,7 @@ class Channel(chn_class.Channel):
               "ua=svtplaywebb-play-render-prod-client".format(operation, variables, extensions)
         return url
 
-    def __update_item_from_video_references(self, item, videos, subtitles=None):  # NOSONAR
+    def __update_item_from_video_references(self, item, videos, subtitles=None, rights=None):  # NOSONAR
         """
 
         :param MediaItem item:      The original MediaItem that needs updating.
@@ -1333,21 +1338,35 @@ class Channel(chn_class.Channel):
 
         """
 
+        rights = rights or {}
+
         item.streams = []
         use_input_stream = AddonSettings.use_adaptive_stream_add_on(channel=self)
         in_sweden = self.__validate_location()
         Logger.debug("Streaming location within GEO area: %s", in_sweden)
+        is_drm_protected = rights.get("drmCopyProtection", False)
 
         # Dictionary with supported video formats and their priority.
+        # For the Dash streams:
+        # "dash-full" has HEVC and x264 video, with multi stream audio, both 5.1 and 2.0 streams
+        # "dash-hbbtv-avc" has x264 multi stream audio, but only 5.1
+        # "dash" has x264 single stream audio and only 2.0
+
+        # For HLS:
+        # "hls-cmaf-full" has x264/x264 with 5.1
+        # "hls"/"hls-ts-avc" has x264 and 2.0 audio
+
+        # LB = Low Bandwidth
+
         if in_sweden or not item.isGeoLocked:
-            # For the Dash streams:
-            # "dash-full" has HEVC and x264 video, with multi stream audio, both 5.1 and 2.0 streams
-            # "dash-hbbtv-avc" has x264 multi stream audio, but only 5.1
-            # "dash" has x264 single stream audio and only 2.0
-            # supported_formats = {"dash": 2, "dash-full": 3, "hls": 0, "hls-ts-full": 1}
-            supported_formats = {"dash": 2, "dash-hbbtv-avc": 3, "hls": 0, "hls-ts-full": 1}
+            supported_formats = {"hls": 0, "hls-ts-full": 2, "hls-cmaf-full": 3}
+            if not is_drm_protected:
+                supported_formats.update({"dash": 3, "dash-hbbtv-avc": 4, "dashhbbtv": 4})
         else:
-            supported_formats = {"dash": 2, "dash-avc-51": 3, "hls": 0, "hls-ts-avc-51": 1}
+            supported_formats = {"hls": 0, "hls-ts-avc-51": 1}
+            if not is_drm_protected:
+                supported_formats.update({"dash": 2, "dash-avc-51": 3})
+
         Logger.debug("Looking for formats: %s", ", ".join(supported_formats.keys()))
 
         for video in videos:

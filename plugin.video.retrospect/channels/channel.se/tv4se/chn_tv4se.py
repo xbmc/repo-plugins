@@ -977,7 +977,7 @@ class Channel(chn_class.Channel):
         if "playableFrom" in result_set:
             from_date = result_set["playableFrom"]["isoString"]
             # isoString=2022-07-27T22:01:00.000Z
-            time_stamp = DateHelper.get_date_from_string(from_date, "%Y-%m-%dT%H:%M:%S.%fZ")
+            time_stamp = DateHelper.get_date_from_string(from_date, "%Y-%m-%dT%H:%M:%S.%fZ", fallback_format="%Y-%m-%dT%H:%M:%SZ")
             item.set_date(*time_stamp[0:6])
 
             # Playable to
@@ -988,7 +988,7 @@ class Channel(chn_class.Channel):
 
         elif "liveEventEnd" in result_set and result_set["liveEventEnd"]:
             until_data = result_set["liveEventEnd"]["isoString"]
-            time_stamp = DateHelper.get_date_from_string(until_data, "%Y-%m-%dT%H:%M:%S.%fZ")
+            time_stamp = DateHelper.get_date_from_string(until_data, "%Y-%m-%dT%H:%M:%S.%fZ", fallback_format="%Y-%m-%dT%H:%M:%SZ")
             time_value = time.strftime('%Y-%m-%d %H:%M:%S', time_stamp)
             expires = "[COLOR gold]{}: {}[/COLOR]".format(MediaItem.ExpiresAt, time_value)
             item.description = f"{expires}\n\n{item.description}"

@@ -80,8 +80,15 @@ def list_my_films(_, subcategory=None):
 
 @Route.register(cache_ttl=-1, content_type='movies')
 def list_films_and_docus(_, category):
-    resp_dict = ct_api.get_jsonp('films-en-documentaires/payload.js')
-    films = ct_data.create_films_list(resp_dict, category)
+    """List subscription films"""
+    if category == 'subscription':
+        film_ids = ct_api.get_subscription_films()
+    elif category == 'recommended':
+        film_ids = ct_api.get_recommended()
+    else:
+        return None
+    stories, _ = storyblok.stories_by_uuids(film_ids)
+    films = ct_data.create_films_list(stories, 'storyblok')
     items = [Listitem.from_dict(callback=play_film, **film) for film in films]
     return items
 

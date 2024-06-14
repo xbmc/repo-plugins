@@ -25,7 +25,7 @@ def clear_cache_version():
     cache_version = 'undefined'
 
 
-def _get_url(path, **kwargs):
+def get_url(path, **kwargs):
     global cache_version
 
     headers = {
@@ -88,7 +88,7 @@ def _get_url_page(path, page=None, items_per_page=None, **kwargs):
 
     while True:
         params.update({'page': cur_page, 'per_page': num_to_fetch})
-        data, headers = _get_url(path, **kwargs)
+        data, headers = get_url(path, **kwargs)
         new_stories = data.get('stories')
         stories.extend(new_stories)
         total = int(headers.get('total', 0))
@@ -104,7 +104,7 @@ def stories_by_uuids(uuids, page=None, items_per_page=None):
     """Return the list of stories defined by the uuid in uuids.
 
     :param uuids: A single uuid as string or an iterable of uuid's referring
-        to a story on Storyblok
+        to a stories on Storyblok
     :param page: Return the items of page number *page*. If None, return all items.
     :param items_per_page: Number of items to return per page.
     :return: A tuple of a list of stories end the total number of available stories.
@@ -138,7 +138,7 @@ def story_by_name(slug: str):
         'resolve_relations': 'selectedBy',
         'from_release': 'undefined'
     }
-    data, _ = _get_url(path, params=params)
+    data, _ = get_url(path, params=params)
     return data['story']
 
 

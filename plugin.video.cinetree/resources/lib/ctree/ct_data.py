@@ -129,7 +129,8 @@ def _select_trailer_url(film_data: dict, prefer_original: bool) -> str:
           YouTube as well.
 
 
-    There is no guarantee that fields ar present. Also string type of fields can be empty.
+    There is no guarantee that fields ar present. Also string type of fields can be empty, or have
+    leading or trailing whitespace.
 
         If originalTrailer is present it will be a dict with fields 'plugin' and 'selected'.
     Field 'selected' is a unique string, but may be None to indicate that no  trailer is present.
@@ -139,8 +140,8 @@ def _select_trailer_url(film_data: dict, prefer_original: bool) -> str:
 
     """
 
-    vimeo_url = film_data.get('trailerVimeoURL')
-    orig_url = film_data.get('originalTrailerURL')
+    vimeo_url = film_data.get('trailerVimeoURL', '').strip()
+    orig_url = film_data.get('originalTrailerURL', '').strip()
     orig_trailer = film_data.get('originalTrailer')
 
     try:
@@ -300,21 +301,7 @@ def create_films_list(data, list_type='generic'):
             if 'shorts' in content.keys():
                 films_list.extend(content['shorts'])
         else:
-            # A data-dict from films-en-documentaires provides two films lists
-            # One list of recommended film which has only a few items, another with the full
-            # list of films available in the monthly subscription.
-            film_items = sorted((v['films'] for k, v in data['fetch'].items() if k.startswith('data-')), key=len)
-
-            if list_type == 'subscription':
-                films_list = film_items[1]
-            elif list_type == 'recommended':
-                # As the recommended items do not have all info we need, select the recommended films from the full list
-                # noinspection PyTypeChecker
-                recommended = tuple(film['full_slug'] for film in film_items[0])
-                # noinspection PyTypeChecker
-                films_list = (film for film in film_items[1] if film['full_slug'] in recommended)
-            else:
-                raise ValueError("Invalid value '{}' for parameter 'list_type'".format(list_type))
+            raise ValueError("Invalid value '{}' for parameter 'list_type'".format(list_type))
     except KeyError:
         raise ValueError("Invalid value of param data")
 

@@ -74,6 +74,7 @@ class HttpSession(requests.sessions.Session):
         super(HttpSession, self).__init__()
         self.headers.update({
             'User-Agent': USER_AGENT,
+            'Accept-Language':  'en-GB,en;q=0.5',
             'Origin': 'https://www.itv.com',
             'Referer': 'https://www.itv.com/',
             'Sec-Fetch-Dest': 'empty',
@@ -185,10 +186,10 @@ def set_default_cookies(cookiejar: RequestsCookieJar = None):
                     {"FieldID":"s137_c128","IsChecked":0}],
                 "appCodeName":"Mozilla",
                 "appName":"Netscape",
-                "appVersion":"5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                "appVersion":"5.0 (X11)",
                 "cookieEnabled":True,
                 "geolocation":"",
-                "language":"en",
+                "language":"en-GB",
                 "platform":"Linux x86_64",
                 "referrer":"",
                 "submissionSource":"prebanner_reject_all",

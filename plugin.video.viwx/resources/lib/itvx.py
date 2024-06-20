@@ -83,22 +83,20 @@ def get_now_next_schedule(local_tz=None):
 
         programs_list = []
         for prog in (slots['now'], slots['next']):
-            if prog.get('detailedDisplayTitle'):
-                details = ': '.join((prog['displayTitle'], prog['detailedDisplayTitle']))
-            else:
-                details = prog['displayTitle']
-
-            if details is None:
+            displ_title = prog['displayTitle']
+            if displ_title is None:
                 # Some schedules have all fields set to None or False, i.e. no programme info available.
                 # In practice, if displayTitle is None, everything else is as well.
+                logger.info("No Now/Next info available for channel '%s': %s", channel.get('id'), prog)
                 continue
 
+            details = ': '.join(s for s in(displ_title, prog.get('detailedDisplayTitle')) if s)
             start_t = prog['start'][:19]
             utc_start = datetime(*(time.strptime(start_t, '%Y-%m-%dT%H:%M:%S')[0:6]), tzinfo=utc_tz)
 
             programs_list.append({
                 'programme_details': details,
-                'programmeTitle': prog['displayTitle'],
+                'programmeTitle': displ_title,
                 'orig_start': None,          # fast channels do not support play from start
                 'startTime': utc_start.astimezone(local_tz).strftime(time_format)
             })
@@ -111,7 +109,7 @@ def get_live_channels(local_tz=None):
     programmes in the channel data.
 
     For the stream-only FAST channels, only the current and next programme are
-    available. For the regular channels a schedule from now up to 4 hours in the
+    available. For the regular channels a schedule from now up to 6 hours in the
     future will be returned.
     Programme start times will be presented in the user's local time zone.
 
@@ -178,7 +176,7 @@ def main_page_items():
 
     if 'shortFormSliderContent' in main_data.keys():
         yield {'type': 'collection',
-               'show': {'label': 'News', 'params': {'slider': 'shortFormSliderContent'}}}
+               'show': {'label': 'News', 'params': {'slider': 'newsShortForm'}}}
     else:
         logger.warning("Main page has no 'News' slider.")
 
@@ -202,13 +200,16 @@ def collection_content(url=None, slider=None, hide_paid=False):
                 yield parsex.parse_shortform_item(item, uk_tz, time_fmt)
             return
 
-        elif slider == 'shortFormSliderContent':
-            # Return items form the main page's News short form. The only other known shorFromSlider
-            # on the main page is 'Sport' and is handled as a full collection.
-            for slider in page_data['shortFormSliderContent']:
-                if slider['key'] == 'newsShortForm':
-                    for news_item in slider['items']:
-                        yield parsex.parse_shortform_item(news_item, uk_tz, time_fmt, hide_paid)
+        elif slider in ('newsShortForm', 'sportShortForm'):
+            # Return items from the main page's News or Sports short form.
+            for slider_data in page_data['shortFormSliderContent']:
+                if slider_data['key'] == slider:
+                    for short_item in slider_data['items']:
+                        yield parsex.parse_shortform_item(short_item, uk_tz, time_fmt, hide_paid)
+                    # A 'View All' item,
+                    view_all_item = parsex.parse_view_all(slider_data)
+                    if view_all_item:
+                        yield view_all_item
             return
 
         elif slider == 'trendingSliderContent':
@@ -262,7 +263,7 @@ def collection_content(url=None, slider=None, hide_paid=False):
             return
 
 
-def episodes(url, use_cache=False):
+def episodes(url, use_cache=False, prefer_bsl=False):
     """Get a listing of series and their episodes
 
     Return a tuple of a series map and a programmeId.
@@ -321,7 +322,7 @@ def episodes(url, use_cache=False):
                 'episodes': []
             })
         series_obj['episodes'].extend(
-            [parsex.parse_episode_title(episode, programme_fanart) for episode in series['titles']])
+            [parsex.parse_episode_title(episode, programme_fanart, prefer_bsl) for episode in series['titles']])
 
     programme_data = {'programme_id': programme_id, 'series_map': series_map}
     cache.set_item(url, programme_data, expire_time=1800)
@@ -453,7 +454,7 @@ def category_news_content(url, sub_cat, rail=None, hide_paid=False):
                 for news_item in items_list]
 
 
-def get_playlist_url_from_episode_page(page_url):
+def get_playlist_url_from_episode_page(page_url, prefer_bsl=False):
     """Obtain the url to the episode's playlist from the episode's HTML page.
 
     """
@@ -461,10 +462,15 @@ def get_playlist_url_from_episode_page(page_url):
     data = get_page_data(page_url)
 
     try:
-        return data['seriesList'][0]['titles'][0]['playlistUrl']
+        episode = data['seriesList'][0]['titles'][0]
     except KeyError:
         # news item
-        return data['episode']['playlistUrl']
+        episode = data['episode']
+
+    if prefer_bsl:
+        return episode.get('bslPlaylistUrl') or episode['playlistUrl']
+    else:
+        return episode['playlistUrl']
 
 
 
@@ -512,17 +518,18 @@ def search(search_term, hide_paid=False):
 def my_list(user_id, programme_id=None, operation=None, offer_login=True, use_cache=True):
     """Get itvX's 'My List', or add or remove an item from 'My List' and return the updated list.
 
+    A regular browser uses platform ctv in these requests.
     """
     if operation in ('add', 'remove'):
-        url = 'https://my-list.prd.user.itv.com/user/{}/mylist/programme/{}?features={}&platform={}'.format(
-            user_id, programme_id, FEATURE_SET, PLATFORM_TAG)
+        url = 'https://my-list.prd.user.itv.com/user/{}/mylist/programme/{}?features={}&platform=ctv&size=52'.format(
+            user_id, programme_id, FEATURE_SET)
     else:
         cached_list = cache.get_item('mylist_' + user_id)
         if use_cache and cached_list is not None:
             return cached_list
         else:
-            url = 'https://my-list.prd.user.itv.com/user/{}/mylist?features={}&platform={}'.format(
-                user_id, FEATURE_SET, PLATFORM_TAG)
+            url = 'https://my-list.prd.user.itv.com/user/{}/mylist?features={}&platform=ctv&size=52'.format(
+                user_id, FEATURE_SET)
 
     fetcher = {
         'get': fetch.get_json,
@@ -565,8 +572,8 @@ def get_last_watched():
     if cached_data is not None:
         return cached_data
 
-    url = 'https://content.prd.user.itv.com/lastwatched/user/{}/{}?features={}'.format(
-            user_id, PLATFORM_TAG, FEATURE_SET)
+    url = 'https://content.prd.user.itv.com/lastwatched/user/{}/ctv?features={}'.format(
+            user_id, FEATURE_SET)
     header = {'accept': 'application/vnd.user.content.v1+json'}
     utc_now = datetime.now(tz=timezone.utc).replace(tzinfo=None)
     data = itv_account.fetch_authenticated(fetch.get_json, url, headers=header)
@@ -605,7 +612,7 @@ def recommended(user_id, hide_paid=False):
 
     recommended = cache.get_item(recommended_url)
     if not recommended:
-        req_params = {'features': FEATURE_SET, 'platform': PLATFORM_TAG, 'size': 24}
+        req_params = {'features': FEATURE_SET, 'platform': PLATFORM_TAG, 'size': 24, 'version': 3}
         recommended = fetch.get_json(recommended_url, params=req_params)
         if not recommended:
             return None
@@ -623,7 +630,7 @@ def because_you_watched(user_id, name_only=False, hide_paid=False):
     byw_url = 'https://recommendations.prd.user.itv.com/recommendations/byw/' + user_id
     byw = cache.get_item(byw_url)
     if not byw:
-        req_params = {'features': FEATURE_SET, 'platform': PLATFORM_TAG, 'size': 12}
+        req_params = {'features': FEATURE_SET, 'platform': 'ctv', 'size': 12, 'version': 2}
         byw = fetch.get_json(byw_url, params=req_params)
         if not byw:
             return

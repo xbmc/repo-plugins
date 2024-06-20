@@ -12,9 +12,12 @@ import pytz
 from datetime import datetime
 
 from codequick.support import logger_id
+from codequick import Script
 
 from . import utils
 from .errors import ParseError
+
+TXT_PLAY_FROM_START = 30620
 
 
 logger = logging.getLogger(logger_id + '.parse')
@@ -90,6 +93,8 @@ def parse_hero_content(hero_data):
             info['title'] = ''.join(('[COLOR orange]', info['title'], '[/COLOR]'))
             return item
 
+        context_mnu = []
+
         item = {
             'label': title,
             'art': {'thumb': hero_data['imageTemplate'].format(**IMG_PROPS_THUMB),
@@ -104,6 +109,32 @@ def parse_hero_content(hero_data):
         if item_type in ('simulcastspot', 'fastchannelspot'):
             item['params'] = {'channel': hero_data['channel'], 'url': None}
             item['info'].update(plot='[B]Watch Live[/B]\n' + hero_data.get('description', ''))
+            if item_type == 'simulcastspot':
+                # Create a 'Watch from the start' context menu item
+                try:
+                    import pytz
+                    from datetime import timedelta
+                    start_t = utils.strptime(hero_data['startDateTime'], '%H:%M')
+                    btz = pytz.timezone('Europe/London')
+                    british_start = btz.localize(datetime.now()).replace(hour=start_t.hour, minute=start_t.minute)
+                    utc_start = british_start.astimezone(pytz.utc)
+                    # Don't create 'Watch from the start' when the programme is yet to begin.
+                    # This breaks the edge case where a programme that started before midnight is
+                    # watched after midnight.
+                    if utc_start < datetime.now(pytz.utc):
+                        params = item['params']
+                        params['start_time'] = utc_start.strftime('%Y-%m-%dT%H:%M:%S')
+                        cmd = ''.join((
+                            'PlayMedia(plugin://', utils.addon_info.id,
+                            '/resources/lib/main/play_stream_live/?channel=', params['channel'],
+                            '&start_time=', params['start_time'],
+                            '&play_from_start=True, noresume)'))
+                        context_mnu.append((Script.localize(TXT_PLAY_FROM_START), cmd))
+                except:
+                    # Don't let errors on Watch from the Start ruin the whole item.
+                    logger.warning("Failed to parse start time of simulcast hero item '%s':\n",
+                                   hero_data.get('title', 'unknown title'), exc_info=True)
+                    pass
 
         elif item_type in ('series', 'brand'):
             item['info'].update(plot=''.join((hero_data.get('ariaLabel', ''), '\n\n', hero_data.get('description'))))
@@ -124,7 +155,8 @@ def parse_hero_content(hero_data):
             return None
         return {'type': item_type,
                 'programme_id': hero_data.get('encodedProgrammeId', {}).get('underscore'),
-                'show': item}
+                'show': item,
+                'ctx_mnu': context_mnu}
     except:
         logger.warning("Failed to parse hero item '%s':\n", hero_data.get('title', 'unknown title'), exc_info=True)
 
@@ -145,7 +177,7 @@ def parse_short_form_slider(slider_data, url=None):
             params = {'url': url, 'slider': 'shortFormSlider'}
         elif link:
             # A shortFormSlider from the main page
-            params = {'url': 'https://www.itv.com' + link}
+            params = {'url': 'https://www.itv.com', 'slider': slider_data.get('key')}
         else:
             return
 
@@ -158,6 +190,35 @@ def parse_short_form_slider(slider_data, url=None):
     except:
         logger.error("Unexpected error parsing shorFormSlider.", exc_info=True)
         return None
+
+
+def parse_view_all(slider_data):
+    """Return listitem data with a behaviour similar to the 'View All' button of a
+    slider on the web page.
+
+    """
+    header = slider_data['header']
+    link = header.get('linkHref')
+    if not link:
+        return
+    url = 'https://www.itv.com' + link
+
+    if link.startswith('/watch/categories'):
+        item_type = 'category'
+        params = {'path': url}
+    elif link.startswith('/watch/collections'):
+        item_type = 'collection'
+        params = {'url': url}
+    else:
+        logger.warning("Unknown linkHref on %s: '%s", slider_data.get('key'), link)
+        return
+
+    return {'type': item_type,
+            'show': {'label': header.get('linkText') or 'View All',
+                     'params': params,
+                     'info': {'sorttitle': sort_title('zzzz')}
+                     }
+            }
 
 
 def parse_editorial_slider(url, slider_data):
@@ -248,23 +309,21 @@ def parse_shortform_item(item_data, time_zone, time_fmt, hide_paid=False):
     ShortFormSliders are found on the main page, some collection pages.
     Items from heroAndLatest and curatedRails in category news also have a shortForm-like content.
 
-    # TODO: Shortform items snow have a field contentType, which has value 'shortform' when the item
-            has a shortform format, or something else like 'episode' when the item is a normal
-            episode. Wait for the occasion to be able to check a sports shortform slider before
-            differentiating based on content type.
     """
     try:
-        if 'encodedProgrammeId' in item_data.keys():
-            # The news item is a 'normal' catchup title. Is usually just the latest ITV news.
+        if item_data['contentType'] == 'shortform':
+            # This item is a 'short item', aka 'news clip'.
+            href = item_data.get('href', '/watch/news/undefined')
+            url = ''.join(('https://www.itv.com', href, '/', item_data['episodeId']))
+
+        else:
+            # The news item is a 'normal' catchup title. Is usually just the latest ITV news,
+            # or a full sports programme.
             # Do not use field 'href' as it is known to have non-a-encoded program and episode Id's which doesn't work.
             url = '/'.join(('https://www.itv.com/watch',
                             item_data['titleSlug'],
                             item_data['encodedProgrammeId']['letterA'],
                             item_data.get('encodedEpisodeId', {}).get('letterA', ''))).rstrip('/')
-        else:
-            # This item is a 'short item', aka 'news clip'.
-            href = item_data.get('href', '/watch/news/undefined')
-            url = ''.join(('https://www.itv.com', href, '/', item_data['episodeId']))
 
         # dateTime field occasionally has milliseconds. Strip these when present.
         item_time = pytz.UTC.localize(utils.strptime(item_data['dateTime'][:19], '%Y-%m-%dT%H:%M:%S'))
@@ -414,7 +473,7 @@ def parse_item_type_collection(item_data):
     return {'type': 'collection', 'show': item}
 
 
-def parse_episode_title(title_data, brand_fanart=None):
+def parse_episode_title(title_data, brand_fanart=None, prefer_bsl=False):
     """Parse a title from episodes listing"""
     # Note: episodeTitle may be None
     title = title_data['episodeTitle'] or title_data['heroCtaLabel']
@@ -433,6 +492,11 @@ def parse_episode_title(title_data, brand_fanart=None):
     if not isinstance(series_nr, int):
         series_nr = None
 
+    if prefer_bsl:
+        playlist_url = title_data.get('bslPlaylistUrl') or title_data['playlistUrl']
+    else:
+        playlist_url = title_data['playlistUrl']
+
     title_obj = {
         'label': title,
         'art': {'thumb': img_url.format(**IMG_PROPS_THUMB),
@@ -446,7 +510,7 @@ def parse_episode_title(title_data, brand_fanart=None):
                  'episode': episode_nr,
                  'season': series_nr,
                  'year': title_data.get('productionYear')},
-        'params': {'url': title_data['playlistUrl'], 'name': title}
+        'params': {'url': playlist_url, 'name': title}
     }
 
     return title_obj

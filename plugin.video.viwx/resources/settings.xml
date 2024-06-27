@@ -17,6 +17,11 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
+				<setting id="prefer_bsl" label="30107" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
 				<setting id="hide_paid" label="30104" type="boolean" help="30304">
 					<level>0</level>
 					<default>false</default>

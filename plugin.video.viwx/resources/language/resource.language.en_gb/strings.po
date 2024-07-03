@@ -45,6 +45,10 @@ msgctxt "#30106"
 msgid "Minimum number of items for A-Z listing."
 msgstr ""
 
+msgctxt "#30107"
+msgid "Use signed programmes whenever available."
+msgstr ""
+
 msgctxt "#30110"
 msgid "Logging"
 msgstr ""

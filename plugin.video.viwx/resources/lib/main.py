@@ -185,6 +185,7 @@ def root(_):
     for item in itvx.main_page_items():
         callback = callb_map.get(item['type'], play_title)
         li = Listitem.from_dict(callback, **item['show'])
+        li.context.extend(item.get('ctx_mnu', []))
         _my_list_context_mnu(li, item.get('programme_id'))
         yield li
     yield Listitem.from_dict(list_collections, 'Collections')
@@ -197,9 +198,13 @@ def sub_menu_my_itvx(_):
     # Ensure to add at least one parameter to persuade dynamic listing that we actually call the list.
     yield Listitem.from_dict(generic_list, 'My List', params={'list_type':'mylist', 'filter_char': None})
     yield Listitem.from_dict(generic_list, 'Continue Watching', params={'list_type':'watching', 'filter_char': None})
-    last_programme = itvx.because_you_watched(itv_account.itv_session().user_id, name_only=True)
-    if last_programme:
-        yield Listitem.from_dict(generic_list, 'Because You Watched ' + last_programme, params={'list_type':'byw'})
+    try:
+        last_programme = itvx.because_you_watched(itv_account.itv_session().user_id, name_only=True)
+        if last_programme:
+            yield Listitem.from_dict(generic_list, 'Because You Watched ' + last_programme, params={'list_type':'byw'})
+    except Exception as e:
+        # Log the error, but don't let the whole submenu fail because of this.
+        logger.error("Error getting the qlast watched programme: %s\n", e, exc_info=True)
     yield Listitem.from_dict(generic_list, 'Recommended for You', params={'list_type':'recommended'})
 
 
@@ -409,7 +414,7 @@ def list_productions(plugin, url, series_idx=None):
                             xbmcplugin.SORT_METHOD_DATE,
                             disable_autosort=True)
 
-    result = itvx.episodes(url, use_cache=True)
+    result = itvx.episodes(url, use_cache=True, prefer_bsl=plugin.setting.get_boolean('prefer_bsl'))
     if not result:
         return
 
@@ -534,7 +539,7 @@ def create_mp4_file_item(name, file_url):
 
 
 @Resolver.register
-def play_stream_live(addon, channel, url, title=None, start_time=None, play_from_start=False):
+def play_stream_live(addon, channel, url=None, title=None, start_time=None, play_from_start=False):
     if url is None:
         url = 'https://simulcast.itv.com/playlist/itvonline/' + channel
         logger.info("Created live url from channel name: '%s'", url)
@@ -606,7 +611,7 @@ def play_title(plugin, url, name=''):
 
     """
     try:
-        url = itvx.get_playlist_url_from_episode_page(url)
+        url = itvx.get_playlist_url_from_episode_page(url, plugin.setting.get_boolean('prefer_bsl'))
     except AccessRestrictedError:
         kodi_utils.msg_dlg(Script.localize(TXT_PREMIUM_CONTENT))
         return False
@@ -647,6 +652,7 @@ Used to map items in collections, categories and search result to the right hand
 
 callb_map = {
     'collection': list_collection_content,
+    'category': list_category,
     'series': list_productions,
     'brand': list_productions,
     'programme': list_productions,

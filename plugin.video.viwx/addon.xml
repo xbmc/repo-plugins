@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.viwx" name="viwX" version="1.3.0" provider-name="Dimitri Kroon">
+<addon id="plugin.video.viwx" name="viwX" version="1.4.1" provider-name="Dimitri Kroon">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="inputstream.adaptive" version="19.0.5"/>
@@ -30,16 +30,20 @@
       <fanart>resources/fanart.png</fanart>
     </assets>
     <news>
-[B]v1.3.0[/B]
+[B]v1.4.1[/B]
 [B]Fixes:[/B]
-* Freezing streams on Kodi 21 (Omega).
-* A lot of timeout errors, only experienced by new users, particularly when trying to sign in or open a stream.
-* All categories failed to open with KeyError('encodeEpisodeId') due to a change at ITVX.
-* A workaround for a bug in ITVX causing full news programmes to fail with FetchError('Not Found').
-* Sometimes an episodes listing failed with KeyError('guidance').
+* Yet again sign-in errors. Now affecting both new users and existing users who had signed out.
+
+[B]v1.4.0[/B]
+[B]Fixes:[/B]
+* Collection ITV sport failed with KeyError('collection')
+* Again occasional sign-in errors for new users. Hopefully the final fix.
+* A rare failure to list live channels.
+* Adapt to changes at ITVX causing submenu 'My ITVX' to fail sometimes.
 
 [B]New Features:[/B]
-* Support for IPTV Manager.
+* Support for signed programmes. (Enable the new setting 'Use signed programmes whenever available').
+* Live hero items (those in orange on the main menu) now have a context menu 'Watch from the start'.
     </news>
     <reuselanguageinvoker>true</reuselanguageinvoker>
   </extension>

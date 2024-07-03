@@ -1,3 +1,18 @@
+v1.4.1
+Fixes:
+- Yet again sign-in errors. Now affecting both new users and existing users who had signed out.
+
+v1.4.0
+New features:
+- Support for signed programmes. (Enable the new setting 'Use signed programmes whenever available').
+- Live hero items (those in orange on the main menu) now have a context menu 'Watch from the start'.
+
+Fixes:
+- Collection ITV sport failed with KeyError('collection')
+- Again occasional sign-in errors for new users. Hopefully the final fix.
+- A rare failure to list live channels.
+- Adapt to changes at ITVX causing submenu 'My ITVX' to fail sometimes.
+
 v1.3.0
 Fixes:
 - Freezing streams on Kodi 21 (Omega).

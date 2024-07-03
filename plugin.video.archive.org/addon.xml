@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.archive.org" name="Internet Archive" version="1.0.0" provider-name="gujal">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>audio video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Internet Archive add-on</summary>
+    <description lang="en_GB">Watch and listen to media archived by Internet Archive</description>
+    <disclaimer lang="en_GB">This third party addon is not in any way commissioned or endorsed by Internet Archive</disclaimer>
+    <language></language>
+    <platform>all</platform>
+    <license>GPL-2.0</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=180623</forum>
+    <website>https://archive.org/</website>
+    <email>gujal at protonmail dot com</email>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+      <screenshot>resources/images/screenshot-01.jpg</screenshot>
+      <screenshot>resources/images/screenshot-02.jpg</screenshot>
+      <screenshot>resources/images/screenshot-03.jpg</screenshot>
+    </assets>
+  </extension>
+</addon>

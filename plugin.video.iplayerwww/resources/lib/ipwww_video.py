@@ -15,7 +15,7 @@ from operator import itemgetter
 from resources.lib.ipwww_common import translation, AddMenuEntry, OpenURL, OpenRequest, \
                                        CheckLogin, CreateBaseDirectory, GetCookieJar, \
                                        ParseImageUrl, download_subtitles, GeoBlockedError, \
-                                       iso_duration_2_seconds, PostJson, strptime, addonid
+                                       iso_duration_2_seconds, PostJson, strptime, addonid, DeleteUrl
 from resources.lib import ipwww_progress
 
 import xbmc
@@ -144,9 +144,9 @@ def ListLive():
         ('bbc_scotland_hd',                  'BBC Scotland',             'bbc_scotland'),
         ('s4cpbs',                           'S4C',                      's4cpbs'),
         ('bbc_one_london',                   'BBC One London',           'bbc_one_london'),
-        ('bbc_one_scotland_hd',              'BBC One Scotland',         'bbc_one_london'),
-        ('bbc_one_northern_ireland_hd',      'BBC One Northern Ireland', 'bbc_one_london'),
-        ('bbc_one_wales_hd',                 'BBC One Wales',            'bbc_one_london'),
+        ('bbc_one_scotland_hd',              'BBC One Scotland',         'bbc_one_scotland'),
+        ('bbc_one_northern_ireland_hd',      'BBC One Northern Ireland', 'bbc_one_northern_ireland'),
+        ('bbc_one_wales_hd',                 'BBC One Wales',            'bbc_one_wales'),
         ('bbc_two_scotland',                 'BBC Two Scotland',         'bbc_two_england'),
         ('bbc_two_northern_ireland_digital', 'BBC Two Northern Ireland', 'bbc_two_northern_ireland_digital'),
         ('bbc_two_wales_digital',            'BBC Two Wales',            'bbc_two_wales_digital'),
@@ -763,7 +763,7 @@ def ParseJSON(programme_data, current_url):
                         AddMenuEntry('[B]%s: %s[/B]' % (name, series['title']['default']),
                                      series_url, 128, '', '', '')
         elif 'items' in programme_data:
-            # This must be Added or Watching.
+            # This must be Watchlist or Continue Watching.
             programmes = programme_data['items']
 
         if programmes:
@@ -806,8 +806,6 @@ def ParseJSON(programme_data, current_url):
                 for item in entity:
                     if 'props' in item:
                         item = item.get("props")
-                    if not item:
-                        continue
                     ParseSingleJSON(None, item, None, added_playables, added_directories)
 
         if 'bundles' in programme_data:
@@ -874,6 +872,15 @@ def SelectImage(images):
            or images.get('promotional')
            or images.get('promotional_with_logo')
            or images.get('portrait', 'DefaultFolder.png')).replace('{recipe}', '832x468')
+
+
+def ParseProgramme(progr_data):
+    return {
+        'url': 'https://www.bbc.co.uk/iplayer/episodes/' + progr_data['id'],
+        'name': '[B]{}[/B] - {} episodes available'.format(progr_data['title'], progr_data['count']),
+        'iconimage': progr_data.get('images', {}).get('standard', 'DefaultFolder.png').replace('{recipe}', '832x468'),
+        'description': SelectSynopsis(progr_data['synopses'])
+    }
 
 
 def ParseEpisode(episode_data):
@@ -1050,7 +1057,7 @@ def GetJsonDataWithBBCid(url, retry=True):
 
 
 def ListWatching():
-    url = "https://www.bbc.co.uk/iplayer/watching"
+    url = "https://www.bbc.co.uk/iplayer/continue-watching"
     data = GetJsonDataWithBBCid(url)
     if not data:
         return
@@ -1066,7 +1073,7 @@ def ListWatching():
         item_data['description'] = item_data['name']
         remaining_seconds = watching_item.get('remaining')
         if remaining_seconds:
-            total_seconds = int(remaining_seconds * 100 / (100 - watching_item['progress']))
+            total_seconds = int(remaining_seconds * 100 / (100 - watching_item.get('progress', 0)))
             item_data['name'] = '{} - [I]{} min left[/I]'.format(episode.get('title', ''), int(remaining_seconds / 60))
             # Resume a little bit earlier, so it's easier to recognise where you've left off.
             item_data['resume_time'] = str(max(total_seconds - remaining_seconds - 10, 0))
@@ -1102,10 +1109,34 @@ def RemoveWatching(episode_id):
 
 
 def ListFavourites():
-    url = "https://www.bbc.co.uk/iplayer/added"
-    data = GetJsonDataWithBBCid(url)
-    if data:
-        ParseJSON(data, url)
+    """AKA 'Watchlist', FKA 'Added'."""
+    data = GetJsonDataWithBBCid("https://www.bbc.co.uk/iplayer/added")
+    if not data:
+        return
+    has_episodes = False
+    for added_item in data['items']['elements']:
+        programme = added_item['programme']
+        ct_mnu = [('Remove',
+                   f'RunPlugin(plugin://plugin.video.iplayerwww?mode=302&episode_id={programme["id"]}&url=url)')]
+        if programme['count'] == 1:
+            CheckAutoplay(context_mnu=ct_mnu, **ParseEpisode(programme['initial_children'][0]))
+            has_episodes = True
+        else:
+            AddMenuEntry(mode=128, subtitles_url='', context_mnu=ct_mnu, **ParseProgramme(programme))
+    if has_episodes:
+        SetSortMethods(xbmcplugin.SORT_METHOD_DATE)
+    else:
+        SetSortMethods()
+
+
+def RemoveFavourite(programme_id):
+    """Remove an item from the Watchlist.
+    Handler for the context menu option 'Remove' on list items in 'Watchlist'.
+
+    Delete will never fail, even if programme_id is not on the list, or does not exist at all.
+    """
+    DeleteUrl('https://user.ibl.api.bbc.co.uk/ibl/v1/user/adds/' + programme_id)
+    xbmc.executebuiltin('Container.Refresh')
 
 
 def ListRecommendations():

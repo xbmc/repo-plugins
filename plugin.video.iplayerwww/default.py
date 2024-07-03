@@ -248,6 +248,9 @@ try:
     elif mode == 301:
         Video.RemoveWatching(episode_id)
 
+    elif mode == 302:
+        Video.RemoveFavourite(episode_id)
+
 except Common.IpwwwError as err:
     xbmcgui.Dialog().ok(Common.translation(30400), str(err))
     sys.exit(1)

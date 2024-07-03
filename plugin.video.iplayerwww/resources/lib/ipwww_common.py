@@ -420,6 +420,24 @@ def OpenURLPost(url, post_data):
     return r
 
 
+def DeleteUrl(url, **kwargs):
+    with requests.Session() as session:
+        session.cookies = cookie_jar
+        session.headers = headers
+        try:
+            r = session.delete(url, **kwargs)
+            r.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            dialog = xbmcgui.Dialog()
+            dialog.ok(translation(30400), "%s" % e)
+            sys.exit(1)
+        try:
+            if r.history:
+                cookie_jar.save(ignore_discard=True)
+        except:
+            pass
+
+
 def PostJson(url, data):
     return OpenRequest('post', url, json=data, exit_on_error=True)
 

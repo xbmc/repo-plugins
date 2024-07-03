@@ -1,3 +1,9 @@
+v4.1.2
+Watching now is Continue Watching.
+Added now is Watchlist.
+Fixes for rare issue with Continue Watching.
+Fix for rare issue with Highlight listings.
+
 v4.1.1
 Fixed initialization of param dictionary.
 Fix for JSON changes on the website.

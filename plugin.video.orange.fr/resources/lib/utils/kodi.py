@@ -9,7 +9,7 @@ import xbmcaddon
 import xbmcgui
 
 ADDON = xbmcaddon.Addon()
-ADDON_NAME = ADDON.getAddonInfo("name")
+ADDON_ID = ADDON.getAddonInfo("id")
 
 
 class DRM(Enum):
@@ -19,9 +19,14 @@ class DRM(Enum):
     PLAYREADY = "com.microsoft.playready"
 
 
-def log(msg: str, log_level: int = xbmc.LOGINFO):
+def build_addon_url(path: str = "") -> str:
+    """Build addon URL from path."""
+    return f"plugin://{ADDON_ID}{path}"
+
+
+def log(msg: str, log_level: int = xbmc.LOGINFO) -> None:
     """Prefix logs with addon name."""
-    xbmc.log(f"{ADDON_NAME}: {msg}", log_level)
+    xbmc.log(f"[{ADDON_ID}] {msg}", log_level)
 
 
 def get_addon_info(name: str) -> str:
@@ -46,7 +51,7 @@ def get_global_setting(name: str):
     return loads(xbmc.executeJSONRPC(dumps(cmd))).get("result", {}).get("value")
 
 
-def localize(string_id: int, **kwargs):
+def localize(string_id: int, **kwargs) -> str:
     """Return the translated string from the .po language files, optionally translating variables."""
     if not isinstance(string_id, int) and not string_id.isdecimal():
         return string_id
@@ -55,6 +60,6 @@ def localize(string_id: int, **kwargs):
     return ADDON.getLocalizedString(string_id)
 
 
-def ok_dialog(msg: str):
+def ok_dialog(msg: str) -> None:
     """Display a popup window with a button."""
-    xbmcgui.Dialog().ok(ADDON_NAME, msg)
+    xbmcgui.Dialog().ok(get_addon_info("name"), msg)

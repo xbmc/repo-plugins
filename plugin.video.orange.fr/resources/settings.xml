@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
     <category label="30100">
+        <setting id="iptv.enabled" visible="false" default="true"/>
         <setting id="iptv.channels_uri" visible="false" default="plugin://plugin.video.orange.fr/iptv/channels" />
         <setting id="iptv.epg_uri" visible="false" default="plugin://plugin.video.orange.fr/iptv/epg" />
         <setting visible="!System.HasAddon(service.iptv.manager)" label="30101" help="30102" type="action" action="InstallAddon(service.iptv.manager)" option="close" />

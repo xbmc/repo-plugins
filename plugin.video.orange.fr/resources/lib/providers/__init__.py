@@ -2,9 +2,8 @@
 
 import xbmc
 
-from lib.utils.xbmctools import get_addon_setting, log
+from lib.utils.kodi import get_addon_setting, log
 
-from .cache_provider import CacheProvider
 from .fr import OrangeCaraibeProvider, OrangeFranceProvider, OrangeReunionProvider
 from .provider_interface import ProviderInterface
 
@@ -26,4 +25,4 @@ if not _PROVIDER:
 
 def get_provider() -> ProviderInterface:
     """Return the selected provider."""
-    return CacheProvider(_PROVIDER)
+    return _PROVIDER

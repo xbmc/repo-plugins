@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="7.0.5" provider-name="anxdpanic, bromix, MoojMidge">
+<addon id="plugin.video.youtube" name="YouTube" version="7.0.6.3" provider-name="anxdpanic, bromix, MoojMidge">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.27.1"/>
@@ -31,7 +31,7 @@
         <summary lang="de_DE">Plugin für YouTube</summary>
         <summary lang="el_GR">Πρόσθετο YouTube</summary>
         <summary lang="en_GB">Plugin for YouTube</summary>
-        <summary lang="es_ES">Plugin para YouTube</summary>
+        <summary lang="es_ES">Complemento para YouTube</summary>
         <summary lang="es_MX">Complemento para YouTube</summary>
         <summary lang="fi_FI">YouTube-lisäosa</summary>
         <summary lang="fr_FR">Plugin pour YouTube</summary>
@@ -48,6 +48,7 @@
         <summary lang="sk_SK">Doplnok pre YouTube</summary>
         <summary lang="sv_SE">Plugin för YouTube</summary>
         <summary lang="tr_TR">YouTube için eklenti</summary>
+        <summary lang="uk_UA">Додаток для YouTube</summary>
         <summary lang="vi_VN">Plugin dành cho YouTube</summary>
         <summary lang="zh_CN">油管插件</summary>
         <summary lang="zh_TW">YouTube附加元件</summary>
@@ -57,7 +58,7 @@
         <description lang="de_DE">YouTube ist eines der größten Video-Sharing-Websites der Welt.</description>
         <description lang="el_GR">Το YouTube είναι μία από τις μεγαλύτερες ιστοσελίδες διαμοιρασμού βίντεο στον κόσμο.</description>
         <description lang="en_GB">YouTube is one of the biggest video-sharing websites of the world.</description>
-        <description lang="es_ES">YouTube es uno de los sitios web más grande del mundo para compartir vídeos.</description>
+        <description lang="es_ES">YouTube es uno de los sitios web para compartir vídeos más grandes del mundo.</description>
         <description lang="es_MX">YouTube es uno de los más grandes sitios web de intercambio de videos del mundo.</description>
         <description lang="fi_FI">YouTube on yksi maailman suurimmista videoiden jakosivustoista.</description>
         <description lang="fr_FR">YouTube est l'un des plus grands sites de partage vidéos du monde.</description>
@@ -74,6 +75,7 @@
         <description lang="sk_SK">YouTube je jednou z najväčších stránok na zdieľanie videa na svete.</description>
         <description lang="sv_SE">YouTube är en av de största videodelningssajterna i världen.</description>
         <description lang="tr_TR">YouTube, dünya üzerindeki en büyük video paylaşma platformlarından birisidir.</description>
+        <description lang="uk_UA">YouTube є одним з найбільших відеохостингів в світі.</description>
         <description lang="vi_VN">YouTube là một trong những trang web chia sẻ video lớn nhất trên thế giới.</description>
         <description lang="zh_CN">油管是世界上最大的视频分享网站之一。</description>
         <description lang="zh_TW">Youtube 是全世界最大的影片分享網站。</description>
@@ -96,37 +98,35 @@
         <disclaimer lang="sk_SK">Tento doplnok nie je schválený spoločnosťou Google</disclaimer>
         <disclaimer lang="sv_SE">Detta plugin är inte godkänt av Google</disclaimer>
         <disclaimer lang="tr_TR">Bu eklenti Google tarafından üretilmemiştir</disclaimer>
+        <disclaimer lang="uk_UA">Цей плагін не має відношення до компанії Google</disclaimer>
         <disclaimer lang="vi_VN">Plugin này không được xác nhận bởi Google</disclaimer>
         <disclaimer lang="zh_CN">此插件未被谷歌认可</disclaimer>
         <disclaimer lang="zh_TW">此附加元件未由Google支持</disclaimer>
-    <news>## v7.0.5
+    <news>## v7.0.6.3
 ### Fixed
-- Fix typo causing no fractional frame rate hinting to fail
-- Fix typo that caused android player requests to fail
-- Fix error message when rating video
-- Fix various issues with Kodi 18 and Python 2
-- Fix issues with video playback #659, #663
-- Fix typos
-- Fix typo that prevented videos from being listed in Kodi versions prior to v20
-- Try to prevent Kodi freezing when settings are updated and container is reloaded
-- Fix lockups when using xbmc.executebuiltin #653
-- Fix searching for preferred language subtitles not using non-region specific subtitles
-- Fix not being able to set custom watch later history playlist per user
-- Update workarounds for multiple busy dialog crashes #649
-- Fix playing incorrect video when player request is blocked
+- Improve updating containers and (re)loading windows
+- Fix refreshing video listing also forcing next pages to refresh when loaded
+- Fix overflow error resulting from parsing hashtags as episode numbers
+- Fix 6s delay on video playback start
+- Further fixes for multiple busy dialog crash workaround
+  - Possibly fix issues reported in comments of
+- Update error checks to avoid unnecessary retries of player requests
+- Fix adding and viewing items to internal bookmarks and watchlater list
+- Fix error checks to prevent prematurely stopping retries of player requests
+- Disable using android client player request by default
 
 ### Changed
-- Update language used for maintenance action prompts that clear data
-- Display search history as list rather than videos
-- Update Setup Wizard
-  - Add settings for Raspberry Pi 3 class devices (1080p30, VP9 enabled)
-  - Update settings for Raspberry Pi 4 class devices (1080p60, VP9 enabled)
-  - Move option to disable list details to last step in wizard
-- Shared playlist play using default order without prompting
-- Removed dependency on script.module.infotagger
-- Removed Nexus specific releases
-  - Matrix releases will now work in Kodi v19+
-  - Leia releases will work, but are unsupported, for Kodi v18 only
-- Updated client versions used for player requests
-  - Use iOS client as fallback for default client</news></extension>
+- Setup Wizard default settings now disable pre-downloading subtitles if MPEG-DASH is enabled
+- Ask for quality, Play with subtitles, Play audio only context menu items only displayed if associated setting is not already enabled
+- Only make extra request for subtitles for Android client when all subtitle languages are enabled
+- Overhaul alternative player support due to Kodi changes and also improve external player support
+- Make "Support alternative player" and "Use YouTube website urls with default player" mutually exclusive options
+- Enable OPUS audio by default
+- Enable MPEG-DASH for live streams by default
+- Setup Wizard will prompt to run when plugin first opens after updating, in order to update default settings
+- http server will shutdown on idle timeout
+- Update client details used for player requests
+
+### New
+- Add r</news></extension>
 </addon>

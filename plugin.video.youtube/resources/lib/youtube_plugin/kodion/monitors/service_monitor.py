@@ -26,7 +26,9 @@ class ServiceMonitor(xbmc.Monitor):
 
     def __init__(self):
         settings = self._settings
-        self._use_httpd = settings.use_isa() or settings.api_config_page()
+        self._use_httpd = (settings.use_isa()
+                           or settings.api_config_page()
+                           or settings.support_alternative_player())
         address, port = get_connect_address()
         self._old_httpd_address = self._httpd_address = address
         self._old_httpd_port = self._httpd_port = port
@@ -83,7 +85,9 @@ class ServiceMonitor(xbmc.Monitor):
                     'plugin://{0}/'.format(ADDON_ID))):
             xbmc.executebuiltin('Container.Refresh')
 
-        use_httpd = settings.use_isa() or settings.api_config_page()
+        use_httpd = (settings.use_isa()
+                     or settings.api_config_page()
+                     or settings.support_alternative_player())
         address, port = get_connect_address()
         whitelist = settings.httpd_whitelist()
 
@@ -164,3 +168,6 @@ class ServiceMonitor(xbmc.Monitor):
     @staticmethod
     def ping_httpd():
         return httpd_status()
+
+    def httpd_required(self):
+        return self._use_httpd

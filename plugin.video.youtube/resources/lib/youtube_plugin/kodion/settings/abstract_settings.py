@@ -22,11 +22,6 @@ class AbstractSettings(object):
         _vars[name] = value
     del _vars
 
-    VALUE_FROM_STR = {
-        'false': False,
-        'true': True,
-    }
-
     _echo = False
     _cache = {}
     _check_set = True
@@ -101,7 +96,7 @@ class AbstractSettings(object):
 
     def is_setup_wizard_enabled(self):
         # Increment min_required on new release to enable oneshot on first run
-        min_required = 2
+        min_required = 3
         forced_runs = self.get_int(settings.SETUP_WIZARD_RUNS, min_required - 1)
         if forced_runs < min_required:
             self.set_int(settings.SETUP_WIZARD_RUNS, min_required)
@@ -113,10 +108,27 @@ class AbstractSettings(object):
             return self.set_bool(settings.SUPPORT_ALTERNATIVE_PLAYER, value)
         return self.get_bool(settings.SUPPORT_ALTERNATIVE_PLAYER, False)
 
+    def default_player_web_urls(self, value=None):
+        if value is not None:
+            return self.set_bool(settings.DEFAULT_PLAYER_WEB_URLS, value)
+        if self.support_alternative_player():
+            return False
+        return self.get_bool(settings.DEFAULT_PLAYER_WEB_URLS, False)
+
     def alternative_player_web_urls(self, value=None):
         if value is not None:
             return self.set_bool(settings.ALTERNATIVE_PLAYER_WEB_URLS, value)
-        return self.get_bool(settings.ALTERNATIVE_PLAYER_WEB_URLS, False)
+        if (self.support_alternative_player()
+                and not self.alternative_player_adaptive()):
+            return self.get_bool(settings.ALTERNATIVE_PLAYER_WEB_URLS, False)
+        return False
+
+    def alternative_player_adaptive(self, value=None):
+        if value is not None:
+            return self.set_bool(settings.ALTERNATIVE_PLAYER_ADAPTIVE, value)
+        if self.support_alternative_player():
+            return self.get_bool(settings.ALTERNATIVE_PLAYER_ADAPTIVE, False)
+        return False
 
     def use_isa(self, value=None):
         if value is not None:

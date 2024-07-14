@@ -21,9 +21,9 @@ GUIDE_URL_FMT = 'https://www.cbc.ca/programguide/daily/{}/cbc_television'
 # Also important is that there needs to be symmetry between get_iptv_epg and
 # get_iptv_channels (from livechannels.py) because of how iptvmanager works.
 SPECIAL_GUIDES = {
-    'NN': 'https://www.cbc.ca/programguide/daily/{}/cbc_news_network',
-    '2265331267748': 'https://www.cbc.ca/programguide/daily/{}/cbc_comedy_fast',
-    '2076284995790': 'https://www.cbc.ca/programguide/daily/{}/cbc_news_explore',
+    15716: 'https://www.cbc.ca/programguide/daily/{}/cbc_comedy_fast',
+    15717: 'https://www.cbc.ca/programguide/daily/{}/cbc_news_explore',
+    15718: 'https://www.cbc.ca/programguide/daily/{}/cbc_news_network',
 }
 
 def get_iptv_epg():

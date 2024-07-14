@@ -102,15 +102,6 @@ def logout():
     os.remove(get_cookie_file())
 
 
-@plugin.route('/smil')
-def play_smil():
-    """Play an SMIL file."""
-    cbc = CBC()
-    url = cbc.parse_smil(plugin.args['url'][0])
-    labels = dict(parse_qsl(plugin.args['labels'][0])) if 'labels' in plugin.args else None
-    return play(labels, plugin.args['image'][0], url)
-
-
 @plugin.route('/iptv/channels')
 def iptv_channels():
     """Send a list of IPTV channels."""
@@ -149,6 +140,13 @@ def live_channels_add_only(station):
     LiveChannels.add_only_iptv_channel(station)
 
 
+@plugin.route('/channels/play')
+def play_live_channel():
+    labels = dict(parse_qsl(plugin.args['labels'][0])) if 'labels' in plugin.args else None
+    chans = LiveChannels()
+    url = chans.get_channel_stream(plugin.args['id'][0])
+    return play(labels, plugin.args['image'][0], url)
+
 @plugin.route('/channels')
 def live_channels_menu():
     """Populate the menu with live channels."""
@@ -171,7 +169,7 @@ def live_channels_menu():
             (getString(30017), 'RunPlugin({})'.format(plugin.url_for(live_channels_add_only, callsign))),
         ])
         xbmcplugin.addDirectoryItem(plugin.handle,
-                                    plugin.url_for(play_smil, url=channel['content'][0]['url'],
+                                    plugin.url_for(play_live_channel, id=channel['idMedia'],
                                                    labels=urlencode(labels), image=image), item, False)
     xbmcplugin.endOfDirectory(plugin.handle)
 

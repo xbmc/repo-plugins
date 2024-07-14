@@ -14,6 +14,7 @@ from .utils import save_cookies, loadCookies, saveAuthorization, log
 
 CALLSIGN = 'cbc$callSign'
 CHANNEL_GUID = 'guid'
+CHANNEL_ID = 'idMedia'
 API_KEY = '3f4beddd-2061-49b0-ae80-6f1f2ed65b37'
 SCOPES = 'openid '\
         'offline_access '\
@@ -258,6 +259,12 @@ class CBC:
             return item['cbc$staticImage']
         if 'cbc$featureImage' in item:
             return item['cbc$featureImage']
+        if 'image' in item:
+            return item['image']
+        if 'images' in item:
+            if 'card' in item['images']:
+                if 'url' in item['images']['card']:
+                    return item['images']['card']['url']
         return None
 
     @staticmethod
@@ -267,6 +274,8 @@ class CBC:
             return item[CALLSIGN]
         if CHANNEL_GUID in item:
             return item[CHANNEL_GUID]
+        if CHANNEL_ID in item:
+            return item[CHANNEL_ID]
         return None
 
     @staticmethod

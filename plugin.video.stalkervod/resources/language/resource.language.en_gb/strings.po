@@ -55,3 +55,11 @@ msgstr ""
 msgctxt "#32010"
 msgid "Signature"
 msgstr ""
+
+msgctxt "#32011"
+msgid "Server default context path /server/load.php"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Use /portal.php as context path"
+msgstr ""

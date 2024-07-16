@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.stalkervod" name="Stalker VOD Client" version="0.0.7" provider-name="rickey">
+<addon id="plugin.video.stalkervod" name="Stalker VOD Client" version="1.0.0" provider-name="rickey">
 	<requires>
 		<import addon="xbmc.python" version="3.0.1"/>
 		<import addon="script.module.requests" version="2.27.1"/>
@@ -7,6 +7,7 @@
 	<extension point="xbmc.python.pluginsource" library="addon_entry.py">
 		<provides>video</provides>
 	</extension>
+	<extension point="xbmc.service" library="service_entry.py"/>
 	<extension point="xbmc.addon.metadata">
 		<reuselanguageinvoker>true</reuselanguageinvoker>
 		<platform>all</platform>
@@ -24,8 +25,11 @@
 			<screenshot>resources/media/screenshot_4.png</screenshot>
 		</assets>
 		<news>
-v0.0.7  (2024-06-10)
-- Bug fix
+v1.0.0  (2024-07-13)
+- Major version release with refactor of the menu options. Support for portal with separate menu option for Series.
+If using kodi Add to Favourites option, existing Favourites link would break.
+Ability to use Portal Favorite option for both VOD and TV Channels
+Add support for UpNext addon.
 		</news>
 	</extension>
 </addon>

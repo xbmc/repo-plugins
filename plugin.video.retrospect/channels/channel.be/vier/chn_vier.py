@@ -1,25 +1,46 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-
 import datetime
+from typing import Tuple, List, Optional, Union
 
-from resources.lib import chn_class, contenttype, mediatype
-from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
-from resources.lib.helpers.htmlhelper import HtmlHelper
-from resources.lib.helpers.jsonhelper import JsonHelper
-from resources.lib.mediaitem import MediaItem
-from resources.lib.logger import Logger
-from resources.lib.regexer import Regexer
-from resources.lib.urihandler import UriHandler
-from resources.lib.parserdata import ParserData
-from resources.lib.streams.m3u8 import M3u8
-from resources.lib.streams.mpd import Mpd
-from resources.lib.helpers.datehelper import DateHelper
-from resources.lib.addonsettings import AddonSettings
-from resources.lib.xbmcwrapper import XbmcWrapper
-from resources.lib.helpers.languagehelper import LanguageHelper
-from resources.lib.vault import Vault
+import pytz
+
 # noinspection PyUnresolvedReferences
 from awsidp import AwsIdp
+from resources.lib import chn_class, contenttype, mediatype
+from resources.lib.actions import keyword, action
+from resources.lib.addonsettings import AddonSettings
+from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.helpers.jsonhelper import JsonHelper
+from resources.lib.helpers.languagehelper import LanguageHelper
+from resources.lib.logger import Logger
+from resources.lib.mediaitem import MediaItem, MediaItemResult, FolderItem
+from resources.lib.regexer import Regexer
+from resources.lib.retroconfig import Config
+from resources.lib.streams.m3u8 import M3u8
+from resources.lib.streams.mpd import Mpd
+from resources.lib.urihandler import UriHandler
+from resources.lib.vault import Vault
+from resources.lib.xbmcwrapper import XbmcWrapper
+
+
+class NextJsParser:
+    def __init__(self, regex: str):
+        self.__regex = regex
+
+    def __call__(self, data: str) -> Tuple[JsonHelper, List[MediaItem]]:
+        nextjs_regex = self.__regex
+        try:
+            nextjs_data = Regexer.do_regex(nextjs_regex, data)[0]
+        except:
+            Logger.debug(f"RAW NextJS: {data}")
+            raise
+
+        Logger.trace(f"NextJS: {nextjs_data}")
+        nextjs_json = JsonHelper(nextjs_data)
+        return nextjs_json, []
+
+    def __str__(self):
+        return f"NextJS parser: {self.__regex}"
 
 
 class Channel(chn_class.Channel):
@@ -39,142 +60,141 @@ class Channel(chn_class.Channel):
 
         chn_class.Channel.__init__(self, channel_info)
 
-        # https://www.goplay.be/api/programs/popular/vier
-        # https://www.goplay.be/api/epg/vier/2021-01-28
-
         # setup the main parsing data
         self.baseUrl = "https://www.goplay.be"
+        self.httpHeaders = {"rsc": "1"}
 
         if self.channelCode == "vijfbe":
-            self.noImage = "vijfimage.png"
-            self.mainListUri = "https://www.goplay.be/programmas/play5"
+            self.noImage = "vijffanart.png"
+            self.mainListUri = "https://www.goplay.be/programmas/play-5"
             self.__channel_brand = "play5"
             self.__channel_slug = "vijf"
 
         elif self.channelCode == "zesbe":
-            self.noImage = "zesimage.png"
-            self.mainListUri = "https://www.goplay.be/programmas/play6"
+            self.noImage = "zesfanart.png"
+            self.mainListUri = "https://www.goplay.be/programmas/play-6"
             self.__channel_brand = "play6"
             self.__channel_slug = "zes"
 
+        elif self.channelCode == "zevenbe":
+            self.noImage = "zevenfanart.png"
+            self.mainListUri = "https://www.goplay.be/programmas/play-7"
+            self.__channel_brand = "play7"
+            self.__channel_slug = "zeven"
+
+        elif self.channelCode == "goplay":
+            self.noImage = "goplayfanart.png"
+            # self.mainListUri = "https://www.goplay.be/programmas/"
+            self.mainListUri = "#goplay"
+            self.__channel_brand = None
         else:
-            self.noImage = "vierimage.png"
-            self.mainListUri = "https://www.goplay.be/programmas/play4"
+            self.noImage = "vierfanart.png"
+            self.mainListUri = "https://www.goplay.be/programmas/play-4"
             self.__channel_brand = "play4"
             self.__channel_slug = "vier"
 
-        episode_regex = r'(data-program)="([^"]+)"'
-        self._add_data_parser(self.mainListUri, match_type=ParserData.MatchExact,
-                              preprocessor=self.add_specials,
-                              parser=episode_regex,
-                              creator=self.create_episode_item)
+        self._add_data_parser("#goplay", preprocessor=self.add_specials)
 
-        self._add_data_parser("*", match_type=ParserData.MatchExact,
-                              name="Json video items", json=True,
-                              preprocessor=self.extract_hero_data,
-                              parser=["data", "playlists", 0, "episodes"],
-                              creator=self.create_video_item_api)
+        self._add_data_parser("#recent", preprocessor=self.add_recent_items)
 
-        video_regex = r'<a(?:[^>]+data-background-image="(?<thumburl>[^"]+)")?[^>]+href="' \
-                      r'(?<url>/video/[^"]+)"[^>]*>(?:\s+<div[^>]+>\s+<div [^>]+' \
-                      r'data-background-image="(?<thumburl2>[^"]+)")?[\w\W]{0,1000}?' \
-                      r'<h3[^>]*>(?:<span>)?(?<title>[^<]+)(?:</span>)?</h3>(?:\s+' \
-                      r'(?:<div[^>]*>\s+)?<div[^>]*>[^<]+</div>\s+<div[^>]+data-timestamp=' \
-                      r'"(?<timestamp>\d+)")?'
-        video_regex = Regexer.from_expresso(video_regex)
-        self._add_data_parser("*", match_type=ParserData.MatchExact,
-                              name="Normal video items",
-                              parser=video_regex,
-                              creator=self.create_video_item)
+        self._add_data_parser("https://www.goplay.be/programmas/", json=True,
+                              preprocessor=NextJsParser(
+                                  r"{\"brand\":\".+?\",\"results\":(.+),\"categories\":"))
 
-        self._add_data_parser("https://www.goplay.be/api/programs/popular",
-                              name="Special lists", json=True,
-                              parser=[], creator=self.create_episode_item_api)
+        self._add_data_parser("https://www.goplay.be/programmas/", json=True,
+                              preprocessor=self.add_recents,
+                              parser=[], creator=self.create_typed_nextjs_item)
 
-        self._add_data_parser("#tvguide", name="TV Guide recents",
-                              preprocessor=self.add_recent_items)
+        self._add_data_parser("https://www.goplay.be/", json=True, name="Main show parser",
+                              preprocessor=NextJsParser(r"{\"playlists\":(.+)}\]}\]\]$"),
+                              parser=[], creator=self.create_season_item,
+                              postprocessor=self.show_single_season)
 
-        self._add_data_parser("https://www.goplay.be/api/epg/", json=True,
-                              name="EPG items",
+        self._add_data_parser("https://www.goplay.be/tv-gids/", json=True, name="TV Guides",
+                              preprocessor=NextJsParser(
+                                  r"children\":(\[\[\"\$\",[^{]+{\"program.+\])}\]\]}\]"),
                               parser=[], creator=self.create_epg_item)
 
-        # Generic updater with login
+        self._add_data_parser("https://api.goplay.be/web/v1/search", json=True,
+                              name="Search results parser",
+                              parser=["hits", "hits"], creator=self.create_search_result)
+
         self._add_data_parser("https://api.goplay.be/web/v1/videos/long-form/",
                               updater=self.update_video_item_with_id)
-        self._add_data_parser("*", updater=self.update_video_item)
+        self._add_data_parser("https://www.goplay.be/video/",
+                              updater=self.update_video_item_from_nextjs)
+        self._add_data_parser("https://www.goplay.be/",
+                              updater=self.update_video_item)
 
         # ==========================================================================================
         # Channel specific stuff
         self.__idToken = None
-        self.__meta_playlist = "current_playlist"
-        self.__no_clips = False
+        self.__tz = pytz.timezone("Europe/Brussels")
 
         # ==========================================================================================
         # Test cases:
-        # Documentaire: pages (has http://www.canvas.be/tag/.... url)
-        # Not-Geo locked: Kroost
 
         # ====================================== Actual channel setup STOPS here ===================
         return
 
-    def log_on(self):
-        """ Logs on to a website, using an url.
+    def add_specials(self, data: JsonHelper) -> Tuple[JsonHelper, List[MediaItem]]:
+        if self.channelCode != "goplay":
+            return data, []
 
-        First checks if the channel requires log on. If so and it's not already
-        logged on, it should handle the log on. That part should be implemented
-        by the specific channel.
+        search_title = LanguageHelper.get_localized_string(LanguageHelper.Search)
+        search_item = FolderItem(search_title, self.search_url, content_type=contenttype.VIDEOS)
 
-        More arguments can be passed on, but must be handled by custom code.
+        url_format = f"plugin://{Config.addonId}/?{keyword.CHANNEL}={{}}&{keyword.ACTION}={action.LIST_FOLDER}"
+        vier = FolderItem("4: Vier", url_format.format("channel.be.vier"),
+                          content_type=contenttype.TVSHOWS)
+        vier.set_artwork(
+            poster=self.get_image_location("vierposter.png"),
+            fanart=self.get_image_location("vierfanart.jpg"),
+            icon=self.get_image_location("viericon.png")
+        )
 
-        After a successful log on the self.loggedOn property is set to True and
-        True is returned.
+        vijf = FolderItem("5: Vijf", url_format.format("channel.be.vier-vijfbe"),
+                          content_type=contenttype.TVSHOWS)
+        vijf.set_artwork(
+            poster=self.get_image_location("vijfposter.png"),
+            fanart=self.get_image_location("vijffanart.jpg"),
+            icon=self.get_image_location("vijficon.png")
+        )
 
-        :return: indication if the login was successful.
-        :rtype: bool
+        zes = FolderItem("6: Zes", url_format.format("channel.be.vier-zesbe"),
+                         content_type=contenttype.TVSHOWS)
+        zes.set_artwork(
+            poster=self.get_image_location("zesposter.png"),
+            fanart=self.get_image_location("zesfanart.jpg"),
+            icon=self.get_image_location("zesicon.png")
+        )
 
-        """
+        zeven = FolderItem("7: Zeven", url_format.format("channel.be.vier-zevenbe"),
+                           content_type=contenttype.TVSHOWS)
+        zeven.set_artwork(
+            poster=self.get_image_location("zevenposter.jpg"),
+            fanart=self.get_image_location("zevenfanart.jpg"),
+            icon=self.get_image_location("zevenicon.png")
+        )
 
-        if self.__idToken:
-            return True
+        all_items = FolderItem(
+            LanguageHelper.get_localized_string(LanguageHelper.TvShows),
+            "https://www.goplay.be/programmas/",
+            content_type=contenttype.TVSHOWS
+        )
+        return data, [search_item, vier, vijf, zes, zeven, all_items]
 
-        # check if there is a refresh token
-        # refresh token: viervijfzes_refresh_token
-        refresh_token = AddonSettings.get_setting("viervijfzes_refresh_token")
-        client = AwsIdp("eu-west-1_dViSsKM5Y", "6s1h851s8uplco5h6mqh1jac8m",
-                        logger=Logger.instance())
-        if refresh_token:
-            id_token = client.renew_token(refresh_token)
-            if id_token:
-                self.__idToken = id_token
-                return True
-            else:
-                Logger.info("Extending token for VierVijfZes failed.")
+    def add_recents(self, data: JsonHelper) -> Tuple[JsonHelper, List[MediaItem]]:
+        title = LanguageHelper.get_localized_string(LanguageHelper.Recent)
+        recent = FolderItem(title, "#recent", content_type=contenttype.TVSHOWS)
+        recent.dontGroup = True
+        recent.name = f".: {title} :."
+        return data, [recent]
 
-        # username: viervijfzes_username
-        username = AddonSettings.get_setting("viervijfzes_username")
-        # password: viervijfzes_password
-        v = Vault()
-        password = v.get_setting("viervijfzes_password")
-        if not username or not password:
-            XbmcWrapper.show_dialog(
-                title=None,
-                message=LanguageHelper.get_localized_string(LanguageHelper.MissingCredentials),
-            )
-            return False
-
-        id_token, refresh_token = client.authenticate(username, password)
-        if not id_token or not refresh_token:
-            Logger.error("Error getting a new token. Wrong password?")
-            return False
-
-        self.__idToken = id_token
-        AddonSettings.set_setting("viervijfzes_refresh_token", refresh_token)
-        return True
-
-    def add_recent_items(self, data):
+    def add_recent_items(self, data: JsonHelper) -> Tuple[JsonHelper, List[MediaItem]]:
         """ Performs pre-process actions for data processing.
 
-        Accepts an data from the process_folder_list method, BEFORE the items are
+        Accepts a data from the process_folder_list method, BEFORE the items are
         processed. Allows setting of parameters (like title etc) for the channel.
         Inside this method the <data> could be changed and additional items can
         be created.
@@ -203,418 +223,356 @@ class Channel(chn_class.Channel):
                 day = LanguageHelper.get_localized_string(LanguageHelper.Yesterday)
 
             title = "%04d-%02d-%02d - %s" % (air_date.year, air_date.month, air_date.day, day)
-            url = "https://www.goplay.be/api/epg/{}/{:04d}-{:02d}-{:02d}".\
+            url = "https://www.goplay.be/tv-gids/{}/{:04d}-{:02d}-{:02d}".\
                 format(self.__channel_slug, air_date.year, air_date.month, air_date.day)
 
             extra = MediaItem(title, url)
             extra.complete = True
             extra.dontGroup = True
+            extra.HttpHeaders = self.httpHeaders
             extra.set_date(air_date.year, air_date.month, air_date.day, text="")
             extra.content_type = contenttype.VIDEOS
             items.append(extra)
 
         return data, items
 
-    def add_specials(self, data):
-        """ Performs pre-process actions for data processing.
+    def search_site(self, url: Optional[str] = None, needle: Optional[str] = None) -> List[MediaItem]:
+        """ Creates a list of items by searching the site.
 
-        Accepts an data from the process_folder_list method, BEFORE the items are
-        processed. Allows setting of parameters (like title etc) for the channel.
-        Inside this method the <data> could be changed and additional items can
-        be created.
+        This method is called when and item with `self.search_url` is opened. The channel
+        calling this should implement the search functionality. This could also include
+        showing of an input keyboard and following actions.
 
-        The return values should always be instantiated in at least ("", []).
+        The %s the url will be replaced with a URL encoded representation of the
+        text to search for.
 
-        :param str data: The retrieve data that was loaded for the current item and URL.
+        :param url:     Url to use to search with an %s for the search parameters.
+        :param needle:  The needle to search for.
 
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
+        :return: A list with search results as MediaItems.
 
         """
 
-        items = []
+        if not needle:
+            raise ValueError("No needle present")
 
-        specials = {
-            "https://www.goplay.be/api/programs/popular/{}".format(self.__channel_slug): (
-                LanguageHelper.get_localized_string(LanguageHelper.Popular),
-                contenttype.TVSHOWS
-            ),
-            "#tvguide": (
-                LanguageHelper.get_localized_string(LanguageHelper.Recent),
-                contenttype.FILES
+        url = f"https://api.goplay.be/web/v1/search"
+        payload = {"mode": "byDate", "page": 0, "query": needle}
+        temp = MediaItem("Search", url, mediatype.FOLDER)
+        temp.postJson = payload
+        return self.process_folder_list(temp)
+
+    def create_typed_nextjs_item(self, result_set: dict) -> MediaItemResult:
+        item_type = result_set["type"]
+        item_sub_type = result_set["subtype"]
+
+        if item_type == "program":
+            return self.create_program_typed_item(result_set)
+        else:
+            Logger.warning(f"Unknown type: {item_type}:{item_sub_type}")
+        return None
+
+    def create_program_typed_item(self, result_set: dict) -> MediaItemResult:
+        item_sub_type = result_set["subtype"]
+        data = result_set.get("data")
+
+        if not data:
+            return None
+
+        brand = data["brandName"].lower()
+        if self.__channel_brand and brand != self.__channel_brand:
+            return None
+
+        title = data["title"]
+        path = data["path"]
+        url = f"{self.baseUrl}{path}"
+
+        if item_sub_type == "movie":
+            item = MediaItem(title, url, media_type=mediatype.MOVIE)
+            # item.metaData["retrospect:parser"] = "movie"
+        else:
+            item = FolderItem(title, url, content_type=contenttype.EPISODES)
+
+        if "brandName" in data:
+            item.metaData["brand"] = data["brandName"]
+        if "categoryName" in data:
+            item.metaData["category"] = data["categoryName"]
+        if "parentalRating" in data:
+            item.metaData["parental"] = data["parentalRating"]
+
+        self.__extract_artwork(item, data.get("images"))
+        return item
+
+    def create_season_item(self, result_set):
+        season_item = None
+        season = result_set.get("season", 0)
+
+        if season:
+            title = f"{LanguageHelper.get_localized_string(LanguageHelper.SeasonId)} {season}"
+            season_item = FolderItem(title, result_set["uuid"], content_type=contenttype.EPISODES)
+
+        videos = []
+        video_info: dict
+        for video_info in result_set.get("videos", []):
+            title = video_info["title"]
+            url = f"{self.baseUrl}{video_info['path']}"
+            video_date = video_info["dateCreated"]
+            description = video_info["description"]
+            # video_id = video_info["uuid"]
+            episode = video_info.get("episodeNumber", 0)
+
+            item = MediaItem(title, url, media_type=mediatype.EPISODE)
+            item.description = description
+
+            self.__extract_artwork(item, video_info.get("images"), set_fanart=False)
+
+            if episode and season:
+                item.set_season_info(season, episode)
+
+            date_stamp = DateHelper.get_date_from_posix(int(video_date), tz=self.__tz)
+            item.set_date(date_stamp.year, date_stamp.month, date_stamp.day, date_stamp.hour,
+                          date_stamp.minute, date_stamp.second)
+
+            self.__extract_stream_collection(item, video_info)
+            videos.append(item)
+            if season_item:
+                season_item.items.append(item)
+
+        if season_item:
+            return season_item
+        return videos
+
+    # noinspection PyUnusedLocal
+    def show_single_season(self, data: Union[str, JsonHelper], items: List[MediaItem]) -> List[MediaItem]:
+        if len(items) == 1 and len(items[0].items) > 0:
+            Logger.info("Showing the full listing of a single season.")
+            return items[0].items
+        return items
+
+    def create_search_result(self, result_set: dict) -> MediaItemResult:
+        data = result_set["_source"]
+
+        title = data["title"]
+        url = data["url"]
+        description = data["intro"]
+        thumb = data["img"]
+        video_date = data["created"]
+        item_type = data["bundle"]
+
+        if item_type == "video":
+            item = MediaItem(title, url, media_type=mediatype.VIDEO)
+        elif item_type == "program":
+            item = FolderItem(title, url, content_type=contenttype.EPISODES)
+        else:
+            Logger.warning("Unknown search result type.")
+            return None
+
+        item.description = description
+        item.set_artwork(thumb=thumb)
+        date_stamp = DateHelper.get_date_from_posix(int(video_date), tz=self.__tz)
+        item.set_date(date_stamp.year, date_stamp.month, date_stamp.day, date_stamp.hour,
+                      date_stamp.minute, date_stamp.second)
+        return item
+
+    def create_epg_item(self, result_set: dict) -> MediaItemResult:
+        data = result_set[-1]["program"]
+        if not data["video"]:
+            return None
+
+        title = data["programTitle"]
+        episode_title = data["episodeTitle"]
+        time_value = data["timeString"]
+        if episode_title:
+            title = f"{time_value} - {title} - {episode_title}"
+        else:
+            title = f"{time_value} - {title}"
+
+        description = data["contentEpisode"]
+        time_stamp = data["timestamp"]
+        duration = data["duration"]
+
+        video_info = data["video"]["data"]
+        path = video_info["path"]
+        video_type = video_info["type"]
+        if video_type != "video":
+            Logger.warning(f"Unknown EPG type: {video_type}")
+
+        item = MediaItem(title, f"{self.baseUrl}{path}", media_type=mediatype.EPISODE)
+        item.description = description
+        item.set_info_label(MediaItem.LabelDuration, duration)
+
+        # Setting this messes up the sorting.
+        # episode = data["episodeNr"]
+        # season = data["season"]
+        # item.set_season_info(season, episode)
+
+        date_stamp = DateHelper.get_date_from_posix(time_stamp, tz=self.__tz)
+        item.set_date(date_stamp.year, date_stamp.month, date_stamp.day, date_stamp.hour,
+                      date_stamp.minute, date_stamp.second)
+        self.__extract_artwork(item, video_info["images"], set_fanart=False)
+        return item
+
+    # def add_specials(self, data):
+    #     """ Performs pre-process actions for data processing.
+    #
+    #     Accepts an data from the process_folder_list method, BEFORE the items are
+    #     processed. Allows setting of parameters (like title etc) for the channel.
+    #     Inside this method the <data> could be changed and additional items can
+    #     be created.
+    #
+    #     The return values should always be instantiated in at least ("", []).
+    #
+    #     :param str data: The retrieve data that was loaded for the current item and URL.
+    #
+    #     :return: A tuple of the data and a list of MediaItems that were generated.
+    #     :rtype: tuple[str|JsonHelper,list[MediaItem]]
+    #
+    #     """
+    #
+    #     items = []
+    #
+    #     specials = {
+    #         "https://www.goplay.be/api/programs/popular/{}".format(self.__channel_slug): (
+    #             LanguageHelper.get_localized_string(LanguageHelper.Popular),
+    #             contenttype.TVSHOWS
+    #         ),
+    #         "#tvguide": (
+    #             LanguageHelper.get_localized_string(LanguageHelper.Recent),
+    #             contenttype.FILES
+    #         )
+    #     }
+    #
+    #     for url, (title, content) in specials.items():
+    #         item = MediaItem("\a.: {} :.".format(title), url)
+    #         item.content_type = content
+    #         items.append(item)
+    #
+    #     return data, items
+
+    def log_on(self):
+        """ Logs on to a website, using an url.
+
+        First checks if the channel requires log on. If so and it's not already
+        logged on, it should handle the log on. That part should be implemented
+        by the specific channel.
+
+        More arguments can be passed on, but must be handled by custom code.
+
+        After a successful log on the self.loggedOn property is set to True and
+        True is returned.
+
+        :return: indication if the login was successful.
+        :rtype: bool
+
+        """
+
+        if self.__idToken:
+            return True
+
+        # check if there is a refresh token
+        refresh_token = AddonSettings.get_setting("viervijfzes_refresh_token")
+        client = AwsIdp("eu-west-1_dViSsKM5Y", "6s1h851s8uplco5h6mqh1jac8m",
+                        logger=Logger.instance())
+        if refresh_token:
+            id_token = client.renew_token(refresh_token)
+            if id_token:
+                self.__idToken = id_token
+                return True
+            else:
+                Logger.info("Extending token for VierVijfZes failed.")
+
+        username = AddonSettings.get_setting("viervijfzes_username")
+        v = Vault()
+        password = v.get_setting("viervijfzes_password")
+        if not username or not password:
+            XbmcWrapper.show_dialog(
+                title=None,
+                message=LanguageHelper.get_localized_string(LanguageHelper.MissingCredentials),
             )
+            return False
+
+        id_token, refresh_token = client.authenticate(username, password)
+        if not id_token or not refresh_token:
+            Logger.error("Error getting a new token. Wrong password?")
+            return False
+
+        self.__idToken = id_token
+        AddonSettings.set_setting("viervijfzes_refresh_token", refresh_token)
+        return True
+
+    def update_video_item(self, item: MediaItem) -> MediaItem:
+        data = UriHandler.open(item.url, additional_headers=self.httpHeaders)
+        list_id = Regexer.do_regex(r"listId\":\"([^\"]+)\"", data)[0]
+        item.url = f"https://api.goplay.be/web/v1/videos/long-form/{list_id}"
+        return self.update_video_item_with_id(item)
+
+    def update_video_item_from_nextjs(self, item: MediaItem) -> MediaItem:
+        data = UriHandler.open(item.url, additional_headers=self.httpHeaders)
+        json_data = Regexer.do_regex(r"({\"video\":{.+?})\]}\],", data)[0]
+        nextjs_json = JsonHelper(json_data)
+
+        # See if the NextJS data has stream info.
+        self.__extract_stream_collection(item, nextjs_json.get_value("video"))
+
+        # if not streams were included, perhaps this is a drm protected sstream.
+        if not item.has_streams():
+            return self.update_video_item_with_id(item)
+        return item
+
+    def update_video_item_with_id(self, item: MediaItem) -> MediaItem:
+        """ Updates an existing MediaItem with more data.
+
+        Used to update none complete MediaItems (self.complete = False). This
+        could include opening the item's URL to fetch more data and then process that
+        data or retrieve it's real media-URL.
+
+        The method should at least:
+        * cache the thumbnail to disk (use self.noImage if no thumb is available).
+        * set at least one MediaStream.
+        * set self.complete = True.
+
+        if the returned item does not have a MediaSteam then the self.complete flag
+        will automatically be set back to False.
+
+        :param MediaItem item: the original MediaItem that needs updating.
+
+        :return: The original item with more data added to it's properties.
+        :rtype: MediaItem
+
+        """
+
+        Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
+
+        # We need to log in
+        if not self.loggedOn:
+            self.log_on()
+
+        # add authorization header
+        authentication_header = {
+            "authorization": "Bearer {}".format(self.__idToken),
+            "content-type": "application/json"
         }
 
-        for url, (title, content) in specials.items():
-            item = MediaItem("\a.: {} :.".format(title), url)
-            item.content_type = content
-            items.append(item)
-
-        return data, items
-
-    def create_episode_item(self, result_set):
-        """ Creates a new MediaItem for an episode.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param list[str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
-        json_data = result_set[1].replace("&quot;", "\"")
-        result_set = JsonHelper(json_data)
-        result_set = result_set.json
-        return self.create_episode_item_api(result_set)
-
-    def create_episode_item_api(self, result_set):
-        """ Creates a new MediaItem for an episode.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param list[str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
-        if not isinstance(result_set, dict):
-            json_data = result_set[1].replace("&quot;", "\"")
-            result_set = JsonHelper(json_data)
-            result_set = result_set.json
-
-        brand = result_set["pageInfo"]["brand"].lower()
-        if brand != self.__channel_brand:
-            return None
-
-        title = result_set["title"]
-        url = "{}{}".format(self.baseUrl, result_set["link"])
-        item = MediaItem(title, url)
-        item.description = result_set.get("description")
-        item.isGeoLocked = True
-
-        images = result_set["images"]
-        item.poster = HtmlEntityHelper.convert_html_entities(images.get("poster"))
-        item.thumb = HtmlEntityHelper.convert_html_entities(images.get("teaser"))
-        return item
-
-    def extract_hero_data(self, data):
-        """ Extacts the Hero json data
-
-        Accepts an data from the process_folder_list method, BEFORE the items are
-        processed. Allows setting of parameters (like title etc) for the channel.
-        Inside this method the <data> could be changed and additional items can
-        be created.
-
-        The return values should always be instantiated in at least ("", []).
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[JsonHelper,list[MediaItem]]
-
-        """
-
-        Logger.info("Performing Pre-Processing")
-        items = []
-
-        hero_data = Regexer.do_regex(r'data-hero="([^"]+)', data)[0]
-        hero_data = HtmlEntityHelper.convert_html_entities(hero_data)
-        Logger.trace(hero_data)
-        hero_json = JsonHelper(hero_data)
-        hero_playlists = hero_json.get_value("data", "playlists")
-        if not hero_playlists:
-            # set an empty object
-            hero_json.json = {}
-
-        current = self.parentItem.metaData.get("current_playlist", None)
-        if current == "clips":
-            Logger.debug("Found 'clips' metadata, only listing clips")
-            hero_json.json = {}
-            return hero_json, items
-
-        if current is None:
-            # Add clips folder
-            clip_title = LanguageHelper.get_localized_string(LanguageHelper.Clips)
-            clips = MediaItem("\a.: %s :." % (clip_title,), self.parentItem.url)
-            clips.metaData[self.__meta_playlist] = "clips"
-            self.__no_clips = True
-            items.append(clips)
-
-        # See if there are seasons to show
-        if len(hero_playlists) == 1:
-            # first items, list all, except if there is only a single season
-            Logger.debug("Only one folder playlist found. Listing that one")
-            return hero_json, items
-
-        if current is None:
-            # list all folders
-            for playlist in hero_playlists:
-                folder = self.create_folder_item(playlist)
-                items.append(folder)
-            # clear the json item to prevent further listing
-            hero_json.json = {}
-            return hero_json, items
-
-        # list the correct folder
-        current_list = [lst for lst in hero_playlists if lst["id"] == current]
-        if current_list:
-            # we are listing a subfolder, put that one on index 0 and then also
-            hero_playlists.insert(0, current_list[0])
-            self.__no_clips = True
-
-        Logger.debug("Pre-Processing finished")
-        return hero_json, items
-
-    def create_folder_item(self, result_set):
-        """ Creates a MediaItem of type 'page' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'page'.
-        :rtype: MediaItem|None
-
-        """
-
-        folder = MediaItem(result_set["title"], self.parentItem.url)
-        folder.metaData["current_playlist"] = result_set["id"]
-        return folder
-
-    def create_video_item_api(self, result_set):
-        """ Creates a MediaItem of type 'video' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param dict[str,] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        # Could be: title = result_set['episodeTitle']
-        title = result_set['title']
-        url = "https://api.goplay.be/web/v1/videos/long-form/{}".format(result_set['videoUuid'])
-        item = MediaItem(title, url)
-        item.media_type = mediatype.EPISODE
-        item.description = HtmlHelper.to_text(result_set.get("description").replace(">\r\n", ">"))
-        item.thumb = result_set["image"]
-        item.isGeoLocked = result_set.get("isProtected")
-
-        date_time = DateHelper.get_date_from_posix(int(result_set["createdDate"]))
-        item.set_date(date_time.year, date_time.month, date_time.day, date_time.hour,
-                      date_time.minute,
-                      date_time.second)
-
-        item.set_info_label("duration", result_set["duration"])
-        if "episodeNumber" in result_set and "seasonNumber" in result_set:
-            item.set_season_info(result_set["seasonNumber"], result_set["episodeNumber"])
-        return item
-
-    def create_epg_item(self, result_set):
-        """ Creates a MediaItem of type 'video' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param dict[str,] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        if "video_node" not in result_set:
-            return None
-
-        # Could be: title = result_set['episodeTitle']
-        program_title = result_set['program_title']
-        episode_title = result_set['episode_title']
-        time_value = result_set["time_string"]
-        if episode_title:
-            title = "{}: {} - {}".format(time_value, program_title, episode_title)
-        else:
-            title = "{}: {}".format(time_value, program_title)
-        video_info = result_set["video_node"]
-        url = "{}{}".format(self.baseUrl, video_info["url"])
-
-        item = MediaItem(title, url)
-        item.media_type = mediatype.EPISODE
-        item.description = video_info["description"]
-        item.thumb = video_info["image"]
-        item.isGeoLocked = result_set.get("isProtected")
-        item.set_info_label("duration", video_info["duration"])
-
-        # 2021-01-27
-        time_stamp = DateHelper.get_date_from_string(result_set["date_string"], date_format="%Y-%m-%d")
-        item.set_date(*time_stamp[0:6])
-
-        item.set_info_label("duration", result_set["duration"])
-        if "episode_nr" in result_set and "season" in result_set \
-                and result_set["season"] and "-" not in result_set["season"]:
-            item.set_season_info(result_set["season"], result_set["episode_nr"])
-        return item
-
-    def create_video_item(self, result_set):
-        """ Creates a MediaItem of type 'video' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        if self.__no_clips:
-            return None
-
-        item = chn_class.Channel.create_video_item(self, result_set)
-
-        # Set the correct url
-        # videoId = resultSet["videoid"]
-        # item.url = "https://api.goplay.be/web/v1/videos/long-form/%s" % (videoId, )
-        time_stamp = result_set.get("timestamp")
-        if time_stamp:
-            date_time = DateHelper.get_date_from_posix(int(result_set["timestamp"]))
-            item.set_date(date_time.year, date_time.month, date_time.day, date_time.hour,
-                          date_time.minute,
-                          date_time.second)
-
-        if not item.thumb and "thumburl2" in result_set and result_set["thumburl2"]:
-            item.thumb = result_set["thumburl2"]
-
-        if item.thumb and item.thumb != self.noImage:
-            item.thumb = HtmlEntityHelper.strip_amp(item.thumb)
-        return item
-
-    def update_video_item(self, item):
-        """ Updates an existing MediaItem with more data.
-
-        Used to update none complete MediaItems (self.complete = False). This
-        could include opening the item's URL to fetch more data and then process that
-        data or retrieve it's real media-URL.
-
-        The method should at least:
-        * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaStream.
-        * set self.complete = True.
-
-        if the returned item does not have a MediaSteam then the self.complete flag
-        will automatically be set back to False.
-
-        :param MediaItem item: the original MediaItem that needs updating.
-
-        :return: The original item with more data added to it's properties.
-        :rtype: MediaItem
-
-        """
-
-        Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
-
-        # https://api.goplay.be/web/v1/videos/long-form/c58996a6-9e3d-4195-9ecf-9931194c00bf
-        # videoId = item.url.split("/")[-1]
-        # url = "%s/video/v3/embed/%s" % (self.baseUrl, videoId,)
-        url = item.url
-        data = UriHandler.open(url)
-        return self.__update_video(item, data)
-
-    def update_video_item_with_id(self, item):
-        """ Updates an existing MediaItem with more data.
-
-        Used to update none complete MediaItems (self.complete = False). This
-        could include opening the item's URL to fetch more data and then process that
-        data or retrieve it's real media-URL.
-
-        The method should at least:
-        * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaStream.
-        * set self.complete = True.
-
-        if the returned item does not have a MediaSteam then the self.complete flag
-        will automatically be set back to False.
-
-        :param MediaItem item: the original MediaItem that needs updating.
-
-        :return: The original item with more data added to it's properties.
-        :rtype: MediaItem
-
-        """
-
-        Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
-
-        data = None
-        return self.__update_video(item, data)
-
-    def __update_video(self, item, data):
-        if not item.url.startswith("https://api.goplay.be/web/v1/videos/long-form/"):
-            regex = 'data-video-*id="([^"]+)'
-            m3u8_url = Regexer.do_regex(regex, data)[-1]
-            # we either have an URL now or an uuid
-        else:
-            m3u8_url = item.url.rsplit("/", 1)[-1]
-
-        if ".m3u8" not in m3u8_url:
-            Logger.info("Not a direct M3u8 file. Need to log in")
-            url = "https://api.goplay.be/web/v1/videos/long-form/%s" % (m3u8_url, )
-
-            # We need to log in
-            if not self.loggedOn:
-                self.log_on()
-
-            # add authorization header
-            authentication_header = {
-                "authorization": "Bearer {}".format(self.__idToken),
-                "content-type": "application/json"
-            }
-            data = UriHandler.open(url, additional_headers=authentication_header)
-            json_data = JsonHelper(data)
-            m3u8_url = json_data.get_value("manifestUrls", "hls")
-
-            # If there's no m3u8 URL, try to use a SSAI stream instead
-            if m3u8_url is None and json_data.get_value("ssai") is not None:
-                return self.__get_ssai_streams(item, json_data)
-
-            elif m3u8_url is None and json_data.get_value('message') is not None:
-                error_message = json_data.get_value('message')
-                if error_message == "Locked":
-                    # set it for the error statistics
-                    item.isGeoLocked = True
-                Logger.info("No stream manifest found: {}".format(error_message))
-                item.complete = False
-                return item
+        data = UriHandler.open(item.url, additional_headers=authentication_header, no_cache=True)
+        json_data = JsonHelper(data)
+
+        if json_data.get_value("ssai") is not None:
+            return self.__get_ssai_streams(item, json_data)
+
+        m3u8_url = json_data.get_value("manifestUrls", "hls")
+
+        # # If there's no m3u8 URL, try to use a SSAI stream instead
+        # if m3u8_url is None and json_data.get_value("ssai") is not None:
+        #     return self.__get_ssai_streams(item, json_data)
+
+        if m3u8_url is None and json_data.get_value('message') is not None:
+            error_message = json_data.get_value('message')
+            if error_message == "Locked":
+                # set it for the error statistics
+                item.isGeoLocked = True
+            Logger.info("No stream manifest found: {}".format(error_message))
+            item.complete = False
+            return item
 
         # Geo Locked?
         if "/geo/" in m3u8_url.lower():
@@ -624,24 +582,87 @@ class Channel(chn_class.Channel):
         item.complete = M3u8.update_part_with_m3u8_streams(
             item, m3u8_url, channel=self, encrypted=False)
 
+    def __extract_stream_collection(self, item, video_info):
+        stream_collection = video_info.get("streamCollection", {})
+        prefer_widevine = True  # video_info.get("videoType") != "longForm"
+
+        if stream_collection:
+            drm_key = stream_collection["drmKey"]
+            video_id = video_info["uuid"]
+            if drm_key:
+                Logger.info(f"Found DRM enabled item: {item.name}")
+                item.url = f"https://api.goplay.be/web/v1/videos/long-form/{video_id}"
+                item.isGeoLocked = True
+                item.isDrmProtected = True
+                item.metaData["drm"] = drm_key
+                return
+
+            streams = stream_collection["streams"]
+            duration = stream_collection["duration"]
+            if duration:
+                item.set_info_label(MediaItem.LabelDuration, duration)
+            for stream in streams:
+                proto = stream["protocol"]
+                stream_url = stream["url"]
+                if proto == "dash":
+                    stream = item.add_stream(stream_url, 1550 if prefer_widevine else 1450)
+                    Mpd.set_input_stream_addon_input(stream)
+                elif proto == "hls":
+                    stream = item.add_stream(stream_url, 1500)
+                    M3u8.set_input_stream_addon_input(stream)
+
+                if "/geo" in stream_url:
+                    item.isGeoLocked = True
+
+            item.complete = item.has_streams()
+
+    def __extract_artwork(self, item: MediaItem, images: dict, set_fanart: bool = True):
+        if not images:
+            return
+
+        if "poster" in images:
+            item.poster = images["poster"]
+        if "default" in images:
+            item.thumb = images["default"]
+            if set_fanart:
+                item.fanart = images["default"]
+        elif "posterLandscape" in images:
+            item.thumb = images["posterLandscape"]
+            if set_fanart:
+                item.fanart = images["posterLandscape"]
+
     def __get_ssai_streams(self, item, json_data):
         Logger.info("No stream data found, trying SSAI data")
         content_source_id = json_data.get_value("ssai", "contentSourceID")
         video_id = json_data.get_value("ssai", "videoID")
+        drm_header = json_data.get_value("drmXml", fallback=None)
 
         streams_url = 'https://dai.google.com/ondemand/dash/content/{}/vid/{}/streams'.format(
             content_source_id, video_id)
+        # streams_url = "https://pubads.g.doubleclick.net/ondemand/dash/content/{}/vid/{}/streams".format(
+        #     content_source_id, video_id)
+
         streams_input_data = {
             "api-key": "null"
+            # "api-key": item.metaData.get("drm", "null")
         }
         streams_headers = {
             "content-type": "application/json"
         }
-        data = UriHandler.open(streams_url, data=streams_input_data, additional_headers=streams_headers)
+        data = UriHandler.open(streams_url, data=streams_input_data,
+                               additional_headers=streams_headers, no_cache=True)
         json_data = JsonHelper(data)
         mpd_url = json_data.get_value("stream_manifest")
 
         stream = item.add_stream(mpd_url, 0)
-        Mpd.set_input_stream_addon_input(stream)
+
+        if drm_header:
+            header = {"customdata": drm_header, "content-type": "application/octet-stream"}
+            license_key = Mpd.get_license_key(
+                "https://wv-keyos.licensekeyserver.com/", key_type="R",
+                key_headers=header)
+            Mpd.set_input_stream_addon_input(stream, license_key=license_key)
+        else:
+            Mpd.set_input_stream_addon_input(stream)
         item.complete = True
         return item

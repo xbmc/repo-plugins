@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
+from typing import List, Optional
+
 import pytz
 import urllib.parse
 
@@ -121,20 +123,20 @@ class Channel(chn_class.Channel):
         return
 
     # noinspection PyUnusedLocal
-    def search_site(self, url=None):  # @UnusedVariable
+    def search_site(self, url: Optional[str] = None, needle: Optional[str] = None) -> List[MediaItem]:
         """ Creates a list of items by searching the site.
 
-        This method is called when the URL of an item is "searchSite". The channel
+        This method is called when and item with `self.search_url` is opened. The channel
         calling this should implement the search functionality. This could also include
         showing of an input keyboard and following actions.
 
-        The %s the url will be replaced with an URL encoded representation of the
+        The %s the url will be replaced with a URL encoded representation of the
         text to search for.
 
-        :param str url:     Url to use to search with a %s for the search parameters.
+        :param url:     Url to use to search with an %s for the search parameters.
+        :param needle:  The needle to search for.
 
         :return: A list with search results as MediaItems.
-        :rtype: list[MediaItem]
 
         """
 
@@ -144,7 +146,7 @@ class Channel(chn_class.Channel):
             "imageMedia{url,label},type,sources{type,file,drm},seasonNumber,"
             "tvSeasonEpisodeNumber,series{title},lastPubDate}}"
         ).replace("%", "%%").replace("----", "%s")
-        return chn_class.Channel.search_site(self, url)
+        return chn_class.Channel.search_site(self, url, needle)
 
     def list_dates(self, data):
         """ Generates a list of the past week days.
@@ -509,7 +511,7 @@ class Channel(chn_class.Channel):
         items.append(recent)
 
         search_title = LanguageHelper.get_localized_string(LanguageHelper.Search)
-        search = FolderItem("\a.: {} :.".format(search_title), "#searchSite",
+        search = FolderItem("\a.: {} :.".format(search_title), self.search_url,
                             content_type=contenttype.EPISODES)
         search.dontGroup = True
         items.append(search)

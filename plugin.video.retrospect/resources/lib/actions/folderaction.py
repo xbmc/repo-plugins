@@ -20,7 +20,7 @@ from resources.lib.xbmcwrapper import XbmcWrapper
 
 
 class FolderAction(AddonAction):
-    def __init__(self, parameter_parser, channel, favorites=None):
+    def __init__(self, parameter_parser, channel, favorites=None, items=None):
         """Wraps the channel.process_folder_list
 
         :param ActionParser parameter_parser:      A ActionParser object to is used to parse and
@@ -38,6 +38,7 @@ class FolderAction(AddonAction):
         self.__channel = channel
         self.__media_item = parameter_parser.media_item
         self.__favorites = favorites
+        self.__items = items
 
     def execute(self):
         Logger.info("Plugin::process_folder_list Doing process_folder_list")
@@ -50,7 +51,10 @@ class FolderAction(AddonAction):
             # determine the parent guid
             parent_guid = self.parameter_parser.get_parent_guid(self.__channel, selected_item)
 
-            if self.__favorites is None:
+            if self.__items is not None:
+                watcher = StopWatch("Plugin process_folder_list of existing items", Logger.instance())
+                media_items = self.__items
+            elif self.__favorites is None:
                 watcher = StopWatch("Plugin process_folder_list", Logger.instance())
                 media_items = self.__channel.process_folder_list(selected_item)
                 watcher.lap("Class process_folder_list finished")
@@ -240,6 +244,11 @@ class FolderAction(AddonAction):
 
         # Set the properties for the context menu add-on
         kodi_item.setProperty(self._propertyRetrospect, "true")
+
+        if media_item.is_search_folder:
+            # Search folders don't need more.
+            return
+
         kodi_item.setProperty(self._propertyRetrospectFolder
                               if is_folder
                               else self._propertyRetrospectVideo, "true")
@@ -295,7 +304,7 @@ class FolderAction(AddonAction):
                 # Some items have episodes, only add the sorting options.
                 sort_methods.append(xbmcplugin.SORT_METHOD_EPISODE)  # 24
 
-        is_search = self.__media_item.is_search(self.__media_item.url) if self.__media_item else False
+        is_search = self.parameter_parser.action == action.SEARCH
         if is_search:
             sort_methods.remove(xbmcplugin.SORT_METHOD_UNSORTED)
             sort_methods.insert(0, xbmcplugin.SORT_METHOD_UNSORTED)

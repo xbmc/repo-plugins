@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from resources.lib import chn_class, mediatype
-from resources.lib.helpers.datehelper import DateHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.logger import Logger
@@ -32,13 +31,18 @@ class Channel(chn_class.Channel):
         self.poster = "bvntvposter.png"
         self.mainListUri = "https://www.bvn.tv/programmas/"
 
-        episode_regex = r'<a[^>]*href="(?<url>[^"]+)[^>]*>\W*<img[^>]*data-src="(?<thumburl>[^"]+)"[^>]*>\W*<div[^>]*>(?<title>[^<]+)<'
+        episode_regex = (r'<a[^>]*href="(?<url>[^"]+)[^>]*>\W*<figure class="media">\W*<img[^>]*'
+                         r'data-src="(?<thumburl>[^"]+)"[\w\W]{0,500}?<h4[^>]+>\W+'
+                         r'(?<title>[^<]+?)[\W]+<')
         episode_regex = Regexer.from_expresso(episode_regex)
         self._add_data_parser(self.mainListUri, name="Mainlist and live",
                               preprocessor=self.add_live_streams,
                               parser=episode_regex, creator=self.create_episode_item)
 
-        video_regex = r'<a[^>]+href="(?<url>[^"]+/(?<pow>[^"]+))"[^>]*>\W*<div[^>]+>\W*<img[^>]+data-src="(?<thumburl>[^"]+)"[\w\W]{0,1000}?title">(?<title>[^<]+)<[^<]+<[^>]+>(?<subtitle>[^<]*)<[^<]+<[^>]+datetime="(?<datetime>[^"]+)"'
+        video_regex = (r'<a[^>]+href="(?<url>[^"]+/(?<pow>[^"]+))"[^>]*>\W*<figure[^>]+>\W+'
+                       r'<img[^>]+src="(?<thumburl>[^"]+)"[\w\W]{0,1000}?<h4[^>]*>\W+'
+                       r'(?<title>[^<]+?)\W+</h4>\W*<p.+class="time">\W+\w+ (?<datetime>[^"]+?)'
+                       r'\W+</p>')
         video_regex = Regexer.from_expresso(video_regex)
         self._add_data_parser("https://www.bvn.tv/programma/", name="Main video listings for shows",
                               preprocessor=self.extract_episode_section,
@@ -59,8 +63,8 @@ class Channel(chn_class.Channel):
         Logger.info("Performing Pre-Processing")
         items = []
 
-        data = data.split("slick-missed-program", 1)[1]
-        data = data.split("</section>", 1)[0]
+        data = data.split("<!-- episodes -->", 1)[1]
+        data = data.split("<!-- footer -->", 1)[0]
 
         Logger.debug("Pre-Processing finished")
         return data, items
@@ -109,9 +113,9 @@ class Channel(chn_class.Channel):
         if not item.url.endswith("/"):
             item.url = "{}/".format(item.url)
 
-        date_value = result_set["datetime"]
-        date_time = DateHelper.get_date_from_string(date_value, "%Y-%m-%d %H:%M:%S")
-        item.set_date(*date_time[0:6])
+        # date_value = result_set["datetime"]
+        # date_time = DateHelper.get_date_from_string(date_value, "%  Y-%m-%d %H:%M:%S")
+        # item.set_date(*date_time[0:6])
 
         item.thumb = "{}{}".format(self.baseUrl, result_set["thumburl"])
         item.metaData["pow"] = result_set["pow"]

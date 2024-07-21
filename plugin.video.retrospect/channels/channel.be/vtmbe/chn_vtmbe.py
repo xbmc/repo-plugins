@@ -4,6 +4,7 @@ import base64
 import random
 import time
 import datetime
+from typing import Optional, List
 
 from resources.lib import chn_class, mediatype
 from resources.lib.helpers.htmlhelper import HtmlHelper
@@ -359,7 +360,7 @@ class Channel(chn_class.Channel):
         # programs.dontGroup = True
         # items.append(programs)
         #
-        # search = MediaItem("Zoeken", "searchSite")
+        # search = MediaItem("Zoeken", self.search_url)
         # search.complete = True
         # search.dontGroup = True
         # items.append(search)
@@ -647,26 +648,29 @@ class Channel(chn_class.Channel):
         return item
     # endregion
 
-    def search_site(self, url=None):  # @UnusedVariable
-        """ Creates an list of items by searching the site.
+    def search_site(self, url: Optional[str] = None, needle: Optional[str] = None) -> List[MediaItem]:
+        """ Creates a list of items by searching the site.
 
-        This method is called when the URL of an item is "searchSite". The channel
+        This method is called when and item with `self.search_url` is opened. The channel
         calling this should implement the search functionality. This could also include
         showing of an input keyboard and following actions.
 
-        The %s the url will be replaced with an URL encoded representation of the
+        The %s the url will be replaced with a URL encoded representation of the
         text to search for.
 
-        :param str url:     Url to use to search with a %s for the search parameters.
+        :param url:     Url to use to search with an %s for the search parameters.
+        :param needle:  The needle to search for.
 
         :return: A list with search results as MediaItems.
-        :rtype: list[MediaItem]
 
         """
 
+        if not needle:
+            raise ValueError("No needle present")
+
         # nieuws
         url = "https://vod.medialaan.io/vod/v2/programs?query=%s"
-        return chn_class.Channel.search_site(self, url)
+        return chn_class.Channel.search_site(self, url, needle)
 
     def add_live_channel_and_fetch_all_data(self, data):
         """ Preprocesses that data and adds live channels and fetches al related data via extra

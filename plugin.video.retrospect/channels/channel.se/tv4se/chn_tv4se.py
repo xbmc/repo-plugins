@@ -201,7 +201,7 @@ class Channel(chn_class.Channel):
             use_get=True)
         items.append(__create_item(LanguageHelper.TvShows, tvshow_url, tvshow_data))
 
-        recent_url, recent_data = self.__get_api_query("Panel", {"panelId": "1pDPvWRfhEg0wa5SvlP28N", "limit": self.__max_page_size, "offset": 0})
+        recent_url, recent_data = self.__get_api_query("Panel", {"panelId": "5qGBwTBSPdxO55EzbpOeNg", "limit": self.__max_page_size, "offset": 0})
         items.append(__create_item(LanguageHelper.Recent, recent_url, recent_data))
 
         popular_url, popular_data = self.__get_api_query("Panel", {"panelId": "4nNp00Z12bjEiNboaW2uxB", "limit": self.__max_page_size, "offset": 0})
@@ -213,7 +213,7 @@ class Channel(chn_class.Channel):
         category_url, json_data = self.__get_api_query("PageList", {"pageListId": "categories"})
         items.append(__create_item(LanguageHelper.Categories, category_url, json_data))
 
-        items.append(__create_item(LanguageHelper.Search, "searchSite"))
+        items.append(__create_item(LanguageHelper.Search, self.search_url))
         return data, items
 
     def fetch_mainlist_pages(self, data: str) -> Tuple[str, List[MediaItem]]:
@@ -516,31 +516,31 @@ class Channel(chn_class.Channel):
         self.parentItem.postJson = data
         return self.process_folder_list(self.parentItem)
 
-    def search_site(self, url: Optional[str] = None) -> List[MediaItem]:
+    def search_site(self, url: Optional[str] = None, needle: Optional[str] = None) -> List[MediaItem]:
         """ Creates a list of items by searching the site.
 
-        This method is called when the URL of an item is "searchSite". The channel
+        This method is called when and item with `self.search_url` is opened. The channel
         calling this should implement the search functionality. This could also include
         showing of an input keyboard and following actions.
 
-        The %s the url will be replaced with an URL encoded representation of the
+        The %s the url will be replaced with a URL encoded representation of the
         text to search for.
 
-        :param str|None url:     Url to use to search with a %s for the search parameters.
+        :param url:     Url to use to search with an %s for the search parameters.
+        :param needle:  The needle to search for.
 
         :return: A list with search results as MediaItems.
-        :rtype: list[MediaItem]
 
         """
 
-        needle = XbmcWrapper.show_key_board()
         if not needle:
-            return []
+            raise ValueError("No needle present")
 
         variables = {"input": {"query": needle}, "limit": 10, "offset": 0,
-                "shouldFetchMovieSeries": True, "shouldFetchMovieSeriesUpsell": True,
-                "shouldFetchClip": True, "shouldFetchPage": True, "shouldFetchSportEvent": True,
-                "shouldFetchSportEventUpsell": True}
+                     "shouldFetchMovieSeries": True, "shouldFetchMovieSeriesUpsell": True,
+                     "shouldFetchClip": True, "shouldFetchPage": True,
+                     "shouldFetchSportEvent": True,
+                     "shouldFetchSportEventUpsell": True}
         url, data = self.__get_api_query("PanelSearch", variables)
 
         search = MediaItem("Search", url, mediatype.FOLDER)

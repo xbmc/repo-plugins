@@ -17,3 +17,4 @@ SHORTCUT = "shortcut"                   # : Used for storing the name of the sho
 PORT = "port"                           # : Used for communicating the port that is used to open the socket to IPTV Manager
 REQUEST = "request"                     # : Used for communicating what data is requested by IPTV Manager
 COMMAND = "command"                     # : User for executing a command.
+NEEDLE = "needle"                       # : Used for searching.

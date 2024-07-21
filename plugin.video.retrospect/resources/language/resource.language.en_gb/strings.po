@@ -770,7 +770,11 @@ msgctxt "#30371"
 msgid "Trending"
 msgstr ""
 
-# empty strings from id 30371 to 30400
+msgctxt "#30372"
+msgid "New Search"
+msgstr ""
+
+# empty strings from id 30373 to 30400
 
 msgctxt "#30401"
 msgid "Dutch"

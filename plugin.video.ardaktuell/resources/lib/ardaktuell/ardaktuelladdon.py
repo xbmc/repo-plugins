@@ -8,6 +8,7 @@ from resources.lib.rssaddon.abstract_rss_addon import AbstractRssAddon
 
 class ArdAktuellAddon(AbstractRssAddon):
 
+    QUALITY_LEVEL_AUDIO = 4
     QUALITY_LEVEL = ["webxl", "webl", "webm", "webs"]
     QUALITY_REGEX = r"^(.+\.)(webxl|webl|webm|webs)(\..+)$"
 
@@ -40,6 +41,12 @@ class ArdAktuellAddon(AbstractRssAddon):
             "date_format": "%d.%m.%Y"
         },
         {
+            "name": "15 Minuten. Der tagesschau-Podcast am Morgen",
+            "icon": "https://images.tagesschau.de/image/5eb354fe-6af8-421f-8fa7-9d3672600d2e/AAABj4DbyB8/AAABjwnlOg4/1x1-1400/podcast-15-minuten-cover-100.jpg?overlay=542c7aa9-161c-48e8-a1cc-e49f9c91d757&overlayModificationDate=AAABgSP-H5A",
+            "audio_url": "https://www.tagesschau.de/multimedia/podcast/15-minuten/index~podcast.xml",
+            "date_format": "%d.%m.%Y"
+        },
+        {
             "name": "ARD Tagesschau vor 20 Jahren",
             "icon": "https://images.tagesschau.de/image/2a6f7e91-d939-4fde-98b8-9d7fb54be721/AAABiB8Zoe4/AAABg8tMMaM/1x1-1400/tagesschau-logo-105.jpg",
             "video_url": "https://www.tagesschau.de/multimedia/sendung/tagesschau_vor_20_jahren/podcast-tsv20-video-100~podcast.xml",
@@ -56,12 +63,6 @@ class ArdAktuellAddon(AbstractRssAddon):
             "name": "Ideenimport",
             "icon": "https://images.tagesschau.de/image/ab2459a5-283e-41be-ad3f-5e323ffb7c5a/AAABiGJ5xhQ/AAABg8tMMaM/1x1-1400/podcast-ideenimport-104.jpg",
             "audio_url": "https://www.tagesschau.de/multimedia/podcast/ideenimport/ideenimport-feed-105~podcast.xml",
-            "date_format": "%d.%m.%Y"
-        },
-        {
-            "name": "faktenfinder",
-            "icon": "https://images.tagesschau.de/image/582386c7-f443-4560-baaa-688cb2773d25/AAABiB78cks/AAABg8tMMaM/1x1-1400/podcast-faktenfinder-104.jpg",
-            "audio_url": "https://www.tagesschau.de/multimedia/podcast/faktenfinder/faktenfinder-feed-101~podcast.xml",
             "date_format": "%d.%m.%Y"
         }
     ]
@@ -99,7 +100,7 @@ class ArdAktuellAddon(AbstractRssAddon):
         for i, broadcast in enumerate(self.BROADCASTS):
 
             quality = int(self.addon.getSetting("quality"))
-            if "video_url" in broadcast and quality < 4:
+            if "video_url" in broadcast and quality < self.QUALITY_LEVEL_AUDIO:
                 _nodes.append(_make_node(
                     i, broadcast, "video", broadcast["video_url"], self.addon.getSetting("archive") != "true"))
 
@@ -179,5 +180,5 @@ class ArdAktuellAddon(AbstractRssAddon):
         quality = int(self.addon.getSetting("quality"))
         match = re.match(self.QUALITY_REGEX, item["stream_url"])
         url = "".join([match.groups()[0], self.QUALITY_LEVEL[quality], match.groups()[
-                      2]]) if match else item["stream_url"]
+                    2]]) if quality < self.QUALITY_LEVEL_AUDIO and match else item["stream_url"]
         return url

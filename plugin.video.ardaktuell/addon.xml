@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.ardaktuell" name="ARD Aktuell" version="1.0.5" provider-name="Heckie">
+<addon id="plugin.video.ardaktuell" name="ARD Aktuell" version="1.1.0" provider-name="Heckie">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.25.1" />
@@ -23,6 +23,13 @@
         <website>https://github.com/Heckie75/kodi-addon-ard-aktuell</website>
         <source>https://github.com/Heckie75/kodi-addon-ard-aktuell/tree/main/plugin.video.ardaktuell</source>
         <news>
+v1.1.0 (2024-07-08)
+- added new audio podcast '15 Minuten'
+- removed podcast 'Faktenfinder'
+
+v1.0.6 (2023-08-20)
+- Bugfix: quality setting audio not working
+
 v1.0.5 (2023-08-06)
 - reactivated quality in settings (see issue #4)
 - Refactoring

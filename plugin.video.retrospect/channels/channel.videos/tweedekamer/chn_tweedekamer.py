@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from typing import Optional, List
 
 from resources.lib import chn_class, mediatype, contenttype
 
@@ -98,7 +99,7 @@ class Channel(chn_class.Channel):
         cats = {
             "Debatten terugkijken": "https://cdn.debatdirect.tweedekamer.nl/api/agenda",
             "Livestreams": "https://cdn.debatdirect.tweedekamer.nl/api/app",
-            LanguageHelper.get_localized_string(LanguageHelper.Search): 'searchSite',
+            LanguageHelper.get_localized_string(LanguageHelper.Search): self.search_url,
         }
 
         for cat in cats:
@@ -292,25 +293,28 @@ class Channel(chn_class.Channel):
         Logger.debug('Finished update_video_item: %s', item.name)
         return item
 
-    def search_site(self, url=None):  # @UnusedVariable
-        """ Creates an list of items by searching the site.
+    def search_site(self, url: Optional[str] = None, needle: Optional[str] = None) -> List[MediaItem]:
+        """ Creates a list of items by searching the site.
 
-        This method is called when the URL of an item is "searchSite". The channel
+        This method is called when and item with `self.search_url` is opened. The channel
         calling this should implement the search functionality. This could also include
         showing of an input keyboard and following actions.
 
-        The %s the url will be replaced with an URL encoded representation of the
+        The %s the url will be replaced with a URL encoded representation of the
         text to search for.
 
-        :param str url:     Url to use to search with a %s for the search parameters.
+        :param url:     Url to use to search with an %s for the search parameters.
+        :param needle:  The needle to search for.
 
         :return: A list with search results as MediaItems.
-        :rtype: list[MediaItem]
 
         """
 
+        if not needle:
+            raise ValueError("No needle present")
+
         url = "https://cdn.debatdirect.tweedekamer.nl/search?q=%s&status[0]=geweest&sortering=relevant&vanaf=0"
-        return chn_class.Channel.search_site(self, url)
+        return chn_class.Channel.search_site(self, url, needle)
 
     def create_video_items_from_search(self, result_set):
         """ Creates a list of MediaItems for the debates in the search results.

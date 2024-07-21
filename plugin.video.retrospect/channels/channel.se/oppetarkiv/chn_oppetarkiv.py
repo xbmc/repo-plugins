@@ -3,6 +3,7 @@
 
 import os
 import re
+from typing import Optional, List
 
 from resources.lib import chn_class
 from resources.lib.retroconfig import Config
@@ -87,7 +88,7 @@ class Channel(chn_class.Channel):
             Logger.debug("Parsing a specific genre: %s", self.__genre)
             return data, items
 
-        search_item = MediaItem("\a.: S&ouml;k :.", "searchSite")
+        search_item = MediaItem("\a.: S&ouml;k :.", self.search_url)
         search_item.complete = True
         search_item.dontGroup = True
         # search_item.set_date(2099, 1, 1, text="")
@@ -115,25 +116,28 @@ class Channel(chn_class.Channel):
         Logger.debug("Pre-Processing finished")
         return data, items
 
-    def search_site(self, url=None):  # @UnusedVariable
-        """ Creates an list of items by searching the site.
+    def search_site(self, url: Optional[str] = None, needle: Optional[str] = None) -> List[MediaItem]:
+        """ Creates a list of items by searching the site.
 
-        This method is called when the URL of an item is "searchSite". The channel
+        This method is called when and item with `self.search_url` is opened. The channel
         calling this should implement the search functionality. This could also include
         showing of an input keyboard and following actions.
 
-        The %s the url will be replaced with an URL encoded representation of the
+        The %s the url will be replaced with a URL encoded representation of the
         text to search for.
 
-        :param str url:     Url to use to search with a %s for the search parameters.
+        :param url:     Url to use to search with an %s for the search parameters.
+        :param needle:  The needle to search for.
 
         :return: A list with search results as MediaItems.
-        :rtype: list[MediaItem]
 
         """
 
+        if not needle:
+            raise ValueError("No needle present")
+
         url = "http://www.oppetarkiv.se/sok/?q=%s"
-        return chn_class.Channel.search_site(self, url)
+        return chn_class.Channel.search_site(self, url, needle)
 
     def create_page_item(self, result_set):
         """ Creates a MediaItem of type 'page' using the result_set from the regex.

@@ -14,6 +14,7 @@ CONFIGURE_CHANNEL = "configurechannel"      # : Used to configure a channel
 SET_ENCRYPTION_PIN = "changepin"            # : Used for setting an application pin
 SET_ENCRYPTED_VALUE = "encryptsetting"      # : Used for setting an application pin
 RESET_VAULT = "resetvault"                  # : Used for resetting the vault
+SEARCH = "search"                           # : Used for searching
 POST_LOG = "postlog"                        # : Used for sending log files to pastebin.com
 CLEANUP = "cleanup"                         # : Used for cleaning the cache and cookies
 IPTVMANAGER = "iptvmanager"                 # : Used by IPTV Manager to query channel data

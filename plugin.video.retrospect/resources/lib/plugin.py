@@ -150,6 +150,11 @@ class Plugin(ActionParser):
                 from resources.lib.actions.folderaction import FolderAction
                 addon_action = FolderAction(self, channel_object)
 
+            elif self.params[keyword.ACTION] == action.SEARCH:
+                needle: str = self.params.get(keyword.NEEDLE, None)
+                from resources.lib.actions.searchaction import SearchAction
+                addon_action = SearchAction(self, channel_object, needle)
+
             elif self.params[keyword.ACTION] == action.PLAY_VIDEO:
                 from resources.lib.actions.videoaction import VideoAction
                 addon_action = VideoAction(self, channel_object)

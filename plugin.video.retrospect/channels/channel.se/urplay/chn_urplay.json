@@ -8,6 +8,7 @@
         "sv": "Sändningar från Sveriges Utbildningsradio (URPlay.se)."
       },
       "icon": "urplaylarge.png",
+      "poster": "urplayposter.jpg",
       "category": "National",
       "channelcode": null,
       "sortorder": 2,

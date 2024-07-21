@@ -1,7 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import random
+from typing import Optional, Union
 
+from resources.lib.channelinfo import ChannelInfo
+from resources.lib.chn_class import Channel
 from resources.lib.retroconfig import Config
 from resources.lib.logger import Logger
 from resources.lib.pickler import Pickler
@@ -108,6 +111,10 @@ class ActionParser(object):
         return self.__media_item
 
     @property
+    def action(self):
+        return self.params.get(keyword.ACTION)
+
+    @property
     def pickle_hash(self):
         """ Returns the pickle hash of the current item.
 
@@ -121,8 +128,10 @@ class ActionParser(object):
 
         return self.params.get(keyword.STORE_ID)
 
-    def create_action_url(self, channel, action, item=None, store_id=None, category=None):
-        """ Creates an URL that includes an action.
+    def create_action_url(self, channel: Union[Channel, ChannelInfo], action: str,
+                          item: MediaItem = None, store_id: Optional[str] = None,
+                          category: Optional[str] = None, needle: Optional[str] = None) -> str:
+        """ Creates a URL that includes an action.
 
         Arguments:
         channel : Channel -
@@ -131,14 +140,14 @@ class ActionParser(object):
         Keyword Arguments:
         item : MediaItem -
 
-        :param ChannelInfo|Channel channel:     The channel object to use for the URL
-        :param str action:                      Action to create an url for
-        :param MediaItem item:                  The media item to add
-        :param str store_id:                    The ID of the pickle store
-        :param str category:                    The category to use
+        :param channel:         The channel object to use for the URL
+        :param action:          Action to create an url for
+        :param item:            The media item to add
+        :param store_id:        The ID of the pickle store
+        :param str category:    The category to use
+        :param needle:          A search needle.
 
         :return: a complete action url with all keywords and values
-        :rtype: str|unicode
 
         """
 
@@ -161,6 +170,8 @@ class ActionParser(object):
         #     params[keyword.RANDOM_LIVE] = random.randint(10000, 99999)
 
         params[keyword.ACTION] = action
+        if needle:
+            params[keyword.NEEDLE] = needle
 
         # it might have an item or not
         if item is not None:
@@ -214,7 +225,11 @@ class ActionParser(object):
 
         try:
             for pair in query_string.split("&"):
-                (k, v) = pair.split("=")
+                if "=" in pair:
+                    (k, v) = pair.split("=")
+                else:
+                    k = pair
+                    v = ""
                 result[k] = v
 
             # if the channelcode was empty, it was stripped, add it again.

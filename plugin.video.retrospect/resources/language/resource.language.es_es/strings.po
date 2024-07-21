@@ -4,19 +4,19 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-20 04:13+0000\n"
-"Last-Translator: José Antonio Alvarado <jalvarado0.eses@gmail.com>\n"
+"PO-Revision-Date: 2024-04-27 22:42+0000\n"
+"Last-Translator: roliverosc <roliverosc@hotmail.com>\n"
 "Language-Team: Spanish (Spain) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/es_es/>\n"
 "Language: es_es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4.3\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
-msgstr "Retrospect te permite ver reposiciones de programas de televisión disponibles a través de sus emisoras oficiales."
+msgstr "Retrospect le permite ver reposiciones de programas de televisión disponibles a través de sus emisoras oficiales."
 
 msgctxt "Addon Description"
 msgid "Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
@@ -32,11 +32,11 @@ msgstr "Calidad de la transmisión"
 
 msgctxt "#30001"
 msgid "Low"
-msgstr "Bajo"
+msgstr "Baja"
 
 msgctxt "#30002"
 msgid "Medium"
-msgstr "Medio"
+msgstr "Media"
 
 msgctxt "#30003"
 msgid "High"
@@ -100,11 +100,11 @@ msgstr "Fecha"
 
 msgctxt "#30019"
 msgid "Show DRM/Paid warning before playback"
-msgstr "Mostrar aviso de DRM/Pago antes de la reproducción"
+msgstr "Mostrar aviso de DRM/De pago antes de la reproducción"
 
 msgctxt "#30020"
 msgid "Maximum Stream Bitrate [COLOR=gray](0=disabled)[/COLOR]"
-msgstr "Máxima Tasa de Bits de Transmisión[COLOR=gray](0=desactivado)[/COLOR]"
+msgstr "Máxima tasa de bits de transmisión[COLOR=gray](0=desactivado)[/COLOR]"
 
 msgctxt "#30021"
 msgid "Enable subtitles by default when available"
@@ -188,7 +188,7 @@ msgstr "Canales"
 
 msgctxt "#30041"
 msgid "Show \"All Favourites\" in main Channel listing"
-msgstr "Mostrar \"Todos los favoritos\" en la lista principal de canales"
+msgstr "Mostrar \"Todos los favoritos\" en la lista de canales principal"
 
 msgctxt "#30042"
 msgid "Enabled"
@@ -282,7 +282,7 @@ msgstr "Grupo Proxy"
 
 msgctxt "#30065"
 msgid "Country Settings"
-msgstr "Ajustes del país"
+msgstr "Ajustes de país"
 
 msgctxt "#30066"
 msgid "DNS"
@@ -306,7 +306,7 @@ msgstr "Dejar que Kodi determine la tasa de bits si es posible"
 
 msgctxt "#30071"
 msgid "Set the proxy and local IP to all channels related to this country"
-msgstr "Ajustar el proxy y la IP local a todos los canales relacionados con este país"
+msgstr "Ajustar el proxy y la IP local para todos los canales relacionados con este país"
 
 msgctxt "#30072"
 msgid "Proxy Type"
@@ -314,7 +314,7 @@ msgstr "Tipo de proxy"
 
 msgctxt "#30073"
 msgid "- Geo-blocked = º, DRM protected = ^ and Premium = ª."
-msgstr "- Geobloqueado = º, Protegido con DRM = ^ y Premium = ª."
+msgstr "- Geobloqueo = º, Protegido con DRM = ^ y Premium = ª."
 
 msgctxt "#30074"
 msgid "Disabled"
@@ -386,7 +386,7 @@ msgstr "La 'Bóveda de contraseñas' protege la contraseña almacenada con cifra
 
 msgctxt "#30091"
 msgid "Change Vault Pin"
-msgstr "Cambiar Pin de Bóveda"
+msgstr "Cambiar PIN de Bóveda"
 
 msgctxt "#30092"
 msgid "Reset Vault"
@@ -414,7 +414,7 @@ msgstr "IP local"
 
 msgctxt "#30098"
 msgid "Logging & Diagnostics"
-msgstr "Registro y diagnósticos"
+msgstr "Registro y diagnóstico"
 
 msgctxt "#30099"
 msgid "Use HLS instead of Dash for non-encrypted streams"
@@ -648,7 +648,7 @@ msgstr "Finlandia"
 # empty strings from id 30312 to 30345
 msgctxt "#30346"
 msgid "Now Playing"
-msgstr "Reproducción en curso"
+msgstr "Reproduciendo"
 
 msgctxt "#30347"
 msgid "Now"
@@ -837,7 +837,7 @@ msgstr "Ocultar"
 
 msgctxt "#30506"
 msgid "Remove Favourite"
-msgstr "Quitar favorito"
+msgstr "Borrar favorito"
 
 msgctxt "#30507"
 msgid "Select Channels »"
@@ -940,7 +940,7 @@ msgstr "Página"
 
 msgctxt "#30538"
 msgid "The selected live stream has not yet|begun."
-msgstr "La transmisión en directo seleccionada aún no ha|comenzado."
+msgstr "La transmisión en directo seleccionada aún no ha comenzado."
 
 msgctxt "#30539"
 msgid "Live stream"
@@ -948,7 +948,7 @@ msgstr "Transmisión en directo"
 
 msgctxt "#30540"
 msgid "Geo-blocked"
-msgstr "Geobloqueado"
+msgstr "Geobloqueo"
 
 msgctxt "#30541"
 msgid "Queue item"
@@ -1064,15 +1064,15 @@ msgstr "Algunos de los add-ons de Retrospect Channel no están activados, lo que
 
 msgctxt "#30569"
 msgid "Ignore SSL verification errors (Security Risk!)"
-msgstr "Ignorar los errores de verificación SSL (¡Riesgo de seguridad!)"
+msgstr "Ignorar errores de verificación SSL (¡Riesgo de seguridad!)"
 
 msgctxt "#30570"
 msgid "Hide channel initialisation messages"
-msgstr "Ocultar los mensajes de inicialización del canal"
+msgstr "Ocultar mensajes de inicialización del canal"
 
 msgctxt "#30571"
 msgid "Use Kodi InputStream Adaptive add-on when possible"
-msgstr "Usar el add-on InputStream Adaptive de Kodi cuando sea posible"
+msgstr "Usar add-on InputStream Adaptive de Kodi cuando sea posible"
 
 msgctxt "#30572"
 msgid "Retrospect Settings »"
@@ -1201,7 +1201,7 @@ msgstr "Limpiar caché y cookies »"
 
 msgctxt "#30605"
 msgid "Are you sure you want to clean all of Retrospect's cache and cookies? This action cannot be undone."
-msgstr "¿Está seguro de que desea limpiar todo el caché y las cookies de Retrospect? Esta acción no se puede deshacer."
+msgstr "¿Está seguro de que desea limpiar todo la caché y las cookies de Retrospect? Esta acción no se puede deshacer."
 
 msgctxt "#30606"
 msgid "Minimum level for showing notifications"

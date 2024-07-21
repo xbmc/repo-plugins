@@ -8,6 +8,7 @@
         "sv": "Sändningar från Sveriges Television (SVTPlay.se)."
       },
       "icon": "svtlarge.png",
+      "poster": "svtposter.png",
       "category": "National",
       "channelcode": "svt",
       "sortorder": 0,

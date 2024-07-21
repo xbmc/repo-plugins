@@ -4,7 +4,7 @@
 from datetime import datetime
 from functools import reduce
 from random import getrandbits
-from typing import Optional
+from typing import Optional, Dict, Any, List, Union
 
 import xbmcgui
 
@@ -16,6 +16,7 @@ from resources.lib.helpers.encodinghelper import EncodingHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib import mediatype
 from resources.lib import contenttype
+from resources.lib.retroconfig import Config
 from resources.lib.streams.adaptive import Adaptive
 from resources.lib.proxyinfo import ProxyInfo
 
@@ -32,8 +33,33 @@ class MediaItem:
 
     """
 
+    actionUrl: Optional[str]
+    cacheToDisc: bool
+    complete: bool
+    content_type: str
+    description: str
+    dontGroup: bool
+    episode: int
+    fanart: str
+    HttpHeaders: Dict[str, str]
+    icon: str
+    isCloaked: bool
+    isDrmProtected: bool
+    isGeoLocked: bool
+    isLive: bool
+    isPaid: bool
+    items: List["MediaItem"]
+    media_type: Optional[str]
+    metaData: Dict[Any, Any]
+    name: str
     postData: Optional[str]
+    poster: str
     postJson: Optional[dict]
+    streams: List["MediaStream"]
+    subtitle: Optional[str]
+    thumb: str
+    tv_show_title: Optional[str]
+    url: str
 
     LabelEpisode = "Episode"
     LabelTrackNumber = "TrackNumber"
@@ -105,7 +131,7 @@ class MediaItem:
         # musicvideos, videos, images, games. Defaults to 'episodes'
         self.content_type = contenttype.EPISODES
 
-        self.streams = []  # type: list[MediaStream]
+        self.streams = []
         self.subtitle = None
 
         if depickle:
@@ -211,6 +237,10 @@ class MediaItem:
 
         """
         return self.media_type in mediatype.AUDIO_TYPES
+
+    @property
+    def is_search_folder(self) -> bool:
+        return self.is_folder and "retrospect:needle" in self.metaData
 
     def has_track(self):
         """ Does this MediaItem have a TrackNumber InfoLabel
@@ -584,15 +614,13 @@ class MediaItem:
 
     @property
     def uses_external_addon(self):
-        return self.url is not None and self.url.startswith("plugin://")
+        return (self.url is not None
+                and self.url.startswith("plugin://")
+                and not self.url.startswith(f"plugin://{Config.addonId}"))
 
     @property
     def title(self):
         return self.name
-
-    @staticmethod
-    def is_search(url):
-        return url == "searchSite" or url == "#searchSite"
 
     def __get_matching_stream(self, bitrate):
         """ Returns the MediaStream for the requested bitrate.
@@ -689,7 +717,7 @@ class MediaItem:
 
             # For live items and search, append a random part to the textual guid, as these items
             # actually have different content for the same URL.
-            if self.isLive or self.is_search(self.url):
+            if self.isLive:
                 self.__guid = "%s%s" % (self.__guid, ("%0x" % getrandbits(8 * 4)).upper())
         except:
             Logger.error("Error setting GUID for title:'%s' and url:'%s'. Falling back to UUID",
@@ -1042,3 +1070,6 @@ class MediaStream:
             text = "%s\n    + Property: %s=%s" % (text, prop[0], prop[1])
 
         return text
+
+
+MediaItemResult = Optional[Union[List[MediaItem], MediaItem]]

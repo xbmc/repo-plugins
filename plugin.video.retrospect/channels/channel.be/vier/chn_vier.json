@@ -1,6 +1,22 @@
 {
   "channels": [
     {
+      "guid": "E108F736-8375-4B5D-B74A-7B70BF52043E",
+      "name": "GoPlay",
+      "description": {
+        "en": "Online video on demand from van goplay.be.\n\nA username and password can be configured for this channel. This enables you to watch all shows to which you are eligible.",
+        "nl": "Online uitzendingen van goplay.be.\n\nHet is mogelijk een gebruikersnaam en wachtwoord te configuren voor dit kanaal. Zo is het mogelijk om alle content te bekijken waarvoor het account is gerechtigd."
+      },
+      "icon": "goplayicon.png",
+      "poster": "goplayposter.png",
+      "category": "National",
+      "channelcode": "goplay",
+      "sortorder": 1,
+      "language": "be",
+      "fanart": "goplayfanart.png",
+      "adaptiveAddonSelectable": true
+    },
+    {
       "guid": "50E04907-8983-4552-A775-E70F3D91FB99",
       "name": "Vier",
       "description": {
@@ -8,6 +24,7 @@
         "nl": "Online uitzendingen van www.vier.be.\n\nHet is mogelijk een gebruikersnaam en wachtwoord te configuren voor dit kanaal. Zo is het mogelijk om alle content te bekijken waarvoor het account is gerechtigd."
       },
       "icon": "viericon.png",
+      "poster": "vierposter.png",
       "category": "National",
       "channelcode": null,
       "sortorder": 4,
@@ -23,6 +40,7 @@
         "nl": "Online uitzendingen van www.vijf.be.\n\nHet is mogelijk een gebruikersnaam en wachtwoord te configuren voor dit kanaal. Zo is het mogelijk om alle content te bekijken waarvoor het account is gerechtigd."
       },
       "icon": "vijficon.png",
+      "poster": "vijfposter.png",
       "category": "National",
       "channelcode": "vijfbe",
       "sortorder": 5,
@@ -38,11 +56,28 @@
         "nl": "Online uitzendingen van www.zestv.be.\n\nHet is mogelijk een gebruikersnaam en wachtwoord te configuren voor dit kanaal. Zo is het mogelijk om alle content te bekijken waarvoor het account is gerechtigd."
       },
       "icon": "zesiconlight.png",
+      "poster": "zesposter.png",
       "category": "National",
       "channelcode": "zesbe",
       "sortorder": 6,
       "language": "be",
       "fanart": "zesfanart.jpg",
+      "adaptiveAddonSelectable": true
+    },
+    {
+      "guid": "3C96398D-22E5-4C61-9308-092FC34A19C0",
+      "name": "Zeven",
+      "description": {
+        "en": "Online Online video on demand from www.zeventv.be.\n\nA username and password can be configured for this channel. This enables you to watch all shows to which you are eligible.",
+        "nl": "Online uitzendingen van www.goplay.be.\n\nHet is mogelijk een gebruikersnaam en wachtwoord te configuren voor dit kanaal. Zo is het mogelijk om alle content te bekijken waarvoor het account is gerechtigd."
+      },
+      "icon": "zeveniconlight.png",
+      "poster": "zevenposter.jpg",
+      "category": "National",
+      "channelcode": "zevenbe",
+      "sortorder": 6,
+      "language": "be",
+      "fanart": "zevenfanart.jpg",
       "adaptiveAddonSelectable": true
     }
   ],

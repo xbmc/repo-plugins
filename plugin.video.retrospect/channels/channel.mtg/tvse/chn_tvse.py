@@ -1,4 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from typing import Optional, List
+
 from resources.lib import chn_class, mediatype
 
 from resources.lib.mediaitem import MediaItem
@@ -136,7 +138,7 @@ class Channel(chn_class.Channel):
 
         title = "\a.: %s :." % (self.searchInfo.get(self.language, self.searchInfo["se"])[1], )
         Logger.trace("Adding search item: %s", title)
-        search_item = MediaItem(title, "searchSite")
+        search_item = MediaItem(title, self.search_url)
         search_item.dontGroup = True
         items.append(search_item)
 
@@ -214,28 +216,31 @@ class Channel(chn_class.Channel):
 
         return item
 
-    def search_site(self, url=None):
-        """ Creates an list of items by searching the site.
+    def search_site(self, url: Optional[str] = None, needle: Optional[str] = None) -> List[MediaItem]:
+        """ Creates a list of items by searching the site.
 
-        This method is called when the URL of an item is "searchSite". The channel
+        This method is called when and item with `self.search_url` is opened. The channel
         calling this should implement the search functionality. This could also include
         showing of an input keyboard and following actions.
 
-        The %s the url will be replaced with an URL encoded representation of the
+        The %s the url will be replaced with a URL encoded representation of the
         text to search for.
 
-        :param str|None url:     Url to use to search with a %s for the search parameters.
+        :param url:     Url to use to search with an %s for the search parameters.
+        :param needle:  The needle to search for.
 
         :return: A list with search results as MediaItems.
-        :rtype: list[MediaItem]
 
         """
+
+        if not needle:
+            raise ValueError("No needle present")
 
         # https://tvplay.tv3.lt/paieska/Lietuvos%20talentai%20/
         # https://tvplay.tv3.ee/otsi/test%20test%20/
         url = self.__get_search_url()
         url = "{0}/%s/".format(url)
-        return chn_class.Channel.search_site(self, url)
+        return chn_class.Channel.search_site(self, url, needle)
 
     def __get_search_url(self):
         """ Generates a search url for the channel using the information for that channel.

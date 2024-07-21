@@ -93,7 +93,7 @@ class Channel(chn_class.Channel):
     def add_others_and_check_correct_url(self, data: str) -> Tuple[JsonHelper, List[MediaItem]]:
         items = []
         search = FolderItem(LanguageHelper.get_localized_string(LanguageHelper.Search),
-                            "#searchSite", content_type=contenttype.TVSHOWS)
+                            self.search_url, content_type=contenttype.TVSHOWS)
         items.append(search)
 
         extras: Dict[int, Tuple[str, str]] = {
@@ -163,8 +163,7 @@ class Channel(chn_class.Channel):
 
         return json_data, items
 
-    def create_mainlist_item(self, result_set: Union[str, dict]) -> Union[
-        MediaItem, List[MediaItem], None]:
+    def create_mainlist_item(self, result_set: Union[str, dict]) -> Union[MediaItem, List[MediaItem], None]:
         if not result_set["title"]:
             return None
         title = result_set["title"].get("long", result_set["title"].get("short"))
@@ -304,26 +303,25 @@ class Channel(chn_class.Channel):
 
         return item
 
-    def search_site(self, url=None):
-        """ Creates an list of items by searching the site.
+    def search_site(self, url: Optional[str] = None, needle: Optional[str] = None) -> List[MediaItem]:
+        """ Creates a list of items by searching the site.
 
-        This method is called when the URL of an item is "searchSite". The channel
+        This method is called when and item with `self.search_url` is opened. The channel
         calling this should implement the search functionality. This could also include
         showing of an input keyboard and following actions.
 
-        The %s the url will be replaced with an URL encoded representation of the
+        The %s the url will be replaced with a URL encoded representation of the
         text to search for.
 
-        :param str url:     Url to use to search with a %s for the search parameters.
+        :param url:     Url to use to search with an %s for the search parameters.
+        :param needle:  The needle to search for.
 
         :return: A list with search results as MediaItems.
-        :rtype: list[MediaItem]
 
         """
 
-        needle = XbmcWrapper.show_key_board()
         if not needle:
-            return []
+            raise ValueError("Needle missing.")
 
         url = "https://nhacvivxxk-dsn.algolia.net/1/indexes/*/queries?x-algolia-agent=Algolia%20for%20JavaScript%20(4.14.2)%3B%20Browser"
         data = {"requests": [{

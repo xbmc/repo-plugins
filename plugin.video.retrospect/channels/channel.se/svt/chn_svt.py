@@ -197,7 +197,7 @@ class Channel(chn_class.Channel):
                 False),
 
             LanguageHelper.get_localized_string(LanguageHelper.Search): (
-                "searchSite", False),
+                self.search_url, False),
 
             LanguageHelper.get_localized_string(LanguageHelper.Recent): (
                 self.__get_api_url(
@@ -1071,22 +1071,25 @@ class Channel(chn_class.Channel):
                 channel["episodeThumbnailIds"][0],)
         return channel_item
 
-    def search_site(self, url=None):  # @UnusedVariable
-        """ Creates an list of items by searching the site.
+    def search_site(self, url: Optional[str] = None, needle: Optional[str] = None) -> List[MediaItem]:
+        """ Creates a list of items by searching the site.
 
-        This method is called when the URL of an item is "searchSite". The channel
+        This method is called when and item with `self.search_url` is opened. The channel
         calling this should implement the search functionality. This could also include
         showing of an input keyboard and following actions.
 
-        The %s the url will be replaced with an URL encoded representation of the
+        The %s the url will be replaced with a URL encoded representation of the
         text to search for.
 
-        :param str url:     Url to use to search with a %s for the search parameters.
+        :param url:     Url to use to search with an %s for the search parameters.
+        :param needle:  The needle to search for.
 
         :return: A list with search results as MediaItems.
-        :rtype: list[MediaItem]
 
         """
+
+        if not needle:
+            raise ValueError("No needle present")
 
         url = self.__get_api_url(
             "AutoCompleteSearch", "8989b62115022fda8a6129d0f512b94f4d2de3bf2110415647c09c4316ce4a91",
@@ -1097,7 +1100,7 @@ class Channel(chn_class.Channel):
                           "https://contento-search.svt.se/graphql")
         url = url.replace("%", "%%")
         url = url.replace("----", "%s")
-        return chn_class.Channel.search_site(self, url)
+        return chn_class.Channel.search_site(self, url, needle)
 
     def extract_json_data(self, data):
         """ Extracts JSON data from the HTML for __svtplay and __reduxStore json data.
@@ -1217,7 +1220,7 @@ class Channel(chn_class.Channel):
         """
 
         data = UriHandler.open(item.url)
-        video_id = Regexer.do_regex(r'play-button"[^>]+href="/video/[^?]+\?id=([^"]+)', data)[0]
+        video_id = Regexer.do_regex(r'play-button"[^>]+href="/video/([^/]+)/', data)[0]
         item.url = "https://api.svt.se/video/{}".format(video_id)
         return self.update_video_api_item(item)
 

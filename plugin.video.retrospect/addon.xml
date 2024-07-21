@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.7.13"
+        version="5.7.14"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -123,20 +123,23 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.7.13 - Changelog - 2024-06-14[/B]
+        <news>[B]Retrospect v5.7.14 - Changelog - 2024-07-21[/B]
 
-Fixed a number of Swedish channel issues.
+This version introduces enhanced searching and keeps track of previous searches, so you can reuse them. It also includes a number of fixes for channels, such as GoPlay and UR Play. And finally some artwork was updated.
 
 [B]Framework related[/B]
-* Added: Fallback format option to DateHelper.
+* Added: New search functionality with search history options (Fixes #1805).
 
 [B]GUI/Settings/Language related[/B]
 _None_
 
 [B]Channel related[/B]
-* Fixed: ONS TV season/episode issue.
-* Fixed: Playback of some SVT streams (Fixes #1801).
-* Fixed: Some timestamps are with and some without milliseconds (Fixes #1800).
+* Updated: UR Play artwork and fixed categories.
+* Updated: SVT poster and icon.
+* Fixed: SVT HTML based videos (Fixes #1808).
+* Fixed: GoPlay (Vier, Vijf, Zes, Zeven) channels broken (Fixes #1809).
+* Fixed: UR Play listings (Fixes #1812).
+
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>
@@ -150,7 +153,7 @@ _None_
         <summary lang="de_DE">Mit Retrospect kann man Wiederholungen / vorherige Folgen von Serien, die von ihren ofiziellen Sendern zur Verfügung gestellt wurden, ansehen.</summary>
         <summary lang="en_GB">Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters.</summary>
         <summary lang="en_US">Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters.</summary>
-        <summary lang="es_ES">Retrospect te permite ver reposiciones de programas de televisión disponibles a través de sus emisoras oficiales.</summary>
+        <summary lang="es_ES">Retrospect le permite ver reposiciones de programas de televisión disponibles a través de sus emisoras oficiales.</summary>
         <summary lang="es_MX">Retrospect te permite ver repeticiones/actualizaciones de series disponibles desde sus emisoras oficiales.</summary>
         <summary lang="it_IT">Retrospect ti consente di guardare e recuperare le serie TV replicate rese disponibili tramite le loro emittenti ufficiali.</summary>
         <summary lang="nl_NL">Retrospect maakt het mogelijk om afleveringen te bekijken van TV series die door de officiële zenders beschikbaar worden gesteld.</summary>

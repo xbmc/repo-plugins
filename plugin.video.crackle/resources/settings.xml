@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
   <!-- General -->
+  <category label="30100">
+   <setting id="page_size" type="slider" label="30004" default="25" range="10,5,100" option="int" />
+   <setting label="30005" type="enum" id="sort" default="0" lvalues="30006|30007|30008"/>
+  </category>
 </settings>

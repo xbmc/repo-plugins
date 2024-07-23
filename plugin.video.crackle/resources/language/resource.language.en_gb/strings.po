@@ -31,3 +31,31 @@ msgstr ""
 msgctxt "#30003"
 msgid "Search"
 msgstr ""
+
+msgctxt "#30004"
+msgid "Page Size"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Sort By"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Latest"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Alphabetical (A-Z)"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Reverse Alpha (Z-A)"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Generals"
+msgstr ""
+
+msgctxt "#30270"
+msgid "Error"
+msgstr ""

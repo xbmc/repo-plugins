@@ -14,16 +14,12 @@ except ImportError:
     from urllib2 import Request, urlopen, HTTPError
     isPython2 = True
 
-import xml.etree.ElementTree as ET
 import datetime
-import time
 import json
-import re
 import xbmc
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
-import urllib
 import zlib
 
 # Get the plugin url in plugin:// notation.
@@ -35,13 +31,10 @@ addon = xbmcaddon.Addon()
 
 UTF8 = 'utf-8'
 
-class SmilDocumentError(Exception):
+class MedianetDocumentError(Exception):
     pass
 
-class NoVideoNodeError(SmilDocumentError):
-    pass
-
-class NoSrcAttribError(SmilDocumentError):
+class NoUrlElementError(MedianetDocumentError):
     pass
 
 class M3u8DocumentError(Exception):
@@ -73,11 +66,9 @@ def okDialog(message):
     dialog = xbmcgui.Dialog()
     return dialog.ok(strings(30999), message)
 
-SMIL_URL = "https://link.theplatform.com/s/ExhSPC/media/guid/2655402169/{0}/meta.smil?feed=Player%20Selector%20-%20Prod&format=smil&mbr=true&manifest=m3u"
-
 PAGE_SIZE = 36
 
-USERAGENT   = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0'
+USERAGENT   = 'Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0'
 
 TIME_FORMAT = '%I:%M %p'
 
@@ -90,22 +81,201 @@ httpHeaders = {
             }
 
 SPORTS = [
-        { 'title': strings(30000), 'category': 'sports/olympics/winter' },
-        { 'title': strings(30001), 'category': 'sports/olympics/winter/alpine skiing' },
-        { 'title': strings(30002), 'category': 'sports/olympics/winter/biathlon' },
-        { 'title': strings(30003), 'category': 'sports/olympics/winter/bobsleigh' },
-        { 'title': strings(30004), 'category': 'sports/olympics/winter/cross-country skiing' },
-        { 'title': strings(30005), 'category': 'sports/olympics/winter/curling' },
-        { 'title': strings(30006), 'category': 'sports/olympics/winter/figure skating' },
-        { 'title': strings(30007), 'category': 'sports/olympics/winter/freestyle skiing' },
-        { 'title': strings(30008), 'category': 'sports/olympics/winter/hockey' },
-        { 'title': strings(30009), 'category': 'sports/olympics/winter/luge' },
-        { 'title': strings(30010), 'category': 'sports/olympics/winter/nordic combined' },
-        { 'title': strings(30011), 'category': 'sports/olympics/winter/skeleton' },
-        { 'title': strings(30012), 'category': 'sports/olympics/winter/short track speed skating' },
-        { 'title': strings(30013), 'category': 'sports/olympics/winter/ski jumping' },
-        { 'title': strings(30014), 'category': 'sports/olympics/winter/snowboard' },
-        { 'title': strings(30015), 'category': 'sports/olympics/winter/speed skating' },
+        {
+            'title': strings(30000),
+            'url': '/sports/olympics/summer/archery',
+            'slug': 'summer-olympics-archery',
+        },
+        {
+            'title': strings(30001),
+            'url': '/sports/olympics/summer/aquatics/artistic-swimming',
+            'slug': 'summer-olympics-artistic-swimming',
+        },
+        {
+            'title': strings(30002),
+            'url': '/sports/olympics/summer/athletics',
+            'slug': 'track-and-field',
+        },
+        {
+            'title': strings(30003),
+            'url': '/sports/olympics/summer/badminton',
+            'slug': 'badminton',
+        },
+        {
+            'title': strings(30004),
+            'url': '/sports/olympics/summer/basketball',
+            'slug': 'summer-olympics-basketball',
+        },
+        {
+            'title': strings(30005),
+            'url': '/sports/olympics/summer/basketball/3x3-basketball',
+            'slug': '3x3-basketball',
+        },
+        {
+            'title': strings(30006),
+            'url': '/sports/olympics/summer/volleyball/beach',
+            'slug': 'summer-olympics-beach-volleyball',
+        },
+        {
+            'title': strings(30007),
+            'url': '/sports/olympics/summer/boxing',
+            'slug': 'summer-olympics-boxing',
+        },
+        {
+            'title': strings(30008),
+            'url': '/sports/olympics/summer/breaking',
+            'slug': 'olympics-summer-breaking',
+        },
+        {
+            'title': strings(30009),
+            'url': '/sports/olympics/summer/canoe-kayak',
+            'slug': 'summer-olympics-canoe-kayak',
+        },
+        {
+            'title': strings(30010),
+            'url': '/sports/olympics/summer/cycling',
+            'slug': 'summer-olympics-cycling',
+        },
+        {
+            'title': strings(30011),
+            'url': '/sports/olympics/summer/aquatics/diving',
+            'slug': 'summer-olympics-diving',
+        },
+        {
+            'title': strings(30012),
+            'url': '/sports/olympics/summer/equestrian',
+            'slug': 'summer-olympics-equestrian',
+        },
+        {
+            'title': strings(30013),
+            'url': '/sports/olympics/summer/fencing',
+            'slug': 'summer-olympics-fencing',
+        },
+        {
+            'title': strings(30014),
+            'url': '/sports/olympics/summer/field-hockey',
+            'slug': 'summer-olympics-field-hockey',
+        },
+        {
+            'title': strings(30015),
+            'url': '/sports/olympics/summer/golf',
+            'slug': 'summer-olympics-golf',
+        },
+        {
+            'title': strings(30016),
+            'url': '/sports/olympics/summer/gymnastics/artistic',
+            'slug': 'artistic',
+        },
+        {
+            'title': strings(30017),
+            'url': '/sports/olympics/summer/gymnastics/rhythmic',
+            'slug': 'rhythmic',
+        },
+        {
+            'title': strings(30018),
+            'url': '/sports/olympics/summer/gymnastics/trampoline',
+            'slug': 'trampoline',
+        },
+        {
+            'title': strings(30019),
+            'url': '/sports/olympics/summer/handball',
+            'slug': 'summer-olympics-handball',
+        },
+        {
+            'title': strings(30020),
+            'url': '/sports/olympics/summer/judo',
+            'slug': 'summer-olympics-judo',
+        },
+        {
+            'title': strings(30021),
+            'url': '/sports/olympics/summer/modern-pentathlon',
+            'slug': 'summer-olympics-modern-pentathlon',
+        },
+        {
+            'title': strings(30022),
+            'url': '/sports/olympics/summer/rowing',
+            'slug': 'summer-olympics-rowing',
+        },
+        {
+            'title': strings(30023),
+            'url': '/sports/olympics/summer/rugby',
+            'slug': 'summer-olympics-rugby',
+        },
+        {
+            'title': strings(30024),
+            'url': '/sports/olympics/summer/sailing',
+            'slug': 'summer-olympics-sailing',
+        },
+        {
+            'title': strings(30025),
+            'url': '/sports/olympics/summer/shooting',
+            'slug': 'summer-olympics-shooting',
+        },
+        {
+            'title': strings(30026),
+            'url': '/sports/olympics/summer/skateboarding',
+            'slug': 'summer-olympics-skateboarding',
+        },
+        {
+            'title': strings(30027),
+            'url': '/sports/olympics/summer/soccer',
+            'slug': 'summer-olympics-soccer',
+        },
+        {
+            'title': strings(30028),
+            'url': '/sports/olympics/summer/sport-climbing',
+            'slug': 'summer-olympics-sport-climbing',
+        },
+        {
+            'title': strings(30029),
+            'url': '/sports/olympics/summer/surfing',
+            'slug': 'summer-olympics-surfing',
+        },
+        {
+            'title': strings(30030),
+            'url': '/sports/olympics/summer/aquatics/swimming',
+            'slug': 'summer-olympics-swimming',
+        },
+        {
+            'title': strings(30031),
+            'url': '/sports/olympics/summer/table-tennis',
+            'slug': 'summer-olympics-table-tennis',
+        },
+        {
+            'title': strings(30032),
+            'url': '/sports/olympics/summer/taekwondo',
+            'slug': 'summer-olympics-taekwondo',
+        },
+        {
+            'title': strings(30033),
+            'url': '/sports/olympics/summer/tennis',
+            'slug': 'summer-olympics-tennis',
+        },
+        {
+            'title': strings(30034),
+            'url': '/sports/olympics/summer/triathlon',
+            'slug': 'summer-olympics-triathlon',
+        },
+        {
+            'title': strings(30035),
+            'url': '/sports/olympics/summer/volleyball',
+            'slug': 'summer-olympics-volleyball',
+        },
+        {
+            'title': strings(30036),
+            'url': '/sports/olympics/summer/aquatics/water-polo',
+            'slug': 'summer-olympics-water-polo',
+        },
+        {
+            'title': strings(30037),
+            'url': '/sports/olympics/summer/weightlifting',
+            'slug': 'summer-olympics-weightlifting',
+        },
+        {
+            'title': strings(30038),
+            'url': '/sports/olympics/summer/wrestling',
+            'slug': 'summer-olympics-wrestling',
+        },
     ]
 
 STATIC_ENTRIES = [
@@ -113,13 +283,12 @@ STATIC_ENTRIES = [
             'title': strings(30200),
             'type': 'folder',
             'page': 'live_videos',
-            'uri': 'live_videos',
         },
         {
             'title': strings(30201),
             'type': 'folder',
-            'page': 'clips_by_category',
-            'category': 'sports/olympics/winter/replays',
+            'page': 'clips_by_slug',
+            'slug': 'summer-olympics-replays',
         },
         {
             'title': strings(30202),
@@ -129,15 +298,99 @@ STATIC_ENTRIES = [
         {
             'title': strings(30203),
             'type': 'folder',
-            'page': 'clips_by_category',
-            'category': 'sports/olympics/winter/highlights',
+            'page': 'clips_by_slug',
+            'slug': 'summer-olympics-highlights',
         },
         {
             'title': strings(30204),
             'type': 'folder',
-            'page': 'clips_by_category',
-            'category': 'Sports/Olympics/winter/Team Canada',
-        }
+            'page': 'clips_by_slug',
+            'slug': 'summer-olympics-team-canada',
+        },
+        {
+            'title': strings(30210),
+            'type': 'folder',
+            'page': 'clips_by_slug',
+            'slug': 'betrivers-the-game-betcha-didnt-know-olympics-feature',
+        },
+        {
+            'title': strings(30205),
+            'type': 'folder',
+            'page': 'clips_by_slug',
+            'slug': 'summer-olympics-features-toyota',
+        },
+        {
+            'title': strings(30214),
+            'type': 'folder',
+            'page': 'clips_by_slug',
+            'slug': 'olympics-canadian-tire-women-in-sports',
+        },
+        {
+            'title': strings(30207),
+            'type': 'folder',
+            'page': 'clips_by_slug',
+            'slug': 'summer-olympics-features-bell',
+        },
+        {
+            'title': strings(30209),
+            'type': 'folder',
+            'page': 'clips_by_slug',
+            'slug': 'olympics-sobeys-feed-the-dream',
+        },
+        {
+            'title': strings(30212),
+            'type': 'folder',
+            'page': 'clips_by_slug',
+            'slug': 'olympics-air-canada-experience-paris',
+        },
+        {
+            'title': strings(30213),
+            'type': 'folder',
+            'page': 'clips_by_slug',
+            'slug': 'olympics-ozempic-lumieres-sur-paris',
+        },
+        {
+            'title': strings(30206),
+            'type': 'folder',
+            'page': 'clips_by_slug',
+            'slug': 'makeorbreak',
+        },
+        {
+            'title': strings(30211),
+            'type': 'folder',
+            'page': 'clips_by_slug',
+            'slug': 'olympics-petro-medal-moments',
+        },
+        {
+            'title': strings(30216),
+            'type': 'folder',
+            'page': 'clips_by_slug',
+            'slug': 'olympics-smartwater-paris-tonight',
+        },
+        {
+            'title': strings(30215),
+            'type': 'folder',
+            'page': 'clips_by_slug',
+            'slug': 'olympics-coca-cola-real-magic',
+        },
+        {
+            'title': strings(30218),
+            'type': 'folder',
+            'page': 'clips_by_slug',
+            'slug': 'road-to-the-olympic-games',
+        },
+        {
+            'title': strings(30208),
+            'type': 'folder',
+            'page': 'clips_by_slug',
+            'slug': 'summer-olympics-features-rbc',
+        },
+        {
+            'title': strings(30217),
+            'type': 'folder',
+            'page': 'clips_by_slug',
+            'slug': 'summer-olympics-features-kraft',
+        },
     ]
 
 # Lovingly borrowed from t1mlib
@@ -200,7 +453,13 @@ def list_entries(folder_title, entries):
             list_item.setArt(entry['art'])
             list_item.setProperty('IsPlayable', 'true')
 
-            url = get_url(action='play', title=entry['title'], videoId=entry.get('videoId', ''), isUpcoming=entry.get('isUpcoming', False))
+            url = get_url(
+                action='play',
+                title=entry['title'],
+                videoId=entry.get('videoId', ''),
+                medianetUrl=entry.get('medianetUrl', ''),
+                isUpcoming=entry.get('isUpcoming', False)
+            )
 
             is_folder = False
 
@@ -208,9 +467,19 @@ def list_entries(folder_title, entries):
             xbmcplugin.addDirectoryItem(_handle, url, list_item, is_folder)
 
         elif entry['type'] == 'folder':
+            art = entry.get('art')
+            if art:
+                list_item.setArt(art)
+
             list_item.setProperty('IsPlayable', 'false')
 
-            url = get_url(action='listing', page=entry['page'], title=entry['title'], uri=entry.get('uri'), category=entry.get('category'), pageNo=entry.get('pageNo', 1))
+            url = get_url(
+                action='listing',
+                page=entry['page'],
+                title=entry['title'],
+                slug=entry.get('slug'),
+                pageNo=entry.get('pageNo', 1)
+            )
 
             is_folder = True
 
@@ -223,11 +492,32 @@ def list_entries(folder_title, entries):
     # Finish creating a virtual folder.
     xbmcplugin.endOfDirectory(_handle)
 
-def entries_append_video(entries, video):
-    duration = video.get('duration')
+def extractMedianetUrl(contentItem):
+    media = contentItem.get('media')
+    if media:
+        # Extract the medianet URL
+        assets = media.get('assets', [])
+        for asset in (asset for asset in assets if asset['type'] == 'medianet'):
+            return asset.get('key')
 
-    airDate = datetime.datetime.fromtimestamp(video.get('airDate', 0) / 1000)
-    isLive = video.get('isLive', False)
+    return None
+
+def entries_append_contentItem(entries, contentItem):
+    duration = 0
+    isLive = False
+
+    medianetUrl = extractMedianetUrl(contentItem)
+
+    try:
+        airDate = datetime.datetime.fromtimestamp(int(contentItem.get('publishedAt', 0)) / 1000)
+    except ValueError:
+        airDate = 0
+
+    media = contentItem.get('media')
+    if media:
+        isLive = (media.get('streamType') == 'Live')
+        duration = int(media.get('duration', ''))
+
     isUpcoming = (airDate > datetime.datetime.now())
 
     if isLive or isUpcoming:
@@ -262,18 +552,19 @@ def entries_append_video(entries, video):
         titleState = strings(30305)
         descState = strings(30305)
 
-    video['title'] = u'{0} ({1})'.format(video['title'].rstrip(), titleState)
-    video['description'] = u'{0}\n\n({1})'.format(video['description'], descState)
+    contentItem['title'] = u'{0} ({1})'.format(contentItem['title'].rstrip(), titleState)
+    contentItem['description'] = u'{0}\n\n({1})'.format(contentItem['description'], descState)
 
-    thumbnail = video.get('thumbnail')
+    thumbnail = contentItem.get('imageLarge')
 
     entries.append(
         {
             'type': 'video',
-            'title': video.get('title'),
-            'description': video.get('description'),
-            'videoId': video.get('id'),
-            'duration': video.get('duration'),
+            'title': contentItem.get('title'),
+            'description': contentItem.get('description'),
+            'videoId': contentItem.get('id'),
+            'medianetUrl': medianetUrl,
+            'duration': duration,
             'isUpcoming': isUpcoming,
             'art':
             {
@@ -294,120 +585,143 @@ def run_graphql(graphql, variables):
         'variables': variables
     }
 
-    return json.loads(getRequest(url=GRAPHQL_URL, udata=json.dumps(body).encode(UTF8), dopost=True))
+    #xbmc.log('GraphQL query: ' + json.dumps(body))
+    response = getRequest(url=GRAPHQL_URL, udata=json.dumps(body).encode(UTF8), dopost=True)
+    #xbmc.log('GraphQL response: ' + response)
+    return json.loads(response)
 
-def graphql_category_to_entries(entries, graphql_category):
-    if graphql_category:
-        for video in graphql_category:
-            entries_append_video(entries, video)
-
-def graphql_result_to_entries(graphql_result):
+def graphql_contentItems_to_entries(contentItems):
     entries = []
-    data = graphql_result.get('data')
-    if data:
-        categories = data.get('categories')
-        for category in categories:
-            graphql_category_to_entries(entries, category.get('clips'))
+    for contentItem in contentItems:
+        entries_append_contentItem(entries, contentItem)
 
     return entries
 
-def list_live_videos(page_title, pageNo):
+def graphql_allContentItems_result_to_entries(graphql_result):
+    data = graphql_result.get('data')
+    if not data:
+        return []
+
+    allContentItems = data.get('allContentItems')
+    if not allContentItems:
+        return []
+
+    nodes = allContentItems.get('nodes')
+    if not nodes:
+        return []
+
+    return graphql_contentItems_to_entries(nodes)
+
+def list_contentItems(page_title, graphql_variables, next_page_entry):
     graphql = """
-query liveClips($liveFullTitle: String, $clipPageSize: Int, $clipPage: Int) {
-        categories: mpxCategories(fullTitle: $liveFullTitle) {
-            id
-            title
-            fullTitle
-            clips(pageSize: $clipPageSize, page: $clipPage) {
-                ...itemBase
-            }
+query contentItemsByItemsQueryFilters(
+  $itemsQueryFilters: ItemsQueryFilters
+  $page: Int
+  $pageSize: Int
+  $minPubDate: String
+  $maxPubDate: String
+  $lineupOnly: Boolean
+  $offset: Int
+) {
+  allContentItems(
+    itemsQueryFilters: $itemsQueryFilters
+    page: $page
+    pageSize: $pageSize
+    offset: $offset
+    minPubDate: $minPubDate
+    maxPubDate: $maxPubDate
+    lineupOnly: $lineupOnly
+    targets: [WEB, ALL]
+  ) {
+    nodes {
+      id
+      title
+      description
+      flag
+      imageLarge
+      publishedAt
+      updatedAt
+      type
+      media {
+        duration
+        hasCaptions
+        streamType
+        assets {
+          type
+          key
         }
-
-    } fragment itemBase on MediaItem {
-    id
-    source
-    title
-    description
-    thumbnail
-    duration
-    airDate
-    isLive
-    isVideo
+      }
+    }
+  }
 }
 """
 
-    variables = {
-		"liveFullTitle": "sports/olympics/winter/live",
-		"clipPage": pageNo,
-		"clipPageSize": PAGE_SIZE
-	}
+    graphql_result = run_graphql(graphql, graphql_variables)
 
-    graphql_result = run_graphql(graphql, variables)
-
-    entries = graphql_result_to_entries(graphql_result)
+    entries = graphql_allContentItems_result_to_entries(graphql_result)
 
     # If we have a full page of results, append a "next page" entry
     if len(entries) == PAGE_SIZE:
-        nextPageNo = pageNo + 1
-        entries.append(
-            {
-                'title': page_title,
-                'listing_title': strings(30306).format(page_title, nextPageNo),
-                'type': 'folder',
-                'page': 'live_videos',
-                'pageNo': nextPageNo,
-                'uri': 'live_videos',
-            })
+        entries.append(next_page_entry)
 
     return list_entries(page_title, entries)
 
-def list_clips_by_category(page_title, category, pageNo):
-    graphql = """
-query clipsByCategory($fullTitle: String, $clipPageSize: Int, $clipPage: Int) {
-            categories: mpxCategories(fullTitle: $fullTitle) {
-                id
-                title
-                fullTitle
-                clips(pageSize: $clipPageSize, page: $clipPage) {
-                    ...itemBase
-                }
-            }
-    } fragment itemBase on MediaItem {
-    id
-    title
-    description
-    thumbnail
-    duration
-    airDate
-    isLive
-    isVideo
-}
-"""
-
+def list_live_videos(page_title, pageNo):
     variables = {
-		"fullTitle": category,
-		"clipPage": pageNo,
-		"clipPageSize": PAGE_SIZE
-	}
+        "itemsQueryFilters": {
+            "categorySlugs": [
+                "summer-olympics-live"
+            ],
+            "mediaStreamType": "Live",
+            "sort": "+publishedAt",
+            "types": [
+                "video"
+            ]
+        },
+        "lineupOnly": False,
+        "maxPubDate": "now+35d",
+        "page": pageNo,
+        "pageSize": PAGE_SIZE
+    }
 
-    graphql_result = run_graphql(graphql, variables)
+    next_page_entry = {
+        'title': page_title,
+        'listing_title': strings(30306).format(page_title, pageNo + 1),
+        'type': 'folder',
+        'page': 'live_videos',
+        'pageNo': pageNo + 1,
+    }
 
-    entries = graphql_result_to_entries(graphql_result)
+    return list_contentItems(page_title, variables, next_page_entry)
 
-    # If we have a full page of results, append a "next page" entry
-    if len(entries) == PAGE_SIZE:
-        nextPageNo = pageNo + 1
-        entries.append(
-            {
-                'title': page_title,
-                'listing_title': strings(30306).format(page_title, nextPageNo),
-                'type': 'folder',
-                'page': 'clips_by_category',
-                'pageNo': nextPageNo,
-                'category': category,
-            })
+def list_clips_by_slug(page_title, slug, pageNo):
+    variables = {
+        "itemsQueryFilters": {
+            "categorySlugs": [
+                slug
+            ],
+            "sort": "-updatedAt",
+            "types": [
+                "video"
+            ]
+        },
+        "lineupOnly": False,
+        "minPubDate": "now-365d",
+        "maxPubDate": "now+4h",
+        "page": pageNo,
+        "pageSize": PAGE_SIZE
+    }
 
-    return list_entries(page_title, entries)
+    next_page_entry = {
+        'title': page_title,
+        'listing_title': strings(30306).format(page_title, pageNo + 1),
+        'type': 'folder',
+        'page': 'clips_by_slug',
+        'slug': slug,
+        'pageNo': pageNo + 1,
+    }
+
+    return list_contentItems(page_title, variables, next_page_entry)
 
 def list_sports(page_title):
     entries = []
@@ -416,40 +730,57 @@ def list_sports(page_title):
             {
                 'title': sport['title'],
                 'type': 'folder',
-                'page': 'clips_by_category',
-                'category': sport['category']
+                'page': 'clips_by_slug',
+                'slug': sport['slug']
             })
 
     list_entries(page_title, entries)
 
-def videoIdToM3u8Url(videoId):
-    # Build URL to the video's SMIL document
-    smil_url = SMIL_URL.format(videoId)
-    xbmc.log('smil_url = ' + smil_url)
-
+def medianetUrlToM3u8Url(medianetUrl):
+    xbmc.log('medianetUrl = ' + medianetUrl)
     try:
-        # Fetch the SMIL
-        smil = getRequest(smil_url)
+        # Fetch the JSON
+        medianetJsonStr = getRequest(medianetUrl)
 
-        # Parse the SMIL document as XML
-        root = ET.fromstring(smil)
+        # Parse the document as JSON
+        medianetJson = json.loads(medianetJsonStr)
 
-        # Locate the first video element on the page
-        ns = {'smil': 'http://www.w3.org/2005/SMIL21/Language'}
-        video = root.find('./smil:body//smil:video', ns)
-        if not video:
-            raise NoVideoNodeError('SMIL document missing a video node')
+        # Return the url element as the video
+        medianetUrl =  medianetJson.get('url')
+        if not medianetUrl:
+            raise NoUrlElementError('medianet document missing a URL element')
 
-        # Extract the "src" attribute of the video element
-        src = video.attrib.get('src')
-        if not src:
-            raise NoSrcAttribError('Video node missing a src attribute')
-
-        return src
+        return medianetUrl
     except Exception as err:
-        xbmc.log('Error loading SMIL: ' + str(err))
-        xbmc.log(smil)
+        xbmc.log('Error loading medianet JSON: ' + str(err))
+        xbmc.log(medianetJsonStr)
         raise
+
+def videoIdToMedianetUrl(videoId):
+    graphql = """
+query Content($videoId: Int) {
+  contentItem(id: $videoId) {
+    media {
+      assets {
+        type
+        key
+      }
+    }
+  }
+}
+"""
+
+    variables = {
+        "videoId": int(videoId)
+    }
+
+    graphql_result = run_graphql(graphql, variables)
+
+    data = graphql_result.get('data')
+    if data:
+        return extractMedianetUrl(data.get('contentItem'))
+    else:
+        return None
 
 def parseM3u8(m3u8):
     streams = {}
@@ -523,32 +854,52 @@ def pickStreamUrlFromM3u8Url(m3u8_url):
         xbmc.log('Falling back to playing M3U8 directly')
         return m3u8_url
 
-def play_video(videoId, isUpcoming):
-    if not videoId or (videoId == ''):
+def play_video(videoId, medianetUrl, isUpcoming):
+    if (not medianetUrl or (medianetUrl == '')) and (not videoId or (videoId == '')):
         raise ValueError(strings(30900))
 
     try:
-        # Fetch the video's SMIL document and extract the m3u8 from it.
-        # This has failed in the past so re-try to see if the error persists.
-        smilAttemptsRemaining = 2
-        while (smilAttemptsRemaining > 0):
+        if (not medianetUrl or (medianetUrl == '')):
+            xbmc.log('Fetching medianetUrl from videoId ' + videoId)
+            medianetUrl = videoIdToMedianetUrl(videoId)
+
+        xbmc.log('medianetUrl: ' + medianetUrl)
+
+        # Fetch the video's medianet JSON document and extract the m3u8 URL from it.
+        # In case this fails, re-try a few times.
+        medianetAttemptsRemaining = 2
+        while (medianetAttemptsRemaining > 0):
             try:
-                m3u8_url = videoIdToM3u8Url(videoId)
+                m3u8_url = medianetUrlToM3u8Url(medianetUrl)
 
                 # Success. No need to re-try.
-                smilAttemptsRemaining = 0
+                medianetAttemptsRemaining = 0
                 xbmc.log('m3u8_url: ' + m3u8_url)
-            except SmilDocumentError as err:
-                smilAttemptsRemaining -= 1
-                if (smilAttemptsRemaining == 0):
+            except MedianetDocumentError as err:
+                medianetAttemptsRemaining -= 1
+                if (medianetAttemptsRemaining == 0):
                     # "The server did not return a valid stream. Please try again later."
                     okDialog(strings(30902))
                     return
                 else:
-                    xbmc.log('Re-trying SMIL fetch')
+                    xbmc.log('Re-trying medianet fetch')
 
-        # Fetch the video's m3u8 and pick the stream based on the user's bitrate preference
-        stream_url = pickStreamUrlFromM3u8Url(m3u8_url)
+        # For Paris 2024, some streams (not many) are published as separate video and audio streams
+        # in the m3u8 which the player can understand and play correctly. However, this plugin was
+        # doing its own bitrate selection by parsing the m3u8 and extracting the chosen stream, so
+        # for these dual-stream manifests it was only passing the one stream, the video, to the
+        # player, causing them to be silent. To resolve this, I could've either continued to parse
+        # the m3u8, extracted both the video and audio URLs, built a new manifest with the two
+        # streams, and passed that into the player, or I could just forego the custom bitrate
+        # selection and instead pass the original m3u8 to Kodi, letting Kodi pick the most
+        # appropriate stream. I decided on the latter because the games are already underway and I
+        # felt that losing the custom bitrate selection was worth the benefit of passing all
+        # responsibility for parsing the m3u8 to Kodi.
+        # Added benefit: Kodi's in-player program selection and audio stream selection now work.
+
+        # [No longer] Fetch the video's m3u8 and pick the stream based on the user's bitrate preference
+        #stream_url = pickStreamUrlFromM3u8Url(m3u8_url)
+        stream_url = m3u8_url
         xbmc.log('stream_url: ' + stream_url)
 
         # Append our custom user agent because it needs to match the agent from the m3u8 request,
@@ -583,14 +934,14 @@ def router(paramstring):
         if params['action'] == 'listing':
             if params['page'] == 'live_videos':
                 list_live_videos(page_title, int(params.get('pageNo', 1)))
-            if params['page'] == 'clips_by_category':
-                list_clips_by_category(page_title, params['category'], int(params.get('pageNo', 1)))
+            if params['page'] == 'clips_by_slug':
+                list_clips_by_slug(page_title, params['slug'], int(params.get('pageNo', 1)))
             if params['page'] == 'sports':
                 list_sports(page_title)
             else:
                 pass
         elif params['action'] == 'play':
-            play_video(params.get('videoId',''), params.get('isUpcoming', 'False')=='True')
+            play_video(params.get('videoId',''), params.get('medianetUrl'), params.get('isUpcoming', 'False')=='True')
         else:
             # If the provided paramstring does not contain a supported action
             # we raise an exception. This helps to catch coding errors,

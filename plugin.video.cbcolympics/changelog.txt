@@ -17,3 +17,15 @@ v2.1.0
 
 v2.2.0
 - Updated for Beijing 2022
+
+v2.3.0
+- Updated for Paris 2024
+
+v2.3.1
+- Added event durations
+- Limited past events to those that are within the last year to eliminate leftover Tokyo clips
+- Limited future events to those that are less than 4 hours away
+- Fixed "next pages" always being replays
+- Removed custom bitrate selection as it caused some streams to have no audio
+- Bitrate selection now the responsibility of Kodi
+- In-player program selection and audio track selection now work on streams that support them

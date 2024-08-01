@@ -9,9 +9,9 @@ This branch contains a certain category of add-ons from which our back-end scrip
 
 ## How to submit your add-on and subsequent updates ##
 
-Your add-on must follow our strict repository rules to be considered for inclusion. Please consult the [Add-on rules](http://kodi.wiki/view/Add-on_Rules) wiki page for further details. Please review these rules carefull before submitting your add-on. Should you have any questions regarding them please start a forum thread in one of the following locations
-* [Python add-ons](http://forum.kodi.tv/forumdisplay.php?fid=26)
-* [Skins](http://forum.kodi.tv/forumdisplay.php?fid=12)
+Your add-on must follow our strict repository rules to be considered for inclusion. Please consult the [Add-on rules](https://kodi.wiki/view/Add-on_rules) wiki page for further details. Please review these rules carefull before submitting your add-on. Should you have any questions regarding them please start a forum thread in one of the following locations
+* [Python add-ons] (https://forum.kodi.tv/forumdisplay.php?fid=26)
+* [Skins] (https://forum.kodi.tv/forumdisplay.php?fid=12)
 
 After you have read the repository guidelines and made sure your addon is compliant with them, you may begin the submission process. By forking this repository and creating a pull-request to the correct repository branch you ask permissing to included you add-on to the official Kodi repository. Subsequent updates can be done in a similar way by updating the code and creating a new pull-request again. Make sure that your local git clone is always rebased before send a pull-request.
 
@@ -29,8 +29,8 @@ This means that you should not submit a request every time you change your code.
 
 ## Compatibility
 
-This branch is used for add-ons that are coded for Kodi v21 Omega builds and higher only. From these code repositories and branches our back-end uploades .zip files of the compatible add-ons to our main mirror server.
-* [Mirror of Kodi v21 Omega compatible add-ons](http://mirrors.kodi.tv/addons/omega/)
+This branch is used for add-ons that are coded for Kodi v22 Piers builds and higher only. From these code repositories and branches our back-end uploades .zip files of the compatible add-ons to our main mirror server.
+* [Mirror of Kodi v22 Piers compatible add-ons](https://mirrors.kodi.tv/addons/piers/)
 
 ## Status
 

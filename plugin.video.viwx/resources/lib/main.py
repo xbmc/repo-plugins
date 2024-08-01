@@ -42,6 +42,8 @@ TXT_SEARCH = 30807
 TXT_NO_ITEMS_FOUND = 30608
 TXT_PLAY_FROM_START = 30620
 TXT_PREMIUM_CONTENT = 30622
+TXT_ADD_TO_MYLIST = 30801
+TXT_REMOVE_FROM_MYLIST = 30802
 
 
 def empty_folder():
@@ -158,6 +160,7 @@ class Paginator:
         for show in shows_list:
             try:
                 li = Listitem.from_dict(callb_map[show['type']], **show['show'])
+                li.context.extend(show.get('ctx_mnu', []))
                 # Create 'My List' add/remove context menu entries here, so as to be able to update these
                 # entries after adding/removing an item, even when the underlying data is cached.
                 _my_list_context_mnu(li, show.get('programme_id'))
@@ -223,10 +226,10 @@ def _my_list_context_mnu(list_item, programme_id, refresh=True, retry=True):
 
     try:
         if programme_id in cache.my_list_programmes:
-            list_item.context.script(update_mylist, "Remove from My List",
+            list_item.context.script(update_mylist, utils.addon_info.localise(TXT_REMOVE_FROM_MYLIST),
                                      progr_id=programme_id, operation='remove', refresh=refresh)
         else:
-            list_item.context.script(update_mylist, "Add to My List",
+            list_item.context.script(update_mylist, utils.addon_info.localise(TXT_ADD_TO_MYLIST),
                                      progr_id=programme_id, operation='add', refresh=refresh)
     except TypeError:
         if retry and cache.my_list_programmes is None:
@@ -591,7 +594,7 @@ def play_stream_catchup(plugin, url, name, set_resume_point=False):
                 'subtitles.translate.orig_lang': 'en',
                 'subtitles.translate.type': 'srt'})
         if set_resume_point:
-            resume_time =  itvx.get_resume_point(production_id)
+            resume_time = itvx.get_resume_point(production_id)
             if resume_time:
                 list_item.setProperties({
                     'ResumeTime': str(resume_time),

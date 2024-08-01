@@ -235,15 +235,15 @@ msgstr ""
 
 # Menu texts
 msgctxt "#30801"
-msgid ""
+msgid "Add to My List"
 msgstr ""
 
 msgctxt "#30802"
-msgid ""
+msgid "Remove from My List"
 msgstr ""
 
 msgctxt "#30803"
-msgid ""
+msgid "View all episodes"
 msgstr ""
 
 msgctxt "#30804"

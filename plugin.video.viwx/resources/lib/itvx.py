@@ -216,7 +216,7 @@ def collection_content(url=None, slider=None, hide_paid=False):
             # Only found on main page
             items_list = page_data['trendingSliderContent']['items']
             for trending_item in items_list:
-                yield parsex.parse_trending_collection_item(trending_item, hide_paid)
+                yield parsex.parse_collection_item(trending_item, hide_paid)
             return
 
         else:
@@ -280,11 +280,7 @@ def episodes(url, use_cache=False, prefer_bsl=False):
             return cached_data['series_map'], cached_data['programme_id']
 
     page_data = get_page_data(url, cache_time=0)
-    try:
-        programme = page_data['programme']
-    except KeyError:
-        logger.warning("Trying to parse episodes in legacy format for programme %s", url)
-        return legacy_episodes(url)
+    programme = page_data['programme']
     programme_id = programme.get('encodedProgrammeId', {}).get('underscore')
     programme_title = programme['title']
     programme_thumb = programme['image'].format(**parsex.IMG_PROPS_THUMB)
@@ -327,53 +323,6 @@ def episodes(url, use_cache=False, prefer_bsl=False):
     programme_data = {'programme_id': programme_id, 'series_map': series_map}
     cache.set_item(url, programme_data, expire_time=1800)
     return series_map, programme_id
-
-
-def legacy_episodes(url):
-    """Get a listing of series and their episodes
-
-    Use legacy data structure that was in use before 2-8-23.
-
-    """
-    brand_data = get_page_data(url, cache_time=0)['title']['brand']
-    brand_title = brand_data['title']
-    brand_thumb = brand_data['imageUrl'].format(**parsex.IMG_PROPS_THUMB)
-    brand_fanart = brand_data['imageUrl'].format(**parsex.IMG_PROPS_FANART)
-    if 'FREE' in brand_data['tier']:
-        brand_description = brand_data['synopses'].get('ninety', '')
-    else:
-        brand_description = parsex.premium_plot(brand_data['synopses'].get('ninety', ''))
-    series_data = brand_data['series']
-
-    if not series_data:
-        return {}
-
-    # The field 'seriesNumber' is not guaranteed to be unique - and not guaranteed an integer either.
-    # Midsummer murder for instance has 2 series with seriesNumber 4
-    # By using this mapping, setdefault() and extend() on the episode list, series with the same
-    # seriesNumber are automatically merged.
-    series_map = {}
-    for series in series_data:
-        title = series['title']
-        series_idx = series['seriesNumber']
-        series_obj = series_map.setdefault(
-            series_idx, {
-                'series': {
-                    'label': title,
-                    'art': {'thumb': brand_thumb, 'fanart': brand_fanart},
-                    # TODO: add more info, like series number, number of episodes
-                    'info': {'title': '[B]{} - {}[/B]'.format(brand_title, series['title']),
-                             'plot': '{}\n\n{} - {} episodes'.format(
-                                 brand_description, title, series['seriesAvailableEpisodeCount'])},
-
-                    'params': {'url': url, 'series_idx': series_idx}
-                },
-                'episodes': []
-            })
-        series_obj['episodes'].extend(
-            [parsex.parse_legacy_episode_title(episode, brand_fanart) for episode in series['episodes']])
-    cache.set_item(url, {'programme_id': None, 'series_map': series_map}, expire_time=1800)
-    return series_map, None
 
 
 def categories():

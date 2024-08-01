@@ -1,3 +1,11 @@
+v1.5.0
+Fixes:
+- ViwX failed to start with 'FetchError: Forbidden'. And issue only experienced by users of OSMC and possibly some other systems that still use OpenSSL v1.1.1.
+
+New Features:
+- Episodes in 'Continue Watching' now have context menu item 'Show all episodes', which opens the programme folder with all series and episodes.
+- Trending now shows programmes with episodes as folder, rather than playing the first episode of series 1.
+
 v1.4.1
 Fixes:
 - Yet again sign-in errors. Now affecting both new users and existing users who had signed out.

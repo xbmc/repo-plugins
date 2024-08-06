@@ -9,6 +9,8 @@ import xbmc
 import requests
 import urllib
 
+import re
+
 if sys.version_info[0] > 2:
     urllib = urllib.parse
 
@@ -58,17 +60,11 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         headers = {}
         pad = 0
-        alternate_english = None
-        alternate_spanish = None
 
         # parse the querystring parameters component
         parsed_qs = parse_qs(parsed_url.query)
         if 'pad' in parsed_qs:
             pad = int(parsed_qs['pad'][0])
-        if 'alternate_english' in parsed_qs:
-            alternate_english = urllib.unquote_plus(parsed_qs['alternate_english'][0])
-        if 'alternate_spanish' in parsed_qs:
-            alternate_spanish = urllib.unquote_plus(parsed_qs['alternate_spanish'][0])
 
         for key in self.headers:
             if key.lower() not in REMOVE_IN_HEADERS:
@@ -87,6 +83,20 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
         content = response.content.decode('utf8')
+        
+        # remove subtitles and extraneous lines for Kodi Inputstream Adaptive compatibility
+        content = re.sub(r"(?:#EXT-X-MEDIA:TYPE=SUBTITLES[\S]+\n)", r"", content, flags=re.M)
+        content = re.sub(r",SUBTITLES=\"subs\"", r"", content, flags=re.M)
+        content = re.sub(r"(?:#EXT-X-I-FRAME-STREAM-INF:[\S]+\n)", r"", content, flags=re.M)
+        # remove ad insertion tag lines
+        content = re.sub(r"^(?:#EXT-OATCLS-SCTE35:[\S]+\n)", r"", content, flags=re.M)
+        content = re.sub(r"^(?:#EXT-X-CUE-[\S]+\n)", r"", content, flags=re.M)
+        
+        # assume it's a master playlist until we detect that it's a variant
+        if '#EXT-X-PLAYLIST-TYPE:' in content:
+            playlist_type = 'variant'
+        else:
+            playlist_type = 'master'
 
         # change relative m3u8 urls to absolute urls by looking at each line
         line_array = content.splitlines()
@@ -94,7 +104,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         for line in line_array:
             if line.startswith('#'):
                 # look for uri parameters within non-key "#" lines
-                if KEY_TEXT not in line and URI_START_DELIMETER in line:
+                if playlist_type == 'master' and KEY_TEXT not in line and URI_START_DELIMETER in line:
                     line_split = line.split(URI_START_DELIMETER)
                     url_split = line_split[1].split(URI_END_DELIMETER, 1)
                     absolute_url = urljoin(url, url_split[0])
@@ -104,11 +114,6 @@ class RequestHandler(BaseHTTPRequestHandler):
                     new_line_array.append(new_line)
                 else:
                     new_line_array.append(line)
-                    if line == '#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="aac",LANGUAGE="en",NAME="English",AUTOSELECT=YES,DEFAULT=YES':
-                        if alternate_english is not None:
-                            new_line_array.append('#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="aac",NAME="Alternate English",LANGUAGE="en",AUTOSELECT=YES,DEFAULT=NO,URI="' + PROXY_URL + alternate_english + '?' + parsed_url.query + '"')
-                        if alternate_spanish is not None:
-                            new_line_array.append('#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="aac",NAME="Alternate Spanish",LANGUAGE="es",AUTOSELECT=YES,DEFAULT=NO,URI="' + PROXY_URL + alternate_spanish + '?' + parsed_url.query + '"')
             elif line != '':
                 absolute_url = urljoin(url, line)
                 if absolute_url.endswith(STREAM_EXTENSION) and not absolute_url.startswith(PROXY_URL):
@@ -116,24 +121,25 @@ class RequestHandler(BaseHTTPRequestHandler):
                 new_line_array.append(absolute_url)
 
         # pad the end of the stream by the requested number of segments
-        last_item_index = len(new_line_array)-1
-        if new_line_array[last_item_index] == ENDLIST_TEXT and int(pad) > 0:
-            new_line_array.pop()
-            last_item_index -= 1
-            #url_line = None
-            extinf_line = None
-            while extinf_line is None:
-                if new_line_array[last_item_index].startswith('#EXTINF:5'):
-                    extinf_line = new_line_array[last_item_index]
-                    #url_line = new_line_array[last_item_index+1]
-                    break
+        if playlist_type == 'variant':
+            last_item_index = len(new_line_array)-1
+            if new_line_array[last_item_index] == ENDLIST_TEXT and int(pad) > 0:
+                new_line_array.pop()
                 last_item_index -= 1
-            for x in range(0, pad):
-                new_line_array.append(extinf_line)
-                # use base proxy URL for more graceful stream padding, instead of repeating last segment
-                #new_line_array.append(url_line)
-                new_line_array.append(PROXY_URL)
-            new_line_array.append(ENDLIST_TEXT)
+                #url_line = None
+                extinf_line = None
+                while extinf_line is None:
+                    if new_line_array[last_item_index].startswith('#EXTINF:4'):
+                        extinf_line = new_line_array[last_item_index]
+                        #url_line = new_line_array[last_item_index+1]
+                        break
+                    last_item_index -= 1
+                for x in range(0, pad):
+                    new_line_array.append(extinf_line)
+                    # use base proxy URL for more graceful stream padding, instead of repeating last segment
+                    #new_line_array.append(url_line)
+                    new_line_array.append(PROXY_URL)
+                new_line_array.append(ENDLIST_TEXT)
 
         content = "\n".join(new_line_array)
 

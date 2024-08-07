@@ -79,17 +79,10 @@ PREV_ICON = os.path.join(ROOTDIR,"icon.png")
 NEXT_ICON = os.path.join(ROOTDIR,"icon.png")
 BLACK_IMAGE = os.path.join(ROOTDIR, "resources", "img", "black.png")
 
-if SINGLE_TEAM == 'true':
-    MASTER_FILE_TYPE = 'master_wired.m3u8'
-    PLAYBACK_SCENARIO = 'HTTP_CLOUD_WIRED'
-else:
-    MASTER_FILE_TYPE = 'master_wired60.m3u8'
-    PLAYBACK_SCENARIO = 'HTTP_CLOUD_WIRED_60'
-
 API_URL = 'https://statsapi.mlb.com'
 #User Agents
 UA_IPAD = 'AppleCoreMedia/1.0 ( iPad; compatible; 3ivx HLS Engine/2.0.0.382; Win8; x64; 264P AACP AC3P AESD CLCP HTPC HTPI HTSI MP3P MTKA)'
-UA_PC = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+UA_PC = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
 UA_ANDROID = 'okhttp/3.12.1'
 
 VERIFY = True
@@ -433,6 +426,8 @@ def load_cookies():
 
 def stream_to_listitem(stream_url, headers, description, title, icon, fanart, start='1', stream_type='video', music_type_unset=False):
     # check if our stream is HLS
+    xbmc.log(f'URL: {stream_url} Headers: {headers} start: {start}')
+    headers = 'User-Agent=' + UA_PC
     if '.m3u8' in stream_url:
         # if not audio only, check if inputstream.adaptive is present and enabled, depending on Kodi version
         if stream_type != 'audio' and (xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)') or (KODI_VERSION >= 19 and xbmc.getCondVisibility('System.AddonIsEnabled(inputstream.adaptive)'))):

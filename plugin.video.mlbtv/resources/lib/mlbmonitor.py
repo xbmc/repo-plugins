@@ -22,8 +22,8 @@ class MLBMonitor(xbmc.Monitor):
     #These are the action events to keep, in addition to the last event of each at-bat, if we're skipping non-decision pitches
     ACTION_TYPES = ['Wild Pitch', 'Passed Ball', 'Stolen Base', 'Caught Stealing', 'Pickoff', 'Error', 'Out', 'Balk', 'Defensive Indiff', 'Other Advance']
     #Pad events at both start (-) and end (+)
-    EVENT_START_PADDING = -3
-    EVENT_END_PADDING = 8
+    EVENT_START_PADDING = -6
+    EVENT_END_PADDING = 5
     #Also use pitch start padding for idle time / specific player skipping
     PITCH_START_PADDING = -1
     #Only skip if a break is at least this long
@@ -1128,7 +1128,7 @@ class MLBMonitor(xbmc.Monitor):
                 current_inning_half = play['about']['halfInning']
                 # make sure we're past our start inning
                 if current_inning > start_inning or (current_inning == start_inning and (current_inning_half == start_inning_half or current_inning_half == 'bottom')):
-                    # skip commercial breaks by examining the gdfp playlist
+                    # skip commercial breaks by examining a variant playlist for insertion tags
                     if skip_type == 1:
                         # finish initial inning skip, if necessary
                         break_end = 0
@@ -1145,27 +1145,33 @@ class MLBMonitor(xbmc.Monitor):
                                     total_skip_time += break_end - break_start
                                     break
 
-                        gdfp_playlist_url = re.sub('/(master_desktop_complete|master_desktop)', '/5600K/5600_complete_gdfp', stream_url)
-                        xbmc.log(monitor_name + ' fetching gdfp playlist at ' + gdfp_playlist_url)
-                        line_array = self.get_playlist(gdfp_playlist_url, monitor_name)
+                        # look for variant playlist
+                        variant_url = stream_url.replace('.m3u8', '_5600K.m3u8')
+                        # remove proxy prefix/suffix if necessary
+                        if variant_url.startswith('http://127.0.0.1:'):
+                            prefix_list = variant_url.split('/', 3)
+                            suffix_list = prefix_list[len(prefix_list)-1].split('?')
+                            variant_url = suffix_list[0]
+                        xbmc.log(monitor_name + ' fetching playlist at ' + variant_url)
+                        line_array = self.get_playlist(variant_url, monitor_name)
                         segment_length = 0
                         playlist_position = 0
                         break_start = None
                         for line in line_array:
                             if line.startswith('#EXTINF:'):
                                 segment_length = float(line.split(':')[1][:-1])
+                            elif line.startswith('#EXT-OATCLS-SCTE35:') and break_start is None and playlist_position > break_end:
+                                break_start = playlist_position
+                                xbmc.log(monitor_name + ' found commercial break starting at ' + str(playlist_position))
+                            elif '#EXT-X-CUE-IN' in line and break_start is not None:
+                                break_end = playlist_position
+                                if break_end > current_time:
+                                    xbmc.log(monitor_name + ' found commercial break ending at ' + str(playlist_position))
+                                    skip_markers.append([break_start, break_end])
+                                    total_skip_time += break_end - break_start
+                                break_start = None
+                                break_end = 0
                             elif not line.startswith('#'):
-                                if 'dai.google.com' in line and break_start is None and playlist_position > break_end:
-                                    break_start = playlist_position
-                                    xbmc.log(monitor_name + ' found commercial break starting at ' + str(playlist_position))
-                                elif 'dai.google.com' not in line and break_start is not None:
-                                    break_end = playlist_position
-                                    if break_end > current_time:
-                                        xbmc.log(monitor_name + ' found commercial break ending at ' + str(playlist_position))
-                                        skip_markers.append([break_start, break_end])
-                                        total_skip_time += break_end - break_start
-                                    break_start = None
-                                    break_end = 0
                                 playlist_position += segment_length
                         break
 
@@ -1383,7 +1389,8 @@ class MLBMonitor(xbmc.Monitor):
         #headers = {
         #    'User-Agent': UA_PC
         #}
-        url = 'http://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate=' + date_string + '&endDate=' + date_string + '&hydrate=game(content(media(epg))),linescore,team,flags,gameInfo'
+        #url = 'http://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate=' + date_string + '&endDate=' + date_string + '&hydrate=game(content(media(epg))),linescore,team,flags,gameInfo'
+        url = 'http://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate=' + date_string + '&endDate=' + date_string + '&hydrate=broadcasts(all),linescore,team,flags,gameInfo'
         headers = {
             'User-Agent': UA_PC,
             'Origin': 'https://www.mlb.com',
@@ -1434,9 +1441,19 @@ class MLBMonitor(xbmc.Monitor):
                         continue
 
                     # Game is not broadcast
-                    if 'content' not in game or 'media' not in game['content'] or 'epg' not in game['content']['media'] or len(game['content']['media']['epg']) == 0 or game['content']['media']['epg'][0]['title'] != 'MLBTV' or 'items' not in game['content']['media']['epg'][0] or len(game['content']['media']['epg'][0]['items']) == 0:
+                    #if 'content' not in game or 'media' not in game['content'] or 'epg' not in game['content']['media'] or len(game['content']['media']['epg']) == 0 or game['content']['media']['epg'][0]['title'] != 'MLBTV' or 'items' not in game['content']['media']['epg'][0] or len(game['content']['media']['epg'][0]['items']) == 0:
+                    if 'broadcasts' not in game or len(game['broadcasts']) == 0:
                         omitted_games['no_broadcast'].append(teams)
                         continue
+                    else:
+                        tv_broadcast = False
+                        for broadcast in game['broadcasts']:
+                            if broadcast['type'] == 'TV':
+                                tv_broadcast = True
+                                break
+                        if tv_broadcast is False:
+                            omitted_games['no_broadcast'].append(teams)
+                            continue
 
                     # Game is blacked out
                     if game_pk in blackouts:

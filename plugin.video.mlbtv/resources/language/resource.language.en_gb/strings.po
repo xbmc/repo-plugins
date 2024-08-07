@@ -412,4 +412,12 @@ msgctxt "#30437"
 msgid "Disable closed captions"
 msgstr ""
 
+msgctxt "#30438"
+msgid "MLB Network"
+msgstr ""
+
+msgctxt "#30439"
+msgid "MLB Network live stream"
+msgstr ""
+
 

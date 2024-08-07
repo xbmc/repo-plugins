@@ -10,6 +10,7 @@ import json
 import logging
 import pytz
 from datetime import datetime
+from urllib.parse import urlencode
 
 from codequick.support import logger_id
 from codequick import Script
@@ -18,7 +19,7 @@ from . import utils
 from .errors import ParseError
 
 TXT_PLAY_FROM_START = 30620
-
+TXT_VIEW_ALL_EPISODES = 30803
 
 logger = logging.getLogger(logger_id + '.parse')
 
@@ -272,10 +273,11 @@ def parse_collection_item(show_data, hide_paid=False):
         else:
             plot = show_data['description']
 
+        img = show_data.get('imageTemplate') or show_data.get('imageUrl', '')
         programme_item = {
             'label': title,
-            'art': {'thumb': show_data['imageTemplate'].format(**IMG_PROPS_THUMB),
-                    'fanart': show_data['imageTemplate'].format(**IMG_PROPS_FANART)},
+            'art': {'thumb': img.format(**IMG_PROPS_THUMB),
+                    'fanart': img.format(**IMG_PROPS_FANART)},
             'info': {'title': title if is_playable else '[B]{}[/B] {}'.format(title, content_info),
                      'plot': plot,
                      'sorttitle': sort_title(title)},
@@ -355,43 +357,6 @@ def parse_shortform_item(item_data, time_zone, time_fmt, hide_paid=False):
         }
     except Exception as err:
         logger.error("Unexpected error parsing a shortForm item: %r\n%s", err, json.dumps(item_data, indent=4))
-        return None
-
-
-def parse_trending_collection_item(trending_item, hide_paid=False):
-    """Parse an item in the collection 'Trending'
-    The only real difference with the regular parse_collection_item() is
-    adding field `contentInfo` to plot and the fact that all items are being
-    treated as playable.
-
-    """
-    try:
-        # No idea if premium content can be trending, but just to be sure.
-        plot = '\n'.join((trending_item['description'], trending_item['contentInfo']))
-        if trending_item.get('isPaid'):
-            if hide_paid:
-                return None
-            plot = premium_plot(plot)
-
-        # NOTE:
-        # Especially titles of type 'special' may lack a field encodedEpisodeID. For those titles it
-        # should not be necessary, but for episodes they are a requirement otherwise the page
-        # will always return the first episode.
-
-        return {
-            'type': 'title',
-            'programme_id': trending_item['encodedProgrammeId']['underscore'],
-            'show': {
-                'label': trending_item['title'],
-                'art': {'thumb': trending_item['imageUrl'].format(**IMG_PROPS_THUMB)},
-                'info': {'plot': plot, 'sorttitle': sort_title(trending_item['title'])},
-                'params': {'url': build_url(trending_item['titleSlug'],
-                                            trending_item['encodedProgrammeId']['letterA'],
-                                            trending_item.get('encodedEpisodeId', {}).get('letterA'))}
-            }
-        }
-    except Exception:
-        logger.warning("Failed to parse trending_collection_item:\n%s", json.dumps(trending_item, indent=4))
         return None
 
 
@@ -521,40 +486,6 @@ def parse_episode_title(title_data, brand_fanart=None, prefer_bsl=False):
     return title_obj
 
 
-def parse_legacy_episode_title(title_data, brand_fanart=None):
-    """Parse a title from episodes listing in old format"""
-    # Note: episodeTitle may be None
-    title = title_data['episodeTitle'] or title_data['numberedEpisodeTitle']
-    img_url = title_data['imageUrl']
-    plot = '\n\n'.join((title_data['synopsis'], title_data['guidance'] or ''))
-    if 'PAID' in title_data.get('tier', []):
-        plot = premium_plot(plot)
-
-    title_obj = {
-        'label': title,
-        'art': {'thumb': img_url.format(**IMG_PROPS_THUMB),
-                'fanart': brand_fanart,
-                # 'poster': img_url.format(**IMG_PROPS_POSTER)
-                },
-        'info': {'title': title_data['numberedEpisodeTitle'],
-                 'plot': plot,
-                 'duration': utils.duration_2_seconds(title_data['duration']),
-                 'date': title_data['broadcastDateTime']},
-        'params': {'url': title_data['playlistUrl'], 'name': title}
-    }
-    if title_data['titleType'] == 'EPISODE':
-        try:
-            episode_nr = int(title_data['episodeNumber'])
-        except ValueError:
-            episode_nr = None
-        try:
-            series_nr = int(title_data['seriesNumber'])
-        except ValueError:
-            series_nr = None
-        title_obj['info'].update(episode=episode_nr, season=series_nr)
-    return title_obj
-
-
 def parse_search_result(search_data):
     entity_type = search_data['entityType']
     result_data = search_data['data']
@@ -652,6 +583,7 @@ def parse_my_list_item(item, hide_paid=False):
 
 def parse_last_watched_item(item, utc_now):
     progr_name = item.get('programmeTitle', '')
+    progr_id = item.get('programmeId', '').replace('/', '_')
     episode_name = item.get('episodeTitle')
     series_nr = item.get('seriesNumber')
     episode_nr = item.get('episodeNumber')
@@ -686,9 +618,10 @@ def parse_last_watched_item(item, utc_now):
     else:
         title = '{} - [I]{}% watched[/I]'.format(progr_name, int(item['percentageWatched'] * 100))
 
+
     item_dict = {
         'type': 'vodstream',
-        'programme_id': item['programmeId'].replace('/', '_'),
+        'programme_id': progr_id,
         'show': {
             'label': episode_name or progr_name,
             'art': {'thumb': img_link.format(**IMG_PROPS_THUMB),
@@ -715,6 +648,15 @@ def parse_last_watched_item(item, utc_now):
     }
     if item['contentType'] == 'FILM':
         item_dict['show']['art']['poster'] = img_link.format(**IMG_PROPS_POSTER)
+    elif item['contentType'] == 'EPISODE' and progr_id:
+        ctx_mnu = (utils.addon_info.localise(TXT_VIEW_ALL_EPISODES),
+                   ''.join(('Container.Update(plugin://',
+                            utils.addon_info.id,
+                            '/resources/lib/main/wrapper.list_productions?',
+                            urlencode({'url': '/watch/undefined/' + progr_id}),
+                            ')'))
+                   )
+        item_dict['ctx_mnu'] = [ctx_mnu]
     return item_dict
 
 

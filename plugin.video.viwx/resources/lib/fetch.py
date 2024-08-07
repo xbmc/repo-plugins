@@ -10,7 +10,9 @@ import logging
 import requests
 import pickle
 import time
+
 from requests.cookies import RequestsCookieJar
+from requests.adapters import HTTPAdapter
 import json
 
 from codequick import Script
@@ -58,6 +60,27 @@ class PersistentCookieJar(RequestsCookieJar):
             pass
 
 
+class CustomHttpAdapter(HTTPAdapter):
+    """A custom HTTP Adaptor to work around the issue that www.itv.com returns
+    403 FORBIDDEN on OSMC 2024.05-1 and probably others systems running openssl 1.1.1.
+
+    It looks like the use of ssl.OP_NO_TICKET with openssl 1.1.1 causes trouble
+    with ITVX's servers. Since urllib3 v2+ sets this option by default we create
+    our own SSLContext for use in HTTPS connection.
+    Apart from the OP_NO_TICKET option, ssl's default context appears to be very
+    much like that created by urllib3, so I guess it's safe for general use here.
+
+    """
+    def init_poolmanager(self, *args, **kwargs):
+        import urllib3
+        import ssl
+        logger.info('Urllib3 version %s', urllib3.__version__)
+        logger.info(ssl.OPENSSL_VERSION)
+
+        ctx = ssl.create_default_context()
+        super().init_poolmanager(*args, **kwargs, ssl_context=ctx)
+
+
 class HttpSession(requests.sessions.Session):
     instance = None
 
@@ -84,6 +107,7 @@ class HttpSession(requests.sessions.Session):
             'Pragma': 'no-cache',
         })
         self.cookies = _create_cookiejar()
+        self.mount('https://', CustomHttpAdapter())
 
     # noinspection PyShadowingNames
     def request(

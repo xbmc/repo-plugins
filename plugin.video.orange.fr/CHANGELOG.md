@@ -1,5 +1,23 @@
 # 2.x
 
+## [2.1.2](https://github.com/f-lawe/plugin.video.orange.fr/releases/tag/v2.1.2) - 2024-07-05
+
+### Changed
+- Better timeshift management
+
+## [2.1.1](https://github.com/f-lawe/plugin.video.orange.fr/releases/tag/v2.1.1) - 2024-06-23
+
+### Changed
+- Use [ABC](https://docs.python.org/3/library/abc.html) for class inheritance
+- Move Orange util functions to decicated abstract Orange provider
+- Better authenticated request management
+- Move caching logic to utils
+
+## [2.1.0](https://github.com/f-lawe/plugin.video.orange.fr/releases/tag/v2.1.0) - 2024-06-21
+
+### Added
+- Catchup TV
+
 ## [2.0.1](https://github.com/f-lawe/plugin.video.orange.fr/releases/tag/v2.0.1) - 2024-06-20
 
 ### Changed

@@ -5,6 +5,7 @@ import socket
 from typing import Any, Callable
 
 from lib.providers import get_provider
+from lib.utils.cache import use_cache
 
 
 class IPTVManager:
@@ -30,11 +31,12 @@ class IPTVManager:
         return send
 
     @via_socket
-    def send_channels(self):
+    @use_cache("streams.json")
+    def send_channels(self) -> dict:
         """Return JSON-STREAMS formatted python datastructure to IPTV Manager."""
         return dict(version=1, streams=self.provider.get_streams())
 
     @via_socket
-    def send_epg(self):
+    def send_epg(self) -> dict:
         """Return JSON-EPG formatted python data structure to IPTV Manager."""
         return dict(version=1, epg=self.provider.get_epg())

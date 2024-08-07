@@ -1,10 +1,12 @@
 """Request utils."""
 
 from random import randint
+from urllib.parse import urlparse
+from urllib.request import Request
 
 # from socks import SOCKS5
 # from sockshandler import SocksiPyHandler
-from lib.utils.xbmctools import get_addon_setting
+from lib.utils.kodi import get_addon_setting
 
 _USER_AGENTS = [
     # Chrome
@@ -31,7 +33,17 @@ def get_random_ua() -> str:
     return _USER_AGENTS[randint(0, len(_USER_AGENTS) - 1)]
 
 
-def install_proxy():
+def build_request(url: str, additional_headers: dict = None) -> Request:
+    """Build HTTP request."""
+    if additional_headers is None:
+        additional_headers = {}
+
+    install_proxy()
+
+    return Request(url, headers={"User-Agent": get_random_ua(), "Host": urlparse(url).netloc, **additional_headers})
+
+
+def install_proxy() -> None:
     """Install proxy server for the next requests."""
     if get_addon_setting("proxy.enabled") != "true":
         return

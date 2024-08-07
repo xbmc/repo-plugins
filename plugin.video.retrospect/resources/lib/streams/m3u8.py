@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from typing import Optional, Dict
 
 from resources.lib.urihandler import UriHandler
 from resources.lib.logger import Logger
@@ -73,25 +74,35 @@ class M3u8(object):
         return sub
 
     @staticmethod
-    def set_input_stream_addon_input(strm,
-                                     headers=None,
-                                     license_key=None, license_type=None,
-                                     max_bit_rate=None,
-                                     persist_storage=False,
-                                     service_certificate=None,
-                                     manifest_update=None):
+    def set_input_stream_addon_input(strm: MediaStream,
+                                     stream_headers: Optional[Dict[str, str]] = None,
+                                     stream_parameters: Optional[Dict[str, str]] = None,
+
+                                     license_key: Optional[str] = None,
+                                     license_type: Optional[str] = None,
+                                     max_bit_rate: Optional[int] = 0,
+                                     persist_storage: bool = False,
+                                     service_certificate: Optional[str] = None,
+
+                                     manifest_params: Optional[Dict[str, str]] = None,
+                                     manifest_headers: Optional[Dict[str, str]] = None,
+                                     manifest_update_params: Optional[str] = None,
+                                     manifest_upd_params: Optional[Dict[str, str]] = None) -> MediaStream:
+
         """ Updates an existing stream with parameters for the inputstream adaptive add-on.
 
-        :param MediaStream strm:        The MediaStream to update
-        :param dict headers:            Possible HTTP Headers
-        :param str license_key:         The value of the license key request
-        :param str license_type:        The type of license key request used (see below)
-        :param int max_bit_rate:        The maximum bitrate to use (optional)
-        :param bool persist_storage:    Should we store certificates? And request server certificates?
-        :param str service_certificate: Use the specified server certificate
-
-        :returns: The updated stream
-        :rtype: MediaStream
+        :param strm:                    The MediaStream to update
+        :param stream_headers:          Possible HTTP Headers for the stream.
+        :param stream_parameters:       The stream parameters.
+        :param license_key:             The value of the license key request
+        :param license_type:            The type of license key request used (see below)
+        :param max_bit_rate:            The maximum bitrate to use (optional)
+        :param persist_storage:         Should we store certificates? And request server certificates?
+        :param service_certificate:     Use the specified server certificate
+        :param manifest_headers:        The headers to add to the manifest request.
+        :param manifest_params:         The parameters to asdd to the manifest request.
+        :param manifest_update_params:  How should the manifest be updated ("full"). Deprecated in v21
+        :param manifest_upd_params:     The request parameters for the manifest update requests.
 
         Can be used like this:
 
@@ -105,14 +116,18 @@ class M3u8(object):
         """
 
         return Adaptive.set_input_stream_addon_input(strm,
-                                                     headers,
+                                                     stream_headers=stream_headers,
+                                                     stream_parameters=stream_parameters,
                                                      manifest_type="hls",
                                                      license_key=license_key,
                                                      license_type=license_type,
                                                      max_bit_rate=max_bit_rate,
                                                      persist_storage=persist_storage,
                                                      service_certificate=service_certificate,
-                                                     manifest_update=manifest_update)
+                                                     manifest_params=manifest_params,
+                                                     manifest_headers=manifest_headers,
+                                                     manifest_update_params=manifest_update_params,
+                                                     manifest_upd_params=manifest_upd_params)
 
     @staticmethod
     def get_license_key(key_url, key_type="R", key_headers=None, key_value=None):

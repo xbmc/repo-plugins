@@ -38,6 +38,9 @@ class AddonSettings(object):
     __language_strings = {}
     __language_current = None
 
+    KodiPiers = 22
+    KodiOmega = 21
+    KodiNexus = 20
     KodiMatrix = 19
     KodiLeia = 18
     KodiKrypton = 17

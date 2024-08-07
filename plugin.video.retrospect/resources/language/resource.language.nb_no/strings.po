@@ -746,6 +746,10 @@ msgctxt "#30371"
 msgid "Trending"
 msgstr ""
 
+msgctxt "#30372"
+msgid "New Search"
+msgstr ""
+
 msgctxt "#30401"
 msgid "Dutch"
 msgstr "Nederlandsk"

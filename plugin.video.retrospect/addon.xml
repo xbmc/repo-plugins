@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.7.14"
+        version="5.7.15"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -123,22 +123,20 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.7.14 - Changelog - 2024-07-21[/B]
+        <news>[B]Retrospect v5.7.15 - Changelog - 2024-08-07[/B]
 
-This version introduces enhanced searching and keeps track of previous searches, so you can reuse them. It also includes a number of fixes for channels, such as GoPlay and UR Play. And finally some artwork was updated.
+This version includes some minor fixes in the &quot;search&quot; feature and fixes the GoPlay and Videoland channels.
 
 [B]Framework related[/B]
-* Added: New search functionality with search history options (Fixes #1805).
+* Fixed: Highlighter of searchresults were shown in the favourites (Fixes #1818).
+* Fixed: In some cases a new searched items would be cleaned up immediately.
 
 [B]GUI/Settings/Language related[/B]
 _None_
 
 [B]Channel related[/B]
-* Updated: UR Play artwork and fixed categories.
-* Updated: SVT poster and icon.
-* Fixed: SVT HTML based videos (Fixes #1808).
-* Fixed: GoPlay (Vier, Vijf, Zes, Zeven) channels broken (Fixes #1809).
-* Fixed: UR Play listings (Fixes #1812).
+* Fixed: Vier.be season and video parsing (See #1820).
+* Fixed: Videoland streams and live TV (Fixes #1813 and Fixes #1804)
 
         </news>
         <assets>

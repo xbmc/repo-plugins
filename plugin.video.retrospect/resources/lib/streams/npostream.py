@@ -101,7 +101,7 @@ class NpoStream(object):
         Mpd.set_input_stream_addon_input(stream,
                                          headers,
                                          license_key=license_key,
-                                         manifest_update=None if not live else "full")
+                                         manifest_update_params=None if not live else "full")
         return None
 
     @staticmethod

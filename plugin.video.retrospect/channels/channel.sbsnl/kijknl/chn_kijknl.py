@@ -853,7 +853,9 @@ class Channel(chn_class.Channel):
                     key_value=encryption_json,
                     key_headers={"Content-Type": "application/json", "authorization": "Basic {}".format(token)}
                 )
-                Mpd.set_input_stream_addon_input(stream, license_key=encryption_key, headers={"user-agent": "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)"})
+                Mpd.set_input_stream_addon_input(
+                    stream, license_key=encryption_key,
+                    stream_headers={"user-agent": "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)"})
                 item.complete = True
 
             elif stream_type == "m3u8" and not drm:

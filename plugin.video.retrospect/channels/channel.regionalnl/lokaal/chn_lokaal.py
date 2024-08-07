@@ -409,7 +409,8 @@ class Channel(chn_class.Channel):
 
         if AddonSettings.use_adaptive_stream_add_on():
             stream = item.add_stream(url, 0)
-            M3u8.set_input_stream_addon_input(stream, item.HttpHeaders)
+            M3u8.set_input_stream_addon_input(
+                stream, stream_headers=item.HttpHeaders, manifest_headers=item.HttpHeaders)
             item.complete = True
         else:
             for s, b in M3u8.get_streams_from_m3u8(url, append_query_string=True):

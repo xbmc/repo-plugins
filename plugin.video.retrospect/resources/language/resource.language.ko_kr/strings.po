@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2024-03-09 00:13+0000\n"
 "Last-Translator: Minho Park <parkmino@gmail.com>\n"
@@ -750,6 +750,10 @@ msgstr ""
 msgctxt "#30371"
 msgid "Trending"
 msgstr "인기 급상승"
+
+msgctxt "#30372"
+msgid "New Search"
+msgstr ""
 
 # empty strings from id 30365 to 30400
 msgctxt "#30401"

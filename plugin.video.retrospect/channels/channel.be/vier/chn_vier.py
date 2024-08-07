@@ -288,6 +288,7 @@ class Channel(chn_class.Channel):
         url = f"{self.baseUrl}{path}"
 
         if item_sub_type == "movie":
+            url = f"{self.baseUrl}/video{path}"
             item = MediaItem(title, url, media_type=mediatype.MOVIE)
             # item.metaData["retrospect:parser"] = "movie"
         else:
@@ -333,7 +334,10 @@ class Channel(chn_class.Channel):
             item.set_date(date_stamp.year, date_stamp.month, date_stamp.day, date_stamp.hour,
                           date_stamp.minute, date_stamp.second)
 
-            self.__extract_stream_collection(item, video_info)
+            duration = (video_info.get("streamCollection", {}) or {}).get("duration", 0)
+            if duration:
+                item.set_info_label(MediaItem.LabelDuration, duration)
+
             videos.append(item)
             if season_item:
                 season_item.items.append(item)
@@ -362,7 +366,11 @@ class Channel(chn_class.Channel):
         if item_type == "video":
             item = MediaItem(title, url, media_type=mediatype.VIDEO)
         elif item_type == "program":
-            item = FolderItem(title, url, content_type=contenttype.EPISODES)
+            if (data["tracking"] and data["tracking"]["item_category"] == "Film") or data["program"] == "":
+                url = url.replace(self.baseUrl, f"{self.baseUrl}/video")
+                item = MediaItem(title, url, media_type=mediatype.MOVIE)
+            else:
+                item = FolderItem(title, url, content_type=contenttype.EPISODES)
         else:
             Logger.warning("Unknown search result type.")
             return None
@@ -510,14 +518,10 @@ class Channel(chn_class.Channel):
         data = UriHandler.open(item.url, additional_headers=self.httpHeaders)
         json_data = Regexer.do_regex(r"({\"video\":{.+?})\]}\],", data)[0]
         nextjs_json = JsonHelper(json_data)
-
-        # See if the NextJS data has stream info.
-        self.__extract_stream_collection(item, nextjs_json.get_value("video"))
-
-        # if not streams were included, perhaps this is a drm protected sstream.
-        if not item.has_streams():
-            return self.update_video_item_with_id(item)
-        return item
+        video_id = nextjs_json.get_value("videoId")
+        item.metaData["whatsonId"] = nextjs_json.get_value("video", "tracking", "whatsonId")
+        item.url = f"https://api.goplay.be/web/v1/videos/long-form/{video_id}"
+        return self.update_video_item_with_id(item)
 
     def update_video_item_with_id(self, item: MediaItem) -> MediaItem:
         """ Updates an existing MediaItem with more data.
@@ -570,6 +574,12 @@ class Channel(chn_class.Channel):
             if error_message == "Locked":
                 # set it for the error statistics
                 item.isGeoLocked = True
+
+                whatson_id = item.metaData.get("whatsonId", None)
+                if whatson_id:
+                    # 2615619 = GoPlay contentSourceID.
+                    return self.__get_ssai_streams_for_content_source(item, 2615619, whatson_id, None)
+
             Logger.info("No stream manifest found: {}".format(error_message))
             item.complete = False
             return item
@@ -581,40 +591,6 @@ class Channel(chn_class.Channel):
 
         item.complete = M3u8.update_part_with_m3u8_streams(
             item, m3u8_url, channel=self, encrypted=False)
-
-    def __extract_stream_collection(self, item, video_info):
-        stream_collection = video_info.get("streamCollection", {})
-        prefer_widevine = True  # video_info.get("videoType") != "longForm"
-
-        if stream_collection:
-            drm_key = stream_collection["drmKey"]
-            video_id = video_info["uuid"]
-            if drm_key:
-                Logger.info(f"Found DRM enabled item: {item.name}")
-                item.url = f"https://api.goplay.be/web/v1/videos/long-form/{video_id}"
-                item.isGeoLocked = True
-                item.isDrmProtected = True
-                item.metaData["drm"] = drm_key
-                return
-
-            streams = stream_collection["streams"]
-            duration = stream_collection["duration"]
-            if duration:
-                item.set_info_label(MediaItem.LabelDuration, duration)
-            for stream in streams:
-                proto = stream["protocol"]
-                stream_url = stream["url"]
-                if proto == "dash":
-                    stream = item.add_stream(stream_url, 1550 if prefer_widevine else 1450)
-                    Mpd.set_input_stream_addon_input(stream)
-                elif proto == "hls":
-                    stream = item.add_stream(stream_url, 1500)
-                    M3u8.set_input_stream_addon_input(stream)
-
-                if "/geo" in stream_url:
-                    item.isGeoLocked = True
-
-            item.complete = item.has_streams()
 
     def __extract_artwork(self, item: MediaItem, images: dict, set_fanart: bool = True):
         if not images:
@@ -636,7 +612,11 @@ class Channel(chn_class.Channel):
         content_source_id = json_data.get_value("ssai", "contentSourceID")
         video_id = json_data.get_value("ssai", "videoID")
         drm_header = json_data.get_value("drmXml", fallback=None)
-
+        return self.__get_ssai_streams_for_content_source(item, content_source_id, video_id, drm_header)
+    
+    def __get_ssai_streams_for_content_source(self, item, content_source_id, video_id, drm_header):
+        Logger.info("No stream data found, trying SSAI data")
+        
         streams_url = 'https://dai.google.com/ondemand/dash/content/{}/vid/{}/streams'.format(
             content_source_id, video_id)
         # streams_url = "https://pubads.g.doubleclick.net/ondemand/dash/content/{}/vid/{}/streams".format(

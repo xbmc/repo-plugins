@@ -282,14 +282,17 @@ class Channel(chn_class.Channel):
         # This postprocessing function fixes date ordering by setting the date of an episode, if it has no date, to the date of the previous episode.
         # This is probably not the real broadcast date, but it at least fixes the order.
         if (len(items) > 1
-            and data.json.get("featureId") == "videos_by_season_by_program"
-            and all(item.media_type == mediatype.EPISODE and not re.match(r"[Aa]flevering \d+", item.name) for item in items)):
+                and data.json.get("featureId") == "videos_by_season_by_program"
+                and all(item.media_type == mediatype.EPISODE
+                        and not re.match(r"[Aa]flevering \d+", item.name) for item in
+                        items)):
             date = ""
             for index, item in enumerate(items, start=1):
                 item.name = f"{index:02} {item.name}"
                 if not item.has_date() and date:
                     previous_episode_date = DateHelper.get_datetime_from_string(date, "%Y-%m-%d")
-                    item.set_date(previous_episode_date.year, previous_episode_date.month, previous_episode_date.day)
+                    item.set_date(previous_episode_date.year, previous_episode_date.month,
+                                  previous_episode_date.day)
                     item.name = f"{item.name} [date unknown]"
                 else:
                     date = item.get_date()
@@ -297,11 +300,13 @@ class Channel(chn_class.Channel):
         return items
 
     def create_program_item(self, result_set: dict) -> Union[MediaItem, List[MediaItem], None]:
-        if not result_set["title"] and result_set.get("blockTemplateId") == "Solo":
-            # Most likely a single video or movie
-            if result_set.get("content", {}).get("items"):
-                result_set["content"]["items"][0]["itemContent"]["title"] = self.parentItem.name
-                return self.create_content_item(result_set["content"]["items"][0])
+        if not result_set["title"]:
+            # Perhaps it is a single video?
+            if result_set.get("blockTemplateId") == "Solo":
+                # Most likely a single video or movie
+                if result_set.get("content", {}).get("items"):
+                    result_set["content"]["items"][0]["itemContent"]["title"] = self.parentItem.name
+                    return self.create_content_item(result_set["content"]["items"][0])
 
             return None
 
@@ -422,7 +427,7 @@ class Channel(chn_class.Channel):
             #     M3u8.set_input_stream_addon_input(stream)
         return item
 
-    def log_on(self):
+    def log_on(self, username=None, password=None) -> bool:
         """ Logs on to a website, using an url.
 
         First checks if the channel requires log on. If so and it's not already
@@ -434,19 +439,27 @@ class Channel(chn_class.Channel):
         After a successful log on the self.loggedOn property is set to True and
         True is returned.
 
+        :param username:    Making it testable.
+        :param password:    Making it testable.
+
         :return: indication if the login was successful.
         :rtype: bool
 
         """
 
+        if self.loggedOn:
+            return self.loggedOn
+
         # Always try to log on. If the username was changed to empty, we should clear the current
         # log in.
-        username: Optional[str] = self._get_setting("videolandnl_username", value_for_none=None)
+        username: Optional[str] = username or self._get_setting(
+            "videolandnl_username", value_for_none=None)
         if not username:
             XbmcWrapper.show_dialog(None, LanguageHelper.MissingCredentials)
 
-        result = self.__authenticator.log_on(username=username, channel_guid=self.guid,
-                                             setting_id="videolandnl_password")
+        result = self.__authenticator.log_on(
+            username=username, password=password,
+            channel_guid=self.guid, setting_id="videolandnl_password")
 
         # Set some defaults
         self.__uid = result.uid

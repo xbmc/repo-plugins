@@ -13,7 +13,7 @@ import xbmc
 
 from lib.providers.abstract_provider import AbstractProvider
 from lib.utils.kodi import build_addon_url, get_drm, get_global_setting, log
-from lib.utils.request import build_request, get_random_ua
+from lib.utils.request import build_request, get_random_ua, open_request
 
 _PROGRAMS_ENDPOINT = "https://rp-ott-mediation-tv.woopic.com/api-gw/live/v3/applications/STB4PC/programs?period={period}&epgIds=all&mco={mco}"
 _CATCHUP_CHANNELS_ENDPOINT = "https://rp-ott-mediation-tv.woopic.com/api-gw/catchup/v4/applications/PC/channels"
@@ -43,9 +43,7 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
     def get_streams(self) -> list:
         """Load stream data from Orange and convert it to JSON-STREAMS format."""
         req = build_request(_CHANNELS_ENDPOINT)
-
-        with urlopen(req) as res:
-            channels = list(json.loads(res.read())["channels"])
+        channels = dict(open_request(req, {"channels": {}}))["channels"]
 
         log(f"{len(channels)} channels found", xbmc.LOGINFO)
         channels.sort(key=lambda channel: channel["displayOrder"])
@@ -121,15 +119,12 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
     def get_catchup_channels(self) -> list:
         """Load available catchup channels."""
         req = build_request(_CATCHUP_CHANNELS_ENDPOINT)
-
-        with urlopen(req) as res:
-            channels = list(json.loads(res.read()))
+        channels = open_request(req, [])
 
         log(f"{len(channels)} catchup channels found", xbmc.LOGINFO)
 
         return [
             {
-                "is_folder": True,
                 "label": str(channel["name"]).upper(),
                 "path": build_addon_url(f"/channels/{channel['id']}/categories"),
                 "art": {"thumb": channel["logos"]["ref_millenials_partner_white_logo"]},
@@ -140,13 +135,10 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
     def get_catchup_categories(self, catchup_channel_id: str) -> list:
         """Return a list of catchup categories for the specified channel id."""
         req = build_request(_CATCHUP_CHANNELS_ENDPOINT + "/" + catchup_channel_id)
-
-        with urlopen(req) as res:
-            categories = list(json.loads(res.read())["categories"])
+        categories = dict(open_request(req, {"categories": {}}))["categories"]
 
         return [
             {
-                "is_folder": True,
                 "label": category["name"][0].upper() + category["name"][1:],
                 "path": build_addon_url(f"/channels/{catchup_channel_id}/categories/{category['id']}/articles"),
             }
@@ -155,18 +147,16 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
 
     def get_catchup_articles(self, catchup_channel_id: str, category_id: str) -> list:
         """Return a list of catchup groups for the specified channel id and category id."""
-        req = build_request(
-            _CATCHUP_ARTICLES_ENDPOINT.format(catchup_channel_id=catchup_channel_id, category_id=category_id)
-        )
+        url = _CATCHUP_ARTICLES_ENDPOINT.format(catchup_channel_id=catchup_channel_id, category_id=category_id)
+        req = build_request(url)
 
-        with urlopen(req) as res:
-            articles = list(json.loads(res.read())["articles"])
+        articles = dict(open_request(req, {"articles": {}}))["articles"]
 
         return [
             {
-                "is_folder": True,
                 "label": article["title"],
                 "path": build_addon_url(f"/channels/{catchup_channel_id}/articles/{article['id']}/videos"),
+                "art": {"poster": article["covers"]["ref_16_9"]},
             }
             for article in articles
         ]
@@ -174,16 +164,20 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
     def get_catchup_videos(self, catchup_channel_id: str, article_id: str) -> list:
         """Return a list of catchup videos for the specified channel id and article id."""
         req = build_request(_CATCHUP_VIDEOS_ENDPOINT.format(group_id=article_id))
-
-        with urlopen(req) as res:
-            videos = list(json.loads(res.read())["videos"])
+        videos = dict(open_request(req, {"videos": {}}))["videos"]
 
         return [
             {
-                "is_folder": False,
                 "label": video["title"],
-                "path": build_addon_url(f"/videos/{video['id']}"),
-                "art": {"thumb": video["covers"]["ref_4_3"]},
+                "path": build_addon_url(f"/catchup-streams/{video['id']}"),
+                "art": {"poster": video["covers"]["ref_16_9"]},
+                "info": {
+                    "duration": int(video["duration"]) * 60,
+                    "genres": video["genres"],
+                    "plot": video["longSummary"],
+                    "premiered": datetime.fromtimestamp(int(video["broadcastDate"]) / 1000).strftime("%Y-%m-%d"),
+                    "year": int(video["productionDate"]),
+                },
             }
             for video in videos
         ]
@@ -197,7 +191,7 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
             item_type=item_type,
             stream_id=stream_id,
         )
-        req, tv_token = self._build_request(url, auth_url=auth_url)
+        req, tv_token = self._build_auth_request(url, auth_url=auth_url)
 
         try:
             with urlopen(req) as res:
@@ -232,7 +226,6 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
             "path": stream_info["url"],
             "mime_type": "application/xml+dash",
             "manifest_type": "mpd",
-            "drm": drm.name.lower(),
             "license_type": drm.value,
             "license_key": f"{license_server_url}|{headers}|{post_data}|{response}",
         }
@@ -240,7 +233,7 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
         log(stream_info, xbmc.LOGDEBUG)
         return stream_info
 
-    def _build_request(self, url: str, additional_headers: dict = None, auth_url: str = None) -> (Request, str):
+    def _build_auth_request(self, url: str, additional_headers: dict = None, auth_url: str = None) -> (Request, str):
         """Build HTTP request."""
         tv_token = None
 

@@ -1,12 +1,17 @@
 """Request utils."""
 
+import gzip
+import json
 from random import randint
+from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
-from urllib.request import Request
+from urllib.request import Request, urlopen
+
+import xbmc
 
 # from socks import SOCKS5
 # from sockshandler import SocksiPyHandler
-from lib.utils.kodi import get_addon_setting
+from lib.utils.kodi import get_addon_setting, log, ok_dialog
 
 _USER_AGENTS = [
     # Chrome
@@ -41,6 +46,27 @@ def build_request(url: str, additional_headers: dict = None) -> Request:
     install_proxy()
 
     return Request(url, headers={"User-Agent": get_random_ua(), "Host": urlparse(url).netloc, **additional_headers})
+
+
+def open_request(req: Request, value=None):
+    """Open HTTP request and handle errors."""
+    try:
+        res = urlopen(req)
+    except HTTPError as e:
+        log(e.code, xbmc.LOGERROR)
+        ok_dialog("HTTPError")
+        return value
+    except URLError as e:
+        log(e.reason, xbmc.LOGERROR)
+        ok_dialog("URLError")
+        return value
+    else:
+        content = res.read()
+
+        if res.headers.get("Content-Encoding") == "gzip":
+            content = gzip.decompress(content)
+
+        return json.loads(content)
 
 
 def install_proxy() -> None:

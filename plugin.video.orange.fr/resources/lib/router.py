@@ -10,5 +10,5 @@ router = Router()
 
 def init_router():
     """Init addon router."""
+    log("Initializing addon router", xbmc.LOGDEBUG)
     router.run()
-    log("Addon router initialized", xbmc.LOGDEBUG)

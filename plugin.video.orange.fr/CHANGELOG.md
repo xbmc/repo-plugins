@@ -1,5 +1,19 @@
 # 2.x
 
+## [2.1.4](https://github.com/f-lawe/plugin.video.orange.fr/releases/tag/v2.1.4) - 2024-08-08
+
+## Changed
+- Better UI items management
+
+### Fixed
+- InputStream Helper is now called properly ([#50](https://github.com/f-lawe/plugin.video.orange.fr/issues/50))
+- Avoid plugin to be run twice on catchup TV videos ([#55](https://github.com/f-lawe/plugin.video.orange.fr/issues/55))
+
+## [2.1.3](https://github.com/f-lawe/plugin.video.orange.fr/releases/tag/v2.1.3) - 2024-07-21
+
+### Fixed
+- IPTV Manager should now detects Orange TV France from clean install
+
 ## [2.1.2](https://github.com/f-lawe/plugin.video.orange.fr/releases/tag/v2.1.2) - 2024-07-05
 
 ### Changed

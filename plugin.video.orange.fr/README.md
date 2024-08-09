@@ -34,3 +34,9 @@ If you need the latest update, you can download the latest ZIP archive from the 
 ## Known limitations
 - Limited to 720p because Orange don't provide higher quality on their web TV
 - Work only from the listed and tested areas (for now metropolitan France, French Caribbean, and Reunion island)
+
+## Sponsorship
+You like this project? Help me working on it!
+
+[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=PNVV6FEQU94JG)
+

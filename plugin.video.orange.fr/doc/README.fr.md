@@ -32,3 +32,8 @@ Si vous avez besoin de la dernière version, vous pouvez toujours télécharger 
 ## Limitations connues
 - Qualité vidéo limitée à 720p, Orange ne propose pas plus sur leur plateforme web
 - Ne fonctionne que depuis les zones listées et testées (pour le moment France métropolitaine, Caraïbes Françaises et La Réunion)
+
+## Sponsoring
+Vous aimez ce projet ? Aidez-moi à travailler dessus !
+
+[![Donate with PayPal](https://www.paypalobjects.com/fr_FR/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=PNVV6FEQU94JG)

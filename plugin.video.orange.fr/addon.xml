@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.orange.fr" name="Orange TV France" version="2.1.3" provider-name="Flawe">
+<addon id="plugin.video.orange.fr" name="Orange TV France" version="2.1.4" provider-name="Flawe">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
         <import addon="script.module.routing" version="0.2.3"/>

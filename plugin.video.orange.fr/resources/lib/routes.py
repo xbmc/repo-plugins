@@ -35,13 +35,6 @@ def channel_article_videos(catchup_channel_id: str, article_id: str):
     CatchupManager().get_videos(catchup_channel_id, article_id)
 
 
-@router.route("/videos/<video_id>")
-def video(video_id: str):
-    """Return catchup video listitem."""
-    log(f"Loading catchup video {video_id}", xbmc.LOGINFO)
-    CatchupManager().play_video(video_id)
-
-
 @router.route("/live-streams/<stream_id>")
 def live_stream(stream_id: str):
     """Load live stream for the required channel id."""

@@ -14,6 +14,7 @@ import os
 import pickle
 import sqlite3
 import time
+from threading import Lock
 from traceback import format_stack
 
 from ..logger import log_error
@@ -62,6 +63,20 @@ class Storage(object):
             'SELECT *'
             ' FROM {table}'
             ' WHERE key in ({{0}});'
+        ),
+        'get_by_key_like': (
+            'SELECT *'
+            ' FROM {table}'
+            ' WHERE key like ?'
+            ' ORDER BY {order_col}'
+            ' LIMIT {{0}};'
+        ),
+        'get_by_key_like_desc': (
+            'SELECT *'
+            ' FROM {table}'
+            ' WHERE key like ?'
+            ' ORDER BY {order_col} DESC'
+            ' LIMIT {{0}};'
         ),
         'get_many': (
             'SELECT *'
@@ -135,6 +150,12 @@ class Storage(object):
             ' (key, timestamp, value, size)'
             ' VALUES {{0}};'
         ),
+        'update': (
+            'UPDATE'
+            ' {table}'
+            ' SET timestamp = ?, value = ?, size = ?'
+            ' WHERE key = ?;'
+        ),
     }
 
     def __init__(self,
@@ -142,9 +163,11 @@ class Storage(object):
                  max_item_count=-1,
                  max_file_size_kb=-1,
                  migrate=False):
-        self._filepath = filepath
+        self.uuid = filepath[1]
+        self._filepath = os.path.join(*filepath)
         self._db = None
         self._cursor = None
+        self._lock = Lock()
         self._max_item_count = -1 if migrate else max_item_count
         self._max_file_size_kb = -1 if migrate else max_file_size_kb
 
@@ -164,6 +187,20 @@ class Storage(object):
                 for name, sql in Storage._sql.items()
             }
             self._base._sql.update(statements)
+        elif self._sql and '_partial' in self._sql:
+            statements = {
+                name: sql.format(table=self._table_name,
+                                 order_col='timestamp')
+                for name, sql in Storage._sql.items()
+            }
+            partial_statements = {
+                name: sql.format(table=self._table_name,
+                                 order_col='timestamp')
+                for name, sql in self._base._sql.items()
+                if not name.startswith('_')
+            }
+            statements.update(partial_statements)
+            self._base._sql = statements
 
     def set_max_item_count(self, max_item_count):
         self._max_item_count = max_item_count
@@ -171,16 +208,15 @@ class Storage(object):
     def set_max_file_size_kb(self, max_file_size_kb):
         self._max_file_size_kb = max_file_size_kb
 
-    def __del__(self):
-        self._close()
-
     def __enter__(self):
+        self._lock.acquire()
         if not self._db or not self._cursor:
             self._open()
         return self._db, self._cursor
 
     def __exit__(self, exc_type=None, exc_val=None, exc_tb=None):
         self._close()
+        self._lock.release()
 
     def _open(self):
         if not os.path.exists(self._filepath):
@@ -359,6 +395,11 @@ class Storage(object):
             self._execute(cursor, query, many=(not flatten), values=values)
         self._optimize_file_size()
 
+    def _update(self, item_id, item, timestamp=None):
+        values = self._encode(item_id, item, timestamp, for_update=True)
+        with self as (db, cursor), db:
+            self._execute(cursor, self._sql['update'], values=values)
+
     def clear(self, defer=False):
         query = self._sql['clear']
         if defer:
@@ -386,7 +427,7 @@ class Storage(object):
         return decoded_obj
 
     @staticmethod
-    def _encode(key, obj, timestamp=None):
+    def _encode(key, obj, timestamp=None, for_update=False):
         timestamp = timestamp or since_epoch()
         blob = sqlite3.Binary(pickle.dumps(
             obj, protocol=pickle.HIGHEST_PROTOCOL
@@ -394,9 +435,13 @@ class Storage(object):
         size = getattr(blob, 'nbytes', None)
         if not size:
             size = int(memoryview(blob).itemsize) * len(blob)
-        return str(key), timestamp, blob, size
+        if key:
+            if for_update:
+                return timestamp, blob, size, str(key)
+            return str(key), timestamp, blob, size
+        return timestamp, blob, size
 
-    def _get(self, item_id, process=None, seconds=None):
+    def _get(self, item_id, process=None, seconds=None, as_dict=False):
         with self as (db, cursor), db:
             result = self._execute(cursor, self._sql['get'], [str(item_id)])
             item = result.fetchone() if result else None
@@ -404,31 +449,53 @@ class Storage(object):
                 return None
         cut_off = since_epoch() - seconds if seconds else 0
         if not cut_off or item[1] >= cut_off:
+            if as_dict:
+                return {
+                    'item_id': item_id,
+                    'age': since_epoch() - item[1],
+                    'value': self._decode(item[2], process, item),
+                }
             return self._decode(item[2], process, item)
         return None
 
     def _get_by_ids(self, item_ids=None, oldest_first=True, limit=-1,
-                    seconds=None, process=None,
-                    as_dict=False, values_only=False):
+                    wildcard=False, seconds=None, process=None,
+                    as_dict=False, values_only=True):
         if not item_ids:
             if oldest_first:
                 query = self._sql['get_many']
             else:
                 query = self._sql['get_many_desc']
             query = query.format(limit)
+        elif wildcard:
+            if oldest_first:
+                query = self._sql['get_by_key_like']
+            else:
+                query = self._sql['get_by_key_like_desc']
+            query = query.format(limit)
         else:
             num_ids = len(item_ids)
             query = self._sql['get_by_key'].format('?,' * (num_ids - 1) + '?')
             item_ids = tuple(item_ids)
 
-        cut_off = since_epoch() - seconds if seconds else 0
+        epoch = since_epoch()
+        cut_off = epoch - seconds if seconds else 0
         with self as (db, cursor), db:
             result = self._execute(cursor, query, item_ids)
             if as_dict:
-                result = {
-                    item[0]: self._decode(item[2], process, item)
-                    for item in result if not cut_off or item[1] >= cut_off
-                }
+                if values_only:
+                    result = {
+                        item[0]: self._decode(item[2], process, item)
+                        for item in result if not cut_off or item[1] >= cut_off
+                    }
+                else:
+                    result = {
+                        item[0]: {
+                            'age': epoch - item[1],
+                            'value': self._decode(item[2], process, item),
+                        }
+                        for item in result if not cut_off or item[1] >= cut_off
+                    }
             elif values_only:
                 result = [
                     self._decode(item[2], process, item)

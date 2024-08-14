@@ -14,10 +14,9 @@ import re
 import time
 from math import log10
 
-from ...kodion.constants import content, paths
+from ...kodion.constants import CONTENT, LICENSE_TOKEN, LICENSE_URL, PATHS
 from ...kodion.items import DirectoryItem, menu_items
 from ...kodion.utils import (
-    create_path,
     datetime_parser,
     friendly_number,
     strip_html_from_text,
@@ -91,43 +90,46 @@ def make_comment_item(context, snippet, uri, total_replies=0):
 
     # Format the label of the comment item.
     if label_props:
-        label = '{author} ({props}) {body}'.format(
-            author=author,
-            props='|'.join(label_props),
-            body=body.replace('\n', ' ')
-        )
+        label = ''.join((
+            author,
+            ' (',
+            '|'.join(label_props),
+            ') ',
+            body.replace('\n', ' '),
+        ))
     else:
-        label = '{author} {body}'.format(
-            author=author, body=body.replace('\n', ' ')
-        )
+        label = ' '.join((
+            author,
+            body.replace('\n', ' '),
+        ))
 
     # Format the plot of the comment item.
     if plot_props:
-        plot = '{author} ({props}){body}'.format(
-            author=author,
-            props='|'.join(plot_props),
-            body=ui.new_line(body, cr_before=2)
-        )
+        plot = ''.join((
+            author,
+            ' (',
+            '|'.join(plot_props),
+            ')',
+            ui.new_line(body, cr_before=2),
+        ))
     else:
-        plot = '{author}{body}'.format(
-            author=author, body=ui.new_line(body, cr_before=2)
-        )
+        plot = ''.join((
+            author,
+            ui.new_line(body, cr_before=2),
+        ))
 
-    comment_item = DirectoryItem(label, uri)
-    comment_item.set_plot(plot)
+    comment_item = DirectoryItem(label, uri, plot=plot, action=(not uri))
 
     datetime = datetime_parser.parse(published_at)
     comment_item.set_added_utc(datetime)
+
     local_datetime = datetime_parser.utc_to_local(datetime)
     comment_item.set_dateadded_from_datetime(local_datetime)
+
     if edited:
         datetime = datetime_parser.parse(updated_at)
         local_datetime = datetime_parser.utc_to_local(datetime)
     comment_item.set_date_from_datetime(local_datetime)
-
-    if not uri:
-        # Cosmetic, makes the item not a folder.
-        comment_item.set_action(True)
 
     return comment_item
 
@@ -155,7 +157,7 @@ def update_channel_infos(provider, context, channel_id_dict,
     path = context.get_path()
 
     filter_list = None
-    if path.startswith(paths.SUBSCRIPTIONS):
+    if path.startswith(PATHS.SUBSCRIPTIONS):
         in_bookmarks_list = False
         in_subscription_list = True
         if settings.get_bool('youtube.folder.my_subscriptions_filtered.show',
@@ -166,24 +168,21 @@ def update_channel_infos(provider, context, channel_id_dict,
             filter_string = filter_string.replace(', ', ',')
             filter_list = filter_string.split(',')
             filter_list = [x.lower() for x in filter_list]
-    elif path.startswith(paths.BOOKMARKS):
+    elif path.startswith(PATHS.BOOKMARKS):
         in_bookmarks_list = True
         in_subscription_list = False
     else:
         in_bookmarks_list = False
         in_subscription_list = False
 
-    thumb_size = settings.use_thumbnail_size
-    banners = [
-        'bannerTvMediumImageUrl',
-        'bannerTvLowImageUrl',
-        'bannerTvImageUrl'
-    ]
+    thumb_size = settings.get_thumbnail_size()
 
     for channel_id, yt_item in data.items():
-        channel_item = channel_id_dict[channel_id]
-
+        if not yt_item or 'snippet' not in yt_item:
+            continue
         snippet = yt_item['snippet']
+
+        channel_item = channel_id_dict[channel_id]
 
         # title
         title = snippet['title']
@@ -199,7 +198,7 @@ def update_channel_infos(provider, context, channel_id_dict,
         # -- unsubscribe from channel
         subscription_id = subscription_id_dict.get(channel_id, '')
         if subscription_id:
-            channel_item.set_subscription_id(subscription_id)
+            channel_item.subscription_id = subscription_id
             context_menu.append(
                 menu_items.unsubscribe_from_channel(
                     context, subscription_id=subscription_id
@@ -228,20 +227,14 @@ def update_channel_infos(provider, context, channel_id_dict,
 
         if not in_bookmarks_list:
             context_menu.append(
-                menu_items.bookmarks_add(
-                    context, channel_item
+                menu_items.bookmark_add_channel(
+                    context, channel_id
                 )
             )
 
         if context_menu:
-            channel_item.set_context_menu(context_menu)
-
-        fanart_images = yt_item.get('brandingSettings', {}).get('image', {})
-        for banner in banners:
-            fanart = fanart_images.get(banner)
-            if fanart:
-                channel_item.set_fanart(fanart)
-                break
+            context_menu.append(menu_items.separator())
+            channel_item.add_context_menu(context_menu)
 
         # update channel mapping
         if channel_items_dict is not None:
@@ -269,13 +262,13 @@ def update_playlist_infos(provider, context, playlist_id_dict,
     custom_history_id = access_manager.get_watch_history_id()
     logged_in = provider.is_logged_in()
     path = context.get_path()
-    thumb_size = context.get_settings().use_thumbnail_size()
+    thumb_size = context.get_settings().get_thumbnail_size()
 
     # if the path directs to a playlist of our own, set channel id to 'mine'
-    if path.startswith(paths.MY_PLAYLISTS):
+    if path.startswith(PATHS.MY_PLAYLISTS):
         in_bookmarks_list = False
         in_my_playlists = True
-    elif path.startswith(paths.BOOKMARKS):
+    elif path.startswith(PATHS.BOOKMARKS):
         in_bookmarks_list = True
         in_my_playlists = False
     else:
@@ -283,11 +276,15 @@ def update_playlist_infos(provider, context, playlist_id_dict,
         in_my_playlists = False
 
     for playlist_id, yt_item in data.items():
+        if not yt_item or 'snippet' not in yt_item:
+            continue
+        snippet = yt_item['snippet']
+
         playlist_item = playlist_id_dict[playlist_id]
 
-        snippet = yt_item['snippet']
         title = snippet['title']
         playlist_item.set_name(title)
+
         image = get_thumbnail(thumb_size, snippet.get('thumbnails', {}))
         playlist_item.set_image(image)
 
@@ -298,15 +295,11 @@ def update_playlist_infos(provider, context, playlist_id_dict,
         context_menu = [
             menu_items.play_all_from_playlist(
                 context, playlist_id
-            )
+            ),
+            menu_items.bookmark_add(
+                context, playlist_item
+            ) if not in_bookmarks_list and channel_id != 'mine' else None,
         ]
-
-        if not in_bookmarks_list and channel_id != 'mine':
-            context_menu.append(
-                menu_items.bookmarks_add(
-                    context, playlist_item
-                )
-            )
 
         if logged_in:
             if channel_id != 'mine':
@@ -347,13 +340,14 @@ def update_playlist_infos(provider, context, playlist_id_dict,
         if not in_bookmarks_list and channel_id != 'mine':
             context_menu.append(
                 # bookmark channel of the playlist
-                menu_items.bookmarks_add_channel(
+                menu_items.bookmark_add_channel(
                     context, channel_id, channel_name
                 )
             )
 
         if context_menu:
-            playlist_item.set_context_menu(context_menu)
+            context_menu.append(menu_items.separator())
+            playlist_item.add_context_menu(context_menu)
 
         # update channel mapping
         if channel_items_dict is not None:
@@ -367,6 +361,7 @@ def update_video_infos(provider, context, video_id_dict,
                        channel_items_dict=None,
                        live_details=True,
                        use_play_data=True,
+                       item_filter=None,
                        data=None):
     video_ids = list(video_id_dict)
     if not video_ids and not data:
@@ -390,33 +385,35 @@ def update_video_infos(provider, context, video_id_dict,
     else:
         watch_later_id = None
 
+    localize = context.localize
     settings = context.get_settings()
     alternate_player = settings.support_alternative_player()
     default_web_urls = settings.default_player_web_urls()
     ask_quality = not default_web_urls and settings.ask_for_video_quality()
     audio_only = settings.audio_only()
-    hide_shorts = settings.hide_short_videos()
+    channel_name_aliases = settings.get_channel_name_aliases()
     show_details = settings.show_detailed_description()
     subtitles_prompt = settings.get_subtitle_selection() == 1
-    thumb_size = settings.use_thumbnail_size()
+    thumb_size = settings.get_thumbnail_size()
     thumb_stamp = get_thumb_timestamp()
 
-    untitled = context.localize('untitled')
+    channel_role = localize(19029)
+    untitled = localize('untitled')
 
     path = context.get_path()
     ui = context.get_ui()
 
-    if path.startswith(paths.MY_SUBSCRIPTIONS):
+    if path.startswith(PATHS.MY_SUBSCRIPTIONS):
         in_bookmarks_list = False
         in_my_subscriptions_list = True
         in_watched_later_list = False
         playlist_match = False
-    elif path.startswith(paths.WATCH_LATER):
+    elif path.startswith(PATHS.WATCH_LATER):
         in_bookmarks_list = False
         in_my_subscriptions_list = False
         in_watched_later_list = True
         playlist_match = False
-    elif path.startswith(paths.BOOKMARKS):
+    elif path.startswith(PATHS.BOOKMARKS):
         in_bookmarks_list = True
         in_my_subscriptions_list = False
         in_watched_later_list = False
@@ -428,33 +425,71 @@ def update_video_infos(provider, context, video_id_dict,
         playlist_match = __RE_PLAYLIST.match(path)
 
     for video_id, yt_item in data.items():
-        video_item = video_id_dict[video_id]
-
-        # set mediatype
-        video_item.set_mediatype(content.VIDEO_TYPE)
-
         if not yt_item or 'snippet' not in yt_item:
             continue
-
         snippet = yt_item['snippet']
-        play_data = use_play_data and yt_item.get('play_data')
-        broadcast_type = snippet.get('liveBroadcastContent')
-        video_item.live = broadcast_type == 'live'
-        video_item.upcoming = broadcast_type == 'upcoming'
 
-        # duration
-        if (not (video_item.live or video_item.upcoming)
-                and play_data and 'total_time' in play_data):
+        video_item = video_id_dict[video_id]
+        video_item.set_mediatype(CONTENT.VIDEO_TYPE)
+
+        play_data = use_play_data and yt_item.get('play_data')
+        if play_data and 'total_time' in play_data:
             duration = play_data['total_time']
         else:
             duration = yt_item.get('contentDetails', {}).get('duration')
             if duration:
                 duration = datetime_parser.parse(duration)
-                # subtract 1s because YouTube duration is +1s too long
-                duration = (duration.seconds - 1) if duration.seconds else None
+                if duration.seconds:
+                    # subtract 1s because YouTube duration is +1s too long
+                    duration = duration.seconds - 1
         if duration:
             video_item.set_duration_from_seconds(duration)
-            if hide_shorts and duration <= 60:
+            if duration <= 60:
+                video_item.short = True
+
+        broadcast_type = snippet.get('liveBroadcastContent')
+        video_item.live = broadcast_type == 'live'
+        video_item.upcoming = broadcast_type == 'upcoming'
+
+        upload_status = yt_item.get('status', {}).get('uploadStatus')
+        if upload_status == 'processed' and duration:
+            video_item.live = False
+        elif upload_status == 'uploaded' and not duration:
+            video_item.live = True
+
+        if 'liveStreamingDetails' in yt_item:
+            streaming_details = yt_item['liveStreamingDetails']
+            if 'actualStartTime' in streaming_details:
+                start_at = streaming_details['actualStartTime']
+                video_item.upcoming = False
+                if 'actualEndTime' in streaming_details:
+                    video_item.completed = True
+            else:
+                start_at = streaming_details.get('scheduledStartTime')
+                video_item.upcoming = True
+        else:
+            video_item.completed = False
+            video_item.live = False
+            video_item.upcoming = False
+            video_item.vod = True
+            start_at = None
+
+            if item_filter and (
+                    (not item_filter['shorts']
+                     and video_item.short)
+                    or (not item_filter['completed']
+                        and video_item.completed)
+                    or (not item_filter['live']
+                        and video_item.live and not video_item.upcoming)
+                    or (not item_filter['upcoming']
+                        and video_item.upcoming)
+                    or (not item_filter['premieres']
+                        and video_item.upcoming and not video_item.live)
+                    or (not item_filter['upcoming_live']
+                        and video_item.upcoming and video_item.live)
+                    or (not item_filter['vod']
+                        and video_item.vod)
+            ):
                 continue
 
         if not video_item.live and play_data:
@@ -472,11 +507,6 @@ def update_video_infos(provider, context, video_id_dict,
         elif video_item.live:
             video_item.set_play_count(0)
 
-        if ((video_item.live or video_item.upcoming)
-                and 'liveStreamingDetails' in yt_item):
-            start_at = yt_item['liveStreamingDetails'].get('scheduledStartTime')
-        else:
-            start_at = None
         if start_at:
             datetime = datetime_parser.parse(start_at)
             video_item.set_scheduled_start_utc(datetime)
@@ -485,14 +515,19 @@ def update_video_infos(provider, context, video_id_dict,
             video_item.set_aired_from_datetime(local_datetime)
             video_item.set_premiered_from_datetime(local_datetime)
             video_item.set_date_from_datetime(local_datetime)
-            type_label = context.localize('live' if video_item.live
-                                          else 'upcoming')
-            start_at = '{type_label} {start_at}'.format(
-                type_label=type_label,
-                start_at=datetime_parser.get_scheduled_start(
-                    context, local_datetime
-                )
-            )
+            if video_item.upcoming:
+                if video_item.live:
+                    type_label = localize('live.upcoming')
+                else:
+                    type_label = localize('upcoming')
+            elif video_item.live:
+                type_label = localize('live')
+            else:
+                type_label = localize(335)  # "Start"
+            start_at = ' '.join((
+                type_label,
+                datetime_parser.get_scheduled_start(context, local_datetime),
+            ))
 
         label_stats = []
         stats = []
@@ -508,7 +543,7 @@ def update_video_infos(provider, context, video_id_dict,
                     continue
 
                 color = settings.get_label_color(stat)
-                label = context.localize(label)
+                label = localize(label)
                 if value == 1:
                     label = label.rstrip('s')
 
@@ -574,8 +609,15 @@ def update_video_infos(provider, context, video_id_dict,
             if season and episode:
                 break
 
-        # plot
+        # channel name
         channel_name = snippet.get('channelTitle', '')
+        video_item.add_artist(channel_name)
+        if 'cast' in channel_name_aliases:
+            video_item.add_cast(channel_name, role=channel_role)
+        if 'studio' in channel_name_aliases:
+            video_item.add_studio(channel_name)
+
+        # plot
         description = strip_html_from_text(snippet['description'])
         if show_details:
             description = ''.join((
@@ -584,10 +626,8 @@ def update_video_infos(provider, context, video_id_dict,
                 (ui.italic(start_at, cr_after=1) if video_item.upcoming
                  else ui.new_line(start_at, cr_after=1)) if start_at else '',
                 description,
+                ui.new_line('https://youtu.be/' + video_id, cr_before=1)
             ))
-        # video_item.add_studio(channel_name)
-        # video_item.add_cast(channel_name)
-        video_item.add_artist(channel_name)
         video_item.set_plot(description)
 
         # date time
@@ -613,7 +653,7 @@ def update_video_infos(provider, context, video_id_dict,
 
         # update channel mapping
         channel_id = snippet.get('channelId', '')
-        video_item.set_subscription_id(channel_id)
+        video_item.channel_id = channel_id
         if channel_id and channel_items_dict is not None:
             if channel_id not in channel_items_dict:
                 channel_items_dict[channel_id] = []
@@ -646,10 +686,6 @@ def update_video_infos(provider, context, video_id_dict,
                 )
             ))
 
-        # 'play with...' (external player)
-        if alternate_player:
-            context_menu.append(menu_items.play_with(context))
-
         # add 'Watch Later' only if we are not in my 'Watch Later' list
         if watch_later_id:
             if not playlist_id or watch_later_id != playlist_id:
@@ -667,7 +703,7 @@ def update_video_infos(provider, context, video_id_dict,
 
         if not in_bookmarks_list:
             context_menu.append(
-                menu_items.bookmarks_add(
+                menu_items.bookmark_add(
                     context, video_item
                 )
             )
@@ -676,10 +712,10 @@ def update_video_infos(provider, context, video_id_dict,
         # we support all playlist except 'Watch History'
         if (logged_in and video_id in playlist_item_id_dict and playlist_id
                 and playlist_channel_id == 'mine'
-                and playlist_id.strip().lower() not in ('hl', 'wl')):
+                and playlist_id.strip().lower() not in {'hl', 'wl'}):
             playlist_item_id = playlist_item_id_dict[video_id]
-            video_item.set_playlist_id(playlist_id)
-            video_item.set_playlist_item_id(playlist_item_id)
+            video_item.playlist_id = playlist_id
+            video_item.playlist_item_id = playlist_item_id
             context_menu.append(
                 menu_items.remove_video_from_playlist(
                     context,
@@ -691,8 +727,8 @@ def update_video_infos(provider, context, video_id_dict,
 
         # got to [CHANNEL] only if we are not directly in the channel
         if (channel_id and channel_name and
-                create_path('channel', channel_id) != path):
-            video_item.set_channel_id(channel_id)
+                context.create_path('channel', channel_id) != path):
+            video_item.channel_id = channel_id
             context_menu.append(
                 menu_items.go_to_channel(
                     context, channel_id, channel_name
@@ -714,11 +750,11 @@ def update_video_infos(provider, context, video_id_dict,
         if not in_bookmarks_list:
             context_menu.append(
                 # remove bookmarked channel of the video
-                menu_items.bookmarks_remove(
+                menu_items.bookmark_remove(
                     context, item_id=channel_id
                 ) if in_my_subscriptions_list else
                 # bookmark channel of the video
-                menu_items.bookmarks_add_channel(
+                menu_items.bookmark_add_channel(
                     context, channel_id, channel_name
                 )
             )
@@ -742,7 +778,7 @@ def update_video_infos(provider, context, video_id_dict,
                 )
 
         # more...
-        refresh = path.startswith((paths.LIKED_VIDEOS, paths.DISLIKED_VIDEOS))
+        refresh = path.startswith((PATHS.LIKED_VIDEOS, PATHS.DISLIKED_VIDEOS))
         context_menu.append(
             menu_items.more_for_video(
                 context,
@@ -751,6 +787,10 @@ def update_video_infos(provider, context, video_id_dict,
                 refresh=refresh,
             )
         )
+
+        # 'play with...' (external player)
+        if alternate_player:
+            context_menu.append(menu_items.play_with(context, video_id))
 
         if not subtitles_prompt:
             context_menu.append(
@@ -773,11 +813,16 @@ def update_video_infos(provider, context, video_id_dict,
                 )
             )
 
-        if context_menu:
+        if video_item.live:
             context_menu.append(
-                ('--------', 'noop')
+                menu_items.play_timeshift(
+                    context, video_id
+                )
             )
-            video_item.set_context_menu(context_menu)
+
+        if context_menu:
+            context_menu.append(menu_items.separator())
+            video_item.add_context_menu(context_menu)
 
 
 def update_play_info(provider, context, video_id, video_item, video_stream,
@@ -791,12 +836,12 @@ def update_play_info(provider, context, video_id, video_item, video_stream,
     settings = context.get_settings()
     ui = context.get_ui()
 
-    meta_data = video_stream.get('meta', None)
+    meta_data = video_stream.get('meta')
     if meta_data:
         video_item.live = meta_data.get('status', {}).get('live', False)
         video_item.set_subtitles(meta_data.get('subtitles', None))
-        image = get_thumbnail(settings.use_thumbnail_size(),
-                              meta_data.get('images', {}))
+        image = get_thumbnail(settings.get_thumbnail_size(),
+                              meta_data.get('thumbnails', {}))
         if image:
             if video_item.live:
                 image = ''.join((image, '?ct=', get_thumb_timestamp()))
@@ -822,8 +867,8 @@ def update_play_info(provider, context, video_id, video_item, video_stream,
                      drm='com.widevine.alpha').check_inputstream()
 
         video_item.set_license_key(license_proxy)
-        ui.set_property('license_url', license_url)
-        ui.set_property('license_token', license_token)
+        ui.set_property(LICENSE_URL, license_url)
+        ui.set_property(LICENSE_TOKEN, license_token)
 
 
 def update_fanarts(provider, context, channel_items_dict, data=None):
@@ -834,34 +879,119 @@ def update_fanarts(provider, context, channel_items_dict, data=None):
 
     if not data:
         resource_manager = provider.get_resource_manager(context)
-        data = resource_manager.get_fanarts(channel_ids)
+        data = resource_manager.get_fanarts(channel_ids, force=True)
 
     if not data:
         return
 
+    settings = context.get_settings()
+    fanart_type = context.get_param('fanart_type')
+    if fanart_type is None:
+        fanart_type = settings.fanart_selection()
+    use_channel_fanart = fanart_type == settings.FANART_CHANNEL
+    use_thumb_fanart = fanart_type == settings.FANART_THUMBNAIL
+
     for channel_id, channel_items in channel_items_dict.items():
-        for channel_item in channel_items:
-            # only set not empty fanarts
-            fanart = data.get(channel_id, '')
-            if fanart:
-                channel_item.set_fanart(fanart)
+        # only set not empty fanarts
+        fanart = data.get(channel_id)
+        if not fanart:
+            continue
+        for item in channel_items:
+            if (use_channel_fanart
+                    or use_thumb_fanart and not item.get_fanart(default=False)):
+                item.set_fanart(fanart)
+
+
+THUMB_TYPES = {
+    'default': {
+        'url': 'https://i.ytimg.com/vi/{0}/default{1}.jpg',
+        'width': 120,
+        'height': 90,
+        'size': 120 * 90,
+        'ratio': 120 / 90,  # 4:3
+    },
+    'medium': {
+        'url': 'https://i.ytimg.com/vi/{0}/mqdefault{1}.jpg',
+        'width': 320,
+        'height': 180,
+        'size': 320 * 180,
+        'ratio': 320 / 180,  # 16:9
+    },
+    'high': {
+        'url': 'https://i.ytimg.com/vi/{0}/hqdefault{1}.jpg',
+        'width': 480,
+        'height': 360,
+        'size': 480 * 360,
+        'ratio': 480 / 360,  # 4:3
+    },
+    'standard': {
+        'url': 'https://i.ytimg.com/vi/{0}/sddefault{1}.jpg',
+        'width': 640,
+        'height': 480,
+        'size': 640 * 480,
+        'ratio': 640 / 480,  # 4:3
+    },
+    '720': {
+        'url': 'https://i.ytimg.com/vi/{0}/hq720{1}.jpg',
+        'width': 1280,
+        'height': 720,
+        'size': 1280 * 720,
+        'ratio': 1280 / 720,  # 16:9
+    },
+    'oar': {
+        'url': 'https://i.ytimg.com/vi/{0}/oardefault{1}.jpg',
+        'size': 0,
+        'ratio': 0,
+    },
+    'maxres': {
+        'url': 'https://i.ytimg.com/vi/{0}/maxresdefault{1}.jpg',
+        'width': 1920,
+        'height': 1080,
+        'size': 1920 * 1080,
+        'ratio': 1920 / 1080,  # 16:9
+    },
+}
 
 
 def get_thumbnail(thumb_size, thumbnails):
-    if thumb_size == 'high':
-        thumbnail_sizes = ['high', 'medium', 'default']
-    else:
-        thumbnail_sizes = ['medium', 'high', 'default']
+    if not thumbnails:
+        return None
+    is_dict = isinstance(thumbnails, dict)
+    size_limit = thumb_size['size']
+    ratio_limit = thumb_size['ratio']
 
-    image = ''
-    for thumbnail_size in thumbnail_sizes:
-        try:
-            image = thumbnails.get(thumbnail_size, {}).get('url', '')
-        except AttributeError:
-            image = thumbnails.get(thumbnail_size, '')
-        if image:
-            break
-    return image
+    def _sort_ratio_size(thumb):
+        if is_dict:
+            thumb_type, thumb = thumb
+        else:
+            thumb_type = None
+
+        if 'size' in thumb:
+            size = thumb['size']
+            ratio = thumb['ratio']
+        elif 'width' in thumb:
+            width = thumb['width']
+            height = thumb['height']
+            size = width * height
+            ratio = width / height
+        elif thumb_type in THUMB_TYPES:
+            thumb = THUMB_TYPES[thumb_type]
+            size = thumb['size']
+            ratio = thumb['ratio']
+        else:
+            return False, False
+        return (
+            ratio_limit and ratio_limit * 0.9 <= ratio <= ratio_limit * 1.1,
+            size <= size_limit and size if size_limit else size
+        )
+
+    thumbnail = sorted(thumbnails.items() if is_dict else thumbnails,
+                       key=_sort_ratio_size,
+                       reverse=True)[0]
+    url = (thumbnail[1] if is_dict else thumbnail).get('url')
+    if url and url.startswith('//'):
+        url = 'https:' + url
+    return url
 
 
 def get_shelf_index_by_title(context, json_data, shelf_title):
@@ -929,9 +1059,24 @@ def add_related_video_to_playlist(provider, context, client, v3, video_id):
                 break
 
 
-def filter_short_videos(items):
+def filter_videos(items,
+                  shorts=True,
+                  live=True,
+                  upcoming_live=True,
+                  premieres=True,
+                  upcoming=True,
+                  completed=True,
+                  vod=True,
+                  **_kwargs):
     return [
         item
         for item in items
-        if not item.playable or not 0 <= item.get_duration() <= 60
+        if (not item.playable or (
+                (completed and item.completed)
+                or (live and item.live and not item.upcoming)
+                or (premieres and upcoming and item.upcoming and not item.live)
+                or (upcoming_live and upcoming and item.upcoming and item.live)
+                or (vod and shorts and item.vod)
+                or (vod and not shorts and item.vod and not item.short)
+        ))
     ]

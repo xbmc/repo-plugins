@@ -12,49 +12,47 @@ from __future__ import absolute_import, division, unicode_literals
 
 from ..helper import v3
 from ...kodion import KodionException
+from ...kodion.constants import CHANNEL_ID, CONTENT, SUBSCRIPTION_ID
 from ...kodion.items import UriItem
 
 
-def _process_list(provider, context):
-    result = []
-
-    page_token = context.get_param('page_token', '')
-    # no caching
-    json_data = provider.get_client(context).get_subscription('mine', page_token=page_token)
+def _process_list(provider, context, client):
+    context.set_content(CONTENT.LIST_CONTENT)
+    json_data = client.get_subscription(
+        'mine', page_token=context.get_param('page_token', '')
+    )
     if not json_data:
         return []
-    result.extend(v3.response_to_items(provider, context, json_data))
-
-    return result
+    return v3.response_to_items(provider, context, json_data)
 
 
-def _process_add(provider, context):
-    listitem_subscription_id = context.get_listitem_detail('subscription_id')
+def _process_add(_provider, context, client):
+    listitem_subscription_id = context.get_listitem_property(SUBSCRIPTION_ID)
 
     subscription_id = context.get_param('subscription_id', '')
-    if (not subscription_id and listitem_subscription_id
+    if (not subscription_id
+            and listitem_subscription_id
             and listitem_subscription_id.lower().startswith('uc')):
         subscription_id = listitem_subscription_id
 
-    if subscription_id:
-        json_data = provider.get_client(context).subscribe(subscription_id)
-        if not json_data:
-            return False
+    if not subscription_id:
+        return False
 
-        context.get_ui().show_notification(
-            context.localize('subscribed.to.channel'),
-            time_ms=2500,
-            audible=False
-        )
+    json_data = client.subscribe(subscription_id)
+    if not json_data:
+        return False
 
-        return True
+    context.get_ui().show_notification(
+        context.localize('subscribed.to.channel'),
+        time_ms=2500,
+        audible=False
+    )
+    return True
 
-    return False
 
-
-def _process_remove(provider, context):
-    listitem_subscription_id = context.get_listitem_detail('channel_subscription_id')
-    listitem_channel_id = context.get_listitem_detail('channel_id')
+def _process_remove(_provider, context, client):
+    listitem_subscription_id = context.get_listitem_property(SUBSCRIPTION_ID)
+    listitem_channel_id = context.get_listitem_property(CHANNEL_ID)
 
     subscription_id = context.get_param('subscription_id', '')
     if not subscription_id and listitem_subscription_id:
@@ -65,9 +63,9 @@ def _process_remove(provider, context):
         channel_id = listitem_channel_id
 
     if subscription_id:
-        success = provider.get_client(context).unsubscribe(subscription_id)
+        success = client.unsubscribe(subscription_id)
     elif channel_id:
-        success = provider.get_client(context).unsubscribe_channel(channel_id)
+        success = client.unsubscribe_channel(channel_id)
     else:
         success = False
 
@@ -83,21 +81,21 @@ def _process_remove(provider, context):
     return True
 
 
-def process(method, provider, context):
-    result = []
+def process(provider, context, re_match):
+    method = re_match.group('method')
 
     # we need a login
-    _ = provider.get_client(context)
+    client = provider.get_client(context)
     if not provider.is_logged_in():
         return UriItem(context.create_uri(('sign', 'in')))
 
     if method == 'list':
-        result.extend(_process_list(provider, context))
-    elif method == 'add':
-        return _process_add(provider, context)
-    elif method == 'remove':
-        return _process_remove(provider, context)
-    else:
-        raise KodionException("Unknown subscriptions method '%s'" % method)
+        return _process_list(provider, context, client)
 
-    return result
+    if method == 'add':
+        return _process_add(provider, context, client)
+
+    if method == 'remove':
+        return _process_remove(provider, context, client)
+
+    raise KodionException('Unknown subscriptions method: %s' % method)

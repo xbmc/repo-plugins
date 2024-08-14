@@ -13,16 +13,13 @@ from __future__ import absolute_import, division, unicode_literals
 from .xbmc_progress_dialog import XbmcProgressDialog, XbmcProgressDialogBG
 from ..abstract_context_ui import AbstractContextUI
 from ...compatibility import xbmc, xbmcgui
-from ...constants import ADDON_ID
+from ...constants import ADDON_ID, REFRESH_CONTAINER
 from ...utils import to_unicode
 
 
 class XbmcContextUI(AbstractContextUI):
-    def __init__(self, xbmc_addon, context):
+    def __init__(self, context):
         super(XbmcContextUI, self).__init__()
-
-        self._xbmc_addon = xbmc_addon
-
         self._context = context
 
     def create_progress_dialog(self, heading, text=None, background=False):
@@ -31,11 +28,12 @@ class XbmcContextUI(AbstractContextUI):
 
         return XbmcProgressDialog(heading, text)
 
-
     def on_keyboard_input(self, title, default='', hidden=False):
         # Starting with Gotham (13.X > ...)
         dialog = xbmcgui.Dialog()
-        result = dialog.input(title, to_unicode(default), type=xbmcgui.INPUT_ALPHANUM)
+        result = dialog.input(title,
+                              to_unicode(default),
+                              type=xbmcgui.INPUT_ALPHANUM)
         if result:
             text = to_unicode(result)
             return True, text
@@ -133,30 +131,14 @@ class XbmcContextUI(AbstractContextUI):
                                       time_ms,
                                       audible)
 
-    def open_settings(self):
-        self._xbmc_addon.openSettings()
+    def refresh_container(self):
+        self._context.send_notification(REFRESH_CONTAINER)
 
     @staticmethod
-    def refresh_container():
-        # TODO: find out why the RunScript call is required
-        # xbmc.executebuiltin("Container.Refresh")
-        xbmc.executebuiltin('RunScript({addon_id},action/refresh)'.format(
-            addon_id=ADDON_ID
-        ))
-
-    def reload_container(self, path=None):
-        context = self._context
-        if path in (True, None):
-            path = context.get_path()
-        params = dict(context.get_params(), refresh=True)
-        xbmc.executebuiltin('ActivateWindow(Videos, {0}, return)'.format(
-            context.create_uri(path, params)
-        ))
-
-    @staticmethod
-    def set_property(property_id, value):
+    def set_property(property_id, value='true'):
         property_id = '-'.join((ADDON_ID, property_id))
         xbmcgui.Window(10000).setProperty(property_id, value)
+        return value
 
     @staticmethod
     def get_property(property_id):
@@ -164,9 +146,19 @@ class XbmcContextUI(AbstractContextUI):
         return xbmcgui.Window(10000).getProperty(property_id)
 
     @staticmethod
+    def pop_property(property_id):
+        property_id = '-'.join((ADDON_ID, property_id))
+        window = xbmcgui.Window(10000)
+        value = window.getProperty(property_id)
+        if value:
+            window.clearProperty(property_id)
+        return value
+
+    @staticmethod
     def clear_property(property_id):
         property_id = '-'.join((ADDON_ID, property_id))
         xbmcgui.Window(10000).clearProperty(property_id)
+        return None
 
     @staticmethod
     def bold(value, cr_before=0, cr_after=0):

@@ -19,22 +19,21 @@ from ..constants import MEDIA_PATH
 
 
 class BaseItem(object):
-    VERSION = 3
-
+    _version = 3
     _playable = False
 
-    def __init__(self, name, uri, image='', fanart=''):
-        self._version = BaseItem.VERSION
-
+    def __init__(self, name, uri, image=None, fanart=None):
         self._name = None
         self.set_name(name)
 
         self._uri = uri
 
-        self._image = None
-        self.set_image(image)
-        self._fanart = None
-        self.set_fanart(fanart)
+        self._image = ''
+        if image:
+            self.set_image(image)
+        self._fanart = ''
+        if fanart:
+            self.set_fanart(fanart)
 
         self._bookmark_timestamp = None
         self._context_menu = None
@@ -43,8 +42,6 @@ class BaseItem(object):
         self._date = None
         self._dateadded = None
         self._short_details = None
-
-        self._next_page = False
 
     def __str__(self):
         return ('------------------------------\n'
@@ -67,17 +64,15 @@ class BaseItem(object):
         Returns a unique id of the item.
         :return: unique id of the item.
         """
-        md5_hash = md5()
-        md5_hash.update(self._name.encode('utf-8'))
-        md5_hash.update(self._uri.encode('utf-8'))
-        return md5_hash.hexdigest()
+        return md5(''.join((self._name, self._uri)).encode('utf-8')).hexdigest()
 
     def set_name(self, name):
         try:
-            self._name = unescape(name)
+            name = unescape(name)
         except:
-            self._name = name
-        return self._name
+            pass
+        self._name = name
+        return name
 
     def get_name(self):
         """
@@ -98,7 +93,6 @@ class BaseItem(object):
 
     def set_image(self, image):
         if not image:
-            self._image = ''
             return
 
         if '{media}/' in image:
@@ -111,7 +105,6 @@ class BaseItem(object):
 
     def set_fanart(self, fanart):
         if not fanart:
-            self._fanart = '{0}/fanart.jpg'.format(MEDIA_PATH)
             return
 
         if '{media}/' in fanart:
@@ -119,15 +112,18 @@ class BaseItem(object):
         else:
             self._fanart = fanart
 
-    def get_fanart(self):
-        return self._fanart
+    def get_fanart(self, default=True):
+        if self._fanart or not default:
+            return self._fanart
+        return '/'.join((
+            MEDIA_PATH,
+            'fanart.jpg',
+        ))
 
-    def set_context_menu(self, context_menu):
-        self._context_menu = context_menu
-
-    def add_context_menu(self, context_menu, position=0):
-        if self._context_menu is None:
-            self._context_menu = context_menu
+    def add_context_menu(self, context_menu, position='end', replace=False):
+        context_menu = (item for item in context_menu if item)
+        if replace or not self._context_menu:
+            self._context_menu = list(context_menu)
         elif position == 'end':
             self._context_menu.extend(context_menu)
         else:
@@ -194,14 +190,6 @@ class BaseItem(object):
 
     def get_bookmark_timestamp(self):
         return self._bookmark_timestamp
-
-    @property
-    def next_page(self):
-        return self._next_page
-
-    @next_page.setter
-    def next_page(self, value):
-        self._next_page = bool(value)
 
     @property
     def playable(self):

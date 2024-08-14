@@ -29,22 +29,18 @@ class SearchHistory(Storage):
     def get_items(self, process=None):
         result = self._get_by_ids(oldest_first=False,
                                   limit=self._max_item_count,
-                                  process=process,
-                                  values_only=True)
+                                  process=process)
         return result
 
     @staticmethod
     def _make_id(search_text):
-        md5_hash = md5()
-        md5_hash.update(search_text.encode('utf-8'))
-        return md5_hash.hexdigest()
+        return md5(search_text.encode('utf-8')).hexdigest()
 
-    def rename(self, old_search_text, new_search_text):
-        self.remove(old_search_text)
-        self.update(new_search_text)
+    def add_item(self, search_text):
+        self._set(self._make_id(search_text), search_text)
 
-    def remove(self, search_text):
+    def del_item(self, search_text):
         self._remove(self._make_id(search_text))
 
-    def update(self, search_text, timestamp=None):
-        self._set(self._make_id(search_text), search_text, timestamp)
+    def update_item(self, search_text, timestamp=None):
+        self._update(self._make_id(search_text), search_text, timestamp)

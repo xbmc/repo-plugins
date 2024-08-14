@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="7.0.6.3" provider-name="anxdpanic, bromix, MoojMidge">
+<addon id="plugin.video.youtube" name="YouTube" version="7.0.9" provider-name="anxdpanic, bromix, MoojMidge">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.27.1"/>
@@ -44,6 +44,8 @@
         <summary lang="nb_NO">Tillegg for YouTube</summary>
         <summary lang="nl_NL">Plugin voor YouTube</summary>
         <summary lang="pl_PL">Wtyczka YouTube</summary>
+        <summary lang="pt_BR">Plugin para YouTube</summary>
+        <summary lang="ro_RO">Modul pentru YouTube</summary>
         <summary lang="ru_RU">Видеодополнение YouTube</summary>
         <summary lang="sk_SK">Doplnok pre YouTube</summary>
         <summary lang="sv_SE">Plugin för YouTube</summary>
@@ -71,6 +73,8 @@
         <description lang="nb_NO">YouTube er en av verdens største nettsider for videodeling.</description>
         <description lang="nl_NL">YouTube is een van de grootste videodelenwebsite in de hele wereld.</description>
         <description lang="pl_PL">YouTube jest jednym z największych na świecie serwisów udostępniania wideo.</description>
+        <description lang="pt_BR">O YouTube é um dos maiores sites de compartilhamento de vídeos do mundo.</description>
+        <description lang="ro_RO">YouTube este unul dintre cele mai mari saituri de distribuire de videoclipuri din lume.</description>
         <description lang="ru_RU">YouTube - популярнейший видеохостинговый сайт, предоставляющий пользователям услуги хранения, доставки и показа видео.</description>
         <description lang="sk_SK">YouTube je jednou z najväčších stránok na zdieľanie videa na svete.</description>
         <description lang="sv_SE">YouTube är en av de största videodelningssajterna i världen.</description>
@@ -94,6 +98,8 @@
         <disclaimer lang="ko_KR">이 플러그인은 Google의 허가를 받지 않았습니다</disclaimer>
         <disclaimer lang="nl_NL">Deze plug-in wordt niet door Google ondersteund</disclaimer>
         <disclaimer lang="pl_PL">Ta wtyczka nie jest zatwierdzona przez Google</disclaimer>
+        <disclaimer lang="pt_BR">Este plugin não é recomendado pelo Google</disclaimer>
+        <disclaimer lang="ro_RO">Acest modul nu este susținut de Google</disclaimer>
         <disclaimer lang="ru_RU">Плагин не поддерживается Google</disclaimer>
         <disclaimer lang="sk_SK">Tento doplnok nie je schválený spoločnosťou Google</disclaimer>
         <disclaimer lang="sv_SE">Detta plugin är inte godkänt av Google</disclaimer>
@@ -102,31 +108,34 @@
         <disclaimer lang="vi_VN">Plugin này không được xác nhận bởi Google</disclaimer>
         <disclaimer lang="zh_CN">此插件未被谷歌认可</disclaimer>
         <disclaimer lang="zh_TW">此附加元件未由Google支持</disclaimer>
-    <news>## v7.0.6.3
+    <news>## v7.0.9
 ### Fixed
-- Improve updating containers and (re)loading windows
-- Fix refreshing video listing also forcing next pages to refresh when loaded
-- Fix overflow error resulting from parsing hashtags as episode numbers
-- Fix 6s delay on video playback start
-- Further fixes for multiple busy dialog crash workaround
-  - Possibly fix issues reported in comments of
-- Update error checks to avoid unnecessary retries of player requests
-- Fix adding and viewing items to internal bookmarks and watchlater list
-- Fix error checks to prevent prematurely stopping retries of player requests
-- Disable using android client player request by default
+- Fix renaming playlists
+- Improve http server wakeup
+- Fix ask for video quality setting being inconsistently applied
+- Fix http server not sleeping after initial start of service
+- Fix not reloading WL playlist if open after playback of video in WL
+- Fix navigating to search page after playback and prompt re-opening
+- Fix issues with next page and jump to page in related video listings
+- Attempt to workaround issue with getting system idle time on Xbox
+- Better handle unknown errors in player request responses
+- Fix double playback due to busy dialog crash workaround
+- Fix disabling certification verification
+- Fix not using player request fallbacks
+- Fix incorrectly identifying VP9 streams
+- Fix videos not able to be re-opened from Kodi playlist
+- Fix http server not working in Kodi 18
+- Fix issues with http server wakeup and sleep on initial start/restart
+- Fix API requests failing if not logged in
+- Fix multi-audio streams failing to play
+- Fix not properly defining default audio role
+- Don't retry player requests for offline live streams
+- Fix incorrectly updating playing live stream details
+- Fix typo causing http server to restart when checking status
 
 ### Changed
-- Setup Wizard default settings now disable pre-downloading subtitles if MPEG-DASH is enabled
-- Ask for quality, Play with subtitles, Play audio only context menu items only displayed if associated setting is not already enabled
-- Only make extra request for subtitles for Android client when all subtitle languages are enabled
-- Overhaul alternative player support due to Kodi changes and also improve external player support
-- Make "Support alternative player" and "Use YouTube website urls with default player" mutually exclusive options
-- Enable OPUS audio by default
-- Enable MPEG-DASH for live streams by default
-- Setup Wizard will prompt to run when plugin first opens after updating, in order to update default settings
-- http server will shutdown on idle timeout
-- Update client details used for player requests
-
-### New
-- Add r</news></extension>
+- Make live query parameter optional when playing channel live stream
+- Allow for removal of custom watch later and history playlists from settings
+  - Use default value of "HL" for history or "WL" for watch later as reset value
+  - This will then clear the setting and clear value from ac</news></extension>
 </addon>

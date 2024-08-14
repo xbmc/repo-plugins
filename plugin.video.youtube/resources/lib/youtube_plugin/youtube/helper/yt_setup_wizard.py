@@ -16,8 +16,8 @@ from ...kodion.compatibility import urlencode, xbmcvfs
 from ...kodion.constants import ADDON_ID, DATA_PATH, WAIT_FLAG
 from ...kodion.network import Locator, httpd_status
 from ...kodion.sql_store import PlaybackHistory, SearchHistory
+from ...kodion.utils import current_system_version, to_unicode
 from ...kodion.utils.datetime_parser import strptime
-from ...kodion.utils.methods import to_unicode
 
 
 DEFAULT_LANGUAGES = {'items': [
@@ -282,13 +282,12 @@ def process_language(provider, context, step, steps):
 
     # set new language id and region id
     settings = context.get_settings()
-    settings.set_string(settings.LANGUAGE, language_id)
-    settings.set_string(settings.REGION, region_id)
-    provider.reset_client()
+    settings.set_language(language_id)
+    settings.set_region(region_id)
     return step
 
 
-def process_geo_location(_provider, context, step, steps):
+def process_geo_location(context, step, steps, **_kwargs):
     localize = context.localize
 
     step += 1
@@ -297,7 +296,7 @@ def process_geo_location(_provider, context, step, steps):
             (localize('setup_wizard.prompt')
              % localize('setup_wizard.prompt.my_location'))
     ):
-        locator = Locator()
+        locator = Locator(context)
         locator.locate_requester()
         coords = locator.coordinates()
         if coords:
@@ -307,7 +306,7 @@ def process_geo_location(_provider, context, step, steps):
     return step
 
 
-def process_default_settings(_provider, context, step, steps):
+def process_default_settings(context, step, steps, **_kwargs):
     localize = context.localize
     settings = context.get_settings()
 
@@ -317,22 +316,24 @@ def process_default_settings(_provider, context, step, steps):
             (localize('setup_wizard.prompt')
              % localize('setup_wizard.prompt.settings.defaults'))
     ):
-        settings.client_selection(0)
         settings.use_isa(True)
         settings.use_mpd_videos(True)
         settings.stream_select(4 if settings.ask_for_video_quality() else 3)
         settings.set_subtitle_download(False)
-        settings.live_stream_type(3)
+        if current_system_version.compatible(21, 0):
+            settings.live_stream_type(3)
+        else:
+            settings.live_stream_type(2)
         if not xbmcvfs.exists('special://profile/playercorefactory.xml'):
             settings.default_player_web_urls(False)
         if settings.cache_size() < 20:
             settings.cache_size(20)
-        if settings.use_isa() and not httpd_status():
+        if settings.use_isa() and not httpd_status(context):
             settings.httpd_listen('0.0.0.0')
     return step
 
 
-def process_list_detail_settings(_provider, context, step, steps):
+def process_list_detail_settings(context, step, steps, **_kwargs):
     localize = context.localize
     settings = context.get_settings()
 
@@ -350,7 +351,7 @@ def process_list_detail_settings(_provider, context, step, steps):
     return step
 
 
-def process_performance_settings(_provider, context, step, steps):
+def process_performance_settings(context, step, steps, **_kwargs):
     localize = context.localize
     settings = context.get_settings()
     ui = context.get_ui()
@@ -367,46 +368,44 @@ def process_performance_settings(_provider, context, step, steps):
                 'stream_features': ('avc1', 'mp4a', 'filter'),
                 'num_items': 10,
                 'settings': (
+                    (settings.use_isa, (False,)),
                     (settings.use_mpd_videos, (False,)),
                     (settings.set_subtitle_download, (True,)),
                 ),
             },
             '1080p30_avc': {
                 'max_resolution': 4,  # 1080p
-                'stream_features': ('avc1', 'vorbis', 'opus', 'mp4a', 'filter'),
+                'stream_features': ('avc1', 'vorbis', 'mp4a', 'filter'),
                 'num_items': 10,
-                'settings': (
-                    (settings.client_selection, (2,)),
-                ),
             },
             '1080p30': {
                 'max_resolution': 4,  # 1080p
-                'stream_features': ('avc1', 'vp9', 'vorbis', 'opus', 'mp4a', 'ssa', 'ac-3', 'ec-3', 'dts', 'filter'),
+                'stream_features': ('avc1', 'vp9', 'vorbis', 'mp4a', 'ssa', 'ac-3', 'ec-3', 'dts', 'filter'),
                 'num_items': 20,
             },
             '1080p60': {
                 'max_resolution': 4,  # 1080p
-                'stream_features': ('avc1', 'vp9', 'hfr', 'vorbis', 'opus', 'mp4a', 'ssa', 'ac-3', 'ec-3', 'dts', 'filter'),
+                'stream_features': ('avc1', 'vp9', 'hfr', 'vorbis', 'mp4a', 'ssa', 'ac-3', 'ec-3', 'dts', 'filter'),
                 'num_items': 30,
             },
             '4k30': {
                 'max_resolution': 6,  # 4k
-                'stream_features': ('avc1', 'vp9', 'hdr', 'hfr', 'no_hfr_max', 'vorbis', 'opus', 'mp4a', 'ssa', 'ac-3', 'ec-3', 'dts', 'filter'),
+                'stream_features': ('avc1', 'vp9', 'hdr', 'hfr', 'no_hfr_max', 'vorbis', 'mp4a', 'ssa', 'ac-3', 'ec-3', 'dts', 'filter'),
                 'num_items': 50,
             },
             '4k60': {
                 'max_resolution': 6,  # 4k
-                'stream_features': ('avc1', 'vp9', 'hdr', 'hfr', 'vorbis', 'opus', 'mp4a', 'ssa', 'ac-3', 'ec-3', 'dts', 'filter'),
+                'stream_features': ('avc1', 'vp9', 'hdr', 'hfr', 'vorbis', 'mp4a', 'ssa', 'ac-3', 'ec-3', 'dts', 'filter'),
                 'num_items': 50,
             },
             '4k60_av1': {
                 'max_resolution': 6,  # 4k
-                'stream_features': ('avc1', 'vp9', 'av01', 'hdr', 'hfr', 'vorbis', 'opus', 'mp4a', 'ssa', 'ac-3', 'ec-3', 'dts', 'filter'),
+                'stream_features': ('avc1', 'vp9', 'av01', 'hdr', 'hfr', 'vorbis', 'mp4a', 'ssa', 'ac-3', 'ec-3', 'dts', 'filter'),
                 'num_items': 50,
             },
             'max': {
                 'max_resolution': 7,  # 8k
-                'stream_features': ('avc1', 'vp9', 'av01', 'hdr', 'hfr', 'vorbis', 'opus', 'mp4a', 'ssa', 'ac-3', 'ec-3', 'dts', 'filter'),
+                'stream_features': ('avc1', 'vp9', 'av01', 'hdr', 'hfr', 'vorbis', 'mp4a', 'ssa', 'ac-3', 'ec-3', 'dts', 'filter'),
                 'num_items': 50,
             },
         }
@@ -423,16 +422,18 @@ def process_performance_settings(_provider, context, step, steps):
             return step
 
         device_type = device_types[device_type]
-        settings.mpd_video_qualities(device_type['max_resolution'])
-        settings.stream_features(device_type['stream_features'])
-        settings.items_per_page(device_type['num_items'])
         if 'settings' in device_type:
             for setting in device_type['settings']:
                 setting[0](*setting[1])
+        settings.mpd_video_qualities(device_type['max_resolution'])
+        if not settings.use_mpd_videos():
+            settings.fixed_video_quality(device_type['max_resolution'])
+        settings.stream_features(device_type['stream_features'])
+        settings.items_per_page(device_type['num_items'])
     return step
 
 
-def process_subtitles(_provider, context, step, steps):
+def process_subtitles(context, step, steps, **_kwargs):
     localize = context.localize
 
     step += 1
@@ -444,10 +445,11 @@ def process_subtitles(_provider, context, step, steps):
         context.execute('RunScript({addon_id},config/subtitles)'.format(
             addon_id=ADDON_ID
         ), wait_for=WAIT_FLAG)
+        context.get_settings(refresh=True)
     return step
 
 
-def process_old_search_db(_provider, context, step, steps):
+def process_old_search_db(context, step, steps, **_kwargs):
     localize = context.localize
     ui = context.get_ui()
 
@@ -474,7 +476,7 @@ def process_old_search_db(_provider, context, step, steps):
         )
         items = old_search_db.get_items(process=_convert_old_search_item)
         for search in items:
-            search_history.update(search['text'], search['timestamp'])
+            search_history.update_item(search['text'], search['timestamp'])
 
         ui.show_notification(localize('succeeded'))
         context.execute(
@@ -488,7 +490,7 @@ def process_old_search_db(_provider, context, step, steps):
     return step
 
 
-def process_old_history_db(_provider, context, step, steps):
+def process_old_history_db(context, step, steps, **_kwargs):
     localize = context.localize
     ui = context.get_ui()
 
@@ -520,7 +522,7 @@ def process_old_history_db(_provider, context, step, steps):
         items = old_history_db.get_items(process=_convert_old_history_item)
         for video_id, history in items.items():
             timestamp = history.pop('timestamp', None)
-            playback_history.update(video_id, history, timestamp)
+            playback_history.update_item(video_id, history, timestamp)
 
         ui.show_notification(localize('succeeded'))
         context.execute(

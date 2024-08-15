@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   sodipodi:docname="icon.svg"
+   inkscape:export-filename="icon.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showguides="true"
+     inkscape:zoom="0.95898438"
+     inkscape:cx="256"
+     inkscape:cy="256"
+     inkscape:window-width="1665"
+     inkscape:window-height="991"
+     inkscape:window-x="26"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1"
+     inkscape:export-bgcolor="#ffffffff">
+    <sodipodi:guide
+       position="487,512"
+       orientation="-1,0"
+       id="guide1"
+       inkscape:locked="false"
+       inkscape:label=""
+       inkscape:color="rgb(0,134,229)" />
+    <sodipodi:guide
+       position="25,512"
+       orientation="-1,0"
+       id="guide2"
+       inkscape:label=""
+       inkscape:locked="false"
+       inkscape:color="rgb(0,134,229)" />
+    <sodipodi:guide
+       position="0,487"
+       orientation="0,1"
+       id="guide3"
+       inkscape:label=""
+       inkscape:locked="false"
+       inkscape:color="rgb(0,134,229)" />
+    <sodipodi:guide
+       position="0,25"
+       orientation="0,1"
+       id="guide4"
+       inkscape:label=""
+       inkscape:locked="false"
+       inkscape:color="rgb(0,134,229)" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1">
+    <linearGradient
+       id="paint2_linear_75_103"
+       x1="37.5457"
+       y1="3.14803"
+       x2="21.322399"
+       y2="32.4618"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(8.0479881,0,0,8.0479881,51.679051,20.216649)">
+      <stop
+         stop-color="#8D044F"
+         id="stop23" />
+      <stop
+         offset="0.278736"
+         stop-color="#AC47B6"
+         id="stop24" />
+      <stop
+         offset="0.419307"
+         stop-color="#986BAA"
+         id="stop25" />
+      <stop
+         offset="0.677775"
+         stop-color="#FF6C5B"
+         id="stop26" />
+      <stop
+         offset="1"
+         stop-color="#FD0323"
+         id="stop27" />
+    </linearGradient>
+    <linearGradient
+       id="paint3_linear_75_103"
+       x1="8.2517796"
+       y1="34.035"
+       x2="25.258699"
+       y2="57.7687"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(8.0479881,0,0,8.0479881,51.679051,20.216649)">
+      <stop
+         stop-color="#B800C4"
+         id="stop28" />
+      <stop
+         offset="0.427705"
+         stop-color="#E0008C"
+         id="stop29" />
+      <stop
+         offset="1"
+         stop-color="#FF0101"
+         id="stop30" />
+    </linearGradient>
+  </defs>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       fill-rule="evenodd"
+       clip-rule="evenodd"
+       d="m 350.66342,293.11588 c 0,15.13424 -3.98134,29.38159 -11.00241,41.86805 h 116.74412 c 3.13308,-13.48441 4.80143,-27.49113 4.80143,-41.86805 0,-82.57719 -54.52995,-153.08642 -131.34961,-181.03467 V 24.471299 H 228.47564 V 207.89734 c 8.8367,-2.59708 18.2295,-3.99824 27.96515,-3.99824 52.0391,0 94.22263,39.94458 94.22263,89.21678 z"
+       fill="url(#paint2_linear_75_103)"
+       id="path3"
+       style="fill:url(#paint2_linear_75_103);stroke-width:1" />
+    <path
+       fill-rule="evenodd"
+       clip-rule="evenodd"
+       d="m 289.40535,376.71596 c -10.26279,3.63126 -21.3666,5.61589 -32.96456,5.61589 -52.03507,0 -94.22262,-39.94136 -94.22262,-89.21678 0,-13.73952 3.28438,-26.75231 9.14332,-38.37763 H 55.70393 c -2.631531,12.40758 -4.024879,25.23929 -4.024879,38.37763 0,107.0817 91.673829,193.88489 204.761739,193.88489 11.22292,0 22.23257,-0.86838 32.96456,-2.51097 z"
+       fill="url(#paint3_linear_75_103)"
+       id="path4"
+       style="fill:url(#paint3_linear_75_103);stroke-width:1" />
+  </g>
+</svg>

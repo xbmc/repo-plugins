@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.tagesschau"
-    version="2.5.6"
+    version="2.5.7"
     name="Tagesschau"
     provider-name="J.Schumacher, H.Saul, C.Prasch">
   <requires>
@@ -31,7 +31,10 @@
       <screenshot>resources/assets/screenshot_3.png</screenshot>
     </assets>
     <news>
-version 2.5.6 (2023-12-010)
+version 2.5.7 (2024-08-17)
+ * Fixed empty news list because of changes in ARD API
+ 
+version 2.5.6 (2023-12-10)
  * Use default image from local ressources instead of non-working ARD url
  * For some skins the category listing is now available in landscape and icon viewtype
  

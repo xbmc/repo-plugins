@@ -243,7 +243,7 @@ class VideoContentProvider(object):
         data = self._jsonsource.latest_videos()
         for jsonvideo in data["news"]:
             try:
-                if( (jsonvideo["type"] == "video") and (jsonvideo["tracking"][0]["src"] == "ard-aktuell") ):
+                if( (jsonvideo["type"] == "video") and (jsonvideo["tracking"][0]["src"] == "tagesschau") ):
                     if( hide_europadruck and ("Europadruck" in jsonvideo["title"]) ):
                         pass
                     elif( hide_wolkenfilm and ("Wolkenfilm" in jsonvideo["title"]) ):

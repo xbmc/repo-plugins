@@ -16,3 +16,4 @@ Additional information :
 - [PEP8](https://www.python.org/dev/peps/pep-0008/) codingstyle which is considered best practice but not mandatory.
 - This add-on repository has automated code guideline check which could help you improve your coding. You can find the results of these check at [Codacy](https://www.codacy.com/app/Kodi/repo-plugins/dashboard). You can create your own account as well to continuously monitor your python coding before submitting to repo.
 - Development questions can be asked in the [add-on development](http://forum.kodi.tv/forumdisplay.php?fid=26) section on the Kodi forum.
+- If you see no activity on your PR after a week (so at least one weekend has passed) then please go to the #kodi-dev freenode IRC channel to reach out to the team

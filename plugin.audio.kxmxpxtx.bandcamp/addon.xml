@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.kxmxpxtx.bandcamp" name="Bandcamp" version="0.5.0+matrix.1" provider-name="Simon Mollema">
+<addon id="plugin.audio.kxmxpxtx.bandcamp" name="Bandcamp" version="0.5.1+matrix.1" provider-name="Simon Mollema">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
-        <import addon="script.module.requests" version="2.22.0+matrix.1"/>
         <import addon="script.module.future" version="0.18.2+matrix.1"/>
         <import addon="script.common.plugin.cache" version="2.6.1.1"/>
     </requires>
@@ -16,7 +15,10 @@
         <platform>all</platform>
         <email>xbmc@molzy.com</email>
         <source>https://github.com/molzy/plugin.audio.kxmxpxtx.bandcamp</source>
-        <news>v0.5.0+matrix.1 (2023-01-15)
+        <news>v0.5.1+matrix.1 (2024-08)
+ - Resolved 403 forbidden error when accessing bandcamp API
+
+v0.5.0+matrix.1 (2023-01)
  - Added image quality settings and band fanart
  - Changed default view for user collection and wishlist
      - Now matches the user-sorted list of albums on the Bandcamp website

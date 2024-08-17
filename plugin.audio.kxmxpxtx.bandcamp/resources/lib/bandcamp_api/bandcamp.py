@@ -9,11 +9,19 @@ from future.utils import (PY2)
 
 install_aliases()
 
-from urllib.parse import unquote
-import requests
+from urllib.parse import unquote, quote_plus
+from urllib.request import Request, urlopen
 from builtins import *
 from html.parser import HTMLParser
 
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36'
+
+def urlopen_ua(url, data=None):
+    return urlopen(Request(url, data=data, headers={'User-Agent': USER_AGENT}), timeout=5)
+
+def req(url, data=None):
+    body = data.encode() if data else None
+    return urlopen_ua(url, data=body).read().decode()
 
 class Band:
     def __init__(self, band_id=None, band_name="", band_img=None):
@@ -93,8 +101,8 @@ class Bandcamp:
     def discover(genre="all", sub_genre="any", slice="best", page=0):
         url = "https://bandcamp.com/api/discover/3/get_web?g={genre}&t={sub_genre}&s={slice}&p={page}&f=all" \
             .format(genre=genre, sub_genre=sub_genre, slice=slice, page=page)
-        request = requests.get(url)
-        items = json.loads(request.text)['items']
+        request = req(url)
+        items = json.loads(request)['items']
         discover_list = {}
         for item in items:
             track = Track(item['featured_track']['title'], item['featured_track']['file']['mp3-128'],
@@ -121,8 +129,8 @@ class Bandcamp:
         token = self._get_token()
         body = '{{"fan_id": "{fan_id}", "older_than_token": "{token}", "count":"{count}"}}' \
             .format(fan_id=fan_id, token=token, count=count)
-        x = requests.post(url, data=body)
-        items = json.loads(x.text)['items']
+        x = req(url, data=body)
+        items = json.loads(x)['items']
         bands = {}
         albums = []
         for item in items:
@@ -144,8 +152,8 @@ class Bandcamp:
         token = self._get_token()
         body = '{{"fan_id": "{fan_id}", "older_than_token": "{token}", "count":"{count}"}}' \
             .format(fan_id=fan_id, token=token, count=count)
-        x = requests.post(url, data=body)
-        items = json.loads(x.text)['items']
+        x = req(url, data=body)
+        items = json.loads(x)['items']
         bands = {}
         albums = []
         for item in items:
@@ -166,8 +174,8 @@ class Bandcamp:
         url = "https://bandcamp.com/api/mobile/24/tralbum_details" \
               "?band_id={band_id}&tralbum_type={item_type}&tralbum_id={album_id}" \
             .format(band_id=band_id, item_type=item_type, album_id=album_id)
-        request = requests.get(url)
-        album_details = json.loads(request.text)
+        request = req(url)
+        album_details = json.loads(request)
         track_list = []
         for track in album_details['tracks']:
             # sometimes not all tracks are available online
@@ -184,9 +192,8 @@ class Bandcamp:
     def get_album_legacy(self, album_id, item_type="album"):
         url = "https://bandcamp.com/EmbeddedPlayer/{item_type}={album_id}" \
             .format(album_id=album_id, item_type=item_type)
-        request = requests.get(url)
+        content = req(url)
         parser = _PlayerDataParser()
-        content = request.text
         parser.feed(content)
         player_data = parser.player_data
         track_list = []
@@ -204,9 +211,9 @@ class Bandcamp:
 
     def get_album_by_url(self, url):
         url = unquote(url)
-        request = requests.get(url)
+        request = req(url)
         parser = _DataBlobParser()
-        parser.feed(request.text)
+        parser.feed(request)
         if '/album/' in url:
             album_id = parser.data_blob['album_id']
             item_type = Album.ALBUM_TYPE
@@ -218,8 +225,8 @@ class Bandcamp:
     def get_band(self, band_id):
         url = "https://bandcamp.com/api/mobile/24/band_details"
         body = '{{"band_id": "{band_id}"}}'.format(band_id=band_id)
-        request = requests.post(url, data=body)
-        band_details = json.loads(request.text)
+        request = req(url, data=body)
+        band_details = json.loads(request)
         band = Band(band_id=band_details['id'], band_name=band_details['name'],
                     band_img=band_details['bio_image_id'])
         albums = []
@@ -232,9 +239,9 @@ class Bandcamp:
     def search(self, query):
         if PY2:
             query = query.decode('utf-8')
-        url = "https://bandcamp.com/api/fuzzysearch/1/autocomplete?q={query}".format(query=query)
-        request = requests.get(url)
-        results = json.loads(request.text)['auto']['results']
+        url = "https://bandcamp.com/api/fuzzysearch/1/autocomplete?q={query}".format(query=quote_plus(query))
+        request = req(url)
+        results = json.loads(request)['auto']['results']
         items = []
         for result in results:
             if result['type'] == "b":
@@ -256,10 +263,9 @@ class Bandcamp:
 
     def _get_data_blob(self):
         if self.data_blob is None:
-            url = "https://bandcamp.com/{user_name}".format(user_name=self.user_name)
-            request = requests.get(url)
+            url = "https://bandcamp.com/{user_name}".format(user_name=quote_plus(self.user_name))
+            content = req(url)
             parser = _DataBlobParser()
-            content = request.content.decode('utf-8')
             parser.feed(content)
             self.data_blob = parser.data_blob
         return self.data_blob

@@ -4,6 +4,9 @@
         <setting label="32002" type="lsep"/>
         <setting label="32003" type="text" id="server_address" default=""/>
         <setting type="sep"/>
+        <setting label="32011" type="lsep"/>
+        <setting label="32012" type="bool" id="alternative_context_path" default="false"/>
+        <setting type="sep"/>
         <setting label="32004" type="lsep"/>
         <setting label="32005" type="text" id="mac_address" default=""/>
         <setting type="sep"/>

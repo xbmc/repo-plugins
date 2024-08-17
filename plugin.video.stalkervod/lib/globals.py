@@ -7,7 +7,7 @@ from urllib.parse import urlencode, urlsplit
 import dataclasses
 import xbmcaddon
 import xbmcvfs
-from .utils import Logger
+from .loggers import Logger
 
 
 @dataclasses.dataclass
@@ -21,6 +21,7 @@ class PortalConfig:
     serial_number: str = None
     portal_base_url: str = None
     server_address: str = None
+    alternative_context_path: bool = False
 
 
 @dataclasses.dataclass
@@ -65,6 +66,7 @@ class GlobalVariables:
             self.portal_config.device_id_2 = self.__addon.getSetting('device_id_2')
             self.portal_config.signature = self.__addon.getSetting('signature')
             self.portal_config.serial_number = self.__addon.getSetting('serial_number')
+            self.portal_config.alternative_context_path = self.__addon.getSetting('alternative_context_path') == 'true'
             self.__set_portal_addresses()
 
     def get_handle(self):
@@ -92,11 +94,12 @@ class GlobalVariables:
 
     def get_portal_url(self):
         """Get portal url"""
-        portal_url = self.portal_config.portal_base_url + '/stalker_portal/server/load.php'
+        context_path = '/portal.php' if self.portal_config.alternative_context_path else '/server/load.php'
+        portal_url = self.portal_config.portal_base_url + '/stalker_portal' + context_path
         if self.portal_config.server_address.endswith('/c/'):
-            portal_url = self.portal_config.server_address.replace('/c/', '') + '/server/load.php'
+            portal_url = self.portal_config.server_address.replace('/c/', '') + context_path
         elif self.portal_config.server_address.endswith('/c'):
-            portal_url = self.portal_config.server_address.replace('/c', '') + '/server/load.php'
+            portal_url = self.portal_config.server_address.replace('/c', '') + context_path
         return portal_url
 
 

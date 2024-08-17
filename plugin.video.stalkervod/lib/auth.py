@@ -7,7 +7,7 @@ import requests
 import xbmcvfs
 import xbmcgui
 from .globals import G
-from .utils import Logger
+from .loggers import Logger
 
 
 @dataclasses.dataclass
@@ -39,8 +39,8 @@ class Auth:
         self.clear_cache()
         Logger.debug('Getting token from {}'.format(self.__url))
         response = requests.get(url=self.__url,
-                                headers={'Cookie': self.__mac_cookie, 'X-User-Agent': 'Model: MAG250; Link: WiFi',
-                                         'Referrer': self.__referrer},
+                                headers={'Cookie': self.__mac_cookie, 'X-User-Agent': 'Model: MAG250; Link: WiFi', 'Referrer': self.__referrer,
+                                         'User-Agent': 'Mozilla/5.0 (QtEmbedded; U; Linux; C) AppleWebKit/533.3 (KHTML, like Gecko) MAG200 stbapp ver: 2 rev: 250 Safari/533.3'},
                                 params={'type': 'stb', 'action': 'handshake'},
                                 timeout=30
                                 )
@@ -64,8 +64,9 @@ class Auth:
         """Refresh token"""
         Logger.debug('Refreshing token')
         requests.get(url=self.__url,
-                     headers={'Cookie': self.__mac_cookie, 'Authorization': 'Bearer ' + self.__token.value,
-                              'X-User-Agent': 'Model: MAG250; Link: WiFi', 'Referrer': self.__referrer},
+                     headers={'Cookie': self.__mac_cookie, 'SN': G.portal_config.serial_number, 'Authorization': 'Bearer ' + self.__token.value,
+                              'X-User-Agent': 'Model: MAG250; Link: WiFi', 'Referrer': self.__referrer,
+                              'User-Agent': 'Mozilla/5.0 (QtEmbedded; U; Linux; C) AppleWebKit/533.3 (KHTML, like Gecko) MAG200 stbapp ver: 2 rev: 250 Safari/533.3'},
                      params={
                          'type': 'stb',
                          'action': 'get_profile',
@@ -88,8 +89,9 @@ class Auth:
                      timeout=30
                      )
         requests.get(url=self.__url,
-                     headers={'Cookie': self.__mac_cookie, 'Authorization': 'Bearer ' + self.__token.value,
-                              'X-User-Agent': 'Model: MAG250; Link: WiFi', 'Referrer': self.__referrer},
+                     headers={'Cookie': self.__mac_cookie, 'SN': G.portal_config.serial_number, 'Authorization': 'Bearer ' + self.__token.value,
+                              'X-User-Agent': 'Model: MAG250; Link: WiFi', 'Referrer': self.__referrer,
+                              'User-Agent': 'Mozilla/5.0 (QtEmbedded; U; Linux; C) AppleWebKit/533.3 (KHTML, like Gecko) MAG200 stbapp ver: 2 rev: 250 Safari/533.3'},
                      params={
                          'type': 'watchdog', 'action': 'get_events',
                          'init': '0', 'cur_play_type': '1', 'event_active_id': '0'

@@ -12,9 +12,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 from . import datetime_parser
 from .methods import (
-    create_path,
     duration_to_seconds,
-    find_best_fit,
     find_video_id,
     friendly_number,
     get_kodi_setting_bool,
@@ -23,6 +21,7 @@ from .methods import (
     loose_version,
     make_dirs,
     merge_dicts,
+    redact_ip,
     rm_dir,
     seconds_to_duration,
     select_stream,
@@ -35,11 +34,9 @@ from .system_version import current_system_version
 
 
 __all__ = (
-    'create_path',
     'current_system_version',
     'datetime_parser',
     'duration_to_seconds',
-    'find_best_fit',
     'find_video_id',
     'friendly_number',
     'get_kodi_setting_bool',
@@ -48,6 +45,7 @@ __all__ = (
     'loose_version',
     'make_dirs',
     'merge_dicts',
+    'redact_ip',
     'rm_dir',
     'seconds_to_duration',
     'select_stream',

@@ -1,3 +1,425 @@
+## v7.0.9
+### Fixed
+- Fix renaming playlists
+- Improve http server wakeup #746 #801
+- Fix ask for video quality setting being inconsistently applied
+- Fix http server not sleeping after initial start of service #746 #801
+- Fix not reloading WL playlist if open after playback of video in WL
+- Fix navigating to search page after playback and prompt re-opening
+- Fix issues with next page and jump to page in related video listings
+- Attempt to workaround issue with getting system idle time on Xbox #839
+- Better handle unknown errors in player request responses #845
+- Fix double playback due to busy dialog crash workaround
+- Fix disabling certification verification #841
+- Fix not using player request fallbacks #845
+- Fix incorrectly identifying VP9 streams #833
+- Fix videos not able to be re-opened from Kodi playlist #810
+- Fix http server not working in Kodi 18
+- Fix issues with http server wakeup and sleep on initial start/restart
+- Fix API requests failing if not logged in
+- Fix multi-audio streams failing to play
+- Fix not properly defining default audio role #861
+- Don't retry player requests for offline live streams
+- Fix incorrectly updating playing live stream details
+- Fix typo causing http server to restart when checking status
+
+### Changed
+- Make live query parameter optional when playing channel live stream
+- Allow for removal of custom watch later and history playlists from settings #818
+  - Use default value of "HL" for history or "WL" for watch later as reset value
+  - This will then clear the setting and clear value from access_manager.json
+  - Old values will be stored as a backup, just in case
+- Update cached data when playlists are modified (removed/renamed)
+- Changed bandwidth attribute of subtitles in MPEG-DASH manifest to 0
+- Rename My Subscriptions plugin url
+  - From:
+    - plugin://plugin.video.youtube/special/new_uploaded_videos_tv
+    - plugin://plugin.video.youtube/special/new_uploaded_videos_tv_filtered
+  - To:
+    - plugin://plugin.video.youtube/special/my_subscriptions
+    - plugin://plugin.video.youtube/special/my_subscriptions_filtered
+  - Old url retained for backwards compatibility, to be removed with Kodi v22
+- Disable OPUS audio again by default #537
+- Respect disable certificate verification setting with cURL in ISA #841
+- Update bookmarks when listing rather than only using item snapshot
+- Player requests no longer use configured plugin language
+- Alternate client selections removed
+
+### New
+- Add notifications for creating/removing/clearing bookmarks #720
+- Add support for channel handles
+- Enable loop to first page on last page of manually paginated listings (My Subscriptions)
+- Improve use of progressive streams
+- Improve stream selection for HLS stream in InputStream.Adaptive
+- Add script action to refresh settings
+  - Settings > Maintenance > Refresh settings.xml
+  - Will remove unused settings from settings.xml to stop log spam
+- Add context menu item to play live stream from start #320
+
+## v7.0.9+beta.10
+### Fixed
+- Don't retry player requests for offline live streams
+- Fix incorrectly updating playing live stream details
+
+### New
+- Add context menu item to play live stream from start #320
+
+## v7.0.9+beta.9
+### Fixed
+- Fix not properly defining default audio role #861
+
+## v7.0.9+beta.8
+### Fixed
+- Fix API requests failing if not logged in
+- Fix multi-audio streams failing to play
+
+### New
+- Add script action to refresh settings
+  - Settings > Maintenance > Refresh settings.xml
+  - Will remove unused settings from settings.xml to stop log spam
+
+## v7.0.9+beta.7
+### New
+- Improve use of progressive streams
+- Improve stream selection for HLS stream in InputStream.Adaptive
+
+## v7.0.9+beta.6
+### Fixed
+- Fix http server not working in Kodi 18
+- Fix issues with http server wakeup and sleep on initial start/restart
+
+### Changed
+- Player requests no longer use configured plugin language
+- Alternate client selections removed
+
+## v7.0.9+beta.5
+### Fixed
+- Fix disabling certification verification #841
+- Fix not using player request fallbacks #845
+- Fix incorrectly identifying VP9 streams #833
+- Fix videos not able to be re-opened from Kodi playlist #810
+
+## v7.0.9+beta.4
+### Fixed
+- Fix issues with next page and jump to page in related video listings
+- Attempt to workaround issue with getting system idle time on Xbox #839
+- Better handle unknown errors in player request responses #845
+- Fix double playback due to busy dialog crash workaround
+
+### Changed
+- Respect disable certificate verification setting with cURL in ISA #841
+- Update bookmarks when listing rather than only using item snapshot
+
+### New
+- Enable loop to first page on last page of manually paginated listings (My Subscriptions)
+
+## v7.0.9+beta.3
+### Fixed
+- Fix navigating to search page after playback and prompt re-opening
+
+### Changed
+- Disable OPUS audio again by default #537
+
+### New
+- Add support for channel handles
+
+## v7.0.9+beta.2
+### Fixed
+- Fix ask for video quality setting being inconsistently applied
+- Fix http server not sleeping after initial start of service #746 #801
+- Fix not reloading WL playlist if open after playback of video in WL
+
+### Changed
+- Rename My Subscriptions plugin url
+  - From:
+    - plugin://plugin.video.youtube/special/new_uploaded_videos_tv
+    - plugin://plugin.video.youtube/special/new_uploaded_videos_tv_filtered
+  - To:
+    - plugin://plugin.video.youtube/special/my_subscriptions
+    - plugin://plugin.video.youtube/special/my_subscriptions_filtered
+  - Old url retained for backwards compatibility, to be removed with Kodi v22
+
+### New
+- Add notifications for creating/removing/clearing bookmarks #720
+
+## v7.0.9+beta.1
+### Fixed
+- Fix renaming playlists
+- Improve http server wakeup #746 #801
+
+### Changed
+- Make live query parameter optional when playing channel live stream
+- Allow for removal of custom watch later and history playlists from settings #818
+  - Use default value of "HL" for history or "WL" for watch later as reset value
+  - This will then clear the setting and clear value from access_manager.json
+  - Old values will be stored as a backup, just in case
+- Update cached data when playlists are modified (removed/renamed)
+- Changed bandwidth attribute of subtitles in MPEG-DASH manifest to 0
+
+## v7.0.8
+### Fixed
+- Update selection and sorting of streams to fix missing live streams
+- Fix using cached settings for XbmcContext.use_inputstream_adaptive
+- Wakeup http server on playback start if required #746
+- Improve handling of context menu play items
+- Use consistent return values for function cache to avoid caching errors #782
+- Attempt to fix PlaylistPlayer race condition error #704
+- Fix not reloading access manager when performing user actions #780
+- Fix page jump when page_token is not used
+- Ensure container is always refreshed when required and available
+- Fix incorrect comparison after cd45122
+- Fix various caching issues #786 #797
+- Fix including un-redacted IP address in debug logs
+- Additional fixes for redacting IP addresses in debug logs #801
+- Various minor fixes for external player use
+- Fix trying to access playlists for account that has no Youtube channel #803
+- Poll for http server restart when required for playback #746 #808
+- Fix unsubscribe from My Subscriptions #809
+- Fix Python2 UnicodeDecodeError when removing/renaming searches #815
+- Fix not catching socket.error in Python2 when force shutting down socket
+- Fix deleting window property with multiple threads causing hang on exit #813
+
+### Changed
+- Update icons
+- Only enable recommendations when logged in
+- Improve sync with internal Kodi watched state #709
+- Align default value for watched percentage with Kodi default #746
+- Limit need to check window property for sleep and wakeup
+- Only show Next Page listitem linking to first page when in the GUI #787
+- Use youtu.be urls with external players to work with different types of videos
+- Test not starting/checking for http server until required for playback #746
+- Invalidate portion of playlist cache if item added to playlist #797
+- Update 720p preset in Setup Wizard #807
+- Update itags found in HLS playlists and exclude them in quality selection #806
+
+### New
+- Cache and update My Subscriptions content per channel feed #785 #786
+- Use separate database for My Subscription feed history #785
+- Enable action parameter in play playlist route
+- Use placeholder in empty listings to provide info and allow refreshing #797
+- Enable subtitles for alternative client 2 #806
+
+## v7.0.8+beta.5
+### Fixed
+- Fix Python2 UnicodeDecodeError when removing/renaming searches #815
+- Fix not catching socket.error in Python2 when force shutting down socket
+- Fix deleting window property with multiple threads causing hang on exit #813
+
+### Changed
+- Update 720p preset in Setup Wizard #807
+- Update itags found in HLS playlists and exclude them in quality selection #806
+
+### New
+- Enable subtitles for alternative client 2 #806
+
+## v7.0.8+beta.4
+### Fixed
+- Poll for http server restart when required for playback #746 #808
+- Fix unsubscribe from My Subscriptions #809
+
+## v7.0.8+beta.3
+### Fixed
+- Additional fixes for redacting IP addresses in debug logs #801
+- Various minor fixes for external player use
+- Fix trying to access playlists for account that has no Youtube channel #803
+
+## v7.0.8+beta.2
+### Fixed
+- Fix various caching issues #786 #797
+- Fix including un-redacted IP address in debug logs
+
+### Changed
+- Test not starting/checking for http server until required for playback #746
+- Invalidate portion of playlist cache if item added to playlist #797
+
+### New
+- Use placeholder in empty listings to provide info and allow refreshing #797
+
+## v7.0.8+beta.1
+### Fixed
+- Update selection and sorting of streams to fix missing live streams
+- Fix using cached settings for XbmcContext.use_inputstream_adaptive
+- Wakeup http server on playback start if required #746
+- Improve handling of context menu play items
+- Use consistent return values for function cache to avoid caching errors #782
+- Attempt to fix PlaylistPlayer race condition error #704
+- Fix not reloading access manager when performing user actions #780
+- Fix page jump when page_token is not used
+- Ensure container is always refreshed when required and available
+- Fix incorrect comparison after cd45122
+
+### Changed
+- Update icons
+- Only enable recommendations when logged in
+- Improve sync with internal Kodi watched state #709
+- Align default value for watched percentage with Kodi default #746
+- Limit need to check window property for sleep and wakeup
+- Only show Next Page listitem linking to first page when opening listings from the GUI #787
+- Use shortened YouTube url with external players for better compatibility with different types of videos
+
+### New
+- Cache and update My Subscriptions content per channel feed #785 #786
+- Use separate database for My Subscription feed history #785
+- Enable action parameter in play playlist route
+
+## v7.0.7
+### Fixed
+- Fixed not being able to re-refresh a directory listing that has already been refreshed
+- Fixed various window and history nagivation issues
+- Fixed http server idle shutdown not restarting if plugin is run but GUI is still idle
+- Additional improvements to busy dialog crash workaround
+- Workaround for new settings interface not updated correctly
+- Fix bookmarks icon background colour
+- Fix adding channel items directly to bookmarks
+- Fixes for player monitoring preventing item being marked as watched #746
+- Fix invalid pageToken error by removing jump from unsupported listings #715
+- Fix issues with post play refresh possibly causing loss of window history
+- Fix bug that could lead to plugin continuously reloading #608
+- Attempted fix for socket error 98 on Linux #746
+  - For error 10013 on Windows try either of the following:
+    - Start-Process powershell -Verb runAs -ArgumentList "net stop winnat; net start winnat"
+    - Start-Process powershell -Verb runAs -ArgumentList "net stop hns; net start hns"
+- Fix changing fanart type on My Subscriptions #751
+- Fix not using thumbnail fanart for channels/subscriptions/playlists when enabled #751
+- Fix My Subscriptions threading issues #529
+- Fix failing to login #759
+- Improve resource usage
+- Fix adding video to playlist #764
+- Fix plugin settings raising exception in Kodi 19-20 #769
+
+### Changed
+- Removed Settings > Advanced > Views > Show channel fanart
+  - Now included as option in Settings > Advanced > Views > Show fanart
+- MPEG-DASH for live streams only enabled by default in Kodi v21
+- Make better use of reuselanguageinvoker and various memory usage improvements
+- Use internal Kodi resume enable/disable for all playback #693
+  - For playback where Kodi does not prompt to resume, the plugin will also no longer resume
+  - For playback where Kodi does prompt to resume, the plugin will follow whatever is selected
+- Cached data for My Subscriptions and Related Videos will be replaced due to changes in cached data
+- Use channel fanart as backup to thumbnail fanart for channel items without thumbnails #751
+
+### New
+- Improvements to plugin page navigation #715
+  - Refresh added to context menu of Next page item
+  - Jump to page added to context menu of Next page item
+    - Can also be used in plugin url: plugin://plugin.video.youtube/goto_page/<PAGE>/<PATH> #317
+  - Home added to context menu of Next page item
+  - Quick search added to context menu of Next page item
+  - Next page item added to last page of directory list to go back to first page
+- Add option to use channel name as studio and/or cast #717
+  - Settings > Advanced > Views > Use channel name as
+- Add option to use best available thumbnail quality
+  - Settings > Advanced > Views > Thumbnail size
+- Added option to use video thumbnail as fanart in Settings > Advanced > Views > Show fanart #716
+  - Also added plugin url query parameter fanart_type to override settings
+    - Can be used to set fanart for specific widgets only: plugin://plugin.video.youtube/<PATH>?fanart_type=<0/1/2/3>
+    - Allowable values are the same as the setting:
+      - 0: No fanart
+      - 1: Default
+      - 2: Channel
+      - 3: Thumbnail
+- Enable syncing of plugin watched state with Kodi watched state when using Kodi mark as (un)watched #709
+- Add website link to video descriptions #721
+- Update video filtering for live streams #755
+  - Add options to filter/hide the following types of videos
+    - shorts
+    - upcoming videos (either live streams or premieres)
+    - upcoming live streams
+    - currently live streams
+    - upcoming premieres
+    - completed videos (previously either live or premieres)
+  - No currently live streams will be shown in searches, only in the Live subfolder
+  - No currently live or upcoming live streams will be shown in channels, only in the Live subfolder
+    - Should also be much faster
+  - Completed stream will continue to be shown in listings unless filtered out
+  - Live subfolders will not be filtered by default
+  - Filter selection dialog has option to also filter the Live subfolder
+  - Most other listings will be filtered using whatever options have been set
+
+## v7.0.7+beta.3
+### Fixed
+- Fix plugin settings raising exception in Kodi 19-20 #769
+
+## v7.0.7+beta.2
+### Fixed
+- Fix invalid pageToken error by removing jump from unsupported listings #715
+- Fix issues with post play refresh possibly causing loss of window history
+- Fix bug that could lead to plugin continuously reloading #608
+- Attempted fix for socket error 98 on Linux #746
+  - For error 10013 on Windows try either of the following:
+    - Start-Process powershell -Verb runAs -ArgumentList "net stop winnat; net start winnat"
+    - Start-Process powershell -Verb runAs -ArgumentList "net stop hns; net start hns"
+- Fix changing fanart type on My Subscriptions #751
+- Fix not using thumbnail fanart for channels/subscriptions/playlists when enabled #751
+- Fix My Subscriptions threading issues #529
+- Fix failing to login #759
+- Improve resource usage
+- Fix adding video to playlist #764
+
+### Changed
+- Use internal Kodi resume enable/disable for all playback #693
+  - For playback where Kodi does not prompt to resume, the plugin will also no longer resume
+  - For playback where Kodi does prompt to resume, the plugin will follow whatever is selected
+- Cached data for My Subscriptions and Related Videos will be replaced due to changes in cached data
+- Use channel fanart as backup to thumbnail fanart for channel items without thumbnails #751
+
+### New
+- Enable syncing of plugin watched state with Kodi watched state when using Kodi mark as (un)watched #709
+- Add website link to video descriptions #721
+- Update video filtering for live streams #755
+  - Add options to filter/hide the following types of videos
+    - shorts
+    - upcoming videos (either live streams or premieres)
+    - upcoming live streams
+    - currently live streams
+    - upcoming premieres
+    - completed videos (previously either live or premieres)
+  - No currently live streams will be shown in searches, only in the Live subfolder
+  - No currently live or upcoming live streams will be shown in channels, only in the Live subfolder
+    - Should also be much faster
+  - Completed stream will continue to be shown in listings unless filtered out
+  - Live subfolders will not be filtered by default
+  - Filter selection dialog has option to also filter the Live subfolder
+  - Most other listings will be filtered using whatever options have been set
+
+## v7.0.7+beta.1
+### Fixed
+- Fixed not being able to re-refresh a directory listing that has already been refreshed
+- Fixed various window and history nagivation issues
+- Fixed http server idle shutdown not restarting if plugin is run but GUI is still idle
+- Additional improvements to busy dialog crash workaround
+- Workaround for new settings interface not updated correctly
+- Fix bookmarks icon background colour
+- Fix adding channel items directly to bookmarks
+- Fixes for player monitoring preventing item being marked as watched #746
+
+### Changed
+- Removed Settings > Advanced > Views > Show channel fanart
+  - Now included as option in Settings > Advanced > Views > Show fanart
+- MPEG-DASH for live streams only enabled by default in Kodi v21
+- Make better use of reuselanguageinvoker and various memory usage improvements
+
+### New
+- Improvements to plugin page navigation #715
+  - Refresh added to context menu of Next page item
+  - Jump to page added to context menu of Next page item
+    - Can also be used in plugin url: plugin://plugin.video.youtube/goto_page/<PAGE>/<PATH> #317
+  - Home added to context menu of Next page item
+  - Quick search added to context menu of Next page item
+  - Next page item added to last page of directory list to go back to first page
+- Add option to use channel name as studio and/or cast #717
+  - Settings > Advanced > Views > Use channel name as
+- Add option to use best available thumbnail quality
+  - Settings > Advanced > Views > Thumbnail size
+- Added option to use video thumbnail as fanart in Settings > Advanced > Views > Show fanart #716
+  - Also added plugin url query parameter fanart_type to override settings
+    - Can be used to set fanart for specific widgets only: plugin://plugin.video.youtube/<PATH>?fanart_type=<0/1/2/3>
+    - Allowable values are the same as the setting:
+      - 0: No fanart
+      - 1: Default
+      - 2: Channel
+      - 3: Thumbnail
+
 ## v7.0.6.3
 ### Fixed
 - Improve updating containers and (re)loading windows #681

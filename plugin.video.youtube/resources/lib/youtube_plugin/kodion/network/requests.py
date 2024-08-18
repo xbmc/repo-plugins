@@ -15,11 +15,10 @@ from traceback import format_stack
 from requests import Session
 from requests.adapters import HTTPAdapter, Retry
 from requests.exceptions import InvalidJSONError, RequestException
+from requests.utils import DEFAULT_CA_BUNDLE_PATH, extract_zipped_paths
+from urllib3.util.ssl_ import create_urllib3_context
 
-from ..compatibility import xbmcaddon
-from ..constants import ADDON_ID
 from ..logger import log_error
-from ..settings import XbmcPluginSettings
 
 
 __all__ = (
@@ -27,11 +26,24 @@ __all__ = (
     'InvalidJSONError'
 )
 
-_settings = XbmcPluginSettings(xbmcaddon.Addon(id=ADDON_ID))
 
+class SSLHTTPAdapter(HTTPAdapter):
+    _ssl_context = create_urllib3_context()
+    _ssl_context.load_verify_locations(
+        capath=extract_zipped_paths(DEFAULT_CA_BUNDLE_PATH)
+    )
+
+    def init_poolmanager(self, *args, **kwargs):
+        kwargs['ssl_context'] = self._ssl_context
+        return super(SSLHTTPAdapter, self).init_poolmanager(*args, **kwargs)
+
+    def cert_verify(self, conn, url, verify, cert):
+        self._ssl_context.check_hostname = bool(verify)
+        return super(SSLHTTPAdapter, self).cert_verify(conn, url, verify, cert)
 
 class BaseRequestsClass(object):
-    _http_adapter = HTTPAdapter(
+    _session = Session()
+    _session.mount('https://', SSLHTTPAdapter(
         pool_maxsize=10,
         pool_block=True,
         max_retries=Retry(
@@ -40,24 +52,20 @@ class BaseRequestsClass(object):
             status_forcelist={500, 502, 503, 504},
             allowed_methods=None,
         )
-    )
-
-    _session = Session()
-    _session.mount('https://', _http_adapter)
+    ))
     atexit.register(_session.close)
 
-    def __init__(self, exc_type=None):
-        self._verify = _settings.verify_ssl()
-        self._timeout = _settings.get_timeout()
+    def __init__(self, context, exc_type=None):
+        settings = context.get_settings()
+        self._verify = settings.verify_ssl()
+        self._timeout = settings.get_timeout()
+
         if isinstance(exc_type, tuple):
             self._default_exc = (RequestException,) + exc_type
         elif exc_type:
             self._default_exc = (RequestException, exc_type)
         else:
             self._default_exc = (RequestException,)
-
-    def __del__(self):
-        self._session.close()
 
     def __enter__(self):
         return self

@@ -11,15 +11,16 @@
 from __future__ import absolute_import, division, unicode_literals
 
 from .base_item import BaseItem
-from ..compatibility import urlencode
+from ..compatibility import unescape, urlencode
 
 
 class DirectoryItem(BaseItem):
     def __init__(self,
                  name,
                  uri,
-                 image='',
-                 fanart='',
+                 image='DefaultFolder.png',
+                 fanart=None,
+                 plot=None,
                  action=False,
                  category_label=None,
                  channel_id=None,
@@ -29,11 +30,12 @@ class DirectoryItem(BaseItem):
         name = self.get_name()
         self._category_label = None
         self.set_category_label(category_label or name)
-        self._plot = name
+        self._plot = plot or name
         self._is_action = action
         self._channel_id = channel_id
         self._playlist_id = playlist_id
         self._subscription_id = subscription_id
+        self._next_page = False
 
     def set_name(self, name, category_label=None):
         name = super(DirectoryItem, self).set_name(name)
@@ -67,6 +69,10 @@ class DirectoryItem(BaseItem):
         return self._category_label
 
     def set_plot(self, plot):
+        try:
+            plot = unescape(plot)
+        except:
+            pass
         self._plot = plot
 
     def get_plot(self):
@@ -79,20 +85,34 @@ class DirectoryItem(BaseItem):
         if isinstance(value, bool):
             self._is_action = value
 
-    def set_subscription_id(self, value):
-        self._subscription_id = value
-
-    def get_subscription_id(self):
+    @property
+    def subscription_id(self):
         return self._subscription_id
 
-    def set_channel_id(self, value):
-        self._channel_id = value
+    @subscription_id.setter
+    def subscription_id(self, value):
+        self._subscription_id = value
 
-    def get_channel_id(self):
+    @property
+    def channel_id(self):
         return self._channel_id
 
-    def set_playlist_id(self, value):
+    @channel_id.setter
+    def channel_id(self, value):
+        self._channel_id = value
+
+    @property
+    def playlist_id(self):
+        return self._playlist_id
+
+    @playlist_id.setter
+    def playlist_id(self, value):
         self._playlist_id = value
 
-    def get_playlist_id(self):
-        return self._playlist_id
+    @property
+    def next_page(self):
+        return self._next_page
+
+    @next_page.setter
+    def next_page(self, value):
+        self._next_page = value

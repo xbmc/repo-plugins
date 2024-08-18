@@ -24,7 +24,7 @@ __RE_IMDB__ = re.compile(r'(http(s)?://)?www.imdb.(com|de)/title/(?P<imdbid>[t0-
 class VideoItem(BaseItem):
     _playable = True
 
-    def __init__(self, name, uri, image='', fanart=''):
+    def __init__(self, name, uri, image='DefaultVideo.png', fanart=None):
         super(VideoItem, self).__init__(name, uri, image, fanart)
         self._genres = None
         self._aired = None
@@ -43,23 +43,30 @@ class VideoItem(BaseItem):
         self._track_number = None
         self._studios = None
         self._artists = None
-        self._play_count = None
-        self._uses_isa = None
+        self._production_code = None
         self._mediatype = None
+
+        self._play_count = None
         self._last_played = None
         self._start_percent = None
         self._start_time = None
+
+        self._completed = False
         self._live = False
+        self._short = False
         self._upcoming = False
+        self._vod = False
+
+        self._uses_isa = None
         self.subtitles = None
         self._headers = None
         self.license_key = None
+
         self._video_id = None
         self._channel_id = None
         self._subscription_id = None
         self._playlist_id = None
         self._playlist_item_id = None
-        self._production_code = None
 
     def set_play_count(self, play_count):
         self._play_count = int(play_count or 0)
@@ -163,12 +170,12 @@ class VideoItem(BaseItem):
     def set_directors(self, directors):
         self._directors = list(directors)
 
-    def add_cast(self, member, role=None, order=None, thumbnail=None):
+    def add_cast(self, name, role=None, order=None, thumbnail=None):
         if self._cast is None:
             self._cast = []
-        if member:
+        if name:
             self._cast.append({
-                'member': to_str(member),
+                'name': to_str(name),
                 'role': to_str(role) if role else '',
                 'order': int(order) if order else len(self._cast) + 1,
                 'thumbnail': to_str(thumbnail) if thumbnail else '',
@@ -241,6 +248,14 @@ class VideoItem(BaseItem):
         return self._scheduled_start_utc
 
     @property
+    def completed(self):
+        return self._completed
+
+    @completed.setter
+    def completed(self, value):
+        self._completed = value
+
+    @property
     def live(self):
         return self._live
 
@@ -249,12 +264,28 @@ class VideoItem(BaseItem):
         self._live = value
 
     @property
+    def short(self):
+        return self._short
+
+    @short.setter
+    def short(self, value):
+        self._short = value
+
+    @property
     def upcoming(self):
         return self._upcoming
 
     @upcoming.setter
     def upcoming(self, value):
         self._upcoming = value
+
+    @property
+    def vod(self):
+        return self._vod
+
+    @vod.setter
+    def vod(self, value):
+        self._vod = value
 
     def add_genre(self, genre):
         if self._genres is None:
@@ -287,14 +318,15 @@ class VideoItem(BaseItem):
         return False
 
     def set_mediatype(self, mediatype):
-        self._mediatype = mediatype
+        if (mediatype in {'video',
+                          'movie',
+                          'tvshow', 'season', 'episode',
+                          'musicvideo'}):
+            self._mediatype = mediatype
+        else:
+            self._mediatype = 'video'
 
     def get_mediatype(self):
-        if (self._mediatype not in {'video',
-                                    'movie',
-                                    'tvshow', 'season', 'episode',
-                                    'musicvideo'}):
-            self._mediatype = 'video'
         return self._mediatype
 
     def set_subtitles(self, value):
@@ -342,28 +374,36 @@ class VideoItem(BaseItem):
     def video_id(self, value):
         self._video_id = value
 
-    def get_channel_id(self):
+    @property
+    def channel_id(self):
         return self._channel_id
 
-    def set_channel_id(self, value):
+    @channel_id.setter
+    def channel_id(self, value):
         self._channel_id = value
 
-    def get_subscription_id(self):
+    @property
+    def subscription_id(self):
         return self._subscription_id
 
-    def set_subscription_id(self, value):
+    @subscription_id.setter
+    def subscription_id(self, value):
         self._subscription_id = value
 
-    def get_playlist_id(self):
+    @property
+    def playlist_id(self):
         return self._playlist_id
 
-    def set_playlist_id(self, value):
+    @playlist_id.setter
+    def playlist_id(self, value):
         self._playlist_id = value
 
-    def get_playlist_item_id(self):
+    @property
+    def playlist_item_id(self):
         return self._playlist_item_id
 
-    def set_playlist_item_id(self, value):
+    @playlist_item_id.setter
+    def playlist_item_id(self, value):
         self._playlist_item_id = value
 
     def get_code(self):

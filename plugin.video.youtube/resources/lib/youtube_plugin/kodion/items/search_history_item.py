@@ -12,7 +12,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 from . import menu_items
 from .directory_item import DirectoryItem
-from ..constants import paths
+from ..constants import PATHS
 
 
 class SearchHistoryItem(DirectoryItem):
@@ -26,17 +26,15 @@ class SearchHistoryItem(DirectoryItem):
 
         super(SearchHistoryItem, self).__init__(query,
                                                 context.create_uri(
-                                                    (paths.SEARCH, 'query',),
+                                                    (PATHS.SEARCH, 'query',),
                                                     params=params,
                                                 ),
-                                                image=image)
-
-        if fanart:
-            self.set_fanart(fanart)
+                                                image=image,
+                                                fanart=fanart)
 
         context_menu = [
             menu_items.search_remove(context, query),
             menu_items.search_rename(context, query),
             menu_items.search_clear(context),
         ]
-        self.set_context_menu(context_menu)
+        self.add_context_menu(context_menu)

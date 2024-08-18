@@ -18,31 +18,34 @@ from textwrap import dedent
 
 from .requests import BaseRequestsClass
 from ..compatibility import (
-    BaseHTTPServer,
+    BaseHTTPRequestHandler,
+    TCPServer,
     parse_qs,
     urlsplit,
     xbmc,
-    xbmcaddon,
     xbmcgui,
     xbmcvfs,
 )
-from ..constants import ADDON_ID, TEMP_PATH, paths
+from ..constants import ADDON_ID, LICENSE_TOKEN, LICENSE_URL, PATHS, TEMP_PATH
 from ..logger import log_debug, log_error
-from ..settings import XbmcPluginSettings
-from ..utils import validate_ip_address, wait
+from ..utils import validate_ip_address, redact_ip, wait
 
 
-_addon = xbmcaddon.Addon(ADDON_ID)
-_settings = XbmcPluginSettings(_addon)
-_i18n = _addon.getLocalizedString
-_addon_name = _addon.getAddonInfo('name')
-_addon_icon = _addon.getAddonInfo('icon')
-del _addon
+class HTTPServer(TCPServer):
+    allow_reuse_address = True
+    allow_reuse_port = True
 
-_server_requests = BaseRequestsClass()
+    def server_close(self):
+        try:
+            self.socket.shutdown(socket.SHUT_RDWR)
+        except (OSError, socket.error):
+            pass
+        self.socket.close()
 
 
-class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
+class RequestHandler(BaseHTTPRequestHandler, object):
+    _context = None
+    requests = None
     BASE_PATH = xbmcvfs.translatePath(TEMP_PATH)
     chunk_size = 1024 * 64
     local_ranges = (
@@ -55,7 +58,9 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
     )
 
     def __init__(self, *args, **kwargs):
-        self.whitelist_ips = _settings.httpd_whitelist()
+        if not RequestHandler.requests:
+            RequestHandler.requests = BaseRequestsClass(context=self._context)
+        self.whitelist_ips = self._context.get_settings().httpd_whitelist()
         super(RequestHandler, self).__init__(*args, **kwargs)
 
     def connection_allowed(self):
@@ -78,33 +83,36 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
         if not conn_allowed:
             log_debug('HTTPServer: Connection from |{client_ip| not allowed'
                       .format(client_ip=client_ip))
-        elif self.path != paths.PING:
+        elif self.path != PATHS.PING:
             log_debug(' '.join(log_lines))
         return conn_allowed
 
     # noinspection PyPep8Naming
     def do_GET(self):
-        api_config_enabled = _settings.api_config_page()
+        settings = self._context.get_settings()
+        localize = self._context.localize
+        api_config_enabled = settings.api_config_page()
 
         # Strip trailing slash if present
         stripped_path = self.path.rstrip('/')
-        if stripped_path != paths.PING:
-            log_debug('HTTPServer: GET |{path}|'.format(path=self.path))
+        if stripped_path != PATHS.PING:
+            log_debug('HTTPServer: GET |{path}|'.format(
+                path=redact_ip(self.path)
+            ))
 
         if not self.connection_allowed():
             self.send_error(403)
 
-        elif stripped_path == paths.IP:
-            client_json = json.dumps({"ip": "{ip}"
-                                     .format(ip=self.client_address[0])})
+        elif stripped_path == PATHS.IP:
+            client_json = json.dumps({'ip': self.client_address[0]})
             self.send_response(200)
             self.send_header('Content-Type', 'application/json; charset=utf-8')
             self.send_header('Content-Length', str(len(client_json)))
             self.end_headers()
             self.wfile.write(client_json.encode('utf-8'))
 
-        elif stripped_path.startswith(paths.MPD):
-            filepath = os.path.join(self.BASE_PATH, self.path[len(paths.MPD):])
+        elif stripped_path.startswith(PATHS.MPD):
+            filepath = os.path.join(self.BASE_PATH, self.path[len(PATHS.MPD):])
             file_chunk = True
             try:
                 with open(filepath, 'rb') as f:
@@ -122,7 +130,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
                             .format(path=self.path, filepath=filepath))
                 self.send_error(404, response)
 
-        elif api_config_enabled and stripped_path == paths.API:
+        elif api_config_enabled and stripped_path == PATHS.API:
             html = self.api_config_page()
             html = html.encode('utf-8')
 
@@ -134,7 +142,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
             for chunk in self.get_chunks(html):
                 self.wfile.write(chunk)
 
-        elif api_config_enabled and stripped_path.startswith(paths.API_SUBMIT):
+        elif api_config_enabled and stripped_path.startswith(PATHS.API_SUBMIT):
             xbmc.executebuiltin('Dialog.Close(addonsettings,true)')
 
             query = urlsplit(self.path).query
@@ -145,7 +153,10 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
             api_id = params.get('api_id', [None])[0]
             api_secret = params.get('api_secret', [None])[0]
             # Bookmark this page
-            footer = _i18n(30638) if api_key and api_id and api_secret else ''
+            if api_key and api_id and api_secret:
+                footer = localize(30638)
+            else:
+                footer = ''
 
             if re.search(r'api_key=(?:&|$)', query):
                 api_key = ''
@@ -154,29 +165,29 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
             if re.search(r'api_secret=(?:&|$)', query):
                 api_secret = ''
 
-            if api_key is not None and api_key != _settings.api_key():
-                _settings.api_key(new_key=api_key)
-                updated.append(_i18n(30201))  # API Key
+            if api_key is not None and api_key != settings.api_key():
+                settings.api_key(new_key=api_key)
+                updated.append(localize(30201))  # API Key
 
-            if api_id is not None and api_id != _settings.api_id():
-                _settings.api_id(new_id=api_id)
-                updated.append(_i18n(30202))  # API ID
+            if api_id is not None and api_id != settings.api_id():
+                settings.api_id(new_id=api_id)
+                updated.append(localize(30202))  # API ID
 
-            if api_secret is not None and api_secret != _settings.api_secret():
-                _settings.api_secret(new_secret=api_secret)
-                updated.append(_i18n(30203))  # API Secret
+            if api_secret is not None and api_secret != settings.api_secret():
+                settings.api_secret(new_secret=api_secret)
+                updated.append(localize(30203))  # API Secret
 
             if api_key and api_id and api_secret:
-                enabled = _i18n(30636)  # Personal keys enabled
+                enabled = localize(30636)  # Personal keys enabled
             else:
-                enabled = _i18n(30637)  # Personal keys disabled
+                enabled = localize(30637)  # Personal keys disabled
 
             if updated:
                 # Successfully updated
-                updated = _i18n(30631) % ', '.join(updated)
+                updated = localize(30631) % ', '.join(updated)
             else:
                 # No changes, not updated
-                updated = _i18n(30635)
+                updated = localize(30635)
 
             html = self.api_submit_page(updated, enabled, footer)
             html = html.encode('utf-8')
@@ -189,10 +200,10 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
             for chunk in self.get_chunks(html):
                 self.wfile.write(chunk)
 
-        elif stripped_path == paths.PING:
+        elif stripped_path == PATHS.PING:
             self.send_error(204)
 
-        elif stripped_path.startswith(paths.REDIRECT):
+        elif stripped_path.startswith(PATHS.REDIRECT):
             url = parse_qs(urlsplit(self.path).query).get('url')
             if url:
                 wait(1)
@@ -212,8 +223,8 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
         if not self.connection_allowed():
             self.send_error(403)
 
-        elif self.path.startswith(paths.MPD):
-            filepath = os.path.join(self.BASE_PATH, self.path[len(paths.MPD):])
+        elif self.path.startswith(PATHS.MPD):
+            filepath = os.path.join(self.BASE_PATH, self.path[len(PATHS.MPD):])
             if not os.path.isfile(filepath):
                 response = ('File Not Found: |{path}| -> |{filepath}|'
                             .format(path=self.path, filepath=filepath))
@@ -225,7 +236,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
                                  str(os.path.getsize(filepath)))
                 self.end_headers()
 
-        elif self.path.startswith(paths.REDIRECT):
+        elif self.path.startswith(PATHS.REDIRECT):
             self.send_error(404)
 
         else:
@@ -238,15 +249,15 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
         if not self.connection_allowed():
             self.send_error(403)
 
-        elif self.path.startswith(paths.DRM):
+        elif self.path.startswith(PATHS.DRM):
             home = xbmcgui.Window(10000)
 
-            lic_url = home.getProperty('-'.join((ADDON_ID, 'license_url')))
+            lic_url = home.getProperty('-'.join((ADDON_ID, LICENSE_URL)))
             if not lic_url:
                 self.send_error(404)
                 return
 
-            lic_token = home.getProperty('-'.join((ADDON_ID, 'license_token')))
+            lic_token = home.getProperty('-'.join((ADDON_ID, LICENSE_TOKEN)))
             if not lic_token:
                 self.send_error(403)
                 return
@@ -261,11 +272,11 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
                 'Authorization': 'Bearer %s' % lic_token
             }
 
-            response = _server_requests.request(lic_url,
-                                                method='POST',
-                                                headers=li_headers,
-                                                data=post_data,
-                                                stream=True)
+            response = self.requests.request(lic_url,
+                                             method='POST',
+                                             headers=li_headers,
+                                             data=post_data,
+                                             stream=True)
             if not response or not response.ok:
                 self.send_error(response and response.status_code or 500)
                 return
@@ -327,38 +338,41 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler, object):
         for i in range(0, len(data), self.chunk_size):
             yield data[i:i + self.chunk_size]
 
-    @staticmethod
-    def api_config_page():
-        api_key = _settings.api_key()
-        api_id = _settings.api_id()
-        api_secret = _settings.api_secret()
+    @classmethod
+    def api_config_page(cls):
+        settings = cls._context.get_settings()
+        localize = cls._context.localize
+        api_key = settings.api_key()
+        api_id = settings.api_id()
+        api_secret = settings.api_secret()
         html = Pages.api_configuration.get('html')
         css = Pages.api_configuration.get('css')
         html = html.format(
             css=css,
-            title=_i18n(30634),  # YouTube Add-on API Configuration
-            api_key_head=_i18n(30201),  # API Key
-            api_id_head=_i18n(30202),  # API ID
-            api_secret_head=_i18n(30203),  # API Secret
+            title=localize(30634),  # YouTube Add-on API Configuration
+            api_key_head=localize(30201),  # API Key
+            api_id_head=localize(30202),  # API ID
+            api_secret_head=localize(30203),  # API Secret
             api_id_value=api_id,
             api_key_value=api_key,
             api_secret_value=api_secret,
-            submit=_i18n(30630),  # Save
-            header=_i18n(30634),  # YouTube Add-on API Configuration
+            submit=localize(30630),  # Save
+            header=localize(30634),  # YouTube Add-on API Configuration
         )
         return html
 
-    @staticmethod
-    def api_submit_page(updated_keys, enabled, footer):
+    @classmethod
+    def api_submit_page(cls, updated_keys, enabled, footer):
+        localize = cls._context.localize
         html = Pages.api_submit.get('html')
         css = Pages.api_submit.get('css')
         html = html.format(
             css=css,
-            title=_i18n(30634),  # YouTube Add-on API Configuration
+            title=localize(30634),  # YouTube Add-on API Configuration
             updated=updated_keys,
             enabled=enabled,
             footer=footer,
-            header=_i18n(30634),  # YouTube Add-on API Configuration
+            header=localize(30634),  # YouTube Add-on API Configuration
         )
         return html
 
@@ -395,7 +409,7 @@ class Pages(object):
                 </div>
               </body>
             </html>
-        '''.format(action_url=paths.API_SUBMIT)),
+        '''.format(action_url=PATHS.API_SUBMIT)),
         'css': ''.join('\t\t\t'.expandtabs(2) + line for line in dedent('''
             body {
               background: #141718;
@@ -546,27 +560,34 @@ class Pages(object):
     }
 
 
-def get_http_server(address, port):
+def get_http_server(address, port, context):
+    RequestHandler._context = context
     try:
-        server = BaseHTTPServer.HTTPServer((address, port), RequestHandler)
+        server = HTTPServer((address, port), RequestHandler)
         return server
     except socket.error as exc:
         log_error('HTTPServer: Failed to start |{address}:{port}| |{response}|'
                   .format(address=address, port=port, response=exc))
-        xbmcgui.Dialog().notification(_addon_name,
+        xbmcgui.Dialog().notification(context.get_name(),
                                       str(exc),
-                                      _addon_icon,
+                                      context.get_icon(),
                                       time=5000,
                                       sound=False)
         return None
 
 
-def httpd_status():
-    address, port = get_connect_address()
-    url = 'http://{address}:{port}{path}'.format(address=address,
-                                                 port=port,
-                                                 path=paths.PING)
-    response = _server_requests.request(url)
+def httpd_status(context):
+    address, port = get_connect_address(context)
+    url = ''.join((
+        'http://',
+        address,
+        ':',
+        str(port),
+        PATHS.PING,
+    ))
+    if not RequestHandler.requests:
+        RequestHandler.requests = BaseRequestsClass(context=context)
+    response = RequestHandler.requests.request(url)
     result = response and response.status_code
     if result == 204:
         return True
@@ -578,13 +599,19 @@ def httpd_status():
     return False
 
 
-def get_client_ip_address():
+def get_client_ip_address(context):
     ip_address = None
-    address, port = get_connect_address()
-    url = 'http://{address}:{port}{path}'.format(address=address,
-                                                 port=port,
-                                                 path=paths.IP)
-    response = _server_requests.request(url)
+    address, port = get_connect_address(context)
+    url = ''.join((
+        'http://',
+        address,
+        ':',
+        str(port),
+        PATHS.IP,
+    ))
+    if not RequestHandler.requests:
+        RequestHandler.requests = BaseRequestsClass(context=context)
+    response = RequestHandler.requests.request(url)
     if response and response.status_code == 200:
         response_json = response.json()
         if response_json:
@@ -592,15 +619,20 @@ def get_client_ip_address():
     return ip_address
 
 
-def get_connect_address(as_netloc=False):
-    address = _settings.httpd_listen()
-    port = _settings.httpd_port()
+def get_connect_address(context, as_netloc=False):
+    settings = context.get_settings()
+    address = settings.httpd_listen()
+    port = settings.httpd_port()
     if address == '0.0.0.0':
         address = '127.0.0.1'
 
     sock = None
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        if hasattr(socket, "SO_REUSEADDR"):
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        if hasattr(socket, "SO_REUSEPORT"):
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
     except socket.error:
         address = xbmc.getIPAddress()
 

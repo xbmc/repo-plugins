@@ -1,0 +1,38 @@
+{
+    "name"              : "Amazon Prime Video",
+    "plugin"            : "plugin.video.amazon-test",
+    "priority"          : 100,
+    "provider"          : "Amazon Prime Video",
+    "is_resolvable"     : "true",
+    "assert"            : {
+                            "play_movie":       ["title", "year"],
+                            "play_episode":     ["showname", "season", "episode"],
+                            "search_movie":     ["title"],
+                            "search_episode":   ["showname"]
+                          },
+    "play_movie"        : [
+                            "plugin://plugin.video.amazon-test/",
+                            {"file": "(?i).*(mode=Search|/search/).*"},
+                            {"keyboard": "{title}"},
+                            {"label": "(?i).*{title}.*", "year": "{year}"}
+                          ],
+    "play_episode"      : [
+                            "plugin://plugin.video.amazon-test/",
+                            {"file": "(?i).*(mode=Search|/search/).*"},
+                            {"keyboard": "{showname}"},
+                            {"label": "(?i).*{showname}.*"},
+                            {"return": "true", "season": "{season}", "episode": "{episode}"},
+                            {"season": "{season}"},
+                            {"season": "{season}", "episode": "{episode}"}
+                          ],
+    "search_movie"      : [
+                            "plugin://plugin.video.amazon-test/",
+                            {"file": "(?i).*(mode=Search|/search/).*"},
+                            {"keyboard": "{title}"}
+                          ],
+    "search_episode"    : [
+                            "plugin://plugin.video.amazon-test/",
+                            {"file": "(?i).*(mode=Search|/search/).*"},
+                            {"keyboard": "{showname}"}
+                          ]
+}

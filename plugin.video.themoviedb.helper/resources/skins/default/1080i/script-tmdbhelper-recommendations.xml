@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="dialog">
+    <defaultcontrol always="true">6000</defaultcontrol>
+    <controls>
+        <control type="list" id="5000">
+            <visible>!String.IsEmpty(Window.Property(List_5000_Visible))</visible>
+        </control>
+        <control type="list" id="5001">
+            <visible>!String.IsEmpty(Window.Property(List_5001_Visible))</visible>
+        </control>
+    </controls>
+</window>

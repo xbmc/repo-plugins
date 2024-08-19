@@ -1,0 +1,26 @@
+{
+    "name" : "JellyCon",
+    "plugin" : "plugin.video.jellycon",
+    "priority" : 200,
+    "is_resolvable": "true",
+    "assert": {"play_episode": ["epid"]},
+    "fallback": {"play_movie": "jellycon.json search_movie",
+                 "play_episode": "jellycon.json search_episode",
+                 "search_episode": "jellycon.parentid.json search_episode"},
+    "play_movie" : [
+        "plugin://plugin.video.jellycon/?content_type=video&mode=NEW_SEARCH&item_type=Movie&query={title}",
+        {"dialog": "auto"}
+     ],
+    "search_movie" : [
+        "plugin://plugin.video.jellycon/?content_type=video&mode=NEW_SEARCH&item_type=Movie&query={title}",
+        {"dialog": "auto"}
+     ],
+    "play_episode" : [
+        "plugin://plugin.video.jellycon/?content_type=video&mode=NEW_SEARCH&item_type=Episode&query={title}",
+        {"dialog":"auto"}
+     ],
+     "search_episode" : [
+        "plugin://plugin.video.jellycon/?content_type=video&mode=NEW_SEARCH&item_type=Episode&query={title}",
+        {"dialog":"auto"}
+     ]
+}

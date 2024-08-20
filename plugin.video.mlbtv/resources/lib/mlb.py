@@ -683,7 +683,16 @@ def stream_select(game_pk, spoiler='True', suspended='False', start_inning='Fals
     json_source = r.json()
     # start with just video content, assumed to be at index 0
     #epg = json_source['media']['epg'][0]['items']
-    epg = json_source['dates'][0]['games'][0]['broadcasts']
+    #epg = json_source['dates'][0]['games'][0]['broadcasts']
+    epg = []
+    # loop through dates/games and skip those that have been rescheduled
+    if 'dates' in json_source:
+        for date in json_source['dates']:
+            if 'games' in date:
+                for game in date['games']:
+                    if 'rescheduleDate' not in game:
+                        epg = game['broadcasts']
+                        break
 
     # define some default variables
     selected_content_id = None

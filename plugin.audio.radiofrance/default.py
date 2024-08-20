@@ -22,7 +22,7 @@ def build_lists(data, args, url):
     xbmc.log(str(args), xbmc.LOGINFO)
 
     def add_search():
-        new_args = {k: v[0] for (k, v) in args.items()}
+        new_args = {k: v[0] for (k, v) in list(args.items())}
         new_args["mode"] = "search"
         li = xbmcgui.ListItem(label=localize(30100))
         li.setIsFolder(True)
@@ -30,15 +30,15 @@ def build_lists(data, args, url):
         highlight_list.append((new_url, li, True))
 
     def add_podcasts():
-        new_args = {k: v[0] for (k, v) in args.items()}
+        new_args = {k: v[0] for (k, v) in list(args.items())}
         new_args["mode"] = "podcasts"
-        pli = xbmcgui.ListItem(label=localize(30104))
+        li = xbmcgui.ListItem(label=localize(30104))
         li.setIsFolder(True)
         new_url = build_url(new_args)
         highlight_list.append((new_url, li, True))
 
     def add_pages(item):
-        new_args = {k: v[0] for (k, v) in args.items()}
+        new_args = {k: v[0] for (k, v) in list(args.items())}
         (num, last) = item.pages
         if 1 < num:
             new_args["page"] = num - 1
@@ -62,12 +62,8 @@ def build_lists(data, args, url):
                 li.setArt({"thumb": item.image, "icon": item.icon})
                 li.setIsFolder(True)
                 new_args = {"title": item.title}
-                new_args["url"] = (
-                    item.path if item.model == Model["Brand"] else item.path
-                )
-                new_args["mode"] = (
-                    "brand" if item.model == Model["Brand"] else "url"
-                )
+                new_args["url"] = item.path
+                new_args["mode"] = "url"
                 builded_url = build_url(new_args)
                 highlight_list.append((builded_url, li, True))
 
@@ -103,14 +99,17 @@ def build_lists(data, args, url):
             tag.setMediaType("audio")
             tag.setTitle(item.title)
             tag.setURL(item.path)
-            tag.setGenres(["podcast"])
+            tag.setGenres([item.genre if item.model == Model['Brand'] else "podcast"])
             tag.setArtist(item.artists)
             tag.setDuration(item.duration if item.duration is not None else 0)
             tag.setReleaseDate(item.release)
             li.setProperty("IsPlayable", "true")
             if item.path is not None:
                 new_args["url"] = item.path
-                new_args["mode"] = "stream"
+                new_args["mode"] = (
+                    "brand" if item.model == Model["Brand"] else "stream"
+                )
+
                 builded_url = build_url(new_args)
                 song_list.append((builded_url, li, False))
 
@@ -130,13 +129,13 @@ def build_lists(data, args, url):
     item = create_item_from_page(data)
     if mode == "index":
         element_index = int(args.get("index", [None])[0])
-        list = create_item(item.subs[element_index]).elements
+        items_list = create_item(item.subs[element_index]).elements
     else:
-        list = item.subs
+        items_list = item.subs
 
     add_pages(item)
     index = 0
-    for data in list:
+    for data in items_list:
         sub_item = create_item(data)
         xbmc.log(str(sub_item), xbmc.LOGINFO)
         add(sub_item, index)
@@ -151,26 +150,8 @@ def build_lists(data, args, url):
 def brand(args):
     url = args.get("url", [""])[0]
 
-    xbmc.log("[Brand]: " + url, xbmc.LOGINFO)
-
-    data = requests.get(url).text
-    item = BrandPage(data)
-
-    add_podcasts()
-
-    li = xbmcgui.ListItem(label=item.title)
-    li.setArt({"thumb": item.image, "icon": item.icon})
-    li.setIsFolder(False)
-    tag = li.getMusicInfoTag(offscreen=True)
-    tag.setMediaType("audio")
-    tag.setTitle(item.title)
-    tag.setURL(item.url)
-    tag.setGenres(["radio"])
-    li.setProperty("IsPlayable", "true")
-
-    xbmc.Player().play(item.url, li)
-    play(item.url)
-
+    xbmc.log("[Play Brand]: " + url, xbmc.LOGINFO)
+    play(url)
 
 def play(url):
     play_item = xbmcgui.ListItem(path=url)
@@ -186,14 +167,14 @@ def search(args):
         query = kb.getText()
         return query
 
-    new_args = {k: v[0] for (k, v) in args.items()}
+    new_args = {k: v[0] for (k, v) in list(args.items())}
     new_args["mode"] = "page"
     value = GUIEditExportName("Odyssées")
     if value is None:
         return
 
     new_args["url"] = RADIOFRANCE_PAGE + "/recherche"
-    new_args = {k: [v] for (k, v) in new_args.items()}
+    new_args = {k: [v] for (k, v) in list(new_args.items())}
     build_url(new_args)
     get_and_build_lists(new_args, url_args="?term=" + value + "&")
 

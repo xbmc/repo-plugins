@@ -1,10 +1,10 @@
-from jurialmunkey.window import get_property
 from tmdbhelper.lib.addon.plugin import get_infolabel, get_condvisibility
 from tmdbhelper.lib.addon.tmdate import convert_timestamp, get_region_date
 from tmdbhelper.lib.addon.logger import kodi_try_except, kodi_log
 from tmdbhelper.lib.files.futils import validate_join
 from tmdbhelper.lib.api.kodi.rpc import get_person_stats
 from tmdbhelper.lib.api.contains import CommonContainerAPIs
+from tmdbhelper.lib.monitor.propertysetter import PropertySetter
 from jurialmunkey.parser import try_int
 import xbmcvfs
 import json
@@ -13,11 +13,14 @@ import json
 SETMAIN = {
     'label', 'tmdb_id', 'imdb_id', 'folderpath', 'filenameandpath'}
 SETMAIN_ARTWORK = {
-    'icon', 'poster', 'thumb', 'fanart', 'discart', 'clearart', 'clearlogo', 'landscape', 'banner', 'keyart'}
+    'cropimage', 'cropimage.original', 'blurimage', 'blurimage.original', 'desaturateimage', 'desaturateimage.original', 'colorsimage', 'colorsimage.original',
+    'icon', 'poster', 'thumb', 'fanart', 'discart', 'clearart', 'clearlogo', 'landscape', 'banner', 'keyart',
+    'season.poster', 'season.thumb', 'season.fanart', 'season.discart', 'season.clearart', 'season.clearlogo', 'season.landscape', 'season.banner', 'season.keyart',
+    'tvshow.poster', 'tvshow.thumb', 'tvshow.fanart', 'tvshow.discart', 'tvshow.clearart', 'tvshow.clearlogo', 'tvshow.landscape', 'tvshow.banner', 'tvshow.keyart'}
 SETINFO = {
     'title', 'originaltitle', 'tvshowtitle', 'plot', 'rating', 'votes', 'premiered', 'year',
-    'imdbnumber', 'tagline', 'status', 'episode', 'season', 'genre', 'set', 'studio', 'country',
-    'mpaa', 'director', 'writer', 'trailer', 'top250'}
+    'imdbnumber', 'tagline', 'episode', 'season', 'genre', 'set', 'studio', 'country',
+    'mpaa', 'director', 'writer', 'trailer'}
 SETPROP = {
     'tmdb_id', 'imdb_id', 'tvdb_id', 'tvshow.tvdb_id', 'tvshow.tmdb_id', 'tvshow.imdb_id',
     'biography', 'birthday', 'age', 'deathday', 'character', 'department', 'job', 'known_for', 'role', 'born',
@@ -26,20 +29,21 @@ SETPROP_RATINGS = {
     'awards', 'metacritic_rating', 'imdb_rating', 'imdb_votes', 'rottentomatoes_rating',
     'rottentomatoes_image', 'rottentomatoes_reviewtotal', 'rottentomatoes_reviewsfresh',
     'rottentomatoes_reviewsrotten', 'rottentomatoes_consensus', 'rottentomatoes_usermeter',
-    'rottentomatoes_userreviews', 'trakt_rating', 'trakt_votes', 'goldenglobe_wins',
+    'rottentomatoes_userreviews', 'trakt_rating', 'trakt_votes', 'letterboxd_rating',
+    'letterboxd_votes', 'mdblist_rating', 'mdblist_votes', 'goldenglobe_wins',
     'goldenglobe_nominations', 'oscar_wins', 'oscar_nominations', 'award_wins', 'award_nominations',
     'emmy_wins', 'emmy_nominations', 'tmdb_rating', 'tmdb_votes', 'top250',
     'total_awards_won', 'awards_won', 'awards_won_cr', 'academy_awards_won', 'goldenglobe_awards_won',
     'mtv_awards_won', 'criticschoice_awards_won', 'emmy_awards_won', 'sag_awards_won', 'bafta_awards_won',
     'total_awards_nominated', 'awards_nominated', 'awards_nominated_cr', 'academy_awards_nominated',
     'goldenglobe_awards_nominated', 'mtv_awards_nominated', 'criticschoice_awards_nominated',
-    'emmy_awards_nominated', 'sag_awards_nominated', 'bafta_awards_nominated'}
-
-SETBASE = {
-    'base_label', 'base_title', 'base_icon', 'base_plot', 'base_tagline', 'base_dbtype', 'base_rating',
-    'base_poster', 'base_fanart', 'base_clearlogo', 'base_tvshowtitle', 'base_studio', 'base_genre',
-    'base_director', 'base_writer'
-}
+    'emmy_awards_nominated', 'sag_awards_nominated', 'bafta_awards_nominated', 'status', 'episode_type',
+    'next_aired', 'next_aired.long', 'next_aired.short', 'next_aired.day', 'next_aired.day_short', 'next_aired.year', 'next_aired.episode',
+    'next_aired.name', 'next_aired.tmdb_id', 'next_aired.plot', 'next_aired.season', 'next_aired.rating', 'next_aired.votes', 'next_aired.thumb',
+    'next_aired.original', 'next_aired.days_from_aired', 'next_aired.days_until_aired', 'next_aired.original', 'next_aired.custom',
+    'last_aired', 'last_aired.long', 'last_aired.short', 'last_aired.day', 'last_aired.day_short', 'last_aired.year', 'last_aired.episode',
+    'last_aired.name', 'last_aired.tmdb_id', 'last_aired.plot', 'last_aired.season', 'last_aired.rating', 'last_aired.votes', 'last_aired.thumb',
+    'last_aired.original', 'last_aired.days_from_aired', 'last_aired.days_until_aired', 'last_aired.original', 'last_aired.custom', }
 
 TVDB_AWARDS_KEYS = {
     'Academy Awards': 'academy',
@@ -61,9 +65,9 @@ class CommonMonitorDetails(CommonContainerAPIs):
         try:
             return self._ib
         except AttributeError:
-            from tmdbhelper.lib.items.builder import ItemBuilder
             from tmdbhelper.lib.addon.plugin import get_setting
-            self._ib = ItemBuilder(tmdb_api=self.tmdb_api, ftv_api=self.ftv_api, trakt_api=self.trakt_api)
+            from tmdbhelper.lib.items.builder import ItemBuilderService
+            self._ib = ItemBuilderService(tmdb_api=self.tmdb_api, ftv_api=self.ftv_api, trakt_api=self.trakt_api)
             self._ib.ftv_api = self.ftv_api if get_setting('service_fanarttv_lookup') else None
             return self._ib
 
@@ -156,8 +160,12 @@ class CommonMonitorDetails(CommonContainerAPIs):
         if not self.mdblist_api:
             return item
         ratings = self.mdblist_api.get_ratings(trakt_type, tmdb_id=tmdb_id) or {}
-        ratings.update(item['infoproperties'])
-        item['infoproperties'] = ratings
+
+        # Pop some ratings we already retrieve from other services
+        for i in ('trakt_rating', 'trakt_votes', 'tmdb_rating', 'tmdb_votes'):
+            ratings.pop(i, None)
+
+        item['infoproperties'].update(ratings)
         return item
 
     def get_tvdb_awards(self, item, tmdb_type, tmdb_id):
@@ -211,6 +219,8 @@ class CommonMonitorDetails(CommonContainerAPIs):
         return item
 
     def get_nextaired(self, item, tmdb_type, tmdb_id):
+        if 'status' in item['infolabels']:
+            item['infoproperties']['status'] = item['infolabels']['status']
         if tmdb_type != 'tv':
             return item
         nextaired = self.tmdb_api.get_tvshow_nextaired(tmdb_id)
@@ -218,39 +228,46 @@ class CommonMonitorDetails(CommonContainerAPIs):
         return item
 
 
-class CommonMonitorFunctions(CommonMonitorDetails):
+class CommonMonitorFunctions(PropertySetter, CommonMonitorDetails):
     def __init__(self):
         self.properties = set()
         self.index_properties = set()
         self.property_prefix = 'ListItem'
-        super(CommonMonitorFunctions, self).__init__()
+        super().__init__()
 
-    @kodi_try_except('lib.monitor.common clear_property')
     def clear_property(self, key):
         key = f'{self.property_prefix}.{key}'
-        get_property(key, clear_property=True)
+        self.get_property(key, clear_property=True)
 
-    @kodi_try_except('lib.monitor.common set_property')
     def set_property(self, key, value):
         key = f'{self.property_prefix}.{key}'
         if value is None:
-            get_property(key, clear_property=True)
+            self.get_property(key, clear_property=True)
             return
-        get_property(key, set_property=f'{value}')
+        self.get_property(key, set_property=f'{value}')
 
     @kodi_try_except('lib.monitor.common set_iter_properties')
-    def set_iter_properties(self, dictionary: dict, keys: set):
+    def set_iter_properties(self, dictionary: dict, keys: set, property_object=None):
         """ Interates through a set of keys and adds corresponding value from the dictionary as a window property
         Lists of values from dictionary are joined with ' / '.join(dictionary[key])
         TMDbHelper.ListItem.{key} = dictionary[key]
         """
         if not isinstance(dictionary, dict):
             dictionary = {}
+
+        if property_object is None:
+            property_object = set()
+
         for k in keys:
-            v = dictionary.get(k)
+            if k not in dictionary:
+                continue
+            v = dictionary[k]
+            if v is None:
+                continue
             if isinstance(v, list):
                 v = ' / '.join(v)
             self.properties.add(k)
+            property_object.add(k)
             self.set_property(k, v)
 
     @kodi_try_except('lib.monitor.common set_indexed_properties')
@@ -258,19 +275,24 @@ class CommonMonitorFunctions(CommonMonitorDetails):
         if not isinstance(dictionary, dict):
             return
 
-        # Convert dictionary to list of keys to avoid iteration size change errors
-        keys = (
-            k for k in list(dictionary)
-            if k not in self.properties
-            and k not in SETPROP_RATINGS
-            and k not in SETMAIN_ARTWORK)
-
         index_properties = set()
 
-        for k in keys:
-            v = dictionary.get(k)
-            self.set_property(k, v)
-            index_properties.add(k)
+        if get_condvisibility("!Skin.HasSetting(TMDbHelper.DisableExtendedProperties) | !String.IsEmpty(Window.Property(TMDbHelper.EnableExtendedProperties))"):
+            # Convert dictionary to list of keys to avoid iteration size change errors
+            keys = (
+                k for k in list(dictionary)
+                if k not in self.properties
+                and k not in SETPROP_RATINGS
+                and k not in SETMAIN_ARTWORK)
+
+            for k in keys:
+                if k not in dictionary:
+                    continue
+                v = dictionary[k]
+                if v is None:
+                    continue
+                self.set_property(k, v)
+                index_properties.add(k)
 
         for k in (self.index_properties - index_properties):
             self.clear_property(k)
@@ -307,22 +329,17 @@ class CommonMonitorFunctions(CommonMonitorDetails):
         self.set_property('Premiered_Custom', date_obj.strftime(get_infolabel('Skin.String(TMDbHelper.Date.Format)') or '%d %b %Y'))
         self.properties.update(['Premiered', 'Premiered_Long', 'Premiered_Custom'])
 
-    def set_base_properties(self, item):
-        infoproperties = item.get('infoproperties', {})
-        self.set_iter_properties(infoproperties, SETBASE)
-
-    def set_properties(self, item):
+    def set_properties(self, item, baseitem_properties=None):
         cast = item.get('cast', [])
         infolabels = item.get('infolabels', {})
         infoproperties = item.get('infoproperties', {})
+        baseitem_properties = baseitem_properties or set()
         self.set_iter_properties(item, SETMAIN)
         self.set_iter_properties(infolabels, SETINFO)
-        self.set_iter_properties(infoproperties, SETPROP)
+        self.set_iter_properties(infoproperties, SETPROP.union(baseitem_properties))
         self.set_time_properties(infolabels.get('duration', 0))
         self.set_date_properties(infolabels.get('premiered'))
         self.set_list_properties(cast, 'name', 'cast')
-        if get_condvisibility("Skin.HasSetting(TMDbHelper.DisableExtendedProperties)"):
-            return
         self.set_indexed_properties(infoproperties)
 
     def clear_properties(self, ignore_keys=None):

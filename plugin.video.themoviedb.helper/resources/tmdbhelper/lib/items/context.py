@@ -26,7 +26,8 @@ CONTEXT_MENU_ITEMS = {
         'movie': {'tmdb_type': 'movie', 'tmdb_id': '{tmdb_id}'},
         'tvshow': {'tmdb_type': 'tv', 'tmdb_id': '{tmdb_id}'},
         'season': {'tmdb_type': 'tv', 'tmdb_id': '{tmdb_id}', 'season': '{season}'},
-        'episode': {'tmdb_type': 'tv', 'tmdb_id': '{tmdb_id}', 'season': '{season}'}
+        'episode': {'tmdb_type': 'tv', 'tmdb_id': '{tmdb_id}', 'season': '{season}'},
+        'set': {'tmdb_type': 'collection', 'tmdb_id': '{tmdb_id}'}
     },
     # Refresh Details
     '$ADDON[plugin.video.themoviedb.helper 32233]': {

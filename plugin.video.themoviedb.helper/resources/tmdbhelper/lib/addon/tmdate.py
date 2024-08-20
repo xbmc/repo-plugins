@@ -44,15 +44,19 @@ def convert_to_timestamp(date_time):
         return 2145916800  # Y2038 bug in time.mktime on 32bit float systems. Use 2038 Jan 1 UTC for db timestamp instead.
 
 
-def format_date(time_str, str_fmt="%A", time_fmt="%Y-%m-%d", time_lim=10, utc_convert=False, region_fmt=None):
-    if not time_str:
-        return
-    time_obj = convert_timestamp(time_str, time_fmt, time_lim, utc_convert=utc_convert)
+def format_date_obj(time_obj, str_fmt="%A", region_fmt=None):
     if not time_obj:
         return
     if not region_fmt:
         return time_obj.strftime(str_fmt)
     return get_region_date(time_obj, region_fmt)
+
+
+def format_date(time_str, str_fmt="%A", time_fmt="%Y-%m-%d", time_lim=10, utc_convert=False, region_fmt=None):
+    if not time_str:
+        return
+    time_obj = convert_timestamp(time_str, time_fmt, time_lim, utc_convert=utc_convert)
+    return format_date_obj(time_obj, str_fmt=str_fmt, region_fmt=region_fmt)
 
 
 def date_in_range(date_str, days=1, start_date=0, date_fmt="%Y-%m-%dT%H:%M:%S", date_lim=19, utc_convert=False):
@@ -133,6 +137,12 @@ def get_calendar_name(startdate=0, days=1):
             return get_localized(32326)  # This Month
         if startdate == -30:
             return get_localized(32327)  # Last Month
+
+
+def get_days_to_air(datetime_object):
+    """ Returns tuple of number of days and bool if object has aired yet """
+    days = (datetime_object.date() - get_datetime_today().date()).days
+    return abs(days), days < 0
 
 
 def convert_timestamp(time_str, time_fmt="%Y-%m-%dT%H:%M:%S", time_lim=19, utc_convert=False):

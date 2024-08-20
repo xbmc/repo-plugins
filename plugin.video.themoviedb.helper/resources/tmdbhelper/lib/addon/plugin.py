@@ -22,6 +22,7 @@ encode_url = jurialmunkey.parser.EncodeURL(u'plugin://plugin.video.themoviedb.he
 executebuiltin = xbmc.executebuiltin
 get_condvisibility = xbmc.getCondVisibility
 get_infolabel = xbmc.getInfoLabel
+get_skindir = xbmc.getSkinDir
 format_name = jurialmunkey.plugin.format_name
 format_folderpath = jurialmunkey.plugin.format_folderpath
 set_kwargattr = jurialmunkey.plugin.set_kwargattr
@@ -45,6 +46,10 @@ def get_mpaa_prefix():
     if ADDON.getSettingString('mpaa_prefix'):
         return f'{ADDON.getSettingString("mpaa_prefix")} '
     return ''
+
+
+def get_flatseasons_info_param():
+    return 'flatseasons' if get_setting('flatten_seasons') else 'seasons'
 
 
 CONVERSION_TABLE = {
@@ -132,3 +137,19 @@ def convert_type(tmdb_type, output, season=None, episode=None, items=None):
     if tmdb_type == 'tv' and season is not None:
         tmdb_type = 'episode' if episode is not None else 'season'
     return _convert_types('tmdb', tmdb_type, output)
+
+
+class GlobalSettingsDict(dict):
+
+    def __init__(self):
+        self.route = {}
+
+    def __missing__(self, key):
+        if key in self.route:
+            func = self.route[key][0]
+            args = self.route[key][1] or tuple()
+        else:
+            func = get_setting
+            args = (key, )
+        self[key] = func(*args)
+        return self[key]

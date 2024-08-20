@@ -176,7 +176,7 @@ def get_tvshow_nextaired(self, tmdb_id):
     if not tmdb_id:
         return {}
 
-    cache_name = f'TMDb.get_tv_nextaired.{tmdb_id}'
+    cache_name = f'TMDb.get_tv_nextaired.v2.{tmdb_id}'
     infoproperties = self._cache.use_cache(_get_nextaired, cache_name=cache_name, cache_days=CACHE_SHORT)
     return _get_formatted() if infoproperties else infoproperties
 

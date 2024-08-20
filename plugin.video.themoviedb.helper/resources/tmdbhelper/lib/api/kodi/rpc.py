@@ -249,7 +249,7 @@ class KodiLibrary(object):
             fuzzy_match=fuzzy_match,
             tmdb_id=tmdb_id,
             tvdb_id=tvdb_id,
-            cache_name=f'get_info',
+            cache_name=f'get_info.{self._tvshowid}.{self._dbtype}',
             cache_minutes=180,
             cache_refresh=self._cache_refresh,
             cache_store_none=True)

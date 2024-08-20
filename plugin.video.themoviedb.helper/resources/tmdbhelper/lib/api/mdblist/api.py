@@ -1,8 +1,7 @@
 from jurialmunkey.parser import get_params
-from tmdbhelper.lib.addon.plugin import ADDONPATH, PLUGINPATH, convert_trakt_type, convert_type, get_localized
+from tmdbhelper.lib.addon.plugin import ADDONPATH, PLUGINPATH, convert_trakt_type, convert_type, get_localized, get_setting
 from tmdbhelper.lib.api.request import RequestAPI
 from tmdbhelper.lib.api.api_keys.mdblist import API_KEY
-
 
 PARAMS_DEF = {
     'episode': {
@@ -105,7 +104,7 @@ class MDbList(RequestAPI):
 
     api_key = API_KEY
 
-    def __init__(self, api_key=None):
+    def __init__(self, api_key=None, page_length=1):
         api_key = api_key or self.api_key
 
         super(MDbList, self).__init__(
@@ -113,6 +112,8 @@ class MDbList(RequestAPI):
             req_api_name='MDbList',
             req_api_url='https://mdblist.com/api')
         MDbList.api_key = api_key
+
+        self.item_limit = 20 * max(get_setting('pagemulti_trakt', 'int'), page_length)
 
     def _get_request(self, func, *args, **kwargs):
         response = func(*args, **kwargs)
@@ -166,19 +167,19 @@ class MDbList(RequestAPI):
 
         return infoproperties
 
-    def get_list_of_lists(self, path, limit=None, page=1):
+    def get_list_of_lists(self, path, page=1, limit: int = None):
         response = self._get_request_sc(path, cache_refresh=True if page == 1 else False)
-        response, next_page = _get_paginated(response, limit=limit, page=page)
+        response, next_page = _get_paginated(response, limit=limit or 250, page=page)
         items = _map_list(response)
         return items if not next_page else items + next_page
 
-    def get_custom_list(self, list_id, page=1, limit=20):
+    def get_custom_list(self, list_id, page=1, limit: int = None):
         path = f'lists/{list_id}/items'
         response = self._get_request_sc(path, cache_refresh=True if page == 1 else False)
         return self.get_custom_list_paginated(response, page, limit)
 
-    def get_custom_list_paginated(self, response, page=1, limit=20):
-        response, next_page = _get_paginated(response, limit=limit, page=page)
+    def get_custom_list_paginated(self, response, page=1, limit: int = None):
+        response, next_page = _get_paginated(response, limit=limit or self.item_limit, page=page)
         items = _get_configured(response, permitted_types=['movie', 'show', 'season', 'episode'])
         return {
             'items': items['items'],

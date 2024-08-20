@@ -72,7 +72,7 @@ class ListSync(Container):
         self.tmdb_cache_only = False
         self.kodi_db = self.get_kodi_database(info_tmdb_type)
         self.library = convert_type(info_tmdb_type, 'library')
-        self.container_content = convert_type(info_tmdb_type, 'container')
+        self.container_content = convert_type(info_tmdb_type, 'container', items=items)
         self.plugin_category = get_plugin_category(info_model, convert_type(info_tmdb_type, 'plural'))
         return items
 

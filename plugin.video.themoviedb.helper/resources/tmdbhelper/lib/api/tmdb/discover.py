@@ -8,6 +8,7 @@ from jurialmunkey.window import get_property
 from tmdbhelper.lib.files.hcache import set_search_history, get_search_history
 from tmdbhelper.lib.api.tmdb.api import TMDb
 from tmdbhelper.lib.api.tmdb.mapping import get_imagepath_quality
+from urllib.parse import urlencode
 
 
 RELATIVE_DATES = [
@@ -503,9 +504,17 @@ def _get_release_types():
 def _get_basedir_top(tmdb_type):
     return [
         {
-            'label': get_localized(32238).format(convert_type(tmdb_type, 'plural')),
+            'label': get_localized(32174),
             'art': {'icon': f'{ADDONPATH}/resources/icons/themoviedb/default.png'},
-            'params': {'info': 'user_discover', 'tmdb_type': tmdb_type, 'method': 'open'}},
+            'params': {'info': 'user_discover', 'tmdb_type': tmdb_type, 'method': 'open'}}]
+
+
+def _get_basedir_new(tmdb_type):
+    return [
+        {
+            'label': get_localized(32277),
+            'art': {'icon': f'{ADDONPATH}/resources/icons/themoviedb/default.png'},
+            'params': {'info': 'user_discover', 'tmdb_type': tmdb_type, 'method': 'add_rule'}},
         {
             'label': get_localized(32239),
             'art': {'icon': f'{ADDONPATH}/resources/icons/themoviedb/default.png'},
@@ -518,10 +527,6 @@ def _get_basedir_top(tmdb_type):
 
 def _get_basedir_end(tmdb_type):
     return [
-        {
-            'label': get_localized(32277),
-            'art': {'icon': f'{ADDONPATH}/resources/icons/themoviedb/default.png'},
-            'params': {'info': 'user_discover', 'tmdb_type': tmdb_type, 'method': 'add_rule'}},
         {
             'label': get_localized(192),
             'art': {'icon': f'{ADDONPATH}/resources/icons/themoviedb/default.png'},
@@ -1040,6 +1045,8 @@ class ListUserDiscover(Container):
             _save_rules(tmdb_type)
         elif method == 'edit':
             _edit_rules(idx=try_int(kwargs.get('idx'), fallback=-1))
+        elif method == 'skip':
+            pass
         else:
             _add_rule(tmdb_type, method)
 
@@ -1047,11 +1054,19 @@ class ListUserDiscover(Container):
         basedir_items = []
         basedir_items += _get_basedir_top(tmdb_type)
         basedir_items += _get_basedir_add(tmdb_type)
-        basedir_items += _get_basedir_end(tmdb_type)
+        basedir_items += _get_basedir_new(tmdb_type)
+        if method != 'skip':
+            basedir_items += _get_basedir_end(tmdb_type)
 
         self.update_listing = True if method and method != 'edit' else False
         self.container_content = 'files'
 
         items = [_get_formatted_item(i) for i in basedir_items]
         items[0]['params'] = _get_discover_params(tmdb_type)
+        _win_prop('FolderPath', set_property=f"{PLUGINPATH}?{urlencode(items[0]['params'])}")
+        _win_prop('ParamsDict', set_property=f"{items[0]['params']}")
+
+        if method == 'skip':
+            items.pop(0)
+
         return items

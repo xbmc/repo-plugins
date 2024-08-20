@@ -1,9 +1,5 @@
 from jurialmunkey.parser import try_int
 
-""" Lazyimports """
-from jurialmunkey.modimp import lazyimport
-set_playprogress = None
-
 
 class TraktMethods():
     def __init__(self, pauseplayprogress=False, watchedindicators=False, unwatchedepisodes=False):
@@ -13,8 +9,6 @@ class TraktMethods():
         self._pauseplayprogress = pauseplayprogress  # Set play progress using paused at position
         self._watchedindicators = watchedindicators  # Set watched status and playcount
         self._unwatchedepisodes = unwatchedepisodes  # Set unwatched episode count to total episode count for unwatched tvshows
-        if pauseplayprogress:
-            lazyimport(globals(), 'tmdbhelper.lib.api.kodi.rpc', import_attr="set_playprogress")
 
     def set_playprogress(self, li):
         def _set_playprogress():
@@ -39,7 +33,6 @@ class TraktMethods():
             progress = 0
         li.infoproperties['ResumeTime'] = int(duration * progress // 100)
         li.infoproperties['TotalTime'] = int(duration)
-        set_playprogress(li.get_url(), li.infoproperties['ResumeTime'], li.infoproperties['TotalTime'])
 
     def pre_sync(self, info=None, tmdb_id=None, tmdb_type=None, season=-2, **kwargs):
         info_movies = ['stars_in_movies', 'crew_in_movies', 'trakt_userlist', 'stars_in_both', 'crew_in_both']

@@ -1,12 +1,17 @@
-from xbmc import Monitor
-from tmdbhelper.lib.update.tagger import LibraryTagger
+import xbmc
 
 
-class UpdateMonitor(Monitor):
+class UpdateMonitor(xbmc.Monitor):
     """
     Monitors updating Kodi library
     """
 
+    @staticmethod
+    def run_library_tagger():
+        from threading import Thread
+        from tmdbhelper.lib.update.tagger import LibraryTagger
+        Thread(target=LibraryTagger).start()
+
     def onScanFinished(self, library):
         if library == 'video':
-            LibraryTagger().run()
+            self.run_library_tagger()

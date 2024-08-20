@@ -2586,6 +2586,11 @@ msgctxt "#32508"
 msgid "Recache Kodi Library details when building players"
 msgstr ""
 
+#: /resources/settings.xml
+msgctxt "#32509"
+msgid "Use alternative TMDb API url"
+msgstr ""
+
 msgctxt "#30030"
 msgid "Hindi (India)"
 msgstr ""

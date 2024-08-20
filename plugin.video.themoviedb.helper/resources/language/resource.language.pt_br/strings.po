@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
-"PO-Revision-Date: 2023-08-04 08:19+0000\n"
+"PO-Revision-Date: 2024-10-31 08:19+0000\n"
 "Last-Translator: Havokdan <havokdan@yahoo.com.br>\n"
 "Language-Team: Português do Brasil\n"
 "MIME-Version: 1.0\n"
@@ -1029,7 +1029,7 @@ msgstr "Seu"
 #: /resources/lib/plugin.py
 msgctxt "#32202"
 msgid "Airing This Week"
-msgstr "Exibição esta semana"
+msgstr "Exibição Esta Semana"
 
 #: /resources/lib/plugin.py
 msgctxt "#32203"
@@ -1112,7 +1112,8 @@ msgid ""
 "Artwork found for {} ID {}\n"
 "{}"
 msgstr ""
-"Arte encontrada para {} ID {}\n{}"
+"Arte encontrada para {} ID {}\n
+"{}"
 
 #: /resources/lib/fanarttv.py
 msgctxt "#32219"
@@ -2629,6 +2630,11 @@ msgstr "Pasta de ícones de gênero (Trakt)"
 msgctxt "#32508"
 msgid "Recache Kodi Library details when building players"
 msgstr "Recache os detalhes da biblioteca Kodi ao construir players"
+
+#: /resources/settings.xml
+msgctxt "#32509"
+msgid "Use alternative TMDb API url"
+msgstr "Usar url alternativa para API do TMDb"
 
 msgctxt "#30030"
 msgid "Hindi (India)"

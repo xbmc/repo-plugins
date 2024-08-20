@@ -19,6 +19,9 @@ class LibraryTagger(LibraryCommonFunctions):
         self.debug_logging = True
         self._msg_start = f'{get_localized(32167)}...'
         self._msg_title = 'TMDbHelper Tagger'
+        self._start()
+        self.update_tags()
+        self._finish()
 
     def add_item(self, item_type, database, user_slug, list_slug, tmdb_id=None, imdb_id=None, **kwargs):
         if not tmdb_id:
@@ -53,8 +56,3 @@ class LibraryTagger(LibraryCommonFunctions):
             self.add_userlist(user_slug=user_slug, list_slug=list_slug, confirm=False)
             create_playlist('movies', user_slug, list_slug)
             create_playlist('tvshows', user_slug, list_slug)
-
-    def run(self):
-        self._start()
-        self.update_tags()
-        self._finish()

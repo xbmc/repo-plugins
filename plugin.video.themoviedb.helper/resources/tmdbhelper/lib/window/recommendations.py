@@ -24,19 +24,20 @@ PROP_ONCLOSED = 'Recommendations.OnClosed'
 
 ACTION_CONTEXT_MENU = (117,)
 ACTION_SHOW_INFO = (11,)
-ACTION_SELECT = (7, )
+ACTION_SELECT = (7, 100, )
 ACTION_CLOSEWINDOW = (9, 10, 92, 216, 247, 257, 275, 61467, 61448,)
 ID_VIDEOINFO = 12003
 
 
 """
 Runscript(plugin.video.themoviedb.helper,recommendations=)
-recommendations=list_id(int)|paramstring(str)|related(bool)|action(str) [Separate multiples with || ]
+recommendations=list_id(int)|paramstring(str)|related(bool)|action(str)|close(str) [Separate multiples with || ]
     * The lists to add. Separate additional lists with ||
     * list_id: the container that the items will be added
     * paramstring: the tmdbhelper base path such as info=cast
     * related: whether to add related query params to the paramstring
     * action: the action to perform. can be info|play|text or a Kodi builtin
+    * close: override window close and execute a Kodi builtin instead
 window_id=window_id(int)
     * The custom window that will act as the base window
 setproperty=property(str)
@@ -52,7 +53,35 @@ context=builtin(str)
 script-tmdbhelper-recommendations.xml
 <onload>SetProperty(Action_{list_id},action)</onload>
     * Set an action for an undefined list
+<onload>SetProperty(Close_{list_id},builtin)</onload>
+    * Set a builtin to execute instead of closing for an undefined list
 """
+
+
+class RecommendationsValues():
+    def __init__(self, *args):
+        self.values = args
+        self.list_id = int(self.values[0])
+        self.url = self.values[1]
+        self.related = self.get_value(2, fallback='').lower() == 'true'
+        self.action = self.get_value(3)
+        self.close = self.get_value(4)
+
+    @property
+    def output_dictionary(self):
+        return {
+            'list_id': self.list_id,
+            'url': self.url,
+            'related': self.related,
+            'action': self.action,
+            'close': self.close,
+        }
+
+    def get_value(self, x, fallback=None):
+        try:
+            return self.values[x]
+        except IndexError:
+            return fallback
 
 
 class WindowRecommendations(xbmcgui.WindowXMLDialog):
@@ -66,10 +95,10 @@ class WindowRecommendations(xbmcgui.WindowXMLDialog):
         self._tmdb_affix = f"&nextpage=false{kwargs.get('affix') or TMDB_AFFIX}"
         self._tmdb_query = {i: kwargs[i] for i in TMDB_QUERY_PARAMS if kwargs.get(i)}
         self._tmdb_id = kwargs.get('tmdb_id') or self._tmdb_api.get_tmdb_id(tmdb_type=self._tmdb_type, **self._tmdb_query)
-        self._recommendations = sorted(kwargs['recommendations'].split('||'))
         self._recommendations = {
-            int(list_id): {'list_id': int(list_id), 'url': url, 'related': related.lower() == 'true', 'action': action}
-            for list_id, url, related, action in (i.split('|') for i in self._recommendations)}
+            rv.list_id: rv.output_dictionary
+            for rv in (RecommendationsValues(*i.split('|')) for i in sorted(kwargs['recommendations'].split('||')))
+        }
         self._queue = (i for i in self._recommendations)
         self._context_action = kwargs.get('context')
         self._window_id = kwargs['window_id']
@@ -129,13 +158,20 @@ class WindowRecommendations(xbmcgui.WindowXMLDialog):
     def onAction(self, action):
         _action_id = action.getId()
         if _action_id in ACTION_CLOSEWINDOW:
-            return self.do_close()
+            return self.do_back()
         if _action_id in ACTION_SHOW_INFO:
             return self.do_action()
         if _action_id in ACTION_CONTEXT_MENU:
             return executebuiltin(self._context_action) if self._context_action else self.do_action()
         if _action_id in ACTION_SELECT:
             return self.do_action()
+
+    def do_back(self):
+        focus_id = self.getFocusId()
+        _action = self.getProperty(f'Close_{focus_id}') or self._recommendations.get(focus_id, {}).get('close')
+        if not _action:
+            return self.do_close()
+        return executebuiltin(_action)
 
     def do_close(self):
         self._state = 'onback'

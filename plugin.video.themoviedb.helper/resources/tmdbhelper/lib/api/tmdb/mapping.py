@@ -1,7 +1,7 @@
 from jurialmunkey.parser import try_int, try_float, dict_to_list, get_params, IterProps
 from tmdbhelper.lib.api.mapping import UPDATE_BASEKEY, _ItemMapper, get_empty_item
 from tmdbhelper.lib.addon.plugin import get_mpaa_prefix, get_language, convert_type, get_setting, get_localized
-from tmdbhelper.lib.addon.tmdate import format_date, age_difference, is_future_timestamp
+from tmdbhelper.lib.addon.tmdate import format_date_obj, age_difference, is_future_timestamp, convert_timestamp, get_days_to_air
 from tmdbhelper.lib.addon.consts import (
     IMAGEPATH_ORIGINAL,
     IMAGEPATH_QUALITY_POSTER,
@@ -168,13 +168,15 @@ def get_trailer(v, iso_639_1=None):
 
 
 def get_external_ids(v):
-    unique_ids = {}
-    if v.get('imdb_id'):
-        unique_ids['imdb'] = v['imdb_id']
-    if v.get('tvdb_id'):
-        unique_ids['tvdb'] = v['tvdb_id']
-    if v.get('id'):
-        unique_ids['tmdb'] = v['id']
+
+    def _get_key_name(key):
+        if key == 'id':
+            return 'tmdb'
+        if key.endswith('_id'):
+            return key[:-3]
+        return key
+
+    unique_ids = {_get_key_name(key): value for key, value in v.items() if key and value}
     return unique_ids
 
 
@@ -219,13 +221,14 @@ def get_extra_art(v):
 def get_episode_to_air(v, name):
     i = v or {}
     air_date = i.get('air_date')
+    air_date_obj = convert_timestamp(air_date, time_fmt="%Y-%m-%d", time_lim=10, utc_convert=False)
     infoproperties = {}
-    infoproperties[f'{name}'] = format_date(air_date, region_fmt='dateshort')
-    infoproperties[f'{name}.long'] = format_date(air_date, region_fmt='datelong')
-    infoproperties[f'{name}.short'] = format_date(air_date, "%d %b")
-    infoproperties[f'{name}.day'] = format_date(air_date, "%A")
-    infoproperties[f'{name}.day_short'] = format_date(air_date, "%a")
-    infoproperties[f'{name}.year'] = format_date(air_date, "%Y")
+    infoproperties[f'{name}'] = format_date_obj(air_date_obj, region_fmt='dateshort')
+    infoproperties[f'{name}.long'] = format_date_obj(air_date_obj, region_fmt='datelong')
+    infoproperties[f'{name}.short'] = format_date_obj(air_date_obj, "%d %b")
+    infoproperties[f'{name}.day'] = format_date_obj(air_date_obj, "%A")
+    infoproperties[f'{name}.day_short'] = format_date_obj(air_date_obj, "%a")
+    infoproperties[f'{name}.year'] = format_date_obj(air_date_obj, "%Y")
     infoproperties[f'{name}.episode'] = i.get('episode_number')
     infoproperties[f'{name}.name'] = i.get('name')
     infoproperties[f'{name}.tmdb_id'] = i.get('id')
@@ -235,6 +238,11 @@ def get_episode_to_air(v, name):
     infoproperties[f'{name}.votes'] = i.get('vote_count')
     infoproperties[f'{name}.thumb'] = get_imagepath_thumb(i.get('still_path'))
     infoproperties[f'{name}.original'] = air_date
+
+    if air_date_obj:
+        days_to_air, is_aired = get_days_to_air(air_date_obj)
+        infoproperties[f'{name}.days_from_aired' if is_aired else f'{name}.days_until_aired'] = str(days_to_air)
+
     return infoproperties
 
 

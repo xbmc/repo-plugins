@@ -2,7 +2,7 @@ from xbmcgui import ListItem as KodiListItem
 from jurialmunkey.parser import try_int, merge_two_dicts
 from infotagger.listitem import ListItemInfoTag
 from tmdbhelper.lib.addon.consts import ACCEPTED_MEDIATYPES, PARAM_WIDGETS_RELOAD, PARAM_WIDGETS_RELOAD_FORCED
-from tmdbhelper.lib.addon.plugin import ADDONPATH, PLUGINPATH, convert_media_type, get_setting, get_condvisibility, get_localized, encode_url
+from tmdbhelper.lib.addon.plugin import ADDONPATH, PLUGINPATH, convert_media_type, get_setting, get_condvisibility, get_localized, encode_url, get_flatseasons_info_param, GlobalSettingsDict
 from tmdbhelper.lib.addon.tmdate import is_unaired_timestamp
 from tmdbhelper.lib.addon.logger import kodi_log
 from jurialmunkey.window import get_property
@@ -12,15 +12,13 @@ from tmdbhelper.lib.items.context import ContextMenu
 """
 
 
-_is_skinshortcuts = get_condvisibility("Window.IsVisible(script-skinshortcuts.xml)") or get_property('IsSkinShortcut')
-_is_skinshortcuts_standard = _is_skinshortcuts and get_property('IsStandardSkinShortcut')
-_int_default_select = get_setting('default_select', 'int')
-_is_only_resolve_strm = get_setting('only_resolve_strm')
-_is_hide_unaired_movies = get_setting('hide_unaired_movies')
-_is_hide_unaired_episodes = get_setting('hide_unaired_episodes')
-_is_flatten_seasons = get_setting('flatten_seasons')
-_is_nextaired_linklibrary = get_setting('nextaired_linklibrary')
-_is_trakt_watchedindicators = get_setting('trakt_watchedindicators')
+global_setting = GlobalSettingsDict()
+global_setting.route = {
+    'is_skinshortcuts': (lambda: get_condvisibility("Window.IsVisible(script-skinshortcuts.xml)") or get_property('IsSkinShortcut'), None, ),
+    'is_skinshortcuts_standard': (lambda: global_setting['is_skinshortcuts'] and get_property('IsStandardSkinShortcut'), None, ),
+    'default_select': (get_setting, ('default_select', 'int', )),
+    'flatseasons_info_param': (get_flatseasons_info_param, None, )
+}
 
 
 def ListItem(*args, **kwargs):
@@ -116,7 +114,7 @@ class _ListItem(object):
     def episode(self):
         return
 
-    def is_unaired(self, format_label=None, check_hide_settings=True, no_date=True):
+    def is_unaired(self, format_label=None, no_date=True):
         return
 
     def unaired_bool(self):
@@ -148,7 +146,7 @@ class _ListItem(object):
         self.infolabels['tvshowtitle'] = details.get('infolabels', {}).get('tvshowtitle') or self.infolabels.get('tvshowtitle')
 
     def _set_params_reroute_skinshortcuts(self):
-        if not _is_skinshortcuts_standard:
+        if not global_setting['is_skinshortcuts_standard']:
             self.params['widget'] = 'true'
         # Reroute sortable lists to display options in skinshortcuts
         if self.infoproperties.get('is_sortable'):
@@ -159,7 +157,7 @@ class _ListItem(object):
             self.params['reload'] = 'forced'
 
     def set_params_reroute(self, is_fanarttv=False, extended=None, is_cacheonly=False):
-        if _is_skinshortcuts and self.path.startswith(PLUGINPATH):
+        if global_setting['is_skinshortcuts'] and self.path.startswith(PLUGINPATH):
             self._set_params_reroute_skinshortcuts()
 
         # Reroute for extended sorting of trakt list by inprogress to open up next folder
@@ -287,7 +285,7 @@ class _Collection(_ListItem):
 
 
 class _Video(_ListItem):
-    def is_unaired(self, format_label=u'[COLOR=ffcc0000][I]{}[/I][/COLOR]', check_hide_settings=True, no_date=True):
+    def is_unaired(self, format_label=u'[COLOR=ffcc0000][I]{}[/I][/COLOR]', no_date=True):
         try:
             if not is_unaired_timestamp(self.infolabels.get('premiered'), no_date):
                 return
@@ -295,14 +293,12 @@ class _Video(_ListItem):
                 self.label = format_label.format(self.label)
         except Exception as exc:
             kodi_log(f'Error: {exc}', 1)
-        if not check_hide_settings:
-            return True
         return self.unaired_bool()
 
     def _set_params_reroute_default(self):
-        if not _int_default_select:
+        if not global_setting['default_select']:
             self.params['info'] = 'play'
-            if not _is_only_resolve_strm:
+            if not global_setting['only_resolve_strm']:
                 self.infoproperties['isPlayable'] = 'true'
         else:
             self.params['info'] = 'related'
@@ -337,12 +333,12 @@ class _Movie(_Video):
         playcount = try_int(playcount)
         # Setting playcount to 0 overrides internal playcount from Kodi to allow Trakt to set unwatched
         # Not setting playcount at all will allow Kodi to manage internally instead
-        if not _is_trakt_watchedindicators and not playcount:
+        if not global_setting['trakt_watchedindicators'] and not playcount:
             return
         self.infolabels['playcount'] = playcount
 
     def unaired_bool(self):
-        if _is_hide_unaired_movies:
+        if global_setting['hide_unaired_movies']:
             return True
 
     def _set_params_reroute_details(self):
@@ -378,16 +374,16 @@ class _Tvshow(_Video):
             self.infoproperties['totalseasons'] = season_count
 
     def unaired_bool(self):
-        if _is_hide_unaired_episodes:
+        if global_setting['hide_unaired_episodes']:
             return True
 
     def _set_params_reroute_details(self):
         self._set_contextmenu_choosedefault('tv', self.unique_ids.get('tmdb'))
-        if _int_default_select:
+        if global_setting['default_select']:
             self.params['info'] = 'related'
             self.is_folder = False
             return
-        self.params['info'] = 'flatseasons' if _is_flatten_seasons else 'seasons'
+        self.params['info'] = global_setting['flatseasons_info_param']
 
 
 class _Season(_Tvshow):
@@ -432,7 +428,7 @@ class _Episode(_Tvshow):
         playcount = try_int(playcount)
         # Setting playcount to 0 overrides internal playcount from Kodi to allow Trakt to set unwatched
         # Not setting playcount at all will allow Kodi to manage internally instead
-        if not _is_trakt_watchedindicators and not playcount:
+        if not global_setting['trakt_watchedindicators'] and not playcount:
             return
         self.infolabels['playcount'] = playcount
 
@@ -442,7 +438,7 @@ class _Episode(_Tvshow):
             season=self.infolabels.get('season'),
             episode=self.infolabels.get('episode'))
         if (self.parent_params.get('info') == 'library_nextaired'
-                and _is_nextaired_linklibrary
+                and global_setting['nextaired_linklibrary']
                 and self.infoproperties.get('tvshow.dbid')):
             self.path = f'videodb://tvshows/titles/{self.infoproperties["tvshow.dbid"]}/'
             self.params = {}

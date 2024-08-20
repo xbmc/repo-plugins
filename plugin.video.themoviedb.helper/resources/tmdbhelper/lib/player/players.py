@@ -738,7 +738,9 @@ class Players(PlayerProperties, PlayerDetails, PlayerMethods, PlayerHacks):
         if isinstance(actions, list):
             return self._get_path_from_actions(actions)
         if isinstance(actions, str):
-            return (self.string_format_map(actions), player.get('is_folder', False))  # Single path so return it formatted
+            if not player.get('is_local', False):
+                actions = self.string_format_map(actions)  # Format our path if a single path and not a file
+            return (actions, player.get('is_folder', False))
 
     def get_default_player(self):
         """ Returns default player """

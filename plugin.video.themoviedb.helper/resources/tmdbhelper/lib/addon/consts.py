@@ -31,17 +31,19 @@ TMDB_PARAMS_EPISODES = {
     'episode': '{episode_number}'}
 
 IMAGEPATH_ORIGINAL = 'https://image.tmdb.org/t/p/original'
-IMAGEPATH_HIGH = 'https://image.tmdb.org/t/p/w1280'
-IMAGEPATH_LOW = 'https://image.tmdb.org/t/p/w780'
-IMAGEPATH_POSTER = 'https://image.tmdb.org/t/p/w500'
+IMAGEPATH_LARGEFANART = 'https://image.tmdb.org/t/p/w1280'
+IAMGEPATH_SMALLFANART = 'https://image.tmdb.org/t/p/w780'
+IMAGEPATH_LARGEPOSTER = 'https://image.tmdb.org/t/p/w780'
+IMAGEPATH_BASICPOSTER = 'https://image.tmdb.org/t/p/w500'
 IMAGEPATH_SMALLPOSTER = 'https://image.tmdb.org/t/p/w342'
+IMAGEPATH_LARGELOGO = 'https://image.tmdb.org/t/p/w500'
 IMAGEPATH_SMALLLOGO = 'https://image.tmdb.org/t/p/w300'
 IMAGEPATH_NEGATE = 'https://image.tmdb.org/t/p/h100_filter(negate,000,666)'
-IMAGEPATH_ALL = [IMAGEPATH_ORIGINAL, IMAGEPATH_HIGH, IMAGEPATH_LOW, IMAGEPATH_POSTER, IMAGEPATH_SMALLPOSTER, IMAGEPATH_SMALLLOGO]
-IMAGEPATH_QUALITY_POSTER = [IMAGEPATH_POSTER, IMAGEPATH_POSTER, IMAGEPATH_POSTER, IMAGEPATH_SMALLPOSTER]
-IMAGEPATH_QUALITY_FANART = [IMAGEPATH_ORIGINAL, IMAGEPATH_HIGH, IMAGEPATH_HIGH, IMAGEPATH_LOW]
-IMAGEPATH_QUALITY_THUMBS = [IMAGEPATH_ORIGINAL, IMAGEPATH_HIGH, IMAGEPATH_LOW, IMAGEPATH_LOW]
-IMAGEPATH_QUALITY_CLOGOS = [IMAGEPATH_ORIGINAL, IMAGEPATH_POSTER, IMAGEPATH_POSTER, IMAGEPATH_SMALLLOGO]
+IMAGEPATH_ALL = [IMAGEPATH_ORIGINAL, IMAGEPATH_LARGEFANART, IAMGEPATH_SMALLFANART, IMAGEPATH_BASICPOSTER, IMAGEPATH_SMALLPOSTER, IMAGEPATH_SMALLLOGO]
+IMAGEPATH_QUALITY_POSTER = [IMAGEPATH_LARGEPOSTER, IMAGEPATH_BASICPOSTER, IMAGEPATH_BASICPOSTER, IMAGEPATH_SMALLPOSTER]
+IMAGEPATH_QUALITY_FANART = [IMAGEPATH_ORIGINAL, IMAGEPATH_LARGEFANART, IMAGEPATH_LARGEFANART, IAMGEPATH_SMALLFANART]
+IMAGEPATH_QUALITY_THUMBS = [IMAGEPATH_ORIGINAL, IMAGEPATH_LARGEFANART, IAMGEPATH_SMALLFANART, IAMGEPATH_SMALLFANART]
+IMAGEPATH_QUALITY_CLOGOS = [IMAGEPATH_ORIGINAL, IMAGEPATH_LARGELOGO, IMAGEPATH_LARGELOGO, IMAGEPATH_SMALLLOGO]
 ARTWORK_BLACKLIST = [
     [],
     ['poster', 'season.poster', 'tvshow.poster'],
@@ -60,7 +62,9 @@ PLAYERS_PRIORITY = 1000
 PLAYERS_REQUIRED_IDS = ['{imdb}', '{tvdb}', '{trakt}', '{slug}', '{eptvdb}' '{epimdb}', '{eptrakt}', '{epslug}', '{epid}']
 PLAYERS_CHOSEN_DEFAULTS_FILENAME = 'player_defaults'
 
-NO_LABEL_FORMATTING = ['details', 'upcoming', 'trakt_calendar', 'trakt_myairing', 'trakt_anticipated', 'library_nextaired', 'library_airingnext', 'trakt_airingnext', 'videos', 'trakt_watchlist_anticipated']
+NO_UNAIRED_LABEL = ['details', 'trakt_calendar', 'library_nextaired', 'videos', 'trakt_watchlist_anticipated', 'trakt_anticipated']
+NO_UNAIRED_CHECK = ['upcoming', 'trakt_myairing', 'discover', 'library_airingnext', 'trakt_airingnext']
+REMOVE_EPISODE_COUNT = ['stars_in_tvshows', 'stars_in_both', 'crew_in_tvshows', 'crew_in_both']
 
 PARAM_WIDGETS_RELOAD = 'reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]'
 PARAM_WIDGETS_RELOAD_FORCED = 'reload=$INFO[System.Time(hh:mm:ss)]'

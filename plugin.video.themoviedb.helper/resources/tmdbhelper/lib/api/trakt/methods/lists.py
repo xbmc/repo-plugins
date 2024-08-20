@@ -310,13 +310,28 @@ def get_sync_list(
     always_refresh=True, extended=None, filters=None
 ):
     from tmdbhelper.lib.api.trakt.items import TraktItems
-    limit = limit or self.sync_item_limit
-    sync = self.get_sync(sync_type, trakt_type, extended=extended)
-    func = TraktItems(items=sync, trakt_type=trakt_type).build_items
+
+    sync_trakt_types = ['movie', 'show'] if trakt_type == 'both' else [trakt_type]
+
+    def _configure_item(i, sync_trakt_type):
+        i['type'] = sync_trakt_type
+        return i
+
+    sync = []
+    for sync_trakt_type in sync_trakt_types:
+        items = self.get_sync(sync_type, sync_trakt_type, extended=extended) or []
+        sync += [_configure_item(i, sync_trakt_type) for i in items if i]
+
+    if not sync:
+        return
+
+    func = TraktItems(items=sync).build_items
     response = func(sort_by, sort_how, filters=filters)
     if not response:
         return
+
     from tmdbhelper.lib.items.pages import PaginatedItems
+    limit = limit or self.sync_item_limit
     response = PaginatedItems(items=response['items'], page=page, limit=limit)
     return response.items if not next_page else response.items + response.next_page
 

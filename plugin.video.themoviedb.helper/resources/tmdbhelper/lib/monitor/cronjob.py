@@ -8,12 +8,11 @@ class CronJobMonitor(Thread):
 
     _poll_time = CRONJOB_POLL_TIME
 
-    def __init__(self, update_hour=0):
-        from xbmc import Monitor
+    def __init__(self, parent, update_hour=0):
         Thread.__init__(self)
         self.exit = False
         self.update_hour = update_hour
-        self.xbmc_monitor = Monitor()
+        self.update_monitor = parent.update_monitor
 
     def _on_startup(self):
         self._do_delete_old_databases()
@@ -47,7 +46,7 @@ class CronJobMonitor(Thread):
         from jurialmunkey.parser import boolean
         from jurialmunkey.window import get_property
         self.trakt_api.authorize(confirmation=True)
-        self.xbmc_monitor.waitForAbort(1)
+        self.update_monitor.waitForAbort(1)
         if not boolean(get_property('TraktIsAuth')):
             return
         from tmdbhelper.lib.script.method.trakt import get_stats
@@ -88,8 +87,6 @@ class CronJobMonitor(Thread):
     def run(self):
         self._on_startup()
 
-        while not self.xbmc_monitor.abortRequested() and not self.exit:
-            self.xbmc_monitor.waitForAbort(self._poll_time)
+        while not self.update_monitor.abortRequested() and not self.exit:
+            self.update_monitor.waitForAbort(self._poll_time)
             self._on_poll()
-
-        del self.xbmc_monitor

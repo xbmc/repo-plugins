@@ -1,6 +1,6 @@
 from xbmcgui import Dialog
 from tmdbhelper.lib.items.listitem import ListItem
-from tmdbhelper.lib.api.fanarttv.api import ARTWORK_TYPES
+from tmdbhelper.lib.api.fanarttv.api import ARTWORK_TYPES, get_encoded_url
 from tmdbhelper.lib.api.tmdb.mapping import get_imagepath_poster, get_imagepath_fanart, get_imagepath_thumb, get_imagepath_logo
 from tmdbhelper.lib.addon.dialog import BusyDialog
 from tmdbhelper.lib.addon.plugin import get_localized, executebuiltin
@@ -13,10 +13,10 @@ class _ArtworkSelector():
         ftv_items = self.ftv_api.get_all_artwork(ftv_id, ftv_type, season=season, artlist_type=artwork_type, season_type='season_only')
         return [
             ListItem(
-                label=i.get('url'),
+                label=get_encoded_url(i),
                 label2=get_localized(32219).format(i.get('lang', ''), i.get('likes', 0), i.get('id', '')),
-                art={'thumb': i.get('url')}).get_listitem()
-            for i in ftv_items if i.get('url')]
+                art={'thumb': get_encoded_url(i)}).get_listitem()
+            for i in ftv_items if get_encoded_url(i)]
 
     def get_tmdb_art(self, tmdb_type, tmdb_id, artwork_type, season=None):
         mappings = {

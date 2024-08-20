@@ -559,7 +559,7 @@
                     <level>0</level>
                     <default>5</default>
                     <constraints>
-                        <minimum>5</minimum>
+                        <minimum>1</minimum>
                         <step>1</step>
                         <maximum>20</maximum>
                     </constraints>
@@ -683,9 +683,9 @@
                     <default>False</default>
                     <control type="toggle"/>
                 </setting>
-                <setting id="service_listitem_readahead" type="boolean" label="32480" help="">
+                <setting id="service_listitem_read_ahead" type="boolean" label="32480" help="">
                     <level>0</level>
-                    <default>True</default>
+                    <default>False</default>
                     <control type="toggle"/>
                 </setting>
                 <setting id="recache_kodidb" type="action" label="32467" help="">
@@ -898,6 +898,11 @@
                 </setting>
             </group>
             <group id="3" label="29921">
+                <setting id="use_alternate_api_url" type="boolean" label="32509">
+                    <level>0</level>
+                    <default>False</default>
+                    <control type="toggle"/>
+                </setting>
                 <setting id="max_threads" type="integer" label="32410" help="">
                     <level>0</level>
                     <default>0</default>
@@ -948,11 +953,6 @@
                         <allowempty>true</allowempty>
                     </constraints>
                     <control type="button" format="action"/>
-                </setting>
-                <setting id="rebuild_listitem_offscreen" type="boolean" label="32478" help="32479">
-                    <level>0</level>
-                    <default>False</default>
-                    <control type="toggle"/>
                 </setting>
             </group>
             <group id="4" label="14260">

@@ -8,8 +8,7 @@ from tmdbhelper.lib.api.api_keys.tmdb import API_KEY
 
 ARTWORK_QUALITY = get_setting('artwork_quality', 'int')
 ARTLANG_FALLBACK = True if get_setting('fanarttv_enfallback') and not get_setting('fanarttv_secondpref') else False
-
-API_URL = 'https://api.themoviedb.org/3'
+API_URL = 'https://api.themoviedb.org/3' if not get_setting('use_alternate_api_url') else 'https://api.tmdb.org/3'
 APPEND_TO_RESPONSE = 'credits,images,release_dates,content_ratings,external_ids,movie_credits,tv_credits,keywords,reviews,videos,watch/providers'
 
 

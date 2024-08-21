@@ -1,3 +1,6 @@
+[B]Version 6.4.3 - 2024-08-20[/B]
+- Fix issue of distutils being removed in python 3.12
+
 [B]Version 6.4.2 - 2024-05-06[/B]
 - Fix not unfolding my-list
 

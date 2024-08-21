@@ -23,7 +23,6 @@ import pickle
 import traceback
 import time
 import urllib.parse as urlparse
-from distutils.version import StrictVersion
 
 import xbmc
 import xbmcaddon
@@ -71,6 +70,10 @@ def kodi_version_major():
     return int(kodi_version().split('.')[0])
 
 
+def version(s):
+    return [int(item) for item in s.split('.')]
+
+
 class DrDkTvAddon(object):
     def __init__(self, plugin_url, plugin_handle):
         self._plugin_url = plugin_url
@@ -102,7 +105,7 @@ class DrDkTvAddon(object):
             if settings_version == '' and kodi_version_major() <= 19:
                 # kodi matrix subtitle handling https://github.com/xbmc/inputstream.adaptive/issues/1037
                 set_setting('enable.localsubtitles', 'true')
-            elif addon_V == StrictVersion('6.2.0').version and kodi_version_major() == 20:
+            elif addon_V == version('6.2.0') and kodi_version_major() == 20:
                 set_setting('enable.localsubtitles', 'false')
 
     def _version_check(self):
@@ -114,10 +117,10 @@ class DrDkTvAddon(object):
 
         # Compare versions (settings_version was not present in version 6.0.2 and older)
         if settings_version != '':
-            settings_V = StrictVersion(settings_version.split('+')[0]).version
+            settings_V = version(settings_version.split('+')[0])
         else:
-            settings_V = StrictVersion('6.0.2').version
-        addon_V = StrictVersion(addon_version.split('+')[0]).version
+            settings_V = version('6.0.2')
+        addon_V = version(addon_version.split('+')[0])
 
         if addon_V > settings_V:
             # New version found, save addon version to settings

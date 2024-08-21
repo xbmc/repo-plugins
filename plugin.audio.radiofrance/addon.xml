@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.radiofrance" name="RadioFrance — Lives and Podcasts" version="1.0.0" provider-name="bateast">
+    <requires>
+        <import addon="script.module.requests" version="2.25.1" />
+        <import addon="xbmc.python" version="3.0.0" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">https://www.radiofrance.fr</summary>
+        <license>GPL-3.0-or-later</license>
+        <description lang="en">Get media, livestations and podcasts from RadioFrance (https://www.radiofrance.fr/podcasts)</description>
+        <website>https://github.com/bateast/plugin.audio.radiofrance</website>
+        <source>https://github.com/bateast/plugin.audio.radiofrance</source>
+        <platform>all</platform>
+        <news>
+            v1.0.0 (2024-08)
+            - Open to live station and RadioFrance landing page
+            - Add translation
+            - *Rename to RadioFrance*
+            - add formal icon and fanart
+            v0.1.0 (2024-04-23)
+            - First workable version
+            v0.2.0 (2024-04-24)
+            - Major cleanup for to handle more properly RadioFrance svelte logic
+            - Add Search function
+        </news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

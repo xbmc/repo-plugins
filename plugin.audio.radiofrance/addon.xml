@@ -9,10 +9,10 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <summary lang="en">https://www.radiofrance.fr</summary>
-        <license>GNU General Public License, v3</license>
+        <license>GPL-3.0-or-later</license>
         <description lang="en">Get media, livestations and podcasts from RadioFrance (https://www.radiofrance.fr/podcasts)</description>
-        <website>https://github.com/bateast/plugin.audio.podcastrf</website>
-        <source>https://github.com/bateast/plugin.audio.podcastrf</source>
+        <website>https://github.com/bateast/plugin.audio.radiofrance</website>
+        <source>https://github.com/bateast/plugin.audio.radiofrance</source>
         <platform>all</platform>
         <news>
             v1.0.0 (2024-08)

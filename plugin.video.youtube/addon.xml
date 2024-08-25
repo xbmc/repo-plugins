@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="7.0.9" provider-name="anxdpanic, bromix, MoojMidge">
+<addon id="plugin.video.youtube" name="YouTube" version="7.0.9.1" provider-name="anxdpanic, bromix, MoojMidge">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.27.1"/>
@@ -108,34 +108,14 @@
         <disclaimer lang="vi_VN">Plugin này không được xác nhận bởi Google</disclaimer>
         <disclaimer lang="zh_CN">此插件未被谷歌认可</disclaimer>
         <disclaimer lang="zh_TW">此附加元件未由Google支持</disclaimer>
-    <news>## v7.0.9
+    <news>## v7.0.9.1
 ### Fixed
-- Fix renaming playlists
-- Improve http server wakeup
-- Fix ask for video quality setting being inconsistently applied
-- Fix http server not sleeping after initial start of service
-- Fix not reloading WL playlist if open after playback of video in WL
-- Fix navigating to search page after playback and prompt re-opening
-- Fix issues with next page and jump to page in related video listings
-- Attempt to workaround issue with getting system idle time on Xbox
-- Better handle unknown errors in player request responses
-- Fix double playback due to busy dialog crash workaround
-- Fix disabling certification verification
-- Fix not using player request fallbacks
-- Fix incorrectly identifying VP9 streams
-- Fix videos not able to be re-opened from Kodi playlist
-- Fix http server not working in Kodi 18
-- Fix issues with http server wakeup and sleep on initial start/restart
-- Fix API requests failing if not logged in
-- Fix multi-audio streams failing to play
-- Fix not properly defining default audio role
-- Don't retry player requests for offline live streams
-- Fix incorrectly updating playing live stream details
-- Fix typo causing http server to restart when checking status
+- Add playlist_type_hint property to workaround issues with CPlayListPlayer::Play
+- Fix comments not displaying for recommended videos
+- Fix not correctly loading bookmarks for My Subscriptions
+- Fix invalid escape sequence in non-raw string
+- Attempt to fix various threading issues with My Subscriptions
 
-### Changed
-- Make live query parameter optional when playing channel live stream
-- Allow for removal of custom watch later and history playlists from settings
-  - Use default value of "HL" for history or "WL" for watch later as reset value
-  - This will then clear the setting and clear value from ac</news></extension>
+### New
+- Add refresh settings to Setup Wizard</news></extension>
 </addon>

@@ -437,6 +437,8 @@ def get_latest_from_channel(channel_id, page, filter_shorts, minimum_duration_in
         video_id = sorted_data[x]['id']
         thumb = sorted_data[x]['snippet']['thumbnails']['high']['url']
         desc = sorted_data[x]['snippet']['description']
+        if not 'duration' in sorted_data[x]['contentDetails']:
+            continue
         duration = sorted_data[x]['contentDetails']['duration']
         seconds = yt_time(duration)
         date = re.search("[0-9]{4}-[0-9]{2}-[0-9]{2}", sorted_data[x]['snippet']['publishedAt'])

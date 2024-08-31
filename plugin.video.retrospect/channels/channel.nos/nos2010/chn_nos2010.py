@@ -2,7 +2,7 @@
 
 import datetime
 import time
-from typing import Optional, List, Tuple, Union
+from typing import Optional, List, Tuple, Union, Dict
 
 import pytz
 
@@ -12,6 +12,7 @@ from resources.lib import mediatype
 from resources.lib.channelinfo import ChannelInfo
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.logger import Logger
+from resources.lib.parserdata import ParserData
 from resources.lib.regexer import Regexer
 from resources.lib.helpers import subtitlehelper
 from resources.lib.helpers.jsonhelper import JsonHelper
@@ -87,16 +88,19 @@ class Channel(chn_class.Channel):
         self._add_data_parsers([
             "https://npo.nl/start/api/domain/page-collection?guid=",
             "https://npo.nl/start/api/domain/page-collection?type=series&guid=",
-            "https://npo.nl/start/api/domain/search-results?searchType=series",
-            "https://npo.nl/start/api/domain/recommendation-collection?key=trending"],
+            "https://npo.nl/start/api/domain/search-results?searchType=series"],
             name="Collections with series", json=True, requires_logon=bool(self.__user_name),
+            parser=["items"],
+            creator=self.create_api_program_item)
+        # Use the new `label` options for the collections
+        self._add_data_parser(
+            "https://npo.nl/start/api/domain/recommendation-collection?key=", name="Collection with series",
+            json=True, label="collection-with-series", requires_logon=bool(self.__user_name),
             parser=["items"],
             creator=self.create_api_program_item)
 
         # If the user was logged in, we need to refresh the token otherwise it will result in 403
         self._add_data_parsers([
-            "https://npo.nl/start/api/domain/recommendation-collection?key=popular-anonymous",
-            "https://npo.nl/start/api/domain/recommendation-collection?key=news-anonymous-v0",
             "https://npo.nl/start/api/domain/search-results?searchType=broadcasts",
             "https://npo.nl/start/api/domain/page-collection?type=program&guid="
         ],
@@ -104,6 +108,12 @@ class Channel(chn_class.Channel):
             parser=["items"],
             creator=self.create_api_episode_item_with_data
         )
+        # Use the new `label` options for the collections
+        self._add_data_parser(
+            "https://npo.nl/start/api/domain/recommendation-collection?key=", name="Collection with videos",
+            json=True, label="collection-with-videos", requires_logon=bool(self.__user_name),
+            parser=["items"],
+            creator=self.create_api_episode_item_with_data)
 
         self._add_data_parser(
             "https://npo.nl/start/api/domain/series-seasons",
@@ -131,24 +141,15 @@ class Channel(chn_class.Channel):
                               parser=["collections"], creator=self.create_api_page_layout)
 
         # Favourites (not yet implemented in the site).
-        # self._add_data_parser("https://npo.nl/start/api/domain/user-profiles",
-        #                       match_type=ParserData.MatchExact, json=True, requires_logon=True,
-        #                       name="Profile selection",
-        #                       parser=[], creator=self.create_profile_item)
-        # self._add_data_parser("#list_profile",
-        #                       name="List favourites for profile",
-        #                       preprocessor=self.switch_profile,
-        #                       requires_logon=True)
-        # self._add_data_parser("https://www.npostart.nl/ums/accounts/@me/favourites?",
-        #                       preprocessor=self.extract_tiles,
-        #                       parser=episode_parser,
-        #                       creator=self.create_episode_item,
-        #                       requires_logon=True)
-        # self._add_data_parser("https://www.npostart.nl/ums/accounts/@me/favourites/episodes?",
-        #                       preprocessor=self.extract_tiles,
-        #                       parser=video_parser,
-        #                       creator=self.create_npo_item,
-        #                       requires_logon=True)
+        self._add_data_parser("https://npo.nl/start/api/domain/user-profiles",
+                              match_type=ParserData.MatchExact, json=True, requires_logon=True,
+                              name="Profile selection",
+                              parser=[], creator=self.create_profile_item)
+
+        self._add_data_parser("#list_profile", name="List profile content", json=True,
+                              preprocessor=self.switch_profile,
+                              parser=["collections"], creator=self.create_profile_content_item,
+                              requires_logon=True)
 
         # OLD but still working?
         # live radio, the folders and items
@@ -186,6 +187,23 @@ class Channel(chn_class.Channel):
             "NED3": "NPO 3",
         }
 
+        self.__collection_names = {
+            "follows": LanguageHelper.Following,
+            "trending": LanguageHelper.Trending,
+            "because-you-watched": LanguageHelper.RecommendedTvShows,
+            "recent": LanguageHelper.Recent,
+            "public-value": None,
+            "series": LanguageHelper.TvShows,
+            "crime": None,
+            "documentaries": None,
+            "continue": LanguageHelper.ContinueWatching,
+            "news": LanguageHelper.LatestNews,
+            "popular": LanguageHelper.Popular,
+            "recommended-for-you": LanguageHelper.RecommendedVideos,
+            "films": LanguageHelper.Movies,
+            "youth": None,
+        }
+
         # ====================================== Actual channel setup STOPS here =======================================
         return
 
@@ -220,7 +238,7 @@ class Channel(chn_class.Channel):
 
         if not username:
             log_out_npo()
-            return True
+            return False
 
         # https://ccm.npo.nl/sites/NPO/npo.nl/version.txt -> app version (for live channels?)
 
@@ -306,7 +324,7 @@ class Channel(chn_class.Channel):
         items = []
 
         def add_item(language_id: int, url: str, content_type: str,
-                     description: str = "", headers: Optional[dict] = None) -> FolderItem:
+                     description: str = "", headers: Optional[dict] = None, parser: str = "") -> FolderItem:
             item = FolderItem(
                 LanguageHelper.get_localized_string(language_id), url, content_type=content_type)
             item.description = description
@@ -314,6 +332,8 @@ class Channel(chn_class.Channel):
             item.dontGroup = True
             if headers:
                 item.HttpHeaders = headers
+            if parser:
+                item.metaData["retrospect:parser"] = parser
             items.append(item)
             return item
 
@@ -321,23 +341,22 @@ class Channel(chn_class.Channel):
                  headers={"X-Requested-With": "XMLHttpRequest"})
 
         # Favorite items that require login
-        # add_item(LanguageHelper.FavouritesId, "https://npo.nl/start/api/domain/user-profiles",
-        #          contenttype.NONE,
-        #          description="Favorieten van de NPO.nl website. Het toevoegen van "
-        #                      "favorieten wordt nog niet ondersteund.",
-        #          headers={"X-Requested-With": "XMLHttpRequest"})
+        if self.__user_name:
+            add_item(LanguageHelper.Profiles, "https://npo.nl/start/api/domain/user-profiles",
+                     contenttype.NONE,
+                     description="Profile van de  npostart.nl website.")
 
         add_item(LanguageHelper.Trending,
                  "https://npo.nl/start/api/domain/recommendation-collection?key=trending-anonymous-v0",
-                 content_type=contenttype.TVSHOWS)
+                 content_type=contenttype.TVSHOWS, parser="collection-with-series")
 
         add_item(LanguageHelper.LatestNews,
                  "https://npo.nl/start/api/domain/recommendation-collection?key=news-anonymous-v0&partyId=unknown",
-                 content_type=contenttype.TVSHOWS)
+                 content_type=contenttype.TVSHOWS, parser="collection-with-videos")
 
         add_item(LanguageHelper.Popular,
                  "https://npo.nl/start/api/domain/recommendation-collection?key=popular-anonymous-v0&partyId=unknown",
-                 content_type=contenttype.TVSHOWS)
+                 content_type=contenttype.TVSHOWS, parser="collection-with-videos")
 
         # add_item(LanguageHelper.Categories,
         #     "https://npo.nl/start/api/domain/page-collection?guid=2670b702-d621-44be-b411-7aae3c3820eb",
@@ -429,30 +448,60 @@ class Channel(chn_class.Channel):
         if not profile_id:
             return data, items
 
-        profile_data = {"id": profile_id, "pinCode": ""}
-
         xsrf_token = self.__get_xsrf_token()
-        UriHandler.open("https://www.npostart.nl/api/account/@me/profile/switch",
-                        data=profile_data,
-                        additional_headers={
-                            "X-Requested-With": "XMLHttpRequest",
-                            "X-XSRF-TOKEN": xsrf_token,
-                            "content-type": "application/x-www-form-urlencoded; charset=UTF-8"
-                        })
+        profile_data = {
+            "csrfToken": xsrf_token,
+            "data": {"profile": {"guid": "0dba0d55-640e-4e70-9b00-1449816f13cf"}}
+        }
+        headers = {"x-xsrf-token": xsrf_token}
+        response = UriHandler.open(
+            "https://npo.nl/start/api/auth/session",
+            json=profile_data, additional_headers=headers)
 
-        # Add the episodes/tvshows
-        epsisodes = FolderItem(
-            LanguageHelper.get_localized_string(LanguageHelper.Episodes),
-            "https://www.npostart.nl/ums/accounts/@me/favourites/episodes?page=1&dateFrom=2014-01-01&tileMapping=dedicated&tileType=asset",
-            content_type=contenttype.EPISODES)
-        items.append(epsisodes)
+        profile_content_url = (
+            f"https://npo.nl/start/api/domain/recommendation-layout?"
+            f"page=home&"
+            #f"partyId=1%3Alp08hirt%3A2c8e90d7048a467babf108e0146ad52d&"
+            f"profileGuid={profile_id}&"
+            # f"subscriptionType=free"
+        )
 
-        tvshows = FolderItem(
-            LanguageHelper.get_localized_string(LanguageHelper.TvShows),
-            "https://www.npostart.nl/ums/accounts/@me/favourites?page=1&type=series&tileMapping=normal&tileType=teaser",
-            content_type=contenttype.TVSHOWS)
-        items.append(tvshows)
+        data = UriHandler.open(profile_content_url)
+
+        # data = JsonHelper(data)
+        # t = data.get_value("collections")
+        # s = [tt["key"] + ":" + tt["type"] for tt in t]
+        # v = ", ".join(s)
         return data, items
+
+    def create_profile_content_item(self, result_set: Dict[str, str]) -> Union[MediaItem, List[MediaItem], None]:
+        profile_id = self.parentItem.metaData["id"]
+        folder_key = result_set["key"]
+        url = (
+            f"https://npo.nl/start/api/domain/recommendation-collection?"
+            f"key={folder_key}&"
+            # f"partyId=1%3Alp08hirt%3A2c8e90d7048a467babf108e0146ad52d&"
+            f"profileGuid={profile_id}&"
+            # f"subscriptionType=free"
+        )
+        title_key = folder_key.rsplit("-", 2)[0]
+        title_id = self.__collection_names.get(title_key, None)
+        if not title_id:
+            return None
+        title = LanguageHelper.get_localized_string(title_id)
+
+        list_type = result_set["type"].lower()
+        if list_type == "program":
+            result = FolderItem(title, url, content_type=contenttype.EPISODES, media_type=mediatype.TVSHOW)
+            result.metaData["retrospect:parser"] = "collection-with-videos"
+        elif list_type == "series":
+            result = FolderItem(title, url, content_type=contenttype.TVSHOWS)
+            result.metaData["retrospect:parser"] = "collection-with-series"
+        else:
+            Logger.warning(f"Missing list type: {list_type}")
+            return None
+
+        return result
 
     # noinspection PyUnusedLocal
     def check_for_single_season(self, data: JsonHelper, items: List[MediaItem]) -> List[MediaItem]:
@@ -818,8 +867,8 @@ class Channel(chn_class.Channel):
         if not needle:
             raise ValueError("No needle present")
 
-        shows_url = "https://npo.nl/start/api/domain/search-results?searchType=series&query=%s&subscriptionType=anonymous"
-        videos_url = "https://npo.nl/start/api/domain/search-results?searchType=broadcasts&query=%s&subscriptionType=anonymous"
+        shows_url = "https://npo.nl/start/api/domain/search-results?searchType=series&searchQuery=%s&subscriptionType=anonymous"
+        videos_url = "https://npo.nl/start/api/domain/search-results?searchType=broadcasts&searchQuery=%s&subscriptionType=anonymous"
 
         items = []
         needle = HtmlEntityHelper.url_encode(needle)

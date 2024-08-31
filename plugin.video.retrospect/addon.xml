@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.7.16"
+        version="5.7.17"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -123,21 +123,21 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.7.16 - Changelog - 2024-08-08[/B]
+        <news>[B]Retrospect v5.7.17 - Changelog - 2024-08-31[/B]
 
-Fixed: Videoland Single detection (Fixed #1824).
+Fixed some minor channel issues. 
 
 [B]Framework related[/B]
-* Fixed: Highlighter of searchresults were shown in the favourites (Fixes #1818).
-* Fixed: In some cases a new searched items would be cleaned up immediately.
+_None_
 
 [B]GUI/Settings/Language related[/B]
 _None_
 
 [B]Channel related[/B]
-* Fixed: Vier.be season and video parsing (See #1820).
-* Fixed: Videoland streams and live TV (Fixes #1813 and Fixes #1804).
-* Fixed: Videoland Single detection (Fixed #1824).
+* Fixed: Older url&#x27;s would have the incorrect build-version of the UR Play app (Fixes #1827).
+* Added: NPO profiles and related stuff (Fixes #1828).
+* Fixed: NPO Search.
+
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

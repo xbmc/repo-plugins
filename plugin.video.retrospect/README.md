@@ -533,7 +533,7 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - Roger Ekholm
 - Magnus Holmquist
 - Lars-Gunnar Carlsson
-- Daniel Polders
+- Daniel Polders (Monthly)
 - Tim Hosman
 - Tobias Skoglund
 - M J Poortman
@@ -545,3 +545,12 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - Matthijs Droes
 - John L Lardee
 - Philip Johansson
+- Nancy Creemers
+- Daniel Enochsson
+- Anders Björk
+- Sape Sikkema
+- Jules Harms
+- Aaj Majoor
+- Marc Luijten
+- J. Konings
+- Reinier

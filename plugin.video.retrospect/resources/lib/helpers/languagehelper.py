@@ -14,6 +14,7 @@ class LanguageHelper(object):
     ChannelsId = 30507
     NoFavsId = 30508
     NoPlaybackId = 30509
+    Profiles = 30513
     NewVersionId = 30516
     NewVersion2Id = 30517
     RepoWarningId = 30520
@@ -81,6 +82,10 @@ class LanguageHelper(object):
     AllEpisodes = 30370
     Trending = 30371
     NewSearch = 30372
+    Following = 30373
+    RecommendedTvShows = 30374
+    RecommendedVideos = 30375
+    ContinueWatching = 30376
 
     ChannelSelection = 30507
     ShortCutName = 30512

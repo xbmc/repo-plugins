@@ -308,6 +308,27 @@ class Channel(chn_class.Channel):
 
         return self.__build_version
 
+    def process_folder_list(self, parent_item: Optional[MediaItem] = None) -> List[MediaItem]:
+        """ We override this method to fix possible issues with build version's in older urls
+        such as favorite urls.
+
+        :param: The parent item.
+
+        :return: A list of MediaItems that form the childeren of the <item>.
+
+        """
+
+        if parent_item and parent_item.url:
+            old_url = parent_item.url
+            UriHandler.header(old_url)
+            if UriHandler.instance().status.code >= 400:
+                # Replace the build version!
+                parts = Regexer.do_regex(r"^(.+/_next/data/)[^/]+(/.+\.json)$", old_url)[0]
+                new_url = f"{parts[0]}{self.build_version}{parts[1]}"
+                parent_item.url = new_url
+
+        return super().process_folder_list(parent_item)
+
     # noinspection PyUnusedLocal
     def load_az_listing(self, data: str) -> Tuple[str, List[MediaItem]]:
         # Load it here, to prevent the `self.build_version` to start unwanted.

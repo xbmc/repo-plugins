@@ -1,6 +1,9 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.5.5 [Sep-2024]
+- Fixing bug with upcoming videos causing a crash due to missing duration
+
 v0.5.4 [12-Feb-2024]
 - Fixing total-breakage bug
 

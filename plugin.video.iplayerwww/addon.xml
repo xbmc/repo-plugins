@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="4.1.2" provider-name="CaptainT, Cas, ihurst, primaeval, ">
+<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="4.1.3" provider-name="CaptainT, Cas, ihurst, primaeval, ">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.7.0"/>
@@ -24,11 +24,10 @@
         <fanart>resources/fanart.jpg</fanart>
     </assets>
     <news>
-v4.1.2
-Watching now is Continue Watching.
-Added now is Watchlist.
-Fixes for rare issue with Continue Watching.
-Fix for rare issue with Highlight listings.
+v4.1.3
+Fixes for requests exceptions.
+Fix for scrape mode "All at once".
+Updated user agent.
 
 Known issues:
 - No Red Button

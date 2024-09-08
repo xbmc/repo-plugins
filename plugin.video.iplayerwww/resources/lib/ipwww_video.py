@@ -12,10 +12,10 @@ import json
 from datetime import timedelta
 from operator import itemgetter
 
-from resources.lib.ipwww_common import translation, AddMenuEntry, OpenURL, OpenRequest, \
-                                       CheckLogin, CreateBaseDirectory, GetCookieJar, \
-                                       ParseImageUrl, download_subtitles, GeoBlockedError, \
-                                       iso_duration_2_seconds, PostJson, strptime, addonid, DeleteUrl
+from resources.lib.ipwww_common import (
+    translation, AddMenuEntry, OpenURL, OpenRequest, CheckLogin, CreateBaseDirectory,
+    GetCookieJar, ParseImageUrl, download_subtitles, GeoBlockedError, WebRequestError,
+    iso_duration_2_seconds, PostJson, strptime, addonid, DeleteUrl, ProgressDlg)
 from resources.lib import ipwww_progress
 
 import xbmc
@@ -206,16 +206,14 @@ def ListAtoZ():
         ('Y', 'y'), ('Z', 'z'), ('0-9', '0-9')]
 
     if int(ADDON.getSetting('scrape_atoz')) == 1:
-        pDialog = xbmcgui.DialogProgressBG()
-        pDialog.create(translation(30319))
-        page = 1
-        total_pages = len(characters)
-        for name, url in characters:
-            GetAtoZPage(url)
-            percent = int(100*page/total_pages)
-            pDialog.update(percent,translation(30319),name)
-            page += 1
-        pDialog.close()
+        with ProgressDlg(translation(30319)) as pDialog:
+            page = 1
+            total_pages = len(characters)
+            for name, url in characters:
+                GetAtoZPage(url)
+                percent = int(100*page/total_pages)
+                pDialog.update(percent,translation(30319),name)
+                page += 1
     else:
         for name, url in characters:
             AddMenuEntry(name, url, 124, '', '', '')
@@ -249,12 +247,24 @@ def GetAtoZPage(url):
 
     Creates the list of programmes for one character.
     """
-    pDialog = xbmcgui.DialogProgressBG()
-    pDialog.create(translation(30319))
+    if int(ADDON.getSetting('scrape_atoz')) == 1:
+        GetSingleAtoZPage(url)
+    else:
+        with ProgressDlg(translation(30319)) as pDialog:
+            GetSingleAtoZPage(url,pDialog)
 
+
+def GetSingleAtoZPage(url, pDialog=None):
     current_url = 'https://www.bbc.co.uk/iplayer/a-z/%s' % url
     # print("Opening "+current_url)
-    html = OpenURL(current_url)
+    try:
+        html = OpenURL(current_url)
+    except WebRequestError as err:
+        # Ignore missing pages; there are simply no programmes starting with this letter.
+        if err.status_code == 404:
+            return
+        else:
+            raise
 
     total_pages = 1
     current_page = 1
@@ -266,8 +276,9 @@ def GetAtoZPage(url):
         if 'pagination' in json_data:
             current_page = int(json_data['pagination']['currentPage'])
             total_pages = int(json_data['pagination']['totalPages'])
-            percent = int(100*current_page/total_pages)
-            pDialog.update(percent,translation(30319))
+            if pDialog:
+                percent = int(100*current_page/total_pages)
+                pDialog.update(percent,translation(30319))
             # print('Current page: %s'%current_page)
             # print('Total pages: %s'%total_pages)
             if current_page<total_pages:
@@ -288,11 +299,11 @@ def GetAtoZPage(url):
                     json_data = ScrapeJSON(html)
                     if json_data:
                         ParseJSON(json_data, current_url)
-                    percent = int(100*i/total_pages)
-                    pDialog.update(percent,translation(30319))
+                    if pDialog:
+                        percent = int(100*i/total_pages)
+                        pDialog.update(percent,translation(30319))
         else:
             ParseJSON(json_data, current_url)
-    pDialog.close()
 
 
 def GetMultipleEpisodes(url):
@@ -352,81 +363,77 @@ def ScrapeEpisodes(page_url):
     of pages.
     """
 
-    pDialog = xbmcgui.DialogProgressBG()
-    pDialog.create(translation(30319))
+    with ProgressDlg(translation(30319)) as pDialog:
+        html = OpenURL(page_url)
 
-    html = OpenURL(page_url)
-
-    total_pages = 1
-    current_page = 1
-    page_range = list(range(1))
-    paginate = re.search(r'<ol class="paginat.*?</ol>', html, re.DOTALL)
-    if not paginate:
-        paginate = re.search(r'<div class="paginate.*?</div>', html, re.DOTALL)
-    next_page = 1
-    if paginate:
-        if int(ADDON.getSetting('paginate_episodes')) == 0:
-            current_page_match = re.search(r'page=(\d*)', page_url)
-            if current_page_match:
-                current_page = int(current_page_match.group(1))
-            pages = re.findall(r'<li class="pag.*?</li>',paginate.group(0),re.DOTALL)
-            if pages:
-                last = pages[-1]
-                last_page = re.search(r'page=(\d*)', last)
-                if last_page:
-                    total_pages = int(last_page.group(1))
+        total_pages = 1
+        current_page = 1
+        page_range = list(range(1))
+        paginate = re.search(r'<ol class="paginat.*?</ol>', html, re.DOTALL)
+        if not paginate:
+            paginate = re.search(r'<div class="paginate.*?</div>', html, re.DOTALL)
+        next_page = 1
+        if paginate:
+            if int(ADDON.getSetting('paginate_episodes')) == 0:
+                current_page_match = re.search(r'page=(\d*)', page_url)
+                if current_page_match:
+                    current_page = int(current_page_match.group(1))
+                pages = re.findall(r'<li class="pag.*?</li>',paginate.group(0),re.DOTALL)
+                if pages:
+                    last = pages[-1]
+                    last_page = re.search(r'page=(\d*)', last)
+                    if last_page:
+                        total_pages = int(last_page.group(1))
+                    else:
+                        total_pages = current_page
+                if current_page<total_pages:
+                    split_page_url = page_url.replace('&','?').split('?')
+                    page_base_url = split_page_url[0]
+                    for part in split_page_url[1:len(split_page_url)]:
+                        if not part.startswith('page'):
+                            page_base_url = page_base_url+'?'+part
+                    if '?' in page_base_url:
+                        page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'&page='
+                    else:
+                        page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
+                    next_page = current_page+1
                 else:
-                    total_pages = current_page
-            if current_page<total_pages:
-                split_page_url = page_url.replace('&','?').split('?')
-                page_base_url = split_page_url[0]
-                for part in split_page_url[1:len(split_page_url)]:
-                    if not part.startswith('page'):
-                        page_base_url = page_base_url+'?'+part
-                if '?' in page_base_url:
-                    page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'&page='
-                else:
-                    page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
-                next_page = current_page+1
+                    next_page = current_page
+                page_range = list(range(current_page, current_page+1))
             else:
-                next_page = current_page
-            page_range = list(range(current_page, current_page+1))
-        else:
-            pages = re.findall(r'<li class="pag.*?</li>',paginate.group(0),re.DOTALL)
-            if pages:
-                last = pages[-1]
-                last_page = re.search(r'page=(\d*)', last)
-                split_page_url = page_url.replace('&','?').split('?')
-                page_base_url = split_page_url[0]
-                for part in split_page_url[1:len(split_page_url)]:
-                    if not part.startswith('page'):
-                        page_base_url = page_base_url+'?'+part
-                if '?' in page_base_url:
-                    page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'&page='
-                else:
-                    page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
-                total_pages = int(last_page.group(1))
-            page_range = list(range(1, total_pages+1))
+                pages = re.findall(r'<li class="pag.*?</li>',paginate.group(0),re.DOTALL)
+                if pages:
+                    last = pages[-1]
+                    last_page = re.search(r'page=(\d*)', last)
+                    split_page_url = page_url.replace('&','?').split('?')
+                    page_base_url = split_page_url[0]
+                    for part in split_page_url[1:len(split_page_url)]:
+                        if not part.startswith('page'):
+                            page_base_url = page_base_url+'?'+part
+                    if '?' in page_base_url:
+                        page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'&page='
+                    else:
+                        page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
+                    total_pages = int(last_page.group(1))
+                page_range = list(range(1, total_pages+1))
 
-    for page in page_range:
+        for page in page_range:
 
-        if page > current_page:
-            page_url = 'https://www.bbc.co.uk' + page_base_url + str(page)
-            html = OpenURL(page_url)
+            if page > current_page:
+                page_url = 'https://www.bbc.co.uk' + page_base_url + str(page)
+                html = OpenURL(page_url)
 
-        json_data = ScrapeJSON(html)
-        if json_data:
-            ParseJSON(json_data, page_url)
+            json_data = ScrapeJSON(html)
+            if json_data:
+                ParseJSON(json_data, page_url)
 
-        percent = int(100*page/total_pages)
-        pDialog.update(percent,translation(30319))
+            percent = int(100*page/total_pages)
+            pDialog.update(percent,translation(30319))
 
-    if int(ADDON.getSetting('paginate_episodes')) == 0:
-        if current_page < next_page:
-            page_url = 'https://www.bbc.co.uk' + page_base_url + str(next_page)
-            AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 128, '', '', '')
-
-    pDialog.close()
+        if int(ADDON.getSetting('paginate_episodes')) == 0:
+            if current_page < next_page:
+                page_url = 'https://www.bbc.co.uk' + page_base_url + str(next_page)
+                AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 128, '', '', '')
 
 
 def ScrapeAtoZEpisodes(page_url):
@@ -437,64 +444,60 @@ def ScrapeAtoZEpisodes(page_url):
     of pages.
     """
 
-    pDialog = xbmcgui.DialogProgressBG()
-    pDialog.create(translation(30319))
+    with ProgressDlg(translation(30319)) as pDialog:
+        html = OpenURL(page_url)
 
-    html = OpenURL(page_url)
-
-    total_pages = 1
-    current_page = 1
-    page_range = list(range(1))
-
-    json_data = ScrapeJSON(html)
-    if json_data:
-
-        last_page = 1
+        total_pages = 1
         current_page = 1
-        if 'pagination' in json_data:
-            page_base_url_match = re.search(r'(.+?)page=', page_url)
-            if page_base_url_match:
-                page_base_url = page_base_url_match.group(0)
-            else:
-                page_base_url = page_url+"?page="
-            current_page = json_data['pagination'].get('currentPage')
-            last_page = json_data['pagination'].get('totalPages')
-            if int(ADDON.getSetting('paginate_episodes')) == 0:
-                current_page_match = re.search(r'page=(\d*)', page_url)
-                if current_page_match:
-                    current_page = int(current_page_match.group(1))
+        page_range = list(range(1))
+
+        json_data = ScrapeJSON(html)
+        if json_data:
+
+            last_page = 1
+            current_page = 1
+            if 'pagination' in json_data:
                 page_base_url_match = re.search(r'(.+?)page=', page_url)
                 if page_base_url_match:
                     page_base_url = page_base_url_match.group(0)
                 else:
                     page_base_url = page_url+"?page="
-                if current_page < last_page:
-                    next_page = current_page+1
+                current_page = json_data['pagination'].get('currentPage')
+                last_page = json_data['pagination'].get('totalPages')
+                if int(ADDON.getSetting('paginate_episodes')) == 0:
+                    current_page_match = re.search(r'page=(\d*)', page_url)
+                    if current_page_match:
+                        current_page = int(current_page_match.group(1))
+                    page_base_url_match = re.search(r'(.+?)page=', page_url)
+                    if page_base_url_match:
+                        page_base_url = page_base_url_match.group(0)
+                    else:
+                        page_base_url = page_url+"?page="
+                    if current_page < last_page:
+                        next_page = current_page+1
+                    else:
+                       next_page = current_page
+                    page_range = list(range(current_page, current_page+1))
                 else:
-                   next_page = current_page
-                page_range = list(range(current_page, current_page+1))
-            else:
-                page_range = list(range(1, last_page+1))
+                    page_range = list(range(1, last_page+1))
 
-        for page in page_range:
+            for page in page_range:
 
-            if page > current_page:
-                page_url = page_base_url + str(page)
-                html = OpenURL(page_url)
+                if page > current_page:
+                    page_url = page_base_url + str(page)
+                    html = OpenURL(page_url)
 
-            json_data = ScrapeJSON(html)
-            if json_data:
-                ParseJSON(json_data, page_url)
+                json_data = ScrapeJSON(html)
+                if json_data:
+                    ParseJSON(json_data, page_url)
 
-            percent = int(100*page/last_page)
-            pDialog.update(percent,translation(30319))
+                percent = int(100*page/last_page)
+                pDialog.update(percent,translation(30319))
 
-    if int(ADDON.getSetting('paginate_episodes')) == 0:
-        if current_page < next_page:
-            page_url = page_base_url + str(next_page)
-            AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 134, '', '', '')
-
-    pDialog.close()
+        if int(ADDON.getSetting('paginate_episodes')) == 0:
+            if current_page < next_page:
+                page_url = page_base_url + str(next_page)
+                AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 134, '', '', '')
 
 
 def ListCategories():

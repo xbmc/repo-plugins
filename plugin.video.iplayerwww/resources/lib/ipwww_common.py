@@ -37,6 +37,13 @@ class GeoBlockedError(IpwwwError):
     pass
 
 
+class WebRequestError(IpwwwError):
+    def __init__(self, err_msg, response):
+        self.status_code = response.status_code
+        self.content = response.content
+        super().__init__(err_msg)
+
+
 def tp(path):
     return xbmcvfs.translatePath(path)
 
@@ -62,7 +69,7 @@ addoninfo = GetAddonInfo()
 DIR_USERDATA = tp(addoninfo["profile"])
 icondir = 'resource://resource.images.iplayerwww/media/'
 cookie_jar = None
-user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0'
+user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0'
 headers = {'User-Agent': user_agent}
 
 
@@ -366,23 +373,21 @@ def OpenRequest(method, url, *args, **kwargs):
         session.cookies = cookie_jar
         session.headers = headers
         exit_on_error = kwargs.pop('exit_on_error', False)
+        kwargs.setdefault('timeout', (4, 10))
         try:
             resp = session.request(method, url, *args, **kwargs)
             resp.raise_for_status()
         except requests.exceptions.RequestException as e:
-            if exit_on_error:
-                dialog = xbmcgui.Dialog()
-                dialog.ok(translation(30400), "%s" % e)
-                sys.exit(1)
-            else:
-                xbmc.log(f"'{method}' request to '{url}' failed: {e!r}")
-                raise
+            xbmc.log(f"'{method}' request to '{url}' failed: {e!r}")
+            if isinstance(e, requests.HTTPError):
+                e = WebRequestError(str(e), e.response)
+            raise e
         try:
-            # Set ignore_discard to overcome issue of not having session
-            # as cookie_jar is reinitialised for each action.
             # Refreshed token cookies are set on intermediate requests.
             # Only save if there have been any.
             if resp.history:
+                # Set ignore_discard to overcome issue of not having session
+                # as cookie_jar is reinitialised for each action.
                 cookie_jar.save(ignore_discard=True)
         except:
             pass
@@ -390,7 +395,7 @@ def OpenRequest(method, url, *args, **kwargs):
 
 
 def OpenURL(url):
-    r = OpenRequest('get', url, exit_on_error=True)
+    r = OpenRequest('get', url)
     return unescape(r)
 
 
@@ -424,13 +429,8 @@ def DeleteUrl(url, **kwargs):
     with requests.Session() as session:
         session.cookies = cookie_jar
         session.headers = headers
-        try:
-            r = session.delete(url, **kwargs)
-            r.raise_for_status()
-        except requests.exceptions.RequestException as e:
-            dialog = xbmcgui.Dialog()
-            dialog.ok(translation(30400), "%s" % e)
-            sys.exit(1)
+        r = session.delete(url, **kwargs)
+        r.raise_for_status()
         try:
             if r.history:
                 cookie_jar.save(ignore_discard=True)
@@ -439,7 +439,7 @@ def DeleteUrl(url, **kwargs):
 
 
 def PostJson(url, data):
-    return OpenRequest('post', url, json=data, exit_on_error=True)
+    return OpenRequest('post', url, json=data)
 
 
 def GetCookieJar():
@@ -725,3 +725,14 @@ def CreateBaseDirectory(content_type):
         AddMenuEntry(translation(30325), 'url', 119,
                      icondir+'settings.png', '', '')
 
+
+class ProgressDlg(xbmcgui.DialogProgressBG):
+    def __init__(self, heading, msg=''):
+        super().__init__()
+        super().create(heading, msg)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()

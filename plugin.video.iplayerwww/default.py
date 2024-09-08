@@ -251,7 +251,7 @@ try:
     elif mode == 302:
         Video.RemoveFavourite(episode_id)
 
-except Common.IpwwwError as err:
+except Exception as err:
     xbmcgui.Dialog().ok(Common.translation(30400), str(err))
     sys.exit(1)
 

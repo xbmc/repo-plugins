@@ -1,3 +1,6 @@
+[B]Version 6.4.4 - 2024-09-08[/B]
+- Fix issue of dr returning 404 on some streams with 'sub' header
+
 [B]Version 6.4.3 - 2024-08-20[/B]
 - Fix issue of distutils being removed in python 3.12
 

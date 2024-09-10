@@ -274,7 +274,6 @@ class Api():
                 'list_page_size': '24',
                 'max_list_prefetch': '3',
                 'path': path,
-                'sub': 'Registered'
             }
         return self._request_get(url, params=data, use_cache=use_cache)
 
@@ -479,7 +478,6 @@ class Api():
             'ff': 'idp,ldp,rpt',
             'lang': 'da',
             'resolution': 'HD-1080',
-            'sub': 'Registered'
         }
 
         u = self.session.get(url, params=data, headers=headers, timeout=GET_TIMEOUT)

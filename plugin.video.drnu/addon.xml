@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="6.4.3" name="DR TV" provider-name="TermeHansen">
+<addon id="plugin.video.drnu" version="6.4.4" name="DR TV" provider-name="TermeHansen">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
         <import addon="script.module.dateutil" version="2.8.2" />
@@ -32,6 +32,9 @@
             <screenshot>resources/media/Screenshot3.jpg</screenshot>
             <screenshot>resources/media/Screenshot4.jpg</screenshot>
        </assets>
+       <news>[B]Version 6.4.4 - 2024-09-08[/B]
+        - Fix issue of dr returning 404 on some streams with 'sub' header
+       </news>
        <news>[B]Version 6.4.3 - 2024-08-20[/B]
         - Fix issue of distutils being removed in python 3.12
        </news>

@@ -24,14 +24,20 @@ def get_url(**kwargs):
 def get_instances():
     filename = "instances.json"
     if not os.path.exists(USERDATA_PATH):
-        os.makedirs(USERDATA_PATH)        
+        try:
+            os.makedirs(USERDATA_PATH)
+        except:
+            xbmc.log("Could not write %s" % USERDATA_PATH, xbmc.LOGDEBUG)
     FILE_PATH = os.path.join(USERDATA_PATH, filename)
     if not xbmcvfs.exists(FILE_PATH):
-        print("No file, requesting new data!")
+        xbmc.log("No file, requesting new data!", xbmc.LOGDEBUG)
         request = requests.get('https://instances.joinpeertube.org/api/v1/instances/hosts?count=1000&start=0&sort=createdAt')
         r = request.json()
-        with xbmcvfs.File(FILE_PATH) as instances_file:
-            instances_file.write(json.dumps(r, ensure_ascii=False, indent=4))
+        try:
+            with xbmcvfs.File(FILE_PATH) as instances_file:
+                instances_file.write(json.dumps(r, ensure_ascii=False, indent=4))
+        except:
+            xbmc.log("Could not write %s" % FILE_PATH, xbmc.LOGDEBUG)
     else:
         with xbmcvfs.File(FILE_PATH) as instances_file:
             r = json.load(instances_file)
@@ -94,11 +100,11 @@ def list_videos(host):
     xbmcplugin.endOfDirectory(HANDLE)
 
 def get_video(host, id):
-    print(host)
-    print(id)
+    xbmc.log("host is %s" % host, xbmc.LOGDEBUG)
+    xbmc.log("id is %s" % id, xbmc.LOGDEBUG)
     request = requests.get('https://%s/api/v1/videos/%d' % (host, id))
     r = request.json()
-    print(r)
+    xbmc.log("request is %s" % r, xbmc.LOGDEBUG)
     return r["streamingPlaylists"][0]["playlistUrl"]
 
 

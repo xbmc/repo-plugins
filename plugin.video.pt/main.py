@@ -24,14 +24,20 @@ def get_url(**kwargs):
 def get_instances():
     filename = "instances.json"
     if not os.path.exists(USERDATA_PATH):
-        os.makedirs(USERDATA_PATH)        
+        try:
+            os.makedirs(USERDATA_PATH)
+        except:
+            print("Could not write %s" % USERDATA_PATH)
     FILE_PATH = os.path.join(USERDATA_PATH, filename)
     if not xbmcvfs.exists(FILE_PATH):
         print("No file, requesting new data!")
         request = requests.get('https://instances.joinpeertube.org/api/v1/instances/hosts?count=1000&start=0&sort=createdAt')
         r = request.json()
-        with xbmcvfs.File(FILE_PATH) as instances_file:
-            instances_file.write(json.dumps(r, ensure_ascii=False, indent=4))
+        try:
+            with xbmcvfs.File(FILE_PATH) as instances_file:
+                instances_file.write(json.dumps(r, ensure_ascii=False, indent=4))
+        except:
+            print("Could not write %s" % FILE_PATH)
     else:
         with xbmcvfs.File(FILE_PATH) as instances_file:
             r = json.load(instances_file)

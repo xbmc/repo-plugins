@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-01-26 08:32+0000\n"
+"PO-Revision-Date: 2024-09-02 01:26+0000\n"
 "Last-Translator: bas <bas@kodi.tv>\n"
 "Language-Team: English (United States) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/en_us/>\n"
 "Language: en_us\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 5.7.1\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -458,83 +458,83 @@ msgstr "Other"
 
 msgctxt "#30109"
 msgid "IPTV Manager"
-msgstr ""
+msgstr "IPTV Manager"
 
 msgctxt "#30110"
 msgid "Install IPTV Manager add-on"
-msgstr ""
+msgstr "Install IPTV Manager add-on"
 
 msgctxt "#30111"
 msgid "Enable IPTV Manager integration"
-msgstr ""
+msgstr "Enable IPTV Manager integration"
 
 msgctxt "#30112"
 msgid "IPTV Manager settings…"
-msgstr ""
+msgstr "IPTV Manager settings…"
 
 msgctxt "#30113"
 msgid "Set refresh token"
-msgstr ""
+msgstr "Set refresh token"
 
 msgctxt "#30114"
 msgid "Retrospect Web Dialog"
-msgstr ""
+msgstr "Retrospect Web Dialog"
 
 msgctxt "#30115"
 msgid "Setting up Retrospect webserver"
-msgstr ""
+msgstr "Setting up Retrospect webserver"
 
 msgctxt "#30116"
 msgid "Starting webserver on port {}"
-msgstr ""
+msgstr "Starting webserver on port {}"
 
 msgctxt "#30117"
 msgid "Waiting for input from browser"
-msgstr ""
+msgstr "Waiting for input from browser"
 
 msgctxt "#30118"
 msgid "Input received from browser"
-msgstr ""
+msgstr "Input received from browser"
 
 msgctxt "#30119"
 msgid "Open a browser and navigate to http://{}:{}"
-msgstr ""
+msgstr "Open a browser and navigate to http://{}:{}"
 
 msgctxt "#30120"
 msgid "Browser input cancelled"
-msgstr ""
+msgstr "Browser input cancelled"
 
 msgctxt "#30121"
 msgid "Paste refresh token here."
-msgstr ""
+msgstr "Paste refresh token here."
 
 msgctxt "#30122"
 msgid "Invalid Refresh Token"
-msgstr ""
+msgstr "Invalid Refresh Token"
 
 msgctxt "#30123"
 msgid "Expired Refresh Token"
-msgstr ""
+msgstr "Expired Refresh Token"
 
 msgctxt "#30124"
 msgid "Find the <b>refresh token</b> for your account by examining the site's cookies and paste the <b>value</b> of the refresh token cookie here."
-msgstr ""
+msgstr "Find the <b>refresh token</b> for your account by examining the site's cookies and paste the <b>value</b> of the refresh token cookie here."
 
 msgctxt "#30125"
 msgid "Show future episodes under 'Recent > Today'"
-msgstr ""
+msgstr "Show future episodes under 'Recent > Today'"
 
 msgctxt "#30126"
 msgid "Default"
-msgstr ""
+msgstr "Default"
 
 msgctxt "#30127"
 msgid "Show All"
-msgstr ""
+msgstr "Show All"
 
 msgctxt "#30128"
 msgid "Filter Premium"
-msgstr ""
+msgstr "Filter Premium"
 
 # used for list limits
 # empty strings from id 30109 to 30189
@@ -737,23 +737,39 @@ msgstr "New on %s"
 
 msgctxt "#30368"
 msgid "Extras"
-msgstr ""
+msgstr "Extras"
 
 msgctxt "#30369"
 msgid "Fragments"
-msgstr ""
+msgstr "Fragments"
 
 msgctxt "#30370"
 msgid "All episodes"
-msgstr ""
+msgstr "All episodes"
 
 msgctxt "#30371"
 msgid "Trending"
-msgstr ""
+msgstr "Trending"
 
 msgctxt "#30372"
 msgid "New Search"
-msgstr ""
+msgstr "New Search"
+
+msgctxt "#30373"
+msgid "Following"
+msgstr "Following"
+
+msgctxt "#30374"
+msgid "Recommended TV Shows"
+msgstr "Recommended TV Shows"
+
+msgctxt "#30375"
+msgid "Recommended Videos"
+msgstr "Recommended Videos"
+
+msgctxt "#30376"
+msgid "Continue Watching"
+msgstr "Continue Watching"
 
 # empty strings from id 30365 to 30400
 msgctxt "#30401"
@@ -866,6 +882,10 @@ msgstr "Add shortcut"
 msgctxt "#30512"
 msgid "Please provide a name for the shortcut."
 msgstr "Please provide a name for the shortcut."
+
+msgctxt "#30513"
+msgid "Profiles"
+msgstr "Profiles"
 
 # empty strings from id 30511 to 30515
 msgctxt "#30516"
@@ -1140,7 +1160,7 @@ msgstr "Number of pages to load for the main listing"
 
 msgctxt "#30587"
 msgid "Show streams with accessibility features"
-msgstr ""
+msgstr "Show streams with accessibility features"
 
 # empty strings from id 30584 to 30589
 msgctxt "#30590"

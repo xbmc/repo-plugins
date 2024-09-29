@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2024-08-03 15:26+0000\n"
 "Last-Translator: Oskari Lavinto <olavinto@protonmail.com>\n"
@@ -750,6 +750,22 @@ msgctxt "#30372"
 msgid "New Search"
 msgstr "Uusi haku"
 
+msgctxt "#30373"
+msgid "Following"
+msgstr ""
+
+msgctxt "#30374"
+msgid "Recommended TV Shows"
+msgstr ""
+
+msgctxt "#30375"
+msgid "Recommended Videos"
+msgstr ""
+
+msgctxt "#30376"
+msgid "Continue Watching"
+msgstr ""
+
 msgctxt "#30401"
 msgid "Dutch"
 msgstr "Dutch"
@@ -849,6 +865,10 @@ msgstr ""
 
 msgctxt "#30512"
 msgid "Please provide a name for the shortcut."
+msgstr ""
+
+msgctxt "#30513"
+msgid "Profiles"
 msgstr ""
 
 msgctxt "#30516"

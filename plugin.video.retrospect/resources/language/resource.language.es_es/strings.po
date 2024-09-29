@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2024-08-23 17:26+0000\n"
 "Last-Translator: roliverosc <roliverosc@hotmail.com>\n"
@@ -755,6 +755,22 @@ msgctxt "#30372"
 msgid "New Search"
 msgstr "Nueva búsqueda"
 
+msgctxt "#30373"
+msgid "Following"
+msgstr ""
+
+msgctxt "#30374"
+msgid "Recommended TV Shows"
+msgstr ""
+
+msgctxt "#30375"
+msgid "Recommended Videos"
+msgstr ""
+
+msgctxt "#30376"
+msgid "Continue Watching"
+msgstr ""
+
 # empty strings from id 30365 to 30400
 msgctxt "#30401"
 msgid "Dutch"
@@ -866,6 +882,10 @@ msgstr "Añadir acceso directo"
 msgctxt "#30512"
 msgid "Please provide a name for the shortcut."
 msgstr "Por favor, proporcione un nombre para el acceso directo."
+
+msgctxt "#30513"
+msgid "Profiles"
+msgstr ""
 
 # empty strings from id 30511 to 30515
 msgctxt "#30516"

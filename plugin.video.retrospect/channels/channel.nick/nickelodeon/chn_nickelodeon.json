@@ -44,6 +44,7 @@
       "channelcode": "mtvnl",
       "sortorder": 20,
       "language": "nl",
+      "ignore": true,
       "fanart": "mtvfanart2.jpg",
       "poster": "mtvposter.png"
     },
@@ -60,6 +61,7 @@
       "channelcode": "mtvde",
       "sortorder": 20,
       "language": "de",
+      "ignore": true,
       "fanart": "mtvfanart2.jpg",
       "poster": "mtvposter.png"
     }

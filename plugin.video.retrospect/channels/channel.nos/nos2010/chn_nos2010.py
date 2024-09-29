@@ -782,7 +782,7 @@ class Channel(chn_class.Channel):
         else:
             return None
 
-        name = result_set["title"]
+        name = result_set["mainTitle"]
         start = result_set["programStart"]
         channel = result_set["channel"]
 
@@ -1285,7 +1285,7 @@ class Channel(chn_class.Channel):
                     iptv_epg_item = dict(
                         start=datetime.datetime.fromtimestamp(JsonHelper.get_from(item, "programStart"), datetime.timezone.utc).isoformat(),
                         stop=datetime.datetime.fromtimestamp(JsonHelper.get_from(item, "programEnd"), datetime.timezone.utc).isoformat(),
-                        title=JsonHelper.get_from(item, "title"))
+                        title=JsonHelper.get_from(item, "mainTitle"))
                     
                     if len(JsonHelper.get_from(item, "images")) > 0:
                         iptv_epg_item["image"] = JsonHelper.get_from(item, "images")[0].get("url")

@@ -750,6 +750,22 @@ msgctxt "#30372"
 msgid "New Search"
 msgstr ""
 
+msgctxt "#30373"
+msgid "Following"
+msgstr ""
+
+msgctxt "#30374"
+msgid "Recommended TV Shows"
+msgstr ""
+
+msgctxt "#30375"
+msgid "Recommended Videos"
+msgstr ""
+
+msgctxt "#30376"
+msgid "Continue Watching"
+msgstr ""
+
 msgctxt "#30401"
 msgid "Dutch"
 msgstr "Nederlandsk"
@@ -849,6 +865,10 @@ msgstr ""
 
 msgctxt "#30512"
 msgid "Please provide a name for the shortcut."
+msgstr ""
+
+msgctxt "#30513"
+msgid "Profiles"
 msgstr ""
 
 msgctxt "#30516"

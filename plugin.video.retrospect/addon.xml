@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.7.17"
+        version="5.7.18"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -123,20 +123,19 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.7.17 - Changelog - 2024-08-31[/B]
+        <news>[B]Retrospect v5.7.18 - Changelog - 2024-09-29[/B]
 
-Fixed some minor channel issues. 
+Updated: Minor channel updates.
 
 [B]Framework related[/B]
-_None_
+* Fixed: Logging out when no username is set.
 
 [B]GUI/Settings/Language related[/B]
 _None_
 
 [B]Channel related[/B]
-* Fixed: Older url&#x27;s would have the incorrect build-version of the UR Play app (Fixes #1827).
-* Added: NPO profiles and related stuff (Fixes #1828).
-* Fixed: NPO Search.
+* Fixed: NPO Start recent items broke due to an API change (Fixes #1838).
+* Removed: Nickelodeon &amp; MTV channels as they no longer provide videos.
 
         </news>
         <assets>

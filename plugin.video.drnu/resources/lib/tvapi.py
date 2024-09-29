@@ -50,6 +50,7 @@ def cache_path(path):
         return False
     return True
 
+
 def full_login(user, password):
     ses = requests.Session()
     # start login flow
@@ -479,8 +480,11 @@ class Api():
             'lang': 'da',
             'resolution': 'HD-1080',
         }
-
         u = self.session.get(url, params=data, headers=headers, timeout=GET_TIMEOUT)
+        if u.status_code == 404 and u.json()['code'] == 8009:
+            data['sub'] = 'Registered'
+            u = self.session.get(url, params=data, headers=headers, timeout=GET_TIMEOUT)
+
         if u.status_code == 200:
             for stream in u.json():
                 if stream['accessService'] == 'StandardVideo':

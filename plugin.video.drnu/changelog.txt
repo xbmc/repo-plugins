@@ -1,3 +1,7 @@
+[B]Version 6.4.5 - 2024-09-29[/B]
+- Fix issue of dr returning 404 on some streams with 'sub' header, again...
+- remove inputstreamhelper from addon
+
 [B]Version 6.4.4 - 2024-09-08[/B]
 - Fix issue of dr returning 404 on some streams with 'sub' header
 

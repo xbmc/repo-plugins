@@ -29,7 +29,6 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 from xbmcvfs import translatePath
-from inputstreamhelper import Helper
 
 from resources.lib import tvapi
 from resources.lib import tvgui
@@ -457,11 +456,9 @@ class DrDkTvAddon(object):
         listItem = xbmcgui.ListItem(path=video['url'], offscreen=True)
 
         if int(get_setting('inputstream')) == 0:
-            is_helper = Helper('hls')
-            if is_helper.check_inputstream():
-                listItem.setProperty('inputstream', is_helper.inputstream_addon)
-                if kodi_version_major() <= 20:
-                    listItem.setProperty('inputstream.adaptive.manifest_type', 'hls')
+            listItem.setProperty('inputstream', 'inputstream.adaptive')
+            if kodi_version_major() <= 20:
+                listItem.setProperty('inputstream.adaptive.manifest_type', 'hls')
 
         local_subs_bool = bool_setting('enable.localsubtitles') or int(get_setting('inputstream')) == 1
         if local_subs_bool and video['srt_subtitles']:

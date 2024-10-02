@@ -1,0 +1,39 @@
+# Kodi Media Center language file
+# Addon Name: EITB Nahieran (unofficial)
+# Addon id: plugin.video.eitb
+# Addon Provider: Mikel Larreategi
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Language-Team: Basque\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: eu_ES\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "TV program settings"
+msgstr "Telebista saioen ezarpenak"
+
+msgctxt "#32001"
+msgid "Element number"
+msgstr "Elementu kopurua"
+
+msgctxt "#32005"
+msgid "Latest TV programs"
+msgstr "Azken telebista saioak"
+
+msgctxt "#32006"
+msgid "All programs"
+msgstr "Programa guztiak"
+
+msgctxt "#32007"
+msgid "Last tvshows"
+msgstr "Azken saioak"
+
+msgctxt "#32008"
+msgid "Program types"
+msgstr "Programa motak"

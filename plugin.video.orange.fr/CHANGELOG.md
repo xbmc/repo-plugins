@@ -1,8 +1,13 @@
 # 2.x
 
+## [2.2.0](https://github.com/f-lawe/plugin.video.orange.fr/releases/tag/v2.2.0) - 2024-10-03
+
+### Added
+- Support remote authentication to Orange live and catchup streams ([#22](https://github.com/f-lawe/plugin.video.orange.fr/issues/22))
+
 ## [2.1.4](https://github.com/f-lawe/plugin.video.orange.fr/releases/tag/v2.1.4) - 2024-08-08
 
-## Changed
+### Changed
 - Better UI items management
 
 ### Fixed

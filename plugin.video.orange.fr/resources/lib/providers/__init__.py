@@ -4,8 +4,8 @@ import xbmc
 
 from lib.utils.kodi import get_addon_setting, log
 
+from .abstract_provider import AbstractProvider
 from .fr import OrangeCaraibeProvider, OrangeFranceProvider, OrangeReunionProvider
-from .provider_interface import ProviderInterface
 
 _PROVIDERS = {
     "France.Orange": OrangeFranceProvider,
@@ -23,6 +23,6 @@ if not _PROVIDER:
     log(f"Cannot instanciate provider: {_PROVIDER_KEY}", xbmc.LOGERROR)
 
 
-def get_provider() -> ProviderInterface:
+def get_provider() -> AbstractProvider:
     """Return the selected provider."""
     return _PROVIDER

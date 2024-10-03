@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <category label="30100">
+    <category label="30100"> <!-- TV Integration -->
         <setting id="iptv.channels_uri" visible="false" default="plugin://plugin.video.orange.fr/iptv/channels" />
         <setting id="iptv.epg_uri" visible="false" default="plugin://plugin.video.orange.fr/iptv/epg" />
         <setting visible="!System.HasAddon(service.iptv.manager)" label="30101" help="30102" type="action" action="InstallAddon(service.iptv.manager)" option="close" />
@@ -8,12 +8,16 @@
         <setting visible="System.HasAddon(service.iptv.manager)" label="30105" help="30106" type="action" action="Addon.OpenSettings(service.iptv.manager)" option="close" subsetting="true" />
     </category>
 
-    <category label="30200">
+    <category label="30200"> <!-- Provider -->
 		<setting id="provider.country" label="30201" help="30202" type="select" values="France" default="France"/>
         <setting id="provider.name" visible="eq(-1,France)" label="30203" help="30204" type="labelenum" values="Orange|Orange Caraïbe|Orange Réunion" default="Orange"/>
+        <setting type="lsep" />
+        <setting id="provider.use_credentials" label="30205" help="30206" type="bool" default="false" />
+        <setting id="provider.username" label="30207" help="30208" enable="eq(-1,true)" type="text" default=""/>
+        <setting id="provider.password" label="30209" help="30210" enable="eq(-2,true)" type="text" default="" option="hidden"/>
     </category>
 
-    <category label="30300">
+    <category label="30300"> <!-- Proxy -->
         <setting id="proxy.enabled" label="30301" help="30302" type="bool" default="false" />
         <setting id="proxy.protocol" label="30303" help="30304" enable="eq(-1,true)"  type="labelenum" values="HTTP|Socks5 Local DNS|Socks5 Remote DNS" default="HTTP"/>
         <setting id="proxy.ip" label="30305" help="30306" enable="eq(-2,true)" type="text" default=""/>

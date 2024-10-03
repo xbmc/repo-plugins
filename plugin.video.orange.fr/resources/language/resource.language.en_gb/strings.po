@@ -27,7 +27,7 @@ msgid "Help 30102"
 msgstr ""
 
 msgctxt "#30103"
-msgid "Enable IPTV Manager integration"
+msgid "Enable Kodi live TV"
 msgstr ""
 
 msgctxt "#30104"
@@ -62,6 +62,30 @@ msgstr ""
 
 msgctxt "#30204"
 msgid "Help 30204"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Use login credentials"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Help 30206"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Login"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Help 30208"
+msgstr ""
+
+msgctxt "#30209"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Help 30210"
 msgstr ""
 
 # Proxy settings (from 30300 to 30399)

@@ -1,12 +1,13 @@
 """Video stream manager."""
 
 import inputstreamhelper
+import xbmc
 import xbmcplugin
 
 from lib.providers import get_provider
 from lib.router import router
 from lib.utils.gui import create_play_item
-from lib.utils.kodi import localize, ok_dialog
+from lib.utils.kodi import localize, log, ok_dialog
 
 
 class StreamManager:
@@ -29,8 +30,9 @@ class StreamManager:
     def _load_stream(self, stream_info: dict = None) -> None:
         """Load stream."""
         if stream_info is None:
+            log("Stream not included in subscription", xbmc.LOGERROR)
             ok_dialog(localize(30900))
-            xbmcplugin.setResolvedUrl(router.handle, False)
+            xbmcplugin.setResolvedUrl(router.handle, False, create_play_item())
             return
 
         is_helper = inputstreamhelper.Helper(stream_info["manifest_type"], drm=stream_info["license_type"])
@@ -40,5 +42,6 @@ class StreamManager:
             xbmcplugin.setResolvedUrl(router.handle, True, play_item)
             return
 
+        log("Cannot load InputStream", xbmc.LOGERROR)
         ok_dialog(localize(30901))
-        xbmcplugin.setResolvedUrl(router.handle, False)
+        xbmcplugin.setResolvedUrl(router.handle, False, create_play_item())

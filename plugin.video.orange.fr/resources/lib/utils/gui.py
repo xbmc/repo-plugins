@@ -34,16 +34,19 @@ def create_list_item(item_data: dict, is_folder: bool = False) -> ListItem:
     return list_item
 
 
-def create_play_item(stream_info: dict, inputstream_addon: str) -> ListItem:
+def create_play_item(stream_info: dict = None, inputstream_addon: str = "") -> ListItem:
     """Create a play item from stream data."""
-    play_item = ListItem(path=stream_info["path"])
+    if stream_info is None:
+        stream_info = {}
+
+    play_item = ListItem(path=stream_info.get("path"))
     play_item.setContentLookup(False)
-    play_item.setMimeType(stream_info["mime_type"])
+    play_item.setMimeType(stream_info.get("mime_type"))
 
     play_item.setProperty("inputstream", inputstream_addon)
     # play_item.setProperty("inputstream.adaptive.play_timeshift_buffer", "true")
     # play_item.setProperty("inputstream.adaptive.manifest_config", '{"timeshift_bufferlimit":14400}')
-    play_item.setProperty("inputstream.adaptive.license_type", stream_info["license_type"])
-    play_item.setProperty("inputstream.adaptive.license_key", stream_info["license_key"])
+    play_item.setProperty("inputstream.adaptive.license_type", stream_info.get("license_type"))
+    play_item.setProperty("inputstream.adaptive.license_key", stream_info.get("license_key"))
 
     return play_item

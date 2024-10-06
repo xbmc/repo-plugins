@@ -5,6 +5,7 @@
 # Imports
 #
 from future import standard_library
+
 standard_library.install_aliases()
 from builtins import str
 from builtins import object
@@ -17,9 +18,11 @@ import xbmcgui
 import xbmcplugin
 import json
 
-from resources.lib.dumpert_const import LANGUAGE, IMAGES_PATH, SETTINGS, convertToUnicodeString, log, SFW_HEADERS, NSFW_HEADERS, \
+from resources.lib.dumpert_const import LANGUAGE, IMAGES_PATH, SETTINGS, convertToUnicodeString, log, SFW_HEADERS, \
+    NSFW_HEADERS, \
     DAY, WEEK, MONTH, DAY_TOPPERS_URL, WEEK_TOPPERS_URL, MONTH_TOPPERS_URL, LATEST_URL, VIDEO_QUALITY_MOBILE, \
     VIDEO_QUALITY_TABLET, VIDEO_QUALITY_720P
+
 
 #
 # Main class
@@ -40,7 +43,8 @@ class Main(object):
         # Parse parameters
         try:
             self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
-            self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+            self.next_page_possible = \
+            urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
         except KeyError:
             self.plugin_category = LANGUAGE(30001)
             self.next_page_possible = "True"
@@ -49,7 +53,8 @@ class Main(object):
         except KeyError:
             self.period = ""
         try:
-            self.days_deducted_from_today = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['days_deducted_from_today'][0]
+            self.days_deducted_from_today = \
+            urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['days_deducted_from_today'][0]
         except KeyError:
             self.days_deducted_from_today = "0"
         try:
@@ -79,7 +84,8 @@ class Main(object):
             if self.period == DAY:
                 # If we don't have a current video list page url, lets construct it
                 if self.video_list_page_url == "":
-                    current_url_datetime_object = current_url_datetime_object - timedelta(days=self.days_deducted_from_today)
+                    current_url_datetime_object = current_url_datetime_object - timedelta(
+                        days=self.days_deducted_from_today)
                     # https://api-live.dumpert.nl/mobile_api/json/video/top5/dag/2019-09-19/
                     self.video_list_page_url = DAY_TOPPERS_URL + current_url_datetime_object.strftime('%Y-%m-%d')
 
@@ -96,7 +102,8 @@ class Main(object):
             elif self.period == WEEK:
                 # If we don't have a current video list page url, lets construct it
                 if self.video_list_page_url == "":
-                    current_url_datetime_object = current_url_datetime_object - timedelta(days=self.days_deducted_from_today)
+                    current_url_datetime_object = current_url_datetime_object - timedelta(
+                        days=self.days_deducted_from_today)
                     # For some reason date.strftime('%Y%W') will now contain the weeknumber that is 1 below the weeknumber should be for the site
                     # Let's add a week to fix that
                     current_url_datetime_object = current_url_datetime_object + timedelta(days=7)
@@ -114,7 +121,6 @@ class Main(object):
 
                 # Let's skip week "00"
                 if next_url_datetime_object.strftime('%W') == "00":
-
                     # log("skipping week 00", "skipping week 00")
 
                     self.days_deducted_from_today = self.days_deducted_from_today + 7
@@ -127,13 +133,15 @@ class Main(object):
             elif self.period == MONTH:
                 # If we don't have a current video list page url, lets construct it
                 if self.video_list_page_url == "":
-                    current_url_datetime_object = current_url_datetime_object - timedelta(days=self.days_deducted_from_today)
+                    current_url_datetime_object = current_url_datetime_object - timedelta(
+                        days=self.days_deducted_from_today)
                     # https://api-live.dumpert.nl/mobile_api/json/video/top5/maand/201909/
                     self.video_list_page_url = MONTH_TOPPERS_URL + current_url_datetime_object.strftime('%Y%m')
 
                     # log("Generated self.video_list_page_url month", self.video_list_page_url)
 
-                current_url_datetime_object = current_url_datetime_object - timedelta(days=self.days_deducted_from_today)
+                current_url_datetime_object = current_url_datetime_object - timedelta(
+                    days=self.days_deducted_from_today)
 
                 self.days_deducted_from_today = self.days_deducted_from_today + 27
                 # Let's deduct all the cumulated days
@@ -141,7 +149,6 @@ class Main(object):
 
                 # If the year/month didn't change, up the days deducted some more
                 if current_url_datetime_object.strftime('%Y%m') == next_url_datetime_object.strftime('%Y%m'):
-
                     # log("forcing next month", "forcing next month")
 
                     self.days_deducted_from_today = self.days_deducted_from_today + 5
@@ -202,11 +209,16 @@ class Main(object):
         for item in data['items']:
             title = item['title']
             title = convertToUnicodeString(title)
+
             description = item['description']
             description = convertToUnicodeString(description)
+            description = description.replace("<p>", "").replace("</p>", "")
+            description = description.replace("&#x27;", "'")
+            description = description.capitalize()
+
             thumbnail_url = item['stills']['still-large']
             for i in item['media']:
-                duration = i.get('duration',False)
+                duration = i.get('duration', False)
 
             # {"gentime":1568796074,"items":[{"date":"2019-09-18T10:28:07+02:00","description":"FUCK DE EU!!!","id":"7757567_fac144f2","media":[{"description":"","duration":57,"mediatype":"VIDEO","variants":[{"uri":"https://media.dumpert.nl/tablet/fac144f2_Fuck_Europa.mp4.mp4.mp4","version":"tablet"},{"uri":"https://media.dumpert.nl/mobile/fac144f2_Fuck_Europa.mp4.mp4.mp4","version":"mobile"},{"uri":"https://media.dumpert.nl/720p/fac144f2_Fuck_Europa.mp4.mp4.mp4","version":"720p"}]}],"nopreroll":false,"nsfw":false,"stats":{"kudos_today":82,"kudos_total":82,"views_today":2202,"views_total":2202},"still":"https://media.dumpert.nl/stills/7757567_fac144f2.jpg","stills":{"still":"https://media.dumpert.nl/stills/7757567_fac144f2.jpg","still-large":"https://media.dumpert.nl/stills/large/7757567_fac144f2.jpg","still-medium":"https://media.dumpert.nl/stills/medium/7757567_fac144f2.jpg","thumb":"https://media.dumpert.nl/sq_thumbs/7757567_fac144f2.jpg","thumb-medium":"https://media.dumpert.nl/sq_thumbs/medium/7757567_fac144f2.jpg"},"tags":"videofuck fuck willem koning prinsjesdag troonrede willy alexander eu nexit","thumbnail":"https://media.dumpert.nl/sq_thumbs/7757567_fac144f2.jpg","title":"Willem heeft er genoeg van!","upload_id":""},{"date":"2019-
 
@@ -225,16 +237,16 @@ class Main(object):
             if process_item:
                 # is it an embedded youtube link?
                 # {"version":"embed","uri":"youtube:wOeZB7bnoxw"}
+                # Skipping embedded Youtube videos as these seem to kill kodi for some reason.
                 if item['media'][0]['variants'][0]['version'] == 'embed':
                     if str(item['media'][0]['variants'][0]['uri']).find("youtube:") >= 0:
-                        youtube_id = str(item['media'][0]['variants'][0]['uri']).replace("youtube:","")
-                        file = "plugin://plugin.video.youtube/play/?video_id=" + youtube_id
+                        youtube_id = str(item['media'][0]['variants'][0]['uri']).replace("youtube:", "")
+                        log("skipping embedded youtube video", youtube_id)
                     else:
-
                         log("skipping mediatype", str(item['media'][0]['variants'][0]['uri']))
 
-                        # go to the next item in the loop
-                        continue
+                    # go to the next item in the loop
+                    continue
                 else:
                     # max video quality 0: low, 1: medium, 2: high
                     # Lets find a video with the desired quality or lower
@@ -307,7 +319,6 @@ class Main(object):
         # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self.plugin_handle)
 
-
     def find_720p_video(self, file, item):
         if file == "":
             try:
@@ -329,7 +340,6 @@ class Main(object):
                 pass
         return file
 
-
     def find_tablet_video(self, file, item):
         if file == "":
             try:
@@ -350,7 +360,6 @@ class Main(object):
             except IndexError:
                 pass
         return file
-
 
     def find_mobile_video(self, file, item):
         if file == "":

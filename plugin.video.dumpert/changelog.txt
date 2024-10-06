@@ -1,3 +1,7 @@
+v1.1.12 (2024-10-01)
+- Removed (!!) embedded Youtube videos as these seem to kill kodi for some reason
+- Cleaned up description
+
 v1.1.11 (2022-12-27)
 - Not using xbmc.translatePath anymore as that method has been removed in Kodi 20 and up
 

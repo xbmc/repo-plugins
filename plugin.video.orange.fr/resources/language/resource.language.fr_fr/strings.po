@@ -24,15 +24,15 @@ msgstr "Installer IPTV Manager…"
 
 msgctxt "#30102"
 msgid "Help 30102"
-msgstr ""
+msgstr "IPTV Manager est requis pour la TV en direct dans Kodi"
 
 msgctxt "#30103"
-msgid "Enable IPTV Manager integration"
-msgstr "Activer l'intégration avec IPTV Manager"
+msgid "Enable Kodi live TV"
+msgstr "Activer la TV en direct dans Kodi"
 
 msgctxt "#30104"
 msgid "Help 30104"
-msgstr ""
+msgstr "Activer cette option pour accéder à vos chaînes en direct depuis Kodi"
 
 msgctxt "#30105"
 msgid "Go to IPTV Manager settings…"
@@ -54,7 +54,7 @@ msgstr "Pays"
 
 msgctxt "#30202"
 msgid "Help 30202"
-msgstr ""
+msgstr "Sélectionner le pays de votre fournisser d'accès à internet"
 
 msgctxt "#30203"
 msgid "Internet service provider"
@@ -62,6 +62,30 @@ msgstr "Fournisseur d'accès à internet"
 
 msgctxt "#30204"
 msgid "Help 30204"
+msgstr "Sélectionner votre fournisser"
+
+msgctxt "#30205"
+msgid "Use login credentials"
+msgstr "Utiliser des identifiants de connexion"
+
+msgctxt "#30206"
+msgid "Help 30206"
+msgstr "Certains fournisseurs peuvent demander une authentification, particulièrement si vous accéder au service depuis une connexion différente."
+
+msgctxt "#30207"
+msgid "Login"
+msgstr "Identifiant"
+
+msgctxt "#30208"
+msgid "Help 30208"
+msgstr ""
+
+msgctxt "#30209"
+msgid "Password"
+msgstr "Mot de passe"
+
+msgctxt "#30210"
+msgid "Help 30210"
 msgstr ""
 
 # Proxy settings (from 30300 to 30399)

@@ -5,22 +5,23 @@ import json
 import re
 from abc import ABC
 from datetime import date, datetime, timedelta
-from urllib.error import HTTPError
-from urllib.parse import urlparse
-from urllib.request import Request, urlopen
+from http.client import HTTPSConnection
+from urllib.parse import urlencode
 
 import xbmc
 
 from lib.providers.abstract_provider import AbstractProvider
-from lib.utils.kodi import build_addon_url, get_drm, get_global_setting, log
-from lib.utils.request import build_request, get_random_ua, open_request
+from lib.utils.kodi import DRM, build_addon_url, get_addon_setting, get_drm, get_global_setting, log
+from lib.utils.request import get_cookies, request, request_json, request_text, to_cookie_string
 
 _PROGRAMS_ENDPOINT = "https://rp-ott-mediation-tv.woopic.com/api-gw/live/v3/applications/STB4PC/programs?period={period}&epgIds=all&mco={mco}"
 _CATCHUP_CHANNELS_ENDPOINT = "https://rp-ott-mediation-tv.woopic.com/api-gw/catchup/v4/applications/PC/channels"
 _CATCHUP_ARTICLES_ENDPOINT = "https://rp-ott-mediation-tv.woopic.com/api-gw/catchup/v4/applications/PC/channels/{catchup_channel_id}/categories/{category_id}"
 _CATCHUP_VIDEOS_ENDPOINT = "https://rp-ott-mediation-tv.woopic.com/api-gw/catchup/v4/applications/PC/groups/{group_id}"
 _CHANNELS_ENDPOINT = "https://rp-ott-mediation-tv.woopic.com/api-gw/pds/v1/live/ew?everywherePopulation=OTT_Metro"
-_STREAM_ENDPOINT = "https://mediation-tv.orange.fr/all/api-gw/{stream_type}/{version}/auth/accountToken/applications/PC/{item_type}/{stream_id}/stream?terminalModel=WEB_PC"
+
+_LIVE_STREAM_ENDPOINT = "https://mediation-tv.orange.fr/all/api-gw/live/v3/auth/accountToken/applications/PC/channels/{stream_id}/stream?terminalModel=WEB_PC&terminalId={terminal_id}"
+_CATCHUP_STREAM_ENDPOINT = "https://mediation-tv.orange.fr/all/api-gw/catchup/v4/auth/accountToken/applications/PC/videos/{stream_id}/stream?terminalModel=WEB_PC&terminalId={terminal_id}"
 
 _STREAM_LOGO_URL = "https://proxymedia.woopic.com/api/v1/images/2090{path}"
 _LIVE_HOMEPAGE_URL = "https://chaines-tv.orange.fr/"
@@ -35,18 +36,20 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
     groups = {}
 
     def get_live_stream_info(self, stream_id: str) -> dict:
-        return self._get_stream_info("live", "v3", "channels", stream_id)
+        """Get live stream info."""
+        auth_url = _LIVE_HOMEPAGE_URL
+        return self._get_stream_info(auth_url, _LIVE_STREAM_ENDPOINT, stream_id)
 
     def get_catchup_stream_info(self, stream_id: str) -> dict:
-        return self._get_stream_info("catchup", "v4", "videos", stream_id)
+        auth_url = _CATCHUP_VIDEO_URL.format(stream_id=stream_id)
+        return self._get_stream_info(auth_url, _CATCHUP_STREAM_ENDPOINT, stream_id)
 
     def get_streams(self) -> list:
         """Load stream data from Orange and convert it to JSON-STREAMS format."""
-        req = build_request(_CHANNELS_ENDPOINT)
-        channels = dict(open_request(req, {"channels": {}}))["channels"]
+        channels = request_json(_CHANNELS_ENDPOINT, default={"channels": {}})["channels"]
+        channels.sort(key=lambda channel: channel["displayOrder"])
 
         log(f"{len(channels)} channels found", xbmc.LOGINFO)
-        channels.sort(key=lambda channel: channel["displayOrder"])
 
         return [
             {
@@ -73,6 +76,9 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
         )
 
         programs = self._get_programs(start_day, days_to_display, self.chunks_per_day, self.mco)
+
+        log(f"{len(programs)} EPG entries found", xbmc.LOGINFO)
+
         epg = {}
 
         for program in programs:
@@ -118,10 +124,7 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
 
     def get_catchup_channels(self) -> list:
         """Load available catchup channels."""
-        req = build_request(_CATCHUP_CHANNELS_ENDPOINT)
-        channels = open_request(req, [])
-
-        log(f"{len(channels)} catchup channels found", xbmc.LOGINFO)
+        channels = request_json(_CATCHUP_CHANNELS_ENDPOINT, default=[])
 
         return [
             {
@@ -134,8 +137,8 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
 
     def get_catchup_categories(self, catchup_channel_id: str) -> list:
         """Return a list of catchup categories for the specified channel id."""
-        req = build_request(_CATCHUP_CHANNELS_ENDPOINT + "/" + catchup_channel_id)
-        categories = dict(open_request(req, {"categories": {}}))["categories"]
+        url = _CATCHUP_CHANNELS_ENDPOINT + "/" + catchup_channel_id
+        categories = request_json(url, default={"categories": {}})["categories"]
 
         return [
             {
@@ -148,9 +151,7 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
     def get_catchup_articles(self, catchup_channel_id: str, category_id: str) -> list:
         """Return a list of catchup groups for the specified channel id and category id."""
         url = _CATCHUP_ARTICLES_ENDPOINT.format(catchup_channel_id=catchup_channel_id, category_id=category_id)
-        req = build_request(url)
-
-        articles = dict(open_request(req, {"articles": {}}))["articles"]
+        articles = request_json(url, default={"articles": {}})["articles"]
 
         return [
             {
@@ -163,8 +164,8 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
 
     def get_catchup_videos(self, catchup_channel_id: str, article_id: str) -> list:
         """Return a list of catchup videos for the specified channel id and article id."""
-        req = build_request(_CATCHUP_VIDEOS_ENDPOINT.format(group_id=article_id))
-        videos = dict(open_request(req, {"videos": {}}))["videos"]
+        url = _CATCHUP_VIDEOS_ENDPOINT.format(group_id=article_id)
+        videos = request_json(url, default={"videos": {}})["videos"]
 
         return [
             {
@@ -182,79 +183,135 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
             for video in videos
         ]
 
-    def _get_stream_info(self, stream_type: str, version: str, item_type: str, stream_id: str) -> dict:
+    def _get_stream_info(self, auth_url: str, stream_endpoint: str, stream_id: str) -> dict:
         """Load stream info from Orange."""
-        auth_url = _LIVE_HOMEPAGE_URL if stream_type == "live" else _CATCHUP_VIDEO_URL.format(stream_id=stream_id)
-        url = _STREAM_ENDPOINT.format(
-            stream_type=stream_type,
-            version=version,
-            item_type=item_type,
-            stream_id=stream_id,
+        tv_token, terminal_id, wassup = (
+            self._retrieve_auth_data(
+                auth_url, get_addon_setting("provider.username"), get_addon_setting("provider.password")
+            )
+            if get_addon_setting("provider.use_credentials") == "true"
+            else self._retrieve_auth_data(auth_url)
         )
-        req, tv_token = self._build_auth_request(url, auth_url=auth_url)
 
-        try:
-            with urlopen(req) as res:
-                stream_info = json.loads(res.read())
-        except HTTPError as error:
-            log(error, xbmc.LOGERROR)
-            if error.code == 403 or error.code == 401:
-                return False
+        if tv_token is None or terminal_id is None:
+            log("Authentication failed", xbmc.LOGERROR)
+            return None
+
+        url = stream_endpoint.format(stream_id=stream_id, terminal_id=terminal_id)
+
+        log(f"url: {url}")
+        stream = request_json(f"{url}", headers={"tv_token": f"Bearer {tv_token}", "Cookie": f"wassup={wassup}"})
+
+        if stream is None:
+            log("Empty stream data", xbmc.LOGERROR)
+            return None
 
         drm = get_drm()
-        protectionData = (
-            stream_info.get("protectionData", None)
-            if stream_info.get("protectionData", None) is not None
-            else stream_info.get("protectionDatas")
+        license_server_url = self._extract_license_server_url(stream, drm)
+        headers = urlencode(
+            {
+                "tv_token": f"Bearer {tv_token}",
+                "Content-Type": "",
+                "Cookie": f"wassup={wassup}",
+            }
         )
+        post_data = "R{SSM}"
+        response_data = ""
+
+        stream_info = {
+            "path": stream.get("url"),
+            "mime_type": "application/xml+dash",
+            "manifest_type": "mpd",
+            "license_type": drm.value,
+            "license_key": f"{license_server_url}|{headers}|{post_data}|{response_data}",
+        }
+
+        log(stream_info, xbmc.LOGDEBUG)
+        return stream_info
+
+    def _extract_license_server_url(self, stream: dict, drm: DRM) -> str:
+        """Extract license server url from stream info."""
+        protectionData = (
+            stream.get("protectionData") if stream.get("protectionData") is not None else stream.get("protectionDatas")
+        )
+
         license_server_url = None
 
         for system in protectionData:
             if system.get("keySystem") == drm.value:
                 license_server_url = system.get("laUrl")
 
-        headers = (
-            f"User-Agent={get_random_ua()}"
-            + f"&Host={urlparse(url).netloc}"
-            + f"&tv_token=Bearer {tv_token}"
-            + "&Content-Type="
-        )
-        post_data = "R{SSM}"
-        response = ""
+        return license_server_url
 
-        stream_info = {
-            "path": stream_info["url"],
-            "mime_type": "application/xml+dash",
-            "manifest_type": "mpd",
-            "license_type": drm.value,
-            "license_key": f"{license_server_url}|{headers}|{post_data}|{response}",
-        }
+    def _retrieve_auth_data(self, auth_url: str, login: str = None, password: str = None) -> (str, str, str):
+        """Retreive auth data from Orange (tv token and terminal id, plus wassup cookie when using credentials)."""
+        cookies = {}
 
-        log(stream_info, xbmc.LOGDEBUG)
-        return stream_info
+        if login is not None and password is not None:
+            conn = HTTPSConnection("login.orange.fr")
+            res = request(conn, "https://login.orange.fr")
 
-    def _build_auth_request(self, url: str, additional_headers: dict = None, auth_url: str = None) -> (Request, str):
-        """Build HTTP request."""
-        tv_token = None
+            if res is None:
+                log("Error while authenticating (init)", xbmc.LOGWARNING)
+                conn.close()
+                return None, None, None
 
-        if additional_headers is None:
-            additional_headers = {}
+            cookies = get_cookies(res)
+            res.read()
 
-        if auth_url is not None:
-            req = build_request(auth_url, {"User-Agent": get_random_ua()})
+            res = request(
+                conn,
+                "https://login.orange.fr/api/login",
+                "POST",
+                headers={
+                    "Content-Type": "application/json",
+                    "Cookie": to_cookie_string(cookies, ["xauth"]),
+                },
+                body=json.dumps({"login": login, "params": {}, "isSosh": False}),
+            )
 
-            with urlopen(req) as res:
-                html = res.read().decode("utf-8")
+            if res is None or res.status != 200:
+                log("Error while authenticating (login)", xbmc.LOGERROR)
+                conn.close()
+                return None, None, None
 
+            cookies = get_cookies(res)
+            res.read()
+
+            res = request(
+                conn,
+                "https://login.orange.fr/api/password",
+                "POST",
+                headers={
+                    "Content-Type": "application/json",
+                    "Cookie": to_cookie_string(cookies, ["xauth"]),
+                },
+                body=json.dumps({"password": password, "remember": True}),
+            )
+
+            if res is None or res.status != 200:
+                log("Error while authenticating (password)", xbmc.LOGERROR)
+                conn.close()
+                return None, None, None
+
+            cookies = get_cookies(res)
+            res.read()
+            conn.close()
+
+        html = request_text(auth_url, headers={"Cookie": to_cookie_string(cookies, ["trust", "wassup"])})
+
+        if html is None:
+            log("Authentication page load failed", xbmc.LOGERROR)
+            return None, None, None
+
+        try:
             tv_token = re.search('instanceInfo:{token:"([a-zA-Z0-9-_.]+)"', html).group(1)
             household_id = re.search('householdId:"([A-Z0-9]+)"', html).group(1)
-
-            additional_headers["tv_token"] = f"Bearer {tv_token}"
-            additional_headers["User-Agent"] = get_random_ua()
-
-            url += f"&terminalId=Windows10-x64-Firefox-{household_id}"
-
-        return build_request(url, additional_headers), tv_token
+            log(f"tv_token: {tv_token}, household_id: {household_id}, wassup: {cookies.get('wassup')}", xbmc.LOGDEBUG)
+            return tv_token, household_id, cookies.get("wassup")
+        except AttributeError:
+            log("Cannot extract tv token or household id", xbmc.LOGERROR)
+            return None, None, None
 
     def _extract_logo(self, logos: list, definition_type: str = "mobileAppliDark") -> str:
         for logo in logos:
@@ -278,10 +335,6 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
                 period = "today"
 
             url = _PROGRAMS_ENDPOINT.format(period=period, mco=mco)
-            req = build_request(url)
-            log(f"Fetching: {url}", xbmc.LOGINFO)
-
-            with urlopen(req) as res:
-                programs.extend(json.loads(res.read()))
+            programs.extend(request_json(url, default=[]))
 
         return programs

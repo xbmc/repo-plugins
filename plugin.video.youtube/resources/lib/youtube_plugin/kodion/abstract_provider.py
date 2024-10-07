@@ -12,7 +12,14 @@ from __future__ import absolute_import, division, unicode_literals
 
 import re
 
-from .constants import CHECK_SETTINGS, CONTENT, PATHS, REROUTE_PATH
+from .constants import (
+    CHECK_SETTINGS,
+    CONTAINER_ID,
+    CONTAINER_POSITION,
+    CONTENT,
+    PATHS,
+    REROUTE_PATH,
+)
 from .exceptions import KodionException
 from .items import (
     DirectoryItem,
@@ -73,7 +80,7 @@ class AbstractProvider(object):
         self.register_path(r''.join((
             '^',
             '(', PATHS.SEARCH, '|', PATHS.EXTERNAL_SEARCH, ')',
-            '/(?P<command>input|query|list|remove|clear|rename)?/?$'
+            '/(?P<command>input|input_prompt|query|list|remove|clear|rename)?/?$'
         )), self.on_search)
 
         self.register_path(r''.join((
@@ -110,10 +117,14 @@ class AbstractProvider(object):
         return wrapper
 
     def run_wizard(self, context):
-        settings = context.get_settings()
+        # ui local variable used for ui.get_view_manager() in unofficial version
         ui = context.get_ui()
 
-        context.send_notification(CHECK_SETTINGS, 'defer')
+        context.wakeup(
+            CHECK_SETTINGS,
+            timeout=5,
+            payload={'state': 'defer'},
+        )
 
         wizard_steps = self.get_wizard_steps()
 
@@ -135,8 +146,13 @@ class AbstractProvider(object):
                     else:
                         step += 1
         finally:
+            settings = context.get_settings(refresh=True)
             settings.setup_wizard_enabled(False)
-            context.send_notification(CHECK_SETTINGS, 'process')
+            context.wakeup(
+                CHECK_SETTINGS,
+                timeout=5,
+                payload={'state': 'process'},
+            )
 
     @staticmethod
     def get_wizard_steps():
@@ -159,9 +175,9 @@ class AbstractProvider(object):
                 result, new_options = result
                 options.update(new_options)
 
-            refresh = context.get_param('refresh')
-            if refresh is not None:
-                options[self.RESULT_UPDATE_LISTING] = bool(refresh)
+            if context.get_param('refresh'):
+                options[self.RESULT_CACHE_TO_DISC] = False
+                options[self.RESULT_UPDATE_LISTING] = True
 
             return result, options
 
@@ -211,7 +227,14 @@ class AbstractProvider(object):
         else:
             page_token = ''
         params = dict(params, page=page, page_token=page_token)
-        return provider.reroute(context=context, path=path, params=params)
+
+        if (not context.get_infobool('System.HasActiveModalDialog')
+                and context.is_plugin_path(
+                    context.get_infolabel('Container.FolderPath'),
+                    partial=True,
+                )):
+            return provider.reroute(context=context, path=path, params=params)
+        return provider.navigate(context.clone(path, params))
 
     @staticmethod
     def on_reroute(provider, context, re_match):
@@ -234,10 +257,16 @@ class AbstractProvider(object):
 
         if not path:
             return False
-        if path == current_path and params == current_params:
-            if 'refresh' not in params:
-                return False
+
+        if 'refresh' in params:
+            container = context.get_infolabel('System.CurrentControlId')
+            position = context.get_infolabel('Container.CurrentItem')
             params['refresh'] += 1
+        elif path == current_path and params == current_params:
+            return False
+        else:
+            container = None
+            position = None
 
         result = None
         function_cache = context.get_function_cache()
@@ -252,16 +281,22 @@ class AbstractProvider(object):
         except Exception as exc:
             context.log_error('Rerouting error: |{0}|'.format(exc))
         finally:
-            context.log_debug('Rerouting to |{path}| |{params}|{status}'
-                              .format(path=path,
-                                      params=params,
+            uri = context.create_uri(path, params)
+            context.log_debug('Rerouting to |{uri}|{status}'
+                              .format(uri=uri,
                                       status='' if result else ' failed'))
             if not result:
                 return False
-            context.get_ui().set_property(REROUTE_PATH, path)
+
+            ui = context.get_ui()
+            ui.set_property(REROUTE_PATH, path)
+            if container and position:
+                ui.set_property(CONTAINER_ID, container)
+                ui.set_property(CONTAINER_POSITION, position)
+
             context.execute(''.join((
                 'ActivateWindow(Videos, ',
-                context.create_uri(path, params),
+                uri,
                 ', return)' if window_return else ')',
             )))
         return True
@@ -311,7 +346,7 @@ class AbstractProvider(object):
             ui.refresh_container()
             return True
 
-        if command == 'input':
+        if command.startswith('input'):
             query = None
             #  came from page 1 of search query by '..'/back
             #  user doesn't want to input on this path
@@ -336,7 +371,10 @@ class AbstractProvider(object):
                 return False
 
             context.set_path(PATHS.SEARCH, 'query')
-            return provider.on_search_run(context=context, search_text=query)
+            return (
+                provider.on_search_run(context=context, search_text=query),
+                {provider.RESULT_CACHE_TO_DISC: command != 'input_prompt'},
+            )
 
         context.set_content(CONTENT.LIST_CONTENT)
         result = []

@@ -1,3 +1,8 @@
+v3.1.0 (2024-10-08) Berkan Teber <berkan@put.io>
+    * Better identify media files
+    * Append language code to subtitle names for language identification
+    * Do not use deprecated methods
+
 v3.0.2 (2023-11-27) Berkan Teber <berkan@put.io>
     * Update Kodi API endpoint (#20)
     * Use `account_status` to verify if account is active (#20)

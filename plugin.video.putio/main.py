@@ -54,73 +54,59 @@ def populate_dir(files):
     """Fills a directory listing with put.io files."""
     list_items = []
     for item in files:
-        thumbnail = item.screenshot or get_resource_path('mid-folder.png')
-        li = xbmcgui.ListItem(label=item.name,
-                              label2=item.name)
-        li.setArt({
-            'icon': thumbnail,
-            'thumb': thumbnail
-        })
+        li = xbmcgui.ListItem(label=item.name)
 
-        # If known prehand, this can (but does not have to) avoid HEAD requests being sent to HTTP servers to figure out
-        # file type.
-        # http://mirrors.kodi.tv/docs/python-docs/16.x-jarvis/xbmcgui.html#ListItem-setMimeType
+        thumbnail = item.screenshot or get_resource_path('mid-folder.png')
+        li.setArt({'icon': thumbnail,'thumb': thumbnail})
+
+        # If known prehand, this can (but does not have to) avoid HEAD requests to figure out file type.
         li.setMimeType(mimetype=item.content_type)
 
-        # http://kodi.wiki/view/InfoLabels
-        info_labels = {
-            'date': item.created_at.strftime('%d.%m.%Y'),
-            'size': item.size,
-            'title': item.name,
-        }
-
-        if item.is_video:
+        if item.is_folder:
+            # According to Kodi authors, Folder's type can be 'video' if you are passing it to `.setInfo()` method.
+            item_type = 'video'
+            url = build_url(action='list', item=item.id)
+            li.setIsFolder(True)
+        elif item.is_video:
             item_type = 'video'
             url = build_url(action='play', item=item.id)
             li.setProperty(key='IsPlayable', value='true')
 
-            info_labels['mediatype'] = 'video'
+            info_tag = li.getVideoInfoTag()
+            info_tag.setTitle(item.name)
+            info_tag.setMediaType('video')
 
-            if hasattr(item, 'video_metadata') and item.video_metadata:
-                metadata = item.video_metadata
-
+            metadata = getattr(item, 'video_metadata', None)
+            if metadata:
                 duration = metadata['duration']
-                video_offset = item.start_from if hasattr(item, 'start_from') else 0
-
+                video_offset = getattr(item, 'start_from', 0)
                 # mark the video as watched if there is 5% progress left
-                video_finished = duration and ((duration - video_offset) <= (duration * 0.05))
+                video_finished = (duration - video_offset <= duration * 0.05) if duration else False
 
-                if duration:
-                    info_labels['duration'] = duration
-                    if video_finished:
-                        info_labels['playcount'] = str(1)
-
-                # resumetime and totaltime are the undocumented properties to show resumable icon.
-                if (not video_finished) and video_offset:
-                    li.setProperty(key='resumetime', value=str(video_offset))
-                if duration:
-                    li.setProperty(key='totaltime', value=str(duration))
-
-        elif item.is_folder:
-            # folder's type can be 'video' if you are passing it to setInfo method. Kodi authors said this. So, who
-            # cares.
-            item_type = 'video'
-            url = build_url(action='list', item=item.id)
+                info_tag.setDuration(int(duration))
+                if video_finished:
+                    info_tag.setPlaycount(1)
+                elif video_offset:
+                    info_tag.setResumePoint(video_offset, duration)
         elif item.is_audio:
             item_type = 'music'
             url = build_url(action='play', item=item.id)
             li.setProperty(key='IsPlayable', value='true')
-        else:  # video or audio, no other types are available here
+
+            info_tag = li.getMusicInfoTag()
+            info_tag.setTitle(item.name)
+            info_tag.setMediaType('music')
+        else:
+            # Only folder, audio, video is available. See `PutioApiHandler.is_showable()`.
             continue
 
-        li.setInfo(type=item_type, infoLabels=info_labels)
+        li.setInfo(type=item_type, infoLabels={'date': item.created_at.strftime('%d.%m.%Y'), 'size': item.size})
 
         context_menu_items = [(I18N(32040), 'Container.Refresh')]
         if not item.is_shared:
             # url when a delete action is triggered
             delete_ctx_url = build_url(action='delete', item=item.id)
-            context_menu_items.append(
-                (I18N(32042), 'RunPlugin(%s)' % delete_ctx_url))  # delete context
+            context_menu_items.append((I18N(32042), 'RunPlugin(%s)' % delete_ctx_url))  # delete context
 
         li.addContextMenuItems(context_menu_items)
         list_items.append((url, li, item.is_folder))
@@ -139,22 +125,24 @@ def play(item):
     """Plays the given item from where it was left off"""
 
     thumbnail = item.screenshot or item.icon
-    li = xbmcgui.ListItem(label=item.name,
-                          label2=item.name)
-    li.setArt({
-        'icon': thumbnail,
-        'thumb': thumbnail
-    })
-
-    li.setInfo(type='video',
-               infoLabels={
-                   'size': item.size,
-                   'title': item.name,
-                   'mediatype': 'video',
-               })
-
+    li = xbmcgui.ListItem(label=item.name)
+    li.setArt({'icon': thumbnail,'thumb': thumbnail})
     li.setPath(item.stream_url())
-    li.setSubtitles(item.subtitles())
+    li.setMimeType(mimetype=item.content_type)
+
+    if item.is_video:
+        li.setInfo(type='video', infoLabels={'date': item.created_at.strftime('%d.%m.%Y'), 'size': item.size})
+        li.setSubtitles(item.subtitles())
+
+        info_tag = li.getVideoInfoTag()
+        info_tag.setTitle(item.name)
+        info_tag.setMediaType('video')
+    elif item.is_audio:
+        li.setInfo(type='music', infoLabels={'date': item.created_at.strftime('%d.%m.%Y'), 'size': item.size})
+
+        info_tag = li.getMusicInfoTag()
+        info_tag.setTitle(item.name)
+        info_tag.setMediaType('music')
 
     xbmcplugin.setResolvedUrl(PLUGIN_HANDLE, succeeded=True, listitem=li)
 

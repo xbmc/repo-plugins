@@ -203,7 +203,13 @@ class _File(_BaseResource):
             truncated_subtitle_key = subtitle['key'][:5]
             subtitle_directory_path = '%s/%s' % (video_directory_path, truncated_subtitle_key)
             xbmcvfs.mkdirs(subtitle_directory_path)
-            subtitle_path = '%s/%s' % (subtitle_directory_path, subtitle['name'])
+
+            subtitle_name = subtitle['name']
+            subtitle_language = subtitle['language_code'] or ''
+            if len(subtitle_language) == 3:  # sometimes this returns wrong
+                subtitle_name = subtitle_name + ' - ' + subtitle_language
+
+            subtitle_path = '%s/%s' % (subtitle_directory_path, subtitle_name)
             # FIXME: Parallelize downloads.
             subtitle_url = '%s/%s' % (subtitles_list_url, subtitle['key'])
             self._download_subtitle(subtitle_url, subtitle_path)
@@ -220,17 +226,17 @@ class _File(_BaseResource):
     # FIXME: temporarily added.
     @property
     def is_video(self):
-        return 'video' in self.content_type
+        return self.file_type == 'VIDEO'
 
     # FIXME: temporarily added.
     @property
     def is_audio(self):
-        return 'audio' in self.content_type
+        return self.file_type == 'AUDIO'
 
     # FIXME: temporarily added.
     @property
     def is_folder(self):
-        return self.content_type == 'application/x-directory'
+        return self.file_type == 'FOLDER'
 
     @classmethod
     def upload(cls, path, name=None, parent_id=0):

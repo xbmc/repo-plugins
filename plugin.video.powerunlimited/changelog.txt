@@ -1,3 +1,6 @@
+v1.0.8 (2024-10-04)
+- updated the addon to use the changed website
+
 v1.0.7 (2018-01-20)
 - removed looking for video dialogue
 - addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.

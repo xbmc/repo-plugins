@@ -28,11 +28,11 @@ msgid "For bugs, requests or general questions visit the PowerUnlimited Tv threa
 msgstr ""
 
 msgctxt "#30000"
-msgid "All Videos"
+msgid "Videos"
 msgstr ""
 
 msgctxt "#30001"
-msgid "PU-TV"
+msgid "Podcasts"
 msgstr ""
 
 msgctxt "#30002"

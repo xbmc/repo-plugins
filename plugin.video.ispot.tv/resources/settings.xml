@@ -1,0 +1,89 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="plugin.video.ispot.tv">
+        <category id="general" label="30001" help="">
+			<group id="1" label="">
+				<setting id="Enable_SAP" type="boolean" label="30030">
+					<level>1</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="Enable_Debugging" type="boolean" label="30000">
+					<level>1</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+                <setting id="Install_Logger" type="action" label="30008" parent="Enable_Debugging">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<and>
+                                <condition operator="is" setting="Enable_Debugging">true</condition>
+                                <condition on="property" name="InfoBool">!System.HasAddon(script.kodi.loguploader)</condition>
+							</and>
+						</dependency>
+					</dependencies>
+					<control type="button" format="action">
+						<data>InstallAddon(script.kodi.loguploader)</data>
+						<close>true</close>
+					</control>
+                </setting> 
+                <setting id="Run_Logger" type="action" label="30009" help="" parent="Enable_Debugging">
+					<level>1</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<and>
+                                <condition operator="is" setting="Enable_Debugging">true</condition>
+                                <condition on="property" name="InfoBool">System.HasAddon(script.kodi.loguploader)</condition>
+                                <condition on="property" name="InfoBool">System.AddonIsEnabled(script.kodi.loguploader)</condition>
+							</and>
+						</dependency>
+					</dependencies>
+					<control type="button" format="action">
+						<data>RunAddon(script.kodi.loguploader)</data>
+						<close>true</close>
+					</control>
+                </setting>
+				<setting id="Enable_Download" type="boolean" label="30010">
+					<level>1</level>
+					<default>false</default>
+					<control type="toggle"/>
+					<dependencies>
+						<dependency type="visible">
+                            <condition on="property" name="InfoBool">System.HasAddon(plugin.video.pseudotv.live)</condition>
+						</dependency>
+					</dependencies>
+				</setting>
+                <setting id="Download_Folder" type="path" label="30002" parent="Enable_Download">
+                    <level>1</level>
+                    <default>special://profile/addon_data/plugin.video.ispot.tv/resources/</default>
+                    <constraints>
+                        <sources>
+                            <source>files</source>
+                        </sources>
+                        <writable>true</writable>
+                    </constraints>
+					<dependencies>
+						<dependency type="visible">
+							<and>
+                                <condition operator="is" setting="Enable_Download">true</condition>
+                                <condition on="property" name="InfoBool">System.HasAddon(plugin.video.pseudotv.live)</condition>
+							</and>
+						</dependency>
+					</dependencies>
+                    <control type="button" format="path">
+                        <heading>30002</heading>
+                    </control>
+                </setting>
+            </group>
+		</category>
+	</section>
+</settings>

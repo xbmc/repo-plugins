@@ -52,6 +52,7 @@ class AbstractContext(object):
         'enable',
         'hide_folders',
         'hide_live',
+        'hide_next_page',
         'hide_playlists',
         'hide_search',
         'incognito',
@@ -65,6 +66,7 @@ class AbstractContext(object):
     }
     _INT_PARAMS = {
         'fanart_type',
+        'items_per_page',
         'live',
         'next_page_token',
         'offset',
@@ -81,7 +83,9 @@ class AbstractContext(object):
     }
     _LIST_PARAMS = {
         'channel_ids',
+        'item_filter',
         'playlist_ids',
+        'video_ids',
     }
     _STRING_PARAMS = {
         'api_key',
@@ -240,16 +244,7 @@ class AbstractContext(object):
             return uuid
         return access_manager
 
-    def get_video_playlist(self):
-        raise NotImplementedError()
-
-    def get_audio_playlist(self):
-        raise NotImplementedError()
-
-    def get_video_player(self):
-        raise NotImplementedError()
-
-    def get_audio_player(self):
+    def get_playlist_player(self):
         raise NotImplementedError()
 
     def get_ui(self):
@@ -314,7 +309,10 @@ class AbstractContext(object):
     def parse_uri(self, uri):
         uri = urlsplit(uri)
         path = uri.path
-        params = self.parse_params(dict(parse_qsl(uri.query)), update=False)
+        params = self.parse_params(
+            dict(parse_qsl(uri.query, keep_blank_values=True)),
+            update=False,
+        )
         return path, params
 
     def parse_params(self, params, update=True):
@@ -336,9 +334,11 @@ class AbstractContext(object):
                 elif param in self._FLOAT_PARAMS:
                     parsed_value = float(value)
                 elif param in self._LIST_PARAMS:
-                    parsed_value = [
-                        val for val in value.split(',') if val
-                    ]
+                    parsed_value = (
+                        list(value)
+                        if isinstance(value, (list, tuple)) else
+                        [val for val in value.split(',') if val]
+                    )
                 elif param in self._STRING_PARAMS:
                     parsed_value = to_str(value)
                     if param in self._STRING_BOOL_PARAMS:
@@ -451,8 +451,7 @@ class AbstractContext(object):
     def clone(self, new_path=None, new_params=None):
         raise NotImplementedError()
 
-    @staticmethod
-    def execute(command):
+    def execute(self, command, wait=False, wait_for=None):
         raise NotImplementedError()
 
     @staticmethod

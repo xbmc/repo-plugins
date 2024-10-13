@@ -51,6 +51,7 @@ class BaseRequestsClass(object):
             total=3,
             backoff_factor=0.1,
             status_forcelist={500, 502, 503, 504},
+            allowed_methods=None,
         )
     ))
     atexit.register(_session.close)
@@ -58,7 +59,8 @@ class BaseRequestsClass(object):
     def __init__(self, context, exc_type=None):
         settings = context.get_settings()
         self._verify = settings.verify_ssl()
-        self._timeout = settings.get_timeout()
+        self._timeout = settings.requests_timeout()
+        self._proxy = settings.proxy_settings()
 
         if isinstance(exc_type, tuple):
             self._default_exc = (RequestException,) + exc_type
@@ -89,6 +91,8 @@ class BaseRequestsClass(object):
             timeout = self._timeout
         if verify is None:
             verify = self._verify
+        if proxies is None:
+            proxies = self._proxy
         if allow_redirects is None:
             allow_redirects = True
 

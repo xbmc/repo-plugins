@@ -32,7 +32,7 @@ from ...constants import (
     SORT,
     WAKEUP,
 )
-from ...player import XbmcPlayer, XbmcPlaylist
+from ...player import XbmcPlaylistPlayer
 from ...settings import XbmcPluginSettings
 from ...ui import XbmcContextUI
 from ...utils import (
@@ -206,8 +206,8 @@ class XbmcContext(AbstractContext):
         'sign.go_to': 30502,
         'sign.in': 30111,
         'sign.out': 30112,
-        'sign.twice.text': 30547,
-        'sign.twice.title': 30546,
+        'sign.multi.text': 30547,
+        'sign.multi.title': 30546,
         'stats.commentCount': 30732,
         # 'stats.favoriteCount': 1036,
         'stats.likeCount': 30733,
@@ -320,10 +320,7 @@ class XbmcContext(AbstractContext):
         self._version = self._addon.getAddonInfo('version')
 
         self._ui = None
-        self._video_playlist = None
-        self._audio_playlist = None
-        self._video_player = None
-        self._audio_player = None
+        self._playlist = None
 
         atexit.register(self.tear_down)
 
@@ -349,7 +346,9 @@ class XbmcContext(AbstractContext):
         if num_args > 2:
             params = sys.argv[2][1:]
             if params:
-                self.parse_params(dict(parse_qsl(params)))
+                self.parse_params(
+                    dict(parse_qsl(params, keep_blank_values=True))
+                )
 
         # then Kodi resume status
         if num_args > 3 and sys.argv[3].lower() == 'resume:true':
@@ -426,25 +425,10 @@ class XbmcContext(AbstractContext):
             sub_language = None
         return sub_language
 
-    def get_video_playlist(self):
-        if not self._video_playlist:
-            self._video_playlist = XbmcPlaylist('video', proxy(self))
-        return self._video_playlist
-
-    def get_audio_playlist(self):
-        if not self._audio_playlist:
-            self._audio_playlist = XbmcPlaylist('audio', proxy(self))
-        return self._audio_playlist
-
-    def get_video_player(self):
-        if not self._video_player:
-            self._video_player = XbmcPlayer('video', proxy(self))
-        return self._video_player
-
-    def get_audio_player(self):
-        if not self._audio_player:
-            self._audio_player = XbmcPlayer('audio', proxy(self))
-        return self._audio_player
+    def get_playlist_player(self, playlist_type=None):
+        if not self._playlist or playlist_type:
+            self._playlist = XbmcPlaylistPlayer(proxy(self), playlist_type)
+        return self._playlist
 
     def get_ui(self):
         if not self._ui:
@@ -593,22 +577,24 @@ class XbmcContext(AbstractContext):
         new_context._watch_later_list = self._watch_later_list
 
         new_context._ui = self._ui
-        new_context._video_playlist = self._video_playlist
-        new_context._audio_playlist = self._audio_playlist
-        new_context._video_player = self._video_player
-        new_context._audio_player = self._audio_player
+        new_context._playlist = self._playlist
 
         return new_context
 
     def execute(self, command, wait=False, wait_for=None):
+        if not wait_for:
+            xbmc.executebuiltin(command, wait)
+            return
+
+        ui = self.get_ui()
+        ui.clear_property(wait_for)
+        pop_property = ui.pop_property
+        waitForAbort = xbmc.Monitor().waitForAbort
+
         xbmc.executebuiltin(command, wait)
-        if wait_for:
-            ui = self.get_ui()
-            monitor = xbmc.Monitor()
-            while not monitor.abortRequested():
-                monitor.waitForAbort(1)
-                if not ui.get_property(wait_for):
-                    break
+
+        while not pop_property(wait_for) and not waitForAbort(1):
+            pass
 
     @staticmethod
     def sleep(timeout=None):
@@ -761,10 +747,7 @@ class XbmcContext(AbstractContext):
 
         attrs = (
             '_ui',
-            '_video_playlist',
-            '_audio_playlist',
-            '_video_player',
-            '_audio_player',
+            '_playlist',
         )
         for attr in attrs:
             try:
@@ -773,8 +756,10 @@ class XbmcContext(AbstractContext):
             except AttributeError:
                 pass
 
-    def wakeup(self, target, timeout=None):
+    def wakeup(self, target, timeout=None, payload=None):
         data = {'target': target, 'response_required': bool(timeout)}
+        if payload:
+            data.update(payload)
         self.send_notification(WAKEUP, data)
         if not timeout:
             return

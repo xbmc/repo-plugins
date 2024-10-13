@@ -31,15 +31,7 @@ def _process_list_response(provider, context, json_data, item_filter):
     yt_items = json_data.get('items', [])
     if not yt_items:
         context.log_warning('v3 response: Items list is empty')
-        return [
-            CommandItem(
-                context.localize('page.back'),
-                'Action(ParentDir)',
-                context,
-                image='DefaultFolderBack.png',
-                plot=context.localize('page.empty'),
-            )
-        ]
+        return []
 
     video_id_dict = {}
     channel_id_dict = {}
@@ -51,16 +43,13 @@ def _process_list_response(provider, context, json_data, item_filter):
 
     new_params = {}
     params = context.get_params()
-    incognito = params.get('incognito', False)
-    if incognito:
-        new_params['incognito'] = incognito
+    if params.get('incognito'):
+        new_params['incognito'] = True
     addon_id = params.get('addon_id', '')
     if addon_id:
         new_params['addon_id'] = addon_id
 
     settings = context.get_settings()
-    use_play_data = not incognito and settings.use_local_history()
-
     thumb_size = settings.get_thumbnail_size()
     fanart_type = params.get('fanart_type')
     if fanart_type is None:
@@ -85,7 +74,7 @@ def _process_list_response(provider, context, json_data, item_filter):
             title = snippet.get('title', context.localize('untitled'))
 
             thumbnails = snippet.get('thumbnails')
-            if not thumbnails and yt_item.get('_partial'):
+            if not thumbnails:
                 thumbnails = {
                     thumb_type: {
                         'url': thumb['url'].format(item_id, ''),
@@ -251,8 +240,6 @@ def _process_list_response(provider, context, json_data, item_filter):
 
         if isinstance(item, VideoItem):
             item.video_id = item_id
-            if incognito:
-                item.set_play_count(0)
             # Set track number from playlist, or set to current list length to
             # match "Default" (unsorted) sort order
             position = snippet.get('position') or len(result)
@@ -289,7 +276,6 @@ def _process_list_response(provider, context, json_data, item_filter):
             'upd_kwargs': {
                 'data': None,
                 'live_details': True,
-                'use_play_data': use_play_data,
                 'item_filter': item_filter,
             },
             'complete': False,
@@ -451,11 +437,18 @@ def response_to_items(provider,
         context.log_debug('v3 response discarded: |%s|' % kind)
         return []
 
+    params = context.get_params()
+
     if kind_type in _KNOWN_RESPONSE_KINDS:
-        item_filter = context.get_settings().item_filter(item_filter)
+        item_filter = context.get_settings().item_filter(
+            update=item_filter,
+            override=params.get('item_filter'),
+        )
         result = _process_list_response(
             provider, context, json_data, item_filter
         )
+        if not result:
+            return result
     else:
         raise KodionException('Unknown kind: %s' % kind)
 
@@ -466,7 +459,7 @@ def response_to_items(provider,
         result.sort(key=sort, reverse=reverse)
 
     # no processing of next page item
-    if not result or not process_next_page:
+    if not process_next_page or params.get('hide_next_page'):
         return result
 
     # next page
@@ -477,7 +470,6 @@ def response_to_items(provider,
     We implemented our own calculation for the token into the YouTube client
     This should work for up to ~2000 entries.
     """
-    params = context.get_params()
     current_page = params.get('page')
     next_page = current_page + 1 if current_page else 2
     new_params = dict(params, page=next_page)

@@ -37,7 +37,7 @@ VALUE_FROM_STR = {
 # Flags
 ABORT_FLAG = 'abort_requested'
 BUSY_FLAG = 'busy'
-WAIT_FLAG = 'builtin_running'
+WAIT_END_FLAG = 'builtin_completed'
 
 # ListItem Properties
 CHANNEL_ID = 'channel_id'
@@ -70,6 +70,9 @@ PLAY_TIMESHIFT = 'timeshift'
 PLAY_WITH = 'play_with'
 
 # Stored data
+CONTAINER_ID = 'container_id'
+CONTAINER_FOCUS = 'container_focus'
+CONTAINER_POSITION = 'container_position'
 CONTENT_TYPE = 'content_type'
 DEVELOPER_CONFIGS = 'configs'
 LICENSE_TOKEN = 'license_token'
@@ -94,7 +97,7 @@ __all__ = (
     # Flags
     'ABORT_FLAG',
     'BUSY_FLAG',
-    'WAIT_FLAG',
+    'WAIT_END_FLAG',
 
     # ListItem properties
     'CHANNEL_ID',
@@ -127,6 +130,9 @@ __all__ = (
     'PLAY_WITH',
 
     # Stored data
+    'CONTAINER_ID',
+    'CONTAINER_FOCUS',
+    'CONTAINER_POSITION',
     'CONTENT_TYPE',
     'DEVELOPER_CONFIGS',
     'LICENSE_TOKEN',

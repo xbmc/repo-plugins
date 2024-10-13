@@ -72,7 +72,7 @@ class YouTubeRequestClient(BaseRequestsClass):
                     },
                 },
                 'thirdParty': {
-                    'embedUrl': 'https://www.youtube.com/embed/{json[videoId]}',
+                    'embedUrl': 'https://www.youtube.com/',
                 },
             },
             'headers': {
@@ -129,12 +129,41 @@ class YouTubeRequestClient(BaseRequestsClass):
                         'platform': 'MOBILE',
                     },
                 },
+                'thirdParty': {
+                    'embedUrl': 'https://www.google.com/',
+                },
             },
             'headers': {
                 'User-Agent': ('com.google.android.apps.youtube.unplugged/'
                                '{json[context][client][clientVersion]}'
                                ' (Linux; U; {json[context][client][osName]}'
                                ' {json[context][client][osVersion]}) gzip'),
+                'X-YouTube-Client-Name': '{_id}',
+                'X-YouTube-Client-Version': '{json[context][client][clientVersion]}',
+            },
+        },
+        'android_vr': {
+            '_id': 28,
+            '_query_subtitles': False,
+            'json': {
+                'context': {
+                    'client': {
+                        'clientName': 'ANDROID_VR',
+                        'clientVersion': '1.57.29',
+                        'deviceMake': 'Oculus',
+                        'deviceModel': 'Quest 3',
+                        'osName': 'Android',
+                        'osVersion': '12L',
+                        'androidSdkVersion': '32',
+                    }
+                }
+            },
+            'headers': {
+                'User-Agent': ('com.google.android.apps.youtube.vr.oculus/'
+                               '{json[context][client][clientVersion]}'
+                               ' (Linux; U; {json[context][client][osName]}'
+                               ' {json[context][client][osVersion]};'
+                               ' eureka-user Build/SQ3A.220605.009.A1) gzip'),
                 'X-YouTube-Client-Name': '{_id}',
                 'X-YouTube-Client-Version': '{json[context][client][clientVersion]}',
             },
@@ -197,7 +226,7 @@ class YouTubeRequestClient(BaseRequestsClass):
                     },
                 },
                 'thirdParty': {
-                    'embedUrl': 'https://www.youtube.com',
+                    'embedUrl': 'https://www.google.com/',
                 },
             },
             # Headers from a 2022 Samsung Tizen 6.5 based Smart TV
@@ -352,6 +381,10 @@ class YouTubeRequestClient(BaseRequestsClass):
         client = merge_dicts(cls.CLIENTS['_common'], client, templates)
         client['_name'] = client_name
 
+        for values, template_id, template in templates.values():
+            if template_id in values:
+                values[template_id] = template.format(**client)
+
         try:
             params = client['params']
             if client.get('_access_token'):
@@ -372,9 +405,5 @@ class YouTubeRequestClient(BaseRequestsClass):
                     client['params'] = params
         except KeyError:
             pass
-
-        for values, template_id, template in templates.values():
-            if template_id in values:
-                values[template_id] = template.format(**client)
 
         return client

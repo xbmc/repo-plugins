@@ -1,0 +1,45 @@
+name: Zip and Attach to Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Get repository name
+      id: repo-name
+      run: echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_OUTPUT
+
+    - name: Get version number
+      id: version
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const { owner, repo } = context.repo;
+          const release = await github.rest.repos.getRelease({
+            owner,
+            repo,
+            release_id: context.payload.release.id
+          });
+          return release.data.tag_name;
+
+    - name: Create folder and zip content
+      run: |
+        mkdir ${{ steps.repo-name.outputs.REPO_NAME }}
+        rsync -av --exclude=${{ steps.repo-name.outputs.REPO_NAME }} . ${{ steps.repo-name.outputs.REPO_NAME }}
+        zip -r ${{ steps.repo-name.outputs.REPO_NAME }}-${{ steps.version.outputs.result }}.zip ${{ steps.repo-name.outputs.REPO_NAME }}
+
+    - name: Upload release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./${{ steps.repo-name.outputs.REPO_NAME }}-${{ steps.version.outputs.result }}.zip
+        asset_name: ${{ steps.repo-name.outputs.REPO_NAME }}-${{ steps.version.outputs.result }}.zip
+        asset_content_type: application/zip

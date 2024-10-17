@@ -287,7 +287,7 @@ class Channel(chn_class.Channel):
             return None
 
         program_title = result_set["programTitle"]
-        episode_title = result_set["episodeTitle"]
+        episode_title = result_set.get("episodeTitle")
         url = "{}{}".format(self.baseUrl, result_set["_links"]["page"]["href"])
 
         item = MediaItem(episode_title or program_title, url, media_type=mediatype.EPISODE)
@@ -301,6 +301,7 @@ class Channel(chn_class.Channel):
         date_time = date_time.astimezone(self.__timezone)
         item.set_date(date_time.year, date_time.month, date_time.day,
                       date_time.hour, date_time.minute, date_time.second)
+
         if epg_item:
             if episode_title and program_title:
                 item.name = "{:02d}:{:02d} - {} - {}".format(date_time.hour, date_time.minute,
@@ -308,6 +309,10 @@ class Channel(chn_class.Channel):
             else:
                 item.name = "{:02d}:{:02d} - {}".format(date_time.hour, date_time.minute,
                                                         item.title)
+        elif not episode_title:
+            item.name = f"{item.name} {date_time.year}-{date_time.month:02}-{date_time.day:02}"
+
+
 
         item.complete = False
         return item

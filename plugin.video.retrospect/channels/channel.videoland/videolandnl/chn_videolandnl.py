@@ -384,7 +384,18 @@ class Channel(chn_class.Channel):
 
     def update_video_item(self, item: MediaItem) -> MediaItem:
         data = JsonHelper(UriHandler.open(item.url, additional_headers=self.httpHeaders))
+
+        # Check for video info and possible locks.
         video_info = data.get_value("blocks", 0, "content", "items", 0, "itemContent", "video")
+        if not video_info:
+            return item
+
+        if len(video_info.get("assets", [])) == 0:
+            target_info = data.get_value("blocks", 0, "content", "items", 0, "itemContent", "action", "target")
+            if target_info["type"] == "lock" and target_info["value_lock"]["reason"].lower() == "geoblocked":
+                XbmcWrapper.show_dialog(LanguageHelper.GeoLockedId, LanguageHelper.GeoLockedMessageId)
+                item.isGeoLocked = True
+                return item
 
         # Find the first Dash item for DRM info (assuming they are all equally DRM-ed).
         dash_assets = [v for v in video_info["assets"] if v["format"] == "dashcenc"]

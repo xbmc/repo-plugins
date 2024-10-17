@@ -129,6 +129,8 @@ class LanguageHelper(object):
     AddonsNotEnabledText = 30568
     FetchMultiApi = 30584
     PageOfPages = 30585
+    # 30586 and 30587 taken by settings.
+    GeoLockedMessageId = 30588
 
     Active = 30068
     InitChannelTitle = 30556

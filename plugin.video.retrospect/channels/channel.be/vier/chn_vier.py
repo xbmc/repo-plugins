@@ -30,7 +30,8 @@ class NextJsParser:
     def __call__(self, data: str) -> Tuple[JsonHelper, List[MediaItem]]:
         nextjs_regex = self.__regex
         try:
-            nextjs_data = Regexer.do_regex(nextjs_regex, data)[0]
+            result = Regexer.do_regex(nextjs_regex, data)
+            nextjs_data = result[0]
         except:
             Logger.debug(f"RAW NextJS: {data}")
             raise
@@ -106,7 +107,7 @@ class Channel(chn_class.Channel):
                               parser=[], creator=self.create_typed_nextjs_item)
 
         self._add_data_parser("https://www.goplay.be/", json=True, name="Main show parser",
-                              preprocessor=NextJsParser(r"{\"playlists\":(.+)}\]}\]\]$"),
+                              preprocessor=NextJsParser(r"{\"playlists\":(.+)}\]}\]\][\r\n]"),
                               parser=[], creator=self.create_season_item,
                               postprocessor=self.show_single_season)
 

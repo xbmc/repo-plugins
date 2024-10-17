@@ -1196,7 +1196,11 @@ msgctxt "#30587"
 msgid "Show streams with accessibility features"
 msgstr ""
 
-# empty strings from id 30588 to 30589
+msgctxt "#30588"
+msgid "This stream cannot be played due to geographical restrictions."
+msgstr ""
+
+# empty strings from id 30589 to 30589
 
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"

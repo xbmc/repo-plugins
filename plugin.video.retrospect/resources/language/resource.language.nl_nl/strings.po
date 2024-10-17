@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2024-09-02 01:26+0000\n"
 "Last-Translator: bas <bas@kodi.tv>\n"
@@ -1164,6 +1164,10 @@ msgstr "Aantal pagina's om te laden voor de hoofdlijst"
 msgctxt "#30587"
 msgid "Show streams with accessibility features"
 msgstr "Toon content met toegankelijkheidsfuncties"
+
+msgctxt "#30588"
+msgid "This stream cannot be played due to geographical restrictions."
+msgstr ""
 
 # empty strings from id 30584 to 30589
 msgctxt "#30590"

@@ -48,7 +48,7 @@ class Channel(chn_class.Channel):
         if self.channelCode == "tv4segroup":
             self.noImage = "tv4image.png"
             self.httpHeaders = {"Content-Type": "application/json", "Client-Name": "tv4-web",
-                                "Client-Version": "4.0.0"}
+                                "Client-Version": "5.2.0"}
         else:
             raise Exception("Invalid channel code")
 
@@ -782,7 +782,6 @@ class Channel(chn_class.Channel):
             "SportEventVideoFields": "fragment SportEventVideoFields on SportEvent { title id slug isLiveContent isDrmProtected access { hasAccess } synopsis { medium } images { logo { ...ImageFieldsLight } main16x9 { ...ImageFieldsLight source } brandLogo { ...ImageFieldsLight } } playableUntil { isoString humanDateTime } playableFrom { humanDateTime isoString readableDistance } liveEventEnd { isoString } }",
             "SurveyPollFields": "fragment SurveyPollFields on SurveyPoll { buttonText color endTime id image { main4x3 { ...ImageFieldsFull } } inactiveSubtitle inactiveTitle liveTriggerTimestamps options { id image { option1x1 { ...ImageFieldsLight } } text } publishing { metadataIds videoAssetIds } resultConfiguration { isResultPublic isResultStatic } resultSubtitle resultTitle status subtitle title vodTriggerTimes }",
             "ThemePanelFields": "fragment ThemePanelFields on ThemePanel { id title pitch hexColor images { image16x9 { ...ImageFieldsFull } } link { ... on ThemePanelSeriesLink { series { id slug genres numberOfAvailableSeasons parentalRating { ...ParentalRatingFields } images { brandLogo { ...ImageFieldsLight } } upsell { tierId } } } ... on ThemePanelMovieLink { movie { id slug genres productionCountries { countryCode name } productionYear parentalRating { ...ParentalRatingFields } images { brandLogo { ...ImageFieldsLight } } upsell { tierId } } } ... on ThemePanelEpisodeLink { episode { id slug upsell { tierId } } } ... on ThemePanelClipLink { clip { id slug } } ... on ThemePanelPageLink { page { id } } ... on ThemePanelUrlsLink { webUrl } ... on ThemePanelSportEventLink { sportEvent { id slug arena league round playableFrom { humanDateTime isoString readableDate } images { brandLogo { ...ImageFieldsLight } } upsell { tierId } } } } themePanelLinkText: linkText showMetadataForLink subtitle trailers { ...TrailerFields } showUpsellLabel }",
-            "TierPanels": "fragment TierPanels on TiersPanel { id title }",
             "TrailerFields": "fragment TrailerFields on Trailers { mp4 webm }",
             "UpcomingEpisodeFields": "fragment UpcomingEpisodeFields on UpcomingEpisode { id title seasonTitle playableFrom { humanDateTime isoString readableDateShort } image { main16x9 { ...ImageFieldsLight } } upsell { tierId } } ",
             "VideoFields": "fragment VideoFields on Video { id duration { readableShort readableMinutes seconds } isLiveContent access { hasAccess } isDrmProtected }",
@@ -860,7 +859,6 @@ class Channel(chn_class.Channel):
             query = """
                 query Page($pageId: ID!, $input: PageContentInput!) { page(id: $pageId) { id title content(input: $input) { pageInfo { ...PageInfoFields } panels { 
                     __typename
-                    ... on TiersPanel { __typename id title detailed } 
                     ... on ContinueWatchingPanel { __typename id title } 
                     ... on MediaPanel { __typename id slug title displayHint { mediaPanelImageRatio } } 
                     ... on SportEventPanel { __typename id title } 
@@ -871,7 +869,6 @@ class Channel(chn_class.Channel):
                     ... on ChannelPanel { __typename id title type } 
                     ... on ThemePanel { __typename ...ThemePanelFields } 
                     ... on SinglePanel { __typename ...SinglePanelFields } 
-                    ... on TiersPanel { __typename id title } 
                 } } } } 
                 %(PageInfoFields)s %(ThemePanelFields)s %(SinglePanelFields)s %(ImageFieldsFull)s %(ParentalRatingFields)s 
                 %(ImageFieldsLight)s %(TrailerFields)s %(SportEventFieldsLight)s %(SeriesFieldsLight)s %(MovieFieldsLight)s 

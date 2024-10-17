@@ -192,7 +192,7 @@ class Channel(chn_class.Channel):
             LanguageHelper.get_localized_string(LanguageHelper.CurrentlyPlayingEpisodes): (
                 self.__get_api_url(
                     "GridPage",
-                    "a8248fc130da34208aba94c4d5cc7bd44187b5f36476d8d05e03724321aafb40",
+                    "1e2d15ff7ffa578d33ebf1287d3f7af7fd47125552b564e96fd277a744345a69",
                     variables={"includeFullOppetArkiv": True, "selectionId": "live_start"}),
                 False),
 
@@ -964,7 +964,7 @@ class Channel(chn_class.Channel):
 
         data = UriHandler.open(url)
         json_data = JsonHelper(data)
-        possible_lists = json_data.get_value("data", "categoryPage", "lazyLoadedTabs", 1, "selections")
+        possible_lists = json_data.get_value("data", "categoryPage", "lazyLoadedTabs", -1, "selections")
         program_items = [genres["items"] for genres in possible_lists if
                          genres["selectionType"] == "all"]
         json_data.json = {
@@ -1362,11 +1362,11 @@ class Channel(chn_class.Channel):
         # LB = Low Bandwidth
 
         if in_sweden or not item.isGeoLocked:
-            supported_formats = {"hls": 0, "hls-ts-full": 2, "hls-cmaf-full": 3}
+            supported_formats = {"hls": 10, "hls-ts-full": 12, "hls-cmaf-full": 13}
             if not is_drm_protected:
                 supported_formats.update({"dash": 3, "dash-hbbtv-avc": 4, "dashhbbtv": 4})
         else:
-            supported_formats = {"hls": 0, "hls-ts-avc-51": 1}
+            supported_formats = {"hls": 10, "hls-ts-avc-51": 11}
             if not is_drm_protected:
                 supported_formats.update({"dash": 2, "dash-avc-51": 3})
 

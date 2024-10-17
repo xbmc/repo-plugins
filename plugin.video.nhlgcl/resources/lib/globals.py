@@ -255,10 +255,11 @@ def stream_to_listitem(stream_url):
         else:
             listitem.setProperty("inputstreamaddon", "inputstream.adaptive")
         listitem.setProperty("inputstream.adaptive.manifest_type", "hls")
-        listitem.setProperty("inputstream.adaptive.stream_headers",  'User-Agent=%s' % UA_PC)
+        listitem.setProperty("inputstream.adaptive.stream_headers",  'User-Agent=%s' % UA_PC)        
+        listitem.setProperty("inputstream.adaptive.manifest_headers",  'User-Agent=%s' % UA_PC)
         listitem.setProperty("inputstream.adaptive.license_key", '|User-Agent=%s' % UA_PC)
     else:
-        listitem = xbmcgui.ListItem(path=f"{stream_url}|{headers}")
+        listitem = xbmcgui.ListItem(path=f"{stream_url}|{'User-Agent=%s' % UA_PC}")
 
     listitem.setMimeType("application/x-mpegURL")
     return listitem

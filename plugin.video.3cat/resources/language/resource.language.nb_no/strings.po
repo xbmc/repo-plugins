@@ -1,88 +1,88 @@
 # Kodi Media Center language file
 # Addon Name: TV3cat
-# Addon id: plugin.video.tv3.cat
+# Addon id: plugin.video.3cat
 # Addon Provider: jqandreu
 msgid ""
 msgstr ""
 "Project-Id-Version: Kodi Addons\n"
-"Report-Msgid-Bugs-To: https://github.com/jqandreu/plugin.video.tv3.cat/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/jqandreu/plugin.video.3cat/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: jqandreu\n"
-"Language-Team:\n"
+"Last-Translator: jrdfrncs\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en_GB\n"
+"Language: nb_NO\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#30001"
 msgid "Today Featured"
-msgstr "Today Featured"
+msgstr "Anbefalt i dag"
 
 msgctxt "#30002"
 msgid "Don't miss"
-msgstr "Don't miss"
+msgstr "Ikke miss"
 
 msgctxt "#30003"
 msgid "Most viewed"
-msgstr "Most viewed"
+msgstr "Mest sett"
 
 msgctxt "#30004"
 msgid "Programs"
-msgstr "Programs"
+msgstr "Sendinger"
 
 msgctxt "#30005"
 msgid "Series"
-msgstr "Series"
+msgstr "Serier"
 
 msgctxt "#30006"
 msgid "News"
-msgstr "News"
+msgstr "Nyheter"
 
 msgctxt "#30007"
 msgid "Entertainment"
-msgstr "Entertainment"
+msgstr "Underholdning"
 
 msgctxt "#30008"
 msgid "Sports"
-msgstr "Sports"
+msgstr "Idrett"
 
 msgctxt "#30009"
 msgid "Documentaries"
-msgstr "Documentaries"
+msgstr "Dokumentaler"
 
 msgctxt "#30010"
 msgid "Divulgation"
-msgstr "Divulgation"
+msgstr "Avsløring"
 
 msgctxt "#30011"
 msgid "Culture"
-msgstr "Culture"
+msgstr "Kultur"
 
 msgctxt "#30012"
 msgid "Music"
-msgstr "Music"
+msgstr "Musikk"
 
 msgctxt "#30013"
 msgid "All A-Z"
-msgstr "All A-Z"
+msgstr "Alt A-Å"
 
 msgctxt "#30014"
 msgid "Aired A-Z"
-msgstr "Aired A-Z"
+msgstr "Nåværende A-Å"
 
 msgctxt "#30015"
 msgid ">>Next Page"
-msgstr ">>Next Page"
+msgstr ">>Neste side"
 
 msgctxt "#30016"
 msgid ">>Previous Page"
-msgstr ">>Previous Page"
+msgstr ">>Forrige side"
 
 msgctxt "#30017"
 msgid "Live channels"
-msgstr "Live channels"
+msgstr "Direkte"
 
 msgctxt "#30018"
 msgid "TV3"
@@ -102,24 +102,24 @@ msgstr "Esport 3"
 
 msgctxt "#30022"
 msgid "Search"
-msgstr "Search"
+msgstr "Søk"
 
 msgctxt "#30023"
 msgid "Collections"
-msgstr "Collections"
+msgstr "Samlinger"
 
 msgctxt "#30024"
 msgid "TV3 (International broadcast)"
-msgstr "TV3 (International broadcast)"
+msgstr "TV3 (Utland)"
 
 msgctxt "#30025"
 msgid "Canal 324 (International broadcast)"
-msgstr "Canal 324 (International broadcast)"
+msgstr "Canal 324 (Utland)"
 
 msgctxt "#30026"
 msgid "Canal 33-Super 3 (International broadcast)"
-msgstr "Canal 33-Super 3 (International broadcast)"
+msgstr "Canal 33-Super 3 (Utland)"
 
 msgctxt "#30027"
 msgid "Esport 3 (International broadcast)"
-msgstr "Esport 3 (International broadcast)"
+msgstr "Esport 3 (Utland)"

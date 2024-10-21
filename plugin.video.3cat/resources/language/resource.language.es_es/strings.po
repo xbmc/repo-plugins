@@ -1,88 +1,88 @@
 # Kodi Media Center language file
 # Addon Name: TV3cat
-# Addon id: plugin.video.tv3.cat
+# Addon id: plugin.video.3cat
 # Addon Provider: jqandreu
 msgid ""
 msgstr ""
 "Project-Id-Version: Kodi Addons\n"
-"Report-Msgid-Bugs-To: https://github.com/jqandreu/plugin.video.tv3.cat/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/jqandreu/plugin.video.3cat/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Connum\n"
+"Last-Translator: jqandreu\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de_DE\n"
+"Language: es_ES\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#30001"
 msgid "Today Featured"
-msgstr "Empfehlungen des Tages"
+msgstr "Hoy destacamos"
 
 msgctxt "#30002"
 msgid "Don't miss"
-msgstr "Nicht verpassen"
+msgstr "No te lo pierdas"
 
 msgctxt "#30003"
 msgid "Most viewed"
-msgstr "Meistgesehen"
+msgstr "Lo más visto"
 
 msgctxt "#30004"
 msgid "Programs"
-msgstr "Programme"
+msgstr "Programas"
 
 msgctxt "#30005"
 msgid "Series"
-msgstr "Serien"
+msgstr "Series"
 
 msgctxt "#30006"
 msgid "News"
-msgstr "Nachrichten"
+msgstr "Informativos"
 
 msgctxt "#30007"
 msgid "Entertainment"
-msgstr "Unterhaltung"
+msgstr "Entretenimiento"
 
 msgctxt "#30008"
 msgid "Sports"
-msgstr "Sport"
+msgstr "Deportes"
 
 msgctxt "#30009"
 msgid "Documentaries"
-msgstr "Dokumentationen"
+msgstr "Documentales"
 
 msgctxt "#30010"
 msgid "Divulgation"
-msgstr "Verbreitung"
+msgstr "Divulgación"
 
 msgctxt "#30011"
 msgid "Culture"
-msgstr "Kultur"
+msgstr "Cultura"
 
 msgctxt "#30012"
 msgid "Music"
-msgstr "Musik"
+msgstr "Música"
 
 msgctxt "#30013"
 msgid "All A-Z"
-msgstr "Alles A-Z"
+msgstr "Todos A-Z"
 
 msgctxt "#30014"
 msgid "Aired A-Z"
-msgstr "Laufend A-Z"
+msgstr "En emisión A-Z"
 
 msgctxt "#30015"
 msgid ">>Next Page"
-msgstr ">>Nächste Seite"
+msgstr ">>Página siguiente"
 
 msgctxt "#30016"
 msgid ">>Previous Page"
-msgstr ">>Vorherige Seite"
+msgstr ">>Página anterior"
 
 msgctxt "#30017"
 msgid "Live channels"
-msgstr "Live-Sender"
+msgstr "Canales en directo"
 
 msgctxt "#30018"
 msgid "TV3"
@@ -102,24 +102,24 @@ msgstr "Esport 3"
 
 msgctxt "#30022"
 msgid "Search"
-msgstr "Finden"
+msgstr "Buscar"
 
 msgctxt "#30023"
 msgid "Collections"
-msgstr "Sammlungen"
+msgstr "Colecciones"
 
 msgctxt "#30024"
 msgid "TV3 (International broadcast)"
-msgstr "TV3 (International)"
+msgstr "TV3 (Emisión internacional)"
 
 msgctxt "#30025"
 msgid "Canal 324 (International broadcast)"
-msgstr "Canal 324 (International)"
+msgstr "Canal 324 (Emisión internacional)"
 
 msgctxt "#30026"
 msgid "Canal 33-Super 3 (International broadcast)"
-msgstr "Canal 33-Super 3 (International)"
+msgstr "Canal 33-Super 3 (Emisión internacional)"
 
 msgctxt "#30027"
 msgid "Esport 3 (International broadcast)"
-msgstr "Esport 3 (International)"
+msgstr "Esport 3 (Emisión internacional)"

@@ -1,11 +1,11 @@
 # Kodi Media Center language file
 # Addon Name: TV3cat
-# Addon id: plugin.video.tv3.cat
+# Addon id: plugin.video.3cat
 # Addon Provider: jqandreu
 msgid ""
 msgstr ""
 "Project-Id-Version: Kodi Addons\n"
-"Report-Msgid-Bugs-To: https://github.com/jqandreu/plugin.video.tv3.cat/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/jqandreu/plugin.video.3cat/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: jqandreu\n"

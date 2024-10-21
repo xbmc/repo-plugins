@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-url_base = 'http://www.ccma.cat'
+url_base = 'https://www.3cat.cat/3cat/'
 url_alacarta = 'http://www.ccma.cat/tv3/alacarta/'
-url_coleccions = 'http://www.ccma.cat/tv3/alacarta/coleccions/'
+url_coleccions = 'https://www.3cat.cat/3cat/tot-cataleg/tot/'
 url_mesvist = 'http://www.ccma.cat/tv3/alacarta/mes-vist/'
 url_datavideos = 'http://dinamics.ccma.cat/pvideo/media.jsp?media=video&version=0s&idint='
 url_programes_emisio = 'http://www.ccma.cat/tv3/alacarta/programes'

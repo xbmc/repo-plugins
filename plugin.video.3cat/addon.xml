@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.3cat" name="3Cat" version="1.1.0" provider-name="mcr222">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.beautifulsoup4" version="4.12.2"/>
+        <import addon="script.module.future" version="1.0.0"/>
+        <import addon="script.module.inputstreamhelper" version="0.4.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">Entertainment, news, documentaries, etc from catalan television 3cat.cat</summary>
+        <description lang="en_GB">Entertainment, news, documentaries, etc from catalan television 3cat.cat. </description>
+        <summary lang="ca_ES">Tots els programes de 3Cat.</summary>
+        <description lang="ca_ES">Tota la programació de 3Cat.</description>
+        <summary lang="es_ES">Toda la programación de 3Cat</summary>
+        <description lang="es_ES">Toda la programación de 3Cat</description>
+        <language>ca</language>
+        <license>GPL-2.0-or-later</license>
+        <source>https://github.com/mcr222/plugin.video.3cat</source>
+        <website>https://www.3cat.cat/3cat/</website>
+        <assets>
+            <icon>resources/icon.jpg</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

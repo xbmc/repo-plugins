@@ -1,8 +1,5 @@
-from future import standard_library
-standard_library.install_aliases()
 from builtins import str
 import urllib.request, urllib.parse, urllib.error
-import urllib.request, urllib.error, urllib.parse
 import json
 import xbmcgui
 import xbmc
@@ -11,6 +8,11 @@ import xbmc
 def buildUrl(query, base_url):
     return base_url + '?' + urllib.parse.urlencode(query)
 
+def find_key_by_value(json_data, target_key):
+    for key, value in json_data.items():
+        if key == target_key:
+            return key, value
+    return None, None
 
 def getHtml(url):
     try:

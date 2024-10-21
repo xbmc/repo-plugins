@@ -1,0 +1,5 @@
+﻿v1.1.0
+-Play old mp4 format videos
+
+v1.0.0
+- First version

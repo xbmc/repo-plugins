@@ -29,9 +29,8 @@ MONTH = "month"
 VIDEO_QUALITY_MOBILE = "mobile"
 VIDEO_QUALITY_TABLET = "tablet"
 VIDEO_QUALITY_720P = "720p"
-DATE = "2024-10-01"
-VERSION = "1.1.12"
-
+DATE = "2024-10-20"
+VERSION = "1.1.13"
 
 if sys.version_info[0] > 2:
     unicode = str
@@ -67,6 +66,6 @@ def log(name_object, object):
             "Unable to log the object due to an error while converting it to an unicode string"), xbmc.LOGDEBUG)
 
 
-def getSoup(html,default_parser="html5lib"):
+def getSoup(html, default_parser="html5lib"):
     soup = BeautifulSoup(html, default_parser)
     return soup

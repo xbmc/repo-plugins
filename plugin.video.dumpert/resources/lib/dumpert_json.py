@@ -19,9 +19,8 @@ import xbmcplugin
 import json
 
 from resources.lib.dumpert_const import LANGUAGE, IMAGES_PATH, SETTINGS, convertToUnicodeString, log, SFW_HEADERS, \
-    NSFW_HEADERS, \
-    DAY, WEEK, MONTH, DAY_TOPPERS_URL, WEEK_TOPPERS_URL, MONTH_TOPPERS_URL, LATEST_URL, VIDEO_QUALITY_MOBILE, \
-    VIDEO_QUALITY_TABLET, VIDEO_QUALITY_720P
+    NSFW_HEADERS, DAY, WEEK, MONTH, DAY_TOPPERS_URL, WEEK_TOPPERS_URL, MONTH_TOPPERS_URL, LATEST_URL, \
+    VIDEO_QUALITY_MOBILE, VIDEO_QUALITY_TABLET, VIDEO_QUALITY_720P
 
 
 #
@@ -44,7 +43,7 @@ class Main(object):
         try:
             self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
             self.next_page_possible = \
-            urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+                urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
         except KeyError:
             self.plugin_category = LANGUAGE(30001)
             self.next_page_possible = "True"
@@ -54,7 +53,7 @@ class Main(object):
             self.period = ""
         try:
             self.days_deducted_from_today = \
-            urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['days_deducted_from_today'][0]
+                urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['days_deducted_from_today'][0]
         except KeyError:
             self.days_deducted_from_today = "0"
         try:
@@ -159,7 +158,7 @@ class Main(object):
                 # https://api-live.dumpert.nl/mobile_api/json/video/top5/maand/201908/
                 self.next_url = MONTH_TOPPERS_URL + next_url_datetime_object.strftime('%Y%m')
 
-            log("self.next_url", self.next_url)
+            # log("self.next_url", self.next_url)
 
         # "https://api-live.dumpert.nl/mobile_api/json/video/latest/0/"
         else:
@@ -222,8 +221,6 @@ class Main(object):
 
             # {"gentime":1568796074,"items":[{"date":"2019-09-18T10:28:07+02:00","description":"FUCK DE EU!!!","id":"7757567_fac144f2","media":[{"description":"","duration":57,"mediatype":"VIDEO","variants":[{"uri":"https://media.dumpert.nl/tablet/fac144f2_Fuck_Europa.mp4.mp4.mp4","version":"tablet"},{"uri":"https://media.dumpert.nl/mobile/fac144f2_Fuck_Europa.mp4.mp4.mp4","version":"mobile"},{"uri":"https://media.dumpert.nl/720p/fac144f2_Fuck_Europa.mp4.mp4.mp4","version":"720p"}]}],"nopreroll":false,"nsfw":false,"stats":{"kudos_today":82,"kudos_total":82,"views_today":2202,"views_total":2202},"still":"https://media.dumpert.nl/stills/7757567_fac144f2.jpg","stills":{"still":"https://media.dumpert.nl/stills/7757567_fac144f2.jpg","still-large":"https://media.dumpert.nl/stills/large/7757567_fac144f2.jpg","still-medium":"https://media.dumpert.nl/stills/medium/7757567_fac144f2.jpg","thumb":"https://media.dumpert.nl/sq_thumbs/7757567_fac144f2.jpg","thumb-medium":"https://media.dumpert.nl/sq_thumbs/medium/7757567_fac144f2.jpg"},"tags":"videofuck fuck willem koning prinsjesdag troonrede willy alexander eu nexit","thumbnail":"https://media.dumpert.nl/sq_thumbs/7757567_fac144f2.jpg","title":"Willem heeft er genoeg van!","upload_id":""},{"date":"2019-
 
-            file = ""
-
             # Only process video items
             try:
                 video_type = item['media'][0]['mediatype']
@@ -235,18 +232,22 @@ class Main(object):
                 process_item = False
 
             if process_item:
+
+                file = ""
+                url = ""
+
                 # is it an embedded youtube link?
                 # {"version":"embed","uri":"youtube:wOeZB7bnoxw"}
-                # Skipping embedded Youtube videos as these seem to kill kodi for some reason.
                 if item['media'][0]['variants'][0]['version'] == 'embed':
                     if str(item['media'][0]['variants'][0]['uri']).find("youtube:") >= 0:
                         youtube_id = str(item['media'][0]['variants'][0]['uri']).replace("youtube:", "")
-                        log("skipping embedded youtube video", youtube_id)
+                        url = "plugin://plugin.video.youtube/play/?video_id=" + youtube_id
                     else:
+
                         log("skipping mediatype", str(item['media'][0]['variants'][0]['uri']))
 
-                    # go to the next item in the loop
-                    continue
+                        # go to the next item in the loop
+                        continue
                 else:
                     # max video quality 0: low, 1: medium, 2: high
                     # Lets find a video with the desired quality or lower
@@ -260,9 +261,16 @@ class Main(object):
                         file = self.find_tablet_video(file, item)
                         file = self.find_mobile_video(file, item)
 
-                # log("title", title)
+                    # Build link to media
+                    # let's remove any non-ascii characters from the title, to prevent errors with urllib.parse.parse_qs of the parameters
+                    parameters = {"action": "play-file",
+                                  "file": file,
+                                  "title": title.encode('ascii', 'ignore')}
+                    url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
 
-                log("json file", file)
+                # log("title", title)
+                # log("url", url)
+                # log("json file", file)
 
                 list_item = xbmcgui.ListItem(label=title)
                 list_item.setInfo("video",
@@ -272,13 +280,6 @@ class Main(object):
                                   'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
                 list_item.setProperty('IsPlayable', 'true')
 
-                # let's remove any non-ascii characters from the title, to prevent errors with urllib.parse.parse_qs of the parameters
-                title = title.encode('ascii', 'ignore')
-
-                parameters = {"action": "play-file",
-                              "file": file,
-                              "title": title}
-                url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
                 is_folder = False
                 # Add refresh option to context menu
                 list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.7.19"
+        version="5.7.20"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -123,9 +123,9 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.7.19 - Changelog - 2024-10-17[/B]
+        <news>[B]Retrospect v5.7.20 - Changelog - 2024-10-21[/B]
 
-Updated a number of channels that were broken.
+Fixed the NPO channel that broke.
 
 [B]Framework related[/B]
 _None_
@@ -134,12 +134,7 @@ _None_
 _None_
 
 [B]Channel related[/B]
-* Fixed: SVT category listings broke (Fixes #1843).
-* Fixed: TV4 API issues.
-* Fixed: RegioGroei Broke.
-* Fixed: Vier parsing (Fixes #1846).
-* Fixed: TV4 Category listing (Fixes #1844).
-* Fixed: UR Play Category listing (Fixes #1847).
+* Fixed: NPO streams (Fixes #1854).
 
         </news>
         <assets>

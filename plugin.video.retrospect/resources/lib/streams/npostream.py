@@ -68,7 +68,7 @@ class NpoStream(object):
             token = UriHandler.open(f"https://npo.nl/start/api/domain/player-token?productId={episode_id}", no_cache=True)
 
         token_json = JsonHelper(token)
-        token_value = token_json.get_value("token")
+        token_value = token_json.get_value("jwt")
 
         video_headers = {"authorization": token_value}
         video_data = {

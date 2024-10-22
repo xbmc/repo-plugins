@@ -23,7 +23,7 @@ class TV3Strings(object):
             'directe': 30017,
             'tv3': 30018,
             'canal324': 30019,
-            'c33super3': 30020,
+            'sx3': 30020,
             'esport3': 30021,
             'cercar': 30022,
             'coleccions': 30023,

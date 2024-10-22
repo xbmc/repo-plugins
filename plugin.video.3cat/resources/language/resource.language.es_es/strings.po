@@ -93,8 +93,8 @@ msgid "Canal 324"
 msgstr "Canal 324"
 
 msgctxt "#30020"
-msgid "Canal 33-Super 3"
-msgstr "Canal 33-Super 3"
+msgid "SX3"
+msgstr "SX3"
 
 msgctxt "#30021"
 msgid "Esport 3"
@@ -117,8 +117,8 @@ msgid "Canal 324 (International broadcast)"
 msgstr "Canal 324 (Emisión internacional)"
 
 msgctxt "#30026"
-msgid "Canal 33-Super 3 (International broadcast)"
-msgstr "Canal 33-Super 3 (Emisión internacional)"
+msgid "SX3 (International broadcast)"
+msgstr "SX3 (Emisión internacional)"
 
 msgctxt "#30027"
 msgid "Esport 3 (International broadcast)"

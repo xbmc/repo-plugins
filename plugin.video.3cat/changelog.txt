@@ -1,4 +1,8 @@
-﻿v1.1.0
+﻿v1.2.0
+- Added direct stream
+- Fix naming
+
+v1.1.0
 -Play old mp4 format videos
 
 v1.0.0

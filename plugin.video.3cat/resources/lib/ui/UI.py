@@ -13,8 +13,6 @@ import xbmc
 import xbmcvfs
 import urllib.parse
 
-from resources.lib.video.Video import Video
-
 PROTOCOL = 'mpd'
 DRM = 'com.widevine.alpha'
 LICENSE_URL = 'https://cwip-shaka-proxy.appspot.com/no_auth'
@@ -156,6 +154,12 @@ class UI(object):
 
     def playVideo(self,videoId):
         xbmc.log("plugin.video.3cat -UI - playVideo " + str(videoId))
+
+        if str(videoId).lower().startswith("http"):
+            xbmc.log("plugin.video.3cat - UI - is stream link")
+            # Simple MP4 playback
+            xbmc.Player().play(videoId)
+            return
 
         apiJsonUrl = "https://api-media.3cat.cat/pvideo/media.jsp?media=video&versio=vast&idint={}&profile=pc_3cat&format=dm".format(
             videoId)

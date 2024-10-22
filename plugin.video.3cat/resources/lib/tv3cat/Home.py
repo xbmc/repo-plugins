@@ -10,7 +10,7 @@ def getList(strings):
     #mesvist = FolderVideo(strings.get('mesvist'), url_mesvist, "mesvist", "", "")
     coleccions = FolderVideo(strings.get('coleccions'), "", "coleccions", "", "")
     #programes = FolderVideo(strings.get('programes'), "", "programes", "", "")
-    #directe = FolderVideo(strings.get('directe'), "", "directe", "", "")
+    directe = FolderVideo(strings.get('directe'), "", "directe", "", "")
     #cercar = FolderVideo(strings.get('cercar'), "", "cercar", "", "")
 
-    return [coleccions]
+    return [coleccions, directe]

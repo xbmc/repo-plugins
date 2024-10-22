@@ -32,32 +32,6 @@ def getHtml(url):
         return None
 
 
-def getDataVideo(url):
-    link = getHtml(url)
-
-    try:
-
-        link = link.decode("ISO-8859-1")
-        data = json.loads(link)
-
-    except ValueError:
-        return None
-
-    except TypeError:
-        return None
-
-    except:
-        return None
-
-    else:
-        if len(data) > 0:
-
-            return data
-
-        else:
-            return None
-
-
 def toSeconds(durada):
     if durada:
 

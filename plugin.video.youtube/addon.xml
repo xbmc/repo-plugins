@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="7.0.9.2" provider-name="anxdpanic, bromix, MoojMidge">
+<addon id="plugin.video.youtube" name="YouTube" version="7.1.0.1" provider-name="anxdpanic, bromix, MoojMidge">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.27.1"/>
         <import addon="inputstream.adaptive" version="19.0.0"/>
         <import addon="script.module.inputstreamhelper" version="0.2.2" optional="true"/>
+        <import addon="script.module.pysocks" optional="true"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="resources/lib/plugin.py">
         <provides>video</provides>
@@ -31,6 +32,7 @@
         <summary lang="de_DE">Plugin für YouTube</summary>
         <summary lang="el_GR">Πρόσθετο YouTube</summary>
         <summary lang="en_GB">Plugin for YouTube</summary>
+        <summary lang="eo">Aldonaĵo por YouTube</summary>
         <summary lang="es_ES">Complemento para YouTube</summary>
         <summary lang="es_MX">Complemento para YouTube</summary>
         <summary lang="fi_FI">YouTube-lisäosa</summary>
@@ -108,9 +110,31 @@
         <disclaimer lang="vi_VN">Plugin này không được xác nhận bởi Google</disclaimer>
         <disclaimer lang="zh_CN">此插件未被谷歌认可</disclaimer>
         <disclaimer lang="zh_TW">此附加元件未由Google支持</disclaimer>
-    <news>## v7.0.9.2
+    <news>## v7.1.0.1
 ### Fixed
-- Fix various Kodi 18 listitem setInfo compatibility issues
-- Additional fixes and compatibility shims for playing AudioItems
-- Fix early thread loop termination in My Subscriptions</news></extension>
+- Fix logging/retry of sqlite3.OperationalError
+- Fix trying to use ISA for progressive live streams
+- Retain list position when refreshing listings
+- Add workarounds for trying to play videos using RunPlugin rather PlayMedia
+- Fix possible regression causing 6s delay on first play
+- Fix regression in building client details causing wrong referer to be used
+- Only reroute to new window if container was not filled by the plugin
+- Only reroute to new window if modal dialog is not open
+- Fix various timing and sync issues with script, service, plugin and Kodi settings
+- Fix playback history related context menu items not being shown
+- Fix new resume details not being saved in plugin local playback history
+- Fix default thumbnails not being updated if available
+- Fix login to personal project only
+- Fix regression with not using content type when routing after f239764
+- Partially revert eb0f81c to avoid merge error in unofficial version
+- Only attempt to import InputStream Helper if necessary
+
+### Changed
+- Update multiple busy dialog crash workaround
+- Use all playable codecs but deprioritise if not selected in stream features
+- Change default live stream type to suit ISA and Youtube stream availability
+- Use a CommandItem that opens the Info dialog for comments to avoid log spam
+- Revert old workaround for Kodi treating a non-folder listitem as playable
+- Improve parsing of plugin url query parameters to allow empty values
+- Move IP location lookup to scri</news></extension>
 </addon>

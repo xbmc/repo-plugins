@@ -218,8 +218,8 @@ class PlayerMonitorThread(threading.Thread):
                 status=(segment_end, segment_end, segment_end, 'stopped'),
             )
         if use_local_history:
-            self._context.get_playback_history().update_item(self.video_id,
-                                                             play_data)
+            self._context.get_playback_history().set_item(self.video_id,
+                                                          play_data)
 
         self._context.send_notification(PLAYBACK_STOPPED, self.playback_data)
         self._context.log_debug('Playback stopped [{video_id}]:'
@@ -355,6 +355,9 @@ class PlayerMonitor(xbmc.Player):
         self.threads = active_threads
 
     def onPlayBackStarted(self):
+        if not self._ui.busy_dialog_active():
+            self._ui.clear_property(BUSY_FLAG)
+
         if self._ui.get_property(PLAY_WITH):
             self._context.execute('Action(SwitchPlayer)')
             self._context.execute('Action(Stop)')
@@ -362,9 +365,6 @@ class PlayerMonitor(xbmc.Player):
     def onAVStarted(self):
         if self._ui.get_property(PLAY_WITH):
             return
-
-        if not self._ui.busy_dialog_active():
-            self._ui.clear_property(BUSY_FLAG)
 
         playback_data = self._ui.pop_property(PLAYER_DATA)
         if not playback_data:

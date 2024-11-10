@@ -1,0 +1,6 @@
+v1.0.0
+- Initial Release
+- Supports Episodes, Movies, Songs, PVR channels, Non-library files
+- Does not (yet?) support: addons/PVR recordings
+
+

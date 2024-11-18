@@ -22,7 +22,7 @@
         <source>https://github.com/mcr222/plugin.video.3cat</source>
         <website>https://www.3cat.cat/3cat/</website>
         <assets>
-            <icon>resources/icon.jpg</icon>
+            <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
         </assets>
     </extension>

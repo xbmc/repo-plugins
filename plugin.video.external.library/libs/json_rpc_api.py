@@ -18,7 +18,8 @@ import logging
 from pprint import pformat
 from typing import List, Dict, Any, Optional
 
-from libs import simple_requests as requests
+import simple_requests as requests
+
 from libs.exceptions import NoDataError, RemoteKodiError
 from libs.kodi_service import ADDON, get_remote_kodi_url
 

@@ -44,7 +44,7 @@ def _process_rate_video(provider, context, re_match):
         client = provider.get_client(context)
         json_data = client.get_video_rating(video_id)
         if not json_data:
-            return False
+            return False, {provider.RESULT_FALLBACK: False}
 
         items = json_data.get('items', [])
         if items:
@@ -84,7 +84,7 @@ def _process_rate_video(provider, context, re_match):
             context.get_ui().show_notification(
                 message=notify_message,
                 time_ms=2500,
-                audible=False
+                audible=False,
             )
 
     return True
@@ -116,14 +116,14 @@ def _process_more_for_video(context):
         context.execute(result)
 
 
-def process(provider, context, re_match=None, method=None):
-    if re_match and method is None:
-        method = re_match.group('method')
+def process(provider, context, re_match=None, command=None):
+    if re_match and command is None:
+        command = re_match.group('command')
 
-    if method == 'rate':
+    if command == 'rate':
         return _process_rate_video(provider, context, re_match)
 
-    if method == 'more':
+    if command == 'more':
         return _process_more_for_video(context)
 
-    raise KodionException('Unknown method: %s' % method)
+    raise KodionException('Unknown video command: %s' % command)

@@ -435,18 +435,19 @@ class AccessManager(JSONStore):
     def update_access_token(self,
                             addon_id,
                             access_token=None,
-                            unix_timestamp=None,
+                            expiry=None,
                             refresh_token=None):
         """
         Updates the old access token with the new one.
+        :param addon_id:
         :param access_token:
-        :param unix_timestamp:
+        :param expiry:
         :param refresh_token:
         :return:
         """
         details = {
             'access_token': (
-                '|'.join(access_token)
+                '|'.join([token or '' for token in access_token])
                 if isinstance(access_token, (list, tuple)) else
                 access_token
                 if access_token else
@@ -454,16 +455,17 @@ class AccessManager(JSONStore):
             )
         }
 
-        if unix_timestamp is not None:
-            details['token_expires'] = (
-                min(map(int, unix_timestamp))
-                if isinstance(unix_timestamp, (list, tuple)) else
-                int(unix_timestamp)
-            )
+        if expiry is not None:
+            if isinstance(expiry, (list, tuple)):
+                expiry = [val for val in expiry if val]
+                expiry = min(map(int, expiry)) if expiry else -1
+            else:
+                expiry = int(expiry)
+            details['token_expires'] = time.time() + expiry
 
         if refresh_token is not None:
             details['refresh_token'] = (
-                '|'.join(refresh_token)
+                '|'.join([token or '' for token in refresh_token])
                 if isinstance(refresh_token, (list, tuple)) else
                 refresh_token
             )

@@ -15,7 +15,6 @@ from ...kodion import KodionException
 from ...kodion.constants import CONTENT
 from ...kodion.items import DirectoryItem, UriItem
 from ...kodion.utils import strip_html_from_text
-from ...kodion.utils.datetime_parser import yt_datetime_offset
 
 
 def _process_related_videos(provider, context, client):
@@ -23,7 +22,7 @@ def _process_related_videos(provider, context, client):
     function_cache = context.get_function_cache()
 
     params = context.get_params()
-    video_id = params.get('video_id', '')
+    video_id = params.get('video_id')
     refresh = params.get('refresh')
     if video_id:
         json_data = function_cache.run(
@@ -149,9 +148,7 @@ def _process_live_events(provider, context, client, event_type='live'):
         order='date' if event_type == 'upcoming' else 'viewCount',
         page_token=context.get_param('page_token', ''),
         location=context.get_param('location', False),
-        after=(yt_datetime_offset(days=3)
-               if event_type == 'completed' else
-               None),
+        after={'days': 3} if event_type == 'completed' else None,
     )
 
     if not json_data:
@@ -224,7 +221,9 @@ def _process_description_links(provider, context):
         channel_id_dict = {}
         for channel_id in channel_ids:
             channel_item = DirectoryItem(
-                '', context.create_uri(('channel', channel_id,), item_params)
+                name='',
+                uri=context.create_uri(('channel', channel_id,), item_params),
+                channel_id=channel_id,
             )
             channel_id_dict[channel_id] = channel_item
 
@@ -249,7 +248,9 @@ def _process_description_links(provider, context):
         playlist_id_dict = {}
         for playlist_id in playlist_ids:
             playlist_item = DirectoryItem(
-                '', context.create_uri(('playlist', playlist_id,), item_params)
+                name='',
+                uri=context.create_uri(('playlist', playlist_id,), item_params),
+                playlist_id=playlist_id,
             )
             playlist_id_dict[playlist_id] = playlist_item
 
@@ -297,19 +298,33 @@ def _process_saved_playlists_tv(provider, context, client):
 def _process_my_subscriptions(provider, context, client, filtered=False):
     context.set_content(CONTENT.VIDEO_CONTENT)
 
-    params = context.get_params()
-    refresh = params.get('refresh')
+    with context.get_ui().create_progress_dialog(
+            heading=context.localize('my_subscriptions.loading'),
+            message=context.localize('please_wait'),
+            background=True,
+            message_template=(
+                    '{wait} {{current}}/{{total}}'.format(
+                        wait=context.localize('please_wait'),
+                    )
+            ),
+    ) as progress_dialog:
+        params = context.get_params()
+        json_data = client.get_my_subscriptions(
+            page_token=params.get('page', 1),
+            logged_in=provider.is_logged_in(),
+            do_filter=filtered,
+            refresh=params.get('refresh'),
+            progress_dialog=progress_dialog,
+        )
 
-    json_data = client.get_my_subscriptions(
-        page_token=params.get('page', 1),
-        logged_in=provider.is_logged_in(),
-        do_filter=filtered,
-        refresh=refresh,
-    )
-
-    if not json_data:
-        return False
-    return v3.response_to_items(provider, context, json_data)
+        if not json_data:
+            return False
+        return v3.response_to_items(
+            provider,
+            context,
+            json_data,
+            progress_dialog=progress_dialog,
+        )
 
 
 def process(provider, context, re_match):

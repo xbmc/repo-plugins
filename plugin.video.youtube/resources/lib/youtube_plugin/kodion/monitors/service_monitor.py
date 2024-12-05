@@ -12,45 +12,47 @@ from __future__ import absolute_import, division, unicode_literals
 import json
 import threading
 
-from ..compatibility import xbmc, xbmcgui
+from ..compatibility import urlsplit, xbmc, xbmcgui
 from ..constants import (
     ADDON_ID,
     CHECK_SETTINGS,
+    CONTAINER_FOCUS,
+    PATHS,
     PLUGIN_WAKEUP,
     REFRESH_CONTAINER,
     RELOAD_ACCESS_MANAGER,
     SERVER_WAKEUP,
     WAKEUP,
 )
-from ..logger import log_debug
 from ..network import get_connect_address, get_http_server, httpd_status
 
 
 class ServiceMonitor(xbmc.Monitor):
     _settings_changes = 0
-    _settings_state = None
+    _settings_collect = False
     get_idle_time = xbmc.getGlobalIdleTime
 
     def __init__(self, context):
         self._context = context
-        settings = context.get_settings()
 
-        self._httpd_address, self._httpd_port = get_connect_address(context)
-        self._old_httpd_address = self._httpd_address
-        self._old_httpd_port = self._httpd_port
-        self._whitelist = settings.httpd_whitelist()
+        self._httpd_address = None
+        self._httpd_port = None
+        self._whitelist = None
+        self._old_httpd_address = None
+        self._old_httpd_port = None
+        self._use_httpd = None
+        self._httpd_error = False
 
         self.httpd = None
         self.httpd_thread = None
-        self.httpd_sleep_allowed = settings.httpd_sleep_allowed()
+        self.httpd_sleep_allowed = True
 
         self.system_idle = False
+        self.system_sleep = False
         self.refresh = False
         self.interrupt = False
 
-        self._use_httpd = None
-        if self.httpd_required(settings):
-            self.start_httpd()
+        self.onSettingsChanged(force=True)
 
         super(ServiceMonitor, self).__init__()
 
@@ -84,73 +86,123 @@ class ServiceMonitor(xbmc.Monitor):
             self.refresh = True
 
     def onNotification(self, sender, method, data):
+        if sender == 'xbmc':
+            if method == 'System.OnSleep':
+                self.system_idle = True
+                self.system_sleep = True
+
+            elif method in {
+                'GUI.OnScreensaverActivated',
+                'GUI.OnDPMSActivated',
+            }:
+                self.system_idle = True
+
+            elif method in {
+                'GUI.OnScreensaverDeactivated',
+                'GUI.OnDPMSDeactivated',
+                'System.OnWake',
+            }:
+                self.onWake()
+
+            elif method == 'Player.OnPlay':
+                player = xbmc.Player()
+                try:
+                    playing_file = urlsplit(player.getPlayingFile())
+                    if playing_file.path in {PATHS.MPD,
+                                             PATHS.PLAY,
+                                             PATHS.REDIRECT}:
+                        self.onWake()
+                except RuntimeError:
+                    pass
+
+            return
+
         if sender != ADDON_ID:
             return
+
         group, separator, event = method.partition('.')
-        if event == CHECK_SETTINGS:
-            if not isinstance(data, dict):
-                data = json.loads(data)
-            if data == 'defer':
-                self._settings_state = data
-            elif data == 'process':
-                self._settings_state = data
-                self.onSettingsChanged()
-                self._settings_state = None
-        elif event == WAKEUP:
+
+        if event == WAKEUP:
             if not isinstance(data, dict):
                 data = json.loads(data)
             if not data:
                 return
+
             target = data.get('target')
+
             if target == PLUGIN_WAKEUP:
                 self.interrupt = True
+                response = True
+
             elif target == SERVER_WAKEUP:
                 if not self.httpd and self.httpd_required():
-                    self.start_httpd()
+                    response = self.start_httpd()
+                else:
+                    response = bool(self.httpd)
                 if self.httpd_sleep_allowed:
                     self.httpd_sleep_allowed = None
+
+            elif target == CHECK_SETTINGS:
+                state = data.get('state')
+                if state == 'defer':
+                    self._settings_collect = True
+                elif state == 'process':
+                    self.onSettingsChanged(force=True)
+                response = True
+
+            else:
+                return
+
             if data.get('response_required'):
-                self.set_property(WAKEUP, target)
+                data['response'] = response
+                self.set_property(WAKEUP, json.dumps(data, ensure_ascii=False))
+
         elif event == REFRESH_CONTAINER:
             self.refresh_container()
+
+        elif event == CONTAINER_FOCUS:
+            if data:
+                data = json.loads(data)
+            if not data or not self.is_plugin_container(check_all=True):
+                return
+            xbmc.executebuiltin('SetFocus({0},{1},absolute)'.format(*data))
+
         elif event == RELOAD_ACCESS_MANAGER:
             self._context.reload_access_manager()
             self.refresh_container()
 
-    def onScreensaverActivated(self):
-        self.system_idle = True
+    def onSettingsChanged(self, force=False):
+        context = self._context
 
-    def onScreensaverDeactivated(self):
-        self.system_idle = False
-        self.interrupt = True
-
-    def onDPMSActivated(self):
-        self.system_idle = True
-
-    def onDPMSDeactivated(self):
-        self.system_idle = False
-        self.interrupt = True
-
-    def onSettingsChanged(self):
-        self._settings_changes += 1
-        if self._settings_state == 'defer':
-            return
-        changes = self._settings_changes
-        if self._settings_state != 'process':
-            self.waitForAbort(1)
-            if changes != self._settings_changes:
+        if force:
+            self._settings_collect = False
+            self._settings_changes = 0
+        else:
+            self._settings_changes += 1
+            if self._settings_collect:
                 return
-        log_debug('onSettingsChanged: {0} change(s)'.format(changes))
-        self._settings_changes = 0
 
-        settings = self._context.get_settings(refresh=True)
+            total = self._settings_changes
+            self.waitForAbort(1)
+            if total != self._settings_changes:
+                return
+
+            context.log_debug('onSettingsChanged: {0} change(s)'.format(total))
+            self._settings_changes = 0
+
+        settings = context.get_settings(refresh=True)
+        if settings.logging_enabled():
+            context.debug_log(on=True)
+        else:
+            context.debug_log(off=True)
+
         self.set_property(CHECK_SETTINGS)
         self.refresh_container()
 
         httpd_started = bool(self.httpd)
         httpd_restart = False
 
-        address, port = get_connect_address(self._context)
+        address, port = get_connect_address(context)
         if port != self._httpd_port:
             self._old_httpd_port = self._httpd_port
             self._httpd_port = port
@@ -177,64 +229,105 @@ class ServiceMonitor(xbmc.Monitor):
         elif httpd_started:
             self.shutdown_httpd()
 
+    def onWake(self):
+        self.system_idle = False
+        self.system_sleep = False
+        self.interrupt = True
+
+        if not self.httpd and self.httpd_required():
+            self.start_httpd()
+        if self.httpd_sleep_allowed:
+            self.httpd_sleep_allowed = None
+
     def httpd_address_sync(self):
         self._old_httpd_address = self._httpd_address
         self._old_httpd_port = self._httpd_port
 
     def start_httpd(self):
         if self.httpd:
-            return
+            self._httpd_error = False
+            return True
 
-        log_debug('HTTPServer: Starting |{ip}:{port}|'
-                  .format(ip=self._httpd_address, port=self._httpd_port))
+        context = self._context
+        context.log_debug('HTTPServer: Starting |{ip}:{port}|'
+                          .format(ip=self._httpd_address,
+                                  port=self._httpd_port))
         self.httpd_address_sync()
         self.httpd = get_http_server(address=self._httpd_address,
                                      port=self._httpd_port,
-                                     context=self._context)
+                                     context=context)
         if not self.httpd:
-            return
+            self._httpd_error = True
+            return False
 
         self.httpd_thread = threading.Thread(target=self.httpd.serve_forever)
+        self.httpd_thread.daemon = True
         self.httpd_thread.start()
 
         address = self.httpd.socket.getsockname()
-        log_debug('HTTPServer: Serving on |{ip}:{port}|'
-                  .format(ip=address[0], port=address[1]))
+        context.log_debug('HTTPServer: Listening on |{ip}:{port}|'
+                          .format(ip=address[0],
+                                  port=address[1]))
+        self._httpd_error = False
+        return True
 
-    def shutdown_httpd(self, sleep=False):
+    def shutdown_httpd(self):
         if self.httpd:
-            if sleep and self.httpd_required(while_sleeping=True):
+            if (not self.system_sleep
+                    and self.system_idle
+                    and self.httpd_required(while_idle=True)):
                 return
-            log_debug('HTTPServer: Shutting down |{ip}:{port}|'
-                      .format(ip=self._old_httpd_address,
-                              port=self._old_httpd_port))
+            self._context.log_debug('HTTPServer: Shutting down |{ip}:{port}|'
+                                    .format(ip=self._old_httpd_address,
+                                            port=self._old_httpd_port))
             self.httpd_address_sync()
-            self.httpd.shutdown()
+
+            shutdown_thread = threading.Thread(target=self.httpd.shutdown)
+            shutdown_thread.daemon = True
+            shutdown_thread.start()
+
+            for thread in (self.httpd_thread, shutdown_thread):
+                if not thread.is_alive():
+                    continue
+                try:
+                    thread.join(5)
+                except RuntimeError:
+                    pass
+
             self.httpd.server_close()
-            self.httpd_thread.join()
+
             self.httpd_thread = None
             self.httpd = None
 
     def restart_httpd(self):
-        log_debug('HTTPServer: Restarting |{old_ip}:{old_port}| > |{ip}:{port}|'
-                  .format(old_ip=self._old_httpd_address,
-                          old_port=self._old_httpd_port,
-                          ip=self._httpd_address,
-                          port=self._httpd_port))
+        self._context.log_debug('HTTPServer: Restarting'
+                                ' |{old_ip}:{old_port}| > |{ip}:{port}|'
+                                .format(old_ip=self._old_httpd_address,
+                                        old_port=self._old_httpd_port,
+                                        ip=self._httpd_address,
+                                        port=self._httpd_port))
         self.shutdown_httpd()
         self.start_httpd()
 
     def ping_httpd(self):
         return self.httpd and httpd_status(self._context)
 
-    def httpd_required(self, settings=None, while_sleeping=False):
-        if while_sleeping:
-            settings = self._context.get_settings()
-            return (settings.api_config_page()
-                    or settings.support_alternative_player())
-
+    def httpd_required(self, settings=None, while_idle=False):
         if settings:
-            self._use_httpd = (settings.use_isa()
-                               or settings.api_config_page()
-                               or settings.support_alternative_player())
-        return self._use_httpd
+            required = (settings.use_isa()
+                        or settings.api_config_page()
+                        or settings.support_alternative_player())
+            self._use_httpd = required
+
+        elif self._httpd_error:
+            required = False
+
+        elif while_idle:
+            settings = self._context.get_settings()
+            required = (settings.api_config_page()
+                        or settings.support_alternative_player())
+
+        else:
+            required = self._use_httpd
+
+        return required

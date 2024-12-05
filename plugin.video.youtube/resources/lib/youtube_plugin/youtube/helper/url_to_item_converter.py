@@ -60,6 +60,7 @@ class UrlToItemConverter(object):
                 ('v', 'video_id', False),
                 ('live', 'live', False),
                 ('clip', 'clip', False),
+                ('video_ids', 'video_ids', False),
             )
             if old in url_params
         }
@@ -82,27 +83,45 @@ class UrlToItemConverter(object):
             ))
             return
 
-        if 'video_id' in new_params:
+        item = None
+
+        if 'video_ids' in new_params:
+            for video_id in new_params['video_ids'].split(','):
+                item = VideoItem(
+                    name='',
+                    uri=context.create_uri(
+                        (PATHS.PLAY,),
+                        dict(new_params, video_id=video_id),
+                    ),
+                    video_id=video_id,
+                )
+                self._video_id_dict[video_id] = item
+
+        elif 'video_id' in new_params:
             video_id = new_params['video_id']
 
-            video_item = VideoItem(
-                '', context.create_uri((PATHS.PLAY,), new_params)
+            item = VideoItem(
+                name='',
+                uri=context.create_uri((PATHS.PLAY,), new_params),
+                video_id=video_id,
             )
-            self._video_id_dict[video_id] = video_item
+            self._video_id_dict[video_id] = item
 
-        elif 'playlist_id' in new_params:
+        if 'playlist_id' in new_params:
             playlist_id = new_params['playlist_id']
 
             if self._flatten:
                 self._playlist_ids.append(playlist_id)
                 return
 
-            playlist_item = DirectoryItem(
-                '', context.create_uri(('playlist', playlist_id,), new_params),
+            item = DirectoryItem(
+                name='',
+                uri=context.create_uri(('playlist', playlist_id,), new_params),
+                playlist_id=playlist_id,
             )
-            self._playlist_id_dict[playlist_id] = playlist_item
+            self._playlist_id_dict[playlist_id] = item
 
-        elif 'channel_id' in new_params:
+        if 'channel_id' in new_params:
             channel_id = new_params['channel_id']
             live = new_params.get('live')
 
@@ -110,14 +129,18 @@ class UrlToItemConverter(object):
                 self._channel_ids.append(channel_id)
                 return
 
-            channel_item = VideoItem(
-                '', context.create_uri((PATHS.PLAY,), new_params)
+            item = VideoItem(
+                name='',
+                uri=context.create_uri((PATHS.PLAY,), new_params),
+                channel_id=channel_id,
             ) if live else DirectoryItem(
-                '', context.create_uri(('channel', channel_id,), new_params)
+                name='',
+                uri=context.create_uri(('channel', channel_id,), new_params),
+                channel_id=channel_id,
             )
-            self._channel_id_dict[channel_id] = channel_item
+            self._channel_id_dict[channel_id] = item
 
-        else:
+        if not item:
             context.log_debug('No items found in url "{0}"'.format(url))
 
     def add_urls(self, urls, context):
@@ -140,7 +163,7 @@ class UrlToItemConverter(object):
                         'channel_ids': ','.join(self._channel_ids),
                     },
                 ),
-                image='{media}/playlist.png',
+                image='{media}/channels.png',
                 category_label=item_label,
             )
             result.append(channels_item)
@@ -155,8 +178,7 @@ class UrlToItemConverter(object):
                         (PATHS.PLAY,),
                         {
                             'playlist_ids': ','.join(self._playlist_ids),
-                            'play': True,
-                            'order': 'default',
+                            'order': 'normal',
                         },
                     ),
                     playable=True,
@@ -191,12 +213,13 @@ class UrlToItemConverter(object):
         if self._video_items:
             return self._video_items
 
-        use_play_data = not context.get_param('incognito', False)
-
         channel_id_dict = {}
-        utils.update_video_infos(provider, context, self._video_id_dict,
-                                 channel_items_dict=channel_id_dict,
-                                 use_play_data=use_play_data)
+        utils.update_video_infos(
+            provider,
+            context,
+            self._video_id_dict,
+            channel_items_dict=channel_id_dict,
+        )
         utils.update_fanarts(provider, context, channel_id_dict)
 
         self._video_items = [

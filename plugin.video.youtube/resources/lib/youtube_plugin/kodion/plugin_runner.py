@@ -10,9 +10,9 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
-from platform import python_version
-
+from .constants import CHECK_SETTINGS
 from .context import XbmcContext
+from .debug import Profiler
 from .plugin import XbmcPlugin
 from ..youtube import Provider
 
@@ -22,22 +22,26 @@ __all__ = ('run',)
 _context = XbmcContext()
 _plugin = XbmcPlugin()
 _provider = Provider()
-
-_profiler = _context.get_infobool('System.GetBool(debug.showloginfo)')
-if _profiler:
-    from .debug import Profiler
-
-    _profiler = Profiler(enabled=False, print_callees=False, num_lines=20)
+_profiler = Profiler(enabled=False, print_callees=False, num_lines=20)
 
 
 def run(context=_context,
         plugin=_plugin,
         provider=_provider,
         profiler=_profiler):
-    if profiler:
-        profiler.enable(flush=True)
 
-    context.log_debug('Starting Kodion framework by bromix...')
+    if context.get_ui().pop_property(CHECK_SETTINGS):
+        provider.reset_client()
+        settings = context.get_settings(refresh=True)
+    else:
+        settings = context.get_settings()
+
+    debug = settings.logging_enabled()
+    if debug:
+        context.debug_log(on=True)
+        profiler.enable(flush=True)
+    else:
+        context.debug_log(off=True)
 
     current_uri = context.get_uri()
     context.init()
@@ -48,18 +52,19 @@ def run(context=_context,
         if key in params:
             params[key] = '<redacted>'
 
-    context.log_notice('Running: {plugin} ({version})'
-                       ' on {kodi} with Python {python}\n'
-                       'Path: {path}\n'
-                       'Params: {params}'
-                       .format(plugin=context.get_name(),
-                               version=context.get_version(),
-                               kodi=context.get_system_version(),
-                               python=python_version(),
+    system_version = context.get_system_version()
+    context.log_notice('Plugin: Running v{version}'
+                       '\n\tKodi:   v{kodi}'
+                       '\n\tPython: v{python}'
+                       '\n\tPath:   |{path}|'
+                       '\n\tParams: |{params}|'
+                       .format(version=context.get_version(),
+                               kodi=str(system_version),
+                               python=system_version.get_python_version(),
                                path=context.get_path(),
                                params=params))
 
     plugin.run(provider, context, focused=(current_uri == new_uri))
 
-    if profiler:
+    if debug:
         profiler.print_stats()

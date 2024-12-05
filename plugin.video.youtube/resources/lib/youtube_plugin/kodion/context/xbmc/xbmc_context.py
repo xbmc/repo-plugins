@@ -18,7 +18,6 @@ from weakref import proxy
 from ..abstract_context import AbstractContext
 from ...compatibility import (
     parse_qsl,
-    unquote,
     urlsplit,
     xbmc,
     xbmcaddon,
@@ -32,7 +31,7 @@ from ...constants import (
     SORT,
     WAKEUP,
 )
-from ...player import XbmcPlayer, XbmcPlaylist
+from ...player import XbmcPlaylistPlayer
 from ...settings import XbmcPluginSettings
 from ...ui import XbmcContextUI
 from ...utils import (
@@ -50,35 +49,41 @@ class XbmcContext(AbstractContext):
     _KODI_UI_SUBTITLE_OPTIONS = None
 
     LOCAL_MAP = {
+        'api.config': 30634,
+        'api.config.bookmark': 30638,
+        'api.config.not_updated': 30635,
+        'api.config.save': 190,
+        'api.config.updated': 30631,
         'api.id': 30202,
         'api.key': 30201,
         'api.key.incorrect': 30648,
-        'api.personal.enabled': 30598,
+        'api.personal.enabled': 30636,
+        'api.personal.disabled': 30637,
         'api.personal.failed': 30599,
         'api.secret': 30203,
-        'archive': 30105,
-        'are_you_sure': 30703,
-        'auto_remove_watch_later': 30515,
+        'are_you_sure': 750,
         'bookmark': 30101,
         'bookmark.channel': 30803,
         'bookmark.created': 21362,
         'bookmark.remove': 20404,
         'bookmarks': 30100,
         'bookmarks.clear': 30801,
-        'bookmarks.clear.confirm': 30802,
+        'bookmarks.clear.check': 30802,
         'browse_channels': 30512,
-        'cancel': 30615,
-        'channels': 30500,
+        'cancel': 222,
+        'channel': 19029,
+        'channels': 19019,
         'client.id.incorrect': 30649,
         'client.ip': 30700,
         'client.ip.failed': 30701,
         'client.secret.incorrect': 30650,
-        'content.clear': 30121,
-        'content.clear.confirm': 30120,
-        'content.delete': 30116,
-        'content.delete.confirm': 30114,
-        'content.remove': 30117,
-        'content.remove.confirm': 30115,
+        'completed': 19256,
+        'content.clear': 30120,
+        'content.clear.check': 30121,
+        'content.delete': 30114,
+        'content.delete.check': 30116,
+        'content.remove': 30115,
+        'content.remove.check': 30117,
         'datetime.a_minute_ago': 30677,
         'datetime.airing_now': 30691,
         'datetime.airing_soon': 30693,
@@ -95,7 +100,7 @@ class XbmcContext(AbstractContext):
         'datetime.two_days_ago': 30683,
         'datetime.two_hours_ago': 30680,
         'datetime.yesterday_at': 30682,
-        'delete': 30118,
+        'delete': 117,
         'disliked.video': 30717,
         'error.no_video_streams_found': 30549,
         'error.rtmpe_not_supported': 30542,
@@ -103,23 +108,22 @@ class XbmcContext(AbstractContext):
         'go_to_channel': 30502,
         'history': 30509,
         'history.clear': 30609,
-        'history.clear.confirm': 30610,
+        'history.clear.check': 30610,
         'history.list.remove': 30572,
-        'history.list.remove.confirm': 30573,
+        'history.list.remove.check': 30573,
         'history.list.set': 30571,
-        'history.list.set.confirm': 30574,
+        'history.list.set.check': 30574,
         'history.mark.unwatched': 30669,
         'history.mark.watched': 30670,
-        'history.remove': 30108,
+        'history.remove': 15015,
         'history.reset.resume_point': 30674,
+        'home': 10000,
         'httpd.not.running': 30699,
         'inputstreamhelper.is_installed': 30625,
-        'isa.enable.confirm': 30579,
+        'isa.enable.check': 30579,
         'key.requirement': 30731,
-        'latest_videos': 30109,
-        'library': 30103,
         'liked.video': 30716,
-        'live': 30539,
+        'live': 19664,
         'live.completed': 30647,
         'live.upcoming': 30646,
         'maintenance.bookmarks': 30800,
@@ -132,53 +136,63 @@ class XbmcContext(AbstractContext):
         'my_channel': 30507,
         'my_location': 30654,
         'my_subscriptions': 30510,
+        'my_subscriptions.loading': 575,
         'my_subscriptions.filter.add': 30587,
         'my_subscriptions.filter.added': 30589,
         'my_subscriptions.filter.remove': 30588,
         'my_subscriptions.filter.removed': 30590,
         'my_subscriptions.filtered': 30584,
-        'none': 30561,
+        'none': 231,
         'page.back': 30815,
         'page.choose': 30806,
         'page.empty': 30816,
         'page.next': 30106,
         'playlist.added_to': 30714,
-        'playlist.create': 30522,
-        'playlist.play.all': 30531,
-        'playlist.play.default': 30532,
+        'playlist.create': 525,
+        'playlist.play.all': 22083,
+        'playlist.play.default': 571,
         'playlist.play.from_here': 30537,
         'playlist.play.reverse': 30533,
         'playlist.play.select': 30535,
-        'playlist.play.shuffle': 30534,
+        'playlist.play.shuffle': 191,
+        'playlist.podcast': 30820,
         'playlist.progress.updating': 30536,
         'playlist.removed_from': 30715,
-        'playlist.select': 30521,
-        'playlists': 30501,
+        'playlist.select': 524,
+        'playlist.view.all': 30562,
+        'playlists': 136,
         'please_wait': 30119,
-        'prompt': 30566,
         'purchases': 30622,
         'recommendations': 30551,
-        'refresh': 30543,
-        'refresh.settings.confirm': 30818,
+        'refresh': 184,
+        'refresh.settings.check': 30818,
         'related_videos': 30514,
-        'remove': 30108,
+        'remove': 15015,
         'removed': 30666,
-        'rename': 30113,
+        'rename': 118,
         'renamed': 30667,
-        'reset.access_manager.confirm': 30581,
+        'reset.access_manager.check': 30581,
         'retry': 30612,
         'saved.playlists': 30611,
-        'search': 30102,
+        'search': 137,
         'search.clear': 30556,
+        'search.history': 30558,
         'search.new': 30110,
         'search.quick': 30605,
         'search.quick.incognito': 30606,
-        'search.remove': 30108,
-        'search.rename': 30113,
-        'search.title': 30102,
+        'search.remove': 15015,
+        'search.rename': 118,
+        'search.sort': 550,
+        'search.sort.date': 552,
+        'search.sort.rating': 563,
+        'search.sort.relevance': 420,
+        'search.sort.title': 369,
+        'search.sort.viewCount': 30767,
+        'search.title': 137,
+        'select': 424,
         'select.listen.ip': 30644,
         'select_video_quality': 30010,
-        'settings': 30577,
+        'settings': 10004,
         'setup_wizard': 30526,
         'setup_wizard.capabilities': 30786,
         'setup_wizard.capabilities.720p30': 30787,
@@ -196,24 +210,28 @@ class XbmcContext(AbstractContext):
         'setup_wizard.prompt.import_search_history': 30779,
         'setup_wizard.prompt.locale': 30527,
         'setup_wizard.prompt.my_location': 30653,
-        'setup_wizard.prompt.settings': 30577,
+        'setup_wizard.prompt.settings': 10004,
         'setup_wizard.prompt.settings.defaults': 30783,
         'setup_wizard.prompt.settings.list_details': 30784,
         'setup_wizard.prompt.settings.performance': 30785,
         'setup_wizard.prompt.settings.refresh': 30817,
-        'setup_wizard.prompt.subtitles': 30600,
+        'setup_wizard.prompt.subtitles': 287,
         'sign.enter_code': 30519,
         'sign.go_to': 30502,
         'sign.in': 30111,
         'sign.out': 30112,
-        'sign.twice.text': 30547,
-        'sign.twice.title': 30546,
+        'sign.multi.text': 30547,
+        'sign.multi.title': 30546,
+        'start': 335,
         'stats.commentCount': 30732,
         # 'stats.favoriteCount': 1036,
+        'stats.itemCount': 20360,
         'stats.likeCount': 30733,
+        'stats.subscriberCount': 30739,
+        'stats.videoCount': 3,
         'stats.viewCount': 30767,
         'stream.alternate': 30747,
-        'stream.automatic': 30583,
+        'stream.automatic': 36588,
         'stream.descriptive': 30746,
         'stream.dubbed': 30745,
         'stream.multi_audio': 30763,
@@ -226,7 +244,7 @@ class XbmcContext(AbstractContext):
         'subtitles.download': 30705,
         'subtitles.download.pre': 30706,
         'subtitles.all': 30774,
-        'subtitles.language': 30560,
+        'subtitles.language': 21448,
         'subtitles.no_asr': 30602,
         'subtitles.translation': 30775,
         'subtitles.with_fallback': 30601,
@@ -240,7 +258,7 @@ class XbmcContext(AbstractContext):
         'updated_': 30597,
         'uploads': 30726,
         'user.changed': 30659,
-        'user.default': 30532,
+        'user.default': 571,
         'user.enter_name': 30658,
         'user.new': 30656,
         'user.remove': 30662,
@@ -257,7 +275,7 @@ class XbmcContext(AbstractContext):
         'video.description.links.not_found': 30545,
         'video.disliked': 30538,
         'video.liked': 30508,
-        'video.more': 30548,
+        'video.more': 22082,
         'video.play.ask_for_quality': 30730,
         'video.play.audio_only': 30708,
         'video.play.timeshift': 30819,
@@ -267,18 +285,47 @@ class XbmcContext(AbstractContext):
         'video.rate': 30528,
         'video.rate.dislike': 30530,
         'video.rate.like': 30529,
-        'video.rate.none': 30108,
+        'video.rate.none': 15015,
+        'videos': 3,
         'watch_later': 30107,
         'watch_later.add': 30107,
         'watch_later.added_to': 30713,
         'watch_later.clear': 30769,
-        'watch_later.clear.confirm': 30770,
+        'watch_later.clear.check': 30770,
         'watch_later.list.remove': 30568,
-        'watch_later.list.remove.confirm': 30569,
+        'watch_later.list.remove.check': 30569,
         'watch_later.list.set': 30567,
-        'watch_later.list.set.confirm': 30570,
-        'watch_later.remove': 30108,
+        'watch_later.list.set.check': 30570,
+        'watch_later.remove': 15015,
         'youtube': 30003,
+    }
+
+    SEARCH_PARAMS = {
+        'forMine',
+        'channelId',
+        'channelType',
+        'eventType',
+        'location',
+        'locationRadius',
+        'maxResults',
+        'order',
+        'pageToken'
+        'publishedAfter',
+        'publishedBefore',
+        'q',
+        'safeSearch',
+        'topicId',
+        'type',
+        'videoCaption',
+        'videoCategoryId',
+        'videoDefinition',
+        'videoDimension',
+        'videoDuration',
+        'videoEmbeddable',
+        'videoLicense',
+        'videoPaidProductPlacement',
+        'videoSyndicated',
+        'videoType',
     }
 
     def __new__(cls, *args, **kwargs):
@@ -296,6 +343,9 @@ class XbmcContext(AbstractContext):
                 self.localize(308),    # Original language
                 self.localize(309),    # UI language
             }
+
+            # Update default allowable params
+            cls._NON_EMPTY_STRING_PARAMS.update(self.SEARCH_PARAMS)
 
             cls._initialized = True
 
@@ -320,10 +370,7 @@ class XbmcContext(AbstractContext):
         self._version = self._addon.getAddonInfo('version')
 
         self._ui = None
-        self._video_playlist = None
-        self._audio_playlist = None
-        self._video_player = None
-        self._audio_player = None
+        self._playlist = None
 
         atexit.register(self.tear_down)
 
@@ -341,15 +388,16 @@ class XbmcContext(AbstractContext):
             return
 
         # first the path of the uri
-        parsed_url = urlsplit(uri)
-        self._path = unquote(parsed_url.path)
+        self.set_path(urlsplit(uri).path, force=True)
 
         # after that try to get the params
         self._params = {}
         if num_args > 2:
             params = sys.argv[2][1:]
             if params:
-                self.parse_params(dict(parse_qsl(params)))
+                self.parse_params(
+                    dict(parse_qsl(params, keep_blank_values=True))
+                )
 
         # then Kodi resume status
         if num_args > 3 and sys.argv[3].lower() == 'resume:true':
@@ -426,25 +474,10 @@ class XbmcContext(AbstractContext):
             sub_language = None
         return sub_language
 
-    def get_video_playlist(self):
-        if not self._video_playlist:
-            self._video_playlist = XbmcPlaylist('video', proxy(self))
-        return self._video_playlist
-
-    def get_audio_playlist(self):
-        if not self._audio_playlist:
-            self._audio_playlist = XbmcPlaylist('audio', proxy(self))
-        return self._audio_playlist
-
-    def get_video_player(self):
-        if not self._video_player:
-            self._video_player = XbmcPlayer('video', proxy(self))
-        return self._video_player
-
-    def get_audio_player(self):
-        if not self._audio_player:
-            self._audio_player = XbmcPlayer('audio', proxy(self))
-        return self._audio_player
+    def get_playlist_player(self, playlist_type=None):
+        if not self._playlist or playlist_type:
+            self._playlist = XbmcPlaylistPlayer(proxy(self), playlist_type)
+        return self._playlist
 
     def get_ui(self):
         if not self._ui:
@@ -509,20 +542,26 @@ class XbmcContext(AbstractContext):
         ))
 
     def apply_content(self):
+        # ui local variable used for ui.get_view_manager() in unofficial version
         ui = self.get_ui()
-        content_type = ui.pop_property(CONTENT_TYPE)
-        if not content_type:
-            return
 
-        content_type, sub_type, category_label = json.loads(content_type)
-        self.log_debug('Applying content-type: |{type}| for |{path}|'.format(
-            type=(sub_type or content_type), path=self.get_path()
-        ))
-        xbmcplugin.setContent(self._plugin_handle, content_type)
+        content_type = ui.pop_property(CONTENT_TYPE)
+        if content_type:
+            content_type, sub_type, category_label = json.loads(content_type)
+            self.log_debug('Applying content-type: |{type}| for |{path}|'.format(
+                type=(sub_type or content_type), path=self.get_path()
+            ))
+            xbmcplugin.setContent(self._plugin_handle, content_type)
+        else:
+            content_type = None
+            sub_type = None
+            category_label = None
+
         if category_label is None:
             category_label = self.get_param('category_label')
         if category_label:
             xbmcplugin.setPluginCategory(self._plugin_handle, category_label)
+
         detailed_labels = self.get_settings().show_detailed_labels()
         if sub_type == 'history':
             self.add_sort_method(
@@ -544,6 +583,7 @@ class XbmcContext(AbstractContext):
                 (SORT.UNSORTED,),
                 (SORT.LABEL,),
             )
+
         if content_type == CONTENT.VIDEO_CONTENT:
             self.add_sort_method(
                 (SORT.CHANNEL,          '[%A - ]%T \u2022 %P',    '%D | %J'),
@@ -566,7 +606,7 @@ class XbmcContext(AbstractContext):
             )
 
     def add_sort_method(self, *sort_methods):
-        args = slice(None if current_system_version.compatible(19, 0) else 2)
+        args = slice(None if current_system_version.compatible(19) else 2)
         for sort_method in sort_methods:
             xbmcplugin.addSortMethod(self._plugin_handle, *sort_method[args])
 
@@ -593,22 +633,24 @@ class XbmcContext(AbstractContext):
         new_context._watch_later_list = self._watch_later_list
 
         new_context._ui = self._ui
-        new_context._video_playlist = self._video_playlist
-        new_context._audio_playlist = self._audio_playlist
-        new_context._video_player = self._video_player
-        new_context._audio_player = self._audio_player
+        new_context._playlist = self._playlist
 
         return new_context
 
     def execute(self, command, wait=False, wait_for=None):
+        if not wait_for:
+            xbmc.executebuiltin(command, wait)
+            return
+
+        ui = self.get_ui()
+        ui.clear_property(wait_for)
+        pop_property = ui.pop_property
+        waitForAbort = xbmc.Monitor().waitForAbort
+
         xbmc.executebuiltin(command, wait)
-        if wait_for:
-            ui = self.get_ui()
-            monitor = xbmc.Monitor()
-            while not monitor.abortRequested():
-                monitor.waitForAbort(1)
-                if not ui.get_property(wait_for):
-                    break
+
+        while not pop_property(wait_for) and not waitForAbort(1):
+            pass
 
     @staticmethod
     def sleep(timeout=None):
@@ -620,11 +662,15 @@ class XbmcContext(AbstractContext):
                                    'properties': ['enabled']})
         try:
             return response['result']['addon']['enabled'] is True
-        except (KeyError, TypeError):
+        except (KeyError, TypeError) as exc:
             error = response.get('error', {})
-            self.log_error('XbmcContext.addon_enabled error - |{0}: {1}|'
-                           .format(error.get('code', 'unknown'),
-                                   error.get('message', 'unknown')))
+            self.log_error('XbmcContext.addon_enabled - Error'
+                           '\n\tException: {exc!r}'
+                           '\n\tCode:      {code}'
+                           '\n\tMessage:   {msg}'
+                           .format(exc=exc,
+                                   code=error.get('code', 'Unknown'),
+                                   msg=error.get('message', 'Unknown')))
             return False
 
     def set_addon_enabled(self, addon_id, enabled=True):
@@ -633,11 +679,15 @@ class XbmcContext(AbstractContext):
                                    'enabled': enabled})
         try:
             return response['result'] == 'OK'
-        except (KeyError, TypeError):
+        except (KeyError, TypeError) as exc:
             error = response.get('error', {})
-            self.log_error('XbmcContext.set_addon_enabled error - |{0}: {1}|'
-                           .format(error.get('code', 'unknown'),
-                                   error.get('message', 'unknown')))
+            self.log_error('XbmcContext.set_addon_enabled - Error'
+                           '\n\tException: {exc!r}'
+                           '\n\tCode:      {code}'
+                           '\n\tMessage:   {msg}'
+                           .format(exc=exc,
+                                   code=error.get('code', 'Unknown'),
+                                   msg=error.get('message', 'Unknown')))
             return False
 
     @staticmethod
@@ -659,7 +709,7 @@ class XbmcContext(AbstractContext):
                 if (prompt
                         and self.get_ui().on_yes_no_input(
                             self.get_name(),
-                            self.localize('isa.enable.confirm'),
+                            self.localize('isa.enable.check'),
                         )
                         and self.set_addon_enabled('inputstream.adaptive')):
                     prompt = False
@@ -693,6 +743,7 @@ class XbmcContext(AbstractContext):
         'av01': loose_version('20.3.0'),
         'vp8': False,
         'vp9': loose_version('2.3.14'),
+        'vp9.2': loose_version('2.4.0'),
     }
 
     def inputstream_adaptive_capabilities(self, capability=None):
@@ -761,10 +812,7 @@ class XbmcContext(AbstractContext):
 
         attrs = (
             '_ui',
-            '_video_playlist',
-            '_audio_playlist',
-            '_video_player',
-            '_audio_player',
+            '_playlist',
         )
         for attr in attrs:
             try:
@@ -773,11 +821,13 @@ class XbmcContext(AbstractContext):
             except AttributeError:
                 pass
 
-    def wakeup(self, target, timeout=None):
+    def wakeup(self, target, timeout=None, payload=None):
         data = {'target': target, 'response_required': bool(timeout)}
+        if payload:
+            data.update(payload)
         self.send_notification(WAKEUP, data)
         if not timeout:
-            return
+            return None
 
         pop_property = self.get_ui().pop_property
         no_timeout = timeout < 0
@@ -786,17 +836,34 @@ class XbmcContext(AbstractContext):
         wait_period = wait_period_ms / 1000
 
         while no_timeout or remaining > 0:
-            awake = pop_property(WAKEUP)
-            if awake:
-                if awake == target:
-                    self.log_debug('Wakeup |{0}| in {1}ms'
-                                   .format(awake, timeout - remaining))
-                else:
-                    self.log_error('Wakeup |{0}| in {1}ms - expected |{2}|'
-                                   .format(awake, timeout - remaining, target))
+            data = pop_property(WAKEUP)
+            if data:
+                data = json.loads(data)
+
+            if data:
+                response = data.get('response')
+                response_target = data.get('target') or 'Unknown'
+
+                if target == response_target:
+                    if response:
+                        self.log_debug('Wakeup |{0}| in {1}ms'
+                                       .format(response_target,
+                                               timeout - remaining))
+                    else:
+                        self.log_error('Wakeup |{0}| in {1}ms - failed'
+                                       .format(response_target,
+                                               timeout - remaining))
+                    return response
+
+                self.log_error('Wakeup |{0}| in {1}ms - expected |{2}|'
+                               .format(response_target,
+                                       timeout - remaining,
+                                       target))
                 break
+
             wait(wait_period)
             remaining -= wait_period_ms
         else:
             self.log_error('Wakeup |{0}| timed out in {1}ms'
                            .format(target, timeout))
+        return False

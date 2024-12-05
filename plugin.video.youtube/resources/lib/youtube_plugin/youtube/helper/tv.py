@@ -16,35 +16,34 @@ from ...kodion.items import DirectoryItem, NextPageItem, VideoItem
 
 
 def tv_videos_to_items(provider, context, json_data):
-    incognito = context.get_param('incognito')
-    settings = context.get_settings()
-    use_play_data = not incognito and settings.use_local_history()
-    item_filter = settings.item_filter()
-
     item_params = {
         'video_id': None,
     }
-    if incognito:
+    if context.get_param('incognito'):
         item_params['incognito'] = True
+
     video_id_dict = {}
-    channel_item_dict = {}
+    channel_items_dict = {}
+
     for item in json_data.get('items', []):
         video_id = item['id']
         item_params['video_id'] = video_id
-        video_item = VideoItem(
-            item['title'], context.create_uri((PATHS.PLAY,), item_params)
+        video_id_dict[video_id] = VideoItem(
+            name=item['title'],
+            uri=context.create_uri((PATHS.PLAY,), item_params),
+            video_id=video_id,
         )
-        if incognito:
-            video_item.set_play_count(0)
-        video_id_dict[video_id] = video_item
 
-    utils.update_video_infos(provider,
-                             context,
-                             video_id_dict,
-                             channel_items_dict=channel_item_dict,
-                             use_play_data=use_play_data,
-                             item_filter=item_filter)
-    utils.update_fanarts(provider, context, channel_item_dict)
+    item_filter = context.get_settings().item_filter()
+
+    utils.update_video_infos(
+        provider,
+        context,
+        video_id_dict,
+        channel_items_dict=channel_items_dict,
+        item_filter=item_filter,
+    )
+    utils.update_fanarts(provider, context, channel_items_dict)
 
     if item_filter:
         result = utils.filter_videos(video_id_dict.values(), **item_filter)
@@ -80,7 +79,7 @@ def saved_playlists_to_items(provider, context, json_data):
         title = item['title']
         channel_id = item['channel_id']
         playlist_id = item['id']
-        image = utils.get_thumbnail(thumb_size, item.get('thumbnails', {}))
+        image = utils.get_thumbnail(thumb_size, item.get('thumbnails'))
 
         if channel_id:
             item_uri = context.create_uri(
@@ -93,7 +92,12 @@ def saved_playlists_to_items(provider, context, json_data):
                 item_params,
             )
 
-        playlist_item = DirectoryItem(title, item_uri, image=image)
+        playlist_item = DirectoryItem(
+            name=title,
+            uri=item_uri,
+            image=image,
+            playlist_id=playlist_id,
+        )
         result.append(playlist_item)
         playlist_id_dict[playlist_id] = playlist_item
 

@@ -15,8 +15,7 @@ from weakref import ref
 from ..abstract_settings import AbstractSettings
 from ...compatibility import xbmcaddon
 from ...constants import ADDON_ID, VALUE_FROM_STR
-from ...logger import log_debug
-from ...utils.methods import get_kodi_setting_bool
+from ...logger import Logger
 from ...utils.system_version import current_system_version
 
 
@@ -24,7 +23,7 @@ class SettingsProxy(object):
     def __init__(self, instance):
         self.ref = instance
 
-    if current_system_version.compatible(21, 0):
+    if current_system_version.compatible(21):
         def get_bool(self, *args, **kwargs):
             return self.ref.getBool(*args, **kwargs)
 
@@ -75,7 +74,7 @@ class SettingsProxy(object):
             value = ','.join(value)
             return self.ref.setSetting(setting, value)
 
-        if not current_system_version.compatible(19, 0):
+        if not current_system_version.compatible(19):
             @property
             def ref(self):
                 if self._ref:
@@ -94,7 +93,7 @@ class SettingsProxy(object):
                 del self._ref
 
 
-class XbmcPluginSettings(AbstractSettings):
+class XbmcPluginSettings(AbstractSettings, Logger):
     _instances = set()
     _proxy = None
 
@@ -119,9 +118,8 @@ class XbmcPluginSettings(AbstractSettings):
         else:
             fill = False
 
-        self._echo = get_kodi_setting_bool('debug.showloginfo')
         self._cache = {}
-        if current_system_version.compatible(21, 0):
+        if current_system_version.compatible(21):
             self._proxy = SettingsProxy(xbmc_addon.getSettings())
             # set methods in new Settings class are documented as returning a
             # bool, True if value was set, False otherwise, similar to how the
@@ -130,9 +128,11 @@ class XbmcPluginSettings(AbstractSettings):
             # Ignore return value until bug is fixed in Kodi
             self._check_set = False
         else:
-            if fill and not current_system_version.compatible(19, 0):
+            if fill and not current_system_version.compatible(19):
                 self.__class__._instances.add(xbmc_addon)
             self._proxy = SettingsProxy(xbmc_addon)
+
+        self._echo = self.logging_enabled()
 
     def get_bool(self, setting, default=None, echo=None):
         if setting in self._cache:
@@ -144,7 +144,7 @@ class XbmcPluginSettings(AbstractSettings):
         except (TypeError, ValueError) as exc:
             error = exc
             try:
-                value = self.get_string(setting, echo=False).lower()
+                value = self.get_string(setting, echo=False)
                 value = VALUE_FROM_STR.get(value, default)
             except TypeError as exc:
                 error = exc
@@ -154,11 +154,10 @@ class XbmcPluginSettings(AbstractSettings):
             value = default
 
         if self._echo and echo is not False:
-            log_debug('Get |{setting}|: {value} (bool, {status})'.format(
-                setting=setting,
-                value=value,
-                status=error if error else 'success'
-            ))
+            self.log_debug('Get |{setting}|: {value} (bool, {status})'
+                           .format(setting=setting,
+                                   value=value,
+                                   status=error if error else 'success'))
         self._cache[setting] = value
         return value
 
@@ -174,11 +173,10 @@ class XbmcPluginSettings(AbstractSettings):
             error = exc
 
         if self._echo and echo is not False:
-            log_debug('Set |{setting}|: {value} (bool, {status})'.format(
-                setting=setting,
-                value=value,
-                status=error if error else 'success'
-            ))
+            self.log_debug('Set |{setting}|: {value} (bool, {status})'
+                           .format(setting=setting,
+                                   value=value,
+                                   status=error if error else 'success'))
         return not error
 
     def get_int(self, setting, default=-1, process=None, echo=None):
@@ -203,11 +201,10 @@ class XbmcPluginSettings(AbstractSettings):
             value = default
 
         if self._echo and echo is not False:
-            log_debug('Get |{setting}|: {value} (int, {status})'.format(
-                setting=setting,
-                value=value,
-                status=error if error else 'success'
-            ))
+            self.log_debug('Get |{setting}|: {value} (int, {status})'
+                           .format(setting=setting,
+                                   value=value,
+                                   status=error if error else 'success'))
         self._cache[setting] = value
         return value
 
@@ -223,11 +220,10 @@ class XbmcPluginSettings(AbstractSettings):
             error = exc
 
         if self._echo and echo is not False:
-            log_debug('Set |{setting}|: {value} (int, {status})'.format(
-                setting=setting,
-                value=value,
-                status=error if error else 'success'
-            ))
+            self.log_debug('Set |{setting}|: {value} (int, {status})'
+                           .format(setting=setting,
+                                   value=value,
+                                   status=error if error else 'success'))
         return not error
 
     def get_string(self, setting, default='', echo=None):
@@ -250,11 +246,10 @@ class XbmcPluginSettings(AbstractSettings):
                 echo = '...'.join((value[:3], value[-3:]))
             else:
                 echo = value
-            log_debug('Get |{setting}|: "{echo}" (str, {status})'.format(
-                setting=setting,
-                echo=echo,
-                status=error if error else 'success'
-            ))
+            self.log_debug('Get |{setting}|: "{echo}" (str, {status})'
+                           .format(setting=setting,
+                                   echo=echo,
+                                   status=error if error else 'success'))
         self._cache[setting] = value
         return value
 
@@ -278,11 +273,10 @@ class XbmcPluginSettings(AbstractSettings):
                 echo = '...'.join((value[:3], value[-3:]))
             else:
                 echo = value
-            log_debug('Set |{setting}|: "{echo}" (str, {status})'.format(
-                setting=setting,
-                echo=echo,
-                status=error if error else 'success'
-            ))
+            self.log_debug('Set |{setting}|: "{echo}" (str, {status})'
+                           .format(setting=setting,
+                                   echo=echo,
+                                   status=error if error else 'success'))
         return not error
 
     def get_string_list(self, setting, default=None, echo=None):
@@ -299,11 +293,10 @@ class XbmcPluginSettings(AbstractSettings):
             value = default
 
         if self._echo and echo is not False:
-            log_debug('Get |{setting}|: "{value}" (str list, {status})'.format(
-                setting=setting,
-                value=value,
-                status=error if error else 'success'
-            ))
+            self.log_debug('Get |{setting}|: "{value}" (str list, {status})'
+                           .format(setting=setting,
+                                   value=value,
+                                   status=error if error else 'success'))
         self._cache[setting] = value
         return value
 
@@ -319,9 +312,8 @@ class XbmcPluginSettings(AbstractSettings):
             error = exc
 
         if self._echo and echo is not False:
-            log_debug('Set |{setting}|: "{value}" (str list, {status})'.format(
-                setting=setting,
-                value=value,
-                status=error if error else 'success'
-            ))
+            self.log_debug('Set |{setting}|: "{value}" (str list, {status})'
+                           .format(setting=setting,
+                                   value=value,
+                                   status=error if error else 'success'))
         return not error

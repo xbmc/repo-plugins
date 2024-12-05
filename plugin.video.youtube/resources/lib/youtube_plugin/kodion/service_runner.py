@@ -13,7 +13,6 @@ from __future__ import absolute_import, division, unicode_literals
 from .constants import (
     ABORT_FLAG,
     PLUGIN_SLEEPING,
-    SERVER_POST_START,
     TEMP_PATH,
     VIDEO_ID,
 )
@@ -28,16 +27,21 @@ __all__ = ('run',)
 
 def run():
     context = XbmcContext()
-    context.log_debug('YouTube service initialization...')
-
     provider = Provider()
+
+    system_version = context.get_system_version()
+    context.log_notice('Service: Starting v{version}'
+                       '\n\tKodi:   v{kodi}'
+                       '\n\tPython: v{python}'
+                       .format(version=context.get_version(),
+                               kodi=str(system_version),
+                               python=system_version.get_python_version()))
 
     get_listitem_info = context.get_listitem_info
     get_listitem_property = context.get_listitem_property
 
     ui = context.get_ui()
     clear_property = ui.clear_property
-    pop_property = ui.pop_property
     set_property = ui.set_property
 
     clear_property(ABORT_FLAG)
@@ -71,8 +75,13 @@ def run():
 
     while not monitor.abortRequested():
         is_idle = monitor.system_idle or monitor.get_idle_time() >= loop_period
+        is_asleep = monitor.system_sleep
 
-        if is_idle:
+        if is_asleep:
+            plugin_idle_time_ms = 0
+            if not plugin_is_idle:
+                plugin_is_idle = set_property(PLUGIN_SLEEPING)
+        elif is_idle:
             if plugin_idle_time_ms >= plugin_idle_timeout_ms:
                 plugin_idle_time_ms = 0
                 if not plugin_is_idle:
@@ -84,18 +93,17 @@ def run():
 
         if not monitor.httpd:
             httpd_idle_time_ms = 0
+        elif is_asleep:
+            httpd_idle_time_ms = 0
+            monitor.shutdown_httpd()
         elif is_idle:
             if monitor.httpd_sleep_allowed:
                 if httpd_idle_time_ms >= httpd_idle_timeout_ms:
                     httpd_idle_time_ms = 0
-                    monitor.shutdown_httpd(sleep=True)
-            else:
-                if monitor.httpd_sleep_allowed is None:
-                    if pop_property(SERVER_POST_START):
-                        monitor.httpd_sleep_allowed = True
-                    httpd_idle_time_ms = 0
-                else:
-                    pop_property(SERVER_POST_START)
+                    monitor.shutdown_httpd()
+            elif monitor.httpd_sleep_allowed is None:
+                monitor.httpd_sleep_allowed = True
+                httpd_idle_time_ms = 0
         else:
             if httpd_idle_time_ms >= httpd_ping_period_ms:
                 httpd_idle_time_ms = 0
@@ -116,6 +124,12 @@ def run():
         wait_time_ms = 0
 
         while not monitor.abortRequested():
+            if (not monitor.httpd
+                    and not monitor.system_sleep
+                    and not (monitor.system_idle
+                             or monitor.get_idle_time() >= loop_period)):
+                monitor.onWake()
+
             if monitor.refresh and all(container.values()):
                 monitor.refresh_container(force=True)
                 monitor.refresh = False

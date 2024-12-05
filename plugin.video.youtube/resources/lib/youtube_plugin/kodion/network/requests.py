@@ -10,6 +10,7 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import atexit
+import socket
 from traceback import format_stack
 
 from requests import Session
@@ -18,7 +19,7 @@ from requests.exceptions import InvalidJSONError, RequestException
 from requests.utils import DEFAULT_CA_BUNDLE_PATH, extract_zipped_paths
 from urllib3.util.ssl_ import create_urllib3_context
 
-from ..logger import log_error
+from ..logger import Logger
 
 
 __all__ = (
@@ -28,6 +29,20 @@ __all__ = (
 
 
 class SSLHTTPAdapter(HTTPAdapter):
+    _SOCKET_OPTIONS = (
+        (socket.SOL_SOCKET, getattr(socket, 'SO_KEEPALIVE', None), 1),
+        (socket.IPPROTO_TCP, getattr(socket, 'TCP_NODELAY', None), 1),
+        (socket.IPPROTO_TCP, getattr(socket, 'TCP_KEEPIDLE', None), 300),
+        # TCP_KEEPALIVE equivalent to TCP_KEEPIDLE on iOS/macOS
+        (socket.IPPROTO_TCP, getattr(socket, 'TCP_KEEPALIVE', None), 300),
+        # TCP_KEEPINTVL may not be implemented at app level on iOS/macOS
+        (socket.IPPROTO_TCP, getattr(socket, 'TCP_KEEPINTVL', None), 60),
+        # TCP_KEEPCNT may not be implemented at app level on iOS/macOS
+        (socket.IPPROTO_TCP, getattr(socket, 'TCP_KEEPCNT', None), 5),
+        # TCP_USER_TIMEOUT = TCP_KEEPIDLE + TCP_KEEPINTVL * TCP_KEEPCNT
+        (socket.IPPROTO_TCP, getattr(socket, 'TCP_USER_TIMEOUT', None), 600),
+    )
+
     _ssl_context = create_urllib3_context()
     _ssl_context.load_verify_locations(
         capath=extract_zipped_paths(DEFAULT_CA_BUNDLE_PATH)
@@ -35,6 +50,12 @@ class SSLHTTPAdapter(HTTPAdapter):
 
     def init_poolmanager(self, *args, **kwargs):
         kwargs['ssl_context'] = self._ssl_context
+
+        kwargs['socket_options'] = [
+            socket_option for socket_option in self._SOCKET_OPTIONS
+            if socket_option[1] is not None
+        ]
+
         return super(SSLHTTPAdapter, self).init_poolmanager(*args, **kwargs)
 
     def cert_verify(self, conn, url, verify, cert):
@@ -42,7 +63,7 @@ class SSLHTTPAdapter(HTTPAdapter):
         return super(SSLHTTPAdapter, self).cert_verify(conn, url, verify, cert)
 
 
-class BaseRequestsClass(object):
+class BaseRequestsClass(Logger):
     _session = Session()
     _session.mount('https://', SSLHTTPAdapter(
         pool_maxsize=10,
@@ -51,6 +72,7 @@ class BaseRequestsClass(object):
             total=3,
             backoff_factor=0.1,
             status_forcelist={500, 502, 503, 504},
+            allowed_methods=None,
         )
     ))
     atexit.register(_session.close)
@@ -58,7 +80,8 @@ class BaseRequestsClass(object):
     def __init__(self, context, exc_type=None):
         settings = context.get_settings()
         self._verify = settings.verify_ssl()
-        self._timeout = settings.get_timeout()
+        self._timeout = settings.requests_timeout()
+        self._proxy = settings.proxy_settings()
 
         if isinstance(exc_type, tuple):
             self._default_exc = (RequestException,) + exc_type
@@ -89,6 +112,8 @@ class BaseRequestsClass(object):
             timeout = self._timeout
         if verify is None:
             verify = self._verify
+        if proxies is None:
+            proxies = self._proxy
         if allow_redirects is None:
             allow_redirects = True
 
@@ -123,7 +148,7 @@ class BaseRequestsClass(object):
         except self._default_exc as exc:
             exc_response = exc.response or response
             response_text = exc_response and exc_response.text
-            stack_trace = format_stack()
+            stack = format_stack()
             error_details = {'exc': exc}
 
             if error_hook:
@@ -141,40 +166,40 @@ class BaseRequestsClass(object):
                     error_details.update(_detail)
                 if _response is not None:
                     response = _response
-                    response_text = str(_response)
+                    response_text = repr(_response)
                 if _trace is not None:
-                    stack_trace = _trace
+                    stack = _trace
                 if _exc is not None:
                     raise_exc = _exc
 
             if error_title is None:
-                error_title = 'Request failed'
+                error_title = 'Request - Failed'
 
             if error_info is None:
                 try:
-                    error_info = 'Status: {0.status_code} - {0.reason}'.format(
-                        exc.response
-                    )
+                    error_info = ('Status:    {0.status_code} - {0.reason}'
+                                  .format(exc.response))
                 except AttributeError:
-                    error_info = str(exc)
+                    error_info = ('Exception: {exc!r}'
+                                  .format(exc=exc))
             elif '{' in error_info:
                 try:
                     error_info = error_info.format(**error_details)
                 except (AttributeError, IndexError, KeyError):
-                    error_info = str(exc)
+                    error_info = ('Exception: {exc!r}'
+                                  .format(exc=exc))
 
             if response_text:
-                response_text = 'Request response:\n{0}'.format(response_text)
+                response_text = ('Response:   {0}'
+                                 .format(response_text))
 
-            if stack_trace:
-                stack_trace = (
-                    'Stack trace (most recent call last):\n{0}'.format(
-                        ''.join(stack_trace)
-                    )
+            if stack:
+                stack = 'Stack trace (most recent call last):\n{stack}'.format(
+                    stack=''.join(stack)
                 )
 
-            log_error('\n'.join([part for part in [
-                error_title, error_info, response_text, stack_trace
+            self.log_error('\n\t'.join([part for part in [
+                error_title, error_info, response_text, stack
             ] if part]))
 
             if raise_exc:

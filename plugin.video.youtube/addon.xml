@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="7.0.9.2" provider-name="anxdpanic, bromix, MoojMidge">
+<addon id="plugin.video.youtube" name="YouTube" version="7.1.1.4" provider-name="anxdpanic, bromix, MoojMidge">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.27.1"/>
         <import addon="inputstream.adaptive" version="19.0.0"/>
         <import addon="script.module.inputstreamhelper" version="0.2.2" optional="true"/>
+        <import addon="script.module.pysocks" optional="true"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="resources/lib/plugin.py">
         <provides>video</provides>
@@ -31,6 +32,7 @@
         <summary lang="de_DE">Plugin für YouTube</summary>
         <summary lang="el_GR">Πρόσθετο YouTube</summary>
         <summary lang="en_GB">Plugin for YouTube</summary>
+        <summary lang="eo">Aldonaĵo por YouTube</summary>
         <summary lang="es_ES">Complemento para YouTube</summary>
         <summary lang="es_MX">Complemento para YouTube</summary>
         <summary lang="fi_FI">YouTube-lisäosa</summary>
@@ -108,9 +110,33 @@
         <disclaimer lang="vi_VN">Plugin này không được xác nhận bởi Google</disclaimer>
         <disclaimer lang="zh_CN">此插件未被谷歌认可</disclaimer>
         <disclaimer lang="zh_TW">此附加元件未由Google支持</disclaimer>
-    <news>## v7.0.9.2
+    <news>## v7.1.1.4
 ### Fixed
-- Fix various Kodi 18 listitem setInfo compatibility issues
-- Additional fixes and compatibility shims for playing AudioItems
-- Fix early thread loop termination in My Subscriptions</news></extension>
+- Fix http server not listening on any interface if listen IP is 0.0.0.0
+- Standardise return type of LoginClient.refresh_token
+- Fix curl headers not being used when set on path of setResolvedUrl listitem
+- Fix HEAD requests to MPD manifests
+- Fix various Python2 incompatible changes
+- Properly distinguish between VP9 and VP9.2 with HDR info
+- Fix http server not running when script shows client IP
+- Fix not listing full stream details in selection dialog
+- Fix translated subtitles not being available for some videos
+- Fix labelling for auto dubbed audio tracks
+- Fix regressions in handling VP9.2 video streams
+- Fix error handling items without headers
+- Fix incorrectly determining Kodi release name
+- Fix search window history navigation when using direct links
+- Fix Python2/Android incompatibilty when checking CPU count
+- Fix method used to determine address of local network interface
+- Fix potential infinite loop with corrupted access_manager.json
+- Various improvements to multiple busy dialog crash workarounds
+- Fallback to search listing when search query is empty
+- Fix debug log string formatting error
+- Fix duplicated separators in context menu
+- Fix Kodi builtin using wrong playlist type
+- Ensure http server is started prior to creating MPD for playback
+- Fix shuffle play of playlists not working
+- Fix plugin category label not being applied if content type not set
+- Fix Kodi navigating to root path of Video window if plugin listing fails
+- Fix l</news></extension>
 </addon>

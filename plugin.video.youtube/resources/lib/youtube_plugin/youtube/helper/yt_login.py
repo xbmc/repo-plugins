@@ -10,8 +10,6 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
-import time
-
 from ..youtube_exceptions import LoginException
 
 
@@ -24,26 +22,25 @@ def process(mode, provider, context, sign_out_refresh=True):
     def _do_logout():
         refresh_tokens = access_manager.get_refresh_token()
         client = provider.get_client(context)
-        if refresh_tokens:
+        if any(refresh_tokens):
             for _refresh_token in set(refresh_tokens):
                 try:
-                    client.revoke(_refresh_token)
+                    if _refresh_token:
+                        client.revoke(_refresh_token)
                 except LoginException:
                     pass
         access_manager.update_access_token(
-            addon_id, access_token='', refresh_token='',
+            addon_id, access_token='', expiry=-1, refresh_token='',
         )
         provider.reset_client()
 
-    def _do_login(login_type):
-        for_tv = login_type == 'tv'
+    def _do_login(token_type):
         _client = provider.get_client(context)
 
         try:
-            if for_tv:
-                json_data = _client.request_device_and_user_code_tv()
-            else:
-                json_data = _client.request_device_and_user_code()
+            json_data = _client.request_device_and_user_code(token_type)
+            if not json_data:
+                return None
         except LoginException:
             _do_logout()
             raise
@@ -59,23 +56,26 @@ def process(mode, provider, context, sign_out_refresh=True):
         else:
             verification_url = 'youtube.com/activate'
 
-        text = [localize('sign.go_to') % ui.bold(verification_url),
-                '[CR]%s %s' % (localize('sign.enter_code'),
-                               ui.bold(user_code))]
-        text = ''.join(text)
+        message = ''.join((
+            localize('sign.go_to') % ui.bold(verification_url),
+            '[CR]',
+            localize('sign.enter_code'),
+            ' ',
+            ui.bold(user_code),
+        ))
 
         with ui.create_progress_dialog(
-                heading=localize('sign.in'), text=text, background=False
-        ) as dialog:
+                heading=localize('sign.in'), message=message, background=False
+        ) as progress_dialog:
             steps = ((10 * 60) // interval)  # 10 Minutes
-            dialog.set_total(steps)
+            progress_dialog.set_total(steps)
             for _ in range(steps):
-                dialog.update()
+                progress_dialog.update()
                 try:
-                    if for_tv:
-                        json_data = _client.request_access_token_tv(device_code)
-                    else:
-                        json_data = _client.request_access_token(device_code)
+                    json_data = _client.request_access_token(token_type,
+                                                             device_code)
+                    if not json_data:
+                        break
                 except LoginException:
                     _do_logout()
                     raise
@@ -93,11 +93,10 @@ def process(mode, provider, context, sign_out_refresh=True):
                     _access_token = json_data.get('access_token', '')
                     _refresh_token = json_data.get('refresh_token', '')
                     if not _access_token and not _refresh_token:
-                        _expires_in = 0
+                        _expiry = 0
                     else:
-                        _expires_in = (int(json_data.get('expires_in', 3600))
-                                       + time.time())
-                    return _access_token, _expires_in, _refresh_token
+                        _expiry = int(json_data.get('expires_in', 3600))
+                    return _access_token, _expiry, _refresh_token
 
                 if json_data['error'] != 'authorization_pending':
                     message = json_data['error']
@@ -106,11 +105,11 @@ def process(mode, provider, context, sign_out_refresh=True):
                     context.log_error('Error requesting access token: |error|'
                                       .format(error=message))
 
-                if dialog.is_aborted():
+                if progress_dialog.is_aborted():
                     break
 
                 context.sleep(interval)
-        return '', 0, ''
+        return None
 
     if mode == 'out':
         _do_logout()
@@ -118,32 +117,23 @@ def process(mode, provider, context, sign_out_refresh=True):
             ui.refresh_container()
 
     elif mode == 'in':
-        ui.on_ok(localize('sign.twice.title'), localize('sign.twice.text'))
+        ui.on_ok(localize('sign.multi.title'), localize('sign.multi.text'))
 
-        tokens = {
-            'tv': None,
-            'kodi': None,
-        }
-        for token in tokens:
-            new_token = _do_login(login_type=token)
-            access_token, expires_in, refresh_token = new_token
+        tokens = ['tv', 'personal']
+        for token_type, token in enumerate(tokens):
+            new_token = _do_login(token_type) or ('', -1, '')
+            tokens[token_type] = new_token
+
             context.log_debug('YouTube Login:'
-                              ' Type |{0}|,'
-                              ' Access Token |{1}|,'
-                              ' Refresh Token |{2}|,'
-                              ' Expires |{3}|'
+                              '\n\tType:          |{0}|'
+                              '\n\tAccess token:  |{1}|'
+                              '\n\tRefresh token: |{2}|'
+                              '\n\tExpires:       |{3}|'
                               .format(token,
-                                      access_token != '',
-                                      refresh_token != '',
-                                      expires_in))
-            # abort login
-            if not access_token and not refresh_token:
-                provider.reset_client()
-                access_manager.update_access_token(addon_id, '')
-                ui.refresh_container()
-                return
-            tokens[token] = new_token
+                                      bool(new_token[0]),
+                                      bool(new_token[2]),
+                                      new_token[1]))
 
         provider.reset_client()
-        access_manager.update_access_token(addon_id, *zip(*tokens.values()))
+        access_manager.update_access_token(addon_id, *zip(*tokens))
         ui.refresh_container()

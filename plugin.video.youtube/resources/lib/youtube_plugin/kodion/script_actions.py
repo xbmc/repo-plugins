@@ -15,13 +15,17 @@ import socket
 from .compatibility import parse_qsl, urlsplit, xbmc, xbmcaddon, xbmcvfs
 from .constants import (
     DATA_PATH,
+    DEFAULT_LANGUAGES,
+    DEFAULT_REGIONS,
     RELOAD_ACCESS_MANAGER,
+    SERVER_WAKEUP,
     TEMP_PATH,
-    WAIT_FLAG,
+    WAIT_END_FLAG,
 )
 from .context import XbmcContext
-from .network import get_client_ip_address, httpd_status
-from .utils import current_system_version, rm_dir, validate_ip_address
+from .network import Locator, get_client_ip_address, httpd_status
+from .utils import rm_dir, validate_ip_address
+from ..youtube import Provider
 
 
 def _config_actions(context, action, *_args):
@@ -63,7 +67,7 @@ def _config_actions(context, action, *_args):
 
         sub_opts = [
             localize('none'),
-            localize('prompt'),
+            localize('select'),
             localize('subtitles.with_fallback') % (preferred, fallback),
             preferred,
             '%s (%s)' % (preferred, localize('subtitles.no_asr')),
@@ -116,6 +120,7 @@ def _config_actions(context, action, *_args):
             settings.httpd_listen(addresses[selected_address])
 
     elif action == 'show_client_ip':
+        context.wakeup(SERVER_WAKEUP, timeout=5)
         if httpd_status(context):
             client_ip = get_client_ip_address(context)
             if client_ip:
@@ -125,6 +130,98 @@ def _config_actions(context, action, *_args):
                 ui.show_notification(context.localize('client.ip.failed'))
         else:
             ui.show_notification(context.localize('httpd.not.running'))
+
+    elif action == 'geo_location':
+        locator = Locator(context)
+        locator.locate_requester()
+        coords = locator.coordinates()
+        if coords:
+            context.get_settings().set_location(
+                '{0[lat]},{0[lon]}'.format(coords)
+            )
+
+    elif action == 'language_region':
+        client = Provider().get_client(context)
+        settings = context.get_settings()
+
+        plugin_language = settings.get_language()
+        plugin_region = settings.get_region()
+
+        kodi_language = context.get_language()
+        base_kodi_language = kodi_language.partition('-')[0]
+
+        json_data = client.get_supported_languages(kodi_language)
+        items = json_data.get('items') or DEFAULT_LANGUAGES['items']
+
+        selected_language = [None]
+
+        def _get_selected_language(item):
+            item_lang = item[1]
+            base_item_lang = item_lang.partition('-')[0]
+            if item_lang == kodi_language or item_lang == plugin_language:
+                selected_language[0] = item
+            elif (not selected_language[0]
+                  and base_item_lang == base_kodi_language):
+                selected_language.append(item)
+            return item
+
+        # Ignore es-419 as it causes hl not a valid language error
+        # https://github.com/jdf76/plugin.video.youtube/issues/418
+        invalid_ids = ('es-419',)
+        language_list = sorted([
+            (item['snippet']['name'], item['snippet']['hl'])
+            for item in items
+            if item['id'] not in invalid_ids
+        ], key=_get_selected_language)
+
+        if selected_language[0]:
+            selected_language = language_list.index(selected_language[0])
+        elif len(selected_language) > 1:
+            selected_language = language_list.index(selected_language[1])
+        else:
+            selected_language = None
+
+        language_id = ui.on_select(
+            localize('setup_wizard.locale.language'),
+            language_list,
+            preselect=selected_language
+        )
+        if language_id == -1:
+            return
+
+        json_data = client.get_supported_regions(language=language_id)
+        items = json_data.get('items') or DEFAULT_REGIONS['items']
+
+        selected_region = [None]
+
+        def _get_selected_region(item):
+            item_region = item[1]
+            if item_region == plugin_region:
+                selected_region[0] = item
+            return item
+
+        region_list = sorted([
+            (item['snippet']['name'], item['snippet']['gl'])
+            for item in items
+        ], key=_get_selected_region)
+
+        if selected_region[0]:
+            selected_region = region_list.index(selected_region[0])
+        else:
+            selected_region = None
+
+        region_id = ui.on_select(
+            localize('setup_wizard.locale.region'),
+            region_list,
+            preselect=selected_region
+        )
+        if region_id == -1:
+            return
+
+        # set new language id and region id
+        settings = context.get_settings()
+        settings.set_language(language_id)
+        settings.set_region(region_id)
 
 
 def _maintenance_actions(context, action, params):
@@ -148,7 +245,7 @@ def _maintenance_actions(context, action, params):
 
         if ui.on_clear_content(localize('maintenance.{0}'.format(target))):
             targets[target]().clear()
-            ui.show_notification(localize('succeeded'))
+            ui.show_notification(localize('completed'))
 
     elif action == 'refresh':
         targets = {
@@ -159,9 +256,9 @@ def _maintenance_actions(context, action, params):
             return
 
         if target == 'settings_xml' and ui.on_yes_no_input(
-                context.get_name(), localize('refresh.settings.confirm')
+                context.get_name(), localize('refresh.settings.check')
         ):
-            if not current_system_version.compatible(20, 0):
+            if not context.get_system_version().compatible(20):
                 ui.show_notification(localize('failed'))
                 return
 
@@ -322,7 +419,7 @@ def _user_actions(context, action, params):
         username = access_manager.get_username(user)
         if ui.on_remove_content(username):
             access_manager.remove_user(user)
-            ui.show_notification(localize('removed') % '"%s"' % username,
+            ui.show_notification(localize('removed') % username,
                                  localize('remove'))
             if user == 0:
                 access_manager.add_user(username=localize('user.default'),
@@ -364,14 +461,13 @@ def _user_actions(context, action, params):
 def run(argv):
     context = XbmcContext()
     ui = context.get_ui()
-    ui.set_property(WAIT_FLAG)
     try:
         category = action = params = None
         args = argv[1:]
         if args:
             args = urlsplit(args[0])
 
-            path = args.path
+            path = args.path.rstrip('/')
             if path:
                 path = path.split('/')
                 category = path[0]
@@ -381,6 +477,20 @@ def run(argv):
             params = args.query
             if params:
                 params = dict(parse_qsl(args.query))
+
+        system_version = context.get_system_version()
+        context.log_notice('Script: Running v{version}'
+                           '\n\tKodi:     v{kodi}'
+                           '\n\tPython:   v{python}'
+                           '\n\tCategory: |{category}|'
+                           '\n\tAction:   |{action}|'
+                           '\n\tParams:   |{params}|'
+                           .format(version=context.get_version(),
+                                   kodi=str(system_version),
+                                   python=system_version.get_python_version(),
+                                   category=category,
+                                   action=action,
+                                   params=params))
 
         if not category:
             xbmcaddon.Addon().openSettings()
@@ -398,4 +508,4 @@ def run(argv):
             _user_actions(context, action, params)
             return
     finally:
-        ui.clear_property(WAIT_FLAG)
+        ui.set_property(WAIT_END_FLAG)

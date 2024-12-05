@@ -24,22 +24,25 @@ from .utils import (
 )
 from ...kodion import KodionException
 from ...kodion.constants import PATHS
-from ...kodion.items import CommandItem, DirectoryItem, NextPageItem, VideoItem
+from ...kodion.items import (
+    CommandItem,
+    DirectoryItem,
+    NextPageItem,
+    VideoItem,
+    menu_items,
+)
+from ...kodion.utils import strip_html_from_text
 
 
-def _process_list_response(provider, context, json_data, item_filter):
+def _process_list_response(provider,
+                           context,
+                           json_data,
+                           item_filter=None,
+                           progress_dialog=None):
     yt_items = json_data.get('items', [])
     if not yt_items:
         context.log_warning('v3 response: Items list is empty')
-        return [
-            CommandItem(
-                context.localize('page.back'),
-                'Action(ParentDir)',
-                context,
-                image='DefaultFolderBack.png',
-                plot=context.localize('page.empty'),
-            )
-        ]
+        return None
 
     video_id_dict = {}
     channel_id_dict = {}
@@ -47,20 +50,18 @@ def _process_list_response(provider, context, json_data, item_filter):
     playlist_item_id_dict = {}
     subscription_id_dict = {}
 
-    result = []
+    items = []
+    do_callbacks = False
 
     new_params = {}
     params = context.get_params()
-    incognito = params.get('incognito', False)
-    if incognito:
-        new_params['incognito'] = incognito
+    if params.get('incognito'):
+        new_params['incognito'] = True
     addon_id = params.get('addon_id', '')
     if addon_id:
         new_params['addon_id'] = addon_id
 
     settings = context.get_settings()
-    use_play_data = not incognito and settings.use_local_history()
-
     thumb_size = settings.get_thumbnail_size()
     fanart_type = params.get('fanart_type')
     if fanart_type is None:
@@ -69,6 +70,13 @@ def _process_list_response(provider, context, json_data, item_filter):
         fanart_type = settings.get_thumbnail_size(settings.THUMB_SIZE_BEST)
     else:
         fanart_type = False
+    untitled = context.localize('untitled')
+
+    if progress_dialog:
+        total = len(yt_items)
+        progress_dialog.reset_total(new_total=total,
+                                    current=0,
+                                    total=total)
 
     for yt_item in yt_items:
         kind, is_youtube, is_plugin, kind_type = _parse_kind(yt_item)
@@ -82,10 +90,17 @@ def _process_list_response(provider, context, json_data, item_filter):
         if is_youtube:
             item_id = yt_item.get('id')
             snippet = yt_item.get('snippet', {})
-            title = snippet.get('title', context.localize('untitled'))
+
+            localised_info = snippet.get('localized') or {}
+            title = (localised_info.get('title')
+                     or snippet.get('title')
+                     or untitled)
+            description = strip_html_from_text(localised_info.get('description')
+                                               or snippet.get('description')
+                                               or '')
 
             thumbnails = snippet.get('thumbnails')
-            if not thumbnails and yt_item.get('_partial'):
+            if not thumbnails:
                 thumbnails = {
                     thumb_type: {
                         'url': thumb['url'].format(item_id, ''),
@@ -110,7 +125,18 @@ def _process_list_response(provider, context, json_data, item_filter):
                 item_id = item_id['channelId']
             else:
                 item_id = None
-            if not item_id:
+            if item_id:
+                yt_item['_context_menu'] = {
+                    'context_menu': (
+                        menu_items.search_sort_by(context, params, 'relevance'),
+                        menu_items.search_sort_by(context, params, 'date'),
+                        menu_items.search_sort_by(context, params, 'viewCount'),
+                        menu_items.search_sort_by(context, params, 'rating'),
+                        menu_items.search_sort_by(context, params, 'title'),
+                    ),
+                    'position': 0,
+                }
+            else:
                 context.log_debug('v3 searchResult discarded: |%s|' % kind)
                 continue
 
@@ -120,7 +146,12 @@ def _process_list_response(provider, context, json_data, item_filter):
                 (PATHS.PLAY,),
                 item_params,
             )
-            item = VideoItem(title, item_uri, image=image, fanart=fanart)
+            item = VideoItem(title,
+                             item_uri,
+                             image=image,
+                             fanart=fanart,
+                             plot=description,
+                             video_id=item_id)
             video_id_dict[item_id] = item
 
         elif kind_type == 'channel':
@@ -132,6 +163,7 @@ def _process_list_response(provider, context, json_data, item_filter):
                                  item_uri,
                                  image=image,
                                  fanart=fanart,
+                                 plot=description,
                                  channel_id=item_id)
             channel_id_dict[item_id] = item
 
@@ -141,7 +173,11 @@ def _process_list_response(provider, context, json_data, item_filter):
                 ('special', 'browse_channels'),
                 item_params,
             )
-            item = DirectoryItem(title, item_uri)
+            item = DirectoryItem(title,
+                                 item_uri,
+                                 image=image,
+                                 fanart=fanart,
+                                 plot=description)
 
         elif kind_type == 'subscription':
             subscription_id = item_id
@@ -157,6 +193,7 @@ def _process_list_response(provider, context, json_data, item_filter):
                                  item_uri,
                                  image=image,
                                  fanart=fanart,
+                                 plot=description,
                                  channel_id=item_id,
                                  subscription_id=subscription_id)
             channel_id_dict[item_id] = item
@@ -182,22 +219,29 @@ def _process_list_response(provider, context, json_data, item_filter):
                                  item_uri,
                                  image=image,
                                  fanart=fanart,
+                                 plot=description,
                                  channel_id=channel_id,
                                  playlist_id=item_id)
             playlist_id_dict[item_id] = item
 
         elif kind_type == 'playlistitem':
-            playlistitem_id = item_id
+            playlist_item_id = item_id
             item_id = snippet['resourceId']['videoId']
             # store the id of the playlistItem - needed for deleting item
-            playlist_item_id_dict[item_id] = playlistitem_id
+            playlist_item_id_dict[item_id] = playlist_item_id
 
             item_params['video_id'] = item_id
             item_uri = context.create_uri(
                 (PATHS.PLAY,),
                 item_params,
             )
-            item = VideoItem(title, item_uri, image=image, fanart=fanart)
+            item = VideoItem(title,
+                             item_uri,
+                             image=image,
+                             fanart=fanart,
+                             plot=description,
+                             video_id=item_id,
+                             playlist_item_id=playlist_item_id)
             video_id_dict[item_id] = item
 
         elif kind_type == 'activity':
@@ -215,7 +259,12 @@ def _process_list_response(provider, context, json_data, item_filter):
                 (PATHS.PLAY,),
                 item_params,
             )
-            item = VideoItem(title, item_uri, image=image, fanart=fanart)
+            item = VideoItem(title,
+                             item_uri,
+                             image=image,
+                             fanart=fanart,
+                             plot=description,
+                             video_id=item_id)
             video_id_dict[item_id] = item
 
         elif kind_type == 'commentthread':
@@ -250,18 +299,18 @@ def _process_list_response(provider, context, json_data, item_filter):
             item.add_context_menu(**yt_item['_context_menu'])
 
         if isinstance(item, VideoItem):
-            item.video_id = item_id
-            if incognito:
-                item.set_play_count(0)
             # Set track number from playlist, or set to current list length to
             # match "Default" (unsorted) sort order
-            position = snippet.get('position') or len(result)
+            position = snippet.get('position') or len(items)
             item.set_track_number(position + 1)
 
         if '_callback' in yt_item:
-            yt_item['_callback'](item)
+            item.callback = yt_item['_callback']
+            do_callbacks = True
 
-        result.append(item)
+        items.append(item)
+        if progress_dialog:
+            progress_dialog.update(current=len(items))
 
     # this will also update the channel_id_dict with the correct channel_id
     # for each video.
@@ -289,7 +338,6 @@ def _process_list_response(provider, context, json_data, item_filter):
             'upd_kwargs': {
                 'data': None,
                 'live_details': True,
-                'use_play_data': use_play_data,
                 'item_filter': item_filter,
             },
             'complete': False,
@@ -380,6 +428,12 @@ def _process_list_response(provider, context, json_data, item_filter):
     completed = []
     iterator = iter(resources)
     threads['loop'].set()
+
+    if progress_dialog:
+        progress_dialog.reset_total(new_total=remaining,
+                                    current=0,
+                                    total=remaining)
+
     while threads['loop'].wait():
         try:
             resource_id = next(iterator)
@@ -398,6 +452,8 @@ def _process_list_response(provider, context, json_data, item_filter):
         if resource['complete']:
             remaining -= 1
             completed.append(resource_id)
+            if progress_dialog:
+                progress_dialog.update(current=len(completed))
             continue
 
         defer = resource['defer']
@@ -420,7 +476,7 @@ def _process_list_response(provider, context, json_data, item_filter):
             resource['thread'] = new_thread
             new_thread.start()
 
-    return result
+    return items, do_callbacks
 
 
 _KNOWN_RESPONSE_KINDS = {
@@ -445,29 +501,45 @@ def response_to_items(provider,
                       sort=None,
                       reverse=False,
                       process_next_page=True,
-                      item_filter=None):
+                      item_filter=None,
+                      progress_dialog=None):
     kind, is_youtube, is_plugin, kind_type = _parse_kind(json_data)
     if not is_youtube and not is_plugin:
         context.log_debug('v3 response discarded: |%s|' % kind)
         return []
 
+    params = context.get_params()
+
     if kind_type in _KNOWN_RESPONSE_KINDS:
-        item_filter = context.get_settings().item_filter(item_filter)
-        result = _process_list_response(
-            provider, context, json_data, item_filter
+        item_filter = context.get_settings().item_filter(
+            update=item_filter,
+            override=params.get('item_filter'),
         )
+        result = _process_list_response(
+            provider,
+            context,
+            json_data,
+            item_filter=item_filter,
+            progress_dialog=progress_dialog,
+        )
+        if not result:
+            return []
+
+        items, do_callbacks = result
+        if not items:
+            return items
     else:
         raise KodionException('Unknown kind: %s' % kind)
 
-    if item_filter:
-        result = filter_videos(result, **item_filter)
+    if item_filter or do_callbacks:
+        items = filter_videos(items, **item_filter)
 
     if sort is not None:
-        result.sort(key=sort, reverse=reverse)
+        items.sort(key=sort, reverse=reverse)
 
     # no processing of next page item
-    if not result or not process_next_page:
-        return result
+    if not process_next_page or params.get('hide_next_page'):
+        return items
 
     # next page
     """
@@ -477,7 +549,6 @@ def response_to_items(provider,
     We implemented our own calculation for the token into the YouTube client
     This should work for up to ~2000 entries.
     """
-    params = context.get_params()
     current_page = params.get('page')
     next_page = current_page + 1 if current_page else 2
     new_params = dict(params, page=next_page)
@@ -493,7 +564,7 @@ def response_to_items(provider,
         elif current_page:
             new_params['page_token'] = ''
         else:
-            return result
+            return items
 
         page_info = json_data.get('pageInfo', {})
         yt_total_results = int(page_info.get('totalResults', 0))
@@ -508,7 +579,7 @@ def response_to_items(provider,
             next_page = 1
             new_params['page'] = 1
         else:
-            return result
+            return items
 
     yt_visitor_data = json_data.get('visitorData')
     if yt_visitor_data:
@@ -524,9 +595,9 @@ def response_to_items(provider,
             new_params['offset'] = offset
 
     next_page_item = NextPageItem(context, new_params)
-    result.append(next_page_item)
+    items.append(next_page_item)
 
-    return result
+    return items
 
 
 def _parse_kind(item):

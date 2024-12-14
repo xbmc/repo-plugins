@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.immich"
+       version="1.0.0"
+       name="Immich"
+       provider-name="Immich">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>image</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Immich</summary>
+        <description lang="en_GB">A (unofficial) plugin to view your media from Immich.</description>
+        <license>MIT</license>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+        <news>Updated with latest artwork metadata</news>
+    </extension>
+</addon>

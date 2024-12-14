@@ -1,0 +1,53 @@
+# Kodi Media Center language file
+# Addon Name: YouTube
+# Addon id: plugin.image.immich
+# Addon Provider: bromix
+msgid ""
+msgstr ""
+"Project-Id-Version: Immich\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgctxt "#30000"
+msgid "Immich URL with http(s)://"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Immich API key"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Timeline"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Albums"
+msgstr ""
+
+msgctxt "#30004"
+msgid ""
+msgstr ""
+
+msgctxt "#30005"
+msgid "Show only shared albums"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Log in"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Connection error"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Can't connect to the server. Check the address of Immich server and API key."
+msgstr ""
+
+msgctxt "#30009"
+msgid "Authorization error"
+msgstr ""
+
+msgctxt "#30010"
+msgid "API Key may be invalid."
+msgstr ""

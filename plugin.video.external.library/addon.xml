@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.external.library"
-    version="1.1.1"
+    version="1.1.2"
     name="External Kodi Videolibrary Client"
     provider-name="Roman V.M.">
   <requires>
@@ -21,9 +21,8 @@
       <icon>icon.png</icon>
     </assets>
     <source>https://github.com/romanvm/kodi.external.library</source>
-    <news>1.1.1:
-- Replaced addon icon.
-- Internal changes.</news>
+    <news>1.1.2:
+- Refresh movies/episodes list after resume/playback state has been updated.</news>
     <reuselanguageinvoker>true</reuselanguageinvoker>
   </extension>
 </addon>

@@ -1,3 +1,8 @@
+[B]Version 6.5.0 - 2024-01-22[/B]
+- Fix "IOException error" and HTTP timeouts.
+- Better output during re-caching.
+- Fix re-caching to also cache full description urls.
+
 [B]Version 6.4.6 - 2024-11-01[/B]
 - Fix "unsupported_subCode" issue.
 - Fix time offset in live tv EPG.

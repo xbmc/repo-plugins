@@ -29,8 +29,9 @@ import requests_cache
 import time
 from dateutil import parser
 from datetime import datetime, timezone, timedelta
-from urllib.parse import urlparse, parse_qs, parse_qsl, urlencode, urlunparse
-
+from urllib.parse import urlparse, parse_qs, parse_qsl, urlencode
+from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
 
 CHANNEL_IDS = [20875, 20876, 192099, 192100, 20892]
 CHANNEL_PRESET = {
@@ -41,7 +42,7 @@ CHANNEL_PRESET = {
     'DRTV Ekstra': 5
 }
 URL = 'https://production.dr-massive.com/api'
-GET_TIMEOUT = 5
+GET_TIMEOUT = 10
 
 
 def cache_path(path):
@@ -51,15 +52,18 @@ def cache_path(path):
     return True
 
 
-def fix_query(url, remove={}, add={}):
-    o = list(urlparse(url))
-    qs = dict(parse_qsl(o[4]))
+def fix_query(url, remove={}, add={}, remove_keys=[]):
+    o = urlparse(url)
+    qs = dict(parse_qsl(o.query))
+    for k in remove_keys:
+        if k in qs:
+            del qs[k]
     for k,v in remove.items():
         if qs.get(k) == v:
             del qs[k]
     qs.update(add)
-    o[4] = urlencode(qs)
-    return urlunparse(o)
+    qs = dict(sorted(qs.items()))
+    return o._replace(query=urlencode(qs)).geturl()
 
 
 def full_login(user, password):
@@ -150,7 +154,10 @@ class Api():
         self.cleanup_every = int(get_setting('recache.cleanup'))
         self.expire_hours = int(get_setting('recache.expiration'))
         self.caching = get_setting('recache.enabled') == 'true'
+        self.fetch_full_plot = get_setting('fetch.full_plot') == 'true'
         self.expire_seconds = 3600*self.expire_hours if self.expire_hours >= 0 else None
+        retry = Retry(total=3, backoff_factor=2, status_forcelist=[429, 500, 502, 503, 504])
+        self.adapter = HTTPAdapter(max_retries=retry)
         self.init_sqlite_db()
 
         self.token_file = Path(f'{self.cachePath}/token.p')
@@ -167,6 +174,7 @@ class Api():
         request_fname = str(self.cachePath/'requests.cache')
         self.session = requests_cache.CachedSession(
             request_fname, backend='sqlite', expire_after=self.expire_seconds)
+        self.session.mount('https://', self.adapter)
 
         if (self.cachePath/'requests_cleaned').exists():
             if (time.time() - (self.cachePath/'requests_cleaned').stat().st_mtime)/3600/24 < self.cleanup_every:
@@ -181,6 +189,7 @@ class Api():
                 (self.cachePath/'requests.cache.sqlite').unlink()
             self.session = requests_cache.CachedSession(
                 request_fname, backend='sqlite', expire_after=self.expire_seconds)
+            self.session.mount('https://', self.adapter)
         (self.cachePath/'requests_cleaned').write_text(str(datetime.now()))
 
     def read_tokens(self, tokens):
@@ -273,6 +282,7 @@ class Api():
             u = self.session.get(url, params=params, headers=headers, timeout=GET_TIMEOUT)
         else:
             u = requests.get(url, params=params, headers=headers, timeout=GET_TIMEOUT)
+
         if u.status_code == 200:
             return u.json()
         else:
@@ -295,7 +305,8 @@ class Api():
 
     def get_next(self, path, use_cache=True, headers=None):
         remove = {'sub':'Emergency'}
-        url = URL + fix_query(path, remove=remove)
+        remove_keys = ['lang', 'segments', 'isDeviceAbroad', 'isLive2VodSupported']
+        url = URL + fix_query(path, remove=remove, remove_keys=remove_keys)
         return self._request_get(url, headers=headers, use_cache=use_cache)
 
     def get_list(self, id, param, use_cache=True):
@@ -371,7 +382,7 @@ class Api():
         url = URL + '/account/profile'
         headers = {'X-Authorization': 'Bearer ' + self.profile_token()}
         return self._request_get(url, headers=headers, use_cache=use_cache)
-    
+
     def kids_item(self, item):
         if 'classification' in item:
             if item['classification']['code'] in ['DR-Ramasjang', 'DR-Minisjang']:
@@ -382,12 +393,21 @@ class Api():
                     return True
         return False
 
-    def unfold_list(self, item, filter_kids=False, headers=None):
+    def unfold_list(self, item, filter_kids=False, headers=None, progress=None):
         items = item['items']
         if 'next' in item['paging']:
+            if progress is not None:
+                if progress.iscanceled():
+                    return items
+                progress.update(self.progress_prc, self.msg + f"page {item['paging']['page']} of {item['paging']['total']}")
+
             next_js = self.get_next(item['paging']['next'], headers=headers)
             items += next_js['items']
             while 'next' in next_js['paging']:
+                if progress is not None:
+                    if progress.iscanceled():
+                        return items
+                    progress.update(self.progress_prc, self.msg + f"page {next_js['paging']['page']} of {next_js['paging']['total']}")
                 next_js = self.get_next(next_js['paging']['next'], headers=headers)
                 items += next_js['items']
         if filter_kids:
@@ -449,22 +469,23 @@ class Api():
         i = 0
         for item in js['entries']:
             if item['type'] == 'ListEntry':
-                st2 = time.time()
-                self.unfold_list(item['list'])
-                msg = f"{self.tr(30523)}'{item['title']}'\n{time.time() - st2:.1f}s"
-                if progress is not None:
-                    if progress.iscanceled():
-                        return
-                    progress.update(int(100*(i+1)/maxidx), msg)
+                self.msg = f"{self.tr(30523)}'{item['title']}'\n"
+                self.progress_prc = int(100 * (i + 1) / maxidx)
+                for sub_item in self.unfold_list(item['list'], progress=progress):
+                    if self.fetch_full_plot:
+                        if progress is not None:
+                            if progress.iscanceled():
+                                return
+                            progress.update(self.progress_prc, self.msg + 'updating descriptions...')
+                        self.fix_item_description(sub_item)
             i += 1
-
         for channel in ['dr-ramasjang', 'dr-minisjang', 'dr-ultra']:
-            self.get_children_front_items(channel)
-            msg = f"{self.tr(30523)}'{channel}'\n{time.time() - st2:.1f}s"
+            msg = f"{self.tr(30523)}'{channel}'\n"
             if progress is not None:
                 if progress.iscanceled():
                     return
                 progress.update(int(100*(i+1)/maxidx), msg)
+            self.get_children_front_items(channel)
             i += 1
 
     def get_children_front_items(self, channel):
@@ -576,13 +597,17 @@ class Api():
                 title += f" ({item['contextualTitle']})"
         return title
 
-    def set_info(self, item, tag, title):
+    def fix_item_description(self, item):
         if len(item.get('shortDescription', '')) >= 255 and item.get('description', '') == '':
             resumetime_save = float(item.get('ResumeTime', 0.0))
             item = self.get_item(item['id'])
             if resumetime_save > 0:
                 item['ResumeTime'] = resumetime_save
+        return item
 
+    def set_info(self, item, tag, title):
+        if self.fetch_full_plot:
+            item = self.fix_item_description(item)
         tag.setTitle(title)
         if item.get('shortDescription', '') and item['shortDescription'] != 'LinkItem':
             tag.setPlot(item['shortDescription'])

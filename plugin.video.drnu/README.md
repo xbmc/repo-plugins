@@ -6,6 +6,6 @@
 
 
 ## Known issues
-*Inputstream.adaptive* in Matrix (kodi 19) has a bug with subtitles, which is why it is advised to use the `subtitles from file` setting that is a legacy way of handling subtitles. On Nexus (kodi 20) this has been fixed in *Inputstream.adaptive*, and `subtitles from file` should be switched off.
+Fetching data for especially the alphabet section can be very slow, this can be greatly improved by activating the re-cache cron job if kodi anyhow is running on a device that is always on. 
 
 With version 6.2.0 I have made a big change in settings handling backend, and if kodi has not been restarted after this upgrade, some of the fields in settings can have empty naming. Just restart kodi and it should be fixed.

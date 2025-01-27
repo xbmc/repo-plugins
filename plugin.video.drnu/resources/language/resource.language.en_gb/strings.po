@@ -300,3 +300,7 @@ msgstr ""
 msgctxt "#30907"
 msgid "https://github.com/xbmc-danish-addons/plugin.video.drnu/issues"
 msgstr ""
+
+msgctxt "#30908"
+msgid "Fetch full descriptions of items"
+msgstr ""

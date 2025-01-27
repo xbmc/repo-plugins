@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="6.4.6" name="DR TV" provider-name="TermeHansen">
+<addon id="plugin.video.drnu" version="6.5.0" name="DR TV" provider-name="TermeHansen">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
         <import addon="script.module.dateutil" version="2.8.2" />
         <import addon="script.module.requests" version="2.31.0" />
         <import addon="script.module.requests-cache" version="0.5.2+matrix.2"/>
-        <import addon="service.cronxbmc" version="0.1.6"/>
+        <import addon="service.cronxbmc" version="0.1.7"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
@@ -31,6 +31,11 @@
             <screenshot>resources/media/Screenshot3.jpg</screenshot>
             <screenshot>resources/media/Screenshot4.jpg</screenshot>
        </assets>
+       <news>[B]Version 6.5.0 - 2024-01-22[/B]
+        - Fix "IOException error" and HTTP timeouts.
+        - Better output during re-caching.
+        - Fix re-caching to also cache full description urls.
+       </news>
        <news>[B]Version 6.4.6 - 2024-11-01[/B]
         - Fix "unsupported_subCode" issue.
         - Fix time offset in live tv EPG.

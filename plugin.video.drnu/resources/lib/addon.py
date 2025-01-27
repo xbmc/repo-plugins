@@ -70,7 +70,7 @@ def kodi_version_major():
 
 
 def version(s):
-    return [int(item) for item in s.split('.')]
+    return [int(item) for item in s.split('-')[0].split('.')]
 
 
 class DrDkTvAddon(object):
@@ -615,12 +615,15 @@ class DrDkTvAddon(object):
                     self.list_entries('/gensyn')
 
         except tvapi.ApiException as ex:
+            log(['API exception', query], level=1)
             self.displayError(str(ex))
 
         except IOError as ex:
+            log(['IO exception', query], level=1)
             self.displayIOError(str(ex))
 
         except Exception as ex:
+            log(['Exception', query], level=1)
             stack = traceback.format_exc()
             heading = 'drnu addon crash'
             xbmcgui.Dialog().ok(heading, '\n'.join([tr(30906), tr(30907), str(stack)]))

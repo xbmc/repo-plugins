@@ -59,6 +59,10 @@
       <level>0</level> <default>false</default> <control type="toggle"/>
     </setting>
 
+    <setting id="fetch.full_plot" label="30908" type="boolean">
+      <level>0</level> <default>true</default> <control type="toggle"/>
+    </setting>
+
     <setting id="use.simpleareaitem" label="30210" type="boolean">
       <level>0</level> <default>false</default> <control type="toggle"/>
     </setting>

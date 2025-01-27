@@ -297,3 +297,7 @@ msgstr "Rapporter gerne fejlen på github"
 msgctxt "#30907"
 msgid "https://github.com/xbmc-danish-addons/plugin.video.drnu/issues"
 msgstr "https://github.com/xbmc-danish-addons/plugin.video.drnu/issues"
+
+msgctxt "#30908"
+msgid "Hent fuld beskrivelse af episoder"
+msgstr ""

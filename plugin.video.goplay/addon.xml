@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.goplay" name="GoPlay" version="0.5.1" provider-name="mediaminister">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.dateutil" version="2.8.1"/>
+        <import addon="script.module.inputstreamhelper" version="0.6.1"/>
+        <import addon="script.module.pysocks" version="1.7.0" optional="true"/>
+        <import addon="script.module.requests" version="2.31.0"/>
+        <import addon="script.module.routing" version="0.2.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon_entry.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.service" library="service_entry.py"/>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="nl_NL">Bekijk programma's van GoPlay.</summary>
+        <description lang="nl_NL">Deze add-on geeft toegang tot de programma's die aangeboden worden op Goplay.</description>
+        <disclaimer lang="nl_NL">Deze add-on wordt niet ondersteund door Play Media, en wordt aangeboden 'as is', zonder enige garantie. De logo's zijn eigendom van Play Media.</disclaimer>
+        <summary lang="en_GB">Watch content from GoPlay.</summary>
+        <description lang="en_GB">This add-on gives access to video-on-demand content available on GoPlay.</description>
+        <disclaimer lang="en_GB">This add-on is not officially commissioned/supported by Play Media and is provided 'as is' without any warranty of any kind. The logos are property of Play Media.</disclaimer>
+        <platform>all</platform>
+        <license>GPL-3.0-only</license>
+        <news>
+v0.5.1 (2024-10-21)
+- Fix caching
+- Add support for external Widevine device
+
+v0.5.0 (2024-09-11)
+- Update to new GoPlay API
+        </news>
+        <source>https://github.com/add-ons/plugin.video.goplay</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.png</fanart>
+            <screenshot>resources/screenshot01.jpg</screenshot>
+            <screenshot>resources/screenshot02.jpg</screenshot>
+            <screenshot>resources/screenshot03.jpg</screenshot>
+        </assets>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+    </extension>
+</addon>

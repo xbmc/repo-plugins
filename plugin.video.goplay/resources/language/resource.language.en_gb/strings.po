@@ -1,0 +1,192 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+### MENUS
+msgctxt "#30001"
+msgid "A-Z"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Alphabetically sorted list of programs"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Catalogue"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Browse the catalogue"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Recommendations"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Show the recommendations"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Show channel based overview"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Search trough the catalogue"
+msgstr ""
+
+msgctxt "#30011"
+msgid "My List"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Browse My List"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Continue watching"
+msgstr ""
+
+
+### SUBMENUS
+msgctxt "#30052"
+msgid "Watch live [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30055"
+msgid "Catalog for [B]{channel}[/B]"
+msgstr ""
+
+msgctxt "#30056"
+msgid "Browse the Catalog for [B]{channel}[/B]"
+msgstr ""
+
+
+### CONTEXT MENU
+msgctxt "#30100"
+msgid "Add to My List"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Remove from My List"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Go to Program"
+msgstr ""
+
+
+### MESSAGES
+msgctxt "#30701"
+msgid "To watch a video, you need to enter your credentials. Do you want to enter them now?"
+msgstr ""
+
+msgctxt "#30702"
+msgid "An error occurred while authenticating: {error}."
+msgstr ""
+
+msgctxt "#30707"
+msgid "The cache has been cleared."
+msgstr ""
+
+msgctxt "#30710"
+msgid "This video is geo-blocked and can't be played from your location: {error}."
+msgstr ""
+
+msgctxt "#30712"
+msgid "The video is unavailable and can't be played right now."
+msgstr ""
+
+msgctxt "#30717"
+msgid "This program is not available in the catalogue."
+msgstr ""
+
+msgctxt "#30719"
+msgid "This video cannot be played."
+msgstr ""
+
+msgctxt "#30720"
+msgid "This video is not available abroad."
+msgstr ""
+
+msgctxt "#30721"
+msgid "You need to install an extra Python module to play this video using an external Widevine device file: {error}."
+msgstr ""
+
+msgctxt "#30722"
+msgid "The server returned an error: {error}."
+msgstr ""
+
+msgctxt "#30723"
+msgid "The Widevine device file must have a '.wvd' extension."
+msgstr ""
+
+
+### SETTINGS
+msgctxt "#30800"
+msgid "Credentials"
+msgstr ""
+
+msgctxt "#30801"
+msgid "Credentials"
+msgstr ""
+
+msgctxt "#30802"
+msgid "Email address"
+msgstr ""
+
+msgctxt "#30803"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30880"
+msgid "Expert"
+msgstr ""
+
+msgctxt "#30881"
+msgid "Logging"
+msgstr ""
+
+msgctxt "#30882"
+msgid "Enable debug logging"
+msgstr ""
+
+msgctxt "#30883"
+msgid "Install Kodi Logfile Uploader…"
+msgstr ""
+
+msgctxt "#30884"
+msgid "Open Kodi Logfile Uploader…"
+msgstr ""
+
+msgctxt "#30885"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30886"
+msgid "Clear cache"
+msgstr ""
+
+msgctxt "#30887"
+msgid "Widevine DRM"
+msgstr ""
+
+msgctxt "#30888"
+msgid "Use external Widevine device file"
+msgstr ""
+
+msgctxt "#30889"
+msgid "Widevine device file"
+msgstr ""

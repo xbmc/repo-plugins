@@ -1,0 +1,107 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="plugin.video.goplay">
+		<category id="credentials" label="30800" help="">  <!-- Credentials -->
+			<group id="1" label="30801">
+				<setting id="username" type="string" label="30802" help="">
+	                <level>0</level>
+	                <default/>
+	                <constraints>
+		                <allowempty>true</allowempty>
+	                </constraints>
+	                <control type="edit" format="string">
+		                <heading>30802</heading>
+	                </control>
+				</setting>
+                <setting id="password" type="string" label="30803" help="">
+	                <level>0</level>
+	                <default/>
+	                <constraints>
+		                <allowempty>true</allowempty>
+	                </constraints>
+	                <control type="edit" format="string">
+		                <heading>30803</heading>
+		                <hidden>true</hidden>
+	                </control>
+                </setting>
+                <setting id="credentials_hash" type="string" label="" help="">
+	                <level>0</level>
+	                <default/>
+	                <constraints>
+		                <allowempty>true</allowempty>
+	                </constraints>
+	                <control type="edit" format="urlencoded">
+		                <heading></heading>
+	                </control>
+                    <visible>false</visible>
+                </setting>
+			</group>
+		</category>
+		<category id="expert" label="30880" help="">  <!-- Expert -->
+			<group id="2" label="30881">   <!-- Logging -->
+                <setting id="debug_logging" type="boolean" label="30882" help="">
+	                <level>0</level>
+	                <default>false</default>
+	                <control type="toggle"/>
+                </setting>
+                <setting id="install_kodiloguploader" type="action" label="30883" help="">
+	                <level>0</level>
+	                <data>InstallAddon(script.kodi.loguploader)</data> <!-- Install Kodi Logfile Uploader -->
+	                <control type="button" format="action">
+		                <close>true</close>
+	                </control>
+                    <dependencies>
+	                    <dependency type="visible" on="property" name="infobool">!System.HasAddon(script.kodi.loguploader)</dependency>
+                    </dependencies>
+                </setting>
+                <setting id="run_kodiloguploader" type="action" label="30884" help="">
+	                <level>0</level>
+	                <data>RunAddon(script.kodi.loguploader)</data> <!-- Open Kodi Logfile Uploader -->
+	                <control type="button" format="action">
+		                <close>false</close>
+	                </control>
+                    <dependencies>
+	                    <dependency type="visible" on="property" name="infobool">System.HasAddon(script.kodi.loguploader) | System.AddonIsEnabled(script.kodi.loguploader)</dependency>
+                    </dependencies>
+                </setting>
+            </group>
+            <group id="3" label="30885">    <!-- Cache -->
+                <setting id="clear_cache" type="action" label="30886" help=""> <!-- Clear cache -->
+	                <level>0</level>
+	                <default/>
+	                <constraints>
+		                <allowempty>true</allowempty>
+	                </constraints>
+	                <control type="button" format="action">
+		                <data>RunPlugin(plugin://plugin.video.goplay/cache/clear)</data>
+	                </control>
+                </setting>
+            </group>
+            <group id="4" label="30887">    <!-- Widevine DRM -->
+                <setting id="enable_widevine_device" type="boolean" label="30888" help="">   <!-- Use external Widevine device file -->
+	                <level>0</level>
+	                <default>false</default>
+	                <control type="toggle"/>
+                    <dependencies>
+	                    <dependency type="visible" on="property" name="infobool">Integer.IsGreaterOrEqual(System.AddonVersion(inputstream.adaptive),21)</dependency>
+                    </dependencies>
+                </setting>
+                <setting id="widevine_device" type="path" label="30889" help="">  <!-- Widevine device file -->
+	                <level>0</level>
+	                <default/>
+	                <constraints>
+		                <writable>false</writable>
+		                <allowempty>true</allowempty>
+	                </constraints>
+	                <control type="button" format="file">
+		                <heading>30889</heading>
+	                </control>
+                    <dependencies>
+	                    <dependency type="enable" setting="enable_widevine_device">true</dependency>
+	                    <dependency type="visible" on="property" name="infobool">Integer.IsGreaterOrEqual(System.AddonVersion(inputstream.adaptive),21)</dependency>
+                    </dependencies>
+                </setting>
+            </group>
+		</category>
+	</section>
+</settings>

@@ -1,0 +1,21 @@
+<addon id="plugin.video.3catdirectes" name="3cat Directes" version="1.0.0" provider-name="PereRB">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Live streamings from catalan TV www.3cat.cat</summary>
+	<description lang="en_GB">Watch online catalan TV channels from https://www.3cat.cat like TV3, 3/24, Esport3, Sx3 and 33</description>
+        <summary lang="ca_ES">Canals online en directe de la plataforma 3cat</summary>
+	<description lang="ca_ES">Goita els canals en directe de 3cat/Televisió de Catalunya: TV3, 3/24, Esport3, Sx3 i 33</description>
+        <summary lang="es_ES">Canales en directo de la plataforma 3cat</summary>
+        <description lang="es_ES">Mira los canales en directo de 3cat/Televisió de Catalunya: TV3, 3/24, Esport3, Sx3 y 33</description>
+        <language>ca</language>
+        <platform>all</platform>
+        <assets>
+            <icon>resources/icon.png</icon>
+        </assets>
+    </extension>
+</addon>

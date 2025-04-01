@@ -420,4 +420,20 @@ msgctxt "#30439"
 msgid "MLB Network live stream"
 msgstr ""
 
+msgctxt "#30440"
+msgid "SportsNet LA"
+msgstr ""
+
+msgctxt "#30441"
+msgid "SNLA live stream"
+msgstr ""
+
+msgctxt "#30442"
+msgid "SNY"
+msgstr ""
+
+msgctxt "#30443"
+msgid "SNY live stream"
+msgstr ""
+
 

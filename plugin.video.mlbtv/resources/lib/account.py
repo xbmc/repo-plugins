@@ -5,6 +5,7 @@ from kodi_six import xbmc, xbmcaddon, xbmcgui
 import time, uuid
 import random
 import string
+import base64
 
 if sys.version_info[0] > 2:
     from urllib.parse import quote
@@ -67,6 +68,7 @@ class Account:
                 self.addon.setSetting('device_id', '')
                 self.addon.setSetting('session_key', '')
                 self.addon.setSetting('entitlements', '')
+                self.addon.setSetting('okta_id', '')
                 sys.exit()
 
 
@@ -77,6 +79,7 @@ class Account:
         self.addon.setSetting('device_id', '')
         self.addon.setSetting('session_key', '')
         self.addon.setSetting('entitlements', '')
+        self.addon.setSetting('okta_id', '')
         self.addon.setSetting('username', '')
         self.addon.setSetting('password', '')
 
@@ -92,7 +95,7 @@ class Account:
     def access_token(self):
         return self.login_token()
 
-    def get_stream(self, content_id):
+    def get_playback(self, content_id):
         if self.addon.getSetting('device_id') == '' or self.addon.getSetting('session_key') == '':
             self.get_device_session_id()
         headers = {
@@ -167,6 +170,12 @@ class Account:
         stream_url = r.json()['data']['initPlaybackSession']['playback']['url']
         xbmc.log(f'Stream URL: {stream_url}')
         headers = 'User-Agent=' + UA_PC
+        token = r.json()['data']['initPlaybackSession']['playback']['token']
+        xbmc.log(f'Token: {token}')
+        return stream_url, headers, token
+
+    def get_stream(self, content_id):
+        stream_url, headers, token = self.get_playback(content_id)
         return stream_url, headers
     
     def get_device_session_id(self):
@@ -241,3 +250,140 @@ class Account:
         except Exception as e:
             xbmc.log('error getting get_broadcast_start_time ' + str(e))
         return None
+
+    def okta_id(self):
+        if self.addon.getSetting('okta_id') == '':
+            self.get_okta_id()
+        return self.addon.getSetting('okta_id')
+        
+    def get_okta_id(self):
+        try:
+            # get a new playback token for a past free game
+            url, headers, token = self.get_playback('b7f0fff7-266f-4171-aa2d-af7988dc9302')
+            if token:
+                encoded_okta_id = token.split('_')[1]
+                okta_id = base64.b64decode(encoded_okta_id.encode('ascii') + b'==').decode('ascii')
+                self.addon.setSetting('okta_id', okta_id)
+        except Exception as e:
+            xbmc.log('error getting okta_id ' + str(e))
+            sys.exit(0)
+
+    def get_event_stream(self, url):
+        xbmc.log('fetching event video stream from url')
+
+        headers = {
+            'User-Agent': UA_PC,
+            'Authorization': 'Bearer ' + self.login_token(),
+            'Accept': '*/*',
+            'Origin': 'https://www.mlb.com',
+            'Referer': 'https://www.mlb.com'
+        }
+        r = requests.get(url, headers=headers, verify=VERIFY)
+
+        text_source = r.text
+        #xbmc.log(text_source)
+
+        # sometimes the returned content is already a stream playlist
+        if text_source.startswith('#EXTM3U'):
+            xbmc.log('video url is already a stream playlist')
+            video_stream_url = url
+        # otherwise it is JSON containing the stream URL
+        else:
+            json_source = r.json()
+            if 'data' in json_source and len(json_source['data']) > 0 and 'value' in json_source['data'][0]:
+                video_stream_url = json_source['data'][0]['value']
+                xbmc.log('found video stream url : ' + video_stream_url)
+        return video_stream_url
+        
+
+    def get_linear_stream(self, network):
+        if self.addon.getSetting('device_id') == '' or self.addon.getSetting('session_key') == '':
+            self.get_device_session_id()
+        url = 'https://media-gateway.mlb.com/graphql'
+        headers = {
+            'User-Agent': UA_PC,
+            'Authorization': 'Bearer ' + self.login_token(),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json, text/plain, */*',
+            'accept-encoding': 'gzip, deflate, br',
+            'accept-language': 'en-US,en;q=0.5',
+            'connection': 'keep-alive',
+            'content-type': 'application/json',
+            'x-client-name': 'WEB',
+            'x-client-version': '7.8.1',
+            'cache-control': 'no-cache',
+            'origin': 'https://www.mlb.com',
+            'pragma': 'no-cache',
+            'priority': 'u=1, i',
+            'referer': 'https://www.mlb.com/',
+            'sec-ch-ua': '"Chromium";v="133", "Google Chrome";v="133", "Not-A.Brand";v="8"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"macOS"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site'
+        }
+        data = {
+            "operationName": "contentCollections",
+            "query": '''query contentCollections(
+                    $categories: [ContentGroupCategory!]
+                    $includeRestricted: Boolean = false
+                    $includeSpoilers: Boolean = false
+                    $limit: Int = 10,
+                    $skip: Int = 0\n    ) {
+                    contentCollections(
+                        categories: $categories
+                        includeRestricted: $includeRestricted
+                        includeSpoilers: $includeSpoilers
+                        limit: $limit
+                        skip: $skip
+                    ) {
+                        title
+                        category
+                        contents {
+                            assetTrackingKey
+                            contentDate
+                            contentId
+                            contentRestrictions
+                            description
+                            duration
+                            language
+                            mediaId
+                            officialDate
+                            title
+                            mediaState {
+                                state
+                                mediaType
+                            }
+                            thumbnails {
+                                thumbnailType
+                                templateUrl
+                                thumbnailUrl
+                            }
+                        }
+                    }
+                }''',
+            "variables": {
+                "categories": network,                
+                "limit": "25"
+            }
+        }
+        xbmc.log(str(data))
+        r = requests.post(url, headers=headers, json=data, verify=VERIFY)
+        xbmc.log(r.text)
+        if not r.ok:
+            dialog = xbmcgui.Dialog()
+            msg = ""
+            for item in r.json()['errors']:
+                msg += item['code'] + '\n'
+            dialog.notification(LOCAL_STRING(30270), msg, self.icon, 5000, False)
+            sys.exit()
+
+        availableStreams  = r.json()['data']['contentCollections'][0]['contents']
+        for stream in availableStreams:
+            try:
+                stream_url, headers = self.get_stream(stream['mediaId'])
+                xbmc.log(f'Stream URL: {stream_url}')
+                return stream_url
+            except:
+                pass

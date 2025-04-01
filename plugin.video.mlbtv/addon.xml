@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2025.3.18+matrix.1" provider-name="eracknaphobia, tonywagner">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2025.3.30+matrix.1" provider-name="eracknaphobia, tonywagner">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -22,9 +22,11 @@
         </description>
         <disclaimer lang="en_GB">Requires an MLB.tv account</disclaimer>
         <news>
-            - ability to change skip timing adjustment settings during playback
-            - initial 2025 updates
-            - fix for Japan exhibitions
+            - automatic blackout/entitlement detection
+            - support for SNLA and SNY subscriptions
+            - skip timing, game changer, and hide scores ticker updates for 2025
+            - jump to live when skipping start dialog and allowing spoilers
+            - disabled Big Inning schedule scraping
         </news>
         <language>en</language>
         <platform>all</platform>

@@ -162,6 +162,10 @@ elif mode == 300:
 elif mode == 301:
     featured_stream_select(featured_video, name, description, start_inning, game_pk)
 
+# Linear channel stream select
+elif mode == 302:
+    linear_channel_stream_select(featured_video, name, description)
+
 # Logout
 elif mode == 400:
     from resources.lib.account import Account

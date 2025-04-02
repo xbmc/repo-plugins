@@ -4,9 +4,9 @@
   <category label="30100">
     <setting id="username" type="text" label="30140" default=""/>
     <setting id="password" type="text" label="30150" option="hidden" default=""/>
-    <setting id="single_team" type="bool" label="30151" default="false"/>
-    <setting id="zip_code" type="number" label="30415" default=""/>
-    <setting id="country" type="labelenum" label="30428" default="USA" values="USA|Angola|Anguilla|Antigua and Barbuda|Argentina|Aruba|Australia|Bahamas|Barbados|Belize|Belize|Benin|Bermuda|Bolivia|Bonaire|Botswana|Brazil|British Virgin Islands|Burkina Faso|Burundi|Canada|Cameroon|Cape Verde|Cayman Islands|Central African Republic|Chad|Chile|Colombia|Comoros|Cook Islands|Costa Rica|Cote d'Ivoire|Curacao|Democratic Republic of the Congo|Djibouti|Dominica|Dominican Republic|Ecuador|El Salvador|England|Equatorial Guinea|Eritrea|Eswatini|Ethiopia|Falkland Islands|Falkland Islands|Fiji|French Guiana|French Guiana|French Polynesia|Gabon|Ghana|Grenada|Guadeloupe|Guatemala|Guinea|Guinea Bissau|Guyana|Guyana|Haiti|Honduras|Ireland|Jamaica|Kenya|Kiribati|Lesotho|Liberia|Madagascar|Malawi|Mali|Marshall Islands|Martinique|Mayotte|Mexico|Micronesia|Montserrat|Mozambique|Namibia|Netherlands|New Zealand|Nicaragua|Niger|Nigeria|Niue|Northern Ireland|Palau Islands|Panama|Paraguay|Peru|Republic of Ireland|Reunion|Rwanda|Saba|Saint Maarten|Samoa|Sao Tome &amp; Principe|Scotland|Senegal|Seychelles|Sierra Leone|Solomon Islands|Somalia|South Africa|St. Barthelemy|St. Eustatius|St. Kitts and Nevis|St. Lucia|St. Martin|St. Vincent and the Grenadines|Sudan|Surinam|Suriname|Tahiti|Tanzania &amp; Zanzibar|The Gambia|The Republic of Congo|Togo|Tokelau|Tonga|Trinidad and Tobago|Turks and Caicos Islands|Tuvalu|Uganda|Uruguay|Venezuela|Wales|Zambia|Zimbabwe|other" />
+    <setting id="single_team" type="bool" label="30151" default="false" visible="false"/>
+    <setting id="zip_code" type="number" label="30415" default="" visible="false"/>
+    <setting id="country" type="labelenum" label="30428" default="USA" values="USA|Angola|Anguilla|Antigua and Barbuda|Argentina|Aruba|Australia|Bahamas|Barbados|Belize|Belize|Benin|Bermuda|Bolivia|Bonaire|Botswana|Brazil|British Virgin Islands|Burkina Faso|Burundi|Canada|Cameroon|Cape Verde|Cayman Islands|Central African Republic|Chad|Chile|Colombia|Comoros|Cook Islands|Costa Rica|Cote d'Ivoire|Curacao|Democratic Republic of the Congo|Djibouti|Dominica|Dominican Republic|Ecuador|El Salvador|England|Equatorial Guinea|Eritrea|Eswatini|Ethiopia|Falkland Islands|Falkland Islands|Fiji|French Guiana|French Guiana|French Polynesia|Gabon|Ghana|Grenada|Guadeloupe|Guatemala|Guinea|Guinea Bissau|Guyana|Guyana|Haiti|Honduras|Ireland|Jamaica|Kenya|Kiribati|Lesotho|Liberia|Madagascar|Malawi|Mali|Marshall Islands|Martinique|Mayotte|Mexico|Micronesia|Montserrat|Mozambique|Namibia|Netherlands|New Zealand|Nicaragua|Niger|Nigeria|Niue|Northern Ireland|Palau Islands|Panama|Paraguay|Peru|Republic of Ireland|Reunion|Rwanda|Saba|Saint Maarten|Samoa|Sao Tome &amp; Principe|Scotland|Senegal|Seychelles|Sierra Leone|Solomon Islands|Somalia|South Africa|St. Barthelemy|St. Eustatius|St. Kitts and Nevis|St. Lucia|St. Martin|St. Vincent and the Grenadines|Sudan|Surinam|Suriname|Tahiti|Tanzania &amp; Zanzibar|The Gambia|The Republic of Congo|Togo|Tokelau|Tonga|Trinidad and Tobago|Turks and Caicos Islands|Tuvalu|Uganda|Uruguay|Venezuela|Wales|Zambia|Zimbabwe|other" visible="false"/>
     <setting id="old_country" type="text" label="" default="" visible="false"/>
     <setting id="old_zip_code" type="number" label="" default="" visible="false"/>
     <setting id="blackout_teams" type="text" label="" default="[]" visible="false"/>
@@ -15,6 +15,7 @@
     <setting id='entitlements' type='text' visible="false" default=''/>
     <setting id='session_key' type='text' visible="false" default=''/>
     <setting id='device_id' type='text' visible="false" default=''/>
+    <setting id='okta_id' type='text' visible="false" default=''/>
     <setting id='login_token' type='text' visible="false" default=''/>
     <setting id='login_token_expiry' type='text' visible="false" default=''/>
   </category>

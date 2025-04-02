@@ -70,7 +70,8 @@ CRITICAL ='FFD10D0D'
 FINAL = 'FF666666'
 FREE = 'FF43CD80'
 
-
+#Score ticker network prefix
+SCORES_TICKER_NETWORK = 'FDSN'
 
 #Images
 ICON = os.path.join(ROOTDIR,"icon.png")

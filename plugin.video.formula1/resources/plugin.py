@@ -65,7 +65,7 @@ def run():
             xbmcplugin.addDirectoryItems(handle, items, len(items))
             xbmcplugin.endOfDirectory(handle)
         elif "results" in action:
-            items = listItems.from_collection(api.standings(Api.api_path_results))
+            items = listItems.from_collection(api.standings(Api.api_path_events))
             xbmcplugin.addDirectoryItems(handle, items, len(items))
             xbmcplugin.endOfDirectory(handle)
         else:

@@ -15,7 +15,7 @@ class Editorial(ListItem):
         })
         url = addon_base + "/?" + urllib.parse.urlencode({
             "action": "call",
-            "call": "video-assets/videos?tag={tag}".format(tag=self.id),
+            "call": "/v1/video-assets/videos?tag={tag}".format(tag=self.id),
         })
 
         return url, list_item, True

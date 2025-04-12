@@ -14,14 +14,21 @@ from urllib.request import Request, urlopen
 from builtins import *
 from html.parser import HTMLParser
 
-USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.3'
 
-def urlopen_ua(url, data=None):
-    return urlopen(Request(url, data=data, headers={'User-Agent': USER_AGENT}), timeout=5)
+def urlopen_ua(url, data=None, content_type=None):
+    headers = {'User-Agent': USER_AGENT}
+    if content_type is not None:
+        headers['Content-Type'] = content_type
+    return urlopen(Request(url, data=data, headers=headers), timeout=15)
 
-def req(url, data=None):
+def req(url, data=None, content_type=None):
+    if isinstance(data, dict):
+        data = json.dumps(data)
+        if content_type is None:
+            content_type = 'application/json'
     body = data.encode() if data else None
-    return urlopen_ua(url, data=body).read().decode()
+    return urlopen_ua(url, data=body, content_type=content_type).read().decode()
 
 class Band:
     def __init__(self, band_id=None, band_name="", band_img=None):
@@ -127,8 +134,7 @@ class Bandcamp:
     def get_collection(self, fan_id, count=1000, return_albums=False):
         url = "https://bandcamp.com/api/fancollection/1/collection_items"
         token = self._get_token()
-        body = '{{"fan_id": "{fan_id}", "older_than_token": "{token}", "count":"{count}"}}' \
-            .format(fan_id=fan_id, token=token, count=count)
+        body = {"fan_id": fan_id, "older_than_token": token, "count": count}
         x = req(url, data=body)
         items = json.loads(x)['items']
         bands = {}
@@ -150,8 +156,7 @@ class Bandcamp:
     def get_wishlist(self, fan_id, count=1000, return_albums=False):
         url = "https://bandcamp.com/api/fancollection/1/wishlist_items"
         token = self._get_token()
-        body = '{{"fan_id": "{fan_id}", "older_than_token": "{token}", "count":"{count}"}}' \
-            .format(fan_id=fan_id, token=token, count=count)
+        body = {"fan_id": fan_id, "older_than_token": token, "count": count}
         x = req(url, data=body)
         items = json.loads(x)['items']
         bands = {}
@@ -224,7 +229,7 @@ class Bandcamp:
 
     def get_band(self, band_id):
         url = "https://bandcamp.com/api/mobile/24/band_details"
-        body = '{{"band_id": "{band_id}"}}'.format(band_id=band_id)
+        body = {"band_id": band_id}
         request = req(url, data=body)
         band_details = json.loads(request)
         band = Band(band_id=band_details['id'], band_name=band_details['name'],
@@ -239,8 +244,9 @@ class Bandcamp:
     def search(self, query):
         if PY2:
             query = query.decode('utf-8')
-        url = "https://bandcamp.com/api/fuzzysearch/1/autocomplete?q={query}".format(query=quote_plus(query))
-        request = req(url)
+        url = "https://bandcamp.com/api/bcsearch_public_api/1/autocomplete_elastic"
+        body = {"full_page": False, "search_filter": "", "search_text": query}
+        request = req(url, data=body)
         results = json.loads(request)['auto']['results']
         items = []
         for result in results:

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.orange.fr" name="Orange TV France" version="2.3.3" provider-name="Flawe">
+<addon id="plugin.video.orange.fr" name="Orange TV France" version="2.3.5" provider-name="Flawe">
   <requires>
     <import addon="xbmc.python" version="3.0.1"/>
     <import addon="script.module.requests" version="2.31.0"/>
@@ -22,7 +22,7 @@
     <source>https://github.com/f-lawe/plugin.video.orange.fr</source>
     <email>francois@lavaud.family</email>
     <assets>
-      <icon>resources/media/icon.png</icon>
+      <icon>resources/media/orange_tv.png</icon>
       <fanart>resources/media/fanart.jpg</fanart>
       <screenshot>resources/media/screenshot_1.jpg</screenshot>
       <screenshot>resources/media/screenshot_2.jpg</screenshot>

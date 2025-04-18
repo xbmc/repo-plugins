@@ -24,13 +24,14 @@ _CATCHUP_ARTICLES_ENDPOINT = "https://rp-ott-mediation-tv.woopic.com/api-gw/catc
 _CATCHUP_VIDEOS_ENDPOINT = "https://rp-ott-mediation-tv.woopic.com/api-gw/catchup/v4/applications/PC/groups/{group_id}"
 _CHANNELS_ENDPOINT = "https://rp-ott-mediation-tv.woopic.com/api-gw/pds/v1/live/ew?everywherePopulation=OTT_Metro"
 
-_LIVE_STREAM_ENDPOINT = "https://mediation-tv.orange.fr/all/api-gw/live/v3/auth/accountToken/applications/PC/channels/{stream_id}/stream?terminalModel=WEB_PC&terminalId="
+_LIVE_STREAM_ENDPOINT = "https://mediation-tv.orange.fr/all/api-gw/stream/v2/auth/accountToken/live/{stream_id}?deviceModel=WEB_PC&customerOrangePopulation=OTT_Metro"
 _CATCHUP_STREAM_ENDPOINT = "https://mediation-tv.orange.fr/all/api-gw/catchup/v4/auth/accountToken/applications/PC/videos/{stream_id}/stream?terminalModel=WEB_PC&terminalId="
 
 _STREAM_LOGO_URL = "https://proxymedia.woopic.com/api/v1/images/2090{path}"
-_LIVE_HOMEPAGE_URL = "https://chaines-tv.orange.fr/"
-_CATCHUP_VIDEO_URL = "https://replay.orange.fr/videos/{stream_id}"
+_LIVE_HOMEPAGE_URL = "https://tv.orange.fr/"
 _LOGIN_URL = "https://login.orange.fr"
+
+_LICENSE_ENDPOINT = "https://mediation-tv.orange.fr/all/api-gw/license/v1/auth/accountToken"
 
 
 class AbstractOrangeProvider(AbstractProvider, ABC):
@@ -42,16 +43,15 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
 
     def get_live_stream_info(self, stream_id: str) -> dict:
         """Get live stream info."""
-        auth_url = _LIVE_HOMEPAGE_URL
-        return self._get_stream_info(auth_url, _LIVE_STREAM_ENDPOINT, stream_id)
+        return self._get_stream_info(_LIVE_STREAM_ENDPOINT, stream_id)
 
     def get_catchup_stream_info(self, stream_id: str) -> dict:
         """Get catchup stream info."""
-        auth_url = _CATCHUP_VIDEO_URL.format(stream_id=stream_id)
-        return self._get_stream_info(auth_url, _CATCHUP_STREAM_ENDPOINT, stream_id)
+        return self._get_stream_info(_CATCHUP_STREAM_ENDPOINT, stream_id)
 
     def get_streams(self) -> list:
         """Load stream data from Orange and convert it to JSON-STREAMS format."""
+        # @todo: use new API to check if channel is part of subscription
         channels = request_json(_CHANNELS_ENDPOINT, default={"channels": {}})["channels"]
         channels.sort(key=lambda channel: channel["displayOrder"])
 
@@ -63,11 +63,15 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
                 "name": channel["name"],
                 "preset": str(channel["displayOrder"]),
                 "logo": self._extract_logo(channel["logos"]),
-                "stream": build_addon_url(f"/stream/live/{channel['idEPG']}"),
+                "stream": build_addon_url(f"/stream/live/{self._get_channel_live_id(channel)}"),
                 "group": [group_name for group_name in self.groups if int(channel["idEPG"]) in self.groups[group_name]],
             }
             for channel in channels
         ]
+
+    def _get_channel_live_id(self, channel: dict) -> str:
+        """Get live id for given channel."""
+        return channel["technicalChannels"]["live"][0]["liveTargetURLRelativePath"]
 
     def get_epg(self) -> dict:
         """Load EPG data from Orange and convert it to JSON-EPG format."""
@@ -198,9 +202,9 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
             for video in videos
         ]
 
-    def _get_stream_info(self, auth_url: str, stream_endpoint: str, stream_id: str) -> dict:
+    def _get_stream_info(self, stream_endpoint: str, stream_id: str) -> dict:
         """Load stream info from Orange."""
-        tv_token, tv_token_expires, wassup = self._retrieve_auth_data(auth_url)
+        tv_token, tv_token_expires, wassup = self._retrieve_auth_data()
 
         try:
             stream_endpoint_url = stream_endpoint.format(stream_id=stream_id)
@@ -221,14 +225,16 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
     def _compute_stream_info(self, stream: dict, tv_token: str, wassup: str) -> dict:
         """Compute stream info."""
         protectionData = stream.get("protectionData") or stream.get("protectionDatas")
-        license_server_url = None
+        path = stream.get("streamURL") or stream.get("url")
+
+        license_server_url = _LICENSE_ENDPOINT if stream.get("url") is None else ""
 
         for system in protectionData:
             if system.get("keySystem") == get_drm():
-                license_server_url = system.get("laUrl")
+                license_server_url += system.get("laUrl")
 
         stream_info = {
-            "path": stream.get("url"),
+            "path": path,
             "protocol": "mpd",
             "mime_type": "application/xml+dash",
             "drm_config": {
@@ -253,7 +259,7 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
         log(stream_info, xbmc.LOGDEBUG)
         return stream_info
 
-    def _retrieve_auth_data(self, auth_url: str, login: str = None, password: str = None) -> (str, str, str):
+    def _retrieve_auth_data(self, login: str = None, password: str = None) -> (str, str, str):
         """Retreive auth data from Orange (tv token and wassup cookie)."""
         provider_session_data = get_addon_setting("provider.session_data", dict)
         tv_token, tv_token_expires, wassup = (
@@ -268,13 +274,14 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
                 session.headers["Cookie"] = f"wassup={wassup}"
 
             try:
-                response = request("GET", f"{_LIVE_HOMEPAGE_URL}token", s=session)
-            except RequestException:
+                response = request("GET", _LIVE_HOMEPAGE_URL, session=session)
+                tv_token = json.loads(re.search('"token":(".*?")', response.text).group(1))
+            except AttributeError:
                 log("Login required", xbmc.LOGINFO)
                 self._login(session)
-                response = request("GET", f"{_LIVE_HOMEPAGE_URL}token", s=session)
+                response = request("GET", _LIVE_HOMEPAGE_URL, session=session)
+                tv_token = json.loads(re.search('"token":(".*?")', response.text).group(1))
 
-            tv_token = response.json()
             tv_token_expires = datetime.utcnow().timestamp() + 30 * 60
 
             if "wassup" in session.cookies:
@@ -309,7 +316,7 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
         }
 
         try:
-            request("GET", _LOGIN_URL, headers=session.headers, s=session)
+            request("GET", _LOGIN_URL, headers=session.headers, session=session)
         except RequestException:
             log("Error while authenticating (init)", xbmc.LOGWARNING)
             return
@@ -319,7 +326,7 @@ class AbstractOrangeProvider(AbstractProvider, ABC):
                 "POST",
                 f"{_LOGIN_URL}/api/login",
                 data=json.dumps({"login": login, "params": {}}),
-                s=session,
+                session=session,
             )
         except RequestException:
             log("Error while authenticating (login)", xbmc.LOGWARNING)

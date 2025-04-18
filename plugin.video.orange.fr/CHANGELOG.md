@@ -1,5 +1,15 @@
 # 2.x
 
+## [2.3.5](https://github.com/f-lawe/plugin.video.orange.fr/releases/tag/v2.3.5) - 2025-04-18
+
+### Fixed
+- Auth and live stream update following new Orange TV website changes
+
+## [2.3.4](https://github.com/f-lawe/plugin.video.orange.fr/releases/tag/v2.3.4) - 2025-04-08
+
+### Changed
+- New logo in order to avoid confusion with the new Orange Radio
+
 ## [2.3.3](https://github.com/f-lawe/plugin.video.orange.fr/releases/tag/v2.3.3) - 2025-01-15
 
 ### Changed

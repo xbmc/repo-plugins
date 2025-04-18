@@ -10,7 +10,7 @@ _Cet addon n'est pas officiellement supporté par Orange. Tous les produits, log
 ## Description
 Cet addon ajoute la TV d'Orange à Kodi. Toutes les chaînes inclues dans votre abonnement sont maintenant directement accessibles depuis Kodi !
 
-Cet addon inclue :
+Cet addon inclut :
 - la télé en direct dans Kodi TV (en utilisant [IPTV Simple PVR](https://github.com/kodi-pvr/pvr.iptvsimple))
 - les programmes en replay
 - l'accès aux chaînes payantes qui font partie de votre souscription (pour le direct et le replay)

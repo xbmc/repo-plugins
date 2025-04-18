@@ -36,7 +36,7 @@ def get_random_ua() -> str:
     return _USER_AGENTS[randint(0, len(_USER_AGENTS) - 1)]
 
 
-def request(method: str, url: str, headers: Mapping[str, str] = None, data=None, s: Session = None) -> Response:
+def request(method: str, url: str, headers: Mapping[str, str] = None, data=None, session: Session = None) -> Response:
     """Send HTTP request using requests."""
     if headers is None:
         headers = {}
@@ -50,10 +50,10 @@ def request(method: str, url: str, headers: Mapping[str, str] = None, data=None,
         **headers,
     }
 
-    s = s if s is not None else Session()
+    session = session if session is not None else Session()
 
     log(f"Fetching {url}", xbmc.LOGDEBUG)
-    res = s.request(method, url, headers=headers, data=data)
+    res = session.request(method, url, headers=headers, data=data)
     res.raise_for_status()
     log(f" -> {res.status_code}", xbmc.LOGDEBUG)
     return res

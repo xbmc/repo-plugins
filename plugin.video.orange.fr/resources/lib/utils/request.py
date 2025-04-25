@@ -30,27 +30,26 @@ _USER_AGENTS = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.1",  # noqa: E501
 ]
 
+_RANDOM_USER_AGENT = _USER_AGENTS[randint(0, len(_USER_AGENTS) - 1)]
+
 
 def get_random_ua() -> str:
     """Get a randomised user agent."""
-    return _USER_AGENTS[randint(0, len(_USER_AGENTS) - 1)]
+    return _RANDOM_USER_AGENT
 
 
 def request(method: str, url: str, headers: Mapping[str, str] = None, data=None, session: Session = None) -> Response:
     """Send HTTP request using requests."""
-    if headers is None:
-        headers = {}
-
-    headers = {
-        "Accept": "*/*",
-        "Accept-Encoding": "gzip, deflate",
+    default_headers = {
+        "Accept": "application/json",
+        "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "*",
         "Sec-Fetch-Mode": "cors",
         "User-Agent": get_random_ua(),
-        **headers,
     }
 
-    session = session if session is not None else Session()
+    headers = {**(session.headers if session is not None else default_headers), **(headers or {})}
+    session = session or Session()
 
     log(f"Fetching {url}", xbmc.LOGDEBUG)
     res = session.request(method, url, headers=headers, data=data)

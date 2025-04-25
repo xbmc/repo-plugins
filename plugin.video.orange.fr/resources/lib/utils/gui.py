@@ -52,7 +52,7 @@ def create_play_item(stream_info: dict = None, inputstream_addon: str = "") -> L
     play_item.setMimeType(stream_info.get("mime_type"))
 
     play_item.setProperty("inputstream", inputstream_addon)
-    play_item.setProperty("inputstream.adaptive.manifest_type", stream_info["protocol"])
+    play_item.setProperty("inputstream.adaptive.manifest_type", stream_info.get("protocol"))
     play_item.setProperty("inputstream.adaptive.play_timeshift_buffer", "true")
 
     drm_config = stream_info.get("drm_config", {})

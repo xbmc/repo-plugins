@@ -1,5 +1,14 @@
 # 2.x
 
+## [2.3.6](https://github.com/f-lawe/plugin.video.orange.fr/releases/tag/v2.3.6) - 2025-04-25
+
+### Fixed
+- Auth when using username/password (following new Otange TV website changes)
+- Prevent Kodi error when stream info is incomplete
+
+### Changed
+- Rework auth process in order to reduce API calls when reusing session data
+
 ## [2.3.5](https://github.com/f-lawe/plugin.video.orange.fr/releases/tag/v2.3.5) - 2025-04-18
 
 ### Fixed

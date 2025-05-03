@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.locast" version="1.1.9" name="Locast" provider-name="Lunatixz">
+<addon id="plugin.video.locast" version="1.2.0" name="Locast" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.six" version="1.0.0"/>
@@ -30,6 +30,7 @@
         <website>https://www.locast.org</website>
         <forum>https://forum.kodi.tv/showthread.php?tid=334947</forum>
         <disclaimer lang="en_GB">Content is Geo-restricted and may not be available in your location.</disclaimer>
+        <broken>deprecated</broken>
         <assets>
             <icon>resources/images/icon.png</icon>
             <fanart>resources/images/fanart.jpg</fanart>

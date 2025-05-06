@@ -7,13 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kodi Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2021-09-30 18:44+2\n"
+"PO-Revision-Date: 2024-11-27 14:39+1\n"
+"Last-Translator: Dimitri Kroon\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en_GB\\n"
+"Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 # Settings
@@ -23,6 +23,18 @@ msgstr ""
 
 msgctxt "#30104"
 msgid "Prefer original trailer"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Genres sorting"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Sort by"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Sort order"
 msgstr ""
 
 msgctxt "#30110"
@@ -79,13 +91,38 @@ msgctxt "#30512"
 msgid "members price"
 msgstr ""
 
+msgctxt "#30513"
+msgid "Subscription film"
+msgstr ""
+
+msgctxt "#30514"
+msgid "Available for over a year."
+msgstr ""
+
+msgctxt "#30515"
+msgid "Available for {} months."
+msgstr ""
+
+msgctxt "#30516"
+msgid "Available for {} weeks."
+msgstr ""
+
+msgctxt "#30517"
+msgid "Only {} days available."
+msgstr ""
+
+msgctxt "#30518"
+msgid "Only {} hours available."
+msgstr ""
+
+
 # Texts in dialogs
 msgctxt "#30601"
 msgid "Rental film"
 msgstr ""
 
 msgctxt "#30602"
-msgid "You can watch this film after you´ve paid the rent via the Cinetree website, or the official Cinetree Apple/Android app."
+msgid "Your balance of € {credit:0.2f} is not sufficient to pay the rental price of € {amount:0.2f}.\nPlease top up your credit at Cinetree or pay the rent on the Cinetree website, or the official Cinetree Apple/Android app."
 msgstr ""
 
 msgctxt "#30604"
@@ -93,10 +130,10 @@ msgid "More info"
 msgstr ""
 
 msgctxt "#30605"
-msgid "Unfortunately, it is not possible to pay for a film directly from kodi.\n\n"
-"You must first rent the film on the Cinetree website, or by using the official Cinetree Android or iOS app. "
+msgid "Charging the rent to your pre-paid credit with Cinetree is only payment method supported by this Kodi add-on.\n\n"
+"For additional payment methods use the Cinetree website, or the official Cinetree Android or iOS app. "
 "Usually it is easiest to goto 'Huur' on the website and make a search on the film title. Click on 'Nu kijken' and "
-"make the payment. Now you can close the web browser and watch the film from kodi.\n\nAll rented films are available "
+"make the payment. Once paid you can close the web browser and watch the film from Kodi.\n\nAll rented films are available "
 "in the menu 'My Films > Rented' for the duration of the rental period."
 msgstr ""
 
@@ -165,6 +202,27 @@ msgctxt "#30621"
 msgid "Login now"
 msgstr ""
 
+msgctxt "#30622"
+msgid "Rent Film"
+msgstr ""
+
+msgctxt "#30623"
+msgid "Rent '{title}' now?\nPrice: € {amount:0.2f}\nCurrent credit: € {credit:0.2f}."
+msgstr ""
+
+msgctxt "#30624"
+msgid "Pay rent"
+msgstr ""
+
+msgctxt "#30625"
+msgid "Unfortunately, payment seems to have failed.\nPlease check your balance and invoices on cinetree.nl and report issues in this add-on's support thread on https://forum.kodi.tv/showthread.php?tid=370761"
+msgstr ""
+
+msgctxt "#30626"
+msgid "Are you sure you want to remove '{title}' from the list?"
+msgstr ""
+
+
 # Generic button texts
 msgctxt "#30790"
 msgid "OK"
@@ -175,11 +233,11 @@ msgid "Cancel"
 msgstr ""
 
 msgctxt "#30792"
-msgid "YES"
+msgid "Yes"
 msgstr ""
 
 msgctxt "#30793"
-msgid "NO"
+msgid "No"
 msgstr ""
 
 # Menu texts
@@ -192,7 +250,7 @@ msgid "Recommended"
 msgstr ""
 
 msgctxt "#30803"
-msgid "Month selection"
+msgid "Subscription"
 msgstr ""
 
 msgctxt "#30804"
@@ -212,12 +270,51 @@ msgid "Search"
 msgstr ""
 
 msgctxt "#30808"
-msgid "Already Watched"
+msgid "Already watched"
 msgstr ""
 
 msgctxt "#30809"
 msgid "Rented"
 msgstr ""
+
+msgctxt "#30810"
+msgid "All Collections"
+msgstr ""
+
+msgctxt "#30811"
+msgid "Continue watching"
+msgstr ""
+
+msgctxt "#30812"
+msgid "Watch list"
+msgstr ""
+
+msgctxt "#30813"
+msgid "Originals"
+msgstr ""
+
+msgctxt "#30814"
+msgid "Short"
+msgstr ""
+
+msgctxt "#30815"
+msgid "All short films"
+msgstr ""
+
+
+# Context Menu
+msgctxt "#30859"
+msgid "Remove from list"
+msgstr ""
+
+msgctxt "#30860"
+msgid "Save to watch list"
+msgstr ""
+
+msgctxt "#30861"
+msgid "Remove from watch list"
+msgstr ""
+
 
 # Error texts
 msgctxt "#30901"

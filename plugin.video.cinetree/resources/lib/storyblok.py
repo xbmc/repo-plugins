@@ -1,32 +1,36 @@
 
 # ------------------------------------------------------------------------------
-#  Copyright (c) 2022-2023 Dimitri Kroon.
+#  Copyright (c) 2022-2025 Dimitri Kroon.
 #  This file is part of plugin.video.cinetree.
 #  SPDX-License-Identifier: GPL-2.0-or-later.
 #  See LICENSE.txt
 # ------------------------------------------------------------------------------
 
+import os
 import time
 import logging
-import requests
 
+import urlquick
+import xbmcplugin
 from codequick.support import logger_id
+
+from resources.lib.utils import CacheMgr
 
 
 logger = logging.getLogger('.'.join((logger_id, __name__)))
 
 token = 'srRWSyWpIEzPm4IzGFBrkAtt'
 base_url = 'https://api.storyblok.com/v2/cdn/'
-cache_version = 'undefined'
 
-
-def clear_cache_version():
-    global cache_version
-    cache_version = 'undefined'
+# Since their revisions change independently,
+# cache Storyblok requests separately from Cinetree.
+st_cache_dir = os.path.join(urlquick.CACHE_LOCATION, 'sbcache')
+st_cache_mgr = CacheMgr(st_cache_dir)
+st_cache_mgr.revalidate()
 
 
 def get_url(path, **kwargs):
-    global cache_version
+    cache_version = st_cache_mgr.version or 'undefined'
 
     headers = {
         'Referer': 'https://www.cintree.nl/',
@@ -35,40 +39,36 @@ def get_url(path, **kwargs):
         'Sec-Fetch-Dest': 'empty',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Site': 'cross-site',
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache',
     }
     params = {'token': token, 'version': 'published', 'cv': cache_version}
     if 'headers' in kwargs:
         headers.update(kwargs.pop('headers'))
 
     p = kwargs.pop('params', None)
-
-    if isinstance(p, dict):
+    if p:
         params.update(p)
-    elif isinstance(p, str):
-        params = '{}&token={}&version=published&cv={}'.format(p, token, cache_version)
-    elif p is not None:
-        raise TypeError("Keyword argument 'params' must be of type dict or string")
 
-    resp = requests.get(base_url + path, headers=headers, params=params, **kwargs)
+    kwargs['raise_for_status'] = False
+    if cache_version == 'undefined':
+        # Requests with a Storyblok cache version of 'undefined' will only be sent once anyway.
+        kwargs['max_age'] = -1
+    with urlquick.Session(st_cache_dir) as s:
+        resp = s.request('get', base_url + path, headers=headers, params=params, **kwargs)
     if resp.status_code == 429:
         # too many requests, wait a second and try once again
         logger.warning("Too many requests per second to storyblok")
         time.sleep(1)
-        resp = requests.get(base_url + path, headers=headers, params=params, **kwargs)
+        resp = urlquick.get(base_url + path, headers=headers, params=params, **kwargs)
 
     resp.raise_for_status()
     data = resp.json()
-    cv = data.get('cv')
-    if cv:
-        cache_version = cv
+    st_cache_mgr.version = str(data.get('cv', ''))
     return data, resp.headers
 
 
 def _get_url_page(path, page=None, items_per_page=None, **kwargs):
     """Make a webrequest to url `path`. Optionally return only a subset of the available
-    items by passing in 'page` and 'items_per_page`.
+    items by passing in `page` and `items_per_page`.
 
     Returns a tuple of 2 elements. The first is the list of items, second is the
     total number of available items.
@@ -116,14 +116,17 @@ def stories_by_uuids(uuids, page=None, items_per_page=None):
 
     if isinstance(uuids, str):
         uuids = (uuids, )
+    else:
+        uuids = list(uuids)
 
-    query_str = {'token': token,
-                 'by_uuids': ','.join(uuids),
-                 }
-
-    stories = _get_url_page('stories', page, items_per_page, params=query_str)
-    # print(" {} stories retrieved".format(len(stories[0])))
-    return stories
+    stories, total = _get_url_page(
+            'stories',
+            page,
+            items_per_page,
+            params={'by_uuids_ordered': ','.join(uuids)})
+    if len(uuids) != len(stories):
+        logger.warning("%s stories requested by uuid, only %s returned.", len(uuids), len(stories))
+    return stories, total
 
 
 def story_by_name(slug: str):
@@ -138,12 +141,12 @@ def story_by_name(slug: str):
         'resolve_relations': 'selectedBy',
         'from_release': 'undefined'
     }
-    data, _ = get_url(path, params=params)
+    data, _ = get_url(path, params=params, max_age=-1)
     return data['story']
 
 
 def search(search_term=None, genre=None, duration_min=None, duration_max=None,
-           country=None, page=None, items_per_page=None):
+           country=None, page=None, items_per_page=None, sort_method=0, sort_order=0):
 
     # query_str = {'starts_with': 'films/'}
     query_str = {'filter_query[component][in]': 'film'}
@@ -167,5 +170,18 @@ def search(search_term=None, genre=None, duration_min=None, duration_max=None,
             raise ValueError("Invalid duration")
         query_str['filter_query[duration][gt_int]'] = duration_min,
         query_str['filter_query[duration][lt_int]'] = duration_max
+
+    sort_field = {
+        xbmcplugin.SORT_METHOD_DURATION: 'content.duration',
+        xbmcplugin.SORT_METHOD_DATEADDED: 'content.startDate',
+        xbmcplugin.SORT_METHOD_TITLE: 'content.title',
+        xbmcplugin.SORT_METHOD_VIDEO_YEAR: 'content.productionYear'
+    }.get(sort_method)
+    if sort_field is not None:
+        order = 'asc' if sort_order == 0 else 'desc'
+        if sort_method == xbmcplugin.SORT_METHOD_DURATION:
+            query_str['sort_by'] = ':'.join((sort_field, order, 'float'))
+        else:
+            query_str['sort_by'] = ':'.join((sort_field, order))
 
     return _get_url_page('stories', page, items_per_page, params=query_str)

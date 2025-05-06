@@ -10,7 +10,34 @@
 					<control type="toggle"/>
 				</setting>
 			</group>
-			<group id="grp2" label="3110">
+			<group id="grp2" label="30105">
+				<setting id="genre-sort-method" type="integer" label="30106" help="">
+					<level>0</level>
+					<default>0</default>
+					<constraints>
+						<options>
+							<option label="571">40</option>
+							<option label="556">9</option>
+							<option label="570">21</option>
+							<option label="180">8</option>
+							<option label="562">18</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="genre-sort-order" type="integer" label="30107" help="">
+					<level>0</level>
+					<default>0</default>
+					<constraints>
+						<options>
+							<option label="584">0</option>
+							<option label="585">1</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+			</group>
+			<group id="grp3" label="30110">
 				<setting id="log-handler" label="30111" type="string" help="">
 					<level>2</level>
 					<default>Kodi log</default>
@@ -38,7 +65,7 @@
         </category>
         <!-- Cinetree account -->
         <category id="account" label="30200" help="">
-			<group id="grp3">
+			<group id="grp4">
 				<setting id="ct-log-in" label="30201" type="action" help="">
 					<level>0</level>
 					<data>RunPlugin(plugin://$ID/resources/lib/settings/login)</data>

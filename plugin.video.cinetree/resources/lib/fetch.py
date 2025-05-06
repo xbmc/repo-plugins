@@ -1,22 +1,22 @@
 
 # ------------------------------------------------------------------------------
-#  Copyright (c) 2022 Dimitri Kroon
-#
-#  SPDX-License-Identifier: GPL-2.0-or-later
-#  This file is part of plugin.video.cinetree
+#  Copyright (c) 2022-2025 Dimitri Kroon.
+#  This file is part of plugin.video.cinetree.
+#  SPDX-License-Identifier: GPL-2.0-or-later.
+#  See LICENSE.txt
 # ------------------------------------------------------------------------------
 
 import logging
-import requests
 import json
-
+import os
+import urlquick
 from codequick.support import logger_id
 
 from resources.lib import kodi_utils
 from resources.lib.constants import USER_AGENT, WEB_TIMEOUT
 from resources.lib.errors import *
 
-
+cache_location = os.path.join(urlquick.CACHE_LOCATION, 'ctcache')
 logger = logging.getLogger('.'.join((logger_id, __name__)))
 
 
@@ -28,8 +28,6 @@ def web_request(method, url, headers=None, data=None, **kwargs):
         'Sec-Fetch-Dest': 'empty',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Site': 'same-site',
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache',
     }
     if headers:
         std_headers.update(headers)
@@ -37,13 +35,14 @@ def web_request(method, url, headers=None, data=None, **kwargs):
     kwargs.setdefault('timeout', WEB_TIMEOUT)
     logger.debug("Making %s request to %s", method, url)
     try:
-        resp = requests.request(method, url, json=data, headers=std_headers, **kwargs)
-        resp.raise_for_status()
+        with urlquick.Session(cache_location) as s:
+            resp = s.request(method, url, json=data, headers=std_headers, **kwargs)
         return resp
-    except requests.HTTPError as e:
+    except urlquick.HTTPError as e:
         # noinspection PyUnboundLocalVariable
-        logger.info("HTTP error %s for url %s: '%s'", e.response.status_code, url, resp.content)
-        if e.response.status_code == 401:
+        resp = e.response
+        logger.info("HTTP error %s for url %s: '%s'", resp.status_code, url, resp.content)
+        if resp.status_code == 401:
             try:
                 msg = resp.json().get('message')
             except json.JSONDecodeError:
@@ -54,12 +53,11 @@ def web_request(method, url, headers=None, data=None, **kwargs):
                 raise NoSubscriptionError(msg)
             else:
                 raise AuthenticationError(msg if msg else None)
-        if e.response.status_code == 403:
+        if resp.status_code == 403:
             raise GeoRestrictedError
         else:
-            resp = e.response
             raise HttpError(resp.status_code, resp.reason)
-    except requests.RequestException as e:
+    except urlquick.RequestException as e:
         logger.error('Error connecting to %s: %r', url, e)
         raise FetchError(str(e))
 
@@ -126,7 +124,7 @@ def fetch_authenticated(funct, url, **kwargs):
             else:
                 kwargs['headers'] = {'Authorization': 'Bearer ' + account.access_token}
 
-            return funct(url, **kwargs)
+            return funct(url=url, **kwargs)
         except AuthenticationError:
             # This is quite common, as tokens seem to expire rather quickly on Cinetree
             if tries == 0:
@@ -134,6 +132,7 @@ def fetch_authenticated(funct, url, **kwargs):
                     if not (kodi_utils.show_msg_not_logged_in() and account.login()):
                         raise
             else:
-                # A NotAuthenticatedError even after refresh or login succeeded:
+                # A NotAuthenticatedError even after a refresh or login succeeded:
                 # No access with this account; e.g. trying to play a subscription film on a free account.
                 raise AccessRestrictedError from None
+    return None

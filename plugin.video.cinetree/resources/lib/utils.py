@@ -1,11 +1,11 @@
 
 # ------------------------------------------------------------------------------
-#  Copyright (c) 2022 Dimitri Kroon
-#
-#  SPDX-License-Identifier: GPL-2.0-or-later
-#  This file is part of plugin.video.cinetree
+#  Copyright (c) 2022-2025 Dimitri Kroon.
+#  This file is part of plugin.video.cinetree.
+#  SPDX-License-Identifier: GPL-2.0-or-later.
+#  See LICENSE.txt
 # ------------------------------------------------------------------------------
-
+from __future__ import annotations
 import logging
 import os
 import re
@@ -16,6 +16,7 @@ import xbmc
 import xbmcaddon
 from xbmcvfs import translatePath
 
+import urlquick
 from codequick.support import logger_id
 
 
@@ -100,6 +101,11 @@ def duration_2_seconds(duration: str):
     return None
 
 
+def strptime(dt_str: str, format: str):
+    """A bug free alternative to `datetime.datetime.strptime(...)`"""
+    return datetime(*(time.strptime(dt_str, format)[0:6]))
+
+
 def reformat_date(date_string: str, old_format: str, new_format: str) -> str:
     """Take a string containing a datetime and in a particular format and
     convert it into another format.
@@ -107,10 +113,7 @@ def reformat_date(date_string: str, old_format: str, new_format: str) -> str:
     Usually used to convert timestamps obtained from a website into a nice readable format.
 
     """
-    try:
-        dt = datetime.strptime(date_string, old_format)
-    except TypeError:
-        dt = datetime(*(time.strptime(date_string, old_format)[:6]))
+    dt = strptime(date_string, old_format)
     return dt.strftime(new_format)
 
 
@@ -176,7 +179,7 @@ def replace_markdown(markdown_text):
     from Cinetree presentable.
 
     Bold an italic markdown will be converted to their respective Kodi equivalent.
-    Markdown hyperlinks will collaps to the link text only. Escaped markdown is unescaped.
+    Markdown hyperlinks will collapse to the link text only. Escaped markdown is unescaped.
 
     """
     if not markdown_text:
@@ -251,3 +254,55 @@ def remove_markdown(src_text):
     except TypeError:
         src_text = ''
     return src_text
+
+
+class CacheMgr:
+    """Keep track of cache revision timestamps of the host and
+    clean the associated HTTP cache on changes.
+
+    """
+    def __init__(self, cache_location: str = ''):
+        self.logger = logging.getLogger(
+            '.'.join((logger_id, 'CacheMgr', os.path.basename(cache_location.rstrip(r'\/'))))
+        )
+        self.cache_dir = cache_location
+        self.__fname = os.path.join(cache_location, 'host_revision')
+        os.makedirs(cache_location, exist_ok=True)
+        self.__version = None
+        self.__revalidate = False
+
+    def _load(self):
+        try:
+            with open(self.__fname, 'r') as f:
+                self.__version = f.read().strip()
+        except OSError:
+            self.__version = None
+
+    def revalidate(self):
+        """Version will return None until version is set again."""
+        self.__revalidate = True
+
+    @property
+    def version(self) -> str | None:
+        if self.__version is None:
+            self._load()
+        if self.__revalidate:
+            return None
+        else:
+            return self.__version
+
+    @version.setter
+    def version(self, new_version: str):
+        self.__revalidate = False
+        if new_version == self.__version or not new_version:
+            return
+        self.__version = new_version
+        # noinspection PyBroadException
+        try:
+            self.logger.info("Revision timestamp changed; cleaning HTTP cache...")
+            with open(self.__fname, 'w') as f:
+                f.write(new_version)
+            with urlquick.Session(self.cache_dir) as s:
+                s.cache_adapter.wipe()
+        except:
+            self.logger.error('Failed to save new Storyblok cache version.', exc_info=True)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="6.5.0" name="DR TV" provider-name="TermeHansen">
+<addon id="plugin.video.drnu" version="6.6.0" name="DR TV" provider-name="TermeHansen">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
         <import addon="script.module.dateutil" version="2.8.2" />
@@ -31,6 +31,11 @@
             <screenshot>resources/media/Screenshot3.jpg</screenshot>
             <screenshot>resources/media/Screenshot4.jpg</screenshot>
        </assets>
+       <news>[B]Version 6.6.0 - 2025-05-09[/B]
+        - Fix change in drtv login flow
+        - Use oidc auth flow
+        - Add new setting for subtitles on livetv
+       </news>
        <news>[B]Version 6.5.0 - 2024-01-22[/B]
         - Fix "IOException error" and HTTP timeouts.
         - Better output during re-caching.

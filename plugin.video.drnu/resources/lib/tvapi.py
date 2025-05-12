@@ -32,16 +32,20 @@ from datetime import datetime, timezone, timedelta
 from urllib.parse import urlparse, parse_qs, parse_qsl, urlencode
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
+import secrets
+import base64
 
 CHANNEL_IDS = [20875, 20876, 192099, 192100, 20892]
 CHANNEL_PRESET = {
     'DR1': 1,
     'DR2': 2,
     'DR Ramasjang': 3,
-    'DRTV': 4,
+    'TVA Live': 4,
     'DRTV Ekstra': 5
 }
 URL = 'https://production.dr-massive.com/api'
+URL2 = 'https://prod95.dr-massive.com/api'
+CLIENT_ID = "283ba39a2cf31d3b81e922b8"
 GET_TIMEOUT = 10
 
 
@@ -66,68 +70,106 @@ def fix_query(url, remove={}, add={}, remove_keys=[]):
     return o._replace(query=urlencode(qs)).geturl()
 
 
+def generate_code_verifier(length: int = 64) -> str:
+    # Generate a secure random string (length between 43 and 128 chars)
+    return secrets.token_urlsafe(length)[:length]
+
+
+def generate_code_challenge(code_verifier: str) -> str:
+    # SHA256 hash of the verifier, then base64-url encode without padding
+    sha256 = hashlib.sha256(code_verifier.encode()).digest()
+    return base64.urlsafe_b64encode(sha256).decode().rstrip('=')
+
+
 def full_login(user, password):
     ses = requests.Session()
+
     # start login flow
+    code_verifier = generate_code_verifier()
+    code_challenge = generate_code_challenge(code_verifier)
+    
     params = {
-        'clientRedirectUrl':'https://www.dr.dk/drtv/callback',
-        'signUp': 'false', 'localPath':'/', 'optout':'false', 'device':'web_browser'}
-    headers = {
-        'authority': 'production.dr-massive.com',
-        'User-Agent': "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:122.0) Gecko/20100101 Firefox/122.0",
+        "client_id": CLIENT_ID,
+        "code_challenge": code_challenge,
+        "code_challenge_method": "S256",
+        "redirect_uri": "https://www.dr.dk/drtv/callback",
+        "state": f'{{"code_verifier":"{code_verifier}","logonRedirectPath":"/","optout":false}}',
+        "response_type": "code",
+        "scope": "openid roles tracking profile email offline_access"
     }
-    url = URL + '/authorization?'
-    res = ses.get(url, params=params, headers=headers, allow_redirects=True)
-
+    res = ses.get('https://login.dr.dk/oidc/authorize', params=params)
     if res.status_code != 200:
         return {'status_code': res.status_code, 'error': res.text}
-    client_id = parse_qs(urlparse(res.history[1].url).query)['client_id'][0]
-    referer = res.history[2].headers['Location']
-    state = parse_qs(urlparse(referer).query)['state'][0]
 
-    # post credentials
-    headers = {
-        'authority': 'api.dr.dk',
-        'User-Agent': "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:122.0) Gecko/20100101 Firefox/122.0",
-        'content-type': 'application/json',
+    trans = urlparse(res.url).path.split('/')[-1]
+    headers = {'content-type': 'application/json'}
+
+    transaction_fragment = "fragment useTransactionTransactionFragment on Transaction { ... on AuthenticatedAuthenticationTransaction { id email registration href __typename } ... on UnauthenticatedAuthenticationTransaction { id email __typename } ... on UnverifiedAuthenticationTransaction { id email name __typename } ... on UnrecognizedAuthenticationTransaction { id email statisticsConsentDefinition { id type version locale permissions headline summary body __typename } preferencesConsentDefinition { id type version locale permissions headline summary body __typename } newsletterConsentDefinition { id type version locale permissions headline summary body __typename } __typename } ... on UnidentifiedAuthenticationTransaction { id __typename } ... on CompletedEmailVerificationTransaction { id emailVerificationVariant: variant email __typename } ... on PendingEmailVerificationTransaction { id emailVerificationVariant: variant email __typename } ... on CompletedPasswordChangeTransaction { id passwordChangeVariant: variant __typename } ... on PendingPasswordChangeTransaction { id passwordChangeVariant: variant __typename } ... on PendingDeletionConfirmationTransaction { id __typename } ... on CompletedDeletionConfirmationTransaction { id __typename } ... on SettingsTransaction { id identity { id email name roles __typename } statisticsConsentDefinition { id type version locale permissions headline summary body __typename } preferencesConsentDefinition { id type version locale permissions headline summary body __typename } newsletterConsentDefinition { id type version locale permissions headline summary body __typename } statisticsConsentRevision { id status definition createdAt __typename } preferencesConsentRevision { id status definition createdAt __typename } newsletterConsentRevision { id status definition createdAt __typename } referBackUri referBackName sessionState expiresAt __typename } ... on PendingEUPTransaction { id href __typename } ... on CompletedEUPTransaction { id __typename } __typename }"  # noqa: E501
+    trans_query = "query useTransactionTransactionQuery($id: ID!) { transaction(id: $id) { ... on Node { id __typename } ...useTransactionTransactionFragment  __typename } }" + transaction_fragment  # noqa: E501
+    identify_query = "mutation useTransactionIdentificationMutation($input: IdentificationInput!) { identify(input: $input) { ... on Node { id __typename } ... on Error { code message __typename } ...useTransactionTransactionFragment __typename } } " + transaction_fragment  # noqa: E501
+    authenticate_query = "mutation useTransactionAuthenticationMutation($input: AuthenticationInput!) { authenticate(input: $input) { ... on Node { id __typename } ... on Error { code message __typename } ...useTransactionTransactionFragment __typename } } " + transaction_fragment  # noqa: E501
+    
+    trans_data = {
+        "operationName": "useTransactionTransactionQuery",
+        "variables": {"id": trans}, "query": trans_query
     }
-    
-    url = 'https://api.dr.dk/login/graphql'
-    data = {"operationName":"InitializeLoginTransaction","variables":{"input":{"state":state,"clientID":client_id}}, "query":"mutation InitializeLoginTransaction($input: InitializeLoginTransactionInput!) {\n  initializeLoginTransaction(input: $input) {\n    id\n    isValid\n    isIdentified\n    captcha {\n      image\n      __typename\n    }\n    proofOfWork {\n      salt\n      difficulty\n      __typename\n    }\n    __typename\n  }\n}"}  # noqa: E501
-
-    u = ses.post(url, data=json.dumps(data), headers=headers)
-    print(1, u.status_code)
-    if u.status_code != 200:
-        return {'status_code': u.status_code, 'error': u.text}
-    transaction_id = u.json()['data']['initializeLoginTransaction']['id']
-    
-    data = {"operationName":"Identify","variables":{"input":{"transaction":transaction_id,"email":user}},"query":"mutation Identify($input: IdentificationInput\u0021) {\n  identify(input: $input) {\n    id\n    isValid\n    isIdentified\n    captcha {\n      image\n      __typename\n    }\n    proofOfWork {\n      salt\n      difficulty\n      __typename\n    }\n    __typename\n  }\n}"}  # noqa: E501
-    u2 = ses.post(url, data=json.dumps(data), headers=headers)
-    print(2, u2.status_code)
-    if u2.status_code != 200:
-        return {'status_code': u2.status_code, 'error': u2.text}
-    
-    data={"variables":{"input":{"email":user,"password":password,"state":state}},"query":"mutation ($input: LoginInput!) {\n  token: login(input: $input)\n}"}   # noqa: E501
-    u3 = ses.post(url, data=json.dumps(data), headers=headers)
-    print(3, u3.status_code)
-    if u3.status_code != 200:
-        return {'status_code': u3.status_code, 'error': u3.text}
-    data = u3.json()['data']
-
-    # post login to tokens
-    headers = {
-        'authority': 'login.dr.dk',
-        'User-Agent': "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:122.0) Gecko/20100101 Firefox/122.0",
-        'content-type': 'application/x-www-form-urlencoded',
+    identify_data = {
+        "operationName": "useTransactionIdentificationMutation",
+        "variables": {"input": {"transaction": trans, "email": user }}, "query": identify_query
     }
-    
-    url = 'https://login.dr.dk/oidc/interactions/login/continue'
-    res = ses.post(url, data=data, headers=headers, allow_redirects=True)
+    authenticate_data = {
+        "operationName": "useTransactionAuthenticationMutation",
+        "variables": {"input": {"transaction": trans, "password": password }}, "query": authenticate_query
+    }
+
+    url = 'https://login.dr.dk/graphql'
+
+    u1 = ses.post(url, json=trans_data, headers=headers)
+    print(u1.json())
+    u2 = ses.post(url, json=identify_data, headers=headers)
+    print(u2.json())
+
+    u3 = ses.post(url, json=authenticate_data, headers=headers)
+    print(u3.json())
+
+    res2 = ses.get(u3.json()['data']['authenticate']['href'])
+    if res2.status_code != 200:
+        return {'status_code': res2.status_code, 'error': res2.text}
+    code = parse_qs(urlparse(res2.url).query)['code'][0]
+
+    data = {
+        "client_id": CLIENT_ID,
+        "redirect_uri": "https://www.dr.dk/drtv/callback",
+        "code_verifier": code_verifier, "code": code,
+        "grant_type": "authorization_code",
+    }
+    return oidc_token(data)
+
+
+def oidc_token(data):
+    headers = {"Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json"}
+    res = requests.post('https://login.dr.dk/oidc/token', data=data, headers=headers)
     if res.status_code != 200:
         return {'status_code': res.status_code, 'error': res.text}
-    o = parse_qs(urlparse(res.url).fragment)
-    tokens = [o[label][0] for label in ['RefreshableUserAccount', 'RefreshableUserProfile']]
-    return tokens
+    return res.json()
+
+
+def refresh_token(refresh_token):
+    data = {"client_id": CLIENT_ID, "refresh_token": refresh_token, "grant_type": "refresh_token"}
+    return oidc_token(data)
+
+
+def exchange_token(tokens):
+    data = {
+        "accessToken": tokens['access_token'], "identityToken": tokens['id_token'],
+        "scopes": ["Catalog"], "device": "web_browser", "optout": False,
+    }
+    
+    headers = {"Content-Type": "application/json", "Accept": "application/json"}
+    res = requests.post(URL + '/authorization/exchange', json=data, headers=headers)
+    if res.status_code != 200:
+        return {'status_code': res.status_code, 'error': res.text}
+    return res.json()
 
 
 def deviceid():
@@ -161,6 +203,7 @@ class Api():
         self.init_sqlite_db()
 
         self.token_file = Path(f'{self.cachePath}/token.p')
+        self.access_tokens = {}
         self._user_token = None
         self.user = get_setting('drtv_username')
         self.password = get_setting('drtv_password')
@@ -193,72 +236,68 @@ class Api():
         (self.cachePath/'requests_cleaned').write_text(str(datetime.now()))
 
     def read_tokens(self, tokens):
-        time_str = tokens[0]['expirationDate'].split('.')[0]
+        if 'value' in tokens[0]:
+            #old flow, anonymous
+            time_str = tokens[0]['expirationDate'].split('.')[0]
+            self._user_token = tokens[0]['value']
+            self._profile_token = tokens[1]['value']
+            self._user_name = 'anonymous'
+        else:
+            time_str = tokens[0]['Expires'].split('.')[0]
+            self._user_token = tokens[0]['Token']
+            self._profile_token = tokens[1]['Token']
+
         try:
             self._token_expire = datetime.strptime(time_str + 'Z', '%Y-%m-%dT%H:%M:%S%z')
         except Exception:
             time_struct = time.strptime(time_str, '%Y-%m-%dT%H:%M:%S')
             self._token_expire = datetime(*time_struct[0:6], tzinfo=timezone.utc)
-        self._user_token = tokens[0]['value']
-        self._profile_token = tokens[1]['value']
-        if self.user:
-            tokens[0]['name'] = self.get_profile()['name']
-        else:
-            tokens[0]['name'] = 'anonymous'
-        self._user_name = tokens[0]['name']
+        if self.access_tokens:
+            self._user_name = self.get_profile()['name']
 
     def request_tokens(self):
         self._user_token = None
         self._profile_token = None
 
         if self.user:
-            tokens_pure = full_login(self.user, self.password)
-            if isinstance(tokens_pure, dict):
-                err = tokens_pure['error']
+            access_tokens = full_login(self.user, self.password)
+            if 'error' in access_tokens:
+                err = access_tokens['error']
                 return err
-            tokens = [self.refresh_token(t) for t in tokens_pure]
-            self.read_tokens(tokens)
+            self.access_tokens = access_tokens
+            tokens = exchange_token(access_tokens)
         else:
             tokens = anonymous_tokens()
-            self.read_tokens(tokens)
+        self.read_tokens(tokens)
         with self.token_file.open('wb') as fh:
-            pickle.dump(tokens, fh)
+            pickle.dump([tokens, self.access_tokens], fh)
         return None
-
-    def refresh_token(self, token):
-        url = 'https://production.dr-massive.com/api/authorization/refresh'
-        params = {'ff':'idp,ldp,rpt', 'supportFallbackToken': True}
-        headers = {
-            'Host': 'production.dr-massive.com',
-            'User-Agent': "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:122.0) Gecko/20100101 Firefox/122.0",
-            'content-type': 'application/json',
-        }
-        data = {
-            'token': token, 'optout': False
-        }
-        res = self.session.post(url, params=params, headers=headers, json=data)
-        if res.status_code != 200:
-            return {'status_code': res.status_code, 'error': res.text}
-        return res.json()
 
     def refresh_tokens(self):
         if self._user_token is None:
             if self.token_file.exists():
                 with self.token_file.open('rb') as fh:
-                    self.read_tokens(pickle.load(fh))
-            else:
-                err = self.request_tokens()
-                if err:
-                    raise ApiException(f'Login failed with: "{err}"')
-                return
-        if (self._token_expire - datetime.now(timezone.utc)).total_seconds() < 120:
+                    [tokens, self.access_tokens] = pickle.load(fh)
+                    if isinstance(tokens, list):
+                        self.read_tokens(tokens)
+
+        if self._user_token is None:
+            err = self.request_tokens()
+            if err:
+                raise ApiException(f'Login failed with: "{err}"')
+            return
+
+        if (self._token_expire - datetime.now(timezone.utc)) < timedelta(hours=10):
             failed_refresh = False
             tokens = []
-            for t in [self._user_token, self._profile_token]:
-                newtoken = self.refresh_token(t)
-                tokens.append(newtoken)
-                if 'error' in newtoken:
-                    failed_refresh = True
+            # oidc flow
+            access_tokens = refresh_token(self.access_tokens['refresh_token'])
+            if 'error' in access_tokens:
+                failed_refresh = True
+            else:
+                tokens = exchange_token(access_tokens)
+                self.access_tokens = access_tokens
+
             if failed_refresh:
                 self.request_tokens()
                 err = self.request_tokens()
@@ -267,7 +306,7 @@ class Api():
             else:
                 self.read_tokens(tokens)
                 with self.token_file.open('wb') as fh:
-                    pickle.dump(tokens, fh)
+                    pickle.dump([tokens, self.access_tokens], fh)
 
     def user_token(self):
         self.refresh_tokens()
@@ -381,7 +420,8 @@ class Api():
     def get_profile(self, use_cache=False):
         url = URL + '/account/profile'
         headers = {'X-Authorization': 'Bearer ' + self.profile_token()}
-        return self._request_get(url, headers=headers, use_cache=use_cache)
+        params = {"ff": "idp,ldp,rpt", "lang": "da"}
+        return self._request_get(url, headers=headers, params=params, use_cache=use_cache)
 
     def kids_item(self, item):
         if 'classification' in item:

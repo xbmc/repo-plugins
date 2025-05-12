@@ -239,7 +239,7 @@ class DrDkTvAddon(object):
 
             iptv_channel = {
                 'name': api_channel['title'],
-                'stream': self.api.get_channel_url(api_channel, bool_setting('enable.subtitles')),
+                'stream': self.api.get_channel_url(api_channel, bool_setting('enable.livetv_subtitles')),
                 'logo': api_channel['item']['images']['logo'],
                 'id': 'drnu.' + api_channel['item']['id'],
                 'preset': tvapi.CHANNEL_PRESET[api_channel['title']]
@@ -286,7 +286,7 @@ class DrDkTvAddon(object):
                          'icon': channel['item']['images']['logo'],
                          'fanart': channel['item']['images']['logo']})
             item.addContextMenuItems(self.menuItems, False)
-            url = self.api.get_channel_url(channel, bool_setting('enable.subtitles'))
+            url = self.api.get_channel_url(channel, bool_setting('enable.livetv_subtitles'))
             item.setInfo('video', {
                 'title': channel['title'],
                 'plot': channel['schedule_str'],

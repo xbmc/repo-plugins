@@ -92,6 +92,9 @@
     <setting id="enable.subtitles" label="30207" type="boolean">
       <level>0</level> <default>false</default> <control type="toggle"/>
     </setting>
+    <setting id="enable.livetv_subtitles" label="30208" type="boolean">
+      <level>0</level> <default>false</default> <control type="toggle"/>
+    </setting>
     <setting id="enable.localsubtitles" label="30214" type="boolean">
       <level>2</level> <default>false</default> <control type="toggle"/>
     </setting>

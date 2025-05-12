@@ -119,6 +119,10 @@ msgctxt "#30207"
 msgid "Enable Hard-of-hearing subtitles"
 msgstr "Vis undertekster for hørehæmmedde"
 
+msgctxt "#30208"
+msgid "Enable Live tv subtitles"
+msgstr "Vis undertekster på Live tv"
+
 msgctxt "#30213"
 msgid "Clear the favorite programs list"
 msgstr "Nulstil listen med foretrukne programmer"

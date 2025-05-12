@@ -121,6 +121,10 @@ msgid "Enable Hard-of-hearing subtitles"
 msgstr ""
 
 msgctxt "#30208"
+msgid "Enable Live tv subtitles"
+msgstr ""
+
+msgctxt "#30208"
 msgid "Remove programs from Ramasjang/Ultra in alphabetical lists"
 msgstr ""
 

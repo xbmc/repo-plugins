@@ -1,3 +1,8 @@
+[B]Version 6.6.0 - 2025-05-09[/B]
+- Fix change in drtv login flow
+- Use oidc auth flow
+- Add new setting for subtitles on livetv
+
 [B]Version 6.5.0 - 2024-01-22[/B]
 - Fix "IOException error" and HTTP timeouts.
 - Better output during re-caching.

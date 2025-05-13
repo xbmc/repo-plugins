@@ -742,17 +742,16 @@ class Main(object):
     def play(self):
         if DEBUG:
             self.log('play()')
+        title = xbmc.getInfoLabel("ListItem.Title")
         if _kodiver < 18.9:
-            title = xbmc.getInfoLabel("ListItem.Title")
             thumbnail = xbmc.getInfoImage("ListItem.Thumb")
             plot = xbmc.getInfoLabel("ListItem.Plot")
         else:
             vtag = xbmc.InfoTagVideo()
-            title = vtag.getTitle()
             thumbnail = vtag.getPictureURL()
             plot = vtag.getPlot()
         # only need to add label, icon and thumbnail, setInfo() and addSortMethod() takes care of label2
-        listitem = self.make_plistitem(title, plot)
+        listitem = self.make_plistitem(title + ' (Trailer)', plot)
         listitem.setArt({'thumb': thumbnail})
         listitem.setPath(cache.get(self.fetch_video_url, cache_duration, self.parameters('videoid')))
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem=listitem)
@@ -781,7 +780,7 @@ class Main(object):
                 plot = plot.get('plotText').get('plainText')
             thumbnail = video.get('latestTrailer').get('thumbnail').get('url')
             poster = video.get('primaryImage').get('url')
-            listitem = self.make_plistitem(title, plot, year)
+            listitem = self.make_plistitem(title + ' (Trailer)', plot, year)
             listitem.setArt({'thumb': poster,
                              'icon': poster,
                              'poster': poster,
@@ -833,7 +832,7 @@ class Main(object):
             vtag.setWriters(labels.get('writer', []))
 
             if cast2:
-                cast2 = [xbmc.Actor(p['name'], p['role'], 0, p['thumbnail']) for p in cast2]
+                cast2 = [xbmc.Actor(p.get('name'), p.get('role'), 0, p.get('thumbnail')) for p in cast2]
                 vtag.setCast(cast2)
 
         else:

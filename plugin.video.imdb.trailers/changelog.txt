@@ -1,5 +1,9 @@
 plugin.video.imdb.trailers:
 ---------------------------
+v2.1.21 (20250513)
+[fix] listing when character names not available
+[fix] add Trailer to tile to avoid scrobbling by trakt module
+
 v2.1.20 (20250209)
 [fix] listing
 [new] charcater names in meta

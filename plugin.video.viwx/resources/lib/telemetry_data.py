@@ -112,7 +112,7 @@ class _TelemetryFactory():
         apply some unpredictability as to what data is returned.
         """
         data_len = len(telemetry_data)
-        new_idx = int(min(random.random(), 0.9) * data_len)
+        new_idx = int(min(random.random(), 0.999) * data_len)
         while new_idx in self.used_indices:
             new_idx += 1
             if new_idx >= data_len:

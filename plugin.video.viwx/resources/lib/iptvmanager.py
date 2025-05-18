@@ -1,6 +1,6 @@
 
 # ----------------------------------------------------------------------------------------------------------------------
-#  Copyright (c) 2024 Dimitri Kroon.
+#  Copyright (c) 2024-2025 Dimitri Kroon.
 #  This file is part of plugin.video.viwx.
 #  SPDX-License-Identifier: GPL-2.0-or-later
 #  See LICENSE.txt
@@ -15,8 +15,8 @@ from codequick.support import build_path
 
 # Logo URLs from now/next.
 CHANNELS = {
-    'ITV': {'id': 'viwx.itv',
-            'name': 'ITV',
+    'ITV1': {'id': 'viwx.itv1',
+            'name': 'ITV1',
             'logo': 'https://images.ctfassets.net/bd5zurrrnk1g/54OefyIkbiHPMJUYApbuUX/7dfe2176762fd8ec10f77cd61a318b07/itv1.png?w=512',
             'preset': 1},
     'ITV2': {'id': 'viwx.itv2',

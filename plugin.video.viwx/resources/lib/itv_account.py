@@ -170,11 +170,10 @@ class ItvSession:
         logger.debug("Refreshing ITV account tokens...")
         try:
             token = self.account_data['itv_session']['refresh_token']
-            url = 'https://auth.prd.user.itv.com/token?grant_type=refresh_token&' \
-                  'token=content_token refresh_token&refresh=' + token
             # Refresh requests require no authorization header and no cookies at all
             resp = fetch.get_json(
-                url,
+                'https://auth.prd.user.itv.com/token',
+                params={'refresh': token},
                 headers={'Accept': 'application/vnd.user.auth.v2+json'},
                 timeout=10
             )

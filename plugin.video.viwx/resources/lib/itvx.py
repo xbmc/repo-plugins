@@ -140,7 +140,7 @@ def get_full_schedule():
 
     These are from the html pages that the website uses to show schedules.
     """
-    today = datetime.utcnow()
+    today = datetime.now(timezone.utc)
     all_days = (today + timedelta(i) for i in range(-7, 8))
     # schedules = (get_page_data('watch/tv-guide/' + day.strftime('%Y-%m-%d')) for day in all_days)
     schedule = {}

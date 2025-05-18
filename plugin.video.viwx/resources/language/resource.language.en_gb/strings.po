@@ -262,7 +262,7 @@ msgid "Import failed.\nThe file has invalid data."
 msgstr ""
 
 msgctxt "#30628"
-msgid "Cookie import succeeded, but signing in failed.\nCheck the log for more info"
+msgid "Import succeeded, but the token was rejected by ITV.\nEnsure to copy all data exactly as is.\nEnsure the data is not older than 6 months."
 msgstr ""
 
 # Generic button texts

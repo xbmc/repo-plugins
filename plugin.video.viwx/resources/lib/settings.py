@@ -75,46 +75,89 @@ def logout(_):
 
 @Script.register()
 def import_tokens(_):
-    """Import authentication tokens from a web browser or an existing viwx session file."""
-    session = itv_account.itv_session()
+    """Import authentication tokens from a web browser or an existing viwx session file.
 
-    file_path = xbmcgui.Dialog().browseSingle(1, 'Open cookie file', 'files')
+    """
+    file_path = xbmcgui.Dialog().browseSingle(1, 'Open token file', 'files')
     if not file_path:
-        logger.info("Importing browser cookie canceled.")
+        logger.info("Importing auth tokens canceled.")
         return
 
-    logger.info("Importing browser cookie from %s.", file_path)
+    logger.info("Importing auth tokens from %s.", file_path)
     with xbmcvfs.File(file_path, 'r') as f:
-        data = f.read()
+        raw_data = f.read()
+    check_token_data(raw_data)
 
-    data = data.strip()
+
+def check_token_data(raw_data: str):
+    data_type = "Unknown"
+    data = raw_data.strip()
+    # Just in case some editor has inserted hard wraps.
+    data = data.replace('\n', '')
+    data = data.replace('\r', '')
     try:
-        if data.startswith('Itv.Session:"{"tokens":'):
-            logger.info("Found Firefox cookie data...")
-            data = data[13:-1]
-            session_data = json.loads(data)['tokens']['content']
-        elif data.startswith('{"tokens":'):
-            logger.info("Found Chromium cookie data...")
-            session_data = json.loads(data)['tokens']['content']
+        if '.Session:"{' in data[:16]:
+            data_type = "Firefox cookie"
+            if not data.startswith('Itv'):
+                raise errors.ParseError("Firefox cookie data should start with 'ITV.Session'.")
+            if not data.endswith('"'):
+                raise errors.ParseError('Firefox cookie data should end with a double quote (").')
+            token_data = _parse_cookie(data[13:-1])
+        elif 'tokens":' in data[:11]:
+            data_type = "Chromium cookie"
+            if not data.startswith('{'):
+                raise errors.ParseError("Chromium cookie data should start with a '{'.")
+            if not data.endswith('}'):
+                raise errors.ParseError("Chromium cookie data should end with a '}'.")
+            token_data = _parse_cookie(data)
+        elif '"vers": 2' in data:
+            data_type = "viwX export"
+            try:
+                token_data = json.loads(data)['itv_session']
+            except (json.JSONDecodeError, KeyError):
+                raise errors.ParseError("This is not a valid viwX token export file.")
         else:
-            logger.info("Expecting viwX data...")
-            session_data = json.loads(data)['itv_session']
-        # Just to check its presence
-        _ = session_data['refresh_token']
-    except (json.JSONDecodeError, KeyError, TypeError):
-        logger.error("Invalid auth cookie data:\n", exc_info=True)
-        kodi_utils.msg_dlg(TXT_IMPORT_INVALID_DATA)
+            raise errors.ParseError("Unknown file format.\n"
+                                    "Ensure to copy all data exactly as is.")
+    except errors.ParseError as err:
+        logger.error("Invalid token data\n\t\tFile format: %s\n\t\tstart: '%s'\n\t\tend: '%s'\n",
+                     data_type, raw_data[:20], raw_data[-20:], exc_info=True)
+        kodi_utils.msg_dlg('\n'.join((Script.localize(TXT_IMPORT_INVALID_DATA), str(err))))
         return
 
-    logger.debug('Successfully read auth cookie file.')
+    try:
+        # Just to check its presence
+        _ = token_data['refresh_token']
+    except KeyError:
+        logger.error("Failed to import' refresh token not present.")
+        kodi_utils.msg_dlg('\n'.join((
+            Script.localize(TXT_IMPORT_INVALID_DATA),
+            "Missing token.Are you sure you were signed in when copying the cookie?"))
+        )
+        return
 
-    session.account_data['itv_session'] = session_data
+    logger.debug('Successfully read auth tokens file.')
+    session = itv_account.itv_session()
+    session.account_data['itv_session'] = token_data
     session.account_data['cookies'] = {}
     if session.refresh():
         kodi_utils.msg_dlg(TXT_IMPORT_SUCCESS, nickname=session.user_nickname)
     else:
-        session.save_account_data()
         kodi_utils.msg_dlg(TXT_IMPORT_FAILED_REFRESH)
+
+
+def _parse_cookie(data: str) -> dict:
+    """Read tokens from cookie data and try to show an informative message on failure."""
+    try:
+        tokens = json.loads(data)['tokens']['content']
+        return tokens
+    except (json.JSONDecodeError, TypeError):
+        logger.error("Error importing tokens from cookie:\n", exc_info=True)
+        raise errors.ParseError('Invalid, or a incomplete authentication cookie.')
+    except KeyError:
+        logger.error("Error importing tokens from cookie:\n", exc_info=True)
+        raise errors.ParseError('The cookie data is invalid, or incomplete.\n'
+                                'Are you sure you were signed in when copying the cookie?')
 
 
 @Script.register()

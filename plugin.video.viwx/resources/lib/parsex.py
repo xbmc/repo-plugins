@@ -449,12 +449,13 @@ def parse_item_type_collection(item_data):
         url += '?ind'
 
     title = item_data['title']
+    descr = '\n\n'.join(txt for txt in (item_data.get('ctaLabel', 'Collection'), item_data.get('description')) if txt)
     item = {
         'label': title,
         'art': {'thumb': item_data['imageTemplate'].format(**IMG_PROPS_THUMB),
                 'fanart': item_data['imageTemplate'].format(**IMG_PROPS_FANART)},
         'info': {'title': '[B]{}[/B]'.format(title),
-                 'plot': item_data.get('ctaLabel', 'Collection'),
+                 'plot': descr,
                  'sorttitle': sort_title(title)},
         'params': {'url': url}
     }

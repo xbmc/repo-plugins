@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.viwx" name="viwX" version="1.6.0" provider-name="Dimitri Kroon">
+<addon id="plugin.video.viwx" name="viwX" version="1.6.1" provider-name="Dimitri Kroon">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="inputstream.adaptive" version="19.0.5"/>
@@ -30,15 +30,14 @@
       <fanart>resources/fanart.png</fanart>
     </assets>
     <news>
-[B]v 1.6.0[/B]
+[B]v 1.6.1[/B]
 [B]Fixes:[/B]
-- 'Continue watching' items could sometimes have and incorrect resume point.
-- Another attempt to fix issues with signing in with email and password.
+- NO IPTV EPG.
 
-[B]New Features:[/B]
-- Possibility to import authentication tokens copied from a web browser or another instance of
-  viwX as an alternative method to authenticate when signing in with email and password fails.
-  Visit https://github.com/dimkroon/itvx-for-kodi/wiki/Sign-in-to-your-ITV-account for more info.
+[B]Changes:[/B]
+- An attempt to correct some mistakes that are easily made when copying authentication tokens from a web browser.
+- More informative error messages and logs when importing tokens fails.
+- Some other minor changes.
     </news>
     <reuselanguageinvoker>true</reuselanguageinvoker>
   </extension>

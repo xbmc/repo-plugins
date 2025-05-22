@@ -147,15 +147,15 @@ class Api:
         res = self._do_api_request("/videos", params)
         return self._map_json_to_collection(res)
 
-    def resolve_texttracks(self, uri):
-        res = self._do_api_request(uri, {})
+    def resolve_texttracks(self, uri, password=None):
+        res = self._do_api_request(uri, {"password": password})
         subtitles = res.get("data")
         for subtitle in subtitles:
             subtitle["srt"] = webvtt_to_srt(self._do_request(subtitle["link"]))
         return subtitles
 
     def resolve_media_url(self, uri, password=None):
-        # If we have a on-demand URL, we need to fetch the trailer and return the uri
+        # If we have an on-demand URL, we need to fetch the trailer and return the uri
         if uri.startswith("/ondemand/"):
             xbmc.log("plugin.video.vimeo::Api() Resolving on-demand", xbmc.LOGDEBUG)
             media_url = self._get_on_demand_trailer(uri)

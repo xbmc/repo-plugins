@@ -219,7 +219,7 @@ def resolve_list_item(handle, list_item, password=None, fetch_subtitles=False):
     list_item.setPath(resolved_url)
     text_tracks = list_item.getProperty("textTracks")
     if fetch_subtitles and text_tracks:
-        list_item = add_subtitles(list_item, text_tracks)
+        list_item = add_subtitles(list_item, text_tracks, password)
     xbmcplugin.setResolvedUrl(handle, succeeded=True, listitem=list_item)
 
 
@@ -231,8 +231,8 @@ def search(handle, query):
     xbmcplugin.endOfDirectory(handle)
 
 
-def add_subtitles(item, texttracks_url):
-    subtitles = api.resolve_texttracks(texttracks_url)
+def add_subtitles(item, texttracks_url, password=None):
+    subtitles = api.resolve_texttracks(texttracks_url, password)
     paths = []
     for subtitle in subtitles:
         file_name = "texttrack.{}.srt".format(subtitle["language"])

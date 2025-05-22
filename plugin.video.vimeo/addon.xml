@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vimeo" name="Vimeo" version="6.0.2" provider-name="jaylinski">
+<addon id="plugin.video.vimeo" name="Vimeo" version="6.0.3" provider-name="jaylinski">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.29.0"/>
@@ -16,8 +16,13 @@
         <forum>https://forum.kodi.tv/showthread.php?tid=220437</forum>
         <website>https://vimeo.com</website>
         <source>https://github.com/jaylinski/kodi-addon-vimeo</source>
-        <news>6.0.2 (2025-02-06)
+        <news>6.0.3 (2025-05-22)
+Fix crash when playing password-protected videos with subtitles enabled
+
+6.0.2 (2025-02-06)
 Handle Vimeo geo-blocking by displaying an error to affected users
+Don't add video to playlist when shared with addon
+Improve video-quality fallback for non-HLS video-formats
 
 6.0.1 (2022-02-25)
 Fixed subtitle conversion issue

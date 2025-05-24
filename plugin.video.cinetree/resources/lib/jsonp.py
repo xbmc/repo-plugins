@@ -45,8 +45,9 @@ def parse(document: str) -> dict:
         document = document.replace('{}', 'null')
 
         # Split the document in the function body, parameter and arguments list
-        funct, args = document.rsplit('}', 1)
-        _, funct = funct.split('function(', 1)
+        pos = document.rfind('}(')
+        args = document[pos + 1:]
+        _, funct = document[:pos].split('function(', 1)
 
         # Find the closing parentheses of the function definition and split the string
         # in the parameter list and function body

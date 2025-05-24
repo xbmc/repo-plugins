@@ -1,3 +1,7 @@
+v 2.0.2
+- Fix: Several lists failed to open with 'ParseError' due to some changes at Cinetree.
+- Fix: Add-on failed to open when the user was not logged in to Cinetree.
+
 v 2.0.1
   same as 2.0.0
 

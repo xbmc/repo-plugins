@@ -102,7 +102,7 @@ def get_document(url, headers=None, **kwargs):
     return resp.text
 
 
-def fetch_authenticated(funct, url, **kwargs):
+def fetch_authenticated(funct, url, ask_login=True, **kwargs):
     """Call one of the fetch function, but with user authentication
 
     Call the specified function with authentication header and return the result.
@@ -129,7 +129,7 @@ def fetch_authenticated(funct, url, **kwargs):
             # This is quite common, as tokens seem to expire rather quickly on Cinetree
             if tries == 0:
                 if account.refresh() is False:
-                    if not (kodi_utils.show_msg_not_logged_in() and account.login()):
+                    if not (ask_login and kodi_utils.show_msg_not_logged_in() and account.login()):
                         raise
             else:
                 # A NotAuthenticatedError even after a refresh or login succeeded:

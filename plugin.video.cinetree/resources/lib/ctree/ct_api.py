@@ -149,11 +149,19 @@ def get_subtitles(url: str, lang: str) -> str:
     return subt_file
 
 
-def get_watched_films():
+def get_watched_films(ask_login: bool = True):
     """Get the list of 'Mijn Films'.
 
+    :param ask_login: Whether to show a dialog asking the user to login when
+        the currently not logged in. If False, an AuthenticationError is raised
+        without asking the user to sign in.
+
     """
-    history = fetch.fetch_authenticated(fetch.get_json, 'https://api.cinetree.nl/watch-history', max_age=10)
+    history = fetch.fetch_authenticated(
+            fetch.get_json,
+            url='https://api.cinetree.nl/watch-history',
+            ask_login=ask_login,
+            max_age=10)
     sb_films, _ = storyblok.stories_by_uuids(film['assetId'] for film in history)
     sb_films = {film['uuid']: film for film in sb_films}
 
@@ -186,13 +194,22 @@ def remove_watched_film(film_uuid):
     return resp.status_code == 200
 
 
-def get_favourites(refresh=False):
-    """Films saved to the personal watch list at Cinetreee."""
+def get_favourites(refresh=False, ask_login=True):
+    """Films saved to the personal watch list at Cinetreee.
+
+    :param refresh: Whether to force requesting data from Cinetree, or just
+        return already stored data when available.
+    :param ask_login: Whether to show a dialog asking the user to login when
+        the currently not logged in. If False, an AuthenticationError is raised
+        without asking the user to sign in.
+
+"""
     global favourites
     if refresh or favourites is None:
         resp = fetch.fetch_authenticated(
                 fetch.get_json,
                 url='https://api.cinetree.nl/favorites/',
+                ask_login=ask_login,
                 max_age=0)
 
         favourites = {item['uuid']: item['createdAt'] for item in resp}

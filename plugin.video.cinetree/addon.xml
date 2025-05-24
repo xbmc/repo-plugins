@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.cinetree" name="Cinetree" version="2.0.1" provider-name="Dimitri Kroon">
+<addon id="plugin.video.cinetree" name="Cinetree" version="2.0.2" provider-name="Dimitri Kroon">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="inputstream.adaptive" version="19.0.7"/>
@@ -37,6 +37,11 @@
     </assets>
     <reuselanguageinvoker>true</reuselanguageinvoker>
     <news>
+[B]Version 2.0.2[/B]
+- Fix: Several lists failed to open with 'ParseError' due to some changes at Cinetree.
+- Fix: Add-on failed to open when the user was not logged in to Cinetree.
+
+[B]Version 2.0.1[/B]
 - New logo image.
 - Now possible to directly rent a film with your prepaid credit at Cinetree.
 - Now possible to sort listings on the date the film was added to Cinetree.

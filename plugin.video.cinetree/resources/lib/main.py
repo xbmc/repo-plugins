@@ -125,7 +125,10 @@ def _create_playables(addon, films: Iterable[ct_data.FilmItem]):
     if addon:
         addon.add_sort_methods(xbmcplugin.SORT_METHOD_UNSORTED,
                                xbmcplugin.SORT_METHOD_DATEADDED)
-    favourites = ct_api.get_favourites()
+    try:
+        favourites = ct_api.get_favourites(ask_login=False)
+    except errors.AuthenticationError:
+        favourites = {}
 
     for film_item in films:
         if film_item:
@@ -303,7 +306,10 @@ def sync_watched_state():
     since the last time it was checked.
 
     """
-    history = list(ct_api.get_watched_films())
+    try:
+        history = list(ct_api.get_watched_films(ask_login=False))
+    except errors.AuthenticationError:
+        return
     logger.debug("[sync_watched] History has %s items", len(history))
     with PersistentDict(constants.HISTORY_CACHE) as prev_watched:
         changed = {film for film in history if prev_watched.get(film.uuid) != film.playtime}

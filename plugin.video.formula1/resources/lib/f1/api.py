@@ -21,6 +21,7 @@ class Api:
     api_key = "RNoNDmjJGUFSu1Re9GfMVzJfDClaUV47"  # Extracted from public Formula 1 Android App
     api_limit = 10
     api_date_format = "%Y-%m-%dT%H:%M:%S"
+    api_locale = "en"
 
     # API endpoints
     api_path_editorial = "/v1/editorial-assemblies/videos/2BiKQUC040cmuysoQsgwcK"
@@ -89,6 +90,7 @@ class Api:
         headers = {
             "Accept-Encoding": "gzip",
             "apikey": self.api_key,
+            "locale": self.api_locale,
         }
         path = self.api_base_url + path
 

@@ -9,6 +9,7 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <lifecyclestate type="broken" lang="en_GB">Non compliant with the last and only remote provider API endpoint</lifecyclestate>
         <platform>all</platform>
         <summary lang="en_GB">Entertainment, news, documentaries, etc from catalan television www.tv3.cat</summary>
         <description lang="en_GB">Entertainment, news, documentaries, etc from catalan television www.tv3.cat. [CR]Featured shows, most viewed, A to Z programs. [CR]Live channels: TV3cat, K33, Super3, News 3/24, Esport3</description>

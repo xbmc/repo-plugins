@@ -5,7 +5,7 @@ import xbmc,xbmcgui
 #main plugin library
 
 from resources.lib import gui
-from resources.lib.art_clean import clean_cache_art
+from resources.lib import art
 from resources.lib import utils as ut
 from resources.lib import json_storage
 from resources.lib import ampache_connect
@@ -88,7 +88,7 @@ def switchServer():
     serverData["current_server"] = i_curr
     jsStorServer.save(serverData)
     #clean cache_art, the server is different, so the cache is invalid
-    clean_cache_art()
+    art.clean_cache_art()
     #if we switch, reconnect
     try:
         ampacheConnect = ampache_connect.AmpacheConnect()

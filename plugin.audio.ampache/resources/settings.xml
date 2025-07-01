@@ -6,6 +6,8 @@
 		<setting id="old-search-gui" type="bool" label="30013" default="false"/>
 		<setting id="images-long-list" type="bool" label="30014" default="false"/>
 		<setting id="auto-fullscreen" type="bool" label="30015" default="false"/>
+		<setting id="clean_art" type="action" label="30016" action="RunPlugin(plugin://plugin.audio.ampache/?mode=400)"/>
+
 	</category>
   <category label="30002">
 		<setting id="server.add" type="action" label="30020" action="RunPlugin(plugin://plugin.audio.ampache/?mode=301)"/>

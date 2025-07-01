@@ -1,7 +1,8 @@
 from resources.lib.ampache_monitor import AmpacheMonitor
-from resources.lib.art_clean import clean_cache_art, clean_settings
+from resources.lib.art_clean import init_cache, clean_settings, remove_expired
 
 def Main():
     clean_settings()
-    clean_cache_art()
+    init_cache()
+    remove_expired()
     AmpacheMonitor().run()

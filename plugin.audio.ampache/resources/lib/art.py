@@ -1,12 +1,13 @@
 from future.utils import PY2
 import os
 import cgi
-import xbmc,xbmcaddon
+import xbmc,xbmcaddon, xbmcgui
 import xbmcvfs
 
 #main plugin library
 
 from resources.lib import ampache_connect
+from resources.lib import utils as ut
 
 ampache = xbmcaddon.Addon("plugin.audio.ampache")
 
@@ -104,5 +105,22 @@ def get_art(object_id,elem_type,url=None):
 
     #xbmc.log("AmpachePlugin::get_art: id - " + object_id + " - albumArt - " + str(albumArt), xbmc.LOGDEBUG )
     return albumArt
+
+def clean_cache_art(isDialog=False):
+    if isDialog == True:
+        dialog = xbmcgui.Dialog()
+        value_int = dialog.yesno(ut.tString(30016),ut.tString(30188))
+        value = ut.int_to_strBool(value_int)
+        if value == 'false':
+            return
+
+    cacheTypes = ["album", "artist" , "song", "podcast","playlist"]
+
+    for c_type in cacheTypes:
+        cacheDirType = os.path.join( cacheDir , c_type )
+        for currentFile in os.listdir(cacheDirType):
+            #xbmc.log("Clear Cache Art " + str(currentFile),xbmc.LOGDEBUG)
+            pathDel = os.path.join( cacheDirType, currentFile)
+            os.remove(pathDel)
 
 

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
 <addon id="plugin.audio.ampache" version="3.2.0+matrix.1" name="Ampache" provider-name="lusum">
     <requires>
         <import addon="script.module.future" version="1.0.0"/>

@@ -30,6 +30,7 @@ class ItvSession:
     def __init__(self):
         self._user_id = ''
         self._user_nickname = ''
+        self._tv_region = None
         self._expire_time = 0
         self.account_data = {}
         self.read_account_data()
@@ -63,6 +64,10 @@ class ItvSession:
     def user_nickname(self):
         return self._user_nickname or ''
 
+    @property
+    def tv_region(self):
+        return self._tv_region or ''
+
     def read_account_data(self):
         session_file = os.path.join(utils.addon_info.profile, "itv_session")
         logger.debug("Reading account data from file: %s", session_file)
@@ -82,7 +87,7 @@ class ItvSession:
         else:
             self.account_data = acc_data
         access_token = self.account_data.get('itv_session', {}).get('access_token')
-        self._user_id, self._user_nickname, self._expire_time = parse_token(access_token)
+        self.parse_token(access_token)
 
     def save_account_data(self):
         session_file = os.path.join(utils.addon_info.profile, "itv_session")
@@ -155,7 +160,7 @@ class ItvSession:
             raise
         else:
             logger.info("Sign in successful.")
-            self._user_id, self._user_nickname, self._expire_time = parse_token(session_data.get('access_token'))
+            self.parse_token(session_data.get('access_token'))
             self.save_account_data()
             return True
 
@@ -181,7 +186,7 @@ class ItvSession:
             sess_cookie_str = build_cookie(session_data)
             self.account_data['cookies']['Itv.Session'] = sess_cookie_str
             self.account_data['refreshed'] = time.time()
-            self._user_id, self._user_nickname, self._expire_time = parse_token(session_data.get('access_token'))
+            self.parse_token(session_data.get('access_token'))
             self.save_account_data()
             logger.info("Tokens refreshed.")
             return True
@@ -199,30 +204,36 @@ class ItvSession:
         self.save_account_data()
         self._user_id = None
         self._user_nickname = None
+        self._tv_region = None
         return True
 
+    def parse_token(self, token):
+        """Extract user_id, user nickname, region and token expiration time obtained from an access token.
 
-def parse_token(token):
-    """Return user_id, user nickname and token expiration time obtained from an access token.
-
-    Token has other fields which we currently don't parse, like:
-    accountProfileIdInUse
-    auth_time
-    scope
-    nonce
-    iat
-    """
-    import binascii
-    try:
-        token_parts = token.split('.')
-        # Since some padding errors have been observed with refresh tokens, add the maximum just
-        # to be sure padding errors won't occur. a2b_base64 automatically removes excess padding.
-        token_data = binascii.a2b_base64(token_parts[1] + '==')
-        data = json.loads(token_data)
-        return data['sub'], data['name'], data['exp']
-    except (KeyError, AttributeError, IndexError, binascii.Error) as err:
-        logger.error("Failed to parse token: '%r'", err)
-        return None, None, int(time.time()) + time.timezone
+        Token has other fields which we currently don't parse, like:
+        accountProfileIdInUse
+        auth_time
+        scope
+        nonce
+        iat
+        """
+        import binascii
+        from resources.lib import region
+        try:
+            token_parts = token.split('.')
+            # Apply the maximum padding; a2b_base64 ignores excess padding.
+            token_data = binascii.a2b_base64(token_parts[1] + '==')
+            data = json.loads(token_data)
+            self._user_id = data['sub']
+            self._user_nickname = data['name']
+            self._tv_region = region.tv_region(data['region'])
+            self._expire_time = data['exp'] - 1800
+        except (KeyError, AttributeError, IndexError, binascii.Error, json.JSONDecodeError) as err:
+            logger.error("Failed to parse token: '%r'", err)
+            self._user_id = None
+            self._user_nickname = None
+            self._tv_region = None
+            self._expire_time = int(time.time()) + time.timezone
 
 
 def build_cookie(session_data):
@@ -291,6 +302,8 @@ def fetch_authenticated(funct, url, login=True, **kwargs):
                     sys.exit(1)
                 else:
                     raise
+    # Just to silence linters
+    return None
 
 
 def convert_session_data(acc_data: dict) -> dict:

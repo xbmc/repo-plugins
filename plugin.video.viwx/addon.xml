@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.viwx" name="viwX" version="1.6.2" provider-name="Dimitri Kroon">
+<addon id="plugin.video.viwx" name="viwX" version="1.7.0" provider-name="Dimitri Kroon">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="inputstream.adaptive" version="19.0.5"/>
     <import addon="script.module.requests" version="2.31.0"/>
-    <import addon="script.module.pytz" version="2023.3"/>
+    <import addon="script.module.backports.zoneinfo" version="0.2.1"/>
+    <import addon="script.module.tzdata" version="0.2.1"/>
     <import addon="script.module.tzlocal" version="5.0.1"/>
     <import addon="script.module.codequick" version="1.0.3"/>
     <import addon="script.module.inputstreamhelper" version="0.6.1"/>
@@ -16,7 +17,7 @@
     <platform>all</platform>
     <summary lang="en_GB">Live TV and video on-demand from ITVX (UK only, ITVX account required)</summary>
     <description lang="en_GB">
-      A Vibrant ITVX Web eXperience. Play live TV and video on-demand from the webservices of British broadcaster ITV. An ITVX account is required, either free or premium, to play any stream.[CR][CR]This add-on is not developed by ITV and is no way affiliated with, or endorsed by ITV.
+      A Vibrant ITVX Web eXperience. Play live TV and video on-demand from the webservices of British broadcaster ITV. An ITVX account is required, either free or premium, to play any stream.[CR][CR]This add-on is not developed by ITV and is in no way affiliated with, or endorsed by ITV.
     </description>
     <disclaimer lang="en_GB">
       This addon is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -30,9 +31,13 @@
       <fanart>resources/fanart.png</fanart>
     </assets>
     <news>
-[B]v 1.6.2[/B]
+[B]v 1.7.0[/B]
+[B]New Features:[/B]
+- Optional full HD streams - must be enabled in settings, off by default.
+
 [B]Fixes:[/B]
-- Logging in to IVX account with username and password works again.
+- Search with live items in the results failed.
+- Some episode listings failed.
     </news>
     <reuselanguageinvoker>true</reuselanguageinvoker>
   </extension>

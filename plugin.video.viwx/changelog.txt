@@ -1,3 +1,11 @@
+v 1.7.0
+New Features:
+- Optional full HD streams - must be enabled in settings, off by default.
+
+Fixes:
+- Search with live items in the results failed.
+- Some episode listings failed.
+
 v 1.6.2
 Fixes:
 - Logging in to IVX account with username and password works again.

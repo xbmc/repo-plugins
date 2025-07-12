@@ -10,14 +10,13 @@ import typing
 import string
 import sys
 
-import pytz
 import requests
 import xbmc
 import xbmcplugin
 from xbmcgui import ListItem
 
 from codequick import Route, Resolver, Listitem, Script, run as cc_run
-from codequick.support import logger_id, build_path, dispatcher
+from codequick.support import logger_id, dispatcher
 
 from resources.lib import itv, itv_account, itvx
 from resources.lib import utils
@@ -199,16 +198,16 @@ def root(_):
 @Route.register(content_type='videos')
 def sub_menu_my_itvx(_):
     # Ensure to add at least one parameter to persuade dynamic listing that we actually call the list.
-    yield Listitem.from_dict(generic_list, 'My List', params={'list_type':'mylist', 'filter_char': None})
-    yield Listitem.from_dict(generic_list, 'Continue Watching', params={'list_type':'watching', 'filter_char': None})
+    yield Listitem.from_dict(generic_list, 'My List', params={'list_type': 'mylist', 'filter_char': None})
+    yield Listitem.from_dict(generic_list, 'Continue Watching', params={'list_type': 'watching', 'filter_char': None})
     try:
         last_programme = itvx.because_you_watched(itv_account.itv_session().user_id, name_only=True)
         if last_programme:
-            yield Listitem.from_dict(generic_list, 'Because You Watched ' + last_programme, params={'list_type':'byw'})
+            yield Listitem.from_dict(generic_list, 'Because You Watched ' + last_programme, params={'list_type': 'byw'})
     except Exception as e:
         # Log the error, but don't let the whole submenu fail because of this.
         logger.error("Error getting the last watched programme: %s\n", e, exc_info=True)
-    yield Listitem.from_dict(generic_list, 'Recommended for You', params={'list_type':'recommended'})
+    yield Listitem.from_dict(generic_list, 'Recommended for You', params={'list_type': 'recommended'})
 
 
 def _my_list_context_mnu(list_item, programme_id, refresh=True, retry=True):
@@ -265,14 +264,7 @@ def generic_list(addon, list_type='mylist', filter_char=None, page_nr=0):
 
 @Route.register(content_type='videos')
 def sub_menu_live(_):
-    try:
-        local_tz = pytz.timezone(kodi_utils.get_system_setting('locale.timezone'))
-    except ValueError:
-        # To be Matrix compatible
-        from tzlocal import get_localzone
-        local_tz = get_localzone()
-
-    tv_schedule = itvx.get_live_channels(local_tz)
+    tv_schedule = itvx.get_live_channels(kodi_utils.local_timezone())
 
     for item in tv_schedule:
         chan_name = item['name']
@@ -317,22 +309,20 @@ def sub_menu_live(_):
 
         # add 'play from the start' context menu item for channels that support this feature
         if program_start_time:
-            cmd = 'PlayMedia({}, noresume)'.format(
-                build_path(play_stream_live, play_from_start=True, **callback_kwargs))
-            li.context.append((Script.localize(TXT_PLAY_FROM_START), cmd))
+            li.context.append(parsex.ctx_mnu_watch_from_start(chan_name, program_start_time))
         yield li
 
 
 @Route.register(content_type='videos')
 def list_collections(_):
     """A list of all available collections."""
-    url ='https://www.itv.com'
+    url = 'https://www.itv.com'
     main_page = itvx.get_page_data(url, cache_time=3600)
     for slider in main_page['shortFormSliderContent']:
         if slider['key'] == 'newsShortForm':
             # News is already on the home page by default.
             continue
-        item  = parsex.parse_short_form_slider(slider)
+        item = parsex.parse_short_form_slider(slider)
         if item:
             yield Listitem.from_dict(list_collection_content, **item['show'])
 
@@ -340,7 +330,6 @@ def list_collections(_):
         item = parsex.parse_editorial_slider(url, slider)
         if item:
             yield Listitem.from_dict(list_collection_content, **item['show'])
-
 
 
 @Route.register(cache_ttl=-1, content_type='videos')
@@ -460,6 +449,9 @@ def do_search(addon, search_query):
         if result is None:
             continue
         li = Listitem.from_dict(callb_map.get(result['type'], play_title), **result['show'])
+        ctx_mnus = result.get('ctx_mnu')
+        if ctx_mnus:
+            li.context.extend(ctx_mnus)
         _my_list_context_mnu(li, result['programme_id'], refresh=False)
         yield li
 
@@ -470,16 +462,6 @@ def create_dash_stream_item(name: str, manifest_url, key_service_url, resume_tim
 
     logger.debug('dash manifest url: %s', manifest_url)
     logger.debug('dash key service url: %s', key_service_url)
-
-    # Ensure to get a fresh hdntl cookie as they expire after 12 or 24 hrs.
-    # Use a plain requests.get() to prevent sending an existing hdntl cookie,
-    # and other cookies are not required.
-    resp = requests.get(url=manifest_url,
-                        allow_redirects=False,
-                        headers={'user-agent': fetch.USER_AGENT},
-                        timeout=fetch.WEB_TIMEOUT)
-    hdntl_cookie = resp.cookies.get('hdntl', '')
-    logger.debug("Received hdntl cookie: %s", hdntl_cookie)
 
     PROTOCOL = 'mpd'
     DRM = 'com.widevine.alpha'
@@ -504,8 +486,7 @@ def create_dash_stream_item(name: str, manifest_url, key_service_url, resume_tim
             'Origin=https://www.itv.com&'
             'Sec-Fetch-Dest=empty&'
             'Sec-Fetch-Mode=cors&'
-            'Sec-Fetch-Site=same-site&'
-            'cookie=', 'hdntl=', hdntl_cookie))
+            'Sec-Fetch-Site=same-site'))
 
     play_item.setProperties({
         'inputstream': is_helper.inputstream_addon,
@@ -547,13 +528,21 @@ def play_stream_live(addon, channel, url=None, title=None, start_time=None, play
         url = 'https://simulcast.itv.com/playlist/itvonline/' + channel
         logger.info("Created live url from channel name: '%s'", url)
 
+    tv_region = addon.setting['tv_region']
+    if tv_region == 'by_account':
+        tv_region = itv_account.itv_session().tv_region
+    if tv_region:
+        # Only affects freeview streams, is currently ignored by web.
+        url = url + '?region=' + tv_region
+
     if addon.setting['live_play_from_start'] != 'true' and not play_from_start:
         start_time = None
-
+    fhd_enabled = addon.setting['FHD_enabled'] == 'true'
     manifest_url, key_service_url, subtitle_url = itv.get_live_urls(url,
                                                                     title,
                                                                     start_time,
-                                                                    play_from_start)
+                                                                    play_from_start,
+                                                                    fhd_enabled)
     list_item = create_dash_stream_item(channel, manifest_url, key_service_url)
     if list_item:
         if start_time and ('?t=' in manifest_url or '&t=' in manifest_url):
@@ -568,8 +557,9 @@ def play_stream_live(addon, channel, url=None, title=None, start_time=None, play
 def play_stream_catchup(plugin, url, name, set_resume_point=False):
 
     logger.info('play catchup stream - %s  url=%s', name, url)
+    fhd_enabled = plugin.setting['FHD_enabled'] == 'true'
     try:
-        manifest_url, key_service_url, subtitle_url, stream_type, production_id = itv.get_catchup_urls(url)
+        manifest_url, key_service_url, subtitle_url, stream_type, production_id = itv.get_catchup_urls(url, fhd_enabled)
         logger.debug('dash subtitles url: %s', subtitle_url)
     except AccessRestrictedError:
         logger.info('Stream only available with premium account')

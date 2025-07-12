@@ -16,24 +16,29 @@ from codequick.support import build_path
 # Logo URLs from now/next.
 CHANNELS = {
     'ITV1': {'id': 'viwx.itv1',
-            'name': 'ITV1',
-            'logo': 'https://images.ctfassets.net/bd5zurrrnk1g/54OefyIkbiHPMJUYApbuUX/7dfe2176762fd8ec10f77cd61a318b07/itv1.png?w=512',
-            'preset': 1},
+             'name': 'ITV1',
+             'logo': 'https://images.ctfassets.net/bd5zurrrnk1g/'
+                     '54OefyIkbiHPMJUYApbuUX/7dfe2176762fd8ec10f77cd61a318b07/itv1.png?w=512',
+             'preset': 1},
     'ITV2': {'id': 'viwx.itv2',
              'name': 'ITV2',
-             'logo': 'https://images.ctfassets.net/bd5zurrrnk1g/aV9MOsYOMEXHx3iw0p4tk/57b35173231c4290ff199ef8573367ad/itv2.png?w=512',
+             'logo': 'https://images.ctfassets.net/bd5zurrrnk1g/'
+                     'aV9MOsYOMEXHx3iw0p4tk/57b35173231c4290ff199ef8573367ad/itv2.png?w=512',
              'preset': 2},
     'ITVBe': {'id': 'viwx.itvbe',
               'name': 'ITVBe',
-              'logo': 'https://images.ctfassets.net/bd5zurrrnk1g/6Mul5JVrb06pRu8bNDgIAe/b5309fa32322cc3db398d25e523e2b2e/itvBe.png?w=512',
+              'logo': 'https://images.ctfassets.net/bd5zurrrnk1g/'
+                      '6Mul5JVrb06pRu8bNDgIAe/b5309fa32322cc3db398d25e523e2b2e/itvBe.png?w=512',
               'preset': 3},
     'ITV3': {'id': 'viwx.itv3',
              'name': 'ITV3',
-             'logo': 'https://images.ctfassets.net/bd5zurrrnk1g/39fJAu9LbUJptatyAs8HkL/80ac6eb141104854b209da946ae7a02f/itv3.png?w=512',
+             'logo': 'https://images.ctfassets.net/bd5zurrrnk1g/'
+                     '39fJAu9LbUJptatyAs8HkL/80ac6eb141104854b209da946ae7a02f/itv3.png?w=512',
              'preset': 4},
     'ITV4': {'id': 'viwx.itv4',
              'name': 'ITV4',
-             'logo': 'https://images.ctfassets.net/bd5zurrrnk1g/6Dv76O9mtWd6m7DzIavtsf/b3d491289679b8030eae7b4a7db58f2d/itv4.png?w=512',
+             'logo': 'https://images.ctfassets.net/bd5zurrrnk1g/'
+                     '6Dv76O9mtWd6m7DzIavtsf/b3d491289679b8030eae7b4a7db58f2d/itv4.png?w=512',
              'preset': 5}
 }
 
@@ -80,8 +85,8 @@ class IPTVManager:
         from resources.lib.itvx import get_full_schedule
 
         schedules = get_full_schedule()
-        epg = {CHANNELS[k]['id']: v for k, v in schedules.items()}
-        return dict(version=1, epg=epg)
+        epg_data = {CHANNELS[k]['id']: v for k, v in schedules.items()}
+        return dict(version=1, epg=epg_data)
 
 
 @Script.register
@@ -96,7 +101,7 @@ def channels(_, port):
 @Script.register
 def epg(_, port):
     try:
-         IPTVManager(int(port)).send_epg()
+        IPTVManager(int(port)).send_epg()
     except Exception as err:
         # Catch all errors to prevent codequick showing an error message
         xbmc.log("[viwX] Error in iptvmanager.epg: {!r}.".format(err))

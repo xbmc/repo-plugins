@@ -1,0 +1,77 @@
+# XBMC Media Center language file
+# Addon Name: Zophar's Domain
+# Addon id: plugin.audio.zophar
+# Addon Provider: Sergey Dudanov
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: sergey.dudanov@gmail.com\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Sergey Dudanov\n"
+"Language-Team: Russian (https://kodi.weblate.cloud/projects/kodi-add-ons-music/plugin-audio-zophar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Consoles"
+msgstr "Игровые консоли"
+
+msgctxt "#30001"
+msgid "Computers"
+msgstr "Компьютеры"
+
+msgctxt "#30002"
+msgid "Music By Letter"
+msgstr "По алфавиту"
+
+msgctxt "#30003"
+msgid "Info"
+msgstr "Прочее"
+
+msgctxt "#30004"
+msgid "Search"
+msgstr "Поиск"
+
+msgctxt "#30005"
+msgid "Random Game"
+msgstr "Случайная игра"
+
+msgctxt "#30006"
+msgid "Top 100 Games"
+msgstr "Лучшие 100 игр"
+
+msgctxt "#30007"
+msgid "Developers"
+msgstr "Разработчики"
+
+msgctxt "#30008"
+msgid "Publishers"
+msgstr "Издатели"
+
+msgctxt "#30009"
+msgid "Music by Year"
+msgstr "По годам"
+
+# Settings dialog
+
+msgctxt "#30101"
+msgid "Prefer lossless format (FLAC)"
+msgstr "Предпочитать формат без потерь (FLAC)"
+
+# Search dialog
+
+msgctxt "#30200"
+msgid "Enter the search string"
+msgstr "Введите строку для поиска"
+
+msgctxt "#30201"
+msgid "Platform"
+msgstr "Платформа"
+
+msgctxt "#30202"
+msgid "Select platform"
+msgstr "Выберите платформу"

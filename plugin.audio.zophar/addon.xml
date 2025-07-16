@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.zophar" name="Zophar's Domain" version="1.0.0" provider-name="Sergey Dudanov">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+        <import addon="script.module.beautifulsoup4" version="4.12.2"/>
+        <import addon="script.module.requests" version="2.31.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <language>en</language>
+        <summary lang="en_GB">Zophar's Domain Music Add-on</summary>
+        <summary lang="ru_RU">Дополнение Zophar's Domain Music</summary>
+        <license>MIT</license>
+        <website>https://www.zophar.net/</website>
+        <email>sergey.dudanov@gmail.com</email>
+        <description lang="en_GB">Listening classic games soundtracks from Zophar's Domain site.</description>
+        <description lang="ru_RU">Прослушивание саундтреков классических игр с сайта Zophar's Domain.</description>
+        <platform>all</platform>
+        <source>https://github.com/dudanov/kodi.plugin.audio.zophar</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/screenshot-1.jpg</screenshot>
+            <screenshot>resources/screenshot-2.jpg</screenshot>
+            <screenshot>resources/screenshot-3.jpg</screenshot>
+            <screenshot>resources/screenshot-4.jpg</screenshot>
+        </assets>
+    </extension>
+</addon>

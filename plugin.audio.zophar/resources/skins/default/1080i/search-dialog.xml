@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<defaultcontrol>100</defaultcontrol>
+	<include>Animation_DialogPopupOpenClose</include>
+	<controls>
+		<control type="group">
+			<width>800</width>
+			<height>390</height>
+			<centerleft>50%</centerleft>
+			<centertop>50%</centertop>
+			<include>Animation_DialogPopupVisible</include>
+			<include content="DialogBackgroundCommons">
+				<param name="header_label" value="$LOCALIZE[137]" />
+				<param name="width" value="800" />
+				<param name="height" value="390" />
+			</include>
+			<control type="edit" format="string" id="100">
+				<left>50</left>
+				<top>100</top>
+				<width>700</width>
+				<height>100</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<label />
+				<onup>102</onup>
+				<ondown>101</ondown>
+				<hinttext>$ADDON[plugin.audio.zophar 30200]</hinttext>
+			</control>
+			<control type="grouplist">
+				<left>50</left>
+				<top>180</top>
+				<width>700</width>
+				<height>200</height>
+				<orientation>vertical</orientation>
+				<itemgap>dialogbuttons_itemgap</itemgap>
+				<onup>100</onup>
+				<ondown>100</ondown>
+				<include content="DefaultDialogButton">
+					<param name="id" value="101" />
+					<param name="width" value="700" />
+					<param name="label" value="$INFO[Window().Property(platform),$ADDON[plugin.audio.zophar 30201]: ]" />
+				</include>
+				<include content="DefaultDialogButton">
+					<param name="id" value="102" />
+					<param name="width" value="700" />
+					<param name="label" value="$LOCALIZE[137]" />
+					<param name="enable" value="false" />
+				</include>
+			</control>
+		</control>
+	</controls>
+</window>

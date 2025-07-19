@@ -9,7 +9,6 @@
 import time
 import logging
 
-import pytz
 import requests
 import xbmc
 
@@ -24,13 +23,15 @@ from . import cache
 from . import itv_account
 
 from .itv import get_live_schedule
+from .utils import ZoneInfo
 
 
 logger = logging.getLogger(logger_id + '.itvx')
 
 
-FEATURE_SET = 'hd,progressive,single-track,mpeg-dash,widevine,widevine-download,inband-ttml,hls,aes,inband-webvtt,outband-webvtt,inband-audio-description'
-PLATFORM_TAG = 'mobile'
+FEATURE_SET = ('hd,progressive,single-track,mpeg-dash,widevine,widevine-download,'
+               'inband-ttml,hls,aes,inband-webvtt,outband-webvtt,inband-audio-description')
+PLATFORM_TAG = 'ctv'
 
 
 def get_page_data(url, cache_time=None):
@@ -61,9 +62,9 @@ def get_now_next_schedule(local_tz=None):
     Present start time conform Kodi's time zone setting.
     """
     if local_tz is None:
-        local_tz = pytz.timezone('Europe/London')
+        local_tz = ZoneInfo('Europe/London')
 
-    utc_tz = pytz.utc
+    utc_tz = timezone.utc
     # Use local time format without seconds. Fix weird kodi formatting for 12-hour clock.
     time_format = xbmc.getRegion('time').replace(':%S', '').replace('%I%I:', '%I:')
 
@@ -85,7 +86,7 @@ def get_now_next_schedule(local_tz=None):
                 logger.info("No Now/Next info available for channel '%s': %s", channel.get('id'), prog)
                 continue
 
-            details = ': '.join(s for s in(displ_title, prog.get('detailedDisplayTitle')) if s)
+            details = ': '.join(s for s in (displ_title, prog.get('detailedDisplayTitle')) if s)
             start_t = prog['start'][:19]
             utc_start = datetime(*(time.strptime(start_t, '%Y-%m-%dT%H:%M:%S')[0:6]), tzinfo=utc_tz)
 
@@ -116,7 +117,7 @@ def get_live_channels(local_tz=None):
         return cached_schedule
 
     if local_tz is None:
-        local_tz = pytz.timezone('Europe/London')
+        local_tz = ZoneInfo('Europe/London')
 
     schedule = get_now_next_schedule(local_tz)
     main_schedule = get_live_schedule(6, local_tz=local_tz)
@@ -183,7 +184,7 @@ def collection_content(url=None, slider=None, hide_paid=False):
     is not None, return the contents of that particular slider on the collection page.
 
     """
-    uk_tz = pytz.timezone('Europe/London')
+    uk_tz = ZoneInfo('Europe/London')
     time_fmt = ' '.join((xbmc.getRegion('dateshort'), xbmc.getRegion('time')))
     is_main_page = url == 'https://www.itv.com'
 
@@ -282,7 +283,7 @@ def episodes(url, use_cache=False, prefer_bsl=False):
     programme_title = programme['title']
     programme_thumb = programme['image'].format(**parsex.IMG_PROPS_THUMB)
     programme_fanart = programme['image'].format(**parsex.IMG_PROPS_FANART)
-    description  = programme.get('longDescription') or programme.get('description') or programme_title
+    description = programme.get('longDescription') or programme.get('description') or programme_title
     if 'FREE' in programme['tier']:
         brand_description = description
     else:
@@ -367,7 +368,7 @@ def category_news_content(url, sub_cat, rail=None, hide_paid=False):
     page_data = get_page_data(url, cache_time=900)
     news_sub_cats = page_data['data']
 
-    uk_tz = pytz.timezone('Europe/London')
+    uk_tz = ZoneInfo('Europe/London')
     time_fmt = ' '.join((xbmc.getRegion('dateshort'), xbmc.getRegion('time')))
 
     # A normal listing of TV shows in the category News, like normal category content
@@ -419,7 +420,6 @@ def get_playlist_url_from_episode_page(page_url, prefer_bsl=False):
         return episode.get('bslPlaylistUrl') or episode['playlistUrl']
     else:
         return episode['playlistUrl']
-
 
 
 def search(search_term, hide_paid=False):
@@ -566,14 +566,14 @@ def recommended(user_id, hide_paid=False):
     """
     recommended_url = 'https://recommendations.prd.user.itv.com/recommendations/homepage/' + user_id
 
-    recommended = cache.get_item(recommended_url)
-    if not recommended:
+    recom_dta = cache.get_item(recommended_url)
+    if not recom_dta:
         req_params = {'features': FEATURE_SET, 'platform': PLATFORM_TAG, 'size': 24, 'version': 3}
-        recommended = fetch.get_json(recommended_url, params=req_params)
-        if not recommended:
+        recom_dta = fetch.get_json(recommended_url, params=req_params)
+        if not recom_dta:
             return None
-        cache.set_item(recommended_url, recommended, 43200)
-    return list(filter(None, (parsex.parse_my_list_item(item, hide_paid) for item in recommended)))
+        cache.set_item(recommended_url, recom_dta, 43200)
+    return list(filter(None, (parsex.parse_my_list_item(item, hide_paid) for item in recom_dta)))
 
 
 def because_you_watched(user_id, name_only=False, hide_paid=False):
@@ -582,17 +582,112 @@ def because_you_watched(user_id, name_only=False, hide_paid=False):
     Returns 204 - No Content when user ID is invalid. Doesn't require authentication.
     """
     if not user_id:
-        return
+        return None
     byw_url = 'https://recommendations.prd.user.itv.com/recommendations/byw/' + user_id
     byw = cache.get_item(byw_url)
     if not byw:
         req_params = {'features': FEATURE_SET, 'platform': 'ctv', 'size': 12, 'version': 2}
         byw = fetch.get_json(byw_url, params=req_params)
         if not byw:
-            return
+            return None
         cache.set_item(byw_url, byw, 1800)
 
     if name_only:
         return byw['watched_programme']
     else:
         return list(filter(None, (parsex.parse_my_list_item(item, hide_paid) for item in byw['recommendations'])))
+
+
+web_req_data = {
+    'client': {
+        'id': 'browser',
+        'service': 'itv.x',
+        'supportsAdPods': False,
+        'version': '4.1'
+    },
+    'device': {
+        'manufacturer': 'Firefox',
+        'model': fetch.USER_AGENT_VERSION,
+        'os': {
+            'name': 'Linux',
+            'type': 'desktop',
+            'version': 'x86_64'
+        }
+    },
+    'user': {
+        'token': ''
+    },
+    'variantAvailability': {
+        'drm': {
+            'maxSupported': 'L3',
+            'system': 'widevine'
+        },
+        'featureset': None,
+        'platformTag': 'dotcom',
+        'player': 'dash'
+    }
+}
+
+freeview_req_data = {
+    "client": {
+        "id": "freeview",
+        "isp": {},
+        "supportsAdPods": False,
+        "appVersion": "3.564.0",
+        "version": "3.564.0",
+        "service": "itv.x",
+        "thirdPartyPaymentModel": "free",
+        "ssaiClientSdkVersion": "3"
+    },
+    "device": {
+        "manufacturer": "LG",
+        "model": "oled77g36la",
+        "os": {
+            "name": "oled77g36la"
+        }
+    },
+    "user": {"token": ""},
+    "variantAvailability": {
+        "drm": {
+            'maxSupported': 'L3',
+            'system': 'widevine'
+        },
+        "featureset": None,
+        "platformTag": "ctv"
+    }
+}
+
+
+features_live = {
+    "min": ["mpeg-dash", "widevine",],
+    "max": ["hd", "mpeg-dash", "widevine", "inband-webvtt"]
+}
+
+features_catchup = ['mpeg-dash', 'widevine', 'outband-webvtt', 'hd', 'single-track']
+
+
+def _request_stream_data(url, stream_type='live', full_hd=False):
+    from .itv_account import itv_session, fetch_authenticated
+    session = itv_session()
+
+    if full_hd:
+        stream_req_data = freeview_req_data
+    else:
+        stream_req_data = web_req_data
+
+    stream_req_data['user']['token'] = session.access_token
+
+    if stream_type == 'live':
+        accept_type = 'application/vnd.itv.online.playlist.sim.v3+json'
+        stream_req_data['variantAvailability']['featureset'] = features_live
+    else:
+        accept_type = 'application/vnd.itv.vod.playlist.v4+json'
+        stream_req_data['variantAvailability']['featureset'] = features_catchup
+
+    stream_data = fetch_authenticated(
+        fetch.post_json, url,
+        data=stream_req_data,
+        headers={'Accept': accept_type})
+
+    return stream_data
+

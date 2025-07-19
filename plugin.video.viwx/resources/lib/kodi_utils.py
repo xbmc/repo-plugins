@@ -13,7 +13,7 @@ import xbmcgui
 from codequick import Script, utils
 from codequick.support import addon_data, logger_id
 
-from . utils import addon_info
+from . utils import addon_info, ZoneInfo
 
 logger = logging.getLogger(logger_id + '.kodi_utils')
 
@@ -67,7 +67,7 @@ def show_msg_not_logged_in():
             Script.localize(MSG_LOGIN),
             nolabel=Script.localize(BTN_TXT_CANCEL),
             yeslabel=Script.localize(TXT_LOGIN_NOW))
-    logger.debug("Dialog 'Open settings to login' result: {}".format('YES' if result else 'NO' ))
+    logger.debug("Dialog 'Open settings to login' result: {}".format('YES' if result else 'NO'))
     return result
 
 
@@ -129,12 +129,28 @@ def msg_dlg(msg, title=None, **kwargs):
 
 
 def get_system_setting(setting_id):
-    json_str = '{{"jsonrpc": "2.0", "method": "Settings.GetSettingValue", "params": ["{}"], "id": 1}}'.format(setting_id)
+    json_str = ('{{"jsonrpc": "2.0", "method": "Settings.GetSettingValue", "params": ["{}"], "id": 1}}'.
+                format(setting_id))
     response = xbmc.executeJSONRPC(json_str)
     data = json.loads(response)
     try:
         return data['result']['value']
     except KeyError:
-        msg  = data.get('message') or "Failed to get setting"
+        msg = data.get('message') or "Failed to get setting"
         logger.error("get_system_setting failed for setting_id '%s': '%s'", setting_id, msg)
         raise ValueError('system setting error: {}'.format(msg))
+
+
+_local_timezone = None
+
+
+def local_timezone() -> ZoneInfo:
+    global _local_timezone
+    if not _local_timezone:
+        try:
+            _local_timezone = ZoneInfo(get_system_setting('locale.timezone'))
+        except ValueError:
+            # To be Matrix compatible
+            from tzlocal import get_localzone
+            _local_timezone = get_localzone()
+    return _local_timezone

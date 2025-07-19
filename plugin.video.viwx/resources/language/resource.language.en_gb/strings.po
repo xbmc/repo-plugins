@@ -73,6 +73,10 @@ msgctxt "#30121"
 msgid "Offer to play from the start"
 msgstr ""
 
+msgctxt "#30122"
+msgid "TV region"
+msgstr ""
+
 msgctxt "#30131"
 msgid "Install IPTV Manager"
 msgstr ""
@@ -83,6 +87,14 @@ msgstr ""
 
 msgctxt "#30133"
 msgid "Go to IPTV Manager settings"
+msgstr ""
+
+msgctxt "#30140"
+msgid "Stream quality"
+msgstr ""
+
+msgctxt "#30141"
+msgid "Enable full HD (1080p)"
 msgstr ""
 
 msgctxt "#30200"
@@ -134,9 +146,9 @@ msgid "When a category or collection has more items than specified here, items w
 msgstr ""
 
 msgctxt "#30311"
-msgid "Target of itvX logging.\n"
+msgid "Target of viwX logging.\n"
 "Default is the standard 'Kodi log' - nothing will be logged until 'debug logging' is enabled in Kodi's settings.\n"
-"'File' logs to itvX's own log file stored in the addon's user data directory. Only of use if you know where to "
+"'File' logs to viwX's own log file stored in the addon's user data directory. Only of use if you know where to "
 "find that file.\n"
 "'No logging' if you want to ensure the addon spends as little time on logging as possible."
 msgstr ""
@@ -146,9 +158,19 @@ msgid "Show a dialog with the option to play the current program from the start 
 "When disabled 'play form the start' is still available on the context menu of the main live channels."
 msgstr ""
 
+msgctxt "#30322"
+msgid "Region for local news and weather on ITV1.\n"
+"Only available when Full HD is enabled."
+msgstr ""
+
 msgctxt "#30332"
 msgid "It may take a few hours before this setting takes effect.\n"
 "To force an update, select 'Refresh channels and guide now' in IPTV Manager's settings. You may also need te restart Kodi."
+msgstr ""
+
+msgctxt "#30341"
+msgid "May not work on all devices.\n"
+"When streams don't play, switch off to revert back to 720p HD."
 msgstr ""
 
 msgctxt "#30401"

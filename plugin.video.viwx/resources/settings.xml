@@ -3,6 +3,13 @@
     <section id="plugin.video.viwx">
         <!-- General -->
         <category id="general" label="30100" help="">
+			<group id="grp-strm-quality" label="30140">
+				<setting id="FHD_enabled" label="30141" type="boolean" help="30341">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
 			<group id="grp1" label="30101">
 				<setting id="subtitles_show" label="30102" type="boolean" help="30302">
 					<level>0</level>
@@ -57,6 +64,31 @@
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle" />
+				</setting>
+				<setting id="tv_region" label="30122" type="string" help="30322">
+					<level>0</level>
+					<default>by_account</default>
+					<constraints>
+						<options>
+                            <option label="By ITVX account">by_account</option>
+							<option label="Default">london</option>
+							<option label="London">london</option>
+							<option label="Meridian">meridian_east</option>
+							<option label="Central">central_west</option>
+							<option label="Wales">wales</option>
+							<option label="Granada">granada</option>
+							<option label="Ulster">ulster</option>
+						</options>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable" setting="FHD_enabled">true</dependency>
+					</dependencies>
+					<control type="list" format="string">
+						<heading>30122</heading>
+						<multiselect>false</multiselect>
+						<hidevalue>false</hidevalue>
+					</control>
 				</setting>
 				<setting id="install_iptvmanager" label="30131" type="action" help="">
 					<level>0</level>

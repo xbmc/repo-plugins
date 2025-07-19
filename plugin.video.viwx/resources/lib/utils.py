@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------------------------------------------------
-#  Copyright (c) 2022-2024 Dimitri Kroon.
+#  Copyright (c) 2022-2025 Dimitri Kroon.
 #  This file is part of plugin.video.viwx.
 #  SPDX-License-Identifier: GPL-2.0-or-later
 #  See LICENSE.txt
@@ -10,6 +10,11 @@ import logging
 import time
 import string
 from datetime import datetime
+
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:
+    from backports.zoneinfo import ZoneInfo
 
 from xbmcvfs import translatePath
 import xbmcaddon
@@ -34,7 +39,7 @@ logger = logging.getLogger(logger_id + '.utils')
 addon_info = AddonInfo()
 
 
-def get_os():
+def get_os() -> tuple[str, str]:
     import platform
     return platform.system(), platform.machine()
 
@@ -52,7 +57,7 @@ def random_string(length: int) -> str:
 def vtt_to_srt(vtt_doc: str, colourize=True) -> str:
     """Convert a string containing subtitles in vtt format into a format kodi accepts.
 
-    Very simple converter that does not expect much styling, position, etc. and tries
+    A very simple converter that does not expect much styling, position, etc. and tries
     to ignore most fancy vtt stuff. But seems to be enough for most itv subtitles.
 
     All styling, except bold, italic, underline and colour in the cue payload is
@@ -92,7 +97,7 @@ def vtt_to_srt(vtt_doc: str, colourize=True) -> str:
                 # Not enough lines to find timings: this is not a cue block
                 continue
 
-            # Write newline and sequence number
+            # Write a newline and a sequence number
             seq_nr += 1
             f.write('\n{}\n'.format(seq_nr))
             # Write cue timings, add "00" for missing hours.
@@ -179,7 +184,7 @@ def duration_2_seconds(duration: str) -> int | None:
 def iso_duration_2_seconds(iso_str: str) -> int | None:
     """Convert an ISO 8601 duration string into seconds.
 
-    Simple parser to match durations found in films and tv episodes.
+    A simple parser to match durations found in films and tv episodes.
     Handles only hours, minutes and seconds.
 
     """
@@ -197,7 +202,7 @@ def iso_duration_2_seconds(iso_str: str) -> int | None:
     return None
 
 
-def reformat_date(date_string: str, old_format: str, new_format: str):
+def reformat_date(date_string: str, old_format: str, new_format: str) -> str:
     """Take a string containing a datetime in a particular format and
     convert it into another format.
 
@@ -208,12 +213,12 @@ def reformat_date(date_string: str, old_format: str, new_format: str):
     return dt.strftime(new_format)
 
 
-def strptime(dt_str: str, format: str):
+def strptime(dt_str: str, format: str) -> datetime:
     """A bug free alternative to `datetime.datetime.strptime(...)`"""
     return datetime(*(time.strptime(dt_str, format)[0:6]))
 
 
-def paginate(items: list, page_nr: int, page_len: int, merge_count: int = 5):
+def paginate(items: list, page_nr: int, page_len: int, merge_count: int = 5) -> tuple[list, int | None]:
     """Return a subset of the list.
 
     Prevent last pages of `merge_count` or fewer items by adding them to the previous page.
@@ -226,7 +231,7 @@ def paginate(items: list, page_nr: int, page_len: int, merge_count: int = 5):
         return items[start:end + merge_count], None
 
 
-def list_start_chars(items: list):
+def list_start_chars(items: list) -> list[str]:
     """Return a list of all starting character present in the sorttitles in the list `items`.
 
     Used to create an A-Z listing to subdivide long lists of items, but only list those

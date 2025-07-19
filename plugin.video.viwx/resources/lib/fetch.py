@@ -232,7 +232,10 @@ def set_default_cookies(cookiejar: RequestsCookieJar = None):
         # Set consent cookies to reject all.
         jar.set('SyrenisGuid_213aea86-31e5-43f3-8d6b-e01ba0d420c7', my_guid, **std_cookie_args)
         jar.set('SyrenisCookieFormConsent_213aea86-31e5-43f3-8d6b-e01ba0d420c7',
-                '[{"FieldID":"s122_c113","IsChecked":0},{"FieldID":"s135_c126","IsChecked":0},{"FieldID":"s134_c125","IsChecked":0},{"FieldID":"s138_c129","IsChecked":0},{"FieldID":"s157_c147","IsChecked":0},{"FieldID":"s136_c127","IsChecked":0},{"FieldID":"s137_c128","IsChecked":0}]',
+                '[{"FieldID":"s122_c113","IsChecked":0},{"FieldID":"s135_c126","IsChecked":0},'
+                '{"FieldID":"s134_c125","IsChecked":0},{"FieldID":"s138_c129","IsChecked":0},'
+                '{"FieldID":"s157_c147","IsChecked":0},{"FieldID":"s136_c127","IsChecked":0},'
+                '{"FieldID":"s137_c128","IsChecked":0}]',
                 **std_cookie_args)
         jar.set('SyrenisCookiePrivacyLink_213aea86-31e5-43f3-8d6b-e01ba0d420c7', '1', **std_cookie_args)
         jar.set('SyrenisCookieConsentDate_213aea86-31e5-43f3-8d6b-e01ba0d420c7',

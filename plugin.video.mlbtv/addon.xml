@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2025.6.19+matrix.1" provider-name="eracknaphobia, tonywagner">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2025.7.18+matrix.1" provider-name="eracknaphobia, tonywagner">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -23,6 +23,10 @@
         <disclaimer lang="en_GB">Requires an MLB.tv account</disclaimer>
         <news>
             - updated Big Inning schedule
+            - fix for disable captions on catch up
+            - fix and improvements for play all recaps option
+            - support for single team packages in stream selection
+            - support for Stream Finder (auto-switching based on custom criteria)
         </news>
         <language>en</language>
         <platform>all</platform>

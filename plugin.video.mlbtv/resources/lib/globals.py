@@ -79,6 +79,7 @@ FANART = os.path.join(ROOTDIR,"fanart.jpg")
 PREV_ICON = os.path.join(ROOTDIR,"icon.png")
 NEXT_ICON = os.path.join(ROOTDIR,"icon.png")
 BLACK_IMAGE = os.path.join(ROOTDIR, "resources", "img", "black.png")
+STREAM_FINDER_ICON = os.path.join(ROOTDIR, "resources", "img", "stream_finder_icon.png")
 
 API_URL = 'https://statsapi.mlb.com'
 #User Agents

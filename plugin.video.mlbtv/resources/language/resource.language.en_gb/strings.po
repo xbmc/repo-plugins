@@ -197,7 +197,7 @@ msgid "Choose Stream Quality"
 msgstr ""
 
 msgctxt "#30375"
-msgid "Watch all the day's highlights for "
+msgid "Click the date to watch all recaps or condensed games for "
 msgstr ""
 
 msgctxt "#30380"
@@ -434,6 +434,14 @@ msgstr ""
 
 msgctxt "#30443"
 msgid "SNY live stream"
+msgstr ""
+
+msgctxt "#30444"
+msgid "Stream Finder"
+msgstr ""
+
+msgctxt "#30445"
+msgid "Automatically switches between games according to your preferences. This addon is not affiliated with Baseball Reference, do not contact them for support. Visit http://bit.ly/bbrefsf to create and export your preferences, then upload and save them to Kodi at "
 msgstr ""
 
 

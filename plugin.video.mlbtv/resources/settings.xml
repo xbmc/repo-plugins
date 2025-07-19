@@ -52,6 +52,7 @@
     <setting id="auto_play_game_date" type="text" label="" default="" visible="false"/>
     <setting id="auto_play_next_game" type="text" label="" default="" visible="false"/>
     <setting id="auto_play_game_checked" type="text" label="" default="" visible="false"/>
+    <setting id="stream_finder_settings" type="text" label="" default="{}" visible="false"/>
   </category>
 </settings>
 

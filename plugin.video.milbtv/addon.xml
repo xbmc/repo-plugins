@@ -19,7 +19,7 @@
         </summary>
         <description lang="en_GB">Watch live and archived minor league baseball games with your MiLB.TV account</description>
         <disclaimer lang="en_GB">Requires a valid MiLB.TV account (separate from MLB.TV)</disclaimer>
-        <broken>MiLB.TV has been discontinued. Those games are now available in MLB.TV instead.</broken>
+        <lifecyclestate type="broken">MiLB.TV has been discontinued. Those games are now available in MLB.TV instead.</lifecyclestate>
         <language>en</language>
         <platform>all</platform>
         <license>GPL-2.0-or-later</license>

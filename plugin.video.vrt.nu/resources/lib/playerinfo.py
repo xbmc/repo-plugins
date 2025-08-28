@@ -73,7 +73,8 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
                 return
 
         # Get resumepoint data
-        self.video_id, self.resumepoint_title = get_resumepoint_data(episode_id=self.path.split('/')[-1])
+        from base64 import b64decode
+        self.video_id, self.resumepoint_title = get_resumepoint_data(episode_id=b64decode(self.path.split('/')[-1].encode('utf-8')).decode('utf-8'))
 
         # Kodi 17 doesn't have onAVStarted
         if kodi_version_major() < 18:
@@ -185,10 +186,9 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
     def push_upnext(self):
         """Push episode info to Up Next service add-on"""
         if has_addon('service.upnext') and get_setting_bool('useupnext', default=True) and self.isPlaying():
-
-            next_info = get_next_info(episode_id=self.path.split('/')[-1])
+            from base64 import b64decode, b64encode
+            next_info = get_next_info(episode_id=b64decode(self.path.split('/')[-1].encode('utf-8')).decode('utf-8'))
             if next_info:
-                from base64 import b64encode
                 from json import dumps
                 data = [to_unicode(b64encode(dumps(next_info).encode()))]
                 sender = '{addon_id}.SIGNAL'.format(addon_id=addon_id())

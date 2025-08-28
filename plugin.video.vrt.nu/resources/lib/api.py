@@ -111,22 +111,30 @@ def format_plot(plot, region, product_placement, mpaa, offtime, permalink):
     if offtime:
         now = datetime.now(dateutil.tz.tzlocal())
         remaining = offtime - now
-        if remaining.days / 365 > 5:
-            pass  # If it is available for more than 5 years, do not show
-        elif remaining.days / 365 > 2:
-            plot_meta += localize(30202, years=int(remaining.days / 365))  # X years remaining
-        elif remaining.days / 30.5 > 3:
-            plot_meta += localize(30203, months=int(remaining.days / 30.5))  # X months remaining
-        elif remaining.days > 1:
-            plot_meta += localize(30204, days=remaining.days)  # X days to go
-        elif remaining.days == 1:
-            plot_meta += localize(30205)  # 1 day to go
-        elif remaining.seconds // 3600 > 1:
-            plot_meta += localize(30206, hours=remaining.seconds // 3600)  # X hours to go
-        elif remaining.seconds // 3600 == 1:
-            plot_meta += localize(30207)  # 1 hour to go
+        total_seconds = remaining.total_seconds()
+
+        if total_seconds <= 0:
+            plot_meta += localize(30209)  # Already expired or 0 time left
         else:
-            plot_meta += localize(30208, minutes=remaining.seconds // 60)  # X minutes to go
+            total_days = total_seconds / 86400
+            if total_days > 5 * 365:
+                pass  # more than 5 years, do not show
+            elif total_days > 2 * 365:
+                plot_meta += localize(30202, years=int(total_days // 365))
+            elif total_days > 3 * 30.5:
+                plot_meta += localize(30203, months=int(total_days // 30.5))
+            elif total_days > 1:
+                plot_meta += localize(30204, days=int(total_days))
+            elif int(total_days) == 1:
+                plot_meta += localize(30205)  # 1 day to go
+            else:
+                total_hours = total_seconds / 3600
+                if total_hours > 1:
+                    plot_meta += localize(30206, hours=int(total_hours))
+                elif int(total_hours) == 1:
+                    plot_meta += localize(30207)  # 1 hour to go
+                else:
+                    plot_meta += localize(30208, minutes=int(total_seconds // 60))
 
     if region == 'BE':
         if plot_meta:
@@ -162,8 +170,8 @@ def resumepoints_is_activated():
 def get_resumepoint_data(episode_id):
     """Get resumepoint data from GraphQL API"""
     data_json = get_single_episode_data(episode_id)
-    video_id = data_json.get('data').get('catalogMember').get('watchAction').get('videoId')
-    resumepoint_title = data_json.get('data').get('catalogMember').get('watchAction').get('resumePointTitle')
+    video_id = data_json.get('data').get('page').get('episode').get('watchAction').get('videoId')
+    resumepoint_title = data_json.get('data').get('page').get('episode').get('watchAction').get('resumePointTitle')
     return video_id, resumepoint_title
 
 
@@ -172,7 +180,7 @@ def get_next_info(episode_id):
     import dateutil.parser
     next_info = {}
     data_json = get_single_episode_data(episode_id)
-    current_ep = data_json.get('data').get('catalogMember')
+    current_ep = data_json.get('data').get('page').get('episode')
     # Only get add data when there is a next episode
     if current_ep.get('nextUp').get('title') == 'Volgende aflevering':
         next_ep = current_ep.get('nextUp').get('tile').get('episode')
@@ -267,13 +275,17 @@ def get_stream_id_data(vrtmax_url):
 def get_single_episode_data(episode_id):
     """Get single episode data from GraphQL API"""
     graphql_query = """
-        query PlayerData($id: ID!) {
-          catalogMember(id: $id) {
+        query OnePlayerData($id: ID!) {
+          page(id: $id) {
             __typename
-          ...episode
+            ... on EpisodePage {
+              episode {
+                ...ep
+              }
+            }
           }
         }
-        fragment episode on Episode {
+        fragment ep on Episode {
           __typename
           id
           title
@@ -289,6 +301,14 @@ def get_single_episode_data(episode_id):
           analytics {
             airDate
             categories
+            contentBrand
+            episode
+            mediaSubtype
+            mediaType
+            name
+            pageName
+            season
+            show
           }
           program {
             id
@@ -336,7 +356,7 @@ def get_single_episode_data(episode_id):
         }
         %s
     """ % EPISODE_TILE
-    operation_name = 'PlayerData'
+    operation_name = 'OnePlayerData'
     variables = {
         'id': episode_id,
     }
@@ -345,25 +365,31 @@ def get_single_episode_data(episode_id):
 
 def get_latest_episode_data(program_name):
     """Get latest episode data from GraphQL API"""
-    latest_episode = {}
+    latest_episode = None
     graphql_query = """
-        query VideoProgramPage($pageId: ID!, $lazyItemCount: Int = 500, $after: ID) {
+        query VideoProgramPage(
+          $pageId: ID!,
+          $lazyItemCount: Int = 500,
+          $after: ID
+          ) {
           page(id: $pageId) {
             ... on ProgramPage {
-              components {
-                __typename
-                ... on PageHeader {
-                  mostRelevantEpisodeTile {
-                    __typename
-                    title
-                    tile {
-                      ...episodeTile
-                      __typename
+              header {
+                title
+                actionItems {
+                  accessibilityLabel
+                  active
+                  mode
+                  title
+                  action {
+                    ... on LinkAction {
+                      internalTarget
+                      link
                     }
-                    __typename
                   }
-                  __typename
                 }
+              }
+              components {
                 ... on ContainerNavigation {
                   items {
                     title
@@ -412,44 +438,38 @@ def get_latest_episode_data(program_name):
                             }
                           }
                         }
-                        __typename
                       }
                     }
-                    __typename
                   }
-                  __typename
                 }
               }
-              __typename
             }
-            __typename
           }
         }
         %s
     """ % EPISODE_TILE
     operation_name = 'VideoProgramPage'
     variables = {
-        'pageId': '/vrtnu/a-z/{}.model.json'.format(program_name),
+        'pageId': '/vrtmax/a-z/{}/'.format(program_name),
     }
-    api_data = api_req(graphql_query, operation_name, variables, client='MobileAndroid')
-    page = api_data.get('data').get('page')
-    if page:
-        most_relevant_ep = page.get('components')[0].get('mostRelevantEpisodeTile')
-        if most_relevant_ep and most_relevant_ep.get('title') == 'Meest recente aflevering':
-            latest_episode = most_relevant_ep
-        else:
-            items = page.get('components')[0].get('items')[0].get('components')[0]
-            if not items.get('paginatedItems'):
-                items = items.get('items')[0].get('components')[0]
-            edges = items.get('paginatedItems').get('edges')
-            highest_ep_no = 0
-            highest_ep = {}
-            for edge in edges:
-                ep_no = int(edge.get('node').get('episode').get('episodeNumberRaw'))
-                if ep_no > highest_ep_no:
-                    highest_ep_no = ep_no
-                    highest_ep = edge.get('node').get('episode')
-            latest_episode = highest_ep
+    data = api_req(graphql_query, operation_name, variables)
+    if data.get('data').get('page'):
+        for action in data.get('data').get('page').get('header').get('actionItems'):
+            if action.get('title') == 'Bekijk de recentste aflevering':
+                latest_episode = get_single_episode_data(action.get('action').get('link')).get('data').get('page').get('episode')
+            else:
+                items = data.get('data').get('page').get('components')[0].get('items')[0].get('components')[0]
+                if not items.get('paginatedItems'):
+                    items = items.get('items')[0].get('components')[0]
+                edges = items.get('paginatedItems').get('edges')
+                highest_ep_no = 0
+                highest_ep = {}
+                for edge in edges:
+                    ep_no = int(edge.get('node').get('episode').get('episodeNumberRaw'))
+                    if ep_no > highest_ep_no:
+                        highest_ep_no = ep_no
+                        highest_ep = edge.get('node').get('episode')
+                latest_episode = highest_ep
     return latest_episode
 
 
@@ -725,128 +745,666 @@ def finish_continue(episode_id):
     return api_req(graphql_query, operation_name, variables)
 
 
-def get_paginated_episodes(list_id, page_size, end_cursor=''):
-    """Get paginated list of episodes from GraphQL API"""
+def get_entities(list_id, page_size='', end_cursor=''):
+    """Get a list of episodes or programs using GraphQL API"""
     graphql_query = """
-        query ListedEpisodes(
+        query TileList(
           $listId: ID!
-          $endCursor: ID!
-          $pageSize: Int!
+          $sort: SortInput
+          $lazyItemCount: Int = 20
+          $after: ID
+          $before: ID
         ) {
-          list(listId: $listId) {
+          list(listId: $listId, sort: $sort) {
             __typename
             ... on PaginatedTileList {
-              paginated: paginatedItems(first: $pageSize, after: $endCursor) {
-                edges {
-                  node {
-                    __typename
-                    ...episodeTile
-                  }
-                }
-                pageInfo {
-                  startCursor
-                  endCursor
-                  hasNextPage
-                  hasPreviousPage
-                  __typename
-                }
-              }
+              ...paginatedTileListFragment
+              __typename
+            }
+            ... on StaticTileList {
+              ...staticTileListFragment
+              __typename
             }
           }
         }
-        %s
-    """ % EPISODE_TILE
-    # FIXME: Find a better way to change GraphQL typename
-    if list_id.startswith('static:/'):
-        graphql_query = graphql_query.replace('on PaginatedTileList', 'on StaticTileList')
-
-    operation_name = 'ListedEpisodes'
-    variables = {
-        'listId': list_id,
-        'endCursor': end_cursor,
-        'pageSize': page_size,
-    }
-    return api_req(graphql_query, operation_name, variables)
-
-
-def get_paginated_programs(list_id, page_size, end_cursor='', client='WEB'):
-    """Get paginated list of episodes from GraphQL API"""
-    graphql_query = """
-        query PaginatedPrograms(
-          $listId: ID!
-          $endCursor: ID!
-          $pageSize: Int!
-        ) {
-          list(listId: $listId) {
-            __typename
-            ... on PaginatedTileList {
-              paginated: paginatedItems(first: $pageSize, after: $endCursor) {
-                edges {
-                  node {
-                    __typename
-                    ...ep
-                  }
-                }
-                pageInfo {
-                  startCursor
-                  endCursor
-                  hasNextPage
-                  hasPreviousPage
-                  __typename
-                }
-              }
-            }
-          }
-        }
-        fragment ep on ProgramTile {
+        fragment staticTileListFragment on StaticTileList {
           __typename
           objectId
-          id
-          link
-          tileType
-          image {
-            alt
-            templateUrl
-          }
+          listId
           title
-          program {
+          description
+          tileContentType
+          displayType
+          maxAge
+          tileVariant
+          sort {
+            icon
+            order
             title
+            __typename
+          }
+          action {
+            ... on LinkAction {
+              __typename
+              externalTarget
+              link
+            }
+            ... on SwitchTabAction {
+              __typename
+              link
+              referencedTabId
+            }
+            __typename
+          }
+          banner {
+            actionItems {
+              ...actionItemFragment
+              __typename
+            }
+            description
+            image {
+              ...imageFragment
+              __typename
+            }
+            compactLayout
+            backgroundColor
+            textTheme
+            title
+            titleArt {
+              objectId
+              templateUrl
+              __typename
+            }
+            __typename
+          }
+          bannerSize
+          items {
+            ...tileFragment
+            __typename
+          }
+          paginatedItems(first: $lazyItemCount, after: $after, before: $before) {
+            __typename
+            edges {
+              __typename
+              cursor
+              node {
+                __typename
+                ...tileFragment
+              }
+            }
+            pageInfo {
+              __typename
+              endCursor
+              hasNextPage
+              hasPreviousPage
+              startCursor
+            }
+          }
+          ... on IComponent {
+            ...componentTrackingDataFragment
+            __typename
+          }
+        }
+        fragment actionItemFragment on ActionItem {
+          __typename
+          objectId
+          accessibilityLabel
+          active
+          mode
+          title
+          themeOverride
+          action {
+            ...actionFragment
+            __typename
+          }
+          icons {
+            ...iconFragment
+            __typename
+          }
+        }
+        fragment actionFragment on Action {
+          __typename
+          ... on FavoriteAction {
+            id
+            favorite
+            title
+            __typename
+          }
+          ... on ListDeleteAction {
+            listName
+            id
+            listId
+            title
+            __typename
+          }
+          ... on ListTileDeletedAction {
+            listName
+            id
+            listId
+            __typename
+          }
+          ... on LinkAction {
+            internalTarget
+            linkId
+            link
+            internalTarget
+            externalTarget
+            passUserIdentity
+            zone {
+              preferredZone
+              isExclusive
+              __typename
+            }
+            linkTokens {
+              __typename
+              placeholder
+              value
+            }
+            __typename
+          }
+          ... on ClientDrivenAction {
+            __typename
+            clientDrivenActionType
+          }
+          ... on ShareAction {
+            title
+            url
+            __typename
+          }
+          ... on SwitchTabAction {
+            referencedTabId
+            link
+            __typename
+          }
+          ... on FinishAction {
+            id
+            __typename
+          }
+        }
+        fragment iconFragment on Icon {
+          __typename
+          accessibilityLabel
+          position
+          ... on DesignSystemIcon {
+            value {
+              name
+              __typename
+            }
+            activeValue {
+              name
+              __typename
+            }
+            __typename
+          }
+          ... on ImageIcon {
+            value {
+              srcSet {
+                src
+                format
+                __typename
+              }
+              __typename
+            }
+            activeValue {
+              srcSet {
+                src
+                format
+                __typename
+              }
+              __typename
+            }
+            __typename
+          }
+        }
+        fragment componentTrackingDataFragment on IComponent {
+          trackingData {
+            data
+            perTrigger {
+              trigger
+              data
+              template {
+                id
+                __typename
+              }
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        fragment imageFragment on Image {
+          __typename
+          objectId
+          alt
+          focusPoint {
+            x
+            y
+            __typename
+          }
+          templateUrl
+        }
+        fragment tileFragment on Tile {
+          ... on IIdentifiable {
+            __typename
+            objectId
+          }
+          ... on IComponent {
+            ...componentTrackingDataFragment
+            __typename
+          }
+          ... on ITile {
+            title
+            active
+            accessibilityTitle
+            action {
+              __typename
+              ... on LinkAction {
+                internalTarget
+                link
+                internalTarget
+                externalTarget
+                __typename
+              }
+            }
+            actionItems {
+              ...actionItemFragment
+              __typename
+            }
+            image {
+              ...imageFragment
+              __typename
+            }
+            primaryMeta {
+              ...metaFragment
+              __typename
+            }
+            secondaryMeta {
+              ...metaFragment
+              __typename
+            }
+            tertiaryMeta {
+              ...metaFragment
+              __typename
+            }
+            indexMeta {
+              __typename
+              type
+              value
+            }
+            statusMeta {
+              __typename
+              type
+              value
+            }
+            labelMeta {
+              __typename
+              type
+              value
+            }
+            __typename
+          }
+          ... on ContentTile {
+            brand
+            brandLogos {
+              ...brandLogosFragment
+              __typename
+            }
+            __typename
+          }
+          ... on BannerTile {
+            backgroundColor
+            brand
+            brandLogos {
+              ...brandLogosFragment
+              __typename
+            }
+            compactLayout
+            description
+            textTheme
+            titleArt {
+              objectId
+              templateUrl
+              __typename
+            }
+            __typename
+          }
+          ... on EpisodeTile {
+            description
+            available
+            chapterStart
+            progress {
+              completed
+              progressInSeconds
+              durationInSeconds
+              __typename
+            }
+            episode {
+              __typename
+              id
+              name
+              available
+              whatsonId
+              title
+              description
+              subtitle
+              permalink
+              logo
+              brand
+              brandLogos {
+                type
+                mono
+                primary
+              }
+              image {
+                alt
+                templateUrl
+              }
+
+              ageRaw
+              ageValue
+
+              durationRaw
+              durationValue
+              durationSeconds
+
+              episodeNumberRaw
+              episodeNumberValue
+              episodeNumberShortValue
+
+              onTimeRaw
+              onTimeValue
+              onTimeShortValue
+
+              offTimeRaw
+              offTimeValue
+              offTimeShortValue
+
+              productPlacementValue
+              productPlacementShortValue
+
+              regionRaw
+              regionValue
+              program {
+                title
+                id
+                link
+                programType
+                description
+                shortDescription
+                subtitle
+                announcementType
+                announcementValue
+                whatsonId
+                image {
+                  alt
+                  templateUrl
+                }
+                posterImage {
+                  alt
+                  templateUrl
+                }
+              }
+              season {
+                id
+                titleRaw
+                titleValue
+                titleShortValue
+              }
+              analytics {
+                airDate
+                categories
+                contentBrand
+                episode
+                mediaSubtype
+                mediaType
+                name
+                pageName
+                season
+                show
+              }
+              primaryMeta {
+                longValue
+                shortValue
+                type
+                value
+                __typename
+              }
+              secondaryMeta {
+                longValue
+                shortValue
+                type
+                value
+                __typename
+              }
+              watchAction {
+                avodUrl
+                completed
+                resumePoint
+                resumePointTotal
+                resumePointProgress
+                resumePointTitle
+                episodeId
+                videoId
+                publicationId
+                streamId
+              }
+              favoriteAction {
+                favorite
+                id
+                title
+              }
+            }
+            __typename
+          }
+          ... on ProgramTile {
+            __typename
+            objectId
             id
             link
-            programType
-            description
-            shortDescription
-            subtitle
-            announcementType
-            announcementValue
-            whatsonId
+            tileType
             image {
               alt
               templateUrl
             }
-            posterImage {
-              alt
-              templateUrl
-            }
-            favoriteAction {
-              favorite
-              id
+            title
+            program {
               title
+              id
+              link
+              programType
+              description
+              shortDescription
+              subtitle
+              announcementType
+              announcementValue
+              whatsonId
+              image {
+                alt
+                templateUrl
+              }
+              posterImage {
+                alt
+                templateUrl
+              }
+              favoriteAction {
+                favorite
+                id
+                title
+              }
             }
+          }
+          ... on PodcastEpisodeTile {
+            available
+            description
+            progress {
+              completed
+              progressInSeconds
+              durationInSeconds
+              __typename
+            }
+            __typename
+          }
+          ... on AudioLivestreamTile {
+            brand
+            brandsLogos {
+              brand
+              brandTitle
+              logos {
+                ...brandLogosFragment
+                __typename
+              }
+              __typename
+            }
+            progress {
+              durationInSeconds
+              progressInSeconds
+              __typename
+            }
+            __typename
+          }
+          ... on LivestreamTile {
+            description
+            progress {
+              durationInSeconds
+              progressInSeconds
+              __typename
+            }
+            __typename
+          }
+          ... on ButtonTile {
+            mode
+            icons {
+              ...iconFragment
+              __typename
+            }
+            __typename
+          }
+          ... on RadioEpisodeTile {
+            available
+            description
+            progress {
+              completed
+              progressInSeconds
+              durationInSeconds
+              __typename
+            }
+            __typename
+          }
+          ... on RadioFragmentTile {
+            progress {
+              completed
+              progressInSeconds
+              durationInSeconds
+              __typename
+            }
+            __typename
+          }
+          ... on SongTile {
+            startDate
+            formattedStartDate
+            endDate
+            description
+            __typename
+          }
+          __typename
+        }
+        fragment brandLogosFragment on Logo {
+          colorOnColor
+          height
+          mono
+          primary
+          type
+          width
+          __typename
+        }
+        fragment metaFragment on MetaDataItem {
+          __typename
+          type
+          value
+          shortValue
+          longValue
+        }
+        fragment paginatedTileListFragment on PaginatedTileList {
+          __typename
+          objectId
+          listId
+          action {
+            ... on LinkAction {
+              __typename
+              externalTarget
+              link
+            }
+            ... on SwitchTabAction {
+              __typename
+              link
+              referencedTabId
+            }
+            __typename
+          }
+          banner {
+            actionItems {
+              ...actionItemFragment
+              __typename
+            }
+            backgroundColor
+            compactLayout
+            description
+            image {
+              ...imageFragment
+              __typename
+            }
+            titleArt {
+              ...imageFragment
+              __typename
+            }
+            textTheme
+            title
+            __typename
+          }
+          bannerSize
+          displayType
+          maxAge
+          tileVariant
+          paginatedItems(first: $lazyItemCount, after: $after, before: $before) {
+            __typename
+            edges {
+              __typename
+              cursor
+              node {
+                __typename
+                ...tileFragment
+              }
+            }
+            pageInfo {
+              __typename
+              endCursor
+              hasNextPage
+              hasPreviousPage
+              startCursor
+            }
+          }
+          sort {
+            icon
+            order
+            title
+            __typename
+          }
+          tileContentType
+          title
+          description
+          ... on IComponent {
+            ...componentTrackingDataFragment
+            __typename
           }
         }
     """
-    # FIXME: Find a better way to change GraphQL typename
-    if list_id.startswith('static:/'):
-        graphql_query = graphql_query.replace('on PaginatedTileList', 'on StaticTileList')
-
-    operation_name = 'PaginatedPrograms'
+    operation_name = 'TileList'
     variables = {
         'listId': list_id,
-        'endCursor': end_cursor,
-        'pageSize': page_size,
+        'after': end_cursor,
+        'lazyItemCount': page_size,
     }
-    return api_req(graphql_query, operation_name, variables, client)
+    return api_req(graphql_query, operation_name, variables)
 
 
 def convert_programs(item_list, destination, end_cursor='', use_favorites=False, **kwargs):
@@ -934,14 +1492,15 @@ def convert_programs(item_list, destination, end_cursor='', use_favorites=False,
 def convert_episode(episode, destination=None):
     """Convert paginated episode item to TitleItem"""
     import dateutil.parser
-
+    import base64
     # FIXME: find a better way to abort when we have no valid api data
     if not episode:
         return None, None, None, None
     episode_id = episode.get('id')
+    episode_page = episode.get('analytics').get('pageName')
     video_id = episode.get('watchAction').get('videoId')
     publication_id = episode.get('watchAction').get('publicationId')
-    path = url_for('play_id', video_id=video_id, publication_id=publication_id, episode_id=episode_id)
+    path = url_for('play_id', video_id=video_id, publication_id=publication_id, episode_id=base64.b64encode(episode_page.encode('utf-8')).decode('utf-8'))
     program_name = url_to_program(episode.get('program').get('link'))
     program_id = episode.get('program').get('id')
     program_title = episode.get('program').get('title')
@@ -1091,8 +1650,11 @@ def convert_episodes(item_list, destination, end_cursor='', use_favorites=False,
 
 def get_single_episode(episode_id):
     """Get single episode"""
-    episode = get_single_episode_data(episode_id).get('data').get('catalogMember')
-    _, _, _, title_item = convert_episode(episode)
+    title_item = None
+    episode_page = get_single_episode_data(episode_id).get('data').get('page')
+    if episode_page is not None:
+        episode = episode_page.get('episode')
+        _, _, _, title_item = convert_episode(episode)
     return title_item
 
 
@@ -1260,8 +1822,8 @@ def get_programs(list_id=None, destination=None, end_cursor='', category=None, c
     item_list = []
     while fetched < kodi_page_size:
         page_size = kodi_page_size - fetched
-        api_data = get_paginated_programs(list_id=list_id, page_size=page_size, end_cursor=end_cursor)
-        paginated = api_data.get('data', {}).get('list', {}).get('paginated', {})
+        api_data = get_entities(list_id=list_id, page_size=page_size, end_cursor=end_cursor)
+        paginated = api_data.get('data', {}).get('list', {}).get('paginatedItems', {})
         edges = paginated.get('edges', [])
         page_info = paginated.get('pageInfo', {})
         item_list.extend(edges)
@@ -1324,8 +1886,8 @@ def get_episodes(list_id=None, destination=None, end_cursor='', program_name=Non
     item_list = []
     while fetched < kodi_page_size:
         page_size = kodi_page_size - fetched
-        api_data = get_paginated_episodes(list_id=list_id, page_size=page_size, end_cursor=end_cursor)
-        paginated = api_data.get('data', {}).get('list', {}).get('paginated', {})
+        api_data = get_entities(list_id=list_id, page_size=page_size, end_cursor=end_cursor)
+        paginated = api_data.get('data', {}).get('list', {}).get('paginatedItems', {})
         edges = paginated.get('edges', [])
         page_info = paginated.get('pageInfo', {})
         item_list.extend(edges)
@@ -1439,7 +2001,7 @@ def api_req(graphql_query, operation_name, variables, client='WEB'):
             'Authorization': 'Bearer ' + access_token,
             'Content-Type': 'application/json',
             'x-vrt-client-name': client,
-            'x-vrt-client-version': '1.5.7',
+            'x-vrt-client-version': '1.5.12',
         }
         data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data, raise_errors='all')
     return data_json
@@ -1486,11 +2048,6 @@ def get_featured_data():
                       __typename
                       listId
                       title
-                      header {
-                        brand
-                        ctaText
-                        description
-                      }
                       componentType
                       tileContentType
                     }
@@ -1753,15 +2310,17 @@ def get_episode_by_air_date(channel_name, start_date, end_date=None):
                                                              - dateutil.parser.parse(episode.get('startTime'))).total_seconds() / 2))) == mindate), None)
     if episode_guess:
         if episode_guess.get('episodeId'):
-            episode = get_single_episode_data(episode_guess.get('episodeId')).get('data').get('catalogMember')
-            _, _, _, video_item = convert_episode(episode)
-            video = {
-                'listitem': video_item,
-                'video_id': episode.get('watchAction').get('videoId'),
-                'publication_id': episode.get('watchAction').get('publicationId')
-            }
-            if video:
-                return video
+            episode = get_single_episode_data(episode_guess.get('url')).get('data').get('page')
+            if episode.get('available'):
+                log(2, 'Guessed available episode {item}', item=episode_guess.get('url'))
+                _, _, _, video_item = convert_episode(episode)
+                video = {
+                    'listitem': video_item,
+                    'video_id': episode.get('episode').get('watchAction').get('videoId'),
+                    'publication_id': episode.get('episode').get('watchAction').get('publicationId')
+                }
+                if video:
+                    return video
 
         # Airdate live2vod feature: use livestream cache of last 24 hours if no video was found
         offairdate_guess = dateutil.parser.parse(episode_guess.get('endTime'))

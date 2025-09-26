@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.formula1" name="Formula 1" version="2.0.6" provider-name="jaylinski">
+<addon id="plugin.video.formula1" name="Formula 1" version="2.0.7" provider-name="jaylinski">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.29.0"/>
@@ -16,7 +16,10 @@
         <forum>https://forum.kodi.tv/showthread.php?tid=352138</forum>
         <website>https://www.formula1.com</website>
         <source>https://github.com/jaylinski/kodi-addon-formula1</source>
-        <news>2.0.6 (2025-07-20)
+        <news>2.0.7 (2025-10-26)
+Fixed sorting of driver standings
+
+2.0.6 (2025-07-20)
 Updated player API key
 
 2.0.5 (2025-06-17)

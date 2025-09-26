@@ -134,6 +134,7 @@ class Api:
             items = json_obj.get("videos")
         elif "drivers" in json_obj:
             items = json_obj.get("drivers")
+            items.sort(key=lambda driver_obj: int(driver_obj.get("positionNumber", 99)))
             item_type = "drivers"
         elif "constructors" in json_obj:
             items = json_obj.get("constructors")

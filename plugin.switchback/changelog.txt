@@ -1,3 +1,12 @@
+v2.0.0 Re-write!
+- Support addons
+- Support PVR live/recordings
+- (Remove music support)
+- Add context menus (configurable)
+- Better artwork support
+- Better notifications
+- Filter watched items from list (configurable)
+
 v1.0.0
 - Initial Release
 - Supports Episodes, Movies, Songs, PVR channels, Non-library files

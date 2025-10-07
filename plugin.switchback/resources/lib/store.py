@@ -1,34 +1,38 @@
-import json
-from json import JSONDecodeError
-
-from bossanova808.constants import *
-from bossanova808.logger import Logger
-from bossanova808.notify import Notify
 import os
-from types import SimpleNamespace
 
-from resources.lib.playback import Playback
+import xbmcvfs
+
+from bossanova808.constants import HOME_WINDOW, PROFILE, ADDON
+from bossanova808.logger import Logger
+from bossanova808.utilities import get_kodi_setting, set_property, clear_property
+from resources.lib.playback import PlaybackList
 
 
 class Store:
     """
-    Helper class to read in and store the addon settings, and to provide a centralised store
+    Helper class to read in and store the addon settings, and to provide a general centralised store
+    Create one with: Store()
     """
     # Static class variables, referred to elsewhere by Store.whatever
     # https://docs.python.org/3/faq/programming.html#how-do-i-create-static-class-data-and-static-class-methods
     kodi_event_monitor = None
     kodi_player = None
     # Holds our playlist of things played back, in first is the latest order
-    switchback_list = []
-    switchback_list_file = xbmcvfs.translatePath(os.path.join(PROFILE, "switchback_list.json"))
+    switchback = None
     # When something is being played back, store the details
     current_playback = None
-    # Addon settings
-    maximum_list_length = ADDON.getSettingInt('maximum_list_length')
-    include_music = ADDON.getSettingBool('include_music')
     # Playbacks are of these possible types
-    kodi_video_types = ["movie", "tvshow", "episode", "musicvideo", "video"]
-    kodi_music_types = ["song","album"]
+    kodi_video_types = ["movie", "tvshow", "episode", "musicvideo", "video", "file"]
+    kodi_music_types = ["song", "album"]
+    # Addon settings
+    save_across_sessions = ADDON.getSettingBool('save_across_sessions')
+    maximum_list_length = ADDON.getSettingInt('maximum_list_length')
+    enable_context_menu = ADDON.getSettingBool('enable_context_menu')
+    episode_force_browse = ADDON.getSettingBool('episode_force_browse')
+    remove_watched_playbacks = ADDON.getSettingBool('remove_watched_playbacks')
+
+    # GUI Settings - to work out how to force browse to a show after a switchback initiated playback
+    flatten_tvshows = None
 
     def __init__(self):
         """
@@ -36,6 +40,11 @@ class Store:
         :return:
         """
         Store.load_config_from_settings()
+        Store.load_config_from_kodi_settings()
+        Store.switchback = PlaybackList([], xbmcvfs.translatePath(os.path.join(PROFILE, "switchback.json")), Store.remove_watched_playbacks)
+        Store.switchback.load_or_init()
+        Store.update_switchback_context_menu()
+
 
     @staticmethod
     def load_config_from_settings():
@@ -45,49 +54,36 @@ class Store:
         """
         Logger.info("Loading configuration")
         Store.maximum_list_length = ADDON.getSettingInt('maximum_list_length')
-        Store.include_music = ADDON.getSettingBool('include_music')
         Logger.info(f"Maximum Switchback list length is: {Store.maximum_list_length}")
-        Logger.info(f"Include Music is: {Store.include_music}")
-
-        Store.switchback_list = []
-        Logger.info(f"Loading Switchback playlist from file: {Store.switchback_list_file}")
-        try:
-            with open(Store.switchback_list_file, 'r') as switchback_list_file:
-                switchback_list_json = json.load(switchback_list_file)
-                for playback in switchback_list_json:
-                    Store.switchback_list.append(Playback(**playback))
-        except FileNotFoundError:
-            Logger.error("Switchback list file not found, creating empty Switchback list file")
-            # Creates an empty Switchback list file if it doesn't yet exist
-            os.makedirs(os.path.dirname(Store.switchback_list_file), exist_ok=True)
-            with open(Store.switchback_list_file, 'w'):
-                pass
-            Store.switchback_list = []
-        except JSONDecodeError:
-            Logger.error("Unable to parse switchback list, JSONDecodeError...corrupt or empty, starting a new empty list")
-            Store.switchback_list = []
-        except:
-            raise
-
-        # Filter out any music playbacks if the setting is currently not to record them
-        for playback_to_maybe_remove in Store.switchback_list:
-            if not Store.include_music and playback_to_maybe_remove.type in Store.kodi_music_types:
-                Logger.warning("Include music is false, removing music playback from Switchback list")
-                Store.switchback_list.remove(playback_to_maybe_remove)
-
-        Logger.info("Switchback List is:")
-        Logger.info(Store.switchback_list)
+        Store.save_across_sessions = ADDON.getSettingBool('save_across_sessions')
+        Logger.info(f"Save across sessions is: {Store.save_across_sessions}")
+        Store.enable_context_menu = ADDON.getSettingBool('enable_context_menu')
+        Logger.info(f"Enable context menu is: {Store.enable_context_menu}")
+        Store.remove_watched_playbacks = ADDON.getSettingBool('remove_watched_playbacks')
+        Logger.info(f"Remove watched playbacks is: {Store.remove_watched_playbacks}")
+        Store.episode_force_browse = ADDON.getSettingBool('episode_force_browse')
+        Logger.info(f"Episode force browse is: {Store.episode_force_browse}")
 
     @staticmethod
-    def save_switchback_list():
-        """
-        Save the Switchback list to file in JSON format
-        :return:
-        """
-        with open(Store.switchback_list_file, 'w', encoding='utf-8') as f:
-            json_string = json.dumps([vars(playback) for playback in Store.switchback_list], indent=4)
-            f.write(json_string)
+    def load_config_from_kodi_settings():
+        # Note: this is an int, not a bool — 0 = Never, 1 = 'If only one season', 2 = Always
+        Store.flatten_tvshows = int(get_kodi_setting('videolibrary.flattentvshows'))
+        Logger.info(f"Flatten TV Shows is: {Store.flatten_tvshows}")
 
+    @staticmethod
+    def update_switchback_context_menu():
+        if Store.enable_context_menu:
+            Logger.debug(f"Updating Home Window Properties for context menu")
+            Logger.debug("Switchback list is:", Store.switchback.list)
+            set_property(HOME_WINDOW, 'Switchback_List_Length', str(len(Store.switchback.list)))
+            if len(Store.switchback.list) == 1:
+                set_property(HOME_WINDOW, 'Switchback_Item', Store.switchback.list[0].pluginlabel)
+            elif len(Store.switchback.list) > 1:
+                set_property(HOME_WINDOW, 'Switchback_Item', Store.switchback.list[1].pluginlabel)
+            else:
+                clear_property(HOME_WINDOW, 'Switchback_Item')
 
-
-
+    @staticmethod
+    def update_home_window_switchback_property(path: str):
+        Logger.debug(f"Updating Home Window Properties for playback, path: {path}")
+        set_property(HOME_WINDOW, 'Switchback', path)

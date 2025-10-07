@@ -1,31 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.switchback" name="Switchback" version="1.0.0" provider-name="bossanova808">
+<addon id="plugin.switchback" name="Switchback" version="2.0.0" provider-name="bossanova808">
     <requires>
-        <import addon="xbmc.python" version="3.0.0"/>
-        <import addon="script.module.bossanova808" version="1.0.0"/>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.bossanova808" version="1.0.2" />
         <import addon="script.module.infotagger" version="0.0.7" />
     </requires>
-    <!-- A service entrypoint to keep track of playbacks -->
+    <!-- The main service entry point, to keep track of playbacks -->
     <extension point="xbmc.service" library="service.py" />
-    <!-- ...and a plugin entrypoint to handle presenting and playing media from the switchback playlist -->
+    <!-- ...and a plugin entry point, to handle presenting and playing media from the switchback playlist -->
     <extension point="xbmc.python.pluginsource" library="plugin.py">
-		<provides>video audio</provides>
-	</extension>
+        <provides>video audio</provides>
+    </extension>
+    <!-- ...and a context menu extension point, for another playback mechanism -->
+    <extension point="kodi.context.item">
+        <menu id="kodi.core.main">
+            <item library="context_menu.py" args="switchback">
+                <label>Switchback: $INFO[Window(Home).Property(Switchback_Item)]</label>
+                <visible>Integer.IsGreater(Window(Home).Property(Switchback_List_Length),1)</visible>
+            </item>
+            <item library="context_menu.py" args="switchback_list">
+                <label>32008</label>
+                <visible>Integer.IsGreater(Window(Home).Property(Switchback_List_Length),0)</visible>
+            </item>
+        </menu>
+    </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en_GB">Utility for fast switching between recently played media.</summary>
+        <summary lang="en_GB">Switchback is a Kodi utility for fast switching between recently played media.</summary>
+        <summary lang="sv_SE">Switchback är ett Kodi-verktyg för snabb växling mellan nyligen spelade medier.</summary>
         <description lang="en_GB">
 Kodi utility for fast switching between recently played media.
-
-Keeps a list of recently played media - supports Kodi library episodes, movies, PVR channels, songs and non-library files.  Does not (yet?) support add-ons or PVR recordings.
-
-The primary intended use is to make for super easy Switchback between two in progress videos (by binding a remote key to Switchback, see Wiki/Forum thread for info).
-
+Keeps a list of recently played videos.
+The primary intended use is to make for super easy Switchback between two in progress video. See Wiki for usage notes including how to bind remote/keyboard controls for instant Switchback.
 Consider this scenario:
-- You are watching 'video A' with your partner.  You are interrupted and your partner needs to tend to the kids/howl at the moon.
-- You navigate to 'video B' and watch some of that.
-- Your partner comes back.
-- You hit your one button 'Switchback' and 'video A' starts playing again, no need for tedious navigation etc.
-- You are interrupted again - the moon is so very bright tonight - hit your 'Switchback' to resume 'video B' immediately, again with one magic button and no tedious navigation.
+* You're watching 'video A' with your partner. You're interrupted, and your partner needs to tend to the kids/howl at the moon.
+* You navigate to 'video B' and watch some of that while you're waiting.
+* Your partner comes back.
+* You hit your one button 'Switchback' and 'video A' instantly starts playing again - no need for tedious navigation etc.
+* You're interrupted, again! The moon really is so very bright tonight. Hit your 'Switchback' button to instantly resume 'video B', again with no tedious navigation.
+        </description>
+        <description lang="sv_SE">
+Kodi-verktyg för snabb växling mellan nyligen spelade medier.
+Spara en lista över nyligen spelade videor.
+Den primära användningen är att göra det superenkelt att växla mellan två pågående videor. Se Wiki för användningsanvisningar, inklusive hur du kopplar fjärrkontroll/tangentbordskontroller för omedelbar växling.
+Tänk dig följande scenario:
+* Du tittar på ”video A” med din partner. Ni blir avbrutna och din partner måste ta hand om barnen/skälla på månen.
+* Du navigerar till ”video B” och tittar på den medan du väntar.
+* Din partner kommer tillbaka.
+* Du trycker på din enda knapp ”Switchback” och ”video A” börjar omedelbart spelas upp igen – utan tråkig navigering etc.
+* Du blir avbruten igen! Månen är verkligen väldigt ljus ikväll. Tryck på din ’Switchback’-knapp för att omedelbart återuppta ”video B”, återigen utan tråkig navigering.
         </description>
         <platform>all</platform>
         <license>GPL-3.0-only</license>
@@ -33,8 +55,14 @@ Consider this scenario:
         <source>https://github.com/bossanova808/plugin.switchback/</source>
         <forum>https://forum.kodi.tv/showthread.php?tid=379330</forum>
         <email>bossanova808@gmail.com</email>
-        <news>
-            v1.0.0 Initial release
+        <news>v2.0.0 Re-write!
+- Support addons
+- Support PVR live/recordings
+- (Remove music support)
+- Add context menus (configurable)
+- Better artwork support
+- Better notifications
+- Filter watched items from list (configurable)
         </news>
         <assets>
             <icon>resources/icon.png</icon>

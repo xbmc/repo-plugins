@@ -1,123 +1,148 @@
+import sys
 from urllib.parse import parse_qs
 
+# noinspection PyUnresolvedReferences
 import xbmc
 import xbmcplugin
-import json
-from bossanova808.constants import *
+import xbmcgui
+
+from resources.lib.store import Store
+from bossanova808.constants import TRANSLATE
 from bossanova808.logger import Logger
 from bossanova808.notify import Notify
-from bossanova808.utilities import *
-# noinspection PyPackages
-from .store import Store
-from infotagger.listitem import ListItemInfoTag
 
 
-def create_kodi_list_item_from_playback(playback, index=None, offscreen=False):
-    Logger.info("Creating list item from playback")
-    Logger.info(playback)
-
-    label = playback.title
-    if playback.showtitle:
-        if playback.season >= 0 and playback.episode >= 0:
-            label = f"{playback.showtitle} ({playback.season}x{playback.episode:02d}) - {playback.title}"
-        elif playback.season >= 0:
-            label = f"{playback.showtitle} ({playback.season}x?) - {playback.title}"
-        else:
-            label = f"{playback.showtitle} - {playback.title}"
-    elif playback.channelname:
-        if playback.source == "pvr.live":
-            label = f"PVR Live - Channel {playback.channelname}"
-        else:
-            label = f"PVR Recording - Channel {playback.channelname} - {playback.title}"
-    elif playback.album:
-        label = f"{playback.artist} - {playback.album} - {playback.tracknumber:02d}. {playback.title}"
-    elif playback.artist:
-        label = f"{playback.artist} - {playback.title}"
-
-    list_item = xbmcgui.ListItem(label=label, path=playback.file, offscreen=offscreen)
-    tag = ListItemInfoTag(list_item, 'video')
-    infolabels = {
-            'mediatype': playback.type,
-            'dbid': playback.dbid if playback.type != 'episode' else playback.tvshowdbid,
-            'tvshowdbid': playback.tvshowdbid,
-            'title': playback.title,
-            'year': playback.year,
-            'tvshowtitle': playback.showtitle,
-            'episode': playback.episode,
-            'season': playback.season,
-            'album': playback.album,
-            'artist': [playback.artist],
-            'tracknumber': playback.tracknumber,
-            'duration': playback.totaltime,
-    }
-    # Infotagger seems the best way to do this currently as is well teste
-    # I found directly setting things on InfoVideoTag to be buggy/inconsistent
-    tag.set_info(infolabels)
-    list_item.setPath(path=playback.file)
-    list_item.setArt({"thumbnail": playback.thumbnail})
-    list_item.setArt({"poster": playback.poster})
-    list_item.setArt({"fanart": playback.fanart})
-    # Auto resumes just won't work without these, even though they are deprecated...
-    list_item.setProperty('TotalTime', str(playback.totaltime))
-    list_item.setProperty('ResumeTime', str(playback.resumetime))
-    list_item.setProperty('StartOffset', str(playback.resumetime))
-    list_item.setProperty('IsPlayable', 'true')
-
-    # index can be zero, so in this case, must explicitly check against None!
-    if index is not None:
-        list_item.addContextMenuItems([(LANGUAGE(32004), "RunPlugin(plugin://plugin.switchback?mode=delete&index=" + str(index) + ")")])
-
-    return list_item
+# PVR HACK!
+# Needed to trigger live PVR playback with proper PVR controls.
+# See https://forum.kodi.tv/showthread.php?tid=381623
+def pvr_hack(path):
+    xbmc.PlayList(xbmc.PLAYLIST_VIDEO).clear()
+    # Kodi is jonesing for one of these, so give it the sugar it needs, see: https://forum.kodi.tv/showthread.php?tid=381623&pid=3232778#pid3232778
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, xbmcgui.ListItem())
+    # Get the full details from our stored playback
+    # pvr_playback = Store.switchback.find_playback_by_path(path)
+    builtin = f'PlayMedia("{path}")'
+    Logger.debug("Work around PVR links not being handled by ListItem/setResolvedUrl - use PlayMedia instead:", builtin)
+    # No ListItem to set a property on here, so set on the Home Window instead
+    Store.update_home_window_switchback_property(path)
+    xbmc.executebuiltin(builtin)
 
 
-def run(args):
-    plugin_instance = int(sys.argv[1])
-
-    footprints()
-    Logger.info("(Plugin)")
+def run():
+    Logger.start("(Plugin)")
+    # This also forces an update of the Switchback list from disk, in case of changes via the service side of things.
     Store()
 
-    xbmcplugin.setContent(plugin_instance, 'mixed')
+    plugin_instance = int(sys.argv[1])
+    xbmcplugin.setContent(plugin_instance, 'video')
 
     parsed_arguments = parse_qs(sys.argv[2][1:])
-    Logger.info(parsed_arguments)
+    Logger.debug(parsed_arguments)
     mode = parsed_arguments.get('mode', None)
-    Logger.info(f"Mode: {mode}")
+    modes = set([m.strip() for m in mode[0].split(",") if m.strip()]) if mode else set()
+    if modes:
+        Logger.info(f"Switchback mode: {mode}")
+    else:
+        Logger.info("Switchback mode: default - generate 'folder' of items")
 
-    # Switchback mode - easily swap between switchback_list[0] and switchback_list[1]
-    if mode and mode[0] == "switchback":
-        try:
-            switchback = Store.switchback_list[1]
-            Logger.info(f"Playing previous file (Store.switchback_list[1]) {switchback.file}")
-            list_item = create_kodi_list_item_from_playback(switchback, offscreen=True)
-            Notify.kodi_notification(f"{list_item.getLabel()}", 3000, ADDON_ICON)
+    # Switchback mode - easily swap between switchback.list[0] and switchback.list[1]
+    # If there's only one item in the list, then resume playing that item
+    if "switchback" in modes:
 
-            # Set a property so we can force browse later at the end of playback
-            HOME_WINDOW.setProperty('Switchback', 'true')
+        # First, determine what to play, if anything...
+        if not Store.switchback.list:
+            Notify.error(TRANSLATE(32007))
+            Logger.error("No Switchback found to play")
+            return
 
-            xbmcplugin.setResolvedUrl(plugin_instance, True, list_item)
-        except IndexError:
-            Notify.error("No previous item found to play")
-            Logger.error("No previous item found to play")
+        if len(Store.switchback.list) == 1:
+            switchback_to_play = Store.switchback.list[0]
+            Logger.debug("Switchback to index 0")
+        else:
+            switchback_to_play = Store.switchback.list[1]
+            Logger.debug("Switchback to index 1")
+
+        # We know what to play...
+        Logger.info(f"Switchback! Switching back to: {switchback_to_play.pluginlabel}")
+        Logger.debug(f"Path: [{switchback_to_play.path}]")
+        Logger.debug(f"File: [{switchback_to_play.file}]")
+        image = switchback_to_play.poster or switchback_to_play.icon
+        Notify.kodi_notification(f"{switchback_to_play.pluginlabel_short}", 3000, image)
+
+        # Short circuit here if PVR, see pvr_hack above.
+        if 'pvr://channels' in switchback_to_play.path:
+            pvr_hack(switchback_to_play.path)
+            return
+
+        # Normal path for everything else
+        list_item = switchback_to_play.create_list_item_from_playback()
+        list_item.setProperty('Switchback', switchback_to_play.path)
+        # Store.update_home_window_switchback_property(switchback_to_play.path)
+        xbmcplugin.setResolvedUrl(plugin_instance, True, list_item)
+        Logger.stop("(Plugin)")
+        return
 
     # Delete an item from the Switchback list - e.g. if it is not playing back properly from Switchback
-    if mode and mode[0] == "delete":
-        index_to_remove = parsed_arguments.get('index', None)
-        if index_to_remove:
-            Logger.info(f"Deleting playback {index_to_remove[0]} from Switchback List")
-            Store.switchback_list.remove(Store.switchback_list[int(index_to_remove[0])])
-            Store.save_switchback_list()
-            # Force refresh the list
-            Logger.debug("Force refresh the container so we see the latest Switchback list")
-            xbmc.executebuiltin("Container.Refresh")
+    elif "delete" in modes:
+        index_values = parsed_arguments.get('index')
+        if index_values:
+            try:
+                idx = int(index_values[0])
+            except (ValueError, TypeError):
+                Logger.error("Invalid 'index' parameter for delete:", index_values)
+                return
+            if 0 <= idx < len(Store.switchback.list):
+                Logger.info(f"Deleting playback {idx} from Switchback list")
+                Store.switchback.list.pop(idx)
+            else:
+                Logger.error("Index out of range for delete:", idx)
+                return
+        else:
+            Logger.error("Missing 'index' parameter for delete")
+            return
 
-    # Default mode - show the whole Switchback List
+        # Save the updated list and then reload it, just to be sure
+        Store.switchback.save_to_file()
+        Store.switchback.load_or_init()
+        Store.update_switchback_context_menu()
+        Logger.debug("Force refreshing the container, so Kodi immediately displays the updated Switchback list")
+        xbmc.executebuiltin("Container.Refresh")
+
+    # See pvr_hack(path) above
+    elif "pvr_hack" in modes:
+        path_values = parsed_arguments.get('path')
+        if not path_values or not path_values[0]:
+            Logger.error("Missing 'path' parameter for pvr_hack")
+            return
+        path = path_values[0]
+        Logger.debug(f"Triggering PVR Playback hack for {path}")
+        pvr_hack(path)
+        return
+
+    # Default mode - show the whole Switchback List (each of which has a context menu option to delete itself)
     else:
-        for index, playback in enumerate(Store.switchback_list[0:Store.maximum_list_length]):
-            list_item = create_kodi_list_item_from_playback(playback, index=index)
-            xbmcplugin.addDirectoryItem(plugin_instance, playback.file, list_item)
+        for index, playback in enumerate(Store.switchback.list[0:Store.maximum_list_length]):
+            list_item = playback.create_list_item_from_playback()
+            # Add delete option to this item
+            list_item.addContextMenuItems([(TRANSLATE(32004), "RunPlugin(plugin://plugin.switchback?mode=delete&index=" + str(index) + ")")])
+            # For detecting Switchback playbacks (in player.py)
+            list_item.setProperty('Switchback', playback.path)
+            # Use the 'proxy' URL if we're dealing with pvr_live and need to trigger the PVR playback hack
+            if playback.source == "pvr_live":
+                proxy_url = f"plugin://plugin.switchback?mode=pvr_hack&path={playback.path}"
+                Logger.debug(f"Creating directory item with pvr_hack proxy url: {proxy_url}")
+                xbmcplugin.addDirectoryItem(plugin_instance, proxy_url, list_item)
+                # TODO -> not sure if URL encoding needed in some cases?  Maybe CodeRabbit knows?
+                #     args = urlencode({'mode': 'pvr_hack', 'path': self.path})
+                #     proxy_url = f"plugin://plugin.switchback/?{args}"
 
-        xbmcplugin.endOfDirectory(plugin_instance)
+            # Otherwise use file for all Kodi library playbacks, and path for addons (as those may include tokens etc)
+            else:
+                url = playback.file if playback.source not in ["addon", "pvr_live"] else playback.path
+                # Logger.debug(f"Creating directory item with url: {url}")
+                xbmcplugin.addDirectoryItem(plugin_instance, url, list_item)
+
+        xbmcplugin.endOfDirectory(plugin_instance, cacheToDisc=False)
 
     # And we're done...
-    footprints(startup=False)
+    Logger.stop("(Plugin)")

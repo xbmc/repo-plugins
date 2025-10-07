@@ -6,11 +6,29 @@
                 <setting id="maximum_list_length" type="integer" label="32002" help="">
                     <level>0</level>
                     <default>5</default>
-                    <control type="edit" format="integer">
-                        <heading>32002</heading>
-                    </control>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <maximum>20</maximum>
+                        <step>1</step>
+                    </constraints>
+                    <control type="spinner" format="integer"/>
                 </setting>
-                <setting id="include_music" type="boolean" label="32003" help="">
+                <setting id="save_across_sessions" type="boolean" label="32006" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="enable_context_menu" type="boolean" label="32009" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="remove_watched_playbacks" type="boolean" label="32010" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="episode_force_browse" type="boolean" label="32011" help="">
                     <level>0</level>
                     <default>false</default>
                     <control type="toggle"/>

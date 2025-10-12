@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.cinetree" name="Cinetree" version="2.0.2" provider-name="Dimitri Kroon">
+<addon id="plugin.video.cinetree" name="Cinetree" version="2.0.3" provider-name="Dimitri Kroon">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="inputstream.adaptive" version="19.0.7"/>
@@ -37,26 +37,9 @@
     </assets>
     <reuselanguageinvoker>true</reuselanguageinvoker>
     <news>
-[B]Version 2.0.2[/B]
-- Fix: Several lists failed to open with 'ParseError' due to some changes at Cinetree.
-- Fix: Add-on failed to open when the user was not logged in to Cinetree.
-
-[B]Version 2.0.1[/B]
-- New logo image.
-- Now possible to directly rent a film with your prepaid credit at Cinetree.
-- Now possible to sort listings on the date the film was added to Cinetree.
-- Sort Genre listings by using the context menu, instead of the side menu.
-- The default sort order of all lists is now the same as the cinetree website.
-- Added a main menu entry for Cinetree Originals.
-- Added a main menu entry for short films.
-- Added a menu entry to your saved watch list in 'My Films'.
-- Added the possibility to add or remove films to your watch list by using the context menu.
-- Properly display films as fully or partially watched.
-- Sync the watched status of films watched on other devices.
-- Better distinguish 'already watched' films from 'continue watching'.
-- Added the possibility to remove films from 'already watched' and 'continue watching' by using the context menu in these lists.
-- Fix: price info missing in the description of some rental films.
-- Several other minor changes and changes under the hood.
+[B]Version 2.0.3[/B]
+- Fixed listing short films
+- Some other small improvements
     </news>
   </extension>
 </addon>

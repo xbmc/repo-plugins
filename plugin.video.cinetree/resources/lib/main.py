@@ -7,6 +7,8 @@
 # ------------------------------------------------------------------------------
 from __future__ import annotations
 
+import xbmcaddon
+
 import xbmc
 import xbmcplugin
 import sys
@@ -28,6 +30,11 @@ from resources.lib import constants
 from resources.lib import utils
 
 
+running_version = utils.addon_info['version']
+
+
+logger.critical('-------------------------------------')
+logger.critical('--- version: %s', running_version)
 logger.critical('-------------------------------------')
 
 TXT_SORT_BY = 30106
@@ -234,11 +241,12 @@ def list_originals(addon):
 @Route.register(content_type='movies')
 def list_shorts(addon, list_films=False):
     if not list_films:
-        # List a submenu of collections of short films
-        collections = ct_api.get_preferred_collections(page='kort')
-        for coll in collections:
-            yield Listitem.from_dict(list_films_by_collection, **coll)
-        yield Listitem.from_dict(list_shorts, addon.localize(TXT_ALL_SHORT_FILMS), params={'list_films': True})
+        # List short films collection, like Cinetree's website.
+        yield from list_films_by_collection(addon, 'collecties/de-korte-filmcollectie')
+        yield Listitem.from_dict(list_shorts,
+                                 addon.localize(TXT_ALL_SHORT_FILMS),
+                                 params={'list_films': True},
+                                 properties={'SpecialSort': "bottom"})
     else:
         # List all short films
         stories, _ = storyblok._get_url_page('stories', params={'starts_with': 'shorts/'})
@@ -462,3 +470,13 @@ def pay_from_ct_credit(title, uuid):
 def run():
     if isinstance(cc_run(), Exception):
         xbmcplugin.endOfDirectory(int(sys.argv[1]), False)
+    # Due to reuselanguageinvoker the addon may have been updated, while it still
+    # keeps running the old version. Exit with non-zero status to force the current
+    # LanguageInvoker thread to end.
+    installed_version = xbmcaddon.Addon().getAddonInfo('version')
+    if running_version != installed_version:
+        logger.warning("Detected add-on upgrade to %s while still running %s. "
+                       "Exiting non-zero now to end this LanguageInvoker thread",
+                       installed_version,
+                       running_version)
+        sys.exit(1)

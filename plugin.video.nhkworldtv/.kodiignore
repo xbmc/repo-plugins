@@ -1,0 +1,60 @@
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Test files
+tests/
+test_*.py
+pytest.ini
+
+# Development files
+.git/
+.gitignore
+.github/
+.vscode/
+*.code-workspace
+
+# Build files
+build/
+dist/
+*.egg-info/
+
+# Documentation (optional - include if you want)
+docs/
+
+# Cache and temporary files
+*.sqlite
+*.db
+*.log
+nhk_world_cache.sqlite
+
+# SVG files (not supported by Kodi)
+*.svg
+
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+cov.xml
+
+# IDE files
+.idea/
+*.swp
+*.swo
+*~
+
+# CI/CD files
+.travis.yml
+.gitlab-ci.yml
+
+# Pipenv files (not needed in addon)
+Pipfile
+Pipfile.lock
+
+# MyPy
+.mypy_cache/
+
+# Pytest
+.pytest_cache/

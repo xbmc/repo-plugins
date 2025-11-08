@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.nhkworldtv" name="NHK World TV" version="1.5.0" provider-name="sbroenne">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1" />
+        <import addon="script.module.requests" version="2.31.0" />
+        <import addon="script.module.requests-cache" version="0.5.2" />
+        <import addon="script.module.routing" version="0.2.3" />
+        <import addon="script.module.pytz" version="2023.3.0" />
+        <import addon="script.module.tzlocal" version="5.0.1" />
+        <import addon="inputstream.adaptive" version="21.5.16" />
+    </requires>
+
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Watch NHK World Japan in Full HD (1080p) - live stream and on-demand programs</summary>
+        <description lang="en_GB">
+Watch NHK World Japan in Full HD (1080p)
+
+- Live Stream with automatic quality selection (1080p/720p)
+- On demand programs in 1080p (with automatic fallback to 720p)
+- By program, latest and most watched and categories. You can also browse and search through all programs.
+- Live schedule
+- Top Stories and At a Glance news
+- Intelligent M3U8 playlist parsing for optimal quality selection
+
+Content is retrieved and played directly from the NHK World web site using HLS streaming with adaptive bitrate selection.
+        </description>
+        <disclaimer lang="en_GB">This plugin is a fan project and not related in any way to NHK!</disclaimer>
+        <platform>all</platform>
+        <license>GPL-3.0-or-later</license>
+        <language>en</language>
+        <email>stefan_broenner@yahoo.com</email>
+        <source>https://github.com/sbroenne/plugin.video.nhkworldtv</source>
+        <forum>https://forum.kodi.tv/showthread.php?tid=353215</forum>
+        <news>
+        v1.5.0
+        - Added 1080p support for live stream and VOD content
+        - Fixed episode playback bugs and empty list items
+        - Improved stream quality detection and URL selection
+        - Replaced requests-cache with lightweight in-memory caching
+
+        v1.4.2
+        - Fixed category filtering - categories now display unique content instead of showing all programs
+
+        v1.4.0
+        - Updated to support the new NHK World website
+        - Now requires inputstream.adaptive for HLS streaming
+        - Requires Kodi Omega (v21) or later
+        </news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/screenshot01.jpeg</screenshot>
+            <screenshot>resources/screenshot02.jpeg</screenshot>
+            <screenshot>resources/screenshot03.jpeg</screenshot>
+        </assets>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+    </extension>
+</addon>

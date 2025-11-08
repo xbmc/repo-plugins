@@ -1,0 +1,157 @@
+# Kodi Media Center language file
+# Addon Name: NHK World TV
+# Addon id: plugin.video.nhkworldtv
+# Addon Provider: sbroenne
+msgid ""
+msgstr ""
+
+# Settings.xml
+msgctxt "#30001"
+msgid "General"
+msgstr ""
+
+
+msgctxt "#30003"
+msgid "Display Limits"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Cache NHK API results (minutes)"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Max 'News'-items (the more the slower)"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Max 'At A Glance'-items"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Caching"
+msgstr ""
+
+# plugin.py
+
+# Top Stories Menu Item
+msgctxt "#30010"
+msgid "Top Stories >"
+msgstr ""
+
+msgctxt "#30012"
+msgid "{0}\n\n{1}"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Last update at: {0})"
+msgstr ""
+
+# At A Glance
+msgctxt "#30015"
+msgid "At a Glance >"
+msgstr ""
+
+# On-Demand Menu Item
+
+msgctxt "#30020"
+msgid "Watch on demand >"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Image from:\n\n{0}"
+msgstr ""
+
+# Live Menu Item
+
+msgctxt "#30030"
+msgid "Watch live now >"
+msgstr ""
+
+# Schedule Menu Items
+
+msgctxt "#30036"
+msgid "Today's Schedule >"
+msgstr ""
+
+msgctxt "#30037"
+msgid "View today's programming schedule"
+msgstr ""
+
+msgctxt "#30038"
+msgid "Past Schedule >"
+msgstr ""
+
+msgctxt "#30039"
+msgid "View previously aired programs"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Upcoming Schedule >"
+msgstr ""
+
+msgctxt "#30041"
+msgid "View upcoming programs"
+msgstr ""
+
+# On-Demand Menu
+
+msgctxt "#30042"
+msgid "Programs"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Programs"
+msgstr ""
+
+msgctxt "#30043"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30044"
+msgid "Latest Episodes"
+msgstr ""
+
+msgctxt "#30045"
+msgid "Most Watched"
+msgstr ""
+
+msgctxt "#30046"
+msgid "All Episodes"
+msgstr ""
+
+msgctxt "#30047"
+msgid "Documentaries"
+msgstr ""
+
+# Episode List
+msgctxt "#30050"
+msgid "{0}\n\nAvailable until: {1}"
+msgstr ""
+
+# Top Stories
+msgctxt "#30060"
+msgid "{0} hour ago"
+msgstr ""
+
+msgctxt "#30061"
+msgid "{0} hours ago"
+msgstr ""
+
+msgctxt "#30062"
+msgid "{0} min ago"
+msgstr ""
+
+# Live Schedule
+msgctxt "#30063"
+msgid "PLAY: {0}"
+msgstr ""
+
+# kodiutils.py
+msgctxt "#30090"
+msgid "{0} - {1} episode"
+msgstr ""
+
+msgctxt "#30091"
+msgid "{0} - {1} episodes"
+msgstr ""
+

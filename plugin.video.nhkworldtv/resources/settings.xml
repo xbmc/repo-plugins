@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30008">
+        <setting id="url_cache_minutes" type="slider" label="30004" default="240" range="60,60,1200" option="int" />
+    </category>
+    <category label="30003">
+        <setting id="max_news_items" type="slider" label="30006" default="39" range="10,10,60" option="int" />
+        <setting id="max_ataglance_items" type="slider" label="30007" default="83" range="44,40,1000" option="int" />
+    </category>
+</settings>

@@ -325,21 +325,6 @@ class CBC:
         return labels
 
 
-    def parse_smil(self, smil):
-        """Parse a SMIL file for the video."""
-        resp = self.session.get(smil)
-
-        if not resp.status_code == 200:
-            log(f'ERROR: {smil} returns status of {resp.status_code}', True)
-            return None
-        save_cookies(self.session.cookies)
-
-        dom = parseString(resp.content)
-        seq = dom.getElementsByTagName('seq')[0]
-        video = seq.getElementsByTagName('video')[0]
-        src = video.attributes['src'].value
-        return src
-
     @staticmethod
     def get_session():
         """Get a requests session object with CBC cookies."""

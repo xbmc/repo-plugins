@@ -7,6 +7,7 @@ import requests
 
 from resources.lib.utils import save_cookies, loadCookies, log, get_iptv_channels_file
 from resources.lib.cbc import CBC
+from resources.lib.gemv2 import GemV2
 
 LIST_URL = 'https://services.radio-canada.ca/ott/catalog/v2/gem/home?device=web'
 LIST_ELEMENT = '2415871718'
@@ -71,6 +72,7 @@ class LiveChannels:
             # - channel_dict is used by the IPTVManager for the guide and stream is how the IPTV manager calls us back to play something
             values = {
                 'id': callsign,
+                'app_code': 'medianetlive',
                 'image': image,
                 'labels': urlencode(labels)
             }
@@ -89,13 +91,7 @@ class LiveChannels:
         return result
 
     def get_channel_stream(self, id):
-        url = f'https://services.radio-canada.ca/media/validation/v2/?appCode=medianetlive&connectionType=hd&deviceType=ipad&idMedia={id}&multibitrate=true&output=json&tech=hls&manifestType=desktop'
-        resp = self.session.get(url)
-        if not resp.status_code == 200:
-            log('ERROR: {} returns status of {}'.format(LIST_URL, resp.status_code), True)
-            return None
-        save_cookies(self.session.cookies)
-        return json.loads(resp.content)['url']
+        return GemV2.get_stream(id=id,app_code='medianetlive')
 
     def get_channel_metadata(self, id):
         url = f'https://services.radio-canada.ca/media/meta/v1/index.ashx?appCode=medianetlive&idMedia={id}&output=jsonObject'

@@ -119,3 +119,7 @@ msgstr ""
 msgctxt "#30026"
 msgid "Search"
 msgstr ""
+
+msgctxt "#30027"
+msgid "Unsupported DRM"
+msgstr ""

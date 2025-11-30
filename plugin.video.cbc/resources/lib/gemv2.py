@@ -107,7 +107,8 @@ class GemV2:
         mv = manifest_versions[-1] if manifest_versions is not None else 1
         url = f'https://services.radio-canada.ca/media/validation/v2/?appCode={app_code}&connectionType=hd&deviceType=multiams&idMedia={id}&multibitrate=true&output=json&tech={tech}&manifestType=desktop&manifestVersion={mv}'
         retval = GemV2.get_episode(url)
-        retval['type'] = drm['name']
+        if retval is not None:
+            retval['type'] = drm['name']
         return retval
     
     @staticmethod

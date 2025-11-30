@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.cbc"
        name="Canadian Broadcasting Corp (CBC)"
-       version="4.0.20+matrix.1"
-       provider-name="micahg,t1m,smf007,oshanrube">
+       version="4.0.21+matrix.1"
+       provider-name="micahg,t1m,smf007,oshanrube,jgaudet">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" version="2.22.0"/>
@@ -28,6 +28,6 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=328421</forum>
     <website>https://watch.cbc.ca/</website>
     <source>https://github.com/micahg/plugin.video.cbc</source>
-    <news>- Updates for new CBC Gem API</news>
+    <news>- Fix authentication issues</news>
   </extension>
 </addon>

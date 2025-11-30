@@ -163,9 +163,12 @@ class CBC:
 
         url = urlparse(resp.headers['location'])
         frags = parse_qs(url.fragment)
-        access_token = frags['access_token'][0]
-        id_token = frags['id_token'][0]
-
+        try:
+            access_token = frags['access_token'][0]
+            id_token = frags['id_token'][0]
+        except KeyError:
+            log(f'Call to Authorize fails. Invalid user credentials?')
+            return None
         return (access_token, id_token)
 
 
@@ -225,7 +228,11 @@ class CBC:
         if not CBC.azure_authorize_self_asserted(sess, username, tx_arg, password):
             log('Authorization "SelfAsserted" step failed', True)
             return False
-        access_token, id_token = CBC.azure_authorize_sign_in(sess, tx_arg)
+        resp = CBC.azure_authorize_sign_in(sess, tx_arg)
+        if resp is None:
+            log('Authorization "confirmed" step failed', True)
+            return False
+        access_token, id_token = resp
         if not access_token or not id_token:
             log('Authorization "confirmed" step failed', True)
             return False

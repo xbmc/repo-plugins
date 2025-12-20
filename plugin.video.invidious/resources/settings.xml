@@ -2,7 +2,13 @@
 <settings>
     <category id="general" label="30008">
         <setting label="30010" type="bool" id="auto_instance" default="true"/>
-        <setting label="30007" type="text" id="instance_url" default="auto"/>
+        <setting visible="eq(-1,false)" label="30007" type="text" id="instance_url"/>
+        <setting visible="eq(-2,false)" label="30015" type="text" id="instance_username"/>
+        <setting visible="eq(-3,false)" label="30016" type="text" option="hidden" id="instance_password"/>
+        <setting visible="eq(-4,false)" label="30017" type="bool" id="mark_items_watched"/>
+        <setting label="30018" type="bool" id="show_instance_trending" default="true"/>
+        <setting label="30019" type="bool" id="show_instance_popular" default="true"/>
         <setting label="30009" type="bool" id="disable_dash" default="false"/>
+        <setting label="30022" type="bool" id="local" default="false"/>
     </category>
 </settings>

@@ -1,7 +1,7 @@
 # Kodi Media Center language file
-# Addon Name: YouTube
+# Addon Name: Invidious
 # Addon id: plugin.video.invidious
-# Addon Provider: TheAssassin
+# Addon Provider: pere
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
@@ -74,4 +74,36 @@ msgstr ""
 
 msgctxt "#30014"
 msgid "HTTP request {request_url} with {request_params} returned HTTP status {status_code}: {status_reason} error"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Instance username"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Instance password"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Mark items watched on instance"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Show instance trending listing"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Show instance popular listing"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Popular"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Trending"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Proxy videos"
 msgstr ""

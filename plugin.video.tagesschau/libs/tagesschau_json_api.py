@@ -18,19 +18,18 @@
 
 try: import json
 except ImportError: import simplejson as json
-import logging, datetime, re, urllib.request, xbmc, xbmcaddon
+import datetime, re, urllib.request, xbmc, xbmcaddon
 #import web_pdb
 #web_pdb.set_trace()
 
 # -- Constants ----------------------------------------------
 ADDON_ID = 'plugin.video.tagesschau'
-
-logger = logging.getLogger("plugin.video.tagesschau.api")
 base_url = "https://www.tagesschau.de/api2u/"
 
 addon = xbmcaddon.Addon(id=ADDON_ID)
 showage = addon.getSettingBool('ShowAge')
 tt_listopt = addon.getSetting('tt_list')
+ts20_count = int(addon.getSetting('ts20_count'))
 hide_europadruck = addon.getSettingBool('hide_europadruck')
 hide_wolkenfilm = addon.getSettingBool('hide_wolkenfilm')
 
@@ -176,13 +175,23 @@ class VideoContentParser(object):
 
     def parse_livestream(self, jsonlivestream):
         """Parses the video JSON into a VideoContent object."""
-        tsid = "livestream"
-        title = "Livestream"
-        timestamp = None
+        tsid = jsonlivestream["sophoraId"]
+        title = jsonlivestream["title"]
+
+        if( "date" in jsonlivestream ): 
+            timestamp = self._parse_date(jsonlivestream["date"])
+        else:
+            timestamp = datetime.datetime.now()
+            
+        if( title.lower() == "tagesschau" ):
+            title = title + timestamp.strftime(' vom %d.%m.%Y  %H:%M')
+            
         imageurls = {}
         imageurls = self._parse_image_urls(jsonlivestream["teaserImage"]["imageVariants"])
         videourls = self.parse_video_urls(jsonlivestream["streams"])
-        return VideoContent(tsid, title, timestamp, videourls, imageurls)
+        duration = int(jsonlivestream["tracking"][1]["length"])
+        description = title
+        return VideoContent(tsid, title, timestamp, videourls, imageurls, duration, description)
 
     def parse_video_urls(self, jsonvariants):
         """Parses the video mediadata JSON into a dict mapping variant name to URL."""
@@ -210,10 +219,8 @@ class VideoContentParser(object):
 class VideoContentProvider(object):
     """Provides access to the VideoContent offered by the tagesschau JSON API."""
 
-    def __init__(self, jsonsource):
-        self._jsonsource = jsonsource
+    def __init__(self):
         self._parser = VideoContentParser()
-        self._logger = logging.getLogger("plugin.video.tagesschau.api.VideoContentProvider")
 
     def livestreams(self):
         """Retrieves the livestream(s) currently on the air.
@@ -221,13 +228,14 @@ class VideoContentProvider(object):
             Returns:
                 A list of VideoContent object for livestream(s) on the air.
         """
-        self._logger.info("retrieving livestream(s)")
         videos = []
-        data = self._jsonsource.livestreams()
+
+        url = base_url + "channels"
+        data = json.loads( urllib.request.urlopen(url).read() )
+
         for jsonstream in data["channels"]:
-            if( not "date" in jsonstream ): # livestream has no date
-                video = self._parser.parse_livestream(jsonstream)
-                videos.append(video)
+            video = self._parser.parse_livestream(jsonstream)
+            videos.append(video)
 
         return videos
 
@@ -237,10 +245,11 @@ class VideoContentProvider(object):
             Returns:
                 A list of VideoContent items.
         """
-        self._logger.info("retrieving videos")
-
         videos = []
-        data = self._jsonsource.latest_videos()
+        
+        url = base_url + "news"
+        data = json.loads( urllib.request.urlopen(url).read() )
+
         for jsonvideo in data["news"]:
             try:
                 if( (jsonvideo["type"] == "video") and (jsonvideo["tracking"][0]["src"] == "tagesschau") ):
@@ -252,9 +261,8 @@ class VideoContentProvider(object):
                         video = self._parser.parse_video(jsonvideo)
                         videos.append(video)
             except:
-                self._logger.info("ignoring")
+                pass
 
-        self._logger.info("found " + str(len(videos)) + " videos")
         return videos
 
     def latest_broadcasts(self):
@@ -263,18 +271,19 @@ class VideoContentProvider(object):
             Returns:
                 A list of VideoContent items.
         """
-        self._logger.info("retrieving broadcasts")
         videos = []
-        data = self._jsonsource.latest_broadcasts()
+
+        url = base_url + "channels"
+        data = json.loads( urllib.request.urlopen(url).read() )
+
         for jsonbroadcast in data["channels"]:
             try:
                 if( ("date" in jsonbroadcast) and ("title" in jsonbroadcast) ):  # Filter out livestream which has no date
                     video = self._parser.parse_broadcast(jsonbroadcast)
                     videos.append(video)
             except:
-                self._logger.info("ignoring")
+                pass
 
-        self._logger.info("found " + str(len(videos)) + " videos")
         return videos
 
     def tagesschau_20(self):
@@ -283,20 +292,24 @@ class VideoContentProvider(object):
             Returns:
                 A list of VideoContent items.
         """
-        self._logger.info("retrieving tagesschau 20:00")
         videos = []
-        data = self._jsonsource.tagesschau_20()
-        for jsonvideo in data["searchResults"]:
-            try:
-                if( jsonvideo["type"] == "video" ):
-                    length = int(jsonvideo["tracking"][1]["length"])
-                    if( (length >= 890) and (length <= 910) ):
-                        video = self._parser.parse_broadcast(jsonvideo, "Tagesschau")
-                        videos.append(video)
-            except:
-                self._logger.info("ignoring")
+        
+        page = 0
+        while (len(videos) < ts20_count) and (page < 10):
+            url = base_url + "search/?searchText=Tagesschau+20+Uhr&pageSize=30&resultPage=" + str(page)
+            data = json.loads( urllib.request.urlopen(url).read() )
+            page += 1
+            
+            for jsonvideo in data["searchResults"]:
+                try:
+                    if( jsonvideo["type"] == "video" ):
+                        length = int(jsonvideo["tracking"][1]["length"])
+                        if( (length >= 890) and (length <= 910) ):
+                            video = self._parser.parse_broadcast(jsonvideo, "Tagesschau")
+                            videos.append(video)
+                except:
+                    pass
 
-        self._logger.info("found " + str(len(videos)) + " videos")
         return videos
 
     def tagesthemen(self):
@@ -305,55 +318,27 @@ class VideoContentProvider(object):
             Returns:
                 A list of VideoContent items.
         """
-        self._logger.info("retrieving tagesthemen")
         videos = []
-        data = self._jsonsource.tagesthemen()
-        for jsonvideo in data["searchResults"]:
-            try:
-                if( jsonvideo["type"] == "video" ):
-                    length = int(jsonvideo["tracking"][1]["length"])
-                    video = self._parser.parse_broadcast(jsonvideo)
 
-                    if( tt_listopt == "0" ):
-                        if( length >= 1100 ):
-                            videos.append(video)
-                    elif( tt_listopt == "1" ):
-                        if( length < 1100 ):
-                            videos.append(video)
-                    else:
-                        videos.append(video)
-            except:
-                self._logger.info("ignoring")
+        for page in range(2):        
+            url = base_url + "search/?searchText=tagesthemen&pageSize=50&resultPage=" + str(page)
+            data = json.loads( urllib.request.urlopen(url).read() )
 
-        self._logger.info("found " + str(len(videos)) + " videos")
+            for jsonvideo in data["searchResults"]:
+                try:
+                    if( jsonvideo["type"] == "video" ):
+                        length = int(jsonvideo["tracking"][1]["length"])
+                        video = self._parser.parse_broadcast(jsonvideo)
+
+                        if( tt_listopt == "0" ):
+                            if( length >= 1100 ):
+                                videos.append(video)
+                        elif( tt_listopt == "1" ):
+                            if( length < 1100 ):
+                                videos.append(video)
+                        else:
+                            videos.append(video)
+                except:
+                    pass
+
         return videos
-
-
-class JsonSource(object):
-    """Provides access to the raw objects parsed from the TS JSON API.
-        Can be replaced for unittesting purposes."""
-
-    def livestreams(self):
-        """Returns the parsed JSON structure for livestreams."""
-        handle = urllib.request.urlopen(base_url + "channels")
-        return json.loads(handle.read())
-
-    def latest_videos(self):
-        """Returns the parsed JSON structure for the latest videos."""
-        handle = urllib.request.urlopen(base_url + "news")
-        return json.loads(handle.read())
-
-    def latest_broadcasts(self):
-        """Returns the parsed JSON structure for the latest broadcasts."""
-        handle = urllib.request.urlopen(base_url + "channels")
-        return json.loads(handle.read())
-
-    def tagesschau_20(self):
-        """Returns the parsed JSON structure for 20:00 tagesschau"""
-        handle = urllib.request.urlopen(base_url + "search/?searchText=Tagesschau+20+Uhr")
-        return json.loads(handle.read())
-
-    def tagesthemen(self):
-        """Returns the parsed JSON structure for tagesthemen"""
-        handle = urllib.request.urlopen(base_url + "search/?searchText=tagesthemen")
-        return json.loads(handle.read())

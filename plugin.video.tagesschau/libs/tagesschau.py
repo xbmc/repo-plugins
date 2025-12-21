@@ -16,12 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys, os, urllib, urllib.parse, logging
+import sys, os, urllib, urllib.parse
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs
 #import web_pdb
 
-from libs.tagesschau_json_api import VideoContentProvider, JsonSource, addon
+from libs.tagesschau_json_api import VideoContentProvider, addon
 from libs.subtitles import download_subtitles
+from infotagger.listitem import ListItemInfoTag
 
 # -- Constants ----------------------------------------------
 ADDON_ID = 'plugin.video.tagesschau'
@@ -32,9 +33,6 @@ ACTION_PARAM = 'action'
 FEED_PARAM = 'feed'
 ID_PARAM = 'tsid'
 URL_PARAM = 'url'
-
-# -- Settings -----------------------------------------------
-logger = logging.getLogger("plugin.video.tagesschau.api")
 
 # -- Settings -----------------------------------------------
 quality_id = addon.getSetting('quality')
@@ -61,10 +59,13 @@ subtitles_dir  = os.path.join(profile_dir, 'Subtitles')
 def addVideoContentDirectory(title, method):
     url_data = { ACTION_PARAM: 'list_feed', FEED_PARAM: method  }
     url = 'plugin://' + ADDON_ID + '/?' + urllib.parse.urlencode(url_data)
-    li = xbmcgui.ListItem(str(title))
+    li = xbmcgui.ListItem()
     li.setArt({'thumb':ICON_IMG, 'landscape':LOGO_IMG, 'icon':ICON_IMG})
     li.setProperty('Fanart_Image', FANART_IMG)
-    li.setInfo(type="video", infoLabels={ "Title": str(title), "Plot": str(title) })    #"mediatype": "video"
+
+    infoLabels={ "title": str(title), "plot": str(title) }
+    ListItemInfoTag(li, 'video').set_info(infoLabels)
+    
     xbmcplugin.setContent(int(sys.argv[1]), 'files')
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=True)
 
@@ -83,20 +84,20 @@ def getListItem(videocontent):
     li.setArt({'thumb':image_url, 'landscape':image_url})
     li.setProperty('Fanart_Image', fanart_url)
     li.setProperty('IsPlayable', 'true')
-    li.setInfo(type="video",
-               infoLabels={ "Title": str(title),
-                            "Plot": str(videocontent.description),
-                            "Duration": str((videocontent.duration or 0)/60),
-                            "mediatype": "video"
-                          }
-              )
+
+    infoLabels={ "title": str(title),
+                 "plot": str(videocontent.description),
+                 "duration": (videocontent.duration or 0)/60,
+                 "mediatype": "video"
+               }
+    ListItemInfoTag(li, 'video').set_info(infoLabels)
+
     if( videocontent.timestamp ):
-        li.setInfo(type="video",
-                   infoLabels={ "premiered": str(videocontent.timestamp.strftime('%d.%m.%Y')),
-                                "aired": str(videocontent.timestamp.strftime('%d.%m.%Y')),
-                                "date": str(videocontent.timestamp.strftime('%d.%m.%Y'))
-                              }
-                  )
+        infoLabels={ "premiered": str(videocontent.timestamp.strftime('%d.%m.%Y')),
+                     "aired": str(videocontent.timestamp.strftime('%d.%m.%Y')),
+                     "date": str(videocontent.timestamp.strftime('%d.%m.%Y'))
+                   }
+        ListItemInfoTag(li, 'video').set_info(infoLabels)
 
     return li
 
@@ -137,7 +138,7 @@ def tagesschau():
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
 
     params = get_params()
-    provider = VideoContentProvider(JsonSource())
+    provider = VideoContentProvider()
 
     if params.get(ACTION_PARAM) == 'play_video':
         subtitles_file = None
@@ -173,21 +174,9 @@ def tagesschau():
         addVideoContentItems(videos, params[FEED_PARAM])
 
     else:
-        # populate root directory
-        # check whether there is a livestream
-        videos = provider.livestreams()
-        if(len(videos) == 1):
-            li = xbmcgui.ListItem(strings['livestreams'])
-            li.setArt({'thumb':ICON_IMG, 'landscape':LOGO_IMG, 'icon':ICON_IMG})
-            li.setProperty('Fanart_Image', FANART_IMG)
-            li.setProperty('IsPlayable', 'true')
-            li.setInfo(type="video", infoLabels={ "Title": strings['livestreams'], "Plot": strings['livestreams'] })
-            url = getUrl(videos[0], "livestreams")
-            xbmcplugin.setContent(int(sys.argv[1]), 'videos')
-            xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, li, False)
-
         # add directories for other feeds
         add_named_directory = lambda x: addVideoContentDirectory(strings[x], x)
+        add_named_directory('livestreams')
         add_named_directory('latest_videos')
         add_named_directory('latest_broadcasts')
         add_named_directory('tagesschau_20')

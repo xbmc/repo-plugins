@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.tagesschau"
-    version="2.5.7"
+    version="2.6.0"
     name="Tagesschau"
     provider-name="J.Schumacher, H.Saul, C.Prasch">
   <requires>
     <import addon="xbmc.python" version="3.0.0"></import>
+    <import addon="script.module.infotagger" version="0.0.3" />
   </requires>
   
   <extension point="xbmc.python.pluginsource" library="main.py">
@@ -31,6 +32,16 @@
       <screenshot>resources/assets/screenshot_3.png</screenshot>
     </assets>
     <news>
+version 2.6.0 (2025-12-21)
+ * Searching for "Tagesschau 20 Uhr" broadcasts changed to find more entries. Number of searched entries can be configured in settings.
+ * Updates some internas to prevent warnings in Kodi logfile.
+ 
+version 2.5.9 (2024-11-17)
+ * All livestreams (not only one) are now listed in the subfolder "Livestreams"
+ 
+version 2.5.8 (2024-11-02)
+ * Detection of available livestream changed
+ 
 version 2.5.7 (2024-08-17)
  * Fixed empty news list because of changes in ARD API
  

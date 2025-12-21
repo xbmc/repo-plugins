@@ -1,9 +1,73 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-  <setting id="quality" type="enum" label="30001" values="Small (480x272)|Medium (640x368)|Large (1280x720)" default="2" />
-  <setting id="ShowAge" type="bool" label="30002" default="true" />
-  <setting id="tt_list" type="enum" label="30003" lvalues="30004|30005|30006" default="2" />
-  <setting id="hide_europadruck" type="bool" label="30007" default="true" />
-  <setting id="hide_wolkenfilm"  type="bool" label="30008" default="true" />
-  <setting id="show_fanart"      type="bool" label="30009" default="true" />
+<?xml version="1.0" ?>
+<settings version="1">
+  <section id="plugin.video.tagesschau">
+    <category id="general" label="30010" help="">
+      <group id="1">
+
+        <setting id="quality" type="integer" label="30001" help="">
+          <level>0</level>
+          <default>2</default>
+          <constraints>
+            <options>
+              <option label="Small (480x272)">0</option>
+              <option label="Medium (640x368)">1</option>
+              <option label="Large (1280x720)">2</option>
+            </options>
+          </constraints>          
+          <control type="spinner" format="string"/>
+        </setting>
+
+        <setting id="ShowAge" type="boolean" label="30002" help="">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+
+        <setting id="tt_list" type="integer" label="30003" help="">
+          <level>0</level>
+          <default>2</default>
+          <constraints>
+            <options>
+              <option label=30004>0</option>
+              <option label=30005>1</option>
+              <option label=30006>2</option>
+            </options>
+          </constraints>          
+          <control type="spinner" format="string"/>
+        </setting>
+
+        <setting id="ts20_count" type="integer" label="30011" help="">
+          <level>0</level>
+          <default>3</default>
+          <constraints>
+            <minimum>2</minimum>
+            <step>1</step>
+            <maximum>7</maximum>
+          </constraints>
+          <control type="slider" format="integer">
+            <popup>false</popup>
+          </control>
+        </setting>
+
+        <setting id="hide_europadruck" type="boolean" label="30007" help="">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+
+        <setting id="hide_wolkenfilm" type="boolean" label="30008" help="">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+
+        <setting id="show_fanart" type="boolean" label="30009" help="">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+
+      </group>
+    </category>
+  </section>
 </settings>

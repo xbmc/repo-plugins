@@ -24,36 +24,34 @@ from io import StringIO
 
 
 def get_subtitles(video_id):
-    mediaelement_json = requests.get("https://psapi.nrk.no/playback/manifest/%s" % (video_id)).json()
-
-    if not mediaelement_json["playable"]['subtitles']:
+    mediaelement_json = requests.get("https://psapi.nrk.no/mediaelement/%s" % (video_id),
+        headers={
+            "Referer": "https://tv.nrk.no",
+            "Accept": "application/vnd.nrk.psapi+json; version=9; ludo-client=true; psapi=snapshot"
+        }).json()
+    if not mediaelement_json['playable']['parts']:
         return None
-    ttml_sub_url = mediaelement_json["playable"]['subtitles'][0]['webVtt']
-    subs = requests.get(ttml_sub_url).text
-    if not subs:
+    subtitles = mediaelement_json['playable']['parts'][0].get('subtitles', None)
+    if not subtitles:
         return None
-
-    content = _vtt_to_srt(subs)
-    try:
-        filename = os.path.join(xbmc.translatePath("special://temp"), 'nor.srt')  # deprecated already in Kodi v19
-    except:
-        filename = os.path.join(xbmcvfs.translatePath("special://temp"), 'nor.srt')  # 4.8.0 https://github.com/xbmc/xbmc/pull/19301
-    with open(filename, 'w' ,encoding='utf8') as f:
-        f.write(content)
-    return filename
-
-
-def _vtt_to_srt(content):
-    return content
-
-def _str_to_time(txt):
-    p = txt.split(':')
-    try:
-        ms = float(p[2])
-    except ValueError:
-        ms = 0
-    return int(p[0]) * 3600 + int(p[1]) * 60 + ms
+    subs = {}
+    for sub in subtitles:
+        subs[sub['type']] = sub['webVtt']
+    if mediaelement_json['streamingMode'] != "onDemand":
+        return subs
+    for sub_type in subs.keys():
+        vtt_sub_url = subs[sub_type]
+        content = requests.get(vtt_sub_url).text
+        if not content:
+            continue
+        filename = "nor.sdh.vtt" if sub_type == 'ttv' else "%s.vtt" % sub_type
+        try:
+            filename = os.path.join(xbmcvfs.translatePath("special://temp"), filename)  # 4.8.0 https://github.com/xbmc/xbmc/pull/19301
+        except:
+            filename = os.path.join(xbmc.translatePath("special://temp"), filename)  # deprecated already in Kodi v19
+        with open(filename, 'w' ,encoding='utf8') as f:
+            f.write(content)
+        subs[sub_type] = filename
+    return subs
 
 
-def _time_to_str(time):
-    return '%02d:%02d:%02d,%03d' % (time / 3600, (time % 3600) / 60, time % 60, (time % 1) * 1000)

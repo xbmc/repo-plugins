@@ -1,3 +1,7 @@
+[B]4.10.0[/B]
+- add subtitles to VOD stream
+- enable rewinding in live stream and add subtitles to live stream
+
 [B]4.9.2[/B]
 - use hardcoded username to fix github action
 

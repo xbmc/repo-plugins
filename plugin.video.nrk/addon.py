@@ -82,8 +82,11 @@ def live_resolve(id):
     media_url = nrktv.get_playback_url("/playback/manifest/channel/%s" % id);
     if (media_url):
         success = True
-    li = ListItem(path=media_url)
-    setResolvedUrl(plugin.handle, success, li)
+    is_helper = inputstreamhelper.Helper('hls')
+    if is_helper.check_inputstream():
+        playitem = ListItem(path=media_url)
+        playitem.setProperty('inputstream', is_helper.inputstream_addon)
+        setResolvedUrl(plugin.handle, success, playitem)
 
 
 def set_stream_details(item, li):
@@ -247,16 +250,17 @@ def play(video_id):
     if not urls:
         raise Exception("could not find any streams")
     url = urls[0] if len(urls) == 1 else "stack://" + ' , '.join(urls)
-
-    xbmcplugin.setResolvedUrl(plugin.handle, True, ListItem(path=url))
+    playitem = ListItem(path=url)
+    subtitles = subs.get_subtitles(video_id)
+    if subtitles:
+        playitem.setSubtitles(list(subtitles.values()))
+    xbmcplugin.setResolvedUrl(plugin.handle, True, listitem=playitem)
     player = xbmc.Player()
-    subtitle = subs.get_subtitles(video_id)
-    if subtitle:
+    if subtitles:
         # Wait for stream to start
         start_time = time.time()
         while not player.isPlaying() and time.time() - start_time < 10:
             time.sleep(1.)
-        player.setSubtitles(subtitle)
         if xbmcaddon.Addon().getSetting('showsubtitles') != '1':
             player.showSubtitles(False)
 

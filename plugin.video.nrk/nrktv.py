@@ -201,7 +201,7 @@ def _get(path, params=''):
 def get_playback_url(manifest_url):
     playable = _get(manifest_url)['playable']
     if playable:
-        return playable['assets'][0]['url']
+        return playable['assets'][0]['url'].replace("adap=small&", "")
     else:
         return None
 

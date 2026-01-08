@@ -198,10 +198,13 @@ def resumepoints_is_activated():
 
 def get_resumepoint_data(episode_id):
     """Get resumepoint data from GraphQL API"""
-    data_json = get_single_episode_data(episode_id)
-    video_id = data_json.get('data').get('page').get('episode').get('watchAction').get('videoId')
-    resumepoint_title = data_json.get('data').get('page').get('episode').get('watchAction').get('resumePointTitle')
-    return video_id, resumepoint_title
+    data_json = get_stream_data(episode_id)
+    return next(
+        (mode.get('resumePointTemplate', {})
+         for mode in data_json.get('data', {}).get('page', {}).get('player', {}).get('modes', [])
+         if mode.get('__typename') == 'VideoPlayerMode'),
+        None
+    )
 
 
 def get_next_info(episode_id):
@@ -261,14 +264,14 @@ def get_next_info(episode_id):
             'current_episode': current_episode,
             'next_episode': next_episode,
             'play_info': {
-                'episode_id': next_ep.get('id'),
+                'episode_id': next_ep.get('shareAction').get('url'),
             }
         }
     return next_info
 
 
-def get_stream_id_data(vrtmax_url):
-    """Get stream_id from from GraphQL API"""
+def get_stream_data(vrtmax_url):
+    """Get stream data from from GraphQL API"""
     page_id = vrtmax_url.split('www.vrt.be')[1]
     graphql_query = """
          query StreamId($pageId: ID!) {
@@ -286,13 +289,21 @@ def get_stream_id_data(vrtmax_url):
               }
             }
             ... on EpisodePage {
-              episode {
-                watchAction {
-                  streamId
+              player {
+                modes {
+                  ... on VideoPlayerMode {
+                    streamId
+                    resumePointTemplate {
+                      mediaId
+                      mediaName
+                    }
+                  }
+                  __typename
                 }
               }
             }
           }
+          __typename
         }
     """
     operation_name = 'StreamId'
@@ -357,17 +368,8 @@ def get_single_episode_data(episode_id):
           season {
             titleRaw
           }
-          watchAction {
-            avodUrl
-            completed
-            resumePoint
-            resumePointTotal
-            resumePointProgress
-            resumePointTitle
-            episodeId
-            videoId
-            publicationId
-            streamId
+          shareAction {
+            url
           }
           favoriteAction {
             favorite
@@ -1740,7 +1742,7 @@ def convert_episode(episode_tile, destination=None):
     """Convert paginated episode item to TitleItem"""
     import dateutil.parser
     from datetime import datetime, timedelta
-    from base64 import b64decode, b64encode
+    from base64 import b64decode
     import dateutil.tz
 
     title_item = TitleItem(label=None, art_dict={}, info_dict={})
@@ -1772,16 +1774,13 @@ def convert_episode(episode_tile, destination=None):
     if episode:
         analytics = episode.get('analytics', {})
         program = episode.get('program', {})
-        watch_action = episode.get('watchAction', {})
+        share_action = episode.get('shareAction', {})
 
         # IDs and paths
         episode_id = episode.get('id')
-        episode_page = analytics.get('pageName', '')
-        video_id = watch_action.get('videoId')
-        publication_id = watch_action.get('publicationId')
-        encoded_page = b64encode(episode_page.encode('utf-8')).decode('utf-8')
+        video_url = share_action.get('url') if share_action else ''
 
-        path = url_for('play_id', video_id=video_id, publication_id=publication_id, episode_id=encoded_page)
+        path = url_for('play_url', video_url=video_url)
         program_name = url_to_program(program.get('link'))
         program_id = program.get('id')
         program_title = program.get('title')
@@ -1852,9 +1851,11 @@ def convert_episode(episode_tile, destination=None):
             program_name, program_id, program_title, program_type, favorited, is_continue, episode_id
         )
 
-        # Resume point logic
-        position = watch_action.get('resumePoint')
-        total = watch_action.get('resumePointTotal')
+        # FIXME: Resume point logic is broken
+        # position = watch_action.get('resumePoint')
+        # total = watch_action.get('resumePointTotal')
+        position = 0
+        total = 0
         prop_dict = {}
         playcount = -1
 
@@ -2020,8 +2021,8 @@ def get_offline_programs(end_cursor='', use_favorites=False):
 def get_favorite_programs(end_cursor=''):
     """Get favorite programs"""
     import base64
-    list_id = 'tl-fp|o%25|o%9|video-program%|video-program|b%0%'
-    list_id = '#{}'.format(base64.b64encode(list_id.encode('utf-8')).decode('utf-8'))
+    list_id = 'o%25|o%9|video-program%|video-program|b%0%'
+    list_id = '${}'.format(base64.b64encode(list_id.encode('utf-8')).decode('utf-8'))
     programs = get_programs(list_id=list_id, destination='favorites_programs', end_cursor=end_cursor)
     return programs
 
@@ -2099,8 +2100,8 @@ def get_search(keywords, end_cursor=''):
         if query_string:
             search_dict['q'] = query_string
 
-        list_id = 'tl-pag-srch|o%14|{}|{}%'.format(dumps(search_dict), result_type)
-        list_id = '#{}'.format(base64.b64encode(list_id.encode('utf-8')).decode('utf-8'))
+        list_id = 'o%14|{}|{}%'.format(dumps(search_dict), result_type)
+        list_id = '${}'.format(base64.b64encode(list_id.encode('utf-8')).decode('utf-8'))
 
         if entity_type == 'video-program' and not end_cursor:
             programs = get_programs(keywords=keywords, end_cursor=end_cursor)
@@ -2149,8 +2150,8 @@ def get_programs(list_id=None, destination=None, end_cursor='', category=None, c
         if query_string:
             search_dict['q'] = query_string
 
-        list_id = 'tl-pag-srch|o%14|{}|{}%'.format(dumps(search_dict), 'watch')
-        list_id = '#{}'.format(base64.b64encode(list_id.encode('utf-8')).decode('utf-8'))
+        list_id = 'o%14|{}|{}%'.format(dumps(search_dict), 'watch')
+        list_id = '${}'.format(base64.b64encode(list_id.encode('utf-8')).decode('utf-8'))
 
     # kodi paging
     kodi_page_size = get_setting_int('itemsperpage', default=50)
@@ -2362,7 +2363,7 @@ def get_seasons(program_name):
         tile = program.get('mostRelevantEpisodeTile')
         if tile:
             episode = (tile.get('tile', {}).get('episode', {}))
-            path = episode.get('watchAction', {}).get('videoUrl')
+            path = episode.get('shareAction', {}).get('url')
 
             # Build entry
             entry = {
@@ -2710,8 +2711,7 @@ def get_episode_by_air_date(channel_name, start_date, end_date=None):
                 _, _, _, video_item = convert_episode(episode)
                 video = {
                     'listitem': video_item,
-                    'video_id': episode.get('episode').get('watchAction').get('videoId'),
-                    'publication_id': episode.get('episode').get('watchAction').get('publicationId')
+                    'video_url': episode.get('episode').get('shareAction').get('url'),
                 }
                 if video:
                     return video

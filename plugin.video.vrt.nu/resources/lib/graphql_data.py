@@ -112,18 +112,8 @@ EPISODE = """
         value
         __typename
       }
-      watchAction {
-        avodUrl
-        completed
-        resumePoint
-        resumePointTotal
-        resumePointProgress
-        resumePointTitle
-        episodeId
-        videoId
-        videoUrl
-        publicationId
-        streamId
+      shareAction {
+        url
       }
       favoriteAction {
         favorite

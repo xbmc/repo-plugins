@@ -57,6 +57,9 @@ You can report issues at [our GitHub issues page](https://github.com/add-ons/plu
 </table>
 
 ## Releases
+### v2.5.48 (2026-01-08)
+- Fix menu listings after api change (@mediaminister)
+
 ### v2.5.47 (2025-12-21)
 - Fix IPTV Manager EPG (@mediaminister)
 

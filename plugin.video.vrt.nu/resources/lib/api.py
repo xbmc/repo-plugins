@@ -9,7 +9,7 @@ from urllib.parse import quote, quote_plus, unquote
 from data import CHANNELS
 from helperobjects import TitleItem
 from kodiutils import (colour, delete_cached_thumbnail, get_cache, get_setting_bool, get_setting_int, get_url_json, has_addon, has_credentials,
-                       localize, localize_datelong, localize_from_data, log, update_cache, url_for)
+                       localize, localize_datelong, localize_from_data, log, log_error, update_cache, url_for)
 from utils import find_entry, parse_duration, reformat_image_url, shorten_link, url_to_program, youtube_to_plugin_url
 from graphql_data import EPISODE, EPISODE_TILE, PROGRAM_TILE
 
@@ -321,73 +321,13 @@ def get_single_episode_data(episode_id):
             __typename
             ... on EpisodePage {
               episode {
-                ...ep
+                ...episode
               }
             }
           }
         }
-        fragment ep on Episode {
-          __typename
-          id
-          title
-          description
-          episodeNumberRaw
-          durationSeconds
-          offTimeRaw
-          onTimeRaw
-          image {
-            alt
-            templateUrl
-          }
-          analytics {
-            airDate
-            categories
-            contentBrand
-            episode
-            mediaSubtype
-            mediaType
-            name
-            pageName
-            season
-            show
-          }
-          program {
-            id
-            title
-            link
-            programType
-            image {
-              alt
-              templateUrl
-            }
-            posterImage {
-              alt
-              templateUrl
-            }
-          }
-          season {
-            titleRaw
-          }
-          shareAction {
-            url
-          }
-          favoriteAction {
-            favorite
-            id
-            title
-          }
-          nextUp {
-            title
-            autoPlay
-            countdown
-            tile {
-              __typename
-              ...episodeTileFragment
-            }
-          }
-        }
         %s
-    """ % EPISODE_TILE
+    """ % EPISODE
     operation_name = 'OnePlayerData'
     variables = {
         'id': episode_id,
@@ -2251,7 +2191,7 @@ def convert_seasons(api_data, program_name):
         if season.get('path'):
             episode_tile = season.get('episode_tile')
             if not episode_tile:
-                episode_tile = get_single_episode_data(season.get('path')).get('data').get('page')
+                episode_tile = get_single_episode_data(season.get('path')).get('data', {}).get('page', {})
 
             _, _, _, title_item = convert_episode(episode_tile)
             if len(api_data) > 1:
@@ -2363,7 +2303,7 @@ def get_seasons(program_name):
         tile = program.get('mostRelevantEpisodeTile')
         if tile:
             episode = (tile.get('tile', {}).get('episode', {}))
-            path = episode.get('shareAction', {}).get('url')
+            path = episode.get('shareAction', {}).get('url', '')
 
             # Build entry
             entry = {
@@ -2400,6 +2340,8 @@ def api_req(graphql_query, operation_name, variables, client='WEB'):
             'x-vrt-client-version': '1.5.12',
         }
         data_json = get_url_json(url=GRAPHQL_URL, cache=None, headers=headers, data=data)
+        if data_json.get('errors'):
+            log_error(dumps(data_json, indent=2))
     return data_json
 
 

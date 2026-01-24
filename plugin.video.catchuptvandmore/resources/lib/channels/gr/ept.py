@@ -5,7 +5,7 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-import re
+import json
 
 from codequick import Resolver
 import urlquick
@@ -16,14 +16,41 @@ from resources.lib import resolver_proxy, web_utils
 # TO DO
 # Add Replay
 
-URL_LIVE = 'https://www.ert.gr/webtv/ert/tv/live-glm/%s.html'
+URL_API = 'https://api.app.ertflix.gr/v1/Player/AcquireContent'
+
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    channel = {"ept1": "ert1", "ept2": "ert2", "ept3": "ert3", "eptnews": "ert-news", "eptsport": "ert-sports"}
+    channel = {
+        "eptnews": "ert-news",
+        "ept1": "ept1-live",
+        "ept2": "ept2-live",
+        "ept3": "ept3-live-2",
+        "eptsport1": "ert-sports-live-ww",
+        "eptsport2": "ert-sports-2-live-ww",
+        "eptkids": "ert-kids-live",
+    }
 
-    resp = urlquick.get(URL_LIVE % (channel[item_id]), headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    video_url = re.compile(r"var stream    = \'(.*?)\'").findall(resp.text)[0]
+    params = {
+        'platformCodename': 'www',
+        'codename': channel[item_id]
+    }
 
-    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")
+    resp = urlquick.get(URL_API, headers=GENERIC_HEADERS, params=params, max_age=-1)
+    data_json = json.loads(resp.text)
+    possible_formats = data_json['MediaFiles'][0]['Formats']
+    default = True
+
+    for video_type in possible_formats:
+        if 'm3u8' in video_type['Url']:
+            video_url = video_type['Url']
+            break
+        if 'mpd' in video_type['Url']:
+            video_url = video_type['Url']
+            default = False
+            if default:
+                video_url = video_type['Url']
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url)

@@ -16,6 +16,7 @@ from resources.lib import resolver_proxy, web_utils
 # Add Replay
 
 URL_ROOT = "https://www.sportenfrance.com"
+API_URL = 'https://apisef.mytvchain.com/public/api.php'
 
 GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
@@ -24,12 +25,23 @@ GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 def get_live_url(plugin, item_id, **kwargs):
 
     try:
-        resp = urlquick.get(URL_ROOT, headers=GENERIC_HEADERS, max_age=-1)
-        root = resp.parse()
-        for live_datas in root.iterfind('.//div'):
-            if live_datas.get('id') is not None:
-                live_id = re.compile('player_(.*?)$').findall(live_datas.get('id'))[0]
-                return resolver_proxy.get_stream_dailymotion(plugin, live_id)
+        headers = {
+            "User-Agent": web_utils.get_random_ua(),
+            "referer": URL_ROOT
+        }
+
+        params = {
+            'a': 'getVideos',
+            'mode': 'live',
+            'onair': 'yes',
+            'reallyLive': 'false',
+        }
+
+        resp = urlquick.get(API_URL, headers=headers, params=params, max_age=-1)
+        json_parser = resp.json()
+        live_id = json_parser['videos'][0]['daily_id']
+
+        return resolver_proxy.get_stream_dailymotion(plugin, live_id, embeder=URL_ROOT)
 
     except Exception:
-        return resolver_proxy.get_stream_dailymotion(plugin, 'x8sayn8')
+        return resolver_proxy.get_stream_dailymotion(plugin, 'x8sayn8', embeder=URL_ROOT)

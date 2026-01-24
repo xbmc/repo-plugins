@@ -255,53 +255,14 @@ def elem_to_programme(elem):
     return d
 
 
-def read_programmes(fp, only_current_programmes=False):
+def read_programmes(fp):
     """
     read_current_programmes(fp) -> list
 
     Return a list of programme dictionaries from file object 'fp'
-    If 'only_current_programmes', only considere current program based on current time.
+
     """
-
-    if only_current_programmes:
-        # Get the current UTC datetime
-        current_utc_time = datetime.datetime.now(pytz.UTC)
-        current_utc_time = int(current_utc_time.strftime(date_format_notz))
-
-        # Parse the xmltv file to only keep current programs
-        # It is faster to parse the xmltv file line by line and remove unwanted programmes
-        # than parsing the whole xmltv file with elementtree
-        # (x10 faster)
-        xmltv_l = []
-        with open(fp, 'rb') as f:
-            take_line = True
-            for line in f:
-                # Match the beginning of a program
-                if b'<programme ' in line:
-                    start = int(re.search(b'start="(.*?)"', line).group(1))  # UTC start time
-                    try:
-                        stop = int(re.search(b'stop="(.*?)"', line).group(1))  # UTC stop time
-                    except Exception:
-                        stop = 50000000000000
-                    if current_utc_time >= start and current_utc_time <= stop:
-                        pass
-                    else:
-                        take_line = False
-                        continue
-
-                # Keep this line if needed
-                if take_line:
-                    xmltv_l.append(line)
-
-                # Match the end of a program
-                if b'</programme>' in line:
-                    take_line = True
-
-        # Parse the reduced xmltv string with elementtree
-        # and convert each programme to a dict
-        tree = ET.fromstring(b''.join(xmltv_l))
-    else:
-        tree = ET.parse(fp)
+    tree = ET.parse(fp)
     programmes = []
     for elem in tree.findall('programme'):
         programmes.append(elem_to_programme(elem))
@@ -311,7 +272,67 @@ def read_programmes(fp, only_current_programmes=False):
 # CUTV&M functions
 
 
-def programme_post_treatment(programme):
+def read_current_programmes(fp, time_range=0):
+    """ Read an xmltv file and return a list of programme dictionaries
+    of all programmes from now up to a number of hours in the future
+    defined by the parameter `time_range`.
+    If `time-range` == 0, only the programmes currently on are returned.
+
+    Args:
+        fp (str): file path of the xmltv file
+        time_range (float): number of hours
+    Returns:
+        list: list of dicts of programmes info.
+    """
+
+    # Get the current UTC datetime
+    range_start = datetime.datetime.now(pytz.UTC)
+    range_end = range_start + datetime.timedelta(hours=time_range)
+    range_start = int(range_start.strftime(date_format_notz))
+    range_end = int(range_end.strftime(date_format_notz))
+
+    # Parse the xmltv file to only keep current programs
+    # It is faster to parse the xmltv file line by line and remove unwanted programmes
+    # than parsing the whole xmltv file with elementtree
+    # (x10 faster)
+    start_regex = re.compile(b'start="(.*?)"', re.DOTALL)
+    stop_regex = re.compile(b'stop="(.*?)"', re.DOTALL)
+    xmltv_l = []
+    with open(fp, 'rb') as f:
+        take_line = True
+        for line in f:
+            # Match the beginning of a program
+            if b'<programme ' in line:
+                start = int(start_regex.search(line).group(1))  # UTC start time
+                try:
+                    stop = int(stop_regex.search(line).group(1))  # UTC stop time
+                except Exception:
+                    stop = 50000000000000
+                if start < range_end and stop >= range_start:
+                    pass
+                else:
+                    take_line = False
+                    continue
+
+            # Keep this line if needed
+            if take_line:
+                xmltv_l.append(line)
+
+            # Match the end of a program
+            if b'</programme>' in line:
+                take_line = True
+
+    # Parse the reduced xmltv string with elementtree
+    # and convert each programme to a dict
+    tree = ET.fromstring(b''.join(xmltv_l))
+
+    programmes = []
+    for elem in tree.findall('programme'):
+        programmes.append(elem_to_programme(elem))
+    return programmes
+
+
+def programme_post_treatment(programme, timeformat):
     """Prepare the programme to be used in the Live TV menu of CUTV&M
 
     """
@@ -361,7 +382,7 @@ def programme_post_treatment(programme):
             # Move to our timezone
             elt_dt = elt_dt.astimezone(local_tz)
 
-            programme[elt] = elt_dt.strftime("%Hh%M")
+            programme[elt] = elt_dt.strftime(timeformat)
 
     return programme
 
@@ -439,43 +460,43 @@ xmltv_infos = {
     'fr_live':
         {
             'method': 'CUTV_xmltv_github',
-            'url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_fr_{}.xml',
-            'md5_url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_fr_{}_md5.txt',
+            'url': 'https://raw.githubusercontent.com/Catch-up-TV-and-More/xmltv/master/tv_guide_fr_{}.xml',
+            'md5_url': 'https://raw.githubusercontent.com/Catch-up-TV-and-More/xmltv/master/tv_guide_fr_{}_md5.txt',
             'keyword': 'tv_guide_fr_'
         },
     'be_live':
         {
             'method': 'CUTV_xmltv_github',
-            'url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_be_{}.xml',
-            'md5_url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_be_{}_md5.txt',
+            'url': 'https://raw.githubusercontent.com/Catch-up-TV-and-More/xmltv/master/tv_guide_be_{}.xml',
+            'md5_url': 'https://raw.githubusercontent.com/Catch-up-TV-and-More/xmltv/master/tv_guide_be_{}_md5.txt',
             'keyword': 'tv_guide_be_'
         },
     'ch_live':
         {
             'method': 'CUTV_xmltv_github',
-            'url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_ch_{}.xml',
-            'md5_url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_ch_{}_md5.txt',
+            'url': 'https://raw.githubusercontent.com/Catch-up-TV-and-More/xmltv/master/tv_guide_ch_{}.xml',
+            'md5_url': 'https://raw.githubusercontent.com/Catch-up-TV-and-More/xmltv/master/tv_guide_ch_{}_md5.txt',
             'keyword': 'tv_guide_ch_'
         },
     'uk_live':
         {
             'method': 'CUTV_xmltv_github',
-            'url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_uk_{}.xml',
-            'md5_url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_uk_{}_md5.txt',
+            'url': 'https://raw.githubusercontent.com/Catch-up-TV-and-More/xmltv/master/tv_guide_uk_{}.xml',
+            'md5_url': 'https://raw.githubusercontent.com/Catch-up-TV-and-More/xmltv/master/tv_guide_uk_{}_md5.txt',
             'keyword': 'tv_guide_uk_'
         },
     'it_live':
         {
             'method': 'CUTV_xmltv_github',
-            'url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_it_{}.xml',
-            'md5_url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_it_{}_md5.txt',
+            'url': 'https://raw.githubusercontent.com/Catch-up-TV-and-More/xmltv/master/tv_guide_it_{}.xml',
+            'md5_url': 'https://raw.githubusercontent.com/Catch-up-TV-and-More/xmltv/master/tv_guide_it_{}_md5.txt',
             'keyword': 'tv_guide_it_'
         },
     'wo_live':
         {
             'method': 'CUTV_xmltv_github',
-            'url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_wo_{}.xml',
-            'md5_url': 'https://github.com/Catch-up-TV-and-More/xmltv/raw/master/tv_guide_wo_{}_md5.txt',
+            'url': 'https://raw.githubusercontent.com/Catch-up-TV-and-More/xmltv/master/tv_guide_wo_{}.xml',
+            'md5_url': 'https://raw.githubusercontent.com/Catch-up-TV-and-More/xmltv/master/tv_guide_wo_{}_md5.txt',
             'keyword': 'tv_guide_wo_'
         },
     'ca_live':
@@ -583,8 +604,8 @@ def download_xmltv_file(country_id, date, xmltv_fp):
 
 
 def delete_xmltv_file(country_id, day_delta=0):
-    """Delete XMLTV file of dountry_id at day = today + day_delta."""
-    day_to_delete = datetime.date.today() + datetime.timedelta(days=day_delta)
+    """Delete XMLTV file of country_id at day = today + day_delta."""
+    day_to_delete = datetime.datetime.now(pytz.UTC).date() + datetime.timedelta(days=day_delta)
     dirs, files = xbmcvfs.listdir(Script.get_info('profile'))
     for fn in files:
         if xmltv_infos[country_id]['keyword'] not in fn:
@@ -612,7 +633,7 @@ def get_xmltv_filepath(country_id, day_delta=0):
 
     # Remove old xmltv files of this country
     dirs, files = xbmcvfs.listdir(Script.get_info('profile'))
-    today = datetime.date.today()
+    today = datetime.datetime.now(pytz.UTC).date()
     for fn in files:
         if country_xmltv_infos['keyword'] not in fn:
             continue
@@ -626,7 +647,7 @@ def get_xmltv_filepath(country_id, day_delta=0):
             pass
 
     # Compute dst filepath
-    xmltv_date = datetime.date.today() + datetime.timedelta(days=day_delta)
+    xmltv_date = today + datetime.timedelta(days=day_delta)
     xmltv_date_s = xmltv_date.strftime('%Y%m%d')
     xmltv_fn = country_xmltv_infos['keyword'] + xmltv_date_s + '.xml'
     Script.log('xmltv filename: {}'.format(xmltv_fn))
@@ -654,7 +675,7 @@ def grab_programmes(country_id, day_delta):
         xmltv_fp = get_xmltv_filepath(country_id, day_delta=day_delta)
 
         # Grab programmes in xmltv file
-        programmes = read_programmes(xmltv_fp, only_current_programmes=False)
+        programmes = read_programmes(xmltv_fp)
         programmes_post_treated = []
         for programme in programmes:
             programmes_post_treated.append(programme_post_treatment_iptvmanager(programme))
@@ -665,29 +686,46 @@ def grab_programmes(country_id, day_delta):
         return []
 
 
-def grab_current_programmes(country_id):
+def grab_current_programmes(country_id, time_range=0, time_format='%Hh%M'):
     """Retrieve current programmes of channels of country_id.
+
+    Return for each tv channels a list of programmes in a time period
+    from now up to `time_range` number of hours in the future.
+    If time_range is 0 only the current programmes will be returned.
 
     Args:
         country_id (str)
+        time_range (float)
+        time_format (str)
     Returns:
-        dict: (key: xmltv_id, value: current programme)
+        dict: (key: xmltv_id, value: list of current programmes)
     """
     if country_id not in xmltv_infos:
         return {}
     try:
-        # Download, if needed, xmltv file of today
-        xmltv_fp = get_xmltv_filepath(country_id)
-
+        # Download, if needed, xmltv file of today and possibly the next day
         # Grab current programmes in xmltv file
-        programmes = read_programmes(xmltv_fp, only_current_programmes=True)
+        xmltv_fp = get_xmltv_filepath(country_id)
+        programmes = read_current_programmes(xmltv_fp, time_range=time_range)
+
+        now = datetime.datetime.now(tz=pytz.UTC)
+        if now.hour + time_range > 24:
+            xmltv_fp = get_xmltv_filepath(country_id, 1)
+            programmes.extend(read_current_programmes(xmltv_fp, time_range=time_range))
+        if not programmes:
+            return {}
 
         # Use the channel as key
         tv_guide = {}
         for programme in programmes:
-            programme = programme_post_treatment(programme)
-            tv_guide[programme['channel']] = programme
-
+            chan_id = programme['channel']
+            pgm_list = tv_guide.setdefault(chan_id, [])
+            formatted_pgm = programme_post_treatment(programme, time_format)
+            # The last programme in the EPG of one day can be the same as the first of the next day.
+            # Check the start time to prevent duplicates.
+            previous_start = pgm_list[-1].get('start') if pgm_list else None
+            if formatted_pgm.get('start') != previous_start:
+                pgm_list.append(formatted_pgm)
         return tv_guide
     except Exception as e:
         Script.notify(

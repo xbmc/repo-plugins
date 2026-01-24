@@ -8,6 +8,8 @@ from __future__ import unicode_literals
 import re
 from builtins import str
 import base64
+import time
+import uuid
 
 from codequick import Listitem, Resolver, Route, Script
 import urlquick
@@ -20,6 +22,12 @@ from resources.lib.menu_utils import item_post_treatment
 
 URL_ROOT = "https://www.tntv.pf"
 URL_API = URL_ROOT + "/tntv/wp-admin/admin-ajax.php"
+URL_BEACON_TNTV_COVE = 'https://beacon.playback.api.brightcove.com/tntv/api'
+URL_TNTV_KEYS = URL_BEACON_TNTV_COVE + '/cache_keys'
+URL_TNTV_API = URL_BEACON_TNTV_COVE + '/assets/%s'
+URL_EPG_API = URL_BEACON_TNTV_COVE + '/onnow'
+URL_TNTV_TOKEN = URL_BEACON_TNTV_COVE + '/account/anonymous_login'
+URL_TNTV_STREAM = URL_TNTV_API + '/streams/%s'
 URL_LIVE = URL_ROOT + "/direct"
 
 GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
@@ -135,11 +143,77 @@ def get_video_url(plugin, video_url, download_mode=False, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
+    headers = {
+        'User-Agent': web_utils.get_random_ua(),
+        'Accept': 'application/json, text/plain, */*',
+        'Referer': 'https://www.tntv.pf/',
+    }
 
-    data_account_player = re.search('//players\.brightcove\.net/([0-9]+)/([A-Za-z0-9]+)_default/index\.html\?videoId=([0-9]+)', resp.text)
-    data_account = data_account_player.group(1)
-    data_player = data_account_player.group(2)
-    data_video_id = data_account_player.group(3)
+    params = {
+        'device_type': 'web',
+    }
 
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account, data_player, data_video_id)
+    resp = urlquick.post(URL_TNTV_KEYS, params=params, headers=headers, max_age=-1)
+    cohort = resp.json()['data'][0]['value']
+
+    headers = {
+        'User-Agent': web_utils.get_random_ua(),
+        'Referer': URL_ROOT,
+    }
+
+    params = {
+        'cohort': cohort,
+        'device_type': 'web',
+        'device_layout': 'web',
+        'datetimestamp': time.time(),
+        'limit': '999',
+    }
+
+    resp = urlquick.get(URL_EPG_API, params=params, headers=headers, max_age=-1)
+    datas = resp.json()
+    asset_id = datas['data']['blocks'][0]['widgets'][0]['playlist']['contents'][0]['id']
+
+    params = {
+        'cohort': cohort,
+        'device_type': 'web',
+        'device_layout': 'web',
+        'asset_id': asset_id,
+    }
+
+    resp = urlquick.get(URL_TNTV_API % asset_id, params=params, headers=headers, max_age=-1)
+    datas = resp.json()
+
+    policy_key = datas['data']['asset']['vc_playback_data']['policy_key']
+    account_id = datas['data']['asset']['vc_playback_data']['bc_account_id']
+    stream_id = datas['data']['asset']['streams'][0]['id']
+
+    params = {
+        'device_type': 'web',
+        'duid': uuid.uuid4(),
+    }
+
+    resp = urlquick.post(URL_TNTV_TOKEN, params=params, headers=headers, max_age=-1)
+
+    datas = resp.json()
+    auth_token = datas['auth_token']
+
+    headers = {
+        'User-Agent': web_utils.get_random_ua(),
+        'Referer': URL_ROOT,
+        'Authorization': 'Bearer ' + auth_token,
+    }
+
+    params = {
+        'cohort': cohort,
+        'device_type': 'web',
+        'device_layout': 'web',
+    }
+
+    resp = urlquick.post(URL_TNTV_STREAM % (asset_id, stream_id), params=params, headers=headers, max_age=-1)
+
+    datas = resp.json()
+    data_video_id = datas['data']['stream']['url']
+    ad_config_id = datas['data']['stream']['playback_query_parameters'][0]['value']
+    params = {'ad_config_id': ad_config_id}
+
+    return resolver_proxy.get_brightcove_video_json(plugin, account_id, None, data_video_id, policy_key, params=params)

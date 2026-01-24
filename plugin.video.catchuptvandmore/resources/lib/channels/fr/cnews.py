@@ -20,6 +20,7 @@ URL_ROOT_SITE = 'https://www.cnews.fr'
 
 # Live :
 URL_LIVE_CNEWS = URL_ROOT_SITE + '/le-direct'
+URL_LIVE_CNEWS_PRIME = URL_ROOT_SITE + '-cnews-prime'
 
 # Replay CNews
 URL_REPLAY_CNEWS = URL_ROOT_SITE + '/les-replays'
@@ -195,15 +196,21 @@ def get_video_url(plugin, item_id, video_url, download_mode=False, **kwargs):
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
+    if item_id == 'cnews':
+        live = 'x3b68jn'
+        url_live = URL_LIVE_CNEWS
+    else:
+        live = 'x9u4hka'
+        url_live = URL_LIVE_CNEWS_PRIME
     try:
         if URLLIB3_VERSION == "2.2.3":
-            url_req = Request(URL_LIVE_CNEWS, headers=GENERIC_HEADERS, method='GET')
+            url_req = Request(url_live, headers=GENERIC_HEADERS, method='GET')
             root = urlopen(url_req).read().decode('utf8')
         else:
-            resp = urlquick.get(URL_LIVE_CNEWS, headers=GENERIC_HEADERS, verify=False, max_age=-1)
+            resp = urlquick.get(url_live, headers=GENERIC_HEADERS, verify=False, max_age=-1)
             root = resp.parse()
         live_id = root.find(".//div[@data-muted='true']").get('data-videoid')
     except Exception:
-        live_id = 'x3b68jn'
+        live_id = live
 
     return resolver_proxy.get_stream_dailymotion(plugin, live_id, False)

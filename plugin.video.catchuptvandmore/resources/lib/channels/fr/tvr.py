@@ -133,7 +133,9 @@ def get_video_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    video_url = re.compile(r'data-source\=\"(.*?)\"').findall(resp.text)[0]
+    resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse("iframe")
 
-    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")
+    player_id = root.get('src')
+
+    return resolver_proxy.get_easybroadcast_stream(plugin, player_id)

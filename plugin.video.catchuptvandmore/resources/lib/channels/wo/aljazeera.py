@@ -120,12 +120,14 @@ def play_video(plugin, url):
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    # label, function_name, video_id
+    # label, data_account, data_video_id, data_player
     channels = [
-        ('English', 'get_stream_youtube', 'gCNeDWCI0vo'),
-        ('الوثائقية', 'get_stream_youtube', 'TiPYdMXt_XI'),
-        ('قناة مباشر', 'get_stream_youtube', 'eksOMqVMINo'),
-        ('البث الحي', 'get_brightcove_video_json', '')
+        ('English', '665003303001', '6368602483112', 'AvByVmBYDu'),
+        ('البث الحي', '665001584001', '6368600638112', 'eXUpvPA1qj'),
+        ('مباشر', '665001583001', '6370624210112', 'ZClLE4quQ'),
+        ('مباشر 2', '665001583001', '6368601098112', 'UydOPrDJX'),
+        ("مباشر ٢٤", '665001583001', '6370624101112', '1U5Do15lN'),
+        ('الوثائقية', '665003304001', '6331807548112', '4LpILI8wW'),
     ]
 
     selected_item = xbmcgui.Dialog().select(Script.localize(30174), list(map(lambda x: x[0], channels)))
@@ -133,10 +135,8 @@ def get_live_url(plugin, item_id, **kwargs):
         return False
 
     selected_item = channels[selected_item]
-    function_name = selected_item[1]
-    if function_name == 'get_stream_youtube':
-        return resolver_proxy.get_stream_youtube(plugin, selected_item[2], False)
 
-    return resolver_proxy.get_brightcove_video_json(plugin, "665001584001", None, "5146642090001",
-                                                    policy_key=POLICY_KEY,
-                                                    download_mode=False, subtitles=None)
+    data_account = selected_item[1]
+    data_video_id = selected_item[2]
+    data_player = selected_item[3]
+    return resolver_proxy.get_brightcove_video_json(plugin, data_account=data_account, data_video_id=data_video_id, data_player=data_player)

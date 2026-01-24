@@ -15,6 +15,7 @@ from resources.lib import web_utils, resolver_proxy
 from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
 from resources.lib.menu_utils import item_post_treatment
 
+STREAK_INFO_URL = 'https://player.tver.jp/player/streaks_info_v2.json'
 
 URL_REPLAY_SERVICE = 'https://platform-api.tver.jp/v2/api/platform_users/browser/create'
 
@@ -24,11 +25,9 @@ URL_VIDEOS_REPLAY = 'https://statics.tver.jp/content/{}/{}.json?v=v2.0.0'
 
 URL_VIDEO_PICTURE = 'https://statics.tver.jp/images/content/thumbnail/{}/small/{}.jpg'
 
-URL_BRIGHTCOVE_POLICY_KEY = 'http://players.brightcove.net/%s/%s_default/index.min.js'
-# AccountId, PlayerId
+URL_STREAKS = 'https://playback.api.streaks.jp/v1/projects/%s/medias/%s'
 
-URL_BRIGHTCOVE_VIDEO_JSON = 'https://edge.api.brightcove.com/playback/v1/accounts/%s/videos/%s%s'
-# AccountId, VideoId
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 BROADCASTER_ID = {
     'abc': 'abc',
@@ -64,11 +63,16 @@ BROADCASTER = {
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
 
-    resp = urlquick.post(URL_REPLAY_SERVICE, data={'device_type': 'pc'})
+    datas = {'device_type': 'pc'}
+    resp = urlquick.post(URL_REPLAY_SERVICE, data=datas, headers=GENERIC_HEADERS, max_age=-1)
     data = resp.json()
     uid = data['result']['platform_uid']
     token = data['result']['platform_token']
-    resp = urlquick.get(URL_REPLAY_PROGRAM.format(BROADCASTER_ID[item_id], uid, token), headers={'x-tver-platform-type': 'web'})
+    headers = {
+        'x-tver-platform-type': 'web',
+        'User-Agent': web_utils.get_random_ua()
+    }
+    resp = urlquick.get(URL_REPLAY_PROGRAM.format(BROADCASTER_ID[item_id], uid, token), headers=headers, max_age=-1)
     programs = resp.json()
 
     list_program = []
@@ -94,7 +98,7 @@ def list_episodes(plugin, item_id, program_title, programs, **kwargs):
             video_type = program['type']
             item.art['thumb'] = item.art['landscape'] = URL_VIDEO_PICTURE.format(video_type, video_id)
             resp = urlquick.get(URL_VIDEOS_REPLAY.format(video_type, video_id),
-                                headers={'User-Agent': web_utils.get_random_ua()},
+                                headers=GENERIC_HEADERS,
                                 max_age=-1)
             data = resp.json()
             item.info['plot'] = data['description']
@@ -105,16 +109,22 @@ def list_episodes(plugin, item_id, program_title, programs, **kwargs):
 
 @Resolver.register
 def get_video_url(plugin, data, download_mode=False, **kwargs):
+    project_id = data['streaks']['projectID']
+    video_id = 'ref:' + data['streaks']['videoRefID']
 
-    if 'videoID' in data['video']:
-        data_video = data['video']['videoID']
-        ref = ''
+    resp = urlquick.get(STREAK_INFO_URL, headers=GENERIC_HEADERS, max_age=-1)
+    streak = resp.json()[project_id]['api_key']['key01']
+
+    headers = {
+        'User-Agent': web_utils.get_random_ua(),
+        'Referer': 'https://tver.jp',
+        'Origin': 'https://tver.jp',
+        'X-Streaks-Api-Key': streak,
+    }
+    resp = urlquick.get(URL_STREAKS % (project_id, video_id), headers=headers, max_age=-1)
+    video = resp.json()['sources'][0]['src']
+
+    if download_mode:
+        return resolver_proxy.get_stream_default(plugin, video, download_mode)
     else:
-        data_video = data['video']['videoRefID']
-        ref = 'ref:'
-    data_account = data['video']['accountID']
-    data_player = data['video']['playerID']
-
-    data_video_id = ref + data_video
-
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account, data_player, data_video_id, None, download_mode)
+        return resolver_proxy.get_stream_with_quality(plugin, video)

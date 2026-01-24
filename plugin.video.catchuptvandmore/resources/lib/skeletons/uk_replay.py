@@ -42,7 +42,7 @@ menu = {
         "order": 3,
     },
     "channel4": {
-        "route": "/resources/lib/channels/uk/channel4:list_categories",
+        "route": "/resources/lib/channels/uk/channel4:main_menu",
         "label": "Channel 4",
         "thumb": "channels/uk/channel4.png",
         "fanart": "channels/uk/channel4_fanart.jpg",
@@ -66,7 +66,7 @@ menu = {
         "order": 6,
     },
     "my5": {
-        "route": "/resources/lib/channels/uk/my5:list_categories",
+        "route": "/resources/lib/channels/uk/my5:list_main_page",
         "label": "My 5",
         "thumb": "channels/uk/my5.png",
         "fanart": "channels/uk/my5_fanart.jpg",
@@ -78,7 +78,7 @@ menu = {
         "label": "UK Local TV",
         "thumb": "channels/uk/uklocaltv.png",
         "fanart": "channels/uk/uklocaltv_fanart.jpg",
-        "enabled": True,
+        "enabled": False,
         "order": 8,
     },
     "discoveryplus": {
@@ -88,5 +88,29 @@ menu = {
         "fanart": "channels/uk/discoveryplus_fanart.jpg",
         "enabled": False,
         "order": 9,
+    },
+    "watchfreeuk": {
+        "route": "/resources/lib/channels/uk/watchfreeuk:main_menu",
+        "label": "Watch Free UK",
+        "thumb": "channels/uk/watchfreeuk.png",
+        "fanart": "channels/uk/watchfreeuk_fanart.png",
+        "enabled": True,
+        "order": 10,
+    },
+    "greatplayer": {
+        "route": "/resources/lib/channels/uk/greatplayer:main_menu",
+        "label": "Great! Player",
+        "thumb": "https://235351de.customer.static.core.one.accedo.tv/235351de730a39f0/image/file/01K49NVDE1HH2MACRW1MFTFDA4",
+        "fanart": "https://235351de.customer.static.core.one.accedo.tv/235351de730a39f0/image/file/01K49NVDE1HH2MACRW1MFTFDA4",
+        "enabled": True,
+        "order": 11,
+    },
+    "tptvencore": {
+        "route": "/resources/lib/channels/uk/tptvencore:main_menu",
+        "label": "Talking Pictures TV Encore",
+        "thumb": "https://image-cdn.suggestedtv.com/api/client/v1/image/fab8eb03-eb6a-4261-969d-016065b0c9a6?tenant=ENCORE&mode=fit&format=png&width=1280&height=720",
+        "fanart": "",
+        "enabled": True,
+        "order": 12,
     },
 }

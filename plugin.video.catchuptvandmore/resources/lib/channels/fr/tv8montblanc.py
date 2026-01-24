@@ -7,30 +7,19 @@
 from __future__ import unicode_literals
 from builtins import str
 import json
+import re
 
 from codequick import Listitem, Resolver, Route
 import urlquick
 
-from resources.lib import resolver_proxy
+from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 
-
-# TO DO
-# Fix Live TV
-
-URL_LIVES = 'https://api.dailymotion.com/user/%s/videos?fields=id,thumbnail_large_url,title,views_last_hour&live_onair=1'
+URL_ROOT = 'http://8montblanc.fr'
+URL_LIVE = URL_ROOT + '/le-direct/'
 URL_REPLAY = 'https://api.dailymotion.com/user/%s/videos?fields=description,duration,id,taken_time,thumbnail_large_url,title&limit=20&sort=recent&page=1'
 
-
-@Resolver.register
-def get_live_url(plugin, item_id, **kwargs):
-    headers = {'User-Agent': 'Android'}
-    r = urlquick.get(URL_LIVES % (item_id), headers=headers)
-    j_content = json.loads(r.text)
-    if j_content['list'] is not None:
-        vid = j_content['list'][0]['id']
-        return resolver_proxy.get_stream_dailymotion(plugin, vid, False)
-    return False
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
 
 
 @Route.register
@@ -71,3 +60,16 @@ def get_video_url(plugin,
                   **kwargs):
     return resolver_proxy.get_stream_dailymotion(plugin, video_id,
                                                  download_mode)
+
+
+@Resolver.register
+def get_live_url(plugin, item_id, **kwargs):
+
+    try:
+        resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
+        root = resp.parse("iframe")
+        video_id = re.compile(r'video\=(.*?)\"').findall(root.get('src'))[0]
+    except Exception:
+        video_id = 'x3wqv8b'
+
+    return resolver_proxy.get_stream_dailymotion(plugin, video_id)

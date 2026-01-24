@@ -37,6 +37,7 @@ def get_live_url(plugin, item_id, **kwargs):
         "ES": "/es/live-tv/channel-spanish",
         "FR": "/fr/live-tv/channel-english",
         "DE": "/de/live-tv/channel-english",
+        "RU": "/ru/live-tv/channel-russian",
     }
     final_language = kwargs.get('language', Script.setting['dw.language'])
     channel = channels[final_language]

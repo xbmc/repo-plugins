@@ -233,6 +233,18 @@ msgctxt "#30076"
 msgid "Bolivia"
 msgstr "Bolivie"
 
+msgctxt "#30077"
+msgid "Saudi Arabia"
+msgstr "Arabie Saoudite"
+
+msgctxt "#30078"
+msgid "Macedonia"
+msgstr "Macédoine"
+
+msgctxt "#30079"
+msgid "Ireland"
+msgstr "Irlande"
+
 # Channels (from 30080 to 30129)
 
 msgctxt "#30080"
@@ -310,6 +322,10 @@ msgstr "Chaînes marocaines"
 msgctxt "#30098"
 msgid "Peruvian channels"
 msgstr "Chaînes péruviennes"
+
+msgctxt "#30099"
+msgid "UK channels"
+msgstr "Chaînes UK"
 
 # Websites (from 30130 to 30149)
 
@@ -437,9 +453,17 @@ msgctxt "#30181"
 msgid "Choose version"
 msgstr "Choix de la version"
 
-msgctxt "#3082"
+msgctxt "#30182"
 msgid "France 3 Régions: Choose region"
 msgstr "France 3 Régions : Choix de la sous-région"
+
+msgctxt "#30183"
+msgid "Channel4: Programmes: Sort By"
+msgstr ""
+
+msgctxt "#30184"
+msgid "quality: "
+msgstr "qualité: "
 
 msgctxt "#30192"
 msgid "BEST"
@@ -582,6 +606,14 @@ msgctxt "#30263"
 msgid "SFR TV password"
 msgstr "Mot de passe SFR TV"
 
+msgctxt "#30264"
+msgid "Channel 4 Login"
+msgstr ""
+
+msgctxt "#30265"
+msgid "Channel 4 Password"
+msgstr ""
+
 
 # TV integration (from 30270 to 30289)
 
@@ -620,7 +652,6 @@ msgstr "Sélectionner les chaînes à activer dans la section TV de Kodi"
 
 
 # Reserved space for other tab/category in settings (from 30290 to 30339)
-
 
 # Advanced settings (from 30370 to 30399)
 

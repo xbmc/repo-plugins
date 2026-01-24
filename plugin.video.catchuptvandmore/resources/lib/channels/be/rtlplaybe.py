@@ -8,14 +8,18 @@
 
 from __future__ import unicode_literals
 
+import base64
 import json
 import random
 import re
 import sys
 from builtins import str
+import requests
+from datetime import datetime, timezone
 
 # noinspection PyUnresolvedReferences
-import inputstreamhelper
+import xbmcvfs
+# noinspection PyUnresolvedReferences
 import urlquick
 # noinspection PyUnresolvedReferences
 from codequick import Listitem, Resolver, Route, Script
@@ -23,88 +27,25 @@ from codequick import Listitem, Resolver, Route, Script
 from kodi_six import xbmcgui
 
 from resources.lib import download, resolver_proxy, web_utils
-from resources.lib.addon_utils import get_item_media_path, Quality
-from resources.lib.kodi_utils import get_kodi_version
 from resources.lib.menu_utils import item_post_treatment
 
 PUBLIC_SITE = 'https://www.rtlplay.be'
-CUSTOMER_NAME = "rtlbe"
-SERVICE_NAME = "rtlbe_rtl_play"
-
-DEVICE_ID_URL = "https://e.m6web.fr/info?customer={customerName}".format(customerName=CUSTOMER_NAME)
 
 # Url to get channel's categories
 # e.g. Info, Divertissement, Séries, ...
 # We get an id by category
-URL_ROOT = 'http://android.middleware.6play.fr/6play/v2/platforms/' \
-           'm6group_androidmob/services/%s/folders?limit=999&offset=0'
-
-URL_ALL_PROGRAMS = 'http://android.middleware.6play.fr/6play/v2/platforms/' \
-                   'm6group_androidmob/services/{serviceName}/programs'.format(serviceName=SERVICE_NAME)
-
-# Url to get catgory's programs
-# e.g. Le meilleur patissier, La france à un incroyable talent, ...
-# We get an id by program
-URL_CATEGORY = 'http://android.middleware.6play.fr/6play/v2/platforms/' \
-               'm6group_androidmob/services/{serviceName}/folders/%s/programs' \
-               '?limit=999&offset=0&csa=6&with=parentcontext'.format(serviceName=SERVICE_NAME)
-
-# Url to get program's subfolders
-# e.g. Saison 5, Les meilleurs moments, les recettes pas à pas, ...
-# We get an id by subfolder
-URL_SUBCATEGORY = 'http://android.middleware.6play.fr/6play/v2/platforms/' \
-                  'm6group_androidmob/services/{serviceName}/programs/%s' \
-                  '?with=links,subcats,rights'.format(serviceName=SERVICE_NAME)
-
-# Url to get shows list
-# e.g. Episode 1, Episode 2, ...
-URL_VIDEOS = 'http://chromecast.middleware.6play.fr/6play/v2/platforms/' \
-             'chromecast/services/{serviceName}/programs/%s/videos?' \
-             'csa=6&with=clips,freemiumpacks&type=vi,vc,playlist&limit=999' \
-             '&offset=0&subcat=%s&sort=subcat'.format(serviceName=SERVICE_NAME)
-
-URL_VIDEOS2 = 'https://chromecast.middleware.6play.fr/6play/v2/platforms/' \
-              'chromecast/services/{serviceName}/programs/%s/videos?' \
-              'csa=6&with=clips,freemiumpacks&type=vi&limit=999&offset=0'.format(serviceName=SERVICE_NAME)
-
-URL_SEARCH = 'https://nhacvivxxk-dsn.algolia.net/1/indexes/*/queries?x-algolia-agent=Algolia%20for%20JavaScript%20(' \
-             '4.10.5)%3B%20Browser'
-
-URL_JSON_VIDEO = 'https://chromecast.middleware.6play.fr/6play/v2/platforms/' \
-                 'chromecast/services/{serviceName}/videos/%s' \
-                 '?csa=6&with=clips,freemiumpacks'.format(serviceName=SERVICE_NAME)
-
-URL_IMG = 'https://images.6play.fr/v1/images/%s/raw'
-
-URL_COMPTE_LOGIN = 'https://accounts.eu1.gigya.com/accounts.login'
-# https://login.6play.fr/accounts.login?loginID=*****&password=*******&targetEnv=mobile&format=jsonp&apiKey=3_hH5KBv25qZTd_sURpixbQW6a4OsiIzIEF2Ei_2H7TXTGLJb_1Hr4THKZianCQhWK&callback=jsonp_3bbusffr388pem4
-# TODO get value Callback
-# callback: jsonp_3bbusffr388pem4
-
-URL_GET_JS_ID_API_KEY = PUBLIC_SITE + '/connexion'
-
-# Id
-URL_API_KEY = PUBLIC_SITE + '/main-%s.bundle.js'
-
-PATTERN_API_KEY = re.compile(r'login.rtl.be\",key:\"(.*?)\"')
-
-PATTERN_JS_ID = re.compile(r'main-(.*?)\.bundle\.js')
-
-API_KEY = "3_LGnnaXIFQ_VRXofTaFTGnc6q7pM923yFB0AXSWdxADsUT0y2dVdDKmPRyQMj7LMc"
-
-URL_TOKEN_DRM = ('https://6play-users.6play.fr/v2/platforms/chromecast/'
-                 'services/{serviceName}/users/%s/videos/%s/upfront-token').format(serviceName=SERVICE_NAME)
-
+BASE_URL = "https://www.rtlplay.be/rtlplay"
+URL_LFVP_API = 'https://lfvp-api.dpgmedia.net'
+URL_CONFIG = 'https://videoplayer-service.dpgmedia.net/play-config/%s'
+URL_SSO_LOGIN = 'https://sso.rtl.be/api/account/login'
+URL_SSO_AUTH = 'https://sso.rtl.be/oidc/account/authenticate'
 URL_LICENCE_KEY = ('https://lic.drmtoday.com/license-proxy-widevine/cenc/'
                    '|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64)'
                    ' AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36'
                    '&Host=lic.drmtoday.com&x-dt-auth-token=%s&x-customer-name=rtlbe|R{SSM}|JBlicense')
-# Referer, Token
 
-URL_LIVE_JSON = ('https://layout.6cloud.fr/front/v1/{customerName}/'
-                 'm6group_web/main/token-web-4/live/%s/layout?nbPages=2').format(customerName=CUSTOMER_NAME)
-
-GET_JWT = "https://front-auth.6cloud.fr/v2/platforms/m6group_web/getJwt"
+POPCORN_SDK = '8'
+REQUESTS_TIMEOUT = 8
 
 LIVE_CHANNEL = {
     "rtl_tvi": "tvi",
@@ -114,251 +55,54 @@ LIVE_CHANNEL = {
     "rtl_sport": "rtl_sport",
     "bel_rtl": "bel",
     "contact": "contact",
-    "rtl_play": "rtlplay"
+    "rtl_play": "rtlplay",
+    "rtl_district": "RTLdistrict"
 }
 
-GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
-CUSTOMER_HEADERS = {
-    'User-Agent': web_utils.get_random_ua(),
-    'x-customer-name': CUSTOMER_NAME
+GENERIC_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0',
+    'Accept': '*/*',
+    'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
+    'Connection': 'keep-alive',
+    'Upgrade-Insecure-Requests': '1',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'none',
+    'Sec-Fetch-User': '?1',
+    'Sec-GPC': '1',
+    'Priority': 'u=0, i',
 }
 
-pyver = float('%s.%s' % sys.version_info[:2])
-
-
-def get_api_key():
-    resp_js_id = urlquick.get(URL_GET_JS_ID_API_KEY, headers=GENERIC_HEADERS)
-    found_js_id = PATTERN_JS_ID.findall(resp_js_id.text)
-    if len(found_js_id) == 0:
-        return API_KEY
-    js_id = found_js_id[0]
-    resp = urlquick.get(URL_API_KEY % js_id, headers=GENERIC_HEADERS)
-    # Hack to force encoding of the response
-    resp.encoding = 'utf-8'
-    found_items = PATTERN_API_KEY.findall(resp.text)
-    if len(found_items) == 0:
-        return API_KEY
-    return found_items[0]
+RTLPLAY_HEADERS = {
+    'User-Agent': 'RTL_PLAY/23.251217 (com.tapptic.rtl.tvi; build:26234; Android 30)',
+    'Accept': '*/*',
+    'Accept-Encoding': 'gzip',
+    'Connection': 'Keep-Alive',
+    'Content-Type': 'application/json; charset=UTF-8',
+    'lfvp-device-segment': 'TV>Android',
+    'x-app-version': '23',
+}
 
 
 @Route.register
-def rtlplay_root(plugin, **kwargs):
-    # (item_id, label, thumb, fanart)
-    channels = [
-        ('rtl_tvi', 'RTL TVI', 'rtltvi.png', 'rtltvi_fanart.jpg'),
-        ('club_rtl', 'CLUB RTL', 'clubrtl.png', 'clubrtl_fanart.jpg'),
-        ('plug_rtl', 'PLUG RTL', 'plugrtl.png', 'plugrtl_fanart.jpg'),
-        ('rtl_info', 'RTL INFO', 'rtlinfo.png', 'rtlinfo_fanart.jpg'),
-        ('rtl_sport', 'RTL Sport', 'rtlsport.png', 'rtlsport_fanart.jpg'),
-        ('bel_rtl', 'BEL RTL', 'belrtl.png', 'belrtl_fanart.jpg'),
-        ('contact', 'Contact', 'contact.png', 'contact_fanart.jpg'),
-        ('rtl_play', 'RTL Play', 'rtlplay.png', 'rtlplay_fanart.jpg')
-    ]
-
-    for channel_infos in channels:
-        item = Listitem()
-        item.label = channel_infos[1]
-        item.art["thumb"] = get_item_media_path('channels/be/' + channel_infos[2])
-        item.art["fanart"] = get_item_media_path('channels/be/' + channel_infos[3])
-        item.set_callback(list_categories, channel_infos[0])
-        item_post_treatment(item)
-        yield item
-
-    # all programs
-    item = Listitem()
-    item.label = plugin.localize(30717)
-    item.art["thumb"] = get_item_media_path('channels/be/rtlplay.png')
-    item.art["fanart"] = get_item_media_path('channels/be/rtlplay_fanart.jpg')
-    item.set_callback(list_all_programs, 'rtl_play')
-    item_post_treatment(item)
-    yield item
-
-    # deactivate search for kodi <=18
-    # see
-    # https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore/issues/911
-    # https://stackoverflow.com/questions/15809296/python-syntaxerror-return-with-argument-inside-generator
-    if pyver >= 3.3:
-        item = Listitem.search(list_videos_search, item_id='rtl_play', page='0')
-        item.label = plugin.localize(30715)
-        item_post_treatment(item)
-        yield item
-
-
-@Route.register
-def list_videos_search(plugin, search_query, item_id, page, **kwargs):
-    if search_query is None or len(search_query) == 0:
-        return False
-
-    json_body_template = """
-    {
-        "requests": [
-            {
-              "indexName": "rtlmutu_prod_bedrock_layout_items_v1_rtlbe_main",
-              "query": "search_term",
-              "params": "hitsPerPage=50&facetFilters=%5B%22metadata.item_type%3Afunctionality%22%5D"
-            },
-            {
-              "indexName": "rtlmutu_prod_bedrock_layout_items_v1_rtlbe_main",
-              "query": "search_term",
-              "params": "hitsPerPage=50&facetFilters=%5B%22metadata.item_type%3Aplaylist%22%5D"
-            },
-            {
-              "indexName": "rtlmutu_prod_bedrock_layout_items_v1_rtlbe_main",
-              "query": "search_term",
-              "params": "hitsPerPage=50&facetFilters=%5B%22metadata.item_type%3Aprogram%22%5D"
-            },
-            {
-              "indexName": "rtlmutu_prod_bedrock_layout_items_v1_rtlbe_main",
-              "query": "search_term",
-              "params": "hitsPerPage=50&facetFilters=%5B%22metadata.item_type%3Avc%22%5D"
-            },
-            {
-              "indexName": "rtlmutu_prod_bedrock_layout_items_v1_rtlbe_main",
-              "query": "search_term",
-              "params": "hitsPerPage=50&facetFilters=%5B%22metadata.item_type%3Avi%22%5D"
-            }
-          ]
+def rtlplay_root(plugin, item_id, **kwargs):
+    # Category items
+    _PARAMS = {
+        'temsPerSwimlane': '20',
+        'defaultImageOrientation': 'landscape',
+        'hideBannerRow': 'true',
     }
+    resp = urlquick.get(URL_LFVP_API + '/RTL_PLAY/storefronts/accueil', headers=RTLPLAY_HEADERS, params=_PARAMS, max_age=-1).content.decode()
+    json_parser = json.loads(resp)
 
-    """
-
-    json_body = json.loads(json_body_template)
-    for request in json_body['requests']:
-        request['query'] = search_query
-
-    headers = {
-        'User-Agent': web_utils.get_random_ua(),
-        'Accept': '*/*',
-        'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'x-algolia-api-key': '5fce02cb376fb2cda773be8a8404598a',
-        'x-algolia-application-id': 'NHACVIVXXK',
-        'Origin': ('%s' % PUBLIC_SITE),
-        'DNT': '1',
-        'Sec-Fetch-Dest': 'empty',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Site': 'cross-site',
-        'Referer': ('%s/' % PUBLIC_SITE),
-        'Connection': 'keep-alive'
-    }
-
-    resp = urlquick.post(URL_SEARCH, None, json_body, headers=headers)
-    json_parser = resp.json()
-
-    for result in json_parser["results"]:
-        if result["nbHits"] > 0:
-            for hit in result["hits"]:
-                search_title = hit["item"]["itemContent"]["title"]
-                search_id = hit["item"]["itemContent"]["action"]["target"]["value_layout"]["id"]
-                search_type = hit["item"]["itemContent"]["action"]["target"]["value_layout"]["type"]
-                # search_image = result["data"]["images"]["illustration"]["16x9"]["1248x702"]
-                if search_type == "program":
-                    item = Listitem()
-                    item.label = search_title
-                    # item.art['thumb'] = item.art['landscape'] = search_image
-                    item.set_callback(list_program_categories,
-                                      item_id=item_id,
-                                      program_id=search_id)
-                    item_post_treatment(item)
-                    if pyver >= 3.3:
-                        yield item
-                    # else: TODO
-                else:
-                    is_downloadable = False
-                    if get_kodi_version() < 18:
-                        is_downloadable = True
-
-                    if search_type != 'playlist':
-                        item = Listitem()
-                        item.label = search_title
-                        # populate_item(item, video['clips'][0])
-                        item.set_callback(get_video_url,
-                                          item_id=item_id,
-                                          video_id=search_id)
-                        # TODO playlist
-                        # else:
-                        #     item = Listitem()
-                        #     item.label = search_title
-                        #     # populate_item(item, video)
-                        #     item.set_callback(get_playlist_urls,
-                        #                       item_id=item_id,
-                        #                       video_id=search_id,
-                        #                       url=url)
-
-                        item_post_treatment(item,
-                                            is_playable=True,
-                                            is_downloadable=is_downloadable)
-                        if pyver >= 3.3:
-                            yield item
-                        # else: TODO
-
-
-@Route.register
-def list_all_programs(plugin, item_id, **kwargs):
-    letters = ['@', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-               'u', 'v', 'w', 'y', 'z']
-
-    for letter in letters:
-        item = Listitem()
-        item.label = plugin.localize(30717) + ' : ' + letter
-        item.art["thumb"] = get_item_media_path('channels/be/rtlplay.png')
-        item.art["fanart"] = get_item_media_path('channels/be/rtlplay_fanart.jpg')
-        item.set_callback(list_all_programs_by_letter, item_id, letter)
-        item_post_treatment(item)
-        yield item
-
-
-@Route.register
-def list_all_programs_by_letter(plugin, item_id, letter, **kwargs):
-    params = {
-        'limit': '999',
-        'offset': '0',
-        'csa': '6',
-        'firstLetter': letter,
-        'with': 'rights'
-    }
-
-    resp = urlquick.get(URL_ALL_PROGRAMS, headers=CUSTOMER_HEADERS, params=params, max_age=-1)
-    json_parser = resp.json()
-
-    at_least_one_item = False
-    for array in json_parser:
-        at_least_one_item = True
-        item = Listitem()
-        program_id = str(array['id'])
-        item.label = array['title']
-        populate_item(item, array)
-        item.set_callback(list_program_categories,
-                          item_id=item_id,
-                          program_id=program_id)
-        item_post_treatment(item)
-        yield item
-
-    if not at_least_one_item:
-        plugin.notify(plugin.localize(30718), '')
-        yield False
-
-
-@Route.register
-def list_categories(plugin, item_id, **kwargs):
-    """
-    Build categories listing
-    - Tous les programmes
-    - Séries
-    - Informations
-    - ...
-    """
-
-    def get_root_param(s):
-        return 'rtlbe_' + s
-
-    resp = urlquick.get(URL_ROOT % get_root_param(item_id), headers=CUSTOMER_HEADERS)
-    json_parser = resp.json()
-
-    for array in json_parser:
-        category_id = str(array['id'])
-        category_name = array['name']
+    for array in json_parser.get('rows'):
+        category_id = ''
+        category_name = ''
+        if array.get('rowType') in ['SWIMLANE_DEFAULT', 'SWIMLANE_PORTRAIT', 'SWIMLANE_LANDSCAPE']:
+            category_id = str(array.get('id'))
+            category_name = array.get('title').strip()
+        if len(category_name) == 0:
+            continue
 
         item = Listitem()
         item.label = category_name
@@ -368,6 +112,42 @@ def list_categories(plugin, item_id, **kwargs):
         item_post_treatment(item)
         yield item
 
+    # Search items
+    item = Listitem.search(list_videos_search, item_id=item_id, page='0')
+    item_post_treatment(item)
+    yield item
+
+
+@Route.register
+def list_videos_search(plugin, search_query, item_id, page, **kwargs):
+    if search_query is None or len(search_query) == 0:
+        return False
+
+    resp = urlquick.get(URL_LFVP_API + '/RTL_PLAY/search?query=' + search_query, headers=RTLPLAY_HEADERS, max_age=-1).content.decode()
+    json_parser = json.loads(resp)
+
+    at_least_one_item = False
+    for array in json_parser.get('results', []):
+        if "exact" == array.get('type'):
+            for datas in array.get('teasers'):
+                datas_id = datas.get('detailId')
+                datas_title = datas.get('title')
+                datas_image = datas.get('imageUrl')
+
+                at_least_one_item = True
+                item = Listitem()
+                item.label = datas_title
+                item.art['thumb'] = item.art['landscape'] = item.art['fanart'] = datas_image
+                item.set_callback(list_program_categories,
+                                  item_id=item_id,
+                                  program_id=datas_id)
+                item_post_treatment(item)
+                yield item
+
+    if not at_least_one_item:
+        plugin.notify(plugin.localize(30718), '')
+        yield False
+
 
 @Route.register
 def list_programs(plugin, item_id, category_id, **kwargs):
@@ -376,14 +156,19 @@ def list_programs(plugin, item_id, category_id, **kwargs):
     - Les feux de l'amour
     - ...
     """
-    resp = urlquick.get(URL_CATEGORY % category_id, headers=CUSTOMER_HEADERS)
-    json_parser = resp.json()
+    resp = urlquick.get(URL_LFVP_API + '/RTL_PLAY/storefronts/accueil/detail/' + category_id, headers=RTLPLAY_HEADERS, max_age=-1).content.decode()
+    json_parser = json.loads(resp)
 
-    for array in json_parser:
+    for array in json_parser.get('row').get('teasers'):
+        program_title = array.get('title')
+        program_id = array.get('detailId')
+        program_image = array.get('imageUrl')
+        program_desc = array.get('description')
+
         item = Listitem()
-        program_id = str(array['id'])
-        item.label = array['title']
-        populate_item(item, array)
+        item.label = program_title
+        item.info['plot'] = program_desc
+        item.art['thumb'] = item.art['landscape'] = item.art['fanart'] = program_image
         item.set_callback(list_program_categories,
                           item_id=item_id,
                           program_id=program_id)
@@ -400,90 +185,66 @@ def list_program_categories(plugin, item_id, program_id, **kwargs):
     - Saison 1
     - ...
     """
-    resp = urlquick.get(URL_SUBCATEGORY % program_id, headers=CUSTOMER_HEADERS)
-    json_parser = resp.json()
+    resp = urlquick.get(URL_LFVP_API + '/RTL_PLAY/detail3/' + program_id, headers=RTLPLAY_HEADERS, max_age=-1).content.decode()
+    json_parser = json.loads(resp)
 
-    for sub_category in json_parser['program_subcats']:
+    channel_image = json_parser.get('landscapeTeaserImageUrl')
+    channel_id = json_parser.get('id')
+    channel_title = json_parser.get('title').get('label')
+    channel_desc = json_parser.get('description')
+    if not json_parser.get('seasonPicker', []):
         item = Listitem()
-        sub_category_id = str(sub_category['id'])
-        sub_category_title = sub_category['title']
-
-        item.label = sub_category_title
-        item.set_callback(list_videos,
+        item.label = channel_title
+        item.info['plot'] = channel_desc
+        item.art['thumb'] = item.art['landscape'] = item.art['fanart'] = channel_image
+        item.info['duration'] = json_parser.get('durationSeconds')
+        item.set_callback(get_video_url,
                           item_id=item_id,
-                          program_id=program_id,
-                          sub_category_id=sub_category_id)
-        item_post_treatment(item)
+                          video_id=channel_id)
+        item_post_treatment(item, is_playable=True, is_downloadable=False)
         yield item
-
-    item = Listitem()
-    item.label = plugin.localize(30701)
-    item.set_callback(list_videos,
-                      item_id=item_id,
-                      program_id=program_id,
-                      sub_category_id=None)
-    item_post_treatment(item)
-    yield item
-
-
-def populate_item(item, clip_dict):
-    duration = clip_dict.get('duration', None)
-    if duration is not None:
-        item.info['duration'] = duration
-    item.info['plot'] = clip_dict.get('description', None)
-
-    try:
-        aired = clip_dict['product']['last_diffusion']
-        aired = aired
-        aired = aired[:10]
-        item.info.date(aired, '%Y-%m-%d')
-    except Exception:
-        pass
-
-    program_imgs = clip_dict['images']
-    for img in program_imgs:
-        if img['role'] == 'vignette' or img['role'] == 'carousel':
-            external_key = img['external_key']
-            program_img = URL_IMG % external_key
-            item.art['thumb'] = item.art['landscape'] = program_img
-            item.art['fanart'] = program_img
-            break
+    else:
+        for item_season in json_parser.get('seasonPicker').get('indices', []):
+            item = Listitem()
+            item.label = 'Saison ' + str(item_season)
+            item.info['plot'] = channel_desc
+            item.art['thumb'] = item.art['landscape'] = item.art['fanart'] = channel_image
+            item.set_callback(list_videos,
+                              item_id=item_id,
+                              program_id=program_id,
+                              season_id=item_season)
+            item_post_treatment(item)
+            yield item
 
 
 @Route.register
-def list_videos(plugin, item_id, program_id, sub_category_id, **kwargs):
-    if sub_category_id is None:
-        url = URL_VIDEOS2 % program_id
+def list_videos(plugin, item_id, program_id, season_id, **kwargs):
+    if season_id is not None:
+        params = {'selectedSeasonIndex': season_id, }
     else:
-        url = URL_VIDEOS % (program_id, sub_category_id)
-    resp = urlquick.get(url, headers=CUSTOMER_HEADERS)
-    json_parser = resp.json()
+        params = None
 
-    if not json_parser:
-        plugin.notify(plugin.localize(30718), '')
-        yield False
+    resp = urlquick.get(URL_LFVP_API + '/RTL_PLAY/detail3/' + program_id, headers=RTLPLAY_HEADERS, params=params, max_age=-1).content.decode()
+    json_parser = json.loads(resp)
 
     at_least_one_item = False
-    for video in json_parser:
-        video_id = str(video['id'])
+    for array in json_parser.get('seasonPicker').get('selected').get('episodes'):
+        video_id = array.get('id')
+        video_title = array.get('title')
+        video_desc = array.get('description')
+        video_image = array.get('imageUrl')
+        video_duration = array.get('durationSeconds')
 
-        item = Listitem()
         at_least_one_item = True
-        item.label = video['title']
-
-        is_downloadable = False
-        if get_kodi_version() < 18:
-            is_downloadable = True
-
-        if 'type' in video and video['type'] == 'playlist':
-            populate_item(item, video)
-            item.set_callback(get_playlist_urls, item_id=item_id, video_id=video_id, url=url)
-        else:
-            populate_item(item, video['clips'][0])
-            item.set_callback(get_video_url,
-                              item_id=item_id,
-                              video_id=video_id)
-        item_post_treatment(item, is_playable=True, is_downloadable=is_downloadable)
+        item = Listitem()
+        item.label = video_title
+        item.info['plot'] = video_desc
+        item.art['thumb'] = item.art['landscape'] = item.art['fanart'] = video_image
+        item.info['duration'] = video_duration
+        item.set_callback(get_video_url,
+                          item_id=item_id,
+                          video_id=video_id)
+        item_post_treatment(item, is_playable=True, is_downloadable=False)
         yield item
 
     if not at_least_one_item:
@@ -491,335 +252,260 @@ def list_videos(plugin, item_id, program_id, sub_category_id, **kwargs):
         yield False
 
 
-@Resolver.register
-def get_video_url(plugin, item_id, video_id, download_mode=False, **kwargs):
-    if get_kodi_version() < 18:
-        video_json = urlquick.get(URL_JSON_VIDEO % video_id, headers=CUSTOMER_HEADERS, max_age=-1)
-        json_parser = json.loads(video_json.text)
+def is_valid_token():
+    with xbmcvfs.File('special://userdata/addon_data/plugin.video.catchuptvandmore/tokenrtlplay', 'r') as f1:
+        token_ = f1.read()
+        f1.close()
 
-        video_assets = json_parser['clips'][0]['assets']
-
-        final_video_url = get_final_video_url_old(plugin, video_assets)
-        if final_video_url is None:
-            return False
-
-        if download_mode:
-            return download.download_video(final_video_url)
-
-        return final_video_url
-
-    api_key = get_api_key()
-
-    is_ok, uid, uid_signature, signature_timestamp = accounts_login(plugin, api_key)
-    if not is_ok:
-        return False
-
-    is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
-    if not is_helper.check_inputstream():
-        return False
-
-    licence_token = get_token(uid, uid_signature, signature_timestamp, item_id, video_id)
-
-    video_json = urlquick.get(URL_JSON_VIDEO % video_id, headers=CUSTOMER_HEADERS, max_age=-1)
-    json_parser = json.loads(video_json.text)
-
-    video_assets = json_parser['clips'][0]['assets']
-
-    if video_assets is None:
-        plugin.notify('ERROR', plugin.localize(30721))
-        return False
-
-    subtitle_url = None
-    if plugin.setting.get_boolean('active_subtitle'):
-        for asset in video_assets:
-            if 'subtitle_vtt' in asset["type"]:
-                subtitle_url = asset['full_physical_path']
-
-    for asset in video_assets:
-        if 'usp_dashcenc_h264' in asset["type"]:
-            dummy_req = urlquick.get(asset['full_physical_path'], headers=GENERIC_HEADERS, allow_redirects=False)
-            if 'location' in dummy_req.headers:
-                video_url = dummy_req.headers['location']
-            else:
-                video_url = asset['full_physical_path']
-            return resolver_proxy.get_stream_with_quality(
-                plugin, video_url=video_url, manifest_type='mpd',
-                subtitles=subtitle_url, license_url=URL_LICENCE_KEY % licence_token)
-
-    for asset in video_assets:
-        if 'http_h264' in asset["type"]:
-            if "hd" in asset["video_quality"]:
-                video_url = asset['full_physical_path']
-                return resolver_proxy.get_stream_with_quality(
-                    plugin, video_url=video_url, subtitles=subtitle_url)
-
-    return False
-
-
-def get_final_video_url(plugin, video_assets):
-    if video_assets is None:
-        plugin.notify('ERROR', plugin.localize(30721))
+    if len(token_) == 0:
         return None
 
-    all_datas_videos_quality = []
-    all_datas_videos_path = []
-    for asset in video_assets:
-        if 'h264' in asset["container"] and "dashcenc" in asset["format"]:
-            all_datas_videos_quality.append(asset["quality"])
-            all_datas_videos_path.append(asset['path'])
+    LOGIN_TOKEN = json.loads(token_)
+    if LOGIN_TOKEN.get('lfvp_access_token') is not None:
+        # Verify our token to see if it's still valid.
+        bstr = LOGIN_TOKEN.get('lfvp_access_token').split(".")[1]
+        b64str = base64.b64decode(bstr + '=' * (-len(bstr) % 4))
 
-    if len(all_datas_videos_quality) == 0:
-        xbmcgui.Dialog().ok('Info', plugin.localize(30602))
-        return None
+        # Check expiration time
+        lfvp_access_token_b64 = json.loads(b64str)
+        exp = round(datetime.fromtimestamp(lfvp_access_token_b64.get('exp'), tz=timezone.utc).timestamp())
+        now = round(datetime.utcnow().timestamp())
 
-    final_video_url = all_datas_videos_path[0]
+        if exp > now:
+            return LOGIN_TOKEN
 
-    desired_quality = Script.setting.get_string('quality')
-    if desired_quality == Quality['DIALOG']:
-        selected_item = xbmcgui.Dialog().select(
-            plugin.localize(30709),
-            all_datas_videos_quality)
-        if selected_item == -1:
-            return None
-        final_video_url = all_datas_videos_path[selected_item]
-
-    elif desired_quality == Quality['BEST']:
-        url_best = ''
-        i = 0
-        for data_video in all_datas_videos_quality:
-            if 'lq' not in data_video:
-                url_best = all_datas_videos_path[i]
-            i = i + 1
-        final_video_url = url_best
-
-    elif desired_quality == Quality['WORST']:
-        final_video_url = all_datas_videos_path[0]
-        i = 0
-        for data_video in all_datas_videos_quality:
-            if 'lq' in data_video:
-                final_video_url = all_datas_videos_path[i]
-                return final_video_url
-
-    return final_video_url
+    return None
 
 
-def get_final_video_url_old(plugin, video_assets, asset_type=None):
-    if video_assets is None:
-        plugin.notify('ERROR', plugin.localize(30721))
-        return None
+def save_token(buffer):
+    with xbmcvfs.File('special://userdata/addon_data/plugin.video.catchuptvandmore/tokenrtlplay', 'wb') as f1:
+        result = json.dump(buffer, f1, ensure_ascii=False, indent=4)
+        f1.close()
 
-    all_datas_videos_quality = []
-    all_datas_videos_path = []
-    for asset in video_assets:
-        if asset_type is None:
-            if 'http_h264' in asset["type"]:
-                all_datas_videos_quality.append(asset["video_quality"])
-                all_datas_videos_path.append(asset['full_physical_path'])
-            elif 'h264' in asset["type"]:
-                manifest = urlquick.get(asset['full_physical_path'], headers=GENERIC_HEADERS, max_age=-1)
-                if 'drm' not in manifest.text:
-                    all_datas_videos_quality.append(asset["video_quality"])
-                    all_datas_videos_path.append(asset['full_physical_path'])
-        elif asset_type in asset["type"]:
-            all_datas_videos_quality.append(asset["video_quality"])
-            all_datas_videos_path.append(asset['full_physical_path'])
-
-    if len(all_datas_videos_quality) == 0:
-        xbmcgui.Dialog().ok('Info', plugin.localize(30602))
-        return None
-
-    final_video_url = all_datas_videos_path[0]
-
-    desired_quality = Script.setting.get_string('quality')
-    if desired_quality == Quality['DIALOG']:
-        selected_item = xbmcgui.Dialog().select(
-            plugin.localize(30709),
-            all_datas_videos_quality)
-        if selected_item == -1:
-            return None
-        final_video_url = all_datas_videos_path[selected_item]
-
-    elif desired_quality == Quality['BEST']:
-        url_best = ''
-        i = 0
-        for data_video in all_datas_videos_quality:
-            if 'lq' not in data_video:
-                url_best = all_datas_videos_path[i]
-            i = i + 1
-        final_video_url = url_best
-
-    elif desired_quality == Quality['WORST']:
-        final_video_url = all_datas_videos_path[0]
-        i = 0
-        for data_video in all_datas_videos_quality:
-            if 'lq' in data_video:
-                final_video_url = all_datas_videos_path[i]
-                return final_video_url
-
-    return final_video_url
+    return result
 
 
 @Resolver.register
-def get_playlist_urls(plugin,
-                      item_id,
-                      video_id,
-                      url,
-                      **kwargs):
-    resp = urlquick.get(url, headers=GENERIC_HEADERS)
-    json_parser = resp.json()
+def get_login_token(plugin, **kwargs):
+    # Check is valide token
+    LOGIN_TOKEN = is_valid_token()
+    if LOGIN_TOKEN:
+        return LOGIN_TOKEN
 
-    for video in json_parser:
-        current_video_id = str(video['id'])
-
-        if current_video_id != video_id:
-            continue
-
-        for clip in video['clips']:
-            clip_id = str(clip['video_id'])
-
-            item = Listitem()
-            item.label = clip['title']
-
-            populate_item(item, clip)
-
-            video = get_video_url(
-                plugin,
-                item_id=item_id,
-                video_id=clip_id)
-
-            yield video
-
-
-@Resolver.register
-def get_live_url(plugin, item_id, **kwargs):
-    api_key = get_api_key()
-
-    is_ok, uid, uid_signature, signature_timestamp = accounts_login(plugin, api_key)
-    if not is_ok:
-        return False
-
-    licence_token = get_token(uid, uid_signature, signature_timestamp, item_id, get_video_id(item_id))
-    device_id = get_device_id()
-    token = get_jwt(device_id, uid, signature_timestamp, uid_signature)
-    is_ok, video_assets = get_video_assets(plugin, token, item_id)
-    if not is_ok:
-        return False
-    if not video_assets:
-        plugin.notify('INFO', plugin.localize(30716))
-        return False
-
-    subtitle_url = None
-    if plugin.setting.get_boolean('active_subtitle'):
-        for asset in video_assets:
-            if 'subtitle_vtt' in asset["type"]:
-                subtitle_url = asset['full_physical_path']
-
-    final_video_url = get_final_video_url(plugin, video_assets)
-    if final_video_url is None:
-        return False
-
-    return resolver_proxy.get_stream_with_quality(plugin,
-                                                  video_url=final_video_url,
-                                                  manifest_type="mpd",
-                                                  subtitles=subtitle_url, license_url=URL_LICENCE_KEY % licence_token)
-
-
-def get_video_id(item_id):
-    return 'dashcenc_%s' % ('rtlbe_' + item_id)
-
-
-def get_video_assets(plugin, token, item_id):
-    headers_live = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/117.0",
-        "Accept": "*/*",
-        "X-Customer-Name": CUSTOMER_NAME,
-        "X-Client-Release": "5.73.4",
-        "Authorization": "Bearer %s" % token,
-        "referrer": ("%s/" % PUBLIC_SITE)
-    }
-
-    json_parser = urlquick.get(URL_LIVE_JSON % LIVE_CHANNEL[item_id], headers=headers_live, max_age=-1).json()
-    if 'error' in json_parser:
-        message = json_parser['message']
-        xbmcgui.Dialog().ok('Info', message)
-        plugin.log('get_video_assets ' + message)
-        return False, None
-    return True, json_parser['blocks'][0]['content']['items'][0]['itemContent']['video']['assets']
-
-
-def random_hexa(i):
-    return ''.join(random.choice('0123456789abcdef') for _ in range(i))
-
-
-def get_device_id():
-    uuid = '-'.join([random_hexa(8), random_hexa(4), random_hexa(4), random_hexa(4), random_hexa(12)])
-    return '_luid_' + uuid
-
-
-def get_jwt(device_id, uid, signature_timestamp, uid_signature):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/117.0",
-        "Accept": "*/*",
-        "Accept-Language": "fr-BE,en-US;q=0.7,en;q=0.3",
-        "X-Customer-Name": CUSTOMER_NAME,
-        "X-Client-Release": "5.73.4",
-        "x-auth-device-name": "Windows - Firefox",
-        "x-auth-device-player-size-width": "1920",
-        "x-auth-device-player-size-height": "423",
-        "x-auth-device-id": device_id,
-        "X-Auth-gigya-uid": uid,
-        "X-Auth-gigya-signature": uid_signature,
-        "X-Auth-gigya-signature-timestamp": signature_timestamp,
-        "referrer": ("%s/" % PUBLIC_SITE)
-    }
-
-    json_parser = urlquick.get(GET_JWT, headers=headers, max_age=-1).json()
-    return json_parser['token']
-
-
-def get_token(uid, uid_signature, signature_timestamp, item_id, video_id):
-    payload_headers = {
-        'x-auth-gigya-signature': uid_signature,
-        'x-auth-gigya-signature-timestamp': signature_timestamp,
-        'x-auth-gigya-uid': uid,
-        'User-Agent': web_utils.get_random_ua(),
-        'x-customer-name': CUSTOMER_NAME
-    }
-    token_json = urlquick.get(URL_TOKEN_DRM % (uid, video_id), headers=payload_headers,
-                              max_age=-1)
-    token_jsonparser = token_json.json()
-    return token_jsonparser["token"]
-
-
-def accounts_login(plugin, api_key):
     login = plugin.setting.get_string('rtlplaybe.login')
     password = plugin.setting.get_string('rtlplaybe.password')
     if login == '' or password == '':
         xbmcgui.Dialog().ok(
             plugin.localize(30600),
             plugin.localize(30604) % ('RTLPlay (BE)', ('%s' % PUBLIC_SITE)))
-        return False, None, None, None
+        return None
 
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/117.0",
-        "Accept": "*/*",
-        "Accept-Language": "fr-BE,en-US;q=0.7,en;q=0.3",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "referrer": "https://cdns.eu1.gigya.com/"
+    # RTLPLAY Device_Id
+    response = urlquick.get(BASE_URL, headers=GENERIC_HEADERS, max_age=-1)
+    cookies = response.cookies.get_dict()
+    lfvp_device_id = cookies['lfvp_device_id']
+    lfvp_disabled_storefronts = cookies['lfvp_disabled_storefronts']
+    ak_bmsc = cookies['ak_bmsc']
+
+    # SSO token
+    cnx_cookies = {
+        'lfvp_device_id': lfvp_device_id,
+        'lfvp_disabled_storefronts': lfvp_disabled_storefronts,
+        'ak_bmsc': ak_bmsc,
+        'lfvp_auth.redirect_uri': BASE_URL,
     }
+    response = urlquick.get(BASE_URL + '/connexion', cookies=cnx_cookies, headers=GENERIC_HEADERS, allow_redirects=True, timeout=REQUESTS_TIMEOUT, max_age=-1)
+    sso_url = []
+    if response.history:
+        for resp in response.history:
+            sso_url.append(resp.url)
+        sso_url.append(response.url)
 
-    payload = {
-        "loginID": login,
-        "password": password,
-        "apiKey": api_key,
-        "lang": "fr",
-        "format": "json"
+    json_data = {
+        'username': login,
+        'password': password,
     }
+    response = urlquick.post(URL_SSO_LOGIN, headers=GENERIC_HEADERS, json=json_data, timeout=10, max_age=-1)
+    json_parser = response.json()
+    if json_parser['httpStatusCode'] == 400:
+        xbmcgui.Dialog().ok(
+            plugin.localize(30600),
+            plugin.localize(30604) % ('RTLPlay (BE)', ('%s' % PUBLIC_SITE)))
+        return None
 
-    resp2 = urlquick.post(URL_COMPTE_LOGIN, data=payload, headers=headers, max_age=-1)
-    json_parser = resp2.json()
-    if "UID" not in json_parser:
-        plugin.notify('ERROR', 'RTLPlay (BE) : ' + plugin.localize(30711))
-        return False, None, None, None
+    sso_token = json_parser['data']['userAccount']['session']['encryptedToken']
+    sso_cookies = response.cookies.get_dict()
 
-    return True, json_parser["UID"], json_parser["UIDSignature"], json_parser["signatureTimestamp"]
+    # SSO auth
+    params = {
+        'redirectUrl': sso_url[1].replace('https://sso.rtl.be', ''),
+        'token': sso_token,
+    }
+    response = urlquick.get(URL_SSO_AUTH, params=params, cookies=sso_cookies, headers=GENERIC_HEADERS, timeout=REQUESTS_TIMEOUT, max_age=-1)
+    sso_code = re.findall(r'name=\"code\" value=\"(.*)\"', response.content.decode())
+    sso_state = re.findall(r'name=\"state\" value=\"(.*)\"', response.content.decode())
+
+    # RTLPlay callback
+    cookies = {
+        'lfvp_device_id': lfvp_device_id,
+        'lfvp_disabled_storefronts': lfvp_disabled_storefronts,
+        'ak_bmsc': ak_bmsc,
+        'lfvp_auth.redirect_uri': BASE_URL,
+        'lfvp_auth.state': sso_state[0],
+    }
+    data = {
+        'code': sso_code[0],
+        'state': sso_state[0],
+        'iss': 'https://sso.rtl.be/oidc/',
+    }
+    response = requests.post(BASE_URL + '/login-callback', cookies=cookies, headers=GENERIC_HEADERS, data=data, allow_redirects=True, timeout=REQUESTS_TIMEOUT)
+    login_cookie = []
+    if response.history:
+        for resp in response.history:
+            login_cookie.append(resp.cookies.get_dict())
+    callback_cookie = response.cookies.get_dict()
+
+    login_token = {
+        "ak_bmsc": ak_bmsc,
+        "bm_sv": callback_cookie['bm_sv'],
+        "lfvp_access_token": login_cookie[0]['lfvp_access_token'],
+        "lfvp_device_id": lfvp_device_id,
+        "lfvp_disabled_storefronts": "",
+        "lfvp_id_token": login_cookie[0]['lfvp_id_token'],
+        "lfvp_refresh_token": login_cookie[0]['lfvp_refresh_token'],
+    }
+    for profile_id in login_cookie:
+        if 'lfvp_auth.profile' in profile_id:
+            x_dpp_profile = re.match(r"^([a-f\d]{8}(-[a-f\d]{4}){3}-[a-f\d]{12})", profile_id.get('lfvp_auth.profile'), re.IGNORECASE).group(1)
+            login_token.update({"lfvp_auth.profile": x_dpp_profile, })
+        if 'lfvp_auth_token' in profile_id:
+            login_token.update({"lfvp_auth_token": profile_id.get('lfvp_auth_token'), })
+
+    save_token(login_token)
+
+    return login_token
+
+
+@Resolver.register
+def get_video_url(plugin, item_id, video_id, download_mode=False, **kwargs):
+    video_url = BASE_URL + '/player/' + video_id
+    manifest, license_url, lic_token = get_final_video_url(plugin, item_id, video_url)
+
+    if manifest is None:
+        plugin.notify('ERROR', plugin.localize(30713))
+        return False
+
+    if license_url is not None:
+        license_url = URL_LICENCE_KEY % lic_token
+
+    return resolver_proxy.get_stream_with_quality(
+        plugin, video_url=manifest, manifest_type='mpd',
+        license_url=license_url)
+
+
+def get_final_video_url(plugin, item_id, video_url):
+    login_token = get_login_token(plugin)
+    if login_token is None:
+        return False
+
+    is_live = "/direct/" in video_url and "/player/" not in video_url
+    response = urlquick.get(video_url, headers=RTLPLAY_HEADERS, cookies=login_token, max_age=-1)
+    if response.status_code != 200:
+        return None, None, None
+
+    response = response.content.decode()
+    pattern = re.search(r'apiKey: "([^"]*)"', response)
+    if pattern is not None:
+        api_key = pattern.group(1)
+    else:
+        api_key = None
+
+    pattern = re.search(r'token: "([^"]*)"', response)
+    if pattern is not None:
+        bearer_token = pattern.group(1)
+    else:
+        bearer_token = None
+
+    if is_live:
+        for r1, r2 in [(r"playerData\s*=", "assetId"), (r"channel\s*:", "id")]:
+            pattern_r1 = re.search(r1 + "[^{}]+{([^{}]+)}", response)
+            if pattern_r1 is not None:
+                content_id = pattern_r1.group(1)
+                pattern_r2 = re.search(r2 + "[^\"']+[\"']([^\"']+)[\"']", content_id)
+                if pattern_r2 is not None:
+                    content_id = pattern_r2.group(1)
+                    assert len(content_id) > 0
+                    break
+                else:
+                    content_id = None
+            else:
+                content_id = None
+    else:
+        content_id = re.search(r"/player/([^/?]*)", video_url).group(1)
+
+    if bearer_token is None or api_key is None:
+        return None, None, None
+
+    headers_cfg = RTLPLAY_HEADERS.copy()
+    headers_cfg.update({'x-api-key': api_key, })
+    headers_cfg.update({'popcorn-sdk-version': POPCORN_SDK, })
+    headers_cfg.update({'authorization': 'Bearer ' + bearer_token, })
+    params_cfg = {'startPosition': '0.0', 'autoPlay': 'true'}
+    # json_cfg = {'deviceType': 'web', 'zone': 'rtlplay'}
+    json_cfg = {"deviceType": "android-phone", "zone": "rtlplay"}
+    response = urlquick.post(URL_CONFIG % content_id,
+                             params=params_cfg,
+                             headers=headers_cfg,
+                             json=json_cfg,
+                             timeout=REQUESTS_TIMEOUT,
+                             max_age=-1)
+    if response.status_code == 403:
+        return None, None, None
+
+    response = json.loads(response.content.decode())
+
+    if response.get("code", None) == 103 and "available" in response.get("type", "").lower():
+        return None, None, None
+    if response.get("code", None) == 104 and "found" in response.get("type", "").lower():
+        return None, None, None
+
+    response = response["video"]
+    manifest = None
+    lic_token = None
+    license_url = None
+    for stream in response["streams"]:
+        if stream["type"] != "dash" or ".mpd" not in stream["url"]:
+            continue
+        manifest = stream["url"]
+
+        drm = stream.get("drm", None)
+        if drm is None:
+            break
+
+        for k in drm:
+            if "widevine" in k.lower():
+                drm = drm[k]
+                break
+
+        lic_token = drm["drmtoday"]["authToken"]
+        license_url = drm["licenseUrl"]
+        break
+
+    return manifest, license_url, lic_token
+
+
+@Resolver.register
+def get_live_url(plugin, item_id, **kwargs):
+    video_url = BASE_URL + '/direct/' + LIVE_CHANNEL[item_id]
+    manifest, license_url, lic_token = get_final_video_url(plugin, item_id, video_url)
+
+    if manifest is None:
+        plugin.notify('ERROR', plugin.localize(30713))
+        return False
+
+    if license_url is not None:
+        license_url = URL_LICENCE_KEY % lic_token
+
+    return resolver_proxy.get_stream_with_quality(
+        plugin, video_url=manifest, manifest_type='mpd',
+        license_url=license_url)

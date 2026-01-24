@@ -14,10 +14,10 @@ import urlquick
 from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 
-URL_LIVE = 'https://www.france24.com/%s/%s'
 LANG = Script.setting['france24.language']
 TOKEN_APP = '66b85dad-3ad5-40f3-ab32-2305fc2357ea'
 URL_API = utils.urljoin_partial('https://apis.france24.com')
+URL_LIVE = URL_API('/products/get_product/app_f24_android_tv_2023')
 
 GENERIC_HEADERS = {'User-Agent': web_utils.get_fixed_ua()}
 
@@ -310,10 +310,16 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    live_translation = {"FR": "direct", "AR": "البث-المباشر", "EN": "live", "ES": "en-vivo"}
     language = kwargs.get('language', LANG)
 
-    root = urlquick.get(URL_LIVE % (language, live_translation[language]), headers=GENERIC_HEADERS, max_age=-1)
-    video_id = root.parse('youtube-player').get('video-id')
-
-    return resolver_proxy.get_stream_youtube(plugin, video_id)
+    data = json.loads(
+        urlquick.get(URL_LIVE, params={'token_application': TOKEN_APP}, headers=GENERIC_HEADERS, max_age=-1).text)
+    for lang in data.get("result", {}).get("languages", []):
+        if lang.get("code") == language:
+            menu_lists = (lang.get("menuHomeCategories", {}).get("list", []))
+            for menu in menu_lists:
+                for carousel in menu.get("carrousel", []):
+                    for product in carousel.get("product", []):
+                        if "videoPreview" in product:
+                            return resolver_proxy.get_stream_with_quality(plugin, product["videoPreview"])
+    return None

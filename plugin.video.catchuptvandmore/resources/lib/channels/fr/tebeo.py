@@ -26,8 +26,6 @@ URL_REPLAY = URL_ROOT + '/le-replay'
 
 URL_STREAM = URL_ROOT + '/player.php?idprogramme=%s'
 
-ULTRAMEDIA_API = 'https://www.ultimedia.com/api/widget/smart?'
-
 GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
 
 
@@ -102,20 +100,10 @@ def get_video_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE % item_id, max_age=-1)
-    root = resp.text
-    mdtk = re.compile(r'ULTIMEDIA_mdtk \= \"(.*?)\"').findall(root)[0]
-    zone = re.compile(r'ULTIMEDIA_zone \= \"(.*?)\"').findall(root)[0]
+    resp = urlquick.get(URL_LIVE % item_id, headers=GENERIC_HEADERS, max_age=-1)
+    player_url = re.compile(r'script\.src \= \"(.*?)\"').findall(resp.text)[0]
 
-    params = {
-        'mdtk': mdtk,
-        'zone': zone
-    }
-    url_frame = urlquick.get(ULTRAMEDIA_API, headers=GENERIC_HEADERS, params=params, max_age=-1)
-    url_player = re.compile(r'iframe src\=\\\"(.*?)\&width').findall(url_frame.text)[0]
-
-    player = urlquick.get(url_player, headers=GENERIC_HEADERS, max_age=-1)
-    data_json = json.loads(re.compile(r'DtkPlayer.init\((.*?)\, \{\"topic').findall(player.text)[0])
-    video_url = data_json['video']['media_sources']['live']['src']
+    resp = urlquick.get(player_url, headers=GENERIC_HEADERS, max_age=-1)
+    video_url = re.compile(r'\"url\"\:\"(.*?)\"').findall(resp.text)[0]
 
     return resolver_proxy.get_stream_with_quality(plugin, video_url)

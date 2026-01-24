@@ -26,6 +26,8 @@ CATEGORIES_BSMART = {
     '/videos/': Script.localize(3)  # Videos
 }
 
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
+
 
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
@@ -149,9 +151,10 @@ def get_video_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(
-        URL_ROOT, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    live_id = re.compile(r'dailymotion.com/embed/video/(.*?)[\?\"]').findall(resp.text)[0]
-    return resolver_proxy.get_stream_dailymotion(plugin,
-                                                 live_id,
-                                                 False)
+    resp = urlquick.get(URL_ROOT, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse()
+    for a in root.iterfind('.//div'):
+        if a.get('data-videourl') is not None:
+            live_id = a.get('data-videourl')
+
+    return resolver_proxy.get_stream_dailymotion(plugin, live_id, False)

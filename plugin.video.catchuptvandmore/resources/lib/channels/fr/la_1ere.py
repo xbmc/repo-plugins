@@ -26,6 +26,9 @@ URL_ROOT = 'https://la1ere.francetvinfo.fr'
 URL_LIVE = 'https://www.france.tv/la1ere/%s/direct.html'
 
 URL_EMISSIONS = URL_ROOT + '/%s/emissions'
+
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
+
 # region
 
 LIVE_LA1ERE_REGIONS = {
@@ -141,7 +144,7 @@ def get_video_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
     final_region = LIVE_LA1ERE_REGIONS[utils.ensure_unicode(Script.setting['la_1ere.language'])]
-    resp = urlquick.get(URL_LIVE % final_region, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
-    broadcast_id = re.compile(r'videoId\"\:\"(.*?)\"', re.DOTALL).findall(resp.text)[0]
+    resp = urlquick.get(URL_LIVE % final_region, headers=GENERIC_HEADERS, max_age=-1)
+    broadcast_id = re.compile(r'options\\\"\:{\\\"id\\\"\:\\\"(.*?)\\\"', re.DOTALL).findall(resp.text)[0]
 
     return resolver_proxy.get_francetv_live_stream(plugin, broadcast_id)

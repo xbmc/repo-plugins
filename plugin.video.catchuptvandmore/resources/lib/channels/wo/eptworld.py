@@ -5,7 +5,7 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-import re
+import json
 
 from codequick import Resolver
 import urlquick
@@ -16,14 +16,32 @@ from resources.lib import resolver_proxy, web_utils
 # TO DO
 # Add Replay
 
-URL_LIVE = 'https://ept-live-bcbs15228.siliconweb.com/media/%s/%s.m3u8'
+URL_API = 'https://api.app.ertflix.gr/v1/Player/AcquireContent'
+
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    channel = {"eptw": "ert_1"}
 
-    resp = urlquick.get(URL_LIVE % (channel[item_id], channel[item_id]), headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    live_id = re.compile(r"var streamww = \'(.*?)\'").findall(resp.text)[0]
+    params = {
+        'platformCodename': 'www',
+        'codename': "ept-world-live"
+    }
 
-    return resolver_proxy.get_quality(plugin, live_id)
+    resp = urlquick.get(URL_API, headers=GENERIC_HEADERS, params=params, max_age=-1)
+    data_json = json.loads(resp.text)
+    possible_formats = data_json['MediaFiles'][0]['Formats']
+    default = True
+
+    for video_type in possible_formats:
+        if 'm3u8' in video_type['Url']:
+            video_url = video_type['Url']
+            break
+        if 'mpd' in video_type['Url']:
+            video_url = video_type['Url']
+            default = False
+            if default:
+                video_url = video_type['Url']
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url)

@@ -15,16 +15,15 @@ from resources.lib import resolver_proxy, web_utils
 
 URL_ROOT = 'https://www.cine5tv.com'
 
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
+
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_ROOT, headers={"User-Agent": web_utils.get_random_ua()})
-    player_url = re.compile('<script src=\"(.*?)\"').findall(resp.text)[0]
-    player_url = player_url.replace("#038;", "").replace("//", "https://")
+    resp = urlquick.get(URL_ROOT, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse("div", attrs={"class": "gm-tv"})
 
-    resp = urlquick.get(player_url)
-    video_url = re.compile('var yayincomtr4=\"(.*?)\"').findall(resp.text)[0]
-    video_url = video_url.replace("//", "https://")
+    video_url = root.get('data-stream')
 
-    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")
+    return resolver_proxy.get_stream_with_quality(plugin, video_url)

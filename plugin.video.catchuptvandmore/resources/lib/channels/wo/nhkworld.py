@@ -24,7 +24,7 @@ from resources.lib import resolver_proxy, web_utils
 
 URL_ROOT = 'http://www3.nhk.or.jp/'
 
-URL_LIVE_NHK = 'https://www3.nhk.or.jp/nhkworld/app/tv/hlslive_web.json'
+URL_LIVE_NHK = 'https://www3.nhk.or.jp/nhkworld/app/tv/hlslive_android_v2.json'
 # Channel_Name...
 
 URL_COMMONJS_NHK = 'http://www3.nhk.or.jp/%s/common/js/common.js'
@@ -134,10 +134,11 @@ def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE_NHK)
     json_parser = json.loads(resp.text)
+    streams = json_parser["tv"]
     video_url = ''
     if desired_country == 'Outside Japan':
-        video_url = json_parser["main"]["wstrm"]
+        video_url = streams["wstrm"]
     else:
-        video_url = json_parser["main"]["jstrm"]
+        video_url = streams["jstrm"]
 
     return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

@@ -7,19 +7,14 @@
 from __future__ import unicode_literals
 
 import re
-
 import urlquick
-# noinspection PyUnresolvedReferences
-from codequick import Resolver, Route
-# noinspection PyUnresolvedReferences
-from codequick.utils import urljoin_partial
+
+from codequick import Resolver
 
 from resources.lib import resolver_proxy, web_utils
 
 URL_ROOT = 'https://www.boliviatv.bo/'
-url_constructor = urljoin_partial(URL_ROOT)
-URL_LIVE = url_constructor('principal/vivo71.php')
-PATTERN_VIDEO_M3U8 = re.compile(r'file: \"(.*?\.m3u8.*)\"')
+URL_LIVE = URL_ROOT + 'principal/vivo71.php'
 
 GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
@@ -28,11 +23,7 @@ GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 def get_live_url(plugin, item_id, **kwargs):
     resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
     frame_url = resp.parse("iframe").get('src')
-    resp = urlquick.get(frame_url, headers=GENERIC_HEADERS, max_age=-1)
 
-    m3u8_array = PATTERN_VIDEO_M3U8.findall(resp.text)
-    if len(m3u8_array) == 0:
-        return False
-    video_url = m3u8_array[0].replace("\\", "")
+    video_id = re.search(r'video=(.*?)$', frame_url).group(1)
 
-    return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url)
+    return resolver_proxy.get_stream_dailymotion(plugin, video_id=video_id)

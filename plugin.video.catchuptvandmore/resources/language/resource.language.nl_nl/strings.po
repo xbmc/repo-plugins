@@ -233,6 +233,18 @@ msgctxt "#30076"
 msgid "Bolivia"
 msgstr "Bolivia"
 
+msgctxt "#30077"
+msgid "Saudi Arabia"
+msgstr "Saoedi-Arabië"
+
+msgctxt "#30078"
+msgid "Macedonia"
+msgstr "Macedonië"
+
+msgctxt "#30079"
+msgid "Ireland"
+msgstr "Irland"
+
 # Channels (from 30080 to 30129)
 
 msgctxt "#30080"
@@ -310,6 +322,10 @@ msgstr "Marokkaans kanalen"
 msgctxt "#30098"
 msgid "Peruvian channels"
 msgstr "Peruaans kanalen"
+
+msgctxt "#30099"
+msgid "UK channels"
+msgstr "UK kanalen"
 
 # Websites (from 30130 to 30149)
 
@@ -440,6 +456,14 @@ msgstr ""
 msgctxt "#30182"
 msgid "France 3 Régions: Choose subregion"
 msgstr ""
+
+msgctxt "#30183"
+msgid "Channel4: Programmes: Sort By"
+msgstr ""
+
+msgctxt "#30184"
+msgid "quality: "
+msgstr "kwaliteit: "
 
 msgctxt "#30192"
 msgid "BEST"
@@ -582,6 +606,14 @@ msgctxt "#30263"
 msgid "SFR TV password"
 msgstr ""
 
+msgctxt "#30264"
+msgid "Channel 4 Login"
+msgstr ""
+
+msgctxt "#30265"
+msgid "Channel 4 Password"
+msgstr ""
+
 
 # TV integration (from 30270 to 30289)
 
@@ -620,7 +652,6 @@ msgstr "Selecteer de kanalen om te activeren in Kodi Live TV"
 
 
 # Reserved space for other tab/category in settings (from 30290 to 30339)
-
 
 
 # Advanced settings (from 30370 to 30399)

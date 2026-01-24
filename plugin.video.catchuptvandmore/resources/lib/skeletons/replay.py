@@ -121,5 +121,12 @@ menu = {
         'thumb': 'channels/cm.png',
         'enabled': False,
         'order': 15
+    },
+    'sa_replay': {
+        'route': '/resources/lib/main:generic_menu',
+        'label': 30077,
+        'thumb': 'channels/sa.png',
+        'enabled': True,
+        'order': 16
     }
 }

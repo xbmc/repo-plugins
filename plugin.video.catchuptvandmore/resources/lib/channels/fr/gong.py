@@ -18,9 +18,9 @@ from resources.lib.menu_utils import item_post_treatment
 # TO DO
 # ...
 
-URL_ROOT = 'http://www.gongnetworks.com'
+URL_ROOT = 'https://www.gongnetworks.com'
 
-URL_LIVE = URL_ROOT + '/gong.php'
+URL_BUNDLE = URL_ROOT + '/static/js/bundle.js'
 
 URL_VIDEOS = URL_ROOT + '/videos.php?page=%s'
 # Page
@@ -84,7 +84,13 @@ def get_video_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE,
-                        headers={'User-Agent': web_utils.get_random_ua()},
-                        max_age=-1)
-    return re.compile(r'x-mpegurl" src="(.*?)"').findall(resp.text)[0]
+    headers = {
+        'User-Agent': web_utils.get_random_ua(),
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    }
+
+    resp = urlquick.get(URL_BUNDLE, headers=headers, max_age=-1)
+    url = re.compile(r'STREAMING_FLUX_URL = \'(.*?)\'').findall(resp.text)[0]
+
+    return resolver_proxy.get_stream_with_quality(plugin, url)
+

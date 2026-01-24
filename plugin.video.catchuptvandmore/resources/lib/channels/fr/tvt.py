@@ -25,7 +25,7 @@ from datetime import datetime
 # TODO
 # Add Replay
 
-URL_ROOT = "https://www.tvtours.fr"
+URL_ROOT = "https://www.valdeloire.tv/"
 API_URL = URL_ROOT + '/ajaxEmissions.php?id_emission=%s&iterations=%s&ajax=true'
 
 GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
@@ -98,6 +98,12 @@ def get_video_url(plugin, item_id, video_id, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
     resp = urlquick.get(URL_ROOT, headers=GENERIC_HEADERS, max_age=-1)
-    live_id = re.compile(r'data-video\=\"(.*?)\"').findall(resp.text)[0]
+    root = resp.parse("div", attrs={"class": "video"})
+    frame = root.findall(".//iframe")[0]
+    url_player = frame.get('src')
 
-    return resolver_proxy.get_stream_dailymotion(plugin, live_id, False)
+    player = urlquick.get(url_player, headers=GENERIC_HEADERS, max_age=-1)
+    data_json = json.loads(re.compile(r'DtkPlayer.init\((.*?)\, \{\"topic').findall(player.text)[0])
+    video_url = data_json['video']['media_sources']['live']['src']
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url)

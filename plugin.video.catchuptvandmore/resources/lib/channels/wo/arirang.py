@@ -7,7 +7,9 @@
 from __future__ import unicode_literals
 import re
 
-from codequick import Listitem, Route
+import xbmcgui
+from codequick import Listitem, Route, Script, utils
+
 import urlquick
 
 from resources.lib import download
@@ -28,9 +30,6 @@ URL_ROOT = 'http://www.arirang.com/mobile/'
 
 URL_EMISSION = URL_ROOT + 'tv_main.asp'
 # URL STREAM below present in this URL in mobile phone
-
-URL_STREAM = 'http://amdlive.ctnd.com.edgesuite.net/' \
-             'arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8'
 
 
 @Route.register
@@ -127,4 +126,19 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    return resolver_proxy.get_stream_with_quality(plugin, URL_STREAM, manifest_type="hls")
+    channels = [
+        ('World TV Global', 'https://amdlive-ch01-g-ctnd-com.akamaized.net/arirang_1gch/smil:arirang_1gch.smil/playlist.m3u8'),
+        ('World TV Korea', 'https://amdlive-ch01-g-ctnd-com.akamaized.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8'),
+        ('UN TV', 'https://amdlive-ch02-ctnd-com.akamaized.net/arirang_2ch/smil:arirang_2ch.smil/playlist.m3u8'),
+        ('Radio', 'https://amdlive-ch03-ctnd-com.akamaized.net/arirang_3ch/smil:arirang_3ch.smil/playlist.m3u8'),
+        ('Korea TV', 'https://amdlive-ch04-ctnd-com.akamaized.net/arirang_4ch/smil:arirang_4ch.smil/playlist.m3u8'),
+    ]  # https://arirang.com/static/js/main.8cdb9957.chunk.js
+
+    selected_item_index = xbmcgui.Dialog().select(Script.localize(30174), list(map(lambda x: x[0], channels)))
+    if selected_item_index == -1:
+        return False
+
+    selected_item = channels[selected_item_index]
+    video_url = selected_item[1]
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url)

@@ -46,19 +46,35 @@ def list_categories(plugin, item_id, **kwargs):
     root = resp.parse()
 
     for video_datas in root.iterfind(
-            ".//div[@class='slider-card card bg-transparent border-0 "
-            "rounded position-relative mb-0 card-default']"):
+            ".//div[@class='col-auto layout-carousel-column']"):
 
         video_title = ''
-        if video_datas.find('.//object') is not None:
-            video_title = video_datas.find('.//object').get('alt')
-        video_image = video_datas.find('.//object').get('data')
-        video_id = video_datas.find('.//a').get('href')
+        video_image = None
+        video_sub_title = ''
+        description = ''
+        for video_image_data in video_datas.iterfind('.//img'):
+            if video_image_data.get('alt') != 'Logo':
+                video_title = video_image_data.get('alt')
+                video_image = video_image_data.get('src')
+        xdata = video_datas.find('.//a').get('x-data')
+        video_id = re.compile(r"href\:\ \'(.*?)\'").findall(xdata)[0]
+
+        episodes_span = video_datas.find(".//span[@data-content-type='episodes']")
+        if episodes_span is not None:
+            sub_title_data = episodes_span.find('span')
+            if sub_title_data is not None:
+                # strip new line and HTML indents, and combine to one line.
+                video_sub_title = ' '.join(t.strip() for t in sub_title_data.text.strip().split('\n'))
+
+        overlay_data = video_datas.find(".//p[@class='overlay-text mb-0']")
+        if overlay_data is not None:
+            # strip new line and HTML indents, and combine to one line.
+            description = ' '.join(t.strip() for t in overlay_data.text.strip().split('\n'))
 
         item = Listitem()
         item.label = video_title
         item.art['thumb'] = item.art['landscape'] = video_image
-
+        item.info['plot'] = '\n\n'.join(t for t in (description, video_sub_title) if t)
         item.set_callback(list_videos,
                           item_id=item_id,
                           video_id=video_id,
@@ -68,7 +84,7 @@ def list_categories(plugin, item_id, **kwargs):
 
 
 @Route.register
-def list_videos(plugin, item_id, video_id, video_image, **kwargs):
+def list_videos(plugin, item_id, video_id, **kwargs):
 
     resp = urlquick.get(video_id, headers=GENERIC_HEADERS, max_age=-1)
     streams = re.search('"streams":"(.+?)"', resp.text)
@@ -79,8 +95,10 @@ def list_videos(plugin, item_id, video_id, video_image, **kwargs):
         for video_datas in video_active.iterfind(".//div[@class='row py-5']"):
 
             video_title = ''
-            if video_datas.find('.//object') is not None:
-                video_title = video_datas.find('.//object').get('alt')
+            video_image = None
+            if video_datas.find('.//img') is not None:
+                video_title = video_datas.find('.//img').get('alt')
+                video_image = video_datas.find('.//img').get('src')
 
             epno = ''
             for epouter in video_datas.iterfind(".//span[@data-content-type='season-episode']"):
@@ -97,14 +115,14 @@ def list_videos(plugin, item_id, video_id, video_image, **kwargs):
 
             plot = ''
             for info in video_datas.iterfind(".//p[@class='text-secondary mb-0']"):
-                plot = info.text
-            for drm_details in video_datas.iterfind(".//a[@class='d-block open-player pointer']"):
+                plot = info.text.strip()
+            for drm_details in video_datas.iterfind(".//span[@data-env='production']"):
                 streamKey = drm_details.get('data-key')
                 streamUvid = drm_details.get('data-uvid')
 
             item = Listitem()
             item.label = video_title
-            item.info['plot'] = epno + ' ' + plot
+            item.info['plot'] = '\n'.join((epno, plot))
             item.info['duration'] = seconds
             item.art['thumb'] = item.art['landscape'] = video_image
 

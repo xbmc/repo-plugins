@@ -68,10 +68,10 @@ menu = {
         'enabled': True,
         'order': 6
     },
-    'pl_live': {
+    'ie_live': {
         'route': '/resources/lib/main:generic_menu',
-        'label': 30058,
-        'thumb': 'channels/pl.png',
+        'label': 30079,
+        'thumb': 'channels/ie.png',
         'enabled': True,
         'order': 7
     },
@@ -97,33 +97,47 @@ menu = {
         'enabled': True,
         'order': 10
     },
+    'gr_live': {
+        'route': '/resources/lib/main:generic_menu',
+        'label': 30072,
+        'thumb': 'channels/gr.png',
+        'enabled': True,
+        'order': 11
+    },
+    'pl_live': {
+        'route': '/resources/lib/main:generic_menu',
+        'label': 30058,
+        'thumb': 'channels/pl.png',
+        'enabled': True,
+        'order': 12
+    },
     'sk_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30071,
         'thumb': 'channels/sk.png',
         'enabled': True,
-        'order': 11
+        'order': 13
     },
     'si_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30065,
         'thumb': 'channels/si.png',
         'enabled': True,
-        'order': 12
-    },
-    'gr_live': {
-        'route': '/resources/lib/main:generic_menu',
-        'label': 30072,
-        'thumb': 'channels/gr.png',
-        'enabled': True,
-        'order': 13
+        'order': 14
     },
     'lt_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30069,
         'thumb': 'channels/lt.png',
         'enabled': True,
-        'order': 14
+        'order': 15
+    },
+    'mk_live': {
+        'route': '/resources/lib/main:generic_menu',
+        'label': 30078,
+        'thumb': 'channels/mk.png',
+        'enabled': True,
+        'order': 16
     },
     'ca_live': {
         'route': '/resources/lib/main:tv_guide_menu'
@@ -131,90 +145,97 @@ menu = {
         'label': 30056,
         'thumb': 'channels/ca.png',
         'enabled': True,
-        'order': 15
+        'order': 17
     },
     'us_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30057,
         'thumb': 'channels/us.png',
         'enabled': True,
-        'order': 16
+        'order': 18
     },
     'jp_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30055,
         'thumb': 'channels/jp.png',
         'enabled': True,
-        'order': 17
+        'order': 19
     },
     'cn_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30063,
         'thumb': 'channels/cn.png',
         'enabled': True,
-        'order': 18
+        'order': 20
     },
     'sg_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30068,
         'thumb': 'channels/sg.png',
         'enabled': True,
-        'order': 19
+        'order': 21
     },
     'tr_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30070,
         'thumb': 'channels/tr.png',
         'enabled': True,
-        'order': 20
+        'order': 22
     },
     'ma_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30067,
         'thumb': 'channels/ma.png',
         'enabled': True,
-        'order': 21
+        'order': 23
     },
     'tn_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30060,
         'thumb': 'channels/tn.png',
         'enabled': True,
-        'order': 22
+        'order': 24
     },
     'cm_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30064,
         'thumb': 'channels/cm.png',
         'enabled': True,
-        'order': 23
+        'order': 25
     },
     'et_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30066,
         'thumb': 'channels/et.png',
         'enabled': True,
-        'order': 24
+        'order': 26
     },
     'bo_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30076,
         'thumb': 'channels/bo.png',
         'enabled': True,
-        'order': 25
+        'order': 27
     },
     'pe_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30073,
         'thumb': 'channels/pe.png',
         'enabled': True,
-        'order': 26
+        'order': 28
     },
     've_live': {
         'route': '/resources/lib/main:generic_menu',
         'label': 30074,
         'thumb': 'channels/ve.png',
         'enabled': True,
-        'order': 27
+        'order': 29
+    },
+    'sa_live': {
+        'route': '/resources/lib/main:generic_menu',
+        'label': 30077,
+        'thumb': 'channels/sa.png',
+        'enabled': True,
+        'order': 30
     }
 }

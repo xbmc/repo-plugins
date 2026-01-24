@@ -21,6 +21,10 @@ URL_ROOT = "https://www.telegrenoble.net"
 
 URL_LIVE = URL_ROOT + '/direct.html'
 
+URL_LIVE_PLAYER = URL_ROOT + '/player/direct'
+
+URL_ACCECPT_COOKIES = URL_ROOT + '/scripts/acceptCookies.php'
+
 URL_REPLAY = URL_ROOT + '/replay.html'
 
 URL_VIDEOS = URL_ROOT + '/views/htmlFragments/replayDetail_pages.php?page=%s&elementsPerPage=10&idEmission=%s'
@@ -89,8 +93,16 @@ def get_video_url(plugin, video_url, download_mode=False, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
-    live_url = resp.parse().find('.//iframe').get('src')
-    video_id = re.compile(r'channel\=(.*?)\&').findall(live_url)[0]
+    session = urlquick.session()
+    resp = session.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
+    data = {
+        'cookiesAccepted': '1',
+    }
 
-    return resolver_proxy.get_stream_twitch(plugin, video_id, False)
+    resp = session.post(URL_ACCECPT_COOKIES, headers=GENERIC_HEADERS, data=data, max_age=-1)
+    resp = session.post(URL_LIVE_PLAYER, headers=GENERIC_HEADERS, max_age=-1)
+
+    youtube_id = resp.parse("iframe").get('src')
+    video_id = re.compile(r'embed\/(.*?)\?').findall(youtube_id)[0]
+
+    return resolver_proxy.get_stream_youtube(plugin, video_id, False)

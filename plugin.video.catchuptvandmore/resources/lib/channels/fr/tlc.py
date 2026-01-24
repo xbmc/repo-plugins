@@ -66,4 +66,4 @@ def get_video_url(plugin, item_id, video_url, **kwargs):
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    return resolver_proxy.get_stream_twitch(plugin, 'tlccholet')
+    return resolver_proxy.get_stream_twitch(plugin, 'tlcredaction')

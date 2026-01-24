@@ -6,6 +6,7 @@
 
 from __future__ import unicode_literals
 import re
+import json
 
 from codequick import Listitem, Resolver, Route
 import urlquick
@@ -16,6 +17,8 @@ from resources.lib.menu_utils import item_post_treatment
 URL_ROOT = 'https://www.tv78.com'
 URL_LIVE = URL_ROOT + '/le-live'
 URL_REPLAY = URL_ROOT + '/emissions-replay/'
+
+STREAMAKKACI_URL = 'https://webcast.streamakaci.com'
 
 GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
@@ -88,7 +91,15 @@ def get_video_url(plugin, url, download_mode=False, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE, headers={'User-Agent': web_utils.get_random_ua()}, max_age=-1)
-    video_url = re.compile('source src\=\"(.*?)\"').findall(resp.text)[0]
+    resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse("iframe")
+    streamakaci_url = root.get('data-src')
+
+    resp = urlquick.get(streamakaci_url, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse('div', attrs={'id': "player"})
+    json_url = STREAMAKKACI_URL + root.get('data-configuration')
+
+    resp = urlquick.get(json_url, headers=GENERIC_HEADERS, max_age=-1)
+    video_url = json.loads(resp.text)['url']
 
     return resolver_proxy.get_stream_with_quality(plugin, video_url)

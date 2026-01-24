@@ -17,7 +17,7 @@ from __future__ import unicode_literals
 root = 'live_tv'
 
 menu = {
-    'alAoula': {
+    'al-aoula': {
         'resolver': '/resources/lib/channels/ma/snrt:get_live_url',
         'label': 'Al Aoula',
         'thumb': 'channels/ma/alaoula.png',
@@ -88,7 +88,7 @@ menu = {
         'enabled': True,
         'order': 8
     },
-    'maghreb': {
+    'MEDI1TV Maghreb': {
         'resolver': '/resources/lib/channels/ma/medi1:get_live_url',
         'label': 'Medi1 Maghreb',
         'thumb': 'channels/ma/medi1.png',
@@ -96,7 +96,7 @@ menu = {
         'enabled': True,
         'order': 9
     },
-    'arabic': {
+    'MEDI1TV Arabic': {
         'resolver': '/resources/lib/channels/ma/medi1:get_live_url',
         'label': 'Medi1 Arabic',
         'thumb': 'channels/ma/medi1.png',
@@ -104,7 +104,7 @@ menu = {
         'enabled': True,
         'order': 10
     },
-    'afrique': {
+    'MEDI1TV Afrique': {
         'resolver': '/resources/lib/channels/ma/medi1:get_live_url',
         'label': 'Medi1 Afrique',
         'thumb': 'channels/ma/medi1afrique.png',

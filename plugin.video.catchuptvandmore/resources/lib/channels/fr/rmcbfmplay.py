@@ -124,7 +124,7 @@ def menu(plugin, path, **kwargs):
             "device": "browser",
             "token": token,
             "page": "0",
-            "size": "30",
+            "size": "1000",
             "profileId": account_id,
             "accountTypes": "NEXTTV",
             "operators": "NEXTTV",
@@ -136,7 +136,9 @@ def menu(plugin, path, **kwargs):
             "universe": "PROVIDER",
             "accountTypes": "NEXTTV",
             "operators": "NEXTTV",
-            "noTracking": "false"
+            "noTracking": "false",
+            'page': "0",
+            "size": "1000"
         }
 
     resp = urlquick.get(url, params=params, headers=GENERIC_HEADERS).json()

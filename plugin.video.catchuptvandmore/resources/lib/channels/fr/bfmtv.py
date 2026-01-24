@@ -43,21 +43,9 @@ URL_VIDEO = 'http://api.nextradiotv.com/%s-applications/%s/' \
 
 # URL Live
 # Channel BFMTV
-URL_LIVE_BFMTV = 'https://www.bfmtv.com/en-direct/'
-
-# Channel BFM Business
-URL_LIVE_BFMBUSINESS = 'https://www.bfmtv.com/economie/en-direct/'
-
-# Channel BFM Business
-URL_LIVE_BFM2 = 'https://www.bfmtv.com/en-direct/bfm2/'
+URL_LIVE_BFM = 'https://www.bfmtv.com/%sen-direct/%s'
 
 DESIRED_QUALITY = Script.setting['quality']
-
-# Dailymotion Id get from these pages below
-# - https://www.dailymotion.com/BFMTV
-LIVE_DAILYMOTION_ID = {
-    'bfmtv': 'xgz4t1'
-}
 
 GENERIC_HEADERS = {'User-Agent': web_utils.get_random_windows_ua()}
 
@@ -217,22 +205,36 @@ def get_video_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    if item_id == 'BFM TV':
-        try:
-            return resolver_proxy.get_stream_dailymotion(plugin, LIVE_DAILYMOTION_ID[item_id], False)
-        except Exception:
-            try:
-                return BFM_brightcove(plugin, URL_LIVE_BFMTV)
-            except Exception:
-                return rmcbfmplay.bfm_player(plugin, item_id)
-
     try:
-        if item_id == 'BFM Business':
-            live_url = URL_LIVE_BFMBUSINESS
-        if item_id == 'BFM2':
-            live_url = URL_LIVE_BFM2
-
-        return BFM_brightcove(plugin, live_url)
+        if (plugin.setting.get_string('rmcbfmplay.login') != '') and \
+           (plugin.setting.get_string('rmcbfmplay.password') != '') and \
+           (item_id in ['BFM TV', 'BFM Business', 'BFM2']):
+            return rmcbfmplay.bfm_player(plugin, item_id)
 
     except Exception:
-        return rmcbfmplay.bfm_player(plugin, item_id)
+        pass
+
+    if item_id == 'BFM_regions':
+        item_id = kwargs.get('language', Script.setting['BFM_regions.language'])
+
+    url_id = {
+        'BFM TV': ['', ''],
+        'BFM Business': ['economie/', ''],
+        'BFM2': ['', 'bfm2'],
+        'BFM ALSACE': ['alsace/', ''],
+        "BFM DICI HAUTE-PROVENCE": ['bfm-dici/haute-provence/', ''],
+        "BFM DICI ALPES DU SUD": ['/bfm-dici/alpes-du-sud/', ''],
+        "BFM GRAND LILLE": ['lille', ''],
+        "BFM GRAND LITTORAL": ['grand-littoral/', ''],
+        "BFM LYON": ['lyon/', ''],
+        "BFM MARSEILLE PROVENCE": ['marseille/', ''],
+        "BFM NICE COTE D'AZUR": ['cote-d-azur/', ''],
+        "BFM NORMANDIE": ['normandie/', ''],
+        "BFM TOULON VAR": ['var/', '']
+    }
+
+    try:
+        return BFM_brightcove(plugin, URL_LIVE_BFM % (url_id[item_id][0], url_id[item_id][1]))
+
+    except Exception:
+        return

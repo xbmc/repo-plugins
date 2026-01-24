@@ -23,9 +23,5 @@ GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
-    json_text = resp.parse().findall(".//script[@id='__NEXT_DATA__']")[0].text
-    json_parser = json.loads(json_text)
-    video_url = json_parser['runtimeConfig']['TNT_STREAM_URL']
 
-    return resolver_proxy.get_stream_with_quality(plugin, video_url)
+    return resolver_proxy.get_stream_with_quality(plugin, 'https://static.lefigaro.fr/secom/tnt.m3u8')

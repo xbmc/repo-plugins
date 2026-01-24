@@ -233,6 +233,18 @@ msgctxt "#30076"
 msgid "Bolivia"
 msgstr ""
 
+msgctxt "#30077"
+msgid "Saudi Arabia"
+msgstr ""
+
+msgctxt "#30078"
+msgid "Macedonia"
+msgstr ""
+
+msgctxt "#30079"
+msgid "Ireland"
+msgstr ""
+
 # Channels (from 30080 to 30129)
 
 msgctxt "#30080"
@@ -309,6 +321,10 @@ msgstr ""
 
 msgctxt "#30098"
 msgid "Peruvian channels"
+msgstr ""
+
+msgctxt "#30099"
+msgid "UK channels"
 msgstr ""
 
 # Websites (from 30130 to 30149)
@@ -439,6 +455,14 @@ msgstr ""
 
 msgctxt "#30182"
 msgid "France 3 Régions: Choose subregion"
+msgstr ""
+
+msgctxt "#30183"
+msgid "Channel4: Programmes: Sort By"
+msgstr ""
+
+msgctxt "#30184"
+msgid "quality: "
 msgstr ""
 
 msgctxt "#30192"
@@ -582,6 +606,22 @@ msgctxt "#30263"
 msgid "SFR TV password"
 msgstr ""
 
+msgctxt "#30264"
+msgid "Channel 4 Login"
+msgstr ""
+
+msgctxt "#30265"
+msgid "Channel 4 Password"
+msgstr ""
+
+msgctxt "#30266"
+msgid "Log in to Channel5"
+msgstr ""
+
+msgctxt "#30267"
+msgid "Log out of Channel5"
+msgstr ""
+
 
 # TV integration (from 30270 to 30289)
 
@@ -620,8 +660,6 @@ msgstr ""
 
 
 # Reserved space for other tab/category in settings (from 30290 to 30339)
-
-
 
 
 # Advanced settings (from 30370 to 30399)
@@ -879,6 +917,22 @@ msgstr ""
 
 msgctxt "#30732"
 msgid "This content requires a payment. To buy or rent it, go to %s website at this URL : %s"
+msgstr ""
+
+msgctxt "#30733"
+msgid "Enter email"
+msgstr ""
+
+msgctxt "#30734"
+msgid "Enter password"
+msgstr ""
+
+msgctxt "#30735"
+msgid "Logged in successfully"
+msgstr ""
+
+msgctxt "#30736"
+msgid "Logged out successfully"
 msgstr ""
 
 

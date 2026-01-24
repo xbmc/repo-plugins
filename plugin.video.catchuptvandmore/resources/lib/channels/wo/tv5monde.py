@@ -30,6 +30,8 @@ URL_TV5MONDE_ROOT = 'https://www.tv5monde.com'
 URL_TV5MONDE_API = 'https://api.tv5monde.com/player/asset/%s/resolve?condenseKS=true'
 M3U8_NOT_FBS = 'https://ott.tv5monde.com/Content/HLS/Live/channel(europe)/variant.m3u8'
 
+URL_LICENCE_KEY = '%s|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0|R{SSM}|'
+
 LIST_LIVE_TV5MONDE = {'tv5mondefbs': 'fbs', 'tv5mondeinfo': 'infoplus'}
 
 LIVETYPE = {
@@ -37,9 +39,16 @@ LIVETYPE = {
     "NOT_FBS": "1"
 }
 
-HEADERS_GENERIC = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0',
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+GENERIC_HEADERS = {
+    'User-Agent': web_utils.get_random_windows_ua(),
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
+    'Connection': 'keep-alive',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'none',
+    'Sec-Fetch-User': '?1',
+    'Sec-GPC': '1',
 }
 
 
@@ -53,14 +62,13 @@ def list_categories(plugin, item_id, **kwargs):
     - ...
     """
     resp = urlquick.get(URL_TV5MONDE_ROOT + '/tv',
-                        headers=HEADERS_GENERIC,
+                        headers=GENERIC_HEADERS,
                         max_age=-1)
 
     root = resp.parse("footer", attrs={"role": "footer-content"})
     for category_datas in root.iterfind(".//li"):
         category_title = category_datas.find('.//a').text.strip()
-        category_url = URL_TV5MONDE_ROOT + category_datas.find('.//a').get(
-            'href')
+        category_url = URL_TV5MONDE_ROOT + category_datas.find('.//a').get('href')
 
         item = Listitem()
         item.label = category_title
@@ -80,7 +88,7 @@ def list_programs(plugin, item_id, category_url, page, **kwargs):
     - ...
     """
     resp = urlquick.get(category_url + '?page=%s' % page,
-                        headers=HEADERS_GENERIC,
+                        headers=GENERIC_HEADERS,
                         max_age=-1)
 
     root = resp.parse("main", attrs={"role": "main-content"})
@@ -99,9 +107,12 @@ def list_programs(plugin, item_id, category_url, page, **kwargs):
         except Exception:
             continue
 
+        if program_datas.find('.//p[@class="thumbnail-titre-fiche-mere"]') is not None:
+            program_title = program_datas.find('.//p[@class="thumbnail-titre-fiche-mere"]').text.strip()
+
         item = Listitem()
         item.label = program_title
-        item.art['thumb'] = item.art['landscape'] = program_image
+        item.art['thumb'] = item.art['landscape'] = item.art["fanart"] = program_image
         item.set_callback(list_videos,
                           item_id=item_id,
                           program_url=program_url,
@@ -117,13 +128,22 @@ def list_programs(plugin, item_id, category_url, page, **kwargs):
 @Route.register
 def list_videos(plugin, item_id, program_url, page, **kwargs):
     resp = urlquick.get(program_url + '?page=%s' % page,
-                        headers=HEADERS_GENERIC,
+                        headers=GENERIC_HEADERS,
                         max_age=-1)
     root = resp.parse("main", attrs={"role": "main-content"})
     if root.findall(".//div[@class='video-wrapper']"):
+        video_plot = video_image = ''
         video_title = root.find(".//h1").text.strip()
+        if root.find('.//p[@class="text"]') is not None:
+            video_plot = root.find('.//p[@class="text"]').text.strip()
+            video_image = root.find('.//div[@class="video_player_loader"]').get('data-image')
+
         item = Listitem()
         item.label = video_title
+        if len(video_image) > 0:
+            item.art['thumb'] = item.art['landscape'] = item.art["fanart"] = video_image
+        if len(video_plot) > 0:
+            item.info['plot'] = video_plot
         item.set_callback(get_video_url,
                           item_id=item_id,
                           video_url=program_url)
@@ -145,10 +165,20 @@ def list_videos(plugin, item_id, program_url, page, **kwargs):
         except Exception:
             continue
 
-        item = Listitem()
-        item.label = video_title
-        item.art['thumb'] = item.art['landscape'] = video_image
+        video_title2 = video_plot = ''
+        if video_datas.find('.//p[@class="thumbnail-titre-episode"]') is not None:
+            video_title2 = video_datas.find('.//p[@class="thumbnail-titre-episode"]').text.strip()
+        if video_datas.find('.//p[@class="thumbnail-description thumbnail-resume-court"]') is not None:
+            video_plot = video_datas.find('.//p[@class="thumbnail-description thumbnail-resume-court"]').text.strip()
 
+        item = Listitem()
+        if len(video_title2) == 0:
+            item.label = video_title
+        else:
+            item.label = video_title + ' - ' + video_title2
+        if len(video_plot) > 0:
+            item.info['plot'] = video_plot
+        item.art['thumb'] = item.art['landscape'] = item.art["fanart"] = video_image
         item.set_callback(get_video_url,
                           item_id=item_id,
                           video_url=video_url)
@@ -164,9 +194,9 @@ def list_videos(plugin, item_id, program_url, page, **kwargs):
 def list_videos_category(plugin, item_id, page, **kwargs):
     resp = urlquick.get(URL_TV5MONDE_ROOT +
                         '/toutes-les-videos?page=%s' % page,
-                        headers={'User-Agent': web_utils.get_random_ua()})
+                        headers=GENERIC_HEADERS,
+                        max_age=-1)
     root = resp.parse()
-
     for video_datas in root.iterfind(".//div[@class='bloc-episode-content']"):
         if video_datas.find('.//h3') is not None:
             video_title = video_datas.find('.//h2').text.strip() + ' - ' + video_datas.find('.//h3').text.strip()
@@ -175,14 +205,12 @@ def list_videos_category(plugin, item_id, page, **kwargs):
         if 'http' in video_datas.find('.//img').get('src'):
             video_image = video_datas.find('.//img').get('src')
         else:
-            video_image = URL_TV5MONDE_ROOT + video_datas.find('.//img').get(
-                'src')
+            video_image = URL_TV5MONDE_ROOT + video_datas.find('.//img').get('src')
         video_url = URL_TV5MONDE_ROOT + video_datas.find('.//a').get('href')
 
         item = Listitem()
         item.label = video_title
         item.art['thumb'] = item.art['landscape'] = video_image
-
         item.set_callback(get_video_url,
                           item_id=item_id,
                           video_url=video_url)
@@ -199,54 +227,41 @@ def get_video_url(plugin,
                   video_url,
                   download_mode=False,
                   **kwargs):
-    resp = urlquick.get(video_url,
-                        headers=HEADERS_GENERIC,
-                        max_age=-1)
+    resp = urlquick.get(video_url, headers=GENERIC_HEADERS, max_age=-1)
     video_json = re.compile('data-broadcast=\'(.*?)\'').findall(resp.text)[0]
     json_parser = json.loads(video_json)
     try:
         api_url = json_parser["files"][0]["url"]
-        token = json_parser["files"][0]["token"]
+        api_token = json_parser["files"][0]["token"]
     except Exception:
         api_url = json_parser[0]["url"]
-        token = json_parser[0]["token"]
+        api_token = json_parser[0]["token"]
 
-    api_headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0",
-        "authorization": "Bearer %s" % token,
-    }
+    headers = GENERIC_HEADERS.copy()
+    headers.update({'Authorization': 'Bearer ' + api_token})
     resp = urlquick.get(URL_TV5MONDE_API % api_url,
-                        headers=api_headers,
+                        headers=headers,
                         max_age=-1)
 
     json_parser = resp.json()
-    license_key = None
-    license_headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0',
-        'Content-Type': 'application/octet-stream'
-    }
+
+    final_video_url = None
+    license_url = license_key = None
     for video_datas in json_parser:
-        if 'dash' in video_datas["type"]:
-            final_video_url = video_datas["url"]
+        if 'dash' in video_datas['type']:
+            final_video_url = video_datas['url']
             if 'drm' in video_datas:
-                license_url = video_datas["drm"]["keySystems"]["widevine"]["license"]
-                license_config = {  # for Python < v3.7 you should use OrderedDict to keep order
-                    'license_server_url': license_url,
-                    'headers': urlencode(license_headers),
-                    'post_data': 'R{SSM}',
-                    'response_data': 'R'
-                }
-                license_key = '|'.join(license_config.values())
-                continue
+                license_url = video_datas['drm']['keySystems']['widevine']['license']
+            break
 
-    if final_video_url is None:
-        final_video_url = json_parser[0]["url"]
-        return final_video_url
+    if license_url is not None:
+        license_key = URL_LICENCE_KEY % license_url
+    else:
+        license_key = None
 
-    return resolver_proxy.get_stream_with_quality(plugin,
-                                                  video_url=final_video_url,
-                                                  manifest_type='mpd',
-                                                  license_url=license_key)
+    return resolver_proxy.get_stream_with_quality(
+        plugin, video_url=final_video_url, manifest_type='mpd',
+        license_url=license_key)
 
 
 @Resolver.register
@@ -260,7 +275,7 @@ def get_live_url(plugin, item_id, **kwargs):
         if item_id == channel_name:
             live_id = live_id_value
     resp = urlquick.get(URL_TV5MONDE_LIVE + '%s.html' % live_id,
-                        headers=HEADERS_GENERIC,
+                        headers=GENERIC_HEADERS,
                         max_age=-1)
     live_json = re.compile(r'data-broadcast=\'(.*?)\'').findall(resp.text)[0]
     json_parser = json.loads(live_json)

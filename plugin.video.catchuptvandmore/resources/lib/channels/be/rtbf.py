@@ -51,11 +51,6 @@ AUTH_SERVICE_API_TOKEN = "https://auth-service.rtbf.be/oauth/v1/token"
 
 AUVIO_ROOT = "https://auvio.rtbf.be/"
 
-URL_EMISSIONS_AUVIO = 'https://www.rtbf.be/auvio/emissions'
-
-URL_JSON_EMISSION_BY_ID2 = 'https://www.rtbf.be/api/media/video?' \
-                           'method=getVideoListByEmissionOrdered&args[]=%s'
-
 # I made the choice to select video only because it seems that some audio and video program have the same id but are
 # different
 URL_JSON_EMISSION_BY_ID = 'https://www.rtbf.be/api/partner/generic/media/' \
@@ -64,7 +59,6 @@ URL_JSON_EMISSION_BY_ID = 'https://www.rtbf.be/api/partner/generic/media/' \
 
 # emission_id
 
-URL_CATEGORIES2 = 'https://www.rtbf.be/news/api/menu?site=media'
 URL_CATEGORIES = 'https://www.rtbf.be/api/partner/generic/embed/' \
                  'category?method=getTree&v=1&partnerID=%s'
 
@@ -114,6 +108,9 @@ GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
 # partner_key
 PARTNER_KEY = '82ed2c5b7df0a9334dfbda21eccd8427'  # get_partner_key()
 
+URL_AUVIO_PAGES = 'https://bff-service.rtbf.be/auvio/v1.23/pages%s'
+URL_LICENCE_KEY2 = '%s|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36|R{SSM}|R'
+
 
 def get_partner_key():
     # Get partner key
@@ -150,36 +147,218 @@ def format_day(date, **kwargs):
 
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
+    params = {
+        'userAgent': 'Chrome-web-3.0',
+    }
+    response = urlquick.get(
+        url=URL_AUVIO_PAGES % '/home',
+        headers=GENERIC_HEADERS,
+        params=params,
+        max_age=-1
+    )
+
+    json_parser = response.json()
+    for array in json_parser["data"]['widgets']:
+        category_type = array['type']
+        if category_type.upper().endswith('_LIST') and 'FAVORITE_PROGRAM_LIST' not in category_type:
+            category_title = array["title"]
+            category_id = array["id"]
+            category_url = array['contentPath']
+
+            item = Listitem()
+            item.label = category_title
+            item.set_callback(main_list_programs,
+                              item_id=item_id,
+                              category_url=category_url,
+                              category_id=category_id)
+            item_post_treatment(item)
+            yield item
+
+    # search items
     item = Listitem.search(list_search, item_id=item_id, page='0')
     item_post_treatment(item)
     yield item
 
-    # all programs
-    item = Listitem()
-    item.label = plugin.localize(30717)
-    item.set_callback(list_programs, item_id=item_id)
-    item_post_treatment(item)
-    yield item
+    # TODO: all programs
+    # item = Listitem()
+    # item.label = plugin.localize(30717)
+    # item.set_callback(list_all_programs, item_id=item_id)
+    # item_post_treatment(item)
+    # yield item
 
-    resp = urlquick.get(URL_CATEGORIES % PARTNER_KEY)
-    json_parser = resp.json()
 
-    for category_datas in json_parser["data"]:
-        category_title = category_datas["name"]
-        category_id = category_datas["id"]
-        item = Listitem()
-        item.label = category_title
-        if "subCategory" in category_datas:
-            item.set_callback(list_sub_categories,
-                              item_id=item_id,
-                              category_datas=category_datas,
-                              category_id=category_id)
-        else:
-            item.set_callback(list_videos_category,
-                              item_id=item_id,
-                              cat_id=category_id)
-        item_post_treatment(item)
-        yield item
+@Route.register
+def main_list_programs(plugin, item_id, category_url, category_id, **kwargs):
+    params = {
+        'userAgent': 'Chrome-web-3.0',
+    }
+    response = urlquick.get(
+        url=category_url,
+        headers=GENERIC_HEADERS,
+        params=params,
+        max_age=-1
+    )
+    if not response and response.status_code != 200:
+        return None
+
+    json_parser = response.json()
+    if 'pageType' in json_parser['data']:
+        if 'widgets' in json_parser['data']:
+            if json_parser['data']['pageType'] != 'MEDIA' and len(json_parser["data"]['widgets']) > 0:
+                for array in json_parser["data"]['widgets']:
+                    category_type = array['type']
+                    if category_type.upper().endswith('_LIST'):
+                        category_title = array["title"]
+                        if len(category_title) == 0:
+                            continue
+                        category_id = array["id"]
+                        category_url = array['contentPath']
+
+                        item = Listitem()
+                        item.label = category_title
+                        item.set_callback(main_list_programs,
+                                          item_id=item_id,
+                                          category_url=category_url,
+                                          category_id=category_id)
+                        item_post_treatment(item)
+                        yield item
+
+            elif 'content' in json_parser['data']:
+                if 'VIDEO' == json_parser["data"]['content']['type'] and json_parser["data"]['content']['pageType'] == "MEDIA":
+                    asset_id = json_parser["data"]['content']['assetId']
+
+                    item = Listitem()
+                    item.label = json_parser["data"]['content']['title']
+                    if "subtitle" in json_parser["data"]['content']:
+                        subtitle = json_parser["data"]['content']['subtitle']
+                        if len(subtitle) > 0:
+                            item.label += " - " + subtitle
+                    item.art['thumb'] = item.art['landscape'] = json_parser["data"]['content']['background']['l']
+                    item.info['plot'] = json_parser["data"]['content']['description']
+                    item.info['duration'] = json_parser["data"]['content']['duration']
+                    date_value = format_day(json_parser["data"]['content']["publishedFrom"])
+                    item.info.date(date_value, '%Y/%m/%d')
+                    item.set_callback(main_video_url, item_id=item_id, video_id=asset_id, download_mode=False)
+                    item_post_treatment(item, is_playable=True, is_downloadable=False)
+                    yield item
+    else:
+        if 'content' in json_parser['data']:
+            category_type = json_parser['data']['type']
+            for array in json_parser['data']['content']:
+                if 'assetId' in array:
+                    asset_id = array['assetId']
+
+                    item = Listitem()
+                    item.label = array['title']
+                    if "subtitle" in array:
+                        subtitle = array['subtitle']
+                        if len(subtitle) > 0:
+                            item.label += " - " + subtitle
+                    item.art['thumb'] = item.art['landscape'] = array['illustration']['l']
+                    if 'description' in array:
+                        item.info['plot'] = array['description']
+                    item.info['duration'] = array['duration']
+                    if 'publishedFrom' in array:
+                        date_value = format_day(array["publishedFrom"])
+                        item.info.date(date_value, '%Y/%m/%d')
+                    item.set_callback(main_video_url, item_id=item_id, video_id=asset_id, download_mode=False)
+                    item_post_treatment(item, is_playable=True, is_downloadable=False)
+                    yield item
+
+                else:
+                    category_id = str(array['id'])
+                    if 'title' in array:
+                        category_title = array['title']
+                    else:
+                        category_title = array['label']
+                    if 'contentPath' in array:
+                        category_url = array['contentPath']
+                    else:
+                        category_url = URL_AUVIO_PAGES % array['path']
+
+                    item = Listitem()
+                    item.label = category_title
+                    if 'illustration' in array:
+                        item.art['thumb'] = item.art['landscape'] = array['illustration']['l']
+                    item.set_callback(main_list_programs,
+                                      item_id=item_id,
+                                      category_url=category_url,
+                                      category_id=category_id)
+                    item_post_treatment(item)
+                    yield item
+
+
+@Resolver.register
+def main_video_url(plugin, item_id, video_id, download_mode=False, **kwargs):
+    is_ok, session_token, _ = get_redbee_session_token(plugin)
+    if is_ok is False:
+        return False
+
+    url = REDBEE_BASE_URL + '/entitlement/{}/play'.format(video_id)
+    params = {
+        'supportedFormats': 'dash,hls,mss,mp3,aac',
+        'supportedDrms': 'widevine'
+    }
+    headers = {
+        'User-Agent': web_utils.get_random_ua(),
+        'Authorization': 'Bearer {}'.format(session_token)
+    }
+    response = urlquick.get(url, headers=headers, params=params, max_age=-1, raise_for_status=False)
+    if response.status_code != 200:
+        plugin.notify(plugin.localize(30600), plugin.localize(30716))
+        return False
+
+    json_paser = json.loads(response.text)
+    video_format = json_paser['formats']
+
+    if video_format is None:
+        plugin.notify('ERROR', plugin.localize(30721))
+        return False
+
+    final_video_url, license_url = get_final_video_url(plugin, video_format)
+    license_key = None
+
+    if license_url:
+        license_key = URL_LICENCE_KEY2 % license_url
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=final_video_url, manifest_type='mpd',
+                                                  subtitles=None, license_url=license_key)
+
+
+def get_final_video_url(plugin, video_format):
+    FORMAT_PRIORITY = {"": 0, "mss": 1, "aac": 2, "mp3": 3, "smoothstreaming": 4, "hls": 5, "dash": 6}
+
+    if video_format is None:
+        plugin.notify('ERROR', plugin.localize(30721))
+        return None
+
+    license_url = manifest = None
+    formats = sorted(
+        video_format, reverse=True,
+        key=lambda f: FORMAT_PRIORITY.get(f.get("format", "").lower(), 0)
+    )
+
+    for current_format in formats:
+        if len(current_format.get("format", "")) == 0:
+            continue
+
+        manifest = current_format["mediaLocator"]
+        if len(current_format.get("drm", {}).keys()) == 0:
+            break
+
+        license_url = None
+        for k, v in current_format["drm"].items():
+            if "widevine" not in k.lower():
+                continue
+
+            license_url = v["licenseServerUrl"]
+            break
+
+        if license_url is not None:
+            break
+        manifest = None
+
+    return manifest, license_url
 
 
 @Route.register
@@ -297,55 +476,6 @@ def get_rtbf_token(plugin, id_token):
     return resp.json()
 
 
-# Not used at the moment but could be used if we want to display all the programs per channel via API
-# (doesn't work at the moment because display folders that are empties)
-@Route.register
-def list_channels(plugin, item_id, **kwargs):
-    resp = urlquick.get(URL_LIST_TV_CHANNELS % PARTNER_KEY, headers=GENERIC_HEADERS, max_age=-1)
-    json_parser = resp.json()
-
-    for channel_datas in json_parser:
-        channel_title = channel_datas["name"]
-        channel_image = channel_datas["images"]["illustration"]["16x9"]["1248x702"]
-        item = Listitem()
-        item.label = channel_title
-        item.art['thumb'] = item.art['landscape'] = channel_image
-        item.set_callback(list_programs, item_id=item_id)
-        item_post_treatment(item)
-        yield item
-
-
-@Route.register
-def list_programs(plugin, item_id, **kwargs):
-    resp = urlquick.get(URL_EMISSIONS_AUVIO, headers=GENERIC_HEADERS, max_age=-1)
-    root = resp.parse()
-
-    for program_datas in root.iterfind(
-            ".//article[@class='rtbf-media-item rtbf-media-item--program-wide col-xxs-12 col-xs-6 col-md-4 col-lg-3 ']"
-    ):
-        program_title = program_datas.find('.//a').get('title')
-        program_image = ''
-        list_program_image_datas = program_datas.find('.//img').get(
-            'data-srcset').split(' ')
-        for program_image_data in list_program_image_datas:
-            if 'jpg' in program_image_data:
-                if ',' in program_image_data:
-                    program_image = program_image_data.split(',')[1]
-                else:
-                    program_image = program_image_data
-        program_id = program_datas.get('data-id')
-
-        item = Listitem()
-        item.label = program_title
-
-        item.art['thumb'] = item.art['landscape'] = program_image
-        item.set_callback(list_videos_program,
-                          item_id=item_id,
-                          program_id=program_id)
-        item_post_treatment(item)
-        yield item
-
-
 @Route.register
 def list_videos_program(plugin, item_id, program_id, **kwargs):
     resp = urlquick.get(URL_JSON_EMISSION_BY_ID % (program_id, PARTNER_KEY), headers=GENERIC_HEADERS, max_age=-1)
@@ -355,75 +485,6 @@ def list_videos_program(plugin, item_id, program_id, **kwargs):
     for video_data in json_parser:
         for i in yield_video_data(item_id, video_data, found_result):
             yield i
-
-
-@Route.register
-def list_sub_categories(plugin, item_id, category_datas, category_id, **kwargs):
-    for sub_category_datas in category_datas["subCategory"]:
-        sub_category_title = sub_category_datas["name"]
-        sub_category_id = sub_category_datas["id"]
-
-        item = Listitem()
-        item.label = sub_category_title
-        item.set_callback(list_videos_category,
-                          item_id=item_id,
-                          cat_id=sub_category_id)
-        item_post_treatment(item)
-        yield item
-
-    category_url = 'https://www.rtbf.be/auvio/categorie?id=' + str(category_id)
-    resp = urlquick.get(category_url, headers=GENERIC_HEADERS, max_age=-1)
-
-    list_data_uuid = re.compile(r'data-uuid=\"(.*?)\"').findall(resp.text)
-    for sub_category_data_uuid in list_data_uuid:
-        resp2 = urlquick.get(
-            URL_SUB_CATEGORIES %
-            (sub_category_data_uuid, sub_category_data_uuid.split('-')[1]),
-            headers=GENERIC_HEADERS, max_age=-1)
-        json_parser = json.loads(resp2.text)
-        if sub_category_data_uuid in json_parser["blocks"]:
-
-            parser = htmlement.HTMLement()
-            parser.feed(json_parser["blocks"][sub_category_data_uuid])
-            root_2 = parser.close()
-
-            for sub_category_dl_data in root_2.iterfind(
-                    ".//section[@class='js-item-container']"):
-
-                if sub_category_dl_data.find('.//h2').text is not None:
-                    sub_category_dl_title = sub_category_dl_data.find(
-                        './/h2').text.strip()
-                else:
-                    sub_category_dl_title = sub_category_dl_data.find(
-                        './/h2/a').text.strip()
-                sub_category_dl_id = sub_category_dl_data.get('id')
-
-                item = Listitem()
-                item.label = sub_category_dl_title + ' download'
-                item.set_callback(
-                    list_videos_sub_category_dl,
-                    item_id=item_id,
-                    sub_category_data_uuid=sub_category_data_uuid,
-                    sub_category_id=sub_category_dl_id)
-                item_post_treatment(item)
-                yield item
-
-
-@Route.register
-def list_videos_category(plugin, item_id, cat_id, offset=0, **kwargs):
-    url = URL_VIDEOS_BY_CAT_ID % (cat_id, PARTNER_KEY)
-    if offset > 0:
-        url += ('&offset=%s' % offset)
-    resp = urlquick.get(url, headers=GENERIC_HEADERS, max_age=-1)
-    json_parser = resp.json()
-
-    found_result = {"value": False}
-    for video_data in json_parser:
-        for i in yield_video_data(item_id, video_data, found_result):
-            yield i
-
-    if len(json_parser) == 100:
-        yield Listitem.next_page(item_id=item_id, cat_id=cat_id, offset=(offset + 100), callback=list_videos_category)
 
 
 def yield_video_data(item_id, video_data, found_result):
@@ -484,62 +545,6 @@ def yield_video_data(item_id, video_data, found_result):
     yield item
 
 
-@Route.register
-def list_videos_sub_category_dl(plugin, item_id, sub_category_data_uuid,
-                                sub_category_id, **kwargs):
-    resp = urlquick.get(
-        URL_SUB_CATEGORIES %
-        (sub_category_data_uuid, sub_category_data_uuid.split('-')[1]),
-        headers=GENERIC_HEADERS, max_age=-1)
-    json_parser = resp.json()
-
-    parser = htmlement.HTMLement()
-    parser.feed(json_parser["blocks"][sub_category_data_uuid])
-    root = parser.close()
-
-    item_found = False
-
-    for sub_category_dl_datas in root.iterfind(".//section[@class='js-item-container']"):
-        if sub_category_dl_datas.get('id') != sub_category_id:
-            continue
-
-        list_videos_datas = sub_category_dl_datas.findall('.//article')
-
-        for video_datas in list_videos_datas:
-            if video_datas.get('data-card') is None:
-                continue
-
-            data_card = video_datas.get('data-card')
-            if not data_card:
-                continue
-
-            json_parser = json.loads(data_card)
-            if not json_parser["isVideo"]:
-                continue
-
-            if "mediaId" not in json_parser:
-                continue
-
-            video_title = json_parser["title"] + ' - ' + json_parser["subtitle"]
-            video_image = json_parser["illustration"]["format1248"]
-            video_id = json_parser["mediaId"]
-
-            item = Listitem()
-            item.label = video_title
-            item.art['thumb'] = item.art['landscape'] = video_image
-
-            item.set_callback(get_video_url2,
-                              item_id=item_id,
-                              video_id=video_id)
-            item_post_treatment(item, is_playable=True, is_downloadable=True)
-            item_found = True
-            yield item
-
-    if not item_found:
-        yield False
-        return
-
-
 def get_video_redbee(plugin, video_id, is_drm):
     is_ok, session_token, _ = get_redbee_session_token(plugin)
     if is_ok is False:
@@ -560,11 +565,13 @@ def get_video_redbee(plugin, video_id, is_drm):
         xbmcgui.Dialog().ok(plugin.localize(30600), plugin.localize(30602))
         return False
 
+    certificate_data = None
     if 'drm' in video_format:
         license_server_url = video_format['drm']['com.widevine.alpha']['licenseServerUrl']
-        certificate_url = video_format['drm']['com.widevine.alpha']['certificateUrl']
-        resp_cert = urlquick.get(certificate_url, headers=GENERIC_HEADERS, max_age=-1).text
-        certificate_data = base64.b64encode(resp_cert.encode("utf-8")).decode("utf-8")
+        certificate_url = video_format['drm']['com.widevine.alpha'].get('certificateUrl')
+        if len(certificate_url) > 0:
+            resp_cert = urlquick.get(certificate_url, headers=GENERIC_HEADERS, max_age=-1).text
+            certificate_data = base64.b64encode(resp_cert.encode("utf-8")).decode("utf-8")
     else:
         return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, manifest_type="mpd")
 
@@ -576,7 +583,9 @@ def get_video_redbee(plugin, video_id, is_drm):
         'Content-Type': ''
     }
 
-    input_stream_properties = {"server_certificate": certificate_data}
+    input_stream_properties = {}
+    if certificate_data is not None:
+        input_stream_properties = {"server_certificate": certificate_data}
 
     return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, manifest_type='mpd', headers=headers,
                                                   license_url=license_server_url,
@@ -622,7 +631,7 @@ def get_video_url(plugin,
                   is_redbee=False,
                   **kwargs):
     if is_redbee:
-        return get_video_redbee(plugin, video_id, is_drm)
+        return main_video_url(plugin, item_id, video_id)
 
     if 'youtube.com' in video_url:
         video_id = video_url.rsplit('/', 1)[1]
@@ -651,39 +660,6 @@ def get_drm_item(plugin, video_id, video_url, url_token_parameter):
     return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, headers=headers, manifest_type='mpd',
                                                   license_url=URL_LICENCE_KEY,
                                                   input_stream_properties=input_stream_properties)
-
-
-@Resolver.register
-def get_video_url2(plugin, item_id, video_id, download_mode=False, **kwargs):
-    resp = urlquick.get(URL_VIDEO_BY_ID % video_id, headers=GENERIC_HEADERS, max_age=-1)
-    json_parser = json.loads(
-        re.compile('data-media=\"(.*?)\"').findall(resp.text)[0].replace(
-            '&quot;', '"'))
-
-    if json_parser["urlHls"] is None:
-        url = json_parser.get("url")
-        if url is not None:
-            if 'youtube.com' in url:
-                video_id = url.rsplit('/', 1)[1]
-                return resolver_proxy.get_stream_youtube(plugin, video_id, download_mode)
-            return url
-        else:
-            asset_id = json_parser.get("assetId")
-            if asset_id is None:
-                return False
-            return get_video_redbee(plugin, asset_id, json_parser["drm"])
-
-    stream_url = json_parser["urlHls"]
-    if 'drm' in stream_url:
-        stream_url = json_parser["urlHlsAes128"]
-
-    if download_mode:
-        return download.download_video(stream_url)
-
-    if stream_url.endswith('m3u8'):
-        return resolver_proxy.get_stream_with_quality(plugin, video_url=stream_url)
-
-    return stream_url
 
 
 @Resolver.register
@@ -874,8 +850,13 @@ def get_redbee_format(plugin, media_id, session_token, is_drm):
         'User-Agent': web_utils.get_random_ua(),
         'Authorization': 'Bearer {}'.format(session_token)
     }
+    response = urlquick.get(url, headers=headers, max_age=-1, raise_for_status=False)
+    if response.status_code != 200:
+        plugin.notify(plugin.localize(30600), plugin.localize(30716))
+        return None, True
 
-    formats = urlquick.get(url, headers=headers, max_age=-1).json()['formats']
+    json_paser = json.loads(response.text)
+    formats = json_paser['formats']
 
     if not is_drm:
         for fmt in formats:

@@ -83,9 +83,9 @@ menu = {
         'enabled': True,
         'order': 7
     },
-    'rtl_play': {
+    'rtl_district': {
         'resolver': '/resources/lib/channels/be/rtlplaybe:get_live_url',
-        'label': 'RTL Play',
+        'label': 'RTL district',
         'thumb': 'channels/be/rtlplay.png',
         'fanart': 'channels/be/rtlplay_fanart.jpg',
         'm3u_group': 'Belgique fr',

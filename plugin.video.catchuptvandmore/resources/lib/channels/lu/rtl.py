@@ -29,7 +29,7 @@ def get_live_url(plugin, item_id, **kwargs):
     for channel in livestreams:
         if channel['channel_id'] == item_id:
             if channel['video_playback'] is not None:
-                video_url = channel['video_playback']
+                video_url = channel['video_playback']['hls']
             else:
                 video_url = channel['audio_playback']['hls']
 

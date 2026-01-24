@@ -23,15 +23,15 @@ menu = {
         'thumb': 'channels/jp/ntvnews24.png',
         'fanart': 'channels/jp/ntvnews24_fanart.jpg',
         'enabled': True,
-        'order': 11
+        'order': 1
     },
-    'japanetshoppingdx': {
-        'resolver': '/resources/lib/channels/jp/japanetshoppingdx:get_live_url',
-        'label': 'ジャパネットチャンネルDX',
-        'thumb': 'channels/jp/japanetshoppingdx.png',
-        'fanart': 'channels/jp/japanetshoppingdx_fanart.jpg',
+    'qvc': {
+        'resolver': '/resources/lib/channels/jp/qvc:get_live_url',
+        'label': 'QVC',
+        'thumb': 'channels/jp/qvc.png',
+        'fanart': 'channels/jp/qvc_fanart.jpg',
         'enabled': True,
-        'order': 12
+        'order': 2
     },
     'weathernewsjp': {
         'resolver': '/resources/lib/channels/jp/weathernewsjp:get_live_url',
@@ -39,6 +39,6 @@ menu = {
         'thumb': 'channels/jp/weathernewsjp.png',
         'fanart': 'channels/jp/weathernewsjp_fanart.jpg',
         'enabled': True,
-        'order': 14
+        'order': 3
     }
 }

@@ -10,17 +10,22 @@ import re
 from codequick import Resolver
 import urlquick
 
-from resources.lib import resolver_proxy
+from resources.lib import resolver_proxy, web_utils
 
 
-URL_ROOT = 'https://www.ulketv.com.tr'
+URL_ROOT = 'https://www.ulketv.com'
 
-URL_LIVE = URL_ROOT + '/canli-yayin'
+URL_LIVE = URL_ROOT + '/ulke-tv-canli-yayin'
+
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE)
-    live_id = re.compile('src=\"https://www.dailymotion.com/embed/video/(.*?)\?.*?\"').findall(resp.text)[0].split('?')[0]
-    return resolver_proxy.get_stream_dailymotion(plugin, live_id, False)
+    resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse("iframe", attrs={"allowfullscreen": ""})
+    live_url = root.get('src')
+    live_id = re.compile(r'embed/(.*?)\?').findall(live_url)[0]
+
+    return resolver_proxy.get_stream_youtube(plugin, live_id)

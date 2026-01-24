@@ -22,8 +22,12 @@ GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    resp = urlquick.get(URL_ROOT, headers=GENERIC_HEADERS, max_age=-1)
-    twitch_url = resp.parse().find('.//iframe').get('src')
-    video_id = re.compile('channel=(.*?)\&').findall(twitch_url)[0]
+    try:
+        resp = urlquick.get(URL_ROOT, headers=GENERIC_HEADERS, max_age=-1)
+        root = resp.parse("iframe", attrs={"allowfullscreen": None})
+        live_url = root.get('src')
+        live_id = re.compile(r'embed/(.*?)\?').findall(live_url)[0]
+    except Exception:
+        live_id = 'r1mbPY0BlYk'
 
-    return resolver_proxy.get_stream_twitch(plugin, video_id)
+    return resolver_proxy.get_stream_youtube(plugin, live_id)

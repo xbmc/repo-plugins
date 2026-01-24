@@ -17,6 +17,23 @@ from __future__ import unicode_literals
 root = 'live_tv'
 
 menu = {
+    'france24': {
+        'resolver': '/resources/lib/channels/wo/france24:get_live_url',
+        'label': 'France 24',
+        'thumb': 'channels/wo/france24.png',
+        'fanart': 'channels/wo/france24_fanart.jpg',
+        'available_languages': {
+            'FR': {
+                'xmltv_id': 'C529.api.telerama.fr'
+            },
+            'EN': {
+                'xmltv_id': '1183.tvguide.co.uk'
+            },
+            'AR': {}, 'ES': {}
+        },
+        'enabled': True,
+        'order': 1
+    },
     'euronews': {
         'resolver': '/resources/lib/channels/wo/euronews:get_live_url',
         'label': 'Euronews',
@@ -46,7 +63,73 @@ menu = {
             'BG': {}
         },
         'enabled': True,
-        'order': 1
+        'order': 2
+    },
+    'tv5mondeinfo': {
+        'resolver': '/resources/lib/channels/wo/tv5monde:get_live_url',
+        'label': 'TV5Monde Info',
+        'thumb': 'channels/wo/tv5mondeinfo.png',
+        'fanart': 'channels/wo/tv5mondeinfo_fanart.jpg',
+        'enabled': True,
+        'order': 3
+    },
+    'nhkworld': {
+        'resolver': '/resources/lib/channels/wo/nhkworld:get_live_url',
+        'label': 'NHK World',
+        'thumb': 'channels/wo/nhkworld.png',
+        'fanart': 'channels/wo/nhkworld_fanart.jpg',
+        'available_languages': {'Outside Japan': {}, 'In Japan': {}},
+        'enabled': True,
+        'order': 4
+    },
+    'channelnewsasia': {
+        'resolver': '/resources/lib/channels/wo/channelnewsasia:get_live_url',
+        'label': 'Channel NewsAsia',
+        'thumb': 'channels/wo/channelnewsasia.png',
+        'fanart': 'channels/wo/channelnewsasia_fanart.jpg',
+        'enabled': True,
+        'order': 5
+    },
+    'africa24': {
+        'resolver': '/resources/lib/channels/wo/africa24:get_live_url',
+        'label': 'Africa 24',
+        'thumb': 'channels/wo/africa24.png',
+        'fanart': 'channels/wo/africa24_fanart.jpg',
+        'enabled': True,
+        'order': 6
+    },
+    'cgtn': {
+        'resolver': '/resources/lib/channels/wo/cgtn:get_live_url',
+        'label': 'CGTN',
+        'thumb': 'channels/wo/cgtn.png',
+        'fanart': 'channels/wo/cgtn_fanart.jpg',
+        'available_languages': {'FR': {}, 'EN': {}, 'AR': {}, 'ES': {}, 'RU': {}},
+        'enabled': True,
+        'order': 7
+    },
+    'aljazeera': {
+        'resolver': '/resources/lib/channels/wo/aljazeera:get_live_url',
+        'label': 'Aljazeera',
+        'thumb': 'channels/wo/aljazeera.png',
+        'fanart': 'channels/wo/aljazeera_fanart.png',
+        'enabled': True,
+        'order': 8
+    },
+    'rt': {
+        'resolver': '/resources/lib/channels/wo/rt:get_live_url',
+        'label': 'RT',
+        'thumb': 'channels/wo/rt.png',
+        'fanart': 'channels/wo/rt_fanart.jpg',
+        'enabled': True,
+        'order': 9
+    },
+    'eptw': {
+        'resolver': '/resources/lib/channels/wo/eptworld:get_live_url',
+        'label': 'EPT World',
+        'thumb': 'channels/wo/eptworld.png',
+        'fanart': 'channels/wo/eptworld.png',
+        'enabled': True,
+        'order': 10
     },
     'arte': {
         'resolver': '/resources/lib/channels/wo/arte:get_live_url',
@@ -62,33 +145,16 @@ menu = {
             'DE': {}
         },
         'enabled': True,
-        'order': 2
+        'order': 11
     },
-    'france24': {
-        'resolver': '/resources/lib/channels/wo/france24:get_live_url',
-        'label': 'France 24',
-        'thumb': 'channels/wo/france24.png',
-        'fanart': 'channels/wo/france24_fanart.jpg',
-        'available_languages': {
-            'FR': {
-                'xmltv_id': 'C529.api.telerama.fr'
-            },
-            'EN': {
-                'xmltv_id': '1183.tvguide.co.uk'
-            },
-            'AR': {}, 'ES': {}
-        },
+    'tv5mondefbs': {
+        'resolver': '/resources/lib/channels/wo/tv5monde:get_live_url',
+        'label': 'TV5Monde France Belgique Suisse',
+        'thumb': 'channels/wo/tv5mondefbs.png',
+        'fanart': 'channels/wo/tv5mondefbs_fanart.jpg',
+        'xmltv_id': 'C205.api.telerama.fr',
         'enabled': True,
-        'order': 3
-    },
-    'nhkworld': {
-        'resolver': '/resources/lib/channels/wo/nhkworld:get_live_url',
-        'label': 'NHK World',
-        'thumb': 'channels/wo/nhkworld.png',
-        'fanart': 'channels/wo/nhkworld_fanart.jpg',
-        'available_languages': {'Outside Japan': {}, 'In Japan': {}},
-        'enabled': True,
-        'order': 4
+        'order': 12
     },
     'tivi5monde': {
         'resolver': '/resources/lib/channels/wo/tivi5monde:get_live_url',
@@ -96,7 +162,7 @@ menu = {
         'thumb': 'channels/wo/tivi5monde.png',
         'fanart': 'channels/wo/tivi5monde_fanart.jpg',
         'enabled': True,
-        'order': 5
+        'order': 13
     },
     'bvn': {
         'resolver': '/resources/lib/channels/wo/bvn:get_live_url',
@@ -104,7 +170,7 @@ menu = {
         'thumb': 'channels/wo/bvn.png',
         'fanart': 'channels/wo/bvn_fanart.jpg',
         'enabled': True,
-        'order': 6
+        'order': 14
     },
     'icitelevision': {
         'resolver': '/resources/lib/channels/wo/icitelevision:get_live_url',
@@ -112,15 +178,7 @@ menu = {
         'thumb': 'channels/wo/icitelevision.png',
         'fanart': 'channels/wo/icitelevision_fanart.jpg',
         'enabled': True,
-        'order': 7
-    },
-    'arirang': {
-        'resolver': '/resources/lib/channels/wo/arirang:get_live_url',
-        'label': 'Arirang (아리랑)',
-        'thumb': 'channels/wo/arirang.png',
-        'fanart': 'channels/wo/arirang_fanart.jpg',
-        'enabled': True,
-        'order': 8
+        'order': 15
     },
     'dw': {
         'resolver': '/resources/lib/channels/wo/dw:get_live_url',
@@ -132,15 +190,31 @@ menu = {
             'AR': {}, 'ES': {}, 'DE': {}
         },
         'enabled': True,
-        'order': 9
+        'order': 16
     },
-    'eptw': {
-        'resolver': '/resources/lib/channels/wo/eptworld:get_live_url',
-        'label': 'EPT World',
-        'thumb': 'channels/wo/eptworld.png',
-        'fanart': 'channels/wo/eptworld.png',
+    'arirang': {
+        'resolver': '/resources/lib/channels/wo/arirang:get_live_url',
+        'label': 'Arirang (아리랑)',
+        'thumb': 'channels/wo/arirang.png',
+        'fanart': 'channels/wo/arirang_fanart.jpg',
         'enabled': True,
-        'order': 10
+        'order': 17
+    },
+    'cgtndocumentary': {
+        'resolver': '/resources/lib/channels/wo/cgtn:get_live_url',
+        'label': 'CGTN Documentary',
+        'thumb': 'channels/wo/cgtndocumentary.png',
+        'fanart': 'channels/wo/cgtndocumentary_fanart.jpg',
+        'enabled': True,
+        'order': 18
+    },
+    'afriquemedia': {
+        'resolver': '/resources/lib/channels/wo/afriquemedia:get_live_url',
+        'label': 'Afrique Media',
+        'thumb': 'channels/wo/afriquemedia.png',
+        'fanart': 'channels/wo/afriquemedia_fanart.jpg',
+        'enabled': True,
+        'order': 19
     },
     'qvc': {
         'resolver': '/resources/lib/channels/wo/qvc:get_live_url',
@@ -149,87 +223,22 @@ menu = {
         'fanart': 'channels/wo/qvc_fanart.jpg',
         'available_languages': {'JP': {}, 'DE': {}, 'IT': {}, 'UK': {}, 'US': {}},
         'enabled': True,
-        'order': 11
-    },
-    'cgtn': {
-        'resolver': '/resources/lib/channels/wo/cgtn:get_live_url',
-        'label': 'CGTN',
-        'thumb': 'channels/wo/cgtn.png',
-        'fanart': 'channels/wo/cgtn_fanart.jpg',
-        'available_languages': {'FR': {}, 'EN': {}, 'AR': {}, 'ES': {}, 'RU': {}},
-        'enabled': True,
-        'order': 12
-    },
-    'cgtndocumentary': {
-        'resolver': '/resources/lib/channels/wo/cgtn:get_live_url',
-        'label': 'CGTN Documentary',
-        'thumb': 'channels/wo/cgtndocumentary.png',
-        'fanart': 'channels/wo/cgtndocumentary_fanart.jpg',
-        'enabled': True,
-        'order': 13
-    },
-    'afriquemedia': {
-        'resolver': '/resources/lib/channels/wo/afriquemedia:get_live_url',
-        'label': 'Afrique Media',
-        'thumb': 'channels/wo/afriquemedia.png',
-        'fanart': 'channels/wo/afriquemedia_fanart.jpg',
-        'enabled': True,
-        'order': 14
-    },
-    'tv5mondefbs': {
-        'resolver': '/resources/lib/channels/wo/tv5monde:get_live_url',
-        'label': 'TV5Monde France Belgique Suisse',
-        'thumb': 'channels/wo/tv5mondefbs.png',
-        'fanart': 'channels/wo/tv5mondefbs_fanart.jpg',
-        'xmltv_id': 'C205.api.telerama.fr',
-        'enabled': True,
-        'order': 15
-    },
-    'tv5mondeinfo': {
-        'resolver': '/resources/lib/channels/wo/tv5monde:get_live_url',
-        'label': 'TV5Monde Info',
-        'thumb': 'channels/wo/tv5mondeinfo.png',
-        'fanart': 'channels/wo/tv5mondeinfo_fanart.jpg',
-        'enabled': True,
-        'order': 16
-    },
-    'channelnewsasia': {
-        'resolver': '/resources/lib/channels/wo/channelnewsasia:get_live_url',
-        'label': 'Channel NewsAsia',
-        'thumb': 'channels/wo/channelnewsasia.png',
-        'fanart': 'channels/wo/channelnewsasia_fanart.jpg',
-        'enabled': True,
-        'order': 17
-    },
-    'rt': {
-        'resolver': '/resources/lib/channels/wo/rt:get_live_url',
-        'label': 'RT',
-        'thumb': 'channels/wo/rt.png',
-        'fanart': 'channels/wo/rt_fanart.jpg',
-        'available_languages': {
-            'FR': {},
-            'EN': {
-                'xmltv_id': '853.tvguide.co.uk'
-            },
-            'AR': {}, 'ES': {}
-        },
-        'enabled': True,
-        'order': 18
-    },
-    'africa24': {
-        'resolver': '/resources/lib/channels/wo/africa24:get_live_url',
-        'label': 'Africa 24',
-        'thumb': 'channels/wo/africa24.png',
-        'fanart': 'channels/wo/africa24_fanart.jpg',
-        'enabled': True,
-        'order': 19
-    },
-    'aljazeera': {
-        'resolver': '/resources/lib/channels/wo/aljazeera:get_live_url',
-        'label': 'Aljazeera',
-        'thumb': 'channels/wo/aljazeera.png',
-        'fanart': 'channels/wo/aljazeera_fanart.png',
-        'enabled': True,
         'order': 20
-    }
+    },
+    'failarmy': {
+        'resolver': '/resources/lib/channels/wo/failarmy:get_live_url',
+        'label': 'Fail Army',
+        'thumb': 'channels/uk/failarmy.png',
+        'fanart': 'channels/uk/failarmy_fanart.jpg',
+        'enabled': True,
+        'order': 21
+    },
+    'petcollective': {
+        'resolver': '/resources/lib/channels/wo/petcollective:get_live_url',
+        'label': 'The Pet Collective',
+        'thumb': 'channels/uk/thepetcollective.png',
+        'fanart': 'channels/uk/thepetcollective_fanart.jpg',
+        'enabled': True,
+        'order': 22
+    },
 }

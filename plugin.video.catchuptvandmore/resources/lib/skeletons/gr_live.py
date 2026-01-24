@@ -41,13 +41,30 @@ menu = {
         'enabled': True,
         'order': 3
     },
-    'eptsport': {
+    'eptsport1': {
         'resolver': '/resources/lib/channels/gr/ept:get_live_url',
-        'label': 'EPT Sport',
+        'label': 'EPT Sport 1',
         'thumb': 'channels/gr/eptsport.png',
         'fanart': 'channels/gr/eptsport_fanart.jpg',
         'enabled': True,
         'order': 4
+    },
+    'eptsport2': {
+        'resolver': '/resources/lib/channels/gr/ept:get_live_url',
+        'label': 'EPT Sport 2',
+        'thumb': 'channels/gr/eptsport2.png',
+        'fanart': 'channels/gr/eptsport2_fanart.jpg',
+        'enabled': True,
+        'order': 5
+    },
+
+    'eptkids': {
+        'resolver': '/resources/lib/channels/gr/ept:get_live_url',
+        'label': 'EPT Kids',
+        'thumb': 'channels/gr/eptkids.png',
+        'fanart': 'channels/gr/eptkids_fanart.jpg',
+        'enabled': True,
+        'order': 6
     },
     'eptnews': {
         'resolver': '/resources/lib/channels/gr/ept:get_live_url',
@@ -55,6 +72,6 @@ menu = {
         'thumb': 'channels/gr/eptnews.png',
         'fanart': 'channels/gr/eptnews_fanart.jpg',
         'enabled': True,
-        'order': 5
+        'order': 7
     }
 }

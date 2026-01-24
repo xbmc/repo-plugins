@@ -50,9 +50,9 @@
             <!--<setting label="" type="bool" id="wo" default="true" visible="false"/>-->
 
                 <setting label="30153" type="labelenum" id="arte.language" values="FR|DE|EN|ES|PL|IT" default="FR"/>
-                <setting label="30155" type="labelenum" id="euronews.language" values="FR|EN|AR|DE|IT|ES|PT|RU|RO|TR|FA|GR|HU|BG" default="FR"/>
+                <setting label="30155" type="labelenum" id="euronews.language" values="AR|BG|DE|EN|ES|FA|FR|GR|HU|IT|PL|PT|RO|RU|TR" default="FR"/>
                 <setting label="30154" type="labelenum" id="france24.language" values="FR|EN|AR|ES" default="FR"/>
-                <setting label="30157" type="labelenum" id="dw.language" values="EN|DE|ES|FR|AR" default="EN"/>
+                <setting label="30157" type="labelenum" id="dw.language" values="EN|DE|ES|FR|AR|RU" default="EN"/>
                 <setting label="30161" type="labelenum" id="qvc.language" values="JP|DE|IT|UK|US" default="UK"/>
                 <setting label="30162" type="labelenum" id="nhkworld.language" values="Outside Japan|In Japan" default="Outside Japan"/>
                 <setting label="30163" type="labelenum" id="cgtn.language" values="FR|EN|AR|ES|RU" default="FR"/>
@@ -66,7 +66,7 @@
 
                 <setting label="30158" type="labelenum" id="france3regions.language" values="Alpes|Alsace|Aquitaine|Auvergne|Bourgogne|Bretagne|Centre-Val de Loire|Chapagne-Ardenne|Corse|Côte d'Azur|Franche-Comté|Languedoc-Roussillon|Limousin|Lorraine|Midi-Pyrénées|Nord-Pas-de-Calais|Basse-Normandie|Haute-Normandie|Paris Île-de-France|Pays de la Loire|Picardie|Poitou-Charentes|Provence-Alpes|Rhône-Alpes|Nouvelle-Aquitaine" default="Alpes"/>
                 <setting label="30159" type="labelenum" id="la_1ere.language" values="Guadeloupe|Guyane|Martinique|Mayotte|Nouvelle Calédonie|Polynésie|Réunion|St-Pierre et Miquelon|Wallis et Futuna|Outre-mer" default="Guadeloupe"/>
-                <setting label="30171" type="labelenum" id="BFM_regions.language" values="BFM ALSACE|BFM DICI HAUTE-PROVENCE|BFM Grand Lille|BFM Grand Littoral|BFM Lyon|BFM MARSEILLE PROVENCE|BFM NICE COTE D'AZUR|BFM NORMANDIE|BFM PARIS ILE-DE-FRANCE|BFM TOULON VAR" default="BFM PARIS ILE-DE-FRANCE"/>
+                <setting label="30171" type="labelenum" id="BFM_regions.language" values="BFM ALSACE|BFM DICI HAUTE-PROVENCE|BFM DICI ALPES DU SUD|BFM GRAND LILLE|BFM GRAND LITTORAL|BFM LYON|BFM MARSEILLE PROVENCE|BFM NICE COTE D'AZUR|BFM NORMANDIE|BFM TOULON VAR" default="BFM NORMANDIE"/>
                 <setting label="30175" type="labelenum" id="equidia-racing.language" values="1|2|3|4|5|6|7|8" default="1"/>
 
             <!-- Spain channels -->
@@ -87,6 +87,10 @@
 
                 <setting label="30164" type="labelenum" id="icitele.language" values="Vancouver|Regina|Toronto|Edmonton|Rimouski|Québec|Winnipeg|Moncton|Ottawa|Sherbrooke|Trois-Rivières|Montréal" default="Montréal"/>
                 <setting label="30170" type="labelenum" id="cbc.language" values="Ottawa|Montreal|Charlottetown|Fredericton|Halifax|Windsor|Yellowknife|Winnipeg|Regina|Calgary|Edmonton|Vancouver|Toronto|St. John\'s" default="Ottawa"/>
+
+            <!-- UK channels -->
+            <setting label="30099" type="lsep" subsetting="true" visible="eq(1,true)"/>
+                <setting label="30183" type="labelenum" id="uk.channel4.programmes.sort.by" values="popular|az|recently-added" default="popular"/>
 
     </category>
     <!-- Quality and Content -->
@@ -141,6 +145,13 @@
         <setting label="30084" type="lsep" subsetting="true" visible="eq(1,true)"/>
         <!--<setting label="" type="bool" id="be" default="true" visible="false"/>-->
 
+            <setting label="30264" type="text" id="uk.channel4.login" default=""/>
+            <setting label="30265" type="text" id="uk.channel4.password" option="hidden" default=""/>
+
+            <setting label="30266" type="action" action="RunPlugin(plugin://$ID/resources/lib/channels/uk/my5/sign_in_account)" option="close"/>
+            <setting label="30267" type="action" action="RunPlugin(plugin://$ID/resources/lib/channels/uk/my5/sign_out_account)" option="close"/>
+            <setting label="" type="text" id="uk.chan5.session-token" default="" visible="false"/>
+
             <setting label="30250" type="text" id="uktvplay.login" default=""/>
             <setting label="30251" type="text" id="uktvplay.password" option="hidden" default=""/>
 
@@ -176,6 +187,8 @@
             <setting type="text" id="iptv.channels_uri" default="plugin://plugin.video.catchuptvandmore/resources/lib/iptvmanager/channels/" visible="false"/>
             <setting type="text" id="iptv.epg_uri" default="plugin://plugin.video.catchuptvandmore/resources/lib/iptvmanager/epg/" visible="false"/>
     </category>
+
+
 
 
     <!-- Advanced settings / Tools and other things to save -->

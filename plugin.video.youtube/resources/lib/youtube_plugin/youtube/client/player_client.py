@@ -848,7 +848,6 @@ class YouTubePlayerClient(YouTubeDataClient):
             INCOGNITO: None,
         }
         self._visitor_data_key = 'current'
-        self._auth_client = {}
         self._client_groups = (
             ('custom', clients if clients else ()),
             ('auth_enabled|initial_request|no_playable_streams', (
@@ -1129,28 +1128,14 @@ class YouTubePlayerClient(YouTubeDataClient):
             if itag in stream_list:
                 break
 
-            url = response['mpd_manifest']
+            headers = response['client']['headers']
+            url = self._process_url_params(
+                response['mpd_manifest'],
+                mpd_manifest=True,
+                headers=headers,
+            )
             if not url:
                 continue
-
-            headers = response['client']['headers']
-
-            url_components = urlsplit(url)
-            if url_components.query:
-                params = dict(parse_qs(url_components.query))
-                params['mpd_version'] = ['7']
-                url = url_components._replace(
-                    query=urlencode(params, doseq=True),
-                ).geturl()
-            else:
-                path = re_sub(
-                    r'/mpd_version/\d+|/?$',
-                    '/mpd_version/7',
-                    url_components.path,
-                )
-                url = url_components._replace(
-                    path=path,
-                ).geturl()
 
             stream_list[itag] = self._get_stream_format(
                 itag=itag,
@@ -1198,11 +1183,13 @@ class YouTubePlayerClient(YouTubeDataClient):
         itags = ('9995', '9996') if is_live else ('9993', '9994')
 
         for client_name, response in responses.items():
-            url = response['hls_manifest']
+            headers = response['client']['headers']
+            url = self._process_url_params(
+                response['hls_manifest'],
+                headers=headers,
+            )
             if not url:
                 continue
-
-            headers = response['client']['headers']
 
             result = self.request(
                 url,
@@ -1319,11 +1306,10 @@ class YouTubePlayerClient(YouTubeDataClient):
                 else:
                     new_url = url
 
-                new_url = self._process_url_params(new_url,
-                                                   mpd=False,
-                                                   headers=headers,
-                                                   referrer=None,
-                                                   visitor_data=None)
+                new_url = self._process_url_params(
+                    new_url,
+                    headers=headers,
+                )
                 if not new_url:
                     continue
 
@@ -1417,11 +1403,12 @@ class YouTubePlayerClient(YouTubeDataClient):
 
     def _process_url_params(self,
                             url,
-                            mpd=True,
+                            stream_proxy=False,
+                            mpd_manifest=False,
                             headers=None,
                             cpn=False,
-                            referrer=False,
-                            visitor_data=False,
+                            referrer=None,
+                            visitor_data=None,
                             method='POST',
                             digits_re=re_compile(r'\d+')):
         if not url:
@@ -1474,7 +1461,7 @@ class YouTubePlayerClient(YouTubeDataClient):
                     or 'https://www.youtube.com/watch?v=%s' % self.video_id,
                 )
 
-        if mpd:
+        if stream_proxy:
             new_params['__id'] = self.video_id
             new_params['__method'] = method
             new_params['__host'] = [parts.hostname]
@@ -1496,15 +1483,23 @@ class YouTubePlayerClient(YouTubeDataClient):
             if cpn is not False:
                 new_params['cpn'] = cpn or self._generate_cpn()
 
-            params.update(new_params)
-            query_str = urlencode(params, doseq=True)
-
-            return parts._replace(
+            parts = parts._replace(
                 scheme='http',
                 netloc=get_connect_address(self._context, as_netloc=True),
                 path=PATHS.STREAM_PROXY,
-                query=query_str,
-            ).geturl()
+            )
+
+        elif mpd_manifest:
+            if 'mpd_version' in params:
+                new_params['mpd_version'] = ['7']
+            else:
+                parts = parts._replace(
+                    path=re_sub(
+                        r'/mpd_version/\d+|/?$',
+                        '/mpd_version/7',
+                        parts.path,
+                    ),
+                )
 
         elif 'ratebypass' not in params and 'range' not in params:
             content_length = params.get('clen', [''])[0]
@@ -1513,7 +1508,7 @@ class YouTubePlayerClient(YouTubeDataClient):
         if new_params:
             params.update(new_params)
             query_str = urlencode(params, doseq=True)
-            return parts._replace(query=query_str).geturl()
+            parts = parts._replace(query=query_str)
 
         return parts.geturl()
 
@@ -1654,6 +1649,7 @@ class YouTubePlayerClient(YouTubeDataClient):
         _status = None
         _reason = None
 
+        auth_client = None
         visitor_data = self._visitor_data[visitor_data_key]
         video_details = {}
         microformat = {}
@@ -1872,8 +1868,8 @@ class YouTubePlayerClient(YouTubeDataClient):
                     compare_str=True,
                 )
 
-                if not self._auth_client and _has_auth:
-                    self._auth_client = {
+                if not auth_client and _has_auth:
+                    auth_client = {
                         'client': _client.copy(),
                         'result': _result,
                     }
@@ -1924,7 +1920,7 @@ class YouTubePlayerClient(YouTubeDataClient):
                 'duration': 'P' + video_details.get('lengthSeconds', '0') + 'S',
             },
             'statistics': {
-                'viewCount': video_details.get('viewCount', ''),
+                'viewCount': video_details.get('viewCount', '0'),
             },
             '_partial': True,
         }
@@ -1969,15 +1965,15 @@ class YouTubePlayerClient(YouTubeDataClient):
             'subtitles': None,
         }
 
-        if use_remote_history and self._auth_client:
+        if use_remote_history and auth_client:
             playback_stats = {
                 'playback_url': 'videostatsPlaybackUrl',
                 'watchtime_url': 'videostatsWatchtimeUrl',
             }
-            playback_tracking = (self._auth_client
+            playback_tracking = (auth_client
                                  .get('result', {})
                                  .get('playbackTracking', {}))
-            cpn = self._auth_client.get('_cpn') or self._generate_cpn()
+            cpn = auth_client.get('_cpn') or self._generate_cpn()
 
             for key, url_key in playback_stats.items():
                 url = playback_tracking.get(url_key, {}).get('baseUrl')
@@ -2129,6 +2125,7 @@ class YouTubePlayerClient(YouTubeDataClient):
         localize = context.localize
 
         debugging = self.log.debugging
+        sep = {'__sep__': '   '}
 
         audio_data = {}
         video_data = {}
@@ -2406,6 +2403,7 @@ class YouTubePlayerClient(YouTubeDataClient):
 
                 urls = self._process_url_params(
                     unquote(url),
+                    stream_proxy=True,
                     headers=client['headers'],
                     cpn=client.get('_cpn'),
                 )
@@ -2450,12 +2448,14 @@ class YouTubePlayerClient(YouTubeDataClient):
                 mime_group[itag] = quality_group[itag] = details
 
                 if log_client:
-                    self.log.debug('{_:{_}^100}', _='=')
-                    self.log.debug('Streams found for %r client:', client_name)
+                    self.log.debug('{_:{_}^100}', _='=', extra=sep)
+                    self.log.debug('Streams found for %r client:',
+                                   client_name,
+                                   extra=sep)
                     log_client = False
                 if log_audio:
                     if log_audio_header:
-                        self.log.debug('{_:{_}^100}', _='-')
+                        self.log.debug('{_:{_}^100}', _='-', extra=sep)
                         self.log.debug('{itag:^3}'
                                        ' | {container:^4}'
                                        ' | {channels:^5}'
@@ -2471,8 +2471,9 @@ class YouTubePlayerClient(YouTubeDataClient):
                                        sample_rate='ASR',
                                        drc='DRC',
                                        codecs='CODECS',
-                                       info='INFO')
-                        self.log.debug('{_:{_}^100}', _='-')
+                                       info='INFO',
+                                       extra=sep)
+                        self.log.debug('{_:{_}^100}', _='-', extra=sep)
                         log_audio_header = False
                     self.log.debug('{itag:3}'
                                    ' | {container:4}'
@@ -2491,10 +2492,11 @@ class YouTubePlayerClient(YouTubeDataClient):
                                    drc='Y' if is_drc else '-',
                                    codecs='%s (%s)' % (codec, codecs),
                                    language=language,
-                                   role_type=role_type)
+                                   role_type=role_type,
+                                   extra=sep)
                 elif log_video:
                     if log_video_header:
-                        self.log.debug('{_:{_}^100}', _='-')
+                        self.log.debug('{_:{_}^100}', _='-', extra=sep)
                         self.log.debug('{itag:^3}'
                                        ' | {container:^4}'
                                        ' | {width:>4} x {height:<4}'
@@ -2513,8 +2515,9 @@ class YouTubePlayerClient(YouTubeDataClient):
                                        s3d='3D',
                                        vr='VR',
                                        bitrate='VBR',
-                                       codecs='CODECS')
-                        self.log.debug('{_:{_}^100}', _='-')
+                                       codecs='CODECS',
+                                       extra=sep)
+                        self.log.debug('{_:{_}^100}', _='-', extra=sep)
                         log_video_header = False
                     self.log.debug('{itag:3}'
                                    ' | {container:4}'
@@ -2534,7 +2537,8 @@ class YouTubePlayerClient(YouTubeDataClient):
                                    s3d='Y' if is_3d else '-',
                                    vr='Y' if is_vr else '-',
                                    bitrate=bitrate // 1000,
-                                   codecs='%s (%s)' % (codec, codecs))
+                                   codecs='%s (%s)' % (codec, codecs),
+                                   extra=sep)
 
         if not video_data and not audio_only:
             self.log.debug('No video mime-types found')
@@ -2783,7 +2787,7 @@ class YouTubePlayerClient(YouTubeDataClient):
                     # + ''.join([''.join([
                     # '\t\t\t\t<BaseURL>', entity_escape(url), '</BaseURL>\n',
                     # ]) for url in stream['baseUrl'] if url]) +
-                    '\t\t\t\t<SegmentBase indexRange="{indexRange}">\n'
+                    '\t\t\t\t<SegmentBase indexRange="{indexRange}" timescale="1000">\n'
                     '\t\t\t\t\t<Initialization range="{initRange}"/>\n'
                     '\t\t\t\t</SegmentBase>\n'
                     '\t\t\t</Representation>\n'
@@ -2851,9 +2855,8 @@ class YouTubePlayerClient(YouTubeDataClient):
 
                 url = entity_escape(unquote(self._process_url_params(
                     subtitle['url'],
+                    stream_proxy=True,
                     headers=headers,
-                    referrer=None,
-                    visitor_data=None,
                 )))
                 if not url:
                     continue

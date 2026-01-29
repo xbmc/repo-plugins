@@ -21,6 +21,11 @@ from traceback import extract_stack, format_list
 from .compatibility import StringIO, string_type, to_str, xbmc
 from .constants import ADDON_ID
 from .utils.convert_format import to_unicode
+from .utils.redact import (
+    parse_and_redact_uri,
+    redact_auth_header,
+    redact_params,
+)
 from .utils.system_version import current_system_version
 
 
@@ -45,7 +50,10 @@ __all__ = (
 
 class RecordFormatter(logging.Formatter):
     def formatMessage(self, record):
-        record.__dict__['__sep__'] = '\n' if '\n' in record.message else ' - '
+        record.__dict__.setdefault(
+            '__sep__',
+            '\n' if record.stack_info or '\n' in record.message else ' - ',
+        )
         try:
             return self._style.format(record)
         except AttributeError:
@@ -153,9 +161,19 @@ class PrettyPrintFormatter(Formatter):
     _pretty_printer = VariableWidthPrettyPrinter(indent=4, width=160)
 
     def convert_field(self, value, conversion):
+        # redact headers
+        if conversion == 'h':
+            return self._pretty_printer.pformat(redact_auth_header(value))
+        # redact setting
+        if conversion == 'q':
+            return self._pretty_printer.pformat(redact_params(value))[1:-1]
+        # pretty printed repr
         if conversion == 'r':
             return self._pretty_printer.pformat(value)
-        if conversion in {'d', 'e', 't', 'w'}:
+        # redact params
+        if conversion == 'p':
+            return self._pretty_printer.pformat(redact_params(value))
+        if conversion in {'d', 'e', 't', 'u', 'w'}:
             _sort_dicts = sort_dicts = getattr(self._pretty_printer,
                                                '_sort_dicts',
                                                None)
@@ -187,6 +205,11 @@ class PrettyPrintFormatter(Formatter):
                         _sort_dicts = False
                 except AttributeError:
                     pass
+            # redact uri
+            elif conversion == 'u':
+                value = parse_and_redact_uri(value, redact_only=True)
+                if sort_dicts:
+                    _sort_dicts = False
             # wide output
             elif conversion == 'w':
                 self._pretty_printer._width = 2 * width
@@ -251,7 +274,7 @@ class Handler(logging.Handler):
     )
     DEBUG_FORMATTER = RecordFormatter(
         fmt='[%(addon_id)s] %(module)s, line %(lineno)d, in %(funcName)s'
-            '\n%(message)s',
+            '%(__sep__)s%(message)s',
     )
 
     _stack_info = False

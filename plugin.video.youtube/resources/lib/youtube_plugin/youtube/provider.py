@@ -29,7 +29,7 @@ from .helper import (
     yt_subscriptions,
     yt_video,
 )
-from .helper.utils import channel_filter_split, update_duplicate_items
+from .helper.utils import update_duplicate_items
 from .youtube_exceptions import InvalidGrant, LoginException
 from ..kodion import AbstractProvider, logging
 from ..kodion.constants import (
@@ -61,7 +61,11 @@ from ..kodion.items import (
     VideoItem,
     menu_items,
 )
-from ..kodion.utils.convert_format import strip_html_from_text, to_unicode
+from ..kodion.utils.convert_format import (
+    channel_filter_split,
+    strip_html_from_text,
+    to_unicode,
+)
 from ..kodion.utils.datetime import now, since_epoch
 
 
@@ -1767,19 +1771,27 @@ class Provider(AbstractProvider):
         if settings_bool(settings.SHOW_SETUP_WIZARD, True):
             settings_menu_item = DirectoryItem(
                 localize('setup_wizard'),
-                create_uri(('config', 'setup_wizard')),
+                create_uri(PATHS.SETUP_WIZARD),
                 image='{media}/settings.png',
                 action=True,
             )
+            context_menu = [
+                menu_items.open_settings(context)
+            ]
+            settings_menu_item.add_context_menu(context_menu)
             result.append(settings_menu_item)
 
         if settings_bool(settings.SHOW_SETTINGS):
             settings_menu_item = DirectoryItem(
                 localize('settings'),
-                create_uri(('config', 'youtube')),
+                create_uri(PATHS.SETTINGS),
                 image='{media}/settings.png',
                 action=True,
             )
+            context_menu = [
+                menu_items.open_setup_wizard(context)
+            ]
+            settings_menu_item.add_context_menu(context_menu)
             result.append(settings_menu_item)
 
         return result, options

@@ -20,13 +20,17 @@ def _process_rate_video(provider,
                         re_match=None,
                         video_id=None,
                         current_rating=None,
+                        new_rating=None,
                         _ratings=('like', 'dislike', 'none')):
     ui = context.get_ui()
     li_path = ui.get_listitem_info(URI)
 
     localize = context.localize
 
-    rating_param = context.get_param('rating', '')
+    if new_rating is None:
+        rating_param = context.get_param('rating', '')
+    else:
+        rating_param = new_rating
     if rating_param:
         rating_param = rating_param.lower()
         if rating_param not in _ratings:
@@ -100,7 +104,7 @@ def _process_rate_video(provider,
     )
 
 
-def _process_more_for_video(context):
+def _process_more_for_video(provider, context):
     params = context.get_params()
 
     video_id = params.get(VIDEO_ID)
@@ -122,8 +126,22 @@ def _process_more_for_video(context):
     ]
 
     result = context.get_ui().on_select(context.localize('video.more'), items)
-    if result != -1:
-        context.execute(result)
+    if result == -1:
+        return (
+            False,
+            {
+                provider.FALLBACK: False,
+                provider.FORCE_RETURN: True,
+            },
+        )
+    return (
+        True,
+        {
+            provider.FALLBACK: result,
+            provider.FORCE_RETURN: True,
+            provider.POST_RUN: True,
+        },
+    )
 
 
 def process(provider, context, re_match=None, command=None, **kwargs):
@@ -134,6 +152,6 @@ def process(provider, context, re_match=None, command=None, **kwargs):
         return _process_rate_video(provider, context, re_match, **kwargs)
 
     if command == 'more':
-        return _process_more_for_video(context)
+        return _process_more_for_video(provider, context)
 
     raise KodionException('Unknown video command: %s' % command)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.tv3.cat" name="TV3cat" version="1.4.9" provider-name="jqandreu">
+<addon id="plugin.video.tv3.cat" name="TV3cat" version="1.4.10" provider-name="jqandreu">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
 		<import addon="script.module.beautifulsoup4" version="4.6.3"/>
@@ -10,6 +10,7 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
+        <lifecyclestate type="broken" lang="en_GB">Non compliant with the last and only remote provider API endpoint</lifecyclestate>
         <summary lang="en_GB">Entertainment, news, documentaries, etc from catalan television www.tv3.cat</summary>
         <description lang="en_GB">Entertainment, news, documentaries, etc from catalan television www.tv3.cat. [CR]Featured shows, most viewed, A to Z programs. [CR]Live channels: TV3cat, K33, Super3, News 3/24, Esport3</description>
         <summary lang="ca_ES">Tots els programes de TV3 a la carta.</summary>

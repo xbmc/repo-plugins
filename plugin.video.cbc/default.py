@@ -206,14 +206,22 @@ def search():
     xbmcplugin.endOfDirectory(handle)
 
 
-@plugin.route('/gem/layout/<path:layout>')
-def layout_menu(layout):
+@plugin.route('/gem/layout/<path:path>')
+def layout_menu(path):
     """Populate the menu with featured items."""
     handle = plugin.handle
     xbmcplugin.setContent(handle, 'videos')
-    for f in GemV2.get_format(layout):
+    items = GemV2.get_format(path)
+
+    # GEM's show list are not alphabetical and at best random. Sections
+    # are usually in a logical order with important things first (like
+    # the olympic)
+    if not GemV2.has_playable(items) and not path.startswith('section/'):
+        xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_LABEL)
+
+    for f in items:
         n = GemV2.normalized_format_item(f)
-        p = GemV2.normalized_format_path(f)
+        p = GemV2.normalized_format_path(f, path)
         item = xbmcgui.ListItem(n['label'])
         if 'art' in n:
             item.setArt(n['art'])

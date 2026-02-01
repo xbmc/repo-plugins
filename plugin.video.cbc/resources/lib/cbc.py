@@ -1,9 +1,11 @@
 """Module for general CBC stuff"""
 from uuid import uuid4
-from base64 import b64encode, b64decode
+from base64 import b64encode, b64decode, urlsafe_b64encode
+import hashlib
+import secrets
 import json
 # import http.client as http_client
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, quote
 from xml.dom.minidom import parseString
 
 import requests
@@ -42,10 +44,14 @@ SCOPES = 'openid '\
         'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/toutv-profiling '\
         'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/testapiwithjwtendpoint.admin '\
         'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/id.account.info'
-AUTHORIZE_LOGIN = 'https://login.cbc.radio-canada.ca/bef1b538-1950-4283-9b27-b096cbc18070/B2C_1A_ExternalClient_FrontEnd_Login_CBC/oauth2/v2.0/authorize'
-SELF_ASSERTED_LOGIN = 'https://login.cbc.radio-canada.ca/bef1b538-1950-4283-9b27-b096cbc18070/B2C_1A_ExternalClient_FrontEnd_Login_CBC/SelfAsserted'
-CONFIRM_LOGIN = 'https://login.cbc.radio-canada.ca/bef1b538-1950-4283-9b27-b096cbc18070/B2C_1A_ExternalClient_FrontEnd_Login_CBC/api/SelfAsserted/confirmed'
-SIGNIN_LOGIN = 'https://login.cbc.radio-canada.ca/bef1b538-1950-4283-9b27-b096cbc18070/B2C_1A_ExternalClient_FrontEnd_Login_CBC/api/CombinedSigninAndSignup/confirmed'
+POLICY = 'B2C_1A_SSO_Login_CBC'
+TENANT_ID = 'bef1b538-1950-4283-9b27-b096cbc18070'
+AUTHORIZE_LOGIN = f'https://login.cbc.radio-canada.ca/{TENANT_ID}/{POLICY}/oauth2/v2.0/authorize'
+SELF_ASSERTED_LOGIN = f'https://login.cbc.radio-canada.ca/{TENANT_ID}/{POLICY}/SelfAsserted'
+CONFIRM_LOGIN = f'https://login.cbc.radio-canada.ca/{TENANT_ID}/{POLICY}/api/SelfAsserted/confirmed'
+SIGNIN_LOGIN = f'https://login.cbc.radio-canada.ca/{TENANT_ID}/{POLICY}/api/CombinedSigninAndSignup/confirmed'
+CLAIMS_PROVIDER_SELECTION = f'https://login.cbc.radio-canada.ca/{TENANT_ID}/{POLICY}/api/ClaimsProviderSelection/selected'
+TOKEN_LOGIN = f'https://login.cbc.radio-canada.ca/{TENANT_ID}/{POLICY}/oauth2/v2.0/token'
 RADIUS_LOGIN_FMT = 'https://api.loginradius.com/identity/v2/auth/login?{}'
 RADIUS_JWT_FMT = 'https://cloud-api.loginradius.com/sso/jwt/api/token?{}'
 TOKEN_URL = 'https://services.radio-canada.ca/ott/cbc-api/v2/token'
@@ -69,21 +75,30 @@ class CBC:
         Make the first authorization call.
         @param sess A requests session
         """
-        nonce= str(uuid4())
+        nonce = str(uuid4())
         guid = str(uuid4())
         state_str = f'{guid}|{{"action":"login","returnUrl":"/","fromSubscription":false}}'.encode()
         state = b64encode(state_str).decode('ascii')
+        code_verifier = secrets.token_urlsafe(32).rstrip('=')
+        code_challenge = urlsafe_b64encode(hashlib.sha256(code_verifier.encode()).digest()).decode('ascii').rstrip('=')
+        sess.code_verifier = code_verifier
         params = {
             'client_id': 'fc05b0ee-3865-4400-a3cc-3da82c330c23',
             'nonce': nonce,
             'redirect_uri': 'https://gem.cbc.ca/auth-changed',
             'scope': SCOPES,
-            'response_type': 'id_token token',
+            'response_type': 'code',
             'response_mode': 'fragment',
+            'response_mode_value': 'fragment',
             'state': state,
             'state_value': state,
             'ui_locales': 'en',
+            'code_challenge': code_challenge,
+            'code_challenge_method': 'S256',
         }
+        cookies = sess.cookies.get_dict()
+        if 'cbc_external_visitor' in cookies:
+            params['cv'] = cookies['cbc_external_visitor']
         resp = sess.get(AUTHORIZE_LOGIN, params=params)
         if resp.status_code != 200:
             log('Call to authorize fails', True)
@@ -102,13 +117,24 @@ class CBC:
         @param sess The requests session
         """
         cookies = sess.cookies.get_dict()
-        headers = { 'x-csrf-token': cookies['x-ms-cpim-csrf'] }
-        params = { 'tx': tx_arg, 'p': 'B2C_1A_ExternalClient_FrontEnd_Login_CBC' }
+        if 'x-ms-cpim-csrf' in cookies:
+            sess.cookies.set('x-ms-cpim-csrf', cookies['x-ms-cpim-csrf'], domain='login.cbc.radio-canada.ca', path='/')
+        if 'x-ms-cpim-trans' in cookies:
+            sess.cookies.set('x-ms-cpim-trans', cookies['x-ms-cpim-trans'], domain='login.cbc.radio-canada.ca', path='/')
+        headers = {
+            'x-csrf-token': cookies['x-ms-cpim-csrf'],
+            'x-requested-with': 'XMLHttpRequest',
+            'Origin': 'https://login.cbc.radio-canada.ca',
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Referer': f'https://login.cbc.radio-canada.ca/{TENANT_ID}/{POLICY}/api/ClaimsProviderSelection/selected?accountId=CE-GetUserPassword&csrf_token={cookies["x-ms-cpim-csrf"]}&tx={tx_arg}&p={POLICY}',
+        }
         data = { 'request_type': 'RESPONSE', 'email': username}
         if password:
             data['password'] = password
 
-        resp = sess.post(SELF_ASSERTED_LOGIN, params=params, headers=headers, data=data)
+        url = f'{SELF_ASSERTED_LOGIN}?tx={tx_arg}&p={POLICY}'
+        resp = sess.post(url, headers=headers, data=data)
         if not resp.status_code == 200:
             log('Call to SelfAsserted fails', True)
             return False
@@ -117,28 +143,25 @@ class CBC:
     @staticmethod
     def azure_authorize_confirmed(sess: requests.Session, tx_arg: str):
         """
-        Make the third authorization call.
+        Call ClaimsProviderSelection/selected.
         @param sess The requests session
-        @param csrf The csrf token
         @param tx_arg the tx parameter
         """
         cookies = sess.cookies.get_dict()
-        params = {
-            'tx': tx_arg,
-            'p': 'B2C_1A_ExternalClient_FrontEnd_Login_CBC',
-            'csrf_token': cookies['x-ms-cpim-csrf'],
+        headers = {
+            'x-csrf-token': cookies['x-ms-cpim-csrf'],
+            'x-requested-with': 'XMLHttpRequest',
+            'Origin': 'https://login.cbc.radio-canada.ca',
         }
+        csrf = quote(cookies['x-ms-cpim-csrf'], safe='')
+        url = f'{CLAIMS_PROVIDER_SELECTION}?accountId=CE-GetUserPassword&csrf_token={csrf}&tx={tx_arg}&p={POLICY}'
 
-        resp = sess.get(CONFIRM_LOGIN, params=params)
+        resp = sess.get(url, headers=headers)
         if resp.status_code != 200:
-            log('Call to authorize fails', True)
+            log('Call to ClaimsProviderSelection fails', True)
             return False
 
-        if not 'x-ms-gateway-requestid' in resp.headers:
-            log('authorize confirmed response had no x-ms-gateway-requestid header')
-            return False
-
-        return resp.headers['x-ms-gateway-requestid']
+        return True
 
     @staticmethod
     def azure_authorize_sign_in(sess: requests.Session, tx_arg: str):
@@ -151,7 +174,7 @@ class CBC:
         cookies = sess.cookies.get_dict()
         params = {
             'tx': tx_arg,
-            'p': 'B2C_1A_ExternalClient_FrontEnd_Login_CBC',
+            'p': POLICY,
             'csrf_token': cookies['x-ms-cpim-csrf'],
             'rememberMe': 'true',
         }
@@ -164,12 +187,36 @@ class CBC:
         url = urlparse(resp.headers['location'])
         frags = parse_qs(url.fragment)
         try:
-            access_token = frags['access_token'][0]
-            id_token = frags['id_token'][0]
+            code = frags['code'][0]
         except KeyError:
             log(f'Call to Authorize fails. Invalid user credentials?')
             return None
-        return (access_token, id_token)
+        return code
+
+    @staticmethod
+    def azure_authorize_exchange_code(sess: requests.Session, code: str):
+        """
+        Exchange authorization code for tokens.
+        @param sess The requests session
+        @param code The authorization code from redirect
+        """
+        headers = {
+            'Accept': 'application/json',
+            'Origin': 'https://gem.cbc.ca',
+            'Referer': 'https://gem.cbc.ca/',
+        }
+        data = {
+            'grant_type': 'authorization_code',
+            'code_verifier': getattr(sess, 'code_verifier', ''),
+            'code': code,
+            'client_secret': '',
+        }
+        resp = sess.post(TOKEN_LOGIN, headers=headers, data=data)
+        if resp.status_code != 200:
+            log('Call to token endpoint fails', True)
+            return None
+        tokens = resp.json()
+        return (tokens.get('access_token'), tokens.get('id_token'))
 
 
     def azure_authorize(self, username=None, password=None, callback=None):
@@ -212,23 +259,20 @@ class CBC:
 
         if callback:
             callback(40)
-        if not CBC.azure_authorize_self_asserted(sess, username, tx_arg):
-            log('Authorization "SelfAsserted" step failed', True)
+        if not CBC.azure_authorize_confirmed(sess, tx_arg):
+            log('Authorization "ClaimsProviderSelection" step failed', True)
             return False
 
         if callback:
             callback(60)
-        gw_req_id = CBC.azure_authorize_confirmed(sess, tx_arg)
-        if not gw_req_id:
-            log('Authorization "confirmed" step failed', True)
-            return False
-
-        if callback:
-            callback(80)
         if not CBC.azure_authorize_self_asserted(sess, username, tx_arg, password):
             log('Authorization "SelfAsserted" step failed', True)
             return False
-        resp = CBC.azure_authorize_sign_in(sess, tx_arg)
+        code = CBC.azure_authorize_sign_in(sess, tx_arg)
+        if code is None:
+            log('Authorization "confirmed" step failed', True)
+            return False
+        resp = CBC.azure_authorize_exchange_code(sess, code)
         if resp is None:
             log('Authorization "confirmed" step failed', True)
             return False

@@ -25,11 +25,11 @@ class Api:
     api_oauth_scope = "public,private,interact"
     api_user_cache_key = "user.json"
 
-    # Extracted from public Vimeo Android App
+    # Base64 decoded from macos AUTH value in yt-dlp's Vimeo extractor
     # This is a special client ID which will return playable URLs
-    api_client_id = "74fa89b811a1cbb750d8528d163f48af28a2dbe1"
-    api_client_secret = "VJjDTzlnL6Vm/GbUDuwCwcc1mrdFUa9XFlg4ZoMQ4xX2UWuzbBomapujUcGKLNrt" \
-                        "wdtIIvy0paa7kFN0asWp2ooNSdqaEdwVkBLqau7MJFe0tSWez7HOakg/8BKtYzDe"
+    api_client_id = "4757be7f9f6f25771754de856f6c5612491e62bb"
+    api_client_secret = "pUCCYIAffjHxPrwAalF382c+66CywRkDBYewOpGlSNmv1eUZ6hMebOFqa7eoJVWe" \
+                        "bqe9hyVz9QkiPbyzjXdPibApWAENpyUexdHwhvgECD/ErJpsNakh7Mm/g1xVjxHs"
 
     # Access token of registered API app
     # Is used for specific routes and as a fallback if the client login request fails

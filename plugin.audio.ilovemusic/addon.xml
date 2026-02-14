@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.audio.ilovemusic" name="I LOVE MUSIC" version="4.0.0" provider-name="adiko01">
+    <requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+		<language>de</language>
+		<license>GPL-2.0-only</license>
+		<source>https://github.com/adiko01/plugin.audio.ilovemusic</source>
+        <website>https://adiko01.de/kodi-addon-i-love-music/</website>
+        <summary lang="en_GB">This add-on lists all I LOVE MUSIC streams.</summary>
+        <description lang="en_GB">This add-on lists all I LOVE MUSIC streams. The content may be geolocked.</description>
+        <summary lang="de_DE">Dies ist ein Music Add-on für die I LOVE MUSIC Webradio streams.</summary>
+        <description lang="de_DE">Dieses Add-on listet alle I LOVE MUSIC Webradiostreams. Die Inhalte sind unter Umständen nur aus Deutschland erreichbar.</description>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

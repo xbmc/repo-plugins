@@ -1,0 +1,94 @@
+# Kodi Media Center language file
+# Addon Name: Home Assistant Weather
+# Addon id: weather.ha
+# Addon Provider: eugeniusz.gienek
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi add-ons\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2024-12-29 01:35+0100\n"
+"Last-Translator: Konstantin Koehring <-@-.pl>\n"
+"Language-Team: Polish <https://kodi.weblate.cloud/projects/kodi-add-ons-weather/weather-ha/pl_pl/>\n"
+"Language: pl_pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.10.1\n"
+
+msgctxt "Addon Summary"
+msgid "Home Assistant Weather forecast"
+msgstr "Prognoza pogody Home Assistant"
+
+msgctxt "Addon Description"
+msgid "Weather forecast provided by Home Assistant"
+msgstr "Prognoza pogody dostarczona przez Home Assistant"
+
+msgctxt "#30001"
+msgid "Connection"
+msgstr "Połączenie"
+
+msgctxt "#30002"
+msgid "Home Assistant Server URL (with protocol)"
+msgstr "URL Serwera Home Assistant (z protokołem)"
+
+msgctxt "#30003"
+msgid "Home Assistant Long Live Token"
+msgstr "Home Assistant Long Live Token"
+
+msgctxt "#30004"
+msgid "Home Assistant Weather Forecast Entity ID"
+msgstr "Identyfikator jednostki prognozy pogody Home Assistant"
+
+msgctxt "#30005"
+msgid "Home Assistant Sun Entity ID"
+msgstr "Identyfikator jednostki słońca Home Assistant"
+
+msgctxt "#30008"
+msgid "Debug"
+msgstr "Debug"
+
+msgctxt "#30009"
+msgid "Enable logging"
+msgstr "Włącz logowanie"
+
+msgctxt "#30010"
+msgid "Please provide settings for the Home Assistant Weather plugin - it won't work without it."
+msgstr "Żeby wtyczka Pogody Home Assistant działała poprawnie musisz podać dane w ustawieniach."
+
+msgctxt "#30011"
+msgid "Please check your token - it seems to be not accepted."
+msgstr "Wygląda na to że token nie był zaapceptowany."
+
+msgctxt "#30013"
+msgid "Some unknown error happened. Please check IP address or if server is even online."
+msgstr "Coś się stało - warto sprawdzić czy adres URL/IP jest poprawny no i czy serwer jest włączony."
+
+msgctxt "#30014"
+msgid "Unexpected response from Home Assistant weather server. This is an error."
+msgstr "Dostaliśmy nieoczeniwaną odpowiedź od serwera Home Assistant - to jest błąd."
+
+msgctxt "#30018"
+msgid "General"
+msgstr "Ogólne"
+
+msgctxt "#30019"
+msgid "Location title displayed"
+msgstr "Wyświetlana nazwa lokacji"
+
+msgctxt "#30020"
+msgid "Use HA location name"
+msgstr "Używaj nazwy lokacji z HA"
+
+msgctxt "#30200"
+msgid "Home Assistant Weather"
+msgstr "Pogoda Home Assistant"
+
+msgctxt "#30201"
+msgid "Check SSL certificate"
+msgstr "Sprawdzać certyfikat SSL"
+
+msgctxt "#30202"
+msgid "Do not inform about errors"
+msgstr "Nie informować o błędach"

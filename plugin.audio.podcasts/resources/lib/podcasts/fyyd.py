@@ -8,7 +8,7 @@ from resources.lib.rssaddon.http_client import http_request
 class Fyyd:
 
     _FYYD_API = {
-        "search": "https://api.fyyd.de/0.2/search/podcast?term=%s"
+        "search": "https://api.fyyd.de/0.2/search/podcast?title=%s"
     }
 
     _addon = None
@@ -22,4 +22,10 @@ class Fyyd:
         response, cookies = http_request(self._addon,
                                          self._FYYD_API["search"] % urllib.parse.quote(term))
 
-        return json.loads(response)
+        try:
+            return json.loads(response)
+        except json.JSONDecodeError as error:
+            return {
+                "msg": "error",
+                "error": self._addon.getLocalizedString(32126) % error.msg
+            }

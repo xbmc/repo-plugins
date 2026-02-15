@@ -12,7 +12,7 @@ import inputstreamhelper
 import routing
 
 from resources.lib.cbc import CBC
-from resources.lib.utils import log, getAuthorizationFile, get_cookie_file, get_iptv_channels_file
+from resources.lib.utils import log, getAuthorizationFile, get_iptv_channels_file, is_pending, iso8601_to_local
 from resources.lib.livechannels import LiveChannels
 from resources.lib.gemv2 import GemV2
 from resources.lib.iptvmanager import IPTVManager
@@ -119,7 +119,6 @@ def logout():
     """Remove authorization stuff."""
     log('Logging out...', True)
     os.remove(getAuthorizationFile())
-    os.remove(get_cookie_file())
 
 
 @plugin.route('/iptv/channels')
@@ -174,6 +173,7 @@ def play_live_channel():
 def live_channels_menu():
     """Populate the menu with live channels."""
     xbmcplugin.setContent(plugin.handle, 'videos')
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_LABEL)
     chans = LiveChannels()
     chan_list = chans.get_live_channels()
     cbc = CBC()
@@ -184,7 +184,10 @@ def live_channels_menu():
         item = xbmcgui.ListItem(labels['title'])
         item.setArt({'thumb': image, 'poster': image})
         item.setInfo(type="Video", infoLabels=labels)
-        item.setProperty('IsPlayable', 'true')
+        air_date = channel.get('airDate')
+        local_dt = iso8601_to_local(air_date) if air_date else None
+        if local_dt is None or not is_pending(local_dt):
+            item.setProperty('IsPlayable', 'true')
         item.addContextMenuItems([
             (getString(30014), 'RunPlugin({})'.format(plugin.url_for(live_channels_add_all))),
             (getString(30015), 'RunPlugin({})'.format(plugin.url_for(live_channels_add, callsign))),
@@ -222,16 +225,16 @@ def layout_menu(path):
     for f in items:
         n = GemV2.normalized_format_item(f)
         p = GemV2.normalized_format_path(f, path)
-        item = xbmcgui.ListItem(n['label'])
+        item = xbmcgui.ListItem(n['title'])
         if 'art' in n:
             item.setArt(n['art'])
         item.setInfo(type="Video", infoLabels=n['info_labels'])
-        if n['playable']:
-            item.setProperty('IsPlayable', 'true')
+        if 'app_code' in n and n['app_code']:
+            item.setProperty('IsPlayable', 'true' if 'playable' in n and n['playable'] else 'false')
             url = plugin.url_for(play_live_channel, id=p, app_code=n['app_code'])
         else:
             url = plugin.url_for(layout_menu, p)
-        xbmcplugin.addDirectoryItem(handle, url, item, not n['playable'])
+        xbmcplugin.addDirectoryItem(handle, url, item, not 'app_code' in n)
     xbmcplugin.endOfDirectory(handle)
 
 

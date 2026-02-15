@@ -1,16 +1,17 @@
 """Module for live channels."""
-from concurrent import futures
 import json
+import re
 from urllib.parse import urlencode
 
 import requests
 
-from resources.lib.utils import save_cookies, loadCookies, log, get_iptv_channels_file
+from resources.lib.utils import log, get_iptv_channels_file
 from resources.lib.cbc import CBC
 from resources.lib.gemv2 import GemV2
 
-LIST_URL = 'https://services.radio-canada.ca/ott/catalog/v2/gem/home?device=web'
-LIST_ELEMENT = '2415871718'
+GEM_BASE_URL = 'https://gem.cbc.ca/'
+FALLBACK_BUILD_ID = '7ByKb_CElwT2xVJeTO43g'
+LIST_URL_TEMPLATE = 'https://gem.cbc.ca/_next/data/{}/live.json'
 
 class LiveChannels:
     """Class for live channels."""
@@ -19,36 +20,97 @@ class LiveChannels:
         """Initialize the live channels class."""
         # Create requests session object
         self.session = requests.Session()
-        session_cookies = loadCookies()
-        if session_cookies is not None:
-            self.session.cookies = session_cookies
+
+    @staticmethod
+    def extract_build_id(html):
+        """Extract Next.js buildId from page HTML."""
+        script_start = '<script id="__NEXT_DATA__" type="application/json">'
+        script_end = '</script>'
+        start_pos = html.find(script_start)
+        if start_pos >= 0:
+            start_pos += len(script_start)
+            end_pos = html.find(script_end, start_pos)
+            if end_pos > start_pos:
+                try:
+                    next_data = json.loads(html[start_pos:end_pos])
+                    build_id = next_data.get('buildId')
+                    if build_id:
+                        return build_id
+                except (ValueError, TypeError):
+                    pass
+
+        match = re.search(r'/_next/static/([^/]+)/_buildManifest\\.js', html)
+        if match:
+            return match.group(1)
+
+        return None
+
+    def get_live_list_url(self):
+        """Build the live channel JSON URL dynamically from current Next.js buildId."""
+        try:
+            resp = self.session.get(GEM_BASE_URL)
+            if resp.status_code == 200:
+                build_id = self.extract_build_id(resp.text)
+                if build_id:
+                    return LIST_URL_TEMPLATE.format(build_id)
+                log('WARNING: Unable to find buildId in {} response'.format(GEM_BASE_URL), True)
+            else:
+                log('WARNING: {} returns status of {}'.format(GEM_BASE_URL, resp.status_code), True)
+        except requests.RequestException as err:
+            log('WARNING: Error fetching {}: {}'.format(GEM_BASE_URL, err), True)
+
+        return LIST_URL_TEMPLATE.format(FALLBACK_BUILD_ID)
 
     def get_live_channels(self):
         """Get the list of live channels."""
-        resp = self.session.get(LIST_URL)
+        list_url = self.get_live_list_url()
+        resp = self.session.get(list_url)
 
         if not resp.status_code == 200:
-            log('ERROR: {} returns status of {}'.format(LIST_URL, resp.status_code), True)
+            log('ERROR: {} returns status of {}'.format(list_url, resp.status_code), True)
             return None
-        save_cookies(self.session.cookies)
 
-        ret = None
-        for result in json.loads(resp.content)['lineups']['results']:
-            if result['key'] == LIST_ELEMENT:
-                ret = result['items']
+        data = json.loads(resp.content)
+        page_data = data.get('pageProps', {}).get('data', {})
+        streams = page_data.get('streams', [])
+        free_tv_items = page_data.get('freeTv', {}).get('items', [])
 
-        future_to_callsign = {}
-        with futures.ThreadPoolExecutor(max_workers=20) as executor:
-            for i, channel in enumerate(ret):
-                callsign = CBC.get_callsign(channel)
-                future = executor.submit(self.get_channel_metadata, callsign)
-                future_to_callsign[future] = i
+        channels = []
+        for stream in streams:
+            items = stream.get('items', [])
+            if len(items) == 0:
+                continue
 
-        for future in futures.as_completed(future_to_callsign):
-            i = future_to_callsign[future]
-            metadata = future.result()
-            ret[i]['image'] = metadata['Metas']['imageHR']
-        return ret
+            for item in items:
+                channel = dict(item)
+                if 'title' not in channel or not channel['title']:
+                    channel['title'] = stream.get('title')
+                if 'genericImage' in channel and 'image' not in channel:
+                    channel['image'] = channel['genericImage']
+                channels.append(channel)
+
+        for item in free_tv_items:
+            channel = dict(item)
+            if 'genericImage' in channel and 'image' not in channel:
+                channel['image'] = channel['genericImage']
+            channels.append(channel)
+
+        unique_channels = []
+        seen_ids = set()
+        for channel in channels:
+            id_media = channel.get('idMedia')
+
+            if id_media is None:
+                unique_channels.append(channel)
+                continue
+
+            if id_media in seen_ids:
+                continue
+
+            seen_ids.add(id_media)
+            unique_channels.append(channel)
+
+        return unique_channels
 
     def get_iptv_channels(self):
         """Get the channels in a IPTV Manager compatible list."""
@@ -99,7 +161,6 @@ class LiveChannels:
         if not resp.status_code == 200:
             log('ERROR: {} returns status of {}'.format(LIST_URL, resp.status_code), True)
             return None
-        save_cookies(self.session.cookies)
         return json.loads(resp.content)
 
     @staticmethod

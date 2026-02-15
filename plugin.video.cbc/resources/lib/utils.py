@@ -1,17 +1,9 @@
 """Utilities module."""
 import os
 import pickle
+from datetime import datetime, timezone
 from requests.utils import dict_from_cookiejar
 from requests.cookies import cookiejar_from_dict
-
-def get_cookie_file():
-    """Get the cookies file."""
-    try:
-        from xbmcvfs import translatePath
-        base = translatePath('special://userdata/addon_data/plugin.video.cbc')
-    except ModuleNotFoundError:
-        base = os.getcwd()
-    return os.path.join(base, 'cookies')
 
 
 def get_iptv_channels_file():
@@ -22,31 +14,6 @@ def get_iptv_channels_file():
     except ModuleNotFoundError:
         base = os.getcwd()
     return os.path.join(base, 'iptvchannels')
-
-def save_cookies(session_cookies):
-    """
-    Write cookies to the cookie file
-    @param session_cookies the session.cookies object to save
-    """
-    with open(get_cookie_file(), 'wb') as f:
-        cookies = dict_from_cookiejar(session_cookies)
-        pickle.dump(cookies, f)
-
-
-def loadCookies():
-    """
-    Load cookies from the cookie file into a session.cookies object
-    @return a session.cookies object
-    """
-    try:
-        with open(get_cookie_file(), 'rb') as f:
-            cookies = pickle.load(f)
-            return cookiejar_from_dict(cookies)
-    except IOError as err:
-        log('Unable to load cookies: {}'.format(err), True)
-        return None
-
-    return None
 
 
 def getAuthorizationFile():
@@ -95,3 +62,36 @@ def log(msg, error = False):
         xbmc.log(full_msg, level=xbmc.LOGERROR if error else xbmc.LOGINFO)
     except:
         print(msg)
+
+
+def iso8601_to_local(dttm):
+    """Convert an ISO 8601 timestamp (UTC or offset-aware) to local datetime."""
+    try:
+        return datetime.fromisoformat(dttm.replace('Z', '+00:00')).astimezone()
+    except (ValueError, TypeError, AttributeError):
+        return None
+
+
+def is_pending(timestamp, item=None):
+    """Return true when the supplied datetime is in the future.
+
+    If item is supplied and has a string title, append a live marker when pending.
+    """
+    try:
+        if timestamp.tzinfo is None:
+            timestamp = timestamp.replace(tzinfo=timezone.utc)
+        pending = timestamp.astimezone(timezone.utc) > datetime.now(timezone.utc)
+        
+        if pending and item is not None and 'title' in item:
+            title = item['title']
+            if isinstance(title, bytes):
+                title = title.decode('utf-8', errors='replace')
+            elif title is None:
+                title = ''
+            elif not isinstance(title, str):
+                title = str(title)
+            item['title'] = f'{title} [Live at {timestamp.strftime("%Y-%m-%d %H:%M:%S")}]'
+        return pending
+    except (ValueError, TypeError, AttributeError) as err:
+        log(f'is_pending failed: {err}', True)
+        return False

@@ -12,6 +12,8 @@ from resources.lib.livechannels import LiveChannels
 
 # Y/M/D
 GUIDE_URL_FMT = 'https://www.cbc.ca/programguide/daily/{}/cbc_television'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
+REQUEST_TIMEOUT = (10, 20)
 
 # This is a combination of actual callsigns (NN for newsnet) and guid values
 # for over-the-top-only services. No doubt, someone will come back here some
@@ -63,8 +65,16 @@ def map_channel_ids(unblocked):
     """Map channel IDs to guide names."""
     url = get_guide_url(datetime.now())
     data = call_guide_url(url)
+    if data is None:
+        log('Unable to map channel IDs: no data returned from {}'.format(url), True)
+        return { sign: None for sign in SPECIAL_GUIDES.keys()}
+
     soup = BeautifulSoup(data, features="html.parser")
     select = soup.find('select', id="selectlocation-tv")
+    if select is None:
+        log('Unable to map channel IDs: missing location selector at {}'.format(url), True)
+        return { sign: None for sign in SPECIAL_GUIDES.keys()}
+
     options = select.find_all('option')
     channel_map = { sign: None for sign in SPECIAL_GUIDES.keys()}
     for option in options:
@@ -87,9 +97,14 @@ def get_guide_url(dttm, callsign=None):
 def call_guide_url(url, location=None):
     """Call the guide URL and return the response body."""
     cookies = {}
+    headers = {'User-Agent': USER_AGENT}
     if location is not None:
         cookies['pgTvLocation'] = location
-    resp = requests.get(url, cookies=cookies)
+    try:
+        resp = requests.get(url, cookies=cookies, headers=headers, timeout=REQUEST_TIMEOUT)
+    except requests.RequestException as ex:
+        log(f'HTTP request failed for {url}: {ex}', True)
+        return None
     if resp.status_code != 200:
         log('{} returns status of {}'.format(url, resp.status_code), True)
         return None
@@ -101,9 +116,21 @@ def get_channel_data(dttm, channel, callsign):
     epg_data = []
     url = get_guide_url(dttm, callsign)
     data = call_guide_url(url, channel)
+    if data is None:
+        return epg_data
+
     soup = BeautifulSoup(data, features="html.parser")
 
-    select = soup.find('table', id="sched-table").find('tbody')
+    table = soup.find('table', id="sched-table")
+    if table is None:
+        log('Missing schedule table at "{}"'.format(url), True)
+        return epg_data
+
+    select = table.find('tbody')
+    if select is None:
+        log('Missing schedule body at "{}"'.format(url), True)
+        return epg_data
+
     progs = select.find_all('tr')
     for prog in progs:
         prog_js = {}
@@ -122,7 +149,9 @@ def get_channel_data(dttm, channel, callsign):
                     prog_js = {}
                     break
                 prog_js['title'] = title_cell.get_text()
-                prog_js['description'] = cell.find('dd').get_text()
+                description_cell = cell.find('dd')
+                if description_cell is not None:
+                    prog_js['description'] = description_cell.get_text()
 
         # skip the header row
         if len(prog_js.items()) == 0:

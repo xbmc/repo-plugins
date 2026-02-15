@@ -6,11 +6,10 @@ import secrets
 import json
 # import http.client as http_client
 from urllib.parse import urlparse, parse_qs, quote
-from xml.dom.minidom import parseString
 
 import requests
 
-from .utils import save_cookies, loadCookies, saveAuthorization, log
+from .utils import saveAuthorization, log, iso8601_to_local, is_pending
 
 # http_client.HTTPConnection.debuglevel = 1
 
@@ -65,9 +64,6 @@ class CBC:
         """Initialize the CBC class."""
         # Create requests session object
         self.session = requests.Session()
-        session_cookies = loadCookies()
-        if session_cookies is not None:
-            self.session.cookies = session_cookies
 
     @staticmethod
     def azure_authorize_authorize(sess: requests.Session):
@@ -336,8 +332,8 @@ class CBC:
             'studio': 'Canadian Broadcasting Corporation',
             'country': 'Canada'
         }
-        if 'cbc$callSign' in item:
-            labels['title'] = '{} {}'.format(item['cbc$callSign'], item['title'])
+        if 'streamTitle' in item:
+            labels['title'] = item['streamTitle'].encode('utf-8')
         else:
             labels['title'] = item['title'].encode('utf-8')
 
@@ -373,14 +369,15 @@ class CBC:
             if item['cbc$audioVideo'].lower() == 'video':
                 labels['mediatype'] = 'video'
 
+        if 'airDate' in item:
+            local_dt = iso8601_to_local(item['airDate'])
+            if local_dt is not None:
+                is_pending(local_dt, item=labels)
+
         return labels
 
 
     @staticmethod
     def get_session():
         """Get a requests session object with CBC cookies."""
-        sess = requests.Session()
-        cookies = loadCookies()
-        if cookies is not None:
-            sess.cookies = cookies
-        return sess
+        return requests.Session()

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.cbc"
        name="Canadian Broadcasting Corp (CBC)"
-       version="4.0.22+matrix.1"
+       version="4.0.23+matrix.1"
        provider-name="micahg,t1m,smf007,oshanrube,jgaudet">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
@@ -29,8 +29,10 @@
     <website>https://watch.cbc.ca/</website>
     <source>https://github.com/micahg/plugin.video.cbc</source>
     <news>
-      - Updates for new Auth API
-      - Fixes for live events
+      - Add back missing live channels
+      - Better live event handling
+      - Better EPG error handling
+      - Remove dead code and fix match bug
     </news>
   </extension>
 </addon>

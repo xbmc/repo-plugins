@@ -1,11 +1,10 @@
 """Module for the V2 Gem API."""
 import json
-from datetime import datetime
 
 import requests
 
 from resources.lib.cbc import CBC
-from resources.lib.utils import loadAuthorization, log
+from resources.lib.utils import loadAuthorization, log, iso8601_to_local, is_pending
 
 
 # api CONFIG IS AT https://services.radio-canada.ca/ott/catalog/v1/gem/settings?device=web
@@ -17,15 +16,6 @@ SHOW_BY_ID = 'https://services.radio-canada.ca/ott/catalog/v2/gem/show/{}?device
 
 class GemV2:
     """V2 Gem API class."""
-
-    @staticmethod
-    def iso8601_to_local(dttm):
-        """Convert an ISO 8601 timestamp (UTC or offset-aware) to local time string."""
-        try:
-            local_dt = datetime.fromisoformat(dttm.replace('Z', '+00:00')).astimezone()
-            return local_dt.strftime('%Y-%m-%d %H:%M:%S')
-        except (ValueError, TypeError, AttributeError):
-            return dttm
 
     @staticmethod
     def scrape_json(uri, headers=None, params=None):
@@ -40,7 +30,7 @@ class GemV2:
         
         try:
             jsObj = json.loads(resp.content)
-        except:
+        except (json.JSONDecodeError, ValueError, TypeError):
             log(f'Unable to parse JSON from {uri} (status {resp.status_code})', True)
             return None
         return jsObj
@@ -198,7 +188,7 @@ class GemV2:
         images = item['images'] if 'images' in item else None
         title = item['label'] if 'label' in item else item['title']
         retval = {
-            'label': title,
+            'title': title,
             'playable': 'idMedia' in item,
             'info_labels': {
                 'tvshowtitle': title,
@@ -225,22 +215,23 @@ class GemV2:
             if 'credits' in meta:
                 retval['info_labels']['cast'] = meta['credits'][0]['peoples'].split(',')
             if 'live' in meta and 'startDate' in meta['live']:
-                dttm = GemV2.iso8601_to_local(meta['live']['startDate'])
-                retval['label'] += f' [Live: {dttm}]'
+                local_dt = iso8601_to_local(meta['live']['startDate'])
+                if local_dt is not None and is_pending(local_dt, item=retval):
+                    retval['playable'] = False
 
         if 'idMedia' in item:
             # logic in https://services.radio-canada.ca/ott/catalog/v1/gem/settings?device=web
             if 'type' in item:
-                match item['type'].lower():
-                    case 'media':
-                        retval['app_code'] = 'gem'
-                    case 'quickturn':
-                        retval['app_code'] = 'medianet'
-                    case 'liveevent' | 'replay':
-                        retval['app_code'] = 'medianetlive'
-                    case _:
-                        log(f'Unknown type {item["type"]} for item with idMedia {item["idMedia"]}, defaulting to app_code "gem"')
-                        retval['app_code'] = 'gem'
+                item_type = item['type'].lower()
+                if item_type == 'media':
+                    retval['app_code'] = 'gem'
+                elif item_type == 'quickturn':
+                    retval['app_code'] = 'medianet'
+                elif item_type == 'liveevent' or item_type == 'replay':
+                    retval['app_code'] = 'medianetlive'
+                else:
+                    log(f'Unknown type {item["type"]} for item with idMedia {item["idMedia"]}, defaulting to app_code "gem"')
+                    retval['app_code'] = 'gem'
 
                 
         return retval

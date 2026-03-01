@@ -1,3 +1,6 @@
+[B]4.11.0[/B]
+- add on-demand radio categories
+
 [B]4.10.1[/B]
 - add missing inputstreamhelper import to addon.py
 

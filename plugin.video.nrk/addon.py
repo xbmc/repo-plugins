@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from nrk import Base
 import time
 import xbmc
 import xbmcplugin
@@ -26,6 +27,8 @@ from xbmcplugin import setResolvedUrl
 from xbmcgui import ListItem
 import routing
 import nrktv
+import nrkradio
+import nrk
 import subs
 import inputstreamhelper
 
@@ -35,8 +38,16 @@ plugin = routing.Plugin()
 @plugin.route('/')
 def root():
     items = [
+        (plugin.url_for(tv), ListItem("TV"), True),
+        (plugin.url_for(radio), ListItem("Radio"), True),
+    ]
+    addDirectoryItems(plugin.handle, items)
+    endOfDirectory(plugin.handle)
+
+@plugin.route('/tv')
+def tv():
+    items = [
         (plugin.url_for(live_tv), ListItem("Direkte TV"), True),
-        (plugin.url_for(live_radio), ListItem("Direkte radio"), True),
         (plugin.url_for(recommended), ListItem("Anbefalt"), True),
         (plugin.url_for(popular), ListItem("Mest sett"), True),
         (plugin.url_for(mostrecent), ListItem("Sist sendt"), True),
@@ -220,6 +231,70 @@ def browse():
     items = nrktv.categories()
     urls = [plugin.url_for(category, item.id) for item in items]
     view(items, urls=urls)
+
+@plugin.route('/radio')
+def radio():
+    items = [
+        (plugin.url_for(live_radio), ListItem("Direkte radio"), True),
+        (plugin.url_for(radio_pages), ListItem("Kategorier"), True),
+    ]
+    addDirectoryItems(plugin.handle, items)
+    endOfDirectory(plugin.handle)
+
+
+@plugin.route('/radio/pages')
+def radio_pages():
+    items: list[Base] = nrkradio.PagesOverview().children
+    show_radio_list(items)
+
+@plugin.route('/radio/<string:type>/<path:url>')
+def radio_navigate_by_url(type: str, url: str) -> None:
+    item_class = nrkradio.map_type_to_class(type)
+    item: Base = item_class.from_url(url)
+    children: list[Base] = item.children
+    if children:
+        show_radio_list(children)
+    else:
+        media_url = item.media_url
+        if media_url:
+            li = ListItem(item.title, path=media_url)
+            set_common_properties(item, li)
+            playable = True
+            #if playable:
+                # set_stream_details(podcastEpisode, li)
+            li.setProperty('isplayable', 'true')
+            xbmcplugin.setResolvedUrl(plugin.handle, True, listitem=li)
+            addDirectoryItem(plugin.handle, media_url, li, not playable)
+            endOfDirectory(plugin.handle)
+
+
+def show_radio_list(items: list[nrk.Base]):
+    total: int = len(items)
+    for item in items:
+        # if not getattr(item, 'available', True):
+        #    continue
+        li = ListItem(item.title)
+        # set_common_properties(item, li) TODO: set metadata
+        playable = item.is_playable
+        if playable:
+            li.setProperty('isplayable', 'true')
+        child_type = item.type
+        manifest_url = item.manifest_url
+        url = plugin.url_for(radio_navigate_by_url, child_type, manifest_url)
+        art: dict[str, str] = {}
+        if item.fanart:
+            xbmc.log(f"setting fanart {item.title}: {item.fanart}", xbmc.LOGINFO)
+            art["fanart"] = item.fanart
+        if item.thumb:
+            art["thumb"] = item.thumb
+        if art:
+            li.setArt(art)
+        #tag = li.getMusicInfoTag()
+
+        #li.setInfo('video', {'count': i, 'title': item.title, 'mediatype': 'video'})
+        addDirectoryItem(plugin.handle, url, li, not playable, total)
+    endOfDirectory(plugin.handle)
+
 
 
 @plugin.route('/search')

@@ -73,7 +73,7 @@ class RequestHandler(BaseHTTPRequestHandler):
           self.send_response(200)
           self.send_header('Content-type', 'text/html')
           self.end_headers()
-          content = '<h1>Stream Finder</h1><p><a download="KodiStreamFinder.txt" href="/downloadsettings">Click to Download Currently Stored Settings</a></p><h2>Settings update</h2><p><b><u>Step 1</b></u><br/>Export and download your desired Stream Finder settings at this link:<br/><a href="https://www.baseball-reference.com/stream-finder.shtml" target="_blank">https://www.baseball-reference.com/stream-finder.shtml</a></p><form method="POST" enctype="multipart/form-data"><p><b><u>Step 2</b></u><br/>Click this button and select the settings file you just downloaded:<br/><input name="file" type="file"/></p><p><p><b><u>Step 3</b></u><br/>Click this button to upload the selected settings file to Kodi:<br/><input type="submit" value="Upload"/></p></form>'
+          content = '<h1>Stream Finder</h1><p><a download="KodiStreamFinder.txt" href="/downloadsettings">Click to Download Currently Stored Settings</a></p><h2>Settings update</h2><p><b><u>Step 1</b></u><br/>Export and download your desired Stream Finder settings at this link:<br/><a href="https://www.baseball-reference.com/stream-finder.shtml" target="_blank">https://www.baseball-reference.com/stream-finder.shtml</a></p><form method="POST" enctype="multipart/form-data"><p><b><u>Step 2</b></u><br/>Click this button and select the settings file you just downloaded:<br/><input name="file" type="file" onchange="form.submit()"/></p></form>'
         elif self.path == '/downloadsettings':
           self.send_response(200)
           self.send_header('Content-type', 'text/plain')
@@ -113,7 +113,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
           self.end_headers()
 
-          content = response.content.decode('utf8')
+          content = response.content.decode('utf8', errors='ignore')
         
           # remove subtitles and extraneous lines for Kodi Inputstream Adaptive compatibility
           content = re.sub(r"(?:#EXT-X-MEDIA:TYPE=SUBTITLES[\S]+\n)", r"", content, flags=re.M)
@@ -135,7 +135,7 @@ class RequestHandler(BaseHTTPRequestHandler):
           for line in line_array:
               if line.startswith('#'):
                   # look for uri parameters within non-key "#" lines
-                  if playlist_type == 'master' and KEY_TEXT not in line and URI_START_DELIMETER in line:
+                  if (playlist_type == 'master' and KEY_TEXT not in line and URI_START_DELIMETER in line) or (KEY_TEXT in line and URI_START_DELIMETER in line):
                       line_split = line.split(URI_START_DELIMETER)
                       url_split = line_split[1].split(URI_END_DELIMETER, 1)
                       absolute_url = urljoin(url, url_split[0])

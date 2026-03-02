@@ -1017,19 +1017,24 @@ class MLBMonitor(xbmc.Monitor):
                     # make sure we're not paused, and current time is valid (less than 10 hours) -- sometimes Kodi was returning a crazy large current time as the stream was starting
                     if current_time > 0 and current_time != last_time and current_time < 36000:
                         last_time = current_time
-                        if skip_markers[0][0] > 0:
+                        # apply current skip adjust settings to non-commercial skipping
+                        if skip_markers[0][0] > 0 and skip_type != 1:
                             current_break_start = skip_markers[0][0] + self.skip_adjust_end
                         else:
                             current_break_start = skip_markers[0][0]
-                        current_break_end = skip_markers[0][1] + self.skip_adjust_start
+                        if skip_type != 1:
+                            current_break_end = skip_markers[0][1] + self.skip_adjust_start
+                        else:
+                            current_break_end = skip_markers[0][1]
                         # remove any past skip markers so user can seek backward freely
                         while len(skip_markers) > 0 and current_time > current_break_end:
                             xbmc.log(monitor_name + " removed skip marker at " + str(current_break_end) + ", before current time " + str(current_time))
                             skip_markers.pop(0)
-                            current_break_end = skip_markers[0][1] + self.skip_adjust_start
+                            if len(skip_markers) > 0:
+                                current_break_end = skip_markers[0][1] + self.skip_adjust_start
                         # seek to end of break if we fall within skip marker range, then remove marker so user can seek backward freely
                         if len(skip_markers) > 0 and current_time >= current_break_start and current_time < current_break_end:
-                            xbmc.log(monitor_name + " processed skip marker at " + str(current_break_end))
+                            xbmc.log(monitor_name + " current time " + str(current_time) + " falls within skip time from " + str(current_break_start) + " - "  + str(current_break_end))
                             player.seekTime(current_break_end)
                             skip_markers.pop(0)
                             # since we just processed a skip marker, we can delay further processing a little bit
@@ -1878,7 +1883,7 @@ class MLBMonitor(xbmc.Monitor):
                     third = game['linescore']['offense']['third']['id']
                 
                 basesit = self.basesit(first, second, third)
-                innbaseout = str(currentInning) + str(half) + str(basesit) + str(outs)
+                innbaseout = str(currentInning if currentInning <= 9 else 9) + str(half) + str(basesit) + str(outs)
                 
                 games.append({
                   'gamePk': game['gamePk'],

@@ -565,6 +565,7 @@ class YouTubeDataClient(YouTubeLoginClient):
                                     **kwargs)
 
         if playlist_id_upper == 'WL':
+            self._context.get_watch_later_list().add_item(video_id)
             post_data = {
                 'playlistId': playlist_id_upper,
                 'actions': [{
@@ -599,6 +600,7 @@ class YouTubeDataClient(YouTubeLoginClient):
                                     **kwargs)
 
         if playlist_id_upper == 'WL':
+            self._context.get_watch_later_list().del_item(video_id)
             post_data = {
                 'playlistId': playlist_id_upper,
                 'actions': [{
@@ -2321,10 +2323,10 @@ class YouTubeDataClient(YouTubeLoginClient):
             return timestamp
 
         threaded_output = {
-            'channel_ids': [],
-            'playlist_ids': [],
+            'channel_ids': set(),
+            'playlist_ids': set(),
             'feeds': {},
-            'to_refresh': [],
+            'to_refresh': set(),
         }
 
         (use_subscriptions,
@@ -2335,21 +2337,25 @@ class YouTubeDataClient(YouTubeLoginClient):
             use_subscriptions = False
             use_saved_playlists = False
 
-        bookmarks = context.get_bookmarks_list().get_items()
-        if bookmarks:
-            channel_ids = threaded_output['channel_ids']
-            playlist_ids = threaded_output['playlist_ids']
-            for item_id, item in bookmarks.items():
-                if isinstance(item, DirectoryItem):
-                    item_id = getattr(item, PLAYLIST_ID, None)
-                    if item_id and use_bookmarked_playlists:
-                        playlist_ids.append(item_id)
-                        continue
-                    item_id = getattr(item, CHANNEL_ID, None)
-                elif not isinstance(item, float):
-                    continue
-                if item_id and use_bookmarked_channels:
-                    channel_ids.append(item_id)
+        if use_bookmarked_channels or use_bookmarked_playlists:
+            bookmarks = context.get_bookmarks_list().get_items()
+            if bookmarks:
+                channel_ids = threaded_output['channel_ids']
+                playlist_ids = threaded_output['playlist_ids']
+                for item_id, item in bookmarks.items():
+                    if isinstance(item, DirectoryItem):
+                        if use_bookmarked_playlists:
+                            item_id = getattr(item, PLAYLIST_ID, None)
+                            if item_id:
+                                playlist_ids.add(item_id)
+                                continue
+                        if use_bookmarked_channels:
+                            item_id = getattr(item, CHANNEL_ID, None)
+                            if item_id:
+                                channel_ids.add(item_id)
+                                continue
+                    elif use_bookmarked_channels and isinstance(item, float):
+                        channel_ids.add(item_id)
 
         headers = {
             'Host': 'www.youtube.com',
@@ -2371,11 +2377,12 @@ class YouTubeDataClient(YouTubeLoginClient):
                              inputs,
                              item_type,
                              feed_type=feed_type,
-                             _refresh=refresh,
+                             refresh=refresh,
                              feed_history=feed_history,
                              ttl=feed_history.ONE_HOUR):
             feeds = output['feeds']
             to_refresh = output['to_refresh']
+
             if item_type == 'channel_id':
                 channel_prefix = (
                     'UUSH' if feed_type == 'shorts' else
@@ -2384,53 +2391,56 @@ class YouTubeDataClient(YouTubeLoginClient):
                 )
             else:
                 channel_prefix = False
+
             for item_id in inputs:
                 if channel_prefix:
                     channel_id = item_id
                     item_id = item_id.replace('UC', channel_prefix, 1)
                 else:
                     channel_id = None
-                cached = feed_history.get_item(item_id, seconds=ttl)
 
+                cached = feed_history.get_item(item_id)
                 if cached:
                     feed_details = cached['value']
-                    feed_details['refresh'] = _refresh
+
                     if channel_id:
                         feed_details.setdefault('channel_id', channel_id)
-                        if _refresh:
-                            to_refresh.append({item_type: channel_id})
-                    elif _refresh:
-                        to_refresh.append({item_type: item_id})
+
+                    _refresh = refresh or cached['age'] > ttl
+                    feed_details['refresh'] = _refresh
+                    if _refresh:
+                        to_refresh.add(channel_id)
+
                     if item_id in feeds:
                         feeds[item_id].update(feed_details)
                     else:
                         feeds[item_id] = feed_details
-                elif channel_id:
-                    to_refresh.append({item_type: channel_id})
                 else:
-                    to_refresh.append({item_type: item_id})
-            del inputs[:]
+                    to_refresh.add(channel_id)
+
             return True, False
 
         def _get_feed(output,
-                      channel_id=None,
-                      playlist_id=None,
+                      input=None,
                       feed_type=feed_type,
                       headers=headers,
                       stream=True,
                       cache=False):
-            if channel_id:
-                item_id = channel_id.replace(
+            if not input:
+                return True, False
+
+            if input.startswith('UC'):
+                channel_id = input
+                item_id = input.replace(
                     'UC',
                     'UUSH' if feed_type == 'shorts' else
                     'UULV' if feed_type == 'live' else
                     'UULF',
                     1,
                 )
-            elif playlist_id:
-                item_id = playlist_id
             else:
-                return True, False
+                channel_id = None
+                item_id = input
 
             response = self.request(
                 ''.join((self.BASE_URL,
@@ -2443,10 +2453,11 @@ class YouTubeDataClient(YouTubeLoginClient):
             if response is None:
                 return False, True
             with response:
-                if response.status_code == 404:
-                    content = None
-                elif response.status_code == 429:
+                status_code = response.status_code
+                if status_code == 429:
                     return False, True
+                if status_code == 404:
+                    content = None
                 elif stream:
                     parser = ET_XMLParser(encoding='utf-8')
                     for chunk in response.iter_content(chunk_size=(8 * 1024)):
@@ -2460,9 +2471,8 @@ class YouTubeDataClient(YouTubeLoginClient):
             _output = {
                 'channel_id': channel_id,
                 'content': content,
-                'refresh': True,
+                'refresh': content is not None,
             }
-
             feeds = output['feeds']
             if item_id in feeds:
                 feeds[item_id].update(_output)
@@ -2612,6 +2622,7 @@ class YouTubeDataClient(YouTubeLoginClient):
 
         def _threaded_fetch(kwargs,
                             do_batch,
+                            unpack,
                             output,
                             worker,
                             threads,
@@ -2628,7 +2639,19 @@ class YouTubeDataClient(YouTubeLoginClient):
                 if kwargs is True:
                     _kwargs = {}
                 elif kwargs:
-                    _kwargs = {'inputs': kwargs} if do_batch else kwargs.pop()
+                    if do_batch:
+                        batch = kwargs.copy()
+                        kwargs -= batch
+                        _kwargs = {'inputs': batch}
+                    else:
+                        try:
+                            _kwargs = kwargs.pop()
+                        except KeyError:
+                            if check_inputs:
+                                check_inputs.clear()
+                            break
+                        if unpack:
+                            _kwargs = {'input': _kwargs}
                 elif check_inputs:
                     if check_inputs.wait(0.1) and kwargs:
                         continue
@@ -2683,51 +2706,44 @@ class YouTubeDataClient(YouTubeLoginClient):
             }
 
             def _get_updated_subscriptions(new_data, old_data):
-                items = new_data and new_data.get('items')
-                if not items:
+                new_items = new_data and new_data.get('items')
+                if not new_items:
                     new_data['_abort'] = True
                     return new_data
 
-                _items = old_data and old_data.get('items')
-                if _items:
-                    _items = {
+                old_items = old_data and old_data.get('items')
+                if old_items:
+                    old_items = {
                         item['snippet']['resourceId']['channelId']:
                             item['contentDetails']
-                        for item in _items
+                        for item in old_items
                     }
 
-                    updated_subscriptions = []
-                    old_subscriptions = []
-
-                    for item in items:
+                    old_subscriptions = False
+                    updated_subscriptions = set()
+                    for item in new_items:
                         channel_id = item['snippet']['resourceId']['channelId']
-                        counts = item['contentDetails']
+                        if channel_id in updated_subscriptions:
+                            continue
 
-                        if (counts['newItemCount']
-                                or counts['totalItemCount']
-                                > _items.get(channel_id, {})['totalItemCount']):
-                            updated_subscriptions.append(
-                                {
-                                    'channel_id': channel_id,
-                                }
-                            )
+                        item_counts = item['contentDetails']
+                        if (item_counts['newItemCount']
+                                or (channel_id in old_items
+                                    and item_counts['totalItemCount']
+                                    > old_items[channel_id]['totalItemCount'])):
+                            updated_subscriptions.add(channel_id)
                         else:
-                            old_subscriptions.append(channel_id)
+                            old_subscriptions = True
 
                     if old_subscriptions:
                         new_data['nextPageToken'] = None
                 else:
-                    updated_subscriptions = [
-                        {
-                            'channel_id':
-                                item['snippet']['resourceId']['channelId'],
-                        }
-                        for item in items
-                    ]
-                    old_subscriptions = []
+                    updated_subscriptions = {
+                        item['snippet']['resourceId']['channelId']
+                        for item in new_items
+                    }
 
                 new_data['_updated_subscriptions'] = updated_subscriptions
-                new_data['_old_subscriptions'] = old_subscriptions
                 return new_data
 
             def _get_channels(output,
@@ -2750,11 +2766,14 @@ class YouTubeDataClient(YouTubeLoginClient):
 
                 updated_subscriptions = json_data.get('_updated_subscriptions')
                 if updated_subscriptions:
-                    output['to_refresh'].extend(updated_subscriptions)
+                    output['to_refresh'] |= updated_subscriptions
 
-                old_subscriptions = json_data.get('_old_subscriptions')
-                if old_subscriptions:
-                    output['channel_ids'].extend(old_subscriptions)
+                all_subscriptions = json_data.get('items')
+                if all_subscriptions:
+                    output['channel_ids'].update([
+                        item['snippet']['resourceId']['channelId']
+                        for item in all_subscriptions
+                    ])
 
                 page_token = json_data.get('nextPageToken')
                 if page_token:
@@ -2768,6 +2787,7 @@ class YouTubeDataClient(YouTubeLoginClient):
                 'worker': _get_channels,
                 'kwargs': True,
                 'do_batch': False,
+                'unpack': False,
                 'output': threaded_output,
                 'threads': threads,
                 'limit': 1,
@@ -2809,10 +2829,12 @@ class YouTubeDataClient(YouTubeLoginClient):
                 if not json_data:
                     return False, True
 
-                output['playlist_ids'].extend([
-                    item['id']
-                    for item in json_data.get('items', [])
-                ])
+                saved_playlists = json_data.get('items')
+                if saved_playlists:
+                    output['playlist_ids'].update([
+                        item['id']
+                        for item in saved_playlists
+                    ])
 
                 subs_page_token = json_data.get('nextPageToken')
                 if subs_page_token:
@@ -2824,6 +2846,7 @@ class YouTubeDataClient(YouTubeLoginClient):
                 'worker': _get_playlists,
                 'kwargs': True,
                 'do_batch': False,
+                'unpack': False,
                 'output': threaded_output,
                 'threads': threads,
                 'limit': 1,
@@ -2835,6 +2858,7 @@ class YouTubeDataClient(YouTubeLoginClient):
             'worker': partial(_get_cached_feed, item_type='channel_id'),
             'kwargs': threaded_output['channel_ids'],
             'do_batch': True,
+            'unpack': False,
             'output': threaded_output,
             'threads': threads,
             'limit': None,
@@ -2846,6 +2870,7 @@ class YouTubeDataClient(YouTubeLoginClient):
             'worker': partial(_get_cached_feed, item_type='playlist_id'),
             'kwargs': threaded_output['playlist_ids'],
             'do_batch': True,
+            'unpack': False,
             'output': threaded_output,
             'threads': threads,
             'limit': None,
@@ -2857,6 +2882,7 @@ class YouTubeDataClient(YouTubeLoginClient):
             'worker': _get_feed,
             'kwargs': threaded_output['to_refresh'],
             'do_batch': False,
+            'unpack': True,
             'output': threaded_output,
             'threads': threads,
             'limit': None,

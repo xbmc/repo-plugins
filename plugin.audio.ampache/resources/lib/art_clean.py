@@ -70,8 +70,9 @@ def delete_expired_files():
             if is_expired(pathDel):
                 try:
                     os.remove(pathDel)
-                except PermissionError if not PY2 else OSError:
-                    pass
+                except OSError:
+                    if not PY2:
+                        raise
 
 def remove_expired():
     print("Starting cache cleanup...")

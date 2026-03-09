@@ -32,7 +32,7 @@ class AmpacheConnect(object):
         serverStorage = jsStorServer.getData()
         try:
             self._connectionData = serverStorage["servers"][serverStorage["current_server"]]
-        except:
+        except KeyError:
             self._connectionData = None
         #self._connectionData = None
         self.filter=None

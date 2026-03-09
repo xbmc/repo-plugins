@@ -590,12 +590,13 @@ def get_items(object_type, object_id=None, add=None,\
 def setRating():
     try:
         file_url = xbmc.Player().getPlayingFile()
-        if not file_url:
-            raise ValueError("No playing file")
-        xbmc.log("AmpachePlugin::setRating url " + file_url , xbmc.LOGDEBUG)
-        
     except Exception:
         raise ValueError("Error getting playing file")
+    
+    if not file_url:
+        raise ValueError("No playing file")
+    
+    xbmc.log("AmpachePlugin::setRating url " + file_url , xbmc.LOGDEBUG)
     
     try:
         object_id = ut.get_objectId_from_fileURL(file_url)

@@ -17,16 +17,23 @@ from resources.lib import json_storage
 from resources.lib import utils as ut
 from resources.lib.art_clean import clean_settings
 
+# Connection timeout constants
+REQUEST_TIMEOUT = 400
+TOKEN_EXPIRE_DELTA = 2400
+
 class AmpacheConnect(object):
     
     class ConnectionError(Exception):
         pass
-    
+
     def __init__(self):
         self._ampache = xbmcaddon.Addon("plugin.audio.ampache")
         jsStorServer = json_storage.JsonStorage("servers.json")
         serverStorage = jsStorServer.getData()
-        self._connectionData = serverStorage["servers"][serverStorage["current_server"]]
+        try:
+            self._connectionData = serverStorage["servers"][serverStorage["current_server"]]
+        except:
+            self._connectionData = None
         #self._connectionData = None
         self.filter=None
         self.add=None
@@ -38,7 +45,7 @@ class AmpacheConnect(object):
         self.id=None
         self.rating=None
         #force the latest version on the server
-        self.version="600001"
+        self.version="680001"
 
     def getBaseUrl(self):
         return '/server/xml.server.php'
@@ -48,8 +55,10 @@ class AmpacheConnect(object):
         token = tree.findtext('auth')
         version = tree.findtext('api')
         if not version:
-        #old api
+            #old api
             version = tree.findtext('version')
+        if not version:
+            raise self.ConnectionError
         #setSettings only string or unicode
         self._ampache.setSetting("api-version",version)
         self._ampache.setSetting("artists", tree.findtext("artists"))
@@ -67,7 +76,7 @@ class AmpacheConnect(object):
         self._ampache.setSetting("add", tree.findtext("add"))
         self._ampache.setSetting("token", token)
         #not 24000 seconds ( 6 hours ) , but 2400 ( 40 minutes ) expiration time
-        self._ampache.setSetting("token-exp", str(nTime+2400))
+        self._ampache.setSetting("token-exp", str(nTime+TOKEN_EXPIRE_DELTA))
 
     def getCodeMessError(self,tree):
         errormess = None
@@ -128,19 +137,19 @@ class AmpacheConnect(object):
             req = urllib.request.Request(url)
             if ut.strBool_to_bool(ssl_certs_str):
                 if PY2:
-                    response = urllib.request.urlopen(req, timeout=400)
+                    response = urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT)
                 else:
                     gcontext = ssl.create_default_context()
                     gcontext.check_hostname = False
                     gcontext.verify_mode = ssl.CERT_NONE
-                    response = urllib.request.urlopen(req, context=gcontext, timeout=400)
+                    response = urllib.request.urlopen(req, context=gcontext, timeout=REQUEST_TIMEOUT)
                 xbmc.log("AmpachePlugin::handle_request: disable ssl certificates",xbmc.LOGDEBUG)
             else:
                 if PY2:
-                    gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
-                    response = urllib.request.urlopen(req, context=gcontext, timeout=400)
+                    gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+                    response = urllib.request.urlopen(req, context=gcontext, timeout=REQUEST_TIMEOUT)
                 else:
-                    response = urllib.request.urlopen(req, timeout=400)
+                    response = urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT)
                 xbmc.log("AmpachePlugin::handle_request: ssl certificates",xbmc.LOGDEBUG)
         except urllib.error.HTTPError as e:
             xbmc.log("AmpachePlugin::handle_request: HTTPError " +\
@@ -202,6 +211,7 @@ class AmpacheConnect(object):
                 xbmcgui.Dialog().notification(ut.tString(30197),amp_notif)
         self.fillConnectionSettings(tree,nTime)
         return
+
 
     #handle request to the xml api that return binary files
     def ampache_binary_request(self,action):

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.audio.ampache" version="3.2.0+matrix.1" name="Ampache" provider-name="lusum">
+<addon id="plugin.audio.ampache" version="3.2.1+matrix.1" name="Ampache" provider-name="lusum">
     <requires>
       <import addon="script.module.future" version="1.0.0"/>
       <import addon="xbmc.python" version="3.0.0"/>
@@ -14,7 +14,9 @@
     <summary lang="de_DE">Streame Musik von der Ampache XML-API</summary>
     <summary lang="it_IT">Streaming Musicale per l'XML-API di Ampache</summary>
     <summary lang="es_ES">Retransmitir música a través de la XML-API de Ampache</summary>
+    <summary lang="sv_SE">Streama musik från Ampache XML-API</summary>
     <description lang="en_GB">A web based audio/video streaming application and file manager allowing you to access your music and videos from anywhere, using almost any internet enabled device.</description>
+    <description lang="sv_SE">En webbaserad applikation för strömning av ljud och video samt filhantering som gör att du kan komma åt din musik och dina videor var du än befinner dig, med nästan alla internetanslutna enheter.</description>
     <platform>all</platform>
     <forum>https://forum.kodi.tv/showthread.php?tid=230736</forum>
     <website>https://ampache.org/</website>

@@ -169,7 +169,8 @@ def fill_tags(elem_type , node, info_tag):
         duration_str = node.findtext("time")
         info_tag.setDuration(int(duration_str) if duration_str else 0)
         year_str = node.findtext("year")
-        info_tag.setYear(int(year_str) if year_str else None)
+        if year_str:
+            info_tag.setYear(int(year_str))
         track_num = node.findtext("track")
         info_tag.setTrack(int(track_num) if track_num else 0)
         info_tag.setUserRating(rating)
@@ -182,7 +183,8 @@ def fill_tags(elem_type , node, info_tag):
         #xbmc.log("AmpachePlugin::disc_num " + str(disc_num),  xbmc.LOGDEBUG)
         info_tag.setDisc(int(disc_num) if disc_num else 0)
         year_str = node.findtext("year")
-        info_tag.setYear(int(year_str) if year_str else None)
+        if year_str:
+            info_tag.setYear(int(year_str))
         info_tag.setUserRating(rating)
 
     elif elem_type == 'artist':
@@ -202,20 +204,22 @@ def fill_tags(elem_type , node, info_tag):
 def getNestedTypeText(node, elem_tag ,elem_type):
     try:
         obj_elem = node.find(elem_type)
-        if obj_elem is not None or obj_elem != '':
+        if obj_elem is not None and obj_elem != '':
             obj_tag = obj_elem.findtext(elem_tag)
             return obj_tag
-    except:
+    except Exception as e:
+        xbmc.log("Error in getNestedTypeText: %s" % str(e), xbmc.LOGERROR)
         return None
     return None
 
 def getNestedTypeId(node,elem_type):
     try:
         obj_elem = node.find(elem_type)
-        if obj_elem is not None or obj_elem != '':
+        if obj_elem is not None and obj_elem != '':
             obj_id = obj_elem.attrib["id"]
             return obj_id
-    except:
+    except Exception as e:
+        xbmc.log("Error in getNestedTypeId: %s" % str(e), xbmc.LOGERROR)
         return None
     return None
 
@@ -229,6 +233,7 @@ def precacheArt(elem,elem_type):
         return
 
     threadList = []
+    max_threads = 10
     for node in elem.iter(elem_type):
         if elem_type == "song":
             art_type = "album"
@@ -246,10 +251,15 @@ def precacheArt(elem,elem_type):
             continue
         x = threading.Thread(target=art.get_art,args=(object_id,art_type,image_url,))
         threadList.append(x)
-    #start threads
-    for x in threadList:
+    #start threads with limit
+    for i, x in enumerate(threadList):
         x.start()
-    #join threads
+        #join every max_threads threads to avoid blocking UI
+        if i > 0 and i % max_threads == 0:
+            for j in range(i - max_threads, i):
+                if j < len(threadList):
+                    threadList[j].join()
+    #join remaining threads
     for x in threadList:
         x.join()
 
@@ -389,7 +399,7 @@ def addPlayLinks(elem, elem_type):
             "Container.Update(%s?title=%s&mode=%s&submode=%s)" % (
                 sys.argv[0],urllib.parse.quote_plus(object_title), str(AmpMode.SONGS), str(AmpSubmode.DO_SEARCH_ITEM) ) ) )
 
-            if cm != []:
+            if cm:
                 liz.addContextMenuItems(cm)
         elif elem_type == "podcast_episode":
             info_tag = liz.getMusicInfoTag()
@@ -408,7 +418,7 @@ def addPlayLinks(elem, elem_type):
 
 #The function that actually plays an Ampache URL by using setResolvedUrl
 def play_track(url):
-    if url == None:
+    if url is None:
         xbmc.log("AmpachePlugin::play_track url null", xbmc.LOGINFO )
         return
 
@@ -474,7 +484,7 @@ def addItems( object_type, elem, object_subtype=None,precache=True):
     return
 
 def get_all(object_type, mode ,offset=None):
-    if offset == None:
+    if offset is None:
         offset=0
     try:
         limit = int(ampache.getSetting(object_type))
@@ -515,7 +525,7 @@ def get_items(object_type, object_id=None, add=None,\
     if object_id:
         xbmc.log("AmpachePlugin::get_items: object_id " + object_id, xbmc.LOGDEBUG)
 
-    if limit == None:
+    if limit is None:
         limit = int(ampache.getSetting(object_type))
 
     #default: object_type is the action,otherwise see the if list below
@@ -571,41 +581,51 @@ def get_items(object_type, object_id=None, add=None,\
 
         elem = ampConn.ampache_http_request(action)
         addItems( object_type, elem, object_subtype)
-    except:
+    except Exception as e:
+        xbmc.log("AmpachePlugin::get_items: Generic Error "  +\
+                repr(e),xbmc.LOGDEBUG)
         return
 
 
 def setRating():
     try:
         file_url = xbmc.Player().getPlayingFile()
+        if not file_url:
+            raise ValueError("No playing file")
         xbmc.log("AmpachePlugin::setRating url " + file_url , xbmc.LOGDEBUG)
-    except:
-        xbmc.log("AmpachePlugin::no playing file " , xbmc.LOGDEBUG)
-        return
-
-    object_id = ut.get_objectId_from_fileURL( file_url )
-    if not object_id:
-        return
-    rating = xbmc.getInfoLabel('MusicPlayer.UserRating')
-    if rating == "":
-        rating = "0"
-
-    xbmc.log("AmpachePlugin::setRating, user Rating " + rating , xbmc.LOGDEBUG)
-    #converts from five stats ampache rating to ten stars kodi rating
-    amp_rating = math.ceil(int(rating)/2.0)
-
+        
+    except Exception:
+        raise ValueError("Error getting playing file")
+    
     try:
+        object_id = ut.get_objectId_from_fileURL(file_url)
+        if not object_id:
+            raise ValueError("No object ID found in URL")
+            
+        rating = xbmc.getInfoLabel('MusicPlayer.UserRating')
+        #used to remove a rating from a song, it is not an error
+        if not rating:
+            rating="0"
+            
+        xbmc.log("AmpachePlugin::setRating, user Rating " + rating , xbmc.LOGDEBUG)
+        #converts from five stats ampache rating to ten stars kodi rating
+        amp_rating = math.ceil(int(rating)/2.0)
+        
         ampConn = ampache_connect.AmpacheConnect()
-
         action = "rate"
         ampConn.id = object_id
         ampConn.type = "song"
         ampConn.rating = str(amp_rating)
-
         ampConn.ampache_http_request(action)
-    except:
-        #do nothing
-        return
+        
+    except (ampache_connect.AmpacheConnect.ConnectionError) as e:
+        xbmc.log("AmpachePlugin::setRating - Connection error: " + repr(e), xbmc.LOGWARNING)
+    except ValueError as e:
+        xbmc.log("AmpachePlugin::setRating - Validation error: " + str(e), xbmc.LOGDEBUG)
+    except Exception as e:
+        xbmc.log("AmpachePlugin::setRating - Generic error: " + repr(e), xbmc.LOGERROR)
+    
+    return
 
 def do_search(object_type,object_subtype=None,thisFilter=None):
     """
@@ -651,8 +671,11 @@ def get_recent(object_type,submode,object_subtype=None):
 
     if submode == AmpSubmode.LAST_UPDATE:
         update = ampache.getSetting("add")
-        xbmc.log(update[:10],xbmc.LOGINFO)
-        get_items(object_type=object_type,add=update[:10],object_subtype=object_subtype)
+        if update and len(update) >= 10:
+            xbmc.log(update[:10],xbmc.LOGINFO)
+            get_items(object_type=object_type,add=update[:10],object_subtype=object_subtype)
+        else:
+            xbmc.log("AmpachePlugin::get_recent - no update setting", xbmc.LOGDEBUG)
     elif submode == AmpSubmode.WEEK_UPDATE:
         get_items(object_type=object_type,add=ut.get_time(-7),object_subtype=object_subtype)
     elif submode == AmpSubmode.MONTH_UPDATE:
@@ -683,8 +706,8 @@ def get_random(object_type, num_items):
             ampConn.limit = 1
             elem = ampConn.ampache_http_request(action)
             addItems( object_type, elem,precache=False)
-        except:
-            pass
+        except Exception as e:
+            xbmc.log("AmpachePlugin::get_random - error getting item %s: %s" % (item_id, str(e)), xbmc.LOGDEBUG)
 
 def switchFromMusicPlaylist(addon_url, mode, submode, object_id=None, title=None):
     """
@@ -817,8 +840,8 @@ def Main():
                 servers_manager.initializeServer()
                 ampacheConnect = ampache_connect.AmpacheConnect()
                 ampacheConnect.AMPACHECONNECT()
-            except:
-                pass
+            except Exception as e:
+                xbmc.log("AmpachePlugin::Main - error connecting to server: %s" % str(e), xbmc.LOGDEBUG)
 
     apiVersion = int(ampache.getSetting("api-version"))
 

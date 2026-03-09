@@ -11,6 +11,10 @@ from datetime import datetime, timedelta
 
 ampache = xbmcaddon.Addon("plugin.audio.ampache")
 
+# Cache configuration constants
+ART_CACHE_EXPIRY_DAYS = 30
+ART_CACHE_TYPES = ["album", "artist", "song", "podcast", "playlist"]
+
 #different functions in kodi 19 (python3) and kodi 18 (python2)
 if PY2:
     user_dir = xbmc.translatePath( ampache.getAddonInfo('profile'))
@@ -48,7 +52,7 @@ def is_expired(cache_file_path: str) -> bool:
         last_modified = datetime.fromtimestamp(mod_time)
 
         # Calculate if more than a month has passed since modification
-        expiration_duration = timedelta(days=30)  # One month
+        expiration_duration = timedelta(days=ART_CACHE_EXPIRY_DAYS)  # ART_CACHE_EXPIRY_DAYS
 
         return (now - last_modified) > expiration_duration
     except FileNotFoundError:
@@ -56,17 +60,17 @@ def is_expired(cache_file_path: str) -> bool:
 
 def delete_expired_files():
 
-    cacheTypes = ["album", "artist" , "song", "podcast","playlist"]
-
-    for c_type in cacheTypes:
+    for c_type in ART_CACHE_TYPES:
         cacheDirType = os.path.join( cacheDir , c_type )
+        if not os.path.isdir(cacheDirType):
+            continue
         for currentFile in os.listdir(cacheDirType):
             #xbmc.log("Clear Cache Art " + str(currentFile),xbmc.LOGDEBUG)
             pathDel = os.path.join( cacheDirType, currentFile)
             if is_expired(pathDel):
                 try:
                     os.remove(pathDel)
-                except PermissionError as e:
+                except PermissionError if not PY2 else OSError:
                     pass
 
 def remove_expired():
@@ -75,15 +79,12 @@ def remove_expired():
     print("Cache cleanup completed.")
 
 def init_cache():
-    cacheTypes = ["album", "artist" , "song", "podcast","playlist"]
     #if cacheDir doesn't exist, create it
     if not os.path.isdir(user_mediaDir):
         os.mkdir(user_mediaDir)
     if not os.path.isdir(cacheDir):
         os.mkdir(cacheDir)
-    for c_type in cacheTypes:
+    for c_type in ART_CACHE_TYPES:
         cacheDirType = os.path.join( cacheDir , c_type )
         if not os.path.isdir(cacheDirType):
             os.mkdir( cacheDirType )
-
-

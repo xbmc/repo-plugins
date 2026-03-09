@@ -1,0 +1,500 @@
+# Kodi Media Center language file
+# Addon Name: Ampache plugin Swedish translation
+# Addon id: plugin.audio.ampache
+# Addon Provider: lusum
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons Ampache Swedish\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-07-06 14:02+0200\n"
+"Last-Translator: Daniel Nylander <github@danielnylander.se>\n"
+"Language-Team: sv\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.6\n"
+
+# settings
+msgctxt "#30001"
+msgid "General"
+msgstr "Allmänt"
+
+msgctxt "#30002"
+msgid "Servers"
+msgstr "Servrar"
+
+msgctxt "#30010"
+msgid "Random Items"
+msgstr "Slumpmässiga objekt"
+
+msgctxt "#30011"
+msgid "Disable Ssl certs"
+msgstr "Inaktivera SSL-certifikat"
+
+msgctxt "#30012"
+msgid "Api Version"
+msgstr "API-version"
+
+msgctxt "#30013"
+msgid "Old search gui (web controller friendly)"
+msgstr "Gamla sökgränssnittet (webbkontrollvänligt)"
+
+msgctxt "#30014"
+msgid "Enable images on long lists"
+msgstr "Aktivera bilder på långa listor"
+
+msgctxt "#30015"
+msgid "Auto fullscreen"
+msgstr "Automatisk helskärm"
+
+msgctxt "#30016"
+msgid "Clean image cache"
+msgstr "Töm bildcachen"
+
+msgctxt "#30020"
+msgid "Add Server"
+msgstr "Lägg till server"
+
+msgctxt "#30021"
+msgid "Remove Server"
+msgstr "Ta bort server"
+
+msgctxt "#30022"
+msgid "Modify Server"
+msgstr "Ändra server"
+
+msgctxt "#30023"
+msgid "Switch Server"
+msgstr "Byt server"
+
+# code
+msgctxt "#30101"
+msgid "Search..."
+msgstr "Sök…"
+
+msgctxt "#30102"
+msgid "Quick access..."
+msgstr "Snabbåtkomst..."
+
+msgctxt "#30103"
+msgid "Explore..."
+msgstr "Utforska..."
+
+msgctxt "#30104"
+msgid "Library..."
+msgstr "Bibliotek..."
+
+msgctxt "#30105"
+msgid "Settings"
+msgstr "Inställningar"
+
+msgctxt "#30106"
+msgid "Artist"
+msgstr "Artist"
+
+msgctxt "#30107"
+msgid "Album"
+msgstr "Album"
+
+msgctxt "#30108"
+msgid "Song"
+msgstr "Låt"
+
+msgctxt "#30109"
+msgid "Playlist"
+msgstr "Spellista"
+
+msgctxt "#30110"
+msgid "All"
+msgstr "Alla"
+
+msgctxt "#30111"
+msgid "Tag"
+msgstr "Tagg"
+
+msgctxt "#30112"
+msgid "Artist tag"
+msgstr "Artisttagg"
+
+msgctxt "#30113"
+msgid "Album tag"
+msgstr "Albumtagg"
+
+msgctxt "#30114"
+msgid "Song tag"
+msgstr "Låttagg"
+
+msgctxt "#30115"
+msgid "Artists"
+msgstr "Artister"
+
+msgctxt "#30116"
+msgid "Albums"
+msgstr "Album"
+
+msgctxt "#30117"
+msgid "Songs"
+msgstr "Låtar"
+
+msgctxt "#30118"
+msgid "Playlists"
+msgstr "Spellistor"
+
+msgctxt "#30119"
+msgid "Tags"
+msgstr "Taggar"
+
+msgctxt "#30120"
+msgid "Search Artists..."
+msgstr "Sök efter artister..."
+
+msgctxt "#30121"
+msgid "Search Albums..."
+msgstr "Sök efter album..."
+
+msgctxt "#30122"
+msgid "Search Songs..."
+msgstr "Sök efter låtar..."
+
+msgctxt "#30123"
+msgid "Search Playlists..."
+msgstr "Sök i spellistor..."
+
+msgctxt "#30124"
+msgid "Search All..."
+msgstr "Sök alla..."
+
+msgctxt "#30125"
+msgid "Search Tags..."
+msgstr "Sök i taggar..."
+
+msgctxt "#30126"
+msgid "Recently Added Artists..."
+msgstr "Nyligen tillagda artister..."
+
+msgctxt "#30127"
+msgid "Recently Added Albums..."
+msgstr "Nyligen tillagda album..."
+
+msgctxt "#30128"
+msgid "Recently Added Songs..."
+msgstr "Nyligen tillagda låtar..."
+
+msgctxt "#30129"
+msgid "Recently Added Playlists..."
+msgstr "Nyligen tillagda spellistor..."
+
+msgctxt "#30130"
+msgid "Last Update"
+msgstr "Senast uppdaterad"
+
+msgctxt "#30131"
+msgid "1 Week"
+msgstr "1 vecka"
+
+msgctxt "#30132"
+msgid "1 Month"
+msgstr "1 månad"
+
+msgctxt "#30133"
+msgid "3 Months"
+msgstr "3 månander"
+
+msgctxt "#30134"
+msgid "Random Artists..."
+msgstr "Slumpmässiga artister..."
+
+msgctxt "#30135"
+msgid "Random Albums..."
+msgstr "Slumpmässiga album..."
+
+msgctxt "#30136"
+msgid "Random Songs..."
+msgstr "Slumpmässiga låtar..."
+
+msgctxt "#30137"
+msgid "Random Playlists..."
+msgstr "Slumpmässiga spellistor..."
+
+msgctxt "#30138"
+msgid "Show artist from this song"
+msgstr "Visa artisten från denna låt"
+
+msgctxt "#30139"
+msgid "Show album from this song"
+msgstr "Visa album från denna låt"
+
+msgctxt "#30140"
+msgid "Search all songs with this title"
+msgstr "Sök efter alla låtar med denna titel"
+
+msgctxt "#30141"
+msgid "Show all albums from artist"
+msgstr "Visa alla album från artisten"
+
+msgctxt "#30142"
+msgid "Artist tags..."
+msgstr "Artisttaggar..."
+
+msgctxt "#30143"
+msgid "Album tags..."
+msgstr "Albumtaggar..."
+
+msgctxt "#30144"
+msgid "Song tags..."
+msgstr "Låttaggar..."
+
+msgctxt "#30145"
+msgid "Recently Added..."
+msgstr "Nyligen tillagda..."
+
+msgctxt "#30146"
+msgid "Random..."
+msgstr "Slumpmässiga..."
+
+msgctxt "#30147"
+msgid "Server playlist..."
+msgstr "Serverns spellista..."
+
+msgctxt "#30148"
+msgid "Highest Rated..."
+msgstr "Högst rankade..."
+
+msgctxt "#30149"
+msgid "Highest Rated Artists..."
+msgstr "Högst rankade artister..."
+
+msgctxt "#30150"
+msgid "Highest Rated Albums..."
+msgstr "Högst rankade album..."
+
+msgctxt "#30151"
+msgid "Highest Rated Songs..."
+msgstr "Högst rankade låtar..."
+
+msgctxt "#30152"
+msgid "Frequent Artists..."
+msgstr "Frekventa artister..."
+
+msgctxt "#30153"
+msgid "Frequent Albums..."
+msgstr "Frekventa album..."
+
+msgctxt "#30154"
+msgid "Frequent Songs..."
+msgstr "Frekventa låtar..."
+
+msgctxt "#30155"
+msgid "Flagged Artists..."
+msgstr "Flaggade artister..."
+
+msgctxt "#30156"
+msgid "Flagged Albums..."
+msgstr "Flaggade album..."
+
+msgctxt "#30157"
+msgid "Flagged Songs..."
+msgstr "Flaggade låtar..."
+
+msgctxt "#30158"
+msgid "Forgotten Artists..."
+msgstr "Bortglömda artister..."
+
+msgctxt "#30159"
+msgid "Forgotten Albums..."
+msgstr "Bortglömda album..."
+
+msgctxt "#30160"
+msgid "Forgotten Songs..."
+msgstr "Bortglömda låtar..."
+
+msgctxt "#30161"
+msgid "Newest Artists..."
+msgstr "Senaste artisterna..."
+
+msgctxt "#30162"
+msgid "Newest Albums..."
+msgstr "Senaste albumen..."
+
+msgctxt "#30163"
+msgid "Newest Songs..."
+msgstr "Senaste låtarna..."
+
+msgctxt "#30164"
+msgid "Frequent..."
+msgstr "Frekventa..."
+
+msgctxt "#30165"
+msgid "Flagged..."
+msgstr "Flaggade..."
+
+msgctxt "#30166"
+msgid "Forgotten..."
+msgstr "Bortglömda..."
+
+msgctxt "#30167"
+msgid "Newest..."
+msgstr "Senaste..."
+
+msgctxt "#30168"
+msgid "Modify the data, cancel to exit"
+msgstr "Ändra data, avbryt för att avsluta"
+
+msgctxt "#30169"
+msgid "Choose a default server"
+msgstr "Välj en standardserver"
+
+msgctxt "#30170"
+msgid "Enter the Server name"
+msgstr "Ange servernamnet"
+
+msgctxt "#30171"
+msgid "Enter the url of the server"
+msgstr "Ange URLen till servern"
+
+msgctxt "#30173"
+msgid "Do you want to use an api-key?"
+msgstr "Vill du använda en api-nyckel?"
+
+msgctxt "#30174"
+msgid "Enter the Api key"
+msgstr "Ange API-nyckeln"
+
+msgctxt "#30175"
+msgid "Enter the username"
+msgstr "Ange användarnamn"
+
+msgctxt "#30177"
+msgid "The server needs a password?"
+msgstr "Behöver servern ett lösenord?"
+
+msgctxt "#30178"
+msgid "Enter the password"
+msgstr "Ange lösenordet"
+
+msgctxt "#30179"
+msgid "Choose a server to remove"
+msgstr "Välj en server att ta bort"
+
+msgctxt "#30180"
+msgid "Modify a server"
+msgstr "Ändra en server"
+
+msgctxt "#30181"
+msgid "Server name"
+msgstr "Servernamn"
+
+msgctxt "#30182"
+msgid "Server url"
+msgstr "Serverns url"
+
+msgctxt "#30183"
+msgid "Username"
+msgstr "Användarnamn"
+
+msgctxt "#30184"
+msgid "Enable password"
+msgstr "Aktivera lösenord"
+
+msgctxt "#30185"
+msgid "Password"
+msgstr "Lösenord"
+
+msgctxt "#30186"
+msgid "Use api key"
+msgstr "Använd api-nyckel"
+
+msgctxt "#30187"
+msgid "Api key"
+msgstr "API-nyckel"
+
+msgctxt "#30188"
+msgid "Are you sure?"
+msgstr "Är du säker?"
+
+msgctxt "#30189"
+msgid "Ampache plugin"
+msgstr "Ampache-tillägg"
+
+msgctxt "#30190"
+msgid "Recently Played Artists..."
+msgstr "Nyligen spelade artister..."
+
+msgctxt "#30191"
+msgid "Recently Played Albums..."
+msgstr "Nyligen spelade album..."
+
+msgctxt "#30192"
+msgid "Recently Played Songs..."
+msgstr "Nyligen spelade låtar..."
+
+msgctxt "#30193"
+msgid "Recently Played..."
+msgstr "Nyligen spelade..."
+
+msgctxt "#30194"
+msgid "Next items..."
+msgstr "Nästa objekt..."
+
+msgctxt "#30195"
+msgid "Disk"
+msgstr "Disk"
+
+msgctxt "#30197"
+msgid "Information"
+msgstr "Information"
+
+msgctxt "#30198"
+msgid "Error"
+msgstr "Fel"
+
+msgctxt "#30202"
+msgid "Connection Error"
+msgstr "Anslutningsfel"
+
+msgctxt "#30203"
+msgid "Connection OK"
+msgstr "Anslutning OK"
+
+msgctxt "#30204"
+msgid "Permission error. If you are using Nextcloud don't check api_key box"
+msgstr "Behörighetsfel. Om du använder Nextcloud ska du inte markera rutan api_key"
+
+msgctxt "#30220"
+msgid "Video"
+msgstr "Video"
+
+msgctxt "#30221"
+msgid "Videos"
+msgstr "Videor"
+
+msgctxt "#30222"
+msgid "Search Videos..."
+msgstr "Sök efter videor..."
+
+msgctxt "#30225"
+msgid "Podcast"
+msgstr "Poddsändning"
+
+msgctxt "#30226"
+msgid "Podcasts"
+msgstr "Poddsändningar"
+
+msgctxt "#30227"
+msgid "Search Podcasts..."
+msgstr "Sök efter poddsändningar..."
+
+msgctxt "#30228"
+msgid "Live stream"
+msgstr "Direktsändning"
+
+msgctxt "#30229"
+msgid "Live streams"
+msgstr "Direktsändningar"
+
+msgctxt "#30230"
+msgid "Search Live Streams..."
+msgstr "Sök efter direktströmmar..."

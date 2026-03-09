@@ -1,13 +1,15 @@
 import time
 import datetime
-import xbmcaddon,xbmcplugin
+import xbmcaddon,xbmcplugin,xbmc
 import sys
 
 #main plugin/service library
 ampache = xbmcaddon.Addon("plugin.audio.ampache")
 
+CONTENT_TYPES = frozenset(['artists', 'albums', 'songs', 'videos'])
+
 def setContent(handle,object_type):
-    if object_type == 'artists' or object_type == 'albums' or object_type == 'songs' or object_type == 'videos':
+    if object_type in CONTENT_TYPES:
         xbmcplugin.setContent(handle, object_type)
 
 def otype_to_mode(object_type, object_subtype=None):
@@ -148,20 +150,13 @@ def get_params(plugin_url):
 
 def get_objectId_from_fileURL( file_url ):
     params = get_params(file_url)
-    object_id = None
     #i use two kind of object_id, i don't know, but sometime i have different
     #url, btw, no problem, i handle both and i solve the problem in this way
-    try:
-            object_id=params["object_id"]
-            xbmc.log("AmpachePlugin::object_id " + object_id, xbmc.LOGDEBUG)
-    except:
-            pass
-    try:
-            object_id=params["oid"]
-            xbmc.log("AmpachePlugin::object_id " + object_id, xbmc.LOGDEBUG)
-    except:
-            pass
-    return object_id
+    for key in ("object_id", "oid"):
+        if key in params:
+            xbmc.log("AmpachePlugin::object_id " + params[key], xbmc.LOGDEBUG)
+            return params[key]
+    return None
 
 def getRating(rating):
     if rating:

@@ -7,6 +7,7 @@ ampache = xbmcaddon.Addon("plugin.audio.ampache")
 from resources.lib.utils import get_objectId_from_fileURL
 
 class AmpacheMonitor( xbmc.Monitor ):
+    # Monitor for Ampache service events
 
     onPlay = False
 
@@ -24,27 +25,35 @@ class AmpacheMonitor( xbmc.Monitor ):
         pass
 
     def onNotification(self, sender, method, data):
-        #i don't know why i have called monitor.onNotification, but now it
-        #seems useless
-        #xbmc.Monitor.onNotification(self, sender, method, data)
-        xbmc.log('AmpacheMonitor:Notification %s from %s, params: %s' % (method, sender, str(data)))
+        xbmc.log('AmpacheMonitor::onNotification called - method: %s, sender: %s' % (method, sender), xbmc.LOGDEBUG)
+
+        if not sender or not method or not data:
+            xbmc.log("AmpacheMonitor::Invalid notification data", xbmc.LOGWARNING)
+            return
 
         #a little hack to avoid calling rate every time a song start
         if method == 'Player.OnStop':
             self.onPlay = False
-        if method == 'Player.OnPlay':
+            xbmc.log("AmpacheMonitor::onPlay status changed to False", xbmc.LOGDEBUG)
+        elif method == 'Player.OnPlay':
             self.onPlay = True
-        #called on infoChanged ( rating )
-        if method == 'Info.OnChanged' and self.onPlay:
-            #call setRating
+            xbmc.log("AmpacheMonitor::onPlay status changed to True", xbmc.LOGDEBUG)
+        elif method == 'Info.OnChanged' and self.onPlay:
             if xbmc.Player().isPlaying():
                 try:
                     file_url = xbmc.Player().getPlayingFile()
-                    #it is not our file
-                    if not (get_objectId_from_fileURL( file_url )):
-                        return
-                except:
-                    xbmc.log("AmpacheMonitor::no playing file " , xbmc.LOGDEBUG)
-                    return
-                xbmc.executebuiltin('RunPlugin(plugin://plugin.audio.ampache/?mode=205)')
+                    if not file_url:
+                        raise ValueError("No playing file")
+
+                    if not get_objectId_from_fileURL(file_url):
+                        raise ValueError("No object ID found in URL")
+
+                    xbmc.log("AmpacheMonitor::Starting setRating for URL: %s" % file_url, xbmc.LOGDEBUG)
+                    xbmc.executebuiltin('RunPlugin(plugin://plugin.audio.ampache/?mode=205)')
+                except ValueError as e:
+                    xbmc.log("AmpacheMonitor::Value error: %s" % str(e), xbmc.LOGDEBUG)
+                except Exception as e:
+                    xbmc.log("AmpacheMonitor::Error in onNotification: %s" % repr(e), xbmc.LOGERROR)
+
+
 

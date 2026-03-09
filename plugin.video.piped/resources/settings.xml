@@ -37,7 +37,9 @@
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
-					<control type="edit" format="string" />
+					<control type="edit" format="string">
+						<hidden>true</hidden>
+					</control>
 					<dependencies>
 						<dependency type="visible" setting="use_login" operator="is">true</dependency>
 					</dependencies>
@@ -139,6 +141,90 @@
 				</setting>
 			</group>
 		</category>
+		<category id="blacklist" label="30600">
+			<group id="blacklist_channels">
+				<setting id="blacklist_channels_enable" label="30601" type="boolean">
+					<level>1</level>
+					<default>false</default>
+					<control type="toggle" />
+				</setting>
+			</group>
+			<group id="blacklist_titles">
+				<setting id="blacklist_titles_enable" label="30602" type="boolean">
+					<level>3</level>
+					<default>false</default>
+					<control type="toggle" />
+				</setting>
+				<setting id="blacklist_titles_regex" label="30603" type="string" parent="blacklist_titles_enable">
+					<level>3</level>
+					<default />
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string" />
+					<dependencies>
+						<dependency type="visible" setting="blacklist_titles_enable" operator="is">true</dependency>
+					</dependencies>
+				</setting>
+				<setting id="blacklist_titles_case_insensitive" label="30604" type="boolean" parent="blacklist_titles_enable">
+					<level>3</level>
+					<default>true</default>
+					<control type="toggle" />
+					<dependencies>
+						<dependency type="visible" setting="blacklist_titles_enable" operator="is">true</dependency>
+					</dependencies>
+				</setting>
+			</group>
+		</category>
+		<category id="interface" label="30500">
+			<group id="interface_menu" label="30501">
+				<setting id="menu_show_feed" label="30502" type="boolean">
+					<level>1</level>
+					<default>true</default>
+					<control type="toggle" />
+				</setting>
+				<setting id="menu_show_feed_update" label="30503" type="boolean">
+					<level>3</level>
+					<default>false</default>
+					<control type="toggle" />
+				</setting>
+				<setting id="menu_show_subscriptions" label="30504" type="boolean">
+					<level>1</level>
+					<default>true</default>
+					<control type="toggle" />
+				</setting>
+				<setting id="menu_show_playlists" label="30505" type="boolean">
+					<level>1</level>
+					<default>true</default>
+					<control type="toggle" />
+				</setting>
+				<setting id="menu_show_watch_history" label="30506" type="boolean">
+					<level>1</level>
+					<default>true</default>
+					<control type="toggle" />
+				</setting>
+				<setting id="menu_show_watch_trending" label="30507" type="boolean">
+					<level>1</level>
+					<default>true</default>
+					<control type="toggle" />
+				</setting>
+				<setting id="menu_show_watch_blacklist" label="30508" type="boolean">
+					<level>1</level>
+					<default>true</default>
+					<control type="toggle" />
+				</setting>
+				<setting id="menu_show_watch_search" label="30509" type="boolean">
+					<level>1</level>
+					<default>true</default>
+					<control type="toggle" />
+				</setting>
+				<setting id="menu_show_watch_settings" label="30510" type="boolean">
+					<level>1</level>
+					<default>true</default>
+					<control type="toggle" />
+				</setting>
+			</group>
+		</category>
 		<category id="service" label="30300">
 			<group id="service_port">
 				<setting id="http_port_random" label="30301" type="boolean">
@@ -191,6 +277,13 @@
 			</group>
 			<group id="subtitles">
 				<setting id="subtitles_load" label="30404" type="boolean">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle" />
+				</setting>
+			</group>
+			<group id="description">
+				<setting id="show_description" label="30406" type="boolean">
 					<level>0</level>
 					<default>true</default>
 					<control type="toggle" />

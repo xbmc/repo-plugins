@@ -100,6 +100,8 @@ class AmpacheConnect(object):
         return errormess
 
     def getHashedPassword(self,timeStamp):
+        if self._connectionData is None:
+            raise self.ConnectionError
         enablePass = self._connectionData["enable_password"]
         if enablePass:
             sdf = self._connectionData["password"]
@@ -117,6 +119,8 @@ class AmpacheConnect(object):
         return passwordHash
 
     def get_user_pwd_login_url(self,nTime):
+        if self._connectionData is None:
+            raise self.ConnectionError
         myTimeStamp = str(nTime)
         myPassphrase = self.getHashedPassword(myTimeStamp)
         myURL = self._connectionData["url"] + self.getBaseUrl() + '?action=handshake&auth='
@@ -125,6 +129,8 @@ class AmpacheConnect(object):
         return myURL
 
     def get_auth_key_login_url(self):
+        if self._connectionData is None:
+            raise self.ConnectionError
         myURL = self._connectionData["url"] +  self.getBaseUrl() + '?action=handshake&auth='
         myURL += self._connectionData["api_key"]
         myURL += '&version=' + self.version
@@ -169,6 +175,8 @@ class AmpacheConnect(object):
         return headers,contents
 
     def AMPACHECONNECT(self,showok=False):
+        if self._connectionData is None:
+            raise self.ConnectionError
         socket.setdefaulttimeout(3600)
         nTime = int(time.time())
         use_api_key = self._connectionData["use_api_key"]
@@ -244,6 +252,8 @@ class AmpacheConnect(object):
         return tree
     
     def build_ampache_url(self,action):
+        if self._connectionData is None:
+            raise self.ConnectionError
         token = self._ampache.getSetting("token")
         thisURL = self._connectionData["url"] +  self.getBaseUrl() + '?action=' + action
         thisURL += '&auth=' + token

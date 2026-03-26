@@ -92,8 +92,8 @@ def switchServer():
     try:
         ampacheConnect = ampache_connect.AmpacheConnect()
         ampacheConnect.AMPACHECONNECT(showok=True)
-    except:
-        pass
+    except Exception as e:
+        xbmc.log("AmpachePlugin::switchServer error: %s" % repr(e), xbmc.LOGERROR)
 
 def addServer():
     xbmc.log("AmpachePlugin::addServer" , xbmc.LOGDEBUG )
@@ -203,5 +203,5 @@ def modifyServer():
     try:
         ampacheConnect = ampache_connect.AmpacheConnect()
         ampacheConnect.AMPACHECONNECT()
-    except:
-        pass
+    except Exception as e:
+        xbmc.log("AmpachePlugin::modifyServer error: %s" % repr(e), xbmc.LOGERROR)

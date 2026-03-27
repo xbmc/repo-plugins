@@ -54,6 +54,10 @@ msgctxt "#30016"
 msgid "Clean image cache"
 msgstr ""
 
+msgctxt "#30017"
+msgid "Connection timeout (ms)"
+msgstr ""
+
 msgctxt "#30020"
 msgid "Add Server"
 msgstr ""

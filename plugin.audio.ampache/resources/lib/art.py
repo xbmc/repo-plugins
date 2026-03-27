@@ -118,6 +118,8 @@ def clean_cache_art(isDialog=False):
 
     for c_type in cacheTypes:
         cacheDirType = os.path.join( cacheDir , c_type )
+        if not os.path.isdir(cacheDirType):
+            continue
         for currentFile in os.listdir(cacheDirType):
             #xbmc.log("Clear Cache Art " + str(currentFile),xbmc.LOGDEBUG)
             pathDel = os.path.join( cacheDirType, currentFile)

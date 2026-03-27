@@ -2,6 +2,7 @@
 	<category label="30001">
 		<setting id="random_items" type="enum" label="30010" values="3|6|9|12|15|18|21" default="1"/>
 		<setting id="disable_ssl_certs" type="bool" label="30011" default="false"/>
+		<setting id="connection_timeout" type="number" label="30017" default="400"/>
 		<setting id="api-version" type="number" label="30012" default="350001"/>
 		<setting id="old-search-gui" type="bool" label="30013" default="false"/>
 		<setting id="images-long-list" type="bool" label="30014" default="false"/>

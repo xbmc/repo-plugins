@@ -34,6 +34,14 @@ msgctxt "#30011"
 msgid "Disable Ssl certs"
 msgstr "Deshabilitar certificados Ssl"
 
+msgctxt "#30016"
+msgid "Clean image cache"
+msgstr "Limpiar caché de imágenes"
+
+msgctxt "#30017"
+msgid "Connection timeout (ms)"
+msgstr "Tiempo de espera de conexión (ms)"
+
 # empty string with id 32003
 msgctxt "#30012"
 msgid "Api Version"
@@ -491,3 +499,15 @@ msgstr "Podcasts"
 msgctxt "#30227"
 msgid "Search Podcasts..."
 msgstr "Busca podcasts..."
+
+msgctxt "#30228"
+msgid "Live stream"
+msgstr "Transmisión en vivo"
+
+msgctxt "#30229"
+msgid "Live streams"
+msgstr "Transmisiones en vivo"
+
+msgctxt "#30230"
+msgid "Search Live Streams..."
+msgstr "Buscar transmisiones en vivo..."

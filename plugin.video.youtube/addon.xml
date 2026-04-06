@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="7.4.1.1" provider-name="anxdpanic, bromix, MoojMidge">
+<addon id="plugin.video.youtube" name="YouTube" version="7.4.2" provider-name="anxdpanic, bromix, MoojMidge">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.27.1"/>
@@ -116,7 +116,25 @@
         <disclaimer lang="vi_VN">Plugin này không được xác nhận bởi Google</disclaimer>
         <disclaimer lang="zh_CN">此插件未被谷歌认可</disclaimer>
         <disclaimer lang="zh_TW">此附加元件未由Google支持</disclaimer>
-    <news>## v7.4.1.1
+    <news>## v7.4.2
 ### Fixed
-- Address possible race condition resulting in KeyError exception when calling pop() on an empty set</news></extension>
+- Ensure updated context is used in client instance when rerouting to existing provider handler methods
+- Fix required ID potentially not being passed to YouTubeDataClient.(add|remove)_video_from_playlist()
+- Skip unplayable live manifests
+- Handle inconsistent error codes and names used in Python 2
+- Simplify byte range to timestamp conversion for compatibility with Python 2
+- Fix unnecessarily reloading listing when adding items to Bookmarks
+
+### Changed
+- Update parsing of plugin urls for path params and ID lists
+- Rework addon debug log settings (Addon &gt; Settings &gt; Advanced &gt; Debug &gt; Enable debug logging)
+  - Allowable values:
+    - Disabled (addon logging output disabled)
+    - Auto (default, addon logging output enabled if Kodi debug logging enabled)
+    - Always enabled (addon logging output enabled)
+    - Verbose (additional addon logging output enabled)
+- Various other improvement to addon logging
+
+### New
+- Update Setup Wizard to account for user possibly using mismatched watch history settings</news></extension>
 </addon>

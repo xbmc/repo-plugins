@@ -291,7 +291,8 @@ class PlayerMonitorThread(object):
                         command='remove',
                         category='video',
                         playlist_id=watch_later_id,
-                        video_id=playlist_item_id,
+                        video_id=video_id,
+                        playlist_item_id=playlist_item_id,
                         video_name='',
                         confirmed=True,
                     )
@@ -439,7 +440,7 @@ class PlayerMonitor(xbmc.Player):
 
         player_data = ui.pop_property(PLAYER_DATA,
                                       process=json.loads,
-                                      log_process=redact_params)
+                                      log_redact=True)
         if not player_data:
             return
         self.cleanup_threads()

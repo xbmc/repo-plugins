@@ -115,6 +115,8 @@ def todays_games(game_day, start_inning='False', sport=MLB_ID, teams='None'):
         from .account import Account
         account = Account()
         entitlements = json.loads(account.get_entitlements())
+        if today == game_day and 'MASN_110' in entitlements:
+            create_linear_channel_listitem('MASN')
         if today == game_day and ('MLBN' in entitlements or 'MLBALL' in entitlements or 'MLBTVMLBNADOBEPASS' in entitlements or 'EXECMLB' in entitlements):
             create_linear_channel_listitem('MLBN')
         if today == game_day and 'SNLA_119' in entitlements:
@@ -286,6 +288,10 @@ def create_game_listitem(game, game_day, start_inning, today, nonentitlement_dat
                     game_time = 'T' + str(relative_inning)
                 else:
                     game_time = display_time
+            # if we're hiding spoilers
+            elif spoiler == 'False':
+                game_time = display_time
+            # otherwise active games show the inning
             elif game_state != 'Final' and game['status']['abstractGameState'] == 'Live' and 'linescore' in game:
                 if game['linescore']['isTopInning']:
                     # up triangle
@@ -296,10 +302,7 @@ def create_game_listitem(game, game_day, start_inning, today, nonentitlement_dat
                     # top_bottom = u"\u25BC"
                     top_bottom = "B"
 
-                if game['linescore']['currentInning'] >= game['scheduled_innings'] and spoiler == 'False':
-                    game_time = str(game['scheduled_innings']) + 'th+'
-                else:
-                    game_time = top_bottom + ' ' + game['linescore']['currentInningOrdinal']
+                game_time = top_bottom + ' ' + game['linescore']['currentInningOrdinal']
 
             try:
                 if 'resumeGameDate' in game or 'resumedFromDate' in game:
@@ -320,7 +323,10 @@ def create_game_listitem(game, game_day, start_inning, today, nonentitlement_dat
             except:
                 pass
 
-        if game_state == 'Final' or game_state == 'Postponed':
+        if spoiler == 'False':
+            game_time = colorString(game_time, LIVE)
+            
+        elif game_state == 'Final' or game_state == 'Postponed':
             game_time = colorString(game_time, FINAL)
 
         elif game['status']['abstractGameState'] == 'Live':
@@ -538,7 +544,14 @@ def featured_videos(featured_video=None):
 # display a linear channel item within a game list
 def create_linear_channel_listitem(network):
     try:
-        if network == 'MLBN':
+        if network == 'MASN':
+            title = LOCAL_STRING(30367) + LOCAL_STRING(30446)
+            description = LOCAL_STRING(30447)
+            video_url = 'MASN_ONE_LIVE'
+            icon = 'https://img.mlbstatic.com/mlb-images/image/upload/t_16x9/t_w640/v1745242435/mlb/jov4fxbzmqikc8umj5kr.png'
+            fanart = FANART
+            mode = 302
+        elif network == 'MLBN':
             title = LOCAL_STRING(30367) + LOCAL_STRING(30438)
             description = LOCAL_STRING(30439)
             video_url = 'https://falcon.mlbinfra.com/api/v1/linear/mlbn'
@@ -581,28 +594,31 @@ def create_big_inning_listitem(game_day):
         today = localToEastern()
         big_inning_date = str(settings.getSetting(id="big_inning_date"))
 
-        # if we've already fetched it today, use the cached schedule
-        if big_inning_date == today:
-            xbmc.log('Using cached Big Inning schedule')
+        # reset for new format as of 2026-04-08
+        big_inning_schedule = None
+        try:
             big_inning_schedule = json.loads(settings.getSetting(id="big_inning_schedule"))
+            first_key = next(iter(big_inning_schedule))
+            if isinstance(big_inning_schedule[first_key], dict):
+                xbmc.log('Resetting cached Big Inning schedule')
+                big_inning_date = 'reset'
+        except:
+            pass
+        
+        # if we've already fetched it today, use the cached schedule
+        if big_inning_schedule is not None and big_inning_date == today:
+            xbmc.log('Using cached Big Inning schedule')
         # otherwise, fetch a new big inning schedule
         else:
             xbmc.log('Fetching Big Inning schedule')
             settings.setSetting(id='big_inning_date', value=today)
-            url = 'https://api.fubo.tv/gg/series/123881219/live-programs?limit=14&languages=en&countrySlugs=USA'
+            url = 'https://watch.product.api.espn.com/api/product/v3/watchespn/web/catalog/ae4eb028-0af3-42e7-8965-9304c5817969?lang=en&features=continueWatching%2Csfb-all%2Cpbov7%2Chigh-volume-row%2Csc4u%2Cguide-menu-header%2Ccutl%2Cheader-quickserve%2Cautoplay%2Cwatch-web-redesign%2CimageRatio58x13%2CpromoTiles%2CopenAuthz%2Cvideo-header%2Cexplore-row%2Cbutton-service%2Cinline-header%2Cflagship&deviceBrand=web&streamMenu=true&headerBgImageWidth=1280&countryCode=US&entitlements=no&tz=UTC-0400&userab=espn_watch_for_you_web-392*watch-fy-a-1642'
 
             headers = {
-                'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-                'accept-language': 'en-US,en;q=0.9',
-                'cache-control': 'no-cache',
-                'dnt': '1',
-                'pragma': 'no-cache',
-                'sec-fetch-dest': 'document',
-                'sec-fetch-mode': 'navigate',
-                'sec-fetch-site': 'none',
-                'sec-fetch-user': '?1',
-                'sec-gpc': '1',
-                'upgrade-insecure-requests': '1',
+                'accept': '*/*',
+                'accept-encoding': 'gzip, deflate, br, zstd',
+                'origin': 'https://www.espn.com',
+                'referer': 'https://www.espn.com/',
                 'user-agent': UA_PC
             }
             r = requests.get(url,headers=headers, verify=VERIFY)
@@ -612,52 +628,52 @@ def create_big_inning_listitem(game_day):
             json_source = r.json()
             
             big_inning_schedule = {}
-            if 'data' in json_source:
-                for entry in json_source['data']:
-                    if 'airings' in entry and len(entry['airings']) > 0 and entry['airings'][0] and 'accessRightsV2' in entry['airings'][0] and 'live' in entry['airings'][0]['accessRightsV2']:
-                        airing = entry['airings'][0]['accessRightsV2']['live']
-                        big_inning_date = get_eastern_game_date(parse(airing['startTime']))
-                        xbmc.log('Formatted date ' + big_inning_date)
-                        # ignore dates in the past
-                        if big_inning_date >= today:
-                            big_inning_start = str(UTCToLocal(parse(airing['startTime'])))
-                            big_inning_end = str(UTCToLocal(parse(airing['endTime'])))
-                            big_inning_schedule[big_inning_date] = {'start': big_inning_start, 'end': big_inning_end}
+            for content in json_source['page']['buckets'][0]['contents']:
+                big_inning_date = content['utc'][0:10]
+                big_inning_start = str(easternToLocal(parse(content['utc'][0:19])))
+                for stream in content['streams']:
+                    big_inning_end = str(easternToLocal(parse(content['utc'][0:19]) + timedelta(seconds=stream['durationInSeconds'])))
+                    if big_inning_date not in big_inning_schedule:
+                        big_inning_schedule[big_inning_date] = []
+                    big_inning_schedule[big_inning_date].append({'start': big_inning_start, 'end': big_inning_end})
+                    break
+                    
             # save the scraped schedule
             settings.setSetting(id='big_inning_schedule', value=json.dumps(big_inning_schedule))
 
         if game_day in big_inning_schedule:
             xbmc.log(game_day + ' has a scheduled Big Inning broadcast')
-            display_title = LOCAL_STRING(30368)
+            for big_inning in big_inning_schedule[game_day]:
+              display_title = LOCAL_STRING(30368)
 
-            big_inning_start = parse(big_inning_schedule[game_day]['start'])
-            big_inning_end = parse(big_inning_schedule[game_day]['end'])
+              big_inning_start = parse(big_inning['start'])
+              big_inning_end = parse(big_inning['end'])
 
-            # format the time for display
+              # format the time for display
 
-            game_time = get_display_time(big_inning_start) + ' - ' + get_display_time(big_inning_end)
-            now = datetime.now()
-            if now < big_inning_start:
-                game_time = colorString(game_time, UPCOMING)
-            elif now > big_inning_end:
-                game_time = colorString(game_time, FINAL)
-            elif now >= big_inning_start and now <= big_inning_end:
-                display_title = LOCAL_STRING(30367) + LOCAL_STRING(30368)
-                game_time = colorString(game_time, LIVE)
-            name = game_time + ' ' + display_title
+              game_time = get_display_time(big_inning_start) + ' - ' + get_display_time(big_inning_end)
+              now = datetime.now()
+              if now < big_inning_start:
+                  game_time = colorString(game_time, UPCOMING)
+              elif now > big_inning_end:
+                  game_time = colorString(game_time, FINAL)
+              elif now >= big_inning_start and now <= big_inning_end:
+                  display_title = LOCAL_STRING(30367) + LOCAL_STRING(30368)
+                  game_time = colorString(game_time, LIVE)
+              name = game_time + ' ' + display_title
 
-            desc = 'MLB Big Inning brings fans all the best action from around the league with live look-ins, breaking highlights and big moments as they happen all season long. Airing seven days a week on MLB.TV.'
+              desc = 'MLB Big Inning brings fans all the best action from around the league with live look-ins, breaking highlights and big moments as they happen all season long. Airing seven days a week on MLB.TV.'
 
-            # create the list item
-            liz=xbmcgui.ListItem(name)
-            liz.setInfo( type="Video", infoLabels={ "Title": display_title, 'plot': desc } )
-            liz.setProperty("IsPlayable", "true")
-            icon = 'https://img.mlbstatic.com/mlb-images/image/private/ar_16:9,g_auto,q_auto:good,w_372,c_fill,f_jpg/mlb/uwr8vepua4t1fe8uwyki'
-            fanart = 'https://img.mlbstatic.com/mlb-images/image/private/g_auto,c_fill,ar_16:9,q_60,w_1920/e_gradient_fade:15,x_0.6,b_black/mlb/uwr8vepua4t1fe8uwyki'
-            liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
-            u=sys.argv[0]+"?mode="+str(301)+"&featured_video="+urllib.quote_plus(LOCAL_STRING(30367) + LOCAL_STRING(30368))+"&name="+urllib.quote_plus(LOCAL_STRING(30367) + LOCAL_STRING(30368))
-            xbmcplugin.addDirectoryItem(handle=addon_handle,url=u,listitem=liz,isFolder=False)
-            xbmcplugin.setContent(addon_handle, 'episodes')
+              # create the list item
+              liz=xbmcgui.ListItem(name)
+              liz.setInfo( type="Video", infoLabels={ "Title": display_title, 'plot': desc } )
+              liz.setProperty("IsPlayable", "true")
+              icon = 'https://img.mlbstatic.com/mlb-images/image/private/ar_16:9,g_auto,q_auto:good,w_372,c_fill,f_jpg/mlb/uwr8vepua4t1fe8uwyki'
+              fanart = 'https://img.mlbstatic.com/mlb-images/image/private/g_auto,c_fill,ar_16:9,q_60,w_1920/e_gradient_fade:15,x_0.6,b_black/mlb/uwr8vepua4t1fe8uwyki'
+              liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
+              u=sys.argv[0]+"?mode="+str(301)+"&featured_video="+urllib.quote_plus(LOCAL_STRING(30367) + LOCAL_STRING(30368))+"&name="+urllib.quote_plus(LOCAL_STRING(30367) + LOCAL_STRING(30368))
+              xbmcplugin.addDirectoryItem(handle=addon_handle,url=u,listitem=liz,isFolder=False)
+              xbmcplugin.setContent(addon_handle, 'episodes')
         else:
             xbmc.log(game_day + ' does not have a scheduled Big Inning broadcast')
     except Exception as e:
@@ -1452,25 +1468,44 @@ def playAllHighlights(stream_date):
 
     for game in json_source['dates'][0]['games']:
         try:
+            icon = 'https://img.mlbstatic.com/mlb-photos/image/upload/ar_167:215,c_crop/fl_relative,l_team:' + str(game['teams']['home']['team']['id']) + ':fill:spot.png,w_1.0,h_1,x_0.5,y_0,fl_no_overflow,e_distort:100p:0:200p:0:200p:100p:0:100p/fl_relative,l_team:' + str(game['teams']['away']['team']['id']) + ':logo:spot:current,w_0.38,x_-0.25,y_-0.16/fl_relative,l_team:' + str(game['teams']['home']['team']['id']) + ':logo:spot:current,w_0.38,x_0.25,y_0.16/w_750/team/' + str(game['teams']['away']['team']['id']) + '/fill/spot.png'
             fanart = 'http://cd-images.mlbstatic.com/stadium-backgrounds/color/light-theme/1920x1080/%s.png' % game['venue']['id']
+            title = None
+            clip_url = None
             if 'highlights' in game['content']:
                 for item in game['content']['highlights']['highlights']['items']:
-                    try:
-                        title = item['headline'].strip().lower()
-                        if (n == 0 and (' vs ' in title or ' vs. ' in title or ' versus ' in title or ' at ' in title or '@' in title) and (title.endswith(' highlights') or title.endswith(' recap'))) or (n == 1 and 'condensed' in title):
-                            for playback in item['playbacks']:
-                                if 'hlsCloud' in playback['name']:
-                                    clip_url = playback['url']
-                                    break
-                            listitem = xbmcgui.ListItem(item['headline'])
-                            icon = item['image']['cuts'][0]['src']
-                            listitem.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
-                            listitem.setInfo(type="Video", infoLabels={"Title": item['headline']})
-                            xbmc.log('adding recap to playlist : ' + item['headline'])
-                            playlist.add(clip_url, listitem)
+                    for keywordsDisplay in item['keywordsDisplay']:
+                        if keywordsDisplay['displayName'] == 'Condensed Game':
+                            title = item['headline']
+                            if (n == 1):
+                                for playback in item['playbacks']:
+                                    if 'hlsCloud' in playback['name']:
+                                        clip_url = playback['url']
+                                        break
+                        if title is not None:
                             break
-                    except:
-                        pass
+                    if title is not None:
+                        break
+                        
+                if (n == 0):
+                    title = title.replace('Condensed Game', 'Game Recap')
+                    for item in game['content']['highlights']['highlights']['items']:
+                        for keywordsDisplay in item['keywordsDisplay']:
+                            if keywordsDisplay['displayName'] == 'Game Recap':
+                                for playback in item['playbacks']:
+                                    if 'hlsCloud' in playback['name']:
+                                        clip_url = playback['url']
+                                        break
+                                break
+                        if clip_url is not None:
+                            break
+                                                
+                if clip_url is not None:
+                    listitem = xbmcgui.ListItem(title)
+                    listitem.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
+                    listitem.setInfo(type="Video", infoLabels={"Title": title})
+                    xbmc.log('adding video to playlist : ' + title)
+                    playlist.add(clip_url, listitem)
         except:
             pass
 

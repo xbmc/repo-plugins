@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2026.2.27+matrix.1" provider-name="eracknaphobia, tonywagner">
+<addon id="plugin.video.mlbtv" name="MLB.TV®" version="2026.4.9+matrix.1" provider-name="eracknaphobia, tonywagner">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.pytz" />
@@ -22,11 +22,14 @@
         </description>
         <disclaimer lang="en_GB">Requires an MLB.tv account</disclaimer>
         <news>
-            - bypass skip adjust settings when skipping commercials
-            - stream finder extra innings LI correction
-            - skip bugfix at end-of-game
-            - auto upload Stream Finder form
-            - proxy playback fix (used for stream length padding)
+            - playback fix for Kodi 22
+            - Game Changer and Stream Finder fixes
+            - affiliate team updates for 2026
+            - restored Watch All Recaps option and removed spoilers from it
+            - restored Big Inning schedule
+            - skip timing adjustment for overturned pitches
+            - added MASN live stream for entitled subscribers
+            - do not show game state or inning when No Spoilers is enabled
         </news>
         <language>en</language>
         <platform>all</platform>

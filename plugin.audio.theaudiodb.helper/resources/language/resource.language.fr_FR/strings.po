@@ -1,0 +1,165 @@
+# Kodi Media Center language file
+# Addon Name: TheAudioDB Helper
+# Addon id: plugin.audio.theaudiodb.helper
+# Addon Provider: manfeed, black_eagle
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.audio.theaudiodb.helper\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2026-01-24 00:00+0000\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: French (http://www.transifex.com/projects/p/kodi-main/language/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr_fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgctxt "#30000"
+msgid "Music Video Links Helper"
+msgstr "Music Video Links Helper"
+
+msgctxt "#30001"
+msgid "HTTP Error"
+msgstr "Erreur HTTP"
+
+msgctxt "#30002"
+msgid "URL Error"
+msgstr "Erreur d'URL"
+
+msgctxt "#30003"
+msgid "Setting video URL for songid"
+msgstr "Définition de l'URL vidéo pour songid"
+
+msgctxt "#30004"
+msgid "to database"
+msgstr "dans la base de données"
+
+msgctxt "#30008"
+msgid "Getting all video links"
+msgstr "Récupération de tous les liens vidéo"
+
+msgctxt "#30009"
+msgid "Processing artistid"
+msgstr "Traitement de artistid"
+
+msgctxt "#30010"
+msgid "artist name"
+msgstr "nom de l'artiste"
+
+msgctxt "#30011"
+msgid "Skipping missing tag artist: "
+msgstr "Ignorer l'artiste avec tag manquant: "
+
+msgctxt "#30012"
+msgid "Looking for video links for: "
+msgstr "Recherche de liens vidéo pour: "
+
+msgctxt "#30013"
+msgid "User cancelled"
+msgstr "Annulé par l'utilisateur"
+
+msgctxt "#30014"
+msgid "Video Links - Error"
+msgstr "Liens vidéo - Erreur"
+
+msgctxt "#30015"
+msgid "Getting video links"
+msgstr "Récupération des liens vidéo"
+
+msgctxt "#30016"
+msgid "Please wait..."
+msgstr "Veuillez patienter..."
+
+msgctxt "#30017"
+msgid "while getting"
+msgstr "lors de la récupération de"
+
+msgctxt "#30018"
+msgid "Removed"
+msgstr "Supprimés"
+
+msgctxt "#30019"
+msgid "Added"
+msgstr "Ajoutés"
+
+msgctxt "#30024"
+msgid "No MusicBrainz ID found"
+msgstr "Aucun ID MusicBrainz trouvé"
+
+msgctxt "#30025"
+msgid "No videos found for this artist"
+msgstr "Aucune vidéo trouvée pour cet artiste"
+
+msgctxt "#30026"
+msgid "Music Videos"
+msgstr "Clips musicaux"
+
+msgctxt "#30027"
+msgid "All videos are already in your library"
+msgstr "Toutes les vidéos sont déjà dans votre bibliothèque"
+
+msgctxt "#30028"
+msgid "Missing Music Videos"
+msgstr "Clips musicaux manquants"
+
+msgctxt "#30029"
+msgid "Finished"
+msgstr "Terminé"
+
+msgctxt "#32001"
+msgid "Settings"
+msgstr "Paramètres"
+
+msgctxt "#32002"
+msgid "Additional Data Sources"
+msgstr "Sources de données supplémentaires"
+
+msgctxt "#32003"
+msgid "Wikipedia"
+msgstr "Wikipedia"
+
+msgctxt "#32004"
+msgid "Last.fm"
+msgstr "Last.fm"
+
+msgctxt "#32005"
+msgid "Last.fm API Settings"
+msgstr "Paramètres API Last.fm"
+
+msgctxt "#32006"
+msgid "Enter your own Last.fm API key (recommended)"
+msgstr "Entrez votre API key Last.fm (recommandé)"
+
+msgctxt "#32007"
+msgid "Note: TheAudioDB is always enabled as primary source"
+msgstr "Note : TheAudioDB est toujours activé comme source principale"
+
+msgctxt "#32008"
+msgid "Auto-Save data"
+msgstr "Sauvegarde automatique des données"
+
+msgctxt "#32009"
+msgid "Save biography/album description to Kodi database if empty"
+msgstr "Enregistrer la biographie/description d'album dans la base de données Kodi si vide"
+
+msgctxt "#32010"
+msgid "Free API key at https://www.last.fm/api/account/create"
+msgstr "API key gratuite sur https://www.last.fm/api/account/create"
+
+msgctxt "#32011"
+msgid "Auto-Save Artwork"
+msgstr "Sauvegarde automatique des images"
+
+msgctxt "#32012"
+msgid "Save artwork to Kodi database if empty"
+msgstr "Enregistrer les images dans la base de données Kodi si vides"
+
+msgctxt "#32013"
+msgid "Save biography to Kodi database?"
+msgstr "Enregistrer la biographie dans la base de données Kodi ?"
+
+msgctxt "#32014"
+msgid "Save album description to Kodi database?"
+msgstr "Enregistrer la description de l'album dans la base de données Kodi ?"

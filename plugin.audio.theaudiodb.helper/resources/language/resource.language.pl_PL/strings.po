@@ -1,0 +1,165 @@
+# Kodi Media Center language file
+# Addon Name: TheAudioDB Helper
+# Addon id: plugin.audio.theaudiodb.helper
+# Addon Provider: manfeed, black_eagle
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.audio.theaudiodb.helper\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2026-01-24 00:00+0000\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Polish (http://www.transifex.com/projects/p/kodi-main/language/pl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl_pl\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "#30000"
+msgid "Music Video Links Helper"
+msgstr "Music Video Links Helper"
+
+msgctxt "#30001"
+msgid "HTTP Error"
+msgstr "Błąd HTTP"
+
+msgctxt "#30002"
+msgid "URL Error"
+msgstr "Błąd adresu URL"
+
+msgctxt "#30003"
+msgid "Setting video URL for songid"
+msgstr "Ustawianie adresu URL wideo dla songid"
+
+msgctxt "#30004"
+msgid "to database"
+msgstr "do bazy danych"
+
+msgctxt "#30008"
+msgid "Getting all video links"
+msgstr "Pobieranie wszystkich linków wideo"
+
+msgctxt "#30009"
+msgid "Processing artistid"
+msgstr "Przetwarzanie artistid"
+
+msgctxt "#30010"
+msgid "artist name"
+msgstr "nazwa wykonawcy"
+
+msgctxt "#30011"
+msgid "Skipping missing tag artist: "
+msgstr "Pomijanie wykonawcy z brakującym tagiem: "
+
+msgctxt "#30012"
+msgid "Looking for video links for: "
+msgstr "Szukanie linków wideo dla: "
+
+msgctxt "#30013"
+msgid "User cancelled"
+msgstr "Anulowane przez użytkownika"
+
+msgctxt "#30014"
+msgid "Video Links - Error"
+msgstr "Linki wideo - Błąd"
+
+msgctxt "#30015"
+msgid "Getting video links"
+msgstr "Pobieranie linków wideo"
+
+msgctxt "#30016"
+msgid "Please wait..."
+msgstr "Proszę czekać..."
+
+msgctxt "#30017"
+msgid "while getting"
+msgstr "podczas pobierania"
+
+msgctxt "#30018"
+msgid "Removed"
+msgstr "Usunięte"
+
+msgctxt "#30019"
+msgid "Added"
+msgstr "Dodane"
+
+msgctxt "#30024"
+msgid "No MusicBrainz ID found"
+msgstr "Nie znaleziono identyfikatora MusicBrainz"
+
+msgctxt "#30025"
+msgid "No videos found for this artist"
+msgstr "Nie znaleziono filmów dla tego wykonawcy"
+
+msgctxt "#30026"
+msgid "Music Videos"
+msgstr "Teledyski"
+
+msgctxt "#30027"
+msgid "All videos are already in your library"
+msgstr "Wszystkie filmy są już w Twojej bibliotece"
+
+msgctxt "#30028"
+msgid "Missing Music Videos"
+msgstr "Brakujące teledyski"
+
+msgctxt "#30029"
+msgid "Finished"
+msgstr "Zakończono"
+
+msgctxt "#32001"
+msgid "Settings"
+msgstr "Ustawienia"
+
+msgctxt "#32002"
+msgid "Additional Data Sources"
+msgstr "Dodatkowe źródła danych"
+
+msgctxt "#32003"
+msgid "Wikipedia"
+msgstr "Wikipedia"
+
+msgctxt "#32004"
+msgid "Last.fm"
+msgstr "Last.fm"
+
+msgctxt "#32005"
+msgid "Last.fm API Settings"
+msgstr "Ustawienia API Last.fm"
+
+msgctxt "#32006"
+msgid "Enter your own Last.fm API key (recommended)"
+msgstr "Wprowadź własny klucz API Last.fm (zalecane)"
+
+msgctxt "#32007"
+msgid "Note: TheAudioDB is always enabled as primary source"
+msgstr "Uwaga: TheAudioDB jest zawsze włączony jako główne źródło"
+
+msgctxt "#32008"
+msgid "Auto-Save data"
+msgstr "Automatyczne zapisywanie danych"
+
+msgctxt "#32009"
+msgid "Save biography/album description to Kodi database if empty"
+msgstr "Zapisz biografię/opis albumu w bazie danych Kodi, jeśli pusta"
+
+msgctxt "#32010"
+msgid "Free API key at https://www.last.fm/api/account/create"
+msgstr "Bezpłatne API key pod adresem https://www.last.fm/api/account/create"
+
+msgctxt "#32011"
+msgid "Auto-Save Artwork"
+msgstr "Automatyczny zapis grafik"
+
+msgctxt "#32012"
+msgid "Save artwork to Kodi database if empty"
+msgstr "Zapisz grafiki w bazie danych Kodi, jeśli są puste"
+
+msgctxt "#32013"
+msgid "Save biography to Kodi database?"
+msgstr "Zapisać biografię w bazie danych Kodi?"
+
+msgctxt "#32014"
+msgid "Save album description to Kodi database?"
+msgstr "Zapisać opis albumu w bazie danych Kodi?"

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="128">
+        <setting label="32002" type="lsep"/>
+        <setting id="biography_use_wikipedia" type="bool" label="32003" default="true"/>
+        <setting id="biography_use_lastfm" type="bool" label="32004" default="true"/>
+        <setting label="32010" type="action" action="" visible="eq(-1,true)"/>
+        <setting id="lastfm_api_key" type="text" label="32006" default="" enable="eq(-2,true)" visible="eq(-2,true)"/>
+        <setting label="32007" type="lsep"/>
+        <setting label="32008" type="lsep"/>
+        <setting id="biography_auto_save" type="bool" label="32009" default="false"/>
+        <setting label="32011" type="lsep"/>
+        <setting id="artwork_auto_save" type="bool" label="32012" default="false"/>
+    </category>
+</settings>

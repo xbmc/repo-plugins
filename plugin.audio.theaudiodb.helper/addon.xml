@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.theaudiodb.helper" name="TheAudioDB Helper" version="1.0.3" provider-name="manfeed, black_eagle">
+<addon id="plugin.audio.theaudiodb.helper" name="TheAudioDB Helper" version="1.0.4" provider-name="manfeed, black_eagle">
 	<requires>
-		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="xbmc.python" version="3.0.1"/>
 	</requires>
 	<!-- Script entry point -->
 	<extension point="xbmc.python.script" library="default.py">
@@ -17,7 +17,7 @@
 		<description lang="es_ES">Busca videoclips, biografías, artistas similares y metadatos en TheAudioDB para los artistas de tu biblioteca musical. Proporciona resolución de DBID del artista, obtención de biografías desde múltiples fuentes (TheAudioDB, Wikipedia, Last.fm) y artistas similares con imágenes. Requiere soporte en el skin y el plugin de YouTube funcionando.</description>
 		<license>GPL-3.0-or-later</license>
 		<source>https://github.com/manfeed/plugin.audio.theaudiodb.helper</source>
-		<news>v1.0.3 - Initial release. Code quality improvements, duplicate code refactored, crash fix in get_songs_for_artist, Kodi repo compliance.</news>
+		<news>v1.0.4 - Robustness fixes: safe JSON-RPC construction, error handling in get_songs_for_artist, resource cleanup in process_all_artists, solid icon, xbmc.python 3.0.1.</news>
 		<assets>
 			<icon>resources/art/icon.png</icon>
 			<fanart>resources/art/fanart.jpg</fanart>

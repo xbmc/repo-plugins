@@ -994,17 +994,24 @@ def update_songs(songstoupdate):
         if vidthumb is None:
             vidthumb = ""
             have_art = False
-        rpc_string = (
-            '{"jsonrpc":"2.0","id":1,"method":"audioLibrary.SetSongDetails", \
-             "params":{"songid":' + str(songid) + ',\
-             "songvideourl": "' + vidurl + '"')
-        if have_art:
-            rpc_string = (
-                rpc_string + ', "art": {"videothumb": "' + vidthumb + '"}}}')
-        else:
-            rpc_string = rpc_string + '}}'
 
-        xbmc.executeJSONRPC(rpc_string)
+        # Build JSON-RPC call safely with json.dumps to avoid injection
+        # issues when URLs contain quotes or special characters
+        params = {
+            "songid": songid,
+            "songvideourl": vidurl
+        }
+        if have_art:
+            params["art"] = {"videothumb": vidthumb}
+
+        rpc = {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "AudioLibrary.SetSongDetails",
+            "params": params
+        }
+
+        xbmc.executeJSONRPC(json.dumps(rpc))
         updated_count += 1
         xbmc.sleep(5)
     
@@ -1012,11 +1019,30 @@ def update_songs(songstoupdate):
 
 
 def get_songs_for_artist(artist_id):
-    getsongs = xbmc.executeJSONRPC('{"jsonrpc":"2.0", \
-    "id":1,"method":"audioLibrary.GetSongs", \
-    "params":{"filter": {"artistid": ' + artist_id + '}, \
-    "properties":["musicbrainztrackid", "title"]}}')
-    thesongs = json.loads(getsongs)
+    try:
+        # Validate artist_id is numeric to avoid malformed JSON
+        artist_id_int = int(artist_id)
+    except (ValueError, TypeError):
+        log("get_songs_for_artist: invalid artist_id: " + str(artist_id),
+            xbmc.LOGERROR)
+        return []
+
+    query = {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "AudioLibrary.GetSongs",
+        "params": {
+            "filter": {"artistid": artist_id_int},
+            "properties": ["musicbrainztrackid", "title"]
+        }
+    }
+    try:
+        getsongs = xbmc.executeJSONRPC(json.dumps(query))
+        thesongs = json.loads(getsongs)
+    except (ValueError, TypeError) as e:
+        log("get_songs_for_artist: failed to parse RPC response for "
+            "artist " + str(artist_id) + ": " + str(e), xbmc.LOGERROR)
+        return []
     songlist = thesongs.get('result', {}).get('songs', [])
     return songlist
 
@@ -1110,74 +1136,88 @@ def process_all_artists():
     bg.show()
     
     monitor = xbmc.Monitor()
-    while not monitor.abortRequested():
-        artist_list = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, \
-        "method": "AudioLibrary.GetArtists", \
-        "params": {"sort": { "order": "ascending", \
-        "ignorearticle": true, "method": "label", \
-        "albumartistsonly": true}, "properties":["musicbrainzartistid"]}}')
-        artistlist = json.loads(artist_list)
-        total_artists = artistlist['result']['limits']['total']
-        log(LANGUAGE(30008))
-        dialog = xbmcgui.DialogProgress()
-        dialog.create(LANGUAGE(30015), LANGUAGE(30016))
-        start_value = 0
-        xbmc.sleep(100)
-        
-        # Contadores para el resumen final
-        processed_count = 0
-        skipped_count = 0
-        total_videos_added = 0
-
-        for artist in artistlist['result']['artists']:
-            if monitor.abortRequested() or dialog.iscanceled():
+    dialog = None
+    try:
+        while not monitor.abortRequested():
+            artist_list = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, \
+            "method": "AudioLibrary.GetArtists", \
+            "params": {"sort": { "order": "ascending", \
+            "ignorearticle": true, "method": "label", \
+            "albumartistsonly": true}, "properties":["musicbrainzartistid"]}}')
+            try:
+                artistlist = json.loads(artist_list)
+            except (ValueError, TypeError) as e:
+                log("process_all_artists: failed to parse artist list: "
+                    + str(e), xbmc.LOGERROR)
                 break
-            start_value += 1
-            artist_mbid_list = artist.get('musicbrainzartistid', [])
-            artist_mbid = artist_mbid_list[0] if artist_mbid_list else ""
-            artist_name = artist['artist']
-            artist_id = artist['artistid']
-            log(LANGUAGE(30009) + artist_name)
+            total_artists = artistlist['result']['limits']['total']
+            log(LANGUAGE(30008))
+            dialog = xbmcgui.DialogProgress()
+            dialog.create(LANGUAGE(30015), LANGUAGE(30016))
+            start_value = 0
+            xbmc.sleep(100)
             
-            # If no MBID, try to get it from artist name
-            if artist_mbid is None or artist_mbid == "":
-                log(LANGUAGE(30010) + artist_name + " - Trying name search...")
-                artist_mbid = get_mbid_from_artist_name(artist_name)
+            # Contadores para el resumen final
+            processed_count = 0
+            skipped_count = 0
+            total_videos_added = 0
+
+            for artist in artistlist['result']['artists']:
+                if monitor.abortRequested() or dialog.iscanceled():
+                    break
+                start_value += 1
+                artist_mbid_list = artist.get('musicbrainzartistid', [])
+                artist_mbid = artist_mbid_list[0] if artist_mbid_list else ""
+                artist_name = artist['artist']
+                artist_id = artist['artistid']
+                log(LANGUAGE(30009) + artist_name)
                 
-                # If still no MBID, skip this artist
-                if not artist_mbid:
-                    skipped_count += 1
-                    dialog.update(
-                        int(start_value * 100 / total_artists),
-                        LANGUAGE(30011) + artist_name)
+                # If no MBID, try to get it from artist name
+                if artist_mbid is None or artist_mbid == "":
+                    log(LANGUAGE(30010) + artist_name + " - Trying name search...")
+                    artist_mbid = get_mbid_from_artist_name(artist_name)
+                    
+                    # If still no MBID, skip this artist
+                    if not artist_mbid:
+                        skipped_count += 1
+                        dialog.update(
+                            int(start_value * 100 / total_artists),
+                            LANGUAGE(30011) + artist_name)
+                        xbmc.sleep(100)
+                        continue
+                
+                xbmc.sleep(100)
+                dialog.update(
+                    int(start_value * 100 / total_artists),
+                    LANGUAGE(30012) + artist_name)
+                songlist = get_songs_for_artist(str(artist_id))
+                mvid_data = get_mvid_data(artist_mbid)
+                mvidlist = mvid_data.get('mvids') or []
+                if not mvidlist:
+                    log(LANGUAGE(30013) + artist_name)
                     xbmc.sleep(100)
                     continue
+                videos_added = match_mvids_to_songs(mvidlist, songlist)
+                if videos_added > 0:
+                    total_videos_added += videos_added
+                    processed_count += 1
             
-            xbmc.sleep(100)
-            dialog.update(
-                int(start_value * 100 / total_artists),
-                LANGUAGE(30012) + artist_name)
-            songlist = get_songs_for_artist(str(artist_id))
-            mvid_data = get_mvid_data(artist_mbid)
-            mvidlist = mvid_data.get('mvids') or []
-            if not mvidlist:
-                log(LANGUAGE(30013) + artist_name)
-                xbmc.sleep(100)
-                continue
-            videos_added = match_mvids_to_songs(mvidlist, songlist)
-            if videos_added > 0:
-                total_videos_added += videos_added
-                processed_count += 1
-        
-        dialog.close()
-        bg.close()
-        
+            # Notificación final simplificada
+            xbmcgui.Dialog().notification(LANGUAGE(30000), LANGUAGE(30029), ICON, 3000)  # "Finished"
+            break
+    finally:
+        # Always cleanup resources, even if an exception occurred
+        if dialog is not None:
+            try:
+                dialog.close()
+            except Exception:
+                pass
+        try:
+            bg.close()
+        except Exception:
+            pass
         # Clear Window Property - scan finished
         xbmcgui.Window(10000).clearProperty('theaudiodb.scanning.videolinks')
-        
-        # Notificación final simplificada
-        xbmcgui.Dialog().notification(LANGUAGE(30000), LANGUAGE(30029), ICON, 3000)  # "Finished"
-        break
 
 
 # ---------------------------------------------------------------------

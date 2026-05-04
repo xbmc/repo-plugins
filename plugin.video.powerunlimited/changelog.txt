@@ -1,3 +1,6 @@
+v1.0.9 (2026-05-03)
+- Marked addon BROKEN because website does not contain videos anymore
+
 v1.0.8 (2024-10-04)
 - updated the addon to use the changed website
 

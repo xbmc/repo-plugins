@@ -45,10 +45,14 @@ def get_events():
         for event_section in buffer_url.split(event_entry_sep)[1:]:
             event_name = l.find_first(event_section, name_pattern)
             ripe_event = l.find_first(event_name, event_pattern)
-            if ripe_event == "60": # From this event to backwards there are no playable videos
+            if ripe_event == "60": # From this event to backwards there are no playable videos.
                 last_page = True
                 break # Into the presentations section.
-            event_url = 'https://ripe%s.ripe.net/archives/' % ripe_event
+            if ripe_event >= "91": # From this event onwards the URL changes.
+                event_url = 'https://ripe%s.ripe.net/programme/meeting-plan/sessions/' % ripe_event
+            else :
+                event_url = 'https://ripe%s.ripe.net/archives/' % ripe_event
+
             site_name = l.find_first(event_section, site_pattern)
             dates_list = l.find_multiple(event_section, date_pattern)
             if len(dates_list) == 2:
@@ -71,6 +75,10 @@ def get_events():
 
 def get_videolist(url):
     """This function gets the video list from the RIPE website and returns them in a pretty data format."""
+
+    if "meeting-plan" in url:
+        return get_videolist_v2(url) # This URL contains the new webpage format and must be parsed in a different way.
+
     video_table_sep        = '<li><a href='
     video_url_pattern      = '"(.*?)"'
     root_url_pattern       = r'(https://ripe[0-9]+\.ripe\.net)'
@@ -131,10 +139,74 @@ def get_videolist(url):
     return video_list
 
 
+def get_videolist_v2(url):
+    """This function gets the video list from the RIPE website in the new format and returns them in a pretty data format."""
+    video_table_sep        = '<h1>All sessions</h1>'
+    video_section_sep      = '<li>'
+    video_url_pattern      = '<a href="([^"]+)"><i [^>]+></i>Video</a>'
+    video_title_pattern    = '<b><a href="[^"]+">(.*?)</a></b>'
+    video_speaker_sec      = '<span>(.*?)</span>'
+    video_speaker_pattern  = '<a href="[^"]+">(.*?)</a>'
+    fanart_pattern         = '<img src="([^"]+)" '
+    root_url_pattern       = r'(https://ripe[0-9]+\.ripe\.net)'
+
+    root_url   = l.find_first(url, root_url_pattern)
+    buffer_url = l.carga_web(url)
+    fanart     = l.find_first(buffer_url, fanart_pattern)
+    if fanart.startswith("/"):
+        fanart = root_url + fanart
+
+    l.log('fanart url: "%s"' % fanart)
+
+    video_list     = []
+    already_parsed = [] # Sometimes the videos are repeated into the list.
+    video_sections = buffer_url.split(video_table_sep)[1]
+
+    for video_section in video_sections.split(video_section_sep)[1:]:
+        video_url = l.find_first(video_section, video_url_pattern)
+        if not video_url or video_url in already_parsed:
+            continue
+        already_parsed.append(video_url)
+        if video_url.startswith("/"):
+            video_url = root_url + video_url
+        video_title = l.find_first(video_section, video_title_pattern)
+        title       = l.clean_title(video_title)
+        speaker_sec = l.find_first(video_section, video_speaker_sec)
+        speakers    = ""
+        for i, speaker in enumerate(l.find_multiple(speaker_sec, video_speaker_pattern)):
+            if i == 0:
+                speakers = speaker
+            else:
+                speakers = '%s, %s' % (speakers, speaker)
+        if speakers != "":
+            title = '%s - %s' % (speakers, title)
+
+        l.log('video_entry. title: "%s" url: "%s"' % (title, video_url))
+        video_entry = {
+            'url'        : video_url,
+            'title'      : title,
+            'plot'       : title,
+            'year'       : '',
+            'aired'      : '',
+            'genre'      : '',
+            'director'   : speakers,
+            'writer'     : speakers,
+            'studio'     : 'RIPE',
+            'tagline'    : '',
+            'credits'    : speakers,
+            'showlink'   : '',
+            'fanart'     : fanart,
+            'thumbnail'  : fanart,
+            'IsPlayable' : True,
+            }
+        video_list.append(video_entry)
+
+    return video_list
+
+
 def get_playable_url(url):
     """This function returns a playable URL fetching the video sources available"""
-    video_url_pattern = '(/archive/video/.*?mp4)["\']'
-    video_url_altpatt = '(/videos/.*?mp4)["\']'
+    video_url_pattern = '((?:/media/videos/|/archive/video/|/videos/).*?mp4)["\']'
     root_url_pattern  = r'(https://ripe[0-9]+\.ripe\.net)'
 
     if url.endswith('mp4'):
@@ -142,20 +214,14 @@ def get_playable_url(url):
         l.log('We have found this video_url with url "%s"' % url)
         return url
 
-    root_url     = l.find_first(url, root_url_pattern)
-
+    root_url   = l.find_first(url, root_url_pattern)
     buffer_url = l.carga_web(url)
     video_link = l.find_first(buffer_url, video_url_pattern)
     if video_link:
         playable_url = root_url + video_link
-        l.log('We have found this video_url with url_pattern1 "%s"' % playable_url)
+        l.log('We have found this video_url "%s"' % playable_url)
     else:
-        video_link = l.find_first(buffer_url, video_url_altpatt)
-        if video_link:
-            playable_url = root_url + video_link
-            l.log('We have found this video_url with alternative pattern  "%s"' % playable_url)
-        else:
-            playable_url = ''
-            l.log('We have not found any video for this url "%s"' % url)
+        playable_url = ''
+        l.log('We have not found any video for this url "%s"' % url)
 
     return playable_url

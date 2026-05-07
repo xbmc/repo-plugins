@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.aeon.tajo.info" name="Aeon Tajo Info" version="1.0.2" provider-name="manfeed, sualfred">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+        <import addon="script.module.requests" version="2.9.1"/>
+    </requires>
+    <extension point="xbmc.python.script" library="default.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Aeon Tajo Info Script</summary>
+        <description lang="en_GB">Helper script to provide The Movie DB informations for persons, shows and movies to the Aeon Tajo skin. Based on script.embuary.info from sualfred.</description>
+        <platform>all</platform>
+        <license>Apache-2.0</license>
+        <news>v1.0.2 - Removed unsafe eval(), settings.xml migrated to v2 format, setInfo migrated to InfoTagVideo, solid icon, optimized fanart, xbmc.python 3.0.1.</news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

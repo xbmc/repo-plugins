@@ -1,0 +1,257 @@
+# Aeon Tajo Info language file
+# Addon Name: Aeon Tajo Info
+# Addon id: script.aeon.tajo.info
+# Addon Provider: manfeed, sualfred
+msgid ""
+msgstr ""
+"Project-Id-Version: script.aeon.tajo.info\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-30 18:00+0000\n"
+"PO-Revision-Date: 2026-03-30 18:00+0000\n"
+"Last-Translator: manfeed\n"
+"Language-Team: Slovak (Slovakia)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sk_SK\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Error"
+msgstr "Chyba"
+
+msgctxt "#32001"
+msgid "This is a tool to provide features to a skin and requires skin integration."
+msgstr "Toto je nástroj na poskytovanie funkcií pre vzhľad a vyžaduje integráciu so vzhľadom."
+
+msgctxt "#32002"
+msgid "(Get a free API key on www.omdbapi.com)"
+msgstr "(Získajte voľný API kľúč na www.omdbapi.com)"
+
+msgctxt "#32003"
+msgid "Certification country"
+msgstr "Krajina certifikácie"
+
+msgctxt "#32019"
+msgid "No information found"
+msgstr "Žiadne informácie neboli nájdené"
+
+msgctxt "#32022"
+msgid "Invalid TheMovieDB API key"
+msgstr "Neplatný API kľúč k TheMovieDB"
+
+msgctxt "#32004"
+msgid "Person"
+msgstr "Osoba"
+
+msgctxt "#32005"
+msgid "Search for"
+msgstr "Vyhľadať"
+
+msgctxt "#32006"
+msgid "Age"
+msgstr "Vek"
+
+msgctxt "#32007"
+msgid "Place of birth"
+msgstr "Miesto narodenia"
+
+msgctxt "#32008"
+msgid "Facts"
+msgstr "Fakty"
+
+msgctxt "#32009"
+msgid "Similar"
+msgstr "Podobné"
+
+msgctxt "#32010"
+msgid "Images"
+msgstr "Obrázky"
+
+msgctxt "#32011"
+msgid "Premiered"
+msgstr "Premiéra"
+
+msgctxt "#32012"
+msgid "Retail"
+msgstr "Retail"
+
+msgctxt "#32013"
+msgid "Budget"
+msgstr "Rozpočet"
+
+msgctxt "#32014"
+msgid "Revenue"
+msgstr "Tržby"
+
+msgctxt "#32015"
+msgid "Awards"
+msgstr "Ocenenia"
+
+msgctxt "#32016"
+msgid "Seasons"
+msgstr "Série"
+
+msgctxt "#32017"
+msgid "Known for"
+msgstr "Známa(y) pre"
+
+msgctxt "#32018"
+msgid "Crew"
+msgstr "Obsadenie"
+
+msgctxt "#32023"
+msgid "API key"
+msgstr "API kľúč"
+
+msgctxt "#32020"
+msgid "Developer settings"
+msgstr "Vyrovnávacia pamäť"
+
+msgctxt "#32021"
+msgid "Enable caching (highly recommended - only turn off for debugging)"
+msgstr "Ukladať stiahnuté údaje do vyrovnávacej pamäte"
+
+msgctxt "#32024"
+msgid "Default language"
+msgstr "Predvolený jazyk"
+
+msgctxt "#32025"
+msgid "items in your library"
+msgstr "položky vo vašej knižnici"
+
+msgctxt "#32026"
+msgid "Misc."
+msgstr "Rôzne"
+
+msgctxt "#32027"
+msgid "Hide person appearances in reality/talk/news shows"
+msgstr "Nezobrazovať účinkovanie osoby v rôznych šou "
+
+msgctxt "#32028"
+msgid "Hide person appearances in specials/documentaries/behind the scenes movies"
+msgstr "Skryť účinkovanie osôb v špeciáloch/dokumentoch/zákulisných filmoch"
+
+msgctxt "#32029"
+msgid "Top rated movies"
+msgstr "Najlepšie hodnotené filmy"
+
+msgctxt "#32030"
+msgid "Now playing movies"
+msgstr "Práve prehrávané filmy"
+
+msgctxt "#32031"
+msgid "Upcoming movies"
+msgstr "Prichádzajúce filmy"
+
+msgctxt "#32032"
+msgid "Popular movies"
+msgstr "Populárne filmy"
+
+msgctxt "#32033"
+msgid "Top rated TV shows"
+msgstr "Najlepšie hodnotené seriály"
+
+msgctxt "#32034"
+msgid "Popular TV shows"
+msgstr "Populárne seriály"
+
+msgctxt "#32035"
+msgid "TV shows airing today"
+msgstr "Dnes vysielané seriály"
+
+msgctxt "#32036"
+msgid "TV shows airing in the next 7 days"
+msgstr "Seriály vysielané v najbližších 7 dňoch"
+
+msgctxt "#32037"
+msgid "Collection"
+msgstr "Kolekcia"
+
+msgctxt "#32039"
+msgid "Guest stars"
+msgstr "Hosťujúce hviezdy"
+
+msgctxt "#32040"
+msgid "Season"
+msgstr "Séria"
+
+msgctxt "#32038"
+msgid "Widgets"
+msgstr "Miniaplikácie"
+
+msgctxt "#32041"
+msgid "Hide items from similar movies if they are part of the collection"
+msgstr "Skryť položky z podobných filmov, ak sú súčasťou kolekcie"
+
+msgctxt "#32042"
+msgid "Trending movies"
+msgstr "Filmy v trende"
+
+msgctxt "#32043"
+msgid "Trending shows"
+msgstr "Seriály v trende"
+
+msgctxt "#32044"
+msgid "Hide upcoming items"
+msgstr "Skryť pripravované položky"
+
+msgctxt "#32045"
+msgid "Allow items of the next [n] days"
+msgstr "Povoliť tie, ktoré výjdu v týchto najbližších dňoch"
+
+msgctxt "#32046"
+msgid "Watched episodes"
+msgstr "Pozreté epizódy"
+
+msgctxt "#32047"
+msgid "Install context menu addon"
+msgstr "Nainštalovať doplnok kontextového menu"
+
+msgctxt "#32048"
+msgid "Next episode"
+msgstr "Nasledujúca epizóda"
+
+msgctxt "#32049"
+msgid "Discover"
+msgstr "Objavovať"
+
+msgctxt "#32050"
+msgid "Discover movies"
+msgstr "Objavovať filmy"
+
+msgctxt "#32051"
+msgid "Discover TV shows"
+msgstr "Objavovať TV seriály"
+
+msgctxt "#32052"
+msgid "Discover movies by year"
+msgstr "Objavovať filmy podľa roku"
+
+msgctxt "#32053"
+msgid "Discover movies by genre"
+msgstr "Objavovať filmy podľa žánru"
+
+msgctxt "#32054"
+msgid "Discover TV shows by year"
+msgstr "Objavovať TV seriály podľa roku"
+
+msgctxt "#32055"
+msgid "Discover TV shows by genre"
+msgstr "Objavovať TV seriály podľa žánru"
+
+msgctxt "#32056"
+msgid "Previous page"
+msgstr "Predchádzajúca stránka"
+
+msgctxt "#32057"
+msgid "Discover people"
+msgstr "Objavovať osoby"
+
+msgctxt "#32058"
+msgid "Next 7 days"
+msgstr "Nasledujúcich 7 dní"
+
+msgctxt "#32059"
+msgid "Next airing episodes of your TV show library"
+msgstr "Najbližšie vysielané epizódy z tvojej TV knižnice"

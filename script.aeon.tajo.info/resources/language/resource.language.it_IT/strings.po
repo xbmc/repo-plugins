@@ -1,0 +1,257 @@
+# Aeon Tajo Info language file
+# Addon Name: Aeon Tajo Info
+# Addon id: script.aeon.tajo.info
+# Addon Provider: manfeed, sualfred
+msgid ""
+msgstr ""
+"Project-Id-Version: script.aeon.tajo.info\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-30 18:00+0000\n"
+"PO-Revision-Date: 2026-03-30 18:00+0000\n"
+"Last-Translator: manfeed\n"
+"Language-Team: Italian (Italy)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it_IT\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Error"
+msgstr "Errore"
+
+msgctxt "#32001"
+msgid "This is a tool to provide features to a skin and requires skin integration."
+msgstr "Questo è uno strumento per fornire funzionalità a una skin e richiede l'integrazione con la skin."
+
+msgctxt "#32002"
+msgid "(Get a free API key on www.omdbapi.com)"
+msgstr "(Ottieni una chiave API gratuita presso www.omdbapi.com)"
+
+msgctxt "#32003"
+msgid "Certification country"
+msgstr "Nazione certificata"
+
+msgctxt "#32019"
+msgid "No information found"
+msgstr "Nessuna informazione trovata"
+
+msgctxt "#32022"
+msgid "Invalid TheMovieDB API key"
+msgstr "Chiave API TheMovieDB invalida"
+
+msgctxt "#32004"
+msgid "Person"
+msgstr "Persona"
+
+msgctxt "#32005"
+msgid "Search for"
+msgstr "Cerca per"
+
+msgctxt "#32006"
+msgid "Age"
+msgstr "Età"
+
+msgctxt "#32007"
+msgid "Place of birth"
+msgstr "Luogo di nascita"
+
+msgctxt "#32008"
+msgid "Facts"
+msgstr "Fatti"
+
+msgctxt "#32009"
+msgid "Similar"
+msgstr "Simili"
+
+msgctxt "#32010"
+msgid "Images"
+msgstr "Immagini"
+
+msgctxt "#32011"
+msgid "Premiered"
+msgstr "Prima"
+
+msgctxt "#32012"
+msgid "Retail"
+msgstr "Pubblico"
+
+msgctxt "#32013"
+msgid "Budget"
+msgstr "Budget"
+
+msgctxt "#32014"
+msgid "Revenue"
+msgstr "Incassi"
+
+msgctxt "#32015"
+msgid "Awards"
+msgstr "Riconoscimenti"
+
+msgctxt "#32016"
+msgid "Seasons"
+msgstr "Stagioni"
+
+msgctxt "#32017"
+msgid "Known for"
+msgstr "Conosciuto per"
+
+msgctxt "#32018"
+msgid "Crew"
+msgstr "Troupe"
+
+msgctxt "#32023"
+msgid "API key"
+msgstr "Chiave API"
+
+msgctxt "#32020"
+msgid "Developer settings"
+msgstr "Caching"
+
+msgctxt "#32021"
+msgid "Enable caching (highly recommended - only turn off for debugging)"
+msgstr "Abilita caching informazioni acquisite"
+
+msgctxt "#32024"
+msgid "Default language"
+msgstr "Lingua predefinita"
+
+msgctxt "#32025"
+msgid "items in your library"
+msgstr "Oggetti libreria"
+
+msgctxt "#32026"
+msgid "Misc."
+msgstr "Varie"
+
+msgctxt "#32027"
+msgid "Hide person appearances in reality/talk/news shows"
+msgstr "Nasconde le persone apparse in reality/talk show/notiziari"
+
+msgctxt "#32028"
+msgid "Hide person appearances in specials/documentaries/behind the scenes movies"
+msgstr "Nascondi apparizioni in speciali/documentari/film dietro le quinte"
+
+msgctxt "#32029"
+msgid "Top rated movies"
+msgstr "Film più votati"
+
+msgctxt "#32030"
+msgid "Now playing movies"
+msgstr "Film ora in riproduzione"
+
+msgctxt "#32031"
+msgid "Upcoming movies"
+msgstr "Film in arrivo"
+
+msgctxt "#32032"
+msgid "Popular movies"
+msgstr "Film popolari"
+
+msgctxt "#32033"
+msgid "Top rated TV shows"
+msgstr "Programmi TV più votati"
+
+msgctxt "#32034"
+msgid "Popular TV shows"
+msgstr "Programmi TV popolari"
+
+msgctxt "#32035"
+msgid "TV shows airing today"
+msgstr "Programmi TV in onda oggi"
+
+msgctxt "#32036"
+msgid "TV shows airing in the next 7 days"
+msgstr "Programmi TV in onda nei prossimi 7 giorni"
+
+msgctxt "#32037"
+msgid "Collection"
+msgstr "Collezione"
+
+msgctxt "#32039"
+msgid "Guest stars"
+msgstr "Guest stars"
+
+msgctxt "#32040"
+msgid "Season"
+msgstr "Stagione"
+
+msgctxt "#32038"
+msgid "Widgets"
+msgstr "Widgets"
+
+msgctxt "#32041"
+msgid "Hide items from similar movies if they are part of the collection"
+msgstr "Nascondi elementi da film simili se fanno parte della raccolta"
+
+msgctxt "#32042"
+msgid "Trending movies"
+msgstr "Film di tendenza"
+
+msgctxt "#32043"
+msgid "Trending shows"
+msgstr "Programmi di tendenza"
+
+msgctxt "#32044"
+msgid "Hide upcoming items"
+msgstr "Nascondi elementi in arrivo"
+
+msgctxt "#32045"
+msgid "Allow items of the next [n] days"
+msgstr "Consenti gli elementi dei prossimi [n] giorni"
+
+msgctxt "#32046"
+msgid "Watched episodes"
+msgstr "Episodi visti"
+
+msgctxt "#32047"
+msgid "Install context menu addon"
+msgstr "Installa addon menu contestuale"
+
+msgctxt "#32048"
+msgid "Next episode"
+msgstr "Prossimo episodio"
+
+msgctxt "#32049"
+msgid "Discover"
+msgstr "Scopri"
+
+msgctxt "#32050"
+msgid "Discover movies"
+msgstr "Scopri film"
+
+msgctxt "#32051"
+msgid "Discover TV shows"
+msgstr "Scopri serie TV"
+
+msgctxt "#32052"
+msgid "Discover movies by year"
+msgstr "Scopri film per anno"
+
+msgctxt "#32053"
+msgid "Discover movies by genre"
+msgstr "Scopri film per genere"
+
+msgctxt "#32054"
+msgid "Discover TV shows by year"
+msgstr "Scopri serie TV per anno"
+
+msgctxt "#32055"
+msgid "Discover TV shows by genre"
+msgstr "Scopri serie TV per genere"
+
+msgctxt "#32056"
+msgid "Previous page"
+msgstr "Pagina precedente"
+
+msgctxt "#32057"
+msgid "Discover people"
+msgstr "Scopri persone"
+
+msgctxt "#32058"
+msgid "Next 7 days"
+msgstr "Prossimi 7 giorni"
+
+msgctxt "#32059"
+msgid "Next airing episodes of your TV show library"
+msgstr "Prossimi episodi in onda dalla tua libreria TV"

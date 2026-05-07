@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<animation effect="fade" start="0" end="100" time="400">WindowOpen</animation>
+	<animation effect="fade" start="100" end="0" time="300">WindowClose</animation>
+	<controls>
+		<control type="group">
+			<control type="image">
+				<width>1920</width>
+				<height>1080</height>
+				<aspectratio>scale</aspectratio>
+				<texture>colors/black.png</texture>
+			</control>
+			<control type="group">
+				<animation effect="fade" start="100" end="97" time="0" condition="true">Conditional</animation>
+				<control type="image">
+					<width>1920</width>
+					<height>1080</height>
+					<aspectratio>scale</aspectratio>
+					<texture colordiffuse="FF0E597E">backgrounds/primary.jpg</texture>
+				</control>
+			</control>
+		</control>
+		<control type="list" id="1">
+			<description>REQUIRED: The list of images</description>
+			<width>1920</width>
+			<height>1080</height>
+			<orientation>horizontal</orientation>
+			<scrolltime>0</scrolltime>
+			<pagecontrol>2</pagecontrol>
+			<itemlayout/>
+			<focusedlayout width="1920" height="1080"/>
+		</control>
+		<control type="image">
+			<width>1920</width>
+			<height>1080</height>
+			<aspectratio>keep</aspectratio>
+			<texture>$INFO[Container(1).ListItem.Icon]</texture>
+			<fadetime>500</fadetime>
+		</control>
+		<control type="scrollbar" id="2">
+			<description>REQUIRED: It's the default control, which is going to be focused on window init.</description>
+			<bottom>0</bottom>
+			<height>5</height>
+			<width>1920</width>
+			<orientation>horizontal</orientation>
+			<showonepage>false</showonepage>
+			<texturesliderbackground colordiffuse="50000000">white.jpg</texturesliderbackground>
+			<texturesliderbar colordiffuse="ffffffff">white.jpg</texturesliderbar>
+			<texturesliderbarfocus colordiffuse="ffffffff">white.jpg</texturesliderbarfocus>
+			<animation effect="fade" time="300" start="100" end="0" condition="System.IdleTime(2)">Conditional</animation>
+		</control>
+	</controls>
+</window>

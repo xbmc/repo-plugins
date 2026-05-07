@@ -1,0 +1,1899 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<defaultcontrol>100</defaultcontrol>
+	<onload>SetProperty(onnext,SetFocus(100))</onload>
+	<onload>SetProperty(onback_10052,SetFocus(100))</onload>
+	<onload>SetProperty(onback_10053,SetFocus(100))</onload>
+	<onload>SetProperty(onback_10054,SetFocus(100))</onload>
+	<onload>SetProperty(onback_10055,SetFocus(100))</onload>
+	<onload>SetProperty(onback_10056,SetFocus(100))</onload>
+	<onload>SetProperty(onback_10057,SetFocus(100))</onload>
+	<onload>SetProperty(onback_10058,SetFocus(100))</onload>
+	<onload>SetProperty(onback_10059,SetFocus(100))</onload>
+	<controls>
+		<!-- Storage container for the item details -->
+		<control type="list" id="10051">
+			<top>-3000</top>
+			<left>-3000</left>
+			<width>1</width>
+			<height>1</height>
+			<itemlayout/>
+			<focusedlayout/>
+		</control>
+		<!-- background -->
+		<control type="group">
+			<animation effect="fade" start="0" end="100" time="400">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" time="300" condition="String.IsEmpty(Window(home).Property(script.aeon.tajo.info-nextcall))">WindowClose</animation>
+			<animation effect="fade" start="100" end="0" time="0" condition="!String.IsEmpty(Window(home).Property(script.aeon.tajo.info-nextcall))">WindowClose</animation>
+			<animation effect="fade" time="400">VisibleChange</animation>
+			<control type="image">
+				<width>1920</width>
+				<height>1080</height>
+				<aspectratio>scale</aspectratio>
+				<texture>colors/black.png</texture>
+			</control>
+			<control type="group">
+				<animation effect="fade" start="100" end="97" time="0" condition="true">Conditional</animation>
+				<control type="image">
+					<width>1920</width>
+					<height>1080</height>
+					<aspectratio>scale</aspectratio>
+					<texture colordiffuse="FF0E597E">backgrounds/primary.jpg</texture>
+				</control>
+			</control>
+			<control type="image">
+				<width>1920</width>
+				<height>1080</height>
+				<aspectratio>scale</aspectratio>
+				<fadetime>400</fadetime>
+				<animation effect="fade" time="400">VisibleChange</animation>
+				<texture background="true" colordiffuse="37FFFFFF">$INFO[Container(10051).ListItem.Art(fanart)]</texture>
+			</control>
+		</control>
+		<!-- infos -->
+		<control type="grouplist" id="50">
+			<animation type="WindowOpen">
+				<effect type="fade" start="0" end="100" time="300" tween="sine" easing="out" />
+				<effect type="slide" start="320" end="0" time="400" tween="cubic" easing="out" />
+			</animation>
+			<animation type="WindowCLose" condition="String.IsEmpty(Window(home).Property(script.aeon.tajo.info-nextcall))">
+				<effect type="fade" start="100" end="0" time="300" tween="sine" easing="out" />
+				<effect type="slide" start="0" end="320" time="300" tween="cubic" easing="out" />
+			</animation>
+			<animation type="WindowCLose" condition="!String.IsEmpty(Window(home).Property(script.aeon.tajo.info-nextcall))">
+				<effect type="fade" start="100" end="0" time="0" tween="sine" easing="out" />
+			</animation>
+			<width>1920</width>
+			<height>1080</height>
+			<orientation>vertical</orientation>
+			<scrolltime tween="cubic" easing="out">500</scrolltime>
+			<itemgap>-210</itemgap>
+			<usecontrolcoords>true</usecontrolcoords>
+			<!-- Meta -->
+			<control type="group">
+				<top>110</top>
+				<height>900</height>
+				<!-- poster -->
+				<control type="group">
+					<left>103</left>
+					<width>500</width>
+					<height>750</height>
+					<control type="image">
+						<left>-20</left>
+						<top>-20</top>
+						<width>540</width>
+						<height>790</height>
+						<texture>dialogs/dialog-bg-nobo.png</texture>
+						<bordertexture border="21">overlays/shadow.png</bordertexture>
+						<bordersize>20</bordersize>
+					</control>
+					<control type="image">
+						<width>500</width>
+						<height>750</height>
+						<texture fallback="DefaultVideo.png" background="true">$INFO[Container(10051).ListItem.Art(thumb)]</texture>
+						<aspectratio>scale</aspectratio>
+					</control>
+					<control type="group">
+						<visible>Integer.IsGreater(Container(10051).ListItem.Playcount,0)</visible>
+						<control type="image">
+							<left>0</left>
+							<bottom>0</bottom>
+							<width>80</width>
+							<height>80</height>
+							<texture>overlays/overlay-bg.png</texture>
+						</control>
+						<control type="image">
+							<left>5</left>
+							<bottom>5</bottom>
+							<width>32</width>
+							<height>32</height>
+							<texture>icons/OverlayWatched.png</texture>
+						</control>
+					</control>
+					<control type="group">
+						<visible>!String.IsEmpty(Container(10051).ListItem.DBID)</visible>
+						<control type="image">
+							<right>0</right>
+							<bottom>0</bottom>
+							<width>80</width>
+							<height>80</height>
+							<texture flipx="true">overlays/overlay-bg.png</texture>
+						</control>
+						<control type="image">
+							<right>5</right>
+							<bottom>5</bottom>
+							<width>32</width>
+							<height>32</height>
+							<texture>icons/OverlayLocal.png</texture>
+						</control>
+					</control>
+				</control>
+				<!-- meta -->
+				<control type="group">
+					<left>650</left>
+					<right>103</right>
+					<!-- plot -->
+					<control type="image">
+						<top>-11</top>
+						<left>-21</left>
+						<right>339</right>
+						<height>640</height>
+						<texture border="21">dialogs/dialog-bg.png</texture>
+					</control>
+					<control type="textbox">
+						<top>20</top>
+						<left>15</left>
+						<right>375</right>
+						<height max="580">auto</height>
+						<align>justify</align>
+						<aligny>top</aligny>
+						<label fallback="19055">$INFO[Container(10051).ListItem.Tagline,[B],[/B][CR][CR]]$INFO[Container(10051).ListItem.Plot]</label>
+						<font>font13</font>
+						<textcolor>ffffffff</textcolor>
+						<shadowcolor>50000000</shadowcolor>
+						<autoscroll delay="6000" time="3000" repeat="10000">true</autoscroll>
+						<visible>!String.IsEqual(Container(10051).ListItem.DBType,season)</visible>
+					</control>
+					<control type="textbox">
+						<top>20</top>
+						<left>15</left>
+						<right>375</right>
+						<height max="580">auto</height>
+						<align>justify</align>
+						<aligny>top</aligny>
+						<label>$INFO[Container(10051).ListItem.Season,[B]$LOCALIZE[20373] ,[/B][CR][CR]]$INFO[Container(10051).ListItem.Plot]</label>
+						<font>font13</font>
+						<textcolor>ffffffff</textcolor>
+						<shadowcolor>50000000</shadowcolor>
+						<autoscroll delay="6000" time="3000" repeat="10000">true</autoscroll>
+						<visible>String.IsEqual(Container(10051).ListItem.DBType,season) + !String.IsEmpty(Container(10051).ListItem.Plot)</visible>
+					</control>
+					<control type="textbox">
+						<top>20</top>
+						<left>15</left>
+						<right>375</right>
+						<height max="580">auto</height>
+						<align>justify</align>
+						<aligny>top</aligny>
+						<label>$INFO[Container(10051).ListItem.Season,[B]$LOCALIZE[20373] ,[/B][CR][CR]]$LOCALIZE[19055]</label>
+						<font>font13</font>
+						<textcolor>ffffffff</textcolor>
+						<shadowcolor>50000000</shadowcolor>
+						<autoscroll delay="6000" time="3000" repeat="10000">true</autoscroll>
+						<visible>String.IsEqual(Container(10051).ListItem.DBType,season) + String.IsEmpty(Container(10051).ListItem.Plot)</visible>
+					</control>
+					<!-- facts -->
+					<control type="image">
+						<top>-11</top>
+						<left>812</left>
+						<right>-20</right>
+						<height>640</height>
+						<texture border="21">dialogs/dialog-bg.png</texture>
+					</control>
+					<control type="grouplist">
+						<animation type="Conditional" reversible="false" condition="!String.IsEmpty(Container(10051).ListItem.Property(studio.0)) | !String.IsEmpty(Container(10051).ListItem.Property(network.0)) | !String.IsEmpty(Container(10051).ListItem.Property(Budget)) | !String.IsEmpty(Container(10051).ListItem.Property(revenue)) | !String.IsEmpty(Container(10051).ListItem.Property(awards))" loop="true">
+							<effect type="fade" start="0" end="100" time="250" delay="0" />
+							<effect type="fade" start="100" end="0" time="250" delay="7000" />
+							<effect type="fade" start="100" end="0" time="250" delay="12000" />
+						</animation>
+						<top>20</top>
+						<width>310</width>
+						<right>10</right>
+						<height>640</height>
+						<itemgap>5</itemgap>
+						<orientation>vertical</orientation>
+						<aligny>top</aligny>
+						<control type="label">
+							<label>[COLOR FF12A0C7]$LOCALIZE[126]:[/COLOR][CR]$INFO[Container(10051).ListItem.Status]</label>
+							<height>80</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<scroll>false</scroll>
+							<align>left</align>
+							<aligny>top</aligny>
+							<visible>[String.IsEmpty(Container(10051).ListItem.Premiered) | String.IsEqual(Container(10051).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(10051).ListItem.Status)</visible>
+						</control>
+						<control type="label">
+							<label>[COLOR FF12A0C7]$ADDON[script.aeon.tajo.info 32011]:[/COLOR][CR]$INFO[Container(10051).ListItem.Premiered]</label>
+							<height>80</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<scroll>false</scroll>
+							<align>left</align>
+							<aligny>top</aligny>
+							<visible>!String.IsEmpty(Container(10051).ListItem.Premiered)</visible>
+						</control>
+						<control type="label">
+							<label>[COLOR FF12A0C7]$ADDON[script.aeon.tajo.info 32012]:[/COLOR][CR]$INFO[Container(10051).ListItem.Property(release)]</label>
+							<height>80</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<scroll>false</scroll>
+							<align>left</align>
+							<aligny>top</aligny>
+							<visible>!String.IsEmpty(Container(10051).ListItem.Property(release))</visible>
+						</control>
+						<control type="label">
+							<label>[COLOR FF12A0C7]$LOCALIZE[20074]:[/COLOR][CR]$INFO[Container(10051).ListItem.MPAA]</label>
+							<height>80</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<scroll>false</scroll>
+							<align>left</align>
+							<aligny>top</aligny>
+							<visible>!String.IsEmpty(Container(10051).ListItem.MPAA)</visible>
+						</control>
+						<control type="label">
+							<label>[COLOR FF12A0C7]TMDb:[/COLOR][CR]$INFO[Container(10051).ListItem.Rating] / 10$INFO[Container(10051).ListItem.Votes, (,)]</label>
+							<height>80</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<scroll>false</scroll>
+							<align>left</align>
+							<aligny>top</aligny>
+							<visible>!String.IsEmpty(Container(10051).ListItem.Rating)</visible>
+						</control>
+						<control type="label">
+							<label>[COLOR FF12A0C7]IMDb:[/COLOR][CR]$INFO[Container(10051).ListItem.Property(rating.imdb)] / 10$INFO[Container(10051).ListItem.Property(votes.imdb), (,)]</label>
+							<height>80</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<scroll>false</scroll>
+							<visible>!String.IsEmpty(Container(10051).ListItem.Property(rating.imdb))</visible>
+						</control>
+						<control type="label">
+							<label>[COLOR FF12A0C7]Rotten Tomatoes:[/COLOR][CR]$INFO[Container(10051).ListItem.Property(rating.rotten)] / 100$INFO[Container(10051).ListItem.Property(votes.rotten), (,)]</label>
+							<height>80</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<scroll>false</scroll>
+							<align>left</align>
+							<aligny>top</aligny>
+							<visible>!String.IsEmpty(Container(10051).ListItem.Property(rating.rotten))</visible>
+						</control>
+						<control type="label">
+							<label>[COLOR FF12A0C7]Metacritic:[/COLOR][CR]$INFO[Container(10051).ListItem.Property(rating.metacritic)] / 100</label>
+							<height>80</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<scroll>false</scroll>
+							<align>left</align>
+							<aligny>top</aligny>
+							<visible>!String.IsEmpty(Container(10051).ListItem.Property(rating.metacritic))</visible>
+						</control>
+						<control type="label">
+							<label>[COLOR FF12A0C7]$ADDON[script.aeon.tajo.info 32046]:[/COLOR][CR]$INFO[Container(10051).ListItem.Property(WatchedEpisodes)] / $INFO[Container(10051).ListItem.Property(TotalEpisodes)]</label>
+							<height>80</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<scroll>false</scroll>
+							<align>left</align>
+							<aligny>top</aligny>
+							<visible>!String.IsEmpty(Container(10051).ListItem.DBID) + !String.IsEmpty(Container(10051).ListItem.Property(WatchedEpisodes)) + !String.IsEmpty(Container(10051).ListItem.Property(TotalEpisodes))</visible>
+						</control>
+						<control type="label">
+							<label>[COLOR FF12A0C7]$ADDON[script.aeon.tajo.info 32048]:[/COLOR][CR]$INFO[Container(10051).ListItem.Property(NextEpisode_date)]</label>
+							<height>80</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<scroll>false</scroll>
+							<align>left</align>
+							<aligny>top</aligny>
+							<visible>!String.IsEmpty(Container(10051).ListItem.Property(NextEpisode_date))</visible>
+						</control>
+					</control>
+					<control type="grouplist">
+						<visible>!String.IsEmpty(Container(10051).ListItem.Property(studio.0)) | !String.IsEmpty(Container(10051).ListItem.Property(network.0)) | !String.IsEmpty(Container(10051).ListItem.Property(Budget)) | !String.IsEmpty(Container(10051).ListItem.Property(revenue)) | !String.IsEmpty(Container(10051).ListItem.Property(awards))</visible>
+						<animation type="Conditional" reversible="false" condition="true" loop="true">
+							<effect type="fade" start="0" end="100" time="250" delay="7250" />
+							<effect type="fade" start="100" end="0" time="250" delay="12000" />
+						</animation>
+						<top>20</top>
+						<width>310</width>
+						<right>10</right>
+						<height>640</height>
+						<itemgap>5</itemgap>
+						<orientation>vertical</orientation>
+						<aligny>top</aligny>
+						<control type="label">
+							<label>[COLOR FF12A0C7]$LOCALIZE[572]:[/COLOR][CR]$INFO[Container(10051).ListItem.Property(studio.0)]</label>
+							<height>80</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<scroll>false</scroll>
+							<align>left</align>
+							<aligny>top</aligny>
+							<visible>!String.IsEmpty(Container(10051).ListItem.Property(studio.0))</visible>
+						</control>
+						<control type="label">
+							<label>[COLOR FF12A0C7]$LOCALIZE[705]:[/COLOR][CR]$INFO[Container(10051).ListItem.Property(network.0)]</label>
+							<height>80</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<scroll>false</scroll>
+							<align>left</align>
+							<aligny>top</aligny>
+							<visible>!String.IsEmpty(Container(10051).ListItem.Property(network.0))</visible>
+						</control>
+						<control type="label">
+							<label>[COLOR FF12A0C7]$ADDON[script.aeon.tajo.info 32013]:[/COLOR][CR]$INFO[Container(10051).ListItem.Property(Budget),$]</label>
+							<height>80</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<scroll>false</scroll>
+							<align>left</align>
+							<aligny>top</aligny>
+							<visible>!String.IsEmpty(Container(10051).ListItem.Property(Budget))</visible>
+						</control>
+						<control type="label">
+							<label>[COLOR FF12A0C7]$ADDON[script.aeon.tajo.info 32014]:[/COLOR][CR]$INFO[Container(10051).ListItem.Property(Revenue),$]</label>
+							<height>80</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<scroll>false</scroll>
+							<visible>!String.IsEmpty(Container(10051).ListItem.Property(revenue))</visible>
+						</control>
+						<control type="label">
+							<label>[COLOR FF12A0C7]$ADDON[script.aeon.tajo.info 32015]:[/COLOR][CR]$INFO[Container(10051).ListItem.Property(awards)]</label>
+							<height>auto</height>
+							<font>font12</font>
+							<textcolor>ffffffff</textcolor>
+							<shadowcolor>50000000</shadowcolor>
+							<wrapmultiline>true</wrapmultiline>
+							<scroll>false</scroll>
+							<align>left</align>
+							<aligny>top</aligny>
+							<visible>!String.IsEmpty(Container(10051).ListItem.Property(awards))</visible>
+						</control>
+					</control>
+					<!-- buttons -->
+					<control type="panel" id="100">
+						<left>-21</left>
+						<top>619</top>
+						<height>130</height>
+						<width>100%</width>
+						<orientation>horizontal</orientation>
+						<defaultcontrol always="true">0</defaultcontrol>
+						<onright>noop</onright>
+						<onleft>noop</onleft>
+						<ondown>10052</ondown>			-->
+						<itemlayout height="142" width="247">
+							<control type="group">
+								<width>262</width>
+								<height>142</height>
+								<control type="group">
+									<control type="image">
+										<width>262</width>
+										<height>142</height>
+										<texture border="21" colordiffuse="D0FFFFFF">buttons/button-nofo.png</texture>
+									</control>
+									<control type="image">
+										<centerleft>50%</centerleft>
+										<top>-35</top>
+										<width>48</width>
+										<texture>icons/$INFO[ListItem.Property(icon)].png</texture>
+										<aspectratio>keep</aspectratio>
+									</control>
+									<control type="label">
+										<left>10</left>
+										<top>25</top>
+										<width>242</width>
+										<height>142</height>
+										<align>center</align>
+										<aligny>center</aligny>
+										<font>font12</font>
+										<textcolor>ffffffff</textcolor>
+										<shadowcolor>50000000</shadowcolor>
+										<label>$INFO[ListItem.Label]</label>
+									</control>
+								</control>
+							</control>
+						</itemlayout>
+						<focusedlayout height="142" width="247">
+							<control type="group">
+								<width>262</width>
+								<height>142</height>
+								<control type="group">
+									<control type="image">
+										<width>262</width>
+										<height>142</height>
+										<texture border="21" colordiffuse="FF12A0C7">buttons/button-fo.png</texture>
+										<visible>Control.HasFocus(100)</visible>
+									</control>
+									<control type="image">
+										<width>262</width>
+										<height>142</height>
+										<texture border="21" colordiffuse="D0FFFFFF">buttons/button-nofo.png</texture>
+										<visible>!Control.HasFocus(100)</visible>
+									</control>
+									<control type="image">
+										<centerleft>50%</centerleft>
+										<top>-35</top>
+										<width>48</width>
+										<texture>icons/$INFO[ListItem.Property(icon)].png</texture>
+										<aspectratio>keep</aspectratio>
+									</control>
+									<control type="label">
+										<left>10</left>
+										<top>25</top>
+										<width>242</width>
+										<height>142</height>
+										<align>center</align>
+										<aligny>center</aligny>
+										<font>font12</font>
+										<textcolor>ffffffff</textcolor>
+										<shadowcolor>50000000</shadowcolor>
+										<label>$INFO[ListItem.Label]</label>
+									</control>
+								</control>
+							</control>
+						</focusedlayout>
+						<content>
+							<item>
+								<property name="icon">disable</property>
+								<label>$LOCALIZE[15067]</label>
+								<onclick>Dialog.Close(all)</onclick>
+							</item>
+							<item>
+								<visible>!String.IsEmpty(Container(10051).ListItem.DBID) + !String.IsEmpty(Container(10051).ListItem.Property(file)) + !String.IsEqual(Container(10051).ListItem.Property(call),tv)</visible>
+								<property name="icon">play</property>
+								<label>$LOCALIZE[208]</label>
+								<onclick>PlayMedia($INFO[Container(10051).ListItem.Property(file)])</onclick>
+								<onclick>Dialog.Close(all)</onclick>
+							</item>
+							<item>
+								<visible>!String.IsEmpty(Container(10051).ListItem.DBID) + String.IsEqual(Container(10051).ListItem.Property(call),tv)</visible>
+								<property name="icon">browse</property>
+								<label>$LOCALIZE[1024]</label>
+								<onclick>Dialog.Close(all)</onclick>
+								<onclick condition="!Window.IsVisible(MyVideoNav.xml)">ActivateWindow(videos,videodb://tvshows/titles/$INFO[Container(10051).ListItem.DBID]/,return)</onclick>
+								<onclick condition="Window.IsVisible(MyVideoNav.xml)">Container.Update(videodb://tvshows/titles/$INFO[Container(10051).ListItem.DBID]/)</onclick>
+							</item>
+							<item>
+								<visible>!String.IsEmpty(Container(10051).ListItem.Plot)</visible>
+								<property name="icon">plot</property>
+								<label>$LOCALIZE[207]</label>
+								<onclick>RunScript(script.aeon.tajo.info,call=textviewer,header='$ESCINFO[Container(10051).ListItem.Label]',message='$ESCINFO[Container(10051).ListItem.Plot]')</onclick>
+							</item>
+						</content>
+					</control>
+				</control>
+
+			</control>
+
+			<!-- cast -->
+			<control type="group">
+				<visible>true</visible>
+				<visible>Integer.IsGreater(Container(10052).NumItems,0) | Container(10052).IsUpdating</visible>
+				<top>50</top>
+				<height>715</height>
+				<control type="group">
+					<control type="label">
+						<left>55</left>
+						<top>80</top>
+						<width>900</width>
+						<height>90</height>
+						<align>left</align>
+						<label>$LOCALIZE[206]</label>
+						<textcolor>ffffffff</textcolor>
+						<shadowcolor>50000000</shadowcolor>
+						<font>font13</font>
+					</control>
+					<control type="panel" id="10052">
+						<movement>6</movement>
+						<top>115</top>
+						<width>100%</width>
+						<ondown>10056</ondown>
+						<onup>100</onup>
+						<scrolltime tween="cubic" easing="out">500</scrolltime>
+						<orientation>horizontal</orientation>
+						<onleft>9000</onleft>
+						<onright>noop</onright>
+						<preloaditems>2</preloaditems>
+						<itemlayout width="293" height="561">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>475</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>400</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>375</top>
+									<control type="label">
+										<width>260</width>
+										<label>$INFO[ListItem.Label]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>false</scroll>
+										<align>center</align>
+									</control>
+									<control type="label">
+										<top>28</top>
+										<width>260</width>
+										<label>$INFO[ListItem.Label2]</label>
+										<font>font12</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>false</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</itemlayout>
+						<focusedlayout width="293" height="561">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<animation type="Focus">
+									<effect type="zoom" start="100" end="110" time="200" tween="sine" easing="inout" center="230,65" />
+								</animation>
+								<animation type="Unfocus">
+									<effect type="zoom" start="110" end="100" time="200" tween="sine" easing="inout" center="230,65" />
+								</animation>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>475</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>11</left>
+									<top>-14</top>
+									<width>297</width>
+									<height>478</height>
+									<texture colordiffuse="button_focus">colors/grey.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+									<animation effect="fade" start="0" end="100" time="200" tween="sine">Focus</animation>
+									<animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>400</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>375</top>
+									<control type="label">
+										<width>260</width>
+										<label>$INFO[ListItem.Label]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>true</scroll>
+										<align>center</align>
+									</control>
+									<control type="label">
+										<top>28</top>
+										<width>260</width>
+										<label>$INFO[ListItem.Label2]</label>
+										<font>font12</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>true</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</focusedlayout>
+					</control>
+				</control>
+			</control>
+
+			<!-- crew -->
+			<control type="group">
+				<visible>true</visible>
+				<visible>Integer.IsGreater(Container(10056).NumItems,0) | Container(10056).IsUpdating</visible>
+				<top>50</top>
+				<height>715</height>
+				<control type="group">
+					<control type="label">
+						<left>55</left>
+						<top>80</top>
+						<width>900</width>
+						<height>90</height>
+						<align>left</align>
+						<label>$ADDON[script.aeon.tajo.info 32018]</label>
+						<textcolor>ffffffff</textcolor>
+						<shadowcolor>50000000</shadowcolor>
+						<font>font13</font>
+						<visible>!String.IsEqual(Container(10051).ListItem.DBType,season)</visible>
+					</control>
+					<control type="label">
+						<left>55</left>
+						<top>80</top>
+						<width>900</width>
+						<height>90</height>
+						<align>left</align>
+						<label>$ADDON[script.aeon.tajo.info 32039]</label>
+						<textcolor>ffffffff</textcolor>
+						<shadowcolor>50000000</shadowcolor>
+						<font>font13</font>
+						<visible>String.IsEqual(Container(10051).ListItem.DBType,season)</visible>
+					</control>
+					<control type="panel" id="10056">
+						<movement>6</movement>
+						<top>115</top>
+						<width>100%</width>
+						<ondown>10057</ondown>
+						<onup>10052</onup>
+						<scrolltime tween="cubic" easing="out">500</scrolltime>
+						<orientation>horizontal</orientation>
+						<onleft>9000</onleft>
+						<onright>noop</onright>
+						<preloaditems>2</preloaditems>
+						<itemlayout width="293" height="561">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>475</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>400</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>375</top>
+									<control type="label">
+										<width>260</width>
+										<label>$INFO[ListItem.Label]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>false</scroll>
+										<align>center</align>
+									</control>
+									<control type="label">
+										<top>28</top>
+										<width>260</width>
+										<label>$INFO[ListItem.Label2]</label>
+										<font>font12</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>false</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</itemlayout>
+						<focusedlayout width="293" height="561">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<animation type="Focus">
+									<effect type="zoom" start="100" end="110" time="200" tween="sine" easing="inout" center="230,65" />
+								</animation>
+								<animation type="Unfocus">
+									<effect type="zoom" start="110" end="100" time="200" tween="sine" easing="inout" center="230,65" />
+								</animation>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>475</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>11</left>
+									<top>-14</top>
+									<width>297</width>
+									<height>478</height>
+									<texture colordiffuse="button_focus">colors/grey.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+									<animation effect="fade" start="0" end="100" time="200" tween="sine">Focus</animation>
+									<animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>400</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>375</top>
+									<control type="label">
+										<width>260</width>
+										<label>$INFO[ListItem.Label]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>true</scroll>
+										<align>center</align>
+									</control>
+									<control type="label">
+										<top>28</top>
+										<width>260</width>
+										<label>$INFO[ListItem.Label2]</label>
+										<font>font12</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>true</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</focusedlayout>
+					</control>
+				</control>
+			</control>
+
+			<!-- collection -->
+			<control type="group">
+				<visible>true</visible>
+				<visible>Integer.IsGreater(Container(10057).NumItems,0) | Container(10057).IsUpdating</visible>
+				<top>50</top>
+				<height>715</height>
+				<control type="group">
+					<control type="label">
+						<left>55</left>
+						<top>80</top>
+						<width>900</width>
+						<height>90</height>
+						<align>left</align>
+						<label>$ADDON[script.aeon.tajo.info 32037]: $INFO[Container(10051).ListItem.Property(collection)]</label>
+						<textcolor>ffffffff</textcolor>
+						<shadowcolor>50000000</shadowcolor>
+						<font>font13</font>
+					</control>
+					<control type="panel" id="10057">
+						<movement>6</movement>
+						<top>115</top>
+						<width>100%</width>
+						<ondown>10058</ondown>
+						<onup>10056</onup>
+						<scrolltime tween="cubic" easing="out">500</scrolltime>
+						<orientation>horizontal</orientation>
+						<onleft>9000</onleft>
+						<onright>noop</onright>
+						<preloaditems>2</preloaditems>
+						<itemlayout width="293" height="561">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>475</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>400</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<top>10</top>
+									<left>35</left>
+									<width>250</width>
+									<control type="group">
+										<visible>!String.IsEmpty(ListItem.DBID)</visible>
+										<control type="image">
+											<left>0</left>
+											<top>0</top>
+											<width>80</width>
+											<height>80</height>
+											<texture flipy="true">overlays/overlay-bg.png</texture>
+										</control>
+										<control type="image">
+											<left>5</left>
+											<top>5</top>
+											<width>32</width>
+											<height>32</height>
+											<texture>icons/OverlayLocal.png</texture>
+										</control>
+									</control>
+									<control type="group">
+										<visible>Integer.IsGreater(ListItem.Playcount,0)</visible>
+										<control type="image">
+											<right>0</right>
+											<top>0</top>
+											<width>80</width>
+											<height>80</height>
+											<texture flipy="true" flipx="true">overlays/overlay-bg.png</texture>
+										</control>
+										<control type="image">
+											<right>5</right>
+											<top>5</top>
+											<width>32</width>
+											<height>32</height>
+											<texture>icons/OverlayWatched.png</texture>
+										</control>
+									</control>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>375</top>
+									<control type="label">
+										<width>260</width>
+										<label>$INFO[ListItem.Label]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>false</scroll>
+										<align>center</align>
+									</control>
+									<control type="label">
+										<top>28</top>
+										<width>260</width>
+										<label>$INFO[ListItem.year]</label>
+										<font>font12</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>false</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</itemlayout>
+						<focusedlayout width="293" height="561">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<animation type="Focus">
+									<effect type="zoom" start="100" end="110" time="200" tween="sine" easing="inout" center="230,65" />
+								</animation>
+								<animation type="Unfocus">
+									<effect type="zoom" start="110" end="100" time="200" tween="sine" easing="inout" center="230,65" />
+								</animation>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>475</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>11</left>
+									<top>-14</top>
+									<width>297</width>
+									<height>478</height>
+									<texture colordiffuse="button_focus">colors/grey.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+									<animation effect="fade" start="0" end="100" time="200" tween="sine">Focus</animation>
+									<animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>400</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<top>10</top>
+									<left>35</left>
+									<width>250</width>
+									<control type="group">
+										<visible>!String.IsEmpty(ListItem.DBID)</visible>
+										<control type="image">
+											<left>0</left>
+											<top>0</top>
+											<width>80</width>
+											<height>80</height>
+											<texture flipy="true">overlays/overlay-bg.png</texture>
+										</control>
+										<control type="image">
+											<left>5</left>
+											<top>5</top>
+											<width>32</width>
+											<height>32</height>
+											<texture>icons/OverlayLocal.png</texture>
+										</control>
+									</control>
+									<control type="group">
+										<visible>Integer.IsGreater(ListItem.Playcount,0)</visible>
+										<control type="image">
+											<right>0</right>
+											<top>0</top>
+											<width>80</width>
+											<height>80</height>
+											<texture flipy="true" flipx="true">overlays/overlay-bg.png</texture>
+										</control>
+										<control type="image">
+											<right>5</right>
+											<top>5</top>
+											<width>32</width>
+											<height>32</height>
+											<texture>icons/OverlayWatched.png</texture>
+										</control>
+									</control>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>375</top>
+									<control type="label">
+										<width>260</width>
+										<label>$INFO[ListItem.Label]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>true</scroll>
+										<align>center</align>
+									</control>
+									<control type="label">
+										<top>28</top>
+										<width>260</width>
+										<label>$INFO[ListItem.Year]</label>
+										<font>font12</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>true</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</focusedlayout>
+					</control>
+				</control>
+			</control>
+
+			<!-- seasons -->
+			<control type="group">
+				<visible>true</visible>
+				<visible>Integer.IsGreater(Container(10058).NumItems,0) | Container(10058).IsUpdating</visible>
+				<top>50</top>
+				<height>715</height>
+				<control type="group">
+					<control type="label">
+						<left>55</left>
+						<top>80</top>
+						<width>900</width>
+						<height>90</height>
+						<align>left</align>
+						<label>$LOCALIZE[33054]</label>
+						<textcolor>ffffffff</textcolor>
+						<shadowcolor>50000000</shadowcolor>
+						<font>font13</font>
+					</control>
+					<control type="panel" id="10058">
+						<movement>6</movement>
+						<top>115</top>
+						<width>100%</width>
+						<ondown>10053</ondown>
+						<onup>10057</onup>
+						<scrolltime tween="cubic" easing="out">500</scrolltime>
+						<orientation>horizontal</orientation>
+						<onleft>9000</onleft>
+						<onright>noop</onright>
+						<preloaditems>2</preloaditems>
+						<itemlayout width="293" height="561">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>475</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>400</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<top>10</top>
+									<left>35</left>
+									<width>250</width>
+									<control type="group">
+										<visible>!String.IsEmpty(ListItem.DBID)</visible>
+										<control type="image">
+											<left>0</left>
+											<top>0</top>
+											<width>80</width>
+											<height>80</height>
+											<texture flipy="true">overlays/overlay-bg.png</texture>
+										</control>
+										<control type="image">
+											<left>5</left>
+											<top>5</top>
+											<width>32</width>
+											<height>32</height>
+											<texture>icons/OverlayLocal.png</texture>
+										</control>
+									</control>
+									<control type="group">
+										<visible>Integer.IsGreater(ListItem.Playcount,0)</visible>
+										<control type="image">
+											<right>0</right>
+											<top>0</top>
+											<width>80</width>
+											<height>80</height>
+											<texture flipy="true" flipx="true">overlays/overlay-bg.png</texture>
+										</control>
+										<control type="image">
+											<right>5</right>
+											<top>5</top>
+											<width>32</width>
+											<height>32</height>
+											<texture>icons/OverlayWatched.png</texture>
+										</control>
+									</control>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>375</top>
+									<control type="label">
+										<width>260</width>
+										<label>$LOCALIZE[20373] $INFO[ListItem.Season]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>false</scroll>
+										<align>center</align>
+									</control>
+									<control type="label">
+										<top>28</top>
+										<width>260</width>
+										<label>$INFO[ListItem.year]</label>
+										<font>font12</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>false</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</itemlayout>
+						<focusedlayout width="293" height="561">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<animation type="Focus">
+									<effect type="zoom" start="100" end="110" time="200" tween="sine" easing="inout" center="230,65" />
+								</animation>
+								<animation type="Unfocus">
+									<effect type="zoom" start="110" end="100" time="200" tween="sine" easing="inout" center="230,65" />
+								</animation>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>475</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>11</left>
+									<top>-14</top>
+									<width>297</width>
+									<height>478</height>
+									<texture colordiffuse="button_focus">colors/grey.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+									<animation effect="fade" start="0" end="100" time="200" tween="sine">Focus</animation>
+									<animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>400</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<top>10</top>
+									<left>35</left>
+									<width>250</width>
+									<control type="group">
+										<visible>!String.IsEmpty(ListItem.DBID)</visible>
+										<control type="image">
+											<left>0</left>
+											<top>0</top>
+											<width>80</width>
+											<height>80</height>
+											<texture flipy="true">overlays/overlay-bg.png</texture>
+										</control>
+										<control type="image">
+											<left>5</left>
+											<top>5</top>
+											<width>32</width>
+											<height>32</height>
+											<texture>icons/OverlayLocal.png</texture>
+										</control>
+									</control>
+									<control type="group">
+										<visible>Integer.IsGreater(ListItem.Playcount,0)</visible>
+										<control type="image">
+											<right>0</right>
+											<top>0</top>
+											<width>80</width>
+											<height>80</height>
+											<texture flipy="true" flipx="true">overlays/overlay-bg.png</texture>
+										</control>
+										<control type="image">
+											<right>5</right>
+											<top>5</top>
+											<width>32</width>
+											<height>32</height>
+											<texture>icons/OverlayWatched.png</texture>
+										</control>
+									</control>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>375</top>
+									<control type="label">
+										<width>260</width>
+										<label>$LOCALIZE[20373] $INFO[ListItem.Season]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>true</scroll>
+										<align>center</align>
+									</control>
+									<control type="label">
+										<top>28</top>
+										<width>260</width>
+										<label>$INFO[ListItem.Year]</label>
+										<font>font12</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>true</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</focusedlayout>
+					</control>
+				</control>
+			</control>
+
+			<!-- similar -->
+			<control type="group">
+				<visible>true</visible>
+				<visible>Integer.IsGreater(Container(10053).NumItems,0) | Container(10053).IsUpdating</visible>
+				<top>50</top>
+				<height>715</height>
+				<control type="group">
+					<control type="label">
+						<left>55</left>
+						<top>80</top>
+						<width>900</width>
+						<height>90</height>
+						<align>left</align>
+						<label>$ADDON[script.aeon.tajo.info 32009]</label>
+						<textcolor>ffffffff</textcolor>
+						<shadowcolor>50000000</shadowcolor>
+						<font>font13</font>
+					</control>
+					<control type="panel" id="10053">
+						<movement>6</movement>
+						<top>115</top>
+						<width>100%</width>
+						<ondown>10054</ondown>
+						<onup>10058</onup>
+						<scrolltime tween="cubic" easing="out">500</scrolltime>
+						<orientation>horizontal</orientation>
+						<onleft>9000</onleft>
+						<onright>noop</onright>
+						<preloaditems>2</preloaditems>
+						<itemlayout width="293" height="561">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>475</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>400</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<top>10</top>
+									<left>35</left>
+									<width>250</width>
+									<control type="group">
+										<visible>!String.IsEmpty(ListItem.DBID)</visible>
+										<control type="image">
+											<left>0</left>
+											<top>0</top>
+											<width>80</width>
+											<height>80</height>
+											<texture flipy="true">overlays/overlay-bg.png</texture>
+										</control>
+										<control type="image">
+											<left>5</left>
+											<top>5</top>
+											<width>32</width>
+											<height>32</height>
+											<texture>icons/OverlayLocal.png</texture>
+										</control>
+									</control>
+									<control type="group">
+										<visible>Integer.IsGreater(ListItem.Playcount,0)</visible>
+										<control type="image">
+											<right>0</right>
+											<top>0</top>
+											<width>80</width>
+											<height>80</height>
+											<texture flipy="true" flipx="true">overlays/overlay-bg.png</texture>
+										</control>
+										<control type="image">
+											<right>5</right>
+											<top>5</top>
+											<width>32</width>
+											<height>32</height>
+											<texture>icons/OverlayWatched.png</texture>
+										</control>
+									</control>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>375</top>
+									<control type="label">
+										<width>260</width>
+										<label>$INFO[ListItem.Label]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>false</scroll>
+										<align>center</align>
+									</control>
+									<control type="label">
+										<top>28</top>
+										<width>260</width>
+										<label>$INFO[ListItem.year]</label>
+										<font>font12</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>false</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</itemlayout>
+						<focusedlayout width="293" height="561">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<animation type="Focus">
+									<effect type="zoom" start="100" end="110" time="200" tween="sine" easing="inout" center="230,65" />
+								</animation>
+								<animation type="Unfocus">
+									<effect type="zoom" start="110" end="100" time="200" tween="sine" easing="inout" center="230,65" />
+								</animation>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>475</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>11</left>
+									<top>-14</top>
+									<width>297</width>
+									<height>478</height>
+									<texture colordiffuse="button_focus">colors/grey.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+									<animation effect="fade" start="0" end="100" time="200" tween="sine">Focus</animation>
+									<animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>400</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<top>10</top>
+									<left>35</left>
+									<width>250</width>
+									<control type="group">
+										<visible>!String.IsEmpty(ListItem.DBID)</visible>
+										<control type="image">
+											<left>0</left>
+											<top>0</top>
+											<width>80</width>
+											<height>80</height>
+											<texture flipy="true">overlays/overlay-bg.png</texture>
+										</control>
+										<control type="image">
+											<left>5</left>
+											<top>5</top>
+											<width>32</width>
+											<height>32</height>
+											<texture>icons/OverlayLocal.png</texture>
+										</control>
+									</control>
+									<control type="group">
+										<visible>Integer.IsGreater(ListItem.Playcount,0)</visible>
+										<control type="image">
+											<right>0</right>
+											<top>0</top>
+											<width>80</width>
+											<height>80</height>
+											<texture flipy="true" flipx="true">overlays/overlay-bg.png</texture>
+										</control>
+										<control type="image">
+											<right>5</right>
+											<top>5</top>
+											<width>32</width>
+											<height>32</height>
+											<texture>icons/OverlayWatched.png</texture>
+										</control>
+									</control>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>375</top>
+									<control type="label">
+										<width>260</width>
+										<label>$INFO[ListItem.Label]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>true</scroll>
+										<align>center</align>
+									</control>
+									<control type="label">
+										<top>28</top>
+										<width>260</width>
+										<label>$INFO[ListItem.year]</label>
+										<font>font12</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>true</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</focusedlayout>
+					</control>
+				</control>
+			</control>
+
+			<!-- videos -->
+			<control type="group">
+				<visible>true</visible>
+				<visible>Integer.IsGreater(Container(10054).NumItems,0) | Container(10054).IsUpdating</visible>
+				<top>50</top>
+				<height>643</height>
+				<control type="group">
+					<control type="label">
+						<left>55</left>
+						<top>80</top>
+						<width>900</width>
+						<height>90</height>
+						<align>left</align>
+						<label>$LOCALIZE[3]</label>
+						<textcolor>ffffffff</textcolor>
+						<shadowcolor>50000000</shadowcolor>
+						<font>font13</font>
+					</control>
+					<control type="panel" id="10054">
+						<movement>6</movement>
+						<top>115</top>
+						<width>100%</width>
+						<ondown>10055</ondown>
+						<onup>10053</onup>
+						<scrolltime tween="cubic" easing="out">500</scrolltime>
+						<orientation>horizontal</orientation>
+						<onleft>9000</onleft>
+						<onright>noop</onright>
+						<preloaditems>2</preloaditems>
+						<itemlayout width="586" height="489">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>583</width>
+									<height>403</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>583</width>
+									<height>328</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>303</top>
+									<control type="label">
+										<width>557</width>
+										<label>$INFO[ListItem.Label]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>false</scroll>
+										<align>center</align>
+									</control>
+									<control type="label">
+										<top>28</top>
+										<width>557</width>
+										<label>$INFO[ListItem.label2]</label>
+										<font>font12</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>false</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</itemlayout>
+						<focusedlayout width="586" height="489">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<animation type="Focus">
+									<effect type="zoom" start="100" end="110" time="200" tween="sine" easing="inout" center="366,65" />
+								</animation>
+								<animation type="Unfocus">
+									<effect type="zoom" start="110" end="100" time="200" tween="sine" easing="inout" center="366,65" />
+								</animation>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>583</width>
+									<height>403</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>11</left>
+									<top>-14</top>
+									<width>591</width>
+									<height>408</height>
+									<texture colordiffuse="button_focus">colors/grey.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+									<animation effect="fade" start="0" end="100" time="200" tween="sine">Focus</animation>
+									<animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>583</width>
+									<height>328</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>303</top>
+									<control type="label">
+										<width>555</width>
+										<label>$INFO[ListItem.Label]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>true</scroll>
+										<align>center</align>
+									</control>
+									<control type="label">
+										<top>28</top>
+										<width>555</width>
+										<label>$INFO[ListItem.label2]</label>
+										<font>font12</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>true</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</focusedlayout>
+					</control>
+				</control>
+			</control>
+
+			<!-- images -->
+			<control type="group">
+				<visible>true</visible>
+				<visible>Integer.IsGreater(Container(10055).NumItems,0) | Container(10055).IsUpdating</visible>
+				<top>50</top>
+				<height>643</height>
+				<control type="group">
+					<control type="label">
+						<left>55</left>
+						<top>80</top>
+						<width>900</width>
+						<height>90</height>
+						<align>left</align>
+						<label>$ADDON[script.aeon.tajo.info 32010]</label>
+						<textcolor>ffffffff</textcolor>
+						<shadowcolor>50000000</shadowcolor>
+						<font>font13</font>
+					</control>
+					<control type="panel" id="10055">
+						<movement>6</movement>
+						<top>115</top>
+						<width>100%</width>
+						<ondown>10059</ondown>
+						<onup>10054</onup>
+						<scrolltime tween="cubic" easing="out">500</scrolltime>
+						<orientation>horizontal</orientation>
+						<onleft>9000</onleft>
+						<onright>noop</onright>
+						<preloaditems>2</preloaditems>
+						<itemlayout width="586" height="489">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>583</width>
+									<height>403</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>583</width>
+									<height>328</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>303</top>
+									<control type="label">
+										<top>14</top>
+										<width>555</width>
+										<label>$INFO[ListItem.Label]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>false</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</itemlayout>
+						<focusedlayout width="586" height="489">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<animation type="Focus">
+									<effect type="zoom" start="100" end="110" time="200" tween="sine" easing="inout" center="366,65" />
+								</animation>
+								<animation type="Unfocus">
+									<effect type="zoom" start="110" end="100" time="200" tween="sine" easing="inout" center="366,65" />
+								</animation>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>583</width>
+									<height>403</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>11</left>
+									<top>-14</top>
+									<width>591</width>
+									<height>408</height>
+									<texture colordiffuse="button_focus">colors/grey.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+									<animation effect="fade" start="0" end="100" time="200" tween="sine">Focus</animation>
+									<animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>583</width>
+									<height>328</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>303</top>
+									<control type="label">
+										<top>14</top>
+										<width>555</width>
+										<label>$INFO[ListItem.Label]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>true</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</focusedlayout>
+					</control>
+				</control>
+			</control>
+
+			<!-- posters -->
+			<control type="group">
+				<visible>true</visible>
+				<visible>Integer.IsGreater(Container(10059).NumItems,0) | Container(10059).IsUpdating</visible>
+				<top>50</top>
+				<height>715</height>
+				<control type="group">
+					<control type="label">
+						<left>55</left>
+						<top>80</top>
+						<width>900</width>
+						<height>90</height>
+						<align>left</align>
+						<label>$LOCALIZE[20021]</label>
+						<textcolor>ffffffff</textcolor>
+						<shadowcolor>50000000</shadowcolor>
+						<font>font13</font>
+					</control>
+					<control type="panel" id="10059">
+						<movement>6</movement>
+						<top>115</top>
+						<width>100%</width>
+						<ondown>noop</ondown>
+						<onup>10055</onup>
+						<scrolltime tween="cubic" easing="out">500</scrolltime>
+						<orientation>horizontal</orientation>
+						<onleft>9000</onleft>
+						<onright>noop</onright>
+						<preloaditems>2</preloaditems>
+						<itemlayout width="293" height="561">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>475</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>400</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>375</top>
+									<control type="label">
+										<top>14</top>
+										<width>260</width>
+										<label>$INFO[ListItem.Label]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>false</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</itemlayout>
+						<focusedlayout width="293" height="561">
+							<control type="group">
+								<left>68</left>
+								<top>10</top>
+								<animation type="Focus">
+									<effect type="zoom" start="100" end="110" time="200" tween="sine" easing="inout" center="230,65" />
+								</animation>
+								<animation type="Unfocus">
+									<effect type="zoom" start="110" end="100" time="200" tween="sine" easing="inout" center="230,65" />
+								</animation>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>475</height>
+									<texture>dialogs/dialog-bg-nobo.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="image">
+									<left>11</left>
+									<top>-14</top>
+									<width>297</width>
+									<height>478</height>
+									<texture colordiffuse="button_focus">colors/grey.png</texture>
+									<bordertexture border="21">overlays/shadow.png</bordertexture>
+									<bordersize>20</bordersize>
+									<animation effect="fade" start="0" end="100" time="200" tween="sine">Focus</animation>
+									<animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
+								</control>
+								<control type="image">
+									<left>15</left>
+									<top>-10</top>
+									<width>290</width>
+									<height>400</height>
+									<texture background="true">$INFO[ListItem.Icon]</texture>
+									<aspectratio>scale</aspectratio>
+									<bordersize>20</bordersize>
+								</control>
+								<control type="group">
+									<left>29</left>
+									<top>375</top>
+									<control type="label">
+										<top>14</top>
+										<width>260</width>
+										<label>$INFO[ListItem.Label]</label>
+										<font>font10</font>
+										<shadowcolor>50000000</shadowcolor>
+										<textoffsetx>10</textoffsetx>
+										<scroll>true</scroll>
+										<align>center</align>
+									</control>
+								</control>
+							</control>
+						</focusedlayout>
+					</control>
+				</control>
+			</control>
+
+		</control>
+
+		<!-- title -->
+		<control type="group">
+			<control type="image">
+				<left>0</left>
+				<top>0</top>
+				<width>110%</width>
+				<height>170</height>
+				<texture>frame/InfoBar.png</texture>
+			</control>
+			<control type="group">
+				<left>35</left>
+				<right>35</right>
+				<height>100</height>
+				<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
+				<animation effect="fade" start="100" end="0" time="200" condition="String.IsEmpty(Window(home).Property(script.aeon.tajo.info-nextcall))">WindowClose</animation>
+				<animation effect="fade" start="100" end="0" time="0" condition="!String.IsEmpty(Window(home).Property(script.aeon.tajo.info-nextcall))">WindowClose</animation>
+				<control type="label">
+					<left>0</left>
+					<right>150</right>
+					<label>$INFO[Container(10051).ListItem.Label]$INFO[Container(10051).ListItem.Year, ([COLOR FFA0A0A0],[/COLOR])]</label>
+					<font>font45</font>
+					<shadowcolor>50000000</shadowcolor>
+					<height>100</height>
+				</control>
+				<control type="image">
+					<top>10</top>
+					<right>0</right>
+					<texture>tmdb.png</texture>
+					<height>65</height>
+					<width>200</width>
+					<aspectratio align="right">keep</aspectratio>
+				</control>
+			</control>
+		</control>
+
+	</controls>
+</window>

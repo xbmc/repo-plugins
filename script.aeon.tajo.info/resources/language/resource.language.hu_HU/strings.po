@@ -1,0 +1,257 @@
+# Aeon Tajo Info language file
+# Addon Name: Aeon Tajo Info
+# Addon id: script.aeon.tajo.info
+# Addon Provider: manfeed, sualfred
+msgid ""
+msgstr ""
+"Project-Id-Version: script.aeon.tajo.info\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-30 18:00+0000\n"
+"PO-Revision-Date: 2026-03-30 18:00+0000\n"
+"Last-Translator: manfeed\n"
+"Language-Team: Hungarian (Hungary)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hu_HU\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Error"
+msgstr "Hiba"
+
+msgctxt "#32001"
+msgid "This is a tool to provide features to a skin and requires skin integration."
+msgstr "Ez egy eszköz, amely funkciókat biztosít a felülethez, és felület-integrációt igényel."
+
+msgctxt "#32002"
+msgid "(Get a free API key on www.omdbapi.com)"
+msgstr "(Ingyenes API kulcs beszerzése a www.omdbapi.com webhelyen)"
+
+msgctxt "#32003"
+msgid "Certification country"
+msgstr "Tanúsító ország"
+
+msgctxt "#32019"
+msgid "No information found"
+msgstr "Nincs információ"
+
+msgctxt "#32022"
+msgid "Invalid TheMovieDB API key"
+msgstr "Érvénytelen TheMovieDB API kulcs"
+
+msgctxt "#32004"
+msgid "Person"
+msgstr "Személy"
+
+msgctxt "#32005"
+msgid "Search for"
+msgstr "Keresés"
+
+msgctxt "#32006"
+msgid "Age"
+msgstr "Kor"
+
+msgctxt "#32007"
+msgid "Place of birth"
+msgstr "Születési helye"
+
+msgctxt "#32008"
+msgid "Facts"
+msgstr "Tények"
+
+msgctxt "#32009"
+msgid "Similar"
+msgstr "Hasonló"
+
+msgctxt "#32010"
+msgid "Images"
+msgstr "Képek"
+
+msgctxt "#32011"
+msgid "Premiered"
+msgstr "Premierje"
+
+msgctxt "#32012"
+msgid "Retail"
+msgstr "Kiskereskedelmi"
+
+msgctxt "#32013"
+msgid "Budget"
+msgstr "Költség"
+
+msgctxt "#32014"
+msgid "Revenue"
+msgstr "Bevétel"
+
+msgctxt "#32015"
+msgid "Awards"
+msgstr "Díjak"
+
+msgctxt "#32016"
+msgid "Seasons"
+msgstr "Évadok"
+
+msgctxt "#32017"
+msgid "Known for"
+msgstr "Ismert"
+
+msgctxt "#32018"
+msgid "Crew"
+msgstr "Stáb"
+
+msgctxt "#32023"
+msgid "API key"
+msgstr "API kulcs"
+
+msgctxt "#32020"
+msgid "Developer settings"
+msgstr "Gyorsítótárral"
+
+msgctxt "#32021"
+msgid "Enable caching (highly recommended - only turn off for debugging)"
+msgstr "A letöltött adatok gyorsítótárazásának engedélyezése"
+
+msgctxt "#32024"
+msgid "Default language"
+msgstr "Alapértelmezett nyelv"
+
+msgctxt "#32025"
+msgid "items in your library"
+msgstr "könyvtár tartalma"
+
+msgctxt "#32026"
+msgid "Misc."
+msgstr "Vegyes"
+
+msgctxt "#32027"
+msgid "Hide person appearances in reality/talk/news shows"
+msgstr "Személyek megjelenésének elrejtése a reality/talk/hír műsorokban"
+
+msgctxt "#32028"
+msgid "Hide person appearances in specials/documentaries/behind the scenes movies"
+msgstr "Személy megjelenéseinek elrejtése speciális/dokumentumfilm/kulisszák mögötti filmekben"
+
+msgctxt "#32029"
+msgid "Top rated movies"
+msgstr "Legjobban értékelt filmek"
+
+msgctxt "#32030"
+msgid "Now playing movies"
+msgstr "Most játszott filmek"
+
+msgctxt "#32031"
+msgid "Upcoming movies"
+msgstr "Következő filmek"
+
+msgctxt "#32032"
+msgid "Popular movies"
+msgstr "Népszerű filmek"
+
+msgctxt "#32033"
+msgid "Top rated TV shows"
+msgstr "Legjobban értékelt TV-sorozatok"
+
+msgctxt "#32034"
+msgid "Popular TV shows"
+msgstr "Népszerű TV-sorozatok"
+
+msgctxt "#32035"
+msgid "TV shows airing today"
+msgstr "Ma bemutatandó TV-sorozatok"
+
+msgctxt "#32036"
+msgid "TV shows airing in the next 7 days"
+msgstr "A következő 7 napban bemutatandó TV-sorozatok"
+
+msgctxt "#32037"
+msgid "Collection"
+msgstr "Gyűjtemény"
+
+msgctxt "#32039"
+msgid "Guest stars"
+msgstr "Vendég szereplők"
+
+msgctxt "#32040"
+msgid "Season"
+msgstr "Évad"
+
+msgctxt "#32038"
+msgid "Widgets"
+msgstr "Widgetek"
+
+msgctxt "#32041"
+msgid "Hide items from similar movies if they are part of the collection"
+msgstr "Filmek elrejtése, ha azok a gyűjtemény részét képezik"
+
+msgctxt "#32042"
+msgid "Trending movies"
+msgstr "Népszerű filmek"
+
+msgctxt "#32043"
+msgid "Trending shows"
+msgstr "Népszerű sorozatok"
+
+msgctxt "#32044"
+msgid "Hide upcoming items"
+msgstr "Közelgő elemek elrejtése"
+
+msgctxt "#32045"
+msgid "Allow items of the next [n] days"
+msgstr "A következő [n] nap elemeinek engedélyezése"
+
+msgctxt "#32046"
+msgid "Watched episodes"
+msgstr "Megtekintett epizódok"
+
+msgctxt "#32047"
+msgid "Install context menu addon"
+msgstr "Helyi menü kiegészítő telepítése"
+
+msgctxt "#32048"
+msgid "Next episode"
+msgstr "Következő epizód"
+
+msgctxt "#32049"
+msgid "Discover"
+msgstr "Felfedezés"
+
+msgctxt "#32050"
+msgid "Discover movies"
+msgstr "Filmek felfedezése"
+
+msgctxt "#32051"
+msgid "Discover TV shows"
+msgstr "TV-műsorok felfedezése"
+
+msgctxt "#32052"
+msgid "Discover movies by year"
+msgstr "Filmek felfedezése év szerint"
+
+msgctxt "#32053"
+msgid "Discover movies by genre"
+msgstr "Filmek felfedezése műfaj szerint"
+
+msgctxt "#32054"
+msgid "Discover TV shows by year"
+msgstr "TV-műsorok felfedezése év szerint"
+
+msgctxt "#32055"
+msgid "Discover TV shows by genre"
+msgstr "TV-műsorok felfedezése műfaj szerint"
+
+msgctxt "#32056"
+msgid "Previous page"
+msgstr "Előző oldal"
+
+msgctxt "#32057"
+msgid "Discover people"
+msgstr "Személyek felfedezése"
+
+msgctxt "#32058"
+msgid "Next 7 days"
+msgstr "Következő 7 nap"
+
+msgctxt "#32059"
+msgid "Next airing episodes of your TV show library"
+msgstr "A TV-műsor könyvtárad következő adásba kerülő epizódjai"

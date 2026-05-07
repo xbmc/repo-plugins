@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+    <section id="script.aeon.tajo.info">
+        <category id="general" label="128">
+            <group id="1" label="TheMovieDB">
+                <setting id="language_code" type="string" label="32024">
+                    <level>0</level>
+                    <default>en</default>
+                    <constraints>
+                        <options>
+                            <option>ar-AE</option>
+                            <option>ar-SA</option>
+                            <option>bg</option>
+                            <option>bn</option>
+                            <option>ca</option>
+                            <option>ch</option>
+                            <option>cs</option>
+                            <option>da</option>
+                            <option>de</option>
+                            <option>el</option>
+                            <option>en</option>
+                            <option>eo</option>
+                            <option>es-ES</option>
+                            <option>es-MX</option>
+                            <option>eu</option>
+                            <option>fa</option>
+                            <option>fi</option>
+                            <option>fr-CA</option>
+                            <option>fr-FR</option>
+                            <option>he</option>
+                            <option>hi</option>
+                            <option>hu</option>
+                            <option>id</option>
+                            <option>it</option>
+                            <option>ja</option>
+                            <option>ka</option>
+                            <option>kn</option>
+                            <option>ko</option>
+                            <option>lt</option>
+                            <option>ml</option>
+                            <option>nb</option>
+                            <option>nl</option>
+                            <option>no</option>
+                            <option>pl</option>
+                            <option>pt-BR</option>
+                            <option>pt-PT</option>
+                            <option>ro</option>
+                            <option>ru</option>
+                            <option>sk</option>
+                            <option>sl</option>
+                            <option>sr</option>
+                            <option>sv</option>
+                            <option>ta</option>
+                            <option>te</option>
+                            <option>th</option>
+                            <option>tr</option>
+                            <option>uk</option>
+                            <option>vi</option>
+                            <option>zh-CN</option>
+                            <option>zh-TW</option>
+                        </options>
+                    </constraints>
+                    <control type="list" format="string">
+                        <heading>32024</heading>
+                    </control>
+                </setting>
+                <setting id="country_code" type="string" label="32003">
+                    <level>0</level>
+                    <default>US</default>
+                    <constraints>
+                        <options>
+                            <option>AU</option>
+                            <option>BG</option>
+                            <option>BR</option>
+                            <option>CA</option>
+                            <option>DE</option>
+                            <option>DK</option>
+                            <option>ES</option>
+                            <option>FI</option>
+                            <option>FR</option>
+                            <option>GB</option>
+                            <option>HU</option>
+                            <option>IN</option>
+                            <option>IT</option>
+                            <option>KR</option>
+                            <option>LT</option>
+                            <option>MY</option>
+                            <option>NL</option>
+                            <option>NO</option>
+                            <option>NZ</option>
+                            <option>PH</option>
+                            <option>PT</option>
+                            <option>RU</option>
+                            <option>SE</option>
+                            <option>SK</option>
+                            <option>TH</option>
+                            <option>US</option>
+                        </options>
+                    </constraints>
+                    <control type="list" format="string">
+                        <heading>32003</heading>
+                    </control>
+                </setting>
+                <setting id="tmdb_api_key" type="string" label="32023">
+                    <level>0</level>
+                    <default>fc168650632c6597038cf7072a7c20da</default>
+                    <control type="edit" format="string">
+                        <heading>32023</heading>
+                    </control>
+                </setting>
+            </group>
+            <group id="2" label="OMDB">
+                <setting id="omdb_api_key" type="string" label="32023">
+                    <level>0</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <control type="edit" format="string">
+                        <heading>32023</heading>
+                    </control>
+                </setting>
+            </group>
+            <group id="3" label="32026">
+                <setting id="filter_shows" type="boolean" label="32027">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="filter_movies" type="boolean" label="32028">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="similar_movies_filter" type="boolean" label="32041">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="filter_upcoming" type="boolean" label="32044">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="filter_daydelta" type="integer" label="32045">
+                    <level>0</level>
+                    <default>180</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>30</step>
+                        <maximum>360</maximum>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable" setting="filter_upcoming" operator="is">true</dependency>
+                    </dependencies>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+            <group id="4" label="32020">
+                <setting id="cache_enabled" type="boolean" label="32021">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+        </category>
+    </section>
+</settings>

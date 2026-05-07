@@ -1,0 +1,257 @@
+# Aeon Tajo Info language file
+# Addon Name: Aeon Tajo Info
+# Addon id: script.aeon.tajo.info
+# Addon Provider: manfeed, sualfred
+msgid ""
+msgstr ""
+"Project-Id-Version: script.aeon.tajo.info\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-30 18:00+0000\n"
+"PO-Revision-Date: 2026-03-30 18:00+0000\n"
+"Last-Translator: manfeed\n"
+"Language-Team: Dutch (Netherlands)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl_NL\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Error"
+msgstr "Fout"
+
+msgctxt "#32001"
+msgid "This is a tool to provide features to a skin and requires skin integration."
+msgstr "Dit is een hulpmiddel dat functies biedt aan een skin en vereist skin-integratie."
+
+msgctxt "#32002"
+msgid "(Get a free API key on www.omdbapi.com)"
+msgstr "(Krijg een gratis API-key op www.omdbapi.com)"
+
+msgctxt "#32003"
+msgid "Certification country"
+msgstr "Certificeringsland"
+
+msgctxt "#32019"
+msgid "No information found"
+msgstr "Geen informatie gevonden"
+
+msgctxt "#32022"
+msgid "Invalid TheMovieDB API key"
+msgstr "Ongeldige TheMovieDB API key"
+
+msgctxt "#32004"
+msgid "Person"
+msgstr "Persoon"
+
+msgctxt "#32005"
+msgid "Search for"
+msgstr "Zoeken naar"
+
+msgctxt "#32006"
+msgid "Age"
+msgstr "Leeftijd"
+
+msgctxt "#32007"
+msgid "Place of birth"
+msgstr "Geboorteplaats"
+
+msgctxt "#32008"
+msgid "Facts"
+msgstr "Feiten"
+
+msgctxt "#32009"
+msgid "Similar"
+msgstr "Gelijkaardig"
+
+msgctxt "#32010"
+msgid "Images"
+msgstr "Afbeeldingen"
+
+msgctxt "#32011"
+msgid "Premiered"
+msgstr "In première"
+
+msgctxt "#32012"
+msgid "Retail"
+msgstr "In detailhandel"
+
+msgctxt "#32013"
+msgid "Budget"
+msgstr "Budget"
+
+msgctxt "#32014"
+msgid "Revenue"
+msgstr "Opbrengsten"
+
+msgctxt "#32015"
+msgid "Awards"
+msgstr "Prijzen"
+
+msgctxt "#32016"
+msgid "Seasons"
+msgstr "Seizoenen"
+
+msgctxt "#32017"
+msgid "Known for"
+msgstr "Gekend van"
+
+msgctxt "#32018"
+msgid "Crew"
+msgstr "Crew"
+
+msgctxt "#32023"
+msgid "API key"
+msgstr "API key"
+
+msgctxt "#32020"
+msgid "Developer settings"
+msgstr "Caching"
+
+msgctxt "#32021"
+msgid "Enable caching (highly recommended - only turn off for debugging)"
+msgstr "Schakel caching van opgehaalde gegevens in"
+
+msgctxt "#32024"
+msgid "Default language"
+msgstr "Standaardtaal"
+
+msgctxt "#32025"
+msgid "items in your library"
+msgstr "Items in jouw bibliotheek"
+
+msgctxt "#32026"
+msgid "Misc."
+msgstr "Div."
+
+msgctxt "#32027"
+msgid "Hide person appearances in reality/talk/news shows"
+msgstr "Persoonsverschijningen in reality-, talk- en nieuwsshows verbergen"
+
+msgctxt "#32028"
+msgid "Hide person appearances in specials/documentaries/behind the scenes movies"
+msgstr "Verberg persoonsverschijningen in specials/documentaires/behind the scenes films"
+
+msgctxt "#32029"
+msgid "Top rated movies"
+msgstr "Best beoordeelde films"
+
+msgctxt "#32030"
+msgid "Now playing movies"
+msgstr "Films die nu spelen"
+
+msgctxt "#32031"
+msgid "Upcoming movies"
+msgstr "Aankomende films"
+
+msgctxt "#32032"
+msgid "Popular movies"
+msgstr "Populaire films"
+
+msgctxt "#32033"
+msgid "Top rated TV shows"
+msgstr "Best beoordeelde TV-series"
+
+msgctxt "#32034"
+msgid "Popular TV shows"
+msgstr "Populaire TV-series"
+
+msgctxt "#32035"
+msgid "TV shows airing today"
+msgstr "Tv-series die vandaag worden uitgezonden"
+
+msgctxt "#32036"
+msgid "TV shows airing in the next 7 days"
+msgstr "Tv-series die in de volgende 7 dagen worden uitgezonden"
+
+msgctxt "#32037"
+msgid "Collection"
+msgstr "Verzameling"
+
+msgctxt "#32039"
+msgid "Guest stars"
+msgstr "Gastrollen"
+
+msgctxt "#32040"
+msgid "Season"
+msgstr "Seizoen"
+
+msgctxt "#32038"
+msgid "Widgets"
+msgstr "Widgets"
+
+msgctxt "#32041"
+msgid "Hide items from similar movies if they are part of the collection"
+msgstr "Verberg items uit vergelijkbare films als ze deel uitmaken van de collectie"
+
+msgctxt "#32042"
+msgid "Trending movies"
+msgstr "Trending films"
+
+msgctxt "#32043"
+msgid "Trending shows"
+msgstr "Trending series"
+
+msgctxt "#32044"
+msgid "Hide upcoming items"
+msgstr "Nakende items verbergen"
+
+msgctxt "#32045"
+msgid "Allow items of the next [n] days"
+msgstr "Items van de volgende [n] dagen toestaan"
+
+msgctxt "#32046"
+msgid "Watched episodes"
+msgstr "Bekeken afleveringen"
+
+msgctxt "#32047"
+msgid "Install context menu addon"
+msgstr "Contextmenu-addon installeren"
+
+msgctxt "#32048"
+msgid "Next episode"
+msgstr "Volgende aflevering"
+
+msgctxt "#32049"
+msgid "Discover"
+msgstr "Ontdekken"
+
+msgctxt "#32050"
+msgid "Discover movies"
+msgstr "Films ontdekken"
+
+msgctxt "#32051"
+msgid "Discover TV shows"
+msgstr "TV-series ontdekken"
+
+msgctxt "#32052"
+msgid "Discover movies by year"
+msgstr "Films ontdekken op jaar"
+
+msgctxt "#32053"
+msgid "Discover movies by genre"
+msgstr "Films ontdekken op genre"
+
+msgctxt "#32054"
+msgid "Discover TV shows by year"
+msgstr "TV-series ontdekken op jaar"
+
+msgctxt "#32055"
+msgid "Discover TV shows by genre"
+msgstr "TV-series ontdekken op genre"
+
+msgctxt "#32056"
+msgid "Previous page"
+msgstr "Vorige pagina"
+
+msgctxt "#32057"
+msgid "Discover people"
+msgstr "Personen ontdekken"
+
+msgctxt "#32058"
+msgid "Next 7 days"
+msgstr "Volgende 7 dagen"
+
+msgctxt "#32059"
+msgid "Next airing episodes of your TV show library"
+msgstr "Volgende uitzendingen van afleveringen uit je TV-bibliotheek"

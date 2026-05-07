@@ -1,0 +1,181 @@
+# Aeon Tajo Helper language file
+# Addon Name: Aeon Tajo Helper
+# Addon id: script.aeon.tajo.helper
+# Addon Provider: manfeed, sualfred
+msgid ""
+msgstr ""
+"Project-Id-Version: script.aeon.tajo.helper\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-30 17:00+0000\n"
+"PO-Revision-Date: 2026-03-30 17:00+0000\n"
+"Last-Translator: manfeed\n"
+"Language-Team: Chinese (China)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Error"
+msgstr "错误"
+
+msgctxt "#32001"
+msgid "This is a tool to provide features to a skin and requires skin integration."
+msgstr "这是一个为皮肤提供功能的工具，需要皮肤集成。"
+
+msgctxt "#32002"
+msgid "Enable logging"
+msgstr "启用日志记录"
+
+msgctxt "#32004"
+msgid "detected"
+msgstr "检测到"
+
+msgctxt "#32005"
+msgid "Changed font to"
+msgstr "已将字体更改为"
+
+msgctxt "#32003"
+msgid "Delete add-on image cache"
+msgstr "删除附加图像缓存"
+
+msgctxt "#32006"
+msgid "Applying changes"
+msgstr "应用更改"
+
+msgctxt "#32007"
+msgid "Suggestions based on random watched item"
+msgstr "基于随机观看项目的建议"
+
+msgctxt "#32008"
+msgid "Next up"
+msgstr "接下来"
+
+msgctxt "#32009"
+msgid "Suggestions by random genre"
+msgstr "按随机类型列出的建议"
+
+msgctxt "#32010"
+msgid "Recently added episodes and shows"
+msgstr "最近添加的剧集和节目"
+
+msgctxt "#32011"
+msgid "All media"
+msgstr "所有媒体"
+
+msgctxt "#32012"
+msgid "Recommended by rating"
+msgstr "按评级推荐"
+
+msgctxt "#32013"
+msgid "Continue watching"
+msgstr "继续观看"
+
+msgctxt "#32014"
+msgid "Suggestions based on the last watched item"
+msgstr "基于上次观看项目的建议"
+
+msgctxt "#32015"
+msgid "Recently added unwatched episodes and shows"
+msgstr "最近添加的未观看剧集和节目"
+
+msgctxt "#32016"
+msgid "Enable service module"
+msgstr "启用服务模块"
+
+msgctxt "#32017"
+msgid "Service interval time"
+msgstr "服务间隔时间"
+
+msgctxt "#32018"
+msgid "Default blurring radius"
+msgstr "默认模糊范围"
+
+msgctxt "#32020"
+msgid "Misc."
+msgstr "杂项"
+
+msgctxt "#32021"
+msgid "Background change interval"
+msgstr "背景更改间隔"
+
+msgctxt "#32019"
+msgid "This will delete all created images (blurred backgrounds, genre thumbs, etc.) in the addon_data folder. Do you want to proceed?"
+msgstr "这将删除addon_data文件夹中所有已创建的图像（模糊背景、类型缩略图等）。您要继续吗？"
+
+msgctxt "#32022"
+msgid "All available database items"
+msgstr "所有可用的数据库项"
+
+msgctxt "#32023"
+msgid "items"
+msgstr "项目"
+
+msgctxt "#32024"
+msgid "The video database has no library tags stored."
+msgstr "视频数据库没有存储库标记。"
+
+msgctxt "#32025"
+msgid "Attention"
+msgstr "注意"
+
+msgctxt "#32026"
+msgid "Enable library tag detection for"
+msgstr "启用库标记检测"
+
+msgctxt "#32029"
+msgid "Directed by"
+msgstr "导演"
+
+msgctxt "#32030"
+msgid "Items starring"
+msgstr "星号项目"
+
+msgctxt "#32031"
+msgid "Because you watched"
+msgstr "因为你在观看"
+
+msgctxt "#32032"
+msgid "Christmas holiday season"
+msgstr "圣诞季"
+
+msgctxt "#32033"
+msgid "Spooky suggestions"
+msgstr "诡异的建议"
+
+msgctxt "#32034"
+msgid "May the force be with you"
+msgstr "愿力量与你同在"
+
+msgctxt "#32035"
+msgid "Live long and prosper"
+msgstr "长寿和繁荣"
+
+msgctxt "#32036"
+msgid "Special and seasonal widgets"
+msgstr "特别篇和季小工具"
+
+msgctxt "#32027"
+msgid "Add/remove movie favourite"
+msgstr "添加 / 删除电影收藏夹"
+
+msgctxt "#32028"
+msgid "Add/remove TV show favourite"
+msgstr "添加 / 删除电视节目收藏夹"
+
+msgctxt "#32037"
+msgid "Scanning folders"
+msgstr "扫描文件夹"
+
+msgctxt "#32038"
+msgid "Checking library items..."
+msgstr "正在检查媒体库项目..."
+
+msgctxt "#32039"
+msgid "Reset library scan data"
+msgstr "重置媒体库扫描数据"
+
+msgctxt "#32040"
+msgid "This will remove all custom art data (extras, themes, studios, soundtracks) and perform a full library rescan. Do you want to proceed?"
+msgstr "这将删除所有自定义图片数据（附加内容、主题、工作室、原声带）并执行完整的媒体库重新扫描。是否继续？"

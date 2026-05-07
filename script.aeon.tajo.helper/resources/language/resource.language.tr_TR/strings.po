@@ -1,0 +1,181 @@
+# Aeon Tajo Helper language file
+# Addon Name: Aeon Tajo Helper
+# Addon id: script.aeon.tajo.helper
+# Addon Provider: manfeed, sualfred
+msgid ""
+msgstr ""
+"Project-Id-Version: script.aeon.tajo.helper\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-30 17:00+0000\n"
+"PO-Revision-Date: 2026-03-30 17:00+0000\n"
+"Last-Translator: manfeed\n"
+"Language-Team: Turkish (Turkey)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: tr_TR\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Error"
+msgstr "Hata"
+
+msgctxt "#32001"
+msgid "This is a tool to provide features to a skin and requires skin integration."
+msgstr "Bu, bir görünüme özellikler sağlayan bir araçtır ve görünüm entegrasyonu gerektirir."
+
+msgctxt "#32002"
+msgid "Enable logging"
+msgstr "Günlük kaydı etkinleştir"
+
+msgctxt "#32004"
+msgid "detected"
+msgstr "algılandı"
+
+msgctxt "#32005"
+msgid "Changed font to"
+msgstr "Yazı tipi olarak değiştirildi"
+
+msgctxt "#32003"
+msgid "Delete add-on image cache"
+msgstr "Eklenti resim önbelleğini sil"
+
+msgctxt "#32006"
+msgid "Applying changes"
+msgstr "Değişiklikleri uygulama"
+
+msgctxt "#32007"
+msgid "Suggestions based on random watched item"
+msgstr "Rastgele izlenen öğeye dayalı öneriler"
+
+msgctxt "#32008"
+msgid "Next up"
+msgstr "Sıradaki"
+
+msgctxt "#32009"
+msgid "Suggestions by random genre"
+msgstr "Rastgele türe göre öneriler"
+
+msgctxt "#32010"
+msgid "Recently added episodes and shows"
+msgstr "Son eklenen bölümler ve programlar"
+
+msgctxt "#32011"
+msgid "All media"
+msgstr "Tüm medya"
+
+msgctxt "#32012"
+msgid "Recommended by rating"
+msgstr "Derecelendirmeye göre önerilir"
+
+msgctxt "#32013"
+msgid "Continue watching"
+msgstr "İzlemeye devam et"
+
+msgctxt "#32014"
+msgid "Suggestions based on the last watched item"
+msgstr "Son izlenen öğeye dayalı öneriler"
+
+msgctxt "#32015"
+msgid "Recently added unwatched episodes and shows"
+msgstr "Son eklenen izlenmemiş bölümler ve programlar"
+
+msgctxt "#32016"
+msgid "Enable service module"
+msgstr "Servis modülünü etkinleştir"
+
+msgctxt "#32017"
+msgid "Service interval time"
+msgstr "Servis zaman aralığı"
+
+msgctxt "#32018"
+msgid "Default blurring radius"
+msgstr "Varsayılan bulanıklaştırma yarıçapı"
+
+msgctxt "#32020"
+msgid "Misc."
+msgstr "Çeşitli"
+
+msgctxt "#32021"
+msgid "Background change interval"
+msgstr "Arkaplan değişim aralığı"
+
+msgctxt "#32019"
+msgid "This will delete all created images (blurred backgrounds, genre thumbs, etc.) in the addon_data folder. Do you want to proceed?"
+msgstr "Bu, addon_data klasöründeki tüm oluşturulan resimleri (bulanık arka planlar, tür küçük resimleri vb.) silecektir. Devam etmek istiyor musunuz?"
+
+msgctxt "#32022"
+msgid "All available database items"
+msgstr "Kullanılabilir tüm veritabanı öğeleri"
+
+msgctxt "#32023"
+msgid "items"
+msgstr "Öğeler"
+
+msgctxt "#32024"
+msgid "The video database has no library tags stored."
+msgstr "Video veritabanında kayıtlı kitaplık etiketi yok."
+
+msgctxt "#32025"
+msgid "Attention"
+msgstr "Dikkat"
+
+msgctxt "#32026"
+msgid "Enable library tag detection for"
+msgstr "Kütüphane etiketi algılamayı etkinleştir"
+
+msgctxt "#32029"
+msgid "Directed by"
+msgstr "Yöneten"
+
+msgctxt "#32030"
+msgid "Items starring"
+msgstr "Başrol oyuncuları"
+
+msgctxt "#32031"
+msgid "Because you watched"
+msgstr "İzlediğiniz için"
+
+msgctxt "#32032"
+msgid "Christmas holiday season"
+msgstr "Noel tatil sezonu"
+
+msgctxt "#32033"
+msgid "Spooky suggestions"
+msgstr "Ürkütücü öneriler"
+
+msgctxt "#32034"
+msgid "May the force be with you"
+msgstr "Güç seninle olsun"
+
+msgctxt "#32035"
+msgid "Live long and prosper"
+msgstr "Uzun ve müreffeh yaşa"
+
+msgctxt "#32036"
+msgid "Special and seasonal widgets"
+msgstr "Özel ve mevsimsel widget'lar"
+
+msgctxt "#32027"
+msgid "Add/remove movie favourite"
+msgstr "Favori film ekle/kaldır"
+
+msgctxt "#32028"
+msgid "Add/remove TV show favourite"
+msgstr "Favori TV programı ekle/kaldır"
+
+msgctxt "#32037"
+msgid "Scanning folders"
+msgstr "Klasörler taranıyor"
+
+msgctxt "#32038"
+msgid "Checking library items..."
+msgstr "Kütüphane öğeleri kontrol ediliyor..."
+
+msgctxt "#32039"
+msgid "Reset library scan data"
+msgstr "Kütüphane tarama verilerini sıfırla"
+
+msgctxt "#32040"
+msgid "This will remove all custom art data (extras, themes, studios, soundtracks) and perform a full library rescan. Do you want to proceed?"
+msgstr "Bu, tüm özel görsel verilerini (ekstralar, temalar, stüdyolar, film müzikleri) kaldıracak ve tam bir kütüphane yeniden taraması yapacaktır. Devam etmek istiyor musunuz?"

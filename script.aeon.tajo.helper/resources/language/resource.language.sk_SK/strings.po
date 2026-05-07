@@ -1,0 +1,181 @@
+# Aeon Tajo Helper language file
+# Addon Name: Aeon Tajo Helper
+# Addon id: script.aeon.tajo.helper
+# Addon Provider: manfeed, sualfred
+msgid ""
+msgstr ""
+"Project-Id-Version: script.aeon.tajo.helper\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-30 17:00+0000\n"
+"PO-Revision-Date: 2026-03-30 17:00+0000\n"
+"Last-Translator: manfeed\n"
+"Language-Team: Slovak (Slovakia)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sk_SK\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Error"
+msgstr "Chyba"
+
+msgctxt "#32001"
+msgid "This is a tool to provide features to a skin and requires skin integration."
+msgstr "Toto je nástroj na poskytovanie funkcií pre vzhľad a vyžaduje integráciu so vzhľadom."
+
+msgctxt "#32002"
+msgid "Enable logging"
+msgstr "Povoliť zapisovať ladiace informácie"
+
+msgctxt "#32004"
+msgid "detected"
+msgstr "zistené"
+
+msgctxt "#32005"
+msgid "Changed font to"
+msgstr "Písmo zmenené na"
+
+msgctxt "#32003"
+msgid "Delete add-on image cache"
+msgstr "Vymazať obrázkovú medzipamäť doplnku"
+
+msgctxt "#32006"
+msgid "Applying changes"
+msgstr "Aplikujem zmeny"
+
+msgctxt "#32007"
+msgid "Suggestions based on random watched item"
+msgstr "Odporúčania podľa náhodnej sledovanej položky"
+
+msgctxt "#32008"
+msgid "Next up"
+msgstr "Ďalej"
+
+msgctxt "#32009"
+msgid "Suggestions by random genre"
+msgstr "Odporúčania podľa náhodne zvoleného žánru"
+
+msgctxt "#32010"
+msgid "Recently added episodes and shows"
+msgstr "Naposledy pridané seriály a epizódy"
+
+msgctxt "#32011"
+msgid "All media"
+msgstr "Všetky médiá"
+
+msgctxt "#32012"
+msgid "Recommended by rating"
+msgstr "Doporučené podľa hodnotenia"
+
+msgctxt "#32013"
+msgid "Continue watching"
+msgstr "Pokračovať v sledovaní"
+
+msgctxt "#32014"
+msgid "Suggestions based on the last watched item"
+msgstr "Odporúčania podľa naposledy sledovanej položky"
+
+msgctxt "#32015"
+msgid "Recently added unwatched episodes and shows"
+msgstr "Naposledy pridané nevidené seriály a epizódy"
+
+msgctxt "#32016"
+msgid "Enable service module"
+msgstr "Povoliť službu na pozadí"
+
+msgctxt "#32017"
+msgid "Service interval time"
+msgstr "Časový interval služby"
+
+msgctxt "#32018"
+msgid "Default blurring radius"
+msgstr "Predvolený polomer rozmazania"
+
+msgctxt "#32020"
+msgid "Misc."
+msgstr "Rôzne"
+
+msgctxt "#32021"
+msgid "Background change interval"
+msgstr "Interval zmeny pozadia"
+
+msgctxt "#32019"
+msgid "This will delete all created images (blurred backgrounds, genre thumbs, etc.) in the addon_data folder. Do you want to proceed?"
+msgstr "Týmto sa odstránia všetky vytvorené obrázky (rozmazané pozadia, miniatúry žánrov atď.) v priečinku addon_data. Chcete pokračovať?"
+
+msgctxt "#32022"
+msgid "All available database items"
+msgstr "Všetky dostupné položky databázy"
+
+msgctxt "#32023"
+msgid "items"
+msgstr "položky"
+
+msgctxt "#32024"
+msgid "The video database has no library tags stored."
+msgstr "Vo video databáze nie sú uložené žiadne značky."
+
+msgctxt "#32025"
+msgid "Attention"
+msgstr "Upozornenie"
+
+msgctxt "#32026"
+msgid "Enable library tag detection for"
+msgstr "Povoliť detekciu značiek v knižnici pre"
+
+msgctxt "#32029"
+msgid "Directed by"
+msgstr "Réžia"
+
+msgctxt "#32030"
+msgid "Items starring"
+msgstr "Položky s účinkovaním"
+
+msgctxt "#32031"
+msgid "Because you watched"
+msgstr "Pretože ste sledovali"
+
+msgctxt "#32032"
+msgid "Christmas holiday season"
+msgstr "Vianočné obdobie"
+
+msgctxt "#32033"
+msgid "Spooky suggestions"
+msgstr "Strašidelné návrhy"
+
+msgctxt "#32034"
+msgid "May the force be with you"
+msgstr "Nech ťa sprevádza sila"
+
+msgctxt "#32035"
+msgid "Live long and prosper"
+msgstr "Ži dlho a v prosperite"
+
+msgctxt "#32036"
+msgid "Special and seasonal widgets"
+msgstr "Špeciálne a sezónne widgety"
+
+msgctxt "#32027"
+msgid "Add/remove movie favourite"
+msgstr "Pridať/Odobrať obľúbený film"
+
+msgctxt "#32028"
+msgid "Add/remove TV show favourite"
+msgstr "Pridať/Odobrať obľubený seriál"
+
+msgctxt "#32037"
+msgid "Scanning folders"
+msgstr "Skenovanie priečinkov"
+
+msgctxt "#32038"
+msgid "Checking library items..."
+msgstr "Kontrola položiek knižnice..."
+
+msgctxt "#32039"
+msgid "Reset library scan data"
+msgstr "Obnoviť údaje skenovania knižnice"
+
+msgctxt "#32040"
+msgid "This will remove all custom art data (extras, themes, studios, soundtracks) and perform a full library rescan. Do you want to proceed?"
+msgstr "Tým sa odstránia všetky vlastné dáta obrázkov (doplnky, témy, štúdiá, zvukové stopy) a vykoná sa úplné opätovné skenovanie knižnice. Chcete pokračovať?"

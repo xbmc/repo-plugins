@@ -1,0 +1,181 @@
+# Aeon Tajo Helper language file
+# Addon Name: Aeon Tajo Helper
+# Addon id: script.aeon.tajo.helper
+# Addon Provider: manfeed, sualfred
+msgid ""
+msgstr ""
+"Project-Id-Version: script.aeon.tajo.helper\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-30 17:00+0000\n"
+"PO-Revision-Date: 2026-03-30 17:00+0000\n"
+"Last-Translator: manfeed\n"
+"Language-Team: Spanish (Spain)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es_ES\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Error"
+msgstr "Error"
+
+msgctxt "#32001"
+msgid "This is a tool to provide features to a skin and requires skin integration."
+msgstr "Esta es una herramienta para proporcionar funciones a un skin y requiere integración con el skin."
+
+msgctxt "#32002"
+msgid "Enable logging"
+msgstr "Activar bitácora"
+
+msgctxt "#32004"
+msgid "detected"
+msgstr "detectado"
+
+msgctxt "#32005"
+msgid "Changed font to"
+msgstr "Font cambiado a"
+
+msgctxt "#32003"
+msgid "Delete add-on image cache"
+msgstr "Borrar caché de imágenes del addon"
+
+msgctxt "#32006"
+msgid "Applying changes"
+msgstr "Aplicando cambios"
+
+msgctxt "#32007"
+msgid "Suggestions based on random watched item"
+msgstr "Sugerencias basadas en un elemento visto al azar"
+
+msgctxt "#32008"
+msgid "Next up"
+msgstr "Próximo"
+
+msgctxt "#32009"
+msgid "Suggestions by random genre"
+msgstr "Sugerencias por género aleatorio"
+
+msgctxt "#32010"
+msgid "Recently added episodes and shows"
+msgstr "Episodios y series añadidos recientemente"
+
+msgctxt "#32011"
+msgid "All media"
+msgstr "Todos los medios"
+
+msgctxt "#32012"
+msgid "Recommended by rating"
+msgstr "Recomendados por valoración"
+
+msgctxt "#32013"
+msgid "Continue watching"
+msgstr "Continuar viendo"
+
+msgctxt "#32014"
+msgid "Suggestions based on the last watched item"
+msgstr "Sugerencias basadas en el ultimo elemento visto"
+
+msgctxt "#32015"
+msgid "Recently added unwatched episodes and shows"
+msgstr "Episodios y series no vistos añadidos recientemente"
+
+msgctxt "#32016"
+msgid "Enable service module"
+msgstr "Activar módulo de servicio"
+
+msgctxt "#32017"
+msgid "Service interval time"
+msgstr "Intervalo de tiempo del servicio"
+
+msgctxt "#32018"
+msgid "Default blurring radius"
+msgstr "Radio de difuminado por defecto"
+
+msgctxt "#32020"
+msgid "Misc."
+msgstr "Varios"
+
+msgctxt "#32021"
+msgid "Background change interval"
+msgstr "Intervalo de cambio de fondo"
+
+msgctxt "#32019"
+msgid "This will delete all created images (blurred backgrounds, genre thumbs, etc.) in the addon_data folder. Do you want to proceed?"
+msgstr "Esto eliminará todas las imágenes creadas (fondos difuminados, miniaturas de género, etc.) en la carpeta addon_data. ¿Desea continuar?"
+
+msgctxt "#32022"
+msgid "All available database items"
+msgstr "Todos los elementos de la base de datos disponibles."
+
+msgctxt "#32023"
+msgid "items"
+msgstr "Elementos"
+
+msgctxt "#32024"
+msgid "The video database has no library tags stored."
+msgstr "La base de datos de vídeo no tiene etiquetas de biblioteca almacenadas."
+
+msgctxt "#32025"
+msgid "Attention"
+msgstr "Atención"
+
+msgctxt "#32026"
+msgid "Enable library tag detection for"
+msgstr "Activar la detección de etiquetas de biblioteca para"
+
+msgctxt "#32029"
+msgid "Directed by"
+msgstr "Dirigido por"
+
+msgctxt "#32030"
+msgid "Items starring"
+msgstr "Elementos protagonizados"
+
+msgctxt "#32031"
+msgid "Because you watched"
+msgstr "Porque viste"
+
+msgctxt "#32032"
+msgid "Christmas holiday season"
+msgstr "Temporada navideña"
+
+msgctxt "#32033"
+msgid "Spooky suggestions"
+msgstr "Sugerencias misteriosas"
+
+msgctxt "#32034"
+msgid "May the force be with you"
+msgstr "Que la fuerza esté contigo"
+
+msgctxt "#32035"
+msgid "Live long and prosper"
+msgstr "Larga vida y prosperidad"
+
+msgctxt "#32036"
+msgid "Special and seasonal widgets"
+msgstr "Widgets de especiales y de temporada"
+
+msgctxt "#32027"
+msgid "Add/remove movie favourite"
+msgstr "Añadir/eliminar película favorita"
+
+msgctxt "#32028"
+msgid "Add/remove TV show favourite"
+msgstr "Añadir/eliminar serie favorita"
+
+msgctxt "#32037"
+msgid "Scanning folders"
+msgstr "Escaneando carpetas"
+
+msgctxt "#32038"
+msgid "Checking library items..."
+msgstr "Comprobando elementos de la biblioteca..."
+
+msgctxt "#32039"
+msgid "Reset library scan data"
+msgstr "Restablecer datos de escaneo de biblioteca"
+
+msgctxt "#32040"
+msgid "This will remove all custom art data (extras, themes, studios, soundtracks) and perform a full library rescan. Do you want to proceed?"
+msgstr "Esto eliminará todos los datos de arte personalizados (extras, temas, estudios, bandas sonoras) y realizará un reescaneo completo de la biblioteca. ¿Desea continuar?"

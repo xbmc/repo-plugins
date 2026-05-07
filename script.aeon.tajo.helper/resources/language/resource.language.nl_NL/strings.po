@@ -1,0 +1,181 @@
+# Aeon Tajo Helper language file
+# Addon Name: Aeon Tajo Helper
+# Addon id: script.aeon.tajo.helper
+# Addon Provider: manfeed, sualfred
+msgid ""
+msgstr ""
+"Project-Id-Version: script.aeon.tajo.helper\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-30 17:00+0000\n"
+"PO-Revision-Date: 2026-03-30 17:00+0000\n"
+"Last-Translator: manfeed\n"
+"Language-Team: Dutch (Netherlands)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl_NL\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Error"
+msgstr "Fout"
+
+msgctxt "#32001"
+msgid "This is a tool to provide features to a skin and requires skin integration."
+msgstr "Dit is een hulpmiddel dat functies biedt aan een skin en vereist skin-integratie."
+
+msgctxt "#32002"
+msgid "Enable logging"
+msgstr "Logging inschakelen"
+
+msgctxt "#32004"
+msgid "detected"
+msgstr "gedetecteerd"
+
+msgctxt "#32005"
+msgid "Changed font to"
+msgstr "Lettertype wijzigen naar"
+
+msgctxt "#32003"
+msgid "Delete add-on image cache"
+msgstr "Add-on afbeeldingscache verwijderen"
+
+msgctxt "#32006"
+msgid "Applying changes"
+msgstr "Wijzigingen toepassen"
+
+msgctxt "#32007"
+msgid "Suggestions based on random watched item"
+msgstr "Suggesties op basis van willekeurig bekeken item"
+
+msgctxt "#32008"
+msgid "Next up"
+msgstr "Volgende"
+
+msgctxt "#32009"
+msgid "Suggestions by random genre"
+msgstr "Suggesties op basis van willekeurig genre"
+
+msgctxt "#32010"
+msgid "Recently added episodes and shows"
+msgstr "Recent toegevoegde afleveringen en series"
+
+msgctxt "#32011"
+msgid "All media"
+msgstr "Alle media"
+
+msgctxt "#32012"
+msgid "Recommended by rating"
+msgstr "Aanbevolen op basis van beoordeling"
+
+msgctxt "#32013"
+msgid "Continue watching"
+msgstr "Verder kijken"
+
+msgctxt "#32014"
+msgid "Suggestions based on the last watched item"
+msgstr "Suggesties op basis van het laatst bekeken item"
+
+msgctxt "#32015"
+msgid "Recently added unwatched episodes and shows"
+msgstr "Recent toegevoegde onbekeken afleveringen en series"
+
+msgctxt "#32016"
+msgid "Enable service module"
+msgstr "Servicemodule inschakelen"
+
+msgctxt "#32017"
+msgid "Service interval time"
+msgstr "Intervaltijd service"
+
+msgctxt "#32018"
+msgid "Default blurring radius"
+msgstr "Standaard vervagingsradius"
+
+msgctxt "#32020"
+msgid "Misc."
+msgstr "Div."
+
+msgctxt "#32021"
+msgid "Background change interval"
+msgstr "Achtergrondveranderingsinterval"
+
+msgctxt "#32019"
+msgid "This will delete all created images (blurred backgrounds, genre thumbs, etc.) in the addon_data folder. Do you want to proceed?"
+msgstr "Hiermee worden alle aangemaakte afbeeldingen (wazige achtergronden, genre-miniaturen, enz.) in de addon_data-map verwijderd. Wilt u doorgaan?"
+
+msgctxt "#32022"
+msgid "All available database items"
+msgstr "Alle beschikbare database-items"
+
+msgctxt "#32023"
+msgid "items"
+msgstr "items"
+
+msgctxt "#32024"
+msgid "The video database has no library tags stored."
+msgstr "De video-database heeft geen bibliotheek-tags opgeslagen."
+
+msgctxt "#32025"
+msgid "Attention"
+msgstr "Opgelet"
+
+msgctxt "#32026"
+msgid "Enable library tag detection for"
+msgstr "Bibliotheektagdetectie inschakelen voor"
+
+msgctxt "#32029"
+msgid "Directed by"
+msgstr "Geregisseerd door"
+
+msgctxt "#32030"
+msgid "Items starring"
+msgstr "Items met"
+
+msgctxt "#32031"
+msgid "Because you watched"
+msgstr "Omdat je keek naar"
+
+msgctxt "#32032"
+msgid "Christmas holiday season"
+msgstr "Kerstvakantie"
+
+msgctxt "#32033"
+msgid "Spooky suggestions"
+msgstr "Griezelige suggesties"
+
+msgctxt "#32034"
+msgid "May the force be with you"
+msgstr "Moge de kracht met je zijn"
+
+msgctxt "#32035"
+msgid "Live long and prosper"
+msgstr "Leef lang en voorspoedig"
+
+msgctxt "#32036"
+msgid "Special and seasonal widgets"
+msgstr "Speciale en seizoensgebonden widgets"
+
+msgctxt "#32027"
+msgid "Add/remove movie favourite"
+msgstr "Favoriete film toevoegen/verwijderen"
+
+msgctxt "#32028"
+msgid "Add/remove TV show favourite"
+msgstr "Favoriete TV-serie toevoegen/verwijderen"
+
+msgctxt "#32037"
+msgid "Scanning folders"
+msgstr "Mappen scannen"
+
+msgctxt "#32038"
+msgid "Checking library items..."
+msgstr "Bibliotheekitems controleren..."
+
+msgctxt "#32039"
+msgid "Reset library scan data"
+msgstr "Bibliotheek-scangegevens resetten"
+
+msgctxt "#32040"
+msgid "This will remove all custom art data (extras, themes, studios, soundtracks) and perform a full library rescan. Do you want to proceed?"
+msgstr "Dit verwijdert alle aangepaste art-gegevens (extra's, thema's, studio's, soundtracks) en voert een volledige bibliotheekscan uit. Wilt u doorgaan?"

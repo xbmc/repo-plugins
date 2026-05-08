@@ -18,9 +18,9 @@ from string import Formatter
 from sys import exc_info as sys_exc_info
 from traceback import extract_stack, format_list
 
-from .compatibility import StringIO, string_type, to_str, xbmc
+from .compatibility import StringIO, string_type, to_str, to_unicode, xbmc
 from .constants import ADDON_ID
-from .utils.convert_format import to_unicode, urls_in_text
+from .utils.convert_format import urls_in_text
 from .utils.redact import (
     parse_and_redact_uri,
     redact_auth_header,
@@ -84,7 +84,11 @@ class RecordFormatter(logging.Formatter):
             if not record.stack_text:
                 stack_text = self.formatStack(record.stack_info)
                 if getattr(record, '__redact_stack__', False):
-                    stack_text = urls_in_text(stack_text, parse_and_redact_uri)
+                    stack_text = urls_in_text(
+                        text=stack_text,
+                        process=parse_and_redact_uri,
+                        url_marker='url: ',
+                    )
                 record.stack_text = stack_text
             if s[-1:] != '\n':
                 s += '\n\n'
@@ -94,7 +98,11 @@ class RecordFormatter(logging.Formatter):
             if not record.exc_text:
                 exc_text = self.formatException(record.exc_info)
                 if getattr(record, '__redact_exc__', False):
-                    exc_text = urls_in_text(exc_text, parse_and_redact_uri)
+                    exc_text = urls_in_text(
+                        text=exc_text,
+                        process=parse_and_redact_uri,
+                        url_marker='url: ',
+                    )
                 record.exc_text = exc_text
             if s[-1:] != '\n':
                 s += '\n\n'

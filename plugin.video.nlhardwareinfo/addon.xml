@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.nlhardwareinfo" 
 	name="Hardware.Info TV" 
-	version="1.0.8+matrix.1"
+	version="1.0.9+matrix.1"
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="3.0.0"/>
@@ -29,9 +29,14 @@
     <forum>http://forum.kodi.tv/showthread.php?tid=162123</forum>
     <website>http://nl.hardware.info/</website>
     <source>https://github.com/skipmodea1/plugin.video.nlhardwareinfo.python3</source>
+    <lifecyclestate type="broken" lang="en_GB">Website has been discontinued</lifecyclestate>	
+    <lifecyclestate type="broken" lang="nl_NL">Website is stopgezet</lifecyclestate>		
+    <news>v1.0.9 (2026-05-11)
+    - marked addon BROKEN because website is discontinued
+    </news>
     <assets>
       <icon>resources/icon.png</icon>
       <fanart>resources/fanart.jpg</fanart>
     </assets>
-  </extension>
+  </extension>	
 </addon>

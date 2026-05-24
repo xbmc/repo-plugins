@@ -1,9 +1,9 @@
 
 # ------------------------------------------------------------------------------
-#  Copyright (c) 2022-2025 Dimitri Kroon.
+#  Copyright (c) 2022-2026 Dimitri Kroon.
 #  This file is part of plugin.video.cinetree.
 #  SPDX-License-Identifier: GPL-2.0-or-later.
-#  See LICENSE.txt
+#  See LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt.
 # ------------------------------------------------------------------------------
 from __future__ import annotations
 
@@ -255,7 +255,7 @@ def list_shorts(addon, list_films=False):
 
 @Route.register(content_type='movies')
 def list_films_by_collection(addon, slug):
-    data = ct_api.get_jsonp(slug + '/payload.js')
+    data = ct_api.get_nuxt_json(slug)
     yield from _create_playables(addon, ct_data.create_films_list(data))
 
 

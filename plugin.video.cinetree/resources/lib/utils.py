@@ -1,9 +1,9 @@
 
 # ------------------------------------------------------------------------------
-#  Copyright (c) 2022-2025 Dimitri Kroon.
+#  Copyright (c) 2022-2026 Dimitri Kroon.
 #  This file is part of plugin.video.cinetree.
 #  SPDX-License-Identifier: GPL-2.0-or-later.
-#  See LICENSE.txt
+#  See LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt.
 # ------------------------------------------------------------------------------
 from __future__ import annotations
 import logging
@@ -304,5 +304,5 @@ class CacheMgr:
                 f.write(new_version)
             with urlquick.Session(self.cache_dir) as s:
                 s.cache_adapter.wipe()
-        except:
+        except Exception:
             self.logger.error('Failed to save new Storyblok cache version.', exc_info=True)

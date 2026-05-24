@@ -1,9 +1,9 @@
 
 # ------------------------------------------------------------------------------
-#  Copyright (c) 2022-2023 Dimitri Kroon.
+#  Copyright (c) 2022-2026 Dimitri Kroon.
 #  This file is part of plugin.video.cinetree.
 #  SPDX-License-Identifier: GPL-2.0-or-later.
-#  See LICENSE.txt
+#  See LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt.
 # ------------------------------------------------------------------------------
 
 import xbmcgui
@@ -37,17 +37,17 @@ def get_steam_url(video_url, max_resolution=None):
 
 
 def get_progressive_url(stream_config, max_resolution):
-        max_video_height = get_height(max_resolution)
-        best_match = {}
-        matched_h = 0
+    max_video_height = get_height(max_resolution)
+    best_match = {}
+    matched_h = 0
 
-        for stream in stream_config:
-            h = stream['height']
-            if matched_h < h <= max_video_height:
-                best_match = stream
-                matched_h = h
+    for stream in stream_config:
+        h = stream['height']
+        if matched_h < h <= max_video_height:
+            best_match = stream
+            matched_h = h
 
-        return best_match.get('url', '')
+    return best_match.get('url', '')
 
 
 def get_hls_url(stream_config):

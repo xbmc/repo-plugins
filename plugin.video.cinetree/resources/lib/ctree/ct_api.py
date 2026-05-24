@@ -1,9 +1,9 @@
 
 # ------------------------------------------------------------------------------
-#  Copyright (c) 2022-2025 Dimitri Kroon.
+#  Copyright (c) 2022-2026 Dimitri Kroon.
 #  This file is part of plugin.video.cinetree.
 #  SPDX-License-Identifier: GPL-2.0-or-later.
-#  See LICENSE.txt
+#  See LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt.
 # ------------------------------------------------------------------------------
 
 import logging
@@ -31,7 +31,7 @@ GENRES = ('Action', 'Adventure', 'Biography', 'Comedy', 'Coming-of-age', 'Crime'
 favourites = None
 
 
-def get_jsonp_url(slug):
+def get_nuxt_json_url(slug):
     """Append *slug* to the base path for .js requests and return the full url.
 
     Part of the base url is a timestamp that changes every so often. We obtain
@@ -44,17 +44,17 @@ def get_jsonp_url(slug):
 
         resp = fetch.web_request('get', 'https://cinetree.nl', max_age=-1)
         page_data = resp.content.decode('utf8')
-        match = re.search(r'href="([\w_/]*?)manifest\.js" as="script">', page_data, re.DOTALL)
+        match = re.search(r'buildId:"([\w-]*?)"', page_data, re.DOTALL)
         nuxt_revision = match.group(1)
         cache_mgr.version = nuxt_revision
-    url = ''.join(('https://cinetree.nl', nuxt_revision, slug))
+    url = ''.join(('https://cinetree.nl/', slug, '/_payload.json?', nuxt_revision))
     return url
 
 
-def get_jsonp(path):
-    from resources.lib.jsonp import parse, parse_simple
+def get_nuxt_json(path):
+    from resources.lib.nuxt3 import parse
 
-    url = get_jsonp_url(path)
+    url = get_nuxt_json_url(path)
     try:
         resp = fetch.get_document(url)
     except errors.HttpError as err:
@@ -62,15 +62,12 @@ def get_jsonp(path):
             # Cinetree's revision timestamp may have changed.
             cache_mgr.revalidate()
             storyblok.st_cache_mgr.revalidate()
-            url = get_jsonp_url(path)
+            url = get_nuxt_json_url(path)
             resp = fetch.get_document(url)
         else:
             raise
 
-    if '__NUXT_' in resp[:16]:
-        resp_dict = parse(resp)
-    else:
-        resp_dict = parse_simple(resp)
+    resp_dict = parse(resp)
     return resp_dict
 
 
@@ -93,13 +90,14 @@ def get_subscription_films():
 
 def get_originals():
     """Return the list of Cinetree Originals"""
-    data = get_jsonp('originals/payload.js')
-    # Data has several fields, of which 2 are a list of films. One has only 1 or 2 highlights,
-    # while the other is the full list. Since the exact names of the fields are unknown,
-    # return the one with the longest list.
-    film_lists = (v['films'] for k, v in data['fetch'].items() if k.startswith('data-v-'))
-    longest_list = max(film_lists, key=len)
-    return longest_list
+    data = get_nuxt_json('originals')
+    # Data has several fields, of which 2 are a list of films. One has only a few highlights,
+    # while the other is the full list. Currently, the list we need has a title starting with 'svod-films'
+    film_list = []
+    for k, v in data.items():
+        if k.startswith('svod-films'):
+            film_list = v
+    return film_list
 
 
 def create_stream_info_url(film_uuid, slug=None):
@@ -216,7 +214,7 @@ def get_favourites(refresh=False, ask_login=True):
     return favourites
 
 
-def edit_favourites(film_uuid, action):
+def edit_favourites(film_uuid: str, action: str):
     """Add or remove a film to/from the personal watch list."""
     method = {
         'remove': 'delete',
@@ -228,7 +226,7 @@ def edit_favourites(film_uuid, action):
             url='https://api.cinetree.nl/favorites/' + film_uuid)
     if resp.status_code != 200:
         return False
-    global favourites
+
     if action == 'remove':
         del favourites[film_uuid]
     else:
@@ -252,12 +250,8 @@ def get_preferred_collections(page):
     This is a short selection of all available collections that the user gets
     presented on the website when he clicks on pages like 'huur films', or 'kort'.
     """
-    slug = page + '/payload.js'
-    data = get_jsonp(slug)['fetch']
-    for k, v in data.items():
-        if k.startswith('data-v'):
-            return (create_collection_item(col_data) for col_data in v['collections'])
-    return None
+    data = get_nuxt_json(page)
+    return (create_collection_item(col_data) for col_data in data['collections'])
 
 
 def get_collections():
@@ -265,8 +259,8 @@ def get_collections():
     Which, by the way, are not exactly all collections, but those the website shows as 'all'.
     To get absolutely all collections, request them from storyblok.
     """
-    data = get_jsonp('collecties/payload.js')
-    return (create_collection_item(col_data) for col_data in data['data'][0]['collections'])
+    data = get_nuxt_json('collecties')
+    return (create_collection_item(col_data) for col_data in data['collections-/collecties'])
 
 
 class DurationFilter(Enum):
@@ -382,7 +376,7 @@ def pay_film(film_uid: str, film_title: str, transaction_id: str, price: float):
         else:
             logger.error("[pay_film] - Unexpected response status code: '%s'", resp.status_code)
             return False
-    except:
+    except Exception:
         logger.error("[pay_film] paying failed: film_uid=%s, film_title=%s, trans_id=%s, price=%s\n",
                      film_uid, film_title, transaction_id, price, exc_info=True)
         return False

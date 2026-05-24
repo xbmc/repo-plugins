@@ -1,15 +1,14 @@
 # ------------------------------------------------------------------------------
-#  Copyright (c) 2022-2025 Dimitri Kroon.
+#  Copyright (c) 2022-2026 Dimitri Kroon.
 #  This file is part of plugin.video.cinetree.
 #  SPDX-License-Identifier: GPL-2.0-or-later.
-#  See LICENSE.txt
+#  See LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt.
 # ------------------------------------------------------------------------------
 
 from __future__ import absolute_import, unicode_literals
 
 import itertools
 import logging
-import time
 import pytz
 
 from datetime import datetime, timedelta, timezone
@@ -17,7 +16,7 @@ from urllib.parse import quote_plus
 
 from codequick import Script
 from codequick.support import logger_id
-from resources.lib.utils import replace_markdown, remove_markdown, strptime, addon_info
+from resources.lib.utils import replace_markdown, strptime, addon_info
 from resources.lib.constants import FULLY_WATCHED_PERCENTAGE
 
 
@@ -54,9 +53,9 @@ class FilmItem:
         try:
             self._end_time, self.is_expired = parse_end_date(self.content.get('endDate'))
             self._data = self._parse()
-        except:
-            self._data = None
+        except Exception:
             logger.error("Failed to create FilmItem\n", exc_info=True)
+            self._data = None
 
     @property
     def data(self):
@@ -378,7 +377,7 @@ def create_films_list(data, list_type='generic', add_price=True):
     This function retrieves all relevant info found in that dict and
     generates FilmItem objects for each film.
 
-    :param data: A dictionary of film data, like obtained from get_jsonp()
+    :param data: A dictionary of film data, like obtained from get_nuxt_json()
     :type data: dict
     :param list_type: The type of list to search for.
         Can be 'storyblok' for list from Storyblok, or 'generic' for any
@@ -394,10 +393,12 @@ def create_films_list(data, list_type='generic', add_price=True):
             # Data returned by storyblok is already a list of film data.
             films_list = data
         elif list_type == 'generic':
-            content = data['data'][0]['story']['content']
-            films_list = content['films']
-            if 'shorts' in content.keys():
-                films_list.extend(content['shorts'])
+            films_list = None
+            for k, v in data.items():
+                if k.startswith('films'):
+                    films_list = v
+            if films_list is None:
+                raise ValueError("Invalid generic data")
         else:
             raise ValueError("Invalid value '{}' for parameter 'list_type'".format(list_type))
     except KeyError:

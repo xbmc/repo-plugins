@@ -1,9 +1,9 @@
 
 # ------------------------------------------------------------------------------
-#  Copyright (c) 2022-2023 Dimitri Kroon.
+#  Copyright (c) 2022-2026 Dimitri Kroon.
 #  This file is part of plugin.video.cinetree.
 #  SPDX-License-Identifier: GPL-2.0-or-later.
-#  See LICENSE.txt
+#  See LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt.
 # ------------------------------------------------------------------------------
 
 import logging
@@ -94,7 +94,8 @@ logger.propagate = False
 # noinspection PyBroadException
 try:
     handler_name = addon_data.getSettingString('log-handler').lower()
-except:
+except Exception as e:
+    xbmc.log(f'[viwX.addon_log] Failed to read handler type from settings: {e!r}')
     handler_name = 'kodi'
 
 if 'kodi' in handler_name:
@@ -108,7 +109,7 @@ else:
 try:
     log_lvl_idx = addon_data.getSettingInt('log-level')
     log_lvl = (logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR)[log_lvl_idx]
-except:
+except (KeyError, ValueError, TypeError, IndexError):
     logger.warning("setting 'log-level' not present in addon settings")
     log_lvl = logging.DEBUG
 

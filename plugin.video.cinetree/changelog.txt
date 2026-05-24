@@ -1,4 +1,11 @@
+v 3.0.0
+- Updated for the new Cinetree website; fixes many listings.
+
 v 2.0.3
+- Fixed listing short films
+- Some other small improvements
+
+v 2.0.2
 - Fixed listing short films
 - Some other small improvements
 

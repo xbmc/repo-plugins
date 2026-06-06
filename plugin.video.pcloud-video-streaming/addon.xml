@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.pcloud-video-streaming" name="PCloud Video Streaming" version="1.5.1" provider-name="Guido Domenici, updated for Kodi Matrix by Carneal">
+<addon id="plugin.video.pcloud-video-streaming" name="PCloud Video Streaming" version="1.5.2" provider-name="Guido Domenici, updated for Kodi Matrix by Carneal">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>
@@ -9,7 +9,7 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">Provides streaming from a pcloud.com bucket</summary>
-    <description lang="en_GB">Provides streaming from a pcloud.com video source. You need an account with pCloud to use this (free accounts are OK). Not affiliated with pcloud.com.</description>
+    <description lang="en_GB">Provides streaming from a pcloud.com video source. You need an account with pCloud to use this (free accounts are OK). Not affiliated with pcloud.com. v1.5.2 fixes login on Kodi 21 Omega.</description>
     <disclaimer lang="en_GB">
       The plugin's author(s) are not affiliated with Kodi.
     </disclaimer>

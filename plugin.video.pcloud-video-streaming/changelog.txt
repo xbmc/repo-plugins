@@ -1,3 +1,7 @@
+v1.5.2 -- 05-Jun-2026
+- Fixed login broken on Kodi 21 Omega: switched auth endpoint from userinfo to login
+- Removed logout=1 parameter that was invalidating sessions prematurely
+
 v1.5.1 -- 12-Sep-2021
 - Fixed issue #38: Added support for eapi.pcloud.com as alternative endpoint. Now the settings screen lets you select the default one (api.pcloud.com) or the alternative one. 
 

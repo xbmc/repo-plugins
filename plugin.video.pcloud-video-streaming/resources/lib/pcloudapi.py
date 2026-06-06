@@ -62,7 +62,7 @@ class PCloudApi:
 
 	def ExecuteRequest(self, api, data = None):
 		"""
-		Private method to execute a JSON POST request and return its results raw.
+		Private method to execute a JSON request and return its results raw.
 		"""
 		url = '{0}{1}'.format(self.PCLOUD_BASE_URL, api)
 		xbmc.log ('Calling {0}...'.format(url))
@@ -72,26 +72,32 @@ class PCloudApi:
 		if data is not None:
 			requestData = data.encode('utf-8')
 			method = 'POST'
-		if sys.version_info.major >= 3:
-			# Python 3 stuff
-			httpRequest = Request(
-				url,
-				data=requestData,
-				method=method)
-		else:
-			# Python 2 stuff. Request for Python 2 (at least on Android) does not
-			# support the "method" keyword.
-			httpRequest = Request(
-				url,
-				data=requestData)			
-		response = self.HttpHandler.open(httpRequest)
-		responseStr = response.read().decode('utf-8')
-		self.HttpHandler.close()
-		return json.loads(responseStr)
+		try:
+			if sys.version_info.major >= 3:
+				# Python 3 stuff
+				httpRequest = Request(
+					url,
+					data=requestData,
+					method=method)
+			else:
+				# Python 2 stuff. Request for Python 2 (at least on Android) does not
+				# support the "method" keyword.
+				httpRequest = Request(
+					url,
+					data=requestData)
+			response = self.HttpHandler.open(httpRequest)
+			responseStr = response.read().decode('utf-8')
+			self.HttpHandler.close()
+			result = json.loads(responseStr)
+			return result
+		except Exception as e:
+			xbmc.log('ExecuteRequest FAILED: {}'.format(str(e)), xbmc.LOGERROR)
+			raise
 
 	def PerformLogon(self, username, password):
-		""" This must be the first API that gets called after the constructor
-			Returns auth
+		""" This must be the first API that gets called after the constructor.
+			Uses pCloud digest-based authentication: getdigest → login.
+			Returns auth token.
 		"""
 		api = "getdigest"
 		response = self.ExecuteRequest(api)
@@ -100,19 +106,21 @@ class PCloudApi:
 			raise Exception("Error calling getdigest: " + errorMessage)
 		sha1 = hashlib.sha1()
 		sha1.update(username.encode('utf-8'))
-		usernameDigest = sha1.hexdigest() # hexdigest outputs hex-encoded bytes
+		usernameDigest = sha1.hexdigest()
 		sha1 = hashlib.sha1()
 		sha1.update(password.encode('utf-8') + usernameDigest.encode('utf-8') + response["digest"].encode('utf-8'))
 		passwordDigest = sha1.hexdigest()
-		# Here we use POST instead of GET in order to account for folders with lots of files
-		authApi = 'userinfo'
-		params = { "getauth": 1, "logout": 1, "username": username, "digest": response["digest"],
+		# Kodi 21 Omega fix (2026): 'userinfo' with logout=1 returns result=2000.
+		# 'userinfo' without logout=1 returns result=0 but no 'auth' field (KeyError).
+		# 'login' is the only endpoint that correctly returns an auth token.
+		authApi = 'login'
+		params = { "getauth": 1, "username": username, "digest": response["digest"],
 					"authexpire": str(self.TOKEN_EXPIRATION_SECONDS), "passworddigest": passwordDigest }
 		paramsUrlEncoded = urlencode(params)
 		response = self.ExecuteRequest(authApi, paramsUrlEncoded)
 		if response["result"]:
 			errorMessage = self.GetErrorMessage(response["result"])
-			raise Exception("Error calling userinfo: " + errorMessage)
+			raise Exception("Error calling login: " + errorMessage)
 		self.auth = response["auth"]
 		return self.auth
 
@@ -174,9 +182,6 @@ class PCloudApi:
 		for oneThumb in response["thumbs"]:
 			if oneThumb["result"] == 0:
 				thumbs[oneThumb["fileid"]] = "https://{0}{1}".format(oneThumb["hosts"][0], oneThumb["path"])
-		# NOTE: cannot use list comprehension (like below) because the Python interpreter in
-		# the Android Kodi port does not seem to understand the syntax.
-		# thumbs = { oneThumb["fileid"]: "https://{0}{1}".format(oneThumb["hosts"][0], oneThumb["path"]) for oneThumb in response["thumbs"] if oneThumb["result"] == 0 }
 		return thumbs
 
 	def DeleteFile(self, fileID):
@@ -209,14 +214,3 @@ class PCloudApi:
 		month = monthDict[match.group(2)]
 		year = int(match.group(3))
 		return date(year, month, day).strftime("%d.%m.%Y")
-
-#auth = PerformLogon("username@example.com", "password")
-#ListFolderContents("/Vcast")
-#ListFolderContents(34719254)
-#ListFolderContents(4684587) # random number, probably invalid
-#folderContents = ListFolderContents("/Vcast")
-#for oneItem in folderContents["metadata"]["contents"]:
-#	print oneItem["name"]
-#tempFilename = os.path.join(xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile')).decode('utf-8'), 'pippo.json')
-#with open(tempFilename, 'w') as f:
-#	f.write(json.dumps(response))
